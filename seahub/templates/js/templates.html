@@ -144,7 +144,7 @@
     <button id="add-new-file" class="op-btn">{% trans "New File" %}</button>
     <% } %>
 
-    <% if (!encrypted) { %>
+    <% if (!encrypted && (can_generate_share_link || can_generate_upload_link || is_repo_owner)) { %>
     <button class="op-btn" id="share-cur-dir">{% trans "Share" %}</button>
     <% } %>
     </div><!-- div#cur-dir-ops ends here -->
@@ -224,7 +224,7 @@
 
                 <a class="op-icon download sf2-icon-download sf2-x vh download-dir" href="#" title="{% trans "Download" %}" aria-label="{% trans "Download" %}"></a>
 
-                <% if (!repo_encrypted) { %>
+                <% if (!repo_encrypted && (can_generate_share_link || can_generate_upload_link || is_repo_owner)) { %>
                     <a href="#" class="op-icon share sf2-icon-share sf2-x vh" title="{% trans "Share" %}" aria-label="{% trans "Share" %}"></a>
                 <% } %>
                 <% if (dirent.perm == 'rw') { %>
@@ -414,7 +414,7 @@
 <script type="text/template" id="grid-view-dir-op-tmpl">
     <ul class="grid-item-op sf-dropdown-menu">
         <li><a class="op download" href="<%= download_url %>">{% trans "Download" %}</a></li>
-        <% if (!repo_encrypted) { %>
+        <% if (!repo_encrypted && (can_generate_share_link || can_generate_upload_link || is_repo_owner)) { %>
         <li><a class="op share" href="#">{% trans "Share" %}</a></li>
         <% } %>
         <% if (dirent.perm == 'rw') { %>
