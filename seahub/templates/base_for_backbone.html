@@ -24,11 +24,11 @@
 <body>
     <div id="wrapper" role="application" class="{{ LANGUAGE_CODE }}">
         <!--[if lt IE 10]>
-        <p id="top-browser-tip">{% trans "We no longer support this version of IE. Please upgrade it to version 10 or above." %} <span class="close">{% trans "Close" %}</span></p>
+        <p id="top-browser-tip" class="top-bar fixed-top-bar">{% trans "We no longer support this version of IE. Please upgrade it to version 10 or above." %} <span id="top-browser-tip-close" class="top-bar-click">{% trans "Close" %}</span></p>
         <![endif]-->
         {% block info_bar_message %}
         {% if request.user.is_authenticated and request.cur_note %}
-        <div id="info-bar">
+        <div id="info-bar" class="fixed-top-bar">
             <p id="info-bar-info">{{ request.cur_note.message|urlize }}</p>
             <span class="close sf2-icon-x1 op-icon" title="{% trans "Close" %}"></span>
         </div>
