@@ -106,35 +106,51 @@ define([
         },
 
         downloadLinkPanelInit: function() {
+            var $panel = $('#download-link-share');
+            var $loadingTip = this.$('.loading-tip');
             var _this = this;
-            var after_op_success = function(data) { // data is [] or [{...}] 
-
-                _this.$('.loading-tip').hide();
-
-                if (data.length == 1) {
-                    var link_data = data[0],
-                        link = link_data.link;
-                    _this.download_link = link; // for 'link send'
-                    _this.download_link_token = link_data.token; // for 'link delete'
-                    _this.$('#download-link').html(link);
-                    _this.$('#direct-dl-link').html(link + '?raw=1');
-                    if (link_data.is_expired) {
-                        _this.$('#send-download-link').addClass('hide');
-                        _this.$('#download-link, #direct-dl-link').append(' <span class="error">(' + gettext('Expired') + ')</span>');
-                    }
-                    _this.$('#download-link-operations').removeClass('hide');
-                } else {
-                    _this.$('#generate-download-link-form').removeClass('hide');
-                }
-            };
             // check if downloadLink exists
-            Common.ajaxGet({
-                'get_url': Common.getUrl({name: 'share_admin_share_links'}),
-                'data': {
+            $.ajax({
+                url: Common.getUrl({name: 'share_admin_share_links'}),
+                data: {
                     'repo_id': this.repo_id,
                     'path': this.dirent_path
                 },
-                'after_op_success': after_op_success
+                cache: false,
+                dataType: 'json',
+                success: function(data) { // data is [] or [{...}]
+                    if (data.length == 1) {
+                        var link_data = data[0],
+                            link = link_data.link;
+                        _this.download_link = link; // for 'link send'
+                        _this.download_link_token = link_data.token; // for 'link delete'
+                        _this.$('#download-link').html(link);
+                        _this.$('#direct-dl-link').html(link + '?raw=1');
+                        if (link_data.is_expired) {
+                            _this.$('#send-download-link').addClass('hide');
+                            _this.$('#download-link, #direct-dl-link').append(' <span class="error">(' + gettext('Expired') + ')</span>');
+                        }
+                        _this.$('#download-link-operations').removeClass('hide');
+                    } else {
+                        _this.$('#generate-download-link-form').removeClass('hide');
+                    }
+                },
+                error: function(xhr, textStatus, errorThrown) {
+                    var err_msg;
+                    if (xhr.responseText) {
+                        if (xhr.status == 403) {
+                            err_msg = gettext("Permission error");
+                        } else {
+                            err_msg = xhr.responseJSON.error_msg ? xhr.responseJSON.error_msg : gettext('Error');
+                        }
+                    } else {
+                        err_msg = gettext('Please check the network.');
+                    }
+                    $('.error', $panel).html(err_msg).show();
+                },
+                complete: function() {
+                    $loadingTip.hide();
+                }
             });
         },
 
@@ -395,27 +411,47 @@ define([
         },
 
         uploadLinkPanelInit: function() {
+            var $panel = $('#dir-upload-link-share');
+            var $loadingTip = this.$('.loading-tip').show();
             var _this = this;
-            var after_op_success = function(data) { // data is [] or [{...}]
-                if (data.length == 1) {
-                    var link_data = data[0],
-                        link = link_data.link;
-                    _this.upload_link_token = link_data.token;
-                    _this.upload_link = link;
-                    _this.$('#upload-link').html(link);
-                    _this.$('#upload-link-operations').removeClass('hide');
-                } else {
-                    _this.$('#generate-upload-link-form').removeClass('hide');
-                }
-            };
             // check if upload link exists
-            Common.ajaxGet({
-                'get_url': Common.getUrl({name: 'share_admin_upload_links'}),
-                'data': {
+            $.ajax({
+                url: Common.getUrl({name: 'share_admin_upload_links'}),
+                data: {
                     'repo_id': this.repo_id,
                     'path': this.dirent_path
                 },
-                'after_op_success': after_op_success
+                cache: false,
+                dataType: 'json',
+                success: function(data) { // data is [] or [{...}]
+                    if (data.length == 1) {
+                        var link_data = data[0],
+                            link = link_data.link;
+                        _this.upload_link_token = link_data.token;
+                        _this.upload_link = link;
+                        _this.$('#upload-link').html(link);
+                        _this.$('#upload-link-operations').removeClass('hide');
+                    } else {
+                        _this.$('#generate-upload-link-form').removeClass('hide');
+                    }
+                    $('.tip', $panel).show();
+                },
+                error: function(xhr, textStatus, errorThrown) {
+                    var err_msg;
+                    if (xhr.responseText) {
+                        if (xhr.status == 403) {
+                            err_msg = gettext("Permission error");
+                        } else {
+                            err_msg = xhr.responseJSON.error_msg ? xhr.responseJSON.error_msg : gettext('Error');
+                        }
+                    } else {
+                        err_msg = gettext('Please check the network.');
+                    }
+                    $('.error', $panel).html(err_msg).show();
+                },
+                complete: function() {
+                    $loadingTip.hide();
+                }
             });
         },
 
@@ -477,26 +513,25 @@ define([
         },
 
         dirUserSharePanelInit: function() {
-            var form = this.$('#dir-user-share');
-
-            $('[name="emails"]', form).select2($.extend({
-                //width: '292px' // the container will copy class 'w100' from the original element to get width
-            },Common.contactInputOptionsForSelect2()));
-
-            // show existing items
+            var $loadingTip = this.$('.loading-tip').show();
+            var $panel = this.$('#dir-user-share');
+            var $table = $('table', $panel);
             var $add_item = $('#add-dir-user-share-item');
             var repo_id = this.repo_id, 
                 path = this.dirent_path;
-            Common.ajaxGet({
-                'get_url': Common.getUrl({
+
+            $.ajax({
+                url: Common.getUrl({
                     name: 'dir_shared_items',
                     repo_id: repo_id
                 }), 
-                'data': {
+                data: {
                     'p': path,
                     'share_type': 'user'
                 },
-                'after_op_success': function (data) {
+                cache: false,
+                dataType: 'json',
+                success: function(data) {
                     $(data).each(function(index, item) {
                         var new_item = new FolderShareItemView({
                             'repo_id': repo_id,
@@ -510,40 +545,50 @@ define([
                         }); 
                         $add_item.after(new_item.el);
                     }); 
+                    $('[name="emails"]', $add_item).select2($.extend({
+                        //width: '292px' // the container will copy class 'w100' from the original element to get width
+                    },Common.contactInputOptionsForSelect2()));
+                    $table.removeClass('hide');
+                },
+                error: function(xhr, textStatus, errorThrown) {
+                    var err_msg;
+                    if (xhr.responseText) {
+                        if (xhr.status == 403) {
+                            err_msg = gettext("Permission error");
+                        } else {
+                            err_msg = xhr.responseJSON.error_msg ? xhr.responseJSON.error_msg : gettext('Error');
+                        }
+                    } else {
+                        err_msg = gettext('Please check the network.');
+                    }
+                    $('.error', $panel).html(err_msg).show();
+                },
+                complete: function() {
+                    $loadingTip.hide();
                 }
             }); 
-
-            form.removeClass('hide');
-            this.$('.loading-tip').hide();
         },
 
         dirGroupSharePanelInit: function() {
-            var form = this.$('#dir-group-share');
-
-            var groups = app.pageOptions.groups || [];
-            var g_opts = '';
-            for (var i = 0, len = groups.length; i < len; i++) {
-                g_opts += '<option value="' + groups[i].id + '" data-index="' + i + '">' + groups[i].name + '</option>';
-            }
-            $('[name="groups"]', form).html(g_opts).select2({
-                placeholder: gettext("Select groups"),
-                escapeMarkup: function(m) { return m; }
-            });
-
-            // show existing items
+            var $loadingTip = this.$('.loading-tip').show();
+            var $panel = this.$('#dir-group-share');
+            var $table = $('table', $panel);
             var $add_item = $('#add-dir-group-share-item');
-            var repo_id = this.repo_id, 
+            var repo_id = this.repo_id,
                 path = this.dirent_path;
-            Common.ajaxGet({
-                'get_url': Common.getUrl({
+
+            $.ajax({
+                url: Common.getUrl({
                     name: 'dir_shared_items',
                     repo_id: repo_id
                 }),
-                'data': {
+                data: {
                     'p': path,
                     'share_type': 'group'
                 },
-                'after_op_success': function (data) {
+                cache: false,
+                dataType: 'json',
+                success: function(data) {
                     $(data).each(function(index, item) {
                         var new_item = new FolderShareItemView({
                             'repo_id': repo_id,
@@ -557,11 +602,36 @@ define([
                         });
                         $add_item.after(new_item.el);
                     });
-                }   
-            }); 
 
-            form.removeClass('hide');
-            this.$('.loading-tip').hide();
+                    var groups = app.pageOptions.groups || [];
+                    var g_opts = '';
+                    for (var i = 0, len = groups.length; i < len; i++) {
+                        g_opts += '<option value="' + groups[i].id + '" data-index="' + i + '">' + groups[i].name + '</option>';
+                    }
+                    $('[name="groups"]', $add_item).html(g_opts).select2({
+                        placeholder: gettext("Select groups"),
+                        escapeMarkup: function(m) { return m; }
+                    });
+
+                    $table.removeClass('hide');
+                },
+                error: function(xhr, textStatus, errorThrown) {
+                    var err_msg;
+                    if (xhr.responseText) {
+                        if (xhr.status == 403) {
+                            err_msg = gettext("Permission error");
+                        } else {
+                            err_msg = xhr.responseJSON.error_msg ? xhr.responseJSON.error_msg : gettext('Error');
+                        }
+                    } else {
+                        err_msg = gettext('Please check the network.');
+                    }
+                    $('.error', $panel).html(err_msg).show();
+                },
+                complete: function() {
+                    $loadingTip.hide();
+                }
+            });
         },
 
         dirUserShare: function () {
