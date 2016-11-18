@@ -158,16 +158,12 @@ define([
         showFolderSelectForm: function(e) {
             var $icon = $(e.currentTarget);
             var $permContent = $icon.closest('.js-folder-perm-content').slideUp();
-
             var $form = $('.js-folder-select-form', $permContent.parent()).slideDown();
+
             var $jstreeContainer = $('.js-jtree-container', $form);
-            /*
-            var repo_data = FileTree.formatRepoData([{
-                'id': this.repo_id,
-                'name': this.repo_name
-            }]);
-            FileTree.renderDirTree($jstreeContainer, $form, repo_data);
-            */
+            if ($.jstree.reference($jstreeContainer)) { // null or {...}
+                return;
+            }
             FileTree.renderTreeForPath({
                 $form: $form,
                 $container: $jstreeContainer,
@@ -181,15 +177,19 @@ define([
             var $submitBtn = $(e.currentTarget);
 
             var $form = $submitBtn.closest('form');
-            var path = $('[name=dst_path]', $form).val();
+            var $input = $('[name=dst_path]', $form);
+            var path = $input.val();
+            var $error = $('.error', $form);
             if (!path) {
-                $('.error', $form).html(gettext("Please click and choose a directory.")).removeClass('hide');
+                $error.html(gettext("Please click and choose a directory.")).removeClass('hide');
                 return false;
             }
             $form.slideUp();
-            // destroy the jstree instance.
-            // attention: because of `destroy()`, the $jstreeContainer's class names should not include string 'jstree', e.g. '.js-jstree-container' is not ok. 
-            $.jstree._reference($('.js-jtree-container', $form)).destroy();
+
+            // clean the state
+            $.jstree.reference($('.js-jtree-container', $form)).deselect_all();
+            $('[name=dst_path]', $form).val('');
+            $error.hide();
 
             var $folderPerm = $('.js-folder-perm-content', $form.parent()).slideDown();
             $('[name=folder_path]', $folderPerm).val(path);
@@ -200,9 +200,13 @@ define([
         cancelFolderSelect: function(e) {
             var $cancelBtn = $(e.currentTarget);
             var $form = $cancelBtn.closest('form').slideUp();
-            // destroy the jstree instance.
-            $.jstree._reference($('.js-jtree-container', $form)).destroy();
             $('.js-folder-perm-content', $form.parent()).slideDown();
+
+            // clean the state
+            var theTree = $.jstree.reference($('.js-jtree-container', $form));
+            if (theTree.get_selected().length > 0) { // if select any node
+                theTree.deselect_all();
+            }
         },
 
         addUserPerm: function(e) {

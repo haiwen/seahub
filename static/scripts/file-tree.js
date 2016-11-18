@@ -3,316 +3,190 @@ define([
   'jstree',
   'underscore',
   'backbone',
-  'common',
+  'common'
   ], function($, jstree, _, Backbone, Common) {
     'use strict';
 
-    $.jstree._themes = app.config.mediaUrl + 'js/themes/';
-
     var FileTree = {
 
-        options: {},
-
-        formatRepoData: function(data) {
-            var repos = [], repo;
-            for (var i = 0, len = data.length; i < len; i++) {
-                repo = {
-                    'data': data[i].name,
-                    'attr': {'repo_id': data[i].id, 'root_node': true},
-                    'state': 'closed'
-                }
-                repos.push(repo);
-            }
-            return repos;
-        },
-
-        /**
-        * @container(required): container.data('site_root', '{{SITE_ROOT}}')
-        * @options (optional): {'two_state': true}
-        */
-        renderFileTree: function(container, repo_data, options) {
-            var opts = options || {};
-            container
-            .delegate('.jstree-closed', 'dblclick', function(e) {
-                container.jstree('open_node', $(this));
-                $(this).find('a').removeClass('jstree-clicked');
-            })
-            .bind('select_node.jstree', function(e, data) {
-                $('.jstree-clicked').removeClass('jstree-clicked'); // do not show selected item
-            })
-            .jstree({
-                'json_data': {
-                    'data': repo_data,
-                    'ajax': {
-                        'url': function(data) {
-                            var path = this.get_path(data);
-                            var repo_id;
-                            if (path.length == 1) {
-                                path = '/';
-                                repo_id = data.attr('repo_id');
-                            } else {
-                                var root_node = data.parents('[root_node=true]');
-                                repo_id = root_node.attr('repo_id');
-                                path.shift();
-                                path = '/' + path.join('/') + '/';
-                            }
-                            return app.config.siteRoot + 'ajax/repo/' + repo_id + '/dirents/?path=' + e(path);
-                        },
-                        'success': function(data) {
-                            var items = [];
-                            var o, item;
-                            for (var i = 0, len = data.length; i < len; i++) {
-                                o = data[i];
-                                if (o.type == 'dir') {
-                                    item = {
-                                        'data': o.name,
-                                        'attr': { 'type': o.type },
-                                        'state': 'closed'
-                                    };
-                                } else {
-                                    item = {
-                                        'data': o.name,
-                                        'attr': {'type': o.type }
-                                    };
-                                }
-                                items.push(item);
-                            }
-                            return items;
-                        }
-                    }
-                },
-                'core': {
-                    'animation': 100
-                },
-                'themes': {
-                    'theme':'classic'
-                },
-                'checkbox':{
-                    'two_state': opts.two_state, // default: false. when 'true', dir can be checked separately with file
-                    // make dir can only be selected
-                    //'override_ui':true, // nodes can be checked, or selected to be checked
-                    'real_checkboxes': true,
-                    'real_checkboxes_names': function(node) {
-                        // get the path array consisting of nodes starting from the root node
-                        var path_array = this.get_path(node);
-                        var repo_id, path;
-                        if (path_array.length == 1) {
-                            // root node
-                            path = '/';
-                            repo_id = node.attr('repo_id');
-                        } else {
-                            path_array.shift();
-                            repo_id = node.parents('[root_node=true]').attr('repo_id');
-                            if (node.attr('type') == 'dir') {
-                                path = '/' + path_array.join('/') + '/';
-                            } else {
-                                path = '/' + path_array.join('/');
-                            }
-                        }
-                        return ['selected', repo_id + path];
-                    }
-                },
-                'plugins': ['themes', 'json_data', 'ui', 'checkbox']
-            });
+        renderFileTree: function() {
         },
 
         // only list dirs
-        renderDirTree: function(container, form, repo_data) {
-            container
-            .delegate('.jstree-closed', 'dblclick', function(e) {
-                container.jstree('open_node', $(this));
-                $(this).find('a').removeClass('jstree-clicked');
-            })
-            .bind('before.jstree', function(e, data) {
-                if (data.func === 'select_node') { // ensure only one selected dir display in the popup
-                    $('.jstree-clicked', form).removeClass('jstree-clicked');
-                }
-            })
-            .bind('select_node.jstree', function(e, data) {
-                var path, repo_id;
-                var path_array = data.inst.get_path(data.rslt.obj);
-                if (path_array.length == 1) {
-                    path = '/';
-                    repo_id = data.rslt.obj.attr('repo_id');
-                } else {
-                    repo_id = data.rslt.obj.parents('[root_node=true]').attr('repo_id');
-                    path_array.shift();
-                    path = '/' + path_array.join('/') + '/';
-                }
-                $('input[name="dst_repo"]', form).val(repo_id);
-                $('input[name="dst_path"]', form).val(path);
-            })
-            .jstree({
-                'json_data': {
-                    'data': repo_data,
-                    'ajax': {
-                        'url': function(data) {
-                            var path = this.get_path(data);
-                            var repo_id;
-                            if (path.length == 1) {
-                                path = '/';
-                                repo_id = data.attr('repo_id');
-                            } else {
-                                repo_id = data.parents('[root_node=true]').attr('repo_id');
-                                path.shift();
-                                path = '/' + path.join('/') + '/';
-                            }
-                            return app.config.siteRoot + 'ajax/repo/' + repo_id + '/dirents/?dir_only=true&path=' + encodeURIComponent(path);
-                        },
-                        'success': function(data) {
-                            var items = [];
-                            var o, item;
-                            for (var i = 0, len = data.length; i < len; i++) {
-                                o = data[i];
-                                if (o.has_subdir) {
-                                    item = {
-                                        'data': o.name,
-                                        'attr': { 'type': o.type },
-                                        'state': 'closed'
-                                    };
-                                } else {
-                                    item = {
-                                        'data': o.name,
-                                        'attr': {'type': o.type }
-                                    };
-                                }
-                                items.push(item);
-                            }
-                            return items;
-                        }
-                    }
-                },
+        renderDirTree: function($container, $form, initial_data) {
+            $container.jstree({
                 'core': {
+                    'data': function(node, callback) {
+                        if (node.id == "#") {
+                            callback(initial_data);
+                        } else {
+                            var repo_id;
+                            var node_path = node.data.path;
+                            if (node.parents.length == 1) { // parents: ['#']
+                                repo_id = node.data.repo_id;
+                            } else {
+                                repo_id = $container.jstree('get_node', node.parents[node.parents.length - 2]).data.repo_id;
+                            }
+                            $.ajax({
+                                url: Common.getUrl({name: 'get_dirents', repo_id: repo_id})
+                                + '?path=' + encodeURIComponent(node_path) + '&dir_only=true',
+                                cache: false,
+                                dataType: 'json',
+                                success: function(data) { // data: [{'name': ''}, ...]
+                                    if (data.length) {
+                                        for (var i = 0, len = data.length; i < len; i++) {
+                                            node.children.push({
+                                                'text': Common.HTMLescape(data[i].name),
+                                                'data': {
+                                                    'path': node_path + data[i].name + '/',
+                                                },
+                                                'children': true
+                                            });
+                                        }
+                                    }
+                                },
+                                complete: function() {
+                                    callback(node.children);
+                                }
+                            });
+                        }
+                    },
+                    'multiple': false, // only 1 folder is allowed to be selected at one time
                     'animation': 100
-                },
-                'plugins': ['themes', 'json_data', 'ui']
+                }
+            })
+            .on('select_node.jstree', function(e, data) {
+                var node = data.node;
+                var repo_id;
+                if (node.parents.length == 1) { // parents: ['#']
+                    repo_id = node.data.repo_id;
+                } else {
+                    repo_id = $container.jstree('get_node', node.parents[node.parents.length - 2]).data.repo_id;
+                }
+                $('input[name="dst_repo"]', $form).val(repo_id);
+                $('input[name="dst_path"]', $form).val(node.data.path);
             });
         },
 
         renderTreeForPath: function(options) {
-            var form = options.$form,
-                container = options.$container;
+            var _this = this;
+            var $form = options.$form,
+                $container = options.$container;
 
             var repo_name = options.repo_name,
                 repo_id = options.repo_id;
-            var cur_path = options.path;
-            if (cur_path != '/') {
-                cur_path += '/';
+            var path = options.path;
+            if (path != '/') {
+                path += '/';
             }
-            var _this = this;
+
+            var json_data = [];
+            var root_node = {
+                'text': Common.HTMLescape(repo_name),
+                'data': {
+                    'repo_id': repo_id,
+                    'path': '/'
+                },
+                'children': [],
+                'state': {
+                    'opened': true
+                }
+            };
+            json_data.push(root_node);
+
             $.ajax({
-                url: Common.getUrl({name: 'get_dirents', repo_id: options.repo_id})
-                + '?path=' + encodeURIComponent(cur_path) + '&dir_only=true&all_dir=true',
+                url: Common.getUrl({name: 'get_dirents', repo_id: repo_id})
+                + '?path=' + encodeURIComponent(path) + '&dir_only=true&all_dir=true',
                 cache: false,
                 dataType: 'json',
-                success: function(data) {
-                    var json_data = [];
-                    var repo_data = {
-                        'data': repo_name,
-                        'attr': {'repo_id': repo_id, 'root_node': true},
-                        'state': 'open'
-                    };
-
-                    var path_eles = cur_path.split('/');
-                    path_eles.pop();
-                    /* e.g.
-                    * path: '/xx/'
-                    * path_eles: ['', 'xx']
-                    * data: [["xxx", "xx", "test1022"], ["lkjj", "kjhkhi"]]
-                    * when no dir in '/', data will be [[]];
-                    */
-                    var len = data.length;
-                    var children = [];
-                    for (var i = len - 1; i > -1; i--) {
-                        children[i] = [];
-                        if (i == len - 1) {
-                            for (var j = 0, len_i = data[i].length; j < len_i; j++) {
-                                children[i].push({
-                                    'data': data[i][j],
-                                    'state': 'closed'
+                success: function(data) { // data: [{'name': '', 'parent_dir':''}, ...]
+                    if (data.length) {
+                        var node, node_path;
+                        var nodes_with_children = [];
+                        for (var i = 0, len = data.length; i < len; i++) {
+                            node_path = data[i].parent_dir + data[i].name + '/';
+                            node = {
+                                'text': Common.HTMLescape(data[i].name),
+                                'data': {
+                                    'path': node_path
+                                }
+                            };
+                            if (path.indexOf(node_path) == 0) {
+                                $.extend(node, {
+                                    'children': [],
+                                    'state': {
+                                        'opened': true
+                                    }
+                                });
+                                nodes_with_children.push(node);
+                            } else {
+                                $.extend(node, {
+                                    'children': true
                                 });
                             }
-                        } else {
-                            for (var j = 0, len_i = data[i].length; j < len_i; j++) {
-                                if (data[i][j] == path_eles[i+1]) {
-                                    children[i].push({
-                                        'data': data[i][j],
-                                        'state': 'open',
-                                        'children': children[i+1]
-                                    });
-                                } else {
-                                    children[i].push({
-                                        'data': data[i][j],
-                                        'state': 'closed'
-                                    });
+                            if (data[i].parent_dir == '/') {
+                                root_node.children.push(node);
+                            } else {
+                                for (var j = 0, lenn = nodes_with_children.length; j < lenn; j++) {
+                                    if (data[i].parent_dir == nodes_with_children[j].data.path) {
+                                        nodes_with_children[j].children.push(node);
+                                        break;
+                                    }
                                 }
                             }
                         }
                     }
-                    if (children[0].length > 0) {
-                        $.extend(repo_data, {'children': children[0]});
-                    }
-                    json_data.push(repo_data);
-
-                    _this.renderDirTree(container, form, json_data);
-                    container.removeClass('hide');
                 },
-                error: function() {
-                    var cur_repo = [{
-                        'data': repo_name,
-                        'attr': {'repo_id': repo_id, 'root_node': true},
-                        'state': 'closed'
-                    }];
-                    _this.renderDirTree(container, form, cur_repo);
-                    container.removeClass('hide');
+                complete: function() {
+                    _this.renderDirTree($container, $form, json_data);
                 }
             });
-
-
         },
 
         prepareOtherReposTree: function(options) {
             var _this = this;
 
-            $('#mv-dir-list #other-repos .hd').click(function() {
-                var span = $('span', $(this)),
-                    form = $('#mv-form'),
-                    loading_tip = $(this).next(),
-                    dir_tree_container = $("#mv-dir-list #other-repos #other-repos-dirs");
+            $('#other-repos .hd').click(function() {
+                var $span = $('span', $(this)),
+                    $form = $('#mv-form'),
+                    $loading_tip = $(this).next(),
+                    $container = $("#other-repos-dirs");
 
-                if (span.hasClass('icon-caret-right')) {
-                    span.attr('class','icon-caret-down');
-                    loading_tip.show();
+                if ($span.hasClass('icon-caret-right')) {
+                    $span.attr('class','icon-caret-down');
+                    $loading_tip.show();
                     $.ajax({
                         url: Common.getUrl({name:'unenc_rw_repos'}),
                         cache: false,
                         dataType: 'json',
-                        success: function(data) {
+                        success: function(data) { // data: [{'id':'', 'name':''}, ...]
                             var other_repos = [];
                             var cur_repo_id = options.cur_repo_id;
                             for (var i = 0, len = data.length; i < len; i++) {
                                 if (data[i].id != cur_repo_id) {
                                     other_repos.push({
-                                    'data': data[i].name,
-                                    'attr': {'repo_id': data[i].id, 'root_node': true},
-                                    'state': 'closed'
+                                    'text': Common.HTMLescape(data[i].name),
+                                    'data': {
+                                        'repo_id': data[i].id,
+                                        'path': '/'
+                                    },
+                                    'children': true
                                     });
                                 }
                             }
-                            loading_tip.hide();
-                            _this.renderDirTree(dir_tree_container, form, other_repos);
-                            dir_tree_container.removeClass('hide');
+                            _this.renderDirTree($container, $form, other_repos);
+                            $container.removeClass('hide');
+                        },
+                        complete: function() {
+                            $loading_tip.hide();
                         }
                     });
                 } else {
-                    span.attr('class','icon-caret-right');
-                    dir_tree_container.addClass('hide');
+                    $span.attr('class','icon-caret-right');
+                    $container.addClass('hide');
                 }
             });
-
         }
-
-
     };
 
     return FileTree;

@@ -191,15 +191,18 @@ $('#wiki-create-form').submit(function () {
 var all_repos = [];
 {% for a_repo in owned_repos %}
     all_repos.push({
-        'data': '{{ a_repo.props.name }}',
-        'attr': {'repo_id': '{{ a_repo.props.id }}', 'root_node': true},
+        'text': HTMLescape('{{ a_repo.props.name|escapejs }}'),
+        'data': {
+            'repo_id': '{{ a_repo.props.id }}',
+            'path': '/'
+        }
     });
 {% endfor %}
 $('#wiki-use-lib').click(function() {
-    var form = $('#wiki-use-lib-form'),
-        file_tree = new FileTree();
-    form.modal({appendTo:'#main', autoResize:true, focus:false});
-    file_tree.renderDirTree($('#repos-dirs').data('site_root', '{{SITE_ROOT}}'), form, all_repos);
+    var $form = $('#wiki-use-lib-form');
+    $form.modal({appendTo:'#main', autoResize:true, focus:false});
+    $('#simplemodal-container').css({'width':'auto', 'height':'auto'});
+    FileTree.renderDirTree($('#repos-dirs').data('site_root', '{{SITE_ROOT}}'), $form, all_repos);
     return false;
 });
 $('#wiki-use-lib-form').submit(function() {

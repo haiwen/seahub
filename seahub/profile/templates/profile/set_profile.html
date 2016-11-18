@@ -91,7 +91,7 @@
     <p>{% trans "Your default library:" %} <a href="{% url 'view_common_lib_dir' default_repo.id '' %}">{{default_repo.name}}</a>.</p>
     {% endif %}
     <p class="txt-before-btn">{% trans "Default library is the default place to store your personal documents and pictures." %}</p>
-    <button id="default-lib">{% trans "Choose Default Library" %}</button>
+    <button id="choose-default-lib">{% trans "Choose Default Library" %}</button>
 </div>
 <form id="default-lib-form" action="{% url 'default_repo' %}" method="post" class="file-choose-form hide">{% csrf_token %}
     <h3 id="dialogTitle">{% trans "Choose default library:" %}</h3>
@@ -172,16 +172,15 @@ $('#account-delete-btn').click(function () {
 var all_repos = [];
 {% for a_repo in owned_repos %}
     all_repos.push({
-        'data': '{{ a_repo.props.name }}',
-        'attr': {'repo_id': '{{ a_repo.props.id }}', 'root_node': true},
+        'text': HTMLescape('{{ a_repo.props.name|escapejs }}'),
+        'data': {'repo_id': '{{ a_repo.props.id }}', 'path': '/'}
     });
 {% endfor %}
-$('#default-lib').click(function() {
-    var form = $('#default-lib-form'),
-        file_tree = new FileTree();
-    form.modal({appendTo:'#main', autoResize:true, focus:false});
+$('#choose-default-lib').click(function() {
+    var $form = $('#default-lib-form');
+    $form.modal({appendTo:'#main', autoResize:true, focus:false});
     $('#simplemodal-container').css({'width':'auto', 'height':'auto'});
-    file_tree.renderDirTree($('#repos-dirs').data('site_root', '{{SITE_ROOT}}'), form, all_repos);
+    FileTree.renderDirTree($('#repos-dirs').data('site_root', '{{SITE_ROOT}}'), $form, all_repos);
 });
 $('#default-lib-form').submit(function() {
     var dst_repo = $('[name="dst_repo"]', $(this)).val();
