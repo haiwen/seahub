@@ -58,6 +58,26 @@ define([
             var new_dir_names = [];
             var dirs_to_update = [];
 
+            // custom: copy function '_formatBitrate' from jquery.fileupload-ui.js,
+            // and changed 'bit/s' to 'B/s'
+            var formatBitRate = function(bits) {
+                var Bs;
+                if (typeof bits !== 'number') {
+                    return '';
+                }
+                Bs = bits / 8;
+                if (Bs >= 1000000000) {
+                    return (Bs / 1000000000).toFixed(2) + ' GB/s';
+                }
+                if (Bs >= 1000000) {
+                    return (Bs / 1000000).toFixed(2) + ' MB/s';
+                }
+                if (Bs >= 1000) {
+                    return (Bs / 1000).toFixed(2) + ' kB/s';
+                }
+                return Bs.toFixed(2) + ' B/s';
+            };
+
             var _this = this;
             popup.fileupload({
                 paramName: 'file',
@@ -270,10 +290,10 @@ define([
                 }
                 return false;
             })
-            .bind('fileuploadprogressall', function (e, data) {
+            .bind('fileuploadprogressall', function(e, data) {
                 $total_progress.html(parseInt(data.loaded / data.total * 100, 10) + '% ' +
                     '<span style="font-size:14px;color:#555;">(' +
-                    $(this).data('blueimp-fileupload')._formatBitrate(data.bitrate) +
+                    formatBitRate(data.bitrate) +
                     ')</span>').removeClass('hide');
                 if (data.loaded > 0 && data.loaded == data.total) {
                     saving_tip.show();
@@ -382,6 +402,15 @@ define([
                         });
                     });
                     updated_files = [];
+                }
+            })
+            .bind('fileuploadfail', function(e, data) { // 'fail'
+                var file = data.files[0];
+                if (!file.error &&
+                    data.jqXHR &&
+                    data.jqXHR.responseJSON &&
+                    data.jqXHR.responseJSON.error) {
+                    file.error = data.jqXHR.responseJSON.error;
                 }
             })
             // after tpl has rendered

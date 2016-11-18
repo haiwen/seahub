@@ -211,6 +211,9 @@ define([
                 if (!dir.user_perm || dir.user_perm != 'rw') {
                     return;
                 }
+                if (dir.no_quota) {
+                    return;
+                }
 
                 var $popup = this.fileUploadView.$el;
 
@@ -426,6 +429,7 @@ define([
 
                 this.$dir_op_bar.html($.trim(this.dir_op_bar_template({
                     user_perm: dir.user_perm,
+                    no_quota: dir.no_quota,
                     encrypted: dir.encrypted,
                     mode: this.view_mode,
                     path: dir.path,

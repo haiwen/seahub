@@ -346,6 +346,8 @@ def list_lib_dir(request, repo_id):
     result["is_virtual"] = repo.is_virtual
     result["repo_name"] = repo.name
     result["user_perm"] = user_perm
+    # check quota for fileupload
+    result["no_quota"] = True if seaserv.check_quota(repo.id) < 0 else False
     result["encrypted"] = repo.encrypted
 
     dirent_list = []
