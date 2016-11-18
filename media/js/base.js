@@ -533,7 +533,8 @@ function userInputOPtionsForSelect2(user_search_url) {
 }
 
 var FileTree = {
-    renderDirTree: function($container, $form, initial_data) {
+    // list dirs & files
+    renderTree: function($container, $form, initial_data, options) {
         $container.jstree({
             'core': {
                 'data': function(node, callback) {
@@ -547,21 +548,38 @@ var FileTree = {
                         } else {
                             repo_id = $container.jstree('get_node', node.parents[node.parents.length - 2]).data.repo_id;
                         }
+
+                        var url = $container.data('site_root') + 'ajax/repo/' + repo_id + '/dirents/'
+                            + '?path=' + encodeURIComponent(node_path);
+                        if (options && options.dir_only) {
+                            url += '&dir_only=true';
+                        }
                         $.ajax({
-                            url: $container.data('site_root') + 'ajax/repo/' + repo_id + '/dirents/'
-                            + '?path=' + encodeURIComponent(node_path) + '&dir_only=true',
+                            url: url,
                             cache: false,
                             dataType: 'json',
-                            success: function(data) { // data: [{'name': ''}, ...]
+                            success: function(data) { // data: [{'name': '', 'type': 'dir'|'file'}, ...]
+                                var node_name;
                                 if (data.length) {
                                     for (var i = 0, len = data.length; i < len; i++) {
-                                        node.children.push({
-                                            'text': HTMLescape(data[i].name),
-                                            'data': {
-                                                'path': node_path + data[i].name + '/',
-                                            },
-                                            'children': true
-                                        });
+                                        node_name = data[i].name;
+                                        if (data[i].type == 'dir') {
+                                            node.children.push({
+                                                'text': HTMLescape(node_name),
+                                                'data': {
+                                                    'path': node_path + node_name + '/'
+                                                },
+                                                'children': true
+                                            });
+                                        } else {
+                                            node.children.push({
+                                                'text': HTMLescape(node_name),
+                                                'type': 'file',
+                                                'data': {
+                                                    'path': node_path + node_name
+                                                }
+                                            });
+                                        }
                                     }
                                 }
                             },
@@ -571,9 +589,15 @@ var FileTree = {
                         });
                     }
                 },
-                'multiple': false, // only 1 folder is allowed to be selected at one time
+                'multiple': false, // only 1 item is allowed to be selected at one time
                 'animation': 100
-            }
+            }, // 'core' ends
+            'types': { // custom node types
+                'file': { // add type 'file'
+                    'icon': 'jstree-file'
+                }
+            },
+            'plugins': ['types']
         })
         .on('select_node.jstree', function(e, data) {
             var node = data.node;
@@ -586,5 +610,10 @@ var FileTree = {
             $('input[name="dst_repo"]', $form).val(repo_id);
             $('input[name="dst_path"]', $form).val(node.data.path);
         });
+    },
+
+    // only list dirs
+    renderDirTree: function($container, $form, initial_data) {
+        this.renderTree($container, $form, initial_data, {'dir_only': true});
     }
 };
