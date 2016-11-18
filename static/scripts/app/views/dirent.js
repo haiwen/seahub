@@ -15,6 +15,9 @@ define([
 
     var DirentView = HLItemView.extend({
         tagName: 'tr',
+        attributes: {
+            draggable: 'true'
+        },
 
         fileTemplate: _.template($('#dirent-file-tmpl').html()),
         dirTemplate: _.template($('#dirent-dir-tmpl').html()),
@@ -76,6 +79,10 @@ define([
             'click .select': 'select',
             'click .file-star': 'starFile',
             'click .img-name-link': 'viewImageWithPopup',
+            // mv by 'drag & drop'
+            'dragstart': 'itemDragstart',
+            'dragover': 'itemDragover',
+            'drop': 'itemDrop',
             'click .download-dir': 'downloadDir',
             'click .share': 'share',
             'click .delete': 'del', // 'delete' is a preserve word
@@ -124,6 +131,82 @@ define([
             } else {
                 $toggle_all_checkbox.prop('checked', false);
             }
+        },
+
+        itemDragstart: function(e) {
+            if (this.model.get('perm') != 'rw') {
+                return false;
+            }
+            var ev = e.originalEvent;
+            ev.dataTransfer.setData('text/cid', this.model.cid);
+            ev.dataTransfer.setData('text/is_dir', this.model.get('is_dir'));
+            ev.dataTransfer.setData('text/plain', this.model.get('obj_name'));
+            ev.dataTransfer.effectAllowed = 'move';
+            // use the file/dir icon as drag image
+            ev.dataTransfer.setDragImage(this.$('.dirent-icon img')[0], 0, 0);
+        },
+
+        itemDragover: function(e) {
+            if (this.model.get('perm') != 'rw') {
+                return false;
+            }
+            if (!this.model.get('is_dir')) {
+                return false;
+            }
+            var ev = e.originalEvent;
+            ev.preventDefault();
+            ev.dataTransfer.dropEffect = 'move';
+        },
+
+        itemDrop: function(e) {
+            if (this.model.get('perm') != 'rw') {
+                return false;
+            }
+            if (!this.model.get('is_dir')) {
+                return false;
+            }
+            var ev = e.originalEvent;
+            ev.preventDefault();
+
+            var cid = ev.dataTransfer.getData('text/cid');
+            var is_dir = ev.dataTransfer.getData('text/is_dir');
+            var obj_name = ev.dataTransfer.getData('text/plain');
+
+            if (is_dir && obj_name == this.model.get('obj_name')) {
+                // can't move a directory to itself
+                return false;
+            }
+
+            var dir = this.dir;
+            var path = dir.path;
+            var dirent_path = Common.pathJoin([path, this.model.get('obj_name')]);
+            $.ajax({
+                url: Common.getUrl({
+                    'name': is_dir ? 'mv_dir' : 'mv_file',
+                    'repo_id': dir.repo_id
+                }) + '?path=' + encodeURIComponent(path)
+                + '&obj_name=' + encodeURIComponent(obj_name),
+                type: 'POST',
+                dataType: 'json',
+                data: {
+                    'dst_repo': dir.repo_id,
+                    'dst_path': dirent_path
+                },
+                beforeSend: Common.prepareCSRFToken,
+                success: function() {
+                    var msg = gettext("Successfully moved %(name)s")
+                        .replace('%(name)s', obj_name);
+                    Common.feedback(msg, 'success');
+                    dir.remove(cid);
+                },
+                error: function(xhr) {
+                    if (xhr.responseText) {
+                        Common.feedback($.parseJSON(xhr.responseText).error);
+                    } else {
+                        Common.feedback(gettext("Please check the network."), 'error');
+                    }
+                }
+            });
         },
 
         downloadDir: function() {

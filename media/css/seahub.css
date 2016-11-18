@@ -2108,6 +2108,12 @@ button.sf-dropdown-toggle:focus {
 .repo-file-list {
     margin:0;
 }
+.repo-file-list .select {
+    padding-left:10px;
+}
+.repo-file-list .hl .select {
+    background: transparent url('../img/grippy_large.png') scroll no-repeat 1px 50%;
+}
 .repo-file-list .icon-star-empty { color:#d0d0d0; }
 .repo-file-list .icon-star { color:#505050; }
 .repo-file-list .icon-star-empty,
