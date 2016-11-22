@@ -346,12 +346,12 @@ def list_lib_dir(request, repo_id):
 
                 if seafile_api.list_org_repo_shared_group(org_id, username, repo_id) or \
                         seafile_api.list_org_repo_shared_to(org_id, username, repo_id) or \
-                                is_inner_org_pub_repo:
+                        is_inner_org_pub_repo:
                     result["has_been_shared_out"] = True
             else:
                 if seafile_api.list_repo_shared_to(username, repo_id) or \
                         seafile_api.list_repo_shared_group_by_user(username, repo_id) or \
-                                seafile_api.is_inner_pub_repo(repo_id):
+                        (not request.cloud_mode and seafile_api.is_inner_pub_repo(repo_id)):
                     result["has_been_shared_out"] = True
         except Exception as e:
             logger.error(e)
