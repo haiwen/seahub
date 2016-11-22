@@ -1953,7 +1953,7 @@ button.sf-dropdown-toggle:focus {
     font-weight: normal;
 }
 #repo-create-form {
-    padding:0 20px;
+    padding:0 5px;
 }
 #repo-create-form .select {
     width:268px;
