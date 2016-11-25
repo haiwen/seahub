@@ -216,16 +216,17 @@ define([
 
                 if (app.pageOptions.enable_upload_folder) {
                     if ('webkitdirectory' in $('#basic-upload-input')[0]) {
-                        // if enable_upload_folder and is chrome
                         this.$("#basic-upload").remove();
                         this.$("#advanced-upload").show();
                         this.upload_dropdown = new DropdownView({
                             el: this.$("#advanced-upload")
                         });
                         $popup.fileupload(
-                            'option',
-                            'fileInput',
-                            this.$('#advanced-upload input[type="file"]'));
+                            'option', {
+                                fileInput: this.$('#advanced-upload input[type="file"]'),
+                                // set 'replaceFileInput: false' for Firefox(v50)
+                                replaceFileInput: navigator.userAgent.indexOf('Firefox') == -1 ? true : false
+                            });
                     } else {
                         this.$("#advanced-upload").remove();
                         $popup.fileupload(

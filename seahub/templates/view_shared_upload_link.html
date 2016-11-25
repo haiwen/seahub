@@ -124,11 +124,16 @@ form.fileupload({
         data.files.shift();
         return;
     }
-    if (file.webkitRelativePath) { // for 'upload folder'
-        file.relative_path = file.webkitRelativePath;
-    }
-    if (file.relativePath) { // for 'folder drag & drop'
-        file.relative_path = file.relativePath + file.name;
+
+    // set 'file.relative_path' when upload a folder
+    if (data.fileInput) { // clicking
+        if (file.webkitRelativePath) {
+            file.relative_path = file.webkitRelativePath;
+        }
+    } else { // drag & drop
+        if (file.relativePath) {
+            file.relative_path = file.relativePath + file.name;
+        }
     }
 })
 .bind('fileuploadsubmit', function(e, data) {
@@ -221,13 +226,13 @@ form.fileupload({
 {% if enable_upload_folder %}
 if ('webkitdirectory' in $('input[type="file"]', $('#add-file'))[0]) {
     $('#add-folder').show();
-    $('#add-file, #add-folder').click(function() {
-        form.fileupload(
-            'option',
-            'fileInput',
-            $('input[type="file"]', $(this))
-        );
-    });
+    form.fileupload(
+        'option', {
+            fileInput: $('input[type="file"]', $('#add-file, #add-folder')),
+            // set 'replaceFileInput: false' for Firefox(v50)
+            replaceFileInput: navigator.userAgent.indexOf('Firefox') == -1 ? true : false
+        }
+    );
 }
 {% endif %}
 
