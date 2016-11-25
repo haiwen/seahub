@@ -108,13 +108,16 @@ define([
                     data.files.shift();
                     return;
                 }
-                if (file.webkitRelativePath) {
-                    file.relative_path = file.webkitRelativePath;
-                }
 
-                // add folder by drag & drop
-                if (file.relativePath) {
-                    file.relative_path = file.relativePath + file.name;
+                // set 'file.relative_path' when upload a folder
+                if (data.fileInput) { // clicking
+                    if (file.webkitRelativePath) {
+                        file.relative_path = file.webkitRelativePath;
+                    }
+                } else { // drag & drop
+                    if (file.relativePath) {
+                        file.relative_path = file.relativePath + file.name;
+                    }
                 }
             })
             .bind('fileuploadstart', function() {
