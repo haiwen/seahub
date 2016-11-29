@@ -74,6 +74,46 @@
     <td><%= size_formatted %></td>
     <td><%= mtime_relative %></td>
 </script>
+<script type="text/template" id="repo-mobile-tmpl">
+    <td>
+        <img src="<%= icon_url %>" title="<%= icon_title %>" alt="<%= icon_title %>" width="24" />
+    </td>
+    <% if (name) { %>
+    <td>
+        <span class="repo-name-span">
+            <a href="#my-libs/lib/<%= id %>"><%- name %></a><br />
+            <span class="repo-meta-info"><%= size_formatted %></span>
+            <span class="repo-meta-info"><%= mtime_relative %></span>
+        </span>
+    </td>
+    <% } else { %>
+    <td>{% trans "Broken (please contact your administrator to fix this library)" %}</td>
+    <% } %>
+    <td class="repo-op-td">
+        <div class="op-container">
+            <div class="sf-dropdown sf-dropdown-inline">
+                <a href="#" class="sf2-icon-caret-down more-op-icon op-icon sf-dropdown-toggle" title="{% trans "More operations" %}" aria-label="{% trans "More operations" %}"></a>
+                <ul class="hidden-op repo-hidden-op hide sf-dropdown-menu">
+                    <li><a href="#" class="repo-share-btn op">{% trans "Share" %}</a></li>
+                    <li><a href="#" class="repo-delete-btn op">{% trans "Delete" %}</a></li>
+                    <li><a class="op js-repo-rename" href="#">{% trans "Rename" %}</a></li>
+                    <li><a class="op js-repo-transfer" href="#">{% trans "Transfer" %}</a></li>
+                    <li><a class="op js-popup-history-setting" href="#">{% trans "History Setting" %}</a></li>
+                    <% if (encrypted && enc_version == 2) { %>
+                    <li><a class="op js-repo-change-password" href="#">{% trans "Change Password" %}</a></li>
+                    <% } %>
+                    <% if (!encrypted && (can_generate_share_link || can_generate_upload_link)) { %>
+                    <li><a class="op js-popup-share-link-admin" href="#">{% trans "Share Links" %}</a></li>
+                    <% } %>
+                    <% if (app.pageOptions.folder_perm_enabled) { %>
+                    <li><a class="op js-popup-folder-perm-admin" href="#">{% trans "Folder Permission" %}</a></li>
+                    <% } %>
+                </ul>
+            </div>
+        </div>
+    </td>
+</script>
+
 <script type="text/template" id="group-repo-tmpl">
     <td>
         <img src="<%= icon_url %>" title="<%= icon_title %>" alt="<%= icon_title %>" width="24" />
@@ -922,6 +962,15 @@
        <th width="20%">{% trans "Size" %}</th>
        <th width="20%"><a class="table-sort-op by-time" href="#">{% trans "Last Update" %} <span class="sort-icon icon-caret-up"></span></a></th>
    </tr>
+</script>
+<script type="text/template" id="my-repos-hd-mobile-tmpl">
+    <tr>
+        <th width="4%"><span class="sr-only">{% trans "Library Type" %}</span><!--icon--></th>
+        <th width="92%">
+            <a class="table-sort-op mobile-table-sort-op by-name" href="#">{% trans "Name" %} <span class="sort-icon icon-caret-down hide"></a>
+            <a class="table-sort-op mobile-table-sort-op by-time" href="#">{% trans "Last Update" %} <span class="sort-icon icon-caret-up"></span></a>
+        <th width="4%"><span class="sr-only">{% trans "Actions" %}</span></th>
+    </tr>
 </script>
 <script type="text/template" id="shared-repos-hd-tmpl">
     <tr>

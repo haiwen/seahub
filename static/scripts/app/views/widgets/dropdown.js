@@ -65,7 +65,7 @@ define([
             var $toggle = this.$('.sf-dropdown-toggle');
             var $menu = this.$('.sf-dropdown-menu');
             app.ui.currentDropdown = this;
-            if (this.options.right) {
+            if (this.options.right != undefined) {
                 $menu.css('right', this.options.right);
             } else {
                 $menu.css('left', this.options.left);

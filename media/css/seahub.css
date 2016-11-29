@@ -230,10 +230,14 @@ a.table-sort-op {
     font-weight:normal;
     display:block;
 }
+a.mobile-table-sort-op {
+    display:inline-block;
+    margin-right:30px;
+}
 a.table-sort-op:hover,
 a.table-sort-op:focus {
     outline:none;
-    font-weight:bold;
+    /*font-weight:bold;*/
     text-decoration:none;
 }
 img { border:none; }
@@ -1961,6 +1965,12 @@ button.sf-dropdown-toggle:focus {
 }
 #repo-create-form .checkbox-label { /* for "Encrypt" */
     margin:10px 0 0;
+}
+.repo-meta-info {
+    display:inline-block;
+    margin-right:8px;
+    color:#666;
+    font-size:12px;
 }
 .activity-group-hd {
     padding: 8px;

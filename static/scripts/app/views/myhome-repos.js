@@ -14,6 +14,7 @@ define([
 
         template: _.template($('#my-own-repos-tmpl').html()),
         reposHdTemplate: _.template($('#my-repos-hd-tmpl').html()),
+        mobileReposHdTemplate: _.template($('#my-repos-hd-mobile-tmpl').html()),
 
         events: {
             'click .repo-create': 'createRepo',
@@ -27,6 +28,11 @@ define([
             this.listenTo(this.repos, 'reset', this.reset);
 
             this.render();
+
+            var _this = this;
+            $(window).resize(function() {
+                _this.reset();
+            });
         },
 
         addOne: function(repo, collection, options) {
@@ -39,7 +45,8 @@ define([
         },
 
         renderReposHd: function() {
-            this.$tableHead.html(this.reposHdTemplate());
+            var tmpl = $(window).width() >= 768 ? this.reposHdTemplate : this.mobileReposHdTemplate;
+            this.$tableHead.html(tmpl());
         },
 
         reset: function() {

@@ -19,6 +19,7 @@ define([
         tagName: 'tr',
 
         template: _.template($('#repo-tmpl').html()),
+        mobileTemplate: _.template($('#repo-mobile-tmpl').html()), // for extra small devices (phones, less than 768px)
         renameTemplate: _.template($("#repo-rename-form-template").html()),
         transferTemplate: _.template($('#repo-transfer-form-tmpl').html()),
 
@@ -43,16 +44,23 @@ define([
             var obj = this.model.toJSON();
             var icon_size = Common.isHiDPI() ? 96 : 24;
             var icon_url = this.model.getIconUrl(icon_size);
+            var tmpl, dropdownOptions = {};
+            if ($(window).width() >= 768) {
+                tmpl = this.template;
+            } else {
+                tmpl = this.mobileTemplate;
+                dropdownOptions = {'right': 0};
+            }
             _.extend(obj, {
                 'icon_url': icon_url,
                 'icon_title': this.model.getIconTitle(),
                 'can_generate_share_link': app.pageOptions.can_generate_share_link,
                 'can_generate_upload_link': app.pageOptions.can_generate_upload_link
             });
-            this.$el.html(this.template(obj));
-            this.dropdown = new DropdownView({
+            this.$el.html(tmpl(obj));
+            this.dropdown = new DropdownView($.extend({
                 el: this.$('.sf-dropdown')
-            });
+            }, dropdownOptions));
             return this;
         },
 
