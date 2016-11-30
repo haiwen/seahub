@@ -28,11 +28,6 @@ define([
             this.listenTo(this.repos, 'reset', this.reset);
 
             this.render();
-
-            var _this = this;
-            $(window).resize(function() {
-                _this.reset();
-            });
         },
 
         addOne: function(repo, collection, options) {

@@ -86,6 +86,19 @@ define([
 
             this.currentView = this.myReposView;
 
+            var _this = this;
+            var originalWindowWidth = $(window).width();
+            $(window).resize(function() {
+                var curWidth = $(window).width();
+                if (_this.currentView.reset) {
+                    if ((originalWindowWidth < 768 && curWidth >= 768 ) ||
+                        (originalWindowWidth >= 768 && curWidth < 768)) {
+                        _this.currentView.reset();
+                    }
+                }
+                originalWindowWidth = curWidth;
+            });
+
             $('#info-bar .close').click(Common.closeTopNoticeBar);
             $('#top-browser-tip-close').click(function () {
                 $('#top-browser-tip').addClass('hide');

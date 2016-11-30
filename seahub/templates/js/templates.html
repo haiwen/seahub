@@ -130,6 +130,25 @@
     <td><span title="<%- owner %>"><%- owner_name %></span></td>
     <% } %>
 </script>
+<script type="text/template" id="group-repo-mobile-tmpl">
+    <td>
+        <img src="<%= icon_url %>" title="<%= icon_title %>" alt="<%= icon_title %>" width="24" />
+    </td>
+    <td>
+        <a href="#group/<%= group_id %>/lib/<%= id %>"><%- name %></a><br />
+        <% if (show_shared_by) { %>
+        <span class="repo-meta-info" title="<%- owner %>"><%- owner_name %></span>
+        <% } %>
+        <span class="repo-meta-info"><%= size_formatted %></span>
+        <span class="repo-meta-info"><%= mtime_relative %></span>
+    </td>
+    <td class="alc">
+        <% if (is_staff || share_from_me) { %>
+            <a href="#" class="sf2-icon-delete sf2-x cancel-share op-icon" title="{% trans "Unshare" %}" aria-label="{% trans "Unshare" %}"></a>
+        <% } %>
+    </td>
+</script>
+
 <script type="text/template" id="organization-repo-tmpl">
     <td>
         <img src="<%= icon_url %>" title="<%= icon_title %>" alt="<%= icon_title %>" width="24" />
@@ -144,6 +163,23 @@
     <td><%= mtime_relative %></td>
     <td><span title="<%- owner %>"><%- owner_nickname %></span></td>
 </script>
+<script type="text/template" id="organization-repo-mobile-tmpl">
+    <td>
+        <img src="<%= icon_url %>" title="<%= icon_title %>" alt="<%= icon_title %>" width="24" />
+    </td>
+    <td>
+        <a href="#org/lib/<%= id %>"><%- name %></a><br />
+        <span class="repo-meta-info"><%- size_formatted %></span>
+        <span class="repo-meta-info"><%= mtime_relative %></span>
+        <span class="repo-meta-info" title="<%- owner %>"><%- owner_nickname %></span>
+    </td>
+    <td class="alc">
+        <% if (app.pageOptions.is_staff || owner == app.pageOptions.username) { %>
+            <a href="#" class="sf2-icon-delete sf2-x cancel-share op-icon" title="{% trans "Unshare" %}"></a>
+        <% } %>
+    </td>
+</script>
+
 <script type="text/template" id="dir-op-bar-tmpl">
     <% if (user_perm == 'rw') { %>
     <div id="multi-dirents-op" class="hide">
@@ -679,6 +715,21 @@
     <td><%= mtime_relative %></td>
     <td><span title="<%- owner %>"><%- owner_nickname %></span></td>
 </script>
+<script type="text/template" id="shared-repo-mobile-tmpl">
+    <td>
+        <img src="<%= icon_url %>" title="<%= icon_title %>" alt="<%= icon_title %>" width="24" />
+    </td>
+    <td>
+        <a href="#shared-libs/lib/<%= id %>"><%- name %></a><br />
+        <span class="repo-meta-info" title="<%- owner %>"><%- owner_nickname %></span>
+        <span class="repo-meta-info"><%= size_formatted %></span>
+        <span class="repo-meta-info"><%= mtime_relative %></span>
+    </td>
+    <td class="alc">
+        <a href="#" class="sf2-icon-delete sf2-x unshare-btn op-icon" title="{% trans "Leave Share" %}"></a>
+    </td>
+</script>
+
 
 <script type="text/template" id="side-nav-tmpl">
     <div class="side-nav-con">
@@ -982,6 +1033,17 @@
         <th width="16%">{% trans "Shared By" %}</th>
     </tr>
 </script>
+<script type="text/template" id="shared-repos-hd-mobile-tmpl">
+    <tr>
+        <th width="4%"><span class="sr-only">{% trans "Library Type" %}</span><!--icon--></th>
+        <th width="92%">
+            <a class="table-sort-op mobile-table-sort-op by-name" href="#">{% trans "Name" %} <span class="sort-icon icon-caret-down hide"></span></a>
+            <a class="table-sort-op mobile-table-sort-op by-time" href="#">{% trans "Last Update" %} <span class="sort-icon icon-caret-up"></span></a>
+        </th>
+        <th width="4%"><span class="sr-only">{% trans "Actions" %}</span><!--op--></th>
+    </tr>
+</script>
+
 <script type="text/template" id="add-pubrepo-popup-tmpl">
     <h3 class="hd" id="dialogTitle">{% trans "Select libraries to share" %}</h3>
     <span class="loading-icon loading-tip"></span>
@@ -1082,6 +1144,23 @@
             <th width="10%"><!--op--></th>
             <th width="20%">{% trans "Size" %}</th>
             <th width="20%">{% trans "Last Update" %}</th>
+        </tr>
+        </thead>
+        <tbody></tbody>
+    </table>
+    <% } else { %>
+    <p class="empty-tip alc">{% trans "No library is shared to this group" %}</p>
+    <% } %>
+</script>
+<script type="text/template" id="group-item-mobile-tmpl">
+    <h4 class="group-name ellipsis"><a href="#group/<%= id %>/" title="<%- name %>" class="a normal"><%- name %></a></h4>
+    <% if (repos.length) { %>
+    <table>
+        <thead class="vh"><!--use .vh for <td> width-->
+        <tr>
+            <th width="4%"><!--icon--></th>
+            <th width="92%">{% trans "Name" %}</th>
+            <th width="4%"><!--op--></th>
         </tr>
         </thead>
         <tbody></tbody>

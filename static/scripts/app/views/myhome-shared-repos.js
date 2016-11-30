@@ -13,6 +13,7 @@ define([
 
         template: _.template($('#repos-shared-to-me-tmpl').html()),
         reposHdTemplate: _.template($('#shared-repos-hd-tmpl').html()),
+        mobileReposHdTemplate: _.template($('#shared-repos-hd-mobile-tmpl').html()),
 
         initialize: function(options) {
             this.repos = new RepoCollection({type: 'shared'});
@@ -31,7 +32,8 @@ define([
         },
 
         renderReposHd: function() {
-            this.$tableHead.html(this.reposHdTemplate());
+            var tmpl = $(window).width() >= 768 ? this.reposHdTemplate : this.mobileReposHdTemplate;
+            this.$tableHead.html(tmpl());
         },
 
         reset: function() {

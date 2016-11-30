@@ -11,6 +11,7 @@ define([
 
     var GroupItemView = Backbone.View.extend({
         template: _.template($('#group-item-tmpl').html()),
+        mobileTemplate: _.template($('#group-item-mobile-tmpl').html()),
 
         events: {
         },
@@ -19,7 +20,8 @@ define([
         },
 
         render: function() {
-            this.$el.html(this.template(this.model.attributes));
+            var tmpl = $(window).width() >= 768 ? this.template : this.mobileTemplate;
+            this.$el.html(tmpl(this.model.attributes));
             var repos = this.model.get('repos');
             if (repos.length) {
                 this.renderRepoList(repos);
@@ -27,7 +29,7 @@ define([
             return this;
         },
 
-        renderRepoList: function (repos) {
+        renderRepoList: function(repos) {
             repos.sort(function(a, b) {
                 return Common.compareTwoWord(a.name, b.name);
             });
