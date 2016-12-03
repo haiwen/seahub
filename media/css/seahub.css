@@ -232,12 +232,11 @@ a.table-sort-op {
 }
 a.mobile-table-sort-op {
     display:inline-block;
-    margin-right:30px;
+    margin: 0 5px 0 10px;
 }
 a.table-sort-op:hover,
 a.table-sort-op:focus {
     outline:none;
-    /*font-weight:bold;*/
     text-decoration:none;
 }
 img { border:none; }
@@ -762,38 +761,70 @@ textarea:-moz-placeholder {/* for FF */
 .ui-tabs .ui-tabs-hide { display:none; }
 
 /**** left-right-tabs ****/
-.left-right-tabs {
+.nav-con-tabs {
     padding:0;
+    overflow:hidden;
 }
-.left-right-tabs-nav {
-    margin-right:15px;
+@media (max-width:767px) {
+    .nav-con-tabs-nav {
+        background:#f2f2f2;
+        padding:2px;
+        margin-bottom:10px;
+    }
+    .nav-con-tabs-nav .tab {
+        display:inline-block;
+        margin:3px 5px;
+    }
+    .nav-con-tabs-nav a {
+        display:inline-block;
+        padding:3px 3px;
+        color:#747476;
+        font-size:14px;
+        outline:none; /* to overwrite webkit ':focus' style */
+        text-decoration:none;
+        border-bottom:3px solid transparent;
+    }
+    .nav-con-tabs-nav a:hover,
+    .nav-con-tabs-nav .ui-state-active a,
+    .nav-con-tabs-nav .ui-state-active a:hover {
+        color:#eb8205;
+        border-color:#eb8205;
+        text-decoration:none;
+    }
 }
-.left-right-tabs-nav a {
-    display:block;
-    padding:5px 4px;
-    border-radius:3px;
-    color:#747476;
-    font-size:14px;
-    outline:none; /* to overwrite webkit ':focus' style */
-    text-decoration:none;
+@media (min-width:768px) {
+    .nav-con-tabs-nav {
+        float:left;
+        margin-right:15px;
+    }
+    .nav-con-tabs-content {
+        float:right;
+        width:550px;
+        padding:0 1.4em 1em;
+        min-height:150px;
+        max-height:250px;
+        overflow:auto;
+    }
+    .nav-con-tabs-nav a {
+        display:block;
+        padding:5px 4px;
+        border-radius:3px;
+        color:#747476;
+        font-size:14px;
+        outline:none; /* to overwrite webkit ':focus' style */
+        text-decoration:none;
+    }
+    .nav-con-tabs-nav a:hover {
+        text-decoration:none;
+        background:#feefb8;
+    }
+    .nav-con-tabs-nav .ui-state-active a,
+    .nav-con-tabs-nav .ui-state-active a:hover {
+        background:#feac74;
+        color:#fff;
+    }
 }
-.left-right-tabs-nav a:hover {
-    text-decoration:none;
-    background:#feefb8;
-}
-.left-right-tabs-nav .ui-state-active a,
-.left-right-tabs-nav .ui-state-active a:hover {
-    background:#feac74;
-    color:#fff;
-}
-.left-right-tabs-content {
-    width:550px;
-    padding:0 1.4em 1em;
-    min-height:150px;
-    max-height:250px;
-    overflow:auto;
-}
-.left-right-tabs .tabs-panel {
+.nav-con-tabs .tabs-panel {
     padding:0;
 }
 /**** side-tabnav ****/
@@ -2443,16 +2474,17 @@ button.sf-dropdown-toggle:focus {
     padding:2px;
 }
 /* file/dir share popup */
-#file-share .tip,
-#share-popup .tip {
-    max-width:400px;
-}
 .ellipsis-op-target {
     display:inline-block;
     vertical-align:bottom;
 }
 #share-popup .op-target {
     max-width:400px;
+}
+@media (max-width:767px) {
+    #share-popup .op-target {
+        max-width:240px;
+    }
 }
 #mv-form .op-target {
     max-width:410px;
@@ -3224,7 +3256,7 @@ button.sf-dropdown-toggle:focus {
 }
 
 /* user & group folder perm */
-#repo-folder-perm .left-right-tabs-content {/* for the case that the scrollbar appears */
+#repo-folder-perm .nav-con-tabs-content {/* for the case that the scrollbar appears */
     width:630px;
     padding-right:0;
 }

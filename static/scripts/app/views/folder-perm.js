@@ -23,11 +23,20 @@ define([
 
             this.render();
 
+            if ($(window).width() < 768) {
+                this.$el.css({
+                    'width': $(window).width() - 50,
+                    'height': $(window).height() - 50,
+                    'overflow': 'auto'
+                });
+            }
             this.$el.modal({
                 appendTo: "#main",
                 focus: false
             });
-            $('#simplemodal-container').css({'width':'auto', 'height':'auto'});
+            if ($(window).width() >= 768) {
+                $('#simplemodal-container').css({'width':'auto', 'height':'auto'});
+            }
 
             this.$("#folder-perm-tabs").tabs();
 

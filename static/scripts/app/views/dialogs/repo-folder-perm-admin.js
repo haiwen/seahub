@@ -21,6 +21,13 @@ define([
 
             this.render();
             this.$('.op-target').css({'max-width':280}); // for long repo name
+            if ($(window).width() < 768) {
+                this.$el.css({
+                    'width': $(window).width() - 50,
+                    'height': $(window).height() - 50,
+                    'overflow': 'auto'
+                });
+            }
             this.$el.modal({
                 focus: false,
                 onClose: function() {
@@ -28,10 +35,12 @@ define([
                     $.modal.close();
                 }
             });
-            $("#simplemodal-container").css({
-                'width':'auto',
-                'height':'auto'
-            });
+            if ($(window).width() >= 768) {
+                $("#simplemodal-container").css({
+                    'width':'auto',
+                    'height':'auto'
+                });
+            }
             this.$('.js-tabs').tabs();
 
             this.userPerm = new UserFolderPerm({repo_id: this.repo_id});

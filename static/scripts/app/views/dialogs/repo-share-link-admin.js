@@ -20,11 +20,18 @@ define([
 
             this.render();
             this.$('.op-target').css({'max-width':280}); // for long repo name
-            this.$el.modal();
-            $("#simplemodal-container").css({
-                'width':'auto',
-                'height':'auto'
-            });
+
+            if ($(window).width() >= 768) {
+                this.$el.modal({focus: false});
+                $('#simplemodal-container').css({'width':'auto', 'height':'auto'});
+            } else {
+                this.$el.css({
+                    'width': $(window).width() - 50,
+                    'height': $(window).height() - 50,
+                    'overflow': 'auto'
+                }).modal({focus:false});
+            }
+
             this.$('.js-tabs').tabs();
 
             var downloadLinks = new DownloadLinks({repo_id: this.repo_id});

@@ -526,8 +526,8 @@
 
 <script type="text/template" id="share-popup-tmpl">
     <h3 class="hd" id="dialogTitle"><%= title %></h3>
-    <div id="share-tabs" class="left-right-tabs ovhd">
-        <ul class="left-right-tabs-nav fleft">
+    <div id="share-tabs" class="nav-con-tabs">
+        <ul class="nav-con-tabs-nav">
             <% if (!repo_encrypted && can_generate_share_link) { %>
             <li class="tab"><a href="#download-link-share" class="a">{% trans "Download Link" %}</a></li>
             <% } %>
@@ -542,7 +542,7 @@
             <% } %>
         </ul>
 
-        <div class="left-right-tabs-content fright">
+        <div class="nav-con-tabs-content">
             <span class="loading-icon loading-tip"></span>
             <% if (!repo_encrypted && can_generate_share_link) { %>
             <div id="download-link-share" class="tabs-panel">
@@ -928,12 +928,12 @@
 </script>
 <script type="text/template" id="folder-perm-popup-tmpl">
     <h3 class="hd" id="dialogTitle"><%= title %></h3>
-    <div id="folder-perm-tabs" class="left-right-tabs ovhd">
-        <ul class="left-right-tabs-nav fleft">
+    <div id="folder-perm-tabs" class="nav-con-tabs">
+        <ul class="nav-con-tabs-nav">
             <li class="tab"><a href="#user-folder-perm" class="a">{% trans "User Permission" %}</a></li>
             <li class="tab"><a href="#group-folder-perm" class="a">{% trans "Group Permission" %}</a></li>
         </ul>
-        <div class="left-right-tabs-content fright">
+        <div class="nav-con-tabs-content">
             <div id="user-folder-perm" class="tabs-panel">
                 <table>
                     <thead>
@@ -1037,8 +1037,9 @@
     <tr>
         <th width="4%"><span class="sr-only">{% trans "Library Type" %}</span><!--icon--></th>
         <th width="92%">
-            <a class="table-sort-op mobile-table-sort-op by-name" href="#">{% trans "Name" %} <span class="sort-icon icon-caret-down hide"></span></a>
-            <a class="table-sort-op mobile-table-sort-op by-time" href="#">{% trans "Last Update" %} <span class="sort-icon icon-caret-up"></span></a>
+            {% trans "Sort:" %}
+            <a class="table-sort-op mobile-table-sort-op by-name" href="#">{% trans "name" %} <span class="sort-icon icon-caret-down hide"></span></a>
+            <a class="table-sort-op mobile-table-sort-op by-time" href="#">{% trans "last update" %} <span class="sort-icon icon-caret-up"></span></a>
         </th>
         <th width="4%"><span class="sr-only">{% trans "Actions" %}</span><!--op--></th>
     </tr>
@@ -1381,8 +1382,8 @@
 
 <script type="text/template" id="repo-shared-links-admin-dialog-tmpl">
     <h3 id="dialogTitle"><%= title %></h3>
-    <div id="repo-shared-links" class="left-right-tabs js-tabs ovhd">
-        <ul class="left-right-tabs-nav fleft">
+    <div id="repo-shared-links" class="nav-con-tabs js-tabs">
+        <ul class="nav-con-tabs-nav">
             <% if (can_generate_share_link) { %>
             <li class="tab"><a href="#js-download-links" class="a">{% trans "Download Links" %}</a></li>
             <% } %>
@@ -1391,7 +1392,7 @@
             <% } %>
         </ul>
 
-        <div class="left-right-tabs-content fright">
+        <div class="nav-con-tabs-content">
             <% if (can_generate_share_link) { %>
             <div id="js-download-links" class="tabs-panel">
                 <table>
@@ -1460,13 +1461,13 @@
 
 <script type="text/template" id="repo-folder-perm-admin-dialog-tmpl">
     <h3 id="dialogTitle"><%= title %></h3>
-    <div id="repo-folder-perm" class="left-right-tabs js-tabs ovhd">
-        <ul class="left-right-tabs-nav fleft">
+    <div id="repo-folder-perm" class="nav-con-tabs js-tabs">
+        <ul class="nav-con-tabs-nav">
             <li class="tab"><a href="#js-repo-user-folder-perm" class="a">{% trans "User Permission" %}</a></li>
             <li class="tab"><a href="#js-repo-group-folder-perm" class="a">{% trans "Group Permission" %}</a></li>
         </ul>
 
-        <div class="left-right-tabs-content fright">
+        <div class="nav-con-tabs-content">
             <div id="js-repo-user-folder-perm" class="tabs-panel">
                 <div class="js-folder-perm-content repo-folder-perm-content">
                 <table>
