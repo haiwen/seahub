@@ -5,8 +5,8 @@ File related views, including view_file, view_history_file, view_trash_file,
 view_snapshot_file, view_shared_file, file_edit, etc.
 """
 
+import sys
 import os
-import hashlib
 import json
 import stat
 import urllib2
@@ -1079,11 +1079,9 @@ def file_edit_submit(request, repo_id):
     content = request.POST.get('content')
     encoding = request.POST.get('encoding')
 
-    if content is None or not path or encoding not in ["gbk", "utf-8"]:
+    if content is None or not path or encoding not in FILE_ENCODING_LIST:
         return error_json(_(u'Invalid arguments'))
     head_id = request.GET.get('head', None)
-
-    content = content.encode(encoding)
 
     # first dump the file content to a tmp file, then update the file
     fd, tmpfile = mkstemp()
@@ -1092,6 +1090,15 @@ def file_edit_submit(request, repo_id):
             os.remove(tmpfile)
         except:
             pass
+
+    if encoding == 'auto':
+        encoding = sys.getfilesystemencoding()
+
+    try:
+        content = content.encode(encoding)
+    except UnicodeEncodeError as e:
+        remove_tmp_file()
+        return error_json(_(u'The encoding you chose is not proper.'))
 
     try:
         bytesWritten = os.write(fd, content)
