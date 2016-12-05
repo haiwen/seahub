@@ -1018,8 +1018,9 @@
     <tr>
         <th width="4%"><span class="sr-only">{% trans "Library Type" %}</span><!--icon--></th>
         <th width="92%">
-            <a class="table-sort-op mobile-table-sort-op by-name" href="#">{% trans "Name" %} <span class="sort-icon icon-caret-down hide"></a>
-            <a class="table-sort-op mobile-table-sort-op by-time" href="#">{% trans "Last Update" %} <span class="sort-icon icon-caret-up"></span></a>
+            {% trans "Sort:" %}
+            <a class="table-sort-op mobile-table-sort-op by-name" href="#">{% trans "name" %} <span class="sort-icon icon-caret-down hide"></a>
+            <a class="table-sort-op mobile-table-sort-op by-time" href="#">{% trans "last update" %} <span class="sort-icon icon-caret-up"></span></a>
         <th width="4%"><span class="sr-only">{% trans "Actions" %}</span></th>
     </tr>
 </script>

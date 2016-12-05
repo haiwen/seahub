@@ -209,7 +209,7 @@ define([
 
             $('[name="email"]', $form).select2($.extend(
                 Common.contactInputOptionsForSelect2(), {
-                width: '300px',
+                width: '280px',
                 maximumSelectionSize: 1,
                 placeholder: gettext("Search user or enter email and press Enter"), // to override 'placeholder' returned by `Common.conta...`
                 formatSelectionTooBig: gettext("You cannot select any more choices")

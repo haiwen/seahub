@@ -2250,6 +2250,16 @@ button.sf-dropdown-toggle:focus {
 .inline-rename-form .input {
     font-size:14px;
 }
+@media (max-width:321px) {
+    .inline-rename-form .input {
+        width:225px;
+    }
+}
+@media (min-width:375px) and (max-width:400px) {
+    .inline-rename-form {
+        width:270px;
+    }
+}
 .web-setting-form .cancel,
 .inline-rename-form .cancel {
     color:#666;
