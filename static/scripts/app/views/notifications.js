@@ -45,8 +45,21 @@ define([
                             document.title =  _this.orig_doc_title;
                         }
                     },
-                    error: function() { // e.g. 401 UNAUTHORIZED
+                    error: function(xhr) { // e.g. 401 UNAUTHORIZED
                         clearInterval(reqInterval); // stop sending requests
+
+                        var $el;
+                        if (xhr.responseText) {
+                            if (xhr.status == 401) {
+                                $el = $('<p class="top-bar fixed-top-bar">' + gettext("You have logged out.") + '<span class="top-bar-click">' + gettext("Log in") + '</span></p>');
+                            }
+                        } else {
+                            $el = $('<p class="top-bar fixed-top-bar">' + gettext("Please check the network.") + '</p>');
+                        }
+                        $('#wrapper').prepend($el);
+                        $('.top-bar-click', $el).click(function() {
+                            location.reload(true);
+                        });
                     }
                 });
             };
