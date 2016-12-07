@@ -20,7 +20,9 @@ define([
         },
 
         fileTemplate: _.template($('#dirent-file-tmpl').html()),
+        fileMobileTemplate: _.template($('#dirent-file-mobile-tmpl').html()),
         dirTemplate: _.template($('#dirent-dir-tmpl').html()),
+        dirMobileTemplate: _.template($('#dirent-dir-mobile-tmpl').html()),
         renameTemplate: _.template($("#rename-form-template").html()),
 
         initialize: function(options) {
@@ -41,9 +43,9 @@ define([
             var file_icon_size = Common.isHiDPI() ? 48 : 24;
             var template;
             if (this.model.get('is_dir')) {
-                template = this.dirTemplate;
+                template = $(window).width() < 768 ? this.dirMobileTemplate : this.dirTemplate;
             } else {
-                template = this.fileTemplate;
+                template = $(window).width() < 768 ? this.fileMobileTemplate : this.fileTemplate;
             }
 
             this.$el.html(template({
@@ -66,7 +68,8 @@ define([
             }));
             this.$('.file-locked-icon').attr('title', gettext("locked by {placeholder}").replace('{placeholder}', this.model.get('lock_owner_name')));
             this.dropdown = new DropdownView({
-                el: this.$('.sf-dropdown')
+                el: this.$('.sf-dropdown'),
+                right: '0'
             });
 
             // for image files

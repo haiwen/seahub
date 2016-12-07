@@ -27,6 +27,7 @@ define([
             path_bar_template: _.template($('#dir-path-bar-tmpl').html()),
             dir_op_bar_template: _.template($('#dir-op-bar-tmpl').html()),
             dirents_hd_template: _.template($('#dirents-hd-tmpl').html()),
+            dirents_hd_mobile_template: _.template($('#dirents-hd-mobile-tmpl').html()),
             top_search_form_template: _.template($('#top-search-form-tmpl').html()),
 
             newDirTemplate: _.template($("#add-new-dir-form-template").html()),
@@ -451,7 +452,8 @@ define([
             },
 
             renderDirentsHd: function() {
-                this.$('thead').html(this.dirents_hd_template());
+                var tmpl = $(window).width() < 768 ? this.dirents_hd_mobile_template : this.dirents_hd_template;
+                this.$('thead').html(tmpl());
             },
 
             render_dirents_slice: function(start, limit) {
