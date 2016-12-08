@@ -44,9 +44,6 @@
     </td>
     <% if (name) { %>
     <td><span class="repo-name-span"><a href="#my-libs/lib/<%= id %>"><%- name %></a></span></td>
-    <% } else { %>
-    <td>{% trans "Broken (please contact your administrator to fix this library)" %}</td>
-    <% } %>
     <td class="repo-op-td">
         <div class="op-container">
             <a href="#" class="sf2-icon-share sf2-x repo-share-btn op-icon vh" title="{% trans "Share" %}" aria-label="{% trans "Share" %}"></a>
@@ -70,6 +67,10 @@
             </div>
         </div>
     </td>
+    <% } else { %>
+    <td>{% trans "Broken (please contact your administrator to fix this library)" %}</td>
+    <td></td>
+    <% } %>
     <td><%= size_formatted %></td>
     <td><%= mtime_relative %></td>
 </script>
