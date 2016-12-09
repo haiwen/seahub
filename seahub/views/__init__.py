@@ -592,11 +592,10 @@ def repo_history(request, repo_id):
 
     try:
         current_page = int(request.GET.get('page', '1'))
-        per_page = int(request.GET.get('per_page', '100'))
     except ValueError:
         current_page = 1
-        per_page = 100
 
+    per_page = 100
     commits_all = get_commits(repo_id, per_page * (current_page -1),
                               per_page + 1)
     commits = commits_all[:per_page]
@@ -608,15 +607,18 @@ def repo_history(request, repo_id):
     else:
         page_next = False
 
+    # for 'go back'
+    referer = request.GET.get('referer', '')
+
     return render_to_response('repo_history.html', {
             "repo": repo,
             "commits": commits,
             'current_page': current_page,
             'prev_page': current_page-1,
             'next_page': current_page+1,
-            'per_page': per_page,
             'page_next': page_next,
             'user_perm': user_perm,
+            'referer': referer,
             }, context_instance=RequestContext(request))
 
 @login_required

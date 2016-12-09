@@ -158,7 +158,7 @@
             <% if (user_perm == 'rw') { %>
             <a class="op-link sf2-icon-trash" href="<%= site_root %>repo/recycle/<%- repo_id %>/?referer=<% print(encodeURIComponent(location.href)); %>" title="{% trans 'Trash' %}" aria-label="{% trans "Trash" %}"></a>
             <% } %>
-            <a class="op-link sf2-icon-history" href="<%= site_root %>repo/history/<%- repo_id %>/" title="{% trans 'History' %}" aria-label="{% trans "History" %}"></a>
+            <a class="op-link sf2-icon-history" href="<%= site_root %>repo/history/<%- repo_id %>/?referer=<% print(encodeURIComponent(location.href)); %>" title="{% trans 'History' %}" aria-label="{% trans "History" %}"></a>
         </div>
     <% } else { %>
         <% if (user_perm == 'rw') { %>
