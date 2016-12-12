@@ -923,6 +923,9 @@ def render_file_revisions (request, repo_id):
         (is_locked and not locked_by_me):
         can_revert_file = False
 
+    # for 'go back'
+    referer = request.GET.get('referer', '')
+
     return render_to_response('file_revisions.html', {
         'repo': repo,
         'path': path,
@@ -933,6 +936,7 @@ def render_file_revisions (request, repo_id):
         'can_compare': can_compare,
         'can_revert_file': can_revert_file,
         'days': days,
+        'referer': referer,
         }, context_instance=RequestContext(request))
 
 @login_required
