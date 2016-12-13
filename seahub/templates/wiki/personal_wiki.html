@@ -64,7 +64,7 @@
         <ul class="wiki-nav fleft">
             <li class="item{% if page == 'home' %} cur-item{% endif %}"><a href="{% url 'personal_wiki' %}" class="link">{% trans "Home" %}</a></li>
             <li class="item"><a href="{% url 'personal_wiki_pages' %}" class="link">{% trans "Pages" %}</a></li>
-            <li class="item"><a href="{% url 'repo_history' repo_id %}" target="_blank" class="link">{% trans "Wiki History" %}</a></li>
+            <li class="item"><a href="{% url 'repo_history' repo_id %}" class="link" id="wiki-history">{% trans "Wiki History" %}</a></li>
         </ul>
 
         <button id="page-create" class="btn-white">{% trans "New Page" %}</button>
@@ -233,5 +233,7 @@ $('#create-index').click(function() {
 // for 'go back'
 var $pageHistory = $('#page-history');
 $pageHistory.attr('href', $pageHistory.attr('href') + '&referer=' + encodeURIComponent(location.href));
+var $wikiHistory = $('#wiki-history');
+$wikiHistory.attr('href', $wikiHistory.attr('href') + '?referer=' + encodeURIComponent(location.href));
 </script>
 {% endblock %}

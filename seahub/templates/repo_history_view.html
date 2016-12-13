@@ -5,7 +5,6 @@
 
 {% block extra_style %}
 <style type="text/css">
-#main { position: relative; }
 .go-back { top:-3px; }
 </style>
 {% endblock %}
@@ -13,9 +12,11 @@
 {% block wide_page_content %}
 <h2 class="repo-snapshot-hd">{% blocktrans with repo_name=repo.props.name %}<span class="op-target">{{repo_name}}</span> Snapshot{% endblocktrans %} <span class="commit-time">({{ current_commit.props.ctime|tsstr_sec }})</span></h2>
 
-<a href="{% url 'repo_history' repo.props.id %}" class="go-back" title="{% trans "Back to modification history"%}">
+{% if referer %}
+<a href="{{referer}}" class="go-back" title="{% trans "Back" %}">
     <span class="icon-chevron-left"></span>
 </a>
+{% endif %}
 
             {% if path == '/' %}
             <div id="repo-latest-commit" class="repo-snapshot-commit">
@@ -39,7 +40,7 @@
                 {% trans "Current path: "%}
                 {% for name, link in zipped %}
                 {% if not forloop.last %}
-                <a href="{% url 'repo_history_view' repo.id %}?commit_id={{ current_commit.id }}&p={{ link|urlencode }}">{{ name }}</a> /
+                <a href="{% url 'repo_history_view' repo.id %}?commit_id={{ current_commit.id }}&p={{ link|urlencode }}" class="repo-history-view-link">{{ name }}</a> /
                 {% else %}
                 {{ name }}
                 {% endif %}
@@ -62,7 +63,7 @@
                 {% for dirent in dir_list %}
                 <tr>
                     <td class="alc"><img src="{{ MEDIA_URL }}img/folder-24.png" alt="{% trans "Directory"%}" /></td>
-                    <td><a href="{% url 'repo_history_view' repo.id %}?commit_id={{ current_commit.id }}&p={{ path|urlencode }}{{ dirent.obj_name|urlencode }}">{{ dirent.obj_name }}</a></td>
+                    <td><a href="{% url 'repo_history_view' repo.id %}?commit_id={{ current_commit.id }}&p={{ path|urlencode }}{{ dirent.obj_name|urlencode }}" class="repo-history-view-link">{{ dirent.obj_name }}</a></td>
                     <td></td>
                     <td><a class="op vh restore-dir" data-commit_id="{{ current_commit.id }}" data-commit_path="{{ path }}{{ dirent.obj_name }}" href="#">{% trans "Restore" %}</a></td>
                 </tr>
@@ -118,5 +119,8 @@ $('.restore-file, .restore-dir').click(function() {
     return false;
 });
 
+$('.repo-history-view-link').each(function() {
+    $(this).attr('href', $(this).attr('href') + '&referer=' + encodeURIComponent(location.href));
+});
 </script>
 {% endblock %}

@@ -1386,6 +1386,8 @@ def text_diff(request, repo_id):
 
     zipped = gen_path_link(path, repo.name)
 
+    referer = request.GET.get('referer', '')
+
     return render_to_response('text_diff.html', {
         'u_filename':u_filename,
         'repo': repo,
@@ -1395,6 +1397,7 @@ def text_diff(request, repo_id):
         'prev_commit': prev_commit,
         'diff_result_table': diff_result_table,
         'is_new_file': is_new_file,
+        'referer': referer,
     }, context_instance=RequestContext(request))
 
 ########## office related

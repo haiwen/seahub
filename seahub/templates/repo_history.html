@@ -13,9 +13,11 @@
 {% block wide_page_content %}
       <h2>{% blocktrans with repo_name=repo.props.name %}<span class="op-target">{{repo_name}}</span> Modification History{% endblocktrans %}</h2>
 
+      {% if referer %}
       <a href="{{referer}}" class="go-back" title="{% trans "Back" %}">
           <span class="icon-chevron-left"></span>
       </a>
+      {% endif %}
 
       {% if user_perm == 'rw' %}
       <p class="tip">{% trans "Tip: a snapshot will be generated after modification, which records the library state after the modification."%}</p>
@@ -55,7 +57,7 @@
                         {% if forloop.first and current_page == 1 %}
                         <span class="op vh">{% trans "Current Version" %}</span>
                         {% else %}
-                        <a href="{% url 'repo_history_view' repo.id %}?commit_id={{ commit.id }}" class="op vh">{% trans "View Snapshot" %}</a>
+                        <a href="{% url 'repo_history_view' repo.id %}?commit_id={{ commit.id }}" class="op vh view-snapshot">{% trans "View Snapshot" %}</a>
                         {% endif %}
                     {% endif %}
                 </td>
@@ -76,5 +78,8 @@
 {% block extra_script %}
 <script type="text/javascript">
     {% include 'snippets/list_commit_detail.html' %}
+    $('.view-snapshot').each(function() {
+        $(this).attr('href', $(this).attr('href') + '&referer=' + encodeURIComponent(location.href));
+    });
 </script>
 {% endblock %}
