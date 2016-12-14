@@ -169,8 +169,22 @@ define([
             reset: function() {
                 this.renderPath();
                 this.renderDirOpBar();
+
+                this.$el_con.show();
+
                 if (this.view_mode == 'list') {
                     this.renderDirentsHd();
+                }
+
+                this.$dirent_grid.empty();
+                this.$dirent_list_body.empty();
+
+                if (this.view_mode == 'list') {
+                    this.$dirent_list.show();
+                    this.$dirent_grid.hide();
+                } else {
+                    this.$dirent_list.hide();
+                    this.$dirent_grid.show();
                 }
 
                 // sort
@@ -343,18 +357,8 @@ define([
             renderDir: function() {
                 this.$loading_tip.show();
                 this.$error.hide();
-                this.$el_con.show();
+                this.$el_con.hide();
 
-                this.$dirent_grid.empty();
-                this.$dirent_list_body.empty();
-
-                if (this.view_mode == 'list') {
-                    this.$dirent_list.show();
-                    this.$dirent_grid.hide();
-                } else {
-                    this.$dirent_list.hide();
-                    this.$dirent_grid.show();
-                }
 
                 var _this = this;
                 var thumbnail_size = app.pageOptions.thumbnail_default_size;

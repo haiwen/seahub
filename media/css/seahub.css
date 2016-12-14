@@ -1038,6 +1038,11 @@ textarea:-moz-placeholder {/* for FF */
     -moz-transition: all 0.3s ease;
     transition: all 0.3s ease;
 }
+@media (max-width:400px) {
+    .right-side-panel {
+        width:100%;
+    }
+}
 .right-side-panel-hd {
     background:#f8f8f8;
     padding:10px;
@@ -1053,6 +1058,7 @@ textarea:-moz-placeholder {/* for FF */
 .right-side-panel-footer {
     position:absolute;
     bottom:0;
+    width:100%;
 }
 /**** messages ****/
 .messages {
@@ -1567,7 +1573,7 @@ button.sf-dropdown-toggle:focus {
     border-top: 1px solid #c9c9c9;
 }
 .msg-input {
-    width:336px;
+    width:100%;
     padding:3px 5px;
     height:60px;
 }
