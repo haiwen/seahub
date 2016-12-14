@@ -146,6 +146,8 @@ def repo_history_view(request, repo_id):
     repo_owner = seafile_api.get_repo_owner(repo.id)
     is_repo_owner = True if username == repo_owner else False
 
+    referer = request.GET.get('referer', '')
+
     return render_to_response('repo_history_view.html', {
             'repo': repo,
             "is_repo_owner": is_repo_owner,
@@ -155,6 +157,7 @@ def repo_history_view(request, repo_id):
             'file_list': file_list,
             'path': path,
             'zipped': zipped,
+            'referer': referer,
             }, context_instance=RequestContext(request))
 
 ########## shared dir/uploadlink

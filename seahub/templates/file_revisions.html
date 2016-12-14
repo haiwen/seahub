@@ -4,8 +4,20 @@
 
 {% block sub_title %}{% trans "History" %} - {% endblock %}
 
+{% block extra_style %}
+<style type="text/css">
+    .go-back { top:-3px; }
+</style>
+{% endblock %}
+
 {% block wide_page_content %}
 <h2>{% blocktrans %}<span class="op-target">{{ u_filename }}</span> Version History{% endblocktrans %}</h2>
+{% if referer %}
+<a href="{{referer}}" class="go-back" title="{% trans "Back" %}">
+    <span class="icon-chevron-left"></span>
+</a>
+{% endif %}
+
 <p class="tip">{% trans "Tip: a new version will be generated after each modification, and you can restore the file to a previous version." %}</p>
         <div class="commit-list-topbar ovhd">
             <p class="path fleft">
@@ -21,17 +33,17 @@
 
             <span class="fright">
                 {% if days != 7 %}
-                <a href="?p={{path|urlencode}}&days=7">{% trans "a week" %}</a> /
+                <a href="?p={{path|urlencode}}&days=7&referer={{referer|urlencode}}">{% trans "a week" %}</a> /
                 {% else %}
                 {% trans "a week" %} /
                 {% endif %}
                 {% if days != 30 %}
-                <a href="?p={{path|urlencode}}&days=30">{% trans "a month" %}</a> /
+                <a href="?p={{path|urlencode}}&days=30&referer={{referer|urlencode}}">{% trans "a month" %}</a> /
                 {% else %}
                 {% trans "a month" %} /
                 {% endif %}
                 {% if days != -1 %}
-                <a href="?p={{path|urlencode}}&days=-1">{% trans "all" %}</a>
+                <a href="?p={{path|urlencode}}&days=-1&referer={{referer|urlencode}}">{% trans "all" %}</a>
                 {% else %}
                 {% trans "all" %}
                 {% endif %}
@@ -76,7 +88,7 @@
                     <a href="{% url "download_file" repo.id commit.rev_file_id %}?p={{commit.path|urlencode}}" class="op vh">{% trans 'Download' %}</a>
                     <a href="{% url 'view_history_file' repo.id %}?obj_id={{ commit.rev_file_id }}&commit_id={{ commit.id }}&p={{commit.path|urlencode}}" class="op vh" target="_blank">{% trans 'View' %}</a>
                     {% if can_compare and not forloop.last %}
-                    <a href="{% url 'text_diff' repo.id %}?p={{commit.path|urlencode}}&commit={{commit.id}}" class="op vh">{% trans 'Diff' %}</a>
+                    <a href="{% url 'text_diff' repo.id %}?p={{commit.path|urlencode}}&commit={{commit.id}}" class="op vh text-diff">{% trans 'Diff' %}</a>
                     {% endif %}
                 </td>
             </tr>
@@ -107,5 +119,8 @@ $('.restore-file').click(function() {
     return false;
 });
 
+$('.text-diff').each(function() {
+    $(this).attr('href', $(this).attr('href') + '&referer=' + encodeURIComponent(location.href));
+});
 </script>
 {% endblock %}
