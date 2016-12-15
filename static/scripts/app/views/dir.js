@@ -440,6 +440,13 @@ define([
                     can_generate_upload_link: app.pageOptions.can_generate_upload_link,
                     enable_upload_folder: app.pageOptions.enable_upload_folder
                 })));
+
+                if (dir.user_perm == 'rw') {
+                    // add new folder/file
+                    this.new_dropdown = new DropdownView({
+                        el: this.$("#add-new")
+                    });
+                }
             },
 
             renderDirentsHd: function() {
@@ -460,7 +467,11 @@ define([
             // Directory Operations
             events: {
                 'click #add-new-dir': 'newDir',
-                'click #add-new-file': 'newFile',
+                'click #add-new-file': 'newCommonFile',
+                'click #add-new-md-file': 'newMdFile',
+                'click #add-new-excel-file': 'newExcelFile',
+                'click #add-new-ppt-file': 'newPPTFile',
+                'click #add-new-word-file': 'newWordFile',
                 'click #share-cur-dir': 'share',
                 'click #js-switch-grid-view': 'switchToGridView',
                 'click #js-switch-list-view': 'switchToListView',
@@ -534,31 +545,29 @@ define([
 
                     return false;
                 });
+
+                return false;
             },
 
-            newFile: function() {
-                var form = $(this.newFileTemplate()),
-                    form_id = form.attr('id'),
-                    file_name = form.find('input[name="name"]'),
+            newFile: function(options) {
+                var $form = $(this.newFileTemplate(options)),
+                    form_id = $form.attr('id'),
+                    $input = $('input[name="name"]', $form),
                     dir = this.dir,
                     dirView = this;
 
-                form.modal({
+                $form.modal({
                     appendTo: '#main',
                     focus: false,
                     containerCss: {'padding':'20px 25px'}
                 });
-                file_name.focus();
                 $('#simplemodal-container').css({'height':'auto'});
 
-                $('.set-file-type', form).click(function() {
-                    file_name.val('.' + $(this).data('filetype'));
-                    Common.setCaretPos(file_name[0], 0);
-                    file_name.focus();
-                });
+                Common.setCaretPos($input[0], 0);
+                $input.focus();
 
-                form.submit(function() {
-                    var dirent_name = $.trim(file_name.val());
+                $form.submit(function() {
+                    var dirent_name = $.trim($input.val());
 
                     if (!dirent_name) {
                       Common.showFormError(form_id, gettext("It is required."));
@@ -578,10 +587,10 @@ define([
                         $.modal.close();
                         var new_dirent = dir.add({
                             'is_file': true,
-                            'is_img': Common.imageCheck(data['obj_name']),
-                            'obj_name': data['obj_name'],
-                            'file_size': Common.fileSizeFormat(0),
-                            'obj_id': '0000000000000000000000000000000000000000',
+                            'is_img': Common.imageCheck(data.obj_name),
+                            'obj_name': data.obj_name,
+                            'file_size': Common.fileSizeFormat(data.size),
+                            'obj_id': data.obj_id,
                             'file_icon': 'file.png',
                             'starred': false,
                             'perm': 'rw',
@@ -592,7 +601,7 @@ define([
                     };
 
                     Common.ajaxPost({
-                        'form': form,
+                        'form': $form,
                         'post_url': post_url,
                         'post_data': post_data,
                         'after_op_success': after_op_success,
@@ -601,6 +610,46 @@ define([
 
                     return false;
                 });
+            },
+
+            newCommonFile: function() {
+                this.newFile({
+                    title: gettext('New File'),
+                    initial_file_name: ''
+                });
+                return false;
+            },
+
+            newMdFile: function() {
+                this.newFile({
+                    title: gettext('New Markdown File'),
+                    initial_file_name: '.md'
+                });
+                return false;
+            },
+
+            newExcelFile: function() {
+                this.newFile({
+                    title: gettext('New Excel File'),
+                    initial_file_name: '.xlsx'
+                });
+                return false;
+            },
+
+            newPPTFile: function() {
+                this.newFile({
+                    title: gettext('New PowerPoint File'),
+                    initial_file_name: '.pptx'
+                });
+                return false;
+            },
+
+            newWordFile: function() {
+                this.newFile({
+                    title: gettext('New Word File'),
+                    initial_file_name: '.docx'
+                });
+                return false;
             },
 
             addNewFile: function(new_dirent) {

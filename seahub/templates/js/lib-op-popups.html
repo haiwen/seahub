@@ -13,18 +13,9 @@
 
     <script type="text/template" id="add-new-file-form-template">
     <form id="add-new-file-form" action="" method="post" class="hide">{% csrf_token %}
-        <h3 id="dialogTitle">{% trans "New File" %}</h3>
-        <div id="featured-filetype">
-            <label>{% trans "Featured File Type" %}</label><br />
-            <button type="button" class="set-file-type" data-filetype="md" title="{% trans "Click to choose" %}">markdown</button> <span>{% trans "simple markup format." %}</span>
-            {% if LANGUAGE_CODE == 'zh-cn' %}
-            <a href="http://www.seafile.com/help/markdown/" target="_blank">{% trans 'Details' %}</a>
-            {% else %}
-            <a href="http://www.seafile.com/en/help/markdown/" target="_blank">{% trans 'Details' %}</a>
-            {% endif %}
-        </div>
-        <label for="file-name">{% trans "File Name" %}</label><br/>
-        <input type="text" name="name" value="" class="input" maxlength="{{max_file_name}}" id="file-name" /><br />
+        <h3 id="dialogTitle"><%= title %></h3>
+        <label for="file-name">{% trans "Name" %}</label><br/>
+        <input type="text" name="name" value="<%= initial_file_name %>" class="input" maxlength="{{max_file_name}}" id="file-name" /><br />
         <p class="error hide"></p>
         <button type="submit" class="submit">{% trans "Submit" %}</button>
         <button class="simplemodal-close">{% trans "Cancel" %}</button>
