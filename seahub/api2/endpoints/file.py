@@ -2,6 +2,7 @@
 import os
 import logging
 import posixpath
+import requests
 
 from rest_framework.authentication import SessionAuthentication
 from rest_framework.permissions import IsAuthenticated
@@ -15,11 +16,13 @@ from seahub.api2.throttling import UserRateThrottle
 from seahub.api2.authentication import TokenAuthentication
 from seahub.api2.utils import api_error
 
-from seahub.utils import check_filename_with_rename, is_pro_version
+from seahub.utils import check_filename_with_rename, is_pro_version, \
+    gen_file_upload_url
 from seahub.utils.timeutils import timestamp_to_isoformat_timestr
 from seahub.views import check_folder_permission, check_file_lock
 
-from seahub.settings import MAX_UPLOAD_FILE_NAME_LEN, FILE_LOCK_EXPIRATION_DAYS
+from seahub.settings import MAX_UPLOAD_FILE_NAME_LEN, \
+    FILE_LOCK_EXPIRATION_DAYS, OFFICE_TEMPLATE_ROOT
 
 from seaserv import seafile_api
 from pysearpc import SearpcError
@@ -147,7 +150,7 @@ class FileView(APIView):
                 error_msg = 'Permission denied.'
                 return api_error(status.HTTP_403_FORBIDDEN, error_msg)
 
-            # create file
+            # create new empty file
             new_file_name = os.path.basename(path)
             new_file_name = check_filename_with_rename(repo_id, parent_dir, new_file_name)
 
@@ -157,6 +160,32 @@ class FileView(APIView):
                 logger.error(e)
                 error_msg = 'Internal Server Error'
                 return api_error(status.HTTP_500_INTERNAL_SERVER_ERROR, error_msg)
+
+            # update office file by template
+            if new_file_name.endswith('.xlsx'):
+                empty_file_path = os.path.join(OFFICE_TEMPLATE_ROOT, 'empty.xlsx')
+            elif new_file_name.endswith('.pptx'):
+                empty_file_path = os.path.join(OFFICE_TEMPLATE_ROOT, 'empty.pptx')
+            elif new_file_name.endswith('.docx'):
+                empty_file_path = os.path.join(OFFICE_TEMPLATE_ROOT, 'empty.docx')
+            else:
+                empty_file_path = ''
+
+            if empty_file_path:
+                # get file server update url
+                update_token = seafile_api.get_fileserver_access_token(
+                        repo_id, 'dummy', 'update', username)
+                update_url = gen_file_upload_url(update_token, 'update-api')
+
+                # update file
+                try:
+                    requests.post(
+                        update_url,
+                        data={'filename': new_file_name, 'target_file': path},
+                        files={'file': open(empty_file_path, 'rb')}
+                    )
+                except Exception as e:
+                    logger.error(e)
 
             new_file_path = posixpath.join(parent_dir, new_file_name)
             file_info = self.get_file_info(username, repo_id, new_file_path)
