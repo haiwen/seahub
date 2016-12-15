@@ -1177,9 +1177,6 @@ def image_view(request, filename):
         response['Content-Encoding'] = content_encoding
     return response
 
-def shib_login(request):
-    return HttpResponseRedirect(request.GET.get("next", reverse('libraries')))
-
 def underscore_template(request, template):
     """Serve underscore template through Django, mainly for I18n.
 

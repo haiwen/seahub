@@ -18,6 +18,7 @@ from seahub.views.wiki import personal_wiki, personal_wiki_pages, \
     personal_wiki_page_delete, personal_wiki_use_lib
 from seahub.views.sysadmin import *
 from seahub.views.ajax import *
+from seahub.views.sso import *
 from seahub.api2.endpoints.groups import Groups, Group
 from seahub.api2.endpoints.group_members import GroupMembers, GroupMembersBulk, GroupMember
 from seahub.api2.endpoints.search_group import SearchGroup
@@ -66,6 +67,8 @@ urlpatterns = patterns(
     #(r'^admin/', include(admin.site.urls)),
 
     (r'^accounts/', include('seahub.base.registration_urls')),
+    (r'^sso/$', sso),
+    url(r'^shib-login/', shib_login, name="shib_login"),
 
     url(r'^$', libraries, name='libraries'),
     #url(r'^home/$', direct_to_template, { 'template': 'home.html' } ),
@@ -359,7 +362,6 @@ if getattr(settings, 'MULTI_TENANCY', False):
 if getattr(settings, 'ENABLE_SHIB_LOGIN', False):
     urlpatterns += patterns(
         '',
-        url(r'^shib-login/', shib_login, name="shib_login"),
         url(r'^shib-complete/', TemplateView.as_view(template_name='shibboleth/complete.html'), name="shib_complete"),
         url(r'^shib-success/', TemplateView.as_view(template_name="shibboleth/success.html"), name="shib_success"),
     )
@@ -395,4 +397,14 @@ if TRAFFIC_STATS_ENABLED:
     from seahub.views.sysadmin import sys_traffic_admin
     urlpatterns += patterns('',
         url(r'^sys/trafficadmin/$', sys_traffic_admin, name='sys_trafficadmin'),
+    )
+
+if getattr(settings, 'ENABLE_ADFS_LOGIN', False):
+    from seahub_extra.adfs_auth.views import assertion_consumer_service, \
+        auth_complete
+    urlpatterns += patterns(
+        '',
+        url(r'^saml2/acs/$', assertion_consumer_service, name='saml2_acs'),
+        url(r'^saml2/complete/$', auth_complete, name='saml2_complete'),
+        (r'^saml2/', include('djangosaml2.urls')),
     )
