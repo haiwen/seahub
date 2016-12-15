@@ -1138,6 +1138,21 @@
         </div>
     </div>
 </script>
+<script type="text/template" id="starred-file-thead-tmpl">
+    <tr>
+        <% if ($(window).width() >= 768) { %>
+        <th width="5%"></th>
+        <th width="40%">{% trans "File Name" %}</th>
+        <th width="32%">{% trans "Library" %}</th>
+        <th width="18%">{% trans "Last Update" %}</th>
+        <th width="5%"></th>
+        <% } else { %>
+        <th width="5%"></th>
+        <th width="90%">{% trans "File Name" %}</th>
+        <th width="5%"></th>
+        <% } %>
+    </tr>
+</script>
 <script type="text/template" id="starred-file-item-tmpl">
     <td class="alc"><img src="{{ MEDIA_URL }}img/file/<%= icon_path %>" alt="{% trans "icon" %}" /></td>
     <td>
@@ -1153,6 +1168,23 @@
         <a href="#" class="sf2-icon-delete unstar op-icon vh" title="{% trans "Unstar" %}" aria-label="{% trans "Unstar" %}"></a>
     </td>
 </script>
+<script type="text/template" id="starred-file-item-mobile-tmpl">
+    <td class="alc"><img src="{{ MEDIA_URL }}img/file/<%= icon_path %>" alt="{% trans "icon" %}" /></td>
+    <td>
+        <% if (is_img) { %>
+            <a class="img-name-link" href="{{ SITE_ROOT }}lib/<%= repo_id %>/file<%- encoded_path %>" target="_blank" data-mfp-src="{{ SITE_ROOT }}repo/<%= repo_id %>/raw<%- encoded_path %>"><%- file_name %></a>
+        <% } else { %>
+            <a href="{{ SITE_ROOT }}lib/<%= repo_id %>/file<%- encoded_path %>" target="_blank"><%- file_name %></a>
+        <% } %>
+        <br />
+        <span class="dirent-meta-info"><%- repo_name %></span>
+        <span class="dirent-meta-info"><%= mtime_relative %></span>
+    </td>
+    <td>
+        <a href="#" class="sf2-icon-delete unstar op-icon" title="{% trans "Unstar" %}" aria-label="{% trans "Unstar" %}"></a>
+    </td>
+</script>
+
 
 <script type="text/template" id="my-repos-hd-tmpl">
    <tr>
