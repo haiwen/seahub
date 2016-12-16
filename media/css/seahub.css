@@ -3291,6 +3291,9 @@ button.sf-dropdown-toggle:focus {
     vertical-align: middle;
 }
 /* sysadmin */
+#admin-groups .btn-white {
+    margin-left:3px;
+}
 #import-members-btn .icon-upload-alt {
     color:#777;
     margin-right:3px;
