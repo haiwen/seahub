@@ -7,6 +7,8 @@
 # EricLF44 <E.lefoll@cdg44.fr>, 2014
 # LowMemory, 2016
 # Gaspard <info@widelinkpc.be>, 2013-2016
+# Gautier Auburtin <gautier.auburtin@campus-condorcet.fr>, 2016
+# Gilles Chauvin <gilles.chauvin@univ-rouen.fr>, 2016
 # jcbeylot78, 2014
 # jcbeylot78, 2014
 # jcbeylot78, 2014-2016
@@ -24,8 +26,8 @@ msgstr ""
 "Project-Id-Version: seahub\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2016-08-20 17:59+0800\n"
-"PO-Revision-Date: 2016-08-22 08:30+0000\n"
-"Last-Translator: Gaspard <info@widelinkpc.be>\n"
+"PO-Revision-Date: 2016-12-14 12:06+0000\n"
+"Last-Translator: Gilles Chauvin <gilles.chauvin@univ-rouen.fr>\n"
 "Language-Team: French (http://www.transifex.com/haiwen/seahub/language/fr/)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -1236,7 +1238,7 @@ msgstr "Créer un wiki maintenant"
 #: seahub/group/templates/group/group_wiki.html:40
 #: seahub/templates/wiki/personal_wiki.html:38
 msgid "Choose a library as wiki"
-msgstr "Choisissez une librairie comme wiki"
+msgstr "Choisissez une bibliothèque comme wiki"
 
 #: seahub/group/templates/group/group_wiki.html:45
 #: seahub/templates/wiki/personal_wiki.html:42
@@ -1257,7 +1259,7 @@ msgstr "Pages du wiki"
 #: seahub/group/templates/group/group_wiki.html:55
 #: seahub/templates/wiki/personal_wiki.html:52
 msgid "Choose a library as wiki:"
-msgstr "Choisissez une librairie comme wiki :"
+msgstr "Choisissez une bibliothèque comme wiki :"
 
 #: seahub/group/templates/group/group_wiki.html:60
 #: seahub/profile/templates/profile/set_profile.html:102
@@ -1498,7 +1500,7 @@ msgstr "Exclure des fichiers/dossiers"
 
 #: seahub/help/templates/help/base.html:18
 msgid "Security and Encryption"
-msgstr "Sécurité et cryptage"
+msgstr "Sécurité et chiffrement"
 
 #: seahub/help/templates/help/base.html:20
 msgid "How to use encrypted libraries"
@@ -1549,7 +1551,7 @@ msgstr "Pour modifier les paramètres de proxy, cliquez sur l'icône Seafile dan
 
 #: seahub/help/templates/help/encrypted_libraries.html:6
 msgid "How to Use Encrypted Libraries"
-msgstr "Comment utiliser les bibliothèques cryptées"
+msgstr "Comment utiliser les bibliothèques chiffrées"
 
 #: seahub/help/templates/help/encrypted_libraries.html:8
 msgid ""
@@ -1558,18 +1560,18 @@ msgid ""
 "libraries are encrypted on client side. The encryption password is not "
 "stored on the server. So even the server administrator can't access your "
 "file contents."
-msgstr "Seafile fournit un cryptage des doonées côté client de bout en bout. Vous pouvez créer des bibliothèques cryptées pour utiliser cette fonctionnalité. Le contenu des fichiers dans les bibliothèques cryptées sont cryptées côté client. Le mot de passe de cryptage n'est pas stocké sur le serveur. De cette manière, même l'administrateur du serveur ne peut pas accéder à vos données."
+msgstr "Seafile fournit un chiffrement des données côté client de bout en bout. Vous pouvez créer des bibliothèques chiffrées pour utiliser cette fonctionnalité. Le contenu des fichiers dans les bibliothèques chiffrées est chiffré côté client. Le mot de passe de chiffrement n'est pas stocké sur le serveur. Ainsi, même l'administrateur du serveur ne peut accéder à vos données."
 
 #: seahub/help/templates/help/encrypted_libraries.html:10
 msgid "When creating an encrypted library:"
-msgstr "Lors de la création d'une bibliothèque cryptée :"
+msgstr "Lors de la création d'une bibliothèque chiffrée :"
 
 #: seahub/help/templates/help/encrypted_libraries.html:12
 msgid ""
 "If you create an encrypted library in the web app, the password is sent to "
 "the server. The server use this password to create the library. But it "
 "doesn't store the plain text password."
-msgstr "Si vous créez une bibliothèque cryptée dans l'application Web, le mot de passe est envoyé au serveur. Le serveur utilise ce mot de passe pour créer la bibliothèque. Mais il ne stocke pas le mot de passe en texte brut."
+msgstr "Si vous créez une bibliothèque chiffrée dans l'application Web, le mot de passe est envoyé au serveur. Le serveur utilise ce mot de passe pour créer la bibliothèque. Mais il ne stocke pas le mot de passe en texte brut."
 
 #: seahub/help/templates/help/encrypted_libraries.html:13
 #, python-format
@@ -1577,44 +1579,44 @@ msgid ""
 "If you create an encrypted library from a local folder with the desktop "
 "client (see <a href=\"%(SITE_ROOT)shelp/install/\">file syncing</a>), the "
 "password is not sent to the server."
-msgstr "Si vous créez une bibliothèque cryptée à partir d'un dossier local avec le client de bureau (voir <a href=\"%(SITE_ROOT)shelp/install/\">synchronisation de fichiers</a>), le mot de passe n'est pas envoyé au serveur."
+msgstr "Si vous créez une bibliothèque chiffrée à partir d'un dossier local avec le client de bureau (voir <a href=\"%(SITE_ROOT)shelp/install/\">synchronisation de fichiers</a>), le mot de passe n'est pas envoyé au serveur."
 
 #: seahub/help/templates/help/encrypted_libraries.html:17
 msgid "When you access the encrypted library:"
-msgstr "Lorsque vous accédez à la bibliothèque cryptée :"
+msgstr "Lorsque vous accédez à la bibliothèque chiffrée :"
 
 #: seahub/help/templates/help/encrypted_libraries.html:19
 msgid ""
 "If you use web app, you have to input the password to the server. The server"
 " will cache the password in encrypted format for 1 hour. It won't store the "
 "password on disk."
-msgstr "Si vous utilisez l'application Web, vous devez entrer le mot de passe au serveur. Le serveur met en cache le mot de passe en format crypté pendant 1 heure. Le mot de passe ne sera pas stocké sur le disque du serveur."
+msgstr "Si vous utilisez l'application Web, vous devez entrer le mot de passe au serveur. Le serveur met en cache le mot de passe au format chiffré pendant 1 heure. Le mot de passe ne sera pas stocké sur le disque du serveur."
 
 #: seahub/help/templates/help/encrypted_libraries.html:20
 msgid ""
 "If you use desktop client to sync the library, the password is not sent to "
 "the server. The client decrypt and encrypt file contents locally. The plain "
 "text password is not stored on the client disk too."
-msgstr "Si vous utilisez le client de bureau pour synchroniser la bibliothèque, le mot de passe n'est pas envoyé au serveur. Le client décrypte et encrypte le contenu des fichiers localement. Le mot de passe en texte brut n'est pas stocké sur le disque côté client non plus."
+msgstr "Si vous utilisez le client de bureau pour synchroniser la bibliothèque, le mot de passe n'est pas envoyé au serveur. Le client déchiffre et chiffre le contenu des fichiers localement. Le mot de passe en texte brut n'est pas stocké sur le disque côté client non plus."
 
 #: seahub/help/templates/help/encrypted_libraries.html:21
 msgid ""
 "iOS client supports client side encryption since version 2.1.6. Android "
 "client support it since version 2.1.0."
-msgstr "Le client iOS supporte le cryptage côté client à partir de la version 2.1.6. Le client Android le supporte à partir de la version 2.1.0."
+msgstr "Le client iOS supporte le chiffrement côté client à partir de la version 2.1.6. Le client Android le supporte à partir de la version 2.1.0."
 
 #: seahub/help/templates/help/encrypted_libraries.html:25
 msgid ""
 "Note that encrypted library only encrypt the contents of the files, but not "
 "the folder and file names."
-msgstr "Notez que la bibliothèque cryptée ne crypte que le contenu des fichiers, mais pas les noms de dossiers ni de fichiers."
+msgstr "Notez que la bibliothèque chiffrée ne chiffre que le contenu des fichiers, mais pas les noms de dossiers ni de fichiers."
 
 #: seahub/help/templates/help/encrypted_libraries.html:27
 msgid ""
 "More technical details of encrypted library can be found at <a "
 "href=\"http://manual.seafile.com/security/security_features.html\">Seafile "
 "Manual</a>."
-msgstr "Plus de détails techniques sur la bibliothèque cryptée peuvent être trouvés dans le <a href=\"http://manual.seafile.com/security/security_features.html\">Manuel de Seafile</a>."
+msgstr "Plus de détails techniques sur la bibliothèque chiffrée peuvent être trouvés dans le <a href=\"http://manual.seafile.com/security/security_features.html\">Manuel de Seafile</a>."
 
 #: seahub/help/templates/help/ignore.html:6
 msgid "Excluding files/folders from syncing"
@@ -1877,7 +1879,7 @@ msgstr "Recherche d'utilisateurs..."
 #: seahub/templates/js/sysadmin-templates.html:86
 #: seahub/templates/sysadmin/base.html:15
 msgid "Info"
-msgstr "Info"
+msgstr "Infos"
 
 #: seahub/institutions/templates/institutions/info.html:13
 #: seahub/templates/home_base.html:58
@@ -2006,7 +2008,7 @@ msgstr "Mise à jour"
 #: seahub/templates/sysadmin/userinfo.html:85
 #: seahub/templates/sysadmin/userinfo.html:134
 msgid "Encrypted"
-msgstr "Crypté"
+msgstr "Chiffré"
 
 #: seahub/institutions/templates/institutions/user_info.html:75
 #: seahub/institutions/templates/institutions/user_info.html:77
@@ -2024,7 +2026,7 @@ msgstr "Icône de bibliothèque"
 #: seahub/institutions/templates/institutions/user_info.html:103
 #: seahub/templates/sysadmin/userinfo.html:115
 msgid "This user has not created any libraries"
-msgstr "Cet utilisateur n'a créé aucune librairie"
+msgstr "Cet utilisateur n'a créé aucune bibliothèque"
 
 #: seahub/institutions/templates/institutions/user_info.html:113
 #: seahub/templates/js/templates.html:1118
@@ -3529,7 +3531,7 @@ msgstr "Outils"
 #: seahub/templates/home_base.html:38 seahub/templates/js/templates.html:680
 #: seahub/templates/libraries.html:164
 msgid "Favorites"
-msgstr "Favorites"
+msgstr "Favoris"
 
 #: seahub/templates/home_base.html:40 seahub/templates/js/templates.html:684
 msgid "Activities"
@@ -3740,7 +3742,7 @@ msgstr "Rechercher les bibliothèques par utilisateur..."
 
 #: seahub/templates/js/sysadmin-templates.html:95
 msgid "System Info"
-msgstr "Information système"
+msgstr "Informations système"
 
 #: seahub/templates/js/sysadmin-templates.html:97
 msgid "Professional Edition"
@@ -3883,7 +3885,7 @@ msgstr "Partager"
 
 #: seahub/templates/js/sysadmin-templates.html:404
 msgid "Tip: libraries deleted 30 days ago will be cleaned automatically."
-msgstr "Astuces : Les librairies de plus de 30 jours seront nettoyées automatiquement"
+msgstr "Astuce : Les bibliothèques de plus de 30 jours seront nettoyées automatiquement"
 
 #: seahub/templates/js/sysadmin-templates.html:411
 msgid "Deleted Time"
@@ -4256,7 +4258,7 @@ msgstr "Partagé par"
 
 #: seahub/templates/js/templates.html:901
 msgid "Select libraries to share"
-msgstr "Sélectionnez la librairie à partager"
+msgstr "Sélectionnez la bibliothèque à partager"
 
 #: seahub/templates/js/templates.html:958
 msgid "Created library"
@@ -4994,7 +4996,7 @@ msgstr "Le téléchargement du fichier est désactivé : le trafic du propriéta
 #: seahub/templates/shared_file_view.html:29
 #: seahub/templates/view_shared_dir.html:16
 msgid "Shared by: "
-msgstr "Partage par : "
+msgstr "Partagé par : "
 
 #: seahub/templates/shared_file_view.html:36
 msgid "Save to..."
@@ -5785,7 +5787,7 @@ msgstr "Partagé par"
 
 #: seahub/templates/sysadmin/userinfo.html:153
 msgid "This user has no shared libraries"
-msgstr "Cet utilisateur n'a pas de librairie partagée"
+msgstr "Cet utilisateur n'a pas de bibliothèque partagée"
 
 #: seahub/templates/sysadmin/userinfo.html:201
 msgid "This user has not created any shared links"
@@ -6454,7 +6456,7 @@ msgstr "Échec du transfert, l'utilisateur %s n'a pas été trouvé"
 
 #: seahub/views/sysadmin.py:1540
 msgid "Can not transfer organization library"
-msgstr "Impossible de transférer la librairie de l'organisation"
+msgstr "Impossible de transférer la bibliothèque de l'organisation"
 
 #: seahub/views/sysadmin.py:1544
 #, python-format
