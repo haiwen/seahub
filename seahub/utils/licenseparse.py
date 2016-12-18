@@ -57,7 +57,8 @@ def user_number_over_limit(new_users = 0):
             # get active user number
             active_db_users = ccnet_api.count_emailusers('DB')
             active_ldap_users = ccnet_api.count_emailusers('LDAP')
-            active_users = active_db_users + active_ldap_users
+            active_users = active_db_users + active_ldap_users if \
+                    active_ldap_users > 0  else active_db_users
 
             return active_users + new_users >= max_users
         except Exception as e:
