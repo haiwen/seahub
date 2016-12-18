@@ -1,6 +1,7 @@
 import json
 from django.core.urlresolvers import reverse
 from seahub.test_utils import BaseTestCase
+from tests.common.utils import randstring
 
 class GroupsTest(BaseTestCase):
 
@@ -23,6 +24,57 @@ class GroupsTest(BaseTestCase):
         self.login_as(self.user)
         url = reverse('api-v2.1-admin-groups')
         resp = self.client.get(url)
+        self.assertEqual(403, resp.status_code)
+
+    def test_can_create(self):
+        self.login_as(self.admin)
+
+        url = reverse('api-v2.1-admin-groups')
+        group_name = randstring(10)
+
+        data = {
+            'group_name': group_name,
+            'group_owner': self.user.email
+        }
+
+        resp = self.client.post(url, data)
+        self.assertEqual(201, resp.status_code)
+
+        json_resp = json.loads(resp.content)
+        assert json_resp['name'] == group_name
+        assert json_resp['owner'] == self.user.email
+
+        self.remove_group(json_resp['id'])
+
+    def test_create_without_group_owner(self):
+        self.login_as(self.admin)
+
+        url = reverse('api-v2.1-admin-groups')
+        group_name = randstring(10)
+
+        data = {
+            'group_name': group_name,
+        }
+
+        resp = self.client.post(url, data)
+        self.assertEqual(201, resp.status_code)
+
+        json_resp = json.loads(resp.content)
+        assert json_resp['name'] == group_name
+        assert json_resp['owner'] == self.admin.email
+
+        self.remove_group(json_resp['id'])
+
+    def test_create_with_invalid_user_permission(self):
+        self.login_as(self.user)
+        url = reverse('api-v2.1-admin-groups')
+        group_name = randstring(10)
+
+        data = {
+            'group_name': group_name,
+        }
+
+        resp = self.client.post(url, data)
         self.assertEqual(403, resp.status_code)
 
 class GroupTest(BaseTestCase):
