@@ -301,7 +301,7 @@ def sys_useradmin_export_excel(request):
                 logger.error(e)
                 space_usage_MB = '--'
         else:
-            space_usage_MB = 0
+            space_usage_MB = ''
 
         if user.space_quota > 0:
             try:
@@ -310,7 +310,7 @@ def sys_useradmin_export_excel(request):
                 logger.error(e)
                 space_quota_MB = '--'
         else:
-            space_quota_MB = 0
+            space_quota_MB = ''
 
         # populate user last login time
         user.last_login = None

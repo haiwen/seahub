@@ -18,6 +18,7 @@
         <li class="tabnav-tab tabnav-tab-cur"><a href="{% url 'sys_useradmin_ldap_imported' %}">{% trans "LDAP(imported)" %}</a></li>
         <li class="tabnav-tab"><a href="{% url 'sys_useradmin_admins' %}">{% trans "Admins" %}</a></li>
     </ul>
+    <a class="sf-btn-link btn-white js-export-excel fright" href="{% url "sys_useradmin_export_excel" %}">{% trans "Export Excel" %}</a>
 </div>
 
 {% if users %}
