@@ -54,7 +54,7 @@
 
 {% endblock %}
 
-{% block extra_script %}
+{% block extra_script %}{{ block.super }}
 <script type="text/javascript">
 
 addConfirmTo($('.js-toggle-admin'), {

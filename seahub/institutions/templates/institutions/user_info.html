@@ -45,17 +45,14 @@
             {% endif %}
 
             <dt>{% trans "Space Used" %}</dt>
-            <dd>{{ space_usage|seahub_filesizeformat }} {% if space_quota > 0 %} / {{ space_quota|seahub_filesizeformat }} {% endif %}</dd>
+            <dd>{{ space_usage|seahub_filesizeformat }} {% if space_quota > 0 %} / {{ space_quota|seahub_filesizeformat }} {% endif %} <a href="#" class="sf-btn-link" style="margin-left:20px;" id="set-quota">{% trans "Set Quota" %}</a></dd>
         </dl>
 
         <form id="set-quota-form" method="post" class="hide">{% csrf_token %}
             <h3>{% trans "Set user storage limit" %}</h3>
             <input type="hidden" name="email" value="{{ email }}" />
             <input type="text" name="space_quota" class="input" /> MB
-            <p class="tip">
-            <span>{% trans "An integer that is greater than or equal to 0." %}</span><br />
-            <span>{% trans "Tip: 0 means default limit" %}</span>
-            </p>
+            <p class="tip">{% trans "Available quota:" %} {{ available_quota|seahub_filesizeformat}}</p>
             <p class="error hide"></p>
             <input type="submit" value="{% trans "Submit" %}" class="submit" />
         </form>
@@ -140,5 +137,46 @@
 
 {% block extra_script %}
 <script type="text/javascript">
+$('#set-quota').click(function() {
+    $("#set-quota-form").modal({appendTo: "#main"});
+    return false;
+});
+
+$('#set-quota-form .submit').click(function() {
+    var form = $('#set-quota-form'),
+        form_id = form.attr('id'),
+        space_quota = $('input[name="space_quota"]', form).val();
+
+    if (!$.trim(space_quota)) {
+        apply_form_error(form_id, "{% trans "Space Quota can't be empty" %}");
+        return false;
+    }
+
+    data = { 'email': $('input[name="email"]', form).val(), 'space_quota': space_quota };
+
+    var sb_btn = $(this);
+    disable(sb_btn);
+    $.ajax({
+        url: '{% url 'institutions:user_set_quota' email %}',
+        type: 'POST',
+        dataType: 'json',
+        cache: false,
+        beforeSend: prepareCSRFToken,
+        data: data,
+        success: function(data) {
+            location.reload(true);
+        },
+        error: function(xhr, textStatus, errorThrown) {
+            if (xhr.responseText) {
+                apply_form_error(form_id, $.parseJSON(xhr.responseText).error);
+            } else {
+                apply_form_error(form_id, "{% trans "Failed. Please check the network." %}");
+            }
+            enable(sb_btn);
+        }
+    });
+    return false;
+});
+ 
 </script>
 {% endblock %}

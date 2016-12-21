@@ -307,6 +307,7 @@ urlpatterns = patterns(
     url(r'^sys/instadmin/(?P<inst_id>\d+)/users/search/$', sys_inst_search_user, name='sys_inst_search_user'),
     url(r'^sys/instadmin/(?P<inst_id>\d+)/admins/$', sys_inst_info_admins, name='sys_inst_info_admins'),
     url(r'^sys/instadmin/(?P<inst_id>\d+)/toggleadmin/(?P<email>[^/]+)/$', sys_inst_toggle_admin, name='sys_inst_toggle_admin'),
+    url(r'^sys/instadmin/(?P<inst_id>\d+)/set_quota/$', sys_inst_set_quota, name='sys_inst_set_quota'),
     url(r'^sys/publinkadmin/$', sys_publink_admin, name='sys_publink_admin'),
     url(r'^sys/publink/remove/$', sys_publink_remove, name='sys_publink_remove'),
     url(r'^sys/uploadlink/remove/$', sys_upload_link_remove, name='sys_upload_link_remove'),

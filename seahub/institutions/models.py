@@ -11,3 +11,17 @@ class Institution(models.Model):
 class InstitutionAdmin(models.Model):
     institution = models.ForeignKey(Institution)
     user = models.EmailField()
+
+
+class InstitutionQuotaManager(models.Manager):
+    def get_or_none(self, *args, **kwargs):
+        try:
+            return self.get(*args, **kwargs).quota
+        except self.model.DoesNotExist:
+            return None
+
+
+class InstitutionQuota(models.Model):
+    institution = models.ForeignKey(Institution)
+    quota = models.BigIntegerField()
+    objects = InstitutionQuotaManager()

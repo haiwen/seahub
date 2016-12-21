@@ -35,7 +35,9 @@ from seahub.base.templatetags.seahub_tags import tsstr_sec, email2nickname
 from seahub.auth import authenticate
 from seahub.auth.decorators import login_required, login_required_ajax
 from seahub.constants import GUEST_USER, DEFAULT_USER
-from seahub.institutions.models import Institution, InstitutionAdmin
+from seahub.institutions.models import (Institution, InstitutionAdmin,
+                                        InstitutionQuota)
+from seahub.institutions.utils import get_institution_space_usage
 from seahub.invitations.models import Invitation
 from seahub.role_permissions.utils import get_available_roles
 from seahub.utils import IS_EMAIL_CONFIGURED, string2list, is_valid_username, \
@@ -2127,6 +2129,8 @@ def sys_inst_info_user(request, inst_id):
                 u.last_login = last_login.last_login
 
     users_count = Profile.objects.filter(institution=inst.name).count()
+    space_quota = InstitutionQuota.objects.get_or_none(institution=inst)
+    space_usage = get_institution_space_usage(inst)
 
     return render_to_response('sysadmin/sys_inst_info_user.html', {
         'inst': inst,
@@ -2137,6 +2141,8 @@ def sys_inst_info_user(request, inst_id):
         'next_page': current_page + 1,
         'per_page': per_page,
         'page_next': page_next,
+        'space_usage': space_usage,
+        'space_quota': space_quota,
     }, context_instance=RequestContext(request))
 
 @login_required
@@ -2249,6 +2255,31 @@ def sys_inst_toggle_admin(request, inst_id, email):
 
     messages.success(request, _('Success'))
     return HttpResponseRedirect(next)
+
+@login_required
+@sys_staff_required
+@require_POST
+def sys_inst_set_quota(request, inst_id):
+    """Set institution quota"""
+    try:
+        inst = Institution.objects.get(pk=inst_id)
+    except Institution.DoesNotExist:
+        raise Http404
+
+    next = request.META.get('HTTP_REFERER', None)
+    if not next:
+        next = reverse('sys_inst_info_users', args=[inst.pk])
+
+    quota_mb = int(request.POST.get('space_quota', ''))
+    quota = quota_mb * get_file_size_unit('MB')
+
+    obj, created = InstitutionQuota.objects.update_or_create(
+        institution=inst,
+        defaults={'quota': quota},
+    )
+    content_type = 'application/json; charset=utf-8'
+    return HttpResponse(json.dumps({'success': True}), status=200,
+                        content_type=content_type)
 
 @login_required
 @sys_staff_required

@@ -18,12 +18,15 @@ from seahub.base.decorators import require_POST
 from seahub.base.models import UserLastLogin
 from seahub.institutions.decorators import (inst_admin_required,
                                             inst_admin_can_manage_user)
+from seahub.institutions.utils import get_institution_available_quota
 from seahub.profile.models import Profile, DetailedProfile
 from seahub.utils import is_valid_username, clear_token
 from seahub.utils.rpc import mute_seafile_api
+from seahub.utils.file_size import get_file_size_unit
 from seahub.views.sysadmin import email_user_on_activation, populate_user_info
 
 logger = logging.getLogger(__name__)
+
 
 def _populate_user_quota_usage(user):
     """Populate space/share quota to user.
@@ -162,6 +165,8 @@ def user_info(request, email):
         else:
             g.role = _('Member')
 
+    available_quota = get_institution_available_quota(request.user.institution)
+
     return render_to_response(
         'institutions/user_info.html', {
             'owned_repos': owned_repos,
@@ -172,6 +177,7 @@ def user_info(request, email):
             'profile': profile,
             'd_profile': d_profile,
             'personal_groups': personal_groups,
+            'available_quota': available_quota,
         }, context_instance=RequestContext(request))
 
 @require_POST
@@ -191,6 +197,26 @@ def user_remove(request, email):
         messages.error(request, _(u'Failed to delete: the user does not exist'))
 
     return HttpResponseRedirect(next)
+
+@login_required_ajax
+@require_POST
+@inst_admin_required
+@inst_admin_can_manage_user
+def user_set_quota(request, email):
+    content_type = 'application/json; charset=utf-8'
+    quota_mb = int(request.POST.get('space_quota', 0))
+    quota = quota_mb * get_file_size_unit('MB')
+
+    available_quota = get_institution_available_quota(request.user.institution)
+    if available_quota < quota:
+        result = {}
+        result['error'] = _(u'Failed to set quota: maximum quota is %d MB' % \
+                            (available_quota / 10 ** 6))
+        return HttpResponse(json.dumps(result), status=400, content_type=content_type)
+
+    seafile_api.set_user_quota(email, quota)
+
+    return HttpResponse(json.dumps({'success': True}), content_type=content_type)
 
 @login_required_ajax
 @require_POST
@@ -234,3 +260,4 @@ def user_toggle_status(request, email):
     except User.DoesNotExist:
         return HttpResponse(json.dumps({'success': False}), status=500,
                             content_type=content_type)
+
