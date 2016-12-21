@@ -78,7 +78,7 @@
                 {% else %}
                 --
                 {% endif %}
-                <span id="set-quota" title="{% trans "Edit" %}" class="sf2-icon-edit op-icon"></span>
+                <span id="set-quota" title="{% trans "Edit Quota" %}" class="sf2-icon-edit op-icon"></span>
             </dd>
         </dl>
 
@@ -98,7 +98,6 @@
 
         <form id="set-quota-form" method="post" class="hide">{% csrf_token %}
             <h3>{% trans "Set user storage limit" %}</h3>
-            <input type="hidden" name="email" value="{{ email }}" />
             <input type="text" name="space_quota" /> MB
             <p class="tip">{% trans "Tip: 0 means default limit" %}</p>
             <p class="error hide"></p>
@@ -383,28 +382,27 @@ $('#set-dept-form').submit(function() {
     return false;
 });
 
-$('#set-quota-form .submit').click(function() {
-    var form = $('#set-quota-form'),
+$('#set-quota-form').submit(function() {
+    var form = $(this),
         form_id = form.attr('id'),
-        space_quota = $('input[name="space_quota"]', form).val();
+        space_quota = $.trim($('input[name="space_quota"]', form).val());
 
-    if (!$.trim(space_quota)) {
-        apply_form_error(form_id, "{% trans "Space Quota can't be empty" %}");
+    if (!space_quota) {
+        apply_form_error(form_id, "{% trans "It is required." %}");
         return false;
     }
 
-    data = { 'email': $('input[name="email"]', form).val(), 'space_quota': space_quota };
+    var $submitBtn = $('[type="submit"]', $(this));
+    disable($submitBtn);
 
-    var sb_btn = $(this);
-    disable(sb_btn);
     $.ajax({
         url: '{% url 'user_set_quota' email %}',
         type: 'POST',
         dataType: 'json',
         cache: false,
         beforeSend: prepareCSRFToken,
-        data: data,
-        success: function(data) {
+        data: {'space_quota': space_quota},
+        success: function() {
             location.reload(true);
         },
         error: function(xhr, textStatus, errorThrown) {
@@ -413,7 +411,7 @@ $('#set-quota-form .submit').click(function() {
             } else {
                 apply_form_error(form_id, "{% trans "Failed. Please check the network." %}");
             }
-            enable(sb_btn);
+            enable($submitBtn);
         }
     });
     return false;

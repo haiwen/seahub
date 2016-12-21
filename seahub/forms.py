@@ -150,7 +150,6 @@ class SetUserQuotaForm(forms.Form):
     """
     Form for setting user quota.
     """
-    email = forms.CharField(error_messages={'required': _('Email is required')})
     space_quota = forms.IntegerField(min_value=0,
                                error_messages={'required': _('Space quota can\'t be empty'),
                                                'min_value': _('Space quota is too low (minimum value is 0)')})

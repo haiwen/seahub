@@ -646,7 +646,6 @@ def user_set_quota(request, email):
 
     f = SetUserQuotaForm(request.POST)
     if f.is_valid():
-        email = f.cleaned_data['email']
         space_quota_mb = f.cleaned_data['space_quota']
         space_quota = space_quota_mb * get_file_size_unit('MB')
 

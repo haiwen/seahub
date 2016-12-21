@@ -80,6 +80,53 @@ $('.user-status-select, .user-role-select').change(function() {
         }
     });
 });
+
+{% if user.source == "DB" %}
+// edit quota
+$('.quota-edit-icon').click(function() {
+    var email = $(this).closest('tr').attr('data-userid');
+    $('#set-quota-form').data('email', email).modal();
+    $('#simplemodal-container').css({'width':'auto', 'height':'auto'});
+});
+
+$('#set-quota-form').submit(function() {
+    var space_quota = $.trim($('[name="space_quota"]', $(this)).val());
+    var $error = $('.error', $(this));
+    if (!space_quota) {
+        $error.html("{% trans "It is required." %}").show();
+        return false;
+    }
+
+    var $submitBtn = $('[type="submit"]', $(this));
+    disable($submitBtn);
+
+    var email = $(this).data('email');
+    $.ajax({
+        url: '{{ SITE_ROOT }}useradmin/' + encodeURIComponent(email) + '/set_quota/',
+        type: 'POST',
+        dataType: 'json',
+        cache: false,
+        beforeSend: prepareCSRFToken,
+        data: {'space_quota': space_quota},
+        success: function() {
+            location.reload(true);
+        },
+        error: function(xhr, textStatus, errorThrown) {
+            var err_msg;
+            if (xhr.responseText) {
+                err_msg = $.parseJSON(xhr.responseText).error;
+            } else {
+                err_msg = "{% trans "Failed. Please check the network." %}";
+            }
+            $error.html(err_msg).show();
+            enable($submitBtn);
+        }
+    });
+
+    return false;
+});
+{% endif %}
+
 // select shows, but the user doesn't select a value, or doesn't change the permission, click other place to hide the select
 $(document).click(function(e) {
     var target = e.target || event.srcElement;
