@@ -54,6 +54,7 @@ from seahub.views.ajax import (get_related_users_by_org_repo,
                                get_related_users_by_repo)
 from seahub.forms import SetUserQuotaForm, AddUserForm, BatchAddUserForm, \
     TermsAndConditionsForm
+from seahub.profile.forms import ProfileForm, DetailedProfileForm 
 from seahub.options.models import UserOptions
 from seahub.profile.models import Profile, DetailedProfile
 from seahub.signals import repo_deleted
@@ -674,6 +675,40 @@ def user_set_quota(request, email):
 
 @login_required_ajax
 @sys_staff_required
+def user_set_nickname(request, email):
+    if request.method != 'POST':
+        raise Http404
+
+    content_type = 'application/json; charset=utf-8'
+    result = {}
+
+    form = ProfileForm(request.POST)
+    if form.is_valid():
+        form.save(username=email)
+        return HttpResponse(json.dumps({'nickname': form.cleaned_data["nickname"]}), content_type=content_type)
+    else:
+        result['error'] = str(form.errors.values()[0])
+        return HttpResponse(json.dumps(result), status=400, content_type=content_type)
+
+@login_required_ajax
+@sys_staff_required
+def user_set_department(request, email):
+    if request.method != 'POST':
+        raise Http404
+
+    content_type = 'application/json; charset=utf-8'
+    result = {}
+
+    form = DetailedProfileForm(request.POST)
+    if form.is_valid():
+        form.save(username=email)
+        return HttpResponse(json.dumps({'department': form.cleaned_data["department"]}), content_type=content_type)
+    else:
+        result['error'] = str(form.errors.values()[0])
+        return HttpResponse(json.dumps(result), status=400, content_type=content_type)
+
+@login_required_ajax
+@sys_staff_required
 def sys_org_set_quota(request, org_id):
     if request.method != 'POST':
         raise Http404
@@ -980,6 +1015,8 @@ def user_add(request):
     form = AddUserForm(post_values)
     if form.is_valid():
         email = form.cleaned_data['email']
+        name = form.cleaned_data['name']
+        department = form.cleaned_data['department']
         role = form.cleaned_data['role']
         password = form.cleaned_data['password1']
 
@@ -995,6 +1032,10 @@ def user_add(request):
             User.objects.update_role(email, role)
             if config.FORCE_PASSWORD_CHANGE:
                 UserOptions.objects.set_force_passwd_change(email)
+            if name:
+                Profile.objects.add_or_update(email, name, '')
+            if department:
+                DetailedProfile.objects.add_or_update(email, department, '')
 
         if request.user.org:
             org_id = request.user.org.org_id
@@ -1834,11 +1875,30 @@ def batch_add_user(request):
             username = row[0].strip()
             password = row[1].strip()
 
+            # nickname & department are optional
+            try:
+                nickname = row[2].strip()
+            except IndexError:
+                nickname = ''
+
+            try:
+                department = row[3].strip()
+            except IndexError:
+                department = ''
+
             if not is_valid_username(username):
                 continue
 
             if password == '':
                 continue
+
+            if nickname:
+                if len(nickname) > 64 or '/' in nickname:
+                    continue
+
+            if department:
+                if len(department) > 512:
+                    continue
 
             try:
                 User.objects.get(email=username)
@@ -1846,6 +1906,11 @@ def batch_add_user(request):
             except User.DoesNotExist:
                 User.objects.create_user(username, password, is_staff=False,
                                          is_active=True)
+
+                if nickname:
+                    Profile.objects.add_or_update(username, nickname, '')
+                if department:
+                    DetailedProfile.objects.add_or_update(username, department, '')
 
                 send_html_email_with_dj_template(
                     username, dj_template='sysadmin/user_batch_add_email.html',

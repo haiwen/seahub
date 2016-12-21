@@ -41,22 +41,60 @@
             <dd>{{ org_name }}</dd>
             {%  endif %}
 
-            {% if profile %}
             <dt>{% trans "Name" context "true name" %}</dt>
-            <dd>{{ profile.nickname }}</dd>
-            {% endif %}
+            <dd>
+                <span id="nickname">
+                    {% if profile and profile.nickname %}
+                    {{ profile.nickname }}
+                    {% else %}
+                    --
+                    {% endif %}
+                </span>
+                <span id="set-name" title="{% trans "Edit"%}" class="sf2-icon-edit op-icon"></span>
+            </dd>
 
-            {% if d_profile %}
             <dt>{% trans "Department" %}</dt>
-            <dd>{{ d_profile.department }}</dd>
+            <dd>
+                <span id="department">
+                    {% if d_profile and d_profile.department %}
+                    {{ d_profile.department }}
+                    {% else %}
+                    --
+                    {% endif %}
+                </span>
+                <span id="set-dept" title="{% trans "Edit"%}" class="sf2-icon-edit op-icon"></span>
+            </dd>
 
+            {% if d_profile and d_profile.telephone %}
             <dt>{% trans "Telephone" %}</dt>
             <dd>{{ d_profile.telephone }}</dd>
             {% endif %}
 
-            <dt>{% trans "Space Used" %}</dt>
-            <dd>{{ space_usage|seahub_filesizeformat }} {% if space_quota > 0 %} / {{ space_quota|seahub_filesizeformat }} {% endif %}  <a href="#" class="sf-btn-link" style="margin-left:20px;" id="set-quota">{% trans "Set Quota" %}</a></dd>
+            <dt>{% trans "Space Used / Quota" %}</dt>
+            <dd>
+                {{ space_usage|seahub_filesizeformat }} /
+                {% if space_quota > 0 %}
+                {{ space_quota|seahub_filesizeformat }}
+                {% else %}
+                --
+                {% endif %}
+                <span id="set-quota" title="{% trans "Edit" %}" class="sf2-icon-edit op-icon"></span>
+            </dd>
         </dl>
+
+        <form id="set-name-form" method="post" action="" class="hide">{% csrf_token %}
+            <h3>{% trans "Set user name" %}</h3>
+            <input type="text" name="nickname" class="input" value="" /><br />
+            <p class="error hide"></p>
+            <input type="submit" value="{% trans "Submit" %}" class="submit" />
+        </form>
+
+        <form id="set-dept-form" method="post" action="" class="hide">{% csrf_token %}
+            <h3>{% trans "Set user department" %}</h3>
+            <input type="text" name="department" class="input" value="" /><br />
+            <p class="error hide"></p>
+            <input type="submit" value="{% trans "Submit" %}" class="submit" />
+        </form>
 
         <form id="set-quota-form" method="post" class="hide">{% csrf_token %}
             <h3>{% trans "Set user storage limit" %}</h3>
@@ -254,9 +292,94 @@ $('.rm-link').click(function() {
     });
     return false;
 });
-
+$('#set-name').click(function() {
+    $("#set-name-form").modal({appendTo: "#main"});
+    $('#simplemodal-container').css({'width':'auto', 'height':'auto'});
+});
+$('#set-dept').click(function() {
+    $("#set-dept-form").modal({appendTo: "#main"});
+    $('#simplemodal-container').css({'width':'auto', 'height':'auto'});
+});
 $('#set-quota').click(function() {
     $("#set-quota-form").modal({appendTo: "#main"});
+    $('#simplemodal-container').css({'width':'auto', 'height':'auto'});
+});
+
+$('#set-name-form').submit(function() {
+    var nickname = $.trim($('[name="nickname"]', $(this)).val());
+    var $error = $('.error', $(this));
+    if (!nickname) {
+        $error.html("{% trans "It is required." %}").show();
+        return false;
+    }
+    if (nickname.indexOf('/') != -1) {
+        $error.html("{% trans "Name should not include '/'." %}").show();
+        return false;
+    }
+
+    var $submitBtn = $('[type="submit"]', $(this));
+    disable($submitBtn);
+
+    $.ajax({
+        url: '{% url 'user_set_nickname' email %}',
+        type: 'POST',
+        dataType: 'json',
+        cache: false,
+        beforeSend: prepareCSRFToken,
+        data: {'nickname': nickname},
+        success: function(data) {
+            $('#nickname').html(data.nickname);
+            $.modal.close();
+        },
+        error: function(xhr, textStatus, errorThrown) {
+            var err_msg;
+            if (xhr.responseText) {
+                err_msg = $.parseJSON(xhr.responseText).error;
+            } else {
+                err_msg = "{% trans "Failed. Please check the network." %}";
+            }
+            $error.html(err_msg).show();
+            enable($submitBtn);
+        }
+    });
+
+    return false;
+});
+
+$('#set-dept-form').submit(function() {
+    var department = $.trim($('[name="department"]', $(this)).val());
+    var $error = $('.error', $(this));
+    if (!department) {
+        $error.html("{% trans "It is required." %}").show();
+        return false;
+    }
+
+    var $submitBtn = $('[type="submit"]', $(this));
+    disable($submitBtn);
+
+    $.ajax({
+        url: '{% url 'user_set_department' email %}',
+        type: 'POST',
+        dataType: 'json',
+        cache: false,
+        beforeSend: prepareCSRFToken,
+        data: {'department': department},
+        success: function(data) {
+            $('#department').html(data.department);
+            $.modal.close();
+        },
+        error: function(xhr, textStatus, errorThrown) {
+            var err_msg;
+            if (xhr.responseText) {
+                err_msg = $.parseJSON(xhr.responseText).error;
+            } else {
+                err_msg = "{% trans "Failed. Please check the network." %}";
+            }
+            $error.html(err_msg).show();
+            enable($submitBtn);
+        }
+    });
+
     return false;
 });
 
