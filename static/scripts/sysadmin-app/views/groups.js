@@ -13,6 +13,7 @@ define([
         id: 'admin-groups',
 
         template: _.template($("#groups-tmpl").html()),
+        groupAddFormtemplate: _.template($("#group-add-form-tmpl").html()),
 
         initialize: function() {
             this.groupCollection = new GroupCollection();
@@ -36,6 +37,7 @@ define([
 
         events: {
             'click .js-add-group': 'addGroup',
+            'click .js-export-excel': 'exportExcel',
             'click #paginator .js-next': 'getNextPage',
             'click #paginator .js-previous': 'getPreviousPage'
         },
@@ -51,7 +53,7 @@ define([
         },
 
         addGroup: function () {
-            var $form = $('#group-add-form'),
+            var $form = $(this.groupAddFormtemplate()),
                 groups = this.groupCollection,
                 _this = this;
 
@@ -60,7 +62,8 @@ define([
 
             $('[name="group_owner"]', $form).select2($.extend(
                 Common.contactInputOptionsForSelect2(), {
-                width: '270px',
+                width: '268px',
+                containerCss: {'margin-bottom': '5px'},
                 maximumSelectionSize: 1,
                 placeholder: gettext("Search user or enter email and press Enter"), // to override 'placeholder' returned by `Common.conta...`
                 formatSelectionTooBig: gettext("You cannot select any more choices")
@@ -73,7 +76,7 @@ define([
                 var $submitBtn = $('[type="submit"]', $form);
 
                 if (!group_name) {
-                    $error.html(gettext("It is required.")).show();
+                    $error.html(gettext("Name is required.")).show();
                     return false;
                 }
 
@@ -103,6 +106,10 @@ define([
                 return false;
             });
             return false;
+        },
+
+        exportExcel: function() {
+            location.href = Common.getUrl({'name': 'sys_group_admin_export_excel'});
         },
 
         getNextPage: function() {
