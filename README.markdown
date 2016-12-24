@@ -17,9 +17,14 @@ You can grab souce code from GitHub.
 
     $ git clone git://github.com/haiwen/seahub.git
 
+Set up a virtualenv to install dependencies locally:
+
+    $ virtualenv .virtualenv
+    $ . .virtualenv/bin/activate
+
 Install python libraries by pip:
 
-    pip install -r requirements.txt
+    $ pip install -r requirements.txt
 
 
 Configuration
@@ -38,7 +43,8 @@ Run and Verify
 
 Run as:
 
-    ./run-seahub.sh.template
+    $ . .virtualenv/bin/activate
+    $ ./run-seahub.sh.template
 
 Then open your browser, and input `http://localhost:8000/`, there should be a Login page. You can create admin account using `seahub-admin.py` script under `tools/` directory.
 
