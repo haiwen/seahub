@@ -81,7 +81,7 @@ $('.user-status-select, .user-role-select').change(function() {
     });
 });
 
-{% if user.source == "DB" %}
+{% if user.source == "DB" or user.source == 'LDAPImport' %}
 // edit quota
 $('.quota-edit-icon').click(function() {
     var email = $(this).closest('tr').attr('data-userid');

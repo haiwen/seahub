@@ -22,18 +22,22 @@
 <table>
     <tr>
         <th width="40%">{% trans "Email" %}</th>
+        <th width="25%">{% trans "Space Used / Quota" %}</th>
         <th width="35%">{% trans "Create At / Last Login" %}</th>
-        <th width="25%">{% trans "Space Used" %}</th>
     </tr>
 
     {% for user in users %}
     <tr>
         <td data="{{user.id}}"><a href="{{ SITE_ROOT }}useradmin/info/{{ user.props.email }}/">{{ user.email }}</a></td>
-        <td style="font-size:11px;"> -- / {% if user.last_login %}{{user.last_login|translate_seahub_time}} {% else %} -- {% endif %}
-        </td>
         <td style="font-size:11px;">
-            <p> {{ user.space_usage|seahub_filesizeformat }} {% if user.space_quota > 0 %} / {{ user.space_quota|seahub_filesizeformat }} {% endif %} </p>
+            {{ user.space_usage|seahub_filesizeformat }} / 
+            {% if user.space_quota > 0 %}
+            {{ user.space_quota|seahub_filesizeformat }}
+            {% else %}
+            --
+            {% endif %}
         </td>
+        <td> -- / {% if user.last_login %}{{user.last_login|translate_seahub_time}} {% else %} -- {% endif %}</td>
     </tr>
     {% endfor %}
 </table>

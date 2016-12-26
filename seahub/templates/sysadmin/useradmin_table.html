@@ -76,7 +76,7 @@
             {% else %}
             --
             {% endif %}
-            {% if user.source == "DB" %}
+            {% if user.source == "DB" or user.source == 'LDAPImport' %}
             <span title="{% trans "Edit Quota" %}" class="quota-edit-icon sf2-icon-edit op-icon vh"></span>
             {% endif %}
         </td>
@@ -103,7 +103,7 @@
     {% endfor %}
 </table>
 
-{% if user.source == "DB" %}
+{% if user.source == "DB" or user.source == 'LDAPImport' %}
 <form id="set-quota-form" method="post" action="" class="hide">{% csrf_token %}
     <h3>{% trans "Set user storage limit" %}</h3>
     <input type="text" name="space_quota" /> MB
