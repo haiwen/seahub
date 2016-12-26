@@ -140,10 +140,6 @@ class AdminLibrary(APIView):
         Permission checking:
         1. only admin can perform this action.
         """
-        repo = seafile_api.get_repo(repo_id)
-        if not repo:
-            return Response({'success': True})
-
         if get_system_default_repo_id() == repo_id:
             error_msg = _('System library can not be deleted.')
             return api_error(status.HTTP_400_BAD_REQUEST, error_msg)

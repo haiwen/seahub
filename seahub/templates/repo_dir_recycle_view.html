@@ -3,16 +3,27 @@
 {% load seahub_tags avatar_tags i18n %}
 {% load url from future %}
 
+{% block extra_style %}
+<style type="text/css">
+    .go-back { top:-3px; }
+</style>
+{% endblock %}
+
 {% block wide_page_content %}
 <h2 class="repo-trash-hd">{% blocktrans %}<span class="op-target">{{repo_dir_name}}</span> Trash{% endblocktrans %}</h2>
+{% if referer %}
+<a href="{{referer}}" class="go-back" title="{% trans "Back" %}">
+    <span class="icon-chevron-left"></span>
+</a>
+{% endif %}
 <div class="repo-file-list-topbar ovhd">
     <p class="path fleft">
     {% trans "Current path: " %}
     {% if not show_recycle_root %}
-    <a href="?dir_path={{dir_path|urlencode}}">{{repo_dir_name}}</a>
+    <a href="?dir_path={{dir_path|urlencode}}&referer={{referer|urlencode}}">{{repo_dir_name}}</a>
     {% for name, link in zipped %}
         {% if not forloop.last %}
-        / <a href="?commit_id={{ commit_id }}&base={{ basedir|urlencode }}&p={{ link|urlencode }}&dir_path={{dir_path|urlencode}}">{{ name }}</a>
+        / <a href="?commit_id={{ commit_id }}&base={{ basedir|urlencode }}&p={{ link|urlencode }}&dir_path={{dir_path|urlencode}}&referer={{referer|urlencode}}">{{ name }}</a>
         {% else %}
         / {{ name }}
         {% endif %}

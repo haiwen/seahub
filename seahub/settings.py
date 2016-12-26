@@ -522,6 +522,7 @@ ENABLE_FOLDER_PERM = False
 # Guest Invite     #
 ####################
 ENABLE_GUEST_INVITATION = False
+INVITATION_ACCEPTER_BLACKLIST = []
 
 #####################
 # Sudo Mode #

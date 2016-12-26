@@ -2327,7 +2327,7 @@ button.sf-dropdown-toggle:focus {
 }
 .fileupload-table {
     margin-bottom:0;
-    table-layout:fixed;
+    table-layout: fixed;
 }
 .fileupload-table .name,
 .fileupload-table .error {
@@ -3604,7 +3604,7 @@ img.thumbnail {
 }
 /* about dialog */
 .about-content {
-    width: 280px;
+    min-width: 280px;
     padding-top: 20px;
     text-align: center;
 }

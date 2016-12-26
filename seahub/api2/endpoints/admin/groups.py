@@ -14,7 +14,8 @@ from pysearpc import SearpcError
 from seahub.base.accounts import User
 from seahub.utils import is_valid_username
 from seahub.utils.timeutils import timestamp_to_isoformat_timestr
-from seahub.group.utils import is_group_member, is_group_admin
+from seahub.group.utils import is_group_member, is_group_admin, \
+        validate_group_name, check_group_name_conflict
 
 from seahub.api2.utils import api_error
 from seahub.api2.throttling import UserRateThrottle
@@ -81,6 +82,53 @@ class AdminGroups(APIView):
         }
 
         return Response({"page_info": page_info, "groups": return_results})
+
+    def post(self, request):
+        """ Create a group
+
+        Permission checking:
+        1. Admin user;
+        """
+
+        # argument check
+        group_name = request.data.get('group_name', '')
+        if not group_name:
+            error_msg = 'group_name %s invalid.' % group_name
+            return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
+
+        group_name = group_name.strip()
+        # Check whether group name is validate.
+        if not validate_group_name(group_name):
+            error_msg = _(u'Group name can only contain letters, numbers, blank, hyphen or underscore')
+            return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
+
+        # Check whether group name is duplicated.
+        if check_group_name_conflict(request, group_name):
+            error_msg = _(u'There is already a group with that name.')
+            return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
+
+        group_owner = request.data.get('group_owner', '')
+        if group_owner:
+            try:
+                User.objects.get(email=group_owner)
+            except User.DoesNotExist:
+                error_msg = 'User %s not found.' % group_owner
+                return api_error(status.HTTP_404_NOT_FOUND, error_msg)
+
+        username = request.user.username
+
+        # create group.
+        try:
+            group_id = ccnet_api.create_group(group_name, group_owner or username)
+        except SearpcError as e:
+            logger.error(e)
+            error_msg = 'Internal Server Error'
+            return api_error(status.HTTP_500_INTERNAL_SERVER_ERROR, error_msg)
+
+        # get info of new group
+        group_info = get_group_info(group_id)
+
+        return Response(group_info, status=status.HTTP_201_CREATED)
 
 
 class AdminGroup(APIView):

@@ -116,6 +116,7 @@ define([
                 },
                 error: function(collection, response, opts) {
                     $loadingTip.hide();
+                    var err_msg;
                     if (response.responseText) {
                         if (response['status'] == 401 || response['status'] == 403) {
                             err_msg = gettext("Permission error");

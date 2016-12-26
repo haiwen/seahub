@@ -274,11 +274,12 @@ def sys_useradmin_export_excel(request):
         is_pro = False
 
     if is_pro:
-        head = [_("Email"), _("Name"), _("Contact Email"), _("Status"),
-                _("Role"), _("Create At"), _("Last Login"), _("Admin"),
-                _("LDAP(imported)"),]
+        head = [_("Email"), _("Name"), _("Contact Email"), _("Status"), _("Role"),
+                _("Space Usage") + "(MB)", _("Space Quota") + "(MB)",
+                _("Create At"), _("Last Login"), _("Admin"), _("LDAP(imported)"),]
     else:
         head = [_("Email"), _("Name"), _("Contact Email"), _("Status"),
+                _("Space Usage") + "(MB)", _("Space Quota") + "(MB)",
                 _("Create At"), _("Last Login"), _("Admin"), _("LDAP(imported)"),]
 
     data_list = []
@@ -288,6 +289,28 @@ def sys_useradmin_export_excel(request):
 
         # populate name and contact email
         populate_user_info(user)
+
+        # populate space usage and quota
+        MB = get_file_size_unit('MB')
+
+        _populate_user_quota_usage(user)
+        if user.space_usage > 0:
+            try:
+                space_usage_MB = round(float(user.space_usage) / MB, 2)
+            except Exception as e:
+                logger.error(e)
+                space_usage_MB = '--'
+        else:
+            space_usage_MB = ''
+
+        if user.space_quota > 0:
+            try:
+                space_quota_MB = round(float(user.space_quota) / MB, 2)
+            except Exception as e:
+                logger.error(e)
+                space_quota_MB = '--'
+        else:
+            space_quota_MB = ''
 
         # populate user last login time
         user.last_login = None
@@ -313,11 +336,13 @@ def sys_useradmin_export_excel(request):
             else:
                 role = _('Default')
 
-            row = [user.email, user.name, user.contact_email, status,
-                    role, create_at, last_login, is_admin, ldap_import]
+            row = [user.email, user.name, user.contact_email, status, role,
+                    space_usage_MB, space_quota_MB, create_at,
+                    last_login, is_admin, ldap_import]
         else:
             row = [user.email, user.name, user.contact_email, status,
-                    create_at, last_login, is_admin, ldap_import]
+                    space_usage_MB, space_quota_MB, create_at,
+                    last_login, is_admin, ldap_import]
 
         data_list.append(row)
 

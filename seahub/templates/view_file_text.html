@@ -58,4 +58,9 @@
 </script>
 {% endifnotequal %}
 {% endif %}
+<script type="text/javascript">
+    // for 'go back'
+    var $fileDiff = $('.file-diff');
+    $fileDiff.attr('href', $fileDiff.attr('href') + '&referer=' + encodeURIComponent(location.href));
+</script>
 {% endblock%}

@@ -44,9 +44,6 @@
     </td>
     <% if (name) { %>
     <td><span class="repo-name-span"><a href="#my-libs/lib/<%= id %>"><%- name %></a></span></td>
-    <% } else { %>
-    <td>{% trans "Broken (please contact your administrator to fix this library)" %}</td>
-    <% } %>
     <td class="repo-op-td">
         <div class="op-container">
             <a href="#" class="sf2-icon-share sf2-x repo-share-btn op-icon vh" title="{% trans "Share" %}" aria-label="{% trans "Share" %}"></a>
@@ -70,6 +67,10 @@
             </div>
         </div>
     </td>
+    <% } else { %>
+    <td>{% trans "Broken (please contact your administrator to fix this library)" %}</td>
+    <td></td>
+    <% } %>
     <td><%= size_formatted %></td>
     <td><%= mtime_relative %></td>
 </script>
@@ -160,13 +161,13 @@
     <% if (path == '/') { %>
         <div class="fright">
             <% if (user_perm == 'rw') { %>
-            <a class="op-link sf2-icon-trash" href="<%= site_root %>repo/recycle/<%- repo_id %>/" title="{% trans 'Trash' %}" aria-label="{% trans "Trash" %}"></a>
+            <a class="op-link sf2-icon-trash" href="<%= site_root %>repo/recycle/<%- repo_id %>/?referer=<% print(encodeURIComponent(location.href)); %>" title="{% trans 'Trash' %}" aria-label="{% trans "Trash" %}"></a>
             <% } %>
-            <a class="op-link sf2-icon-history" href="<%= site_root %>repo/history/<%- repo_id %>/" title="{% trans 'History' %}" aria-label="{% trans "History" %}"></a>
+            <a class="op-link sf2-icon-history" href="<%= site_root %>repo/history/<%- repo_id %>/?referer=<% print(encodeURIComponent(location.href)); %>" title="{% trans 'History' %}" aria-label="{% trans "History" %}"></a>
         </div>
     <% } else { %>
         <% if (user_perm == 'rw') { %>
-        <a class="op-link sf2-icon-trash fright" href="<%= site_root %>dir/recycle/<%- repo_id %>/?dir_path=<% print(encodeURIComponent(path)); %>" title="{% trans 'Trash' %}"></a>
+        <a class="op-link sf2-icon-trash fright" href="<%= site_root %>dir/recycle/<%- repo_id %>/?dir_path=<% print(encodeURIComponent(path)); %>&referer=<% print(encodeURIComponent(location.href)); %>" title="{% trans 'Trash' %}"></a>
         <% } %>
     <% } %>
 </script>
@@ -325,7 +326,7 @@
                     <li><a class="op rename" href="#">{% trans "Rename" %}</a></li>
                     <li><a class="op mv" href="#">{% trans "Move" %}</a></li>
                     <li><a class="op cp" href="#">{% trans "Copy" %}</a></li>
-                    <li><a class="op file-history" href="{{ SITE_ROOT }}repo/file_revisions/<%= repo_id %>/?p=<% print(encodeURIComponent(dirent_path)); %>">{% trans "History" %}</a></li>
+                    <li><a class="op file-history" href="{{ SITE_ROOT }}repo/file_revisions/<%= repo_id %>/?p=<% print(encodeURIComponent(dirent_path)); %>&referer=<% print(encodeURIComponent(location.href)); %>">{% trans "History" %}</a></li>
                     <% if (is_pro) { %>
                         <% if (file_audit_enabled) { %>
                     <li><a class="op" href="{{ SITE_ROOT }}repo/file-access/<%= repo_id %>/?p=<% print(encodeURIComponent(dirent_path)); %>" target="_blank">{% trans "Access Log" %}</a></li>
@@ -400,7 +401,7 @@
         <li><a class="op rename" href="#">{% trans "Rename" %}</a></li>
         <li><a class="op mv" href="#">{% trans "Move" %}</a></li>
         <li><a class="op cp" href="#">{% trans "Copy" %}</a></li>
-        <li><a class="op file-history" href="{{ SITE_ROOT }}repo/file_revisions/<%= repo_id %>/?p=<% print(encodeURIComponent(dirent_path)); %>">{% trans "History" %}</a></li>
+        <li><a class="op file-history" href="{{ SITE_ROOT }}repo/file_revisions/<%= repo_id %>/?p=<% print(encodeURIComponent(dirent_path)); %>&referer=<% print(encodeURIComponent(location.href)); %>">{% trans "History" %}</a></li>
             <% if (is_pro) { %>
                 <% if (dirent.is_locked) { %>
                     <% if (dirent.locked_by_me) { %>

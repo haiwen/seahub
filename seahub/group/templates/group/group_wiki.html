@@ -68,7 +68,7 @@
             <li class="item{% if page == 'home' %} cur-item{% endif %}"><a href="{% url 'group_wiki' group.id %}" class="link">{% trans "Home" %}</a></li>
             <li class="item"><a href="{% url 'group_wiki_pages' group.id %}" class="link">{% trans "Pages" %}</a></li>
             {% if group.view_perm != "pub" %}
-            <li class="item"><a href="{% url 'repo_history' repo_id %}" class="link">{% trans "Wiki History" %}</a></li>
+            <li class="item"><a href="{% url 'repo_history' repo_id %}" class="link" id="wiki-history">{% trans "Wiki History" %}</a></li>
             {% endif %}
         </ul>
 
@@ -76,7 +76,7 @@
         <button id="page-create" class="btn-white">{% trans "New Page" %}</button>
         <button id="page-delete" class="btn-white" data-url="{% url 'group_wiki_page_delete' group.id page %}">{% trans "Delete Page" %}</button>
         <a class="sf-btn-link btn-white" href="{% url 'group_wiki_page_edit' group.id page %}">{% trans "Edit Page" %}</a>
-        <a class="sf-btn-link btn-white" href="{% url 'file_revisions' repo_id %}?p={{path|urlencode}}" target="_blank">{% trans "Page History" %}</a>
+        <a class="sf-btn-link btn-white" href="{% url 'file_revisions' repo_id %}?p={{path|urlencode}}" id="page-history">{% trans "Page History" %}</a>
         {% endif %}
     </div>
 
@@ -239,5 +239,11 @@ $('#wiki-index-con').html(marked('{{ index_content|escapejs }}'));
     {% endif %}
 {% endif %}
 {% endif %}
+
+// for 'go back'
+var $pageHistory = $('#page-history');
+$pageHistory.attr('href', $pageHistory.attr('href') + '&referer=' + encodeURIComponent(location.href));
+var $wikiHistory = $('#wiki-history');
+$wikiHistory.attr('href', $wikiHistory.attr('href') + '?referer=' + encodeURIComponent(location.href));
 </script>
 {% endblock %}

@@ -519,7 +519,10 @@
 <script type="text/template" id="groups-tmpl">
     <div class="hd ovhd">
         <h3 class="fleft">{% trans "Groups" %}</h3>
-        <a class="sf-btn-link btn-white js-export-excel fright hide" href="{% url "sys_group_admin_export_excel" %}">{% trans "Export Excel" %}</a>
+        <div class="fright">
+            <button class="btn-white js-add-group">{% trans "New Group" %}</button>
+            <button class="btn-white js-export-excel">{% trans "Export Excel" %}</button>
+        </div>
     </div>
     <span class="loading-icon loading-tip"></span>
     <table>
@@ -542,6 +545,19 @@
         <h2 class="alc">{% trans "No groups" %}</h2>
     </div>
     <p class="error error-tip hide"></p>
+</script>
+
+<script type="text/template" id="group-add-form-tmpl">
+    <form id="group-add-form" action="" method="post" class="hide">{% csrf_token %}
+        <h3 id="dialogTitle">{% trans "New Group" %}</h3>
+        <label for="group-name">{% trans "Name" %}</label><br />
+        <input type="text" name="group_name" value="" class="input" id="group-name" /><br />
+        <label for="group-owner">{% trans "Owner" %}</label>
+        <span class="tip">{% trans "(If left blank, owner will be admin)" %}</span><br />
+        <input type="hidden" name="group_owner" value="" id="group-owner" />
+        <p class="error hide"></p>
+        <input type="submit" class="submit" value="{% trans "Submit" %}" />
+    </form>
 </script>
 
 <script type="text/template" id="group-item-tmpl">

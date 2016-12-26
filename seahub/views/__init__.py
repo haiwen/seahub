@@ -281,7 +281,7 @@ def get_unencry_rw_repos_by_user(request):
 
     return accessible_repos
 
-def render_recycle_root(request, repo_id):
+def render_recycle_root(request, repo_id, referer):
     repo = get_repo(repo_id)
     if not repo:
         raise Http404
@@ -332,9 +332,10 @@ def render_recycle_root(request, repo_id):
             'scan_stat': new_scan_stat,
             'trash_more': trash_more,
             'enable_clean': enable_clean,
+            'referer': referer,
             }, context_instance=RequestContext(request))
 
-def render_recycle_dir(request, repo_id, commit_id):
+def render_recycle_dir(request, repo_id, commit_id, referer):
     basedir = request.GET.get('base', '')
     path = request.GET.get('p', '')
     if not basedir or not path:
@@ -380,9 +381,10 @@ def render_recycle_dir(request, repo_id, commit_id):
             'commit_id': commit_id,
             'basedir': basedir,
             'path': path,
+            'referer': referer,
             }, context_instance=RequestContext(request))
 
-def render_dir_recycle_root(request, repo_id, dir_path):
+def render_dir_recycle_root(request, repo_id, dir_path, referer):
     repo = get_repo(repo_id)
     if not repo:
         raise Http404
@@ -422,9 +424,10 @@ def render_dir_recycle_root(request, repo_id, dir_path):
             'scan_stat': new_scan_stat,
             'trash_more': trash_more,
             'dir_path': dir_path,
+            'referer': referer,
             }, context_instance=RequestContext(request))
 
-def render_dir_recycle_dir(request, repo_id, commit_id, dir_path):
+def render_dir_recycle_dir(request, repo_id, commit_id, dir_path, referer):
     basedir = request.GET.get('base', '')
     path = request.GET.get('p', '')
     if not basedir or not path:
@@ -470,6 +473,7 @@ def render_dir_recycle_dir(request, repo_id, commit_id, dir_path):
             'basedir': basedir,
             'path': path,
             'dir_path': dir_path,
+            'referer': referer,
             }, context_instance=RequestContext(request))
 
 @login_required
@@ -479,10 +483,11 @@ def repo_recycle_view(request, repo_id):
         return render_permission_error(request, _(u'Unable to view recycle page'))
 
     commit_id = request.GET.get('commit_id', '')
+    referer = request.GET.get('referer', '') # for back to 'dir view' page
     if not commit_id:
-        return render_recycle_root(request, repo_id)
+        return render_recycle_root(request, repo_id, referer)
     else:
-        return render_recycle_dir(request, repo_id, commit_id)
+        return render_recycle_dir(request, repo_id, commit_id, referer)
 
 @login_required
 def dir_recycle_view(request, repo_id):
@@ -494,10 +499,11 @@ def dir_recycle_view(request, repo_id):
         return render_permission_error(request, _(u'Unable to view recycle page'))
 
     commit_id = request.GET.get('commit_id', '')
+    referer = request.GET.get('referer', '') # for back to 'dir view' page
     if not commit_id:
-        return render_dir_recycle_root(request, repo_id, dir_path)
+        return render_dir_recycle_root(request, repo_id, dir_path, referer)
     else:
-        return render_dir_recycle_dir(request, repo_id, commit_id, dir_path)
+        return render_dir_recycle_dir(request, repo_id, commit_id, dir_path, referer)
 
 @login_required
 def repo_online_gc(request, repo_id):
@@ -586,11 +592,10 @@ def repo_history(request, repo_id):
 
     try:
         current_page = int(request.GET.get('page', '1'))
-        per_page = int(request.GET.get('per_page', '100'))
     except ValueError:
         current_page = 1
-        per_page = 100
 
+    per_page = 100
     commits_all = get_commits(repo_id, per_page * (current_page -1),
                               per_page + 1)
     commits = commits_all[:per_page]
@@ -602,15 +607,18 @@ def repo_history(request, repo_id):
     else:
         page_next = False
 
+    # for 'go back'
+    referer = request.GET.get('referer', '')
+
     return render_to_response('repo_history.html', {
             "repo": repo,
             "commits": commits,
             'current_page': current_page,
             'prev_page': current_page-1,
             'next_page': current_page+1,
-            'per_page': per_page,
             'page_next': page_next,
             'user_perm': user_perm,
+            'referer': referer,
             }, context_instance=RequestContext(request))
 
 @login_required
@@ -915,6 +923,9 @@ def render_file_revisions (request, repo_id):
         (is_locked and not locked_by_me):
         can_revert_file = False
 
+    # for 'go back'
+    referer = request.GET.get('referer', '')
+
     return render_to_response('file_revisions.html', {
         'repo': repo,
         'path': path,
@@ -925,6 +936,7 @@ def render_file_revisions (request, repo_id):
         'can_compare': can_compare,
         'can_revert_file': can_revert_file,
         'days': days,
+        'referer': referer,
         }, context_instance=RequestContext(request))
 
 @login_required
