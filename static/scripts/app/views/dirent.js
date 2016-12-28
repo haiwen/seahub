@@ -81,6 +81,7 @@ define([
         events: {
             'click .select': 'select',
             'click .file-star': 'starFile',
+            'click .dirent-name': 'visitDirent',
             'click .img-name-link': 'viewImageWithPopup',
 
             // mv by 'drag & drop'
@@ -335,6 +336,13 @@ define([
             }
 
             return false;
+        },
+
+        visitDirent: function() {
+            if ($(window).width() < 768 &&
+                !this.model.get('is_img')) { // dir or non image file
+                location.href = this.$('.dirent-name a').attr('href');
+            }
         },
 
         viewImageWithPopup: function() {

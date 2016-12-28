@@ -24,6 +24,7 @@ define([
         transferTemplate: _.template($('#repo-transfer-form-tmpl').html()),
 
         events: {
+            'click td:lt(2)': 'visitRepo',
             'click .repo-delete-btn': 'del',
             'click .repo-share-btn': 'share',
             'click .js-repo-rename': 'rename',
@@ -62,6 +63,12 @@ define([
                 el: this.$('.sf-dropdown')
             }, dropdownOptions));
             return this;
+        },
+
+        visitRepo: function() {
+            if ($(window).width() < 768) {
+                location.href = this.$('.repo-name-span a').attr('href');
+            }
         },
 
         del: function() {

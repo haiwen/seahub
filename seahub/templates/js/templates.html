@@ -86,9 +86,6 @@
             <span class="repo-meta-info"><%= mtime_relative %></span>
         </span>
     </td>
-    <% } else { %>
-    <td>{% trans "Broken (please contact your administrator to fix this library)" %}</td>
-    <% } %>
     <td class="repo-op-td">
         <div class="op-container">
             <div class="sf-dropdown sf-dropdown-inline">
@@ -112,6 +109,10 @@
             </div>
         </div>
     </td>
+    <% } else { %>
+    <td>{% trans "Broken (please contact your administrator to fix this library)" %}</td>
+    <td></td>
+    <% } %>
 </script>
 
 <script type="text/template" id="group-repo-tmpl">
@@ -550,8 +551,8 @@
             <a class="normal img-name-link" href="<%= url %>" target="_blank"><%- dirent.obj_name %></a>
             <% } else { %>
             <a class="normal" href="<%= url %>" target="_blank"><%- dirent.obj_name %></a>
-            <% } %>
             <br />
+            <% } %>
             <span class="dirent-meta-info"><%= dirent.file_size %></span>
             <span class="dirent-meta-info">
             <% if (dirent.last_modified) { %>

@@ -232,7 +232,7 @@ a.table-sort-op {
 }
 a.mobile-table-sort-op {
     display:inline-block;
-    margin: 0 5px 0 10px;
+    margin: 0 7px 0 10px;
 }
 a.table-sort-op:hover,
 a.table-sort-op:focus {
@@ -567,6 +567,12 @@ a.op-icon:focus {
     display:inline-block;
     margin-top:4px;
     font-size:12px;
+}
+@media (max-width:767px) {
+    .more-op-icon {
+        padding:6px;
+        margin:0;
+    }
 }
 .big-more-btn {
     padding:.5em 0;
@@ -2195,6 +2201,12 @@ button.sf-dropdown-toggle:focus {
 }
 .repo-file-list .dirent-name {
     display:inline-block;
+}
+@media (max-width:767px) {
+    .repo-file-list .dirent-name,
+    .repo-file-list .img-name-link {
+        display:block;
+    }
 }
 .repo-file-list .file-locked-icon {
     position:absolute;
