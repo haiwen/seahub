@@ -172,6 +172,9 @@ define([
 
                 this.$el_con.show();
 
+                // there may be a 'style' added via 'onWindowScroll()' when visiting last dir
+                this.$('.js-dir-content').removeAttr('style');
+
                 if (this.view_mode == 'list') {
                     this.renderDirentsHd();
                 }
@@ -445,7 +448,8 @@ define([
                     can_generate_share_link: app.pageOptions.can_generate_share_link,
                     can_generate_upload_link: app.pageOptions.can_generate_upload_link,
                     enable_upload_folder: app.pageOptions.enable_upload_folder
-                })));
+                })))
+                .removeAttr('style'); // there may be a 'style' added via 'onWindowScroll()' when visiting last dir
 
                 if (dir.user_perm == 'rw') {
                     // add new folder/file
@@ -1285,7 +1289,7 @@ define([
                 // fixed 'dir-op-bar'
                 var op_bar = this.$dir_op_bar,
                     path_bar = this.$path_bar, // the element before op_bar
-                    repo_file_list = this.$('.repo-file-list'); // the element after op_bar
+                    repo_file_list = this.$('.js-dir-content'); // the element after op_bar
                 var op_bar_top = path_bar.offset().top + path_bar.outerHeight(true);
                 var fixed_styles = {
                     'position': 'fixed',
@@ -1294,6 +1298,9 @@ define([
                     'background-color': $('#header').css('background-color'),
                     'z-index': 12 // make 'op_bar' shown on top of the checkboxes
                 };
+                if (!op_bar_top) {
+                    return;
+                }
                 if ($(window).scrollTop() >= op_bar_top) {
                     repo_file_list.css({'margin-top':op_bar.outerHeight(true)});
                     op_bar.outerWidth(this.$el.width()).css(fixed_styles);
