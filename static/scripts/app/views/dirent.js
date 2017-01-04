@@ -169,7 +169,7 @@ define([
             if (!this.model.get('is_dir')) {
                 return false;
             }
-            this.$('.dir-link').removeClass('normal');
+            this.$el.css({'background-color':'#f8f8f8'});
         },
 
         itemDragleave: function(e) {
@@ -179,7 +179,7 @@ define([
             if (!this.model.get('is_dir')) {
                 return false;
             }
-            this.$('.dir-link').addClass('normal');
+            this.$el.removeAttr('style');
         },
 
         itemDrop: function(e) {
@@ -189,7 +189,7 @@ define([
             if (!this.model.get('is_dir')) {
                 return false;
             }
-            this.$('.dir-link').addClass('normal');
+            this.$el.removeAttr('style');
 
             var ev = e.originalEvent;
             ev.preventDefault();
