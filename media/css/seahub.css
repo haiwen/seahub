@@ -1644,9 +1644,6 @@ button.sf-dropdown-toggle:focus {
     margin-bottom:.5em;
     border-radius:2px;
 }
-#dir-view .repo-op {
-    position: relative; /* for '#upload-menu' */
-}
 #right-panel .hd,
 .tabnav,
 .wiki-top {
@@ -2120,6 +2117,11 @@ button.sf-dropdown-toggle:focus {
 }
 #dir-view .repo-op .op-btn {
     padding:5px 14px;
+}
+#new-file-menu {
+    margin-top:4px;
+    border-top:1px solid #ddd;
+    padding-top:4px;
 }
 .repo-file-list {
     margin:0;

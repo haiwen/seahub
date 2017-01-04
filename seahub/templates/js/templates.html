@@ -145,8 +145,21 @@
     <% } else { %>
     <button class="op-btn btn-disabled" disabled="disabled" title="{% trans "Out of quota" %}">{% trans "Upload" %}</button>
     <% } %>
-    <button id="add-new-dir" class="op-btn">{% trans "New Folder" %}</button>
-    <button id="add-new-file" class="op-btn">{% trans "New File" %}</button>
+    <div id="add-new" class="sf-dropdown sf-dropdown-inline">
+        <button class="sf-dropdown-toggle op-btn">{% trans "New" %}</button>
+        <div class="sf-dropdown-menu hide">
+            <ul>
+                <li><a id="add-new-dir" class="op" href="#">{% trans "New Folder" %}</a></li>
+                <li><a id="add-new-file" class="op" href="#">{% trans "New File" %}</a></li>
+            </ul>
+            <ul id="new-file-menu">
+                <li><a id="add-new-md-file" class="op" href="#">{% trans "New Markdown File" %}</a></li>
+                <li><a id="add-new-excel-file" class="op" href="#">{% trans "New Excel File" %}</a></li>
+                <li><a id="add-new-ppt-file" class="op" href="#">{% trans "New PowerPoint File" %}</a></li>
+                <li><a id="add-new-word-file" class="op" href="#">{% trans "New Word File" %}</a></li>
+            </ul>
+        </div>
+    </div>
     <% } %>
 
     <% if (!encrypted && (can_generate_share_link || can_generate_upload_link || is_repo_owner)) { %>
