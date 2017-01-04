@@ -79,10 +79,14 @@ define([
             'click .select': 'select',
             'click .file-star': 'starFile',
             'click .img-name-link': 'viewImageWithPopup',
+
             // mv by 'drag & drop'
             'dragstart': 'itemDragstart',
             'dragover': 'itemDragover',
+            'dragenter': 'itemDragenter',
+            'dragleave': 'itemDragleave',
             'drop': 'itemDrop',
+
             'click .download-dir': 'downloadDir',
             'click .share': 'share',
             'click .delete': 'del', // 'delete' is a preserve word
@@ -158,6 +162,26 @@ define([
             ev.dataTransfer.dropEffect = 'move';
         },
 
+        itemDragenter: function(e) {
+            if (this.model.get('perm') != 'rw') {
+                return false;
+            }
+            if (!this.model.get('is_dir')) {
+                return false;
+            }
+            this.$el.css({'background-color':'#f8f8f8'});
+        },
+
+        itemDragleave: function(e) {
+            if (this.model.get('perm') != 'rw') {
+                return false;
+            }
+            if (!this.model.get('is_dir')) {
+                return false;
+            }
+            this.$el.removeAttr('style');
+        },
+
         itemDrop: function(e) {
             if (this.model.get('perm') != 'rw') {
                 return false;
@@ -165,6 +189,8 @@ define([
             if (!this.model.get('is_dir')) {
                 return false;
             }
+            this.$el.removeAttr('style');
+
             var ev = e.originalEvent;
             ev.preventDefault();
 
