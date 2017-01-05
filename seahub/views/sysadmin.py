@@ -674,40 +674,6 @@ def user_set_quota(request, email):
 
 @login_required_ajax
 @sys_staff_required
-def user_set_nickname(request, email):
-    if request.method != 'POST':
-        raise Http404
-
-    content_type = 'application/json; charset=utf-8'
-    result = {}
-
-    form = ProfileForm(request.POST)
-    if form.is_valid():
-        form.save(username=email)
-        return HttpResponse(json.dumps({'nickname': form.cleaned_data["nickname"]}), content_type=content_type)
-    else:
-        result['error'] = str(form.errors.values()[0])
-        return HttpResponse(json.dumps(result), status=400, content_type=content_type)
-
-@login_required_ajax
-@sys_staff_required
-def user_set_department(request, email):
-    if request.method != 'POST':
-        raise Http404
-
-    content_type = 'application/json; charset=utf-8'
-    result = {}
-
-    form = DetailedProfileForm(request.POST)
-    if form.is_valid():
-        form.save(username=email)
-        return HttpResponse(json.dumps({'department': form.cleaned_data["department"]}), content_type=content_type)
-    else:
-        result['error'] = str(form.errors.values()[0])
-        return HttpResponse(json.dumps(result), status=400, content_type=content_type)
-
-@login_required_ajax
-@sys_staff_required
 def sys_org_set_quota(request, org_id):
     if request.method != 'POST':
         raise Http404

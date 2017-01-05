@@ -85,7 +85,8 @@ $('.user-status-select, .user-role-select').change(function() {
 // edit quota
 $('.quota-edit-icon').click(function() {
     var email = $(this).closest('tr').attr('data-userid');
-    $('#set-quota-form').data('email', email).modal();
+    var $spaceQuota = $(this).prev('.user-space-quota');
+    $('#set-quota-form').data({'email': email, '$spaceQuota': $spaceQuota}).modal();
     $('#simplemodal-container').css({'width':'auto', 'height':'auto'});
 });
 
@@ -101,20 +102,26 @@ $('#set-quota-form').submit(function() {
     disable($submitBtn);
 
     var email = $(this).data('email');
+    var $spaceQuota = $(this).data('$spaceQuota');
     $.ajax({
-        url: '{{ SITE_ROOT }}useradmin/' + encodeURIComponent(email) + '/set_quota/',
-        type: 'POST',
+        url: '{{ SITE_ROOT }}api2/accounts/' + encodeURIComponent(email) + '/',
+        type: 'PUT',
         dataType: 'json',
         cache: false,
         beforeSend: prepareCSRFToken,
-        data: {'space_quota': space_quota},
-        success: function() {
-            location.reload(true);
+        data: {'storage': space_quota},
+        success: function(data) {
+            if (space_quota == 0) {
+                $spaceQuota.html('--');
+            } else {
+                $spaceQuota.html(parseInt(data['total'])/1000000 + ' MB');
+            }
+            $.modal.close();
         },
         error: function(xhr, textStatus, errorThrown) {
             var err_msg;
             if (xhr.responseText) {
-                err_msg = $.parseJSON(xhr.responseText).error;
+                err_msg = $.parseJSON(xhr.responseText).error_msg;
             } else {
                 err_msg = "{% trans "Failed. Please check the network." %}";
             }

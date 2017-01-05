@@ -73,11 +73,13 @@
             <dt>{% trans "Space Used / Quota" %}</dt>
             <dd>
                 {{ space_usage|seahub_filesizeformat }} /
-                {% if space_quota > 0 %}
-                {{ space_quota|seahub_filesizeformat }}
-                {% else %}
-                --
-                {% endif %}
+                <span id="space_quota">
+                    {% if space_quota > 0 %}
+                    {{ space_quota|seahub_filesizeformat }}
+                    {% else %}
+                    --
+                    {% endif %}
+                </span>
                 <span id="set-quota" title="{% trans "Edit Quota" %}" class="sf2-icon-edit op-icon"></span>
             </dd>
         </dl>
@@ -307,10 +309,6 @@ $('#set-quota').click(function() {
 $('#set-name-form').submit(function() {
     var nickname = $.trim($('[name="nickname"]', $(this)).val());
     var $error = $('.error', $(this));
-    if (!nickname) {
-        $error.html("{% trans "It is required." %}").show();
-        return false;
-    }
     if (nickname.indexOf('/') != -1) {
         $error.html("{% trans "Name should not include '/'." %}").show();
         return false;
@@ -320,20 +318,24 @@ $('#set-name-form').submit(function() {
     disable($submitBtn);
 
     $.ajax({
-        url: '{% url 'user_set_nickname' email %}',
-        type: 'POST',
+        url: '{% url 'api2-account' email %}',
+        type: 'PUT',
         dataType: 'json',
         cache: false,
         beforeSend: prepareCSRFToken,
-        data: {'nickname': nickname},
+        data: {'name': nickname},
         success: function(data) {
-            $('#nickname').html(data.nickname);
+            if (nickname == '') {
+                $('#nickname').html('--');
+            } else {
+                $('#nickname').html(data['name']);
+            }
             $.modal.close();
         },
         error: function(xhr, textStatus, errorThrown) {
             var err_msg;
             if (xhr.responseText) {
-                err_msg = $.parseJSON(xhr.responseText).error;
+                err_msg = $.parseJSON(xhr.responseText).error_msg;
             } else {
                 err_msg = "{% trans "Failed. Please check the network." %}";
             }
@@ -348,29 +350,28 @@ $('#set-name-form').submit(function() {
 $('#set-dept-form').submit(function() {
     var department = $.trim($('[name="department"]', $(this)).val());
     var $error = $('.error', $(this));
-    if (!department) {
-        $error.html("{% trans "It is required." %}").show();
-        return false;
-    }
-
     var $submitBtn = $('[type="submit"]', $(this));
     disable($submitBtn);
 
     $.ajax({
-        url: '{% url 'user_set_department' email %}',
-        type: 'POST',
+        url: '{% url 'api2-account' email %}',
+        type: 'PUT',
         dataType: 'json',
         cache: false,
         beforeSend: prepareCSRFToken,
         data: {'department': department},
         success: function(data) {
-            $('#department').html(data.department);
+            if (department == '') {
+                $('#department').html('--');
+            } else {
+                $('#department').html(data['department']);
+            }
             $.modal.close();
         },
         error: function(xhr, textStatus, errorThrown) {
             var err_msg;
             if (xhr.responseText) {
-                err_msg = $.parseJSON(xhr.responseText).error;
+                err_msg = $.parseJSON(xhr.responseText).error_msg;
             } else {
                 err_msg = "{% trans "Failed. Please check the network." %}";
             }
@@ -396,18 +397,23 @@ $('#set-quota-form').submit(function() {
     disable($submitBtn);
 
     $.ajax({
-        url: '{% url 'user_set_quota' email %}',
-        type: 'POST',
+        url: '{% url 'api2-account' email %}',
+        type: 'PUT',
         dataType: 'json',
         cache: false,
         beforeSend: prepareCSRFToken,
-        data: {'space_quota': space_quota},
-        success: function() {
-            location.reload(true);
+        data: {'storage': space_quota},
+        success: function(data) {
+            if (space_quota == 0) {
+                $('#space_quota').html('--');
+            } else {
+                $('#space_quota').html(parseInt(data['total'])/1000000 + ' MB');
+            }
+            $.modal.close();
         },
         error: function(xhr, textStatus, errorThrown) {
             if (xhr.responseText) {
-                apply_form_error(form_id, $.parseJSON(xhr.responseText).error);
+                apply_form_error(form_id, $.parseJSON(xhr.responseText).error_msg);
             } else {
                 apply_form_error(form_id, "{% trans "Failed. Please check the network." %}");
             }

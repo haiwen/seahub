@@ -71,11 +71,13 @@
 
         <td style="font-size:11px;">
             {{ user.space_usage|seahub_filesizeformat }} /
-            {% if user.space_quota > 0 %}
-            {{ user.space_quota|seahub_filesizeformat }}
-            {% else %}
-            --
-            {% endif %}
+            <span class="user-space-quota">
+                {% if user.space_quota > 0 %}
+                {{ user.space_quota|seahub_filesizeformat }}
+                {% else %}
+                --
+                {% endif %}
+            </span>
             {% if user.source == "DB" or user.source == 'LDAPImport' %}
             <span title="{% trans "Edit Quota" %}" class="quota-edit-icon sf2-icon-edit op-icon vh"></span>
             {% endif %}

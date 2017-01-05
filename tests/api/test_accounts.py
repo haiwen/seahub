@@ -35,8 +35,7 @@ class AccountsApiTest(ApiTestBase):
         # non-admin user can not create new user
         self.put(test_account_url, data=data, expected=403)
 
-        res = self.admin_put(test_account_url, data=data, expected=201)
-        self.assertEqual(res.text, u'"success"')
+        self.admin_put(test_account_url, data=data, expected=201)
 
         # non-admin user can not delete a user
         self.delete(test_account_url, expected=403)
@@ -99,10 +98,10 @@ class AccountsApiTest(ApiTestBase):
 
     def test_update_account_storage_quota(self):
         with self.get_tmp_user() as user:
-            data = {'storage': 1024}  # 1KB
+            data = {'storage': 1024}  # 1 Mb
             self.admin_put(user.user_url, data=data, expected=200)
             self.assertEqual(self.admin_get(user.user_url).json()['total'],
-                             1024)
+                             1024000000)
 
     # def test_update_account_sharing_quota(self):
     #     with self.get_tmp_user() as user:
