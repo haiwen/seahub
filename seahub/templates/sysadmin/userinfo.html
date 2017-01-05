@@ -73,7 +73,7 @@
             <dt>{% trans "Space Used / Quota" %}</dt>
             <dd>
                 {{ space_usage|seahub_filesizeformat }} /
-                <span id="space_quota">
+                <span id="quota">
                     {% if space_quota > 0 %}
                     {{ space_quota|seahub_filesizeformat }}
                     {% else %}
@@ -308,6 +308,7 @@ $('#set-quota').click(function() {
 
 $('#set-name-form').submit(function() {
     var nickname = $.trim($('[name="nickname"]', $(this)).val());
+    var $name = $('#nickname');
     var $error = $('.error', $(this));
     if (nickname.indexOf('/') != -1) {
         $error.html("{% trans "Name should not include '/'." %}").show();
@@ -326,9 +327,9 @@ $('#set-name-form').submit(function() {
         data: {'name': nickname},
         success: function(data) {
             if (nickname == '') {
-                $('#nickname').html('--');
+                $name.html('--');
             } else {
-                $('#nickname').html(data['name']);
+                $name.html(HTMLescape(data['name']));
             }
             $.modal.close();
         },
@@ -349,6 +350,7 @@ $('#set-name-form').submit(function() {
 
 $('#set-dept-form').submit(function() {
     var department = $.trim($('[name="department"]', $(this)).val());
+    var $department = $('#department');
     var $error = $('.error', $(this));
     var $submitBtn = $('[type="submit"]', $(this));
     disable($submitBtn);
@@ -362,9 +364,9 @@ $('#set-dept-form').submit(function() {
         data: {'department': department},
         success: function(data) {
             if (department == '') {
-                $('#department').html('--');
+                $department.html('--');
             } else {
-                $('#department').html(data['department']);
+                $department.html(HTMLescape(data['department']));
             }
             $.modal.close();
         },
@@ -387,6 +389,7 @@ $('#set-quota-form').submit(function() {
     var form = $(this),
         form_id = form.attr('id'),
         space_quota = $.trim($('input[name="space_quota"]', form).val());
+    var $quota = $('#quota');
 
     if (!space_quota) {
         apply_form_error(form_id, "{% trans "It is required." %}");
@@ -405,9 +408,9 @@ $('#set-quota-form').submit(function() {
         data: {'storage': space_quota},
         success: function(data) {
             if (space_quota == 0) {
-                $('#space_quota').html('--');
+                $quota.html('--');
             } else {
-                $('#space_quota').html(parseInt(data['total'])/1000000 + ' MB');
+                $quota.html(parseInt(data['total'])/1000000 + ' MB');
             }
             $.modal.close();
         },
