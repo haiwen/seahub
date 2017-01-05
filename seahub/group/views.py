@@ -112,10 +112,6 @@ def group_check(func):
             group.view_perm = "joined"
             group.is_staff = is_group_staff(group, request.user)
             return func(request, group, *args, **kwargs)
-        if request.user.is_staff:
-            # viewed by system admin
-            group.view_perm = "sys_admin"
-            return func(request, group, *args, **kwargs)
 
         if group.is_pub:
             group.view_perm = "pub"
