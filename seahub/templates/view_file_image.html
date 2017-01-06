@@ -23,7 +23,7 @@
 </div>
 {% endif %}
 
-<img src="{{ raw_path }}" alt="{{ u_filename}}" id="image-view" class="vh" />
+<img src="{{ raw_path }}" alt="{{ u_filename}}" id="image-view" class="vh" style="position:absolute;left:0;top:0;height:98%"/>
 {% endblock %}
 
 {% block extra_script %}{{ block.super }}
@@ -48,6 +48,10 @@ $('body').bind('keydown', function(e) {
             location.href = $('#img-next').attr('href');
         }
         {% endif %}
+	if (e.keyCode == 27) { // press 'ESC'
+	    $('#image-view').width(0);
+	    $('#image-view').height(0);
+	}
     }
 })
 {% endif %}
@@ -56,6 +60,7 @@ window.onload = function () {
     var img = $('#image-view');
     var img_h = img.outerHeight();
     var file_view_h = parseInt($('#file-view').css('min-height'));
+    img.css({top:'50%',left:'50%',margin:'-'+(img.height() / 2)+'px 0 0 -'+(img.width() / 2)+'px'});
     {% if img_prev or img_next %}
     var prev_next_h = $('#img-prev-next').outerHeight(true);
     {% else %}
@@ -65,7 +70,7 @@ window.onload = function () {
         img.css({'margin-top':(file_view_h - img_h - prev_next_h)/2});
     }
     if (img.width() > 946) {
-        img.width(946);
+//        img.width(946);
     }
     img.removeClass('vh');
 }
