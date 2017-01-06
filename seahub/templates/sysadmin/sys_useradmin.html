@@ -32,6 +32,12 @@
     <h3>{% trans "Add user" %}</h3>
     <label for="id_email">{% trans "Email" %}</label><br />
     <input type="text" name="email" id="id_email" class="input" /><br />
+
+    <label for="id_name">{% trans "Name(optional)" %}</label><br />
+    <input type="text" name="name" id="id_name" class="input" /><br />
+    <label for="id_dept">{% trans "Department(optional)" %}</label><br />
+    <input type="text" name="department" id="id_dept" class="input" /><br />
+
     {% if is_pro %}
     <label>{% trans "Role"%}</label><span class="icon-question-sign" title="{% trans "You can also add a user as a guest, who will not be allowed to create libraries and groups." %}" style="color:#666; margin-left:3px;"></span>
     <select name="role" class="w100">
@@ -54,7 +60,10 @@
 <form id="upload-csv-form" class="hide" enctype="multipart/form-data" method="post" action="{% url 'batch_add_user' %}">{% csrf_token %}
     <h3>{% trans "Import users from a CSV file" %}</h3>
     <input type="file" name="file" />
-    <p class="tip">{% trans "File format: user@mail.com,password"%}</p>
+    <p class="tip">
+        {% trans "File format: user@mail.com,password,name,department"%}<br />
+        {% trans "Name and department are optional." %}
+    </p>
     <p class="error hide">{% trans "Please choose a CSV file" %}</p>
     <button type="submit" class="submit">{% trans "Submit" %}</button>
 </form>
@@ -143,6 +152,8 @@ $('#add-user-form').submit(function() {
     var form = $(this),
         form_id = $(this).attr('id'),
         email = $.trim(form.children('[name="email"]').val()),
+        name = $.trim($('[name="name"]', form).val()),
+        department = $.trim($('[name="department"]', form).val()),
         {% if is_pro %}
         role = $('select[name="role"]', form).val(),
         {% endif %}
@@ -176,6 +187,8 @@ $('#add-user-form').submit(function() {
         beforeSend: prepareCSRFToken,
         data: {
             'email': email,
+            'name': name,
+            'department': department,
             {% if is_pro %}
             'role': role,
             {% endif %}

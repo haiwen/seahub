@@ -26,9 +26,9 @@
     <tr>
         <th width="36%">{% trans "Email" %}</th>
         <th width="12%">{% trans "Status" %}</th>
-        <th width="16%">{% trans "Space Used" %}</th>
+        <th width="18%">{% trans "Space Used / Quota" %}</th>
         <th width="18%">{% trans "Last Login" %}</th>
-        <th width="18%">{% trans "Operations" %}</th>
+        <th width="16%">{% trans "Operations" %}</th>
     </tr>
 
     {% for user in users %}
@@ -53,7 +53,15 @@
             </select>
         </td>
         <td style="font-size:11px;">
-            <p> {{ user.space_usage|seahub_filesizeformat }} {% if user.space_quota > 0 %} / {{ user.space_quota|seahub_filesizeformat }} {% endif %} </p>
+            {{ user.space_usage|seahub_filesizeformat }} / 
+            <span class="user-space-quota">
+                {% if user.space_quota > 0 %}
+                {{ user.space_quota|seahub_filesizeformat }}
+                {% else %}
+                --
+                {% endif %}
+            </span>
+            <span title="{% trans "Edit Quota" %}" class="quota-edit-icon sf2-icon-edit op-icon vh"></span>
         </td>
         <td>
             {% if user.last_login %}{{user.last_login|translate_seahub_time}} {% else %} -- {% endif %}
@@ -67,6 +75,13 @@
     {% endfor %}
 </table>
 {% include "snippets/admin_paginator.html" %}
+<form id="set-quota-form" method="post" action="" class="hide">{% csrf_token %}
+    <h3>{% trans "Set user storage limit" %}</h3>
+    <input type="text" name="space_quota" /> MB
+    <p class="tip">{% trans "Tip: 0 means default limit" %}</p>
+    <p class="error hide"></p>
+    <input type="submit" value="{% trans "Submit" %}" class="submit" />
+</form>
 {% else %}
 <div class="empty-tips">
     <h2 class="alc">{% trans "No LDAP users have been imported" %}</h2>

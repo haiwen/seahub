@@ -16,6 +16,9 @@ class AddUserForm(forms.Form):
     Form for adding a user.
     """
     email = forms.EmailField()
+    name = forms.CharField(max_length=64, required=False)
+    department = forms.CharField(max_length=512, required=False)
+
     role = forms.ChoiceField(choices=[(DEFAULT_USER, DEFAULT_USER),
                                       (GUEST_USER, GUEST_USER)])
     password1 = forms.CharField(widget=forms.PasswordInput())
@@ -31,6 +34,16 @@ class AddUserForm(forms.Form):
             raise forms.ValidationError(_("A user with this email already exists."))
         except User.DoesNotExist:
             return self.cleaned_data['email']
+
+    def clean_name(self):
+        """
+        should not include '/'
+        """
+        if "/" in self.cleaned_data["name"]:
+            raise forms.ValidationError(_(u"Name should not include ' / '"))
+
+        return self.cleaned_data["name"]
+
 
     def clean(self):
         """
@@ -137,7 +150,6 @@ class SetUserQuotaForm(forms.Form):
     """
     Form for setting user quota.
     """
-    email = forms.CharField(error_messages={'required': _('Email is required')})
     space_quota = forms.IntegerField(min_value=0,
                                error_messages={'required': _('Space quota can\'t be empty'),
                                                'min_value': _('Space quota is too low (minimum value is 0)')})
