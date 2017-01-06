@@ -114,7 +114,7 @@ $('#set-quota-form').submit(function() {
             if (space_quota == 0) {
                 $spaceQuota.html('--');
             } else {
-                $spaceQuota.html(parseInt(data['total'])/1000000 + ' MB');
+                $spaceQuota.html(quotaSizeFormat(parseInt(data['total']), 1));
             }
             $.modal.close();
         },
