@@ -27,8 +27,8 @@ from seahub.utils.file_size import get_file_size_unit
 logger = logging.getLogger(__name__)
 json_content_type = 'application/json; charset=utf-8'
 
-def get_account_info(email):
-    user = User.objects.get(email=email)
+def get_account_info(user):
+    email = user.username
     d_profile = DetailedProfile.objects.get_detailed_profile_by_user(email)
 
     info = {}
@@ -58,11 +58,11 @@ class Account(APIView):
 
         # query account info
         try:
-            User.objects.get(email=email)
+            user = User.objects.get(email=email)
         except User.DoesNotExist:
             return api_error(status.HTTP_404_NOT_FOUND, 'User %s not found.' % email)
 
-        info = get_account_info(email)
+        info = get_account_info(user)
         return Response(info)
 
     def post(self, request, email, format=None):
@@ -264,7 +264,7 @@ class Account(APIView):
                         'Internal Server Error')
 
             # get account info and return
-            info = get_account_info(email)
+            info = get_account_info(user)
             return Response(info)
 
         except User.DoesNotExist:
@@ -276,7 +276,7 @@ class Account(APIView):
                 return api_error(status.HTTP_400_BAD_REQUEST, serializer.errors)
 
             try:
-                User.objects.create_user(serializer.data['email'],
+                user = User.objects.create_user(serializer.data['email'],
                                                 serializer.data['password'],
                                                 serializer.data['is_staff'],
                                                 serializer.data['is_active'])
@@ -294,7 +294,7 @@ class Account(APIView):
                         'Internal Server Error')
 
             # get account info and return
-            info = get_account_info(email)
+            info = get_account_info(user)
             resp = Response(info, status=status.HTTP_201_CREATED)
             resp['Location'] = reverse('api2-account', args=[email])
             return resp
