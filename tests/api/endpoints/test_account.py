@@ -45,7 +45,7 @@ class AccountTest(BaseTestCase):
     def _do_update(self):
         return self.client.put(
             reverse('api2-account', args=[self.user1.username]),
-            'password=654321&is_staff=1&is_active=0&name=user1&note=this_is_user1&storage=102400',
+            'password=654321&is_staff=1&is_active=0&name=user1&storage=102400',
             'application/x-www-form-urlencoded',
         )
 
@@ -101,8 +101,6 @@ class AccountTest(BaseTestCase):
         self.assertFalse(User.objects.get(self.user1.username).is_active)
         self.assertEqual(Profile.objects.get_profile_by_user(
             self.user1.username).nickname, 'user1')
-        self.assertEqual(Profile.objects.get_profile_by_user(
-            self.user1.username).intro, 'this_is_user1')
         self.assertEqual(seafile_api.get_user_quota(
             self.user1.username), 102400000000)
 
