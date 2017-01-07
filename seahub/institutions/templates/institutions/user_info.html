@@ -52,7 +52,10 @@
             <h3>{% trans "Set user storage limit" %}</h3>
             <input type="hidden" name="email" value="{{ email }}" />
             <input type="text" name="space_quota" /> MB
-            <p class="tip">{% trans "Tip: 0 means default limit" %}</p>
+            <p class="tip">
+            <span>{% trans "An integer that greater than or equal to 0." %}</span><br />
+            <span>{% trans "Tip: 0 means default limit" %}</span>
+            </p>
             <p class="error hide"></p>
             <input type="submit" value="{% trans "Submit" %}" class="submit" />
         </form>
