@@ -104,18 +104,12 @@ class Account(APIView):
 
         # update account profile
         name = request.data.get("name", None)
-        note = request.data.get("note", None)
-        if name is not None or note is not None:
+        if name is not None:
             profile = Profile.objects.get_profile_by_user(email)
             if profile is None:
                 profile = Profile(user=email)
 
-            if name is not None:
-                profile.nickname = name
-
-            if note is not None:
-                profile.intro = note
-
+            profile.nickname = name
             profile.save()
 
         # update account detailed profile
@@ -170,13 +164,6 @@ class Account(APIView):
             if "/" in name:
                 return api_error(status.HTTP_400_BAD_REQUEST,
                         _(u"Name should not include '/'."))
-
-        # argument check for note
-        note = request.data.get("note", None)
-        if note is not None:
-            if len(note) > 256:
-                return api_error(status.HTTP_400_BAD_REQUEST,
-                        _(u'Note is too long (maximum is 256 characters)'))
 
         # argument check for department
         department = request.data.get("department", None)
