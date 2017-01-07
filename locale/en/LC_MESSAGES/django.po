@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2017-01-07 16:24+0800\n"
+"POT-Creation-Date: 2017-01-07 17:12+0800\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -17,36 +17,32 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 
-#: seahub/api2/endpoints/account.py:168
+#: seahub/api2/endpoints/account.py:162
 msgid "Name is too long (maximum is 64 characters)"
 msgstr ""
 
-#: seahub/api2/endpoints/account.py:172 seahub/forms.py:43
+#: seahub/api2/endpoints/account.py:166 seahub/forms.py:43
 #: seahub/profile/forms.py:17 seahub/templates/sysadmin/userinfo.html:317
 msgid "Name should not include '/'."
 msgstr ""
 
-#: seahub/api2/endpoints/account.py:179
-msgid "Note is too long (maximum is 256 characters)"
-msgstr ""
-
-#: seahub/api2/endpoints/account.py:186
+#: seahub/api2/endpoints/account.py:173
 msgid "Department is too long (maximum is 512 characters)"
 msgstr ""
 
-#: seahub/api2/endpoints/account.py:193 seahub/forms.py:154
+#: seahub/api2/endpoints/account.py:180 seahub/forms.py:154
 msgid "Space quota can't be empty"
 msgstr ""
 
-#: seahub/api2/endpoints/account.py:199
+#: seahub/api2/endpoints/account.py:186
 msgid "Must be an integer that greater than or equal to 0."
 msgstr ""
 
-#: seahub/api2/endpoints/account.py:203 seahub/forms.py:155
+#: seahub/api2/endpoints/account.py:190 seahub/forms.py:155
 msgid "Space quota is too low (minimum value is 0)"
 msgstr ""
 
-#: seahub/api2/endpoints/account.py:211 seahub/views/sysadmin.py:660
+#: seahub/api2/endpoints/account.py:198 seahub/views/sysadmin.py:660
 #, python-format
 msgid "Failed to set quota: maximum quota is %d MB"
 msgstr ""
