@@ -14,6 +14,7 @@ from seahub.utils.licenseparse import parse_license
 
 from seahub.api2.authentication import TokenAuthentication
 from seahub.api2.throttling import UserRateThrottle
+from seahub.api2.models import TokenV2
 
 try:
     from seahub.settings import MULTI_TENANCY
@@ -87,6 +88,7 @@ class SysInfo(APIView):
         inactive_users = inactive_db_users + inactive_ldap_users if inactive_ldap_users > 0 \
                 else inactive_db_users
 
+        # get license info
         is_pro = is_pro_version()
         if is_pro:
             license_dict = parse_license()
@@ -104,10 +106,39 @@ class SysInfo(APIView):
             with_license = False
             max_users = 0
 
+        # count total file number
+        try:
+            total_files_count = seafile_api.get_total_file_number()
+        except Exception as e:
+            logger.error(e)
+            total_files_count = 0
+
+        # count total storage
+        try:
+            total_storage = seafile_api.get_total_storage()
+        except Exception as e:
+            logger.error(e)
+            total_storage = 0
+
+        # count devices number
+        try:
+            total_devices_count = TokenV2.objects.get_total_devices_count()
+        except Exception as e:
+            logger.error(e)
+            total_devices_count = 0
+
+        # count current connected devices
+        try:
+            current_connected_devices_count = TokenV2.objects.get_current_connected_devices_count()
+        except Exception as e:
+            logger.error(e)
+            current_connected_devices_count= 0
+
         info = {
             'users_count': active_users + inactive_users,
             'active_users_count': active_users,
             'repos_count': repos_count,
+            'total_files_count': total_files_count,
             'groups_count': groups_count,
             'org_count': org_count,
             'multi_tenancy_enabled': multi_tenancy_enabled,
@@ -116,6 +147,9 @@ class SysInfo(APIView):
             'license_expiration': license_dict.get('Expiration', ''),
             'license_maxusers': max_users,
             'license_to': license_dict.get('Name', ''),
+            'total_storage': total_storage,
+            'total_devices_count': total_devices_count,
+            'current_connected_devices_count': current_connected_devices_count,
         }
 
         return Response(info)

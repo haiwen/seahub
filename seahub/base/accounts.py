@@ -19,7 +19,7 @@ from seahub.auth import login
 from seahub.constants import DEFAULT_USER
 from seahub.profile.models import Profile, DetailedProfile
 from seahub.role_permissions.utils import get_enabled_role_permissions_by_role
-from seahub.utils import is_valid_username, is_user_password_strong, \
+from seahub.utils import is_user_password_strong, \
     clear_token, get_system_admins
 from seahub.utils.mail import send_html_email_with_dj_template, MAIL_PRIORITY
 from seahub.utils.licenseparse import user_number_over_limit

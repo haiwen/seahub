@@ -106,8 +106,14 @@
             <% } %>
         </dd>
 
-        <dt>{% trans "Libraries" %}</dt>
-        <dd><%- repos_count %></dd>
+        <dt>{% trans "Libraries" %} / {% trans "Files" %}</dt>
+        <dd><%- repos_count %> / <%- total_files_count %></dd>
+
+        <dt>{% trans "Storage Used" %}</dt>
+        <dd><%- formatted_storage %></dd>
+
+        <dt>{% trans "Total Devices" %} / {% trans "Current Connected Devices" %}</dt>
+        <dd><%- total_devices_count %> / <%- current_connected_devices_count %></dd>
 
         <% if (is_pro) { %>
         <dt>{% trans "Active Users" %} / {% trans "Total Users" %} / {% trans "Limits" %}</dt>
