@@ -788,19 +788,21 @@ define([
             },
 
             download: function () {
-                var selected_dirents = this.dir.where({'selected':true});
+                var dirents = this.dir;
+                var selected_dirents = dirents.where({'selected':true});
+                var selected_names = [];
+
                 // select 1 item, and it is a file
                 if (selected_dirents.length == 1 &&
                     selected_dirents[0].get('is_file')) {
                     location.href = selected_dirents[0].getDownloadUrl();
                     return;
                 }
-                var selected_names = [];
                 $(selected_dirents).each(function() {
                     selected_names.push(this.get('obj_name'));
                 });
 
-                Common.zipDownloadDirents(this.dir.repo_id, this.dir.path, selected_names);
+                Common.zipDownload(dirents.repo_id, dirents.path, selected_names);
             },
 
             del: function () {

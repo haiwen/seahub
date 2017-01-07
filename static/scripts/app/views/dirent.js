@@ -127,7 +127,9 @@ define([
         },
 
         downloadDir: function() {
-            Common.zipDownloadDirents(this.dirView.dir.repo_id, this.dirView.dir.path, this.model.get('obj_name'));
+            var dir = this.dirView.dir;
+            var obj_name = this.model.get('obj_name');
+            Common.zipDownload(dir.repo_id, dir.path, obj_name);
             return false;
         },
 

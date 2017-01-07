@@ -954,8 +954,10 @@ define([
             }
         },
 
-        zipDownloadDirents:function(repo_id, parent_dir, dirents) {
+        // for 'dir view': download multi dirents; dir download
+        zipDownload:function(repo_id, parent_dir, dirents) {
             var _this = this;
+
             var interval;
             var zip_token;
             var packagingTip = gettext("Packaging...");

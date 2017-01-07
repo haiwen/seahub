@@ -153,8 +153,9 @@ define([
 
         download: function() {
             this.closeMenu();
+            var dir = this.dir;
             var obj_name = this.model.get('obj_name');
-            Common.zipDownloadDirents(this.dir.repo_id, this.dir.path, obj_name);
+            Common.zipDownload(dir.repo_id, dir.path, obj_name);
             return false;
         },
 
