@@ -410,7 +410,7 @@ $('#set-quota-form').submit(function() {
             if (space_quota == 0) {
                 $quota.html('--');
             } else {
-                $quota.html(parseInt(data['total'])/1000000 + ' MB');
+                $quota.html(quotaSizeFormat(parseInt(data['total']), 1));
             }
             $.modal.close();
         },

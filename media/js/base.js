@@ -761,3 +761,31 @@ function userInputOPtionsForSelect2(user_search_url) {
         escapeMarkup: function(m) { return m; }
     };
 }
+
+function quotaSizeFormat(bytes, precision) {
+    var kilobyte = 1000;
+    var megabyte = kilobyte * 1000;
+    var gigabyte = megabyte * 1000;
+    var terabyte = gigabyte * 1000;
+
+    var precision = precision || 0;
+
+    if ((bytes >= 0) && (bytes < kilobyte)) {
+        return bytes + ' B';
+
+    } else if ((bytes >= kilobyte) && (bytes < megabyte)) {
+        return (bytes / kilobyte).toFixed(precision) + ' KB';
+
+    } else if ((bytes >= megabyte) && (bytes < gigabyte)) {
+        return (bytes / megabyte).toFixed(precision) + ' MB';
+
+    } else if ((bytes >= gigabyte) && (bytes < terabyte)) {
+        return (bytes / gigabyte).toFixed(precision) + ' GB';
+
+    } else if (bytes >= terabyte) {
+        return (bytes / terabyte).toFixed(precision) + ' TB';
+
+    } else {
+        return bytes + ' B';
+    }
+}
