@@ -169,7 +169,7 @@ class Account(APIView):
 
             if "/" in name:
                 return api_error(status.HTTP_400_BAD_REQUEST,
-                        _(u"Name should not include ' / '"))
+                        _(u"Name should not include '/'."))
 
         # argument check for note
         note = request.data.get("note", None)
