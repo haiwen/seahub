@@ -40,7 +40,7 @@ class AddUserForm(forms.Form):
         should not include '/'
         """
         if "/" in self.cleaned_data["name"]:
-            raise forms.ValidationError(_(u"Name should not include ' / '"))
+            raise forms.ValidationError(_(u"Name should not include '/'."))
 
         return self.cleaned_data["name"]
 
