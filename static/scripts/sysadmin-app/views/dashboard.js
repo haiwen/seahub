@@ -61,7 +61,9 @@ define([
 
         reset: function() {
             this.$loadingTip.hide();
-            this.$sysinfo.html(this.template(this.sysinfo.toJSON()));
+            var json_data = this.sysinfo.toJSON();
+            json_data['formatted_storage'] = Common.quotaSizeFormat(json_data['total_storage'], 1)
+            this.$sysinfo.html(this.template(json_data));
         }
 
     });

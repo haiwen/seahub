@@ -3,8 +3,7 @@ import os
 import datetime
 import hashlib
 import logging
-import json
-from django.db import models, IntegrityError
+from django.db import models
 from django.utils import timezone
 
 from pysearpc import SearpcError
