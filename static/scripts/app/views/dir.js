@@ -1168,12 +1168,27 @@ define([
                                     req_progress();
                                 }
                             }; // 'after_op_success' ends
-                            Common.ajaxPost({
-                                'form': form,
-                                'post_url': post_url,
-                                'post_data': post_data,
-                                'after_op_success': after_op_success,
-                                'form_id': form.attr('id')
+                            $.ajax({
+                                url: post_url,
+                                type: 'POST',
+                                dataType: 'json',
+                                beforeSend: Common.prepareCSRFToken,
+                                data: post_data,
+                                success: after_op_success,
+                                error: function(xhr) {
+                                    var err;
+                                    if (xhr.responseText) {
+                                        err = $.parseJSON(xhr.responseText).error;
+                                    } else {
+                                        err = gettext("Failed. Please check the network.");
+                                    }
+                                    if (form.is(':visible')) {
+                                        $('.error', form).html(err).show();
+                                    } else {
+                                        cancel_btn.after('<p class="error">' + err + '</p>');
+                                        cancel_btn.hide();
+                                    }
+                                }
                             });
                         }; // 'mvcpDirent' ends
                         var endOrContinue = function () {
