@@ -107,7 +107,6 @@ define([
             var op = template({
                 dirent: this.model.attributes,
                 dirent_path: this.model.getPath(),
-                download_url: this.model.getDownloadUrl(),
                 category: dir.category,
                 repo_id: dir.repo_id,
                 is_repo_owner: dir.is_repo_owner,
@@ -127,6 +126,7 @@ define([
 
             // Using _.bind(function, object) to make that whenever the function is
             // called, the value of this will be the object.
+            this.$('.download').on('click', _.bind(this.download, this));
             this.$('.delete').on('click', _.bind(this.del, this));
             this.$('.share').on('click', _.bind(this.share, this));
             this.$('.mv').on('click', _.bind(this.mvcp, this));
@@ -149,6 +149,13 @@ define([
 
         closeMenu: function() {
             this.$('.grid-item-op').remove();
+        },
+
+        download: function() {
+            this.closeMenu();
+            var obj_name = this.model.get('obj_name');
+            Common.zipDownloadDirents(this.dir.repo_id, this.dir.path, obj_name);
+            return false;
         },
 
         del: function(event) {
