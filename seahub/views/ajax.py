@@ -654,16 +654,20 @@ def copy_move_common():
                         repo.version, dir_obj_id)
 
             # check quota
-            out_of_quota = False
+            src_repo_owner = seafile_api.get_repo_owner(repo_id)
+            dst_repo_owner = seafile_api.get_repo_owner(dst_repo_id)
             try:
-                if seafile_api.is_repo_owner(request.user.username, dst_repo_id):
-                    # if dst repo is my own repo, only check quota when copy.
-                    if view_method.__name__ in ('cp_file', 'cp_dir'):
-                        out_of_quota = seafile_api.check_quota(dst_repo_id, delta=obj_size)
-                else:
-                    # if dst repo is NOT my own repo,
-                    # check quota when copy AND move.
+                # always check quota when copy file
+                if view_method.__name__ in ('cp_file', 'cp_dir'):
                     out_of_quota = seafile_api.check_quota(dst_repo_id, delta=obj_size)
+                else:
+                    # when move file
+                    if src_repo_owner != dst_repo_owner:
+                        # only check quota when src_repo_owner != dst_repo_owner
+                        out_of_quota = seafile_api.check_quota(dst_repo_id, delta=obj_size)
+                    else:
+                        # not check quota when src and dst repo are both mine
+                        out_of_quota = False
             except Exception as e:
                 logger.error(e)
                 result['error'] = _(u'Internal server error')
@@ -911,18 +915,22 @@ def dirents_copy_move_common():
                         repo.store_id, repo.version, dir_obj_id)
 
             # check quota
-            out_of_quota = False
+            src_repo_owner = seafile_api.get_repo_owner(repo_id)
+            dst_repo_owner = seafile_api.get_repo_owner(dst_repo_id)
             try:
-                if seafile_api.is_repo_owner(request.user.username, dst_repo_id):
-                    # if dst repo is my own repo, only check quota when copy.
-                    if view_method.__name__ == 'cp_dirents':
-                        out_of_quota = seafile_api.check_quota(
-                                dst_repo_id, delta=file_obj_size + dir_obj_size)
-                else:
-                    # if dst repo is NOT my own repo,
-                    # check quota when copy AND move.
+                # always check quota when copy file
+                if view_method.__name__ == 'cp_dirents':
                     out_of_quota = seafile_api.check_quota(
                             dst_repo_id, delta=file_obj_size + dir_obj_size)
+                else:
+                    # when move file
+                    if src_repo_owner != dst_repo_owner:
+                        # only check quota when src_repo_owner != dst_repo_owner
+                        out_of_quota = seafile_api.check_quota(
+                                dst_repo_id, delta=file_obj_size + dir_obj_size)
+                    else:
+                        # not check quota when src and dst repo are both mine
+                        out_of_quota = False
             except Exception as e:
                 logger.error(e)
                 result['error'] = _(u'Internal server error')
