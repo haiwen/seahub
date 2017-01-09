@@ -183,7 +183,7 @@ class Account(APIView):
                 space_quota_mb = int(space_quota_mb)
             except ValueError:
                 return api_error(status.HTTP_400_BAD_REQUEST,
-                        _('Must be an integer that greater than or equal to 0.'))
+                        _('Must be an integer that is greater than or equal to 0.'))
 
             if space_quota_mb < 0:
                 return api_error(status.HTTP_400_BAD_REQUEST,
