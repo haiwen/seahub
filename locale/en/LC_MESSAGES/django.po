@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2017-01-07 17:12+0800\n"
+"POT-Creation-Date: 2017-01-09 11:11+0800\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -35,7 +35,7 @@ msgid "Space quota can't be empty"
 msgstr ""
 
 #: seahub/api2/endpoints/account.py:186
-msgid "Must be an integer that greater than or equal to 0."
+msgid "Must be an integer that is greater than or equal to 0."
 msgstr ""
 
 #: seahub/api2/endpoints/account.py:190 seahub/forms.py:155
@@ -1996,7 +1996,7 @@ msgstr ""
 #: seahub/templates/sysadmin/sys_user_admin_ldap_imported.html:82
 #: seahub/templates/sysadmin/useradmin_table.html:113
 #: seahub/templates/sysadmin/userinfo.html:105
-msgid "An integer that greater than or equal to 0."
+msgid "An integer that is greater than or equal to 0."
 msgstr ""
 
 #: seahub/institutions/templates/institutions/user_info.html:57
