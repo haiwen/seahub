@@ -214,23 +214,42 @@ class User(object):
         else:
             source = "LDAP"
 
+        username = self.username
+        orgs = ccnet_threaded_rpc.get_orgs_by_user(username)
+
+        # remove owned repos
         owned_repos = []
-        orgs = ccnet_threaded_rpc.get_orgs_by_user(self.username)
         if orgs:
             for org in orgs:
                 owned_repos += seafile_api.get_org_owned_repo_list(org.org_id,
-                                                                   self.username)
+                                                                   username)
         else:
-            owned_repos += seafile_api.get_owned_repo_list(self.username)
+            owned_repos += seafile_api.get_owned_repo_list(username)
 
         for r in owned_repos:
             seafile_api.remove_repo(r.id)
 
-        clear_token(self.username)
+        # remove shared in repos
+        shared_in_repos = []
+        if orgs:
+            for org in orgs:
+                org_id = org.org_id
+                shared_in_repos = seafile_api.get_org_share_in_repo_list(org_id,
+                        username, -1, -1)
+
+                for r in shared_in_repos:
+                    seafile_api.org_remove_share(org_id,
+                            r.repo_id, r.user, username)
+        else:
+            shared_in_repos = seafile_api.get_share_in_repo_list(username, -1, -1)
+            for r in shared_in_repos:
+                seafile_api.remove_share(r.repo_id, r.user, username)
+
+        clear_token(username)
         # remove current user from joined groups
-        ccnet_api.remove_group_user(self.username)
-        ccnet_api.remove_emailuser(source, self.username)
-        Profile.objects.delete_profile_by_user(self.username)
+        ccnet_api.remove_group_user(username)
+        ccnet_api.remove_emailuser(source, username)
+        Profile.objects.delete_profile_by_user(username)
 
     def get_and_delete_messages(self):
         messages = []
