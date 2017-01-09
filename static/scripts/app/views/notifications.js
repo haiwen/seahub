@@ -44,19 +44,26 @@ define([
                             $num.addClass('hide');
                             document.title =  _this.orig_doc_title;
                         }
+
+                        var $networkNotice = $('#network-top-notice');
+                        if ($networkNotice.is(':visible')) {
+                            $networkNotice.remove();
+                        }
                     },
                     error: function(xhr) { // e.g. 401 UNAUTHORIZED
-                        clearInterval(reqInterval); // stop sending requests
-
                         var $el;
                         if (xhr.responseText) {
                             if (xhr.status == 401) {
+                                clearInterval(reqInterval); // stop sending requests
                                 $el = $('<p class="top-bar fixed-top-bar">' + gettext("You have logged out.") + '<span class="top-bar-click">' + gettext("Log in") + '</span></p>');
+                                $('#wrapper').prepend($el);
                             }
                         } else {
-                            $el = $('<p class="top-bar fixed-top-bar">' + gettext("Please check the network.") + '</p>');
+                            if ($('#network-top-notice').length == 0) {
+                                $el = $('<p class="top-bar fixed-top-bar" id="network-top-notice">' + gettext("Please check the network.") + '<span class="top-bar-click">' + gettext("Refresh") + '</span></p>');
+                                $('#wrapper').prepend($el);
+                            }
                         }
-                        $('#wrapper').prepend($el);
                         $('.top-bar-click', $el).click(function() {
                             location.reload(true);
                         });
