@@ -711,11 +711,6 @@ def user_remove(request, email):
                 messages.error(request, _(u'Failed to delete: the user is an organization creator'))
                 return HttpResponseRedirect(next)
 
-            org_id = org[0].org_id
-            org_user_repos = seafile_api.get_org_owned_repo_list(org_id, user.email)
-            for repo in org_user_repos:
-                seafile_api.remove_repo(repo.id)
-
         user.delete()
         messages.success(request, _(u'Successfully deleted %s') % user.username)
     except User.DoesNotExist:
