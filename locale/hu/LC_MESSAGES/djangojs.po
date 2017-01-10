@@ -4,14 +4,14 @@
 # 
 # Translators:
 # gergely fodor <fodi666@gmail.com>, 2016
-# Szabolcs Gyuris <szimszon@oregpreshaz.eu>, 2015
+# Szabolcs Gyuris <szimszon@oregpreshaz.eu>, 2015-2017
 msgid ""
 msgstr ""
 "Project-Id-Version: seahub\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2016-08-20 17:59+0800\n"
-"PO-Revision-Date: 2016-08-20 10:06+0000\n"
-"Last-Translator: zheng xie <xiez1989@gmail.com>\n"
+"POT-Creation-Date: 2017-01-09 11:11+0800\n"
+"PO-Revision-Date: 2017-01-07 19:12+0000\n"
+"Last-Translator: Szabolcs Gyuris <szimszon@oregpreshaz.eu>\n"
 "Language-Team: Hungarian (http://www.transifex.com/haiwen/seahub/language/hu/)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -19,12 +19,12 @@ msgstr ""
 "Language: hu\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 
-#: static/scripts/app/models/dirent.js:113 static/scripts/app/views/dir.js:523
-#: static/scripts/app/views/dir.js:591
-#: static/scripts/app/views/fileupload.js:343
-#: static/scripts/app/views/fileupload.js:357
-#: static/scripts/app/views/fileupload.js:369
-#: static/scripts/app/views/fileupload.js:381 static/scripts/common.js:537
+#: static/scripts/app/models/dirent.js:113 static/scripts/app/views/dir.js:518
+#: static/scripts/app/views/dir.js:586
+#: static/scripts/app/views/fileupload.js:346
+#: static/scripts/app/views/fileupload.js:360
+#: static/scripts/app/views/fileupload.js:372
+#: static/scripts/app/views/fileupload.js:384 static/scripts/common.js:539
 msgid "Just now"
 msgstr "Éppen most"
 
@@ -32,19 +32,19 @@ msgstr "Éppen most"
 msgid "Name is required"
 msgstr "Név szükséges"
 
-#: static/scripts/app/models/repo.js:35 static/scripts/app/views/share.js:202
+#: static/scripts/app/models/repo.js:35 static/scripts/app/views/share.js:204
 msgid "Please enter password"
 msgstr "Kérem adja meg a jelszót"
 
-#: static/scripts/app/models/repo.js:36 static/scripts/app/views/share.js:210
+#: static/scripts/app/models/repo.js:36 static/scripts/app/views/share.js:212
 msgid "Please enter the password again"
 msgstr "Kérem adja meg a jelszót újra"
 
-#: static/scripts/app/models/repo.js:38 static/scripts/app/views/share.js:206
+#: static/scripts/app/models/repo.js:38 static/scripts/app/views/share.js:208
 msgid "Password is too short"
 msgstr "A jelszó túl rövid"
 
-#: static/scripts/app/models/repo.js:40 static/scripts/app/views/share.js:214
+#: static/scripts/app/models/repo.js:40 static/scripts/app/views/share.js:216
 msgid "Passwords don't match"
 msgstr "Nem egyeznek a megadott jelszavak."
 
@@ -74,25 +74,25 @@ msgid "Read-Only"
 msgstr "Csak olvaható"
 
 #: static/scripts/app/views/account.js:58
-#: static/scripts/app/views/dialogs/repo-folder-perm-admin.js:126
-#: static/scripts/app/views/dialogs/repo-folder-perm-admin.js:245
-#: static/scripts/app/views/dialogs/repo-folder-perm-admin.js:292
-#: static/scripts/app/views/dialogs/repo-share-link-admin.js:81
-#: static/scripts/app/views/dir.js:391
+#: static/scripts/app/views/dialogs/repo-folder-perm-admin.js:127
+#: static/scripts/app/views/dialogs/repo-folder-perm-admin.js:246
+#: static/scripts/app/views/dialogs/repo-folder-perm-admin.js:293
+#: static/scripts/app/views/dialogs/repo-share-link-admin.js:89
+#: static/scripts/app/views/dir.js:384
 #: static/scripts/app/views/group-discussions.js:125
 #: static/scripts/app/views/group-discussions.js:203
 #: static/scripts/app/views/group-discussions.js:246
 #: static/scripts/app/views/group-manage-members.js:117
 #: static/scripts/app/views/group-manage-members.js:146
 #: static/scripts/app/views/group-members.js:80
-#: static/scripts/app/views/group.js:101 static/scripts/app/views/group.js:134
+#: static/scripts/app/views/group.js:107 static/scripts/app/views/group.js:140
 #: static/scripts/app/views/groups.js:83
 #: static/scripts/app/views/groups.js:134
 #: static/scripts/app/views/invitations.js:78
-#: static/scripts/app/views/myhome-repos.js:86
-#: static/scripts/app/views/myhome-shared-repos.js:73
+#: static/scripts/app/views/myhome-repos.js:91
+#: static/scripts/app/views/myhome-shared-repos.js:79
 #: static/scripts/app/views/notifications.js:140
-#: static/scripts/app/views/organization.js:118
+#: static/scripts/app/views/organization.js:123
 #: static/scripts/app/views/repo-folder-perm.js:94
 #: static/scripts/app/views/repo-folder-perm.js:134
 #: static/scripts/app/views/repo-shared-link.js:84
@@ -100,6 +100,7 @@ msgstr "Csak olvaható"
 #: static/scripts/app/views/share-admin-repos.js:100
 #: static/scripts/app/views/share-admin-share-links.js:150
 #: static/scripts/app/views/share-admin-upload-links.js:64
+#: static/scripts/sysadmin-app/views/groups.js:100
 msgid "Please check the network."
 msgstr "Ellenőrizze a hálózatot."
 
@@ -134,8 +135,8 @@ msgstr "Törölt könyvtárak"
 #: static/scripts/app/views/dialogs/repo-change-password.js:95
 #: static/scripts/app/views/dialogs/repo-history-settings.js:82
 #: static/scripts/app/views/dialogs/repo-history-settings.js:141
-#: static/scripts/app/views/dir.js:1167 static/scripts/app/views/dir.js:1224
-#: static/scripts/app/views/dirent.js:323
+#: static/scripts/app/views/dir.js:1103 static/scripts/app/views/dir.js:1137
+#: static/scripts/app/views/dir.js:1175 static/scripts/app/views/dirent.js:286
 #: static/scripts/app/views/folder-perm-item.js:84
 #: static/scripts/app/views/folder-perm-item.js:126
 #: static/scripts/app/views/folder-perm.js:155
@@ -154,10 +155,10 @@ msgstr "Törölt könyvtárak"
 #: static/scripts/app/views/group-settings.js:327
 #: static/scripts/app/views/group-settings.js:362
 #: static/scripts/app/views/invitations.js:146
-#: static/scripts/app/views/repo.js:165 static/scripts/app/views/repo.js:240
-#: static/scripts/app/views/share.js:343 static/scripts/app/views/share.js:632
-#: static/scripts/app/views/share.js:710 static/scripts/common.js:358
-#: static/scripts/common.js:447
+#: static/scripts/app/views/repo.js:167 static/scripts/app/views/repo.js:242
+#: static/scripts/app/views/share.js:345 static/scripts/app/views/share.js:634
+#: static/scripts/app/views/share.js:712 static/scripts/common.js:360
+#: static/scripts/common.js:449
 #: static/scripts/sysadmin-app/views/dashboard.js:46
 #: static/scripts/sysadmin-app/views/desktop-devices.js:105
 #: static/scripts/sysadmin-app/views/device-errors.js:92
@@ -165,7 +166,7 @@ msgstr "Törölt könyvtárak"
 #: static/scripts/sysadmin-app/views/folder-share-item.js:89
 #: static/scripts/sysadmin-app/views/folder-share-item.js:138
 #: static/scripts/sysadmin-app/views/group.js:108
-#: static/scripts/sysadmin-app/views/groups.js:106
+#: static/scripts/sysadmin-app/views/groups.js:168
 #: static/scripts/sysadmin-app/views/mobile-devices.js:106
 #: static/scripts/sysadmin-app/views/repo.js:123
 #: static/scripts/sysadmin-app/views/repos.js:105
@@ -221,12 +222,12 @@ msgstr "Sikertelen."
 
 #: static/scripts/app/views/dialogs/dirent-mvcp.js:119
 #: static/scripts/app/views/dialogs/dirent-mvcp.js:147
-#: static/scripts/app/views/dir.js:1215
+#: static/scripts/app/views/dir.js:1166
 msgid "Canceled."
 msgstr "Megszakítva."
 
 #: static/scripts/app/views/dialogs/dirent-mvcp.js:179
-#: static/scripts/app/views/dir.js:1012
+#: static/scripts/app/views/dir.js:948
 msgid "Invalid destination path"
 msgstr "Érvénytelen cél útvonal"
 
@@ -280,8 +281,9 @@ msgstr "{placeholder} könyvtár jogosultsága"
 
 #: static/scripts/app/views/dialogs/repo-folder-perm-admin.js:92
 #: static/scripts/app/views/group-settings.js:154
-#: static/scripts/app/views/repo.js:204
+#: static/scripts/app/views/repo.js:206
 #: static/scripts/sysadmin-app/views/group.js:74
+#: static/scripts/sysadmin-app/views/groups.js:68
 #: static/scripts/sysadmin-app/views/repo.js:88
 msgid "Search user or enter email and press Enter"
 msgstr "Felhasználónév vagy email cím szerinti keresés, üssön Entert"
@@ -295,17 +297,17 @@ msgstr "Csak 1 elemet választhat ki"
 msgid "Select a group"
 msgstr "Csoport kiválasztása"
 
-#: static/scripts/app/views/dialogs/repo-folder-perm-admin.js:121
-#: static/scripts/app/views/dialogs/repo-share-link-admin.js:76
+#: static/scripts/app/views/dialogs/repo-folder-perm-admin.js:122
+#: static/scripts/app/views/dialogs/repo-share-link-admin.js:84
 #: static/scripts/app/views/group-discussions.js:120
 #: static/scripts/app/views/group-discussions.js:198
 #: static/scripts/app/views/group-manage-members.js:112
 #: static/scripts/app/views/group-members.js:75
-#: static/scripts/app/views/group.js:129 static/scripts/app/views/groups.js:78
+#: static/scripts/app/views/group.js:135 static/scripts/app/views/groups.js:78
 #: static/scripts/app/views/invitations.js:141
-#: static/scripts/app/views/myhome-repos.js:81
-#: static/scripts/app/views/myhome-shared-repos.js:68
-#: static/scripts/app/views/organization.js:113
+#: static/scripts/app/views/myhome-repos.js:86
+#: static/scripts/app/views/myhome-shared-repos.js:74
+#: static/scripts/app/views/organization.js:118
 #: static/scripts/app/views/share-admin-folders.js:93
 #: static/scripts/app/views/share-admin-repos.js:95
 #: static/scripts/app/views/share-admin-share-links.js:145
@@ -314,7 +316,7 @@ msgstr "Csoport kiválasztása"
 #: static/scripts/sysadmin-app/views/desktop-devices.js:100
 #: static/scripts/sysadmin-app/views/device-errors.js:87
 #: static/scripts/sysadmin-app/views/dir.js:188
-#: static/scripts/sysadmin-app/views/groups.js:101
+#: static/scripts/sysadmin-app/views/groups.js:163
 #: static/scripts/sysadmin-app/views/mobile-devices.js:101
 #: static/scripts/sysadmin-app/views/repos.js:100
 #: static/scripts/sysadmin-app/views/search-repos.js:72
@@ -324,7 +326,7 @@ msgstr "Csoport kiválasztása"
 msgid "Permission error"
 msgstr "Jogosultság hiba"
 
-#: static/scripts/app/views/dialogs/repo-folder-perm-admin.js:186
+#: static/scripts/app/views/dialogs/repo-folder-perm-admin.js:187
 msgid "Please click and choose a directory."
 msgstr "Kattintson és válasszon könyvtárat."
 
@@ -336,171 +338,167 @@ msgstr "{placeholder} Naplóbeállítások"
 msgid "Successfully set library history."
 msgstr "Kötetnapló beállítása sikeres"
 
-#: static/scripts/app/views/dialogs/repo-share-link-admin.js:50
+#: static/scripts/app/views/dialogs/repo-share-link-admin.js:57
 msgid "{placeholder} Share Links"
 msgstr "{placeholder} Megosztási linkek"
 
-#: static/scripts/app/views/dir.js:117
+#: static/scripts/app/views/dir.js:50
 #: static/scripts/app/views/starred-file.js:60
 msgid "Close (Esc)"
 msgstr "Bezár (Esc)"
 
-#: static/scripts/app/views/dir.js:118
+#: static/scripts/app/views/dir.js:51
 #: static/scripts/app/views/starred-file.js:61
 msgid "Loading..."
 msgstr "Betöltés..."
 
-#: static/scripts/app/views/dir.js:121
+#: static/scripts/app/views/dir.js:54
 #: static/scripts/app/views/starred-file.js:64
 msgid "Previous (Left arrow key)"
 msgstr "Előző (Balra nyíl)"
 
-#: static/scripts/app/views/dir.js:122
+#: static/scripts/app/views/dir.js:55
 #: static/scripts/app/views/starred-file.js:65
 msgid "Next (Right arrow key)"
 msgstr "Következő (Jobbra nyíl)"
 
-#: static/scripts/app/views/dir.js:123
+#: static/scripts/app/views/dir.js:56
 #: static/scripts/app/views/starred-file.js:66
 msgid "%curr% of %total%"
 msgstr "%curr% / %total%"
 
-#: static/scripts/app/views/dir.js:126
-#: static/scripts/app/views/starred-file.js:75
-msgid "<a href=\"%url%\" target=\"_blank\">The image</a> could not be loaded."
-msgstr "<a href=\"%url%\" target=\"_blank\">A kép</a>et nem lehet betölteni."
-
-#: static/scripts/app/views/dir.js:136 static/scripts/app/views/dir.js:148
+#: static/scripts/app/views/dir.js:61
 #: static/scripts/app/views/starred-file.js:72
 msgid "Open in New Tab"
 msgstr "Megnyitás új fülön"
 
-#: static/scripts/app/views/dir.js:323
+#: static/scripts/app/views/dir.js:64
+#: static/scripts/app/views/starred-file.js:75
+msgid "<a href=\"%url%\" target=\"_blank\">The image</a> could not be loaded."
+msgstr "<a href=\"%url%\" target=\"_blank\">A kép</a>et nem lehet betölteni."
+
+#: static/scripts/app/views/dir.js:316
 msgid "Password is required."
 msgstr "Jelszó szükséges."
 
-#: static/scripts/app/views/dir.js:508 static/scripts/app/views/dir.js:566
+#: static/scripts/app/views/dir.js:503 static/scripts/app/views/dir.js:561
 #: static/scripts/app/views/groups.js:112
 #: static/scripts/app/views/invitations.js:54
 #: static/scripts/sysadmin-app/views/dir.js:82
 msgid "It is required."
 msgstr "Szükséges."
 
-#: static/scripts/app/views/dir.js:572
+#: static/scripts/app/views/dir.js:567
 msgid "Only an extension there, please input a name."
 msgstr "Csak a kiterjesztés van, kérem adja meg a nevet."
 
-#: static/scripts/app/views/dir.js:823 static/scripts/app/views/dirent.js:127
-msgid "Packaging..."
-msgstr "Csomagolás"
-
-#: static/scripts/app/views/dir.js:877 static/scripts/app/views/dir.js:1017
+#: static/scripts/app/views/dir.js:813 static/scripts/app/views/dir.js:953
 msgid "Processing..."
 msgstr "Feldolgozás..."
 
-#: static/scripts/app/views/dir.js:914
+#: static/scripts/app/views/dir.js:850
 msgid "Successfully deleted %(name)s."
 msgstr "%(name)s törlése sikeres."
 
-#: static/scripts/app/views/dir.js:916
+#: static/scripts/app/views/dir.js:852
 msgid "Successfully deleted %(name)s and 1 other item."
 msgstr "%(name)s és még 1 másik elem törölve."
 
-#: static/scripts/app/views/dir.js:918
+#: static/scripts/app/views/dir.js:854
 msgid "Successfully deleted %(name)s and %(amount)s other items."
 msgstr "%(name)s és még %(amount)s másik elem törölve."
 
-#: static/scripts/app/views/dir.js:925
+#: static/scripts/app/views/dir.js:861
 msgid "Failed to delete %(name)s."
 msgstr "Törlés meghiúsult: %(name)s."
 
-#: static/scripts/app/views/dir.js:927
+#: static/scripts/app/views/dir.js:863
 msgid "Failed to delete %(name)s and 1 other item."
 msgstr "%(name)s és még 1 elem törlése sikertelen."
 
-#: static/scripts/app/views/dir.js:929
+#: static/scripts/app/views/dir.js:865
 msgid "Failed to delete %(name)s and %(amount)s other items."
 msgstr "%(name)s és még %(amount)s másik elem törlése sikertelen."
 
-#: static/scripts/app/views/dir.js:942
+#: static/scripts/app/views/dir.js:878
 msgid "Delete Items"
 msgstr "Elemek törlése"
 
-#: static/scripts/app/views/dir.js:943
+#: static/scripts/app/views/dir.js:879
 msgid "Are you sure you want to delete these selected items?"
 msgstr "Biztos, hogy törli ezeket az elemeket?"
 
-#: static/scripts/app/views/dir.js:957
+#: static/scripts/app/views/dir.js:893
 msgid "Move selected item(s) to:"
 msgstr "Kiválasztott elem(ek) mozgatása ide: "
 
-#: static/scripts/app/views/dir.js:957
+#: static/scripts/app/views/dir.js:893
 msgid "Copy selected item(s) to:"
 msgstr "Kiválasztott elem(ek) másolása ide:"
 
-#: static/scripts/app/views/dir.js:1061
+#: static/scripts/app/views/dir.js:997
 msgid "Successfully moved %(name)s."
 msgstr "%(name)s sikeresen átmozgatva."
 
-#: static/scripts/app/views/dir.js:1063
+#: static/scripts/app/views/dir.js:999
 msgid "Successfully moved %(name)s and 1 other item."
 msgstr "%(name)s áthelyezése és még 1 másik elemé sikeres."
 
-#: static/scripts/app/views/dir.js:1065
+#: static/scripts/app/views/dir.js:1001
 msgid "Successfully moved %(name)s and %(amount)s other items."
 msgstr "%(name)s áthelyezése és még %(amount)s másik elemé sikeres."
 
-#: static/scripts/app/views/dir.js:1069
+#: static/scripts/app/views/dir.js:1005
 msgid "Successfully copied %(name)s."
 msgstr "%(name)s másolása sikeres."
 
-#: static/scripts/app/views/dir.js:1071
+#: static/scripts/app/views/dir.js:1007
 msgid "Successfully copied %(name)s and 1 other item."
 msgstr "%(name)s másolása és még 1 másik elemé sikeres."
 
-#: static/scripts/app/views/dir.js:1073
+#: static/scripts/app/views/dir.js:1009
 msgid "Successfully copied %(name)s and %(amount)s other items."
 msgstr "%(name)s másolása és még %(amount)s másik elemé sikeres."
 
-#: static/scripts/app/views/dir.js:1085
+#: static/scripts/app/views/dir.js:1021
 msgid "Internal error. Failed to move %(name)s and %(amount)s other item(s)."
 msgstr "Belső hiba. %(name)s mozgatása és még %(amount)s másik elemé sikertelen."
 
-#: static/scripts/app/views/dir.js:1087
+#: static/scripts/app/views/dir.js:1023
 msgid "Internal error. Failed to move %(name)s."
 msgstr "Belső hiba. %(name)s mozgatása sikertelen."
 
-#: static/scripts/app/views/dir.js:1091
+#: static/scripts/app/views/dir.js:1027
 msgid "Internal error. Failed to copy %(name)s and %(amount)s other item(s)."
 msgstr "Belső hiba. %(name)s másolása és még %(amount)s másik elemé sikertelen."
 
-#: static/scripts/app/views/dir.js:1093
+#: static/scripts/app/views/dir.js:1029
 msgid "Internal error. Failed to copy %(name)s."
 msgstr "Belső hiba. %(name)s másolása sikertelen."
 
-#: static/scripts/app/views/dir.js:1133
+#: static/scripts/app/views/dir.js:1069
 msgid "Moving file %(index)s of %(total)s"
 msgstr "Fájlok mozgatása: %(index)s / %(total)s"
 
-#: static/scripts/app/views/dir.js:1133
+#: static/scripts/app/views/dir.js:1069
 msgid "Copying file %(index)s of %(total)s"
 msgstr "Fájlok másolása: %(index)s / %(total)s"
 
-#: static/scripts/app/views/dir.js:1155
+#: static/scripts/app/views/dir.js:1091
 msgid "Failed to move %(name)s"
 msgstr "%(name)s mozgatása sikertelen"
 
-#: static/scripts/app/views/dir.js:1155
+#: static/scripts/app/views/dir.js:1091
 msgid "Failed to copy %(name)s"
 msgstr "%(name)s másolása sikertelen"
 
-#: static/scripts/app/views/dirent-grid.js:60
-#: static/scripts/app/views/dirent.js:61
+#: static/scripts/app/views/dirent-grid.js:59
+#: static/scripts/app/views/dirent.js:64
 msgid "locked by {placeholder}"
 msgstr "zárolta: {placeholder}"
 
-#: static/scripts/app/views/dirent-grid.js:154
-#: static/scripts/app/views/dirent.js:244
+#: static/scripts/app/views/dirent-grid.js:167
+#: static/scripts/app/views/dirent.js:207
 msgid "Successfully deleted %(name)s"
 msgstr "%(name)s törlése sikeres"
 
@@ -534,10 +532,10 @@ msgstr "Üres fájl feltöltés"
 #: static/scripts/app/views/group-manage-members.js:114
 #: static/scripts/app/views/group-manage-members.js:178
 #: static/scripts/app/views/group-members.js:77
-#: static/scripts/app/views/group.js:131 static/scripts/app/views/groups.js:80
-#: static/scripts/app/views/myhome-repos.js:83
-#: static/scripts/app/views/myhome-shared-repos.js:70
-#: static/scripts/app/views/organization.js:115
+#: static/scripts/app/views/group.js:137 static/scripts/app/views/groups.js:80
+#: static/scripts/app/views/myhome-repos.js:88
+#: static/scripts/app/views/myhome-shared-repos.js:76
+#: static/scripts/app/views/organization.js:120
 #: static/scripts/app/views/share-admin-folders.js:95
 #: static/scripts/app/views/share-admin-repos.js:97
 #: static/scripts/app/views/share-admin-share-links.js:147
@@ -581,19 +579,19 @@ msgstr "Fájl feltöltés megszakítva"
 msgid "File Upload failed"
 msgstr "Fájl feltöltés sikertelen"
 
-#: static/scripts/app/views/fileupload.js:186
+#: static/scripts/app/views/fileupload.js:189
 msgid "Failed to get upload url"
 msgstr "A feltöltési linket nem lehet elérni"
 
-#: static/scripts/app/views/fileupload.js:219
+#: static/scripts/app/views/fileupload.js:222
 msgid "Failed to get update url"
 msgstr "A frissítési linket nem lehet elérni"
 
-#: static/scripts/app/views/fileupload.js:230
+#: static/scripts/app/views/fileupload.js:233
 msgid "Replace file {filename}?"
 msgstr "Felülírja: {filename}?"
 
-#: static/scripts/app/views/fileupload.js:256
+#: static/scripts/app/views/fileupload.js:259
 msgid "File is locked"
 msgstr "A fájl zárolva van"
 
@@ -602,7 +600,7 @@ msgid "Set {placeholder}'s permission"
 msgstr "{placeholder} jogosultság beállítása"
 
 #: static/scripts/app/views/folder-perm.js:100
-#: static/scripts/app/views/share.js:527
+#: static/scripts/app/views/share.js:529
 msgid "Select groups"
 msgstr "Csoportok kiválasztása"
 
@@ -624,8 +622,9 @@ msgid "Successfully unshared 1 item."
 msgstr "1 megosztás sikeresen megszüntetve."
 
 #: static/scripts/app/views/group-settings.js:155
-#: static/scripts/app/views/repo.js:205
+#: static/scripts/app/views/repo.js:207
 #: static/scripts/sysadmin-app/views/group.js:75
+#: static/scripts/sysadmin-app/views/groups.js:69
 #: static/scripts/sysadmin-app/views/repo.js:89
 msgid "You cannot select any more choices"
 msgstr "Nem lehet többet kiválasztani"
@@ -668,30 +667,30 @@ msgstr "Biztosan elhagyja a csoportot?"
 msgid "Successfully deleted 1 item"
 msgstr "1 elem sikeresen törölve."
 
-#: static/scripts/app/views/repo.js:60
+#: static/scripts/app/views/repo.js:62
 #: static/scripts/sysadmin-app/views/repo.js:46
 #: static/scripts/sysadmin-app/views/trash-repo.js:28
 msgid "Delete Library"
 msgstr "Kötet törlése"
 
-#: static/scripts/app/views/repo.js:61
+#: static/scripts/app/views/repo.js:63
 #: static/scripts/sysadmin-app/views/group.js:31
 #: static/scripts/sysadmin-app/views/repo.js:47
 #, javascript-format
 msgid "Are you sure you want to delete %s ?"
 msgstr "Biztosan törli: %s?"
 
-#: static/scripts/app/views/repo.js:71
+#: static/scripts/app/views/repo.js:73
 #: static/scripts/sysadmin-app/views/repo.js:60
 msgid "Successfully deleted."
 msgstr "Sikeresen törölve."
 
-#: static/scripts/app/views/repo.js:194
+#: static/scripts/app/views/repo.js:196
 #: static/scripts/sysadmin-app/views/repo.js:78
 msgid "Transfer Library {library_name} To"
 msgstr "{library_name} kötet átadása neki:"
 
-#: static/scripts/app/views/repo.js:233
+#: static/scripts/app/views/repo.js:235
 #: static/scripts/sysadmin-app/views/repo.js:116
 msgid "Successfully transferred the library."
 msgstr "Kötet átadása sikeres."
@@ -706,36 +705,36 @@ msgstr "Engedély sikeresen megváltoztatva."
 msgid "Share {placeholder}"
 msgstr "{placeholder} megosztása"
 
-#: static/scripts/app/views/share.js:121
+#: static/scripts/app/views/share.js:123
 msgid "Expired"
 msgstr "Lejárt"
 
-#: static/scripts/app/views/share.js:152 static/scripts/app/views/share.js:153
-#: static/scripts/app/views/share.js:174 static/scripts/app/views/share.js:175
+#: static/scripts/app/views/share.js:154 static/scripts/app/views/share.js:155
+#: static/scripts/app/views/share.js:176 static/scripts/app/views/share.js:177
 msgid "Hide"
 msgstr "Elrejt"
 
-#: static/scripts/app/views/share.js:170 static/scripts/app/views/share.js:171
+#: static/scripts/app/views/share.js:172 static/scripts/app/views/share.js:173
 msgid "Show"
 msgstr "Mutat"
 
-#: static/scripts/app/views/share.js:224
+#: static/scripts/app/views/share.js:226
 msgid "Please enter days."
 msgstr "Adja meg a napok számát."
 
-#: static/scripts/app/views/share.js:228
+#: static/scripts/app/views/share.js:230
 msgid "Please enter valid days"
 msgstr "Kérem érvényes nap számot adjon meg"
 
-#: static/scripts/app/views/share.js:310
+#: static/scripts/app/views/share.js:312
 msgid "Please input at least an email."
 msgstr "Adjon meg legalább egy e-mail címet"
 
-#: static/scripts/app/views/share.js:327
+#: static/scripts/app/views/share.js:329
 msgid "Successfully sent to {placeholder}"
 msgstr "Sikeresen elküldve ide: {placeholder}"
 
-#: static/scripts/app/views/share.js:331
+#: static/scripts/app/views/share.js:333
 msgid "Failed to send to {placeholder}"
 msgstr "Sikertelen küldés ide: {placeholder}"
 
@@ -752,29 +751,33 @@ msgstr "Sikeres"
 msgid "Successfully unstared {placeholder}"
 msgstr "{placeholder} sikeresen törölve a kedvencekből"
 
-#: static/scripts/common.js:571
+#: static/scripts/common.js:573
 msgid "Search users or enter emails and press Enter"
 msgstr "Felhasználónév vagy email cím szerinti keresés, üssön Entert"
 
-#: static/scripts/common.js:579 static/scripts/common.js:650
+#: static/scripts/common.js:581 static/scripts/common.js:652
 msgid "Please enter 1 or more character"
 msgstr "Kérem adjon meg még 1 vagy több karaktert"
 
-#: static/scripts/common.js:580 static/scripts/common.js:651
+#: static/scripts/common.js:582 static/scripts/common.js:653
 msgid "No matches"
 msgstr "Nincs találat"
 
-#: static/scripts/common.js:581 static/scripts/common.js:652
+#: static/scripts/common.js:583 static/scripts/common.js:654
 msgid "Searching..."
 msgstr "Keresés..."
 
-#: static/scripts/common.js:582 static/scripts/common.js:653
+#: static/scripts/common.js:584 static/scripts/common.js:655
 msgid "Loading failed"
 msgstr "Betöltés nem sikerült"
 
-#: static/scripts/common.js:642
+#: static/scripts/common.js:644
 msgid "Search groups"
-msgstr ""
+msgstr "Csoportok keresése"
+
+#: static/scripts/common.js:963
+msgid "Packaging..."
+msgstr "Csomagolás"
 
 #: static/scripts/sysadmin-app/views/device-errors.js:39
 msgid "Successfully clean all errors."
@@ -795,6 +798,10 @@ msgstr "{group_name} csoport átadása"
 #: static/scripts/sysadmin-app/views/group.js:101
 msgid "Successfully transferred the group."
 msgstr "Csoport sikeresen átadva."
+
+#: static/scripts/sysadmin-app/views/groups.js:79
+msgid "Name is required."
+msgstr "Név kötelező."
 
 #: static/scripts/sysadmin-app/views/search-trash-repos.js:46
 msgid "Delete Library By Owner"

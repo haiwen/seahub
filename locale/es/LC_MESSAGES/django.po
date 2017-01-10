@@ -3,19 +3,20 @@
 # This file is distributed under the same license as the PACKAGE package.
 # 
 # Translators:
+# Albert, 2017
 # Carlos Madera <carlos.madera@gmail.com>, 2013-2014
 # Carlos Madera <carlos.madera@gmail.com>, 2013
 # Hector Colina <hcolina@gmail.com>, 2013
 # eddelac <edg.delac@gmail.com>, 2013
-# Hector Colina <hcolina@gmail.com>, 2013
+# Hector Colina <hcolina@gmail.com>, 2013,2017
 # Rodolfo Cossalter <rcoss@dm.uba.ar>, 2014
 # Rodolfo Cossalter <rcoss@dm.uba.ar>, 2014-2015
 msgid ""
 msgstr ""
 "Project-Id-Version: seahub\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2016-08-20 17:59+0800\n"
-"PO-Revision-Date: 2016-08-20 17:42+0000\n"
+"POT-Creation-Date: 2017-01-09 11:11+0800\n"
+"PO-Revision-Date: 2017-01-09 15:53+0000\n"
 "Last-Translator: Rodolfo Cossalter <rcoss@dm.uba.ar>\n"
 "Language-Team: Spanish (http://www.transifex.com/haiwen/seahub/language/es/)\n"
 "MIME-Version: 1.0\n"
@@ -24,13 +25,55 @@ msgstr ""
 "Language: es\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 
-#: seahub/api2/endpoints/admin/groups.py:122
+#: seahub/api2/endpoints/account.py:162
+msgid "Name is too long (maximum is 64 characters)"
+msgstr "El nombre es demasiado largo (el máximo es de 64 carácteres)"
+
+#: seahub/api2/endpoints/account.py:166 seahub/forms.py:43
+#: seahub/profile/forms.py:17 seahub/templates/sysadmin/userinfo.html:317
+msgid "Name should not include '/'."
+msgstr "El nombre no debería incluir «/»."
+
+#: seahub/api2/endpoints/account.py:173
+msgid "Department is too long (maximum is 512 characters)"
+msgstr "El departamento es demasiado largo (el máximo es de 512 carácteres)"
+
+#: seahub/api2/endpoints/account.py:180 seahub/forms.py:154
+msgid "Space quota can't be empty"
+msgstr "La cuota para almacenamiento no puede estar vacía"
+
+#: seahub/api2/endpoints/account.py:186
+msgid "Must be an integer that is greater than or equal to 0."
+msgstr "Debe ser un entero que sea mayor o igual a 0."
+
+#: seahub/api2/endpoints/account.py:190 seahub/forms.py:155
+msgid "Space quota is too low (minimum value is 0)"
+msgstr "La cuota para almacenamiento es muy pequeña (el valor mínimo es 0)"
+
+#: seahub/api2/endpoints/account.py:198 seahub/views/sysadmin.py:660
+#, python-format
+msgid "Failed to set quota: maximum quota is %d MB"
+msgstr "Fallo al definir cuota: la cuota máxima es %d MB"
+
+#: seahub/api2/endpoints/admin/groups.py:102
+#: seahub/api2/endpoints/groups.py:149 seahub/api2/endpoints/groups.py:225
+#: seahub/group/forms.py:38
+msgid ""
+"Group name can only contain letters, numbers, blank, hyphen or underscore"
+msgstr "El nombre del grupo sólo puede tener letras, números, espacio, guión o guión bajo"
+
+#: seahub/api2/endpoints/admin/groups.py:107
+#: seahub/api2/endpoints/groups.py:154 seahub/api2/endpoints/groups.py:230
+msgid "There is already a group with that name."
+msgstr "Ya existe un grupo con ese nombre"
+
+#: seahub/api2/endpoints/admin/groups.py:170
 #: seahub/api2/endpoints/groups.py:255
 #, python-format
 msgid "User %s is already group owner."
 msgstr "El usuario %s ya es propietario del grupo."
 
-#: seahub/api2/endpoints/admin/libraries.py:143 seahub/views/sysadmin.py:1611
+#: seahub/api2/endpoints/admin/libraries.py:144 seahub/views/sysadmin.py:1649
 msgid "System library can not be deleted."
 msgstr "La bibilioteca del sistema no puede ser eliminada."
 
@@ -40,7 +83,7 @@ msgid "User %s is already library owner."
 msgstr "El usuario %s ya es propietario de la biblioteca."
 
 #: seahub/api2/endpoints/admin/shares.py:174
-#: seahub/api2/endpoints/invitations.py:46
+#: seahub/api2/endpoints/invitations.py:49
 #, python-format
 msgid "Email %s invalid."
 msgstr "Email %s es inválido."
@@ -50,46 +93,54 @@ msgstr "Email %s es inválido."
 msgid "Total size exceeds limit."
 msgstr "El tamaño total excede el límite"
 
+#: seahub/api2/endpoints/file.py:366 seahub/views/file.py:1066
+msgid "Check file lock error"
+msgstr "Verificar error de bloqueo de archivo"
+
+#: seahub/api2/endpoints/file.py:370 seahub/views/file.py:1069
+msgid "File is locked"
+msgstr "El archivo está bloqueado"
+
 #: seahub/api2/endpoints/group_members.py:93
-#: seahub/api2/endpoints/group_members.py:290 seahub/views/ajax.py:2075
+#: seahub/api2/endpoints/group_members.py:290 seahub/views/ajax.py:2228
 #, python-format
 msgid "User %s is already a group member."
 msgstr "El usuario %s ya es miembro del grupo."
 
 #: seahub/api2/endpoints/group_members.py:99
-#: seahub/api2/endpoints/group_members.py:299 seahub/api2/views.py:1111
-#: seahub/views/ajax.py:2084
+#: seahub/api2/endpoints/group_members.py:299 seahub/api2/views.py:1082
+#: seahub/views/ajax.py:2237
 #, python-format
 msgid "User %s not found in organization."
 msgstr "El usuario %s no se encuentra en la organización."
 
-#: seahub/api2/endpoints/groups.py:149 seahub/api2/endpoints/groups.py:225
-#: seahub/group/forms.py:38
-msgid ""
-"Group name can only contain letters, numbers, blank, hyphen or underscore"
-msgstr "El nombre del grupo sólo puede tener letras, números, espacio, guión o guión bajo"
+#: seahub/api2/endpoints/invitations.py:53
+msgid "The email address is not allowed to be invited as a guest."
+msgstr "La dirección de correo no está permitida para ser invitado como invitado."
 
-#: seahub/api2/endpoints/groups.py:154 seahub/api2/endpoints/groups.py:230
-msgid "There is already a group with that name."
-msgstr "Ya existe un grupo con ese nombre"
+#: seahub/api2/endpoints/invitations.py:58
+#, python-format
+msgid "%s is already invited."
+msgstr "%s ya está invitado."
 
-#: seahub/api2/endpoints/invitations.py:56 seahub/base/accounts.py:575
+#: seahub/api2/endpoints/invitations.py:68 seahub/base/accounts.py:582
 #, python-format
 msgid "User %s already exists."
 msgstr "El usuario %s ya existe."
 
-#: seahub/api2/endpoints/repo_set_password.py:42 seahub/api2/views.py:2788
+#: seahub/api2/endpoints/repo_set_password.py:42 seahub/api2/views.py:2830
 msgid "Wrong password"
 msgstr "Contraseña incorrecta"
 
-#: seahub/api2/endpoints/repo_set_password.py:45 seahub/api2/views.py:2791
-#: seahub/views/__init__.py:527 seahub/views/ajax.py:625
-#: seahub/views/ajax.py:659 seahub/views/ajax.py:703 seahub/views/ajax.py:746
-#: seahub/views/sysadmin.py:1909
+#: seahub/api2/endpoints/repo_set_password.py:45 seahub/api2/views.py:2833
+#: seahub/views/__init__.py:535 seahub/views/ajax.py:673
+#: seahub/views/ajax.py:713 seahub/views/ajax.py:748 seahub/views/ajax.py:792
+#: seahub/views/ajax.py:836 seahub/views/ajax.py:936
+#: seahub/views/sysadmin.py:1980
 msgid "Internal server error"
 msgstr "Error interno del servidor"
 
-#: seahub/api2/endpoints/repo_set_password.py:48 seahub/api2/views.py:2794
+#: seahub/api2/endpoints/repo_set_password.py:48 seahub/api2/views.py:2836
 msgid "Decrypt library error"
 msgstr "Error en el desencriptado de la biblioteca"
 
@@ -128,11 +179,11 @@ msgstr "Una carpeta fue compartida contigo en %s"
 msgid "An upload link is shared to you on %s"
 msgstr "Un enlace de subida ha sido compartido contigo en %s"
 
-#: seahub/api2/endpoints/share_links.py:185
+#: seahub/api2/endpoints/share_links.py:178
 msgid "Password is too short."
 msgstr "La contraseña es demasiado corta."
 
-#: seahub/api2/endpoints/upload_links.py:149
+#: seahub/api2/endpoints/upload_links.py:142
 #: seahub/templates/snippets/repo_create_js.html:50
 #: seahub/templates/snippets/shared_link_js.html:137
 msgid "Password is too short"
@@ -154,11 +205,10 @@ msgstr "Fechas importantes"
 #: seahub/institutions/templates/institutions/info.html:23
 #: seahub/institutions/templates/institutions/user_info.html:22
 #: seahub/templates/js/sysadmin-templates.html:24
-#: seahub/templates/js/sysadmin-templates.html:134
-#: seahub/templates/js/sysadmin-templates.html:521
-#: seahub/templates/js/templates.html:161
-#: seahub/templates/js/templates.html:748
-#: seahub/templates/snippets/repo_share_form.html:7
+#: seahub/templates/js/sysadmin-templates.html:140
+#: seahub/templates/js/sysadmin-templates.html:527
+#: seahub/templates/js/templates.html:172
+#: seahub/templates/js/templates.html:765
 #: seahub/templates/sysadmin/base.html:32
 #: seahub/templates/sysadmin/sys_org_info_group.html:9
 #: seahub/templates/sysadmin/sys_org_info_library.html:9
@@ -186,19 +236,19 @@ msgid "Email or Username"
 msgstr "Email o Nombre de usuario"
 
 #: seahub/auth/forms.py:24 seahub/auth/forms.py:196
-#: seahub/base/accounts.py:556
+#: seahub/base/accounts.py:560
 #: seahub/invitations/templates/invitations/token_view.html:13
 #: seahub/templates/file_edit.html:129
 #: seahub/templates/js/lib-op-popups.html:117
-#: seahub/templates/js/templates.html:21
-#: seahub/templates/js/templates.html:451
-#: seahub/templates/js/templates.html:506
+#: seahub/templates/js/templates.html:31
+#: seahub/templates/js/templates.html:462
+#: seahub/templates/js/templates.html:517
 #: seahub/templates/registration/login.html:12
 #: seahub/templates/registration/registration_form.html:24
 #: seahub/templates/snippets/file_share_popup.html:18
 #: seahub/templates/sysadmin/sudo_mode.html:10
 #: seahub/templates/sysadmin/sys_org_admin.html:32
-#: seahub/templates/sysadmin/sys_useradmin.html:42
+#: seahub/templates/sysadmin/sys_useradmin.html:48
 msgid "Password"
 msgstr "Contraseña "
 
@@ -210,7 +260,7 @@ msgstr "Por favor, ingresa un email/nombre de usuario y contraseña correctos. N
 
 #: seahub/auth/forms.py:64
 msgid "This account is inactive."
-msgstr "Esta cuenta está inactiva."
+msgstr "Esta cuenta se encuentra inactiva."
 
 #: seahub/auth/forms.py:69
 msgid ""
@@ -252,7 +302,7 @@ msgid "New password confirmation"
 msgstr "Confirmación de nueva contraseña"
 
 #: seahub/auth/forms.py:165 seahub/auth/forms.py:208
-#: seahub/base/accounts.py:609
+#: seahub/base/accounts.py:616
 msgid "The two password fields didn't match."
 msgstr "Las contraseñas no coinciden"
 
@@ -264,7 +314,7 @@ msgstr "Contraseña anterior"
 msgid "Your old password was entered incorrectly. Please enter it again."
 msgstr "La contraseña anterior ingresada es incorrecta. Por favor, ingrésela nuevamente."
 
-#: seahub/auth/forms.py:197 seahub/base/accounts.py:558
+#: seahub/auth/forms.py:197 seahub/base/accounts.py:562
 msgid "Password (again)"
 msgstr "Contraseña (de nuevo)"
 
@@ -372,44 +422,49 @@ msgstr "Avatar actualizado con éxito."
 msgid "Successfully deleted the requested avatars."
 msgstr "Avatares borrados con éxito."
 
-#: seahub/base/accounts.py:279
+#: seahub/base/accounts.py:283
 #, python-format
 msgid "Account %(account)s froze on %(site)s."
 msgstr "Cuenta %(account)s inmovilizada en %(site)s."
 
-#: seahub/base/accounts.py:547
+#: seahub/base/accounts.py:551
 msgid "Email address"
 msgstr "Dirección de correo"
 
-#: seahub/base/accounts.py:552
+#: seahub/base/accounts.py:556
 msgid "Username"
 msgstr "Nombre de usuario"
 
-#: seahub/base/accounts.py:553
+#: seahub/base/accounts.py:557
 msgid "This value must be of length 40"
 msgstr "Debe tener una longitud de 40"
 
-#: seahub/base/accounts.py:569
+#: seahub/base/accounts.py:572 seahub/forms.py:29
+#: seahub/views/sysadmin.py:1830
+msgid "The number of users exceeds the limit."
+msgstr "El número de usuarios excede el límite"
+
+#: seahub/base/accounts.py:576
 msgid "Enter a valid email address."
 msgstr "Ingresa una dirección de correo válida."
 
-#: seahub/base/accounts.py:579
+#: seahub/base/accounts.py:586
 msgid "Invalid user id."
 msgstr "ID de usuario inválido"
 
-#: seahub/base/accounts.py:630
+#: seahub/base/accounts.py:637
 msgid "name"
 msgstr "nombre"
 
-#: seahub/base/accounts.py:633
+#: seahub/base/accounts.py:640
 msgid "department"
 msgstr "departamento"
 
-#: seahub/base/accounts.py:636
+#: seahub/base/accounts.py:643
 msgid "telephone"
 msgstr "teléfono"
 
-#: seahub/base/accounts.py:639
+#: seahub/base/accounts.py:646
 msgid "note"
 msgstr "nota"
 
@@ -478,7 +533,7 @@ msgid "Recovered deleted directory"
 msgstr "Carpeta borrada recuperada"
 
 #: seahub/base/templatetags/seahub_tags.py:175
-#: seahub/base/templatetags/seahub_tags.py:244 seahub/views/ajax.py:1532
+#: seahub/base/templatetags/seahub_tags.py:244 seahub/views/ajax.py:1664
 msgid "Changed library name or description"
 msgstr "Descripción o nombre de la biblioteca modificados."
 
@@ -522,64 +577,62 @@ msgstr[0] "Hace menos de un segundo"
 msgstr[1] "Hace %(seconds)d segundos"
 
 #: seahub/base/templatetags/seahub_tags.py:469
-#: seahub/institutions/templates/institutions/user_info.html:77
-#: seahub/templates/js/sysadmin-templates.html:580
-#: seahub/templates/js/sysadmin-templates.html:589
-#: seahub/templates/js/sysadmin-templates.html:592
-#: seahub/templates/js/sysadmin-templates.html:628
-#: seahub/templates/js/sysadmin-templates.html:655
-#: seahub/templates/js/templates.html:10
-#: seahub/templates/js/templates.html:557
-#: seahub/templates/js/templates.html:584
-#: seahub/templates/js/templates.html:781
-#: seahub/templates/js/templates.html:790
-#: seahub/templates/js/templates.html:793
-#: seahub/templates/js/templates.html:826
-#: seahub/templates/js/templates.html:852
-#: seahub/templates/js/templates.html:922
-#: seahub/templates/js/templates.html:929
-#: seahub/templates/js/templates.html:1320
-#: seahub/templates/js/templates.html:1366
-#: seahub/templates/js/templates.html:1405
-#: seahub/templates/js/templates.html:1408
-#: seahub/templates/js/templates.html:1415
-#: seahub/templates/js/templates.html:1540
-#: seahub/templates/js/templates.html:1543
-#: seahub/templates/js/templates.html:1550
-#: seahub/templates/snippets/repo_share_form.html:25
+#: seahub/institutions/templates/institutions/user_info.html:80
+#: seahub/templates/js/sysadmin-templates.html:602
+#: seahub/templates/js/sysadmin-templates.html:611
+#: seahub/templates/js/sysadmin-templates.html:614
+#: seahub/templates/js/sysadmin-templates.html:650
+#: seahub/templates/js/sysadmin-templates.html:677
+#: seahub/templates/js/templates.html:20
+#: seahub/templates/js/templates.html:568
+#: seahub/templates/js/templates.html:595
+#: seahub/templates/js/templates.html:798
+#: seahub/templates/js/templates.html:807
+#: seahub/templates/js/templates.html:810
+#: seahub/templates/js/templates.html:843
+#: seahub/templates/js/templates.html:869
+#: seahub/templates/js/templates.html:939
+#: seahub/templates/js/templates.html:946
+#: seahub/templates/js/templates.html:1345
+#: seahub/templates/js/templates.html:1391
+#: seahub/templates/js/templates.html:1430
+#: seahub/templates/js/templates.html:1433
+#: seahub/templates/js/templates.html:1440
+#: seahub/templates/js/templates.html:1565
+#: seahub/templates/js/templates.html:1568
+#: seahub/templates/js/templates.html:1575
 #: seahub/templates/sysadmin/sys_admin_group_info.html:40
 #: seahub/templates/sysadmin/sys_org_info_library.html:29
-#: seahub/templates/sysadmin/userinfo.html:87
-#: seahub/templates/sysadmin/userinfo.html:138
+#: seahub/templates/sysadmin/userinfo.html:129
+#: seahub/templates/sysadmin/userinfo.html:180
 msgid "Read-Write"
 msgstr "Lectura / Escritura"
 
 #: seahub/base/templatetags/seahub_tags.py:471
-#: seahub/templates/js/sysadmin-templates.html:582
-#: seahub/templates/js/sysadmin-templates.html:590
-#: seahub/templates/js/sysadmin-templates.html:593
-#: seahub/templates/js/sysadmin-templates.html:629
-#: seahub/templates/js/sysadmin-templates.html:656
-#: seahub/templates/js/templates.html:11
-#: seahub/templates/js/templates.html:558
-#: seahub/templates/js/templates.html:585
-#: seahub/templates/js/templates.html:783
-#: seahub/templates/js/templates.html:791
-#: seahub/templates/js/templates.html:794
-#: seahub/templates/js/templates.html:827
-#: seahub/templates/js/templates.html:853
-#: seahub/templates/js/templates.html:930
-#: seahub/templates/js/templates.html:1321
-#: seahub/templates/js/templates.html:1367
-#: seahub/templates/js/templates.html:1409
-#: seahub/templates/js/templates.html:1412
-#: seahub/templates/js/templates.html:1416
-#: seahub/templates/js/templates.html:1544
-#: seahub/templates/js/templates.html:1547
-#: seahub/templates/js/templates.html:1551
-#: seahub/templates/snippets/repo_share_form.html:26
+#: seahub/templates/js/sysadmin-templates.html:604
+#: seahub/templates/js/sysadmin-templates.html:612
+#: seahub/templates/js/sysadmin-templates.html:615
+#: seahub/templates/js/sysadmin-templates.html:651
+#: seahub/templates/js/sysadmin-templates.html:678
+#: seahub/templates/js/templates.html:21
+#: seahub/templates/js/templates.html:569
+#: seahub/templates/js/templates.html:596
+#: seahub/templates/js/templates.html:800
+#: seahub/templates/js/templates.html:808
+#: seahub/templates/js/templates.html:811
+#: seahub/templates/js/templates.html:844
+#: seahub/templates/js/templates.html:870
+#: seahub/templates/js/templates.html:947
+#: seahub/templates/js/templates.html:1346
+#: seahub/templates/js/templates.html:1392
+#: seahub/templates/js/templates.html:1434
+#: seahub/templates/js/templates.html:1437
+#: seahub/templates/js/templates.html:1441
+#: seahub/templates/js/templates.html:1569
+#: seahub/templates/js/templates.html:1572
+#: seahub/templates/js/templates.html:1576
 #: seahub/templates/sysadmin/sys_admin_group_info.html:38
-#: seahub/templates/sysadmin/userinfo.html:136
+#: seahub/templates/sysadmin/userinfo.html:178
 msgid "Read-Only"
 msgstr "Sólo lectura"
 
@@ -623,7 +676,6 @@ msgstr "Se requiere correo."
 
 #: seahub/contacts/templates/contacts/contact_list.html:4
 #: seahub/contacts/templates/contacts/contact_list.html:10
-#: seahub/templates/snippets/repo_share_form.html:8
 msgid "Contacts"
 msgstr "Contactos"
 
@@ -641,35 +693,36 @@ msgstr "E-Mail"
 #: seahub/group/templates/group/group_wiki.html:91
 #: seahub/group/templates/group/group_wiki_pages.html:30
 #: seahub/institutions/templates/institutions/info.html:10
-#: seahub/institutions/templates/institutions/user_info.html:66
-#: seahub/institutions/templates/institutions/user_info.html:112
+#: seahub/institutions/templates/institutions/user_info.html:69
+#: seahub/institutions/templates/institutions/user_info.html:115
 #: seahub/institutions/templates/institutions/useradmin.html:16
 #: seahub/institutions/templates/institutions/useradmin_search.html:18
 #: seahub/message/templates/message/all_msg_list.html:22
 #: seahub/templates/js/lib-op-popups.html:6
-#: seahub/templates/js/sysadmin-templates.html:302
-#: seahub/templates/js/sysadmin-templates.html:325
-#: seahub/templates/js/sysadmin-templates.html:335
-#: seahub/templates/js/sysadmin-templates.html:385
-#: seahub/templates/js/sysadmin-templates.html:409
-#: seahub/templates/js/sysadmin-templates.html:450
-#: seahub/templates/js/sysadmin-templates.html:528
-#: seahub/templates/js/templates.html:5 seahub/templates/js/templates.html:191
-#: seahub/templates/js/templates.html:884
-#: seahub/templates/js/templates.html:893
-#: seahub/templates/js/templates.html:907
-#: seahub/templates/js/templates.html:996
-#: seahub/templates/js/templates.html:1116
-#: seahub/templates/js/templates.html:1124
-#: seahub/templates/js/templates.html:1232
-#: seahub/templates/js/templates.html:1249
-#: seahub/templates/js/templates.html:1512
-#: seahub/templates/js/templates.html:1567
-#: seahub/templates/js/templates.html:1599
-#: seahub/templates/js/templates.html:1632 seahub/templates/libraries.html:91
+#: seahub/templates/js/sysadmin-templates.html:308
+#: seahub/templates/js/sysadmin-templates.html:331
+#: seahub/templates/js/sysadmin-templates.html:341
+#: seahub/templates/js/sysadmin-templates.html:391
+#: seahub/templates/js/sysadmin-templates.html:415
+#: seahub/templates/js/sysadmin-templates.html:456
+#: seahub/templates/js/sysadmin-templates.html:537
+#: seahub/templates/js/sysadmin-templates.html:559
+#: seahub/templates/js/templates.html:5 seahub/templates/js/templates.html:202
+#: seahub/templates/js/templates.html:901
+#: seahub/templates/js/templates.html:910
+#: seahub/templates/js/templates.html:924
+#: seahub/templates/js/templates.html:1013
+#: seahub/templates/js/templates.html:1133
+#: seahub/templates/js/templates.html:1141
+#: seahub/templates/js/templates.html:1254
+#: seahub/templates/js/templates.html:1273
+#: seahub/templates/js/templates.html:1537
+#: seahub/templates/js/templates.html:1592
+#: seahub/templates/js/templates.html:1626
+#: seahub/templates/js/templates.html:1661 seahub/templates/libraries.html:91
 #: seahub/templates/registration/registration_form.html:18
-#: seahub/templates/repo_dir_recycle_view.html:33
-#: seahub/templates/repo_history_view.html:57
+#: seahub/templates/repo_dir_recycle_view.html:44
+#: seahub/templates/repo_history_view.html:58
 #: seahub/templates/sysadmin/org_admin_table.html:4
 #: seahub/templates/sysadmin/sys_admin_group_info.html:27
 #: seahub/templates/sysadmin/sys_inst_admin.html:18
@@ -683,16 +736,16 @@ msgstr "E-Mail"
 #: seahub/templates/sysadmin/sys_terms_admin.html:55
 #: seahub/templates/sysadmin/useradmin_table.html:5
 #: seahub/templates/sysadmin/useradmin_table.html:9
-#: seahub/templates/sysadmin/userinfo.html:76
-#: seahub/templates/sysadmin/userinfo.html:125
-#: seahub/templates/sysadmin/userinfo.html:163
-#: seahub/templates/sysadmin/userinfo.html:210
+#: seahub/templates/sysadmin/userinfo.html:118
+#: seahub/templates/sysadmin/userinfo.html:167
+#: seahub/templates/sysadmin/userinfo.html:205
+#: seahub/templates/sysadmin/userinfo.html:252
 #: seahub/templates/view_shared_dir.html:54
 #: seahub/templates/wiki/personal_wiki.html:43
 #: seahub/templates/wiki/personal_wiki.html:85
 #: seahub/templates/wiki/personal_wiki_pages.html:28
-#: seahub/views/sysadmin.py:275 seahub/views/sysadmin.py:279
-#: seahub/views/sysadmin.py:1018
+#: seahub/views/sysadmin.py:278 seahub/views/sysadmin.py:282
+#: seahub/views/sysadmin.py:1054
 msgid "Name"
 msgstr "Nombre"
 
@@ -702,15 +755,15 @@ msgid "Note"
 msgstr "Nota"
 
 #: seahub/contacts/templates/contacts/contact_list.html:20
-#: seahub/institutions/templates/institutions/user_info.html:69
-#: seahub/institutions/templates/institutions/user_info.html:115
+#: seahub/institutions/templates/institutions/user_info.html:72
+#: seahub/institutions/templates/institutions/user_info.html:118
 #: seahub/institutions/templates/institutions/useradmin.html:20
 #: seahub/institutions/templates/institutions/useradmin_search.html:22
 #: seahub/notifications/templates/notifications/notification_list.html:21
-#: seahub/templates/file_revisions.html:45
-#: seahub/templates/repo_dir_recycle_view.html:36
-#: seahub/templates/repo_history.html:19
-#: seahub/templates/repo_history_view.html:59
+#: seahub/templates/file_revisions.html:57
+#: seahub/templates/repo_dir_recycle_view.html:47
+#: seahub/templates/repo_history.html:31
+#: seahub/templates/repo_history_view.html:60
 #: seahub/templates/sysadmin/org_admin_table.html:8
 #: seahub/templates/sysadmin/sys_admin_group_info.html:30
 #: seahub/templates/sysadmin/sys_inst_admin.html:29
@@ -721,12 +774,12 @@ msgstr "Nota"
 #: seahub/templates/sysadmin/sys_org_info_library.html:22
 #: seahub/templates/sysadmin/sys_org_info_user.html:20
 #: seahub/templates/sysadmin/sys_publink_admin.html:16
-#: seahub/templates/sysadmin/sys_user_admin_ldap_imported.html:30
+#: seahub/templates/sysadmin/sys_user_admin_ldap_imported.html:31
 #: seahub/templates/sysadmin/sys_virus_scan_records.html:14
 #: seahub/templates/sysadmin/useradmin_table.html:14
-#: seahub/templates/sysadmin/userinfo.html:79
-#: seahub/templates/sysadmin/userinfo.html:167
-#: seahub/templates/sysadmin/userinfo.html:213
+#: seahub/templates/sysadmin/userinfo.html:121
+#: seahub/templates/sysadmin/userinfo.html:209
+#: seahub/templates/sysadmin/userinfo.html:255
 #: seahub/templates/view_shared_dir.html:57
 msgid "Operations"
 msgstr "Operaciones"
@@ -734,18 +787,20 @@ msgstr "Operaciones"
 #: seahub/contacts/templates/contacts/contact_list.html:29
 #: seahub/group/templates/group/group_wiki.html:22
 #: seahub/institutions/templates/institutions/useradmin.html:37
-#: seahub/templates/js/sysadmin-templates.html:585
-#: seahub/templates/js/templates.html:786
-#: seahub/templates/js/templates.html:1153
-#: seahub/templates/js/templates.html:1160
-#: seahub/templates/js/templates.html:1406
-#: seahub/templates/js/templates.html:1413
-#: seahub/templates/js/templates.html:1541
-#: seahub/templates/js/templates.html:1548
+#: seahub/templates/js/sysadmin-templates.html:607
+#: seahub/templates/js/templates.html:803
+#: seahub/templates/js/templates.html:1170
+#: seahub/templates/js/templates.html:1177
+#: seahub/templates/js/templates.html:1431
+#: seahub/templates/js/templates.html:1438
+#: seahub/templates/js/templates.html:1566
+#: seahub/templates/js/templates.html:1573
 #: seahub/templates/sysadmin/sys_org_info_user.html:33
-#: seahub/templates/sysadmin/sys_user_admin_ldap_imported.html:44
+#: seahub/templates/sysadmin/sys_user_admin_ldap_imported.html:48
 #: seahub/templates/sysadmin/useradmin_table.html:39
 #: seahub/templates/sysadmin/useradmin_table.html:57
+#: seahub/templates/sysadmin/userinfo.html:53
+#: seahub/templates/sysadmin/userinfo.html:65
 #: seahub/templates/view_file_markdown.html:17
 #: seahub/templates/view_file_text.html:22
 msgid "Edit"
@@ -760,24 +815,24 @@ msgstr "Editar"
 #: seahub/notifications/templates/notifications/notification_list.html:33
 #: seahub/profile/templates/profile/set_profile.html:137
 #: seahub/profile/templates/profile/set_profile.html:139
-#: seahub/templates/js/sysadmin-templates.html:373
-#: seahub/templates/js/sysadmin-templates.html:435
-#: seahub/templates/js/sysadmin-templates.html:500
-#: seahub/templates/js/sysadmin-templates.html:552
-#: seahub/templates/js/sysadmin-templates.html:598
-#: seahub/templates/js/templates.html:43
-#: seahub/templates/js/templates.html:101
-#: seahub/templates/js/templates.html:221
-#: seahub/templates/js/templates.html:304
-#: seahub/templates/js/templates.html:385
-#: seahub/templates/js/templates.html:411
-#: seahub/templates/js/templates.html:481
-#: seahub/templates/js/templates.html:521
-#: seahub/templates/js/templates.html:799
-#: seahub/templates/js/templates.html:1031
-#: seahub/templates/js/templates.html:1174
-#: seahub/templates/js/templates.html:1179
-#: seahub/templates/js/templates.html:1421
+#: seahub/templates/js/sysadmin-templates.html:379
+#: seahub/templates/js/sysadmin-templates.html:441
+#: seahub/templates/js/sysadmin-templates.html:506
+#: seahub/templates/js/sysadmin-templates.html:574
+#: seahub/templates/js/sysadmin-templates.html:620
+#: seahub/templates/js/templates.html:50
+#: seahub/templates/js/templates.html:112
+#: seahub/templates/js/templates.html:232
+#: seahub/templates/js/templates.html:315
+#: seahub/templates/js/templates.html:396
+#: seahub/templates/js/templates.html:422
+#: seahub/templates/js/templates.html:492
+#: seahub/templates/js/templates.html:532
+#: seahub/templates/js/templates.html:816
+#: seahub/templates/js/templates.html:1048
+#: seahub/templates/js/templates.html:1191
+#: seahub/templates/js/templates.html:1196
+#: seahub/templates/js/templates.html:1446
 #: seahub/templates/snippets/file_share_popup.html:37
 #: seahub/templates/sysadmin/org_admin_table.html:25
 #: seahub/templates/sysadmin/sys_admin_group_info.html:52
@@ -785,11 +840,11 @@ msgstr "Editar"
 #: seahub/templates/sysadmin/sys_org_info_library.html:42
 #: seahub/templates/sysadmin/sys_org_info_user.html:48
 #: seahub/templates/sysadmin/sys_terms_admin.html:40
-#: seahub/templates/sysadmin/sys_user_admin_ldap_imported.html:59
+#: seahub/templates/sysadmin/sys_user_admin_ldap_imported.html:71
 #: seahub/templates/sysadmin/sys_virus_scan_records.html:23
-#: seahub/templates/sysadmin/useradmin_table.html:85
-#: seahub/templates/sysadmin/userinfo.html:106
-#: seahub/templates/sysadmin/userinfo.html:220
+#: seahub/templates/sysadmin/useradmin_table.html:95
+#: seahub/templates/sysadmin/userinfo.html:148
+#: seahub/templates/sysadmin/userinfo.html:262
 #: seahub/templates/view_file_base.html:143
 #: seahub/templates/view_shared_upload_link.html:86
 msgid "Delete"
@@ -813,24 +868,24 @@ msgstr "Agrega contactos para compartir bibliotecas y enviar enlaces de descarga
 #: seahub/institutions/templates/institutions/useradmin_search.html:18
 #: seahub/invitations/templates/invitations/token_view.html:10
 #: seahub/share/templates/share/share_link_audit.html:9
-#: seahub/templates/js/templates.html:1117
-#: seahub/templates/js/templates.html:1125
-#: seahub/templates/js/templates.html:1695
-#: seahub/templates/js/templates.html:1727
+#: seahub/templates/js/templates.html:1134
+#: seahub/templates/js/templates.html:1142
+#: seahub/templates/js/templates.html:1724
+#: seahub/templates/js/templates.html:1756
 #: seahub/templates/registration/registration_form.html:22
 #: seahub/templates/sysadmin/sys_inst_info_admins.html:15
 #: seahub/templates/sysadmin/sys_inst_info_user.html:15
 #: seahub/templates/sysadmin/sys_inst_search_user.html:8
 #: seahub/templates/sysadmin/sys_inst_search_user.html:16
 #: seahub/templates/sysadmin/sys_org_info_user.html:16
-#: seahub/templates/sysadmin/sys_user_admin_ldap_imported.html:26
+#: seahub/templates/sysadmin/sys_user_admin_ldap_imported.html:27
 #: seahub/templates/sysadmin/sys_useradmin.html:33
 #: seahub/templates/sysadmin/sys_useradmin_ldap.html:24
 #: seahub/templates/sysadmin/user_search.html:10
 #: seahub/templates/sysadmin/useradmin_table.html:5
 #: seahub/templates/sysadmin/useradmin_table.html:9
-#: seahub/templates/sysadmin/userinfo.html:36 seahub/views/sysadmin.py:275
-#: seahub/views/sysadmin.py:279
+#: seahub/templates/sysadmin/userinfo.html:36 seahub/views/sysadmin.py:278
+#: seahub/views/sysadmin.py:282
 msgid "Email"
 msgstr "Email"
 
@@ -845,7 +900,7 @@ msgstr "Nota (opcional)"
 #: seahub/group/templates/group/group_wiki.html:61
 #: seahub/group/templates/group/group_wiki.html:94
 #: seahub/group/templates/group/group_wiki_pages.html:33
-#: seahub/institutions/templates/institutions/user_info.html:57
+#: seahub/institutions/templates/institutions/user_info.html:60
 #: seahub/institutions/templates/institutions/useradmin_search.html:11
 #: seahub/invitations/templates/invitations/token_view.html:17
 #: seahub/message/templates/message/all_msg_list.html:47
@@ -867,56 +922,60 @@ msgstr "Nota (opcional)"
 #: seahub/templates/js/lib-op-popups.html:76
 #: seahub/templates/js/lib-op-popups.html:118
 #: seahub/templates/js/lib-op-popups.html:137
-#: seahub/templates/js/sysadmin-templates.html:327
-#: seahub/templates/js/sysadmin-templates.html:515
-#: seahub/templates/js/sysadmin-templates.html:562
-#: seahub/templates/js/sysadmin-templates.html:632
-#: seahub/templates/js/sysadmin-templates.html:659
-#: seahub/templates/js/templates.html:28
-#: seahub/templates/js/templates.html:488
-#: seahub/templates/js/templates.html:528
-#: seahub/templates/js/templates.html:561
-#: seahub/templates/js/templates.html:588
-#: seahub/templates/js/templates.html:743
-#: seahub/templates/js/templates.html:830
-#: seahub/templates/js/templates.html:856
-#: seahub/templates/js/templates.html:912
-#: seahub/templates/js/templates.html:1082
-#: seahub/templates/js/templates.html:1091
+#: seahub/templates/js/sysadmin-templates.html:333
+#: seahub/templates/js/sysadmin-templates.html:521
+#: seahub/templates/js/sysadmin-templates.html:565
+#: seahub/templates/js/sysadmin-templates.html:584
+#: seahub/templates/js/sysadmin-templates.html:654
+#: seahub/templates/js/sysadmin-templates.html:681
+#: seahub/templates/js/templates.html:38
+#: seahub/templates/js/templates.html:499
+#: seahub/templates/js/templates.html:539
+#: seahub/templates/js/templates.html:572
+#: seahub/templates/js/templates.html:599
+#: seahub/templates/js/templates.html:760
+#: seahub/templates/js/templates.html:847
+#: seahub/templates/js/templates.html:873
+#: seahub/templates/js/templates.html:929
 #: seahub/templates/js/templates.html:1099
-#: seahub/templates/js/templates.html:1211
-#: seahub/templates/js/templates.html:1285
-#: seahub/templates/js/templates.html:1325
-#: seahub/templates/js/templates.html:1338
-#: seahub/templates/js/templates.html:1371
-#: seahub/templates/js/templates.html:1384
-#: seahub/templates/js/templates.html:1435
-#: seahub/templates/js/templates.html:1730 seahub/templates/libraries.html:94
+#: seahub/templates/js/templates.html:1108
+#: seahub/templates/js/templates.html:1116
+#: seahub/templates/js/templates.html:1228
+#: seahub/templates/js/templates.html:1310
+#: seahub/templates/js/templates.html:1350
+#: seahub/templates/js/templates.html:1363
+#: seahub/templates/js/templates.html:1396
+#: seahub/templates/js/templates.html:1409
+#: seahub/templates/js/templates.html:1460
+#: seahub/templates/js/templates.html:1759 seahub/templates/libraries.html:94
 #: seahub/templates/libraries.html:157
 #: seahub/templates/registration/password_change_form.html:24
 #: seahub/templates/registration/password_reset_confirm.html:19
 #: seahub/templates/registration/password_reset_form.html:13
-#: seahub/templates/repo_dir_recycle_view.html:62
+#: seahub/templates/repo_dir_recycle_view.html:73
 #: seahub/templates/share_access_validation.html:14
 #: seahub/templates/shared_file_view.html:61
 #: seahub/templates/snippets/file_share_popup.html:48
-#: seahub/templates/snippets/repo_share_form.html:30
 #: seahub/templates/snippets/search_form.html:80
 #: seahub/templates/snippets/web_settings_form.html:12
 #: seahub/templates/sysadmin/repo_transfer_form.html:8
 #: seahub/templates/sysadmin/sys_inst_admin.html:21
 #: seahub/templates/sysadmin/sys_inst_search_user.html:9
 #: seahub/templates/sysadmin/sys_org_admin.html:38
-#: seahub/templates/sysadmin/sys_org_info_base.html:36
+#: seahub/templates/sysadmin/sys_org_info_base.html:39
 #: seahub/templates/sysadmin/sys_org_info_setting.html:20
 #: seahub/templates/sysadmin/sys_org_info_setting.html:29
 #: seahub/templates/sysadmin/sys_org_search.html:12
 #: seahub/templates/sysadmin/sys_terms_admin.html:71
-#: seahub/templates/sysadmin/sys_useradmin.html:51
-#: seahub/templates/sysadmin/sys_useradmin.html:59
+#: seahub/templates/sysadmin/sys_user_admin_ldap_imported.html:86
+#: seahub/templates/sysadmin/sys_useradmin.html:57
+#: seahub/templates/sysadmin/sys_useradmin.html:68
 #: seahub/templates/sysadmin/sys_useradmin_admins.html:37
 #: seahub/templates/sysadmin/user_search.html:11
-#: seahub/templates/sysadmin/userinfo.html:67
+#: seahub/templates/sysadmin/useradmin_table.html:117
+#: seahub/templates/sysadmin/userinfo.html:91
+#: seahub/templates/sysadmin/userinfo.html:98
+#: seahub/templates/sysadmin/userinfo.html:109
 #: seahub/templates/view_file_base.html:128
 #: seahub/templates/wiki/personal_wiki.html:48
 #: seahub/templates/wiki/personal_wiki.html:58
@@ -937,8 +996,8 @@ msgstr "Editar Contacto"
 #: seahub/share/templates/share/share_link_audit.html:70
 #: seahub/templates/base.html:142 seahub/templates/decrypt_repo_form.html:47
 #: seahub/templates/file_edit.html:443
-#: seahub/templates/repo_dir_recycle_view.html:121
-#: seahub/templates/repo_dir_recycle_view.html:149
+#: seahub/templates/repo_dir_recycle_view.html:132
+#: seahub/templates/repo_dir_recycle_view.html:160
 #: seahub/templates/snippets/add_file_js.html:23
 #: seahub/templates/snippets/office_convert_js.html:100
 #: seahub/templates/snippets/shared_link_js.html:107
@@ -947,9 +1006,12 @@ msgstr "Editar Contacto"
 #: seahub/templates/sysadmin/sys_org_admin.html:126
 #: seahub/templates/sysadmin/sys_org_set_quota_js.html:35
 #: seahub/templates/sysadmin/sys_terms_admin.html:117
-#: seahub/templates/sysadmin/sys_useradmin.html:194
+#: seahub/templates/sysadmin/sys_useradmin.html:207
 #: seahub/templates/sysadmin/sys_useradmin_admins.html:85
-#: seahub/templates/sysadmin/userinfo.html:291
+#: seahub/templates/sysadmin/useradmin_js.html:126
+#: seahub/templates/sysadmin/userinfo.html:344
+#: seahub/templates/sysadmin/userinfo.html:381
+#: seahub/templates/sysadmin/userinfo.html:424
 #: seahub/templates/view_file_base.html:405
 #: seahub/templates/view_file_base.html:448
 #: seahub/templates/view_file_base.html:526
@@ -976,7 +1038,7 @@ msgstr "Borrar Contacto"
 #: seahub/templates/sysadmin/sys_org_search.html:28
 #: seahub/templates/sysadmin/sys_terms_admin.html:143
 #: seahub/templates/sysadmin/useradmin_js.html:4
-#: seahub/templates/sysadmin/userinfo.html:300
+#: seahub/templates/sysadmin/userinfo.html:433
 #, python-format
 msgid "Are you sure you want to delete %s ?"
 msgstr "¿Seguro que quieres borrar %s ?"
@@ -1015,93 +1077,81 @@ msgstr "Editado con éxito %s"
 msgid "Successfully Deleted %s"
 msgstr "Borrado con éxito %s"
 
-#: seahub/forms.py:27 seahub/invitations/views.py:29
+#: seahub/forms.py:34 seahub/invitations/views.py:29
 msgid "A user with this email already exists."
 msgstr "Ya existe un usuario con este correo"
 
-#: seahub/forms.py:41
+#: seahub/forms.py:58
 msgid "The two passwords didn't match."
 msgstr "Las contraseñas no coinciden"
 
-#: seahub/forms.py:50 seahub/group/forms.py:58 seahub/wiki/forms.py:17
+#: seahub/forms.py:67 seahub/group/forms.py:58 seahub/wiki/forms.py:17
 msgid "Name can't be empty"
 msgstr "El nombre no puede estar vacío"
 
-#: seahub/forms.py:51 seahub/group/forms.py:59 seahub/wiki/forms.py:18
+#: seahub/forms.py:68 seahub/group/forms.py:59 seahub/wiki/forms.py:18
 msgid "Name is too long (maximum is 255 characters)"
 msgstr "El nombre es demasiado extenso (máximo 255 caracteres)"
 
-#: seahub/forms.py:54 seahub/group/forms.py:62 seahub/wiki/forms.py:21
+#: seahub/forms.py:71 seahub/group/forms.py:62 seahub/wiki/forms.py:21
 msgid "Description can't be empty"
 msgstr "La descripción no puede estar vacía"
 
-#: seahub/forms.py:55 seahub/group/forms.py:63 seahub/wiki/forms.py:22
+#: seahub/forms.py:72 seahub/group/forms.py:63 seahub/wiki/forms.py:22
 msgid "Description is too long (maximum is 100 characters)"
 msgstr "La descripión es demasiado extensa (máximo 100 caracteres)"
 
-#: seahub/forms.py:65 seahub/forms.py:152
+#: seahub/forms.py:82 seahub/forms.py:168
 #, python-format
 msgid "Name %s is not valid"
 msgstr "El nombre %s no es válido"
 
-#: seahub/forms.py:79 seahub/message/views.py:178 seahub/views/ajax.py:406
-#: seahub/views/ajax.py:567 seahub/views/ajax.py:785 seahub/views/ajax.py:928
-#: seahub/views/ajax.py:957 seahub/views/ajax.py:1086
-#: seahub/views/ajax.py:1090 seahub/views/ajax.py:1094
-#: seahub/views/ajax.py:1382 seahub/views/ajax.py:1406
-#: seahub/views/ajax.py:1519 seahub/views/ajax.py:1626
-#: seahub/views/ajax.py:1683 seahub/views/ajax.py:1824
-#: seahub/views/file.py:1534 seahub/views/sysadmin.py:1414
-#: seahub/views/sysadmin.py:1432
+#: seahub/forms.py:96 seahub/message/views.py:178 seahub/views/ajax.py:435
+#: seahub/views/ajax.py:588 seahub/views/ajax.py:612 seahub/views/ajax.py:875
+#: seahub/views/ajax.py:1060 seahub/views/ajax.py:1089
+#: seahub/views/ajax.py:1218 seahub/views/ajax.py:1222
+#: seahub/views/ajax.py:1226 seahub/views/ajax.py:1514
+#: seahub/views/ajax.py:1538 seahub/views/ajax.py:1651
+#: seahub/views/ajax.py:1758 seahub/views/ajax.py:1826
+#: seahub/views/ajax.py:1972 seahub/views/file.py:1546
+#: seahub/views/sysadmin.py:1450 seahub/views/sysadmin.py:1468
 msgid "Argument missing"
 msgstr "Argumento faltante"
 
-#: seahub/forms.py:93
+#: seahub/forms.py:110
 msgid "Oldname is required"
 msgstr "Se requiere el nombre"
 
-#: seahub/forms.py:96 seahub/forms.py:117
+#: seahub/forms.py:113 seahub/forms.py:134
 msgid "It's too long."
 msgstr "Es demasiado largo."
 
-#: seahub/forms.py:97 seahub/forms.py:118
+#: seahub/forms.py:114 seahub/forms.py:135
 msgid "It's required."
 msgstr "Se requiere."
 
-#: seahub/forms.py:104 seahub/forms.py:125
+#: seahub/forms.py:121 seahub/forms.py:142
 #, python-format
 msgid "Name \"%s\" is not valid"
 msgstr "El nombre \"%s\" no es válido."
 
-#: seahub/forms.py:136 seahub/share/forms.py:20 seahub/share/forms.py:33
-msgid "Email is required"
-msgstr "Dirección de correo requerida"
-
-#: seahub/forms.py:138
-msgid "Space quota can't be empty"
-msgstr "La cuota para almacenamiento no puede estar vacía"
-
-#: seahub/forms.py:139
-msgid "Space quota is too low (minimum value is 0)"
-msgstr "La cuota para almacenamiento es muy pequeña (el valor mínimo es 0)"
-
-#: seahub/forms.py:145
+#: seahub/forms.py:161
 msgid "Library name is required"
 msgstr "El nombre de la biblioteca es obligatorio."
 
-#: seahub/forms.py:147
+#: seahub/forms.py:163
 msgid "Please enter a number"
 msgstr "Por favor, ingresa un número"
 
-#: seahub/forms.py:167 seahub/templates/snippets/repo_create_js.html:34
+#: seahub/forms.py:183 seahub/templates/snippets/repo_create_js.html:34
 msgid "Name is required"
 msgstr "Nombre requerido"
 
-#: seahub/forms.py:168
+#: seahub/forms.py:184
 msgid "Please enter a valid number"
 msgstr "Por favor, ingrese un número válido"
 
-#: seahub/forms.py:169
+#: seahub/forms.py:185
 msgid "Text is required"
 msgstr "Se requiere texto."
 
@@ -1235,8 +1285,8 @@ msgid "Create Wiki"
 msgstr "Crear Wiki"
 
 #: seahub/group/templates/group/group_wiki.html:48
-#: seahub/templates/js/sysadmin-templates.html:387
-#: seahub/templates/repo_history.html:16
+#: seahub/templates/js/sysadmin-templates.html:393
+#: seahub/templates/repo_history.html:28
 #: seahub/templates/wiki/personal_wiki.html:45
 msgid "Description"
 msgstr "Descripción"
@@ -1271,11 +1321,11 @@ msgstr "Haz click y elije una biblioteca."
 #: seahub/templates/js/lib-op-popups.html:86
 #: seahub/templates/js/lib-op-popups.html:130
 #: seahub/templates/js/lib-op-popups.html:138
-#: seahub/templates/js/templates.html:489
-#: seahub/templates/js/templates.html:529
-#: seahub/templates/js/templates.html:1339
-#: seahub/templates/js/templates.html:1385
-#: seahub/templates/repo_dir_recycle_view.html:63
+#: seahub/templates/js/templates.html:500
+#: seahub/templates/js/templates.html:540
+#: seahub/templates/js/templates.html:1364
+#: seahub/templates/js/templates.html:1410
+#: seahub/templates/repo_dir_recycle_view.html:74
 #: seahub/templates/shared_file_view.html:62
 #: seahub/templates/snippets/file_share_popup.html:49
 #: seahub/templates/snippets/web_settings_form.html:13
@@ -1356,96 +1406,96 @@ msgstr "Se requiere nombre."
 msgid "Description is required."
 msgstr "Se requiere descripción."
 
-#: seahub/group/views.py:125 seahub/share/views.py:223
-#: seahub/views/__init__.py:519 seahub/views/__init__.py:633
-#: seahub/views/__init__.py:958 seahub/views/__init__.py:1006
-#: seahub/views/ajax.py:191 seahub/views/ajax.py:424 seahub/views/ajax.py:431
-#: seahub/views/ajax.py:481 seahub/views/ajax.py:488 seahub/views/ajax.py:585
-#: seahub/views/ajax.py:610 seahub/views/ajax.py:646 seahub/views/ajax.py:688
-#: seahub/views/ajax.py:724 seahub/views/ajax.py:804 seahub/views/ajax.py:1418
-#: seahub/views/ajax.py:1499 seahub/views/ajax.py:1670
-#: seahub/views/ajax.py:1696 seahub/views/ajax.py:1812
-#: seahub/views/ajax.py:1838 seahub/views/file.py:1060
-#: seahub/views/file.py:1543 seahub/views/repo.py:118
+#: seahub/group/views.py:121 seahub/share/views.py:223
+#: seahub/views/__init__.py:527 seahub/views/__init__.py:643
+#: seahub/views/ajax.py:191 seahub/views/ajax.py:453 seahub/views/ajax.py:460
+#: seahub/views/ajax.py:510 seahub/views/ajax.py:517 seahub/views/ajax.py:643
+#: seahub/views/ajax.py:698 seahub/views/ajax.py:734 seahub/views/ajax.py:777
+#: seahub/views/ajax.py:813 seahub/views/ajax.py:894 seahub/views/ajax.py:1550
+#: seahub/views/ajax.py:1631 seahub/views/ajax.py:1813
+#: seahub/views/ajax.py:1835 seahub/views/ajax.py:1844
+#: seahub/views/ajax.py:1960 seahub/views/ajax.py:1982
+#: seahub/views/ajax.py:1991 seahub/views/file.py:1062
+#: seahub/views/file.py:1555 seahub/views/repo.py:119
 msgid "Permission denied"
 msgstr "Permiso denegado"
 
-#: seahub/group/views.py:191
+#: seahub/group/views.py:187
 #, python-format
 msgid "You are invited to join a group on %s"
 msgstr "Has sido invitado a unirte a un grupo en %s"
 
-#: seahub/group/views.py:207
+#: seahub/group/views.py:203
 msgid "Failed to create: the group does not exist."
 msgstr "No se pudo crear: el grupo no existe."
 
-#: seahub/group/views.py:212
+#: seahub/group/views.py:208
 msgid "Failed to create: you are not in the group."
 msgstr "No se pudo crear: no estás en el grupo."
 
-#: seahub/group/views.py:240 seahub/group/views.py:262
-#: seahub/group/views.py:419 seahub/views/wiki.py:177
+#: seahub/group/views.py:236 seahub/group/views.py:258
+#: seahub/group/views.py:415 seahub/views/wiki.py:177
 msgid "Failed to create"
 msgstr "No se pudo crear"
 
-#: seahub/group/views.py:247 seahub/group/views.py:268
-#: seahub/group/views.py:425
+#: seahub/group/views.py:243 seahub/group/views.py:264
+#: seahub/group/views.py:421
 msgid "Failed to create: internal error."
 msgstr "No se pudo crear: error interno."
 
-#: seahub/group/views.py:307 seahub/group/views.py:491 seahub/views/wiki.py:76
+#: seahub/group/views.py:303 seahub/group/views.py:487 seahub/views/wiki.py:76
 #: seahub/views/wiki.py:238
 msgid "Failed to create wiki page. Please retry later."
 msgstr "Fallo al crear la página wiki. Intenta más tarde."
 
-#: seahub/group/views.py:343 seahub/templates/file_revisions.html:66
-#: seahub/templates/repo_history.html:40
-#: seahub/templates/repo_history_view.html:29 seahub/views/wiki.py:104
+#: seahub/group/views.py:339 seahub/templates/file_revisions.html:78
+#: seahub/templates/repo_history.html:52
+#: seahub/templates/repo_history_view.html:30 seahub/views/wiki.py:104
 msgid "Unknown"
 msgstr "Desconocido"
 
-#: seahub/group/views.py:365 seahub/views/ajax.py:1477
+#: seahub/group/views.py:361 seahub/views/ajax.py:1609
 #: seahub/views/wiki.py:136
 msgid "Internal Server Error"
 msgstr "Error interno del servidor"
 
-#: seahub/group/views.py:367 seahub/views/wiki.py:138
+#: seahub/group/views.py:363 seahub/views/wiki.py:138
 msgid "Wiki does not exists."
 msgstr "No existe la wiki"
 
-#: seahub/group/views.py:432 seahub/group/views.py:461
+#: seahub/group/views.py:428 seahub/group/views.py:457
 #: seahub/views/wiki.py:184 seahub/views/wiki.py:212
 msgid "Failed to create home page. Please retry later"
 msgstr "Fallo al crear página de inicio. Intenta más tarde."
 
-#: seahub/group/views.py:448 seahub/views/wiki.py:199
+#: seahub/group/views.py:444 seahub/views/wiki.py:199
 msgid "Failed to set wiki library."
 msgstr "Fallo al establecer biblioteca de wiki."
 
-#: seahub/group/views.py:452 seahub/thumbnail/views.py:52
+#: seahub/group/views.py:448 seahub/thumbnail/views.py:52
 #: seahub/thumbnail/views.py:148 seahub/views/ajax.py:267
-#: seahub/views/ajax.py:1007 seahub/views/ajax.py:1954
-#: seahub/views/ajax.py:1974 seahub/views/wiki.py:203
+#: seahub/views/ajax.py:1139 seahub/views/ajax.py:2107
+#: seahub/views/ajax.py:2127 seahub/views/wiki.py:203
 msgid "Permission denied."
 msgstr "Persmiso denegado."
 
-#: seahub/group/views.py:481 seahub/group/views.py:507
-#: seahub/group/views.py:525 seahub/views/wiki.py:228 seahub/views/wiki.py:251
+#: seahub/group/views.py:477 seahub/group/views.py:503
+#: seahub/group/views.py:521 seahub/views/wiki.py:228 seahub/views/wiki.py:251
 #: seahub/views/wiki.py:266
 msgid "Wiki is not found."
 msgstr "Wiki no encontrado"
 
-#: seahub/group/views.py:488 seahub/views/wiki.py:235
+#: seahub/group/views.py:484 seahub/views/wiki.py:235
 #, python-format
 msgid "Page \"%s\" already exists."
 msgstr "La página \"%s\" ya existe."
 
-#: seahub/group/views.py:530
+#: seahub/group/views.py:526
 #, python-format
 msgid "Successfully deleted \"%s\"."
 msgstr "Borrado con éxito \"%s\"."
 
-#: seahub/group/views.py:532
+#: seahub/group/views.py:528
 #, python-format
 msgid "Failed to delete \"%s\". Please retry later."
 msgstr "Fallo al eliminar \"%s\".  Intenta más tarde."
@@ -1841,7 +1891,7 @@ msgid ""
 msgstr "En ciertas ocasiones hay errores internos en el cliente que bloquean la sincronización. En estos casos, usualmete  ayuda \"resincronizar\" la biblioteca.\nResincronizar significa desincronizar e inmediatamente sincronizar la biblioteca con la misma carpeta. Puede encontrar esta acción en el menú emergente de la ventana principal del cliente."
 
 #: seahub/institutions/templates/institutions/base.html:5
-#: seahub/templates/js/sysadmin-templates.html:259
+#: seahub/templates/js/sysadmin-templates.html:265
 #: seahub/templates/sysadmin/base.html:5
 msgid "Exit admin panel"
 msgstr "Salir del panel de administración"
@@ -1874,8 +1924,8 @@ msgstr "Info"
 #: seahub/templates/home_base.html:58
 #: seahub/templates/js/sysadmin-templates.html:18
 #: seahub/templates/js/sysadmin-templates.html:109
-#: seahub/templates/js/templates.html:708
-#: seahub/templates/js/templates.html:1506 seahub/templates/libraries.html:5
+#: seahub/templates/js/templates.html:719
+#: seahub/templates/js/templates.html:1531 seahub/templates/libraries.html:5
 #: seahub/templates/sysadmin/base.html:26
 #: seahub/templates/sysadmin/sys_admin_group_info.html:17
 #: seahub/templates/sysadmin/sys_org_info_group.html:10
@@ -1886,19 +1936,20 @@ msgid "Libraries"
 msgstr "Bibliotecas"
 
 #: seahub/institutions/templates/institutions/info.html:16
-#: seahub/templates/js/sysadmin-templates.html:113
-#: seahub/templates/js/sysadmin-templates.html:126
+#: seahub/templates/js/sysadmin-templates.html:119
+#: seahub/templates/js/sysadmin-templates.html:132
 msgid "Active Users"
 msgstr "Usuarios Activos"
 
 #: seahub/institutions/templates/institutions/info.html:16
-#: seahub/templates/js/sysadmin-templates.html:113
-#: seahub/templates/js/sysadmin-templates.html:126
+#: seahub/templates/js/sysadmin-templates.html:119
+#: seahub/templates/js/sysadmin-templates.html:132
 msgid "Total Users"
 msgstr "Usuarios Total"
 
 #: seahub/institutions/templates/institutions/user_info.html:20
 #: seahub/profile/templates/profile/set_profile.html:12
+#: seahub/profile/templates/profile/user_profile.html:4
 #: seahub/templates/sysadmin/userinfo.html:23
 msgid "Profile"
 msgstr "Perfil"
@@ -1914,20 +1965,20 @@ msgid "Avatar"
 msgstr "Avatar"
 
 #: seahub/institutions/templates/institutions/user_info.html:35
-#: seahub/templates/sysadmin/userinfo.html:45
+#: seahub/templates/sysadmin/userinfo.html:44
 msgctxt "true name"
 msgid "Name"
 msgstr "Nombre"
 
 #: seahub/institutions/templates/institutions/user_info.html:40
 #: seahub/templates/registration/registration_form.html:31
-#: seahub/templates/sysadmin/userinfo.html:50
+#: seahub/templates/sysadmin/userinfo.html:56
 msgid "Department"
 msgstr "Departamento"
 
 #: seahub/institutions/templates/institutions/user_info.html:43
 #: seahub/templates/registration/registration_form.html:36
-#: seahub/templates/sysadmin/userinfo.html:53
+#: seahub/templates/sysadmin/userinfo.html:69
 msgid "Telephone"
 msgstr "Teléfono"
 
@@ -1940,102 +1991,110 @@ msgstr "Teléfono"
 #: seahub/templates/sysadmin/sys_inst_search_user.html:18
 #: seahub/templates/sysadmin/sys_org_info_base.html:26
 #: seahub/templates/sysadmin/sys_org_info_user.html:18
-#: seahub/templates/sysadmin/sys_user_admin_ldap_imported.html:28
-#: seahub/templates/sysadmin/sys_useradmin_ldap.html:26
-#: seahub/templates/sysadmin/useradmin_table.html:12
-#: seahub/templates/sysadmin/userinfo.html:57
 msgid "Space Used"
 msgstr "Espacio utilizado"
 
 #: seahub/institutions/templates/institutions/user_info.html:52
-#: seahub/templates/sysadmin/userinfo.html:62
+#: seahub/templates/sysadmin/sys_user_admin_ldap_imported.html:79
+#: seahub/templates/sysadmin/useradmin_table.html:110
+#: seahub/templates/sysadmin/userinfo.html:102
 msgid "Set user storage limit"
 msgstr "Especificar límite de espacio"
 
-#: seahub/institutions/templates/institutions/user_info.html:55
-#: seahub/templates/sysadmin/sys_org_info_base.html:34
-#: seahub/templates/sysadmin/userinfo.html:65
+#: seahub/institutions/templates/institutions/user_info.html:56
+#: seahub/templates/sysadmin/sys_org_info_base.html:35
+#: seahub/templates/sysadmin/sys_user_admin_ldap_imported.html:82
+#: seahub/templates/sysadmin/useradmin_table.html:113
+#: seahub/templates/sysadmin/userinfo.html:105
+msgid "An integer that is greater than or equal to 0."
+msgstr "Un número entero mayor o igual que 0."
+
+#: seahub/institutions/templates/institutions/user_info.html:57
+#: seahub/templates/sysadmin/sys_org_info_base.html:36
+#: seahub/templates/sysadmin/sys_user_admin_ldap_imported.html:83
+#: seahub/templates/sysadmin/useradmin_table.html:114
+#: seahub/templates/sysadmin/userinfo.html:106
 msgid "Tip: 0 means default limit"
 msgstr "Tip: con 0 se mantiene el límite predeterminado"
 
-#: seahub/institutions/templates/institutions/user_info.html:67
-#: seahub/templates/file_revisions.html:44
-#: seahub/templates/js/sysadmin-templates.html:452
-#: seahub/templates/js/templates.html:193
-#: seahub/templates/js/templates.html:886
-#: seahub/templates/js/templates.html:895
-#: seahub/templates/js/templates.html:998
-#: seahub/templates/js/templates.html:1234
-#: seahub/templates/js/templates.html:1251
-#: seahub/templates/repo_dir_recycle_view.html:35
-#: seahub/templates/repo_history_view.html:58
+#: seahub/institutions/templates/institutions/user_info.html:70
+#: seahub/templates/file_revisions.html:56
+#: seahub/templates/js/sysadmin-templates.html:458
+#: seahub/templates/js/templates.html:204
+#: seahub/templates/js/templates.html:903
+#: seahub/templates/js/templates.html:912
+#: seahub/templates/js/templates.html:1015
+#: seahub/templates/js/templates.html:1256
+#: seahub/templates/js/templates.html:1275
+#: seahub/templates/repo_dir_recycle_view.html:46
+#: seahub/templates/repo_history_view.html:59
 #: seahub/templates/sysadmin/sys_admin_group_info.html:28
-#: seahub/templates/sysadmin/userinfo.html:77
-#: seahub/templates/sysadmin/userinfo.html:127
-#: seahub/templates/sysadmin/userinfo.html:164
+#: seahub/templates/sysadmin/userinfo.html:119
+#: seahub/templates/sysadmin/userinfo.html:169
+#: seahub/templates/sysadmin/userinfo.html:206
 #: seahub/templates/view_shared_dir.html:55
 msgid "Size"
 msgstr "Tamaño"
 
-#: seahub/institutions/templates/institutions/user_info.html:68
-#: seahub/templates/js/sysadmin-templates.html:453
-#: seahub/templates/js/templates.html:194
-#: seahub/templates/js/templates.html:887
-#: seahub/templates/js/templates.html:896
-#: seahub/templates/js/templates.html:908
-#: seahub/templates/js/templates.html:999 seahub/templates/libraries.html:171
-#: seahub/templates/sysadmin/userinfo.html:78
-#: seahub/templates/sysadmin/userinfo.html:128
+#: seahub/institutions/templates/institutions/user_info.html:71
+#: seahub/templates/js/sysadmin-templates.html:459
+#: seahub/templates/js/templates.html:205
+#: seahub/templates/js/templates.html:904
+#: seahub/templates/js/templates.html:913
+#: seahub/templates/js/templates.html:925
+#: seahub/templates/js/templates.html:1016 seahub/templates/libraries.html:171
+#: seahub/templates/sysadmin/userinfo.html:120
+#: seahub/templates/sysadmin/userinfo.html:170
 #: seahub/templates/view_shared_dir.html:56
 msgid "Last Update"
 msgstr "Última actualización"
 
-#: seahub/institutions/templates/institutions/user_info.html:75
-#: seahub/templates/js/templates.html:920
+#: seahub/institutions/templates/institutions/user_info.html:78
+#: seahub/templates/js/templates.html:937
 #: seahub/templates/sysadmin/sys_admin_group_info.html:36
 #: seahub/templates/sysadmin/sys_org_info_library.html:27
-#: seahub/templates/sysadmin/userinfo.html:85
-#: seahub/templates/sysadmin/userinfo.html:134
+#: seahub/templates/sysadmin/userinfo.html:127
+#: seahub/templates/sysadmin/userinfo.html:176
 msgid "Encrypted"
 msgstr "Encriptada"
 
-#: seahub/institutions/templates/institutions/user_info.html:75
-#: seahub/institutions/templates/institutions/user_info.html:77
+#: seahub/institutions/templates/institutions/user_info.html:78
+#: seahub/institutions/templates/institutions/user_info.html:80
 #: seahub/templates/sysadmin/sys_admin_group_info.html:36
 #: seahub/templates/sysadmin/sys_admin_group_info.html:38
 #: seahub/templates/sysadmin/sys_admin_group_info.html:40
-#: seahub/templates/sysadmin/userinfo.html:85
-#: seahub/templates/sysadmin/userinfo.html:87
-#: seahub/templates/sysadmin/userinfo.html:134
-#: seahub/templates/sysadmin/userinfo.html:136
-#: seahub/templates/sysadmin/userinfo.html:138
+#: seahub/templates/sysadmin/userinfo.html:127
+#: seahub/templates/sysadmin/userinfo.html:129
+#: seahub/templates/sysadmin/userinfo.html:176
+#: seahub/templates/sysadmin/userinfo.html:178
+#: seahub/templates/sysadmin/userinfo.html:180
 msgid "library icon"
 msgstr "ícono de biblioteca"
 
-#: seahub/institutions/templates/institutions/user_info.html:103
-#: seahub/templates/sysadmin/userinfo.html:115
+#: seahub/institutions/templates/institutions/user_info.html:106
+#: seahub/templates/sysadmin/userinfo.html:157
 msgid "This user has not created any libraries"
 msgstr "Este usuario no ha creado ninguna biblioteca"
 
-#: seahub/institutions/templates/institutions/user_info.html:113
-#: seahub/templates/js/templates.html:1118
-#: seahub/templates/sysadmin/sys_useradmin.html:36
+#: seahub/institutions/templates/institutions/user_info.html:116
+#: seahub/templates/js/templates.html:1135
+#: seahub/templates/sysadmin/sys_useradmin.html:42
 #: seahub/templates/sysadmin/useradmin_table.html:7
-#: seahub/templates/sysadmin/userinfo.html:211 seahub/views/sysadmin.py:276
+#: seahub/templates/sysadmin/userinfo.html:253 seahub/views/sysadmin.py:278
 msgid "Role"
 msgstr "Rol"
 
-#: seahub/institutions/templates/institutions/user_info.html:114
+#: seahub/institutions/templates/institutions/user_info.html:117
 #: seahub/templates/sysadmin/sys_inst_admin.html:28
 #: seahub/templates/sysadmin/sys_org_info_group.html:20
 #: seahub/templates/sysadmin/sys_publink_admin.html:14
-#: seahub/templates/sysadmin/userinfo.html:212 seahub/views/sysadmin.py:276
-#: seahub/views/sysadmin.py:280 seahub/views/sysadmin.py:1018
+#: seahub/templates/sysadmin/userinfo.html:254 seahub/views/sysadmin.py:280
+#: seahub/views/sysadmin.py:284 seahub/views/sysadmin.py:1054
 msgid "Create At"
 msgstr "Creado el"
 
-#: seahub/institutions/templates/institutions/user_info.html:128
-#: seahub/templates/sysadmin/userinfo.html:226
+#: seahub/institutions/templates/institutions/user_info.html:131
+#: seahub/templates/sysadmin/userinfo.html:268
 msgid "This user has not created or joined any groups"
 msgstr "Este usuario no ha creado ni se ha unido a ningún grupo"
 
@@ -2043,7 +2102,7 @@ msgstr "Este usuario no ha creado ni se ha unido a ningún grupo"
 #: seahub/institutions/templates/institutions/useradmin_search.html:18
 #: seahub/templates/sysadmin/useradmin_table.html:5
 #: seahub/templates/sysadmin/useradmin_table.html:9
-#: seahub/views/sysadmin.py:275 seahub/views/sysadmin.py:279
+#: seahub/views/sysadmin.py:278 seahub/views/sysadmin.py:282
 msgid "Contact Email"
 msgstr "Email de Contacto"
 
@@ -2054,10 +2113,10 @@ msgstr "Email de Contacto"
 #: seahub/templates/sysadmin/sys_inst_info_user.html:16
 #: seahub/templates/sysadmin/sys_inst_search_user.html:17
 #: seahub/templates/sysadmin/sys_org_info_user.html:17
-#: seahub/templates/sysadmin/sys_user_admin_ldap_imported.html:27
+#: seahub/templates/sysadmin/sys_user_admin_ldap_imported.html:28
 #: seahub/templates/sysadmin/useradmin_table.html:6
 #: seahub/templates/sysadmin/useradmin_table.html:10
-#: seahub/views/sysadmin.py:275 seahub/views/sysadmin.py:279
+#: seahub/views/sysadmin.py:278 seahub/views/sysadmin.py:282
 msgid "Status"
 msgstr "Estado"
 
@@ -2067,7 +2126,7 @@ msgstr "Estado"
 #: seahub/templates/sysadmin/sys_inst_info_user.html:18
 #: seahub/templates/sysadmin/sys_inst_search_user.html:19
 #: seahub/templates/sysadmin/sys_org_info_user.html:19
-#: seahub/templates/sysadmin/sys_useradmin_ldap.html:25
+#: seahub/templates/sysadmin/sys_useradmin_ldap.html:26
 #: seahub/templates/sysadmin/useradmin_table.html:13
 msgid "Create At / Last Login"
 msgstr "Creado / Último incio"
@@ -2080,11 +2139,11 @@ msgstr "Creado / Último incio"
 #: seahub/templates/sysadmin/sys_inst_search_user.html:29
 #: seahub/templates/sysadmin/sys_org_info_user.html:29
 #: seahub/templates/sysadmin/sys_org_info_user.html:36
-#: seahub/templates/sysadmin/sys_user_admin_ldap_imported.html:40
-#: seahub/templates/sysadmin/sys_user_admin_ldap_imported.html:47
+#: seahub/templates/sysadmin/sys_user_admin_ldap_imported.html:44
+#: seahub/templates/sysadmin/sys_user_admin_ldap_imported.html:51
 #: seahub/templates/sysadmin/useradmin_table.html:35
 #: seahub/templates/sysadmin/useradmin_table.html:42
-#: seahub/views/sysadmin.py:297
+#: seahub/views/sysadmin.py:323
 msgid "Active"
 msgstr "Activo"
 
@@ -2096,11 +2155,11 @@ msgstr "Activo"
 #: seahub/templates/sysadmin/sys_inst_search_user.html:31
 #: seahub/templates/sysadmin/sys_org_info_user.html:31
 #: seahub/templates/sysadmin/sys_org_info_user.html:37
-#: seahub/templates/sysadmin/sys_user_admin_ldap_imported.html:42
-#: seahub/templates/sysadmin/sys_user_admin_ldap_imported.html:48
+#: seahub/templates/sysadmin/sys_user_admin_ldap_imported.html:46
+#: seahub/templates/sysadmin/sys_user_admin_ldap_imported.html:52
 #: seahub/templates/sysadmin/useradmin_table.html:37
 #: seahub/templates/sysadmin/useradmin_table.html:43
-#: seahub/views/sysadmin.py:299
+#: seahub/views/sysadmin.py:325
 msgid "Inactive"
 msgstr "Inactivo"
 
@@ -2118,8 +2177,8 @@ msgstr "Vacío"
 #: seahub/institutions/templates/institutions/useradmin.html:70
 #: seahub/templates/sysadmin/sys_inst_info_user.html:52
 #: seahub/templates/sysadmin/sys_org_info_user.html:57
-#: seahub/templates/sysadmin/sys_user_admin_ldap_imported.html:73
-#: seahub/templates/sysadmin/sys_useradmin.html:68
+#: seahub/templates/sysadmin/sys_user_admin_ldap_imported.html:95
+#: seahub/templates/sysadmin/sys_useradmin.html:77
 #: seahub/templates/sysadmin/sys_useradmin_admins.html:46
 #: seahub/templates/sysadmin/sys_useradmin_paid.html:31
 #: seahub/templates/sysadmin/user_search.html:21
@@ -2170,57 +2229,58 @@ msgid "Search User"
 msgstr "Buscar Usuario"
 
 #: seahub/institutions/templates/institutions/useradmin_search.html:13
-#: seahub/templates/js/sysadmin-templates.html:329
+#: seahub/templates/js/sysadmin-templates.html:335
 #: seahub/templates/sysadmin/sys_inst_search_user.html:11
 #: seahub/templates/sysadmin/sys_org_search.html:15
 #: seahub/templates/sysadmin/user_search.html:13
 msgid "Result"
 msgstr "Resultado"
 
-#: seahub/institutions/views.py:156
-#: seahub/templates/js/sysadmin-templates.html:305
-#: seahub/templates/js/sysadmin-templates.html:326
-#: seahub/templates/js/sysadmin-templates.html:338
-#: seahub/templates/js/sysadmin-templates.html:410
-#: seahub/templates/js/sysadmin-templates.html:529
+#: seahub/institutions/views.py:159
+#: seahub/templates/js/sysadmin-templates.html:311
+#: seahub/templates/js/sysadmin-templates.html:332
+#: seahub/templates/js/sysadmin-templates.html:344
+#: seahub/templates/js/sysadmin-templates.html:416
+#: seahub/templates/js/sysadmin-templates.html:538
+#: seahub/templates/js/sysadmin-templates.html:561
 #: seahub/templates/sysadmin/sys_org_admin.html:30
 #: seahub/templates/sysadmin/sys_org_info_library.html:21
 #: seahub/templates/sysadmin/sys_publink_admin.html:13
 #: seahub/templates/sysadmin/sys_virus_scan_records.html:12
-#: seahub/views/sysadmin.py:586
+#: seahub/views/sysadmin.py:617
 msgid "Owner"
 msgstr "Propietario"
 
-#: seahub/institutions/views.py:158 seahub/templates/base.html:75
-#: seahub/templates/base.html.py:78 seahub/templates/js/templates.html:1152
-#: seahub/templates/js/templates.html:1156
-#: seahub/templates/js/templates.html:1163
-#: seahub/templates/js/templates.html:1483
-#: seahub/templates/js/templates.html:1486 seahub/views/sysadmin.py:276
-#: seahub/views/sysadmin.py:280 seahub/views/sysadmin.py:588
+#: seahub/institutions/views.py:161 seahub/templates/base.html:75
+#: seahub/templates/base.html.py:78 seahub/templates/js/templates.html:1169
+#: seahub/templates/js/templates.html:1173
+#: seahub/templates/js/templates.html:1180
+#: seahub/templates/js/templates.html:1508
+#: seahub/templates/js/templates.html:1511 seahub/views/sysadmin.py:280
+#: seahub/views/sysadmin.py:284 seahub/views/sysadmin.py:619
 msgid "Admin"
 msgstr "Administrar"
 
-#: seahub/institutions/views.py:160 seahub/templates/js/templates.html:1155
-#: seahub/templates/js/templates.html:1159
-#: seahub/templates/js/templates.html:1162 seahub/views/sysadmin.py:590
+#: seahub/institutions/views.py:163 seahub/templates/js/templates.html:1172
+#: seahub/templates/js/templates.html:1176
+#: seahub/templates/js/templates.html:1179 seahub/views/sysadmin.py:621
 msgid "Member"
 msgstr "Miembro"
 
-#: seahub/institutions/views.py:186 seahub/views/sysadmin.py:690
+#: seahub/institutions/views.py:189 seahub/views/sysadmin.py:720
 #, python-format
 msgid "Successfully deleted %s"
 msgstr "Borrado con éxito %s"
 
-#: seahub/institutions/views.py:188 seahub/views/sysadmin.py:692
+#: seahub/institutions/views.py:191 seahub/views/sysadmin.py:722
 msgid "Failed to delete: the user does not exist"
 msgstr "Fallo al borrar: no existe el usuario"
 
 #: seahub/invitations/models.py:16 seahub/invitations/models.py:34
-#: seahub/templates/sysadmin/sys_useradmin.html:39
+#: seahub/templates/sysadmin/sys_useradmin.html:45
 #: seahub/templates/sysadmin/useradmin_table.html:51
 #: seahub/templates/sysadmin/useradmin_table.html:61
-#: seahub/views/sysadmin.py:310
+#: seahub/views/sysadmin.py:336
 msgid "Guest"
 msgstr "Invitado"
 
@@ -2255,6 +2315,8 @@ msgstr "Establecer su contraseña"
 
 #: seahub/invitations/templates/invitations/token_view.html:26
 #: seahub/templates/sysadmin/settings.html:181
+#: seahub/templates/sysadmin/useradmin_js.html:97
+#: seahub/templates/sysadmin/userinfo.html:398
 msgid "It is required."
 msgstr "Es requerido."
 
@@ -2277,9 +2339,9 @@ msgstr "Mensaje"
 #: seahub/message/templates/message/all_msg_list.html:24
 #: seahub/notifications/templates/notifications/notice_email.html:20
 #: seahub/notifications/templates/notifications/user_notification_list.html:22
-#: seahub/templates/file_revisions.html:42
-#: seahub/templates/js/sysadmin-templates.html:220
-#: seahub/templates/repo_history.html:17
+#: seahub/templates/file_revisions.html:54
+#: seahub/templates/js/sysadmin-templates.html:226
+#: seahub/templates/repo_history.html:29
 msgid "Time"
 msgstr "Fecha"
 
@@ -2330,11 +2392,11 @@ msgstr "Enviar un mensaje..."
 
 #: seahub/message/templates/message/user_msg_list.html:72
 #: seahub/templates/file_access.html:56
-#: seahub/templates/js/sysadmin-templates.html:179
-#: seahub/templates/js/sysadmin-templates.html:313
-#: seahub/templates/js/sysadmin-templates.html:419
-#: seahub/templates/js/sysadmin-templates.html:538
-#: seahub/templates/repo_history.html:58
+#: seahub/templates/js/sysadmin-templates.html:185
+#: seahub/templates/js/sysadmin-templates.html:319
+#: seahub/templates/js/sysadmin-templates.html:425
+#: seahub/templates/js/sysadmin-templates.html:547
+#: seahub/templates/repo_history.html:70
 #: seahub/templates/snippets/admin_paginator.html:4
 #: seahub/templates/sysadmin/sys_publink_admin.html:33
 #: seahub/templates/sysadmin/sys_trafficadmin.html:30
@@ -2344,11 +2406,11 @@ msgstr "Anterior"
 
 #: seahub/message/templates/message/user_msg_list.html:82
 #: seahub/templates/file_access.html:59
-#: seahub/templates/js/sysadmin-templates.html:180
-#: seahub/templates/js/sysadmin-templates.html:314
-#: seahub/templates/js/sysadmin-templates.html:420
-#: seahub/templates/js/sysadmin-templates.html:539
-#: seahub/templates/repo_history.html:61
+#: seahub/templates/js/sysadmin-templates.html:186
+#: seahub/templates/js/sysadmin-templates.html:320
+#: seahub/templates/js/sysadmin-templates.html:426
+#: seahub/templates/js/sysadmin-templates.html:548
+#: seahub/templates/repo_history.html:73
 #: seahub/templates/snippets/admin_paginator.html:7
 #: seahub/templates/sysadmin/sys_publink_admin.html:36
 #: seahub/templates/sysadmin/sys_trafficadmin.html:33
@@ -2369,7 +2431,7 @@ msgstr "¿Seguro que deseas eliminar esta discusión?"
 #: seahub/message/templates/message/user_msg_list.html:220
 #: seahub/templates/base.html:124 seahub/templates/base_for_backbone.html:90
 #: seahub/templates/sysadmin/sysadmin_backbone.html:74
-#: seahub/views/sysadmin.py:305 seahub/views/sysadmin.py:306
+#: seahub/views/sysadmin.py:331 seahub/views/sysadmin.py:332
 msgid "Yes"
 msgstr "Sí"
 
@@ -2622,7 +2684,7 @@ msgstr "Limpiar"
 
 #: seahub/notifications/templates/notifications/user_notification_list.html:29
 #: seahub/templates/libraries.html:187
-#: seahub/templates/repo_dir_recycle_view.html:48
+#: seahub/templates/repo_dir_recycle_view.html:59
 msgid "More"
 msgstr "Más"
 
@@ -2656,22 +2718,13 @@ msgid ""
 "browsers. We advise you to use the latest version of Chrome or Firefox."
 msgstr "Tip: la manera más segura es la última, pero no está soportado por todos los navegadores. Recomendamos utilizar la última versión de Chrome o Firefox."
 
-#: seahub/profile/forms.py:17
-msgid "Nickname should not include ' / '"
-msgstr "El apodo no debe contener ' / '"
-
-#: seahub/profile/templates/profile/profile_base.html:4
-#: seahub/profile/templates/profile/set_profile.html:29
-msgid "Profile Setting"
-msgstr "Configuración del perfil"
-
 #: seahub/profile/templates/profile/set_profile.html:5
 #: seahub/profile/templates/profile/set_profile.html:26
 #: seahub/templates/base.html:69
 #: seahub/templates/js/sysadmin-templates.html:14
-#: seahub/templates/js/sysadmin-templates.html:258
-#: seahub/templates/js/templates.html:761
-#: seahub/templates/js/templates.html:1478 seahub/templates/libraries.html:121
+#: seahub/templates/js/sysadmin-templates.html:264
+#: seahub/templates/js/templates.html:778
+#: seahub/templates/js/templates.html:1503 seahub/templates/libraries.html:121
 #: seahub/templates/sysadmin/base.html:22
 #: seahub/templates/sysadmin/settings.html:7
 #: seahub/templates/sysadmin/sys_org_info_group.html:11
@@ -2699,6 +2752,10 @@ msgstr "Autenticación de dos Factores"
 #: seahub/profile/templates/profile/set_profile.html:158
 msgid "Delete Account"
 msgstr "Eliminar Cuenta"
+
+#: seahub/profile/templates/profile/set_profile.html:29
+msgid "Profile Setting"
+msgstr "Configuración del perfil"
 
 #: seahub/profile/templates/profile/set_profile.html:31
 msgid "Avatar:"
@@ -2869,84 +2926,92 @@ msgid "Español de México"
 msgstr "Español de México"
 
 #: seahub/settings.py:149
+msgid "Suomi"
+msgstr "Suomi"
+
+#: seahub/settings.py:150
 msgid "français"
 msgstr "Français"
 
-#: seahub/settings.py:150
+#: seahub/settings.py:151
 msgid "עברית"
 msgstr "עברית"
 
-#: seahub/settings.py:151
+#: seahub/settings.py:152
 msgid "Magyar"
 msgstr "Magyar"
 
-#: seahub/settings.py:152
+#: seahub/settings.py:153
 msgid "Íslenska"
 msgstr "Íslenska"
 
-#: seahub/settings.py:153
+#: seahub/settings.py:154
 msgid "Italiano"
 msgstr "Italiano"
 
-#: seahub/settings.py:154
+#: seahub/settings.py:155
 msgid "日本語"
 msgstr "日本語"
 
-#: seahub/settings.py:155
+#: seahub/settings.py:156
 msgid "한국어"
 msgstr "한국어"
 
-#: seahub/settings.py:156
+#: seahub/settings.py:157
 msgid "Latvian"
 msgstr "Latvian"
 
-#: seahub/settings.py:157
+#: seahub/settings.py:158
 msgid "Nederlands"
 msgstr "Nederlands"
 
-#: seahub/settings.py:158
+#: seahub/settings.py:159
 msgid "Polski"
 msgstr "Polski"
 
-#: seahub/settings.py:159
+#: seahub/settings.py:160
 msgid "Portuguese, Brazil"
 msgstr "Português, Brasil"
 
-#: seahub/settings.py:160
+#: seahub/settings.py:161
 msgid "Русский"
 msgstr "Русский"
 
-#: seahub/settings.py:161
+#: seahub/settings.py:162
 msgid "Slovak"
 msgstr "Slovak"
 
-#: seahub/settings.py:162
+#: seahub/settings.py:163
 msgid "Slovenian"
 msgstr "Slovenian"
 
-#: seahub/settings.py:163
+#: seahub/settings.py:164
 msgid "Svenska"
 msgstr "Svenska"
 
-#: seahub/settings.py:164
+#: seahub/settings.py:165
 msgid "ไทย"
 msgstr "ไทย"
 
-#: seahub/settings.py:165
+#: seahub/settings.py:166
 msgid "Türkçe"
 msgstr "Türkçe"
 
-#: seahub/settings.py:166
+#: seahub/settings.py:167
 msgid "українська мова"
 msgstr "українська мова"
 
-#: seahub/settings.py:167
+#: seahub/settings.py:168
 msgid "简体中文"
 msgstr "简体中文"
 
-#: seahub/settings.py:168
+#: seahub/settings.py:169
 msgid "繁體中文"
 msgstr "繁體中文"
+
+#: seahub/share/forms.py:20 seahub/share/forms.py:33
+msgid "Email is required"
+msgstr "Dirección de correo requerida"
 
 #: seahub/share/forms.py:21 seahub/share/forms.py:34
 msgid "Email is not longer than 512 characters"
@@ -3005,9 +3070,9 @@ msgstr "El envío del enlace de subida falló. El servicio de Email no está con
 
 #: seahub/share/views.py:329 seahub/thumbnail/views.py:40
 #: seahub/thumbnail/views.py:143 seahub/views/ajax.py:255
-#: seahub/views/ajax.py:399 seahub/views/ajax.py:463 seahub/views/ajax.py:513
-#: seahub/views/ajax.py:557 seahub/views/ajax.py:773 seahub/views/ajax.py:1000
-#: seahub/views/ajax.py:1490
+#: seahub/views/ajax.py:428 seahub/views/ajax.py:492 seahub/views/ajax.py:542
+#: seahub/views/ajax.py:595 seahub/views/ajax.py:619 seahub/views/ajax.py:863
+#: seahub/views/ajax.py:1132 seahub/views/ajax.py:1622
 msgid "Library does not exist."
 msgstr "La biblioteca no existe."
 
@@ -3053,8 +3118,8 @@ msgstr "Organización de equipo de colaboraores"
 #: seahub/templates/base_for_backbone.html:103
 #: seahub/templates/file_edit.html:326
 #: seahub/templates/js/lib-op-popups.html:97
-#: seahub/templates/js/templates.html:615
-#: seahub/templates/js/templates.html:1454 seahub/templates/libraries.html:120
+#: seahub/templates/js/templates.html:626
+#: seahub/templates/js/templates.html:1479 seahub/templates/libraries.html:120
 #: seahub/templates/libraries.html:130 seahub/templates/libraries.html:142
 #: seahub/templates/sysadmin/sysadmin_backbone.html:29
 #: seahub/templates/sysadmin/sysadmin_backbone.html:35
@@ -3068,18 +3133,18 @@ msgid "View profile and more"
 msgstr "Ver perfil y más"
 
 #: seahub/templates/base.html:72 seahub/templates/js/sysadmin-templates.html:4
-#: seahub/templates/js/templates.html:1480
+#: seahub/templates/js/templates.html:1505
 #: seahub/templates/sysadmin/base.html:12
 msgid "System Admin"
 msgstr "Administración del Sistema"
 
-#: seahub/templates/base.html:75 seahub/templates/js/templates.html:1483
+#: seahub/templates/base.html:75 seahub/templates/js/templates.html:1508
 msgid "Organization Admin"
 msgstr "Administrador de la Organización"
 
 #: seahub/templates/base.html:81 seahub/templates/finish_payment.html:5
-#: seahub/templates/js/sysadmin-templates.html:260
-#: seahub/templates/js/templates.html:1488
+#: seahub/templates/js/sysadmin-templates.html:266
+#: seahub/templates/js/templates.html:1513
 msgid "Log out"
 msgstr "Desconectarse"
 
@@ -3096,7 +3161,7 @@ msgstr "Menú Lateral de Navegación"
 
 #: seahub/templates/base_for_backbone.html:61
 #: seahub/templates/js/sysadmin-templates.html:39
-#: seahub/templates/js/templates.html:1455
+#: seahub/templates/js/templates.html:1480
 #: seahub/templates/sysadmin/base.html:45
 msgid "Notifications"
 msgstr "Notificaciones"
@@ -3152,18 +3217,18 @@ msgstr "Contraseña:"
 msgid "Please enter the password."
 msgstr "Por favor ingresa la contraseña."
 
-#: seahub/templates/download.html:4 seahub/templates/file_revisions.html:76
-#: seahub/templates/js/sysadmin-templates.html:503
-#: seahub/templates/js/templates.html:102
-#: seahub/templates/js/templates.html:108
-#: seahub/templates/js/templates.html:215
-#: seahub/templates/js/templates.html:299
-#: seahub/templates/js/templates.html:380
-#: seahub/templates/js/templates.html:406
-#: seahub/templates/repo_history_view.html:78
+#: seahub/templates/download.html:4 seahub/templates/file_revisions.html:88
+#: seahub/templates/js/sysadmin-templates.html:509
+#: seahub/templates/js/templates.html:113
+#: seahub/templates/js/templates.html:119
+#: seahub/templates/js/templates.html:226
+#: seahub/templates/js/templates.html:310
+#: seahub/templates/js/templates.html:391
+#: seahub/templates/js/templates.html:417
+#: seahub/templates/repo_history_view.html:79
 #: seahub/templates/shared_file_view.html:40
 #: seahub/templates/shared_file_view.html:72
-#: seahub/templates/sysadmin/userinfo.html:181
+#: seahub/templates/sysadmin/userinfo.html:223
 #: seahub/templates/view_file_base.html:82
 #: seahub/templates/view_file_base.html:165
 #: seahub/templates/view_history_file.html:35
@@ -3178,41 +3243,41 @@ msgid "Download"
 msgstr "Descargar"
 
 #: seahub/templates/file_access.html:5 seahub/templates/file_access.html:8
-#: seahub/templates/js/templates.html:317
+#: seahub/templates/js/templates.html:328
 msgid "Access Log"
 msgstr "Registro de Acceso"
 
 #: seahub/templates/file_access.html:11
-#: seahub/templates/file_revisions.html:12 seahub/templates/text_diff.html:10
+#: seahub/templates/file_revisions.html:24 seahub/templates/text_diff.html:21
 msgid "Current Path:"
 msgstr "Ruta actual:"
 
 #: seahub/templates/file_access.html:25
-#: seahub/templates/js/sysadmin-templates.html:163
-#: seahub/templates/js/sysadmin-templates.html:215
-#: seahub/templates/js/sysadmin-templates.html:616
-#: seahub/templates/js/templates.html:545
-#: seahub/templates/js/templates.html:814
-#: seahub/templates/js/templates.html:1303
+#: seahub/templates/js/sysadmin-templates.html:169
+#: seahub/templates/js/sysadmin-templates.html:221
+#: seahub/templates/js/sysadmin-templates.html:638
+#: seahub/templates/js/templates.html:556
+#: seahub/templates/js/templates.html:831
+#: seahub/templates/js/templates.html:1328
 #: seahub/templates/sysadmin/sys_trafficadmin.html:17
 msgid "User"
 msgstr "Usuario"
 
 #: seahub/templates/file_access.html:26
 #: seahub/templates/sysadmin/sys_invitations_admin.html:14
-#: seahub/templates/sysadmin/userinfo.html:165
+#: seahub/templates/sysadmin/userinfo.html:207
 msgid "Type"
 msgstr "Tipo"
 
 #: seahub/templates/file_access.html:27
-#: seahub/templates/js/sysadmin-templates.html:166
-#: seahub/templates/js/sysadmin-templates.html:217
+#: seahub/templates/js/sysadmin-templates.html:172
+#: seahub/templates/js/sysadmin-templates.html:223
 #: seahub/templates/libraries.html:197
 msgid "IP"
 msgstr "IP"
 
 #: seahub/templates/file_access.html:27
-#: seahub/templates/js/sysadmin-templates.html:165
+#: seahub/templates/js/sysadmin-templates.html:171
 #: seahub/templates/libraries.html:196
 msgid "Device Name"
 msgstr "Nombre de dispositivo"
@@ -3225,7 +3290,7 @@ msgstr "Fecha"
 msgid "Anonymous User"
 msgstr "Usuario Anónimo"
 
-#: seahub/templates/file_access.html:64 seahub/templates/repo_history.html:66
+#: seahub/templates/file_access.html:64
 #: seahub/templates/snippets/admin_paginator.html:12
 #: seahub/templates/sysadmin/sys_publink_admin.html:41
 #: seahub/templates/sysadmin/sys_trafficadmin.html:38
@@ -3238,8 +3303,8 @@ msgid "This file has (apparently) not been accessed yet"
 msgstr "Este archivo todavía no ha sido accedido (aparentemente)"
 
 #: seahub/templates/file_edit.html:89
-#: seahub/templates/repo_dir_recycle_view.html:10
-#: seahub/templates/repo_history_view.html:39
+#: seahub/templates/repo_dir_recycle_view.html:21
+#: seahub/templates/repo_history_view.html:40
 #: seahub/templates/shared_file_view.html:19
 #: seahub/templates/view_shared_dir.html:20
 msgid "Current path: "
@@ -3250,9 +3315,9 @@ msgid "Draft saved."
 msgstr "Borrador guardado."
 
 #: seahub/templates/file_edit.html:128
-#: seahub/templates/js/sysadmin-templates.html:218
-#: seahub/templates/js/templates.html:1600
-#: seahub/templates/js/templates.html:1633 seahub/templates/libraries.html:170
+#: seahub/templates/js/sysadmin-templates.html:224
+#: seahub/templates/js/templates.html:1627
+#: seahub/templates/js/templates.html:1662 seahub/templates/libraries.html:170
 #: seahub/templates/sysadmin/sys_virus_scan_records.html:11
 msgid "Library"
 msgstr "Biblioteca"
@@ -3382,10 +3447,10 @@ msgid "Columns"
 msgstr "Columnas"
 
 #: seahub/templates/file_edit.html:347
-#: seahub/templates/sysadmin/sys_useradmin.html:38
+#: seahub/templates/sysadmin/sys_useradmin.html:44
 #: seahub/templates/sysadmin/useradmin_table.html:53
 #: seahub/templates/sysadmin/useradmin_table.html:60
-#: seahub/views/sysadmin.py:312
+#: seahub/views/sysadmin.py:338
 msgid "Default"
 msgstr "Predeterminado"
 
@@ -3410,173 +3475,194 @@ msgid "Password is required."
 msgstr "Contraseña requerida"
 
 #: seahub/templates/file_revisions.html:5
-#: seahub/templates/js/templates.html:151
-#: seahub/templates/js/templates.html:314
-#: seahub/templates/js/templates.html:389 seahub/templates/repo_history.html:5
+#: seahub/templates/js/templates.html:162
+#: seahub/templates/js/templates.html:325
+#: seahub/templates/js/templates.html:400 seahub/templates/repo_history.html:5
 #: seahub/templates/view_file_base.html:74
 msgid "History"
 msgstr "Historial"
 
-#: seahub/templates/file_revisions.html:8
+#: seahub/templates/file_revisions.html:14
 #, python-format
 msgid "<span class=\"op-target\">%(u_filename)s</span> Version History"
 msgstr "<span class=\"op-target\">%(u_filename)s</span> Historial de Versiones"
 
-#: seahub/templates/file_revisions.html:9
+#: seahub/templates/file_revisions.html:16
+#: seahub/templates/repo_dir_recycle_view.html:15
+#: seahub/templates/repo_history.html:17
+#: seahub/templates/repo_history_view.html:16
+#: seahub/templates/sysadmin/sys_inst_info_base.html:16
+#: seahub/templates/text_diff.html:15
+msgid "Back"
+msgstr "Atrás"
+
+#: seahub/templates/file_revisions.html:21
 msgid ""
 "Tip: a new version will be generated after each modification, and you can "
 "restore the file to a previous version."
 msgstr "Consejo: una nueva versión será generada después de cada modificación, puedes restaurar el archivo desde una versión previa."
 
-#: seahub/templates/file_revisions.html:24
-#: seahub/templates/file_revisions.html:26
+#: seahub/templates/file_revisions.html:36
+#: seahub/templates/file_revisions.html:38
 msgid "a week"
 msgstr "una semana"
 
-#: seahub/templates/file_revisions.html:29
-#: seahub/templates/file_revisions.html:31
+#: seahub/templates/file_revisions.html:41
+#: seahub/templates/file_revisions.html:43
 msgid "a month"
 msgstr "un mes"
 
-#: seahub/templates/file_revisions.html:34
-#: seahub/templates/file_revisions.html:36
-#: seahub/templates/repo_dir_recycle_view.html:60
+#: seahub/templates/file_revisions.html:46
+#: seahub/templates/file_revisions.html:48
+#: seahub/templates/repo_dir_recycle_view.html:71
 msgid "all"
 msgstr "todos"
 
-#: seahub/templates/file_revisions.html:43
-#: seahub/templates/repo_history.html:18
+#: seahub/templates/file_revisions.html:55
+#: seahub/templates/repo_history.html:30
 msgid "Modifier"
 msgstr "Modificó"
 
-#: seahub/templates/file_revisions.html:52
+#: seahub/templates/file_revisions.html:64
 msgid "(current version)"
 msgstr "(versión actual)"
 
-#: seahub/templates/file_revisions.html:56
+#: seahub/templates/file_revisions.html:68
 #, python-format
 msgid "(Renamed or moved from %(old_path)s)"
 msgstr "(Renombrados o movidos desde %(old_path)s)"
 
-#: seahub/templates/file_revisions.html:73
-#: seahub/templates/js/sysadmin-templates.html:436
-#: seahub/templates/repo_history_view.html:50
-#: seahub/templates/repo_history_view.html:67
-#: seahub/templates/repo_history_view.html:77
+#: seahub/templates/file_revisions.html:85
+#: seahub/templates/js/sysadmin-templates.html:442
+#: seahub/templates/repo_history_view.html:51
+#: seahub/templates/repo_history_view.html:68
+#: seahub/templates/repo_history_view.html:78
 #: seahub/templates/snippets/repo_dir_trash_tr.html:11
 #: seahub/templates/snippets/repo_dir_trash_tr.html:26
 msgid "Restore"
 msgstr "Restaurar"
 
-#: seahub/templates/file_revisions.html:77
-#: seahub/templates/js/templates.html:1663
-#: seahub/templates/js/templates.html:1674
+#: seahub/templates/file_revisions.html:89
+#: seahub/templates/js/templates.html:1692
+#: seahub/templates/js/templates.html:1703
 msgid "View"
 msgstr "Ver"
 
-#: seahub/templates/file_revisions.html:79
+#: seahub/templates/file_revisions.html:91
 msgid "Diff"
 msgstr "Diff"
+
+#: seahub/templates/file_revisions.html:115
+#: seahub/templates/repo_history_view.html:115
+#: seahub/templates/sysadmin/settings.html:165
+#: seahub/templates/sysadmin/settings.html:203 seahub/views/sysadmin.py:1222
+#: seahub/views/sysadmin.py:1279 seahub/views/sysadmin.py:2039
+#: seahub/views/sysadmin.py:2081 seahub/views/sysadmin.py:2248
+msgid "Success"
+msgstr "Éxito"
 
 #: seahub/templates/finish_payment.html:8
 msgid "Plan"
 msgstr "Plan"
 
-#: seahub/templates/home_base.html:8 seahub/templates/js/templates.html:616
+#: seahub/templates/home_base.html:8
+#: seahub/templates/js/sysadmin-templates.html:109
+#: seahub/templates/js/templates.html:627
 msgid "Files"
 msgstr "Archivos"
 
-#: seahub/templates/home_base.html:11 seahub/templates/js/templates.html:167
-#: seahub/templates/js/templates.html:169
-#: seahub/templates/js/templates.html:620 seahub/templates/libraries.html:13
+#: seahub/templates/home_base.html:11 seahub/templates/js/templates.html:178
+#: seahub/templates/js/templates.html:180
+#: seahub/templates/js/templates.html:631 seahub/templates/libraries.html:13
 msgid "My Libraries"
 msgstr "Mis Bibliotecas"
 
-#: seahub/templates/home_base.html:13 seahub/templates/js/templates.html:169
-#: seahub/templates/js/templates.html:625 seahub/templates/libraries.html:29
+#: seahub/templates/home_base.html:13 seahub/templates/js/templates.html:180
+#: seahub/templates/js/templates.html:636 seahub/templates/libraries.html:29
 msgid "Shared with me"
 msgstr "Compartido conmigo"
 
-#: seahub/templates/home_base.html:15 seahub/templates/js/templates.html:165
-#: seahub/templates/js/templates.html:630 seahub/templates/libraries.html:44
+#: seahub/templates/home_base.html:15 seahub/templates/js/templates.html:176
+#: seahub/templates/js/templates.html:641 seahub/templates/libraries.html:44
 msgid "Shared with all"
 msgstr "Compartido con todos"
 
-#: seahub/templates/home_base.html:20 seahub/templates/js/templates.html:636
-#: seahub/templates/js/templates.html:653
-#: seahub/templates/js/templates.html:656
+#: seahub/templates/home_base.html:20 seahub/templates/js/templates.html:647
+#: seahub/templates/js/templates.html:664
+#: seahub/templates/js/templates.html:667
 msgid "Shared with groups"
 msgstr "Compartido con grupos"
 
-#: seahub/templates/home_base.html:23 seahub/templates/js/templates.html:638
-#: seahub/templates/js/templates.html:660
+#: seahub/templates/home_base.html:23 seahub/templates/js/templates.html:649
+#: seahub/templates/js/templates.html:671
 msgid "All Groups"
 msgstr "Todos los grupos"
 
-#: seahub/templates/home_base.html:35 seahub/templates/js/templates.html:673
+#: seahub/templates/home_base.html:35 seahub/templates/js/templates.html:684
 msgid "Tools"
 msgstr "Herramientas"
 
-#: seahub/templates/home_base.html:38 seahub/templates/js/templates.html:680
+#: seahub/templates/home_base.html:38 seahub/templates/js/templates.html:691
 #: seahub/templates/libraries.html:164
 msgid "Favorites"
 msgstr "Favoritos"
 
-#: seahub/templates/home_base.html:40 seahub/templates/js/templates.html:684
+#: seahub/templates/home_base.html:40 seahub/templates/js/templates.html:695
 msgid "Activities"
 msgstr "Actividades"
 
 #: seahub/templates/home_base.html:44 seahub/templates/home_base.html.py:80
-#: seahub/templates/js/templates.html:690
-#: seahub/templates/js/templates.html:737
+#: seahub/templates/js/templates.html:701
+#: seahub/templates/js/templates.html:754
 #: seahub/templates/wiki/personal_wiki.html:6
 #: seahub/templates/wiki/personal_wiki_pages.html:6
 msgid "Personal Wiki"
 msgstr "Wiki Personal"
 
-#: seahub/templates/home_base.html:47 seahub/templates/js/templates.html:695
+#: seahub/templates/home_base.html:47 seahub/templates/js/templates.html:706
 #: seahub/templates/libraries.html:191
 msgid "Linked Devices"
 msgstr "Dispositivos vinculados"
 
-#: seahub/templates/home_base.html:50 seahub/templates/js/templates.html:699
-#: seahub/templates/js/templates.html:1688
-#: seahub/templates/js/templates.html:1689
-#: seahub/templates/js/templates.html:1726
+#: seahub/templates/home_base.html:50 seahub/templates/js/templates.html:710
+#: seahub/templates/js/templates.html:1717
+#: seahub/templates/js/templates.html:1718
+#: seahub/templates/js/templates.html:1755
 msgid "Invite People"
 msgstr "Invitar Personas"
 
-#: seahub/templates/home_base.html:55 seahub/templates/js/templates.html:704
+#: seahub/templates/home_base.html:55 seahub/templates/js/templates.html:715
 msgid "Share Admin"
 msgstr "Admin de Compartidos"
 
-#: seahub/templates/home_base.html:59 seahub/templates/js/templates.html:711
-#: seahub/templates/js/templates.html:1561
+#: seahub/templates/home_base.html:59 seahub/templates/js/templates.html:722
+#: seahub/templates/js/templates.html:1586
 msgid "Folders"
 msgstr "Carpetas"
 
 #: seahub/templates/home_base.html:61
 #: seahub/templates/js/sysadmin-templates.html:42
-#: seahub/templates/js/templates.html:715
+#: seahub/templates/js/templates.html:727
+#: seahub/templates/js/templates.html:731
 #: seahub/templates/sysadmin/base.html:48
 msgid "Links"
 msgstr "Enlaces"
 
-#: seahub/templates/home_base.html:73 seahub/templates/js/templates.html:675
-#: seahub/templates/js/templates.html:726
+#: seahub/templates/home_base.html:73 seahub/templates/js/templates.html:686
+#: seahub/templates/js/templates.html:743
 msgid "Enable Modules"
 msgstr "Habilitar Módulos"
 
-#: seahub/templates/i18n.html:6 seahub/templates/js/templates.html:127
+#: seahub/templates/i18n.html:6 seahub/templates/js/templates.html:138
 msgid "Upload Folder"
 msgstr "Carpeta de Subida"
 
-#: seahub/templates/i18n.html:7 seahub/templates/js/templates.html:462
+#: seahub/templates/i18n.html:7 seahub/templates/js/templates.html:473
 #: seahub/templates/snippets/file_share_popup.html:25
 msgid "Add auto expiration"
 msgstr "Agregar vencimiento automático"
 
-#: seahub/templates/i18n.html:8 seahub/templates/js/templates.html:465
+#: seahub/templates/i18n.html:8 seahub/templates/js/templates.html:476
 #: seahub/templates/snippets/file_share_popup.html:28
 msgid "Days"
 msgstr "Días"
@@ -3594,13 +3680,13 @@ msgid "Shared Libs"
 msgstr "Bibliotecas Compartidas"
 
 #: seahub/templates/js/lib-op-popups.html:5
-#: seahub/templates/js/sysadmin-templates.html:488
-#: seahub/templates/js/templates.html:133
+#: seahub/templates/js/sysadmin-templates.html:494
+#: seahub/templates/js/templates.html:144
 msgid "New Folder"
 msgstr "Nueva Carpeta"
 
 #: seahub/templates/js/lib-op-popups.html:16
-#: seahub/templates/js/templates.html:134
+#: seahub/templates/js/templates.html:145
 msgid "New File"
 msgstr "Nuevo archivo"
 
@@ -3618,8 +3704,8 @@ msgstr "Formateo sencillo."
 
 #: seahub/templates/js/lib-op-popups.html:21
 #: seahub/templates/js/lib-op-popups.html:23
-#: seahub/templates/js/templates.html:950
-#: seahub/templates/repo_history.html:28
+#: seahub/templates/js/templates.html:967
+#: seahub/templates/repo_history.html:40
 msgid "Details"
 msgstr "Detalles"
 
@@ -3685,7 +3771,7 @@ msgid "Devices"
 msgstr "Dispositivos"
 
 #: seahub/templates/js/sysadmin-templates.html:28
-#: seahub/templates/js/sysadmin-templates.html:138
+#: seahub/templates/js/sysadmin-templates.html:144
 #: seahub/templates/sysadmin/base.html:36
 msgid "Organizations"
 msgstr "Organizaciones"
@@ -3753,456 +3839,488 @@ msgstr "Versión Community"
 msgid "Upgrade to Pro Edition"
 msgstr "Actualizar a Versión Pro"
 
-#: seahub/templates/js/sysadmin-templates.html:113
+#: seahub/templates/js/sysadmin-templates.html:112
+msgid "Storage Used"
+msgstr "Espacio Utilizado"
+
+#: seahub/templates/js/sysadmin-templates.html:115
+msgid "Total Devices"
+msgstr "Total de Dispositivos"
+
+#: seahub/templates/js/sysadmin-templates.html:115
+msgid "Current Connected Devices"
+msgstr "Dispositivos Conectados Actualmente"
+
+#: seahub/templates/js/sysadmin-templates.html:119
 msgid "Limits"
 msgstr "Límites"
 
-#: seahub/templates/js/sysadmin-templates.html:148
-#: seahub/templates/js/sysadmin-templates.html:201
+#: seahub/templates/js/sysadmin-templates.html:154
+#: seahub/templates/js/sysadmin-templates.html:207
 msgid "Desktop"
 msgstr "Escritorio"
 
-#: seahub/templates/js/sysadmin-templates.html:151
-#: seahub/templates/js/sysadmin-templates.html:204
+#: seahub/templates/js/sysadmin-templates.html:157
+#: seahub/templates/js/sysadmin-templates.html:210
 msgid "Mobile"
 msgstr "Móvil"
 
-#: seahub/templates/js/sysadmin-templates.html:155
-#: seahub/templates/js/sysadmin-templates.html:207
+#: seahub/templates/js/sysadmin-templates.html:161
+#: seahub/templates/js/sysadmin-templates.html:213
 msgid "Errors"
 msgstr "Errores"
 
-#: seahub/templates/js/sysadmin-templates.html:164
+#: seahub/templates/js/sysadmin-templates.html:170
 #: seahub/templates/libraries.html:195
 msgid "Platform"
 msgstr "Plataforma"
 
-#: seahub/templates/js/sysadmin-templates.html:164
-#: seahub/templates/js/sysadmin-templates.html:216
+#: seahub/templates/js/sysadmin-templates.html:170
+#: seahub/templates/js/sysadmin-templates.html:222
 #: seahub/templates/sysadmin/sys_terms_admin.html:17
 msgid "Version"
 msgstr "Versión"
 
-#: seahub/templates/js/sysadmin-templates.html:167
+#: seahub/templates/js/sysadmin-templates.html:173
 #: seahub/templates/libraries.html:198
 msgid "Last Access"
 msgstr "Último acceso"
 
-#: seahub/templates/js/sysadmin-templates.html:176
+#: seahub/templates/js/sysadmin-templates.html:182
 msgid "No connected devices"
 msgstr "No hay dispositivos conectados"
 
-#: seahub/templates/js/sysadmin-templates.html:192
-#: seahub/templates/js/templates.html:1446
+#: seahub/templates/js/sysadmin-templates.html:198
+#: seahub/templates/js/templates.html:1471
 msgid "Unlink"
 msgstr "Desvincular"
 
-#: seahub/templates/js/sysadmin-templates.html:210
-#: seahub/templates/js/sysadmin-templates.html:291
-#: seahub/templates/repo_dir_recycle_view.html:26
-#: seahub/templates/repo_dir_recycle_view.html:54
+#: seahub/templates/js/sysadmin-templates.html:216
+#: seahub/templates/js/sysadmin-templates.html:297
+#: seahub/templates/repo_dir_recycle_view.html:37
+#: seahub/templates/repo_dir_recycle_view.html:65
 msgid "Clean"
 msgstr "Limpiar"
 
-#: seahub/templates/js/sysadmin-templates.html:216
+#: seahub/templates/js/sysadmin-templates.html:222
 msgid "Device"
 msgstr "Dispositivo"
 
-#: seahub/templates/js/sysadmin-templates.html:219
-#: seahub/templates/view_shared_upload_link.html:81 seahub/views/ajax.py:936
+#: seahub/templates/js/sysadmin-templates.html:225
+#: seahub/templates/view_shared_upload_link.html:81 seahub/views/ajax.py:1068
 msgid "Error"
 msgstr "Error"
 
-#: seahub/templates/js/sysadmin-templates.html:228
+#: seahub/templates/js/sysadmin-templates.html:234
 msgid "No sync errors"
 msgstr "No hay errores de sincronización"
 
-#: seahub/templates/js/sysadmin-templates.html:281
-#: seahub/templates/js/sysadmin-templates.html:467
+#: seahub/templates/js/sysadmin-templates.html:287
+#: seahub/templates/js/sysadmin-templates.html:473
 #: seahub/templates/sysadmin/sys_org_admin.html:14
 msgid "All"
 msgstr "Todas"
 
-#: seahub/templates/js/sysadmin-templates.html:284
-#: seahub/templates/js/sysadmin-templates.html:465
+#: seahub/templates/js/sysadmin-templates.html:290
+#: seahub/templates/js/sysadmin-templates.html:471
 msgid "System"
 msgstr "Sistema"
 
-#: seahub/templates/js/sysadmin-templates.html:287
-#: seahub/templates/js/templates.html:149
-#: seahub/templates/js/templates.html:155
+#: seahub/templates/js/sysadmin-templates.html:293
+#: seahub/templates/js/templates.html:160
+#: seahub/templates/js/templates.html:166
 #: seahub/templates/view_trash_file.html:10
 msgid "Trash"
 msgstr "Papelera"
 
-#: seahub/templates/js/sysadmin-templates.html:303
-#: seahub/templates/js/sysadmin-templates.html:336
+#: seahub/templates/js/sysadmin-templates.html:309
+#: seahub/templates/js/sysadmin-templates.html:342
 msgid "Files / Size"
 msgstr "Archivos / Tamaño"
 
-#: seahub/templates/js/sysadmin-templates.html:317
-#: seahub/templates/js/sysadmin-templates.html:346
+#: seahub/templates/js/sysadmin-templates.html:323
+#: seahub/templates/js/sysadmin-templates.html:352
 msgid "No libraries"
 msgstr "No hay bibliotecas"
 
-#: seahub/templates/js/sysadmin-templates.html:322
+#: seahub/templates/js/sysadmin-templates.html:328
 msgid "Search Library"
 msgstr "Buscar Biblioteca"
 
-#: seahub/templates/js/sysadmin-templates.html:324
+#: seahub/templates/js/sysadmin-templates.html:330
 msgid "Tip: you can search by keyword in name or owner or both."
 msgstr "Tip: puedes buscar por nombre, propietario o ambas."
 
-#: seahub/templates/js/sysadmin-templates.html:374
-#: seahub/templates/js/sysadmin-templates.html:553
-#: seahub/templates/js/templates.html:48
-#: seahub/templates/js/templates.html:1043
-#: seahub/templates/sysadmin/userinfo.html:107
+#: seahub/templates/js/sysadmin-templates.html:380
+#: seahub/templates/js/sysadmin-templates.html:575
+#: seahub/templates/js/templates.html:55
+#: seahub/templates/js/templates.html:1060
+#: seahub/templates/sysadmin/userinfo.html:149
 msgid "Transfer"
 msgstr "Transferir"
 
-#: seahub/templates/js/sysadmin-templates.html:376
-#: seahub/templates/js/templates.html:42
-#: seahub/templates/js/templates.html:138
-#: seahub/templates/js/templates.html:218
-#: seahub/templates/js/templates.html:301
-#: seahub/templates/js/templates.html:382
-#: seahub/templates/js/templates.html:408
+#: seahub/templates/js/sysadmin-templates.html:382
+#: seahub/templates/js/templates.html:49
+#: seahub/templates/js/templates.html:149
+#: seahub/templates/js/templates.html:229
+#: seahub/templates/js/templates.html:312
+#: seahub/templates/js/templates.html:393
+#: seahub/templates/js/templates.html:419
 #: seahub/templates/view_file_base.html:69
 msgid "Share"
 msgstr "Compartir"
 
-#: seahub/templates/js/sysadmin-templates.html:404
+#: seahub/templates/js/sysadmin-templates.html:410
 msgid "Tip: libraries deleted 30 days ago will be cleaned automatically."
 msgstr "Consejo: bibliotecas eliminadas hace 30 días serán removidas automáticamente."
 
-#: seahub/templates/js/sysadmin-templates.html:411
+#: seahub/templates/js/sysadmin-templates.html:417
 msgid "Deleted Time"
 msgstr "Fecha de eliminación"
 
-#: seahub/templates/js/sysadmin-templates.html:423
+#: seahub/templates/js/sysadmin-templates.html:429
 msgid "No library deleted yet"
 msgstr "Aún no se han eliminado bibliotecas"
 
-#: seahub/templates/js/sysadmin-templates.html:485
-#: seahub/templates/js/templates.html:115
-#: seahub/templates/js/templates.html:120
-#: seahub/templates/sysadmin/userinfo.html:190
+#: seahub/templates/js/sysadmin-templates.html:491
+#: seahub/templates/js/templates.html:126
+#: seahub/templates/js/templates.html:131
+#: seahub/templates/sysadmin/userinfo.html:232
 msgid "Upload"
 msgstr "Subir archivo"
 
-#: seahub/templates/js/sysadmin-templates.html:522
+#: seahub/templates/js/sysadmin-templates.html:529
+#: seahub/templates/js/sysadmin-templates.html:558
+#: seahub/templates/libraries.html:72 seahub/templates/libraries.html.py:90
+msgid "New Group"
+msgstr "Nuevo Grupo"
+
+#: seahub/templates/js/sysadmin-templates.html:530
+#: seahub/templates/sysadmin/sys_user_admin_ldap_imported.html:21
 #: seahub/templates/sysadmin/sys_useradmin.html:27
 msgid "Export Excel"
 msgstr "Exportar Excel"
 
-#: seahub/templates/js/sysadmin-templates.html:530
+#: seahub/templates/js/sysadmin-templates.html:539
 msgid "Created At"
 msgstr "Creado En"
 
-#: seahub/templates/js/sysadmin-templates.html:542
+#: seahub/templates/js/sysadmin-templates.html:551
 msgid "No groups"
 msgstr "No hay grupos"
 
-#: seahub/templates/js/sysadmin-templates.html:606
-#: seahub/templates/js/templates.html:435
+#: seahub/templates/js/sysadmin-templates.html:562
+msgid "(If left blank, owner will be admin)"
+msgstr "(Si queda en blanco, el propietario será admin)"
+
+#: seahub/templates/js/sysadmin-templates.html:628
+#: seahub/templates/js/templates.html:446
 msgid "Share to user"
 msgstr "Compartir con usuario"
 
-#: seahub/templates/js/sysadmin-templates.html:607
-#: seahub/templates/js/templates.html:436
+#: seahub/templates/js/sysadmin-templates.html:629
+#: seahub/templates/js/templates.html:447
 msgid "Share to group"
 msgstr "Compartir con grupo"
 
-#: seahub/templates/js/sysadmin-templates.html:617
-#: seahub/templates/js/sysadmin-templates.html:644
-#: seahub/templates/js/templates.html:232
-#: seahub/templates/js/templates.html:416
-#: seahub/templates/js/templates.html:546
-#: seahub/templates/js/templates.html:573
-#: seahub/templates/js/templates.html:815
-#: seahub/templates/js/templates.html:841
-#: seahub/templates/js/templates.html:909
-#: seahub/templates/js/templates.html:1305
-#: seahub/templates/js/templates.html:1349
-#: seahub/templates/js/templates.html:1514
-#: seahub/templates/js/templates.html:1569
+#: seahub/templates/js/sysadmin-templates.html:639
+#: seahub/templates/js/sysadmin-templates.html:666
+#: seahub/templates/js/templates.html:243
+#: seahub/templates/js/templates.html:427
+#: seahub/templates/js/templates.html:557
+#: seahub/templates/js/templates.html:584
+#: seahub/templates/js/templates.html:832
+#: seahub/templates/js/templates.html:858
+#: seahub/templates/js/templates.html:926
+#: seahub/templates/js/templates.html:1330
+#: seahub/templates/js/templates.html:1374
+#: seahub/templates/js/templates.html:1539
+#: seahub/templates/js/templates.html:1594
 msgid "Permission"
 msgstr "Permiso"
 
-#: seahub/templates/js/sysadmin-templates.html:643
-#: seahub/templates/js/templates.html:572
-#: seahub/templates/js/templates.html:840
-#: seahub/templates/js/templates.html:1347
+#: seahub/templates/js/sysadmin-templates.html:665
+#: seahub/templates/js/templates.html:583
+#: seahub/templates/js/templates.html:857
+#: seahub/templates/js/templates.html:1372
 msgid "Group"
 msgstr "Grupo"
 
-#: seahub/templates/js/templates.html:4 seahub/templates/js/templates.html:754
+#: seahub/templates/js/templates.html:4 seahub/templates/js/templates.html:771
 #: seahub/templates/libraries.html:14
 msgid "New Library"
 msgstr "Nueva biblioteca"
 
 #: seahub/templates/js/templates.html:8
+msgid "Template"
+msgstr "Plantilla"
+
+#: seahub/templates/js/templates.html:10
+msgid "Select a template"
+msgstr "Seleccione una plantilla"
+
+#: seahub/templates/js/templates.html:18
 msgid "Share Permission"
 msgstr "Permisos al Compartir"
 
-#: seahub/templates/js/templates.html:19
+#: seahub/templates/js/templates.html:29
 msgid "Encrypt"
 msgstr "Encriptar"
 
-#: seahub/templates/js/templates.html:21
-#: seahub/templates/js/templates.html:1430
+#: seahub/templates/js/templates.html:31
+#: seahub/templates/js/templates.html:1455
 #, python-format
 msgid "(at least %(repo_password_min_length)s characters)"
 msgstr "(al menos %(repo_password_min_length)s caracteres)"
 
-#: seahub/templates/js/templates.html:23
-#: seahub/templates/js/templates.html:457
-#: seahub/templates/js/templates.html:512
+#: seahub/templates/js/templates.html:33
+#: seahub/templates/js/templates.html:468
+#: seahub/templates/js/templates.html:523
 #: seahub/templates/snippets/file_share_popup.html:20
 msgid "Password again"
 msgstr "Repetir contraseña"
 
-#: seahub/templates/js/templates.html:38
-msgid "Broken (please contact your administrator to fix this library)"
-msgstr "Dañada (por favor contacte al administrador para reparar esta biblioteca)"
-
-#: seahub/templates/js/templates.html:45
-#: seahub/templates/js/templates.html:226
-#: seahub/templates/js/templates.html:239
-#: seahub/templates/js/templates.html:332
+#: seahub/templates/js/templates.html:52
+#: seahub/templates/js/templates.html:237
+#: seahub/templates/js/templates.html:250
+#: seahub/templates/js/templates.html:343
 msgid "More operations"
 msgstr "Más operaciones"
 
-#: seahub/templates/js/templates.html:47
-#: seahub/templates/js/templates.html:228
-#: seahub/templates/js/templates.html:311
-#: seahub/templates/js/templates.html:386
-#: seahub/templates/js/templates.html:412
-#: seahub/templates/js/templates.html:1042
+#: seahub/templates/js/templates.html:54
+#: seahub/templates/js/templates.html:239
+#: seahub/templates/js/templates.html:322
+#: seahub/templates/js/templates.html:397
+#: seahub/templates/js/templates.html:423
 #: seahub/templates/js/templates.html:1059
+#: seahub/templates/js/templates.html:1076
 msgid "Rename"
 msgstr "Renombrar"
 
-#: seahub/templates/js/templates.html:49
+#: seahub/templates/js/templates.html:56
 msgid "History Setting"
 msgstr "Configuración de historial"
 
-#: seahub/templates/js/templates.html:51
+#: seahub/templates/js/templates.html:58
 msgid "Change Password"
 msgstr "Cambiar contraseña"
 
-#: seahub/templates/js/templates.html:54
+#: seahub/templates/js/templates.html:61
 msgid "Share Links"
 msgstr "Enlaces Compartidos"
 
-#: seahub/templates/js/templates.html:57
+#: seahub/templates/js/templates.html:64
 msgid "Folder Permission"
 msgstr "Permiso de Carpeta"
 
-#: seahub/templates/js/templates.html:73 seahub/templates/js/templates.html:89
-#: seahub/templates/js/templates.html:1556
+#: seahub/templates/js/templates.html:71
+msgid "Broken (please contact your administrator to fix this library)"
+msgstr "Dañada (por favor contacte al administrador para reparar esta biblioteca)"
+
+#: seahub/templates/js/templates.html:84
+#: seahub/templates/js/templates.html:100
+#: seahub/templates/js/templates.html:1581
 msgid "Unshare"
 msgstr "Dejar de compartir"
 
-#: seahub/templates/js/templates.html:99
-#: seahub/templates/js/templates.html:229
-#: seahub/templates/js/templates.html:312
-#: seahub/templates/js/templates.html:387
-#: seahub/templates/js/templates.html:413
+#: seahub/templates/js/templates.html:110
+#: seahub/templates/js/templates.html:240
+#: seahub/templates/js/templates.html:323
+#: seahub/templates/js/templates.html:398
+#: seahub/templates/js/templates.html:424
 msgid "Move"
 msgstr "Mover"
 
-#: seahub/templates/js/templates.html:100
-#: seahub/templates/js/templates.html:107
-#: seahub/templates/js/templates.html:230
+#: seahub/templates/js/templates.html:111
+#: seahub/templates/js/templates.html:118
 #: seahub/templates/js/templates.html:241
-#: seahub/templates/js/templates.html:313
-#: seahub/templates/js/templates.html:334
-#: seahub/templates/js/templates.html:388
-#: seahub/templates/js/templates.html:414
+#: seahub/templates/js/templates.html:252
+#: seahub/templates/js/templates.html:324
+#: seahub/templates/js/templates.html:345
+#: seahub/templates/js/templates.html:399
+#: seahub/templates/js/templates.html:425
 msgid "Copy"
 msgstr "Copiar"
 
-#: seahub/templates/js/templates.html:123
+#: seahub/templates/js/templates.html:134
 msgid "Upload Files"
 msgstr "Subir archivos"
 
-#: seahub/templates/js/templates.html:143
+#: seahub/templates/js/templates.html:154
 #: seahub/templates/view_shared_dir.html:31
 #: seahub/templates/view_shared_dir.html:33
 #: seahub/templates/view_shared_dir.html:35
 msgid "List"
 msgstr "Lista"
 
-#: seahub/templates/js/templates.html:143
+#: seahub/templates/js/templates.html:154
 msgid "list view"
 msgstr "ver como lista"
 
-#: seahub/templates/js/templates.html:143
+#: seahub/templates/js/templates.html:154
 #: seahub/templates/view_shared_dir.html:37
 #: seahub/templates/view_shared_dir.html:39
 #: seahub/templates/view_shared_dir.html:41
 msgid "Grid"
 msgstr "Grilla"
 
-#: seahub/templates/js/templates.html:143
+#: seahub/templates/js/templates.html:154
 msgid "grid view"
 msgstr "ver como grilla"
 
-#: seahub/templates/js/templates.html:192
-#: seahub/templates/js/templates.html:885
-#: seahub/templates/js/templates.html:894
+#: seahub/templates/js/templates.html:203
+#: seahub/templates/js/templates.html:902
+#: seahub/templates/js/templates.html:911
 msgid "Actions"
 msgstr "Acciones"
 
-#: seahub/templates/js/templates.html:226
-#: seahub/templates/js/templates.html:239
-#: seahub/templates/js/templates.html:309
-#: seahub/templates/js/templates.html:332
+#: seahub/templates/js/templates.html:237
+#: seahub/templates/js/templates.html:250
+#: seahub/templates/js/templates.html:320
+#: seahub/templates/js/templates.html:343
 msgid "More Operations"
 msgstr "Más Operaciones"
 
-#: seahub/templates/js/templates.html:234
-#: seahub/templates/js/templates.html:327
-#: seahub/templates/js/templates.html:399
-#: seahub/templates/js/templates.html:418
+#: seahub/templates/js/templates.html:245
+#: seahub/templates/js/templates.html:338
+#: seahub/templates/js/templates.html:410
+#: seahub/templates/js/templates.html:429
 msgid "Open via Client"
 msgstr "Abrir via el Cliente"
 
-#: seahub/templates/js/templates.html:265
+#: seahub/templates/js/templates.html:276
 #: seahub/templates/view_file_base.html:19
 msgid "starred"
 msgstr "marcado"
 
-#: seahub/templates/js/templates.html:267
+#: seahub/templates/js/templates.html:278
 #: seahub/templates/view_file_base.html:21
 msgid "unstarred"
 msgstr "desmarcado"
 
-#: seahub/templates/js/templates.html:283
-#: seahub/templates/js/templates.html:359
+#: seahub/templates/js/templates.html:294
+#: seahub/templates/js/templates.html:370
 #: seahub/templates/view_file_base.html:25
 msgid "locked"
 msgstr "bloqueado"
 
-#: seahub/templates/js/templates.html:321
-#: seahub/templates/js/templates.html:393
+#: seahub/templates/js/templates.html:332
+#: seahub/templates/js/templates.html:404
 #: seahub/templates/view_file_base.html:60
 #: seahub/templates/view_file_base.html:62
 msgid "Unlock"
 msgstr "Desbloquear"
 
-#: seahub/templates/js/templates.html:324
-#: seahub/templates/js/templates.html:396
+#: seahub/templates/js/templates.html:335
+#: seahub/templates/js/templates.html:407
 #: seahub/templates/view_file_base.html:59
 #: seahub/templates/view_file_base.html:63
 msgid "Lock"
 msgstr "Bloquear"
 
-#: seahub/templates/js/templates.html:345
+#: seahub/templates/js/templates.html:356
 msgid "Fetch failed"
 msgstr "Obtener falló"
 
-#: seahub/templates/js/templates.html:428
+#: seahub/templates/js/templates.html:439
 #: seahub/templates/snippets/file_share_popup.html:6
 msgid "Download Link"
 msgstr "Enlace de descarga"
 
-#: seahub/templates/js/templates.html:432
+#: seahub/templates/js/templates.html:443
 msgid "Upload Link"
 msgstr "Link de subida"
 
-#: seahub/templates/js/templates.html:448
-#: seahub/templates/js/templates.html:503
+#: seahub/templates/js/templates.html:459
+#: seahub/templates/js/templates.html:514
 #: seahub/templates/snippets/file_share_popup.html:15
 msgid "Add password protection"
 msgstr "Agregar protección por contraseña"
 
-#: seahub/templates/js/templates.html:451
-#: seahub/templates/js/templates.html:506
+#: seahub/templates/js/templates.html:462
+#: seahub/templates/js/templates.html:517
 #: seahub/templates/snippets/file_share_popup.html:18
 #, python-format
 msgid "(at least %(share_link_password_min_length)s characters)"
 msgstr "(al menos %(share_link_password_min_length)s caracteres)"
 
-#: seahub/templates/js/templates.html:454
-#: seahub/templates/js/templates.html:509
-#: seahub/templates/sysadmin/sys_useradmin.html:45
-#: seahub/templates/sysadmin/sys_useradmin.html:123
+#: seahub/templates/js/templates.html:465
+#: seahub/templates/js/templates.html:520
+#: seahub/templates/sysadmin/sys_useradmin.html:51
+#: seahub/templates/sysadmin/sys_useradmin.html:132
 msgid "Show"
 msgstr "Mostrar"
 
-#: seahub/templates/js/templates.html:455
-#: seahub/templates/js/templates.html:510
-#: seahub/templates/sysadmin/sys_useradmin.html:46
+#: seahub/templates/js/templates.html:466
+#: seahub/templates/js/templates.html:521
+#: seahub/templates/sysadmin/sys_useradmin.html:52
 msgid "Generate a random password"
 msgstr "Generar una contraseña aleatoria"
 
-#: seahub/templates/js/templates.html:469
-#: seahub/templates/js/templates.html:516
+#: seahub/templates/js/templates.html:480
+#: seahub/templates/js/templates.html:527
 #: seahub/templates/snippets/file_share_popup.html:33
 msgid "Generate"
 msgstr "Generar"
 
-#: seahub/templates/js/templates.html:473
+#: seahub/templates/js/templates.html:484
 #: seahub/templates/snippets/file_share_popup.html:35
 msgid "Link: "
 msgstr "Enlace:"
 
-#: seahub/templates/js/templates.html:476
+#: seahub/templates/js/templates.html:487
 msgid "Direct Download Link: "
 msgstr "Enlace de Descarga Directa:"
 
-#: seahub/templates/js/templates.html:480
-#: seahub/templates/js/templates.html:520
+#: seahub/templates/js/templates.html:491
+#: seahub/templates/js/templates.html:531
 #: seahub/templates/snippets/file_share_popup.html:36
 msgid "Send"
 msgstr "Enviar"
 
-#: seahub/templates/js/templates.html:483
-#: seahub/templates/js/templates.html:523
+#: seahub/templates/js/templates.html:494
+#: seahub/templates/js/templates.html:534
 #: seahub/templates/snippets/file_share_popup.html:40
 msgid "Send to:"
 msgstr "Enviar a:"
 
-#: seahub/templates/js/templates.html:484
-#: seahub/templates/js/templates.html:524
+#: seahub/templates/js/templates.html:495
+#: seahub/templates/js/templates.html:535
 #: seahub/templates/snippets/file_share_popup.html:41
 msgid "Emails, Seperated by ','"
 msgstr "Correos separados por ','"
 
-#: seahub/templates/js/templates.html:485
-#: seahub/templates/js/templates.html:525
+#: seahub/templates/js/templates.html:496
+#: seahub/templates/js/templates.html:536
 #: seahub/templates/snippets/file_share_popup.html:45
 msgid "Message (optional):"
 msgstr "Mensaje (opcional):"
 
-#: seahub/templates/js/templates.html:490
-#: seahub/templates/js/templates.html:530
+#: seahub/templates/js/templates.html:501
+#: seahub/templates/js/templates.html:541
 #: seahub/templates/snippets/file_share_popup.html:50
 msgid "Sending..."
 msgstr "Enviando…"
 
-#: seahub/templates/js/templates.html:499
+#: seahub/templates/js/templates.html:510
 msgid ""
 "You can share the generated link to others and then they can upload files to"
 " this directory via the link."
 msgstr "Puedes compartir el enlace generado con otros para que puedan subir archivos a esta carpeta."
 
-#: seahub/templates/js/templates.html:519
+#: seahub/templates/js/templates.html:530
 msgid "Upload Link: "
 msgstr "Link de Subida:"
 
-#: seahub/templates/js/templates.html:606
+#: seahub/templates/js/templates.html:617
 msgid "Leave Share"
 msgstr "Dejar de compartir"
 
-#: seahub/templates/js/templates.html:759
+#: seahub/templates/js/templates.html:776
 msgid "Wiki"
 msgstr "Wiki"
 
-#: seahub/templates/js/templates.html:762 seahub/templates/libraries.html:131
+#: seahub/templates/js/templates.html:779 seahub/templates/libraries.html:131
 #: seahub/templates/sysadmin/sys_admin_group_info.html:18
 #: seahub/templates/sysadmin/sys_inst_info_admins.html:7
 #: seahub/templates/sysadmin/sys_inst_info_user.html:7
@@ -4213,310 +4331,310 @@ msgstr "Wiki"
 msgid "Members"
 msgstr "Miembros"
 
-#: seahub/templates/js/templates.html:763
+#: seahub/templates/js/templates.html:780
 msgid "Discussion"
 msgstr "Discusión"
 
-#: seahub/templates/js/templates.html:806
-#: seahub/templates/js/templates.html:1293
+#: seahub/templates/js/templates.html:823
+#: seahub/templates/js/templates.html:1318
 msgid "User Permission"
 msgstr "Permiso del usuario"
 
-#: seahub/templates/js/templates.html:807
-#: seahub/templates/js/templates.html:1294
+#: seahub/templates/js/templates.html:824
+#: seahub/templates/js/templates.html:1319
 msgid "Group Permission"
 msgstr "Permiso de grupo"
 
-#: seahub/templates/js/templates.html:866
+#: seahub/templates/js/templates.html:883
 msgid "icon"
 msgstr "icono"
 
-#: seahub/templates/js/templates.html:877
+#: seahub/templates/js/templates.html:894
 msgid "Unstar"
 msgstr "Desmarcar"
 
-#: seahub/templates/js/templates.html:883
-#: seahub/templates/js/templates.html:892
+#: seahub/templates/js/templates.html:900
+#: seahub/templates/js/templates.html:909
 msgid "Library Type"
 msgstr "Tipo de Biblioteca"
 
-#: seahub/templates/js/templates.html:897
+#: seahub/templates/js/templates.html:914
 #: seahub/templates/sysadmin/sys_admin_group_info.html:29
 msgid "Shared By"
 msgstr "Compartida por"
 
-#: seahub/templates/js/templates.html:901
+#: seahub/templates/js/templates.html:918
 msgid "Select libraries to share"
 msgstr "Seleccionar bibliotecas para compartir"
 
-#: seahub/templates/js/templates.html:958
+#: seahub/templates/js/templates.html:975
 msgid "Created library"
 msgstr "Biblioteca creada"
 
-#: seahub/templates/js/templates.html:962
+#: seahub/templates/js/templates.html:979
 msgid "Deleted library"
 msgstr "Biblioteca eliminada"
 
-#: seahub/templates/js/templates.html:969
+#: seahub/templates/js/templates.html:986
 #: seahub/templates/snippets/list_commit_detail.html:10
 msgid "Modification Details"
 msgstr "Detalles de modificación"
 
-#: seahub/templates/js/templates.html:983
+#: seahub/templates/js/templates.html:1000
 #: seahub/templates/snippets/search_form.html:4
 msgid "Search files in this wiki"
 msgstr "Buscar archivos en el wiki"
 
-#: seahub/templates/js/templates.html:983
+#: seahub/templates/js/templates.html:1000
 #: seahub/templates/snippets/search_form.html:4
 msgid "Search files in this library"
 msgstr "Buscar archivos en esta biblioteca"
 
-#: seahub/templates/js/templates.html:985
+#: seahub/templates/js/templates.html:1002
 #: seahub/templates/snippets/search_form.html:7
 #: seahub/templates/snippets/search_form.html:13
 msgid "Search Files"
 msgstr "Buscar Archivos"
 
-#: seahub/templates/js/templates.html:987
+#: seahub/templates/js/templates.html:1004
 #: seahub/templates/snippets/search_form.html:9
 msgid "advanced"
 msgstr "avanzado"
 
-#: seahub/templates/js/templates.html:1005 seahub/templates/libraries.html:108
+#: seahub/templates/js/templates.html:1022 seahub/templates/libraries.html:108
 msgid "No library is shared to this group"
 msgstr "No se ha compartido ninguna biblioteca con este grupo"
 
-#: seahub/templates/js/templates.html:1013
+#: seahub/templates/js/templates.html:1030
 msgid "owner"
 msgstr "propietario"
 
-#: seahub/templates/js/templates.html:1015
+#: seahub/templates/js/templates.html:1032
 #: seahub/templates/sysadmin/sys_admin_group_info.html:70
 msgid "admin"
 msgstr "admin"
 
-#: seahub/templates/js/templates.html:1029
+#: seahub/templates/js/templates.html:1046
 #: seahub/templates/view_file_base.html:141
 msgid "Reply"
 msgstr "Responder"
 
-#: seahub/templates/js/templates.html:1045
-#: seahub/templates/js/templates.html:1061
+#: seahub/templates/js/templates.html:1062
+#: seahub/templates/js/templates.html:1078
 msgid "Add Wiki"
 msgstr "Agregar Wiki"
 
-#: seahub/templates/js/templates.html:1047
-#: seahub/templates/js/templates.html:1063
+#: seahub/templates/js/templates.html:1064
+#: seahub/templates/js/templates.html:1080
 msgid "Remove Wiki"
 msgstr "Remover Wiki"
 
-#: seahub/templates/js/templates.html:1051
-#: seahub/templates/js/templates.html:1067
+#: seahub/templates/js/templates.html:1068
+#: seahub/templates/js/templates.html:1084
 msgid "Import Members"
 msgstr "Importar Miembros"
 
-#: seahub/templates/js/templates.html:1052
-#: seahub/templates/js/templates.html:1068
+#: seahub/templates/js/templates.html:1069
+#: seahub/templates/js/templates.html:1085
 msgid "Manage Members"
 msgstr "Administrar Miembros"
 
-#: seahub/templates/js/templates.html:1055
+#: seahub/templates/js/templates.html:1072
 msgid "Dismiss"
 msgstr "Descartar"
 
-#: seahub/templates/js/templates.html:1072
+#: seahub/templates/js/templates.html:1089
 msgid "Leave group"
 msgstr "Abandonar el grupo"
 
-#: seahub/templates/js/templates.html:1079
+#: seahub/templates/js/templates.html:1096
 msgid "Rename Group To"
 msgstr "Renombrar Grupo a"
 
-#: seahub/templates/js/templates.html:1088
+#: seahub/templates/js/templates.html:1105
 msgid "Transfer Group To"
 msgstr "Tranferir Grupo a"
 
-#: seahub/templates/js/templates.html:1096
+#: seahub/templates/js/templates.html:1113
 msgid "Import group members from a CSV file"
 msgstr "Importar miembros del grupo desde un archivo CSV"
 
-#: seahub/templates/js/templates.html:1098
+#: seahub/templates/js/templates.html:1115
 msgid "File format: user@mail.com"
 msgstr "Formato de archivo: usuario@mail.com"
 
-#: seahub/templates/js/templates.html:1108
+#: seahub/templates/js/templates.html:1125
 #: seahub/templates/sysadmin/sys_inst_admin.html:12
 #: seahub/templates/sysadmin/sys_terms_admin.html:9
 msgid "Add"
 msgstr "Agregar"
 
-#: seahub/templates/js/templates.html:1188
+#: seahub/templates/js/templates.html:1205
 msgid "Setting library history is disabled by Admin"
 msgstr "La configuración del historial de la biblioteca ha sido deshabilitada por el Administrador"
 
-#: seahub/templates/js/templates.html:1193
+#: seahub/templates/js/templates.html:1210
 msgid "Keep full history"
 msgstr "Mantener historial completo"
 
-#: seahub/templates/js/templates.html:1199
+#: seahub/templates/js/templates.html:1216
 msgid "Don't keep history"
 msgstr "No mantener historial"
 
-#: seahub/templates/js/templates.html:1205
+#: seahub/templates/js/templates.html:1222
 msgid "Only keep a period of history:"
 msgstr "Sólo mantener el historial por:"
 
-#: seahub/templates/js/templates.html:1206
+#: seahub/templates/js/templates.html:1223
 msgid "days"
 msgstr "días"
 
-#: seahub/templates/js/templates.html:1222
-#: seahub/templates/js/templates.html:1587
-#: seahub/templates/js/templates.html:1620
+#: seahub/templates/js/templates.html:1240
+#: seahub/templates/js/templates.html:1612
+#: seahub/templates/js/templates.html:1648
 msgid "Download Links"
 msgstr "Enlaces de descarga"
 
-#: seahub/templates/js/templates.html:1223
-#: seahub/templates/js/templates.html:1590
-#: seahub/templates/js/templates.html:1623
+#: seahub/templates/js/templates.html:1243
+#: seahub/templates/js/templates.html:1616
+#: seahub/templates/js/templates.html:1652
 msgid "Upload Links"
 msgstr "Enlaces de subida"
 
-#: seahub/templates/js/templates.html:1233
-#: seahub/templates/js/templates.html:1250
+#: seahub/templates/js/templates.html:1255
+#: seahub/templates/js/templates.html:1274
 msgid "Created By"
 msgstr "Creado Por"
 
-#: seahub/templates/js/templates.html:1235
-#: seahub/templates/js/templates.html:1252
-#: seahub/templates/js/templates.html:1601
-#: seahub/templates/js/templates.html:1634
-#: seahub/templates/sysadmin/userinfo.html:166
+#: seahub/templates/js/templates.html:1257
+#: seahub/templates/js/templates.html:1276
+#: seahub/templates/js/templates.html:1628
+#: seahub/templates/js/templates.html:1663
+#: seahub/templates/sysadmin/userinfo.html:208
 msgid "Visits"
 msgstr "Visitas"
 
-#: seahub/templates/js/templates.html:1266
-#: seahub/templates/sysadmin/userinfo.html:177
-#: seahub/templates/sysadmin/userinfo.html:187
+#: seahub/templates/js/templates.html:1291
+#: seahub/templates/sysadmin/userinfo.html:219
+#: seahub/templates/sysadmin/userinfo.html:229
 #: seahub/templates/view_shared_dir.html:64
 msgid "Directory icon"
 msgstr "Icono de la carpeta"
 
-#: seahub/templates/js/templates.html:1269
-#: seahub/templates/repo_history_view.html:73
+#: seahub/templates/js/templates.html:1294
+#: seahub/templates/repo_history_view.html:74
 #: seahub/templates/snippets/repo_dir_trash_tr.html:21
-#: seahub/templates/sysadmin/userinfo.html:173
+#: seahub/templates/sysadmin/userinfo.html:215
 #: seahub/templates/view_shared_dir.html:84
 #: seahub/templates/view_shared_dir.html:86
 #: seahub/templates/view_shared_dir.html:89
 msgid "File"
 msgstr "Archivo"
 
-#: seahub/templates/js/templates.html:1276
-#: seahub/templates/js/templates.html:1664
-#: seahub/templates/js/templates.html:1675
-#: seahub/templates/js/templates.html:1720
+#: seahub/templates/js/templates.html:1301
+#: seahub/templates/js/templates.html:1693
+#: seahub/templates/js/templates.html:1704
+#: seahub/templates/js/templates.html:1749
 #: seahub/templates/sysadmin/sys_inst_admin.html:36
 #: seahub/templates/sysadmin/sys_publink_admin.html:25
-#: seahub/templates/sysadmin/userinfo.html:184
-#: seahub/templates/sysadmin/userinfo.html:193
+#: seahub/templates/sysadmin/userinfo.html:226
+#: seahub/templates/sysadmin/userinfo.html:235
 msgid "Remove"
 msgstr "Remover"
 
-#: seahub/templates/js/templates.html:1304
-#: seahub/templates/js/templates.html:1348
+#: seahub/templates/js/templates.html:1329
+#: seahub/templates/js/templates.html:1373
 msgid "Folder"
 msgstr "Carpeta"
 
-#: seahub/templates/js/templates.html:1315
-#: seahub/templates/js/templates.html:1334
-#: seahub/templates/js/templates.html:1361
-#: seahub/templates/js/templates.html:1380
+#: seahub/templates/js/templates.html:1340
+#: seahub/templates/js/templates.html:1359
+#: seahub/templates/js/templates.html:1386
+#: seahub/templates/js/templates.html:1405
 msgid "Select a folder"
 msgstr "Seleccione una carpeta"
 
-#: seahub/templates/js/templates.html:1428
+#: seahub/templates/js/templates.html:1453
 msgid "Old Password"
 msgstr "Contraseña anterior"
 
-#: seahub/templates/js/templates.html:1430
+#: seahub/templates/js/templates.html:1455
 #: seahub/templates/registration/password_change_form.html:18
 msgid "New Password"
 msgstr "Nueva Contraseña"
 
-#: seahub/templates/js/templates.html:1432
+#: seahub/templates/js/templates.html:1457
 msgid "New Password Again"
 msgstr "Nueva contraseña otra vez"
 
-#: seahub/templates/js/templates.html:1461
+#: seahub/templates/js/templates.html:1486
 msgid "See All Notifications"
 msgstr "Ver Todas las Notificaciones"
 
-#: seahub/templates/js/templates.html:1513
-#: seahub/templates/js/templates.html:1568
+#: seahub/templates/js/templates.html:1538
+#: seahub/templates/js/templates.html:1593
 msgid "Share To"
 msgstr "Compartir con"
 
-#: seahub/templates/js/templates.html:1522
+#: seahub/templates/js/templates.html:1547
 msgid "You have not shared any library"
 msgstr "No has compartido ninguna biblioteca"
 
-#: seahub/templates/js/templates.html:1523
+#: seahub/templates/js/templates.html:1548
 msgid ""
 "You can share libraries to your friends and colleagues by clicking the share"
 " icon of your own libraries in your home page or creating a new library in "
 "groups you are in."
 msgstr "Puedes compartir bibliotecas con contactos dando click al icono de compartir en la página de inicio o creando una nueva biblioteca en los grupos a los cuales pertenezcas"
 
-#: seahub/templates/js/templates.html:1536
+#: seahub/templates/js/templates.html:1561
 msgid "all members"
 msgstr "todos los miembros"
 
-#: seahub/templates/js/templates.html:1577
+#: seahub/templates/js/templates.html:1602
 msgid "You have not shared any folder"
 msgstr "No has compartido ninguna carpeta"
 
-#: seahub/templates/js/templates.html:1578
+#: seahub/templates/js/templates.html:1603
 msgid ""
 "You can share a single folder with a registered user if you don't want to "
 "share a whole library."
 msgstr "Puedes compartir solamente una carpeta con un usuario registrado si no quieres compartir toda la biblioteca."
 
-#: seahub/templates/js/templates.html:1602
-#: seahub/templates/js/templates.html:1697
+#: seahub/templates/js/templates.html:1629
+#: seahub/templates/js/templates.html:1726
 msgid "Expiration"
 msgstr "Vencimiento"
 
-#: seahub/templates/js/templates.html:1610
+#: seahub/templates/js/templates.html:1637
 msgid "You don't have any download link"
 msgstr "No tienes ningún enlace de descarga"
 
-#: seahub/templates/js/templates.html:1611
+#: seahub/templates/js/templates.html:1638
 msgid ""
 "You can generate a download link for a folder or a file. People receive this"
 " link can view the folder or the file online."
 msgstr "Puedes generar un enlace de descarga para una carpeta o un archivo. Las personas que reciban el enlace pueden ver la carpeta o el archivo en línea."
 
-#: seahub/templates/js/templates.html:1642
+#: seahub/templates/js/templates.html:1671
 msgid "You don't have any upload link"
 msgstr "No tienes ningún enlace de subida"
 
-#: seahub/templates/js/templates.html:1643
+#: seahub/templates/js/templates.html:1672
 msgid ""
 "You can generate an upload link from any folder. People receive this link "
 "can upload files to this folder."
 msgstr "Puedes generar un enlace de subida para cualquier carpeta. Las personas que reciben este enlace pueden subir archivos a esta carpeta."
 
-#: seahub/templates/js/templates.html:1696
+#: seahub/templates/js/templates.html:1725
 msgid "Invite Time"
 msgstr "Fecha de Invitación"
 
-#: seahub/templates/js/templates.html:1698
+#: seahub/templates/js/templates.html:1727
 msgid "Accepted"
 msgstr "Aceptada"
 
-#: seahub/templates/js/templates.html:1706
+#: seahub/templates/js/templates.html:1735
 msgid "You have not invited any people."
 msgstr "No ha invitado a ninguna persona."
 
@@ -4566,10 +4684,6 @@ msgstr "Puedes crear una biblioteca pública dando click en el enlace \"Nueva bi
 #: seahub/templates/libraries.html:70
 msgid "My Groups"
 msgstr "Mis grupos"
-
-#: seahub/templates/libraries.html:72 seahub/templates/libraries.html.py:90
-msgid "New Group"
-msgstr "Nuevo Grupo"
 
 #: seahub/templates/libraries.html:78
 msgid "You are not in any group"
@@ -4673,6 +4787,11 @@ msgid ""
 "%(expiration_days)s days: "
 msgstr "Para activar esta cuenta, por favor haga click en el siguiente enlace dentro de los próximos %(expiration_days)s días: "
 
+#: seahub/templates/registration/activation_email.html:18
+#: seahub/templates/registration/registration_form.html:46
+msgid "Sign Up"
+msgstr "Registrarse"
+
 #: seahub/templates/registration/login.html:4
 #: seahub/templates/registration/login.html:8
 #: seahub/templates/registration/login.html:38
@@ -4725,7 +4844,7 @@ msgstr "El email o el nombre de usuario no pueden estar en blanco"
 #: seahub/templates/registration/password_change_form.html:66
 #: seahub/templates/registration/registration_form.html:88
 #: seahub/templates/sysadmin/sudo_mode.html:34
-#: seahub/templates/sysadmin/sys_useradmin.html:157
+#: seahub/templates/sysadmin/sys_useradmin.html:168
 msgid "Password cannot be blank"
 msgstr "La contraseña no puede estar en blanco"
 
@@ -4768,7 +4887,7 @@ msgstr "Contraseña Actual"
 #: seahub/templates/sysadmin/sudo_mode.html:4
 #: seahub/templates/sysadmin/sudo_mode.html:18
 #: seahub/templates/sysadmin/sys_org_admin.html:34
-#: seahub/templates/sysadmin/sys_useradmin.html:48
+#: seahub/templates/sysadmin/sys_useradmin.html:54
 msgid "Confirm Password"
 msgstr "Confirmar contraseña"
 
@@ -4789,7 +4908,7 @@ msgstr "La contraseña no puede estar en blanco"
 #: seahub/templates/snippets/repo_create_js.html:54
 #: seahub/templates/snippets/shared_link_js.html:141
 #: seahub/templates/sysadmin/sys_org_admin.html:94
-#: seahub/templates/sysadmin/sys_useradmin.html:161
+#: seahub/templates/sysadmin/sys_useradmin.html:172
 msgid "Please enter the password again"
 msgstr "Ingresa la contraseña nuevamente"
 
@@ -4844,7 +4963,7 @@ msgid ""
 "click the following link: "
 msgstr "Para reestablecer la contraseña de tu cuenta %(account)s en %(site_name)s, dale click en el siguiente enlace:"
 
-#: seahub/templates/registration/password_reset_email.html:17
+#: seahub/templates/registration/password_reset_email.html:20
 msgid "If you did not request it, just skip it."
 msgstr "Si no lo has solicitado, ignóralo."
 
@@ -4885,90 +5004,78 @@ msgstr "Registrar"
 msgid "Welcome back, you are already signed in."
 msgstr "Bienvenido otra vez, sesión iniciada."
 
-#: seahub/templates/registration/registration_form.html:46
-msgid "Sign Up"
-msgstr "Registrarse"
-
 #: seahub/templates/registration/registration_form.html:84
-#: seahub/templates/sysadmin/sys_useradmin.html:153
+#: seahub/templates/sysadmin/sys_useradmin.html:164
 msgid "Email cannot be blank"
 msgstr "El correo no puede estar en blanco"
 
-#: seahub/templates/repo_dir_recycle_view.html:7
+#: seahub/templates/repo_dir_recycle_view.html:13
 #, python-format
 msgid "<span class=\"op-target\">%(repo_dir_name)s</span> Trash"
 msgstr "<span class=\"op-target\">%(repo_dir_name)s</span> Papelera"
 
-#: seahub/templates/repo_dir_recycle_view.html:34
+#: seahub/templates/repo_dir_recycle_view.html:45
 msgid "Delete Time"
 msgstr "Borrar fecha"
 
-#: seahub/templates/repo_dir_recycle_view.html:55
+#: seahub/templates/repo_dir_recycle_view.html:66
 msgid "Clear files in trash and history："
 msgstr "Limpiar archivos en la papelera y en el historial :"
 
-#: seahub/templates/repo_dir_recycle_view.html:57
+#: seahub/templates/repo_dir_recycle_view.html:68
 msgid "3 days ago"
 msgstr "más de 3 días"
 
-#: seahub/templates/repo_dir_recycle_view.html:58
+#: seahub/templates/repo_dir_recycle_view.html:69
 msgid "1 week ago"
 msgstr "más de 1 semana"
 
-#: seahub/templates/repo_dir_recycle_view.html:59
+#: seahub/templates/repo_dir_recycle_view.html:70
 msgid "1 month ago"
 msgstr "más de 1 mes"
 
-#: seahub/templates/repo_dir_recycle_view.html:143
-#: seahub/templates/sysadmin/settings.html:165
-#: seahub/templates/sysadmin/settings.html:203 seahub/views/sysadmin.py:1186
-#: seahub/views/sysadmin.py:1243 seahub/views/sysadmin.py:1969
-#: seahub/views/sysadmin.py:2011 seahub/views/sysadmin.py:2178
-msgid "Success"
-msgstr "Éxito"
+#: seahub/templates/repo_dir_recycle_view.html:154
+msgid "Successfully restored 1 item."
+msgstr "1 ítem restaurado con éxito."
 
-#: seahub/templates/repo_history.html:8
+#: seahub/templates/repo_history.html:14
 #, python-format
 msgid "<span class=\"op-target\">%(repo_name)s</span> Modification History"
 msgstr "<span class=\"op-target\">%(repo_name)s</span> Historial de Modificaciones"
 
-#: seahub/templates/repo_history.html:11
+#: seahub/templates/repo_history.html:23
 msgid ""
 "Tip: a snapshot will be generated after modification, which records the "
 "library state after the modification."
 msgstr "Consejo: una instantánea será generada después de cada modificación, para almacenar el estado posterior a la modificación."
 
-#: seahub/templates/repo_history.html:37
+#: seahub/templates/repo_history.html:49
 msgid "None"
 msgstr "Ninguna"
 
-#: seahub/templates/repo_history.html:46
+#: seahub/templates/repo_history.html:58
 msgid "Current Version"
 msgstr "Versión Actual"
 
-#: seahub/templates/repo_history.html:48
+#: seahub/templates/repo_history.html:60
 msgid "View Snapshot"
 msgstr "Ver instántanea"
 
-#: seahub/templates/repo_history_view.html:14
+#: seahub/templates/repo_history_view.html:13
 #, python-format
 msgid "<span class=\"op-target\">%(repo_name)s</span> Snapshot"
 msgstr "<span class=\"op-target\">%(repo_name)s</span> Instantánea"
 
-#: seahub/templates/repo_history_view.html:16
-msgid "Back to modification history"
-msgstr "Regresar al historial de modificaciones"
-
-#: seahub/templates/repo_history_view.html:64
+#: seahub/templates/repo_history_view.html:65
 #: seahub/templates/snippets/repo_dir_trash_tr.html:6
 msgid "Directory"
 msgstr "Carpeta"
 
-#: seahub/templates/repo_history_view.html:88
+#: seahub/templates/repo_history_view.html:89
 msgid "Restore Library"
 msgstr "Restaurar biblioteca"
 
-#: seahub/templates/repo_history_view.html:89
+#: seahub/templates/repo_history_view.html:90
 msgid "Are you sure you want to restore this library?"
 msgstr "¿Estás seguro que deseas restaurar está biblioteca?"
 
@@ -5152,30 +5259,6 @@ msgstr "Descripción requerida"
 msgid "Please enter password"
 msgstr "Ingresa una contraseña"
 
-#: seahub/templates/snippets/repo_share_form.html:3
-#, python-format
-msgid "Share %(lib_name)s"
-msgstr "Compartir %(lib_name)s"
-
-#: seahub/templates/snippets/repo_share_form.html:6
-#: seahub/templates/sysadmin/sys_useradmin_admins.html:28
-msgid "Enter"
-msgstr "Aceptar"
-
-#: seahub/templates/snippets/repo_share_form.html:11
-msgid "Emails or Groups, Seperated by ','"
-msgstr "Correos o grupos separados por ','"
-
-#: seahub/templates/snippets/repo_share_form.html:14
-msgid ""
-"Tip: must be organization members or organization groups, enter \"all\" to "
-"share to public library."
-msgstr "Tip: deben ser miembros de la organización o de algún grupo, escribe \"all\" para convertirla en pública."
-
-#: seahub/templates/snippets/repo_share_form.html:17
-msgid "Tip: enter \"all\" to share to public library."
-msgstr "Tip: Ingresa \"all\" para convertir en biblioteca pública."
-
 #: seahub/templates/snippets/search_form.html:17
 #: seahub/templates/snippets/search_form.html:21
 #: seahub/templates/snippets/search_form.html:24
@@ -5260,11 +5343,11 @@ msgstr "Enviado con éxito a  {placeholder}"
 msgid "Failed to send to {placeholder}"
 msgstr "Fallo al enviar a  {placeholder}"
 
-#: seahub/templates/snippets/shared_link_js.html:156
+#: seahub/templates/snippets/shared_link_js.html:154
 msgid "Please enter days"
 msgstr "Ingresa cantidad de días"
 
-#: seahub/templates/snippets/shared_link_js.html:162
+#: seahub/templates/snippets/shared_link_js.html:160
 msgid "Please enter valid days"
 msgstr "Ingresa cantidad válida de días"
 
@@ -5283,7 +5366,7 @@ msgstr "Pago"
 #: seahub/templates/sysadmin/org_admin_table.html:5
 #: seahub/templates/sysadmin/sys_org_info_group.html:19
 #: seahub/templates/sysadmin/sys_org_search.html:11
-#: seahub/views/sysadmin.py:1018
+#: seahub/views/sysadmin.py:1054
 msgid "Creator"
 msgstr "Creador"
 
@@ -5390,13 +5473,9 @@ msgstr "Administradores"
 #: seahub/templates/sysadmin/sys_inst_info_user.html:41
 #: seahub/templates/sysadmin/sys_inst_search_user.html:42
 #: seahub/templates/sysadmin/useradmin_js.html:13
-#: seahub/templates/sysadmin/useradmin_table.html:90
+#: seahub/templates/sysadmin/useradmin_table.html:100
 msgid "Revoke Admin"
 msgstr "Revocar Privilegios"
-
-#: seahub/templates/sysadmin/sys_inst_info_base.html:16
-msgid "Back"
-msgstr "Atrás"
 
 #: seahub/templates/sysadmin/sys_inst_info_base.html:20
 #: seahub/templates/sysadmin/sys_org_info_base.html:20
@@ -5468,7 +5547,7 @@ msgid "Password can not be blank"
 msgstr "La contraseña no puede estar en blanco"
 
 #: seahub/templates/sysadmin/sys_org_admin.html:98
-#: seahub/templates/sysadmin/sys_useradmin.html:165
+#: seahub/templates/sysadmin/sys_useradmin.html:176
 msgid "Passwords do not match"
 msgstr "Las contraseñas no concuerdan"
 
@@ -5490,7 +5569,6 @@ msgid "Number of groups"
 msgstr "Número de grupos"
 
 #: seahub/templates/sysadmin/sys_org_info_base.html:28
-#: seahub/templates/sysadmin/userinfo.html:58
 msgid "Set Quota"
 msgstr "Fijar quota"
 
@@ -5503,7 +5581,7 @@ msgid "This organization doesn't have any groups"
 msgstr "Esta organización no tiene ningún grupo"
 
 #: seahub/templates/sysadmin/sys_org_info_group.html:43
-#: seahub/templates/sysadmin/userinfo.html:299
+#: seahub/templates/sysadmin/userinfo.html:432
 msgid "Delete Group"
 msgstr "Borrar grupo"
 
@@ -5533,17 +5611,17 @@ msgid "Max User Number"
 msgstr "Máximo Número de Usuarios"
 
 #: seahub/templates/sysadmin/sys_org_info_setting.html:52
-#: seahub/views/sysadmin.py:1237
+#: seahub/views/sysadmin.py:1273
 msgid "Input should be a number"
 msgstr "Debe ingresar un número"
 
 #: seahub/templates/sysadmin/sys_org_info_setting.html:55
-#: seahub/views/sysadmin.py:1247
+#: seahub/views/sysadmin.py:1283
 msgid "Input number should be greater than 0"
 msgstr "El número ingresado debe ser mayor que 0"
 
 #: seahub/templates/sysadmin/sys_org_info_user.html:49
-#: seahub/templates/sysadmin/useradmin_table.html:87
+#: seahub/templates/sysadmin/useradmin_table.html:97
 msgid "ResetPwd"
 msgstr "Restaurar contraseña"
 
@@ -5636,16 +5714,29 @@ msgstr "LDAP"
 #: seahub/templates/sysadmin/sys_useradmin_admins.html:17
 #: seahub/templates/sysadmin/sys_useradmin_ldap.html:17
 #: seahub/templates/sysadmin/sys_useradmin_paid.html:17
-#: seahub/views/sysadmin.py:277 seahub/views/sysadmin.py:280
+#: seahub/views/sysadmin.py:280 seahub/views/sysadmin.py:284
 msgid "LDAP(imported)"
 msgstr "LDAP (importado)"
 
 #: seahub/templates/sysadmin/sys_user_admin_ldap_imported.html:29
-#: seahub/views/sysadmin.py:276 seahub/views/sysadmin.py:280
+#: seahub/templates/sysadmin/sys_useradmin_ldap.html:25
+#: seahub/templates/sysadmin/useradmin_table.html:12
+#: seahub/templates/sysadmin/userinfo.html:73
+msgid "Space Used / Quota"
+msgstr "Espacio utilizado / Cuota"
+
+#: seahub/templates/sysadmin/sys_user_admin_ldap_imported.html:30
+#: seahub/views/sysadmin.py:280 seahub/views/sysadmin.py:284
 msgid "Last Login"
 msgstr "Último Ingreso"
 
-#: seahub/templates/sysadmin/sys_user_admin_ldap_imported.html:68
+#: seahub/templates/sysadmin/sys_user_admin_ldap_imported.html:64
+#: seahub/templates/sysadmin/useradmin_table.html:82
+#: seahub/templates/sysadmin/userinfo.html:83
+msgid "Edit Quota"
+msgstr "Editar Cuota"
+
+#: seahub/templates/sysadmin/sys_user_admin_ldap_imported.html:90
 msgid "No LDAP users have been imported"
 msgstr "No se han importado usuarios LDAP"
 
@@ -5659,30 +5750,42 @@ msgid "Add user"
 msgstr "Agregar usuario"
 
 #: seahub/templates/sysadmin/sys_useradmin.html:36
+msgid "Name(optional)"
+msgstr "Nombre (opcional)"
+
+#: seahub/templates/sysadmin/sys_useradmin.html:38
+msgid "Department(optional)"
+msgstr "Departamento (opcional)"
+
+#: seahub/templates/sysadmin/sys_useradmin.html:42
 msgid ""
 "You can also add a user as a guest, who will not be allowed to create "
 "libraries and groups."
 msgstr "También puedes agregar un usuario como invitado, que no podrá crear bibliotecas ni grupos."
 
-#: seahub/templates/sysadmin/sys_useradmin.html:55
+#: seahub/templates/sysadmin/sys_useradmin.html:61
 msgid "Import users from a CSV file"
 msgstr "Importar usuarios desde un archivo CSV"
 
-#: seahub/templates/sysadmin/sys_useradmin.html:57
-msgid "File format: user@mail.com,password"
-msgstr "Formato de archivo: usuario@mail.com,contraseña"
+#: seahub/templates/sysadmin/sys_useradmin.html:64
+msgid "File format: user@mail.com,password,name,department"
+msgstr "Formato de archivo: usuario@mail.com,contraseña,nombre,departamento"
 
-#: seahub/templates/sysadmin/sys_useradmin.html:58
+#: seahub/templates/sysadmin/sys_useradmin.html:65
+msgid "Name and department are optional."
+msgstr "Nombre y departamento son opcionales."
+
+#: seahub/templates/sysadmin/sys_useradmin.html:67
 msgid "Please choose a CSV file"
 msgstr "Escoja  un archivo CSV"
 
-#: seahub/templates/sysadmin/sys_useradmin.html:83
+#: seahub/templates/sysadmin/sys_useradmin.html:92
 #, python-format
 msgid "A new server version %(v)s is available."
 msgstr "Está disponible un nuevo servidor versión %(v)s."
 
-#: seahub/templates/sysadmin/sys_useradmin.html:126
-#: seahub/templates/sysadmin/sys_useradmin.html:139
+#: seahub/templates/sysadmin/sys_useradmin.html:135
+#: seahub/templates/sysadmin/sys_useradmin.html:148
 msgid "Hide"
 msgstr "Ocultar"
 
@@ -5693,6 +5796,10 @@ msgstr "Agregar admin"
 #: seahub/templates/sysadmin/sys_useradmin_admins.html:25
 msgid "Add admins"
 msgstr "Agregar admins"
+
+#: seahub/templates/sysadmin/sys_useradmin_admins.html:28
+msgid "Enter"
+msgstr "Aceptar"
 
 #: seahub/templates/sysadmin/sys_useradmin_admins.html:31
 msgid "emails, separated by ','"
@@ -5770,43 +5877,43 @@ msgstr "¿Seguro que deseas revocar los privilegios de administración de %s ?"
 msgid "Organization"
 msgstr "Organización"
 
-#: seahub/templates/sysadmin/userinfo.html:126
+#: seahub/templates/sysadmin/userinfo.html:88
+msgid "Set user name"
+msgstr "Establecer nombre del usuario"
+
+#: seahub/templates/sysadmin/userinfo.html:95
+msgid "Set user department"
+msgstr "Establecer departamento del usuario"
+
+#: seahub/templates/sysadmin/userinfo.html:168
 msgid "Share From"
 msgstr "Compartir desde"
 
-#: seahub/templates/sysadmin/userinfo.html:153
+#: seahub/templates/sysadmin/userinfo.html:195
 msgid "This user has no shared libraries"
 msgstr "Este usuario no tiene bibliotecas compartidas"
 
-#: seahub/templates/sysadmin/userinfo.html:201
+#: seahub/templates/sysadmin/userinfo.html:243
 msgid "This user has not created any shared links"
 msgstr "Este usuario no ha creado ningún enlace para compartir"
-
-#: seahub/templates/sysadmin/userinfo.html:269
-msgid "Space Quota can't be empty"
-msgstr "La cuota para almacenamiento no puede estar vacía"
 
 #: seahub/templates/termsandconditions/tc_accept_terms.html:10
 msgid "Accept"
 msgstr "Aceptar"
 
-#: seahub/templates/text_diff.html:6
+#: seahub/templates/text_diff.html:12
 msgid "modification details"
 msgstr "detalles de modificación"
 
-#: seahub/templates/text_diff.html:7
-msgid "Back to file versions"
-msgstr "Regresar a versiones"
-
-#: seahub/templates/text_diff.html:22
+#: seahub/templates/text_diff.html:33
 msgid "It's a newly-created blank file."
 msgstr "Éste es un archivo nuevo sin ningún contenido"
 
-#: seahub/templates/text_diff.html:29
+#: seahub/templates/text_diff.html:40
 msgid "before modification"
 msgstr "antes de la modificación"
 
-#: seahub/templates/text_diff.html:31
+#: seahub/templates/text_diff.html:42
 msgid "after modification"
 msgstr "después de la modificación"
 
@@ -5967,7 +6074,7 @@ msgstr "cancelado"
 msgid "Start"
 msgstr "Inicio"
 
-#: seahub/templates/view_shared_upload_link.html:185
+#: seahub/templates/view_shared_upload_link.html:190
 msgid "Failed to get upload url"
 msgstr "Fallo al obtener url de subida"
 
@@ -5999,99 +6106,72 @@ msgstr "Identificador inválido"
 msgid "permission error"
 msgstr "error de permiso"
 
-#: seahub/views/__init__.py:477 seahub/views/__init__.py:492
+#: seahub/views/__init__.py:483 seahub/views/__init__.py:499
 msgid "Unable to view recycle page"
 msgstr "Error al ver la papelera"
 
-#: seahub/views/__init__.py:559
+#: seahub/views/__init__.py:567
 msgid "Unable to view library modification"
 msgstr "Fallo al ver las modificaciones de la biblioteca"
 
-#: seahub/views/__init__.py:624 seahub/views/__init__.py:665
-#: seahub/views/__init__.py:887 seahub/views/__init__.py:1099
-#: seahub/views/ajax.py:1388 seahub/views/ajax.py:1412
-#: seahub/views/ajax.py:1687 seahub/views/ajax.py:1829
-#: seahub/views/file.py:1529 seahub/views/sysadmin.py:1528
+#: seahub/views/__init__.py:634 seahub/views/__init__.py:675
+#: seahub/views/__init__.py:886 seahub/views/__init__.py:1014
+#: seahub/views/ajax.py:1520 seahub/views/ajax.py:1544
+#: seahub/views/ajax.py:1831 seahub/views/ajax.py:1978
+#: seahub/views/file.py:1541 seahub/views/sysadmin.py:1566
 msgid "Library does not exist"
 msgstr "La biblioteca no existe"
 
-#: seahub/views/__init__.py:657
+#: seahub/views/__init__.py:667
 msgid "Please specify history ID"
 msgstr "Por favor, especifica el ID del historial"
 
-#: seahub/views/__init__.py:663 seahub/views/__init__.py:950
-#: seahub/views/__init__.py:999 seahub/views/file.py:1081
+#: seahub/views/__init__.py:673 seahub/views/file.py:1083
 msgid "Invalid arguments"
 msgstr "Argumentos inválidos"
 
-#: seahub/views/__init__.py:667
+#: seahub/views/__init__.py:677
 msgid "History you specified does not exist"
 msgstr "El historial especificado no existe"
 
-#: seahub/views/__init__.py:669
+#: seahub/views/__init__.py:679
 msgid "Unknown error"
 msgstr "Error desconocido"
 
-#: seahub/views/__init__.py:725 seahub/views/__init__.py:726
-#: seahub/views/__init__.py:731 seahub/views/__init__.py:732
+#: seahub/views/__init__.py:735 seahub/views/__init__.py:736
+#: seahub/views/__init__.py:741 seahub/views/__init__.py:742
 msgid "My Library"
 msgstr "Mi Biblioteca"
 
-#: seahub/views/__init__.py:903
+#: seahub/views/__init__.py:902
 msgid "No revisions found"
 msgstr "No se encontraron revisiones"
 
-#: seahub/views/__init__.py:963 seahub/views/file.py:1064
-msgid "Check file lock error"
-msgstr "Verificar error de bloqueo de archivo"
-
-#: seahub/views/__init__.py:967 seahub/views/file.py:1067
-msgid "File is locked"
-msgstr "El archivo está bloqueado"
-
-#: seahub/views/__init__.py:974 seahub/views/__init__.py:1013
-msgid "Failed to restore, please try again later."
-msgstr "Fallo al restarurar,  por favor intenta más tarde."
-
-#: seahub/views/__init__.py:979
-#, python-format
-msgid "Successfully revert %(path)s to <a href=\"%(root)s\">root directory.</a>"
-msgstr "Restablecido con éxito %(path)s al <a href=\"%(root)s\"> directorio raíz.</a>"
-
-#: seahub/views/__init__.py:983 seahub/views/__init__.py:1022
-#, python-format
-msgid "Successfully revert <a href=\"%(url)s\">%(path)s</a>"
-msgstr "<a href=\"%(url)s\">%(path)s</a> restablecido con éxito"
-
-#: seahub/views/__init__.py:1018
-#, python-format
-msgid "Successfully revert %(path)s to <a href=\"%(url)s\">root directory.</a>"
-msgstr "Restablecido con éxito %(path)s al <a href=\"%(url)s\">directorio raíz.</a>"
-
-#: seahub/views/__init__.py:1106 seahub/views/repo.py:192
+#: seahub/views/__init__.py:1021 seahub/views/ajax.py:604
+#: seahub/views/repo.py:196
 #, python-format
 msgid "\"%s\" does not exist."
 msgstr "\"%s\" no existe."
 
-#: seahub/views/__init__.py:1124 seahub/views/file.py:1049
+#: seahub/views/__init__.py:1039 seahub/views/file.py:1051
 msgid "Internal Error"
 msgstr "Error interno"
 
-#: seahub/views/__init__.py:1127
+#: seahub/views/__init__.py:1042
 #, python-format
 msgid "Unable to download directory \"%s\": size is too large."
 msgstr "Imposible descargar carpeta \"%s\": tamaño excedido."
 
-#: seahub/views/__init__.py:1143
+#: seahub/views/__init__.py:1058
 #, python-format
 msgid "Unable to download \"%s\""
 msgstr "Imposible descargar \"%s\""
 
-#: seahub/views/__init__.py:1235
+#: seahub/views/__init__.py:1150
 msgid "Successfully enable \"Personal Wiki\"."
 msgstr "\"Wiki Personal\" activado con éxito."
 
-#: seahub/views/__init__.py:1240
+#: seahub/views/__init__.py:1155
 msgid "Successfully disable \"Personal Wiki\"."
 msgstr "\"Wiki Personal\" desactivado con éxito"
 
@@ -6107,140 +6187,144 @@ msgstr "No hay ruta."
 msgid "The group doesn't exist"
 msgstr "El grupo no existe"
 
-#: seahub/views/ajax.py:273 seahub/views/ajax.py:1020
-#: seahub/views/ajax.py:1513
+#: seahub/views/ajax.py:273 seahub/views/ajax.py:1152
+#: seahub/views/ajax.py:1645
 msgid "Library is encrypted."
 msgstr "Biblioteca encriptada."
 
-#: seahub/views/ajax.py:279 seahub/views/ajax.py:1026
+#: seahub/views/ajax.py:279 seahub/views/ajax.py:1158
 msgid "Error: no head commit id"
 msgstr "Error: no head commit id"
 
-#: seahub/views/ajax.py:471 seahub/views/ajax.py:521
+#: seahub/views/ajax.py:500 seahub/views/ajax.py:550
 msgid "Argument missing."
 msgstr "Argumento faltante."
 
-#: seahub/views/ajax.py:499
+#: seahub/views/ajax.py:528
 #, python-format
 msgid "Internal error. Failed to delete %s."
 msgstr "Error interno. No se pudo borrar: %s."
 
-#: seahub/views/ajax.py:573
+#: seahub/views/ajax.py:626
 msgid "Destination path is too long."
 msgstr "La ruta de destino es demasiado larga."
 
-#: seahub/views/ajax.py:579 seahub/views/ajax.py:798
+#: seahub/views/ajax.py:633 seahub/views/ajax.py:888
 msgid "Invalid destination path"
 msgstr "Ruta de destino inválida"
 
-#: seahub/views/ajax.py:630 seahub/views/ajax.py:708
+#: seahub/views/ajax.py:678 seahub/views/ajax.py:941
+msgid "Out of quota."
+msgstr "Cuota agotada."
+
+#: seahub/views/ajax.py:718 seahub/views/ajax.py:797
 #, python-format
 msgid "Successfully moved %(name)s"
 msgstr "Movido con éxito %(name)s"
 
-#: seahub/views/ajax.py:664 seahub/views/ajax.py:751
+#: seahub/views/ajax.py:753 seahub/views/ajax.py:841
 #, python-format
 msgid "Successfully copied %(name)s"
 msgstr "Copiado con éxito %(name)s"
 
-#: seahub/views/ajax.py:681 seahub/views/ajax.py:841
+#: seahub/views/ajax.py:770 seahub/views/ajax.py:973
 #, python-format
 msgid "Can not move directory %(src)s to its subdirectory %(des)s"
 msgstr "No se pudo mover la carpeta %(src)s a la subcarpeta %(des)s"
 
-#: seahub/views/ajax.py:730 seahub/views/ajax.py:890
+#: seahub/views/ajax.py:819 seahub/views/ajax.py:1022
 #, python-format
 msgid "Can not copy directory %(src)s to its subdirectory %(des)s"
 msgstr "No se pudo copiar la carpeta %(src)s a la subcarpeta %(des)s"
 
-#: seahub/views/ajax.py:792
+#: seahub/views/ajax.py:882
 #, python-format
 msgid "Destination path is too long for %s."
 msgstr "La ruta de destino de %s es demasiado larga."
 
-#: seahub/views/ajax.py:883
+#: seahub/views/ajax.py:1015
 msgid "You do not have permission to copy files/folders in this directory"
 msgstr "No tienes permiso para copiar archivos/carpetas en esta carpeta"
 
-#: seahub/views/ajax.py:967
+#: seahub/views/ajax.py:1099
 msgid "Cancel failed"
 msgstr "Falló al cancelar"
 
-#: seahub/views/ajax.py:1061
+#: seahub/views/ajax.py:1193
 msgid "Failed to get file block list"
 msgstr "Falllo al conseguir lista de bloques"
 
-#: seahub/views/ajax.py:1099
+#: seahub/views/ajax.py:1231
 msgid "Wrong repo id"
 msgstr "repo id incorrecto"
 
-#: seahub/views/ajax.py:1108 seahub/views/file.py:383 seahub/views/file.py:777
-#: seahub/views/file.py:953 seahub/views/file.py:1538
+#: seahub/views/ajax.py:1240 seahub/views/file.py:385 seahub/views/file.py:779
+#: seahub/views/file.py:955 seahub/views/file.py:1550
 msgid "File does not exist"
 msgstr "El archivo no existe"
 
-#: seahub/views/ajax.py:1223 seahub/views/ajax.py:1935
+#: seahub/views/ajax.py:1355 seahub/views/ajax.py:2088
 msgid "Failed"
 msgstr "Falló"
 
-#: seahub/views/ajax.py:1455
+#: seahub/views/ajax.py:1587
 msgid "Bad upload link token."
 msgstr "Identificador del enlace de subida inválido."
 
-#: seahub/views/ajax.py:1461
+#: seahub/views/ajax.py:1593
 msgid "Bad repo id in upload link."
 msgstr "Id del repo en el enlace de subida, inválido."
 
-#: seahub/views/ajax.py:1535
+#: seahub/views/ajax.py:1667
 msgid "No conflict in the merge."
 msgstr "No hubo conflictos al unir."
 
-#: seahub/views/ajax.py:1702 seahub/views/ajax.py:1844
+#: seahub/views/ajax.py:1850 seahub/views/ajax.py:1997
 msgid "Invalid folder permission, should be \"rw\" or \"r\""
 msgstr "Permiso de carpeta inválido, debe ser \"rw\" o \"r\""
 
-#: seahub/views/ajax.py:1706 seahub/views/ajax.py:1848
+#: seahub/views/ajax.py:1854 seahub/views/ajax.py:2001
 msgid "Path should start with \"/\""
 msgstr "La ruta debe comenzar con \"/\""
 
-#: seahub/views/ajax.py:1710 seahub/views/ajax.py:1852
+#: seahub/views/ajax.py:1858 seahub/views/ajax.py:2005
 msgid "Path should not end with \"/\""
 msgstr "La ruta no debe terminar con \"/\""
 
-#: seahub/views/ajax.py:1714 seahub/views/ajax.py:1856
+#: seahub/views/ajax.py:1862 seahub/views/ajax.py:2009
 msgid "Invalid path"
 msgstr "Ruta inválida"
 
-#: seahub/views/ajax.py:1722
+#: seahub/views/ajax.py:1870
 msgid "Invalid user, should be registered"
 msgstr "Usuario inválido, debe estar registrado"
 
-#: seahub/views/ajax.py:1734 seahub/views/ajax.py:1747
-#: seahub/views/ajax.py:1877 seahub/views/ajax.py:1890
+#: seahub/views/ajax.py:1882 seahub/views/ajax.py:1895
+#: seahub/views/ajax.py:2030 seahub/views/ajax.py:2043
 msgid "Operation failed"
 msgstr "Operación falló"
 
-#: seahub/views/ajax.py:1737 seahub/views/ajax.py:1880
+#: seahub/views/ajax.py:1885 seahub/views/ajax.py:2033
 msgid "Wrong folder permission"
 msgstr "Permiso de carpeta incorrecto"
 
-#: seahub/views/ajax.py:1750 seahub/views/ajax.py:1893
+#: seahub/views/ajax.py:1898 seahub/views/ajax.py:2046
 msgid "Please add folder permission first"
 msgstr "Por favor, primero agregue el permiso de la carpeta"
 
-#: seahub/views/ajax.py:1797
+#: seahub/views/ajax.py:1945
 msgid "Please check the email(s) you entered and the contacts you selected"
 msgstr "Por favor verifique el(los) e-mail(s) ingresado(s) y el(los) contacto(s) seleccionado(s)"
 
-#: seahub/views/ajax.py:1865
+#: seahub/views/ajax.py:2018
 msgid "Invalid group"
 msgstr "Grupo inválido"
 
-#: seahub/views/ajax.py:1948
+#: seahub/views/ajax.py:2101
 msgid "Group does not exist."
 msgstr "El grupoa no existe."
 
-#: seahub/views/ajax.py:2025
+#: seahub/views/ajax.py:2178
 msgid "Failed, file is too large"
 msgstr "Falló, el archivo es demasiado grande"
 
@@ -6252,7 +6336,7 @@ msgstr "Error HTTP: No se pudo abrir el archivo en línea"
 msgid "URLError: failed to open file online"
 msgstr "Error URL: No se pudo abrir el archivo en línea"
 
-#: seahub/views/file.py:154
+#: seahub/views/file.py:154 seahub/views/file.py:1101
 msgid "The encoding you chose is not proper."
 msgstr "La codificación elegida no es correcta."
 
@@ -6260,126 +6344,129 @@ msgstr "La codificación elegida no es correcta."
 msgid "Unknown file encoding"
 msgstr "Codificación de archivo desconocida"
 
-#: seahub/views/file.py:294 seahub/views/file.py:301
+#: seahub/views/file.py:294 seahub/views/file.py:303
 #, python-format
 msgid "File size surpasses %s, can not be opened online."
 msgstr "El tamaño del archivo sobrepasa %s, no se puede abrir en línea."
 
-#: seahub/views/file.py:317
+#: seahub/views/file.py:319
 msgid "The library is encrypted, can not open file online."
 msgstr "La biblioteca está encriptada, no se puede abrir el archivo en línea."
 
-#: seahub/views/file.py:395 seahub/views/file.py:662 seahub/views/file.py:677
-#: seahub/views/file.py:695
+#: seahub/views/file.py:397 seahub/views/file.py:664 seahub/views/file.py:679
+#: seahub/views/file.py:697
 msgid "Unable to view file"
 msgstr "Imposible visualizar el archivo"
 
-#: seahub/views/file.py:476 seahub/views/file.py:637 seahub/views/file.py:829
+#: seahub/views/file.py:478 seahub/views/file.py:639 seahub/views/file.py:831
 msgid "Invalid file format."
 msgstr "Formato de archivo inválido."
 
-#: seahub/views/file.py:722
+#: seahub/views/file.py:724
 msgid "Unable to download file, invalid file path"
 msgstr "No es posible descargar el archivo, ruta inválida"
 
-#: seahub/views/file.py:731
+#: seahub/views/file.py:733
 msgid "Unable to download file, wrong file path"
 msgstr "No es posible descargar el archivo, ruta errónea"
 
-#: seahub/views/file.py:736
+#: seahub/views/file.py:738
 msgid "Unable to download file, share link traffic is used up."
 msgstr "No es posible descargar el archivo, tráfico para compartir enlaces agotado."
 
-#: seahub/views/file.py:799
+#: seahub/views/file.py:801
 msgid "Unable to view raw file, share link traffic is used up."
 msgstr "No es posible ver el archivo, el tráfico para enlaces compartidos ha sido agotado."
 
-#: seahub/views/file.py:1071
+#: seahub/views/file.py:1073
 msgid "The library does not exist."
 msgstr "La biblioteca no existe."
 
-#: seahub/views/file.py:1075
+#: seahub/views/file.py:1077
 msgid "The library is encrypted."
 msgstr "La biblioteca está encriptada."
 
-#: seahub/views/file.py:1149
+#: seahub/views/file.py:1158
 msgid "Unable to edit file"
 msgstr "Imposible editar el archivo"
 
-#: seahub/views/file.py:1155
+#: seahub/views/file.py:1164
 msgid "The file does not exist."
 msgstr "El archivo no existe."
 
-#: seahub/views/file.py:1184
+#: seahub/views/file.py:1193
 msgid "Edit online is not offered for this type of file."
 msgstr "Este tipo de archivo no se puede editar en línea."
 
-#: seahub/views/file.py:1293
+#: seahub/views/file.py:1302
 msgid "Unable to download file"
 msgstr "Imposible descargar archivo"
 
-#: seahub/views/sysadmin.py:266 seahub/views/sysadmin.py:324
-#: seahub/views/sysadmin.py:1015 seahub/views/sysadmin.py:1027
+#: seahub/views/sysadmin.py:269 seahub/views/sysadmin.py:352
+#: seahub/views/sysadmin.py:1051 seahub/views/sysadmin.py:1063
 msgid "Failed to export Excel"
 msgstr "Fallo al exportar Excel"
 
-#: seahub/views/sysadmin.py:630
-#, python-format
-msgid "Failed to set quota: maximum quota is %d MB"
-msgstr "Fallo al definir cuota: la cuota máxima es %d MB"
+#: seahub/views/sysadmin.py:279 seahub/views/sysadmin.py:283
+msgid "Space Usage"
+msgstr "Uso de Espacio"
 
-#: seahub/views/sysadmin.py:636 seahub/views/sysadmin.py:662
+#: seahub/views/sysadmin.py:279 seahub/views/sysadmin.py:283
+msgid "Space Quota"
+msgstr "Cuota de Espacio"
+
+#: seahub/views/sysadmin.py:666 seahub/views/sysadmin.py:692
 msgid "Failed to set quota: internal server error"
 msgstr "Fallo al definir cuota: error interno del servidor"
 
-#: seahub/views/sysadmin.py:681
+#: seahub/views/sysadmin.py:711
 msgid "Failed to delete: the user is an organization creator"
 msgstr "Fallo al borrar: el usuario es el creador de una organización"
 
-#: seahub/views/sysadmin.py:713
+#: seahub/views/sysadmin.py:743
 #, python-format
 msgid "Successfully remove trial for: %s"
 msgstr "Evaluación eliminada con éxito para: %s"
 
-#: seahub/views/sysadmin.py:742
+#: seahub/views/sysadmin.py:772
 #, python-format
 msgid "Successfully revoke the admin permission of %s"
 msgstr "Los permisos de administrador de %s fueron revocados"
 
-#: seahub/views/sysadmin.py:744
+#: seahub/views/sysadmin.py:774
 msgid "Failed to revoke admin: the user does not exist"
 msgstr "Fallo al revocar admin: el usuario no existe"
 
-#: seahub/views/sysadmin.py:791
+#: seahub/views/sysadmin.py:821
 #, python-format
 msgid "Your account on %s is activated"
 msgstr "Tu cuenta en %s está activada."
 
-#: seahub/views/sysadmin.py:874
+#: seahub/views/sysadmin.py:904
 #, python-format
 msgid "Password has been reset on %s"
 msgstr "La contraseña ha sido reestablecida en %s"
 
-#: seahub/views/sysadmin.py:899
+#: seahub/views/sysadmin.py:929
 #, python-format
 msgid ""
 "Successfully reset password to %(passwd)s, an email has been sent to "
 "%(user)s."
 msgstr "Contraseña restablecida con éxito a %(passwd)s, un correo fue enviado a %(user)s."
 
-#: seahub/views/sysadmin.py:904
+#: seahub/views/sysadmin.py:934
 #, python-format
 msgid ""
 "Successfully reset password to %(passwd)s, but failed to send email to "
 "%(user)s, please check your email configuration."
 msgstr "Contraseña restablecida a %(passwd)s, pero hubo un fallo al enviar el correo a %(user)s, revise su configuracion de email."
 
-#: seahub/views/sysadmin.py:908
+#: seahub/views/sysadmin.py:938
 #, python-format
 msgid "Successfully reset password to %(passwd)s for user %(user)s."
 msgstr "Contraseña de %(user)s restablecida a %(passwd)s con éxito."
 
-#: seahub/views/sysadmin.py:911
+#: seahub/views/sysadmin.py:941
 #, python-format
 msgid ""
 "Successfully reset password to %(passwd)s for user %(user)s. But email "
@@ -6387,107 +6474,107 @@ msgid ""
 "configured."
 msgstr "Contraseña de %(user)s restablecida a %(passwd)s. Pero el correo de notificación no pudo ser enviado, porque el servicio de correo no está configurado correctamente."
 
-#: seahub/views/sysadmin.py:914
+#: seahub/views/sysadmin.py:944
 msgid "Failed to reset password: user does not exist"
 msgstr "Fallo al restablecer la contraseña: el usuario no existe."
 
-#: seahub/views/sysadmin.py:930 seahub/views/sysadmin.py:1810
+#: seahub/views/sysadmin.py:960 seahub/views/sysadmin.py:1882
 #, python-format
 msgid "You are invited to join %s"
 msgstr "Estás invitado a unirte a %s"
 
-#: seahub/views/sysadmin.py:961
+#: seahub/views/sysadmin.py:993
 #, python-format
 msgid "Fail to add user %s."
 msgstr "Fallo al agregar el usuario %s."
 
-#: seahub/views/sysadmin.py:976 seahub/views/sysadmin.py:989
+#: seahub/views/sysadmin.py:1012 seahub/views/sysadmin.py:1025
 #, python-format
 msgid "Successfully added user %s. An email notification has been sent."
 msgstr "El usuario %s fue agregado con éxito. Se ha enviado un correo de aviso."
 
-#: seahub/views/sysadmin.py:979 seahub/views/sysadmin.py:992
+#: seahub/views/sysadmin.py:1015 seahub/views/sysadmin.py:1028
 #, python-format
 msgid ""
 "Successfully added user %s. An error accurs when sending email notification,"
 " please check your email configuration."
 msgstr "El usuario %s fue agregado con éxito. Pero hubo un error al  enviar la notificación; por favor, revisa la configuración del correo."
 
-#: seahub/views/sysadmin.py:981 seahub/views/sysadmin.py:994
+#: seahub/views/sysadmin.py:1017 seahub/views/sysadmin.py:1030
 #, python-format
 msgid "Successfully added user %s."
 msgstr "El usuario %s fue agregado con éxito."
 
-#: seahub/views/sysadmin.py:996
+#: seahub/views/sysadmin.py:1032
 #, python-format
 msgid ""
 "Successfully added user %s. But email notification can not be sent, because "
 "Email service is not properly configured."
 msgstr "El usuario %s fue agregado con éxito. Pero el correo de aviso no pudo ser enviado, el servicio de correo no esta configurado."
 
-#: seahub/views/sysadmin.py:1189
+#: seahub/views/sysadmin.py:1225
 msgid "Failed to rename organization"
 msgstr "Fallo al renombrar organización"
 
-#: seahub/views/sysadmin.py:1219 seahub/views/sysadmin.py:1634
-#: seahub/views/sysadmin.py:1730
+#: seahub/views/sysadmin.py:1255 seahub/views/sysadmin.py:1672
+#: seahub/views/sysadmin.py:1768
 msgid "Successfully deleted."
 msgstr "Eliminado con éxito"
 
-#: seahub/views/sysadmin.py:1523
+#: seahub/views/sysadmin.py:1561
 msgid "Failed to transfer, invalid arguments."
 msgstr "Fallo al transferir, argumentos inválidos."
 
-#: seahub/views/sysadmin.py:1534
+#: seahub/views/sysadmin.py:1572
 #, python-format
 msgid "Failed to transfer, user %s not found"
 msgstr "Fallo al transferir, usuario %s no encontrado"
 
-#: seahub/views/sysadmin.py:1540
+#: seahub/views/sysadmin.py:1578
 msgid "Can not transfer organization library"
 msgstr "No es posible transferir la biblioteca de la organización"
 
-#: seahub/views/sysadmin.py:1544
+#: seahub/views/sysadmin.py:1582
 #, python-format
 msgid "Can not transfer library to organization user %s"
 msgstr "No es posible transferir la biblioteca al usuario %s de la organización"
 
-#: seahub/views/sysadmin.py:1597
+#: seahub/views/sysadmin.py:1635
 msgid "Successfully transfered."
 msgstr "Transferida con éxito."
 
-#: seahub/views/sysadmin.py:1733
+#: seahub/views/sysadmin.py:1771
 msgid "Failed to delete, please try again later."
 msgstr "Fallo al eliminar, por favor intente más tarde."
 
-#: seahub/views/sysadmin.py:1764
+#: seahub/views/sysadmin.py:1802
 #, python-format
 msgid "Successfully set %s as admin."
 msgstr "%s asignado como administrador."
 
-#: seahub/views/sysadmin.py:1766
+#: seahub/views/sysadmin.py:1804
 #, python-format
 msgid "Failed to set %s as admin: user does not exist."
 msgstr "Fallo al definir %s como administrador: el usuario no existe."
 
-#: seahub/views/sysadmin.py:1817
+#: seahub/views/sysadmin.py:1889
 msgid "Import succeeded"
 msgstr "Importado exitosamente"
 
-#: seahub/views/sysadmin.py:1819
+#: seahub/views/sysadmin.py:1891
 msgid "Please select a csv file first."
 msgstr "Primero escoja un archivo csv."
 
-#: seahub/views/sysadmin.py:1884
+#: seahub/views/sysadmin.py:1955
 msgid "Invalid setting"
 msgstr "Configuración inválida"
 
-#: seahub/views/sysadmin.py:1891 seahub/views/sysadmin.py:1895
-#: seahub/views/sysadmin.py:1900
+#: seahub/views/sysadmin.py:1962 seahub/views/sysadmin.py:1966
+#: seahub/views/sysadmin.py:1971
 msgid "Invalid value"
 msgstr "Valor inválido"
 
-#: seahub/views/sysadmin.py:2266
+#: seahub/views/sysadmin.py:2336
 msgid "Successfully deleted 1 item"
 msgstr "1 ítem eliminado con éxito"
 
