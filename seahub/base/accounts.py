@@ -106,19 +106,19 @@ class UserPermissions(object):
         self.user = user
 
     def can_add_repo(self):
-        return get_enabled_role_permissions_by_role(DEFAULT_USER)['can_add_repo']
+        return get_enabled_role_permissions_by_role(self.user.role)['can_add_repo']
 
     def can_add_group(self):
-        return get_enabled_role_permissions_by_role(DEFAULT_USER)['can_add_group']
+        return get_enabled_role_permissions_by_role(self.user.role)['can_add_group']
 
     def can_generate_share_link(self):
-        return get_enabled_role_permissions_by_role(DEFAULT_USER)['can_generate_share_link']
+        return get_enabled_role_permissions_by_role(self.user.role)['can_generate_share_link']
 
     def can_generate_upload_link(self):
-        return get_enabled_role_permissions_by_role(DEFAULT_USER)['can_generate_upload_link']
+        return get_enabled_role_permissions_by_role(self.user.role)['can_generate_upload_link']
 
     def can_use_global_address_book(self):
-        return get_enabled_role_permissions_by_role(DEFAULT_USER)['can_use_global_address_book']
+        return get_enabled_role_permissions_by_role(self.user.role)['can_use_global_address_book']
 
     def can_view_org(self):
         if MULTI_TENANCY:
@@ -127,25 +127,25 @@ class UserPermissions(object):
         if CLOUD_MODE:
             return False
 
-        return get_enabled_role_permissions_by_role(DEFAULT_USER)['can_view_org']
+        return get_enabled_role_permissions_by_role(self.user.role)['can_view_org']
 
     def can_drag_drop_folder_to_sync(self):
-        return get_enabled_role_permissions_by_role(DEFAULT_USER)['can_drag_drop_folder_to_sync']
+        return get_enabled_role_permissions_by_role(self.user.role)['can_drag_drop_folder_to_sync']
 
     def can_connect_with_android_clients(self):
-        return get_enabled_role_permissions_by_role(DEFAULT_USER)['can_connect_with_android_clients']
+        return get_enabled_role_permissions_by_role(self.user.role)['can_connect_with_android_clients']
 
     def can_connect_with_ios_clients(self):
-        return get_enabled_role_permissions_by_role(DEFAULT_USER)['can_connect_with_ios_clients']
+        return get_enabled_role_permissions_by_role(self.user.role)['can_connect_with_ios_clients']
 
     def can_connect_with_desktop_clients(self):
-        return get_enabled_role_permissions_by_role(DEFAULT_USER)['can_connect_with_desktop_clients']
+        return get_enabled_role_permissions_by_role(self.user.role)['can_connect_with_desktop_clients']
 
     def can_invite_guest(self):
-        return get_enabled_role_permissions_by_role(DEFAULT_USER)['can_invite_guest']
+        return get_enabled_role_permissions_by_role(self.user.role)['can_invite_guest']
 
     def can_export_files_via_mobile_client(self):
-        return get_enabled_role_permissions_by_role(DEFAULT_USER)['can_export_files_via_mobile_client']
+        return get_enabled_role_permissions_by_role(self.user.role)['can_export_files_via_mobile_client']
 
 
 class User(object):

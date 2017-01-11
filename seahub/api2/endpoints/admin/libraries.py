@@ -170,10 +170,15 @@ class AdminLibrary(APIView):
             return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
 
         try:
-            User.objects.get(email=new_owner)
+            new_owner_obj = User.objects.get(email=new_owner)
         except User.DoesNotExist:
             error_msg = 'User %s not found.' % new_owner
             return api_error(status.HTTP_404_NOT_FOUND, error_msg)
+
+        if not new_owner_obj.permissions.can_add_repo():
+            error_msg = 'Transfer failed: role of %s is %s, can not add library.' % \
+                    (new_owner, new_owner_obj.role)
+            return api_error(status.HTTP_403_FORBIDDEN, error_msg)
 
         if MULTI_TENANCY:
             try:
