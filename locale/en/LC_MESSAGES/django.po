@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2017-01-09 11:11+0800\n"
+"POT-Creation-Date: 2017-01-11 16:54+0800\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -65,7 +65,7 @@ msgstr ""
 msgid "User %s is already group owner."
 msgstr ""
 
-#: seahub/api2/endpoints/admin/libraries.py:144 seahub/views/sysadmin.py:1649
+#: seahub/api2/endpoints/admin/libraries.py:144 seahub/views/sysadmin.py:1644
 msgid "System library can not be deleted."
 msgstr ""
 
@@ -115,24 +115,24 @@ msgstr ""
 msgid "%s is already invited."
 msgstr ""
 
-#: seahub/api2/endpoints/invitations.py:68 seahub/base/accounts.py:582
+#: seahub/api2/endpoints/invitations.py:68 seahub/base/accounts.py:601
 #, python-format
 msgid "User %s already exists."
 msgstr ""
 
-#: seahub/api2/endpoints/repo_set_password.py:42 seahub/api2/views.py:2830
+#: seahub/api2/endpoints/repo_set_password.py:42 seahub/api2/views.py:2843
 msgid "Wrong password"
 msgstr ""
 
-#: seahub/api2/endpoints/repo_set_password.py:45 seahub/api2/views.py:2833
+#: seahub/api2/endpoints/repo_set_password.py:45 seahub/api2/views.py:2846
 #: seahub/views/__init__.py:535 seahub/views/ajax.py:673
 #: seahub/views/ajax.py:713 seahub/views/ajax.py:748 seahub/views/ajax.py:792
 #: seahub/views/ajax.py:836 seahub/views/ajax.py:936
-#: seahub/views/sysadmin.py:1980
+#: seahub/views/sysadmin.py:1975
 msgid "Internal server error"
 msgstr ""
 
-#: seahub/api2/endpoints/repo_set_password.py:48 seahub/api2/views.py:2836
+#: seahub/api2/endpoints/repo_set_password.py:48 seahub/api2/views.py:2849
 msgid "Decrypt library error"
 msgstr ""
 
@@ -228,7 +228,7 @@ msgid "Email or Username"
 msgstr ""
 
 #: seahub/auth/forms.py:24 seahub/auth/forms.py:196
-#: seahub/base/accounts.py:560
+#: seahub/base/accounts.py:579
 #: seahub/invitations/templates/invitations/token_view.html:13
 #: seahub/templates/file_edit.html:129
 #: seahub/templates/js/lib-op-popups.html:117
@@ -294,7 +294,7 @@ msgid "New password confirmation"
 msgstr ""
 
 #: seahub/auth/forms.py:165 seahub/auth/forms.py:208
-#: seahub/base/accounts.py:616
+#: seahub/base/accounts.py:635
 msgid "The two password fields didn't match."
 msgstr ""
 
@@ -306,7 +306,7 @@ msgstr ""
 msgid "Your old password was entered incorrectly. Please enter it again."
 msgstr ""
 
-#: seahub/auth/forms.py:197 seahub/base/accounts.py:562
+#: seahub/auth/forms.py:197 seahub/base/accounts.py:581
 msgid "Password (again)"
 msgstr ""
 
@@ -414,49 +414,49 @@ msgstr ""
 msgid "Successfully deleted the requested avatars."
 msgstr ""
 
-#: seahub/base/accounts.py:283
+#: seahub/base/accounts.py:302
 #, python-format
 msgid "Account %(account)s froze on %(site)s."
 msgstr ""
 
-#: seahub/base/accounts.py:551
+#: seahub/base/accounts.py:570
 msgid "Email address"
 msgstr ""
 
-#: seahub/base/accounts.py:556
+#: seahub/base/accounts.py:575
 msgid "Username"
 msgstr ""
 
-#: seahub/base/accounts.py:557
+#: seahub/base/accounts.py:576
 msgid "This value must be of length 40"
 msgstr ""
 
-#: seahub/base/accounts.py:572 seahub/forms.py:29
-#: seahub/views/sysadmin.py:1830
+#: seahub/base/accounts.py:591 seahub/forms.py:29
+#: seahub/views/sysadmin.py:1825
 msgid "The number of users exceeds the limit."
 msgstr ""
 
-#: seahub/base/accounts.py:576
+#: seahub/base/accounts.py:595
 msgid "Enter a valid email address."
 msgstr ""
 
-#: seahub/base/accounts.py:586
+#: seahub/base/accounts.py:605
 msgid "Invalid user id."
 msgstr ""
 
-#: seahub/base/accounts.py:637
+#: seahub/base/accounts.py:656
 msgid "name"
 msgstr ""
 
-#: seahub/base/accounts.py:640
+#: seahub/base/accounts.py:659
 msgid "department"
 msgstr ""
 
-#: seahub/base/accounts.py:643
+#: seahub/base/accounts.py:662
 msgid "telephone"
 msgstr ""
 
-#: seahub/base/accounts.py:646
+#: seahub/base/accounts.py:665
 msgid "note"
 msgstr ""
 
@@ -737,7 +737,7 @@ msgstr ""
 #: seahub/templates/wiki/personal_wiki.html:85
 #: seahub/templates/wiki/personal_wiki_pages.html:28
 #: seahub/views/sysadmin.py:278 seahub/views/sysadmin.py:282
-#: seahub/views/sysadmin.py:1054
+#: seahub/views/sysadmin.py:1049
 msgid "Name"
 msgstr ""
 
@@ -1106,7 +1106,7 @@ msgstr ""
 #: seahub/views/ajax.py:1538 seahub/views/ajax.py:1651
 #: seahub/views/ajax.py:1758 seahub/views/ajax.py:1826
 #: seahub/views/ajax.py:1972 seahub/views/file.py:1546
-#: seahub/views/sysadmin.py:1450 seahub/views/sysadmin.py:1468
+#: seahub/views/sysadmin.py:1445 seahub/views/sysadmin.py:1463
 msgid "Argument missing"
 msgstr ""
 
@@ -2079,7 +2079,7 @@ msgstr ""
 #: seahub/templates/sysadmin/sys_org_info_group.html:20
 #: seahub/templates/sysadmin/sys_publink_admin.html:14
 #: seahub/templates/sysadmin/userinfo.html:254 seahub/views/sysadmin.py:280
-#: seahub/views/sysadmin.py:284 seahub/views/sysadmin.py:1054
+#: seahub/views/sysadmin.py:284 seahub/views/sysadmin.py:1049
 msgid "Create At"
 msgstr ""
 
@@ -2257,12 +2257,12 @@ msgstr ""
 msgid "Member"
 msgstr ""
 
-#: seahub/institutions/views.py:189 seahub/views/sysadmin.py:720
+#: seahub/institutions/views.py:189 seahub/views/sysadmin.py:715
 #, python-format
 msgid "Successfully deleted %s"
 msgstr ""
 
-#: seahub/institutions/views.py:191 seahub/views/sysadmin.py:722
+#: seahub/institutions/views.py:191 seahub/views/sysadmin.py:717
 msgid "Failed to delete: the user does not exist"
 msgstr ""
 
@@ -2272,6 +2272,13 @@ msgstr ""
 #: seahub/templates/sysadmin/useradmin_table.html:61
 #: seahub/views/sysadmin.py:336
 msgid "Guest"
+msgstr ""
+
+#: seahub/invitations/models.py:90
+#: seahub/templates/sysadmin/user_add_email.html:15
+#: seahub/templates/sysadmin/user_batch_add_email.html:12
+#, python-format
+msgid "%(user)s invited you to join %(site_name)s."
 msgstr ""
 
 #: seahub/invitations/templates/invitations/invitation_email.html:9
@@ -3544,9 +3551,9 @@ msgstr ""
 #: seahub/templates/file_revisions.html:115
 #: seahub/templates/repo_history_view.html:115
 #: seahub/templates/sysadmin/settings.html:165
-#: seahub/templates/sysadmin/settings.html:203 seahub/views/sysadmin.py:1222
-#: seahub/views/sysadmin.py:1279 seahub/views/sysadmin.py:2039
-#: seahub/views/sysadmin.py:2081 seahub/views/sysadmin.py:2248
+#: seahub/templates/sysadmin/settings.html:203 seahub/views/sysadmin.py:1217
+#: seahub/views/sysadmin.py:1274 seahub/views/sysadmin.py:2034
+#: seahub/views/sysadmin.py:2076 seahub/views/sysadmin.py:2243
 msgid "Success"
 msgstr ""
 
@@ -5354,7 +5361,7 @@ msgstr ""
 #: seahub/templates/sysadmin/org_admin_table.html:5
 #: seahub/templates/sysadmin/sys_org_info_group.html:19
 #: seahub/templates/sysadmin/sys_org_search.html:11
-#: seahub/views/sysadmin.py:1054
+#: seahub/views/sysadmin.py:1049
 msgid "Creator"
 msgstr ""
 
@@ -5599,12 +5606,12 @@ msgid "Max User Number"
 msgstr ""
 
 #: seahub/templates/sysadmin/sys_org_info_setting.html:52
-#: seahub/views/sysadmin.py:1273
+#: seahub/views/sysadmin.py:1268
 msgid "Input should be a number"
 msgstr ""
 
 #: seahub/templates/sysadmin/sys_org_info_setting.html:55
-#: seahub/views/sysadmin.py:1283
+#: seahub/views/sysadmin.py:1278
 msgid "Input number should be greater than 0"
 msgstr ""
 
@@ -5818,12 +5825,6 @@ msgstr ""
 #, python-format
 msgid ""
 "%(user)s invited you to join organization \"%(org_name)s\" on %(site_name)s."
-msgstr ""
-
-#: seahub/templates/sysadmin/user_add_email.html:15
-#: seahub/templates/sysadmin/user_batch_add_email.html:12
-#, python-format
-msgid "%(user)s invited you to join %(site_name)s."
 msgstr ""
 
 #: seahub/templates/sysadmin/user_add_email.html:20
@@ -6105,7 +6106,7 @@ msgstr ""
 #: seahub/views/__init__.py:886 seahub/views/__init__.py:1014
 #: seahub/views/ajax.py:1520 seahub/views/ajax.py:1544
 #: seahub/views/ajax.py:1831 seahub/views/ajax.py:1978
-#: seahub/views/file.py:1541 seahub/views/sysadmin.py:1566
+#: seahub/views/file.py:1541 seahub/views/sysadmin.py:1561
 msgid "Library does not exist"
 msgstr ""
 
@@ -6390,7 +6391,7 @@ msgid "Unable to download file"
 msgstr ""
 
 #: seahub/views/sysadmin.py:269 seahub/views/sysadmin.py:352
-#: seahub/views/sysadmin.py:1051 seahub/views/sysadmin.py:1063
+#: seahub/views/sysadmin.py:1046 seahub/views/sysadmin.py:1058
 msgid "Failed to export Excel"
 msgstr ""
 
@@ -6410,50 +6411,50 @@ msgstr ""
 msgid "Failed to delete: the user is an organization creator"
 msgstr ""
 
-#: seahub/views/sysadmin.py:743
+#: seahub/views/sysadmin.py:738
 #, python-format
 msgid "Successfully remove trial for: %s"
 msgstr ""
 
-#: seahub/views/sysadmin.py:772
+#: seahub/views/sysadmin.py:767
 #, python-format
 msgid "Successfully revoke the admin permission of %s"
 msgstr ""
 
-#: seahub/views/sysadmin.py:774
+#: seahub/views/sysadmin.py:769
 msgid "Failed to revoke admin: the user does not exist"
 msgstr ""
 
-#: seahub/views/sysadmin.py:821
+#: seahub/views/sysadmin.py:816
 #, python-format
 msgid "Your account on %s is activated"
 msgstr ""
 
-#: seahub/views/sysadmin.py:904
+#: seahub/views/sysadmin.py:899
 #, python-format
 msgid "Password has been reset on %s"
 msgstr ""
 
-#: seahub/views/sysadmin.py:929
+#: seahub/views/sysadmin.py:924
 #, python-format
 msgid ""
 "Successfully reset password to %(passwd)s, an email has been sent to "
 "%(user)s."
 msgstr ""
 
-#: seahub/views/sysadmin.py:934
+#: seahub/views/sysadmin.py:929
 #, python-format
 msgid ""
 "Successfully reset password to %(passwd)s, but failed to send email to "
 "%(user)s, please check your email configuration."
 msgstr ""
 
-#: seahub/views/sysadmin.py:938
+#: seahub/views/sysadmin.py:933
 #, python-format
 msgid "Successfully reset password to %(passwd)s for user %(user)s."
 msgstr ""
 
-#: seahub/views/sysadmin.py:941
+#: seahub/views/sysadmin.py:936
 #, python-format
 msgid ""
 "Successfully reset password to %(passwd)s for user %(user)s. But email "
@@ -6461,107 +6462,107 @@ msgid ""
 "configured."
 msgstr ""
 
-#: seahub/views/sysadmin.py:944
+#: seahub/views/sysadmin.py:939
 msgid "Failed to reset password: user does not exist"
 msgstr ""
 
-#: seahub/views/sysadmin.py:960 seahub/views/sysadmin.py:1882
+#: seahub/views/sysadmin.py:955 seahub/views/sysadmin.py:1877
 #, python-format
 msgid "You are invited to join %s"
 msgstr ""
 
-#: seahub/views/sysadmin.py:993
+#: seahub/views/sysadmin.py:988
 #, python-format
 msgid "Fail to add user %s."
 msgstr ""
 
-#: seahub/views/sysadmin.py:1012 seahub/views/sysadmin.py:1025
+#: seahub/views/sysadmin.py:1007 seahub/views/sysadmin.py:1020
 #, python-format
 msgid "Successfully added user %s. An email notification has been sent."
 msgstr ""
 
-#: seahub/views/sysadmin.py:1015 seahub/views/sysadmin.py:1028
+#: seahub/views/sysadmin.py:1010 seahub/views/sysadmin.py:1023
 #, python-format
 msgid ""
 "Successfully added user %s. An error accurs when sending email notification, "
 "please check your email configuration."
 msgstr ""
 
-#: seahub/views/sysadmin.py:1017 seahub/views/sysadmin.py:1030
+#: seahub/views/sysadmin.py:1012 seahub/views/sysadmin.py:1025
 #, python-format
 msgid "Successfully added user %s."
 msgstr ""
 
-#: seahub/views/sysadmin.py:1032
+#: seahub/views/sysadmin.py:1027
 #, python-format
 msgid ""
 "Successfully added user %s. But email notification can not be sent, because "
 "Email service is not properly configured."
 msgstr ""
 
-#: seahub/views/sysadmin.py:1225
+#: seahub/views/sysadmin.py:1220
 msgid "Failed to rename organization"
 msgstr ""
 
-#: seahub/views/sysadmin.py:1255 seahub/views/sysadmin.py:1672
-#: seahub/views/sysadmin.py:1768
+#: seahub/views/sysadmin.py:1250 seahub/views/sysadmin.py:1667
+#: seahub/views/sysadmin.py:1763
 msgid "Successfully deleted."
 msgstr ""
 
-#: seahub/views/sysadmin.py:1561
+#: seahub/views/sysadmin.py:1556
 msgid "Failed to transfer, invalid arguments."
 msgstr ""
 
-#: seahub/views/sysadmin.py:1572
+#: seahub/views/sysadmin.py:1567
 #, python-format
 msgid "Failed to transfer, user %s not found"
 msgstr ""
 
-#: seahub/views/sysadmin.py:1578
+#: seahub/views/sysadmin.py:1573
 msgid "Can not transfer organization library"
 msgstr ""
 
-#: seahub/views/sysadmin.py:1582
+#: seahub/views/sysadmin.py:1577
 #, python-format
 msgid "Can not transfer library to organization user %s"
 msgstr ""
 
-#: seahub/views/sysadmin.py:1635
+#: seahub/views/sysadmin.py:1630
 msgid "Successfully transfered."
 msgstr ""
 
-#: seahub/views/sysadmin.py:1771
+#: seahub/views/sysadmin.py:1766
 msgid "Failed to delete, please try again later."
 msgstr ""
 
-#: seahub/views/sysadmin.py:1802
+#: seahub/views/sysadmin.py:1797
 #, python-format
 msgid "Successfully set %s as admin."
 msgstr ""
 
-#: seahub/views/sysadmin.py:1804
+#: seahub/views/sysadmin.py:1799
 #, python-format
 msgid "Failed to set %s as admin: user does not exist."
 msgstr ""
 
-#: seahub/views/sysadmin.py:1889
+#: seahub/views/sysadmin.py:1884
 msgid "Import succeeded"
 msgstr ""
 
-#: seahub/views/sysadmin.py:1891
+#: seahub/views/sysadmin.py:1886
 msgid "Please select a csv file first."
 msgstr ""
 
-#: seahub/views/sysadmin.py:1955
+#: seahub/views/sysadmin.py:1950
 msgid "Invalid setting"
 msgstr ""
 
-#: seahub/views/sysadmin.py:1962 seahub/views/sysadmin.py:1966
-#: seahub/views/sysadmin.py:1971
+#: seahub/views/sysadmin.py:1957 seahub/views/sysadmin.py:1961
+#: seahub/views/sysadmin.py:1966
 msgid "Invalid value"
 msgstr ""
 
-#: seahub/views/sysadmin.py:2336
+#: seahub/views/sysadmin.py:2331
 msgid "Successfully deleted 1 item"
 msgstr ""
 
