@@ -2402,6 +2402,10 @@ class FileSharedLinkView(APIView):
             if check_folder_permission(request, repo_id, path) is None:
                 return api_error(status.HTTP_403_FORBIDDEN, 'Permission denied')
 
+            if not request.user.permissions.can_generate_share_link():
+                error_msg = 'Can not generate share link.'
+                return api_error(status.HTTP_403_FORBIDDEN, error_msg)
+
             expire = request.data.get('expire', None)
             if expire:
                 try:
@@ -2459,6 +2463,10 @@ class FileSharedLinkView(APIView):
 
             if check_folder_permission(request, repo_id, path) != 'rw':
                 return api_error(status.HTTP_403_FORBIDDEN, 'Permission denied')
+
+            if not request.user.permissions.can_generate_upload_link():
+                error_msg = 'Can not generate upload link.'
+                return api_error(status.HTTP_403_FORBIDDEN, error_msg)
 
             # generate upload link
             uls = UploadLinkShare.objects.get_upload_link_by_path(username, repo_id, path)
