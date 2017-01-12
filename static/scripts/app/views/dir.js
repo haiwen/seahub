@@ -76,12 +76,15 @@ define([
                 this.render();
 
 
-                // scroll window: get 'more', fix 'op bar'
                 var _this = this;
+                // scroll window: get 'more', fix 'op bar'
                 $(window).scroll(function() {
                     if ($(_this.el).is(':visible')) {
                         _this.onWindowScroll();
                     }
+                });
+                $(window).resize(function() {
+                    _this.updateDirOpBarUI();
                 });
 
                 // hide 'rename form'
@@ -172,6 +175,9 @@ define([
 
                 this.$el_con.show();
 
+                this.setFileInput();
+                this.updateDirOpBarUI(); // should be after `setFileInput()`
+
                 // there may be a 'style' added via 'onWindowScroll()' when visiting last dir
                 this.$('.js-dir-content').removeAttr('style');
 
@@ -200,9 +206,18 @@ define([
                 this.dir.limit = 100;
                 this.render_dirents_slice(this.dir.last_start, this.dir.limit);
 
-                this.setFileInput();
-
                 this.getImageThumbnail();
+            },
+
+            updateDirOpBarUI: function() {
+                var width;
+                if ($(window).width() > 500) {
+                    width = this.$('.repo-op').width() - parseInt(this.$('.repo-op-misc').css('margin-left')) - 5;
+                    width -= $('#multi-dirents-op').is(':visible') ? $('#multi-dirents-op').width() : $('#cur-dir-ops').width();
+                    this.$('.repo-op-misc').css({'width': width});
+                } else {
+                    this.$('.repo-op-misc').removeAttr('style');
+                }
             },
 
             updateMagnificPopupOptions: function() {
@@ -450,6 +465,7 @@ define([
                     enable_upload_folder: app.pageOptions.enable_upload_folder
                 })))
                 .removeAttr('style'); // there may be a 'style' added via 'onWindowScroll()' when visiting last dir
+
 
                 if (dir.user_perm == 'rw') {
                     // add new folder/file
@@ -848,6 +864,8 @@ define([
                     $dirents_op.hide();
                     $curDirOps.show();
                 }
+
+                this.updateDirOpBarUI();
             },
 
             download: function () {

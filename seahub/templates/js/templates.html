@@ -244,22 +244,24 @@
     <% } %>
     </div><!-- div#cur-dir-ops ends here -->
 
-    <div class="switch-mode vam">
-        <button class="list-view-icon-btn sf2-icon-list-view <% if (mode == 'list') { %>active<% } %>" title="{% trans "List" %}" id="js-switch-list-view" aria-label="{% trans "list view" %}"></button><button class="grid-view-icon-btn sf2-icon-grid-view <% if (mode == 'grid') { %>active<% } %>" title="{% trans "Grid" %}" id="js-switch-grid-view" aria-label="{% trans "grid view" %}"></button>
-    </div>
+    <div class="repo-op-misc">
+        <div class="switch-mode">
+            <button class="list-view-icon-btn sf2-icon-list-view <% if (mode == 'list') { %>active<% } %>" title="{% trans "List" %}" id="js-switch-list-view" aria-label="{% trans "list view" %}"></button><button class="grid-view-icon-btn sf2-icon-grid-view <% if (mode == 'grid') { %>active<% } %>" title="{% trans "Grid" %}" id="js-switch-grid-view" aria-label="{% trans "grid view" %}"></button>
+        </div>
 
-    <% if (path == '/') { %>
-        <div class="fright">
+        <div class="trash-history">
+        <% if (path == '/') { %>
             <% if (user_perm == 'rw') { %>
             <a class="op-link sf2-icon-trash" href="<%= site_root %>repo/recycle/<%- repo_id %>/?referer=<% print(encodeURIComponent(location.href)); %>" title="{% trans 'Trash' %}" aria-label="{% trans "Trash" %}"></a>
             <% } %>
             <a class="op-link sf2-icon-history" href="<%= site_root %>repo/history/<%- repo_id %>/?referer=<% print(encodeURIComponent(location.href)); %>" title="{% trans 'History' %}" aria-label="{% trans "History" %}"></a>
-        </div>
-    <% } else { %>
-        <% if (user_perm == 'rw') { %>
-        <a class="op-link sf2-icon-trash fright" href="<%= site_root %>dir/recycle/<%- repo_id %>/?dir_path=<% print(encodeURIComponent(path)); %>&referer=<% print(encodeURIComponent(location.href)); %>" title="{% trans 'Trash' %}"></a>
+        <% } else { %>
+            <% if (user_perm == 'rw') { %>
+            <a class="op-link sf2-icon-trash" href="<%= site_root %>dir/recycle/<%- repo_id %>/?dir_path=<% print(encodeURIComponent(path)); %>&referer=<% print(encodeURIComponent(location.href)); %>" title="{% trans 'Trash' %}"></a>
+            <% } %>
         <% } %>
-    <% } %>
+        </div>
+    </div>
 </script>
 <script type="text/template" id="dir-path-bar-tmpl">
     <% if (context == 'group') { %>

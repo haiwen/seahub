@@ -134,6 +134,7 @@ define([
                 $dirents_op.hide();
                 $curDirOps.show();
             }
+            dirView.updateDirOpBarUI();
             if (checked_num == dirView.$('tr:gt(0)').length) {
                 $toggle_all_checkbox.prop('checked', true);
             } else {
