@@ -920,7 +920,8 @@ def user_reset(request, email):
         if IS_EMAIL_CONFIGURED:
             if SEND_EMAIL_ON_RESETTING_USER_PASSWD:
                 try:
-                    send_user_reset_email(request, user.email, new_password)
+                    contact_email = Profile.objects.get_contact_email_by_user(user.email)
+                    send_user_reset_email(request, contact_email, new_password)
                     msg = _('Successfully reset password to %(passwd)s, an email has been sent to %(user)s.') % \
                         {'passwd': new_password, 'user': user.email}
                     messages.success(request, msg)
