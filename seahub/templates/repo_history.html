@@ -25,10 +25,11 @@
 
         <table class="commit-list">
             <tr>
-                <th width="52%">{% trans "Description"%}</th>
+                <th width="43%">{% trans "Description" %}</th>
                 <th width="15%">{% trans "Time" %}</th>
-                <th width="15%">{% trans "Modifier"%}</th>
-                <th width="18%">{% trans "Operations" %}</th>
+                <th width="15%">{% trans "Modifier" %}</th>
+                <th width="15%">{% trans "Device" %} / {% trans "Version" %}</th>
+                <th width="12%">{% trans "Operations" %}</th>
             </tr>
 
             {% for commit in commits %}
@@ -51,6 +52,13 @@
                 {% else %}
                     {% trans "Unknown"%}
                 {% endif %}
+                </td>
+                <td>
+                    {% if commit.client_version %}
+                    {{ commit.device_name }} / {{ commit.client_version }}
+                    {% else %}
+                    {% trans "API" %} / --
+                    {% endif %}
                 </td>
                 <td>
                     {% if user_perm == 'rw' %}
