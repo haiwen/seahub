@@ -86,6 +86,38 @@ define([
 
             this.currentView = this.myReposView;
 
+            var _this = this;
+            var originalWindowWidth = $(window).width();
+            $(window).resize(function() {
+                var curWidth = $(window).width();
+                if (_this.currentView.reset) {
+                    if ((originalWindowWidth < 768 && curWidth >= 768 ) ||
+                        (originalWindowWidth >= 768 && curWidth < 768)) {
+                        _this.currentView.reset();
+                    }
+                }
+                originalWindowWidth = curWidth;
+            });
+
+            // for popups such as '#share-popup'
+            $(window).resize(function() {
+                var $el = $('#share-popup, #repo-share-link-admin-dialog, #repo-folder-perm-popup, #folder-perm-popup');
+                if ($el.is(':visible')) {
+                    if ($(window).width() < 768) {
+                        $el.css({
+                            'width': $(window).width() - 50,
+                            'height': $(window).height() - 50,
+                            'overflow': 'auto'
+                        });
+                        $.modal.update($(window).height() - 50, $(window).width() - 50);
+                    } else {
+                        $el.removeAttr('style');
+                        $('#simplemodal-container').css({'width':'auto', 'height':'auto'});
+                    }
+                }
+            });
+
+
             $('#info-bar .close').click(Common.closeTopNoticeBar);
             $('#top-browser-tip-close').click(function () {
                 $('#top-browser-tip').addClass('hide');

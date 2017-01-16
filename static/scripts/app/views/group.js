@@ -19,6 +19,7 @@ define([
         template: _.template($('#group-tmpl').html()),
         groupTopTemplate: _.template($('#group-top-tmpl').html()),
         reposHdTemplate: _.template($('#shared-repos-hd-tmpl').html()),
+        mobileReposHdTemplate: _.template($('#shared-repos-hd-mobile-tmpl').html()),
 
         events: {
             'click #group-settings-icon': 'toggleSettingsPanel',
@@ -56,7 +57,8 @@ define([
         },
 
         renderReposHd: function() {
-            this.$tableHead.html(this.reposHdTemplate());
+            var tmpl = $(window).width() >= 768 ? this.reposHdTemplate : this.mobileReposHdTemplate;
+            this.$tableHead.html(tmpl());
         },
 
         reset: function() {

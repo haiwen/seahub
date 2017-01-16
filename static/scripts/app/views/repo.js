@@ -19,10 +19,12 @@ define([
         tagName: 'tr',
 
         template: _.template($('#repo-tmpl').html()),
+        mobileTemplate: _.template($('#repo-mobile-tmpl').html()), // for extra small devices (phones, less than 768px)
         renameTemplate: _.template($("#repo-rename-form-template").html()),
         transferTemplate: _.template($('#repo-transfer-form-tmpl').html()),
 
         events: {
+            'click td:lt(2)': 'visitRepo',
             'click .repo-delete-btn': 'del',
             'click .repo-share-btn': 'share',
             'click .js-repo-rename': 'rename',
@@ -43,17 +45,30 @@ define([
             var obj = this.model.toJSON();
             var icon_size = Common.isHiDPI() ? 96 : 24;
             var icon_url = this.model.getIconUrl(icon_size);
+            var tmpl, dropdownOptions = {};
+            if ($(window).width() >= 768) {
+                tmpl = this.template;
+            } else {
+                tmpl = this.mobileTemplate;
+                dropdownOptions = {'right': 0};
+            }
             _.extend(obj, {
                 'icon_url': icon_url,
                 'icon_title': this.model.getIconTitle(),
                 'can_generate_share_link': app.pageOptions.can_generate_share_link,
                 'can_generate_upload_link': app.pageOptions.can_generate_upload_link
             });
-            this.$el.html(this.template(obj));
-            this.dropdown = new DropdownView({
+            this.$el.html(tmpl(obj));
+            this.dropdown = new DropdownView($.extend({
                 el: this.$('.sf-dropdown')
-            });
+            }, dropdownOptions));
             return this;
+        },
+
+        visitRepo: function() {
+            if ($(window).width() < 768) {
+                location.href = this.$('.repo-name-span a').attr('href');
+            }
         },
 
         del: function() {
@@ -201,7 +216,7 @@ define([
 
             $('[name="email"]', $form).select2($.extend(
                 Common.contactInputOptionsForSelect2(), {
-                width: '300px',
+                width: '280px',
                 maximumSelectionSize: 1,
                 placeholder: gettext("Search user or enter email and press Enter"), // to override 'placeholder' returned by `Common.conta...`
                 formatSelectionTooBig: gettext("You cannot select any more choices")

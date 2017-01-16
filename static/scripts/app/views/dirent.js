@@ -20,7 +20,9 @@ define([
         },
 
         fileTemplate: _.template($('#dirent-file-tmpl').html()),
+        fileMobileTemplate: _.template($('#dirent-file-mobile-tmpl').html()),
         dirTemplate: _.template($('#dirent-dir-tmpl').html()),
+        dirMobileTemplate: _.template($('#dirent-dir-mobile-tmpl').html()),
         renameTemplate: _.template($("#rename-form-template").html()),
 
         initialize: function(options) {
@@ -41,9 +43,9 @@ define([
             var file_icon_size = Common.isHiDPI() ? 48 : 24;
             var template;
             if (this.model.get('is_dir')) {
-                template = this.dirTemplate;
+                template = $(window).width() < 768 ? this.dirMobileTemplate : this.dirTemplate;
             } else {
-                template = this.fileTemplate;
+                template = $(window).width() < 768 ? this.fileMobileTemplate : this.fileTemplate;
             }
 
             this.$el.html(template({
@@ -66,7 +68,8 @@ define([
             }));
             this.$('.file-locked-icon').attr('title', gettext("locked by {placeholder}").replace('{placeholder}', this.model.get('lock_owner_name')));
             this.dropdown = new DropdownView({
-                el: this.$('.sf-dropdown')
+                el: this.$('.sf-dropdown'),
+                right: '0'
             });
 
             // for image files
@@ -78,6 +81,7 @@ define([
         events: {
             'click .select': 'select',
             'click .file-star': 'starFile',
+            'click .dirent-name': 'visitDirent',
             'click .img-name-link': 'viewImageWithPopup',
 
             // mv by 'drag & drop'
@@ -130,6 +134,7 @@ define([
                 $dirents_op.hide();
                 $curDirOps.show();
             }
+            dirView.updateDirOpBarUI();
             if (checked_num == dirView.$('tr:gt(0)').length) {
                 $toggle_all_checkbox.prop('checked', true);
             } else {
@@ -332,6 +337,13 @@ define([
             }
 
             return false;
+        },
+
+        visitDirent: function() {
+            if ($(window).width() < 768 &&
+                !this.model.get('is_img')) { // dir or non image file
+                location.href = this.$('.dirent-name a').attr('href');
+            }
         },
 
         viewImageWithPopup: function() {

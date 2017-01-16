@@ -51,7 +51,10 @@ define([
                 return;
             }
             app.ui.currentHighlightedItem = null;
-            this.$el.removeClass('hl').find(this.hiddenOperationClass).addClass('vh');
+            this.$el.removeClass('hl');
+            if ($(window).width() >= 768) {
+                this.$el.find(this.hiddenOperationClass).addClass('vh');
+            }
         }
 
     });

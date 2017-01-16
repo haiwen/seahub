@@ -144,7 +144,7 @@ define([
             var _this = this;
 
             var $form = $(this.transferTemplate());
-            $form.modal({focus:false});
+            $form.modal({focus:false, minWidth:268});
             $('#simplemodal-container').css({'width':'auto', 'height':'auto'});
 
             $('[name="email"]', $form).select2($.extend(

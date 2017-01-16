@@ -11,6 +11,7 @@ define([
         tagName: 'tr',
 
         template: _.template($('#starred-file-item-tmpl').html()),
+        mobileTemplate: _.template($('#starred-file-item-mobile-tmpl').html()),
 
         events: {
             'click .unstar': 'removeShare'
@@ -26,7 +27,8 @@ define([
             data['is_img'] = Common.imageCheck(data['file_name']);
             data['encoded_path'] = Common.encodePath(data['path']);
 
-            this.$el.html(this.template(data));
+            var tmpl = $(window).width() >= 768 ? this.template : this.mobileTemplate;
+            this.$el.html(tmpl(data));
             return this;
         },
 

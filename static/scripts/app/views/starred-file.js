@@ -14,6 +14,7 @@ define([
         id: 'starred-file',
 
         template: _.template($('#starred-file-tmpl').html()),
+        theadTemplate: _.template($('#starred-file-thead-tmpl').html()),
 
         initialize: function() {
             this.starredFiles = new StarredFilesCollection();
@@ -29,9 +30,10 @@ define([
         reset: function() {
             this.$tableBody.empty();
             this.$loadingTip.hide();
-            this.starredFiles.each(this.addOne, this);
             if (this.starredFiles.length) {
                 this.$emptyTip.hide();
+                this.renderThead();
+                this.starredFiles.each(this.addOne, this);
                 this.$table.show();
             } else {
                 this.$emptyTip.show();
@@ -75,6 +77,10 @@ define([
                     tError: gettext('<a href="%url%" target="_blank">The image</a> could not be loaded.') // Error message when image could not be loaded
                 }
             });
+        },
+
+        renderThead: function() {
+            this.$('thead').html(this.theadTemplate());
         },
 
         show: function() {

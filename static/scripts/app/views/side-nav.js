@@ -51,7 +51,14 @@ define([
             'click #enable-mods': 'enableMods',
             'click .js-close-side-nav': 'closeNav',
             'click li > a': 'visitLink',
-            'click .js-about': 'showAbout'
+            'click .js-about': 'showAbout',
+
+            // for touch devices
+            'touchstart .side-nav-con': 'conTouchStart'
+        },
+
+        conTouchStart: function() {
+            this.$('.side-nav-con').css({'overflow':'auto'});
         },
 
         toggleGroupList: function() {

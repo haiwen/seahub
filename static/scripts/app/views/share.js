@@ -24,8 +24,16 @@ define([
 
             this.render();
 
-            this.$el.modal({focus: false});
-            $('#simplemodal-container').css({'width':'auto', 'height':'auto'});
+            if ($(window).width() >= 768) {
+                this.$el.modal({focus: false});
+                $('#simplemodal-container').css({'width':'auto', 'height':'auto'});
+            } else {
+                this.$el.css({
+                    'width': $(window).width() - 50,
+                    'height': $(window).height() - 50,
+                    'overflow': 'auto'
+                }).modal({focus:false});
+            }
 
             this.$("#share-tabs").tabs();
 

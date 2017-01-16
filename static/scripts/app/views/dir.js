@@ -27,6 +27,7 @@ define([
             path_bar_template: _.template($('#dir-path-bar-tmpl').html()),
             dir_op_bar_template: _.template($('#dir-op-bar-tmpl').html()),
             dirents_hd_template: _.template($('#dirents-hd-tmpl').html()),
+            dirents_hd_mobile_template: _.template($('#dirents-hd-mobile-tmpl').html()),
             top_search_form_template: _.template($('#top-search-form-tmpl').html()),
 
             newDirTemplate: _.template($("#add-new-dir-form-template").html()),
@@ -75,12 +76,15 @@ define([
                 this.render();
 
 
-                // scroll window: get 'more', fix 'op bar'
                 var _this = this;
+                // scroll window: get 'more', fix 'op bar'
                 $(window).scroll(function() {
                     if ($(_this.el).is(':visible')) {
                         _this.onWindowScroll();
                     }
+                });
+                $(window).resize(function() {
+                    _this.updateDirOpBarUI();
                 });
 
                 // hide 'rename form'
@@ -168,8 +172,28 @@ define([
             reset: function() {
                 this.renderPath();
                 this.renderDirOpBar();
+
+                this.$el_con.show();
+
+                this.setFileInput();
+                this.updateDirOpBarUI(); // should be after `setFileInput()`
+
+                // there may be a 'style' added via 'onWindowScroll()' when visiting last dir
+                this.$('.js-dir-content').removeAttr('style');
+
                 if (this.view_mode == 'list') {
                     this.renderDirentsHd();
+                }
+
+                this.$dirent_grid.empty();
+                this.$dirent_list_body.empty();
+
+                if (this.view_mode == 'list') {
+                    this.$dirent_list.show();
+                    this.$dirent_grid.hide();
+                } else {
+                    this.$dirent_list.hide();
+                    this.$dirent_grid.show();
                 }
 
                 // sort
@@ -182,9 +206,18 @@ define([
                 this.dir.limit = 100;
                 this.render_dirents_slice(this.dir.last_start, this.dir.limit);
 
-                this.setFileInput();
-
                 this.getImageThumbnail();
+            },
+
+            updateDirOpBarUI: function() {
+                var width;
+                if ($(window).width() > 500) {
+                    width = this.$('.repo-op').width() - parseInt(this.$('.repo-op-misc').css('margin-left')) - 5;
+                    width -= $('#multi-dirents-op').is(':visible') ? $('#multi-dirents-op').width() : $('#cur-dir-ops').width();
+                    this.$('.repo-op-misc').css({'width': width});
+                } else {
+                    this.$('.repo-op-misc').removeAttr('style');
+                }
             },
 
             updateMagnificPopupOptions: function() {
@@ -342,18 +375,8 @@ define([
             renderDir: function() {
                 this.$loading_tip.show();
                 this.$error.hide();
-                this.$el_con.show();
+                this.$el_con.hide();
 
-                this.$dirent_grid.empty();
-                this.$dirent_list_body.empty();
-
-                if (this.view_mode == 'list') {
-                    this.$dirent_list.show();
-                    this.$dirent_grid.hide();
-                } else {
-                    this.$dirent_list.hide();
-                    this.$dirent_grid.show();
-                }
 
                 var _this = this;
                 var thumbnail_size = app.pageOptions.thumbnail_default_size;
@@ -440,7 +463,9 @@ define([
                     can_generate_share_link: app.pageOptions.can_generate_share_link,
                     can_generate_upload_link: app.pageOptions.can_generate_upload_link,
                     enable_upload_folder: app.pageOptions.enable_upload_folder
-                })));
+                })))
+                .removeAttr('style'); // there may be a 'style' added via 'onWindowScroll()' when visiting last dir
+
 
                 if (dir.user_perm == 'rw') {
                     // add new folder/file
@@ -451,7 +476,8 @@ define([
             },
 
             renderDirentsHd: function() {
-                this.$('thead').html(this.dirents_hd_template());
+                var tmpl = $(window).width() < 768 ? this.dirents_hd_mobile_template : this.dirents_hd_template;
+                this.$('thead').html(tmpl());
             },
 
             render_dirents_slice: function(start, limit) {
@@ -838,6 +864,8 @@ define([
                     $dirents_op.hide();
                     $curDirOps.show();
                 }
+
+                this.updateDirOpBarUI();
             },
 
             download: function () {
@@ -1279,7 +1307,7 @@ define([
                 // fixed 'dir-op-bar'
                 var op_bar = this.$dir_op_bar,
                     path_bar = this.$path_bar, // the element before op_bar
-                    repo_file_list = this.$('.repo-file-list'); // the element after op_bar
+                    repo_file_list = this.$('.js-dir-content'); // the element after op_bar
                 var op_bar_top = path_bar.offset().top + path_bar.outerHeight(true);
                 var fixed_styles = {
                     'position': 'fixed',
@@ -1288,6 +1316,9 @@ define([
                     'background-color': $('#header').css('background-color'),
                     'z-index': 12 // make 'op_bar' shown on top of the checkboxes
                 };
+                if (!op_bar_top) {
+                    return;
+                }
                 if ($(window).scrollTop() >= op_bar_top) {
                     repo_file_list.css({'margin-top':op_bar.outerHeight(true)});
                     op_bar.outerWidth(this.$el.width()).css(fixed_styles);

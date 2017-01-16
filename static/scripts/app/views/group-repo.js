@@ -11,6 +11,7 @@ define([
         tagName: 'tr',
 
         template: _.template($('#group-repo-tmpl').html()),
+        mobileTemplate: _.template($('#group-repo-mobile-tmpl').html()),
 
         events: {
             'click .cancel-share': 'unshare'
@@ -34,6 +35,7 @@ define([
             var obj = this.model.toJSON();
             var icon_size = Common.isHiDPI() ? 96 : 24;
             var icon_url = this.model.getIconUrl(icon_size);
+            var tmpl = $(window).width() >= 768 ? this.template : this.mobileTemplate;
             $.extend(obj, {
                 group_id: this.group_id,
                 is_staff: this.is_staff,
@@ -45,7 +47,7 @@ define([
                 icon_url: icon_url,
                 icon_title: this.model.getIconTitle()
             });
-            this.$el.html(this.template(obj));
+            this.$el.html(tmpl(obj));
             return this;
         },
 
