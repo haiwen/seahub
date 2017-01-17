@@ -1900,6 +1900,8 @@ class DevicesView(APIView):
             error_msg = 'device_id invalid.'
             return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
 
+        remote_wipe = True if remote_wipe == 'true' else False
+
         try:
             do_unlink_device(request.user.username,
                              platform,

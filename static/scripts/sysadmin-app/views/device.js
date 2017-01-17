@@ -14,7 +14,7 @@ define([
         template: _.template($('#device-item-tmpl').html()),
 
         events: {
-            'click .unlink-device': 'unlinkDevice'
+            'click .unlink-device': 'unlinkDeviceWithConfirm'
         },
 
         initialize: function() {
@@ -33,26 +33,54 @@ define([
             return this;
         },
 
-        unlinkDevice: function() {
+        unlinkDeviceWithConfirm: function() {
             var _this = this,
+                is_desktop_client = this.model.get('is_desktop_client'),
                 device_name = this.model.get('device_name');
 
-            this.model.unlink({
-                success: function() {
-                    _this.remove();
+            if (is_desktop_client) {
+                var title = gettext('Unlink device');
+                var content = gettext('Are you sure you want to unlink this device?');
+                var extraOption = gettext('Delete files from this device the next time it comes online.');
 
-                    var msg = gettext("Successfully unlink %(name)s.")
-                        .replace('%(name)s', device_name);
-                    Common.feedback(msg, 'success');
-                },
-                error: function(xhr) {
-                    Common.ajaxErrorHandler(xhr);
-                }
-            });
-            return false;
+                var yesCallback = function (wipe_device) {
+                    _this.model.unlink({
+                        wipe_device: wipe_device,
+
+                        success: function() {
+                            _this.remove();
+
+                            var msg = gettext("Successfully unlink %(name)s.")
+                                .replace('%(name)s', device_name);
+                            Common.feedback(msg, 'success');
+                        },
+                        error: function(xhr) {
+                            Common.ajaxErrorHandler(xhr);
+                        },
+                        complete: function() {
+                            $.modal.close();
+                        }
+                    });
+                    return false;
+                };
+                Common.showConfirmWithExtraOption(title, content, extraOption, yesCallback);
+            } else {
+                _this.model.unlink({
+                    wipe_device: true,
+                    success: function() {
+                        _this.remove();
+
+                        var msg = gettext("Successfully unlink %(name)s.")
+                            .replace('%(name)s', device_name);
+                        Common.feedback(msg, 'success');
+                    },
+                    error: function(xhr) {
+                        Common.ajaxErrorHandler(xhr);
+                    }
+                });
+                return false;
+            }
         }
-
     });
-
     return DeviceView;
 });

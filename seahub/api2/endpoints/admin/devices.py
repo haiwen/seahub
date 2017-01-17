@@ -16,7 +16,7 @@ from seahub.views import is_registered_user
 from seahub.api2.authentication import TokenAuthentication
 from seahub.api2.throttling import UserRateThrottle
 from seahub.api2.utils import api_error
-from seahub.api2.models import TokenV2
+from seahub.api2.models import TokenV2, DESKTOP_PLATFORMS
 
 logger = logging.getLogger(__name__)
 
@@ -56,6 +56,11 @@ class AdminDevices(APIView):
             result['last_login_ip'] = device.last_login_ip
             result['user'] = device.user
             result['platform'] = device.platform
+
+            result['is_desktop_client'] = False
+            if result['platform'] in DESKTOP_PLATFORMS:
+                result['is_desktop_client'] = True
+
             return_results.append(result)
 
         page_info = {
@@ -68,6 +73,7 @@ class AdminDevices(APIView):
 
         platform = request.data.get('platform', '')
         device_id = request.data.get('device_id', '')
+        remote_wipe = request.data.get('wipe_device', '')
         user = request.data.get('user', '')
 
         if not platform:
@@ -82,8 +88,10 @@ class AdminDevices(APIView):
             error_msg = 'user invalid.'
             return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
 
+        remote_wipe = True if remote_wipe == 'true' else False
+
         try:
-            do_unlink_device(user, platform, device_id)
+            do_unlink_device(user, platform, device_id, remote_wipe=remote_wipe)
         except SearpcError as e:
             logger.error(e)
             error_msg = 'Internal Server Error'
