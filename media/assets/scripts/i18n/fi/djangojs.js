@@ -1,0 +1,268 @@
+
+
+(function (globals) {
+
+  var django = globals.django || (globals.django = {});
+
+  
+  django.pluralidx = function (n) {
+    var v=(n != 1);
+    if (typeof(v) == 'boolean') {
+      return v ? 1 : 0;
+    } else {
+      return v;
+    }
+  };
+  
+
+  
+  /* gettext library */
+
+  django.catalog = {
+    "%curr% of %total%": "%curr% kokonaism\u00e4\u00e4r\u00e4st\u00e4 %total%", 
+    "<a href=\"%url%\" target=\"_blank\">The image</a> could not be loaded.": " href=\"%url%\" target=\"_blank\">Kuvaa</a> ei voitu ladata.", 
+    "Are you sure you want to delete these selected items?": "Oletko varma, ett\u00e4 haluat poistaa n\u00e4m\u00e4 kohteet?", 
+    "Are you sure you want to quit this group?": "Oletko varma, ett\u00e4 haluat lopettaa t\u00e4m\u00e4n ryhm\u00e4n?", 
+    "Cancel": "Peruuta", 
+    "Canceled.": "Peruutettu.", 
+    "Change Password of Library {placeholder}": "Vaihda kirjaston {placeholder} salasana", 
+    "Close (Esc)": "Sulje (Esc)", 
+    "Copy selected item(s) to:": "Kopioi valitut kohteet:", 
+    "Copy {placeholder} to:": "Kopioi {placeholder} kohteeseen:", 
+    "Copying %(name)s": "Kopioidaan %(name)s", 
+    "Copying file %(index)s of %(total)s": "Kopioidaan tiedostoa %(index)s kokonaism\u00e4\u00e4r\u00e4st\u00e4 %(total)s", 
+    "Delete": "Poista", 
+    "Delete Items": "Poista kohteita", 
+    "Delete failed": "Poisto ep\u00e4onnistui", 
+    "Deleted directories": "Poistetut hakemistot", 
+    "Deleted files": "Poistetut tiedostot", 
+    "Dismiss Group": "Poistu ryhm\u00e4st\u00e4", 
+    "Edit failed": "Muokkaus ep\u00e4onnistui", 
+    "Empty file upload result": "Tiedoston l\u00e4hetys oli tulokseton", 
+    "Encrypted library": "Salattu kirjasto", 
+    "Error": "Virhe", 
+    "Expired": "Vanhentunut", 
+    "Failed to copy %(name)s": "%(name)s kopiointi ep\u00e4onnistui.", 
+    "Failed to delete %(name)s and %(amount)s other items.": "Ep\u00e4onnistuttiin poistamaan %(name)s ja %(amount)s muuta kohdetta.", 
+    "Failed to delete %(name)s and 1 other item.": "Ep\u00e4onnistuttiin poistamaan %(name)s ja 1 muu kohde.", 
+    "Failed to delete %(name)s.": "%(name)s poistaminen ep\u00e4onnistui.", 
+    "Failed to get update url": "P\u00e4ivityslinkin haku ep\u00e4onnistui", 
+    "Failed to get upload url": "L\u00e4hetyslinkin haku ep\u00e4onnistui", 
+    "Failed to move %(name)s": "%(name)s siirt\u00e4minen ep\u00e4onnistui", 
+    "Failed to send to {placeholder}": "L\u00e4hett\u00e4minen kohteeseen {placeholder} ep\u00e4onnistui", 
+    "Failed.": "Ep\u00e4onnistui.", 
+    "Failed. Please check the network.": "Ep\u00e4onnistui. Ole hyv\u00e4 ja tarkista verkkoyhteys.", 
+    "File Upload canceled": "Tiedoston l\u00e4hetys peruutettu", 
+    "File Upload complete": "Tiedoston l\u00e4hetys valmistui", 
+    "File Upload failed": "Tiedoston l\u00e4hetys ep\u00e4onnistui", 
+    "File Uploading...": "Tiedostoa l\u00e4hetet\u00e4\u00e4n...", 
+    "File is locked": "Tiedosto on lukittu", 
+    "File is too big": "Tiedosto on liian suuri", 
+    "File is too small": "Tiedosto on liian pieni", 
+    "Filetype not allowed": "Tiedostotyyppi ei ole sallittu", 
+    "Hide": "Piiloita", 
+    "Internal error. Failed to copy %(name)s and %(amount)s other item(s).": "Sis\u00e4inen virhe. Ep\u00e4onnistuttiin kopioimaan %(name)s ja %(amount)s muuta kohdetta.", 
+    "Internal error. Failed to copy %(name)s.": "Sis\u00e4inen virhe. %(name)s kopiointi ep\u00e4onnistui.", 
+    "Internal error. Failed to move %(name)s and %(amount)s other item(s).": "Sis\u00e4inen virhe. Ep\u00e4onnistuttiin siirt\u00e4m\u00e4\u00e4n %(name)s ja %(amount)s muuta kohdetta.", 
+    "Internal error. Failed to move %(name)s.": "Sis\u00e4inen virhe. %(name)s siirt\u00e4minen ep\u00e4onnistui.", 
+    "Invalid destination path": "Virheellinen kohdepolku", 
+    "It is required.": "Vaaditaan", 
+    "Just now": "Juuri nyt", 
+    "Loading failed": "Lataus ep\u00e4onnistui", 
+    "Loading...": "Ladataan...", 
+    "Max number of files exceeded": "Tiedostojen maksim\u00e4\u00e4r\u00e4 on ylitetty", 
+    "Modified files": "Muokatut tiedostot", 
+    "Move selected item(s) to:": "Siirr\u00e4 valitut kohteet:", 
+    "Move {placeholder} to:": "Siirr\u00e4 {placeholder} kohteeseen:", 
+    "Moving %(name)s": "Siirret\u00e4\u00e4n %(name)s", 
+    "Moving file %(index)s of %(total)s": "Siirret\u00e4\u00e4n tiedostoa %(index)s kokonaism\u00e4\u00e4r\u00e4st\u00e4 %(total)s", 
+    "Name is required": "Nimi vaaditaan", 
+    "New directories": "Uudet hakemistot", 
+    "New files": "Uudet tiedostot", 
+    "New password is too short": "Uusi salasana on liian lyhyt", 
+    "New passwords don't match": "Uudet salasanat eiv\u00e4t t\u00e4sm\u00e4\u00e4", 
+    "Next (Right arrow key)": "Seuraava (Oikea nuolin\u00e4pp\u00e4in)", 
+    "No matches": "Ei osumia", 
+    "Only an extension there, please input a name.": "Ainoastaan p\u00e4\u00e4tteet t\u00e4h\u00e4n, ole hyv\u00e4 ja anna nimi.", 
+    "Open in New Tab": "Avaa uudessa v\u00e4lilehdess\u00e4", 
+    "Password is required.": "Salasana vaaditaan", 
+    "Password is too short": "Salasana on liian lyhyt", 
+    "Passwords don't match": "Salasanat eiv\u00e4t t\u00e4sm\u00e4\u00e4", 
+    "Permission error": "Virhe oikeuksissa", 
+    "Please check the network.": "Ole hyv\u00e4 ja tarkista verkko.", 
+    "Please choose a CSV file": "Ole hyv\u00e4 ja valitse CSV-tiedosto", 
+    "Please click and choose a directory.": "Ole hyv\u00e4 ja valitse hakemisto.", 
+    "Please enter 1 or more character": "Ole hyv\u00e4 ja sy\u00f6t\u00e4 1 tai useampi merkki", 
+    "Please enter a new password": "Ole hyv\u00e4 ja anna uusi salasana", 
+    "Please enter days.": "Ole hyv\u00e4 ja sy\u00f6t\u00e4 p\u00e4iv\u00e4t.", 
+    "Please enter password": "Ole hyv\u00e4 ja sy\u00f6t\u00e4 salasana", 
+    "Please enter the new password again": "Ole hyv\u00e4 ja anna uusi salasana uudelleen", 
+    "Please enter the old password": "Ole hyv\u00e4 ja anna vanha salasana", 
+    "Please enter the password again": "Ole hyv\u00e4 ja sy\u00f6t\u00e4 salasana uudelleen", 
+    "Please enter valid days": "Ole hyv\u00e4 ja sy\u00f6t\u00e4 validit p\u00e4iv\u00e4t", 
+    "Please input at least an email.": "Ole hyv\u00e4 ja sy\u00f6t\u00e4 ainakin s\u00e4hk\u00f6posti.", 
+    "Previous (Left arrow key)": "Edellinen (Vasen nuolin\u00e4pp\u00e4in)", 
+    "Processing...": "K\u00e4sitell\u00e4\u00e4n...", 
+    "Quit Group": "Lopeta ryhm\u00e4", 
+    "Read-Only library": "Vain luku kirjasto", 
+    "Read-Write library": "Luku-kirjoitus kirjasto", 
+    "Really want to dismiss this group?": "Haluatko varmasti poistua ryhm\u00e4st\u00e4?", 
+    "Rename File": "Nime\u00e4 tiedosto uudelleen", 
+    "Rename Folder": "Nime\u00e4 kansio uudelleen", 
+    "Renamed or Moved files": "Uudelleen nimetyt tai siirretyt tiedostot", 
+    "Replace file {filename}?": "Korvaa tiedosto {filename}?", 
+    "Saving...": "Tallennetaan...", 
+    "Search user or enter email and press Enter": "Etsi k\u00e4ytt\u00e4j\u00e4 tai sy\u00f6t\u00e4 s\u00e4hk\u00f6posti ja paina Enter", 
+    "Search users or enter emails and press Enter": "Etsi k\u00e4ytt\u00e4ji\u00e4 tai sy\u00f6t\u00e4 s\u00e4hk\u00f6postit ja paina Enter", 
+    "Searching...": "Etsit\u00e4\u00e4n...", 
+    "Select a group": "Valitse ryhm\u00e4", 
+    "Select groups": "Valitse ryhm\u00e4t", 
+    "Set {placeholder}'s permission": "Aseta oikeudet kohteelle {placeholder} ", 
+    "Share {placeholder}": "Jaa {placeholder}", 
+    "Show": "N\u00e4yt\u00e4", 
+    "Start": "Aloita", 
+    "Success": "Onnistui", 
+    "Successfully changed library password.": "Kirjaston salasana vaihdettu onnistuneesti.", 
+    "Successfully clean all errors.": "Kaikki virheet on poistettu onnistuneesti.", 
+    "Successfully copied %(name)s": "Kohde %(name)s kopioitu onnistuneesti", 
+    "Successfully copied %(name)s and %(amount)s other items.": "Kopioitiin onnistuneesti %(name)s ja %(amount)s muuta kohdetta.", 
+    "Successfully copied %(name)s and 1 other item.": "Kopioitiin onnistuneesti %(name)s ja 1 muu kohde.", 
+    "Successfully copied %(name)s.": "%(name)s kopioitiin onnistuneesti.", 
+    "Successfully deleted %(name)s": "%(name)s poistettu onnistuneesti", 
+    "Successfully deleted %(name)s and %(amount)s other items.": "Poistettu onnistuneesti %(name)s ja %(amount)s muuta kohdetta.", 
+    "Successfully deleted %(name)s and 1 other item.": "Poistettu onnistuneesti %(name)s ja 1 muu kohde.", 
+    "Successfully deleted %(name)s.": "Poistettu onnistuneesti %(name)s", 
+    "Successfully imported.": "Tuonti onnistui.", 
+    "Successfully moved %(name)s": "Kohde %(name)s siirretty onnistuneesti", 
+    "Successfully moved %(name)s and %(amount)s other items.": "Siirrettiin onnistuneesti %(name)s ja %(amount)s muuta kohdetta.", 
+    "Successfully moved %(name)s and 1 other item.": "Siirrettiin onnistuneesti %(name)s ja 1 muu kohde.", 
+    "Successfully moved %(name)s.": "%(name)s siirretty onnistuneesti.", 
+    "Successfully sent to {placeholder}": "L\u00e4hetetty onnistuneesti kohteeseen {placeholder}", 
+    "Successfully set library history.": "Kirjaston historia asetettu onnistuneesti.", 
+    "Successfully transferred the group. You are now a normal member of the group.": "Ryhm\u00e4n vaihto onnistui. Olet nyt ryhm\u00e4n perusk\u00e4ytt\u00e4j\u00e4.", 
+    "Successfully transferred the library.": "Kirjasto siirretty onnistuneesti.", 
+    "Successfully unlink %(name)s.": "Kohteen %(name)s linkki poistettu onnistuneesti", 
+    "Successfully unstared {placeholder}": "Suosikki {placeholder} poistettu onnistuneesti", 
+    "Transfer Library {library_name} To": "Siirr\u00e4 kirjasto {library_name} kohteeseen", 
+    "Uploaded bytes exceed file size": "L\u00e4htetyt tavut ylitt\u00e4v\u00e4t tiedoston koon", 
+    "You can only select 1 item": "Voit valita vain yhden kohteen", 
+    "You cannot select any more choices": "Et voi tehd\u00e4 enemp\u00e4\u00e4 valintoja", 
+    "canceled": "peruutettu", 
+    "locked by {placeholder}": "lukittu {placeholder} toimesta", 
+    "uploaded": "l\u00e4hetetty", 
+    "{placeholder} Folder Permission": "{placeholder} Kansion oikeus", 
+    "{placeholder} History Setting": "{placeholder} Historia-asetukset", 
+    "{placeholder} Members": "{placeholder} J\u00e4senet", 
+    "{placeholder} Share Links": "{placeholder} Jakolinkit"
+  };
+
+  django.gettext = function (msgid) {
+    var value = django.catalog[msgid];
+    if (typeof(value) == 'undefined') {
+      return msgid;
+    } else {
+      return (typeof(value) == 'string') ? value : value[0];
+    }
+  };
+
+  django.ngettext = function (singular, plural, count) {
+    var value = django.catalog[singular];
+    if (typeof(value) == 'undefined') {
+      return (count == 1) ? singular : plural;
+    } else {
+      return value[django.pluralidx(count)];
+    }
+  };
+
+  django.gettext_noop = function (msgid) { return msgid; };
+
+  django.pgettext = function (context, msgid) {
+    var value = django.gettext(context + '\x04' + msgid);
+    if (value.indexOf('\x04') != -1) {
+      value = msgid;
+    }
+    return value;
+  };
+
+  django.npgettext = function (context, singular, plural, count) {
+    var value = django.ngettext(context + '\x04' + singular, context + '\x04' + plural, count);
+    if (value.indexOf('\x04') != -1) {
+      value = django.ngettext(singular, plural, count);
+    }
+    return value;
+  };
+  
+
+  django.interpolate = function (fmt, obj, named) {
+    if (named) {
+      return fmt.replace(/%\(\w+\)s/g, function(match){return String(obj[match.slice(2,-2)])});
+    } else {
+      return fmt.replace(/%s/g, function(match){return String(obj.shift())});
+    }
+  };
+
+
+  /* formatting library */
+
+  django.formats = {
+    "DATETIME_FORMAT": "j. E Y \\k\\e\\l\\l\\o G.i", 
+    "DATETIME_INPUT_FORMATS": [
+      "%d.%m.%Y %H.%M.%S", 
+      "%d.%m.%Y %H.%M.%S.%f", 
+      "%d.%m.%Y %H.%M", 
+      "%d.%m.%Y", 
+      "%d.%m.%y %H.%M.%S", 
+      "%d.%m.%y %H.%M.%S.%f", 
+      "%d.%m.%y %H.%M", 
+      "%d.%m.%y", 
+      "%Y-%m-%d %H:%M:%S", 
+      "%Y-%m-%d %H:%M:%S.%f", 
+      "%Y-%m-%d %H:%M", 
+      "%Y-%m-%d"
+    ], 
+    "DATE_FORMAT": "j. E Y", 
+    "DATE_INPUT_FORMATS": [
+      "%d.%m.%Y", 
+      "%d.%m.%y", 
+      "%Y-%m-%d"
+    ], 
+    "DECIMAL_SEPARATOR": ",", 
+    "FIRST_DAY_OF_WEEK": "1", 
+    "MONTH_DAY_FORMAT": "j. F", 
+    "NUMBER_GROUPING": "3", 
+    "SHORT_DATETIME_FORMAT": "j.n.Y G.i", 
+    "SHORT_DATE_FORMAT": "j.n.Y", 
+    "THOUSAND_SEPARATOR": "\u00a0", 
+    "TIME_FORMAT": "G.i", 
+    "TIME_INPUT_FORMATS": [
+      "%H.%M.%S", 
+      "%H.%M.%S.%f", 
+      "%H.%M", 
+      "%H:%M:%S", 
+      "%H:%M:%S.%f", 
+      "%H:%M"
+    ], 
+    "YEAR_MONTH_FORMAT": "F Y"
+  };
+
+  django.get_format = function (format_type) {
+    var value = django.formats[format_type];
+    if (typeof(value) == 'undefined') {
+      return format_type;
+    } else {
+      return value;
+    }
+  };
+
+  /* add to global namespace */
+  globals.pluralidx = django.pluralidx;
+  globals.gettext = django.gettext;
+  globals.ngettext = django.ngettext;
+  globals.gettext_noop = django.gettext_noop;
+  globals.pgettext = django.pgettext;
+  globals.npgettext = django.npgettext;
+  globals.interpolate = django.interpolate;
+  globals.get_format = django.get_format;
+
+}(this));
+
