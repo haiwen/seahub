@@ -1,5 +1,7 @@
+from mock import patch
 from django.core import mail
 from django.core.urlresolvers import reverse
+from django.http.cookie import parse_cookie
 from constance import config
 
 from seahub.base.accounts import User
@@ -15,6 +17,8 @@ class UserResetTest(BaseTestCase):
 
         self.login_as(self.admin)
 
+    @patch('seahub.views.sysadmin.IS_EMAIL_CONFIGURED', True)
+    @patch('seahub.views.sysadmin.SEND_EMAIL_ON_RESETTING_USER_PASSWD', True)
     def test_can_send_reset_email_to_contact_email(self):
         p = Profile.objects.add_or_update(self.user.username, '')
         p.contact_email = 'contact@mail.com'
@@ -26,6 +30,9 @@ class UserResetTest(BaseTestCase):
             reverse('user_reset', args=[self.user.email])
         )
         self.assertEqual(302, resp.status_code)
+        assert 'email has been sent' in parse_cookie(resp.cookies)['messages']
+
+        self.assertEqual(len(mail.outbox), 1)
         assert mail.outbox[0].to[0] != self.user.username
         assert mail.outbox[0].to[0] == 'contact@mail.com'
         self.assertEqual(len(mail.outbox), 1)
