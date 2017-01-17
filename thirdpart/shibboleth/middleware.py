@@ -1,3 +1,4 @@
+from django.conf import settings
 from django.contrib.auth.middleware import RemoteUserMiddleware
 from django.core.exceptions import ImproperlyConfigured
 from django.core.urlresolvers import reverse
@@ -6,6 +7,7 @@ from django.http import HttpResponseRedirect
 from shibboleth.app_settings import SHIB_ATTRIBUTE_MAP, LOGOUT_SESSION_KEY, SHIB_USER_HEADER
 
 from seahub import auth
+from seahub.base.accounts import User
 from seahub.base.sudo_mode import update_sudo_mode_ts
 from seahub.profile.models import Profile
 
@@ -77,6 +79,7 @@ class ShibbolethRemoteUserMiddleware(RemoteUserMiddleware):
             user.save()
             # call make profile.
             self.make_profile(user, shib_meta)
+            self.update_user_role(user, shib_meta)
             #setup session.
             self.setup_session(request)
             request.shib_login = True
@@ -141,6 +144,22 @@ class ShibbolethRemoteUserMiddleware(RemoteUserMiddleware):
             p.contact_email = contact_email
 
         p.save()
+
+    def update_user_role(self, user, shib_meta):
+        affiliation = shib_meta.get('affiliation', '')
+        if not affiliation:
+            return
+
+        try:
+            role_map = settings.SHIBBOLETH_AFFILIATION_ROLE_MAP
+        except AttributeError:
+            return
+
+        for e in affiliation.split(';'):
+            role = role_map.get(e)
+            if role:
+                User.objects.update_role(user.email, role)
+                return
 
     def setup_session(self, request):
         """
