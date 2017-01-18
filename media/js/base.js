@@ -128,6 +128,18 @@ function addConfirmTo(op_ele, popup) {
     });
 }
 
+function showConfirm(title, content, yesCallback) {
+    var $popup = $("#confirm-popup");
+    var $cont = $('#confirm-con');
+    var $yesBtn = $('#confirm-yes');
+
+    $cont.html('<h3>' + title + '</h3><p>' + content + '</p>');
+    $popup.modal({appendTo: '#main'});
+    $('#simplemodal-container').css({'height':'auto'});
+
+    $yesBtn.click(yesCallback);
+}
+
 function addFormPost(op_ele) {
     op_ele.click(function() {
         $('<form>', {
