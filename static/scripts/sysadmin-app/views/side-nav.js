@@ -35,13 +35,14 @@ define([
 
         events: {
             'submit #libs-search-form': 'searchLibs', // for 'all' libs
-            'submit #trash-libs-search-form': 'searchTrashLibs'
+            'submit #trash-libs-search-form': 'searchTrashLibs',
+            'submit #groups-search-form': 'searchGroups'
         },
 
         // search libs by repo_name
         searchLibs: function() {
             var $form = this.$('#libs-search-form');
-            var name = $.trim($('[name="name"]', $form).val()); 
+            var name = $.trim($('[name="name"]', $form).val());
             if (!name) {
                 return false;
             }
@@ -54,12 +55,24 @@ define([
         // search trash libs by owner
         searchTrashLibs: function() {
             var $form = this.$('#trash-libs-search-form');
-            var owner = $.trim($('[name="name"]', $form).val()); 
+            var owner = $.trim($('[name="name"]', $form).val());
             if (!owner) {
                 return false;
             }
 
             var url = $form.attr('action') + '?name=' + encodeURIComponent(owner);
+            location.href = url;
+            return false; // necessary
+        },
+
+        searchGroups: function() {
+            var $form = this.$('#groups-search-form');
+            var name = $.trim($('[name="name"]', $form).val());
+            if (!name) {
+                return false;
+            }
+
+            var url = $form.attr('action') + '?name=' + encodeURIComponent(name);
             location.href = url;
             return false; // necessary
         }

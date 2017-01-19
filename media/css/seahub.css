@@ -2881,6 +2881,7 @@ button.sf-dropdown-toggle:focus {
 }
 #search-form,
 #search-user-form,
+#search-group-form,
 #search-repo-form {
     padding:7px 5px;
     background:#f7f7f8;
@@ -2982,10 +2983,12 @@ button.sf-dropdown-toggle:focus {
     margin:10px 15px 20px 0;
 }
 #search-repo-form label,
+#search-group-form label,
 #search-user-form label {
     width:3.5em;
 }
 #search-repo-form .submit,
+#search-group-form .submit,
 #search-user-form .submit {
     margin-left:3.5em;
 }

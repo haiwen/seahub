@@ -79,6 +79,11 @@
             </form>
         <% } %>
     <% } %>
+    <% if (cur_tab == 'groups') { %>
+        <form action="{% url 'sys_group_search' %}" method="get" class="side-search-form" id="groups-search-form">
+            <input type="text" name="name" class="input" value="" placeholder="{% trans "Search groups by name..." %}" />
+        </form>
+    <% } %>
 </script>
 
 <script type="text/template" id="sysinfo-header-tmpl">
@@ -551,6 +556,32 @@
         <h2 class="alc">{% trans "No groups" %}</h2>
     </div>
     <p class="error error-tip hide"></p>
+</script>
+
+<script type="text/template" id="search-groups-tmpl">
+    <h3>{% trans "Search Group"%}</h3>
+    <form id="search-group-form" method="get" action="">
+        <p class="tip">{% trans "Tip: you can search by keyword in name." %}</p>
+        <label>{% trans "Name" %}</label><input type="text" name="name" class="input" value=""/><br />
+        <input type="submit" value="{% trans "Submit" %}" class="submit" />
+    </form>
+    <h3>{% trans "Result"%}</h3>
+    <span class="loading-icon loading-tip"></span>
+    <table class="hide">
+        <thead>
+            <tr>
+                <th width="35%">{% trans "Name" %}</th>
+                <th width="30%">{% trans "Owner" %}</th>
+                <th width="25%">{% trans "Created At" %}</th>
+                <th width="10%"><!--Operations--></th>
+            </tr>
+        </thead>
+        <tbody>
+        </tbody>
+    </table>
+    <div class="empty-tips hide">
+        <h2 class="alc">{% trans "No groups" %}</h2>
+    </div>
 </script>
 
 <script type="text/template" id="group-add-form-tmpl">
