@@ -31,7 +31,7 @@ class UserEnabledModulesView(APIView):
         2. user can add repo
         """
 
-        if not request.user.permissions.can_add_repo:
+        if not request.user.permissions.can_add_repo():
             error_msg = 'Permission denied.'
             return api_error(status.HTTP_403_FORBIDDEN, error_msg)
 
@@ -53,7 +53,7 @@ class UserEnabledModulesView(APIView):
         2. user can add repo
         """
 
-        if not request.user.permissions.can_add_repo:
+        if not request.user.permissions.can_add_repo():
             error_msg = 'Permission denied.'
             return api_error(status.HTTP_403_FORBIDDEN, error_msg)
 

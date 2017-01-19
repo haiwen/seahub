@@ -4493,11 +4493,6 @@ class RepoUserFolderPerm(APIView):
             error_msg = 'User %s not found.' % user
             return api_error(status.HTTP_404_NOT_FOUND, error_msg)
 
-        permission = seafile_api.get_folder_user_perm(repo_id, path, user)
-        if not permission:
-            error_msg = 'Folder permission not found.'
-            return api_error(status.HTTP_404_NOT_FOUND, error_msg)
-
         # permission check
         if is_org_context(request):
             repo_owner = seafile_api.get_org_repo_owner(repo_id)
@@ -4508,6 +4503,11 @@ class RepoUserFolderPerm(APIView):
         if not (is_pro_version() and ENABLE_FOLDER_PERM and username == repo_owner):
             error_msg = 'Permission denied.'
             return api_error(status.HTTP_403_FORBIDDEN, error_msg)
+
+        permission = seafile_api.get_folder_user_perm(repo_id, path, user)
+        if not permission:
+            error_msg = 'Folder permission not found.'
+            return api_error(status.HTTP_404_NOT_FOUND, error_msg)
 
         # modify permission
         try:
@@ -4561,10 +4561,6 @@ class RepoUserFolderPerm(APIView):
             error_msg = 'User %s not found.' % user
             return api_error(status.HTTP_404_NOT_FOUND, error_msg)
 
-        permission = seafile_api.get_folder_user_perm(repo_id, path, user)
-        if not permission:
-            return Response({'success': True})
-
         # permission check
         if is_org_context(request):
             repo_owner = seafile_api.get_org_repo_owner(repo_id)
@@ -4575,6 +4571,10 @@ class RepoUserFolderPerm(APIView):
         if not (is_pro_version() and ENABLE_FOLDER_PERM and username == repo_owner):
             error_msg = 'Permission denied.'
             return api_error(status.HTTP_403_FORBIDDEN, error_msg)
+
+        permission = seafile_api.get_folder_user_perm(repo_id, path, user)
+        if not permission:
+            return Response({'success': True})
 
         # delete permission
         try:
@@ -4780,11 +4780,6 @@ class RepoGroupFolderPerm(APIView):
             error_msg = 'Group %s not found.' % group_id
             return api_error(status.HTTP_404_NOT_FOUND, error_msg)
 
-        permission = seafile_api.get_folder_group_perm(repo_id, path, group_id)
-        if not permission:
-            error_msg = 'Folder permission not found.'
-            return api_error(status.HTTP_404_NOT_FOUND, error_msg)
-
         # permission check
         if is_org_context(request):
             repo_owner = seafile_api.get_org_repo_owner(repo_id)
@@ -4795,6 +4790,11 @@ class RepoGroupFolderPerm(APIView):
         if not (is_pro_version() and ENABLE_FOLDER_PERM and username == repo_owner):
             error_msg = 'Permission denied.'
             return api_error(status.HTTP_403_FORBIDDEN, error_msg)
+
+        permission = seafile_api.get_folder_group_perm(repo_id, path, group_id)
+        if not permission:
+            error_msg = 'Folder permission not found.'
+            return api_error(status.HTTP_404_NOT_FOUND, error_msg)
 
         # modify permission
         try:
@@ -4847,10 +4847,6 @@ class RepoGroupFolderPerm(APIView):
             error_msg = 'Group %s not found.' % group_id
             return api_error(status.HTTP_404_NOT_FOUND, error_msg)
 
-        permission = seafile_api.get_folder_group_perm(repo_id, path, group_id)
-        if not permission:
-            return Response({'success': True})
-
         # permission check
         if is_org_context(request):
             repo_owner = seafile_api.get_org_repo_owner(repo_id)
@@ -4861,6 +4857,10 @@ class RepoGroupFolderPerm(APIView):
         if not (is_pro_version() and ENABLE_FOLDER_PERM and username == repo_owner):
             error_msg = 'Permission denied.'
             return api_error(status.HTTP_403_FORBIDDEN, error_msg)
+
+        permission = seafile_api.get_folder_group_perm(repo_id, path, group_id)
+        if not permission:
+            return Response({'success': True})
 
         # delete permission
         try:
