@@ -2259,7 +2259,7 @@ def ajax_group_members_import(request, group_id):
 @login_required_ajax
 def ajax_repo_dir_recycle_more(request, repo_id):
     """
-    List 'more' repo/dir trash.
+    List first/'more' batch of repo/dir trash.
     """
     result = {}
     content_type = 'application/json; charset=utf-8'
@@ -2279,6 +2279,8 @@ def ajax_repo_dir_recycle_more(request, repo_id):
 
     scan_stat = request.GET.get('scan_stat', None)
     try:
+        # a list will be returned, with at least 1 item in it
+        # the last item is not a deleted entry, and it contains an attribute named 'scan_stat'
         deleted_entries = seafile_api.get_deleted(repo_id, 0, path, scan_stat)
     except SearpcError as e:
         logger.error(e)
@@ -2290,10 +2292,6 @@ def ajax_repo_dir_recycle_more(request, repo_id):
     trash_more = True if new_scan_stat is not None else False
 
     more_entries_html = ''
-    # since there will always have one 'deleted_entry' to tell scan_stat,
-    # so if len of deleted_entries = 1, means have not get any trash dir/file
-    # if len of deleted_entries > 1,
-    # means have get trash dir/file from current scanned commits
     if len(deleted_entries) > 1:
         deleted_entries = deleted_entries[0:-1]
         for dirent in deleted_entries:
@@ -2305,12 +2303,14 @@ def ajax_repo_dir_recycle_more(request, repo_id):
         # Entries sort by deletion time in descending order.
         deleted_entries.sort(lambda x, y : cmp(y.delete_time,
                                                x.delete_time))
+
         ctx = {
             'show_recycle_root': True,
             'repo': repo,
             'dir_entries': deleted_entries,
             'dir_path': path,
-            'MEDIA_URL': MEDIA_URL
+            'MEDIA_URL': MEDIA_URL,
+            'referer': request.GET.get('referer', '')
         }
 
         more_entries_html = render_to_string("snippets/repo_dir_trash_tr.html", ctx)

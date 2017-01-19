@@ -2010,6 +2010,9 @@ button.sf-dropdown-toggle:focus {
     color:#000;
     background:#dfdfdf;
 }
+#trash-more {
+    margin-bottom:30px;
+}
 #notices-more {
     margin-top: -20px;
 }
