@@ -12,6 +12,9 @@ define([
                 'device_id': this.get('device_id'),
                 'user': this.get('user')
             };
+            if (options.wipe_device) {
+                data['wipe_device'] = 'true';
+            }
 
             $.ajax({
                 url: Common.getUrl({name: 'admin-devices'}),
@@ -27,6 +30,11 @@ define([
                 error: function(xhr) {
                     if (options.error) {
                         options.error(xhr);
+                    }
+                },
+                complete: function(xhr) {
+                    if (options.complete) {
+                        options.complete(xhr);
                     }
                 }
             });
