@@ -42,8 +42,9 @@ from seahub.utils import IS_EMAIL_CONFIGURED, string2list, is_valid_username, \
     clear_token, handle_virus_record, get_virus_record_by_id, \
     get_virus_record, FILE_AUDIT_ENABLED, get_max_upload_file_size
 from seahub.utils.file_size import get_file_size_unit
-from seahub.utils.rpc import mute_seafile_api
+from seahub.utils.ldap import get_ldap_info
 from seahub.utils.licenseparse import parse_license, user_number_over_limit
+from seahub.utils.rpc import mute_seafile_api
 from seahub.utils.sysinfo import get_platform_name
 from seahub.utils.mail import send_html_email_with_dj_template
 from seahub.utils.ms_excel import write_xls
@@ -225,8 +226,6 @@ def sys_user_admin(request):
             if trial_user.user_or_org == user.email:
                 user.trial_info = {'expire_date': trial_user.expire_date}
 
-    have_ldap = True if len(seaserv.get_emailusers('LDAP', 0, 1)) > 0 else False
-
     platform = get_platform_name()
     server_id = get_server_id()
     pro_server = 1 if is_pro_version() else 0
@@ -241,7 +240,7 @@ def sys_user_admin(request):
             'next_page': current_page+1,
             'per_page': per_page,
             'page_next': page_next,
-            'have_ldap': have_ldap,
+            'have_ldap': get_ldap_info(),
             'platform': platform,
             'server_id': server_id[:8],
             'default_user': DEFAULT_USER,
@@ -487,13 +486,11 @@ def sys_user_admin_admins(request):
             if last_login.username == user.email:
                 user.last_login = last_login.last_login
 
-    have_ldap = True if len(seaserv.get_emailusers('LDAP', 0, 1)) > 0 else False
-
     return render_to_response(
         'sysadmin/sys_useradmin_admins.html', {
             'users': admin_users,
             'not_admin_users': not_admin_users,
-            'have_ldap': have_ldap,
+            'have_ldap': get_ldap_info(),
             'default_user': DEFAULT_USER,
             'guest_user': GUEST_USER,
             'is_pro': is_pro_version(),
