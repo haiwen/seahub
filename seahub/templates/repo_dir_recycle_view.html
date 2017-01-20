@@ -53,10 +53,10 @@
     </tbody>
 </table>
 
-{% if trash_more %}
+{% if show_recycle_root %}
 <div id="trash-more">
     <div id="trash-more-loading" class="hide"><span class="loading-icon"></span></div>
-    <button id="trash-more-btn">{% trans 'More' %}</button>
+    <button id="trash-more-btn" class="hide">{% trans 'More' %}</button>
 </div>
 {% endif %}
 
@@ -87,22 +87,32 @@ $('#online-gc').click(function() {
 });
 {% endif %}
 
+{% if show_recycle_root %}
 var dir_path = '{{dir_path|escapejs}}',
-    scan_stat = '{{scan_stat|escapejs}}',
+    scan_stat,
     $filesContainer = $('tbody'),
     $trash_more_btn = $('#trash-more-btn'),
     $trash_more_loading = $('#trash-more-loading');
 
-var get_more_trash = function(current_scan_stat) {
+var get_more_trash = function() {
     $trash_more_btn.addClass('hide');
     $trash_more_loading.removeClass('hide');
 
+    var data = {
+        'path': dir_path,
+        'referer': '{{referer|escapejs}}' // for 'back'
+    }; // for the first request
+    if (scan_stat != undefined) {
+        $.extend(data, {'scan_stat': scan_stat});
+    }
+
     $.ajax({
-        url:'{% url "ajax_repo_dir_recycle_more" repo.id %}' + '?scan_stat=' + encodeURIComponent(current_scan_stat) + '&path=' + encodeURIComponent(dir_path),
-        dataType: 'json',
+        url:'{% url "ajax_repo_dir_recycle_more" repo.id %}',
+        data: data,
         cache: false,
+        dataType: 'json',
         success: function(data) {
-            var new_scan_stat = data['new_scan_stat'];
+            scan_stat = data['new_scan_stat'];
 
             if (data['html']) {
                 // have trash dir or file
@@ -112,11 +122,10 @@ var get_more_trash = function(current_scan_stat) {
                 if (data['trash_more']) {
                     $trash_more_btn.removeClass('hide');
                 }
-                scan_stat = new_scan_stat;
-            } else if (new_scan_stat) {
+            } else if (scan_stat) {
                 // no trash dir or file
                 // have not scan all commit
-                get_more_trash(new_scan_stat);
+                get_more_trash();
             } else {
                 // no trash dir or file
                 // scan all commit
@@ -134,8 +143,14 @@ var get_more_trash = function(current_scan_stat) {
             feedback(error, 'error');
         }
     });
-}
+};
 
+// get 'first' batch of trash
+get_more_trash();
+
+$('#trash-more-btn').click(function() {
+    get_more_trash();
+});
 
 $('table').on("click", ".restore-file, .restore-dir", function() {
     var _this = $(this),
@@ -163,19 +178,6 @@ $('table').on("click", ".restore-file, .restore-dir", function() {
     });
     return false;
 });
-
-// has 'scan_stat' means have not scanned all commit
-// 'not dir_entries' means no trash returned
-// so continue scan by send ajax
-{% if scan_stat and not dir_entries %}
-get_more_trash(scan_stat);
 {% endif %}
-
-{% if trash_more %}
-$('#trash-more-btn').click(function() {
-    get_more_trash(scan_stat);
-});
-{% endif %}
-
 </script>
 {% endblock %}
