@@ -20,6 +20,17 @@ class GroupsTest(BaseTestCase):
         json_resp = json.loads(resp.content)
         assert len(json_resp['groups']) > 0
 
+    def test_can_search_by_name(self):
+        self.login_as(self.admin)
+        group_name =  self.group.group_name
+        searched_args = group_name[0:1]
+        url = reverse('api-v2.1-admin-groups') + '?name=%s' % searched_args
+        resp = self.client.get(url)
+
+        json_resp = json.loads(resp.content)
+        assert json_resp['name'] == searched_args
+        assert searched_args in json_resp['groups'][0]['name']
+
     def test_get_with_invalid_user_permission(self):
         self.login_as(self.user)
         url = reverse('api-v2.1-admin-groups')

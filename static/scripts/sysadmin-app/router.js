@@ -15,11 +15,13 @@ define([
     'sysadmin-app/views/search-trash-repos',
     'sysadmin-app/views/dir',
     'sysadmin-app/views/groups',
+    'sysadmin-app/views/search-groups',
     'app/views/account'
 ], function($, Backbone, Common, SideNavView, DashboardView,
     DesktopDevicesView, MobileDevicesView, DeviceErrorsView,
     ReposView, SearchReposView, SystemReposView, TrashReposView,
-    SearchTrashReposView, DirView, GroupsView, AccountView) {
+    SearchTrashReposView, DirView, GroupsView, SearchGroupsView,
+    AccountView) {
 
     "use strict";
 
@@ -37,6 +39,7 @@ define([
             'search-trash-libs/': 'showSearchTrashLibraries',
             'libs/:repo_id(/*path)': 'showLibraryDir',
             'groups/': 'showGroups',
+            'search-groups/': 'showSearchGroups',
             // Default
             '*actions': 'showDashboard'
         },
@@ -65,6 +68,7 @@ define([
             this.dirView = new DirView();
 
             this.groupsView = new GroupsView();
+            this.searchGroupsView = new SearchGroupsView();
 
             app.ui.accountView = this.accountView = new AccountView();
 
@@ -189,6 +193,18 @@ define([
             this.switchCurrentView(this.groupsView);
             this.sideNavView.setCurTab('groups');
             this.groupsView.show({'page': page});
+        },
+
+        showSearchGroups: function() {
+            // url_match: null or an array
+            var url_match = location.href.match(/.*?name=(.*)/); // search by group_name
+            var group_name = url_match ? url_match[1] : '';
+
+            this.switchCurrentView(this.searchGroupsView);
+            this.sideNavView.setCurTab('groups', {'option': 'search'});
+            this.searchGroupsView.show({
+                'name': decodeURIComponent(group_name)
+            });
         }
 
     });
