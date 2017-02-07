@@ -93,7 +93,7 @@ define([
             }, 100);
             var req_progress = function() {
                 $.ajax({
-                    url: Common.getUrl({name: 'get_cp_progress'}) + '?task_id=' + encodeURIComponent(task_id),
+                    url: Common.getUrl({name: 'query_copy_move_progress'}) + '?task_id=' + encodeURIComponent(task_id),
                     dataType: 'json',
                     success: function(data) {
                         var bar = $('.ui-progressbar-value', $('#mv-progress'));
@@ -140,8 +140,11 @@ define([
             cancel_btn.click(function() {
                 Common.disableButton(cancel_btn);
                 $.ajax({
-                    url: Common.getUrl({name: 'cancel_cp'}) + '?task_id=' + encodeURIComponent(task_id),
+                    url: Common.getUrl({name: 'copy_move_task'}),
+                    type: 'DELETE',
                     dataType: 'json',
+                    beforeSend: Common.prepareCSRFToken,
+                    data: {'task_id': task_id},
                     success: function(data) {
                         details.addClass('vh')
                         other_info.html(gettext("Canceled.")).removeClass('hide');
@@ -179,17 +182,16 @@ define([
                 this.$error.html(gettext("Invalid destination path")).removeClass('hide');
                 return false;
             }
-            var options = { repo_id: repo_id };
-            if (obj_type == 'dir') {
-                options.name = this.op_type == 'mv' ? 'mv_dir' : 'cp_dir';
-            } else {
-                options.name = this.op_type == 'mv' ? 'mv_file' : 'cp_file';
-            }
-            var post_url = Common.getUrl(options) + '?path=' + encodeURIComponent(path)
-                + '&obj_name=' + encodeURIComponent(obj_name);
+
+            var post_url = Common.getUrl({'name': 'copy_move_task'});
             var post_data = {
-                'dst_repo': dst_repo,
-                'dst_path': dst_path
+                'src_repo_id': repo_id,
+                'src_parent_dir': path,
+                'src_dirent_name': obj_name,
+                'dst_repo_id': dst_repo,
+                'dst_parent_dir': dst_path,
+                'operation': this.op_type == 'mv' ? 'move' : 'copy',
+                'dirent_type': obj_type
             };
             var after_op_success = function(data) {
                 $.modal.close();

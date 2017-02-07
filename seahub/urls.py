@@ -12,7 +12,6 @@ from seahub.views.file import view_repo_file, view_history_file, view_trash_file
 from seahub.views.repo import repo_history_view, view_shared_dir, \
     view_shared_upload_link
 from notifications.views import notification_list
-from message.views import user_msg_list, user_msg_remove, user_received_msg_remove
 from seahub.views.wiki import personal_wiki, personal_wiki_pages, \
     personal_wiki_create, personal_wiki_page_new, personal_wiki_page_edit, \
     personal_wiki_page_delete, personal_wiki_use_lib
@@ -32,8 +31,13 @@ from seahub.api2.endpoints.dirents_download_link import DirentsDownloadLinkView
 from seahub.api2.endpoints.zip_task  import ZipTaskView
 from seahub.api2.endpoints.share_link_zip_task import ShareLinkZipTaskView
 from seahub.api2.endpoints.query_zip_progress import QueryZipProgressView
+from seahub.api2.endpoints.copy_move_task import CopyMoveTaskView
+from seahub.api2.endpoints.query_copy_move_progress import QueryCopyMoveProgressView
 from seahub.api2.endpoints.invitations import InvitationsView
 from seahub.api2.endpoints.invitation import InvitationView
+from seahub.api2.endpoints.notifications import NotificationsView, NotificationView
+from seahub.api2.endpoints.user_enabled_modules import UserEnabledModulesView
+from seahub.api2.endpoints.repo_file_uploaded_bytes import RepoFileUploadedBytesView
 
 from seahub.api2.endpoints.admin.login import Login
 from seahub.api2.endpoints.admin.file_audit import FileAudit
@@ -125,9 +129,6 @@ urlpatterns = patterns(
    (r'^file_upload_progress_page/$', file_upload_progress_page),
     url(r'^i18n/$', i18n, name='i18n'),
     url(r'^convert_cmmt_desc_link/$', convert_cmmt_desc_link, name='convert_cmmt_desc_link'),
-    url(r'^user/(?P<id_or_email>[^/]+)/msgs/$', user_msg_list, name='user_msg_list'),
-    url(r'^user/(?P<msg_id>\d+)/msgdel/$', user_msg_remove, name='user_msg_remove'),
-    url(r'^user/(?P<msg_id>\d+)/remsgdel/$', user_received_msg_remove, name='user_received_msg_remove'),
     url(r'^modules/toggle/$', toggle_modules, name="toggle_modules"),
     url(r'^download_client_program/$', TemplateView.as_view(template_name="download.html"), name="download_client"),
     url(r'^choose_register/$', TemplateView.as_view(template_name="choose_register.html"), name="choose_register"),
@@ -139,37 +140,18 @@ urlpatterns = patterns(
     url(r'^ajax/repo/(?P<repo_id>[-0-9a-f]{36})/dirents/copy/$', cp_dirents, name='cp_dirents'),
     url(r'^ajax/repo/(?P<repo_id>[-0-9a-f]{36})/dir/rename/$', rename_dirent, name='rename_dir'),
     url(r'^ajax/repo/(?P<repo_id>[-0-9a-f]{36})/dir/delete/$', delete_dirent, name='delete_dir'),
-    url(r'^ajax/repo/(?P<repo_id>[-0-9a-f]{36})/dir/mv/$', mv_dir, name='mv_dir'),
-    url(r'^ajax/repo/(?P<repo_id>[-0-9a-f]{36})/dir/cp/$', cp_dir, name='cp_dir'),
-    url(r'^ajax/cp_progress/$', get_cp_progress, name='get_cp_progress'),
-    url(r'^ajax/cancel_cp/$', cancel_cp, name='cancel_cp'),
     url(r'^ajax/repo/(?P<repo_id>[-0-9a-f]{36})/file/rename/$', rename_dirent, name='rename_file'),
     url(r'^ajax/repo/(?P<repo_id>[-0-9a-f]{36})/file/delete/$', delete_dirent, name='delete_file'),
-    url(r'^ajax/repo/(?P<repo_id>[-0-9a-f]{36})/file/mv/$', mv_file, name='mv_file'),
-    url(r'^ajax/repo/(?P<repo_id>[-0-9a-f]{36})/file/cp/$', cp_file, name='cp_file'),
     url(r'^ajax/repo/(?P<repo_id>[-0-9a-f]{36})/current_commit/$', get_current_commit, name='get_current_commit'),
     url(r'^ajax/repo/(?P<repo_id>[-0-9a-f]{36})/history/changes/$', repo_history_changes, name='repo_history_changes'),
     url(r'^ajax/repo/(?P<repo_id>[-0-9a-f]{36})/encrypted_file/(?P<file_id>[0-9a-f]{40})/download/$', download_enc_file, name='download_enc_file'),
-    url(r'^ajax/repo/(?P<repo_id>[-0-9a-f]{36})/file_op_url/$', get_file_op_url, name='get_file_op_url'),
-    url(r'^ajax/repo/(?P<repo_id>[-0-9a-f]{36})/get-file-uploaded-bytes/$', get_file_uploaded_bytes, name='get_file_uploaded_bytes'),
     url(r'^ajax/u/d/(?P<token>[-0-9a-f]{10})/upload/$', get_file_upload_url_ul, name='get_file_upload_url_ul'),
     url(r'^ajax/group/(?P<group_id>\d+)/repos/$', get_unenc_group_repos, name='get_group_repos'),
-    url(r'^ajax/group/(?P<group_id>\d+)/toggle-modules/$', toggle_group_modules, name='toggle_group_modules'),
     url(r'^ajax/group/(?P<group_id>\d+)/members/import/$', ajax_group_members_import, name='ajax_group_members_import'),
-    url(r'^ajax/toggle-personal-modules/$', toggle_personal_modules, name='toggle_personal_modules'),
-    url(r'^ajax/my-unenc-repos/$', get_my_unenc_repos, name='get_my_unenc_repos'),
     url(r'^ajax/unenc-rw-repos/$', unenc_rw_repos, name='unenc_rw_repos'),
-    url(r'^ajax/contacts/$', get_contacts, name='get_contacts'),
     url(r'^ajax/upload-file-done/$', upload_file_done, name='upload_file_done'),
-    url(r'^ajax/unseen-notices-count/$', unseen_notices_count, name='unseen_notices_count'),
     url(r'^ajax/get_popup_notices/$', get_popup_notices, name='get_popup_notices'),
-    url(r'^ajax/set_notices_seen/$', set_notices_seen, name='set_notices_seen'),
-    url(r'^ajax/set_notice_seen_by_id/$', set_notice_seen_by_id, name='set_notice_seen_by_id'),
     url(r'^ajax/space_and_traffic/$', space_and_traffic, name='space_and_traffic'),
-    url(r'^ajax/repo/(?P<repo_id>[-0-9a-f]{36})/setting/change-passwd/$', ajax_repo_change_passwd, name='ajax_repo_change_passwd'),
-    url(r'^ajax/repo/(?P<repo_id>[-0-9a-f]{36})/get-folder-perm-by-path/$', get_folder_perm_by_path, name='get_folder_perm_by_path'),
-    url(r'^ajax/repo/(?P<repo_id>[-0-9a-f]{36})/set-user-folder-perm/$', set_user_folder_perm, name='set_user_folder_perm'),
-    url(r'^ajax/repo/(?P<repo_id>[-0-9a-f]{36})/set-group-folder-perm/$', set_group_folder_perm, name='set_group_folder_perm'),
 
     url(r'^ajax/(?P<repo_id>[-0-9a-f]{36})/repo-dir/recycle/more/$', ajax_repo_dir_recycle_more, name='ajax_repo_dir_recycle_more'),
 
@@ -197,15 +179,22 @@ urlpatterns = patterns(
     url(r'^api/v2.1/repos/(?P<repo_id>[-0-9a-f]{36})/file/$', FileView.as_view(), name='api-v2.1-file-view'),
     url(r'^api/v2.1/repos/(?P<repo_id>[-0-9a-f]{36})/dirents/download-link/$', DirentsDownloadLinkView.as_view(), name='api-v2.1-dirents-download-link-view'),
     url(r'^api/v2.1/repos/(?P<repo_id>[-0-9a-f]{36})/zip-task/$', ZipTaskView.as_view(), name='api-v2.1-zip-task'),
+    url(r'^api/v2.1/repos/(?P<repo_id>[-0-9a-f]{36})/file-uploaded-bytes/$', RepoFileUploadedBytesView.as_view(), name='api-v2.1-repo-file-uploaded-bytes'),
     url(r'^api/v2.1/share-link-zip-task/$', ShareLinkZipTaskView.as_view(), name='api-v2.1-share-link-zip-task'),
     url(r'^api/v2.1/query-zip-progress/$', QueryZipProgressView.as_view(), name='api-v2.1-query-zip-progress'),
+    url(r'^api/v2.1/copy-move-task/$', CopyMoveTaskView.as_view(), name='api-v2.1-copy-move-task'),
+    url(r'^api/v2.1/query-copy-move-progress/$', QueryCopyMoveProgressView.as_view(), name='api-v2.1-query-copy-move-progress'),
     url(r'^api/v2.1/repos/(?P<repo_id>[-0-9a-f]{36})/dir/$', DirView.as_view(), name='api-v2.1-dir-view'),
     url(r'^api/v2.1/repos/(?P<repo_id>[-0-9a-f]{36})/set-password/$', RepoSetPassword.as_view(), name="api-v2.1-repo-set-password"),
+    url(r'^api/v2.1/invitations/$', InvitationsView.as_view()),
+    url(r'^api/v2.1/invitations/(?P<token>[a-f0-9]{32})/$', InvitationView.as_view()),
+    url(r'^api/v2.1/notifications/$', NotificationsView.as_view(), name='api-v2.1-notifications'),
+    url(r'^api/v2.1/notification/$', NotificationView.as_view(), name='api-v2.1-notification'),
+    url(r'^api/v2.1/user-enabled-modules/$', UserEnabledModulesView.as_view(), name='api-v2.1-user-enabled-module'),
+
     url(r'^api/v2.1/admin/sysinfo/$', SysInfo.as_view(), name='api-v2.1-sysinfo'),
     url(r'^api/v2.1/admin/devices/$', AdminDevices.as_view(), name='api-v2.1-admin-devices'),
     url(r'^api/v2.1/admin/device-errors/$', AdminDeviceErrors.as_view(), name='api-v2.1-admin-device-errors'),
-    url(r'^api/v2.1/invitations/$', InvitationsView.as_view()),
-    url(r'^api/v2.1/invitations/(?P<token>[a-f0-9]{32})/$', InvitationView.as_view()),
     url(r'^api/v2.1/admin/libraries/$', AdminLibraries.as_view(), name='api-v2.1-admin-libraries'),
     url(r'^api/v2.1/admin/libraries/(?P<repo_id>[-0-9a-f]{36})/$', AdminLibrary.as_view(), name='api-v2.1-admin-library'),
     url(r'^api/v2.1/admin/libraries/(?P<repo_id>[-0-9a-f]{36})/dirents/$', AdminLibraryDirents.as_view(), name='api-v2.1-admin-library-dirents'),
@@ -221,7 +210,6 @@ urlpatterns = patterns(
     (r'^notification/', include('seahub.notifications.urls')),
     (r'^contacts/', include('seahub.contacts.urls')),
     (r'^group/', include('seahub.group.urls')),
-    (r'^message/', include('seahub.message.urls')),
     (r'^options/', include('seahub.options.urls')),
     (r'^profile/', include('seahub.profile.urls')),
     (r'^share/', include('seahub.share.urls')),

@@ -72,16 +72,15 @@ define([
 
             $.ajax({
                 url: Common.getUrl({
-                    'name': 'repo_change_password',
+                    'name': 'api_v2.1_repo_set_password',
                     'repo_id': this.repo_id
                 }),
-                type: 'POST',
+                type: 'PUT',
                 dataType: 'json',
                 beforeSend: Common.prepareCSRFToken,
                 data: {
-                    'old_passwd': old_passwd,
-                    'new_passwd': new_passwd,
-                    'new_passwd_again': new_passwd_again
+                    'old_password': old_passwd,
+                    'new_password': new_passwd
                 },
                 success: function() {
                     $.modal.close();
@@ -90,7 +89,7 @@ define([
                 error: function(xhr) {
                     var err_msg;
                     if (xhr.responseText) {
-                        err_msg = $.parseJSON(xhr.responseText).error;
+                        err_msg = $.parseJSON(xhr.responseText).error_msg;
                     } else {
                         err_msg = gettext("Failed. Please check the network.");
                     }

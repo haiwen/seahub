@@ -208,6 +208,9 @@ class RepoGroupFolderPermTest(BaseTestCase):
         self.assertEqual(404, resp.status_code)
 
     def test_invalid_group(self):
+        if not LOCAL_PRO_DEV_ENV:
+            return
+
         self.login_as(self.user)
 
         invalid_group_id = -1
@@ -232,7 +235,8 @@ class RepoGroupFolderPermTest(BaseTestCase):
             "permission": self.perm_rw
         }
         resp = self.client.post(url, data)
-        self.assertEqual(404, resp.status_code)
+        json_resp = json.loads(resp.content)
+        assert invalid_group_id == json_resp['failed'][0]['group_id']
 
     def test_invalid_perm(self):
         self.login_as(self.user)

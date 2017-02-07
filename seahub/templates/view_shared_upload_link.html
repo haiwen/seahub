@@ -165,7 +165,7 @@ form.fileupload({
                             file.size && file.size > block_size) {
                         form.fileupload('option', 'maxChunkSize', block_size);
                         $.ajax({
-                            url: '{% url 'get_file_uploaded_bytes' uploadlink.repo_id %}',
+                            url: '{% url 'api-v2.1-repo-file-uploaded-bytes' uploadlink.repo_id %}',
                             data: {
                                 'parent_dir': "{{path|escapejs}}",
                                 'file_name': file.name

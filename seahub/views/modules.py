@@ -1,6 +1,5 @@
 # Copyright (c) 2012-2016 Seafile Ltd.
 from seahub.base.models import UserEnabledModule, GroupEnabledModule
-from seahub.wiki.models import PersonalWiki
 
 MOD_PERSONAL_WIKI = 'personal wiki'
 MOD_GROUP_WIKI = 'group wiki'

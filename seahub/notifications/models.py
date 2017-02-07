@@ -516,45 +516,6 @@ class UserNotification(models.Model):
 
         return msg
 
-    def format_user_message_title(self):
-        """
-
-        Arguments:
-        - `self`:
-        """
-        try:
-            d = self.user_message_detail_to_dict()
-        except self.InvalidDetailError as e:
-            logger.error(e)
-            return _(u"Internal error")
-
-        msg_from = d.get('msg_from')
-        nickname = email2nickname(msg_from)
-
-        msg = _(u"You have received a <a href='%(href)s'>new message</a> from %(user)s.") % {
-            'user': escape(nickname),
-            'href': reverse('user_msg_list', args=[msg_from]),
-            }
-        return msg
-
-    def format_user_message_detail(self):
-        """
-
-        Arguments:
-        - `self`:
-        """
-        try:
-            d = self.user_message_detail_to_dict()
-        except self.InvalidDetailError as e:
-            logger.error(e)
-            return _(u"Internal error")
-
-        message = d.get('message')
-        if message is not None:
-            return message
-        else:
-            return None
-
     def format_group_message_title(self):
         """
 
@@ -696,7 +657,6 @@ from seahub.signals import upload_file_successful, comment_file_successful
 from seahub.group.signals import grpmsg_added, group_join_request, add_user_to_group
 from seahub.share.signals import share_repo_to_user_successful, \
     share_repo_to_group_successful
-from seahub.message.signals import user_message_sent
 
 @receiver(upload_file_successful)
 def add_upload_file_msg_cb(sender, **kwargs):
@@ -744,18 +704,6 @@ def add_share_repo_to_group_msg_cb(sender, **kwargs):
             continue
         detail = repo_share_to_group_msg_to_json(from_user, repo.id, group_id)
         UserNotification.objects.add_repo_share_to_group_msg(to_user, detail)
-
-@receiver(user_message_sent)
-def add_user_message_cb(sender, **kwargs):
-    """Notify user when he/she got a new mesaage.
-    """
-    msg = kwargs.get('msg')
-    msg_from = msg.from_email
-    msg_to = msg.to_email
-    message = msg.message
-    detail = user_msg_to_json(message, msg_from)
-
-    UserNotification.objects.add_user_message(msg_to, detail=detail)
 
 @receiver(grpmsg_added)
 def grpmsg_added_cb(sender, **kwargs):

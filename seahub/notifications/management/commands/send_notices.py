@@ -6,19 +6,16 @@ import json
 import os
 import re
 
-from django.utils.http import urlquote
 from django.core.management.base import BaseCommand
 from django.core.urlresolvers import reverse
 from django.utils.html import escape
 from django.utils import translation
 from django.utils.translation import ugettext as _
 
-import seaserv
 from seaserv import seafile_api, ccnet_api
 from seahub.base.models import CommandsLastCheck
 from seahub.notifications.models import UserNotification
-from seahub.utils import send_html_email, get_service_url, \
-    get_site_scheme_and_netloc
+from seahub.utils import send_html_email, get_site_scheme_and_netloc
 import seahub.settings as settings
 from seahub.avatar.templatetags.avatar_tags import avatar
 from seahub.avatar.util import get_default_avatar_url
@@ -68,17 +65,6 @@ class Command(BaseCommand):
             return m.group(1)
         else:
             return ''
-
-    def format_user_message(self, notice):
-        d = notice.user_message_detail_to_dict()
-        msg_from = d['msg_from']
-        message = d.get('message')
-
-        notice.notice_from = escape(email2nickname(msg_from))
-        notice.avatar_src = self.get_avatar_src(msg_from)
-        notice.user_msg_url = reverse('user_msg_list', args=[msg_from])
-        notice.user_msg = message
-        return notice
 
     def format_group_message(self, notice):
         d = notice.group_message_detail_to_dict()
@@ -247,9 +233,6 @@ class Command(BaseCommand):
 
                 if notice.to_user != to_user:
                     continue
-
-                elif notice.is_user_message():
-                    notice = self.format_user_message(notice)
 
                 elif notice.is_group_msg():
                     notice = self.format_group_message(notice)

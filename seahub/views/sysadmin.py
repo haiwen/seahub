@@ -23,7 +23,8 @@ from django.utils.translation import ugettext as _
 
 import seaserv
 from seaserv import ccnet_threaded_rpc, seafserv_threaded_rpc, \
-    seafile_api, get_group, get_group_members, ccnet_api
+    seafile_api, get_group, get_group_members, ccnet_api, \
+    get_related_users_by_repo, get_related_users_by_org_repo
 from pysearpc import SearpcError
 
 from seahub.base.accounts import User
@@ -50,8 +51,6 @@ from seahub.utils.ms_excel import write_xls
 from seahub.utils.user_permissions import (get_basic_user_roles,
                                            get_user_role)
 from seahub.views import get_system_default_repo_id
-from seahub.views.ajax import (get_related_users_by_org_repo,
-                               get_related_users_by_repo)
 from seahub.forms import SetUserQuotaForm, AddUserForm, BatchAddUserForm, \
     TermsAndConditionsForm
 from seahub.options.models import UserOptions
@@ -998,7 +997,6 @@ def user_add(request):
 
         if request.user.org:
             org_id = request.user.org.org_id
-            url_prefix = request.user.org.url_prefix
             ccnet_threaded_rpc.add_org_user(org_id, email, 0)
             if IS_EMAIL_CONFIGURED:
                 try:

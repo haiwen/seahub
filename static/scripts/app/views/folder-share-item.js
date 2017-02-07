@@ -12,6 +12,10 @@ define([
         template: _.template($('#folder-perm-item-tmpl').html()),
 
         initialize: function(options) {
+            if (options.item_data.show_folder_path === undefined) {
+                $.extend(options.item_data, {'show_folder_path': false})
+            }
+
             this.item_data = options.item_data;
             this.repo_id = options.repo_id;
             this.path = options.path;
@@ -56,7 +60,7 @@ define([
                     repo_id: this.repo_id
                 }) + '?p=' + encodeURIComponent(this.path);
             if (item_data.for_user) {
-                url += '&share_type=user&username=' + encodeURIComponent(item_data.user);
+                url += '&share_type=user&username=' + encodeURIComponent(item_data.user_email);
             } else {
                 url += '&share_type=group&group_id=' + encodeURIComponent(item_data.group_id);
             }
@@ -70,7 +74,7 @@ define([
                     'permission': perm
                 },
                 success: function () {
-                    item_data.perm = perm;
+                    item_data.permission = perm;
                     _this.render();
                 },
                 error: function(xhr) {
@@ -97,7 +101,7 @@ define([
                     repo_id: this.repo_id
                 }) + '?p=' + encodeURIComponent(this.path);
             if (item_data.for_user) {
-                url += '&share_type=user&username=' + encodeURIComponent(item_data.user);
+                url += '&share_type=user&username=' + encodeURIComponent(item_data.user_email);
             } else {
                 url += '&share_type=group&group_id=' + encodeURIComponent(item_data.group_id);
             }

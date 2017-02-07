@@ -30,11 +30,11 @@ define([
 
             var reqUnreadNum = function() {
                 $.ajax({
-                    url: Common.getUrl({name: 'get_unseen_notices_num'}),
+                    url: Common.getUrl({name: 'notifications'}),
                     dataType: 'json',
                     cache: false,
                     success: function(data) {
-                        var count = data['count'],
+                        var count = data['unseen_count'],
                             $num = _this.$num;
                         $num.html(count);
                         if (count > 0) {
@@ -100,12 +100,15 @@ define([
             var notice_id = $el.closest('.unread').data('id');
             var link_href = $el.attr('href');
             $.ajax({
-                url: Common.getUrl({name: 'set_notice_seen_by_id'}) + '?notice_id=' + encodeURIComponent(notice_id),
-                type: 'POST',
+                // set unread notice to be read
+                url: Common.getUrl({name: 'notification'}),
+                type: 'PUT',
                 dataType: 'json',
+                data:{'notice_id': notice_id},
                 beforeSend: Common.prepareCSRFToken,
                 success: function(data) {
                     location.href = link_href;
+                    $el.closest('.unread').removeClass('unread').addClass('read');
                 },
                 error: function() {
                     location.href = link_href;
@@ -123,8 +126,8 @@ define([
             if (this.$(".unread").length > 0) {
                 // set all unread notice to be read
                 $.ajax({
-                    url: Common.getUrl({name: 'set_notices_seen'}),
-                    type: 'POST',
+                    url: Common.getUrl({name: 'notifications'}),
+                    type: 'PUT',
                     dataType: 'json',
                     beforeSend: Common.prepareCSRFToken,
                     success: function() {

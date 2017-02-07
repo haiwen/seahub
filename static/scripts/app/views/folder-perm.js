@@ -5,8 +5,8 @@ define([
     'common',
     'jquery.ui.tabs',
     'select2',
-    'app/views/folder-perm-item'
-], function($, _, Backbone, Common, Tabs, Select2, FolderPermItemView) {
+    'app/views/repo-folder-perm-item'
+], function($, _, Backbone, Common, Tabs, Select2, RepoFolderPermItemView) {
     'use strict';
 
     var FolderPermView = Backbone.View.extend({
@@ -42,6 +42,9 @@ define([
 
             this.panelsInit();
 
+            this.$add_user_perm = this.$('#add-user-folder-perm');
+            this.$add_group_perm = this.$('#add-group-folder-perm');
+
             var _this = this;
             $(document).on('click', function(e) {
                 var target = e.target || event.srcElement;
@@ -61,43 +64,44 @@ define([
         },
 
         panelsInit: function() {
-            this.$add_user_perm = this.$('#add-user-folder-perm');
-            this.$add_group_perm = this.$('#add-group-folder-perm');
-
             var _this = this;
-            var $add_user_perm = this.$add_user_perm,
-                $add_group_perm = this.$add_group_perm;
 
-            // show existing perm items
+            // show existing user folder perm items
             Common.ajaxGet({
                 'get_url': Common.getUrl({
-                    name: 'get_folder_perm_by_path',
+                    name: 'repo_user_folder_perm',
                     repo_id: this.repo_id
                 }),
-                'data': {'path': this.path},
+                'data': {'folder_path': this.path},
                 'after_op_success': function (data) {
-                    $(data['user_perms']).each(function(index, item) {
-                        var perm_item = new FolderPermItemView({
-                            'repo_id': _this.repo_id,
-                            'path': _this.path,
-                            'item_data':$.extend(item, {'for_user': true})
+                    $(data).each(function(index, item) {
+                        var perm_item = new RepoFolderPermItemView({
+                            item_data: $.extend(item, {'for_user': true})
                         });
-                        $add_user_perm.after(perm_item.el);
+                        _this.$add_user_perm.after(perm_item.el);
                     });
+                }
+            });
 
-                    $(data['group_perms']).each(function(index, item) {
-                        var perm_item = new FolderPermItemView({
-                            'repo_id': _this.repo_id,
-                            'path': _this.path,
-                            'item_data':$.extend(item, {'for_user': false})
+            // show existing group folder perm items
+            Common.ajaxGet({
+                'get_url': Common.getUrl({
+                    name: 'repo_group_folder_perm',
+                    repo_id: this.repo_id
+                }),
+                'data': {'folder_path': this.path},
+                'after_op_success': function (data) {
+                    $(data).each(function(index, item) {
+                        var perm_item = new RepoFolderPermItemView({
+                            item_data: $.extend(item, {'for_user': false})
                         });
-                        $add_group_perm.after(perm_item.el);
+                        _this.$add_group_perm.after(perm_item.el);
                     });
                 }
             });
 
             // use select2 to 'user' input in 'add user perm'
-            $('[name="email"]', $add_user_perm).select2(Common.contactInputOptionsForSelect2());
+            $('[name="email"]', this.$add_user_perm).select2(Common.contactInputOptionsForSelect2());
 
             // use select2 to 'group' input in 'add group perm'
             var groups = app.pageOptions.groups || [],
@@ -105,117 +109,102 @@ define([
             for (var i = 0, len = groups.length; i < len; i++) {
                 g_opts += '<option value="' + groups[i].id + '" data-index="' + i + '">' + groups[i].name + '</option>';
             }
-            $('[name="group"]', $add_group_perm).html(g_opts).select2({
+            $('[name="group"]', this.$add_group_perm).html(g_opts).select2({
                 placeholder: gettext("Select groups"),
                 escapeMarkup: function(m) { return m; }
             });
         },
 
         events: {
-            'click #add-user-folder-perm .submit': 'addUserFolderPerm',
-            'click #add-group-folder-perm .submit': 'addGroupFolderPerm'
+            'click #add-user-folder-perm .submit': 'addFolderPerm',
+            'click #add-group-folder-perm .submit': 'addFolderPerm'
         },
 
-        addUserFolderPerm: function() {
-            var _this = this;
-            var form = this.$add_user_perm, // pseudo form
-                email = $('[name="email"]', form).val();
-            if (!email) {
-                return false;
-            }
+        addFolderPerm: function(e) {
+            var $form, $error, url, post_data, extended_data;
 
-            var perm = $('[name="permission"]', form).val();
-            Common.ajaxPost({
-                'form': form,
-                'form_id': form.attr('id'),
-                'post_url': Common.getUrl({
-                    name: 'set_user_folder_perm',
-                    repo_id: this.repo_id
-                }),
-                'post_data': {
-                    'path': this.path,
-                    'type': 'add',
-                    'user': email,
-                    'perm': perm
-                },
-                'after_op_success': function(data) {
-                    $(data.success).each(function(index, item) {
-                        var perm_item = new FolderPermItemView({
-                            'repo_id': _this.repo_id,
-                            'path': _this.path,
-                            'item_data': {
-                                'user': email,
-                                'user_name': item.user_name,
-                                'perm': perm,
-                                'for_user': true
-                            }
-                        });
-                        form.after(perm_item.el);
-                    });
+            if ($(e.currentTarget).closest('tr').attr('id') == 'add-user-folder-perm') {
+                $form = this.$add_user_perm;
+                $error = $('#user-folder-perm .error');
 
-                    $('[name="email"]', form).select2("val", "");
-                    $('#user-folder-perm .error').addClass('hide');
-                },
-                'after_op_error': function(xhr) {
-                    var err;
-                    if (xhr.responseText) {
-                        err = $.parseJSON(xhr.responseText).error;
-                    } else {
-                        err = gettext("Failed. Please check the network.");
-                    }
-                    $('#user-folder-perm .error').html(err).removeClass('hide');
+                url = Common.getUrl({name: 'repo_user_folder_perm', repo_id: this.repo_id});
+                var emails_group_ids_input = $('[name="email"]', $form),
+                    emails = emails_group_ids_input.val(),
+                    perm = $('[name="permission"]', $form).val();
+
+                if (!emails || !perm) {
+                    return false;
                 }
-            });
-        },
 
-        addGroupFolderPerm: function() {
-            var _this = this;
-            var form = this.$add_group_perm, // pseudo form
-                group_ids = $('[name="group"]', form).val().join(',');
-            if (!group_ids) {
-                return false;
+                post_data = {
+                    'folder_path': this.path,
+                    'user_email': emails.split(','),
+                    'permission': perm
+                };
+
+                extended_data = {'for_user': true};
+
+            } else {
+                $form = this.$add_group_perm;
+                $error = $('#group-folder-perm .error');
+
+                url = Common.getUrl({name: 'repo_group_folder_perm', repo_id: this.repo_id});
+                var emails_group_ids_input = $('[name="group"]', $form),
+                    group_ids = emails_group_ids_input.val().join(','),
+                    perm = $('[name="permission"]', $form).val();
+
+                if (!group_ids || !perm) {
+                    return false;
+                }
+
+                post_data = {
+                    'folder_path': this.path,
+                    'group_id': group_ids.split(','),
+                    'permission': perm
+                };
+
+                extended_data = {'for_user': false};
             }
 
-            var perm = $('[name="permission"]', form).val();
-            Common.ajaxPost({
-                'form': form,
-                'form_id': form.attr('id'),
-                'post_url': Common.getUrl({
-                    name: 'set_group_folder_perm',
-                    repo_id: this.repo_id
-                }),
-                'post_data': {
-                    'path': this.path,
-                    'type': 'add',
-                    'group_id': group_ids,
-                    'perm': perm
-                },
-                'after_op_success': function(data) {
-                    $(data.success).each(function(index, item) {
-                        var perm_item = new FolderPermItemView({
-                            'repo_id': _this.repo_id,
-                            'path': _this.path,
-                            'item_data': {
-                                'for_user': false,
-                                'perm': perm,
-                                'group_id': item.group_id,
-                                'group_name': item.group_name
-                            }
-                        });
-                        form.after(perm_item.el);
-                        $('#group-folder-perm .error').addClass('hide');
-                    });
+            var $submit_btn = $form.children('[type="submit"]');
 
-                    $('[name="group"]', form).select2("val", "");
-                },
-                'after_op_error': function(xhr) {
-                    var err;
-                    if (xhr.responseText) {
-                        err = $.parseJSON(xhr.responseText).error;
-                    } else {
-                        err = gettext("Failed. Please check the network.");
+            Common.disableButton($submit_btn);
+
+            $.ajax({
+                url: url,
+                dataType: 'json',
+                method: 'POST',
+                beforeSend: Common.prepareCSRFToken,
+                traditional: true,
+                data: post_data,
+                success: function(data) {
+                    if (data.success.length > 0) {
+                        $(data.success).each(function(index, item) {
+                            var perm_item = new RepoFolderPermItemView({
+                                item_data: $.extend(item, extended_data)
+                            });
+                            $form.closest('tr').after(perm_item.el);
+                        });
+
+                        emails_group_ids_input.select2("val", "");
+                        $error.addClass('hide');
                     }
-                    $('#group-folder-perm .error').html(err).removeClass('hide');
+                    if (data.failed.length > 0) {
+                        var error_msg = '';
+                        $(data.failed).each(function(index, item) {
+                            error_msg += Common.HTMLescape(item.user_email || item.group_id) + ': ' + Common.HTMLescape(item.error_msg) + '<br />';
+                        });
+                        $error.html(error_msg).removeClass('hide');
+                    }
+                },
+                error: function(xhr) {
+                    var error_msg;
+                    if (xhr.responseText) {
+                        error_msg = $.parseJSON(xhr.responseText).error_msg;
+                    } else {
+                        error_msg = gettext("Failed. Please check the network.");
+                    }
+                    $error.html(error_msg).removeClass('hide');
                 }
             });
         }

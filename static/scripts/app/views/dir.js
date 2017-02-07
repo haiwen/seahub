@@ -1182,15 +1182,15 @@ define([
                                 post_url,
                                 post_data;
 
-                            if (op == 'mv') {
-                                url_obj.name = obj_type == 'dir' ? 'mv_dir' : 'mv_file';
-                            } else {
-                                url_obj.name = obj_type == 'dir' ? 'cp_dir' : 'cp_file';
-                            }
-                            post_url = Common.getUrl(url_obj) + '?path=' + encodeURIComponent(cur_path) + '&obj_name=' + encodeURIComponent(obj_name);
+                            post_url = Common.getUrl({'name': 'copy_move_task'});
                             post_data = {
-                                'dst_repo': dst_repo,
-                                'dst_path': dst_path
+                                'src_repo_id': dirents.repo_id,
+                                'src_parent_dir': cur_path,
+                                'src_dirent_name': obj_name,
+                                'dst_repo_id': dst_repo,
+                                'dst_parent_dir': dst_path,
+                                'operation': op == 'mv' ? 'move' : 'copy',
+                                'dirent_type': obj_type
                             };
                             var after_op_success = function (data) {
                                 var det_text = op == 'mv' ? gettext("Moving file %(index)s of %(total)s") : gettext("Copying file %(index)s of %(total)s");
@@ -1200,7 +1200,7 @@ define([
                                     var task_id = data['task_id'];
                                     cancel_btn.data('task_id', task_id);
                                     $.ajax({
-                                        url: Common.getUrl({name:'get_cp_progress'}) + '?task_id=' + encodeURIComponent(task_id),
+                                        url: Common.getUrl({name:'query_copy_move_progress'}) + '?task_id=' + encodeURIComponent(task_id),
                                         dataType: 'json',
                                         success: function(data) {
                                             var bar = $('.ui-progressbar-value', $('#mv-progress'));
@@ -1272,8 +1272,11 @@ define([
                             Common.disableButton(cancel_btn);
                             var task_id = $(this).data('task_id');
                             $.ajax({
-                                url: Common.getUrl({name:'cancel_cp'}) + '?task_id=' + encodeURIComponent(task_id),
+                                url: Common.getUrl({name: 'copy_move_task'}),
+                                type: 'DELETE',
                                 dataType: 'json',
+                                beforeSend: Common.prepareCSRFToken,
+                                data: {'task_id': task_id},
                                 success: function(data) {
                                     other_info.html(gettext("Canceled.")).removeClass('hide');
                                     cancel_btn.addClass('hide');
