@@ -1868,6 +1868,9 @@ def batch_add_user(request):
                 User.objects.create_user(username, password, is_staff=False,
                                          is_active=True)
 
+                if config.FORCE_PASSWORD_CHANGE:
+                    UserOptions.objects.set_force_passwd_change(username)
+
                 if nickname:
                     Profile.objects.add_or_update(username, nickname, '')
                 if department:
