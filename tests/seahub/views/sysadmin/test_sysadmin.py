@@ -10,6 +10,8 @@ from seahub.options.models import (UserOptions, KEY_FORCE_PASSWD_CHANGE,
 from seahub.test_utils import BaseTestCase
 from seahub.utils.ms_excel import write_xls as real_write_xls
 
+from constance import config
+
 from seaserv import ccnet_threaded_rpc
 
 class UserToggleStatusTest(BaseTestCase):
@@ -161,6 +163,7 @@ class SysUserAdminExportExcelTest(BaseTestCase):
 
 class BatchAddUserTest(BaseTestCase):
     def setUp(self):
+        self.clear_cache()
         self.login_as(self.admin)
 
         self.new_users = []
@@ -190,6 +193,56 @@ class BatchAddUserTest(BaseTestCase):
         assert 'Import succeeded' in parse_cookie(resp.cookies)['messages']
         for e in self.new_users:
             assert User.objects.get(e) is not None
+
+    def test_can_batch_add_when_pwd_change_required(self):
+        config.FORCE_PASSWORD_CHANGE = 1
+
+        for e in self.new_users:
+            assert len(UserOptions.objects.filter(
+                email=e, option_key=KEY_FORCE_PASSWD_CHANGE)) == 0
+
+        for e in self.new_users:
+            try:
+                r = User.objects.get(e)
+            except User.DoesNotExist:
+                r = None
+            assert r is None
+
+        with open(self.csv_file) as f:
+            resp = self.client.post(reverse('batch_add_user'), {
+                'file': f
+            })
+
+        self.assertEqual(302, resp.status_code)
+        assert 'Import succeeded' in parse_cookie(resp.cookies)['messages']
+        for e in self.new_users:
+            assert User.objects.get(e) is not None
+            assert UserOptions.objects.passwd_change_required(e)
+
+    def test_can_batch_add_when_pwd_change_not_required(self):
+        config.FORCE_PASSWORD_CHANGE = 0
+
+        for e in self.new_users:
+            assert len(UserOptions.objects.filter(
+                email=e, option_key=KEY_FORCE_PASSWD_CHANGE)) == 0
+
+        for e in self.new_users:
+            try:
+                r = User.objects.get(e)
+            except User.DoesNotExist:
+                r = None
+            assert r is None
+
+        with open(self.csv_file) as f:
+            resp = self.client.post(reverse('batch_add_user'), {
+                'file': f
+            })
+
+        self.assertEqual(302, resp.status_code)
+        assert 'Import succeeded' in parse_cookie(resp.cookies)['messages']
+        for e in self.new_users:
+            assert User.objects.get(e) is not None
+            assert not UserOptions.objects.passwd_change_required(e)
 
     @patch('seahub.views.sysadmin.user_number_over_limit')
     def test_can_not_batch_add_if_user_over_limit(self, mock_user_number_over_limit):
