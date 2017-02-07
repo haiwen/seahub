@@ -144,7 +144,7 @@ define([
             var for_user = perm_type == 'user' ? true : false;
             var encoded_path = Common.encodePath(model.get('folder_path'));
             var view = new ItemView({
-                data: $.extend(model.toJSON(), {'for_user': for_user, 'show_folder_path': true, 'encoded_path': encoded_path})
+                item_data: $.extend(model.toJSON(), {'for_user': for_user, 'show_folder_path': true, 'encoded_path': encoded_path})
             });
 
             if (options.prepend) {
@@ -275,7 +275,7 @@ define([
                         $(data.success).each(function(index, item) {
                             var encoded_path = Common.encodePath(item.folder_path);
                             var perm_item = new ItemView({
-                                data: $.extend(item, {'for_user': for_user, 'show_folder_path': true, 'encoded_path': encoded_path})
+                                item_data: $.extend(item, {'for_user': for_user, 'show_folder_path': true, 'encoded_path': encoded_path})
                             });
                             $('[name="folder_path"]', $panel).closest('tr').after(perm_item.el);
                         });

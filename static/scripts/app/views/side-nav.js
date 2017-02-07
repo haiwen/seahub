@@ -103,16 +103,9 @@ define([
                 var submit_btn = form.children('[type="submit"]');
                 Common.disableButton(submit_btn);
 
-                var ajax_type = '';
-                if (cur_checked) {
-                    ajax_type = 'POST';
-                } else {
-                    ajax_type = 'DELETE';
-                }
-
                 $.ajax({
                     url: Common.getUrl({'name': 'user_enabled_modules'}),
-                    type: ajax_type,
+                    type: cur_checked ? 'POST' : 'DELETE',
                     cache: false,
                     dataType: 'json',
                     beforeSend: Common.prepareCSRFToken,

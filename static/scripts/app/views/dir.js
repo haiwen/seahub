@@ -1190,7 +1190,7 @@ define([
                                 'dst_repo_id': dst_repo,
                                 'dst_parent_dir': dst_path,
                                 'operation': op == 'mv' ? 'move' : 'copy',
-                                'dirent_type': obj_type == 'dir' ? 'dir' : 'file'
+                                'dirent_type': obj_type
                             };
                             var after_op_success = function (data) {
                                 var det_text = op == 'mv' ? gettext("Moving file %(index)s of %(total)s") : gettext("Copying file %(index)s of %(total)s");
@@ -1276,7 +1276,7 @@ define([
                                 type: 'DELETE',
                                 dataType: 'json',
                                 beforeSend: Common.prepareCSRFToken,
-                                data: {'task_id': encodeURIComponent(task_id)},
+                                data: {'task_id': task_id},
                                 success: function(data) {
                                     other_info.html(gettext("Canceled.")).removeClass('hide');
                                     cancel_btn.addClass('hide');

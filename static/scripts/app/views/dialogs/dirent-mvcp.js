@@ -96,7 +96,6 @@ define([
                     url: Common.getUrl({name: 'query_copy_move_progress'}) + '?task_id=' + encodeURIComponent(task_id),
                     dataType: 'json',
                     success: function(data) {
-                        console.log(data);
                         var bar = $('.ui-progressbar-value', $('#mv-progress'));
                         if (!data['failed'] && !data['canceled'] && !data['successful']) {
                             if (data['done'] == data['total']) {
@@ -145,7 +144,7 @@ define([
                     type: 'DELETE',
                     dataType: 'json',
                     beforeSend: Common.prepareCSRFToken,
-                    data: {'task_id': encodeURIComponent(task_id)},
+                    data: {'task_id': task_id},
                     success: function(data) {
                         details.addClass('vh')
                         other_info.html(gettext("Canceled.")).removeClass('hide');
@@ -192,7 +191,7 @@ define([
                 'dst_repo_id': dst_repo,
                 'dst_parent_dir': dst_path,
                 'operation': this.op_type == 'mv' ? 'move' : 'copy',
-                'dirent_type': obj_type == 'dir' ? 'dir' : 'file'
+                'dirent_type': obj_type
             };
             var after_op_success = function(data) {
                 $.modal.close();

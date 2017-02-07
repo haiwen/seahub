@@ -100,13 +100,15 @@ define([
             var notice_id = $el.closest('.unread').data('id');
             var link_href = $el.attr('href');
             $.ajax({
+                // set unread notice to be read
                 url: Common.getUrl({name: 'notification'}),
                 type: 'PUT',
                 dataType: 'json',
-                data:{'notice_id': encodeURIComponent(notice_id)},
+                data:{'notice_id': notice_id},
                 beforeSend: Common.prepareCSRFToken,
                 success: function(data) {
                     location.href = link_href;
+                    $el.closest('.unread').removeClass('unread').addClass('read');
                 },
                 error: function() {
                     location.href = link_href;

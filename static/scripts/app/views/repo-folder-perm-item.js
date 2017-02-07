@@ -12,8 +12,12 @@ define([
         template: _.template($('#folder-perm-item-tmpl').html()),
 
         initialize: function(options) {
+            if (options.item_data.show_folder_path === undefined) {
+                $.extend(options.item_data, {'show_folder_path': false})
+            }
+
             this.data = {};
-            $.extend(this.data, options.data);
+            $.extend(this.data, options.item_data);
 
             this.render();
         },

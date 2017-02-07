@@ -76,7 +76,7 @@ define([
                 'after_op_success': function (data) {
                     $(data).each(function(index, item) {
                         var perm_item = new RepoFolderPermItemView({
-                            data: $.extend(item, {'for_user': true, 'show_folder_path': false})
+                            item_data: $.extend(item, {'for_user': true})
                         });
                         _this.$add_user_perm.after(perm_item.el);
                     });
@@ -93,7 +93,7 @@ define([
                 'after_op_success': function (data) {
                     $(data).each(function(index, item) {
                         var perm_item = new RepoFolderPermItemView({
-                            data: $.extend(item, {'for_user': false, 'show_folder_path': false})
+                            item_data: $.extend(item, {'for_user': false})
                         });
                         _this.$add_group_perm.after(perm_item.el);
                     });
@@ -142,7 +142,7 @@ define([
                     'permission': perm
                 };
 
-                extended_data = {'for_user': true, 'show_folder_path': false};
+                extended_data = {'for_user': true};
 
             } else {
                 $form = this.$add_group_perm;
@@ -163,7 +163,7 @@ define([
                     'permission': perm
                 };
 
-                extended_data = {'for_user': false, 'show_folder_path': false};
+                extended_data = {'for_user': false};
             }
 
             var $submit_btn = $form.children('[type="submit"]');
@@ -181,7 +181,7 @@ define([
                     if (data.success.length > 0) {
                         $(data.success).each(function(index, item) {
                             var perm_item = new RepoFolderPermItemView({
-                                data: $.extend(item, extended_data)
+                                item_data: $.extend(item, extended_data)
                             });
                             $form.closest('tr').after(perm_item.el);
                         });
