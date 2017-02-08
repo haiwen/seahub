@@ -1,3 +1,4 @@
+import logging
 from django.conf import settings
 from django.contrib.auth.middleware import RemoteUserMiddleware
 from django.core.exceptions import ImproperlyConfigured
@@ -5,11 +6,17 @@ from django.core.urlresolvers import reverse
 from django.http import HttpResponseRedirect
 
 from shibboleth.app_settings import SHIB_ATTRIBUTE_MAP, LOGOUT_SESSION_KEY, SHIB_USER_HEADER
+from seaserv import seafile_api
 
 from seahub import auth
 from seahub.base.accounts import User
 from seahub.base.sudo_mode import update_sudo_mode_ts
 from seahub.profile.models import Profile
+from seahub.utils.file_size import get_file_size_unit
+from seahub.utils.user_permissions import get_user_role
+
+logger = logging.getLogger(__name__)
+
 
 class ShibbolethRemoteUserMiddleware(RemoteUserMiddleware):
     """
@@ -80,6 +87,7 @@ class ShibbolethRemoteUserMiddleware(RemoteUserMiddleware):
             # call make profile.
             self.make_profile(user, shib_meta)
             self.update_user_role(user, shib_meta)
+            self.update_user_quota(user)
             #setup session.
             self.setup_session(request)
             request.shib_login = True
@@ -160,6 +168,28 @@ class ShibbolethRemoteUserMiddleware(RemoteUserMiddleware):
             if role:
                 User.objects.update_role(user.email, role)
                 return
+
+    def update_user_quota(self, user):
+        try:
+            role_quota_map = settings.SHIBBOLETH_ROLE_QUOTA_MAP
+        except AttributeError:
+            return
+
+        user_role = get_user_role(User.objects.get(user.username))
+        quota_str = role_quota_map.get(user_role)
+        if not quota_str:
+            return
+
+        quota_str = quota_str.lower()
+        if quota_str.endswith('g'):
+            quota = int(quota_str[:-1]) * get_file_size_unit('gb')
+        elif quota_str.endswith('m'):
+            quota = int(quota_str[:-1]) * get_file_size_unit('mb')
+        else:
+            logger.error('invalid SHIBBOLETH_ROLE_QUOTA_MAP')
+            return
+
+        seafile_api.set_role_quota(user_role, quota)
 
     def setup_session(self, request):
         """
