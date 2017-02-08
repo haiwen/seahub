@@ -23,6 +23,8 @@
         <p class="error">{{ form.captcha.errors}}</p>
       {% elif form.errors.freeze_account %}
         <p class="error">{{ form.errors.freeze_account }}</p>
+      {% elif form.errors.inactive %}
+        <p class="error">{{ form.errors.inactive }}</p>
       {% else %}
         <p class="error">{% trans "Incorrect email or password" %}</p>
       {% endif %}

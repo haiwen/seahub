@@ -61,6 +61,7 @@ class AuthenticationForm(forms.Form):
             if self.user_cache is None:
                 raise forms.ValidationError(_("Please enter a correct email/username and password. Note that both fields are case-sensitive."))
             elif not self.user_cache.is_active:
+                self.errors['inactive'] = _("This account is inactive.")
                 raise forms.ValidationError(_("This account is inactive."))
 
         # TODO: determine whether this should move to its own method.
