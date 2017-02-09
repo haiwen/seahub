@@ -6,12 +6,10 @@ from rest_framework.permissions import IsAdminUser
 from rest_framework.response import Response
 from rest_framework.views import APIView
 from rest_framework import status
-
 import seaserv
 from seaserv import seafile_api, ccnet_api
 
 from seahub.utils import is_org_context
-
 from seahub.api2.authentication import TokenAuthentication
 from seahub.api2.throttling import UserRateThrottle
 from seahub.api2.utils import api_error
