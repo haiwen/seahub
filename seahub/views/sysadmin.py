@@ -1066,26 +1066,6 @@ def sys_group_admin_export_excel(request):
 
 @login_required
 @sys_staff_required
-def sys_admin_group_info(request, group_id):
-
-    group_id = int(group_id)
-    group = get_group(group_id)
-    org_id = request.GET.get('org_id', None)
-    if org_id:
-        repos = seafile_api.get_org_group_repos(org_id, group_id)
-    else:
-        repos = seafile_api.get_repos_by_group(group_id)
-    members = get_group_members(group_id)
-
-    return render_to_response('sysadmin/sys_admin_group_info.html', {
-            'group': group,
-            'repos': repos,
-            'members': members,
-            'enable_sys_admin_view_repo': ENABLE_SYS_ADMIN_VIEW_REPO,
-            }, context_instance=RequestContext(request))
-
-@login_required
-@sys_staff_required
 def sys_org_admin(request):
     # Make sure page request is an int. If not, deliver first page.
     try:

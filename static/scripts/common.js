@@ -179,6 +179,10 @@ define([
                 case 'admin-library-dirents': return siteRoot + 'api/v2.1/admin/libraries/' + options.repo_id + '/dirents/';
                 case 'admin-groups': return siteRoot + 'api/v2.1/admin/groups/';
                 case 'admin-group': return siteRoot + 'api/v2.1/admin/groups/' + options.group_id + '/';
+                case 'admin-group-libraries': return siteRoot + 'api/v2.1/admin/groups/' + options.group_id + '/libraries/';
+                case 'admin-group-library': return siteRoot + 'api/v2.1/admin/groups/' + options.group_id + '/libraries/' + options.repo_id + '/';
+                case 'admin-group-members': return siteRoot + 'api/v2.1/admin/groups/' + options.group_id + '/members/';
+                case 'admin-group-member': return siteRoot + 'api/v2.1/admin/groups/' + options.group_id + '/members/' + options.email+ '/';
                 case 'admin-system-library': return siteRoot + 'api/v2.1/admin/system-library/';
                 case 'admin-trash-libraries': return siteRoot + 'api/v2.1/admin/trash-libraries/';
                 case 'admin-trash-library': return siteRoot + 'api/v2.1/admin/trash-libraries/' + options.repo_id + '/';
@@ -283,6 +287,16 @@ define([
                 } else {
                     return app.config.mediaUrl + "img/lib/24/lib.png";
                 }
+            }
+        },
+
+        getLibIconTitle: function(is_encrypted, is_readonly) {
+            if (is_encrypted) {
+                return gettext("Encrypted library");
+            } else if (is_readonly) {
+                return gettext("Read-Only library");
+            } else {
+                return gettext("Read-Write library");
             }
         },
 
