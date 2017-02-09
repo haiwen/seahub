@@ -61,8 +61,8 @@
     <h3>{% trans "Import users from a CSV file" %}</h3>
     <input type="file" name="file" />
     <p class="tip">
-        {% trans "File format: user@mail.com,password,name,department"%}<br />
-        {% trans "Name and department are optional." %}
+        {% trans "File format: user@mail.com,password,name,department,role,quota"%}<br />
+        {% trans "Name, department, role and quota are optional." %}
     </p>
     <p class="error hide">{% trans "Please choose a CSV file" %}</p>
     <button type="submit" class="submit">{% trans "Submit" %}</button>

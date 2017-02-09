@@ -1819,7 +1819,6 @@ def batch_add_user(request):
             content = content.decode(encoding, 'replace').encode('utf-8')
 
         filestream = StringIO.StringIO(content)
-
         reader = csv.reader(filestream)
         new_users_count = len(list(reader))
         if user_number_over_limit(new_users = new_users_count):
@@ -1830,51 +1829,61 @@ def batch_add_user(request):
         filestream.seek(0)
         reader = csv.reader(filestream)
         for row in reader:
+
             if not row:
                 continue
 
-            username = row[0].strip()
-            password = row[1].strip()
-
-            # nickname & department are optional
-            try:
-                nickname = row[2].strip()
-            except IndexError:
-                nickname = ''
-
-            try:
-                department = row[3].strip()
-            except IndexError:
-                department = ''
-
+            username = row[0].strip() or ''
             if not is_valid_username(username):
                 continue
 
+            password = row[1].strip() or ''
             if password == '':
                 continue
 
-            if nickname:
-                if len(nickname) > 64 or '/' in nickname:
-                    continue
-
-            if department:
-                if len(department) > 512:
-                    continue
-
             try:
                 User.objects.get(email=username)
-                continue
             except User.DoesNotExist:
-                User.objects.create_user(username, password, is_staff=False,
-                                         is_active=True)
+                User.objects.create_user(username,
+                        password, is_staff=False, is_active=True)
 
                 if config.FORCE_PASSWORD_CHANGE:
                     UserOptions.objects.set_force_passwd_change(username)
 
-                if nickname:
-                    Profile.objects.add_or_update(username, nickname, '')
-                if department:
-                    DetailedProfile.objects.add_or_update(username, department, '')
+                # then update the user's optional info
+                try:
+                    nickname = row[2].strip() or ''
+                    if len(nickname) <= 64 and '/' not in nickname:
+                        Profile.objects.add_or_update(username, nickname, '')
+                except Exception as e:
+                    logger.error(e)
+                    continue
+
+                try:
+                    department = row[3].strip() or ''
+                    if len(department) <= 512:
+                        DetailedProfile.objects.add_or_update(username, department, '')
+                except Exception as e:
+                    logger.error(e)
+                    continue
+
+                try:
+                    role = row[4].strip() or ''
+                    if is_pro_version() and role in get_available_roles():
+                        User.objects.update_role(username, role)
+                except Exception as e:
+                    logger.error(e)
+                    continue
+
+                try:
+                    space_quota_mb = row[5].strip() or ''
+                    space_quota_mb = int(space_quota_mb)
+                    if space_quota_mb >= 0:
+                        space_quota = int(space_quota_mb) * get_file_size_unit('MB')
+                        seafile_api.set_user_quota(username, space_quota)
+                except Exception as e:
+                    logger.error(e)
+                    continue
 
                 send_html_email_with_dj_template(
                     username, dj_template='sysadmin/user_batch_add_email.html',
