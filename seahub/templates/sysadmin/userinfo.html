@@ -256,7 +256,7 @@
             </tr>
             {% for group in personal_groups %}
                 <tr>
-                    <td><a href="{% url 'sys_admin_group_info' group.id %}">{{ group.group_name }}</a></td>
+                    <td><a href="{{ SITE_ROOT }}sysadmin/#groups/{{ group.id }}/libs/">{{ group.group_name }}</a></td>
                     <td>{{ group.role }}</td>
                     <td>{{ group.timestamp|tsstr_sec }}</td>
                     <td><a href="#" data-url="{% url 'group_remove' group.id %}" data-target="{{ group.group_name }}" class="rm-grp op vh">{% trans "Delete" %}</a></td>

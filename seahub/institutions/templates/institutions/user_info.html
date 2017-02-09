@@ -119,7 +119,7 @@
             </tr>
             {% for group in personal_groups %}
                 <tr>
-                    <td><a href="{% url 'sys_admin_group_info' group.id %}">{{ group.group_name }}</a></td>
+                    <td><a href="{{ SITE_ROOT }}sysadmin/#groups/{{ group.id }}/libs/">{{ group.group_name }}</a></td>
                     <td>{{ group.role }}</td>
                     <td>{{ group.timestamp|tsstr_sec }}</td>
                     <td></td>

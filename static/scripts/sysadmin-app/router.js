@@ -16,12 +16,14 @@ define([
     'sysadmin-app/views/dir',
     'sysadmin-app/views/groups',
     'sysadmin-app/views/search-groups',
+    'sysadmin-app/views/group-repos',
+    'sysadmin-app/views/group-members',
     'app/views/account'
 ], function($, Backbone, Common, SideNavView, DashboardView,
     DesktopDevicesView, MobileDevicesView, DeviceErrorsView,
     ReposView, SearchReposView, SystemReposView, TrashReposView,
     SearchTrashReposView, DirView, GroupsView, SearchGroupsView,
-    AccountView) {
+    GroupReposView, GroupMembersView, AccountView) {
 
     "use strict";
 
@@ -40,6 +42,8 @@ define([
             'libs/:repo_id(/*path)': 'showLibraryDir',
             'groups/': 'showGroups',
             'search-groups/': 'showSearchGroups',
+            'groups/:group_id/libs/': 'showGroupLibraries',
+            'groups/:group_id/members/': 'showGroupMembers',
             // Default
             '*actions': 'showDashboard'
         },
@@ -69,6 +73,8 @@ define([
 
             this.groupsView = new GroupsView();
             this.searchGroupsView = new SearchGroupsView();
+            this.groupReposView = new GroupReposView();
+            this.groupMembersView = new GroupMembersView();
 
             app.ui.accountView = this.accountView = new AccountView();
 
@@ -205,6 +211,18 @@ define([
             this.searchGroupsView.show({
                 'name': decodeURIComponent(group_name)
             });
+        },
+
+        showGroupLibraries: function(group_id) {
+            this.switchCurrentView(this.groupReposView);
+            this.sideNavView.setCurTab('groups');
+            this.groupReposView.show(group_id);
+        },
+
+        showGroupMembers: function(group_id) {
+            this.switchCurrentView(this.groupMembersView);
+            this.sideNavView.setCurTab('groups');
+            this.groupMembersView.show(group_id);
         }
 
     });

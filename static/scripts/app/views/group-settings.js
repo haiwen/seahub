@@ -270,7 +270,7 @@ define([
                         if (data.failed.length > 0) {
                             var err_msg = '';
                             $(data.failed).each(function(index, item) {
-                                err_msg += item.email + ': ' + item.error_msg + '<br />';
+                                err_msg += Common.HTMLescape(item.email) + ': ' + Common.HTMLescape(item.error_msg) + '<br />';
                             });
                             $error.html(err_msg).removeClass('hide');
                             Common.enableButton($submitBtn);

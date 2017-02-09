@@ -48,6 +48,8 @@ from seahub.api2.endpoints.admin.library_dirents import AdminLibraryDirents, Adm
 from seahub.api2.endpoints.admin.system_library import AdminSystemLibrary
 from seahub.api2.endpoints.admin.trash_libraries import AdminTrashLibraries, AdminTrashLibrary
 from seahub.api2.endpoints.admin.groups import AdminGroups, AdminGroup
+from seahub.api2.endpoints.admin.group_libraries import AdminGroupLibraries, AdminGroupLibrary
+from seahub.api2.endpoints.admin.group_members import AdminGroupMembers, AdminGroupMember
 from seahub.api2.endpoints.admin.shares import AdminShares
 
 # Uncomment the next two lines to enable the admin:
@@ -214,6 +216,10 @@ urlpatterns = patterns(
     url(r'^api/v2.1/admin/libraries/(?P<repo_id>[-0-9a-f]{36})/dirents/$', AdminLibraryDirents.as_view(), name='api-v2.1-admin-library-dirents'),
     url(r'^api/v2.1/admin/groups/$', AdminGroups.as_view(), name='api-v2.1-admin-groups'),
     url(r'^api/v2.1/admin/groups/(?P<group_id>\d+)/$', AdminGroup.as_view(), name='api-v2.1-admin-group'),
+    url(r'^api/v2.1/admin/groups/(?P<group_id>\d+)/libraries/$', AdminGroupLibraries.as_view(), name='api-v2.1-admin-group-libraries'),
+    url(r'^api/v2.1/admin/groups/(?P<group_id>\d+)/libraries/(?P<repo_id>[-0-9a-f]{36})/$', AdminGroupLibrary.as_view(), name='api-v2.1-admin-group-library'),
+    url(r'^api/v2.1/admin/groups/(?P<group_id>\d+)/members/$', AdminGroupMembers.as_view(), name='api-v2.1-admin-group-members'),
+    url(r'^api/v2.1/admin/groups/(?P<group_id>\d+)/members/(?P<email>[^/]+)/$', AdminGroupMember.as_view(), name='api-v2.1-admin-group-member'),
     url(r'^api/v2.1/admin/libraries/(?P<repo_id>[-0-9a-f]{36})/dirent/$', AdminLibraryDirent.as_view(), name='api-v2.1-admin-library-dirent'),
     url(r'^api/v2.1/admin/system-library/$', AdminSystemLibrary.as_view(), name='api-v2.1-admin-system-library'),
     url(r'^api/v2.1/admin/trash-libraries/$', AdminTrashLibraries.as_view(), name='api-v2.1-admin-trash-libraries'),
@@ -253,7 +259,6 @@ urlpatterns = patterns(
     url(r'^sys/useradmin/ldap/imported$', sys_user_admin_ldap_imported, name='sys_useradmin_ldap_imported'),
     url(r'^sys/useradmin/admins/$', sys_user_admin_admins, name='sys_useradmin_admins'),
     url(r'^sys/groupadmin/export-excel/$', sys_group_admin_export_excel, name='sys_group_admin_export_excel'),
-    url(r'^sys/groupadmin/(?P<group_id>\d+)/$', sys_admin_group_info, name='sys_admin_group_info'),
     url(r'^sys/orgadmin/$', sys_org_admin, name='sys_org_admin'),
     url(r'^sys/orgadmin/search/$', sys_org_search, name='sys_org_search'),
     url(r'^sys/orgadmin/(?P<org_id>\d+)/set_quota/$', sys_org_set_quota, name='sys_org_set_quota'),

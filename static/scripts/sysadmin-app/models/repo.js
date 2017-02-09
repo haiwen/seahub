@@ -12,14 +12,8 @@ define([
         },
 
         getIconTitle: function() {
-            var icon_title = '';
-            if (this.get('encrypted')) {
-                icon_title = gettext("Encrypted library");
-            } else {
-                icon_title = gettext("Read-Write library");
-            }
-
-            return icon_title;
+            var is_encrypted = this.get('encrypted');
+            return Common.getLibIconTitle(is_encrypted, false);
         }
     });
 
