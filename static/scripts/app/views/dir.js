@@ -176,8 +176,6 @@ define([
                 Common.updateSortIconByMode({'context': this.$el});
                 this.sortDirents();
 
-                this.updateMagnificPopupOptions();
-
                 this.dir.last_start = 0;
                 this.dir.limit = 100;
                 this.render_dirents_slice(this.dir.last_start, this.dir.limit);
@@ -737,6 +735,8 @@ define([
                 }
 
                 this.dir.sort();
+
+                this.updateMagnificPopupOptions();
             },
 
             sortByName: function() {
