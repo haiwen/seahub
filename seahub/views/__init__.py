@@ -738,7 +738,11 @@ def libraries(request):
         joined_groups = seaserv.get_personal_groups_by_user(username)
 
     if joined_groups:
-        joined_groups.sort(lambda x, y: cmp(x.group_name.lower(), y.group_name.lower()))
+        try:
+            joined_groups.sort(lambda x, y: cmp(x.group_name.lower(), y.group_name.lower()))
+        except Exception as e:
+            logger.error(e)
+            joined_groups = []
 
     return render_to_response('libraries.html', {
             "allow_public_share": allow_public_share,
