@@ -295,15 +295,6 @@ class FilesApiTest(ApiTestBase):
             self.assertEqual(res.text, u'"success"')
             self.get(durl, expected=404)
 
-    def test_download_dir(self):
-        with self.get_tmp_repo() as repo:
-            dpath, _ = self.create_dir(repo)
-            query = '?p=%s' % quote(dpath)
-            ddurl = urljoin(repo.dir_url, 'download') + query
-            res = self.get(ddurl)
-            self.assertRegexpMatches(res.text,
-                r'"http(.*)/files/[^/]+/%s"' % quote(dpath[1:]))
-
     @pytest.mark.xfail
     def test_create_dir_with_parents(self):
         with self.get_tmp_repo() as repo:
