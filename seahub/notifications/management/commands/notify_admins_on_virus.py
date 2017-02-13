@@ -75,7 +75,7 @@ class Command(BaseCommand):
             )
 
     def email_repo_owner(self, repo_file):
-        repo_id, file_path = repo_file.split(':')
+        repo_id, file_path = repo_file.split(':', 1)
         owner = seafile_api.get_repo_owner(repo_id)
         if not owner:
             return
