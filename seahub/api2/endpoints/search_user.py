@@ -14,7 +14,6 @@ import seaserv
 from seahub.api2.authentication import TokenAuthentication
 from seahub.api2.throttling import UserRateThrottle
 from seahub.api2.utils import api_error
-
 from seahub.utils import is_valid_email, is_org_context
 from seahub.base.accounts import User
 from seahub.base.templatetags.seahub_tags import email2nickname
@@ -65,7 +64,7 @@ class SearchUser(APIView):
                     for user in all_org_users:
                         limited_emails.append(user.email)
 
-                    email_list += search_user_from_profile(q, limited_emails)
+                    email_list += search_user_from_profile_with_limits(q, limited_emails)
 
                 elif ENABLE_GLOBAL_ADDRESSBOOK:
                     # search from ccnet
@@ -76,7 +75,7 @@ class SearchUser(APIView):
                 else:
                     # in cloud mode, user will be added to Contact when share repo
                     # search user from user's contacts
-                    email_list += search_user_from_contact(request, q)
+                    email_list += search_user_when_global_address_book_disabled(request, q)
             else:
                 # not CLOUD_MODE
                 # search from ccnet
@@ -88,13 +87,9 @@ class SearchUser(APIView):
             # if current user can NOT use global address book,
             # he/she can also search `q` from Contact,
             # search user from user's contacts
-            email_list += search_user_from_contact(request, q)
+            email_list += search_user_when_global_address_book_disabled(request, q)
 
         ## search finished
-        # check if `q` is a valid email
-        if is_valid_email(q):
-            email_list.append(q)
-
         # remove duplicate emails
         email_list = {}.fromkeys(email_list).keys()
 
@@ -181,16 +176,11 @@ def search_user_from_ccnet(q):
 
     return email_list
 
-def search_user_from_profile(q, limited_emails=[]):
-    users = []
-    if limited_emails:
-        # 'nickname__icontains' for search by nickname
-        # 'contact_email__icontains' for search by contact email
-        users = Profile.objects.filter(Q(user__in=limited_emails) &
-                (Q(nickname__icontains=q) | Q(contact_email__icontains=q))).values('user')
-    else:
-        users = Profile.objects.filter(
-                Q(nickname__icontains=q) | Q(contact_email__icontains=q)).values('user')
+def search_user_from_profile(q):
+    # 'nickname__icontains' for search by nickname
+    # 'contact_email__icontains' for search by contact email
+    users = Profile.objects.filter(Q(nickname__icontains=q) | \
+            Q(contact_email__icontains=q)).values('user')
 
     email_list = []
     for user in users:
@@ -198,23 +188,44 @@ def search_user_from_profile(q, limited_emails=[]):
 
     return email_list
 
-def search_user_from_contact(request, q):
+def search_user_from_profile_with_limits(q, limited_emails):
+    # search within limited_emails
+    users = Profile.objects.filter(Q(user__in=limited_emails) &
+            (Q(nickname__icontains=q) | Q(contact_email__icontains=q))).values('user')
 
-    # get user's contact list
-    username = request.user.username
-    contacts = Contact.objects.get_contacts_by_user(username)
-
-    # search user from contact list
     email_list = []
+    for user in users:
+        email_list.append(user['user'])
+
+    return email_list
+
+def search_user_when_global_address_book_disabled(request, q):
+
+    email_list = []
+    username = request.user.username
+
+    # search from contact
+    # get user's contact list
+    contacts = Contact.objects.get_contacts_by_user(username)
     for contact in contacts:
+        # search user from contact list
         if q in contact.contact_email:
             email_list.append(contact.contact_email)
 
-    # search from profile, limit search range in user contacts
+    # search from profile, limit search range in user's contacts
     limited_emails = []
     for contact in contacts:
         limited_emails.append(contact.contact_email)
 
-    email_list += search_user_from_profile(q, limited_emails)
+    email_list += search_user_from_profile_with_limits(q, limited_emails)
+
+    if is_valid_email(q):
+        # if `q` is a valid email
+        email_list.append(q)
+
+        # get user whose `contact_email` is `q`
+        users = Profile.objects.filter(contact_email=q).values('user')
+        for user in users:
+            email_list.append(user['user'])
 
     return email_list
