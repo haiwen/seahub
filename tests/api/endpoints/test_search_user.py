@@ -9,6 +9,7 @@ from seahub.profile.models import Profile
 from seahub.profile.utils import refresh_cache
 from seahub.api2.endpoints.search_user import SearchUser
 from seahub.test_utils import BaseTestCase
+from tests.common.utils import randstring
 
 class SearchUserTest(BaseTestCase):
     def setUp(self):
@@ -157,29 +158,33 @@ class SearchUserTest(BaseTestCase):
         assert json_resp['users'][0]['email'] == self.admin.username
 
     @patch.object(SearchUser, '_can_use_global_address_book')
-    def test_search_with_not_use_global_address_book(self, mock_can_use_global_address_book):
+    def test_search_when_not_use_global_address_book(self, mock_can_use_global_address_book):
 
         mock_can_use_global_address_book.return_value = False
 
-        resp = self.client.get(self.endpoint + '?q=%s' % self.admin.username)
-        json_resp = json.loads(resp.content)
+        contact_email = '%s@%s.com' % (randstring(6), randstring(6))
 
+        p = Profile.objects.add_or_update(self.admin.username, nickname='')
+        p.contact_email = contact_email
+        p.save()
+
+        # search with valid email
+        resp = self.client.get(self.endpoint + '?q=%s' % contact_email)
+        json_resp = json.loads(resp.content)
         self.assertEqual(200, resp.status_code)
         assert json_resp['users'][0]['email'] == self.admin.username
 
-    @patch.object(SearchUser, '_can_use_global_address_book')
-    def test_search_by_contact_with_not_use_global_address_book(self, mock_can_use_global_address_book):
+        # search with invalid email & has no contacts
+        resp = self.client.get(self.endpoint + '?q=%s' % contact_email[:6])
+        json_resp = json.loads(resp.content)
+        self.assertEqual(200, resp.status_code)
+        assert len(json_resp['users']) == 0
 
-        mock_can_use_global_address_book.return_value = False
-
+        # search with invalid email & has contact
+        nickname_of_admin = randstring(6)
         Contact.objects.add_contact(self.user.username, self.admin.username)
-
-        nickname_of_admin = 'nickname of admin'
-        Profile.objects.add_or_update(self.admin.username,
-                nickname=nickname_of_admin)
-
+        Profile.objects.add_or_update(self.admin.username, nickname=nickname_of_admin)
         resp = self.client.get(self.endpoint + '?q=%s' % nickname_of_admin)
         json_resp = json.loads(resp.content)
-
         self.assertEqual(200, resp.status_code)
         assert json_resp['users'][0]['email'] == self.admin.username
