@@ -1810,12 +1810,14 @@ def batch_add_user(request):
             if not row:
                 continue
 
-            username = row[0].strip() or ''
-            if not is_valid_username(username):
+            try:
+                username = row[0].strip() or ''
+                password = row[1].strip() or ''
+            except Exception as e:
+                logger.error(e)
                 continue
 
-            password = row[1].strip() or ''
-            if password == '':
+            if not is_valid_username(username) or password == '':
                 continue
 
             try:
