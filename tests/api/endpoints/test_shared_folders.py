@@ -5,7 +5,9 @@ from django.core.urlresolvers import reverse
 
 from seaserv import seafile_api
 
+from seahub.profile.models import Profile
 from seahub.test_utils import BaseTestCase
+from tests.common.utils import randstring
 
 class SharedFoldersTest(BaseTestCase):
 
@@ -34,21 +36,47 @@ class SharedFoldersTest(BaseTestCase):
         self.admin_user = self.admin.username
         self.url = reverse('api-v2.1-shared-folders')
 
-        sub_repo_id = self.create_virtual_repo()
-        self.share_repo_to_user(sub_repo_id)
-        self.share_repo_to_group(sub_repo_id)
+        self.sub_repo_id = self.create_virtual_repo()
 
     def tearDown(self):
+        seafile_api.remove_share(self.repo_id, self.user_name, self.admin_user)
+        seafile_api.unset_group_repo(self.repo_id, self.group_id, self.user_name)
+        seafile_api.remove_inner_pub_repo(self.repo_id)
+
         self.remove_repo()
 
-    def test_can_get(self):
+    def test_can_get_when_share_to_user(self):
+        self.share_repo_to_user(self.sub_repo_id)
+
+        contact_email = '%s@%s.com' % (randstring(6), randstring(6))
+        nickname = randstring(6)
+        p = Profile.objects.add_or_update(self.admin.username, nickname=nickname)
+        p.contact_email = contact_email
+        p.save()
+
         self.login_as(self.user)
         resp = self.client.get(self.url)
         self.assertEqual(200, resp.status_code)
 
         json_resp = json.loads(resp.content)
         assert json_resp[0]['share_type'] == 'personal'
-        assert json_resp[1]['share_type'] == 'group'
+        assert json_resp[0]['repo_id'] == self.repo_id
+        assert json_resp[0]['user_email'] == self.admin.username
+        assert json_resp[0]['user_name'] == nickname
+        assert json_resp[0]['contact_email'] == contact_email
+
+    def test_can_get_when_share_to_group(self):
+
+        self.share_repo_to_group(self.sub_repo_id)
+
+        self.login_as(self.user)
+        resp = self.client.get(self.url)
+        self.assertEqual(200, resp.status_code)
+
+        json_resp = json.loads(resp.content)
+        assert json_resp[0]['share_type'] == 'group'
+        assert json_resp[0]['repo_id'] == self.repo_id
+        assert json_resp[0]['group_id'] == self.group_id
 
     def test_get_with_invalid_repo_permission(self):
         # login with admin, then get user's share repo info

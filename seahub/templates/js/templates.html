@@ -1554,7 +1554,7 @@
     <td><img src="<%= icon_url %>" title="<%= icon_title %>" alt="<%= icon_title %>" width="24" /></td>
     <td><a href="<%= url %>"><%- name %></a></td>
     <% if (share_type == 'personal') { %>
-    <td title="<%- user_email %>"><%- user_name %></td>
+    <td title="<%- contact_email %>"><%- user_name %></td>
     <% } else if (share_type == 'group') { %>
     <td><%- group_name %></td>
     <% } else if (share_type == 'public') { %> {# no 'public' type for 'folder' #}
