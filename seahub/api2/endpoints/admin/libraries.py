@@ -8,14 +8,15 @@ from rest_framework.views import APIView
 from rest_framework import status
 from django.template.defaultfilters import filesizeformat
 from django.utils.translation import ugettext as _
-
+import seaserv
 from seaserv import ccnet_api, seafile_api, seafserv_threaded_rpc
 
-from seahub.views import get_system_default_repo_id
-from seahub.base.accounts import User
 from seahub.api2.authentication import TokenAuthentication
 from seahub.api2.throttling import UserRateThrottle
 from seahub.api2.utils import api_error
+from seahub.base.accounts import User
+from seahub.signals import repo_deleted
+from seahub.views import get_system_default_repo_id
 
 try:
     from seahub.settings import MULTI_TENANCY
@@ -144,8 +145,24 @@ class AdminLibrary(APIView):
             error_msg = _('System library can not be deleted.')
             return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
 
+        repo = seafile_api.get_repo(repo_id)
+        if not repo:
+            return api_error(status.HTTP_404_NOT_FOUND,
+                             'Library %s not found.' % repo_id)
+
+        repo_owner = seafile_api.get_repo_owner(repo_id)
+        if not repo_owner:
+            repo_owner = seafile_api.get_org_repo_owner(repo_id)
+        related_usernames = seaserv.get_related_users_by_repo(repo_id)
+
         try:
             seafile_api.remove_repo(repo_id)
+            repo_deleted.send(sender=None,
+                              org_id=-1,
+                              usernames=related_usernames,
+                              repo_owner=repo_owner,
+                              repo_id=repo_id,
+                              repo_name=repo.name)
         except Exception as e:
             logger.error(e)
             error_msg = 'Internal Server Error'
