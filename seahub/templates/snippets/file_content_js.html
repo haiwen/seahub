@@ -17,45 +17,11 @@
 {% endif %}
 
 {% if filetype == 'Image' %}
-window.onload = function () {
-    var img = $('#image-view');
-    var img_h = img.outerHeight();
-    var file_view_h = parseInt($('#file-view').css('min-height'));
-    {% if img_prev or img_next %}
-    var prev_next_h = $('#img-prev-next').outerHeight(true);
-    {% else %}
-    var prev_next_h = 0;
-    {% endif %}
-    if (img_h < file_view_h - prev_next_h) {
-        img.css({'margin-top':(file_view_h - img_h - prev_next_h)/2});
-    }
-    if (img.width() > 946) {
-        img.width(946);
-    }
-    img.removeClass('vh');
+function setFileViewAreaHeight() {
+    var $fileView = $('#file-view');
+    $fileView.outerHeight($(window).height() - $fileView.offset().top);
 }
-    {% if img_prev or img_next %}
-    var input_focus = false;
-    $('input, textarea').focus(function() {
-        input_focus = true;
-    }).blur(function() {
-        input_focus = false;
-    });
-    $('body').bind('keydown', function(e) {
-        if (!input_focus) { // so cursor move in form input element can work normally
-            {% if img_prev %}
-            if (e.keyCode == 37) { // press '<-'
-                location.href = $('#img-prev').attr('href');
-            }
-            {% endif %}
-            {% if img_next %}
-            if (e.keyCode == 39) { // press '->'
-                location.href = $('#img-next').attr('href');
-            }
-            {% endif %}
-        }
-    })
-    {% endif %}
+$(window).load(setFileViewAreaHeight).resize(setFileViewAreaHeight);
 {% endif %}
 
 {% if filetype == 'SVG' %}
