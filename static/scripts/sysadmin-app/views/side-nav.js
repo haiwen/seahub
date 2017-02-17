@@ -17,7 +17,17 @@ define([
                 'cur_tab': this.default_cur_tab
             };
             this.render();
-            this.$el.show();
+
+            var _this = this;
+            $('#js-toggle-side-nav').click(function() {
+                _this.show();
+                return false;
+            });
+            $(window).resize(function() {
+                if ($(window).width() >= 768) {
+                    _this.show();
+                }
+            });
         },
 
         render: function() {
@@ -33,9 +43,31 @@ define([
             this.render();
         },
 
+        show: function() {
+            this.$el.css({ 'left':'0px' });
+        },
+
+        hide: function() {
+            this.$el.css({ 'left':'-300px' });
+        },
+
         events: {
+            'click .js-close-side-nav': 'closeNav',
+            'click li a': 'visitLink',
             'submit #libs-search-form': 'searchLibs', // for 'all' libs
             'submit #trash-libs-search-form': 'searchTrashLibs'
+        },
+
+        closeNav: function() {
+            this.hide();
+            return false;
+        },
+
+        visitLink: function(e) {
+            if ($(window).width() < 768) {
+                this.hide();
+            }
+            return true;
         },
 
         // search libs by repo_name
