@@ -128,6 +128,18 @@ function addConfirmTo(op_ele, popup) {
     });
 }
 
+function showConfirm(title, content, yesCallback) {
+    var $popup = $("#confirm-popup");
+    var $cont = $('#confirm-con');
+    var $yesBtn = $('#confirm-yes');
+
+    $cont.html('<h3>' + title + '</h3><p>' + content + '</p>');
+    $popup.modal({appendTo: '#main'});
+    $('#simplemodal-container').css({'height':'auto'});
+
+    $yesBtn.click(yesCallback);
+}
+
 function addFormPost(op_ele) {
     op_ele.click(function() {
         $('<form>', {
@@ -617,3 +629,31 @@ var FileTree = {
         this.renderTree($container, $form, initial_data, {'dir_only': true});
     }
 };
+
+function quotaSizeFormat(bytes, precision) {
+    var kilobyte = 1000;
+    var megabyte = kilobyte * 1000;
+    var gigabyte = megabyte * 1000;
+    var terabyte = gigabyte * 1000;
+
+    var precision = precision || 0;
+
+    if ((bytes >= 0) && (bytes < kilobyte)) {
+        return bytes + ' B';
+
+    } else if ((bytes >= kilobyte) && (bytes < megabyte)) {
+        return (bytes / kilobyte).toFixed(precision) + ' KB';
+
+    } else if ((bytes >= megabyte) && (bytes < gigabyte)) {
+        return (bytes / megabyte).toFixed(precision) + ' MB';
+
+    } else if ((bytes >= gigabyte) && (bytes < terabyte)) {
+        return (bytes / gigabyte).toFixed(precision) + ' GB';
+
+    } else if (bytes >= terabyte) {
+        return (bytes / terabyte).toFixed(precision) + ' TB';
+
+    } else {
+        return bytes + ' B';
+    }
+}

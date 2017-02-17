@@ -21,12 +21,6 @@ def test_sudo_mode_required(admin_browser_once):
         'the browser should be redirected back to the previous page'
     )
 
-    b.visit('/sys/groupadmin/')
-    assert b.path == '/sys/groupadmin/', (
-        'once the admin enters the password, '
-        'he would not be asked again within a certain time'
-    )
-
 @pytest.mark.xfail
 def test_sudo_mode_rejects_wrong_password(admin_browser_once):
     b = admin_browser_once

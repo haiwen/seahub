@@ -659,7 +659,7 @@
 
 <script type="text/template" id="grid-view-dir-op-tmpl">
     <ul class="grid-item-op sf-dropdown-menu">
-        <li><a class="op download" href="<%= download_url %>">{% trans "Download" %}</a></li>
+        <li><a class="op download" href="#">{% trans "Download" %}</a></li>
         <% if (!repo_encrypted && (can_generate_share_link || can_generate_upload_link || is_repo_owner)) { %>
         <li><a class="op share" href="#">{% trans "Share" %}</a></li>
         <% } %>
@@ -1855,7 +1855,7 @@
     <td><img src="<%= icon_url %>" title="<%= icon_title %>" alt="<%= icon_title %>" width="24" /></td>
     <td><a href="<%= url %>"><%- name %></a></td>
     <% if (share_type == 'personal') { %>
-    <td title="<%- user_email %>"><%- user_name %></td>
+    <td title="<%- contact_email %>"><%- user_name %></td>
     <% } else if (share_type == 'group') { %>
     <td><%- group_name %></td>
     <% } else if (share_type == 'public') { %> {# no 'public' type for 'folder' #}

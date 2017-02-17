@@ -19,7 +19,7 @@ from seahub.auth import login
 from seahub.constants import DEFAULT_USER
 from seahub.profile.models import Profile, DetailedProfile
 from seahub.role_permissions.utils import get_enabled_role_permissions_by_role
-from seahub.utils import is_valid_username, is_user_password_strong, \
+from seahub.utils import is_user_password_strong, \
     clear_token, get_system_admins
 from seahub.utils.mail import send_html_email_with_dj_template, MAIL_PRIORITY
 from seahub.utils.licenseparse import user_number_over_limit
@@ -106,19 +106,19 @@ class UserPermissions(object):
         self.user = user
 
     def can_add_repo(self):
-        return get_enabled_role_permissions_by_role(DEFAULT_USER)['can_add_repo']
+        return get_enabled_role_permissions_by_role(self.user.role)['can_add_repo']
 
     def can_add_group(self):
-        return get_enabled_role_permissions_by_role(DEFAULT_USER)['can_add_group']
+        return get_enabled_role_permissions_by_role(self.user.role)['can_add_group']
 
     def can_generate_share_link(self):
-        return get_enabled_role_permissions_by_role(DEFAULT_USER)['can_generate_share_link']
+        return get_enabled_role_permissions_by_role(self.user.role)['can_generate_share_link']
 
     def can_generate_upload_link(self):
-        return get_enabled_role_permissions_by_role(DEFAULT_USER)['can_generate_upload_link']
+        return get_enabled_role_permissions_by_role(self.user.role)['can_generate_upload_link']
 
     def can_use_global_address_book(self):
-        return get_enabled_role_permissions_by_role(DEFAULT_USER)['can_use_global_address_book']
+        return get_enabled_role_permissions_by_role(self.user.role)['can_use_global_address_book']
 
     def can_view_org(self):
         if MULTI_TENANCY:
@@ -127,25 +127,25 @@ class UserPermissions(object):
         if CLOUD_MODE:
             return False
 
-        return get_enabled_role_permissions_by_role(DEFAULT_USER)['can_view_org']
+        return get_enabled_role_permissions_by_role(self.user.role)['can_view_org']
 
     def can_drag_drop_folder_to_sync(self):
-        return get_enabled_role_permissions_by_role(DEFAULT_USER)['can_drag_drop_folder_to_sync']
+        return get_enabled_role_permissions_by_role(self.user.role)['can_drag_drop_folder_to_sync']
 
     def can_connect_with_android_clients(self):
-        return get_enabled_role_permissions_by_role(DEFAULT_USER)['can_connect_with_android_clients']
+        return get_enabled_role_permissions_by_role(self.user.role)['can_connect_with_android_clients']
 
     def can_connect_with_ios_clients(self):
-        return get_enabled_role_permissions_by_role(DEFAULT_USER)['can_connect_with_ios_clients']
+        return get_enabled_role_permissions_by_role(self.user.role)['can_connect_with_ios_clients']
 
     def can_connect_with_desktop_clients(self):
-        return get_enabled_role_permissions_by_role(DEFAULT_USER)['can_connect_with_desktop_clients']
+        return get_enabled_role_permissions_by_role(self.user.role)['can_connect_with_desktop_clients']
 
     def can_invite_guest(self):
-        return get_enabled_role_permissions_by_role(DEFAULT_USER)['can_invite_guest']
+        return get_enabled_role_permissions_by_role(self.user.role)['can_invite_guest']
 
     def can_export_files_via_mobile_client(self):
-        return get_enabled_role_permissions_by_role(DEFAULT_USER)['can_export_files_via_mobile_client']
+        return get_enabled_role_permissions_by_role(self.user.role)['can_export_files_via_mobile_client']
 
 
 class User(object):
@@ -214,23 +214,42 @@ class User(object):
         else:
             source = "LDAP"
 
+        username = self.username
+        orgs = ccnet_threaded_rpc.get_orgs_by_user(username)
+
+        # remove owned repos
         owned_repos = []
-        orgs = ccnet_threaded_rpc.get_orgs_by_user(self.username)
         if orgs:
             for org in orgs:
                 owned_repos += seafile_api.get_org_owned_repo_list(org.org_id,
-                                                                   self.username)
+                                                                   username)
         else:
-            owned_repos += seafile_api.get_owned_repo_list(self.username)
+            owned_repos += seafile_api.get_owned_repo_list(username)
 
         for r in owned_repos:
             seafile_api.remove_repo(r.id)
 
-        clear_token(self.username)
+        # remove shared in repos
+        shared_in_repos = []
+        if orgs:
+            for org in orgs:
+                org_id = org.org_id
+                shared_in_repos = seafile_api.get_org_share_in_repo_list(org_id,
+                        username, -1, -1)
+
+                for r in shared_in_repos:
+                    seafile_api.org_remove_share(org_id,
+                            r.repo_id, r.user, username)
+        else:
+            shared_in_repos = seafile_api.get_share_in_repo_list(username, -1, -1)
+            for r in shared_in_repos:
+                seafile_api.remove_share(r.repo_id, r.user, username)
+
+        clear_token(username)
         # remove current user from joined groups
-        ccnet_api.remove_group_user(self.username)
-        ccnet_api.remove_emailuser(source, self.username)
-        Profile.objects.delete_profile_by_user(self.username)
+        ccnet_api.remove_group_user(username)
+        ccnet_api.remove_emailuser(source, username)
+        Profile.objects.delete_profile_by_user(username)
 
     def get_and_delete_messages(self):
         messages = []

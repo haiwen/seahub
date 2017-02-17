@@ -170,6 +170,10 @@ define([
                 case 'admin-library-dirents': return siteRoot + 'api/v2.1/admin/libraries/' + options.repo_id + '/dirents/';
                 case 'admin-groups': return siteRoot + 'api/v2.1/admin/groups/';
                 case 'admin-group': return siteRoot + 'api/v2.1/admin/groups/' + options.group_id + '/';
+                case 'admin-group-libraries': return siteRoot + 'api/v2.1/admin/groups/' + options.group_id + '/libraries/';
+                case 'admin-group-library': return siteRoot + 'api/v2.1/admin/groups/' + options.group_id + '/libraries/' + options.repo_id + '/';
+                case 'admin-group-members': return siteRoot + 'api/v2.1/admin/groups/' + options.group_id + '/members/';
+                case 'admin-group-member': return siteRoot + 'api/v2.1/admin/groups/' + options.group_id + '/members/' + options.email+ '/';
                 case 'admin-system-library': return siteRoot + 'api/v2.1/admin/system-library/';
                 case 'admin-trash-libraries': return siteRoot + 'api/v2.1/admin/trash-libraries/';
                 case 'admin-trash-library': return siteRoot + 'api/v2.1/admin/trash-libraries/' + options.repo_id + '/';
@@ -274,6 +278,16 @@ define([
                 } else {
                     return app.config.mediaUrl + "img/lib/24/lib.png";
                 }
+            }
+        },
+
+        getLibIconTitle: function(is_encrypted, is_readonly) {
+            if (is_encrypted) {
+                return gettext("Encrypted library");
+            } else if (is_readonly) {
+                return gettext("Read-Only library");
+            } else {
+                return gettext("Read-Write library");
             }
         },
 
@@ -894,6 +908,34 @@ define([
             }
         },
 
+        quotaSizeFormat: function(bytes, precision) {
+            var kilobyte = 1000;
+            var megabyte = kilobyte * 1000;
+            var gigabyte = megabyte * 1000;
+            var terabyte = gigabyte * 1000;
+
+            var precision = precision || 0;
+
+            if ((bytes >= 0) && (bytes < kilobyte)) {
+                return bytes + ' B';
+
+            } else if ((bytes >= kilobyte) && (bytes < megabyte)) {
+                return (bytes / kilobyte).toFixed(precision) + ' KB';
+
+            } else if ((bytes >= megabyte) && (bytes < gigabyte)) {
+                return (bytes / megabyte).toFixed(precision) + ' MB';
+
+            } else if ((bytes >= gigabyte) && (bytes < terabyte)) {
+                return (bytes / gigabyte).toFixed(precision) + ' GB';
+
+            } else if (bytes >= terabyte) {
+                return (bytes / terabyte).toFixed(precision) + ' TB';
+
+            } else {
+                return bytes + ' B';
+            }
+        },
+
         groupId2Name: function(group_id) {
             var group_name;
             var groups = app.pageOptions.groups;
@@ -915,7 +957,62 @@ define([
             } else {
                 return input.setSelectionRange(pos, pos);
             }
-        }
+        },
 
+        // for 'dir view': download multi dirents; dir download
+        zipDownload:function(repo_id, parent_dir, dirents) {
+            var _this = this;
+
+            var interval;
+            var zip_token;
+            var packagingTip = gettext("Packaging...");
+            var $tip = $('<p></p>');
+            var queryZipProgress = function() {
+                $.ajax({
+                    url: _this.getUrl({name: 'query_zip_progress'}) + '?token=' + zip_token,
+                    dataType: 'json',
+                    cache: false,
+                    success: function(data) {
+                        var progress = data.total == 0 ? '100%' : (data.zipped/data.total*100).toFixed(0) + '%';
+                        $tip.html(packagingTip + ' ' + progress);
+                        if (data['total'] == data['zipped']) {
+                            setTimeout(function() { $.modal.close(); }, 500);
+                            clearInterval(interval);
+                            location.href = _this.getUrl({
+                                name: 'download_dir_zip_url',
+                                zip_token: zip_token
+                            });
+                        }
+                    },
+                    error: function(xhr) {
+                        _this.ajaxErrorHandler(xhr);
+                        clearInterval(interval);
+                    }
+                });
+            };
+
+            $.ajax({
+                url: _this.getUrl({
+                    name: 'zip_task',
+                    repo_id: repo_id
+                }),
+                data: {
+                    'parent_dir': parent_dir,
+                    'dirents': dirents
+                },
+                traditional: true,
+                dataType: 'json',
+                success: function(data) {
+                    zip_token = data['zip_token'];
+                    $tip.html(packagingTip).modal();
+                    $('#simplemodal-container').css({'width':'auto'});
+                    queryZipProgress();
+                    interval = setInterval(queryZipProgress, 1000);
+                },
+                error: function(xhr) {
+                    _this.ajaxErrorHandler(xhr);
+                }
+            });
+        }
     }
 });

@@ -50,7 +50,7 @@ class GroupMembers(APIView):
                 error_msg = 'Permission denied.'
                 return api_error(status.HTTP_403_FORBIDDEN, error_msg)
 
-            members = seaserv.get_group_members(group_id)
+            members = ccnet_api.get_group_members(group_id)
 
         except SearpcError as e:
             logger.error(e)
@@ -169,13 +169,12 @@ class GroupMember(APIView):
 
             # set/unset a specific group member as admin
             if is_admin.lower() == 'true':
-                seaserv.ccnet_threaded_rpc.group_set_admin(group_id, email)
+                ccnet_api.group_set_admin(group_id, email)
             elif is_admin.lower() == 'false':
-                seaserv.ccnet_threaded_rpc.group_unset_admin(group_id, email)
+                ccnet_api.group_unset_admin(group_id, email)
             else:
                 error_msg = 'is_admin invalid.'
                 return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
-
         except SearpcError as e:
             logger.error(e)
             error_msg = 'Internal Server Error'
@@ -204,7 +203,7 @@ class GroupMember(APIView):
         # user leave group
         if username == email:
             try:
-                seaserv.ccnet_threaded_rpc.quit_group(group_id, username)
+                ccnet_api.quit_group(group_id, username)
                 # remove repo-group share info of all 'email' owned repos
                 seafile_api.remove_group_repos_by_owner(group_id, email)
                 return Response({'success': True})
@@ -217,14 +216,14 @@ class GroupMember(APIView):
         try:
             if is_group_owner(group_id, username):
                 # group owner can delete all group member
-                seaserv.ccnet_threaded_rpc.group_remove_member(group_id, username, email)
+                ccnet_api.group_remove_member(group_id, username, email)
                 seafile_api.remove_group_repos_by_owner(group_id, email)
                 return Response({'success': True})
 
             elif is_group_admin(group_id, username):
                 # group admin can NOT delete group owner/admin
                 if not is_group_admin_or_owner(group_id, email):
-                    seaserv.ccnet_threaded_rpc.group_remove_member(group_id, username, email)
+                    ccnet_api.group_remove_member(group_id, username, email)
                     seafile_api.remove_group_repos_by_owner(group_id, email)
                     return Response({'success': True})
                 else:

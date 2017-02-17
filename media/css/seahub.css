@@ -2078,6 +2078,9 @@ button.sf-dropdown-toggle:focus {
     color:#000;
     background:#dfdfdf;
 }
+#trash-more {
+    margin-bottom:30px;
+}
 #notices-more {
     margin-top: -20px;
 }
@@ -3007,6 +3010,7 @@ button.sf-dropdown-toggle:focus {
 }
 #search-form,
 #search-user-form,
+#search-group-form,
 #search-repo-form {
     padding:7px 5px;
     background:#f7f7f8;
@@ -3108,10 +3112,12 @@ button.sf-dropdown-toggle:focus {
     margin:10px 15px 20px 0;
 }
 #search-repo-form label,
+#search-group-form label,
 #search-user-form label {
     width:3.5em;
 }
 #search-repo-form .submit,
+#search-group-form .submit,
 #search-user-form .submit {
     margin-left:3.5em;
 }
@@ -3192,6 +3198,9 @@ button.sf-dropdown-toggle:focus {
 }
 #set-quota-form {
     min-width:255px;
+}
+#set-quota-form .input {
+    width:180px;
 }
 
 /* org reg */

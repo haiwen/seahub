@@ -51,8 +51,11 @@
         <form id="set-quota-form" method="post" class="hide">{% csrf_token %}
             <h3>{% trans "Set user storage limit" %}</h3>
             <input type="hidden" name="email" value="{{ email }}" />
-            <input type="text" name="space_quota" /> MB
-            <p class="tip">{% trans "Tip: 0 means default limit" %}</p>
+            <input type="text" name="space_quota" class="input" /> MB
+            <p class="tip">
+            <span>{% trans "An integer that is greater than or equal to 0." %}</span><br />
+            <span>{% trans "Tip: 0 means default limit" %}</span>
+            </p>
             <p class="error hide"></p>
             <input type="submit" value="{% trans "Submit" %}" class="submit" />
         </form>
@@ -116,7 +119,7 @@
             </tr>
             {% for group in personal_groups %}
                 <tr>
-                    <td><a href="{% url 'sys_admin_group_info' group.id %}">{{ group.group_name }}</a></td>
+                    <td><a href="{{ SITE_ROOT }}sysadmin/#groups/{{ group.id }}/libs/">{{ group.group_name }}</a></td>
                     <td>{{ group.role }}</td>
                     <td>{{ group.timestamp|tsstr_sec }}</td>
                     <td></td>

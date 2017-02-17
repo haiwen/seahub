@@ -135,29 +135,6 @@ class ViewLibFileTest(BaseTestCase):
     #     r = requests.get(raw_path)
     #     self.assertEqual(400, r.status_code)
 
-    @patch('seahub.views.file.get_file_size')
-    def test_opendoc(self, mock_get_file_size):
-        mock_get_file_size.return_value = 1
-
-        self.login_as(self.user)
-
-        file_path = self.create_file(repo_id=self.repo.id, parent_dir='/',
-                                     filename="foo.odt", username=self.user.email)
-        url = reverse('view_lib_file', args=[self.repo.id, file_path])
-
-        resp = self.client.get(url)
-        self.assertEqual(200, resp.status_code)
-        self.assertTemplateUsed(resp, 'view_file_opendocument.html')
-        assert resp.context['filetype'].lower() == 'opendocument'
-        assert resp.context['err'] == ''
-
-        # token for doc file is one time only
-        raw_path = resp.context['raw_path']
-        r = requests.get(raw_path)
-        self.assertEqual(200, r.status_code)
-        r = requests.get(raw_path)
-        self.assertEqual(400, r.status_code)
-
     def test_pdf_file(self):
         self.login_as(self.user)
 

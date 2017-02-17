@@ -286,33 +286,6 @@ def render_recycle_root(request, repo_id, referer):
     if not repo:
         raise Http404
 
-    scan_stat = request.GET.get('scan_stat', None)
-    try:
-        deleted_entries = seafile_api.get_deleted(repo_id, 0, '/', scan_stat)
-    except SearpcError as e:
-        logger.error(e)
-        referer = request.META.get('HTTP_REFERER', None)
-        next = settings.SITE_ROOT if referer is None else referer
-        return HttpResponseRedirect(next)
-
-    if not deleted_entries:
-        new_scan_stat = None
-    else:
-        new_scan_stat = deleted_entries[-1].scan_stat
-
-    trash_more = True if new_scan_stat is not None else False
-
-    deleted_entries = deleted_entries[0:-1]
-    for dirent in deleted_entries:
-        if stat.S_ISDIR(dirent.mode):
-            dirent.is_dir = True
-        else:
-            dirent.is_dir = False
-
-    # Entries sort by deletion time in descending order.
-    deleted_entries.sort(lambda x, y : cmp(y.delete_time,
-                                           x.delete_time))
-
     username = request.user.username
     if is_org_context(request):
         repo_owner = seafile_api.get_org_repo_owner(repo.id)
@@ -328,9 +301,6 @@ def render_recycle_root(request, repo_id, referer):
             'show_recycle_root': True,
             'repo': repo,
             'repo_dir_name': repo.name,
-            'dir_entries': deleted_entries,
-            'scan_stat': new_scan_stat,
-            'trash_more': trash_more,
             'enable_clean': enable_clean,
             'referer': referer,
             }, context_instance=RequestContext(request))
@@ -389,40 +359,10 @@ def render_dir_recycle_root(request, repo_id, dir_path, referer):
     if not repo:
         raise Http404
 
-    scan_stat = request.GET.get('scan_stat', None)
-    try:
-        deleted_entries = seafile_api.get_deleted(repo_id, 0, dir_path, scan_stat)
-    except SearpcError as e:
-        logger.error(e)
-        referer = request.META.get('HTTP_REFERER', None)
-        next = settings.SITE_ROOT if referer is None else referer
-        return HttpResponseRedirect(next)
-
-    if not deleted_entries:
-        new_scan_stat = None
-    else:
-        new_scan_stat = deleted_entries[-1].scan_stat
-
-    trash_more = True if new_scan_stat is not None else False
-
-    deleted_entries = deleted_entries[0:-1]
-    for dirent in deleted_entries:
-        if stat.S_ISDIR(dirent.mode):
-            dirent.is_dir = True
-        else:
-            dirent.is_dir = False
-
-    # Entries sort by deletion time in descending order.
-    deleted_entries.sort(lambda x, y : cmp(y.delete_time,
-                                           x.delete_time))
-
     return render_to_response('repo_dir_recycle_view.html', {
             'show_recycle_root': True,
             'repo': repo,
             'repo_dir_name': os.path.basename(dir_path.rstrip('/')),
-            'dir_entries': deleted_entries,
-            'scan_stat': new_scan_stat,
-            'trash_more': trash_more,
             'dir_path': dir_path,
             'referer': referer,
             }, context_instance=RequestContext(request))
@@ -798,7 +738,11 @@ def libraries(request):
         joined_groups = seaserv.get_personal_groups_by_user(username)
 
     if joined_groups:
-        joined_groups.sort(lambda x, y: cmp(x.group_name.lower(), y.group_name.lower()))
+        try:
+            joined_groups.sort(lambda x, y: cmp(x.group_name.lower(), y.group_name.lower()))
+        except Exception as e:
+            logger.error(e)
+            joined_groups = []
 
     return render_to_response('libraries.html', {
             "allow_public_share": allow_public_share,
@@ -1188,9 +1132,6 @@ def image_view(request, filename):
     if content_encoding:
         response['Content-Encoding'] = content_encoding
     return response
-
-def shib_login(request):
-    return HttpResponseRedirect(request.GET.get("next", reverse('libraries')))
 
 def underscore_template(request, template):
     """Serve underscore template through Django, mainly for I18n.

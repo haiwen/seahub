@@ -30,15 +30,6 @@ For details please refer to 'snippets/file_content_js.html'.
         {% if filetype == 'SpreadSheet' %}
             {% include 'snippets/spreadsheet_convert_html.html' %}
         {% endif %}
-
-        {% if filetype == 'OpenDocument' %}
-            {% if shared_token %}
-            <iframe id="viewer" src="{{MEDIA_URL}}js/Viewer.js/index.html#{% url 'view_raw_shared_file' shared_token obj_id file_name %}" style="width:95%;height:600px;border:0;margin:0 auto;" allowfullscreen webkitallowfullscreen></iframe>
-            {% else %}
-            <iframe id="viewer" src="{{MEDIA_URL}}js/Viewer.js/index.html#{{raw_path}}" style="width:95%;height:600px;border:0;margin:0 auto;" allowfullscreen webkitallowfullscreen></iframe>
-            {% endif %}
-
-        {% endif %}
     {% else %}
     <div id="file-view-tip">
         {% if err != 'invalid extension' %}

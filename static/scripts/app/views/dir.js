@@ -199,8 +199,6 @@ define([
                 Common.updateSortIconByMode({'context': this.$el});
                 this.sortDirents();
 
-                this.updateMagnificPopupOptions();
-
                 this.dir.last_start = 0;
                 this.dir.limit = 100;
                 this.render_dirents_slice(this.dir.last_start, this.dir.limit);
@@ -817,6 +815,8 @@ define([
                 }
 
                 this.dir.sort();
+
+                this.updateMagnificPopupOptions();
             },
 
             sortByName: function() {
@@ -871,8 +871,8 @@ define([
 
             download: function () {
                 var dirents = this.dir;
-                var parent_dir = dirents.path;
                 var selected_dirents = dirents.where({'selected':true});
+                var selected_names = [];
 
                 // select 1 item, and it is a file
                 if (selected_dirents.length == 1 &&
@@ -880,57 +880,11 @@ define([
                     location.href = selected_dirents[0].getDownloadUrl();
                     return;
                 }
-
-                var selected_names = [];
-                var interval;
-                var zip_token;
-                var packagingTip = gettext("Packaging...");
-                var $tip = $('<p></p>');
-                var queryZipProgress = function() {
-                    $.ajax({
-                        url: Common.getUrl({name: 'query_zip_progress'}) + '?token=' + zip_token,
-                        dataType: 'json',
-                        cache: false,
-                        success: function(data) {
-                            var progress = data.total == 0 ? '100%' : (data.zipped/data.total*100).toFixed(0) + '%';
-                            $tip.html(packagingTip + ' ' + progress);
-                            if (data['total'] == data['zipped']) {
-                                setTimeout(function() { $.modal.close(); }, 500);
-                                clearInterval(interval);
-                                location.href = Common.getUrl({
-                                    name: 'download_dir_zip_url',
-                                    zip_token: zip_token
-                                });
-                            }
-                        },
-                        error: function(xhr) {
-                            Common.ajaxErrorHandler(xhr);
-                            clearInterval(interval);
-                        }
-                    });
-                };
                 $(selected_dirents).each(function() {
                     selected_names.push(this.get('obj_name'));
                 });
-                $.ajax({
-                    url: Common.getUrl({name: 'zip_task', repo_id: dirents.repo_id}),
-                    data: {
-                        'parent_dir': parent_dir,
-                        'dirents': selected_names
-                    },
-                    traditional: true,
-                    dataType: 'json',
-                    success: function(data) {
-                        zip_token = data['zip_token'];
-                        $tip.html(packagingTip).modal();
-                        $('#simplemodal-container').css({'width':'auto'});
-                        queryZipProgress();
-                        interval = setInterval(queryZipProgress, 1000);
-                    },
-                    error: function(xhr) {
-                        Common.ajaxErrorHandler(xhr);
-                    }
-                });
+
+                Common.zipDownload(dirents.repo_id, dirents.path, selected_names);
             },
 
             del: function () {
@@ -1250,12 +1204,27 @@ define([
                                     req_progress();
                                 }
                             }; // 'after_op_success' ends
-                            Common.ajaxPost({
-                                'form': form,
-                                'post_url': post_url,
-                                'post_data': post_data,
-                                'after_op_success': after_op_success,
-                                'form_id': form.attr('id')
+                            $.ajax({
+                                url: post_url,
+                                type: 'POST',
+                                dataType: 'json',
+                                beforeSend: Common.prepareCSRFToken,
+                                data: post_data,
+                                success: after_op_success,
+                                error: function(xhr) {
+                                    var err;
+                                    if (xhr.responseText) {
+                                        err = $.parseJSON(xhr.responseText).error;
+                                    } else {
+                                        err = gettext("Failed. Please check the network.");
+                                    }
+                                    if (form.is(':visible')) {
+                                        $('.error', form).html(err).show();
+                                    } else {
+                                        cancel_btn.after('<p class="error">' + err + '</p>');
+                                        cancel_btn.hide();
+                                    }
+                                }
                             });
                         }; // 'mvcpDirent' ends
                         var endOrContinue = function () {

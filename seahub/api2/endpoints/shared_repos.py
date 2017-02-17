@@ -13,7 +13,7 @@ from seaserv import seafile_api, ccnet_api
 from seahub.api2.utils import api_error
 from seahub.api2.authentication import TokenAuthentication
 from seahub.api2.throttling import UserRateThrottle
-
+from seahub.profile.models import Profile
 from seahub.utils import is_org_context, is_valid_username, send_perm_audit_msg
 from seahub.base.templatetags.seahub_tags import email2nickname
 
@@ -65,6 +65,7 @@ class SharedRepos(APIView):
             if repo.share_type == 'personal':
                 result['user_name'] = email2nickname(repo.user)
                 result['user_email'] = repo.user
+                result['contact_email'] = Profile.objects.get_contact_email_by_user(repo.user)
 
             if repo.share_type == 'group':
                 group = ccnet_api.get_group(repo.group_id)

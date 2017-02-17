@@ -43,8 +43,9 @@ from seahub.utils import IS_EMAIL_CONFIGURED, string2list, is_valid_username, \
     clear_token, handle_virus_record, get_virus_record_by_id, \
     get_virus_record, FILE_AUDIT_ENABLED, get_max_upload_file_size
 from seahub.utils.file_size import get_file_size_unit
-from seahub.utils.rpc import mute_seafile_api
+from seahub.utils.ldap import get_ldap_info
 from seahub.utils.licenseparse import parse_license, user_number_over_limit
+from seahub.utils.rpc import mute_seafile_api
 from seahub.utils.sysinfo import get_platform_name
 from seahub.utils.mail import send_html_email_with_dj_template
 from seahub.utils.ms_excel import write_xls
@@ -53,6 +54,7 @@ from seahub.utils.user_permissions import (get_basic_user_roles,
 from seahub.views import get_system_default_repo_id
 from seahub.forms import SetUserQuotaForm, AddUserForm, BatchAddUserForm, \
     TermsAndConditionsForm
+from seahub.profile.forms import ProfileForm, DetailedProfileForm 
 from seahub.options.models import UserOptions
 from seahub.profile.models import Profile, DetailedProfile
 from seahub.signals import repo_deleted
@@ -223,8 +225,6 @@ def sys_user_admin(request):
             if trial_user.user_or_org == user.email:
                 user.trial_info = {'expire_date': trial_user.expire_date}
 
-    have_ldap = True if len(seaserv.get_emailusers('LDAP', 0, 1)) > 0 else False
-
     platform = get_platform_name()
     server_id = get_server_id()
     pro_server = 1 if is_pro_version() else 0
@@ -239,7 +239,7 @@ def sys_user_admin(request):
             'next_page': current_page+1,
             'per_page': per_page,
             'page_next': page_next,
-            'have_ldap': have_ldap,
+            'have_ldap': get_ldap_info(),
             'platform': platform,
             'server_id': server_id[:8],
             'default_user': DEFAULT_USER,
@@ -485,13 +485,11 @@ def sys_user_admin_admins(request):
             if last_login.username == user.email:
                 user.last_login = last_login.last_login
 
-    have_ldap = True if len(seaserv.get_emailusers('LDAP', 0, 1)) > 0 else False
-
     return render_to_response(
         'sysadmin/sys_useradmin_admins.html', {
             'users': admin_users,
             'not_admin_users': not_admin_users,
-            'have_ldap': have_ldap,
+            'have_ldap': get_ldap_info(),
             'default_user': DEFAULT_USER,
             'guest_user': GUEST_USER,
             'is_pro': is_pro_version(),
@@ -644,7 +642,6 @@ def user_set_quota(request, email):
 
     f = SetUserQuotaForm(request.POST)
     if f.is_valid():
-        email = f.cleaned_data['email']
         space_quota_mb = f.cleaned_data['space_quota']
         space_quota = space_quota_mb * get_file_size_unit('MB')
 
@@ -709,11 +706,6 @@ def user_remove(request, email):
             if org[0].creator == user.email:
                 messages.error(request, _(u'Failed to delete: the user is an organization creator'))
                 return HttpResponseRedirect(next)
-
-            org_id = org[0].org_id
-            org_user_repos = seafile_api.get_org_owned_repo_list(org_id, user.email)
-            for repo in org_user_repos:
-                seafile_api.remove_repo(repo.id)
 
         user.delete()
         messages.success(request, _(u'Successfully deleted %s') % user.username)
@@ -924,9 +916,10 @@ def user_reset(request, email):
         if IS_EMAIL_CONFIGURED:
             if SEND_EMAIL_ON_RESETTING_USER_PASSWD:
                 try:
-                    send_user_reset_email(request, user.email, new_password)
+                    contact_email = Profile.objects.get_contact_email_by_user(user.email)
+                    send_user_reset_email(request, contact_email, new_password)
                     msg = _('Successfully reset password to %(passwd)s, an email has been sent to %(user)s.') % \
-                        {'passwd': new_password, 'user': user.email}
+                        {'passwd': new_password, 'user': contact_email}
                     messages.success(request, msg)
                 except Exception, e:
                     logger.error(str(e))
@@ -979,6 +972,8 @@ def user_add(request):
     form = AddUserForm(post_values)
     if form.is_valid():
         email = form.cleaned_data['email']
+        name = form.cleaned_data['name']
+        department = form.cleaned_data['department']
         role = form.cleaned_data['role']
         password = form.cleaned_data['password1']
 
@@ -994,6 +989,10 @@ def user_add(request):
             User.objects.update_role(email, role)
             if config.FORCE_PASSWORD_CHANGE:
                 UserOptions.objects.set_force_passwd_change(email)
+            if name:
+                Profile.objects.add_or_update(email, name, '')
+            if department:
+                DetailedProfile.objects.add_or_update(email, department, '')
 
         if request.user.org:
             org_id = request.user.org.org_id
@@ -1059,26 +1058,6 @@ def sys_group_admin_export_excel(request):
     response['Content-Disposition'] = 'attachment; filename=groups.xlsx'
     wb.save(response)
     return response
-
-@login_required
-@sys_staff_required
-def sys_admin_group_info(request, group_id):
-
-    group_id = int(group_id)
-    group = get_group(group_id)
-    org_id = request.GET.get('org_id', None)
-    if org_id:
-        repos = seafile_api.get_org_group_repos(org_id, group_id)
-    else:
-        repos = seafile_api.get_repos_by_group(group_id)
-    members = get_group_members(group_id)
-
-    return render_to_response('sysadmin/sys_admin_group_info.html', {
-            'group': group,
-            'repos': repos,
-            'members': members,
-            'enable_sys_admin_view_repo': ENABLE_SYS_ADMIN_VIEW_REPO,
-            }, context_instance=RequestContext(request))
 
 @login_required
 @sys_staff_required
@@ -1815,7 +1794,6 @@ def batch_add_user(request):
             content = content.decode(encoding, 'replace').encode('utf-8')
 
         filestream = StringIO.StringIO(content)
-
         reader = csv.reader(filestream)
         new_users_count = len(list(reader))
         if user_number_over_limit(new_users = new_users_count):
@@ -1826,24 +1804,61 @@ def batch_add_user(request):
         filestream.seek(0)
         reader = csv.reader(filestream)
         for row in reader:
+
             if not row:
                 continue
 
-            username = row[0].strip()
-            password = row[1].strip()
-
+            username = row[0].strip() or ''
             if not is_valid_username(username):
                 continue
 
+            password = row[1].strip() or ''
             if password == '':
                 continue
 
             try:
                 User.objects.get(email=username)
-                continue
             except User.DoesNotExist:
-                User.objects.create_user(username, password, is_staff=False,
-                                         is_active=True)
+                User.objects.create_user(username,
+                        password, is_staff=False, is_active=True)
+
+                if config.FORCE_PASSWORD_CHANGE:
+                    UserOptions.objects.set_force_passwd_change(username)
+
+                # then update the user's optional info
+                try:
+                    nickname = row[2].strip() or ''
+                    if len(nickname) <= 64 and '/' not in nickname:
+                        Profile.objects.add_or_update(username, nickname, '')
+                except Exception as e:
+                    logger.error(e)
+                    continue
+
+                try:
+                    department = row[3].strip() or ''
+                    if len(department) <= 512:
+                        DetailedProfile.objects.add_or_update(username, department, '')
+                except Exception as e:
+                    logger.error(e)
+                    continue
+
+                try:
+                    role = row[4].strip() or ''
+                    if is_pro_version() and role in get_available_roles():
+                        User.objects.update_role(username, role)
+                except Exception as e:
+                    logger.error(e)
+                    continue
+
+                try:
+                    space_quota_mb = row[5].strip() or ''
+                    space_quota_mb = int(space_quota_mb)
+                    if space_quota_mb >= 0:
+                        space_quota = int(space_quota_mb) * get_file_size_unit('MB')
+                        seafile_api.set_user_quota(username, space_quota)
+                except Exception as e:
+                    logger.error(e)
+                    continue
 
                 send_html_email_with_dj_template(
                     username, dj_template='sysadmin/user_batch_add_email.html',

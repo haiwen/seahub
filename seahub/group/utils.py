@@ -4,6 +4,7 @@ import re
 import logging
 
 import seaserv
+from seaserv import ccnet_api
 
 from seahub.utils import is_org_context
 from seahub.profile.models import Profile
@@ -44,7 +45,7 @@ def check_group_name_conflict(request, new_group_name):
         if request.cloud_mode:
             checked_groups = seaserv.get_personal_groups_by_user(username)
         else:
-            checked_groups = seaserv.ccnet_threaded_rpc.get_all_groups(-1, -1)
+            checked_groups = ccnet_api.get_all_groups(-1, -1)
 
     for g in checked_groups:
         if g.group_name == new_group_name:
@@ -53,13 +54,13 @@ def check_group_name_conflict(request, new_group_name):
     return False
 
 def is_group_member(group_id, email):
-    return seaserv.is_group_user(group_id, email)
+    return ccnet_api.is_group_user(int(group_id), email)
 
 def is_group_admin(group_id, email):
-    return seaserv.check_group_staff(group_id, email)
+    return ccnet_api.check_group_staff(int(group_id), email)
 
 def is_group_owner(group_id, email):
-    group = seaserv.get_group(group_id)
+    group = ccnet_api.get_group(int(group_id))
     if email == group.creator_name:
         return True
     else:
@@ -85,14 +86,23 @@ def get_group_member_info(request, group_id, email, avatar_size=AVATAR_DEFAULT_S
         logger.error(e)
         avatar_url = get_default_avatar_url()
 
-    is_admin = seaserv.check_group_staff(group_id, email)
+    role = 'Member'
+    group = ccnet_api.get_group(int(group_id))
+    is_admin = ccnet_api.check_group_staff(int(group_id), email)
+    if email == group.creator_name:
+        role = 'Owner'
+    elif is_admin:
+        role = 'Admin'
+
     member_info = {
+        'group_id': group_id,
         "name": email2nickname(email),
         'email': email,
         "contact_email": Profile.objects.get_contact_email_by_user(email),
         "login_id": login_id,
         "avatar_url": request.build_absolute_uri(avatar_url),
         "is_admin": is_admin,
+        "role": role,
     }
 
     return member_info

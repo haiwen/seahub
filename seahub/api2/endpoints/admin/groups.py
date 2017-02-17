@@ -42,11 +42,24 @@ class AdminGroups(APIView):
     permission_classes = (IsAdminUser,)
 
     def get(self, request):
-        """ List all groups
+        """ List all groups / search group by name
 
         Permission checking:
         1. Admin user;
         """
+
+        # search groups by name
+        group_name = request.GET.get('name', '')
+        group_name = group_name.strip()
+        return_results = []
+        if group_name:
+            # search by name(keyword in name)
+            groups_all = ccnet_api.search_groups(group_name, -1, -1)
+            for group in groups_all:
+                group_info = get_group_info(group.id)
+                return_results.append(group_info)
+
+            return Response({"name": group_name, "groups": return_results})
 
         try:
             current_page = int(request.GET.get('page', '1'))

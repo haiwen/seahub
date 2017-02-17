@@ -2,7 +2,6 @@
 import uuid
 import hmac
 import datetime
-import time
 from hashlib import sha1
 
 from django.db import models
@@ -45,6 +44,19 @@ class TokenV2Manager(models.Manager):
             devices = devices.order_by('-last_accessed')[start : end]
 
         return devices
+
+    def get_total_devices_count(self):
+        devices = super(TokenV2Manager, self).filter(wiped_at=None)
+        return len(devices)
+
+    def get_current_connected_devices_count(self):
+        # get number of devices last one hour accessed
+        devices = super(TokenV2Manager, self).filter(wiped_at=None)
+        date_from = datetime.datetime.now() - datetime.timedelta(hours=1)
+
+        # greater than or equal to.
+        results = devices.filter(last_accessed__gte=date_from)
+        return len(results)
 
     def get_user_devices(self, username):
         '''List user devices, most recently used first'''

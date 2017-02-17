@@ -41,28 +41,70 @@
             <dd>{{ org_name }}</dd>
             {%  endif %}
 
-            {% if profile %}
             <dt>{% trans "Name" context "true name" %}</dt>
-            <dd>{{ profile.nickname }}</dd>
-            {% endif %}
+            <dd>
+                <span id="nickname">
+                    {% if profile and profile.nickname %}
+                    {{ profile.nickname }}
+                    {% else %}
+                    --
+                    {% endif %}
+                </span>
+                <span id="set-name" title="{% trans "Edit"%}" class="sf2-icon-edit op-icon"></span>
+            </dd>
 
-            {% if d_profile %}
             <dt>{% trans "Department" %}</dt>
-            <dd>{{ d_profile.department }}</dd>
+            <dd>
+                <span id="department">
+                    {% if d_profile and d_profile.department %}
+                    {{ d_profile.department }}
+                    {% else %}
+                    --
+                    {% endif %}
+                </span>
+                <span id="set-dept" title="{% trans "Edit"%}" class="sf2-icon-edit op-icon"></span>
+            </dd>
 
+            {% if d_profile and d_profile.telephone %}
             <dt>{% trans "Telephone" %}</dt>
             <dd>{{ d_profile.telephone }}</dd>
             {% endif %}
 
-            <dt>{% trans "Space Used" %}</dt>
-            <dd>{{ space_usage|seahub_filesizeformat }} {% if space_quota > 0 %} / {{ space_quota|seahub_filesizeformat }} {% endif %}  <a href="#" class="sf-btn-link" style="margin-left:20px;" id="set-quota">{% trans "Set Quota" %}</a></dd>
+            <dt>{% trans "Space Used / Quota" %}</dt>
+            <dd>
+                {{ space_usage|seahub_filesizeformat }} /
+                <span id="quota">
+                    {% if space_quota > 0 %}
+                    {{ space_quota|seahub_filesizeformat }}
+                    {% else %}
+                    --
+                    {% endif %}
+                </span>
+                <span id="set-quota" title="{% trans "Edit Quota" %}" class="sf2-icon-edit op-icon"></span>
+            </dd>
         </dl>
+
+        <form id="set-name-form" method="post" action="" class="hide">{% csrf_token %}
+            <h3>{% trans "Set user name" %}</h3>
+            <input type="text" name="nickname" class="input" value="" /><br />
+            <p class="error hide"></p>
+            <input type="submit" value="{% trans "Submit" %}" class="submit" />
+        </form>
+
+        <form id="set-dept-form" method="post" action="" class="hide">{% csrf_token %}
+            <h3>{% trans "Set user department" %}</h3>
+            <input type="text" name="department" class="input" value="" /><br />
+            <p class="error hide"></p>
+            <input type="submit" value="{% trans "Submit" %}" class="submit" />
+        </form>
 
         <form id="set-quota-form" method="post" class="hide">{% csrf_token %}
             <h3>{% trans "Set user storage limit" %}</h3>
-            <input type="hidden" name="email" value="{{ email }}" />
-            <input type="text" name="space_quota" /> MB
-            <p class="tip">{% trans "Tip: 0 means default limit" %}</p>
+            <input type="text" name="space_quota" class="input" /> MB
+            <p class="tip">
+            <span>{% trans "An integer that is greater than or equal to 0." %}</span><br />
+            <span>{% trans "Tip: 0 means default limit" %}</span>
+            </p>
             <p class="error hide"></p>
             <input type="submit" value="{% trans "Submit" %}" class="submit" />
         </form>
@@ -103,7 +145,7 @@
                 <td>{{ repo.last_modify|translate_seahub_time }}</td>
                 <td data-id="{{ repo.props.id }}" data-name="{{repo.name}}">
                     <div>
-                        <a href="#" data-url="{% url "sys_repo_delete" repo.id %}" data-target="{{ repo.name }}" class="repo-delete-btn op vh">{% trans "Delete" %}</a>
+                        <a href="#" class="repo-delete-btn op vh">{% trans "Delete" %}</a>
                         <a href="#" class="repo-transfer-btn op vh">{% trans "Transfer" %}</a>
                     </div>
                 </td>
@@ -214,7 +256,7 @@
             </tr>
             {% for group in personal_groups %}
                 <tr>
-                    <td><a href="{% url 'sys_admin_group_info' group.id %}">{{ group.group_name }}</a></td>
+                    <td><a href="{{ SITE_ROOT }}sysadmin/#groups/{{ group.id }}/libs/">{{ group.group_name }}</a></td>
                     <td>{{ group.role }}</td>
                     <td>{{ group.timestamp|tsstr_sec }}</td>
                     <td><a href="#" data-url="{% url 'group_remove' group.id %}" data-target="{{ group.group_name }}" class="rm-grp op vh">{% trans "Delete" %}</a></td>
@@ -254,43 +296,134 @@ $('.rm-link').click(function() {
     });
     return false;
 });
-
+$('#set-name').click(function() {
+    $("#set-name-form").modal({appendTo: "#main"});
+    $('#simplemodal-container').css({'width':'auto', 'height':'auto'});
+});
+$('#set-dept').click(function() {
+    $("#set-dept-form").modal({appendTo: "#main"});
+    $('#simplemodal-container').css({'width':'auto', 'height':'auto'});
+});
 $('#set-quota').click(function() {
     $("#set-quota-form").modal({appendTo: "#main"});
-    return false;
+    $('#simplemodal-container').css({'width':'auto', 'height':'auto'});
 });
 
-$('#set-quota-form .submit').click(function() {
-    var form = $('#set-quota-form'),
-        form_id = form.attr('id'),
-        space_quota = $('input[name="space_quota"]', form).val();
-
-    if (!$.trim(space_quota)) {
-        apply_form_error(form_id, "{% trans "Space Quota can't be empty" %}");
+$('#set-name-form').submit(function() {
+    var nickname = $.trim($('[name="nickname"]', $(this)).val());
+    var $name = $('#nickname');
+    var $error = $('.error', $(this));
+    if (nickname.indexOf('/') != -1) {
+        $error.html("{% trans "Name should not include '/'." %}").show();
         return false;
     }
 
-    data = { 'email': $('input[name="email"]', form).val(), 'space_quota': space_quota };
+    var $submitBtn = $('[type="submit"]', $(this));
+    disable($submitBtn);
 
-    var sb_btn = $(this);
-    disable(sb_btn);
     $.ajax({
-        url: '{% url 'user_set_quota' email %}',
-        type: 'POST',
+        url: '{% url 'api2-account' email %}',
+        type: 'PUT',
         dataType: 'json',
         cache: false,
         beforeSend: prepareCSRFToken,
-        data: data,
+        data: {'name': nickname},
         success: function(data) {
-            location.reload(true);
+            if (nickname == '') {
+                $name.html('--');
+            } else {
+                $name.html(HTMLescape(data['name']));
+            }
+            $.modal.close();
+        },
+        error: function(xhr, textStatus, errorThrown) {
+            var err_msg;
+            if (xhr.responseText) {
+                err_msg = $.parseJSON(xhr.responseText).error_msg;
+            } else {
+                err_msg = "{% trans "Failed. Please check the network." %}";
+            }
+            $error.html(err_msg).show();
+            enable($submitBtn);
+        }
+    });
+
+    return false;
+});
+
+$('#set-dept-form').submit(function() {
+    var department = $.trim($('[name="department"]', $(this)).val());
+    var $department = $('#department');
+    var $error = $('.error', $(this));
+    var $submitBtn = $('[type="submit"]', $(this));
+    disable($submitBtn);
+
+    $.ajax({
+        url: '{% url 'api2-account' email %}',
+        type: 'PUT',
+        dataType: 'json',
+        cache: false,
+        beforeSend: prepareCSRFToken,
+        data: {'department': department},
+        success: function(data) {
+            if (department == '') {
+                $department.html('--');
+            } else {
+                $department.html(HTMLescape(data['department']));
+            }
+            $.modal.close();
+        },
+        error: function(xhr, textStatus, errorThrown) {
+            var err_msg;
+            if (xhr.responseText) {
+                err_msg = $.parseJSON(xhr.responseText).error_msg;
+            } else {
+                err_msg = "{% trans "Failed. Please check the network." %}";
+            }
+            $error.html(err_msg).show();
+            enable($submitBtn);
+        }
+    });
+
+    return false;
+});
+
+$('#set-quota-form').submit(function() {
+    var form = $(this),
+        form_id = form.attr('id'),
+        space_quota = $.trim($('input[name="space_quota"]', form).val());
+    var $quota = $('#quota');
+
+    if (!space_quota) {
+        apply_form_error(form_id, "{% trans "It is required." %}");
+        return false;
+    }
+
+    var $submitBtn = $('[type="submit"]', $(this));
+    disable($submitBtn);
+
+    $.ajax({
+        url: '{% url 'api2-account' email %}',
+        type: 'PUT',
+        dataType: 'json',
+        cache: false,
+        beforeSend: prepareCSRFToken,
+        data: {'storage': space_quota},
+        success: function(data) {
+            if (space_quota == 0) {
+                $quota.html('--');
+            } else {
+                $quota.html(quotaSizeFormat(parseInt(data['total']), 1));
+            }
+            $.modal.close();
         },
         error: function(xhr, textStatus, errorThrown) {
             if (xhr.responseText) {
-                apply_form_error(form_id, $.parseJSON(xhr.responseText).error);
+                apply_form_error(form_id, $.parseJSON(xhr.responseText).error_msg);
             } else {
                 apply_form_error(form_id, "{% trans "Failed. Please check the network." %}");
             }
-            enable(sb_btn);
+            enable($submitBtn);
         }
     });
     return false;

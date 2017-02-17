@@ -9,7 +9,7 @@
         <th width="36%">{% trans "Email" %} / {% trans "Name" %} / {% trans "Contact Email" %}</th>
         <th width="12%">{% trans "Status" %}</th>
         {% endif %}
-        <th width="16%">{% trans "Space Used" %}</th>
+        <th width="16%">{% trans "Space Used / Quota" %}</th>
         <th width="22%">{% trans "Create At / Last Login" %}</th>
         <th width="14%">{% trans "Operations" %}</th>
     </tr>
@@ -70,7 +70,17 @@
         {% endif %}
 
         <td style="font-size:11px;">
-            <p> {{ user.space_usage|seahub_filesizeformat }} {% if user.space_quota > 0 %} / {{ user.space_quota|seahub_filesizeformat }} {% endif %} </p>
+            {{ user.space_usage|seahub_filesizeformat }} /
+            <span class="user-space-quota">
+                {% if user.space_quota > 0 %}
+                {{ user.space_quota|seahub_filesizeformat }}
+                {% else %}
+                --
+                {% endif %}
+            </span>
+            {% if user.source == "DB" or user.source == 'LDAPImport' %}
+            <span title="{% trans "Edit Quota" %}" class="quota-edit-icon sf2-icon-edit op-icon vh"></span>
+            {% endif %}
         </td>
         <td>
             {% if user.source == "DB" %}
@@ -94,3 +104,16 @@
     </tr>
     {% endfor %}
 </table>
+
+{% if user.source == "DB" or user.source == 'LDAPImport' %}
+<form id="set-quota-form" method="post" action="" class="hide">{% csrf_token %}
+    <h3>{% trans "Set user storage limit" %}</h3>
+    <input type="text" name="space_quota" class="input" /> MB
+    <p class="tip">
+    <span>{% trans "An integer that is greater than or equal to 0." %}</span><br />
+    <span>{% trans "Tip: 0 means default limit" %}</span>
+    </p>
+    <p class="error hide"></p>
+    <input type="submit" value="{% trans "Submit" %}" class="submit" />
+</form>
+{% endif %}

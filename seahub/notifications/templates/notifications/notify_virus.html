@@ -1,11 +1,19 @@
 {% extends 'email_base.html' %}
 
-{% load i18n %}
+{% load i18n seahub_tags %}
+
 
 {% block email_con %}
 
 {% autoescape off %}
+{% if owner %}
+<p style="color:#121214;font-size:14px;">{% trans "Hi," %} {{owner|email2nickname}}</p>
 
+<p style="font-size:14px;color:#434144;">
+{% blocktrans %}Virus detected in file <a href="{{url_base}}{{file_url}}" target="_blank">{{ file_name }}</a> during regular scanning.{% endblocktrans %}
+</p>
+
+{% else %}
 <p style="color:#121214;font-size:14px;">{% trans "Hi," %}</p>
 
 <p style="font-size:14px;color:#434144;">
@@ -14,6 +22,7 @@
 
 <a href="{{ url_base }}{% url 'sys_virus_scan_records' %}" target="_blank">{{ url_base }}{% url 'sys_virus_scan_records' %}</a>
 
+{% endif %}
 {% endautoescape %}
 
 {% endblock %}

@@ -54,7 +54,7 @@ from seahub.utils import render_error, is_org_context, \
 from seahub.utils.ip import get_remote_ip
 from seahub.utils.timeutils import utc_to_local
 from seahub.utils.file_types import (IMAGE, PDF, DOCUMENT, SPREADSHEET, AUDIO,
-                                     MARKDOWN, TEXT, OPENDOCUMENT, VIDEO)
+                                     MARKDOWN, TEXT, VIDEO)
 from seahub.utils.star import is_file_starred
 from seahub.utils import HAS_OFFICE_CONVERTER, FILEEXT_TYPE_MAP
 from seahub.utils.http import json_response, int_param, BadRequestException, RequestForbbiddenException
@@ -314,8 +314,7 @@ def can_preview_file(file_name, file_size, repo=None):
 
     file_type, file_ext = get_file_type_and_ext(file_name)
 
-    if repo and repo.encrypted and (file_type in (DOCUMENT, SPREADSHEET,
-        OPENDOCUMENT, PDF)):
+    if repo and repo.encrypted and (file_type in (DOCUMENT, SPREADSHEET, PDF)):
         return (False, _(u'The library is encrypted, can not open file online.'))
 
     if file_ext in FILEEXT_TYPE_MAP:  # check file extension
@@ -339,7 +338,7 @@ def send_file_access_msg_when_preview(request, repo, path, access_from):
     if filetype in (TEXT, IMAGE, MARKDOWN, VIDEO, AUDIO):
         send_file_access_msg(request, repo, path, access_from)
 
-    if filetype in (DOCUMENT, SPREADSHEET, OPENDOCUMENT, PDF) and \
+    if filetype in (DOCUMENT, SPREADSHEET, PDF) and \
         HAS_OFFICE_CONVERTER:
         send_file_access_msg(request, repo, path, access_from)
 
@@ -473,9 +472,6 @@ def _file_view(request, repo_id, path):
             handle_document(inner_path, obj_id, fileext, ret_dict)
         elif filetype == SPREADSHEET:
             handle_spreadsheet(inner_path, obj_id, fileext, ret_dict)
-        elif filetype == OPENDOCUMENT:
-            if fsize == 0:
-                ret_dict['err'] = _(u'Invalid file format.')
         elif filetype == PDF:
             handle_pdf(inner_path, obj_id, fileext, ret_dict)
         elif filetype == IMAGE:
@@ -634,9 +630,6 @@ def view_history_file_common(request, repo_id, ret_dict):
                 handle_document(inner_path, obj_id, fileext, ret_dict)
             elif filetype == SPREADSHEET:
                 handle_spreadsheet(inner_path, obj_id, fileext, ret_dict)
-            elif filetype == OPENDOCUMENT:
-                if fsize == 0:
-                    ret_dict['err'] = _(u'Invalid file format.')
             elif filetype == PDF:
                 handle_pdf(inner_path, obj_id, fileext, ret_dict)
             else:
@@ -826,9 +819,6 @@ def view_shared_file(request, fileshare):
             handle_document(inner_path, obj_id, fileext, ret_dict)
         elif filetype == SPREADSHEET:
             handle_spreadsheet(inner_path, obj_id, fileext, ret_dict)
-        elif filetype == OPENDOCUMENT:
-            if file_size == 0:
-                ret_dict['err'] = _(u'Invalid file format.')
         elif filetype == PDF:
             handle_pdf(inner_path, obj_id, fileext, ret_dict)
     else:

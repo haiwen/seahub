@@ -1071,7 +1071,7 @@ class RepoOwner(APIView):
             return api_error(status.HTTP_404_NOT_FOUND, error_msg)
 
         try:
-            User.objects.get(email=new_owner)
+            new_owner_obj = User.objects.get(email=new_owner)
         except User.DoesNotExist:
             error_msg = 'User %s not found.' % new_owner
             return api_error(status.HTTP_404_NOT_FOUND, error_msg)
@@ -1089,6 +1089,11 @@ class RepoOwner(APIView):
         username = request.user.username
         if username != repo_owner:
             error_msg = 'Permission denied.'
+            return api_error(status.HTTP_403_FORBIDDEN, error_msg)
+
+        if not new_owner_obj.permissions.can_add_repo():
+            error_msg = 'Transfer failed: role of %s is %s, can not add library.' % \
+                    (new_owner, new_owner_obj.role)
             return api_error(status.HTTP_403_FORBIDDEN, error_msg)
 
         pub_repos = []
@@ -2420,6 +2425,10 @@ class FileSharedLinkView(APIView):
             if check_folder_permission(request, repo_id, path) is None:
                 return api_error(status.HTTP_403_FORBIDDEN, 'Permission denied')
 
+            if not request.user.permissions.can_generate_share_link():
+                error_msg = 'Can not generate share link.'
+                return api_error(status.HTTP_403_FORBIDDEN, error_msg)
+
             expire = request.data.get('expire', None)
             if expire:
                 try:
@@ -2477,6 +2486,10 @@ class FileSharedLinkView(APIView):
 
             if check_folder_permission(request, repo_id, path) != 'rw':
                 return api_error(status.HTTP_403_FORBIDDEN, 'Permission denied')
+
+            if not request.user.permissions.can_generate_upload_link():
+                error_msg = 'Can not generate upload link.'
+                return api_error(status.HTTP_403_FORBIDDEN, error_msg)
 
             # generate upload link
             uls = UploadLinkShare.objects.get_upload_link_by_path(username, repo_id, path)
@@ -2689,70 +2702,6 @@ class DirView(APIView):
                              "Failed to delete file.")
 
         return reloaddir_if_necessary(request, repo, parent_dir_utf8)
-
-class DirDownloadView(APIView):
-    authentication_classes = (TokenAuthentication, SessionAuthentication )
-    permission_classes = (IsAuthenticated,)
-    throttle_classes = (UserRateThrottle, )
-
-    def get(self, request, repo_id, format=None):
-        repo = get_repo(repo_id)
-        if not repo:
-            return api_error(status.HTTP_404_NOT_FOUND, 'Library not found.')
-
-        path = request.GET.get('p', None)
-        if path is None:
-            return api_error(status.HTTP_400_BAD_REQUEST, 'Path is missing.')
-        if path[-1] != '/':         # Normalize dir path
-            path += '/'
-
-        if len(path) > 1:
-            dirname = os.path.basename(path.rstrip('/'))
-        else:
-            dirname = repo.name
-
-        current_commit = get_commits(repo_id, 0, 1)[0]
-        if not current_commit:
-            return api_error(status.HTTP_500_INTERNAL_SERVER_ERROR,
-                             'Failed to get current commit of repo %s.' % repo_id)
-
-        try:
-            dir_id = seafile_api.get_dir_id_by_commit_and_path(current_commit.repo_id,
-                current_commit.id, path)
-        except SearpcError, e:
-            return api_error(HTTP_520_OPERATION_FAILED,
-                             "Failed to get dir id by path")
-
-        if not dir_id:
-            return api_error(status.HTTP_404_NOT_FOUND, "Path does not exist")
-
-        try:
-            total_size = seafserv_threaded_rpc.get_dir_size(repo.store_id, repo.version,
-                                                            dir_id)
-        except Exception, e:
-            logger.error(str(e))
-            return api_error(HTTP_520_OPERATION_FAILED, "Internal error")
-
-        if total_size > MAX_DOWNLOAD_DIR_SIZE:
-            return api_error(status.HTTP_400_BAD_REQUEST,
-                             'Unable to download directory "%s": size is too large.' % dirname)
-
-        is_windows = 0
-        if is_windows_operating_system(request):
-            is_windows = 1
-
-        fake_obj_id = {
-            'obj_id': dir_id,
-            'dir_name': dirname,
-            'is_windows': is_windows
-        }
-
-        token = seafile_api.get_fileserver_access_token(
-                repo_id, json.dumps(fake_obj_id), 'download-dir', request.user.username)
-
-        redirect_url = gen_file_get_url(token, dirname)
-        return HttpResponse(json.dumps(redirect_url), status=200,
-                            content_type=json_content_type)
 
 class DirRevert(APIView):
     authentication_classes = (TokenAuthentication, SessionAuthentication)
@@ -4524,37 +4473,23 @@ class RepoUserFolderPerm(APIView):
             return api_error(status.HTTP_500_INTERNAL_SERVER_ERROR, error_msg)
 
     def delete(self, request, repo_id, format=None):
-        """ Delete repo user folder perm.
-
-        Permission checking:
-        1. repo owner & pro edition & enable folder perm.
-        """
 
         # argument check
-        path = request.data.get('folder_path', None)
-        if not path:
-            error_msg = 'folder_path invalid.'
-            return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
-
-        perm = request.data.get('permission', None)
-        if not perm or perm not in ('r', 'rw'):
-            error_msg = 'permission invalid.'
-            return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
-
         user = request.data.get('user_email', None)
+        path = request.data.get('folder_path', None)
+
         if not user:
             error_msg = 'user_email invalid.'
+            return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
+
+        if not path:
+            error_msg = 'folder_path invalid.'
             return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
 
         # resource check
         repo = seafile_api.get_repo(repo_id)
         if not repo:
             error_msg = 'Library %s not found.' % repo_id
-            return api_error(status.HTTP_404_NOT_FOUND, error_msg)
-
-        path = path.rstrip('/') if path != '/' else path
-        if not seafile_api.get_dir_id_by_path(repo_id, path):
-            error_msg = 'Folder %s not found.' % path
             return api_error(status.HTTP_404_NOT_FOUND, error_msg)
 
         try:
@@ -4570,25 +4505,26 @@ class RepoUserFolderPerm(APIView):
             repo_owner = seafile_api.get_repo_owner(repo_id)
 
         username = request.user.username
-        if not (is_pro_version() and ENABLE_FOLDER_PERM and username == repo_owner):
+        if not (is_pro_version() and ENABLE_FOLDER_PERM) or \
+                repo.is_virtual or username != repo_owner:
             error_msg = 'Permission denied.'
             return api_error(status.HTTP_403_FORBIDDEN, error_msg)
 
+        # delete permission
+        path = path.rstrip('/') if path != '/' else path
         permission = seafile_api.get_folder_user_perm(repo_id, path, user)
         if not permission:
             return Response({'success': True})
 
-        # delete permission
         try:
             seafile_api.rm_folder_user_perm(repo_id, path, user)
             send_perm_audit_msg('delete-repo-perm', username,
-                user, repo_id, path, permission)
+                    user, repo_id, path, permission)
             return Response({'success': True})
         except SearpcError as e:
             logger.error(e)
             error_msg = 'Internal Server Error'
             return api_error(status.HTTP_500_INTERNAL_SERVER_ERROR, error_msg)
-
 
 class RepoGroupFolderPerm(APIView):
     authentication_classes = (TokenAuthentication, SessionAuthentication)
@@ -4811,21 +4747,16 @@ class RepoGroupFolderPerm(APIView):
             return api_error(status.HTTP_500_INTERNAL_SERVER_ERROR, error_msg)
 
     def delete(self, request, repo_id, format=None):
-        """ Delete repo group folder perm.
-
-        Permission checking:
-        1. repo owner & pro edition & enable folder perm.
-        """
-
-        # argument check
+        # arguments check
+        group_id = request.data.get('group_id', None)
         path = request.data.get('folder_path', None)
-        if not path:
-            error_msg = 'folder_path invalid.'
-            return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
 
-        group_id = request.data.get('group_id')
         if not group_id:
             error_msg = 'group_id invalid.'
+            return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
+
+        if not path:
+            error_msg = 'folder_path invalid.'
             return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
 
         try:
@@ -4835,18 +4766,13 @@ class RepoGroupFolderPerm(APIView):
             return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
 
         # resource check
+        if not ccnet_api.get_group(group_id):
+            error_msg = 'Group %s not found.' % group_id
+            return api_error(status.HTTP_404_NOT_FOUND, error_msg)
+
         repo = seafile_api.get_repo(repo_id)
         if not repo:
             error_msg = 'Library %s not found.' % repo_id
-            return api_error(status.HTTP_404_NOT_FOUND, error_msg)
-
-        path = path.rstrip('/') if path != '/' else path
-        if not seafile_api.get_dir_id_by_path(repo_id, path):
-            error_msg = 'Folder %s not found.' % path
-            return api_error(status.HTTP_404_NOT_FOUND, error_msg)
-
-        if not ccnet_api.get_group(group_id):
-            error_msg = 'Group %s not found.' % group_id
             return api_error(status.HTTP_404_NOT_FOUND, error_msg)
 
         # permission check
@@ -4856,24 +4782,27 @@ class RepoGroupFolderPerm(APIView):
             repo_owner = seafile_api.get_repo_owner(repo_id)
 
         username = request.user.username
-        if not (is_pro_version() and ENABLE_FOLDER_PERM and username == repo_owner):
+        if not (is_pro_version() and ENABLE_FOLDER_PERM) or \
+                repo.is_virtual or username != repo_owner:
             error_msg = 'Permission denied.'
             return api_error(status.HTTP_403_FORBIDDEN, error_msg)
 
+        # delete permission
+        path = path.rstrip('/') if path != '/' else path
         permission = seafile_api.get_folder_group_perm(repo_id, path, group_id)
         if not permission:
             return Response({'success': True})
 
-        # delete permission
         try:
             seafile_api.rm_folder_group_perm(repo_id, path, group_id)
             send_perm_audit_msg('delete-repo-perm', username, group_id,
-                repo_id, path, permission)
+                                repo_id, path, permission)
             return Response({'success': True})
         except SearpcError as e:
             logger.error(e)
             error_msg = 'Internal Server Error'
             return api_error(status.HTTP_500_INTERNAL_SERVER_ERROR, error_msg)
+
 
 class RemoteWipeReportView(APIView):
     throttle_classes = (UserRateThrottle,)

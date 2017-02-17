@@ -22,7 +22,7 @@ class SysinfoTest(BaseTestCase):
         resp = self.client.get(url)
         json_resp = json.loads(resp.content)
 
-        assert len(json_resp) == 11
+        assert len(json_resp) == 15
         assert json_resp['is_pro'] is False
         assert json_resp['multi_tenancy_enabled'] is False
         assert json_resp['license_maxusers'] == 0
@@ -49,6 +49,6 @@ class SysinfoTest(BaseTestCase):
         resp = self.client.get(url)
         json_resp = json.loads(resp.content)
 
-        assert len(json_resp) == 11
+        assert len(json_resp) == 15
         assert json_resp['license_maxusers'] == 500
         assert json_resp['license_to'] == test_user

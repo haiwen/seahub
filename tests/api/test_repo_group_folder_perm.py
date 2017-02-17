@@ -180,33 +180,6 @@ class RepoGroupFolderPermTest(BaseTestCase):
         resp = self.client.delete(url, data, 'application/x-www-form-urlencoded')
         self.assertEqual(403, resp.status_code)
 
-    def test_invalid_path(self):
-        self.login_as(self.user)
-
-        invalid_path = randstring(6)
-
-        # test delete
-        url = reverse("api2-repo-group-folder-perm", args=[self.user_repo_id])
-        data = 'group_id=%s&folder_path=%s' % (self.group_id, invalid_path)
-        resp = self.client.delete(url, data, 'application/x-www-form-urlencoded')
-        self.assertEqual(404, resp.status_code)
-
-        # test modify
-        url = reverse("api2-repo-group-folder-perm", args=[self.user_repo_id])
-        data = 'group_id=%s&folder_path=%s&permission=%s' % (self.group_id, invalid_path, self.perm_rw)
-        resp = self.client.put(url, data, 'application/x-www-form-urlencoded')
-        self.assertEqual(404, resp.status_code)
-
-        # test add
-        url = reverse("api2-repo-group-folder-perm", args=[self.user_repo_id])
-        data = {
-            "group_id": self.group_id,
-            "folder_path": invalid_path,
-            "permission": self.perm_rw
-        }
-        resp = self.client.post(url, data)
-        self.assertEqual(404, resp.status_code)
-
     def test_invalid_group(self):
         if not LOCAL_PRO_DEV_ENV:
             return

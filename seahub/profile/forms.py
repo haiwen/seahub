@@ -14,7 +14,7 @@ class ProfileForm(forms.Form):
         Validates that nickname should not include '/'
         """
         if "/" in self.cleaned_data["nickname"]:
-            raise forms.ValidationError(_(u"Nickname should not include ' / '"))
+            raise forms.ValidationError(_(u"Name should not include '/'."))
 
         return self.cleaned_data["nickname"]
 
