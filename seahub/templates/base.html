@@ -42,6 +42,7 @@
                     <img src="{{ MEDIA_URL }}{{ logo_path }}" title="Seafile" alt="logo" width="{{logo_width}}" height="{{logo_height}}" />
                     {% endif %}
                 </a>
+                <button class="sf2-icon-list-view side-nav-toggle hidden-md-up hide" title="{% trans "Side Nav Menu" %}" id="js-toggle-side-nav" aria-label="{% trans "Side Nav Menu" %}"></button>
 
                 {% block header_right %}
                 {% if request.user.is_authenticated %}
@@ -196,6 +197,19 @@ $('#info-bar .close').click(function() {
     });
 })();
 {% endif %}
+
+if ($('.side-nav').length) {
+    $('#logo').addClass('hidden-sm-down');
+    $('#js-toggle-side-nav').removeClass('hide');
+}
+$('#js-toggle-side-nav').click(function() {
+    $('.side-nav').css({'left': 0});
+    return false;
+});
+$('.js-close-side-nav').click(function() {
+    $('.side-nav').css({'left': '-300px'});
+    return false;
+});
 </script>
 {% block extra_script %}{% endblock %}
 </body>
