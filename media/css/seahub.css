@@ -3073,6 +3073,9 @@ button.sf-dropdown-toggle:focus {
 #set-quota-form {
     min-width:255px;
 }
+#set-quota-form .input {
+    width:180px;
+}
 
 /* org reg */
 #org-url {

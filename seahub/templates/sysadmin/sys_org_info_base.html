@@ -30,7 +30,7 @@
 <form id="set-quota-form" method="post" class="hide">{% csrf_token %}
     <h3>{% trans "Set org storage limit" %}</h3>
     <input type="hidden" name="org_id" value="{{ org.org_id }}" />
-    <input type="text" name="quota" /> MB
+    <input type="text" name="quota" class="input" /> MB
     <p class="tip">
     <span>{% trans "An integer that is greater than or equal to 0." %}</span><br />
     <span>{% trans "Tip: 0 means default limit" %}</span>
