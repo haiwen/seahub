@@ -7,8 +7,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: seahub\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2017-01-09 11:11+0800\n"
-"PO-Revision-Date: 2017-01-07 09:13+0000\n"
+"POT-Creation-Date: 2017-02-17 10:30+0800\n"
+"PO-Revision-Date: 2017-02-17 02:31+0000\n"
 "Last-Translator: zheng xie <xiez1989@gmail.com>\n"
 "Language-Team: Croatian (http://www.transifex.com/haiwen/seahub/language/hr/)\n"
 "MIME-Version: 1.0\n"
@@ -17,12 +17,12 @@ msgstr ""
 "Language: hr\n"
 "Plural-Forms: nplurals=3; plural=n%10==1 && n%100!=11 ? 0 : n%10>=2 && n%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2;\n"
 
-#: static/scripts/app/models/dirent.js:113 static/scripts/app/views/dir.js:518
-#: static/scripts/app/views/dir.js:586
+#: static/scripts/app/models/dirent.js:113 static/scripts/app/views/dir.js:516
+#: static/scripts/app/views/dir.js:584
 #: static/scripts/app/views/fileupload.js:346
 #: static/scripts/app/views/fileupload.js:360
 #: static/scripts/app/views/fileupload.js:372
-#: static/scripts/app/views/fileupload.js:384 static/scripts/common.js:539
+#: static/scripts/app/views/fileupload.js:384 static/scripts/common.js:553
 msgid "Just now"
 msgstr ""
 
@@ -46,18 +46,16 @@ msgstr ""
 msgid "Passwords don't match"
 msgstr ""
 
-#: static/scripts/app/models/repo.js:53
-#: static/scripts/sysadmin-app/models/repo.js:17
+#: static/scripts/app/models/repo.js:53 static/scripts/common.js:295
 msgid "Encrypted library"
 msgstr ""
 
-#: static/scripts/app/models/repo.js:55
-#: static/scripts/sysadmin-app/models/repo.js:19
+#: static/scripts/app/models/repo.js:55 static/scripts/common.js:299
 #: static/scripts/sysadmin-app/models/trash-repo.js:14
 msgid "Read-Write library"
 msgstr ""
 
-#: static/scripts/app/models/repo.js:57
+#: static/scripts/app/models/repo.js:57 static/scripts/common.js:297
 msgid "Read-Only library"
 msgstr ""
 
@@ -76,7 +74,7 @@ msgstr ""
 #: static/scripts/app/views/dialogs/repo-folder-perm-admin.js:246
 #: static/scripts/app/views/dialogs/repo-folder-perm-admin.js:293
 #: static/scripts/app/views/dialogs/repo-share-link-admin.js:89
-#: static/scripts/app/views/dir.js:384
+#: static/scripts/app/views/dir.js:382
 #: static/scripts/app/views/group-discussions.js:125
 #: static/scripts/app/views/group-discussions.js:203
 #: static/scripts/app/views/group-discussions.js:246
@@ -98,6 +96,7 @@ msgstr ""
 #: static/scripts/app/views/share-admin-repos.js:100
 #: static/scripts/app/views/share-admin-share-links.js:150
 #: static/scripts/app/views/share-admin-upload-links.js:64
+#: static/scripts/sysadmin-app/views/group-members.js:96
 #: static/scripts/sysadmin-app/views/groups.js:100
 msgid "Please check the network."
 msgstr ""
@@ -155,19 +154,23 @@ msgstr ""
 #: static/scripts/app/views/invitations.js:146
 #: static/scripts/app/views/repo.js:167 static/scripts/app/views/repo.js:242
 #: static/scripts/app/views/share.js:345 static/scripts/app/views/share.js:634
-#: static/scripts/app/views/share.js:712 static/scripts/common.js:360
-#: static/scripts/common.js:449
+#: static/scripts/app/views/share.js:712 static/scripts/common.js:374
+#: static/scripts/common.js:463
 #: static/scripts/sysadmin-app/views/dashboard.js:46
 #: static/scripts/sysadmin-app/views/desktop-devices.js:105
 #: static/scripts/sysadmin-app/views/device-errors.js:92
 #: static/scripts/sysadmin-app/views/dir.js:193
 #: static/scripts/sysadmin-app/views/folder-share-item.js:89
 #: static/scripts/sysadmin-app/views/folder-share-item.js:138
+#: static/scripts/sysadmin-app/views/group-member.js:71
+#: static/scripts/sysadmin-app/views/group-members.js:157
+#: static/scripts/sysadmin-app/views/group-repos.js:75
 #: static/scripts/sysadmin-app/views/group.js:108
 #: static/scripts/sysadmin-app/views/groups.js:168
 #: static/scripts/sysadmin-app/views/mobile-devices.js:106
 #: static/scripts/sysadmin-app/views/repo.js:123
 #: static/scripts/sysadmin-app/views/repos.js:105
+#: static/scripts/sysadmin-app/views/search-groups.js:76
 #: static/scripts/sysadmin-app/views/search-repos.js:77
 #: static/scripts/sysadmin-app/views/search-trash-repos.js:113
 #: static/scripts/sysadmin-app/views/share.js:190
@@ -280,6 +283,7 @@ msgstr ""
 #: static/scripts/app/views/dialogs/repo-folder-perm-admin.js:92
 #: static/scripts/app/views/group-settings.js:154
 #: static/scripts/app/views/repo.js:206
+#: static/scripts/sysadmin-app/views/group-members.js:41
 #: static/scripts/sysadmin-app/views/group.js:74
 #: static/scripts/sysadmin-app/views/groups.js:68
 #: static/scripts/sysadmin-app/views/repo.js:88
@@ -314,9 +318,12 @@ msgstr ""
 #: static/scripts/sysadmin-app/views/desktop-devices.js:100
 #: static/scripts/sysadmin-app/views/device-errors.js:87
 #: static/scripts/sysadmin-app/views/dir.js:188
+#: static/scripts/sysadmin-app/views/group-members.js:152
+#: static/scripts/sysadmin-app/views/group-repos.js:70
 #: static/scripts/sysadmin-app/views/groups.js:163
 #: static/scripts/sysadmin-app/views/mobile-devices.js:101
 #: static/scripts/sysadmin-app/views/repos.js:100
+#: static/scripts/sysadmin-app/views/search-groups.js:71
 #: static/scripts/sysadmin-app/views/search-repos.js:72
 #: static/scripts/sysadmin-app/views/search-trash-repos.js:108
 #: static/scripts/sysadmin-app/views/system-repo.js:54
@@ -375,18 +382,18 @@ msgstr ""
 msgid "<a href=\"%url%\" target=\"_blank\">The image</a> could not be loaded."
 msgstr ""
 
-#: static/scripts/app/views/dir.js:316
+#: static/scripts/app/views/dir.js:314
 msgid "Password is required."
 msgstr ""
 
-#: static/scripts/app/views/dir.js:503 static/scripts/app/views/dir.js:561
+#: static/scripts/app/views/dir.js:501 static/scripts/app/views/dir.js:559
 #: static/scripts/app/views/groups.js:112
 #: static/scripts/app/views/invitations.js:54
 #: static/scripts/sysadmin-app/views/dir.js:82
 msgid "It is required."
 msgstr ""
 
-#: static/scripts/app/views/dir.js:567
+#: static/scripts/app/views/dir.js:565
 msgid "Only an extension there, please input a name."
 msgstr ""
 
@@ -672,6 +679,7 @@ msgid "Delete Library"
 msgstr ""
 
 #: static/scripts/app/views/repo.js:63
+#: static/scripts/sysadmin-app/views/group-member.js:82
 #: static/scripts/sysadmin-app/views/group.js:31
 #: static/scripts/sysadmin-app/views/repo.js:47
 #, javascript-format
@@ -749,36 +757,61 @@ msgstr ""
 msgid "Successfully unstared {placeholder}"
 msgstr ""
 
-#: static/scripts/common.js:573
+#: static/scripts/common.js:587
 msgid "Search users or enter emails and press Enter"
 msgstr ""
 
-#: static/scripts/common.js:581 static/scripts/common.js:652
+#: static/scripts/common.js:595 static/scripts/common.js:666
 msgid "Please enter 1 or more character"
 msgstr ""
 
-#: static/scripts/common.js:582 static/scripts/common.js:653
+#: static/scripts/common.js:596 static/scripts/common.js:667
 msgid "No matches"
 msgstr ""
 
-#: static/scripts/common.js:583 static/scripts/common.js:654
+#: static/scripts/common.js:597 static/scripts/common.js:668
 msgid "Searching..."
 msgstr ""
 
-#: static/scripts/common.js:584 static/scripts/common.js:655
+#: static/scripts/common.js:598 static/scripts/common.js:669
 msgid "Loading failed"
 msgstr ""
 
-#: static/scripts/common.js:644
+#: static/scripts/common.js:658
 msgid "Search groups"
 msgstr ""
 
-#: static/scripts/common.js:963
+#: static/scripts/common.js:977
 msgid "Packaging..."
 msgstr ""
 
 #: static/scripts/sysadmin-app/views/device-errors.js:39
 msgid "Successfully clean all errors."
+msgstr ""
+
+#: static/scripts/sysadmin-app/views/group-member.js:81
+msgid "Delete Member"
+msgstr ""
+
+#: static/scripts/sysadmin-app/views/group-member.js:95
+msgid "Successfully deleted member {placeholder}"
+msgstr ""
+
+#: static/scripts/sysadmin-app/views/group-members.js:51
+msgid "Email is required."
+msgstr ""
+
+#: static/scripts/sysadmin-app/views/group-repo.js:28
+msgid "Unshare Library"
+msgstr ""
+
+#: static/scripts/sysadmin-app/views/group-repo.js:29
+#, javascript-format
+msgid "Are you sure you want to unshare %s ?"
+msgstr ""
+
+#: static/scripts/sysadmin-app/views/group-repo.js:42
+msgid "Successfully unshared library {placeholder}"
 msgstr ""
 
 #: static/scripts/sysadmin-app/views/group.js:30

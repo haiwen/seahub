@@ -10,8 +10,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: seahub\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2017-01-09 11:11+0800\n"
-"PO-Revision-Date: 2017-01-09 03:16+0000\n"
+"POT-Creation-Date: 2017-02-17 10:30+0800\n"
+"PO-Revision-Date: 2017-02-17 02:31+0000\n"
 "Last-Translator: zheng xie <xiez1989@gmail.com>\n"
 "Language-Team: Finnish (http://www.transifex.com/haiwen/seahub/language/fi/)\n"
 "MIME-Version: 1.0\n"
@@ -45,30 +45,30 @@ msgstr ""
 msgid "Space quota is too low (minimum value is 0)"
 msgstr "Tilakiintiö on liian pieni (minimissään 0)"
 
-#: seahub/api2/endpoints/account.py:198 seahub/views/sysadmin.py:660
+#: seahub/api2/endpoints/account.py:198 seahub/views/sysadmin.py:657
 #, python-format
 msgid "Failed to set quota: maximum quota is %d MB"
 msgstr "Kiintiö asettaminen epäonnistui: maksimikiintiö on %d MB"
 
-#: seahub/api2/endpoints/admin/groups.py:102
+#: seahub/api2/endpoints/admin/groups.py:115
 #: seahub/api2/endpoints/groups.py:149 seahub/api2/endpoints/groups.py:225
 #: seahub/group/forms.py:38
 msgid ""
 "Group name can only contain letters, numbers, blank, hyphen or underscore"
 msgstr "Ryhmän nimi voi ainoastaan sisältää kirjaimia, numeroita, välimerkin, tavuviivan tai alaviivan"
 
-#: seahub/api2/endpoints/admin/groups.py:107
+#: seahub/api2/endpoints/admin/groups.py:120
 #: seahub/api2/endpoints/groups.py:154 seahub/api2/endpoints/groups.py:230
 msgid "There is already a group with that name."
 msgstr "On olemassa jo samanniminen ryhmä."
 
-#: seahub/api2/endpoints/admin/groups.py:170
+#: seahub/api2/endpoints/admin/groups.py:183
 #: seahub/api2/endpoints/groups.py:255
 #, python-format
 msgid "User %s is already group owner."
 msgstr "Käyttäjä %s on jo ryhmän omistaja."
 
-#: seahub/api2/endpoints/admin/libraries.py:144 seahub/views/sysadmin.py:1649
+#: seahub/api2/endpoints/admin/libraries.py:145 seahub/views/sysadmin.py:1622
 msgid "System library can not be deleted."
 msgstr "Järjestelmäkirjastoa ei voi poistaa."
 
@@ -83,27 +83,22 @@ msgstr "Käyttäjä %s on jo kirjaston omistaja."
 msgid "Email %s invalid."
 msgstr "Sähköpostiosoite %s on virheellinen."
 
-#: seahub/api2/endpoints/dirents_download_link.py:83
-#: seahub/api2/endpoints/zip_task.py:120
-msgid "Total size exceeds limit."
-msgstr "Kokonaiskoko ylittää limiitin."
-
-#: seahub/api2/endpoints/file.py:366 seahub/views/file.py:1066
+#: seahub/api2/endpoints/file.py:366 seahub/views/file.py:1056
 msgid "Check file lock error"
 msgstr "Tarkista tiedoston lukitusvirhe"
 
-#: seahub/api2/endpoints/file.py:370 seahub/views/file.py:1069
+#: seahub/api2/endpoints/file.py:370 seahub/views/file.py:1059
 msgid "File is locked"
 msgstr "Tiedosto on lukittu"
 
 #: seahub/api2/endpoints/group_members.py:93
-#: seahub/api2/endpoints/group_members.py:290 seahub/views/ajax.py:2228
+#: seahub/api2/endpoints/group_members.py:289 seahub/views/ajax.py:2228
 #, python-format
 msgid "User %s is already a group member."
 msgstr "Käyttäjä %s on jo ryhmän jäsen."
 
 #: seahub/api2/endpoints/group_members.py:99
-#: seahub/api2/endpoints/group_members.py:299 seahub/api2/views.py:1082
+#: seahub/api2/endpoints/group_members.py:298 seahub/api2/views.py:1082
 #: seahub/views/ajax.py:2237
 #, python-format
 msgid "User %s not found in organization."
@@ -118,24 +113,24 @@ msgstr ""
 msgid "%s is already invited."
 msgstr ""
 
-#: seahub/api2/endpoints/invitations.py:68 seahub/base/accounts.py:582
+#: seahub/api2/endpoints/invitations.py:68 seahub/base/accounts.py:601
 #, python-format
 msgid "User %s already exists."
 msgstr "Käyttäjä %s on jo olemassa."
 
-#: seahub/api2/endpoints/repo_set_password.py:42 seahub/api2/views.py:2830
+#: seahub/api2/endpoints/repo_set_password.py:42 seahub/api2/views.py:2779
 msgid "Wrong password"
 msgstr "Väärä salasana"
 
-#: seahub/api2/endpoints/repo_set_password.py:45 seahub/api2/views.py:2833
-#: seahub/views/__init__.py:535 seahub/views/ajax.py:673
+#: seahub/api2/endpoints/repo_set_password.py:45 seahub/api2/views.py:2782
+#: seahub/views/__init__.py:475 seahub/views/ajax.py:673
 #: seahub/views/ajax.py:713 seahub/views/ajax.py:748 seahub/views/ajax.py:792
 #: seahub/views/ajax.py:836 seahub/views/ajax.py:936
-#: seahub/views/sysadmin.py:1980
+#: seahub/views/sysadmin.py:1965
 msgid "Internal server error"
 msgstr "Sisäinen palvelinvirhe"
 
-#: seahub/api2/endpoints/repo_set_password.py:48 seahub/api2/views.py:2836
+#: seahub/api2/endpoints/repo_set_password.py:48 seahub/api2/views.py:2785
 msgid "Decrypt library error"
 msgstr "Salauksenpurkukirjaston virhe"
 
@@ -184,6 +179,10 @@ msgstr "Salasana on liian lyhyt."
 msgid "Password is too short"
 msgstr "Salasana on liian lyhyt"
 
+#: seahub/api2/endpoints/zip_task.py:120
+msgid "Total size exceeds limit."
+msgstr "Kokonaiskoko ylittää limiitin."
+
 #: seahub/auth/admin.py:30
 msgid "Personal info"
 msgstr "Henkilökohtaiset tiedot"
@@ -200,8 +199,9 @@ msgstr "Tärkeät päivämäärät"
 #: seahub/institutions/templates/institutions/info.html:23
 #: seahub/institutions/templates/institutions/user_info.html:22
 #: seahub/templates/js/sysadmin-templates.html:24
-#: seahub/templates/js/sysadmin-templates.html:140
-#: seahub/templates/js/sysadmin-templates.html:527
+#: seahub/templates/js/sysadmin-templates.html:145
+#: seahub/templates/js/sysadmin-templates.html:532
+#: seahub/templates/js/sysadmin-templates.html:724
 #: seahub/templates/js/templates.html:172
 #: seahub/templates/js/templates.html:765
 #: seahub/templates/sysadmin/base.html:32
@@ -230,8 +230,8 @@ msgstr "Kirjaudu sisään."
 msgid "Email or Username"
 msgstr "Sähköposti tai käyttäjänimi"
 
-#: seahub/auth/forms.py:24 seahub/auth/forms.py:196
-#: seahub/base/accounts.py:560
+#: seahub/auth/forms.py:24 seahub/auth/forms.py:197
+#: seahub/base/accounts.py:579
 #: seahub/invitations/templates/invitations/token_view.html:13
 #: seahub/templates/file_edit.html:129
 #: seahub/templates/js/lib-op-popups.html:117
@@ -253,63 +253,63 @@ msgid ""
 "are case-sensitive."
 msgstr "Anna oikea sähköposti/käyttäjätunnus ja salasana. Huomaa, että molemmissa kentissä kirjainkoko on oltava oikein."
 
-#: seahub/auth/forms.py:64
+#: seahub/auth/forms.py:64 seahub/auth/forms.py:65
 msgid "This account is inactive."
 msgstr "Tämä käyttäjätunnus on toimeton."
 
-#: seahub/auth/forms.py:69
+#: seahub/auth/forms.py:70
 msgid ""
 "Your Web browser doesn't appear to have cookies enabled. Cookies are "
 "required for logging in."
 msgstr "Web-selaimesi ei salli tällä hetkellä keksejä. Kirjautuminen vaatii keksien sallimisen."
 
-#: seahub/auth/forms.py:85
+#: seahub/auth/forms.py:86
 msgid "E-mail"
 msgstr "Sähköposti"
 
-#: seahub/auth/forms.py:92
+#: seahub/auth/forms.py:93
 msgid ""
 "Failed to send email, email service is not properly configured, please "
 "contact administrator."
 msgstr "Sähköpostin lähetys epäonnistui, sähköpostipalvelu ei ole oikein konfiguroitu, ottakaa yhteyttä palvelimen ylläpitäjään."
 
-#: seahub/auth/forms.py:100
+#: seahub/auth/forms.py:101
 msgid ""
 "That e-mail address doesn't have an associated user account. Are you sure "
 "you've registered?"
 msgstr "Sähköpostiosoitteella ei ole vastaavaa käyttäjätunnusta. Oletko varmasti rekisteröitynyt? "
 
-#: seahub/auth/forms.py:103
+#: seahub/auth/forms.py:104
 msgid "Can not reset password, please contact LDAP admin."
 msgstr "Salasanaa ei voitu nollata, ota yhteys LDAP-ylläpitäjään."
 
-#: seahub/auth/forms.py:127
+#: seahub/auth/forms.py:128
 #, python-format
 msgid "Reset Password on %s"
 msgstr "Nollaa Salasana %s"
 
-#: seahub/auth/forms.py:135
+#: seahub/auth/forms.py:136
 msgid "New password"
 msgstr "Uusi salasana"
 
-#: seahub/auth/forms.py:136
+#: seahub/auth/forms.py:137
 msgid "New password confirmation"
 msgstr "Uusi salasanan hyväksyntä"
 
-#: seahub/auth/forms.py:165 seahub/auth/forms.py:208
-#: seahub/base/accounts.py:616
+#: seahub/auth/forms.py:166 seahub/auth/forms.py:209
+#: seahub/base/accounts.py:635
 msgid "The two password fields didn't match."
 msgstr "Salasanat eivät täsmänneet."
 
-#: seahub/auth/forms.py:180
+#: seahub/auth/forms.py:181
 msgid "Old password"
 msgstr "Vanha salasana"
 
-#: seahub/auth/forms.py:188
+#: seahub/auth/forms.py:189
 msgid "Your old password was entered incorrectly. Please enter it again."
 msgstr "Vanha salasanasi syötettiin väärin. Syötä se uudelleen."
 
-#: seahub/auth/forms.py:197 seahub/base/accounts.py:562
+#: seahub/auth/forms.py:198 seahub/base/accounts.py:581
 msgid "Password (again)"
 msgstr "Salasana (uudelleen)"
 
@@ -322,15 +322,15 @@ msgstr "Syötä kelpo sähköpostiosoite."
 msgid "This account has been frozen due to too many failed login attempts."
 msgstr "Käyttäjätili on jäädytetty liian monen virheellisen kirjautumisyrityksen johdosta."
 
-#: seahub/auth/views.py:297
+#: seahub/auth/views.py:299
 msgid "Logged out"
 msgstr "Kirjauduttiin ulos"
 
-#: seahub/auth/views.py:345
+#: seahub/auth/views.py:347
 msgid "Failed to send email, please contact administrator."
 msgstr "Sähköpostin lähetys epäonnistui, ottakaa yhteys ylläpitäjään."
 
-#: seahub/auth/views.py:406
+#: seahub/auth/views.py:408
 msgid "Can not update password, please contact LDAP admin."
 msgstr "Salasanaa ei voitu päivittää, ottakaa yhteys LDAP-ylläpitäjään."
 
@@ -417,49 +417,49 @@ msgstr "Onnistuneesti päivitettiin avatariasi."
 msgid "Successfully deleted the requested avatars."
 msgstr "Pyydetyt avatarit poistettiin onnistuneesti."
 
-#: seahub/base/accounts.py:283
+#: seahub/base/accounts.py:302
 #, python-format
 msgid "Account %(account)s froze on %(site)s."
 msgstr ""
 
-#: seahub/base/accounts.py:551
+#: seahub/base/accounts.py:570
 msgid "Email address"
 msgstr "Sähköpostiosoite"
 
-#: seahub/base/accounts.py:556
+#: seahub/base/accounts.py:575
 msgid "Username"
 msgstr "Käyttäjänimi"
 
-#: seahub/base/accounts.py:557
+#: seahub/base/accounts.py:576
 msgid "This value must be of length 40"
 msgstr "Tämän arvon pituus on oltava 40"
 
-#: seahub/base/accounts.py:572 seahub/forms.py:29
-#: seahub/views/sysadmin.py:1830
+#: seahub/base/accounts.py:591 seahub/forms.py:29
+#: seahub/views/sysadmin.py:1802
 msgid "The number of users exceeds the limit."
 msgstr ""
 
-#: seahub/base/accounts.py:576
+#: seahub/base/accounts.py:595
 msgid "Enter a valid email address."
 msgstr "Syötä kelpo sähköpostiosoite."
 
-#: seahub/base/accounts.py:586
+#: seahub/base/accounts.py:605
 msgid "Invalid user id."
 msgstr "Epäkelpo käyttäjätunniste."
 
-#: seahub/base/accounts.py:637
+#: seahub/base/accounts.py:656
 msgid "name"
 msgstr "nimi"
 
-#: seahub/base/accounts.py:640
+#: seahub/base/accounts.py:659
 msgid "department"
 msgstr "osasto"
 
-#: seahub/base/accounts.py:643
+#: seahub/base/accounts.py:662
 msgid "telephone"
 msgstr "puhelin"
 
-#: seahub/base/accounts.py:646
+#: seahub/base/accounts.py:665
 msgid "note"
 msgstr "huomautus"
 
@@ -573,11 +573,11 @@ msgstr[1] "%(seconds)d sekuntia sitten"
 
 #: seahub/base/templatetags/seahub_tags.py:469
 #: seahub/institutions/templates/institutions/user_info.html:80
-#: seahub/templates/js/sysadmin-templates.html:602
-#: seahub/templates/js/sysadmin-templates.html:611
-#: seahub/templates/js/sysadmin-templates.html:614
-#: seahub/templates/js/sysadmin-templates.html:650
-#: seahub/templates/js/sysadmin-templates.html:677
+#: seahub/templates/js/sysadmin-templates.html:633
+#: seahub/templates/js/sysadmin-templates.html:642
+#: seahub/templates/js/sysadmin-templates.html:645
+#: seahub/templates/js/sysadmin-templates.html:681
+#: seahub/templates/js/sysadmin-templates.html:708
 #: seahub/templates/js/templates.html:20
 #: seahub/templates/js/templates.html:568
 #: seahub/templates/js/templates.html:595
@@ -596,7 +596,6 @@ msgstr[1] "%(seconds)d sekuntia sitten"
 #: seahub/templates/js/templates.html:1565
 #: seahub/templates/js/templates.html:1568
 #: seahub/templates/js/templates.html:1575
-#: seahub/templates/sysadmin/sys_admin_group_info.html:40
 #: seahub/templates/sysadmin/sys_org_info_library.html:29
 #: seahub/templates/sysadmin/userinfo.html:129
 #: seahub/templates/sysadmin/userinfo.html:180
@@ -604,11 +603,11 @@ msgid "Read-Write"
 msgstr "Luku-Kirjoitus"
 
 #: seahub/base/templatetags/seahub_tags.py:471
-#: seahub/templates/js/sysadmin-templates.html:604
-#: seahub/templates/js/sysadmin-templates.html:612
-#: seahub/templates/js/sysadmin-templates.html:615
-#: seahub/templates/js/sysadmin-templates.html:651
-#: seahub/templates/js/sysadmin-templates.html:678
+#: seahub/templates/js/sysadmin-templates.html:635
+#: seahub/templates/js/sysadmin-templates.html:643
+#: seahub/templates/js/sysadmin-templates.html:646
+#: seahub/templates/js/sysadmin-templates.html:682
+#: seahub/templates/js/sysadmin-templates.html:709
 #: seahub/templates/js/templates.html:21
 #: seahub/templates/js/templates.html:569
 #: seahub/templates/js/templates.html:596
@@ -626,7 +625,6 @@ msgstr "Luku-Kirjoitus"
 #: seahub/templates/js/templates.html:1569
 #: seahub/templates/js/templates.html:1572
 #: seahub/templates/js/templates.html:1576
-#: seahub/templates/sysadmin/sys_admin_group_info.html:38
 #: seahub/templates/sysadmin/userinfo.html:178
 msgid "Read-Only"
 msgstr "Vain-Kirjoitus"
@@ -694,14 +692,18 @@ msgstr "Sähköposti"
 #: seahub/institutions/templates/institutions/useradmin_search.html:18
 #: seahub/message/templates/message/all_msg_list.html:22
 #: seahub/templates/js/lib-op-popups.html:6
-#: seahub/templates/js/sysadmin-templates.html:308
-#: seahub/templates/js/sysadmin-templates.html:331
-#: seahub/templates/js/sysadmin-templates.html:341
-#: seahub/templates/js/sysadmin-templates.html:391
-#: seahub/templates/js/sysadmin-templates.html:415
-#: seahub/templates/js/sysadmin-templates.html:456
-#: seahub/templates/js/sysadmin-templates.html:537
-#: seahub/templates/js/sysadmin-templates.html:559
+#: seahub/templates/js/sysadmin-templates.html:313
+#: seahub/templates/js/sysadmin-templates.html:336
+#: seahub/templates/js/sysadmin-templates.html:346
+#: seahub/templates/js/sysadmin-templates.html:396
+#: seahub/templates/js/sysadmin-templates.html:420
+#: seahub/templates/js/sysadmin-templates.html:461
+#: seahub/templates/js/sysadmin-templates.html:542
+#: seahub/templates/js/sysadmin-templates.html:565
+#: seahub/templates/js/sysadmin-templates.html:573
+#: seahub/templates/js/sysadmin-templates.html:590
+#: seahub/templates/js/sysadmin-templates.html:760
+#: seahub/templates/js/sysadmin-templates.html:798
 #: seahub/templates/js/templates.html:5 seahub/templates/js/templates.html:202
 #: seahub/templates/js/templates.html:901
 #: seahub/templates/js/templates.html:910
@@ -719,7 +721,6 @@ msgstr "Sähköposti"
 #: seahub/templates/repo_dir_recycle_view.html:44
 #: seahub/templates/repo_history_view.html:58
 #: seahub/templates/sysadmin/org_admin_table.html:4
-#: seahub/templates/sysadmin/sys_admin_group_info.html:27
 #: seahub/templates/sysadmin/sys_inst_admin.html:18
 #: seahub/templates/sysadmin/sys_inst_admin.html:27
 #: seahub/templates/sysadmin/sys_org_admin.html:24
@@ -739,8 +740,8 @@ msgstr "Sähköposti"
 #: seahub/templates/wiki/personal_wiki.html:43
 #: seahub/templates/wiki/personal_wiki.html:85
 #: seahub/templates/wiki/personal_wiki_pages.html:28
-#: seahub/views/sysadmin.py:278 seahub/views/sysadmin.py:282
-#: seahub/views/sysadmin.py:1054
+#: seahub/views/sysadmin.py:277 seahub/views/sysadmin.py:281
+#: seahub/views/sysadmin.py:1047
 msgid "Name"
 msgstr "Nimi"
 
@@ -756,11 +757,11 @@ msgstr "Huomautus"
 #: seahub/institutions/templates/institutions/useradmin_search.html:22
 #: seahub/notifications/templates/notifications/notification_list.html:21
 #: seahub/templates/file_revisions.html:57
+#: seahub/templates/js/sysadmin-templates.html:763
 #: seahub/templates/repo_dir_recycle_view.html:47
 #: seahub/templates/repo_history.html:31
 #: seahub/templates/repo_history_view.html:60
 #: seahub/templates/sysadmin/org_admin_table.html:8
-#: seahub/templates/sysadmin/sys_admin_group_info.html:30
 #: seahub/templates/sysadmin/sys_inst_admin.html:29
 #: seahub/templates/sysadmin/sys_inst_info_admins.html:19
 #: seahub/templates/sysadmin/sys_inst_info_user.html:19
@@ -782,7 +783,9 @@ msgstr "Toiminnot"
 #: seahub/contacts/templates/contacts/contact_list.html:29
 #: seahub/group/templates/group/group_wiki.html:22
 #: seahub/institutions/templates/institutions/useradmin.html:37
-#: seahub/templates/js/sysadmin-templates.html:607
+#: seahub/templates/js/sysadmin-templates.html:638
+#: seahub/templates/js/sysadmin-templates.html:821
+#: seahub/templates/js/sysadmin-templates.html:828
 #: seahub/templates/js/templates.html:803
 #: seahub/templates/js/templates.html:1170
 #: seahub/templates/js/templates.html:1177
@@ -810,11 +813,12 @@ msgstr "Muokkaa"
 #: seahub/notifications/templates/notifications/notification_list.html:33
 #: seahub/profile/templates/profile/set_profile.html:137
 #: seahub/profile/templates/profile/set_profile.html:139
-#: seahub/templates/js/sysadmin-templates.html:379
-#: seahub/templates/js/sysadmin-templates.html:441
-#: seahub/templates/js/sysadmin-templates.html:506
-#: seahub/templates/js/sysadmin-templates.html:574
-#: seahub/templates/js/sysadmin-templates.html:620
+#: seahub/templates/js/sysadmin-templates.html:384
+#: seahub/templates/js/sysadmin-templates.html:446
+#: seahub/templates/js/sysadmin-templates.html:511
+#: seahub/templates/js/sysadmin-templates.html:605
+#: seahub/templates/js/sysadmin-templates.html:651
+#: seahub/templates/js/sysadmin-templates.html:837
 #: seahub/templates/js/templates.html:50
 #: seahub/templates/js/templates.html:112
 #: seahub/templates/js/templates.html:232
@@ -830,7 +834,6 @@ msgstr "Muokkaa"
 #: seahub/templates/js/templates.html:1446
 #: seahub/templates/snippets/file_share_popup.html:37
 #: seahub/templates/sysadmin/org_admin_table.html:25
-#: seahub/templates/sysadmin/sys_admin_group_info.html:52
 #: seahub/templates/sysadmin/sys_org_info_group.html:28
 #: seahub/templates/sysadmin/sys_org_info_library.html:42
 #: seahub/templates/sysadmin/sys_org_info_user.html:48
@@ -863,6 +866,8 @@ msgstr "Lisää kontakteihisi, jotta voit nopeasti jakaa kirjastoja ja jakaa tie
 #: seahub/institutions/templates/institutions/useradmin_search.html:18
 #: seahub/invitations/templates/invitations/token_view.html:10
 #: seahub/share/templates/share/share_link_audit.html:9
+#: seahub/templates/js/sysadmin-templates.html:747
+#: seahub/templates/js/sysadmin-templates.html:799
 #: seahub/templates/js/templates.html:1134
 #: seahub/templates/js/templates.html:1142
 #: seahub/templates/js/templates.html:1724
@@ -879,8 +884,8 @@ msgstr "Lisää kontakteihisi, jotta voit nopeasti jakaa kirjastoja ja jakaa tie
 #: seahub/templates/sysadmin/user_search.html:10
 #: seahub/templates/sysadmin/useradmin_table.html:5
 #: seahub/templates/sysadmin/useradmin_table.html:9
-#: seahub/templates/sysadmin/userinfo.html:36 seahub/views/sysadmin.py:278
-#: seahub/views/sysadmin.py:282
+#: seahub/templates/sysadmin/userinfo.html:36 seahub/views/sysadmin.py:277
+#: seahub/views/sysadmin.py:281
 msgid "Email"
 msgstr "Sähköposti"
 
@@ -917,12 +922,14 @@ msgstr "Huomautus (valinnainen)"
 #: seahub/templates/js/lib-op-popups.html:76
 #: seahub/templates/js/lib-op-popups.html:118
 #: seahub/templates/js/lib-op-popups.html:137
-#: seahub/templates/js/sysadmin-templates.html:333
-#: seahub/templates/js/sysadmin-templates.html:521
-#: seahub/templates/js/sysadmin-templates.html:565
-#: seahub/templates/js/sysadmin-templates.html:584
-#: seahub/templates/js/sysadmin-templates.html:654
-#: seahub/templates/js/sysadmin-templates.html:681
+#: seahub/templates/js/sysadmin-templates.html:338
+#: seahub/templates/js/sysadmin-templates.html:526
+#: seahub/templates/js/sysadmin-templates.html:566
+#: seahub/templates/js/sysadmin-templates.html:596
+#: seahub/templates/js/sysadmin-templates.html:615
+#: seahub/templates/js/sysadmin-templates.html:685
+#: seahub/templates/js/sysadmin-templates.html:712
+#: seahub/templates/js/sysadmin-templates.html:750
 #: seahub/templates/js/templates.html:38
 #: seahub/templates/js/templates.html:499
 #: seahub/templates/js/templates.html:539
@@ -991,8 +998,8 @@ msgstr "Muokkaa Kontaktia"
 #: seahub/share/templates/share/share_link_audit.html:70
 #: seahub/templates/base.html:142 seahub/templates/decrypt_repo_form.html:47
 #: seahub/templates/file_edit.html:443
-#: seahub/templates/repo_dir_recycle_view.html:132
-#: seahub/templates/repo_dir_recycle_view.html:160
+#: seahub/templates/repo_dir_recycle_view.html:141
+#: seahub/templates/repo_dir_recycle_view.html:175
 #: seahub/templates/snippets/add_file_js.html:23
 #: seahub/templates/snippets/office_convert_js.html:100
 #: seahub/templates/snippets/shared_link_js.html:107
@@ -1023,8 +1030,7 @@ msgstr "Poista Kontakti"
 #: seahub/institutions/templates/institutions/useradmin.html:79
 #: seahub/institutions/templates/institutions/useradmin_search.html:71
 #: seahub/notifications/templates/notifications/notification_list.html:52
-#: seahub/templates/sysadmin/repoadmin_js.html:44
-#: seahub/templates/sysadmin/sys_admin_group_info.html:86
+#: seahub/templates/sysadmin/repoadmin_js.html:48
 #: seahub/templates/sysadmin/sys_inst_admin.html:67
 #: seahub/templates/sysadmin/sys_org_admin.html:63
 #: seahub/templates/sysadmin/sys_org_info_group.html:44
@@ -1108,8 +1114,8 @@ msgstr "Nimi %s ei ole sallittu"
 #: seahub/views/ajax.py:1226 seahub/views/ajax.py:1514
 #: seahub/views/ajax.py:1538 seahub/views/ajax.py:1651
 #: seahub/views/ajax.py:1758 seahub/views/ajax.py:1826
-#: seahub/views/ajax.py:1972 seahub/views/file.py:1546
-#: seahub/views/sysadmin.py:1450 seahub/views/sysadmin.py:1468
+#: seahub/views/ajax.py:1972 seahub/views/file.py:1536
+#: seahub/views/sysadmin.py:1423 seahub/views/sysadmin.py:1441
 msgid "Argument missing"
 msgstr "Argumentti puuttuu"
 
@@ -1280,7 +1286,7 @@ msgid "Create Wiki"
 msgstr "Luo Wiki"
 
 #: seahub/group/templates/group/group_wiki.html:48
-#: seahub/templates/js/sysadmin-templates.html:393
+#: seahub/templates/js/sysadmin-templates.html:398
 #: seahub/templates/repo_history.html:28
 #: seahub/templates/wiki/personal_wiki.html:45
 msgid "Description"
@@ -1402,7 +1408,7 @@ msgid "Description is required."
 msgstr "Kuvaus vaaditaan."
 
 #: seahub/group/views.py:121 seahub/share/views.py:223
-#: seahub/views/__init__.py:527 seahub/views/__init__.py:643
+#: seahub/views/__init__.py:467 seahub/views/__init__.py:583
 #: seahub/views/ajax.py:191 seahub/views/ajax.py:453 seahub/views/ajax.py:460
 #: seahub/views/ajax.py:510 seahub/views/ajax.py:517 seahub/views/ajax.py:643
 #: seahub/views/ajax.py:698 seahub/views/ajax.py:734 seahub/views/ajax.py:777
@@ -1410,8 +1416,8 @@ msgstr "Kuvaus vaaditaan."
 #: seahub/views/ajax.py:1631 seahub/views/ajax.py:1813
 #: seahub/views/ajax.py:1835 seahub/views/ajax.py:1844
 #: seahub/views/ajax.py:1960 seahub/views/ajax.py:1982
-#: seahub/views/ajax.py:1991 seahub/views/file.py:1062
-#: seahub/views/file.py:1555 seahub/views/repo.py:119
+#: seahub/views/ajax.py:1991 seahub/views/file.py:1052
+#: seahub/views/file.py:1545 seahub/views/repo.py:119
 msgid "Permission denied"
 msgstr "Lupa evätty"
 
@@ -1886,7 +1892,7 @@ msgid ""
 msgstr ""
 
 #: seahub/institutions/templates/institutions/base.html:5
-#: seahub/templates/js/sysadmin-templates.html:265
+#: seahub/templates/js/sysadmin-templates.html:270
 #: seahub/templates/sysadmin/base.html:5
 msgid "Exit admin panel"
 msgstr "Poistu pääkäyttäjän paneelista"
@@ -1910,7 +1916,7 @@ msgstr "Etsi käyttäjiä..."
 
 #: seahub/institutions/templates/institutions/info.html:7
 #: seahub/templates/js/sysadmin-templates.html:7
-#: seahub/templates/js/sysadmin-templates.html:86
+#: seahub/templates/js/sysadmin-templates.html:91
 #: seahub/templates/sysadmin/base.html:15
 msgid "Info"
 msgstr "Info"
@@ -1918,11 +1924,11 @@ msgstr "Info"
 #: seahub/institutions/templates/institutions/info.html:13
 #: seahub/templates/home_base.html:58
 #: seahub/templates/js/sysadmin-templates.html:18
-#: seahub/templates/js/sysadmin-templates.html:109
+#: seahub/templates/js/sysadmin-templates.html:114
+#: seahub/templates/js/sysadmin-templates.html:730
 #: seahub/templates/js/templates.html:719
 #: seahub/templates/js/templates.html:1531 seahub/templates/libraries.html:5
 #: seahub/templates/sysadmin/base.html:26
-#: seahub/templates/sysadmin/sys_admin_group_info.html:17
 #: seahub/templates/sysadmin/sys_org_info_group.html:10
 #: seahub/templates/sysadmin/sys_org_info_library.html:10
 #: seahub/templates/sysadmin/sys_org_info_setting.html:10
@@ -1931,14 +1937,14 @@ msgid "Libraries"
 msgstr "Kirjastot"
 
 #: seahub/institutions/templates/institutions/info.html:16
-#: seahub/templates/js/sysadmin-templates.html:119
-#: seahub/templates/js/sysadmin-templates.html:132
+#: seahub/templates/js/sysadmin-templates.html:124
+#: seahub/templates/js/sysadmin-templates.html:137
 msgid "Active Users"
 msgstr "Aktiiviset käyttäjät"
 
 #: seahub/institutions/templates/institutions/info.html:16
-#: seahub/templates/js/sysadmin-templates.html:119
-#: seahub/templates/js/sysadmin-templates.html:132
+#: seahub/templates/js/sysadmin-templates.html:124
+#: seahub/templates/js/sysadmin-templates.html:137
 msgid "Total Users"
 msgstr "Käyttäjiä yhteensä"
 
@@ -2014,7 +2020,8 @@ msgstr "Vinkki: 0 tarkoittaa oletuskiintiötä"
 
 #: seahub/institutions/templates/institutions/user_info.html:70
 #: seahub/templates/file_revisions.html:56
-#: seahub/templates/js/sysadmin-templates.html:458
+#: seahub/templates/js/sysadmin-templates.html:463
+#: seahub/templates/js/sysadmin-templates.html:761
 #: seahub/templates/js/templates.html:204
 #: seahub/templates/js/templates.html:903
 #: seahub/templates/js/templates.html:912
@@ -2023,7 +2030,6 @@ msgstr "Vinkki: 0 tarkoittaa oletuskiintiötä"
 #: seahub/templates/js/templates.html:1275
 #: seahub/templates/repo_dir_recycle_view.html:46
 #: seahub/templates/repo_history_view.html:59
-#: seahub/templates/sysadmin/sys_admin_group_info.html:28
 #: seahub/templates/sysadmin/userinfo.html:119
 #: seahub/templates/sysadmin/userinfo.html:169
 #: seahub/templates/sysadmin/userinfo.html:206
@@ -2032,7 +2038,7 @@ msgid "Size"
 msgstr "Koko"
 
 #: seahub/institutions/templates/institutions/user_info.html:71
-#: seahub/templates/js/sysadmin-templates.html:459
+#: seahub/templates/js/sysadmin-templates.html:464
 #: seahub/templates/js/templates.html:205
 #: seahub/templates/js/templates.html:904
 #: seahub/templates/js/templates.html:913
@@ -2046,7 +2052,6 @@ msgstr "Viimeisin päivitys"
 
 #: seahub/institutions/templates/institutions/user_info.html:78
 #: seahub/templates/js/templates.html:937
-#: seahub/templates/sysadmin/sys_admin_group_info.html:36
 #: seahub/templates/sysadmin/sys_org_info_library.html:27
 #: seahub/templates/sysadmin/userinfo.html:127
 #: seahub/templates/sysadmin/userinfo.html:176
@@ -2055,9 +2060,6 @@ msgstr "Salattu"
 
 #: seahub/institutions/templates/institutions/user_info.html:78
 #: seahub/institutions/templates/institutions/user_info.html:80
-#: seahub/templates/sysadmin/sys_admin_group_info.html:36
-#: seahub/templates/sysadmin/sys_admin_group_info.html:38
-#: seahub/templates/sysadmin/sys_admin_group_info.html:40
 #: seahub/templates/sysadmin/userinfo.html:127
 #: seahub/templates/sysadmin/userinfo.html:129
 #: seahub/templates/sysadmin/userinfo.html:176
@@ -2072,10 +2074,11 @@ msgid "This user has not created any libraries"
 msgstr "Tämä käyttäjä ei ole luonut kirjastoja"
 
 #: seahub/institutions/templates/institutions/user_info.html:116
+#: seahub/templates/js/sysadmin-templates.html:800
 #: seahub/templates/js/templates.html:1135
 #: seahub/templates/sysadmin/sys_useradmin.html:42
 #: seahub/templates/sysadmin/useradmin_table.html:7
-#: seahub/templates/sysadmin/userinfo.html:253 seahub/views/sysadmin.py:278
+#: seahub/templates/sysadmin/userinfo.html:253 seahub/views/sysadmin.py:277
 msgid "Role"
 msgstr "Rooli"
 
@@ -2083,8 +2086,8 @@ msgstr "Rooli"
 #: seahub/templates/sysadmin/sys_inst_admin.html:28
 #: seahub/templates/sysadmin/sys_org_info_group.html:20
 #: seahub/templates/sysadmin/sys_publink_admin.html:14
-#: seahub/templates/sysadmin/userinfo.html:254 seahub/views/sysadmin.py:280
-#: seahub/views/sysadmin.py:284 seahub/views/sysadmin.py:1054
+#: seahub/templates/sysadmin/userinfo.html:254 seahub/views/sysadmin.py:279
+#: seahub/views/sysadmin.py:283 seahub/views/sysadmin.py:1047
 msgid "Create At"
 msgstr "Luotu"
 
@@ -2097,7 +2100,7 @@ msgstr "Tämä käyttäjä ei ole luonut tai liittynyt mihinkään ryhmiin"
 #: seahub/institutions/templates/institutions/useradmin_search.html:18
 #: seahub/templates/sysadmin/useradmin_table.html:5
 #: seahub/templates/sysadmin/useradmin_table.html:9
-#: seahub/views/sysadmin.py:278 seahub/views/sysadmin.py:282
+#: seahub/views/sysadmin.py:277 seahub/views/sysadmin.py:281
 msgid "Contact Email"
 msgstr "Yhteyssähköposti"
 
@@ -2111,7 +2114,7 @@ msgstr "Yhteyssähköposti"
 #: seahub/templates/sysadmin/sys_user_admin_ldap_imported.html:28
 #: seahub/templates/sysadmin/useradmin_table.html:6
 #: seahub/templates/sysadmin/useradmin_table.html:10
-#: seahub/views/sysadmin.py:278 seahub/views/sysadmin.py:282
+#: seahub/views/sysadmin.py:277 seahub/views/sysadmin.py:281
 msgid "Status"
 msgstr "Tila"
 
@@ -2138,7 +2141,7 @@ msgstr "Luotu / Kirjautunut"
 #: seahub/templates/sysadmin/sys_user_admin_ldap_imported.html:51
 #: seahub/templates/sysadmin/useradmin_table.html:35
 #: seahub/templates/sysadmin/useradmin_table.html:42
-#: seahub/views/sysadmin.py:323
+#: seahub/views/sysadmin.py:322
 msgid "Active"
 msgstr "Aktiivinen"
 
@@ -2154,7 +2157,7 @@ msgstr "Aktiivinen"
 #: seahub/templates/sysadmin/sys_user_admin_ldap_imported.html:52
 #: seahub/templates/sysadmin/useradmin_table.html:37
 #: seahub/templates/sysadmin/useradmin_table.html:43
-#: seahub/views/sysadmin.py:325
+#: seahub/views/sysadmin.py:324
 msgid "Inactive"
 msgstr "Ei aktiivinen"
 
@@ -2224,7 +2227,8 @@ msgid "Search User"
 msgstr "Etsi käyttäjä"
 
 #: seahub/institutions/templates/institutions/useradmin_search.html:13
-#: seahub/templates/js/sysadmin-templates.html:335
+#: seahub/templates/js/sysadmin-templates.html:340
+#: seahub/templates/js/sysadmin-templates.html:568
 #: seahub/templates/sysadmin/sys_inst_search_user.html:11
 #: seahub/templates/sysadmin/sys_org_search.html:15
 #: seahub/templates/sysadmin/user_search.html:13
@@ -2232,42 +2236,52 @@ msgid "Result"
 msgstr "Tulos"
 
 #: seahub/institutions/views.py:159
-#: seahub/templates/js/sysadmin-templates.html:311
-#: seahub/templates/js/sysadmin-templates.html:332
-#: seahub/templates/js/sysadmin-templates.html:344
-#: seahub/templates/js/sysadmin-templates.html:416
-#: seahub/templates/js/sysadmin-templates.html:538
-#: seahub/templates/js/sysadmin-templates.html:561
+#: seahub/templates/js/sysadmin-templates.html:316
+#: seahub/templates/js/sysadmin-templates.html:337
+#: seahub/templates/js/sysadmin-templates.html:349
+#: seahub/templates/js/sysadmin-templates.html:421
+#: seahub/templates/js/sysadmin-templates.html:543
+#: seahub/templates/js/sysadmin-templates.html:574
+#: seahub/templates/js/sysadmin-templates.html:592
+#: seahub/templates/js/sysadmin-templates.html:818
 #: seahub/templates/sysadmin/sys_org_admin.html:30
 #: seahub/templates/sysadmin/sys_org_info_library.html:21
 #: seahub/templates/sysadmin/sys_publink_admin.html:13
 #: seahub/templates/sysadmin/sys_virus_scan_records.html:12
-#: seahub/views/sysadmin.py:617
+#: seahub/views/sysadmin.py:614
 msgid "Owner"
 msgstr "Omistaja"
 
 #: seahub/institutions/views.py:161 seahub/templates/base.html:75
-#: seahub/templates/base.html.py:78 seahub/templates/js/templates.html:1169
+#: seahub/templates/base.html.py:78
+#: seahub/templates/js/sysadmin-templates.html:820
+#: seahub/templates/js/sysadmin-templates.html:824
+#: seahub/templates/js/sysadmin-templates.html:831
+#: seahub/templates/js/templates.html:1169
 #: seahub/templates/js/templates.html:1173
 #: seahub/templates/js/templates.html:1180
 #: seahub/templates/js/templates.html:1508
-#: seahub/templates/js/templates.html:1511 seahub/views/sysadmin.py:280
-#: seahub/views/sysadmin.py:284 seahub/views/sysadmin.py:619
+#: seahub/templates/js/templates.html:1511 seahub/views/sysadmin.py:279
+#: seahub/views/sysadmin.py:283 seahub/views/sysadmin.py:616
 msgid "Admin"
 msgstr "Ylläpitäjä"
 
-#: seahub/institutions/views.py:163 seahub/templates/js/templates.html:1172
+#: seahub/institutions/views.py:163
+#: seahub/templates/js/sysadmin-templates.html:823
+#: seahub/templates/js/sysadmin-templates.html:827
+#: seahub/templates/js/sysadmin-templates.html:830
+#: seahub/templates/js/templates.html:1172
 #: seahub/templates/js/templates.html:1176
-#: seahub/templates/js/templates.html:1179 seahub/views/sysadmin.py:621
+#: seahub/templates/js/templates.html:1179 seahub/views/sysadmin.py:618
 msgid "Member"
 msgstr "Jäsen"
 
-#: seahub/institutions/views.py:189 seahub/views/sysadmin.py:720
+#: seahub/institutions/views.py:189 seahub/views/sysadmin.py:712
 #, python-format
 msgid "Successfully deleted %s"
 msgstr "Poistettu onnistuneesti %s"
 
-#: seahub/institutions/views.py:191 seahub/views/sysadmin.py:722
+#: seahub/institutions/views.py:191 seahub/views/sysadmin.py:714
 msgid "Failed to delete: the user does not exist"
 msgstr "Poistaminen epäonnistui: käyttäjää ei ole"
 
@@ -2275,12 +2289,20 @@ msgstr "Poistaminen epäonnistui: käyttäjää ei ole"
 #: seahub/templates/sysadmin/sys_useradmin.html:45
 #: seahub/templates/sysadmin/useradmin_table.html:51
 #: seahub/templates/sysadmin/useradmin_table.html:61
-#: seahub/views/sysadmin.py:336
+#: seahub/views/sysadmin.py:335
 msgid "Guest"
 msgstr "Vieras"
 
+#: seahub/invitations/models.py:90
+#: seahub/templates/sysadmin/user_add_email.html:15
+#: seahub/templates/sysadmin/user_batch_add_email.html:12
+#, python-format
+msgid "%(user)s invited you to join %(site_name)s."
+msgstr "%(user)s lähetti sinulle kutsun liittyä %(site_name)s-palveluun."
+
 #: seahub/invitations/templates/invitations/invitation_email.html:9
-#: seahub/notifications/templates/notifications/notify_virus.html:9
+#: seahub/notifications/templates/notifications/notify_virus.html:10
+#: seahub/notifications/templates/notifications/notify_virus.html:17
 #: seahub/share/templates/share/audit_code_email.html:8
 #: seahub/templates/registration/activation_email.html:9
 #: seahub/templates/registration/password_reset_email.html:9
@@ -2335,7 +2357,7 @@ msgstr "Viesti"
 #: seahub/notifications/templates/notifications/notice_email.html:20
 #: seahub/notifications/templates/notifications/user_notification_list.html:22
 #: seahub/templates/file_revisions.html:54
-#: seahub/templates/js/sysadmin-templates.html:226
+#: seahub/templates/js/sysadmin-templates.html:231
 #: seahub/templates/repo_history.html:29
 msgid "Time"
 msgstr "Aika"
@@ -2387,10 +2409,10 @@ msgstr "Lähetä viesti..."
 
 #: seahub/message/templates/message/user_msg_list.html:72
 #: seahub/templates/file_access.html:56
-#: seahub/templates/js/sysadmin-templates.html:185
-#: seahub/templates/js/sysadmin-templates.html:319
-#: seahub/templates/js/sysadmin-templates.html:425
-#: seahub/templates/js/sysadmin-templates.html:547
+#: seahub/templates/js/sysadmin-templates.html:190
+#: seahub/templates/js/sysadmin-templates.html:324
+#: seahub/templates/js/sysadmin-templates.html:430
+#: seahub/templates/js/sysadmin-templates.html:552
 #: seahub/templates/repo_history.html:70
 #: seahub/templates/snippets/admin_paginator.html:4
 #: seahub/templates/sysadmin/sys_publink_admin.html:33
@@ -2401,10 +2423,10 @@ msgstr "Jälkimmäinen"
 
 #: seahub/message/templates/message/user_msg_list.html:82
 #: seahub/templates/file_access.html:59
-#: seahub/templates/js/sysadmin-templates.html:186
-#: seahub/templates/js/sysadmin-templates.html:320
-#: seahub/templates/js/sysadmin-templates.html:426
-#: seahub/templates/js/sysadmin-templates.html:548
+#: seahub/templates/js/sysadmin-templates.html:191
+#: seahub/templates/js/sysadmin-templates.html:325
+#: seahub/templates/js/sysadmin-templates.html:431
+#: seahub/templates/js/sysadmin-templates.html:553
 #: seahub/templates/repo_history.html:73
 #: seahub/templates/snippets/admin_paginator.html:7
 #: seahub/templates/sysadmin/sys_publink_admin.html:36
@@ -2426,7 +2448,7 @@ msgstr "Haluatko varmasti poistaa tämän keskustelun?"
 #: seahub/message/templates/message/user_msg_list.html:220
 #: seahub/templates/base.html:124 seahub/templates/base_for_backbone.html:90
 #: seahub/templates/sysadmin/sysadmin_backbone.html:74
-#: seahub/views/sysadmin.py:331 seahub/views/sysadmin.py:332
+#: seahub/views/sysadmin.py:330 seahub/views/sysadmin.py:331
 msgid "Yes"
 msgstr "Kyllä"
 
@@ -2469,7 +2491,9 @@ msgstr "Et voi lähettää viestiä itsellesi."
 msgid "Failed to send message to %s, user not found."
 msgstr "Viestin lähettäminen käyttäjälle %s epäonnistui, käyttäjää ei löydy."
 
-#: seahub/notifications/management/commands/notify_admins_on_virus.py:43
+#: seahub/notifications/management/commands/notify_admins_on_virus.py:57
+#: seahub/notifications/management/commands/notify_admins_on_virus.py:73
+#: seahub/notifications/management/commands/notify_admins_on_virus.py:98
 #, python-format
 msgid "Virus detected on %s"
 msgstr "Virus havaittu kohteessa %s"
@@ -2485,7 +2509,7 @@ msgstr "Uusi ilmoitus %s"
 #: seahub/notifications/models.py:550 seahub/notifications/models.py:568
 #: seahub/notifications/models.py:600 seahub/notifications/models.py:618
 #: seahub/notifications/models.py:648 seahub/notifications/models.py:670
-#: seahub/utils/__init__.py:144 seahub/utils/__init__.py:1089
+#: seahub/utils/__init__.py:143 seahub/utils/__init__.py:1082
 msgid "Internal error"
 msgstr "Sisäinen virhe"
 
@@ -2660,7 +2684,14 @@ msgstr "Aseta nykyiseksi"
 msgid "Delete Notification"
 msgstr "Poista ilmoitus"
 
-#: seahub/notifications/templates/notifications/notify_virus.html:12
+#: seahub/notifications/templates/notifications/notify_virus.html:13
+#, python-format
+msgid ""
+"Virus detected in file <a href=\"%(url_base)s%(file_url)s\" "
+"target=\"_blank\">%(file_name)s</a> during regular scanning."
+msgstr ""
+
+#: seahub/notifications/templates/notifications/notify_virus.html:20
 msgid "Virus is detected on regular scanning. Please check the report at:"
 msgstr "Virus havaittu säännöllisessä skannauksessa. Ole hyvä ja katso raportti: "
 
@@ -2717,7 +2748,7 @@ msgstr "Vinkki: jälkimmäinen tapa on turvallisempi, mutta se ei ole tuettu hyv
 #: seahub/profile/templates/profile/set_profile.html:26
 #: seahub/templates/base.html:69
 #: seahub/templates/js/sysadmin-templates.html:14
-#: seahub/templates/js/sysadmin-templates.html:264
+#: seahub/templates/js/sysadmin-templates.html:269
 #: seahub/templates/js/templates.html:778
 #: seahub/templates/js/templates.html:1503 seahub/templates/libraries.html:121
 #: seahub/templates/sysadmin/base.html:22
@@ -3138,7 +3169,7 @@ msgid "Organization Admin"
 msgstr ""
 
 #: seahub/templates/base.html:81 seahub/templates/finish_payment.html:5
-#: seahub/templates/js/sysadmin-templates.html:266
+#: seahub/templates/js/sysadmin-templates.html:271
 #: seahub/templates/js/templates.html:1513
 msgid "Log out"
 msgstr "Kirjaudu ulos"
@@ -3183,7 +3214,7 @@ msgid ""
 msgstr ""
 
 #: seahub/templates/choose_register.html:13
-#: seahub/templates/registration/login.html:40
+#: seahub/templates/registration/login.html:42
 #: seahub/templates/registration/registration_form.html:11
 msgid "Signup"
 msgstr "Kirjaudu"
@@ -3213,7 +3244,7 @@ msgid "Please enter the password."
 msgstr "Ole hyvä ja syötä salasana."
 
 #: seahub/templates/download.html:4 seahub/templates/file_revisions.html:88
-#: seahub/templates/js/sysadmin-templates.html:509
+#: seahub/templates/js/sysadmin-templates.html:514
 #: seahub/templates/js/templates.html:113
 #: seahub/templates/js/templates.html:119
 #: seahub/templates/js/templates.html:226
@@ -3248,9 +3279,9 @@ msgid "Current Path:"
 msgstr "Nykyinen polku:"
 
 #: seahub/templates/file_access.html:25
-#: seahub/templates/js/sysadmin-templates.html:169
-#: seahub/templates/js/sysadmin-templates.html:221
-#: seahub/templates/js/sysadmin-templates.html:638
+#: seahub/templates/js/sysadmin-templates.html:174
+#: seahub/templates/js/sysadmin-templates.html:226
+#: seahub/templates/js/sysadmin-templates.html:669
 #: seahub/templates/js/templates.html:556
 #: seahub/templates/js/templates.html:831
 #: seahub/templates/js/templates.html:1328
@@ -3265,14 +3296,14 @@ msgid "Type"
 msgstr "Tyyppi"
 
 #: seahub/templates/file_access.html:27
-#: seahub/templates/js/sysadmin-templates.html:172
-#: seahub/templates/js/sysadmin-templates.html:223
+#: seahub/templates/js/sysadmin-templates.html:177
+#: seahub/templates/js/sysadmin-templates.html:228
 #: seahub/templates/libraries.html:197
 msgid "IP"
 msgstr "IP"
 
 #: seahub/templates/file_access.html:27
-#: seahub/templates/js/sysadmin-templates.html:171
+#: seahub/templates/js/sysadmin-templates.html:176
 #: seahub/templates/libraries.html:196
 msgid "Device Name"
 msgstr "Laitteen nimi"
@@ -3310,7 +3341,7 @@ msgid "Draft saved."
 msgstr "Luonnos tallennettu."
 
 #: seahub/templates/file_edit.html:128
-#: seahub/templates/js/sysadmin-templates.html:224
+#: seahub/templates/js/sysadmin-templates.html:229
 #: seahub/templates/js/templates.html:1627
 #: seahub/templates/js/templates.html:1662 seahub/templates/libraries.html:170
 #: seahub/templates/sysadmin/sys_virus_scan_records.html:11
@@ -3445,7 +3476,7 @@ msgstr "Sarakkeet"
 #: seahub/templates/sysadmin/sys_useradmin.html:44
 #: seahub/templates/sysadmin/useradmin_table.html:53
 #: seahub/templates/sysadmin/useradmin_table.html:60
-#: seahub/views/sysadmin.py:338
+#: seahub/views/sysadmin.py:337
 msgid "Default"
 msgstr "Oletus"
 
@@ -3528,7 +3559,7 @@ msgid "(Renamed or moved from %(old_path)s)"
 msgstr "(Nimetty uudelleen tai poistettu kohteesta %(old_path)s)"
 
 #: seahub/templates/file_revisions.html:85
-#: seahub/templates/js/sysadmin-templates.html:442
+#: seahub/templates/js/sysadmin-templates.html:447
 #: seahub/templates/repo_history_view.html:51
 #: seahub/templates/repo_history_view.html:68
 #: seahub/templates/repo_history_view.html:78
@@ -3550,9 +3581,9 @@ msgstr "Erot"
 #: seahub/templates/file_revisions.html:115
 #: seahub/templates/repo_history_view.html:115
 #: seahub/templates/sysadmin/settings.html:165
-#: seahub/templates/sysadmin/settings.html:203 seahub/views/sysadmin.py:1222
-#: seahub/views/sysadmin.py:1279 seahub/views/sysadmin.py:2039
-#: seahub/views/sysadmin.py:2081 seahub/views/sysadmin.py:2248
+#: seahub/templates/sysadmin/settings.html:203 seahub/views/sysadmin.py:1195
+#: seahub/views/sysadmin.py:1252 seahub/views/sysadmin.py:2024
+#: seahub/views/sysadmin.py:2066 seahub/views/sysadmin.py:2233
 msgid "Success"
 msgstr "Onnistui"
 
@@ -3561,7 +3592,7 @@ msgid "Plan"
 msgstr "Suunnitelma"
 
 #: seahub/templates/home_base.html:8
-#: seahub/templates/js/sysadmin-templates.html:109
+#: seahub/templates/js/sysadmin-templates.html:114
 #: seahub/templates/js/templates.html:627
 msgid "Files"
 msgstr "Tiedostot"
@@ -3675,7 +3706,7 @@ msgid "Shared Libs"
 msgstr "Jaetut kirjastot"
 
 #: seahub/templates/js/lib-op-popups.html:5
-#: seahub/templates/js/sysadmin-templates.html:494
+#: seahub/templates/js/sysadmin-templates.html:499
 #: seahub/templates/js/templates.html:144
 msgid "New Folder"
 msgstr "Uusi hakemisto"
@@ -3766,7 +3797,7 @@ msgid "Devices"
 msgstr "Laitteet"
 
 #: seahub/templates/js/sysadmin-templates.html:28
-#: seahub/templates/js/sysadmin-templates.html:144
+#: seahub/templates/js/sysadmin-templates.html:149
 #: seahub/templates/sysadmin/base.html:36
 msgid "Organizations"
 msgstr "Organisaatiot"
@@ -3810,151 +3841,156 @@ msgstr "Etsi kirjastoja nimellä..."
 msgid "Search libraries by owner..."
 msgstr "Etsi kirjastoja omistajalla..."
 
-#: seahub/templates/js/sysadmin-templates.html:95
+#: seahub/templates/js/sysadmin-templates.html:84
+msgid "Search groups by name..."
+msgstr ""
+
+#: seahub/templates/js/sysadmin-templates.html:100
 msgid "System Info"
 msgstr "Järjestelmän info"
 
-#: seahub/templates/js/sysadmin-templates.html:97
+#: seahub/templates/js/sysadmin-templates.html:102
 msgid "Professional Edition"
 msgstr "Professional Edition"
 
-#: seahub/templates/js/sysadmin-templates.html:99
+#: seahub/templates/js/sysadmin-templates.html:104
 msgid "licensed to"
 msgstr ""
 
-#: seahub/templates/js/sysadmin-templates.html:101
+#: seahub/templates/js/sysadmin-templates.html:106
 msgid "expires on"
 msgstr "vanhenee"
 
-#: seahub/templates/js/sysadmin-templates.html:104
+#: seahub/templates/js/sysadmin-templates.html:109
 msgid "Community Edition"
 msgstr "Community versio"
 
-#: seahub/templates/js/sysadmin-templates.html:105
+#: seahub/templates/js/sysadmin-templates.html:110
 msgid "Upgrade to Pro Edition"
 msgstr "Päivitä Pro versioon"
 
-#: seahub/templates/js/sysadmin-templates.html:112
+#: seahub/templates/js/sysadmin-templates.html:117
 msgid "Storage Used"
 msgstr ""
 
-#: seahub/templates/js/sysadmin-templates.html:115
+#: seahub/templates/js/sysadmin-templates.html:120
 msgid "Total Devices"
 msgstr ""
 
-#: seahub/templates/js/sysadmin-templates.html:115
+#: seahub/templates/js/sysadmin-templates.html:120
 msgid "Current Connected Devices"
 msgstr ""
 
-#: seahub/templates/js/sysadmin-templates.html:119
+#: seahub/templates/js/sysadmin-templates.html:124
 msgid "Limits"
 msgstr "Rajat"
 
-#: seahub/templates/js/sysadmin-templates.html:154
-#: seahub/templates/js/sysadmin-templates.html:207
+#: seahub/templates/js/sysadmin-templates.html:159
+#: seahub/templates/js/sysadmin-templates.html:212
 msgid "Desktop"
 msgstr ""
 
-#: seahub/templates/js/sysadmin-templates.html:157
-#: seahub/templates/js/sysadmin-templates.html:210
+#: seahub/templates/js/sysadmin-templates.html:162
+#: seahub/templates/js/sysadmin-templates.html:215
 msgid "Mobile"
 msgstr ""
 
-#: seahub/templates/js/sysadmin-templates.html:161
-#: seahub/templates/js/sysadmin-templates.html:213
+#: seahub/templates/js/sysadmin-templates.html:166
+#: seahub/templates/js/sysadmin-templates.html:218
 msgid "Errors"
 msgstr ""
 
-#: seahub/templates/js/sysadmin-templates.html:170
+#: seahub/templates/js/sysadmin-templates.html:175
 #: seahub/templates/libraries.html:195
 msgid "Platform"
 msgstr "Alusta"
 
-#: seahub/templates/js/sysadmin-templates.html:170
-#: seahub/templates/js/sysadmin-templates.html:222
+#: seahub/templates/js/sysadmin-templates.html:175
+#: seahub/templates/js/sysadmin-templates.html:227
 #: seahub/templates/sysadmin/sys_terms_admin.html:17
 msgid "Version"
 msgstr ""
 
-#: seahub/templates/js/sysadmin-templates.html:173
+#: seahub/templates/js/sysadmin-templates.html:178
 #: seahub/templates/libraries.html:198
 msgid "Last Access"
 msgstr "Viimeisin käyttö"
 
-#: seahub/templates/js/sysadmin-templates.html:182
+#: seahub/templates/js/sysadmin-templates.html:187
 msgid "No connected devices"
 msgstr ""
 
-#: seahub/templates/js/sysadmin-templates.html:198
+#: seahub/templates/js/sysadmin-templates.html:203
 #: seahub/templates/js/templates.html:1471
 msgid "Unlink"
 msgstr "Poista linkki"
 
-#: seahub/templates/js/sysadmin-templates.html:216
-#: seahub/templates/js/sysadmin-templates.html:297
+#: seahub/templates/js/sysadmin-templates.html:221
+#: seahub/templates/js/sysadmin-templates.html:302
 #: seahub/templates/repo_dir_recycle_view.html:37
 #: seahub/templates/repo_dir_recycle_view.html:65
 msgid "Clean"
 msgstr "Siivoa"
 
-#: seahub/templates/js/sysadmin-templates.html:222
+#: seahub/templates/js/sysadmin-templates.html:227
 msgid "Device"
 msgstr ""
 
-#: seahub/templates/js/sysadmin-templates.html:225
+#: seahub/templates/js/sysadmin-templates.html:230
 #: seahub/templates/view_shared_upload_link.html:81 seahub/views/ajax.py:1068
 msgid "Error"
 msgstr "Virhe"
 
-#: seahub/templates/js/sysadmin-templates.html:234
+#: seahub/templates/js/sysadmin-templates.html:239
 msgid "No sync errors"
 msgstr ""
 
-#: seahub/templates/js/sysadmin-templates.html:287
-#: seahub/templates/js/sysadmin-templates.html:473
+#: seahub/templates/js/sysadmin-templates.html:292
+#: seahub/templates/js/sysadmin-templates.html:478
 #: seahub/templates/sysadmin/sys_org_admin.html:14
 msgid "All"
 msgstr "Kaikki"
 
-#: seahub/templates/js/sysadmin-templates.html:290
-#: seahub/templates/js/sysadmin-templates.html:471
+#: seahub/templates/js/sysadmin-templates.html:295
+#: seahub/templates/js/sysadmin-templates.html:476
 msgid "System"
 msgstr "Järjestelmä"
 
-#: seahub/templates/js/sysadmin-templates.html:293
+#: seahub/templates/js/sysadmin-templates.html:298
 #: seahub/templates/js/templates.html:160
 #: seahub/templates/js/templates.html:166
 #: seahub/templates/view_trash_file.html:10
 msgid "Trash"
 msgstr "Roskakori"
 
-#: seahub/templates/js/sysadmin-templates.html:309
-#: seahub/templates/js/sysadmin-templates.html:342
+#: seahub/templates/js/sysadmin-templates.html:314
+#: seahub/templates/js/sysadmin-templates.html:347
 msgid "Files / Size"
 msgstr "Tiedostot / Koko"
 
-#: seahub/templates/js/sysadmin-templates.html:323
-#: seahub/templates/js/sysadmin-templates.html:352
+#: seahub/templates/js/sysadmin-templates.html:328
+#: seahub/templates/js/sysadmin-templates.html:357
+#: seahub/templates/js/sysadmin-templates.html:770
 msgid "No libraries"
 msgstr ""
 
-#: seahub/templates/js/sysadmin-templates.html:328
+#: seahub/templates/js/sysadmin-templates.html:333
 msgid "Search Library"
 msgstr "Etsi kirjasto"
 
-#: seahub/templates/js/sysadmin-templates.html:330
+#: seahub/templates/js/sysadmin-templates.html:335
 msgid "Tip: you can search by keyword in name or owner or both."
 msgstr "Vinkki: voit etsiä hakusanalla nimestä tai omistajasta tai molemmista."
 
-#: seahub/templates/js/sysadmin-templates.html:380
-#: seahub/templates/js/sysadmin-templates.html:575
+#: seahub/templates/js/sysadmin-templates.html:385
+#: seahub/templates/js/sysadmin-templates.html:606
 #: seahub/templates/js/templates.html:55
 #: seahub/templates/js/templates.html:1060
 #: seahub/templates/sysadmin/userinfo.html:149
 msgid "Transfer"
 msgstr "Siirrä"
 
-#: seahub/templates/js/sysadmin-templates.html:382
+#: seahub/templates/js/sysadmin-templates.html:387
 #: seahub/templates/js/templates.html:49
 #: seahub/templates/js/templates.html:149
 #: seahub/templates/js/templates.html:229
@@ -3965,61 +4001,71 @@ msgstr "Siirrä"
 msgid "Share"
 msgstr "Jaa"
 
-#: seahub/templates/js/sysadmin-templates.html:410
+#: seahub/templates/js/sysadmin-templates.html:415
 msgid "Tip: libraries deleted 30 days ago will be cleaned automatically."
 msgstr "Vinkki: 30 päivää sitten poistetut kirjastot siivotaan automaattisesti."
 
-#: seahub/templates/js/sysadmin-templates.html:417
+#: seahub/templates/js/sysadmin-templates.html:422
 msgid "Deleted Time"
 msgstr "Poistoaika"
 
-#: seahub/templates/js/sysadmin-templates.html:429
+#: seahub/templates/js/sysadmin-templates.html:434
 msgid "No library deleted yet"
 msgstr "Kirjastoja ei ole vielä poistettu"
 
-#: seahub/templates/js/sysadmin-templates.html:491
+#: seahub/templates/js/sysadmin-templates.html:496
 #: seahub/templates/js/templates.html:126
 #: seahub/templates/js/templates.html:131
 #: seahub/templates/sysadmin/userinfo.html:232
 msgid "Upload"
 msgstr "Lisää"
 
-#: seahub/templates/js/sysadmin-templates.html:529
-#: seahub/templates/js/sysadmin-templates.html:558
+#: seahub/templates/js/sysadmin-templates.html:534
+#: seahub/templates/js/sysadmin-templates.html:589
 #: seahub/templates/libraries.html:72 seahub/templates/libraries.html.py:90
 msgid "New Group"
 msgstr "Uusi ryhmä"
 
-#: seahub/templates/js/sysadmin-templates.html:530
+#: seahub/templates/js/sysadmin-templates.html:535
 #: seahub/templates/sysadmin/sys_user_admin_ldap_imported.html:21
 #: seahub/templates/sysadmin/sys_useradmin.html:27
 msgid "Export Excel"
 msgstr "Vie Exceliin"
 
-#: seahub/templates/js/sysadmin-templates.html:539
+#: seahub/templates/js/sysadmin-templates.html:544
+#: seahub/templates/js/sysadmin-templates.html:575
 msgid "Created At"
 msgstr ""
 
-#: seahub/templates/js/sysadmin-templates.html:551
+#: seahub/templates/js/sysadmin-templates.html:556
+#: seahub/templates/js/sysadmin-templates.html:583
 msgid "No groups"
 msgstr ""
 
 #: seahub/templates/js/sysadmin-templates.html:562
+msgid "Search Group"
+msgstr ""
+
+#: seahub/templates/js/sysadmin-templates.html:564
+msgid "Tip: you can search by keyword in name."
+msgstr ""
+
+#: seahub/templates/js/sysadmin-templates.html:593
 msgid "(If left blank, owner will be admin)"
 msgstr ""
 
-#: seahub/templates/js/sysadmin-templates.html:628
+#: seahub/templates/js/sysadmin-templates.html:659
 #: seahub/templates/js/templates.html:446
 msgid "Share to user"
 msgstr "Jaa käyttäjälle"
 
-#: seahub/templates/js/sysadmin-templates.html:629
+#: seahub/templates/js/sysadmin-templates.html:660
 #: seahub/templates/js/templates.html:447
 msgid "Share to group"
 msgstr "Jaa ryhmälle"
 
-#: seahub/templates/js/sysadmin-templates.html:639
-#: seahub/templates/js/sysadmin-templates.html:666
+#: seahub/templates/js/sysadmin-templates.html:670
+#: seahub/templates/js/sysadmin-templates.html:697
 #: seahub/templates/js/templates.html:243
 #: seahub/templates/js/templates.html:427
 #: seahub/templates/js/templates.html:557
@@ -4034,12 +4080,44 @@ msgstr "Jaa ryhmälle"
 msgid "Permission"
 msgstr "Oikeus"
 
-#: seahub/templates/js/sysadmin-templates.html:665
+#: seahub/templates/js/sysadmin-templates.html:696
 #: seahub/templates/js/templates.html:583
 #: seahub/templates/js/templates.html:857
 #: seahub/templates/js/templates.html:1372
 msgid "Group"
 msgstr "Ryhmä"
+
+#: seahub/templates/js/sysadmin-templates.html:733
+#: seahub/templates/js/templates.html:779 seahub/templates/libraries.html:131
+#: seahub/templates/sysadmin/sys_inst_info_admins.html:7
+#: seahub/templates/sysadmin/sys_inst_info_user.html:7
+#: seahub/templates/sysadmin/sys_org_info_group.html:8
+#: seahub/templates/sysadmin/sys_org_info_library.html:8
+#: seahub/templates/sysadmin/sys_org_info_setting.html:8
+#: seahub/templates/sysadmin/sys_org_info_user.html:7
+msgid "Members"
+msgstr "Jäsenet"
+
+#: seahub/templates/js/sysadmin-templates.html:738
+#: seahub/templates/js/sysadmin-templates.html:746
+msgid "Add Member"
+msgstr ""
+
+#: seahub/templates/js/sysadmin-templates.html:762
+#: seahub/templates/js/templates.html:914
+msgid "Shared By"
+msgstr "Jakaja"
+
+#: seahub/templates/js/sysadmin-templates.html:788
+#: seahub/templates/js/templates.html:84
+#: seahub/templates/js/templates.html:100
+#: seahub/templates/js/templates.html:1581
+msgid "Unshare"
+msgstr "Poista jako"
+
+#: seahub/templates/js/sysadmin-templates.html:808
+msgid "No members"
+msgstr ""
 
 #: seahub/templates/js/templates.html:4 seahub/templates/js/templates.html:771
 #: seahub/templates/libraries.html:14
@@ -4111,12 +4189,6 @@ msgstr "Hakemiston oikeudet"
 #: seahub/templates/js/templates.html:71
 msgid "Broken (please contact your administrator to fix this library)"
 msgstr "Virheellinen (ole hyvä ja ota yhteyttä järjestelmän ylläpitäjään korjataksesi tämän kirjaston)"
-
-#: seahub/templates/js/templates.html:84
-#: seahub/templates/js/templates.html:100
-#: seahub/templates/js/templates.html:1581
-msgid "Unshare"
-msgstr "Poista jako"
 
 #: seahub/templates/js/templates.html:110
 #: seahub/templates/js/templates.html:240
@@ -4315,17 +4387,6 @@ msgstr "Poistu jaosta"
 msgid "Wiki"
 msgstr "Wiki"
 
-#: seahub/templates/js/templates.html:779 seahub/templates/libraries.html:131
-#: seahub/templates/sysadmin/sys_admin_group_info.html:18
-#: seahub/templates/sysadmin/sys_inst_info_admins.html:7
-#: seahub/templates/sysadmin/sys_inst_info_user.html:7
-#: seahub/templates/sysadmin/sys_org_info_group.html:8
-#: seahub/templates/sysadmin/sys_org_info_library.html:8
-#: seahub/templates/sysadmin/sys_org_info_setting.html:8
-#: seahub/templates/sysadmin/sys_org_info_user.html:7
-msgid "Members"
-msgstr "Jäsenet"
-
 #: seahub/templates/js/templates.html:780
 msgid "Discussion"
 msgstr "Keskustelu"
@@ -4352,11 +4413,6 @@ msgstr "Poista merkintä"
 #: seahub/templates/js/templates.html:909
 msgid "Library Type"
 msgstr "Kirjaston tyyppi"
-
-#: seahub/templates/js/templates.html:914
-#: seahub/templates/sysadmin/sys_admin_group_info.html:29
-msgid "Shared By"
-msgstr "Jakaja"
 
 #: seahub/templates/js/templates.html:918
 msgid "Select libraries to share"
@@ -4405,7 +4461,6 @@ msgid "owner"
 msgstr ""
 
 #: seahub/templates/js/templates.html:1032
-#: seahub/templates/sysadmin/sys_admin_group_info.html:70
 msgid "admin"
 msgstr "ylläpitäjä"
 
@@ -4789,7 +4844,7 @@ msgstr "Kirjaudu"
 
 #: seahub/templates/registration/login.html:4
 #: seahub/templates/registration/login.html:8
-#: seahub/templates/registration/login.html:38
+#: seahub/templates/registration/login.html:40
 #: seahub/templates/registration/password_reset_complete.html:8
 #: seahub/templates/sysadmin/user_activation_email.html:15
 #: seahub/templates/sysadmin/user_add_email.html:25
@@ -4809,33 +4864,33 @@ msgstr "CAPTCHA"
 msgid "Not clear? Refresh it."
 msgstr "Epäselvä? Päivitä."
 
-#: seahub/templates/registration/login.html:27
+#: seahub/templates/registration/login.html:29
 msgid "Incorrect email or password"
 msgstr "Väärä sähköposti tai salasana"
 
-#: seahub/templates/registration/login.html:35
+#: seahub/templates/registration/login.html:37
 #, python-format
 msgid "Remember me for %(remember_days)s days "
 msgstr "Muista minut %(remember_days)s päivää"
 
-#: seahub/templates/registration/login.html:44
+#: seahub/templates/registration/login.html:50
 #: seahub/templates/sysadmin/sudo_mode.html:20
 msgid "Shibboleth"
 msgstr "Shibboleth"
 
-#: seahub/templates/registration/login.html:48
+#: seahub/templates/registration/login.html:54
 msgid "Kerberos"
 msgstr "Kerberos"
 
-#: seahub/templates/registration/login.html:75
+#: seahub/templates/registration/login.html:81
 msgid "Failed to refresh the CAPTCHA, please try again later."
 msgstr "CAPTCHAn päivitys epäonnistui. Yritä myöhemmin uudestaan."
 
-#: seahub/templates/registration/login.html:82
+#: seahub/templates/registration/login.html:88
 msgid "Email or username cannot be blank"
 msgstr "Sähköposti tai salasana ei voi olla tyhjä"
 
-#: seahub/templates/registration/login.html:86
+#: seahub/templates/registration/login.html:92
 #: seahub/templates/registration/password_change_form.html:66
 #: seahub/templates/registration/registration_form.html:88
 #: seahub/templates/sysadmin/sudo_mode.html:34
@@ -5029,7 +5084,7 @@ msgstr "1 viikko sitten"
 msgid "1 month ago"
 msgstr "1 kuukausi sitten"
 
-#: seahub/templates/repo_dir_recycle_view.html:154
+#: seahub/templates/repo_dir_recycle_view.html:169
 msgid "Successfully restored 1 item."
 msgstr ""
 
@@ -5361,7 +5416,7 @@ msgstr "Maksu"
 #: seahub/templates/sysadmin/org_admin_table.html:5
 #: seahub/templates/sysadmin/sys_org_info_group.html:19
 #: seahub/templates/sysadmin/sys_org_search.html:11
-#: seahub/views/sysadmin.py:1054
+#: seahub/views/sysadmin.py:1047
 msgid "Creator"
 msgstr "Luoja"
 
@@ -5402,11 +5457,14 @@ msgstr "Lataus epäonnistui"
 msgid "You cannot select any more choices"
 msgstr "Et voi valita enenpää vaihtoehtoja"
 
-#: seahub/templates/sysadmin/repoadmin_js.html:43
-#: seahub/templates/sysadmin/sys_admin_group_info.html:85
+#: seahub/templates/sysadmin/repoadmin_js.html:47
 #: seahub/templates/sysadmin/sys_org_info_library.html:60
 msgid "Delete Library"
 msgstr "Poista kirjasto"
+
+#: seahub/templates/sysadmin/repoadmin_js.html:58
+msgid "Successfully deleted 1 item."
+msgstr ""
 
 #: seahub/templates/sysadmin/settings.html:11
 msgid ""
@@ -5432,10 +5490,6 @@ msgid ""
 "You are entering admin area, we won't ask for your password again for a few "
 "hours."
 msgstr "Olet siirtymässä ylläpitoon, emme pyydä salasanaa uudestaan muutamaan tuntiin."
-
-#: seahub/templates/sysadmin/sys_admin_group_info.html:59
-msgid "No library has shared to this group"
-msgstr "Mitään kirjastoa ei ole jaettu tällä ryhmälle"
 
 #: seahub/templates/sysadmin/sys_inst_admin.html:9
 msgid "All Institutions"
@@ -5606,12 +5660,12 @@ msgid "Max User Number"
 msgstr "Käyttäjien maksimimäärä"
 
 #: seahub/templates/sysadmin/sys_org_info_setting.html:52
-#: seahub/views/sysadmin.py:1273
+#: seahub/views/sysadmin.py:1246
 msgid "Input should be a number"
 msgstr "Syöte pitää olla numero"
 
 #: seahub/templates/sysadmin/sys_org_info_setting.html:55
-#: seahub/views/sysadmin.py:1283
+#: seahub/views/sysadmin.py:1256
 msgid "Input number should be greater than 0"
 msgstr "Syötetty numero pitää olla suurempi kuin 0"
 
@@ -5709,7 +5763,7 @@ msgstr "LDAP"
 #: seahub/templates/sysadmin/sys_useradmin_admins.html:17
 #: seahub/templates/sysadmin/sys_useradmin_ldap.html:17
 #: seahub/templates/sysadmin/sys_useradmin_paid.html:17
-#: seahub/views/sysadmin.py:280 seahub/views/sysadmin.py:284
+#: seahub/views/sysadmin.py:279 seahub/views/sysadmin.py:283
 msgid "LDAP(imported)"
 msgstr "LDAP(tuotu)"
 
@@ -5721,7 +5775,7 @@ msgid "Space Used / Quota"
 msgstr ""
 
 #: seahub/templates/sysadmin/sys_user_admin_ldap_imported.html:30
-#: seahub/views/sysadmin.py:280 seahub/views/sysadmin.py:284
+#: seahub/views/sysadmin.py:279 seahub/views/sysadmin.py:283
 msgid "Last Login"
 msgstr "Viimeisin kirjautuminen"
 
@@ -5763,11 +5817,11 @@ msgid "Import users from a CSV file"
 msgstr "Tuo käyttäjiä CSV-tiedostosta"
 
 #: seahub/templates/sysadmin/sys_useradmin.html:64
-msgid "File format: user@mail.com,password,name,department"
+msgid "File format: user@mail.com,password,name,department,role,quota"
 msgstr ""
 
 #: seahub/templates/sysadmin/sys_useradmin.html:65
-msgid "Name and department are optional."
+msgid "Name, department, role and quota are optional."
 msgstr ""
 
 #: seahub/templates/sysadmin/sys_useradmin.html:67
@@ -5826,12 +5880,6 @@ msgstr "Sinun tili %(username)s sivustolla %(site_name)s on aktivoitu."
 msgid ""
 "%(user)s invited you to join organization \"%(org_name)s\" on %(site_name)s."
 msgstr "%(user)s lähetti sinulle kutsun liittyä organisaatioon \"%(org_name)s\" sivustolla %(site_name)s."
-
-#: seahub/templates/sysadmin/user_add_email.html:15
-#: seahub/templates/sysadmin/user_batch_add_email.html:12
-#, python-format
-msgid "%(user)s invited you to join %(site_name)s."
-msgstr "%(user)s lähetti sinulle kutsun liittyä %(site_name)s-palveluun."
 
 #: seahub/templates/sysadmin/user_add_email.html:20
 #: seahub/templates/sysadmin/user_batch_add_email.html:16
@@ -6097,76 +6145,76 @@ msgstr "Esikatselukuvan luonti epäonnistui."
 msgid "Invalid token."
 msgstr "Virheellinen tunniste."
 
-#: seahub/utils/__init__.py:129
+#: seahub/utils/__init__.py:128
 msgid "permission error"
 msgstr "virhe oikeuksissa"
 
-#: seahub/views/__init__.py:483 seahub/views/__init__.py:499
+#: seahub/views/__init__.py:423 seahub/views/__init__.py:439
 msgid "Unable to view recycle page"
 msgstr "Roskakorin sivun katselu epäonnistui"
 
-#: seahub/views/__init__.py:567
+#: seahub/views/__init__.py:507
 msgid "Unable to view library modification"
 msgstr "Kirjaston muokkauksen katselu epäonnistui"
 
-#: seahub/views/__init__.py:634 seahub/views/__init__.py:675
-#: seahub/views/__init__.py:886 seahub/views/__init__.py:1014
+#: seahub/views/__init__.py:574 seahub/views/__init__.py:615
+#: seahub/views/__init__.py:830 seahub/views/__init__.py:958
 #: seahub/views/ajax.py:1520 seahub/views/ajax.py:1544
 #: seahub/views/ajax.py:1831 seahub/views/ajax.py:1978
-#: seahub/views/file.py:1541 seahub/views/sysadmin.py:1566
+#: seahub/views/file.py:1531 seahub/views/sysadmin.py:1539
 msgid "Library does not exist"
 msgstr "Kirjastoa ei ole"
 
-#: seahub/views/__init__.py:667
+#: seahub/views/__init__.py:607
 msgid "Please specify history ID"
 msgstr "Ole hyvä ja määritä historian ID"
 
-#: seahub/views/__init__.py:673 seahub/views/file.py:1083
+#: seahub/views/__init__.py:613 seahub/views/file.py:1073
 msgid "Invalid arguments"
 msgstr "Virheelliset argumentit"
 
-#: seahub/views/__init__.py:677
+#: seahub/views/__init__.py:617
 msgid "History you specified does not exist"
 msgstr "Määrittämääsi historiaa ei ole"
 
-#: seahub/views/__init__.py:679
+#: seahub/views/__init__.py:619
 msgid "Unknown error"
 msgstr "Tuntematon virhe"
 
-#: seahub/views/__init__.py:735 seahub/views/__init__.py:736
-#: seahub/views/__init__.py:741 seahub/views/__init__.py:742
+#: seahub/views/__init__.py:675 seahub/views/__init__.py:676
+#: seahub/views/__init__.py:681 seahub/views/__init__.py:682
 msgid "My Library"
 msgstr "Oma Kirjasto"
 
-#: seahub/views/__init__.py:902
+#: seahub/views/__init__.py:846
 msgid "No revisions found"
 msgstr "Versioita ei löydy"
 
-#: seahub/views/__init__.py:1021 seahub/views/ajax.py:604
+#: seahub/views/__init__.py:965 seahub/views/ajax.py:604
 #: seahub/views/repo.py:196
 #, python-format
 msgid "\"%s\" does not exist."
 msgstr "\"%s\" ei ole olemassa."
 
-#: seahub/views/__init__.py:1039 seahub/views/file.py:1051
+#: seahub/views/__init__.py:983 seahub/views/file.py:1041
 msgid "Internal Error"
 msgstr "Sisäinen virhe"
 
-#: seahub/views/__init__.py:1042
+#: seahub/views/__init__.py:986
 #, python-format
 msgid "Unable to download directory \"%s\": size is too large."
 msgstr "Hakemiston lataus epäonnistui \"%s\": koko on liian suuri."
 
-#: seahub/views/__init__.py:1058
+#: seahub/views/__init__.py:1002
 #, python-format
 msgid "Unable to download \"%s\""
 msgstr "Kohteen \"%s\" lataus ei onnistu"
 
-#: seahub/views/__init__.py:1150
+#: seahub/views/__init__.py:1094
 msgid "Successfully enable \"Personal Wiki\"."
 msgstr "Onnistuneesti otettu käyttöön \"Oma Wiki\"."
 
-#: seahub/views/__init__.py:1155
+#: seahub/views/__init__.py:1099
 msgid "Successfully disable \"Personal Wiki\"."
 msgstr "\"Oma Wiki\" poistettu onnistuneesti käytöstä."
 
@@ -6253,8 +6301,8 @@ msgstr "Estettyjen tiedostojen listan haku epäonnistui"
 msgid "Wrong repo id"
 msgstr "Väärä säiliön id"
 
-#: seahub/views/ajax.py:1240 seahub/views/file.py:385 seahub/views/file.py:779
-#: seahub/views/file.py:955 seahub/views/file.py:1550
+#: seahub/views/ajax.py:1240 seahub/views/file.py:384 seahub/views/file.py:772
+#: seahub/views/file.py:945 seahub/views/file.py:1540
 msgid "File does not exist"
 msgstr "Tiedostoa ei ole olemassa."
 
@@ -6331,7 +6379,7 @@ msgstr "HTTPError: tiedoston avaus verkossa epäonnistui"
 msgid "URLError: failed to open file online"
 msgstr "URLError: tiedoston avaus verkossa epäonnistui"
 
-#: seahub/views/file.py:154 seahub/views/file.py:1101
+#: seahub/views/file.py:154 seahub/views/file.py:1091
 msgid "The encoding you chose is not proper."
 msgstr "Valitsemasi koodaus ei ole kelvollinen."
 
@@ -6344,124 +6392,120 @@ msgstr "Tunnistamaton tiedostokoodaus"
 msgid "File size surpasses %s, can not be opened online."
 msgstr "Tiedoston koko ylittää %s, sitä ei voida avata verkossa."
 
-#: seahub/views/file.py:319
+#: seahub/views/file.py:318
 msgid "The library is encrypted, can not open file online."
 msgstr "Kirjasto on salattu, sitä ei voi avata verkossa."
 
-#: seahub/views/file.py:397 seahub/views/file.py:664 seahub/views/file.py:679
-#: seahub/views/file.py:697
+#: seahub/views/file.py:396 seahub/views/file.py:657 seahub/views/file.py:672
+#: seahub/views/file.py:690
 msgid "Unable to view file"
 msgstr "Tiedoston katselu epäonnistui"
 
-#: seahub/views/file.py:478 seahub/views/file.py:639 seahub/views/file.py:831
-msgid "Invalid file format."
-msgstr "Virheellinen tiedostomuoto."
-
-#: seahub/views/file.py:724
+#: seahub/views/file.py:717
 msgid "Unable to download file, invalid file path"
 msgstr "Tiedoston lataus epäonnistui, virheellinen tiedostopolku"
 
-#: seahub/views/file.py:733
+#: seahub/views/file.py:726
 msgid "Unable to download file, wrong file path"
 msgstr "Tiedoston lataus epäonnistui, väärä tiedostopolku"
 
-#: seahub/views/file.py:738
+#: seahub/views/file.py:731
 msgid "Unable to download file, share link traffic is used up."
 msgstr "Tiedoston lataus epäonnistui, jakolinkin kaista on käytetty."
 
-#: seahub/views/file.py:801
+#: seahub/views/file.py:794
 msgid "Unable to view raw file, share link traffic is used up."
 msgstr ""
 
-#: seahub/views/file.py:1073
+#: seahub/views/file.py:1063
 msgid "The library does not exist."
 msgstr "Kirjastoa ei löydy."
 
-#: seahub/views/file.py:1077
+#: seahub/views/file.py:1067
 msgid "The library is encrypted."
 msgstr "Kirjasto on salattu."
 
-#: seahub/views/file.py:1158
+#: seahub/views/file.py:1148
 msgid "Unable to edit file"
 msgstr "Tiedostoa ei pysty muokkaamaan"
 
-#: seahub/views/file.py:1164
+#: seahub/views/file.py:1154
 msgid "The file does not exist."
 msgstr "Tiedostoa ei löydy."
 
-#: seahub/views/file.py:1193
+#: seahub/views/file.py:1183
 msgid "Edit online is not offered for this type of file."
 msgstr "Muokkaus verkossa ei ole tarjolla tämäntyyppiselle tiedostolle."
 
-#: seahub/views/file.py:1302
+#: seahub/views/file.py:1292
 msgid "Unable to download file"
 msgstr "Tiedostoa ei voi ladata"
 
-#: seahub/views/sysadmin.py:269 seahub/views/sysadmin.py:352
-#: seahub/views/sysadmin.py:1051 seahub/views/sysadmin.py:1063
+#: seahub/views/sysadmin.py:268 seahub/views/sysadmin.py:351
+#: seahub/views/sysadmin.py:1044 seahub/views/sysadmin.py:1056
 msgid "Failed to export Excel"
 msgstr "Vienti Exceliin epäonnistui"
 
-#: seahub/views/sysadmin.py:279 seahub/views/sysadmin.py:283
+#: seahub/views/sysadmin.py:278 seahub/views/sysadmin.py:282
 msgid "Space Usage"
 msgstr ""
 
-#: seahub/views/sysadmin.py:279 seahub/views/sysadmin.py:283
+#: seahub/views/sysadmin.py:278 seahub/views/sysadmin.py:282
 msgid "Space Quota"
 msgstr ""
 
-#: seahub/views/sysadmin.py:666 seahub/views/sysadmin.py:692
+#: seahub/views/sysadmin.py:663 seahub/views/sysadmin.py:689
 msgid "Failed to set quota: internal server error"
 msgstr "Kiintiön asettaminen epäonnistui: sisäinen palvelinvirhe"
 
-#: seahub/views/sysadmin.py:711
+#: seahub/views/sysadmin.py:708
 msgid "Failed to delete: the user is an organization creator"
 msgstr "Poisto epäonnistui: käyttäjä on organisaation luoja"
 
-#: seahub/views/sysadmin.py:743
+#: seahub/views/sysadmin.py:735
 #, python-format
 msgid "Successfully remove trial for: %s"
 msgstr "Koekäyttö poistettu onnistuneesti kohteelta: %s"
 
-#: seahub/views/sysadmin.py:772
+#: seahub/views/sysadmin.py:764
 #, python-format
 msgid "Successfully revoke the admin permission of %s"
 msgstr "Ylläpitäjän oikeudet poistettu onnistuneesti käyttäjältä %s"
 
-#: seahub/views/sysadmin.py:774
+#: seahub/views/sysadmin.py:766
 msgid "Failed to revoke admin: the user does not exist"
 msgstr "Ylläpitäjän poisto epäonnistui: käyttäjää ei ole"
 
-#: seahub/views/sysadmin.py:821
+#: seahub/views/sysadmin.py:813
 #, python-format
 msgid "Your account on %s is activated"
 msgstr "Sinun tili kohteessa %s on aktivoitu"
 
-#: seahub/views/sysadmin.py:904
+#: seahub/views/sysadmin.py:896
 #, python-format
 msgid "Password has been reset on %s"
 msgstr "Salasana on nollattu kohteessa %s"
 
-#: seahub/views/sysadmin.py:929
+#: seahub/views/sysadmin.py:922
 #, python-format
 msgid ""
 "Successfully reset password to %(passwd)s, an email has been sent to "
 "%(user)s."
 msgstr "Salasana nollattu onnistuneesti, sähköposti on lähetty käyttäjälle %(user)s. Uusi salasana on %(passwd)s."
 
-#: seahub/views/sysadmin.py:934
+#: seahub/views/sysadmin.py:927
 #, python-format
 msgid ""
 "Successfully reset password to %(passwd)s, but failed to send email to "
 "%(user)s, please check your email configuration."
 msgstr "Salasana nollattu onnistuneesti, mutta sähköpostin lähettäminen käyttäjälle %(user)s epäonnistui, ole hyvä ja tarkista sähköpostin asetukset. Uusi salasana on %(passwd)s."
 
-#: seahub/views/sysadmin.py:938
+#: seahub/views/sysadmin.py:931
 #, python-format
 msgid "Successfully reset password to %(passwd)s for user %(user)s."
 msgstr "Salasana nollattu onnistuneesti. Uusi salasana käyttäjälle %(user)s on %(passwd)s."
 
-#: seahub/views/sysadmin.py:941
+#: seahub/views/sysadmin.py:934
 #, python-format
 msgid ""
 "Successfully reset password to %(passwd)s for user %(user)s. But email "
@@ -6469,107 +6513,107 @@ msgid ""
 "configured."
 msgstr "Salasana nollattu onnistuneesti käyttäjälle %(user)s, mutta sähköpostin lähettäminen epäonnistui, koska sähköpostipalvelu ei ole oikein konfiguroitu. Uusi salasana on %(passwd)s."
 
-#: seahub/views/sysadmin.py:944
+#: seahub/views/sysadmin.py:937
 msgid "Failed to reset password: user does not exist"
 msgstr "Salasanan nollaus epäonnistui: käyttäjää ei ole"
 
-#: seahub/views/sysadmin.py:960 seahub/views/sysadmin.py:1882
+#: seahub/views/sysadmin.py:953 seahub/views/sysadmin.py:1867
 #, python-format
 msgid "You are invited to join %s"
 msgstr "Sinulle on lähetetty kutsu liittyä %s-palveluun"
 
-#: seahub/views/sysadmin.py:993
+#: seahub/views/sysadmin.py:986
 #, python-format
 msgid "Fail to add user %s."
 msgstr "Käyttäjän %s lisääminen epäonnistui."
 
-#: seahub/views/sysadmin.py:1012 seahub/views/sysadmin.py:1025
+#: seahub/views/sysadmin.py:1005 seahub/views/sysadmin.py:1018
 #, python-format
 msgid "Successfully added user %s. An email notification has been sent."
 msgstr "Käyttäjä %s lisätty onnistuneesti. Sähköposti ilmoitus on lähetetty."
 
-#: seahub/views/sysadmin.py:1015 seahub/views/sysadmin.py:1028
+#: seahub/views/sysadmin.py:1008 seahub/views/sysadmin.py:1021
 #, python-format
 msgid ""
 "Successfully added user %s. An error accurs when sending email notification,"
 " please check your email configuration."
 msgstr "Käyttäjä %s lisätty onnistuneesti. Sähköpostin lähetyksessä tapahtui virhe, ole hyvä ja tarkista sähköpostiasetukset."
 
-#: seahub/views/sysadmin.py:1017 seahub/views/sysadmin.py:1030
+#: seahub/views/sysadmin.py:1010 seahub/views/sysadmin.py:1023
 #, python-format
 msgid "Successfully added user %s."
 msgstr "Käyttäjä %s lisätty onnistuneesti."
 
-#: seahub/views/sysadmin.py:1032
+#: seahub/views/sysadmin.py:1025
 #, python-format
 msgid ""
 "Successfully added user %s. But email notification can not be sent, because "
 "Email service is not properly configured."
 msgstr "Käyttäjä %s lisätty onnistuneesti, mutta sähköpostia ei voitu lähettää koska sähköpostiasetukset on väärin konfiguroitu."
 
-#: seahub/views/sysadmin.py:1225
+#: seahub/views/sysadmin.py:1198
 msgid "Failed to rename organization"
 msgstr "Organisaation nimen vaihto epäonnistui"
 
-#: seahub/views/sysadmin.py:1255 seahub/views/sysadmin.py:1672
-#: seahub/views/sysadmin.py:1768
+#: seahub/views/sysadmin.py:1228 seahub/views/sysadmin.py:1645
+#: seahub/views/sysadmin.py:1741
 msgid "Successfully deleted."
 msgstr "Poistettu onnistuneesti."
 
-#: seahub/views/sysadmin.py:1561
+#: seahub/views/sysadmin.py:1534
 msgid "Failed to transfer, invalid arguments."
 msgstr "Siirto epäonnistui, virheelliset argumentit."
 
-#: seahub/views/sysadmin.py:1572
+#: seahub/views/sysadmin.py:1545
 #, python-format
 msgid "Failed to transfer, user %s not found"
 msgstr "Siirto epäonnistui, käyttäjää %s ei löydy"
 
-#: seahub/views/sysadmin.py:1578
+#: seahub/views/sysadmin.py:1551
 msgid "Can not transfer organization library"
 msgstr "Organisaation kirjastoa ei voi siirtää"
 
-#: seahub/views/sysadmin.py:1582
+#: seahub/views/sysadmin.py:1555
 #, python-format
 msgid "Can not transfer library to organization user %s"
 msgstr "Kirjastoa ei voida siirtää organisaation käyttäjälle %s"
 
-#: seahub/views/sysadmin.py:1635
+#: seahub/views/sysadmin.py:1608
 msgid "Successfully transfered."
 msgstr "Siirretty onnistuneesti."
 
-#: seahub/views/sysadmin.py:1771
+#: seahub/views/sysadmin.py:1744
 msgid "Failed to delete, please try again later."
 msgstr "Poisto epäonnistui, ole hyvä ja yritä myöhemmin uudestaan."
 
-#: seahub/views/sysadmin.py:1802
+#: seahub/views/sysadmin.py:1775
 #, python-format
 msgid "Successfully set %s as admin."
 msgstr "Onnistuneesti asetettu %s ylläpitäjäksi"
 
-#: seahub/views/sysadmin.py:1804
+#: seahub/views/sysadmin.py:1777
 #, python-format
 msgid "Failed to set %s as admin: user does not exist."
 msgstr "Käyttäjän %s asetus ylläpitäjäksi epäonnistui: käyttäjää ei ole"
 
-#: seahub/views/sysadmin.py:1889
+#: seahub/views/sysadmin.py:1874
 msgid "Import succeeded"
 msgstr "Tuonti onnistui"
 
-#: seahub/views/sysadmin.py:1891
+#: seahub/views/sysadmin.py:1876
 msgid "Please select a csv file first."
 msgstr "Ole hyvä ja valitse ensin csv-tiedosto."
 
-#: seahub/views/sysadmin.py:1955
+#: seahub/views/sysadmin.py:1940
 msgid "Invalid setting"
 msgstr "Virheellinen asetus"
 
-#: seahub/views/sysadmin.py:1962 seahub/views/sysadmin.py:1966
-#: seahub/views/sysadmin.py:1971
+#: seahub/views/sysadmin.py:1947 seahub/views/sysadmin.py:1951
+#: seahub/views/sysadmin.py:1956
 msgid "Invalid value"
 msgstr "Virheellinen arvo"
 
-#: seahub/views/sysadmin.py:2336
+#: seahub/views/sysadmin.py:2321
 msgid "Successfully deleted 1 item"
 msgstr ""
 
