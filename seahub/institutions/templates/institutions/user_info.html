@@ -51,7 +51,7 @@
         <form id="set-quota-form" method="post" class="hide">{% csrf_token %}
             <h3>{% trans "Set user storage limit" %}</h3>
             <input type="hidden" name="email" value="{{ email }}" />
-            <input type="text" name="space_quota" /> MB
+            <input type="text" name="space_quota" class="input" /> MB
             <p class="tip">
             <span>{% trans "An integer that is greater than or equal to 0." %}</span><br />
             <span>{% trans "Tip: 0 means default limit" %}</span>
