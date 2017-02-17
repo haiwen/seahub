@@ -176,7 +176,6 @@ define([
                 this.$el_con.show();
 
                 this.setFileInput();
-                this.updateDirOpBarUI(); // should be after `setFileInput()`
 
                 // there may be a 'style' added via 'onWindowScroll()' when visiting last dir
                 this.$('.js-dir-content').removeAttr('style');
@@ -205,6 +204,8 @@ define([
                 this.dir.last_start = 0;
                 this.dir.limit = 100;
                 this.render_dirents_slice(this.dir.last_start, this.dir.limit);
+
+                this.updateDirOpBarUI(); // after `render_dirents_slice`
 
                 this.getImageThumbnail();
             },
