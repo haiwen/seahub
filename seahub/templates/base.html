@@ -210,6 +210,11 @@ $('.js-close-side-nav').click(function() {
     $('.side-nav').css({'left': '-300px'});
     return false;
 });
+$(window).resize(function() {
+    if ($(window).width() >= 768) {
+        $('.side-nav').css({'left': 0});
+    }
+});
 </script>
 {% block extra_script %}{% endblock %}
 </body>
