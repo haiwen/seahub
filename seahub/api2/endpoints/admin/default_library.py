@@ -6,6 +6,7 @@ from rest_framework.permissions import IsAdminUser
 from rest_framework.response import Response
 from rest_framework.views import APIView
 from rest_framework import status
+from django.utils.translation import ugettext as _
 
 from seaserv import seafile_api
 
@@ -15,11 +16,6 @@ from seahub.api2.throttling import UserRateThrottle
 from seahub.api2.utils import api_error
 from seahub.base.accounts import User
 from seahub.views import get_system_default_repo_id
-
-try:
-    from seahub.settings import USER_DEFAULT_LIBRARY_NAME
-except ImportError:
-    USER_DEFAULT_LIBRARY_NAME = "My Library"
 
 logger = logging.getLogger(__name__)
 
@@ -32,8 +28,8 @@ class AdminDefaultLibrary(APIView):
 
     def create_default_repo(self, username):
 
-        default_repo_id = seafile_api.create_repo(name=USER_DEFAULT_LIBRARY_NAME,
-                desc=USER_DEFAULT_LIBRARY_NAME, username=username, passwd=None)
+        default_repo_id = seafile_api.create_repo(name=_("My Library"),
+                desc=_("My Library"), username=username, passwd=None)
 
         sys_repo_id = get_system_default_repo_id()
         if not sys_repo_id or not seafile_api.get_repo(sys_repo_id):
