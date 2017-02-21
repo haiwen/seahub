@@ -13,47 +13,32 @@
 {% block main_css_class %}{% endblock %} {# remove the padding-top css #}
 
 {% block main_content %}
-    <div id="view-hd">
-        <h2>{{ filename }}
-            {% if is_starred %}
-            <a id="file-star" class="no-deco icon-star" href="#" title="{% trans "starred" %}" aria-label="{% trans "starred" %}"></a>
-            {% else %}
-            <a id="file-star" class="no-deco icon-star-empty" href="#" title="{% trans "unstarred" %}" aria-label="{% trans "unstarred" %}"></a>
-            {% endif %}
+    <div id="view-hd" class="ovhd">
+        <div class="fleft">
+            <h2 class="file-view-hd">
+                <span class="vam">{{ filename }}</span>
+                {% if is_starred %}
+                <a id="file-star" class="vam no-deco icon-star" href="#" title="{% trans "starred" %}" aria-label="{% trans "starred" %}"></a>
+                {% else %}
+                <a id="file-star" class="vam no-deco icon-star-empty" href="#" title="{% trans "unstarred" %}" aria-label="{% trans "unstarred" %}"></a>
+                {% endif %}
 
-            {% if is_pro %}
-            <img class="file-locked-icon cspt vam {% if not file_locked %}hide{% endif %}" width="16" src="{{ MEDIA_URL }}img/file-locked-32.png" alt="{% trans "locked" %}" title="{% trans "locked" %}" aria-label="{% trans "locked" %}" />
-            {% endif %}
-        </h2>
-    </div>
-
-    <div id="view-path-op">
-        <p class="file-path">
-        {% trans "Current Path: "%}
-        {% for name, link in zipped %}
-            {% if not forloop.last %}
-                <a href="{% url 'view_common_lib_dir' repo.id link|strip_slash %}">{{ name }}</a> /
-            {% else %}
-                {{ name }}
-            {% endif %}
-        {% endfor %}
-        </p>
-    </div>
-
-    <div id="file">
-        <div id="file-op" class="ovhd">
-            <div class="commit fleft">
-                {% avatar latest_contributor 24 %} <a href="{% url 'user_profile' latest_contributor %}" class="name vam">{{ latest_contributor|email2nickname }}</a>
+                {% if is_pro %}
+                <img class="file-locked-icon cspt vam {% if not file_locked %}hide{% endif %}" width="16" src="{{ MEDIA_URL }}img/file-locked-32.png" alt="{% trans "locked" %}" title="{% trans "locked" %}" aria-label="{% trans "locked" %}" />
+                {% endif %}
+            </h2>
+            <div class="commit">
+                <a href="{% url 'user_profile' latest_contributor %}" class="name vam">{{ latest_contributor|email2nickname }}</a>
                 <span class="time vam">{{ last_modified|translate_seahub_time}}</span>
                 {% block update_detail %}
                 {% if last_commit_id %}
                   <span class="vam">{% trans "updated this file"%}.</span>
                 {% endif %}
                 {% endblock %}
-
             </div>
+        </div>
 
-            <div class="fright sf-btn-group">
+        <div class="sf-btn-group file-view-op fright">
             {% if can_lock_unlock_file %}
                 {% if not file_locked %}
                     <button id="lock-file" class="sf-btn-group-btn sf-btn-group-btn-first op-icon sf2-icon-lock" title="{% trans "Lock" %}"></button>
@@ -82,22 +67,21 @@
             <a class="sf-btn-group-btn sf-btn-link op-icon sf2-icon-download" href="?dl=1" id="download" title="{% trans "Download"%}"></a>
 
             <button id="discuss" class="sf-btn-group-btn sf-btn-group-btn-last op-icon sf2-icon-msgs" title="{% trans "Comment" %}"></button>
-            </div>
-
-            <div id="file-discussions" class="right-side-panel"></div>
         </div>
 
-        <div id="file-view" {% if filetype == 'Image' %}class="image-file-view"{% endif %}>
-          {% if err %}
-            <div id="file-view-tip">
-            {% if err != 'invalid extension' %}
-                <p class="error">{{ err }}</p>
-            {% endif %}
-            </div>
-          {% else %}
-          {% block file_view %}{% endblock %}
-          {% endif %}
+        <div id="file-discussions" class="right-side-panel"></div>
+    </div>
+
+    <div id="file-view" {% if filetype == 'Image' %}class="image-file-view"{% endif %}>
+      {% if err %}
+        <div id="file-view-tip">
+        {% if err != 'invalid extension' %}
+            <p class="error">{{ err }}</p>
+        {% endif %}
         </div>
+      {% else %}
+      {% block file_view %}{% endblock %}
+      {% endif %}
     </div>
 
     {% include "snippets/file_share_popup.html" %}

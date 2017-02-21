@@ -2629,6 +2629,13 @@ button.sf-dropdown-toggle:focus {
 }
 
 /* file view online, file edit */
+.file-view-hd {
+    font-size:1.4em;
+    margin-bottom:0px;
+}
+.file-view-op {
+    margin-top:10px;
+}
 #shared-link,
 #shared-upload-link,
 #shared-link-text,
@@ -2664,7 +2671,7 @@ button.sf-dropdown-toggle:focus {
 #file-view-tip {
     height:130px;
     padding:30px 10px 10px;
-    width:930px;
+    width:950px;
     background:#fff;
     text-align:center;
 }
@@ -2674,24 +2681,28 @@ button.sf-dropdown-toggle:focus {
     font-family: Consolas,"Liberation Mono",Courier,monospace;/*override .ace_editor*/
     min-height: 200px;
 }
-#img-prev {
+#img-prev,
+#img-next {
     position:absolute;
+    top:48%;
+    text-decoration:none;
+    color:#888;
+    width:50px;
+    height:50px;
+    background:#fff;
+    border-radius:100%;
+    line-height:50px;
+}
+#img-prev {
     left:15px;
 }
 #img-next {
-    position:absolute;
     right:15px;
 }
-#img-prev,
-#img-next {
-    top:48%;
-    text-decoration:none;
-    color: #333;
-    width: 50px;
-    height: 50px;
-    background: #fff;
-    border-radius: 100%;
-    line-height: 50px;
+
+#img-prev:hover,
+#img-next:hover {
+    color:#333;
 }
 #image-view {
     padding:1px;
