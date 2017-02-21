@@ -1811,13 +1811,12 @@ def batch_add_user(request):
                 continue
 
             try:
-                username = row[0].strip() or ''
-                password = row[1].strip() or ''
+                username = row[0].strip()
+                password = row[1].strip()
+                if not is_valid_username(username) or not password:
+                    continue
             except Exception as e:
                 logger.error(e)
-                continue
-
-            if not is_valid_username(username) or password == '':
                 continue
 
             try:
@@ -1831,47 +1830,34 @@ def batch_add_user(request):
 
                 # then update the user's optional info
                 try:
-                    nickname = row[2].strip() or ''
+                    nickname = row[2].strip()
                     if len(nickname) <= 64 and '/' not in nickname:
                         Profile.objects.add_or_update(username, nickname, '')
-                except Exception as e:
-                    logger.error(e)
-                    continue
 
-                try:
-                    department = row[3].strip() or ''
+                    department = row[3].strip()
                     if len(department) <= 512:
                         DetailedProfile.objects.add_or_update(username, department, '')
-                except Exception as e:
-                    logger.error(e)
-                    continue
 
-                try:
-                    role = row[4].strip() or ''
+                    role = row[4].strip()
                     if is_pro_version() and role in get_available_roles():
                         User.objects.update_role(username, role)
-                except Exception as e:
-                    logger.error(e)
-                    continue
 
-                try:
-                    space_quota_mb = row[5].strip() or ''
+                    space_quota_mb = row[5].strip()
                     space_quota_mb = int(space_quota_mb)
                     if space_quota_mb >= 0:
                         space_quota = int(space_quota_mb) * get_file_size_unit('MB')
                         seafile_api.set_user_quota(username, space_quota)
+
+                    send_html_email_with_dj_template(
+                        username, dj_template='sysadmin/user_batch_add_email.html',
+                        subject=_(u'You are invited to join %s') % SITE_NAME,
+                        context={
+                            'user': email2nickname(request.user.username),
+                            'email': username,
+                            'password': password,
+                        })
                 except Exception as e:
                     logger.error(e)
-                    continue
-
-                send_html_email_with_dj_template(
-                    username, dj_template='sysadmin/user_batch_add_email.html',
-                    subject=_(u'You are invited to join %s') % SITE_NAME,
-                    context={
-                        'user': email2nickname(request.user.username),
-                        'email': username,
-                        'password': password,
-                    })
 
         messages.success(request, _('Import succeeded'))
     else:
