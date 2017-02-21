@@ -200,28 +200,31 @@ define([
             ev.preventDefault();
 
             var cid = ev.dataTransfer.getData('text/cid');
-            var is_dir = ev.dataTransfer.getData('text/is_dir');
+            var is_dir = ev.dataTransfer.getData('text/is_dir'); // the value is string: 'true' or 'undefined'
             var obj_name = ev.dataTransfer.getData('text/plain');
 
-            if (is_dir && obj_name == this.model.get('obj_name')) {
+            if (is_dir == 'true' && obj_name == this.model.get('obj_name')) {
                 // can't move a directory to itself
                 return false;
             }
 
             var dir = this.dir;
+            var repo_id = dir.repo_id;
             var path = dir.path;
             var dirent_path = Common.pathJoin([path, this.model.get('obj_name')]);
             $.ajax({
-                url: Common.getUrl({
-                    'name': is_dir ? 'mv_dir' : 'mv_file',
-                    'repo_id': dir.repo_id
-                }) + '?path=' + encodeURIComponent(path)
-                + '&obj_name=' + encodeURIComponent(obj_name),
-                type: 'POST',
+                url: Common.getUrl({'name': 'copy_move_task'}),
+                type: 'post',
+                cache: false,
                 dataType: 'json',
                 data: {
-                    'dst_repo': dir.repo_id,
-                    'dst_path': dirent_path
+                    'src_repo_id': repo_id,
+                    'src_parent_dir': path,
+                    'src_dirent_name': obj_name,
+                    'dst_repo_id': repo_id,
+                    'dst_parent_dir': dirent_path,
+                    'operation': 'move',
+                    'dirent_type': is_dir == 'true' ? 'dir' : 'file'
                 },
                 beforeSend: Common.prepareCSRFToken,
                 success: function() {
