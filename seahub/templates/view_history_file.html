@@ -12,30 +12,18 @@
 {% block main_css_class %}{% endblock %} {# remove the padding-top css #}
 
 {% block main_content %}
-    <div id="view-hd">
-      {% block view_hd %}
-        <h2>
-          {{file_name}}
-          <span class="commit-time">({{ current_commit.props.ctime|tsstr_sec }})</span>
-        </h2>
-      {% endblock %}
-    </div>
-
-    <div id="file">
-        <div id="file-op" class="ovhd">
-            <p class="history-file-path fleft">
-              {% block file_path %}
-                {% trans "Current Path: "%}
-                {% for name, link in zipped %}
-                    {% if not forloop.last %} {{ name }} / {% else %} {{ name }} {% endif %}
-                {% endfor %}
-              {% endblock %}
-            </p>
-
-            <a class="sf-btn-link fright" href="{% url 'download_file' repo.id obj_id%}?file_name={{ file_name|urlencode }}&p={{path|urlencode}}" id="download">{% trans "Download"%}</a>
+    <div id="view-hd" class="ovhd">
+        <div class="fleft">
+            <h2 class="file-view-hd">{{file_name}}</h2>
+            {% block file_path %}
+            <p class="file-view-meta-info">{{ current_commit.props.ctime|tsstr_sec }}</p>
+            {% endblock %}
         </div>
-        {% include 'snippets/file_content_html.html' %}
+
+        <a class="file-view-op sf-btn-link fright" href="{% url 'download_file' repo.id obj_id%}?file_name={{ file_name|urlencode }}&p={{path|urlencode}}" id="download">{% trans "Download"%}</a>
     </div>
+
+    {% include 'snippets/file_content_html.html' %}
 {% endblock %}
 
 {% block extra_script %}

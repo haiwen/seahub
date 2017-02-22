@@ -285,7 +285,7 @@ if (ref_list.length > 1 && ref_list[0].indexOf('search') > 0) {
 $(window).load(function() {
     if (highlight_kw) {
         // hl kw in file title
-        highlight_kw($('#view-hd')[0]);
+        highlight_kw($('.file-view-hd span')[0]);
 
         // hl kw in file content
         if ('{{filetype}}' == 'Markdown') {

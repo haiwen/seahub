@@ -2636,6 +2636,9 @@ button.sf-dropdown-toggle:focus {
 .file-view-op {
     margin-top:10px;
 }
+.file-view-meta-info {
+    margin:0;
+}
 #shared-link,
 #shared-upload-link,
 #shared-link-text,
@@ -3476,7 +3479,7 @@ button.sf-dropdown-toggle:focus {
 }
 .shared-file-op-btn {
     padding:7px;
-    margin-top:11px;
+    margin-top:9px;
 }
 /*random password */
 #share-popup .passwd-wrapper,
