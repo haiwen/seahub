@@ -4,7 +4,7 @@
 content of files that can be viewed online shows here.
 For details please refer to 'snippets/file_content_js.html'.
 {% endcomment %}
-<div id="file-view" {% if filetype == 'Image' %}class="image-file-view"{% endif %}>
+<div id="file-view" {% if filetype == 'Image' and not err %}class="image-file-view"{% endif %}>
     {% include 'snippets/file_encoding.html' %}
     {% if not err %}
         {% if filetype == 'Text' or filetype == 'Markdown' %}

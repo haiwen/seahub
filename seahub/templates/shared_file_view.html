@@ -13,7 +13,7 @@
     {% endif %}
     <div id="shared-file-view-hd" class="ovhd">
         <div class="fleft js-file-info">
-            <h2 class="ellipsis no-bold" title="{{ file_name }}">{{ file_name }}</h2>
+            <h2 class="file-view-hd ellipsis no-bold" title="{{ file_name }}">{{ file_name }}</h2>
             {% if zipped %}
             <p class="cur-path ellipsis">
               {% trans "Current path: "%}
@@ -42,10 +42,7 @@
         </div>
     </div>
 
-    <div id="file">
-        {% include 'snippets/file_content_html.html' %}
-    </div>
-
+    {% include 'snippets/file_content_html.html' %}
 
     <form id="file-save-form" action="{{save_to_link}}" method="post" class="file-choose-form hide">{% csrf_token %}
         <h3>{% trans "Save To:" %}</h3>
