@@ -122,11 +122,11 @@ urlpatterns = patterns(
     url(r'^#group/(?P<group_id>\d+)/settings/$', fake_view, name='group_manage'),
 
     ### share/upload link ###
-    url(r'^f/(?P<token>[a-f0-9]{10})/$', view_shared_file, name='view_shared_file'),
-    url(r'^f/(?P<token>[a-f0-9]{10})/raw/(?P<obj_id>[0-9a-f]{40})/(?P<file_name>.*)', view_raw_shared_file, name='view_raw_shared_file'),
-    url(r'^d/(?P<token>[a-f0-9]{10})/$', view_shared_dir, name='view_shared_dir'),
-    url(r'^d/(?P<token>[a-f0-9]{10})/files/$', view_file_via_shared_dir, name='view_file_via_shared_dir'),
-    url(r'^u/d/(?P<token>[a-f0-9]{10})/$', view_shared_upload_link, name='view_shared_upload_link'),
+    url(r'^f/(?P<token>[a-f0-9]+)/$', view_shared_file, name='view_shared_file'),
+    url(r'^f/(?P<token>[a-f0-9]+)/raw/(?P<obj_id>[0-9a-f]{40})/(?P<file_name>.*)', view_raw_shared_file, name='view_raw_shared_file'),
+    url(r'^d/(?P<token>[a-f0-9]+)/$', view_shared_dir, name='view_shared_dir'),
+    url(r'^d/(?P<token>[a-f0-9]+)/files/$', view_file_via_shared_dir, name='view_file_via_shared_dir'),
+    url(r'^u/d/(?P<token>[a-f0-9]+)/$', view_shared_upload_link, name='view_shared_upload_link'),
 
     ### Misc ###
     url(r'^image-view/(?P<filename>.*)$', image_view, name='image_view'),
@@ -149,7 +149,7 @@ urlpatterns = patterns(
     url(r'^ajax/repo/(?P<repo_id>[-0-9a-f]{36})/current_commit/$', get_current_commit, name='get_current_commit'),
     url(r'^ajax/repo/(?P<repo_id>[-0-9a-f]{36})/history/changes/$', repo_history_changes, name='repo_history_changes'),
     url(r'^ajax/repo/(?P<repo_id>[-0-9a-f]{36})/encrypted_file/(?P<file_id>[0-9a-f]{40})/download/$', download_enc_file, name='download_enc_file'),
-    url(r'^ajax/u/d/(?P<token>[-0-9a-f]{10})/upload/$', get_file_upload_url_ul, name='get_file_upload_url_ul'),
+    url(r'^ajax/u/d/(?P<token>[-0-9a-f]+)/upload/$', get_file_upload_url_ul, name='get_file_upload_url_ul'),
     url(r'^ajax/group/(?P<group_id>\d+)/repos/$', get_unenc_group_repos, name='get_group_repos'),
     url(r'^ajax/group/(?P<group_id>\d+)/members/import/$', ajax_group_members_import, name='ajax_group_members_import'),
     url(r'^ajax/unenc-rw-repos/$', unenc_rw_repos, name='unenc_rw_repos'),
@@ -177,9 +177,9 @@ urlpatterns = patterns(
     url(r'^api/v2.1/shared-repos/$', SharedRepos.as_view(), name='api-v2.1-shared-repos'),
     url(r'^api/v2.1/shared-repos/(?P<repo_id>[-0-9a-f]{36})/$', SharedRepo.as_view(), name='api-v2.1-shared-repo'),
     url(r'^api/v2.1/share-links/$', ShareLinks.as_view(), name='api-v2.1-share-links'),
-    url(r'^api/v2.1/share-links/(?P<token>[a-f0-9]{10})/$', ShareLink.as_view(), name='api-v2.1-share-link'),
+    url(r'^api/v2.1/share-links/(?P<token>[a-f0-9]+)/$', ShareLink.as_view(), name='api-v2.1-share-link'),
     url(r'^api/v2.1/upload-links/$', UploadLinks.as_view(), name='api-v2.1-upload-links'),
-    url(r'^api/v2.1/upload-links/(?P<token>[a-f0-9]{10})/$', UploadLink.as_view(), name='api-v2.1-upload-link'),
+    url(r'^api/v2.1/upload-links/(?P<token>[a-f0-9]+)/$', UploadLink.as_view(), name='api-v2.1-upload-link'),
     url(r'^api/v2.1/repos/(?P<repo_id>[-0-9a-f]{36})/file/$', FileView.as_view(), name='api-v2.1-file-view'),
     url(r'^api/v2.1/repos/(?P<repo_id>[-0-9a-f]{36})/zip-task/$', ZipTaskView.as_view(), name='api-v2.1-zip-task'),
     url(r'^api/v2.1/repos/(?P<repo_id>[-0-9a-f]{36})/file-uploaded-bytes/$', RepoFileUploadedBytesView.as_view(), name='api-v2.1-repo-file-uploaded-bytes'),

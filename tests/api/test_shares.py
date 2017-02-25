@@ -53,7 +53,7 @@ class FileSharedLinkApiTest(BaseTestCase):
         )
         self.assertEqual(201, resp.status_code)
         self.assertRegexpMatches(resp._headers['location'][1],
-                                 r'http(.*)/f/(\w{10,10})/')
+                                 r'http(.*)/f/(\w{10,100})/')
 
         token = resp._headers['location'][1].split('/')[-2]
         self.assertIsNotNone(FileShare.objects.get(token=token))
@@ -69,7 +69,7 @@ class FileSharedLinkApiTest(BaseTestCase):
         )
         self.assertEqual(201, resp.status_code)
         self.assertRegexpMatches(resp._headers['location'][1],
-                                 r'http(.*)/f/(\w{10,10})/')
+                                 r'http(.*)/f/(\w{10,100})/')
 
         token = resp._headers['location'][1].split('/')[-2]
         fileshare = FileShare.objects.get(token=token)
@@ -86,7 +86,7 @@ class FileSharedLinkApiTest(BaseTestCase):
         )
         self.assertEqual(201, resp.status_code)
         self.assertRegexpMatches(resp._headers['location'][1],
-                                 r'http(.*)/f/(\w{10,10})/')
+                                 r'http(.*)/f/(\w{10,100})/')
 
         token = resp._headers['location'][1].split('/')[-2]
         fileshare = FileShare.objects.get(token=token)
@@ -103,7 +103,7 @@ class FileSharedLinkApiTest(BaseTestCase):
         )
         self.assertEqual(201, resp.status_code)
         self.assertRegexpMatches(resp._headers['location'][1],
-                                 r'http(.*)/f/(\w{10,10})/')
+                                 r'http(.*)/f/(\w{10,100})/')
 
         token = resp._headers['location'][1].split('/')[-2]
         fileshare = FileShare.objects.get(token=token)
@@ -122,7 +122,7 @@ class FileSharedLinkApiTest(BaseTestCase):
         self.assertEqual(201, resp.status_code)
         self.dir_link_location = resp._headers['location'][1]
         self.assertRegexpMatches(self.dir_link_location,
-                                 r'http(.*)/d/(\w{10,10})/')
+                                 r'http(.*)/d/(\w{10,100})/')
 
         token = resp._headers['location'][1].split('/')[-2]
         self.assertIsNotNone(FileShare.objects.get(token=token))
@@ -139,7 +139,7 @@ class FileSharedLinkApiTest(BaseTestCase):
         self.assertEqual(201, resp.status_code)
         self.dir_link_location = resp._headers['location'][1]
         self.assertRegexpMatches(self.dir_link_location,
-                                 r'http(.*)/d/(\w{10,10})/')
+                                 r'http(.*)/d/(\w{10,100})/')
 
         token = resp._headers['location'][1].split('/')[-2]
         fileshare = FileShare.objects.get(token=token)
@@ -157,7 +157,7 @@ class FileSharedLinkApiTest(BaseTestCase):
         self.assertEqual(201, resp.status_code)
         self.dir_link_location = resp._headers['location'][1]
         self.assertRegexpMatches(self.dir_link_location,
-                                 r'http(.*)/d/(\w{10,10})/')
+                                 r'http(.*)/d/(\w{10,100})/')
 
         token = resp._headers['location'][1].split('/')[-2]
         fileshare = FileShare.objects.get(token=token)
@@ -175,7 +175,7 @@ class FileSharedLinkApiTest(BaseTestCase):
         self.assertEqual(201, resp.status_code)
         self.dir_link_location = resp._headers['location'][1]
         self.assertRegexpMatches(self.dir_link_location,
-                                 r'http(.*)/d/(\w{10,10})/')
+                                 r'http(.*)/d/(\w{10,100})/')
 
         token = resp._headers['location'][1].split('/')[-2]
         fileshare = FileShare.objects.get(token=token)
@@ -194,7 +194,7 @@ class FileSharedLinkApiTest(BaseTestCase):
         self.assertEqual(201, resp.status_code)
         self.dir_link_location = resp._headers['location'][1]
         self.assertRegexpMatches(self.dir_link_location,
-                                 r'http(.*)/u/d/(\w{10,10})/')
+                                 r'http(.*)/u/d/(\w{10,100})/')
 
         token = resp._headers['location'][1].split('/')[-2]
         self.assertIsNotNone(UploadLinkShare.objects.get(token=token))
@@ -211,7 +211,7 @@ class FileSharedLinkApiTest(BaseTestCase):
         self.assertEqual(201, resp.status_code)
         self.dir_link_location = resp._headers['location'][1]
         self.assertRegexpMatches(self.dir_link_location,
-                                 r'http(.*)/u/d/(\w{10,10})/')
+                                 r'http(.*)/u/d/(\w{10,100})/')
 
         token = resp._headers['location'][1].split('/')[-2]
         uls = UploadLinkShare.objects.get(token=token)

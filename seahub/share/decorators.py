@@ -15,7 +15,6 @@ def share_link_audit(func):
         fileshare = FileShare.objects.get_valid_file_link_by_token(token) or \
                     FileShare.objects.get_valid_dir_link_by_token(token) or \
                     UploadLinkShare.objects.get_valid_upload_link_by_token(token)
-
         if fileshare is None:
             raise Http404
 

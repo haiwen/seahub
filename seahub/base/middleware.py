@@ -83,7 +83,7 @@ class ForcePasswdChangeMiddleware(object):
     def _request_in_black_list(self, request):
         path = request.path
         black_list = (r'^%s$' % SITE_ROOT, r'home/.+', r'repo/.+',
-                      r'[f|d]/[a-f][0-9]{10}', r'group/\d+', r'groups/',
+                      r'[f|d]/[a-f][0-9]+', r'group/\d+', r'groups/',
                       r'share/', r'profile/', r'notification/list/')
 
         for patt in black_list:

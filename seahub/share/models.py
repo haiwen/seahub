@@ -6,6 +6,7 @@ from django.db import models
 from django.utils import timezone
 from django.utils.translation import ugettext_lazy as _
 from django.contrib.auth.hashers import make_password, check_password
+from constance import config
 
 from seahub.base.fields import LowerCaseCharField
 from seahub.utils import normalize_file_path, normalize_dir_path, gen_token,\
@@ -86,7 +87,7 @@ class FileShareManager(models.Manager):
         else:
             password_enc = None
 
-        token = gen_token(max_length=10)
+        token = gen_token(max_length=config.SHARE_LINK_TOKEN_LENGTH)
         fs = super(FileShareManager, self).create(
             username=username, repo_id=repo_id, path=path, token=token,
             s_type=s_type, password=password_enc, expire_date=expire_date)
@@ -155,7 +156,7 @@ class FileShare(models.Model):
     username = LowerCaseCharField(max_length=255, db_index=True)
     repo_id = models.CharField(max_length=36, db_index=True)
     path = models.TextField()
-    token = models.CharField(max_length=10, unique=True)
+    token = models.CharField(max_length=100, unique=True)
     ctime = models.DateTimeField(default=datetime.datetime.now)
     view_cnt = models.IntegerField(default=0)
     s_type = models.CharField(max_length=2, db_index=True, default='f') # `f` or `d`
@@ -226,7 +227,7 @@ class UploadLinkShareManager(models.Manager):
     def create_upload_link_share(self, username, repo_id, path,
                                  password=None, expire_date=None):
         path = normalize_dir_path(path)
-        token = gen_token(max_length=10)
+        token = gen_token(max_length=config.SHARE_LINK_TOKEN_LENGTH)
         if password is not None:
             password_enc = make_password(password)
         else:
