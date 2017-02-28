@@ -201,12 +201,21 @@ define([
         },
 
         del: function() {
+            var _this = this;
+            if (this.model.get('is_img')) {
+                var index = $('.img-name-link', this.dirView.$dirent_list).index(this.$('.img-name-link'));
+            }
+
             var dirent_name = this.model.get('obj_name');
             this.model.deleteFromServer({
                 success: function(data) {
                     var msg = gettext("Successfully deleted %(name)s")
                         .replace('%(name)s', dirent_name);
                     Common.feedback(msg, 'success');
+
+                    if (_this.model.get('is_img')) {
+                        _this.dirView.updateMagnificPopupOptions({'op':'delete-item', 'index':index});
+                    }
                 },
                 error: function(xhr) {
                     Common.ajaxErrorHandler(xhr);
@@ -216,6 +225,7 @@ define([
         },
 
         rename: function() {
+            var _this = this;
             var dirent_name = this.model.get('obj_name');
 
             var form = $(this.renameTemplate({
@@ -247,6 +257,15 @@ define([
                 app.ui.freezeItemHightlight = false;
                 if (app.ui.currentHighlightedItem) {
                     app.ui.currentHighlightedItem.rmHighlight();
+                }
+
+                if (_this.model.get('is_img')) {
+                    var index = $('.img-name-link', _this.dirView.$dirent_list).index(_this.$('.img-name-link'));
+                    _this.dirView.updateMagnificPopupOptions({
+                        'op': 'update-item',
+                        'index': index,
+                        'model': _this.model
+                    }); // update the item
                 }
             };
             var cancelRename = function() {
@@ -305,6 +324,13 @@ define([
                 'dirent': this.model,
                 'op_type': op_type
             };
+            if (this.model.get('is_img') && op_type == 'mv') {
+                var index = $('.img-name-link', this.dirView.$dirent_list).index(this.$('.img-name-link'));
+                $.extend(options, {
+                    'dirView': this.dirView,
+                    'imgIndex': index
+                });
+            }
 
             this._hideMenu();
             new DirentMvcpDialog(options);

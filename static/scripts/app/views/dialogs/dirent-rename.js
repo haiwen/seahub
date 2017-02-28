@@ -14,6 +14,9 @@ define([
             this.dirent = options.dirent;
             this.dir = options.dir;
 
+            this.dirView = options.dirView;
+            this.imgIndex = options.imgIndex;
+
             this.render();
             this.$el.modal({appendTo:'#main', focus: false});
             $('#simplemodal-container').css({'width':'auto', 'height':'auto'});
@@ -65,6 +68,14 @@ define([
                 newname: new_name,
                 success: function() {
                     $.modal.close();
+
+                    if (_this.dirent.get('is_img')) {
+                        _this.dirView.updateMagnificPopupOptions({
+                            'op': 'update-item',
+                            'index': _this.imgIndex,
+                            'model': _this.dirent
+                        });
+                    }
                 },
                 error: function(xhr, textStatus, errorThrown) {
                     var err;

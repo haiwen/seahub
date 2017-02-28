@@ -64,6 +64,7 @@ define([
             if (this.model.get('is_img')) {
                 // use specific links such as .img-link, .text-link, in order to make 'open by index' work
                 this.$('.img-link, .text-link').magnificPopup(this.dirView.magnificPopupOptions);
+                this.$el.addClass('img-grid-item');
             }
 
             return this;
@@ -107,6 +108,7 @@ define([
             var op = template({
                 dirent: this.model.attributes,
                 dirent_path: this.model.getPath(),
+                download_url: this.model.getDownloadUrl(),
                 category: dir.category,
                 repo_id: dir.repo_id,
                 is_repo_owner: dir.is_repo_owner,
@@ -126,7 +128,7 @@ define([
 
             // Using _.bind(function, object) to make that whenever the function is
             // called, the value of this will be the object.
-            this.$('.download').on('click', _.bind(this.download, this));
+            this.$('.download-dir').on('click', _.bind(this.download, this));
             this.$('.delete').on('click', _.bind(this.del, this));
             this.$('.share').on('click', _.bind(this.share, this));
             this.$('.mv').on('click', _.bind(this.mvcp, this));
@@ -142,7 +144,7 @@ define([
 
         viewImageWithPopup: function() {
             if (this.model.get('is_img')) {
-                var index = _.indexOf(this.dir.where({'is_img': true}), this.model);
+                var index = $('.img-grid-item', this.dirView.$dirent_grid).index(this.$el);
                 $.magnificPopup.open(this.dirView.magnificPopupOptions, index); // open by index
             }
         },
@@ -159,7 +161,12 @@ define([
             return false;
         },
 
-        del: function(event) {
+        del: function() {
+            var _this = this;
+            if (this.model.get('is_img')) {
+                var index = $('.img-grid-item', this.dirView.$dirent_grid).index(this.$el);
+            }
+
             this.closeMenu();
             var dirent_name = this.model.get('obj_name');
             this.model.deleteFromServer({
@@ -167,6 +174,10 @@ define([
                     var msg = gettext("Successfully deleted %(name)s")
                         .replace('%(name)s', dirent_name);
                     Common.feedback(msg, 'success');
+
+                    if (_this.model.get('is_img')) {
+                        _this.dirView.updateMagnificPopupOptions({'op':'delete-item', 'index':index});
+                    }
                 },
                 error: function(xhr) {
                     Common.ajaxErrorHandler(xhr);
@@ -203,6 +214,14 @@ define([
                 'op_type': op_type
             };
 
+            if (this.model.get('is_img') && op_type == 'mv') {
+                var index = $('.img-grid-item', this.dirView.$dirent_grid).index(this.$el);
+                $.extend(options, {
+                    'dirView': this.dirView,
+                    'imgIndex': index
+                });
+            }
+
             new DirentMvcpDialog(options);
             this.closeMenu();
             return false;
@@ -214,6 +233,14 @@ define([
                 'dir': this.dir,
                 'dirent': this.model
             };
+
+            if (this.model.get('is_img')) {
+                var index = $('.img-grid-item', this.dirView.$dirent_grid).index(this.$el);
+                $.extend(options, {
+                    'dirView': this.dirView,
+                    'imgIndex': index
+                });
+            }
             new DirentRenameDialog(options);
             return false;
         },

@@ -185,22 +185,61 @@ define([
                 this.getImageThumbnail();
             },
 
-            updateMagnificPopupOptions: function() {
-                var imgs = this.dir.where({is_img: true});
-                var items = [];
+            updateMagnificPopupOptions: function(options) {
                 var repo_id = this.dir.repo_id,
                     path = this.dir.path;
-                $(imgs).each(function(index, model) {
+                var genItem = function(model) {
                     var name = model.get('obj_name');
                     var dirent_path = Common.pathJoin([path, name]);
-                    items.push({
+                    var item = {
                         'name': name,
                         'url': model.getWebUrl(),
                         'src': app.config.siteRoot + 'repo/' + repo_id + '/raw' + Common.encodePath(dirent_path)
-                    });
-                });
+                    };
+                    return item;
+                };
 
-                this.magnificPopupOptions.items = items;
+                var _this = this;
+                var getItems = function() {
+                    var imgs = _this.dir.where({is_img: true});
+                    var items = [];
+                    $(imgs).each(function(index, model) {
+                        var item = genItem(model);
+                        items.push(item);
+                    });
+                    _this.magnificPopupOptions.items = items;
+                };
+
+                var addNewItem = function(model) {
+                    var item = genItem(model);
+                    // add the new item as the first
+                    _this.magnificPopupOptions.items.unshift(item);
+                };
+
+                var updateItem = function(index, model) {
+                    var item = genItem(model);
+                    _this.magnificPopupOptions.items[index] = item;
+                };
+
+                var deleteItem = function(index) {
+                    _this.magnificPopupOptions.items.splice(index, 1);
+                };
+
+                var op = options ? options.op : 'get-items';
+                switch (op) {
+                    case 'get-items':
+                        getItems();
+                        break;
+                    case 'add-new-item':
+                        addNewItem(options.model);
+                        break;
+                    case 'update-item':
+                        updateItem(options.index, options.model);
+                        break;
+                    case 'delete-item':
+                        deleteItem(options.index);
+                        break;
+                }
             },
 
             // for fileupload
@@ -632,6 +671,10 @@ define([
                         }
                     }
                 }
+
+                if (new_dirent.get('is_img')) {
+                    this.updateMagnificPopupOptions({'op':'add-new-item', 'model':new_dirent});
+                }
             },
 
             addNewDir: function(new_dirent) {
@@ -828,7 +871,7 @@ define([
                         data: {
                             'dirents_names': selected_names
                         },
-                        success: function(data) {
+                        success: function(data) { // data['deleted']: [name,]
                             var del_len = data['deleted'].length,
                                 not_del_len = data['undeleted'].length,
                                 msg_s, msg_f;
@@ -855,6 +898,8 @@ define([
                                 }
                                 msg_s = msg_s.replace('%(name)s', data['deleted'][0]).replace('%(amount)s', del_len - 1);
                                 Common.feedback(msg_s, 'success');
+
+                                _this.updateMagnificPopupOptions(); // after Successfully deleting some items
                             }
                             if (not_del_len > 0) {
                                 if (not_del_len == 1) {
@@ -1000,6 +1045,7 @@ define([
                                         } else {
                                             msg_s = gettext("Successfully moved %(name)s and %(amount)s other items.");
                                         }
+                                        _this.updateMagnificPopupOptions(); // after moving items in the same library
                                     } else { // cp
                                         if (success_len == 1) {
                                             msg_s = gettext("Successfully copied %(name)s.");
@@ -1148,12 +1194,18 @@ define([
                         var endOrContinue = function () {
                             if (i == op_objs.length - 1) {
                                 setTimeout(function () { $.modal.close(); }, 500);
+                                if (op == 'mv') {
+                                    _this.updateMagnificPopupOptions();
+                                }
                             } else {
                                 mvcpDirent(++i);
                             }
                         };
                         var end = function () {
                             setTimeout(function () { $.modal.close(); }, 500);
+                            if (op == 'mv') {
+                                _this.updateMagnificPopupOptions();
+                            }
                         };
                         mvcpDirent();
                         cancel_btn.click(function() {
