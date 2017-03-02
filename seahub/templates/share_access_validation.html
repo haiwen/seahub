@@ -9,12 +9,13 @@
     {% else %}
     <form action="{% url view_name token %}" method="post" id="share-passwd-form">{% csrf_token %}
     {% endif %}
-        <label>{% trans "Password: " %}</label>
-        <input type="password" name="password" autofocus />
-        <input type="submit" value="{% trans "Submit" %}" />
+        <input type="text" name="token" value="{{ token }}" class="hide" />
+        <label>{% trans "Password: " %}</label><br />
+        <input type="password" name="password" class="input" autofocus /><br />
         {% if err_msg %}
         <p class="error">{{ err_msg }}</p>
         {% endif %}
+        <input type="submit" value="{% trans "Submit" %}" />
     </form>
 </div>
 {% endblock %}
