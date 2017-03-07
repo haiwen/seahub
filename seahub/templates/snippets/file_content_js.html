@@ -58,6 +58,20 @@ $(window).load(setFileViewAreaHeight).resize(setFileViewAreaHeight);
 {% endif %}
 
 {% if filetype == 'PDF' and use_pdfjs %}
+function getOutputScale(ctx) {
+    var devicePixelRatio = window.devicePixelRatio || 1;
+    var backingStoreRatio = ctx.webkitBackingStorePixelRatio ||
+                          ctx.mozBackingStorePixelRatio ||
+                          ctx.msBackingStorePixelRatio ||
+                          ctx.oBackingStorePixelRatio ||
+                          ctx.backingStorePixelRatio || 1;
+    var pixelRatio = devicePixelRatio / backingStoreRatio;
+    return {
+        sx: pixelRatio,
+        sy: pixelRatio,
+        scaled: pixelRatio !== 1
+    };
+}
 try {
     PDFJS.workerSrc = '{{MEDIA_URL}}js/pdf.worker.js';
     $('#file-view').html('<div id="pdf"><span class="loading-icon loading-tip"></span></div>');
@@ -75,13 +89,28 @@ try {
             pdf.getPage(pageNumber).then(function(page) {
                 var scale = 1.5;
                 var viewport = page.getViewport(scale);
-                var $canvas = $('<canvas class="pdf-page"></canvas>').attr({
-                    'height': viewport.height,
-                    'width': viewport.width
-                });
+
+                var $canvas = $('<canvas class="pdf-page"></canvas>');
+                var canvas = $canvas[0];
+
+                var ctx = canvas.getContext('2d', {alpha: false});
+                var outputScale = getOutputScale(ctx);
+
+                var width = Math.floor(viewport.width);
+                var height = Math.floor(viewport.height);
+
+                canvas.width = width * outputScale.sx;
+                canvas.height = height * outputScale.sy;
+                canvas.style.width = width + 'px';
+                canvas.style.height = height + 'px';
+
+                if (outputScale.scaled) {
+                    ctx.scale(outputScale.sx, outputScale.sy);
+                }
+
                 $loadingTip.before($canvas);
                 page.render({
-                    canvasContext: $canvas[0].getContext('2d'),
+                    canvasContext: ctx,
                     viewport: viewport
                 });
 
