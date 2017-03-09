@@ -147,8 +147,17 @@ class AdminLibrary(APIView):
 
         repo = seafile_api.get_repo(repo_id)
         if not repo:
-            return api_error(status.HTTP_404_NOT_FOUND,
-                             'Library %s not found.' % repo_id)
+            # for case of `seafile-data` has been damaged
+            # no `repo object` will be returned from seafile api
+            # delete the database record anyway
+            try:
+                seafile_api.remove_repo(repo_id)
+            except Exception as e:
+                logger.error(e)
+                error_msg = 'Internal Server Error'
+                return api_error(status.HTTP_500_INTERNAL_SERVER_ERROR, error_msg)
+
+            return Response({'success': True})
 
         repo_owner = seafile_api.get_repo_owner(repo_id)
         if not repo_owner:
