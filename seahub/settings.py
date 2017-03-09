@@ -245,7 +245,7 @@ ENABLE_MAKE_GROUP_PUBLIC = False
 SHOW_REPO_DOWNLOAD_BUTTON = False
 
 # enable 'upload folder' or not
-ENABLE_UPLOAD_FOLDER = False
+ENABLE_UPLOAD_FOLDER = True
 
 # enable resumable fileupload or not
 ENABLE_RESUMABLE_FILEUPLOAD = False
