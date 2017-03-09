@@ -16,7 +16,7 @@ from seahub.utils import is_valid_username
 from seahub.utils.timeutils import timestamp_to_isoformat_timestr
 from seahub.group.utils import is_group_member, is_group_admin, \
         validate_group_name, check_group_name_conflict
-
+from seahub.admin_log.signals import admin_operation
 from seahub.api2.utils import api_error
 from seahub.api2.throttling import UserRateThrottle
 from seahub.api2.authentication import TokenAuthentication
@@ -129,14 +129,24 @@ class AdminGroups(APIView):
                 return api_error(status.HTTP_404_NOT_FOUND, error_msg)
 
         username = request.user.username
+        new_owner = group_owner or username
 
         # create group.
         try:
-            group_id = ccnet_api.create_group(group_name, group_owner or username)
+            group_id = ccnet_api.create_group(group_name, new_owner)
         except SearpcError as e:
             logger.error(e)
             error_msg = 'Internal Server Error'
             return api_error(status.HTTP_500_INTERNAL_SERVER_ERROR, error_msg)
+
+        # send admin operation log signal
+        admin_op_detail = {
+            "id": group_id,
+            "name": group_name,
+            "owner": new_owner,
+        }
+        admin_operation.send(sender=None, admin_name=username,
+                operation='group_create', detail=admin_op_detail)
 
         # get info of new group
         group_info = get_group_info(group_id)
@@ -198,21 +208,46 @@ class AdminGroup(APIView):
             error_msg = 'Internal Server Error'
             return api_error(status.HTTP_500_INTERNAL_SERVER_ERROR, error_msg)
 
-        group_info = get_group_info(group_id)
+        # send admin operation log signal
+        admin_op_detail = {
+            "id": group_id,
+            "name": group.group_name,
+            "from": old_owner,
+            "to": new_owner,
+        }
+        admin_operation.send(sender=None, admin_name=request.user.username,
+                operation='group_transfer', detail=admin_op_detail)
 
+        group_info = get_group_info(group_id)
         return Response(group_info)
 
     def delete(self, request, group_id):
         """ Dismiss a specific group
         """
 
+        group_id = int(group_id)
+        group = ccnet_api.get_group(group_id)
+        if not group:
+            return Response({'success': True})
+
+        group_owner = group.creator_name
+        group_name = group.group_name
+
         try:
-            group_id = int(group_id)
             ccnet_api.remove_group(group_id)
             seafile_api.remove_group_repos(group_id)
         except Exception as e:
             logger.error(e)
             error_msg = 'Internal Server Error'
             return api_error(status.HTTP_500_INTERNAL_SERVER_ERROR, error_msg)
+
+        # send admin operation log signal
+        admin_op_detail = {
+            "id": group_id,
+            "name": group_name,
+            "owner": group_owner,
+        }
+        admin_operation.send(sender=None, admin_name=request.user.username,
+                operation='group_delete', detail=admin_op_detail)
 
         return Response({'success': True})

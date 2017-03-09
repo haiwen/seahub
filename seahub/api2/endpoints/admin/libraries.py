@@ -17,6 +17,7 @@ from seahub.api2.utils import api_error
 from seahub.base.accounts import User
 from seahub.signals import repo_deleted
 from seahub.views import get_system_default_repo_id
+from seahub.admin_log.signals import admin_operation
 
 try:
     from seahub.settings import MULTI_TENANCY
@@ -150,23 +151,32 @@ class AdminLibrary(APIView):
             return api_error(status.HTTP_404_NOT_FOUND,
                              'Library %s not found.' % repo_id)
 
+        repo_name = repo.name
         repo_owner = seafile_api.get_repo_owner(repo_id)
         if not repo_owner:
             repo_owner = seafile_api.get_org_repo_owner(repo_id)
-        related_usernames = seaserv.get_related_users_by_repo(repo_id)
 
         try:
             seafile_api.remove_repo(repo_id)
-            repo_deleted.send(sender=None,
-                              org_id=-1,
-                              usernames=related_usernames,
-                              repo_owner=repo_owner,
-                              repo_id=repo_id,
-                              repo_name=repo.name)
+            related_usernames = seaserv.get_related_users_by_repo(repo_id)
+
+            # send signal for seafevents
+            repo_deleted.send(sender=None, org_id=-1, usernames=related_usernames,
+                    repo_owner=repo_owner, repo_id=repo_id, repo_name=repo.name)
+
         except Exception as e:
             logger.error(e)
             error_msg = 'Internal Server Error'
             return api_error(status.HTTP_500_INTERNAL_SERVER_ERROR, error_msg)
+
+        # send admin operation log signal
+        admin_op_detail = {
+            "id": repo_id,
+            "name": repo_name,
+            "owner": repo_owner,
+        }
+        admin_operation.send(sender=None, admin_name=request.user.username,
+                operation='repo_delete', detail=admin_op_detail)
 
         return Response({'success': True})
 
@@ -256,6 +266,16 @@ class AdminLibrary(APIView):
             seafile_api.add_inner_pub_repo(repo_id, pub_repo.permission)
 
             break
+
+        # send admin operation log signal
+        admin_op_detail = {
+            "id": repo_id,
+            "name": repo.name,
+            "from": repo_owner,
+            "to": new_owner,
+        }
+        admin_operation.send(sender=None, admin_name=request.user.username,
+                operation='repo_transfer', detail=admin_op_detail)
 
         repo = seafile_api.get_repo(repo_id)
         repo_info = get_repo_info(repo)

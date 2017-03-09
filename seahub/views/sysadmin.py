@@ -54,11 +54,11 @@ from seahub.utils.user_permissions import (get_basic_user_roles,
 from seahub.views import get_system_default_repo_id
 from seahub.forms import SetUserQuotaForm, AddUserForm, BatchAddUserForm, \
     TermsAndConditionsForm
-from seahub.profile.forms import ProfileForm, DetailedProfileForm 
 from seahub.options.models import UserOptions
 from seahub.profile.models import Profile, DetailedProfile
 from seahub.signals import repo_deleted
 from seahub.share.models import FileShare, UploadLinkShare
+from seahub.admin_log.signals import admin_operation
 import seahub.settings as settings
 from seahub.settings import INIT_PASSWD, SITE_NAME, SITE_ROOT, \
     SEND_EMAIL_ON_ADDING_SYSTEM_MEMBER, SEND_EMAIL_ON_RESETTING_USER_PASSWD, \
@@ -712,6 +712,13 @@ def user_remove(request, email):
     except User.DoesNotExist:
         messages.error(request, _(u'Failed to delete: the user does not exist'))
 
+    # send admin operation log signal
+    admin_op_detail = {
+        "email": email,
+    }
+    admin_operation.send(sender=None, admin_name=request.user.username,
+            operation='user_delete', detail=admin_op_detail)
+
     return HttpResponseRedirect(next)
 
 @login_required
@@ -984,6 +991,13 @@ def user_add(request):
             logger.error(e)
             err_msg = _(u'Fail to add user %s.') % email
             return HttpResponse(json.dumps({'error': err_msg}), status=403, content_type=content_type)
+
+        # send admin operation log signal
+        admin_op_detail = {
+            "email": email,
+        }
+        admin_operation.send(sender=None, admin_name=request.user.username,
+                operation='user_add', detail=admin_op_detail)
 
         if user:
             User.objects.update_role(email, role)
@@ -1832,7 +1846,6 @@ def batch_add_user(request):
                         Profile.objects.add_or_update(username, nickname, '')
                 except Exception as e:
                     logger.error(e)
-                    continue
 
                 try:
                     department = row[3].strip() or ''
@@ -1840,7 +1853,6 @@ def batch_add_user(request):
                         DetailedProfile.objects.add_or_update(username, department, '')
                 except Exception as e:
                     logger.error(e)
-                    continue
 
                 try:
                     role = row[4].strip() or ''
@@ -1848,7 +1860,6 @@ def batch_add_user(request):
                         User.objects.update_role(username, role)
                 except Exception as e:
                     logger.error(e)
-                    continue
 
                 try:
                     space_quota_mb = row[5].strip() or ''
@@ -1858,7 +1869,6 @@ def batch_add_user(request):
                         seafile_api.set_user_quota(username, space_quota)
                 except Exception as e:
                     logger.error(e)
-                    continue
 
                 send_html_email_with_dj_template(
                     username, dj_template='sysadmin/user_batch_add_email.html',
@@ -1868,6 +1878,13 @@ def batch_add_user(request):
                         'email': username,
                         'password': password,
                     })
+
+                # send admin operation log signal
+                admin_op_detail = {
+                    "email": username,
+                }
+                admin_operation.send(sender=None, admin_name=request.user.username,
+                        operation='user_add', detail=admin_op_detail)
 
         messages.success(request, _('Import succeeded'))
     else:

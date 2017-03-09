@@ -18,12 +18,13 @@ define([
     'sysadmin-app/views/search-groups',
     'sysadmin-app/views/group-repos',
     'sysadmin-app/views/group-members',
+    'sysadmin-app/views/admin-logs',
     'app/views/account'
 ], function($, Backbone, Common, SideNavView, DashboardView,
     DesktopDevicesView, MobileDevicesView, DeviceErrorsView,
     ReposView, SearchReposView, SystemReposView, TrashReposView,
     SearchTrashReposView, DirView, GroupsView, SearchGroupsView,
-    GroupReposView, GroupMembersView, AccountView) {
+    GroupReposView, GroupMembersView, AdminLogsView, AccountView) {
 
     "use strict";
 
@@ -42,8 +43,10 @@ define([
             'libs/:repo_id(/*path)': 'showLibraryDir',
             'groups/': 'showGroups',
             'search-groups/': 'showSearchGroups',
+            'groups/:group_id/': 'showGroupLibraries',
             'groups/:group_id/libs/': 'showGroupLibraries',
             'groups/:group_id/members/': 'showGroupMembers',
+            'admin-logs/': 'showAdminLogs',
             // Default
             '*actions': 'showDashboard'
         },
@@ -75,6 +78,8 @@ define([
             this.searchGroupsView = new SearchGroupsView();
             this.groupReposView = new GroupReposView();
             this.groupMembersView = new GroupMembersView();
+
+            this.adminLogsView = new AdminLogsView();
 
             app.ui.accountView = this.accountView = new AccountView();
 
@@ -223,6 +228,20 @@ define([
             this.switchCurrentView(this.groupMembersView);
             this.sideNavView.setCurTab('groups');
             this.groupMembersView.show(group_id);
+        },
+
+        showAdminLogs: function() {
+            var url = window.location.href;
+            var page = url.match(/.*?page=(\d+)/);
+            if (page) {
+                var current_page = page[1];
+            } else {
+                var current_page = null;
+            }
+
+            this.switchCurrentView(this.adminLogsView);
+            this.sideNavView.setCurTab('admin-logs');
+            this.adminLogsView.show({'current_page': current_page});
         }
 
     });
