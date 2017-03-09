@@ -16,11 +16,10 @@ from constance import config
 from registration import signals
 
 from seahub.auth import login
-from seahub.constants import DEFAULT_USER
 from seahub.profile.models import Profile, DetailedProfile
 from seahub.role_permissions.utils import get_enabled_role_permissions_by_role
 from seahub.utils import is_user_password_strong, \
-    clear_token, get_system_admins
+    clear_token, get_system_admins, is_pro_version
 from seahub.utils.mail import send_html_email_with_dj_template, MAIL_PRIORITY
 from seahub.utils.licenseparse import user_number_over_limit
 
@@ -215,7 +214,10 @@ class User(object):
             source = "LDAP"
 
         username = self.username
-        orgs = ccnet_threaded_rpc.get_orgs_by_user(username)
+
+        orgs = []
+        if is_pro_version():
+            orgs = ccnet_threaded_rpc.get_orgs_by_user(username)
 
         # remove owned repos
         owned_repos = []
