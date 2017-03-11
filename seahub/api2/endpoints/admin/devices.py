@@ -78,7 +78,7 @@ class AdminDevices(APIView):
             error_msg = 'device_id invalid.'
             return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
 
-        if not user or not is_registered_user(user):
+        if not user:
             error_msg = 'user invalid.'
             return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
 
@@ -90,4 +90,3 @@ class AdminDevices(APIView):
             return api_error(status.HTTP_500_INTERNAL_SERVER_ERROR, error_msg)
 
         return Response({'success': True})
-
