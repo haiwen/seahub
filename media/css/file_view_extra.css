@@ -29,6 +29,10 @@
     background:#f4f4f4;
     border:1px solid #ededed;
     margin-top:12px;
+    height:10000px;
+}
+body {
+    overflow:hidden;
 }
 @media (max-width:950px) {
     #file-view {
