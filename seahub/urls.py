@@ -54,6 +54,7 @@ from seahub.api2.endpoints.admin.groups import AdminGroups, AdminGroup
 from seahub.api2.endpoints.admin.group_libraries import AdminGroupLibraries, AdminGroupLibrary
 from seahub.api2.endpoints.admin.group_members import AdminGroupMembers, AdminGroupMember
 from seahub.api2.endpoints.admin.shares import AdminShares
+from seahub.api2.endpoints.admin.batch_set_user_quota import AdminUsersBatchSetQuota
 
 # Uncomment the next two lines to enable the admin:
 #from django.contrib import admin
@@ -212,6 +213,8 @@ urlpatterns = patterns(
     url(r'^api/v2.1/admin/trash-libraries/$', AdminTrashLibraries.as_view(), name='api-v2.1-admin-trash-libraries'),
     url(r'^api/v2.1/admin/trash-libraries/(?P<repo_id>[-0-9a-f]{36})/$', AdminTrashLibrary.as_view(), name='api-v2.1-admin-trash-library'),
     url(r'^api/v2.1/admin/shares/$', AdminShares.as_view(), name='api-v2.1-admin-shares'),
+
+    url(r'^api/v2.1/admin/users/batch_set_quota/$', AdminUsersBatchSetQuota.as_view(), name='api-v2.1-admin-users-batch-set-quota'),
 
     (r'^avatar/', include('seahub.avatar.urls')),
     (r'^notification/', include('seahub.notifications.urls')),
