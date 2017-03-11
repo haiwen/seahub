@@ -251,9 +251,11 @@ function setToolbarPos() {
 $(window).load(setToolbarPos).resize(setToolbarPos);
 
 {% if filetype == 'PDF' and use_pdfjs and not err %}
+{% elif filetype == 'Image' and not err %}
 {% else %}
 function setFileViewAreaHeight() {
-    var file_view = $('#file-view');
+    $('body').css({'overflow':'auto'});
+    var file_view = $('#file-view').css({'height': 'auto'});
     if ($(window).height() > file_view.outerHeight(true) + file_view.offset().top) {
         file_view.outerHeight($(window).height() - file_view.offset().top);
     }

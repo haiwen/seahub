@@ -1,0 +1,92 @@
+{% load i18n %}
+
+function getOutputScale(ctx) {
+    var devicePixelRatio = window.devicePixelRatio || 1;
+    var backingStoreRatio = ctx.webkitBackingStorePixelRatio ||
+                          ctx.mozBackingStorePixelRatio ||
+                          ctx.msBackingStorePixelRatio ||
+                          ctx.oBackingStorePixelRatio ||
+                          ctx.backingStorePixelRatio || 1;
+    var pixelRatio = devicePixelRatio / backingStoreRatio;
+    return {
+        sx: pixelRatio,
+        sy: pixelRatio,
+        scaled: pixelRatio !== 1
+    };
+}
+
+function setFileViewAreaHeight() {
+    $('body').css({'overflow':'auto'});
+    var file_view = $('#file-view').css({'height': 'auto'});
+    if ($(window).height() > file_view.outerHeight(true) + file_view.offset().top) {
+        file_view.outerHeight($(window).height() - file_view.offset().top);
+    }
+}
+
+try {
+    PDFJS.workerSrc = '{{MEDIA_URL}}js/pdf.worker.js';
+    $('#file-view').html('<div id="pdf"><span class="loading-icon loading-tip"></span></div>');
+    PDFJS.getDocument("{{ raw_path|escapejs }}").then(function(pdf) {
+        if (pdf.numPages > 50) {
+            feedback("{% trans "This file has more than 50 pages, and only the first 50 will be shown here." %}", 'info');
+        }
+
+        var $loadingTip = $('#pdf .loading-tip');
+
+        // show at most 50 pages
+        var shownPageCount = pdf.numPages < 50 ? pdf.numPages : 50;
+
+        var getPageAndRender = function (pageNumber) {
+            pdf.getPage(pageNumber).then(function(page) {
+                var scale = 1.5;
+                var viewport = page.getViewport(scale);
+                var $canvas = $('<canvas class="pdf-page"></canvas>');
+                var canvas = $canvas[0];
+
+                var ctx = canvas.getContext('2d', {alpha: false});
+                var outputScale = getOutputScale(ctx);
+
+                var width = Math.floor(viewport.width);
+                var height = Math.floor(viewport.height);
+
+                canvas.width = width * outputScale.sx;
+                canvas.height = height * outputScale.sy;
+                canvas.style.width = width + 'px';
+                canvas.style.height = height + 'px';
+
+                if (outputScale.scaled) {
+                    ctx.scale(outputScale.sx, outputScale.sy);
+                }
+
+                $loadingTip.before($canvas);
+                page.render({
+                    canvasContext: ctx,
+                    viewport: viewport
+                });
+
+                // after rendering the first page
+                if (pageNumber == 1) {
+                    setFileViewAreaHeight();
+                }
+
+                if (pageNumber < shownPageCount) {
+                    pageNumber++;
+                    getPageAndRender(pageNumber);
+                } else {
+                    // the last page
+                    $loadingTip.hide();
+                }
+            });
+        };
+
+        // start from page 1
+        getPageAndRender(1);
+    });
+
+} catch(e) {
+    var tip = "{% trans "You can use IE 10 or other browsers, for example, Firefox, to view it online." %}";
+    $('#file-view').html('<div id="file-view-tip"><p>' + tip + '</p></div>');
+    setFileViewAreaHeight();
+}
+
+$(window).resize(setFileViewAreaHeight);
