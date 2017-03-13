@@ -912,8 +912,7 @@ def space_and_traffic(request):
         space_usage = seafile_api.get_user_self_usage(username)
     else:
         org_id = org[0].org_id
-        space_quota = seafserv_threaded_rpc.get_org_user_quota(org_id,
-                                                               username)
+        space_quota = seafile_api.get_org_user_quota(org_id, username)
         space_usage = seafserv_threaded_rpc.get_org_user_quota_usage(
             org_id, username)
 

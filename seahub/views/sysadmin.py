@@ -137,7 +137,7 @@ def _populate_user_quota_usage(user):
             user.org = orgs[0]
             org_id = user.org.org_id
             user.space_usage = seafserv_threaded_rpc.get_org_user_quota_usage(org_id, user.email)
-            user.space_quota = seafserv_threaded_rpc.get_org_user_quota(org_id, user.email)
+            user.space_quota = seafile_api.get_org_user_quota(org_id, user.email)
         else:
             user.space_usage = seafile_api.get_user_self_usage(user.email)
             user.space_quota = seafile_api.get_user_quota(user.email)
@@ -513,7 +513,7 @@ def user_info(request, email):
         org_name = org[0].org_name
         space_usage = seafserv_threaded_rpc.get_org_user_quota_usage(org_id,
                                                                      email)
-        space_quota = seafserv_threaded_rpc.get_org_user_quota(org_id, email)
+        space_quota = seafile_api.get_org_user_quota(org_id, email)
         owned_repos = seafile_api.get_org_owned_repo_list(org_id, email,
                                                           ret_corrupted=True)
         in_repos = seafile_api.get_org_share_in_repo_list(org_id, email, -1, -1)
@@ -657,7 +657,7 @@ def user_set_quota(request, email):
                                             org_quota_mb)
                     return HttpResponse(json.dumps(result), status=400, content_type=content_type)
                 else:
-                    seafserv_threaded_rpc.set_org_user_quota(org_id, email, space_quota)
+                    seafile_api.set_org_user_quota(org_id, email, space_quota)
         except:
             result['error'] = _(u'Failed to set quota: internal server error')
             return HttpResponse(json.dumps(result), status=500, content_type=content_type)
