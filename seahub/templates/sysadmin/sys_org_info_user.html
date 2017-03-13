@@ -24,7 +24,7 @@
     </tr>
 
     {% for user in users %}
-    <tr data-userid="{{user.email}}">
+    <tr data-userid="{{user.email}}" data-url="{% url 'api-v2.1-admin-org-user' org.org_id user.email %}">
         <td><a href="{% url 'user_info' user.email %}">{{ user.email }}</a></td>
         <td>
             <div class="user-status">
@@ -48,7 +48,7 @@
         </td>
         <td>
           {% if not user.is_self %}
-          <a href="#" class="remove-user-btn op vh" data-userid="{{ user.email }}">{% trans "Delete" %}</a>
+          <a href="#" class="remove-user-btn op vh">{% trans "Delete" %}</a>
           <a href="#" class="reset-user-btn op vh" data-url="{% url 'user_reset' user.email %}" data-target="{{ user.email }}">{% trans "ResetPwd" %}</a>
           {% endif %}
         </td>
@@ -143,7 +143,7 @@ $('#add-user-form').submit(function() {
     }
 
     var submit_btn = $(this).find('[type="submit"]');
-    var url = "{{ SITE_ROOT }}api/v2.1/admin/organizations/" + org_id + "/users/";
+    var url = "{% url 'api-v2.1-admin-org-users' org.org_id %}";
     disable(submit_btn);
     $.ajax({
         url: url,
@@ -173,9 +173,8 @@ $('#add-user-form').submit(function() {
 
 $('.remove-user-btn').click(function() {
     var _this = $(this),
-        uid = _this.attr('data-userid'),
-        org_id = {{ org.org_id }},
-        url = "{{ SITE_ROOT }}api/v2.1/admin/organizations/" + org_id + "/users/" + uid + "/",
+        uid = _this.parents('tr').attr('data-userid'),
+        url = _this.parents('tr').attr('data-url'),
         popupTitle = "{% trans "Delete User" %}",
         popupContent = "{% trans "Are you sure you want to delete %s ?" %}".replace('%s', '<span class="op-target ellipsis ellipsis-op-target" title="' + HTMLescape(uid) + '">' + HTMLescape(uid) + '</span>');
 
@@ -226,9 +225,8 @@ $('.user-status-select').change(function() {
     var select = $(this),
         select_val = select.val(),
         uid = select.parents('tr').attr('data-userid'),
-        $select_prev = $(this).prev('.user-status'), // .user-status, .user-role
-        org_id = {{ org.org_id }},
-        url = "{{ SITE_ROOT }}api/v2.1/admin/organizations/" + org_id + "/users/" + uid + "/";
+        url = select.parents('tr').attr('data-url'),
+        $select_prev = $(this).prev('.user-status'); // .user-status, .user-role
 
     if (select_val == 'true') {
         // show activating popup
