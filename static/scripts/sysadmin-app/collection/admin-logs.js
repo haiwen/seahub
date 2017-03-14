@@ -16,16 +16,15 @@ define([
 
         state: {
             firstPage: 1,
-            pageSize: 100,
+            pageSize: 100
         },
 
-        // Setting `null` as the value of any mapping
-        // will remove it from the query string.
+        // Setting a parameter mapping value to null removes it from the query string
         queryParams: {
             currentPage: "page",
             pageSize: "per_page",
             totalPages: null,
-            totalRecords: null,
+            totalRecords: null
         },
 
         parseState: function (resp) {

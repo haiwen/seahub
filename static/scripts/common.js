@@ -179,7 +179,6 @@ define([
                 case 'admin-trash-library': return siteRoot + 'api/v2.1/admin/trash-libraries/' + options.repo_id + '/';
                 case 'admin_shares': return siteRoot + 'api/v2.1/admin/shares/';
                 case 'sys_group_admin_export_excel': return siteRoot + 'sys/groupadmin/export-excel/';
-
                 case 'admin-logs': return siteRoot + 'api/v2.1/admin/admin-logs/';
             }
         },

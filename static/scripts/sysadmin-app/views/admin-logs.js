@@ -129,6 +129,9 @@ define([
                             err_msg = gettext("Failed. Please check the network.");
                         }
                         Common.feedback(err_msg, 'error');
+                    },
+                    complete: function() {
+                        _this.$loadingTip.hide();
                     }
                 });
             }
