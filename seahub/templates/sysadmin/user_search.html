@@ -10,7 +10,13 @@
   <label>{% trans "Email" %}</label><input type="text" name="email" class="input" value="{{email}}" /><br />
   <input type="submit" value="{% trans "Submit" %}" class="submit" />
 </form>
-<h3>{% trans "Result"%}</h3>
+<div class="ovhd">
+    <h3 class="fleft">{% trans "Result"%}</h3>
+    <div class="js-op-for-selected fright hide">
+        <button id="set-quota-btn">{% trans "Set quota" %}</button>
+        <button id="delete-users-btn">{% trans "Delete users" %}</button>
+    </div>
+</div>
 {% if users %}
 {% include "sysadmin/useradmin_table.html"%}
 {% else %}

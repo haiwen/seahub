@@ -81,12 +81,112 @@ $('.user-status-select, .user-role-select').change(function() {
     });
 });
 
-{% if user.source == "DB" or user.source == 'LDAPImport' %}
+// for 'select'
+var $opForAll = $('.js-op-for-all');
+var $opForSelected = $('.js-op-for-selected');
+$('th [type="checkbox"]').click(function() {
+    var all_checked = $(this).prop('checked');
+    if (all_checked) {
+        $('td [type="checkbox"]').prop('checked', true);
+        $opForAll.hide();
+        $opForSelected.show();
+    } else {
+        $('td [type="checkbox"]').prop('checked', false);
+        $opForAll.show();
+        $opForSelected.hide();
+    }
+});
+
+$('td [type="checkbox"]').click(function() {
+    if ($('td [type="checkbox"]:checked').length) {
+        $opForAll.hide();
+        $opForSelected.show();
+    } else {
+        $opForAll.show();
+        $opForSelected.hide();
+    }
+
+    if ($('td [type="checkbox"]:checked').length == $('td [type="checkbox"]').length) {
+        $('th [type="checkbox"]').prop('checked', true);
+    } else {
+        $('th [type="checkbox"]').prop('checked', false);
+    }
+});
+
+$('#set-quota-btn').click(function() {
+    $('#set-quota-form').data({'batch': true}).modal();
+    $('#simplemodal-container').css({'width':'auto', 'height':'auto'});
+});
+
+$('#delete-users-btn').click(function() {
+    var title = "{% trans "Delete User" %}";
+    var content = "{% trans "Are you sure you want to delete the selected user(s) ?" %}";
+    var yesCallback = function() {
+        var emails = [];
+        $('td [type="checkbox"]:checked').closest('tr').each(function(index, item) {
+            var email = $(item).attr('data-userid');
+            if (email != "{{request.user.username|escapejs}}") {
+                emails.push(email);
+            }
+        });
+        $.ajax({
+            url: '{% url "api-v2.1-admin-users-batch" %}',
+            type: 'POST',
+            cache: false,
+            data: {
+                'operation': 'delete-user',
+                'email': emails
+            },
+            traditional: true,
+            dataType: 'json',
+            beforeSend: prepareCSRFToken,
+            success: function(data) {
+                if (data.success.length) {
+                    var emails = [];
+                    $(data.success).each(function(index, item) {
+                        $('tr[data-userid="' + item.email + '"]').remove();
+                        emails.push(item.email);
+                    });
+                    var msg = "{% trans "Successfully deleted {users}." %}".replace('{users}', HTMLescape(emails.join(', ')));
+                    feedback(msg, 'success');
+                }
+
+                // all selected items are deleted
+                if ($('td [type="checkbox"]:checked').length == 0) {
+                    $opForAll.show();
+                    $opForSelected.hide();
+                }
+
+                if (data.failed.length) {
+                    var err_msg = '';
+                    $(data.failed).each(function(index, item) {
+                        err_msg += HTMLescape(item.email) + ': ' + item.error_msg + '<br />';
+                    });
+                    setTimeout(function() { feedback(err_msg, 'error'); }, 1500);
+                }
+            },
+            error: function(xhr, textStatus, errorThrown) {
+                var err_msg;
+                if (xhr.responseText) {
+                    err_msg = $.parseJSON(xhr.responseText).error_msg;
+                } else {
+                    err_msg = "{% trans "Failed. Please check the network." %}";
+                }
+                feedback(err_msg, 'error');
+            },
+            complete: function() {
+                $.modal.close();
+            }
+        });
+    };
+    showConfirm(title, content, yesCallback);
+});
+
 // edit quota
 $('.quota-edit-icon').click(function() {
     var email = $(this).closest('tr').attr('data-userid');
     var $spaceQuota = $(this).prev('.user-space-quota');
-    $('#set-quota-form').data({'email': email, '$spaceQuota': $spaceQuota}).modal();
+    $('#set-quota-form').data({'batch': false, 'email': email, '$spaceQuota': $spaceQuota}).modal();
     $('#simplemodal-container').css({'width':'auto', 'height':'auto'});
 });
 
@@ -101,23 +201,72 @@ $('#set-quota-form').submit(function() {
     var $submitBtn = $('[type="submit"]', $(this));
     disable($submitBtn);
 
-    var email = $(this).data('email');
-    var $spaceQuota = $(this).data('$spaceQuota');
-    $.ajax({
-        url: '{{ SITE_ROOT }}api2/accounts/' + encodeURIComponent(email) + '/',
-        type: 'PUT',
+    var batch = $(this).data('batch');
+    var options = {};
+    if (batch) {
+        var emails = [];
+        $('td [type="checkbox"]:checked').closest('tr').each(function(index, item) {
+            emails.push($(item).attr('data-userid'));
+        });
+        options = {
+            url: '{% url "api-v2.1-admin-users-batch" %}',
+            type: 'POST',
+            data: {
+                'operation': 'set-quota',
+                'email': emails,
+                'quota_total': space_quota
+            },
+            traditional: true,
+            success: function(data) {
+                if (data.success.length) {
+                    var emails = [];
+                    $(data.success).each(function(index, item) {
+                        var $tr = $('tr[data-userid="' + item.email + '"]');
+                        var $quota = $('.user-space-quota', $tr);
+                        if (space_quota == 0) {
+                            $quota.html('--');
+                        } else {
+                            $quota.html(quotaSizeFormat(parseInt(item.quota_total), 1));
+                        }
+                        emails.push(item.email);
+                    });
+                    var msg = "{% trans "Successfully set quota for {users}." %}".replace('{users}', HTMLescape(emails.join(', ')));
+                    feedback(msg, 'success');
+                }
+                if (data.failed.length) {
+                    var err_msg = '';
+                    $(data.failed).each(function(index, item) {
+                        err_msg += HTMLescape(item.email) + ': ' + item.error_msg + '<br />';
+                    });
+                    setTimeout(function() { feedback(err_msg, 'error'); }, 1500);
+                }
+                $.modal.close();
+            }
+        };
+    } else {
+        var email = $(this).data('email');
+        var $spaceQuota = $(this).data('$spaceQuota');
+        options = {
+            url: '{{ SITE_ROOT }}api2/accounts/' + encodeURIComponent(email) + '/',
+            type: 'PUT',
+            data: {'storage': space_quota},
+            success: function(data) {
+                if (space_quota == 0) {
+                    $spaceQuota.html('--');
+                } else {
+                    $spaceQuota.html(quotaSizeFormat(parseInt(data['total']), 1));
+                }
+                var msg = "{% trans "Successfully set quota for {user}." %}".replace('{user}', HTMLescape(data.email));
+                feedback(msg, 'success');
+                $.modal.close();
+            }
+        };
+    }
+
+    $.ajax($.extend({
         dataType: 'json',
         cache: false,
         beforeSend: prepareCSRFToken,
-        data: {'storage': space_quota},
-        success: function(data) {
-            if (space_quota == 0) {
-                $spaceQuota.html('--');
-            } else {
-                $spaceQuota.html(quotaSizeFormat(parseInt(data['total']), 1));
-            }
-            $.modal.close();
-        },
         error: function(xhr, textStatus, errorThrown) {
             var err_msg;
             if (xhr.responseText) {
@@ -128,11 +277,10 @@ $('#set-quota-form').submit(function() {
             $error.html(err_msg).show();
             enable($submitBtn);
         }
-    });
+    }, options));
 
     return false;
 });
-{% endif %}
 
 // select shows, but the user doesn't select a value, or doesn't change the permission, click other place to hide the select
 $(document).click(function(e) {

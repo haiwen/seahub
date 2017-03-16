@@ -1,21 +1,23 @@
 {% load seahub_tags i18n %}
 <table>
     <tr>
+        <th width="3%"><input type="checkbox" /></th>
         {% if is_pro %}
-        <th width="24%">{% trans "Email" %} / {% trans "Name" %} / {% trans "Contact Email" %}</th>
+        <th width="21%">{% trans "Email" %} / {% trans "Name" %} / {% trans "Contact Email" %}</th>
         <th width="12%">{% trans "Status" %}</th>
         <th width="12%">{% trans "Role" %}</th>
         {% else %}
-        <th width="36%">{% trans "Email" %} / {% trans "Name" %} / {% trans "Contact Email" %}</th>
+        <th width="33%">{% trans "Email" %} / {% trans "Name" %} / {% trans "Contact Email" %}</th>
         <th width="12%">{% trans "Status" %}</th>
         {% endif %}
         <th width="16%">{% trans "Space Used / Quota" %}</th>
         <th width="22%">{% trans "Create At / Last Login" %}</th>
-        <th width="14%">{% trans "Operations" %}</th>
+        <th width="14%"></th>
     </tr>
 
     {% for user in users %}
     <tr data-userid="{{user.email}}">
+        <td><input type="checkbox" /></td>
         <td>
             <a href="{% url 'user_info' user.email %}">{{ user.email }}</a>
             {% if user.name %}<br />{{ user.name }}{% endif %}
@@ -105,7 +107,6 @@
     {% endfor %}
 </table>
 
-{% if user.source == "DB" or user.source == 'LDAPImport' %}
 <form id="set-quota-form" method="post" action="" class="hide">{% csrf_token %}
     <h3>{% trans "Set user storage limit" %}</h3>
     <input type="text" name="space_quota" class="input" /> MB
@@ -116,4 +117,3 @@
     <p class="error hide"></p>
     <input type="submit" value="{% trans "Submit" %}" class="submit" />
 </form>
-{% endif %}

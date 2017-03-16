@@ -18,21 +18,30 @@
         <li class="tabnav-tab tabnav-tab-cur"><a href="{% url 'sys_useradmin_ldap_imported' %}">{% trans "LDAP(imported)" %}</a></li>
         <li class="tabnav-tab"><a href="{% url 'sys_useradmin_admins' %}">{% trans "Admins" %}</a></li>
     </ul>
-    <a class="sf-btn-link btn-white js-export-excel fright" href="{% url "sys_useradmin_export_excel" %}">{% trans "Export Excel" %}</a>
+
+    <div class="js-op-for-all fright">
+        <button id="export-excel">{% trans "Export Excel" %}</button>
+    </div>
+    <div class="js-op-for-selected fright hide">
+        <button id="set-quota-btn">{% trans "Set quota" %}</button>
+        <button id="delete-users-btn">{% trans "Delete users" %}</button>
+    </div>
 </div>
 
 {% if users %}
 <table>
     <tr>
-        <th width="36%">{% trans "Email" %}</th>
+        <th width="3%"><input type="checkbox" /></th>
+        <th width="33%">{% trans "Email" %}</th>
         <th width="12%">{% trans "Status" %}</th>
         <th width="18%">{% trans "Space Used / Quota" %}</th>
         <th width="18%">{% trans "Last Login" %}</th>
-        <th width="16%">{% trans "Operations" %}</th>
+        <th width="16%"></th>
     </tr>
 
     {% for user in users %}
     <tr data-userid="{{user.email}}">
+        <td><input type="checkbox" /></td>
         <td>
             <a href="{% url 'user_info' user.email %}">{{ user.email }}</a>
             {% if user.name %}<br />{{ user.name }}{% endif %}
@@ -98,6 +107,9 @@
 
 {% block extra_script %}
 <script type="text/javascript">
+$("#export-excel").click(function() {
+    location.href = "{% url 'sys_useradmin_export_excel' %}";
+});
 {% include "sysadmin/useradmin_js.html" %}
 </script>
 {% endblock %}
