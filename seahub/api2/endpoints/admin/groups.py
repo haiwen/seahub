@@ -17,6 +17,7 @@ from seahub.utils.timeutils import timestamp_to_isoformat_timestr
 from seahub.group.utils import is_group_member, is_group_admin, \
         validate_group_name, check_group_name_conflict
 from seahub.admin_log.signals import admin_operation
+from seahub.admin_log.models import GROUP_CREATE, GROUP_DELETE, GROUP_TRANSFER
 from seahub.api2.utils import api_error
 from seahub.api2.throttling import UserRateThrottle
 from seahub.api2.authentication import TokenAuthentication
@@ -146,7 +147,7 @@ class AdminGroups(APIView):
             "owner": new_owner,
         }
         admin_operation.send(sender=None, admin_name=username,
-                operation='group_create', detail=admin_op_detail)
+                operation=GROUP_CREATE, detail=admin_op_detail)
 
         # get info of new group
         group_info = get_group_info(group_id)
@@ -216,7 +217,7 @@ class AdminGroup(APIView):
             "to": new_owner,
         }
         admin_operation.send(sender=None, admin_name=request.user.username,
-                operation='group_transfer', detail=admin_op_detail)
+                operation=GROUP_TRANSFER, detail=admin_op_detail)
 
         group_info = get_group_info(group_id)
         return Response(group_info)
@@ -248,6 +249,6 @@ class AdminGroup(APIView):
             "owner": group_owner,
         }
         admin_operation.send(sender=None, admin_name=request.user.username,
-                operation='group_delete', detail=admin_op_detail)
+                operation=GROUP_DELETE, detail=admin_op_detail)
 
         return Response({'success': True})

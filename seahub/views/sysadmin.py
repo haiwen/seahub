@@ -59,6 +59,7 @@ from seahub.profile.models import Profile, DetailedProfile
 from seahub.signals import repo_deleted
 from seahub.share.models import FileShare, UploadLinkShare
 from seahub.admin_log.signals import admin_operation
+from seahub.admin_log.models import USER_DELETE, USER_ADD
 import seahub.settings as settings
 from seahub.settings import INIT_PASSWD, SITE_NAME, SITE_ROOT, \
     SEND_EMAIL_ON_ADDING_SYSTEM_MEMBER, SEND_EMAIL_ON_RESETTING_USER_PASSWD, \
@@ -717,7 +718,7 @@ def user_remove(request, email):
         "email": email,
     }
     admin_operation.send(sender=None, admin_name=request.user.username,
-            operation='user_delete', detail=admin_op_detail)
+            operation=USER_DELETE, detail=admin_op_detail)
 
     return HttpResponseRedirect(next)
 
@@ -997,7 +998,7 @@ def user_add(request):
             "email": email,
         }
         admin_operation.send(sender=None, admin_name=request.user.username,
-                operation='user_add', detail=admin_op_detail)
+                operation=USER_ADD, detail=admin_op_detail)
 
         if user:
             User.objects.update_role(email, role)
@@ -1884,7 +1885,7 @@ def batch_add_user(request):
                     "email": username,
                 }
                 admin_operation.send(sender=None, admin_name=request.user.username,
-                        operation='user_add', detail=admin_op_detail)
+                        operation=USER_ADD, detail=admin_op_detail)
 
         messages.success(request, _('Import succeeded'))
     else:

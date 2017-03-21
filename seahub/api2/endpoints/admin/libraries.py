@@ -18,6 +18,7 @@ from seahub.base.accounts import User
 from seahub.signals import repo_deleted
 from seahub.views import get_system_default_repo_id
 from seahub.admin_log.signals import admin_operation
+from seahub.admin_log.models import REPO_DELETE, REPO_TRANSFER
 
 try:
     from seahub.settings import MULTI_TENANCY
@@ -176,7 +177,7 @@ class AdminLibrary(APIView):
             "owner": repo_owner,
         }
         admin_operation.send(sender=None, admin_name=request.user.username,
-                operation='repo_delete', detail=admin_op_detail)
+                operation=REPO_DELETE, detail=admin_op_detail)
 
         return Response({'success': True})
 
@@ -275,7 +276,7 @@ class AdminLibrary(APIView):
             "to": new_owner,
         }
         admin_operation.send(sender=None, admin_name=request.user.username,
-                operation='repo_transfer', detail=admin_op_detail)
+                operation=REPO_TRANSFER, detail=admin_op_detail)
 
         repo = seafile_api.get_repo(repo_id)
         repo_info = get_repo_info(repo)

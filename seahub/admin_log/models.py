@@ -3,26 +3,32 @@ import json
 import datetime
 
 from django.db import models
-from django.db.models import Q
 from django.dispatch import receiver
 
 from seahub.admin_log.signals import admin_operation
 
-ADMIN_LOG_OPERATION_TYPE = ('repo_transfer', 'repo_delete',
-        'group_create', 'group_transfer', 'group_delete',
-        'user_add', 'user_delete')
-
 ## operation: detail
 
 # 'repo_transfer': {'id': repo_id, 'name': repo_name, 'from': from_user, 'to': to_user}
+REPO_TRANSFER = 'repo_transfer'
 # 'repo_delete': {'id': repo_id, 'name': repo_name, 'owner': repo_owner}
+REPO_DELETE = 'repo_delete'
 
 # 'group_create': {'id': group_id, 'name': group_name, 'owner': group_owner}
+GROUP_CREATE = 'group_create'
 # 'group_transfer': {'id': group_id, 'name': group_name, 'from': from_user, 'to': to_user}
+GROUP_TRANSFER = 'group_transfer'
 # 'group_delete': {'id': group_id, 'name': group_name, 'owner': group_owner}
+GROUP_DELETE = 'group_delete'
 
 # 'user_add': {'email': new_user}
+USER_ADD = 'user_add'
 # 'user_delete': {'email': deleted_user}
+USER_DELETE = 'user_delete'
+
+ADMIN_LOG_OPERATION_TYPE = (REPO_TRANSFER, REPO_DELETE,
+        GROUP_CREATE, GROUP_TRANSFER, GROUP_DELETE,
+        USER_ADD, USER_DELETE)
 
 
 class AdminLogManager(models.Manager):
@@ -40,21 +46,18 @@ class AdminLogManager(models.Manager):
 
         logs = super(AdminLogManager, self).all()
 
-        if email and operation:
-            filtered_logs = logs.filter(Q(email=email) & Q(operation = operation))
-        elif email:
-            filtered_logs = logs.filter(email=email)
-        elif operation:
-            filtered_logs = logs.filter(operation=operation)
-        else:
-            filtered_logs = logs
+        if email:
+            logs = logs.filter(email=email)
 
-        return filtered_logs
+        if operation:
+            logs = logs.filter(operation=operation)
+
+        return logs
 
 class AdminLog(models.Model):
     email = models.EmailField(db_index=True)
     operation = models.CharField(max_length=255, db_index=True)
-    detail = models.CharField(max_length=255)
+    detail = models.TextField()
     datetime = models.DateTimeField(default=datetime.datetime.now)
     objects = AdminLogManager()
 
