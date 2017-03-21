@@ -111,7 +111,6 @@ $('.restore-file').click(function() {
         dataType: 'json',
         beforeSend: prepareCSRFToken,
         success: function() {
-            _this.closest('tr').remove();
             feedback("{% trans "Success" %}", 'success');
         },
         error: ajaxErrorHandler
