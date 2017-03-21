@@ -9,7 +9,7 @@
 <p style="color:#121214;font-size:14px;">{% trans "Hi," %}</p>
 
 <p style="font-size:14px;color:#434144;">
-{% blocktrans %}{{ user }} invited you to join {{ site_name }}.{% endblocktrans%}
+{% blocktrans %}{{ user|email2nickname|escape }} invited you to join {{ site_name }}.{% endblocktrans%}
 </p>
 
 <p style="font-size:14px;color:#434144;">

@@ -10,9 +10,9 @@
 
 <p style="font-size:14px;color:#434144;">
 {% if org %}
-{% blocktrans with org_name=org.org_name %}{{ user }} invited you to join organization "{{ org_name }}" on {{ site_name }}.{% endblocktrans%}
+{% blocktrans with org_name=org.org_name %}{{ user|email2nickname|escape }} invited you to join organization "{{ org_name }}" on {{ site_name }}.{% endblocktrans%}
 {% else %}
-{% blocktrans %}{{ user }} invited you to join {{ site_name }}.{% endblocktrans%}
+{% blocktrans %}{{ user|email2nickname|escape }} invited you to join {{ site_name }}.{% endblocktrans%}
 {% endif %}
 </p>
 
