@@ -8,7 +8,7 @@
 <p style="color:#121214;font-size:14px;">{% trans "Hi, " %}</p>
 
 <p style="font-size:14px;color:#434144;">
-{% blocktrans with grp_name=group.group_name %}{{ email }} invited you to join group {{ grp_name }} on {{ site_name }}: {% endblocktrans %}<br />
+{% blocktrans with grp_name=group.group_name %}{{ email|email2nickname|escape }} invited you to join group {{ grp_name }} on {{ site_name }}: {% endblocktrans %}<br />
 {{ url_base }}{% url 'registration_register' %}?src={{ to_email }}
 </p>
 

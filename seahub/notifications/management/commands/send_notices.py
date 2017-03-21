@@ -151,7 +151,7 @@ class Command(BaseCommand):
         notice.grpjoin_user_profile_url = reverse('user_profile',
                                                   args=[username])
         notice.grpjoin_group_url = reverse('group_members', args=[group_id])
-        notice.notice_from = username
+        notice.notice_from = escape(email2nickname(username))
         notice.grpjoin_group_name = group.group_name
         notice.grpjoin_request_msg = join_request_msg
         notice.avatar_src = self.get_avatar_src(username)
@@ -164,7 +164,7 @@ class Command(BaseCommand):
 
         group = ccnet_api.get_group(group_id)
 
-        notice.notice_from = group_staff
+        notice.notice_from = escape(email2nickname(group_staff))
         notice.avatar_src = self.get_avatar_src(group_staff)
         notice.group_staff_profile_url = reverse('user_profile',
                                                   args=[group_staff])
