@@ -1,0 +1,91 @@
+import json
+from django.core.urlresolvers import reverse
+from seahub.test_utils import BaseTestCase
+from tests.common.utils import randstring
+
+class LibrariesTest(BaseTestCase):
+
+    def setUp(self):
+        self.libraries_url = reverse('api-v2.1-admin-libraries')
+
+    def tearDown(self):
+        self.remove_repo()
+
+    def test_can_get(self):
+        self.login_as(self.admin)
+        resp = self.client.get(self.libraries_url)
+
+        json_resp = json.loads(resp.content)
+        assert len(json_resp['repos']) > 0
+
+    def test_can_search_by_name(self):
+        self.login_as(self.admin)
+        repo_name =  self.repo.repo_name
+        searched_args = repo_name[0:1]
+        url = self.libraries_url + '?name=%s' % searched_args
+        resp = self.client.get(url)
+
+        json_resp = json.loads(resp.content)
+        assert json_resp['name'] == searched_args
+        assert searched_args in json_resp['repos'][0]['name']
+
+    def test_get_with_invalid_user_permission(self):
+        self.login_as(self.user)
+        resp = self.client.get(self.libraries_url)
+        self.assertEqual(403, resp.status_code)
+
+
+class LibraryTest(BaseTestCase):
+
+    def setUp(self):
+        self.user_name = self.user.username
+        self.admin_name = self.admin.username
+        self.repo_id= self.repo.repo_id
+
+        self.library_url = reverse('api-v2.1-admin-library', args=[self.repo_id])
+
+    def test_can_transfer(self):
+
+        self.login_as(self.admin)
+
+        data = 'owner=%s' % self.admin_name
+        resp = self.client.put(self.library_url, data, 'application/x-www-form-urlencoded')
+
+        self.assertEqual(200, resp.status_code)
+        json_resp = json.loads(resp.content)
+        assert json_resp['owner'] == self.admin_name
+
+    def test_transfer_group_invalid_user_permission(self):
+
+        self.login_as(self.user)
+
+        data = 'owner=%s' % self.admin_name
+        resp = self.client.put(self.library_url, data, 'application/x-www-form-urlencoded')
+        self.assertEqual(403, resp.status_code)
+
+    def test_transfer_group_invalid_args(self):
+
+        self.login_as(self.admin)
+
+        # invalid new owner
+        data = 'invalid_new_owner=%s' % self.admin_name
+        resp = self.client.put(self.library_url, data, 'application/x-www-form-urlencoded')
+        self.assertEqual(400, resp.status_code)
+
+        # new owner not exist
+        data = 'owner=invalid@email.com'
+        resp = self.client.put(self.library_url, data, 'application/x-www-form-urlencoded')
+        self.assertEqual(404, resp.status_code)
+
+    def test_can_delete(self):
+        self.login_as(self.admin)
+        resp = self.client.delete(self.library_url)
+        self.assertEqual(200, resp.status_code)
+
+        json_resp = json.loads(resp.content)
+        assert json_resp['success'] is True
+
+    def test_delete_with_invalid_user_permission(self):
+        self.login_as(self.user)
+        resp = self.client.delete(self.library_url)
+        self.assertEqual(403, resp.status_code)
