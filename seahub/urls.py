@@ -54,7 +54,7 @@ from seahub.api2.endpoints.admin.groups import AdminGroups, AdminGroup
 from seahub.api2.endpoints.admin.group_libraries import AdminGroupLibraries, AdminGroupLibrary
 from seahub.api2.endpoints.admin.group_members import AdminGroupMembers, AdminGroupMember
 from seahub.api2.endpoints.admin.shares import AdminShares
-from seahub.api2.endpoints.admin.batch_set_user_quota import AdminUsersBatch
+from seahub.api2.endpoints.admin.users_batch import AdminUsersBatch
 
 # Uncomment the next two lines to enable the admin:
 #from django.contrib import admin

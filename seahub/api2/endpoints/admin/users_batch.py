@@ -20,20 +20,6 @@ from seahub.utils.file_size import get_file_size_unit
 
 logger = logging.getLogger(__name__)
 
-# user fields returned by admin users api
-# {
-#     "email": "email",
-#     "name": "email2nickname(email)",
-#     "contact_email": Profile.objects.get_contact_email_by_user(email),
-#     "is_admin": True, # False
-#     "active": True, # False
-#     "role": "default", # guest
-#     "quota_total": 100000,
-#     "quota_used": 50000,
-#     "created_at": "2017-02-23T15:51:21+08:00",
-#     "last_login": "2017-02-27T15:51:21+08:00",
-# }
-
 
 class AdminUsersBatch(APIView):
     authentication_classes = (TokenAuthentication, SessionAuthentication)
