@@ -21,10 +21,15 @@
         <li class="tabnav-tab"><a href="{% url 'sys_useradmin' %}?filter=paid">Paid</a></li>
         {% endif %}
     </ul>
-    <div class="fright">
+
+    <div class="js-op-for-all fright">
         <button id="import-users-btn">{% trans "Import users" %}</button>
         <button id="add-user-btn">{% trans "Add user" %}</button>
         <button id="export-excel">{% trans "Export Excel" %}</button>
+    </div>
+    <div class="js-op-for-selected fright hide">
+        <button id="set-quota-btn">{% trans "Set quota" %}</button>
+        <button id="delete-users-btn">{% trans "Delete users" %}</button>
     </div>
 </div>
 

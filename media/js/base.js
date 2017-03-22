@@ -135,7 +135,7 @@ function showConfirm(title, content, yesCallback) {
 
     $cont.html('<h3>' + title + '</h3><p>' + content + '</p>');
     $popup.modal({appendTo: '#main'});
-    $('#simplemodal-container').css({'height':'auto'});
+    $('#simplemodal-container').css({'width':'auto', 'height':'auto'});
 
     $yesBtn.click(yesCallback);
 }
