@@ -26,11 +26,13 @@ except ImportError:
 logger = logging.getLogger(__name__)
 
 def get_repo_info(repo):
+    repo_owner = seafile_api.get_repo_owner(repo.repo_id)
+    org_repo_owner = seafile_api.get_org_repo_owner(repo.repo_id)
 
     result = {}
     result['id'] = repo.repo_id
     result['name'] = repo.repo_name
-    result['owner'] = seafile_api.get_repo_owner(repo.repo_id)
+    result['owner'] = repo_owner or org_repo_owner
     result['size'] = repo.size
     result['size_formatted'] = filesizeformat(repo.size)
     result['encrypted'] = repo.encrypted
