@@ -96,8 +96,8 @@ define([
             var first_page = parseInt(this.adminLogCollection.state.firstPage);
             var total_page = parseInt(this.adminLogCollection.state.totalPages);
 
-            // `currentPage` must be firstPage <= currentPage < totalPages if 1-based.
-            if (first_page <= current_page && current_page < total_page) {
+            // `currentPage` must be firstPage <= currentPage <= totalPages if 1-based.
+            if (first_page <= current_page && current_page <= total_page) {
                 this.adminLogCollection.getPage(current_page).done(function () {
                     _this.$loadingTip.hide();
                     var current_page = _this.adminLogCollection.state.currentPage;
