@@ -67,6 +67,12 @@
             <a href="{{ SITE_ROOT }}sys/termsadmin/"><span class="sf2-icon-wiki"></span>{% trans "Terms and Conditions" %}</a>
         </li>
         {% endif %}
+        <% if (app.pageOptions.is_pro) { %>
+        <li class="tab<% if (cur_tab == 'admin-logs') { %> tab-cur<% } %>">
+            <a href="{{ SITE_ROOT }}sysadmin/#admin-logs/"><span class="sf2-icon-clock"></span>{% trans "Admin Logs" %}</a>
+        </li>
+        <% } %>
+
     </ul>
     <% if (cur_tab == 'libraries') { %>
         <% if (option == 'all') { %>
@@ -838,4 +844,37 @@
         <a href="#" class="sf2-icon-delete sf2-x member-delete-btn op-icon vh" title="{% trans "Delete" %}" aria-label="{% trans "Delete" %}"></a>
         <% } %>
     </td>
+</script>
+
+<script type="text/template" id="admin-logs-tmpl">
+    <div class="hd">
+        <h3>{% trans "Admin Logs" %}</h3>
+    </div>
+    <span class="loading-icon loading-tip"></span>
+    <table class="hide">
+        <thead>
+            <tr>
+                <th width="20%">{% trans "Email" %}</th>
+                <th width="15%">{% trans "Operation" %}</th>
+                <th width="50%">{% trans "Detail" %}</th>
+                <th width="15%">{% trans "Time" %}</th>
+            </tr>
+        </thead>
+        <tbody>
+        </tbody>
+    </table>
+    <div id="paginator">
+        <a class="prev js-previous hide" href="#">{% trans "Previous" %}</a>
+        <a class="next js-next hide" href="#">{% trans "Next" %}</a>
+    </div>
+    <div class="empty-tips hide">
+        <h2 class="alc">{% trans "No Admin Logs" %}</h2>
+    </div>
+</script>
+
+<script type="text/template" id="admin-log-item-tmpl">
+    <td><a href="<%= admin_user_url %>"><%- email %></a></td>
+    <td><%= op_title %></td>
+    <td><%= op_details %></td>
+    <td><time title="<%- time %>"><%- time_from_now %></time></td>
 </script>

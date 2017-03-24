@@ -9,6 +9,8 @@ from django.conf import settings
 
 from seaserv import check_permission, is_repo_owner, ccnet_api
 
+from seahub.utils import is_pro_version
+
 SAFE_METHODS = ['GET', 'HEAD', 'OPTIONS']
 
 class IsRepoWritable(BasePermission):
@@ -76,3 +78,11 @@ class CanGenerateUploadLink(BasePermission):
     """
     def has_permission(self, request, *args, **kwargs):
         return request.user.permissions.can_generate_upload_link()
+
+class IsProVersion(BasePermission):
+    """
+    Check whether Seafile is pro version
+    """
+
+    def has_permission(self, request, *args, **kwargs):
+        return is_pro_version()

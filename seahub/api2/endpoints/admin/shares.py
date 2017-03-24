@@ -191,7 +191,7 @@ class AdminShares(APIView):
                         seafile_api.share_repo(
                                 repo_id, repo_owner, email, permission)
                     else:
-                        seafile_api.share_subdir_email(
+                        seafile_api.share_subdir_to_user(
                                 repo_id, path, repo_owner, email, permission)
 
                 except Exception as e:

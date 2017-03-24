@@ -22,7 +22,8 @@ try:
 except ImportError:
     SEACLOUD_MODE = False
 
-from seahub.utils import HAS_FILE_SEARCH, EVENTS_ENABLED, TRAFFIC_STATS_ENABLED
+from seahub.utils import HAS_FILE_SEARCH, EVENTS_ENABLED, TRAFFIC_STATS_ENABLED, \
+        is_pro_version
 
 try:
     from seahub.settings import ENABLE_PUBFILE
@@ -85,4 +86,5 @@ def base(request):
         'FILE_SERVER_ROOT': file_server_root,
         'enable_guest_invitation': ENABLE_GUEST_INVITATION,
         'enable_terms_and_conditions': dj_settings.ENABLE_TERMS_AND_CONDITIONS,
+        'is_pro': True if is_pro_version() else False,
         }
