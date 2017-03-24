@@ -61,7 +61,7 @@
                 </tr>
 
                 {% for dirent in dir_list %}
-                <tr>
+                <tr data-name="{{ dirent.obj_name }}">
                     <td class="alc"><img src="{{ MEDIA_URL }}img/folder-24.png" alt="{% trans "Directory"%}" /></td>
                     <td><a href="{% url 'repo_history_view' repo.id %}?commit_id={{ current_commit.id }}&p={{ path|urlencode }}{{ dirent.obj_name|urlencode }}" class="repo-history-view-link">{{ dirent.obj_name }}</a></td>
                     <td></td>
@@ -70,7 +70,7 @@
                 {% endfor %}
 
                 {% for dirent in file_list %}
-                <tr>
+                <tr data-name="{{ dirent.props.obj_name }}">
                     <td class="alc"><img src="{{ MEDIA_URL }}img/file/{{ dirent.obj_name|file_icon_filter }}" alt="{% trans "File"%}" /></td>
                     <td><a class="normal" href="{% url 'view_snapshot_file' repo.props.id %}?obj_id={{ dirent.props.obj_id }}&commit_id={{ current_commit.id }}&p={{ path|urlencode }}{{ dirent.obj_name|urlencode }}" target="_blank">{{ dirent.props.obj_name }}</a></td>
                     <td>{{ dirent.file_size|filesizeformat }}</td>
@@ -111,8 +111,8 @@ $('.restore-file, .restore-dir').click(function() {
         dataType: 'json',
         beforeSend: prepareCSRFToken,
         success: function() {
-            _this.closest('tr').remove();
-            feedback("{% trans "Success" %}", 'success');
+            var msg = "{% trans "Successfully restored {dirent_name}" %}".replace('{dirent_name}', _this.closest('tr').attr('data-name'));
+            feedback(msg, 'success');
         },
         error: ajaxErrorHandler
     });

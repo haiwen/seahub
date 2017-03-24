@@ -111,8 +111,9 @@ $('.restore-file').click(function() {
         dataType: 'json',
         beforeSend: prepareCSRFToken,
         success: function() {
-            _this.closest('tr').remove();
-            feedback("{% trans "Success" %}", 'success');
+            var msg = "{% trans "Successfully restored {filename}" %}".replace('{filename}', "{{u_filename|escapejs}}");
+            feedback(msg, 'success');
+            setTimeout(function() { location.reload(true); }, 1000);
         },
         error: ajaxErrorHandler
     });
