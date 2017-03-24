@@ -1,13 +1,10 @@
 import json
+from mock import patch
 
 from django.core.urlresolvers import reverse
 from seahub.test_utils import BaseTestCase
 from tests.common.utils import randstring
 
-try:
-    from seahub.settings import LOCAL_PRO_DEV_ENV
-except ImportError:
-    LOCAL_PRO_DEV_ENV = False
 
 class LogsTest(BaseTestCase):
 
@@ -25,10 +22,10 @@ class LogsTest(BaseTestCase):
         self.remove_group()
         self.remove_repo()
 
-    def test_can_get(self):
+    @patch('seahub.api2.permissions.IsProVersion.has_permission')
+    def test_can_get(self, mock_has_permission):
 
-        if not LOCAL_PRO_DEV_ENV:
-            return
+        mock_has_permission.return_value = True
 
         # admin create group
         url = reverse('api-v2.1-admin-groups')
