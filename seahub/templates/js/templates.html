@@ -682,9 +682,11 @@
 
     <div class="hd w100 ovhd">
         <h3 class="fleft">{% trans "Tools" %}</h3>
+        <% if (app.pageOptions.enable_wiki) { %>
         {% if user.permissions.can_add_repo %}
         <a href="#" id="enable-mods" class="sf2-icon-cog2 op-icon enable-mods-icon fright" title="{% trans "Enable Modules" %}" aria-label="{% trans "Enable Modules" %}"></a>
         {% endif %}
+        <% } %>
     </div>
     <ul class="side-tabnav-tabs">
         <li class="tab<% if (cur_tab == 'starred') { %> tab-cur<% } %>">
@@ -695,12 +697,15 @@
             <a href="{{ SITE_ROOT }}#activities/"><span aria-hidden="true" class="sf2-icon-clock"></span>{% trans "Activities" %}</a>
         </li>
         {% endif %}
+
+        <% if (app.pageOptions.enable_wiki) { %>
         <% for (var i = 0, len = mods_enabled.length; i < len; i++) { %>
             <% if (mods_enabled[i] == 'personal wiki') { %>
                 <li class="tab">
                     <a href="{% url 'personal_wiki' %}"><span aria-hidden="true" class="sf2-icon-wiki"></span>{% trans "Personal Wiki" %}</a>
                 </li>
             <% } %>
+        <% } %>
         <% } %>
         <li class="tab<% if (cur_tab == 'devices') { %> tab-cur<% } %>">
             <a href="{{ SITE_ROOT }}#devices/" class="ellipsis" title="{% trans "Linked Devices" %}"><span aria-hidden="true" class="sf2-icon-monitor"></span>{% trans "Linked Devices" %}</a>
@@ -772,8 +777,10 @@
     {% endif %}
 
     <div class="fright">
+        <% if (app.pageOptions.enable_wiki) { %>
         <% if (wiki_enabled) { %>
             <a href="{{SITE_ROOT}}group/<%= id %>/wiki/" class="sf2-icon-wiki2 op-icon group-top-op-icon" title="{% trans "Wiki" %}" id="group-wiki-icon"></a>
+        <% } %>
         <% } %>
         <a href="#" class="sf2-icon-cog1 op-icon group-top-op-icon" title="{% trans "Settings" %}" id="group-settings-icon" aria-label="{% trans "Settings" %}"></a>
         <a href="#" class="sf2-icon-user2 op-icon group-top-op-icon" title="{% trans "Members" %}" id="group-members-icon" aria-label="{% trans "Members" %}"></a>
@@ -1058,10 +1065,12 @@
     <ul class="group-setting-list">
         <li><a href="#" class="group-setting-item sf-popover-item" data-op="rename">{% trans "Rename" %}</a></li>
         <li><a href="#" class="group-setting-item sf-popover-item" data-op="transfer">{% trans "Transfer" %}</a></li>
+        <% if (app.pageOptions.enable_wiki) { %>
         <% if (!wiki_enabled) { %>
         <li><a href="#" class="group-setting-item sf-popover-item" data-op="add-wiki">{% trans "Add Wiki" %}</a></li>
         <% } else { %>
         <li><a href="#" class="group-setting-item sf-popover-item" data-op="remove-wiki">{% trans "Remove Wiki" %}</a></li>
+        <% } %>
         <% } %>
     </ul>
     <ul class="group-setting-list">
@@ -1074,10 +1083,12 @@
 <% } else if (is_admin) { %>
     <ul class="group-setting-list">
         <li><a href="#" class="group-setting-item sf-popover-item" data-op="rename">{% trans "Rename" %}</a></li>
+        <% if (app.pageOptions.enable_wiki) { %>
         <% if (!wiki_enabled) { %>
         <li><a href="#" class="group-setting-item sf-popover-item" data-op="add-wiki">{% trans "Add Wiki" %}</a></li>
         <% } else { %>
         <li><a href="#" class="group-setting-item sf-popover-item" data-op="remove-wiki">{% trans "Remove Wiki" %}</a></li>
+        <% } %>
         <% } %>
     </ul>
     <ul class="last-group-setting-list">

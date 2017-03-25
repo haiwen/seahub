@@ -748,6 +748,7 @@ def libraries(request):
             "allow_public_share": allow_public_share,
             "guide_enabled": guide_enabled,
             "sub_lib_enabled": sub_lib_enabled,
+            'enable_wiki': settings.ENABLE_WIKI,
             'enable_upload_folder': settings.ENABLE_UPLOAD_FOLDER,
             'enable_resumable_fileupload': settings.ENABLE_RESUMABLE_FILEUPLOAD,
             'max_number_of_files_for_fileupload': settings.MAX_NUMBER_OF_FILES_FOR_FILEUPLOAD,
