@@ -15,7 +15,8 @@ from constance import config
 
 from seahub.settings import SEAFILE_VERSION, SITE_TITLE, SITE_NAME, \
     MAX_FILE_NAME, BRANDING_CSS, LOGO_PATH, LOGO_WIDTH, LOGO_HEIGHT,\
-    SHOW_REPO_DOWNLOAD_BUTTON, SITE_ROOT, ENABLE_GUEST_INVITATION
+    SHOW_REPO_DOWNLOAD_BUTTON, SITE_ROOT, ENABLE_GUEST_INVITATION, \
+    FAVICON_PATH
 
 try:
     from seahub.settings import SEACLOUD_MODE
@@ -60,6 +61,7 @@ def base(request):
         'seafile_version': SEAFILE_VERSION,
         'site_title': SITE_TITLE,
         'branding_css': BRANDING_CSS,
+        'favicon_path': FAVICON_PATH,
         'logo_path': LOGO_PATH,
         'logo_width': LOGO_WIDTH,
         'logo_height': LOGO_HEIGHT,
