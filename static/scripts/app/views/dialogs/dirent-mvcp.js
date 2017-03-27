@@ -17,6 +17,9 @@ define([
             this.dir = options.dir;
             this.op_type = options.op_type;
 
+            this.dirView = options.dirView;
+            this.imgIndex = options.imgIndex;
+
             // only show current repo if current repo is read-write
             this.show_cur_repo = this.dirent.get('perm') == 'rw' ? true : false;
 
@@ -62,6 +65,15 @@ define([
             }));
 
             return this;
+        },
+
+        removeImgItem: function() {
+            if (this.dirent.get('is_img')) {
+                this.dirView.updateMagnificPopupOptions({
+                    'op': 'delete-item',
+                    'index': this.imgIndex
+                });
+            }
         },
 
         events: {
@@ -112,6 +124,7 @@ define([
                             $.modal.close();
                             if (op == 'mv') {
                                 _this.dir.remove(_this.dirent);
+                                _this.removeImgItem();
                             }
                             Common.feedback(msg, 'success');
                         } else { // failed or canceled
@@ -208,6 +221,7 @@ define([
                 if (!data['task_id']) { // no progress
                     if (_this.op_type == 'mv') {
                         _this.dir.remove(_this.dirent);
+                        _this.removeImgItem();
                     }
                     Common.feedback(msg, 'success');
                 } else {

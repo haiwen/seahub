@@ -28,11 +28,13 @@ except ImportError:
 logger = logging.getLogger(__name__)
 
 def get_repo_info(repo):
+    repo_owner = seafile_api.get_repo_owner(repo.repo_id)
+    org_repo_owner = seafile_api.get_org_repo_owner(repo.repo_id)
 
     result = {}
     result['id'] = repo.repo_id
     result['name'] = repo.repo_name
-    result['owner'] = seafile_api.get_repo_owner(repo.repo_id)
+    result['owner'] = repo_owner or org_repo_owner
     result['size'] = repo.size
     result['size_formatted'] = filesizeformat(repo.size)
     result['encrypted'] = repo.encrypted
@@ -149,8 +151,17 @@ class AdminLibrary(APIView):
 
         repo = seafile_api.get_repo(repo_id)
         if not repo:
-            return api_error(status.HTTP_404_NOT_FOUND,
-                             'Library %s not found.' % repo_id)
+            # for case of `seafile-data` has been damaged
+            # no `repo object` will be returned from seafile api
+            # delete the database record anyway
+            try:
+                seafile_api.remove_repo(repo_id)
+            except Exception as e:
+                logger.error(e)
+                error_msg = 'Internal Server Error'
+                return api_error(status.HTTP_500_INTERNAL_SERVER_ERROR, error_msg)
+
+            return Response({'success': True})
 
         repo_name = repo.name
         repo_owner = seafile_api.get_repo_owner(repo_id)

@@ -268,7 +268,7 @@ define([
                             }
                         }
                     });
-                    $('#simplemodal-container').css({'height':'auto'});
+                    $('#simplemodal-container').css({'width':'auto', 'height':'auto'});
                     $('.yes', confirm_popup).click(function() {
                         var selected_file = dirents.findWhere({'obj_name': file.name});
                         if (selected_file.get('is_locked')) {

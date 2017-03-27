@@ -393,6 +393,10 @@ SITE_TITLE = 'Private Seafile'
 # Base name used in email sending
 SITE_NAME = 'Seafile'
 
+# Path to the favicon file (relative to the media path)
+# tip: use a different name when modify it.
+FAVICON_PATH = 'img/favicon.ico'
+
 # Path to the Logo Imagefile (relative to the media path)
 LOGO_PATH = 'img/seafile-logo.png'
 # logo size. the unit is 'px'
@@ -562,6 +566,9 @@ CLOUD_DEMO_USER = 'demo@seafile.com'
 
 ENABLE_TWO_FACTOR_AUTH = False
 OTP_LOGIN_URL = '/profile/two_factor_authentication/setup/'
+
+# Enable personal wiki, group wiki
+ENABLE_WIKI = True
 
 #####################
 # External settings #

@@ -49,6 +49,7 @@ from seahub.api2.endpoints.admin.device_errors import AdminDeviceErrors
 from seahub.api2.endpoints.admin.libraries import AdminLibraries, AdminLibrary
 from seahub.api2.endpoints.admin.library_dirents import AdminLibraryDirents, AdminLibraryDirent
 from seahub.api2.endpoints.admin.system_library import AdminSystemLibrary
+from seahub.api2.endpoints.admin.default_library import AdminDefaultLibrary
 from seahub.api2.endpoints.admin.trash_libraries import AdminTrashLibraries, AdminTrashLibrary
 from seahub.api2.endpoints.admin.groups import AdminGroups, AdminGroup
 from seahub.api2.endpoints.admin.group_libraries import AdminGroupLibraries, AdminGroupLibrary
@@ -56,6 +57,7 @@ from seahub.api2.endpoints.admin.group_members import AdminGroupMembers, AdminGr
 from seahub.api2.endpoints.admin.shares import AdminShares
 from seahub.api2.endpoints.admin.users_batch import AdminUsersBatch
 from seahub.api2.endpoints.admin.logs import AdminLogs
+from seahub.api2.endpoints.admin.org_users import AdminOrgUsers, AdminOrgUser
 
 # Uncomment the next two lines to enable the admin:
 #from django.contrib import admin
@@ -211,12 +213,16 @@ urlpatterns = patterns(
     url(r'^api/v2.1/admin/groups/(?P<group_id>\d+)/members/(?P<email>[^/]+)/$', AdminGroupMember.as_view(), name='api-v2.1-admin-group-member'),
     url(r'^api/v2.1/admin/libraries/(?P<repo_id>[-0-9a-f]{36})/dirent/$', AdminLibraryDirent.as_view(), name='api-v2.1-admin-library-dirent'),
     url(r'^api/v2.1/admin/system-library/$', AdminSystemLibrary.as_view(), name='api-v2.1-admin-system-library'),
+    url(r'^api/v2.1/admin/default-library/$', AdminDefaultLibrary.as_view(), name='api-v2.1-admin-default-library'),
     url(r'^api/v2.1/admin/trash-libraries/$', AdminTrashLibraries.as_view(), name='api-v2.1-admin-trash-libraries'),
     url(r'^api/v2.1/admin/trash-libraries/(?P<repo_id>[-0-9a-f]{36})/$', AdminTrashLibrary.as_view(), name='api-v2.1-admin-trash-library'),
     url(r'^api/v2.1/admin/shares/$', AdminShares.as_view(), name='api-v2.1-admin-shares'),
     url(r'^api/v2.1/admin/admin-logs/$', AdminLogs.as_view(), name='api-v2.1-admin-admin-logs'),
 
     url(r'^api/v2.1/admin/users/batch/$', AdminUsersBatch.as_view(), name='api-v2.1-admin-users-batch'),
+
+    url(r'^api/v2.1/admin/organizations/(?P<org_id>\d+)/users/$', AdminOrgUsers.as_view(), name='api-v2.1-admin-org-users'),
+    url(r'^api/v2.1/admin/organizations/(?P<org_id>\d+)/users/(?P<email>[^/]+)/$', AdminOrgUser.as_view(), name='api-v2.1-admin-org-user'),
 
     (r'^avatar/', include('seahub.avatar.urls')),
     (r'^notification/', include('seahub.notifications.urls')),

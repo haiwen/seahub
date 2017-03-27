@@ -48,6 +48,7 @@ def parse_license():
     return ret
 
 def user_number_over_limit(new_users = 0):
+    logger = logging.getLogger(__name__)
     if is_pro_version():
         try:
             # get license user limit
@@ -60,11 +61,16 @@ def user_number_over_limit(new_users = 0):
             active_users = active_db_users + active_ldap_users if \
                     active_ldap_users > 0  else active_db_users
 
-            return active_users + new_users >= max_users
+            if new_users < 0:
+                logger.debug('`new_users` must be greater or equal to 0.')
+                return False
+            elif new_users == 0:
+                return active_users >= max_users
+            else:
+                return active_users + new_users > max_users
+
         except Exception as e:
-            logger = logging.getLogger(__name__)
             logger.error(e)
             return False
     else:
         return False
-

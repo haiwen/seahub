@@ -10,10 +10,7 @@
 {% block viewport %}
 <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no" />
 {% endblock %}
-<link rel="icon" type="image/x-icon" href="{{ MEDIA_URL }}img/favicon.png?t=1398068110" />
-<!--[if IE]>
-<link rel="shortcut icon" href="{{ MEDIA_URL }}img/favicon.png?t=1398068110"/>
-<![endif]-->
+<link rel="icon" href="{{ MEDIA_URL }}{{ favicon_path }}" />
 <link rel="stylesheet" type="text/css" href="{% static "css/bootstrap.min.css" %}"/>
 <link rel="stylesheet" type="text/css" href="{{ MEDIA_URL }}css/jstree_default_theme/style.min.css" />
 <link rel="stylesheet" type="text/css" href="{{ MEDIA_URL }}css/seahub.css?t=1398068110" />
@@ -39,7 +36,7 @@
                     {% if seacloud_mode %}
                     <img src="{{ MEDIA_URL }}img/seacloud_logo.png?t=1398068110" title="Seacloud" alt="logo" width="186" height="31" />
                     {% else %}
-                    <img src="{{ MEDIA_URL }}{{ logo_path }}" title="Seafile" alt="logo" width="{{logo_width}}" height="{{logo_height}}" />
+                    <img src="{{ MEDIA_URL }}{{ logo_path }}" title="{{ site_title }}" alt="logo" width="{{logo_width}}" height="{{logo_height}}" />
                     {% endif %}
                 </a>
                 <button class="sf2-icon-list-view side-nav-toggle hidden-md-up hide" title="{% trans "Side Nav Menu" %}" id="js-toggle-side-nav" aria-label="{% trans "Side Nav Menu" %}"></button>

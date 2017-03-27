@@ -1282,9 +1282,10 @@ def download_file(request, repo_id, obj_id):
     if repo.encrypted and not seafile_api.is_password_set(repo_id, username):
         return HttpResponseRedirect(reverse('view_common_lib_dir', args=[repo_id, '']))
 
-    # Permission check and generate download link
-    path = request.GET.get('p', '')
-    if check_folder_permission(request, repo_id, path):
+    # only check the permissions at the repo level
+    # to prevent file can not be downloaded on the history page
+    # if it has been renamed
+    if check_folder_permission(request, repo_id, '/'):
         # Get a token to access file
         token = seafile_api.get_fileserver_access_token(repo_id, obj_id,
                                                         'download', username)
@@ -1293,11 +1294,11 @@ def download_file(request, repo_id, obj_id):
         next = request.META.get('HTTP_REFERER', settings.SITE_ROOT)
         return HttpResponseRedirect(next)
 
-    # send stats message
-    send_file_access_msg(request, repo, path, 'web')
-
+    path = request.GET.get('p', '')
+    send_file_access_msg(request, repo, path, 'web') # send stats message
     file_name = os.path.basename(path.rstrip('/'))
-    redirect_url = gen_file_get_url(token, file_name)
+    redirect_url = gen_file_get_url(token, file_name) # generate download link
+
     return HttpResponseRedirect(redirect_url)
 
 ########## text diff

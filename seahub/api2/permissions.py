@@ -8,6 +8,7 @@ from rest_framework.permissions import BasePermission
 from django.conf import settings
 
 from seaserv import check_permission, is_repo_owner, ccnet_api
+from seahub.utils import is_pro_version
 
 from seahub.utils import is_pro_version
 
@@ -67,11 +68,13 @@ class CanInviteGuest(BasePermission):
         return settings.ENABLE_GUEST_INVITATION and \
                 request.user.permissions.can_invite_guest()
 
+
 class CanGenerateShareLink(BasePermission):
     """Check user has permission to generate share link.
     """
     def has_permission(self, request, *args, **kwargs):
         return request.user.permissions.can_generate_share_link()
+
 
 class CanGenerateUploadLink(BasePermission):
     """Check user has permission to generate upload link.

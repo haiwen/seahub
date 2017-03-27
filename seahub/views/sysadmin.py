@@ -1811,7 +1811,7 @@ def batch_add_user(request):
         filestream = StringIO.StringIO(content)
         reader = csv.reader(filestream)
         new_users_count = len(list(reader))
-        if user_number_over_limit(new_users = new_users_count):
+        if user_number_over_limit(new_users=new_users_count):
             messages.error(request, _(u'The number of users exceeds the limit.'))
             return HttpResponseRedirect(next)
 
@@ -1823,47 +1823,48 @@ def batch_add_user(request):
             if not row:
                 continue
 
-            username = row[0].strip() or ''
-            if not is_valid_username(username):
-                continue
-
-            password = row[1].strip() or ''
-            if password == '':
+            try:
+                username = row[0].strip()
+                password = row[1].strip()
+                if not is_valid_username(username) or not password:
+                    continue
+            except Exception as e:
+                logger.error(e)
                 continue
 
             try:
                 User.objects.get(email=username)
             except User.DoesNotExist:
-                User.objects.create_user(username,
-                        password, is_staff=False, is_active=True)
+                User.objects.create_user(
+                    username, password, is_staff=False, is_active=True)
 
                 if config.FORCE_PASSWORD_CHANGE:
                     UserOptions.objects.set_force_passwd_change(username)
 
                 # then update the user's optional info
                 try:
-                    nickname = row[2].strip() or ''
+                    nickname = row[2].strip()
                     if len(nickname) <= 64 and '/' not in nickname:
                         Profile.objects.add_or_update(username, nickname, '')
                 except Exception as e:
                     logger.error(e)
 
                 try:
-                    department = row[3].strip() or ''
+                    department = row[3].strip()
                     if len(department) <= 512:
                         DetailedProfile.objects.add_or_update(username, department, '')
                 except Exception as e:
                     logger.error(e)
 
                 try:
-                    role = row[4].strip() or ''
+                    role = row[4].strip()
                     if is_pro_version() and role in get_available_roles():
                         User.objects.update_role(username, role)
                 except Exception as e:
                     logger.error(e)
 
                 try:
-                    space_quota_mb = row[5].strip() or ''
+                    space_quota_mb = row[5].strip()
                     space_quota_mb = int(space_quota_mb)
                     if space_quota_mb >= 0:
                         space_quota = int(space_quota_mb) * get_file_size_unit('MB')
@@ -1885,7 +1886,7 @@ def batch_add_user(request):
                     "email": username,
                 }
                 admin_operation.send(sender=None, admin_name=request.user.username,
-                        operation=USER_ADD, detail=admin_op_detail)
+                                     operation=USER_ADD, detail=admin_op_detail)
 
         messages.success(request, _('Import succeeded'))
     else:
