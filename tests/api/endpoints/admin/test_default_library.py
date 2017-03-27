@@ -26,7 +26,7 @@ class DefaultLibraryTest(BaseTestCase):
         json_resp = json.loads(resp.content)
 
         assert json_resp['user_email'] == self.user_name
-        assert json_resp['exists'] == False
+        assert json_resp['exists'] is False
 
     def test_can_create(self):
         self.login_as(self.admin)
@@ -40,7 +40,7 @@ class DefaultLibraryTest(BaseTestCase):
         new_default_repo_id = UserOptions.objects.get_default_repo(self.user_name)
 
         assert json_resp['user_email'] == self.user_name
-        assert json_resp['exists'] == True
+        assert json_resp['exists'] is True
         assert json_resp['repo_id'] == new_default_repo_id
 
     def test_can_not_get_if_not_admin(self):

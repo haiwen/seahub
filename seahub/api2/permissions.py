@@ -10,8 +10,6 @@ from django.conf import settings
 from seaserv import check_permission, is_repo_owner, ccnet_api
 from seahub.utils import is_pro_version
 
-from seahub.utils import is_pro_version
-
 SAFE_METHODS = ['GET', 'HEAD', 'OPTIONS']
 
 class IsRepoWritable(BasePermission):

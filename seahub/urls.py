@@ -28,7 +28,7 @@ from seahub.api2.endpoints.upload_links import UploadLinks, UploadLink
 from seahub.api2.endpoints.file import FileView
 from seahub.api2.endpoints.dir import DirView
 from seahub.api2.endpoints.repo_set_password import RepoSetPassword
-from seahub.api2.endpoints.zip_task  import ZipTaskView
+from seahub.api2.endpoints.zip_task import ZipTaskView
 from seahub.api2.endpoints.share_link_zip_task import ShareLinkZipTaskView
 from seahub.api2.endpoints.query_zip_progress import QueryZipProgressView
 from seahub.api2.endpoints.copy_move_task import CopyMoveTaskView
@@ -134,7 +134,7 @@ urlpatterns = patterns(
 
     ### Misc ###
     url(r'^image-view/(?P<filename>.*)$', image_view, name='image_view'),
-   (r'^file_upload_progress_page/$', file_upload_progress_page),
+    (r'^file_upload_progress_page/$', file_upload_progress_page),
     url(r'^i18n/$', i18n, name='i18n'),
     url(r'^convert_cmmt_desc_link/$', convert_cmmt_desc_link, name='convert_cmmt_desc_link'),
     url(r'^modules/toggle/$', toggle_modules, name="toggle_modules"),
