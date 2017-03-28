@@ -326,7 +326,13 @@
         <input type="checkbox" class="vam" />
         <% } %>
     </td>
-    <td class="star"></td>
+    <td class="star alc">
+        <% if (dirent.starred) { %>
+        <a href="#" title="{% trans "starred" %}" class="icon-star file-star" aria-label="{% trans "starred" %}"></a>
+        <% } else { %>
+        <a href="#" title="{% trans "unstarred" %}" class="icon-star-empty file-star" aria-label="{% trans "unstarred" %}"></a>
+        <% } %>
+    </td>
     <td class="dirent-icon"><img src="<%= icon_url %>" width="24" alt="" /></td>
     <td>
         <span class="dirent-name"><a href="<%= url %>" class="dir-link normal"><%- dirent.obj_name %></a></span>
@@ -951,8 +957,8 @@
         <% } %>
     </div>
     <ul class="side-tabnav-tabs">
-        <li class="tab<% if (cur_tab == 'starred') { %> tab-cur<% } %>">
-            <a href="{{ SITE_ROOT }}#starred/"><span aria-hidden="true" class="sf2-icon-star"></span>{% trans "Favorites" %}</a>
+        <li class="tab<% if (cur_tab == 'starred-items') { %> tab-cur<% } %>">
+            <a href="{{ SITE_ROOT }}#starred-items/"><span aria-hidden="true" class="sf2-icon-star"></span>{% trans "Favorites" %}</a>
         </li>
         {% if events_enabled %}
         <li class="tab<% if (cur_tab == 'activities') { %> tab-cur<% } %>">
@@ -1149,53 +1155,6 @@
         </div>
     </div>
 </script>
-<script type="text/template" id="starred-file-thead-tmpl">
-    <tr>
-        <% if ($(window).width() >= 768) { %>
-        <th width="5%"></th>
-        <th width="40%">{% trans "File Name" %}</th>
-        <th width="32%">{% trans "Library" %}</th>
-        <th width="18%">{% trans "Last Update" %}</th>
-        <th width="5%"></th>
-        <% } else { %>
-        <th width="5%"></th>
-        <th width="90%">{% trans "File Name" %}</th>
-        <th width="5%"></th>
-        <% } %>
-    </tr>
-</script>
-<script type="text/template" id="starred-file-item-tmpl">
-    <td class="alc"><img src="{{ MEDIA_URL }}img/file/<%= icon_path %>" alt="{% trans "icon" %}" /></td>
-    <td>
-        <% if (is_img) { %>
-            <a class="img-name-link" href="{{ SITE_ROOT }}lib/<%= repo_id %>/file<%- encoded_path %>" target="_blank" data-mfp-src="{{ SITE_ROOT }}repo/<%= repo_id %>/raw<%- encoded_path %>"><%- file_name %></a>
-        <% } else { %>
-            <a href="{{ SITE_ROOT }}lib/<%= repo_id %>/file<%- encoded_path %>" target="_blank"><%- file_name %></a>
-        <% } %>
-    </td>
-    <td><%- repo_name %></td>
-    <td><%= mtime_relative %></td>
-    <td>
-        <a href="#" class="sf2-icon-delete unstar op-icon vh" title="{% trans "Unstar" %}" aria-label="{% trans "Unstar" %}"></a>
-    </td>
-</script>
-<script type="text/template" id="starred-file-item-mobile-tmpl">
-    <td class="alc"><img src="{{ MEDIA_URL }}img/file/<%= icon_path %>" alt="{% trans "icon" %}" /></td>
-    <td>
-        <% if (is_img) { %>
-            <a class="img-name-link" href="{{ SITE_ROOT }}lib/<%= repo_id %>/file<%- encoded_path %>" target="_blank" data-mfp-src="{{ SITE_ROOT }}repo/<%= repo_id %>/raw<%- encoded_path %>"><%- file_name %></a>
-        <% } else { %>
-            <a href="{{ SITE_ROOT }}lib/<%= repo_id %>/file<%- encoded_path %>" target="_blank"><%- file_name %></a>
-        <% } %>
-        <br />
-        <span class="dirent-meta-info"><%- repo_name %></span>
-        <span class="dirent-meta-info"><%= mtime_relative %></span>
-    </td>
-    <td>
-        <a href="#" class="sf2-icon-delete unstar op-icon" title="{% trans "Unstar" %}" aria-label="{% trans "Unstar" %}"></a>
-    </td>
-</script>
-
 
 <script type="text/template" id="my-repos-hd-tmpl">
    <tr>
@@ -2072,3 +2031,69 @@
         <span class="loading-icon vam" style="margin-left:5px;display:none;"></span>
     </form>
 </script>
+
+<script type="text/template" id="starred-items-tmpl">
+    <div class="hd">
+        <h3>{% trans "Favorites" %}</h3>
+    </div>
+    <span class="loading-icon loading-tip"></span>
+    <table class="hide">
+        <thead>
+            <tr>
+                <% if ($(window).width() >= 768) { %>
+                <th width="5%"></th>
+                <th width="40%">{% trans "File Name" %}</th>
+                <th width="32%">{% trans "Library" %}</th>
+                <th width="18%">{% trans "Last Update" %}</th>
+                <th width="5%"></th>
+                <% } else { %>
+                <th width="5%"></th>
+                <th width="90%">{% trans "File Name" %}</th>
+                <th width="5%"></th>
+                <% } %>
+            </tr>
+        </thead>
+        <tbody>
+        </tbody>
+    </table>
+    <div class="empty-tips hide">
+        <h2 class="alc">{% trans "You don't have any starred files yet" %}</h2>
+        <p>{% blocktrans %}You can star important files by clicking the "Star" button on file viewing page, and they will be listed here.{% endblocktrans %}</p>
+    </div>
+</script>
+
+<script type="text/template" id="starred-item-tmpl">
+    <td>
+        <img src="<%= icon_url %>" width="24" />
+    </td>
+    <td>
+        <% if (is_dir) { %>
+            <a href="<%= dirent_url %>"><%- obj_name %></a>
+        <% } else { %>
+            <a href="<%= dirent_url %>" target="_blank"><%- obj_name %></a>
+        <% } %>
+    </td>
+    <td><a href="<%= repo_url %>"><%- repo_name %></a></td>
+    <td><time title='<%- time %>'><%- time_from_now %></time></td>
+    <td>
+        <a href="#" class="sf2-icon-delete unstar op-icon vh" title="{% trans "Unstar" %}" aria-label="{% trans "Unstar" %}"></a>
+    </td>
+</script>
+
+<script type="text/template" id="starred-item-mobile-tmpl">
+    <td class="alc"><img src="<%= icon_url %>" alt="{% trans "icon" %}" /></td>
+    <td>
+        <% if (is_dir) { %>
+            <a href="<%= dirent_url %>"><%- obj_name %></a>
+        <% } else { %>
+            <a href="<%= dirent_url %>" target="_blank"><%- obj_name %></a>
+        <% } %>
+        <br />
+        <span class="dirent-meta-info"><%- repo_name %></span>
+        <span class="dirent-meta-info"><%- time_from_now %></span>
+    </td>
+    <td>
+        <a href="#" class="sf2-icon-delete unstar op-icon" title="{% trans "Unstar" %}" aria-label="{% trans "Unstar" %}"></a>
+    </td>
+</script>
+

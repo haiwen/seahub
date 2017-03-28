@@ -80,7 +80,7 @@ define([
 
         events: {
             'click .select': 'select',
-            'click .file-star': 'starFile',
+            'click .file-star': 'starItem',
             'click .dirent-name': 'visitDirent',
             'click .img-name-link': 'viewImageWithPopup',
 
@@ -250,19 +250,29 @@ define([
             return false;
         },
 
-        starFile: function() {
+        starItem: function() {
             var _this = this;
             var dir = this.dirView.dir;
-            var starred = this.model.get('starred');
             var filePath = Common.pathJoin([dir.path, this.model.get('obj_name')]);
-            if (starred) {
+            var data = {
+                'repo_id': dir.repo_id,
+                'path': filePath
+            };
+
+            if (this.model.get('is_dir')) {
+                data['is_dir'] = 'true';
+            } else {
+                data['is_dir'] = 'false';
+            }
+
+            if (this.model.get('starred')) {
                 $.ajax({
-                    url: Common.getUrl({'name':'starred_files'})
-                        + '?repo_id=' + dir.repo_id + '&p=' + encodeURIComponent(filePath),
+                    url: Common.getUrl({'name':'starred_items'}),
                     type: 'DELETE',
                     cache: false,
                     dataType: 'json',
                     beforeSend: Common.prepareCSRFToken,
+                    data: data,
                     success: function() {
                         _this.model.set({'starred':false});
                     },
@@ -272,15 +282,12 @@ define([
                 });
             } else {
                 $.ajax({
-                    url: Common.getUrl({'name':'starred_files'}),
+                    url: Common.getUrl({'name':'starred_items'}),
                     type: 'POST',
                     cache: false,
                     dataType: 'json',
                     beforeSend: Common.prepareCSRFToken,
-                    data: {
-                        'repo_id': dir.repo_id,
-                        'p': filePath
-                    },
+                    data: data,
                     success: function() {
                         _this.model.set({'starred':true});
                     },

@@ -11,7 +11,7 @@ define([
     'app/views/group',
     'app/views/organization',
     'app/views/dir',
-    'app/views/starred-file',
+    'app/views/starred-items',
     'app/views/activities',
     'app/views/devices',
     'app/views/invitations',
@@ -23,7 +23,7 @@ define([
     'app/views/account'
 ], function($, Backbone, Common, Cookies, SideNavView, MyReposView,
     SharedReposView, GroupsView, GroupView, OrgView, DirView,
-    StarredFileView, ActivitiesView, DevicesView, InvitationsView,
+    StarredItemsView, ActivitiesView, DevicesView, InvitationsView,
     ShareAdminReposView, ShareAdminFoldersView, ShareAdminShareLinksView,
     ShareAdminUploadLinksView, NotificationsView, AccountView) {
     "use strict";
@@ -42,7 +42,7 @@ define([
             'org/': 'showOrgRepos',
             'org/lib/:repo_id(/*path)': 'showOrgRepoDir',
             'common/lib/:repo_id(/*path)': 'showCommonDir',
-            'starred/': 'showStarredFile',
+            'starred-items/': 'showStarredItems',
             'activities/': 'showActivities',
             'devices/': 'showDevices',
             'invitations/': 'showInvitations',
@@ -71,7 +71,7 @@ define([
             this.orgView = new OrgView();
             this.groupView = new GroupView();
             this.groupsView = new GroupsView();
-            this.starredFileView = new StarredFileView();
+            this.starredItemsView = new StarredItemsView();
             this.devicesView = new DevicesView();
             this.invitationsView = new InvitationsView();
             this.activitiesView = new ActivitiesView();
@@ -248,10 +248,10 @@ define([
             this.sideNavView.setCurTab('org');
         },
 
-        showStarredFile: function() {
-            this.switchCurrentView(this.starredFileView);
-            this.starredFileView.show();
-            this.sideNavView.setCurTab('starred');
+        showStarredItems: function() {
+            this.switchCurrentView(this.starredItemsView);
+            this.starredItemsView.show();
+            this.sideNavView.setCurTab('starred-items');
         },
 
         showActivities: function() {

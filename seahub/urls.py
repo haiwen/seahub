@@ -39,6 +39,8 @@ from seahub.api2.endpoints.notifications import NotificationsView, NotificationV
 from seahub.api2.endpoints.user_enabled_modules import UserEnabledModulesView
 from seahub.api2.endpoints.repo_file_uploaded_bytes import RepoFileUploadedBytesView
 
+from seahub.api2.endpoints.starred_items import StarredItems
+
 from seahub.api2.endpoints.admin.login import Login
 from seahub.api2.endpoints.admin.file_audit import FileAudit
 from seahub.api2.endpoints.admin.file_update import FileUpdate
@@ -198,6 +200,7 @@ urlpatterns = patterns(
     url(r'^api/v2.1/notifications/$', NotificationsView.as_view(), name='api-v2.1-notifications'),
     url(r'^api/v2.1/notification/$', NotificationView.as_view(), name='api-v2.1-notification'),
     url(r'^api/v2.1/user-enabled-modules/$', UserEnabledModulesView.as_view(), name='api-v2.1-user-enabled-module'),
+    url(r'^api/v2.1/starred-items/$', StarredItems.as_view(), name='api-v2.1-starred-items'),
 
     url(r'^api/v2.1/admin/sysinfo/$', SysInfo.as_view(), name='api-v2.1-sysinfo'),
     url(r'^api/v2.1/admin/devices/$', AdminDevices.as_view(), name='api-v2.1-admin-devices'),
@@ -218,7 +221,6 @@ urlpatterns = patterns(
     url(r'^api/v2.1/admin/trash-libraries/(?P<repo_id>[-0-9a-f]{36})/$', AdminTrashLibrary.as_view(), name='api-v2.1-admin-trash-library'),
     url(r'^api/v2.1/admin/shares/$', AdminShares.as_view(), name='api-v2.1-admin-shares'),
     url(r'^api/v2.1/admin/admin-logs/$', AdminLogs.as_view(), name='api-v2.1-admin-admin-logs'),
-
     url(r'^api/v2.1/admin/users/batch/$', AdminUsersBatch.as_view(), name='api-v2.1-admin-users-batch'),
 
     url(r'^api/v2.1/admin/organizations/(?P<org_id>\d+)/users/$', AdminOrgUsers.as_view(), name='api-v2.1-admin-org-users'),
