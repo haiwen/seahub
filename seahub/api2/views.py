@@ -266,10 +266,10 @@ class AccountInfo(APIView):
         info['name'] = email2nickname(email)
         info['total'] = seafile_api.get_user_quota(email)
         info['usage'] = seafile_api.get_user_self_usage(email)
-        info['login_id'] = p.login_id if p else ""
+        info['login_id'] = p.login_id if p and p.login_id else ""
         info['department'] = d_p.department if d_p else ""
         info['contact_email'] = p.contact_email if p else ""
-        info['institution'] = p.institution if p else ""
+        info['institution'] = p.institution if p and p.institution else ""
 
         return Response(info)
 
