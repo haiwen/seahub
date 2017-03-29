@@ -124,13 +124,6 @@ $('.text-diff').each(function() {
     $(this).attr('href', $(this).attr('href') + '&referer=' + encodeURIComponent(location.href));
 });
 
-$('.go-back').click(function() {
-    var referer = '{{referer|escapejs}}';
-    var str = location.protocol + '//' + location.host;
-    if (referer.indexOf(str) == 0) {
-        location.href = referer;
-    }
-    return false;
-});
+{% include 'snippets/go_back_js.html' %}
 </script>
 {% endblock %}
