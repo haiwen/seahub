@@ -132,7 +132,7 @@ def _populate_user_quota_usage(user):
     Arguments:
     - `user`:
     """
-    orgs = ccnet_threaded_rpc.get_orgs_by_user(user.email)
+    orgs = ccnet_api.get_orgs_by_user(user.email)
     try:
         if orgs:
             user.org = orgs[0]
@@ -502,7 +502,7 @@ def user_info(request, email):
     org_name = None
     space_quota = space_usage = 0
 
-    org = ccnet_threaded_rpc.get_orgs_by_user(email)
+    org = ccnet_api.get_orgs_by_user(email)
     if not org:
         owned_repos = mute_seafile_api.get_owned_repo_list(email,
                                                            ret_corrupted=True)
@@ -646,7 +646,7 @@ def user_set_quota(request, email):
         space_quota_mb = f.cleaned_data['space_quota']
         space_quota = space_quota_mb * get_file_size_unit('MB')
 
-        org = ccnet_threaded_rpc.get_orgs_by_user(email)
+        org = ccnet_api.get_orgs_by_user(email)
         try:
             if not org:
                 seafile_api.set_user_quota(email, space_quota)
@@ -702,7 +702,7 @@ def user_remove(request, email):
 
     try:
         user = User.objects.get(email=email)
-        org = ccnet_threaded_rpc.get_orgs_by_user(user.email)
+        org = ccnet_api.get_orgs_by_user(user.email)
         if org:
             if org[0].creator == user.email:
                 messages.error(request, _(u'Failed to delete: the user is an organization creator'))
