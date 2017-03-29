@@ -70,7 +70,8 @@ else:
                                 name='auth_login'),
                             url(r'^logout/$',
                                 auth_views.logout,
-                                {'template_name': 'registration/logout.html'},
+                                {'template_name': 'registration/logout.html',
+                                 'next_page': settings.LOGOUT_REDIRECT_URL},
                                 name='auth_logout'),
                             )
 
