@@ -217,7 +217,7 @@ class User(object):
 
         orgs = []
         if is_pro_version():
-            orgs = ccnet_threaded_rpc.get_orgs_by_user(username)
+            orgs = ccnet_api.get_orgs_by_user(username)
 
         # remove owned repos
         owned_repos = []

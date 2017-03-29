@@ -5,7 +5,7 @@ from rest_framework import status
 from rest_framework.authentication import BaseAuthentication
 from rest_framework.exceptions import APIException
 
-import seaserv
+from seaserv import ccnet_api
 from seahub.base.accounts import User
 from seahub.api2.models import Token, TokenV2
 from seahub.api2.utils import get_client_ip
@@ -78,7 +78,7 @@ class TokenAuthentication(BaseAuthentication):
             raise AuthenticationFailed('User inactive or deleted')
 
         if MULTI_TENANCY:
-            orgs = seaserv.get_orgs_by_user(token.user)
+            orgs = ccnet_api.get_orgs_by_user(token.user)
             if orgs:
                 user.org = orgs[0]
 
@@ -103,7 +103,7 @@ class TokenAuthentication(BaseAuthentication):
             raise AuthenticationFailed('User inactive or deleted')
 
         if MULTI_TENANCY:
-            orgs = seaserv.get_orgs_by_user(token.user)
+            orgs = ccnet_api.get_orgs_by_user(token.user)
             if orgs:
                 user.org = orgs[0]
 
