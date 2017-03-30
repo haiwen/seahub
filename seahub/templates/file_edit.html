@@ -167,6 +167,7 @@ if ('localStorage' in window && window['localStorage'] !== null) {
     var saved_draft = browserStorage.get(key);
     if (saved_draft) {
         $('#load-draft').modal();
+        $('#simplemodal-container').css({'width':'auto', 'height':'auto'});
     }
 }
 </script>
