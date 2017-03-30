@@ -1,6 +1,6 @@
 {% extends 'email_base.html' %}
 
-{% load i18n %}
+{% load i18n seahub_tags %}
 
 {% block email_con %}
 {% autoescape off %}
@@ -8,7 +8,7 @@
 <p style="color:#121214;font-size:14px;">{% trans "Hi," %}</p>
 
 <p style="font-size:14px;color:#434144;">
-{% blocktrans %}{{ email|email2nickname|escape }} shared an upload link to you on {{ site_name }}.{% endblocktrans%}
+{% blocktrans with escaped_nickname=email|email2nickname|escape %}{{ escaped_nickname }} shared an upload link to you on {{ site_name }}.{% endblocktrans%}
 </p>
 
 <p style="font-size:14px;color:#434144;">

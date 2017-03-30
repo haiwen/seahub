@@ -1,6 +1,6 @@
 {% extends 'email_base.html' %}
 
-{% load i18n %}
+{% load i18n seahub_tags %}
 
 {% block email_con %}
 
@@ -9,7 +9,7 @@
 <p style="color:#121214;font-size:14px;">{% trans "Hi," %}</p>
 
 <p style="font-size:14px;color:#434144;">
-{% blocktrans %}{{ user|email2nickname|escape }} invited you to join {{ site_name }}.{% endblocktrans%}
+{% blocktrans with escaped_nickname=user|email2nickname|escape %}{{ escaped_nickname }} invited you to join {{ site_name }}.{% endblocktrans%}
 </p>
 
 <p style="font-size:14px;color:#434144;">

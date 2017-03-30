@@ -1,6 +1,6 @@
 {% extends 'email_base.html' %}
 
-{% load i18n %}
+{% load i18n seahub_tags %}
 
 {% block email_con %}
 
@@ -10,9 +10,9 @@
 
 <p style="font-size:14px;color:#434144;">
 {% if org %}
-{% blocktrans with org_name=org.org_name %}{{ user|email2nickname|escape }} invited you to join organization "{{ org_name }}" on {{ site_name }}.{% endblocktrans%}
+{% blocktrans with org_name=org.org_name escaped_nickname=user|email2nickname|escape %}{{ escaped_nickname }} invited you to join organization "{{ org_name }}" on {{ site_name }}.{% endblocktrans%}
 {% else %}
-{% blocktrans %}{{ user|email2nickname|escape }} invited you to join {{ site_name }}.{% endblocktrans%}
+{% blocktrans with escaped_nickname=user|email2nickname|escape %}{{ escaped_nickname }} invited you to join {{ site_name }}.{% endblocktrans%}
 {% endif %}
 </p>
 
