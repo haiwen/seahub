@@ -19,6 +19,7 @@ import urlparse
 import datetime
 
 from django.core import signing
+from django.core.cache import cache
 from django.contrib.sites.models import RequestSite
 from django.contrib import messages
 from django.core.urlresolvers import reverse
@@ -50,7 +51,8 @@ from seahub.utils import render_error, is_org_context, \
     render_permission_error, is_pro_version, is_textual_file, \
     mkstemp, EMPTY_SHA1, HtmlDiff, gen_inner_file_get_url, \
     user_traffic_over_limit, get_file_audit_events_by_path, \
-    generate_file_audit_event_type, FILE_AUDIT_ENABLED
+    generate_file_audit_event_type, FILE_AUDIT_ENABLED, gen_token, \
+    get_site_scheme_and_netloc
 from seahub.utils.ip import get_remote_ip
 from seahub.utils.timeutils import utc_to_local
 from seahub.utils.file_types import (IMAGE, PDF, DOCUMENT, SPREADSHEET, AUDIO,
@@ -90,6 +92,12 @@ try:
     from seahub.settings import OFFICE_WEB_APP_EDIT_FILE_EXTENSION
 except ImportError:
     OFFICE_WEB_APP_EDIT_FILE_EXTENSION = ()
+
+try:
+    from seahub.settings import ENABLE_ONLYOFFICE
+    from seahub.onlyoffice.settings import ONLYOFFICE_APIJS_URL, ONLYOFFICE_FILE_EXTENSION
+except ImportError:
+    ENABLE_ONLYOFFICE = False
 
 # Get an instance of a logger
 logger = logging.getLogger(__name__)
@@ -444,6 +452,41 @@ def _file_view(request, repo_id, path):
             send_file_access_msg(request, repo, path, 'web')
             return render_to_response('view_wopi_file.html', wopi_dict,
                       context_instance=RequestContext(request))
+
+    if ENABLE_ONLYOFFICE and not repo.encrypted and \
+       fileext in ONLYOFFICE_FILE_EXTENSION:
+        doc_key = gen_token(10)
+        if fileext in ('xls', 'xlsx', 'ods', 'fods', 'csv'):
+            document_type = 'spreadsheet'
+        elif fileext in ('pptx', 'ppt', 'odp', 'fodp', 'ppsx', 'pps'):
+            document_type = 'presentation'
+        else:
+            document_type = 'text'
+        doc_title = os.path.basename(path)
+        dl_token = seafile_api.get_fileserver_access_token(
+            repo.id, obj_id, 'download', username, use_onetime=True)
+        doc_url = gen_file_get_url(dl_token, u_filename)
+        doc_info = json.dumps({'repo_id': repo_id, 'file_path': path,
+                               'username': username})
+        assert len(ONLYOFFICE_APIJS_URL) > 1
+        cache.set("ONLYOFFICE_%s" % doc_key, doc_info, None)
+
+        if file_perm == 'rw' and ((not is_locked) or (is_locked and locked_by_me)):
+            can_edit = True
+        else:
+            can_edit = False
+
+        return render_to_response('onlyoffice/view_file_via_onlyoffice.html', {
+            'ONLYOFFICE_APIJS_URL': ONLYOFFICE_APIJS_URL,
+            'file_type': fileext,
+            'doc_key': doc_key,
+            'doc_title': doc_title,
+            'doc_url': doc_url,
+            'document_type': document_type,
+            'callback_url': get_site_scheme_and_netloc().rstrip('/') + reverse('onlyoffice_editor_callback'),
+            'can_edit': can_edit,
+            'username': username,
+        }, context_instance=RequestContext(request))
 
     # check if the user is the owner or not, for 'private share'
     if is_org_context(request):
