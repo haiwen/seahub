@@ -44,7 +44,7 @@ from seahub.utils import render_permission_error, render_error, \
     new_merge_with_no_conflict, get_max_upload_file_size, \
     is_pro_version, FILE_AUDIT_ENABLED, \
     is_org_repo_creation_allowed, is_windows_operating_system
-from seahub.utils.star import get_dir_starred_files
+from seahub.utils.star import get_dir_starred_items
 from seahub.utils.timeutils import utc_to_local
 from seahub.views.modules import MOD_PERSONAL_WIKI, enable_mod_for_user, \
     disable_mod_for_user
@@ -198,7 +198,7 @@ def get_repo_dirents(request, repo, commit, path, offset=-1, limit=-1):
             dirent_more = True
 
         username = request.user.username
-        starred_files = get_dir_starred_files(username, repo.id, path)
+        starred_items = get_dir_starred_items(username, repo.id, path)
         fileshares = FileShare.objects.filter(repo_id=repo.id).filter(username=username)
         uploadlinks = UploadLinkShare.objects.filter(repo_id=repo.id).filter(username=username)
 
@@ -241,7 +241,7 @@ def get_repo_dirents(request, repo, commit, path, offset=-1, limit=-1):
                 dirent.dl_link = get_file_download_link(repo.id, dirent.obj_id,
                                                         p_fpath)
                 dirent.history_link = file_history_base + '?p=' + urlquote(p_fpath)
-                if fpath in starred_files:
+                if fpath in starred_items:
                     dirent.starred = True
                 for share in fileshares:
                     if fpath == share.path:

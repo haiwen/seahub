@@ -171,7 +171,7 @@ $('#share').click(function() {
 // star file
 $('#file-star').click(function() {
     var op_icon = $(this), url_base;
-    url_base = '{% url "starredfiles" %}';
+    url_base = '{% url "api-v2.1-starred-items" %}';
 
     if (op_icon.hasClass('icon-star-empty')) {
         // star the file
@@ -183,7 +183,8 @@ $('#file-star').click(function() {
             beforeSend: prepareCSRFToken,
             data: {
                 'repo_id': "{{ repo.id }}",
-                'p': "{{ path|escapejs }}"
+                'path': "{{ path|escapejs }}",
+                'is_dir': "false"
             },
             success:function(data) {
                 op_icon.toggleClass('icon-star-empty icon-star');
@@ -193,10 +194,15 @@ $('#file-star').click(function() {
     } else {
         // unstar
         $.ajax({
-            url: url_base + '?p=' + e("{{path|escapejs}}") + '&repo_id=' + "{{ repo.id }}",
+            url: url_base,
             cache: false,
             dataType: 'json',
             type: 'DELETE',
+            data: {
+                'repo_id': "{{ repo.id }}",
+                'path': "{{ path|escapejs }}",
+                'is_dir': "false"
+            },
             beforeSend: prepareCSRFToken,
             success:function(data) {
                 op_icon.toggleClass('icon-star-empty icon-star');
