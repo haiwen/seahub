@@ -141,7 +141,7 @@ class StarredFile(object):
 
 class UserStarredFilesManager(models.Manager):
 
-    def star_a_item(self, email, repo_id, path, is_dir, org_id=-1):
+    def add(self, email, repo_id, path, is_dir, org_id=-1):
 
         path = path.strip()
 
@@ -155,7 +155,7 @@ class UserStarredFilesManager(models.Manager):
 
         return starred_item
 
-    def unstar_a_item(self, email, repo_id, path, is_dir=False):
+    def delete(self, email, repo_id, path, is_dir=False):
 
         UserStarredFiles.objects.filter(email=email,
                 repo_id=repo_id, path=path).delete()

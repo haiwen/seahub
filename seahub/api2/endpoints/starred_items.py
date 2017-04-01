@@ -157,8 +157,7 @@ class StarredItems(APIView):
         # star a item
         email = request.user.username
         try:
-            starred_item = UserStarredFiles.objects.star_a_item(email, repo_id,
-                    path, is_dir)
+            starred_item = UserStarredFiles.objects.add(email, repo_id, path, is_dir)
         except Exception as e:
             logger.error(e)
             error_msg = 'Internal Server Error'
@@ -184,8 +183,7 @@ class StarredItems(APIView):
         # star a item
         email = request.user.username
         try:
-            UserStarredFiles.objects.unstar_a_item(email, repo_id,
-                    path, is_dir)
+            UserStarredFiles.objects.delete(email, repo_id, path, is_dir)
         except Exception as e:
             logger.error(e)
             error_msg = 'Internal Server Error'
