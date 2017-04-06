@@ -1,5 +1,4 @@
 from django.core.urlresolvers import reverse
-from django.http.cookie import parse_cookie
 
 from seahub.test_utils import BaseTestCase
 from seahub.profile.models import Profile
@@ -9,12 +8,12 @@ class I18nTest(BaseTestCase):
     def test_can_set_to_zh(self):
         resp = self.client.get(reverse('i18n') + '?lang=zh-cn')
         self.assertEqual(302, resp.status_code)
-        assert parse_cookie(resp.cookies)['django_language'] == 'zh-cn'
+        assert resp.cookies['django_language'].value == 'zh-cn'
 
     def test_wrong_lang_code(self):
         resp = self.client.get(reverse('i18n') + '?lang=zh_CN')
         self.assertEqual(302, resp.status_code)
-        assert parse_cookie(resp.cookies)['django_language'] == 'en'
+        assert resp.cookies['django_language'].value == 'en'
 
     def test_anonymous_user_profile(self):
         # Should not add profile record when user is anonymous.

@@ -1,7 +1,6 @@
 import os
 from mock import patch
 from django.core.urlresolvers import reverse
-from django.http.cookie import parse_cookie
 from post_office.models import Email
 
 from seahub.base.accounts import User
@@ -98,7 +97,7 @@ class UserRemoveTest(BaseTestCase):
         )
 
         self.assertEqual(302, resp.status_code)
-        assert 'Successfully deleted %s' % username in parse_cookie(resp.cookies)['messages']
+        assert 'Successfully deleted %s' % username in resp.cookies['messages'].value
         assert len(ccnet_threaded_rpc.search_emailusers('DB', username, -1, -1))  == 0
 
 
@@ -190,7 +189,7 @@ class BatchAddUserTest(BaseTestCase):
             })
 
         self.assertEqual(302, resp.status_code)
-        assert 'Import succeeded' in parse_cookie(resp.cookies)['messages']
+        assert 'Import succeeded' in resp.cookies['messages'].value
         for e in self.new_users:
             assert User.objects.get(e) is not None
 
@@ -214,7 +213,7 @@ class BatchAddUserTest(BaseTestCase):
             })
 
         self.assertEqual(302, resp.status_code)
-        assert 'Import succeeded' in parse_cookie(resp.cookies)['messages']
+        assert 'Import succeeded' in resp.cookies['messages'].value
         for e in self.new_users:
             assert User.objects.get(e) is not None
             assert UserOptions.objects.passwd_change_required(e)
@@ -239,7 +238,7 @@ class BatchAddUserTest(BaseTestCase):
             })
 
         self.assertEqual(302, resp.status_code)
-        assert 'Import succeeded' in parse_cookie(resp.cookies)['messages']
+        assert 'Import succeeded' in resp.cookies['messages'].value
         for e in self.new_users:
             assert User.objects.get(e) is not None
             assert not UserOptions.objects.passwd_change_required(e)
@@ -262,7 +261,7 @@ class BatchAddUserTest(BaseTestCase):
             })
 
         self.assertEqual(302, resp.status_code)
-        assert 'users exceeds the limit' in parse_cookie(resp.cookies)['messages']
+        assert 'users exceeds the limit' in resp.cookies['messages'].value
 
     def test_can_send_email(self):
         self.assertEqual(0, len(Email.objects.all()))

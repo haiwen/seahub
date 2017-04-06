@@ -1,5 +1,4 @@
 from django.core.urlresolvers import reverse
-from django.http.cookie import parse_cookie
 
 from seahub.institutions.models import Institution, InstitutionAdmin
 from seahub.profile.models import Profile
@@ -24,12 +23,12 @@ class SysInstInfoUserTest(BaseTestCase):
         assert len(InstitutionAdmin.objects.filter(institution=self.inst)) == 0
         resp = self.client.post(self.url)
         self.assertEqual(302, resp.status_code)
-        assert 'Success' in parse_cookie(resp.cookies)['messages']
+        assert 'Success' in resp.cookies['messages'].value
 
         assert len(InstitutionAdmin.objects.filter(institution=self.inst)) == 1
 
         resp = self.client.post(self.url)
         self.assertEqual(302, resp.status_code)
-        assert 'Success' in parse_cookie(resp.cookies)['messages']
+        assert 'Success' in resp.cookies['messages'].value
 
         assert len(InstitutionAdmin.objects.filter(institution=self.inst)) == 0
