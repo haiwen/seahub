@@ -58,6 +58,17 @@ class LoginTest(BaseTestCase):
         self.assertEqual(302, resp.status_code)
         self.assertRegexpMatches(resp['Location'], r'http://testserver%s' % settings.LOGIN_REDIRECT_URL)
 
+    def test_bad_redirect2_to_after_success_login(self):
+        from django.utils.http import urlquote
+        resp = self.client.post(
+            reverse('auth_login') + '?next=' + urlquote('http:999999999'),
+            {'login': self.user.username,
+             'password': self.user_password}
+        )
+
+        self.assertEqual(302, resp.status_code)
+        self.assertRegexpMatches(resp['Location'], r'http://testserver%s' % settings.LOGIN_REDIRECT_URL)
+
     def test_redirect_to_other_host_after_success_login(self):
         from django.utils.http import urlquote
         resp = self.client.post(
