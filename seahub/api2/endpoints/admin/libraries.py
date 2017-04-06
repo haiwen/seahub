@@ -26,11 +26,12 @@ except ImportError:
 logger = logging.getLogger(__name__)
 
 def get_repo_info(repo):
-    repo_owner = seafile_api.get_repo_owner(repo.repo_id)
 
-    org_repo_owner = None
-    if hasattr(seafile_api, 'get_org_repo_owner'):
+    repo_owner = seafile_api.get_repo_owner(repo.repo_id)
+    try:
         org_repo_owner = seafile_api.get_org_repo_owner(repo.repo_id)
+    except Exception:
+        org_repo_owner = None
 
     result = {}
     result['id'] = repo.repo_id
