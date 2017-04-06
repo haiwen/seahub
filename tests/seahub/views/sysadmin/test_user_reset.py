@@ -1,7 +1,6 @@
 from mock import patch
 from django.core import mail
 from django.core.urlresolvers import reverse
-from django.http.cookie import parse_cookie
 from constance import config
 
 from seahub.base.accounts import User
@@ -30,7 +29,7 @@ class UserResetTest(BaseTestCase):
             reverse('user_reset', args=[self.user.email])
         )
         self.assertEqual(302, resp.status_code)
-        assert 'email has been sent to contact@mail.com' in parse_cookie(resp.cookies)['messages']
+        assert 'email has been sent to contact@mail.com' in resp.cookies['messages'].value
 
         self.assertEqual(len(mail.outbox), 1)
         assert mail.outbox[0].to[0] != self.user.username
