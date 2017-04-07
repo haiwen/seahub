@@ -1,6 +1,7 @@
 from django.core import mail
 from django.conf import settings
 from django.core.urlresolvers import reverse
+from django.http.cookie import parse_cookie
 from django.test import override_settings
 
 from seahub.base.accounts import User
