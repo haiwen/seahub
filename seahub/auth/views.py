@@ -13,7 +13,7 @@ from django.shortcuts import render_to_response
 from django.contrib.sites.models import Site, RequestSite
 from django.http import HttpResponseRedirect, Http404
 from django.template import RequestContext
-from django.utils.http import urlquote, base36_to_int, is_safe_url
+from django.utils.http import urlquote, base36_to_int
 from django.utils.translation import ugettext as _
 from django.views.decorators.cache import never_cache
 
@@ -27,6 +27,7 @@ from seahub.base.accounts import User
 from seahub.options.models import UserOptions
 from seahub.profile.models import Profile
 from seahub.utils import is_ldap_user
+from seahub.utils.http import is_safe_url
 from seahub.utils.ip import get_remote_ip
 from seahub.utils.two_factor_auth import two_factor_auth_enabled, handle_two_factor_auth
 

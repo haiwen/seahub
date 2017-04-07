@@ -3,7 +3,7 @@ python-memcached==1.57
 chardet
 six
 Pillow>=2.6.1,<3.0.0
-Django==1.8.18
+Django==1.8.10
 django-compressor==1.4
 django-post-office==2.0.3
 django-statici18n==1.1.2
