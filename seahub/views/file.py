@@ -529,11 +529,7 @@ def _file_view(request, repo_id, path):
         latest_contributor, last_modified = None, 0
 
     # check whether file is starred
-    is_starred = False
-    org_id = -1
-    if request.user.org:
-        org_id = request.user.org.org_id
-    is_starred = is_file_starred(username, repo.id, path.encode('utf-8'), org_id)
+    is_starred = is_file_starred(username, repo.id, path.encode('utf-8'))
 
     can_edit_file = True
     if file_perm == 'r':

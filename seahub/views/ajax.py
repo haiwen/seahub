@@ -44,7 +44,7 @@ from seahub.utils import check_filename_with_rename, EMPTY_SHA1, \
     new_merge_with_no_conflict, get_commit_before_new_merge, \
     get_repo_last_modify, gen_file_upload_url, is_org_context, \
     get_file_type_and_ext, is_pro_version
-from seahub.utils.star import get_dir_starred_files
+from seahub.utils.star import get_dir_starred_items
 from seahub.base.accounts import User
 from seahub.thumbnail.utils import get_thumbnail_src
 from seahub.utils.file_types import IMAGE
@@ -251,14 +251,19 @@ def list_lib_dir(request, repo_id):
 
     dirs = seafserv_threaded_rpc.list_dir_with_perm(repo_id, path, dir_id,
             username, -1, -1)
-    starred_files = get_dir_starred_files(username, repo_id, path)
+    starred_items = get_dir_starred_items(username, repo_id, path)
 
     for dirent in dirs:
+        dirent.starred = False
         dirent.last_modified = dirent.mtime
         if stat.S_ISDIR(dirent.mode):
             dpath = posixpath.join(path, dirent.obj_name)
+            if dpath in starred_items:
+                dirent.starred = True
+
             if dpath[-1] != '/':
                 dpath += '/'
+
             dir_list.append(dirent)
         else:
             if repo.version == 0:
@@ -267,9 +272,8 @@ def list_lib_dir(request, repo_id):
                 file_size = dirent.size
             dirent.file_size = file_size if file_size else 0
 
-            dirent.starred = False
             fpath = posixpath.join(path, dirent.obj_name)
-            if fpath in starred_files:
+            if fpath in starred_items:
                 dirent.starred = True
 
             file_list.append(dirent)
@@ -325,6 +329,7 @@ def list_lib_dir(request, repo_id):
         d_['last_update'] = translate_seahub_time(d.last_modified)
         d_['p_dpath'] = posixpath.join(path, d.obj_name)
         d_['perm'] = d.permission # perm for sub dir in current dir
+        d_['starred'] = d.starred
         dirent_list.append(d_)
 
     size = int(request.GET.get('thumbnail_size', THUMBNAIL_DEFAULT_SIZE))
