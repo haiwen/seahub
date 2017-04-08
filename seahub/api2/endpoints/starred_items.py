@@ -1,7 +1,6 @@
 # Copyright (c) 2012-2016 Seafile Ltd.
 import os
 import logging
-import posixpath
 
 from rest_framework.authentication import SessionAuthentication
 from rest_framework.permissions import IsAuthenticated
@@ -14,7 +13,6 @@ from seaserv import seafile_api
 from seahub.api2.utils import api_error
 from seahub.api2.authentication import TokenAuthentication
 from seahub.api2.throttling import UserRateThrottle
-from seahub.utils import is_org_context
 from seahub.utils.timeutils import timestamp_to_isoformat_timestr
 from seahub.views import check_folder_permission
 
@@ -65,7 +63,7 @@ class StarredItems(APIView):
         result['email'] = starred_item.email
         result['repo_id'] = starred_item.repo_id
         result['path'] = starred_item.path
-        result['is_dir'] = starred_item.is_dir
+        result['is_dir'] = bool(starred_item.is_dir)
         return result
 
     def get(self, request):
