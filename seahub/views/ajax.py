@@ -347,8 +347,12 @@ def list_lib_dir(request, repo_id):
             if not repo.encrypted and ENABLE_THUMBNAIL and \
                 os.path.exists(os.path.join(THUMBNAIL_ROOT, str(size), f.obj_id)):
                 file_path = posixpath.join(path, f.obj_name)
+
                 src = get_thumbnail_src(repo_id, size, file_path)
                 f_['encoded_thumbnail_src'] = urlquote(src)
+
+                src_1024 = get_thumbnail_src(repo_id, 1024, file_path)
+                f_['encoded_thumbnail_src_1024'] = urlquote(src_1024)
 
         if is_pro_version():
             f_['is_locked'] = True if f.is_locked else False
