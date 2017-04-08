@@ -19,6 +19,8 @@ define([
 
         initialize: function() {
             HLItemView.prototype.initialize.call(this);
+
+            this.listenTo(this.model, "change", this.render);
         },
 
         render: function () {
@@ -26,6 +28,7 @@ define([
 
             data['is_img'] = Common.imageCheck(data['file_name']);
             data['encoded_path'] = Common.encodePath(data['path']);
+            data.encoded_thumbnail_src = this.model.get('encoded_thumbnail_src') || '';
 
             var tmpl = $(window).width() >= 768 ? this.template : this.mobileTemplate;
             this.$el.html(tmpl(data));

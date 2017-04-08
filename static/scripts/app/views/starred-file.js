@@ -35,10 +35,55 @@ define([
                 this.renderThead();
                 this.starredFiles.each(this.addOne, this);
                 this.$table.show();
+                this.getImageThumbnail();
             } else {
                 this.$emptyTip.show();
                 this.$table.hide();
             }
+        },
+
+        getImageThumbnail: function() {
+            if (!app.pageOptions.enable_thumbnail) {
+                return false;
+            }
+
+            var images = this.starredFiles.filter(function(item) {
+                // 'item' is a model
+                return Common.imageCheck(item.get('file_name'));
+            });
+            if (images.length == 0) {
+                return ;
+            }
+
+            var images_len = images.length;
+            var thumbnail_size = app.pageOptions.thumbnail_default_size;
+
+            var get_thumbnail = function(i) {
+                var cur_img = images[i];
+                $.ajax({
+                    url: Common.getUrl({
+                        name: 'thumbnail_create',
+                        repo_id: cur_img.get('repo_id')
+                    }),
+                    data: {
+                        'path': cur_img.get('path'),
+                        'size': thumbnail_size
+                    },
+                    cache: false,
+                    dataType: 'json',
+                    success: function(data) {
+                        cur_img.set({
+                            'encoded_thumbnail_src': data.encoded_thumbnail_src
+                        });
+                    },
+                    complete: function() {
+                        if (i < images_len - 1) {
+                            get_thumbnail(++i);
+                        }
+                    }
+                });
+            };
+            get_thumbnail(0);
         },
 
         showStarredFiles: function() {
