@@ -61,8 +61,9 @@ body {
 #file-view .CodeMirror-scroll {
     min-height:400px;
 }
-#file-star {
-    vertical-align:middle;
+.file-view-toggle-star,
+.file-view-toggle-star:hover,
+.file-view-toggle-star:focus {
     margin-left:3px;
     color:#a4a4a4;
 }

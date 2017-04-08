@@ -18,9 +18,11 @@
             <h2 class="file-view-hd">
                 <span class="vam">{{ filename }}</span>
                 {% if is_starred %}
-                <a id="file-star" class="vam no-deco icon-star" href="#" title="{% trans "starred" %}" aria-label="{% trans "starred" %}"></a>
+                <a class="file-view-toggle-star vam no-deco icon-star" href="#" title="{% trans "starred" %}" aria-label="{% trans "starred" %}"></a>
+                <a class="file-view-toggle-star vam no-deco icon-star-empty hide" href="#" title="{% trans "unstarred" %}" aria-label="{% trans "unstarred" %}"></a>
                 {% else %}
-                <a id="file-star" class="vam no-deco icon-star-empty" href="#" title="{% trans "unstarred" %}" aria-label="{% trans "unstarred" %}"></a>
+                <a class="file-view-toggle-star vam no-deco icon-star hide" href="#" title="{% trans "starred" %}" aria-label="{% trans "starred" %}"></a>
+                <a class="file-view-toggle-star vam no-deco icon-star-empty" href="#" title="{% trans "unstarred" %}" aria-label="{% trans "unstarred" %}"></a>
                 {% endif %}
 
                 {% if is_pro %}
@@ -168,43 +170,27 @@ $('#share').click(function() {
 });
 
 
-// star file
-$('#file-star').click(function() {
-    var op_icon = $(this), url_base;
-    url_base = '{% url "starredfiles" %}';
+// star/unstar file
+$('.file-view-toggle-star').click(function() {
+    var op =  $(this).hasClass('icon-star-empty') ? 'star' : 'unstar';
+    var _this = $(this);
 
-    if (op_icon.hasClass('icon-star-empty')) {
-        // star the file
-        $.ajax({
-            url: url_base,
-            cache: false,
-            dataType: 'json',
-            type: 'POST',
-            beforeSend: prepareCSRFToken,
-            data: {
-                'repo_id': "{{ repo.id }}",
-                'p': "{{ path|escapejs }}"
-            },
-            success:function(data) {
-                op_icon.toggleClass('icon-star-empty icon-star');
-            },
-            error: ajaxErrorHandler
-        });
-    } else {
-        // unstar
-        $.ajax({
-            url: url_base + '?p=' + e("{{path|escapejs}}") + '&repo_id=' + "{{ repo.id }}",
-            cache: false,
-            dataType: 'json',
-            type: 'DELETE',
-            beforeSend: prepareCSRFToken,
-            success:function(data) {
-                op_icon.toggleClass('icon-star-empty icon-star');
-            },
-            error: ajaxErrorHandler
-        });
-    }
-
+    $.ajax({
+        url: '{% url "api-v2.1-starred-items" %}',
+        type: op == 'star' ? 'POST' : 'DELETE',
+        cache: false,
+        dataType: 'json',
+        beforeSend: prepareCSRFToken,
+        data: {
+            'repo_id': "{{ repo.id }}",
+            'path': "{{ path|escapejs }}",
+            'is_dir': false
+        },
+        success:function(data) {
+            $('.file-view-toggle-star').toggleClass('hide');
+        },
+        error: ajaxErrorHandler
+    });
     return false;
 });
 
