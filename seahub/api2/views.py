@@ -323,7 +323,6 @@ class Search(APIView):
         results, total, has_more = search_keyword(request, keyword)
         for e in results:
             e.pop('repo', None)
-            e.pop('content_highlight', None)
             e.pop('exists', None)
             e.pop('last_modified_by', None)
             e.pop('name_highlight', None)
