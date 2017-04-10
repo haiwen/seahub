@@ -326,7 +326,13 @@
         <input type="checkbox" class="vam" />
         <% } %>
     </td>
-    <td class="star"></td>
+    <td class="star alc">
+        <% if (dirent.starred) { %>
+        <a href="#" title="{% trans "starred" %}" class="icon-star item-toggle-star" aria-label="{% trans "starred" %}"></a>
+        <% } else { %>
+        <a href="#" title="{% trans "unstarred" %}" class="icon-star-empty item-toggle-star" aria-label="{% trans "unstarred" %}"></a>
+        <% } %>
+    </td>
     <td class="dirent-icon"><img src="<%= icon_url %>" width="24" alt="" /></td>
     <td>
         <span class="dirent-name"><a href="<%= url %>" class="dir-link normal"><%- dirent.obj_name %></a></span>
@@ -382,7 +388,13 @@
         <input type="checkbox" class="vam" />
         <% } %>
     </td>
-    <td class="star"></td>
+    <td class="star alc">
+        <% if (dirent.starred) { %>
+        <a href="#" title="{% trans "starred" %}" class="icon-star item-toggle-star" aria-label="{% trans "starred" %}"></a>
+        <% } else { %>
+        <a href="#" title="{% trans "unstarred" %}" class="icon-star-empty item-toggle-star" aria-label="{% trans "unstarred" %}"></a>
+        <% } %>
+    </td>
     <td class="dirent-icon"><img src="<%= icon_url %>" width="24" alt="" /></td>
     <td>
         <span class="dirent-name">
@@ -430,9 +442,9 @@
     </td>
     <td class="star alc">
         <% if (dirent.starred) { %>
-        <a href="#" title="{% trans "starred" %}" class="icon-star file-star" aria-label="{% trans "starred" %}"></a>
+        <a href="#" title="{% trans "starred" %}" class="icon-star item-toggle-star" aria-label="{% trans "starred" %}"></a>
         <% } else { %>
-        <a href="#" title="{% trans "unstarred" %}" class="icon-star-empty file-star" aria-label="{% trans "unstarred" %}"></a>
+        <a href="#" title="{% trans "unstarred" %}" class="icon-star-empty item-toggle-star" aria-label="{% trans "unstarred" %}"></a>
         <% } %>
     </td>
     <td class="dirent-icon">
@@ -525,9 +537,9 @@
     </td>
     <td class="star alc">
         <% if (dirent.starred) { %>
-        <a href="#" title="{% trans "starred" %}" class="icon-star file-star" aria-label="{% trans "starred" %}"></a>
+        <a href="#" title="{% trans "starred" %}" class="icon-star item-toggle-star" aria-label="{% trans "starred" %}"></a>
         <% } else { %>
-        <a href="#" title="{% trans "unstarred" %}" class="icon-star-empty file-star" aria-label="{% trans "unstarred" %}"></a>
+        <a href="#" title="{% trans "unstarred" %}" class="icon-star-empty item-toggle-star" aria-label="{% trans "unstarred" %}"></a>
         <% } %>
     </td>
     <td class="dirent-icon">

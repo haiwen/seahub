@@ -153,6 +153,7 @@ define([
                 case 'user_enabled_modules': return siteRoot + 'api/v2.1/user-enabled-modules/';
 
                 case 'starred_files': return siteRoot + 'api2/starredfiles/';
+                case 'starred_items': return siteRoot + 'api/v2.1/starred-items/';
                 case 'events': return siteRoot + 'api2/events/';
                 case 'devices': return siteRoot + 'api2/devices/';
                 case 'invitations': return siteRoot + 'api/v2.1/invitations/';

@@ -80,7 +80,7 @@ define([
 
         events: {
             'click .select': 'select',
-            'click .file-star': 'starFile',
+            'click .item-toggle-star': 'itemToggleStar',
             'click .dirent-name': 'visitDirent',
             'click .img-name-link': 'viewImageWithPopup',
 
@@ -250,45 +250,30 @@ define([
             return false;
         },
 
-        starFile: function() {
+        // star/unstar a dir/file
+        itemToggleStar: function() {
             var _this = this;
             var dir = this.dirView.dir;
-            var starred = this.model.get('starred');
-            var filePath = Common.pathJoin([dir.path, this.model.get('obj_name')]);
-            if (starred) {
-                $.ajax({
-                    url: Common.getUrl({'name':'starred_files'})
-                        + '?repo_id=' + dir.repo_id + '&p=' + encodeURIComponent(filePath),
-                    type: 'DELETE',
-                    cache: false,
-                    dataType: 'json',
-                    beforeSend: Common.prepareCSRFToken,
-                    success: function() {
-                        _this.model.set({'starred':false});
-                    },
-                    error: function(xhr) {
-                        Common.ajaxErrorHandler(xhr);
-                    }
-                });
-            } else {
-                $.ajax({
-                    url: Common.getUrl({'name':'starred_files'}),
-                    type: 'POST',
-                    cache: false,
-                    dataType: 'json',
-                    beforeSend: Common.prepareCSRFToken,
-                    data: {
-                        'repo_id': dir.repo_id,
-                        'p': filePath
-                    },
-                    success: function() {
-                        _this.model.set({'starred':true});
-                    },
-                    error: function(xhr) {
-                        Common.ajaxErrorHandler(xhr);
-                    }
-                });
-            }
+            var op = this.model.get('starred') ? 'unstar' : 'star';
+
+            $.ajax({
+                url: Common.getUrl({'name':'starred_items'}),
+                type: op == 'unstar' ? 'DELETE' : 'POST',
+                cache: false,
+                dataType: 'json',
+                beforeSend: Common.prepareCSRFToken,
+                data: {
+                    'repo_id': dir.repo_id,
+                    'path': Common.pathJoin([dir.path, this.model.get('obj_name')]),
+                    'is_dir': this.model.get('is_dir') ? true : false
+                },
+                success: function() {
+                    _this.model.set({'starred': op == 'unstar' ? false : true});
+                },
+                error: function(xhr) {
+                    Common.ajaxErrorHandler(xhr);
+                }
+            });
 
             return false;
         },
