@@ -47,7 +47,6 @@ define([
 
         render: function() {
             this.$el.html(this.template());
-            $("#right-panel").html(this.$el);
 
             this.$table = this.$('table');
             this.$tableBody = this.$('tbody');
