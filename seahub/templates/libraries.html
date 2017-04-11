@@ -160,16 +160,16 @@
     </div>
 </script>
 
-<script type="text/template" id="starred-file-tmpl">
+<script type="text/template" id="starred-tmpl">
     <h3 class="hd">{% trans "Favorites" %}</h3>
+    <span class="loading-icon loading-tip"></span>
     <table class="hide">
         <thead></thead>
         <tbody></tbody>
     </table>
-    <span class="loading-icon loading-tip"></span>
     <div class="empty-tips hide">
-        <h2 class="alc">{% trans "You don't have any starred files yet" %}</h2>
-        <p>{% blocktrans %}You can star important files by clicking the "Star" button on file viewing page, and they will be listed here.{% endblocktrans %}</p>
+        <h2 class="alc">{% trans "No items yet" %}</h2>
+        <p>{% trans "You can star a file on a file viewing page, or star a folder/file on a library/folder viewing page, and those starred items will be listed here." %}</p>
     </div>
 </script>
 

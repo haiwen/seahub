@@ -4,36 +4,37 @@ define([
     'backbone',
     'common',
     'jquery.magnific-popup',
-    'app/views/starred-file-item',
-    'app/collections/starred-files',
-], function($, _, Backbone, Common, magnificPopup, StarredFileItem,
-    StarredFilesCollection) {
+    'app/views/starred-item',
+    'app/collections/starred'
+], function($, _, Backbone, Common, magnificPopup, StarredItem,
+    StarredCollection) {
     'use strict';
 
-    var StarredFileView = Backbone.View.extend({
-        id: 'starred-file',
+    var StarredView = Backbone.View.extend({
+        id: 'starred',
 
-        template: _.template($('#starred-file-tmpl').html()),
-        theadTemplate: _.template($('#starred-file-thead-tmpl').html()),
+        template: _.template($('#starred-tmpl').html()),
+        theadTemplate: _.template($('#starred-thead-tmpl').html()),
 
         initialize: function() {
-            this.starredFiles = new StarredFilesCollection();
-            this.listenTo(this.starredFiles, 'reset', this.reset);
+            this.collection = new StarredCollection();
+            this.listenTo(this.collection, 'reset', this.reset);
             this.render();
         },
 
-        addOne: function(starredFile) {
-            var view = new StarredFileItem({model: starredFile});
+        addOne: function(starredItem) {
+            var view = new StarredItem({model: starredItem});
             this.$tableBody.append(view.render().el);
         },
 
         reset: function() {
             this.$tableBody.empty();
             this.$loadingTip.hide();
-            if (this.starredFiles.length) {
+            if (this.collection.length) {
                 this.$emptyTip.hide();
                 this.renderThead();
-                this.starredFiles.each(this.addOne, this);
+                this.sortItems();
+                this.collection.each(this.addOne, this);
                 this.$table.show();
                 this.getImageThumbnail();
             } else {
@@ -42,14 +43,25 @@ define([
             }
         },
 
+        sortItems: function() {
+            this.collection.comparator = function(a, b) {
+                if (a.get('is_dir') && !b.get('is_dir')) {
+                    return -1;
+                }
+                if (!a.get('is_dir') && b.get('is_dir')) {
+                    return 1;
+                }
+            };
+            this.collection.sort();
+        },
+
         getImageThumbnail: function() {
             if (!app.pageOptions.enable_thumbnail) {
                 return false;
             }
 
-            var images = this.starredFiles.filter(function(item) {
-                // 'item' is a model
-                return Common.imageCheck(item.get('file_name'));
+            var images = this.collection.filter(function(item) { // 'item' is a model
+                return !item.get('is_dir') && Common.imageCheck(item.get('obj_name'));
             });
             if (images.length == 0) {
                 return ;
@@ -86,15 +98,14 @@ define([
             get_thumbnail(0);
         },
 
-        showStarredFiles: function() {
+        showStarredItems: function() {
             this.$table.hide();
             this.$loadingTip.show();
-            this.starredFiles.fetch({reset: true});
+            this.collection.fetch({reset: true});
         },
 
         render: function() {
             this.$el.html(this.template());
-            $("#right-panel").html(this.$el);
 
             this.$table = this.$('table');
             this.$tableBody = this.$('tbody');
@@ -130,7 +141,7 @@ define([
 
         show: function() {
             $("#right-panel").html(this.$el);
-            this.showStarredFiles();
+            this.showStarredItems();
         },
 
         hide: function() {
@@ -139,5 +150,5 @@ define([
 
     });
 
-    return StarredFileView;
+    return StarredView;
 });
