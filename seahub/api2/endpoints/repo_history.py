@@ -10,7 +10,8 @@ from rest_framework import status
 from seahub.api2.throttling import UserRateThrottle
 from seahub.api2.authentication import TokenAuthentication
 from seahub.api2.utils import api_error
-
+from seahub.profile.models import Profile
+from seahub.base.templatetags.seahub_tags import email2nickname
 from seahub.options.models import UserOptions, CryptoOptionNotSetError
 from seahub.utils.timeutils import timestamp_to_isoformat_timestr
 from seahub.utils import new_merge_with_no_conflict
@@ -27,9 +28,11 @@ class RepoHistory(APIView):
     throttle_classes = (UserRateThrottle, )
 
     def get_item_info(self, commit):
-
+        email = commit.creator_name
         item_info = {
-            'creator': commit.creator_name,
+            "name": email2nickname(email),
+            "contact_email": Profile.objects.get_contact_email_by_user(email),
+            'email': email,
             'time': timestamp_to_isoformat_timestr(commit.ctime),
             'description': commit.desc,
             'commit_id': commit.id,

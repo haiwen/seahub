@@ -20,4 +20,4 @@ class RepoHistoryTest(BaseTestCase):
         resp = self.client.get(self.url)
         self.assertEqual(200, resp.status_code)
         json_resp = json.loads(resp.content)
-        assert json_resp['data'][0]['creator'] == self.user_name
+        assert json_resp['data'][0]['email'] == self.user_name
