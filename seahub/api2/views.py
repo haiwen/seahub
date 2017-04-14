@@ -320,6 +320,20 @@ class Search(APIView):
         if not keyword:
             return api_error(status.HTTP_400_BAD_REQUEST, "Missing argument")
 
+        search_repo = request.GET.get('search_repo', None) # val: 'all' or 'search_repo_id'
+        if search_repo and search_repo != 'all':
+
+            try:
+                repo = seafile_api.get_repo(search_repo)
+            except Exception as e:
+                logger.error(e)
+                error_msg = 'Internal Server Error'
+                return api_error(status.HTTP_500_INTERNAL_SERVER_ERROR, error_msg)
+
+            if not repo:
+                error_msg = 'Library %s not found.' % search_repo
+                return api_error(status.HTTP_404_NOT_FOUND, error_msg)
+
         results, total, has_more = search_keyword(request, keyword)
         for e in results:
             e.pop('repo', None)
