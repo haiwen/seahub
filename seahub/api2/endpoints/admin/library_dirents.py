@@ -18,7 +18,7 @@ from seahub.utils.timeutils import timestamp_to_isoformat_timestr
 from seahub.views.sysadmin import can_view_sys_admin_repo
 from seahub.views.file import send_file_access_msg
 from seahub.utils import is_org_context, gen_file_get_url, \
-    check_filename_with_rename
+    check_filename_with_rename, is_valid_dirent_name
 from seahub.views import get_system_default_repo_id
 
 from seahub.api2.authentication import TokenAuthentication
@@ -128,7 +128,7 @@ class AdminLibraryDirents(APIView):
             return api_error(status.HTTP_404_NOT_FOUND, error_msg)
 
         obj_name = request.data.get('obj_name', None)
-        if not obj_name or not seafile_api.is_valid_filename(repo_id, obj_name):
+        if not obj_name or not is_valid_dirent_name(obj_name):
             error_msg = 'obj_name invalid.'
             return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
 

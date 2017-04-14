@@ -286,9 +286,20 @@ define([
             var _this = this;
             form.submit(function() {
                 var new_name = $.trim($('[name="newname"]', form).val());
+                var err_msg;
+
                 if (!new_name) {
+                    err_msg = gettext("It is required.");
+                    Common.feedback(err_msg, 'error');
                     return false;
                 }
+
+                if (new_name.indexOf('/') != -1) {
+                    err_msg = gettext("Name should not include '/'.");
+                    Common.feedback(err_msg, 'error');
+                     return false;
+                }
+
                 if (new_name == dirent_name) {
                     cancelRename();
                     return false;

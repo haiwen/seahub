@@ -65,7 +65,7 @@ from seahub.utils import gen_file_get_url, gen_token, gen_file_upload_url, \
     gen_block_get_url, get_file_type_and_ext, HAS_FILE_SEARCH, \
     gen_file_share_link, gen_dir_share_link, is_org_context, gen_shared_link, \
     get_org_user_events, calculate_repos_last_modify, send_perm_audit_msg, \
-    gen_shared_upload_link, convert_cmmt_desc_link, \
+    gen_shared_upload_link, convert_cmmt_desc_link, is_valid_dirent_name, \
     is_org_repo_creation_allowed, is_windows_operating_system
 from seahub.utils.devices import do_unlink_device
 from seahub.utils.repo import get_sub_repo_abbrev_origin_path
@@ -570,6 +570,11 @@ class Repos(APIView):
         if not repo_name:
             return api_error(status.HTTP_400_BAD_REQUEST,
                              'Library name is required.')
+
+        if not is_valid_dirent_name(repo_name):
+            return api_error(status.HTTP_400_BAD_REQUEST,
+                             'name invalid.')
+
         repo_desc = request.data.get("desc", '')
         org_id = -1
         if is_org_context(request):
@@ -862,6 +867,10 @@ class Repo(APIView):
             username = request.user.username
             repo_name = request.POST.get('repo_name')
             repo_desc = request.POST.get('repo_desc')
+
+            if not is_valid_dirent_name(repo_name):
+                return api_error(status.HTTP_400_BAD_REQUEST,
+                                 'name invalid.')
 
             # check permission
             if is_org_context(request):

@@ -4,7 +4,7 @@
 from django import forms
 from django.conf import settings
 from django.utils.translation import ugettext_lazy as _
-from seaserv import is_valid_filename
+from seahub.utils import is_valid_dirent_name
 
 from utils import clean_page_name
 
@@ -24,7 +24,7 @@ class WikiCreateForm(forms.Form):
 
     def clean_repo_name(self):
         repo_name = self.cleaned_data['repo_name']
-        if not is_valid_filename(repo_name):
+        if not is_valid_dirent_name(repo_name):
             error_msg = _(u'"%s" is not a valid name') % repo_name
             raise forms.ValidationError(error_msg)
         else:

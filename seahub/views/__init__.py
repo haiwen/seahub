@@ -21,7 +21,7 @@ from django.utils.translation import ugettext as _
 from django.views.decorators.http import condition
 
 import seaserv
-from seaserv import get_repo, get_commits, is_valid_filename, \
+from seaserv import get_repo, get_commits, \
     seafserv_threaded_rpc, seafserv_rpc, is_repo_owner, \
     get_file_size, MAX_DOWNLOAD_DIR_SIZE, \
     seafile_api
@@ -42,7 +42,7 @@ from seahub.utils import render_permission_error, render_error, \
     gen_dir_share_link, gen_file_share_link, get_file_type_and_ext, \
     get_user_repos, EMPTY_SHA1, gen_file_get_url, \
     new_merge_with_no_conflict, get_max_upload_file_size, \
-    is_pro_version, FILE_AUDIT_ENABLED, \
+    is_pro_version, FILE_AUDIT_ENABLED, is_valid_dirent_name, \
     is_org_repo_creation_allowed, is_windows_operating_system
 from seahub.utils.star import get_dir_starred_files
 from seahub.utils.timeutils import utc_to_local
@@ -800,7 +800,7 @@ def validate_filename(request):
     result = {'ret':'yes'}
 
     try:
-        ret = is_valid_filename(filename)
+        ret = is_valid_dirent_name(filename)
     except SearpcError:
         result['ret'] = 'error'
     else:

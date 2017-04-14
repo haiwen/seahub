@@ -16,7 +16,7 @@ from seahub.api2.views import get_dir_recursively, \
     get_dir_entrys_by_id
 
 from seahub.views import check_folder_permission
-from seahub.utils import check_filename_with_rename
+from seahub.utils import check_filename_with_rename, is_valid_dirent_name
 from seahub.utils.timeutils import timestamp_to_isoformat_timestr
 
 from seaserv import seafile_api
@@ -160,6 +160,11 @@ class DirView(APIView):
                 return api_error(status.HTTP_404_NOT_FOUND, error_msg)
 
             new_dir_name = os.path.basename(path)
+
+            if not is_valid_dirent_name(new_dir_name):
+                return api_error(status.HTTP_400_BAD_REQUEST,
+                                 'name invalid.')
+
             new_dir_name = check_filename_with_rename(repo_id, parent_dir, new_dir_name)
             try:
                 seafile_api.post_dir(repo_id, parent_dir, new_dir_name, username)
@@ -188,9 +193,14 @@ class DirView(APIView):
 
             old_dir_name = os.path.basename(path)
             new_dir_name = request.data.get('newname', None)
+
             if not new_dir_name:
                 error_msg = 'newname invalid.'
                 return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
+
+            if not is_valid_dirent_name(new_dir_name):
+                return api_error(status.HTTP_400_BAD_REQUEST,
+                                 'name invalid.')
 
             if new_dir_name == old_dir_name:
                 dir_info = self.get_dir_info(repo_id, path)
