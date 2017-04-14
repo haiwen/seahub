@@ -31,6 +31,10 @@ define([
         validate: function(attrs, options) {
             if (!attrs.name) return gettext("Name is required");
 
+            if (attrs.name.indexOf('/') != -1) {
+                return gettext("Name should not include '/'.");
+            }
+
             if (attrs.encrypted) {
                 if (!attrs.passwd1) return gettext("Please enter password");
                 if (!attrs.passwd2) return gettext("Please enter the password again");
