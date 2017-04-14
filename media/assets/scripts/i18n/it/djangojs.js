@@ -37,24 +37,28 @@
   /* formatting library */
 
   django.formats = {
-    "DATETIME_FORMAT": "l d F Y H:i:s", 
+    "DATETIME_FORMAT": "l d F Y H:i", 
     "DATETIME_INPUT_FORMATS": [
       "%d/%m/%Y %H:%M:%S", 
+      "%d/%m/%Y %H:%M:%S.%f", 
       "%d/%m/%Y %H:%M", 
       "%d/%m/%Y", 
       "%d/%m/%y %H:%M:%S", 
+      "%d/%m/%y %H:%M:%S.%f", 
       "%d/%m/%y %H:%M", 
       "%d/%m/%y", 
       "%Y-%m-%d %H:%M:%S", 
+      "%Y-%m-%d %H:%M:%S.%f", 
       "%Y-%m-%d %H:%M", 
       "%Y-%m-%d", 
       "%d-%m-%Y %H:%M:%S", 
+      "%d-%m-%Y %H:%M:%S.%f", 
       "%d-%m-%Y %H:%M", 
       "%d-%m-%Y", 
       "%d-%m-%y %H:%M:%S", 
+      "%d-%m-%y %H:%M:%S.%f", 
       "%d-%m-%y %H:%M", 
-      "%d-%m-%y", 
-      "%Y-%m-%d %H:%M:%S.%f"
+      "%d-%m-%y"
     ], 
     "DATE_FORMAT": "d F Y", 
     "DATE_INPUT_FORMATS": [
@@ -69,12 +73,13 @@
     "FIRST_DAY_OF_WEEK": "1", 
     "MONTH_DAY_FORMAT": "j/F", 
     "NUMBER_GROUPING": "3", 
-    "SHORT_DATETIME_FORMAT": "d/m/Y H:i:s", 
+    "SHORT_DATETIME_FORMAT": "d/m/Y H:i", 
     "SHORT_DATE_FORMAT": "d/m/Y", 
     "THOUSAND_SEPARATOR": ".", 
-    "TIME_FORMAT": "H:i:s", 
+    "TIME_FORMAT": "H:i", 
     "TIME_INPUT_FORMATS": [
       "%H:%M:%S", 
+      "%H:%M:%S.%f", 
       "%H:%M"
     ], 
     "YEAR_MONTH_FORMAT": "F Y"
