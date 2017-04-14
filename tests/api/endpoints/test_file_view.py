@@ -170,6 +170,16 @@ class FileViewTest(BaseTestCase):
         # check old file has been renamed to new_name
         assert new_name == self.get_lib_file_name(self.repo_id)
 
+    def test_rename_file_with_invalid_name(self):
+        self.login_as(self.user)
+
+        # check old file exist
+        assert self.file_name == self.get_lib_file_name(self.repo_id)
+
+        data = {'operation': 'rename', 'newname': '123/456'}
+        resp = self.client.post(self.url + '?p=' + self.file_path, data)
+        self.assertEqual(400, resp.status_code)
+
     def test_can_rename_file_with_same_name(self):
         self.login_as(self.user)
 

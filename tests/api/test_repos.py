@@ -4,7 +4,6 @@ Test repos api.
 """
 import pytest
 import uuid
-import unittest
 
 from seaserv import seafile_api
 from tests.api.apitestbase import ApiTestBase
@@ -12,7 +11,7 @@ from tests.api.urls import (
     REPOS_URL, DEFAULT_REPO_URL, GET_REPO_TOKENS_URL
 )
 from tests.common.utils import apiurl, urljoin, randstring
-from tests.common.common import USERNAME, PASSWORD, SEAFILE_BASE_URL
+from tests.common.common import SEAFILE_BASE_URL
 
 # TODO: all tests should be run on an encrypted repo
 class ReposApiTest(ApiTestBase):
@@ -104,6 +103,10 @@ class ReposApiTest(ApiTestBase):
             self.remove_repo(repo_id)
             # Check the repo is really removed
             self.get(urljoin(REPOS_URL, repo_id), expected=404)
+
+    def test_create_repo_with_invalid_name(self):
+        data = {'name': 'test/test'}
+        self.post(REPOS_URL, data=data, expected=400)
 
     def test_check_or_create_sub_repo(self):
         # TODO: create a sub folder and use it as a sub repo
