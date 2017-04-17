@@ -2015,6 +2015,11 @@ button.sf-dropdown-toggle:focus {
     width:268px;
     margin-bottom:5px;
 }
+/* for different behaviour when set the 'input' */
+/* element 'display:block' in firefox and chrome */
+#repo-create-form input.submit {
+    display:block;
+}
 #repo-create-form .checkbox-label { /* for "Encrypt" */
     margin:10px 0 0;
 }
