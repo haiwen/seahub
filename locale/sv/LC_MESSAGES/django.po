@@ -4,7 +4,7 @@
 # 
 # Translators:
 # Radapompa <radapompa@gmail.com>, 2015-2016
-# Radapompa <radapompa@gmail.com>, 2016
+# Radapompa <radapompa@gmail.com>, 2016-2017
 # Robert Högberg <robert.hogberg@gmail.com>, 2016
 # tompa <tompatulpan@gmail.com>, 2014
 # ugusta <ugusta@hotmail.com>, 2014
@@ -13,8 +13,8 @@ msgstr ""
 "Project-Id-Version: seahub\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2017-02-17 10:30+0800\n"
-"PO-Revision-Date: 2017-02-17 02:31+0000\n"
-"Last-Translator: zheng xie <xiez1989@gmail.com>\n"
+"PO-Revision-Date: 2017-03-07 15:33+0000\n"
+"Last-Translator: Radapompa <radapompa@gmail.com>\n"
 "Language-Team: Swedish (http://www.transifex.com/haiwen/seahub/language/sv/)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -24,16 +24,16 @@ msgstr ""
 
 #: seahub/api2/endpoints/account.py:162
 msgid "Name is too long (maximum is 64 characters)"
-msgstr ""
+msgstr "Namnet är för långt (max 64 tecken)"
 
 #: seahub/api2/endpoints/account.py:166 seahub/forms.py:43
 #: seahub/profile/forms.py:17 seahub/templates/sysadmin/userinfo.html:317
 msgid "Name should not include '/'."
-msgstr ""
+msgstr "Namn ska inte inkludera '/'."
 
 #: seahub/api2/endpoints/account.py:173
 msgid "Department is too long (maximum is 512 characters)"
-msgstr ""
+msgstr "Avdelning är för långt (max 512 tecken)"
 
 #: seahub/api2/endpoints/account.py:180 seahub/forms.py:154
 msgid "Space quota can't be empty"
@@ -41,7 +41,7 @@ msgstr "Utrymmeskvot måste anges"
 
 #: seahub/api2/endpoints/account.py:186
 msgid "Must be an integer that is greater than or equal to 0."
-msgstr ""
+msgstr "Måste vara en siddra som är större eller lika med 0."
 
 #: seahub/api2/endpoints/account.py:190 seahub/forms.py:155
 msgid "Space quota is too low (minimum value is 0)"
@@ -108,12 +108,12 @@ msgstr "Kan inte hitta användaren %s i organisationen."
 
 #: seahub/api2/endpoints/invitations.py:53
 msgid "The email address is not allowed to be invited as a guest."
-msgstr ""
+msgstr "Mejladressen är inte tillåten att bli inbjuden som gäst."
 
 #: seahub/api2/endpoints/invitations.py:58
 #, python-format
 msgid "%s is already invited."
-msgstr ""
+msgstr "%s är redan inbjuden."
 
 #: seahub/api2/endpoints/invitations.py:68 seahub/base/accounts.py:601
 #, python-format
@@ -439,7 +439,7 @@ msgstr "Detta värde måste ha längden 40"
 #: seahub/base/accounts.py:591 seahub/forms.py:29
 #: seahub/views/sysadmin.py:1802
 msgid "The number of users exceeds the limit."
-msgstr ""
+msgstr "Antalet användare överskrider begränsningen."
 
 #: seahub/base/accounts.py:595
 msgid "Enter a valid email address."
@@ -2010,7 +2010,7 @@ msgstr "Sätt användarutrymme"
 #: seahub/templates/sysadmin/useradmin_table.html:113
 #: seahub/templates/sysadmin/userinfo.html:105
 msgid "An integer that is greater than or equal to 0."
-msgstr ""
+msgstr "En siffra som är större än eller lika med 0."
 
 #: seahub/institutions/templates/institutions/user_info.html:57
 #: seahub/templates/sysadmin/sys_org_info_base.html:36
@@ -2691,7 +2691,7 @@ msgstr "Ta bort systemmeddelande"
 msgid ""
 "Virus detected in file <a href=\"%(url_base)s%(file_url)s\" "
 "target=\"_blank\">%(file_name)s</a> during regular scanning."
-msgstr ""
+msgstr "Virus detekterat i filen <a href=\"%(url_base)s%(file_url)s\" target=\"_blank\">%(file_name)s</a> under en skannning."
 
 #: seahub/notifications/templates/notifications/notify_virus.html:20
 msgid "Virus is detected on regular scanning. Please check the report at:"
@@ -2955,7 +2955,7 @@ msgstr "Español de México"
 
 #: seahub/settings.py:149
 msgid "Suomi"
-msgstr ""
+msgstr "Finska"
 
 #: seahub/settings.py:150
 msgid "français"
@@ -3845,7 +3845,7 @@ msgstr "Sök katalog med ägare..."
 
 #: seahub/templates/js/sysadmin-templates.html:84
 msgid "Search groups by name..."
-msgstr ""
+msgstr "Sök grupper via namn..."
 
 #: seahub/templates/js/sysadmin-templates.html:100
 msgid "System Info"
@@ -3873,15 +3873,15 @@ msgstr "Uppgradera till Pro Edition"
 
 #: seahub/templates/js/sysadmin-templates.html:117
 msgid "Storage Used"
-msgstr ""
+msgstr "Använt Utrymme"
 
 #: seahub/templates/js/sysadmin-templates.html:120
 msgid "Total Devices"
-msgstr ""
+msgstr "Total Enheter"
 
 #: seahub/templates/js/sysadmin-templates.html:120
 msgid "Current Connected Devices"
-msgstr ""
+msgstr "Nuvarande Anslutna Enheter"
 
 #: seahub/templates/js/sysadmin-templates.html:124
 msgid "Limits"
@@ -4046,15 +4046,15 @@ msgstr "Inga grupper"
 
 #: seahub/templates/js/sysadmin-templates.html:562
 msgid "Search Group"
-msgstr ""
+msgstr "Sök Grupp"
 
 #: seahub/templates/js/sysadmin-templates.html:564
 msgid "Tip: you can search by keyword in name."
-msgstr ""
+msgstr "Tips: du kan söka genom att ange nyckelord namnet."
 
 #: seahub/templates/js/sysadmin-templates.html:593
 msgid "(If left blank, owner will be admin)"
-msgstr ""
+msgstr "(Om det lämnas blankt, kommer ägaren bli admin)"
 
 #: seahub/templates/js/sysadmin-templates.html:659
 #: seahub/templates/js/templates.html:446
@@ -4103,7 +4103,7 @@ msgstr "Medlemmar"
 #: seahub/templates/js/sysadmin-templates.html:738
 #: seahub/templates/js/sysadmin-templates.html:746
 msgid "Add Member"
-msgstr ""
+msgstr "Lägg till medlem"
 
 #: seahub/templates/js/sysadmin-templates.html:762
 #: seahub/templates/js/templates.html:914
@@ -4119,7 +4119,7 @@ msgstr "Sluta dela"
 
 #: seahub/templates/js/sysadmin-templates.html:808
 msgid "No members"
-msgstr ""
+msgstr "Inga Medlemmar"
 
 #: seahub/templates/js/templates.html:4 seahub/templates/js/templates.html:771
 #: seahub/templates/libraries.html:14
@@ -4128,11 +4128,11 @@ msgstr "Ny katalog"
 
 #: seahub/templates/js/templates.html:8
 msgid "Template"
-msgstr ""
+msgstr "Mall"
 
 #: seahub/templates/js/templates.html:10
 msgid "Select a template"
-msgstr ""
+msgstr "Välj en mall"
 
 #: seahub/templates/js/templates.html:18
 msgid "Share Permission"
@@ -5088,7 +5088,7 @@ msgstr "1 månad sedan"
 
 #: seahub/templates/repo_dir_recycle_view.html:169
 msgid "Successfully restored 1 item."
-msgstr ""
+msgstr "Lyckades återställa 1 fil."
 
 #: seahub/templates/repo_history.html:14
 #, python-format
@@ -5466,7 +5466,7 @@ msgstr "Ta bort katalog"
 
 #: seahub/templates/sysadmin/repoadmin_js.html:58
 msgid "Successfully deleted 1 item."
-msgstr ""
+msgstr "Lyckades ta bort 1 fil."
 
 #: seahub/templates/sysadmin/settings.html:11
 msgid ""
@@ -5774,7 +5774,7 @@ msgstr "LDAP(importerad)"
 #: seahub/templates/sysadmin/useradmin_table.html:12
 #: seahub/templates/sysadmin/userinfo.html:73
 msgid "Space Used / Quota"
-msgstr ""
+msgstr "Utrymme Använt / Kvot"
 
 #: seahub/templates/sysadmin/sys_user_admin_ldap_imported.html:30
 #: seahub/views/sysadmin.py:279 seahub/views/sysadmin.py:283
@@ -5785,7 +5785,7 @@ msgstr "Senast Inloggning"
 #: seahub/templates/sysadmin/useradmin_table.html:82
 #: seahub/templates/sysadmin/userinfo.html:83
 msgid "Edit Quota"
-msgstr ""
+msgstr "Ändra Kvot"
 
 #: seahub/templates/sysadmin/sys_user_admin_ldap_imported.html:90
 msgid "No LDAP users have been imported"
@@ -5802,11 +5802,11 @@ msgstr "Lägg till användare"
 
 #: seahub/templates/sysadmin/sys_useradmin.html:36
 msgid "Name(optional)"
-msgstr ""
+msgstr "Namn(valfritt)"
 
 #: seahub/templates/sysadmin/sys_useradmin.html:38
 msgid "Department(optional)"
-msgstr ""
+msgstr "Avdelning(Valfritt)"
 
 #: seahub/templates/sysadmin/sys_useradmin.html:42
 msgid ""
@@ -5820,11 +5820,11 @@ msgstr "Importera användare från en CSV fil"
 
 #: seahub/templates/sysadmin/sys_useradmin.html:64
 msgid "File format: user@mail.com,password,name,department,role,quota"
-msgstr ""
+msgstr "Filformat: användare@mejl.com,lösenord,namn,avdelning,roll,kvot"
 
 #: seahub/templates/sysadmin/sys_useradmin.html:65
 msgid "Name, department, role and quota are optional."
-msgstr ""
+msgstr "Namn, avdelning, roll och kvot är valfria."
 
 #: seahub/templates/sysadmin/sys_useradmin.html:67
 msgid "Please choose a CSV file"
@@ -5924,11 +5924,11 @@ msgstr "Organisation"
 
 #: seahub/templates/sysadmin/userinfo.html:88
 msgid "Set user name"
-msgstr ""
+msgstr "Sätt användarens namn"
 
 #: seahub/templates/sysadmin/userinfo.html:95
 msgid "Set user department"
-msgstr ""
+msgstr "Sätt användarens avdelning"
 
 #: seahub/templates/sysadmin/userinfo.html:168
 msgid "Share From"
@@ -6260,7 +6260,7 @@ msgstr "Felaktig destination"
 
 #: seahub/views/ajax.py:678 seahub/views/ajax.py:941
 msgid "Out of quota."
-msgstr ""
+msgstr "Slut på kvoten."
 
 #: seahub/views/ajax.py:718 seahub/views/ajax.py:797
 #, python-format
@@ -6450,11 +6450,11 @@ msgstr "Misslyckades att exportera till Excel"
 
 #: seahub/views/sysadmin.py:278 seahub/views/sysadmin.py:282
 msgid "Space Usage"
-msgstr ""
+msgstr "Använt utrymme"
 
 #: seahub/views/sysadmin.py:278 seahub/views/sysadmin.py:282
 msgid "Space Quota"
-msgstr ""
+msgstr "Utrymmeskvot"
 
 #: seahub/views/sysadmin.py:663 seahub/views/sysadmin.py:689
 msgid "Failed to set quota: internal server error"

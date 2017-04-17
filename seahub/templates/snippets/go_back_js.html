@@ -1,0 +1,8 @@
+$('.go-back').click(function() {
+    var referer = '{{referer|escapejs}}';
+    var str = location.protocol + '//' + location.host;
+    if (referer.indexOf(str) == 0) { // check referer
+        location.href = referer;
+    }
+    return false;
+});

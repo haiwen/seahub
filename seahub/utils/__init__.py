@@ -245,6 +245,12 @@ def is_valid_username(username):
     """
     return is_valid_email(username)
 
+def is_valid_dirent_name(name):
+    """Check whether repo/dir/file name is valid.
+    """
+    # `repo_id` parameter is not used in seafile api
+    return seafile_api.is_valid_filename('fake_repo_id', name)
+
 def is_ldap_user(user):
     """Check whether user is a LDAP user.
     """

@@ -52,10 +52,20 @@ define([
         formSubmit: function() {
             var _this = this;
             var new_name = $.trim(this.$('[name="newname"]').val());
+            var err_msg;
 
             if (!new_name) {
+                err_msg = gettext("It is required.");
+                this.$error.html(err_msg).removeClass('hide');
                 return false;
             }
+
+            if (new_name.indexOf('/') != -1) {
+                err_msg = gettext("Name should not include '/'.");
+                this.$error.html(err_msg).removeClass('hide');
+                return false;
+            }
+
             if (new_name == this.dirent.get('obj_name')) {
                 $.modal.close();
                 return false;

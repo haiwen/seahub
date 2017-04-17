@@ -583,6 +583,11 @@ define([
                         return false;
                     };
 
+                    if (dirent_name.indexOf('/') != -1) {
+                        Common.showFormError(form_id, gettext("Name should not include '/'."));
+                        return false;
+                    }
+
                     var post_data = { 'operation': 'mkdir' },
                         post_url = Common.getUrl({name: "new_dir", repo_id: dir.repo_id})
                                    + '?p=' + encodeURIComponent(Common.pathJoin([dir.path, dirent_name]));
@@ -638,6 +643,11 @@ define([
                       Common.showFormError(form_id, gettext("It is required."));
                       return false;
                     };
+
+                    if (dirent_name.indexOf('/') != -1) {
+                        Common.showFormError(form_id, gettext("Name should not include '/'."));
+                        return false;
+                    }
 
                     // if it has an extension, make sure it has a name
                     if (dirent_name.lastIndexOf('.') != -1 && dirent_name.substr(0, dirent_name.lastIndexOf('.')).length == 0) {

@@ -4,11 +4,11 @@ from django.conf import settings
 from django import forms
 from django.utils.translation import ugettext_lazy as _
 
-from seaserv import is_valid_filename
 from pysearpc import SearpcError
 
 from seahub.base.accounts import User
 from seahub.constants import DEFAULT_USER, GUEST_USER
+from seahub.utils import is_valid_dirent_name
 from seahub.utils.licenseparse import user_number_over_limit
 
 class AddUserForm(forms.Form):
@@ -78,7 +78,7 @@ class RepoCreateForm(forms.Form):
 
     def clean_repo_name(self):
         repo_name = self.cleaned_data['repo_name']
-        if not is_valid_filename(repo_name):
+        if not is_valid_dirent_name(repo_name):
             error_msg = _(u"Name %s is not valid") % repo_name
             raise forms.ValidationError(error_msg)
         else:
@@ -117,7 +117,7 @@ class RepoRenameDirentForm(forms.Form):
     def clean_newname(self):
         newname = self.cleaned_data['newname']
         try:
-            if not is_valid_filename(newname):
+            if not is_valid_dirent_name(newname):
                 error_msg = _(u'Name "%s" is not valid') % newname
                 raise forms.ValidationError(error_msg)
             else:
@@ -138,7 +138,7 @@ class RepoNewDirentForm(forms.Form):
     def clean_dirent_name(self):
         dirent_name = self.cleaned_data['dirent_name']
         try:
-            if not is_valid_filename(dirent_name):
+            if not is_valid_dirent_name(dirent_name):
                 error_msg = _(u'Name "%s" is not valid') % dirent_name
                 raise forms.ValidationError(error_msg)
             else:
@@ -164,7 +164,7 @@ class RepoSettingForm(forms.Form):
 
     def clean_repo_name(self):
         repo_name = self.cleaned_data['repo_name']
-        if not is_valid_filename(repo_name):
+        if not is_valid_dirent_name(repo_name):
             error_msg = _(u"Name %s is not valid") % repo_name
             raise forms.ValidationError(error_msg)
         else:

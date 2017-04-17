@@ -906,7 +906,7 @@ def space_and_traffic(request):
     username = request.user.username
 
     # space & quota calculation
-    org = ccnet_threaded_rpc.get_orgs_by_user(username)
+    org = ccnet_api.get_orgs_by_user(username)
     if not org:
         space_quota = seafile_api.get_user_quota(username)
         space_usage = seafile_api.get_user_self_usage(username)

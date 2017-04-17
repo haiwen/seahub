@@ -33,27 +33,31 @@ def get_rotated_image(image):
 
     orientation = exif.get(0x0112) if isinstance(exif, dict) else 1
     # rotate image according to Orientation info
+
+    # im.transpose(method)
+    # Returns a flipped or rotated copy of an image.
+    # Method can be one of the following: FLIP_LEFT_RIGHT, FLIP_TOP_BOTTOM, ROTATE_90, ROTATE_180, or ROTATE_270.
     if orientation == 2:
         # Vertical image
         image = image.transpose(Image.FLIP_LEFT_RIGHT)
     elif orientation == 3:
         # Rotation 180
-        image = image.transpose(Image.ROTATE_180)
+        image = image.rotate(180)
     elif orientation == 4:
+        image = image.rotate(180).transpose(Image.FLIP_LEFT_RIGHT)
         # Horizontal image
-        image = image.transpose(Image.FLIP_TOP_BOTTOM)
     elif orientation == 5:
         # Horizontal image + Rotation 90 CCW
-        image = image.transpose(Image.FLIP_TOP_BOTTOM).transpose(Image.ROTATE_90)
+        image = image.rotate(-90).transpose(Image.FLIP_LEFT_RIGHT)
     elif orientation == 6:
         # Rotation 270
-        image = image.transpose(Image.ROTATE_270)
+        image = image.rotate(-90)
     elif orientation == 7:
         # Horizontal image + Rotation 270
-        image = image.transpose(Image.FLIP_TOP_BOTTOM).transpose(Image.ROTATE_270)
+        image = image.rotate(90).transpose(Image.FLIP_LEFT_RIGHT)
     elif orientation == 8:
         # Rotation 90
-        image = image.transpose(Image.ROTATE_90)
+        image = image.rotate(90)
 
     return image
 

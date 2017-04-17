@@ -63,7 +63,7 @@ from seahub.utils import gen_file_get_url, gen_token, gen_file_upload_url, \
     gen_block_get_url, get_file_type_and_ext, HAS_FILE_SEARCH, \
     gen_file_share_link, gen_dir_share_link, is_org_context, gen_shared_link, \
     get_org_user_events, calculate_repos_last_modify, send_perm_audit_msg, \
-    gen_shared_upload_link, convert_cmmt_desc_link, \
+    gen_shared_upload_link, convert_cmmt_desc_link, is_valid_dirent_name, \
     is_org_repo_creation_allowed, is_windows_operating_system
 from seahub.utils.devices import do_unlink_device
 from seahub.utils.repo import get_sub_repo_abbrev_origin_path
@@ -264,10 +264,10 @@ class AccountInfo(APIView):
         info['name'] = email2nickname(email)
         info['total'] = seafile_api.get_user_quota(email)
         info['usage'] = seafile_api.get_user_self_usage(email)
-        info['login_id'] = p.login_id if p else ""
+        info['login_id'] = p.login_id if p and p.login_id else ""
         info['department'] = d_p.department if d_p else ""
         info['contact_email'] = p.contact_email if p else ""
-        info['institution'] = p.institution if p else ""
+        info['institution'] = p.institution if p and p.institution else ""
 
         return Response(info)
 
@@ -318,10 +318,23 @@ class Search(APIView):
         if not keyword:
             return api_error(status.HTTP_400_BAD_REQUEST, "Missing argument")
 
+        search_repo = request.GET.get('search_repo', None) # val: 'all' or 'search_repo_id'
+        if search_repo and search_repo != 'all':
+
+            try:
+                repo = seafile_api.get_repo(search_repo)
+            except Exception as e:
+                logger.error(e)
+                error_msg = 'Internal Server Error'
+                return api_error(status.HTTP_500_INTERNAL_SERVER_ERROR, error_msg)
+
+            if not repo:
+                error_msg = 'Library %s not found.' % search_repo
+                return api_error(status.HTTP_404_NOT_FOUND, error_msg)
+
         results, total, has_more = search_keyword(request, keyword)
         for e in results:
             e.pop('repo', None)
-            e.pop('content_highlight', None)
             e.pop('exists', None)
             e.pop('last_modified_by', None)
             e.pop('name_highlight', None)
@@ -555,6 +568,11 @@ class Repos(APIView):
         if not repo_name:
             return api_error(status.HTTP_400_BAD_REQUEST,
                              'Library name is required.')
+
+        if not is_valid_dirent_name(repo_name):
+            return api_error(status.HTTP_400_BAD_REQUEST,
+                             'name invalid.')
+
         repo_desc = request.data.get("desc", '')
         org_id = -1
         if is_org_context(request):
@@ -847,6 +865,10 @@ class Repo(APIView):
             username = request.user.username
             repo_name = request.POST.get('repo_name')
             repo_desc = request.POST.get('repo_desc')
+
+            if not is_valid_dirent_name(repo_name):
+                return api_error(status.HTTP_400_BAD_REQUEST,
+                                 'name invalid.')
 
             # check permission
             if is_org_context(request):

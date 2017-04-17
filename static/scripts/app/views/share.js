@@ -117,6 +117,7 @@ define([
             var $panel = $('#download-link-share');
             var $loadingTip = this.$('.loading-tip');
             var _this = this;
+
             // check if downloadLink exists
             $.ajax({
                 url: Common.getUrl({name: 'share_admin_share_links'}),
@@ -133,7 +134,7 @@ define([
                         _this.download_link = link; // for 'link send'
                         _this.download_link_token = link_data.token; // for 'link delete'
                         _this.$('#download-link').html(link);
-                        _this.$('#direct-dl-link').html(link + '?raw=1');
+                        _this.$('#direct-dl-link').html(link + '?dl=1');
                         if (link_data.is_expired) {
                             _this.$('#send-download-link').addClass('hide');
                             _this.$('#download-link, #direct-dl-link').append(' <span class="error">(' + gettext('Expired') + ')</span>');
@@ -289,7 +290,7 @@ define([
 
                 if (link_type == 'download') {
                     _this.$('#download-link').html(data["link"]); // TODO: add 'click & select' func
-                    _this.$('#direct-dl-link').html(data['link'] + '?raw=1');
+                    _this.$('#direct-dl-link').html(data['link'] + '?dl=1');
                     _this.download_link = data["link"]; // for 'link send'
                     _this.download_link_token = data["token"]; // for 'link delete'
                     _this.$('#download-link-operations').removeClass('hide');

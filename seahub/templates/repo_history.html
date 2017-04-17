@@ -14,7 +14,7 @@
       <h2>{% blocktrans with repo_name=repo.props.name %}<span class="op-target">{{repo_name}}</span> Modification History{% endblocktrans %}</h2>
 
       {% if referer %}
-      <a href="{{referer}}" class="go-back" title="{% trans "Back" %}">
+      <a href="#" class="go-back" title="{% trans "Back" %}">
           <span class="icon-chevron-left"></span>
       </a>
       {% endif %}
@@ -89,5 +89,7 @@
     $('.view-snapshot').each(function() {
         $(this).attr('href', $(this).attr('href') + '&referer=' + encodeURIComponent(location.href));
     });
+
+{% include 'snippets/go_back_js.html' %}
 </script>
 {% endblock %}

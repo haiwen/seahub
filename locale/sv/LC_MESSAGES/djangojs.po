@@ -4,15 +4,15 @@
 # 
 # Translators:
 # Radapompa <radapompa@gmail.com>, 2016
-# Radapompa <radapompa@gmail.com>, 2016
+# Radapompa <radapompa@gmail.com>, 2016-2017
 # Robert Högberg <robert.hogberg@gmail.com>, 2016
 msgid ""
 msgstr ""
 "Project-Id-Version: seahub\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2017-02-17 10:30+0800\n"
-"PO-Revision-Date: 2017-02-17 02:31+0000\n"
-"Last-Translator: zheng xie <xiez1989@gmail.com>\n"
+"PO-Revision-Date: 2017-03-07 14:56+0000\n"
+"Last-Translator: Radapompa <radapompa@gmail.com>\n"
 "Language-Team: Swedish (http://www.transifex.com/haiwen/seahub/language/sv/)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -794,28 +794,28 @@ msgstr "Rensade alla meddelanden"
 
 #: static/scripts/sysadmin-app/views/group-member.js:81
 msgid "Delete Member"
-msgstr ""
+msgstr "Ta bort medlem"
 
 #: static/scripts/sysadmin-app/views/group-member.js:95
 msgid "Successfully deleted member {placeholder}"
-msgstr ""
+msgstr "Lyckades ta bort medlem {placeholder}"
 
 #: static/scripts/sysadmin-app/views/group-members.js:51
 msgid "Email is required."
-msgstr ""
+msgstr "Mejladress krävs."
 
 #: static/scripts/sysadmin-app/views/group-repo.js:28
 msgid "Unshare Library"
-msgstr ""
+msgstr "Sluta dela katalog"
 
 #: static/scripts/sysadmin-app/views/group-repo.js:29
 #, javascript-format
 msgid "Are you sure you want to unshare %s ?"
-msgstr ""
+msgstr "Är du säker på att du vill sluta dela %s ?"
 
 #: static/scripts/sysadmin-app/views/group-repo.js:42
 msgid "Successfully unshared library {placeholder}"
-msgstr ""
+msgstr "Lyckades sluta dela katalogen {placeholder}"
 
 #: static/scripts/sysadmin-app/views/group.js:30
 msgid "Delete Group"
@@ -835,7 +835,7 @@ msgstr "Lyckades skicka gruppen."
 
 #: static/scripts/sysadmin-app/views/groups.js:79
 msgid "Name is required."
-msgstr ""
+msgstr "Namn krävs."
 
 #: static/scripts/sysadmin-app/views/search-trash-repos.js:46
 msgid "Delete Library By Owner"

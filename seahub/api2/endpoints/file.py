@@ -17,7 +17,7 @@ from seahub.api2.authentication import TokenAuthentication
 from seahub.api2.utils import api_error
 
 from seahub.utils import check_filename_with_rename, is_pro_version, \
-    gen_file_upload_url
+    gen_file_upload_url, is_valid_dirent_name
 from seahub.utils.timeutils import timestamp_to_isoformat_timestr
 from seahub.views import check_folder_permission, check_file_lock
 
@@ -152,6 +152,11 @@ class FileView(APIView):
 
             # create new empty file
             new_file_name = os.path.basename(path)
+
+            if not is_valid_dirent_name(new_file_name):
+                return api_error(status.HTTP_400_BAD_REQUEST,
+                                 'name invalid.')
+
             new_file_name = check_filename_with_rename(repo_id, parent_dir, new_file_name)
 
             try:
@@ -197,6 +202,10 @@ class FileView(APIView):
             if not new_file_name:
                 error_msg = 'newname invalid.'
                 return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
+
+            if not is_valid_dirent_name(new_file_name):
+                return api_error(status.HTTP_400_BAD_REQUEST,
+                                 'name invalid.')
 
             if len(new_file_name) > MAX_UPLOAD_FILE_NAME_LEN:
                 error_msg = 'newname is too long.'

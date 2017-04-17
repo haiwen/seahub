@@ -7,6 +7,7 @@
 {% if filetype == 'Text' %}
 <link rel="stylesheet" type="text/css" href="{{ MEDIA_URL }}codemirror/codemirror.css" />
 <style type="text/css">
+.CodeMirror pre.CodeMirror-cursor { overflow:hidden; } /* for chrome */
 .CodeMirror-focused pre.CodeMirror-cursor { visibility: visible; }
 .CodeMirror-scroll { height:auto; min-height:700px; }
 </style>
@@ -186,6 +187,7 @@ if ('localStorage' in window && window['localStorage'] !== null) {
     var saved_draft = browserStorage.get(key);
     if (saved_draft) {
         $('#load-draft').modal();
+        $('#simplemodal-container').css({'width':'auto', 'height':'auto'});
     }
 }
 </script>

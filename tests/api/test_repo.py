@@ -32,6 +32,33 @@ class RepoTest(BaseTestCase):
         )
         self.assertEqual(200, resp.status_code)
 
+    def test_rename_with_invalid_name(self):
+
+        self.login_as(self.user)
+
+        invalid_name = '123/456'
+        data = {'repo_name': invalid_name}
+
+        resp = self.client.post(
+                reverse('api2-repo', args=[self.repo.id])+'?op=rename', data)
+
+        self.assertEqual(400, resp.status_code)
+
+    def test_rename_repo(self):
+
+        self.login_as(self.user)
+
+        invalid_name = '123456'
+        data = {'repo_name': invalid_name}
+
+        resp = self.client.post(
+                reverse('api2-repo', args=[self.repo.id])+'?op=rename', data)
+
+        self.assertEqual(200, resp.status_code)
+
+        json_resp = json.loads(resp.content)
+        assert json_resp == 'success'
+
     def test_cleaning_stuff_when_delete(self):
         self.login_as(self.user)
 

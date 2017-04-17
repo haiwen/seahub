@@ -156,9 +156,19 @@ define([
             var _this = this;
             form.submit(function() {
                 var new_name = $.trim($('[name="newname"]', form).val());
+                var err_msg;
                 if (!new_name) {
+                    err_msg = gettext("It is required.");
+                    Common.feedback(err_msg, 'error');
                     return false;
                 }
+
+                if (new_name.indexOf('/') != -1) {
+                    err_msg = gettext("Name should not include '/'.");
+                    Common.feedback(err_msg, 'error');
+                    return false;
+                }
+
                 if (new_name == repo_name) {
                     cancelRename();
                     return false;
@@ -177,7 +187,7 @@ define([
                 var after_op_error = function(xhr) {
                     var err_msg;
                     if (xhr.responseText) {
-                        err_msg = $.parseJSON(xhr.responseText).error;
+                        err_msg = $.parseJSON(xhr.responseText).error||$.parseJSON(xhr.responseText).error_msg;
                     } else {
                         err_msg = gettext("Failed. Please check the network.");
                     }

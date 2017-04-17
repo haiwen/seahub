@@ -5,6 +5,7 @@
 # Translators:
 # EricLF44 <E.lefoll@cdg44.fr>, 2015
 # LowMemory, 2016
+# FLEURY Kévin <kevinfleury.todae@gmail.com>, 2017
 # Gaspard <info@widelinkpc.be>, 2016-2017
 # Gilles Chauvin <gilles.chauvin@univ-rouen.fr>, 2016
 # jcbeylot78, 2015
@@ -13,8 +14,8 @@ msgstr ""
 "Project-Id-Version: seahub\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2017-02-17 10:30+0800\n"
-"PO-Revision-Date: 2017-02-17 02:31+0000\n"
-"Last-Translator: zheng xie <xiez1989@gmail.com>\n"
+"PO-Revision-Date: 2017-03-01 11:06+0000\n"
+"Last-Translator: FLEURY Kévin <kevinfleury.todae@gmail.com>\n"
 "Language-Team: French (http://www.transifex.com/haiwen/seahub/language/fr/)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -104,7 +105,7 @@ msgstr "Lecture seulement"
 #: static/scripts/sysadmin-app/views/group-members.js:96
 #: static/scripts/sysadmin-app/views/groups.js:100
 msgid "Please check the network."
-msgstr "Vérifier le réseau."
+msgstr "Veuillez vérifier le réseau."
 
 #: static/scripts/app/views/details.js:47
 msgid "New files"
@@ -183,7 +184,7 @@ msgstr "Dossiers supprimés"
 #: static/scripts/sysadmin-app/views/system-repo.js:59
 #: static/scripts/sysadmin-app/views/trash-repos.js:142
 msgid "Failed. Please check the network."
-msgstr "Échec. Vérifiez le réseau"
+msgstr "Échec. Veuillez vérifier le réseau."
 
 #: static/scripts/app/views/device.js:42
 msgid "Unlink device"
@@ -195,12 +196,12 @@ msgstr "Êtes-vous certain de vouloir supprimer le lien de l'appareil ?"
 
 #: static/scripts/app/views/device.js:44
 msgid "Delete files from this device the next time it comes online."
-msgstr "Supprimer les fichiers de cet appareil la prochaine fois q'uil est en ligne."
+msgstr "Supprimer les fichiers de cet appareil la prochaine fois qu'il est en ligne."
 
 #: static/scripts/app/views/device.js:53 static/scripts/app/views/device.js:73
 #: static/scripts/sysadmin-app/views/device.js:44
 msgid "Successfully unlink %(name)s."
-msgstr "Le lien %(name)s a été annulé avec succès"
+msgstr "Le lien %(name)s a été annulé avec succès."
 
 #: static/scripts/app/views/dialogs/dirent-mvcp.js:50
 msgid "Move {placeholder} to:"
@@ -208,7 +209,7 @@ msgstr "Déplacer {placeholder} vers :"
 
 #: static/scripts/app/views/dialogs/dirent-mvcp.js:50
 msgid "Copy {placeholder} to:"
-msgstr "Copier {placeholder} vers:"
+msgstr "Copier {placeholder} vers :"
 
 #: static/scripts/app/views/dialogs/dirent-mvcp.js:89
 msgid "Moving %(name)s"
@@ -220,7 +221,7 @@ msgstr "Copie de %(name)s"
 
 #: static/scripts/app/views/dialogs/dirent-mvcp.js:105
 msgid "Saving..."
-msgstr "Enregistrement..."
+msgstr "Sauvegarde ..."
 
 #: static/scripts/app/views/dialogs/dirent-mvcp.js:119
 msgid "Failed."
@@ -355,22 +356,22 @@ msgstr "Liens de partage pour {placeholder}"
 #: static/scripts/app/views/dir.js:50
 #: static/scripts/app/views/starred-file.js:60
 msgid "Close (Esc)"
-msgstr "Fermer (Esc)"
+msgstr "Fermer (Échap)"
 
 #: static/scripts/app/views/dir.js:51
 #: static/scripts/app/views/starred-file.js:61
 msgid "Loading..."
-msgstr "Chargement..."
+msgstr "Chargement ..."
 
 #: static/scripts/app/views/dir.js:54
 #: static/scripts/app/views/starred-file.js:64
 msgid "Previous (Left arrow key)"
-msgstr "Précédent (flèche gauche)"
+msgstr "Précédent (Flèche gauche)"
 
 #: static/scripts/app/views/dir.js:55
 #: static/scripts/app/views/starred-file.js:65
 msgid "Next (Right arrow key)"
-msgstr "Suivant (flèche droite)"
+msgstr "Suivant (Flèche droite)"
 
 #: static/scripts/app/views/dir.js:56
 #: static/scripts/app/views/starred-file.js:66
@@ -389,14 +390,14 @@ msgstr "<a href=\"%url%\" target=\"_blank\">L'image</a> ne peut être chargée."
 
 #: static/scripts/app/views/dir.js:314
 msgid "Password is required."
-msgstr "Le mot de passe est obligatoire"
+msgstr "Le mot de passe est obligatoire."
 
 #: static/scripts/app/views/dir.js:501 static/scripts/app/views/dir.js:559
 #: static/scripts/app/views/groups.js:112
 #: static/scripts/app/views/invitations.js:54
 #: static/scripts/sysadmin-app/views/dir.js:82
 msgid "It is required."
-msgstr "c'est obligatoire."
+msgstr "C'est obligatoire."
 
 #: static/scripts/app/views/dir.js:565
 msgid "Only an extension there, please input a name."
@@ -404,7 +405,7 @@ msgstr "Une seule extension ici, saisissez un nom."
 
 #: static/scripts/app/views/dir.js:813 static/scripts/app/views/dir.js:953
 msgid "Processing..."
-msgstr "Traitement en cours..."
+msgstr "Traitement en cours ..."
 
 #: static/scripts/app/views/dir.js:850
 msgid "Successfully deleted %(name)s."
@@ -452,7 +453,7 @@ msgstr " %(name)s déplacé avec succès."
 
 #: static/scripts/app/views/dir.js:999
 msgid "Successfully moved %(name)s and 1 other item."
-msgstr " %(name)s et 1 autre élément déplacés avec succès"
+msgstr " %(name)s et 1 autre élément déplacés avec succès."
 
 #: static/scripts/app/views/dir.js:1001
 msgid "Successfully moved %(name)s and %(amount)s other items."
@@ -472,11 +473,11 @@ msgstr "%(name)s et %(amount)s autres éléments copiés avec succès."
 
 #: static/scripts/app/views/dir.js:1021
 msgid "Internal error. Failed to move %(name)s and %(amount)s other item(s)."
-msgstr "Erreur interne.  Échec du déplacement de %(name)s et %(amount)s autres élément(s)."
+msgstr "Erreur interne.  Échec du déplacement de %(name)s et %(amount)s autre(s) élément(s)."
 
 #: static/scripts/app/views/dir.js:1023
 msgid "Internal error. Failed to move %(name)s."
-msgstr " Erreur interne.  Échec du déplacement de %(name)s "
+msgstr " Erreur interne.  Échec du déplacement de %(name)s."
 
 #: static/scripts/app/views/dir.js:1027
 msgid "Internal error. Failed to copy %(name)s and %(amount)s other item(s)."
@@ -484,7 +485,7 @@ msgstr "Erreur interne.  Échec de la copie de %(name)s et %(amount)s autres él
 
 #: static/scripts/app/views/dir.js:1029
 msgid "Internal error. Failed to copy %(name)s."
-msgstr "Erreur interne.  Échec de la copie de %(name)s"
+msgstr "Erreur interne.  Échec de la copie de %(name)s."
 
 #: static/scripts/app/views/dir.js:1069
 msgid "Moving file %(index)s of %(total)s"
@@ -514,7 +515,7 @@ msgstr "%(name)s supprimé avec succès"
 
 #: static/scripts/app/views/fileupload.js:10
 msgid "File is too big"
-msgstr "Le fichier est trop volumineux"
+msgstr "Le fichier est trop gros"
 
 #: static/scripts/app/views/fileupload.js:11
 msgid "File is too small"
@@ -575,7 +576,7 @@ msgstr "Supprimer"
 
 #: static/scripts/app/views/fileupload.js:46
 msgid "File Uploading..."
-msgstr "Envoi du fichier en cours..."
+msgstr "Envoi du fichier en cours ..."
 
 #: static/scripts/app/views/fileupload.js:47
 msgid "File Upload complete"
@@ -599,11 +600,11 @@ msgstr "Échec de la mise à jour de l'url"
 
 #: static/scripts/app/views/fileupload.js:233
 msgid "Replace file {filename}?"
-msgstr "Remplacer le fichier {filename}?"
+msgstr "Remplacer le fichier {filename} ?"
 
 #: static/scripts/app/views/fileupload.js:259
 msgid "File is locked"
-msgstr "Le fichier est  vérouillé"
+msgstr "Le fichier est verrouillé"
 
 #: static/scripts/app/views/folder-perm.js:48
 msgid "Set {placeholder}'s permission"
@@ -659,7 +660,7 @@ msgstr "Supprimer le groupe"
 
 #: static/scripts/app/views/group-settings.js:308
 msgid "Really want to dismiss this group?"
-msgstr "Voulez-vous réellement supprimer ce groupe?"
+msgstr "Voulez-vous réellement supprimer ce groupe ?"
 
 #: static/scripts/app/views/group-settings.js:341
 msgid "Quit Group"
@@ -739,7 +740,7 @@ msgstr "saisissez un nombre de jours valide"
 
 #: static/scripts/app/views/share.js:312
 msgid "Please input at least an email."
-msgstr "Saisissez au moins une adresse mel "
+msgstr "Saisissez au moins une adresse e-mail."
 
 #: static/scripts/app/views/share.js:329
 msgid "Successfully sent to {placeholder}"
@@ -776,7 +777,7 @@ msgstr "Pas de correspondance"
 
 #: static/scripts/common.js:597 static/scripts/common.js:668
 msgid "Searching..."
-msgstr "Recherche en cours..."
+msgstr "Recherche en cours ..."
 
 #: static/scripts/common.js:598 static/scripts/common.js:669
 msgid "Loading failed"
@@ -788,7 +789,7 @@ msgstr "Recherche de groupes"
 
 #: static/scripts/common.js:977
 msgid "Packaging..."
-msgstr "Packaging..."
+msgstr "Packaging ..."
 
 #: static/scripts/sysadmin-app/views/device-errors.js:39
 msgid "Successfully clean all errors."
@@ -796,28 +797,28 @@ msgstr "Toutes les erreurs ont été effacées avec succès."
 
 #: static/scripts/sysadmin-app/views/group-member.js:81
 msgid "Delete Member"
-msgstr ""
+msgstr "Supprimer le membre"
 
 #: static/scripts/sysadmin-app/views/group-member.js:95
 msgid "Successfully deleted member {placeholder}"
-msgstr ""
+msgstr "Membre supprimé avec succès {placeholder}"
 
 #: static/scripts/sysadmin-app/views/group-members.js:51
 msgid "Email is required."
-msgstr ""
+msgstr "L'e-mail est requis."
 
 #: static/scripts/sysadmin-app/views/group-repo.js:28
 msgid "Unshare Library"
-msgstr ""
+msgstr "Bibliothèque non partagée"
 
 #: static/scripts/sysadmin-app/views/group-repo.js:29
 #, javascript-format
 msgid "Are you sure you want to unshare %s ?"
-msgstr ""
+msgstr "Êtes-vous certain de ne plus vouloir partager %s ?"
 
 #: static/scripts/sysadmin-app/views/group-repo.js:42
 msgid "Successfully unshared library {placeholder}"
-msgstr ""
+msgstr "Partage de {placeholder} supprimé avec succès"
 
 #: static/scripts/sysadmin-app/views/group.js:30
 msgid "Delete Group"

@@ -5,7 +5,7 @@ from django.core.cache import cache
 from django.core.urlresolvers import reverse
 from django.http import HttpResponseRedirect
 
-import seaserv
+from seaserv import ccnet_api
 
 from seahub.notifications.models import Notification
 from seahub.notifications.utils import refresh_cache
@@ -32,7 +32,7 @@ class BaseMiddleware(object):
             request.cloud_mode = True
 
             if MULTI_TENANCY:
-                orgs = seaserv.get_orgs_by_user(username)
+                orgs = ccnet_api.get_orgs_by_user(username)
                 if orgs:
                     request.user.org = orgs[0]
         else:
