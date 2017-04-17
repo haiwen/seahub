@@ -30,7 +30,7 @@ from seahub.settings import ENABLE_UPLOAD_FOLDER, \
     ENABLE_RESUMABLE_FILEUPLOAD, ENABLE_THUMBNAIL, \
     THUMBNAIL_ROOT, THUMBNAIL_DEFAULT_SIZE, THUMBNAIL_SIZE_FOR_GRID, \
     MAX_NUMBER_OF_FILES_FOR_FILEUPLOAD
-from seahub.utils.file_types import IMAGE
+from seahub.utils.file_types import IMAGE, VIDEO
 from seahub.thumbnail.utils import get_share_link_thumbnail_src
 
 # Get an instance of a logger
@@ -228,7 +228,7 @@ def view_shared_dir(request, fileshare):
     if not repo.encrypted and ENABLE_THUMBNAIL:
         for f in file_list:
             file_type, file_ext = get_file_type_and_ext(f.obj_name)
-            if file_type == IMAGE:
+            if file_type == IMAGE or file_type == VIDEO: # FIXME
                 f.is_img = True
                 if os.path.exists(os.path.join(THUMBNAIL_ROOT, str(thumbnail_size), f.obj_id)):
                     req_image_path = posixpath.join(req_path, f.obj_name)

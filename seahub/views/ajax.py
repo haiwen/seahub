@@ -47,7 +47,7 @@ from seahub.utils import check_filename_with_rename, EMPTY_SHA1, \
 from seahub.utils.star import get_dir_starred_files
 from seahub.base.accounts import User
 from seahub.thumbnail.utils import get_thumbnail_src
-from seahub.utils.file_types import IMAGE
+from seahub.utils.file_types import IMAGE, VIDEO
 from seahub.base.templatetags.seahub_tags import translate_seahub_time, \
         file_icon_filter, email2nickname, tsstr_sec
 
@@ -342,7 +342,7 @@ def list_lib_dir(request, repo_id):
         f_['perm'] = f.permission # perm for file in current dir
 
         file_type, file_ext = get_file_type_and_ext(f.obj_name)
-        if file_type == IMAGE:
+        if file_type == IMAGE or file_type == VIDEO: # FIXME
             f_['is_img'] = True
             if not repo.encrypted and ENABLE_THUMBNAIL and \
                 os.path.exists(os.path.join(THUMBNAIL_ROOT, str(size), f.obj_id)):

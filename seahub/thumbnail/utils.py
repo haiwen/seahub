@@ -1,21 +1,32 @@
 # Copyright (c) 2012-2016 Seafile Ltd.
 import os
 import posixpath
+import tempfile
 import urllib2
 import logging
 from StringIO import StringIO
-from PIL import Image, ExifTags
 
+from PIL import Image
+try:
+    from moviepy.editor import VideoFileClip
+    _ENABLE_VIDEO_THUMBNAIL = True
+except ImportError:
+    _ENABLE_VIDEO_THUMBNAIL = False
 from seaserv import get_file_id_by_path, get_repo, get_file_size, \
     seafile_api
 
-from seahub.utils import gen_inner_file_get_url
-
+from seahub.utils import gen_inner_file_get_url, get_file_type_and_ext
+from seahub.utils.file_types import VIDEO
 from seahub.settings import THUMBNAIL_IMAGE_SIZE_LIMIT, \
     THUMBNAIL_EXTENSION, THUMBNAIL_ROOT, THUMBNAIL_IMAGE_ORIGINAL_SIZE_LIMIT
 
 # Get an instance of a logger
 logger = logging.getLogger(__name__)
+
+if _ENABLE_VIDEO_THUMBNAIL:
+    logger.info('Video thumbnail is enabled.')
+else:
+    logger.info('Video thumbnail is disabled.')
 
 def get_thumbnail_src(repo_id, size, path):
     return posixpath.join("thumbnail", repo_id, str(size), path.lstrip('/'))
@@ -90,6 +101,15 @@ def generate_thumbnail(request, repo_id, size, path):
 
     repo = get_repo(repo_id)
     file_size = get_file_size(repo.store_id, repo.version, file_id)
+
+    if _ENABLE_VIDEO_THUMBNAIL:
+        # video thumbnails
+        filetype, fileext = get_file_type_and_ext(os.path.basename(path))
+        if filetype == VIDEO:
+            return create_video_thumbnails(repo, file_id, path, size,
+                                           thumbnail_file, file_size)
+
+    # image thumbnails
     if file_size > THUMBNAIL_IMAGE_SIZE_LIMIT * 1024**2:
         return (False, 403)
 
@@ -116,6 +136,42 @@ def generate_thumbnail(request, repo_id, size, path):
         image = get_rotated_image(image)
         image.thumbnail((size, size), Image.ANTIALIAS)
         image.save(thumbnail_file, THUMBNAIL_EXTENSION)
+        return (True, 200)
+    except Exception as e:
+        logger.error(e)
+        return (False, 500)
+
+def create_video_thumbnails(repo, file_id, path, size, thumbnail_file, file_size):
+    import timeit
+    t1 = timeit.default_timer()
+    token = seafile_api.get_fileserver_access_token(repo.id, file_id, 'view',
+                                                    '', use_onetime=False)
+
+    inner_path = gen_inner_file_get_url(token, os.path.basename(path))
+    clip = VideoFileClip(inner_path)
+    tmp_path = str(os.path.join(tempfile.gettempdir(), '%s.png' % file_id[:8]))
+    clip.save_frame(tmp_path)
+    t2 = timeit.default_timer()
+    logger.info('Create thumbnail of [%s](size: %s) takes: %s' % (path, file_size, (t2 - t1)))
+
+    try:
+        image = Image.open(tmp_path)
+
+        # check image memory cost size limit
+        # use RGBA as default mode(4x8-bit pixels, true colour with transparency mask)
+        # every pixel will cost 4 byte in RGBA mode
+        width, height = image.size
+        image_memory_cost = width * height * 4 / 1024 / 1024
+        if image_memory_cost > THUMBNAIL_IMAGE_ORIGINAL_SIZE_LIMIT:
+            return (False, 403)
+
+        if image.mode not in ["1", "L", "P", "RGB", "RGBA"]:
+            image = image.convert("RGB")
+
+        image = get_rotated_image(image)
+        image.thumbnail((size, size), Image.ANTIALIAS)
+        image.save(thumbnail_file, THUMBNAIL_EXTENSION)
+        os.unlink(tmp_path)
         return (True, 200)
     except Exception as e:
         logger.error(e)
