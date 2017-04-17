@@ -913,8 +913,7 @@ def space_and_traffic(request):
     else:
         org_id = org[0].org_id
         space_quota = seafile_api.get_org_user_quota(org_id, username)
-        space_usage = seafserv_threaded_rpc.get_org_user_quota_usage(
-            org_id, username)
+        space_usage = seafile_api.get_org_user_quota_usage(org_id, username)
 
     rates = {}
     if space_quota > 0:
