@@ -38,6 +38,7 @@ from .utils import get_diff_details, \
     get_groups, prepare_events, \
     api_group_check, get_timestamp, json_response, is_seafile_pro
 
+from seahub.wopi.utils import get_wopi_dict
 from seahub.api2.base import APIView
 from seahub.api2.models import TokenV2, DESKTOP_PLATFORMS
 from seahub.avatar.templatetags.avatar_tags import api_avatar_url, avatar
@@ -1897,7 +1898,6 @@ class OwaFileView(APIView):
             return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
 
         # get wopi dict
-        from seahub_extra.wopi.utils import get_wopi_dict
         username = request.user.username
         wopi_dict = get_wopi_dict(username, repo_id, path)
 
