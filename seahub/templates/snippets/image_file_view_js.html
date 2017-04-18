@@ -1,0 +1,5 @@
+function setFileViewAreaHeight() {
+    var $fileView = $('#file-view');
+    $fileView.outerHeight($(window).height() - $fileView.offset().top);
+}
+$(window).load(setFileViewAreaHeight).resize(setFileViewAreaHeight);

@@ -144,10 +144,14 @@ define([
                 case 'group_discussions': return siteRoot + 'api2/groups/' + options.group_id + '/discussions/';
                 case 'group_discussion': return siteRoot + 'api2/groups/' + options.group_id + '/discussions/' + options.discussion_id + '/';
 
-                // Misc
+                // thumbnail
                 case 'thumbnail_create': return siteRoot + 'thumbnail/' + options.repo_id + '/create/';
-                case 'get_popup_notices': return siteRoot + 'ajax/get_popup_notices/';
+                case 'thumbnail_get': return siteRoot + 'thumbnail/' + options.repo_id + '/' + options.size + options.path;
 
+                // Misc
+                case 'view_raw_file': return siteRoot + 'repo/' + options.repo_id + '/raw' + options.path;
+
+                case 'get_popup_notices': return siteRoot + 'ajax/get_popup_notices/';
                 case 'notifications': return siteRoot + 'api/v2.1/notifications/';
                 case 'notification': return siteRoot + 'api/v2.1/notification/';
                 case 'user_enabled_modules': return siteRoot + 'api/v2.1/user-enabled-modules/';

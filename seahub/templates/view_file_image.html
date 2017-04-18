@@ -17,12 +17,21 @@ body { overflow:hidden; }
     <a href="{% url 'view_lib_file' repo.id img_next %}" id="img-next" title="{% trans 'you can also press → ' %}"><span class="icon-chevron-right"></span></a>
   {% endif %}
 
-<img src="{{ raw_path }}" alt="{{ u_filename}}" id="image-view" />
+<img src="" alt="{{ filename }}" id="image-view" />
 {% endblock %}
 
 {% block extra_script %}{{ block.super }}
 
 <script type="text/javascript">
+{% if enable_thumbnail and not repo.encrypted %}
+    var encoded_path = encodePath('{{ path|escapejs }}'); // path: '/Portrait_8.jpg'
+    $('#image-view').attr('src', '{{ SITE_ROOT }}thumbnail/{{ repo.id }}/1024' + encoded_path);
+{% else %}
+    $('#image-view').attr('src', '{{ raw_path|escapejs }}');
+{% endif %}
+
+{% include 'snippets/image_file_view_js.html' %}
+
 {% if img_prev or img_next %}
 var input_focus = false;
 $('input, textarea').focus(function() {
@@ -45,11 +54,5 @@ $('body').bind('keydown', function(e) {
     }
 })
 {% endif %}
-
-function setFileViewAreaHeight() {
-    var $fileView = $('#file-view');
-    $fileView.outerHeight($(window).height() - $fileView.offset().top);
-}
-$(window).load(setFileViewAreaHeight).resize(setFileViewAreaHeight);
 </script>
 {% endblock %}

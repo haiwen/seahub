@@ -32,6 +32,16 @@ define([
 
             var tmpl = $(window).width() >= 768 ? this.template : this.mobileTemplate;
             this.$el.html(tmpl(data));
+
+            if (app.pageOptions.enable_thumbnail) {
+                this.$('.img-name-link').attr('data-mfp-src', Common.getUrl({
+                    'name': 'thumbnail_get',
+                    'repo_id': data.repo_id,
+                    'size': 1024,
+                    'path': data.encoded_path
+                }));
+            }
+
             return this;
         },
 
