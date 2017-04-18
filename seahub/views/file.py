@@ -39,6 +39,7 @@ from seaserv import get_repo, send_message, get_commits, \
     seafserv_threaded_rpc
 from pysearpc import SearpcError
 
+from seahub.wopi.utils import get_wopi_dict
 from seahub.avatar.templatetags.group_avatar_tags import grp_avatar
 from seahub.auth.decorators import login_required
 from seahub.base.decorators import repo_passwd_set_required
@@ -446,7 +447,6 @@ def _file_view(request, repo_id, path):
                 ((not is_locked) or (is_locked and locked_by_me)):
             action_name = 'edit'
 
-        from seahub_extra.wopi.utils import get_wopi_dict
         wopi_dict = get_wopi_dict(username, repo_id, path, action_name)
         if wopi_dict:
             send_file_access_msg(request, repo, path, 'web')
