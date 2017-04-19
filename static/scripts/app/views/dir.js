@@ -205,7 +205,7 @@ define([
 
                 this.updateDirOpBarUI(); // after `render_dirents_slice`
 
-                this.getImageThumbnail();
+                this.getThumbnail();
             },
 
             updateDirOpBarUI: function() {
@@ -316,20 +316,20 @@ define([
                 }
             },
 
-            getImageThumbnail: function() {
+            getThumbnail: function() {
                 if (!app.pageOptions.enable_thumbnail || this.dir.encrypted) {
                     return false;
                 }
 
-                var images_with_no_thumbnail = this.dir.filter(function(dirent) {
+                var items = this.dir.filter(function(dirent) {
                     // 'dirent' is a model
-                    return dirent.get('is_img') && !dirent.get('encoded_thumbnail_src');
+                    return (dirent.get('is_img') || dirent.get('is_video')) && !dirent.get('encoded_thumbnail_src');
                 });
-                if (images_with_no_thumbnail.length == 0) {
+                if (items.length == 0) {
                     return ;
                 }
 
-                var images_len = images_with_no_thumbnail.length,
+                var items_length = items.length,
                     repo_id = this.dir.repo_id,
                     cur_path = this.dir.path,
                     _this = this;
@@ -338,24 +338,24 @@ define([
                     thumbnail_size = app.pageOptions.thumbnail_size_for_grid;
                 }
                 var get_thumbnail = function(i) {
-                    var cur_img = images_with_no_thumbnail[i];
-                    var cur_img_path = Common.pathJoin([cur_path, cur_img.get('obj_name')]);
+                    var cur_item = items[i];
+                    var cur_item_path = Common.pathJoin([cur_path, cur_item.get('obj_name')]);
                     $.ajax({
                         url: Common.getUrl({name: 'thumbnail_create', repo_id: repo_id}),
                         data: {
-                            'path': cur_img_path,
+                            'path': cur_item_path,
                             'size': thumbnail_size
                         },
                         cache: false,
                         dataType: 'json',
                         success: function(data) {
-                            cur_img.set({
+                            cur_item.set({
                                 'encoded_thumbnail_src': data.encoded_thumbnail_src
                             });
                         },
                         complete: function() {
                             // cur path may be changed. e.g., the user enter another directory
-                            if (i < images_len - 1 &&
+                            if (i < items_length - 1 &&
                                 _this.dir.repo_id == repo_id &&
                                 _this.dir.path == cur_path) {
                                 get_thumbnail(++i);
@@ -1336,7 +1336,7 @@ define([
                 if (this.dir.dirent_more &&
                         $(window).scrollTop() + $(window).height() == $(document).height()) { // scroll to the bottom
                     this.render_dirents_slice(this.dir.last_start, this.dir.limit);
-                    this.getImageThumbnail();
+                    this.getThumbnail();
                 }
 
                 // fixed 'dir-op-bar'

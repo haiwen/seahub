@@ -342,8 +342,11 @@ def list_lib_dir(request, repo_id):
         f_['perm'] = f.permission # perm for file in current dir
 
         file_type, file_ext = get_file_type_and_ext(f.obj_name)
-        if file_type == IMAGE or file_type == VIDEO: # FIXME
+        if file_type == IMAGE:
             f_['is_img'] = True
+        if file_type == VIDEO:
+            f_['is_video'] = True
+        if file_type == IMAGE or file_type == VIDEO:
             if not repo.encrypted and ENABLE_THUMBNAIL and \
                 os.path.exists(os.path.join(THUMBNAIL_ROOT, str(size), f.obj_id)):
                 file_path = posixpath.join(path, f.obj_name)

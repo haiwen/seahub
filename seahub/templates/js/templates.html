@@ -437,7 +437,7 @@
     </td>
     <td class="dirent-icon">
         <div class="pos-rel">
-        <% if (dirent.is_img) { %>
+        <% if (dirent.is_img || dirent.is_video) { %>
             <% if (dirent.encoded_thumbnail_src) { %>
             <img class="thumbnail" src="{{ SITE_ROOT }}<%- dirent.encoded_thumbnail_src %>" alt="" />
             <% } else { %>
@@ -532,7 +532,7 @@
     </td>
     <td class="dirent-icon">
         <div class="pos-rel">
-        <% if (dirent.is_img) { %>
+        <% if (dirent.is_img || dirent.is_video) { %>
             <% if (dirent.encoded_thumbnail_src) { %>
             <img class="thumbnail" src="{{ SITE_ROOT }}<%- dirent.encoded_thumbnail_src %>" alt="" />
             <% } else { %>
@@ -605,7 +605,7 @@
 
 <script type="text/template" id="grid-view-file-item-tmpl">
     <a href="<%= url %>" class="img-link" target="_blank">
-        <% if (dirent.is_img && dirent.encoded_thumbnail_src) { %>
+        <% if ((dirent.is_img || dirent.is_video) && dirent.encoded_thumbnail_src) { %>
             <img class="thumbnail vam" src="{{ SITE_ROOT }}<%- dirent.encoded_thumbnail_src %>" alt="" />
         <% } else { %>
             <img src="<%= icon_url %>" width="96" alt="" class="vam" />

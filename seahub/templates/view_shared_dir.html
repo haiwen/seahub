@@ -79,7 +79,7 @@
 
             {% for dirent in file_list %}
             <tr class="file-item" data-name="{{dirent.obj_name}}" >
-                {% if dirent.is_img %}
+                {% if dirent.is_img or dirent.is_video %}
                 {% if dirent.encoded_thumbnail_src %}
                 <td class="alc"><img class="thumbnail" src="{{ SITE_ROOT }}{{ dirent.encoded_thumbnail_src }}" alt="{% trans "File"%}" /></td>
                 {% else %}
@@ -130,17 +130,21 @@
             <li class="file-item grid-item" data-name="{{dirent.obj_name}}" title="{{dirent.obj_name}}">
                 {% if dirent.is_img %}
                 <a class="img-link img-img-link" href="{% url "view_file_via_shared_dir" token %}?p={{ path|urlencode }}{{ dirent.obj_name|urlencode }}" data-mfp-src="{% url "view_file_via_shared_dir" token %}?p={{ path|urlencode }}{{ dirent.obj_name|urlencode }}&raw=1">
+                {% else %}
+                <a class="img-link" href="{% url "view_file_via_shared_dir" token %}?p={{ path|urlencode }}{{ dirent.obj_name|urlencode }}">
+                {% endif %}
+
+                {% if dirent.is_img or dirent.is_video %}
                     {% if dirent.encoded_thumbnail_src %}
                         <img class="thumbnail vam" src="{{ SITE_ROOT }}{{ dirent.encoded_thumbnail_src }}" alt="" />
                     {% else %}
                         <img class="not-thumbnail vam" src="{{ MEDIA_URL }}img/file/{{ dirent.obj_name|file_icon_filter:192 }}" alt="" width="96" />
                     {% endif %}
-                </a>
                 {% else %}
-                <a class="img-link" href="{% url "view_file_via_shared_dir" token %}?p={{ path|urlencode }}{{ dirent.obj_name|urlencode }}">
                     <img class="vam" src="{{ MEDIA_URL }}img/file/{{ dirent.obj_name|file_icon_filter:192 }}" alt="" width="96" />
-                </a>
                 {% endif %}
+
+                </a>
 
                 {% if dirent.is_img %}
                 <a class="normal img-name-link text-link ellipsis" href="{% url "view_file_via_shared_dir" token %}?p={{ path|urlencode }}{{ dirent.obj_name|urlencode }}" data-mfp-src="{% url "view_file_via_shared_dir" token %}?p={{ path|urlencode }}{{ dirent.obj_name|urlencode }}&raw=1">{{ dirent.obj_name }}</a>
