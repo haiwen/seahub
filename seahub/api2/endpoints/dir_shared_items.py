@@ -116,6 +116,28 @@ class DirSharedItemsEndpoint(APIView):
         else:
             return seafile_api.get_repo_owner(repo_id)
 
+    def has_shared_to_user(self, request, repo_id, path, username):
+        items = self.list_user_shared_items(request, repo_id, path)
+
+        has_shared = False
+        for item in items:
+            if username == item['user_info']['name']:
+                has_shared = True
+                break
+
+        return has_shared
+
+    def has_shared_to_group(self, request, repo_id, path, group_id):
+        items = self.list_group_shared_items(request, repo_id, path)
+
+        has_shared = False
+        for item in items:
+            if group_id == item['group_info']['id']:
+                has_shared = True
+                break
+
+        return has_shared
+
     def get(self, request, repo_id, format=None):
         """List shared items(shared to users/groups) for a folder/library.
         """
@@ -149,21 +171,16 @@ class DirSharedItemsEndpoint(APIView):
 
         path = request.GET.get('p', '/')
         if seafile_api.get_dir_id_by_path(repo.id, path) is None:
-            return api_error(status.HTTP_400_BAD_REQUEST, 'Directory not found.')
+            return api_error(status.HTTP_404_NOT_FOUND, 'Folder %s not found.' % path)
 
         if username != self.get_repo_owner(request, repo_id):
             return api_error(status.HTTP_403_FORBIDDEN, 'Permission denied.')
-
-        shared_to_user, shared_to_group = self.handle_shared_to_args(request)
 
         permission = request.data.get('permission', 'r')
         if permission not in ['r', 'rw']:
             return api_error(status.HTTP_400_BAD_REQUEST, 'permission invalid.')
 
-        path = request.GET.get('p', '/')
-        if seafile_api.get_dir_id_by_path(repo.id, path) is None:
-            return api_error(status.HTTP_404_NOT_FOUND, 'Folder %s not found.' % path)
-
+        shared_to_user, shared_to_group = self.handle_shared_to_args(request)
         if shared_to_user:
             shared_to = request.GET.get('username')
             if shared_to is None or not is_valid_username(shared_to):
@@ -268,6 +285,13 @@ class DirSharedItemsEndpoint(APIView):
                         })
                     continue
 
+                if self.has_shared_to_user(request, repo_id, path, to_user):
+                    result['failed'].append({
+                        'email': to_user,
+                        'error_msg': 'This item has been shared to %s.' % to_user
+                        })
+                    continue
+
                 try:
                     if is_org_context(request):
                         org_id = request.user.org.org_id
@@ -321,9 +345,17 @@ class DirSharedItemsEndpoint(APIView):
                     gid = int(gid)
                 except ValueError:
                     return api_error(status.HTTP_400_BAD_REQUEST, 'group_id %s invalid.' % gid)
+
                 group = seaserv.get_group(gid)
                 if not group:
                     return api_error(status.HTTP_404_NOT_FOUND, 'Group %s not found' % gid)
+
+                if self.has_shared_to_group(request, repo_id, path, gid):
+                    result['failed'].append({
+                        'group_name': group.group_name,
+                        'error_msg': 'This item has been shared to %s.' % group.group_name
+                        })
+                    continue
 
                 try:
                     if is_org_context(request):
@@ -386,7 +418,6 @@ class DirSharedItemsEndpoint(APIView):
             return api_error(status.HTTP_403_FORBIDDEN, 'Permission denied.')
 
         shared_to_user, shared_to_group = self.handle_shared_to_args(request)
-
         if shared_to_user:
             shared_to = request.GET.get('username')
             if shared_to is None or not is_valid_username(shared_to):
