@@ -513,6 +513,9 @@ THUMBNAIL_SIZE_FOR_GRID = 192
 THUMBNAIL_IMAGE_SIZE_LIMIT = 20
 THUMBNAIL_IMAGE_ORIGINAL_SIZE_LIMIT = 256
 
+# template for create new office file
+OFFICE_TEMPLATE_ROOT = os.path.join(MEDIA_ROOT + 'office-template')
+
 #####################
 # Global AddressBook #
 #####################
