@@ -49,7 +49,7 @@ from seahub.base.accounts import User
 from seahub.thumbnail.utils import get_thumbnail_src
 from seahub.utils.file_types import IMAGE
 from seahub.base.templatetags.seahub_tags import translate_seahub_time, \
-        file_icon_filter, email2nickname, tsstr_sec
+    email2nickname, tsstr_sec
 
 # Get an instance of a logger
 logger = logging.getLogger(__name__)
@@ -332,7 +332,6 @@ def list_lib_dir(request, repo_id):
     for f in file_list:
         f_ = {}
         f_['is_file'] = True
-        f_['file_icon'] = file_icon_filter(f.obj_name)
         f_['obj_name'] = f.obj_name
         f_['last_modified'] = f.last_modified
         f_['last_update'] = translate_seahub_time(f.last_modified)

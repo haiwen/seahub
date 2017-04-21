@@ -46,22 +46,39 @@ def tsstr_day(value):
 
 # Supported file extensions and file icon name.
 FILEEXT_ICON_MAP = {
+
+    # text file
+    'md': 'txt.png',
+    'txt': 'txt.png',
+
     # pdf file
     'pdf' : 'pdf.png',
+
     # document file
     'doc' : 'word.png',
     'docx' : 'word.png',
-    'ppt' : 'ppt.png',
-    'pptx' : 'ppt.png',
-    'xls' : 'excel.png',
-    'xlsx' : 'excel.png',
-    'txt' : 'txt.png',
     'odt' : 'word.png',
     'fodt' : 'word.png',
-    'ods' : 'excel.png',
-    'fods' : 'excel.png',
+
+    'ppt' : 'ppt.png',
+    'pptx' : 'ppt.png',
     'odp' : 'ppt.png',
     'fodp' : 'ppt.png',
+
+    'xls' : 'excel.png',
+    'xlsx' : 'excel.png',
+    'ods' : 'excel.png',
+    'fods' : 'excel.png',
+
+    # video
+    'mp4': 'video.png',
+    'ogv': 'video.png',
+    'webm': 'video.png',
+    'mov': 'video.png',
+    'flv': 'video.png',
+    'wmv': 'video.png',
+    'rmvb': 'video.png',
+
     # music file
     'mp3' : 'music.png',
     'oga' : 'music.png',
@@ -70,7 +87,8 @@ FILEEXT_ICON_MAP = {
     'aac' : 'music.png',
     'ac3' : 'music.png',
     'wma' : 'music.png',
-    # picture file
+
+    # image file
     'jpg' : 'pic.png',
     'jpeg' : 'pic.png',
     'png' : 'pic.png',
@@ -78,44 +96,9 @@ FILEEXT_ICON_MAP = {
     'gif' : 'pic.png',
     'bmp' : 'pic.png',
     'ico' : 'pic.png',
-    # normal file and unknown file
-    'default' : 'file.png',
 
-    # for 192 pixel icon
-    # pdf file
-    'pdf-192' : 'pdf-192.png',
-    # document file
-    'doc-192' : 'word-192.png',
-    'docx-192' : 'word-192.png',
-    'ppt-192' : 'ppt-192.png',
-    'pptx-192' : 'ppt-192.png',
-    'xls-192' : 'excel-192.png',
-    'xlsx-192' : 'excel-192.png',
-    'txt-192' : 'txt-192.png',
-    'odt-192' : 'word-192.png',
-    'fodt-192' : 'word-192.png',
-    'ods-192' : 'excel-192.png',
-    'fods-192' : 'excel-192.png',
-    'odp-192' : 'ppt-192.png',
-    'fodp-192' : 'ppt-192.png',
-    # music file
-    'mp3-192' : 'music-192.png',
-    'oga-192' : 'music-192.png',
-    'ogg-192' : 'music-192.png',
-    'flac-192' : 'music-192.png',
-    'aac-192' : 'music-192.png',
-    'ac3-192' : 'music-192.png',
-    'wma-192' : 'music-192.png',
-    # picture file
-    'jpg-192' : 'pic-192.png',
-    'jpeg-192' : 'pic-192.png',
-    'png-192' : 'pic-192.png',
-    'svg-192' : 'pic-192.png',
-    'gif-192' : 'pic-192.png',
-    'bmp-192' : 'pic-192.png',
-    'ico-192' : 'pic-192.png',
-    # normal file and unknown file
-    'default-192' : 'file-192.png',
+    # default
+    'default' : 'file.png',
 }
 @register.filter(name='file_icon_filter')
 def file_icon_filter(value, size=None):
@@ -127,14 +110,14 @@ def file_icon_filter(value, size=None):
 
     if file_ext and FILEEXT_ICON_MAP.has_key(file_ext):
         if size == 192:
-            return FILEEXT_ICON_MAP.get(file_ext + '-192')
+            return '192/' + FILEEXT_ICON_MAP.get(file_ext)
         else:
-            return FILEEXT_ICON_MAP.get(file_ext)
+            return '24/' + FILEEXT_ICON_MAP.get(file_ext)
     else:
         if size == 192:
-            return FILEEXT_ICON_MAP.get('default-192')
+            return '192/' + FILEEXT_ICON_MAP.get('default')
         else:
-            return FILEEXT_ICON_MAP.get('default')
+            return '24/' + FILEEXT_ICON_MAP.get('default')
 
 # This way of translation looks silly, but works well.
 COMMIT_MSG_TRANSLATION_MAP = {

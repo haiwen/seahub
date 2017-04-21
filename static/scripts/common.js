@@ -184,26 +184,39 @@ define([
         },
 
         FILEEXT_ICON_MAP: {
+
             // text file
             'md': 'txt.png',
             'txt': 'txt.png',
 
             // pdf file
             'pdf' : 'pdf.png',
+
             // document file
             'doc' : 'word.png',
             'docx' : 'word.png',
-            'ppt' : 'ppt.png',
-            'pptx' : 'ppt.png',
-            'xls' : 'excel.png',
-            'xlsx' : 'excel.png',
-            'txt' : 'txt.png',
             'odt' : 'word.png',
             'fodt' : 'word.png',
-            'ods' : 'excel.png',
-            'fods' : 'excel.png',
+
+            'ppt' : 'ppt.png',
+            'pptx' : 'ppt.png',
             'odp' : 'ppt.png',
             'fodp' : 'ppt.png',
+
+            'xls' : 'excel.png',
+            'xlsx' : 'excel.png',
+            'ods' : 'excel.png',
+            'fods' : 'excel.png',
+
+            // video
+            'mp4': 'video.png',
+            'ogv': 'video.png',
+            'webm': 'video.png',
+            'mov': 'video.png',
+            'flv': 'video.png',
+            'wmv': 'video.png',
+            'rmvb': 'video.png',
+
             // music file
             'mp3' : 'music.png',
             'oga' : 'music.png',
@@ -212,6 +225,7 @@ define([
             'aac' : 'music.png',
             'ac3' : 'music.png',
             'wma' : 'music.png',
+
             // image file
             'jpg' : 'pic.png',
             'jpeg' : 'pic.png',
@@ -220,6 +234,7 @@ define([
             'gif' : 'pic.png',
             'bmp' : 'pic.png',
             'ico' : 'pic.png',
+
             // default
             'default' : 'file.png'
         },
