@@ -108,7 +108,7 @@ define([
                 data: post_data,
                 success: function(data) {
                     var renamed_dirent_data = {
-                        'obj_name': options.newname,
+                        'obj_name': data.obj_name,
                         'last_modified': new Date().getTime()/1000,
                         'last_update': gettext("Just now")
                     };
