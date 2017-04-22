@@ -366,6 +366,8 @@ define([
             $op.hide();
             $name.hide();
 
+            this.$el.attr('draggable', false);
+
             var $input = $('[name="newname"]', form);
             var dot_index = dirent_name.lastIndexOf('.');
             if (!this.model.get('is_dir') && dot_index != -1) {
@@ -382,6 +384,8 @@ define([
                 if (app.ui.currentHighlightedItem) {
                     app.ui.currentHighlightedItem.rmHighlight();
                 }
+
+                _this.$el.attr('draggable', true);
 
                 if (_this.model.get('is_img')) {
                     var index = $('.img-name-link', _this.dirView.$dirent_list).index(_this.$('.img-name-link'));
@@ -403,6 +407,8 @@ define([
                 $td.attr('colspan', 1).css({
                     'width': $name.width()
                 });
+
+                _this.$el.attr('draggable', true);
                 return false; // stop bubbling (to 'doc click to hide .hidden-op')
             };
             $('.cancel', form).click(cancelRename);
