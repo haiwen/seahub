@@ -245,6 +245,7 @@ define([
             var $input = $('[name="newname"]', form);
             var dot_index = dirent_name.lastIndexOf('.');
             if (!this.model.get('is_dir') && dot_index != -1) {
+                $input[0].focus();
                 $input[0].setSelectionRange(0, dot_index);
             } else {
                 $input.select();
