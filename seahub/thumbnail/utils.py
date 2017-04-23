@@ -4,13 +4,10 @@ import posixpath
 import urllib2
 import logging
 from StringIO import StringIO
-from PIL import Image, ExifTags
+from PIL import Image
 
-from seaserv import get_file_id_by_path, get_repo, get_file_size, \
-    seafile_api
-
+from seaserv import seafile_api
 from seahub.utils import gen_inner_file_get_url
-
 from seahub.settings import THUMBNAIL_IMAGE_SIZE_LIMIT, \
     THUMBNAIL_EXTENSION, THUMBNAIL_ROOT, THUMBNAIL_IMAGE_ORIGINAL_SIZE_LIMIT
 
@@ -80,7 +77,7 @@ def generate_thumbnail(request, repo_id, size, path):
     if not os.path.exists(thumbnail_dir):
         os.makedirs(thumbnail_dir)
 
-    file_id = get_file_id_by_path(repo_id, path)
+    file_id = seafile_api.get_file_id_by_path(repo_id, path)
     if not file_id:
         return (False, 400)
 
@@ -88,13 +85,13 @@ def generate_thumbnail(request, repo_id, size, path):
     if os.path.exists(thumbnail_file):
         return (True, 200)
 
-    repo = get_repo(repo_id)
-    file_size = get_file_size(repo.store_id, repo.version, file_id)
+    repo = seafile_api.get_repo(repo_id)
+    file_size = seafile_api.get_file_size(repo.store_id, repo.version, file_id)
     if file_size > THUMBNAIL_IMAGE_SIZE_LIMIT * 1024**2:
         return (False, 403)
 
-    token = seafile_api.get_fileserver_access_token(repo_id, file_id, 'view',
-                                                    '', use_onetime = True)
+    token = seafile_api.get_fileserver_access_token(repo_id,
+            file_id, 'view', '', use_onetime = True)
 
     inner_path = gen_inner_file_get_url(token, os.path.basename(path))
     try:

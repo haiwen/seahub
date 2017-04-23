@@ -225,10 +225,18 @@ define([
                 var genItem = function(model) {
                     var name = model.get('obj_name');
                     var dirent_path = Common.pathJoin([path, name]);
+                    var src;
+
+                    if (model.has('encoded_thumbnail_src_1024')) {
+                        src = model.get('encoded_thumbnail_src_1024');
+                    } else {
+                        src = app.config.siteRoot + 'repo/' + repo_id + '/raw' + Common.encodePath(dirent_path);
+                    }
+
                     var item = {
                         'name': name,
                         'url': model.getWebUrl(),
-                        'src': app.config.siteRoot + 'repo/' + repo_id + '/raw' + Common.encodePath(dirent_path)
+                        'src': src,
                     };
                     return item;
                 };
