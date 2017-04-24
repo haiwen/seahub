@@ -122,6 +122,22 @@ def thumbnail_get(request, repo_id, size, path):
     else:
         return HttpResponse()
 
+def get_real_path_by_fs_and_req_path(fileshare, req_path):
+    """ Return the real path of a file.
+
+    The file could be a file in a shared dir or a shared file.
+    """
+
+    if fileshare.s_type == 'd':
+        if fileshare.path == '/':
+            real_path = req_path
+        else:
+            real_path = posixpath.join(fileshare.path, req_path.lstrip('/'))
+    else:
+        real_path = fileshare.path
+
+    return real_path
+
 def share_link_thumbnail_create(request, token):
     """generate thumbnail from dir download link page
 
@@ -155,10 +171,7 @@ def share_link_thumbnail_create(request, token):
         return HttpResponse(json.dumps({"error": err_msg}), status=400,
                             content_type=content_type)
 
-    if fileshare.path == '/':
-        real_path = req_path
-    else:
-        real_path = posixpath.join(fileshare.path, req_path.lstrip('/'))
+    real_path = get_real_path_by_fs_and_req_path(fileshare, req_path)
 
     size = request.GET.get('size', THUMBNAIL_DEFAULT_SIZE)
     success, status_code = generate_thumbnail(request, repo_id, size, real_path)
@@ -181,10 +194,7 @@ def share_link_latest_entry(request, token, size, path):
     if not repo:
         return None
 
-    if fileshare.path == '/':
-        image_path = path
-    else:
-        image_path = posixpath.join(fileshare.path, path.lstrip('/'))
+    image_path = get_real_path_by_fs_and_req_path(fileshare, path)
 
     obj_id = get_file_id_by_path(repo_id, image_path)
     if obj_id:
@@ -223,10 +233,7 @@ def share_link_thumbnail_get(request, token, size, path):
         return render_to_response('share_access_validation.html', d,
                                   context_instance=RequestContext(request))
 
-    if fileshare.path == '/':
-        image_path = path
-    else:
-        image_path = posixpath.join(fileshare.path, path.lstrip('/'))
+    image_path = get_real_path_by_fs_and_req_path(fileshare, path)
 
     repo_id = fileshare.repo_id
     repo = get_repo(repo_id)
