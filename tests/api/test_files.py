@@ -8,6 +8,7 @@ import pytest
 import urllib
 from urllib import urlencode, quote
 import urlparse
+from nose.tools import assert_in
 
 from tests.common.utils import randstring, urljoin
 from tests.api.apitestbase import ApiTestBase
@@ -32,15 +33,70 @@ class FilesApiTest(ApiTestBase):
 
     def test_move_file(self):
         with self.get_tmp_repo() as repo:
-            _, furl = self.create_file(repo)
             # TODO: create another repo here, and use it as dst_repo
+
+            # create sub folder(dpath)
+            dpath, _ = self.create_dir(repo)
+
+            # create tmp file in sub folder(dpath)
+            tmp_file = 'tmp_file.txt'
+            file_path = dpath + '/' + tmp_file
+            furl = repo.get_filepath_url(file_path)
+            data = {'operation': 'create'}
+            res = self.post(furl, data=data, expected=201)
+
+            # copy tmp file from sub folder(dpath) to dst dir('/')
             data = {
-                'operation': 'move',
                 'dst_repo': repo.repo_id,
                 'dst_dir': '/',
+                'operation': 'copy',
             }
-            res = self.post(furl, data=data)
-            self.assertEqual(res.text, '"success"')
+            u = urlparse.urlparse(furl)
+            parsed_furl = urlparse.urlunparse((u.scheme, u.netloc, u.path, '', '', ''))
+            res = self.post(parsed_furl+ '?p=' + quote(file_path), data=data)
+            assert_in(tmp_file, res.text)
+
+            # get info of copied file in dst dir('/')
+            fdurl = repo.file_url + u'detail/?p=/%s' % quote(tmp_file)
+            detail = self.get(fdurl).json()
+            self.assertIsNotNone(detail)
+            self.assertIsNotNone(detail['id'])
+
+            # copy tmp file from sub folder(dpath) to dst dir('/') again
+            # for test can rename file if a file with the same name is dst dir
+            data = {
+                'dst_repo': repo.repo_id,
+                'dst_dir': '/',
+                'operation': 'copy',
+            }
+            u = urlparse.urlparse(furl)
+            parsed_furl = urlparse.urlunparse((u.scheme, u.netloc, u.path, '', '', ''))
+            res = self.post(parsed_furl+ '?p=' + quote(file_path), data=data)
+            assert_in('tmp_file (1).txt', res.text)
+
+            # copy tmp file from sub folder(dpath) to dst dir('/') again
+            # for test can rename file if a file with the same name is dst dir
+            data = {
+                'dst_repo': repo.repo_id,
+                'dst_dir': '/',
+                'operation': 'copy',
+            }
+            u = urlparse.urlparse(furl)
+            parsed_furl = urlparse.urlunparse((u.scheme, u.netloc, u.path, '', '', ''))
+            res = self.post(parsed_furl+ '?p=' + quote(file_path), data=data)
+            assert_in('tmp_file (2).txt', res.text)
+
+            # then move file to dst dir
+            data = {
+                'dst_repo': repo.repo_id,
+                'dst_dir': '/',
+                'operation': 'move',
+            }
+            u = urlparse.urlparse(furl)
+            parsed_furl = urlparse.urlunparse((u.scheme, u.netloc, u.path, '', '', ''))
+            res = self.post(parsed_furl+ '?p=' + quote(file_path), data=data)
+            assert_in('tmp_file%20%283%29.txt', res.text)
+
 
     def test_copy_file(self):
         with self.get_tmp_repo() as repo:
@@ -65,13 +121,37 @@ class FilesApiTest(ApiTestBase):
             u = urlparse.urlparse(furl)
             parsed_furl = urlparse.urlunparse((u.scheme, u.netloc, u.path, '', '', ''))
             res = self.post(parsed_furl+ '?p=' + quote(file_path), data=data)
-            self.assertEqual(res.text, '"success"')
+            assert_in(tmp_file, res.text)
 
             # get info of copied file in dst dir('/')
             fdurl = repo.file_url + u'detail/?p=/%s' % quote(tmp_file)
             detail = self.get(fdurl).json()
             self.assertIsNotNone(detail)
             self.assertIsNotNone(detail['id'])
+
+            # copy tmp file from sub folder(dpath) to dst dir('/') again
+            # for test can rename file if a file with the same name is dst dir
+            data = {
+                'dst_repo': repo.repo_id,
+                'dst_dir': '/',
+                'operation': 'copy',
+            }
+            u = urlparse.urlparse(furl)
+            parsed_furl = urlparse.urlunparse((u.scheme, u.netloc, u.path, '', '', ''))
+            res = self.post(parsed_furl+ '?p=' + quote(file_path), data=data)
+            assert_in('tmp_file (1).txt', res.text)
+
+            # copy tmp file from sub folder(dpath) to dst dir('/') again
+            # for test can rename file if a file with the same name is dst dir
+            data = {
+                'dst_repo': repo.repo_id,
+                'dst_dir': '/',
+                'operation': 'copy',
+            }
+            u = urlparse.urlparse(furl)
+            parsed_furl = urlparse.urlunparse((u.scheme, u.netloc, u.path, '', '', ''))
+            res = self.post(parsed_furl+ '?p=' + quote(file_path), data=data)
+            assert_in('tmp_file (2).txt', res.text)
 
     def test_download_file(self):
         with self.get_tmp_repo() as repo:
