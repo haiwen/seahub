@@ -346,6 +346,7 @@ class Search(APIView):
                 file_id = seafile_api.get_file_id_by_path(e['repo_id'], path)
                 e['oid'] = file_id
                 repo = get_repo(e['repo_id'])
+                e['repo_name'] = repo.name
                 e['size'] = get_file_size(repo.store_id, repo.version, file_id)
             except SearpcError, err:
                 pass
