@@ -2008,6 +2008,7 @@ class FileView(APIView):
         parent_dir = os.path.dirname(path)
         operation = request.POST.get('operation', '')
 
+        file_info = {}
         if operation.lower() == 'rename':
             if check_folder_permission(request, repo_id, parent_dir) != 'rw':
                 return api_error(status.HTTP_403_FORBIDDEN,
@@ -2091,7 +2092,10 @@ class FileView(APIView):
             if request.GET.get('reloaddir', '').lower() == 'true':
                 return reloaddir(request, dst_repo, dst_dir)
             else:
-                resp = Response('success', status=status.HTTP_301_MOVED_PERMANENTLY)
+                file_info['repo_id'] = dst_repo_id
+                file_info['parent_dir'] = dst_dir
+                file_info['obj_name'] = new_filename_utf8
+                resp = Response(file_info, status=status.HTTP_301_MOVED_PERMANENTLY)
                 uri = reverse('FileView', args=[dst_repo_id], request=request)
                 resp['Location'] = uri + '?p=' + quote(dst_dir_utf8) + quote(new_filename_utf8)
                 return resp
@@ -2141,7 +2145,10 @@ class FileView(APIView):
             if request.GET.get('reloaddir', '').lower() == 'true':
                 return reloaddir(request, dst_repo, dst_dir)
             else:
-                resp = Response('success', status=status.HTTP_200_OK)
+                file_info['repo_id'] = dst_repo_id
+                file_info['parent_dir'] = dst_dir
+                file_info['obj_name'] = new_filename_utf8
+                resp = Response(file_info, status=status.HTTP_200_OK)
                 uri = reverse('FileView', args=[dst_repo_id], request=request)
                 resp['Location'] = uri + '?p=' + quote(dst_dir_utf8) + quote(new_filename_utf8)
                 return resp
