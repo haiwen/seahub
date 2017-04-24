@@ -657,3 +657,12 @@ function quotaSizeFormat(bytes, precision) {
         return bytes + ' B';
     }
 }
+
+function encodePath(path) {
+    var path_arr = path.split('/'),
+        path_arr_ = [];
+    for (var i = 0, len = path_arr.length; i < len; i++) {
+        path_arr_.push(encodeURIComponent(path_arr[i]));
+    }
+    return path_arr_.join('/');
+}

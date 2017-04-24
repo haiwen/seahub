@@ -17,11 +17,7 @@
 {% endif %}
 
 {% if filetype == 'Image' %}
-function setFileViewAreaHeight() {
-    var $fileView = $('#file-view');
-    $fileView.outerHeight($(window).height() - $fileView.offset().top);
-}
-$(window).load(setFileViewAreaHeight).resize(setFileViewAreaHeight);
+{% include 'snippets/image_file_view_js.html' %}
 {% endif %}
 
 {% if filetype == 'SVG' %}

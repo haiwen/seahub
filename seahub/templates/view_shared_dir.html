@@ -166,6 +166,10 @@
 {% block extra_script %}
 <script type="text/javascript" src="{% static "scripts/lib/jquery.magnific-popup.js" %}"></script>
 <script type="text/javascript">
+var cur_path = '{{path|escapejs}}';
+var share_link_token = '{{token}}';
+var file_server_root = '{{FILE_SERVER_ROOT}}';
+
 var magnificOptions = {
     type: 'image',
     tClose: "{% trans "Close (Esc)" %}", // Alt text on close button
@@ -186,12 +190,16 @@ var magnificOptions = {
         tError: '{% trans '<a href="%url%" target="_blank">The image</a> could not be loaded.' %}' // Error message when image could not be loaded
     }
 };
+
+{% if not repo.encrypted and ENABLE_THUMBNAIL %}
+$('[data-mfp-src]').each(function(index, item) {
+    var $item = $(item);
+    var file_name = $item.closest('.file-item').attr('data-name');
+    $item.attr('data-mfp-src', '{{ SITE_ROOT }}thumbnail/{{ token }}/1024' + encodePath(cur_path + file_name));
+});
+{% endif %}
 $('.img-name-link').magnificPopup(magnificOptions);
 $('.img-img-link').magnificPopup(magnificOptions);
-
-var cur_path = '{{path|escapejs}}';
-var share_link_token = '{{token}}';
-var file_server_root = '{{FILE_SERVER_ROOT}}';
 
 $('.shared-dir-zip, .download-dir').click(function (e) {
     var cur_download_dir_path;

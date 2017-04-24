@@ -20,7 +20,7 @@ For details please refer to 'snippets/file_content_js.html'.
         {% endif %}
 
         {% if filetype == 'Image' %}
-            <img src="{{ raw_path }}" alt="{{ u_filename}}" id="image-view" />
+            <img src="" alt="{{ file_name }}" id="image-view" />
         {% endif %}
         
         {% if filetype == 'Document' or filetype == 'PDF' and not use_pdfjs %} 

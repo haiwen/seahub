@@ -222,13 +222,34 @@ define([
             updateMagnificPopupOptions: function(options) {
                 var repo_id = this.dir.repo_id,
                     path = this.dir.path;
+
+                var use_thumbnail = true;
+                if (!app.pageOptions.enable_thumbnail || this.dir.encrypted) {
+                    use_thumbnail = false;
+                }
                 var genItem = function(model) {
                     var name = model.get('obj_name');
                     var dirent_path = Common.pathJoin([path, name]);
+                    var url_options = {
+                        'repo_id': repo_id,
+                        'path': Common.encodePath(dirent_path)
+                    };
+                    var item_src;
+                    if (use_thumbnail) {
+                        item_src = Common.getUrl($.extend(url_options, {
+                            'name': 'thumbnail_get',
+                            'size': 1024
+                        }));
+                    } else {
+                        item_src = Common.getUrl($.extend(url_options, {
+                            'name': 'view_raw_file'
+                        }));
+                    }
+
                     var item = {
                         'name': name,
                         'url': model.getWebUrl(),
-                        'src': app.config.siteRoot + 'repo/' + repo_id + '/raw' + Common.encodePath(dirent_path)
+                        'src': item_src
                     };
                     return item;
                 };

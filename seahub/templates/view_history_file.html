@@ -36,6 +36,7 @@ $(function() {
 
 {% if filetype == 'PDF' and use_pdfjs and not err %}
 {% elif filetype == 'Image' and not err %}
+    $('#image-view').attr('src', '{{ raw_path|escapejs }}');
 {% else %}
 function setFileViewAreaHeight() {
     $('body').css({'overflow':'auto'});
