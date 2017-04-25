@@ -1591,7 +1591,7 @@ def reloaddir(request, repo, parent_dir):
 
     return get_dir_entrys_by_id(request, repo, parent_dir, dir_id)
 
-def reloaddir_if_necessary (request, repo, parent_dir):
+def reloaddir_if_necessary(request, repo, parent_dir, obj_info=None):
 
     reload_dir = False
     s = request.GET.get('reloaddir', None)
@@ -1599,7 +1599,10 @@ def reloaddir_if_necessary (request, repo, parent_dir):
         reload_dir = True
 
     if not reload_dir:
-        return Response('success')
+        if obj_info:
+            return Response(obj_info)
+        else:
+            return Response('success')
 
     return reloaddir(request, repo, parent_dir)
 
@@ -1678,6 +1681,7 @@ class OpMoveView(APIView):
             return api_error(status.HTTP_400_BAD_REQUEST,
                              'The destination directory is the same as the source.')
 
+        obj_info_list = []
         parent_dir_utf8 = parent_dir.encode('utf-8')
         for file_name in file_names.split(':'):
             file_name = unquote(file_name.encode('utf-8'))
@@ -1693,7 +1697,14 @@ class OpMoveView(APIView):
                 return api_error(HTTP_520_OPERATION_FAILED,
                                  "Failed to move file.")
 
-        return reloaddir_if_necessary (request, repo, parent_dir_utf8)
+            obj_info = {}
+            obj_info['repo_id'] = dst_repo
+            obj_info['parent_dir'] = dst_dir
+            obj_info['obj_name'] = new_filename
+            obj_info_list.append(obj_info)
+
+        return reloaddir_if_necessary(request, repo, parent_dir_utf8,
+                obj_info_list)
 
 class OpCopyView(APIView):
     """
@@ -1733,6 +1744,7 @@ class OpCopyView(APIView):
             seafile_api.get_dir_id_by_path(dst_repo, dst_dir) is None:
             return api_error(status.HTTP_400_BAD_REQUEST, 'Path does not exist.')
 
+        obj_info_list = []
         parent_dir_utf8 = parent_dir.encode('utf-8')
         for file_name in file_names.split(':'):
             file_name = unquote(file_name.encode('utf-8'))
@@ -1747,7 +1759,14 @@ class OpCopyView(APIView):
                 return api_error(HTTP_520_OPERATION_FAILED,
                                  "Failed to copy file.")
 
-        return reloaddir_if_necessary(request, repo, parent_dir_utf8)
+            obj_info = {}
+            obj_info['repo_id'] = dst_repo
+            obj_info['parent_dir'] = dst_dir
+            obj_info['obj_name'] = new_filename
+            obj_info_list.append(obj_info)
+
+        return reloaddir_if_necessary(request, repo, parent_dir_utf8,
+                obj_info_list)
 
 
 class StarredFileView(APIView):
