@@ -1650,7 +1650,7 @@ class OpMoveView(APIView):
     """
     Move files.
     """
-    authentication_classes = (TokenAuthentication, )
+    authentication_classes = (TokenAuthentication, SessionAuthentication)
     permission_classes = (IsAuthenticated, )
 
     def post(self, request, repo_id, format=None):
@@ -1710,7 +1710,7 @@ class OpCopyView(APIView):
     """
     Copy files.
     """
-    authentication_classes = (TokenAuthentication, )
+    authentication_classes = (TokenAuthentication, SessionAuthentication)
     permission_classes = (IsAuthenticated, )
 
     def post(self, request, repo_id, format=None):
