@@ -1684,9 +1684,8 @@ class OpMoveView(APIView):
         obj_info_list = []
         parent_dir_utf8 = parent_dir.encode('utf-8')
         for file_name in file_names.split(':'):
-            file_name = unquote(file_name.encode('utf-8'))
-            new_filename = check_filename_with_rename_utf8(dst_repo, dst_dir,
-                                                           file_name)
+            new_filename = check_filename_with_rename(dst_repo,
+                    dst_dir, file_name)
             try:
                 seafile_api.move_file(repo_id, parent_dir_utf8, file_name,
                                       dst_repo, dst_dir, new_filename,
@@ -1747,9 +1746,8 @@ class OpCopyView(APIView):
         obj_info_list = []
         parent_dir_utf8 = parent_dir.encode('utf-8')
         for file_name in file_names.split(':'):
-            file_name = unquote(file_name.encode('utf-8'))
-            new_filename = check_filename_with_rename_utf8(dst_repo, dst_dir,
-                                                           file_name)
+            new_filename = check_filename_with_rename(dst_repo,
+                    dst_dir, file_name)
             try:
                 seafile_api.copy_file(repo_id, parent_dir_utf8, file_name,
                                       dst_repo, dst_dir, new_filename,
