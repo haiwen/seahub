@@ -88,7 +88,7 @@ def get_group_member_info(request, group_id, email, avatar_size=AVATAR_DEFAULT_S
 
     role = 'Member'
     group = ccnet_api.get_group(int(group_id))
-    is_admin = ccnet_api.check_group_staff(int(group_id), email)
+    is_admin = bool(ccnet_api.check_group_staff(int(group_id), email))
     if email == group.creator_name:
         role = 'Owner'
     elif is_admin:

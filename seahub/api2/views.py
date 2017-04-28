@@ -345,6 +345,7 @@ class Search(APIView):
                 file_id = seafile_api.get_file_id_by_path(e['repo_id'], path)
                 e['oid'] = file_id
                 repo = get_repo(e['repo_id'])
+                e['repo_name'] = repo.name
                 e['size'] = get_file_size(repo.store_id, repo.version, file_id)
             except SearpcError, err:
                 pass
@@ -1607,7 +1608,7 @@ def reloaddir(request, repo, parent_dir):
 
     return get_dir_entrys_by_id(request, repo, parent_dir, dir_id)
 
-def reloaddir_if_necessary (request, repo, parent_dir):
+def reloaddir_if_necessary(request, repo, parent_dir, obj_info=None):
 
     reload_dir = False
     s = request.GET.get('reloaddir', None)
@@ -1615,7 +1616,10 @@ def reloaddir_if_necessary (request, repo, parent_dir):
         reload_dir = True
 
     if not reload_dir:
-        return Response('success')
+        if obj_info:
+            return Response(obj_info)
+        else:
+            return Response('success')
 
     return reloaddir(request, repo, parent_dir)
 
@@ -1663,7 +1667,7 @@ class OpMoveView(APIView):
     """
     Move files.
     """
-    authentication_classes = (TokenAuthentication, )
+    authentication_classes = (TokenAuthentication, SessionAuthentication)
     permission_classes = (IsAuthenticated, )
 
     def post(self, request, repo_id, format=None):
@@ -1694,6 +1698,7 @@ class OpMoveView(APIView):
             return api_error(status.HTTP_400_BAD_REQUEST,
                              'The destination directory is the same as the source.')
 
+        obj_info_list = []
         parent_dir_utf8 = parent_dir.encode('utf-8')
         for file_name in file_names.split(':'):
             file_name = unquote(file_name.encode('utf-8'))
@@ -1709,13 +1714,20 @@ class OpMoveView(APIView):
                 return api_error(HTTP_520_OPERATION_FAILED,
                                  "Failed to move file.")
 
-        return reloaddir_if_necessary (request, repo, parent_dir_utf8)
+            obj_info = {}
+            obj_info['repo_id'] = dst_repo
+            obj_info['parent_dir'] = dst_dir
+            obj_info['obj_name'] = new_filename
+            obj_info_list.append(obj_info)
+
+        return reloaddir_if_necessary(request, repo, parent_dir_utf8,
+                obj_info_list)
 
 class OpCopyView(APIView):
     """
     Copy files.
     """
-    authentication_classes = (TokenAuthentication, )
+    authentication_classes = (TokenAuthentication, SessionAuthentication)
     permission_classes = (IsAuthenticated, )
 
     def post(self, request, repo_id, format=None):
@@ -1749,6 +1761,7 @@ class OpCopyView(APIView):
             seafile_api.get_dir_id_by_path(dst_repo, dst_dir) is None:
             return api_error(status.HTTP_400_BAD_REQUEST, 'Path does not exist.')
 
+        obj_info_list = []
         parent_dir_utf8 = parent_dir.encode('utf-8')
         for file_name in file_names.split(':'):
             file_name = unquote(file_name.encode('utf-8'))
@@ -1763,7 +1776,14 @@ class OpCopyView(APIView):
                 return api_error(HTTP_520_OPERATION_FAILED,
                                  "Failed to copy file.")
 
-        return reloaddir_if_necessary(request, repo, parent_dir_utf8)
+            obj_info = {}
+            obj_info['repo_id'] = dst_repo
+            obj_info['parent_dir'] = dst_dir
+            obj_info['obj_name'] = new_filename
+            obj_info_list.append(obj_info)
+
+        return reloaddir_if_necessary(request, repo, parent_dir_utf8,
+                obj_info_list)
 
 
 class StarredFileView(APIView):
@@ -2025,6 +2045,7 @@ class FileView(APIView):
         parent_dir = os.path.dirname(path)
         operation = request.POST.get('operation', '')
 
+        file_info = {}
         if operation.lower() == 'rename':
             if check_folder_permission(request, repo_id, parent_dir) != 'rw':
                 return api_error(status.HTTP_403_FORBIDDEN,
@@ -2108,7 +2129,10 @@ class FileView(APIView):
             if request.GET.get('reloaddir', '').lower() == 'true':
                 return reloaddir(request, dst_repo, dst_dir)
             else:
-                resp = Response('success', status=status.HTTP_301_MOVED_PERMANENTLY)
+                file_info['repo_id'] = dst_repo_id
+                file_info['parent_dir'] = dst_dir
+                file_info['obj_name'] = new_filename_utf8
+                resp = Response(file_info, status=status.HTTP_301_MOVED_PERMANENTLY)
                 uri = reverse('FileView', args=[dst_repo_id], request=request)
                 resp['Location'] = uri + '?p=' + quote(dst_dir_utf8) + quote(new_filename_utf8)
                 return resp
@@ -2158,7 +2182,10 @@ class FileView(APIView):
             if request.GET.get('reloaddir', '').lower() == 'true':
                 return reloaddir(request, dst_repo, dst_dir)
             else:
-                resp = Response('success', status=status.HTTP_200_OK)
+                file_info['repo_id'] = dst_repo_id
+                file_info['parent_dir'] = dst_dir
+                file_info['obj_name'] = new_filename_utf8
+                resp = Response(file_info, status=status.HTTP_200_OK)
                 uri = reverse('FileView', args=[dst_repo_id], request=request)
                 resp['Location'] = uri + '?p=' + quote(dst_dir_utf8) + quote(new_filename_utf8)
                 return resp
