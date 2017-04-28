@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2017-04-28 13:54+0800\n"
+"POT-Creation-Date: 2017-04-28 15:19+0800\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -4086,8 +4086,10 @@ msgstr ""
 #: seahub/templates/js/templates.html:349
 #: seahub/templates/js/templates.html:362
 #: seahub/templates/js/templates.html:399
+#: seahub/templates/js/templates.html:477
 #: seahub/templates/js/templates.html:500
-msgid "More operations"
+#: seahub/templates/js/templates.html:571
+msgid "More Operations"
 msgstr ""
 
 #: seahub/templates/js/templates.html:54 seahub/templates/js/templates.html:96
@@ -4224,15 +4226,6 @@ msgstr ""
 #: seahub/templates/js/templates.html:1227
 #: seahub/templates/js/templates.html:1247
 msgid "last update"
-msgstr ""
-
-#: seahub/templates/js/templates.html:349
-#: seahub/templates/js/templates.html:362
-#: seahub/templates/js/templates.html:399
-#: seahub/templates/js/templates.html:477
-#: seahub/templates/js/templates.html:500
-#: seahub/templates/js/templates.html:571
-msgid "More Operations"
 msgstr ""
 
 #: seahub/templates/js/templates.html:357
@@ -5109,10 +5102,6 @@ msgstr ""
 
 #: seahub/templates/repo_history.html:50
 msgid "None"
-msgstr ""
-
-#: seahub/templates/repo_history.html:60
-msgid "API"
 msgstr ""
 
 #: seahub/templates/repo_history.html:66
