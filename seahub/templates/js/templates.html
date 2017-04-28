@@ -49,7 +49,7 @@
             <a href="#" class="sf2-icon-share sf2-x repo-share-btn op-icon vh" title="{% trans "Share" %}" aria-label="{% trans "Share" %}"></a>
             <a href="#" class="sf2-icon-delete sf2-x repo-delete-btn op-icon vh" title="{% trans "Delete" %}" aria-label="{% trans "Delete" %}"></a>
             <div class="sf-dropdown sf-dropdown-inline">
-                <a href="#" class="sf2-icon-caret-down more-op-icon op-icon vh sf-dropdown-toggle" title="{% trans "More operations" %}" aria-label="{% trans "More operations" %}"></a>
+                <a href="#" class="sf2-icon-caret-down more-op-icon op-icon vh sf-dropdown-toggle" title="{% trans "More Operations" %}" aria-label="{% trans "More Operations" %}"></a>
                 <ul class="hidden-op repo-hidden-op hide sf-dropdown-menu">
                     <li><a class="op js-repo-rename" href="#">{% trans "Rename" %}</a></li>
                     <li><a class="op js-repo-transfer" href="#">{% trans "Transfer" %}</a></li>
@@ -89,7 +89,7 @@
     <td class="repo-op-td">
         <div class="op-container">
             <div class="sf-dropdown sf-dropdown-inline">
-                <a href="#" class="sf2-icon-caret-down more-op-icon op-icon sf-dropdown-toggle" title="{% trans "More operations" %}" aria-label="{% trans "More operations" %}"></a>
+                <a href="#" class="sf2-icon-caret-down more-op-icon op-icon sf-dropdown-toggle" title="{% trans "More Operations" %}" aria-label="{% trans "More Operations" %}"></a>
                 <ul class="hidden-op repo-hidden-op hide sf-dropdown-menu">
                     <li><a href="#" class="repo-share-btn op">{% trans "Share" %}</a></li>
                     <li><a href="#" class="repo-delete-btn op">{% trans "Delete" %}</a></li>
@@ -346,7 +346,7 @@
             </div>
             <% if (dirent.perm == 'rw') { %>
             <div class="sf-dropdown sf-dropdown-inline">
-                <a href="#" class="more-op-icon sf2-icon-caret-down op-icon vh sf-dropdown-toggle" title="{% trans "More operations" %}" aria-label="{% trans "More Operations" %}"></a>
+                <a href="#" class="more-op-icon sf2-icon-caret-down op-icon vh sf-dropdown-toggle" title="{% trans "More Operations" %}" aria-label="{% trans "More Operations" %}"></a>
                 <ul class="hidden-op dirent-hidden-op hide sf-dropdown-menu">
                     <li><a class="op rename" href="#">{% trans "Rename" %}</a></li>
                     <li><a class="op mv" href="#">{% trans "Move" %}</a></li>
@@ -359,7 +359,7 @@
             </div>
             <% } else if (dirent.perm == 'r' && !repo_encrypted) { %>
             <div class="sf-dropdown sf-dropdown-inline">
-                <a href="#" class="more-op-icon sf2-icon-caret-down op-icon vh sf-dropdown-toggle" title="{% trans "More operations" %}" aria-label="{% trans "More Operations" %}"></a>
+                <a href="#" class="more-op-icon sf2-icon-caret-down op-icon vh sf-dropdown-toggle" title="{% trans "More Operations" %}" aria-label="{% trans "More Operations" %}"></a>
                 <ul class="hidden-op dirent-hidden-op hide sf-dropdown-menu">
                     <li><a class="op cp" href="#">{% trans "Copy" %}</a></li>
                 </ul>
@@ -396,7 +396,7 @@
     <td class="dirent-op">
         <div class="op-container">
             <div class="sf-dropdown sf-dropdown-inline">
-                <a href="#" class="more-op-icon sf2-icon-caret-down op-icon sf-dropdown-toggle" title="{% trans "More operations" %}" aria-label="{% trans "More Operations" %}"></a>
+                <a href="#" class="more-op-icon sf2-icon-caret-down op-icon sf-dropdown-toggle" title="{% trans "More Operations" %}" aria-label="{% trans "More Operations" %}"></a>
                 <ul class="hidden-op dirent-hidden-op hide sf-dropdown-menu">
                     <li><a class="op download download-dir" href="#">{% trans "Download" %}</a></li>
                     <% if (!repo_encrypted && (can_generate_share_link || can_generate_upload_link || is_repo_owner)) { %>
@@ -497,7 +497,7 @@
             </div>
             <% } else if (dirent.perm == 'r' && !repo_encrypted) { %>
             <div class="sf-dropdown sf-dropdown-inline">
-                <a class="more-op-icon sf2-icon-caret-down op-icon vh sf-dropdown-toggle" title="{% trans "More operations" %}" aria-label="{% trans "More Operations" %}"></a>
+                <a class="more-op-icon sf2-icon-caret-down op-icon vh sf-dropdown-toggle" title="{% trans "More Operations" %}" aria-label="{% trans "More Operations" %}"></a>
                 <ul class="hidden-op dirent-hidden-op hide sf-dropdown-menu">
                     <li><a class="op cp" href="#">{% trans "Copy" %}</a></li>
                 </ul>
