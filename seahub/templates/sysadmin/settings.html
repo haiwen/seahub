@@ -21,7 +21,7 @@
 
     <div>
     {% with type="input" setting_display_name="FILE_SERVER_ROOT" setting_name="FILE_SERVER_ROOT" setting_val=config_dict.FILE_SERVER_ROOT %}
-        {% trans "The internal URL for downloading/uploading files. Users will not be able to download/upload files if this is not set correctly. If you config Seafile behind Nginx/Apache, it should be SERVICE_URL/seafhttp, like https://seafile.example.com/seafhttp . If you config Seafile without Nginx/Apache, leave it blank." as help_tip %}
+        {% trans "The internal URL for downloading/uploading files. Users will not be able to download/upload files if this is not set correctly. If you config Seafile behind Nginx/Apache, it should be SERVICE_URL/seafhttp, like https://seafile.example.com/seafhttp ." as help_tip %}
         {% include "snippets/web_settings_form.html" %}
     {% endwith %}
     </div>
