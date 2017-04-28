@@ -139,7 +139,7 @@ def _populate_user_quota_usage(user):
         if orgs:
             user.org = orgs[0]
             org_id = user.org.org_id
-            user.space_usage = seafserv_threaded_rpc.get_org_user_quota_usage(org_id, user.email)
+            user.space_usage = seafile_api.get_org_user_quota_usage(org_id, user.email)
             user.space_quota = seafile_api.get_org_user_quota(org_id, user.email)
         else:
             user.space_usage = seafile_api.get_user_self_usage(user.email)
@@ -514,7 +514,7 @@ def user_info(request, email):
     else:
         org_id = org[0].org_id
         org_name = org[0].org_name
-        space_usage = seafserv_threaded_rpc.get_org_user_quota_usage(org_id,
+        space_usage = seafile_api.get_org_user_quota_usage(org_id,
                                                                      email)
         space_quota = seafile_api.get_org_user_quota(org_id, email)
         owned_repos = seafile_api.get_org_owned_repo_list(org_id, email,
@@ -1310,10 +1310,8 @@ def sys_org_info_user(request, org_id):
         if user.email == request.user.email:
             user.is_self = True
         try:
-            user.self_usage =seafserv_threaded_rpc. \
-                    get_org_user_quota_usage(org_id, user.email)
-            user.quota = seafserv_threaded_rpc. \
-                    get_org_user_quota(org_id, user.email)
+            user.self_usage = seafile_api.get_org_user_quota_usage(org_id, user.email)
+            user.quota = seafile_api.get_org_user_quota(org_id, user.email)
         except SearpcError as e:
             logger.error(e)
             user.self_usage = -1
