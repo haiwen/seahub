@@ -137,7 +137,7 @@ def create_video_thumbnails(repo, file_id, path, size, thumbnail_file, file_size
     inner_path = gen_inner_file_get_url(token, os.path.basename(path))
     clip = VideoFileClip(inner_path)
     tmp_path = str(os.path.join(tempfile.gettempdir(), '%s.png' % file_id[:8]))
-    clip.save_frame(tmp_path)
+    clip.save_frame(tmp_path, t=5)  # save the frame in 5 second
     t2 = timeit.default_timer()
     logger.debug('Create thumbnail of [%s](size: %s) takes: %s' % (path, file_size, (t2 - t1)))
 
