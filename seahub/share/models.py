@@ -261,7 +261,7 @@ class UploadLinkShare(models.Model):
     username = LowerCaseCharField(max_length=255, db_index=True)
     repo_id = models.CharField(max_length=36, db_index=True)
     path = models.TextField()
-    token = models.CharField(max_length=10, unique=True)
+    token = models.CharField(max_length=100, unique=True)
     ctime = models.DateTimeField(default=datetime.datetime.now)
     view_cnt = models.IntegerField(default=0)
     password = models.CharField(max_length=128, null=True)

@@ -11,6 +11,22 @@
 /*!40111 SET @OLD_SQL_NOTES=@@SQL_NOTES, SQL_NOTES=0 */;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `admin_log_adminlog` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `email` varchar(254) NOT NULL,
+  `operation` varchar(255) NOT NULL,
+  `detail` longtext NOT NULL,
+  `datetime` datetime NOT NULL,
+  PRIMARY KEY (`id`),
+  KEY `admin_log_adminlog_0c83f57c` (`email`),
+  KEY `admin_log_adminlog_f7235a61` (`operation`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+/*!40000 ALTER TABLE `admin_log_adminlog` DISABLE KEYS */;
+/*!40000 ALTER TABLE `admin_log_adminlog` ENABLE KEYS */;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `api2_token` (
   `key` varchar(40) NOT NULL,
   `user` varchar(255) NOT NULL,
@@ -285,11 +301,11 @@ CREATE TABLE `django_content_type` (
   `model` varchar(100) NOT NULL,
   PRIMARY KEY (`id`),
   UNIQUE KEY `django_content_type_app_label_45f3b1d93ec8c61c_uniq` (`app_label`,`model`)
-) ENGINE=InnoDB AUTO_INCREMENT=56 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=55 DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 /*!40000 ALTER TABLE `django_content_type` DISABLE KEYS */;
-INSERT INTO `django_content_type` VALUES (12,'api2','token'),(13,'api2','tokenv2'),(14,'avatar','avatar'),(15,'avatar','groupavatar'),(17,'base','clientlogintoken'),(22,'base','commandslastcheck'),(21,'base','devicetoken'),(19,'base','filecomment'),(20,'base','filediscuss'),(16,'base','groupenabledmodule'),(23,'base','innerpubmsg'),(24,'base','innerpubmsgreply'),(18,'base','userenabledmodule'),(25,'base','userlastlogin'),(26,'base','userstarredfiles'),(4,'captcha','captchastore'),(27,'contacts','contact'),(1,'contenttypes','contenttype'),(5,'database','constance'),(34,'group','groupmessage'),(35,'group','messageattachment'),(36,'group','messagereply'),(33,'group','publicgroup'),(29,'institutions','institution'),(28,'institutions','institutionadmin'),(30,'invitations','invitation'),(39,'message','usermessage'),(37,'message','usermsgattachment'),(38,'message','usermsglastcheck'),(40,'notifications','notification'),(41,'notifications','usernotification'),(42,'options','useroptions'),(51,'organizations','orgmemberquota'),(6,'post_office','attachment'),(8,'post_office','email'),(7,'post_office','emailtemplate'),(9,'post_office','log'),(44,'profile','detailedprofile'),(43,'profile','profile'),(3,'registration','registrationprofile'),(2,'sessions','session'),(48,'share','anonymousshare'),(47,'share','fileshare'),(49,'share','orgfileshare'),(45,'share','privatefiledirshare'),(46,'share','uploadlinkshare'),(50,'sysadmin_extra','userloginlog'),(10,'termsandconditions','termsandconditions'),(11,'termsandconditions','usertermsandconditions'),(52,'two_factor','phonedevice'),(55,'two_factor','staticdevice'),(53,'two_factor','statictoken'),(54,'two_factor','totpdevice'),(32,'wiki','groupwiki'),(31,'wiki','personalwiki');
+INSERT INTO `django_content_type` VALUES (48,'admin_log','adminlog'),(12,'api2','token'),(13,'api2','tokenv2'),(14,'avatar','avatar'),(15,'avatar','groupavatar'),(17,'base','clientlogintoken'),(22,'base','commandslastcheck'),(21,'base','devicetoken'),(19,'base','filecomment'),(20,'base','filediscuss'),(16,'base','groupenabledmodule'),(23,'base','innerpubmsg'),(24,'base','innerpubmsgreply'),(18,'base','userenabledmodule'),(25,'base','userlastlogin'),(26,'base','userstarredfiles'),(4,'captcha','captchastore'),(27,'contacts','contact'),(1,'contenttypes','contenttype'),(5,'database','constance'),(35,'group','groupmessage'),(36,'group','messageattachment'),(37,'group','messagereply'),(34,'group','publicgroup'),(29,'institutions','institution'),(28,'institutions','institutionadmin'),(30,'institutions','institutionquota'),(31,'invitations','invitation'),(38,'notifications','notification'),(39,'notifications','usernotification'),(40,'options','useroptions'),(50,'organizations','orgmemberquota'),(6,'post_office','attachment'),(8,'post_office','email'),(7,'post_office','emailtemplate'),(9,'post_office','log'),(42,'profile','detailedprofile'),(41,'profile','profile'),(3,'registration','registrationprofile'),(2,'sessions','session'),(46,'share','anonymousshare'),(45,'share','fileshare'),(47,'share','orgfileshare'),(43,'share','privatefiledirshare'),(44,'share','uploadlinkshare'),(49,'sysadmin_extra','userloginlog'),(10,'termsandconditions','termsandconditions'),(11,'termsandconditions','usertermsandconditions'),(51,'two_factor','phonedevice'),(54,'two_factor','staticdevice'),(52,'two_factor','statictoken'),(53,'two_factor','totpdevice'),(33,'wiki','groupwiki'),(32,'wiki','personalwiki');
 /*!40000 ALTER TABLE `django_content_type` ENABLE KEYS */;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!40101 SET character_set_client = utf8 */;
@@ -299,11 +315,11 @@ CREATE TABLE `django_migrations` (
   `name` varchar(255) NOT NULL,
   `applied` datetime NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=16 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=18 DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 /*!40000 ALTER TABLE `django_migrations` DISABLE KEYS */;
-INSERT INTO `django_migrations` VALUES (1,'captcha','0001_initial','2016-08-02 14:48:00.596152'),(2,'contenttypes','0001_initial','2016-08-02 14:48:00.797303'),(3,'contenttypes','0002_remove_content_type_name','2016-08-02 14:48:00.879450'),(4,'database','0001_initial','2016-08-02 14:48:00.902084'),(5,'institutions','0001_initial','2016-08-02 14:48:01.021340'),(6,'invitations','0001_initial','2016-08-02 14:48:01.068479'),(7,'invitations','0002_invitation_invite_type','2016-08-02 14:48:01.105755'),(8,'invitations','0003_auto_20160510_1703','2016-08-02 14:48:01.163442'),(9,'invitations','0004_auto_20160629_1610','2016-08-02 14:48:01.265499'),(10,'invitations','0005_auto_20160629_1614','2016-08-02 14:48:01.290426'),(11,'post_office','0001_initial','2016-08-02 14:48:01.727406'),(12,'post_office','0002_add_i18n_and_backend_alias','2016-08-02 14:48:02.927550'),(13,'sessions','0001_initial','2016-08-02 14:48:02.976884'),(14,'termsandconditions','0001_initial','2016-08-02 14:48:03.107817'),(15,'two_factor','0001_initial','2016-08-02 14:48:03.249115');
+INSERT INTO `django_migrations` VALUES (1,'admin_log','0001_initial','2017-04-28 08:59:43.344829'),(2,'captcha','0001_initial','2017-04-28 08:59:43.391050'),(3,'contenttypes','0001_initial','2017-04-28 08:59:43.455216'),(4,'contenttypes','0002_remove_content_type_name','2017-04-28 08:59:43.574756'),(5,'database','0001_initial','2017-04-28 08:59:43.606652'),(6,'institutions','0001_initial','2017-04-28 08:59:43.708428'),(7,'institutions','0002_institutionquota','2017-04-28 08:59:43.775756'),(8,'invitations','0001_initial','2017-04-28 08:59:43.984567'),(9,'invitations','0002_invitation_invite_type','2017-04-28 08:59:44.208796'),(10,'invitations','0003_auto_20160510_1703','2017-04-28 08:59:44.276843'),(11,'invitations','0004_auto_20160629_1610','2017-04-28 08:59:44.379998'),(12,'invitations','0005_auto_20160629_1614','2017-04-28 08:59:44.400270'),(13,'post_office','0001_initial','2017-04-28 08:59:44.791069'),(14,'post_office','0002_add_i18n_and_backend_alias','2017-04-28 08:59:45.499079'),(15,'sessions','0001_initial','2017-04-28 08:59:45.707769'),(16,'termsandconditions','0001_initial','2017-04-28 08:59:45.887480'),(17,'two_factor','0001_initial','2017-04-28 08:59:46.076000');
 /*!40000 ALTER TABLE `django_migrations` ENABLE KEYS */;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!40101 SET character_set_client = utf8 */;
@@ -324,7 +340,7 @@ CREATE TABLE `group_groupmessage` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `group_id` int(11) NOT NULL,
   `from_email` varchar(255) NOT NULL,
-  `message` varchar(2048) NOT NULL,
+  `message` longtext NOT NULL,
   `timestamp` datetime NOT NULL,
   PRIMARY KEY (`id`),
   KEY `group_groupmessage_0e939a4f` (`group_id`)
@@ -356,7 +372,7 @@ CREATE TABLE `group_messagereply` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `reply_to_id` int(11) NOT NULL,
   `from_email` varchar(255) NOT NULL,
-  `message` varchar(2048) NOT NULL,
+  `message` longtext NOT NULL,
   `timestamp` datetime NOT NULL,
   PRIMARY KEY (`id`),
   KEY `group_mess_reply_to_id_23113ea180894951_fk_group_groupmessage_id` (`reply_to_id`),
@@ -406,6 +422,20 @@ CREATE TABLE `institutions_institutionadmin` (
 /*!40000 ALTER TABLE `institutions_institutionadmin` ENABLE KEYS */;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `institutions_institutionquota` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `quota` bigint(20) NOT NULL,
+  `institution_id` int(11) NOT NULL,
+  PRIMARY KEY (`id`),
+  KEY `i_institution_id_2ca7c89373390e2c_fk_institutions_institution_id` (`institution_id`),
+  CONSTRAINT `i_institution_id_2ca7c89373390e2c_fk_institutions_institution_id` FOREIGN KEY (`institution_id`) REFERENCES `institutions_institution` (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+/*!40000 ALTER TABLE `institutions_institutionquota` DISABLE KEYS */;
+/*!40000 ALTER TABLE `institutions_institutionquota` ENABLE KEYS */;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `invitations_invitation` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `token` varchar(40) NOT NULL,
@@ -423,52 +453,6 @@ CREATE TABLE `invitations_invitation` (
 
 /*!40000 ALTER TABLE `invitations_invitation` DISABLE KEYS */;
 /*!40000 ALTER TABLE `invitations_invitation` ENABLE KEYS */;
-/*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
-CREATE TABLE `message_usermessage` (
-  `message_id` int(11) NOT NULL AUTO_INCREMENT,
-  `message` varchar(512) NOT NULL,
-  `from_email` varchar(255) NOT NULL,
-  `to_email` varchar(255) NOT NULL,
-  `timestamp` datetime NOT NULL,
-  `ifread` tinyint(1) NOT NULL,
-  `sender_deleted_at` datetime DEFAULT NULL,
-  `recipient_deleted_at` datetime DEFAULT NULL,
-  PRIMARY KEY (`message_id`),
-  KEY `message_usermessage_f50bd8c4` (`from_email`),
-  KEY `message_usermessage_acc047cf` (`to_email`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
-/*!40101 SET character_set_client = @saved_cs_client */;
-
-/*!40000 ALTER TABLE `message_usermessage` DISABLE KEYS */;
-/*!40000 ALTER TABLE `message_usermessage` ENABLE KEYS */;
-/*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
-CREATE TABLE `message_usermsgattachment` (
-  `id` int(11) NOT NULL AUTO_INCREMENT,
-  `user_msg_id` int(11) NOT NULL,
-  `priv_file_dir_share_id` int(11) DEFAULT NULL,
-  PRIMARY KEY (`id`),
-  KEY `m_user_msg_id_3f10b9ac43610631_fk_message_usermessage_message_id` (`user_msg_id`),
-  KEY `D0bceb1017884f579a81b2fab45df4e7` (`priv_file_dir_share_id`),
-  CONSTRAINT `D0bceb1017884f579a81b2fab45df4e7` FOREIGN KEY (`priv_file_dir_share_id`) REFERENCES `share_privatefiledirshare` (`id`),
-  CONSTRAINT `m_user_msg_id_3f10b9ac43610631_fk_message_usermessage_message_id` FOREIGN KEY (`user_msg_id`) REFERENCES `message_usermessage` (`message_id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
-/*!40101 SET character_set_client = @saved_cs_client */;
-
-/*!40000 ALTER TABLE `message_usermsgattachment` DISABLE KEYS */;
-/*!40000 ALTER TABLE `message_usermsgattachment` ENABLE KEYS */;
-/*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
-CREATE TABLE `message_usermsglastcheck` (
-  `id` int(11) NOT NULL AUTO_INCREMENT,
-  `check_time` datetime NOT NULL,
-  PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
-/*!40101 SET character_set_client = @saved_cs_client */;
-
-/*!40000 ALTER TABLE `message_usermsglastcheck` DISABLE KEYS */;
-/*!40000 ALTER TABLE `message_usermsglastcheck` ENABLE KEYS */;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `notifications_notification` (
@@ -693,7 +677,7 @@ CREATE TABLE `share_fileshare` (
   `username` varchar(255) NOT NULL,
   `repo_id` varchar(36) NOT NULL,
   `path` longtext NOT NULL,
-  `token` varchar(10) NOT NULL,
+  `token` varchar(100) NOT NULL,
   `ctime` datetime NOT NULL,
   `view_cnt` int(11) NOT NULL,
   `s_type` varchar(2) NOT NULL,
@@ -752,7 +736,7 @@ CREATE TABLE `share_uploadlinkshare` (
   `username` varchar(255) NOT NULL,
   `repo_id` varchar(36) NOT NULL,
   `path` longtext NOT NULL,
-  `token` varchar(10) NOT NULL,
+  `token` varchar(100) NOT NULL,
   `ctime` datetime NOT NULL,
   `view_cnt` int(11) NOT NULL,
   `password` varchar(128) DEFAULT NULL,
