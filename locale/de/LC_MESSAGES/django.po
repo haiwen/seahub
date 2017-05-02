@@ -65,8 +65,8 @@ msgstr ""
 "Project-Id-Version: seahub\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2017-04-28 16:23+0800\n"
-"PO-Revision-Date: 2017-04-28 08:23+0000\n"
-"Last-Translator: zheng xie <xiez1989@gmail.com>\n"
+"PO-Revision-Date: 2017-04-28 14:41+0000\n"
+"Last-Translator: Andreas Vollmer | HU Berlin <andreas.vollmer@cms.hu-berlin.de>\n"
 "Language-Team: German (http://www.transifex.com/haiwen/seahub/language/de/)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -4280,7 +4280,7 @@ msgstr "Aktionen"
 #: seahub/templates/js/templates.html:1225
 #: seahub/templates/js/templates.html:1245
 msgid "Sort:"
-msgstr ""
+msgstr "Sortieren:"
 
 #: seahub/templates/js/templates.html:314
 #: seahub/templates/js/templates.html:1227
@@ -5518,7 +5518,7 @@ msgstr "Hinweis: Einstellungen per Weboberfläche werden in einer Datenbanktabel
 msgid ""
 "The URL of the server, like https://seafile.example.com or "
 "http://192.168.1.2:8000"
-msgstr ""
+msgstr "URL des Servers, z.B. https://seafile.example.com oder http://192.168.1.2:8000"
 
 #: seahub/templates/sysadmin/settings.html:24
 msgid ""
@@ -5526,146 +5526,146 @@ msgid ""
 "download/upload files if this is not set correctly. If you config Seafile "
 "behind Nginx/Apache, it should be SERVICE_URL/seafhttp, like "
 "https://seafile.example.com/seafhttp ."
-msgstr ""
+msgstr "Interne URL für das Hoch- und Herunterladen von Dateien. Die URL muss korrekt sein, sonst können Nutzerinnen und Nutzer keine Dateien hoch- oder herunterladen. Wenn Sie Seafile hinter Nginx/Apache konfigurieren, sollte es nach diesem Muster sein: SERVICE_URL/seafhttp, z.B. https://seafile.example.com/seafhttp"
 
 #: seahub/templates/sysadmin/settings.html:33
 msgid "allow new registrations"
-msgstr ""
+msgstr "Neue Registrierungen zulassen"
 
 #: seahub/templates/sysadmin/settings.html:34
 msgid ""
 "Allow new user registrations. Uncheck this to prevent anyone from creating a"
 " new account."
-msgstr ""
+msgstr "Neue Registrierungen zulassen. Entfernen Sie den Haken, um zu vermeiden, dass sich jemand ein neues Benutzerkonto anlegt."
 
 #: seahub/templates/sysadmin/settings.html:39
 msgid "activate after registration"
-msgstr ""
+msgstr "Nach der Registrierung aktivieren"
 
 #: seahub/templates/sysadmin/settings.html:40
 msgid ""
 "Activate user immediately after registration. If unchecked, an user need to "
 "be activated by administrator or via activation email"
-msgstr ""
+msgstr "Benutzerkonten sofort nach einer Registrierung aktivieren. Wenn kein Haken gesetzt ist, müssen neuen Benutzer/innen von der Administration oder per Bestätigungs-E-Mail aktiviert werden."
 
 #: seahub/templates/sysadmin/settings.html:45
 msgid "send activation email"
-msgstr ""
+msgstr "Bestätigungs-E-Mail schicken"
 
 #: seahub/templates/sysadmin/settings.html:46
 msgid "Send activation Email after user registration."
-msgstr ""
+msgstr "Bestätigungs-E-Mail an neue Nutzer/innen nach Registrierung schicken."
 
 #: seahub/templates/sysadmin/settings.html:51
 msgid "keep sign in"
-msgstr ""
+msgstr "Angemeldet bleiben"
 
 #: seahub/templates/sysadmin/settings.html:52
 msgid "Number of days that keep user sign in."
-msgstr ""
+msgstr "Anzahl der Tage, in denen man angemeldet bleibt."
 
 #: seahub/templates/sysadmin/settings.html:57
 msgid "The maximum number of failed login attempts before showing CAPTCHA."
-msgstr ""
+msgstr "Grenzwert von fehlgeschlagenen Anmeldeversuchen, nach dem ein CAPTCHA angezeigt wird."
 
 #: seahub/templates/sysadmin/settings.html:62
 msgid "Freeze user account when failed login attempts exceed limit."
-msgstr ""
+msgstr "Benutzerkonto sperren, wenn die Anmeldeversuche das Limit überschreiten"
 
 #: seahub/templates/sysadmin/settings.html:72
 msgid "strong password"
-msgstr ""
+msgstr "Starkes Passwort"
 
 #: seahub/templates/sysadmin/settings.html:73
 msgid "Force user to use a strong password when sign up or change password."
-msgstr ""
+msgstr "Starke Passwörter bei Registrierung oder Änderung verlangen."
 
 #: seahub/templates/sysadmin/settings.html:78
 msgid "force password change"
-msgstr ""
+msgstr "Passwortänderung erzwingen"
 
 #: seahub/templates/sysadmin/settings.html:79
 msgid ""
 "Force user to change password when account is newly added or reset by admin"
-msgstr ""
+msgstr "Passwortänderung erzwingen, wenn ein Benutzerkonto von der Administration erzeugt oder zurückgesetzt wurde"
 
 #: seahub/templates/sysadmin/settings.html:84
 msgid "password minimum length"
-msgstr ""
+msgstr "Mindestlänge von Passwörtern"
 
 #: seahub/templates/sysadmin/settings.html:85
 msgid "The least number of characters an account password should include."
-msgstr ""
+msgstr "Mindestzahl von Zeichen für Passwörter von Benutzerkonten "
 
 #: seahub/templates/sysadmin/settings.html:90
 msgid "password strength level"
-msgstr ""
+msgstr "Niveau der Passwortstärke"
 
 #: seahub/templates/sysadmin/settings.html:91
 msgid ""
 "The level(1-4) of an account password's strength. For example, '3' means "
 "password must have at least 3 of the following: num, upper letter, lower "
 "letter and other symbols"
-msgstr ""
+msgstr "Das Niveau (1-4) der Stärke eines Passworts. '3' zum Beispiel bedeutet, mindestens 3 der folgenden Eigenschaften: Zahl, Großschreibung, Kleinschreibung, Sonderzeichen"
 
 #: seahub/templates/sysadmin/settings.html:98
 msgid "enable two factor authentication"
-msgstr ""
+msgstr "Zwei-Faktor-Authentifizierung aktivieren"
 
 #: seahub/templates/sysadmin/settings.html:99
 msgid "Enable two factor authentication"
-msgstr ""
+msgstr "Zwei-Faktor-Authentifizierung aktivieren"
 
 #: seahub/templates/sysadmin/settings.html:108
 msgid "library history"
-msgstr ""
+msgstr "Versionen einer Bibliothek"
 
 #: seahub/templates/sysadmin/settings.html:109
 msgid "Allow user to keep library history"
-msgstr ""
+msgstr "Benutzer/innen dürfen eine Versionsgeschichte ihrer Bibliotheken behalten"
 
 #: seahub/templates/sysadmin/settings.html:114
 msgid "encrypted library"
-msgstr ""
+msgstr "Verschlüsselte Bibliothek"
 
 #: seahub/templates/sysadmin/settings.html:115
 msgid "Allow user to create encrypted library"
-msgstr ""
+msgstr "Benutzer/innen dürfen Bibliotheken verschlüsseln"
 
 #: seahub/templates/sysadmin/settings.html:120
 msgid "library password minimum length"
-msgstr ""
+msgstr "Mindestlänge von Passwörtern für Bibliotheken"
 
 #: seahub/templates/sysadmin/settings.html:121
 msgid ""
 "The least number of characters an encrypted library password should include."
-msgstr ""
+msgstr "Mindestzahl von Zeichen für Passwörter von verschlüsselten Bibliotheken"
 
 #: seahub/templates/sysadmin/settings.html:128
 msgid "download/upload link password minimum length"
-msgstr ""
+msgstr "Mindestlänge von Passwörtern für Upload- und Download-Links"
 
 #: seahub/templates/sysadmin/settings.html:129
 msgid ""
 "The least number of characters a download/upload link password should "
 "include."
-msgstr ""
+msgstr "Mindestzahl von Zeichen für Upload- und Download-Links "
 
 #: seahub/templates/sysadmin/settings.html:135
 msgid ""
 "Allow user to add organization library. If unchecked, only system admin can "
 "add library."
-msgstr ""
+msgstr "Benutzer/innen dürfen eine Bibliothek für die Organisation anlegen. Wenn der Haken entfernt wird, kann nur die Administration entsprechende Bibliotheken hinzufügen."
 
 #: seahub/templates/sysadmin/settings.html:140
 msgid "Sync"
-msgstr ""
+msgstr "Synchronisieren"
 
 #: seahub/templates/sysadmin/settings.html:144
 msgid ""
 "If turn on, the desktop clients will not be able to sync a folder outside "
 "the default Seafile folder."
-msgstr ""
+msgstr "Wenn aktiviert, können die Desktop-Programme nur Ordner innerhalb des Seafile-Standardordners synchronisieren."
 
 #: seahub/templates/sysadmin/settings.html:197
 #: seahub/templates/sysadmin/settings.html:235 seahub/views/sysadmin.py:1210
@@ -5734,7 +5734,7 @@ msgstr "Anzahl der Mitglieder"
 
 #: seahub/templates/sysadmin/sys_inst_info_base.html:29
 msgid "Set storage limit"
-msgstr ""
+msgstr "Speicherlimit einstellen"
 
 #: seahub/templates/sysadmin/sys_inst_info_base.html:31
 #: seahub/templates/sysadmin/sys_org_info_base.html:36

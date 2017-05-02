@@ -16,8 +16,8 @@ msgstr ""
 "Project-Id-Version: seahub\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2017-04-28 16:23+0800\n"
-"PO-Revision-Date: 2017-04-28 08:23+0000\n"
-"Last-Translator: zheng xie <xiez1989@gmail.com>\n"
+"PO-Revision-Date: 2017-04-28 18:16+0000\n"
+"Last-Translator: Rodolfo Cossalter <rcoss@dm.uba.ar>\n"
 "Language-Team: Spanish (http://www.transifex.com/haiwen/seahub/language/es/)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -99,7 +99,7 @@ msgstr "Email %s es inválido."
 
 #: seahub/api2/endpoints/admin/users_batch.py:72
 msgid "must be an integer that is greater than or equal to 0."
-msgstr ""
+msgstr "debe ser un número entero mayor o igual que 0."
 
 #: seahub/api2/endpoints/copy_move_task.py:76 seahub/views/ajax.py:569
 msgid "Invalid destination path"
@@ -175,7 +175,7 @@ msgstr "Error en el desencriptado de la biblioteca"
 
 #: seahub/api2/endpoints/repo_set_password.py:97
 msgid "Wrong old password"
-msgstr ""
+msgstr "Contraseña anterior errónea"
 
 #: seahub/api2/endpoints/send_share_link_email.py:32
 #: seahub/api2/endpoints/send_upload_link_email.py:31
@@ -1259,7 +1259,7 @@ msgstr "Hola,"
 msgid ""
 "%(escaped_nickname)s invited you to join group %(grp_name)s on "
 "%(site_name)s: "
-msgstr ""
+msgstr "%(escaped_nickname)s te ha invitado a unirte al grupo  %(grp_name)s en %(site_name)s: "
 
 #: seahub/group/templates/group/group_base.html:10
 #: seahub/help/templates/help/base.html:7
@@ -2056,7 +2056,7 @@ msgstr "Especificar límite de espacio"
 
 #: seahub/institutions/templates/institutions/user_info.html:55
 msgid "Available quota:"
-msgstr ""
+msgstr "Cuota disponible:"
 
 #: seahub/institutions/templates/institutions/user_info.html:67
 #: seahub/templates/file_revisions.html:56
@@ -2140,7 +2140,7 @@ msgstr "Este usuario no ha creado ni se ha unido a ningún grupo"
 #: seahub/institutions/templates/institutions/user_info.html:151
 #: seahub/templates/sysadmin/sys_inst_info_base.html:56
 msgid "Space Quota can't be empty"
-msgstr ""
+msgstr "Cuota de espacio no puede estar vacía"
 
 #: seahub/institutions/templates/institutions/useradmin.html:16
 #: seahub/institutions/templates/institutions/useradmin_search.html:18
@@ -3285,11 +3285,11 @@ msgstr "La contraseña será almacenada en el servidor por 1 hora."
 
 #: seahub/templates/file_edit.html:142
 msgid "Choose a file"
-msgstr ""
+msgstr "Escoja un archivo"
 
 #: seahub/templates/file_edit.html:150
 msgid "Please choose a file."
-msgstr ""
+msgstr "Por favor escoja un archivo."
 
 #: seahub/templates/file_edit.html:158
 msgid "Draft Available"
@@ -3531,7 +3531,7 @@ msgstr "Diff"
 #: seahub/templates/file_revisions.html:114
 #, python-brace-format
 msgid "Successfully restored {filename}"
-msgstr ""
+msgstr "{filename} restaurado con éxito"
 
 #: seahub/templates/finish_payment.html:8
 msgid "Plan"
@@ -3754,7 +3754,7 @@ msgstr "Términos y Condiciones"
 #: seahub/templates/js/sysadmin-templates.html:851
 #: seahub/templates/sysadmin/base.html:78
 msgid "Admin Logs"
-msgstr ""
+msgstr "Registros de Admin"
 
 #: seahub/templates/js/sysadmin-templates.html:80
 msgid "Search libraries by name..."
@@ -4047,7 +4047,7 @@ msgstr "No hay miembros"
 
 #: seahub/templates/js/sysadmin-templates.html:858
 msgid "Operation"
-msgstr ""
+msgstr "Operación"
 
 #: seahub/templates/js/sysadmin-templates.html:859
 #: seahub/templates/view_file_markdown.html:11
@@ -4057,7 +4057,7 @@ msgstr "Detalles"
 
 #: seahub/templates/js/sysadmin-templates.html:871
 msgid "No Admin Logs"
-msgstr ""
+msgstr "No hay registros de Admin"
 
 #: seahub/templates/js/templates.html:4
 #: seahub/templates/js/templates.html:1038 seahub/templates/libraries.html:14
@@ -4170,11 +4170,11 @@ msgstr "Subir archivos"
 
 #: seahub/templates/js/templates.html:223
 msgid "Out of quota"
-msgstr ""
+msgstr "Cuota agotada"
 
 #: seahub/templates/js/templates.html:226
 msgid "New"
-msgstr ""
+msgstr "Nuevo"
 
 #: seahub/templates/js/templates.html:230
 msgid "New File"
@@ -4182,19 +4182,19 @@ msgstr "Nuevo archivo"
 
 #: seahub/templates/js/templates.html:233
 msgid "New Markdown File"
-msgstr ""
+msgstr "Nuevo Archivo Markdown"
 
 #: seahub/templates/js/templates.html:234
 msgid "New Excel File"
-msgstr ""
+msgstr "Nuevo Archivo Excel"
 
 #: seahub/templates/js/templates.html:235
 msgid "New PowerPoint File"
-msgstr ""
+msgstr "Nuevo Archivo PowerPoint"
 
 #: seahub/templates/js/templates.html:236
 msgid "New Word File"
-msgstr ""
+msgstr "Nuevo Archivo Word"
 
 #: seahub/templates/js/templates.html:249
 #: seahub/templates/view_shared_dir.html:31
@@ -4231,13 +4231,13 @@ msgstr "Acciones"
 #: seahub/templates/js/templates.html:1225
 #: seahub/templates/js/templates.html:1245
 msgid "Sort:"
-msgstr ""
+msgstr "Ordenar:"
 
 #: seahub/templates/js/templates.html:314
 #: seahub/templates/js/templates.html:1227
 #: seahub/templates/js/templates.html:1247
 msgid "last update"
-msgstr ""
+msgstr "última actualización"
 
 #: seahub/templates/js/templates.html:357
 #: seahub/templates/js/templates.html:413
@@ -5144,7 +5144,7 @@ msgstr "¿Estás seguro que deseas restaurar está biblioteca?"
 #: seahub/templates/repo_history_view.html:114
 #, python-brace-format
 msgid "Successfully restored {dirent_name}"
-msgstr ""
+msgstr "{dirent_name} restaurado con éxito"
 
 #: seahub/templates/share_access_validation.html:6
 msgid ""
@@ -5174,12 +5174,12 @@ msgstr "Guardar en:"
 msgid ""
 "%(escaped_nickname)s shared a %(file_shared_type)s <span style=\"font-"
 "weight:bold;\">%(file_shared_name)s</span> to you on %(site_name)s:"
-msgstr ""
+msgstr "%(escaped_nickname)s compartió un %(file_shared_type)s <span style=\"font-weight:bold;\">%(file_shared_name)s</span> contigo en %(site_name)s:"
 
 #: seahub/templates/shared_upload_link_email.html:11
 #, python-format
 msgid "%(escaped_nickname)s shared an upload link to you on %(site_name)s."
-msgstr ""
+msgstr "%(escaped_nickname)s compartió un enlace de subida contigo en %(site_name)s."
 
 #: seahub/templates/shared_upload_link_email.html:15
 msgid "You can go to the following page and upload your files:"
@@ -5469,7 +5469,7 @@ msgstr "Nota: las configuraciones via la interfaz web se guardan en una tabla de
 msgid ""
 "The URL of the server, like https://seafile.example.com or "
 "http://192.168.1.2:8000"
-msgstr ""
+msgstr "El URL del servidor, como https://seafile.example.com o http://192.168.1.2:8000"
 
 #: seahub/templates/sysadmin/settings.html:24
 msgid ""
@@ -5477,146 +5477,146 @@ msgid ""
 "download/upload files if this is not set correctly. If you config Seafile "
 "behind Nginx/Apache, it should be SERVICE_URL/seafhttp, like "
 "https://seafile.example.com/seafhttp ."
-msgstr ""
+msgstr "El URL interno para descargar/subir archivos. Los usuarios no podrán descargar/subir archivos si ésto no es correcto. Si configuras Seafile utilizando Nginx/Apache, debería ser SERVICE_URL/seafhttp, como https://seafile.example.com/seafhttp ."
 
 #: seahub/templates/sysadmin/settings.html:33
 msgid "allow new registrations"
-msgstr ""
+msgstr "permitir nuevos registros"
 
 #: seahub/templates/sysadmin/settings.html:34
 msgid ""
 "Allow new user registrations. Uncheck this to prevent anyone from creating a"
 " new account."
-msgstr ""
+msgstr "Permitir que nuevos usuarios se registren. Desmarcar ésto para que nadie pueda crear una nueva cuenta."
 
 #: seahub/templates/sysadmin/settings.html:39
 msgid "activate after registration"
-msgstr ""
+msgstr "activar después del registro"
 
 #: seahub/templates/sysadmin/settings.html:40
 msgid ""
 "Activate user immediately after registration. If unchecked, an user need to "
 "be activated by administrator or via activation email"
-msgstr ""
+msgstr "Activar el usuario inmediatamente después del registro. Si está desmarcado, el usuario necesita ser activado por un administrador o mediante un email de activación"
 
 #: seahub/templates/sysadmin/settings.html:45
 msgid "send activation email"
-msgstr ""
+msgstr "enviar email de activación"
 
 #: seahub/templates/sysadmin/settings.html:46
 msgid "Send activation Email after user registration."
-msgstr ""
+msgstr "Enviar email de activación después del registro del usuario."
 
 #: seahub/templates/sysadmin/settings.html:51
 msgid "keep sign in"
-msgstr ""
+msgstr "permanecer identificado"
 
 #: seahub/templates/sysadmin/settings.html:52
 msgid "Number of days that keep user sign in."
-msgstr ""
+msgstr "Número de días que el usuario permanece identificado"
 
 #: seahub/templates/sysadmin/settings.html:57
 msgid "The maximum number of failed login attempts before showing CAPTCHA."
-msgstr ""
+msgstr "El número máximo de intentos de acceso fallidos antes de mostrar el CAPTCHA."
 
 #: seahub/templates/sysadmin/settings.html:62
 msgid "Freeze user account when failed login attempts exceed limit."
-msgstr ""
+msgstr "Inmovilizar la cuenta del usuario cuando el número de intentos de acceso fallidos exceda el límite."
 
 #: seahub/templates/sysadmin/settings.html:72
 msgid "strong password"
-msgstr ""
+msgstr "contaseña segura"
 
 #: seahub/templates/sysadmin/settings.html:73
 msgid "Force user to use a strong password when sign up or change password."
-msgstr ""
+msgstr "Forzar a que el usuario utilice una contraseña segura al registrarse o al cambiar la contraseña."
 
 #: seahub/templates/sysadmin/settings.html:78
 msgid "force password change"
-msgstr ""
+msgstr "forzar cambio de contraseña"
 
 #: seahub/templates/sysadmin/settings.html:79
 msgid ""
 "Force user to change password when account is newly added or reset by admin"
-msgstr ""
+msgstr "Forzar a que el usuario cambie la contraseña cuando se crea la cuenta o reestablecida por un administrador"
 
 #: seahub/templates/sysadmin/settings.html:84
 msgid "password minimum length"
-msgstr ""
+msgstr "mímima longitud de contraseña"
 
 #: seahub/templates/sysadmin/settings.html:85
 msgid "The least number of characters an account password should include."
-msgstr ""
+msgstr "El mínimo número de caracteres que debería contener la contraseña de una cuenta."
 
 #: seahub/templates/sysadmin/settings.html:90
 msgid "password strength level"
-msgstr ""
+msgstr "nivel de seguridad de la contraseña"
 
 #: seahub/templates/sysadmin/settings.html:91
 msgid ""
 "The level(1-4) of an account password's strength. For example, '3' means "
 "password must have at least 3 of the following: num, upper letter, lower "
 "letter and other symbols"
-msgstr ""
+msgstr "El nivel (1-4) de seguridad de la contraseña de una cuenta. Por ejemplo, '3' significa que la contraseña debe tener por lo menos 3 de los siguientes: números, letras mayúsculas, letras minúsculas y otros símbolos"
 
 #: seahub/templates/sysadmin/settings.html:98
 msgid "enable two factor authentication"
-msgstr ""
+msgstr "habilitar autenticación de dos factores"
 
 #: seahub/templates/sysadmin/settings.html:99
 msgid "Enable two factor authentication"
-msgstr ""
+msgstr "Habilitar autenticación de dos factores"
 
 #: seahub/templates/sysadmin/settings.html:108
 msgid "library history"
-msgstr ""
+msgstr "historial de la biblioteca"
 
 #: seahub/templates/sysadmin/settings.html:109
 msgid "Allow user to keep library history"
-msgstr ""
+msgstr "Permitir al usuario mantener el historial de la biblioteca"
 
 #: seahub/templates/sysadmin/settings.html:114
 msgid "encrypted library"
-msgstr ""
+msgstr "biblioteca encriptada"
 
 #: seahub/templates/sysadmin/settings.html:115
 msgid "Allow user to create encrypted library"
-msgstr ""
+msgstr "Permitir al usuario crear una biblioteca encriptada"
 
 #: seahub/templates/sysadmin/settings.html:120
 msgid "library password minimum length"
-msgstr ""
+msgstr "mímima longitud de contraseña de biblioteca"
 
 #: seahub/templates/sysadmin/settings.html:121
 msgid ""
 "The least number of characters an encrypted library password should include."
-msgstr ""
+msgstr "El mínimo número de caracteres que debería contener la contraseña de una biblioteca encriptada."
 
 #: seahub/templates/sysadmin/settings.html:128
 msgid "download/upload link password minimum length"
-msgstr ""
+msgstr "mímima longitud de contraseña de un enlace de descarga/subida"
 
 #: seahub/templates/sysadmin/settings.html:129
 msgid ""
 "The least number of characters a download/upload link password should "
 "include."
-msgstr ""
+msgstr "El mínimo número de caracteres que debería contener la contraseña de un enlace de descarga/subida."
 
 #: seahub/templates/sysadmin/settings.html:135
 msgid ""
 "Allow user to add organization library. If unchecked, only system admin can "
 "add library."
-msgstr ""
+msgstr "Permitir al usuario crear una biblioteca de la organización. Si está desmarcado sólo un administrador puede hacerlo."
 
 #: seahub/templates/sysadmin/settings.html:140
 msgid "Sync"
-msgstr ""
+msgstr "Sincronizar"
 
 #: seahub/templates/sysadmin/settings.html:144
 msgid ""
 "If turn on, the desktop clients will not be able to sync a folder outside "
 "the default Seafile folder."
-msgstr ""
+msgstr "Si está activado el cliente de escritorio no podrá sincronizar una carpeta fuera de la carpeta Seafile preestablecida."
 
 #: seahub/templates/sysadmin/settings.html:197
 #: seahub/templates/sysadmin/settings.html:235 seahub/views/sysadmin.py:1210
@@ -5685,7 +5685,7 @@ msgstr "Número de miembros"
 
 #: seahub/templates/sysadmin/sys_inst_info_base.html:29
 msgid "Set storage limit"
-msgstr ""
+msgstr "Establecer el límite de almacenamiento"
 
 #: seahub/templates/sysadmin/sys_inst_info_base.html:31
 #: seahub/templates/sysadmin/sys_org_info_base.html:36
@@ -5959,14 +5959,14 @@ msgstr "LDAP (importado)"
 #: seahub/templates/sysadmin/sys_useradmin_admins.html:26
 #: seahub/templates/sysadmin/user_search.html:16
 msgid "Set quota"
-msgstr ""
+msgstr "Establecer cuota"
 
 #: seahub/templates/sysadmin/sys_user_admin_ldap_imported.html:27
 #: seahub/templates/sysadmin/sys_useradmin.html:32
 #: seahub/templates/sysadmin/sys_useradmin_admins.html:27
 #: seahub/templates/sysadmin/user_search.html:17
 msgid "Delete users"
-msgstr ""
+msgstr "Eliminar usuarios"
 
 #: seahub/templates/sysadmin/sys_user_admin_ldap_imported.html:37
 #: seahub/templates/sysadmin/sys_useradmin_ldap.html:25
@@ -6067,13 +6067,13 @@ msgstr "Tu cuanta %(username)s en %(site_name)s ha sido activada."
 msgid ""
 "%(escaped_nickname)s invited you to join organization \"%(org_name)s\" on "
 "%(site_name)s."
-msgstr ""
+msgstr "%(escaped_nickname)s te ha invitado a unirte a la organización \"%(org_name)s\" en %(site_name)s."
 
 #: seahub/templates/sysadmin/user_add_email.html:15
 #: seahub/templates/sysadmin/user_batch_add_email.html:12
 #, python-format
 msgid "%(escaped_nickname)s invited you to join %(site_name)s."
-msgstr ""
+msgstr "%(escaped_nickname)s te ha invitado a unirte a %(site_name)s."
 
 #: seahub/templates/sysadmin/user_add_email.html:20
 #: seahub/templates/sysadmin/user_batch_add_email.html:16
@@ -6112,22 +6112,22 @@ msgstr "¿Seguro que deseas revocar los privilegios de administración de %s ?"
 
 #: seahub/templates/sysadmin/useradmin_js.html:123
 msgid "Are you sure you want to delete the selected user(s) ?"
-msgstr ""
+msgstr "¿Seguro que deseas eliminar los usuarios selecionados?"
 
 #: seahub/templates/sysadmin/useradmin_js.html:150
 #, python-brace-format
 msgid "Successfully deleted {users}."
-msgstr ""
+msgstr "Eliminado con éxito {users}."
 
 #: seahub/templates/sysadmin/useradmin_js.html:233
 #, python-brace-format
 msgid "Successfully set quota for {users}."
-msgstr ""
+msgstr "Cuota para {users} establecida con  éxito."
 
 #: seahub/templates/sysadmin/useradmin_js.html:259
 #, python-brace-format
 msgid "Successfully set quota for {user}."
-msgstr ""
+msgstr "Cuota para {user} establecida con  éxito."
 
 #: seahub/templates/sysadmin/userinfo.html:40
 msgid "Organization"

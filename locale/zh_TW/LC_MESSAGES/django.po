@@ -12,8 +12,8 @@ msgstr ""
 "Project-Id-Version: seahub\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2017-04-28 16:23+0800\n"
-"PO-Revision-Date: 2017-04-28 08:23+0000\n"
-"Last-Translator: zheng xie <xiez1989@gmail.com>\n"
+"PO-Revision-Date: 2017-05-02 02:26+0000\n"
+"Last-Translator: aa bbb <lung375706226@gmail.com>\n"
 "Language-Team: Chinese (Taiwan) (http://www.transifex.com/haiwen/seahub/language/zh_TW/)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -95,7 +95,7 @@ msgstr "電子郵件 %s 含有無效字元"
 
 #: seahub/api2/endpoints/admin/users_batch.py:72
 msgid "must be an integer that is greater than or equal to 0."
-msgstr ""
+msgstr "必須是大於或等於 0 的整數。"
 
 #: seahub/api2/endpoints/copy_move_task.py:76 seahub/views/ajax.py:569
 msgid "Invalid destination path"
@@ -171,7 +171,7 @@ msgstr "解密資料庫出錯"
 
 #: seahub/api2/endpoints/repo_set_password.py:97
 msgid "Wrong old password"
-msgstr ""
+msgstr "舊密碼錯誤"
 
 #: seahub/api2/endpoints/send_share_link_email.py:32
 #: seahub/api2/endpoints/send_upload_link_email.py:31
@@ -1250,7 +1250,7 @@ msgstr "你好，"
 msgid ""
 "%(escaped_nickname)s invited you to join group %(grp_name)s on "
 "%(site_name)s: "
-msgstr ""
+msgstr "%(escaped_nickname)s 邀請你加入 %(grp_name)s上的群組 %(site_name)s："
 
 #: seahub/group/templates/group/group_base.html:10
 #: seahub/help/templates/help/base.html:7
@@ -2047,7 +2047,7 @@ msgstr "設置該用戶的存儲容量上限"
 
 #: seahub/institutions/templates/institutions/user_info.html:55
 msgid "Available quota:"
-msgstr ""
+msgstr "可用容量："
 
 #: seahub/institutions/templates/institutions/user_info.html:67
 #: seahub/templates/file_revisions.html:56
@@ -2131,7 +2131,7 @@ msgstr "此用戶沒有創建或加入群組"
 #: seahub/institutions/templates/institutions/user_info.html:151
 #: seahub/templates/sysadmin/sys_inst_info_base.html:56
 msgid "Space Quota can't be empty"
-msgstr ""
+msgstr "容量不能為空"
 
 #: seahub/institutions/templates/institutions/useradmin.html:16
 #: seahub/institutions/templates/institutions/useradmin_search.html:18
@@ -3274,11 +3274,11 @@ msgstr "密碼將在服務器上保存一小時。"
 
 #: seahub/templates/file_edit.html:142
 msgid "Choose a file"
-msgstr ""
+msgstr "選擇一個文件"
 
 #: seahub/templates/file_edit.html:150
 msgid "Please choose a file."
-msgstr ""
+msgstr "請選擇一個文件。"
 
 #: seahub/templates/file_edit.html:158
 msgid "Draft Available"
@@ -3520,7 +3520,7 @@ msgstr "差異"
 #: seahub/templates/file_revisions.html:114
 #, python-brace-format
 msgid "Successfully restored {filename}"
-msgstr ""
+msgstr "成功還原 {filename}"
 
 #: seahub/templates/finish_payment.html:8
 msgid "Plan"
@@ -3743,7 +3743,7 @@ msgstr "軟件使用條款"
 #: seahub/templates/js/sysadmin-templates.html:851
 #: seahub/templates/sysadmin/base.html:78
 msgid "Admin Logs"
-msgstr ""
+msgstr "管理員日誌"
 
 #: seahub/templates/js/sysadmin-templates.html:80
 msgid "Search libraries by name..."
@@ -4036,7 +4036,7 @@ msgstr "暫無成員"
 
 #: seahub/templates/js/sysadmin-templates.html:858
 msgid "Operation"
-msgstr ""
+msgstr "操作"
 
 #: seahub/templates/js/sysadmin-templates.html:859
 #: seahub/templates/view_file_markdown.html:11
@@ -4046,7 +4046,7 @@ msgstr "修改內容"
 
 #: seahub/templates/js/sysadmin-templates.html:871
 msgid "No Admin Logs"
-msgstr ""
+msgstr "沒有管理員日誌"
 
 #: seahub/templates/js/templates.html:4
 #: seahub/templates/js/templates.html:1038 seahub/templates/libraries.html:14
@@ -4159,11 +4159,11 @@ msgstr "上傳文件"
 
 #: seahub/templates/js/templates.html:223
 msgid "Out of quota"
-msgstr ""
+msgstr "超過空間上限"
 
 #: seahub/templates/js/templates.html:226
 msgid "New"
-msgstr ""
+msgstr "新建"
 
 #: seahub/templates/js/templates.html:230
 msgid "New File"
@@ -4171,19 +4171,19 @@ msgstr "新建文件"
 
 #: seahub/templates/js/templates.html:233
 msgid "New Markdown File"
-msgstr ""
+msgstr "新建Markdown文件"
 
 #: seahub/templates/js/templates.html:234
 msgid "New Excel File"
-msgstr ""
+msgstr "新建Excel文件"
 
 #: seahub/templates/js/templates.html:235
 msgid "New PowerPoint File"
-msgstr ""
+msgstr "新建PowerPoint文件"
 
 #: seahub/templates/js/templates.html:236
 msgid "New Word File"
-msgstr ""
+msgstr "新建Word文件"
 
 #: seahub/templates/js/templates.html:249
 #: seahub/templates/view_shared_dir.html:31
@@ -4220,13 +4220,13 @@ msgstr "操作"
 #: seahub/templates/js/templates.html:1225
 #: seahub/templates/js/templates.html:1245
 msgid "Sort:"
-msgstr ""
+msgstr "排序："
 
 #: seahub/templates/js/templates.html:314
 #: seahub/templates/js/templates.html:1227
 #: seahub/templates/js/templates.html:1247
 msgid "last update"
-msgstr ""
+msgstr "更新時間"
 
 #: seahub/templates/js/templates.html:357
 #: seahub/templates/js/templates.html:413
@@ -5133,7 +5133,7 @@ msgstr "確定要還原該資料庫？"
 #: seahub/templates/repo_history_view.html:114
 #, python-brace-format
 msgid "Successfully restored {dirent_name}"
-msgstr ""
+msgstr "成功還原 {dirent_name}"
 
 #: seahub/templates/share_access_validation.html:6
 msgid ""
@@ -5163,12 +5163,12 @@ msgstr "儲存到："
 msgid ""
 "%(escaped_nickname)s shared a %(file_shared_type)s <span style=\"font-"
 "weight:bold;\">%(file_shared_name)s</span> to you on %(site_name)s:"
-msgstr ""
+msgstr "%(escaped_nickname)s 在 %(site_name)s共享了 %(file_shared_type)s<span style=\"font-weight:bold;\">%(file_shared_name)s</span>  給你:"
 
 #: seahub/templates/shared_upload_link_email.html:11
 #, python-format
 msgid "%(escaped_nickname)s shared an upload link to you on %(site_name)s."
-msgstr ""
+msgstr "%(escaped_nickname)s 在  %(site_name)s 上共享了一個上傳鏈接給你。"
 
 #: seahub/templates/shared_upload_link_email.html:15
 msgid "You can go to the following page and upload your files:"
@@ -5458,7 +5458,7 @@ msgstr "注意：通過Web界面設置的選項會保存在數據庫(seahub-db /
 msgid ""
 "The URL of the server, like https://seafile.example.com or "
 "http://192.168.1.2:8000"
-msgstr ""
+msgstr "服務器URL，比如 https://seafile.example.com 或者http://192.168.1.2:8000"
 
 #: seahub/templates/sysadmin/settings.html:24
 msgid ""
@@ -5466,146 +5466,146 @@ msgid ""
 "download/upload files if this is not set correctly. If you config Seafile "
 "behind Nginx/Apache, it should be SERVICE_URL/seafhttp, like "
 "https://seafile.example.com/seafhttp ."
-msgstr ""
+msgstr "下載/上傳文件的內部URL。如果這個URL錯誤，用戶將不能下載/上傳文件。如果你配置了Nginx / Apache，這個URL的值是“SERVICE_URL / seafhttp”，比如:https://seafile.example.com/seafhttp 。"
 
 #: seahub/templates/sysadmin/settings.html:33
 msgid "allow new registrations"
-msgstr ""
+msgstr "允許用戶註冊"
 
 #: seahub/templates/sysadmin/settings.html:34
 msgid ""
 "Allow new user registrations. Uncheck this to prevent anyone from creating a"
 " new account."
-msgstr ""
+msgstr "允許用戶註冊。如果關閉此功能，將禁止任何人進行註冊。"
 
 #: seahub/templates/sysadmin/settings.html:39
 msgid "activate after registration"
-msgstr ""
+msgstr "註冊後激活"
 
 #: seahub/templates/sysadmin/settings.html:40
 msgid ""
 "Activate user immediately after registration. If unchecked, an user need to "
 "be activated by administrator or via activation email"
-msgstr ""
+msgstr "用戶註冊後立即激活用戶。如果關閉此功能，新註冊用戶需要通過管理員或者激活郵件來進行激活"
 
 #: seahub/templates/sysadmin/settings.html:45
 msgid "send activation email"
-msgstr ""
+msgstr "發送激活郵件"
 
 #: seahub/templates/sysadmin/settings.html:46
 msgid "Send activation Email after user registration."
-msgstr ""
+msgstr "用戶註冊後發送激活郵件。"
 
 #: seahub/templates/sysadmin/settings.html:51
 msgid "keep sign in"
-msgstr ""
+msgstr "保持登錄"
 
 #: seahub/templates/sysadmin/settings.html:52
 msgid "Number of days that keep user sign in."
-msgstr ""
+msgstr "保持登錄的日數。"
 
 #: seahub/templates/sysadmin/settings.html:57
 msgid "The maximum number of failed login attempts before showing CAPTCHA."
-msgstr ""
+msgstr "用戶登錄失敗幾次後顯示驗證碼。"
 
 #: seahub/templates/sysadmin/settings.html:62
 msgid "Freeze user account when failed login attempts exceed limit."
-msgstr ""
+msgstr "當用戶登錄失敗超過限制時，凍結用戶賬戶。"
 
 #: seahub/templates/sysadmin/settings.html:72
 msgid "strong password"
-msgstr ""
+msgstr "強密碼"
 
 #: seahub/templates/sysadmin/settings.html:73
 msgid "Force user to use a strong password when sign up or change password."
-msgstr ""
+msgstr "強制在新用戶註冊時或用戶修改密碼時使用強力密碼。"
 
 #: seahub/templates/sysadmin/settings.html:78
 msgid "force password change"
-msgstr ""
+msgstr "強制修改密碼"
 
 #: seahub/templates/sysadmin/settings.html:79
 msgid ""
 "Force user to change password when account is newly added or reset by admin"
-msgstr ""
+msgstr "強制新用戶或被管理員重置了密碼的用戶，在下次登錄時修改密碼"
 
 #: seahub/templates/sysadmin/settings.html:84
 msgid "password minimum length"
-msgstr ""
+msgstr "密碼最小長度"
 
 #: seahub/templates/sysadmin/settings.html:85
 msgid "The least number of characters an account password should include."
-msgstr ""
+msgstr "用戶賬戶的最小密碼長度。"
 
 #: seahub/templates/sysadmin/settings.html:90
 msgid "password strength level"
-msgstr ""
+msgstr "密碼強度等級"
 
 #: seahub/templates/sysadmin/settings.html:91
 msgid ""
 "The level(1-4) of an account password's strength. For example, '3' means "
 "password must have at least 3 of the following: num, upper letter, lower "
 "letter and other symbols"
-msgstr ""
+msgstr "用戶賬戶的密碼強度等級(1-4)。比如，如果設為“3”，則密碼必須包含數字，大寫字母小寫字母和其他符號這4種字符中的3種"
 
 #: seahub/templates/sysadmin/settings.html:98
 msgid "enable two factor authentication"
-msgstr ""
+msgstr "開啟兩步驗證"
 
 #: seahub/templates/sysadmin/settings.html:99
 msgid "Enable two factor authentication"
-msgstr ""
+msgstr "開啟兩步驗證"
 
 #: seahub/templates/sysadmin/settings.html:108
 msgid "library history"
-msgstr ""
+msgstr "資料庫歷史"
 
 #: seahub/templates/sysadmin/settings.html:109
 msgid "Allow user to keep library history"
-msgstr ""
+msgstr "允許用戶保留資料庫歷史。"
 
 #: seahub/templates/sysadmin/settings.html:114
 msgid "encrypted library"
-msgstr ""
+msgstr "加密資料庫"
 
 #: seahub/templates/sysadmin/settings.html:115
 msgid "Allow user to create encrypted library"
-msgstr ""
+msgstr "允許用戶建立加密資料庫"
 
 #: seahub/templates/sysadmin/settings.html:120
 msgid "library password minimum length"
-msgstr ""
+msgstr "資料庫最小密碼長度"
 
 #: seahub/templates/sysadmin/settings.html:121
 msgid ""
 "The least number of characters an encrypted library password should include."
-msgstr ""
+msgstr "加密資料庫的最小密碼長度。"
 
 #: seahub/templates/sysadmin/settings.html:128
 msgid "download/upload link password minimum length"
-msgstr ""
+msgstr "上傳/下載外鏈的最小密碼長度"
 
 #: seahub/templates/sysadmin/settings.html:129
 msgid ""
 "The least number of characters a download/upload link password should "
 "include."
-msgstr ""
+msgstr "加密上傳/下載外鏈的最小密碼長度。"
 
 #: seahub/templates/sysadmin/settings.html:135
 msgid ""
 "Allow user to add organization library. If unchecked, only system admin can "
 "add library."
-msgstr ""
+msgstr "允許用戶創建組織資料庫。如果關閉此功能，將只有系統管理員可以創建。"
 
 #: seahub/templates/sysadmin/settings.html:140
 msgid "Sync"
-msgstr ""
+msgstr "同步"
 
 #: seahub/templates/sysadmin/settings.html:144
 msgid ""
 "If turn on, the desktop clients will not be able to sync a folder outside "
 "the default Seafile folder."
-msgstr ""
+msgstr "如果啟用此功能，桌面客戶端將不能同步Seafile目錄外的文件夾。"
 
 #: seahub/templates/sysadmin/settings.html:197
 #: seahub/templates/sysadmin/settings.html:235 seahub/views/sysadmin.py:1210
@@ -5674,7 +5674,7 @@ msgstr "成員數量"
 
 #: seahub/templates/sysadmin/sys_inst_info_base.html:29
 msgid "Set storage limit"
-msgstr ""
+msgstr "設定容量限制"
 
 #: seahub/templates/sysadmin/sys_inst_info_base.html:31
 #: seahub/templates/sysadmin/sys_org_info_base.html:36
@@ -5948,14 +5948,14 @@ msgstr "LDAP (已導入)"
 #: seahub/templates/sysadmin/sys_useradmin_admins.html:26
 #: seahub/templates/sysadmin/user_search.html:16
 msgid "Set quota"
-msgstr ""
+msgstr "設定容量"
 
 #: seahub/templates/sysadmin/sys_user_admin_ldap_imported.html:27
 #: seahub/templates/sysadmin/sys_useradmin.html:32
 #: seahub/templates/sysadmin/sys_useradmin_admins.html:27
 #: seahub/templates/sysadmin/user_search.html:17
 msgid "Delete users"
-msgstr ""
+msgstr "刪除使用者"
 
 #: seahub/templates/sysadmin/sys_user_admin_ldap_imported.html:37
 #: seahub/templates/sysadmin/sys_useradmin_ldap.html:25
@@ -6056,13 +6056,13 @@ msgstr "你的%(site_name)s 帳戶%(username)s已被激活"
 msgid ""
 "%(escaped_nickname)s invited you to join organization \"%(org_name)s\" on "
 "%(site_name)s."
-msgstr ""
+msgstr "%(escaped_nickname)s 邀請你加入 %(site_name)s上的組織 %(org_name)s :"
 
 #: seahub/templates/sysadmin/user_add_email.html:15
 #: seahub/templates/sysadmin/user_batch_add_email.html:12
 #, python-format
 msgid "%(escaped_nickname)s invited you to join %(site_name)s."
-msgstr ""
+msgstr "%(escaped_nickname)s 邀請你加入 %(site_name)s 。"
 
 #: seahub/templates/sysadmin/user_add_email.html:20
 #: seahub/templates/sysadmin/user_batch_add_email.html:16
@@ -6101,22 +6101,22 @@ msgstr "是否取消%s的管理員權限？"
 
 #: seahub/templates/sysadmin/useradmin_js.html:123
 msgid "Are you sure you want to delete the selected user(s) ?"
-msgstr ""
+msgstr "確定要刪除選中的用戶嗎？"
 
 #: seahub/templates/sysadmin/useradmin_js.html:150
 #, python-brace-format
 msgid "Successfully deleted {users}."
-msgstr ""
+msgstr "成功刪除{users}。"
 
 #: seahub/templates/sysadmin/useradmin_js.html:233
 #, python-brace-format
 msgid "Successfully set quota for {users}."
-msgstr ""
+msgstr "成功為 {users} 設置容量。"
 
 #: seahub/templates/sysadmin/useradmin_js.html:259
 #, python-brace-format
 msgid "Successfully set quota for {user}."
-msgstr ""
+msgstr "成功為 {user} 設置容量。"
 
 #: seahub/templates/sysadmin/userinfo.html:40
 msgid "Organization"
