@@ -9,7 +9,8 @@ from selenium.webdriver.common.action_chains import ActionChains
 from selenium.webdriver.common.keys import Keys
 
 from seahub.base.accounts import User
-from seaserv import list_personal_repos_by_owner, remove_repo
+from seaserv import remove_repo
+from seaserv import seafile_api
 
 class BaseTest(LiveServerTestCase):
     
@@ -29,7 +30,7 @@ class BaseTest(LiveServerTestCase):
 
     def _teardown_new_user(self, username):
         # First delete all repos created by user
-        for e in list_personal_repos_by_owner(username):
+        for e in seafile_api.get_owned_repo_list(username):
             remove_repo(e.id)
         # Then remove user
         User.objects.get(email=username).delete()
