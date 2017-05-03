@@ -1333,12 +1333,38 @@
 </script>
 <script type="text/template" id="top-search-form-tmpl">
 <% if (search_repo_id) { %>
-    <input type="text" class="search-input" name="q" placeholder="{% if search_wiki %}{% trans "Search files in this wiki" %}{% else %}{% trans "Search files in this library" %}{% endif %}" value="{{ keyword }}" /> <input type="hidden" name="search_repo" value="<%= search_repo_id %>" />
+    <input type="text" autocomplete="off" class="search-input" name="q" placeholder="{% if search_wiki %}{% trans "Search files in this wiki" %}{% else %}{% trans "Search files in this library" %}{% endif %}" value="" /> <input type="hidden" name="search_repo" value="<%= search_repo_id %>" />
 <% } else { %>
-    <input type="text" class="search-input" name="q" placeholder="{% trans 'Search Files' %}" value="{{ keyword }}" />
+    <input type="text" autocomplete="off" class="search-input" name="q" placeholder="{% trans 'Search Files' %}" value="" />
 <% } %>
-<!--span class="icon-caret-down" title="{% trans "advanced" %}"></span--><button type="submit" class="search-submit"><span class="icon-search"></span></button>
+<!--span class="icon-caret-down" title="{% trans "advanced" %}"></span-->
+<span class="loading-icon" style="display:none;"></span>
+<button type="submit" class="search-submit"><span class="icon-search"></span></button>
+<div class="sf-popover hide" id="fast-search-results">
+    <div class="sf-popover-con"></div>
+</div>
 </script>
+<script type="text/template" id="top-fast-search-result-item-tmpl">
+<div class="search-results-item ovhd">
+    <div class="fleft search-results-file-icon-container">
+        <% if (is_dir) { %>
+            <img src="<%= icon_url %>" alt="{% trans "Icon" %}" width="36" height="36" />
+        <% } else { %>
+            <% if (thumbnail_url) { %>
+                <img src="<%= thumbnail_url %>" alt="{% trans "Icon" %}" class="search-results-file-icon" />
+            <% } else { %>
+                <img src="<%= icon_url %>" alt="{% trans "Icon" %}" width="36" height="36" />
+            <% } %>
+        <% } %>
+    </div>
+    <div class="main-con">
+        <a href="<%= item_view_url %>" target="_blank" title="<%- name_title %>"><%- name %></a>
+        <br />
+        <a href="<%= parent_dir_url %>" target="_blank" class="parent-dir-link"><%- parent_dir_path %></a>
+    </div>
+</div>
+</script>
+
 <script type="text/template" id="group-item-tmpl">
     <h4 class="group-name ellipsis"><a href="#group/<%= id %>/" title="<%- name %>" class="a normal"><%- name %></a></h4>
     <% if (repos.length) { %>

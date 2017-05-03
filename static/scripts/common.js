@@ -161,6 +161,7 @@ define([
                 case 'devices': return siteRoot + 'api2/devices/';
                 case 'invitations': return siteRoot + 'api/v2.1/invitations/';
                 case 'invitation': return siteRoot + 'api/v2.1/invitations/' + options.token + '/';
+                case 'search': return siteRoot + 'api2/search/';
                 case 'search_user': return siteRoot + 'api2/search-user/';
                 case 'user_profile': return siteRoot + 'profile/' + options.username + '/';
                 case 'space_and_traffic': return siteRoot + 'ajax/space_and_traffic/';

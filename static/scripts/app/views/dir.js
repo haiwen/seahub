@@ -28,7 +28,6 @@ define([
             dir_op_bar_template: _.template($('#dir-op-bar-tmpl').html()),
             dirents_hd_template: _.template($('#dirents-hd-tmpl').html()),
             dirents_hd_mobile_template: _.template($('#dirents-hd-mobile-tmpl').html()),
-            top_search_form_template: _.template($('#top-search-form-tmpl').html()),
 
             newDirTemplate: _.template($("#add-new-dir-form-template").html()),
             newFileTemplate: _.template($("#add-new-file-form-template").html()),
@@ -132,9 +131,11 @@ define([
             // 'category' is sth. like url prefix
             // options: for rendering from group view, currently is { group_name: group_name }
             showDir: function(category, repo_id, path, options) {
-                $('#top-search-form').html(this.top_search_form_template({
-                    search_repo_id: repo_id
-                }));
+                if (app.ui.searchView) {
+                    app.ui.searchView.render({
+                        search_repo_id: repo_id
+                    });
+                }
 
                 this.contextOptions = options;
                 if (!this.attached) {
@@ -149,9 +150,11 @@ define([
             // public function
             // hide the folder view
             hide: function() {
-                $('#top-search-form').html(this.top_search_form_template({
-                    search_repo_id: ''
-                }));
+                if (app.ui.searchView) {
+                    app.ui.searchView.render({
+                        search_repo_id: ''
+                    });
+                }
 
                 this.$el.detach();
                 this.attached = false;

@@ -53,7 +53,7 @@ define([
 
         // set max-height for '.sf-popover-con'
         setConMaxHeight: function() {
-            this.$('.sf-popover-con').css({'max-height': $(window).height() - this.$el.offset().top - this.$('.sf-popover-hd').outerHeight(true) - 2}); // 2: top, bottom border width of $el
+            this.$('.sf-popover-con').css({'max-height': $(window).height() - this.$el.offset().top - this.$('.sf-popover-hd').outerHeight(true) - 2 - 10}); // 2: top, bottom border width of $el; 10: bottom gap
         },
 
         hide: function() {

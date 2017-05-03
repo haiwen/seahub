@@ -307,7 +307,7 @@ class RegDevice(APIView):
 class Search(APIView):
     """ Search all the repos
     """
-    authentication_classes = (TokenAuthentication, )
+    authentication_classes = (TokenAuthentication, SessionAuthentication)
     permission_classes = (IsAuthenticated,)
     throttle_classes = (UserRateThrottle, )
 
@@ -346,6 +346,7 @@ class Search(APIView):
                 e['oid'] = file_id
                 repo = get_repo(e['repo_id'])
                 e['repo_name'] = repo.name
+                e['repo_encrypted'] = repo.encrypted
                 e['size'] = get_file_size(repo.store_id, repo.version, file_id)
             except SearpcError, err:
                 pass

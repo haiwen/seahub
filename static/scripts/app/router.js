@@ -19,13 +19,14 @@ define([
     'app/views/share-admin-folders',
     'app/views/share-admin-share-links',
     'app/views/share-admin-upload-links',
+    'app/views/search',
     'app/views/notifications',
     'app/views/account'
 ], function($, Backbone, Common, Cookies, SideNavView, MyReposView,
     SharedReposView, GroupsView, GroupView, OrgView, DirView,
     StarredFileView, ActivitiesView, DevicesView, InvitationsView,
     ShareAdminReposView, ShareAdminFoldersView, ShareAdminShareLinksView,
-    ShareAdminUploadLinksView, NotificationsView, AccountView) {
+    ShareAdminUploadLinksView, SearchView, NotificationsView, AccountView) {
     "use strict";
 
     var Router = Backbone.Router.extend({
@@ -80,6 +81,9 @@ define([
             this.shareAdminShareLinksView = new ShareAdminShareLinksView();
             this.shareAdminUploadLinksView = new ShareAdminUploadLinksView();
 
+            if ($('#top-search-form').length) {
+                app.ui.searchView = this.searchView = new SearchView();
+            }
             app.ui.notificationsView = this.notificationsView = new NotificationsView();
             app.ui.accountView = this.accountView = new AccountView();
             app.pageOptions.sort_mode = Cookies.get('sort_mode') || 'name_up';
