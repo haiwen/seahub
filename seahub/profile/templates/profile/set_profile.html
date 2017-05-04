@@ -78,11 +78,13 @@
 <div class="setting-item" id="lang-setting">
     <h3>{% trans "Language Setting" %}</h3>
     <a href="#" id="lang-context" data-lang="{{ LANGUAGE_CODE }}">{{ LANGUAGE_CODE|language_name_local }} <span class="icon-caret-down"></span></a>
-    <ul id="lang-context-selector" class="hide">
-        {% for LANG in LANGUAGES %}
-        <li><a href="{% url 'i18n' %}?lang={{ LANG.0 }}">{{ LANG.1 }}</a></li>
-        {% endfor %}
-    </ul>
+    <div id="lang-context-selector" class="sf-popover hide" >
+        <ul class="sf-popover-con">
+            {% for LANG in LANGUAGES %}
+            <li><a href="{% url 'i18n' %}?lang={{ LANG.0 }}">{{ LANG.1 }}</a></li>
+            {% endfor %}
+        </ul>
+    </div>
 </div>
 
 {% if user.permissions.can_add_repo %}

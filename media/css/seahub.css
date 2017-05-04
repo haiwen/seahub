@@ -1907,13 +1907,13 @@ button.sf-dropdown-toggle:focus {
 }
 #lang-context-selector {
     position:absolute;
-    top:60px;
-    border:1px solid #bbb;
-    background:#fff;
-    padding:5px 0;
-    box-shadow: 0 2px 4px rgba(0,0,0,.2);
+    top:23px;
     white-space:nowrap;
-    z-index:10; /* for shared dir grid view */
+    width:auto;
+    min-width:200px;
+}
+#lang-context-selector .sf-popover-con {
+    padding:10px;
 }
 #lang-context-selector a {
     color:#000;
