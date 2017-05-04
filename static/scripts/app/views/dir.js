@@ -552,6 +552,7 @@ define([
 
             // Directory Operations
             events: {
+                'click #add-new li a': 'closeNewDropdown',
                 'click #add-new-dir': 'newDir',
                 'click #add-new-file': 'newCommonFile',
                 'click #add-new-md-file': 'newMdFile',
@@ -585,6 +586,10 @@ define([
             advancedUploadFolder: function() {
                 this.$('#advanced-upload-folder-input').trigger('click');
                 return false;
+            },
+
+            closeNewDropdown: function() {
+                this.new_dropdown.hide();
             },
 
             newDir: function() {
