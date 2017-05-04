@@ -297,7 +297,7 @@ def get_user_repos(username, org_id=None):
     If ``org_id`` is not None, get org repos that user can access.
     """
     if org_id is None:
-        owned_repos = seaserv.list_personal_repos_by_owner(username)
+        owned_repos = seafile_api.get_owned_repo_list(username)
         shared_repos = seafile_api.get_share_in_repo_list(username, -1, -1)
         groups_repos = []
         for group in seaserv.get_personal_groups_by_user(username):

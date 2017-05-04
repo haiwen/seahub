@@ -105,6 +105,16 @@ class DirSharedItemsTest(BaseTestCase):
         assert len(json_resp['success']) == 1
         assert json_resp['success'][0]['permission'] == 'r'
 
+        # test share failed when share the same item to the same user
+        resp = self.client.put(
+            '/api2/repos/%s/dir/shared_items/?p=/' % self.repo_id,
+            "share_type=user&username=%s" % self.admin.email,
+            'application/x-www-form-urlencoded',
+        )
+        self.assertEqual(200, resp.status_code)
+        json_resp = json.loads(resp.content)
+        assert 'has been shared to' in json_resp['failed'][0]['error_msg']
+
     def test_can_share_folder_to_users(self):
         self.login_as(self.user)
 
@@ -118,6 +128,17 @@ class DirSharedItemsTest(BaseTestCase):
         json_resp = json.loads(resp.content)
         assert len(json_resp['success']) == 1
         assert json_resp['success'][0]['permission'] == 'r'
+
+        # test share failed when share the same item to the same user
+        resp = self.client.put(
+            '/api2/repos/%s/dir/shared_items/?p=%s' % (self.repo.id,
+                                                       self.folder),
+            "share_type=user&username=%s" % self.admin.email,
+            'application/x-www-form-urlencoded',
+        )
+        self.assertEqual(200, resp.status_code)
+        json_resp = json.loads(resp.content)
+        assert 'has been shared to' in json_resp['failed'][0]['error_msg']
 
     def test_can_share_repo_to_groups(self):
         self.login_as(self.user)
@@ -136,6 +157,16 @@ class DirSharedItemsTest(BaseTestCase):
         assert len(json_resp['success']) == 2
         assert json_resp['success'][0]['permission'] == 'rw'
 
+        # test share failed when share the same item to the same group
+        resp = self.client.put(
+            '/api2/repos/%s/dir/shared_items/?p=/' % (self.repo.id),
+            "share_type=group&group_id=%d&group_id=%d&permission=rw" % (grp1.id, grp2.id),
+            'application/x-www-form-urlencoded',
+        )
+        self.assertEqual(200, resp.status_code)
+        json_resp = json.loads(resp.content)
+        assert 'has been shared to' in json_resp['failed'][0]['error_msg']
+
     def test_can_share_folder_to_groups(self):
         self.login_as(self.user)
 
@@ -153,6 +184,17 @@ class DirSharedItemsTest(BaseTestCase):
         json_resp = json.loads(resp.content)
         assert len(json_resp['success']) == 2
         assert json_resp['success'][0]['permission'] == 'rw'
+
+        # test share failed when share the same item to the same group
+        resp = self.client.put(
+            '/api2/repos/%s/dir/shared_items/?p=%s' % (self.repo.id,
+                                                       self.folder),
+            "share_type=group&group_id=%d&group_id=%d&permission=rw" % (grp1.id, grp2.id),
+            'application/x-www-form-urlencoded',
+        )
+        self.assertEqual(200, resp.status_code)
+        json_resp = json.loads(resp.content)
+        assert 'has been shared to' in json_resp['failed'][0]['error_msg']
 
     def test_share_with_invalid_email(self):
         self.login_as(self.user)
