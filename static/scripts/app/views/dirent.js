@@ -156,18 +156,33 @@ define([
         },
 
         itemDragover: function(e) {
+            var ev = e.originalEvent;
+            ev.preventDefault();
+
+            // check if the dragged item is a dir entry
+            if (ev.dataTransfer.types.length &&
+                ev.dataTransfer.types.indexOf('text/cid') == -1) {
+                return;
+            }
+
             if (this.model.get('perm') != 'rw') {
                 return false;
             }
             if (!this.model.get('is_dir')) {
                 return false;
             }
-            var ev = e.originalEvent;
-            ev.preventDefault();
             ev.dataTransfer.dropEffect = 'move';
         },
 
         itemDragenter: function(e) {
+            var ev = e.originalEvent;
+            ev.preventDefault();
+
+            if (ev.dataTransfer.types.length &&
+                ev.dataTransfer.types.indexOf('text/cid') == -1) {
+                return;
+            }
+
             if (this.model.get('perm') != 'rw') {
                 return false;
             }
@@ -178,6 +193,14 @@ define([
         },
 
         itemDragleave: function(e) {
+            var ev = e.originalEvent;
+            ev.preventDefault();
+
+            if (ev.dataTransfer.types.length &&
+                ev.dataTransfer.types.indexOf('text/cid') == -1) {
+                return;
+            }
+
             if (this.model.get('perm') != 'rw') {
                 return false;
             }
@@ -188,6 +211,15 @@ define([
         },
 
         itemDrop: function(e) {
+            var ev = e.originalEvent;
+            ev.preventDefault();
+
+            // check if the dropped item is a dir entry
+            if (ev.dataTransfer.types.length &&
+                ev.dataTransfer.types.indexOf('text/cid') == -1) {
+                return;
+            }
+
             if (this.model.get('perm') != 'rw') {
                 return false;
             }
@@ -195,9 +227,6 @@ define([
                 return false;
             }
             this.$el.removeAttr('style');
-
-            var ev = e.originalEvent;
-            ev.preventDefault();
 
             var cid = ev.dataTransfer.getData('text/cid');
             var is_dir = ev.dataTransfer.getData('text/is_dir'); // the value is string: 'true' or 'undefined'
