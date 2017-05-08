@@ -1,6 +1,9 @@
 # Copyright (c) 2012-2016 Seafile Ltd.
 import seahub.settings as settings
 
+# OfficeOnlineServer, OnlyOffice, CollaboraOffice
+OFFICE_SERVER_TYPE = getattr(settings, 'OFFICE_SERVER_TYPE', '')
+
 OFFICE_WEB_APP_BASE_URL = getattr(settings, 'OFFICE_WEB_APP_BASE_URL', '')
 WOPI_ACCESS_TOKEN_EXPIRATION = getattr(settings, 'WOPI_ACCESS_TOKEN_EXPIRATION', 30 * 60)
 OFFICE_WEB_APP_DISCOVERY_EXPIRATION = getattr(settings, 'OFFICE_WEB_APP_DISCOVERY_EXPIRATION', 24 * 60 * 60)

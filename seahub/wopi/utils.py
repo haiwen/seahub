@@ -26,7 +26,7 @@ from seahub.utils import get_site_scheme_and_netloc
 from .settings import OFFICE_WEB_APP_BASE_URL, WOPI_ACCESS_TOKEN_EXPIRATION, \
     OFFICE_WEB_APP_DISCOVERY_EXPIRATION, OFFICE_WEB_APP_CLIENT_PEM, \
     OFFICE_WEB_APP_CLIENT_CERT, OFFICE_WEB_APP_CLIENT_KEY, \
-    OFFICE_WEB_APP_SERVER_CA
+    OFFICE_WEB_APP_SERVER_CA, OFFICE_SERVER_TYPE
 
 logger = logging.getLogger(__name__)
 
@@ -64,6 +64,16 @@ def get_wopi_dict(request_user, repo_id, file_path, action_name='view'):
 
     file_name = os.path.basename(file_path)
     file_ext = os.path.splitext(file_name)[1][1:].lower()
+
+    if OFFICE_SERVER_TYPE.lower() == 'collaboraoffice':
+        if file_ext == 'doc':
+            file_ext = 'docx'
+
+        if file_ext == 'ppt':
+            file_ext = 'pptx'
+
+        if file_ext == 'xls':
+            file_ext = 'xlsx'
 
     wopi_key = generate_discovery_cache_key(action_name, file_ext)
     action_url = cache.get(wopi_key)
