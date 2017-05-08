@@ -8,7 +8,7 @@ import datetime
 import posixpath
 import re
 from dateutil.relativedelta import relativedelta
-from urllib2 import unquote, quote
+from urllib2 import quote
 
 from rest_framework import parsers
 from rest_framework import status
@@ -135,16 +135,6 @@ json_content_type = 'application/json; charset=utf-8'
 HTTP_440_REPO_PASSWD_REQUIRED = 440
 HTTP_441_REPO_PASSWD_MAGIC_REQUIRED = 441
 HTTP_520_OPERATION_FAILED = 520
-
-def UTF8Encode(s):
-    if isinstance(s, unicode):
-        return s.encode('utf-8')
-    else:
-        return s
-
-def check_filename_with_rename_utf8(repo_id, parent_dir, filename):
-    newname = check_filename_with_rename(repo_id, parent_dir, filename)
-    return UTF8Encode(newname)
 
 ########## Test
 class Ping(APIView):
@@ -346,13 +336,14 @@ class Search(APIView):
             e.pop('name_highlight', None)
             e.pop('score', None)
             try:
-                path = e['fullpath'].encode('utf-8')
+                path = e['fullpath']
                 file_id = seafile_api.get_file_id_by_path(e['repo_id'], path)
                 e['oid'] = file_id
                 repo = get_repo(e['repo_id'])
                 e['repo_name'] = repo.name
                 e['size'] = get_file_size(repo.store_id, repo.version, file_id)
-            except SearpcError, err:
+            except SearpcError as e:
+                logger.error(e)
                 pass
 
 
@@ -1638,17 +1629,16 @@ class OpDeleteView(APIView):
             return api_error(status.HTTP_404_NOT_FOUND,
                              'File or directory not found.')
 
-        parent_dir_utf8 = parent_dir.encode('utf-8')
         for file_name in file_names.split(':'):
-            file_name = unquote(file_name.encode('utf-8'))
             try:
-                seafile_api.del_file(repo_id, parent_dir_utf8,
+                seafile_api.del_file(repo_id, parent_dir,
                                      file_name, username)
-            except SearpcError, e:
+            except SearpcError as e:
+                logger.error(e)
                 return api_error(HTTP_520_OPERATION_FAILED,
                                  "Failed to delete file.")
 
-        return reloaddir_if_necessary (request, repo, parent_dir_utf8)
+        return reloaddir_if_necessary(request, repo, parent_dir)
 
 class OpMoveView(APIView):
     """
@@ -1686,13 +1676,10 @@ class OpMoveView(APIView):
                              'The destination directory is the same as the source.')
 
         obj_info_list = []
-        parent_dir_utf8 = parent_dir.encode('utf-8')
         for file_name in file_names.split(':'):
-            file_name = unquote(file_name.encode('utf-8'))
-            new_filename = check_filename_with_rename_utf8(dst_repo, dst_dir,
-                                                           file_name)
+            new_filename = check_filename_with_rename(dst_repo, dst_dir, file_name)
             try:
-                seafile_api.move_file(repo_id, parent_dir_utf8, file_name,
+                seafile_api.move_file(repo_id, parent_dir, file_name,
                                       dst_repo, dst_dir, new_filename,
                                       replace=False, username=username,
                                       need_progress=0, synchronous=1)
@@ -1707,8 +1694,7 @@ class OpMoveView(APIView):
             obj_info['obj_name'] = new_filename
             obj_info_list.append(obj_info)
 
-        return reloaddir_if_necessary(request, repo, parent_dir_utf8,
-                obj_info_list)
+        return reloaddir_if_necessary(request, repo, parent_dir, obj_info_list)
 
 class OpCopyView(APIView):
     """
@@ -1749,13 +1735,10 @@ class OpCopyView(APIView):
             return api_error(status.HTTP_400_BAD_REQUEST, 'Path does not exist.')
 
         obj_info_list = []
-        parent_dir_utf8 = parent_dir.encode('utf-8')
         for file_name in file_names.split(':'):
-            file_name = unquote(file_name.encode('utf-8'))
-            new_filename = check_filename_with_rename_utf8(dst_repo, dst_dir,
-                                                           file_name)
+            new_filename = check_filename_with_rename(dst_repo, dst_dir, file_name)
             try:
-                seafile_api.copy_file(repo_id, parent_dir_utf8, file_name,
+                seafile_api.copy_file(repo_id, parent_dir, file_name,
                                       dst_repo, dst_dir, new_filename,
                                       username, 0, synchronous=1)
             except SearpcError as e:
@@ -1769,8 +1752,7 @@ class OpCopyView(APIView):
             obj_info['obj_name'] = new_filename
             obj_info_list.append(obj_info)
 
-        return reloaddir_if_necessary(request, repo, parent_dir_utf8,
-                obj_info_list)
+        return reloaddir_if_necessary(request, repo, parent_dir, obj_info_list)
 
 
 class StarredFileView(APIView):
@@ -1991,8 +1973,7 @@ class FileView(APIView):
 
         file_id = None
         try:
-            file_id = seafile_api.get_file_id_by_path(repo_id,
-                                                      path.encode('utf-8'))
+            file_id = seafile_api.get_file_id_by_path(repo_id, path)
         except SearpcError as e:
             logger.error(e)
             return api_error(HTTP_520_OPERATION_FAILED,
@@ -2041,18 +2022,15 @@ class FileView(APIView):
             if not newname:
                 return api_error(status.HTTP_400_BAD_REQUEST,
                                  'New name is missing')
-            newname = newname.encode('utf-8')
             if len(newname) > settings.MAX_UPLOAD_FILE_NAME_LEN:
                 return api_error(status.HTTP_400_BAD_REQUEST, 'New name is too long')
 
-            parent_dir_utf8 = parent_dir.encode('utf-8')
             oldname = os.path.basename(path)
             if oldname == newname:
                 return api_error(status.HTTP_409_CONFLICT,
                                  'The new name is the same to the old')
 
-            newname = check_filename_with_rename_utf8(repo_id, parent_dir,
-                                                      newname)
+            newname = check_filename_with_rename(repo_id, parent_dir, newname)
             try:
                 seafile_api.rename_file(repo_id, parent_dir, oldname, newname,
                                         username)
@@ -2061,11 +2039,11 @@ class FileView(APIView):
                                  "Failed to rename file: %s" % e)
 
             if request.GET.get('reloaddir', '').lower() == 'true':
-                return reloaddir(request, repo, parent_dir_utf8)
+                return reloaddir(request, repo, parent_dir)
             else:
                 resp = Response('success', status=status.HTTP_301_MOVED_PERMANENTLY)
                 uri = reverse('FileView', args=[repo_id], request=request)
-                resp['Location'] = uri + '?p=' + quote(parent_dir_utf8) + quote(newname)
+                resp['Location'] = uri + '?p=' + quote(parent_dir.encode('utf-8')) + quote(newname.encode('utf-8'))
                 return resp
 
         elif operation.lower() == 'move':
@@ -2074,11 +2052,9 @@ class FileView(APIView):
                                  'You do not have permission to move file.')
 
             src_dir = os.path.dirname(path)
-            src_dir_utf8 = src_dir.encode('utf-8')
             src_repo_id = repo_id
             dst_repo_id = request.POST.get('dst_repo', '')
             dst_dir = request.POST.get('dst_dir', '')
-            dst_dir_utf8 = dst_dir.encode('utf-8')
             if dst_dir[-1] != '/': # Append '/' to the end of directory if necessary
                 dst_dir += '/'
             # obj_names   = request.POST.get('obj_names', '')
@@ -2094,14 +2070,11 @@ class FileView(APIView):
                                  'You do not have permission to move file.')
 
             filename = os.path.basename(path)
-            filename_utf8 = filename.encode('utf-8')
-            new_filename_utf8 = check_filename_with_rename_utf8(dst_repo_id,
-                                                                dst_dir,
-                                                                filename)
+            new_filename = check_filename_with_rename(dst_repo_id, dst_dir, filename)
             try:
-                seafile_api.move_file(src_repo_id, src_dir_utf8,
-                                      filename_utf8, dst_repo_id,
-                                      dst_dir_utf8, new_filename_utf8,
+                seafile_api.move_file(src_repo_id, src_dir,
+                                      filename, dst_repo_id,
+                                      dst_dir, new_filename,
                                       replace=False, username=username,
                                       need_progress=0, synchronous=1)
             except SearpcError, e:
@@ -2117,19 +2090,17 @@ class FileView(APIView):
             else:
                 file_info['repo_id'] = dst_repo_id
                 file_info['parent_dir'] = dst_dir
-                file_info['obj_name'] = new_filename_utf8
+                file_info['obj_name'] = new_filename
                 resp = Response(file_info, status=status.HTTP_301_MOVED_PERMANENTLY)
                 uri = reverse('FileView', args=[dst_repo_id], request=request)
-                resp['Location'] = uri + '?p=' + quote(dst_dir_utf8) + quote(new_filename_utf8)
+                resp['Location'] = uri + '?p=' + quote(dst_dir.encode('utf-8')) + quote(new_filename.encode('utf-8'))
                 return resp
 
         elif operation.lower() == 'copy':
             src_repo_id = repo_id
             src_dir = os.path.dirname(path)
-            src_dir_utf8 = src_dir.encode('utf-8')
             dst_repo_id = request.POST.get('dst_repo', '')
             dst_dir = request.POST.get('dst_dir', '')
-            dst_dir_utf8 = dst_dir.encode('utf-8')
 
             if dst_dir[-1] != '/': # Append '/' to the end of directory if necessary
                 dst_dir += '/'
@@ -2151,14 +2122,11 @@ class FileView(APIView):
                                  'You do not have permission to copy file.')
 
             filename = os.path.basename(path)
-            filename_utf8 = filename.encode('utf-8')
-            new_filename_utf8 = check_filename_with_rename_utf8(dst_repo_id,
-                                                                dst_dir,
-                                                                filename)
+            new_filename = check_filename_with_rename(dst_repo_id, dst_dir, filename)
             try:
-                seafile_api.copy_file(src_repo_id, src_dir_utf8,
-                                      filename_utf8, dst_repo_id,
-                                      dst_dir_utf8, new_filename_utf8,
+                seafile_api.copy_file(src_repo_id, src_dir,
+                                      filename, dst_repo_id,
+                                      dst_dir, new_filename,
                                       username, 0, synchronous=1)
             except SearpcError as e:
                 logger.error(e)
@@ -2170,10 +2138,10 @@ class FileView(APIView):
             else:
                 file_info['repo_id'] = dst_repo_id
                 file_info['parent_dir'] = dst_dir
-                file_info['obj_name'] = new_filename_utf8
+                file_info['obj_name'] = new_filename
                 resp = Response(file_info, status=status.HTTP_200_OK)
                 uri = reverse('FileView', args=[dst_repo_id], request=request)
-                resp['Location'] = uri + '?p=' + quote(dst_dir_utf8) + quote(new_filename_utf8)
+                resp['Location'] = uri + '?p=' + quote(dst_dir.encode('utf-8')) + quote(new_filename.encode('utf-8'))
                 return resp
 
         elif operation.lower() == 'create':
@@ -2181,15 +2149,12 @@ class FileView(APIView):
                 return api_error(status.HTTP_403_FORBIDDEN,
                                  'You do not have permission to create file.')
 
-            parent_dir_utf8 = parent_dir.encode('utf-8')
             new_file_name = os.path.basename(path)
-            new_file_name_utf8 = check_filename_with_rename_utf8(repo_id,
-                                                                 parent_dir,
-                                                                 new_file_name)
+            new_file_name = check_filename_with_rename(repo_id, parent_dir, new_file_name)
 
             try:
                 seafile_api.post_empty_file(repo_id, parent_dir,
-                                            new_file_name_utf8, username)
+                                            new_file_name, username)
             except SearpcError, e:
                 return api_error(HTTP_520_OPERATION_FAILED,
                                  'Failed to create file.')
@@ -2199,8 +2164,8 @@ class FileView(APIView):
             else:
                 resp = Response('success', status=status.HTTP_201_CREATED)
                 uri = reverse('FileView', args=[repo_id], request=request)
-                resp['Location'] = uri + '?p=' + quote(parent_dir_utf8) + \
-                    quote(new_file_name_utf8)
+                resp['Location'] = uri + '?p=' + quote(parent_dir.encode('utf-8')) + \
+                    quote(new_file_name.encode('utf-8'))
                 return resp
         else:
             return api_error(status.HTTP_400_BAD_REQUEST,
@@ -2271,19 +2236,18 @@ class FileView(APIView):
         if check_folder_permission(request, repo_id, parent_dir) != 'rw':
             return api_error(status.HTTP_403_FORBIDDEN, 'Permission denied.')
 
-        parent_dir_utf8 = os.path.dirname(path).encode('utf-8')
-        file_name_utf8 = os.path.basename(path).encode('utf-8')
+        parent_dir = os.path.dirname(path)
+        file_name = os.path.basename(path)
 
         try:
-            seafile_api.del_file(repo_id, parent_dir_utf8,
-                                 file_name_utf8,
-                                 request.user.username)
+            seafile_api.del_file(repo_id, parent_dir,
+                                 file_name, request.user.username)
         except SearpcError as e:
             logger.error(e)
             return api_error(HTTP_520_OPERATION_FAILED,
                              "Failed to delete file.")
 
-        return reloaddir_if_necessary(request, repo, parent_dir_utf8)
+        return reloaddir_if_necessary(request, repo, parent_dir)
 
 class FileDetailView(APIView):
     authentication_classes = (TokenAuthentication, )
@@ -2310,8 +2274,7 @@ class FileDetailView(APIView):
                                  'Failed to get file id.')
         else:
             try:
-                obj_id = seafile_api.get_file_id_by_path(repo_id,
-                                                         path.encode('utf-8'))
+                obj_id = seafile_api.get_file_id_by_path(repo_id, path)
             except SearpcError as e:
                 logger.error(e)
                 return api_error(status.HTTP_500_INTERNAL_SERVER_ERROR,
@@ -2567,8 +2530,7 @@ class DirView(APIView):
             return api_error(status.HTTP_403_FORBIDDEN, 'Forbid to access this folder.')
 
         try:
-            dir_id = seafile_api.get_dir_id_by_path(repo_id,
-                                                    path.encode('utf-8'))
+            dir_id = seafile_api.get_dir_id_by_path(repo_id, path)
         except SearpcError as e:
             logger.error(e)
             return api_error(HTTP_520_OPERATION_FAILED,
@@ -2626,10 +2588,8 @@ class DirView(APIView):
         username = request.user.username
         operation = request.POST.get('operation', '')
         parent_dir = os.path.dirname(path)
-        parent_dir_utf8 = parent_dir.encode('utf-8')
 
         if operation.lower() == 'mkdir':
-            parent_dir = os.path.dirname(path)
             if check_folder_permission(request, repo_id, parent_dir) != 'rw':
                 return api_error(status.HTTP_403_FORBIDDEN, 'You do not have permission to access this folder.')
 
@@ -2641,12 +2601,10 @@ class DirView(APIView):
                                      'Parent dir does not exist')
 
                 new_dir_name = os.path.basename(path)
-                new_dir_name_utf8 = check_filename_with_rename_utf8(repo_id,
-                                                                    parent_dir,
-                                                                    new_dir_name)
+                new_dir_name = check_filename_with_rename(repo_id, parent_dir, new_dir_name)
                 try:
                     seafile_api.post_dir(repo_id, parent_dir,
-                                         new_dir_name_utf8, username)
+                                         new_dir_name, username)
                 except SearpcError as e:
                     logger.error(e)
                     return api_error(HTTP_520_OPERATION_FAILED,
@@ -2662,21 +2620,20 @@ class DirView(APIView):
                     logger.error(e)
                     return api_error(HTTP_520_OPERATION_FAILED,
                                      'Failed to make directory.')
-                new_dir_name_utf8 = os.path.basename(path).encode('utf-8')
 
             if request.GET.get('reloaddir', '').lower() == 'true':
                 resp = reloaddir(request, repo, parent_dir)
             else:
                 resp = Response('success', status=status.HTTP_201_CREATED)
                 uri = reverse('DirView', args=[repo_id], request=request)
-                resp['Location'] = uri + '?p=' + quote(parent_dir_utf8) + \
-                    quote(new_dir_name_utf8)
+                resp['Location'] = uri + '?p=' + quote(parent_dir.encode('utf-8')) + \
+                    quote(new_dir_name.encode('utf-8'))
             return resp
+
         elif operation.lower() == 'rename':
             if check_folder_permission(request, repo.id, path) != 'rw':
                 return api_error(status.HTTP_403_FORBIDDEN, 'You do not have permission to access this folder.')
 
-            parent_dir = os.path.dirname(path)
             old_dir_name = os.path.basename(path)
 
             newname = request.POST.get('newname', '')
@@ -2724,19 +2681,18 @@ class DirView(APIView):
             path = path[:-1]
 
         parent_dir = os.path.dirname(path)
-        parent_dir_utf8 = os.path.dirname(path).encode('utf-8')
-        file_name_utf8 = os.path.basename(path).encode('utf-8')
+        file_name = os.path.basename(path)
 
         username = request.user.username
         try:
-            seafile_api.del_file(repo_id, parent_dir_utf8,
-                                 file_name_utf8, username)
+            seafile_api.del_file(repo_id, parent_dir,
+                                 file_name, username)
         except SearpcError as e:
             logger.error(e)
             return api_error(HTTP_520_OPERATION_FAILED,
                              "Failed to delete file.")
 
-        return reloaddir_if_necessary(request, repo, parent_dir_utf8)
+        return reloaddir_if_necessary(request, repo, parent_dir)
 
 class DirRevert(APIView):
     authentication_classes = (TokenAuthentication, SessionAuthentication)
@@ -2954,9 +2910,9 @@ class SharedFileView(APIView):
 
         file_id = None
         try:
-            file_id = seafserv_threaded_rpc.get_file_id_by_path(repo_id,
-                                                                path.encode('utf-8'))
-        except SearpcError, e:
+            file_id = seafile_api.get_file_id_by_path(repo_id, path)
+        except SearpcError as e:
+            logger.error(e)
             return api_error(HTTP_520_OPERATION_FAILED,
                              "Failed to get file id by path.")
 
@@ -3000,8 +2956,7 @@ class SharedFileDetailView(APIView):
 
         file_id = None
         try:
-            file_id = seafserv_threaded_rpc.get_file_id_by_path(repo_id,
-                                                                path.encode('utf-8'))
+            file_id = seafile_api.get_file_id_by_path(repo_id, path)
             commits = seafserv_threaded_rpc.list_file_revisions(repo_id, path,
                                                                 -1, -1)
             c = commits[0]
@@ -3593,8 +3548,7 @@ class Groups(APIView):
 
         # Group name is valid, create that group.
         try:
-            group_id = ccnet_threaded_rpc.create_group(group_name.encode('utf-8'),
-                                                       username)
+            group_id = ccnet_api.create_group(group_name, username)
             return HttpResponse(json.dumps({'success': True, 'group_id': group_id}),
                                 content_type=content_type)
         except SearpcError, e:
@@ -3994,8 +3948,7 @@ class OfficeGenerateView(APIView):
                 return api_error(status.HTTP_404_NOT_FOUND, 'Revision not found.')
         else:
             try:
-                obj_id = seafile_api.get_file_id_by_path(repo_id,
-                                                      path.encode('utf-8'))
+                obj_id = seafile_api.get_file_id_by_path(repo_id, path)
             except:
                 return api_error(status.HTTP_404_NOT_FOUND, 'File not found.')
 
