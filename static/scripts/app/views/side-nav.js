@@ -128,6 +128,8 @@ define([
 
                 return false;
             });
+
+            return false;
         },
 
         setCurTab: function(cur_tab, options) {
