@@ -438,7 +438,7 @@ table img { vertical-align:middle; }
     text-align:center;
     border-bottom:1px solid #ccc;
     margin:0;
-    z-index:3;
+    z-index:30;
 }
 .top-bar-click {
     display:inline-block;
@@ -1764,10 +1764,10 @@ button.sf-dropdown-toggle:focus {
 }
 /* info-bar */
 #info-bar {
-    color: #1f0600;
+    color:#1f0600;
     padding:1px 25px 1px 10px;
-    background: #fddaa4;
-    z-index: 2;
+    background:#fddaa4;
+    z-index:15;
 }
 #info-bar .close {
     position:absolute;
