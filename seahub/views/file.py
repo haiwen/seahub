@@ -435,7 +435,7 @@ def _file_view(request, repo_id, path):
     is_locked, locked_by_me = check_file_lock(repo_id, path, username)
 
     # check if use office web app to view/edit file
-    if is_pro_version() and not repo.encrypted and ENABLE_OFFICE_WEB_APP:
+    if not repo.encrypted and ENABLE_OFFICE_WEB_APP:
         action_name = None
         # first check if can view file
         if fileext in OFFICE_WEB_APP_FILE_EXTENSION:
