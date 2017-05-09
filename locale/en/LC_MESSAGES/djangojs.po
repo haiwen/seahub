@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2017-04-28 16:23+0800\n"
+"POT-Creation-Date: 2017-05-09 13:14+0800\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -17,8 +17,8 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 
-#: static/scripts/app/models/dirent.js:113 static/scripts/app/views/dir.js:623
-#: static/scripts/app/views/dir.js:694
+#: static/scripts/app/models/dirent.js:113 static/scripts/app/views/dir.js:628
+#: static/scripts/app/views/dir.js:699
 #: static/scripts/app/views/fileupload.js:366
 #: static/scripts/app/views/fileupload.js:380
 #: static/scripts/app/views/fileupload.js:392
@@ -32,8 +32,8 @@ msgstr ""
 
 #: static/scripts/app/models/repo.js:35
 #: static/scripts/app/views/dialogs/dirent-rename.js:65
-#: static/scripts/app/views/dir.js:608 static/scripts/app/views/dir.js:669
-#: static/scripts/app/views/dirent.js:429 static/scripts/app/views/repo.js:167
+#: static/scripts/app/views/dir.js:613 static/scripts/app/views/dir.js:674
+#: static/scripts/app/views/dirent.js:458 static/scripts/app/views/repo.js:167
 msgid "Name should not include '/'."
 msgstr ""
 
@@ -79,7 +79,7 @@ msgstr ""
 #: static/scripts/app/views/account.js:58
 #: static/scripts/app/views/dialogs/repo-folder-perm-admin.js:134
 #: static/scripts/app/views/dialogs/repo-share-link-admin.js:96
-#: static/scripts/app/views/dir.js:469 static/scripts/app/views/dirent.js:240
+#: static/scripts/app/views/dir.js:469 static/scripts/app/views/dirent.js:269
 #: static/scripts/app/views/group-discussions.js:125
 #: static/scripts/app/views/group-discussions.js:203
 #: static/scripts/app/views/group-discussions.js:246
@@ -139,8 +139,8 @@ msgstr ""
 #: static/scripts/app/views/dialogs/repo-folder-perm-admin.js:302
 #: static/scripts/app/views/dialogs/repo-history-settings.js:82
 #: static/scripts/app/views/dialogs/repo-history-settings.js:141
-#: static/scripts/app/views/dir.js:1262 static/scripts/app/views/dir.js:1296
-#: static/scripts/app/views/dir.js:1343 static/scripts/app/views/dirent.js:447
+#: static/scripts/app/views/dir.js:1267 static/scripts/app/views/dir.js:1301
+#: static/scripts/app/views/dir.js:1348 static/scripts/app/views/dirent.js:476
 #: static/scripts/app/views/folder-perm.js:205
 #: static/scripts/app/views/folder-share-item.js:85
 #: static/scripts/app/views/folder-share-item.js:121
@@ -234,17 +234,17 @@ msgstr ""
 
 #: static/scripts/app/views/dialogs/dirent-mvcp.js:132
 #: static/scripts/app/views/dialogs/dirent-mvcp.js:163
-#: static/scripts/app/views/dir.js:1334
+#: static/scripts/app/views/dir.js:1339
 msgid "Canceled."
 msgstr ""
 
 #: static/scripts/app/views/dialogs/dirent-mvcp.js:195
-#: static/scripts/app/views/dir.js:1106
+#: static/scripts/app/views/dir.js:1111
 msgid "Invalid destination path"
 msgstr ""
 
 #: static/scripts/app/views/dialogs/dirent-mvcp.js:214
-#: static/scripts/app/views/dirent.js:231
+#: static/scripts/app/views/dirent.js:260
 msgid "Successfully moved %(name)s"
 msgstr ""
 
@@ -261,8 +261,8 @@ msgid "Rename File"
 msgstr ""
 
 #: static/scripts/app/views/dialogs/dirent-rename.js:59
-#: static/scripts/app/views/dir.js:603 static/scripts/app/views/dir.js:664
-#: static/scripts/app/views/dirent.js:423
+#: static/scripts/app/views/dir.js:608 static/scripts/app/views/dir.js:669
+#: static/scripts/app/views/dirent.js:452
 #: static/scripts/app/views/groups.js:112
 #: static/scripts/app/views/invitations.js:54
 #: static/scripts/app/views/repo.js:161
@@ -410,127 +410,127 @@ msgstr ""
 msgid "Password is required."
 msgstr ""
 
-#: static/scripts/app/views/dir.js:675
+#: static/scripts/app/views/dir.js:680
 msgid "Only an extension there, please input a name."
 msgstr ""
 
-#: static/scripts/app/views/dir.js:713
+#: static/scripts/app/views/dir.js:718
 msgid "New File"
 msgstr ""
 
-#: static/scripts/app/views/dir.js:721
+#: static/scripts/app/views/dir.js:726
 msgid "New Markdown File"
 msgstr ""
 
-#: static/scripts/app/views/dir.js:729
+#: static/scripts/app/views/dir.js:734
 msgid "New Excel File"
 msgstr ""
 
-#: static/scripts/app/views/dir.js:737
+#: static/scripts/app/views/dir.js:742
 msgid "New PowerPoint File"
 msgstr ""
 
-#: static/scripts/app/views/dir.js:745
+#: static/scripts/app/views/dir.js:750
 msgid "New Word File"
 msgstr ""
 
-#: static/scripts/app/views/dir.js:969 static/scripts/app/views/dir.js:1111
+#: static/scripts/app/views/dir.js:974 static/scripts/app/views/dir.js:1116
 msgid "Processing..."
 msgstr ""
 
-#: static/scripts/app/views/dir.js:1006
+#: static/scripts/app/views/dir.js:1011
 msgid "Successfully deleted %(name)s."
 msgstr ""
 
-#: static/scripts/app/views/dir.js:1008
+#: static/scripts/app/views/dir.js:1013
 msgid "Successfully deleted %(name)s and 1 other item."
 msgstr ""
 
-#: static/scripts/app/views/dir.js:1010
+#: static/scripts/app/views/dir.js:1015
 msgid "Successfully deleted %(name)s and %(amount)s other items."
 msgstr ""
 
-#: static/scripts/app/views/dir.js:1019
+#: static/scripts/app/views/dir.js:1024
 msgid "Failed to delete %(name)s."
 msgstr ""
 
-#: static/scripts/app/views/dir.js:1021
+#: static/scripts/app/views/dir.js:1026
 msgid "Failed to delete %(name)s and 1 other item."
 msgstr ""
 
-#: static/scripts/app/views/dir.js:1023
+#: static/scripts/app/views/dir.js:1028
 msgid "Failed to delete %(name)s and %(amount)s other items."
 msgstr ""
 
-#: static/scripts/app/views/dir.js:1036
+#: static/scripts/app/views/dir.js:1041
 msgid "Delete Items"
 msgstr ""
 
-#: static/scripts/app/views/dir.js:1037
+#: static/scripts/app/views/dir.js:1042
 msgid "Are you sure you want to delete these selected items?"
 msgstr ""
 
-#: static/scripts/app/views/dir.js:1051
+#: static/scripts/app/views/dir.js:1056
 msgid "Move selected item(s) to:"
 msgstr ""
 
-#: static/scripts/app/views/dir.js:1051
+#: static/scripts/app/views/dir.js:1056
 msgid "Copy selected item(s) to:"
 msgstr ""
 
-#: static/scripts/app/views/dir.js:1155
+#: static/scripts/app/views/dir.js:1160
 msgid "Successfully moved %(name)s."
 msgstr ""
 
-#: static/scripts/app/views/dir.js:1157
+#: static/scripts/app/views/dir.js:1162
 msgid "Successfully moved %(name)s and 1 other item."
 msgstr ""
 
-#: static/scripts/app/views/dir.js:1159
+#: static/scripts/app/views/dir.js:1164
 msgid "Successfully moved %(name)s and %(amount)s other items."
 msgstr ""
 
-#: static/scripts/app/views/dir.js:1164
+#: static/scripts/app/views/dir.js:1169
 msgid "Successfully copied %(name)s."
 msgstr ""
 
-#: static/scripts/app/views/dir.js:1166
+#: static/scripts/app/views/dir.js:1171
 msgid "Successfully copied %(name)s and 1 other item."
 msgstr ""
 
-#: static/scripts/app/views/dir.js:1168
+#: static/scripts/app/views/dir.js:1173
 msgid "Successfully copied %(name)s and %(amount)s other items."
 msgstr ""
 
-#: static/scripts/app/views/dir.js:1180
+#: static/scripts/app/views/dir.js:1185
 msgid "Internal error. Failed to move %(name)s and %(amount)s other item(s)."
 msgstr ""
 
-#: static/scripts/app/views/dir.js:1182
+#: static/scripts/app/views/dir.js:1187
 msgid "Internal error. Failed to move %(name)s."
 msgstr ""
 
-#: static/scripts/app/views/dir.js:1186
+#: static/scripts/app/views/dir.js:1191
 msgid "Internal error. Failed to copy %(name)s and %(amount)s other item(s)."
 msgstr ""
 
-#: static/scripts/app/views/dir.js:1188
+#: static/scripts/app/views/dir.js:1193
 msgid "Internal error. Failed to copy %(name)s."
 msgstr ""
 
-#: static/scripts/app/views/dir.js:1228
+#: static/scripts/app/views/dir.js:1233
 msgid "Moving file %(index)s of %(total)s"
 msgstr ""
 
-#: static/scripts/app/views/dir.js:1228
+#: static/scripts/app/views/dir.js:1233
 msgid "Copying file %(index)s of %(total)s"
 msgstr ""
 
-#: static/scripts/app/views/dir.js:1250
+#: static/scripts/app/views/dir.js:1255
 msgid "Failed to move %(name)s"
 msgstr ""
 
-#: static/scripts/app/views/dir.js:1250
+#: static/scripts/app/views/dir.js:1255
 msgid "Failed to copy %(name)s"
 msgstr ""
 
@@ -540,7 +540,7 @@ msgid "locked by {placeholder}"
 msgstr ""
 
 #: static/scripts/app/views/dirent-grid.js:174
-#: static/scripts/app/views/dirent.js:336
+#: static/scripts/app/views/dirent.js:365
 msgid "Successfully deleted %(name)s"
 msgstr ""
 
