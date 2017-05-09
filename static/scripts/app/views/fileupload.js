@@ -160,7 +160,7 @@ define([
                             }),
                         data: {
                             'from': 'web',
-                            'path': dirents.path
+                            'p': dirents.path
                         },
                         cache: false,
                         dataType: 'json',
@@ -224,7 +224,7 @@ define([
                             }),
                         data: {
                             'from': 'web',
-                            'path': dirents.path
+                            'p': dirents.path
                         },
                         cache: false,
                         dataType: 'json',
