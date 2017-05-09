@@ -131,6 +131,9 @@ $('#file-save-form').submit(function() {
         {% else %}
         $('#image-view').attr('src', '{{ SITE_ROOT }}thumbnail/{{ shared_token }}/1024/' + encodeURIComponent('{{file_name|escapejs}}'));
         {% endif %}
+        $('#image-view').on('error', function() { // fail to load thumbnail
+            $(this).attr('src', '{{ raw_path|escapejs }}');
+        })
     {% else %}
         $('#image-view').attr('src', '{{ raw_path|escapejs }}');
     {% endif %}
