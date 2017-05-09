@@ -8,6 +8,9 @@ from rest_framework import status
 from rest_framework.authentication import SessionAuthentication
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.views import APIView
+
+from django.utils.translation import ugettext as _
+
 import seaserv
 from seaserv import seafile_api
 
@@ -272,7 +275,7 @@ class DirSharedItemsEndpoint(APIView):
                 if not is_valid_username(to_user):
                     result['failed'].append({
                         'email': to_user,
-                        'error_msg': 'username invalid.'
+                        'error_msg': _(u'username invalid.')
                         })
                     continue
 
@@ -281,14 +284,14 @@ class DirSharedItemsEndpoint(APIView):
                 except User.DoesNotExist:
                     result['failed'].append({
                         'email': to_user,
-                        'error_msg': 'User %s not found.' % to_user
+                        'error_msg': _(u'User %s not found.') % to_user
                         })
                     continue
 
                 if self.has_shared_to_user(request, repo_id, path, to_user):
                     result['failed'].append({
                         'email': to_user,
-                        'error_msg': 'This item has been shared to %s.' % to_user
+                        'error_msg': _(u'This item has been shared to %s.') % to_user
                         })
                     continue
 
@@ -353,7 +356,7 @@ class DirSharedItemsEndpoint(APIView):
                 if self.has_shared_to_group(request, repo_id, path, gid):
                     result['failed'].append({
                         'group_name': group.group_name,
-                        'error_msg': 'This item has been shared to %s.' % group.group_name
+                        'error_msg': _(u'This item has been shared to %s.') % group.group_name
                         })
                     continue
 
