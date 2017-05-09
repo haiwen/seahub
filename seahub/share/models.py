@@ -81,7 +81,7 @@ def check_share_link_common(request, sharelink, is_upload_link=False):
 
 class FileShareManager(models.Manager):
     def _add_file_share(self, username, repo_id, path, s_type,
-                        password=None, expire_date=None):
+                        password=None, expire_date=None, permission='view_download'):
         if password is not None:
             password_enc = make_password(password)
         else:
@@ -90,7 +90,8 @@ class FileShareManager(models.Manager):
         token = gen_token(max_length=config.SHARE_LINK_TOKEN_LENGTH)
         fs = super(FileShareManager, self).create(
             username=username, repo_id=repo_id, path=path, token=token,
-            s_type=s_type, password=password_enc, expire_date=expire_date)
+            s_type=s_type, password=password_enc, expire_date=expire_date,
+            permission=permission)
         fs.save()
         return fs
 
@@ -120,12 +121,12 @@ class FileShareManager(models.Manager):
 
     ########## public methods ##########
     def create_file_link(self, username, repo_id, path, password=None,
-                         expire_date=None):
+                         expire_date=None, permission='view_download'):
         """Create download link for file.
         """
         path = normalize_file_path(path)
         return self._add_file_share(username, repo_id, path, 'f', password,
-                                    expire_date)
+                                    expire_date, permission)
 
     def get_file_link_by_path(self, username, repo_id, path):
         path = normalize_file_path(path)
@@ -135,12 +136,12 @@ class FileShareManager(models.Manager):
         return self._get_valid_file_share_by_token(token)
 
     def create_dir_link(self, username, repo_id, path, password=None,
-                        expire_date=None):
+                        expire_date=None, permission='view_download'):
         """Create download link for directory.
         """
         path = normalize_dir_path(path)
         return self._add_file_share(username, repo_id, path, 'd', password,
-                                    expire_date)
+                                    expire_date, permission)
 
     def get_dir_link_by_path(self, username, repo_id, path):
         path = normalize_dir_path(path)
@@ -153,6 +154,13 @@ class FileShare(models.Model):
     """
     Model used for file or dir shared link.
     """
+    PERM_VIEW_DL = 'view_download'
+    PERM_VIEW_ONLY = 'view_only'
+    PERMISSION_CHOICES = (
+        (PERM_VIEW_DL, 'View and download'),
+        (PERM_VIEW_ONLY, 'Disable download'),
+    )
+
     username = LowerCaseCharField(max_length=255, db_index=True)
     repo_id = models.CharField(max_length=36, db_index=True)
     path = models.TextField()
@@ -161,6 +169,9 @@ class FileShare(models.Model):
     view_cnt = models.IntegerField(default=0)
     s_type = models.CharField(max_length=2, db_index=True, default='f') # `f` or `d`
     password = models.CharField(max_length=128, null=True)
+    permission = models.CharField(max_length=50, db_index=True,
+                                  choices=PERMISSION_CHOICES,
+                                  default=PERM_VIEW_DL)
     expire_date = models.DateTimeField(null=True)
     objects = FileShareManager()
 
