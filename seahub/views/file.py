@@ -455,7 +455,7 @@ def _file_view(request, repo_id, path):
 
     if ENABLE_ONLYOFFICE and not repo.encrypted and \
        fileext in ONLYOFFICE_FILE_EXTENSION:
-        doc_key = gen_token(10)
+        doc_key = obj_id
         if fileext in ('xls', 'xlsx', 'ods', 'fods', 'csv'):
             document_type = 'spreadsheet'
         elif fileext in ('pptx', 'ppt', 'odp', 'fodp', 'ppsx', 'pps'):
