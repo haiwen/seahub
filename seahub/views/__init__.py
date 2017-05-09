@@ -610,7 +610,7 @@ def repo_revert_history(request, repo_id):
         seafserv_threaded_rpc.revert_on_server(repo_id, commit_id, request.user.username)
     except SearpcError, e:
         if e.msg == 'Bad arguments':
-            return render_error(request, _(u'Invalid arguments'))
+            return render_error(request, _(u'Invalid arguments.'))
         elif e.msg == 'No such repo':
             return render_error(request, _(u'Library does not exist'))
         elif e.msg == "Commit doesn't exist":

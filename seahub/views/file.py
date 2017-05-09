@@ -1113,7 +1113,7 @@ def file_edit_submit(request, repo_id):
     encoding = request.POST.get('encoding')
 
     if content is None or not path or encoding not in FILE_ENCODING_LIST:
-        return error_json(_(u'Invalid arguments'))
+        return error_json(_(u'Invalid arguments.'))
     head_id = request.GET.get('head', None)
 
     # first dump the file content to a tmp file, then update the file
