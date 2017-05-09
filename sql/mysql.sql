@@ -319,7 +319,7 @@ CREATE TABLE `django_migrations` (
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 /*!40000 ALTER TABLE `django_migrations` DISABLE KEYS */;
-INSERT INTO `django_migrations` VALUES (1,'admin_log','0001_initial','2017-05-09 06:21:29.565664'),(2,'captcha','0001_initial','2017-05-09 06:21:29.745525'),(3,'contenttypes','0001_initial','2017-05-09 06:21:29.793382'),(4,'contenttypes','0002_remove_content_type_name','2017-05-09 06:21:29.874781'),(5,'database','0001_initial','2017-05-09 06:21:29.899976'),(6,'institutions','0001_initial','2017-05-09 06:21:29.958478'),(7,'institutions','0002_institutionquota','2017-05-09 06:21:30.008766'),(8,'invitations','0001_initial','2017-05-09 06:21:30.054959'),(9,'invitations','0002_invitation_invite_type','2017-05-09 06:21:30.093084'),(10,'invitations','0003_auto_20160510_1703','2017-05-09 06:21:30.144551'),(11,'invitations','0004_auto_20160629_1610','2017-05-09 06:21:30.216132'),(12,'invitations','0005_auto_20160629_1614','2017-05-09 06:21:30.237481'),(13,'post_office','0001_initial','2017-05-09 06:21:30.566611'),(14,'post_office','0002_add_i18n_and_backend_alias','2017-05-09 06:21:31.046411'),(15,'sessions','0001_initial','2017-05-09 06:21:31.085385'),(16,'termsandconditions','0001_initial','2017-05-09 06:21:31.207152'),(17,'two_factor','0001_initial','2017-05-09 06:21:31.354917');
+INSERT INTO `django_migrations` VALUES (1,'admin_log','0001_initial','2017-05-09 06:46:37.744868'),(2,'captcha','0001_initial','2017-05-09 06:46:37.935266'),(3,'contenttypes','0001_initial','2017-05-09 06:46:37.979257'),(4,'contenttypes','0002_remove_content_type_name','2017-05-09 06:46:38.208170'),(5,'database','0001_initial','2017-05-09 06:46:38.236030'),(6,'institutions','0001_initial','2017-05-09 06:46:38.448271'),(7,'institutions','0002_institutionquota','2017-05-09 06:46:38.646454'),(8,'invitations','0001_initial','2017-05-09 06:46:38.691074'),(9,'invitations','0002_invitation_invite_type','2017-05-09 06:46:38.732389'),(10,'invitations','0003_auto_20160510_1703','2017-05-09 06:46:38.784129'),(11,'invitations','0004_auto_20160629_1610','2017-05-09 06:46:38.862351'),(12,'invitations','0005_auto_20160629_1614','2017-05-09 06:46:38.884639'),(13,'post_office','0001_initial','2017-05-09 06:46:39.224068'),(14,'post_office','0002_add_i18n_and_backend_alias','2017-05-09 06:46:39.708011'),(15,'sessions','0001_initial','2017-05-09 06:46:39.746055'),(16,'termsandconditions','0001_initial','2017-05-09 06:46:39.880406'),(17,'two_factor','0001_initial','2017-05-09 06:46:40.161967');
 /*!40000 ALTER TABLE `django_migrations` ENABLE KEYS */;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!40101 SET character_set_client = utf8 */;
@@ -682,8 +682,8 @@ CREATE TABLE `share_fileshare` (
   `view_cnt` int(11) NOT NULL,
   `s_type` varchar(2) NOT NULL,
   `password` varchar(128) DEFAULT NULL,
-  `permission` varchar(50) NOT NULL,
   `expire_date` datetime DEFAULT NULL,
+  `permission` varchar(50) NOT NULL,
   PRIMARY KEY (`id`),
   UNIQUE KEY `token` (`token`),
   KEY `share_fileshare_14c4b06b` (`username`),

@@ -5,12 +5,13 @@
 # Translators:
 # Jakub Skořepa <inactive+jakub.skorepa@transifex.com>, 2015
 # Petr Zientek <shmaic@gmail.com>, 2017
+# Tomáš Kubalík <tkubalik@ifrog.cz>, 2017
 msgid ""
 msgstr ""
 "Project-Id-Version: seahub\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2017-04-28 16:23+0800\n"
-"PO-Revision-Date: 2017-04-28 08:23+0000\n"
+"POT-Creation-Date: 2017-05-09 13:14+0800\n"
+"PO-Revision-Date: 2017-05-09 05:15+0000\n"
 "Last-Translator: zheng xie <xiez1989@gmail.com>\n"
 "Language-Team: Czech (http://www.transifex.com/haiwen/seahub/language/cs/)\n"
 "MIME-Version: 1.0\n"
@@ -21,42 +22,42 @@ msgstr ""
 
 #: seahub/api2/endpoints/account.py:162
 msgid "Name is too long (maximum is 64 characters)"
-msgstr ""
+msgstr "Jméno je příliš dlouhé (maximum je 64 znaků)"
 
 #: seahub/api2/endpoints/account.py:166 seahub/forms.py:43
 #: seahub/profile/forms.py:17 seahub/templates/sysadmin/userinfo.html:317
 msgid "Name should not include '/'."
-msgstr ""
+msgstr "Jméno by nemělo obsahovat '/'."
 
 #: seahub/api2/endpoints/account.py:173
 msgid "Department is too long (maximum is 512 characters)"
-msgstr ""
+msgstr "Oddělení je příliš dlouhé (maximum je 512 znaků)"
 
 #: seahub/api2/endpoints/account.py:180 seahub/forms.py:154
 msgid "Space quota can't be empty"
-msgstr ""
+msgstr "Kvóta nemůže být prázdná"
 
 #: seahub/api2/endpoints/account.py:186
 msgid "Must be an integer that is greater than or equal to 0."
-msgstr ""
+msgstr "Musí být číslo které je větší nebo rovno 0."
 
 #: seahub/api2/endpoints/account.py:190
 #: seahub/api2/endpoints/admin/users_batch.py:76 seahub/forms.py:155
 msgid "Space quota is too low (minimum value is 0)"
-msgstr ""
+msgstr "Kvóta je příliš malá (minimum je 0)"
 
 #: seahub/api2/endpoints/account.py:198 seahub/institutions/views.py:213
 #: seahub/views/sysadmin.py:659
 #, python-format
 msgid "Failed to set quota: maximum quota is %d MB"
-msgstr ""
+msgstr "Chyba při nastavení kvóty: maximum je %d MB"
 
 #: seahub/api2/endpoints/admin/default_library.py:31
 #: seahub/api2/endpoints/admin/default_library.py:32
 #: seahub/views/__init__.py:675 seahub/views/__init__.py:676
 #: seahub/views/__init__.py:681 seahub/views/__init__.py:682
 msgid "My Library"
-msgstr ""
+msgstr "Moje knihovna"
 
 #: seahub/api2/endpoints/admin/groups.py:116
 #: seahub/api2/endpoints/groups.py:149 seahub/api2/endpoints/groups.py:225
@@ -93,32 +94,47 @@ msgstr "Email %s je neplatný."
 
 #: seahub/api2/endpoints/admin/users_batch.py:72
 msgid "must be an integer that is greater than or equal to 0."
-msgstr ""
+msgstr "musí být číslo, které je větší nebo rovno 0."
 
 #: seahub/api2/endpoints/copy_move_task.py:76 seahub/views/ajax.py:569
 msgid "Invalid destination path"
-msgstr ""
+msgstr "Nesprávná cílová cesta"
 
 #: seahub/api2/endpoints/copy_move_task.py:80
 msgid "Destination path is too long."
-msgstr ""
+msgstr "Cílová cesta je příliš dlouhá."
 
 #: seahub/api2/endpoints/copy_move_task.py:126 seahub/views/ajax.py:654
 #, python-format
 msgid "Can not move directory %(src)s to its subdirectory %(des)s"
-msgstr ""
+msgstr "Nemohu přesunout adresář %(src)s do podadresáře %(des)s"
 
 #: seahub/api2/endpoints/copy_move_task.py:194
 msgid "Cancel failed"
+msgstr "Zručení selhalo"
+
+#: seahub/api2/endpoints/dir_shared_items.py:278
+msgid "username invalid."
+msgstr ""
+
+#: seahub/api2/endpoints/dir_shared_items.py:287
+#, python-format
+msgid "User %s not found."
+msgstr ""
+
+#: seahub/api2/endpoints/dir_shared_items.py:294
+#: seahub/api2/endpoints/dir_shared_items.py:359
+#, python-format
+msgid "This item has been shared to %s."
 msgstr ""
 
 #: seahub/api2/endpoints/file.py:404 seahub/views/file.py:1099
 msgid "Check file lock error"
-msgstr ""
+msgstr "Zkontroluj chybu zámku souboru"
 
 #: seahub/api2/endpoints/file.py:408 seahub/views/file.py:1102
 msgid "File is locked"
-msgstr ""
+msgstr "Soubor je uzamčen"
 
 #: seahub/api2/endpoints/group_members.py:93
 #: seahub/api2/endpoints/group_members.py:289 seahub/views/ajax.py:1261
@@ -135,12 +151,12 @@ msgstr "Uživatel %s nebyl v organizaci nalezen."
 
 #: seahub/api2/endpoints/invitations.py:53
 msgid "The email address is not allowed to be invited as a guest."
-msgstr ""
+msgstr "Emailová adresa není oprávněna být pozvána jako host."
 
 #: seahub/api2/endpoints/invitations.py:58
 #, python-format
 msgid "%s is already invited."
-msgstr ""
+msgstr "%s je již pozván."
 
 #: seahub/api2/endpoints/invitations.py:68 seahub/base/accounts.py:603
 #, python-format
@@ -151,7 +167,7 @@ msgstr "Uživatel %s již existuje."
 #: seahub/templates/js/sysadmin-templates.html:237
 #: seahub/templates/view_shared_upload_link.html:81
 msgid "Error"
-msgstr ""
+msgstr "Chyba"
 
 #: seahub/api2/endpoints/repo_set_password.py:48 seahub/api2/views.py:2846
 msgid "Wrong password"
@@ -169,7 +185,7 @@ msgstr "Problém při dešifrování knihovny"
 
 #: seahub/api2/endpoints/repo_set_password.py:97
 msgid "Wrong old password"
-msgstr ""
+msgstr "Chybné staré heslo"
 
 #: seahub/api2/endpoints/send_share_link_email.py:32
 #: seahub/api2/endpoints/send_upload_link_email.py:31
@@ -426,195 +442,195 @@ msgstr "Prosím vyberte avatary, které si přejete smazat."
 msgid ""
 "You have no avatars to delete. Please <a "
 "href=\"%(avatar_change_url)s\">upload one</a> now."
-msgstr ""
+msgstr "Nemáte žádný profilový obrázek ke smazání. Prosím <a href=\"%(avatar_change_url)s\">nahrajte</a> jej nyní."
 
 #: seahub/avatar/templates/avatar/confirm_delete.html:18
 msgid "Delete These"
-msgstr ""
+msgstr "Smazat tyto"
 
 #: seahub/avatar/templates/notification/avatar_friend_updated/notice.html:2
 #, python-format
 msgid ""
 "<a href=\"%(user_url)s\">%(avatar_creator)s</a> has updated their avatar <a "
 "href=\"%(avatar_url)s\">%(avatar)s</a>."
-msgstr ""
+msgstr "<a href=\"%(user_url)s\">%(avatar_creator)s</a> aktualizovat jeho profilový obrázek <a href=\"%(avatar_url)s\">%(avatar)s</a>."
 
 #: seahub/avatar/templates/notification/avatar_updated/notice.html:2
 #, python-format
 msgid "You have updated your avatar <a href=\"%(avatar_url)s\">%(avatar)s</a>."
-msgstr ""
+msgstr "Aktualizoval jste svůj profilový obrázek <a href=\"%(avatar_url)s\">%(avatar)s</a>."
 
 #: seahub/avatar/views.py:78
 msgid "Successfully uploaded a new avatar."
-msgstr ""
+msgstr "Profilový obrázek byl úspěšně nahrán."
 
 #: seahub/avatar/views.py:124
 msgid "Successfully updated your avatar."
-msgstr ""
+msgstr "Profilový obrázek byl úspěšně aktualizován."
 
 #: seahub/avatar/views.py:166
 msgid "Successfully deleted the requested avatars."
-msgstr ""
+msgstr "Požadovaný profilový obrázek byl úspěšně smazán."
 
 #: seahub/base/accounts.py:304
 #, python-format
 msgid "Account %(account)s froze on %(site)s."
-msgstr ""
+msgstr "Účet %(account)s zmrazen na %(site)s."
 
 #: seahub/base/accounts.py:572
 msgid "Email address"
-msgstr ""
+msgstr "E-mailová adresa"
 
 #: seahub/base/accounts.py:577
 msgid "Username"
-msgstr ""
+msgstr "Uživatelské jméno"
 
 #: seahub/base/accounts.py:578
 msgid "This value must be of length 40"
-msgstr ""
+msgstr "Tatao hodnota musí mít délku 40"
 
 #: seahub/base/accounts.py:593 seahub/forms.py:29
 #: seahub/views/sysadmin.py:1815
 msgid "The number of users exceeds the limit."
-msgstr ""
+msgstr "Počet uživatelů překročil limit."
 
 #: seahub/base/accounts.py:597
 msgid "Enter a valid email address."
-msgstr ""
+msgstr "Zadejte platou emailovou adresu."
 
 #: seahub/base/accounts.py:607
 msgid "Invalid user id."
-msgstr ""
+msgstr "Nesprávné uživatelské ID."
 
 #: seahub/base/accounts.py:658 seahub/templates/js/templates.html:313
 #: seahub/templates/js/templates.html:1226
 #: seahub/templates/js/templates.html:1246
 msgid "name"
-msgstr ""
+msgstr "jméno"
 
 #: seahub/base/accounts.py:661
 msgid "department"
-msgstr ""
+msgstr "oddělení"
 
 #: seahub/base/accounts.py:664
 msgid "telephone"
-msgstr ""
+msgstr "telefon"
 
 #: seahub/base/accounts.py:667
 msgid "note"
-msgstr ""
+msgstr "poznámka"
 
 #: seahub/base/decorators.py:72
 msgid "Files in this library can not be viewed online."
-msgstr ""
+msgstr "Soubory v této knihovně nemohou být prohlíženy on-line."
 
 #: seahub/base/templatetags/seahub_tags.py:124
 msgid "Added"
-msgstr ""
+msgstr "Přidán"
 
 #: seahub/base/templatetags/seahub_tags.py:125
 msgid "Deleted"
-msgstr ""
+msgstr "Smazán"
 
 #: seahub/base/templatetags/seahub_tags.py:126
 msgid "Removed"
-msgstr ""
+msgstr "Odstraněn"
 
 #: seahub/base/templatetags/seahub_tags.py:127
 msgid "Modified"
-msgstr ""
+msgstr "Upraven"
 
 #: seahub/base/templatetags/seahub_tags.py:128
 msgid "Renamed"
-msgstr ""
+msgstr "Přejmenován"
 
 #: seahub/base/templatetags/seahub_tags.py:129
 msgid "Moved"
-msgstr ""
+msgstr "Přesunut"
 
 #: seahub/base/templatetags/seahub_tags.py:130
 msgid "Added directory"
-msgstr ""
+msgstr "Přidán adresář"
 
 #: seahub/base/templatetags/seahub_tags.py:131
 msgid "Removed directory"
-msgstr ""
+msgstr "Odstraněn adresář"
 
 #: seahub/base/templatetags/seahub_tags.py:132
 msgid "Renamed directory"
-msgstr ""
+msgstr "Přejmenován adresář"
 
 #: seahub/base/templatetags/seahub_tags.py:133
 msgid "Moved directory"
-msgstr ""
+msgstr "Přesunutý adresář"
 
 #: seahub/base/templatetags/seahub_tags.py:134
 msgid "Added or modified"
-msgstr ""
+msgstr "Přidán nebo modifikován"
 
 #: seahub/base/templatetags/seahub_tags.py:149
 #: seahub/base/templatetags/seahub_tags.py:218
 msgid "Reverted library to status at"
-msgstr ""
+msgstr "Vrácen status knihovny na"
 
 #: seahub/base/templatetags/seahub_tags.py:152
 #: seahub/base/templatetags/seahub_tags.py:221
 #, python-format
 msgid "Reverted file \"%(file)s\" to status at %(time)s."
-msgstr ""
+msgstr "Vrácen soubor \"%(file)s\" na status v %(time)s."
 
 #: seahub/base/templatetags/seahub_tags.py:156
 #: seahub/base/templatetags/seahub_tags.py:225
 msgid "Recovered deleted directory"
-msgstr ""
+msgstr "Smazaný adresář byl obnoven"
 
 #: seahub/base/templatetags/seahub_tags.py:158
 #: seahub/base/templatetags/seahub_tags.py:227 seahub/views/ajax.py:1133
 msgid "Changed library name or description"
-msgstr ""
+msgstr "Jméno knihovny nebo popisu bylo změněno"
 
 #: seahub/base/templatetags/seahub_tags.py:160
 #: seahub/base/templatetags/seahub_tags.py:229
 msgid "Auto merge by seafile system"
-msgstr ""
+msgstr "Automatické spojení seafile systémem"
 
 #: seahub/base/templatetags/seahub_tags.py:304
 #: seahub/base/templatetags/seahub_tags.py:340
 #: seahub/templates/view_file_base.html:522
 msgid "Just now"
-msgstr ""
+msgstr "Právě teď"
 
 #: seahub/base/templatetags/seahub_tags.py:315
 #, python-format
 msgid "%(days)d day ago"
 msgid_plural "%(days)d days ago"
-msgstr[0] ""
-msgstr[1] ""
-msgstr[2] ""
+msgstr[0] "%(days)d den"
+msgstr[1] "%(days)d dny"
+msgstr[2] "%(days)d dní"
 
 #: seahub/base/templatetags/seahub_tags.py:322
 #, python-format
 msgid "%(hours)d hour ago"
 msgid_plural "%(hours)d hours ago"
-msgstr[0] ""
-msgstr[1] ""
-msgstr[2] ""
+msgstr[0] "%(hours)d hodina"
+msgstr[1] "%(hours)d hodiny"
+msgstr[2] "%(hours)d hodin"
 
 #: seahub/base/templatetags/seahub_tags.py:329
 #, python-format
 msgid "%(minutes)d minute ago"
 msgid_plural "%(minutes)d minutes ago"
-msgstr[0] ""
-msgstr[1] ""
-msgstr[2] ""
+msgstr[0] "%(minutes)d munuta"
+msgstr[1] "%(minutes)d minuty"
+msgstr[2] "%(minutes)d minut"
 
 #: seahub/base/templatetags/seahub_tags.py:335
 #, python-format
 msgid "%(seconds)d second ago"
 msgid_plural "%(seconds)d seconds ago"
-msgstr[0] ""
-msgstr[1] ""
-msgstr[2] ""
+msgstr[0] "%(seconds)d vteřin"
+msgstr[1] "%(seconds)d vteřiny"
+msgstr[2] "%(seconds)d vteřin"
 
 #: seahub/base/templatetags/seahub_tags.py:452
 #: seahub/institutions/templates/institutions/user_info.html:77
@@ -642,7 +658,7 @@ msgstr[2] ""
 #: seahub/templates/sysadmin/userinfo.html:129
 #: seahub/templates/sysadmin/userinfo.html:180
 msgid "Read-Write"
-msgstr ""
+msgstr "Čtení-Zápis"
 
 #: seahub/base/templatetags/seahub_tags.py:454
 #: seahub/templates/js/sysadmin-templates.html:642
@@ -666,60 +682,60 @@ msgstr ""
 #: seahub/templates/js/templates.html:1900
 #: seahub/templates/sysadmin/userinfo.html:178
 msgid "Read-Only"
-msgstr ""
+msgstr "Jen čtení"
 
 #: seahub/base/templatetags/seahub_tags.py:478
 #: seahub/base/templatetags/seahub_tags.py:490
 #, python-format
 msgid "%(size)d byte"
 msgid_plural "%(size)d bytes"
-msgstr[0] ""
-msgstr[1] ""
-msgstr[2] ""
+msgstr[0] "%(size)d bajt"
+msgstr[1] "%(size)d bajty"
+msgstr[2] "%(size)d bajtů"
 
 #: seahub/base/templatetags/seahub_tags.py:492
 #, python-format
 msgid "%s KB"
-msgstr ""
+msgstr "%s KB"
 
 #: seahub/base/templatetags/seahub_tags.py:494
 #, python-format
 msgid "%s MB"
-msgstr ""
+msgstr "%s MB"
 
 #: seahub/base/templatetags/seahub_tags.py:496
 #, python-format
 msgid "%s GB"
-msgstr ""
+msgstr "%s GB"
 
 #: seahub/base/templatetags/seahub_tags.py:498
 #, python-format
 msgid "%s TB"
-msgstr ""
+msgstr "%s TB"
 
 #: seahub/base/templatetags/seahub_tags.py:500
 #, python-format
 msgid "%s PB"
-msgstr ""
+msgstr "%s PB"
 
 #: seahub/contacts/models.py:78
 #: seahub/contacts/templates/contacts/contact_list.html:119
 msgid "Email is required."
-msgstr ""
+msgstr "Email je vyžadován."
 
 #: seahub/contacts/templates/contacts/contact_list.html:4
 #: seahub/contacts/templates/contacts/contact_list.html:10
 msgid "Contacts"
-msgstr ""
+msgstr "Kontakty"
 
 #: seahub/contacts/templates/contacts/contact_list.html:11
 #: seahub/contacts/templates/contacts/contact_list.html:43
 msgid "Add Contacts"
-msgstr ""
+msgstr "Přidej kontakty"
 
 #: seahub/contacts/templates/contacts/contact_list.html:17
 msgid "Email "
-msgstr ""
+msgstr "Email "
 
 #: seahub/contacts/templates/contacts/contact_list.html:18
 #: seahub/group/templates/group/group_wiki.html:46
@@ -784,12 +800,12 @@ msgstr ""
 #: seahub/views/sysadmin.py:279 seahub/views/sysadmin.py:283
 #: seahub/views/sysadmin.py:1062
 msgid "Name"
-msgstr ""
+msgstr "Jméno"
 
 #: seahub/contacts/templates/contacts/contact_list.html:19
 #: seahub/templates/registration/registration_form.html:41
 msgid "Note"
-msgstr ""
+msgstr "Poznámka"
 
 #: seahub/contacts/templates/contacts/contact_list.html:20
 #: seahub/institutions/templates/institutions/user_info.html:69
@@ -817,7 +833,7 @@ msgstr ""
 #: seahub/templates/sysadmin/userinfo.html:255
 #: seahub/templates/view_shared_dir.html:57
 msgid "Operations"
-msgstr ""
+msgstr "Operace"
 
 #: seahub/contacts/templates/contacts/contact_list.html:29
 #: seahub/group/templates/group/group_wiki.html:22
@@ -839,14 +855,14 @@ msgstr ""
 #: seahub/templates/view_file_markdown.html:17
 #: seahub/templates/view_file_text.html:22
 msgid "Edit"
-msgstr ""
+msgstr "Upravit"
 
 #: seahub/contacts/templates/contacts/contact_list.html:30
 #: seahub/institutions/templates/institutions/useradmin.html:57
 #: seahub/institutions/templates/institutions/useradmin_search.html:54
 #: seahub/notifications/templates/notifications/notification_list.html:33
-#: seahub/profile/templates/profile/set_profile.html:138
 #: seahub/profile/templates/profile/set_profile.html:140
+#: seahub/profile/templates/profile/set_profile.html:142
 #: seahub/templates/js/sysadmin-templates.html:391
 #: seahub/templates/js/sysadmin-templates.html:453
 #: seahub/templates/js/sysadmin-templates.html:518
@@ -881,17 +897,17 @@ msgstr ""
 #: seahub/templates/view_file_base.html:127
 #: seahub/templates/view_shared_upload_link.html:86
 msgid "Delete"
-msgstr ""
+msgstr "Smazat"
 
 #: seahub/contacts/templates/contacts/contact_list.html:37
 msgid "You don't have any contacts"
-msgstr ""
+msgstr "Nemáte žádné kontakty"
 
 #: seahub/contacts/templates/contacts/contact_list.html:38
 msgid ""
 "Add your contacts so you can quickly share libraries and send file shared "
 "link."
-msgstr ""
+msgstr "Přidejte vaše kontakty a tak budete moci rychle sdílet knihovny a odesílat odkazy."
 
 #: seahub/contacts/templates/contacts/contact_list.html:44
 #: seahub/contacts/templates/contacts/contact_list.html:53
@@ -924,12 +940,12 @@ msgstr ""
 #: seahub/templates/sysadmin/userinfo.html:36 seahub/views/sysadmin.py:279
 #: seahub/views/sysadmin.py:283
 msgid "Email"
-msgstr ""
+msgstr "Email"
 
 #: seahub/contacts/templates/contacts/contact_list.html:46
 #: seahub/contacts/templates/contacts/contact_list.html:55
 msgid "Note(optional)"
-msgstr ""
+msgstr "Poznámka (volitelná)"
 
 #: seahub/contacts/templates/contacts/contact_list.html:49
 #: seahub/contacts/templates/contacts/contact_list.html:58
@@ -943,7 +959,7 @@ msgstr ""
 #: seahub/notifications/templates/notifications/notification_list.html:14
 #: seahub/options/templates/options/set_user_options.html:14
 #: seahub/profile/templates/profile/set_profile.html:74
-#: seahub/profile/templates/profile/set_profile.html:104
+#: seahub/profile/templates/profile/set_profile.html:106
 #: seahub/share/templates/share/share_link_audit.html:22
 #: seahub/templates/decrypt_repo_form.html:11
 #: seahub/templates/file_edit.html:102 seahub/templates/file_edit.html:135
@@ -1019,18 +1035,18 @@ msgstr ""
 #: seahub/templates/wiki/personal_wiki.html:88
 #: seahub/templates/wiki/personal_wiki_pages.html:31
 msgid "Submit"
-msgstr ""
+msgstr "Odeslat"
 
 #: seahub/contacts/templates/contacts/contact_list.html:52
 msgid "Edit Contact"
-msgstr ""
+msgstr "Upravit kontakt"
 
 #: seahub/contacts/templates/contacts/contact_list.html:101
 #: seahub/contacts/templates/contacts/contact_list.html:146
 #: seahub/institutions/templates/institutions/user_info.html:173
 #: seahub/notifications/templates/notifications/user_notification_list.html:90
 #: seahub/share/templates/share/share_link_audit.html:70
-#: seahub/templates/base.html:141 seahub/templates/decrypt_repo_form.html:47
+#: seahub/templates/base.html:143 seahub/templates/decrypt_repo_form.html:47
 #: seahub/templates/file_edit.html:545
 #: seahub/templates/repo_dir_recycle_view.html:141
 #: seahub/templates/repo_dir_recycle_view.html:175
@@ -1057,11 +1073,11 @@ msgstr ""
 #: seahub/templates/view_shared_dir.html:236
 #: seahub/templates/view_shared_dir.html:258
 msgid "Failed. Please check the network."
-msgstr ""
+msgstr "Chyba. Prosím zkontrolujte připojení k síti."
 
 #: seahub/contacts/templates/contacts/contact_list.html:109
 msgid "Delete Contact"
-msgstr ""
+msgstr "Smazat kontakt"
 
 #: seahub/contacts/templates/contacts/contact_list.html:109
 #: seahub/institutions/templates/institutions/useradmin.html:79
@@ -1079,41 +1095,41 @@ msgstr ""
 #: seahub/templates/sysadmin/userinfo.html:433
 #, python-format
 msgid "Are you sure you want to delete %s ?"
-msgstr ""
+msgstr "Jste si jisti že chcete smazat %s ?"
 
 #: seahub/contacts/templates/contacts/contact_list.html:123
 msgid "You cannot add yourself."
-msgstr ""
+msgstr "Nemůžete přidat sám sebe."
 
 #: seahub/contacts/views.py:68
 #, python-format
 msgid "%s is not a valid email."
-msgstr ""
+msgstr "%s není platný email"
 
 #: seahub/contacts/views.py:73
 #, python-format
 msgid "%s is already in your contacts."
-msgstr ""
+msgstr "%s je již ve vašich kontaktech."
 
 #: seahub/contacts/views.py:82
 #, python-format
 msgid "Successfully added %s to contacts."
-msgstr ""
+msgstr "%s byl úspěšně přidán do kontaktů."
 
 #: seahub/contacts/views.py:87
 #, python-format
 msgid "Failed to add %s to contacts."
-msgstr ""
+msgstr "Chyba při přidávání %s do kontaktů"
 
 #: seahub/contacts/views.py:108
 #, python-format
 msgid "Successfully edited %s."
-msgstr ""
+msgstr "%s byl úspěšně upraven."
 
 #: seahub/contacts/views.py:121
 #, python-format
 msgid "Successfully Deleted %s"
-msgstr ""
+msgstr "%s byl úspěšně smazán"
 
 #: seahub/forms.py:34 seahub/invitations/views.py:29
 msgid "A user with this email already exists."
@@ -1142,116 +1158,116 @@ msgstr "Popis je příliš dlouhý (maximum je 100 znaků)"
 #: seahub/forms.py:82 seahub/forms.py:168
 #, python-format
 msgid "Name %s is not valid"
-msgstr ""
+msgstr "Jméno %s není platné"
 
 #: seahub/forms.py:96 seahub/views/ajax.py:392 seahub/views/ajax.py:556
 #: seahub/views/ajax.py:824 seahub/views/ajax.py:828 seahub/views/ajax.py:832
 #: seahub/views/ajax.py:1120 seahub/views/file.py:1580
 #: seahub/views/sysadmin.py:1436 seahub/views/sysadmin.py:1454
 msgid "Argument missing"
-msgstr ""
+msgstr "Chybí argument"
 
 #: seahub/forms.py:110
 msgid "Oldname is required"
-msgstr ""
+msgstr "Staré jméno je povinné"
 
 #: seahub/forms.py:113 seahub/forms.py:134
 msgid "It's too long."
-msgstr ""
+msgstr "Příliš dlouhé."
 
 #: seahub/forms.py:114 seahub/forms.py:135
 msgid "It's required."
-msgstr ""
+msgstr "Je vyžadováno"
 
 #: seahub/forms.py:121 seahub/forms.py:142
 #, python-format
 msgid "Name \"%s\" is not valid"
-msgstr ""
+msgstr "Jméno \"%s\" není platné"
 
 #: seahub/forms.py:161
 msgid "Library name is required"
-msgstr ""
+msgstr "Jméno knihovny je povinné"
 
 #: seahub/forms.py:163
 msgid "Please enter a number"
-msgstr ""
+msgstr "Prosím zadejte číslo"
 
 #: seahub/forms.py:183 seahub/templates/snippets/repo_create_js.html:34
 msgid "Name is required"
-msgstr ""
+msgstr "Jméno je povinné"
 
 #: seahub/forms.py:184
 msgid "Please enter a valid number"
-msgstr ""
+msgstr "Prosím zadejte platné číslo"
 
 #: seahub/forms.py:185
 msgid "Text is required"
-msgstr ""
+msgstr "Text je povinný"
 
 #: seahub/group/error_msg.py:8
 msgid "The group has already created"
-msgstr ""
+msgstr "Skupina byla již vytvořena"
 
 #: seahub/group/error_msg.py:9
 msgid "Failed to create group"
-msgstr ""
+msgstr "Chyba při vytváření skupiny"
 
 #: seahub/group/error_msg.py:12
 msgid "The group has already created in this org."
-msgstr ""
+msgstr "Skupina je již vytvořena v této organizaci"
 
 #: seahub/group/error_msg.py:13
 msgid "Failed to create org group."
-msgstr ""
+msgstr "Chyba při vytváření organizační skupiny."
 
 #: seahub/group/error_msg.py:16
 msgid "Permission error: only group staff can add member"
-msgstr ""
+msgstr "Chyba oprávnění: Pouze zástupce skupiny může přidat člena"
 
 #: seahub/group/error_msg.py:17 seahub/group/error_msg.py:23
 msgid "Group does not exist"
-msgstr ""
+msgstr "Skupina neexistuje"
 
 #: seahub/group/error_msg.py:18
 msgid "Group is full"
-msgstr ""
+msgstr "Skupina je plná"
 
 #: seahub/group/error_msg.py:19
 msgid "Failed to add member to group"
-msgstr ""
+msgstr "Chyba při přidávání člena do skupiny"
 
 #: seahub/group/error_msg.py:22
 msgid "Only group staff can remove member"
-msgstr ""
+msgstr "Pouze zástupce skupiny může odebrat člena"
 
 #: seahub/group/error_msg.py:24
 msgid "Can not remove myself"
-msgstr ""
+msgstr "Nemůžete odebrat sám sebe"
 
 #: seahub/group/forms.py:29
 msgid "Group name can't be empty"
-msgstr ""
+msgstr "Jméno skupiny nemůže být prázdné"
 
 #: seahub/group/forms.py:30
 msgid "Group name is too long (maximum is 255 characters)"
-msgstr ""
+msgstr "Jméno skupiny je příliš dlouhé (maximum je 255 znaků)"
 
 #: seahub/group/forms.py:46
 msgid "Verification message can't be empty"
-msgstr ""
+msgstr "Verifikační zpráva nemůže být prázdná"
 
 #: seahub/group/forms.py:47
 msgid "Verification message is too long (maximun is 255 characters)"
-msgstr ""
+msgstr "Verifikační zpráva je příliš dlouhá (maximum je 255 znaků)"
 
 #: seahub/group/forms.py:67 seahub/wiki/forms.py:28
 #, python-format
 msgid "\"%s\" is not a valid name"
-msgstr ""
+msgstr "\"%s\" není platné jméno"
 
 #: seahub/group/templates/group/add_member_email.html:8
 msgid "Hi, "
-msgstr ""
+msgstr "Dobrý den, "
 
 #: seahub/group/templates/group/add_member_email.html:11
 #, python-format
@@ -1277,42 +1293,42 @@ msgstr ""
 #: seahub/templates/sysadmin/sysadmin_backbone.html:30
 #: seahub/templates/view_file_base.html:97
 msgid "Close"
-msgstr ""
+msgstr "Zavřít"
 
 #: seahub/group/templates/group/group_join_email.html:2
 #, python-format
 msgid ""
 "%(user)s want to join to Group \"%(group_name)s\", here is the verification "
 "message: "
-msgstr ""
+msgstr "%(user)s se chce připojit do skupiny \"%(group_name)s\", zde je ověřovací zpráva: "
 
 #: seahub/group/templates/group/group_join_email.html:6
 #: seahub/templates/email_base.html:9
 msgid "Thanks for using our site!"
-msgstr ""
+msgstr "Děkujeme za využití našich stránek!"
 
 #: seahub/group/templates/group/group_join_email.html:8
 #: seahub/templates/email_base.html:13
 #, python-format
 msgid "The %(site_name)s team"
-msgstr ""
+msgstr "Tým %(site_name)s"
 
 #: seahub/group/templates/group/group_wiki.html:13
 #: seahub/group/templates/group/group_wiki.html:20
 msgid "Wiki Index"
-msgstr ""
+msgstr "Wiki index"
 
 #: seahub/group/templates/group/group_wiki.html:14
 msgid "No index now."
-msgstr ""
+msgstr "Aktuálně žádný index"
 
 #: seahub/group/templates/group/group_wiki.html:16
 msgid "Create"
-msgstr ""
+msgstr "Vytvořit"
 
 #: seahub/group/templates/group/group_wiki.html:35
 msgid "This group currently has no wiki"
-msgstr ""
+msgstr "tato skupina nemá momentálně žádnou wiki"
 
 #: seahub/group/templates/group/group_wiki.html:36
 #: seahub/templates/wiki/personal_wiki.html:35
@@ -1321,47 +1337,47 @@ msgid ""
 "contents of wiki is stored in a normal library with pre-defined file/folder "
 "structure. This enables you to edit your wiki in your desktop and then sync "
 "back to the server."
-msgstr ""
+msgstr "Seafile wiki umožňuje organizovat Vaše poznatky jednduchou cestou.Obsah wiki je uložen v normální knihovně s předdefinovanou souborovou/adresářovou strukturou.To umožňuje editovat Vaší wiki na vašem počítači a pak synchronizovat zpět na server."
 
 #: seahub/group/templates/group/group_wiki.html:38
 #: seahub/templates/wiki/personal_wiki.html:36
 msgid "Create Wiki Now"
-msgstr ""
+msgstr "Vytvořit Wiki nyní"
 
 #: seahub/group/templates/group/group_wiki.html:40
 #: seahub/templates/wiki/personal_wiki.html:38
 msgid "Choose a library as wiki"
-msgstr ""
+msgstr "Vybrat knihovnu jako wiki"
 
 #: seahub/group/templates/group/group_wiki.html:45
 #: seahub/templates/wiki/personal_wiki.html:42
 msgid "Create Wiki"
-msgstr ""
+msgstr "Vytvořit Wiki"
 
 #: seahub/group/templates/group/group_wiki.html:48
 #: seahub/templates/js/sysadmin-templates.html:405
 #: seahub/templates/repo_history.html:28
 #: seahub/templates/wiki/personal_wiki.html:45
 msgid "Description"
-msgstr ""
+msgstr "Popis"
 
 #: seahub/group/templates/group/group_wiki.html:49
 msgid "Wiki Pages"
-msgstr ""
+msgstr "Wiki stránky"
 
 #: seahub/group/templates/group/group_wiki.html:55
 #: seahub/templates/wiki/personal_wiki.html:52
 msgid "Choose a library as wiki:"
-msgstr ""
+msgstr "Vyberte knihovnu jako wiki:"
 
 #: seahub/group/templates/group/group_wiki.html:60
-#: seahub/profile/templates/profile/set_profile.html:103
+#: seahub/profile/templates/profile/set_profile.html:105
 #: seahub/templates/wiki/personal_wiki.html:57
 msgid "Please click and choose a library."
-msgstr ""
+msgstr "Prosím klikněte a vyberte knihovnu."
 
 #: seahub/group/templates/group/group_wiki.html:62
-#: seahub/profile/templates/profile/set_profile.html:105
+#: seahub/profile/templates/profile/set_profile.html:107
 #: seahub/templates/file_edit.html:103 seahub/templates/file_edit.html:152
 #: seahub/templates/file_edit.html:427
 #: seahub/templates/js/lib-op-popups.html:10
@@ -1385,28 +1401,28 @@ msgstr ""
 #: seahub/templates/view_shared_upload_link.html:85
 #: seahub/templates/wiki/personal_wiki.html:59
 msgid "Cancel"
-msgstr ""
+msgstr "Zrušit"
 
 #: seahub/group/templates/group/group_wiki.html:68
 #: seahub/group/templates/group/group_wiki_pages.html:11
 #: seahub/templates/wiki/personal_wiki.html:65
 #: seahub/templates/wiki/personal_wiki_pages.html:13
 msgid "Home"
-msgstr ""
+msgstr "Domů"
 
 #: seahub/group/templates/group/group_wiki.html:69
 #: seahub/group/templates/group/group_wiki_pages.html:12
 #: seahub/templates/wiki/personal_wiki.html:66
 #: seahub/templates/wiki/personal_wiki_pages.html:14
 msgid "Pages"
-msgstr ""
+msgstr "Stránky"
 
 #: seahub/group/templates/group/group_wiki.html:71
 #: seahub/group/templates/group/group_wiki_pages.html:14
 #: seahub/templates/wiki/personal_wiki.html:67
 #: seahub/templates/wiki/personal_wiki_pages.html:15
 msgid "Wiki History"
-msgstr ""
+msgstr "Historie Wiki"
 
 #: seahub/group/templates/group/group_wiki.html:76
 #: seahub/group/templates/group/group_wiki.html:90
@@ -1417,45 +1433,45 @@ msgstr ""
 #: seahub/templates/wiki/personal_wiki_pages.html:17
 #: seahub/templates/wiki/personal_wiki_pages.html:27
 msgid "New Page"
-msgstr ""
+msgstr "Nová stránka"
 
 #: seahub/group/templates/group/group_wiki.html:77
 #: seahub/group/templates/group/group_wiki.html:138
 #: seahub/templates/wiki/personal_wiki.html:71
 #: seahub/templates/wiki/personal_wiki.html:132
 msgid "Delete Page"
-msgstr ""
+msgstr "Smazat stránku"
 
 #: seahub/group/templates/group/group_wiki.html:78
 #: seahub/templates/wiki/personal_wiki.html:72
 msgid "Edit Page"
-msgstr ""
+msgstr "Upravit stránku"
 
 #: seahub/group/templates/group/group_wiki.html:79
 #: seahub/templates/wiki/personal_wiki.html:73
 msgid "Page History"
-msgstr ""
+msgstr "Historie stránky"
 
 #: seahub/group/templates/group/group_wiki.html:86
 #: seahub/templates/wiki/personal_wiki.html:79
 #, python-format
 msgid "Last modified by %(modifier)s, %(modify_time)s"
-msgstr ""
+msgstr "Naposledy změněno uživatelem %(modifier)s, %(modify_time)s"
 
 #: seahub/group/templates/group/group_wiki.html:139
 #: seahub/templates/wiki/personal_wiki.html:133
 msgid "Are you sure you want to delete this page?"
-msgstr ""
+msgstr "Jste si jisti, že chcete smazat tuto stránku?"
 
 #: seahub/group/templates/group/group_wiki.html:160
 #: seahub/templates/wiki/personal_wiki.html:154
 msgid "Name is required."
-msgstr ""
+msgstr "Jméno je povinné"
 
 #: seahub/group/templates/group/group_wiki.html:164
 #: seahub/templates/wiki/personal_wiki.html:158
 msgid "Description is required."
-msgstr ""
+msgstr "Popis je povinný"
 
 #: seahub/group/views.py:121 seahub/share/views.py:223
 #: seahub/views/__init__.py:467 seahub/views/__init__.py:583
@@ -1464,131 +1480,131 @@ msgstr ""
 #: seahub/views/ajax.py:1100 seahub/views/file.py:1095
 #: seahub/views/file.py:1589 seahub/views/repo.py:119
 msgid "Permission denied"
-msgstr ""
+msgstr "Přístup odepřen"
 
 #: seahub/group/views.py:187
 #, python-format
 msgid "You are invited to join a group on %s"
-msgstr ""
+msgstr "Jste pozván do skupiny na %s"
 
 #: seahub/group/views.py:203
 msgid "Failed to create: the group does not exist."
-msgstr ""
+msgstr "Chyba při vytváření: skupina neexistuje."
 
 #: seahub/group/views.py:208
 msgid "Failed to create: you are not in the group."
-msgstr ""
+msgstr "Chyba při vytváření: nejste ve skupině."
 
 #: seahub/group/views.py:236 seahub/group/views.py:258
 #: seahub/group/views.py:415 seahub/views/wiki.py:177
 msgid "Failed to create"
-msgstr ""
+msgstr "Chyba při vytváření"
 
 #: seahub/group/views.py:243 seahub/group/views.py:264
 #: seahub/group/views.py:421
 msgid "Failed to create: internal error."
-msgstr ""
+msgstr "Chyba při vytváření: vnitřní chyba"
 
 #: seahub/group/views.py:303 seahub/group/views.py:487 seahub/views/wiki.py:76
 #: seahub/views/wiki.py:238
 msgid "Failed to create wiki page. Please retry later."
-msgstr ""
+msgstr "Chyba při vytváření wiki stránky. Prosím zkuste to později."
 
 #: seahub/group/views.py:339 seahub/templates/file_revisions.html:78
 #: seahub/templates/repo_history.html:53
 #: seahub/templates/repo_history_view.html:30 seahub/views/wiki.py:104
 msgid "Unknown"
-msgstr ""
+msgstr "Neznámý"
 
 #: seahub/group/views.py:361 seahub/views/ajax.py:1078
 #: seahub/views/wiki.py:136
 msgid "Internal Server Error"
-msgstr ""
+msgstr "Vnitřní chyba serveru"
 
 #: seahub/group/views.py:363 seahub/views/wiki.py:138
 msgid "Wiki does not exists."
-msgstr ""
+msgstr "Wiki neexistuje"
 
 #: seahub/group/views.py:428 seahub/group/views.py:457
 #: seahub/views/wiki.py:184 seahub/views/wiki.py:212
 msgid "Failed to create home page. Please retry later"
-msgstr ""
+msgstr "Chyba při vytváření domovské stránky. Prosím zkuste to později."
 
 #: seahub/group/views.py:444 seahub/views/wiki.py:199
 msgid "Failed to set wiki library."
-msgstr ""
+msgstr "Chyba při nastavování wiki knihovny."
 
 #: seahub/group/views.py:448 seahub/thumbnail/views.py:52
 #: seahub/thumbnail/views.py:164 seahub/views/ajax.py:220
 #: seahub/views/ajax.py:745 seahub/views/wiki.py:203
 msgid "Permission denied."
-msgstr ""
+msgstr "Přístup odmítnut."
 
 #: seahub/group/views.py:477 seahub/group/views.py:503
 #: seahub/group/views.py:521 seahub/views/wiki.py:228 seahub/views/wiki.py:251
 #: seahub/views/wiki.py:266
 msgid "Wiki is not found."
-msgstr ""
+msgstr "Wiki nenalezena"
 
 #: seahub/group/views.py:484 seahub/views/wiki.py:235
 #, python-format
 msgid "Page \"%s\" already exists."
-msgstr ""
+msgstr "Stránka \"%s\" již existuje."
 
 #: seahub/group/views.py:526
 #, python-format
 msgid "Successfully deleted \"%s\"."
-msgstr ""
+msgstr "Úspěšně smazáno \"%s\"."
 
 #: seahub/group/views.py:528
 #, python-format
 msgid "Failed to delete \"%s\". Please retry later."
-msgstr ""
+msgstr "Chyba při mazání \"%s\". Zkuste to znovu později."
 
 #: seahub/help/templates/help/base.html:8
 msgid "Desktop Client and Syncing"
-msgstr ""
+msgstr "Desktopový klient a synchronizace"
 
 #: seahub/help/templates/help/base.html:10
 msgid "Install and sync Files"
-msgstr ""
+msgstr "Instalovat a synchronizovat soubory"
 
 #: seahub/help/templates/help/base.html:11
 msgid "Syncing existing folders"
-msgstr ""
+msgstr "Synchronizuji existující složky"
 
 #: seahub/help/templates/help/base.html:12
 msgid "Selective sync sub-folders"
-msgstr ""
+msgstr "Selektivní synchronizace podsložek"
 
 #: seahub/help/templates/help/base.html:13
 msgid "Unsync and resync libraries"
-msgstr ""
+msgstr "Znovu-synchronizace knihoven"
 
 #: seahub/help/templates/help/base.html:14
 msgid "Setting sync interval"
-msgstr ""
+msgstr "Nastavení intervalu synchronizace"
 
 #: seahub/help/templates/help/base.html:15
 msgid "Proxy settings"
-msgstr ""
+msgstr "Nastavení proxy"
 
 #: seahub/help/templates/help/base.html:16
 #: seahub/help/templates/help/conflicts.html:5
 msgid "File conflicts"
-msgstr ""
+msgstr "Konfikty souborů"
 
 #: seahub/help/templates/help/base.html:17
 msgid "Excluding files"
-msgstr ""
+msgstr "Vynechané soubory"
 
 #: seahub/help/templates/help/base.html:19
 msgid "Security and Encryption"
-msgstr ""
+msgstr "Zabezpečení a šifrování"
 
 #: seahub/help/templates/help/base.html:21
 msgid "How to use encrypted libraries"
-msgstr ""
+msgstr "Jak použít šifrované knihovny"
 
 #: seahub/help/templates/help/conflicts.html:7
 msgid ""
@@ -1609,7 +1625,7 @@ msgstr ""
 
 #: seahub/help/templates/help/desktop_proxy.html:6
 msgid "Using Proxy in Seafile Client"
-msgstr ""
+msgstr "Použití proxy v Seafile klientu"
 
 #: seahub/help/templates/help/desktop_proxy.html:8
 msgid ""
@@ -1749,11 +1765,11 @@ msgstr ""
 
 #: seahub/help/templates/help/ignore.html:18
 msgid "Example"
-msgstr ""
+msgstr "Příklad "
 
 #: seahub/help/templates/help/ignore.html:36
 msgid "Notes"
-msgstr ""
+msgstr "Poznámky"
 
 #: seahub/help/templates/help/ignore.html:38
 msgid ""
@@ -1784,7 +1800,7 @@ msgstr ""
 
 #: seahub/help/templates/help/install.html:6
 msgid "Installing Seafile Client Program"
-msgstr ""
+msgstr "Instaluji Seafile klienta"
 
 #: seahub/help/templates/help/install.html:8
 msgid ""
@@ -1939,14 +1955,14 @@ msgstr ""
 #: seahub/templates/js/sysadmin-templates.html:277
 #: seahub/templates/sysadmin/base.html:5
 msgid "Exit admin panel"
-msgstr ""
+msgstr "Opustit Admin panel"
 
 #: seahub/institutions/templates/institutions/base.html:16
 #: seahub/institutions/templates/institutions/useradmin.html:9
 #: seahub/templates/js/sysadmin-templates.html:22
 #: seahub/templates/sysadmin/base.html:30
 msgid "Users"
-msgstr ""
+msgstr "Uživatelé"
 
 #: seahub/institutions/templates/institutions/base.html:21
 #: seahub/templates/sysadmin/sys_inst_info_base.html:37
@@ -1956,14 +1972,14 @@ msgstr ""
 #: seahub/templates/sysadmin/sys_useradmin_ldap.html:8
 #: seahub/templates/sysadmin/sys_useradmin_paid.html:7
 msgid "Search users..."
-msgstr ""
+msgstr "Vyhledat uživatele..."
 
 #: seahub/institutions/templates/institutions/info.html:7
 #: seahub/templates/js/sysadmin-templates.html:8
 #: seahub/templates/js/sysadmin-templates.html:98
 #: seahub/templates/sysadmin/base.html:16
 msgid "Info"
-msgstr ""
+msgstr "Info"
 
 #: seahub/institutions/templates/institutions/info.html:13
 #: seahub/templates/home_base.html:59
@@ -1978,54 +1994,54 @@ msgstr ""
 #: seahub/templates/sysadmin/sys_org_info_setting.html:10
 #: seahub/templates/sysadmin/sys_org_info_user.html:9
 msgid "Libraries"
-msgstr ""
+msgstr "Knihovny"
 
 #: seahub/institutions/templates/institutions/info.html:16
 #: seahub/templates/js/sysadmin-templates.html:131
 #: seahub/templates/js/sysadmin-templates.html:144
 msgid "Active Users"
-msgstr ""
+msgstr "Aktivní uživatelé"
 
 #: seahub/institutions/templates/institutions/info.html:16
 #: seahub/templates/js/sysadmin-templates.html:131
 #: seahub/templates/js/sysadmin-templates.html:144
 msgid "Total Users"
-msgstr ""
+msgstr "Celkový počet uživatelů"
 
 #: seahub/institutions/templates/institutions/user_info.html:20
 #: seahub/profile/templates/profile/set_profile.html:13
 #: seahub/profile/templates/profile/user_profile.html:4
 #: seahub/templates/sysadmin/userinfo.html:23
 msgid "Profile"
-msgstr ""
+msgstr "Profil"
 
 #: seahub/institutions/templates/institutions/user_info.html:21
 #: seahub/templates/i18n.html:11 seahub/templates/sysadmin/userinfo.html:24
 msgid "Owned Libs"
-msgstr ""
+msgstr "Vlastněné knihovny"
 
 #: seahub/institutions/templates/institutions/user_info.html:28
 #: seahub/templates/sysadmin/userinfo.html:33
 msgid "Avatar"
-msgstr ""
+msgstr "Profilový obrázek"
 
 #: seahub/institutions/templates/institutions/user_info.html:35
 #: seahub/templates/sysadmin/userinfo.html:44
 msgctxt "true name"
 msgid "Name"
-msgstr ""
+msgstr "Jméno"
 
 #: seahub/institutions/templates/institutions/user_info.html:40
 #: seahub/templates/registration/registration_form.html:31
 #: seahub/templates/sysadmin/userinfo.html:56
 msgid "Department"
-msgstr ""
+msgstr "Oddělení"
 
 #: seahub/institutions/templates/institutions/user_info.html:43
 #: seahub/templates/registration/registration_form.html:36
 #: seahub/templates/sysadmin/userinfo.html:69
 msgid "Telephone"
-msgstr ""
+msgstr "Telefon"
 
 #: seahub/institutions/templates/institutions/user_info.html:47
 #: seahub/institutions/templates/institutions/useradmin.html:18
@@ -2038,24 +2054,24 @@ msgstr ""
 #: seahub/templates/sysadmin/sys_org_info_base.html:26
 #: seahub/templates/sysadmin/sys_org_info_user.html:21
 msgid "Space Used"
-msgstr ""
+msgstr "Využité místo"
 
 #: seahub/institutions/templates/institutions/user_info.html:48
 #: seahub/templates/sysadmin/sys_inst_info_base.html:24
 #: seahub/templates/sysadmin/sys_org_info_base.html:28
 msgid "Set Quota"
-msgstr ""
+msgstr "Nastavit kvótu"
 
 #: seahub/institutions/templates/institutions/user_info.html:52
 #: seahub/templates/sysadmin/sys_user_admin_ldap_imported.html:88
 #: seahub/templates/sysadmin/useradmin_table.html:111
 #: seahub/templates/sysadmin/userinfo.html:102
 msgid "Set user storage limit"
-msgstr ""
+msgstr "Nastavit limit úložného prostoru uživatele"
 
 #: seahub/institutions/templates/institutions/user_info.html:55
 msgid "Available quota:"
-msgstr ""
+msgstr "Dostupná kvóta:"
 
 #: seahub/institutions/templates/institutions/user_info.html:67
 #: seahub/templates/file_revisions.html:56
@@ -2074,7 +2090,7 @@ msgstr ""
 #: seahub/templates/sysadmin/userinfo.html:206
 #: seahub/templates/view_shared_dir.html:55
 msgid "Size"
-msgstr ""
+msgstr "Velikost"
 
 #: seahub/institutions/templates/institutions/user_info.html:68
 #: seahub/templates/js/sysadmin-templates.html:471
@@ -2088,7 +2104,7 @@ msgstr ""
 #: seahub/templates/sysadmin/userinfo.html:170
 #: seahub/templates/view_shared_dir.html:56
 msgid "Last Update"
-msgstr ""
+msgstr "Poslední aktualizace"
 
 #: seahub/institutions/templates/institutions/user_info.html:75
 #: seahub/templates/js/templates.html:1273
@@ -2096,7 +2112,7 @@ msgstr ""
 #: seahub/templates/sysadmin/userinfo.html:127
 #: seahub/templates/sysadmin/userinfo.html:176
 msgid "Encrypted"
-msgstr ""
+msgstr "Šifrováno"
 
 #: seahub/institutions/templates/institutions/user_info.html:75
 #: seahub/institutions/templates/institutions/user_info.html:77
@@ -2106,12 +2122,12 @@ msgstr ""
 #: seahub/templates/sysadmin/userinfo.html:178
 #: seahub/templates/sysadmin/userinfo.html:180
 msgid "library icon"
-msgstr ""
+msgstr "ikona knihovny"
 
 #: seahub/institutions/templates/institutions/user_info.html:103
 #: seahub/templates/sysadmin/userinfo.html:157
 msgid "This user has not created any libraries"
-msgstr ""
+msgstr "Tento uživatel nemá vytvořené žádné knihovny"
 
 #: seahub/institutions/templates/institutions/user_info.html:113
 #: seahub/templates/js/sysadmin-templates.html:807
@@ -2120,7 +2136,7 @@ msgstr ""
 #: seahub/templates/sysadmin/useradmin_table.html:8
 #: seahub/templates/sysadmin/userinfo.html:253 seahub/views/sysadmin.py:279
 msgid "Role"
-msgstr ""
+msgstr "Role"
 
 #: seahub/institutions/templates/institutions/user_info.html:114
 #: seahub/templates/sysadmin/sys_inst_admin.html:28
@@ -2129,12 +2145,12 @@ msgstr ""
 #: seahub/templates/sysadmin/userinfo.html:254 seahub/views/sysadmin.py:281
 #: seahub/views/sysadmin.py:285 seahub/views/sysadmin.py:1062
 msgid "Create At"
-msgstr ""
+msgstr "Vytvořeno v"
 
 #: seahub/institutions/templates/institutions/user_info.html:128
 #: seahub/templates/sysadmin/userinfo.html:268
 msgid "This user has not created or joined any groups"
-msgstr ""
+msgstr "Tento uživatel nevytvořil nebo se nepřipojil do žádné skupiny"
 
 #: seahub/institutions/templates/institutions/user_info.html:151
 #: seahub/templates/sysadmin/sys_inst_info_base.html:56
@@ -2147,11 +2163,11 @@ msgstr ""
 #: seahub/templates/sysadmin/useradmin_table.html:10
 #: seahub/views/sysadmin.py:279 seahub/views/sysadmin.py:283
 msgid "Contact Email"
-msgstr ""
+msgstr "Kontaktní email"
 
 #: seahub/institutions/templates/institutions/useradmin.html:17
 #: seahub/institutions/templates/institutions/useradmin_search.html:19
-#: seahub/profile/templates/profile/set_profile.html:113
+#: seahub/profile/templates/profile/set_profile.html:115
 #: seahub/templates/sysadmin/sys_inst_info_admins.html:16
 #: seahub/templates/sysadmin/sys_inst_info_user.html:16
 #: seahub/templates/sysadmin/sys_inst_search_user.html:17
@@ -2161,7 +2177,7 @@ msgstr ""
 #: seahub/templates/sysadmin/useradmin_table.html:11
 #: seahub/views/sysadmin.py:279 seahub/views/sysadmin.py:283
 msgid "Status"
-msgstr ""
+msgstr "Stav"
 
 #: seahub/institutions/templates/institutions/useradmin.html:19
 #: seahub/institutions/templates/institutions/useradmin_search.html:21
@@ -2172,7 +2188,7 @@ msgstr ""
 #: seahub/templates/sysadmin/sys_useradmin_ldap.html:26
 #: seahub/templates/sysadmin/useradmin_table.html:14
 msgid "Create At / Last Login"
-msgstr ""
+msgstr "Vytvořeno v / Poslední přihlášení"
 
 #: seahub/institutions/templates/institutions/useradmin.html:33
 #: seahub/institutions/templates/institutions/useradmin.html:40
@@ -2188,7 +2204,7 @@ msgstr ""
 #: seahub/templates/sysadmin/useradmin_table.html:44
 #: seahub/views/sysadmin.py:324
 msgid "Active"
-msgstr ""
+msgstr "Aktivní"
 
 #: seahub/institutions/templates/institutions/useradmin.html:35
 #: seahub/institutions/templates/institutions/useradmin.html:41
@@ -2204,7 +2220,7 @@ msgstr ""
 #: seahub/templates/sysadmin/useradmin_table.html:45
 #: seahub/views/sysadmin.py:326
 msgid "Inactive"
-msgstr ""
+msgstr "Neaktivní"
 
 #: seahub/institutions/templates/institutions/useradmin.html:66
 #: seahub/institutions/templates/institutions/useradmin_search.html:62
@@ -2215,7 +2231,7 @@ msgstr ""
 #: seahub/templates/sysadmin/sys_publink_admin.html:59
 #: seahub/templates/sysadmin/sys_terms_admin.html:48
 msgid "Empty"
-msgstr ""
+msgstr "Prázdný"
 
 #: seahub/institutions/templates/institutions/useradmin.html:70
 #: seahub/templates/sysadmin/sys_inst_info_user.html:52
@@ -2226,7 +2242,7 @@ msgstr ""
 #: seahub/templates/sysadmin/sys_useradmin_paid.html:31
 #: seahub/templates/sysadmin/user_search.html:27
 msgid "Activating..., please wait"
-msgstr ""
+msgstr "Aktivuji..., prosím čekejte"
 
 #: seahub/institutions/templates/institutions/useradmin.html:78
 #: seahub/institutions/templates/institutions/useradmin_search.html:70
@@ -2234,13 +2250,13 @@ msgstr ""
 #: seahub/templates/sysadmin/useradmin_js.html:3
 #: seahub/templates/sysadmin/useradmin_js.html:122
 msgid "Delete User"
-msgstr ""
+msgstr "Smazat uživatele"
 
 #: seahub/institutions/templates/institutions/useradmin.html:124
 #: seahub/templates/sysadmin/sys_inst_info_user.html:98
 #: seahub/templates/sysadmin/useradmin_js.html:64
 msgid "Edit succeeded, an email has been sent."
-msgstr ""
+msgstr "Editace byla úspěšná, email byl odeslán."
 
 #: seahub/institutions/templates/institutions/useradmin.html:126
 #: seahub/templates/sysadmin/sys_inst_info_user.html:100
@@ -2248,27 +2264,27 @@ msgstr ""
 msgid ""
 "Edit succeeded, but failed to send email, please check your email "
 "configuration."
-msgstr ""
+msgstr "Editace byla úspěšná, ale selhalo odesílání emailu. Prosím zkontrolujte Vaší emailovou konfiguraci."
 
 #: seahub/institutions/templates/institutions/useradmin.html:128
 #: seahub/templates/sysadmin/sys_inst_info_user.html:102
 #: seahub/templates/sysadmin/sys_org_info_user.html:245
 #: seahub/templates/sysadmin/useradmin_js.html:68
 msgid "Edit succeeded"
-msgstr ""
+msgstr "Editace byla úspěšná"
 
 #: seahub/institutions/templates/institutions/useradmin.html:136
 #: seahub/templates/sysadmin/sys_inst_info_user.html:110
 #: seahub/templates/sysadmin/sys_org_info_user.html:252
 #: seahub/templates/sysadmin/useradmin_js.html:76
 msgid "Edit failed."
-msgstr ""
+msgstr "Editace selhala."
 
 #: seahub/institutions/templates/institutions/useradmin_search.html:7
 #: seahub/templates/sysadmin/sys_inst_search_user.html:5
 #: seahub/templates/sysadmin/user_search.html:7
 msgid "Search User"
-msgstr ""
+msgstr "Vyhledat uživatele"
 
 #: seahub/institutions/templates/institutions/useradmin_search.html:13
 #: seahub/templates/js/sysadmin-templates.html:347
@@ -2277,7 +2293,7 @@ msgstr ""
 #: seahub/templates/sysadmin/sys_org_search.html:15
 #: seahub/templates/sysadmin/user_search.html:14
 msgid "Result"
-msgstr ""
+msgstr "Výsledek"
 
 #: seahub/institutions/views.py:162
 #: seahub/templates/js/sysadmin-templates.html:323
@@ -2294,7 +2310,7 @@ msgstr ""
 #: seahub/templates/sysadmin/sys_virus_scan_records.html:12
 #: seahub/views/sysadmin.py:616
 msgid "Owner"
-msgstr ""
+msgstr "Vlastník"
 
 #: seahub/institutions/views.py:164 seahub/templates/base.html:74
 #: seahub/templates/base.html.py:77
@@ -2308,7 +2324,7 @@ msgstr ""
 #: seahub/templates/js/templates.html:1835 seahub/views/sysadmin.py:281
 #: seahub/views/sysadmin.py:285 seahub/views/sysadmin.py:618
 msgid "Admin"
-msgstr ""
+msgstr "Admin"
 
 #: seahub/institutions/views.py:166
 #: seahub/templates/js/sysadmin-templates.html:830
@@ -2318,16 +2334,16 @@ msgstr ""
 #: seahub/templates/js/templates.html:1533
 #: seahub/templates/js/templates.html:1536 seahub/views/sysadmin.py:620
 msgid "Member"
-msgstr ""
+msgstr "Člen"
 
 #: seahub/institutions/views.py:195 seahub/views/sysadmin.py:714
 #, python-format
 msgid "Successfully deleted %s"
-msgstr ""
+msgstr "Úspěšně smazáno %s"
 
 #: seahub/institutions/views.py:197 seahub/views/sysadmin.py:716
 msgid "Failed to delete: the user does not exist"
-msgstr ""
+msgstr "Chyba při mazání: uživatel neexistuje"
 
 #: seahub/invitations/models.py:16 seahub/invitations/models.py:34
 #: seahub/templates/sysadmin/sys_useradmin.html:50
@@ -2335,12 +2351,12 @@ msgstr ""
 #: seahub/templates/sysadmin/useradmin_table.html:63
 #: seahub/views/sysadmin.py:337
 msgid "Guest"
-msgstr ""
+msgstr "Host"
 
 #: seahub/invitations/models.py:90
 #, python-format
 msgid "%(user)s invited you to join %(site_name)s."
-msgstr ""
+msgstr "%(user)s Vás pozval k připojení se do %(site_name)s."
 
 #: seahub/invitations/templates/invitations/invitation_email.html:9
 #: seahub/notifications/templates/notifications/notify_virus.html:10
@@ -2356,41 +2372,41 @@ msgstr ""
 #: seahub/templates/sysadmin/user_freeze_email.html:9
 #: seahub/templates/sysadmin/user_reset_email.html:9
 msgid "Hi,"
-msgstr ""
+msgstr "Dobrý den,"
 
 #: seahub/invitations/templates/invitations/invitation_email.html:12
 #, python-format
 msgid ""
 "%(inviter)s invited you to join %(site_name)s. Please click the link below:"
-msgstr ""
+msgstr "%(inviter)s Vás pozval k připojení se do %(site_name)s. Prosím zkontrolujte odkaz níže:"
 
 #: seahub/invitations/templates/invitations/token_view.html:4
 msgid "Create Account"
-msgstr ""
+msgstr "Vytvořit účet"
 
 #: seahub/invitations/templates/invitations/token_view.html:8
 msgid "Set your password"
-msgstr ""
+msgstr "Nastavit Vaše heslo"
 
 #: seahub/invitations/templates/invitations/token_view.html:26
 #: seahub/templates/sysadmin/settings.html:213
 #: seahub/templates/sysadmin/useradmin_js.html:197
 #: seahub/templates/sysadmin/userinfo.html:398
 msgid "It is required."
-msgstr ""
+msgstr "Je vyžadováno"
 
 #: seahub/notifications/management/commands/notify_admins_on_virus.py:57
 #: seahub/notifications/management/commands/notify_admins_on_virus.py:73
 #: seahub/notifications/management/commands/notify_admins_on_virus.py:98
 #, python-format
 msgid "Virus detected on %s"
-msgstr ""
+msgstr "Detekován virus na %s"
 
 #: seahub/notifications/management/commands/send_notices.py:28
 #: seahub/notifications/management/commands/send_notices.py:272
 #, python-format
 msgid "New notice on %s"
-msgstr ""
+msgstr "Nové oznámení na %s"
 
 #: seahub/notifications/models.py:422 seahub/notifications/models.py:464
 #: seahub/notifications/models.py:492 seahub/notifications/models.py:529
@@ -2398,28 +2414,28 @@ msgstr ""
 #: seahub/notifications/models.py:609 seahub/notifications/models.py:631
 #: seahub/utils/__init__.py:143 seahub/utils/__init__.py:1088
 msgid "Internal error"
-msgstr ""
+msgstr "Vnitřní chyba"
 
 #: seahub/notifications/models.py:441
 #, python-format
 msgid ""
 "A file named <a href='%(file_link)s'>%(file_name)s</a> is uploaded to <a "
 "href='%(link)s'>%(name)s</a>"
-msgstr ""
+msgstr "Soubor se jménem <a href='%(file_link)s'>%(file_name)s</a> je nahrán do <a href='%(link)s'>%(name)s</a>"
 
 #: seahub/notifications/models.py:448
 #, python-format
 msgid ""
 "A file named <strong>%(file_name)s</strong> is uploaded to <strong>Deleted "
 "Library</strong>"
-msgstr ""
+msgstr "Soubor se jménem <strong>%(file_name)s</strong> je nahrán do <strong>Smazané Knihovny</strong>"
 
 #: seahub/notifications/models.py:474
 #, python-format
 msgid ""
 "%(user)s has shared a library named <a href='%(href)s'>%(repo_name)s</a> to "
 "you."
-msgstr ""
+msgstr "%(user)s sdílel knihovnu se jménem <a href='%(href)s'>%(repo_name)s</a> "
 
 #: seahub/notifications/models.py:509
 #, python-format
@@ -2427,18 +2443,18 @@ msgid ""
 "%(user)s has shared a library named <a "
 "href='%(repo_href)s'>%(repo_name)s</a> to group <a "
 "href='%(group_href)s'>%(group_name)s</a>."
-msgstr ""
+msgstr "%(user)s sdílel knihovnu se jménem <a href='%(repo_href)s'>%(repo_name)s</a> skupině <a href='%(group_href)s'>%(group_name)s</a>."
 
 #: seahub/notifications/models.py:540
 #, python-format
 msgid "<a href='%(href)s'>%(group_name)s</a> has a new discussion."
-msgstr ""
+msgstr "<a href='%(href)s'>%(group_name)s</a> má novou diskizi."
 
 #: seahub/notifications/models.py:544
 #, python-format
 msgid ""
 "%(user)s posted a new discussion in <a href='%(href)s'>%(group_name)s</a>."
-msgstr ""
+msgstr "%(user)s odeslal novou diskuzi ve skupině <a href='%(href)s'>%(group_name)s</a>."
 
 #: seahub/notifications/models.py:590
 #, python-format
@@ -2446,26 +2462,26 @@ msgid ""
 "User <a href='%(user_profile)s'>%(username)s</a> has asked to join group <a "
 "href='%(href)s'>%(group_name)s</a>, verification message: "
 "%(join_request_msg)s"
-msgstr ""
+msgstr "Uživatel <a href='%(user_profile)s'>%(username)s</a> požádal o připojení ke skupině <a href='%(href)s'>%(group_name)s</a>, ověřovací zpráva: %(join_request_msg)s"
 
 #: seahub/notifications/models.py:619
 #, python-format
 msgid ""
 "User <a href='%(user_profile)s'>%(group_staff)s</a> has added you to group "
 "<a href='%(href)s'>%(group_name)s</a>"
-msgstr ""
+msgstr "Uživatel <a href='%(user_profile)s'>%(group_staff)s</a> Vás přidal do skupiny <a href='%(href)s'>%(group_name)s</a>"
 
 #: seahub/notifications/models.py:645
 #, python-format
 msgid ""
 "File <a href='%(file_url)s'>%(file_name)s</a> has a new comment from user "
 "%(author)s"
-msgstr ""
+msgstr "Soubor <a href='%(file_url)s'>%(file_name)s</a> má nový komentář od uživatele %(author)s"
 
 #: seahub/notifications/templates/notifications/notice_email.html:7
 #, python-format
 msgid "Hi, %(name)s"
-msgstr ""
+msgstr "Dobrý den, %(name)s"
 
 #: seahub/notifications/templates/notifications/notice_email.html:9
 #, python-format
@@ -2482,7 +2498,7 @@ msgstr[2] ""
 #: seahub/notifications/templates/notifications/notice_email.html:19
 #: seahub/notifications/templates/notifications/user_notification_list.html:21
 msgid "Message"
-msgstr ""
+msgstr "Zpráva"
 
 #: seahub/notifications/templates/notifications/notice_email.html:20
 #: seahub/notifications/templates/notifications/user_notification_list.html:22
@@ -2491,21 +2507,21 @@ msgstr ""
 #: seahub/templates/js/sysadmin-templates.html:860
 #: seahub/templates/repo_history.html:29
 msgid "Time"
-msgstr ""
+msgstr "Čas"
 
 #: seahub/notifications/templates/notifications/notice_email.html:27
 #, python-format
 msgid ""
 "%(user)s posted a new discussion in <a "
 "href=\"%(url_base)s%(grp_url)s\">%(grp_name)s</a>"
-msgstr ""
+msgstr "%(user)s odeslal novou diskuzi ve skupině <a href=\"%(url_base)s%(grp_url)s\">%(grp_name)s</a>"
 
 #: seahub/notifications/templates/notifications/notice_email.html:33
 #, python-format
 msgid ""
 "%(user)s has shared a library named <a "
 "href=\"%(url_base)s%(lib_url)s\">%(lib_name)s</a> to you."
-msgstr ""
+msgstr "%(user)s sdílel knihovnu se jménem <a href=\"%(url_base)s%(lib_url)s\">%(lib_name)s</a>."
 
 #: seahub/notifications/templates/notifications/notice_email.html:36
 #, python-format
@@ -2513,14 +2529,14 @@ msgid ""
 "%(user)s has shared a library named <a "
 "href=\"%(url_base)s%(lib_url)s\">%(lib_name)s</a> to group <a "
 "href=\"%(url_base)s%(group_url)s\">%(group_name)s</a>."
-msgstr ""
+msgstr "%(user)s sdílel knihovnu se jménem <a href=\"%(url_base)s%(lib_url)s\">%(lib_name)s</a> ve skupině <a href=\"%(url_base)s%(group_url)s\">%(group_name)s</a>."
 
 #: seahub/notifications/templates/notifications/notice_email.html:39
 #, python-format
 msgid ""
 "You have received a <a href=\"%(url_base)s%(msg_url)s\">new message</a> from"
 " %(user)s."
-msgstr ""
+msgstr "Obdrželi jste <a href=\"%(url_base)s%(msg_url)s\">novou zprávu</a> od uživatele %(user)s."
 
 #: seahub/notifications/templates/notifications/notice_email.html:45
 #, python-format
@@ -2528,7 +2544,7 @@ msgid ""
 "A file named <a href=\"%(url_base)s%(file_url)s\">%(file_name)s</a> is "
 "uploaded to your folder <a "
 "href=\"%(url_base)s%(folder_url)s\">%(folder_name)s</a>."
-msgstr ""
+msgstr "Soubor se jménem <a href=\"%(url_base)s%(file_url)s\">%(file_name)s</a> je nahrán do Vaší složky <a href=\"%(url_base)s%(folder_url)s\">%(folder_name)s</a>."
 
 #: seahub/notifications/templates/notifications/notice_email.html:48
 #, python-format
@@ -2536,110 +2552,110 @@ msgid ""
 "User <a href=\"%(url_base)s%(user_url)s\">%(user)s</a> has asked to join "
 "group <a href=\"%(url_base)s%(grp_url)s\">%(grp_name)s</a>, verification "
 "message: %(msg)s"
-msgstr ""
+msgstr "Uživatel <a href=\"%(url_base)s%(user_url)s\">%(user)s</a> žádá o připojení do skupiny <a href=\"%(url_base)s%(grp_url)s\">%(grp_name)s</a>, ověřovací zpráva: %(msg)s"
 
 #: seahub/notifications/templates/notifications/notice_email.html:51
 #, python-format
 msgid ""
 "User <a href=\"%(url_base)s%(user_url)s\">%(user)s</a> has added you to "
 "group <a href=\"%(url_base)s%(grp_url)s\">%(grp_name)s</a>"
-msgstr ""
+msgstr "Uživatel <a href=\"%(url_base)s%(user_url)s\">%(user)s</a> Vás přidal do skupiny <a href=\"%(url_base)s%(grp_url)s\">%(grp_name)s</a>"
 
 #: seahub/notifications/templates/notifications/notice_email.html:54
 #, python-format
 msgid ""
 "File <a href=\"%(url_base)s%(file_url)s\">%(file_name)s</a> has a new "
 "comment from user %(author)s"
-msgstr ""
+msgstr "Soubor <a href=\"%(url_base)s%(file_url)s\">%(file_name)s</a> má nový komentář od uživatele %(author)s"
 
 #: seahub/notifications/templates/notifications/notice_email.html:64
 msgid "Go check out at the following page:"
-msgstr ""
+msgstr "Zkontrolujte na následující stránce:"
 
 #: seahub/notifications/templates/notifications/notification_list.html:8
 msgid "All Notifications"
-msgstr ""
+msgstr "Všechna upozornění"
 
 #: seahub/notifications/templates/notifications/notification_list.html:9
 #: seahub/notifications/templates/notifications/notification_list.html:12
 msgid "Add new notification"
-msgstr ""
+msgstr "Přidat nové upozornění"
 
 #: seahub/notifications/templates/notifications/notification_list.html:20
 msgid "Notification Detail"
-msgstr ""
+msgstr "Detail upozornění"
 
 #: seahub/notifications/templates/notifications/notification_list.html:27
 msgid "(current notification)"
-msgstr ""
+msgstr "(aktuální upozornění)"
 
 #: seahub/notifications/templates/notifications/notification_list.html:31
 msgid "Set to current"
-msgstr ""
+msgstr "Nastavit jako aktuální"
 
 #: seahub/notifications/templates/notifications/notification_list.html:51
 msgid "Delete Notification"
-msgstr ""
+msgstr "Smazat oznámení"
 
 #: seahub/notifications/templates/notifications/notify_virus.html:13
 #, python-format
 msgid ""
 "Virus detected in file <a href=\"%(url_base)s%(file_url)s\" "
 "target=\"_blank\">%(file_name)s</a> during regular scanning."
-msgstr ""
+msgstr "Virus detekován s souboru <a href=\"%(url_base)s%(file_url)s\" target=\"_blank\">%(file_name)s</a> běhěm pravidelné kontroly."
 
 #: seahub/notifications/templates/notifications/notify_virus.html:20
 msgid "Virus is detected on regular scanning. Please check the report at:"
-msgstr ""
+msgstr "Virus je detekován během is pravidelné kontroly. Prosím zkontrolujte report na:"
 
 #: seahub/notifications/templates/notifications/user_notification_list.html:4
 #: seahub/notifications/templates/notifications/user_notification_list.html:9
 msgid "Notices"
-msgstr ""
+msgstr "Oznámení"
 
 #: seahub/notifications/templates/notifications/user_notification_list.html:12
 msgid "Mark all read"
-msgstr ""
+msgstr "Označit vše jako přečtené"
 
 #: seahub/notifications/templates/notifications/user_notification_list.html:13
 msgid "Clear"
-msgstr ""
+msgstr "Vyčistit"
 
 #: seahub/notifications/templates/notifications/user_notification_list.html:29
 #: seahub/templates/libraries.html:179
 #: seahub/templates/repo_dir_recycle_view.html:59
 msgid "More"
-msgstr ""
+msgstr "Více"
 
 #: seahub/notifications/views.py:130
 msgid "Successfully cleared all notices."
-msgstr ""
+msgstr "Všechna oznámení byla úspěšně vymazána."
 
 #: seahub/options/templates/options/set_user_options.html:7
 msgid "Please choose how to view encrypted libraries online:"
-msgstr ""
+msgstr "Prosím vyberte jak zobrazit šifrované knihovny online:"
 
 #: seahub/options/templates/options/set_user_options.html:10
 msgid "Send passwords to the server."
-msgstr ""
+msgstr "Odeslat hesla na server."
 
 #: seahub/options/templates/options/set_user_options.html:10
 msgid "Files will be decrypted in the server before being sent to you."
-msgstr ""
+msgstr "Soubory budou dešifrovány na serveru předtím, Vám než budou odeslána."
 
 #: seahub/options/templates/options/set_user_options.html:12
 msgid "Save passwords in your browser."
-msgstr ""
+msgstr "Uložit hesla v prohlížeči."
 
 #: seahub/options/templates/options/set_user_options.html:12
 msgid "Files will be decrypted in your browser when you download them."
-msgstr ""
+msgstr "Soubory budou dešifrovány ve vašem prohlížeči jakmile je stáhnete."
 
 #: seahub/options/templates/options/set_user_options.html:13
 msgid ""
 "Tip: the latter way is more secure, but it is not supported well by all "
 "browsers. We advise you to use the latest version of Chrome or Firefox."
-msgstr ""
+msgstr "Tip: Druhý způsob je více bezpečný, ale není dobře podporovaný všemi prohížeči. Doporučujeme použít poslední verzi Chrome nebo Firefoxu."
 
 #: seahub/profile/templates/profile/set_profile.html:5
 #: seahub/profile/templates/profile/set_profile.html:27
@@ -2655,118 +2671,118 @@ msgstr ""
 #: seahub/templates/sysadmin/sys_org_info_setting.html:11
 #: seahub/templates/sysadmin/sys_org_info_user.html:10
 msgid "Settings"
-msgstr ""
+msgstr "Nastavení"
 
 #: seahub/profile/templates/profile/set_profile.html:14
 msgid "Language"
-msgstr ""
+msgstr "Jazyk"
 
 #: seahub/profile/templates/profile/set_profile.html:16
 msgid "Default Library"
-msgstr ""
+msgstr "Výchozí knihovna"
 
 #: seahub/profile/templates/profile/set_profile.html:19
-#: seahub/profile/templates/profile/set_profile.html:111
+#: seahub/profile/templates/profile/set_profile.html:113
 msgid "Two-Factor Authentication"
-msgstr ""
+msgstr "Dvoufaktorová autentizace"
 
 #: seahub/profile/templates/profile/set_profile.html:21
-#: seahub/profile/templates/profile/set_profile.html:136
-#: seahub/profile/templates/profile/set_profile.html:159
+#: seahub/profile/templates/profile/set_profile.html:138
+#: seahub/profile/templates/profile/set_profile.html:161
 msgid "Delete Account"
-msgstr ""
+msgstr "Smazat účet"
 
 #: seahub/profile/templates/profile/set_profile.html:30
 msgid "Profile Setting"
-msgstr ""
+msgstr "Nastavení profilu"
 
 #: seahub/profile/templates/profile/set_profile.html:32
 msgid "Avatar:"
-msgstr ""
+msgstr "Profilový obrázek:"
 
 #: seahub/profile/templates/profile/set_profile.html:34
 msgid "Change"
-msgstr ""
+msgstr "Změnit"
 
 #: seahub/profile/templates/profile/set_profile.html:41
 msgid "Password:"
-msgstr ""
+msgstr "Heslo:"
 
 #: seahub/profile/templates/profile/set_profile.html:41
 #: seahub/templates/sysadmin/sys_terms_admin.html:39
 msgid "Update"
-msgstr ""
+msgstr "Aktualizovat"
 
 #: seahub/profile/templates/profile/set_profile.html:43
 msgctxt "true name"
 msgid "Name:"
-msgstr ""
+msgstr "Jméno:"
 
 #: seahub/profile/templates/profile/set_profile.html:50
 msgid "Username:"
-msgstr ""
+msgstr "Uživatelské jméno:"
 
 #: seahub/profile/templates/profile/set_profile.html:51
 msgid "You can use this field at login."
-msgstr ""
+msgstr "Toto pole můžete použít při přihlášení."
 
 #: seahub/profile/templates/profile/set_profile.html:56
 msgid "Contact Email:"
-msgstr ""
+msgstr "Kontaktní email:"
 
 #: seahub/profile/templates/profile/set_profile.html:57
 msgid "Your notifications will be sent to this email."
-msgstr ""
+msgstr "Vaše upozornění bude odesláno na tento email."
 
 #: seahub/profile/templates/profile/set_profile.html:62
 msgid "Department:"
-msgstr ""
+msgstr "Oddělení:"
 
 #: seahub/profile/templates/profile/set_profile.html:67
 msgid "Telephone:"
-msgstr ""
+msgstr "Telefon:"
 
 #: seahub/profile/templates/profile/set_profile.html:79
 msgid "Language Setting"
-msgstr ""
-
-#: seahub/profile/templates/profile/set_profile.html:90
-msgid "Default Library Setting"
-msgstr ""
+msgstr "Nastavení jazyka"
 
 #: seahub/profile/templates/profile/set_profile.html:92
-msgid "Your default library:"
-msgstr ""
+msgid "Default Library Setting"
+msgstr "Nastavení výchozí knihovny"
 
 #: seahub/profile/templates/profile/set_profile.html:94
+msgid "Your default library:"
+msgstr "Vaše výchozí knihovna:"
+
+#: seahub/profile/templates/profile/set_profile.html:96
 msgid ""
 "Default library is the default place to store your personal documents and "
 "pictures."
-msgstr ""
+msgstr "Výchozí knihovna je výchozí místo pro Vaše osobní dokumenty a obrázky."
 
-#: seahub/profile/templates/profile/set_profile.html:95
+#: seahub/profile/templates/profile/set_profile.html:97
 msgid "Choose Default Library"
-msgstr ""
+msgstr "Vyber výchozí knihovnu"
 
-#: seahub/profile/templates/profile/set_profile.html:98
+#: seahub/profile/templates/profile/set_profile.html:100
 msgid "Choose default library:"
-msgstr ""
-
-#: seahub/profile/templates/profile/set_profile.html:113
-msgid "enabled"
-msgstr ""
+msgstr "Vyber výchozí knihovnu:"
 
 #: seahub/profile/templates/profile/set_profile.html:115
-msgid "Disable Two-Factor Authentication"
-msgstr ""
+msgid "enabled"
+msgstr "zapnuto"
 
-#: seahub/profile/templates/profile/set_profile.html:119
+#: seahub/profile/templates/profile/set_profile.html:117
+msgid "Disable Two-Factor Authentication"
+msgstr "Vypnout dvoufaktorovou autentuzaci"
+
+#: seahub/profile/templates/profile/set_profile.html:121
 msgid ""
 "If you don't have any device with you, you can access your account using "
 "backup codes."
-msgstr ""
+msgstr "Pokud nemáte u sebe žádné zařízení, můžete přisupovat k Vašemu účtu pomocí záložních kódů."
 
-#: seahub/profile/templates/profile/set_profile.html:120
+#: seahub/profile/templates/profile/set_profile.html:122
 #, python-format
 msgid "You have only one backup code remaining."
 msgid_plural "You have %(counter)s backup codes remaining."
@@ -2774,322 +2790,330 @@ msgstr[0] ""
 msgstr[1] ""
 msgstr[2] ""
 
-#: seahub/profile/templates/profile/set_profile.html:123
+#: seahub/profile/templates/profile/set_profile.html:125
 msgid "Show Codes"
-msgstr ""
+msgstr "Zobrazit kódy"
 
-#: seahub/profile/templates/profile/set_profile.html:127
+#: seahub/profile/templates/profile/set_profile.html:129
 msgid ""
 "Two-factor authentication is not enabled for your account. Enable two-factor"
 " authentication for enhanced account security."
-msgstr ""
+msgstr "Dvoufaktorová autentizace není zapnuta pro Váš účet. Zapněte dvoufaktorovou autentizaci pro zvýšení zabezpečení vašeho účtu."
 
-#: seahub/profile/templates/profile/set_profile.html:129
+#: seahub/profile/templates/profile/set_profile.html:131
 msgid "Enable Two-Factor Authentication"
-msgstr ""
+msgstr "Zapnout dvoufaktorovou autentizaci"
 
-#: seahub/profile/templates/profile/set_profile.html:137
+#: seahub/profile/templates/profile/set_profile.html:139
 msgid "This operation will not be reverted. Please think twice!"
-msgstr ""
+msgstr "Tuto operaci nebude možno vzít zpět. Prosím ujistěte se, že to opravdu chcete!"
 
-#: seahub/profile/templates/profile/set_profile.html:160
+#: seahub/profile/templates/profile/set_profile.html:162
 msgid "Really want to delete your account?"
-msgstr ""
+msgstr "Opravdu chcete smazat svůj účet?"
 
 #: seahub/profile/views.py:41
 msgid "Successfully edited profile."
-msgstr ""
+msgstr "Profil byl úspěšně změněn."
 
 #: seahub/profile/views.py:45
 msgid "Failed to edit profile"
-msgstr ""
+msgstr "Chyba při změně profilu"
 
 #: seahub/profile/views.py:157
 msgid "Has not accepted invitation yet"
-msgstr ""
+msgstr "Ješte neakceptoval pozvání"
 
 #: seahub/profile/views.py:176
 msgid "Demo account can not be deleted."
-msgstr ""
+msgstr "Demo účet není možné smazat."
 
 #: seahub/profile/views.py:202
 msgid "Failed to set default library."
-msgstr ""
+msgstr "Chyba při nastavování výchozí knihovny."
 
 #: seahub/profile/views.py:206
 msgid "Can not set encrypted library as default library."
-msgstr ""
+msgstr "Nemohu nastavit šifrovanou knihovnu jako výchzí."
 
 #: seahub/profile/views.py:211
 #, python-format
 msgid "Successfully set \"%s\" as your default library."
-msgstr ""
+msgstr "Úspěšně nastavena \"%s\" jako výchzí knihovna."
 
 #: seahub/settings.py:143
-msgid "català"
-msgstr ""
-
-#: seahub/settings.py:144
-msgid "Deutsch"
+msgid "العربية"
 msgstr ""
 
 #: seahub/settings.py:145
-msgid "English"
-msgstr ""
-
-#: seahub/settings.py:146
-msgid "Español"
+msgid "Català"
 msgstr ""
 
 #: seahub/settings.py:147
-msgid "Español de Argentina"
-msgstr ""
+msgid "Deutsch"
+msgstr "Deutsch"
 
 #: seahub/settings.py:148
-msgid "Español de México"
+msgid "ελληνικά"
 msgstr ""
 
 #: seahub/settings.py:149
-msgid "Suomi"
-msgstr ""
+msgid "English"
+msgstr "English"
 
 #: seahub/settings.py:150
-msgid "français"
-msgstr ""
+msgid "Español"
+msgstr "Español"
 
 #: seahub/settings.py:151
-msgid "עברית"
-msgstr ""
+msgid "Español de Argentina"
+msgstr "Español de Argentina"
 
 #: seahub/settings.py:152
-msgid "Magyar"
-msgstr ""
+msgid "Español de México"
+msgstr "Español de México"
 
 #: seahub/settings.py:153
-msgid "Íslenska"
-msgstr ""
+msgid "Suomi"
+msgstr "Suomi"
 
 #: seahub/settings.py:154
-msgid "Italiano"
-msgstr ""
+msgid "français"
+msgstr "français"
 
 #: seahub/settings.py:155
-msgid "日本語"
-msgstr ""
+msgid "עברית"
+msgstr "עברית"
 
 #: seahub/settings.py:156
-msgid "한국어"
-msgstr ""
+msgid "Magyar"
+msgstr "Magyar"
 
 #: seahub/settings.py:157
-msgid "Latvian"
-msgstr ""
+msgid "Íslenska"
+msgstr "Íslenska"
 
 #: seahub/settings.py:158
-msgid "Nederlands"
-msgstr ""
+msgid "Italiano"
+msgstr "Italiano"
 
 #: seahub/settings.py:159
-msgid "Polski"
-msgstr ""
+msgid "日本語"
+msgstr "日本語"
 
 #: seahub/settings.py:160
-msgid "Portuguese, Brazil"
-msgstr ""
-
-#: seahub/settings.py:161
-msgid "Русский"
-msgstr ""
+msgid "한국어"
+msgstr "한국어"
 
 #: seahub/settings.py:162
-msgid "Slovak"
-msgstr ""
-
-#: seahub/settings.py:163
-msgid "Slovenian"
-msgstr ""
+msgid "Latvian"
+msgstr "Latvian"
 
 #: seahub/settings.py:164
-msgid "Svenska"
-msgstr ""
+msgid "Nederlands"
+msgstr "Nederlands"
 
 #: seahub/settings.py:165
-msgid "ไทย"
-msgstr ""
+msgid "Polski"
+msgstr "Polski"
 
 #: seahub/settings.py:166
-msgid "Türkçe"
-msgstr ""
+msgid "Portuguese, Brazil"
+msgstr "Portuguese, Brazil"
 
 #: seahub/settings.py:167
-msgid "українська мова"
-msgstr ""
-
-#: seahub/settings.py:168
-msgid "简体中文"
-msgstr ""
+msgid "Русский"
+msgstr "Русский"
 
 #: seahub/settings.py:169
-msgid "繁體中文"
+msgid "Slovenian"
+msgstr "Slovenian"
+
+#: seahub/settings.py:170
+msgid "Svenska"
+msgstr "Svenska"
+
+#: seahub/settings.py:171
+msgid "ไทย"
+msgstr "ไทย"
+
+#: seahub/settings.py:172
+msgid "Türkçe"
+msgstr "Türkçe"
+
+#: seahub/settings.py:173
+msgid "українська мова"
+msgstr "українська мова"
+
+#: seahub/settings.py:174
+msgid "Tiếng Việt"
 msgstr ""
+
+#: seahub/settings.py:175
+msgid "简体中文"
+msgstr "简体中文"
+
+#: seahub/settings.py:176
+msgid "繁體中文"
+msgstr "繁體中文"
 
 #: seahub/share/forms.py:20 seahub/share/forms.py:33
 msgid "Email is required"
-msgstr ""
+msgstr "Email je povinný"
 
 #: seahub/share/forms.py:21 seahub/share/forms.py:34
 msgid "Email is not longer than 512 characters"
-msgstr ""
+msgstr "Email nemůže být delší než 512 znaků"
 
 #: seahub/share/models.py:72
 msgid "Password can't be empty"
-msgstr ""
+msgstr "Heslo nemůže být prázdné"
 
 #: seahub/share/models.py:79
 msgid "Please enter a correct password."
-msgstr ""
+msgstr "Prosím zadejte správné heslo"
 
 #: seahub/share/templates/share/audit_code_email.html:11
 #, python-format
 msgid "Your code is %(code)s, this code will be valid for one hour."
-msgstr ""
+msgstr "Váš kód je %(code)s, tento kód bude platný po dobu jedné hodiny."
 
 #: seahub/share/templates/share/share_link_audit.html:6
 msgid "Email Verification"
-msgstr ""
+msgstr "Emailové ověření"
 
 #: seahub/share/templates/share/share_link_audit.html:8
 msgid "Please provide your email address to continue."
-msgstr ""
+msgstr "Prosím uveďte Váš email pro pokračování."
 
 #: seahub/share/templates/share/share_link_audit.html:11
 msgid "Get code"
-msgstr ""
+msgstr "Získat kód"
 
 #: seahub/share/templates/share/share_link_audit.html:13
 msgid "Verification code"
-msgstr ""
+msgstr "Ověřovací kód"
 
 #: seahub/share/templates/share/share_link_audit.html:63
 msgid "A verification code has been sent to the email."
-msgstr ""
+msgstr "Ověřovací kód byl zaslán na email."
 
 #: seahub/share/views.py:199 seahub/share/views.py:311
 msgid "Internal server error, or please check the email(s) you entered"
-msgstr ""
+msgstr "Interní chyba nebo prosím zkontrolujte email, co jste zadali."
 
 #: seahub/share/views.py:219
 msgid "Please choose a directory."
-msgstr ""
+msgstr "Prosím vyberte adresář."
 
 #: seahub/share/views.py:241
 msgid "Successfully saved."
-msgstr ""
+msgstr "Úspěšně uloženo."
 
 #: seahub/share/views.py:255
 msgid ""
 "Sending shared upload link failed. Email service is not properly configured,"
 " please contact administrator."
-msgstr ""
+msgstr "Odeslání sdíleného upload odkazu selhalo. Emailová složba není správně nakonfigurována, kontaktujte prosím administrátora."
 
 #: seahub/share/views.py:329 seahub/thumbnail/views.py:40
 #: seahub/thumbnail/views.py:159 seahub/views/ajax.py:208
 #: seahub/views/ajax.py:385 seahub/views/ajax.py:449 seahub/views/ajax.py:499
 #: seahub/views/ajax.py:544 seahub/views/ajax.py:738 seahub/views/ajax.py:1091
 msgid "Library does not exist."
-msgstr ""
+msgstr "Knihovna neexistuje"
 
 #: seahub/share/views.py:333
 msgid "Directory does not exist."
-msgstr ""
+msgstr "Adresář neexistuje."
 
 #: seahub/share/views.py:382
 msgid "Only the owner of the library has permission to share it."
-msgstr ""
+msgstr "Pouze vlastník knihovny má oprávnění ke sdílení."
 
 #: seahub/share/views.py:420
 msgid "Please check the email(s) you entered"
-msgstr ""
+msgstr "Prosím zkontrolujte email(y) co jste zadal"
 
 #: seahub/share/views.py:437
 msgid "Email address is not valid"
-msgstr ""
+msgstr "Emailová adre není platná"
 
 #: seahub/share/views.py:446
 msgid "Share link is not found"
-msgstr ""
+msgstr "Sdílený odkaz nebyl nalezen"
 
 #: seahub/share/views.py:455
 msgid "Verification code for visiting share links"
-msgstr ""
+msgstr "Ověřovací kód pro zobrazení sdílených odkazů"
 
 #: seahub/share/views.py:470
 msgid "Failed to send a verification code, please try again later."
-msgstr ""
+msgstr "Chyba při odesílání ověřovacího kódu, prosím zkuste to znovu."
 
 #: seahub/templates/404.html:6
 msgid "Sorry, but the requested page could not be found."
-msgstr ""
+msgstr "Požadovaná stránka nebyla nalezena."
 
 #: seahub/templates/base.html:9 seahub/templates/base_for_backbone.html:9
 #: seahub/templates/sysadmin/sysadmin_backbone.html:9
 msgid "File Collaboration Team Organization"
-msgstr ""
+msgstr "Práce se soubory a týmová organizace"
 
 #: seahub/templates/base.html:42 seahub/templates/base_for_backbone.html:50
 #: seahub/templates/sysadmin/sysadmin_backbone.html:45
 msgid "Side Nav Menu"
-msgstr ""
+msgstr "Postranní navigační menu"
 
 #: seahub/templates/base.html:53 seahub/templates/base_for_backbone.html:65
 #: seahub/templates/sysadmin/sysadmin_backbone.html:48
 msgid "View profile and more"
-msgstr ""
+msgstr "Zobrazit profil a více"
 
 #: seahub/templates/base.html:71 seahub/templates/js/sysadmin-templates.html:5
 #: seahub/templates/js/templates.html:1829
 #: seahub/templates/sysadmin/base.html:13
 msgid "System Admin"
-msgstr ""
+msgstr "System Admin"
 
 #: seahub/templates/base.html:74 seahub/templates/js/templates.html:1832
 msgid "Organization Admin"
-msgstr ""
+msgstr "Admin organizace"
 
 #: seahub/templates/base.html:80 seahub/templates/finish_payment.html:5
 #: seahub/templates/js/sysadmin-templates.html:278
 #: seahub/templates/js/templates.html:1837
 msgid "Log out"
-msgstr ""
+msgstr "Odhlástit"
 
-#: seahub/templates/base.html:123 seahub/templates/base_for_backbone.html:87
+#: seahub/templates/base.html:125 seahub/templates/base_for_backbone.html:87
 #: seahub/templates/sysadmin/sysadmin_backbone.html:70
 #: seahub/views/sysadmin.py:332 seahub/views/sysadmin.py:333
 msgid "Yes"
-msgstr ""
+msgstr "Ano"
 
-#: seahub/templates/base.html:124 seahub/templates/base_for_backbone.html:88
+#: seahub/templates/base.html:126 seahub/templates/base_for_backbone.html:88
 #: seahub/templates/sysadmin/sysadmin_backbone.html:71
 msgid "No"
-msgstr ""
+msgstr "Ne"
 
 #: seahub/templates/base_for_backbone.html:28
 msgid ""
 "We no longer support this version of IE. Please upgrade it to version 10 or "
 "above."
-msgstr ""
+msgstr "Již nepodporujeme tuto verzi IE. Prosím aktualizujte na veri 10 nebo výše"
 
 #: seahub/templates/base_for_backbone.html:58
 #: seahub/templates/js/sysadmin-templates.html:40
 #: seahub/templates/js/templates.html:1804
 #: seahub/templates/sysadmin/base.html:46
 msgid "Notifications"
-msgstr ""
+msgstr "Upozornění"
 
 #: seahub/templates/base_for_backbone.html:94
 #, python-format
 msgid "Welcome to %(site_name)s"
-msgstr ""
+msgstr "Vítejte na %(site_name)s"
 
 #: seahub/templates/base_for_backbone.html:96
 #, python-format
@@ -3097,7 +3121,7 @@ msgid ""
 "%(site_name)s organizes files into libraries. Each library can be synced and"
 " shared separately. We have created a personal library for you. You can "
 "create more libraries later."
-msgstr ""
+msgstr "%(site_name)s organizuje soubory do knihoven. Každá knihovna může být synchronizována a sdílena samostatně. Vytvořili jsme pro Vás osobní knihovnu. Další knihovny můžete vytvořit později."
 
 #: seahub/templates/base_for_backbone.html:98
 #, python-format
@@ -3105,37 +3129,37 @@ msgid ""
 "%(site_name)s organizes files into libraries. Each library can be synced and"
 " shared separately. Howerver, since you are a guest user now, you can not "
 "create libraries."
-msgstr ""
+msgstr "%(site_name)s organizuje soubory do knihoven. Každá knihovna může být synchronizována a sdílena samostatně. Protože jste nyní host, nemůžete vytvářet knihovny."
 
 #: seahub/templates/choose_register.html:13
 #: seahub/templates/registration/login.html:42
 #: seahub/templates/registration/registration_form.html:11
 msgid "Signup"
-msgstr ""
+msgstr "Registrace"
 
 #: seahub/templates/choose_register.html:14
 msgid "Create a personal account"
-msgstr ""
+msgstr "Vytvořit osobní účet"
 
 #: seahub/templates/choose_register.html:15
 msgid "Create an organization account"
-msgstr ""
+msgstr "Vytvořit účet organizace"
 
 #: seahub/templates/decrypt_repo_form.html:7
 msgid ""
 "This library is encrypted. Please input the password if you want to browse "
 "it online. And the password will be kept on the server for only 1 hour."
-msgstr ""
+msgstr "Tato knihovna je šifrována. Prosím zadejte heslo pokud ji chcete prohlížet on-line. Heslo bude uchováno na serveru po dobu 1 hodiny."
 
 #: seahub/templates/decrypt_repo_form.html:9
 #: seahub/templates/share_access_validation.html:13
 msgid "Password: "
-msgstr ""
+msgstr "Heslo:"
 
 #: seahub/templates/decrypt_repo_form.html:24
 #: seahub/templates/share_access_validation.html:29
 msgid "Please enter the password."
-msgstr ""
+msgstr "Prosím zadejte heslo."
 
 #: seahub/templates/download.html:4 seahub/templates/file_revisions.html:88
 #: seahub/templates/js/sysadmin-templates.html:521
@@ -3162,18 +3186,18 @@ msgstr ""
 #: seahub/templates/view_shared_dir.html:122
 #: seahub/templates/view_shared_dir.html:156
 msgid "Download"
-msgstr ""
+msgstr "Stáhnout"
 
 #: seahub/templates/file_access.html:5 seahub/templates/file_access.html:8
 #: seahub/templates/js/templates.html:485
 #: seahub/templates/js/templates.html:585
 msgid "Access Log"
-msgstr ""
+msgstr "Log přístupů"
 
 #: seahub/templates/file_access.html:11
 #: seahub/templates/file_revisions.html:24 seahub/templates/text_diff.html:21
 msgid "Current Path:"
-msgstr ""
+msgstr "Aktuální cesta:"
 
 #: seahub/templates/file_access.html:25
 #: seahub/templates/js/sysadmin-templates.html:181
@@ -3185,34 +3209,34 @@ msgstr ""
 #: seahub/templates/sysadmin/settings.html:29
 #: seahub/templates/sysadmin/sys_trafficadmin.html:17
 msgid "User"
-msgstr ""
+msgstr "Uživatel"
 
 #: seahub/templates/file_access.html:26
 #: seahub/templates/sysadmin/sys_invitations_admin.html:14
 #: seahub/templates/sysadmin/userinfo.html:207
 msgid "Type"
-msgstr ""
+msgstr "Typ"
 
 #: seahub/templates/file_access.html:27
 #: seahub/templates/js/sysadmin-templates.html:184
 #: seahub/templates/js/sysadmin-templates.html:235
 #: seahub/templates/libraries.html:189
 msgid "IP"
-msgstr ""
+msgstr "IP"
 
 #: seahub/templates/file_access.html:27
 #: seahub/templates/js/sysadmin-templates.html:183
 #: seahub/templates/libraries.html:188
 msgid "Device Name"
-msgstr ""
+msgstr "Jméno zařízení"
 
 #: seahub/templates/file_access.html:28
 msgid "Date"
-msgstr ""
+msgstr "Datum"
 
 #: seahub/templates/file_access.html:38
 msgid "Anonymous User"
-msgstr ""
+msgstr "Anonymní uživatel"
 
 #: seahub/templates/file_access.html:56
 #: seahub/templates/js/sysadmin-templates.html:197
@@ -3226,7 +3250,7 @@ msgstr ""
 #: seahub/templates/sysadmin/sys_trafficadmin.html:30
 #: seahub/templates/sysadmin/useradmin_paginator.html:4
 msgid "Previous"
-msgstr ""
+msgstr "Předchozí"
 
 #: seahub/templates/file_access.html:59
 #: seahub/templates/js/sysadmin-templates.html:198
@@ -3240,7 +3264,7 @@ msgstr ""
 #: seahub/templates/sysadmin/sys_trafficadmin.html:33
 #: seahub/templates/sysadmin/useradmin_paginator.html:7
 msgid "Next"
-msgstr ""
+msgstr "Další"
 
 #: seahub/templates/file_access.html:64
 #: seahub/templates/snippets/admin_paginator.html:12
@@ -3248,11 +3272,11 @@ msgstr ""
 #: seahub/templates/sysadmin/sys_trafficadmin.html:38
 #: seahub/templates/sysadmin/useradmin_paginator.html:12
 msgid "Per page: "
-msgstr ""
+msgstr "Na stránku: "
 
 #: seahub/templates/file_access.html:83
 msgid "This file has (apparently) not been accessed yet"
-msgstr ""
+msgstr "Tento soubor nebyl pravněpodobně ještě zobrazen"
 
 #: seahub/templates/file_edit.html:91
 #: seahub/templates/repo_dir_recycle_view.html:21
@@ -3260,11 +3284,11 @@ msgstr ""
 #: seahub/templates/shared_file_view.html:19
 #: seahub/templates/view_shared_dir.html:20
 msgid "Current path: "
-msgstr ""
+msgstr "Aktuální cesta: "
 
 #: seahub/templates/file_edit.html:101
 msgid "Draft saved."
-msgstr ""
+msgstr "Koncept byl uložen."
 
 #: seahub/templates/file_edit.html:130
 #: seahub/templates/js/sysadmin-templates.html:236
@@ -3274,15 +3298,15 @@ msgstr ""
 #: seahub/templates/sysadmin/settings.html:104
 #: seahub/templates/sysadmin/sys_virus_scan_records.html:11
 msgid "Library"
-msgstr ""
+msgstr "Knihovna"
 
 #: seahub/templates/file_edit.html:130
 msgid "is encrypted"
-msgstr ""
+msgstr "je šifrován"
 
 #: seahub/templates/file_edit.html:133
 msgid "The password will be kept in the server for only 1 hour."
-msgstr ""
+msgstr "Heslo bude uloženo na serveru pouze 1 hodinu."
 
 #: seahub/templates/file_edit.html:142
 msgid "Choose a file"
@@ -3294,71 +3318,71 @@ msgstr ""
 
 #: seahub/templates/file_edit.html:158
 msgid "Draft Available"
-msgstr ""
+msgstr "Koncept je dostupný"
 
 #: seahub/templates/file_edit.html:159
 msgid "There's a saved draft for this file, would you like to load it?"
-msgstr ""
+msgstr "Je dostupný koncept pro tento soubor, přejete si jej nahrát?"
 
 #: seahub/templates/file_edit.html:160
 msgid "Load"
-msgstr ""
+msgstr "Nahrát"
 
 #: seahub/templates/file_edit.html:161
 msgid "Discard"
-msgstr ""
+msgstr "Zrušit změny"
 
 #: seahub/templates/file_edit.html:174
 msgid "Failed to save draft, exceeded max quota"
-msgstr ""
+msgstr "Chyba při ukádání konceptu, překročena max. kvóta"
 
 #: seahub/templates/file_edit.html:243
 msgid "Draft successfully loaded"
-msgstr ""
+msgstr "Koncept byl úslěšně nahrán"
 
 #: seahub/templates/file_edit.html:361
 msgid "Please check the network."
-msgstr ""
+msgstr "Prosím zkontrolujte síť."
 
 #: seahub/templates/file_edit.html:405
 msgid "Bold"
-msgstr ""
+msgstr "Tučně"
 
 #: seahub/templates/file_edit.html:406
 msgid "Italic"
-msgstr ""
+msgstr "Kurzíva"
 
 #: seahub/templates/file_edit.html:407
 msgid "Heading 1"
-msgstr ""
+msgstr "Záhlaví 1"
 
 #: seahub/templates/file_edit.html:408
 msgid "Heading 2"
-msgstr ""
+msgstr "Záhlaví 2"
 
 #: seahub/templates/file_edit.html:409
 msgid "Heading 3"
-msgstr ""
+msgstr "Záhlaví 3"
 
 #: seahub/templates/file_edit.html:410
 msgid "Heading 4"
-msgstr ""
+msgstr "Záhlaví 4"
 
 #: seahub/templates/file_edit.html:411
 msgid "Unordered list"
-msgstr ""
+msgstr "Neseřazený seznam"
 
 #: seahub/templates/file_edit.html:412
 msgid "Ordered list"
-msgstr ""
+msgstr "Seřazený seznam"
 
 #: seahub/templates/file_edit.html:413
 msgid "Horizontal rule"
-msgstr ""
+msgstr "Vodorovná čára"
 
 #: seahub/templates/file_edit.html:414 seahub/templates/file_edit.html:432
 msgid "Link"
-msgstr ""
+msgstr "Odkaz"
 
 #: seahub/templates/file_edit.html:415 seahub/templates/js/templates.html:1651
 #: seahub/templates/repo_history_view.html:74
@@ -3368,59 +3392,59 @@ msgstr ""
 #: seahub/templates/view_shared_dir.html:86
 #: seahub/templates/view_shared_dir.html:89
 msgid "File"
-msgstr ""
+msgstr "Soubor"
 
 #: seahub/templates/file_edit.html:416 seahub/templates/file_edit.html:438
 msgid "Image"
-msgstr ""
+msgstr "Obrázek"
 
 #: seahub/templates/file_edit.html:417 seahub/templates/file_edit.html:444
 msgid "Table"
-msgstr ""
+msgstr "Tabulka"
 
 #: seahub/templates/file_edit.html:418
 msgid "Undo(Ctrl+Z)"
-msgstr ""
+msgstr "Vrátit změny (Ctrl+Z)"
 
 #: seahub/templates/file_edit.html:419
 msgid "Redo(Ctrl+Y)"
-msgstr ""
+msgstr "Zrušit změny (Ctrl+Y)"
 
 #: seahub/templates/file_edit.html:420
 msgid "Close live preview"
-msgstr ""
+msgstr "Zavřít živý náhled"
 
 #: seahub/templates/file_edit.html:421
 msgid "Live preview"
-msgstr ""
+msgstr "Živý náhled"
 
 #: seahub/templates/file_edit.html:422
 msgid "Fullscreen"
-msgstr ""
+msgstr "Celá obrazovka"
 
 #: seahub/templates/file_edit.html:434 seahub/templates/file_edit.html:440
 msgid "Title"
-msgstr ""
+msgstr "Název"
 
 #: seahub/templates/file_edit.html:435 seahub/templates/file_edit.html:441
 msgid "Please enter URL."
-msgstr ""
+msgstr "Prosím zadejte URL."
 
 #: seahub/templates/file_edit.html:445
 msgid "Cells"
-msgstr ""
+msgstr "Buňky"
 
 #: seahub/templates/file_edit.html:446
 msgid "Align"
-msgstr ""
+msgstr "Zarovnat"
 
 #: seahub/templates/file_edit.html:447
 msgid "Rows"
-msgstr ""
+msgstr "Řádky"
 
 #: seahub/templates/file_edit.html:448
 msgid "Columns"
-msgstr ""
+msgstr "Sloupce"
 
 #: seahub/templates/file_edit.html:449
 #: seahub/templates/sysadmin/sys_useradmin.html:49
@@ -3428,27 +3452,27 @@ msgstr ""
 #: seahub/templates/sysadmin/useradmin_table.html:62
 #: seahub/views/sysadmin.py:339
 msgid "Default"
-msgstr ""
+msgstr "Výchozí"
 
 #: seahub/templates/file_edit.html:449
 msgid "Align left"
-msgstr ""
+msgstr "Zarovnat vlevo"
 
 #: seahub/templates/file_edit.html:449
 msgid "Align center"
-msgstr ""
+msgstr "Zarovnat na střed"
 
 #: seahub/templates/file_edit.html:449
 msgid "Align right"
-msgstr ""
+msgstr "Zarovnat vpravo"
 
 #: seahub/templates/file_edit.html:494
 msgid "Submit failed. Please check the network."
-msgstr ""
+msgstr "Odeslání selaho. Prosím zkontrolujte připojení k síti."
 
 #: seahub/templates/file_edit.html:514
 msgid "Password is required."
-msgstr ""
+msgstr "Heslo je povinné."
 
 #: seahub/templates/file_revisions.html:5
 #: seahub/templates/js/templates.html:257
@@ -3457,12 +3481,12 @@ msgstr ""
 #: seahub/templates/js/templates.html:645 seahub/templates/repo_history.html:5
 #: seahub/templates/view_file_base.html:59
 msgid "History"
-msgstr ""
+msgstr "Historie"
 
 #: seahub/templates/file_revisions.html:14
 #, python-format
 msgid "<span class=\"op-target\">%(u_filename)s</span> Version History"
-msgstr ""
+msgstr "<span class=\"op-target\">%(u_filename)s</span> Historie verzí"
 
 #: seahub/templates/file_revisions.html:16
 #: seahub/templates/repo_dir_recycle_view.html:15
@@ -3471,43 +3495,43 @@ msgstr ""
 #: seahub/templates/sysadmin/sys_inst_info_base.html:16
 #: seahub/templates/text_diff.html:15
 msgid "Back"
-msgstr ""
+msgstr "Zpět"
 
 #: seahub/templates/file_revisions.html:21
 msgid ""
 "Tip: a new version will be generated after each modification, and you can "
 "restore the file to a previous version."
-msgstr ""
+msgstr "Tip: Nová verze bude generována po každé modifikaci a je možnost obnovit předchozí verzi souboru."
 
 #: seahub/templates/file_revisions.html:36
 #: seahub/templates/file_revisions.html:38
 msgid "a week"
-msgstr ""
+msgstr "týden"
 
 #: seahub/templates/file_revisions.html:41
 #: seahub/templates/file_revisions.html:43
 msgid "a month"
-msgstr ""
+msgstr "měsíc"
 
 #: seahub/templates/file_revisions.html:46
 #: seahub/templates/file_revisions.html:48
 #: seahub/templates/repo_dir_recycle_view.html:71
 msgid "all"
-msgstr ""
+msgstr "vše"
 
 #: seahub/templates/file_revisions.html:55
 #: seahub/templates/repo_history.html:30
 msgid "Modifier"
-msgstr ""
+msgstr "Upravil"
 
 #: seahub/templates/file_revisions.html:64
 msgid "(current version)"
-msgstr ""
+msgstr "(aktuální verze)"
 
 #: seahub/templates/file_revisions.html:68
 #, python-format
 msgid "(Renamed or moved from %(old_path)s)"
-msgstr ""
+msgstr "(Přejmenováno nebo přesunuto z %(old_path)s)"
 
 #: seahub/templates/file_revisions.html:85
 #: seahub/templates/js/sysadmin-templates.html:454
@@ -3517,17 +3541,17 @@ msgstr ""
 #: seahub/templates/snippets/repo_dir_trash_tr.html:11
 #: seahub/templates/snippets/repo_dir_trash_tr.html:26
 msgid "Restore"
-msgstr ""
+msgstr "Obnovit"
 
 #: seahub/templates/file_revisions.html:89
 #: seahub/templates/js/templates.html:2016
 #: seahub/templates/js/templates.html:2027
 msgid "View"
-msgstr ""
+msgstr "Zobrazit"
 
 #: seahub/templates/file_revisions.html:91
 msgid "Diff"
-msgstr ""
+msgstr "Diff"
 
 #: seahub/templates/file_revisions.html:114
 #, python-brace-format
@@ -3536,53 +3560,53 @@ msgstr ""
 
 #: seahub/templates/finish_payment.html:8
 msgid "Plan"
-msgstr ""
+msgstr "Plán"
 
 #: seahub/templates/home_base.html:9
 #: seahub/templates/js/sysadmin-templates.html:121
 #: seahub/templates/js/templates.html:889
 msgid "Files"
-msgstr ""
+msgstr "Soubory"
 
 #: seahub/templates/home_base.html:12 seahub/templates/js/templates.html:274
 #: seahub/templates/js/templates.html:276
 #: seahub/templates/js/templates.html:893 seahub/templates/libraries.html:13
 msgid "My Libraries"
-msgstr ""
+msgstr "Moje knihovny"
 
 #: seahub/templates/home_base.html:14 seahub/templates/js/templates.html:276
 #: seahub/templates/js/templates.html:898 seahub/templates/libraries.html:29
 msgid "Shared with me"
-msgstr ""
+msgstr "Sdíleno se mnou"
 
 #: seahub/templates/home_base.html:16 seahub/templates/js/templates.html:272
 #: seahub/templates/js/templates.html:903 seahub/templates/libraries.html:44
 msgid "Shared with all"
-msgstr ""
+msgstr "Sdíleno se všemi"
 
 #: seahub/templates/home_base.html:21 seahub/templates/js/templates.html:909
 #: seahub/templates/js/templates.html:926
 #: seahub/templates/js/templates.html:929
 msgid "Shared with groups"
-msgstr ""
+msgstr "Sdíleno se skupinami"
 
 #: seahub/templates/home_base.html:24 seahub/templates/js/templates.html:911
 #: seahub/templates/js/templates.html:933
 msgid "All Groups"
-msgstr ""
+msgstr "Všechny skupiny"
 
 #: seahub/templates/home_base.html:36 seahub/templates/js/templates.html:946
 msgid "Tools"
-msgstr ""
+msgstr "Nástroje"
 
 #: seahub/templates/home_base.html:39 seahub/templates/js/templates.html:955
 #: seahub/templates/libraries.html:164
 msgid "Favorites"
-msgstr ""
+msgstr "Oblíbené"
 
 #: seahub/templates/home_base.html:41 seahub/templates/js/templates.html:959
 msgid "Activities"
-msgstr ""
+msgstr "Aktivity"
 
 #: seahub/templates/home_base.html:45 seahub/templates/home_base.html.py:81
 #: seahub/templates/js/templates.html:967
@@ -3590,28 +3614,28 @@ msgstr ""
 #: seahub/templates/wiki/personal_wiki.html:6
 #: seahub/templates/wiki/personal_wiki_pages.html:6
 msgid "Personal Wiki"
-msgstr ""
+msgstr "Osobní Wiki"
 
 #: seahub/templates/home_base.html:48 seahub/templates/js/templates.html:973
 #: seahub/templates/libraries.html:183
 msgid "Linked Devices"
-msgstr ""
+msgstr "Spárovaná zařízení"
 
 #: seahub/templates/home_base.html:51 seahub/templates/js/templates.html:977
 #: seahub/templates/js/templates.html:2041
 #: seahub/templates/js/templates.html:2042
 #: seahub/templates/js/templates.html:2079
 msgid "Invite People"
-msgstr ""
+msgstr "Pozvat lidi"
 
 #: seahub/templates/home_base.html:56 seahub/templates/js/templates.html:982
 msgid "Share Admin"
-msgstr ""
+msgstr "Sdílení Admin"
 
 #: seahub/templates/home_base.html:60 seahub/templates/js/templates.html:989
 #: seahub/templates/js/templates.html:1910
 msgid "Folders"
-msgstr ""
+msgstr "Složky"
 
 #: seahub/templates/home_base.html:62
 #: seahub/templates/js/sysadmin-templates.html:43
@@ -3619,137 +3643,137 @@ msgstr ""
 #: seahub/templates/js/templates.html:998
 #: seahub/templates/sysadmin/base.html:49
 msgid "Links"
-msgstr ""
+msgstr "Odkazy"
 
 #: seahub/templates/home_base.html:74 seahub/templates/js/templates.html:949
 #: seahub/templates/js/templates.html:1010
 msgid "Enable Modules"
-msgstr ""
+msgstr "Zapnout moduly"
 
 #: seahub/templates/i18n.html:6 seahub/templates/js/templates.html:216
 msgid "Upload Folder"
-msgstr ""
+msgstr "Nahrát adresář"
 
 #: seahub/templates/i18n.html:7 seahub/templates/js/templates.html:718
 #: seahub/templates/snippets/file_share_popup.html:25
 msgid "Add auto expiration"
-msgstr ""
+msgstr "Přidat automatickou expiraci"
 
 #: seahub/templates/i18n.html:8 seahub/templates/js/templates.html:721
 #: seahub/templates/snippets/file_share_popup.html:28
 msgid "Days"
-msgstr ""
+msgstr "Dní"
 
 #: seahub/templates/i18n.html:9 seahub/templates/sysadmin/userinfo.html:26
 msgid "Shared Links"
-msgstr ""
+msgstr "Sdílené odkazy"
 
 #: seahub/templates/i18n.html:10
 msgid "View and manage all the shared links in this library."
-msgstr ""
+msgstr "Zobrazit a spravovat všechvy stílené odkazy v této knihovně"
 
 #: seahub/templates/i18n.html:12 seahub/templates/sysadmin/userinfo.html:25
 msgid "Shared Libs"
-msgstr ""
+msgstr "Sdílené knihovny"
 
 #: seahub/templates/js/lib-op-popups.html:5
 #: seahub/templates/js/sysadmin-templates.html:506
 #: seahub/templates/js/templates.html:229
 msgid "New Folder"
-msgstr ""
+msgstr "Nová složka"
 
 #: seahub/templates/js/lib-op-popups.html:48
 msgid "Current Library"
-msgstr ""
+msgstr "Aktuální knihovna"
 
 #: seahub/templates/js/lib-op-popups.html:55
 msgid "Other Libraries"
-msgstr ""
+msgstr "Ostatní knihovny"
 
 #: seahub/templates/js/lib-op-popups.html:66
 #: seahub/templates/shared_file_view.html:57
 msgid "Please click and choose a directory."
-msgstr ""
+msgstr "Prosím klikněte a vyberte adresář"
 
 #: seahub/templates/js/lib-op-popups.html:85
 msgid "File Upload"
-msgstr ""
+msgstr "Nahrát soubor"
 
 #: seahub/templates/js/lib-op-popups.html:92
 #: seahub/templates/view_shared_upload_link.html:30
 msgid "Cancel All"
-msgstr ""
+msgstr "Zrušit vše"
 
 #: seahub/templates/js/lib-op-popups.html:96
 #: seahub/templates/view_shared_upload_link.html:48
 msgid "Saving..."
-msgstr ""
+msgstr "Ukládání..."
 
 #: seahub/templates/js/lib-op-popups.html:106
 msgid "This library is password protected"
-msgstr ""
+msgstr "Tato knihovna je chráněna heslem"
 
 #: seahub/templates/js/lib-op-popups.html:110
 msgid "*The password will be kept in the server for only 1 hour."
-msgstr ""
+msgstr "*Heslo bude uloženo na serveru pouze 1 hodinu."
 
 #: seahub/templates/js/lib-op-popups.html:117
 msgid "A file with the same name already exists in this folder."
-msgstr ""
+msgstr "Soubor se stejným jménem již existuje v této složce."
 
 #: seahub/templates/js/lib-op-popups.html:117
 msgid "Replacing it will overwrite its content."
-msgstr ""
+msgstr "Přepsáním se přepíše původní obsah."
 
 #: seahub/templates/js/lib-op-popups.html:119
 msgid "Replace"
-msgstr ""
+msgstr "Nahradit"
 
 #: seahub/templates/js/lib-op-popups.html:120
 msgid "Don't replace"
-msgstr ""
+msgstr "Nenahrazovat"
 
 #: seahub/templates/js/sysadmin-templates.html:11
 #: seahub/templates/sysadmin/base.html:19
 msgid "Devices"
-msgstr ""
+msgstr "Zařízení"
 
 #: seahub/templates/js/sysadmin-templates.html:29
 #: seahub/templates/js/sysadmin-templates.html:156
 #: seahub/templates/sysadmin/base.html:37
 msgid "Organizations"
-msgstr ""
+msgstr "Organizace"
 
 #: seahub/templates/js/sysadmin-templates.html:35
 #: seahub/templates/sysadmin/base.html:42
 msgid "Institutions"
-msgstr ""
+msgstr "Instituce"
 
 #: seahub/templates/js/sysadmin-templates.html:47
 #: seahub/templates/sysadmin/base.html:53
 msgid "Traffic"
-msgstr ""
+msgstr "Vytížení"
 
 #: seahub/templates/js/sysadmin-templates.html:52
 #: seahub/templates/sysadmin/base.html:58
 msgid "Logs"
-msgstr ""
+msgstr "Logy"
 
 #: seahub/templates/js/sysadmin-templates.html:57
 #: seahub/templates/sysadmin/base.html:63
 msgid "Virus Scan"
-msgstr ""
+msgstr "Virus sken"
 
 #: seahub/templates/js/sysadmin-templates.html:62
 #: seahub/templates/sysadmin/base.html:68
 msgid "Invitations"
-msgstr ""
+msgstr "Pozvánky"
 
 #: seahub/templates/js/sysadmin-templates.html:67
 #: seahub/templates/sysadmin/base.html:73
 #: seahub/templates/sysadmin/sys_terms_admin.html:8
 msgid "Terms and Conditions"
-msgstr ""
+msgstr "Pravidla a podmínky"
 
 #: seahub/templates/js/sysadmin-templates.html:72
 #: seahub/templates/js/sysadmin-templates.html:851
@@ -3759,149 +3783,149 @@ msgstr ""
 
 #: seahub/templates/js/sysadmin-templates.html:80
 msgid "Search libraries by name..."
-msgstr ""
+msgstr "Prohledávat knihovny podle jména..."
 
 #: seahub/templates/js/sysadmin-templates.html:85
 msgid "Search libraries by owner..."
-msgstr ""
+msgstr "Prohledávat knihovny podle vlastníka..."
 
 #: seahub/templates/js/sysadmin-templates.html:91
 msgid "Search groups by name..."
-msgstr ""
+msgstr "Prohledávat skupiny podle jména..."
 
 #: seahub/templates/js/sysadmin-templates.html:107
 msgid "System Info"
-msgstr ""
+msgstr "Informace o systému"
 
 #: seahub/templates/js/sysadmin-templates.html:109
 msgid "Professional Edition"
-msgstr ""
+msgstr "Professional Edition"
 
 #: seahub/templates/js/sysadmin-templates.html:111
 msgid "licensed to"
-msgstr ""
+msgstr "licencováno na"
 
 #: seahub/templates/js/sysadmin-templates.html:113
 msgid "expires on"
-msgstr ""
+msgstr "vyprší v"
 
 #: seahub/templates/js/sysadmin-templates.html:116
 msgid "Community Edition"
-msgstr ""
+msgstr "Community Edition"
 
 #: seahub/templates/js/sysadmin-templates.html:117
 msgid "Upgrade to Pro Edition"
-msgstr ""
+msgstr "Upgrade na Pro Edition"
 
 #: seahub/templates/js/sysadmin-templates.html:124
 msgid "Storage Used"
-msgstr ""
+msgstr "Použité místo"
 
 #: seahub/templates/js/sysadmin-templates.html:127
 msgid "Total Devices"
-msgstr ""
+msgstr "Celkem zařízení"
 
 #: seahub/templates/js/sysadmin-templates.html:127
 msgid "Current Connected Devices"
-msgstr ""
+msgstr "Aktuálně připojená zařízení"
 
 #: seahub/templates/js/sysadmin-templates.html:131
 msgid "Limits"
-msgstr ""
+msgstr "Limity"
 
 #: seahub/templates/js/sysadmin-templates.html:166
 #: seahub/templates/js/sysadmin-templates.html:219
 msgid "Desktop"
-msgstr ""
+msgstr "Desktop"
 
 #: seahub/templates/js/sysadmin-templates.html:169
 #: seahub/templates/js/sysadmin-templates.html:222
 msgid "Mobile"
-msgstr ""
+msgstr "Mobilní"
 
 #: seahub/templates/js/sysadmin-templates.html:173
 #: seahub/templates/js/sysadmin-templates.html:225
 msgid "Errors"
-msgstr ""
+msgstr "Chyby"
 
 #: seahub/templates/js/sysadmin-templates.html:182
 #: seahub/templates/libraries.html:187
 msgid "Platform"
-msgstr ""
+msgstr "Platforma"
 
 #: seahub/templates/js/sysadmin-templates.html:182
 #: seahub/templates/js/sysadmin-templates.html:234
 #: seahub/templates/repo_history.html:31
 #: seahub/templates/sysadmin/sys_terms_admin.html:17
 msgid "Version"
-msgstr ""
+msgstr "Verze"
 
 #: seahub/templates/js/sysadmin-templates.html:185
 #: seahub/templates/libraries.html:190
 msgid "Last Access"
-msgstr ""
+msgstr "Poslední přístup"
 
 #: seahub/templates/js/sysadmin-templates.html:194
 msgid "No connected devices"
-msgstr ""
+msgstr "Žádná připojená zařízení"
 
 #: seahub/templates/js/sysadmin-templates.html:210
 #: seahub/templates/js/templates.html:1795
 msgid "Unlink"
-msgstr ""
+msgstr "Odpárovat"
 
 #: seahub/templates/js/sysadmin-templates.html:228
 #: seahub/templates/js/sysadmin-templates.html:309
 #: seahub/templates/repo_dir_recycle_view.html:37
 #: seahub/templates/repo_dir_recycle_view.html:65
 msgid "Clean"
-msgstr ""
+msgstr "Vyčistit"
 
 #: seahub/templates/js/sysadmin-templates.html:234
 #: seahub/templates/repo_history.html:31
 msgid "Device"
-msgstr ""
+msgstr "Zařízení"
 
 #: seahub/templates/js/sysadmin-templates.html:246
 msgid "No sync errors"
-msgstr ""
+msgstr "Žádné chyby synchronizace"
 
 #: seahub/templates/js/sysadmin-templates.html:299
 #: seahub/templates/js/sysadmin-templates.html:485
 #: seahub/templates/sysadmin/sys_org_admin.html:14
 msgid "All"
-msgstr ""
+msgstr "Vše"
 
 #: seahub/templates/js/sysadmin-templates.html:302
 #: seahub/templates/js/sysadmin-templates.html:483
 msgid "System"
-msgstr ""
+msgstr "Systém"
 
 #: seahub/templates/js/sysadmin-templates.html:305
 #: seahub/templates/js/templates.html:255
 #: seahub/templates/js/templates.html:260
 #: seahub/templates/view_trash_file.html:6
 msgid "Trash"
-msgstr ""
+msgstr "Koš"
 
 #: seahub/templates/js/sysadmin-templates.html:321
 #: seahub/templates/js/sysadmin-templates.html:354
 msgid "Files / Size"
-msgstr ""
+msgstr "Soubory / Velikost"
 
 #: seahub/templates/js/sysadmin-templates.html:335
 #: seahub/templates/js/sysadmin-templates.html:364
 #: seahub/templates/js/sysadmin-templates.html:777
 msgid "No libraries"
-msgstr ""
+msgstr "Žádné knihovny"
 
 #: seahub/templates/js/sysadmin-templates.html:340
 msgid "Search Library"
-msgstr ""
+msgstr "vyhledat knihovnu"
 
 #: seahub/templates/js/sysadmin-templates.html:342
 msgid "Tip: you can search by keyword in name or owner or both."
-msgstr ""
+msgstr "Tip: Můžete vyhledávat podle klíčových slov ve jméně nebo vlastníkovi, či v obojím."
 
 #: seahub/templates/js/sysadmin-templates.html:392
 #: seahub/templates/js/sysadmin-templates.html:613
@@ -3909,7 +3933,7 @@ msgstr ""
 #: seahub/templates/js/templates.html:1413
 #: seahub/templates/sysadmin/userinfo.html:149
 msgid "Transfer"
-msgstr ""
+msgstr "Převod"
 
 #: seahub/templates/js/sysadmin-templates.html:394
 #: seahub/templates/js/templates.html:49 seahub/templates/js/templates.html:94
@@ -3922,19 +3946,19 @@ msgstr ""
 #: seahub/templates/js/templates.html:664
 #: seahub/templates/view_file_base.html:54
 msgid "Share"
-msgstr ""
+msgstr "Sdílet"
 
 #: seahub/templates/js/sysadmin-templates.html:422
 msgid "Tip: libraries deleted 30 days ago will be cleaned automatically."
-msgstr ""
+msgstr "Tip: Knihovny smazané před 30 dny budou vymazány automaticky."
 
 #: seahub/templates/js/sysadmin-templates.html:429
 msgid "Deleted Time"
-msgstr ""
+msgstr "Čas smazání"
 
 #: seahub/templates/js/sysadmin-templates.html:441
 msgid "No library deleted yet"
-msgstr ""
+msgstr "Nebyla zatím smazána žádná knihovna"
 
 #: seahub/templates/js/sysadmin-templates.html:503
 #: seahub/templates/js/templates.html:204
@@ -3942,51 +3966,51 @@ msgstr ""
 #: seahub/templates/js/templates.html:223
 #: seahub/templates/sysadmin/userinfo.html:232
 msgid "Upload"
-msgstr ""
+msgstr "Nahrát"
 
 #: seahub/templates/js/sysadmin-templates.html:541
 #: seahub/templates/js/sysadmin-templates.html:596
 #: seahub/templates/libraries.html:72 seahub/templates/libraries.html.py:90
 msgid "New Group"
-msgstr ""
+msgstr "Nová skupina"
 
 #: seahub/templates/js/sysadmin-templates.html:542
 #: seahub/templates/sysadmin/sys_user_admin_ldap_imported.html:23
 #: seahub/templates/sysadmin/sys_useradmin.html:28
 msgid "Export Excel"
-msgstr ""
+msgstr "Export do Excelu"
 
 #: seahub/templates/js/sysadmin-templates.html:551
 #: seahub/templates/js/sysadmin-templates.html:582
 msgid "Created At"
-msgstr ""
+msgstr "Vytvořeno"
 
 #: seahub/templates/js/sysadmin-templates.html:563
 #: seahub/templates/js/sysadmin-templates.html:590
 msgid "No groups"
-msgstr ""
+msgstr "Žádné skupiny"
 
 #: seahub/templates/js/sysadmin-templates.html:569
 msgid "Search Group"
-msgstr ""
+msgstr "Hledat skupinu"
 
 #: seahub/templates/js/sysadmin-templates.html:571
 msgid "Tip: you can search by keyword in name."
-msgstr ""
+msgstr "Tip: Můžete vyhledávat podle klíčového slova ve jméně."
 
 #: seahub/templates/js/sysadmin-templates.html:600
 msgid "(If left blank, owner will be admin)"
-msgstr ""
+msgstr "(Pokud je prázdné, vlatníkem bude Admin)"
 
 #: seahub/templates/js/sysadmin-templates.html:666
 #: seahub/templates/js/templates.html:691
 msgid "Share to user"
-msgstr ""
+msgstr "Sdílet uživateli"
 
 #: seahub/templates/js/sysadmin-templates.html:667
 #: seahub/templates/js/templates.html:692
 msgid "Share to group"
-msgstr ""
+msgstr "Sdílet skupině"
 
 #: seahub/templates/js/sysadmin-templates.html:677
 #: seahub/templates/js/sysadmin-templates.html:704
@@ -4003,14 +4027,14 @@ msgstr ""
 #: seahub/templates/js/templates.html:1863
 #: seahub/templates/js/templates.html:1918
 msgid "Permission"
-msgstr ""
+msgstr "Oprávnění"
 
 #: seahub/templates/js/sysadmin-templates.html:703
 #: seahub/templates/js/templates.html:830
 #: seahub/templates/js/templates.html:1127
 #: seahub/templates/js/templates.html:1729
 msgid "Group"
-msgstr ""
+msgstr "Skupina"
 
 #: seahub/templates/js/sysadmin-templates.html:740
 #: seahub/templates/js/templates.html:1048 seahub/templates/libraries.html:131
@@ -4021,17 +4045,17 @@ msgstr ""
 #: seahub/templates/sysadmin/sys_org_info_setting.html:8
 #: seahub/templates/sysadmin/sys_org_info_user.html:7
 msgid "Members"
-msgstr ""
+msgstr "Členové"
 
 #: seahub/templates/js/sysadmin-templates.html:745
 #: seahub/templates/js/sysadmin-templates.html:753
 msgid "Add Member"
-msgstr ""
+msgstr "Přidat člena"
 
 #: seahub/templates/js/sysadmin-templates.html:769
 #: seahub/templates/js/templates.html:1238
 msgid "Shared By"
-msgstr ""
+msgstr "Sdíleno uživatelem"
 
 #: seahub/templates/js/sysadmin-templates.html:795
 #: seahub/templates/js/templates.html:125
@@ -4040,11 +4064,11 @@ msgstr ""
 #: seahub/templates/js/templates.html:179
 #: seahub/templates/js/templates.html:1905
 msgid "Unshare"
-msgstr ""
+msgstr "Zrušit sdílení"
 
 #: seahub/templates/js/sysadmin-templates.html:815
 msgid "No members"
-msgstr ""
+msgstr "Žádní členové"
 
 #: seahub/templates/js/sysadmin-templates.html:858
 msgid "Operation"
@@ -4054,7 +4078,7 @@ msgstr ""
 #: seahub/templates/view_file_markdown.html:11
 #: seahub/templates/view_file_text.html:16
 msgid "Detail"
-msgstr ""
+msgstr "Detail"
 
 #: seahub/templates/js/sysadmin-templates.html:871
 msgid "No Admin Logs"
@@ -4063,36 +4087,36 @@ msgstr ""
 #: seahub/templates/js/templates.html:4
 #: seahub/templates/js/templates.html:1038 seahub/templates/libraries.html:14
 msgid "New Library"
-msgstr ""
+msgstr "Nová knihovna"
 
 #: seahub/templates/js/templates.html:8
 msgid "Template"
-msgstr ""
+msgstr "Šablona"
 
 #: seahub/templates/js/templates.html:10
 msgid "Select a template"
-msgstr ""
+msgstr "Vyber šablonu"
 
 #: seahub/templates/js/templates.html:18
 msgid "Share Permission"
-msgstr ""
+msgstr "Oprávnění sdílení"
 
 #: seahub/templates/js/templates.html:29
 msgid "Encrypt"
-msgstr ""
+msgstr "Šifrovat"
 
 #: seahub/templates/js/templates.html:31
 #: seahub/templates/js/templates.html:1779
 #, python-format
 msgid "(at least %(repo_password_min_length)s characters)"
-msgstr ""
+msgstr "(nejméně %(repo_password_min_length)s znaků)"
 
 #: seahub/templates/js/templates.html:33
 #: seahub/templates/js/templates.html:713
 #: seahub/templates/js/templates.html:769
 #: seahub/templates/snippets/file_share_popup.html:20
 msgid "Password again"
-msgstr ""
+msgstr "Heslo znovu"
 
 #: seahub/templates/js/templates.html:52 seahub/templates/js/templates.html:92
 #: seahub/templates/js/templates.html:349
@@ -4102,7 +4126,7 @@ msgstr ""
 #: seahub/templates/js/templates.html:500
 #: seahub/templates/js/templates.html:571
 msgid "More Operations"
-msgstr ""
+msgstr "Více operací"
 
 #: seahub/templates/js/templates.html:54 seahub/templates/js/templates.html:96
 #: seahub/templates/js/templates.html:351
@@ -4114,31 +4138,31 @@ msgstr ""
 #: seahub/templates/js/templates.html:1412
 #: seahub/templates/js/templates.html:1431
 msgid "Rename"
-msgstr ""
+msgstr "Přejmenovat"
 
 #: seahub/templates/js/templates.html:56 seahub/templates/js/templates.html:98
 msgid "History Setting"
-msgstr ""
+msgstr "Nastavení historie"
 
 #: seahub/templates/js/templates.html:58
 #: seahub/templates/js/templates.html:100
 msgid "Change Password"
-msgstr ""
+msgstr "Změnit heslo"
 
 #: seahub/templates/js/templates.html:61
 #: seahub/templates/js/templates.html:103
 msgid "Share Links"
-msgstr ""
+msgstr "Sdílet odkazy"
 
 #: seahub/templates/js/templates.html:64
 #: seahub/templates/js/templates.html:106
 msgid "Folder Permission"
-msgstr ""
+msgstr "Oprávnění složky"
 
 #: seahub/templates/js/templates.html:71
 #: seahub/templates/js/templates.html:113
 msgid "Broken (please contact your administrator to fix this library)"
-msgstr ""
+msgstr "Poškozený (prosím kontaktujte administrátora pro opravu knihovny)"
 
 #: seahub/templates/js/templates.html:187
 #: seahub/templates/js/templates.html:352
@@ -4148,7 +4172,7 @@ msgstr ""
 #: seahub/templates/js/templates.html:643
 #: seahub/templates/js/templates.html:669
 msgid "Move"
-msgstr ""
+msgstr "Přesunout"
 
 #: seahub/templates/js/templates.html:188
 #: seahub/templates/js/templates.html:195
@@ -4163,11 +4187,11 @@ msgstr ""
 #: seahub/templates/js/templates.html:644
 #: seahub/templates/js/templates.html:670
 msgid "Copy"
-msgstr ""
+msgstr "Kopírovat"
 
 #: seahub/templates/js/templates.html:212
 msgid "Upload Files"
-msgstr ""
+msgstr "Nahrát soubory"
 
 #: seahub/templates/js/templates.html:223
 msgid "Out of quota"
@@ -4179,7 +4203,7 @@ msgstr ""
 
 #: seahub/templates/js/templates.html:230
 msgid "New File"
-msgstr ""
+msgstr "Nový soubor"
 
 #: seahub/templates/js/templates.html:233
 msgid "New Markdown File"
@@ -4202,22 +4226,22 @@ msgstr ""
 #: seahub/templates/view_shared_dir.html:33
 #: seahub/templates/view_shared_dir.html:35
 msgid "List"
-msgstr ""
+msgstr "Seznam"
 
 #: seahub/templates/js/templates.html:249
 msgid "list view"
-msgstr ""
+msgstr "Pohled-seznam"
 
 #: seahub/templates/js/templates.html:249
 #: seahub/templates/view_shared_dir.html:37
 #: seahub/templates/view_shared_dir.html:39
 #: seahub/templates/view_shared_dir.html:41
 msgid "Grid"
-msgstr ""
+msgstr "Mřížka"
 
 #: seahub/templates/js/templates.html:249
 msgid "grid view"
-msgstr ""
+msgstr "Pohled-mřížka"
 
 #: seahub/templates/js/templates.html:299
 #: seahub/templates/js/templates.html:316
@@ -4226,7 +4250,7 @@ msgstr ""
 #: seahub/templates/js/templates.html:1235
 #: seahub/templates/js/templates.html:1249
 msgid "Actions"
-msgstr ""
+msgstr "Akce"
 
 #: seahub/templates/js/templates.html:312
 #: seahub/templates/js/templates.html:1225
@@ -4247,26 +4271,26 @@ msgstr ""
 #: seahub/templates/js/templates.html:655
 #: seahub/templates/js/templates.html:674
 msgid "Open via Client"
-msgstr ""
+msgstr "Otevřít pomocí klienta"
 
 #: seahub/templates/js/templates.html:433
 #: seahub/templates/js/templates.html:528
 #: seahub/templates/view_file_base.html:21
 msgid "starred"
-msgstr ""
+msgstr "označeno"
 
 #: seahub/templates/js/templates.html:435
 #: seahub/templates/js/templates.html:530
 #: seahub/templates/view_file_base.html:23
 msgid "unstarred"
-msgstr ""
+msgstr "odznačeno"
 
 #: seahub/templates/js/templates.html:451
 #: seahub/templates/js/templates.html:546
 #: seahub/templates/js/templates.html:615
 #: seahub/templates/view_file_base.html:27
 msgid "locked"
-msgstr ""
+msgstr "uzamčeno"
 
 #: seahub/templates/js/templates.html:489
 #: seahub/templates/js/templates.html:589
@@ -4274,7 +4298,7 @@ msgstr ""
 #: seahub/templates/view_file_base.html:45
 #: seahub/templates/view_file_base.html:47
 msgid "Unlock"
-msgstr ""
+msgstr "Odemknout"
 
 #: seahub/templates/js/templates.html:492
 #: seahub/templates/js/templates.html:592
@@ -4282,34 +4306,34 @@ msgstr ""
 #: seahub/templates/view_file_base.html:44
 #: seahub/templates/view_file_base.html:48
 msgid "Lock"
-msgstr ""
+msgstr "Zámek"
 
 #: seahub/templates/js/templates.html:513
 #: seahub/templates/js/templates.html:563
 msgid "Fetch failed"
-msgstr ""
+msgstr "Chyba při načtení"
 
 #: seahub/templates/js/templates.html:684
 #: seahub/templates/snippets/file_share_popup.html:6
 msgid "Download Link"
-msgstr ""
+msgstr "Download odkaz"
 
 #: seahub/templates/js/templates.html:688
 msgid "Upload Link"
-msgstr ""
+msgstr "Upload odkaz"
 
 #: seahub/templates/js/templates.html:704
 #: seahub/templates/js/templates.html:760
 #: seahub/templates/snippets/file_share_popup.html:15
 msgid "Add password protection"
-msgstr ""
+msgstr "Přidat ochranu heslem"
 
 #: seahub/templates/js/templates.html:707
 #: seahub/templates/js/templates.html:763
 #: seahub/templates/snippets/file_share_popup.html:18
 #, python-format
 msgid "(at least %(share_link_password_min_length)s characters)"
-msgstr ""
+msgstr "(nejméně %(share_link_password_min_length)s znaků)"
 
 #: seahub/templates/js/templates.html:710
 #: seahub/templates/js/templates.html:766
@@ -4318,262 +4342,262 @@ msgstr ""
 #: seahub/templates/sysadmin/sys_useradmin.html:56
 #: seahub/templates/sysadmin/sys_useradmin.html:137
 msgid "Show"
-msgstr ""
+msgstr "Zobrazit"
 
 #: seahub/templates/js/templates.html:711
 #: seahub/templates/js/templates.html:767
 #: seahub/templates/sysadmin/sys_org_info_user.html:75
 #: seahub/templates/sysadmin/sys_useradmin.html:57
 msgid "Generate a random password"
-msgstr ""
+msgstr "generovat náhodné heslo"
 
 #: seahub/templates/js/templates.html:725
 #: seahub/templates/js/templates.html:773
 #: seahub/templates/snippets/file_share_popup.html:33
 msgid "Generate"
-msgstr ""
+msgstr "Generovat"
 
 #: seahub/templates/js/templates.html:729
 #: seahub/templates/snippets/file_share_popup.html:35
 msgid "Link: "
-msgstr ""
+msgstr "Odkaz: "
 
 #: seahub/templates/js/templates.html:732
 msgid "Direct Download Link: "
-msgstr ""
+msgstr "Přímý odkaz ke stažení: "
 
 #: seahub/templates/js/templates.html:736
 #: seahub/templates/js/templates.html:777
 #: seahub/templates/snippets/file_share_popup.html:36
 msgid "Send"
-msgstr ""
+msgstr "Odeslat"
 
 #: seahub/templates/js/templates.html:739
 #: seahub/templates/js/templates.html:780
 #: seahub/templates/snippets/file_share_popup.html:40
 msgid "Send to:"
-msgstr ""
+msgstr "Odeslat na:"
 
 #: seahub/templates/js/templates.html:740
 #: seahub/templates/js/templates.html:781
 #: seahub/templates/snippets/file_share_popup.html:41
 msgid "Emails, Seperated by ','"
-msgstr ""
+msgstr "Emaily, oddělené ','"
 
 #: seahub/templates/js/templates.html:741
 #: seahub/templates/js/templates.html:782
 #: seahub/templates/snippets/file_share_popup.html:45
 msgid "Message (optional):"
-msgstr ""
+msgstr "Zpráva(volitelné):"
 
 #: seahub/templates/js/templates.html:746
 #: seahub/templates/js/templates.html:787
 #: seahub/templates/snippets/file_share_popup.html:50
 msgid "Sending..."
-msgstr ""
+msgstr "Odesílám..."
 
 #: seahub/templates/js/templates.html:756
 msgid ""
 "You can share the generated link to others and then they can upload files to"
 " this directory via the link."
-msgstr ""
+msgstr "Můžete sdílet vygenerovaný odkaz s ostatními a pak oni mohou nahrát soubory do toho adresáře přes tento odkaz."
 
 #: seahub/templates/js/templates.html:776
 msgid "Upload Link: "
-msgstr ""
+msgstr "Upload odkaz: "
 
 #: seahub/templates/js/templates.html:864
 #: seahub/templates/js/templates.html:881
 msgid "Leave Share"
-msgstr ""
+msgstr "Ponechat sdílení"
 
 #: seahub/templates/js/templates.html:1044
 msgid "Wiki"
-msgstr ""
+msgstr "Wiki"
 
 #: seahub/templates/js/templates.html:1049
 msgid "Discussion"
-msgstr ""
+msgstr "Diskuze"
 
 #: seahub/templates/js/templates.html:1093
 #: seahub/templates/js/templates.html:1675
 msgid "User Permission"
-msgstr ""
+msgstr "Uživatelské oprávnění"
 
 #: seahub/templates/js/templates.html:1094
 #: seahub/templates/js/templates.html:1676
 msgid "Group Permission"
-msgstr ""
+msgstr "Skupinová oprávnění"
 
 #: seahub/templates/js/templates.html:1156
 #: seahub/templates/js/templates.html:1162
 msgid "File Name"
-msgstr ""
+msgstr "Jméno souboru"
 
 #: seahub/templates/js/templates.html:1172
 #: seahub/templates/js/templates.html:1193
 msgid "icon"
-msgstr ""
+msgstr "ikona"
 
 #: seahub/templates/js/templates.html:1185
 #: seahub/templates/js/templates.html:1207
 msgid "Unstar"
-msgstr ""
+msgstr "Odebrat z oblíbených"
 
 #: seahub/templates/js/templates.html:1214
 #: seahub/templates/js/templates.html:1223
 #: seahub/templates/js/templates.html:1233
 #: seahub/templates/js/templates.html:1243
 msgid "Library Type"
-msgstr ""
+msgstr "Typ knihovny"
 
 #: seahub/templates/js/templates.html:1254
 msgid "Select libraries to share"
-msgstr ""
+msgstr "Vyberte knohovnu ke sdílení"
 
 #: seahub/templates/js/templates.html:1303
 #: seahub/templates/repo_history.html:41
 msgid "Details"
-msgstr ""
+msgstr "Detaily"
 
 #: seahub/templates/js/templates.html:1311
 msgid "Created library"
-msgstr ""
+msgstr "Vytvořená knihovna"
 
 #: seahub/templates/js/templates.html:1315
 msgid "Deleted library"
-msgstr ""
+msgstr "Smazaná knihovna"
 
 #: seahub/templates/js/templates.html:1322
 #: seahub/templates/snippets/list_commit_detail.html:10
 msgid "Modification Details"
-msgstr ""
+msgstr "Detaily změn"
 
 #: seahub/templates/js/templates.html:1336
 #: seahub/templates/snippets/search_form.html:4
 msgid "Search files in this wiki"
-msgstr ""
+msgstr "Vyhledat soubory v této wiki"
 
 #: seahub/templates/js/templates.html:1336
 #: seahub/templates/snippets/search_form.html:4
 msgid "Search files in this library"
-msgstr ""
+msgstr "Vyhledat soubory v této knihovně"
 
 #: seahub/templates/js/templates.html:1338
 #: seahub/templates/snippets/search_form.html:7
 #: seahub/templates/snippets/search_form.html:13
 msgid "Search Files"
-msgstr ""
+msgstr "Vyhledat soubory"
 
 #: seahub/templates/js/templates.html:1340
 #: seahub/templates/snippets/search_form.html:9
 msgid "advanced"
-msgstr ""
+msgstr "rozšířené"
 
 #: seahub/templates/js/templates.html:1358
 #: seahub/templates/js/templates.html:1375 seahub/templates/libraries.html:108
 msgid "No library is shared to this group"
-msgstr ""
+msgstr "Není sdílena žádná knihovna s touto skupinou"
 
 #: seahub/templates/js/templates.html:1383
 msgid "owner"
-msgstr ""
+msgstr "vlastník"
 
 #: seahub/templates/js/templates.html:1385
 msgid "admin"
-msgstr ""
+msgstr "admin"
 
 #: seahub/templates/js/templates.html:1399
 #: seahub/templates/view_file_base.html:125
 msgid "Reply"
-msgstr ""
+msgstr "Odpověď"
 
 #: seahub/templates/js/templates.html:1416
 #: seahub/templates/js/templates.html:1434
 msgid "Add Wiki"
-msgstr ""
+msgstr "Přidat Wiki"
 
 #: seahub/templates/js/templates.html:1418
 #: seahub/templates/js/templates.html:1436
 msgid "Remove Wiki"
-msgstr ""
+msgstr "Odebrat Wiki"
 
 #: seahub/templates/js/templates.html:1423
 #: seahub/templates/js/templates.html:1441
 msgid "Import Members"
-msgstr ""
+msgstr "Importovat členy"
 
 #: seahub/templates/js/templates.html:1424
 #: seahub/templates/js/templates.html:1442
 msgid "Manage Members"
-msgstr ""
+msgstr "Spravovat členy"
 
 #: seahub/templates/js/templates.html:1427
 msgid "Dismiss"
-msgstr ""
+msgstr "Zrušit"
 
 #: seahub/templates/js/templates.html:1446
 msgid "Leave group"
-msgstr ""
+msgstr "Opustit skupinu"
 
 #: seahub/templates/js/templates.html:1453
 msgid "Rename Group To"
-msgstr ""
+msgstr "Přejmenovat skupinu na"
 
 #: seahub/templates/js/templates.html:1462
 msgid "Transfer Group To"
-msgstr ""
+msgstr "Převést skupinu na"
 
 #: seahub/templates/js/templates.html:1470
 msgid "Import group members from a CSV file"
-msgstr ""
+msgstr "Importovat členy z CSV souboru"
 
 #: seahub/templates/js/templates.html:1472
 msgid "File format: user@mail.com"
-msgstr ""
+msgstr "Formát souboru: user@mail.com"
 
 #: seahub/templates/js/templates.html:1482
 #: seahub/templates/sysadmin/sys_inst_admin.html:12
 #: seahub/templates/sysadmin/sys_terms_admin.html:9
 msgid "Add"
-msgstr ""
+msgstr "Přidat"
 
 #: seahub/templates/js/templates.html:1562
 msgid "Setting library history is disabled by Admin"
-msgstr ""
+msgstr "Nastavení historie knihovny je vypnuto Administrátorem"
 
 #: seahub/templates/js/templates.html:1567
 msgid "Keep full history"
-msgstr ""
+msgstr "Ponechat všechnu historii"
 
 #: seahub/templates/js/templates.html:1573
 msgid "Don't keep history"
-msgstr ""
+msgstr "Neukládat historii"
 
 #: seahub/templates/js/templates.html:1579
 msgid "Only keep a period of history:"
-msgstr ""
+msgstr "Pouze ponechat období historie:"
 
 #: seahub/templates/js/templates.html:1580
 msgid "days"
-msgstr ""
+msgstr "dní"
 
 #: seahub/templates/js/templates.html:1597
 #: seahub/templates/js/templates.html:1936
 #: seahub/templates/js/templates.html:1972
 msgid "Download Links"
-msgstr ""
+msgstr "Download odkazy"
 
 #: seahub/templates/js/templates.html:1600
 #: seahub/templates/js/templates.html:1940
 #: seahub/templates/js/templates.html:1976
 msgid "Upload Links"
-msgstr ""
+msgstr "Upload odkazy"
 
 #: seahub/templates/js/templates.html:1612
 #: seahub/templates/js/templates.html:1631
 msgid "Created By"
-msgstr ""
+msgstr "Vytvořeno uživatelem"
 
 #: seahub/templates/js/templates.html:1614
 #: seahub/templates/js/templates.html:1633
@@ -4581,14 +4605,14 @@ msgstr ""
 #: seahub/templates/js/templates.html:1987
 #: seahub/templates/sysadmin/userinfo.html:208
 msgid "Visits"
-msgstr ""
+msgstr "Návštěvy"
 
 #: seahub/templates/js/templates.html:1648
 #: seahub/templates/sysadmin/userinfo.html:219
 #: seahub/templates/sysadmin/userinfo.html:229
 #: seahub/templates/view_shared_dir.html:64
 msgid "Directory icon"
-msgstr ""
+msgstr "Ikona adresáře"
 
 #: seahub/templates/js/templates.html:1658
 #: seahub/templates/js/templates.html:2017
@@ -4599,237 +4623,237 @@ msgstr ""
 #: seahub/templates/sysadmin/userinfo.html:226
 #: seahub/templates/sysadmin/userinfo.html:235
 msgid "Remove"
-msgstr ""
+msgstr "Odstranit"
 
 #: seahub/templates/js/templates.html:1686
 #: seahub/templates/js/templates.html:1730
 msgid "Folder"
-msgstr ""
+msgstr "Složka"
 
 #: seahub/templates/js/templates.html:1697
 #: seahub/templates/js/templates.html:1716
 #: seahub/templates/js/templates.html:1743
 #: seahub/templates/js/templates.html:1762
 msgid "Select a folder"
-msgstr ""
+msgstr "Vybrat složku"
 
 #: seahub/templates/js/templates.html:1777
 msgid "Old Password"
-msgstr ""
+msgstr "Staré heslo"
 
 #: seahub/templates/js/templates.html:1779
 #: seahub/templates/registration/password_change_form.html:18
 msgid "New Password"
-msgstr ""
+msgstr "Nové heslo"
 
 #: seahub/templates/js/templates.html:1781
 msgid "New Password Again"
-msgstr ""
+msgstr "Nové heslo znovu"
 
 #: seahub/templates/js/templates.html:1810
 msgid "See All Notifications"
-msgstr ""
+msgstr "Prohlížet všechna upozornění"
 
 #: seahub/templates/js/templates.html:1862
 #: seahub/templates/js/templates.html:1917
 msgid "Share To"
-msgstr ""
+msgstr "Sdílet s"
 
 #: seahub/templates/js/templates.html:1871
 msgid "You have not shared any library"
-msgstr ""
+msgstr "Nemáte sdílené žádné knihovny"
 
 #: seahub/templates/js/templates.html:1872
 msgid ""
 "You can share libraries to your friends and colleagues by clicking the share"
 " icon of your own libraries in your home page or creating a new library in "
 "groups you are in."
-msgstr ""
+msgstr "Můžete sdílet knihovny s Vašimi přáteli a kolegy kliknutím na ikonu sdílení u Vašich knihoven na domovské stránce nebo vytvořením nové knihovny ve skupinách ve kterých jste."
 
 #: seahub/templates/js/templates.html:1885
 msgid "all members"
-msgstr ""
+msgstr "všichni členové"
 
 #: seahub/templates/js/templates.html:1926
 msgid "You have not shared any folder"
-msgstr ""
+msgstr "Nemáte nasdílenou žádnou složku"
 
 #: seahub/templates/js/templates.html:1927
 msgid ""
 "You can share a single folder with a registered user if you don't want to "
 "share a whole library."
-msgstr ""
+msgstr "Můžete sdílet jednotlivou složku s registrovaným uživatelem pokud nechcete sdílet celou knihovnu."
 
 #: seahub/templates/js/templates.html:1953
 #: seahub/templates/js/templates.html:2050
 msgid "Expiration"
-msgstr ""
+msgstr "Expirace"
 
 #: seahub/templates/js/templates.html:1961
 msgid "You don't have any download link"
-msgstr ""
+msgstr "Nemáte žádný odkaz ke stažení"
 
 #: seahub/templates/js/templates.html:1962
 msgid ""
 "You can generate a download link for a folder or a file. People receive this"
 " link can view the folder or the file online."
-msgstr ""
+msgstr "Můžete vygenerovat odkaz ke stažení pro složku nebo soubor. Lidé kteří obdrží tento odkaz, mohou složku nebo soubor prohlédnout on-line."
 
 #: seahub/templates/js/templates.html:1995
 msgid "You don't have any upload link"
-msgstr ""
+msgstr "Nemáte žádné odkazy k odeslání"
 
 #: seahub/templates/js/templates.html:1996
 msgid ""
 "You can generate an upload link from any folder. People receive this link "
 "can upload files to this folder."
-msgstr ""
+msgstr "Můžete generovat odkaz pro odeslání z jakéhokoliv složky. Lidé kteří obdrží tento odkaz, mohou nahrát soubory do této složky."
 
 #: seahub/templates/js/templates.html:2049
 msgid "Invite Time"
-msgstr ""
+msgstr "Čas pozvání"
 
 #: seahub/templates/js/templates.html:2051
 msgid "Accepted"
-msgstr ""
+msgstr "Přijato"
 
 #: seahub/templates/js/templates.html:2059
 msgid "You have not invited any people."
-msgstr ""
+msgstr "Nepozval jste žádné lidi."
 
 #: seahub/templates/libraries.html:21
 msgid "You have not created any libraries"
-msgstr ""
+msgstr "Nevytvořil jste žádné knihovny"
 
 #: seahub/templates/libraries.html:22
 msgid ""
 "You can create a library to organize your files. For example, you can create"
 " one for each of your projects. Each library can be synchronized and shared "
 "separately."
-msgstr ""
+msgstr "Můžete vytvořit knihovnu pro správu Vašich souborů. Například můžete vytvořit jednu pro každý Váš projekt. Každá knihovna může být synchronizována a sdílena separátně."
 
 #: seahub/templates/libraries.html:35
 msgid "No library is shared to you personally"
-msgstr ""
+msgstr "Nejsou s Vámi osobně sdíleny žádné knihovny"
 
 #: seahub/templates/libraries.html:36
 msgid ""
 "No library is shared to you personally. You can find more shared libraries "
 "at \"Shared with groups\"."
-msgstr ""
+msgstr "Žádná knihovna není sdílena s Vámi osobně. Můžete najít více sdílených knihoven na \"Sdíleno se skupinami\"."
 
 #: seahub/templates/libraries.html:47
 msgid "Add Library"
-msgstr ""
+msgstr "Přidat knihovnu"
 
 #: seahub/templates/libraries.html:49
 msgid "Share existing libraries"
-msgstr ""
+msgstr "Sdílet existující knihovny"
 
 #: seahub/templates/libraries.html:50
 msgid "Create a new library"
-msgstr ""
+msgstr "Vytvořit novou knihovnu"
 
 #: seahub/templates/libraries.html:61
 msgid "No public library"
-msgstr ""
+msgstr "Žádná veřejná knihovna"
 
 #: seahub/templates/libraries.html:62
 msgid ""
 "You can create a public library by clicking \"New Library\" button, others "
 "can view and download this library."
-msgstr ""
+msgstr "Můžete vytvořit veřejnou knihovnu kliknutím na tlačítko \"Nová knihovna\". Ostatní mohou prohlížet a stáhnout tuto knihovnu."
 
 #: seahub/templates/libraries.html:70
 msgid "My Groups"
-msgstr ""
+msgstr "Moje skupiny"
 
 #: seahub/templates/libraries.html:78
 msgid "You are not in any group"
-msgstr ""
+msgstr "Nejste v žádné skupině"
 
 #: seahub/templates/libraries.html:80
 msgid ""
 "Group is a place for you and your friends leaving messages and collaborating"
 " on libraries. You can create a group by clicking \"New Group\" button."
-msgstr ""
+msgstr "Skupina je místo pro Vás a Vaše přátele, kde je možné zanechat zprávy a spolupracovat nad knihovnami. Můžete vytvořit skupinu kliknutím na tlačítko \"Nová skupina\""
 
 #: seahub/templates/libraries.html:82
 msgid ""
 "Group is a place for you and your friends leaving messages and collaborating"
 " on libraries. Groups you join will be listed here."
-msgstr ""
+msgstr "Skupina je místo pro Vás a Vaše přátele, kede je možné zanechat zprávy a spolupracovat nad knihovnami. Skupiny kterými jste členem budou zobrazeny zde."
 
 #: seahub/templates/libraries.html:109
 msgid ""
 "You can share libraries by clicking the \"New Library\" button above or the "
 "\"Share\" icon on your libraries list."
-msgstr ""
+msgstr "Můžete sdílet knihovny klikntím na tlačítko \"Nová knihovna\" umístěné výše nebo na ikonu \"Sdílet\" ve Vašem seznamu knihoven. "
 
 #: seahub/templates/libraries.html:110
 msgid ""
 "Libraries shared as writable can be downloaded and synced by other group "
 "members. Read only libraries can only be downloaded, updates by others will "
 "not be uploaded."
-msgstr ""
+msgstr "Knihovny sdílené jako zapisovatelné mohou být staženy a synchronizovány jinými členy skupiny. Skupiny jen ke čtení mohou být pouze staženy. Aukualizace jinými členy nebudou nahrány."
 
 #: seahub/templates/libraries.html:143
 msgid "Discussions"
-msgstr ""
+msgstr "Diskuze"
 
 #: seahub/templates/libraries.html:147
 msgid "More..."
-msgstr ""
+msgstr "Více..."
 
 #: seahub/templates/libraries.html:149
 msgid "No discussion in this group yet."
-msgstr ""
+msgstr "Žádné diskuze ve skupině."
 
 #: seahub/templates/libraries.html:156
 msgid "Add a discussion..."
-msgstr ""
+msgstr "Přidat komentář..."
 
 #: seahub/templates/libraries.html:171
 msgid "You don't have any starred files yet"
-msgstr ""
+msgstr "Nemáte žádné oblíbené soubory"
 
 #: seahub/templates/libraries.html:172
 msgid ""
 "You can star important files by clicking the \"Star\" button on file viewing"
 " page, and they will be listed here."
-msgstr ""
+msgstr "Můžete označit hvězdičkou důležité soubory kliknutím na ikonu \"hvězdičky\" na stránce pro prohlížení souborů a ty pak budou vidět zde."
 
 #: seahub/templates/libraries.html:198
 msgid "You do not have connected devices"
-msgstr ""
+msgstr "Nemáte žádná připojená zařízení"
 
 #: seahub/templates/libraries.html:199
 msgid "Your clients (Desktop/Android/iOS) will be listed here."
-msgstr ""
+msgstr "Vaši klienti (Desktop/Android/iOS) budou zobrazeny zde."
 
 #: seahub/templates/nav_footer.html:2
 msgid "Help"
-msgstr ""
+msgstr "Nápověda"
 
 #: seahub/templates/nav_footer.html:3
 msgid "About"
-msgstr ""
+msgstr "O aplikaci"
 
 #: seahub/templates/nav_footer.html:4
 msgid "Clients"
-msgstr ""
+msgstr "Klienti"
 
 #: seahub/templates/nav_footer.html:8
 msgid "Server Version: "
-msgstr ""
+msgstr "Verze serveru: "
 
 #: seahub/templates/nav_footer.html:8
 msgid "Seafile"
-msgstr ""
+msgstr "Seafile"
 
 #: seahub/templates/nav_footer.html:9
 msgid "About Us"
-msgstr ""
+msgstr "O nás"
 
 #: seahub/templates/registration/activation_email.html:12
 #, python-format
@@ -4837,19 +4861,19 @@ msgid ""
 "You (or someone pretending to be you) have asked to register an account at "
 "%(site_name)s. If this wasn't you, please ignore this email and your address"
 " will be removed from our records."
-msgstr ""
+msgstr "Vy (nebo někdo, kdo se za Vás vydává) požádal o registraci nového účtu na %(site_name)s. Pokud jste tak neučinil, prosím ignorujte teno email a vaše adresa bude odstraněna z našich záznamů."
 
 #: seahub/templates/registration/activation_email.html:14
 #, python-format
 msgid ""
 "To activate this account, please click the following link within the next "
 "%(expiration_days)s days: "
-msgstr ""
+msgstr "Pro aktivaci tohoto účtu prosím klikněte na následující odkaz během následujících %(expiration_days)s dní: "
 
 #: seahub/templates/registration/activation_email.html:18
 #: seahub/templates/registration/registration_form.html:46
 msgid "Sign Up"
-msgstr ""
+msgstr "Registrovat"
 
 #: seahub/templates/registration/login.html:4
 #: seahub/templates/registration/login.html:8
@@ -4859,45 +4883,45 @@ msgstr ""
 #: seahub/templates/sysadmin/user_add_email.html:25
 #: seahub/templates/sysadmin/user_batch_add_email.html:21
 msgid "Log In"
-msgstr ""
+msgstr "Přihlášení"
 
 #: seahub/templates/registration/login.html:13
 msgid "(forgot password)"
-msgstr ""
+msgstr "Zapomenuté heslo"
 
 #: seahub/templates/registration/login.html:16
 msgid "CAPTCHA"
-msgstr ""
+msgstr "CAPTCHA"
 
 #: seahub/templates/registration/login.html:18
 msgid "Not clear? Refresh it."
-msgstr ""
+msgstr "Není jasné? Obnovte."
 
 #: seahub/templates/registration/login.html:29
 msgid "Incorrect email or password"
-msgstr ""
+msgstr "Špatný email nebo heslo"
 
 #: seahub/templates/registration/login.html:37
 #, python-format
 msgid "Remember me for %(remember_days)s days "
-msgstr ""
+msgstr "Pamatuj si mě na %(remember_days)s dní"
 
 #: seahub/templates/registration/login.html:50
 #: seahub/templates/sysadmin/sudo_mode.html:20
 msgid "Shibboleth"
-msgstr ""
+msgstr "Shibboleth"
 
 #: seahub/templates/registration/login.html:54
 msgid "Kerberos"
-msgstr ""
+msgstr "Kerberos"
 
 #: seahub/templates/registration/login.html:81
 msgid "Failed to refresh the CAPTCHA, please try again later."
-msgstr ""
+msgstr "Chyba při obnovení CAPTCHA, prosím zkuste to znovu později."
 
 #: seahub/templates/registration/login.html:88
 msgid "Email or username cannot be blank"
-msgstr ""
+msgstr "Email nebo uživatelské jméno nemůže být prázdné"
 
 #: seahub/templates/registration/login.html:92
 #: seahub/templates/registration/password_change_form.html:66
@@ -4906,41 +4930,41 @@ msgstr ""
 #: seahub/templates/sysadmin/sys_org_info_user.html:133
 #: seahub/templates/sysadmin/sys_useradmin.html:173
 msgid "Password cannot be blank"
-msgstr ""
+msgstr "Heslo nemůže být prázdné"
 
 #: seahub/templates/registration/logout.html:4
 msgid "Log Out"
-msgstr ""
+msgstr "Odhlášení"
 
 #: seahub/templates/registration/logout.html:8
 msgid "Thanks for your participation! "
-msgstr ""
+msgstr "Děkujeme za spolupráci! "
 
 #: seahub/templates/registration/logout.html:8
 #: seahub/templates/registration/password_change_done.html:10
 msgid "Log in again"
-msgstr ""
+msgstr "Přihlaste se znovu"
 
 #: seahub/templates/registration/password_change_done.html:4
 msgid "Password Change Successfully"
-msgstr ""
+msgstr "Změna hesla proběhla úspěšně"
 
 #: seahub/templates/registration/password_change_done.html:9
 msgid "Your password has been changed successfully."
-msgstr ""
+msgstr "Vaše heslo bylo úspěšně změněno."
 
 #: seahub/templates/registration/password_change_form.html:3
 #: seahub/templates/registration/password_change_form.html:11
 msgid "Password Modification"
-msgstr ""
+msgstr "Změna hesla"
 
 #: seahub/templates/registration/password_change_form.html:14
 msgid "Please update your password before continue."
-msgstr ""
+msgstr "Před pokračováním si prosím aktualizujte Vaše heslo."
 
 #: seahub/templates/registration/password_change_form.html:16
 msgid "Current Password"
-msgstr ""
+msgstr "Současné heslo"
 
 #: seahub/templates/registration/password_change_form.html:21
 #: seahub/templates/registration/registration_form.html:27
@@ -4950,7 +4974,7 @@ msgstr ""
 #: seahub/templates/sysadmin/sys_org_info_user.html:77
 #: seahub/templates/sysadmin/sys_useradmin.html:59
 msgid "Confirm Password"
-msgstr ""
+msgstr "Potvrzení hesla"
 
 #: seahub/templates/registration/password_change_form.html:36
 #: seahub/templates/registration/registration_form.html:58
@@ -4958,11 +4982,11 @@ msgstr ""
 msgid ""
 "Passwords must have at least %(min_len)s characters and contain %(level)s of"
 " the following: uppercase letters, lowercase letters, numbers, and symbols."
-msgstr ""
+msgstr "Heslo musí mít nejméně %(min_len)s znaků a obsahovat %(level)s následujích : velká a malá písmena, číslice a symboly."
 
 #: seahub/templates/registration/password_change_form.html:62
 msgid "Current password cannot be blank"
-msgstr ""
+msgstr "Aktuální heslo nemůže být prázdné"
 
 #: seahub/templates/registration/password_change_form.html:70
 #: seahub/templates/registration/registration_form.html:92
@@ -4972,22 +4996,22 @@ msgstr ""
 #: seahub/templates/sysadmin/sys_org_info_user.html:137
 #: seahub/templates/sysadmin/sys_useradmin.html:177
 msgid "Please enter the password again"
-msgstr ""
+msgstr "Prosím zadejte znovu Vaše heslo"
 
 #: seahub/templates/registration/password_change_form.html:74
 #: seahub/templates/registration/registration_form.html:96
 #: seahub/templates/snippets/repo_create_js.html:58
 #: seahub/templates/snippets/shared_link_js.html:146
 msgid "Passwords don't match"
-msgstr ""
+msgstr "Hesla nesouhlasí"
 
 #: seahub/templates/registration/password_reset_complete.html:4
 msgid "Successfully reset password"
-msgstr ""
+msgstr "Heslo bylo úspěšně vyresetováno"
 
 #: seahub/templates/registration/password_reset_complete.html:8
 msgid "Successfully reset password."
-msgstr ""
+msgstr "Heslo bylo úspěšně vyresetováno."
 
 #: seahub/templates/registration/password_reset_confirm.html:4
 #: seahub/templates/registration/password_reset_done.html:4
@@ -4996,151 +5020,151 @@ msgstr ""
 #: seahub/templates/sysadmin/sys_org_info_user.html:205
 #: seahub/templates/sysadmin/useradmin_js.html:8
 msgid "Password Reset"
-msgstr ""
+msgstr "Reset hesla"
 
 #: seahub/templates/registration/password_reset_confirm.html:11
 msgid "Reset Password"
-msgstr ""
+msgstr "Resetovat heslo"
 
 #: seahub/templates/registration/password_reset_confirm.html:13
 msgid "New Password: "
-msgstr ""
+msgstr "Nové heslo: "
 
 #: seahub/templates/registration/password_reset_confirm.html:16
 msgid "Confirm Password: "
-msgstr ""
+msgstr "Potvrzení hesla: "
 
 #: seahub/templates/registration/password_reset_confirm.html:26
 msgid "Failed to reset password: this link is no longer available."
-msgstr ""
+msgstr "Chyba při resetu hesla: tento odkaz již není dostupný."
 
 #: seahub/templates/registration/password_reset_done.html:8
 msgid "We've sent a password reset email to your mailbox."
-msgstr ""
+msgstr "Odeslali jsme email pro změnu hesla do vaší mailové schránky."
 
 #: seahub/templates/registration/password_reset_email.html:12
 #, python-format
 msgid ""
 "To reset the password of your account %(account)s on %(site_name)s, please "
 "click the following link: "
-msgstr ""
+msgstr "Pro reset hesla Vašeho účtu %(account)s na %(site_name)s, prosím klikněte na následující odkaz: "
 
 #: seahub/templates/registration/password_reset_email.html:20
 msgid "If you did not request it, just skip it."
-msgstr ""
+msgstr "Pokud jste o to nepožádali, ignorujte tento mail."
 
 #: seahub/templates/registration/password_reset_form.html:9
 msgid "Your email used in login: "
-msgstr ""
+msgstr "Váš email použitý při prihlášení: "
 
 #: seahub/templates/registration/password_reset_form.html:12
 msgid "We will send you an email to set new password"
-msgstr ""
+msgstr "Odešleme Vám email pro nastavení nového hesla"
 
 #: seahub/templates/registration/registration_complete.html:4
 #: seahub/templates/shibboleth/complete.html:4
 msgid "Registration complete"
-msgstr ""
+msgstr "Registrace dokončena"
 
 #: seahub/templates/registration/registration_complete.html:10
 msgid ""
 "An activation email has been sent. Please check your email and click on the "
 "link to activate your account."
-msgstr ""
+msgstr "Aktivační email byl odeslán. Prosím zkontrolujte Váš email a klikněte na odkaz pro aktivaci účtu."
 
 #: seahub/templates/registration/registration_complete.html:12
 msgid ""
 "Registration complete, please wait for administrator to activate your "
 "account."
-msgstr ""
+msgstr "Registrace byla dokončena. Prosím čekejte na aktivaci účtu administrátorem."
 
 #: seahub/templates/registration/registration_complete.html:15
 msgid "Signup function is not enabled."
-msgstr ""
+msgstr "Registrační funkce není zapnuta."
 
 #: seahub/templates/registration/registration_form.html:3
 msgid "Register"
-msgstr ""
+msgstr "Registrovat"
 
 #: seahub/templates/registration/registration_form.html:14
 msgid "Welcome back, you are already signed in."
-msgstr ""
+msgstr "Vítejte spátky, již jste přihlášen."
 
 #: seahub/templates/registration/registration_form.html:84
 #: seahub/templates/sysadmin/sys_org_info_user.html:129
 #: seahub/templates/sysadmin/sys_useradmin.html:169
 msgid "Email cannot be blank"
-msgstr ""
+msgstr "Email nemůže být prázdný"
 
 #: seahub/templates/repo_dir_recycle_view.html:13
 #, python-format
 msgid "<span class=\"op-target\">%(repo_dir_name)s</span> Trash"
-msgstr ""
+msgstr "<span class=\"op-target\">%(repo_dir_name)s</span> Koš"
 
 #: seahub/templates/repo_dir_recycle_view.html:45
 msgid "Delete Time"
-msgstr ""
+msgstr "Čas smazání"
 
 #: seahub/templates/repo_dir_recycle_view.html:66
 msgid "Clear files in trash and history："
-msgstr ""
+msgstr "Vyprázdnit koš a historii: "
 
 #: seahub/templates/repo_dir_recycle_view.html:68
 msgid "3 days ago"
-msgstr ""
+msgstr "3 dny zpět"
 
 #: seahub/templates/repo_dir_recycle_view.html:69
 msgid "1 week ago"
-msgstr ""
+msgstr "1 týden zpět"
 
 #: seahub/templates/repo_dir_recycle_view.html:70
 msgid "1 month ago"
-msgstr ""
+msgstr "1 měsíc zpět"
 
 #: seahub/templates/repo_dir_recycle_view.html:169
 msgid "Successfully restored 1 item."
-msgstr ""
+msgstr "1 položka byla úspěšně obnovena."
 
 #: seahub/templates/repo_history.html:14
 #, python-format
 msgid "<span class=\"op-target\">%(repo_name)s</span> Modification History"
-msgstr ""
+msgstr "<span class=\"op-target\">%(repo_name)s</span> Historie změn"
 
 #: seahub/templates/repo_history.html:23
 msgid ""
 "Tip: a snapshot will be generated after modification, which records the "
 "library state after the modification."
-msgstr ""
+msgstr "Tip: Snapshot bude generován po modifikaci, který zaznamená stav knihovny po modifikaci."
 
 #: seahub/templates/repo_history.html:50
 msgid "None"
-msgstr ""
+msgstr "Žádný"
 
 #: seahub/templates/repo_history.html:66
 msgid "Current Version"
-msgstr ""
+msgstr "Aktuální verze"
 
 #: seahub/templates/repo_history.html:68
 msgid "View Snapshot"
-msgstr ""
+msgstr "Prohlédnout Snapshot"
 
 #: seahub/templates/repo_history_view.html:13
 #, python-format
 msgid "<span class=\"op-target\">%(repo_name)s</span> Snapshot"
-msgstr ""
+msgstr "<span class=\"op-target\">%(repo_name)s</span> Snapshot"
 
 #: seahub/templates/repo_history_view.html:65
 #: seahub/templates/snippets/repo_dir_trash_tr.html:6
 msgid "Directory"
-msgstr ""
+msgstr "Adresář"
 
 #: seahub/templates/repo_history_view.html:89
 msgid "Restore Library"
-msgstr ""
+msgstr "Obnovit knihovnu"
 
 #: seahub/templates/repo_history_view.html:90
 msgid "Are you sure you want to restore this library?"
-msgstr ""
+msgstr "Jste si jisti, že chcete obnovit tuto knihovnu?"
 
 #: seahub/templates/repo_history_view.html:114
 #, python-brace-format
@@ -5150,25 +5174,25 @@ msgstr ""
 #: seahub/templates/share_access_validation.html:6
 msgid ""
 "Please input the password if you want to browse the shared file/directory."
-msgstr ""
+msgstr "Prosím zadejte heslo pokud chcete procházet sdílené soubory/adresáře."
 
 #: seahub/templates/shared_file_view.html:12
 #: seahub/templates/view_shared_dir.html:12
 msgid "File download is disabled: the share link traffic of owner is used up."
-msgstr ""
+msgstr "Stažení souboru je vypnuto: Datový limit sdíleného odkazu vlastníka byl vyčrpán."
 
 #: seahub/templates/shared_file_view.html:29
 #: seahub/templates/view_shared_dir.html:16
 msgid "Shared by: "
-msgstr ""
+msgstr "Sdíleno uživatelem: "
 
 #: seahub/templates/shared_file_view.html:36
 msgid "Save to..."
-msgstr ""
+msgstr "Uložit jako..."
 
 #: seahub/templates/shared_file_view.html:48
 msgid "Save To:"
-msgstr ""
+msgstr "Uložit do:"
 
 #: seahub/templates/shared_link_email.html:12
 #, python-format
@@ -5184,287 +5208,287 @@ msgstr ""
 
 #: seahub/templates/shared_upload_link_email.html:15
 msgid "You can go to the following page and upload your files:"
-msgstr ""
+msgstr "Můžete přejít na následující stránku pro nahrání Vašich souborů:"
 
 #: seahub/templates/shibboleth/complete.html:8
 msgid ""
 "Your account is created successfully, please wait for administrator to "
 "activate your account."
-msgstr ""
+msgstr "Váš účet byl úspěšně vytvořen, prosím čekejte na aktivaci účtu administrátorem."
 
 #: seahub/templates/snippets/add_file_js.html:15
 msgid "You don't have any library at present"
-msgstr ""
+msgstr "V současnosti nemáte žádnou knihovnu"
 
 #: seahub/templates/snippets/avatar_upload_js.html:40
 msgid " is not supported. Please choose an image file."
-msgstr ""
+msgstr " není podporován. Prosím vyberte soubor s obrázekem."
 
 #: seahub/templates/snippets/avatar_upload_js.html:45
 msgid " is not supported. File extensions can only be "
-msgstr ""
+msgstr " není podporován. Přípony souborů mohou být pouze "
 
 #: seahub/templates/snippets/avatar_upload_js.html:52
 msgid " is too large. Allowed maximum size is 1MB."
-msgstr ""
+msgstr " je příliš velký. Povolená maximální velikost je 1MB."
 
 #: seahub/templates/snippets/file_content_js.html:25
 #: seahub/templates/view_file_svg.html:7
 msgid "To view it online, you can use firefox, chrome or IE 9."
-msgstr ""
+msgstr "K online prohlížení můžete použít Firefox, Chrome nebo IE 9."
 
 #: seahub/templates/snippets/file_encoding.html:5
 #: seahub/templates/view_file_markdown.html:24
 #: seahub/templates/view_file_text.html:29
 msgid "Encoding:"
-msgstr ""
+msgstr "Kódování:"
 
 #: seahub/templates/snippets/file_encoding.html:8
 #: seahub/templates/view_file_markdown.html:27
 #: seahub/templates/view_file_text.html:32
 msgid "auto detect"
-msgstr ""
+msgstr "auto detekce"
 
 #: seahub/templates/snippets/file_share_popup.html:3
 #, python-format
 msgid "Share %(name)s"
-msgstr ""
+msgstr "Sdílení %(name)s"
 
 #: seahub/templates/snippets/list_commit_detail.html:23
 msgid "New files"
-msgstr ""
+msgstr "Nové soubory"
 
 #: seahub/templates/snippets/list_commit_detail.html:24
 msgid "Deleted files"
-msgstr ""
+msgstr "Smazané soubory"
 
 #: seahub/templates/snippets/list_commit_detail.html:25
 msgid "Renamed or Moved files"
-msgstr ""
+msgstr "Přejmenované nebo přesunuté soubory"
 
 #: seahub/templates/snippets/list_commit_detail.html:26
 msgid "Modified files"
-msgstr ""
+msgstr "Změněné soubory"
 
 #: seahub/templates/snippets/list_commit_detail.html:27
 msgid "New directories"
-msgstr ""
+msgstr "Nové adresáře"
 
 #: seahub/templates/snippets/list_commit_detail.html:28
 msgid "Deleted directories"
-msgstr ""
+msgstr "Smazané adresáře"
 
 #: seahub/templates/snippets/list_commit_detail.html:38
 msgid "Unknown error."
-msgstr ""
+msgstr "Neznámá chyba"
 
 #: seahub/templates/snippets/office_convert_js.html:73
 #: seahub/templates/snippets/pdfjs_file_viewer.html:31
 msgid ""
 "This file has more than 50 pages, and only the first 50 will be shown here."
-msgstr ""
+msgstr "Tento soubor má více než 50 stránek a použ prvních 50 bude zobrazeno."
 
 #: seahub/templates/snippets/office_convert_js.html:84
 #: seahub/templates/snippets/office_convert_js.html:105
 #: seahub/templates/snippets/spreadsheet_convert_js.html:37
 msgid "Document convertion failed."
-msgstr ""
+msgstr "Konverze dokumentu selhala"
 
 #: seahub/templates/snippets/office_convert_js.html:87
 msgid "Failed to load this page."
-msgstr ""
+msgstr "Chyba při načítání této stránky"
 
 #: seahub/templates/snippets/password_strength_js.html:42
 msgid "too weak"
-msgstr ""
+msgstr "příliš slabé"
 
 #: seahub/templates/snippets/password_strength_js.html:43
 msgid "weak"
-msgstr ""
+msgstr "slabé"
 
 #: seahub/templates/snippets/password_strength_js.html:44
 msgid "medium"
-msgstr ""
+msgstr "střední"
 
 #: seahub/templates/snippets/password_strength_js.html:45
 msgid "strong"
-msgstr ""
+msgstr "silné"
 
 #: seahub/templates/snippets/pdfjs_file_viewer.html:87
 msgid ""
 "You can use IE 10 or other browsers, for example, Firefox, to view it "
 "online."
-msgstr ""
+msgstr "Můžete použít IE 10 nebo jiné prohlížeče, např. Firefox, k online prohlížení."
 
 #: seahub/templates/snippets/repo_create_js.html:38
 msgid "Description is required"
-msgstr ""
+msgstr "Popis je povinný"
 
 #: seahub/templates/snippets/repo_create_js.html:46
 #: seahub/templates/snippets/shared_link_js.html:134
 msgid "Please enter password"
-msgstr ""
+msgstr "Prosím zadejte heslo"
 
 #: seahub/templates/snippets/search_form.html:17
 #: seahub/templates/snippets/search_form.html:21
 #: seahub/templates/snippets/search_form.html:24
 msgid "In all libraries"
-msgstr ""
+msgstr "Ve všech knihovnách"
 
 #: seahub/templates/snippets/search_form.html:18
 msgid "In this wiki"
-msgstr ""
+msgstr "V této wiki"
 
 #: seahub/templates/snippets/search_form.html:18
 msgid "In this library"
-msgstr ""
+msgstr "V této knihovně"
 
 #: seahub/templates/snippets/search_form.html:22
 #, python-format
 msgid "in %(name)s"
-msgstr ""
+msgstr "v %(name)s"
 
 #: seahub/templates/snippets/search_form.html:30
 #: seahub/templates/snippets/search_form.html:33
 msgid "All file types"
-msgstr ""
+msgstr "Všechny typy souborů"
 
 #: seahub/templates/snippets/search_form.html:31
 #: seahub/templates/snippets/search_form.html:34
 msgid "Custom file types"
-msgstr ""
+msgstr "Vlastní typy souborů"
 
 #: seahub/templates/snippets/search_form.html:45
 msgid "Text files"
-msgstr ""
+msgstr "Textové soubory"
 
 #: seahub/templates/snippets/search_form.html:49
 msgid "Documents"
-msgstr ""
+msgstr "Dokumenty"
 
 #: seahub/templates/snippets/search_form.html:53
 msgid "Images"
-msgstr ""
+msgstr "Obrázky"
 
 #: seahub/templates/snippets/search_form.html:57
 msgid "Video"
-msgstr ""
+msgstr "Video"
 
 #: seahub/templates/snippets/search_form.html:61
 msgid "Audio"
-msgstr ""
+msgstr "Audio"
 
 #: seahub/templates/snippets/search_form.html:65
 msgid "pdf"
-msgstr ""
+msgstr "pdf"
 
 #: seahub/templates/snippets/search_form.html:69
 msgid "markdown"
-msgstr ""
+msgstr "markdown"
 
 #: seahub/templates/snippets/search_form.html:72
 msgid "Input file extensions here, separate with ','"
-msgstr ""
+msgstr "Sem vložte příponu souboru oddělenou ','"
 
 #: seahub/templates/snippets/search_form.html:73
 msgid ""
 "Please select at least one file type or input at least one file extension"
-msgstr ""
+msgstr "Prosím vyberte nejméně jeden typ souboru nebo nejméně jednu příponu"
 
 #: seahub/templates/snippets/shared_link_js.html:61
 msgid "Please input at least an email."
-msgstr ""
+msgstr "Prosím zadejte nejméně jeden email."
 
 #: seahub/templates/snippets/shared_link_js.html:84
 #, python-brace-format
 msgid "Successfully sent to {placeholder}"
-msgstr ""
+msgstr "Úspěšně odesláno na {placeholder}"
 
 #: seahub/templates/snippets/shared_link_js.html:88
 #, python-brace-format
 msgid "Failed to send to {placeholder}"
-msgstr ""
+msgstr "Chyba při odesílání na {placeholder}"
 
 #: seahub/templates/snippets/shared_link_js.html:155
 msgid "Please enter days"
-msgstr ""
+msgstr "Prosím zadejte dny"
 
 #: seahub/templates/snippets/shared_link_js.html:161
 msgid "Please enter valid days"
-msgstr ""
+msgstr "Zadejte platné dny"
 
 #: seahub/templates/snippets/space_and_traffic.html:3
 msgid "Used:"
-msgstr ""
+msgstr "Využito:"
 
 #: seahub/templates/snippets/space_and_traffic.html:19
 msgid "Traffic this month:"
-msgstr ""
+msgstr "Provoz tento měsíc: "
 
 #: seahub/templates/snippets/space_and_traffic.html:23
 msgid "Payment"
-msgstr ""
+msgstr "Platba"
 
 #: seahub/templates/sysadmin/org_admin_table.html:5
 #: seahub/templates/sysadmin/sys_org_info_group.html:19
 #: seahub/templates/sysadmin/sys_org_search.html:11
 #: seahub/views/sysadmin.py:1062
 msgid "Creator"
-msgstr ""
+msgstr "Vytvořil"
 
 #: seahub/templates/sysadmin/org_admin_table.html:7
 msgid "Created At / Expiration"
-msgstr ""
+msgstr "Vytvořeno / Vyprší"
 
 #: seahub/templates/sysadmin/repo_transfer_form.html:3
 msgid "Transfer Library"
-msgstr ""
+msgstr "Převést knihovnu"
 
 #: seahub/templates/sysadmin/repo_transfer_form.html:4
 #, python-format
 msgid "Transfer %(lib_name)s to:"
-msgstr ""
+msgstr "Převést %(lib_name)s na:"
 
 #: seahub/templates/sysadmin/repoadmin_js.html:18
 msgid "Search user or enter email and press Enter"
-msgstr ""
+msgstr "Vyhledejte uživatele nebo vložte email a stiskněte Enter"
 
 #: seahub/templates/sysadmin/repoadmin_js.html:19
 msgid "Please enter 1 or more character"
-msgstr ""
+msgstr "Prosím zadejte 1 nebo více znaků"
 
 #: seahub/templates/sysadmin/repoadmin_js.html:20
 msgid "No matches"
-msgstr ""
+msgstr "Žádná shodaa"
 
 #: seahub/templates/sysadmin/repoadmin_js.html:21
 msgid "Searching..."
-msgstr ""
+msgstr "Vyhledávám..."
 
 #: seahub/templates/sysadmin/repoadmin_js.html:22
 msgid "Loading failed"
-msgstr ""
+msgstr "Nahrávání selhalo"
 
 #: seahub/templates/sysadmin/repoadmin_js.html:23
 msgid "You cannot select any more choices"
-msgstr ""
+msgstr "Nemůžete vybrat žádné jiné volby"
 
 #: seahub/templates/sysadmin/repoadmin_js.html:47
 #: seahub/templates/sysadmin/sys_org_info_library.html:60
 msgid "Delete Library"
-msgstr ""
+msgstr "Smazat knihovnu"
 
 #: seahub/templates/sysadmin/repoadmin_js.html:58
 #: seahub/templates/sysadmin/sys_org_info_user.html:190
 msgid "Successfully deleted 1 item."
-msgstr ""
+msgstr "Úspěšně smazána 1 položka"
 
 #: seahub/templates/sysadmin/settings.html:11
 msgid ""
 "Note: Settings via web interface are saved in database table (seahub-"
 "db/constance_config). They have a higher priority over the settings in "
 "config files."
-msgstr ""
+msgstr "Poznámka: nastavení přes webové rozhraní jsou uložena v databázi, v tabulce (seahub-db/constance_config). Mají vyšší prioritu než nastavení v konfiguračních souborech."
 
 #: seahub/templates/sysadmin/settings.html:17
 msgid ""
@@ -5611,55 +5635,55 @@ msgstr ""
 
 #: seahub/templates/sysadmin/settings.html:140
 msgid "Sync"
-msgstr ""
+msgstr "Synchronizace"
 
 #: seahub/templates/sysadmin/settings.html:144
 msgid ""
 "If turn on, the desktop clients will not be able to sync a folder outside "
 "the default Seafile folder."
-msgstr ""
+msgstr "Pokud bude zapnuté, desktopoví klienti nebudou schopni synchronizovat složky mimo výchozí Seafile složku. "
 
 #: seahub/templates/sysadmin/settings.html:197
 #: seahub/templates/sysadmin/settings.html:235 seahub/views/sysadmin.py:1210
 #: seahub/views/sysadmin.py:1267 seahub/views/sysadmin.py:2041
 #: seahub/views/sysadmin.py:2083 seahub/views/sysadmin.py:2254
 msgid "Success"
-msgstr ""
+msgstr "Úspěch"
 
 #: seahub/templates/sysadmin/sudo_mode.html:8
 msgid "Confirm password to continue"
-msgstr ""
+msgstr "Prosím zadejte heslo pro pokračování"
 
 #: seahub/templates/sysadmin/sudo_mode.html:13
 msgid "Incorrect password"
-msgstr ""
+msgstr "Špatné heslo"
 
 #: seahub/templates/sysadmin/sudo_mode.html:24
 msgid "Tip:"
-msgstr ""
+msgstr "Tip:"
 
 #: seahub/templates/sysadmin/sudo_mode.html:24
 msgid ""
 "You are entering admin area, we won't ask for your password again for a few "
 "hours."
-msgstr ""
+msgstr "Vstupujete do admin oblasti, nebudeme se ptát znovu na heslo po dobu několika hodin"
 
 #: seahub/templates/sysadmin/sys_inst_admin.html:9
 msgid "All Institutions"
-msgstr ""
+msgstr "Všechny instituce"
 
 #: seahub/templates/sysadmin/sys_inst_admin.html:17
 msgid "Add institution"
-msgstr ""
+msgstr "Přidat instituci"
 
 #: seahub/templates/sysadmin/sys_inst_admin.html:60
 #: seahub/templates/sysadmin/sys_org_admin.html:78
 msgid "Name can not be blank"
-msgstr ""
+msgstr "Jméno nemůže být prázdné"
 
 #: seahub/templates/sysadmin/sys_inst_admin.html:66
 msgid "Delete Institution"
-msgstr ""
+msgstr "Smazat instituci"
 
 #: seahub/templates/sysadmin/sys_inst_info_admins.html:8
 #: seahub/templates/sysadmin/sys_inst_info_user.html:8
@@ -5669,7 +5693,7 @@ msgstr ""
 #: seahub/templates/sysadmin/sys_useradmin_ldap.html:18
 #: seahub/templates/sysadmin/sys_useradmin_paid.html:19
 msgid "Admins"
-msgstr ""
+msgstr "Administrátoři"
 
 #: seahub/templates/sysadmin/sys_inst_info_admins.html:41
 #: seahub/templates/sysadmin/sys_inst_info_user.html:41
@@ -5677,16 +5701,16 @@ msgstr ""
 #: seahub/templates/sysadmin/useradmin_js.html:13
 #: seahub/templates/sysadmin/useradmin_table.html:102
 msgid "Revoke Admin"
-msgstr ""
+msgstr "Odvolat Admina"
 
 #: seahub/templates/sysadmin/sys_inst_info_base.html:20
 #: seahub/templates/sysadmin/sys_org_info_base.html:20
 msgid "Number of members"
-msgstr ""
+msgstr "Počet členů"
 
 #: seahub/templates/sysadmin/sys_inst_info_base.html:29
 msgid "Set storage limit"
-msgstr ""
+msgstr "Nastavit limit úložiště"
 
 #: seahub/templates/sysadmin/sys_inst_info_base.html:31
 #: seahub/templates/sysadmin/sys_org_info_base.html:36
@@ -5694,241 +5718,241 @@ msgstr ""
 #: seahub/templates/sysadmin/useradmin_table.html:115
 #: seahub/templates/sysadmin/userinfo.html:106
 msgid "Tip: 0 means default limit"
-msgstr ""
+msgstr "Tip: 0 znamená výchozí limit"
 
 #: seahub/templates/sysadmin/sys_inst_info_user.html:41
 #: seahub/templates/sysadmin/sys_inst_search_user.html:42
 msgid "Set Admin"
-msgstr ""
+msgstr "Nastavit Admina"
 
 #: seahub/templates/sysadmin/sys_inst_search_user.html:48
 #: seahub/templates/sysadmin/sys_org_search.html:19
 #: seahub/templates/sysadmin/user_search.html:23
 msgid "No result"
-msgstr ""
+msgstr "Žádný výsledek"
 
 #: seahub/templates/sysadmin/sys_invitations_admin.html:7
 msgid "All Invitations"
-msgstr ""
+msgstr "Všechny pozvánky"
 
 #: seahub/templates/sysadmin/sys_invitations_admin.html:12
 msgid "Inviter"
-msgstr ""
+msgstr "Hostilel"
 
 #: seahub/templates/sysadmin/sys_invitations_admin.html:13
 msgid "Accepter"
-msgstr ""
+msgstr "Potvrzující"
 
 #: seahub/templates/sysadmin/sys_invitations_admin.html:15
 msgid "Invited at"
-msgstr ""
+msgstr "Pozván v"
 
 #: seahub/templates/sysadmin/sys_invitations_admin.html:16
 msgid "Accepted at"
-msgstr ""
+msgstr "Potvrzeno v"
 
 #: seahub/templates/sysadmin/sys_invitations_admin.html:40
 msgid "There is no invitation yet."
-msgstr ""
+msgstr "Není zatím žádné pozvání."
 
 #: seahub/templates/sysadmin/sys_org_admin.html:19
 #: seahub/templates/sysadmin/sys_org_admin.html:23
 msgid "Add organization"
-msgstr ""
+msgstr "Přidat organizaci"
 
 #: seahub/templates/sysadmin/sys_org_admin.html:27
 msgid "Url Prefix"
-msgstr ""
+msgstr "URL prefix"
 
 #: seahub/templates/sysadmin/sys_org_admin.html:30
 msgid "Owner can use admin panel in an organization, must be a new account."
-msgstr ""
+msgstr "Vlastník může použít panel v organizaci, musí být nový účet."
 
 #: seahub/templates/sysadmin/sys_org_admin.html:49
 msgid "None."
-msgstr ""
+msgstr "Žádný"
 
 #: seahub/templates/sysadmin/sys_org_admin.html:82
 msgid "Url can not be blank"
-msgstr ""
+msgstr "URL nemůže být prázdné"
 
 #: seahub/templates/sysadmin/sys_org_admin.html:86
 msgid "Owner can not be blank"
-msgstr ""
+msgstr "Vlastník nemůže být prázdný"
 
 #: seahub/templates/sysadmin/sys_org_admin.html:90
 msgid "Password can not be blank"
-msgstr ""
+msgstr "Heslo nemůže být prázdné"
 
 #: seahub/templates/sysadmin/sys_org_admin.html:98
 #: seahub/templates/sysadmin/sys_org_info_user.html:141
 #: seahub/templates/sysadmin/sys_useradmin.html:181
 msgid "Passwords do not match"
-msgstr ""
+msgstr "Hesla nesouhlasí"
 
 #: seahub/templates/sysadmin/sys_org_admin.html:137
 msgid "Remove Trial"
-msgstr ""
+msgstr "Odstranit Trial"
 
 #: seahub/templates/sysadmin/sys_org_admin.html:138
 #, python-format
 msgid "Are you sure you want to remove trial for %s ?"
-msgstr ""
+msgstr "Jste si jisti, že chcete odstranit trial pro %s ?"
 
 #: seahub/templates/sysadmin/sys_org_info_base.html:16
 msgid "Back to organization list"
-msgstr ""
+msgstr "Zpět na seznam organizací"
 
 #: seahub/templates/sysadmin/sys_org_info_base.html:22
 msgid "Number of groups"
-msgstr ""
+msgstr "Počet skupin"
 
 #: seahub/templates/sysadmin/sys_org_info_base.html:31
 msgid "Set org storage limit"
-msgstr ""
+msgstr "Nastavit úložný limit organizace"
 
 #: seahub/templates/sysadmin/sys_org_info_base.html:35
 #: seahub/templates/sysadmin/sys_user_admin_ldap_imported.html:91
 #: seahub/templates/sysadmin/useradmin_table.html:114
 #: seahub/templates/sysadmin/userinfo.html:105
 msgid "An integer that is greater than or equal to 0."
-msgstr ""
+msgstr "Číslo které je větší nebo rovno 0."
 
 #: seahub/templates/sysadmin/sys_org_info_group.html:34
 msgid "This organization doesn't have any groups"
-msgstr ""
+msgstr "Tato organizace nemá žádné skupiny"
 
 #: seahub/templates/sysadmin/sys_org_info_group.html:43
 #: seahub/templates/sysadmin/userinfo.html:432
 msgid "Delete Group"
-msgstr ""
+msgstr "Smazat skupinu"
 
 #: seahub/templates/sysadmin/sys_org_info_library.html:27
 #: seahub/templates/sysadmin/sys_org_info_library.html:29
 msgid "directory icon"
-msgstr ""
+msgstr "ikona adresáře"
 
 #: seahub/templates/sysadmin/sys_org_info_library.html:50
 msgid "This organization doesn't have any libraries"
-msgstr ""
+msgstr "Tato organizace nemá žádné knihovny"
 
 #: seahub/templates/sysadmin/sys_org_info_setting.html:16
 msgid "Rename Organization"
-msgstr ""
+msgstr "Přejmenovat organizaci"
 
 #: seahub/templates/sysadmin/sys_org_info_setting.html:18
 msgid "New Name"
-msgstr ""
+msgstr "Nové jméno"
 
 #: seahub/templates/sysadmin/sys_org_info_setting.html:24
 msgid "Limit Organization User Number"
-msgstr ""
+msgstr "Limit organizace uživatel číslo"
 
 #: seahub/templates/sysadmin/sys_org_info_setting.html:26
 msgid "Max User Number"
-msgstr ""
+msgstr "Max uživatel číslo"
 
 #: seahub/templates/sysadmin/sys_org_info_setting.html:52
 #: seahub/views/sysadmin.py:1261
 msgid "Input should be a number"
-msgstr ""
+msgstr "Vložená hodnota musí být čáslo"
 
 #: seahub/templates/sysadmin/sys_org_info_setting.html:55
 #: seahub/views/sysadmin.py:1271
 msgid "Input number should be greater than 0"
-msgstr ""
+msgstr "Vložené číslo musí být větší než 0"
 
 #: seahub/templates/sysadmin/sys_org_info_user.html:13
 #: seahub/templates/sysadmin/sys_org_info_user.html:64
 #: seahub/templates/sysadmin/sys_useradmin.html:27
 #: seahub/templates/sysadmin/sys_useradmin.html:37
 msgid "Add user"
-msgstr ""
+msgstr "Přidat uživatele"
 
 #: seahub/templates/sysadmin/sys_org_info_user.html:52
 #: seahub/templates/sysadmin/useradmin_table.html:99
 msgid "ResetPwd"
-msgstr ""
+msgstr "Reset Hesla"
 
 #: seahub/templates/sysadmin/sys_org_info_user.html:68
 #: seahub/templates/sysadmin/sys_useradmin.html:41
 msgid "Name(optional)"
-msgstr ""
+msgstr "Jméno (volitelné)"
 
 #: seahub/templates/sysadmin/sys_org_info_user.html:101
 #: seahub/templates/sysadmin/sys_org_info_user.html:115
 #: seahub/templates/sysadmin/sys_useradmin.html:140
 #: seahub/templates/sysadmin/sys_useradmin.html:153
 msgid "Hide"
-msgstr ""
+msgstr "Skrýt"
 
 #: seahub/templates/sysadmin/sys_org_info_user.html:206
 #: seahub/templates/sysadmin/useradmin_js.html:9
 #, python-format
 msgid "Are you sure you want to reset the password of %s ?"
-msgstr ""
+msgstr "Jste si jisti, že chcete vyresetovat heslo uživatele %s ?"
 
 #: seahub/templates/sysadmin/sys_org_search.html:9
 msgid "Tip: you can search by keyword in name or creator or both."
-msgstr ""
+msgstr "Tip: Můžete vyhledávat podle klíčového slova ve jméně nebo podle tvůrce, či obojího."
 
 #: seahub/templates/sysadmin/sys_org_set_quota_js.html:13
 msgid "Quota can not be empty"
-msgstr ""
+msgstr "Kvóta nemůže být prázdná"
 
 #: seahub/templates/sysadmin/sys_publink_admin.html:7
 msgid "All Public Links"
-msgstr ""
+msgstr "Všechny veřejné odkazy"
 
 #: seahub/templates/sysadmin/sys_publink_admin.html:15
 msgid "Count"
-msgstr ""
+msgstr "Počet"
 
 #: seahub/templates/sysadmin/sys_terms_admin.html:18
 #: seahub/templates/sysadmin/sys_terms_admin.html:61
 msgid "Text"
-msgstr ""
+msgstr "Text"
 
 #: seahub/templates/sysadmin/sys_terms_admin.html:19
 msgid "Created"
-msgstr ""
+msgstr "Vytvořeno"
 
 #: seahub/templates/sysadmin/sys_terms_admin.html:20
 #: seahub/templates/sysadmin/sys_terms_admin.html:64
 msgid "Activated"
-msgstr ""
+msgstr "Aktivováno"
 
 #: seahub/templates/sysadmin/sys_terms_admin.html:52
 msgid "Add Terms and Conditions"
-msgstr ""
+msgstr "Přidat pravidla a podmínky"
 
 #: seahub/templates/sysadmin/sys_terms_admin.html:58
 msgid "Version Number"
-msgstr ""
+msgstr "Číslo verze"
 
 #: seahub/templates/sysadmin/sys_terms_admin.html:66
 msgid "On"
-msgstr ""
+msgstr "Zapnuto"
 
 #: seahub/templates/sysadmin/sys_terms_admin.html:68
 msgid "Off"
-msgstr ""
+msgstr "Vypnuto"
 
 #: seahub/templates/sysadmin/sys_terms_admin.html:131
 msgid "Update Terms and Conditions"
-msgstr ""
+msgstr "Aktualizovat pravidla a podmínky"
 
 #: seahub/templates/sysadmin/sys_trafficadmin.html:8
 msgid "User Traffic"
-msgstr ""
+msgstr "Provoz uživatele"
 
 #: seahub/templates/sysadmin/sys_trafficadmin.html:11
 msgid "Month:"
-msgstr ""
+msgstr "Měsíc:"
 
 #: seahub/templates/sysadmin/sys_trafficadmin.html:18
 msgid "Total Usage"
-msgstr ""
+msgstr "Celkové využití"
 
 #: seahub/templates/sysadmin/sys_user_admin_ldap_imported.html:16
 #: seahub/templates/sysadmin/sys_useradmin.html:14
@@ -5936,7 +5960,7 @@ msgstr ""
 #: seahub/templates/sysadmin/sys_useradmin_ldap.html:15
 #: seahub/templates/sysadmin/sys_useradmin_paid.html:14
 msgid "Database"
-msgstr ""
+msgstr "Databáze"
 
 #: seahub/templates/sysadmin/sys_user_admin_ldap_imported.html:17
 #: seahub/templates/sysadmin/sys_useradmin.html:16
@@ -5944,7 +5968,7 @@ msgstr ""
 #: seahub/templates/sysadmin/sys_useradmin_ldap.html:16
 #: seahub/templates/sysadmin/sys_useradmin_paid.html:16
 msgid "LDAP"
-msgstr ""
+msgstr "LDAP"
 
 #: seahub/templates/sysadmin/sys_user_admin_ldap_imported.html:18
 #: seahub/templates/sysadmin/sys_useradmin.html:17
@@ -5953,686 +5977,683 @@ msgstr ""
 #: seahub/templates/sysadmin/sys_useradmin_paid.html:17
 #: seahub/views/sysadmin.py:281 seahub/views/sysadmin.py:285
 msgid "LDAP(imported)"
-msgstr ""
+msgstr "LDAP(importováno)"
 
 #: seahub/templates/sysadmin/sys_user_admin_ldap_imported.html:26
 #: seahub/templates/sysadmin/sys_useradmin.html:31
 #: seahub/templates/sysadmin/sys_useradmin_admins.html:26
 #: seahub/templates/sysadmin/user_search.html:16
 msgid "Set quota"
-msgstr ""
+msgstr "Nastavit kvótu"
 
 #: seahub/templates/sysadmin/sys_user_admin_ldap_imported.html:27
 #: seahub/templates/sysadmin/sys_useradmin.html:32
 #: seahub/templates/sysadmin/sys_useradmin_admins.html:27
 #: seahub/templates/sysadmin/user_search.html:17
 msgid "Delete users"
-msgstr ""
+msgstr "Smazat uživatele"
 
 #: seahub/templates/sysadmin/sys_user_admin_ldap_imported.html:37
 #: seahub/templates/sysadmin/sys_useradmin_ldap.html:25
 #: seahub/templates/sysadmin/useradmin_table.html:13
 #: seahub/templates/sysadmin/userinfo.html:73
 msgid "Space Used / Quota"
-msgstr ""
+msgstr "Využité místo / Kvóta"
 
 #: seahub/templates/sysadmin/sys_user_admin_ldap_imported.html:38
 #: seahub/views/sysadmin.py:281 seahub/views/sysadmin.py:285
 msgid "Last Login"
-msgstr ""
+msgstr "Poslední přihlášení"
 
 #: seahub/templates/sysadmin/sys_user_admin_ldap_imported.html:73
 #: seahub/templates/sysadmin/useradmin_table.html:84
 #: seahub/templates/sysadmin/userinfo.html:83
 msgid "Edit Quota"
-msgstr ""
+msgstr "Upravit kvótu"
 
 #: seahub/templates/sysadmin/sys_user_admin_ldap_imported.html:99
 msgid "No LDAP users have been imported"
-msgstr ""
+msgstr "Žádní LDAP uživatelé nebyly importovány"
 
 #: seahub/templates/sysadmin/sys_useradmin.html:26
 msgid "Import users"
-msgstr ""
+msgstr "Importovat uživatele"
 
 #: seahub/templates/sysadmin/sys_useradmin.html:43
 msgid "Department(optional)"
-msgstr ""
+msgstr "Oddělení (volitelné)"
 
 #: seahub/templates/sysadmin/sys_useradmin.html:47
 msgid ""
 "You can also add a user as a guest, who will not be allowed to create "
 "libraries and groups."
-msgstr ""
+msgstr "Můžete také přidat uživatele jako hosta, který nebude oprávněn vytvářet knihovny a skupiny."
 
 #: seahub/templates/sysadmin/sys_useradmin.html:66
 msgid "Import users from a CSV file"
-msgstr ""
+msgstr "Importovat uživatele z CSV souboru"
 
 #: seahub/templates/sysadmin/sys_useradmin.html:69
 msgid "File format: user@mail.com,password,name,department,role,quota"
-msgstr ""
+msgstr "Formát souboru: user@mail.com,heslo,jméno,oddělení,role,kvóta"
 
 #: seahub/templates/sysadmin/sys_useradmin.html:70
 msgid "Name, department, role and quota are optional."
-msgstr ""
+msgstr "Jméno, oddělení, role a kvóta jsou volitelné."
 
 #: seahub/templates/sysadmin/sys_useradmin.html:72
 msgid "Please choose a CSV file"
-msgstr ""
+msgstr "Prosím vyberte CSV soubor"
 
 #: seahub/templates/sysadmin/sys_useradmin.html:97
 #, python-format
 msgid "A new server version %(v)s is available."
-msgstr ""
+msgstr "Nová verze serveru %(v)s je k dispozici."
 
 #: seahub/templates/sysadmin/sys_useradmin_admins.html:23
 msgid "Add admin"
-msgstr ""
+msgstr "Přidat Administrátora"
 
 #: seahub/templates/sysadmin/sys_useradmin_admins.html:32
 msgid "Add admins"
-msgstr ""
+msgstr "Přidat Administrátory"
 
 #: seahub/templates/sysadmin/sys_useradmin_admins.html:35
 msgid "Enter"
-msgstr ""
+msgstr "Vložit"
 
 #: seahub/templates/sysadmin/sys_useradmin_admins.html:38
 msgid "emails, separated by ','"
-msgstr ""
+msgstr "emaily, oddělené ','"
 
 #: seahub/templates/sysadmin/sys_useradmin_admins.html:39
 msgid "Tip: the emails should be the users already added."
-msgstr ""
+msgstr "Tip: Emaily by měly být uživatelů, kteří byly již přidáni."
 
 #: seahub/templates/sysadmin/sys_virus_scan_records.html:8
 msgid "Virus Scan Records"
-msgstr ""
+msgstr "Virová kontrola - záznamy"
 
 #: seahub/templates/sysadmin/sys_virus_scan_records.html:13
 msgid "Virus File"
-msgstr ""
+msgstr "Virus soubor"
 
 #: seahub/templates/sysadmin/sys_virus_scan_records.html:25
 msgid "Handled"
-msgstr ""
+msgstr "Ovládáno"
 
 #: seahub/templates/sysadmin/user_activation_email.html:12
 #, python-format
 msgid "Your account %(username)s on %(site_name)s has been activated."
-msgstr ""
+msgstr "Váš účet %(username)s na %(site_name)s byl aktivován."
 
 #: seahub/templates/sysadmin/user_add_email.html:13
 #, python-format
 msgid ""
 "%(escaped_nickname)s invited you to join organization \"%(org_name)s\" on "
 "%(site_name)s."
-msgstr ""
+msgstr "%(escaped_nickname)s vás pozval k připojení  do organizace \"%(org_name)s\" na %(site_name)s."
 
 #: seahub/templates/sysadmin/user_add_email.html:15
 #: seahub/templates/sysadmin/user_batch_add_email.html:12
 #, python-format
 msgid "%(escaped_nickname)s invited you to join %(site_name)s."
-msgstr ""
+msgstr "%(escaped_nickname)s vás pozval k připojení do %(site_name)s."
 
 #: seahub/templates/sysadmin/user_add_email.html:20
 #: seahub/templates/sysadmin/user_batch_add_email.html:16
 msgid "Here is your account information:"
-msgstr ""
+msgstr "Zde jsou informace o Vašem účtu:"
 
 #: seahub/templates/sysadmin/user_add_email.html:21
 #: seahub/templates/sysadmin/user_batch_add_email.html:17
 #, python-format
 msgid "Email: %(email)s"
-msgstr ""
+msgstr "Email: %(email)s"
 
 #: seahub/templates/sysadmin/user_add_email.html:22
 #: seahub/templates/sysadmin/user_batch_add_email.html:18
 #, python-format
 msgid "Password: %(password)s"
-msgstr ""
+msgstr "Heslo: %(password)s"
 
 #: seahub/templates/sysadmin/user_freeze_email.html:12
 #, python-format
 msgid ""
 "Account %(user)s froze due to excessive failed logins. Please check at:"
-msgstr ""
+msgstr "Účet %(user)s je uzamčen z důvodu velkého množství pokusů o přihlášení. Prosím zkontrolujte na: "
 
 #: seahub/templates/sysadmin/user_reset_email.html:12
 #, python-format
 msgid ""
 "Your password on %(site_name)s has been reset. Now it is %(password)s. "
 "Please change it as soon as possible. "
-msgstr ""
+msgstr "Vaše heslo na %(site_name)s bylo vyresetováno. Nyní je %(password)s. Prosím změňte si jej co nejdříve. "
 
 #: seahub/templates/sysadmin/useradmin_js.html:14
 #, python-format
 msgid "Are you sure you want to revoke the admin permission of %s ?"
-msgstr ""
+msgstr "Jste si jisti, že chcete zrušit administrátorská oprávnění uživatele %s ?"
 
 #: seahub/templates/sysadmin/useradmin_js.html:123
 msgid "Are you sure you want to delete the selected user(s) ?"
-msgstr ""
+msgstr "Jste si jisti, že chcete smazat vybrané uživatele ?"
 
 #: seahub/templates/sysadmin/useradmin_js.html:150
 #, python-brace-format
 msgid "Successfully deleted {users}."
-msgstr ""
+msgstr "Uživatelé {users} byli úspěšně smazáni."
 
 #: seahub/templates/sysadmin/useradmin_js.html:233
 #, python-brace-format
 msgid "Successfully set quota for {users}."
-msgstr ""
+msgstr "Kvóta pro uživatele {users} byla úspěšně nastavena"
 
 #: seahub/templates/sysadmin/useradmin_js.html:259
 #, python-brace-format
 msgid "Successfully set quota for {user}."
-msgstr ""
+msgstr "Kvóta pro uživatele {user} byla úspěšně nastavena."
 
 #: seahub/templates/sysadmin/userinfo.html:40
 msgid "Organization"
-msgstr ""
+msgstr "Organizace"
 
 #: seahub/templates/sysadmin/userinfo.html:88
 msgid "Set user name"
-msgstr ""
+msgstr "Nastavit jméno uživatele"
 
 #: seahub/templates/sysadmin/userinfo.html:95
 msgid "Set user department"
-msgstr ""
+msgstr "Nastavit oddělení uživatele"
 
 #: seahub/templates/sysadmin/userinfo.html:168
 msgid "Share From"
-msgstr ""
+msgstr "Sdíleno od"
 
 #: seahub/templates/sysadmin/userinfo.html:195
 msgid "This user has no shared libraries"
-msgstr ""
+msgstr "Tento uživatel nemá žádné sdílené knihovny"
 
 #: seahub/templates/sysadmin/userinfo.html:243
 msgid "This user has not created any shared links"
-msgstr ""
+msgstr "Tento uživatel nevytvořil žádné sdílené odkazy"
 
 #: seahub/templates/termsandconditions/tc_accept_terms.html:10
 msgid "Accept"
-msgstr ""
+msgstr "Přijmout"
 
 #: seahub/templates/text_diff.html:12
 msgid "modification details"
-msgstr ""
+msgstr "Detaily úprav"
 
 #: seahub/templates/text_diff.html:33
 msgid "It's a newly-created blank file."
-msgstr ""
+msgstr "To je nově vytvořený odkaz."
 
 #: seahub/templates/text_diff.html:40
 msgid "before modification"
-msgstr ""
+msgstr "před úpravami"
 
 #: seahub/templates/text_diff.html:42
 msgid "after modification"
-msgstr ""
+msgstr "po úpravách"
 
 #: seahub/templates/user_404.html:6
 msgid "Sorry, this user is not registered yet."
-msgstr ""
+msgstr "Uživatel není ještě registrován."
 
 #: seahub/templates/view_file_base.html:35
 #: seahub/templates/view_file_markdown.html:11
 #: seahub/templates/view_file_text.html:16
 msgid "updated this file"
-msgstr ""
+msgstr "aktualizoval tento soubor"
 
 #: seahub/templates/view_file_base.html:69
 msgid "Comment"
-msgstr ""
+msgstr "Komentář"
 
 #: seahub/templates/view_file_base.html:91
 msgid "Back to top"
-msgstr ""
+msgstr "Zpět nahoru"
 
 #: seahub/templates/view_file_base.html:91
 msgid "top"
-msgstr ""
+msgstr "nahoře"
 
 #: seahub/templates/view_file_base.html:98
 msgid "Comments"
-msgstr ""
+msgstr "Komentáře"
 
 #: seahub/templates/view_file_base.html:103
 msgid "No comment yet."
-msgstr ""
+msgstr "Žádné komentáře"
 
 #: seahub/templates/view_file_base.html:110
 msgid "Add a comment..."
-msgstr ""
+msgstr "Přidej komentář..."
 
 #: seahub/templates/view_file_image.html:14
 msgid "you can also press ← "
-msgstr ""
+msgstr "můžete také stisknout ← "
 
 #: seahub/templates/view_file_image.html:17
 msgid "you can also press → "
-msgstr ""
+msgstr "můžete také stisknout → "
 
 #: seahub/templates/view_shared_dir.html:45
 msgid "ZIP"
-msgstr ""
+msgstr "ZIP"
 
 #: seahub/templates/view_shared_dir.html:175
 msgid "Close (Esc)"
-msgstr ""
+msgstr "Zavřít (Esc)"
 
 #: seahub/templates/view_shared_dir.html:176
 msgid "Loading..."
-msgstr ""
+msgstr "Nahrávám..."
 
 #: seahub/templates/view_shared_dir.html:179
 msgid "Previous (Left arrow key)"
-msgstr ""
+msgstr "Předchozí (levá šipka)"
 
 #: seahub/templates/view_shared_dir.html:180
 msgid "Next (Right arrow key)"
-msgstr ""
+msgstr "Další (pravá šipka)"
 
 #: seahub/templates/view_shared_dir.html:181
 #, python-format
 msgid "%%curr%% of %%total%%"
-msgstr ""
+msgstr "%%curr%% z %%total%%"
 
 #: seahub/templates/view_shared_dir.html:187
 msgid "Open in New Tab"
-msgstr ""
+msgstr "Otevřít v nové záložce"
 
 #: seahub/templates/view_shared_dir.html:190
 #, python-format
 msgid "<a href=\"%%url%%\" target=\"_blank\">The image</a> could not be loaded."
-msgstr ""
+msgstr "<a href=\"%%url%%\" target=\"_blank\">Obrázek</a> nemůže být nahrán."
 
 #: seahub/templates/view_shared_dir.html:209
 msgid "Packaging..."
-msgstr ""
+msgstr "Komprimuji..."
 
 #: seahub/templates/view_shared_upload_link.html:8
 #, python-format
 msgid "Upload files to <span class=\"op-target\">%(dir_name)s</span>"
-msgstr ""
+msgstr "Nahrání souborů do <span class=\"op-target\">%(dir_name)s</span>"
 
 #: seahub/templates/view_shared_upload_link.html:9
 msgid "shared by:"
-msgstr ""
+msgstr "sdíleno uživatelem:"
 
 #: seahub/templates/view_shared_upload_link.html:11
 msgid "The owner of this library has run out of space."
-msgstr ""
+msgstr "Vlastník této knihovny nemá volné místo."
 
 #: seahub/templates/view_shared_upload_link.html:18
 #: seahub/templates/view_shared_upload_link.html:63
 msgid "Add Files"
-msgstr ""
+msgstr "Přidat soubory"
 
 #: seahub/templates/view_shared_upload_link.html:24
 msgid "Add folder"
-msgstr ""
+msgstr "Přidat složku"
 
 #: seahub/templates/view_shared_upload_link.html:34
 msgid ""
 "File Drag & Drop is supported for Chrome, Safari 5.0+, Firefox 4.0+, IE "
 "10.0+"
-msgstr ""
+msgstr "Drag & Drop souborů je podporován pro Chrome, Safari 5.0+, Firefox 4.0+, IE 10.0+"
 
 #: seahub/templates/view_shared_upload_link.html:36
 msgid "Folder Drag & Drop is supported for Chrome"
-msgstr ""
+msgstr "Drag & Drop složek je podporován pro Chrome"
 
 #: seahub/templates/view_shared_upload_link.html:39
 #, python-format
 msgid "File size should be smaller than %(max_file_size)s"
-msgstr ""
+msgstr "Velikost souboru by měla být menší než %(max_file_size)s"
 
 #: seahub/templates/view_shared_upload_link.html:74
 msgid "File is too big"
-msgstr ""
+msgstr "Soubor je příliš velký"
 
 #: seahub/templates/view_shared_upload_link.html:75
 msgid "File is too small"
-msgstr ""
+msgstr "Soubor je příliš malý"
 
 #: seahub/templates/view_shared_upload_link.html:76
 msgid "Filetype not allowed"
-msgstr ""
+msgstr "Typ souboru není dovolen"
 
 #: seahub/templates/view_shared_upload_link.html:77
 msgid "Max number of files exceeded"
-msgstr ""
+msgstr "Překročen maximální počet souborů"
 
 #: seahub/templates/view_shared_upload_link.html:78
 msgid "Uploaded bytes exceed file size"
-msgstr ""
+msgstr "Nahrané bytes překročily velikost souboru"
 
 #: seahub/templates/view_shared_upload_link.html:79
 msgid "Empty file upload result"
-msgstr ""
+msgstr "Výsledek nahrání prázdného souboru"
 
 #: seahub/templates/view_shared_upload_link.html:82
 msgid "uploaded"
-msgstr ""
+msgstr "nahrán"
 
 #: seahub/templates/view_shared_upload_link.html:83
 msgid "canceled"
-msgstr ""
+msgstr "zrušen"
 
 #: seahub/templates/view_shared_upload_link.html:84
 msgid "Start"
-msgstr ""
+msgstr "Start"
 
 #: seahub/templates/view_shared_upload_link.html:190
 msgid "Failed to get upload url"
-msgstr ""
+msgstr "Chyba při získání URL adresy pro nahrání"
 
 #: seahub/templates/view_trash_file.html:6
 msgid "Current Path: "
-msgstr ""
+msgstr "Aktuální cesta: "
 
 #: seahub/templates/wiki/personal_wiki.html:34
 msgid "You do not have personal wiki"
-msgstr ""
+msgstr "Nemáte osobní wiki"
 
 #: seahub/templates/wiki/personal_wiki.html:44
 msgid "personal-wiki"
-msgstr ""
+msgstr "osobní-wiki"
 
 #: seahub/templates/wiki/personal_wiki.html:46
 msgid "Personal Wiki Pages"
-msgstr ""
+msgstr "Osobní Wiki stránky"
 
 #: seahub/thumbnail/views.py:46 seahub/thumbnail/views.py:170
+#: seahub/views/__init__.py:613 seahub/views/file.py:1116
 msgid "Invalid arguments."
-msgstr ""
+msgstr "Chybné argumenty."
 
 #: seahub/thumbnail/views.py:63 seahub/thumbnail/views.py:183
 msgid "Failed to create thumbnail."
-msgstr ""
+msgstr "Chyba při vytváření náhledu."
 
 #: seahub/thumbnail/views.py:152
 msgid "Invalid token."
-msgstr ""
+msgstr "Chybný token."
 
 #: seahub/utils/__init__.py:128
 msgid "permission error"
-msgstr ""
+msgstr "Chyba oprávnění"
 
 #: seahub/views/__init__.py:423 seahub/views/__init__.py:439
 msgid "Unable to view recycle page"
-msgstr ""
+msgstr "Není možné zobrazit recycle stránku"
 
 #: seahub/views/__init__.py:507
 msgid "Unable to view library modification"
-msgstr ""
+msgstr "Není možné zobrazit úpravy knihovny"
 
 #: seahub/views/__init__.py:574 seahub/views/__init__.py:615
 #: seahub/views/__init__.py:831 seahub/views/__init__.py:959
 #: seahub/views/file.py:1575 seahub/views/sysadmin.py:1552
 msgid "Library does not exist"
-msgstr ""
+msgstr "Knihovna neexistuje"
 
 #: seahub/views/__init__.py:607
 msgid "Please specify history ID"
-msgstr ""
-
-#: seahub/views/__init__.py:613 seahub/views/file.py:1116
-msgid "Invalid arguments"
-msgstr ""
+msgstr "Prosím specifikujte ID historie"
 
 #: seahub/views/__init__.py:617
 msgid "History you specified does not exist"
-msgstr ""
+msgstr "Historie co jste specifikoval, neexistuje"
 
 #: seahub/views/__init__.py:619
 msgid "Unknown error"
-msgstr ""
+msgstr "Neznámá chyba"
 
 #: seahub/views/__init__.py:847
 msgid "No revisions found"
-msgstr ""
+msgstr "Nenalezeny žádné revize"
 
 #: seahub/views/__init__.py:966 seahub/views/repo.py:196
 #, python-format
 msgid "\"%s\" does not exist."
-msgstr ""
+msgstr "\"%s\" neexistuje."
 
 #: seahub/views/__init__.py:984 seahub/views/file.py:1084
 msgid "Internal Error"
-msgstr ""
+msgstr "Vnitřní chyba"
 
 #: seahub/views/__init__.py:987
 #, python-format
 msgid "Unable to download directory \"%s\": size is too large."
-msgstr ""
+msgstr "Nnení možné stáhnout adresář \"%s\": velikost je příliš velká."
 
 #: seahub/views/__init__.py:1003
 #, python-format
 msgid "Unable to download \"%s\""
-msgstr ""
+msgstr "Není možné stáhnout \"%s\""
 
 #: seahub/views/__init__.py:1095
 msgid "Successfully enable \"Personal Wiki\"."
-msgstr ""
+msgstr "Úspěšně zapnuta \"Osobní Wiki\"."
 
 #: seahub/views/__init__.py:1100
 msgid "Successfully disable \"Personal Wiki\"."
-msgstr ""
+msgstr "Úspěšně vypnuta \"Osobní Wiki\"."
 
 #: seahub/views/ajax.py:81
 msgid "You don't have permission to access the library."
-msgstr ""
+msgstr "Nemáte oprávnění pro přístup ke knihovně."
 
 #: seahub/views/ajax.py:89
 msgid "No path."
-msgstr ""
+msgstr "Žádná cesta"
 
 #: seahub/views/ajax.py:154
 msgid "The group doesn't exist"
-msgstr ""
+msgstr "Skupina neexistuje"
 
 #: seahub/views/ajax.py:226 seahub/views/ajax.py:758 seahub/views/ajax.py:1114
 msgid "Library is encrypted."
-msgstr ""
+msgstr "Knihovna je šifrována."
 
 #: seahub/views/ajax.py:232 seahub/views/ajax.py:764
 msgid "Error: no head commit id"
-msgstr ""
+msgstr "Chyba: no head commit id"
 
 #: seahub/views/ajax.py:457 seahub/views/ajax.py:507
 msgid "Argument missing."
-msgstr ""
+msgstr "Chybí argument."
 
 #: seahub/views/ajax.py:485
 #, python-format
 msgid "Internal error. Failed to delete %s."
-msgstr ""
+msgstr "Interní chyba. Chyba při mazání %s."
 
 #: seahub/views/ajax.py:563
 #, python-format
 msgid "Destination path is too long for %s."
-msgstr ""
+msgstr "Cílová cesta je příliš dlouhá pro %s."
 
 #: seahub/views/ajax.py:622
 msgid "Out of quota."
-msgstr ""
+msgstr "Nedostatek úložného prostoru - mimo kvótu."
 
 #: seahub/views/ajax.py:696
 msgid "You do not have permission to copy files/folders in this directory"
-msgstr ""
+msgstr "Nemáte oprávnění kopírovat soubory/složky do tohoto adresáře"
 
 #: seahub/views/ajax.py:703
 #, python-format
 msgid "Can not copy directory %(src)s to its subdirectory %(des)s"
-msgstr ""
+msgstr "Nemohu zkopírovat adresář %(src)s do podadresáře %(des)s"
 
 #: seahub/views/ajax.py:799
 msgid "Failed to get file block list"
-msgstr ""
+msgstr "Chyba při získání seznamu blokovaných souborů"
 
 #: seahub/views/ajax.py:837
 msgid "Wrong repo id"
-msgstr ""
+msgstr "Špatné repo ID"
 
 #: seahub/views/ajax.py:846 seahub/views/file.py:393 seahub/views/file.py:815
 #: seahub/views/file.py:988 seahub/views/file.py:1584
 msgid "File does not exist"
-msgstr ""
+msgstr "Soubor neexistuje"
 
 #: seahub/views/ajax.py:1056
 msgid "Bad upload link token."
-msgstr ""
+msgstr "Chybný token upload odkazu"
 
 #: seahub/views/ajax.py:1062
 msgid "Bad repo id in upload link."
-msgstr ""
+msgstr "Chybné repo ID v nahrávaném odkazu"
 
 #: seahub/views/ajax.py:1136
 msgid "No conflict in the merge."
-msgstr ""
+msgstr "Žádný konflikt ve sloučení"
 
 #: seahub/views/ajax.py:1211
 msgid "Failed, file is too large"
-msgstr ""
+msgstr "Chyba, soubor je příliš velký"
 
 #: seahub/views/file.py:152
 msgid "HTTPError: failed to open file online"
-msgstr ""
+msgstr "HTTPError: chyba při otvírání souboru online"
 
 #: seahub/views/file.py:156
 msgid "URLError: failed to open file online"
-msgstr ""
+msgstr "URLError: chyba při otvírání souboru online"
 
 #: seahub/views/file.py:163 seahub/views/file.py:1134
 msgid "The encoding you chose is not proper."
-msgstr ""
+msgstr "Kódování co jste vybrali není správné."
 
 #: seahub/views/file.py:180 seahub/views/file.py:183
 msgid "Unknown file encoding"
-msgstr ""
+msgstr "Neznámé kódování souboru"
 
 #: seahub/views/file.py:303 seahub/views/file.py:312
 #, python-format
 msgid "File size surpasses %s, can not be opened online."
-msgstr ""
+msgstr "velikost souboru předčila %s, není možné otevřít online. "
 
 #: seahub/views/file.py:327
 msgid "The library is encrypted, can not open file online."
-msgstr ""
+msgstr "Knihovna je šifrována, není možné otevřít online."
 
 #: seahub/views/file.py:405 seahub/views/file.py:700 seahub/views/file.py:715
 #: seahub/views/file.py:733
 msgid "Unable to view file"
-msgstr ""
+msgstr "Není možné prohlížet soubor"
 
 #: seahub/views/file.py:760
 msgid "Unable to download file, invalid file path"
-msgstr ""
+msgstr "Není možné stáhnout soubor, neplatná cesta"
 
 #: seahub/views/file.py:769
 msgid "Unable to download file, wrong file path"
-msgstr ""
+msgstr "Není možné stáhnout soubor, špatná cesta"
 
 #: seahub/views/file.py:774
 msgid "Unable to download file, share link traffic is used up."
-msgstr ""
+msgstr "Není možné stáhnout soubor, datový provoz sdíleného odkazu byl vyčerpán."
 
 #: seahub/views/file.py:837
 msgid "Unable to view raw file, share link traffic is used up."
-msgstr ""
+msgstr "Není možné prohlížet soubor, datový provoz sdíleného odkazu byl vyčerpán."
 
 #: seahub/views/file.py:1106
 msgid "The library does not exist."
-msgstr ""
+msgstr "Knihovna neexistuje."
 
 #: seahub/views/file.py:1110
 msgid "The library is encrypted."
-msgstr ""
+msgstr "Knihovna je šifrována"
 
 #: seahub/views/file.py:1191
 msgid "Unable to edit file"
-msgstr ""
+msgstr "Soubor nelze upravovat"
 
 #: seahub/views/file.py:1197
 msgid "The file does not exist."
-msgstr ""
+msgstr "Soubor neexistuje"
 
 #: seahub/views/file.py:1226
 msgid "Edit online is not offered for this type of file."
-msgstr ""
+msgstr "Online editace není nabízena pro tento typ souboru."
 
 #: seahub/views/file.py:1336
 msgid "Unable to download file"
-msgstr ""
+msgstr "Nelze stáhnout soubor"
 
 #: seahub/views/sysadmin.py:270 seahub/views/sysadmin.py:353
 #: seahub/views/sysadmin.py:1059 seahub/views/sysadmin.py:1071
 msgid "Failed to export Excel"
-msgstr ""
+msgstr "Chyba při exportu do Excelu"
 
 #: seahub/views/sysadmin.py:280 seahub/views/sysadmin.py:284
 msgid "Space Usage"
-msgstr ""
+msgstr "Využití prostoru"
 
 #: seahub/views/sysadmin.py:280 seahub/views/sysadmin.py:284
 msgid "Space Quota"
-msgstr ""
+msgstr "Kvóta úložiště"
 
 #: seahub/views/sysadmin.py:665 seahub/views/sysadmin.py:691
 msgid "Failed to set quota: internal server error"
-msgstr ""
+msgstr "Chyba při nastavení kvóty: interní chyba serveru"
 
 #: seahub/views/sysadmin.py:710
 msgid "Failed to delete: the user is an organization creator"
-msgstr ""
+msgstr "Chyba při mazání: Uživatel není tvůrcem organizace"
 
 #: seahub/views/sysadmin.py:744
 #, python-format
 msgid "Successfully remove trial for: %s"
-msgstr ""
+msgstr "Úspěšně odebrán trial pro: %s"
 
 #: seahub/views/sysadmin.py:773
 #, python-format
 msgid "Successfully revoke the admin permission of %s"
-msgstr ""
+msgstr "Úspěšně zrušena admin oprávnění uživatele %s"
 
 #: seahub/views/sysadmin.py:775
 msgid "Failed to revoke admin: the user does not exist"
-msgstr ""
+msgstr "Chyba při rušení admin oprávnění: uživatel neexistuje"
 
 #: seahub/views/sysadmin.py:822
 #, python-format
 msgid "Your account on %s is activated"
-msgstr ""
+msgstr "Váš účet na %s byl aktivován"
 
 #: seahub/views/sysadmin.py:905
 #, python-format
 msgid "Password has been reset on %s"
-msgstr ""
+msgstr "Heslo bylo vyresetováno na %s"
 
 #: seahub/views/sysadmin.py:931
 #, python-format
 msgid ""
 "Successfully reset password to %(passwd)s, an email has been sent to "
 "%(user)s."
-msgstr ""
+msgstr "Úspěšně vyresetováno heslo na %(passwd)s, email byl odeslán na %(user)s."
 
 #: seahub/views/sysadmin.py:936
 #, python-format
 msgid ""
 "Successfully reset password to %(passwd)s, but failed to send email to "
 "%(user)s, please check your email configuration."
-msgstr ""
+msgstr "Úspěšně vyresetováno heslo na %(passwd)s, ale selhalo odeslání emailu na%(user)s, prosím zkontrolujte vaší emailovou konfiguraci."
 
 #: seahub/views/sysadmin.py:940
 #, python-format
 msgid "Successfully reset password to %(passwd)s for user %(user)s."
-msgstr ""
+msgstr "Úspěšně vyresetováno heslo na %(passwd)s pro uživatele %(user)s"
 
 #: seahub/views/sysadmin.py:943
 #, python-format
@@ -6640,112 +6661,112 @@ msgid ""
 "Successfully reset password to %(passwd)s for user %(user)s. But email "
 "notification can not be sent, because Email service is not properly "
 "configured."
-msgstr ""
+msgstr "Úspěšně vyresetováno heslo na %(passwd)s pro uživatele %(user)s, Emailová notifikace nemohla být odeslána, protože emailová služba není správně nakonfigurována"
 
 #: seahub/views/sysadmin.py:946
 msgid "Failed to reset password: user does not exist"
-msgstr ""
+msgstr "Chyba při resetování hesla: uživatel neexistuje"
 
 #: seahub/views/sysadmin.py:962 seahub/views/sysadmin.py:1877
 #, python-format
 msgid "You are invited to join %s"
-msgstr ""
+msgstr "Jste pozván pro připojení se do %s"
 
 #: seahub/views/sysadmin.py:995
 #, python-format
 msgid "Fail to add user %s."
-msgstr ""
+msgstr "Chyba při přidávání uživatele %s."
 
 #: seahub/views/sysadmin.py:1020 seahub/views/sysadmin.py:1033
 #, python-format
 msgid "Successfully added user %s. An email notification has been sent."
-msgstr ""
+msgstr "Uživatel %s byl úspěšně přidán. Emailová notifikace byla odeslána."
 
 #: seahub/views/sysadmin.py:1023 seahub/views/sysadmin.py:1036
 #, python-format
 msgid ""
 "Successfully added user %s. An error accurs when sending email notification,"
 " please check your email configuration."
-msgstr ""
+msgstr "Uživatel %s byl úspěšně přidán. Nastala chyba při odesílání emailové notifikace. Prosím zkontrolujte emailovou konfguraci."
 
 #: seahub/views/sysadmin.py:1025 seahub/views/sysadmin.py:1038
 #, python-format
 msgid "Successfully added user %s."
-msgstr ""
+msgstr "Uživatel %s byl úspěšně přidán."
 
 #: seahub/views/sysadmin.py:1040
 #, python-format
 msgid ""
 "Successfully added user %s. But email notification can not be sent, because "
 "Email service is not properly configured."
-msgstr ""
+msgstr "Uživatel %s byl úspěšně přidán. Email nebyl odeslán, protože emailová služba není správně nakonfigurována."
 
 #: seahub/views/sysadmin.py:1213
 msgid "Failed to rename organization"
-msgstr ""
+msgstr "Chyba při přejmenování organizace"
 
 #: seahub/views/sysadmin.py:1243 seahub/views/sysadmin.py:1658
 #: seahub/views/sysadmin.py:1754
 msgid "Successfully deleted."
-msgstr ""
+msgstr "Úspěšně smazáno."
 
 #: seahub/views/sysadmin.py:1547
 msgid "Failed to transfer, invalid arguments."
-msgstr ""
+msgstr "Chyba při převodu, neplatné argumenty."
 
 #: seahub/views/sysadmin.py:1558
 #, python-format
 msgid "Failed to transfer, user %s not found"
-msgstr ""
+msgstr "Chyba při převodu, uživatel %s nenalezen"
 
 #: seahub/views/sysadmin.py:1564
 msgid "Can not transfer organization library"
-msgstr ""
+msgstr "Nelze převést knihovnu organizace"
 
 #: seahub/views/sysadmin.py:1568
 #, python-format
 msgid "Can not transfer library to organization user %s"
-msgstr ""
+msgstr "Nelze převést knihovnu k uživateli organizace %s"
 
 #: seahub/views/sysadmin.py:1621
 msgid "Successfully transfered."
-msgstr ""
+msgstr "Úspěšně převedeno."
 
 #: seahub/views/sysadmin.py:1757
 msgid "Failed to delete, please try again later."
-msgstr ""
+msgstr "Chyba při mazání, zkuste to prosím znovu později."
 
 #: seahub/views/sysadmin.py:1788
 #, python-format
 msgid "Successfully set %s as admin."
-msgstr ""
+msgstr "Uživatel %s byl úspěšně nastaven jako Admin"
 
 #: seahub/views/sysadmin.py:1790
 #, python-format
 msgid "Failed to set %s as admin: user does not exist."
-msgstr ""
+msgstr "Chyba při nastavení uživatele %s jako Admin: uživatel neexistuje."
 
 #: seahub/views/sysadmin.py:1891
 msgid "Import succeeded"
-msgstr ""
+msgstr "Import byl úspěšný"
 
 #: seahub/views/sysadmin.py:1893
 msgid "Please select a csv file first."
-msgstr ""
+msgstr "Prosím nejprve vyberte CSV soubor."
 
 #: seahub/views/sysadmin.py:1957
 msgid "Invalid setting"
-msgstr ""
+msgstr "Neplatné nastavení"
 
 #: seahub/views/sysadmin.py:1964 seahub/views/sysadmin.py:1968
 #: seahub/views/sysadmin.py:1973
 msgid "Invalid value"
-msgstr ""
+msgstr "Neplatná hodnota"
 
 #: seahub/views/sysadmin.py:2367
 msgid "Successfully deleted 1 item"
-msgstr ""
+msgstr "1 položka byla úspěšně smazána"
 
 #: seahub/views/wiki.py:162
 msgid "You do not have permission to create wiki"
-msgstr ""
+msgstr "Nemáte oprávnění k vytvoření wiki"

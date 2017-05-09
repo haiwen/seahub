@@ -7,13 +7,14 @@
 # baiyuan <tonny.chiu@baiyuan.com.tw>, 2015
 # carylorrk <carylorrk@gmail.com>, 2014
 # Chilledheart <rwindz0@gmail.com>, 2014
+# zheng xie <xiez1989@gmail.com>, 2017
 msgid ""
 msgstr ""
 "Project-Id-Version: seahub\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2017-04-28 16:23+0800\n"
-"PO-Revision-Date: 2017-05-02 02:26+0000\n"
-"Last-Translator: aa bbb <lung375706226@gmail.com>\n"
+"POT-Creation-Date: 2017-05-09 13:14+0800\n"
+"PO-Revision-Date: 2017-05-09 05:15+0000\n"
+"Last-Translator: zheng xie <xiez1989@gmail.com>\n"
 "Language-Team: Chinese (Taiwan) (http://www.transifex.com/haiwen/seahub/language/zh_TW/)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -113,6 +114,21 @@ msgstr "不能把目錄 %(src)s 移動到它的子目錄 %(des)s 中"
 #: seahub/api2/endpoints/copy_move_task.py:194
 msgid "Cancel failed"
 msgstr "取消失敗"
+
+#: seahub/api2/endpoints/dir_shared_items.py:278
+msgid "username invalid."
+msgstr ""
+
+#: seahub/api2/endpoints/dir_shared_items.py:287
+#, python-format
+msgid "User %s not found."
+msgstr ""
+
+#: seahub/api2/endpoints/dir_shared_items.py:294
+#: seahub/api2/endpoints/dir_shared_items.py:359
+#, python-format
+msgid "This item has been shared to %s."
+msgstr ""
 
 #: seahub/api2/endpoints/file.py:404 seahub/views/file.py:1099
 msgid "Check file lock error"
@@ -837,8 +853,8 @@ msgstr "編輯"
 #: seahub/institutions/templates/institutions/useradmin.html:57
 #: seahub/institutions/templates/institutions/useradmin_search.html:54
 #: seahub/notifications/templates/notifications/notification_list.html:33
-#: seahub/profile/templates/profile/set_profile.html:138
 #: seahub/profile/templates/profile/set_profile.html:140
+#: seahub/profile/templates/profile/set_profile.html:142
 #: seahub/templates/js/sysadmin-templates.html:391
 #: seahub/templates/js/sysadmin-templates.html:453
 #: seahub/templates/js/sysadmin-templates.html:518
@@ -935,7 +951,7 @@ msgstr "備註(可選)"
 #: seahub/notifications/templates/notifications/notification_list.html:14
 #: seahub/options/templates/options/set_user_options.html:14
 #: seahub/profile/templates/profile/set_profile.html:74
-#: seahub/profile/templates/profile/set_profile.html:104
+#: seahub/profile/templates/profile/set_profile.html:106
 #: seahub/share/templates/share/share_link_audit.html:22
 #: seahub/templates/decrypt_repo_form.html:11
 #: seahub/templates/file_edit.html:102 seahub/templates/file_edit.html:135
@@ -1022,7 +1038,7 @@ msgstr "編輯聯絡人"
 #: seahub/institutions/templates/institutions/user_info.html:173
 #: seahub/notifications/templates/notifications/user_notification_list.html:90
 #: seahub/share/templates/share/share_link_audit.html:70
-#: seahub/templates/base.html:141 seahub/templates/decrypt_repo_form.html:47
+#: seahub/templates/base.html:143 seahub/templates/decrypt_repo_form.html:47
 #: seahub/templates/file_edit.html:545
 #: seahub/templates/repo_dir_recycle_view.html:141
 #: seahub/templates/repo_dir_recycle_view.html:175
@@ -1347,13 +1363,13 @@ msgid "Choose a library as wiki:"
 msgstr "選擇一個資料庫作為維基："
 
 #: seahub/group/templates/group/group_wiki.html:60
-#: seahub/profile/templates/profile/set_profile.html:103
+#: seahub/profile/templates/profile/set_profile.html:105
 #: seahub/templates/wiki/personal_wiki.html:57
 msgid "Please click and choose a library."
 msgstr "請選擇資料庫。"
 
 #: seahub/group/templates/group/group_wiki.html:62
-#: seahub/profile/templates/profile/set_profile.html:105
+#: seahub/profile/templates/profile/set_profile.html:107
 #: seahub/templates/file_edit.html:103 seahub/templates/file_edit.html:152
 #: seahub/templates/file_edit.html:427
 #: seahub/templates/js/lib-op-popups.html:10
@@ -2143,7 +2159,7 @@ msgstr "聯繫電郵"
 
 #: seahub/institutions/templates/institutions/useradmin.html:17
 #: seahub/institutions/templates/institutions/useradmin_search.html:19
-#: seahub/profile/templates/profile/set_profile.html:113
+#: seahub/profile/templates/profile/set_profile.html:115
 #: seahub/templates/sysadmin/sys_inst_info_admins.html:16
 #: seahub/templates/sysadmin/sys_inst_info_user.html:16
 #: seahub/templates/sysadmin/sys_inst_search_user.html:17
@@ -2656,13 +2672,13 @@ msgid "Default Library"
 msgstr "預設資料庫"
 
 #: seahub/profile/templates/profile/set_profile.html:19
-#: seahub/profile/templates/profile/set_profile.html:111
+#: seahub/profile/templates/profile/set_profile.html:113
 msgid "Two-Factor Authentication"
 msgstr "兩步驗證"
 
 #: seahub/profile/templates/profile/set_profile.html:21
-#: seahub/profile/templates/profile/set_profile.html:136
-#: seahub/profile/templates/profile/set_profile.html:159
+#: seahub/profile/templates/profile/set_profile.html:138
+#: seahub/profile/templates/profile/set_profile.html:161
 msgid "Delete Account"
 msgstr "刪除帳號"
 
@@ -2720,67 +2736,67 @@ msgstr "電話："
 msgid "Language Setting"
 msgstr "語言設定"
 
-#: seahub/profile/templates/profile/set_profile.html:90
+#: seahub/profile/templates/profile/set_profile.html:92
 msgid "Default Library Setting"
 msgstr "預設資料庫設置"
 
-#: seahub/profile/templates/profile/set_profile.html:92
+#: seahub/profile/templates/profile/set_profile.html:94
 msgid "Your default library:"
 msgstr "你的預設資料庫："
 
-#: seahub/profile/templates/profile/set_profile.html:94
+#: seahub/profile/templates/profile/set_profile.html:96
 msgid ""
 "Default library is the default place to store your personal documents and "
 "pictures."
 msgstr "預設資料庫是用來存放你的個人文檔和照片的地方。"
 
-#: seahub/profile/templates/profile/set_profile.html:95
+#: seahub/profile/templates/profile/set_profile.html:97
 msgid "Choose Default Library"
 msgstr "選擇預設資料庫"
 
-#: seahub/profile/templates/profile/set_profile.html:98
+#: seahub/profile/templates/profile/set_profile.html:100
 msgid "Choose default library:"
 msgstr "選擇預設資料庫："
 
-#: seahub/profile/templates/profile/set_profile.html:113
+#: seahub/profile/templates/profile/set_profile.html:115
 msgid "enabled"
 msgstr "已啟用"
 
-#: seahub/profile/templates/profile/set_profile.html:115
+#: seahub/profile/templates/profile/set_profile.html:117
 msgid "Disable Two-Factor Authentication"
 msgstr "停用兩步驗證"
 
-#: seahub/profile/templates/profile/set_profile.html:119
+#: seahub/profile/templates/profile/set_profile.html:121
 msgid ""
 "If you don't have any device with you, you can access your account using "
 "backup codes."
 msgstr "如果你身邊沒有設備，可以通過備用驗證碼來登陸賬戶。"
 
-#: seahub/profile/templates/profile/set_profile.html:120
+#: seahub/profile/templates/profile/set_profile.html:122
 #, python-format
 msgid "You have only one backup code remaining."
 msgid_plural "You have %(counter)s backup codes remaining."
 msgstr[0] "你還剩餘 %(counter)s 個備用驗證碼。"
 
-#: seahub/profile/templates/profile/set_profile.html:123
+#: seahub/profile/templates/profile/set_profile.html:125
 msgid "Show Codes"
 msgstr "顯示驗證碼"
 
-#: seahub/profile/templates/profile/set_profile.html:127
+#: seahub/profile/templates/profile/set_profile.html:129
 msgid ""
 "Two-factor authentication is not enabled for your account. Enable two-factor"
 " authentication for enhanced account security."
 msgstr "你的賬戶並未開始兩步驗證，請開啟兩步驗證增加賬戶安全性。"
 
-#: seahub/profile/templates/profile/set_profile.html:129
+#: seahub/profile/templates/profile/set_profile.html:131
 msgid "Enable Two-Factor Authentication"
 msgstr "啟用兩步驗證"
 
-#: seahub/profile/templates/profile/set_profile.html:137
+#: seahub/profile/templates/profile/set_profile.html:139
 msgid "This operation will not be reverted. Please think twice!"
 msgstr "該操作將不可復原。請三思！"
 
-#: seahub/profile/templates/profile/set_profile.html:160
+#: seahub/profile/templates/profile/set_profile.html:162
 msgid "Really want to delete your account?"
 msgstr "確定要刪除該帳號嗎？"
 
@@ -2814,110 +2830,118 @@ msgid "Successfully set \"%s\" as your default library."
 msgstr "成功設置 \"%s\"為你的預設資料庫。"
 
 #: seahub/settings.py:143
-msgid "català"
-msgstr "català"
+msgid "العربية"
+msgstr ""
 
-#: seahub/settings.py:144
+#: seahub/settings.py:145
+msgid "Català"
+msgstr ""
+
+#: seahub/settings.py:147
 msgid "Deutsch"
 msgstr "Deutsch"
 
-#: seahub/settings.py:145
+#: seahub/settings.py:148
+msgid "ελληνικά"
+msgstr ""
+
+#: seahub/settings.py:149
 msgid "English"
 msgstr "English"
 
-#: seahub/settings.py:146
+#: seahub/settings.py:150
 msgid "Español"
 msgstr "Español"
 
-#: seahub/settings.py:147
+#: seahub/settings.py:151
 msgid "Español de Argentina"
 msgstr "Español de Argentina"
 
-#: seahub/settings.py:148
+#: seahub/settings.py:152
 msgid "Español de México"
 msgstr "Español de México"
 
-#: seahub/settings.py:149
+#: seahub/settings.py:153
 msgid "Suomi"
 msgstr "Suomi"
 
-#: seahub/settings.py:150
+#: seahub/settings.py:154
 msgid "français"
 msgstr "français"
 
-#: seahub/settings.py:151
+#: seahub/settings.py:155
 msgid "עברית"
 msgstr "עברית"
 
-#: seahub/settings.py:152
+#: seahub/settings.py:156
 msgid "Magyar"
 msgstr "Magyar"
 
-#: seahub/settings.py:153
+#: seahub/settings.py:157
 msgid "Íslenska"
 msgstr "Íslenska"
 
-#: seahub/settings.py:154
+#: seahub/settings.py:158
 msgid "Italiano"
 msgstr "Italiano"
 
-#: seahub/settings.py:155
+#: seahub/settings.py:159
 msgid "日本語"
 msgstr "日本語"
 
-#: seahub/settings.py:156
+#: seahub/settings.py:160
 msgid "한국어"
 msgstr "한국어"
 
-#: seahub/settings.py:157
+#: seahub/settings.py:162
 msgid "Latvian"
 msgstr "Latvian"
 
-#: seahub/settings.py:158
+#: seahub/settings.py:164
 msgid "Nederlands"
 msgstr "Nederlands"
 
-#: seahub/settings.py:159
+#: seahub/settings.py:165
 msgid "Polski"
 msgstr "Polski"
 
-#: seahub/settings.py:160
+#: seahub/settings.py:166
 msgid "Portuguese, Brazil"
 msgstr "Portuguese, Brazil"
 
-#: seahub/settings.py:161
+#: seahub/settings.py:167
 msgid "Русский"
 msgstr "Русский"
 
-#: seahub/settings.py:162
-msgid "Slovak"
-msgstr "Slovak"
-
-#: seahub/settings.py:163
+#: seahub/settings.py:169
 msgid "Slovenian"
 msgstr "Slovenian"
 
-#: seahub/settings.py:164
+#: seahub/settings.py:170
 msgid "Svenska"
 msgstr "Svenska"
 
-#: seahub/settings.py:165
+#: seahub/settings.py:171
 msgid "ไทย"
 msgstr "ไทย"
 
-#: seahub/settings.py:166
+#: seahub/settings.py:172
 msgid "Türkçe"
 msgstr "Türkçe"
 
-#: seahub/settings.py:167
+#: seahub/settings.py:173
 msgid "українська мова"
 msgstr "українська мова"
 
-#: seahub/settings.py:168
+#: seahub/settings.py:174
+msgid "Tiếng Việt"
+msgstr ""
+
+#: seahub/settings.py:175
 msgid "简体中文"
 msgstr "简体中文"
 
-#: seahub/settings.py:169
+#: seahub/settings.py:176
 msgid "繁體中文"
 msgstr "繁體中文"
 
@@ -3050,13 +3074,13 @@ msgstr "組織管理"
 msgid "Log out"
 msgstr "退出"
 
-#: seahub/templates/base.html:123 seahub/templates/base_for_backbone.html:87
+#: seahub/templates/base.html:125 seahub/templates/base_for_backbone.html:87
 #: seahub/templates/sysadmin/sysadmin_backbone.html:70
 #: seahub/views/sysadmin.py:332 seahub/views/sysadmin.py:333
 msgid "Yes"
 msgstr "確定"
 
-#: seahub/templates/base.html:124 seahub/templates/base_for_backbone.html:88
+#: seahub/templates/base.html:126 seahub/templates/base_for_backbone.html:88
 #: seahub/templates/sysadmin/sysadmin_backbone.html:71
 msgid "No"
 msgstr "取消"
@@ -6336,6 +6360,7 @@ msgid "Personal Wiki Pages"
 msgstr "個人維基頁面"
 
 #: seahub/thumbnail/views.py:46 seahub/thumbnail/views.py:170
+#: seahub/views/__init__.py:613 seahub/views/file.py:1116
 msgid "Invalid arguments."
 msgstr "非法參數"
 
@@ -6368,10 +6393,6 @@ msgstr "資料庫不存在"
 #: seahub/views/__init__.py:607
 msgid "Please specify history ID"
 msgstr "請指定歷史記錄ID"
-
-#: seahub/views/__init__.py:613 seahub/views/file.py:1116
-msgid "Invalid arguments"
-msgstr "無效參數"
 
 #: seahub/views/__init__.py:617
 msgid "History you specified does not exist"

@@ -169,10 +169,11 @@ class FileShare(models.Model):
     view_cnt = models.IntegerField(default=0)
     s_type = models.CharField(max_length=2, db_index=True, default='f') # `f` or `d`
     password = models.CharField(max_length=128, null=True)
+    expire_date = models.DateTimeField(null=True)
     permission = models.CharField(max_length=50, db_index=True,
                                   choices=PERMISSION_CHOICES,
                                   default=PERM_VIEW_DL)
-    expire_date = models.DateTimeField(null=True)
+
     objects = FileShareManager()
 
     def is_file_share_link(self):

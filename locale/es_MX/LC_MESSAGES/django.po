@@ -13,9 +13,9 @@ msgid ""
 msgstr ""
 "Project-Id-Version: seahub\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2017-04-28 16:23+0800\n"
-"PO-Revision-Date: 2017-04-28 18:19+0000\n"
-"Last-Translator: Rodolfo Cossalter <rcoss@dm.uba.ar>\n"
+"POT-Creation-Date: 2017-05-09 13:14+0800\n"
+"PO-Revision-Date: 2017-05-09 05:15+0000\n"
+"Last-Translator: zheng xie <xiez1989@gmail.com>\n"
 "Language-Team: Spanish (Mexico) (http://www.transifex.com/haiwen/seahub/language/es_MX/)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -115,6 +115,21 @@ msgstr "No se pudo mover el directorio %(src)s al subdirectorio %(des)s"
 #: seahub/api2/endpoints/copy_move_task.py:194
 msgid "Cancel failed"
 msgstr "Falló al cancelar"
+
+#: seahub/api2/endpoints/dir_shared_items.py:278
+msgid "username invalid."
+msgstr ""
+
+#: seahub/api2/endpoints/dir_shared_items.py:287
+#, python-format
+msgid "User %s not found."
+msgstr ""
+
+#: seahub/api2/endpoints/dir_shared_items.py:294
+#: seahub/api2/endpoints/dir_shared_items.py:359
+#, python-format
+msgid "This item has been shared to %s."
+msgstr ""
 
 #: seahub/api2/endpoints/file.py:404 seahub/views/file.py:1099
 msgid "Check file lock error"
@@ -844,8 +859,8 @@ msgstr "Editar"
 #: seahub/institutions/templates/institutions/useradmin.html:57
 #: seahub/institutions/templates/institutions/useradmin_search.html:54
 #: seahub/notifications/templates/notifications/notification_list.html:33
-#: seahub/profile/templates/profile/set_profile.html:138
 #: seahub/profile/templates/profile/set_profile.html:140
+#: seahub/profile/templates/profile/set_profile.html:142
 #: seahub/templates/js/sysadmin-templates.html:391
 #: seahub/templates/js/sysadmin-templates.html:453
 #: seahub/templates/js/sysadmin-templates.html:518
@@ -942,7 +957,7 @@ msgstr "Nota (opcional)"
 #: seahub/notifications/templates/notifications/notification_list.html:14
 #: seahub/options/templates/options/set_user_options.html:14
 #: seahub/profile/templates/profile/set_profile.html:74
-#: seahub/profile/templates/profile/set_profile.html:104
+#: seahub/profile/templates/profile/set_profile.html:106
 #: seahub/share/templates/share/share_link_audit.html:22
 #: seahub/templates/decrypt_repo_form.html:11
 #: seahub/templates/file_edit.html:102 seahub/templates/file_edit.html:135
@@ -1029,7 +1044,7 @@ msgstr "Editar Contacto"
 #: seahub/institutions/templates/institutions/user_info.html:173
 #: seahub/notifications/templates/notifications/user_notification_list.html:90
 #: seahub/share/templates/share/share_link_audit.html:70
-#: seahub/templates/base.html:141 seahub/templates/decrypt_repo_form.html:47
+#: seahub/templates/base.html:143 seahub/templates/decrypt_repo_form.html:47
 #: seahub/templates/file_edit.html:545
 #: seahub/templates/repo_dir_recycle_view.html:141
 #: seahub/templates/repo_dir_recycle_view.html:175
@@ -1354,13 +1369,13 @@ msgid "Choose a library as wiki:"
 msgstr "Elije una biblioteca como wiki:"
 
 #: seahub/group/templates/group/group_wiki.html:60
-#: seahub/profile/templates/profile/set_profile.html:103
+#: seahub/profile/templates/profile/set_profile.html:105
 #: seahub/templates/wiki/personal_wiki.html:57
 msgid "Please click and choose a library."
 msgstr "Haga click y escoja una biblioteca."
 
 #: seahub/group/templates/group/group_wiki.html:62
-#: seahub/profile/templates/profile/set_profile.html:105
+#: seahub/profile/templates/profile/set_profile.html:107
 #: seahub/templates/file_edit.html:103 seahub/templates/file_edit.html:152
 #: seahub/templates/file_edit.html:427
 #: seahub/templates/js/lib-op-popups.html:10
@@ -2150,7 +2165,7 @@ msgstr "Email de Contacto"
 
 #: seahub/institutions/templates/institutions/useradmin.html:17
 #: seahub/institutions/templates/institutions/useradmin_search.html:19
-#: seahub/profile/templates/profile/set_profile.html:113
+#: seahub/profile/templates/profile/set_profile.html:115
 #: seahub/templates/sysadmin/sys_inst_info_admins.html:16
 #: seahub/templates/sysadmin/sys_inst_info_user.html:16
 #: seahub/templates/sysadmin/sys_inst_search_user.html:17
@@ -2664,13 +2679,13 @@ msgid "Default Library"
 msgstr "Biblioteca predeterminada."
 
 #: seahub/profile/templates/profile/set_profile.html:19
-#: seahub/profile/templates/profile/set_profile.html:111
+#: seahub/profile/templates/profile/set_profile.html:113
 msgid "Two-Factor Authentication"
 msgstr "Autenticación de dos Factores"
 
 #: seahub/profile/templates/profile/set_profile.html:21
-#: seahub/profile/templates/profile/set_profile.html:136
-#: seahub/profile/templates/profile/set_profile.html:159
+#: seahub/profile/templates/profile/set_profile.html:138
+#: seahub/profile/templates/profile/set_profile.html:161
 msgid "Delete Account"
 msgstr "Eliminar Cuenta"
 
@@ -2728,68 +2743,68 @@ msgstr "Telefono:"
 msgid "Language Setting"
 msgstr "Configuración de idioma"
 
-#: seahub/profile/templates/profile/set_profile.html:90
+#: seahub/profile/templates/profile/set_profile.html:92
 msgid "Default Library Setting"
 msgstr "Configuración predeterminada de biblioteca"
 
-#: seahub/profile/templates/profile/set_profile.html:92
+#: seahub/profile/templates/profile/set_profile.html:94
 msgid "Your default library:"
 msgstr "Su biblioteca predeterminada:"
 
-#: seahub/profile/templates/profile/set_profile.html:94
+#: seahub/profile/templates/profile/set_profile.html:96
 msgid ""
 "Default library is the default place to store your personal documents and "
 "pictures."
 msgstr "La biblioteca predeterminada es el lugar donde se almacenarán sus documentos e imagenes personales."
 
-#: seahub/profile/templates/profile/set_profile.html:95
+#: seahub/profile/templates/profile/set_profile.html:97
 msgid "Choose Default Library"
 msgstr "Escoja Biblioteca Predeterminada"
 
-#: seahub/profile/templates/profile/set_profile.html:98
+#: seahub/profile/templates/profile/set_profile.html:100
 msgid "Choose default library:"
 msgstr "Escoja biblioteca predeterminada:"
 
-#: seahub/profile/templates/profile/set_profile.html:113
+#: seahub/profile/templates/profile/set_profile.html:115
 msgid "enabled"
 msgstr "habilitada"
 
-#: seahub/profile/templates/profile/set_profile.html:115
+#: seahub/profile/templates/profile/set_profile.html:117
 msgid "Disable Two-Factor Authentication"
 msgstr "Deshabilitar Autenticación de dos Factores"
 
-#: seahub/profile/templates/profile/set_profile.html:119
+#: seahub/profile/templates/profile/set_profile.html:121
 msgid ""
 "If you don't have any device with you, you can access your account using "
 "backup codes."
 msgstr "Si no posse ningún dispositivo consigo, puede acceder a su cuenta utilizando códigos de respaldo."
 
-#: seahub/profile/templates/profile/set_profile.html:120
+#: seahub/profile/templates/profile/set_profile.html:122
 #, python-format
 msgid "You have only one backup code remaining."
 msgid_plural "You have %(counter)s backup codes remaining."
 msgstr[0] "Sólo le queda un código de respaldo."
 msgstr[1] "Le quedan %(counter)s códigos de respaldo."
 
-#: seahub/profile/templates/profile/set_profile.html:123
+#: seahub/profile/templates/profile/set_profile.html:125
 msgid "Show Codes"
 msgstr "Mostrar Códigos"
 
-#: seahub/profile/templates/profile/set_profile.html:127
+#: seahub/profile/templates/profile/set_profile.html:129
 msgid ""
 "Two-factor authentication is not enabled for your account. Enable two-factor"
 " authentication for enhanced account security."
 msgstr "La autenticación de dos factores no está habilitada para su cuenta. Habilite autenticación de dos factores para seguridad mejorada."
 
-#: seahub/profile/templates/profile/set_profile.html:129
+#: seahub/profile/templates/profile/set_profile.html:131
 msgid "Enable Two-Factor Authentication"
 msgstr "Habilitar Autenticación de dos Factores"
 
-#: seahub/profile/templates/profile/set_profile.html:137
+#: seahub/profile/templates/profile/set_profile.html:139
 msgid "This operation will not be reverted. Please think twice!"
 msgstr "Esta operacion no se puede revertir. Está seguro?"
 
-#: seahub/profile/templates/profile/set_profile.html:160
+#: seahub/profile/templates/profile/set_profile.html:162
 msgid "Really want to delete your account?"
 msgstr "Seguro que desea eliminar su cuenta?"
 
@@ -2823,110 +2838,118 @@ msgid "Successfully set \"%s\" as your default library."
 msgstr "\"%s\" definida correctamente como biblioteca predeterminada."
 
 #: seahub/settings.py:143
-msgid "català"
-msgstr "Català"
+msgid "العربية"
+msgstr ""
 
-#: seahub/settings.py:144
+#: seahub/settings.py:145
+msgid "Català"
+msgstr ""
+
+#: seahub/settings.py:147
 msgid "Deutsch"
 msgstr "Deutsch"
 
-#: seahub/settings.py:145
+#: seahub/settings.py:148
+msgid "ελληνικά"
+msgstr ""
+
+#: seahub/settings.py:149
 msgid "English"
 msgstr "English"
 
-#: seahub/settings.py:146
+#: seahub/settings.py:150
 msgid "Español"
 msgstr "Español"
 
-#: seahub/settings.py:147
+#: seahub/settings.py:151
 msgid "Español de Argentina"
 msgstr "Español de Argentina"
 
-#: seahub/settings.py:148
+#: seahub/settings.py:152
 msgid "Español de México"
 msgstr "Español de México"
 
-#: seahub/settings.py:149
+#: seahub/settings.py:153
 msgid "Suomi"
 msgstr "Suomi"
 
-#: seahub/settings.py:150
+#: seahub/settings.py:154
 msgid "français"
 msgstr "Français"
 
-#: seahub/settings.py:151
+#: seahub/settings.py:155
 msgid "עברית"
 msgstr "עברית"
 
-#: seahub/settings.py:152
+#: seahub/settings.py:156
 msgid "Magyar"
 msgstr "Magyar"
 
-#: seahub/settings.py:153
+#: seahub/settings.py:157
 msgid "Íslenska"
 msgstr "Íslenska"
 
-#: seahub/settings.py:154
+#: seahub/settings.py:158
 msgid "Italiano"
 msgstr "Italiano"
 
-#: seahub/settings.py:155
+#: seahub/settings.py:159
 msgid "日本語"
 msgstr "日本語"
 
-#: seahub/settings.py:156
+#: seahub/settings.py:160
 msgid "한국어"
 msgstr "한국어"
 
-#: seahub/settings.py:157
+#: seahub/settings.py:162
 msgid "Latvian"
 msgstr "Letón"
 
-#: seahub/settings.py:158
+#: seahub/settings.py:164
 msgid "Nederlands"
 msgstr "Nederlands"
 
-#: seahub/settings.py:159
+#: seahub/settings.py:165
 msgid "Polski"
 msgstr "Polski"
 
-#: seahub/settings.py:160
+#: seahub/settings.py:166
 msgid "Portuguese, Brazil"
 msgstr "Portugués, Brazil"
 
-#: seahub/settings.py:161
+#: seahub/settings.py:167
 msgid "Русский"
 msgstr "Русский"
 
-#: seahub/settings.py:162
-msgid "Slovak"
-msgstr "Eslovaco"
-
-#: seahub/settings.py:163
+#: seahub/settings.py:169
 msgid "Slovenian"
 msgstr "Slovenian"
 
-#: seahub/settings.py:164
+#: seahub/settings.py:170
 msgid "Svenska"
 msgstr "Svenska"
 
-#: seahub/settings.py:165
+#: seahub/settings.py:171
 msgid "ไทย"
 msgstr "ไทย"
 
-#: seahub/settings.py:166
+#: seahub/settings.py:172
 msgid "Türkçe"
 msgstr "Türkçe"
 
-#: seahub/settings.py:167
+#: seahub/settings.py:173
 msgid "українська мова"
 msgstr "українська мова"
 
-#: seahub/settings.py:168
+#: seahub/settings.py:174
+msgid "Tiếng Việt"
+msgstr ""
+
+#: seahub/settings.py:175
 msgid "简体中文"
 msgstr "简体中文"
 
-#: seahub/settings.py:169
+#: seahub/settings.py:176
 msgid "繁體中文"
 msgstr "繁體中文"
 
@@ -3059,13 +3082,13 @@ msgstr "Administrador de la Organización"
 msgid "Log out"
 msgstr "Desconectarse"
 
-#: seahub/templates/base.html:123 seahub/templates/base_for_backbone.html:87
+#: seahub/templates/base.html:125 seahub/templates/base_for_backbone.html:87
 #: seahub/templates/sysadmin/sysadmin_backbone.html:70
 #: seahub/views/sysadmin.py:332 seahub/views/sysadmin.py:333
 msgid "Yes"
 msgstr "Sí"
 
-#: seahub/templates/base.html:124 seahub/templates/base_for_backbone.html:88
+#: seahub/templates/base.html:126 seahub/templates/base_for_backbone.html:88
 #: seahub/templates/sysadmin/sysadmin_backbone.html:71
 msgid "No"
 msgstr "No"
@@ -6345,6 +6368,7 @@ msgid "Personal Wiki Pages"
 msgstr "Paginas de Wiki Personales"
 
 #: seahub/thumbnail/views.py:46 seahub/thumbnail/views.py:170
+#: seahub/views/__init__.py:613 seahub/views/file.py:1116
 msgid "Invalid arguments."
 msgstr "Argumentos inválidos."
 
@@ -6377,10 +6401,6 @@ msgstr "La biblioteca no existe"
 #: seahub/views/__init__.py:607
 msgid "Please specify history ID"
 msgstr "Por favor, especifique el ID del historial"
-
-#: seahub/views/__init__.py:613 seahub/views/file.py:1116
-msgid "Invalid arguments"
-msgstr "Argumentos inválidos"
 
 #: seahub/views/__init__.py:617
 msgid "History you specified does not exist"

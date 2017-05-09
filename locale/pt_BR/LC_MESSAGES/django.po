@@ -6,6 +6,7 @@
 # Carlos Marchi <carlosmarchi@gmail.com>, 2014
 # Carlos Madera <carlos.madera@gmail.com>, 2013-2014
 # Carlos Madera <carlos.madera@gmail.com>, 2013
+# cunhaal <cunha00@hotmail.com>, 2017
 # douglasfernandes <douglasfernandes@gmail.com>, 2013
 # douglasfernandes <douglasfernandes@gmail.com>, 2013
 # Erick Melo <erickmelo@gmail.com>, 2016
@@ -22,8 +23,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: seahub\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2017-04-28 16:23+0800\n"
-"PO-Revision-Date: 2017-04-28 08:23+0000\n"
+"POT-Creation-Date: 2017-05-09 13:14+0800\n"
+"PO-Revision-Date: 2017-05-09 05:15+0000\n"
 "Last-Translator: zheng xie <xiez1989@gmail.com>\n"
 "Language-Team: Portuguese (Brazil) (http://www.transifex.com/haiwen/seahub/language/pt_BR/)\n"
 "MIME-Version: 1.0\n"
@@ -34,16 +35,16 @@ msgstr ""
 
 #: seahub/api2/endpoints/account.py:162
 msgid "Name is too long (maximum is 64 characters)"
-msgstr ""
+msgstr "O nome é longo demais (máximo de 64 caracteres)"
 
 #: seahub/api2/endpoints/account.py:166 seahub/forms.py:43
 #: seahub/profile/forms.py:17 seahub/templates/sysadmin/userinfo.html:317
 msgid "Name should not include '/'."
-msgstr ""
+msgstr "O nome não pode conter '/'."
 
 #: seahub/api2/endpoints/account.py:173
 msgid "Department is too long (maximum is 512 characters)"
-msgstr ""
+msgstr "O Departamento é longo demais (máximo de 512 caracteres)"
 
 #: seahub/api2/endpoints/account.py:180 seahub/forms.py:154
 msgid "Space quota can't be empty"
@@ -51,18 +52,18 @@ msgstr "A cota do espaço não pode estar vazia"
 
 #: seahub/api2/endpoints/account.py:186
 msgid "Must be an integer that is greater than or equal to 0."
-msgstr ""
+msgstr "Deve ser um número inteiro superior ou igual a 0."
 
 #: seahub/api2/endpoints/account.py:190
 #: seahub/api2/endpoints/admin/users_batch.py:76 seahub/forms.py:155
 msgid "Space quota is too low (minimum value is 0)"
-msgstr "A cota de espaço está muito baixa (o valor mínimo é 0)"
+msgstr "A cota de espaço é muito baixo (o valor mínimo é 0)"
 
 #: seahub/api2/endpoints/account.py:198 seahub/institutions/views.py:213
 #: seahub/views/sysadmin.py:659
 #, python-format
 msgid "Failed to set quota: maximum quota is %d MB"
-msgstr "Definição de cota falhou: a cota maxima é %d MB"
+msgstr "Falha ao definir uma cota: a cota maxima é %d MB"
 
 #: seahub/api2/endpoints/admin/default_library.py:31
 #: seahub/api2/endpoints/admin/default_library.py:32
@@ -91,7 +92,7 @@ msgstr "O usuário %s já é proprietário do grupo."
 
 #: seahub/api2/endpoints/admin/libraries.py:154 seahub/views/sysadmin.py:1635
 msgid "System library can not be deleted."
-msgstr "A biblioteca do sistema não pode ser deletada."
+msgstr "A biblioteca do sistema não pode ser excluída."
 
 #: seahub/api2/endpoints/admin/shares.py:166
 #, python-format
@@ -106,7 +107,7 @@ msgstr "O e-mail %s é inválido."
 
 #: seahub/api2/endpoints/admin/users_batch.py:72
 msgid "must be an integer that is greater than or equal to 0."
-msgstr ""
+msgstr "deve ser um número inteiro que é maior ou igual a 0."
 
 #: seahub/api2/endpoints/copy_move_task.py:76 seahub/views/ajax.py:569
 msgid "Invalid destination path"
@@ -124,6 +125,21 @@ msgstr "Não é possível mover o diretório %(src)s para o subdiretório %(des)
 #: seahub/api2/endpoints/copy_move_task.py:194
 msgid "Cancel failed"
 msgstr "Falha ao Cancelar"
+
+#: seahub/api2/endpoints/dir_shared_items.py:278
+msgid "username invalid."
+msgstr ""
+
+#: seahub/api2/endpoints/dir_shared_items.py:287
+#, python-format
+msgid "User %s not found."
+msgstr ""
+
+#: seahub/api2/endpoints/dir_shared_items.py:294
+#: seahub/api2/endpoints/dir_shared_items.py:359
+#, python-format
+msgid "This item has been shared to %s."
+msgstr ""
 
 #: seahub/api2/endpoints/file.py:404 seahub/views/file.py:1099
 msgid "Check file lock error"
@@ -148,12 +164,12 @@ msgstr "O usuário %s não foi encontrado na organização."
 
 #: seahub/api2/endpoints/invitations.py:53
 msgid "The email address is not allowed to be invited as a guest."
-msgstr ""
+msgstr "O endereço de email não pode ser cadastrado como convidado."
 
 #: seahub/api2/endpoints/invitations.py:58
 #, python-format
 msgid "%s is already invited."
-msgstr ""
+msgstr "%s já está convidado."
 
 #: seahub/api2/endpoints/invitations.py:68 seahub/base/accounts.py:603
 #, python-format
@@ -182,7 +198,7 @@ msgstr "Falha ao descriptografar a biblioteca"
 
 #: seahub/api2/endpoints/repo_set_password.py:97
 msgid "Wrong old password"
-msgstr ""
+msgstr "Senha antiga errada."
 
 #: seahub/api2/endpoints/send_share_link_email.py:32
 #: seahub/api2/endpoints/send_upload_link_email.py:31
@@ -489,7 +505,7 @@ msgstr "Este valor deve ter o tamanho de 40 caracteres"
 #: seahub/base/accounts.py:593 seahub/forms.py:29
 #: seahub/views/sysadmin.py:1815
 msgid "The number of users exceeds the limit."
-msgstr ""
+msgstr "O número de usuários excede o limite."
 
 #: seahub/base/accounts.py:597
 msgid "Enter a valid email address."
@@ -853,8 +869,8 @@ msgstr "Editar"
 #: seahub/institutions/templates/institutions/useradmin.html:57
 #: seahub/institutions/templates/institutions/useradmin_search.html:54
 #: seahub/notifications/templates/notifications/notification_list.html:33
-#: seahub/profile/templates/profile/set_profile.html:138
 #: seahub/profile/templates/profile/set_profile.html:140
+#: seahub/profile/templates/profile/set_profile.html:142
 #: seahub/templates/js/sysadmin-templates.html:391
 #: seahub/templates/js/sysadmin-templates.html:453
 #: seahub/templates/js/sysadmin-templates.html:518
@@ -951,7 +967,7 @@ msgstr "Nota(opcional)"
 #: seahub/notifications/templates/notifications/notification_list.html:14
 #: seahub/options/templates/options/set_user_options.html:14
 #: seahub/profile/templates/profile/set_profile.html:74
-#: seahub/profile/templates/profile/set_profile.html:104
+#: seahub/profile/templates/profile/set_profile.html:106
 #: seahub/share/templates/share/share_link_audit.html:22
 #: seahub/templates/decrypt_repo_form.html:11
 #: seahub/templates/file_edit.html:102 seahub/templates/file_edit.html:135
@@ -1038,7 +1054,7 @@ msgstr "Editar Contato"
 #: seahub/institutions/templates/institutions/user_info.html:173
 #: seahub/notifications/templates/notifications/user_notification_list.html:90
 #: seahub/share/templates/share/share_link_audit.html:70
-#: seahub/templates/base.html:141 seahub/templates/decrypt_repo_form.html:47
+#: seahub/templates/base.html:143 seahub/templates/decrypt_repo_form.html:47
 #: seahub/templates/file_edit.html:545
 #: seahub/templates/repo_dir_recycle_view.html:141
 #: seahub/templates/repo_dir_recycle_view.html:175
@@ -1087,7 +1103,7 @@ msgstr "Excluir Contato"
 #: seahub/templates/sysadmin/userinfo.html:433
 #, python-format
 msgid "Are you sure you want to delete %s ?"
-msgstr "Tem certeza que quer apagar %s ?"
+msgstr "Tem certeza que quer excluir %s ?"
 
 #: seahub/contacts/templates/contacts/contact_list.html:123
 msgid "You cannot add yourself."
@@ -1266,7 +1282,7 @@ msgstr "Olá,"
 msgid ""
 "%(escaped_nickname)s invited you to join group %(grp_name)s on "
 "%(site_name)s: "
-msgstr ""
+msgstr "%(escaped_nickname)s o convidou para entrar o grupo %(grp_name)s em %(site_name)s: "
 
 #: seahub/group/templates/group/group_base.html:10
 #: seahub/help/templates/help/base.html:7
@@ -1363,13 +1379,13 @@ msgid "Choose a library as wiki:"
 msgstr "Escolher uma biblioteca como wiki:"
 
 #: seahub/group/templates/group/group_wiki.html:60
-#: seahub/profile/templates/profile/set_profile.html:103
+#: seahub/profile/templates/profile/set_profile.html:105
 #: seahub/templates/wiki/personal_wiki.html:57
 msgid "Please click and choose a library."
 msgstr "Por favor, clique e escolha uma biblioteca."
 
 #: seahub/group/templates/group/group_wiki.html:62
-#: seahub/profile/templates/profile/set_profile.html:105
+#: seahub/profile/templates/profile/set_profile.html:107
 #: seahub/templates/file_edit.html:103 seahub/templates/file_edit.html:152
 #: seahub/templates/file_edit.html:427
 #: seahub/templates/js/lib-op-popups.html:10
@@ -1453,7 +1469,7 @@ msgstr "Modificado pela última vez por %(modifier)s, %(modify_time)s"
 #: seahub/group/templates/group/group_wiki.html:139
 #: seahub/templates/wiki/personal_wiki.html:133
 msgid "Are you sure you want to delete this page?"
-msgstr "Tem certeza que quer apagar esta página?"
+msgstr "Tem certeza que quer excluir esta página?"
 
 #: seahub/group/templates/group/group_wiki.html:160
 #: seahub/templates/wiki/personal_wiki.html:154
@@ -1546,12 +1562,12 @@ msgstr "Página \"%s\" já existe."
 #: seahub/group/views.py:526
 #, python-format
 msgid "Successfully deleted \"%s\"."
-msgstr "\"%s\" apagado com sucesso."
+msgstr "\"%s\" excluído com sucesso."
 
 #: seahub/group/views.py:528
 #, python-format
 msgid "Failed to delete \"%s\". Please retry later."
-msgstr "Falha ao apagar \"%s\". Por favor tente novamente."
+msgstr "Falha ao excluir \"%s\". Por favor tente novamente."
 
 #: seahub/help/templates/help/base.html:8
 msgid "Desktop Client and Syncing"
@@ -1603,7 +1619,7 @@ msgid ""
 "Once you and your friends sync a shared file library onto your computers, "
 "you may add, delete or edit files in the library together. Every change you "
 "make to the library would be automatically synced to others' computers."
-msgstr "Uma vez que você e seus amigos sincronizam uma biblioteca compartilhada em seus computadores, vocês podem adicionar, remover ou editar arquivos na biblioteca. Cada alteração que você fizer na biblioteca será automaticamente sincronizada para os demais computadores."
+msgstr "Uma vez que você e seus amigos sincronizarem uma biblioteca compartilhada em seus computadores, vocês podem adicionar, remover ou editar arquivos na biblioteca. Cada alteração que você fizer na biblioteca será automaticamente sincronizada para os demais computadores."
 
 #: seahub/help/templates/help/conflicts.html:9
 msgid ""
@@ -1632,7 +1648,7 @@ msgid ""
 "settings from the operating system. The operating system has some mechanisms"
 " to auto-detect proxy server information. So you don't have to manually "
 "enter proxy server address."
-msgstr ""
+msgstr "Os proxies HTTP e SOCKS5 exigem que você insira o endereço e a porta do servidor. Se você estiver utilizando a opção proxy do sistema, Seafile lê as opções de proxy do sistema operacional utilizado. O sistema operacional tem alguns mecanismos para auto-detectar as informações do servidor de proxy. Assim, você não precisará inserir manualmente o endereço do servidor de proxy."
 
 #: seahub/help/templates/help/desktop_proxy.html:12
 msgid ""
@@ -2159,7 +2175,7 @@ msgstr "E-mail de contato"
 
 #: seahub/institutions/templates/institutions/useradmin.html:17
 #: seahub/institutions/templates/institutions/useradmin_search.html:19
-#: seahub/profile/templates/profile/set_profile.html:113
+#: seahub/profile/templates/profile/set_profile.html:115
 #: seahub/templates/sysadmin/sys_inst_info_admins.html:16
 #: seahub/templates/sysadmin/sys_inst_info_user.html:16
 #: seahub/templates/sysadmin/sys_inst_search_user.html:17
@@ -2420,7 +2436,7 @@ msgstr "Um arquivo de nome <a href='%(file_link)s'>%(file_name)s</a> foi enviado
 msgid ""
 "A file named <strong>%(file_name)s</strong> is uploaded to <strong>Deleted "
 "Library</strong>"
-msgstr "O Arquivo chamado <strong>%(file_name)s</strong> será carregado para <strong>biblioteca deletada</strong>"
+msgstr "O Arquivo chamado <strong>%(file_name)s</strong> será carregado para <strong>biblioteca excluída</strong>"
 
 #: seahub/notifications/models.py:474
 #, python-format
@@ -2673,13 +2689,13 @@ msgid "Default Library"
 msgstr "Biblioteca Padrão"
 
 #: seahub/profile/templates/profile/set_profile.html:19
-#: seahub/profile/templates/profile/set_profile.html:111
+#: seahub/profile/templates/profile/set_profile.html:113
 msgid "Two-Factor Authentication"
 msgstr "Autenticação de 2 fatores"
 
 #: seahub/profile/templates/profile/set_profile.html:21
-#: seahub/profile/templates/profile/set_profile.html:136
-#: seahub/profile/templates/profile/set_profile.html:159
+#: seahub/profile/templates/profile/set_profile.html:138
+#: seahub/profile/templates/profile/set_profile.html:161
 msgid "Delete Account"
 msgstr "Excluir Conta"
 
@@ -2737,68 +2753,68 @@ msgstr "Telefone:"
 msgid "Language Setting"
 msgstr "Configuração de Idioma"
 
-#: seahub/profile/templates/profile/set_profile.html:90
+#: seahub/profile/templates/profile/set_profile.html:92
 msgid "Default Library Setting"
 msgstr "Configuração de Biblioteca Padrão"
 
-#: seahub/profile/templates/profile/set_profile.html:92
+#: seahub/profile/templates/profile/set_profile.html:94
 msgid "Your default library:"
 msgstr "Sua biblioteca padrão:"
 
-#: seahub/profile/templates/profile/set_profile.html:94
+#: seahub/profile/templates/profile/set_profile.html:96
 msgid ""
 "Default library is the default place to store your personal documents and "
 "pictures."
 msgstr "A biblioteca padrão é o local para armazenar todos os seus documentos pessoais e fotos."
 
-#: seahub/profile/templates/profile/set_profile.html:95
+#: seahub/profile/templates/profile/set_profile.html:97
 msgid "Choose Default Library"
 msgstr "Escolha Biblioteca Padrão"
 
-#: seahub/profile/templates/profile/set_profile.html:98
+#: seahub/profile/templates/profile/set_profile.html:100
 msgid "Choose default library:"
 msgstr "Escolha Biblioteca Padrão:"
 
-#: seahub/profile/templates/profile/set_profile.html:113
+#: seahub/profile/templates/profile/set_profile.html:115
 msgid "enabled"
 msgstr "habilitado"
 
-#: seahub/profile/templates/profile/set_profile.html:115
+#: seahub/profile/templates/profile/set_profile.html:117
 msgid "Disable Two-Factor Authentication"
 msgstr "Desabilitar Autenticação de 2 fatores"
 
-#: seahub/profile/templates/profile/set_profile.html:119
+#: seahub/profile/templates/profile/set_profile.html:121
 msgid ""
 "If you don't have any device with you, you can access your account using "
 "backup codes."
 msgstr "Se você não tiver nenhum dispositivo contigo, você pode acessar a sua conta utilizando códigos de backup"
 
-#: seahub/profile/templates/profile/set_profile.html:120
+#: seahub/profile/templates/profile/set_profile.html:122
 #, python-format
 msgid "You have only one backup code remaining."
 msgid_plural "You have %(counter)s backup codes remaining."
 msgstr[0] ""
 msgstr[1] ""
 
-#: seahub/profile/templates/profile/set_profile.html:123
+#: seahub/profile/templates/profile/set_profile.html:125
 msgid "Show Codes"
 msgstr "Exibir Códigos"
 
-#: seahub/profile/templates/profile/set_profile.html:127
+#: seahub/profile/templates/profile/set_profile.html:129
 msgid ""
 "Two-factor authentication is not enabled for your account. Enable two-factor"
 " authentication for enhanced account security."
 msgstr "Autenticação de 2 fatores não está habilitada para sua conta. Habilite esse tipo de autenticação para aumentar a segurança da sua conta."
 
-#: seahub/profile/templates/profile/set_profile.html:129
+#: seahub/profile/templates/profile/set_profile.html:131
 msgid "Enable Two-Factor Authentication"
 msgstr "Habilitar Autenticação de 2 fatores"
 
-#: seahub/profile/templates/profile/set_profile.html:137
+#: seahub/profile/templates/profile/set_profile.html:139
 msgid "This operation will not be reverted. Please think twice!"
 msgstr "Essa operação não será revertida. Favor verifique duas vezes!"
 
-#: seahub/profile/templates/profile/set_profile.html:160
+#: seahub/profile/templates/profile/set_profile.html:162
 msgid "Really want to delete your account?"
 msgstr "Você realmente deseja excluir essa conta?"
 
@@ -2816,7 +2832,7 @@ msgstr "Não foi aceito nenhum convite ainda"
 
 #: seahub/profile/views.py:176
 msgid "Demo account can not be deleted."
-msgstr "A conta demo não pode ser apagada."
+msgstr "A conta demo não pode ser excluída."
 
 #: seahub/profile/views.py:202
 msgid "Failed to set default library."
@@ -2832,110 +2848,118 @@ msgid "Successfully set \"%s\" as your default library."
 msgstr "\"%s\" definida como sua biblioteca padrão com sucesso."
 
 #: seahub/settings.py:143
-msgid "català"
-msgstr "català"
+msgid "العربية"
+msgstr ""
 
-#: seahub/settings.py:144
+#: seahub/settings.py:145
+msgid "Català"
+msgstr ""
+
+#: seahub/settings.py:147
 msgid "Deutsch"
 msgstr "Alemão"
 
-#: seahub/settings.py:145
+#: seahub/settings.py:148
+msgid "ελληνικά"
+msgstr ""
+
+#: seahub/settings.py:149
 msgid "English"
 msgstr "Inglês"
 
-#: seahub/settings.py:146
+#: seahub/settings.py:150
 msgid "Español"
 msgstr "Espanhol"
 
-#: seahub/settings.py:147
+#: seahub/settings.py:151
 msgid "Español de Argentina"
 msgstr "Espanhol da Argentina"
 
-#: seahub/settings.py:148
+#: seahub/settings.py:152
 msgid "Español de México"
 msgstr "Espanhol do México"
 
-#: seahub/settings.py:149
+#: seahub/settings.py:153
 msgid "Suomi"
 msgstr ""
 
-#: seahub/settings.py:150
+#: seahub/settings.py:154
 msgid "français"
 msgstr "français"
 
-#: seahub/settings.py:151
+#: seahub/settings.py:155
 msgid "עברית"
 msgstr "עברית"
 
-#: seahub/settings.py:152
+#: seahub/settings.py:156
 msgid "Magyar"
 msgstr "Húngaro"
 
-#: seahub/settings.py:153
+#: seahub/settings.py:157
 msgid "Íslenska"
 msgstr "Íslenska"
 
-#: seahub/settings.py:154
+#: seahub/settings.py:158
 msgid "Italiano"
 msgstr "Italiano"
 
-#: seahub/settings.py:155
+#: seahub/settings.py:159
 msgid "日本語"
 msgstr "japonês"
 
-#: seahub/settings.py:156
+#: seahub/settings.py:160
 msgid "한국어"
 msgstr "한국어"
 
-#: seahub/settings.py:157
+#: seahub/settings.py:162
 msgid "Latvian"
 msgstr "Latvian"
 
-#: seahub/settings.py:158
+#: seahub/settings.py:164
 msgid "Nederlands"
 msgstr "Nederlands"
 
-#: seahub/settings.py:159
+#: seahub/settings.py:165
 msgid "Polski"
 msgstr "Polski"
 
-#: seahub/settings.py:160
+#: seahub/settings.py:166
 msgid "Portuguese, Brazil"
 msgstr "Português Brasil"
 
-#: seahub/settings.py:161
+#: seahub/settings.py:167
 msgid "Русский"
 msgstr "Russo"
 
-#: seahub/settings.py:162
-msgid "Slovak"
-msgstr "Eslovaco"
-
-#: seahub/settings.py:163
+#: seahub/settings.py:169
 msgid "Slovenian"
 msgstr "Slovenian"
 
-#: seahub/settings.py:164
+#: seahub/settings.py:170
 msgid "Svenska"
 msgstr "Svenska"
 
-#: seahub/settings.py:165
+#: seahub/settings.py:171
 msgid "ไทย"
 msgstr "Tailândia"
 
-#: seahub/settings.py:166
+#: seahub/settings.py:172
 msgid "Türkçe"
 msgstr "Turco"
 
-#: seahub/settings.py:167
+#: seahub/settings.py:173
 msgid "українська мова"
 msgstr "українська мова"
 
-#: seahub/settings.py:168
+#: seahub/settings.py:174
+msgid "Tiếng Việt"
+msgstr ""
+
+#: seahub/settings.py:175
 msgid "简体中文"
 msgstr "Chinês Simplificado"
 
-#: seahub/settings.py:169
+#: seahub/settings.py:176
 msgid "繁體中文"
 msgstr "Chinês Tradicional"
 
@@ -3068,13 +3092,13 @@ msgstr "Administração da Organização"
 msgid "Log out"
 msgstr "Sair"
 
-#: seahub/templates/base.html:123 seahub/templates/base_for_backbone.html:87
+#: seahub/templates/base.html:125 seahub/templates/base_for_backbone.html:87
 #: seahub/templates/sysadmin/sysadmin_backbone.html:70
 #: seahub/views/sysadmin.py:332 seahub/views/sysadmin.py:333
 msgid "Yes"
 msgstr "Sim"
 
-#: seahub/templates/base.html:124 seahub/templates/base_for_backbone.html:88
+#: seahub/templates/base.html:126 seahub/templates/base_for_backbone.html:88
 #: seahub/templates/sysadmin/sysadmin_backbone.html:71
 msgid "No"
 msgstr "Não"
@@ -3932,7 +3956,7 @@ msgstr "Compartilhar"
 
 #: seahub/templates/js/sysadmin-templates.html:422
 msgid "Tip: libraries deleted 30 days ago will be cleaned automatically."
-msgstr "Dica: bibliotecas apagadas há mais de 30 dias serão automaticamente removidas."
+msgstr "Dica: bibliotecas excluída há mais de 30 dias serão automaticamente removidas."
 
 #: seahub/templates/js/sysadmin-templates.html:429
 msgid "Deleted Time"
@@ -3940,7 +3964,7 @@ msgstr "Excluir hora"
 
 #: seahub/templates/js/sysadmin-templates.html:441
 msgid "No library deleted yet"
-msgstr "Nenhuma biblioteca apagada ainda"
+msgstr "Nenhuma biblioteca excluída até o presente momento."
 
 #: seahub/templates/js/sysadmin-templates.html:503
 #: seahub/templates/js/templates.html:204
@@ -4886,7 +4910,7 @@ msgstr "E-mail ou senha incorreta"
 #: seahub/templates/registration/login.html:37
 #, python-format
 msgid "Remember me for %(remember_days)s days "
-msgstr "Lembre me por %(remember_days)s daias "
+msgstr "Lembre me por %(remember_days)s dias "
 
 #: seahub/templates/registration/login.html:50
 #: seahub/templates/sysadmin/sudo_mode.html:20
@@ -5242,7 +5266,7 @@ msgstr "Novo arquivo"
 
 #: seahub/templates/snippets/list_commit_detail.html:24
 msgid "Deleted files"
-msgstr "Arquivos apagados"
+msgstr "Arquivos excluídos"
 
 #: seahub/templates/snippets/list_commit_detail.html:25
 msgid "Renamed or Moved files"
@@ -5458,12 +5482,12 @@ msgstr "Você não pode selecionar mais opções"
 #: seahub/templates/sysadmin/repoadmin_js.html:47
 #: seahub/templates/sysadmin/sys_org_info_library.html:60
 msgid "Delete Library"
-msgstr "Deletar Biblioteca"
+msgstr "Excluir Biblioteca"
 
 #: seahub/templates/sysadmin/repoadmin_js.html:58
 #: seahub/templates/sysadmin/sys_org_info_user.html:190
 msgid "Successfully deleted 1 item."
-msgstr ""
+msgstr "Sucesso ao excluir 1 item."
 
 #: seahub/templates/sysadmin/settings.html:11
 msgid ""
@@ -5665,7 +5689,7 @@ msgstr "Nome não pode ser vazio"
 
 #: seahub/templates/sysadmin/sys_inst_admin.html:66
 msgid "Delete Institution"
-msgstr "Remover Instituição"
+msgstr "Excluir Instituição"
 
 #: seahub/templates/sysadmin/sys_inst_info_admins.html:8
 #: seahub/templates/sysadmin/sys_inst_info_user.html:8
@@ -5973,7 +5997,7 @@ msgstr ""
 #: seahub/templates/sysadmin/sys_useradmin_admins.html:27
 #: seahub/templates/sysadmin/user_search.html:17
 msgid "Delete users"
-msgstr ""
+msgstr "Excluir usuários"
 
 #: seahub/templates/sysadmin/sys_user_admin_ldap_imported.html:37
 #: seahub/templates/sysadmin/sys_useradmin_ldap.html:25
@@ -6119,12 +6143,12 @@ msgstr "Deseja realmente revogar a permissão de administrador de %s ?"
 
 #: seahub/templates/sysadmin/useradmin_js.html:123
 msgid "Are you sure you want to delete the selected user(s) ?"
-msgstr ""
+msgstr "Você tem certeza que quer excluir o(s) usuário(s) selecionado(s)?"
 
 #: seahub/templates/sysadmin/useradmin_js.html:150
 #, python-brace-format
 msgid "Successfully deleted {users}."
-msgstr ""
+msgstr "Sucesso ao excluir {users}."
 
 #: seahub/templates/sysadmin/useradmin_js.html:233
 #, python-brace-format
@@ -6354,6 +6378,7 @@ msgid "Personal Wiki Pages"
 msgstr "Páginas da Wiki pessoal"
 
 #: seahub/thumbnail/views.py:46 seahub/thumbnail/views.py:170
+#: seahub/views/__init__.py:613 seahub/views/file.py:1116
 msgid "Invalid arguments."
 msgstr "Argumentos invalidos"
 
@@ -6386,10 +6411,6 @@ msgstr "Biblioteca não existe"
 #: seahub/views/__init__.py:607
 msgid "Please specify history ID"
 msgstr "Favor, especifique o ID da história"
-
-#: seahub/views/__init__.py:613 seahub/views/file.py:1116
-msgid "Invalid arguments"
-msgstr "Argumento inválido"
 
 #: seahub/views/__init__.py:617
 msgid "History you specified does not exist"
@@ -6693,7 +6714,7 @@ msgstr "Erro ao renomear organização"
 #: seahub/views/sysadmin.py:1243 seahub/views/sysadmin.py:1658
 #: seahub/views/sysadmin.py:1754
 msgid "Successfully deleted."
-msgstr "Removido com sucesso."
+msgstr "Excluído com sucesso."
 
 #: seahub/views/sysadmin.py:1547
 msgid "Failed to transfer, invalid arguments."
@@ -6719,7 +6740,7 @@ msgstr "Transferido com sucesso."
 
 #: seahub/views/sysadmin.py:1757
 msgid "Failed to delete, please try again later."
-msgstr "Falha ao remover, por favor tente novamente."
+msgstr "Falha ao excluir, por favor tente novamente."
 
 #: seahub/views/sysadmin.py:1788
 #, python-format
@@ -6750,7 +6771,7 @@ msgstr "Valor inválido"
 
 #: seahub/views/sysadmin.py:2367
 msgid "Successfully deleted 1 item"
-msgstr "Item removido com sucesso"
+msgstr "Sucesso ao excluir 1 item."
 
 #: seahub/views/wiki.py:162
 msgid "You do not have permission to create wiki"
