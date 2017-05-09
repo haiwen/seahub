@@ -577,7 +577,7 @@ ENABLE_TWO_FACTOR_AUTH = False
 OTP_LOGIN_URL = '/profile/two_factor_authentication/setup/'
 
 # Enable personal wiki, group wiki
-ENABLE_WIKI = True
+ENABLE_WIKI = False
 
 #####################
 # External settings #
