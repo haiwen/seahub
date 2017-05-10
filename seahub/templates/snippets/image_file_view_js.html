@@ -1,5 +1,13 @@
 function setFileViewAreaHeight() {
     var $fileView = $('#file-view');
     $fileView.outerHeight($(window).height() - $fileView.offset().top);
+
+    var $arrow = $('#img-prev, #img-next');
+    $arrow.css({'top': ($fileView.outerHeight() - $arrow.height())/2});
 }
-$(window).load(setFileViewAreaHeight).resize(setFileViewAreaHeight);
+setFileViewAreaHeight();
+$(window).resize(setFileViewAreaHeight);
+$('#image-view').load(function() {
+    $('.image-file-view .loading-icon').hide();
+    $(this).show();
+});
