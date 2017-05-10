@@ -868,6 +868,8 @@ def render_file_revisions (request, repo_id):
         (is_locked and not locked_by_me):
         can_revert_file = False
 
+    commits[0].is_first_commit = True
+
     # for 'go back'
     referer = request.GET.get('referer', '')
 

@@ -60,7 +60,7 @@
             <tr>
                 <td class="time">
                     {{ commit.props.ctime|translate_seahub_time }}
-                    {% if commit.is_current_version %}
+                    {% if commit.is_first_commit %}
                     {% trans '(current version)' %}
                     {% endif %}
 
@@ -80,10 +80,8 @@
 
                 <td>{{ commit.rev_file_size|filesizeformat }} </td>
                 <td>
-                    {% if commit.id != repo.head_cmmt_id %}
-                    {% if can_revert_file %}
+                    {% if can_revert_file and not commit.is_first_commit %}
                     <a href="#" class="op vh restore-file" data-commit_id="{{ commit.id }}" data-commit_path="{{ commit.path }}">{% trans 'Restore' %}</a>
-                    {% endif %}
                     {% endif %}
                     <a href="{% url "download_file" repo.id commit.rev_file_id %}?p={{commit.path|urlencode}}" class="op vh">{% trans 'Download' %}</a>
                     <a href="{% url 'view_history_file' repo.id %}?obj_id={{ commit.rev_file_id }}&commit_id={{ commit.id }}&p={{commit.path|urlencode}}" class="op vh" target="_blank">{% trans 'View' %}</a>
