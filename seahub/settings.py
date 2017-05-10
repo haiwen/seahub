@@ -216,6 +216,7 @@ INSTALLED_APPS = (
     'seahub.group',
     'seahub.notifications',
     'seahub.options',
+    'seahub.onlyoffice',
     'seahub.profile',
     'seahub.share',
     'seahub.help',
