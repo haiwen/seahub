@@ -1038,7 +1038,7 @@ textarea:-moz-placeholder {/* for FF */
     right:-400px;
     top:0;
     bottom:0;
-    z-index:1;
+    z-index:21;
     overflow-x:hidden;
     border-left:1px solid #c9c9c9;
     box-shadow:0 0 4px #ccc;
@@ -1767,7 +1767,7 @@ button.sf-dropdown-toggle:focus {
     color:#1f0600;
     padding:1px 25px 1px 10px;
     background:#fddaa4;
-    z-index:15;
+    z-index:25;
 }
 #info-bar .close {
     position:absolute;
