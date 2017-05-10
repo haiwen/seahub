@@ -3,10 +3,6 @@
 {% load seahub_tags i18n staticfiles %}
 {% load url from future %}
 
-{% block extra_style %}
-<link rel="stylesheet" type="text/css" href="{% static "css/magnific-popup.css" %}" />
-{% endblock %}
-
 {% block wide_page_content %}
     {% if traffic_over_limit %}
     <p class="strip-tip">{% trans "File download is disabled: the share link traffic of owner is used up." %}</p>
