@@ -225,18 +225,18 @@ def view_shared_dir(request, fileshare):
         mode = 'grid'
     thumbnail_size = THUMBNAIL_DEFAULT_SIZE if mode == 'list' else THUMBNAIL_SIZE_FOR_GRID
 
-    if not repo.encrypted and ENABLE_THUMBNAIL:
-        for f in file_list:
-            file_type, file_ext = get_file_type_and_ext(f.obj_name)
-            if file_type == IMAGE:
-                f.is_img = True
-            if file_type == VIDEO:
-                f.is_video = True
-            if file_type == IMAGE or file_type == VIDEO:
-                if os.path.exists(os.path.join(THUMBNAIL_ROOT, str(thumbnail_size), f.obj_id)):
-                    req_image_path = posixpath.join(req_path, f.obj_name)
-                    src = get_share_link_thumbnail_src(token, thumbnail_size, req_image_path)
-                    f.encoded_thumbnail_src = urlquote(src)
+    for f in file_list:
+        file_type, file_ext = get_file_type_and_ext(f.obj_name)
+        if file_type == IMAGE:
+            f.is_img = True
+        if file_type == VIDEO:
+            f.is_video = True
+
+        if (file_type == IMAGE or file_type == VIDEO) and ENABLE_THUMBNAIL:
+            if os.path.exists(os.path.join(THUMBNAIL_ROOT, str(thumbnail_size), f.obj_id)):
+                req_image_path = posixpath.join(req_path, f.obj_name)
+                src = get_share_link_thumbnail_src(token, thumbnail_size, req_image_path)
+                f.encoded_thumbnail_src = urlquote(src)
 
     return render_to_response('view_shared_dir.html', {
             'repo': repo,
