@@ -11,3 +11,26 @@ $('#image-view').load(function() {
     $('.image-file-view .loading-icon').hide();
     $(this).show();
 });
+
+{% if img_prev or img_next %} {# for view_file_image & view_file_via_shared_dir #}
+var input_focus = false;
+$('input, textarea').focus(function() {
+    input_focus = true;
+}).blur(function() {
+    input_focus = false;
+});
+$('body').bind('keydown', function(e) {
+    if (!input_focus) { // so cursor move in form input element can work normally
+        {% if img_prev %}
+        if (e.keyCode == 37) { // press '<-'
+            location.href = $('#img-prev').attr('href');
+        }
+        {% endif %}
+        {% if img_next %}
+        if (e.keyCode == 39) { // press '->'
+            location.href = $('#img-next').attr('href');
+        }
+        {% endif %}
+    }
+})
+{% endif %}
