@@ -547,6 +547,8 @@ def _file_view(request, repo_id, path):
     # generate file path navigator
     zipped = gen_path_link(path, repo.name)
 
+    parent_dir = os.path.dirname(path)
+
     # file shared link
     l = FileShare.objects.filter(repo_id=repo_id).filter(
         username=username).filter(path=path)
@@ -596,6 +598,7 @@ def _file_view(request, repo_id, path):
             'filename': u_filename,
             'path': path,
             'zipped': zipped,
+            'parent_dir': parent_dir,
             'current_commit': current_commit,
             'fileext': fileext,
             'raw_path': raw_path,
