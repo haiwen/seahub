@@ -42,9 +42,13 @@ from .utils import get_diff_details, \
 
 from seahub.api2.base import APIView
 from seahub.api2.models import TokenV2, DESKTOP_PLATFORMS
+from seahub.avatar.models import Avatar
+from seahub.avatar.signals import avatar_updated
 from seahub.avatar.templatetags.avatar_tags import api_avatar_url, avatar
-from seahub.avatar.templatetags.group_avatar_tags import api_grp_avatar_url, \
-        grp_avatar
+from seahub.avatar.templatetags.group_avatar_tags import api_grp_avatar_url, grp_avatar
+from seahub.avatar.settings import (AVATAR_MAX_AVATARS_PER_USER,
+        AVATAR_MAX_SIZE, AVATAR_ALLOWED_FILE_EXTS)
+
 from seahub.base.accounts import User
 from seahub.base.models import UserStarredFiles, DeviceToken
 from seahub.base.templatetags.seahub_tags import email2nickname, \
@@ -3844,9 +3848,9 @@ class GroupRepo(APIView):
                             content_type=json_content_type)
 
 class UserAvatarView(APIView):
-    authentication_classes = (TokenAuthentication, )
+    authentication_classes = (TokenAuthentication, SessionAuthentication)
     permission_classes = (IsAuthenticated,)
-    throttle_classes = (UserRateThrottle, )
+    throttle_classes = (UserRateThrottle,)
 
     def get(self, request, user, size, format=None):
         url, is_default, date_uploaded = api_avatar_url(user, int(size))
@@ -3854,6 +3858,44 @@ class UserAvatarView(APIView):
             "url": request.build_absolute_uri(url),
             "is_default": is_default,
             "mtime": get_timestamp(date_uploaded) }
+        return Response(ret)
+
+    def post(self, request, user, size, format=None):
+
+        image_file = request.FILES.get('avatar', None)
+        if not image_file:
+            error_msg = 'avatar invalid.'
+            return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
+
+        (root, ext) = os.path.splitext(image_file.name.lower())
+        if AVATAR_ALLOWED_FILE_EXTS and ext not in AVATAR_ALLOWED_FILE_EXTS:
+            error_msg = _(u"%(ext)s is an invalid file extension. Authorized extensions are : %(valid_exts_list)s") % {'ext' : ext, 'valid_exts_list' : ", ".join(AVATAR_ALLOWED_FILE_EXTS)}
+            return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
+
+        if image_file.size > AVATAR_MAX_SIZE:
+            error_msg = _(u"Your file is too big (%(size)s), the maximum allowed size is %(max_valid_size)s") % { 'size' : filesizeformat(image_file.size), 'max_valid_size' : filesizeformat(AVATAR_MAX_SIZE)}
+            return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
+
+        username = request.user.username
+        count = Avatar.objects.filter(emailuser=username).count()
+        if AVATAR_MAX_AVATARS_PER_USER > 1 and count >= AVATAR_MAX_AVATARS_PER_USER:
+            error_msg = _(u"You already have %(nb_avatars)d avatars, and the maximum allowed is %(nb_max_avatars)d.") % { 'nb_avatars' : count, 'nb_max_avatars' : AVATAR_MAX_AVATARS_PER_USER}
+            return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
+
+        avatar = Avatar(
+            emailuser = username,
+            primary = True,
+        )
+        avatar.avatar.save(image_file.name, image_file)
+        avatar.save()
+        avatar_updated.send(sender=Avatar, user=request.user, avatar=avatar)
+
+        url, is_default, date_uploaded = api_avatar_url(request.user, int(size))
+        ret = {
+            "url": request.build_absolute_uri(url),
+            "mtime": get_timestamp(date_uploaded)
+        }
+
         return Response(ret)
 
 class GroupAvatarView(APIView):

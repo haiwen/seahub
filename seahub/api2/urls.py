@@ -90,7 +90,7 @@ urlpatterns = patterns('',
     url(r'^repo_history_changes/(?P<repo_id>[-0-9a-f]{36})/$', RepoHistoryChange.as_view()),
     url(r'^unseen_messages/$', UnseenMessagesCountView.as_view()),
 
-    url(r'^avatars/user/(?P<user>\S+@[a-zA-Z0-9._-]+\.[a-zA-Z0-9._-]+)/resized/(?P<size>[0-9]+)/$', UserAvatarView.as_view()),
+    url(r'^avatars/user/(?P<user>\S+@[a-zA-Z0-9._-]+\.[a-zA-Z0-9._-]+)/resized/(?P<size>[0-9]+)/$', UserAvatarView.as_view(), name="api2-user-avatar"),
     url(r'^avatars/group/(?P<group_id>\d+)/resized/(?P<size>[0-9]+)/$', GroupAvatarView.as_view()),
 
     url(r'^groups/$', Groups.as_view()),
