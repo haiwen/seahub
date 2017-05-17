@@ -145,6 +145,29 @@
         {% include "snippets/web_settings_form.html" %}
     {% endwith %}
     </div>
+
+    <h4>{% trans "Custom" %}</h4>
+
+    <div id="custom-logo">
+        <label>{% trans "Logo:" %}
+        <img src="{{ MEDIA_URL }}{{ logo_path }}" alt="logo" width="80" height="80" />
+
+        <form id="custom-logo-form" enctype="multipart/form-data" method="post" action="" class="ovhd">{% csrf_token %}
+            <button type="button" id="custom-logo-btn">{% trans "Change" %}</button>
+            <input type="file" name="logo" id="custom-logo-input" />
+        </form>
+    </div>
+
+    <div id="custom-favicon">
+        <label>{% trans "Favicon:" %}
+        <img src="{{ MEDIA_URL }}{{ favicon_path }}" alt="favicon" width="80" height="80" />
+
+        <form id="custom-favicon-form" enctype="multipart/form-data" method="post" action="" class="ovhd">{% csrf_token %}
+            <button type="button" id="custom-favicon-btn">{% trans "Change" %}</button>
+            <input type="file" name="favicon" id="custom-favicon-input" />
+        </form>
+    </div>
+
 </div>
 {% endblock %}
 
@@ -244,6 +267,33 @@ $('.web-input-setting-form').submit(function() {
         }
     });
     return false;
+});
+
+$('#custom-logo-input, #custom-favicon-input').change(function() {
+    var file = $(this)[0].files[0];
+    var fd = new FormData();
+    var url;
+
+    if ($(this).attr('id') == 'custom-logo-input') {
+        url = "{% url 'api-v2.1-admin-logo' %}";
+        fd.append('logo', file);
+    } else {
+        url = "{% url 'api-v2.1-admin-favicon' %}";
+        fd.append('favicon', file);
+    }
+
+    $.ajax({
+        url: url,
+        type: 'POST',
+        data: fd,
+        processData: false,
+        contentType: false,
+        beforeSend: prepareCSRFToken,
+        success: function(){
+            location.reload(true);
+        },
+        error: ajaxErrorHandler
+    });
 });
 </script>
 {% endblock %}

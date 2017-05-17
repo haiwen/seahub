@@ -9,6 +9,7 @@ RequestContext.
 """
 
 import re
+import os
 
 from django.conf import settings as dj_settings
 from constance import config
@@ -16,15 +17,15 @@ from constance import config
 from seahub.settings import SEAFILE_VERSION, SITE_TITLE, SITE_NAME, \
     MAX_FILE_NAME, BRANDING_CSS, LOGO_PATH, LOGO_WIDTH, LOGO_HEIGHT,\
     SHOW_REPO_DOWNLOAD_BUTTON, SITE_ROOT, ENABLE_GUEST_INVITATION, \
-    FAVICON_PATH, ENABLE_THUMBNAIL
+    FAVICON_PATH, ENABLE_THUMBNAIL, MEDIA_ROOT
 
 try:
     from seahub.settings import SEACLOUD_MODE
 except ImportError:
     SEACLOUD_MODE = False
 
-from seahub.utils import HAS_FILE_SEARCH, EVENTS_ENABLED, TRAFFIC_STATS_ENABLED, \
-        is_pro_version
+from seahub.utils import HAS_FILE_SEARCH, EVENTS_ENABLED, \
+        TRAFFIC_STATS_ENABLED, is_pro_version
 
 try:
     from seahub.settings import ENABLE_PUBFILE
@@ -39,6 +40,9 @@ try:
     from seahub.settings import MULTI_TENANCY
 except ImportError:
     MULTI_TENANCY = False
+
+from seahub.api2.endpoints.admin.logo import CUSTOM_LOGO_PATH
+from seahub.api2.endpoints.admin.favicon import CUSTOM_FAVICON_PATH
 
 def base(request):
     """
@@ -58,12 +62,29 @@ def base(request):
     if not file_server_root.endswith('/'):
         file_server_root += '/'
 
+    logo_path = LOGO_PATH
+    favicon_path = FAVICON_PATH
+
+    # filter ajax/api request out
+    if (not request.is_ajax()) and ("api2/" not in request.path) and \
+            ("api/v2.1/" not in request.path):
+
+        # get logo path
+        custom_logo_file = os.path.join(MEDIA_ROOT, CUSTOM_LOGO_PATH)
+        if os.path.exists(custom_logo_file):
+            logo_path = CUSTOM_LOGO_PATH
+
+        # get favicon path
+        custom_favicon_file = os.path.join(MEDIA_ROOT, CUSTOM_FAVICON_PATH)
+        if os.path.exists(custom_favicon_file):
+            favicon_path = CUSTOM_FAVICON_PATH
+
     return {
         'seafile_version': SEAFILE_VERSION,
         'site_title': SITE_TITLE,
         'branding_css': BRANDING_CSS,
-        'favicon_path': FAVICON_PATH,
-        'logo_path': LOGO_PATH,
+        'favicon_path': favicon_path,
+        'logo_path': logo_path,
         'logo_width': LOGO_WIDTH,
         'logo_height': LOGO_HEIGHT,
         'seacloud_mode': SEACLOUD_MODE,
