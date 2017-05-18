@@ -2272,6 +2272,28 @@ button.sf-dropdown-toggle:focus {
     display:inline;
     margin-right:5px;
 }
+#dirent-details {
+    width:320px;
+}
+.dirent-details-img-container {
+    text-align:center;
+    height:160px;
+    padding:6px 0;
+}
+.dirent-details-img-container .thumbnail {
+    max-width:calc(100% - 4px); /* `-4px` for full width thumbnail */
+    max-height:100%;
+}
+.dirent-details-text-info-container {
+    padding:10px 20px;
+}
+.dirent-details-text-info-container table {
+    margin:0;
+}
+.dirent-details-text-info-container th,
+.dirent-details-text-info-container td {
+    border:none;
+}
 .audit-item .audit-select-hidden {
     position:absolute;
     background:#fff;
