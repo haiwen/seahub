@@ -34,6 +34,86 @@ class LibrariesTest(BaseTestCase):
         resp = self.client.get(self.libraries_url)
         self.assertEqual(403, resp.status_code)
 
+    def test_can_create(self):
+        self.login_as(self.admin)
+
+        repo_name = randstring(6)
+        repo_owner = self.user.username
+
+        data = {
+            'name': repo_name,
+            'owner': repo_owner,
+        }
+
+        resp = self.client.post(self.libraries_url, data)
+
+        self.assertEqual(200, resp.status_code)
+        json_resp = json.loads(resp.content)
+        assert json_resp['name'] == repo_name
+        assert json_resp['owner'] == repo_owner
+
+        self.remove_repo(json_resp['id'])
+
+    def test_can_create_without_owner_parameter(self):
+        self.login_as(self.admin)
+
+        repo_name = randstring(6)
+
+        data = {
+            'name': repo_name,
+        }
+
+        resp = self.client.post(self.libraries_url, data)
+
+        self.assertEqual(200, resp.status_code)
+        json_resp = json.loads(resp.content)
+        assert json_resp['name'] == repo_name
+        assert json_resp['owner'] == self.admin.username
+
+        self.remove_repo(json_resp['id'])
+
+    def test_create_with_invalid_user_permission(self):
+        self.login_as(self.user)
+
+        repo_name = randstring(6)
+        repo_owner = self.user.username
+
+        data = {
+            'name': repo_name,
+            'owner': repo_owner,
+        }
+
+        resp = self.client.post(self.libraries_url, data)
+        self.assertEqual(403, resp.status_code)
+
+    def test_create_with_invalid_name_parameter(self):
+        self.login_as(self.admin)
+
+        repo_name = randstring(6)
+        repo_owner = self.user.username
+
+        data = {
+            'invalid_name': repo_name,
+            'owner': repo_owner,
+        }
+
+        resp = self.client.post(self.libraries_url, data)
+        self.assertEqual(400, resp.status_code)
+
+    def test_create_with_unexisted_user(self):
+        self.login_as(self.admin)
+
+        repo_name = randstring(6)
+        repo_owner = '%s@email.com' % randstring(6)
+
+        data = {
+            'name': repo_name,
+            'owner': repo_owner,
+        }
+
+        resp = self.client.post(self.libraries_url, data)
+        self.assertEqual(404, resp.status_code)
+
 
 class LibraryTest(BaseTestCase):
 

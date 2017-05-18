@@ -308,6 +308,9 @@
         <% if (cur_tab == 'trash') { %>
         <button class="js-clean fright hide">{% trans "Clean" %}</button>
         <% } %>
+        <% if (cur_tab == 'all') { %>
+        <button class="js-add-library fright">{% trans "New Library" %}</button>
+        <% } %>
     </div>
 </script>
 
@@ -334,6 +337,19 @@
     <div class="empty-tips hide">
         <h2 class="alc">{% trans "No libraries" %}</h2>
     </div>
+</script>
+
+<script type="text/template" id="library-add-form-tmpl">
+    <form id="library-add-form" action="" method="post" class="hide">{% csrf_token %}
+        <h3 id="dialogTitle">{% trans "New Library" %}</h3>
+        <label for="library-name">{% trans "Name" %}</label><br />
+        <input type="text" name="library_name" value="" class="input" id="library-name" /><br />
+        <label for="library-owner">{% trans "Owner" %}</label>
+        <span class="tip">{% trans "(If left blank, owner will be admin)" %}</span><br />
+        <input type="hidden" name="library_owner" value="" id="library-owner" />
+        <p class="error hide"></p>
+        <input type="submit" class="submit" value="{% trans "Submit" %}" />
+    </form>
 </script>
 
 <script type="text/template" id="search-libraries-tmpl">
