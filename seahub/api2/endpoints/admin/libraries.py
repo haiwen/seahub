@@ -138,6 +138,40 @@ class AdminLibraries(APIView):
 
         return Response({"page_info": page_info, "repos": return_results})
 
+    def post(self, request):
+        """ Admin create library
+
+        Permission checking:
+        1. only admin can perform this action.
+        """
+
+        repo_name = request.data.get('name', None)
+        if not repo_name:
+            error_msg = 'name invalid.'
+            return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
+
+        username = request.user.username
+        repo_owner = request.data.get('owner', None)
+        if repo_owner:
+            try:
+                User.objects.get(email=repo_owner)
+            except User.DoesNotExist:
+                error_msg = 'User %s not found.' % repo_owner
+                return api_error(status.HTTP_404_NOT_FOUND, error_msg)
+        else:
+            repo_owner = username
+
+        try:
+            repo_id = seafile_api.create_repo(repo_name, '', repo_owner, None)
+        except Exception as e:
+            logger.error(e)
+            error_msg = 'Internal Server Error'
+            return api_error(status.HTTP_500_INTERNAL_SERVER_ERROR, error_msg)
+
+        repo = seafile_api.get_repo(repo_id)
+        repo_info = get_repo_info(repo)
+        return Response(repo_info)
+
 class AdminLibrary(APIView):
 
     authentication_classes = (TokenAuthentication, SessionAuthentication)

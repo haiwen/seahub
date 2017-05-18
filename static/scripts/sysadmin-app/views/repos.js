@@ -14,6 +14,7 @@ define([
 
         tabNavTemplate: _.template($("#libraries-tabnav-tmpl").html()),
         template: _.template($("#libraries-tmpl").html()),
+        libraryAddFormtemplate: _.template($("#library-add-form-tmpl").html()),
 
         initialize: function() {
             this.repoCollection = new RepoCollection();
@@ -36,8 +37,65 @@ define([
         },
 
         events: {
+            'click .js-add-library': 'addLibrary',
             'click #paginator .js-next': 'getNextPage',
             'click #paginator .js-previous': 'getPreviousPage'
+        },
+
+        addLibrary: function () {
+            var $form = $(this.libraryAddFormtemplate()),
+                repos = this.repoCollection,
+                _this = this;
+
+            $form.modal();
+            $('#simplemodal-container').css({'height':'auto'});
+
+            $('[name="library_owner"]', $form).select2($.extend(
+                Common.contactInputOptionsForSelect2(), {
+                width: '268px',
+                containerCss: {'margin-bottom': '5px'},
+                maximumSelectionSize: 1,
+                placeholder: gettext("Search user or enter email and press Enter"), // to override 'placeholder' returned by `Common.conta...`
+                formatSelectionTooBig: gettext("You cannot select any more choices")
+            }));
+
+            $form.submit(function() {
+                var library_name = $.trim($('[name="library_name"]', $form).val());
+                var library_owner = $.trim($('[name="library_owner"]', $form).val());
+                var $error = $('.error', $form);
+                var $submitBtn = $('[type="submit"]', $form);
+
+                if (!library_name) {
+                    $error.html(gettext("Name is required.")).show();
+                    return false;
+                }
+
+                $error.hide();
+                Common.disableButton($submitBtn);
+
+                repos.create({'name': library_name, 'owner': library_owner}, {
+                    prepend: true,
+                    wait: true,
+                    success: function() {
+                        if (repos.length == 1) {
+                            repos.reset(repos.models);
+                        }
+                        Common.closeModal();
+                    },
+                    error: function(collection, response, options) {
+                        var err_msg;
+                        if (response.responseText) {
+                            err_msg = response.responseJSON.error_msg;
+                        } else {
+                            err_msg = gettext('Please check the network.');
+                        }
+                        $error.html(err_msg).show();
+                        Common.enableButton($submitBtn);
+                    }
+                });
+                return false;
+            });
+            return false;
         },
 
         initPage: function() {
@@ -142,9 +200,13 @@ define([
             }
         },
 
-        addOne: function(library) {
+        addOne: function(library, collection, options) {
             var view = new RepoView({model: library});
-            this.$tableBody.append(view.render().el);
+            if (options.prepend) {
+                this.$tableBody.prepend(view.render().el);
+            } else {
+                this.$tableBody.append(view.render().el);
+            }
         }
     });
 
