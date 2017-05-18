@@ -201,6 +201,19 @@ class FileShare(models.Model):
         else:
             return '%s/d/%s/' % (service_url, self.token)
 
+    def get_permissions(self):
+        perm_dict = {}
+        if self.permission == FileShare.PERM_VIEW_DL:
+            perm_dict['can_preview'] = True
+            perm_dict['can_download'] = True
+        elif self.permission == FileShare.PERM_VIEW_ONLY:
+            perm_dict['can_preview'] = True
+            perm_dict['can_download'] = False
+        else:
+            assert False
+        return perm_dict
+
+
 class OrgFileShareManager(models.Manager):
     def set_org_file_share(self, org_id, file_share):
         """Set a share link as org share link.
