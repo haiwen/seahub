@@ -45,7 +45,40 @@ class AccountTest(BaseTestCase):
     def _do_update(self):
         return self.client.put(
             reverse('api2-account', args=[self.user1.username]),
-            'password=654321&is_staff=1&is_active=0&name=user1&storage=102400',
+            'password=654321&is_staff=1&is_active=0&name=user1&storage=102400&login_id=hello',
+            'application/x-www-form-urlencoded',
+        )
+
+    def _do_update_name(self):
+        return self.client.put(
+            reverse('api2-account', args=[self.user1.username]),
+            'name=user1',
+            'application/x-www-form-urlencoded',
+        )
+
+    def _do_update_loginid(self):
+        return self.client.put(
+            reverse('api2-account', args=[self.user1.username]),
+            'login_id=hello',
+            'application/x-www-form-urlencoded',
+        )
+
+    def _do_update_loginid_useemptystring(self):
+        return self.client.put(
+            reverse('api2-account', args=[self.user1.username]),
+            'login_id=',
+            'application/x-www-form-urlencoded',
+        )
+
+    def _do_update_loginid_sendagain(self):
+        self.client.put(
+            reverse('api2-account', args=[self.user1.username]),
+            'login_id=test',
+            'application/x-www-form-urlencoded',
+        )
+        return self.client.put(
+            reverse('api2-account', args=[self.user1.username]),
+            'login_id=test',
             'application/x-www-form-urlencoded',
         )
 
@@ -77,7 +110,7 @@ class AccountTest(BaseTestCase):
 
         resp = self._do_get_info()
         json_resp = json.loads(resp.content)
-        assert len(json_resp) == 9
+        assert len(json_resp) == 10
         assert json_resp['email'] == self.user1.username
         assert json_resp['is_staff'] is False
         assert json_resp['is_active'] is True
@@ -100,9 +133,37 @@ class AccountTest(BaseTestCase):
         self.assertTrue(User.objects.get(self.user1.username).is_staff)
         self.assertFalse(User.objects.get(self.user1.username).is_active)
         self.assertEqual(Profile.objects.get_profile_by_user(
+            self.user1.username).login_id, 'hello')
+        self.assertEqual(Profile.objects.get_profile_by_user(
             self.user1.username).nickname, 'user1')
         self.assertEqual(seafile_api.get_user_quota(
             self.user1.username), 102400000000)
+
+    def test_update_name(self):
+        """only test name"""
+        self.login_as(self.admin)
+        resp = self._do_update_name()
+        self.assertEqual(Profile.objects.get_profile_by_user(
+            self.user1.username).nickname, 'user1')
+
+    def test_update_loginid(self):
+        """only test loginid"""
+        self.login_as(self.admin)
+        resp = self._do_update_loginid()
+        self.assertEqual(Profile.objects.get_profile_by_user(
+            self.user1.username).login_id, 'hello')
+
+    def test_update_loginid_useemptystring(self):
+        """test loginid, longid send the empty"""
+        self.login_as(self.admin)
+        resp = self._do_update_loginid_useemptystring()
+        self.assertEqual(400, resp.status_code)
+
+    def test_update_loginid_sendagain(self):
+        """test loginid,sent twice"""
+        self.login_as(self.admin)
+        resp = self._do_update_loginid_sendagain()
+        self.assertEqual(400, resp.status_code)
 
     def test_refresh_profile_cache_after_update(self):
         self.login_as(self.admin)

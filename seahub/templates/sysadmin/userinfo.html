@@ -53,6 +53,18 @@
                 <span id="set-name" title="{% trans "Edit"%}" class="sf2-icon-edit op-icon"></span>
             </dd>
 
+            <dt>{% trans "Login ID" %}</dt>
+            <dd>
+                <span id="loginid">
+                    {% if profile and profile.login_id %}
+                    {{ profile.login_id }}
+                    {% else %}
+                    --
+                    {% endif %}
+                </span>
+                <span id="set-loginid" title="{% trans "Edit"%}" class="sf2-icon-edit op-icon"></span>
+            </dd>
+
             <dt>{% trans "Department" %}</dt>
             <dd>
                 <span id="department">
@@ -94,6 +106,13 @@
         <form id="set-dept-form" method="post" action="" class="hide">{% csrf_token %}
             <h3>{% trans "Set user department" %}</h3>
             <input type="text" name="department" class="input" value="" /><br />
+            <p class="error hide"></p>
+            <input type="submit" value="{% trans "Submit" %}" class="submit" />
+        </form>
+
+        <form id="set-loginid-form" method="post" action="" class="hide">{% csrf_token %}
+            <h3>{% trans "Set user Login ID" %}</h3>
+            <input type="text" name="loginid" class="input" value="" /><br />
             <p class="error hide"></p>
             <input type="submit" value="{% trans "Submit" %}" class="submit" />
         </form>
@@ -300,6 +319,10 @@ $('#set-name').click(function() {
     $("#set-name-form").modal({appendTo: "#main"});
     $('#simplemodal-container').css({'width':'auto', 'height':'auto'});
 });
+$('#set-loginid').click(function () {
+    $("#set-loginid-form").modal({appendTo:"#main"});
+    $('#simplemodal-container').css({'width':'auto', 'height':'auto'});
+})
 $('#set-dept').click(function() {
     $("#set-dept-form").modal({appendTo: "#main"});
     $('#simplemodal-container').css({'width':'auto', 'height':'auto'});
@@ -334,6 +357,43 @@ $('#set-name-form').submit(function() {
             } else {
                 $name.html(HTMLescape(data['name']));
             }
+            $.modal.close();
+        },
+        error: function(xhr, textStatus, errorThrown) {
+            var err_msg;
+            if (xhr.responseText) {
+                err_msg = $.parseJSON(xhr.responseText).error_msg;
+            } else {
+                err_msg = "{% trans "Failed. Please check the network." %}";
+            }
+            $error.html(err_msg).show();
+            enable($submitBtn);
+        }
+    });
+
+    return false;
+});
+
+$('#set-loginid-form').submit(function() {
+    var loginid = $.trim($('[name="loginid"]', $(this)).val());
+    var $loginid = $('#loginid');
+    var $error = $('.error', $(this));
+    var $submitBtn = $('[type="submit"]', $(this));
+    if (!loginid){
+        $error.html("{% trans "Login id can't be empty" %}").show();
+        return false;
+    }
+    disable($submitBtn);
+
+    $.ajax({
+        url: '{% url 'api2-account' email %}',
+        type: 'PUT',
+        dataType: 'json',
+        cache: false,
+        beforeSend: prepareCSRFToken,
+        data: {'login_id': loginid},
+        success: function(data) {
+            $loginid.html(HTMLescape(data['login_id']));
             $.modal.close();
         },
         error: function(xhr, textStatus, errorThrown) {

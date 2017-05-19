@@ -30,6 +30,7 @@ json_content_type = 'application/json; charset=utf-8'
 def get_account_info(user):
     email = user.username
     d_profile = DetailedProfile.objects.get_detailed_profile_by_user(email)
+    profile = Profile.objects.get_profile_by_user(email)
 
     info = {}
     info['email'] = email
@@ -39,6 +40,7 @@ def get_account_info(user):
     info['is_staff'] = user.is_staff
     info['is_active'] = user.is_active
     info['create_time'] = user.ctime
+    info['login_id'] = profile.login_id if profile else ''
     info['total'] = seafile_api.get_user_quota(email)
     info['usage'] = seafile_api.get_user_self_usage(email)
 
@@ -108,8 +110,16 @@ class Account(APIView):
             profile = Profile.objects.get_profile_by_user(email)
             if profile is None:
                 profile = Profile(user=email)
-
             profile.nickname = name
+            profile.save()
+
+        # update account loginid
+        loginid = request.data.get("login_id", '').strip()
+        if loginid != '':
+            profile = Profile.objects.get_profile_by_user(email)
+            if profile is None:
+                profile = Profile(user=email)
+            profile.login_id = loginid
             profile.save()
 
         # update account detailed profile
@@ -164,6 +174,18 @@ class Account(APIView):
             if "/" in name:
                 return api_error(status.HTTP_400_BAD_REQUEST,
                         _(u"Name should not include '/'."))
+
+        #argument check for loginid
+        loginid = request.data.get("login_id", None)
+        if loginid is not None:
+            loginid = loginid.strip()
+            if loginid == "":
+                return api_error(status.HTTP_400_BAD_REQUEST,
+                            _(u"Login id can't be empty"))
+            usernamebyloginid = Profile.objects.get_username_by_login_id(loginid)
+            if usernamebyloginid is not None:
+                return api_error(status.HTTP_400_BAD_REQUEST,
+                          _(u"Login id %s already exists." % loginid))
 
         # argument check for department
         department = request.data.get("department", None)
