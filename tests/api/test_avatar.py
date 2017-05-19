@@ -1,27 +1,18 @@
-import os
+import unittest
+
 from tests.api.apitestbase import ApiTestBase
 from tests.api.urls import AVATAR_BASE_URL, GROUPS_URL
-from tests.common.utils import randstring, urljoin
+from tests.common.utils import randstring, apiurl, urljoin
 
 class AvatarApiTest(ApiTestBase):
-
-    def test_get_user_avatar(self):
+    def test_user_avatar(self):
         avatar_url = urljoin(AVATAR_BASE_URL, 'user', self.username, '/resized/80/')
         info = self.get(avatar_url).json()
         self.assertIsNotNone(info['url'])
         self.assertIsNotNone(info['is_default'])
         self.assertIsNotNone(info['mtime'])
 
-    def test_create_user_avatar(self):
-        avatar_url = urljoin(AVATAR_BASE_URL, 'user', self.username, '/resized/80/')
-        avatar_file = os.path.join(os.getcwd(), 'media/img/seafile-logo.png')
-
-        with open(avatar_file) as f:
-            json_resp = self.post(avatar_url, files={'avatar': f}).json()
-
-        assert 'media/avatars' in json_resp['url']
-
-    def test_get_group_avatar(self):
+    def test_group_avatar(self):
         gname = randstring(16)
         data = {'group_name': gname}
         res = self.put(GROUPS_URL, data=data)
