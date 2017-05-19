@@ -96,7 +96,7 @@ except ImportError:
 
 try:
     from seahub.settings import ENABLE_ONLYOFFICE
-    from seahub.onlyoffice.settings import ONLYOFFICE_APIJS_URL, ONLYOFFICE_FILE_EXTENSION
+    from seahub.onlyoffice.settings import ONLYOFFICE_APIJS_URL, ONLYOFFICE_FILE_EXTENSION, ONLYOFFICE_EDITOR_LANGUAGE_SETTING
 except ImportError:
     ENABLE_ONLYOFFICE = False
 
@@ -486,6 +486,7 @@ def _file_view(request, repo_id, path):
             'callback_url': get_site_scheme_and_netloc().rstrip('/') + reverse('onlyoffice_editor_callback'),
             'can_edit': can_edit,
             'username': username,
+            'ONLYOFFICE_EDITOR_LANGUAGE_SETTING': ONLYOFFICE_EDITOR_LANGUAGE_SETTING,
         }, context_instance=RequestContext(request))
 
     # check if the user is the owner or not, for 'private share'
