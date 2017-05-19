@@ -104,11 +104,21 @@ class Account(APIView):
 
         # update account profile
         name = request.data.get("name", None)
-        if name is not None:
+        uloginid = request.data.get("login_id", None)
+        if name is not None or uloginid is not None:
+            # add judege  if exists uloginid
+            # if exists raise 400 bad request
+            profile_loginid = Profile.objects.get_username_by_login_id(uloginid)
+            if profile_loginid is not None:
+                return api_error(status.HTTP_400_BAD_REQUEST, "loginid has been registered")
+
+
             profile = Profile.objects.get_profile_by_user(email)
             if profile is None:
                 profile = Profile(user=email)
 
+
+            profile.login_id = uloginid
             profile.nickname = name
             profile.save()
 
