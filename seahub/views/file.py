@@ -57,7 +57,7 @@ from seahub.utils import render_error, is_org_context, \
 from seahub.utils.ip import get_remote_ip
 from seahub.utils.timeutils import utc_to_local
 from seahub.utils.file_types import (IMAGE, PDF, DOCUMENT, SPREADSHEET, AUDIO,
-                                     MARKDOWN, TEXT, VIDEO)
+                                     MARKDOWN, TEXT, VIDEO, PSD)
 from seahub.utils.star import is_file_starred
 from seahub.utils import HAS_OFFICE_CONVERTER, FILEEXT_TYPE_MAP
 from seahub.utils.http import json_response, int_param, BadRequestException, RequestForbbiddenException
