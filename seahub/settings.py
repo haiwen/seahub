@@ -520,10 +520,13 @@ THUMBNAIL_EXTENSION = 'png'
 THUMBNAIL_DEFAULT_SIZE = 48
 THUMBNAIL_SIZE_FOR_GRID = 192
 
-
 # size(MB) limit for generate thumbnail
 THUMBNAIL_IMAGE_SIZE_LIMIT = 20
 THUMBNAIL_IMAGE_ORIGINAL_SIZE_LIMIT = 256
+
+# video thumbnails
+ENABLE_VIDEO_THUMBNAIL = False
+THUMBNAIL_VIDEO_FRAME_TIME = 5  # use the frame at 5 second as thumbnail
 
 # template for create new office file
 OFFICE_TEMPLATE_ROOT = os.path.join(MEDIA_ROOT, 'office-template')
