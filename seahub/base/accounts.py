@@ -253,6 +253,10 @@ class User(object):
         ccnet_api.remove_emailuser(source, username)
         Profile.objects.delete_profile_by_user(username)
 
+        if settings.ENABLE_TERMS_AND_CONDITIONS:
+            from termsandconditions.models import UserTermsAndConditions
+            UserTermsAndConditions.objects.filter(username=username).delete()
+
     def get_and_delete_messages(self):
         messages = []
         return messages
