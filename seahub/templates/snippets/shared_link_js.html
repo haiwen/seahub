@@ -123,6 +123,7 @@ $('#gen-link-btn').click(function() {
         form_id = form.attr('id'),
         use_passwd = $('#link-passwd-switch').prop('checked'),
         set_expiration = $('#link-expire-switch').prop('checked'),
+        preview_only = $('[name="preview_only"]', form).prop('checked'),
         password, password_again, expire_days,
         post_data = {};
 
@@ -163,6 +164,13 @@ $('#gen-link-btn').click(function() {
         }
     }
 
+    if (preview_only) {
+        post_data["permissions"] = JSON.stringify({
+            "can_preview": true,
+            "can_download": false
+        });
+    }
+
     $.ajax({
             url: '{% url 'api-v2.1-share-links' %}',
             type: 'POST',
@@ -176,8 +184,9 @@ $('#gen-link-btn').click(function() {
 
                 $('#link-options, #link-options .error').addClass('hide');
                 $('#link-passwd, #link-expire').hide(); // slideDown use 'show()'
-                $('#link-passwd-switch, #link-expire-switch').attr('checked', false).parent().removeClass('checkbox-checked');
+                $('#link-passwd-switch, #link-expire-switch').prop('checked', false);
                 $('[type="password"], [name="expire-days"]', form).val('').attr('disabled', false).removeClass('input-disabled');
+                $('[name="preview_only"]', form).prop('checked', false);
 
                 $('#shared-link-text, #link-send-form input[name="file_shared_link"]').val(link);
                 $('#main').append('<p id="linkwidth" class="hide">' + link + '</p>');
