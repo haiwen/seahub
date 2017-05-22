@@ -8,24 +8,24 @@ import logging
 from StringIO import StringIO
 
 from PIL import Image
-try:
-    from moviepy.editor import VideoFileClip
-    _ENABLE_VIDEO_THUMBNAIL = True
-except ImportError:
-    _ENABLE_VIDEO_THUMBNAIL = False
 from seaserv import get_file_id_by_path, get_repo, get_file_size, \
     seafile_api
 
 from seahub.utils import gen_inner_file_get_url, get_file_type_and_ext
 from seahub.utils.file_types import VIDEO
 from seahub.settings import THUMBNAIL_IMAGE_SIZE_LIMIT, \
-    THUMBNAIL_EXTENSION, THUMBNAIL_ROOT, THUMBNAIL_IMAGE_ORIGINAL_SIZE_LIMIT
+    THUMBNAIL_EXTENSION, THUMBNAIL_ROOT, THUMBNAIL_IMAGE_ORIGINAL_SIZE_LIMIT,\
+    ENABLE_VIDEO_THUMBNAIL, THUMBNAIL_VIDEO_FRAME_TIME
 
 # Get an instance of a logger
 logger = logging.getLogger(__name__)
 
-if _ENABLE_VIDEO_THUMBNAIL:
-    logger.debug('Video thumbnail is enabled.')
+if ENABLE_VIDEO_THUMBNAIL:
+    try:
+        from moviepy.editor import VideoFileClip
+        logger.debug('Video thumbnail is enabled.')
+    except ImportError:
+        logger.error("Could not find moviepy installed.")
 else:
     logger.debug('Video thumbnail is disabled.')
 
@@ -106,7 +106,7 @@ def generate_thumbnail(request, repo_id, size, path):
 
     if filetype == VIDEO:
         # video thumbnails
-        if _ENABLE_VIDEO_THUMBNAIL:
+        if ENABLE_VIDEO_THUMBNAIL:
             return create_video_thumbnails(repo, file_id, path, size,
                                            thumbnail_file, file_size)
         else:
@@ -137,7 +137,8 @@ def create_video_thumbnails(repo, file_id, path, size, thumbnail_file, file_size
     inner_path = gen_inner_file_get_url(token, os.path.basename(path))
     clip = VideoFileClip(inner_path)
     tmp_path = str(os.path.join(tempfile.gettempdir(), '%s.png' % file_id[:8]))
-    clip.save_frame(tmp_path, t=5)  # save the frame in 5 second
+
+    clip.save_frame(tmp_path, t=THUMBNAIL_VIDEO_FRAME_TIME)
     t2 = timeit.default_timer()
     logger.debug('Create thumbnail of [%s](size: %s) takes: %s' % (path, file_size, (t2 - t1)))
 
