@@ -134,6 +134,11 @@ define([
                         _this.download_link = link; // for 'link send'
                         _this.download_link_token = link_data.token; // for 'link delete'
                         _this.$('#download-link').html(link);
+
+                        if (app.pageOptions.is_pro && !link_data.permissions.can_download) {
+                            _this.$('#direct-dl-link').hide().prev('dt').hide();
+                        }
+
                         _this.$('#direct-dl-link').html(link + '?dl=1');
                         if (link_data.is_expired) {
                             _this.$('#send-download-link').addClass('hide');
@@ -306,7 +311,13 @@ define([
 
                 if (link_type == 'download') {
                     _this.$('#download-link').html(data["link"]); // TODO: add 'click & select' func
+                    if (data.permissions.can_download) {
+                        _this.$('#direct-dl-link').show().prev('dt').show();
+                    } else {
+                        _this.$('#direct-dl-link').hide().prev('dt').hide();
+                    }
                     _this.$('#direct-dl-link').html(data['link'] + '?dl=1');
+
                     _this.download_link = data["link"]; // for 'link send'
                     _this.download_link_token = data["token"]; // for 'link delete'
                     _this.$('#download-link-operations').removeClass('hide');
