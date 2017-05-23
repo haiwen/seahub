@@ -312,6 +312,8 @@ var fileDiscussions = {
     init: function() {
         var _this = this;
 
+        this.setLocale();
+
         // events
         this.$el.on('click', '.js-close', function() {
             _this.hide();
@@ -339,6 +341,19 @@ var fileDiscussions = {
             return false;
         });
 
+    },
+
+    setLocale: function() {
+        var lang_code = '{{LANGUAGE_CODE}}';
+        var m_lang_code;
+        if (lang_code == 'en') {
+            m_lang_code = 'en-gb';
+        } else if (lang_code == 'es-ar' || lang_code == 'es-mx') {
+            m_lang_code = 'es';
+        } else {
+            m_lang_code = lang_code;
+        }
+        moment.locale(m_lang_code);
     },
 
     render: function () {
