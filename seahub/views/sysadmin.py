@@ -712,15 +712,16 @@ def user_remove(request, email):
 
         user.delete()
         messages.success(request, _(u'Successfully deleted %s') % user.username)
+
+        # send admin operation log signal
+        admin_op_detail = {
+            "email": email,
+        }
+        admin_operation.send(sender=None, admin_name=request.user.username,
+                operation=USER_DELETE, detail=admin_op_detail)
+
     except User.DoesNotExist:
         messages.error(request, _(u'Failed to delete: the user does not exist'))
-
-    # send admin operation log signal
-    admin_op_detail = {
-        "email": email,
-    }
-    admin_operation.send(sender=None, admin_name=request.user.username,
-            operation=USER_DELETE, detail=admin_op_detail)
 
     return HttpResponseRedirect(next)
 

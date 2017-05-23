@@ -9,6 +9,8 @@ from seahub.admin_log.signals import admin_operation
 
 ## operation: detail
 
+# 'repo_create': {'id': repo_id, 'name': repo_name, 'owner': repo_owner}
+REPO_CREATE = 'repo_create'
 # 'repo_transfer': {'id': repo_id, 'name': repo_name, 'from': from_user, 'to': to_user}
 REPO_TRANSFER = 'repo_transfer'
 # 'repo_delete': {'id': repo_id, 'name': repo_name, 'owner': repo_owner}
