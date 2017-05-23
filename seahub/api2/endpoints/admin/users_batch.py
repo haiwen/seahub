@@ -17,6 +17,8 @@ from seahub.api2.utils import api_error
 
 from seahub.base.accounts import User
 from seahub.utils.file_size import get_file_size_unit
+from seahub.admin_log.models import USER_DELETE
+from seahub.admin_log.signals import admin_operation
 
 logger = logging.getLogger(__name__)
 
@@ -111,5 +113,12 @@ class AdminUsersBatch(APIView):
                 result['success'].append({
                     'email': email,
                 })
+
+                # send admin operation log signal
+                admin_op_detail = {
+                    "email": email,
+                }
+                admin_operation.send(sender=None, admin_name=request.user.username,
+                        operation=USER_DELETE, detail=admin_op_detail)
 
         return Response(result)

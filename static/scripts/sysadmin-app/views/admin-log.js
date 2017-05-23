@@ -36,6 +36,13 @@ define([
             data.admin_user_url = user_url(data.email);
 
             switch(this.model.get('operation')) {
+                case 'repo_create':
+                    data.op_title = gettext("Create Library");
+                    data.op_details = gettext("Created library {name} with {owner} as its owner")
+                        .replace('{name}', '<span class="bold" title="' + detail.id + '">' + Common.HTMLescape(detail.name) + '</span>')
+                        .replace('{owner}', '<a href="' + user_url(detail.owner) + '">' + Common.HTMLescape(detail.owner) + '</a>');
+                    break;
+
                 case 'repo_delete':
                     data.op_title = gettext("Delete Library");
                     data.op_details = gettext("Deleted library {library_name}")
