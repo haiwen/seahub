@@ -12,7 +12,8 @@ var OfficePreviewer = function(repo_id, path, token, commit_id) {
             repo_id: repo_id,
             commit_id: this.commit_id,
             path: path,
-            doctype: 'document'
+            doctype: 'document',
+            convert_tmp_filename: '{{convert_tmp_filename}}'
         };
         if (this.token) {
             params['token'] = this.token;
@@ -60,8 +61,8 @@ OfficePreviewer.prototype.check_status = function() {
 };
 
 OfficePreviewer.prototype.load_page = function() {
-    var raw_path = '{{ SITE_ROOT }}office-convert/static/{{ repo.id  }}/' + this.commit_id + '{{ path|urlencode  }}/fake.pdf?token={{shared_token}}'
-    {% include "snippets/pdfjs_file_viewer.html" %}
+    var raw_path = '{{ SITE_ROOT }}office-convert/static/{{ repo.id  }}/' + this.commit_id + '{{ path|urlencode  }}/fake.pdf?token={{shared_token}}&convert_tmp_filename={{convert_tmp_filename}}'
+    {% include "snippets/pdfjs_core.html" %}
 };
 
 $(function() {

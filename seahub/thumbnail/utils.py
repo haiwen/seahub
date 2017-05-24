@@ -1,4 +1,5 @@
 # Copyright (c) 2012-2016 Seafile Ltd.
+# coding:utf-8
 import os
 import posixpath
 import timeit
@@ -7,7 +8,13 @@ import urllib2
 import logging
 from StringIO import StringIO
 
-from PIL import Image
+from seahub.base.templatetags.seahub_tags import email2nickname
+from PIL import Image, ImageDraw, ImageFont
+try:
+    from moviepy.editor import VideoFileClip
+    _ENABLE_VIDEO_THUMBNAIL = True
+except ImportError:
+    _ENABLE_VIDEO_THUMBNAIL = False
 from seaserv import get_file_id_by_path, get_repo, get_file_size, \
     seafile_api
 
@@ -78,7 +85,7 @@ def get_rotated_image(image):
 
     return image
 
-def generate_thumbnail(request, repo_id, size, path):
+def generate_thumbnail(request, repo_id, size, path, watermark=''):
     """ generate and save thumbnail if not exist
 
     before generate thumbnail, you should check:
@@ -101,7 +108,7 @@ def generate_thumbnail(request, repo_id, size, path):
     if not file_id:
         return (False, 400)
 
-    thumbnail_file = os.path.join(thumbnail_dir, file_id)
+    thumbnail_file = get_thumbnail_file_path(THUMBNAIL_ROOT, file_id, size, watermark=watermark)
     if os.path.exists(thumbnail_file):
         return (True, 200)
 
@@ -131,7 +138,7 @@ def generate_thumbnail(request, repo_id, size, path):
     try:
         image_file = urllib2.urlopen(inner_path)
         f = StringIO(image_file.read())
-        return _create_thumbnail_common(f, thumbnail_file, size)
+        return _create_thumbnail_common(f, thumbnail_file, size, email=watermark)
     except Exception as e:
         logger.error(e)
         return (False, 500)
@@ -162,7 +169,7 @@ def create_video_thumbnails(repo, file_id, path, size, thumbnail_file, file_size
         os.unlink(tmp_path)
         return (False, 500)
 
-def _create_thumbnail_common(fp, thumbnail_file, size):
+def _create_thumbnail_common(fp, thumbnail_file, size, **kwargs):
     """Common logic for creating image thumbnail.
 
     `fp` can be a filename (string) or a file object.
@@ -180,7 +187,48 @@ def _create_thumbnail_common(fp, thumbnail_file, size):
     if image.mode not in ["1", "L", "P", "RGB", "RGBA"]:
         image = image.convert("RGB")
 
-    image = get_rotated_image(image)
-    image.thumbnail((size, size), Image.ANTIALIAS)
+    if kwargs['email']:
+        image = add_text_to_image(image, email2nickname(kwargs['email']), kwargs['email'])
+    else:
+        image = get_rotated_image(image)
+        image.thumbnail((size, size), Image.ANTIALIAS)
     image.save(thumbnail_file, THUMBNAIL_EXTENSION)
     return (True, 200)
+
+def add_text_to_image(img, user, email):
+    try:
+        if img.mode != 'RGBA':
+            img = img.convert('RGBA')
+    except Exception as e:
+        logger.debug(e)
+    copyImgsize = img.size[0] if img.size[0] < img.size[1] else img.size[1]
+    font_size = (copyImgsize -200)/200*3 + 11
+
+    #calc the background size
+    font = ImageFont.truetype('seahub/thumbnail/font.ttc', font_size)
+    test_overlay = Image.new('RGBA', img.size, (0, 0, 0, 0))
+    image_draw = ImageDraw.Draw(test_overlay)
+
+    #calc the test size and position
+    margin_ = (copyImgsize - 200)/ 200 * 1 + 5
+    margin = [margin_, margin_]
+    test_size_x, test_size_y = image_draw.textsize(user, font=font)
+    test_size_email_x, test_size_email_y = image_draw.textsize(email, font=font)
+    text_xy_user = (img.size[0] - test_size_x - margin[0], img.size[1] - test_size_y - margin[1])
+    text_xy_email = (img.size[0] - test_size_email_x - margin[0], img.size[1] - 2 * test_size_email_y - margin[1])
+    max_width = max(test_size_x,test_size_email_x)
+
+    #draw the background of rect , and draw  the watermark
+    image_draw.rectangle([ img.size[0] - max_width - 2 * margin[0] , img.size[1] - 2 * test_size_y - 2 * margin[1] , img.size[0] + margin[0], img.size[1] + margin[1] ], fill=(0, 0, 0, 88))
+    image_draw.text(text_xy_user, user, font=font, fill=(255, 255, 245, 255))
+    image_draw.text(text_xy_email, email, font=font, fill=(255, 255, 245, 255))
+    image_width_text = Image.alpha_composite(img, test_overlay)
+    return image_width_text
+
+def get_thumbnail_file_path(root_dir, file_id, size, watermark=''):
+    if  watermark:
+        path = os.path.join(root_dir, str(size), file_id + '_' + watermark)
+    else:
+        path = os.path.join(root_dir, str(size), file_id)
+    return path
+
