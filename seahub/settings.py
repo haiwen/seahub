@@ -293,6 +293,8 @@ TRUSTED_IP_LIST = ['127.0.0.1']
 
 # Control the language that send email. Default to user's current language.
 SHARE_LINK_EMAIL_LANGUAGE = ''
+# enable or disable share link watermark
+ENABLE_SHARE_LINK_WATERMARK = True
 
 # check virus for files uploaded form upload link
 ENABLE_UPLOAD_LINK_VIRUS_CHECK = False
