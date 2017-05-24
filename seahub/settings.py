@@ -305,6 +305,8 @@ TRUSTED_IP_LIST = ['127.0.0.1']
 
 # Control the language that send email. Default to user's current language.
 SHARE_LINK_EMAIL_LANGUAGE = ''
+# enable or disable share link watermark
+ENABLE_SHARE_LINK_WATERMARK = False
 
 # check virus for files uploaded form upload link
 ENABLE_UPLOAD_LINK_VIRUS_CHECK = False
@@ -596,6 +598,9 @@ THUMBNAIL_VIDEO_FRAME_TIME = 5  # use the frame at 5 second as thumbnail
 
 # template for create new office file
 OFFICE_TEMPLATE_ROOT = os.path.join(MEDIA_ROOT, 'office-template')
+
+# location for image of watermark
+WATERMARK_PATH = os.path.join(SEAHUB_DATA_ROOT, 'watermark')
 
 #####################
 # Global AddressBook #

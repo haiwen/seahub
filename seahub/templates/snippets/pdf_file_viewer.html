@@ -12,7 +12,7 @@ var OfficePreviewer = function(repo_id, path, token, commit_id) {
             repo_id: repo_id,
             commit_id: this.commit_id,
             path: path,
-            doctype: 'document',
+            doctype: 'pdf',
             convert_tmp_filename: '{{convert_tmp_filename}}'
         };
         if (this.token) {
@@ -41,7 +41,7 @@ OfficePreviewer.prototype.check_status = function() {
                     setTimeout($.proxy(this.check_status, this), 2000);
                     break;
                 case 'ERROR':
-                    var str = "{% trans "Document convertion failed." %}";
+                    var str = "{% trans "add watermark failed." %}";
                     $('#file-view').html('<div id="file-view-tip"><p class="error">' + str + '</p></div>');
                     break;
                 case 'DONE':
@@ -51,7 +51,7 @@ OfficePreviewer.prototype.check_status = function() {
         error: function(xhr, textStatus, errorThrown) {
             var str;
             if (xhr.responseText) {
-                str = "{% trans "Document convertion failed." %}";
+                str = "{% trans "add watermark failed." %}";
             } else {
                 str = "{% trans "Failed. Please check the network." %}";
             }

@@ -58,7 +58,7 @@ $('#svg-view').show();
 
 {% if filetype == 'PDF' %}
     var raw_path = "{{ raw_path|escapejs }}";
-    {% include 'snippets/pdfjs_file_viewer.html' %}
+    {% include 'snippets/pdf_file_viewer.html' %}
 {% endif %}
 
 {% if filetype == 'Video' %}

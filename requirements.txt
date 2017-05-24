@@ -15,3 +15,5 @@ django-formtools
 qrcode
 requests
 requests_oauthlib==0.8.0
+reportlab==3.4.0
+pdfrw==0.4

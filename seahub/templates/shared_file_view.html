@@ -43,18 +43,20 @@ body {
             {% endif %}
         </div>
 
-        <div class="fright js-file-op">
-            {% if permissions.can_download %}
-            {% if request.user.is_authenticated and request.user.username != shared_by %}
-              {% if save_to_link %}
-              <button data="{{save_to_link}}" id="save" class="shared-file-op-btn">{% trans "Save to..."%}</button>
-              {% endif %}
-            {% endif %}
-            {% if not traffic_over_limit %}
-              <a href="{% if from_shared_dir %}?p={{path|urlencode}}&dl=1{% else %}?dl=1{% endif %}" class="obv-btn shared-file-op-btn">{% trans "Download" %} ({{file_size|filesizeformat}})</a>
-            {% endif %}
-            {% endif %}
-        </div>
+        {% if dl_enabled %}
+            <div class="fright js-file-op">
+                {% if permissions.can_download %}
+                {% if request.user.is_authenticated and request.user.username != shared_by %}
+                  {% if save_to_link %}
+                  <button data="{{save_to_link}}" id="save" class="shared-file-op-btn">{% trans "Save to..."%}</button>
+                  {% endif %}
+                {% endif %}
+                {% if not traffic_over_limit %}
+                  <a href="{% if from_shared_dir %}?p={{path|urlencode}}&dl=1{% else %}?dl=1{% endif %}" class="obv-btn shared-file-op-btn">{% trans "Download" %} ({{file_size|filesizeformat}})</a>
+                {% endif %}
+                {% endif %}
+            </div>
+        {% endif %}
     </div>
 
     {% include 'snippets/file_content_html.html' %}
