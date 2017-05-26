@@ -12,23 +12,31 @@
 
     <h4>URL</h4>
 
-    <div>
     {% with type="input" setting_display_name="SERVICE_URL" setting_name="SERVICE_URL" setting_val=config_dict.SERVICE_URL %}
         {% trans "The URL of the server, like https://seafile.example.com or http://192.168.1.2:8000" as help_tip %}
         {% include "snippets/web_settings_form.html" %}
     {% endwith %}
-    </div>
 
-    <div>
     {% with type="input" setting_display_name="FILE_SERVER_ROOT" setting_name="FILE_SERVER_ROOT" setting_val=config_dict.FILE_SERVER_ROOT %}
         {% trans "The internal URL for downloading/uploading files. Users will not be able to download/upload files if this is not set correctly. If you config Seafile behind Nginx/Apache, it should be SERVICE_URL/seafhttp, like https://seafile.example.com/seafhttp ." as help_tip %}
         {% include "snippets/web_settings_form.html" %}
     {% endwith %}
-    </div>
+
+
+    <h4>{% trans "Logo" %}</h4>
+
+    {% with type="file" setting_name="logo" file_path=logo_path %}
+        {% trans "Logo" as setting_display_name %}
+        {% include "snippets/web_settings_form.html" %}
+    {% endwith %}
+
+    {% with type="file" setting_name="favicon" file_path=favicon_path %}
+        {% trans "Favicon" as setting_display_name %}
+        {% include "snippets/web_settings_form.html" %}
+    {% endwith %}
 
     <h4>{% trans "User" %}</h4>
 
-    <div>
     {% with type="checkbox" setting_name="ENABLE_SIGNUP" setting_val=config_dict.ENABLE_SIGNUP %}
         {% trans "allow new registrations" as setting_display_name %}
         {% trans "Allow new user registrations. Uncheck this to prevent anyone from creating a new account." as help_tip %}
@@ -63,11 +71,9 @@
         {% include "snippets/web_settings_form.html" %}
     {% endwith %}
 
-    </div>
 
     <h4>{% trans "Password" %}</h4>
 
-    <div>
     {% with type="checkbox" setting_name="USER_STRONG_PASSWORD_REQUIRED" setting_val=config_dict.USER_STRONG_PASSWORD_REQUIRED %}
         {% trans "strong password" as setting_display_name %}
         {% trans "Force user to use a strong password when sign up or change password." as help_tip %}
@@ -91,7 +97,6 @@
         {% trans "The level(1-4) of an account password's strength. For example, '3' means password must have at least 3 of the following: num, upper letter, lower letter and other symbols" as help_tip %}
         {% include "snippets/web_settings_form.html" %}
     {% endwith %}
-    </div>
 
     {% if has_two_factor_auth %}
     {% with type="checkbox" setting_name="ENABLE_TWO_FACTOR_AUTH" setting_val=config_dict.ENABLE_TWO_FACTOR_AUTH %}
@@ -103,7 +108,6 @@
 
     <h4>{% trans "Library" %}</h4>
 
-    <div>
     {% with type="checkbox" setting_name="ENABLE_REPO_HISTORY_SETTING" setting_val=config_dict.ENABLE_REPO_HISTORY_SETTING %}
         {% trans "library history" as setting_display_name %}
         {% trans "Allow user to keep library history" as help_tip %}
@@ -121,52 +125,23 @@
         {% trans "The least number of characters an encrypted library password should include." as help_tip %}
         {% include "snippets/web_settings_form.html" %}
     {% endwith %}
-    </div>
 
-    <div>
     {% with type="input" setting_name="SHARE_LINK_PASSWORD_MIN_LENGTH" setting_val=config_dict.SHARE_LINK_PASSWORD_MIN_LENGTH %} {% include "snippets/web_settings_form.html" %}
         {% trans "download/upload link password minimum length" as setting_display_name %}
         {% trans "The least number of characters a download/upload link password should include." as help_tip %}
     {% endwith %}
-    </div>
 
-    <div>
     {% with type="checkbox" setting_display_name="ENABLE_USER_CREATE_ORG_REPO" setting_name="ENABLE_USER_CREATE_ORG_REPO" setting_val=config_dict.ENABLE_USER_CREATE_ORG_REPO %}
         {% trans "Allow user to add organization library. If unchecked, only system admin can add library." as help_tip %}
         {% include "snippets/web_settings_form.html" %}
     {% endwith %}
-    </div>
 
     <h4>{% trans "Sync" %}</h4>
 
-    <div>
     {% with type="checkbox" setting_display_name="DISABLE_SYNC_WITH_ANY_FOLDER" setting_name="DISABLE_SYNC_WITH_ANY_FOLDER" setting_val=config_dict.DISABLE_SYNC_WITH_ANY_FOLDER %}
         {% trans "If turn on, the desktop clients will not be able to sync a folder outside the default Seafile folder." as help_tip %}
         {% include "snippets/web_settings_form.html" %}
     {% endwith %}
-    </div>
-
-    <h4>{% trans "Custom" %}</h4>
-
-    <div id="custom-logo">
-        <label>{% trans "Logo:" %}
-        <img src="{{ MEDIA_URL }}{{ logo_path }}" alt="logo" width="80" height="80" />
-
-        <form id="custom-logo-form" enctype="multipart/form-data" method="post" action="" class="ovhd">{% csrf_token %}
-            <button type="button" id="custom-logo-btn">{% trans "Change" %}</button>
-            <input type="file" name="logo" id="custom-logo-input" />
-        </form>
-    </div>
-
-    <div id="custom-favicon">
-        <label>{% trans "Favicon:" %}
-        <img src="{{ MEDIA_URL }}{{ favicon_path }}" alt="favicon" width="80" height="80" />
-
-        <form id="custom-favicon-form" enctype="multipart/form-data" method="post" action="" class="ovhd">{% csrf_token %}
-            <button type="button" id="custom-favicon-btn">{% trans "Change" %}</button>
-            <input type="file" name="favicon" id="custom-favicon-input" />
-        </form>
-    </div>
 
 </div>
 {% endblock %}
@@ -269,19 +244,43 @@ $('.web-input-setting-form').submit(function() {
     return false;
 });
 
-$('#custom-logo-input, #custom-favicon-input').change(function() {
-    var file = $(this)[0].files[0];
+
+$('.web-setting-file-upload').each(function(index, item) {
+    var $this = $(item);
+    var $btn = $('.web-setting-file-upload-btn', $this);
+    $this.css({
+        'width': $btn.outerWidth(),
+        'overflow': 'hidden'
+    });
+});
+$('.web-setting-file-upload-input').each(function(index, item) {
+    var $this = $(item);
+    var $btn = $this.next('.web-setting-file-upload-btn');
+    $this.css({
+        // don't set width here, to make `cursor:pointer;` work
+        'height': $btn.outerHeight()
+    });
+});
+
+$('.web-setting-file-upload-input').change(function() {
+    var $input = $(this);
+    var file;
+    if ($input[0].files) {
+        file = $input[0].files[0];
+    } else {
+        return;
+    }
+
+    var input_name = $input.attr('name');
     var fd = new FormData();
     var url;
 
-    if ($(this).attr('id') == 'custom-logo-input') {
-        url = "{% url 'api-v2.1-admin-logo' %}";
-        fd.append('logo', file);
-    } else {
-        url = "{% url 'api-v2.1-admin-favicon' %}";
-        fd.append('favicon', file);
+    switch(input_name) {
+        case 'logo': url = '{% url 'api-v2.1-admin-logo' %}'; break;
+        case 'favicon': url = '{% url 'api-v2.1-admin-favicon' %}'; break;
     }
 
+    fd.append(input_name, file);
     $.ajax({
         url: url,
         type: 'POST',

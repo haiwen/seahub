@@ -3568,6 +3568,23 @@ img.thumbnail {
 .web-setting-form .submit {
     margin-right:5px;
 }
+.web-setting-file-input {
+    position:relative;
+}
+.web-setting-file-upload {
+    position:absolute;
+    right:0;
+    top:0;
+}
+.transparent-file-input {
+    position:absolute;
+    top:0;
+    right:0;
+    cursor:pointer;
+    margin:0;
+    opacity:0;
+    filter:alpha(opacity=0);
+}
 /* view shared dir */
 .mode-link {
     display:inline-block;

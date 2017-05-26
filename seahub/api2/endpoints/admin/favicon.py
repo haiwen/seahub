@@ -16,7 +16,7 @@ from seahub.settings import SEAHUB_DATA_ROOT, MEDIA_ROOT
 
 logger = logging.getLogger(__name__)
 
-CUSTOM_FAVICON_PATH = 'custom/favicon.png'
+CUSTOM_FAVICON_PATH = 'custom/favicon.ico'
 
 class AdminFavicon(APIView):
 
