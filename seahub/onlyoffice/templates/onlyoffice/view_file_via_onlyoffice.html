@@ -1,5 +1,10 @@
 {% load seahub_tags %}
 
+<head>
+<title>{{doc_title}}</title>
+<link rel="icon" href="{{ MEDIA_URL }}{{ favicon_path }}" />
+</head>
+
 {% block main_content %}
 <div id="placeholder"></div>
 {% endblock %}
@@ -24,7 +29,7 @@ var config = {
     "documentType": "{{document_type}}", // 'text' | 'spreadsheet' | 'presentation',
     "editorConfig": {
         "callbackUrl": "{{ callback_url }}",
-        "lang": "en-US",
+        "lang": {% if ONLYOFFICE_EDITOR_LANGUAGE_SETTING %}"{{ ONLYOFFICE_EDITOR_LANGUAGE_SETTING }}"{% else %}"{{ LANGUAGE_CODE }}"{% endif %},
         "mode": {% if can_edit %}"edit"{% else %}"view"{% endif %},
         "user": {
             "name": "{{ username|email2nickname }}"
