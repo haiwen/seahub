@@ -3585,6 +3585,9 @@ img.thumbnail {
     opacity:0;
     filter:alpha(opacity=0);
 }
+.web-setting-cur-img {
+    margin-bottom:5px;
+}
 /* view shared dir */
 .mode-link {
     display:inline-block;

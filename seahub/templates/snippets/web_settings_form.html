@@ -31,7 +31,8 @@
 <form class="web-setting-form" action="">{% csrf_token %}
     <h5 class="web-setting-name">{{ setting_display_name }}</h5>
     <div class="web-setting-input web-setting-file-input">
-        <img src="{{ MEDIA_URL }}{{ file_path }}" alt="" />
+        <img src="{{ MEDIA_URL }}{{ file_path }}" alt="" width="{{ file_width }}" height="{{file_height}}" class="web-setting-cur-img" />
+        <p class="tip">{{ help_tip }}</p>
         <div class="web-setting-file-upload">
             <input type="file" name="{{ setting_name }}" class="web-setting-file-upload-input transparent-file-input" />
             <button type="button" class="web-setting-file-upload-btn">{% trans "Change" %}</button>
