@@ -11,7 +11,9 @@
 
 {% block extra_script %}
 <script type="text/javascript" src="{{ ONLYOFFICE_APIJS_URL }}"></script>
+<script type="text/javascript" src="{{ MEDIA_URL }}js/jquery-1.12.1.min.js" id="jquery"></script>
 <script type="text/javascript">
+var ClientType = $(window).width() >= 768 ? "desktop" : "mobile";
 
 var config = {
     "document": {
@@ -27,6 +29,7 @@ var config = {
         },        
     },
     "documentType": "{{document_type}}", // 'text' | 'spreadsheet' | 'presentation',
+    "type": ClientType,
     "editorConfig": {
         "callbackUrl": "{{ callback_url }}",
         "lang": {% if ONLYOFFICE_EDITOR_LANGUAGE_SETTING %}"{{ ONLYOFFICE_EDITOR_LANGUAGE_SETTING }}"{% else %}"{{ LANGUAGE_CODE }}"{% endif %},
