@@ -1,0 +1,36 @@
+{% load seahub_tags %}
+
+{% block main_content %}
+<div id="placeholder"></div>
+{% endblock %}
+
+{% block extra_script %}
+<script type="text/javascript" src="{{ ONLYOFFICE_APIJS_URL }}"></script>
+<script type="text/javascript">
+
+var config = {
+    "document": {
+        "fileType": "{{ file_type }}",
+        "key": "{{doc_key}}",
+        "title": "{{doc_title}}",
+        "url": "{{doc_url}}",
+        "permissions": {
+            "download": true,
+            "edit": {% if can_edit %}true{% else %}false{% endif %},
+            "print": true,
+            "review": true
+        },        
+    },
+    "documentType": "{{document_type}}", // 'text' | 'spreadsheet' | 'presentation',
+    "editorConfig": {
+        "callbackUrl": "{{ callback_url }}",
+        "lang": "en-US",
+        "mode": {% if can_edit %}"edit"{% else %}"view"{% endif %},
+        "user": {
+            "name": "{{ username|email2nickname }}"
+        }
+    },
+}; 
+var docEditor = new DocsAPI.DocEditor("placeholder", config);
+</script>
+{% endblock %}
