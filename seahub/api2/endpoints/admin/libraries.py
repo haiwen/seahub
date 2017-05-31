@@ -18,7 +18,7 @@ from seahub.base.accounts import User
 from seahub.signals import repo_deleted
 from seahub.views import get_system_default_repo_id
 from seahub.admin_log.signals import admin_operation
-from seahub.admin_log.models import REPO_DELETE, REPO_TRANSFER
+from seahub.admin_log.models import REPO_CREATE, REPO_DELETE, REPO_TRANSFER
 
 try:
     from seahub.settings import MULTI_TENANCY
@@ -167,6 +167,15 @@ class AdminLibraries(APIView):
             logger.error(e)
             error_msg = 'Internal Server Error'
             return api_error(status.HTTP_500_INTERNAL_SERVER_ERROR, error_msg)
+
+        # send admin operation log signal
+        admin_op_detail = {
+            "id": repo_id,
+            "name": repo_name,
+            "owner": repo_owner,
+        }
+        admin_operation.send(sender=None, admin_name=request.user.username,
+                operation=REPO_CREATE, detail=admin_op_detail)
 
         repo = seafile_api.get_repo(repo_id)
         repo_info = get_repo_info(repo)
