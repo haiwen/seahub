@@ -238,7 +238,7 @@ define([
                     if (use_thumbnail) {
                         item_src = Common.getUrl($.extend(url_options, {
                             'name': 'thumbnail_get',
-                            'size': 1024
+                            'size': app.pageOptions.thumbnail_size_for_original
                         }));
                     } else {
                         item_src = Common.getUrl($.extend(url_options, {

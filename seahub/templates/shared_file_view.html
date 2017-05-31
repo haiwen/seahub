@@ -127,9 +127,9 @@ $('#file-save-form').submit(function() {
     {% if enable_thumbnail %}
         {% if from_shared_dir %}
         var encoded_path = encodePath('{{ path|escapejs }}'); // path: '/Portrait_8.jpg'
-        $('#image-view').attr('src', '{{ SITE_ROOT }}thumbnail/{{ shared_token }}/1024' + encoded_path);
+        $('#image-view').attr('src', '{{ SITE_ROOT }}thumbnail/{{ shared_token }}/{{ thumbnail_size_for_original }}' + encoded_path);
         {% else %}
-        $('#image-view').attr('src', '{{ SITE_ROOT }}thumbnail/{{ shared_token }}/1024/' + encodeURIComponent('{{file_name|escapejs}}'));
+        $('#image-view').attr('src', '{{ SITE_ROOT }}thumbnail/{{ shared_token }}/{{ thumbnail_size_for_original }}/' + encodeURIComponent('{{file_name|escapejs}}'));
         {% endif %}
         $('#image-view').on('error', function() { // fail to load thumbnail
             $(this).attr('src', '{{ raw_path|escapejs }}');

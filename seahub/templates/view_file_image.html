@@ -27,7 +27,7 @@ body { overflow:hidden; }
 {% if enable_thumbnail and not repo.encrypted %}
     var encoded_path = encodePath('{{ path|escapejs }}'); // path: '/Portrait_8.jpg'
     $('#image-view')
-    .attr('src', '{{ SITE_ROOT }}thumbnail/{{ repo.id }}/1024' + encoded_path)
+    .attr('src', '{{ SITE_ROOT }}thumbnail/{{ repo.id }}/{{ thumbnail_size_for_original }}' + encoded_path)
     .on('error', function() { // fail to load thumbnail
         $(this).attr('src', '{{ raw_path|escapejs }}');
     })
