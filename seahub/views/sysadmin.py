@@ -2068,6 +2068,63 @@ def sys_inst_admin(request):
             'page_next': page_next,
         }, context_instance=RequestContext(request))
 
+def get_user_uninst(request):
+    q = request.GET.get('q')
+    pro_user = Profile.objects.filter(Q(user__contains=q) & Q(institution=''))
+    res_user = []
+    for i in pro_user:
+        try:
+            u = User.objects.get(email=i.user)
+        except User.DoesNotExist as e:
+            continue
+        if not u.is_staff:
+            res_user.append(u)
+    res_data = []
+    for i in res_user:
+        res_data.append(dict(zip(['id', 'text'], [res_user.index(i),
+                i.username])))
+    return HttpResponse(json.dumps(res_data))
+
+@login_required
+@sys_staff_required
+@require_POST
+def sys_inst_add(request, inst_id):
+    content_type = 'application/json; charset=utf-8'
+    get_email = request.POST.get('email', '')
+    email_list = get_email.split(',')[:-1]
+    allow_email = []
+    deny_email = []
+    if len(email_list) == 0:
+        return HttpResponse(json.dumps({'error': _("User can't be empaty")}),
+                status=400)
+    try:
+        inst = Institution.objects.get(pk=inst_id)
+    except Institution.DoesNotExist:
+        return HttpResponse(json.dumps({'error': _("Inst does not exist")}),
+                status=400)
+    for email in email_list:
+        try:
+            User.objects.get(email=email)
+        except Exception as e:
+            deny_email.append(email)
+            continue
+        profile = Profile.objects.get_profile_by_user(email)
+        if not profile:
+            profile = Profile.objects.add_or_update(email, email)
+        if profile.institution:
+            deny_email.append(email)
+            continue
+        else:
+            profile.institution = inst.name
+        profile.save()
+        allow_email.append(email)
+    for email in deny_email:
+        messages.error(request, email + _(": add to insti fail"))
+    for email in allow_email:
+        messages.success(request, email + _(":add to insti success "))
+    return HttpResponse(json.dumps({'success': True}),
+            content_type=content_type)
+
 @login_required
 @sys_staff_required
 @require_POST
