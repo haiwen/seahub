@@ -17,7 +17,8 @@ from constance import config
 from seahub.settings import SEAFILE_VERSION, SITE_TITLE, SITE_NAME, \
     MAX_FILE_NAME, BRANDING_CSS, LOGO_PATH, LOGO_WIDTH, LOGO_HEIGHT,\
     SHOW_REPO_DOWNLOAD_BUTTON, SITE_ROOT, ENABLE_GUEST_INVITATION, \
-    FAVICON_PATH, ENABLE_THUMBNAIL, MEDIA_ROOT
+    FAVICON_PATH, ENABLE_THUMBNAIL, THUMBNAIL_SIZE_FOR_ORIGINAL, \
+    MEDIA_ROOT
 
 try:
     from seahub.settings import SEACLOUD_MODE
@@ -108,6 +109,7 @@ def base(request):
         'constance_enabled': dj_settings.CONSTANCE_ENABLED,
         'FILE_SERVER_ROOT': file_server_root,
         'enable_thumbnail': ENABLE_THUMBNAIL,
+        'thumbnail_size_for_original': THUMBNAIL_SIZE_FOR_ORIGINAL,
         'enable_guest_invitation': ENABLE_GUEST_INVITATION,
         'enable_terms_and_conditions': dj_settings.ENABLE_TERMS_AND_CONDITIONS,
         'is_pro': True if is_pro_version() else False,

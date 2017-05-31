@@ -37,7 +37,7 @@ define([
                 this.$('.img-name-link').attr('data-mfp-src', Common.getUrl({
                     'name': 'thumbnail_get',
                     'repo_id': data.repo_id,
-                    'size': 1024,
+                    'size': app.pageOptions.thumbnail_size_for_original,
                     'path': data.encoded_path
                 }));
             }

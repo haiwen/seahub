@@ -191,7 +191,7 @@ var magnificOptions = {
 $('[data-mfp-src]').each(function(index, item) {
     var $item = $(item);
     var file_name = $item.closest('.file-item').attr('data-name');
-    $item.attr('data-mfp-src', '{{ SITE_ROOT }}thumbnail/{{ token }}/1024' + encodePath(cur_path + file_name));
+    $item.attr('data-mfp-src', '{{ SITE_ROOT }}thumbnail/{{ token }}/{{ thumbnail_size_for_original }}' + encodePath(cur_path + file_name));
 });
 {% endif %}
 $('.img-name-link').magnificPopup(magnificOptions);
