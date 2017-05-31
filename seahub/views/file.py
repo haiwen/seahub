@@ -17,6 +17,7 @@ import re
 import mimetypes
 import urlparse
 import datetime
+import hashlib
 
 from django.core import signing
 from django.core.cache import cache
@@ -28,6 +29,7 @@ from django.http import HttpResponse, Http404, HttpResponseRedirect, HttpRespons
 from django.shortcuts import render_to_response
 from django.template import RequestContext
 from django.utils.http import urlquote
+from django.utils.encoding import force_bytes
 from django.utils.translation import ugettext as _
 from django.views.decorators.http import require_POST
 from django.template.defaultfilters import filesizeformat
@@ -455,7 +457,7 @@ def _file_view(request, repo_id, path):
 
     if ENABLE_ONLYOFFICE and not repo.encrypted and \
        fileext in ONLYOFFICE_FILE_EXTENSION:
-        doc_key = obj_id
+        doc_key = hashlib.md5(force_bytes(repo_id + path + obj_id)).hexdigest()[:20]
         if fileext in ('xls', 'xlsx', 'ods', 'fods', 'csv'):
             document_type = 'spreadsheet'
         elif fileext in ('pptx', 'ppt', 'odp', 'fodp', 'ppsx', 'pps'):
