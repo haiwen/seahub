@@ -36,6 +36,17 @@ define([
             data.admin_user_url = user_url(data.email);
 
             switch(this.model.get('operation')) {
+                case 'repo_create':
+                    data.op_title = gettext("Create Library");
+                    data.op_details = gettext("Created library {library_name} with {owner} as its owner")
+                        .replace('{owner}', '<a href="' + user_url(detail.owner) + '">' + Common.HTMLescape(detail.owner) + '</a>');
+                    if (app.pageOptions.is_pro && app.pageOptions.enable_sys_admin_view_repo) {
+                        data.op_details = data.op_details.replace('{library_name}', '<a href="#libs/' + encodeURIComponent(detail.id) + '/">' + Common.HTMLescape(detail.name) + '</a>');
+                    } else {
+                        data.op_details = data.op_details.replace('{library_name}', '<span class="bold" title="' + detail.id + '">' + Common.HTMLescape(detail.name) + '</span>');
+                    }
+                    break;
+
                 case 'repo_delete':
                     data.op_title = gettext("Delete Library");
                     data.op_details = gettext("Deleted library {library_name}")
