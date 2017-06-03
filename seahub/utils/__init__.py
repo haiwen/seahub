@@ -104,6 +104,7 @@ PREVIEW_FILEEXT = {
     VIDEO: ('mp4', 'ogv', 'webm', 'mov'),
     AUDIO: ('mp3', 'oga', 'ogg'),
     '3D': ('stl', 'obj'),
+    'PSD': ('psd',),
 }
 
 def gen_fileext_type_map():
