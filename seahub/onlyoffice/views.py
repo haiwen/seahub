@@ -51,7 +51,7 @@ def onlyoffice_editor_callback(request):
         username = doc_info['username']
         file_type = doc_info['file_type']
 
-        # check is converting OpenDocument format enabled and file extensions the right
+        # check is converting OpenDocument format enabled and file extensions are right
         if file_type in ('odt', 'ods', 'odp') and ONLYOFFICE_CONVERTSERVICE_URL:
             if file_type == 'odt':
                 file_type_input = "docx"
