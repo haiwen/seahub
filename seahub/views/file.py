@@ -98,7 +98,7 @@ except ImportError:
 
 try:
     from seahub.settings import ENABLE_ONLYOFFICE
-    from seahub.onlyoffice.settings import ONLYOFFICE_APIJS_URL, ONLYOFFICE_FILE_EXTENSION, ONLYOFFICE_EDITOR_LANGUAGE_SETTING
+    from seahub.onlyoffice.settings import ONLYOFFICE_APIJS_URL, ONLYOFFICE_FILE_EXTENSION ,ONLYOFFICE_EDIT_FILE_EXTENSION, ONLYOFFICE_EDITOR_LANGUAGE_SETTING
 except ImportError:
     ENABLE_ONLYOFFICE = False
 
@@ -469,11 +469,12 @@ def _file_view(request, repo_id, path):
             repo.id, obj_id, 'download', username, use_onetime=True)
         doc_url = gen_file_get_url(dl_token, u_filename)
         doc_info = json.dumps({'repo_id': repo_id, 'file_path': path,
-                               'username': username})
+                               'username': username, 'file_type': fileext})
         assert len(ONLYOFFICE_APIJS_URL) > 1
         cache.set("ONLYOFFICE_%s" % doc_key, doc_info, None)
 
-        if file_perm == 'rw' and ((not is_locked) or (is_locked and locked_by_me)):
+        if file_perm == 'rw' and ((not is_locked) or (is_locked and locked_by_me)) and \
+                   fileext in ONLYOFFICE_EDIT_FILE_EXTENSION:
             can_edit = True
         else:
             can_edit = False
