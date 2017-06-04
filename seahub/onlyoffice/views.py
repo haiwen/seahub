@@ -4,6 +4,7 @@ import logging
 import os
 import requests
 import urllib2
+import xml.etree.ElementTree
 
 from django.core.cache import cache
 from django.http import HttpResponse
@@ -11,7 +12,14 @@ from django.views.decorators.csrf import csrf_exempt
 from seaserv import seafile_api
 
 from .settings import VERIFY_ONLYOFFICE_CERTIFICATE
+
+try:
+   from .settings import ONLYOFFICE_CONVERTSERVICE_URL
+except:
+   ONLYOFFICE_CONVERTSERVICE_URL = False
+
 from seahub.utils import gen_file_upload_url
+from seahub.utils import gen_token
 
 # Get an instance of a logger
 logger = logging.getLogger(__name__)
@@ -36,6 +44,48 @@ def onlyoffice_editor_callback(request):
         # service. The link is present when the status value is equal to 2 or 3 only.
         url = post_data.get('url')
 
+        doc_key = post_data.get('key')
+        doc_info = json.loads(cache.get("ONLYOFFICE_%s" % doc_key))
+        repo_id = doc_info['repo_id']
+        file_path = doc_info['file_path']
+        username = doc_info['username']
+        file_type = doc_info['file_type']
+
+        # check is converting OpenDocument format enabled and file extensions the right
+        if file_type in ('odt', 'ods', 'odp') and ONLYOFFICE_CONVERTSERVICE_URL:
+            if file_type == 'odt':
+                file_type_input = "docx"
+            elif file_type == 'ods':
+                file_type_input = "xlsx"
+            else:
+                file_type_input = "pptx"
+
+            # build the json call parameter and send this to document conversion service
+            convert_data = {
+                "async": "false",
+                "key": gen_token(20),
+                "filetype": file_type_input,
+                "outputtype": file_type,
+                "url": url
+            }
+            try:
+                convert_resp = requests.post(ONLYOFFICE_CONVERTSERVICE_URL, data=json.dumps(convert_data), headers={'Content-Type': 'application/json'})
+            except:
+                logger.error("error: connect OnlyOffice Converter")
+            else:
+                # check the response, is alright then change the url for fetching file on document conversion service 
+                convert_resp_tree = xml.etree.ElementTree.fromstring(convert_resp.text)
+
+                try:
+                    convert_finish = convert_resp_tree.find('EndConvert').text
+                except:
+                    logger.error("error at converting")
+                else:
+                    convert_fileurl = convert_resp_tree.find('FileUrl').text
+                    if convert_finish:
+                        url = convert_fileurl
+
+
         context = None
         if VERIFY_ONLYOFFICE_CERTIFICATE is False:
             import ssl
@@ -47,12 +97,6 @@ def onlyoffice_editor_callback(request):
             logger.error(e)
         else:
             # update file
-            doc_key = post_data.get('key')
-            doc_info = json.loads(cache.get("ONLYOFFICE_%s" % doc_key))
-            repo_id = doc_info['repo_id']
-            file_path = doc_info['file_path']
-            username = doc_info['username']
-
             update_token = seafile_api.get_fileserver_access_token(
                 repo_id, 'dummy', 'update', username)
             update_url = gen_file_upload_url(update_token, 'update-api')
