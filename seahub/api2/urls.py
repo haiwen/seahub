@@ -102,7 +102,7 @@ urlpatterns = patterns('',
     url(r'^groups/(?P<group_id>\d+)/discussions/(?P<discuss_id>\d+)/$', GroupDiscussion.as_view(), name="api2-group-discussion"),
 
     # Deprecated
-    url(r'^repos/(?P<repo_id>[-0-9-a-f]{36})/fileops/delete/$', OpDeleteView.as_view()),
+    url(r'^repos/(?P<repo_id>[-0-9-a-f]{36})/fileops/delete/$', OpDeleteView.as_view(), name="api2-fileops-delete"),
     url(r'^repos/(?P<repo_id>[-0-9-a-f]{36})/fileops/copy/$', OpCopyView.as_view(), name="api2-fileops-copy"),
     url(r'^repos/(?P<repo_id>[-0-9-a-f]{36})/fileops/move/$', OpMoveView.as_view(), name="api2-fileops-move"),
 )
