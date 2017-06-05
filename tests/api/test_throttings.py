@@ -1,30 +1,41 @@
+from mock import patch
 import time
 
 from django.core.urlresolvers import reverse
-from django.conf import settings
 from django.test import override_settings
 
+from seahub.api2.throttling import SimpleRateThrottle
 from seahub.test_utils import BaseTestCase
 
 
-@override_settings(REST_FRAMEWORK = {'DEFAULT_THROTTLE_RATES':
-    {'ping': '600/minute', 'anon': '5000/minute', 'user': '10/minute',},})
 class ThrottingsTest(BaseTestCase):
 
     def setUp(self):
+        # clear cache between every test case to avoid cache issue in throtting
+        self.clear_cache()
+
         self.login_as(self.user)
 
-    def test_whitelist(self):
-        WHITELIST = settings.REST_FRAMEWORK_THROTTING_WHITELIST
+    @patch.object(SimpleRateThrottle, 'get_rate')
+    def test_default(self, mock_get_rate):
+        mock_get_rate.return_value = '10/minute'
+
         for i in range(12):
-            time.sleep(0.1)
             res = self.client.get(reverse('api2-pub-repos'))
-            if i > 10:
+            if i >= 10:
                 assert res.status_code == 429
-        WHITELIST.append('127.0.0.1')
-        count = 0
-        for i in range(12):
-            time.sleep(0.1)
-            res = self.client.get(reverse('api2-pub-repos'))
-            if i > 10:
+            else:
                 assert res.status_code == 200
+
+            time.sleep(0.1)
+
+    @override_settings(REST_FRAMEWORK_THROTTING_WHITELIST=['127.0.0.1'])
+    @patch.object(SimpleRateThrottle, 'get_rate')
+    def test_whitelist(self, mock_get_rate):
+        mock_get_rate.return_value = '10/minute'
+
+        for i in range(12):
+            res = self.client.get(reverse('api2-pub-repos'))
+            assert res.status_code == 200
+
+            time.sleep(0.1)

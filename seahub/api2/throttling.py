@@ -71,6 +71,9 @@ class SimpleRateThrottle(BaseThrottle):
     def __init__(self):
         if not getattr(self, 'rate', None):
             self.rate = self.get_rate()
+        print '000000000', self.THROTTLE_RATES
+#        print '-------', self.rate
+#        assert False
         self.num_requests, self.duration = self.parse_rate(self.rate)
 
     def get_cache_key(self, request, view):
@@ -116,14 +119,14 @@ class SimpleRateThrottle(BaseThrottle):
         On success calls `throttle_success`.
         On failure calls `throttle_failure`.
         """
+        print '-------', self.num_requests
         if self.rate is None:
             return True
 
-        if get_remote_ip(request) in \
-                settings.REST_FRAMEWORK_THROTTING_WHITELIST:
+        if get_remote_ip(request) in settings.REST_FRAMEWORK_THROTTING_WHITELIST:
             return True
-        else:
-            self.key = self.get_cache_key(request, view)
+
+        self.key = self.get_cache_key(request, view)
         if self.key is None:
             return True
 
