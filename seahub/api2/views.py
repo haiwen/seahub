@@ -2387,6 +2387,16 @@ class FileHistory(APIView):
         if not commits:
             return api_error(status.HTTP_404_NOT_FOUND, 'File not found.')
 
+        for commit in commits:
+            creator_name = commit.creator_name
+
+            user_info = {}
+            user_info['email'] = creator_name
+            user_info['name'] = email2nickname(creator_name)
+            user_info['contact_email'] = Profile.objects.get_contact_email_by_user(creator_name)
+
+            commit._dict['user_info'] = user_info
+
         return HttpResponse(json.dumps({"commits": commits}, cls=SearpcObjEncoder), status=200, content_type=json_content_type)
 
 class FileSharedLinkView(APIView):
