@@ -373,6 +373,7 @@ REST_FRAMEWORK = {
     # https://github.com/tomchristie/django-rest-framework/issues/2891
     'UNICODE_JSON': False,
 }
+REST_FRAMEWORK_THROTTING_WHITELIST = []
 
 # file and path
 MAX_UPLOAD_FILE_NAME_LEN    = 255
