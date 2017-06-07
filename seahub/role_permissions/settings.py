@@ -22,6 +22,7 @@ DEFAULT_ENABLED_ROLE_PERMISSIONS = {
         'can_connect_with_ios_clients': True,
         'can_connect_with_desktop_clients': True,
         'can_export_files_via_mobile_client': True,
+        'role_quota': '',
     },
     GUEST_USER: {
         'can_add_repo': False,
@@ -36,6 +37,7 @@ DEFAULT_ENABLED_ROLE_PERMISSIONS = {
         'can_connect_with_ios_clients': False,
         'can_connect_with_desktop_clients': False,
         'can_export_files_via_mobile_client': False,
+        'role_quota': '',
     },
 }
 
