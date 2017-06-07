@@ -555,17 +555,21 @@ def delete_dirents(request, repo_id):
     username = request.user.username
     deleted = []
     undeleted = []
+
+    multi_files = ''
     for dirent_name in dirents_names:
         full_path = posixpath.join(parent_dir, dirent_name)
         if check_folder_permission(request, repo.id, full_path) != 'rw':
             undeleted.append(dirent_name)
             continue
-        try:
-            seafile_api.del_file(repo_id, parent_dir, dirent_name, username)
-            deleted.append(dirent_name)
-        except SearpcError, e:
-            logger.error(e)
-            undeleted.append(dirent_name)
+
+        multi_files += dirent_name + '\t'
+        deleted.append(dirent_name)
+
+    try:
+        seafile_api.del_file(repo_id, parent_dir, multi_files, username)
+    except SearpcError, e:
+        logger.error(e)
 
     return HttpResponse(json.dumps({'deleted': deleted, 'undeleted': undeleted}),
                         content_type=content_type)

@@ -1602,7 +1602,7 @@ class OpDeleteView(APIView):
     """
     Delete files.
     """
-    authentication_classes = (TokenAuthentication, )
+    authentication_classes = (TokenAuthentication, SessionAuthentication)
     permission_classes = (IsAuthenticated, )
 
     def post(self, request, repo_id, format=None):
@@ -1625,14 +1625,17 @@ class OpDeleteView(APIView):
             return api_error(status.HTTP_404_NOT_FOUND,
                              'File or directory not found.')
 
+        multi_files = ''
         for file_name in file_names.split(':'):
-            try:
-                seafile_api.del_file(repo_id, parent_dir,
-                                     file_name, username)
-            except SearpcError as e:
-                logger.error(e)
-                return api_error(HTTP_520_OPERATION_FAILED,
-                                 "Failed to delete file.")
+            multi_files += file_name + '\t'
+
+        try:
+            seafile_api.del_file(repo_id, parent_dir,
+                                 multi_files, username)
+        except SearpcError as e:
+            logger.error(e)
+            return api_error(HTTP_520_OPERATION_FAILED,
+                             "Failed to delete file.")
 
         return reloaddir_if_necessary(request, repo, parent_dir)
 
