@@ -1433,21 +1433,6 @@ def space_and_traffic(request):
                             context_instance=RequestContext(request))
     return HttpResponse(json.dumps({"html": html}), content_type=content_type)
 
-def get_share_in_repo_list(request, start, limit):
-    """List share in repos.
-    """
-    username = request.user.username
-    if is_org_context(request):
-        org_id = request.user.org.org_id
-        repo_list = seafile_api.get_org_share_in_repo_list(org_id, username,
-                                                           -1, -1)
-    else:
-        repo_list = seafile_api.get_share_in_repo_list(username, -1, -1)
-
-    for repo in repo_list:
-        repo.user_perm = check_folder_permission(request, repo.repo_id, '/')
-    return repo_list
-
 def get_groups_by_user(request):
     """List user groups.
     """
