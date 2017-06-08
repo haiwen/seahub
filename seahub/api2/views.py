@@ -76,8 +76,7 @@ from seahub.utils.timeutils import utc_to_local, datetime_to_isoformat_timestr
 from seahub.views import is_registered_user, check_file_lock, \
     group_events_data, get_diff, create_default_library, \
     list_inner_pub_repos, check_folder_permission
-from seahub.views.ajax import get_share_in_repo_list, get_groups_by_user, \
-    get_group_repos
+from seahub.views.ajax import get_groups_by_user, get_group_repos
 from seahub.views.file import get_file_view_path_and_perm, send_file_access_msg
 if HAS_FILE_SEARCH:
     from seahub_extra.search.views import search_keyword
@@ -459,7 +458,15 @@ class Repos(APIView):
                 repos_json.append(repo)
 
         if filter_by['shared']:
-            shared_repos = get_share_in_repo_list(request, -1, -1)
+
+            if is_org_context(request):
+                org_id = request.user.org.org_id
+                shared_repos = seafile_api.get_org_share_in_repo_list(org_id,
+                        email, -1, -1)
+            else:
+                shared_repos = seafile_api.get_share_in_repo_list(
+                        email, -1, -1)
+
             shared_repos.sort(lambda x, y: cmp(y.last_modify, x.last_modify))
             for r in shared_repos:
                 r.password_need = is_passwd_set(r.repo_id, email)
@@ -475,7 +482,7 @@ class Repos(APIView):
                     "size": r.size,
                     "size_formatted": filesizeformat(r.size),
                     "encrypted": r.encrypted,
-                    "permission": r.user_perm,
+                    "permission": r.permission,
                     "share_type": r.share_type,
                     "root": r.root,
                     "head_commit_id": r.head_cmmt_id,
