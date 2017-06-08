@@ -1853,6 +1853,11 @@ class OwaFileView(APIView):
             error_msg = 'Library %s not found.' % repo_id
             return api_error(status.HTTP_404_NOT_FOUND, error_msg)
 
+        action = request.GET.get('action', 'view')
+        if action not in ('view', 'edit'):
+            error_msg = 'action invalid.'
+            return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
+
         path = request.GET.get('path', None)
         if not path:
             error_msg = 'path invalid.'
@@ -1895,7 +1900,7 @@ class OwaFileView(APIView):
         # get wopi dict
         from seahub_extra.wopi.utils import get_wopi_dict
         username = request.user.username
-        wopi_dict = get_wopi_dict(username, repo_id, path)
+        wopi_dict = get_wopi_dict(username, repo_id, path, action)
 
         # send stats message
         send_file_access_msg(request, repo, path, 'api')
