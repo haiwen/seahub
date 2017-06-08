@@ -20,7 +20,7 @@ from seaserv import seafile_api
 
 from seahub.views import check_file_lock
 from seahub.utils import gen_inner_file_get_url, \
-    gen_file_upload_url, get_file_type_and_ext
+    gen_file_upload_url, get_file_type_and_ext, is_pro_version
 from seahub.base.templatetags.seahub_tags import email2nickname
 
 from seahub.settings import SITE_ROOT
@@ -129,10 +129,20 @@ class WOPIFilesView(APIView):
         result = {}
         # necessary
         result['BaseFileName'] = os.path.basename(file_path)
-        result['OwnerId'] = seafile_api.get_repo_owner(repo_id)
         result['Size'] = file_size
         result['UserId'] = request_user
         result['Version'] = obj_id
+
+        try:
+            if is_pro_version():
+                result['OwnerId'] = seafile_api.get_repo_owner(repo_id) or \
+                        seafile_api.get_org_repo_owner(repo_id)
+            else:
+                result['OwnerId'] = seafile_api.get_repo_owner(repo_id)
+        except Exception as e:
+            logger.error(e)
+            return HttpResponse(json.dumps({}), status=500,
+                                content_type=json_content_type)
 
         # optional
         result['UserFriendlyName'] = email2nickname(request_user)
