@@ -94,7 +94,6 @@ EMPTY_SHA1 = '0000000000000000000000000000000000000000'
 MAX_INT = 2147483647
 
 PREVIEW_FILEEXT = {
-    TEXT: ('ac', 'am', 'bat', 'c', 'cc', 'cmake', 'cpp', 'cs', 'css', 'diff', 'el', 'h', 'html', 'htm', 'java', 'js', 'json', 'less', 'make', 'org', 'php', 'pl', 'properties', 'py', 'rb', 'scala', 'script', 'sh', 'sql', 'txt', 'text', 'tex', 'vi', 'vim', 'xhtml', 'xml', 'log', 'csv', 'groovy', 'rst', 'patch', 'go'),
     IMAGE: ('gif', 'jpeg', 'jpg', 'png', 'ico', 'bmp'),
     DOCUMENT: ('doc', 'docx', 'ppt', 'pptx', 'odt', 'fodt', 'odp', 'fodp'),
     SPREADSHEET: ('xls', 'xlsx', 'ods', 'fods'),
@@ -334,12 +333,24 @@ def get_user_repos(username, org_id=None):
 
     return (owned_repos, shared_repos, groups_repos, public_repos)
 
+def get_conf_text_ext():
+    """
+    Get the conf of text ext in constance settings, and remove space.
+    """
+    if hasattr(config, 'TEXT_PREVIEW_EXT'):
+        text_ext = getattr(config, 'TEXT_PREVIEW_EXT').split(',')
+        return [x.strip() for x in text_ext]
+    return []
+
 def get_file_type_and_ext(filename):
     """
     Return file type and extension if the file can be previewd online,
     otherwise, return unknown type.
     """
     fileExt = os.path.splitext(filename)[1][1:].lower()
+    if fileExt in get_conf_text_ext():
+        return (TEXT, fileExt)
+
     filetype = FILEEXT_TYPE_MAP.get(fileExt)
     if filetype:
         return (filetype, fileExt)
