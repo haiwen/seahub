@@ -34,6 +34,7 @@ from django.utils.translation import ugettext as _
 from django.views.decorators.http import require_POST
 from django.template.defaultfilters import filesizeformat
 from django.views.decorators.csrf import csrf_exempt
+from constance import config
 
 from seaserv import seafile_api
 from seaserv import get_repo, send_message, get_commits, \
@@ -55,7 +56,7 @@ from seahub.utils import render_error, is_org_context, \
     mkstemp, EMPTY_SHA1, HtmlDiff, gen_inner_file_get_url, \
     user_traffic_over_limit, get_file_audit_events_by_path, \
     generate_file_audit_event_type, FILE_AUDIT_ENABLED, gen_token, \
-    get_site_scheme_and_netloc
+    get_site_scheme_and_netloc,get_conf_text_ext
 from seahub.utils.ip import get_remote_ip
 from seahub.utils.timeutils import utc_to_local
 from seahub.utils.file_types import (IMAGE, PDF, DOCUMENT, SPREADSHEET, AUDIO,
@@ -327,6 +328,14 @@ def can_preview_file(file_name, file_size, repo=None):
 
     if repo and repo.encrypted and (file_type in (DOCUMENT, SPREADSHEET, PDF)):
         return (False, _(u'The library is encrypted, can not open file online.'))
+
+    if file_ext in get_conf_text_ext(): # move the judge of utils.__init__ to  here
+        exceeds_limit, err_msg = file_size_exceeds_preview_limit(
+            file_size,file_type)
+        if exceeds_limit:
+            return (False, err_msg)
+        else:
+            return (True, None)
 
     if file_ext in FILEEXT_TYPE_MAP:  # check file extension
         exceeds_limit, err_msg = file_size_exceeds_preview_limit(file_size,
