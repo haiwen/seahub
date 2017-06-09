@@ -9,6 +9,8 @@ from django.core.urlresolvers import reverse
 from seahub.test_utils import BaseTestCase
 from seahub.utils import check_filename_with_rename
 
+from tests.common.utils import randstring
+
 class FileOpsApiTest(BaseTestCase):
 
     def create_new_repo(self):
@@ -30,10 +32,10 @@ class FileOpsApiTest(BaseTestCase):
 
         return dirent_name_list
 
-    def create_new_file(self):
-        new_file_name = u'file-中文'
+    def create_new_file(self, parent_dir='/'):
+        new_file_name = u'%s-中文' % randstring(6)
         seafile_api.post_empty_file(self.repo_id,
-                '/', new_file_name, self.user_name)
+                parent_dir, new_file_name, self.user_name)
 
         return new_file_name
 
@@ -49,6 +51,7 @@ class FileOpsApiTest(BaseTestCase):
 
         self.copy_url = reverse('api2-fileops-copy', args=[self.repo_id])
         self.move_url = reverse('api2-fileops-move', args=[self.repo_id])
+        self.delete_url = reverse('api2-fileops-delete', args=[self.repo_id])
 
     def tearDown(self):
         self.remove_repo()
@@ -191,3 +194,24 @@ class FileOpsApiTest(BaseTestCase):
         assert renamed_name in self.get_dirent_name_list(dst_repo_id)
 
         self.remove_repo(dst_repo_id)
+
+    def test_can_delete(self):
+        self.login_as(self.user)
+
+        file_name_1 = self.create_new_file()
+        file_name_2 = self.create_new_file()
+
+        # check file exists in repo
+        assert file_name_1 in self.get_dirent_name_list(self.repo_id)
+        assert file_name_2 in self.get_dirent_name_list(self.repo_id)
+
+        data = {
+            'file_names': file_name_1 + ':' + file_name_2,
+        }
+
+        resp = self.client.post(self.delete_url + '?p=/', data)
+        self.assertEqual(200, resp.status_code)
+
+        # check file not existes
+        assert file_name_1 not in self.get_dirent_name_list(self.repo_id)
+        assert file_name_2 not in self.get_dirent_name_list(self.repo_id)

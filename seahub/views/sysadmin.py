@@ -1945,7 +1945,7 @@ def sys_settings(request):
     if HAS_TWO_FACTOR_AUTH:
         DIGIT_WEB_SETTINGS.append('ENABLE_TWO_FACTOR_AUTH')
 
-    STRING_WEB_SETTINGS = ('SERVICE_URL', 'FILE_SERVER_ROOT',)
+    STRING_WEB_SETTINGS = ('SERVICE_URL', 'FILE_SERVER_ROOT', 'TEXT_PREVIEW_EXT')
 
     if request.is_ajax() and request.method == "POST":
         content_type = 'application/json; charset=utf-8'
