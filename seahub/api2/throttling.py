@@ -3,10 +3,13 @@
 Provides various throttling policies.
 """
 from __future__ import unicode_literals
+from django.conf import settings
 from django.core.cache import cache as default_cache
 from django.core.exceptions import ImproperlyConfigured
 from rest_framework.settings import api_settings
 import time
+
+from seahub.utils.ip import get_remote_ip
 
 
 class BaseThrottle(object):
@@ -114,6 +117,9 @@ class SimpleRateThrottle(BaseThrottle):
         On failure calls `throttle_failure`.
         """
         if self.rate is None:
+            return True
+
+        if get_remote_ip(request) in settings.REST_FRAMEWORK_THROTTING_WHITELIST:
             return True
 
         self.key = self.get_cache_key(request, view)

@@ -512,17 +512,21 @@ def delete_dirents(request, repo_id):
     username = request.user.username
     deleted = []
     undeleted = []
+
+    multi_files = ''
     for dirent_name in dirents_names:
         full_path = posixpath.join(parent_dir, dirent_name)
         if check_folder_permission(request, repo.id, full_path) != 'rw':
             undeleted.append(dirent_name)
             continue
-        try:
-            seafile_api.del_file(repo_id, parent_dir, dirent_name, username)
-            deleted.append(dirent_name)
-        except SearpcError, e:
-            logger.error(e)
-            undeleted.append(dirent_name)
+
+        multi_files += dirent_name + '\t'
+        deleted.append(dirent_name)
+
+    try:
+        seafile_api.del_file(repo_id, parent_dir, multi_files, username)
+    except SearpcError, e:
+        logger.error(e)
 
     return HttpResponse(json.dumps({'deleted': deleted, 'undeleted': undeleted}),
                         content_type=content_type)
@@ -966,21 +970,6 @@ def space_and_traffic(request):
     html = render_to_string('snippets/space_and_traffic.html', ctx,
                             context_instance=RequestContext(request))
     return HttpResponse(json.dumps({"html": html}), content_type=content_type)
-
-def get_share_in_repo_list(request, start, limit):
-    """List share in repos.
-    """
-    username = request.user.username
-    if is_org_context(request):
-        org_id = request.user.org.org_id
-        repo_list = seafile_api.get_org_share_in_repo_list(org_id, username,
-                                                           -1, -1)
-    else:
-        repo_list = seafile_api.get_share_in_repo_list(username, -1, -1)
-
-    for repo in repo_list:
-        repo.user_perm = check_folder_permission(request, repo.repo_id, '/')
-    return repo_list
 
 def get_groups_by_user(request):
     """List user groups.

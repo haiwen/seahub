@@ -143,6 +143,10 @@
         {% include "snippets/web_settings_form.html" %}
     {% endwith %}
 
+    {% with type="input" setting_display_name="Preview Text ext" setting_name="TEXT_PREVIEW_EXT" setting_val=config_dict.TEXT_PREVIEW_EXT %}
+        {% trans "Each suffix is separated by a comma" as help_tip %}
+        {% include "snippets/web_settings_form.html" %}
+    {% endwith %}
 </div>
 {% endblock %}
 
