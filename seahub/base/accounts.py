@@ -146,6 +146,9 @@ class UserPermissions(object):
     def can_export_files_via_mobile_client(self):
         return get_enabled_role_permissions_by_role(self.user.role)['can_export_files_via_mobile_client']
 
+    def role_quota(self):
+        return get_enabled_role_permissions_by_role(self.user.role).get('role_quota', '')
+
 
 class User(object):
     is_staff = False

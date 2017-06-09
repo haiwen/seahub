@@ -75,8 +75,7 @@ from seahub.utils.timeutils import utc_to_local, datetime_to_isoformat_timestr
 from seahub.views import is_registered_user, check_file_lock, \
     group_events_data, get_diff, create_default_library, \
     list_inner_pub_repos, check_folder_permission
-from seahub.views.ajax import get_share_in_repo_list, get_groups_by_user, \
-    get_group_repos
+from seahub.views.ajax import get_groups_by_user, get_group_repos
 from seahub.views.file import get_file_view_path_and_perm, send_file_access_msg
 if HAS_FILE_SEARCH:
     from seahub_extra.search.views import search_keyword
@@ -458,7 +457,15 @@ class Repos(APIView):
                 repos_json.append(repo)
 
         if filter_by['shared']:
-            shared_repos = get_share_in_repo_list(request, -1, -1)
+
+            if is_org_context(request):
+                org_id = request.user.org.org_id
+                shared_repos = seafile_api.get_org_share_in_repo_list(org_id,
+                        email, -1, -1)
+            else:
+                shared_repos = seafile_api.get_share_in_repo_list(
+                        email, -1, -1)
+
             shared_repos.sort(lambda x, y: cmp(y.last_modify, x.last_modify))
             for r in shared_repos:
                 r.password_need = is_passwd_set(r.repo_id, email)
@@ -474,7 +481,7 @@ class Repos(APIView):
                     "size": r.size,
                     "size_formatted": filesizeformat(r.size),
                     "encrypted": r.encrypted,
-                    "permission": r.user_perm,
+                    "permission": r.permission,
                     "share_type": r.share_type,
                     "root": r.root,
                     "head_commit_id": r.head_cmmt_id,
@@ -1619,7 +1626,7 @@ class OpDeleteView(APIView):
     """
     Delete files.
     """
-    authentication_classes = (TokenAuthentication, )
+    authentication_classes = (TokenAuthentication, SessionAuthentication)
     permission_classes = (IsAuthenticated, )
 
     def post(self, request, repo_id, format=None):
@@ -1642,14 +1649,17 @@ class OpDeleteView(APIView):
             return api_error(status.HTTP_404_NOT_FOUND,
                              'File or directory not found.')
 
+        multi_files = ''
         for file_name in file_names.split(':'):
-            try:
-                seafile_api.del_file(repo_id, parent_dir,
-                                     file_name, username)
-            except SearpcError as e:
-                logger.error(e)
-                return api_error(HTTP_520_OPERATION_FAILED,
-                                 "Failed to delete file.")
+            multi_files += file_name + '\t'
+
+        try:
+            seafile_api.del_file(repo_id, parent_dir,
+                                 multi_files, username)
+        except SearpcError as e:
+            logger.error(e)
+            return api_error(HTTP_520_OPERATION_FAILED,
+                             "Failed to delete file.")
 
         return reloaddir_if_necessary(request, repo, parent_dir)
 
@@ -1860,6 +1870,11 @@ class OwaFileView(APIView):
             error_msg = 'Library %s not found.' % repo_id
             return api_error(status.HTTP_404_NOT_FOUND, error_msg)
 
+        action = request.GET.get('action', 'view')
+        if action not in ('view', 'edit'):
+            error_msg = 'action invalid.'
+            return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
+
         path = request.GET.get('path', None)
         if not path:
             error_msg = 'path invalid.'
@@ -1901,7 +1916,7 @@ class OwaFileView(APIView):
 
         # get wopi dict
         username = request.user.username
-        wopi_dict = get_wopi_dict(username, repo_id, path)
+        wopi_dict = get_wopi_dict(username, repo_id, path, action)
 
         # send stats message
         send_file_access_msg(request, repo, path, 'api')
@@ -2404,6 +2419,16 @@ class FileHistory(APIView):
 
         if not commits:
             return api_error(status.HTTP_404_NOT_FOUND, 'File not found.')
+
+        for commit in commits:
+            creator_name = commit.creator_name
+
+            user_info = {}
+            user_info['email'] = creator_name
+            user_info['name'] = email2nickname(creator_name)
+            user_info['contact_email'] = Profile.objects.get_contact_email_by_user(creator_name)
+
+            commit._dict['user_info'] = user_info
 
         return HttpResponse(json.dumps({"commits": commits}, cls=SearpcObjEncoder), status=200, content_type=json_content_type)
 
