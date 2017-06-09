@@ -34,6 +34,7 @@ from django.utils.translation import ugettext as _
 from django.views.decorators.http import require_POST
 from django.template.defaultfilters import filesizeformat
 from django.views.decorators.csrf import csrf_exempt
+from constance import config
 
 from seaserv import seafile_api
 from seaserv import get_repo, send_message, get_commits, \
@@ -327,6 +328,19 @@ def can_preview_file(file_name, file_size, repo=None):
 
     if repo and repo.encrypted and (file_type in (DOCUMENT, SPREADSHEET, PDF)):
         return (False, _(u'The library is encrypted, can not open file online.'))
+
+    if hasattr(config, 'TEXT_PREVIEW_EXT'):
+        test_ext = getattr(config, 'TEXT_PREVIEW_EXT').split(',')
+        for i in range(len(test_ext)):
+            test_ext[i] = test_ext[i].strip()
+        if file_ext in test_ext:
+            exceeds_limit, err_msg = file_size_exceeds_preview_limit(
+                file_size,file_type)
+            if exceeds_limit:
+                return (False, err_msg)
+            else:
+                return (True, None)
+
 
     if file_ext in FILEEXT_TYPE_MAP:  # check file extension
         exceeds_limit, err_msg = file_size_exceeds_preview_limit(file_size,

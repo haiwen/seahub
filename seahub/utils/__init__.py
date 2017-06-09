@@ -94,7 +94,7 @@ EMPTY_SHA1 = '0000000000000000000000000000000000000000'
 MAX_INT = 2147483647
 
 PREVIEW_FILEEXT = {
-    TEXT: ('ac', 'am', 'bat', 'c', 'cc', 'cmake', 'cpp', 'cs', 'css', 'diff', 'el', 'h', 'html', 'htm', 'java', 'js', 'json', 'less', 'make', 'org', 'php', 'pl', 'properties', 'py', 'rb', 'scala', 'script', 'sh', 'sql', 'txt', 'text', 'tex', 'vi', 'vim', 'xhtml', 'xml', 'log', 'csv', 'groovy', 'rst', 'patch', 'go'),
+    #TEXT: ('ac', 'am', 'bat', 'c', 'cc', 'cmake', 'cpp', 'cs', 'css', 'diff', 'el', 'h', 'html', 'htm', 'java', 'js', 'json', 'less', 'make', 'org', 'php', 'pl', 'properties', 'py', 'rb', 'scala', 'script', 'sh', 'sql', 'txt', 'text', 'tex', 'vi', 'vim', 'xhtml', 'xml', 'log', 'csv', 'groovy', 'rst', 'patch', 'go'),
     IMAGE: ('gif', 'jpeg', 'jpg', 'png', 'ico', 'bmp'),
     DOCUMENT: ('doc', 'docx', 'ppt', 'pptx', 'odt', 'fodt', 'odp', 'fodp'),
     SPREADSHEET: ('xls', 'xlsx', 'ods', 'fods'),
@@ -115,6 +115,7 @@ def gen_fileext_type_map():
     for filetype in PREVIEW_FILEEXT.keys():
         for fileext in PREVIEW_FILEEXT.get(filetype):
             d[fileext] = filetype
+    #test_ext = getattr(config, 'TEXT_PREVIEW_EXT').split(',')
 
     return d
 FILEEXT_TYPE_MAP = gen_fileext_type_map()
@@ -341,6 +342,13 @@ def get_file_type_and_ext(filename):
     """
     fileExt = os.path.splitext(filename)[1][1:].lower()
     filetype = FILEEXT_TYPE_MAP.get(fileExt)
+    if hasattr(config, 'TEXT_PREVIEW_EXT'):
+        test_ext = getattr(config, 'TEXT_PREVIEW_EXT').split(',')
+        for i in range(len(test_ext)):
+            test_ext[i] = test_ext[i].strip()
+        if str(fileExt) in test_ext:
+            return (TEXT, fileExt)
+
     if filetype:
         return (filetype, fileExt)
     else:
