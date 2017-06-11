@@ -16,6 +16,7 @@ from django.template import RequestContext
 from django.utils.http import urlquote, base36_to_int, is_safe_url
 from django.utils.translation import ugettext as _
 from django.views.decorators.cache import never_cache
+from seaserv import seafile_api
 
 from seahub.auth import REDIRECT_FIELD_NAME, get_backends
 from seahub.auth import login as auth_login
@@ -28,7 +29,9 @@ from seahub.options.models import UserOptions
 from seahub.profile.models import Profile
 from seahub.utils import is_ldap_user
 from seahub.utils.ip import get_remote_ip
+from seahub.utils.file_size import get_quota_from_string
 from seahub.utils.two_factor_auth import two_factor_auth_enabled, handle_two_factor_auth
+from seahub.utils.user_permissions import get_user_role
 
 from constance import config
 
@@ -125,6 +128,11 @@ def _handle_login_form_valid(request, user, redirect_to, remember_me):
             user.username):
         redirect_to = reverse('auth_password_change')
         request.session['force_passwd_change'] = True
+
+    if user.permissions.role_quota():
+        user_role = get_user_role(user)
+        quota = get_quota_from_string(user.permissions.role_quota())
+        seafile_api.set_role_quota(user_role, quota)
 
     # password is valid, log user in
     request.session['remember_me'] = remember_me

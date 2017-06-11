@@ -23,3 +23,14 @@ def get_file_size_unit(unit_type):
         raise TypeError('Invalid unit type')
 
     return table.get(unit_type)
+
+def get_quota_from_string(quota_str):
+    quota_str = quota_str.lower()
+    if quota_str.endswith('g'):
+        quota = int(quota_str[:-1]) * get_file_size_unit('gb')
+    elif quota_str.endswith('m'):
+        quota = int(quota_str[:-1]) * get_file_size_unit('mb')
+    else:
+        return None
+
+    return quota
