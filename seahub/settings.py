@@ -394,6 +394,9 @@ ACTIVATE_AFTER_REGISTRATION = True
 # This option will be ignored if ``ACTIVATE_AFTER_REGISTRATION`` set to ``True``.
 REGISTRATION_SEND_MAIL = False
 
+#Control the language that send email.
+SHARE_LINK_EMAIL_LANGUAGE = ''
+
 REQUIRE_DETAIL_ON_REGISTRATION = False
 
 # Account initial password, for password resetting.
