@@ -9,7 +9,7 @@ from constance import config
 from django.core.cache import cache
 from django.http import HttpResponse, HttpResponseRedirect, Http404, \
     HttpResponseBadRequest
-from django.utils.translation import ugettext as _, activate, deactivate
+from django.utils.translation import ugettext as _, activate
 from django.contrib import messages
 from django.utils import timezone
 from django.utils.html import escape
@@ -152,6 +152,7 @@ def send_shared_link(request):
 
             if SHARE_LINK_EMAIL_LANGUAGE:
                 activate(SHARE_LINK_EMAIL_LANGUAGE)
+
             # Add email to contacts.
             mail_sended.send(sender=None, user=request.user.username,
                              email=to_email)
@@ -195,7 +196,6 @@ def send_shared_link(request):
             except Exception:
                 send_failed.append(to_email)
 
-        deactivate()
         if len(send_success) > 0:
             data = json.dumps({"send_success": send_success, "send_failed": send_failed})
             return HttpResponse(data, status=200, content_type=content_type)

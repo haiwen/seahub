@@ -279,6 +279,9 @@ SHARE_LINK_PASSWORD_MIN_LENGTH = 8
 # enable or disable share link audit
 ENABLE_SHARE_LINK_AUDIT = False
 
+# Control the language that send email. Default to user's current language.
+SHARE_LINK_EMAIL_LANGUAGE = ''
+
 # check virus for files uploaded form upload link
 ENABLE_UPLOAD_LINK_VIRUS_CHECK = False
 
@@ -393,9 +396,6 @@ ACTIVATE_AFTER_REGISTRATION = True
 # Whether or not send activation Email to user when registration complete.
 # This option will be ignored if ``ACTIVATE_AFTER_REGISTRATION`` set to ``True``.
 REGISTRATION_SEND_MAIL = False
-
-#Control the language that send email.
-SHARE_LINK_EMAIL_LANGUAGE = ''
 
 REQUIRE_DETAIL_ON_REGISTRATION = False
 
