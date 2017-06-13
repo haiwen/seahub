@@ -47,7 +47,8 @@ from seahub.avatar.templatetags.group_avatar_tags import api_grp_avatar_url, \
 from seahub.base.accounts import User
 from seahub.base.models import UserStarredFiles, DeviceToken
 from seahub.base.templatetags.seahub_tags import email2nickname, \
-    translate_seahub_time, translate_commit_desc_escape
+    translate_seahub_time, translate_commit_desc_escape, \
+    email2contact_email
 from seahub.group.views import remove_group_common, \
     rename_group_with_new_name, is_group_staff
 from seahub.group.utils import BadGroupNameError, ConflictGroupNameError, \
@@ -1470,6 +1471,7 @@ def get_dir_entrys_by_id(request, repo, path, dir_id, request_type=None):
                          "Failed to list dir.")
 
     dir_list, file_list = [], []
+    all_email = []
     for dirent in dirs:
         dtype = "file"
         entry = {}
@@ -1491,6 +1493,8 @@ def get_dir_entrys_by_id(request, repo, path, dir_id, request_type=None):
                 else:
                     entry["locked_by_me"] = False
 
+            entry['modifier_email'] = dirent.modifier
+            all_email.append(dirent.modifier)
         entry["type"] = dtype
         entry["name"] = dirent.obj_name
         entry["id"] = dirent.obj_id
@@ -1500,6 +1504,13 @@ def get_dir_entrys_by_id(request, repo, path, dir_id, request_type=None):
             dir_list.append(entry)
         else:
             file_list.append(entry)
+    #Reduce cache usage
+    all_email = set(all_email)
+    all_contact  = dict([(x,email2contact_email(x)) for x in all_email])
+    all_name  = dict([(x,email2nickname(x)) for x in all_email])
+    for fst in file_list:
+        fst['modifier_contact_email'] = all_contact.get(fst['modifier_email'])
+        fst['modifier_name'] = all_name.get(fst['modifier_email'])
 
     dir_list.sort(lambda x, y: cmp(x['name'].lower(), y['name'].lower()))
     file_list.sort(lambda x, y: cmp(x['name'].lower(), y['name'].lower()))

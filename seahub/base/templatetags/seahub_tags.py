@@ -18,7 +18,8 @@ from django.utils.html import escape
 from seahub.base.accounts import User
 from seahub.profile.models import Profile
 from seahub.profile.settings import NICKNAME_CACHE_TIMEOUT, NICKNAME_CACHE_PREFIX, \
-    EMAIL_ID_CACHE_TIMEOUT, EMAIL_ID_CACHE_PREFIX
+    EMAIL_ID_CACHE_TIMEOUT, EMAIL_ID_CACHE_PREFIX, CONTACT_CACHE_TIMEOUT, \
+    CONTACT_CACHE_PREFIX
 from seahub.cconvert import CConvert
 from seahub.po import TRANSLATION_MAP
 from seahub.shortcuts import get_first_object_or_none
@@ -371,7 +372,14 @@ def email2contact_email(value):
     if not value:
         return ''
 
-    return Profile.objects.get_contact_email_by_user(value)
+    key = normalize_cache_key(value, CONTACT_CACHE_PREFIX)
+    contact_email = cache.get(key)
+    if contact_email and contact_email.strip():
+        return contact_email
+
+    contact_email = Profile.objects.get_contact_email_by_user(value)
+    cache.set(key, contact_email, CONTACT_CACHE_TIMEOUT) 
+    return contact_email
 
 @register.filter(name='email2id')
 def email2id(value):
