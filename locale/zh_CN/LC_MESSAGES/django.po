@@ -14,7 +14,7 @@ msgstr ""
 "Project-Id-Version: seahub\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2017-05-09 13:14+0800\n"
-"PO-Revision-Date: 2017-05-09 05:38+0000\n"
+"PO-Revision-Date: 2017-06-13 02:25+0000\n"
 "Last-Translator: imwhatiam <imwhatiam123@gmail.com>\n"
 "Language-Team: Chinese (China) (http://www.transifex.com/haiwen/seahub/language/zh_CN/)\n"
 "MIME-Version: 1.0\n"
@@ -1993,7 +1993,7 @@ msgstr "资料库"
 #: seahub/templates/js/sysadmin-templates.html:131
 #: seahub/templates/js/sysadmin-templates.html:144
 msgid "Active Users"
-msgstr "活跃用户数"
+msgstr "激活用户数"
 
 #: seahub/institutions/templates/institutions/info.html:16
 #: seahub/templates/js/sysadmin-templates.html:131
@@ -2197,7 +2197,7 @@ msgstr "创建于/最后登录"
 #: seahub/templates/sysadmin/useradmin_table.html:44
 #: seahub/views/sysadmin.py:324
 msgid "Active"
-msgstr "活跃"
+msgstr "激活"
 
 #: seahub/institutions/templates/institutions/useradmin.html:35
 #: seahub/institutions/templates/institutions/useradmin.html:41
@@ -2213,7 +2213,7 @@ msgstr "活跃"
 #: seahub/templates/sysadmin/useradmin_table.html:45
 #: seahub/views/sysadmin.py:326
 msgid "Inactive"
-msgstr "不活跃"
+msgstr "未激活"
 
 #: seahub/institutions/templates/institutions/useradmin.html:66
 #: seahub/institutions/templates/institutions/useradmin_search.html:62
