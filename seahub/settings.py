@@ -496,7 +496,7 @@ SESSION_COOKIE_AGE = 24 * 60 * 60
 # Days of remembered login info (deafult: 7 days)
 LOGIN_REMEMBER_DAYS = 7
 
-SEAFILE_VERSION = '5.1.0'
+SEAFILE_VERSION = '6.1.1'
 
 # Compress static files(css, js)
 COMPRESS_URL = MEDIA_URL
