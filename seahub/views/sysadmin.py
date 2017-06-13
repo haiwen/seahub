@@ -514,8 +514,7 @@ def user_info(request, email):
     else:
         org_id = org[0].org_id
         org_name = org[0].org_name
-        space_usage = seafile_api.get_org_user_quota_usage(org_id,
-                                                                     email)
+        space_usage = seafile_api.get_org_user_quota_usage(org_id, email)
         space_quota = seafile_api.get_org_user_quota(org_id, email)
         owned_repos = seafile_api.get_org_owned_repo_list(org_id, email,
                                                           ret_corrupted=True)
