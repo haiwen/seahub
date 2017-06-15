@@ -60,7 +60,7 @@ from seahub.utils import render_error, is_org_context, \
 from seahub.utils.ip import get_remote_ip
 from seahub.utils.timeutils import utc_to_local
 from seahub.utils.file_types import (IMAGE, PDF, DOCUMENT, SPREADSHEET, AUDIO,
-                                     MARKDOWN, TEXT, VIDEO)
+                                     MARKDOWN, TEXT, VIDEO, PSD)
 from seahub.utils.star import is_file_starred
 from seahub.utils import HAS_OFFICE_CONVERTER, FILEEXT_TYPE_MAP
 from seahub.utils.http import json_response, int_param, BadRequestException, RequestForbbiddenException
@@ -309,6 +309,13 @@ def file_size_exceeds_preview_limit(file_size, file_type):
         else:
             return False, ''
     elif file_type in (VIDEO, AUDIO):
+            return False, ''
+    elif file_type == PSD:
+        if file_size > 200000000:
+            err = _(u'File size surpasses %s, can not be opened online.') % \
+                filesizeformat(200000000)
+            return True, err
+        else:
             return False, ''
     else:
         if file_size > FILE_PREVIEW_MAX_SIZE:
