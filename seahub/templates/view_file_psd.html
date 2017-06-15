@@ -1,0 +1,33 @@
+{% extends 'view_file_base.html' %}
+{% load i18n %}
+{% load url from future %}
+
+{% block extra_style %}{{block.super}}
+<style type="text/css">
+body { overflow:hidden; }
+#file-view { text-align:center; padding:30px 0; height:10000px; position:relative; }
+</style>
+{% endblock %}
+
+{% block file_view %}
+    <span class="loading-icon"></span>
+    <img src="" alt="{{ filename }}" id="image-view" class="hide" />
+{% endblock %}
+
+{% block extra_script %}{{ block.super }}
+
+<script type="text/javascript">
+{% if enable_thumbnail and not repo.encrypted %}
+    var encoded_path = encodePath('{{ path|escapejs }}'); // path: '/Portrait_8.jpg'
+    $('#image-view')
+    .attr('src', '{{ SITE_ROOT }}thumbnail/{{ repo.id }}/gen_psd_file' + encoded_path)
+    .on('error', function() { // fail to load thumbnail
+        $(this).attr('src', '{{ raw_path|escapejs }}');
+    })
+{% else %}
+    $('#image-view').attr('src', '{{ raw_path|escapejs }}');
+{% endif %}
+
+{% include 'snippets/psd_file_view_js.html' %}
+</script>
+{% endblock %}

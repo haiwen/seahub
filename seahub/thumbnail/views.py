@@ -19,7 +19,8 @@ from seahub.views import check_folder_permission
 from seahub.settings import THUMBNAIL_DEFAULT_SIZE, THUMBNAIL_EXTENSION, \
     THUMBNAIL_ROOT, ENABLE_THUMBNAIL
 from seahub.thumbnail.utils import generate_thumbnail, \
-    get_thumbnail_src, get_share_link_thumbnail_src
+    get_thumbnail_src, get_share_link_thumbnail_src, \
+    generate_psd_thumbnail
 from seahub.share.models import FileShare, check_share_link_common
 
 # Get an instance of a logger
@@ -78,6 +79,58 @@ def latest_entry(request, repo_id, size, path):
             return None
     else:
         return None
+
+def latest_psd_entry(request, repo_id, path):
+    obj_id = get_file_id_by_path(repo_id, path)
+    if obj_id:
+        try:
+            thumbnail_file = os.path.join(THUMBNAIL_ROOT, 'gen_psd_file', obj_id)
+            last_modified_time = os.path.getmtime(thumbnail_file)
+            # convert float to datatime obj
+            return datetime.datetime.fromtimestamp(last_modified_time)
+        except Exception as e:
+            # no thumbnail file exists
+            logger.error(e)
+            return None
+    else:
+        return None
+
+@login_required
+@condition(last_modified_func=latest_psd_entry)
+def psd_thumbnail_get(request, repo_id, path):
+    """
+    handle thumbnail of psd src from repo file list
+
+    return thumbnail of psd file to web
+    """
+    repo = get_repo(repo_id)
+    obj_id = get_file_id_by_path(repo_id, path)
+
+    # check if file exist
+    if not repo or not obj_id:
+        return HttpResponse()
+
+    # check if is allowed
+    if repo.encrypted or not ENABLE_THUMBNAIL or \
+        check_folder_permission(request, repo_id, path) is None:
+        return HttpResponse()
+
+    success = True
+    thumbnail_file = os.path.join(THUMBNAIL_ROOT, 'gen_psd_file', obj_id)
+    if not os.path.exists(thumbnail_file):
+        success, status_code = generate_psd_thumbnail(request, repo_id, path)
+
+    if success:
+        try:
+            with open(thumbnail_file, 'rb') as f:
+                thumbnail = f.read()
+                return HttpResponse(content=thumbnail, 
+                        content_type='image/' + THUMBNAIL_EXTENSION)
+        except IOError as e:
+            logger.error(e)
+            return HttpResponse()
+    else:
+        return HttpResponse()
 
 @login_required
 @condition(last_modified_func=latest_entry)

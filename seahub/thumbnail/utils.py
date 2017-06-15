@@ -6,6 +6,8 @@ import tempfile
 import urllib2
 import logging
 from StringIO import StringIO
+from PIL import Image, ImageCms
+from psd_tools import PSDImage
 
 from PIL import Image
 from seaserv import get_file_id_by_path, get_repo, get_file_size, \
@@ -72,6 +74,49 @@ def get_rotated_image(image):
         image = image.rotate(90)
 
     return image
+
+def generate_psd_thumbnail(request, repo_id, path):
+    """
+    generate and save thumbnail of psd if not exist
+
+    before generate thumbnail, you should check:
+    1. if source of  psd exist: should exist;
+    2. if ENABLE_THUMBNAIL: enabled;
+
+    about psdimage of psd_tools(1.4.0):
+    1. this need pillow>=3.4.0
+    2. only can load psd file from file path or stream of file.
+    """
+
+    thumbnail_dir = os.path.join(THUMBNAIL_ROOT, 'gen_psd_file')
+    if not os.path.exists(thumbnail_dir):
+        os.makedirs(thumbnail_dir)
+
+    file_id = get_file_id_by_path(repo_id, path)
+    if not file_id:
+        return (False, 400)
+
+    thumbnail_file = os.path.join(thumbnail_dir, file_id)
+    if os.path.exists(thumbnail_file):
+        return (True, 200)
+
+    repo = get_repo(repo_id)
+    filetype, fileext = get_file_type_and_ext(os.path.basename(path))
+    token = seafile_api.get_fileserver_access_token(repo_id, file_id, 'view',
+            '', use_onetime=True)
+
+    inner_path = gen_inner_file_get_url(token, os.path.basename(path))
+    try:
+        image_file = urllib2.urlopen(inner_path)
+        f = StringIO(image_file.read())
+        psd = PSDImage.from_stream(f, 'utf8')
+        png = psd.as_PIL()
+        png.save(thumbnail_file, THUMBNAIL_EXTENSION)
+        f.close()
+    except Exception as e:
+        logger.error(e)
+        return (False, 500)
+    return (True, 200)
 
 def generate_thumbnail(request, repo_id, size, path):
     """ generate and save thumbnail if not exist
