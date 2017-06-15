@@ -59,8 +59,8 @@ from seahub.utils import render_error, is_org_context, \
 
 from seahub.utils.ip import get_remote_ip
 from seahub.utils.timeutils import utc_to_local
-from seahub.utils.file_types import (IMAGE, PDF,
-        DOCUMENT, SPREADSHEET, AUDIO, MARKDOWN, TEXT, VIDEO)
+from seahub.utils.file_types import (IMAGE, PDF, DOCUMENT, SPREADSHEET, AUDIO,
+                                     MARKDOWN, TEXT, VIDEO, PSD)
 from seahub.utils.star import is_file_starred
 from seahub.utils.http import json_response, int_param, \
         BadRequestException, RequestForbbiddenException
@@ -71,12 +71,13 @@ from seahub.views import check_folder_permission, \
 if HAS_OFFICE_CONVERTER:
     from seahub.utils import (
         query_office_convert_status, add_office_convert_task,
-        prepare_converted_html, OFFICE_PREVIEW_MAX_SIZE, get_office_converted_page
+        prepare_converted_html, OFFICE_PREVIEW_MAX_SIZE,
+        get_office_converted_page
     )
 
 import seahub.settings as settings
 from seahub.settings import FILE_ENCODING_LIST, FILE_PREVIEW_MAX_SIZE, \
-    FILE_ENCODING_TRY_LIST, USE_PDFJS, MEDIA_URL
+    FILE_ENCODING_TRY_LIST, USE_PDFJS, MEDIA_URL, PSD_PREVIEW_MAX_SIZE
 
 try:
     from seahub.settings import ENABLE_OFFICE_WEB_APP
@@ -319,6 +320,13 @@ def file_size_exceeds_preview_limit(file_size, file_type):
         else:
             return False, ''
     elif file_type in (VIDEO, AUDIO):
+            return False, ''
+    elif file_type == PSD:
+        if file_size > PSD_PREVIEW_MAX_SIZE:
+            err = _(u'File size surpasses %s, can not be opened online.') % \
+                filesizeformat(PSD_PREVIEW_MAX_SIZE)
+            return True, err
+        else:
             return False, ''
     else:
         if file_size > FILE_PREVIEW_MAX_SIZE:

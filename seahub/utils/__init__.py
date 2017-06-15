@@ -100,6 +100,7 @@ PREVIEW_FILEEXT = {
     SPREADSHEET: ('xls', 'xlsx', 'ods', 'fods'),
     # SVG: ('svg',),
     PDF: ('pdf',),
+    PSD: ('psd',),
     MARKDOWN: ('markdown', 'md'),
     VIDEO: ('mp4', 'ogv', 'webm', 'mov'),
     AUDIO: ('mp3', 'oga', 'ogg'),
