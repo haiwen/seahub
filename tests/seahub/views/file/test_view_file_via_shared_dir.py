@@ -23,6 +23,7 @@ class ViewFileViaSharedDirTest(TestCase, Fixtures):
         self.remove_repo()
 
     def test_can_render(self):
+        assert self.fs.get_permissions()['can_download'] is True
         resp = self.client.get(
             reverse('view_file_via_shared_dir', args=[self.fs.token]) + \
             '?p=%s' % self.file

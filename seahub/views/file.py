@@ -1075,6 +1075,7 @@ def view_file_via_shared_dir(request, fileshare):
         ret_dict['err'] = err_msg
 
     traffic_over_limit = user_traffic_over_limit(shared_by)
+    permissions = fileshare.get_permissions()
 
     return render_to_response('shared_file_view.html', {
             'repo': repo,
@@ -1099,6 +1100,7 @@ def view_file_via_shared_dir(request, fileshare):
             'img_prev': img_prev,
             'img_next': img_next,
             'traffic_over_limit': traffic_over_limit,
+            'permissions': permissions,
             }, context_instance=RequestContext(request))
 
 def file_edit_submit(request, repo_id):
