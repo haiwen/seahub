@@ -20,6 +20,7 @@
                         <label for="password-again">{% trans "Password again"%}</label><br />
                         <input type="password" name="password_again" disabled="disabled" class="input input-disabled" id="password-again" />
                     </div>
+
                     <label class="checkbox-label">
                         <input type="checkbox" name="set-expiration" id="link-expire-switch" class="vam" />
                         <span class="checkbox-option vam">{% trans "Add auto expiration"%}</span>
@@ -28,6 +29,14 @@
                         <label for="expire-days">{% trans "Days" %}</label><br />
                         <input type="text" id="expire-days" name="expire-days" disabled="disabled" class="input input-disabled" />
                     </div>
+
+                    {% if is_pro %}
+                    <label class="checkbox-label">
+                        <input type="checkbox" name="preview_only" class="vam" />
+                        <span class="checkbox-option vam">{% trans "Online preview only" %}</span>
+                    </label>
+                    {% endif %}
+
                     <p class="error hide"></p>
                 </div>
                 <button id="gen-link-btn" class="hide">{% trans "Generate"%}</button>

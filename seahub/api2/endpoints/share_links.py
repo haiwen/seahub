@@ -70,7 +70,7 @@ def get_share_link_info(fileshare):
     data['ctime'] = ctime
     data['expire_date'] = expire_date
     data['is_expired'] = fileshare.is_expired()
-
+    data['permissions'] = fileshare.get_permissions()
     return data
 
 class ShareLinks(APIView):
@@ -90,6 +90,36 @@ class ShareLinks(APIView):
             return (dir_id, 'd')
 
         return (None, None)
+
+    def _check_permissions_arg(self, request):
+        permissions = request.data.get('permissions', None)
+        if permissions is not None:
+            if isinstance(permissions, dict):
+                perm_dict = permissions
+            elif isinstance(permissions, basestring):
+                import json
+                try:
+                    perm_dict = json.loads(permissions)
+                except ValueError:
+                    error_msg = 'permissions invalid: %s' % permissions
+                    return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
+            else:
+                error_msg = 'permissions invalid: %s' % permissions
+                return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
+        else:
+            perm_dict = None
+
+        can_preview = True
+        can_download = True
+        if perm_dict is not None:
+            can_preview = perm_dict.get('can_preview', True)
+            can_download = perm_dict.get('can_download', True)
+
+        if can_preview and can_download:
+            perm = FileShare.PERM_VIEW_DL
+        if can_preview and not can_download:
+            perm = FileShare.PERM_VIEW_ONLY
+        return perm
 
     def get(self, request):
         """ Get all share links of a user.
@@ -188,6 +218,8 @@ class ShareLinks(APIView):
         else:
             expire_date = timezone.now() + relativedelta(days=expire_days)
 
+        perm = self._check_permissions_arg(request)
+
         # resource check
         repo = seafile_api.get_repo(repo_id)
         if not repo:
@@ -221,13 +253,15 @@ class ShareLinks(APIView):
             fs = FileShare.objects.get_file_link_by_path(username, repo_id, path)
             if not fs:
                 fs = FileShare.objects.create_file_link(username, repo_id, path,
-                                                        password, expire_date)
+                                                        password, expire_date,
+                                                        permission=perm)
 
         elif s_type == 'd':
             fs = FileShare.objects.get_dir_link_by_path(username, repo_id, path)
             if not fs:
                 fs = FileShare.objects.create_dir_link(username, repo_id, path,
-                                                       password, expire_date)
+                                                       password, expire_date,
+                                                       permission=perm)
 
         if is_org_context(request):
             org_id = request.user.org.org_id

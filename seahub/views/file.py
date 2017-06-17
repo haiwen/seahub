@@ -877,6 +877,8 @@ def view_shared_file(request, fileshare):
     save_to_link = reverse('save_shared_link') + '?t=' + token
     traffic_over_limit = user_traffic_over_limit(shared_by)
 
+    permissions = fileshare.get_permissions()
+
     return render_to_response('shared_file_view.html', {
             'repo': repo,
             'obj_id': obj_id,
@@ -897,6 +899,7 @@ def view_shared_file(request, fileshare):
             'accessible_repos': accessible_repos,
             'save_to_link': save_to_link,
             'traffic_over_limit': traffic_over_limit,
+            'permissions': permissions,
             }, context_instance=RequestContext(request))
 
 def view_raw_shared_file(request, token, obj_id, file_name):
