@@ -514,8 +514,7 @@ def user_info(request, email):
     else:
         org_id = org[0].org_id
         org_name = org[0].org_name
-        space_usage = seafile_api.get_org_user_quota_usage(org_id,
-                                                                     email)
+        space_usage = seafile_api.get_org_user_quota_usage(org_id, email)
         space_quota = seafile_api.get_org_user_quota(org_id, email)
         owned_repos = seafile_api.get_org_owned_repo_list(org_id, email,
                                                           ret_corrupted=True)
@@ -1945,7 +1944,7 @@ def sys_settings(request):
     if HAS_TWO_FACTOR_AUTH:
         DIGIT_WEB_SETTINGS.append('ENABLE_TWO_FACTOR_AUTH')
 
-    STRING_WEB_SETTINGS = ('SERVICE_URL', 'FILE_SERVER_ROOT',)
+    STRING_WEB_SETTINGS = ('SERVICE_URL', 'FILE_SERVER_ROOT', 'TEXT_PREVIEW_EXT')
 
     if request.is_ajax() and request.method == "POST":
         content_type = 'application/json; charset=utf-8'

@@ -136,13 +136,17 @@
         {% include "snippets/web_settings_form.html" %}
     {% endwith %}
 
+    {% with type="input" setting_display_name="Preview File Extensions" setting_name="TEXT_PREVIEW_EXT" setting_val=config_dict.TEXT_PREVIEW_EXT %}
+        {% trans "Extensions of online previewed files, each suffix is separated by a comma." as help_tip %}
+        {% include "snippets/web_settings_form.html" %}
+    {% endwith %}
+    
     <h4>{% trans "Sync" %}</h4>
 
     {% with type="checkbox" setting_display_name="DISABLE_SYNC_WITH_ANY_FOLDER" setting_name="DISABLE_SYNC_WITH_ANY_FOLDER" setting_val=config_dict.DISABLE_SYNC_WITH_ANY_FOLDER %}
         {% trans "If turn on, the desktop clients will not be able to sync a folder outside the default Seafile folder." as help_tip %}
         {% include "snippets/web_settings_form.html" %}
     {% endwith %}
-
 </div>
 {% endblock %}
 

@@ -3,6 +3,7 @@ from django.contrib.auth.middleware import RemoteUserMiddleware
 from django.core.exceptions import ImproperlyConfigured
 from django.core.urlresolvers import reverse
 from django.http import HttpResponseRedirect
+from seaserv import seafile_api
 
 from shibboleth.app_settings import SHIB_ATTRIBUTE_MAP, LOGOUT_SESSION_KEY, SHIB_USER_HEADER
 
@@ -10,6 +11,9 @@ from seahub import auth
 from seahub.base.accounts import User
 from seahub.base.sudo_mode import update_sudo_mode_ts
 from seahub.profile.models import Profile
+from seahub.utils.file_size import get_quota_from_string
+from seahub.utils.user_permissions import get_user_role
+
 
 class ShibbolethRemoteUserMiddleware(RemoteUserMiddleware):
     """
@@ -79,7 +83,8 @@ class ShibbolethRemoteUserMiddleware(RemoteUserMiddleware):
             user.save()
             # call make profile.
             self.make_profile(user, shib_meta)
-            self.update_user_role(user, shib_meta)
+            user_role = self.update_user_role(user, shib_meta)
+            self.update_user_quota(user, user_role)
             #setup session.
             self.setup_session(request)
             request.shib_login = True
@@ -159,7 +164,14 @@ class ShibbolethRemoteUserMiddleware(RemoteUserMiddleware):
             role = role_map.get(e)
             if role:
                 User.objects.update_role(user.email, role)
-                return
+                return role
+
+    def update_user_quota(self, user, user_role):
+        if user.permissions.role_quota():
+            quota = get_quota_from_string(user.permissions.role_quota())
+            seafile_api.set_role_quota(user_role, quota)
+        else:
+            return
 
     def setup_session(self, request):
         """

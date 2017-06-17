@@ -22,6 +22,7 @@ from django.core.cache import cache
 from django.core.urlresolvers import reverse
 from django.utils import timezone
 
+from seahub.profile.models import Profile
 from seahub.utils import get_site_scheme_and_netloc
 from .settings import OFFICE_WEB_APP_BASE_URL, WOPI_ACCESS_TOKEN_EXPIRATION, \
     OFFICE_WEB_APP_DISCOVERY_EXPIRATION, OFFICE_WEB_APP_CLIENT_PEM, \
@@ -145,6 +146,10 @@ def get_wopi_dict(request_user, repo_id, file_path, action_name='view'):
         full_action_url = action_url + '&' + urllib.urlencode(query_dict)
     else:
         full_action_url = action_url + '?' + urllib.urlencode(query_dict)
+
+    lang_code = Profile.objects.get_user_language(request_user)
+    if lang_code.lower() == 'zh-cn':
+        full_action_url += '&ui=zh-CN&rs=zh-CN'
 
     # generate access token
     user_repo_path_info = (request_user, repo_id, file_path)
