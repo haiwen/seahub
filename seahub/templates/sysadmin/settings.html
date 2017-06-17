@@ -23,15 +23,13 @@
     {% endwith %}
 
 
-    <h4>{% trans "Logo" %}</h4>
+    <h4>Logo</h4>
 
-    {% with type="file" setting_name="logo" file_path=logo_path file_width=256 file_height=64 help_tip="logo.png, 256px * 64px" %}
-        {% trans "Logo" as setting_display_name %}
+    {% with type="file" setting_display_name="Logo" setting_name="logo" file_path=logo_path file_width=256 file_height=64 help_tip="logo.png, 256px * 64px" %}
         {% include "snippets/web_settings_form.html" %}
     {% endwith %}
 
-    {% with type="file" setting_name="favicon" file_path=favicon_path file_width=32 file_height=32 help_tip="favicon.ico, 32px * 32px" %}
-        {% trans "Favicon" as setting_display_name %}
+    {% with type="file" setting_display_name="Favicon" setting_name="favicon" file_path=favicon_path file_width=32 file_height=32 help_tip="favicon.ico, 32px * 32px" %}
         {% include "snippets/web_settings_form.html" %}
     {% endwith %}
 
