@@ -4707,7 +4707,7 @@ msgid "Share To"
 msgstr "Von mir freigegeben für"
 
 #: seahub/templates/js/templates.html:1871
-msgid "You have not shared any library"
+msgid "You have not shared any libraries"
 msgstr "Sie haben keine Bibliotheken freigegeben"
 
 #: seahub/templates/js/templates.html:1872
@@ -4722,7 +4722,7 @@ msgid "all members"
 msgstr "Alle Mitglieder"
 
 #: seahub/templates/js/templates.html:1926
-msgid "You have not shared any folder"
+msgid "You have not shared any folders"
 msgstr "Sie haben keine Ordner freigegeben"
 
 #: seahub/templates/js/templates.html:1927
@@ -4737,7 +4737,7 @@ msgid "Expiration"
 msgstr "Ablaufdatum"
 
 #: seahub/templates/js/templates.html:1961
-msgid "You don't have any download link"
+msgid "You don't have any download links"
 msgstr "Sie haben keine Download-Links freigegeben"
 
 #: seahub/templates/js/templates.html:1962
@@ -4747,7 +4747,7 @@ msgid ""
 msgstr "Sie können einen Download-Link für eine Datei oder einen Ordner erstellen und weitergeben. \nAlle, die über diesen Link verfügen, können die Datei oder den Ordner online einsehen und herunterladen."
 
 #: seahub/templates/js/templates.html:1995
-msgid "You don't have any upload link"
+msgid "You don't have any upload links"
 msgstr "Sie haben keine Upload-Links freigegeben"
 
 #: seahub/templates/js/templates.html:1996
@@ -4780,12 +4780,12 @@ msgid ""
 msgstr "Sie können eine Bibliothek erstellen um Ihre Dateien zu organisieren. Zum Beispiel können Sie eine für jedes Ihrer Projekte erstellen. Jede Bibliothek kann einzeln synchronisiert und freigeben werden."
 
 #: seahub/templates/libraries.html:35
-msgid "No library is shared to you personally"
+msgid "No libraries are shared with you personally"
 msgstr "Für Sie sind keine Bibliotheken freigegeben"
 
 #: seahub/templates/libraries.html:36
 msgid ""
-"No library is shared to you personally. You can find more shared libraries "
+"No libraries are shared with you personally. You can find more shared libraries "
 "at \"Shared with groups\"."
 msgstr "Für Sie ist persönlich keine Bibliothek freigegeben. Weitere freigegebene Bibliotheken finden Sie unter \"Mit Gruppen geteilt\"."
 
@@ -4802,7 +4802,7 @@ msgid "Create a new library"
 msgstr "Eine neue Bibliothek erstellen"
 
 #: seahub/templates/libraries.html:61
-msgid "No public library"
+msgid "No public libraries"
 msgstr "Keine öffentliche Bibliothek"
 
 #: seahub/templates/libraries.html:62
@@ -4816,7 +4816,7 @@ msgid "My Groups"
 msgstr "Meine Gruppen"
 
 #: seahub/templates/libraries.html:78
-msgid "You are not in any group"
+msgid "You are not in any groups"
 msgstr "Sie sind nicht Mitglied einer Gruppe"
 
 #: seahub/templates/libraries.html:80

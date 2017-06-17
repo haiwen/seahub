@@ -4648,7 +4648,7 @@ msgid "Share To"
 msgstr "共有先"
 
 #: seahub/templates/js/templates.html:1871
-msgid "You have not shared any library"
+msgid "You have not shared any libraries"
 msgstr "ライブラリーを共有していません。"
 
 #: seahub/templates/js/templates.html:1872
@@ -4663,7 +4663,7 @@ msgid "all members"
 msgstr "全てのメンバー"
 
 #: seahub/templates/js/templates.html:1926
-msgid "You have not shared any folder"
+msgid "You have not shared any folders"
 msgstr "共有しているフォルダがありません"
 
 #: seahub/templates/js/templates.html:1927
@@ -4678,7 +4678,7 @@ msgid "Expiration"
 msgstr ""
 
 #: seahub/templates/js/templates.html:1961
-msgid "You don't have any download link"
+msgid "You don't have any download links"
 msgstr "ダウンロードリンクがありません。"
 
 #: seahub/templates/js/templates.html:1962
@@ -4688,7 +4688,7 @@ msgid ""
 msgstr "フォルダやファイルのダウンロードリンクを生成できます。このリンクを受け取った人は、フォルダやファイルをオンラインで閲覧できます。"
 
 #: seahub/templates/js/templates.html:1995
-msgid "You don't have any upload link"
+msgid "You don't have any upload links"
 msgstr "アップロードリンクがありません。"
 
 #: seahub/templates/js/templates.html:1996
@@ -4721,12 +4721,12 @@ msgid ""
 msgstr ""
 
 #: seahub/templates/libraries.html:35
-msgid "No library is shared to you personally"
+msgid "No libraries are shared with you personally"
 msgstr ""
 
 #: seahub/templates/libraries.html:36
 msgid ""
-"No library is shared to you personally. You can find more shared libraries "
+"No libraries are shared with you personally. You can find more shared libraries "
 "at \"Shared with groups\"."
 msgstr ""
 
@@ -4743,7 +4743,7 @@ msgid "Create a new library"
 msgstr ""
 
 #: seahub/templates/libraries.html:61
-msgid "No public library"
+msgid "No public libraries"
 msgstr "公開ライブラリーがありません"
 
 #: seahub/templates/libraries.html:62
@@ -4757,7 +4757,7 @@ msgid "My Groups"
 msgstr "参加グループ"
 
 #: seahub/templates/libraries.html:78
-msgid "You are not in any group"
+msgid "You are not in any groups"
 msgstr ""
 
 #: seahub/templates/libraries.html:80

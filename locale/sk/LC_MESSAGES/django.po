@@ -2838,7 +2838,7 @@ msgid "Remove"
 msgstr ""
 
 #: seahub/share/templates/share/links.html:45
-msgid "You don't have any download link"
+msgid "You don't have any download links"
 msgstr ""
 
 #: seahub/share/templates/share/links.html:46
@@ -2848,7 +2848,7 @@ msgid ""
 msgstr ""
 
 #: seahub/share/templates/share/links.html:76
-msgid "You don't have any upload link"
+msgid "You don't have any upload links"
 msgstr ""
 
 #: seahub/share/templates/share/links.html:77
@@ -2877,7 +2877,7 @@ msgid "Permission"
 msgstr ""
 
 #: seahub/share/templates/share/list_priv_shared_folders.html:61
-msgid "You have not shared any folder"
+msgid "You have not shared any folders"
 msgstr ""
 
 #: seahub/share/templates/share/list_priv_shared_folders.html:62
@@ -2943,7 +2943,7 @@ msgid "Libraries - Share"
 msgstr ""
 
 #: seahub/share/templates/share/repos.html:65
-msgid "You have not shared any library"
+msgid "You have not shared any libraries"
 msgstr ""
 
 #: seahub/share/templates/share/repos.html:66
@@ -3628,7 +3628,7 @@ msgid "Share From"
 msgstr ""
 
 #: seahub/templates/pubrepo.html:50
-msgid "No public library"
+msgid "No public libraries"
 msgstr ""
 
 #: seahub/templates/pubrepo.html:51

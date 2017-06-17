@@ -4655,7 +4655,7 @@ msgid "Share To"
 msgstr "Dela med"
 
 #: seahub/templates/js/templates.html:1871
-msgid "You have not shared any library"
+msgid "You have not shared any libraries"
 msgstr "Du har inte delat något bibliotek"
 
 #: seahub/templates/js/templates.html:1872
@@ -4670,7 +4670,7 @@ msgid "all members"
 msgstr "alla medlemmar"
 
 #: seahub/templates/js/templates.html:1926
-msgid "You have not shared any folder"
+msgid "You have not shared any folders"
 msgstr "Du har inte delat någon katalog"
 
 #: seahub/templates/js/templates.html:1927
@@ -4685,7 +4685,7 @@ msgid "Expiration"
 msgstr "Utgångsdatum"
 
 #: seahub/templates/js/templates.html:1961
-msgid "You don't have any download link"
+msgid "You don't have any download links"
 msgstr "Du har ingen nedladdningslänk"
 
 #: seahub/templates/js/templates.html:1962
@@ -4695,7 +4695,7 @@ msgid ""
 msgstr "Du kan skapa en nedladdningslänk till en katalog eller en fil. Den som har länken kan se katalogen eller filen online."
 
 #: seahub/templates/js/templates.html:1995
-msgid "You don't have any upload link"
+msgid "You don't have any upload links"
 msgstr "Du har ingen uppladdningslänk"
 
 #: seahub/templates/js/templates.html:1996
@@ -4728,12 +4728,12 @@ msgid ""
 msgstr "Du kan skapa ett bibliotek för att hålla ordning på dina filer. Du kan t.ex. skapa ett för varje projekt du har. Varje bibliotek kan sedan synkas och delas separat."
 
 #: seahub/templates/libraries.html:35
-msgid "No library is shared to you personally"
+msgid "No libraries are shared with you personally"
 msgstr "Inget bibliotek är delat med dig personligen"
 
 #: seahub/templates/libraries.html:36
 msgid ""
-"No library is shared to you personally. You can find more shared libraries "
+"No libraries are shared with you personally. You can find more shared libraries "
 "at \"Shared with groups\"."
 msgstr "Inget bibliotek är delat med dig personligen. Du kan hitta fler delade bibliotek under \"Delade med grupper\"."
 
@@ -4750,7 +4750,7 @@ msgid "Create a new library"
 msgstr "Skapa ett nytt bibliotek"
 
 #: seahub/templates/libraries.html:61
-msgid "No public library"
+msgid "No public libraries"
 msgstr "Inga publika bibliotek"
 
 #: seahub/templates/libraries.html:62
@@ -4764,7 +4764,7 @@ msgid "My Groups"
 msgstr "Mina grupper"
 
 #: seahub/templates/libraries.html:78
-msgid "You are not in any group"
+msgid "You are not in any groups"
 msgstr "Du är inte i någon grupp"
 
 #: seahub/templates/libraries.html:80

@@ -4663,7 +4663,7 @@ msgid "Share To"
 msgstr "Спільний доступ для"
 
 #: seahub/templates/js/templates.html:1871
-msgid "You have not shared any library"
+msgid "You have not shared any libraries"
 msgstr "Ви не поділилися жодною бібліотекою"
 
 #: seahub/templates/js/templates.html:1872
@@ -4678,7 +4678,7 @@ msgid "all members"
 msgstr "усі учасники"
 
 #: seahub/templates/js/templates.html:1926
-msgid "You have not shared any folder"
+msgid "You have not shared any folders"
 msgstr "Ви не поділилися жодним каталогом"
 
 #: seahub/templates/js/templates.html:1927
@@ -4693,7 +4693,7 @@ msgid "Expiration"
 msgstr ""
 
 #: seahub/templates/js/templates.html:1961
-msgid "You don't have any download link"
+msgid "You don't have any download links"
 msgstr "У Вас немає посилань з правами перегляду"
 
 #: seahub/templates/js/templates.html:1962
@@ -4703,7 +4703,7 @@ msgid ""
 msgstr "Ви можете створювати посилання з правами перегляду для каталогу чи файлу. Люди, що отримують ці посилання, мають змогу переглядати каталог чи файл онлайн."
 
 #: seahub/templates/js/templates.html:1995
-msgid "You don't have any upload link"
+msgid "You don't have any upload links"
 msgstr "У Вас немає посилань з правами запису"
 
 #: seahub/templates/js/templates.html:1996
@@ -4736,12 +4736,12 @@ msgid ""
 msgstr "Ви можете створювати бібліотеки для організації роботи з файлами. Наприклад, Ви створюєте бібліотеки для кожного з ваших проектів, причому кожна з них може бути синхронізована і дана у спільний доступ."
 
 #: seahub/templates/libraries.html:35
-msgid "No library is shared to you personally"
+msgid "No libraries are shared with you personally"
 msgstr ""
 
 #: seahub/templates/libraries.html:36
 msgid ""
-"No library is shared to you personally. You can find more shared libraries "
+"No libraries are shared with you personally. You can find more shared libraries "
 "at \"Shared with groups\"."
 msgstr ""
 
@@ -4758,7 +4758,7 @@ msgid "Create a new library"
 msgstr ""
 
 #: seahub/templates/libraries.html:61
-msgid "No public library"
+msgid "No public libraries"
 msgstr "Немає публічних бібліотек"
 
 #: seahub/templates/libraries.html:62
@@ -4772,7 +4772,7 @@ msgid "My Groups"
 msgstr "Мої групи"
 
 #: seahub/templates/libraries.html:78
-msgid "You are not in any group"
+msgid "You are not in any groups"
 msgstr ""
 
 #: seahub/templates/libraries.html:80

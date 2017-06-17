@@ -4646,7 +4646,7 @@ msgid "Share To"
 msgstr "다음과 공유"
 
 #: seahub/templates/js/templates.html:1871
-msgid "You have not shared any library"
+msgid "You have not shared any libraries"
 msgstr "공유한 라이브러리가 없습니다"
 
 #: seahub/templates/js/templates.html:1872
@@ -4661,7 +4661,7 @@ msgid "all members"
 msgstr "모든 구성원"
 
 #: seahub/templates/js/templates.html:1926
-msgid "You have not shared any folder"
+msgid "You have not shared any folders"
 msgstr "공유한 폴더가 없습니다"
 
 #: seahub/templates/js/templates.html:1927
@@ -4676,7 +4676,7 @@ msgid "Expiration"
 msgstr "유효기간"
 
 #: seahub/templates/js/templates.html:1961
-msgid "You don't have any download link"
+msgid "You don't have any download links"
 msgstr "다운로드 링크가 없습니다"
 
 #: seahub/templates/js/templates.html:1962
@@ -4686,7 +4686,7 @@ msgid ""
 msgstr "폴더 또는 파일에 대한 다운로드 링크를 만들 수 있습니다. 다른 사람들은 온라인에서 폴더 또는 파일을 볼 수 있는 링크를 받습니다."
 
 #: seahub/templates/js/templates.html:1995
-msgid "You don't have any upload link"
+msgid "You don't have any upload links"
 msgstr "업로드 링크가 없습니다"
 
 #: seahub/templates/js/templates.html:1996
@@ -4719,12 +4719,12 @@ msgid ""
 msgstr "파일을 모을 라이브러리를 만들 수 있습니다. 각각의 프로젝트에 라이브러리를 만들 수 있으며 각각의 라이브러리는 개별적으로 동기화 하고 공유할 수 있습니다."
 
 #: seahub/templates/libraries.html:35
-msgid "No library is shared to you personally"
+msgid "No libraries are shared with you personally"
 msgstr "개인적으로 공유한 라이브러리 없음"
 
 #: seahub/templates/libraries.html:36
 msgid ""
-"No library is shared to you personally. You can find more shared libraries "
+"No libraries are shared with you personally. You can find more shared libraries "
 "at \"Shared with groups\"."
 msgstr "개인적으로 공유한 라이브러리가 없습니다. \"그룹에 공유\"에서 공유한 라이브러리를 찾아볼 수 있습니다."
 
@@ -4741,7 +4741,7 @@ msgid "Create a new library"
 msgstr "새 라이브러리 만들기"
 
 #: seahub/templates/libraries.html:61
-msgid "No public library"
+msgid "No public libraries"
 msgstr "공개 라이브러리가 없습니다"
 
 #: seahub/templates/libraries.html:62
@@ -4755,7 +4755,7 @@ msgid "My Groups"
 msgstr "내 그룹"
 
 #: seahub/templates/libraries.html:78
-msgid "You are not in any group"
+msgid "You are not in any groups"
 msgstr "어떤 그룹에도 속하지 않았습니다"
 
 #: seahub/templates/libraries.html:80

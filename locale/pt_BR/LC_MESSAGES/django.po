@@ -4666,7 +4666,7 @@ msgid "Share To"
 msgstr "Compartilhar com"
 
 #: seahub/templates/js/templates.html:1871
-msgid "You have not shared any library"
+msgid "You have not shared any libraries"
 msgstr "Você não tem nenhuma biblioteca compartilhada"
 
 #: seahub/templates/js/templates.html:1872
@@ -4681,7 +4681,7 @@ msgid "all members"
 msgstr "Todos os membros"
 
 #: seahub/templates/js/templates.html:1926
-msgid "You have not shared any folder"
+msgid "You have not shared any folders"
 msgstr "Você não compartilhou nenhuma pasta"
 
 #: seahub/templates/js/templates.html:1927
@@ -4696,7 +4696,7 @@ msgid "Expiration"
 msgstr "Expiração"
 
 #: seahub/templates/js/templates.html:1961
-msgid "You don't have any download link"
+msgid "You don't have any download links"
 msgstr "Você não tem links de download"
 
 #: seahub/templates/js/templates.html:1962
@@ -4706,7 +4706,7 @@ msgid ""
 msgstr "Você pode gerar um link de download para uma pasta ou arquivo. As pessoas que receberem este link podem ver a pasta ou arquivo online."
 
 #: seahub/templates/js/templates.html:1995
-msgid "You don't have any upload link"
+msgid "You don't have any upload links"
 msgstr "Você não tem um link de upload"
 
 #: seahub/templates/js/templates.html:1996
@@ -4739,12 +4739,12 @@ msgid ""
 msgstr "Você pode criar uma biblioteca para organizar seus arqquivos. Por exemplo, você pode criar uma para cada projeto. Cada biblioteca pode ser soncronizada e compartilhada separadamente. "
 
 #: seahub/templates/libraries.html:35
-msgid "No library is shared to you personally"
+msgid "No libraries are shared with you personally"
 msgstr "Nenhuma biblioteca foi compartilhada diretamente com você"
 
 #: seahub/templates/libraries.html:36
 msgid ""
-"No library is shared to you personally. You can find more shared libraries "
+"No libraries are shared with you personally. You can find more shared libraries "
 "at \"Shared with groups\"."
 msgstr "Nenhuma biblioteca foi compartilhada diretamente com você. Vocẽ pode encontrar mais bibliotecas compartilhadas através do \"Compartilhado com grupos\"."
 
@@ -4761,7 +4761,7 @@ msgid "Create a new library"
 msgstr "Criar nova biblioteca"
 
 #: seahub/templates/libraries.html:61
-msgid "No public library"
+msgid "No public libraries"
 msgstr "Nenhuma biblioteca pública"
 
 #: seahub/templates/libraries.html:62
@@ -4775,7 +4775,7 @@ msgid "My Groups"
 msgstr "Meus grupos"
 
 #: seahub/templates/libraries.html:78
-msgid "You are not in any group"
+msgid "You are not in any groups"
 msgstr "Você não está em nenhum grupo"
 
 #: seahub/templates/libraries.html:80

@@ -3132,7 +3132,7 @@ msgid "Remove"
 msgstr "Odstrani"
 
 #: seahub/share/templates/share/links.html:45
-msgid "You don't have any download link"
+msgid "You don't have any download links"
 msgstr "Nimate nobene javne povezave za prenos"
 
 #: seahub/share/templates/share/links.html:46
@@ -3142,7 +3142,7 @@ msgid ""
 msgstr "Ustvarite lahko javno povezavo za prenos za mapo ali datoteko. Obiskovalci z povezavo si bodo lahko ogledali vsebino mape ali datoteko na spletu."
 
 #: seahub/share/templates/share/links.html:76
-msgid "You don't have any upload link"
+msgid "You don't have any upload links"
 msgstr "Nimate nobene povezave za nalaganje"
 
 #: seahub/share/templates/share/links.html:77
@@ -3171,7 +3171,7 @@ msgid "Permission"
 msgstr "Dovoljenja"
 
 #: seahub/share/templates/share/list_priv_shared_folders.html:61
-msgid "You have not shared any folder"
+msgid "You have not shared any folders"
 msgstr "Nimate deljenih map"
 
 #: seahub/share/templates/share/list_priv_shared_folders.html:62
@@ -3237,7 +3237,7 @@ msgid "Libraries - Share"
 msgstr "Knjižnice-Deljeno"
 
 #: seahub/share/templates/share/repos.html:61
-msgid "You have not shared any library"
+msgid "You have not shared any libraries"
 msgstr "Nimate še deljenih knjižnic"
 
 #: seahub/share/templates/share/repos.html:62
@@ -3982,7 +3982,7 @@ msgid "Share From"
 msgstr "Delij od"
 
 #: seahub/templates/pubrepo.html:53
-msgid "No public library"
+msgid "No public libraries"
 msgstr "Ni javne knjižnice"
 
 #: seahub/templates/pubrepo.html:54
