@@ -29,6 +29,7 @@ from seahub.api2.endpoints.repos_batch import ReposBatchView
 from seahub.api2.endpoints.file import FileView
 from seahub.api2.endpoints.dir import DirView
 from seahub.api2.endpoints.repo_trash import RepoTrash
+from seahub.api2.endpoints.own_repos_trash import OwnReposTrash
 from seahub.api2.endpoints.repo_history import RepoHistory
 from seahub.api2.endpoints.repo_set_password import RepoSetPassword
 from seahub.api2.endpoints.zip_task import ZipTaskView
@@ -200,6 +201,7 @@ urlpatterns = patterns(
 
     ## user::repos
     url(r'^api/v2.1/repos/batch/$', ReposBatchView.as_view(), name='api-v2.1-repos-batch'),
+    url(r'^api/v2.1/repos/deleted/$', OwnReposTrash.as_view(), name='api2-v2.1-repos-trash'),
     url(r'^api/v2.1/repos/(?P<repo_id>[-0-9a-f]{36})/file/$', FileView.as_view(), name='api-v2.1-file-view'),
     url(r'^api/v2.1/repos/(?P<repo_id>[-0-9a-f]{36})/dir/$', DirView.as_view(), name='api-v2.1-dir-view'),
     url(r'^api/v2.1/repos/(?P<repo_id>[-0-9a-f]{36})/trash/$', RepoTrash.as_view(), name='api-v2.1-repo-trash'),
