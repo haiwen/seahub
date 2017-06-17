@@ -831,6 +831,9 @@ def view_shared_file(request, fileshare):
     # send statistic messages
     file_size = seafile_api.get_file_size(repo.store_id, repo.version, obj_id)
     if request.GET.get('dl', '') == '1':
+        if fileshare.get_permissions()['can_download'] is False:
+            raise Http404
+
         # download shared file
         return _download_file_from_share_link(request, fileshare)
 
@@ -839,6 +842,9 @@ def view_shared_file(request, fileshare):
                                                            use_onetime=False)
     raw_path = gen_file_get_url(access_token, filename)
     if request.GET.get('raw', '') == '1':
+        if fileshare.get_permissions()['can_download'] is False:
+            raise Http404
+
         # check whether owner's traffic over the limit
         if user_traffic_over_limit(shared_by):
             messages.error(request, _(u'Unable to view raw file, share link traffic is used up.'))
@@ -974,6 +980,9 @@ def view_file_via_shared_dir(request, fileshare):
                                   context_instance=RequestContext(request))
 
     if request.GET.get('dl', '') == '1':
+        if fileshare.get_permissions()['can_download'] is False:
+            raise Http404
+
         # download shared file
         return _download_file_from_share_link(request, fileshare)
 
@@ -999,6 +1008,9 @@ def view_file_via_shared_dir(request, fileshare):
 
     filename = os.path.basename(req_path)
     if request.GET.get('raw', '0') == '1':
+        if fileshare.get_permissions()['can_download'] is False:
+            raise Http404
+
         username = request.user.username
         token = seafile_api.get_fileserver_access_token(repo_id,
             obj_id, 'view', username, use_onetime=True)
