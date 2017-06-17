@@ -3195,7 +3195,7 @@ msgid "Remove"
 msgstr "เอาออก"
 
 #: seahub/share/templates/share/links.html:45
-msgid "You don't have any download link"
+msgid "You don't have any download links"
 msgstr "คุณไม่มีลิงก์ดาวน์โหลด"
 
 #: seahub/share/templates/share/links.html:46
@@ -3205,7 +3205,7 @@ msgid ""
 msgstr "คุณสามารถสร้าง ดาวน์โหลดลิงก์ สำหรับโฟลเดอร์หรือไฟล์ เมื่อบุคคลทั่วไปได้รับลิงก์สามารถเรียกดูโฟลเดอร์หรือไฟล์ออนไลน์"
 
 #: seahub/share/templates/share/links.html:76
-msgid "You don't have any upload link"
+msgid "You don't have any upload links"
 msgstr "คุณไม่มีอัพโหลดลิงก์"
 
 #: seahub/share/templates/share/links.html:77
@@ -3234,7 +3234,7 @@ msgid "Permission"
 msgstr "รับอนุญาต"
 
 #: seahub/share/templates/share/list_priv_shared_folders.html:61
-msgid "You have not shared any folder"
+msgid "You have not shared any folders"
 msgstr "คุณไม่มีโฟลเดอร์ใดแบ่งปัน"
 
 #: seahub/share/templates/share/list_priv_shared_folders.html:62
@@ -3302,7 +3302,7 @@ msgid "Libraries - Share"
 msgstr "คลังแฟ้มข้อมูล-แบ่งปัน"
 
 #: seahub/share/templates/share/repos.html:61
-msgid "You have not shared any library"
+msgid "You have not shared any libraries"
 msgstr "คุณไม่ได้แบ่งปันคลังแฟ้มข้อมูลใดๆ"
 
 #: seahub/share/templates/share/repos.html:62
@@ -4013,7 +4013,7 @@ msgid "Share From"
 msgstr "ฟอร์มแบ่งปัน"
 
 #: seahub/templates/pubrepo.html:49
-msgid "No public library"
+msgid "No public libraries"
 msgstr "ไม่มีคลังแฟ้มข้อมูลสาธารณะ"
 
 #: seahub/templates/pubrepo.html:50

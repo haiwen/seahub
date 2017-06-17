@@ -32,8 +32,8 @@
         <tbody></tbody>
     </table>
     <div class="empty-tips hide">
-        <h2 class="alc">{% trans "No library is shared to you personally" %}</h2>
-        <p>{% blocktrans %}No library is shared to you personally. You can find more shared libraries at "Shared with groups".{% endblocktrans %}</p>
+        <h2 class="alc">{% trans "No libraries are shared with you personally" %}</h2>
+        <p>{% blocktrans %}No libraries are shared with you personally. You can find more shared libraries at "Shared with groups".{% endblocktrans %}</p>
     </div>
     <span class="loading-icon loading-tip"></span>
     <p class="error error-tip hide"></p>
@@ -58,7 +58,7 @@
         <tbody></tbody>
     </table>
     <div class="empty-tips hide">
-        <h2 class="alc">{% trans "No public library" %}</h2>
+        <h2 class="alc">{% trans "No public libraries" %}</h2>
         <p>{% blocktrans %}You can create a public library by clicking "New Library" button, others can view and download this library.{% endblocktrans %}</p>
     </div>
     <span class="loading-icon loading-tip"></span>
@@ -75,11 +75,11 @@
 
     <div id="group-list" class="hide"></div>
     <div class="empty-tips hide">
-        <h2 class="alc">{% trans "You are not in any group" %}</h2>
+        <h2 class="alc">{% trans "You are not in any groups" %}</h2>
         {% if user.permissions.can_add_group %}
-        <p>{% blocktrans %}Group is a place for you and your friends leaving messages and collaborating on libraries. You can create a group by clicking "New Group" button.{% endblocktrans %}</p>
+        <p>{% blocktrans %}Groups allow you to collaborate on libraries. You can create a group by clicking the "New Group" button.{% endblocktrans %}</p>
         {% else %}
-        <p>{% trans "Group is a place for you and your friends leaving messages and collaborating on libraries. Groups you join will be listed here." %}</p>
+        <p>{% trans "Groups allow you to collaborate on libraries. Groups you join will be listed here." %}</p>
         {% endif %}
     </div>
     <span class="loading-icon loading-tip"></span>
@@ -169,7 +169,7 @@
     <span class="loading-icon loading-tip"></span>
     <div class="empty-tips hide">
         <h2 class="alc">{% trans "You don't have any starred files yet" %}</h2>
-        <p>{% blocktrans %}You can star important files by clicking the "Star" button on file viewing page, and they will be listed here.{% endblocktrans %}</p>
+        <p>{% blocktrans %}You can star important files by clicking the "Star" button on file viewing page and they will be listed here.{% endblocktrans %}</p>
     </div>
 </script>
 

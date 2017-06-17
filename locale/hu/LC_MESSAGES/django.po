@@ -4658,7 +4658,7 @@ msgid "Share To"
 msgstr "Címzett"
 
 #: seahub/templates/js/templates.html:1871
-msgid "You have not shared any library"
+msgid "You have not shared any libraries"
 msgstr "Nem osztott még meg egy kötetet sem"
 
 #: seahub/templates/js/templates.html:1872
@@ -4673,7 +4673,7 @@ msgid "all members"
 msgstr "minden tag"
 
 #: seahub/templates/js/templates.html:1926
-msgid "You have not shared any folder"
+msgid "You have not shared any folders"
 msgstr "Nem osztott meg egy könyvtárat sem"
 
 #: seahub/templates/js/templates.html:1927
@@ -4688,7 +4688,7 @@ msgid "Expiration"
 msgstr "Lejárat"
 
 #: seahub/templates/js/templates.html:1961
-msgid "You don't have any download link"
+msgid "You don't have any download links"
 msgstr "Önnek nincs letöltési linkje"
 
 #: seahub/templates/js/templates.html:1962
@@ -4698,7 +4698,7 @@ msgid ""
 msgstr "Lehetősége van letöltési hivatkozást készíteni egy fájlhoz vagy könyvtárhoz. Azon személyek, akiknek elküldi a hivatkozást, megtekinthetik a megosztott tartalmat a Seafile webes felületén."
 
 #: seahub/templates/js/templates.html:1995
-msgid "You don't have any upload link"
+msgid "You don't have any upload links"
 msgstr "Önnek nincs feltöltési linkje"
 
 #: seahub/templates/js/templates.html:1996
@@ -4731,12 +4731,12 @@ msgid ""
 msgstr "Köteteket hozhat létre fájljai rendezéséhez. Például hozzon létre egy-egy kötetet a munkáihoz. Minden kötet külön szinkronizálható és megosztható."
 
 #: seahub/templates/libraries.html:35
-msgid "No library is shared to you personally"
+msgid "No libraries are shared with you personally"
 msgstr "Önnel személyesen nincs megosztva egy kötet sem."
 
 #: seahub/templates/libraries.html:36
 msgid ""
-"No library is shared to you personally. You can find more shared libraries "
+"No libraries are shared with you personally. You can find more shared libraries "
 "at \"Shared with groups\"."
 msgstr "Önnel személyesen nincs megosztva egy kötet sem. További köteteket a \"Csoporttal megosztva\" menüpontban talál."
 
@@ -4753,7 +4753,7 @@ msgid "Create a new library"
 msgstr "Új kötet készítése"
 
 #: seahub/templates/libraries.html:61
-msgid "No public library"
+msgid "No public libraries"
 msgstr "Nincs nyilvános kötet"
 
 #: seahub/templates/libraries.html:62
@@ -4767,7 +4767,7 @@ msgid "My Groups"
 msgstr "Saját csoportok"
 
 #: seahub/templates/libraries.html:78
-msgid "You are not in any group"
+msgid "You are not in any groups"
 msgstr "Nem tagja egy csoportnak sem"
 
 #: seahub/templates/libraries.html:80
