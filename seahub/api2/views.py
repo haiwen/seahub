@@ -47,7 +47,8 @@ from seahub.avatar.templatetags.group_avatar_tags import api_grp_avatar_url, \
 from seahub.base.accounts import User
 from seahub.base.models import UserStarredFiles, DeviceToken
 from seahub.base.templatetags.seahub_tags import email2nickname, \
-    translate_seahub_time, translate_commit_desc_escape
+    translate_seahub_time, translate_commit_desc_escape, \
+    email2contact_email
 from seahub.group.views import remove_group_common, \
     rename_group_with_new_name, is_group_staff
 from seahub.group.utils import BadGroupNameError, ConflictGroupNameError, \
@@ -1491,6 +1492,9 @@ def get_dir_entrys_by_id(request, repo, path, dir_id, request_type=None):
                 else:
                     entry["locked_by_me"] = False
 
+            entry['modifier_email'] = dirent.modifier
+            entry['modifier_contact_email'] = email2contact_email(dirent.modifier)
+            entry['modifier_name'] = email2nickname(dirent.modifier)
         entry["type"] = dtype
         entry["name"] = dirent.obj_name
         entry["id"] = dirent.obj_id

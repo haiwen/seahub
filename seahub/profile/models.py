@@ -28,6 +28,19 @@ class ProfileManager(models.Manager):
         profile.save(using=self._db)
         return profile
 
+    def update_contact_email(self, username, contact_email):
+        """
+        update contact_email of profile
+        """
+        try:
+            profile = self.get(user=username)
+            profile.contact_email = contact_email
+        except Profile.DoesNotExist:
+            logger.warn('%s profile does not exists' % username)
+            return None
+        profile.save(using=self._db)
+        return profile
+
     def get_profile_by_user(self, username):
         """Get a user's profile.
         """
@@ -143,6 +156,9 @@ def clean_email_id_cache(sender, **kwargs):
     key = normalize_cache_key(user.email, EMAIL_ID_CACHE_PREFIX)
     cache.set(key, user.id, EMAIL_ID_CACHE_TIMEOUT)
 
-@receiver(post_save, sender=Profile, dispatch_uid="update_nickname_cache")
-def update_nickname_cache(sender, instance, **kwargs):
+@receiver(post_save, sender=Profile, dispatch_uid="update_profile_cache")
+def update_profile_cache(sender, instance, **kwargs):
+    """
+    Set profile data to cache when profile data change.
+    """
     refresh_cache(instance.user)
