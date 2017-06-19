@@ -2669,8 +2669,8 @@ class DirView(APIView):
             else:
                 resp = Response('success', status=status.HTTP_201_CREATED)
                 uri = reverse('DirView', args=[repo_id], request=request)
-                resp['Location'] = uri + '?p=' + quote(parent_dir.encode('utf-8')) + \
-                    quote(new_dir_name.encode('utf-8'))
+                resp['Location'] = uri + '?p=' + quote(
+                    parent_dir.encode('utf-8') + '/' + new_dir_name.encode('utf-8'))
             return resp
 
         elif operation.lower() == 'rename':
