@@ -332,6 +332,7 @@ urlpatterns = patterns(
     ### system admin ###
     url(r'^sysadmin/$', sysadmin, name='sysadmin'),
     url(r'^sys/settings/$', sys_settings, name='sys_settings'),
+    url(r'^sys/statistic/$', sys_statistic, name='sys_statistic'),
     url(r'^sysadmin/#all-libs/$', fake_view, name='sys_repo_admin'),
     url(r'^sysadmin/#libs/(?P<repo_id>[-0-9a-f]{36})/$', fake_view, name='sys_admin_repo'),
     url(r'^sysadmin/#system-lib/$', fake_view, name='sys_list_system'),
