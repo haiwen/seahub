@@ -2576,10 +2576,12 @@ class DirView(APIView):
                              "Failed to get dir id by path.")
 
         if not dir_id:
-            return api_error(status.HTTP_404_NOT_FOUND, "Path does not exist")
+            error_msg = 'Folder %s not found.' % path
+            return api_error(status.HTTP_404_NOT_FOUND, error_msg)
 
         if check_folder_permission(request, repo_id, path) is None:
-            return api_error(status.HTTP_403_FORBIDDEN, 'Forbid to access this folder.')
+            error_msg = 'Permission denied.'
+            return api_error(status.HTTP_403_FORBIDDEN, error_msg)
 
         old_oid = request.GET.get('oid', None)
         if old_oid and old_oid == dir_id:
