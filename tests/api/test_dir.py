@@ -39,7 +39,7 @@ class DirTest(BaseTestCase):
             'operation': 'mkdir'
         })
 
-        self.assertEqual(400, resp.status_code)
+        self.assertEqual(404, resp.status_code)
 
     def test_get_dir_file_modifier(self):
         # upload the file , then test whether can get modifier
