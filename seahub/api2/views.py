@@ -1211,6 +1211,11 @@ class FileBlockDownloadLinkView(APIView):
 
         token = seafile_api.get_fileserver_access_token(
                 repo_id, file_id, 'downloadblks', request.user.username)
+
+        if not token:
+            error_msg = 'Internal Server Error'
+            return api_error(status.HTTP_500_INTERNAL_SERVER_ERROR, error_msg)
+
         url = gen_block_get_url(token, block_id)
         return Response(url)
 
@@ -1240,8 +1245,12 @@ class UploadLinkView(APIView):
         if check_quota(repo_id) < 0:
             return api_error(HTTP_520_OPERATION_FAILED, 'Above quota')
 
-        token = seafile_api.get_fileserver_access_token(
-            repo_id, 'dummy', 'upload', request.user.username, use_onetime = False)
+        token = seafile_api.get_fileserver_access_token(repo_id,
+                'dummy', 'upload', request.user.username, use_onetime=False)
+
+        if not token:
+            error_msg = 'Internal Server Error'
+            return api_error(status.HTTP_500_INTERNAL_SERVER_ERROR, error_msg)
 
         req_from = request.GET.get('from', 'api')
         if req_from == 'api':
@@ -1280,8 +1289,12 @@ class UpdateLinkView(APIView):
         if check_quota(repo_id) < 0:
             return api_error(HTTP_520_OPERATION_FAILED, 'Above quota')
 
-        token = seafile_api.get_fileserver_access_token(
-            repo_id, 'dummy', 'update', request.user.username)
+        token = seafile_api.get_fileserver_access_token(repo_id,
+                'dummy', 'update', request.user.username)
+
+        if not token:
+            error_msg = 'Internal Server Error'
+            return api_error(status.HTTP_500_INTERNAL_SERVER_ERROR, error_msg)
 
         req_from = request.GET.get('from', 'api')
         if req_from == 'api':
@@ -1320,9 +1333,13 @@ class UploadBlksLinkView(APIView):
         if check_quota(repo_id) < 0:
             return api_error(HTTP_520_OPERATION_FAILED, 'Above quota')
 
-        token = seafile_api.get_fileserver_access_token(
-            repo_id, 'dummy', 'upload-blks-api', request.user.username,
-            use_onetime = False)
+        token = seafile_api.get_fileserver_access_token(repo_id,
+                'dummy', 'upload-blks-api', request.user.username, use_onetime=False)
+
+        if not token:
+            error_msg = 'Internal Server Error'
+            return api_error(status.HTTP_500_INTERNAL_SERVER_ERROR, error_msg)
+
         url = gen_file_upload_url(token, 'upload-blks-api')
         return Response(url)
 
@@ -1361,9 +1378,13 @@ class UploadBlksLinkView(APIView):
         if check_quota(repo_id) < 0:
             return api_error(HTTP_520_OPERATION_FAILED, 'Above quota')
 
-        token = seafile_api.get_fileserver_access_token(
-            repo_id, 'dummy', 'upload', request.user.username,
-            use_onetime = False)
+        token = seafile_api.get_fileserver_access_token(repo_id,
+                'dummy', 'upload', request.user.username, use_onetime=False)
+
+        if not token:
+            error_msg = 'Internal Server Error'
+            return api_error(status.HTTP_500_INTERNAL_SERVER_ERROR, error_msg)
+
         blksurl = gen_file_upload_url(token, 'upload-raw-blks-api')
         commiturl = '%s?commitonly=true&ret-json=true' %  gen_file_upload_url(
             token, 'upload-blks-api')
@@ -1405,9 +1426,13 @@ class UpdateBlksLinkView(APIView):
         if check_quota(repo_id) < 0:
             return api_error(HTTP_520_OPERATION_FAILED, 'Above quota')
 
-        token = seafile_api.get_fileserver_access_token(
-            repo_id, 'dummy', 'update-blks-api', request.user.username,
-            use_onetime = False)
+        token = seafile_api.get_fileserver_access_token(repo_id,
+                'dummy', 'update-blks-api', request.user.username, use_onetime=False)
+
+        if not token:
+            error_msg = 'Internal Server Error'
+            return api_error(status.HTTP_500_INTERNAL_SERVER_ERROR, error_msg)
+
         url = gen_file_upload_url(token, 'update-blks-api')
         return Response(url)
 
@@ -1529,9 +1554,12 @@ def get_shared_link(request, repo_id, path):
 
 def get_repo_file(request, repo_id, file_id, file_name, op, use_onetime=True):
     if op == 'download':
-        token = seafile_api.get_fileserver_access_token(repo_id, file_id, op,
-                                                        request.user.username,
-                                                        use_onetime)
+        token = seafile_api.get_fileserver_access_token(repo_id,
+                file_id, op, request.user.username, use_onetime)
+
+        if not token:
+            error_msg = 'Internal Server Error'
+            return api_error(status.HTTP_500_INTERNAL_SERVER_ERROR, error_msg)
 
         redirect_url = gen_file_get_url(token, file_name)
         response = HttpResponse(json.dumps(redirect_url), status=200,

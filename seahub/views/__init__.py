@@ -1001,6 +1001,9 @@ def repo_download_dir(request, repo_id):
         token = seafile_api.get_fileserver_access_token(
                 repo_id, json.dumps(fake_obj_id), 'download-dir', request.user.username)
 
+        if not token:
+            return render_error(request, _(u'Internal Server Error'))
+
     else:
         return render_error(request, _(u'Unable to download "%s"') % dirname )
 

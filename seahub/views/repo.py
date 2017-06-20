@@ -66,8 +66,12 @@ def is_no_quota(repo_id):
 def get_upload_url(request, repo_id):
     username = request.user.username
     if check_folder_permission(request, repo_id, '/') == 'rw':
-        token = seafile_api.get_fileserver_access_token(repo_id, 'dummy',
-                                                        'upload', username)
+        token = seafile_api.get_fileserver_access_token(repo_id,
+                'dummy', 'upload', username)
+
+        if not token:
+            return ''
+
         return gen_file_upload_url(token, 'upload')
     else:
         return ''

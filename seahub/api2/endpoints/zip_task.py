@@ -135,6 +135,10 @@ class ZipTaskView(APIView):
             error_msg = 'Internal Server Error'
             return api_error(status.HTTP_500_INTERNAL_SERVER_ERROR, error_msg)
 
+        if not zip_token:
+            error_msg = 'Internal Server Error'
+            return api_error(status.HTTP_500_INTERNAL_SERVER_ERROR, error_msg)
+
         if len(dirent_name_list) > 10:
             send_file_access_msg(request, repo, parent_dir, 'web')
         else:
