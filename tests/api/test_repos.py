@@ -38,9 +38,6 @@ class ReposApiTest(ApiTestBase):
             self.assertIsNotNone(repo['size'])
             self.assertIsNotNone(repo['name'])
             self.assertIsNotNone(repo['type'])
-            # self.assertIsNotNone(repo['virtual']) #allow null for pub-repo
-            self.assertIsNotNone(repo['desc'])
-            self.assertIsNotNone(repo['root'])
             self.assertIsNotNone(repo['head_commit_id'])
 
     def test_get_repo_info(self):

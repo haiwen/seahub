@@ -54,7 +54,7 @@
                     <li><a class="op js-repo-rename" href="#">{% trans "Rename" %}</a></li>
                     <li><a class="op js-repo-transfer" href="#">{% trans "Transfer" %}</a></li>
                     <li><a class="op js-popup-history-setting" href="#">{% trans "History Setting" %}</a></li>
-                    <% if (encrypted && enc_version == 2) { %>
+                    <% if (encrypted) { %>
                     <li><a class="op js-repo-change-password" href="#">{% trans "Change Password" %}</a></li>
                     <% } %>
                     <% if (!encrypted && (can_generate_share_link || can_generate_upload_link)) { %>
@@ -96,7 +96,7 @@
                     <li><a class="op js-repo-rename" href="#">{% trans "Rename" %}</a></li>
                     <li><a class="op js-repo-transfer" href="#">{% trans "Transfer" %}</a></li>
                     <li><a class="op js-popup-history-setting" href="#">{% trans "History Setting" %}</a></li>
-                    <% if (encrypted && enc_version == 2) { %>
+                    <% if (encrypted) { %>
                     <li><a class="op js-repo-change-password" href="#">{% trans "Change Password" %}</a></li>
                     <% } %>
                     <% if (!encrypted && (can_generate_share_link || can_generate_upload_link)) { %>
