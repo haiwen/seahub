@@ -53,8 +53,12 @@ def onlyoffice_editor_callback(request):
             file_path = doc_info['file_path']
             username = doc_info['username']
 
-            update_token = seafile_api.get_fileserver_access_token(
-                repo_id, 'dummy', 'update', username)
+            update_token = seafile_api.get_fileserver_access_token(repo_id,
+                    'dummy', 'update', username)
+
+            if not update_token:
+                return HttpResponse('{"error": 0}')
+
             update_url = gen_file_upload_url(update_token, 'update-api')
 
             files = {

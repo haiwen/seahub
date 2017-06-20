@@ -805,8 +805,13 @@ def download_enc_file(request, repo_id, file_id):
 
     blklist = blks.split('\n')
     blklist = [i for i in blklist if len(i) == 40]
-    token = seafile_api.get_fileserver_access_token(repo_id, file_id,
-                                                    op, request.user.username)
+    token = seafile_api.get_fileserver_access_token(repo_id,
+            file_id, op, request.user.username)
+
+    if not token:
+        result['error'] = _(u'FileServer access token invalid.')
+        return HttpResponse(json.dumps(result), content_type=content_type)
+
     url = gen_block_get_url(token, None)
     result = {
         'blklist':blklist,
@@ -1064,6 +1069,10 @@ def get_file_upload_url_ul(request, token):
         acc_token = seafile_api.get_fileserver_access_token(*args, **kwargs)
     except SearpcError as e:
         logger.error(e)
+        return HttpResponse(json.dumps({"error": _("Internal Server Error")}),
+                            status=500, content_type=content_type)
+
+    if not acc_token:
         return HttpResponse(json.dumps({"error": _("Internal Server Error")}),
                             status=500, content_type=content_type)
 

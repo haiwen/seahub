@@ -180,6 +180,11 @@ class FileView(APIView):
                 # get file server update url
                 update_token = seafile_api.get_fileserver_access_token(
                         repo_id, 'dummy', 'update', username)
+
+                if not update_token:
+                    error_msg = 'Internal Server Error'
+                    return api_error(status.HTTP_500_INTERNAL_SERVER_ERROR, error_msg)
+
                 update_url = gen_file_upload_url(update_token, 'update-api')
 
                 # update file

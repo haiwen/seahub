@@ -291,11 +291,15 @@ class WOPIFilesContentsView(APIView):
         file_name = os.path.basename(file_path)
         try:
             fileserver_token = seafile_api.get_fileserver_access_token(repo_id,
-                                       obj_id, 'view', '', use_onetime = False)
+                    obj_id, 'view', '', use_onetime = False)
         except SearpcError as e:
             logger.error(e)
             return HttpResponse(json.dumps({}), status=500,
-                                content_type=json_content_type)
+                    content_type=json_content_type)
+
+        if not fileserver_token:
+            return HttpResponse(json.dumps({}), status=500,
+                    content_type=json_content_type)
 
         inner_path = gen_inner_file_get_url(fileserver_token, file_name)
 
@@ -320,6 +324,11 @@ class WOPIFilesContentsView(APIView):
             # get file update url
             token = seafile_api.get_fileserver_access_token(repo_id,
                     'dummy', 'update', request_user)
+
+            if not token:
+                return HttpResponse(json.dumps({}), status=500,
+                        content_type=json_content_type)
+
             update_url = gen_file_upload_url(token, 'update-api')
 
             # update file
