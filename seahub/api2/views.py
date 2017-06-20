@@ -438,22 +438,17 @@ class Repos(APIView):
                     "id": r.id,
                     "owner": email,
                     "name": r.name,
-                    "desc": r.desc,
                     "mtime": r.last_modify,
                     "mtime_relative": translate_seahub_time(r.last_modify),
                     "size": r.size,
                     "size_formatted": filesizeformat(r.size),
                     "encrypted": r.encrypted,
                     "permission": 'rw',  # Always have read-write permission to owned repo
-                    "virtual": r.is_virtual,
-                    "root": r.root,
+                    "virtual": False,
+                    "root": '',
                     "head_commit_id": r.head_cmmt_id,
                     "version": r.version,
                 }
-                if r.encrypted:
-                    repo["enc_version"] = r.enc_version
-                    repo["magic"] = r.magic
-                    repo["random_key"] = r.random_key
                 repos_json.append(repo)
 
         if filter_by['shared']:
@@ -475,7 +470,6 @@ class Repos(APIView):
                     "owner": r.user,
                     "name": r.repo_name,
                     "owner_nickname": email2nickname(r.user),
-                    "desc": r.repo_desc,
                     "mtime": r.last_modify,
                     "mtime_relative": translate_seahub_time(r.last_modify),
                     "size": r.size,
@@ -483,14 +477,10 @@ class Repos(APIView):
                     "encrypted": r.encrypted,
                     "permission": r.permission,
                     "share_type": r.share_type,
-                    "root": r.root,
+                    "root": '',
                     "head_commit_id": r.head_cmmt_id,
                     "version": r.version,
                 }
-                if r.encrypted:
-                    repo["enc_version"] = r.enc_version
-                    repo["magic"] = r.magic
-                    repo["random_key"] = r.random_key
                 repos_json.append(repo)
 
         if filter_by['group']:
@@ -504,19 +494,14 @@ class Repos(APIView):
                     "owner": r.group.group_name,
                     "groupid": r.group.id,
                     "name": r.name,
-                    "desc": r.desc,
                     "mtime": r.last_modify,
                     "size": r.size,
                     "encrypted": r.encrypted,
                     "permission": check_permission(r.id, email),
-                    "root": r.root,
+                    "root": '',
                     "head_commit_id": r.head_cmmt_id,
                     "version": r.version,
                 }
-                if r.encrypted:
-                    repo["enc_version"] = r.enc_version
-                    repo["magic"] = r.magic
-                    repo["random_key"] = r.random_key
                 repos_json.append(repo)
 
         if filter_by['org'] and request.user.permissions.can_view_org():
@@ -526,7 +511,6 @@ class Repos(APIView):
                     "type": "grepo",
                     "id": r.repo_id,
                     "name": r.repo_name,
-                    "desc": r.repo_desc,
                     "owner": "Organization",
                     "mtime": r.last_modified,
                     "mtime_relative": translate_seahub_time(r.last_modified),
@@ -536,14 +520,10 @@ class Repos(APIView):
                     "permission": r.permission,
                     "share_from": r.user,
                     "share_type": r.share_type,
-                    "root": r.root,
+                    "root": '',
                     "head_commit_id": r.head_cmmt_id,
                     "version": r.version,
                 }
-                if r.encrypted:
-                    repo["enc_version"] = r.enc_version
-                    repo["magic"] = r.magic
-                    repo["random_key"] = r.random_key
                 repos_json.append(repo)
 
         response = HttpResponse(json.dumps(repos_json), status=200,
