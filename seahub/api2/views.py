@@ -439,6 +439,9 @@ class Repos(APIView):
                     "owner": email,
                     "name": r.name,
                     "mtime": r.last_modify,
+                    "modifier_email": r.last_modifier,
+                    "modifier_contact_email": email2contact_email(r.last_modifier),
+                    "modifier_name": email2nickname(r.last_modifier),
                     "mtime_relative": translate_seahub_time(r.last_modify),
                     "size": r.size,
                     "size_formatted": filesizeformat(r.size),
@@ -472,6 +475,9 @@ class Repos(APIView):
                     "owner_nickname": email2nickname(r.user),
                     "mtime": r.last_modify,
                     "mtime_relative": translate_seahub_time(r.last_modify),
+                    "modifier_email": r.last_modifier,
+                    "modifier_contact_email": email2contact_email(r.last_modifier),
+                    "modifier_name": email2nickname(r.last_modifier),
                     "size": r.size,
                     "size_formatted": filesizeformat(r.size),
                     "encrypted": r.encrypted,
@@ -495,6 +501,9 @@ class Repos(APIView):
                     "groupid": r.group.id,
                     "name": r.name,
                     "mtime": r.last_modify,
+                    "modifier_email": r.last_modifier,
+                    "modifier_contact_email": email2contact_email(r.last_modifier),
+                    "modifier_name": email2nickname(r.last_modifier),
                     "size": r.size,
                     "encrypted": r.encrypted,
                     "permission": check_permission(r.id, email),
@@ -514,6 +523,9 @@ class Repos(APIView):
                     "owner": "Organization",
                     "mtime": r.last_modified,
                     "mtime_relative": translate_seahub_time(r.last_modified),
+                    "modifier_email": r.last_modifier,
+                    "modifier_contact_email": email2contact_email(r.last_modifier),
+                    "modifier_name": email2nickname(r.last_modifier),
                     "size": r.size,
                     "size_formatted": filesizeformat(r.size),
                     "encrypted": r.encrypted,
@@ -806,6 +818,9 @@ class Repo(APIView):
             "encrypted":repo.encrypted,
             "root":root_id,
             "permission": check_permission(repo.id, username),
+            "modifier_email": repo.last_modifier,
+            "modifier_contact_email": email2contact_email(repo.last_modifier),
+            "modifier_name": email2nickname(repo.last_modifier),
             }
         if repo.encrypted:
             repo_json["enc_version"] = repo.enc_version
@@ -3787,6 +3802,9 @@ class GroupRepos(APIView):
             "owner": username,
             "owner_nickname": email2nickname(username),
             "share_from_me": True,
+            "modifier_email": repo.last_modifier,
+            "modifier_contact_email": email2contact_email(repo.last_modifier),
+            "modifier_name": email2nickname(repo.last_modifier),
         }
 
         return Response(group_repo, status=200)

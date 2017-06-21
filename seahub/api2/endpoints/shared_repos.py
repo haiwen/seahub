@@ -15,7 +15,7 @@ from seahub.api2.authentication import TokenAuthentication
 from seahub.api2.throttling import UserRateThrottle
 from seahub.profile.models import Profile
 from seahub.utils import is_org_context, is_valid_username, send_perm_audit_msg
-from seahub.base.templatetags.seahub_tags import email2nickname
+from seahub.base.templatetags.seahub_tags import email2nickname, email2contact_email
 
 logger = logging.getLogger(__name__)
 
@@ -61,6 +61,9 @@ class SharedRepos(APIView):
             result['repo_name'] = repo.repo_name
             result['share_type'] = repo.share_type
             result['share_permission'] = repo.permission
+            result['modifier_email'] = repo.last_modifier
+            result['modifier_name'] = email2nickname(repo.last_modifier)
+            result['modifier_contact_email'] = email2contact_email(repo.last_modifier)
 
             if repo.share_type == 'personal':
                 result['user_name'] = email2nickname(repo.user)
