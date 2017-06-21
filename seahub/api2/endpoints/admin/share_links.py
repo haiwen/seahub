@@ -20,9 +20,9 @@ from seahub.api2.authentication import TokenAuthentication
 from seahub.api2.throttling import UserRateThrottle
 from seahub.api2.utils import api_error
 
-from seahub.base.templatetags.seahub_tags import email2nickname
+from seahub.base.templatetags.seahub_tags import email2nickname, \
+        email2contact_email
 from seahub.share.models import FileShare
-from seahub.profile.models import Profile
 from seahub.utils import gen_file_get_url, gen_dir_zip_download_url, \
         is_windows_operating_system, gen_shared_link
 from seahub.utils.timeutils import timestamp_to_isoformat_timestr, \
@@ -61,8 +61,7 @@ def get_share_link_info(fileshare):
     ccnet_email = fileshare.username
     data['creator_email'] = ccnet_email
     data['creator_name'] = email2nickname(ccnet_email)
-    data['creator_contact_email'] = \
-            Profile.objects.get_contact_email_by_user(ccnet_email)
+    data['creator_contact_email'] = email2contact_email(ccnet_email)
 
     data['repo_id'] = repo_id
     data['repo_name'] = repo.repo_name if repo else ''

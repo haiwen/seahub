@@ -16,12 +16,12 @@ from seahub.api2.utils import api_error
 from seahub.api2.authentication import TokenAuthentication
 from seahub.api2.throttling import UserRateThrottle
 
-from seahub.base.templatetags.seahub_tags import email2nickname
+from seahub.base.templatetags.seahub_tags import email2nickname, \
+        email2contact_email
 from seahub.utils import gen_file_upload_url, gen_shared_upload_link
 from seahub.utils.timeutils import datetime_to_isoformat_timestr
 
 from seahub.share.models import UploadLinkShare
-from seahub.profile.models import Profile
 
 logger = logging.getLogger(__name__)
 
@@ -59,8 +59,7 @@ def get_upload_link_info(uls):
     ccnet_email = uls.username
     data['creator_email'] = ccnet_email
     data['creator_name'] = email2nickname(ccnet_email)
-    data['creator_contact_email'] = \
-            Profile.objects.get_contact_email_by_user(ccnet_email)
+    data['creator_contact_email'] = email2contact_email(ccnet_email)
 
     return data
 
