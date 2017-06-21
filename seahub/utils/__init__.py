@@ -451,6 +451,13 @@ def gen_file_get_url(token, filename):
 def gen_file_upload_url(token, op):
     return '%s/%s/%s' % (get_fileserver_root(), op, token)
 
+def gen_dir_zip_download_url(token):
+    """
+    Generate fileserver file url.
+    Format: http://<domain:port>/files/<token>/<filename>
+    """
+    return '%s/zip/%s' % (get_fileserver_root(), token)
+
 def get_ccnet_server_addr_port():
     """get ccnet server host and port"""
     return seaserv.CCNET_SERVER_ADDR, seaserv.CCNET_SERVER_PORT
