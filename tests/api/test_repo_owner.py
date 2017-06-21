@@ -65,13 +65,21 @@ class RepoOwnerTest(BaseTestCase):
                 '/', tmp_user) == 'rw'
 
     def test_not_reshare_to_user_after_transfer_repo(self):
-        # Remove share if repo already shared to new owner
+
+        # remove all share
+        shared_repos = seafile_api.get_share_in_repo_list(self.admin.username, -1, -1)
+        for repo in  shared_repos:
+            seafile_api.remove_share(repo.repo_id, self.admin.username,
+                    self.user.username)
+
+            seafile_api.remove_share(repo.repo_id, self.user.username,
+                    self.admin.username)
 
         # share user's repo to admin with 'rw' permission
         seafile_api.share_repo(self.user_repo_id, self.user.username,
                 self.admin.username, 'rw')
 
-        # repo in admin's be shared repo list
+        # assert repo in admin's be shared repo list
         shared_repos = seafile_api.get_share_in_repo_list(self.admin.username, -1, -1)
         assert shared_repos[0].repo_name == self.repo.repo_name
 
@@ -83,7 +91,7 @@ class RepoOwnerTest(BaseTestCase):
         resp = self.client.put(url, data, 'application/x-www-form-urlencoded')
         self.assertEqual(200, resp.status_code)
 
-        # repo NOT in admin's be shared repo list
+        # assert repo NOT in admin's be shared repo list
         shared_repos = seafile_api.get_share_in_repo_list(self.admin.username, -1, -1)
         assert len(shared_repos) == 0
 

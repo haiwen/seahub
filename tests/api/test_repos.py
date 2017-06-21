@@ -55,10 +55,9 @@ class ReposApiTest(ApiTestBase):
             self.assertIsNotNone(rinfo['root'])
             self.assertIsNotNone(rinfo['desc'])
             self.assertIsNotNone(rinfo['type'])
-            assert len(repo['modifier_email']) > 0
-            assert len(repo['modifier_name']) > 0
-            assert len(repo['modifier_contact_email']) > 0
-            # elf.assertIsNotNone(rinfo['password_need']) # allow null here
+            assert len(rinfo['modifier_email']) > 0
+            assert len(rinfo['modifier_name']) > 0
+            assert len(rinfo['modifier_contact_email']) > 0
 
     def test_get_repo_history(self):
         with self.get_tmp_repo() as repo:

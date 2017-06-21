@@ -146,7 +146,10 @@ class RepoUserFolderPermTest(BaseTestCase):
         }
 
         resp = self.client.post(url, data)
-        self.assertEqual(409, resp.status_code)
+        json_resp = json.loads(resp.content)
+        assert len(json_resp['failed']) == 1
+        assert len(json_resp['success']) == 0
+        assert json_resp['failed'][0]['user_email'] == self.admin_email
 
     def test_can_delete_folder_perm(self):
 
