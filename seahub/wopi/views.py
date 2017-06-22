@@ -188,10 +188,6 @@ class WOPIFilesView(APIView):
 
         if x_wopi_override == 'LOCK':
 
-            # TODO
-            if file_path.endswith('.xlsx'):
-                x_wopi_oldlock = False
-
             if x_wopi_oldlock:
                 # UnlockAndRelock endpoint
                 if file_is_locked(request):
