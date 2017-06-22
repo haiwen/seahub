@@ -15,6 +15,7 @@ class DirTest(BaseTestCase):
         self.login_as(self.user)
         self.endpoint = reverse('DirView', args=[self.repo.id])
         self.folder_name = os.path.basename(self.folder)
+        self.file_name = os.path.basename(self.file)
 
     def tearDown(self):
         self.remove_repo()
@@ -24,8 +25,11 @@ class DirTest(BaseTestCase):
         json_resp = json.loads(resp.content)
 
         self.assertEqual(200, resp.status_code)
-        assert len(json_resp) == 1
+        assert len(json_resp) == 2
         assert self.folder_name == json_resp[0]['name']
+        assert self.file_name == json_resp[1]['name']
+        assert len(json_resp[1]['modifier_name']) > 0
+        assert len(json_resp[1]['modifier_contact_email']) > 0
 
     def test_can_create(self):
         resp = self.client.post(self.endpoint + '?p=/new_dir', {

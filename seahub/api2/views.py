@@ -1476,17 +1476,17 @@ def get_dir_entrys_by_id(request, repo, path, dir_id, request_type=None):
 
     dir_list, file_list = [], []
     for dirent in dirs:
-        dtype = "file"
         entry = {}
         if stat.S_ISDIR(dirent.mode):
             dtype = "dir"
         else:
+            dtype = "file"
+            entry['modifier_email'] = dirent.modifier
             if repo.version == 0:
                 entry["size"] = get_file_size(repo.store_id, repo.version,
                                               dirent.obj_id)
             else:
                 entry["size"] = dirent.size
-
             if is_pro_version():
                 entry["is_locked"] = dirent.is_locked
                 entry["lock_owner"] = dirent.lock_owner
@@ -1496,9 +1496,6 @@ def get_dir_entrys_by_id(request, repo, path, dir_id, request_type=None):
                 else:
                     entry["locked_by_me"] = False
 
-            entry['modifier_email'] = dirent.modifier
-            entry['modifier_contact_email'] = email2contact_email(dirent.modifier)
-            entry['modifier_name'] = email2nickname(dirent.modifier)
         entry["type"] = dtype
         entry["name"] = dirent.obj_name
         entry["id"] = dirent.obj_id
@@ -1508,6 +1505,20 @@ def get_dir_entrys_by_id(request, repo, path, dir_id, request_type=None):
             dir_list.append(entry)
         else:
             file_list.append(entry)
+
+    # Use dict to reduce memcache fetch cost in large for-loop.
+    contact_email_dict = {}
+    nickname_dict = {}
+    modifiers_set = set([x['modifier_email'] for x in file_list])
+    for e in modifiers_set:
+        if e not in contact_email_dict:
+            contact_email_dict[e] = email2contact_email(e)
+        if e not in nickname_dict:
+            nickname_dict[e] = email2nickname(e)
+
+    for e in file_list:
+        e['modifier_contact_email'] = contact_email_dict.get(e['modifier_email'], '')
+        e['modifier_name'] = nickname_dict.get(e['modifier_email'], '')
 
     dir_list.sort(lambda x, y: cmp(x['name'].lower(), y['name'].lower()))
     file_list.sort(lambda x, y: cmp(x['name'].lower(), y['name'].lower()))
