@@ -58,6 +58,9 @@ class SharedReposTest(BaseTestCase):
         assert json_resp[0]['user_email'] == self.admin_name
         assert json_resp[0]['user_name'] == nickname
         assert json_resp[0]['contact_email'] == contact_email
+        assert len(json_resp[0]['modifier_email']) > 0
+        assert len(json_resp[0]['modifier_name']) > 0
+        assert len(json_resp[0]['modifier_contact_email']) > 0
 
     def test_can_get_when_share_to_group(self):
         self.share_repo_to_group()
