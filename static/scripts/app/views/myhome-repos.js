@@ -6,9 +6,10 @@ define([
     'app/collections/repos',
     'app/views/repo',
     'app/views/add-repo',
-    'app/views/repo-details'
+    'app/views/repo-details',
+    'app/views/widgets/dropdown'
 ], function($, _, Backbone, Common, RepoCollection, RepoView, AddRepoView,
-    RepoDetailsView) {
+    RepoDetailsView, DropdownView) {
     'use strict';
 
     var ReposView = Backbone.View.extend({
@@ -21,7 +22,8 @@ define([
         events: {
             'click .repo-create': 'createRepo',
             'click .by-name': 'sortByName',
-            'click .by-time': 'sortByTime'
+            'click .by-time': 'sortByTime',
+            'click #my-libs-more-op a': 'closeDropdown'
         },
 
         initialize: function(options) {
@@ -32,6 +34,11 @@ define([
             this.repoDetailsView = new RepoDetailsView();
 
             this.render();
+
+            this.more_op_dropdown = new DropdownView({
+                el: this.$("#my-libs-more-op"),
+                right: 0
+            })
         },
 
         addOne: function(repo, collection, options) {
@@ -149,6 +156,10 @@ define([
             this.repos.comparator = null;
 
             return false;
+        },
+
+        closeDropdown: function() {
+            this.more_op_dropdown.hide();
         }
 
     });

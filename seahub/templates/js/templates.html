@@ -154,6 +154,30 @@
     </div>
 </script>
 
+<script type="text/template" id="deleted-repo-tmpl">
+    <td>
+        <img src="<%= icon_url %>" title="<%= icon_title %>" alt="<%= icon_title %>" width="24" />
+    </td>
+    <td><%- repo_name %></td>
+    <td><span title="<%= time %>"><%= time_from_now %></span></td>
+    <td>
+        <a href="#" class="sf2-icon-reply sf2-x restore op-icon vh" title="{% trans "Restore" %}" aria-label="{% trans "Restore" %}"></a>
+    </td>
+</script>
+<script type="text/template" id="deleted-repo-mobile-tmpl">
+    <td>
+        <img src="<%= icon_url %>" title="<%= icon_title %>" alt="<%= icon_title %>" width="24" />
+    </td>
+    <td>
+        <span class="repo-name-span">
+            <%- repo_name %><br />
+            <span class="repo-meta-info" title="<%= time %>"><%= time_from_now %></span>
+        </span>
+    </td>
+    <td>
+        <a href="#" class="sf2-icon-reply sf2-x restore op-icon" title="{% trans "Restore" %}" aria-label="{% trans "Restore" %}"></a>
+    </td>
+</script>
 
 <script type="text/template" id="group-repo-tmpl">
     <td>
@@ -1260,13 +1284,13 @@
 
 
 <script type="text/template" id="my-repos-hd-tmpl">
-   <tr>
-       <th width="4%"><span class="sr-only">{% trans "Library Type" %}</span><!--icon--></th>
-       <th width="42%"><a class="table-sort-op by-name" href="#">{% trans "Name" %} <span class="sort-icon icon-caret-down hide"></span></a></th>
-       <th width="14%"><span class="sr-only">{% trans "Actions" %}</span></th>
-       <th width="20%">{% trans "Size" %}</th>
-       <th width="20%"><a class="table-sort-op by-time" href="#">{% trans "Last Update" %} <span class="sort-icon icon-caret-up"></span></a></th>
-   </tr>
+    <tr>
+        <th width="4%"><span class="sr-only">{% trans "Library Type" %}</span><!--icon--></th>
+        <th width="42%"><a class="table-sort-op by-name" href="#">{% trans "Name" %} <span class="sort-icon icon-caret-down hide"></span></a></th>
+        <th width="14%"><span class="sr-only">{% trans "Actions" %}</span></th>
+        <th width="20%">{% trans "Size" %}</th>
+        <th width="20%"><a class="table-sort-op by-time" href="#">{% trans "Last Update" %} <span class="sort-icon icon-caret-up"></span></a></th>
+    </tr>
 </script>
 <script type="text/template" id="my-repos-hd-mobile-tmpl">
     <tr>
@@ -1278,6 +1302,23 @@
         <th width="4%"><span class="sr-only">{% trans "Actions" %}</span></th>
     </tr>
 </script>
+
+<script type="text/template" id="my-deleted-repos-hd-tmpl">
+    <tr>
+        <th width="4%"><span class="sr-only">{% trans "Library Type" %}</span><!--icon--></th>
+        <th width="52%">{% trans "Name" %}</th>
+        <th width="30%">{% trans "Deleted Time" %}</th>
+        <th width="14%"><span class="sr-only">{% trans "Actions" %}</span></th>
+    </tr>
+</script>
+<script type="text/template" id="my-deleted-repos-hd-mobile-tmpl">
+    <tr class="vh">
+        <th width="4%"><span class="sr-only">{% trans "Library Type" %}</span><!--icon--></th>
+        <th width="82%">{% trans "Name" %}{% trans "Deleted Time" %}</th>
+        <th width="14%"><span class="sr-only">{% trans "Actions" %}</span></th>
+    </tr>
+</script>
+
 <script type="text/template" id="shared-repos-hd-tmpl">
     <tr>
         <th width="4%"><span class="sr-only">{% trans "Library Type" %}</span><!--icon--></th>

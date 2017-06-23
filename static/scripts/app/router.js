@@ -6,6 +6,7 @@ define([
     'js.cookie',
     'app/views/side-nav',
     'app/views/myhome-repos',
+    'app/views/my-deleted-repos',
     'app/views/myhome-shared-repos',
     'app/views/groups',
     'app/views/group',
@@ -22,8 +23,8 @@ define([
     'app/views/notifications',
     'app/views/account'
 ], function($, Backbone, Common, Cookies, SideNavView, MyReposView,
-    SharedReposView, GroupsView, GroupView, OrgView, DirView,
-    StarredFileView, ActivitiesView, DevicesView, InvitationsView,
+    MyDeletedReposView, SharedReposView, GroupsView, GroupView, OrgView,
+    DirView, StarredFileView, ActivitiesView, DevicesView, InvitationsView,
     ShareAdminReposView, ShareAdminFoldersView, ShareAdminShareLinksView,
     ShareAdminUploadLinksView, NotificationsView, AccountView) {
     "use strict";
@@ -32,6 +33,7 @@ define([
         routes: {
             '': 'showRepos',
             'my-libs/': 'showMyRepos',
+            'my-libs/deleted/': 'showMyDeletedRepos',
             'my-libs/lib/:repo_id(/*path)': 'showMyRepoDir',
             'shared-libs/': 'showSharedRepos',
             'shared-libs/lib/:repo_id(/*path)': 'showSharedRepoDir',
@@ -67,6 +69,7 @@ define([
             this.dirView = new DirView();
 
             this.myReposView = new MyReposView();
+            this.myDeletedReposView = new MyDeletedReposView();
             this.sharedReposView = new SharedReposView();
             this.orgView = new OrgView();
             this.groupView = new GroupView();
@@ -145,6 +148,12 @@ define([
         showMyRepos: function() {
             this.switchCurrentView(this.myReposView);
             this.myReposView.show();
+            this.sideNavView.setCurTab('mine');
+        },
+
+        showMyDeletedRepos: function() {
+            this.switchCurrentView(this.myDeletedReposView);
+            this.myDeletedReposView.show();
             this.sideNavView.setCurTab('mine');
         },
 
