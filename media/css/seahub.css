@@ -682,10 +682,12 @@ textarea:-moz-placeholder {/* for FF */
     border-top-right-radius:2px;
     border-bottom-right-radius:2px;
 }
+.sf-btn-group-btn:focus {
+    border-color:#c5c5c5;
+}
 .sf-btn-group-btn-cur,
 .sf-btn-group-btn:hover {
-    color:#fff;
-    background:#feac74;
+    background:#efefef;
 }
 .sf2-icon-edit.sf-btn-group-btn {
     font-size:20px;
@@ -3946,7 +3948,7 @@ img.thumbnail {
     margin: 15px 0 25px;
 }
 .date-custom-form {
-    margin-left:10px;
+    margin-left:15px;
 }
 .date-custom-form .input,
 .date-custom-form .submit {
@@ -3954,5 +3956,8 @@ img.thumbnail {
 }
 .date-custom-form .input {
     height:25px;
-    width:100px;
+    width:75px;
+}
+.date-custom-form .submit {
+    margin-left:5px;
 }

@@ -120,13 +120,13 @@ function getStatisticByTimeRange(range) {
             group_by = 'hour';
             break;
         case '7d': // 7 days
-            start_ms = today_ms - 7 * day_ms;
+            start_ms = today_ms - 6 * day_ms; // 'today' is included
             break;
         case '30d': // 30 days
-            start_ms = today_ms - 30 * day_ms;
+            start_ms = today_ms - 29 * day_ms;
             break;
         case '1y': // 1 year
-            start_ms = today_ms - 365 * day_ms;
+            start_ms = today_ms - 364 * day_ms;
             break;
     }
 
@@ -146,15 +146,21 @@ function renderChart(data, group_by) {
         visited = [];
 
     var item;
+	var datetime_ms, datetime_str;
     for (var i = 0, len = data.length; i < len; i++) {
         item = data[i];
+
+        // datetime: 2017-06-21T07:58:01+00:00
+        datetime_ms = Date.parse(item.datetime);
+        datetime_str = getTimeStr(datetime_ms);
         if (group_by == 'hour') {
             // time shown in '%H:%M'
-            labels.push(item.datetime.substr(11,5));
+            labels.push(datetime_str.substr(11,5));
         } else {
             // time shown in '%Y-%m-%d'
-            labels.push(item.datetime.substr(0, 10));
+            labels.push(datetime_str.substr(0, 10));
         }
+
         added.push(item.added);
         deleted.push(item.deleted);
         visited.push(item.visited);
@@ -166,23 +172,23 @@ function renderChart(data, group_by) {
             labels: labels,
             datasets: [
                 {
-                    label: "{% trans "added" %}",
-                    data: added,
-                    borderColor: 'green',
-                    backgroundColor: 'green'
-                },
-                {
-                    label: "{% trans "deleted" %}",
-                    data: deleted,
-                    borderColor: 'red',
-                    backgroundColor: 'red'
-                },
-                {
-                    label: "{% trans "visited" %}",
+                    label: "{% trans "Visited" %}",
                     data: visited,
-                    borderColor: 'yellow',
-                    backgroundColor: 'yellow'
+                    borderColor: '#fd913a',
+                    backgroundColor: '#fd913a'
                 },
+                {
+                    label: "{% trans "Added" %}",
+                    data: added,
+                    borderColor: '#57cd6b',
+                    backgroundColor: '#57cd6b'
+                },
+                {
+                    label: "{% trans "Deleted" %}",
+                    data: deleted,
+                    borderColor: '#f75356',
+                    backgroundColor: '#f75356'
+                }
             ]
         }, // 'data' ends here
         options: {
@@ -201,6 +207,11 @@ function renderChart(data, group_by) {
             legend: {
                 labels: {
                     usePointStyle: true
+                }
+            },
+            layout: {
+                padding: {
+                    right: 100
                 }
             }
         }
@@ -255,7 +266,7 @@ $('.date-custom-form').submit(function() {
     }
 
     // 'date' can be picked from datepicker, also directly input
-    var date_pattern = /^([012]\d{3})-(0[1-9]|1[012])\-(0[1-9]|[12]\d|3[01])$/;
+    var date_pattern = /^([012]\d{3})\-(0[1-9]|1[012])\-(0[1-9]|[12]\d|3[01])$/;
     if (!date_pattern.test(start_date)) {
         $error.html("{% trans "Invalid start date, should be yyyy-mm-dd" %}").removeClass('hide');
         return false;
@@ -270,7 +281,6 @@ $('.date-custom-form').submit(function() {
         return false;
     }
 
-    //disable($('[type=submit]', $form));
     var options = {
         start: start_date + ' 00:00:00'
     };
