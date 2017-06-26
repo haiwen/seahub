@@ -24,6 +24,7 @@ define([
         transferTemplate: _.template($('#repo-transfer-form-tmpl').html()),
 
         events: {
+            'click': 'clickItem',
             'click td:lt(2)': 'visitRepo',
             'click .repo-delete-btn': 'del',
             'click .repo-share-btn': 'share',
@@ -32,11 +33,14 @@ define([
             'click .js-repo-change-password': 'changePassword',
             'click .js-popup-history-setting': 'popupHistorySetting',
             'click .js-popup-share-link-admin': 'popupShareLinkAdmin',
-            'click .js-popup-folder-perm-admin': 'popupFolderPermAdmin'
+            'click .js-popup-folder-perm-admin': 'popupFolderPermAdmin',
+            'click .js-repo-details': 'viewDetails'
         },
 
-        initialize: function() {
+        initialize: function(options) {
             HLItemView.prototype.initialize.call(this);
+
+            this.myReposView = options.myReposView;
 
             this.listenTo(this.model, "change", this.render);
         },
@@ -63,6 +67,14 @@ define([
                 el: this.$('.sf-dropdown')
             }, dropdownOptions));
             return this;
+        },
+
+        clickItem: function(e) {
+            var target =  e.target || event.srcElement;
+            if (this.$('td').is(target) &&
+                $('#repo-details').is(':visible')) { // after `#repo-details` is shown
+                this.viewDetails();
+            }
         },
 
         visitRepo: function() {
@@ -311,6 +323,19 @@ define([
             };
             this.togglePopup(); // close the popup
             new RepoChangePasswordDialog(options);
+            return false;
+        },
+
+        viewDetails: function() {
+            var obj = this.model.toJSON();
+            var icon_size = Common.isHiDPI() ? 96 : 24;
+            var data = $.extend({}, obj, {
+                icon_url: this.model.getIconUrl(icon_size),
+                big_icon_url: this.model.getIconUrl(96)
+            });
+            this.myReposView.repoDetailsView.show(data);
+
+            this.togglePopup(); // close the popup
             return false;
         }
 

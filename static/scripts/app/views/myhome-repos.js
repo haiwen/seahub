@@ -6,7 +6,9 @@ define([
     'app/collections/repos',
     'app/views/repo',
     'app/views/add-repo',
-], function($, _, Backbone, Common, RepoCollection, RepoView, AddRepoView) {
+    'app/views/repo-details'
+], function($, _, Backbone, Common, RepoCollection, RepoView, AddRepoView,
+    RepoDetailsView) {
     'use strict';
 
     var ReposView = Backbone.View.extend({
@@ -27,11 +29,13 @@ define([
             this.listenTo(this.repos, 'add', this.addOne);
             this.listenTo(this.repos, 'reset', this.reset);
 
+            this.repoDetailsView = new RepoDetailsView();
+
             this.render();
         },
 
         addOne: function(repo, collection, options) {
-            var view = new RepoView({model: repo});
+            var view = new RepoView({model: repo, myReposView: this});
             if (options.prepend) {
                 this.$tableBody.prepend(view.render().el);
             } else {
@@ -115,6 +119,8 @@ define([
 
         hide: function() {
             this.$el.detach();
+
+            this.repoDetailsView.hide();
         },
 
         createRepo: function() {
