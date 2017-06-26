@@ -16,7 +16,7 @@ from django.conf import settings as dj_settings
 from django.core.urlresolvers import reverse
 from django.contrib import messages
 from django.http import HttpResponse, Http404, HttpResponseRedirect, HttpResponseNotAllowed
-from django.shortcuts import render_to_response
+from django.shortcuts import render_to_response, get_object_or_404
 from django.template import RequestContext
 from django.utils import timezone
 from django.utils.translation import ugettext as _
@@ -2315,6 +2315,27 @@ def sys_invitation_admin(request):
             'page_next': page_next,
         },
         context_instance=RequestContext(request))
+
+@login_required
+@sys_staff_required
+def sys_invitation_remove(request):
+    """Delete an invitation.
+    """
+    ct = 'application/json; charset=utf-8'
+    result = {}
+
+    if not ENABLE_GUEST_INVITATION:
+        return HttpResponse(json.dumps({}), status=400, content_type=ct)
+
+    inv_id = request.POST.get('inv_id', '')
+    if not inv_id:
+        result = {'error': "Argument missing"}
+        return HttpResponse(json.dumps(result), status=400, content_type=ct)
+
+    inv = get_object_or_404(Invitation, pk=inv_id)
+    inv.delete()
+
+    return HttpResponse(json.dumps({'success': True}), content_type=ct)
 
 @login_required
 @sys_staff_required

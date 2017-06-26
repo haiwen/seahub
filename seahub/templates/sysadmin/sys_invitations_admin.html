@@ -12,8 +12,9 @@
         <th width="25%">{% trans "Inviter" %}</th>
         <th width="25%">{% trans "Accepter" %}</th>
         <th width="10%">{% trans "Type" %}</th>
-        <th width="20%">{% trans "Invited at" %}</th>
-        <th width="20%">{% trans "Accepted at" %}</th>
+        <th width="16%">{% trans "Invited at" %}</th>
+        <th width="16%">{% trans "Accepted at" %}</th>
+        <th width="8%"></th>
     </tr>
     {% for invitation in invitations %}
     <tr>
@@ -30,6 +31,7 @@
         {% else %}
         <td>--</td>
         {% endif %}
+        <td><a class="op vh rm-link" href="#" data-id="{{invitation.pk}}">{% trans "Delete" %}</a></td>
     </tr>
     {% endfor %}
 </table>
@@ -44,5 +46,21 @@
 
 {% block extra_script %}
 <script type="text/javascript">
+$('.rm-link').click(function() {
+    var _this = $(this);
+    $.ajax({
+        url: '{% url 'sys_invitation_remove' %}',
+        type: 'POST',
+        data: {'inv_id': _this.attr('data-id')},
+        cache: false,
+        dataType: 'json',
+        beforeSend: prepareCSRFToken,
+        success: function() {
+            _this.closest('tr').remove();
+        },
+        error: ajaxErrorHandler
+    });
+    return false;
+});
 </script>
 {% endblock %}

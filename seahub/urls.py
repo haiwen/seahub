@@ -348,6 +348,7 @@ urlpatterns = patterns(
     url(r'^sys/uploadlink/remove/$', sys_upload_link_remove, name='sys_upload_link_remove'),
     url(r'^sys/notificationadmin/', notification_list, name='notification_list'),
     url(r'^sys/invitationadmin/$', sys_invitation_admin, name='sys_invitation_admin'),
+    url(r'^sys/invitationadmin/remove/$', sys_invitation_remove, name='sys_invitation_remove'),
     url(r'^sys/sudo/', sys_sudo_mode, name='sys_sudo_mode'),
     url(r'^sys/check-license/', sys_check_license, name='sys_check_license'),
     url(r'^useradmin/add/$', user_add, name="user_add"),
