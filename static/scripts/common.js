@@ -106,6 +106,7 @@ define([
                 case 'dir_shared_items': return siteRoot + 'api2/repos/' + options.repo_id + '/dir/shared_items/';
                 case 'shared_repos': return siteRoot + 'api2/shared-repos/' + options.repo_id + '/';
                 case 'repo': return siteRoot + 'api2/repos/' + options.repo_id + '/';
+                case 'repo_v2.1': return siteRoot + 'api/v2.1/repos/' + options.repo_id + '/';
                 case 'repo_owner': return siteRoot + 'api2/repos/' + options.repo_id + '/owner/';
                 case 'repo_history_limit': return siteRoot + 'api2/repos/' + options.repo_id + '/history-limit/';
                 case 'repo_shared_download_links': return siteRoot + 'api2/repos/' + options.repo_id + '/download-shared-links/';

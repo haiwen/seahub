@@ -333,7 +333,26 @@ define([
                 icon_url: this.model.getIconUrl(icon_size),
                 big_icon_url: this.model.getIconUrl(96)
             });
-            this.myReposView.repoDetailsView.show(data);
+            var detailsView = this.myReposView.repoDetailsView;
+            detailsView.show(data);
+
+            // fetch other data
+            $.ajax({
+                url: Common.getUrl({
+                    'name': 'repo_v2.1',
+                    'repo_id': this.model.get('id')
+                }),
+                cache: false,
+                dataType: 'json',
+                success: function(data) {
+                    detailsView.update({
+                        'file_count': data.file_count
+                    });
+                },
+                error: function() {
+                    detailsView.update({'error': true});
+                }
+            });
 
             this.togglePopup(); // close the popup
             return false;

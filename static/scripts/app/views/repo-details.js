@@ -36,6 +36,14 @@ define([
             this.$el.html(this.template(this.data));
         },
 
+        update: function(part_data) {
+            if (part_data.error) {
+                this.$('#file-count').html('<span class="error">' + gettext("Error") + '</span>');
+            } else {
+                this.$('#file-count').html(part_data.file_count);
+            }
+        },
+
         setConMaxHeight: function() {
             this.$('.right-side-panel-con').css({
                 'height': $(window).height() -  // this.$el `position:fixed; top:0;`
