@@ -800,12 +800,12 @@ class Repo(APIView):
             "id":repo.id,
             "owner":owner,
             "name":repo.name,
-            "desc":repo.desc,
             "mtime":repo.latest_modify,
             "size":repo.size,
             "encrypted":repo.encrypted,
             "root":root_id,
             "permission": check_permission(repo.id, username),
+            "file_count": repo.file_count,
             }
         if repo.encrypted:
             repo_json["enc_version"] = repo.enc_version
