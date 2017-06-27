@@ -50,7 +50,6 @@ class ReposApiTest(ApiTestBase):
             self.assertIsNotNone(rinfo['size'])
             self.assertIsNotNone(rinfo['name'])
             self.assertIsNotNone(rinfo['root'])
-            self.assertIsNotNone(rinfo['desc'])
             self.assertIsNotNone(rinfo['type'])
             # elf.assertIsNotNone(rinfo['password_need']) # allow null here
 
@@ -73,7 +72,6 @@ class ReposApiTest(ApiTestBase):
                 #self.assertIsNotNone(commit['parent_id']) #allow null
                 self.assertIsNotNone(commit['new_merge'])
                 self.assertIsNotNone(commit['repo_id'])
-                self.assertIsNotNone(commit['desc'])
                 self.assertIsNotNone(commit['id'])
                 self.assertIsNotNone(commit['conflict'])
                 #self.assertIsNotNone(commit['second_parent_id']) #allow null
