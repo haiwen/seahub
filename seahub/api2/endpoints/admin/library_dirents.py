@@ -195,7 +195,12 @@ class AdminLibraryDirent(APIView):
         if is_file and request.GET.get('dl', '0') == '1':
 
             token = seafile_api.get_fileserver_access_token(repo_id,
-                dirent.obj_id, 'download', username, use_onetime=True)
+                    dirent.obj_id, 'download', username, use_onetime=True)
+
+            if not token:
+                error_msg = 'Internal Server Error'
+                return api_error(status.HTTP_500_INTERNAL_SERVER_ERROR, error_msg)
+
             dl_url = gen_file_get_url(token, dirent.obj_name)
             send_file_access_msg(request, repo, path, 'web')
             return Response({'download_url': dl_url})

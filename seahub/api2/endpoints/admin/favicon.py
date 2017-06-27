@@ -1,7 +1,6 @@
 # Copyright (c) 2012-2016 Seafile Ltd.
 import os
 import logging
-from PIL import Image
 
 from rest_framework.authentication import SessionAuthentication
 from rest_framework.permissions import IsAdminUser
@@ -45,8 +44,8 @@ class AdminFavicon(APIView):
                     CUSTOM_FAVICON_PATH)
 
             # save favicon file to custom dir
-            image = Image.open(favicon_file)
-            image.save(custom_favicon_file)
+            with open(custom_favicon_file, 'w') as fd:
+                fd.write(favicon_file.read())
 
             custom_symlink = os.path.join(MEDIA_ROOT,
                     os.path.dirname(CUSTOM_FAVICON_PATH))

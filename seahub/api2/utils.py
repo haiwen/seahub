@@ -183,9 +183,14 @@ def get_group_msgs(groupid, page, username):
                     if not att.obj_id:
                         att.err = 'File does not exist'
                     else:
-                        att.token = seafile_api.get_fileserver_access_token(
-                            att.repo_id, att.obj_id, 'view', username)
-                        att.img_url = gen_file_get_url(att.token, att.name)
+                        token = seafile_api.get_fileserver_access_token(att.repo_id,
+                                att.obj_id, 'view', username)
+
+                        if not token:
+                            att.err = 'File does not exist'
+                        else:
+                            att.token = token
+                            att.img_url = gen_file_get_url(att.token, att.name)
 
             msg.attachment = att
 

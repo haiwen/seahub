@@ -110,7 +110,7 @@ define([
         clickCheckbox: function(e) {
             var $el = $(e.currentTarget);
             // for link options such as 'password', 'expire'
-            $el.closest('.checkbox-label').next().toggleClass('hide');
+            $el.closest('.checkbox-label').next('div').toggleClass('hide');
         },
 
         downloadLinkPanelInit: function() {
@@ -134,6 +134,11 @@ define([
                         _this.download_link = link; // for 'link send'
                         _this.download_link_token = link_data.token; // for 'link delete'
                         _this.$('#download-link').html(link);
+
+                        if (app.pageOptions.is_pro && !link_data.permissions.can_download) {
+                            _this.$('#direct-dl-link').hide().prev('dt').hide();
+                        }
+
                         _this.$('#direct-dl-link').html(link + '?dl=1');
                         if (link_data.is_expired) {
                             _this.$('#send-download-link').addClass('hide');
@@ -217,6 +222,11 @@ define([
             if (link_type == 'download') {
                 var set_expiration_checkbox = $('[name="set_expiration"]', form),
                     set_expiration = set_expiration_checkbox.prop('checked');
+
+                if (app.pageOptions.is_pro) {
+                    var $preview_only = $('[name="preview_only"]', form);
+                    var preview_only = $preview_only.prop('checked');
+                }
             }
             var post_data = {};
 
@@ -244,7 +254,7 @@ define([
                 post_data["password"] = passwd;
             }
 
-            if (set_expiration) { // for upload link, 'set_expiration' is undefined
+            if (link_type == 'download' && set_expiration) {
                 var expire_days_input = $('[name="expire_days"]', form),
                     expire_days = $.trim(expire_days_input.val());
                 if (!expire_days) {
@@ -256,6 +266,13 @@ define([
                     return false;
                 };
                 post_data["expire_days"] = expire_days;
+            }
+
+            if (link_type == 'download' && preview_only) {
+                post_data["permissions"] = JSON.stringify({
+                    "can_preview": true,
+                    "can_download": false
+                });
             }
 
             $('.error', form).addClass('hide').html('');
@@ -280,7 +297,7 @@ define([
                     passwd_input.val('');
                     passwd_again_input.val('');
                 }
-                if (set_expiration) {
+                if (link_type == 'download' && set_expiration) {
                     set_expiration_checkbox.prop('checked', false)
                         .parent().removeClass('checkbox-checked')
                         // hide 'day' input
@@ -288,9 +305,19 @@ define([
                     expire_days_input.val('');
                 }
 
+                if (link_type == 'download' && preview_only) {
+                    $preview_only.prop('checked', false);
+                }
+
                 if (link_type == 'download') {
                     _this.$('#download-link').html(data["link"]); // TODO: add 'click & select' func
+                    if (data.permissions.can_download) {
+                        _this.$('#direct-dl-link').show().prev('dt').show();
+                    } else {
+                        _this.$('#direct-dl-link').hide().prev('dt').hide();
+                    }
                     _this.$('#direct-dl-link').html(data['link'] + '?dl=1');
+
                     _this.download_link = data["link"]; // for 'link send'
                     _this.download_link_token = data["token"]; // for 'link delete'
                     _this.$('#download-link-operations').removeClass('hide');

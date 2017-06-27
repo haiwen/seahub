@@ -188,6 +188,7 @@
 .sf2-icon-lock:before { content: "\e02c"; }
 .sf2-icon-unlock:before { content: "\e02d"; }
 .sf2-icon-admin-log:before { content: "\e02e"; }
+.sf2-icon-info:before { content: "\e02f"; }
 
 /******* tags **********/
 body,
@@ -1068,6 +1069,31 @@ textarea:-moz-placeholder {/* for FF */
     bottom:0;
     width:100%;
 }
+
+/**** details-side-panel ****/
+.details-panel {
+    width:320px;
+}
+.details-panel-img-container {
+    text-align:center;
+    height:160px;
+    padding:6px 0;
+}
+.details-panel-img-container .thumbnail {
+    max-width:calc(100% - 4px); /* `-4px` for full width thumbnail */
+    max-height:100%;
+}
+.details-panel-text-info-container {
+    padding:10px 20px;
+}
+.details-panel-text-info-container table {
+    margin:0;
+}
+.details-panel-text-info-container th,
+.details-panel-text-info-container td {
+    border:none;
+}
+
 /**** messages ****/
 .messages {
     position:fixed;

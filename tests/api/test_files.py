@@ -238,6 +238,10 @@ class FilesApiTest(ApiTestBase):
                 self.assertIsNotNone(commit['desc'])
                 self.assertIsNotNone(commit['id'])
                 self.assertIsNotNone(commit['conflict'])
+
+                assert commit['user_info']['email'] == commit['creator_name']
+                self.assertIsNotNone(commit['user_info']['name'])
+                self.assertIsNotNone(commit['user_info']['contact_email'])
                 #self.assertIsNotNone(commit['second_parent_id']) #allow null
 
     def test_get_upload_link(self):

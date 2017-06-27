@@ -94,7 +94,6 @@ EMPTY_SHA1 = '0000000000000000000000000000000000000000'
 MAX_INT = 2147483647
 
 PREVIEW_FILEEXT = {
-    TEXT: ('ac', 'am', 'bat', 'c', 'cc', 'cmake', 'cpp', 'cs', 'css', 'diff', 'el', 'h', 'html', 'htm', 'java', 'js', 'json', 'less', 'make', 'org', 'php', 'pl', 'properties', 'py', 'rb', 'scala', 'script', 'sh', 'sql', 'txt', 'text', 'tex', 'vi', 'vim', 'xhtml', 'xml', 'log', 'csv', 'groovy', 'rst', 'patch', 'go'),
     IMAGE: ('gif', 'jpeg', 'jpg', 'png', 'ico', 'bmp'),
     DOCUMENT: ('doc', 'docx', 'ppt', 'pptx', 'odt', 'fodt', 'odp', 'fodp'),
     SPREADSHEET: ('xls', 'xlsx', 'ods', 'fods'),
@@ -216,15 +215,27 @@ def calculate_repos_last_modify(repo_list):
 
 def normalize_dir_path(path):
     """Add '/' at the end of directory path if necessary.
+
+    And make sure path starts with '/'
     """
-    if path[-1] != '/':
-        path = path + '/'
-    return path
+
+    path = path.strip('/')
+    if path == '':
+        return '/'
+    else:
+        return '/' + path + '/'
 
 def normalize_file_path(path):
     """Remove '/' at the end of file path if necessary.
+
+    And make sure path starts with '/'
     """
-    return path.rstrip('/')
+
+    path = path.strip('/')
+    if path == '':
+        return ''
+    else:
+        return '/' + path
 
 # modified from django1.5:/core/validators, and remove the support for single
 # quote in email address
@@ -334,12 +345,24 @@ def get_user_repos(username, org_id=None):
 
     return (owned_repos, shared_repos, groups_repos, public_repos)
 
+def get_conf_text_ext():
+    """
+    Get the conf of text ext in constance settings, and remove space.
+    """
+    if hasattr(config, 'TEXT_PREVIEW_EXT'):
+        text_ext = getattr(config, 'TEXT_PREVIEW_EXT').split(',')
+        return [x.strip() for x in text_ext]
+    return []
+
 def get_file_type_and_ext(filename):
     """
     Return file type and extension if the file can be previewd online,
     otherwise, return unknown type.
     """
     fileExt = os.path.splitext(filename)[1][1:].lower()
+    if fileExt in get_conf_text_ext():
+        return (TEXT, fileExt)
+
     filetype = FILEEXT_TYPE_MAP.get(fileExt)
     if filetype:
         return (filetype, fileExt)
@@ -439,6 +462,13 @@ def gen_file_get_url(token, filename):
 
 def gen_file_upload_url(token, op):
     return '%s/%s/%s' % (get_fileserver_root(), op, token)
+
+def gen_dir_zip_download_url(token):
+    """
+    Generate fileserver file url.
+    Format: http://<domain:port>/files/<token>/<filename>
+    """
+    return '%s/zip/%s' % (get_fileserver_root(), token)
 
 def get_ccnet_server_addr_port():
     """get ccnet server host and port"""

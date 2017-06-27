@@ -54,7 +54,7 @@
                     <li><a class="op js-repo-rename" href="#">{% trans "Rename" %}</a></li>
                     <li><a class="op js-repo-transfer" href="#">{% trans "Transfer" %}</a></li>
                     <li><a class="op js-popup-history-setting" href="#">{% trans "History Setting" %}</a></li>
-                    <% if (encrypted && enc_version == 2) { %>
+                    <% if (encrypted) { %>
                     <li><a class="op js-repo-change-password" href="#">{% trans "Change Password" %}</a></li>
                     <% } %>
                     <% if (!encrypted && (can_generate_share_link || can_generate_upload_link)) { %>
@@ -63,6 +63,7 @@
                     <% if (app.pageOptions.folder_perm_enabled) { %>
                     <li><a class="op js-popup-folder-perm-admin" href="#">{% trans "Folder Permission" %}</a></li>
                     <% } %>
+                    <li><a class="op js-repo-details" href="#">{% trans "Details" %}</a></li>
                 </ul>
             </div>
         </div>
@@ -96,7 +97,7 @@
                     <li><a class="op js-repo-rename" href="#">{% trans "Rename" %}</a></li>
                     <li><a class="op js-repo-transfer" href="#">{% trans "Transfer" %}</a></li>
                     <li><a class="op js-popup-history-setting" href="#">{% trans "History Setting" %}</a></li>
-                    <% if (encrypted && enc_version == 2) { %>
+                    <% if (encrypted) { %>
                     <li><a class="op js-repo-change-password" href="#">{% trans "Change Password" %}</a></li>
                     <% } %>
                     <% if (!encrypted && (can_generate_share_link || can_generate_upload_link)) { %>
@@ -105,6 +106,7 @@
                     <% if (app.pageOptions.folder_perm_enabled) { %>
                     <li><a class="op js-popup-folder-perm-admin" href="#">{% trans "Folder Permission" %}</a></li>
                     <% } %>
+                    <li><a class="op js-repo-details" href="#">{% trans "Details" %}</a></li>
                 </ul>
             </div>
         </div>
@@ -114,6 +116,44 @@
     <td></td>
     <% } %>
 </script>
+
+<script type="text/template" id="repo-details-tmpl">
+    <div class="right-side-panel-hd ovhd">
+        <a href="#" title="{% trans "Close" %}" aria-label="{% trans "Close" %}" class="sf-popover-close js-close sf2-icon-x1 op-icon fleft"></a>
+        <h3 class="right-side-panel-title">
+            <img src="<%= icon_url %>" width="24" alt="" class="vam" />
+            <span class="vam"><%- name %></span>
+        </h3>
+    </div>
+    <div class="right-side-panel-con">
+        <div class="details-panel-img-container image-file-view">
+            <img src="<%= big_icon_url %>" width="96" alt="" />
+        </div>
+
+        <div class="details-panel-text-info-container">
+            <table>
+                <tr class="vh">
+                    <th width="35%"></th>
+                    <td width="65%"></td>
+                </tr>
+                <tr>
+                    <th>{% trans "Files" %}</th>
+                    <td id="file-count"><span class="loading-icon"></span></td>
+                </tr>
+                <tr>
+                    <th>{% trans "Size" %}</th>
+                    <td><%= size_formatted %></td>
+                </tr>
+                <tr>
+                    <th>{% trans "Last Update" %}</th>
+                    <td><%= mtime_relative %></td>
+                </tr>
+            </table>
+        </div>
+
+    </div>
+</script>
+
 
 <script type="text/template" id="group-repo-tmpl">
     <td>
@@ -699,6 +739,7 @@
             <% if (!repo_encrypted && can_generate_share_link) { %>
             <div id="download-link-share" class="tabs-panel">
                 <form id="generate-download-link-form" action="" class="hide">
+
                     <label class="checkbox-label">
                         <input type="checkbox" name="use_passwd" class="vam" />
                         <span class="checkbox-option vam">{% trans "Add password protection"%}</span>
@@ -713,6 +754,7 @@
                         <label for="passwd-again">{% trans "Password again" %}</label><br />
                         <input type="password" name="password_again" class="input" id="passwd-again" />
                     </div>
+
                     <label class="checkbox-label">
                         <input type="checkbox" name="set_expiration" class="vam" />
                         <span class="checkbox-option vam">{% trans "Add auto expiration"%}</span>
@@ -721,6 +763,14 @@
                         <label for="expire-days">{% trans "Days" %}</label><br />
                         <input type="text" name="expire_days" class="input" id="expire-days" />
                     </div>
+
+                    <% if (app.pageOptions.is_pro) { %>
+                    <label class="checkbox-label">
+                        <input type="checkbox" name="preview_only" class="vam" />
+                        <span class="checkbox-option vam">{% trans "Online preview only" %}</span>
+                    </label>
+                    <% } %>
+
                     <p class="error hide"></p>
                     <input type="submit" value="{% trans 'Generate'%}" />
                 </form>

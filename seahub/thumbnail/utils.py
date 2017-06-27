@@ -116,8 +116,11 @@ def generate_thumbnail(request, repo_id, size, path):
     if file_size > THUMBNAIL_IMAGE_SIZE_LIMIT * 1024**2:
         return (False, 403)
 
-    token = seafile_api.get_fileserver_access_token(repo_id, file_id, 'view',
-                                                    '', use_onetime=True)
+    token = seafile_api.get_fileserver_access_token(repo_id,
+            file_id, 'view', '', use_onetime=True)
+
+    if not token:
+        return (False, 500)
 
     inner_path = gen_inner_file_get_url(token, os.path.basename(path))
     try:
@@ -131,8 +134,11 @@ def generate_thumbnail(request, repo_id, size, path):
 def create_video_thumbnails(repo, file_id, path, size, thumbnail_file, file_size):
 
     t1 = timeit.default_timer()
-    token = seafile_api.get_fileserver_access_token(repo.id, file_id, 'view',
-                                                    '', use_onetime=False)
+    token = seafile_api.get_fileserver_access_token(repo.id,
+            file_id, 'view', '', use_onetime=False)
+
+    if not token:
+        return (False, 500)
 
     inner_path = gen_inner_file_get_url(token, os.path.basename(path))
     clip = VideoFileClip(inner_path)

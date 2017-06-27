@@ -9,7 +9,7 @@ from constance import config
 from django.core.cache import cache
 from django.http import HttpResponse, HttpResponseRedirect, Http404, \
     HttpResponseBadRequest
-from django.utils.translation import ugettext as _
+from django.utils.translation import ugettext as _, activate
 from django.contrib import messages
 from django.utils import timezone
 from django.utils.html import escape
@@ -31,7 +31,8 @@ from seahub.utils import string2list, gen_shared_link, \
     is_valid_username, is_valid_email, send_html_email, is_org_context, \
     gen_token, normalize_cache_key
 from seahub.utils.mail import send_html_email_with_dj_template, MAIL_PRIORITY
-from seahub.settings import SITE_ROOT, REPLACE_FROM_EMAIL, ADD_REPLY_TO_HEADER
+from seahub.settings import SITE_ROOT, REPLACE_FROM_EMAIL, \
+        ADD_REPLY_TO_HEADER, SHARE_LINK_EMAIL_LANGUAGE
 from seahub.profile.models import Profile
 
 # Get an instance of a logger
@@ -148,6 +149,9 @@ def send_shared_link(request):
             if not is_valid_email(to_email):
                 send_failed.append(to_email)
                 continue
+
+            if SHARE_LINK_EMAIL_LANGUAGE:
+                activate(SHARE_LINK_EMAIL_LANGUAGE)
 
             # Add email to contacts.
             mail_sended.send(sender=None, user=request.user.username,

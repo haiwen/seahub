@@ -16,7 +16,7 @@ from django.conf import settings as dj_settings
 from django.core.urlresolvers import reverse
 from django.contrib import messages
 from django.http import HttpResponse, Http404, HttpResponseRedirect, HttpResponseNotAllowed
-from django.shortcuts import render_to_response
+from django.shortcuts import render_to_response, get_object_or_404
 from django.template import RequestContext
 from django.utils import timezone
 from django.utils.translation import ugettext as _
@@ -514,8 +514,7 @@ def user_info(request, email):
     else:
         org_id = org[0].org_id
         org_name = org[0].org_name
-        space_usage = seafile_api.get_org_user_quota_usage(org_id,
-                                                                     email)
+        space_usage = seafile_api.get_org_user_quota_usage(org_id, email)
         space_quota = seafile_api.get_org_user_quota(org_id, email)
         owned_repos = seafile_api.get_org_owned_repo_list(org_id, email,
                                                           ret_corrupted=True)
@@ -1945,7 +1944,7 @@ def sys_settings(request):
     if HAS_TWO_FACTOR_AUTH:
         DIGIT_WEB_SETTINGS.append('ENABLE_TWO_FACTOR_AUTH')
 
-    STRING_WEB_SETTINGS = ('SERVICE_URL', 'FILE_SERVER_ROOT',)
+    STRING_WEB_SETTINGS = ('SERVICE_URL', 'FILE_SERVER_ROOT', 'TEXT_PREVIEW_EXT')
 
     if request.is_ajax() and request.method == "POST":
         content_type = 'application/json; charset=utf-8'
@@ -2316,6 +2315,27 @@ def sys_invitation_admin(request):
             'page_next': page_next,
         },
         context_instance=RequestContext(request))
+
+@login_required
+@sys_staff_required
+def sys_invitation_remove(request):
+    """Delete an invitation.
+    """
+    ct = 'application/json; charset=utf-8'
+    result = {}
+
+    if not ENABLE_GUEST_INVITATION:
+        return HttpResponse(json.dumps({}), status=400, content_type=ct)
+
+    inv_id = request.POST.get('inv_id', '')
+    if not inv_id:
+        result = {'error': "Argument missing"}
+        return HttpResponse(json.dumps(result), status=400, content_type=ct)
+
+    inv = get_object_or_404(Invitation, pk=inv_id)
+    inv.delete()
+
+    return HttpResponse(json.dumps({'success': True}), content_type=ct)
 
 @login_required
 @sys_staff_required

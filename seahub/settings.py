@@ -279,6 +279,9 @@ SHARE_LINK_PASSWORD_MIN_LENGTH = 8
 # enable or disable share link audit
 ENABLE_SHARE_LINK_AUDIT = False
 
+# Control the language that send email. Default to user's current language.
+SHARE_LINK_EMAIL_LANGUAGE = ''
+
 # check virus for files uploaded form upload link
 ENABLE_UPLOAD_LINK_VIRUS_CHECK = False
 
@@ -317,6 +320,11 @@ USE_PDFJS = True
 FILE_ENCODING_LIST = ['auto', 'utf-8', 'gbk', 'ISO-8859-1', 'ISO-8859-5']
 FILE_ENCODING_TRY_LIST = ['utf-8', 'gbk']
 HIGHLIGHT_KEYWORD = False # If True, highlight the keywords in the file when the visit is via clicking a link in 'search result' page.
+# extensions of previewed files
+TEXT_PREVIEW_EXT = """ac, am, bat, c, cc, cmake, cpp, cs, css, diff, el, h, html,
+htm, java, js, json, less, make, org, php, pl, properties, py, rb,
+scala, script, sh, sql, txt, text, tex, vi, vim, xhtml, xml, log, csv,
+groovy, rst, patch, go"""
 
 # Common settings(file extension, storage) for avatar and group avatar.
 AVATAR_FILE_STORAGE = '' # Replace with 'seahub.base.database_storage.DatabaseStorage' if save avatar files to database
@@ -373,6 +381,7 @@ REST_FRAMEWORK = {
     # https://github.com/tomchristie/django-rest-framework/issues/2891
     'UNICODE_JSON': False,
 }
+REST_FRAMEWORK_THROTTING_WHITELIST = []
 
 # file and path
 MAX_UPLOAD_FILE_NAME_LEN    = 255
@@ -487,7 +496,7 @@ SESSION_COOKIE_AGE = 24 * 60 * 60
 # Days of remembered login info (deafult: 7 days)
 LOGIN_REMEMBER_DAYS = 7
 
-SEAFILE_VERSION = '5.1.0'
+SEAFILE_VERSION = '6.1.1'
 
 # Compress static files(css, js)
 COMPRESS_URL = MEDIA_URL
@@ -684,4 +693,6 @@ CONSTANCE_CONFIG = {
     'SHARE_LINK_TOKEN_LENGTH': (SHARE_LINK_TOKEN_LENGTH, ''),
     'SHARE_LINK_PASSWORD_MIN_LENGTH': (SHARE_LINK_PASSWORD_MIN_LENGTH,''),
     'ENABLE_TWO_FACTOR_AUTH': (ENABLE_TWO_FACTOR_AUTH,''),
+
+    'TEXT_PREVIEW_EXT': (TEXT_PREVIEW_EXT, ''),
 }

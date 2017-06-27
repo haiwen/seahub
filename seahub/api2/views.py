@@ -47,7 +47,8 @@ from seahub.avatar.templatetags.group_avatar_tags import api_grp_avatar_url, \
 from seahub.base.accounts import User
 from seahub.base.models import UserStarredFiles, DeviceToken
 from seahub.base.templatetags.seahub_tags import email2nickname, \
-    translate_seahub_time, translate_commit_desc_escape
+    translate_seahub_time, translate_commit_desc_escape, \
+    email2contact_email
 from seahub.group.views import remove_group_common, \
     rename_group_with_new_name, is_group_staff
 from seahub.group.utils import BadGroupNameError, ConflictGroupNameError, \
@@ -75,8 +76,7 @@ from seahub.utils.timeutils import utc_to_local, datetime_to_isoformat_timestr
 from seahub.views import is_registered_user, check_file_lock, \
     group_events_data, get_diff, create_default_library, \
     list_inner_pub_repos, check_folder_permission
-from seahub.views.ajax import get_share_in_repo_list, get_groups_by_user, \
-    get_group_repos
+from seahub.views.ajax import get_groups_by_user, get_group_repos
 from seahub.views.file import get_file_view_path_and_perm, send_file_access_msg
 if HAS_FILE_SEARCH:
     from seahub_extra.search.views import search_keyword
@@ -341,7 +341,6 @@ class Search(APIView):
                 logger.error(e)
                 pass
 
-
         res = { "total":total, "results":results, "has_more":has_more }
         return Response(res)
 
@@ -439,26 +438,29 @@ class Repos(APIView):
                     "id": r.id,
                     "owner": email,
                     "name": r.name,
-                    "desc": r.desc,
                     "mtime": r.last_modify,
                     "mtime_relative": translate_seahub_time(r.last_modify),
                     "size": r.size,
                     "size_formatted": filesizeformat(r.size),
                     "encrypted": r.encrypted,
                     "permission": 'rw',  # Always have read-write permission to owned repo
-                    "virtual": r.is_virtual,
-                    "root": r.root,
+                    "virtual": False,
+                    "root": '',
                     "head_commit_id": r.head_cmmt_id,
                     "version": r.version,
                 }
-                if r.encrypted:
-                    repo["enc_version"] = r.enc_version
-                    repo["magic"] = r.magic
-                    repo["random_key"] = r.random_key
                 repos_json.append(repo)
 
         if filter_by['shared']:
-            shared_repos = get_share_in_repo_list(request, -1, -1)
+
+            if is_org_context(request):
+                org_id = request.user.org.org_id
+                shared_repos = seafile_api.get_org_share_in_repo_list(org_id,
+                        email, -1, -1)
+            else:
+                shared_repos = seafile_api.get_share_in_repo_list(
+                        email, -1, -1)
+
             shared_repos.sort(lambda x, y: cmp(y.last_modify, x.last_modify))
             for r in shared_repos:
                 r.password_need = is_passwd_set(r.repo_id, email)
@@ -468,22 +470,17 @@ class Repos(APIView):
                     "owner": r.user,
                     "name": r.repo_name,
                     "owner_nickname": email2nickname(r.user),
-                    "desc": r.repo_desc,
                     "mtime": r.last_modify,
                     "mtime_relative": translate_seahub_time(r.last_modify),
                     "size": r.size,
                     "size_formatted": filesizeformat(r.size),
                     "encrypted": r.encrypted,
-                    "permission": r.user_perm,
+                    "permission": r.permission,
                     "share_type": r.share_type,
-                    "root": r.root,
+                    "root": '',
                     "head_commit_id": r.head_cmmt_id,
                     "version": r.version,
                 }
-                if r.encrypted:
-                    repo["enc_version"] = r.enc_version
-                    repo["magic"] = r.magic
-                    repo["random_key"] = r.random_key
                 repos_json.append(repo)
 
         if filter_by['group']:
@@ -497,19 +494,14 @@ class Repos(APIView):
                     "owner": r.group.group_name,
                     "groupid": r.group.id,
                     "name": r.name,
-                    "desc": r.desc,
                     "mtime": r.last_modify,
                     "size": r.size,
                     "encrypted": r.encrypted,
                     "permission": check_permission(r.id, email),
-                    "root": r.root,
+                    "root": '',
                     "head_commit_id": r.head_cmmt_id,
                     "version": r.version,
                 }
-                if r.encrypted:
-                    repo["enc_version"] = r.enc_version
-                    repo["magic"] = r.magic
-                    repo["random_key"] = r.random_key
                 repos_json.append(repo)
 
         if filter_by['org'] and request.user.permissions.can_view_org():
@@ -519,7 +511,6 @@ class Repos(APIView):
                     "type": "grepo",
                     "id": r.repo_id,
                     "name": r.repo_name,
-                    "desc": r.repo_desc,
                     "owner": "Organization",
                     "mtime": r.last_modified,
                     "mtime_relative": translate_seahub_time(r.last_modified),
@@ -529,14 +520,10 @@ class Repos(APIView):
                     "permission": r.permission,
                     "share_from": r.user,
                     "share_type": r.share_type,
-                    "root": r.root,
+                    "root": '',
                     "head_commit_id": r.head_cmmt_id,
                     "version": r.version,
                 }
-                if r.encrypted:
-                    repo["enc_version"] = r.enc_version
-                    repo["magic"] = r.magic
-                    repo["random_key"] = r.random_key
                 repos_json.append(repo)
 
         response = HttpResponse(json.dumps(repos_json), status=200,
@@ -813,12 +800,12 @@ class Repo(APIView):
             "id":repo.id,
             "owner":owner,
             "name":repo.name,
-            "desc":repo.desc,
             "mtime":repo.latest_modify,
             "size":repo.size,
             "encrypted":repo.encrypted,
             "root":root_id,
             "permission": check_permission(repo.id, username),
+            "file_count": repo.file_count,
             }
         if repo.encrypted:
             repo_json["enc_version"] = repo.enc_version
@@ -1224,6 +1211,11 @@ class FileBlockDownloadLinkView(APIView):
 
         token = seafile_api.get_fileserver_access_token(
                 repo_id, file_id, 'downloadblks', request.user.username)
+
+        if not token:
+            error_msg = 'Internal Server Error'
+            return api_error(status.HTTP_500_INTERNAL_SERVER_ERROR, error_msg)
+
         url = gen_block_get_url(token, block_id)
         return Response(url)
 
@@ -1253,8 +1245,12 @@ class UploadLinkView(APIView):
         if check_quota(repo_id) < 0:
             return api_error(HTTP_520_OPERATION_FAILED, 'Above quota')
 
-        token = seafile_api.get_fileserver_access_token(
-            repo_id, 'dummy', 'upload', request.user.username, use_onetime = False)
+        token = seafile_api.get_fileserver_access_token(repo_id,
+                'dummy', 'upload', request.user.username, use_onetime=False)
+
+        if not token:
+            error_msg = 'Internal Server Error'
+            return api_error(status.HTTP_500_INTERNAL_SERVER_ERROR, error_msg)
 
         req_from = request.GET.get('from', 'api')
         if req_from == 'api':
@@ -1293,8 +1289,12 @@ class UpdateLinkView(APIView):
         if check_quota(repo_id) < 0:
             return api_error(HTTP_520_OPERATION_FAILED, 'Above quota')
 
-        token = seafile_api.get_fileserver_access_token(
-            repo_id, 'dummy', 'update', request.user.username)
+        token = seafile_api.get_fileserver_access_token(repo_id,
+                'dummy', 'update', request.user.username)
+
+        if not token:
+            error_msg = 'Internal Server Error'
+            return api_error(status.HTTP_500_INTERNAL_SERVER_ERROR, error_msg)
 
         req_from = request.GET.get('from', 'api')
         if req_from == 'api':
@@ -1333,9 +1333,13 @@ class UploadBlksLinkView(APIView):
         if check_quota(repo_id) < 0:
             return api_error(HTTP_520_OPERATION_FAILED, 'Above quota')
 
-        token = seafile_api.get_fileserver_access_token(
-            repo_id, 'dummy', 'upload-blks-api', request.user.username,
-            use_onetime = False)
+        token = seafile_api.get_fileserver_access_token(repo_id,
+                'dummy', 'upload-blks-api', request.user.username, use_onetime=False)
+
+        if not token:
+            error_msg = 'Internal Server Error'
+            return api_error(status.HTTP_500_INTERNAL_SERVER_ERROR, error_msg)
+
         url = gen_file_upload_url(token, 'upload-blks-api')
         return Response(url)
 
@@ -1374,9 +1378,13 @@ class UploadBlksLinkView(APIView):
         if check_quota(repo_id) < 0:
             return api_error(HTTP_520_OPERATION_FAILED, 'Above quota')
 
-        token = seafile_api.get_fileserver_access_token(
-            repo_id, 'dummy', 'upload', request.user.username,
-            use_onetime = False)
+        token = seafile_api.get_fileserver_access_token(repo_id,
+                'dummy', 'upload', request.user.username, use_onetime=False)
+
+        if not token:
+            error_msg = 'Internal Server Error'
+            return api_error(status.HTTP_500_INTERNAL_SERVER_ERROR, error_msg)
+
         blksurl = gen_file_upload_url(token, 'upload-raw-blks-api')
         commiturl = '%s?commitonly=true&ret-json=true' %  gen_file_upload_url(
             token, 'upload-blks-api')
@@ -1418,9 +1426,13 @@ class UpdateBlksLinkView(APIView):
         if check_quota(repo_id) < 0:
             return api_error(HTTP_520_OPERATION_FAILED, 'Above quota')
 
-        token = seafile_api.get_fileserver_access_token(
-            repo_id, 'dummy', 'update-blks-api', request.user.username,
-            use_onetime = False)
+        token = seafile_api.get_fileserver_access_token(repo_id,
+                'dummy', 'update-blks-api', request.user.username, use_onetime=False)
+
+        if not token:
+            error_msg = 'Internal Server Error'
+            return api_error(status.HTTP_500_INTERNAL_SERVER_ERROR, error_msg)
+
         url = gen_file_upload_url(token, 'update-blks-api')
         return Response(url)
 
@@ -1464,17 +1476,17 @@ def get_dir_entrys_by_id(request, repo, path, dir_id, request_type=None):
 
     dir_list, file_list = [], []
     for dirent in dirs:
-        dtype = "file"
         entry = {}
         if stat.S_ISDIR(dirent.mode):
             dtype = "dir"
         else:
+            dtype = "file"
+            entry['modifier_email'] = dirent.modifier
             if repo.version == 0:
                 entry["size"] = get_file_size(repo.store_id, repo.version,
                                               dirent.obj_id)
             else:
                 entry["size"] = dirent.size
-
             if is_pro_version():
                 entry["is_locked"] = dirent.is_locked
                 entry["lock_owner"] = dirent.lock_owner
@@ -1493,6 +1505,20 @@ def get_dir_entrys_by_id(request, repo, path, dir_id, request_type=None):
             dir_list.append(entry)
         else:
             file_list.append(entry)
+
+    # Use dict to reduce memcache fetch cost in large for-loop.
+    contact_email_dict = {}
+    nickname_dict = {}
+    modifiers_set = set([x['modifier_email'] for x in file_list])
+    for e in modifiers_set:
+        if e not in contact_email_dict:
+            contact_email_dict[e] = email2contact_email(e)
+        if e not in nickname_dict:
+            nickname_dict[e] = email2nickname(e)
+
+    for e in file_list:
+        e['modifier_contact_email'] = contact_email_dict.get(e['modifier_email'], '')
+        e['modifier_name'] = nickname_dict.get(e['modifier_email'], '')
 
     dir_list.sort(lambda x, y: cmp(x['name'].lower(), y['name'].lower()))
     file_list.sort(lambda x, y: cmp(x['name'].lower(), y['name'].lower()))
@@ -1539,9 +1565,12 @@ def get_shared_link(request, repo_id, path):
 
 def get_repo_file(request, repo_id, file_id, file_name, op, use_onetime=True):
     if op == 'download':
-        token = seafile_api.get_fileserver_access_token(repo_id, file_id, op,
-                                                        request.user.username,
-                                                        use_onetime)
+        token = seafile_api.get_fileserver_access_token(repo_id,
+                file_id, op, request.user.username, use_onetime)
+
+        if not token:
+            error_msg = 'Internal Server Error'
+            return api_error(status.HTTP_500_INTERNAL_SERVER_ERROR, error_msg)
 
         redirect_url = gen_file_get_url(token, file_name)
         response = HttpResponse(json.dumps(redirect_url), status=200,
@@ -1619,7 +1648,7 @@ class OpDeleteView(APIView):
     """
     Delete files.
     """
-    authentication_classes = (TokenAuthentication, )
+    authentication_classes = (TokenAuthentication, SessionAuthentication)
     permission_classes = (IsAuthenticated, )
 
     def post(self, request, repo_id, format=None):
@@ -1642,14 +1671,17 @@ class OpDeleteView(APIView):
             return api_error(status.HTTP_404_NOT_FOUND,
                              'File or directory not found.')
 
+        multi_files = ''
         for file_name in file_names.split(':'):
-            try:
-                seafile_api.del_file(repo_id, parent_dir,
-                                     file_name, username)
-            except SearpcError as e:
-                logger.error(e)
-                return api_error(HTTP_520_OPERATION_FAILED,
-                                 "Failed to delete file.")
+            multi_files += file_name + '\t'
+
+        try:
+            seafile_api.del_file(repo_id, parent_dir,
+                                 multi_files, username)
+        except SearpcError as e:
+            logger.error(e)
+            return api_error(HTTP_520_OPERATION_FAILED,
+                             "Failed to delete file.")
 
         return reloaddir_if_necessary(request, repo, parent_dir)
 
@@ -1860,6 +1892,11 @@ class OwaFileView(APIView):
             error_msg = 'Library %s not found.' % repo_id
             return api_error(status.HTTP_404_NOT_FOUND, error_msg)
 
+        action = request.GET.get('action', 'view')
+        if action not in ('view', 'edit'):
+            error_msg = 'action invalid.'
+            return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
+
         path = request.GET.get('path', None)
         if not path:
             error_msg = 'path invalid.'
@@ -1901,7 +1938,7 @@ class OwaFileView(APIView):
 
         # get wopi dict
         username = request.user.username
-        wopi_dict = get_wopi_dict(username, repo_id, path)
+        wopi_dict = get_wopi_dict(username, repo_id, path, action)
 
         # send stats message
         send_file_access_msg(request, repo, path, 'api')
@@ -2405,6 +2442,16 @@ class FileHistory(APIView):
         if not commits:
             return api_error(status.HTTP_404_NOT_FOUND, 'File not found.')
 
+        for commit in commits:
+            creator_name = commit.creator_name
+
+            user_info = {}
+            user_info['email'] = creator_name
+            user_info['name'] = email2nickname(creator_name)
+            user_info['contact_email'] = Profile.objects.get_contact_email_by_user(creator_name)
+
+            commit._dict['user_info'] = user_info
+
         return HttpResponse(json.dumps({"commits": commits}, cls=SearpcObjEncoder), status=200, content_type=json_content_type)
 
 class FileSharedLinkView(APIView):
@@ -2540,9 +2587,6 @@ class DirView(APIView):
         if path[-1] != '/':
             path = path + '/'
 
-        if check_folder_permission(request, repo_id, path) is None:
-            return api_error(status.HTTP_403_FORBIDDEN, 'Forbid to access this folder.')
-
         try:
             dir_id = seafile_api.get_dir_id_by_path(repo_id, path)
         except SearpcError as e:
@@ -2551,7 +2595,12 @@ class DirView(APIView):
                              "Failed to get dir id by path.")
 
         if not dir_id:
-            return api_error(status.HTTP_404_NOT_FOUND, "Path does not exist")
+            error_msg = 'Folder %s not found.' % path
+            return api_error(status.HTTP_404_NOT_FOUND, error_msg)
+
+        if check_folder_permission(request, repo_id, path) is None:
+            error_msg = 'Permission denied.'
+            return api_error(status.HTTP_403_FORBIDDEN, error_msg)
 
         old_oid = request.GET.get('oid', None)
         if old_oid and old_oid == dir_id:
@@ -2604,17 +2653,18 @@ class DirView(APIView):
         parent_dir = os.path.dirname(path)
 
         if operation.lower() == 'mkdir':
-            if check_folder_permission(request, repo_id, parent_dir) != 'rw':
-                return api_error(status.HTTP_403_FORBIDDEN, 'You do not have permission to access this folder.')
-
+            new_dir_name = os.path.basename(path)
             create_parents = request.POST.get('create_parents', '').lower() in ('true', '1')
             if not create_parents:
                 # check whether parent dir exists
                 if not seafile_api.get_dir_id_by_path(repo_id, parent_dir):
-                    return api_error(status.HTTP_400_BAD_REQUEST,
-                                     'Parent dir does not exist')
+                    error_msg = 'Folder %s not found.' % parent_dir
+                    return api_error(status.HTTP_404_NOT_FOUND, error_msg)
 
-                new_dir_name = os.path.basename(path)
+                if check_folder_permission(request, repo_id, parent_dir) != 'rw':
+                    error_msg = 'Permission denied.'
+                    return api_error(status.HTTP_403_FORBIDDEN, error_msg)
+
                 new_dir_name = check_filename_with_rename(repo_id, parent_dir, new_dir_name)
                 try:
                     seafile_api.post_dir(repo_id, parent_dir,
@@ -2627,6 +2677,11 @@ class DirView(APIView):
                 if not is_seafile_pro():
                     return api_error(status.HTTP_400_BAD_REQUEST,
                                      'Feature not supported.')
+
+                if check_folder_permission(request, repo_id, '/') != 'rw':
+                    error_msg = 'Permission denied.'
+                    return api_error(status.HTTP_403_FORBIDDEN, error_msg)
+
                 try:
                     seafile_api.mkdir_with_parents(repo_id, '/',
                                                    path[1:], username)
@@ -2640,13 +2695,18 @@ class DirView(APIView):
             else:
                 resp = Response('success', status=status.HTTP_201_CREATED)
                 uri = reverse('DirView', args=[repo_id], request=request)
-                resp['Location'] = uri + '?p=' + quote(parent_dir.encode('utf-8')) + \
-                    quote(new_dir_name.encode('utf-8'))
+                resp['Location'] = uri + '?p=' + quote(
+                    parent_dir.encode('utf-8') + '/' + new_dir_name.encode('utf-8'))
             return resp
 
         elif operation.lower() == 'rename':
+            if not seafile_api.get_dir_id_by_path(repo_id, path):
+                error_msg = 'Folder %s not found.' % path
+                return api_error(status.HTTP_404_NOT_FOUND, error_msg)
+
             if check_folder_permission(request, repo.id, path) != 'rw':
-                return api_error(status.HTTP_403_FORBIDDEN, 'You do not have permission to access this folder.')
+                error_msg = 'Permission denied.'
+                return api_error(status.HTTP_403_FORBIDDEN, error_msg)
 
             old_dir_name = os.path.basename(path)
 
@@ -2677,16 +2737,23 @@ class DirView(APIView):
 
     def delete(self, request, repo_id, format=None):
         # delete dir or file
-        repo = get_repo(repo_id)
-        if not repo:
-            return api_error(status.HTTP_404_NOT_FOUND, 'Library not found.')
-
         path = request.GET.get('p', None)
         if not path:
-            return api_error(status.HTTP_400_BAD_REQUEST, 'Path is missing.')
+            error_msg = 'p invalid.'
+            return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
+
+        repo = get_repo(repo_id)
+        if not repo:
+            error_msg = 'Library %s not found.' % repo_id
+            return api_error(status.HTTP_404_NOT_FOUND, error_msg)
+
+        if not seafile_api.get_dir_id_by_path(repo_id, path):
+            error_msg = 'Folder %s not found.' % path
+            return api_error(status.HTTP_404_NOT_FOUND, error_msg)
 
         if check_folder_permission(request, repo_id, path) != 'rw':
-            return api_error(status.HTTP_403_FORBIDDEN, 'You do not have permission to access this folder.')
+            error_msg = 'Permission denied.'
+            return api_error(status.HTTP_403_FORBIDDEN, error_msg)
 
         if path == '/':         # Can not delete root path.
             return api_error(status.HTTP_400_BAD_REQUEST, 'Path is invalid.')

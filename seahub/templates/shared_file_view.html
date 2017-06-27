@@ -5,6 +5,18 @@
 
 {% block extra_style %}
 {% include 'snippets/file_view_style.html' %}
+<style type="text/css">
+{% if not permissions.can_download %}
+body {
+    user-select:none;
+}
+@media print {
+    html {
+        display:none;
+    }
+}
+{% endif %}
+</style>
 {% endblock %}
 
 {% block main_content %}
@@ -31,6 +43,7 @@
         </div>
 
         <div class="fright js-file-op">
+            {% if permissions.can_download %}
             {% if request.user.is_authenticated and request.user.username != shared_by %}
               {% if save_to_link %}
               <button data="{{save_to_link}}" id="save" class="shared-file-op-btn">{% trans "Save to..."%}</button>
@@ -39,11 +52,13 @@
             {% if not traffic_over_limit %}
               <a href="{% if from_shared_dir %}?p={{path|urlencode}}&dl=1{% else %}?dl=1{% endif %}" class="obv-btn shared-file-op-btn">{% trans "Download" %} ({{file_size|filesizeformat}})</a>
             {% endif %}
+            {% endif %}
         </div>
     </div>
 
     {% include 'snippets/file_content_html.html' %}
 
+    {% if permissions.can_download %}
     <form id="file-save-form" action="{{save_to_link}}" method="post" class="file-choose-form hide">{% csrf_token %}
         <h3>{% trans "Save To:" %}</h3>
         <div class="dir-tree-cont">
@@ -58,6 +73,7 @@
         <button type="submit" class="submit">{% trans "Submit" %}</button>
         <button class="simplemodal-close">{% trans "Cancel" %}</button>
     </form>
+    {% endif %}
 
 {% endblock %}
 
@@ -87,7 +103,7 @@ function setFileViewAreaHeight() {
 $(window).load(setFileViewAreaHeight).resize(setFileViewAreaHeight);
 {% endif %}
 
-{% if request.user.is_authenticated and request.user.username != shared_by %}
+{% if request.user.is_authenticated and request.user.username != shared_by and permissions.can_download %}
 $('#save').click(function() {
     var $form = $('#file-save-form');
     $form.modal({appendTo:'#main', autoResize:true, focus:false});
@@ -137,6 +153,20 @@ $('#file-save-form').submit(function() {
     {% else %}
         $('#image-view').attr('src', '{{ raw_path|escapejs }}');
     {% endif %}
+{% endif %}
+
+{% if not permissions.can_download %}
+$(document)
+.contextmenu(function() {
+    return false;
+})
+.bind('keydown', function(e) {
+    // prevent ctrl + s/p/a/c, i.e, 'save', 'print', 'select all', 'copy'
+    if (e.ctrlKey && (e.which == 83 || e.which == 80 || e.which == 65 || e.which == 67)) {
+        e.preventDefault();
+        return false;
+    }
+});
 {% endif %}
 </script>
 {% endblock %}

@@ -119,6 +119,10 @@ class ShareLinkZipTaskView(APIView):
             error_msg = 'Internal Server Error'
             return api_error(status.HTTP_500_INTERNAL_SERVER_ERROR, error_msg)
 
+        if not zip_token:
+            error_msg = 'Internal Server Error'
+            return api_error(status.HTTP_500_INTERNAL_SERVER_ERROR, error_msg)
+
         if request.session.get('anonymous_email'):
             request.user.username = request.session.get('anonymous_email')
 

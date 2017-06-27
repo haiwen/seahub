@@ -66,8 +66,12 @@ def is_no_quota(repo_id):
 def get_upload_url(request, repo_id):
     username = request.user.username
     if check_folder_permission(request, repo_id, '/') == 'rw':
-        token = seafile_api.get_fileserver_access_token(repo_id, 'dummy',
-                                                        'upload', username)
+        token = seafile_api.get_fileserver_access_token(repo_id,
+                'dummy', 'upload', username)
+
+        if not token:
+            return ''
+
         return gen_file_upload_url(token, 'upload')
     else:
         return ''
@@ -219,6 +223,8 @@ def view_shared_dir(request, fileshare):
 
     traffic_over_limit = user_traffic_over_limit(fileshare.username)
 
+    permissions = fileshare.get_permissions()
+
     # mode to view dir/file items
     mode = request.GET.get('mode', 'list')
     if mode != 'list':
@@ -248,6 +254,7 @@ def view_shared_dir(request, fileshare):
             'dir_list': dir_list,
             'zipped': zipped,
             'traffic_over_limit': traffic_over_limit,
+            'permissions': permissions,
             'ENABLE_THUMBNAIL': ENABLE_THUMBNAIL,
             'mode': mode,
             'thumbnail_size': thumbnail_size,

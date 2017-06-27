@@ -34,6 +34,7 @@ from django.utils.translation import ugettext as _
 from django.views.decorators.http import require_POST
 from django.template.defaultfilters import filesizeformat
 from django.views.decorators.csrf import csrf_exempt
+from constance import config
 
 from seaserv import seafile_api
 from seaserv import get_repo, send_message, get_commits, \
@@ -55,7 +56,7 @@ from seahub.utils import render_error, is_org_context, \
     mkstemp, EMPTY_SHA1, HtmlDiff, gen_inner_file_get_url, \
     user_traffic_over_limit, get_file_audit_events_by_path, \
     generate_file_audit_event_type, FILE_AUDIT_ENABLED, gen_token, \
-    get_site_scheme_and_netloc
+    get_site_scheme_and_netloc, get_conf_text_ext
 from seahub.utils.ip import get_remote_ip
 from seahub.utils.timeutils import utc_to_local
 from seahub.utils.file_types import (IMAGE, PDF, DOCUMENT, SPREADSHEET, AUDIO,
@@ -204,8 +205,12 @@ def get_file_view_path_and_perm(request, repo_id, obj_id, path, use_onetime=True
         return ('', '', user_perm)
     else:
         # Get a token to visit file
-        token = seafile_api.get_fileserver_access_token(repo_id, obj_id, 'view',
-                                                        username, use_onetime=use_onetime)
+        token = seafile_api.get_fileserver_access_token(repo_id,
+                obj_id, 'view', username, use_onetime=use_onetime)
+
+        if not token:
+            return ('', '', None)
+
         outer_url = gen_file_get_url(token, filename)
         inner_url = gen_inner_file_get_url(token, filename)
         return (outer_url, inner_url, user_perm)
@@ -281,8 +286,12 @@ def convert_md_link(file_content, repo_id, username):
             if not obj_id:
                 return '''<p class="wiki-page-missing">%s</p>''' %  link_name
 
-            token = seafile_api.get_fileserver_access_token(repo_id, obj_id,
-                                                            'view', username)
+            token = seafile_api.get_fileserver_access_token(repo_id,
+                    obj_id, 'view', username)
+
+            if not token:
+                return '''<p class="wiki-page-missing">%s</p>''' %  link_name
+
             return '<img class="wiki-image" src="%s" alt="%s" />' % (gen_file_get_url(token, filename), filename)
         else:
             from seahub.base.templatetags.seahub_tags import file_icon_filter
@@ -328,7 +337,7 @@ def can_preview_file(file_name, file_size, repo=None):
     if repo and repo.encrypted and (file_type in (DOCUMENT, SPREADSHEET, PDF)):
         return (False, _(u'The library is encrypted, can not open file online.'))
 
-    if file_ext in FILEEXT_TYPE_MAP:  # check file extension
+    if file_ext in FILEEXT_TYPE_MAP or file_ext in get_conf_text_ext():  # check file extension
         exceeds_limit, err_msg = file_size_exceeds_preview_limit(file_size,
                                                                  file_type)
         if exceeds_limit:
@@ -409,18 +418,24 @@ def _file_view(request, repo_id, path):
     # Pass permission check, start download or render file.
 
     if request.GET.get('dl', '0') == '1':
-        token = seafile_api.get_fileserver_access_token(repo_id, obj_id,
-                                                        'download', username,
-                                                        use_onetime=True)
+        token = seafile_api.get_fileserver_access_token(repo_id,
+                obj_id, 'download', username, use_onetime=True)
+
+        if not token:
+            return render_permission_error(request, _(u'Unable to view file'))
+
         dl_url = gen_file_get_url(token, u_filename)
         # send stats message
         send_file_access_msg(request, repo, path, 'web')
         return HttpResponseRedirect(dl_url)
 
     if request.GET.get('raw', '0') == '1':
-        token = seafile_api.get_fileserver_access_token(repo_id, obj_id,
-                                                        'view', username,
-                                                        use_onetime=True)
+        token = seafile_api.get_fileserver_access_token(repo_id,
+                obj_id, 'view', username, use_onetime=True)
+
+        if not token:
+            return render_permission_error(request, _(u'Unable to view file'))
+
         raw_url = gen_file_get_url(token, u_filename)
         # send stats message
         send_file_access_msg(request, repo, path, 'web')
@@ -465,8 +480,13 @@ def _file_view(request, repo_id, path):
         else:
             document_type = 'text'
         doc_title = os.path.basename(path)
-        dl_token = seafile_api.get_fileserver_access_token(
-            repo.id, obj_id, 'download', username, use_onetime=True)
+
+        dl_token = seafile_api.get_fileserver_access_token(repo.id,
+                obj_id, 'download', username, use_onetime=True)
+
+        if not dl_token:
+            return render_permission_error(request, _(u'Unable to view file'))
+
         doc_url = gen_file_get_url(dl_token, u_filename)
         doc_info = json.dumps({'repo_id': repo_id, 'file_path': path,
                                'username': username})
@@ -789,9 +809,12 @@ def _download_file_from_share_link(request, fileshare):
     except Exception as e:
         logger.error('Error when sending file-download message: %s' % str(e))
 
-    dl_token = seafile_api.get_fileserver_access_token(repo.id, obj_id,
-                                                       'download', username,
-                                                       use_onetime=False)
+    dl_token = seafile_api.get_fileserver_access_token(repo.id,
+            obj_id, 'download', username, use_onetime=False)
+
+    if not dl_token:
+        messages.error(request, _(u'Unable to download file.'))
+
     return HttpResponseRedirect(gen_file_get_url(dl_token, filename))
 
 @share_link_audit
@@ -830,14 +853,24 @@ def view_shared_file(request, fileshare):
     # send statistic messages
     file_size = seafile_api.get_file_size(repo.store_id, repo.version, obj_id)
     if request.GET.get('dl', '') == '1':
+        if fileshare.get_permissions()['can_download'] is False:
+            raise Http404
+
         # download shared file
         return _download_file_from_share_link(request, fileshare)
 
-    access_token = seafile_api.get_fileserver_access_token(repo.id, obj_id,
-                                                           'view', '',
-                                                           use_onetime=False)
+    access_token = seafile_api.get_fileserver_access_token(repo.id,
+            obj_id, 'view', '', use_onetime=False)
+
+    if not access_token:
+        return render_error(request, _(u'Unable to view file'))
+
+
     raw_path = gen_file_get_url(access_token, filename)
     if request.GET.get('raw', '') == '1':
+        if fileshare.get_permissions()['can_download'] is False:
+            raise Http404
+
         # check whether owner's traffic over the limit
         if user_traffic_over_limit(shared_by):
             messages.error(request, _(u'Unable to view raw file, share link traffic is used up.'))
@@ -877,6 +910,8 @@ def view_shared_file(request, fileshare):
     save_to_link = reverse('save_shared_link') + '?t=' + token
     traffic_over_limit = user_traffic_over_limit(shared_by)
 
+    permissions = fileshare.get_permissions()
+
     return render_to_response('shared_file_view.html', {
             'repo': repo,
             'obj_id': obj_id,
@@ -897,6 +932,7 @@ def view_shared_file(request, fileshare):
             'accessible_repos': accessible_repos,
             'save_to_link': save_to_link,
             'traffic_over_limit': traffic_over_limit,
+            'permissions': permissions,
             }, context_instance=RequestContext(request))
 
 def view_raw_shared_file(request, token, obj_id, file_name):
@@ -947,8 +983,12 @@ def view_raw_shared_file(request, token, obj_id, file_name):
 
     filename = os.path.basename(file_path)
     username = request.user.username
-    token = seafile_api.get_fileserver_access_token(repo_id, real_obj_id, 'view',
-                                                    username, use_onetime=False)
+    token = seafile_api.get_fileserver_access_token(repo_id,
+            real_obj_id, 'view', username, use_onetime=False)
+
+    if not token:
+        raise Http404
+
     outer_url = gen_file_get_url(token, filename)
     return HttpResponseRedirect(outer_url)
 
@@ -970,6 +1010,9 @@ def view_file_via_shared_dir(request, fileshare):
                                   context_instance=RequestContext(request))
 
     if request.GET.get('dl', '') == '1':
+        if fileshare.get_permissions()['can_download'] is False:
+            raise Http404
+
         # download shared file
         return _download_file_from_share_link(request, fileshare)
 
@@ -995,9 +1038,15 @@ def view_file_via_shared_dir(request, fileshare):
 
     filename = os.path.basename(req_path)
     if request.GET.get('raw', '0') == '1':
+        if fileshare.get_permissions()['can_download'] is False:
+            raise Http404
+
         username = request.user.username
         token = seafile_api.get_fileserver_access_token(repo_id,
-            obj_id, 'view', username, use_onetime=True)
+                obj_id, 'view', username, use_onetime=True)
+
+        if not token:
+            return render_error(request, _(u'Unable to view file'))
 
         raw_url = gen_file_get_url(token, filename)
         # send stats message
@@ -1006,8 +1055,12 @@ def view_file_via_shared_dir(request, fileshare):
 
     file_size = seafile_api.get_file_size(repo.store_id, repo.version, obj_id)
     filetype, fileext = get_file_type_and_ext(filename)
-    access_token = seafile_api.get_fileserver_access_token(repo.id, obj_id,
-                                                           'view', '', use_onetime=False)
+    access_token = seafile_api.get_fileserver_access_token(repo.id,
+            obj_id, 'view', '', use_onetime=False)
+
+    if not access_token:
+        return render_error(request, _(u'Unable to view file'))
+
     raw_path = gen_file_get_url(access_token, filename)
     inner_path = gen_inner_file_get_url(access_token, filename)
 
@@ -1059,6 +1112,7 @@ def view_file_via_shared_dir(request, fileshare):
         ret_dict['err'] = err_msg
 
     traffic_over_limit = user_traffic_over_limit(shared_by)
+    permissions = fileshare.get_permissions()
 
     return render_to_response('shared_file_view.html', {
             'repo': repo,
@@ -1083,6 +1137,7 @@ def view_file_via_shared_dir(request, fileshare):
             'img_prev': img_prev,
             'img_next': img_next,
             'traffic_over_limit': traffic_over_limit,
+            'permissions': permissions,
             }, context_instance=RequestContext(request))
 
 def file_edit_submit(request, repo_id):
@@ -1202,8 +1257,11 @@ def file_edit(request, repo_id):
     if not obj_id:
         return render_error(request, _(u'The file does not exist.'))
 
-    token = seafile_api.get_fileserver_access_token(repo_id, obj_id, 'view',
-                                                    request.user.username)
+    token = seafile_api.get_fileserver_access_token(repo_id,
+            obj_id, 'view', request.user.username)
+
+    if not token:
+        return render_error(request, _(u'Unable to view file'))
 
     # generate path and link
     zipped = gen_path_link(path, repo.name)
@@ -1336,8 +1394,14 @@ def download_file(request, repo_id, obj_id):
     # if it has been renamed
     if check_folder_permission(request, repo_id, '/'):
         # Get a token to access file
-        token = seafile_api.get_fileserver_access_token(repo_id, obj_id,
-                                                        'download', username)
+        token = seafile_api.get_fileserver_access_token(repo_id,
+                obj_id, 'download', username)
+
+        if not token:
+            messages.error(request, _(u'Unable to download file'))
+            next = request.META.get('HTTP_REFERER', settings.SITE_ROOT)
+            return HttpResponseRedirect(next)
+
     else:
         messages.error(request, _(u'Unable to download file'))
         next = request.META.get('HTTP_REFERER', settings.SITE_ROOT)
@@ -1364,9 +1428,12 @@ def get_file_content_by_commit_and_path(request, repo_id, commit_id, path, file_
         permission = check_folder_permission(request, repo_id, '/')
         if permission:
             # Get a token to visit file
-            token = seafile_api.get_fileserver_access_token(repo_id, obj_id,
-                                                            'view',
-                                                            request.user.username)
+            token = seafile_api.get_fileserver_access_token(repo_id,
+                    obj_id, 'view', request.user.username)
+
+            if not token:
+                return None, 'FileServer access token invalid'
+
         else:
             return None, 'permission denied'
 

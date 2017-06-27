@@ -1,3 +1,5 @@
+import logging
+
 from django.conf import settings
 from django.contrib.auth.middleware import RemoteUserMiddleware
 from django.core.exceptions import ImproperlyConfigured
@@ -13,6 +15,9 @@ from seahub.base.sudo_mode import update_sudo_mode_ts
 from seahub.profile.models import Profile
 from seahub.utils.file_size import get_quota_from_string
 from seahub.utils.user_permissions import get_user_role
+
+# Get an instance of a logger
+logger = logging.getLogger(__name__)
 
 
 class ShibbolethRemoteUserMiddleware(RemoteUserMiddleware):
@@ -35,7 +40,7 @@ class ShibbolethRemoteUserMiddleware(RemoteUserMiddleware):
 
         #To support logout.  If this variable is True, do not
         #authenticate user and return now.
-        if request.session.get(LOGOUT_SESSION_KEY) == True:
+        if request.session.get(LOGOUT_SESSION_KEY) is True:
             return
         else:
             #Delete the shib reauth session key if present.
@@ -84,7 +89,8 @@ class ShibbolethRemoteUserMiddleware(RemoteUserMiddleware):
             # call make profile.
             self.make_profile(user, shib_meta)
             user_role = self.update_user_role(user, shib_meta)
-            self.update_user_quota(user, user_role)
+            if user_role:
+                self.update_user_quota(user, user_role)
             #setup session.
             self.setup_session(request)
             request.shib_login = True
@@ -169,6 +175,7 @@ class ShibbolethRemoteUserMiddleware(RemoteUserMiddleware):
     def update_user_quota(self, user, user_role):
         if user.permissions.role_quota():
             quota = get_quota_from_string(user.permissions.role_quota())
+            logger.info('Set quota[%d] for user: %s, role[%s]' % (quota, user.username, user_role))
             seafile_api.set_role_quota(user_role, quota)
         else:
             return

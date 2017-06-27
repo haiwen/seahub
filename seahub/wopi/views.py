@@ -18,20 +18,23 @@ from django.core.cache import cache
 from pysearpc import SearpcError
 from seaserv import seafile_api
 
+from seahub.base.accounts import User
 from seahub.views import check_file_lock
 from seahub.utils import gen_inner_file_get_url, \
-    gen_file_upload_url, get_file_type_and_ext
+    gen_file_upload_url, get_file_type_and_ext, is_pro_version
 from seahub.base.templatetags.seahub_tags import email2nickname
 
 from seahub.settings import SITE_ROOT
 
 from .utils import get_file_info_by_token
 
-from .settings import WOPI_ACCESS_TOKEN_EXPIRATION, \
-    ENABLE_OFFICE_WEB_APP_EDIT, OFFICE_WEB_APP_EDIT_FILE_EXTENSION
+from .settings import ENABLE_OFFICE_WEB_APP_EDIT, \
+        OFFICE_WEB_APP_EDIT_FILE_EXTENSION
 
 logger = logging.getLogger(__name__)
 json_content_type = 'application/json; charset=utf-8'
+
+WOPI_LOCK_EXPIRATION = 30 * 60
 
 def generate_file_lock_key_value(request):
     token = request.GET.get('access_token', None)
@@ -54,7 +57,7 @@ def generate_file_lock_key_value(request):
 
 def lock_file(request):
     key, value = generate_file_lock_key_value(request)
-    cache.set(key, value, WOPI_ACCESS_TOKEN_EXPIRATION)
+    cache.set(key, value, WOPI_LOCK_EXPIRATION)
 
 def unlock_file(request):
     key, value = generate_file_lock_key_value(request)
@@ -76,23 +79,36 @@ def access_token_check(func):
     def _decorated(view, request, file_id, *args, **kwargs):
 
         token = request.GET.get('access_token', None)
+        if not token:
+            logger.error('access_token invalid.')
+            return HttpResponse(json.dumps({}), status=401,
+                                content_type=json_content_type)
+
         request_user, repo_id, file_path = get_file_info_by_token(token)
 
         if not request_user or not repo_id or not file_path:
-            logger.error('access_token invalid.')
-            return HttpResponse(json.dumps({}), status=401,
+            logger.error('File info invalid, user: %s, repo_id: %s, path: %s.'
+                    % request_user, repo_id, file_path)
+            return HttpResponse(json.dumps({}), status=404,
+                                content_type=json_content_type)
+
+        try:
+            User.objects.get(email=request_user)
+        except User.DoesNotExist:
+            logger.error('User %s not found.' % request_user)
+            return HttpResponse(json.dumps({}), status=404,
                                 content_type=json_content_type)
 
         repo = seafile_api.get_repo(repo_id)
         if not repo:
             logger.error('Library %s not found.' % repo_id)
-            return HttpResponse(json.dumps({}), status=401,
+            return HttpResponse(json.dumps({}), status=404,
                                 content_type=json_content_type)
 
         obj_id = seafile_api.get_file_id_by_path(repo_id, file_path)
         if not obj_id:
             logger.error('File %s not found.' % file_path)
-            return HttpResponse(json.dumps({}), status=401,
+            return HttpResponse(json.dumps({}), status=404,
                                 content_type=json_content_type)
 
         return func(view, request, file_id, *args, **kwargs)
@@ -129,10 +145,20 @@ class WOPIFilesView(APIView):
         result = {}
         # necessary
         result['BaseFileName'] = os.path.basename(file_path)
-        result['OwnerId'] = seafile_api.get_repo_owner(repo_id)
         result['Size'] = file_size
         result['UserId'] = request_user
         result['Version'] = obj_id
+
+        try:
+            if is_pro_version():
+                result['OwnerId'] = seafile_api.get_repo_owner(repo_id) or \
+                        seafile_api.get_org_repo_owner(repo_id)
+            else:
+                result['OwnerId'] = seafile_api.get_repo_owner(repo_id)
+        except Exception as e:
+            logger.error(e)
+            return HttpResponse(json.dumps({}), status=500,
+                                content_type=json_content_type)
 
         # optional
         result['UserFriendlyName'] = email2nickname(request_user)
@@ -177,10 +203,6 @@ class WOPIFilesView(APIView):
         current_lock_id = get_current_lock_id(request)
 
         if x_wopi_override == 'LOCK':
-
-            # TODO
-            if file_path.endswith('.xlsx'):
-                x_wopi_oldlock = False
 
             if x_wopi_oldlock:
                 # UnlockAndRelock endpoint
@@ -281,11 +303,15 @@ class WOPIFilesContentsView(APIView):
         file_name = os.path.basename(file_path)
         try:
             fileserver_token = seafile_api.get_fileserver_access_token(repo_id,
-                                       obj_id, 'view', '', use_onetime = False)
+                    obj_id, 'view', '', use_onetime = False)
         except SearpcError as e:
             logger.error(e)
             return HttpResponse(json.dumps({}), status=500,
-                                content_type=json_content_type)
+                    content_type=json_content_type)
+
+        if not fileserver_token:
+            return HttpResponse(json.dumps({}), status=500,
+                    content_type=json_content_type)
 
         inner_path = gen_inner_file_get_url(fileserver_token, file_name)
 
@@ -310,6 +336,11 @@ class WOPIFilesContentsView(APIView):
             # get file update url
             token = seafile_api.get_fileserver_access_token(repo_id,
                     'dummy', 'update', request_user)
+
+            if not token:
+                return HttpResponse(json.dumps({}), status=500,
+                        content_type=json_content_type)
+
             update_url = gen_file_upload_url(token, 'update-api')
 
             # update file

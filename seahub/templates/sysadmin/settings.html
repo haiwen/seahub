@@ -23,15 +23,13 @@
     {% endwith %}
 
 
-    <h4>{% trans "Logo" %}</h4>
+    <h4>Logo</h4>
 
-    {% with type="file" setting_name="logo" file_path=logo_path file_width=256 file_height=64 help_tip="logo.png, 256px * 64px" %}
-        {% trans "Logo" as setting_display_name %}
+    {% with type="file" setting_display_name="Logo" setting_name="logo" file_path=logo_path file_width=256 file_height=64 help_tip="logo.png, 256px * 64px" %}
         {% include "snippets/web_settings_form.html" %}
     {% endwith %}
 
-    {% with type="file" setting_name="favicon" file_path=favicon_path file_width=32 file_height=32 help_tip="favicon.ico, 32px * 32px" %}
-        {% trans "Favicon" as setting_display_name %}
+    {% with type="file" setting_display_name="Favicon" setting_name="favicon" file_path=favicon_path file_width=32 file_height=32 help_tip="favicon.ico, 32px * 32px" %}
         {% include "snippets/web_settings_form.html" %}
     {% endwith %}
 
@@ -136,13 +134,17 @@
         {% include "snippets/web_settings_form.html" %}
     {% endwith %}
 
+    {% with type="input" setting_display_name="Preview File Extensions" setting_name="TEXT_PREVIEW_EXT" setting_val=config_dict.TEXT_PREVIEW_EXT %}
+        {% trans "Extensions of online previewed files, each suffix is separated by a comma." as help_tip %}
+        {% include "snippets/web_settings_form.html" %}
+    {% endwith %}
+    
     <h4>{% trans "Sync" %}</h4>
 
     {% with type="checkbox" setting_display_name="DISABLE_SYNC_WITH_ANY_FOLDER" setting_name="DISABLE_SYNC_WITH_ANY_FOLDER" setting_val=config_dict.DISABLE_SYNC_WITH_ANY_FOLDER %}
         {% trans "If turn on, the desktop clients will not be able to sync a folder outside the default Seafile folder." as help_tip %}
         {% include "snippets/web_settings_form.html" %}
     {% endwith %}
-
 </div>
 {% endblock %}
 

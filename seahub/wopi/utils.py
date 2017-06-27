@@ -9,7 +9,6 @@ import hashlib
 import logging
 import uuid
 import posixpath
-from dateutil.relativedelta import relativedelta
 
 try:
     import xml.etree.cElementTree as ET
@@ -20,8 +19,8 @@ from seaserv import seafile_api
 
 from django.core.cache import cache
 from django.core.urlresolvers import reverse
-from django.utils import timezone
 
+from seahub.profile.models import Profile
 from seahub.utils import get_site_scheme_and_netloc
 from .settings import OFFICE_WEB_APP_BASE_URL, WOPI_ACCESS_TOKEN_EXPIRATION, \
     OFFICE_WEB_APP_DISCOVERY_EXPIRATION, OFFICE_WEB_APP_CLIENT_PEM, \
@@ -146,6 +145,10 @@ def get_wopi_dict(request_user, repo_id, file_path, action_name='view'):
     else:
         full_action_url = action_url + '?' + urllib.urlencode(query_dict)
 
+    lang_code = Profile.objects.get_user_language(request_user)
+    if lang_code.lower() == 'zh-cn':
+        full_action_url += '&ui=zh-CN&rs=zh-CN'
+
     # generate access token
     user_repo_path_info = (request_user, repo_id, file_path)
 
@@ -157,10 +160,8 @@ def get_wopi_dict(request_user, repo_id, file_path, action_name='view'):
 
     # access_token_ttl property tells office web app
     # when access token expires
-    expire_sec = WOPI_ACCESS_TOKEN_EXPIRATION
-    expiration= timezone.now() + relativedelta(seconds=expire_sec)
-    milliseconds_ttl = time.mktime(expiration.timetuple()) * 1000
-    access_token_ttl = int(milliseconds_ttl)
+    utc_timestamp = time.time()
+    access_token_ttl = int((utc_timestamp + WOPI_ACCESS_TOKEN_EXPIRATION) * 1000)
 
     wopi_dict = {}
     wopi_dict['action_url'] = full_action_url

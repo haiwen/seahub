@@ -148,16 +148,16 @@ class DirView(APIView):
         username = request.user.username
         parent_dir = os.path.dirname(path)
         if operation == 'mkdir':
-            # permission check
-            if check_folder_permission(request, repo_id, parent_dir) != 'rw':
-                error_msg = 'Permission denied.'
-                return api_error(status.HTTP_403_FORBIDDEN, error_msg)
-
             # resource check
             parent_dir_id = seafile_api.get_dir_id_by_path(repo_id, parent_dir)
             if not parent_dir_id:
                 error_msg = 'Folder %s not found.' % parent_dir
                 return api_error(status.HTTP_404_NOT_FOUND, error_msg)
+
+            # permission check
+            if check_folder_permission(request, repo_id, parent_dir) != 'rw':
+                error_msg = 'Permission denied.'
+                return api_error(status.HTTP_403_FORBIDDEN, error_msg)
 
             new_dir_name = os.path.basename(path)
 
@@ -269,7 +269,8 @@ class DirView(APIView):
         # resource check
         dir_id = seafile_api.get_dir_id_by_path(repo_id, path)
         if not dir_id:
-            return Response({'success': True})
+            error_msg = 'Folder %s not found.' % path
+            return api_error(status.HTTP_404_NOT_FOUND, error_msg)
 
         repo = seafile_api.get_repo(repo_id)
         if not repo:
