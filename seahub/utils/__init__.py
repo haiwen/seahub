@@ -215,15 +215,27 @@ def calculate_repos_last_modify(repo_list):
 
 def normalize_dir_path(path):
     """Add '/' at the end of directory path if necessary.
+
+    And make sure path starts with '/'
     """
-    if path[-1] != '/':
-        path = path + '/'
-    return path
+
+    path = path.strip('/')
+    if path == '':
+        return '/'
+    else:
+        return '/' + path + '/'
 
 def normalize_file_path(path):
     """Remove '/' at the end of file path if necessary.
+
+    And make sure path starts with '/'
     """
-    return path.rstrip('/')
+
+    path = path.strip('/')
+    if path == '':
+        return ''
+    else:
+        return '/' + path
 
 # modified from django1.5:/core/validators, and remove the support for single
 # quote in email address
