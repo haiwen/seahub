@@ -40,8 +40,10 @@
     "DATETIME_FORMAT": "j \\d\\e F \\d\\e Y \\a \\l\\e\\s G:i", 
     "DATETIME_INPUT_FORMATS": [
       "%d/%m/%Y %H:%M:%S", 
+      "%d/%m/%Y %H:%M:%S.%f", 
       "%d/%m/%Y %H:%M", 
       "%d/%m/%y %H:%M:%S", 
+      "%d/%m/%y %H:%M:%S.%f", 
       "%d/%m/%y %H:%M", 
       "%Y-%m-%d %H:%M:%S", 
       "%Y-%m-%d %H:%M:%S.%f", 
@@ -61,9 +63,10 @@
     "SHORT_DATETIME_FORMAT": "d/m/Y G:i", 
     "SHORT_DATE_FORMAT": "d/m/Y", 
     "THOUSAND_SEPARATOR": ".", 
-    "TIME_FORMAT": "G:i:s", 
+    "TIME_FORMAT": "G:i", 
     "TIME_INPUT_FORMATS": [
       "%H:%M:%S", 
+      "%H:%M:%S.%f", 
       "%H:%M"
     ], 
     "YEAR_MONTH_FORMAT": "F \\d\\e\\l Y"
