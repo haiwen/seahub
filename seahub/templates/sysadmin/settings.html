@@ -33,6 +33,10 @@
         {% include "snippets/web_settings_form.html" %}
     {% endwith %}
 
+    {% with type="license" setting_display_name="License" setting_name="license" help_tip="seafile_license.txt" %}
+        {% include "snippets/web_settings_form.html" %}
+    {% endwith %}
+
     <h4>{% trans "User" %}</h4>
 
     {% with type="checkbox" setting_name="ENABLE_SIGNUP" setting_val=config_dict.ENABLE_SIGNUP %}
@@ -280,6 +284,7 @@ $('.web-setting-file-upload-input').change(function() {
     switch(input_name) {
         case 'logo': url = '{% url 'api-v2.1-admin-logo' %}'; break;
         case 'favicon': url = '{% url 'api-v2.1-admin-favicon' %}'; break;
+        case 'license': url = '{% url 'api-v2.1-admin-license' %}'; break;
     }
 
     fd.append(input_name, file);

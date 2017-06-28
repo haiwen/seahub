@@ -71,6 +71,7 @@ from seahub.api2.endpoints.admin.logs import AdminLogs
 from seahub.api2.endpoints.admin.org_users import AdminOrgUsers, AdminOrgUser
 from seahub.api2.endpoints.admin.logo import AdminLogo
 from seahub.api2.endpoints.admin.favicon import AdminFavicon
+from seahub.api2.endpoints.admin.license import AdminLicense
 
 # Uncomment the next two lines to enable the admin:
 #from django.contrib import admin
@@ -295,6 +296,7 @@ urlpatterns = patterns(
     ## admin::logo
     url(r'^api/v2.1/admin/logo/$', AdminLogo.as_view(), name='api-v2.1-admin-logo'),
     url(r'^api/v2.1/admin/favicon/$', AdminFavicon.as_view(), name='api-v2.1-admin-favicon'),
+    url(r'^api/v2.1/admin/license/$', AdminLicense.as_view(), name='api-v2.1-admin-license'),
 
     (r'^avatar/', include('seahub.avatar.urls')),
     (r'^notification/', include('seahub.notifications.urls')),
