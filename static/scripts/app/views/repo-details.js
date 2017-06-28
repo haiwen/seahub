@@ -8,7 +8,7 @@ define([
 
     var View = Backbone.View.extend({
         id: 'repo-details',
-        className: 'details-panel right-side-panel hide', // `hide` is for 'clickItem' in `views/myhome-repos.js`
+        className: 'details-panel right-side-panel',
 
         template:  _.template($('#repo-details-tmpl').html()),
 
@@ -52,7 +52,7 @@ define([
         },
 
         hide: function() {
-            this.$el.css({'right': '-400px'}).hide();
+            this.$el.css({'right': '-320px'});
         },
 
         close: function() {
@@ -63,7 +63,7 @@ define([
         show: function(options) {
             this.data = options;
             this.render();
-            this.$el.css({'right': '0px'}).show();
+            this.$el.css({'right': '0px'});
             this.setConMaxHeight();
         }
 
