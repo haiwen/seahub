@@ -350,6 +350,8 @@ define([
                 'obj_name': obj_name
             };
             new ShareView(options);
+
+            this._hideMenu();
             return false;
         },
 
@@ -365,6 +367,8 @@ define([
                     var msg = gettext("Successfully deleted %(name)s")
                         .replace('%(name)s', dirent_name);
                     Common.feedback(msg, 'success');
+
+                    _this._hideMenu();
 
                     if (_this.model.get('is_img')) {
                         _this.dirView.updateMagnificPopupOptions({'op':'delete-item', 'index':index});
