@@ -126,7 +126,7 @@ class AdminUploadLinkUpload(APIView):
             return api_error(status.HTTP_500_INTERNAL_SERVER_ERROR, error_msg)
 
         result = {}
-        result['upload_link'] = gen_file_upload_url(token, 'upload-api')
+        result['upload_link'] = gen_file_upload_url(upload_token, 'upload-api')
 
         return Response(result)
 
