@@ -26,6 +26,7 @@ from seahub.api2.endpoints.shared_folders import SharedFolders
 from seahub.api2.endpoints.shared_repos import SharedRepos, SharedRepo
 from seahub.api2.endpoints.upload_links import UploadLinks, UploadLink
 from seahub.api2.endpoints.repos_batch import ReposBatchView
+from seahub.api2.endpoints.repos import RepoView
 from seahub.api2.endpoints.file import FileView
 from seahub.api2.endpoints.dir import DirView
 from seahub.api2.endpoints.repo_trash import RepoTrash
@@ -207,6 +208,7 @@ urlpatterns = patterns(
 
     ## user::repos
     url(r'^api/v2.1/repos/batch/$', ReposBatchView.as_view(), name='api-v2.1-repos-batch'),
+    url(r'^api/v2.1/repos/(?P<repo_id>[-0-9a-f]{36})/$', RepoView.as_view(), name='api-v2.1-repo-view'),
     url(r'^api/v2.1/repos/(?P<repo_id>[-0-9a-f]{36})/file/$', FileView.as_view(), name='api-v2.1-file-view'),
     url(r'^api/v2.1/repos/(?P<repo_id>[-0-9a-f]{36})/dir/$', DirView.as_view(), name='api-v2.1-dir-view'),
     url(r'^api/v2.1/repos/(?P<repo_id>[-0-9a-f]{36})/trash/$', RepoTrash.as_view(), name='api-v2.1-repo-trash'),
@@ -348,6 +350,7 @@ urlpatterns = patterns(
     url(r'^sys/uploadlink/remove/$', sys_upload_link_remove, name='sys_upload_link_remove'),
     url(r'^sys/notificationadmin/', notification_list, name='notification_list'),
     url(r'^sys/invitationadmin/$', sys_invitation_admin, name='sys_invitation_admin'),
+    url(r'^sys/invitationadmin/remove/$', sys_invitation_remove, name='sys_invitation_remove'),
     url(r'^sys/sudo/', sys_sudo_mode, name='sys_sudo_mode'),
     url(r'^sys/check-license/', sys_check_license, name='sys_check_license'),
     url(r'^useradmin/add/$', user_add, name="user_add"),

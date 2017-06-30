@@ -851,7 +851,6 @@ class Repo(APIView):
             "id":repo.id,
             "owner":owner,
             "name":repo.name,
-            "desc":repo.desc,
             "mtime":repo.latest_modify,
             "size":repo.size,
             "encrypted":repo.encrypted,
@@ -860,6 +859,7 @@ class Repo(APIView):
             "modifier_email": repo.last_modifier,
             "modifier_contact_email": email2contact_email(repo.last_modifier),
             "modifier_name": email2nickname(repo.last_modifier),
+            "file_count": repo.file_count,
             }
         if repo.encrypted:
             repo_json["enc_version"] = repo.enc_version
