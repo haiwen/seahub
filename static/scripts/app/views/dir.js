@@ -1000,6 +1000,7 @@ define([
                                     _this.$('th .checkbox').removeClass('checkbox-checked');
                                     _this.$('#multi-dirents-op').hide();
                                     _this.$('#cur-dir-ops').show();
+                                    _this.updateDirOpBarUI();
                                 } else {
                                     $(selected_dirents).each(function() {
                                         if (data['deleted'].indexOf(this.get('obj_name')) != -1) {
@@ -1144,6 +1145,7 @@ define([
                                             _this.$('th .checkbox').removeClass('checkbox-checked');
                                             _this.$('#multi-dirents-op').hide();
                                             _this.$('#cur-dir-ops').show();
+                                            _this.updateDirOpBarUI();
                                         } else {
                                             $(dirs).each(function() {
                                                 if (this.get('obj_name') in data['success']) {
