@@ -117,7 +117,6 @@
 .icon-eye-slash:before            { content: "\f070"; }
 .icon-plus-square:before          { content: "\f0fe"; }
 .icon-envelope:before             { content: "\f0e0"; }
-.icon-ellipsis-vertical:before    { content: "\f142"; }
 .fa-1x {
     font-size: 1.3em;
 }
@@ -1788,9 +1787,6 @@ button.sf-dropdown-toggle:focus {
     height:29px;
     background:#fff;
     line-height:17px;
-}
-.more-op-btn-white {
-    width:29px;
 }
 /* info-bar */
 #info-bar {
