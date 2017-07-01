@@ -9,9 +9,18 @@
 
 {% block extra_script %}
 <script type="text/template" id="my-own-repos-tmpl">
-    <div class="hd ovhd">
+    <div class="hd">
         <h3 class="fleft">{% trans "My Libraries" %}</h3>
-        <button class="repo-create btn-white fright"><span aria-hidden="true" class="icon-plus-square add vam"></span><span class="vam">{% trans "New Library" %}</span></button>
+        <div class="fright">
+            <button class="repo-create btn-white"><span aria-hidden="true" class="icon-plus-square add vam"></span><span class="vam">{% trans "New Library" %}</span></button>
+
+            <div id="my-libs-more-op" class="sf-dropdown sf-dropdown-inline">
+                <button class="sf-dropdown-toggle btn-white more-op-btn-white">{% trans "More" %}</button>
+                <ul class="sf-dropdown-menu hide">
+                    <li><a href="#my-libs/deleted/">{% trans "Deleted Libraries" %}</a></li>
+                </ul>
+            </div>
+        </div>
     </div>
     <table class="my-own-repos-table hide">
         <thead></thead>
@@ -24,6 +33,25 @@
     <span class="loading-icon loading-tip"></span>
     <p class="error error-tip hide"></p>
 </script>
+
+<script type="text/template" id="my-deleted-repos-tmpl">
+    <p class="path-bar">
+        <a href="#my-libs/" class="normal">{% trans "My Libraries" %}</a>
+        <span class="path-split">/</span>
+        <span>{% trans "Deleted" %}</span>
+    </p>
+    <p class="tip">{% trans "Tip: libraries deleted 30 days ago will be cleaned automatically."%}</p>
+    <table class="my-deleted-repos-table hide">
+        <thead></thead>
+        <tbody></tbody>
+    </table>
+    <div class="empty-tips hide">
+        <h2 class="alc">{% trans "No deleted libraries." %}</h2>
+    </div>
+    <span class="loading-icon loading-tip"></span>
+    <p class="error error-tip hide"></p>
+</script>
+
 
 <script type="text/template" id="repos-shared-to-me-tmpl">
     <h3 class="hd">{% trans "Shared with me" %}</h3>
