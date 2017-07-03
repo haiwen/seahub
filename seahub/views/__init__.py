@@ -91,8 +91,7 @@ def get_system_default_repo_id():
     return _default_repo_id
 
 def check_folder_permission(request, repo_id, path):
-    """Check repo/folder/file access permission of a user, always return 'rw'
-    when repo is system repo and user is admin.
+    """Check repo/folder/file access permission of a user.
 
     Arguments:
     - `request`:
@@ -100,9 +99,6 @@ def check_folder_permission(request, repo_id, path):
     - `path`:
     """
     username = request.user.username
-    if request.user.is_staff and get_system_default_repo_id() == repo_id:
-        return 'rw'
-
     return seafile_api.check_permission_by_path(repo_id, path, username)
 
 def check_file_lock(repo_id, file_path, username):

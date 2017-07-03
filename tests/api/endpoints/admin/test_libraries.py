@@ -3,7 +3,7 @@ from django.core.urlresolvers import reverse
 from seahub.test_utils import BaseTestCase
 from tests.common.utils import randstring
 
-class LibrariesTest(BaseTestCase):
+class AdminLibrariesTest(BaseTestCase):
 
     def setUp(self):
         self.libraries_url = reverse('api-v2.1-admin-libraries')
@@ -115,7 +115,7 @@ class LibrariesTest(BaseTestCase):
         self.assertEqual(404, resp.status_code)
 
 
-class LibraryTest(BaseTestCase):
+class AdminLibraryTest(BaseTestCase):
 
     def setUp(self):
         self.user_name = self.user.username

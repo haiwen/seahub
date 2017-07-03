@@ -1,5 +1,6 @@
 import string
 import random
+import requests
 
 from .common import BASE_URL
 
@@ -19,3 +20,13 @@ def urljoin(base, *args):
 
 def apiurl(*parts):
     return urljoin(BASE_URL, *parts)
+
+def upload_file_test(upload_link):
+    file_name = randstring(6)
+    files = {
+        'file': (file_name, 'Some lines in this file'),
+        'parent_dir': '/',
+    }
+
+    resp = requests.post(upload_link, files=files)
+    assert 200 == resp.status_code
