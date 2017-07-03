@@ -181,6 +181,7 @@ define([
                 case 'admin-group-members': return siteRoot + 'api/v2.1/admin/groups/' + options.group_id + '/members/';
                 case 'admin-group-member': return siteRoot + 'api/v2.1/admin/groups/' + options.group_id + '/members/' + options.email+ '/';
                 case 'admin-system-library': return siteRoot + 'api/v2.1/admin/system-library/';
+                case 'admin-system-library-upload-link': return siteRoot + 'api/v2.1/admin/system-library/upload-link/';
                 case 'admin-trash-libraries': return siteRoot + 'api/v2.1/admin/trash-libraries/';
                 case 'admin-trash-library': return siteRoot + 'api/v2.1/admin/trash-libraries/' + options.repo_id + '/';
                 case 'admin_shares': return siteRoot + 'api/v2.1/admin/shares/';
