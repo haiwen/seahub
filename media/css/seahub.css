@@ -3856,3 +3856,12 @@ img.thumbnail {
     width:800px;
     overflow:auto;
 }
+/* system info */
+.license-file-upload {
+    margin-top:5px;
+    position:relative;
+    overflow:hidden;
+}
+.license-file-upload-btn {
+    white-space:nowrap;
+}

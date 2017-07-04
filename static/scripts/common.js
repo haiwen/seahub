@@ -185,6 +185,8 @@ define([
                 case 'admin_shares': return siteRoot + 'api/v2.1/admin/shares/';
                 case 'sys_group_admin_export_excel': return siteRoot + 'sys/groupadmin/export-excel/';
                 case 'admin-logs': return siteRoot + 'api/v2.1/admin/admin-logs/';
+
+                case 'license': return siteRoot + 'api/v2.1/admin/license/';
             }
         },
 
