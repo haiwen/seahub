@@ -8,11 +8,11 @@ define([
 
     var View = Backbone.View.extend({
         id: 'dirent-details',
-        className: 'right-side-panel hide', // `hide` is for 'clickItem' in `views/dir.js`
+        className: 'details-panel right-side-panel',
 
         template:  _.template($('#dirent-details-tmpl').html()),
 
-        initialize: function(options) {
+        initialize: function() {
             $("#main").append(this.$el);
 
             var _this = this;
@@ -36,12 +36,23 @@ define([
             this.$el.html(this.template(this.data));
 
             var _this = this;
-            this.$('.dirent-details-img-container img').load(function() {
+            this.$('.details-panel-img-container img').load(function() {
                 _this.showImg();
             });
             this.$('.thumbnail').on('error', function() {
                 _this.getBigIcon();
             });
+        },
+
+        update: function(part_data) {
+            if (part_data.error) {
+                this.$('.dir-folder-counts, .dir-file-counts, .dir-size')
+                    .html('<span class="error">' + gettext("Error") + '</span>');
+            } else {
+                this.$('.dir-folder-counts').html(part_data.dir_count);
+                this.$('.dir-file-counts').html(part_data.file_count);
+                this.$('.dir-size').html(part_data.size);
+            }
         },
 
         setConMaxHeight: function() {
@@ -52,7 +63,7 @@ define([
         },
 
         hide: function() {
-            this.$el.css({'right': '-400px'}).hide();
+            this.$el.css({'right': '-320px'});
         },
 
         close: function() {
@@ -63,12 +74,12 @@ define([
         show: function(options) {
             this.data = options;
             this.render();
-            this.$el.css({'right': '0px'}).show();
+            this.$el.css({'right': '0px'});
             this.setConMaxHeight();
         },
 
         showImg: function() {
-            var $container = this.$('.dirent-details-img-container');
+            var $container = this.$('.details-panel-img-container');
             $('.loading-icon', $container).hide();
             $('img', $container).show();
         },

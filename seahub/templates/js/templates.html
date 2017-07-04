@@ -781,7 +781,7 @@
         </h3>
     </div>
     <div class="right-side-panel-con">
-        <div class="dirent-details-img-container image-file-view">
+        <div class="details-panel-img-container image-file-view">
             <span class="loading-icon"></span>
             <% if (thumbnail_url) { %>
             <img src="<%= thumbnail_url %>" class="thumbnail hide" alt="" />
@@ -790,18 +790,33 @@
             <% } %>
         </div>
 
-        <div class="dirent-details-text-info-container">
+        <div class="details-panel-text-info-container">
             <table>
                 <tr class="vh">
                     <th width="35%"></th>
                     <td width="65%"></td>
                 </tr>
+
                 <% if (dirent.is_file) { %>
                 <tr>
                     <th>{% trans "Size" %}</th>
                     <td><%= dirent.file_size %></td>
                 </tr>
+                <% } else { %>
+                <tr>
+                    <th>{% trans "Folders" %}</th>
+                    <td class="dir-folder-counts"></td>
+                </tr>
+                <tr>
+                    <th>{% trans "Files" %}</th>
+                    <td class="dir-file-counts"><span class="loading-icon"></span></td>
+                </tr>
+                <tr>
+                    <th>{% trans "Size" %}</th>
+                    <td class="dir-size"></td>
+                </tr>
                 <% } %>
+
                 <tr>
                     <th>{% trans "Location" %}</th>
                     <td><%- path %></td>

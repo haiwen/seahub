@@ -73,7 +73,7 @@ define([
                 this.listenTo(this.dir, 'reset', this.reset);
 
                 this.fileUploadView = new FileUploadView({dirView: this});
-                this.direntDetailsView = new DirentDetailsView({dirView: this});
+                this.direntDetailsView = new DirentDetailsView();
 
                 this.render();
 

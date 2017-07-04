@@ -301,7 +301,34 @@ define([
                 });
             }
 
-            this.dirView.direntDetailsView.show(data);
+            var detailsView = this.dirView.direntDetailsView;
+            detailsView.show(data);
+
+            // fetch other data for dir
+            if (this.model.get('is_dir')) {
+                $.ajax({
+                    url: Common.getUrl({
+                        'name': 'dir-details',
+                        'repo_id': this.dir.repo_id
+                    }),
+                    cache: false,
+                    data: {
+                        'path': Common.pathJoin([this.dir.path, this.model.get('obj_name')])
+                    },
+                    dataType: 'json',
+                    success: function(data) {
+                        detailsView.update({
+                            'dir_count': data.dir_count,
+                            'file_count': data.file_count,
+                            'size': Common.fileSizeFormat(data.size, 1)
+                        });
+                    },
+                    error: function() {
+                        detailsView.update({'error': true});
+                    }
+                });
+            }
+
             this.closeMenu();
             return false;
         },
