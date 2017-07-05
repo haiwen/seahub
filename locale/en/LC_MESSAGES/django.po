@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2017-07-05 14:18+0800\n"
+"POT-Creation-Date: 2017-07-05 15:34+0800\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -538,7 +538,6 @@ msgid "Added"
 msgstr ""
 
 #: seahub/base/templatetags/seahub_tags.py:126
-#: seahub/templates/libraries.html:41
 msgid "Deleted"
 msgstr ""
 
@@ -4783,7 +4782,7 @@ msgstr ""
 msgid "You have not invited any people."
 msgstr ""
 
-#: seahub/templates/libraries.html:20
+#: seahub/templates/libraries.html:20 seahub/templates/libraries.html.py:41
 msgid "Deleted Libraries"
 msgstr ""
 
