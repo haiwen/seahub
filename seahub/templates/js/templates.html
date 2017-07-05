@@ -777,7 +777,7 @@
         <a href="#" title="{% trans "Close" %}" aria-label="{% trans "Close" %}" class="sf-popover-close js-close sf2-icon-x1 op-icon fleft"></a>
         <h3 class="right-side-panel-title">
             <img src="<%= icon_url %>" width="24" alt="" class="vam" />
-            <span class="vam"><%- dirent.obj_name %></span>
+            <span class="vam ellipsis details-panel-item-name" title="<%- dirent.obj_name %>"><%- dirent.obj_name %></span>
         </h3>
     </div>
     <div class="right-side-panel-con">
@@ -791,31 +791,48 @@
         </div>
 
         <div class="details-panel-text-info-container">
+            <% if (dirent.is_file) { %>
             <table>
                 <tr class="vh">
                     <th width="35%"></th>
                     <td width="65%"></td>
                 </tr>
-
-                <% if (dirent.is_file) { %>
                 <tr>
                     <th>{% trans "Size" %}</th>
                     <td><%= dirent.file_size %></td>
                 </tr>
-                <% } else { %>
+                <tr>
+                    <th>{% trans "Location" %}</th>
+                    <td><%- path %></td>
+                </tr>
+                <% if (dirent.last_modified) { %>
+                <tr>
+                    <th>{% trans "Last Update" %}</th>
+                    <td><%= dirent.last_update %></td>
+                </tr>
+                <% } %>
+            </table>
+
+            <% } else { %>
+            <p class="loading-icon loading-tip"></p>
+            <p class="error hide"></p>
+            <table class="hide">
+                <tr class="vh">
+                    <th width="35%"></th>
+                    <td width="65%"></td>
+                </tr>
                 <tr>
                     <th>{% trans "Folders" %}</th>
                     <td class="dir-folder-counts"></td>
                 </tr>
                 <tr>
                     <th>{% trans "Files" %}</th>
-                    <td class="dir-file-counts"><span class="loading-icon"></span></td>
+                    <td class="dir-file-counts"></td>
                 </tr>
                 <tr>
                     <th>{% trans "Size" %}</th>
                     <td class="dir-size"></td>
                 </tr>
-                <% } %>
 
                 <tr>
                     <th>{% trans "Location" %}</th>
@@ -828,8 +845,8 @@
                 </tr>
                 <% } %>
             </table>
+            <% } %>
         </div>
-
     </div>
 </script>
 

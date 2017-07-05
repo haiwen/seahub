@@ -45,13 +45,15 @@ define([
         },
 
         update: function(part_data) {
-            if (part_data.error) {
-                this.$('.dir-folder-counts, .dir-file-counts, .dir-size')
-                    .html('<span class="error">' + gettext("Error") + '</span>');
+            var $container = this.$('.details-panel-text-info-container');
+            $('.loading-icon', $container).hide();
+            if (part_data.error_msg) {
+                $('.error', $container).html(part_data.error_msg).show();
             } else {
                 this.$('.dir-folder-counts').html(part_data.dir_count);
                 this.$('.dir-file-counts').html(part_data.file_count);
                 this.$('.dir-size').html(part_data.size);
+                $('table', $container).show();
             }
         },
 

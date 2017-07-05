@@ -605,8 +605,15 @@ define([
                             'size': Common.fileSizeFormat(data.size, 1)
                         });
                     },
-                    error: function() {
-                        detailsView.update({'error': true});
+                    error: function(xhr) {
+                        var error_msg;
+                        if (xhr.responseText) {
+                            var parsed_resp = $.parseJSON(xhr.responseText);
+                            error_msg = parsed_resp.error_msg || parsed_resp.detail;
+                        } else {
+                            error_msg = gettext("Failed. Please check the network.");
+                        }
+                        detailsView.update({'error_msg': error_msg});
                     }
                 });
             }
