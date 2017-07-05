@@ -79,6 +79,9 @@ define([
         },
 
         events: {
+
+            'click': 'clickItem',
+
             'click .select': 'select',
             'click .file-star': 'starFile',
             'click .dirent-name': 'visitDirent',
@@ -100,11 +103,20 @@ define([
             'click .set-folder-permission': 'setFolderPerm',
             'click .lock-file': 'lockFile',
             'click .unlock-file': 'unlockFile',
+            'click .view-details': 'viewDetails',
             'click .open-via-client': 'open_via_client'
         },
 
         _hideMenu: function() {
             this.dropdown.hide();
+        },
+
+        clickItem: function(e) {
+            var target =  e.target || event.srcElement;
+            if (this.$('td').is(target) &&
+                $('#dirent-details').css('right') == '0px') { // after `#dirent-details` is shown
+                this.viewDetails();
+            }
         },
 
         select: function () {
@@ -548,6 +560,65 @@ define([
                     Common.ajaxErrorHandler(xhr);
                 }
             });
+            return false;
+        },
+
+        viewDetails: function() {
+            var file_icon_size = Common.isHiDPI() ? 48 : 24;
+            var data = {
+                icon_url: this.model.getIconUrl(file_icon_size),
+                big_icon_url: this.model.getIconUrl(192),
+                dirent: this.model.attributes,
+                thumbnail_url: '',
+                path: this.dir.repo_name + this.dir.path
+            };
+            if (app.pageOptions.enable_thumbnail &&
+                !this.dir.encrypted &&
+                (this.model.get('is_img') || this.model.get('is_video'))) {
+                data.thumbnail_url = Common.getUrl({
+                    'name': 'thumbnail_get',
+                    'repo_id': this.dir.repo_id,
+                    'path': Common.encodePath(Common.pathJoin([this.dir.path, this.model.get('obj_name')])),
+                    'size': 1024
+                });
+            }
+
+            var detailsView = this.dirView.direntDetailsView;
+            detailsView.show(data);
+
+            // fetch other data for dir
+            if (this.model.get('is_dir')) {
+                $.ajax({
+                    url: Common.getUrl({
+                        'name': 'dir-details',
+                        'repo_id': this.dir.repo_id
+                    }),
+                    cache: false,
+                    data: {
+                        'path': Common.pathJoin([this.dir.path, this.model.get('obj_name')])
+                    },
+                    dataType: 'json',
+                    success: function(data) {
+                        detailsView.update({
+                            'dir_count': data.dir_count,
+                            'file_count': data.file_count,
+                            'size': Common.fileSizeFormat(data.size, 1)
+                        });
+                    },
+                    error: function(xhr) {
+                        var error_msg;
+                        if (xhr.responseText) {
+                            var parsed_resp = $.parseJSON(xhr.responseText);
+                            error_msg = parsed_resp.error_msg || parsed_resp.detail;
+                        } else {
+                            error_msg = gettext("Failed. Please check the network.");
+                        }
+                        detailsView.update({'error_msg': error_msg});
+                    }
+                });
+            }
+
+            this._hideMenu();
             return false;
         },
 
