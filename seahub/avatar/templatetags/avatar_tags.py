@@ -54,7 +54,7 @@ def avatar(user, size=AVATAR_DEFAULT_SIZE):
     if not isinstance(user, User):
         try:
             user = User.objects.get(email=user)
-            url = avatar_url(user, size)
+            url = avatar_url(user, size*2)
         except User.DoesNotExist:
             url = get_default_avatar_non_registered_url()
         except Exception as e:
@@ -63,7 +63,7 @@ def avatar(user, size=AVATAR_DEFAULT_SIZE):
             url = get_default_avatar_non_registered_url()
     else:
         try:
-            url = avatar_url(user, size)
+            url = avatar_url(user, size*2)
         except Exception as e:
             # Catch exceptions to avoid 500 errors.
             logger.error(e)

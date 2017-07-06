@@ -267,39 +267,44 @@ def is_ldap_user(user):
     """
     return user.source == 'LDAP' or user.source == 'LDAPImport'
 
-def check_filename_with_rename(repo_id, parent_dir, filename):
+def get_no_duplicate_obj_name(obj_name, exist_obj_names):
+
+    def no_duplicate(obj_name):
+        for exist_obj_name in exist_obj_names:
+            if exist_obj_name == obj_name:
+                return False
+        return True
+
+    def make_new_name(obj_name, i):
+        base, ext = os.path.splitext(obj_name)
+        if ext:
+            new_base = "%s (%d)" % (base, i)
+            return new_base + ext
+        else:
+            return "%s (%d)" % (obj_name, i)
+
+    if no_duplicate(obj_name):
+        return obj_name
+    else:
+        i = 1
+        while True:
+            new_name = make_new_name(obj_name, i)
+            if no_duplicate(new_name):
+                return new_name
+            else:
+                i += 1
+
+def check_filename_with_rename(repo_id, parent_dir, obj_name):
     cmmts = seafile_api.get_commit_list(repo_id, 0, 1)
     latest_commit = cmmts[0] if cmmts else None
     if not latest_commit:
         return ''
     # TODO: what if parrent_dir does not exist?
-    dirents = seafile_api.list_dir_by_commit_and_path(repo_id, latest_commit.id,
-                                                      parent_dir.encode('utf-8'))
+    dirents = seafile_api.list_dir_by_commit_and_path(repo_id,
+            latest_commit.id, parent_dir.encode('utf-8'))
 
-    def no_duplicate(name):
-        for dirent in dirents:
-            if dirent.obj_name == name:
-                return False
-        return True
-
-    def make_new_name(filename, i):
-        base, ext = os.path.splitext(filename)
-        if ext:
-            new_base = "%s (%d)" % (base, i)
-            return new_base + ext
-        else:
-            return "%s (%d)" % (filename, i)
-
-    if no_duplicate(filename):
-        return filename
-    else:
-        i = 1
-        while True:
-            new_name = make_new_name (filename, i)
-            if no_duplicate(new_name):
-                return new_name
-            else:
-                i += 1
+    exist_obj_names = [dirent.obj_name for dirent in dirents]
+    return get_no_duplicate_obj_name(obj_name, exist_obj_names)
 
 def get_user_repos(username, org_id=None):
     """

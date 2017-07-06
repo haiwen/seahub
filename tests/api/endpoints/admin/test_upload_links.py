@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 import json
 
-from tests.common.utils import randstring
+from tests.common.utils import randstring, upload_file_test
 from django.core.urlresolvers import reverse
 from seahub.test_utils import BaseTestCase
 from seahub.share.models import UploadLinkShare
@@ -96,6 +96,9 @@ class AdminUploadLinkUploadTest(BaseTestCase):
 
         assert '8082' in json_resp['upload_link']
         assert 'upload' in json_resp['upload_link']
+
+        # test upload file via `upload_link`
+        upload_file_test(json_resp['upload_link'])
 
         self._remove_upload_link(token)
 

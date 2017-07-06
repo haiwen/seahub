@@ -54,17 +54,17 @@ define([
             new_dirent.set('last_update', new Date().getTime());
             var view = new DirentView({model: new_dirent, dirView: this});
             var new_file = view.render().el;
-            if ($('tr', this.$tableBody).length == 0) { 
+            if ($('tr', this.$tableBody).length == 0) {
                 this.$tableBody.append(new_file);
             } else {
                 var dirs = this.dir.where({'is_file':false});
-                if (dirs.length == 0) { 
+                if (dirs.length == 0) {
                     this.$tableBody.prepend(new_file);
                 } else {
                     // put the new file after the last dir
                     $($('tr', this.$tableBody)[dirs.length - 1]).after(new_file);
-                }    
-            }    
+                }
+            }
         },
 
         newDir: function() {

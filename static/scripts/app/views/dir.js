@@ -11,12 +11,13 @@ define([
     'app/collections/dirents',
     'app/views/dirent',
     'app/views/dirent-grid',
+    'app/views/dirent-details',
     'app/views/fileupload',
     'app/views/share',
     'app/views/widgets/dropdown'
     ], function($, progressbar, magnificPopup, simplemodal, _, Backbone, Common,
         FileTree, Cookies, DirentCollection, DirentView, DirentGridView,
-        FileUploadView, ShareView, DropdownView) {
+        DirentDetailsView, FileUploadView, ShareView, DropdownView) {
         'use strict';
 
         var DirView = Backbone.View.extend({
@@ -72,6 +73,7 @@ define([
                 this.listenTo(this.dir, 'reset', this.reset);
 
                 this.fileUploadView = new FileUploadView({dirView: this});
+                this.direntDetailsView = new DirentDetailsView();
 
                 this.render();
 
@@ -155,6 +157,8 @@ define([
 
                 this.$el.detach();
                 this.attached = false;
+
+                this.direntDetailsView.hide();
             },
 
             /***** private functions *****/
@@ -1000,6 +1004,7 @@ define([
                                     _this.$('th .checkbox').removeClass('checkbox-checked');
                                     _this.$('#multi-dirents-op').hide();
                                     _this.$('#cur-dir-ops').show();
+                                    _this.updateDirOpBarUI();
                                 } else {
                                     $(selected_dirents).each(function() {
                                         if (data['deleted'].indexOf(this.get('obj_name')) != -1) {
@@ -1144,6 +1149,7 @@ define([
                                             _this.$('th .checkbox').removeClass('checkbox-checked');
                                             _this.$('#multi-dirents-op').hide();
                                             _this.$('#cur-dir-ops').show();
+                                            _this.updateDirOpBarUI();
                                         } else {
                                             $(dirs).each(function() {
                                                 if (this.get('obj_name') in data['success']) {

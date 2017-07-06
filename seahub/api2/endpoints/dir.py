@@ -16,7 +16,8 @@ from seahub.api2.views import get_dir_recursively, \
     get_dir_entrys_by_id
 
 from seahub.views import check_folder_permission
-from seahub.utils import check_filename_with_rename, is_valid_dirent_name
+from seahub.utils import check_filename_with_rename, is_valid_dirent_name, \
+        normalize_dir_path
 from seahub.utils.timeutils import timestamp_to_isoformat_timestr
 
 from seaserv import seafile_api
@@ -297,3 +298,65 @@ class DirView(APIView):
             return api_error(status.HTTP_500_INTERNAL_SERVER_ERROR, error_msg)
 
         return Response({'success': True})
+
+
+class DirDetailView(APIView):
+    """ Get detailed info of a folder.
+    """
+    authentication_classes = (TokenAuthentication, SessionAuthentication)
+    permission_classes = (IsAuthenticated, )
+    throttle_classes = (UserRateThrottle, )
+
+    def get(self, request, repo_id):
+        """ Get dir info.
+
+        Permission checking:
+        1. user with either 'r' or 'rw' permission.
+        """
+
+        # parameter check
+        path = request.GET.get('path', None)
+        if not path:
+            error_msg = 'path invalid.'
+            return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
+
+        path = normalize_dir_path(path)
+        if path == '/':
+            error_msg = 'path invalid.'
+            return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
+
+        # resource check
+        repo = seafile_api.get_repo(repo_id)
+        if not repo:
+            error_msg = 'Library %s not found.' % repo_id
+            return api_error(status.HTTP_404_NOT_FOUND, error_msg)
+
+        dir_id = seafile_api.get_dir_id_by_path(repo_id, path)
+        if not dir_id:
+            error_msg = 'Folder %s not found.' % path
+            return api_error(status.HTTP_404_NOT_FOUND, error_msg)
+
+        # permission check
+        if not check_folder_permission(request, repo_id, path):
+            error_msg = 'Permission denied.'
+            return api_error(status.HTTP_403_FORBIDDEN, error_msg)
+
+        try:
+            dir_obj = seafile_api.get_dirent_by_path(repo_id, path)
+            count_info = seafile_api.get_file_count_info_by_path(repo_id, path)
+        except SearpcError as e:
+            logger.error(e)
+            error_msg = 'Internal Server Error'
+            return api_error(status.HTTP_500_INTERNAL_SERVER_ERROR, error_msg)
+
+        dir_info = {
+            'repo_id': repo_id,
+            'path': path,
+            'name': dir_obj.obj_name,
+            'file_count': count_info.file_count,
+            'dir_count': count_info.dir_count,
+            'size': count_info.size,
+            'mtime': timestamp_to_isoformat_timestr(dir_obj.mtime),
+        }
+
+        return Response(dir_info)

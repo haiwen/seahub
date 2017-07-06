@@ -96,8 +96,11 @@ define([
                 case 'cp_dirents': return siteRoot + 'ajax/repo/' + options.repo_id + '/dirents/copy/';
                 case 'get_dirents': return siteRoot + 'ajax/repo/' + options.repo_id + '/dirents/';
 
+                case 'dir-details': return siteRoot + 'api/v2.1/repos/' + options.repo_id + '/dir/detail/';
+
                 // Repos
                 case 'repos': return siteRoot + 'api2/repos/';
+                case 'deleted_repos': return siteRoot + 'api/v2.1/deleted-repos/';
                 case 'pub_repos': return siteRoot + 'api2/repos/public/';
                 case 'unenc_rw_repos': return siteRoot + 'ajax/unenc-rw-repos/';
                 case 'api_v2.1_repo_set_password': return siteRoot + 'api/v2.1/repos/' + options.repo_id + '/set-password/';
@@ -180,6 +183,7 @@ define([
                 case 'admin-group-members': return siteRoot + 'api/v2.1/admin/groups/' + options.group_id + '/members/';
                 case 'admin-group-member': return siteRoot + 'api/v2.1/admin/groups/' + options.group_id + '/members/' + options.email+ '/';
                 case 'admin-system-library': return siteRoot + 'api/v2.1/admin/system-library/';
+                case 'admin-system-library-upload-link': return siteRoot + 'api/v2.1/admin/system-library/upload-link/';
                 case 'admin-trash-libraries': return siteRoot + 'api/v2.1/admin/trash-libraries/';
                 case 'admin-trash-library': return siteRoot + 'api/v2.1/admin/trash-libraries/' + options.repo_id + '/';
                 case 'admin_shares': return siteRoot + 'api/v2.1/admin/shares/';

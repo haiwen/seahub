@@ -12,8 +12,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: seahub\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2017-06-17 16:24+0800\n"
-"PO-Revision-Date: 2017-06-17 08:25+0000\n"
+"POT-Creation-Date: 2017-07-05 14:18+0800\n"
+"PO-Revision-Date: 2017-07-05 06:19+0000\n"
 "Last-Translator: zheng xie <xiez1989@gmail.com>\n"
 "Language-Team: Greek (http://www.transifex.com/haiwen/seahub/language/el/)\n"
 "MIME-Version: 1.0\n"
@@ -66,8 +66,8 @@ msgstr ""
 
 #: seahub/api2/endpoints/admin/default_library.py:31
 #: seahub/api2/endpoints/admin/default_library.py:32
-#: seahub/views/__init__.py:675 seahub/views/__init__.py:676
-#: seahub/views/__init__.py:681 seahub/views/__init__.py:682
+#: seahub/views/__init__.py:671 seahub/views/__init__.py:672
+#: seahub/views/__init__.py:677 seahub/views/__init__.py:678
 msgid "My Library"
 msgstr "Η βιβλιοθήκη μου"
 
@@ -140,23 +140,23 @@ msgstr ""
 msgid "This item has been shared to %s."
 msgstr ""
 
-#: seahub/api2/endpoints/file.py:404 seahub/views/file.py:1123
+#: seahub/api2/endpoints/file.py:409 seahub/views/file.py:1161
 msgid "Check file lock error"
 msgstr ""
 
-#: seahub/api2/endpoints/file.py:408 seahub/views/file.py:1126
+#: seahub/api2/endpoints/file.py:413 seahub/views/file.py:1164
 msgid "File is locked"
 msgstr "Το αρχείο είναι κλειδωμένο"
 
 #: seahub/api2/endpoints/group_members.py:93
-#: seahub/api2/endpoints/group_members.py:289 seahub/views/ajax.py:1250
+#: seahub/api2/endpoints/group_members.py:289 seahub/views/ajax.py:1259
 #, python-format
 msgid "User %s is already a group member."
 msgstr ""
 
 #: seahub/api2/endpoints/group_members.py:99
-#: seahub/api2/endpoints/group_members.py:298 seahub/api2/views.py:1102
-#: seahub/views/ajax.py:1259
+#: seahub/api2/endpoints/group_members.py:298 seahub/api2/views.py:1083
+#: seahub/views/ajax.py:1268
 #, python-format
 msgid "User %s not found in organization."
 msgstr ""
@@ -181,17 +181,17 @@ msgstr ""
 msgid "Error"
 msgstr "Σφάλμα"
 
-#: seahub/api2/endpoints/repo_set_password.py:48 seahub/api2/views.py:2827
+#: seahub/api2/endpoints/repo_set_password.py:48 seahub/api2/views.py:2937
 msgid "Wrong password"
 msgstr "Λάθος κωδικός"
 
-#: seahub/api2/endpoints/repo_set_password.py:51 seahub/api2/views.py:2830
-#: seahub/views/__init__.py:475 seahub/views/ajax.py:621
+#: seahub/api2/endpoints/repo_set_password.py:51 seahub/api2/views.py:2940
+#: seahub/views/__init__.py:471 seahub/views/ajax.py:621
 #: seahub/views/sysadmin.py:1982
 msgid "Internal server error"
 msgstr "Εσωτερικό σφάλμα διακομιστή"
 
-#: seahub/api2/endpoints/repo_set_password.py:54 seahub/api2/views.py:2833
+#: seahub/api2/endpoints/repo_set_password.py:54 seahub/api2/views.py:2943
 msgid "Decrypt library error"
 msgstr "Πρόβλημα αποκρυπτογράφησης βιβλιοθήκης"
 
@@ -290,8 +290,8 @@ msgstr "Σημαντικές ημερομηνίες"
 #: seahub/templates/js/sysadmin-templates.html:152
 #: seahub/templates/js/sysadmin-templates.html:555
 #: seahub/templates/js/sysadmin-templates.html:747
-#: seahub/templates/js/templates.html:268
-#: seahub/templates/js/templates.html:1042
+#: seahub/templates/js/templates.html:332
+#: seahub/templates/js/templates.html:1216
 #: seahub/templates/sysadmin/base.html:33
 #: seahub/templates/sysadmin/sys_org_info_group.html:9
 #: seahub/templates/sysadmin/sys_org_info_library.html:9
@@ -324,8 +324,8 @@ msgstr "Ηλ. Ταχυδρομείο ή όνομα χρήστη"
 #: seahub/templates/file_edit.html:131
 #: seahub/templates/js/lib-op-popups.html:108
 #: seahub/templates/js/templates.html:31
-#: seahub/templates/js/templates.html:708
-#: seahub/templates/js/templates.html:773
+#: seahub/templates/js/templates.html:882
+#: seahub/templates/js/templates.html:947
 #: seahub/templates/registration/login.html:12
 #: seahub/templates/registration/registration_form.html:24
 #: seahub/templates/snippets/file_share_popup.html:18
@@ -516,9 +516,9 @@ msgstr "Εισάγετε μία σωστή διεύθυνση ηλεκτρονι
 msgid "Invalid user id."
 msgstr "Άκυρο id χρήστη."
 
-#: seahub/base/accounts.py:665 seahub/templates/js/templates.html:313
-#: seahub/templates/js/templates.html:1236
-#: seahub/templates/js/templates.html:1256
+#: seahub/base/accounts.py:665 seahub/templates/js/templates.html:377
+#: seahub/templates/js/templates.html:1410
+#: seahub/templates/js/templates.html:1447
 msgid "name"
 msgstr "όνομα"
 
@@ -538,111 +538,112 @@ msgstr "σημείωση"
 msgid "Files in this library can not be viewed online."
 msgstr "Τα αρχεία αυτής της βιβλιοθήκης δεν μπορούν να προβληθούν online."
 
-#: seahub/base/templatetags/seahub_tags.py:124
+#: seahub/base/templatetags/seahub_tags.py:125
 msgid "Added"
 msgstr "Προστέθηκε"
 
-#: seahub/base/templatetags/seahub_tags.py:125
+#: seahub/base/templatetags/seahub_tags.py:126
+#: seahub/templates/libraries.html:41
 msgid "Deleted"
 msgstr "Διεγράφη"
 
-#: seahub/base/templatetags/seahub_tags.py:126
+#: seahub/base/templatetags/seahub_tags.py:127
 msgid "Removed"
 msgstr "Διαγράφτηκε"
 
-#: seahub/base/templatetags/seahub_tags.py:127
+#: seahub/base/templatetags/seahub_tags.py:128
 msgid "Modified"
 msgstr "Τροποποιήθηκε"
 
-#: seahub/base/templatetags/seahub_tags.py:128
+#: seahub/base/templatetags/seahub_tags.py:129
 msgid "Renamed"
 msgstr "Μετονομάστηκε"
 
-#: seahub/base/templatetags/seahub_tags.py:129
+#: seahub/base/templatetags/seahub_tags.py:130
 msgid "Moved"
 msgstr "Μετακιινήθηκε"
 
-#: seahub/base/templatetags/seahub_tags.py:130
+#: seahub/base/templatetags/seahub_tags.py:131
 msgid "Added directory"
 msgstr "Προστέθηκε φάκελος"
 
-#: seahub/base/templatetags/seahub_tags.py:131
+#: seahub/base/templatetags/seahub_tags.py:132
 msgid "Removed directory"
 msgstr "Αφαιρέθηκε φάκελος"
 
-#: seahub/base/templatetags/seahub_tags.py:132
+#: seahub/base/templatetags/seahub_tags.py:133
 msgid "Renamed directory"
 msgstr "Μετονομάστηκε φάκελος"
 
-#: seahub/base/templatetags/seahub_tags.py:133
+#: seahub/base/templatetags/seahub_tags.py:134
 msgid "Moved directory"
 msgstr "Μετακινήθηκε φάκελος"
 
-#: seahub/base/templatetags/seahub_tags.py:134
+#: seahub/base/templatetags/seahub_tags.py:135
 msgid "Added or modified"
 msgstr "Προστέθηκε ή τροποποιήθηκε"
 
-#: seahub/base/templatetags/seahub_tags.py:149
-#: seahub/base/templatetags/seahub_tags.py:218
+#: seahub/base/templatetags/seahub_tags.py:150
+#: seahub/base/templatetags/seahub_tags.py:219
 msgid "Reverted library to status at"
 msgstr "Η βιβλιοθήκη επαναφέρθηκε στην κατάσταση που είχε στις"
 
-#: seahub/base/templatetags/seahub_tags.py:152
-#: seahub/base/templatetags/seahub_tags.py:221
+#: seahub/base/templatetags/seahub_tags.py:153
+#: seahub/base/templatetags/seahub_tags.py:222
 #, python-format
 msgid "Reverted file \"%(file)s\" to status at %(time)s."
 msgstr "Επαναφέρθηκε το/τα αρχεί/α \"%(file)s\" στην κατάσταση που είχαν στις %(time)s."
 
-#: seahub/base/templatetags/seahub_tags.py:156
-#: seahub/base/templatetags/seahub_tags.py:225
+#: seahub/base/templatetags/seahub_tags.py:157
+#: seahub/base/templatetags/seahub_tags.py:226
 msgid "Recovered deleted directory"
 msgstr "Ανακτήθηκε ο διαγραφείς φάκελος"
 
-#: seahub/base/templatetags/seahub_tags.py:158
-#: seahub/base/templatetags/seahub_tags.py:227 seahub/views/ajax.py:1122
+#: seahub/base/templatetags/seahub_tags.py:159
+#: seahub/base/templatetags/seahub_tags.py:228 seahub/views/ajax.py:1131
 msgid "Changed library name or description"
 msgstr "Αλλάχθηκε το όνομα ή η περιγραφή της βιβλιοθήκης"
 
-#: seahub/base/templatetags/seahub_tags.py:160
-#: seahub/base/templatetags/seahub_tags.py:229
+#: seahub/base/templatetags/seahub_tags.py:161
+#: seahub/base/templatetags/seahub_tags.py:230
 msgid "Auto merge by seafile system"
 msgstr "Αυτόματη ένωση από το σύστημα seafile"
 
-#: seahub/base/templatetags/seahub_tags.py:304
-#: seahub/base/templatetags/seahub_tags.py:340
+#: seahub/base/templatetags/seahub_tags.py:305
+#: seahub/base/templatetags/seahub_tags.py:341
 #: seahub/templates/view_file_base.html:539
 msgid "Just now"
 msgstr "Μόλις τώρα"
 
-#: seahub/base/templatetags/seahub_tags.py:315
+#: seahub/base/templatetags/seahub_tags.py:316
 #, python-format
 msgid "%(days)d day ago"
 msgid_plural "%(days)d days ago"
 msgstr[0] "πριν από %(days)d μέρα"
 msgstr[1] "πριν από %(days)d μέρες"
 
-#: seahub/base/templatetags/seahub_tags.py:322
+#: seahub/base/templatetags/seahub_tags.py:323
 #, python-format
 msgid "%(hours)d hour ago"
 msgid_plural "%(hours)d hours ago"
 msgstr[0] "πριν από %(hours)d ώρα"
 msgstr[1] "πριν από %(hours)d ώρες"
 
-#: seahub/base/templatetags/seahub_tags.py:329
+#: seahub/base/templatetags/seahub_tags.py:330
 #, python-format
 msgid "%(minutes)d minute ago"
 msgid_plural "%(minutes)d minutes ago"
 msgstr[0] "πριν από %(minutes)d λεπτό"
 msgstr[1] "πριν από %(minutes)d λεπτά"
 
-#: seahub/base/templatetags/seahub_tags.py:335
+#: seahub/base/templatetags/seahub_tags.py:336
 #, python-format
 msgid "%(seconds)d second ago"
 msgid_plural "%(seconds)d seconds ago"
 msgstr[0] "πριν από %(seconds)d δευτερόλεπτο"
 msgstr[1] "πριν από %(seconds)d δευτερόλεπτα"
 
-#: seahub/base/templatetags/seahub_tags.py:452
+#: seahub/base/templatetags/seahub_tags.py:460
 #: seahub/institutions/templates/institutions/user_info.html:77
 #: seahub/templates/js/sysadmin-templates.html:656
 #: seahub/templates/js/sysadmin-templates.html:665
@@ -650,79 +651,79 @@ msgstr[1] "πριν από %(seconds)d δευτερόλεπτα"
 #: seahub/templates/js/sysadmin-templates.html:704
 #: seahub/templates/js/sysadmin-templates.html:731
 #: seahub/templates/js/templates.html:20
-#: seahub/templates/js/templates.html:825
-#: seahub/templates/js/templates.html:852
-#: seahub/templates/js/templates.html:1078
-#: seahub/templates/js/templates.html:1087
-#: seahub/templates/js/templates.html:1090
-#: seahub/templates/js/templates.html:1123
-#: seahub/templates/js/templates.html:1149
-#: seahub/templates/js/templates.html:1285
-#: seahub/templates/js/templates.html:1292
-#: seahub/templates/js/templates.html:1712
-#: seahub/templates/js/templates.html:1758
-#: seahub/templates/js/templates.html:1899
-#: seahub/templates/js/templates.html:1902
-#: seahub/templates/js/templates.html:1909
+#: seahub/templates/js/templates.html:999
+#: seahub/templates/js/templates.html:1026
+#: seahub/templates/js/templates.html:1252
+#: seahub/templates/js/templates.html:1261
+#: seahub/templates/js/templates.html:1264
+#: seahub/templates/js/templates.html:1297
+#: seahub/templates/js/templates.html:1323
+#: seahub/templates/js/templates.html:1476
+#: seahub/templates/js/templates.html:1483
+#: seahub/templates/js/templates.html:1903
+#: seahub/templates/js/templates.html:1949
+#: seahub/templates/js/templates.html:2090
+#: seahub/templates/js/templates.html:2093
+#: seahub/templates/js/templates.html:2100
 #: seahub/templates/sysadmin/sys_org_info_library.html:29
 #: seahub/templates/sysadmin/userinfo.html:148
 #: seahub/templates/sysadmin/userinfo.html:199
 msgid "Read-Write"
 msgstr "Ανάγνωση-Εγγραφή"
 
-#: seahub/base/templatetags/seahub_tags.py:454
+#: seahub/base/templatetags/seahub_tags.py:462
 #: seahub/templates/js/sysadmin-templates.html:658
 #: seahub/templates/js/sysadmin-templates.html:666
 #: seahub/templates/js/sysadmin-templates.html:669
 #: seahub/templates/js/sysadmin-templates.html:705
 #: seahub/templates/js/sysadmin-templates.html:732
 #: seahub/templates/js/templates.html:21
-#: seahub/templates/js/templates.html:826
-#: seahub/templates/js/templates.html:853
-#: seahub/templates/js/templates.html:1080
-#: seahub/templates/js/templates.html:1088
-#: seahub/templates/js/templates.html:1091
-#: seahub/templates/js/templates.html:1124
-#: seahub/templates/js/templates.html:1150
-#: seahub/templates/js/templates.html:1293
-#: seahub/templates/js/templates.html:1713
-#: seahub/templates/js/templates.html:1759
-#: seahub/templates/js/templates.html:1903
-#: seahub/templates/js/templates.html:1906
-#: seahub/templates/js/templates.html:1910
+#: seahub/templates/js/templates.html:1000
+#: seahub/templates/js/templates.html:1027
+#: seahub/templates/js/templates.html:1254
+#: seahub/templates/js/templates.html:1262
+#: seahub/templates/js/templates.html:1265
+#: seahub/templates/js/templates.html:1298
+#: seahub/templates/js/templates.html:1324
+#: seahub/templates/js/templates.html:1484
+#: seahub/templates/js/templates.html:1904
+#: seahub/templates/js/templates.html:1950
+#: seahub/templates/js/templates.html:2094
+#: seahub/templates/js/templates.html:2097
+#: seahub/templates/js/templates.html:2101
 #: seahub/templates/sysadmin/userinfo.html:197
 msgid "Read-Only"
 msgstr "Μόνο ανάγνωση"
 
-#: seahub/base/templatetags/seahub_tags.py:478
-#: seahub/base/templatetags/seahub_tags.py:490
+#: seahub/base/templatetags/seahub_tags.py:486
+#: seahub/base/templatetags/seahub_tags.py:498
 #, python-format
 msgid "%(size)d byte"
 msgid_plural "%(size)d bytes"
 msgstr[0] ""
 msgstr[1] ""
 
-#: seahub/base/templatetags/seahub_tags.py:492
+#: seahub/base/templatetags/seahub_tags.py:500
 #, python-format
 msgid "%s KB"
 msgstr "%s KB"
 
-#: seahub/base/templatetags/seahub_tags.py:494
+#: seahub/base/templatetags/seahub_tags.py:502
 #, python-format
 msgid "%s MB"
 msgstr "%s MB"
 
-#: seahub/base/templatetags/seahub_tags.py:496
+#: seahub/base/templatetags/seahub_tags.py:504
 #, python-format
 msgid "%s GB"
 msgstr "%s GB"
 
-#: seahub/base/templatetags/seahub_tags.py:498
+#: seahub/base/templatetags/seahub_tags.py:506
 #, python-format
 msgid "%s TB"
 msgstr "%s TB"
 
-#: seahub/base/templatetags/seahub_tags.py:500
+#: seahub/base/templatetags/seahub_tags.py:508
 #, python-format
 msgid "%s PB"
 msgstr "%s PB"
@@ -770,20 +771,22 @@ msgstr "Διεύθυνση ηλεκτρονικού ταχυδρομείου"
 #: seahub/templates/js/sysadmin-templates.html:613
 #: seahub/templates/js/sysadmin-templates.html:783
 #: seahub/templates/js/sysadmin-templates.html:821
-#: seahub/templates/js/templates.html:5 seahub/templates/js/templates.html:298
-#: seahub/templates/js/templates.html:1225
-#: seahub/templates/js/templates.html:1244
-#: seahub/templates/js/templates.html:1270
-#: seahub/templates/js/templates.html:1359
-#: seahub/templates/js/templates.html:1378
-#: seahub/templates/js/templates.html:1500
-#: seahub/templates/js/templates.html:1508
-#: seahub/templates/js/templates.html:1621
-#: seahub/templates/js/templates.html:1640
-#: seahub/templates/js/templates.html:1871
-#: seahub/templates/js/templates.html:1926
-#: seahub/templates/js/templates.html:1960
-#: seahub/templates/js/templates.html:1995 seahub/templates/libraries.html:91
+#: seahub/templates/js/templates.html:5 seahub/templates/js/templates.html:362
+#: seahub/templates/js/templates.html:1399
+#: seahub/templates/js/templates.html:1419
+#: seahub/templates/js/templates.html:1427
+#: seahub/templates/js/templates.html:1435
+#: seahub/templates/js/templates.html:1461
+#: seahub/templates/js/templates.html:1550
+#: seahub/templates/js/templates.html:1569
+#: seahub/templates/js/templates.html:1691
+#: seahub/templates/js/templates.html:1699
+#: seahub/templates/js/templates.html:1812
+#: seahub/templates/js/templates.html:1831
+#: seahub/templates/js/templates.html:2062
+#: seahub/templates/js/templates.html:2117
+#: seahub/templates/js/templates.html:2151
+#: seahub/templates/js/templates.html:2186 seahub/templates/libraries.html:119
 #: seahub/templates/registration/registration_form.html:18
 #: seahub/templates/repo_dir_recycle_view.html:44
 #: seahub/templates/repo_history_view.html:58
@@ -851,11 +854,11 @@ msgstr "Διεργασίες"
 #: seahub/templates/js/sysadmin-templates.html:661
 #: seahub/templates/js/sysadmin-templates.html:844
 #: seahub/templates/js/sysadmin-templates.html:851
-#: seahub/templates/js/templates.html:1083
-#: seahub/templates/js/templates.html:1537
-#: seahub/templates/js/templates.html:1544
-#: seahub/templates/js/templates.html:1900
-#: seahub/templates/js/templates.html:1907
+#: seahub/templates/js/templates.html:1257
+#: seahub/templates/js/templates.html:1728
+#: seahub/templates/js/templates.html:1735
+#: seahub/templates/js/templates.html:2091
+#: seahub/templates/js/templates.html:2098
 #: seahub/templates/sysadmin/sys_org_info_user.html:36
 #: seahub/templates/sysadmin/sys_user_admin_ldap_imported.html:57
 #: seahub/templates/sysadmin/useradmin_table.html:41
@@ -880,22 +883,23 @@ msgstr "Τροποποίηση"
 #: seahub/templates/js/sysadmin-templates.html:628
 #: seahub/templates/js/sysadmin-templates.html:674
 #: seahub/templates/js/sysadmin-templates.html:860
-#: seahub/templates/js/templates.html:50 seahub/templates/js/templates.html:95
-#: seahub/templates/js/templates.html:189
-#: seahub/templates/js/templates.html:344
-#: seahub/templates/js/templates.html:406
-#: seahub/templates/js/templates.html:472
-#: seahub/templates/js/templates.html:578
-#: seahub/templates/js/templates.html:641
-#: seahub/templates/js/templates.html:667
-#: seahub/templates/js/templates.html:747
-#: seahub/templates/js/templates.html:788
-#: seahub/templates/js/templates.html:1096
-#: seahub/templates/js/templates.html:1411
-#: seahub/templates/js/templates.html:1558
-#: seahub/templates/js/templates.html:1563
+#: seahub/templates/js/templates.html:50 seahub/templates/js/templates.html:96
+#: seahub/templates/js/templates.html:253
+#: seahub/templates/js/templates.html:408
+#: seahub/templates/js/templates.html:474
+#: seahub/templates/js/templates.html:544
+#: seahub/templates/js/templates.html:654
+#: seahub/templates/js/templates.html:721
+#: seahub/templates/js/templates.html:756
+#: seahub/templates/js/templates.html:921
+#: seahub/templates/js/templates.html:962
+#: seahub/templates/js/templates.html:1270
+#: seahub/templates/js/templates.html:1602
+#: seahub/templates/js/templates.html:1749
+#: seahub/templates/js/templates.html:1754
 #: seahub/templates/snippets/file_share_popup.html:46
 #: seahub/templates/sysadmin/org_admin_table.html:25
+#: seahub/templates/sysadmin/sys_invitations_admin.html:34
 #: seahub/templates/sysadmin/sys_org_info_group.html:28
 #: seahub/templates/sysadmin/sys_org_info_library.html:42
 #: seahub/templates/sysadmin/sys_org_info_user.html:51
@@ -931,10 +935,10 @@ msgstr "Εισάγετε τις επαφές σας ώστε να μπορείτ
 #: seahub/templates/js/sysadmin-templates.html:770
 #: seahub/templates/js/sysadmin-templates.html:822
 #: seahub/templates/js/sysadmin-templates.html:873
-#: seahub/templates/js/templates.html:1501
-#: seahub/templates/js/templates.html:1509
-#: seahub/templates/js/templates.html:2058
-#: seahub/templates/js/templates.html:2090
+#: seahub/templates/js/templates.html:1692
+#: seahub/templates/js/templates.html:1700
+#: seahub/templates/js/templates.html:2249
+#: seahub/templates/js/templates.html:2281
 #: seahub/templates/registration/registration_form.html:22
 #: seahub/templates/sysadmin/sys_inst_info_admins.html:15
 #: seahub/templates/sysadmin/sys_inst_info_user.html:15
@@ -992,26 +996,26 @@ msgstr "Σημείωση (προεραιτικά)"
 #: seahub/templates/js/sysadmin-templates.html:735
 #: seahub/templates/js/sysadmin-templates.html:773
 #: seahub/templates/js/templates.html:38
-#: seahub/templates/js/templates.html:754
-#: seahub/templates/js/templates.html:795
-#: seahub/templates/js/templates.html:829
-#: seahub/templates/js/templates.html:856
-#: seahub/templates/js/templates.html:1037
-#: seahub/templates/js/templates.html:1127
-#: seahub/templates/js/templates.html:1153
-#: seahub/templates/js/templates.html:1275
+#: seahub/templates/js/templates.html:928
+#: seahub/templates/js/templates.html:969
+#: seahub/templates/js/templates.html:1003
+#: seahub/templates/js/templates.html:1030
+#: seahub/templates/js/templates.html:1211
+#: seahub/templates/js/templates.html:1301
+#: seahub/templates/js/templates.html:1327
 #: seahub/templates/js/templates.html:1466
-#: seahub/templates/js/templates.html:1475
-#: seahub/templates/js/templates.html:1483
-#: seahub/templates/js/templates.html:1595
-#: seahub/templates/js/templates.html:1677
-#: seahub/templates/js/templates.html:1717
-#: seahub/templates/js/templates.html:1730
-#: seahub/templates/js/templates.html:1763
-#: seahub/templates/js/templates.html:1776
-#: seahub/templates/js/templates.html:1794
-#: seahub/templates/js/templates.html:2093 seahub/templates/libraries.html:94
-#: seahub/templates/libraries.html:157
+#: seahub/templates/js/templates.html:1657
+#: seahub/templates/js/templates.html:1666
+#: seahub/templates/js/templates.html:1674
+#: seahub/templates/js/templates.html:1786
+#: seahub/templates/js/templates.html:1868
+#: seahub/templates/js/templates.html:1908
+#: seahub/templates/js/templates.html:1921
+#: seahub/templates/js/templates.html:1954
+#: seahub/templates/js/templates.html:1967
+#: seahub/templates/js/templates.html:1985
+#: seahub/templates/js/templates.html:2284 seahub/templates/libraries.html:122
+#: seahub/templates/libraries.html:185
 #: seahub/templates/registration/password_change_form.html:24
 #: seahub/templates/registration/password_reset_confirm.html:19
 #: seahub/templates/registration/password_reset_form.html:13
@@ -1175,8 +1179,8 @@ msgid "Name %s is not valid"
 msgstr "Το όνομα %s δεν είναι σωστό"
 
 #: seahub/forms.py:96 seahub/views/ajax.py:392 seahub/views/ajax.py:560
-#: seahub/views/ajax.py:828 seahub/views/ajax.py:832 seahub/views/ajax.py:836
-#: seahub/views/ajax.py:1109 seahub/views/file.py:1604
+#: seahub/views/ajax.py:833 seahub/views/ajax.py:837 seahub/views/ajax.py:841
+#: seahub/views/ajax.py:1118 seahub/views/file.py:1654
 #: seahub/views/sysadmin.py:1436 seahub/views/sysadmin.py:1454
 msgid "Argument missing"
 msgstr "Λείπει επιλογή"
@@ -1300,9 +1304,11 @@ msgstr ""
 #: seahub/templates/file_edit.html:428 seahub/templates/home_base.html:7
 #: seahub/templates/js/lib-op-popups.html:88
 #: seahub/templates/js/sysadmin-templates.html:4
-#: seahub/templates/js/templates.html:898
-#: seahub/templates/js/templates.html:1813 seahub/templates/libraries.html:120
-#: seahub/templates/libraries.html:130 seahub/templates/libraries.html:142
+#: seahub/templates/js/templates.html:122
+#: seahub/templates/js/templates.html:777
+#: seahub/templates/js/templates.html:1072
+#: seahub/templates/js/templates.html:2004 seahub/templates/libraries.html:148
+#: seahub/templates/libraries.html:158 seahub/templates/libraries.html:170
 #: seahub/templates/sysadmin/base.html:11
 #: seahub/templates/sysadmin/sysadmin_backbone.html:30
 #: seahub/templates/view_file_base.html:99
@@ -1402,10 +1408,10 @@ msgstr "Παρακαλώ κάντε κλικ και επιλέγξτε μια β
 #: seahub/templates/js/lib-op-popups.html:77
 #: seahub/templates/js/lib-op-popups.html:121
 #: seahub/templates/js/lib-op-popups.html:129
-#: seahub/templates/js/templates.html:755
-#: seahub/templates/js/templates.html:796
-#: seahub/templates/js/templates.html:1731
-#: seahub/templates/js/templates.html:1777
+#: seahub/templates/js/templates.html:929
+#: seahub/templates/js/templates.html:970
+#: seahub/templates/js/templates.html:1922
+#: seahub/templates/js/templates.html:1968
 #: seahub/templates/repo_dir_recycle_view.html:74
 #: seahub/templates/shared_file_view.html:74
 #: seahub/templates/snippets/file_share_popup.html:58
@@ -1488,11 +1494,11 @@ msgid "Description is required."
 msgstr "Η περιγραφή είναι απαραίτητη."
 
 #: seahub/group/views.py:121 seahub/share/views.py:227
-#: seahub/views/__init__.py:467 seahub/views/__init__.py:583
+#: seahub/views/__init__.py:463 seahub/views/__init__.py:579
 #: seahub/views/ajax.py:160 seahub/views/ajax.py:410 seahub/views/ajax.py:417
 #: seahub/views/ajax.py:467 seahub/views/ajax.py:474 seahub/views/ajax.py:579
-#: seahub/views/ajax.py:1089 seahub/views/file.py:1119
-#: seahub/views/file.py:1613 seahub/views/repo.py:119
+#: seahub/views/ajax.py:1098 seahub/views/file.py:1157
+#: seahub/views/file.py:1663 seahub/views/repo.py:123
 msgid "Permission denied"
 msgstr "Απαγόρευση πρόσβασης"
 
@@ -1530,7 +1536,8 @@ msgstr "Αποτυχία δημιουργίας σελίδας wiki. Παρακ�
 msgid "Unknown"
 msgstr "Άγνωστο"
 
-#: seahub/group/views.py:361 seahub/views/ajax.py:1067
+#: seahub/group/views.py:361 seahub/views/__init__.py:1001
+#: seahub/views/ajax.py:1072 seahub/views/ajax.py:1076
 #: seahub/views/wiki.py:136
 msgid "Internal Server Error"
 msgstr "Εσωτερικό σφάλμα διακομιστή"
@@ -2000,8 +2007,8 @@ msgstr "Πληροφορίες"
 #: seahub/templates/js/sysadmin-templates.html:19
 #: seahub/templates/js/sysadmin-templates.html:121
 #: seahub/templates/js/sysadmin-templates.html:753
-#: seahub/templates/js/templates.html:996
-#: seahub/templates/js/templates.html:1865 seahub/templates/libraries.html:5
+#: seahub/templates/js/templates.html:1170
+#: seahub/templates/js/templates.html:2056 seahub/templates/libraries.html:5
 #: seahub/templates/sysadmin/base.html:27
 #: seahub/templates/sysadmin/sys_org_info_group.html:10
 #: seahub/templates/sysadmin/sys_org_info_library.html:10
@@ -2091,12 +2098,15 @@ msgstr ""
 #: seahub/templates/file_revisions.html:56
 #: seahub/templates/js/sysadmin-templates.html:486
 #: seahub/templates/js/sysadmin-templates.html:784
-#: seahub/templates/js/templates.html:300
-#: seahub/templates/js/templates.html:1227
-#: seahub/templates/js/templates.html:1246
-#: seahub/templates/js/templates.html:1361
-#: seahub/templates/js/templates.html:1623
-#: seahub/templates/js/templates.html:1642
+#: seahub/templates/js/templates.html:144
+#: seahub/templates/js/templates.html:364
+#: seahub/templates/js/templates.html:801
+#: seahub/templates/js/templates.html:833
+#: seahub/templates/js/templates.html:1401
+#: seahub/templates/js/templates.html:1437
+#: seahub/templates/js/templates.html:1552
+#: seahub/templates/js/templates.html:1814
+#: seahub/templates/js/templates.html:1833
 #: seahub/templates/repo_dir_recycle_view.html:46
 #: seahub/templates/repo_history_view.html:59
 #: seahub/templates/sysadmin/userinfo.html:138
@@ -2108,12 +2118,15 @@ msgstr "Μέγεθος"
 
 #: seahub/institutions/templates/institutions/user_info.html:68
 #: seahub/templates/js/sysadmin-templates.html:487
-#: seahub/templates/js/templates.html:301
-#: seahub/templates/js/templates.html:1168
-#: seahub/templates/js/templates.html:1228
-#: seahub/templates/js/templates.html:1247
-#: seahub/templates/js/templates.html:1271
-#: seahub/templates/js/templates.html:1362
+#: seahub/templates/js/templates.html:148
+#: seahub/templates/js/templates.html:365
+#: seahub/templates/js/templates.html:810
+#: seahub/templates/js/templates.html:843
+#: seahub/templates/js/templates.html:1342
+#: seahub/templates/js/templates.html:1402
+#: seahub/templates/js/templates.html:1438
+#: seahub/templates/js/templates.html:1462
+#: seahub/templates/js/templates.html:1553
 #: seahub/templates/sysadmin/userinfo.html:139
 #: seahub/templates/sysadmin/userinfo.html:189
 #: seahub/templates/view_shared_dir.html:52
@@ -2121,7 +2134,7 @@ msgid "Last Update"
 msgstr "Τελευταία τροποποίηση"
 
 #: seahub/institutions/templates/institutions/user_info.html:75
-#: seahub/templates/js/templates.html:1283
+#: seahub/templates/js/templates.html:1474
 #: seahub/templates/sysadmin/sys_org_info_library.html:27
 #: seahub/templates/sysadmin/userinfo.html:146
 #: seahub/templates/sysadmin/userinfo.html:195
@@ -2145,7 +2158,7 @@ msgstr ""
 
 #: seahub/institutions/templates/institutions/user_info.html:113
 #: seahub/templates/js/sysadmin-templates.html:823
-#: seahub/templates/js/templates.html:1502
+#: seahub/templates/js/templates.html:1693
 #: seahub/templates/sysadmin/sys_useradmin.html:47
 #: seahub/templates/sysadmin/useradmin_table.html:8
 #: seahub/templates/sysadmin/userinfo.html:272 seahub/views/sysadmin.py:279
@@ -2332,11 +2345,11 @@ msgstr "Ιδιοκτήτης"
 #: seahub/templates/js/sysadmin-templates.html:843
 #: seahub/templates/js/sysadmin-templates.html:847
 #: seahub/templates/js/sysadmin-templates.html:854
-#: seahub/templates/js/templates.html:1536
-#: seahub/templates/js/templates.html:1540
-#: seahub/templates/js/templates.html:1547
-#: seahub/templates/js/templates.html:1842
-#: seahub/templates/js/templates.html:1845 seahub/views/sysadmin.py:281
+#: seahub/templates/js/templates.html:1727
+#: seahub/templates/js/templates.html:1731
+#: seahub/templates/js/templates.html:1738
+#: seahub/templates/js/templates.html:2033
+#: seahub/templates/js/templates.html:2036 seahub/views/sysadmin.py:281
 #: seahub/views/sysadmin.py:285 seahub/views/sysadmin.py:617
 msgid "Admin"
 msgstr "Διαχειριστής"
@@ -2345,9 +2358,9 @@ msgstr "Διαχειριστής"
 #: seahub/templates/js/sysadmin-templates.html:846
 #: seahub/templates/js/sysadmin-templates.html:850
 #: seahub/templates/js/sysadmin-templates.html:853
-#: seahub/templates/js/templates.html:1539
-#: seahub/templates/js/templates.html:1543
-#: seahub/templates/js/templates.html:1546 seahub/views/sysadmin.py:619
+#: seahub/templates/js/templates.html:1730
+#: seahub/templates/js/templates.html:1734
+#: seahub/templates/js/templates.html:1737 seahub/views/sysadmin.py:619
 msgid "Member"
 msgstr "Μέλος"
 
@@ -2427,7 +2440,7 @@ msgstr "Νέα ειδοποίηση στο %s"
 #: seahub/notifications/models.py:492 seahub/notifications/models.py:529
 #: seahub/notifications/models.py:561 seahub/notifications/models.py:579
 #: seahub/notifications/models.py:609 seahub/notifications/models.py:631
-#: seahub/utils/__init__.py:142 seahub/utils/__init__.py:1099
+#: seahub/utils/__init__.py:142 seahub/utils/__init__.py:1123
 msgid "Internal error"
 msgstr "Internal error"
 
@@ -2636,7 +2649,7 @@ msgid "Clear"
 msgstr "Καθαρισμός"
 
 #: seahub/notifications/templates/notifications/user_notification_list.html:29
-#: seahub/templates/libraries.html:179
+#: seahub/templates/libraries.html:18 seahub/templates/libraries.html:207
 #: seahub/templates/repo_dir_recycle_view.html:59
 msgid "More"
 msgstr "Περισσότερα"
@@ -2676,8 +2689,8 @@ msgstr "Συμβουλή: ο τελευταίος τρόπος είναι ο π�
 #: seahub/templates/base.html:69
 #: seahub/templates/js/sysadmin-templates.html:15
 #: seahub/templates/js/sysadmin-templates.html:276
-#: seahub/templates/js/templates.html:1057
-#: seahub/templates/js/templates.html:1837 seahub/templates/libraries.html:121
+#: seahub/templates/js/templates.html:1231
+#: seahub/templates/js/templates.html:2028 seahub/templates/libraries.html:149
 #: seahub/templates/sysadmin/base.html:23
 #: seahub/templates/sysadmin/settings.html:7
 #: seahub/templates/sysadmin/sys_org_info_group.html:11
@@ -3033,7 +3046,7 @@ msgstr "Η αποστολή του συνδέσμου μεταφόρτωσης �
 #: seahub/share/views.py:333 seahub/thumbnail/views.py:40
 #: seahub/thumbnail/views.py:159 seahub/views/ajax.py:208
 #: seahub/views/ajax.py:385 seahub/views/ajax.py:449 seahub/views/ajax.py:499
-#: seahub/views/ajax.py:548 seahub/views/ajax.py:742 seahub/views/ajax.py:1080
+#: seahub/views/ajax.py:548 seahub/views/ajax.py:742 seahub/views/ajax.py:1089
 msgid "Library does not exist."
 msgstr "Η βιβλιοθήκη δεν υπάρχει."
 
@@ -3085,18 +3098,18 @@ msgid "View profile and more"
 msgstr ""
 
 #: seahub/templates/base.html:72 seahub/templates/js/sysadmin-templates.html:5
-#: seahub/templates/js/templates.html:1839
+#: seahub/templates/js/templates.html:2030
 #: seahub/templates/sysadmin/base.html:13
 msgid "System Admin"
 msgstr "Διαχειριστής συστήματος"
 
-#: seahub/templates/base.html:75 seahub/templates/js/templates.html:1842
+#: seahub/templates/base.html:75 seahub/templates/js/templates.html:2033
 msgid "Organization Admin"
 msgstr ""
 
 #: seahub/templates/base.html:81 seahub/templates/finish_payment.html:5
 #: seahub/templates/js/sysadmin-templates.html:278
-#: seahub/templates/js/templates.html:1847
+#: seahub/templates/js/templates.html:2038
 msgid "Log out"
 msgstr "Αποσύνδεση"
 
@@ -3119,7 +3132,7 @@ msgstr "Αυτή η έκδοση του IE δεν υποστηρίζετε πλ�
 
 #: seahub/templates/base_for_backbone.html:58
 #: seahub/templates/js/sysadmin-templates.html:40
-#: seahub/templates/js/templates.html:1814
+#: seahub/templates/js/templates.html:2005
 #: seahub/templates/sysadmin/base.html:46
 msgid "Notifications"
 msgstr "Ειδοποιήσεις"
@@ -3177,14 +3190,14 @@ msgstr "Παρακαλώ εισάγετε τον κωδικό."
 
 #: seahub/templates/download.html:4 seahub/templates/file_revisions.html:86
 #: seahub/templates/js/sysadmin-templates.html:537
-#: seahub/templates/js/templates.html:190
-#: seahub/templates/js/templates.html:196
-#: seahub/templates/js/templates.html:338
-#: seahub/templates/js/templates.html:401
-#: seahub/templates/js/templates.html:467
-#: seahub/templates/js/templates.html:573
-#: seahub/templates/js/templates.html:636
-#: seahub/templates/js/templates.html:662
+#: seahub/templates/js/templates.html:254
+#: seahub/templates/js/templates.html:260
+#: seahub/templates/js/templates.html:402
+#: seahub/templates/js/templates.html:469
+#: seahub/templates/js/templates.html:539
+#: seahub/templates/js/templates.html:649
+#: seahub/templates/js/templates.html:716
+#: seahub/templates/js/templates.html:751
 #: seahub/templates/repo_history_view.html:79
 #: seahub/templates/shared_file_view.html:53
 #: seahub/templates/shared_file_view.html:85
@@ -3203,8 +3216,9 @@ msgid "Download"
 msgstr "Λήψη"
 
 #: seahub/templates/file_access.html:5 seahub/templates/file_access.html:8
-#: seahub/templates/js/templates.html:485
-#: seahub/templates/js/templates.html:585
+#: seahub/templates/js/templates.html:557
+#: seahub/templates/js/templates.html:661
+#: seahub/templates/js/templates.html:728
 msgid "Access Log"
 msgstr ""
 
@@ -3217,9 +3231,9 @@ msgstr "Τωρινή διαδρομή:"
 #: seahub/templates/js/sysadmin-templates.html:181
 #: seahub/templates/js/sysadmin-templates.html:233
 #: seahub/templates/js/sysadmin-templates.html:692
-#: seahub/templates/js/templates.html:813
-#: seahub/templates/js/templates.html:1111
-#: seahub/templates/js/templates.html:1695
+#: seahub/templates/js/templates.html:987
+#: seahub/templates/js/templates.html:1285
+#: seahub/templates/js/templates.html:1886
 #: seahub/templates/sysadmin/settings.html:36
 #: seahub/templates/sysadmin/sys_trafficadmin.html:17
 msgid "User"
@@ -3234,13 +3248,13 @@ msgstr "Τύπος"
 #: seahub/templates/file_access.html:27
 #: seahub/templates/js/sysadmin-templates.html:184
 #: seahub/templates/js/sysadmin-templates.html:235
-#: seahub/templates/libraries.html:189
+#: seahub/templates/libraries.html:217
 msgid "IP"
 msgstr "IP"
 
 #: seahub/templates/file_access.html:27
 #: seahub/templates/js/sysadmin-templates.html:183
-#: seahub/templates/libraries.html:188
+#: seahub/templates/libraries.html:216
 msgid "Device Name"
 msgstr "Όνομα συσκευής"
 
@@ -3306,9 +3320,9 @@ msgstr "Σώθηκε το πρόχειρο."
 
 #: seahub/templates/file_edit.html:130
 #: seahub/templates/js/sysadmin-templates.html:236
-#: seahub/templates/js/templates.html:1167
-#: seahub/templates/js/templates.html:1961
-#: seahub/templates/js/templates.html:1996
+#: seahub/templates/js/templates.html:1341
+#: seahub/templates/js/templates.html:2152
+#: seahub/templates/js/templates.html:2187
 #: seahub/templates/sysadmin/settings.html:107
 #: seahub/templates/sysadmin/sys_virus_scan_records.html:11
 msgid "Library"
@@ -3398,7 +3412,7 @@ msgstr ""
 msgid "Link"
 msgstr ""
 
-#: seahub/templates/file_edit.html:415 seahub/templates/js/templates.html:1661
+#: seahub/templates/file_edit.html:415 seahub/templates/js/templates.html:1852
 #: seahub/templates/repo_history_view.html:74
 #: seahub/templates/snippets/repo_dir_trash_tr.html:21
 #: seahub/templates/sysadmin/userinfo.html:234
@@ -3489,10 +3503,10 @@ msgid "Password is required."
 msgstr "Ο κωδικός είναι απαραίτητος."
 
 #: seahub/templates/file_revisions.html:5
-#: seahub/templates/js/templates.html:257
-#: seahub/templates/js/templates.html:482
-#: seahub/templates/js/templates.html:582
-#: seahub/templates/js/templates.html:645 seahub/templates/repo_history.html:5
+#: seahub/templates/js/templates.html:321
+#: seahub/templates/js/templates.html:554
+#: seahub/templates/js/templates.html:658
+#: seahub/templates/js/templates.html:725 seahub/templates/repo_history.html:5
 #: seahub/templates/view_file_base.html:61
 msgid "History"
 msgstr "Ιστορικό"
@@ -3549,6 +3563,8 @@ msgstr "(Μετονομάστηκε ή μεταφέρθηκε από %(old_path)
 
 #: seahub/templates/file_revisions.html:84
 #: seahub/templates/js/sysadmin-templates.html:470
+#: seahub/templates/js/templates.html:164
+#: seahub/templates/js/templates.html:178
 #: seahub/templates/repo_history_view.html:51
 #: seahub/templates/repo_history_view.html:68
 #: seahub/templates/repo_history_view.html:78
@@ -3558,8 +3574,8 @@ msgid "Restore"
 msgstr "Επαναφορά"
 
 #: seahub/templates/file_revisions.html:87
-#: seahub/templates/js/templates.html:2026
-#: seahub/templates/js/templates.html:2037
+#: seahub/templates/js/templates.html:2217
+#: seahub/templates/js/templates.html:2228
 msgid "View"
 msgstr "Προβολή"
 
@@ -3578,102 +3594,106 @@ msgstr "Σχέδιο"
 
 #: seahub/templates/home_base.html:9
 #: seahub/templates/js/sysadmin-templates.html:121
-#: seahub/templates/js/templates.html:899
+#: seahub/templates/js/templates.html:140
+#: seahub/templates/js/templates.html:829
+#: seahub/templates/js/templates.html:1073
 msgid "Files"
 msgstr "Αρχεία"
 
-#: seahub/templates/home_base.html:12 seahub/templates/js/templates.html:274
-#: seahub/templates/js/templates.html:276
-#: seahub/templates/js/templates.html:903 seahub/templates/libraries.html:13
+#: seahub/templates/home_base.html:12 seahub/templates/js/templates.html:338
+#: seahub/templates/js/templates.html:340
+#: seahub/templates/js/templates.html:1077 seahub/templates/libraries.html:13
+#: seahub/templates/libraries.html.py:39
 msgid "My Libraries"
 msgstr ""
 
-#: seahub/templates/home_base.html:14 seahub/templates/js/templates.html:276
-#: seahub/templates/js/templates.html:908 seahub/templates/libraries.html:29
+#: seahub/templates/home_base.html:14 seahub/templates/js/templates.html:340
+#: seahub/templates/js/templates.html:1082 seahub/templates/libraries.html:57
 msgid "Shared with me"
 msgstr ""
 
-#: seahub/templates/home_base.html:16 seahub/templates/js/templates.html:272
-#: seahub/templates/js/templates.html:913 seahub/templates/libraries.html:44
+#: seahub/templates/home_base.html:16 seahub/templates/js/templates.html:336
+#: seahub/templates/js/templates.html:1087 seahub/templates/libraries.html:72
 msgid "Shared with all"
 msgstr ""
 
-#: seahub/templates/home_base.html:21 seahub/templates/js/templates.html:919
-#: seahub/templates/js/templates.html:936
-#: seahub/templates/js/templates.html:939
+#: seahub/templates/home_base.html:21 seahub/templates/js/templates.html:1093
+#: seahub/templates/js/templates.html:1110
+#: seahub/templates/js/templates.html:1113
 msgid "Shared with groups"
 msgstr ""
 
-#: seahub/templates/home_base.html:24 seahub/templates/js/templates.html:921
-#: seahub/templates/js/templates.html:943
+#: seahub/templates/home_base.html:24 seahub/templates/js/templates.html:1095
+#: seahub/templates/js/templates.html:1117
 msgid "All Groups"
 msgstr "Όλες οι ομάδες"
 
-#: seahub/templates/home_base.html:36 seahub/templates/js/templates.html:956
+#: seahub/templates/home_base.html:36 seahub/templates/js/templates.html:1130
 msgid "Tools"
 msgstr "Εργαλεία"
 
-#: seahub/templates/home_base.html:39 seahub/templates/js/templates.html:965
-#: seahub/templates/libraries.html:164
+#: seahub/templates/home_base.html:39 seahub/templates/js/templates.html:1139
+#: seahub/templates/libraries.html:192
 msgid "Favorites"
 msgstr "Αγαπημένα"
 
-#: seahub/templates/home_base.html:41 seahub/templates/js/templates.html:969
+#: seahub/templates/home_base.html:41 seahub/templates/js/templates.html:1143
 msgid "Activities"
 msgstr "Δραστηριότητες"
 
 #: seahub/templates/home_base.html:45 seahub/templates/home_base.html.py:81
-#: seahub/templates/js/templates.html:977
-#: seahub/templates/js/templates.html:1031
+#: seahub/templates/js/templates.html:1151
+#: seahub/templates/js/templates.html:1205
 #: seahub/templates/wiki/personal_wiki.html:6
 #: seahub/templates/wiki/personal_wiki_pages.html:6
 msgid "Personal Wiki"
 msgstr "Προσωπικό Wiki"
 
-#: seahub/templates/home_base.html:48 seahub/templates/js/templates.html:983
-#: seahub/templates/libraries.html:183
+#: seahub/templates/home_base.html:48 seahub/templates/js/templates.html:1157
+#: seahub/templates/libraries.html:211
 msgid "Linked Devices"
 msgstr "Συνδεδεμένες συσκευές"
 
-#: seahub/templates/home_base.html:51 seahub/templates/js/templates.html:987
-#: seahub/templates/js/templates.html:2051
-#: seahub/templates/js/templates.html:2052
-#: seahub/templates/js/templates.html:2089
+#: seahub/templates/home_base.html:51 seahub/templates/js/templates.html:1161
+#: seahub/templates/js/templates.html:2242
+#: seahub/templates/js/templates.html:2243
+#: seahub/templates/js/templates.html:2280
 msgid "Invite People"
 msgstr "Πρόσκληση ατόμων"
 
-#: seahub/templates/home_base.html:56 seahub/templates/js/templates.html:992
+#: seahub/templates/home_base.html:56 seahub/templates/js/templates.html:1166
 msgid "Share Admin"
 msgstr "Διαχειριστής κοινόχρηστων"
 
-#: seahub/templates/home_base.html:60 seahub/templates/js/templates.html:999
-#: seahub/templates/js/templates.html:1920
+#: seahub/templates/home_base.html:60 seahub/templates/js/templates.html:825
+#: seahub/templates/js/templates.html:1173
+#: seahub/templates/js/templates.html:2111
 msgid "Folders"
 msgstr "Φάκελοι"
 
 #: seahub/templates/home_base.html:62
 #: seahub/templates/js/sysadmin-templates.html:43
-#: seahub/templates/js/templates.html:1004
-#: seahub/templates/js/templates.html:1008
+#: seahub/templates/js/templates.html:1178
+#: seahub/templates/js/templates.html:1182
 #: seahub/templates/sysadmin/base.html:49
 msgid "Links"
 msgstr "Σύνδεσμοι"
 
-#: seahub/templates/home_base.html:74 seahub/templates/js/templates.html:959
-#: seahub/templates/js/templates.html:1020
+#: seahub/templates/home_base.html:74 seahub/templates/js/templates.html:1133
+#: seahub/templates/js/templates.html:1194
 msgid "Enable Modules"
 msgstr "Ενεργοποίηση μονάδων"
 
-#: seahub/templates/i18n.html:6 seahub/templates/js/templates.html:216
+#: seahub/templates/i18n.html:6 seahub/templates/js/templates.html:280
 msgid "Upload Folder"
 msgstr "Φάκελος μεταφόρτωσης"
 
-#: seahub/templates/i18n.html:7 seahub/templates/js/templates.html:720
+#: seahub/templates/i18n.html:7 seahub/templates/js/templates.html:894
 #: seahub/templates/snippets/file_share_popup.html:26
 msgid "Add auto expiration"
 msgstr "Προσθήκη αυτόματης λήξης"
 
-#: seahub/templates/i18n.html:8 seahub/templates/js/templates.html:723
+#: seahub/templates/i18n.html:8 seahub/templates/js/templates.html:897
 #: seahub/templates/snippets/file_share_popup.html:29
 msgid "Days"
 msgstr "Ημέρες"
@@ -3692,7 +3712,7 @@ msgstr "Κοινόχρηστες βιβλιοθήκες"
 
 #: seahub/templates/js/lib-op-popups.html:5
 #: seahub/templates/js/sysadmin-templates.html:522
-#: seahub/templates/js/templates.html:229
+#: seahub/templates/js/templates.html:293
 msgid "New Folder"
 msgstr "Νέος φάκελος"
 
@@ -3863,7 +3883,7 @@ msgid "Errors"
 msgstr "Σφάλματα"
 
 #: seahub/templates/js/sysadmin-templates.html:182
-#: seahub/templates/libraries.html:187
+#: seahub/templates/libraries.html:215
 msgid "Platform"
 msgstr "Πλατφόρμα"
 
@@ -3875,7 +3895,7 @@ msgid "Version"
 msgstr "Έκδοση"
 
 #: seahub/templates/js/sysadmin-templates.html:185
-#: seahub/templates/libraries.html:190
+#: seahub/templates/libraries.html:218
 msgid "Last Access"
 msgstr "Τελευταία σύνδεση"
 
@@ -3884,7 +3904,7 @@ msgid "No connected devices"
 msgstr ""
 
 #: seahub/templates/js/sysadmin-templates.html:210
-#: seahub/templates/js/templates.html:1805
+#: seahub/templates/js/templates.html:1996
 msgid "Unlink"
 msgstr "Αποσύνδεση"
 
@@ -3916,8 +3936,8 @@ msgid "System"
 msgstr "Σύστημα"
 
 #: seahub/templates/js/sysadmin-templates.html:305
-#: seahub/templates/js/templates.html:255
-#: seahub/templates/js/templates.html:260
+#: seahub/templates/js/templates.html:319
+#: seahub/templates/js/templates.html:324
 #: seahub/templates/view_trash_file.html:6
 msgid "Trash"
 msgstr "Κάδος ανακύκλωσης"
@@ -3925,7 +3945,7 @@ msgstr "Κάδος ανακύκλωσης"
 #: seahub/templates/js/sysadmin-templates.html:312
 #: seahub/templates/js/sysadmin-templates.html:344
 #: seahub/templates/js/templates.html:4
-#: seahub/templates/js/templates.html:1048 seahub/templates/libraries.html:14
+#: seahub/templates/js/templates.html:1222 seahub/templates/libraries.html:15
 msgid "New Library"
 msgstr "Νέα βιβλιοθήκη"
 
@@ -3955,30 +3975,33 @@ msgstr ""
 
 #: seahub/templates/js/sysadmin-templates.html:408
 #: seahub/templates/js/sysadmin-templates.html:629
-#: seahub/templates/js/templates.html:55 seahub/templates/js/templates.html:97
-#: seahub/templates/js/templates.html:1423
+#: seahub/templates/js/templates.html:55 seahub/templates/js/templates.html:98
+#: seahub/templates/js/templates.html:1614
 #: seahub/templates/sysadmin/userinfo.html:168
 msgid "Transfer"
 msgstr "Μεταφορά"
 
 #: seahub/templates/js/sysadmin-templates.html:410
-#: seahub/templates/js/templates.html:49 seahub/templates/js/templates.html:94
-#: seahub/templates/js/templates.html:243
-#: seahub/templates/js/templates.html:341
-#: seahub/templates/js/templates.html:403
-#: seahub/templates/js/templates.html:469
-#: seahub/templates/js/templates.html:575
-#: seahub/templates/js/templates.html:638
-#: seahub/templates/js/templates.html:664
+#: seahub/templates/js/templates.html:49 seahub/templates/js/templates.html:95
+#: seahub/templates/js/templates.html:307
+#: seahub/templates/js/templates.html:405
+#: seahub/templates/js/templates.html:471
+#: seahub/templates/js/templates.html:541
+#: seahub/templates/js/templates.html:651
+#: seahub/templates/js/templates.html:718
+#: seahub/templates/js/templates.html:753
 #: seahub/templates/view_file_base.html:56
 msgid "Share"
 msgstr ""
 
 #: seahub/templates/js/sysadmin-templates.html:438
+#: seahub/templates/libraries.html:43
 msgid "Tip: libraries deleted 30 days ago will be cleaned automatically."
 msgstr ""
 
 #: seahub/templates/js/sysadmin-templates.html:445
+#: seahub/templates/js/templates.html:1420
+#: seahub/templates/js/templates.html:1427
 msgid "Deleted Time"
 msgstr ""
 
@@ -3987,16 +4010,16 @@ msgid "No library deleted yet"
 msgstr ""
 
 #: seahub/templates/js/sysadmin-templates.html:519
-#: seahub/templates/js/templates.html:204
-#: seahub/templates/js/templates.html:209
-#: seahub/templates/js/templates.html:223
+#: seahub/templates/js/templates.html:268
+#: seahub/templates/js/templates.html:273
+#: seahub/templates/js/templates.html:287
 #: seahub/templates/sysadmin/userinfo.html:251
 msgid "Upload"
 msgstr ""
 
 #: seahub/templates/js/sysadmin-templates.html:557
 #: seahub/templates/js/sysadmin-templates.html:612
-#: seahub/templates/libraries.html:72 seahub/templates/libraries.html.py:90
+#: seahub/templates/libraries.html:100 seahub/templates/libraries.html:118
 msgid "New Group"
 msgstr "Νέα Ομάδα"
 
@@ -4025,41 +4048,41 @@ msgid "Tip: you can search by keyword in name."
 msgstr ""
 
 #: seahub/templates/js/sysadmin-templates.html:682
-#: seahub/templates/js/templates.html:691
+#: seahub/templates/js/templates.html:865
 msgid "Share to user"
 msgstr ""
 
 #: seahub/templates/js/sysadmin-templates.html:683
-#: seahub/templates/js/templates.html:692
+#: seahub/templates/js/templates.html:866
 msgid "Share to group"
 msgstr ""
 
 #: seahub/templates/js/sysadmin-templates.html:693
 #: seahub/templates/js/sysadmin-templates.html:720
-#: seahub/templates/js/templates.html:355
-#: seahub/templates/js/templates.html:411
-#: seahub/templates/js/templates.html:672
-#: seahub/templates/js/templates.html:814
-#: seahub/templates/js/templates.html:841
-#: seahub/templates/js/templates.html:1112
-#: seahub/templates/js/templates.html:1138
-#: seahub/templates/js/templates.html:1272
-#: seahub/templates/js/templates.html:1697
-#: seahub/templates/js/templates.html:1741
-#: seahub/templates/js/templates.html:1873
-#: seahub/templates/js/templates.html:1928
+#: seahub/templates/js/templates.html:419
+#: seahub/templates/js/templates.html:479
+#: seahub/templates/js/templates.html:761
+#: seahub/templates/js/templates.html:988
+#: seahub/templates/js/templates.html:1015
+#: seahub/templates/js/templates.html:1286
+#: seahub/templates/js/templates.html:1312
+#: seahub/templates/js/templates.html:1463
+#: seahub/templates/js/templates.html:1888
+#: seahub/templates/js/templates.html:1932
+#: seahub/templates/js/templates.html:2064
+#: seahub/templates/js/templates.html:2119
 msgid "Permission"
 msgstr "Δικαίωμα"
 
 #: seahub/templates/js/sysadmin-templates.html:719
-#: seahub/templates/js/templates.html:840
-#: seahub/templates/js/templates.html:1137
-#: seahub/templates/js/templates.html:1739
+#: seahub/templates/js/templates.html:1014
+#: seahub/templates/js/templates.html:1311
+#: seahub/templates/js/templates.html:1930
 msgid "Group"
 msgstr "Ομάδα"
 
 #: seahub/templates/js/sysadmin-templates.html:756
-#: seahub/templates/js/templates.html:1058 seahub/templates/libraries.html:131
+#: seahub/templates/js/templates.html:1232 seahub/templates/libraries.html:159
 #: seahub/templates/sysadmin/sys_inst_info_admins.html:7
 #: seahub/templates/sysadmin/sys_inst_info_user.html:7
 #: seahub/templates/sysadmin/sys_org_info_group.html:8
@@ -4075,16 +4098,16 @@ msgid "Add Member"
 msgstr ""
 
 #: seahub/templates/js/sysadmin-templates.html:785
-#: seahub/templates/js/templates.html:1248
+#: seahub/templates/js/templates.html:1439
 msgid "Shared By"
 msgstr "Κοινή χρήση από"
 
 #: seahub/templates/js/sysadmin-templates.html:811
-#: seahub/templates/js/templates.html:125
-#: seahub/templates/js/templates.html:148
-#: seahub/templates/js/templates.html:160
-#: seahub/templates/js/templates.html:179
-#: seahub/templates/js/templates.html:1915
+#: seahub/templates/js/templates.html:189
+#: seahub/templates/js/templates.html:212
+#: seahub/templates/js/templates.html:224
+#: seahub/templates/js/templates.html:243
+#: seahub/templates/js/templates.html:2106
 msgid "Unshare"
 msgstr "Απενεργοποίηση κοινής χρήσης"
 
@@ -4123,237 +4146,265 @@ msgid "Encrypt"
 msgstr ""
 
 #: seahub/templates/js/templates.html:31
-#: seahub/templates/js/templates.html:1789
+#: seahub/templates/js/templates.html:1980
 #, python-format
 msgid "(at least %(repo_password_min_length)s characters)"
 msgstr ""
 
 #: seahub/templates/js/templates.html:33
-#: seahub/templates/js/templates.html:714
-#: seahub/templates/js/templates.html:779
+#: seahub/templates/js/templates.html:888
+#: seahub/templates/js/templates.html:953
 #: seahub/templates/snippets/file_share_popup.html:20
 msgid "Password again"
 msgstr ""
 
-#: seahub/templates/js/templates.html:52 seahub/templates/js/templates.html:92
-#: seahub/templates/js/templates.html:349
-#: seahub/templates/js/templates.html:362
-#: seahub/templates/js/templates.html:399
-#: seahub/templates/js/templates.html:477
-#: seahub/templates/js/templates.html:500
-#: seahub/templates/js/templates.html:571
+#: seahub/templates/js/templates.html:52 seahub/templates/js/templates.html:93
+#: seahub/templates/js/templates.html:413
+#: seahub/templates/js/templates.html:427
+#: seahub/templates/js/templates.html:467
+#: seahub/templates/js/templates.html:549
+#: seahub/templates/js/templates.html:573
+#: seahub/templates/js/templates.html:647
 msgid "More Operations"
 msgstr ""
 
-#: seahub/templates/js/templates.html:54 seahub/templates/js/templates.html:96
-#: seahub/templates/js/templates.html:351
-#: seahub/templates/js/templates.html:407
-#: seahub/templates/js/templates.html:479
-#: seahub/templates/js/templates.html:579
-#: seahub/templates/js/templates.html:642
-#: seahub/templates/js/templates.html:668
-#: seahub/templates/js/templates.html:1422
-#: seahub/templates/js/templates.html:1441
+#: seahub/templates/js/templates.html:54 seahub/templates/js/templates.html:97
+#: seahub/templates/js/templates.html:415
+#: seahub/templates/js/templates.html:475
+#: seahub/templates/js/templates.html:551
+#: seahub/templates/js/templates.html:655
+#: seahub/templates/js/templates.html:722
+#: seahub/templates/js/templates.html:757
+#: seahub/templates/js/templates.html:1613
+#: seahub/templates/js/templates.html:1632
 msgid "Rename"
 msgstr "Μετονομασία"
 
-#: seahub/templates/js/templates.html:56 seahub/templates/js/templates.html:98
+#: seahub/templates/js/templates.html:56 seahub/templates/js/templates.html:99
 msgid "History Setting"
 msgstr ""
 
 #: seahub/templates/js/templates.html:58
-#: seahub/templates/js/templates.html:100
+#: seahub/templates/js/templates.html:101
 msgid "Change Password"
 msgstr ""
 
 #: seahub/templates/js/templates.html:61
-#: seahub/templates/js/templates.html:103
+#: seahub/templates/js/templates.html:104
 msgid "Share Links"
 msgstr ""
 
 #: seahub/templates/js/templates.html:64
-#: seahub/templates/js/templates.html:106
+#: seahub/templates/js/templates.html:107
 msgid "Folder Permission"
 msgstr ""
 
-#: seahub/templates/js/templates.html:71
-#: seahub/templates/js/templates.html:113
+#: seahub/templates/js/templates.html:66
+#: seahub/templates/js/templates.html:109
+#: seahub/templates/js/templates.html:421
+#: seahub/templates/js/templates.html:432
+#: seahub/templates/js/templates.html:481
+#: seahub/templates/js/templates.html:487
+#: seahub/templates/js/templates.html:567
+#: seahub/templates/js/templates.html:578
+#: seahub/templates/js/templates.html:671
+#: seahub/templates/js/templates.html:677
+#: seahub/templates/js/templates.html:738
+#: seahub/templates/js/templates.html:744
+#: seahub/templates/js/templates.html:764
+#: seahub/templates/js/templates.html:770
+#: seahub/templates/js/templates.html:1504
+#: seahub/templates/repo_history.html:41
+msgid "Details"
+msgstr "Λεπτομέρειες"
+
+#: seahub/templates/js/templates.html:72
+#: seahub/templates/js/templates.html:115
 msgid "Broken (please contact your administrator to fix this library)"
 msgstr ""
 
-#: seahub/templates/js/templates.html:187
-#: seahub/templates/js/templates.html:352
-#: seahub/templates/js/templates.html:408
-#: seahub/templates/js/templates.html:480
-#: seahub/templates/js/templates.html:580
-#: seahub/templates/js/templates.html:643
-#: seahub/templates/js/templates.html:669
+#: seahub/templates/js/templates.html:251
+#: seahub/templates/js/templates.html:416
+#: seahub/templates/js/templates.html:476
+#: seahub/templates/js/templates.html:552
+#: seahub/templates/js/templates.html:656
+#: seahub/templates/js/templates.html:723
+#: seahub/templates/js/templates.html:758
 msgid "Move"
 msgstr "Μετακίνηση"
 
-#: seahub/templates/js/templates.html:188
-#: seahub/templates/js/templates.html:195
-#: seahub/templates/js/templates.html:353
-#: seahub/templates/js/templates.html:364
-#: seahub/templates/js/templates.html:409
-#: seahub/templates/js/templates.html:415
-#: seahub/templates/js/templates.html:481
-#: seahub/templates/js/templates.html:502
-#: seahub/templates/js/templates.html:581
-#: seahub/templates/js/templates.html:597
-#: seahub/templates/js/templates.html:644
-#: seahub/templates/js/templates.html:670
+#: seahub/templates/js/templates.html:252
+#: seahub/templates/js/templates.html:259
+#: seahub/templates/js/templates.html:417
+#: seahub/templates/js/templates.html:430
+#: seahub/templates/js/templates.html:477
+#: seahub/templates/js/templates.html:485
+#: seahub/templates/js/templates.html:553
+#: seahub/templates/js/templates.html:576
+#: seahub/templates/js/templates.html:657
+#: seahub/templates/js/templates.html:675
+#: seahub/templates/js/templates.html:724
+#: seahub/templates/js/templates.html:742
+#: seahub/templates/js/templates.html:759
+#: seahub/templates/js/templates.html:768
 msgid "Copy"
 msgstr "Αντιγραφή"
 
-#: seahub/templates/js/templates.html:212
+#: seahub/templates/js/templates.html:276
 msgid "Upload Files"
 msgstr "Μεταφόρτωση αρχείων"
 
-#: seahub/templates/js/templates.html:223
+#: seahub/templates/js/templates.html:287
 msgid "Out of quota"
 msgstr ""
 
-#: seahub/templates/js/templates.html:226
+#: seahub/templates/js/templates.html:290
 msgid "New"
 msgstr ""
 
-#: seahub/templates/js/templates.html:230
+#: seahub/templates/js/templates.html:294
 msgid "New File"
 msgstr "Νέο αρχείο"
 
-#: seahub/templates/js/templates.html:233
+#: seahub/templates/js/templates.html:297
 msgid "New Markdown File"
 msgstr ""
 
-#: seahub/templates/js/templates.html:234
+#: seahub/templates/js/templates.html:298
 msgid "New Excel File"
 msgstr ""
 
-#: seahub/templates/js/templates.html:235
+#: seahub/templates/js/templates.html:299
 msgid "New PowerPoint File"
 msgstr ""
 
-#: seahub/templates/js/templates.html:236
+#: seahub/templates/js/templates.html:300
 msgid "New Word File"
 msgstr ""
 
-#: seahub/templates/js/templates.html:249
+#: seahub/templates/js/templates.html:313
 #: seahub/templates/view_shared_dir.html:27
 #: seahub/templates/view_shared_dir.html:29
 #: seahub/templates/view_shared_dir.html:31
 msgid "List"
 msgstr ""
 
-#: seahub/templates/js/templates.html:249
+#: seahub/templates/js/templates.html:313
 msgid "list view"
 msgstr ""
 
-#: seahub/templates/js/templates.html:249
+#: seahub/templates/js/templates.html:313
 #: seahub/templates/view_shared_dir.html:33
 #: seahub/templates/view_shared_dir.html:35
 #: seahub/templates/view_shared_dir.html:37
 msgid "Grid"
 msgstr ""
 
-#: seahub/templates/js/templates.html:249
+#: seahub/templates/js/templates.html:313
 msgid "grid view"
 msgstr ""
 
-#: seahub/templates/js/templates.html:299
-#: seahub/templates/js/templates.html:316
-#: seahub/templates/js/templates.html:1226
-#: seahub/templates/js/templates.html:1238
-#: seahub/templates/js/templates.html:1245
-#: seahub/templates/js/templates.html:1259
+#: seahub/templates/js/templates.html:363
+#: seahub/templates/js/templates.html:380
+#: seahub/templates/js/templates.html:1400
+#: seahub/templates/js/templates.html:1412
+#: seahub/templates/js/templates.html:1421
+#: seahub/templates/js/templates.html:1428
+#: seahub/templates/js/templates.html:1436
+#: seahub/templates/js/templates.html:1450
 msgid "Actions"
 msgstr ""
 
-#: seahub/templates/js/templates.html:312
-#: seahub/templates/js/templates.html:1235
-#: seahub/templates/js/templates.html:1255
+#: seahub/templates/js/templates.html:376
+#: seahub/templates/js/templates.html:1409
+#: seahub/templates/js/templates.html:1446
 msgid "Sort:"
 msgstr ""
 
-#: seahub/templates/js/templates.html:314
-#: seahub/templates/js/templates.html:1237
-#: seahub/templates/js/templates.html:1257
+#: seahub/templates/js/templates.html:378
+#: seahub/templates/js/templates.html:1411
+#: seahub/templates/js/templates.html:1448
 msgid "last update"
 msgstr ""
 
-#: seahub/templates/js/templates.html:357
-#: seahub/templates/js/templates.html:413
-#: seahub/templates/js/templates.html:495
-#: seahub/templates/js/templates.html:595
-#: seahub/templates/js/templates.html:655
-#: seahub/templates/js/templates.html:674
+#: seahub/templates/js/templates.html:422
+#: seahub/templates/js/templates.html:482
+#: seahub/templates/js/templates.html:568
+#: seahub/templates/js/templates.html:672
+#: seahub/templates/js/templates.html:739
+#: seahub/templates/js/templates.html:765
 msgid "Open via Client"
 msgstr ""
 
-#: seahub/templates/js/templates.html:433
-#: seahub/templates/js/templates.html:528
+#: seahub/templates/js/templates.html:505
+#: seahub/templates/js/templates.html:604
 #: seahub/templates/view_file_base.html:21
 msgid "starred"
 msgstr ""
 
-#: seahub/templates/js/templates.html:435
-#: seahub/templates/js/templates.html:530
+#: seahub/templates/js/templates.html:507
+#: seahub/templates/js/templates.html:606
 #: seahub/templates/view_file_base.html:23
 msgid "unstarred"
 msgstr "χωρίς αστέρι"
 
-#: seahub/templates/js/templates.html:451
-#: seahub/templates/js/templates.html:546
-#: seahub/templates/js/templates.html:615
+#: seahub/templates/js/templates.html:523
+#: seahub/templates/js/templates.html:622
+#: seahub/templates/js/templates.html:695
 #: seahub/templates/view_file_base.html:27
 msgid "locked"
 msgstr ""
 
-#: seahub/templates/js/templates.html:489
-#: seahub/templates/js/templates.html:589
-#: seahub/templates/js/templates.html:649
+#: seahub/templates/js/templates.html:561
+#: seahub/templates/js/templates.html:665
+#: seahub/templates/js/templates.html:732
 #: seahub/templates/view_file_base.html:47
 #: seahub/templates/view_file_base.html:49
 msgid "Unlock"
 msgstr ""
 
-#: seahub/templates/js/templates.html:492
-#: seahub/templates/js/templates.html:592
-#: seahub/templates/js/templates.html:652
+#: seahub/templates/js/templates.html:564
+#: seahub/templates/js/templates.html:668
+#: seahub/templates/js/templates.html:735
 #: seahub/templates/view_file_base.html:46
 #: seahub/templates/view_file_base.html:50
 msgid "Lock"
 msgstr ""
 
-#: seahub/templates/js/templates.html:513
-#: seahub/templates/js/templates.html:563
+#: seahub/templates/js/templates.html:589
+#: seahub/templates/js/templates.html:639
 msgid "Fetch failed"
 msgstr ""
 
-#: seahub/templates/js/templates.html:684
+#: seahub/templates/js/templates.html:805
+#: seahub/templates/js/templates.html:838
+msgid "Location"
+msgstr ""
+
+#: seahub/templates/js/templates.html:858
 #: seahub/templates/snippets/file_share_popup.html:6
 msgid "Download Link"
 msgstr ""
 
-#: seahub/templates/js/templates.html:688
+#: seahub/templates/js/templates.html:862
 msgid "Upload Link"
 msgstr ""
 
-#: seahub/templates/js/templates.html:705
-#: seahub/templates/js/templates.html:770
+#: seahub/templates/js/templates.html:879
+#: seahub/templates/js/templates.html:944
 #: seahub/templates/snippets/file_share_popup.html:15
 msgid "Add password protection"
 msgstr ""
 
-#: seahub/templates/js/templates.html:708
-#: seahub/templates/js/templates.html:773
+#: seahub/templates/js/templates.html:882
+#: seahub/templates/js/templates.html:947
 #: seahub/templates/snippets/file_share_popup.html:18
 #, python-format
 msgid "(at least %(share_link_password_min_length)s characters)"
 msgstr ""
 
-#: seahub/templates/js/templates.html:711
-#: seahub/templates/js/templates.html:776
+#: seahub/templates/js/templates.html:885
+#: seahub/templates/js/templates.html:950
 #: seahub/templates/sysadmin/sys_org_info_user.html:74
 #: seahub/templates/sysadmin/sys_org_info_user.html:98
 #: seahub/templates/sysadmin/sys_useradmin.html:56
@@ -4361,285 +4412,282 @@ msgstr ""
 msgid "Show"
 msgstr ""
 
-#: seahub/templates/js/templates.html:712
-#: seahub/templates/js/templates.html:777
+#: seahub/templates/js/templates.html:886
+#: seahub/templates/js/templates.html:951
 #: seahub/templates/sysadmin/sys_org_info_user.html:75
 #: seahub/templates/sysadmin/sys_useradmin.html:57
 msgid "Generate a random password"
 msgstr ""
 
-#: seahub/templates/js/templates.html:730
+#: seahub/templates/js/templates.html:904
 #: seahub/templates/snippets/file_share_popup.html:36
 msgid "Online preview only"
 msgstr ""
 
-#: seahub/templates/js/templates.html:735
-#: seahub/templates/js/templates.html:783
+#: seahub/templates/js/templates.html:909
+#: seahub/templates/js/templates.html:957
 #: seahub/templates/snippets/file_share_popup.html:42
 msgid "Generate"
 msgstr ""
 
-#: seahub/templates/js/templates.html:739
+#: seahub/templates/js/templates.html:913
 #: seahub/templates/snippets/file_share_popup.html:44
 msgid "Link: "
 msgstr ""
 
-#: seahub/templates/js/templates.html:742
+#: seahub/templates/js/templates.html:916
 msgid "Direct Download Link: "
 msgstr ""
 
-#: seahub/templates/js/templates.html:746
-#: seahub/templates/js/templates.html:787
+#: seahub/templates/js/templates.html:920
+#: seahub/templates/js/templates.html:961
 #: seahub/templates/snippets/file_share_popup.html:45
 msgid "Send"
 msgstr ""
 
-#: seahub/templates/js/templates.html:749
-#: seahub/templates/js/templates.html:790
+#: seahub/templates/js/templates.html:923
+#: seahub/templates/js/templates.html:964
 #: seahub/templates/snippets/file_share_popup.html:49
 msgid "Send to:"
 msgstr ""
 
-#: seahub/templates/js/templates.html:750
-#: seahub/templates/js/templates.html:791
+#: seahub/templates/js/templates.html:924
+#: seahub/templates/js/templates.html:965
 #: seahub/templates/snippets/file_share_popup.html:50
 msgid "Emails, Seperated by ','"
 msgstr ""
 
-#: seahub/templates/js/templates.html:751
-#: seahub/templates/js/templates.html:792
+#: seahub/templates/js/templates.html:925
+#: seahub/templates/js/templates.html:966
 #: seahub/templates/snippets/file_share_popup.html:54
 msgid "Message (optional):"
 msgstr ""
 
-#: seahub/templates/js/templates.html:756
-#: seahub/templates/js/templates.html:797
+#: seahub/templates/js/templates.html:930
+#: seahub/templates/js/templates.html:971
 #: seahub/templates/snippets/file_share_popup.html:59
 msgid "Sending..."
 msgstr ""
 
-#: seahub/templates/js/templates.html:766
+#: seahub/templates/js/templates.html:940
 msgid ""
 "You can share the generated link to others and then they can upload files to"
 " this directory via the link."
 msgstr ""
 
-#: seahub/templates/js/templates.html:786
+#: seahub/templates/js/templates.html:960
 msgid "Upload Link: "
 msgstr ""
 
-#: seahub/templates/js/templates.html:874
-#: seahub/templates/js/templates.html:891
+#: seahub/templates/js/templates.html:1048
+#: seahub/templates/js/templates.html:1065
 msgid "Leave Share"
 msgstr "Αποσύνδεση από κοινή χρήση"
 
-#: seahub/templates/js/templates.html:1054
+#: seahub/templates/js/templates.html:1228
 msgid "Wiki"
 msgstr "Wiki"
 
-#: seahub/templates/js/templates.html:1059
+#: seahub/templates/js/templates.html:1233
 msgid "Discussion"
 msgstr "Συζήτηση"
 
-#: seahub/templates/js/templates.html:1103
-#: seahub/templates/js/templates.html:1685
+#: seahub/templates/js/templates.html:1277
+#: seahub/templates/js/templates.html:1876
 msgid "User Permission"
 msgstr ""
 
-#: seahub/templates/js/templates.html:1104
-#: seahub/templates/js/templates.html:1686
+#: seahub/templates/js/templates.html:1278
+#: seahub/templates/js/templates.html:1877
 msgid "Group Permission"
 msgstr ""
 
-#: seahub/templates/js/templates.html:1166
-#: seahub/templates/js/templates.html:1172
+#: seahub/templates/js/templates.html:1340
+#: seahub/templates/js/templates.html:1346
 msgid "File Name"
 msgstr "Όνομα αρχείου"
 
-#: seahub/templates/js/templates.html:1182
-#: seahub/templates/js/templates.html:1203
+#: seahub/templates/js/templates.html:1356
+#: seahub/templates/js/templates.html:1377
 msgid "icon"
 msgstr ""
 
-#: seahub/templates/js/templates.html:1195
-#: seahub/templates/js/templates.html:1217
+#: seahub/templates/js/templates.html:1369
+#: seahub/templates/js/templates.html:1391
 msgid "Unstar"
 msgstr ""
 
-#: seahub/templates/js/templates.html:1224
-#: seahub/templates/js/templates.html:1233
-#: seahub/templates/js/templates.html:1243
-#: seahub/templates/js/templates.html:1253
+#: seahub/templates/js/templates.html:1398
+#: seahub/templates/js/templates.html:1407
+#: seahub/templates/js/templates.html:1418
+#: seahub/templates/js/templates.html:1426
+#: seahub/templates/js/templates.html:1434
+#: seahub/templates/js/templates.html:1444
 msgid "Library Type"
 msgstr ""
 
-#: seahub/templates/js/templates.html:1264
+#: seahub/templates/js/templates.html:1455
 msgid "Select libraries to share"
 msgstr ""
 
-#: seahub/templates/js/templates.html:1313
-#: seahub/templates/repo_history.html:41
-msgid "Details"
-msgstr "Λεπτομέρειες"
-
-#: seahub/templates/js/templates.html:1321
+#: seahub/templates/js/templates.html:1512
 msgid "Created library"
 msgstr "Δημιουργήθηκε η βιβλιοθήκη"
 
-#: seahub/templates/js/templates.html:1325
+#: seahub/templates/js/templates.html:1516
 msgid "Deleted library"
 msgstr ""
 
-#: seahub/templates/js/templates.html:1332
+#: seahub/templates/js/templates.html:1523
 #: seahub/templates/snippets/list_commit_detail.html:10
 msgid "Modification Details"
 msgstr ""
 
-#: seahub/templates/js/templates.html:1346
+#: seahub/templates/js/templates.html:1537
 #: seahub/templates/snippets/search_form.html:4
 msgid "Search files in this wiki"
 msgstr ""
 
-#: seahub/templates/js/templates.html:1346
+#: seahub/templates/js/templates.html:1537
 #: seahub/templates/snippets/search_form.html:4
 msgid "Search files in this library"
 msgstr ""
 
-#: seahub/templates/js/templates.html:1348
+#: seahub/templates/js/templates.html:1539
 #: seahub/templates/snippets/search_form.html:7
 #: seahub/templates/snippets/search_form.html:13
 msgid "Search Files"
 msgstr ""
 
-#: seahub/templates/js/templates.html:1350
+#: seahub/templates/js/templates.html:1541
 #: seahub/templates/snippets/search_form.html:9
 msgid "advanced"
 msgstr ""
 
-#: seahub/templates/js/templates.html:1368
-#: seahub/templates/js/templates.html:1385 seahub/templates/libraries.html:108
+#: seahub/templates/js/templates.html:1559
+#: seahub/templates/js/templates.html:1576 seahub/templates/libraries.html:136
 msgid "No library is shared to this group"
 msgstr "Δεν υπάρχει βιβλιοθήκη σε κοινή χρήση με αυτή την ομάδα"
 
-#: seahub/templates/js/templates.html:1393
+#: seahub/templates/js/templates.html:1584
 msgid "owner"
 msgstr ""
 
-#: seahub/templates/js/templates.html:1395
+#: seahub/templates/js/templates.html:1586
 msgid "admin"
 msgstr ""
 
-#: seahub/templates/js/templates.html:1409
+#: seahub/templates/js/templates.html:1600
 #: seahub/templates/view_file_base.html:127
 msgid "Reply"
 msgstr "Απάντηση"
 
-#: seahub/templates/js/templates.html:1426
-#: seahub/templates/js/templates.html:1444
+#: seahub/templates/js/templates.html:1617
+#: seahub/templates/js/templates.html:1635
 msgid "Add Wiki"
 msgstr ""
 
-#: seahub/templates/js/templates.html:1428
-#: seahub/templates/js/templates.html:1446
+#: seahub/templates/js/templates.html:1619
+#: seahub/templates/js/templates.html:1637
 msgid "Remove Wiki"
 msgstr ""
 
-#: seahub/templates/js/templates.html:1433
-#: seahub/templates/js/templates.html:1451
+#: seahub/templates/js/templates.html:1624
+#: seahub/templates/js/templates.html:1642
 msgid "Import Members"
 msgstr ""
 
-#: seahub/templates/js/templates.html:1434
-#: seahub/templates/js/templates.html:1452
+#: seahub/templates/js/templates.html:1625
+#: seahub/templates/js/templates.html:1643
 msgid "Manage Members"
 msgstr ""
 
-#: seahub/templates/js/templates.html:1437
+#: seahub/templates/js/templates.html:1628
 msgid "Dismiss"
 msgstr "Παράβλεψη"
 
-#: seahub/templates/js/templates.html:1456
+#: seahub/templates/js/templates.html:1647
 msgid "Leave group"
 msgstr "Αποχώρηση από την ομάδα"
 
-#: seahub/templates/js/templates.html:1463
+#: seahub/templates/js/templates.html:1654
 msgid "Rename Group To"
 msgstr "Μετονομασία Ομάδας Σε"
 
-#: seahub/templates/js/templates.html:1472
+#: seahub/templates/js/templates.html:1663
 msgid "Transfer Group To"
 msgstr "Μεταφορά Ομάδας Σε"
 
-#: seahub/templates/js/templates.html:1480
+#: seahub/templates/js/templates.html:1671
 msgid "Import group members from a CSV file"
 msgstr ""
 
-#: seahub/templates/js/templates.html:1482
+#: seahub/templates/js/templates.html:1673
 msgid "File format: user@mail.com"
 msgstr ""
 
-#: seahub/templates/js/templates.html:1492
+#: seahub/templates/js/templates.html:1683
 #: seahub/templates/sysadmin/sys_inst_admin.html:12
 #: seahub/templates/sysadmin/sys_terms_admin.html:9
 msgid "Add"
 msgstr ""
 
-#: seahub/templates/js/templates.html:1572
+#: seahub/templates/js/templates.html:1763
 msgid "Setting library history is disabled by Admin"
 msgstr ""
 
-#: seahub/templates/js/templates.html:1577
+#: seahub/templates/js/templates.html:1768
 msgid "Keep full history"
 msgstr ""
 
-#: seahub/templates/js/templates.html:1583
+#: seahub/templates/js/templates.html:1774
 msgid "Don't keep history"
 msgstr ""
 
-#: seahub/templates/js/templates.html:1589
+#: seahub/templates/js/templates.html:1780
 msgid "Only keep a period of history:"
 msgstr ""
 
-#: seahub/templates/js/templates.html:1590
+#: seahub/templates/js/templates.html:1781
 msgid "days"
 msgstr ""
 
-#: seahub/templates/js/templates.html:1607
-#: seahub/templates/js/templates.html:1946
-#: seahub/templates/js/templates.html:1982
+#: seahub/templates/js/templates.html:1798
+#: seahub/templates/js/templates.html:2137
+#: seahub/templates/js/templates.html:2173
 msgid "Download Links"
 msgstr "Σύνδεσμοι λήψης"
 
-#: seahub/templates/js/templates.html:1610
-#: seahub/templates/js/templates.html:1950
-#: seahub/templates/js/templates.html:1986
+#: seahub/templates/js/templates.html:1801
+#: seahub/templates/js/templates.html:2141
+#: seahub/templates/js/templates.html:2177
 msgid "Upload Links"
 msgstr "Σύνδεσμοι μεταφόρτωσης"
 
-#: seahub/templates/js/templates.html:1622
-#: seahub/templates/js/templates.html:1641
+#: seahub/templates/js/templates.html:1813
+#: seahub/templates/js/templates.html:1832
 msgid "Created By"
 msgstr ""
 
-#: seahub/templates/js/templates.html:1624
-#: seahub/templates/js/templates.html:1643
-#: seahub/templates/js/templates.html:1962
-#: seahub/templates/js/templates.html:1997
+#: seahub/templates/js/templates.html:1815
+#: seahub/templates/js/templates.html:1834
+#: seahub/templates/js/templates.html:2153
+#: seahub/templates/js/templates.html:2188
 #: seahub/templates/sysadmin/userinfo.html:227
 msgid "Visits"
 msgstr "Επισκέψεις"
 
-#: seahub/templates/js/templates.html:1658
+#: seahub/templates/js/templates.html:1849
 #: seahub/templates/sysadmin/userinfo.html:238
 #: seahub/templates/sysadmin/userinfo.html:248
 #: seahub/templates/view_shared_dir.html:60
 msgid "Directory icon"
 msgstr "Εικονίδιο φακέλου"
 
-#: seahub/templates/js/templates.html:1668
-#: seahub/templates/js/templates.html:2027
-#: seahub/templates/js/templates.html:2038
-#: seahub/templates/js/templates.html:2083
+#: seahub/templates/js/templates.html:1859
+#: seahub/templates/js/templates.html:2218
+#: seahub/templates/js/templates.html:2229
+#: seahub/templates/js/templates.html:2274
 #: seahub/templates/sysadmin/sys_inst_admin.html:36
 #: seahub/templates/sysadmin/sys_publink_admin.html:25
 #: seahub/templates/sysadmin/userinfo.html:245
@@ -4647,209 +4695,217 @@ msgstr "Εικονίδιο φακέλου"
 msgid "Remove"
 msgstr "Αφαίρεση"
 
-#: seahub/templates/js/templates.html:1696
-#: seahub/templates/js/templates.html:1740
+#: seahub/templates/js/templates.html:1887
+#: seahub/templates/js/templates.html:1931
 msgid "Folder"
 msgstr ""
 
-#: seahub/templates/js/templates.html:1707
-#: seahub/templates/js/templates.html:1726
-#: seahub/templates/js/templates.html:1753
-#: seahub/templates/js/templates.html:1772
+#: seahub/templates/js/templates.html:1898
+#: seahub/templates/js/templates.html:1917
+#: seahub/templates/js/templates.html:1944
+#: seahub/templates/js/templates.html:1963
 msgid "Select a folder"
 msgstr ""
 
-#: seahub/templates/js/templates.html:1787
+#: seahub/templates/js/templates.html:1978
 msgid "Old Password"
 msgstr ""
 
-#: seahub/templates/js/templates.html:1789
+#: seahub/templates/js/templates.html:1980
 #: seahub/templates/registration/password_change_form.html:18
 msgid "New Password"
 msgstr ""
 
-#: seahub/templates/js/templates.html:1791
+#: seahub/templates/js/templates.html:1982
 msgid "New Password Again"
 msgstr ""
 
-#: seahub/templates/js/templates.html:1820
+#: seahub/templates/js/templates.html:2011
 msgid "See All Notifications"
 msgstr "Δες όλες τις Ειδοποιήσεις"
 
-#: seahub/templates/js/templates.html:1872
-#: seahub/templates/js/templates.html:1927
+#: seahub/templates/js/templates.html:2063
+#: seahub/templates/js/templates.html:2118
 msgid "Share To"
 msgstr "Κοινή χρήση με"
 
-#: seahub/templates/js/templates.html:1881
+#: seahub/templates/js/templates.html:2072
 msgid "You have not shared any library"
 msgstr "Δεν έχετε κάνει κοινή χρήση καμίας βιβλιοθήκης"
 
-#: seahub/templates/js/templates.html:1882
+#: seahub/templates/js/templates.html:2073
 msgid ""
 "You can share libraries to your friends and colleagues by clicking the share"
 " icon of your own libraries in your home page or creating a new library in "
 "groups you are in."
 msgstr "Μπορείτε να μοιραστείτε βιβλιοθήκες με τους φίλους και τους συνεργάτες σας κάνοντας κλικ στο εικονίδιο κοινή χρήση στις βιβλιοθήκες σας ή δημιουργόντας μία νέα βιβλιοθήκη στις ομάδες που ανήκετε."
 
-#: seahub/templates/js/templates.html:1895
+#: seahub/templates/js/templates.html:2086
 msgid "all members"
 msgstr "όλα τα μέλη"
 
-#: seahub/templates/js/templates.html:1936
+#: seahub/templates/js/templates.html:2127
 msgid "You have not shared any folder"
 msgstr "Δεν έχετε κάνει κοινή χρήση κανενός φακέλου"
 
-#: seahub/templates/js/templates.html:1937
+#: seahub/templates/js/templates.html:2128
 msgid ""
 "You can share a single folder with a registered user if you don't want to "
 "share a whole library."
 msgstr "Μπορείτε να κάνετε κοινή χρήση ενός φακέλου με ένα χρήστη αν δεν θέλετε να μοιραστείτε όλη τη βιβλιοθήκη."
 
-#: seahub/templates/js/templates.html:1963
-#: seahub/templates/js/templates.html:2060
+#: seahub/templates/js/templates.html:2154
+#: seahub/templates/js/templates.html:2251
 msgid "Expiration"
 msgstr "Λήξη"
 
-#: seahub/templates/js/templates.html:1971
+#: seahub/templates/js/templates.html:2162
 msgid "You don't have any download link"
 msgstr "Δεν έχετε σύνδεσμο λήψης"
 
-#: seahub/templates/js/templates.html:1972
+#: seahub/templates/js/templates.html:2163
 msgid ""
 "You can generate a download link for a folder or a file. People receive this"
 " link can view the folder or the file online."
 msgstr "Μπορείτε να δημιουργήσετε ένα σύνδεσμο λήψης για ένα φάκελο ή ένα αρχείο. Οι άνθρωποι που θα παραλάβουν αυτό το σύνδεσμο μπορούν να δουν το φάκελο ή το αρχείο online."
 
-#: seahub/templates/js/templates.html:2005
+#: seahub/templates/js/templates.html:2196
 msgid "You don't have any upload link"
 msgstr "Δεν έχετε σύνδεσμο μεταφόρτωσης"
 
-#: seahub/templates/js/templates.html:2006
+#: seahub/templates/js/templates.html:2197
 msgid ""
 "You can generate an upload link from any folder. People receive this link "
 "can upload files to this folder."
 msgstr "Μπροείτε να δημιουργήσετε ένα σύνδεσμο μεταφόρτωσης από οποιοδήποτε φάκελο. Οι άνθρωποι που θα παραλάβουν αυτό το σύνδεσμο μπορούν να μεταφορτώσουν αρχεία σε αυτό τον φάκελο."
 
-#: seahub/templates/js/templates.html:2059
+#: seahub/templates/js/templates.html:2250
 msgid "Invite Time"
 msgstr ""
 
-#: seahub/templates/js/templates.html:2061
+#: seahub/templates/js/templates.html:2252
 msgid "Accepted"
 msgstr ""
 
-#: seahub/templates/js/templates.html:2069
+#: seahub/templates/js/templates.html:2260
 msgid "You have not invited any people."
 msgstr ""
 
-#: seahub/templates/libraries.html:21
+#: seahub/templates/libraries.html:20
+msgid "Deleted Libraries"
+msgstr ""
+
+#: seahub/templates/libraries.html:30
 msgid "You have not created any libraries"
 msgstr "Δεν έχετε δημιουργήσει βιβλιοθήκες"
 
-#: seahub/templates/libraries.html:22
+#: seahub/templates/libraries.html:31
 msgid ""
 "You can create a library to organize your files. For example, you can create"
 " one for each of your projects. Each library can be synchronized and shared "
 "separately."
 msgstr "Μπορείτε να δημιουργήσετε μία βιβλιοθήκη για να οργανώσετε τα αρχεία σας. Για παράδειγμα, μπορείτε να δημιουργήσετε μία για κάθε ένα από τα έργα σας. Κάθε βιβλιοθήκη μπορεί να συγχρονιστεί και να μπει σε κοινή χρήση ξεχωριστά."
 
-#: seahub/templates/libraries.html:35
+#: seahub/templates/libraries.html:49
+msgid "No deleted libraries."
+msgstr ""
+
+#: seahub/templates/libraries.html:63
 msgid "No library is shared to you personally"
 msgstr ""
 
-#: seahub/templates/libraries.html:36
+#: seahub/templates/libraries.html:64
 msgid ""
 "No library is shared to you personally. You can find more shared libraries "
 "at \"Shared with groups\"."
 msgstr ""
 
-#: seahub/templates/libraries.html:47
+#: seahub/templates/libraries.html:75
 msgid "Add Library"
 msgstr "Προσθήκη βιβλιοθήκης"
 
-#: seahub/templates/libraries.html:49
+#: seahub/templates/libraries.html:77
 msgid "Share existing libraries"
 msgstr "Κοινή χρήση υπάρχουσων βιβλιοθηκών"
 
-#: seahub/templates/libraries.html:50
+#: seahub/templates/libraries.html:78
 msgid "Create a new library"
 msgstr "Δημιουργία μίας νέας βιβλιοθήκης"
 
-#: seahub/templates/libraries.html:61
+#: seahub/templates/libraries.html:89
 msgid "No public library"
 msgstr "Δεν υπάρχει δημόσια βιβλιοθήκη"
 
-#: seahub/templates/libraries.html:62
+#: seahub/templates/libraries.html:90
 msgid ""
 "You can create a public library by clicking \"New Library\" button, others "
 "can view and download this library."
 msgstr "Μπορείτε να δημιουργήσετε μία δημόσια βιβλιοθήκη κάνοντας κλικ στο κουμπί \"Νέα βιβλιοθήκη\", άλλοι μπορούν να προβάλλουν και να κατεβάσουν αυτή τη βιβλιοθήκη."
 
-#: seahub/templates/libraries.html:70
+#: seahub/templates/libraries.html:98
 msgid "My Groups"
 msgstr "Οι Ομάδες μου"
 
-#: seahub/templates/libraries.html:78
+#: seahub/templates/libraries.html:106
 msgid "You are not in any group"
 msgstr ""
 
-#: seahub/templates/libraries.html:80
+#: seahub/templates/libraries.html:108
 msgid ""
 "Group is a place for you and your friends leaving messages and collaborating"
 " on libraries. You can create a group by clicking \"New Group\" button."
 msgstr "Η Ομάδα είναι ένα μέρος όπου εσείς και οι φίλοι σας μπορείτε να αφήσετε μηνύματα και να συνεργαστείτε σε βιβλιοθήκες.  Μπορείτε να δημιουργήσετε μία ομάδα κάνοντας κλικ στο κουμπί \"Νέα Ομάδα\"."
 
-#: seahub/templates/libraries.html:82
+#: seahub/templates/libraries.html:110
 msgid ""
 "Group is a place for you and your friends leaving messages and collaborating"
 " on libraries. Groups you join will be listed here."
 msgstr "Η Ομάδα είναι ένα μέρος όπου εσείς και οι φίλοι σας μπορείτε να αφήσετε μηνύματα και να συνεργαστείτε σε βιβλιοθήκες.  Οι Ομάδες στις οποίες συμμετέχετε εμφανίζονται εδώ."
 
-#: seahub/templates/libraries.html:109
+#: seahub/templates/libraries.html:137
 msgid ""
 "You can share libraries by clicking the \"New Library\" button above or the "
 "\"Share\" icon on your libraries list."
 msgstr "Μπορείτε να κάνετε κοινή χρήση βιβλιοθηκών επιλέγοντας το κουμπί \"Νέα Βιβλιοθήκη\" ή το εικονίδιο \"Κοινή Χρήση\" στην λίστα βιβλιοθηκών σας."
 
-#: seahub/templates/libraries.html:110
+#: seahub/templates/libraries.html:138
 msgid ""
 "Libraries shared as writable can be downloaded and synced by other group "
 "members. Read only libraries can only be downloaded, updates by others will "
 "not be uploaded."
 msgstr "Οι βιβλιοθήκες που είναι σε κοινή χρήση ως εγγράψιμες μπορούν να κατεβούν και να συγχρονιστούν από άλλα μέλη της ομάδας.  Μη εγγράψιμες βιβλιοθήκες μπορούν μόνο να κατεβούν, οι αλλαγές από άλλους δεν θα ανεβαίνουν."
 
-#: seahub/templates/libraries.html:143
+#: seahub/templates/libraries.html:171
 msgid "Discussions"
 msgstr ""
 
-#: seahub/templates/libraries.html:147
+#: seahub/templates/libraries.html:175
 msgid "More..."
 msgstr ""
 
-#: seahub/templates/libraries.html:149
+#: seahub/templates/libraries.html:177
 msgid "No discussion in this group yet."
 msgstr ""
 
-#: seahub/templates/libraries.html:156
+#: seahub/templates/libraries.html:184
 msgid "Add a discussion..."
 msgstr "Προσθήκη συζήτησης...."
 
-#: seahub/templates/libraries.html:171
+#: seahub/templates/libraries.html:199
 msgid "You don't have any starred files yet"
 msgstr "Δεν έχετε αρχεία επισημασμένα με αστεράκι ακόμη"
 
-#: seahub/templates/libraries.html:172
+#: seahub/templates/libraries.html:200
 msgid ""
 "You can star important files by clicking the \"Star\" button on file viewing"
 " page, and they will be listed here."
 msgstr "Μπορείτε να επισημάνετε σημαντικά αρχεία με αστεράκι κάνοντας κλικ στο κουμπί \"Star\" στην σελίδα προβολής του αρχείου, και θα προβάλονται εδώ."
 
-#: seahub/templates/libraries.html:198
+#: seahub/templates/libraries.html:226
 msgid "You do not have connected devices"
 msgstr "Δεν έχετε συνδεδεμένες συσκευές"
 
-#: seahub/templates/libraries.html:199
+#: seahub/templates/libraries.html:227
 msgid "Your clients (Desktop/Android/iOS) will be listed here."
 msgstr "Οι συσκευές σας (Desktop/Android/iOS) θα προβάλλονται εδώ."
 
@@ -5788,7 +5844,7 @@ msgstr ""
 msgid "Accepted at"
 msgstr ""
 
-#: seahub/templates/sysadmin/sys_invitations_admin.html:40
+#: seahub/templates/sysadmin/sys_invitations_admin.html:42
 msgid "There is no invitation yet."
 msgstr ""
 
@@ -6413,7 +6469,7 @@ msgid "Personal Wiki Pages"
 msgstr ""
 
 #: seahub/thumbnail/views.py:46 seahub/thumbnail/views.py:170
-#: seahub/views/__init__.py:613 seahub/views/file.py:1140
+#: seahub/views/__init__.py:609 seahub/views/file.py:1178
 msgid "Invalid arguments."
 msgstr ""
 
@@ -6429,60 +6485,60 @@ msgstr ""
 msgid "permission error"
 msgstr "σφάλμα δικαιωμάτων"
 
-#: seahub/views/__init__.py:423 seahub/views/__init__.py:439
+#: seahub/views/__init__.py:419 seahub/views/__init__.py:435
 msgid "Unable to view recycle page"
 msgstr ""
 
-#: seahub/views/__init__.py:507
+#: seahub/views/__init__.py:503
 msgid "Unable to view library modification"
 msgstr ""
 
-#: seahub/views/__init__.py:574 seahub/views/__init__.py:615
-#: seahub/views/__init__.py:831 seahub/views/__init__.py:961
-#: seahub/views/file.py:1599 seahub/views/sysadmin.py:1552
+#: seahub/views/__init__.py:570 seahub/views/__init__.py:611
+#: seahub/views/__init__.py:827 seahub/views/__init__.py:957
+#: seahub/views/file.py:1649 seahub/views/sysadmin.py:1552
 msgid "Library does not exist"
 msgstr "Η βιβλιοθήκη δεν υπάρχει."
 
-#: seahub/views/__init__.py:607
+#: seahub/views/__init__.py:603
 msgid "Please specify history ID"
 msgstr ""
 
-#: seahub/views/__init__.py:617
+#: seahub/views/__init__.py:613
 msgid "History you specified does not exist"
 msgstr ""
 
-#: seahub/views/__init__.py:619
+#: seahub/views/__init__.py:615
 msgid "Unknown error"
 msgstr ""
 
-#: seahub/views/__init__.py:847
+#: seahub/views/__init__.py:843
 msgid "No revisions found"
 msgstr ""
 
-#: seahub/views/__init__.py:968 seahub/views/repo.py:196
+#: seahub/views/__init__.py:964 seahub/views/repo.py:200
 #, python-format
 msgid "\"%s\" does not exist."
 msgstr ""
 
-#: seahub/views/__init__.py:986 seahub/views/file.py:1108
+#: seahub/views/__init__.py:982 seahub/views/file.py:1146
 msgid "Internal Error"
 msgstr "Εσωτερικό σφάλμα"
 
-#: seahub/views/__init__.py:989
+#: seahub/views/__init__.py:985
 #, python-format
 msgid "Unable to download directory \"%s\": size is too large."
 msgstr ""
 
-#: seahub/views/__init__.py:1005
+#: seahub/views/__init__.py:1004
 #, python-format
 msgid "Unable to download \"%s\""
 msgstr ""
 
-#: seahub/views/__init__.py:1097
+#: seahub/views/__init__.py:1096
 msgid "Successfully enable \"Personal Wiki\"."
 msgstr ""
 
-#: seahub/views/__init__.py:1102
+#: seahub/views/__init__.py:1101
 msgid "Successfully disable \"Personal Wiki\"."
 msgstr ""
 
@@ -6498,7 +6554,7 @@ msgstr ""
 msgid "The group doesn't exist"
 msgstr ""
 
-#: seahub/views/ajax.py:226 seahub/views/ajax.py:762 seahub/views/ajax.py:1103
+#: seahub/views/ajax.py:226 seahub/views/ajax.py:762 seahub/views/ajax.py:1112
 msgid "Library is encrypted."
 msgstr ""
 
@@ -6537,28 +6593,32 @@ msgstr ""
 msgid "Failed to get file block list"
 msgstr ""
 
-#: seahub/views/ajax.py:841
+#: seahub/views/ajax.py:812
+msgid "FileServer access token invalid."
+msgstr ""
+
+#: seahub/views/ajax.py:846
 msgid "Wrong repo id"
 msgstr ""
 
-#: seahub/views/ajax.py:850 seahub/views/file.py:396 seahub/views/file.py:822
-#: seahub/views/file.py:1007 seahub/views/file.py:1608
+#: seahub/views/ajax.py:855 seahub/views/file.py:404 seahub/views/file.py:845
+#: seahub/views/file.py:1038 seahub/views/file.py:1658
 msgid "File does not exist"
 msgstr "Το αρχείο δεν υπάρχει."
 
-#: seahub/views/ajax.py:1045
+#: seahub/views/ajax.py:1050
 msgid "Bad upload link token."
 msgstr ""
 
-#: seahub/views/ajax.py:1051
+#: seahub/views/ajax.py:1056
 msgid "Bad repo id in upload link."
 msgstr ""
 
-#: seahub/views/ajax.py:1125
+#: seahub/views/ajax.py:1134
 msgid "No conflict in the merge."
 msgstr ""
 
-#: seahub/views/ajax.py:1200
+#: seahub/views/ajax.py:1209
 msgid "Failed, file is too large"
 msgstr ""
 
@@ -6570,7 +6630,7 @@ msgstr ""
 msgid "URLError: failed to open file online"
 msgstr ""
 
-#: seahub/views/file.py:166 seahub/views/file.py:1158
+#: seahub/views/file.py:166 seahub/views/file.py:1196
 msgid "The encoding you chose is not proper."
 msgstr ""
 
@@ -6578,57 +6638,63 @@ msgstr ""
 msgid "Unknown file encoding"
 msgstr ""
 
-#: seahub/views/file.py:306 seahub/views/file.py:315
+#: seahub/views/file.py:314 seahub/views/file.py:323
 #, python-format
 msgid "File size surpasses %s, can not be opened online."
 msgstr ""
 
-#: seahub/views/file.py:330
+#: seahub/views/file.py:338
 msgid "The library is encrypted, can not open file online."
 msgstr ""
 
-#: seahub/views/file.py:408 seahub/views/file.py:707 seahub/views/file.py:722
-#: seahub/views/file.py:740
+#: seahub/views/file.py:416 seahub/views/file.py:425 seahub/views/file.py:437
+#: seahub/views/file.py:488 seahub/views/file.py:727 seahub/views/file.py:742
+#: seahub/views/file.py:760 seahub/views/file.py:867 seahub/views/file.py:1050
+#: seahub/views/file.py:1063 seahub/views/file.py:1265
 msgid "Unable to view file"
 msgstr ""
 
-#: seahub/views/file.py:767
+#: seahub/views/file.py:787
 msgid "Unable to download file, invalid file path"
 msgstr ""
 
-#: seahub/views/file.py:776
+#: seahub/views/file.py:796
 msgid "Unable to download file, wrong file path"
 msgstr ""
 
-#: seahub/views/file.py:781
+#: seahub/views/file.py:801
 msgid "Unable to download file, share link traffic is used up."
 msgstr ""
 
-#: seahub/views/file.py:850
+#: seahub/views/file.py:817
+msgid "Unable to download file."
+msgstr ""
+
+#: seahub/views/file.py:877
 msgid "Unable to view raw file, share link traffic is used up."
 msgstr ""
 
-#: seahub/views/file.py:1130
+#: seahub/views/file.py:1168
 msgid "The library does not exist."
 msgstr ""
 
-#: seahub/views/file.py:1134
+#: seahub/views/file.py:1172
 msgid "The library is encrypted."
 msgstr ""
 
-#: seahub/views/file.py:1215
+#: seahub/views/file.py:1253
 msgid "Unable to edit file"
 msgstr ""
 
-#: seahub/views/file.py:1221
+#: seahub/views/file.py:1259
 msgid "The file does not exist."
 msgstr ""
 
-#: seahub/views/file.py:1250
+#: seahub/views/file.py:1291
 msgid "Edit online is not offered for this type of file."
 msgstr ""
 
-#: seahub/views/file.py:1360
+#: seahub/views/file.py:1402 seahub/views/file.py:1407
 msgid "Unable to download file"
 msgstr ""
 
@@ -6804,7 +6870,7 @@ msgstr ""
 msgid "Invalid value"
 msgstr ""
 
-#: seahub/views/sysadmin.py:2367
+#: seahub/views/sysadmin.py:2388
 msgid "Successfully deleted 1 item"
 msgstr ""
 

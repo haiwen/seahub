@@ -24,7 +24,7 @@
                 <span class="meta-info split">
                     <span class="author">
                         {% if current_commit.props.creator_name %}
-                        <img src="{% avatar_url current_commit.props.creator_name 20 %}" width="20" class="avatar" />
+                        <img src="{% avatar_url current_commit.props.creator_name 40 %}" width="20" class="avatar" />
                         <a class="name" href="{% url 'user_profile' current_commit.props.creator_name %}">{{ current_commit.props.creator_name|email2nickname }}</a>
                         {% else %}
                         {% trans "Unknown"%}

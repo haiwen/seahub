@@ -364,3 +364,52 @@ class DirViewTest(BaseTestCase):
         resp = self.client.delete(self.url + '?p=' + self.folder_path,
                 {}, 'application/x-www-form-urlencoded')
         self.assertEqual(403, resp.status_code)
+
+
+class DirDetailViewTest(BaseTestCase):
+
+    def setUp(self):
+        self.repo_id = self.repo.id
+        self.folder_path = self.folder
+        self.folder_name = os.path.basename(self.folder_path)
+
+        self.user_name = self.user.username
+        self.admin_name = self.admin.username
+
+        self.url = reverse('api-v2.1-dir-detail-view', args=[self.repo_id])
+
+    def tearDown(self):
+        self.remove_repo()
+
+    def test_can_get_dir_detail(self):
+
+        seafile_api.post_dir(self.repo_id, self.folder_path, randstring(3),
+                self.user_name)
+        seafile_api.post_empty_file(self.repo_id, self.folder_path, randstring(3),
+                self.user_name)
+
+        self.login_as(self.user)
+        resp = self.client.get(self.url + '?path=%s' % self.folder_path)
+        self.assertEqual(200, resp.status_code)
+        json_resp = json.loads(resp.content)
+
+        assert json_resp['name'] == self.folder_name
+        assert json_resp['file_count'] == 1
+        assert json_resp['dir_count'] == 1
+
+    def test_get_dir_detail_with_invalid_perm(self):
+
+        self.login_as(self.admin)
+
+        resp = self.client.get(self.url + '?path=%s' % self.folder_path)
+        self.assertEqual(403, resp.status_code)
+
+    def test_get_dir_detail_without_path_parameter(self):
+
+        self.login_as(self.user)
+
+        resp = self.client.get(self.url)
+        self.assertEqual(400, resp.status_code)
+
+        resp = self.client.get(self.url + '?path=/')
+        self.assertEqual(400, resp.status_code)

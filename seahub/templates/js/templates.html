@@ -154,6 +154,30 @@
     </div>
 </script>
 
+<script type="text/template" id="deleted-repo-tmpl">
+    <td>
+        <img src="<%= icon_url %>" title="<%= icon_title %>" alt="<%= icon_title %>" width="24" />
+    </td>
+    <td><%- repo_name %></td>
+    <td><span title="<%= time %>"><%= time_from_now %></span></td>
+    <td>
+        <a href="#" class="sf2-icon-reply sf2-x restore op-icon vh" title="{% trans "Restore" %}" aria-label="{% trans "Restore" %}"></a>
+    </td>
+</script>
+<script type="text/template" id="deleted-repo-mobile-tmpl">
+    <td>
+        <img src="<%= icon_url %>" title="<%= icon_title %>" alt="<%= icon_title %>" width="24" />
+    </td>
+    <td>
+        <span class="repo-name-span">
+            <%- repo_name %><br />
+            <span class="repo-meta-info" title="<%= time %>"><%= time_from_now %></span>
+        </span>
+    </td>
+    <td>
+        <a href="#" class="sf2-icon-reply sf2-x restore op-icon" title="{% trans "Restore" %}" aria-label="{% trans "Restore" %}"></a>
+    </td>
+</script>
 
 <script type="text/template" id="group-repo-tmpl">
     <td>
@@ -394,14 +418,18 @@
                     <% if (app.pageOptions.folder_perm_enabled && is_repo_owner && !is_virtual && has_been_shared_out) { %>
                     <li><a class="op set-folder-permission" href="#">{% trans "Permission" %}</a></li>
                     <% } %>
+                    <li><a class="op view-details" href="#">{% trans "Details" %}</a></li>
                     <li><a class="op open-via-client" href="seafile://openfile?repo_id=<%- repo_id %>&path=<% print(encodeURIComponent(dirent_path + '/')); %>">{% trans "Open via Client" %}</a></li>
                 </ul>
             </div>
-            <% } else if (dirent.perm == 'r' && !repo_encrypted) { %>
+            <% } else if (dirent.perm == 'r') { %>
             <div class="sf-dropdown sf-dropdown-inline">
                 <a href="#" class="more-op-icon sf2-icon-caret-down op-icon vh sf-dropdown-toggle" title="{% trans "More Operations" %}" aria-label="{% trans "More Operations" %}"></a>
                 <ul class="hidden-op dirent-hidden-op hide sf-dropdown-menu">
+                    <% if (!repo_encrypted) { %>
                     <li><a class="op cp" href="#">{% trans "Copy" %}</a></li>
+                    <% } %>
+                    <li><a class="op view-details" href="#">{% trans "Details" %}</a></li>
                 </ul>
             </div>
             <% } %>
@@ -450,9 +478,13 @@
                     <% if (app.pageOptions.folder_perm_enabled && is_repo_owner && !is_virtual && has_been_shared_out) { %>
                     <li><a class="op set-folder-permission" href="#">{% trans "Permission" %}</a></li>
                     <% } %>
+                    <li><a class="op view-details" href="#">{% trans "Details" %}</a></li>
                     <li><a class="op open-via-client" href="seafile://openfile?repo_id=<%- repo_id %>&path=<% print(encodeURIComponent(dirent_path + '/')); %>">{% trans "Open via Client" %}</a></li>
-            <% } else if (dirent.perm == 'r' && !repo_encrypted) { %>
+            <% } else if (dirent.perm == 'r') { %>
+                    <% if (!repo_encrypted) { %>
                     <li><a class="op cp" href="#">{% trans "Copy" %}</a></li>
+                    <% } %>
+                    <li><a class="op view-details" href="#">{% trans "Details" %}</a></li>
             <% } %>
                 </ul>
             </div>
@@ -532,14 +564,18 @@
                         <li><a class="op lock-file" href="#">{% trans "Lock" %}</a></li>
                         <% } %>
                     <% } %>
+                    <li><a class="op view-details" href="#">{% trans "Details" %}</a></li>
                     <li><a class="op open-via-client" href="seafile://openfile?repo_id=<%- repo_id %>&path=<% print(encodeURIComponent(dirent_path)); %>">{% trans "Open via Client" %}</a></li>
                 </ul>
             </div>
-            <% } else if (dirent.perm == 'r' && !repo_encrypted) { %>
+            <% } else if (dirent.perm == 'r') { %>
             <div class="sf-dropdown sf-dropdown-inline">
                 <a class="more-op-icon sf2-icon-caret-down op-icon vh sf-dropdown-toggle" title="{% trans "More Operations" %}" aria-label="{% trans "More Operations" %}"></a>
                 <ul class="hidden-op dirent-hidden-op hide sf-dropdown-menu">
+                    <% if (!repo_encrypted) { %>
                     <li><a class="op cp" href="#">{% trans "Copy" %}</a></li>
+                    <% } %>
+                    <li><a class="op view-details" href="#">{% trans "Details" %}</a></li>
                 </ul>
             </div>
             <% } %>
@@ -632,9 +668,13 @@
                         <li><a class="op lock-file" href="#">{% trans "Lock" %}</a></li>
                         <% } %>
                     <% } %>
+                    <li><a class="op view-details" href="#">{% trans "Details" %}</a></li>
                     <li><a class="op open-via-client" href="seafile://openfile?repo_id=<%- repo_id %>&path=<% print(encodeURIComponent(dirent_path)); %>">{% trans "Open via Client" %}</a></li>
-            <% } else if (dirent.perm == 'r' && !repo_encrypted) { %>
+            <% } else if (dirent.perm == 'r') { %>
+                    <% if (!repo_encrypted) { %>
                     <li><a class="op cp" href="#">{% trans "Copy" %}</a></li>
+                    <% } %>
+                    <li><a class="op view-details" href="#">{% trans "Details" %}</a></li>
             <% } %>
                 </ul>
             </div>
@@ -684,6 +724,9 @@
         <li><a class="op cp" href="#">{% trans "Copy" %}</a></li>
         <li><a class="op file-history" href="{{ SITE_ROOT }}repo/file_revisions/<%= repo_id %>/?p=<% print(encodeURIComponent(dirent_path)); %>&referer=<% print(encodeURIComponent(location.href)); %>">{% trans "History" %}</a></li>
             <% if (is_pro) { %>
+                    <% if (file_audit_enabled) { %>
+                    <li><a class="op" href="{{ SITE_ROOT }}repo/file-access/<%= repo_id %>/?p=<% print(encodeURIComponent(dirent_path)); %>" target="_blank">{% trans "Access Log" %}</a></li>
+                    <% } %>
                 <% if (dirent.is_locked) { %>
                     <% if (dirent.locked_by_me) { %>
         <li><a class="op unlock-file" href="#">{% trans "Unlock" %}</a></li>
@@ -692,7 +735,13 @@
         <li><a class="op lock-file" href="#">{% trans "Lock" %}</a></li>
                 <% } %>
             <% } %>
+        <li><a class="op view-details" href="#">{% trans "Details" %}</a></li>
         <li><a class="op open-via-client" href="seafile://openfile?repo_id=<%= repo_id %>&path=<% print(encodeURIComponent(dirent_path)); %>">{% trans "Open via Client" %}</a></li>
+        <% } else if (dirent.perm == 'r') { %>
+            <% if (!repo_encrypted) { %>
+            <li><a class="op cp" href="#">{% trans "Copy" %}</a></li>
+            <% } %>
+            <li><a class="op view-details" href="#">{% trans "Details" %}</a></li>
         <% } %>
     </ul>
 </script>
@@ -711,9 +760,94 @@
             <% if (app.pageOptions.folder_perm_enabled && is_repo_owner) { %>
         <li><a class="op set-folder-permission" href="#">{% trans "Permission" %}</a></li>
             <% } %>
+
+        <li><a class="op view-details" href="#">{% trans "Details" %}</a></li>
         <li><a class="op open-via-client" href="seafile://openfile?repo_id=<%= repo_id %>&path=<% print(encodeURIComponent(dirent_path)); %>">{% trans "Open via Client" %}</a></li>
+        <% } else if (dirent.perm == 'r') { %>
+            <% if (!repo_encrypted) { %>
+            <li><a class="op cp" href="#">{% trans "Copy" %}</a></li>
+            <% } %>
+            <li><a class="op view-details" href="#">{% trans "Details" %}</a></li>
         <% } %>
     </ul>
+</script>
+
+<script type="text/template" id="dirent-details-tmpl">
+    <div class="right-side-panel-hd ovhd">
+        <a href="#" title="{% trans "Close" %}" aria-label="{% trans "Close" %}" class="sf-popover-close js-close sf2-icon-x1 op-icon fleft"></a>
+        <h3 class="right-side-panel-title">
+            <img src="<%= icon_url %>" width="24" alt="" class="vam" />
+            <span class="vam ellipsis details-panel-item-name" title="<%- dirent.obj_name %>"><%- dirent.obj_name %></span>
+        </h3>
+    </div>
+    <div class="right-side-panel-con">
+        <div class="details-panel-img-container image-file-view">
+            <span class="loading-icon"></span>
+            <% if (thumbnail_url) { %>
+            <img src="<%= thumbnail_url %>" class="thumbnail hide" alt="" />
+            <% } else { %>
+            <img src="<%= big_icon_url %>" width="96" class="hide" alt="" />
+            <% } %>
+        </div>
+
+        <div class="details-panel-text-info-container">
+            <% if (dirent.is_file) { %>
+            <table>
+                <tr class="vh">
+                    <th width="35%"></th>
+                    <td width="65%"></td>
+                </tr>
+                <tr>
+                    <th>{% trans "Size" %}</th>
+                    <td><%= dirent.file_size %></td>
+                </tr>
+                <tr>
+                    <th>{% trans "Location" %}</th>
+                    <td><%- path %></td>
+                </tr>
+                <% if (dirent.last_modified) { %>
+                <tr>
+                    <th>{% trans "Last Update" %}</th>
+                    <td><%= dirent.last_update %></td>
+                </tr>
+                <% } %>
+            </table>
+
+            <% } else { %>
+            <p class="loading-icon loading-tip"></p>
+            <p class="error hide"></p>
+            <table class="hide">
+                <tr class="vh">
+                    <th width="35%"></th>
+                    <td width="65%"></td>
+                </tr>
+                <tr>
+                    <th>{% trans "Folders" %}</th>
+                    <td class="dir-folder-counts"></td>
+                </tr>
+                <tr>
+                    <th>{% trans "Files" %}</th>
+                    <td class="dir-file-counts"></td>
+                </tr>
+                <tr>
+                    <th>{% trans "Size" %}</th>
+                    <td class="dir-size"></td>
+                </tr>
+
+                <tr>
+                    <th>{% trans "Location" %}</th>
+                    <td><%- path %></td>
+                </tr>
+                <% if (dirent.last_modified) { %>
+                <tr>
+                    <th>{% trans "Last Update" %}</th>
+                    <td><%= dirent.last_update %></td>
+                </tr>
+                <% } %>
+            </table>
+            <% } %>
+        </div>
+    </div>
 </script>
 
 <script type="text/template" id="share-popup-tmpl">
@@ -1260,13 +1394,13 @@
 
 
 <script type="text/template" id="my-repos-hd-tmpl">
-   <tr>
-       <th width="4%"><span class="sr-only">{% trans "Library Type" %}</span><!--icon--></th>
-       <th width="42%"><a class="table-sort-op by-name" href="#">{% trans "Name" %} <span class="sort-icon icon-caret-down hide"></span></a></th>
-       <th width="14%"><span class="sr-only">{% trans "Actions" %}</span></th>
-       <th width="20%">{% trans "Size" %}</th>
-       <th width="20%"><a class="table-sort-op by-time" href="#">{% trans "Last Update" %} <span class="sort-icon icon-caret-up"></span></a></th>
-   </tr>
+    <tr>
+        <th width="4%"><span class="sr-only">{% trans "Library Type" %}</span><!--icon--></th>
+        <th width="42%"><a class="table-sort-op by-name" href="#">{% trans "Name" %} <span class="sort-icon icon-caret-down hide"></span></a></th>
+        <th width="14%"><span class="sr-only">{% trans "Actions" %}</span></th>
+        <th width="20%">{% trans "Size" %}</th>
+        <th width="20%"><a class="table-sort-op by-time" href="#">{% trans "Last Update" %} <span class="sort-icon icon-caret-up"></span></a></th>
+    </tr>
 </script>
 <script type="text/template" id="my-repos-hd-mobile-tmpl">
     <tr>
@@ -1278,6 +1412,23 @@
         <th width="4%"><span class="sr-only">{% trans "Actions" %}</span></th>
     </tr>
 </script>
+
+<script type="text/template" id="my-deleted-repos-hd-tmpl">
+    <tr>
+        <th width="4%"><span class="sr-only">{% trans "Library Type" %}</span><!--icon--></th>
+        <th width="52%">{% trans "Name" %}</th>
+        <th width="30%">{% trans "Deleted Time" %}</th>
+        <th width="14%"><span class="sr-only">{% trans "Actions" %}</span></th>
+    </tr>
+</script>
+<script type="text/template" id="my-deleted-repos-hd-mobile-tmpl">
+    <tr class="vh">
+        <th width="4%"><span class="sr-only">{% trans "Library Type" %}</span><!--icon--></th>
+        <th width="82%">{% trans "Name" %}{% trans "Deleted Time" %}</th>
+        <th width="14%"><span class="sr-only">{% trans "Actions" %}</span></th>
+    </tr>
+</script>
+
 <script type="text/template" id="shared-repos-hd-tmpl">
     <tr>
         <th width="4%"><span class="sr-only">{% trans "Library Type" %}</span><!--icon--></th>

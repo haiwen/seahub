@@ -153,18 +153,25 @@ define([
                 }
 
                 var upload_file = function() {
+
+                    var ajax_url, ajax_data;
+
+                    if (dirents.is_system_library) {
+                        ajax_url = Common.getUrl({ name: 'admin-system-library-upload-link', repo_id: dirents.repo_id });
+                        ajax_data = { 'from': 'web', 'path': dirents.path };
+                    } else {
+                        ajax_url = Common.getUrl({ name: 'repo_upload_link', repo_id: dirents.repo_id });
+                        ajax_data = { 'from': 'web', 'p': dirents.path };
+                    }
                     $.ajax({
-                        url: Common.getUrl({
-                            name: 'repo_upload_link',
-                            repo_id: dirents.repo_id
-                            }),
-                        data: {
-                            'from': 'web',
-                            'p': dirents.path
-                        },
+                        url: ajax_url,
+                        data: ajax_data,
                         cache: false,
                         dataType: 'json',
                         success: function(returned_url) {
+                            if (dirents.is_system_library) {
+                                returned_url = returned_url['upload_link'];
+                            }
                             if (enable_upload_folder && file.relative_path) { // 'add folder'
                                 var file_path = file.relative_path,
                                     r_path = file_path.substring(0, file_path.lastIndexOf('/') + 1),
@@ -249,7 +256,7 @@ define([
                 $(files).each(function() {
                     file_names.push(this.get('obj_name'));
                 });
-                if (file_names.indexOf(file.name) != -1) { // file with the same name already exists in the dir
+                if (!dirents.is_system_library && file_names.indexOf(file.name) != -1) { // file with the same name already exists in the dir
                     var confirm_title = gettext("Replace file {filename}?")
                         .replace('{filename}', '<span class="op-target">' + Common.HTMLescape(file.name) + '</span>');
                     var confirm_popup = $(_this.fileupdateConfirmTemplate({
