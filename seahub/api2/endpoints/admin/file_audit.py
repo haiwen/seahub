@@ -1,4 +1,6 @@
 # Copyright (c) 2012-2016 Seafile Ltd.
+import logging
+
 from rest_framework.authentication import SessionAuthentication
 from rest_framework.permissions import IsAdminUser
 from rest_framework.response import Response
@@ -12,23 +14,24 @@ from .utils import check_time_period_valid, \
 
 from seahub.api2.authentication import TokenAuthentication
 from seahub.api2.throttling import UserRateThrottle
+from seahub.api2.permissions import IsProVersion
 from seahub.api2.utils import api_error
 
-from seahub.base.templatetags.seahub_tags import email2nickname
+from seahub.api2.endpoints.utils import get_user_name_dict, \
+        get_user_contact_email_dict
+
 from seahub.utils.timeutils import datetime_to_isoformat_timestr
-from seahub.utils import is_pro_version
+
+logger = logging.getLogger(__name__)
+
 
 class FileAudit(APIView):
 
-    authentication_classes = (TokenAuthentication, SessionAuthentication )
-    permission_classes = (IsAdminUser,)
+    authentication_classes = (TokenAuthentication, SessionAuthentication)
+    permission_classes = (IsAdminUser, IsProVersion)
     throttle_classes = (UserRateThrottle,)
 
     def get(self, request):
-
-        if not is_pro_version():
-            error_msg = 'Feature disabled.'
-            return api_error(status.HTTP_403_FORBIDDEN, error_msg)
 
         # check the date format, should be like '2015-10-10'
         start = request.GET.get('start', None)
@@ -38,23 +41,51 @@ class FileAudit(APIView):
             error_msg = 'start or end date invalid.'
             return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
 
-        result = []
-        events = get_log_events_by_type_and_time('file_audit', start, end)
-        if events:
-            for ev in events:
-                tmp_repo = seafile_api.get_repo(ev.repo_id)
-                tmp_repo_name = tmp_repo.name if tmp_repo else ''
+        try:
+            events = get_log_events_by_type_and_time('file_audit', start, end)
+        except Exception as e:
+            logger.error(e)
+            error_msg = 'Internal Server Error'
+            return api_error(status.HTTP_500_INTERNAL_SERVER_ERROR, error_msg)
 
+        result = []
+        if events:
+
+            # get name/contact_email dict for events user/repo_owner
+            ev_user_list = []
+            ev_repo_owner_list = []
+            for ev in events:
+                repo_id = ev.repo_id
+                repo = seafile_api.get_repo(repo_id)
+
+                ev.repo_name = repo.name if repo else ''
+                ev.repo_owner = seafile_api.get_repo_owner(repo_id) if repo else ''
+
+                ev_user_list.append(ev.user)
+                ev_repo_owner_list.append(ev.repo_owner)
+
+            ev_user_name_dict = get_user_name_dict(ev_user_list)
+            ev_user_contact_email_dict = get_user_contact_email_dict(ev_user_list)
+            ev_repo_owner_name_dict = get_user_name_dict(ev_repo_owner_list)
+            ev_repo_owner_contact_email_dict = get_user_contact_email_dict(ev_repo_owner_list)
+
+            for ev in events:
                 result.append({
                     'repo_id': ev.repo_id,
-                    'repo_name': tmp_repo_name,
+                    'repo_name': ev.repo_name,
+
+                    'repo_owner_email': ev.repo_owner,
+                    'repo_owner_name': ev_repo_owner_name_dict[ev.repo_owner],
+                    'repo_owner_contact_email': ev_repo_owner_contact_email_dict[ev.repo_owner],
+
                     'time': datetime_to_isoformat_timestr(ev.timestamp),
-                    'etype': ev.etype,
                     'ip': ev.ip,
                     'file_path': ev.file_path,
                     'etype': ev.etype,
-                    'user_name': email2nickname(ev.user),
-                    'user_email': ev.user
+
+                    'user_email': ev.user,
+                    'user_name': ev_user_name_dict[ev.user],
+                    'user_contact_email': ev_user_contact_email_dict[ev.user],
                 })
 
         return Response(result)
