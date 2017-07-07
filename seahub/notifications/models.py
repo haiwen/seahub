@@ -9,6 +9,7 @@ from django.db import models
 from django.forms import ModelForm, Textarea
 from django.utils.html import escape
 from django.utils.translation import ugettext as _
+from django.core.cache import cache
 
 import seaserv
 from seaserv import seafile_api, ccnet_api
@@ -19,6 +20,7 @@ from seahub.utils.repo import get_repo_shared_users
 
 # Get an instance of a logger
 logger = logging.getLogger(__name__)
+
 
 ########## system notification
 class Notification(models.Model):
@@ -79,6 +81,10 @@ def file_comment_msg_to_json(repo_id, file_path, author, comment):
                        'author': author,
                        'comment': comment})
 
+def get_cache_key_of_unseen_notifications(username):
+
+    return "%s_unseen_notifications_count" % username
+
 
 class UserNotificationManager(models.Manager):
     def _add_user_notification(self, to_user, msg_type, detail):
@@ -92,6 +98,10 @@ class UserNotificationManager(models.Manager):
         n = super(UserNotificationManager, self).create(
             to_user=to_user, msg_type=msg_type, detail=detail)
         n.save()
+
+        cache_key = get_cache_key_of_unseen_notifications(to_user)
+        cache.delete(cache_key)
+
         return n
 
     def get_all_notifications(self, seen=None, time_since=None):
