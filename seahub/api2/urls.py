@@ -3,7 +3,7 @@ from django.conf.urls import patterns, url, include
 
 from .views import *
 from .views_misc import ServerInfoView
-from .views_auth import LogoutDeviceView, ClientLoginTokenView
+from .views_auth import LogoutDeviceView, ClientLoginTokenView, TwoFactorAuthView
 from .endpoints.dir_shared_items import DirSharedItemsEndpoint
 from .endpoints.account import Account
 from .endpoints.shared_upload_links import SharedUploadLinksView
@@ -24,6 +24,7 @@ urlpatterns = patterns('',
     url(r'^server-info/$', ServerInfoView.as_view()),
     url(r'^logout-device/$', LogoutDeviceView.as_view()),
     url(r'^client-login/$', ClientLoginTokenView.as_view()),
+    url(r'^two-factor-auth-view/$', TwoFactorAuthView.as_view(), name="two-factor-auth-view"),
     url(r'^device-wiped/$', RemoteWipeReportView.as_view()),
     url(r'^wopi/', include('seahub.wopi.urls')),
 

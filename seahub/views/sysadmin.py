@@ -76,7 +76,7 @@ try:
     from seahub.settings import MULTI_TENANCY
 except ImportError:
     MULTI_TENANCY = False
-from seahub.utils.two_factor_auth import HAS_TWO_FACTOR_AUTH
+from seahub.utils.two_factor_auth import has_two_factor_auth
 from termsandconditions.models import TermsAndConditions
 
 logger = logging.getLogger(__name__)
@@ -618,6 +618,11 @@ def user_info(request, email):
         else:
             g.role = _('Member')
 
+    _default_device = False
+    if has_two_factor_auth():
+        from seahub_extra.two_factor.utils import default_device
+        _default_device =  default_device(request.user)
+
     return render_to_response(
         'sysadmin/userinfo.html', {
             'owned_repos': owned_repos,
@@ -631,6 +636,7 @@ def user_info(request, email):
             'user_shared_links': user_shared_links,
             'enable_sys_admin_view_repo': ENABLE_SYS_ADMIN_VIEW_REPO,
             'personal_groups': personal_groups,
+            'default_device': _default_device,
         }, context_instance=RequestContext(request))
 
 @login_required_ajax

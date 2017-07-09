@@ -94,6 +94,17 @@
                 </span>
                 <span id="set-quota" title="{% trans "Edit Quota" %}" class="sf2-icon-edit op-icon"></span>
             </dd>
+
+			<dt>{% trans "Two Factor Auth"  %}</dt>
+			<dd id="factor">
+				{% if default_device %}
+				<button type="button" id="disable_auth">Disable Two Factor Auth</button>
+				{% else %}
+				<button type="button" style="color:#AAA"disabled="disabled">Disable Two Factor Auth</button>
+				{% endif %}
+				<p class="error hide"></p>
+			</dd>
+
         </dl>
 
         <form id="set-name-form" method="post" action="" class="hide">{% csrf_token %}
@@ -331,6 +342,27 @@ $('#set-quota').click(function() {
     $("#set-quota-form").modal({appendTo: "#main"});
     $('#simplemodal-container').css({'width':'auto', 'height':'auto'});
 });
+$("#disable_auth").click(function(){
+    var $error = $('.error', $("#factor"));
+	$.ajax({
+		url: '{% url 'two-factor-auth-view' %}',
+		type: 'DELETE',
+		cache: false,
+		beforeSend: prepareCSRFToken,
+		success:function(data){
+			location.reload(true);
+		},
+        error: function(xhr, textStatus, errorThrown) {
+            var err_msg;
+            if (xhr.responseText) {
+                err_msg = $.parseJSON(xhr.responseText).error_msg;
+            } else {
+                err_msg = "{% trans "Failed. Please check the network." %}";
+            }
+            $error.html(err_msg).show();
+        }
+	})
+})
 
 $('#set-name-form').submit(function() {
     var nickname = $.trim($('[name="nickname"]', $(this)).val());

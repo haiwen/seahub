@@ -1,6 +1,8 @@
 # Copyright (c) 2012-2016 Seafile Ltd.
 from rest_framework import status
-from rest_framework.permissions import IsAuthenticated
+from rest_framework.permissions import IsAuthenticated, IsAdminUser
+from rest_framework.authentication import SessionAuthentication
+from rest_framework.response import Response
 
 from seaserv import seafile_api
 from seahub import settings
@@ -12,6 +14,7 @@ from seahub.api2.models import Token, TokenV2
 from seahub.base.models import ClientLoginToken
 from seahub.utils import gen_token
 from seahub.utils.two_factor_auth import has_two_factor_auth, two_factor_auth_enabled
+from seahub_extra.two_factor import devices_for_user
 
 class LogoutDeviceView(APIView):
     """Removes the api token of a device that has already logged in. If the device
@@ -49,3 +52,15 @@ class ClientLoginTokenView(APIView):
         token = ClientLoginToken(randstr, request.user.username)
         token.save()
         return {'token': randstr}
+
+class TwoFactorAuthView(APIView):
+    authentication_classes = (TokenAuthentication, SessionAuthentication)
+    throttle_classes = (UserRateThrottle,)
+    permission_classes = (IsAdminUser,)
+
+    def delete(self, request):
+        devices = devices_for_user(request.user)
+        if devices:
+            for device in devices:
+                device.delete()
+        return Response({'success':True}, status=status.HTTP_200_OK)
