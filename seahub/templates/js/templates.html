@@ -917,7 +917,7 @@
                         <dd id="direct-dl-link"></dd>
                         <% } %>
                     </dl>
-                    {% if user.permissions.can_send_share_upload_link_mail %}
+                    {% if user.permissions.can_send_share_link_mail %}
                         <button id="send-download-link">{% trans 'Send' %}</button>
                     {% endif %}
                     <button id="delete-download-link">{% trans 'Delete' %}</button>
@@ -960,7 +960,7 @@
                 </form>
                 <div id="upload-link-operations" class="hide">
                     <p><span class="vam">{% trans 'Upload Link: ' %}</span><span id="upload-link"></span><!--input type="text" readonly="readonly" id="shared-link-text" class="vam" /--></p>
-                    {% if user.permissions.can_send_share_upload_link_mail %}
+                    {% if user.permissions.can_send_share_link_mail %}
                         <button id="send-upload-link">{% trans 'Send' %}</button>
                     {% endif %}
                     <button id="delete-upload-link">{% trans 'Delete' %}</button>
