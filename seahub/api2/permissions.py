@@ -80,11 +80,11 @@ class CanGenerateUploadLink(BasePermission):
     def has_permission(self, request, *args, **kwargs):
         return request.user.permissions.can_generate_upload_link()
 
-class CanSendShareUploadLinkMail(BasePermission):
+class CanSendShareLinkMail(BasePermission):
     """Check user has permission to generate upload link.
     """
     def has_permission(self, request, *args, **kwargs):
-        return request.user.permissions.can_send_share_upload_link_mail()
+        return request.user.permissions.can_send_share_link_mail()
    
 class IsProVersion(BasePermission):
     """
