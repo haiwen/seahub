@@ -17,6 +17,7 @@ from seaserv import seafile_api, ccnet_api
 from seahub.base.fields import LowerCaseCharField
 from seahub.base.templatetags.seahub_tags import email2nickname
 from seahub.utils.repo import get_repo_shared_users
+from seahub.utils import normalize_cache_key
 
 # Get an instance of a logger
 logger = logging.getLogger(__name__)
@@ -47,6 +48,8 @@ MSG_TYPE_REPO_SHARE = 'repo_share'
 MSG_TYPE_REPO_SHARE_TO_GROUP = 'repo_share_to_group'
 MSG_TYPE_USER_MESSAGE = 'user_message'
 MSG_TYPE_FILE_COMMENT = 'file_comment'
+
+USER_NOTIFICATION_COUNT_CACHE_PREFIX = 'USER_NOTIFICATION_COUNT_'
 
 def file_uploaded_msg_to_json(file_name, repo_id, uploaded_to):
     """Encode file uploaded message to json string.
@@ -82,8 +85,8 @@ def file_comment_msg_to_json(repo_id, file_path, author, comment):
                        'comment': comment})
 
 def get_cache_key_of_unseen_notifications(username):
-
-    return "%s_unseen_notifications_count" % username
+    return normalize_cache_key(username,
+            USER_NOTIFICATION_COUNT_CACHE_PREFIX)
 
 
 class UserNotificationManager(models.Manager):
