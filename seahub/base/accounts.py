@@ -116,8 +116,8 @@ class UserPermissions(object):
     def can_generate_upload_link(self):
         return get_enabled_role_permissions_by_role(self.user.role)['can_generate_upload_link']
 
-    def can_send_share_upload_link_mail(self):
-        return get_enabled_role_permissions_by_role(self.user.role)['can_send_share_upload_link_mail']
+    def can_send_share_link_mail(self):
+        return get_enabled_role_permissions_by_role(self.user.role)['can_send_share_link_mail']
 
     def can_use_global_address_book(self):
         return get_enabled_role_permissions_by_role(self.user.role)['can_use_global_address_book']
