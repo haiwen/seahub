@@ -6,9 +6,13 @@ from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 from rest_framework.views import APIView
 
+from django.core.cache import cache
+
 from seahub.api2.authentication import TokenAuthentication
 from seahub.api2.throttling import UserRateThrottle
 from seahub.notifications.models import UserNotification
+
+from seahub.notifications.models import get_cache_key_of_unseen_notifications
 
 logger = logging.getLogger(__name__)
 json_content_type = 'application/json; charset=utf-8'
@@ -26,10 +30,22 @@ class NotificationsView(APIView):
         1. login user.
         """
 
-        username = request.user.username
-        unseen_count = UserNotification.objects.count_unseen_user_notifications(username)
         result = {}
-        result['unseen_count'] = unseen_count
+
+        username = request.user.username
+        cache_key = get_cache_key_of_unseen_notifications(username)
+
+        count_from_cache = cache.get(cache_key, None)
+
+        # for case of count value is `0`
+        if count_from_cache is not None:
+            result['unseen_count'] = count_from_cache
+        else:
+            count_from_db = UserNotification.objects.count_unseen_user_notifications(username)
+            result['unseen_count'] = count_from_db
+
+            # set cache
+            cache.set(cache_key, count_from_db)
 
         return Response(result)
 
@@ -46,6 +62,9 @@ class NotificationsView(APIView):
         for notice in unseen_notices:
             notice.seen = True
             notice.save()
+
+        cache_key = get_cache_key_of_unseen_notifications(username)
+        cache.delete(cache_key)
 
         return Response({'success': True})
 
@@ -73,5 +92,9 @@ class NotificationView(APIView):
         if not notice.seen:
             notice.seen = True
             notice.save()
+
+        username = request.user.username
+        cache_key = get_cache_key_of_unseen_notifications(username)
+        cache.delete(cache_key)
 
         return Response({'success': True})
