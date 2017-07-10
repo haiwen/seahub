@@ -4,16 +4,22 @@
 {% block cur_invitations %}tab-cur{% endblock %}
 
 {% block right_panel %}
-<h3 class="hd">{% trans "All Invitations" %}</h3>
+
+<div class="hd ovhd">
+    <h3 class="fleft">{% trans "All Invitations" %}</h3>
+
+    <button id="rm-expire-invitations" class="fright btn-white">{% trans "Delete Expired Invitations" %}</button>
+</div>
 
 {% if invitations %}
 <table>
     <tr>
-        <th width="25%">{% trans "Inviter" %}</th>
-        <th width="25%">{% trans "Accepter" %}</th>
-        <th width="10%">{% trans "Type" %}</th>
-        <th width="16%">{% trans "Invited at" %}</th>
-        <th width="16%">{% trans "Accepted at" %}</th>
+        <th width="20%">{% trans "Inviter" %}</th>
+        <th width="20%">{% trans "Accepter" %}</th>
+        <th width="9%">{% trans "Type" %}</th>
+        <th width="14%">{% trans "Invited at" %}</th>
+        <th width="14%">{% trans "Accepted at" %}</th>
+        <th width="18%">{% trans "Expired at" %}</th>
         <th width="8%"></th>
     </tr>
     {% for invitation in invitations %}
@@ -31,6 +37,7 @@
         {% else %}
         <td>--</td>
         {% endif %}
+		<td>{{ invitation.expire_time }}</td>
         <td><a class="op vh rm-link" href="#" data-id="{{invitation.pk}}">{% trans "Delete" %}</a></td>
     </tr>
     {% endfor %}
@@ -62,5 +69,26 @@ $('.rm-link').click(function() {
     });
     return false;
 });
+$("#rm-expire-invitations").click(function() {
+    $.ajax({
+        url: '{% url 'api-v2.1-admin-invitations' %}?type=expired',
+        type: 'DELETE',
+        cache: false,
+        dataType: 'json',
+        beforeSend: prepareCSRFToken,
+        success: function(data) {
+            location.reload(true);
+        },
+        error: function(xhr,status,error){
+            if (xhr.responseText) {
+                err_msg = $.parseJSON(xhr.responseText).error||$.parseJSON(xhr.responseText).error_msg;
+            } else {
+                err_msg = gettext("Failed. Please check the network.");
+            }
+            feedback(err_msg, 'error');
+        }
+    });
+});
+
 </script>
 {% endblock %}
