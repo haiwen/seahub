@@ -48,6 +48,9 @@
     <select name="role" class="w100">
         <option value={{default_user}} selected="selected">{% trans "Default"%}</option>
         <option value={{guest_user}}>{% trans "Guest"%}</option>
+        {% for role in extra_user_roles %}
+            <option value={{role}}>{{ role }}</option>
+        {% endfor %}
     </select><br />
     {% endif %}
     <label for="id_password1">{% trans "Password" %}</label>
