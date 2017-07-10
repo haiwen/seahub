@@ -77,6 +77,12 @@ def get_share_link_info(fileshare):
     data['expire_date'] = expire_date
     data['is_expired'] = fileshare.is_expired()
     data['permissions'] = fileshare.get_permissions()
+
+    if fileshare.s_type == 'f':
+        obj_id = seafile_api.get_file_id_by_path(repo_id, path)
+        data['size'] = seafile_api.get_file_size(repo.store_id,
+                repo.version, obj_id)
+
     return data
 
 
