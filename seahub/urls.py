@@ -51,6 +51,7 @@ from seahub.api2.endpoints.admin.file_audit import FileAudit
 from seahub.api2.endpoints.admin.file_update import FileUpdate
 from seahub.api2.endpoints.admin.perm_audit import PermAudit
 from seahub.api2.endpoints.admin.sysinfo import SysInfo
+from seahub.api2.endpoints.admin.file_operations import FileOperations
 from seahub.api2.endpoints.admin.devices import AdminDevices
 from seahub.api2.endpoints.admin.device_errors import AdminDeviceErrors
 from seahub.api2.endpoints.admin.libraries import AdminLibraries, AdminLibrary
@@ -240,6 +241,7 @@ urlpatterns = patterns(
 
     ## admin::sysinfo
     url(r'^api/v2.1/admin/sysinfo/$', SysInfo.as_view(), name='api-v2.1-sysinfo'),
+    url(r'^api/v2.1/admin/sysinfo/file-operations/$', FileOperations.as_view(), name='api-v2.1-admin-file-operations'),
 
     ## admin::devices
     url(r'^api/v2.1/admin/devices/$', AdminDevices.as_view(), name='api-v2.1-admin-devices'),

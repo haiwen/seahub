@@ -627,6 +627,14 @@ if EVENTS_CONFIG_FILE:
         15th events.
         """
         return _get_events(username, start, count)
+    
+    def get_user_activity_stats(start, end):
+        """
+        Return user activity record of the specified time
+        """
+        with _get_seafevents_session() as session:
+            res = seafevents.get_user_activity_stats(ev_session, start, end)
+        return res
 
     def get_org_user_events(org_id, username, start, count):
         return _get_events(username, start, count, org_id=org_id)
@@ -677,6 +685,33 @@ if EVENTS_CONFIG_FILE:
 
         return events if events else None
 
+    def get_file_audit_stats(start, end):
+        """
+        Return file audit record of specifiy time.
+        """
+        with _get_seafevents_session() as session:
+            res = seafevents.get_file_audit_stats(session, start, end)
+
+        return res
+
+    def get_file_audit_stats_by_day(start, end):
+        """
+        return file audit record of sepcifiy time group by day.
+        """
+        with _get_seafevents_session() as session:
+            res = seafevents.get_file_audit_stats_by_day(session, start, end)
+
+        return res
+
+    def get_total_storage_stats(start, end):
+        """
+        Return total storage record of specified time.
+        """
+        with _get_seafevents_session() as session:
+            res = seafevents.get_total_storage_stats(session, start, end)
+
+        return res
+
     def get_file_update_events(email, org_id, repo_id, start, limit):
         """Return file update events list. (If no file update, return 'None')
 
@@ -721,6 +756,8 @@ else:
     EVENTS_ENABLED = False
     def get_user_events():
         pass
+    def get_user_activity_stats():
+        pass
     def get_log_events_by_time():
         pass
     def get_org_user_events():
@@ -730,6 +767,12 @@ else:
     def get_file_audit_events_by_path():
         pass
     def get_file_audit_events():
+        pass
+    def get_file_audit_stats():
+        pass
+    def get_file_audit_stats_by_day():
+        pass
+    def get_total_storage_stats():
         pass
     def get_file_update_events():
         pass
