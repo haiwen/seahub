@@ -3860,3 +3860,13 @@ img.thumbnail {
     width:800px;
     overflow:auto;
 }
+/* tags in detail panel */
+.tags-label {
+    vertical-align: top;
+}
+.cur-tag {
+    padding:1px 5px;
+    background:#eee;
+    border-radius:3px;
+    margin:0 8px 8px 0;
+}

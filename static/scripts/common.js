@@ -97,6 +97,7 @@ define([
                 case 'get_dirents': return siteRoot + 'ajax/repo/' + options.repo_id + '/dirents/';
 
                 case 'dir-details': return siteRoot + 'api/v2.1/repos/' + options.repo_id + '/dir/detail/';
+                case 'tags': return siteRoot + 'api/v2.1/repos/' + options.repo_id + '/tags/';
 
                 // Repos
                 case 'repos': return siteRoot + 'api2/repos/';
