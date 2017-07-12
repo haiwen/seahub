@@ -141,6 +141,13 @@ class OrgUserTest(BaseTestCase):
             self.org_users_url = reverse('api-v2.1-admin-org-users',
                     args=[self.org_id])
 
+            email = '%s@%s.com' % (randstring(6), randstring(6))
+            self.create_user(email=email)
+            ccnet_api.add_org_user(self.org_id, email, 0)
+            assert ccnet_api.org_user_exists(self.org_id, email) == 1
+
+            self.org_user = email
+
     def tearDown(self):
         self.remove_group()
         self.remove_repo()
@@ -154,30 +161,20 @@ class OrgUserTest(BaseTestCase):
         if not LOCAL_PRO_DEV_ENV:
             return
 
-        email = '%s@%s.com' % (randstring(6), randstring(6))
-        self.create_user(email=email)
-        ccnet_api.add_org_user(self.org_id, email, 0)
-        assert ccnet_api.org_user_exists(self.org_id, email) == 1
-
         self.login_as(self.admin)
-        url = reverse('api-v2.1-admin-org-user', args=[self.org_id, email])
+        url = reverse('api-v2.1-admin-org-user', args=[self.org_id, self.org_user])
         resp = self.client.delete(url)
 
         self.assertEqual(200, resp.status_code)
-        assert ccnet_api.org_user_exists(self.org_id, email) == 0
+        assert ccnet_api.org_user_exists(self.org_id, self.org_user) == 0
 
     def test_can_not_delete_if_not_admin(self):
 
         if not LOCAL_PRO_DEV_ENV:
             return
 
-        email = '%s@%s.com' % (randstring(6), randstring(6))
-        self.create_user(email=email)
-        ccnet_api.add_org_user(self.org_id, email, 0)
-        assert ccnet_api.org_user_exists(self.org_id, email) == 1
-
         self.login_as(self.user)
-        url = reverse('api-v2.1-admin-org-user', args=[self.org_id, email])
+        url = reverse('api-v2.1-admin-org-user', args=[self.org_id, self.org_user])
         resp = self.client.delete(url)
 
         self.assertEqual(403, resp.status_code)
@@ -208,41 +205,91 @@ class OrgUserTest(BaseTestCase):
 
         self.assertEqual(404, resp.status_code)
 
-    def test_can_update(self):
+    def test_update_active(self):
 
         if not LOCAL_PRO_DEV_ENV:
             return
 
-        email = '%s@%s.com' % (randstring(6), randstring(6))
-        tmp_user = self.create_user(email=email)
-        ccnet_api.add_org_user(self.org_id, email, 0)
-        assert ccnet_api.org_user_exists(self.org_id, email) == 1
-        assert tmp_user.is_active
-
         self.login_as(self.admin)
-        url = reverse('api-v2.1-admin-org-user', args=[self.org_id, email])
-        status = 'false'
-        data = 'active=%s' % status
-        resp = self.client.put(url, data, 'application/x-www-form-urlencoded')
+        url = reverse('api-v2.1-admin-org-user', args=[self.org_id, self.org_user])
 
+        # test inactive user
+        data = 'active=false'
+        resp = self.client.put(url, data, 'application/x-www-form-urlencoded')
         json_resp = json.loads(resp.content)
         self.assertEqual(200, resp.status_code)
         assert json_resp['active'] is False
+
+        # test active user
+        data = 'active=true'
+        resp = self.client.put(url, data, 'application/x-www-form-urlencoded')
+        json_resp = json.loads(resp.content)
+        self.assertEqual(200, resp.status_code)
+        assert json_resp['active'] is True
+
+        self.remove_user(self.org_user)
+
+    def test_update_name(self):
+
+        if not LOCAL_PRO_DEV_ENV:
+            return
+
+        self.login_as(self.admin)
+        url = reverse('api-v2.1-admin-org-user', args=[self.org_id, self.org_user])
+
+        name = randstring(6)
+        data = 'name=%s' % name
+        resp = self.client.put(url, data, 'application/x-www-form-urlencoded')
+        json_resp = json.loads(resp.content)
+        self.assertEqual(200, resp.status_code)
+        assert json_resp['name'] == name
+
+        self.remove_user(self.org_user)
+
+    def test_update_contact_email(self):
+
+        if not LOCAL_PRO_DEV_ENV:
+            return
+
+        self.login_as(self.admin)
+        url = reverse('api-v2.1-admin-org-user', args=[self.org_id, self.org_user])
+
+        contact_email = '%s@%s.com' % (randstring(6), randstring(6))
+        data = 'contact_email=%s' % contact_email
+        resp = self.client.put(url, data, 'application/x-www-form-urlencoded')
+        json_resp = json.loads(resp.content)
+        self.assertEqual(200, resp.status_code)
+        assert json_resp['contact_email'] == contact_email
+
+        self.remove_user(self.org_user)
+
+    def test_update_quota_total(self):
+
+        if not LOCAL_PRO_DEV_ENV:
+            return
+
+        self.login_as(self.admin)
+        url = reverse('api-v2.1-admin-org-user', args=[self.org_id, self.org_user])
+
+        quota_total = 1234
+        data = 'quota_total=%s' % quota_total
+        resp = self.client.put(url, data, 'application/x-www-form-urlencoded')
+        json_resp = json.loads(resp.content)
+        self.assertEqual(200, resp.status_code)
+        assert json_resp['quota_total'] == int(quota_total)
+
+        self.remove_user(self.org_user)
 
     def test_update_with_invalid_args(self):
 
         if not LOCAL_PRO_DEV_ENV:
             return
 
-        email = '%s@%s.com' % (randstring(6), randstring(6))
-        tmp_user = self.create_user(email=email)
-        ccnet_api.add_org_user(self.org_id, email, 0)
-        assert ccnet_api.org_user_exists(self.org_id, email) == 1
-        assert tmp_user.is_active
-
         self.login_as(self.admin)
-        url = reverse('api-v2.1-admin-org-user', args=[self.org_id, email])
+        url = reverse('api-v2.1-admin-org-user', args=[self.org_id, self.org_user])
         status = 'fals'
         data = 'active=%s' % status
         resp = self.client.put(url, data, 'application/x-www-form-urlencoded')
         self.assertEqual(400, resp.status_code)
+
+        self.remove_user(self.org_user)
