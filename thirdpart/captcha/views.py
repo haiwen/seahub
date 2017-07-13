@@ -92,6 +92,7 @@ def captcha_image(request, key, scale=1):
     for f in settings.filter_functions():
         image = f(image)
 
+    image = image.resize(settings.CAPTCHA_IMAGE_SIZE, Image.ANTIALIAS)
     out = StringIO()
     image.save(out, "PNG")
     out.seek(0)
