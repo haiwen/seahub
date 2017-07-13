@@ -2071,6 +2071,43 @@ def sys_inst_admin(request):
 @login_required
 @sys_staff_required
 @require_POST
+def sys_inst_add_user(request, inst_id):
+    content_type = 'application/json; charset=utf-8'
+    get_email = request.POST.get('email', '')
+    email_list = [em.strip() for em in get_email.split(',') if em.strip()]
+    if len(email_list) == 0:
+        return HttpResponse(json.dumps({'error': "User can't be empty"}),
+                status=400)
+    try:
+        inst = Institution.objects.get(pk=inst_id)
+    except Institution.DoesNotExist:
+        return HttpResponse(json.dumps({'error': "Inst does not exists"}),
+                status=400)
+
+    for email in email_list:
+        try:
+            User.objects.get(email=email)
+        except Exception as e:
+            messages.error(request, u'Failed to add %s to institution: user does not exist.' % email)
+            continue
+
+        profile = Profile.objects.get_profile_by_user(email)
+        if not profile:
+            profile = Profile.objects.add_or_update(email, email)
+        if profile.institution:
+            messages.error(request, _(u"Failed to add %s to institution: user already have institution") % email)
+            continue
+        else:
+            profile.institution = inst.name
+        profile.save()
+        messages.success(request, _(u'Successfully add %s to institution.') % email)
+
+    return HttpResponse(json.dumps({'success': True}),
+            content_type=content_type)
+
+@login_required
+@sys_staff_required
+@require_POST
 def sys_inst_remove(request, inst_id):
     """Delete an institution.
     """
