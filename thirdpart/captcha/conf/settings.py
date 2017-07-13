@@ -1,6 +1,7 @@
 ﻿import os
 from django.conf import settings
 
+CAPTCHA_IMAGE_SIZE = getattr(settings, 'CAPTCHA_IMAGE_SIZE', (90,42))
 CAPTCHA_FONT_PATH = getattr(settings, 'CAPTCHA_FONT_PATH', os.path.normpath(os.path.join(os.path.dirname(__file__), '..', 'fonts/Vera.ttf')))
 CAPTCHA_FONT_SIZE = getattr(settings, 'CAPTCHA_FONT_SIZE', 22)
 CAPTCHA_LETTER_ROTATION = getattr(settings, 'CAPTCHA_LETTER_ROTATION', (-35, 35))
