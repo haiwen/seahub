@@ -28,20 +28,25 @@ $('tr:gt(0)').hover(
         $(this).find('.user-status-edit-icon, .user-role-edit-icon').addClass('vh');
     }
 );
-$('.user-status-edit-icon, .user-role-edit-icon').click(function() {
+$('.user-status-edit-icon, .user-role-edit-icon, .user-institution-edit-icon').click(function() {
     $(this).parent().addClass('hide');
     $(this).parent().next().removeClass('hide'); // show 'select'
 });
-$('.user-status-select, .user-role-select').change(function() {
+$('.user-status-select, .user-role-select, .user-institution-select').change(function() {
     var select = $(this),
         select_val = select.val(),
+        ajax_type = 'POST',
         uid = select.parents('tr').attr('data-userid'),
-        $select_prev = $(this).prev('.user-status, .user-role'), // .user-status, .user-role
+        $select_prev = $(this).prev('.user-status, .user-role, .user-institution'), // .user-status, .user-role, .user-institution
         url, data;
 
     if (select.hasClass('user-status-select')) {
         url = "{{ SITE_ROOT }}useradmin/toggle_status/" + uid + "/";
         data = {'s': select_val};
+    } else if (select.hasClass('user-institution-select')){
+        url = "{{ SITE_ROOT }}api2/accounts/" + uid + "/";
+        data = {'institution_name': select_val};
+        ajax_type = 'PUT';
     } else {
         url = "{{ SITE_ROOT }}useradmin/toggle_role/" + uid + "/";
         data = {'r': select_val};
@@ -54,7 +59,7 @@ $('.user-status-select, .user-role-select').change(function() {
     }
     $.ajax({
         url: url,
-        type: 'POST',
+        type: ajax_type,
         dataType: 'json',
         data: data,
         cache: false,
@@ -67,7 +72,12 @@ $('.user-status-select, .user-role-select').change(function() {
             } else {
                 feedback("{% trans "Edit succeeded" %}", 'success');
             }
-            $('.user-status-cur-value, .user-role-cur-value', $select_prev).html(select.children('option[value="' +select.val() + '"]').text());
+            if (select.children('option[value="' +select.val() + '"]').text() == "None"){
+                $('.user-status-cur-value, .user-role-cur-value, .user-institution-cur-value', $select_prev).html("");
+            }
+            else{
+                $('.user-status-cur-value, .user-role-cur-value, .user-institution-cur-value', $select_prev).html(select.children('option[value="' +select.val() + '"]').text());
+            }
             select.addClass('hide');
             $select_prev.removeClass('hide');
             $.modal.close();
@@ -116,6 +126,97 @@ $('td [type="checkbox"]').click(function() {
 $('#set-quota-btn').click(function() {
     $('#set-quota-form').data({'batch': true}).modal();
     $('#simplemodal-container').css({'width':'auto', 'height':'auto'});
+});
+
+$('#set-institution-btn').click(function(){
+    $('#set-institution-form').data({'batch': true}).modal();
+    $('#simplemodal-container').css({'width':'auto', 'height':'auto'});
+
+    $("#institution_name").select2({
+        minimumInputLength: 1,
+        maximumSelectionSize:1,
+        multiple: true,
+        tags: [],
+        ajax: {
+            url: "{% url 'sys_inst_search_inst' %}",
+            dataType: 'json',
+            delay: 250,
+            data: function (term, page) {
+                return {
+                    q: term, // search term
+                };
+            },
+            results: function(data, page){
+                var insts_list = [], insts = data.insts;
+                for (var i =0, len = insts.length; i < len; i++){
+                    insts_list.push({
+                        "id": i,
+                        "name": insts[i].name
+                    });
+                }
+                return {results:insts_list};
+            }
+        },
+        formatResult: function(item) {
+            var markup = '<li>'+
+                '<div >'+
+                '<span class="text ellipsis">' + item.name + '</span></div></li>'
+            return markup;
+        },
+        formatSelection:function(item) {
+            return (item.name);
+        },
+        escapeMarkup: function (m) { return m;  }
+    });
+});
+$("#set-institution-form").submit(function(){
+    var insts = $("#institution_name").select2("data"),
+        data = "",
+        emails = [],
+        form_id = $(this).attr('id'),
+        submit_btn = $(this).find('[type="submit"]');
+    if (!insts){
+        apply_form_error(form_id, "Institution can not be blank" );
+        return false;
+    } else {
+        data += insts[0].name;
+    }
+    $('td [type="checkbox"]:checked').closest('tr').each(function(index, item) {
+            emails.push($(item).attr('data-userid'));
+    });
+    if (data == "None"){
+        data = "";
+    }
+    disable(submit_btn);
+    var batch = $(this).data('batch');
+    if (batch){
+        $.ajax({
+            url: "{% url 'api-v2.1-admin-users-batch' %}",
+            type: "POST",
+            dataType: 'json',
+            cache: false,
+            data: {
+                'operation': 'set-institution',
+                'email': emails,
+                'institution_name': data
+            },
+            traditional: true,
+            beforeSend: prepareCSRFToken,
+            success: function(data){
+                if(data['success']){
+                    location.reload(true);
+                }
+            },
+             error: function(xhr, textStatus, errorThrown){
+                 if (xhr.responseText) {
+                     var error = $.parseJSON(xhr.responseText).error;
+                     apply_form_error(form_id, error);
+                     enable(submit_btn);
+                 }
+            }
+        });
+        return false;
+    }
 });
 
 $('#delete-users-btn').click(function() {
@@ -293,5 +394,9 @@ $(document).click(function(e) {
     if (!$('.user-role-edit-icon, .user-role-select').is(target)) {
         $('.user-role').removeClass('hide');
         $('.user-role-select').addClass('hide');
+    }
+    if (!$('.user-institution-edit-icon, .user-institution-select').is(target)) {
+        $('.user-institution').removeClass('hide');
+        $('.user-institution-select').addClass('hide');
     }
 });

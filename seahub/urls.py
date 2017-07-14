@@ -344,6 +344,7 @@ urlpatterns = patterns(
     url(r'^sys/orgadmin/(?P<org_id>\d+)/library/$', sys_org_info_library, name='sys_org_info_library'),
     url(r'^sys/orgadmin/(?P<org_id>\d+)/setting/$', sys_org_info_setting, name='sys_org_info_setting'),
     url(r'^sys/instadmin/$', sys_inst_admin, name='sys_inst_admin'),
+    url(r'^sys/instadmin/search-inst/$$', sys_inst_search_inst, name='sys_inst_search_inst'),
     url(r'^sys/instadmin/(?P<inst_id>\d+)/remove/$', sys_inst_remove, name='sys_inst_remove'),
     url(r'^sys/instadmin/(?P<inst_id>\d+)/users/$', sys_inst_info_user, name='sys_inst_info_users'),
     url(r'^sys/instadmin/(?P<inst_id>\d+)/users/add/$', sys_inst_add_user, name='sys_inst_add_user'),

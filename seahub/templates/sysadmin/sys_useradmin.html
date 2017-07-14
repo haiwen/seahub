@@ -1,5 +1,6 @@
 {% extends "sysadmin/base.html" %}
 {% load seahub_tags i18n %}
+{% load staticfiles %}
 {% block cur_users %}tab-cur{% endblock %}
 
 {% block left_panel %}{{block.super}}
@@ -28,6 +29,7 @@
         <button id="export-excel">{% trans "Export Excel" %}</button>
     </div>
     <div class="js-op-for-selected fright hide">
+        <button id="set-institution-btn">{% trans "Set institution" %}</button>
         <button id="set-quota-btn">{% trans "Set quota" %}</button>
         <button id="delete-users-btn">{% trans "Delete users" %}</button>
     </div>
@@ -82,8 +84,11 @@
     <p>{% trans "Activating..., please wait" %}</p>
 </div>
 {% endblock %}
-
+{% block extra_style %}
+<link rel="stylesheet" type="text/css" href="{% static "css/select2-3.5.2.css" %}"/>
+{% endblock %}
 {% block extra_script %}
+<script type="text/javascript" src= "{% static "scripts/lib/select2-3.5.2.js" %}"></script>
 <script type="text/javascript">
 $(function(){
     // check if server version is the latest one

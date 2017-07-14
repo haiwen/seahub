@@ -10,9 +10,10 @@
         <th width="33%">{% trans "Email" %} / {% trans "Name" %} / {% trans "Contact Email" %}</th>
         <th width="12%">{% trans "Status" %}</th>
         {% endif %}
+        <th width="10%">{% trans "Institution" %}</th>
         <th width="16%">{% trans "Space Used / Quota" %}</th>
-        <th width="22%">{% trans "Create At / Last Login" %}</th>
-        <th width="14%"></th>
+        <th width="15%">{% trans "Create At / Last Login" %}</th>
+        <th width="15%"></th>
     </tr>
 
     {% for user in users %}
@@ -70,6 +71,18 @@
         {% endif %}
         </td>
         {% endif %}
+        <td>
+            <div class="user-institution">
+                <span class="user-institution-cur-value"> {{ user.institution }} </span>
+                <span title="{% trans "Edit"%}" class="user-institution-edit-icon sf2-icon-edit op-icon vh"></span>
+            </div>
+            <select name="institution" class="user-institution-select hide">
+                {% for insti in institutions %}
+                    <option value={{insti}} {% if user.institution == insti %} selected="selected"{% endif %}>{{insti}}</option>
+                {% endfor %}
+                <option value="" {% if user.institution == "" %} selected="selected"{% endif %}>None</option>
+            </select>
+        </td>
 
         <td style="font-size:11px;">
             {{ user.space_usage|seahub_filesizeformat }} /
@@ -116,4 +129,23 @@
     </p>
     <p class="error hide"></p>
     <input type="submit" value="{% trans "Submit" %}" class="submit" />
+</form>
+<form id="set-institution-form" method="post" action="" class="hide">{% csrf_token %}
+    <table>
+        <thead>
+            <tr>
+                <th width="75%">{% trans "Institution" %}</th>
+                <th width="25%"></th>
+            </tr>
+        </thead>
+        <tbody>
+            <td>
+                <input id="institution_name"  class="w100"/>
+                <p class="error hide"></p>
+            </td>
+            <td>
+                <input type="submit" value="{% trans "Submit" %}" class="submit" />
+            </td>
+        </tbody>
+    </table>
 </form>

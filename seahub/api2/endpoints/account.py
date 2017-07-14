@@ -20,6 +20,7 @@ from seahub.api2.utils import api_error, to_python_boolean
 from seahub.base.accounts import User
 from seahub.base.templatetags.seahub_tags import email2nickname
 from seahub.profile.models import Profile, DetailedProfile
+from seahub.institutions.models import Institution
 from seahub.utils import is_valid_username, is_org_context
 from seahub.utils.file_size import get_file_size_unit
 
@@ -36,6 +37,7 @@ def get_account_info(user):
     info['email'] = email
     info['name'] = email2nickname(email)
     info['department'] = d_profile.department if d_profile else ''
+    info['institution_name'] = profile.institution if profile else ''
     info['id'] = user.id
     info['is_staff'] = user.is_staff
     info['is_active'] = user.is_active
@@ -143,6 +145,15 @@ class Account(APIView):
             else:
                 seafile_api.set_user_quota(email, space_quota)
 
+        # update user institution
+        institution_name = request.data.get("institution_name", None)
+        if institution_name is not None:
+            inst_profile = Profile.objects.get_profile_by_user(email)
+            if inst_profile is None:
+                inst_profile = Profile(user=email)
+            inst_profile.institution = institution_name
+            inst_profile.save()
+
         # update is_trial
         is_trial = request.data.get("is_trial", None)
         if is_trial is not None:
@@ -193,6 +204,16 @@ class Account(APIView):
             if len(department) > 512:
                 return api_error(status.HTTP_400_BAD_REQUEST,
                         _(u'Department is too long (maximum is 512 characters)'))
+
+        # argument check for institution
+        institution_name = request.data.get("institution_name", None)
+        if institution_name is not None and institution_name != '':
+            try:
+                obj_insti = Institution.objects.get(name=institution_name)
+            except Institution.DoesNotExist:
+                if institution_name != "":
+                    return api_error(status.HTTP_400_BAD_REQUEST,
+                                    "Institution %s does not exists" % institution_name)
 
         # argument check for storage
         space_quota_mb = request.data.get("storage", None)

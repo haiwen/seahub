@@ -228,11 +228,15 @@ def sys_user_admin(request):
             if trial_user.user_or_org == user.email:
                 user.trial_info = {'expire_date': trial_user.expire_date}
 
+        profile = Profile.objects.get_profile_by_user(user.email)
+        user.institution =  profile.institution if profile else ''
+
     platform = get_platform_name()
     server_id = get_server_id()
     pro_server = 1 if is_pro_version() else 0
     extra_user_roles = [x for x in get_available_roles()
                         if x not in get_basic_user_roles()]
+    institutions = [inst.name for inst in Institution.objects.all()]
 
     return render_to_response(
         'sysadmin/sys_useradmin.html', {
@@ -251,6 +255,7 @@ def sys_user_admin(request):
             'pro_server': pro_server,
             'enable_user_plan': enable_user_plan,
             'extra_user_roles': extra_user_roles,
+            'institutions': institutions,
         }, context_instance=RequestContext(request))
 
 @login_required
@@ -2067,6 +2072,18 @@ def sys_inst_admin(request):
             'per_page': per_page,
             'page_next': page_next,
         }, context_instance=RequestContext(request))
+
+@login_required
+@sys_staff_required
+def sys_inst_search_inst(request):
+    key = request.GET.get('q', '')
+    if not key:
+        return HttpResponse(json.dumps({'error': "q invalid"}),
+                status=400)
+    institutions = [dict([('name', inst.name)]) for inst in Institution.objects.filter(name__contains=key)]
+    institutions.append({'name': 'None'})
+    return HttpResponse(json.dumps({"insts": institutions}), status=200,
+                       content_type='application/json; charset=utf-8')
 
 @login_required
 @sys_staff_required
