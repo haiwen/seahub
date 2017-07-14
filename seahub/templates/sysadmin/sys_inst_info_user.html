@@ -1,5 +1,6 @@
 {% extends "sysadmin/sys_inst_info_base.html" %}
 {% load i18n seahub_tags %}
+{% load staticfiles %}
 
 {% block right_panel %}
 <div class="tabnav">
@@ -7,8 +8,18 @@
         <li class="tabnav-tab tabnav-tab-cur"><a href="{% url 'sys_inst_info_users' inst.pk %}">{% trans "Members" %}</a></li>
         <li class="tabnav-tab"><a href="{% url 'sys_inst_info_admins' inst.pk %}">{% trans "Admins" %}</a></li>
     </ul>
+    <div class="js-op-for-all fright">
+        <button id="add-user-btn">{% trans "Add user" %}</button>
+    </div>
 </div>
 
+<form id="add-user-form" action="" method="post" class="hide">{% csrf_token %}
+    <h3>{% trans "Add user" %}</h3>
+    <label for="id_email">{% trans "Email" %}</label><br />
+    <input id="id_email" style="width:300px;height:30px;"/>
+    <button type="submit" class="submit">{% trans "Submit" %}</button>
+    <p id="id_error" class="error hide" style="margin-top:30px;"></p>
+</form>
 {% if users %}
 <table>
     <tr>
@@ -54,9 +65,13 @@
 
 {% endblock %}
 
+{% block extra_style %}
+<link rel="stylesheet" type="text/css" href="{% static "css/select2-3.5.2.css" %}"/>
+{% endblock %}
 {% block extra_script %}{{ block.super }}
-<script type="text/javascript">
+<script type="text/javascript" src= "{% static "scripts/lib/select2-3.5.2.js" %}"></script>
 
+<script type="text/javascript">
 addConfirmTo($('.js-toggle-admin'), {
     'title': "Toggle Admin",
     'con': "Sure ?",
@@ -75,6 +90,89 @@ $('.user-status-edit-icon').click(function() {
     $(this).parent().addClass('hide');
     $(this).parent().next().removeClass('hide'); // show 'select'
 });
+$('#add-user-btn').click(function(){
+     $('#add-user-form').modal();
+     $('#simplemodal-container').css({'width':'auto', 'height':'auto'});
+ 
+     $("#id_email").select2({
+         minimumInputLength: 1,
+         maximumSelectionSize:5,
+         multiple: true,
+         tags: [],
+         ajax: {
+             url: "{% url 'search-user' %}",
+             dataType: 'json',
+             delay: 250,
+             data: function (term, page) {
+                 return {
+                     q: term, // search term
+                 };
+             },
+             results: function(data, page){
+                 var group_list = [], groups = data.users;
+                 for (var i =0, len = groups.length; i < len; i++){
+                     group_list.push({
+                         "id": i,
+                         "email": groups[i].email,
+                         "avatar_url": groups[i].avatar_url,
+                         "name": groups[i].name
+                     });
+                 }
+                 return {results:group_list};
+             }
+         },
+         formatResult: function(item) {
+             var markup = '<li>'+
+                 '<div ><img src="' + item.avatar_url + '" width="32" height="32" class="avatar" />'+
+                 '<span class="text ellipsis">' + item.name + '<br>' + item.email + '</span></div></li>'
+             return markup;
+         },
+         formatSelection:function(item) {
+             return (item.email);
+         },
+         escapeMarkup: function (m) { return m;  }
+     });
+ });
+ $('#add-user-form').submit(function(){
+     var form = $(this),
+         data = ""
+         form_id = $(this).attr('id'),
+         email = $("#id_email").select2("data"),
+         submit_btn = $(this).find('[type="submit"]');
+     if (!email){
+         apply_form_error(form_id, "{% trans "Email can not be blank "%}");
+         return false;
+     } else {
+         for (var i=0; i < email.length; i++){
+             data += email[i].email;
+             data += ',';
+         }
+     }
+     disable(submit_btn);
+     $.ajax({
+         url: "{% url 'sys_inst_add_user' inst.id %}",
+         type: 'POST',
+         dataType: 'json',
+         data: {
+             'email': data
+         },
+         beforeSend: prepareCSRFToken,
+         success: function(data){
+             if(data['success']){
+                 location.reload(true);
+             }
+         },
+         error: function(xhr, textStatus, errorThrown){
+             if (xhr.responseText) {
+                 var error = $.parseJSON(xhr.responseText).error;
+                 apply_form_error(form_id, error);
+                 enable(submit_btn);
+             }
+         }
+     });
+     return false;
+ });
+ 
 $('.user-status-select').change(function() {
     var select = $(this),
         select_val = select.val(),

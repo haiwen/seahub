@@ -53,6 +53,7 @@ class AdminShareLinkTest(BaseTestCase):
 
         assert json_resp['token'] == token
         assert json_resp['is_dir'] == False
+        assert json_resp['size'] is not None
 
         self._remove_share_link(token)
 

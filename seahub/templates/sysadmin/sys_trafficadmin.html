@@ -7,6 +7,8 @@
 {% block right_panel %}
 <h3 class="hd">{% trans "User Traffic" %}</h3>
 
+<p class="tip">{% trans "Tip: the traffic only includes the traffic used by sharing links." %}</p>
+
 <form action="{{ sys_traffic_admin }}" method="get" autocomplete="off" id="traffic-month-form">
     <label for="month">{% trans "Month:" %}</label>
     <input type="text" name="month" maxlength="6" value="{{ month }}" class="input" />
