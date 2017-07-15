@@ -58,8 +58,13 @@ class FileUpdate(APIView):
                 repo_id = ev.repo_id
                 repo = seafile_api.get_repo(repo_id)
 
-                ev.repo_name = repo.name if repo else ''
-                ev.repo_owner = seafile_api.get_repo_owner(repo_id) if repo else ''
+                if repo:
+                    ev.repo_name = repo.name
+                    ev.repo_owner = seafile_api.get_repo_owner(repo_id) or \
+                            seafile_api.get_org_repo_owner(repo_id)
+                else:
+                    ev.repo_name = ''
+                    ev.repo_owner = ''
 
                 ev_user_list.append(ev.user)
                 ev_repo_owner_list.append(ev.repo_owner)
