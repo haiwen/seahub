@@ -4,34 +4,50 @@
 {% block cur_invitations %}tab-cur{% endblock %}
 
 {% block right_panel %}
-<h3 class="hd">{% trans "All Invitations" %}</h3>
+
+<div class="hd ovhd">
+    <h3 class="fleft">{% trans "All Invitations" %}</h3>
+    <button id="rm-all-expired" class="fright btn-white">{% trans "Delete Expired Invitations" %}</button>
+</div>
 
 {% if invitations %}
 <table>
     <tr>
-        <th width="25%">{% trans "Inviter" %}</th>
-        <th width="25%">{% trans "Accepter" %}</th>
-        <th width="10%">{% trans "Type" %}</th>
-        <th width="16%">{% trans "Invited at" %}</th>
-        <th width="16%">{% trans "Accepted at" %}</th>
+        <th width="20%">{% trans "Inviter" %}</th>
+        <th width="20%">{% trans "Accepter" %}</th>
+        <th width="9%">{% trans "Type" %}</th>
+        <th width="14%">{% trans "Invited at" %}</th>
+        <th width="14%">{% trans "Accepted at" %}</th>
+        <th width="18%">{% trans "Expired at" %}</th>
         <th width="8%"></th>
     </tr>
     {% for invitation in invitations %}
     <tr>
         <td><a href="{% url 'user_info' invitation.inviter %}">{{ invitation.inviter }}</a></td>
-        {% if invitation.accept_time %}
-        <td><a href="{% url 'user_info' invitation.accepter %}">{{ invitation.accepter }}</a></td>
-        {% else %}
-        <td>{{ invitation.accepter }}</td>
-        {% endif %}
+        <td>
+            {% if invitation.accept_time %}
+            <a href="{% url 'user_info' invitation.accepter %}">{{ invitation.accepter }}</a>
+            {% else %}
+            {{ invitation.accepter }}
+            {% endif %}
+        </td>
         <td>{{ invitation.invite_type }}</td>
-        <td>{{ invitation.invite_time|translate_seahub_time }} </td>
-        {% if invitation.accept_time %}
-        <td>{{ invitation.accept_time|translate_seahub_time }}</td>
+        <td>{{ invitation.invite_time|translate_seahub_time }}</td>
+        <td>
+            {% if invitation.accept_time %}
+            {{ invitation.accept_time|translate_seahub_time }}
+            {% else %}
+            --
+            {% endif %}
+        </td>
+        {% if invitation.is_expired %}
+        <td class="error">{{ invitation.expire_time }}</td>
         {% else %}
-        <td>--</td>
+        <td>{{ invitation.expire_time }}</td>
         {% endif %}
-        <td><a class="op vh rm-link" href="#" data-id="{{invitation.pk}}">{% trans "Delete" %}</a></td>
+        <td>
+            <a href="#" data-id="{{invitation.pk}}" class="sf2-icon-delete sf2-x rm op-icon vh" title="{% trans "Delete" %}" aria-label="{% trans "Delete" %}"></a>
+        </td>
     </tr>
     {% endfor %}
 </table>
@@ -46,7 +62,8 @@
 
 {% block extra_script %}
 <script type="text/javascript">
-$('.rm-link').click(function() {
+// rm a single invitation
+$('.rm').click(function() {
     var _this = $(this);
     $.ajax({
         url: '{% url 'sys_invitation_remove' %}',
@@ -62,5 +79,21 @@ $('.rm-link').click(function() {
     });
     return false;
 });
+
+// rm all expired invitations
+$("#rm-all-expired").click(function() {
+    $.ajax({
+        url: '{% url 'api-v2.1-admin-invitations' %}?type=expired',
+        type: 'DELETE',
+        cache: false,
+        dataType: 'json',
+        beforeSend: prepareCSRFToken,
+        success: function(data) {
+            location.reload(true);
+        },
+        error: ajaxErrorHandler
+    });
+});
+
 </script>
 {% endblock %}
