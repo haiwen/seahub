@@ -20,7 +20,7 @@ class InvitationsView(APIView):
     def delete(self, request):
         _type = request.GET.get('type', '')
         if not _type:
-            error_msg = "type can not be empty" % _type
+            error_msg = "type can not be empty"
             return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
         if _type == "expired":
             Invitation.objects.delete_all_expire_invitation()
