@@ -7,6 +7,7 @@ from rest_framework.permissions import IsAdminUser
 from rest_framework.response import Response
 from rest_framework.views import APIView
 from rest_framework import status
+from seaserv import ccnet_api
 
 from seahub.api2.authentication import TokenAuthentication
 from seahub.api2.throttling import UserRateThrottle
@@ -30,12 +31,15 @@ class AdminLicense(APIView):
         license_dir = os.path.dirname(LICENSE_PATH)
         try:
             if not os.path.exists(license_dir):
-                error_msg = 'path %s invalid.'% LICENSE_PATH
+                error_msg = 'path %s invalid.' % LICENSE_PATH
                 return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
 
             with open(LICENSE_PATH, 'w') as fd:
                 fd.write(license_file.read())
+
+            ccnet_api.reload_license()
         except Exception as e:
             logger.error(e)
+            error_msg = 'Interal Server Eerror'
             return api_error(status.HTTP_500_INTERNAL_SERVER_ERROR, error_msg)
         return Response({'success': True}, status=status.HTTP_200_OK)
