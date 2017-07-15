@@ -415,6 +415,9 @@ SITE_TITLE = 'Private Seafile'
 # Base name used in email sending
 SITE_NAME = 'Seafile'
 
+# Path to the license file(relative to the media path)
+LICENSE_PATH = os.path.join(PROJECT_ROOT, '../../seafile-license.txt')
+
 # Path to the favicon file (relative to the media path)
 # tip: use a different name when modify it.
 FAVICON_PATH = 'img/favicon.ico'
