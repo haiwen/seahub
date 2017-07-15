@@ -39,15 +39,15 @@
         </div>
 
         <div class="sf-btn-group file-view-op fright">
-            <a class="sf-btn-group-btn sf-btn-link op-icon sf2-icon-folder" href="{% url 'view_common_lib_dir' repo.id parent_dir|strip_slash %}" title="{% trans "Open parent folder" %}"></a>
+            <a class="sf-btn-group-btn sf-btn-group-btn-first sf-btn-link op-icon sf2-icon-folder" href="{% url 'view_common_lib_dir' repo.id parent_dir|strip_slash %}" title="{% trans "Open parent folder" %}"></a>
 
             {% if can_lock_unlock_file %}
                 {% if not file_locked %}
-                    <button id="lock-file" class="sf-btn-group-btn sf-btn-group-btn-first op-icon sf2-icon-lock" title="{% trans "Lock" %}"></button>
-                    <button id="unlock-file" class="sf-btn-group-btn sf-btn-group-btn-first op-icon sf2-icon-unlock hide" title="{% trans "Unlock" %}"></button>
+                    <button id="lock-file" class="sf-btn-group-btn op-icon sf2-icon-lock" title="{% trans "Lock" %}"></button>
+                    <button id="unlock-file" class="sf-btn-group-btn op-icon sf2-icon-unlock hide" title="{% trans "Unlock" %}"></button>
                 {% elif locked_by_me %}
-                    <button id="unlock-file" class="sf-btn-group-btn sf-btn-group-btn-first op-icon sf2-icon-unlock" title="{% trans "Unlock" %}"></button>
-                    <button id="lock-file" class="sf-btn-group-btn sf-btn-group-btn-first op-icon sf2-icon-lock hide" title="{% trans "Lock" %}"></button>
+                    <button id="unlock-file" class="sf-btn-group-btn op-icon sf2-icon-unlock" title="{% trans "Unlock" %}"></button>
+                    <button id="lock-file" class="sf-btn-group-btn op-icon sf2-icon-lock hide" title="{% trans "Lock" %}"></button>
                 {% endif %}
             {% endif %}
 
