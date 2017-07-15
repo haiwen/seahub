@@ -14,6 +14,7 @@ from seahub.invitations import models
 class InvitationsTest(BaseTestCase):
     def setUp(self):
         self.login_as(self.admin)
+        self.delete_url = reverse('api-v2.1-admin-invitations')
    
     @patch.object(CanInviteGuest, 'has_permission')
     @patch.object(UserPermissions, 'can_invite_guest')
@@ -30,8 +31,7 @@ class InvitationsTest(BaseTestCase):
         self.assertEqual(2, new_invitations_number-invitations_number)
 
         time.sleep(2)
-        delete_url = reverse('api-v2.1-admin-invitations')
-        resp = self.client.delete(delete_url+"?type=expired")
+        resp = self.client.delete(self.delete_url+"?type=expired")
         self.assertEqual(200, resp.status_code)
         self.assertEqual(invitations_number, len(Invitation.objects.all()))
 
@@ -42,3 +42,8 @@ class InvitationsTest(BaseTestCase):
                          invite_type=models.GUEST,
                          expire_time=timezone.now())
         entry.save()
+
+    def test_invalid_args(self):
+        resp = self.client.delete(self.delete_url+"?type=expired122")
+        self.assertEqual(400, resp.status_code)
+
