@@ -10,7 +10,6 @@ from seahub.api2.throttling import UserRateThrottle
 from seahub.api2.utils import json_response, api_error
 from seahub.api2.authentication import TokenAuthentication
 from seahub.utils.two_factor_auth import has_two_factor_auth, two_factor_auth_enabled
-from seahub_extra.two_factor import devices_for_user
 
 
 class TwoFactorAuthView(APIView):
@@ -27,6 +26,8 @@ class TwoFactorAuthView(APIView):
         except User.DoesNotExist:
             error_msg = "User %s not found" % email
             return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
+
+        from seahub_extra.two_factor import devices_for_user
         devices = devices_for_user(_user)
         if devices:
             for device in devices:
