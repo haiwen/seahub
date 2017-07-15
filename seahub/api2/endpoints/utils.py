@@ -54,8 +54,7 @@ def is_org_user(username, org_id=None):
             return ccnet_api.org_user_exists(org_id, username) != 0
         else:
             orgs = ccnet_api.get_orgs_by_user(username)
-            org_ids = [ org.org_id for org in orgs ]
-            return len(org_ids) > 0
+            return len(orgs) > 0
     except Exception as e:
         logger.error(e)
         return False
