@@ -83,6 +83,7 @@
 .icon-cloud-download:before       { content: "\f0ed"; }
 .icon-download:before             { content: "\f01a"; }
 .icon-trash:before                { content: "\f014"; }
+.icon-refresh:before              { content: "\f021"; }
 .icon-plus:before                 { content: "\f067"; }
 .icon-minus:before                { content: "\f068"; }
 .icon-pencil:before               { content: "\f040"; }
@@ -1975,6 +1976,9 @@ button.sf-dropdown-toggle:focus {
 .captcha {
     float:right;
 }
+#refresh-captcha {
+    margin:10px 3px 0 5px;
+}
 #id_captcha_1 {
     width:auto;
     height:36px;
@@ -1983,11 +1987,12 @@ button.sf-dropdown-toggle:focus {
     margin:0;
 }
 .login-panel {
-    background:#f4eaea;
+    background:#f5f6f7;
     border-radius:3px;
-    padding:10px 60px 20px;
+    padding:20px 60px;
     width:390px;
     margin:0 auto;
+    box-shadow:0 0 8px #a7a6a9;
 }
 @media (max-width:389px) {
     .login-panel {
@@ -1996,9 +2001,15 @@ button.sf-dropdown-toggle:focus {
         padding-right: calc((100% - 270px)/2);
     }
 }
-.login-panel .logo {
+.login-panel-logo {
     display:block;
-    margin:0 auto 18px;
+    margin:0 auto 20px;
+}
+.login-panel-hd {
+    font-size:18px;
+    font-weight:normal;
+    text-align:center;
+    margin:5px 0 15px;
 }
 .login-panel .input {
     margin:0;
@@ -2018,9 +2029,6 @@ button.sf-dropdown-toggle:focus {
 }
 .login-panel .remember {
     margin:20px 0 10px;
-}
-.login-panel .forgot-passwd {
-    margin-left:18px;
 }
 .login-panel .submit {
     margin:20px 0 15px;
