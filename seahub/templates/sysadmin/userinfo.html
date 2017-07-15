@@ -94,6 +94,19 @@
                 </span>
                 <span id="set-quota" title="{% trans "Edit Quota" %}" class="sf2-icon-edit op-icon"></span>
             </dd>
+
+            {% if two_factor_auth_enabled %}
+            <dt>{% trans "Two-Factor Authentication" %}</dt>
+            <dd>
+                {% if default_device %}
+                <p class="txt-before-btn">{% trans "Status" %}: {% trans "enabled" %}</p>
+                <button id="disable-two-factor-auth">{% trans "Disable Two-Factor Authentication" %}</button>
+                {% else %}
+                <button disabled="disabled" class="btn-disabled">{% trans "Disable Two-Factor Authentication" %}</button>
+                {% endif %}
+            </dd>
+            {% endif %}
+
         </dl>
 
         <form id="set-name-form" method="post" action="" class="hide">{% csrf_token %}
@@ -129,7 +142,7 @@
         </form>
     </div>
 
-    <div id="owned">
+    <div id="owned" class="hide">
         {% if owned_repos %}
         <table class="repo-list">
             <tr>
@@ -178,7 +191,7 @@
         {% endif %}
     </div>
 
-    <div id="shared">
+    <div id="shared" class="hide">
         {% if in_repos %}
         <table>
             <tr>
@@ -216,7 +229,7 @@
         {% endif %}
     </div>
 
-    <div id="shared-links">
+    <div id="shared-links" class="hide">
         {% if user_shared_links%}
         <table class="sharelink-list">
             <tr>
@@ -264,7 +277,7 @@
         {% endif %}
     </div>
 
-    <div id="user-admin-groups">
+    <div id="user-admin-groups" class="hide">
         {% if personal_groups %}
         <table>
             <tr>
@@ -330,6 +343,27 @@ $('#set-dept').click(function() {
 $('#set-quota').click(function() {
     $("#set-quota-form").modal({appendTo: "#main"});
     $('#simplemodal-container').css({'width':'auto', 'height':'auto'});
+});
+
+$("#disable-two-factor-auth").click(function(){
+    $.ajax({
+        url: '{% url 'two-factor-auth-view' email %}',
+        type: 'DELETE',
+        cache: false,
+        beforeSend: prepareCSRFToken,
+        success:function(data){
+            location.reload(true);
+        },
+        error: function(xhr, textStatus, errorThrown) {
+            var err_msg;
+            if (xhr.responseText) {
+                err_msg = $.parseJSON(xhr.responseText).error_msg;
+            } else {
+                err_msg = "{% trans "Failed. Please check the network." %}";
+            }
+            feedback(err_msg, 'error');
+        }
+    });
 });
 
 $('#set-name-form').submit(function() {
@@ -488,6 +522,7 @@ $('#set-quota-form').submit(function() {
     });
     return false;
 });
+
 addConfirmTo($('.rm-grp'), {
     'title': "{% trans "Delete Group" %}",
     'con': "{% trans "Are you sure you want to delete %s ?" %}",
