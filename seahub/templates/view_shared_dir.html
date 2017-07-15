@@ -191,7 +191,11 @@ var magnificOptions = {
 $('[data-mfp-src]').each(function(index, item) {
     var $item = $(item);
     var file_name = $item.closest('.file-item').attr('data-name');
-    $item.attr('data-mfp-src', '{{ SITE_ROOT }}thumbnail/{{ token }}/{{ thumbnail_size_for_original }}' + encodePath(cur_path + file_name));
+    var file_ext = file_name.substr(file_name.lastIndexOf('.') + 1).toLowerCase();
+    var is_gif = file_ext == 'gif' ? true : false;
+    if (!is_gif) {
+        $item.attr('data-mfp-src', '{{ SITE_ROOT }}thumbnail/{{ token }}/{{ thumbnail_size_for_original }}' + encodePath(cur_path + file_name));
+    }
 });
 {% endif %}
 $('.img-name-link').magnificPopup(magnificOptions);
