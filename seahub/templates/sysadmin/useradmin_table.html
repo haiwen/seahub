@@ -77,8 +77,8 @@
                 <span title="{% trans "Edit"%}" class="user-institution-edit-icon sf2-icon-edit op-icon vh"></span>
             </div>
             <select name="institution" class="user-institution-select hide">
-                {% for insti in institutions %}
-                    <option value={{insti}} {% if user.institution == insti %} selected="selected"{% endif %}>{{insti}}</option>
+                {% for inst in institutions %}
+                    <option value={{inst}} {% if user.institution == inst %} selected="selected"{% endif %}>{{inst}}</option>
                 {% endfor %}
                 <option value="" {% if user.institution == "" %} selected="selected"{% endif %}>None</option>
             </select>

@@ -58,7 +58,7 @@ from seahub.forms import SetUserQuotaForm, AddUserForm, BatchAddUserForm, \
     TermsAndConditionsForm
 from seahub.options.models import UserOptions
 from seahub.profile.models import Profile, DetailedProfile
-from seahub.signals import repo_deleted
+from seahub.signals import repo_deleted, institution_deleted
 from seahub.share.models import FileShare, UploadLinkShare
 from seahub.admin_log.signals import admin_operation
 from seahub.admin_log.models import USER_DELETE, USER_ADD
@@ -2133,7 +2133,9 @@ def sys_inst_remove(request, inst_id):
     except Institution.DoesNotExist:
         raise Http404
 
+    inst_name = inst.name
     inst.delete()
+    institution_deleted.send(sender=None, inst_name = inst_name)
     messages.success(request, _('Success'))
 
     return HttpResponseRedirect(reverse('sys_inst_admin'))

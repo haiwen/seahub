@@ -211,9 +211,8 @@ class Account(APIView):
             try:
                 obj_insti = Institution.objects.get(name=institution_name)
             except Institution.DoesNotExist:
-                if institution_name != "":
-                    return api_error(status.HTTP_400_BAD_REQUEST,
-                                    "Institution %s does not exists" % institution_name)
+                return api_error(status.HTTP_400_BAD_REQUEST,
+                                "Institution %s does not exists" % institution_name)
 
         # argument check for storage
         space_quota_mb = request.data.get("storage", None)

@@ -158,9 +158,7 @@ $('#set-institution-btn').click(function(){
             }
         },
         formatResult: function(item) {
-            var markup = '<li>'+
-                '<div >'+
-                '<span class="text ellipsis">' + item.name + '</span></div></li>'
+            var markup = '<li><div ><span class="text ellipsis">' + item.name + '</span></div></li>'
             return markup;
         },
         formatSelection:function(item) {
@@ -179,7 +177,7 @@ $("#set-institution-form").submit(function(){
         apply_form_error(form_id, "Institution can not be blank" );
         return false;
     } else {
-        data += insts[0].name;
+        data = insts[0].name;
     }
     $('td [type="checkbox"]:checked').closest('tr').each(function(index, item) {
             emails.push($(item).attr('data-userid'));
@@ -207,12 +205,12 @@ $("#set-institution-form").submit(function(){
                     location.reload(true);
                 }
             },
-             error: function(xhr, textStatus, errorThrown){
-                 if (xhr.responseText) {
-                     var error = $.parseJSON(xhr.responseText).error;
-                     apply_form_error(form_id, error);
-                     enable(submit_btn);
-                 }
+            error: function(xhr, textStatus, errorThrown){
+                if (xhr.responseText) {
+                    var error = $.parseJSON(xhr.responseText).error;
+                    apply_form_error(form_id, error);
+                    enable(submit_btn);
+                }
             }
         });
         return false;
