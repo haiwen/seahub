@@ -13,6 +13,7 @@ from django.utils.html import escape
 from seahub.api2.throttling import UserRateThrottle
 from seahub.api2.authentication import TokenAuthentication
 from seahub.api2.utils import api_error
+from seahub.signals import rename_dirent_successful
 
 from seahub.views import check_folder_permission
 from seahub.utils import check_filename_with_rename
@@ -137,6 +138,11 @@ class CopyMoveTaskView(APIView):
                         src_dirent_name, dst_repo_id, dst_parent_dir,
                         new_dirent_name, replace=False, username=username,
                         need_progress=1)
+                is_dir = True if dirent_type == 'dir' else False
+                rename_dirent_successful.send(sender=None, src_repo_id=src_repo_id,
+                        src_parent_dir=src_parent_dir, src_filename=src_dirent_name,
+                        dst_repo_id=dst_repo_id, dst_parent_dir=dst_parent_dir,
+                        dst_filename=dst_dirent_name, is_dir=is_dir)
             except Exception as e:
                 logger.error(e)
                 error_msg = 'Internal Server Error'

@@ -811,6 +811,19 @@
                     <td><%= dirent.last_update %></td>
                 </tr>
                 <% } %>
+                <% if (dirent.perm == 'rw') { %>
+                <tr>
+                    <th class="tags-label">{% trans "Tags" %}</th>
+                    <td class="tags-container">
+                        <span class="loading-icon"></span>
+                        <ul class="cur-tags hide ovhd"></ul>
+                        <span class="sf2-icon-edit tags-edit-icon op-icon hide" title="{% trans "Edit" %}"></span>
+                        <input type="hidden" class="w100 hide tags-input" />
+                        <button class="submit tags-submit-btn hide">{% trans "Submit" %}</button>
+                        <p class="error hide"></p>
+                    </td>
+                </tr>
+                <% } %>
             </table>
 
             <% } else { %>
@@ -842,6 +855,19 @@
                 <tr>
                     <th>{% trans "Last Update" %}</th>
                     <td><%= dirent.last_update %></td>
+                </tr>
+                <% } %>
+                <% if (dirent.perm == 'rw') { %>
+                <tr>
+                    <th class="tags-label">{% trans "Tags" %}</th>
+                    <td class="tags-container">
+                        <span class="loading-icon"></span>
+                        <ul class="cur-tags hide ovhd"></ul>
+                        <span class="sf2-icon-edit tags-edit-icon op-icon hide" title="{% trans "Edit" %}"></span>
+                        <input type="hidden" class="w100 hide tags-input" />
+                        <button class="submit tags-submit-btn hide">{% trans "Submit" %}</button>
+                        <p class="error hide"></p>
+                    </td>
                 </tr>
                 <% } %>
             </table>
