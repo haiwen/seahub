@@ -179,15 +179,20 @@ $('#info-bar .close').click(function() {
         lang_selector = $('#lang-context-selector');
 
     lang_context.parent().css({'position':'relative'});
-    lang_selector.css({
-        'top': lang_context.position().top + lang_context.height() + 5,
-        'right': 0
-    });
+
+    if ($('#header').is(':visible')) { // for login page
+        lang_selector.css({
+            'top': lang_context.position().top + lang_context.height() + 5,
+            'right': 0
+        });
+    }
 
     var setLangSelectorMaxHeight = function() {
-        $('.sf-popover-con', lang_selector).css({
-            'max-height': $(window).height() - lang_selector.offset().top - 12
-        });
+        if ($('#header').is(':visible')) { // for login page
+            $('.sf-popover-con', lang_selector).css({
+                'max-height': $(window).height() - lang_selector.offset().top - 12
+            });
+        }
     };
     $(window).resize(function() {
         if (lang_selector.is(':visible')) {
