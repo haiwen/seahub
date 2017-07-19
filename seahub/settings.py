@@ -313,6 +313,9 @@ DISABLE_SYNC_WITH_ANY_FOLDER = False
 
 ENABLE_TERMS_AND_CONDITIONS = False
 
+# Enable or disable sharing to all groups
+ENABLE_SHARE_ANY_GROUPS = True
+
 # interval for request unread notifications
 UNREAD_NOTIFICATIONS_REQUEST_INTERVAL = 3 * 60 # seconds
 

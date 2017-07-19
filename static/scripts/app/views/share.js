@@ -638,15 +638,41 @@ define([
                         });
                         $add_item.after(new_item.el);
                     });
-
-                    var groups = app.pageOptions.groups || [];
-                    var g_opts = '';
-                    for (var i = 0, len = groups.length; i < len; i++) {
-                        g_opts += '<option value="' + groups[i].id + '" data-index="' + i + '">' + groups[i].name + '</option>';
-                    }
-                    $('[name="groups"]', $add_item).html(g_opts).select2({
-                        placeholder: gettext("Select groups"),
-                        escapeMarkup: function(m) { return m; }
+                    $.ajax({
+                        url: Common.getUrl({
+                            name: 'groups-share'
+                        }),
+                        type: 'GET',
+                        dataType: 'json',
+                        cache: false,
+                        success: function(data){
+                            var groups = [];
+                            for (var i = 0, len = data.length; i < len; i++) {
+                                groups.push({
+                                    'id': data[i].id,
+                                    'name': data[i].name
+                                });
+                            }
+                            groups.sort(function(a, b) {
+                                return Common.compareTwoWord(a.name, b.name);
+                            });
+                            var g_opts = '';
+                            for (var i = 0, len = groups.length; i < len; i++) {
+                                g_opts += '<option value="' + groups[i].id + '" data-index="' + i + '">' + groups[i].name + '</option>';
+                            }
+                            $('[name="groups"]', $add_item).html(g_opts).select2({
+                                placeholder: gettext("Select groups"),
+                                escapeMarkup: function(m) { return m; }
+                            })
+                        },
+                        error: function(xhr, textStatus, errorThrown) {
+                            var g_opts = '<option disabled="true">Place check network</option';
+                            $('[name="groups"]', $add_item).html(g_opts).select2({
+                                placeholder: gettext("Place check network"),
+                            });
+                            var $submitBtn = $('[type="submit"]', $add_item);
+                            Common.disableButton($submitBtn);
+                        }
                     });
 
                     $table.removeClass('hide');
