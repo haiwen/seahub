@@ -29,7 +29,9 @@
         <button id="export-excel">{% trans "Export Excel" %}</button>
     </div>
     <div class="js-op-for-selected fright hide">
+        {% if multi_institution %}
         <button id="set-institution-btn">{% trans "Set institution" %}</button>
+        {% endif %}
         <button id="set-quota-btn">{% trans "Set quota" %}</button>
         <button id="delete-users-btn">{% trans "Delete users" %}</button>
     </div>

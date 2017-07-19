@@ -10,10 +10,17 @@
         <th width="33%">{% trans "Email" %} / {% trans "Name" %} / {% trans "Contact Email" %}</th>
         <th width="12%">{% trans "Status" %}</th>
         {% endif %}
-        <th width="10%">{% trans "Institution" %}</th>
-        <th width="16%">{% trans "Space Used / Quota" %}</th>
-        <th width="15%">{% trans "Create At / Last Login" %}</th>
-        <th width="15%"></th>
+        {% if multi_institution %}
+            <th width="10%">{% trans "Institution" %}</th>
+            <th width="10%">{% trans "Institution" %}</th>
+            <th width="16%">{% trans "Space Used / Quota" %}</th>
+            <th width="15%">{% trans "Create At / Last Login" %}</th>
+            <th width="15%"></th>
+        {% else %}
+            <th width="16%">{% trans "Space Used / Quota" %}</th>
+            <th width="22%">{% trans "Create At / Last Login" %}</th>
+            <th width="14%"></th>
+        {% endif %}
     </tr>
 
     {% for user in users %}
@@ -71,6 +78,7 @@
         {% endif %}
         </td>
         {% endif %}
+        {% if multi_institution %}
         <td>
             <div class="user-institution">
                 <span class="user-institution-cur-value"> {{ user.institution }} </span>
@@ -83,6 +91,7 @@
                 <option value="" {% if user.institution == "" %} selected="selected"{% endif %}>None</option>
             </select>
         </td>
+        {% endif %}
 
         <td style="font-size:11px;">
             {{ user.space_usage|seahub_filesizeformat }} /

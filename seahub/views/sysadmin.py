@@ -256,6 +256,7 @@ def sys_user_admin(request):
             'enable_user_plan': enable_user_plan,
             'extra_user_roles': extra_user_roles,
             'institutions': institutions,
+            'multi_institution': getattr(dj_settings, 'MULTI_INSTITUTION', False),
         }, context_instance=RequestContext(request))
 
 @login_required
