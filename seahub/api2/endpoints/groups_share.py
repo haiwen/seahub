@@ -4,8 +4,7 @@ from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 from rest_framework.views import APIView
 
-import seaserv
-from seaserv import ccnet_threaded_rpc
+from seaserv import seafile_api
 
 from seahub.api2.authentication import TokenAuthentication
 from seahub.api2.throttling import UserRateThrottle
@@ -15,22 +14,25 @@ from seahub.utils import is_org_context
 from seahub.settings import ENABLE_SHARE_ANY_GROUPS
 
 
-class GroupsShareView(APIView):
+class GroupsSharableView(APIView):
+    """Only for share group selection"""
     authentication_classes = (TokenAuthentication, SessionAuthentication)
     permission_classes = (IsAuthenticated,)
     throttle_classes = (UserRateThrottle, )
 
     def get(self, request):
+        """Get personal groups or get all groups
+        """
         org_id = None
         username = request.user.username
         if ENABLE_SHARE_ANY_GROUPS:
-            groups_list = ccnet_threaded_rpc.get_all_groups(-1, -1)
+            groups_list = seafile_api.get_all_groups(-1, -1)
         else:
             if is_org_context(request):
                 org_id = request.user.org.org_id
-                groups_list = seaserv.get_org_groups_by_user(org_id, username)
+                groups_list = seafile_api.get_org_groups_by_user(org_id, username)
             else:
-                groups_list = seaserv.get_personal_groups_by_user(username)
+                groups_list = seafile_api.get_personal_groups_by_user(username)
 
         try:
             avatar_size = int(request.GET.get('avatar_size', 

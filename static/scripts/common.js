@@ -138,7 +138,7 @@ define([
 
                 // Group
                 case 'groups': return siteRoot + 'api/v2.1/groups/';
-                case 'groups-share': return siteRoot + 'api/v2.1/groups-share/';
+                case 'groups_sharable': return siteRoot + 'api/v2.1/groups/sharable/';
                 case 'search_group': return siteRoot + 'api/v2.1/search-group/';
                 case 'group': return siteRoot + 'api/v2.1/groups/' + options.group_id + '/';
                 case 'group_members': return siteRoot + 'api/v2.1/groups/' + options.group_id + '/members/';

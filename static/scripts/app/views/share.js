@@ -640,7 +640,7 @@ define([
                     });
                     $.ajax({
                         url: Common.getUrl({
-                            name: 'groups-share'
+                            name: 'groups_sharable'
                         }),
                         type: 'GET',
                         dataType: 'json',
@@ -666,7 +666,7 @@ define([
                             })
                         },
                         error: function(xhr, textStatus, errorThrown) {
-                            var g_opts = '<option disabled="true">Place check network</option';
+                            var g_opts = '<option disabled="true">Place check network</option>';
                             $('[name="groups"]', $add_item).html(g_opts).select2({
                                 placeholder: gettext("Place check network"),
                             });
