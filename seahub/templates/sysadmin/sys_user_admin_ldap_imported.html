@@ -29,60 +29,9 @@
 </div>
 
 {% if users %}
-<table>
-    <tr>
-        <th width="3%"><input type="checkbox" /></th>
-        <th width="33%">{% trans "Email" %}</th>
-        <th width="12%">{% trans "Status" %}</th>
-        <th width="18%">{% trans "Space Used / Quota" %}</th>
-        <th width="18%">{% trans "Last Login" %}</th>
-        <th width="16%"></th>
-    </tr>
-
-    {% for user in users %}
-    <tr data-userid="{{user.email}}">
-        <td><input type="checkbox" /></td>
-        <td>
-            <a href="{% url 'user_info' user.email %}">{{ user.email }}</a>
-            {% if user.name %}<br />{{ user.name }}{% endif %}
-            {% if user.contact_email %}<br />{{ user.contact_email }}{% endif %}
-        </td>
-        <td>
-            <div class="user-status">
-              {% if user.is_active %}
-                <span class="user-status-cur-value">{% trans "Active" %}</span>
-              {% else %}
-                <span class="user-status-cur-value">{% trans "Inactive" %}</span>
-              {% endif %}
-                <span title="{% trans "Edit"%}" class="user-status-edit-icon sf2-icon-edit op-icon vh"></span>
-            </div>
-            <select name="permission" class="user-status-select hide">
-                <option value="1" {%if user.is_active %}selected="selected"{% endif %}>{% trans "Active" %}</option>
-                <option value="0" {%if not user.is_active %}selected="selected"{% endif %}>{% trans "Inactive"%}</option>
-            </select>
-        </td>
-        <td style="font-size:11px;">
-            {{ user.space_usage|seahub_filesizeformat }} / 
-            <span class="user-space-quota">
-                {% if user.space_quota > 0 %}
-                {{ user.space_quota|seahub_filesizeformat }}
-                {% else %}
-                --
-                {% endif %}
-            </span>
-            <span title="{% trans "Edit Quota" %}" class="quota-edit-icon sf2-icon-edit op-icon vh"></span>
-        </td>
-        <td>
-            {% if user.last_login %}{{user.last_login|translate_seahub_time}} {% else %} -- {% endif %}
-        </td>
-        <td>
-          {% if not user.is_self %}
-          <a href="#" class="remove-user-btn op vh" data-url="{% url 'user_remove' user.email %}" data-target="{{ user.props.email }}">{% trans "Delete" %}</a>
-          {% endif %}
-        </td>
-    </tr>
-    {% endfor %}
-</table>
+{% with is_admin_page=False%}
+{% include "sysadmin/useradmin_table.html" %}
+{% endwith %}
 {% include "snippets/admin_paginator.html" %}
 <form id="set-quota-form" method="post" action="" class="hide">{% csrf_token %}
     <h3>{% trans "Set user storage limit" %}</h3>

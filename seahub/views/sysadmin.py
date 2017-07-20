@@ -387,11 +387,18 @@ def sys_user_admin_ldap_imported(request):
         populate_user_info(user)
         _populate_user_quota_usage(user)
 
+        # check user's role
+        user.is_guest = True if get_user_role(user) == GUEST_USER else False
+        user.is_default = True if get_user_role(user) == DEFAULT_USER else False
+
         # populate user last login time
         user.last_login = None
         for last_login in last_logins:
             if last_login.username == user.email:
                 user.last_login = last_login.last_login
+
+    extra_user_roles = [x for x in get_available_roles()
+                        if x not in get_basic_user_roles()]
 
     return render_to_response(
         'sysadmin/sys_user_admin_ldap_imported.html', {
@@ -402,6 +409,9 @@ def sys_user_admin_ldap_imported(request):
             'per_page': per_page,
             'page_next': page_next,
             'is_pro': is_pro_version(),
+            'extra_user_roles': extra_user_roles,
+            'default_user': DEFAULT_USER,
+            'guest_user': GUEST_USER,
         }, context_instance=RequestContext(request))
 
 @login_required

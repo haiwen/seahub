@@ -47,7 +47,6 @@
         </td>
         {% if is_pro %}
         <td>
-        {% if user.source == "DB" %}
             <div class="user-role">
                 {% if user.is_guest %}
                     <span class="user-role-cur-value">{% trans "Guest" %}</span>
@@ -65,9 +64,6 @@
                 <option value={{role}} {%if user.role == role %}selected="selected"{% endif %}>{{ role }}</option>
                 {% endfor %}
             </select>
-        {% else %}
-        --
-        {% endif %}
         </td>
         {% endif %}
 
@@ -80,9 +76,7 @@
                 --
                 {% endif %}
             </span>
-            {% if user.source == "DB" or user.source == 'LDAPImport' %}
             <span title="{% trans "Edit Quota" %}" class="quota-edit-icon sf2-icon-edit op-icon vh"></span>
-            {% endif %}
         </td>
         <td>
             {% if user.source == "DB" %}
