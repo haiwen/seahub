@@ -25,11 +25,20 @@
 
         <table class="commit-list">
             <tr>
+                {% if show_label %}
+                <th width="43%">{% trans "Description" %}</th>
+                <th width="12%">{% trans "Time" %}</th>
+                <th width="12%">{% trans "Modifier" %}</th>
+                <th width="12%">{% trans "Device" %} / {% trans "Version" %}</th>
+                <th width="9%">{% trans "Labels" %}</th>
+                <th width="12%">{% trans "Operations" %}</th>
+                {% else %}
                 <th width="43%">{% trans "Description" %}</th>
                 <th width="15%">{% trans "Time" %}</th>
                 <th width="15%">{% trans "Modifier" %}</th>
                 <th width="15%">{% trans "Device" %} / {% trans "Version" %}</th>
                 <th width="12%">{% trans "Operations" %}</th>
+                {% endif %}
             </tr>
 
             {% for commit in commits %}
@@ -60,6 +69,13 @@
                     API / --
                     {% endif %}
                 </td>
+                {% if show_label %}
+                <td>
+                    {% for label in commit.labels %}
+                    <span class="cur-tag">{{ label }}</span>
+                    {% endfor %}
+                </td>
+                {% endif %}
                 <td>
                     {% if user_perm == 'rw' %}
                         {% if forloop.first and current_page == 1 %}

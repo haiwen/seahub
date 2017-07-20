@@ -595,6 +595,9 @@ OTP_LOGIN_URL = '/profile/two_factor_authentication/setup/'
 # Enable personal wiki, group wiki
 ENABLE_WIKI = False
 
+# Enable 'repo snapshot label' feature
+ENABLE_REPO_SNAPSHOT_LABEL = False
+
 #####################
 # External settings #
 #####################

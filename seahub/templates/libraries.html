@@ -289,6 +289,7 @@ app["pageOptions"] = {
     folder_perm_enabled: {% if folder_perm_enabled %} true {% else %} false {% endif %},
     is_pro: {% if is_pro %} true {% else %} false {% endif %},
     file_audit_enabled: {% if file_audit_enabled %} true {% else %} false {% endif %},
+    enable_repo_snapshot_label: {% if enable_repo_snapshot_label %} true {% else %} false {% endif %},
     cur_note: {% if request.cur_note %} {'id': '{{ request.cur_note.id }}'} {% else %} null {% endif %}
 };
 app.ui = {
