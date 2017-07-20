@@ -103,7 +103,8 @@ app["pageOptions"] = {
     is_pro: {% if is_pro %} true {% else %} false {% endif %},
     enable_sys_admin_view_repo: {% if enable_sys_admin_view_repo %} true {% else %} false {% endif %},
     file_audit_enabled: {% if file_audit_enabled %} true {% else %} false {% endif %},
-    cur_note: {% if request.cur_note %} {'id': '{{ request.cur_note.id }}'} {% else %} null {% endif %}
+    cur_note: {% if request.cur_note %} {'id': '{{ request.cur_note.id }}'} {% else %} null {% endif %},
+    enable_limit_ipaddress:  {% if enable_limit_ipaddress %} true {% else %} false {% endif %},
 };
 </script>
 <script src="{{ STATIC_URL }}scripts/i18n/{{ LANGUAGE_CODE }}/djangojs.js"></script>

@@ -8,6 +8,7 @@ define([
     'sysadmin-app/views/desktop-devices',
     'sysadmin-app/views/mobile-devices',
     'sysadmin-app/views/device-errors',
+    'sysadmin-app/views/device-settings',
     'sysadmin-app/views/repos',
     'sysadmin-app/views/search-repos',
     'sysadmin-app/views/system-repo',
@@ -22,9 +23,10 @@ define([
     'app/views/account'
 ], function($, Backbone, Common, SideNavView, DashboardView,
     DesktopDevicesView, MobileDevicesView, DeviceErrorsView,
-    ReposView, SearchReposView, SystemReposView, TrashReposView,
-    SearchTrashReposView, DirView, GroupsView, SearchGroupsView,
-    GroupReposView, GroupMembersView, AdminLogsView, AccountView) {
+    DeviceSettingsView, ReposView, SearchReposView, SystemReposView,
+    TrashReposView, SearchTrashReposView, DirView, GroupsView,
+    SearchGroupsView, GroupReposView, GroupMembersView, AdminLogsView,
+    AccountView) {
 
     "use strict";
 
@@ -35,6 +37,7 @@ define([
             'desktop-devices/': 'showDesktopDevices',
             'mobile-devices/': 'showMobileDevices',
             'device-errors/': 'showDeviceErrors',
+            'device-settings/': 'showDeviceSettings',
             'all-libs/': 'showLibraries',
             'search-libs/': 'showSearchLibraries',
             'system-lib/': 'showSystemLibrary',
@@ -66,6 +69,7 @@ define([
             this.desktopDevicesView = new DesktopDevicesView();
             this.mobileDevicesView = new MobileDevicesView();
             this.deviceErrorsView = new DeviceErrorsView();
+            this.deviceSettingsView = new DeviceSettingsView();
 
             this.reposView = new ReposView();
             this.searchReposView = new SearchReposView();
@@ -131,6 +135,12 @@ define([
             this.switchCurrentView(this.deviceErrorsView);
             this.sideNavView.setCurTab('devices');
             this.deviceErrorsView.show();
+        },
+
+        showDeviceSettings: function() {
+            this.switchCurrentView(this.deviceSettingsView);
+            this.sideNavView.setCurTab('devices');
+            this.deviceSettingsView.show()
         },
 
         showLibraries: function() {
