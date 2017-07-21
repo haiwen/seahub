@@ -96,12 +96,21 @@ define([
         },
 
         showDashboard: function() {
+            if (!app.pageOptions.admin_permissions.can_view_system_info) {
+                return false;
+            }
+
             this.switchCurrentView(this.dashboardView);
             this.sideNavView.setCurTab('dashboard');
             this.dashboardView.show();
         },
 
         showDesktopDevices: function(current_page) {
+            if (!app.pageOptions.is_default_admin) {
+                this.showDashboard();
+                return false;
+            }
+
             var url = window.location.href;
             var page = url.match(/.*?page=(\d+)/);
             if (page) {
@@ -115,6 +124,11 @@ define([
         },
 
         showMobileDevices: function(current_page) {
+            if (!app.pageOptions.is_default_admin) {
+                this.showDashboard();
+                return false;
+            }
+
             var url = window.location.href;
             var page = url.match(/.*?page=(\d+)/);
             if (page) {
@@ -128,12 +142,22 @@ define([
         },
 
         showDeviceErrors: function() {
+            if (!app.pageOptions.is_default_admin) {
+                this.showDashboard();
+                return false;
+            }
+
             this.switchCurrentView(this.deviceErrorsView);
             this.sideNavView.setCurTab('devices');
             this.deviceErrorsView.show();
         },
 
         showLibraries: function() {
+            if (!app.pageOptions.admin_permissions.can_manage_library) {
+                this.showDashboard();
+                return false;
+            }
+
             // url_match: null or an array like ["http://127.0.0.1:8000/sysadmin/#libraries/?page=2", "2"]
             var url_match = location.href.match(/.*?page=(\d+)/);
             var page = url_match ? url_match[1] : 1; // 1: default
@@ -144,6 +168,11 @@ define([
         },
 
         showSearchLibraries: function() {
+            if (!app.pageOptions.admin_permissions.can_manage_library) {
+                this.showDashboard();
+                return false;
+            }
+
             // url_match: null or an array
             var url_match = location.href.match(/.*?name=(.*)&owner=(.*)/); // search by repo_name/owner
             var repo_name = url_match ? url_match[1] : '';
@@ -158,6 +187,11 @@ define([
         },
 
         showLibraryDir: function(repo_id, path) {
+            if (!app.pageOptions.admin_permissions.can_manage_library) {
+                this.showDashboard();
+                return false;
+            }
+
             if (path) {
                 path = '/' + path;
             } else {
@@ -169,6 +203,11 @@ define([
         },
 
         showSystemLibrary: function() {
+            if (!app.pageOptions.admin_permissions.can_manage_library) {
+                this.showDashboard();
+                return false;
+            }
+
             this.switchCurrentView(this.systemReposView);
             this.sideNavView.setCurTab('libraries', {'option': 'system'});
             this.systemReposView.show();
@@ -176,6 +215,11 @@ define([
 
         // show trash libs by page
         showTrashLibraries: function() {
+            if (!app.pageOptions.admin_permissions.can_manage_library) {
+                this.showDashboard();
+                return false;
+            }
+
             // url_match: null or an array
             var url_match = location.href.match(/.*?page=(\d+)/);
             var page = url_match ? url_match[1] : 1; // 1: default
@@ -187,6 +231,11 @@ define([
 
         // search trash libs by owner
         showSearchTrashLibraries: function() {
+            if (!app.pageOptions.admin_permissions.can_manage_library) {
+                this.showDashboard();
+                return false;
+            }
+
             // url_match: null or an array
             var url_match = location.href.match(/.*?name=(.*)/); // search by owner
             var owner = url_match ? url_match[1] : '';
@@ -197,6 +246,11 @@ define([
         },
 
         showGroups: function() {
+            if (!app.pageOptions.admin_permissions.can_manage_group) {
+                this.showDashboard();
+                return false;
+            }
+
             // url_match: null or an array like ["http://127.0.0.1:8000/sysadmin/#groups/?page=2", "2"]
             var url_match = location.href.match(/.*?page=(\d+)/);
             var page = url_match ? url_match[1] : 1; // 1: default
@@ -207,6 +261,11 @@ define([
         },
 
         showSearchGroups: function() {
+            if (!app.pageOptions.admin_permissions.can_manage_group) {
+                this.showDashboard();
+                return false;
+            }
+
             // url_match: null or an array
             var url_match = location.href.match(/.*?name=(.*)/); // search by group_name
             var group_name = url_match ? url_match[1] : '';
@@ -219,18 +278,33 @@ define([
         },
 
         showGroupLibraries: function(group_id) {
+            if (!app.pageOptions.admin_permissions.can_manage_group) {
+                this.showDashboard();
+                return false;
+            }
+
             this.switchCurrentView(this.groupReposView);
             this.sideNavView.setCurTab('groups');
             this.groupReposView.show(group_id);
         },
 
         showGroupMembers: function(group_id) {
+            if (!app.pageOptions.admin_permissions.can_manage_group) {
+                this.showDashboard();
+                return false;
+            }
+
             this.switchCurrentView(this.groupMembersView);
             this.sideNavView.setCurTab('groups');
             this.groupMembersView.show(group_id);
         },
 
         showAdminLogs: function() {
+            if (!app.pageOptions.admin_permissions.can_view_admin_log) {
+                this.showDashboard();
+                return false;
+            }
+
             var url = window.location.href;
             var page = url.match(/.*?page=(\d+)/);
             if (page) {

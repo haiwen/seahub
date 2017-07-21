@@ -4,74 +4,102 @@
     <a href="#" title="{% trans "Close" %}" aria-label="{% trans "Close" %}" class="sf2-icon-x1 sf-popover-close op-icon hidden-md-up js-close-side-nav fright"></a>
     <h3 class="hd">{% trans "System Admin" %}</h3>
     <ul class="side-tabnav-tabs">
+
+        {% if admin_permissions.can_view_system_info %}
         <li class="tab<% if (cur_tab == 'dashboard') { %> tab-cur<% } %>">
             <a href="{{ SITE_ROOT }}sysadmin/#dashboard/"><span class="sf2-icon-info"></span>{% trans "Info" %}</a>
         </li>
+        {% endif %}
+
+        {% if is_default_admin %}
         <li class="tab<% if (cur_tab == 'devices') { %> tab-cur<% } %>">
             <a href="{{ SITE_ROOT }}sysadmin/#desktop-devices/"><span class="sf2-icon-monitor"></span>{% trans "Devices" %}</a>
         </li>
-        {% if constance_enabled %}
+        {% endif %}
+
+        {% if constance_enabled and admin_permissions.can_config_system %}
         <li class="tab">
             <a href="{% url "sys_settings" %}"><span class="sf2-icon-cog2"></span>{% trans "Settings" %}</a>
         </li>
         {% endif %}
+
+        {% if admin_permissions.can_manage_library %}
         <li class="tab<% if (cur_tab == 'libraries') { %> tab-cur<% } %>">
             <a href="{{ SITE_ROOT }}sysadmin/#all-libs/"><span class="sf2-icon-library"></span>{% trans "Libraries" %}</a>
         </li>
+        {% endif %}
+
+        {% if admin_permissions.can_manage_user %}
         <li class="tab">
             <a href="{{ SITE_ROOT }}sys/useradmin/"><span class="sf2-icon-user"></span>{% trans "Users" %}</a>
         </li>
+        {% endif %}
+
+        {% if admin_permissions.can_manage_group %}
         <li class="tab<% if (cur_tab == 'groups') { %> tab-cur<% } %>">
             <a href="{{ SITE_ROOT }}sysadmin/#groups/"><span class="sf2-icon-group"></span>{% trans "Groups" %}</a>
         </li>
-        {% if multi_tenancy %}
+        {% endif %}
+
+        {% if multi_tenancy and is_default_admin %}
         <li class="tab">
             <a href="{{ SITE_ROOT }}sys/orgadmin/"><span class="sf2-icon-organization"></span>{% trans "Organizations" %}</a>
         </li>
         {% endif %}
 
-        {% if multi_institution %}
+        {% if multi_institution and is_default_admin %}
         <li class="tab">
             <a href="{{ SITE_ROOT }}sys/instadmin/"><span class="sf2-icon-organization"></span>{% trans "Institutions" %}</a>
         </li>
         {% endif %}
 
+        {% if is_default_admin %}
         <li class="tab">
             <a href="{{ SITE_ROOT }}sys/notificationadmin/"><span class="sf2-icon-msgs"></span>{% trans "Notifications" %}</a>
         </li>
+        {% endif %}
+
+        {% if is_default_admin %}
         <li class="tab">
             <a href="{{ SITE_ROOT }}sys/publinkadmin/"><span class="sf2-icon-link"></span>{% trans "Links" %}</a>
         </li>
-        {% if traffic_stats_enabled %}
+        {% endif %}
+
+        {% if traffic_stats_enabled and is_default_admin %}
         <li class="tab">
             <a href="{{ SITE_ROOT }}sys/trafficadmin/"><span class="sf2-icon-histogram"></span>{% trans "Traffic" %}</a>
         </li>
         {% endif %}
-        {% if sysadmin_extra_enabled %}
+
+        {% if sysadmin_extra_enabled and admin_permissions.can_view_user_log %}
         <li class="tab">
             <a href="{{ SITE_ROOT }}sys/loginadmin/"><span class="sf2-icon-clock"></span>{% trans "Logs" %}</a>
         </li>
         {% endif %}
-        {% if events_enabled %}
+
+        {% if events_enabled and is_default_admin %}
         <li class="tab">
             <a href="{{ SITE_ROOT }}sys/virus_scan_records/"><span class="sf2-icon-security"></span>{% trans "Virus Scan" %}</a>
         </li>
         {% endif %}
-        {% if enable_guest_invitation %}
+
+        {% if enable_guest_invitation and is_default_admin %}
         <li class="tab">
         <a href="{{ SITE_ROOT }}sys/invitationadmin/"><span class="sf2-icon-invite"></span>{% trans "Invitations" %}</a>
         </li>
         {% endif %}
-        {% if enable_terms_and_conditions %}
+
+        {% if enable_terms_and_conditions and is_default_admin %}
         <li class="tab">
             <a href="{{ SITE_ROOT }}sys/termsadmin/"><span class="sf2-icon-wiki"></span>{% trans "Terms and Conditions" %}</a>
         </li>
         {% endif %}
-        <% if (app.pageOptions.is_pro) { %>
+
+        {% if is_pro and admin_permissions.can_view_admin_log %}
         <li class="tab<% if (cur_tab == 'admin-logs') { %> tab-cur<% } %>">
             <a href="{{ SITE_ROOT }}sysadmin/#admin-logs/"><span class="sf2-icon-admin-log"></span>{% trans "Admin Logs" %}</a>
         </li>
-        <% } %>
+        {% endif %}
 
     </ul>
     <% if (cur_tab == 'libraries') { %>
@@ -112,10 +140,14 @@
                     {% trans "licensed to" %} <%- license_to %>,
                     {% trans "expires on" %} <%- license_expiration %>
                 <% } %>
+
+                <% if (app.pageOptions.is_default_admin || app.pageOptions.admin_permissions.can_config_system) { %>
                 <div class="license-file-upload">
                     <input type="file" name="license" class="license-file-upload-input transparent-file-input" />
                     <button type="button" class="license-file-upload-btn">{% trans "Upload licence" %}</button>
                 </div>
+                <% } %>
+
             <% } else { %>
             {% trans "Community Edition" %}
             <a href="http://manual.seafile.com/deploy_pro/migrate_from_seafile_community_server.html" target="_blank">{% trans "Upgrade to Pro Edition" %}</a>

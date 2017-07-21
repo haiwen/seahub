@@ -47,6 +47,7 @@
         </td>
         {% if is_pro %}
         <td>
+            {% if not is_admin_page %}
             <div class="user-role">
                 {% if user.is_guest %}
                     <span class="user-role-cur-value">{% trans "Guest" %}</span>
@@ -64,6 +65,34 @@
                 <option value={{role}} {%if user.role == role %}selected="selected"{% endif %}>{{ role }}</option>
                 {% endfor %}
             </select>
+            {% else %} {# else for `if not is_admin_page` #}
+            <div class="admin-role">
+                {% if user.admin_role == default_admin %}
+                    <span class="admin-role-cur-value">{% trans "Default" %}</span>
+                {% elif user.admin_role == system_admin %}
+                    <span class="admin-role-cur-value">{% trans "System" %}</span>
+                {% elif user.admin_role == daily_admin %}
+                    <span class="admin-role-cur-value">{% trans "Daily" %}</span>
+                {% elif user.admin_role == audit_admin %}
+                    <span class="admin-role-cur-value">{% trans "Audit" %}</span>
+                {% else %}
+                    <span class="admin-role-cur-value">{{user.admin_role}}</span>
+                {% endif %}
+                <span title="{% trans "Edit"%}" class="admin-role-edit-icon sf2-icon-edit op-icon vh"></span>
+            </div>
+            <select name="role" class="admin-role-select hide">
+                <option value={{ default_admin }}{% if user.admin_role == default_admin %} selected="selected"{% endif %}>{% trans "Default" %}</option>
+                <option value={{ system_admin }}{% if user.admin_role == system_admin %} selected="selected"{% endif %}>{% trans "System" %}</option>
+                <option value={{ daily_admin }}{% if user.admin_role == daily_admin %} selected="selected"{% endif %}>{% trans "Daily" %}</option>
+                <option value={{ audit_admin }}{% if user.admin_role == audit_admin %} selected="selected"{% endif %}>{% trans "Audit" %}</option>
+                {% for role in extra_admin_roles %}
+                <option value={{ role }}{% if user.admin_role == role %} selected="selected"{% endif %}>{{ role }}</option>
+                {% endfor %}
+            </select>
+            {% endif %}
+        {% else %} {# else for `if is pro` #}
+        --
+        {% endif %}
         </td>
         {% endif %}
 

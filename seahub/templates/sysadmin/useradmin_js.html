@@ -22,13 +22,13 @@ addConfirmTo($('.unset-trial'), {
 
 $('tr:gt(0)').hover(
     function() {
-        $(this).find('.user-status-edit-icon, .user-role-edit-icon').removeClass('vh');
+        $(this).find('.user-status-edit-icon, .user-role-edit-icon, .admin-role-edit-icon').removeClass('vh');
     },
     function() {
-        $(this).find('.user-status-edit-icon, .user-role-edit-icon').addClass('vh');
+        $(this).find('.user-status-edit-icon, .user-role-edit-icon, .admin-role-edit-icon').addClass('vh');
     }
 );
-$('.user-status-edit-icon, .user-role-edit-icon').click(function() {
+$('.user-status-edit-icon, .user-role-edit-icon, .admin-role-edit-icon').click(function() {
     $(this).parent().addClass('hide');
     $(this).parent().next().removeClass('hide'); // show 'select'
 });
@@ -68,6 +68,37 @@ $('.user-status-select, .user-role-select').change(function() {
                 feedback("{% trans "Edit succeeded" %}", 'success');
             }
             $('.user-status-cur-value, .user-role-cur-value', $select_prev).html(select.children('option[value="' +select.val() + '"]').text());
+            select.addClass('hide');
+            $select_prev.removeClass('hide');
+            $.modal.close();
+        },
+        error: function() {
+            feedback("{% trans "Edit failed." %}", 'error');
+            select.addClass('hide');
+            $select_prev.removeClass('hide');
+            $.modal.close();
+        }
+    });
+});
+
+$('.admin-role-select').change(function() {
+    var select = $(this),
+        select_val = select.val(),
+        email = select.parents('tr').attr('data-userid'),
+        $select_prev = $(this).prev('.admin-role'),
+        url = "{% url 'api-v2.1-admin-admin-role' %}",
+        data = {'email': email, 'role': select_val};
+
+    $.ajax({
+        url: url,
+        type: 'PUT',
+        dataType: 'json',
+        data: data,
+        cache: false,
+        beforeSend: prepareCSRFToken,
+        success: function(data) {
+            feedback("{% trans "Edit succeeded" %}", 'success');
+            $('.admin-role-cur-value', $select_prev).html(select.children('option[value="' +select.val() + '"]').text());
             select.addClass('hide');
             $select_prev.removeClass('hide');
             $.modal.close();
@@ -293,5 +324,9 @@ $(document).click(function(e) {
     if (!$('.user-role-edit-icon, .user-role-select').is(target)) {
         $('.user-role').removeClass('hide');
         $('.user-role-select').addClass('hide');
+    }
+    if (!$('.admin-role-edit-icon, .admin-role-select').is(target)) {
+        $('.admin-role').removeClass('hide');
+        $('.admin-role-select').addClass('hide');
     }
 });
