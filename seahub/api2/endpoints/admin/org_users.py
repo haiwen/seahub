@@ -8,7 +8,6 @@ from rest_framework.views import APIView
 from rest_framework import status
 
 from constance import config
-import seaserv
 from seaserv import ccnet_api, seafile_api
 
 from seahub.utils import clear_token, is_valid_email
@@ -263,9 +262,7 @@ class AdminOrgUser(APIView):
 
             user_quota = int(user_quota_mb) * get_file_size_unit('MB')
 
-            # TODO
-            # seafile_api.get_org_quota(org_id)
-            org_quota = seaserv.seafserv_threaded_rpc.get_org_quota(org_id)
+            org_quota = seafile_api.get_org_quota(org_id)
 
             # -1 means org has unlimited quota
             if org_quota > 0:
@@ -274,9 +271,7 @@ class AdminOrgUser(APIView):
                     error_msg = 'Failed to set quota: maximum quota is %d MB' % org_quota_mb
                     return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
 
-            # TODO
-            # seafile_api.set_org_user_quota(org_id, email, user_quota)
-            seaserv.seafserv_threaded_rpc.set_org_user_quota(org_id, email, user_quota)
+            seafile_api.set_org_user_quota(org_id, email, user_quota)
 
         user_info = get_org_user_info(org_id, email)
         return Response(user_info)
