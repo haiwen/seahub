@@ -86,7 +86,9 @@ $('#add-admin-form').submit(function() {
         },
         error: function(xhr) {
             var error_msg;
-            if (xhr.responseText) {
+            if (xhr.status === 403) {
+                error_msg = 'Permission denied.'
+            } else if (xhr.responseText) {
                 error_msg = $.parseJSON(xhr.responseText).error;
             } else {
                 error_msg = "{% trans "Failed. Please check the network." %}";

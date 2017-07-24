@@ -103,7 +103,17 @@ app["pageOptions"] = {
     is_pro: {% if is_pro %} true {% else %} false {% endif %},
     enable_sys_admin_view_repo: {% if enable_sys_admin_view_repo %} true {% else %} false {% endif %},
     file_audit_enabled: {% if file_audit_enabled %} true {% else %} false {% endif %},
-    cur_note: {% if request.cur_note %} {'id': '{{ request.cur_note.id }}'} {% else %} null {% endif %}
+    cur_note: {% if request.cur_note %} {'id': '{{ request.cur_note.id }}'} {% else %} null {% endif %},
+    is_default_admin: {% if is_default_admin %} true {% else %} false {% endif %},
+    admin_permissions: {
+        "can_view_system_info": '{{ admin_permissions.can_view_system_info }}' === 'True',
+        "can_config_system": '{{ admin_permissions.can_config_system }}' === 'True',
+        "can_manage_library": '{{ admin_permissions.can_manage_library }}' === 'True',
+        "can_manage_user": '{{ admin_permissions.can_manage_user }}' === 'True',
+        "can_manage_group": '{{ admin_permissions.can_manage_group }}' === 'True',
+        "can_view_user_log": '{{ admin_permissions.can_view_user_log }}' === 'True',
+        "can_view_admin_log": '{{ admin_permissions.can_view_admin_log }}' === 'True'
+    }
 };
 </script>
 <script src="{{ STATIC_URL }}scripts/i18n/{{ LANGUAGE_CODE }}/djangojs.js"></script>
