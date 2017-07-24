@@ -53,7 +53,7 @@ from seahub.api2.endpoints.admin.perm_audit import PermAudit
 from seahub.api2.endpoints.admin.sysinfo import SysInfo
 from seahub.api2.endpoints.admin.devices import AdminDevices
 from seahub.api2.endpoints.admin.device_errors import AdminDeviceErrors
-from seahub.api2.endpoints.admin.device_settings import AdminDeviceAccessibleIpSetting
+from seahub.api2.endpoints.admin.device_accessible_ip_setting import AdminDeviceAccessibleIpSetting
 from seahub.api2.endpoints.admin.libraries import AdminLibraries, AdminLibrary
 from seahub.api2.endpoints.admin.library_dirents import AdminLibraryDirents, AdminLibraryDirent
 from seahub.api2.endpoints.admin.system_library import AdminSystemLibrary, \

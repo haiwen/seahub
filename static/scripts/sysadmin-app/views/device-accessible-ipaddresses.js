@@ -38,14 +38,11 @@ define([
 
         removeOne: function(e) {
             $.ajax({
-                url: Common.getUrl({name: 'admin-device-accessible-ip-setting'}),
+                url: Common.getUrl({name: 'admin-device-accessible-ip-setting'}) + "?ipaddress="+$(e.target).parent().parent().find(":first").html(),
                 type: "DELETE",
                 cache: false,
                 dataType: "JSON",
                 beforeSend: Common.prepareCSRFToken,
-                data: {
-                    "ipaddress": $(e.target).parent().parent().find(":first").html()
-                },
                 success: function(data){
                     $(e.target).parent().parent().remove();
                 },
@@ -69,7 +66,7 @@ define([
                     if (xhr.status == 201){
                         $("#admin-device-accessible-ipaddresses tbody").append('<tr><td id="label-id">' 
                                 + data.ip + 
-                                '</td><td><a id="remove-accessible-ip" class="op vh">Remove</a></td></tr>')
+                                '</td><td><a id="remove-accessible-ip" style="cursor:pointer;" class="op vh">Remove</a></td></tr>')
                         $.modal.close();
                     }
                     else if (xhr.status == 200){

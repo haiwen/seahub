@@ -22,7 +22,10 @@ def check_parameter(func):
             return api_error(status.HTTP_403_FORBIDDEN, error_msg)
 
         if request.method in ["DELETE", "POST"]:
-            ipaddress = request.POST.get('ipaddress', '')
+            if request.method == 'DELETE':
+                ipaddress = request.GET.get('ipaddress', '')
+            else:
+                ipaddress = request.POST.get('ipaddress', '')
             if not ipaddress:
                 error_msg = 'ip address can not be empty'
                 return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
@@ -65,7 +68,7 @@ class AdminDeviceAccessibleIpSetting(APIView):
     @check_parameter
     def delete(self, request, format=None):
         accessible_ip = list(settings.ACCESSIBLE_IPADDRESS_RANGE)
-        new_ip = request.POST.get('ipaddress')
+        new_ip = request.GET.get('ipaddress')
         if new_ip in accessible_ip:
             accessible_ip.remove(new_ip)
             settings.ACCESSIBLE_IPADDRESS_RANGE = tuple(accessible_ip)

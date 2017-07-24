@@ -3,9 +3,9 @@ import json
 
 from django.contrib import auth
 from django.core.exceptions import ImproperlyConfigured
+from django.conf import settings
 from django.http import HttpResponse
 
-from seahub.settings import ENABLE_LIMIT_IPADDRESS, ACCESSIBLE_IPADDRESS_RANGE
 from seahub.utils.ip import get_remote_ip
 
 
@@ -20,8 +20,8 @@ class LazyUser(object):
 class LimitIpMiddleware(object):
     def process_request(self, request):
         ip = get_remote_ip(request)
-        if ENABLE_LIMIT_IPADDRESS:
-            if ip not in ACCESSIBLE_IPADDRESS_RANGE:
+        if settings.ENABLE_LIMIT_IPADDRESS:
+            if ip not in settings.ACCESSIBLE_IPADDRESS_RANGE:
                 return HttpResponse(
                     json.dumps({"err_msg": "you can't login, because ip did't in range"}),
                     status=403,
