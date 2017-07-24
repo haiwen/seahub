@@ -124,16 +124,16 @@ class AdminUsersBatch(APIView):
                         operation=USER_DELETE, detail=admin_op_detail)
 
         if operation == 'set-institution':
-            institution_name = request.POST.get('institution_name', None)
-            if institution_name is None:
+            institution = request.POST.get('institution', None)
+            if institution is None:
                 error_msg = 'institution name can not be blank.'
                 return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
             emails = [email.strip() for email in emails if email.strip()]
-            if institution_name != '':
+            if institution != '':
                 try:
-                    obj_insti = Institution.objects.get(name=institution_name)
+                    obj_insti = Institution.objects.get(name=institution)
                 except Institution.DoesNotExist:
-                    error_msg = 'institution %s does not exists' % institution_name
+                    error_msg = 'Institution %s does not exists' % institution
                     return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
             for email in emails:
                 try:
@@ -145,7 +145,7 @@ class AdminUsersBatch(APIView):
                 profile = Profile.objects.get_profile_by_user(email)
                 if profile is None:
                     profile = Profile(user=email)
-                profile.institution = institution_name
+                profile.institution = institution
                 profile.save()
 
         return Response(result)

@@ -142,14 +142,18 @@
     <table>
         <thead>
             <tr>
-                <th width="75%">{% trans "Institution" %}</th>
-                <th width="25%"></th>
+                <th width="80%">{% trans "Institution" %}</th>
+                <th width="20%"></th>
             </tr>
         </thead>
         <tbody>
             <td>
-                <input id="institution_name"  class="w100"/>
-                <p class="error hide"></p>
+            <select id="batch-institution-select" name="institution" class="w100">
+                {% for inst in institutions %}
+                    <option value={{inst}}>{{inst}}</option>
+                {% endfor %}
+                <option value="" selected="selected">None</option>
+            </select>
             </td>
             <td>
                 <input type="submit" value="{% trans "Submit" %}" class="submit" />

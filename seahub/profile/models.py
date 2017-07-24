@@ -168,5 +168,7 @@ def update_profile_cache(sender, instance, **kwargs):
 @receiver(institution_deleted)
 def remove_user_for_inst_deleted(sender, **kwargs):
     inst_name = kwargs.get("inst_name", "")
-    Profile.objects.filter(institution=inst_name).delete()
-
+    profiles = Profile.objects.filter(institution=inst_name)
+    for p in profiles:
+        p.institution = ""
+        p.save()

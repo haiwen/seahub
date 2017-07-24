@@ -131,60 +131,16 @@ $('#set-quota-btn').click(function() {
 $('#set-institution-btn').click(function(){
     $('#set-institution-form').data({'batch': true}).modal();
     $('#simplemodal-container').css({'width':'auto', 'height':'auto'});
-
-    $("#institution_name").select2({
-        minimumInputLength: 1,
-        maximumSelectionSize:1,
-        multiple: true,
-        tags: [],
-        ajax: {
-            url: "{% url 'sys_inst_search_inst' %}",
-            dataType: 'json',
-            delay: 250,
-            data: function (term, page) {
-                return {
-                    q: term, // search term
-                };
-            },
-            results: function(data, page){
-                var insts_list = [], insts = data.insts;
-                for (var i =0, len = insts.length; i < len; i++){
-                    insts_list.push({
-                        "id": i,
-                        "name": insts[i].name
-                    });
-                }
-                return {results:insts_list};
-            }
-        },
-        formatResult: function(item) {
-            var markup = '<li><div ><span class="text ellipsis">' + item.name + '</span></div></li>'
-            return markup;
-        },
-        formatSelection:function(item) {
-            return (item.name);
-        },
-        escapeMarkup: function (m) { return m;  }
-    });
 });
+
 $("#set-institution-form").submit(function(){
-    var insts = $("#institution_name").select2("data"),
-        data = "",
-        emails = [],
+    var emails = [],
         form_id = $(this).attr('id'),
-        submit_btn = $(this).find('[type="submit"]');
-    if (!insts){
-        apply_form_error(form_id, "Institution can not be blank" );
-        return false;
-    } else {
-        data = insts[0].name;
-    }
+        submit_btn = $(this).find('[type="submit"]'),
+        data = $("#set-institution-form option:selected").val();
     $('td [type="checkbox"]:checked').closest('tr').each(function(index, item) {
             emails.push($(item).attr('data-userid'));
     });
-    if (data == "None"){
-        data = "";
-    }
     disable(submit_btn);
     var batch = $(this).data('batch');
     if (batch){
@@ -196,7 +152,7 @@ $("#set-institution-form").submit(function(){
             data: {
                 'operation': 'set-institution',
                 'email': emails,
-                'institution_name': data
+                'institution': data
             },
             traditional: true,
             beforeSend: prepareCSRFToken,

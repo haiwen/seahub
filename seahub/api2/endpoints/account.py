@@ -37,7 +37,7 @@ def get_account_info(user):
     info['email'] = email
     info['name'] = email2nickname(email)
     info['department'] = d_profile.department if d_profile else ''
-    info['institution_name'] = profile.institution if profile else ''
+    info['institution'] = profile.institution if profile else ''
     info['id'] = user.id
     info['is_staff'] = user.is_staff
     info['is_active'] = user.is_active
@@ -146,12 +146,12 @@ class Account(APIView):
                 seafile_api.set_user_quota(email, space_quota)
 
         # update user institution
-        institution_name = request.data.get("institution_name", None)
-        if institution_name is not None:
+        institution = request.data.get("institution", None)
+        if institution is not None:
             inst_profile = Profile.objects.get_profile_by_user(email)
             if inst_profile is None:
                 inst_profile = Profile(user=email)
-            inst_profile.institution = institution_name
+            inst_profile.institution = institution
             inst_profile.save()
 
         # update is_trial
@@ -206,13 +206,13 @@ class Account(APIView):
                         _(u'Department is too long (maximum is 512 characters)'))
 
         # argument check for institution
-        institution_name = request.data.get("institution_name", None)
-        if institution_name is not None and institution_name != '':
+        institution = request.data.get("institution", None)
+        if institution is not None and institution != '':
             try:
-                obj_insti = Institution.objects.get(name=institution_name)
+                obj_insti = Institution.objects.get(name=institution)
             except Institution.DoesNotExist:
                 return api_error(status.HTTP_400_BAD_REQUEST,
-                                "Institution %s does not exists" % institution_name)
+                                "Institution %s does not exists" % institution)
 
         # argument check for storage
         space_quota_mb = request.data.get("storage", None)

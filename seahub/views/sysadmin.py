@@ -2074,19 +2074,6 @@ def sys_inst_admin(request):
             'page_next': page_next,
         }, context_instance=RequestContext(request))
 
-@login_required
-@sys_staff_required
-def sys_inst_search_inst(request):
-    key = request.GET.get('q', '')
-    if not key:
-        return HttpResponse(json.dumps({'error': "q invalid"}),
-                status=400)
-    institutions = [dict([('name', inst.name)]) for inst in Institution.objects.filter(name__contains=key)]
-    institutions.append({'name': 'None'})
-    return HttpResponse(json.dumps({"insts": institutions}), status=200,
-                       content_type='application/json; charset=utf-8')
-
-@login_required
 @sys_staff_required
 @require_POST
 def sys_inst_add_user(request, inst_id):
