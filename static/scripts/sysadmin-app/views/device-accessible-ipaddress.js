@@ -8,10 +8,10 @@ define([
 ], function($, _, Backbone, Common, Moment, HLItemView) {
     'use strict';
 
-    var DeviceSettingView = HLItemView.extend({
+    var DeviceAccessibleIpAddressView = HLItemView.extend({
         tagName: 'tr',
 
-        template: _.template($('#device-setting-item-tmpl').html()),
+        template: _.template($('#device-accessible-ip-item-tmpl').html()),
 
         initialize: function() {
             HLItemView.prototype.initialize.call(this);
@@ -25,5 +25,5 @@ define([
         }
     });
 
-    return DeviceSettingView
+    return DeviceAccessibleIpAddressView;
 });

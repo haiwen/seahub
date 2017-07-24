@@ -3,21 +3,21 @@ define([
     'underscore',
     'backbone',
     'common',
-    'sysadmin-app/views/device-setting',
-    'sysadmin-app/collection/device-settings'
-],function($, _, Backbone, Common, DeviceSetting, DeviceSettingCollection) {
+    'sysadmin-app/views/device-accessible-ipaddress',
+    'sysadmin-app/collection/device-accessible-ipaddress'
+],function($, _, Backbone, Common, DeviceAccessibleIpAddress, DeviceAccessibleIpAddressCollection) {
     'use strict';
 
-    var DeviceSettingsView = Backbone.View.extend({
+    var DeviceAccessibleIpAddressesView = Backbone.View.extend({
 
-        id: 'admin-device-settings',
+        id: 'admin-device-accessible-ipaddresses',
 
-        template: _.template($('#device-settings-tmpl').html()),
+        template: _.template($('#device-accessible-ipaddresses-tmpl').html()),
 
         initialize: function() {
-            this.deviceSettingCollection = new DeviceSettingCollection();
-            this.listenTo(this.deviceSettingCollection, 'add', this.addOne);
-            this.listenTo(this.deviceSettingCollection, 'reset', this.reset);
+            this.deviceAccessibleIpAddressCollection = new DeviceAccessibleIpAddressCollection();
+            this.listenTo(this.deviceAccessibleIpAddressCollection, 'add', this.addOne);
+            this.listenTo(this.deviceAccessibleIpAddressCollection, 'reset', this.reset);
             this.render();
         },
 
@@ -38,7 +38,7 @@ define([
 
         removeOne: function(e) {
             $.ajax({
-                url: Common.getUrl({name: 'admin-device-settings'}),
+                url: Common.getUrl({name: 'admin-device-accessible-ip-setting'}),
                 type: "DELETE",
                 cache: false,
                 dataType: "JSON",
@@ -57,7 +57,7 @@ define([
 
         createOne: function() {
             $.ajax({
-                url: Common.getUrl({name: 'admin-device-settings'}),
+                url: Common.getUrl({name: 'admin-device-accessible-ip-setting'}),
                 type: "POST",
                 cache: false,
                 dataType: "JSON",
@@ -67,7 +67,7 @@ define([
                 },
                 success: function(data, textStatus, xhr){
                     if (xhr.status == 201){
-                        $("#admin-device-settings tbody").append('<tr><td id="label-id">' 
+                        $("#admin-device-accessible-ipaddresses tbody").append('<tr><td id="label-id">' 
                                 + data.ip + 
                                 '</td><td><a id="remove-accessible-ip" class="op vh">Remove</a></td></tr>')
                         $.modal.close();
@@ -110,7 +110,7 @@ define([
 
         show: function() {
             $("#right-panel").html(this.$el);
-            this.showAdminDeviceSettings();
+            this.showAdminDeviceAccessibleIpAddress();
         },
 
         initPage: function() {
@@ -118,11 +118,11 @@ define([
             this.$tableBody.empty();
         },
 
-        showAdminDeviceSettings: function() {
+        showAdminDeviceAccessibleIpAddress: function() {
             this.initPage();
 
             var _this = this;
-            this.deviceSettingCollection.fetch({
+            this.deviceAccessibleIpAddressCollection.fetch({
                 cache: false,
                 reset: true,
                 success: function(collection, response, opts){
@@ -145,19 +145,19 @@ define([
 
         reset: function() {
             this.$loadingTip.hide();
-            if (this.deviceSettingCollection.length > 0) {
-                this.deviceSettingCollection.each(this.addOne, this);
+            if (this.deviceAccessibleIpAddressCollection.length > 0) {
+                this.deviceAccessibleIpAddressCollection.each(this.addOne, this);
                 this.$table.show();
             } else {
                 this.$emptyTip.show();
             }
         },
 
-        addOne: function(deviceSetting) {
-            var view = new DeviceSetting({model: deviceSetting});
+        addOne: function(deviceAccessibleIpAddress) {
+            var view = new DeviceAccessibleIpAddress({model: deviceAccessibleIpAddress});
             this.$tableBody.append(view.render().el);
         }
     });
 
-    return DeviceSettingsView;
+    return DeviceAccessibleIpAddressesView;
 });

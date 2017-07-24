@@ -179,7 +179,7 @@
             <% } %>
             <% if (app.pageOptions.enable_limit_ipaddress) { %>
             <li class="tab <% if (cur_tab == 'settings') { %> ui-state-active <% } %>">
-                <a href="#device-settings/" class="a">Accessible ip</a>
+                <a href="#device-accessible-ip-setting/" class="a">Accessible ip</a>
             </li>
             <% } %>
         </ul>
@@ -235,7 +235,7 @@
             </li>
             <% if (app.pageOptions.enable_limit_ipaddress) { %>
             <li class="tab <% if (cur_tab == 'settings') { %> ui-state-active <% } %>">
-                <a href="#device-settings/" class="a">Accessible ip</a>
+                <a href="#device-accessible-ip-setting/" class="a">Accessible ip</a>
             </li>
             <% } %>
         </ul>
@@ -274,7 +274,7 @@
     <td><time title='<%- time %>'><%- time_from_now %></time></td>
 </script>
 
-<script type="text/template" id="device-settings-tmpl">
+<script type="text/template" id="device-accessible-ipaddresses-tmpl">
     <div class="hd ovhd">
         <ul class="tab-tabs-nav fleft">
             <li class="tab <% if (cur_tab == 'desktop') { %> ui-state-active <% } %>">
@@ -289,7 +289,7 @@
             </li>
             <% } %>
             <li class="tab <% if (cur_tab == 'settings') { %> ui-state-active <% } %>">
-                <a href="#device-settings/" class="a">Accessible ip</a>
+                <a href="#device-accessible-ip-setting/" class="a">Accessible ip</a>
             </li>
         </ul>
         <div class="js-op-for-all fright">
@@ -300,7 +300,7 @@
         <thead>
             <tr>
                 <th width="80%">{% trans "IP Address" %}</th>
-                <th width="20%">{% trans "Operations" %}</th>
+                <th width="20%"></th>
             </tr>
         </thead>
         <tbody>
@@ -323,7 +323,7 @@
     </form>
 </script>
 
-<script type="text/template" id="device-setting-item-tmpl">
+<script type="text/template" id="device-accessible-ip-item-tmpl">
     <td id="label-ip"><%- ip_address %></td>
     <td><a id="remove-accessible-ip" style="cursor:pointer" class="op vh">Remove</a></td>
 </script>

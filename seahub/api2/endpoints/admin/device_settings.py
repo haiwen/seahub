@@ -39,7 +39,7 @@ def check_parameter(func):
     return _decorated
 
 
-class AdminDeviceSettings(APIView):
+class AdminDeviceAccessibleIpSetting(APIView):
     authentication_classes = (TokenAuthentication, SessionAuthentication)
     throttle_classes = (UserRateThrottle, )
     permission_classes = (IsAdminUser,)
