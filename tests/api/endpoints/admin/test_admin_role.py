@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
-
 import json
+from mock import patch
 
 from tests.common.utils import randstring
 from django.core.urlresolvers import reverse
@@ -36,7 +36,10 @@ class AdminAdminRoleTest(BaseTestCase):
         self.remove_group()
         self.remove_user(self.tmp_admin_email)
 
-    def test_add_amdin_role(self):
+    @patch('seahub.api2.permissions.IsProVersion.has_permission')
+    def test_add_amdin_role(self, mock_has_permission):
+
+        mock_has_permission.return_value = True
 
         try:
             AdminRole.objects.get_admin_role(self.tmp_admin_email)
@@ -63,7 +66,10 @@ class AdminAdminRoleTest(BaseTestCase):
         tmp_admin_role = AdminRole.objects.get_admin_role(self.tmp_admin_email)
         assert tmp_admin_role.role == DAILY_ADMIN
 
-    def test_add_with_invalid_role_argument(self):
+    @patch('seahub.api2.permissions.IsProVersion.has_permission')
+    def test_add_with_invalid_role_argument(self, mock_has_permission):
+
+        mock_has_permission.return_value = True
 
         self.login_as(self.admin)
         url = reverse('api-v2.1-admin-admin-role')
@@ -76,7 +82,10 @@ class AdminAdminRoleTest(BaseTestCase):
         json_resp = json.loads(resp.content)
         assert 'role must be in' in json_resp['error_msg']
 
-    def test_add_with_request_adminuser_not_default_admin_role(self):
+    @patch('seahub.api2.permissions.IsProVersion.has_permission')
+    def test_add_with_request_adminuser_not_default_admin_role(self, mock_has_permission):
+
+        mock_has_permission.return_value = True
 
         AdminRole.objects.add_admin_role(self.admin_email, DAILY_ADMIN)
         admin_role = AdminRole.objects.get_admin_role(self.admin_email)
@@ -96,7 +105,10 @@ class AdminAdminRoleTest(BaseTestCase):
         assert json_resp['error_msg'] == "%s's role must be '%s'." % \
                 (self.admin_email, DEFAULT_ADMIN)
 
-    def test_add_with_email_is_not_admin(self):
+    @patch('seahub.api2.permissions.IsProVersion.has_permission')
+    def test_add_with_email_is_not_admin(self, mock_has_permission):
+
+        mock_has_permission.return_value = True
 
         tmp_user_email = '%s@%s.com' % (randstring(6), randstring(6))
         ccnet_api.add_emailuser(tmp_user_email, randstring(6), 0, 1)
@@ -118,7 +130,10 @@ class AdminAdminRoleTest(BaseTestCase):
 
         self.remove_user(tmp_user_email)
 
-    def test_update_amdin_role(self):
+    @patch('seahub.api2.permissions.IsProVersion.has_permission')
+    def test_update_amdin_role(self, mock_has_permission):
+
+        mock_has_permission.return_value = True
 
         AdminRole.objects.add_admin_role(self.tmp_admin_email, AUDIT_ADMIN)
         tmp_admin_role = AdminRole.objects.get_admin_role(self.tmp_admin_email)
@@ -139,7 +154,10 @@ class AdminAdminRoleTest(BaseTestCase):
         tmp_admin_role = AdminRole.objects.get_admin_role(self.tmp_admin_email)
         assert tmp_admin_role.role == DAILY_ADMIN
 
-    def test_update_with_invalid_role_argument(self):
+    @patch('seahub.api2.permissions.IsProVersion.has_permission')
+    def test_update_with_invalid_role_argument(self, mock_has_permission):
+
+        mock_has_permission.return_value = True
 
         self.login_as(self.admin)
         url = reverse('api-v2.1-admin-admin-role')
@@ -149,7 +167,10 @@ class AdminAdminRoleTest(BaseTestCase):
         json_resp = json.loads(resp.content)
         assert 'role must be in' in json_resp['error_msg']
 
-    def test_update_with_request_adminuser_not_default_admin_role(self):
+    @patch('seahub.api2.permissions.IsProVersion.has_permission')
+    def test_update_with_request_adminuser_not_default_admin_role(self, mock_has_permission):
+
+        mock_has_permission.return_value = True
 
         AdminRole.objects.add_admin_role(self.admin_email, DAILY_ADMIN)
         admin_role = AdminRole.objects.get_admin_role(self.admin_email)
@@ -166,7 +187,10 @@ class AdminAdminRoleTest(BaseTestCase):
         assert json_resp['error_msg'] == "%s's role must be '%s'." % \
                 (self.admin_email, DEFAULT_ADMIN)
 
-    def test_update_with_email_is_not_admin(self):
+    @patch('seahub.api2.permissions.IsProVersion.has_permission')
+    def test_update_with_email_is_not_admin(self, mock_has_permission):
+
+        mock_has_permission.return_value = True
 
         tmp_user_email = '%s@%s.com' % (randstring(6), randstring(6))
         ccnet_api.add_emailuser(tmp_user_email, randstring(6), 0, 1)
@@ -185,7 +209,10 @@ class AdminAdminRoleTest(BaseTestCase):
 
         self.remove_user(tmp_user_email)
 
-    def test_get_amdin_role(self):
+    @patch('seahub.api2.permissions.IsProVersion.has_permission')
+    def test_get_amdin_role(self, mock_has_permission):
+
+        mock_has_permission.return_value = True
 
         AdminRole.objects.add_admin_role(self.tmp_admin_email, AUDIT_ADMIN)
         tmp_admin_role = AdminRole.objects.get_admin_role(self.tmp_admin_email)
@@ -202,14 +229,20 @@ class AdminAdminRoleTest(BaseTestCase):
         assert json_resp['email'] == self.tmp_admin_email
         assert json_resp['role'] == AUDIT_ADMIN
 
-    def test_get_with_invalid_user_permission(self):
+    @patch('seahub.api2.permissions.IsProVersion.has_permission')
+    def test_get_with_invalid_user_permission(self, mock_has_permission):
+
+        mock_has_permission.return_value = True
 
         self.login_as(self.user)
         url = reverse('api-v2.1-admin-admin-role') + '?email=%s' % self.tmp_admin_email
         resp = self.client.get(url)
         self.assertEqual(403, resp.status_code)
 
-    def test_get_with_email_is_not_admin(self):
+    @patch('seahub.api2.permissions.IsProVersion.has_permission')
+    def test_get_with_email_is_not_admin(self, mock_has_permission):
+
+        mock_has_permission.return_value = True
 
         tmp_user_email = '%s@%s.com' % (randstring(6), randstring(6))
         ccnet_api.add_emailuser(tmp_user_email, randstring(6), 0, 1)
