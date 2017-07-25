@@ -225,6 +225,7 @@ INSTALLED_APPS = (
     'seahub.password_session',
     'seahub.admin_log',
     'seahub.wopi',
+    'seahub.trusted_ip',
 )
 
 # Enabled or disable constance(web settings).
@@ -281,8 +282,7 @@ SHARE_LINK_PASSWORD_MIN_LENGTH = 8
 ENABLE_SHARE_LINK_AUDIT = False
 
 # enable or disable limit ip 
-ENABLE_LIMIT_IPADDRESS = True
-ACCESSIBLE_IPADDRESS_RANGE = ()
+ENABLE_LIMIT_IPADDRESS = False
 
 # Control the language that send email. Default to user's current language.
 SHARE_LINK_EMAIL_LANGUAGE = ''

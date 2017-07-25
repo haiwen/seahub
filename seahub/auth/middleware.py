@@ -3,10 +3,13 @@ import json
 
 from django.contrib import auth
 from django.core.exceptions import ImproperlyConfigured
-from django.conf import settings
-from django.http import HttpResponse
+from django.core.urlresolvers import reverse
+from django.http import HttpResponse, HttpResponseRedirect, HttpResponseForbidden
+from django.shortcuts import render_to_response
 
 from seahub.utils.ip import get_remote_ip
+from seahub.trusted_ip.models import TrustedIP
+from seahub.settings import ENABLE_LIMIT_IPADDRESS
 
 
 class LazyUser(object):
@@ -20,13 +23,17 @@ class LazyUser(object):
 class LimitIpMiddleware(object):
     def process_request(self, request):
         ip = get_remote_ip(request)
-        if settings.ENABLE_LIMIT_IPADDRESS:
-            if ip not in settings.ACCESSIBLE_IPADDRESS_RANGE:
-                return HttpResponse(
-                    json.dumps({"err_msg": "you can't login, because ip did't in range"}),
-                    status=403,
-                    content_type='application/json; charset=utf-9'
-                )
+        if ENABLE_LIMIT_IPADDRESS:
+            if not TrustedIP.objects.match_ip(ip):
+                if "api2/" in request.path or "api/v2.1/" in request.path:
+                    return HttpResponse(
+                        json.dumps({"err_msg": "you can't login, because ip d\
+                                    id't in range"}),
+                        status=403,
+                        content_type='application/json; charset=utf-8'
+                    )
+                else:
+                    return render_to_response('403_trusted_ip.html', status=403)
         return None
 
 

@@ -3,42 +3,42 @@ define([
     'underscore',
     'backbone',
     'common',
-    'sysadmin-app/views/device-accessible-ipaddress',
-    'sysadmin-app/collection/device-accessible-ipaddress'
-],function($, _, Backbone, Common, DeviceAccessibleIpAddress, DeviceAccessibleIpAddressCollection) {
+    'sysadmin-app/views/device-trusted-ipaddress',
+    'sysadmin-app/collection/device-trusted-ip'
+],function($, _, Backbone, Common, DeviceTrustedIP, DeviceTrustedIPAddressCollection) {
     'use strict';
 
-    var DeviceAccessibleIpAddressesView = Backbone.View.extend({
+    var DeviceTrustedIPView = Backbone.View.extend({
 
-        id: 'admin-device-accessible-ipaddresses',
+        id: 'admin-device-trusted-ip',
 
-        template: _.template($('#device-accessible-ipaddresses-tmpl').html()),
+        template: _.template($('#device-trusted-ip-tmpl').html()),
 
         initialize: function() {
-            this.deviceAccessibleIpAddressCollection = new DeviceAccessibleIpAddressCollection();
-            this.listenTo(this.deviceAccessibleIpAddressCollection, 'add', this.addOne);
-            this.listenTo(this.deviceAccessibleIpAddressCollection, 'reset', this.reset);
+            this.deviceTrustedIPAddressCollection = new DeviceTrustedIPAddressCollection();
+            this.listenTo(this.deviceTrustedIPAddressCollection, 'add', this.addOne);
+            this.listenTo(this.deviceTrustedIPAddressCollection, 'reset', this.reset);
             this.render();
         },
 
         events: {
-            'click #add-accessible-ip-btn': 'showAddAccessibleIpForm',
-            'click #remove-accessible-ip': 'removeOne',
+            'click #add-trusted-ip-btn': 'showAddTrustedIpForm',
+            'click #remove-trusted-ip': 'removeOne',
             'mouseover tbody tr': 'mouseovercard',
             'mouseout tbody tr': 'mouseoutcard',
         },
 
         mouseoutcard: function(e) {
-            $(e.target).parent().find("#remove-accessible-ip").addClass('vh');
+            $(e.target).parent().find("#remove-trusted-ip").addClass('vh');
         },
 
         mouseovercard: function(e) {
-            $(e.target).parent().find("#remove-accessible-ip").removeClass('vh');
+            $(e.target).parent().find("#remove-trusted-ip").removeClass('vh');
         },
 
         removeOne: function(e) {
             $.ajax({
-                url: Common.getUrl({name: 'admin-device-accessible-ip-setting'}) + "?ipaddress="+$(e.target).parent().parent().find(":first").html(),
+                url: Common.getUrl({name: 'admin-device-trusted-ip'}) + "?ipaddress="+$(e.target).parent().parent().find(":first").html(),
                 type: "DELETE",
                 cache: false,
                 dataType: "JSON",
@@ -54,7 +54,7 @@ define([
 
         createOne: function() {
             $.ajax({
-                url: Common.getUrl({name: 'admin-device-accessible-ip-setting'}),
+                url: Common.getUrl({name: 'admin-device-trusted-ip'}),
                 type: "POST",
                 cache: false,
                 dataType: "JSON",
@@ -64,29 +64,29 @@ define([
                 },
                 success: function(data, textStatus, xhr){
                     if (xhr.status == 201){
-                        $("#admin-device-accessible-ipaddresses tbody").append('<tr><td id="label-id">' 
+                        $("#admin-device-trusted-ip tbody").append('<tr><td id="label-id">' 
                                 + data.ip + 
-                                '</td><td><a id="remove-accessible-ip" style="cursor:pointer;" class="op vh">Remove</a></td></tr>')
+                                '</td><td><a id="remove-trusted-ip" style="cursor:pointer;" class="op vh">Remove</a></td></tr>')
                         $.modal.close();
                     }
                     else if (xhr.status == 200){
                         var parsed_resp = $.parseJSON(xhr.responseText);
-                        $("#add-accessible-ip-form .error").html('ip address already exists').show();
+                        $("#add-trusted-ip-form .error").html('ip address already exists').show();
                     }
                 },
                 error: function(xhr, textStatus, errorThrown){
                     if (xhr.responseText) {
                         var parsed_resp = $.parseJSON(xhr.responseText);
-                        $("#add-accessible-ip-form .error").html(parsed_resp.error_msg).show();
+                        $("#add-trusted-ip-form .error").html(parsed_resp.error_msg).show();
                     } else {
-                        $("#add-accessible-ip-form .error").html("Failed. Please check the network").show();
+                        $("#add-trusted-ip-form .error").html("Failed. Please check the network").show();
                     }
                 }
             })
         },
 
-        showAddAccessibleIpForm: function() {
-            $('#add-accessible-ip-form').modal();
+        showAddTrustedIpForm: function() {
+            $('#add-trusted-ip-form').modal();
             $('#simplemodal-container').css({'width':'auto', 'height':'auto'});
         },
 
@@ -96,7 +96,6 @@ define([
             this.$tableBody = $('tbody', this.$table);
             this.$loadingTip = this.$('.loading-tip');
             this.$emptyTip = this.$('.empty-tips');
-            this.$form = this.$('#add-accessible-ip-form');
             $("body").on('click', '#add-ip-form-btn', this.createOne);
             $("tbody tr:gt(0)").hover(this.mouseovercard, this.mouseoutcard);
         },
@@ -107,7 +106,7 @@ define([
 
         show: function() {
             $("#right-panel").html(this.$el);
-            this.showAdminDeviceAccessibleIpAddress();
+            this.showAdminDeviceTrustedIP();
         },
 
         initPage: function() {
@@ -115,11 +114,11 @@ define([
             this.$tableBody.empty();
         },
 
-        showAdminDeviceAccessibleIpAddress: function() {
+        showAdminDeviceTrustedIP: function() {
             this.initPage();
 
             var _this = this;
-            this.deviceAccessibleIpAddressCollection.fetch({
+            this.deviceTrustedIPAddressCollection.fetch({
                 cache: false,
                 reset: true,
                 success: function(collection, response, opts){
@@ -142,19 +141,19 @@ define([
 
         reset: function() {
             this.$loadingTip.hide();
-            if (this.deviceAccessibleIpAddressCollection.length > 0) {
-                this.deviceAccessibleIpAddressCollection.each(this.addOne, this);
+            if (this.deviceTrustedIPAddressCollection.length > 0) {
+                this.deviceTrustedIPAddressCollection.each(this.addOne, this);
                 this.$table.show();
             } else {
                 this.$emptyTip.show();
             }
         },
 
-        addOne: function(deviceAccessibleIpAddress) {
-            var view = new DeviceAccessibleIpAddress({model: deviceAccessibleIpAddress});
+        addOne: function(deviceTrustedIP) {
+            var view = new DeviceTrustedIP({model: deviceTrustedIP});
             this.$tableBody.append(view.render().el);
         }
     });
 
-    return DeviceAccessibleIpAddressesView;
+    return DeviceTrustedIPView;
 });

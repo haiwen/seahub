@@ -5,7 +5,7 @@ define([
 ], function(_, Backbone, Common) {
     'use strict';
 
-    var DeviceAccessibleIpAddress = Backbone.Model.extend({});
+    var DeviceTrustedIP = Backbone.Model.extend({});
 
-    return DeviceAccessibleIpAddress;
+    return DeviceTrustedIP;
 })

@@ -179,7 +179,7 @@
             <% } %>
             <% if (app.pageOptions.enable_limit_ipaddress) { %>
             <li class="tab <% if (cur_tab == 'settings') { %> ui-state-active <% } %>">
-                <a href="#device-accessible-ip-setting/" class="a">Accessible ip</a>
+                <a href="#device-trusted-ip/" class="a">{% trans "Trusted IP" %}</a>
             </li>
             <% } %>
         </ul>
@@ -235,7 +235,7 @@
             </li>
             <% if (app.pageOptions.enable_limit_ipaddress) { %>
             <li class="tab <% if (cur_tab == 'settings') { %> ui-state-active <% } %>">
-                <a href="#device-accessible-ip-setting/" class="a">Accessible ip</a>
+                <a href="#device-trusted-ip/" class="a">{% trans "Trusted IP" %}</a>
             </li>
             <% } %>
         </ul>
@@ -274,7 +274,7 @@
     <td><time title='<%- time %>'><%- time_from_now %></time></td>
 </script>
 
-<script type="text/template" id="device-accessible-ipaddresses-tmpl">
+<script type="text/template" id="device-trusted-ip-tmpl">
     <div class="hd ovhd">
         <ul class="tab-tabs-nav fleft">
             <li class="tab <% if (cur_tab == 'desktop') { %> ui-state-active <% } %>">
@@ -289,11 +289,11 @@
             </li>
             <% } %>
             <li class="tab <% if (cur_tab == 'settings') { %> ui-state-active <% } %>">
-                <a href="#device-accessible-ip-setting/" class="a">Accessible ip</a>
+                <a href="#device-trusted-ip/" class="a">{% trans "Trusted IP" %}</a>
             </li>
         </ul>
         <div class="js-op-for-all fright">
-           <button id="add-accessible-ip-btn">Add ip address</button>
+           <button id="add-trusted-ip-btn">{% trans "Add IP Address" %}</button>
         </div>
     </div>
     <table class="hide">
@@ -308,24 +308,24 @@
     </table>
     <span class="loading-icon loading-tip"></span>
     <div class="empty-tips hide">
-        <h2 class="alc">{% trans "No connected devices" %}</h2>
+        <h2 class="alc">{% trans "No Trusted IP" %}</h2>
     </div>
     <div id="paginator">
         <a class="prev js-previous hide" href="#">{% trans "Previous" %}</a>
         <a class="next js-next hide" href="#">{% trans "Next" %}</a>
     </div>
-    <form id="add-accessible-ip-form" onsubmit="return false" class="hide">{% csrf_token %}
-        <h3>{% trans "Add ip address" %}</h3>
-        <label>Accessible Ip Address</label><br />
+    <form id="add-trusted-ip-form" onsubmit="return false" class="hide">{% csrf_token %}
+        <h3>{% trans "Add IP Address" %}</h3>
+        <label>{% trans "Trusted IP Address" %}</label><br />
         <input name="ipaddress" id="ipaddress" class="input" /><br />
         <p class="error alc hide"></p>
         <button id="add-ip-form-btn">{% trans "Submit" %}</button>
     </form>
 </script>
 
-<script type="text/template" id="device-accessible-ip-item-tmpl">
-    <td id="label-ip"><%- ip_address %></td>
-    <td><a id="remove-accessible-ip" style="cursor:pointer" class="op vh">Remove</a></td>
+<script type="text/template" id="device-trusted-ip-item-tmpl">
+    <td id="label-ip"><%- ip %></td>
+    <td><a id="remove-trusted-ip" style="cursor:pointer" class="op vh">{% trans "Delete" %}</a></td>
 </script>
 
 <script type="text/template" id="user-info-popup-tmpl">

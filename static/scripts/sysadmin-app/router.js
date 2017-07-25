@@ -8,7 +8,7 @@ define([
     'sysadmin-app/views/desktop-devices',
     'sysadmin-app/views/mobile-devices',
     'sysadmin-app/views/device-errors',
-    'sysadmin-app/views/device-accessible-ipaddresses',
+    'sysadmin-app/views/device-trusted-ipaddresses',
     'sysadmin-app/views/repos',
     'sysadmin-app/views/search-repos',
     'sysadmin-app/views/system-repo',
@@ -23,7 +23,7 @@ define([
     'app/views/account'
 ], function($, Backbone, Common, SideNavView, DashboardView,
     DesktopDevicesView, MobileDevicesView, DeviceErrorsView,
-    DeviceAccessibleIpAddressesView, ReposView, SearchReposView, SystemReposView,
+    DeviceTrustedIPView, ReposView, SearchReposView, SystemReposView,
     TrashReposView, SearchTrashReposView, DirView, GroupsView,
     SearchGroupsView, GroupReposView, GroupMembersView, AdminLogsView,
     AccountView) {
@@ -37,7 +37,7 @@ define([
             'desktop-devices/': 'showDesktopDevices',
             'mobile-devices/': 'showMobileDevices',
             'device-errors/': 'showDeviceErrors',
-            'device-accessible-ip-setting/': 'showDeviceAccessibleIPSetting',
+            'device-trusted-ip/': 'showDeviceTrustedIP',
             'all-libs/': 'showLibraries',
             'search-libs/': 'showSearchLibraries',
             'system-lib/': 'showSystemLibrary',
@@ -69,7 +69,7 @@ define([
             this.desktopDevicesView = new DesktopDevicesView();
             this.mobileDevicesView = new MobileDevicesView();
             this.deviceErrorsView = new DeviceErrorsView();
-            this.deviceAccessibleIpAddressesView = new DeviceAccessibleIpAddressesView();
+            this.deviceTrustedIPView = new DeviceTrustedIPView();
 
             this.reposView = new ReposView();
             this.searchReposView = new SearchReposView();
@@ -137,10 +137,10 @@ define([
             this.deviceErrorsView.show();
         },
 
-        showDeviceAccessibleIPSetting: function() {
-            this.switchCurrentView(this.deviceAccessibleIpAddressesView);
+        showDeviceTrustedIP: function() {
+            this.switchCurrentView(this.deviceTrustedIPView);
             this.sideNavView.setCurTab('devices');
-            this.deviceAccessibleIpAddressesView.show()
+            this.deviceTrustedIPView.show()
         },
 
         showLibraries: function() {
