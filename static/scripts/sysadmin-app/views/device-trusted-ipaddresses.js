@@ -91,7 +91,7 @@ define([
         },
 
         render: function() {
-            this.$el.html(this.template({'cur_tab': 'settings', 'is_pro': app.pageOptions.is_pro, 'ENABLE_LIMIT_IPADDRESS': app.pageOptions.enable_limit_ipaddress}));
+            this.$el.html(this.template({'cur_tab': 'settings', 'is_pro': app.pageOptions.is_pro}));
             this.$table = this.$('table');
             this.$tableBody = $('tbody', this.$table);
             this.$loadingTip = this.$('.loading-tip');

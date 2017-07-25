@@ -9,7 +9,7 @@ from django.shortcuts import render_to_response
 
 from seahub.utils.ip import get_remote_ip
 from seahub.trusted_ip.models import TrustedIP
-from seahub.settings import ENABLE_LIMIT_IPADDRESS
+from seahub.settings import ENABLE_LIMIT_IPADDRESS, TRUSTED_IP_LIST
 
 
 class LazyUser(object):
@@ -24,7 +24,7 @@ class LimitIpMiddleware(object):
     def process_request(self, request):
         ip = get_remote_ip(request)
         if ENABLE_LIMIT_IPADDRESS:
-            if not TrustedIP.objects.match_ip(ip):
+            if not TrustedIP.objects.match_ip(ip) and ip not in TRUSTED_IP_LIST:
                 if "api2/" in request.path or "api/v2.1/" in request.path:
                     return HttpResponse(
                         json.dumps({"err_msg": "you can't login, because ip d\

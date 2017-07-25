@@ -26,27 +26,19 @@ class TrustedIPManager(models.Manager):
             return False
 
     def match_ip(self, ip):
-        ip_list = ['*.*.*.*']
-        ip_list.append(ip)
-        for i in range(4):
-            ip_list_tmp = ip.split('.')
-            ip_list_tmp.remove(ip_list_tmp[i])
-            ip_list_tmp.insert(i, '*')
-            new_ip = '.'.join(ip_list_tmp)
-            ip_list.append(new_ip)
-
+        """e.g.  163.13.12.233
+        will generate all can be match ip.
+        e.g. 163.13.12.233
+             163.13.12.*
+             163.13.*.*
+             163.*.*.*
+        use Q query to join all ip
+        """
+        ip_list = [ip]
         ip_list_tmp = ip.split('.')
-        ip_list.append('*.*.'+ip_list_tmp[2]+'.'+ip_list_tmp[3])
-        ip_list.append('*.'+ip_list_tmp[1]+'.*.'+ip_list_tmp[3])
-        ip_list.append('*.'+ip_list_tmp[1]+'.'+ip_list_tmp[2]+'.*')
-        ip_list.append(ip_list_tmp[0]+'.*.*.'+ip_list_tmp[3])
-        ip_list.append(ip_list_tmp[0]+'.*.'+ip_list_tmp[2]+'.*')
-        ip_list.append(ip_list_tmp[0]+'.'+ip_list_tmp[1]+'.*.*')
-
-        ip_list.append('*.*.*.'+ip_list_tmp[3])
-        ip_list.append('*.*.'+ip_list_tmp[2]+'.*')
-        ip_list.append('*.'+ip_list_tmp[1]+'.*.*')
-        ip_list.append(ip_list_tmp[0]+'.*.*.*')
+        ip_list.append(ip_list_tmp[0] + '.' + ip_list_tmp[1] + '.' + ip_list_tmp[2] + '.*')
+        ip_list.append(ip_list_tmp[0] + '.' + ip_list_tmp[1] + '.*.*')
+        ip_list.append(ip_list_tmp[0] + '.*.*.*')
 
         query_list = [Q(ip=ip) for ip in ip_list]
         ip_obj = super(TrustedIPManager, self).filter(reduce(operator.or_, query_list))
@@ -57,7 +49,7 @@ class TrustedIPManager(models.Manager):
 
 
 class TrustedIP(models.Model):
-    ip = models.CharField(max_length=15)
+    ip = models.CharField(max_length=255, db_index=True)
     objects = TrustedIPManager()
 
     def to_dict(self):

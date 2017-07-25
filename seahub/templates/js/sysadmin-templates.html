@@ -310,10 +310,6 @@
     <div class="empty-tips hide">
         <h2 class="alc">{% trans "No Trusted IP" %}</h2>
     </div>
-    <div id="paginator">
-        <a class="prev js-previous hide" href="#">{% trans "Previous" %}</a>
-        <a class="next js-next hide" href="#">{% trans "Next" %}</a>
-    </div>
     <form id="add-trusted-ip-form" onsubmit="return false" class="hide">{% csrf_token %}
         <h3>{% trans "Add IP Address" %}</h3>
         <label>{% trans "Trusted IP Address" %}</label><br />

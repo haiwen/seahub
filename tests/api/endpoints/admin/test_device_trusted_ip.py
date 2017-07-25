@@ -3,7 +3,6 @@ from mock import patch
 from django.core.urlresolvers import reverse
 from django.conf import settings
 from seahub.test_utils import BaseTestCase
-from seahub.settings import ACCESSIBLE_IPADDRESS_RANGE
 from seahub.trusted_ip.models import TrustedIP
 
 class DeviceAccessibleIpSetting(BaseTestCase):
