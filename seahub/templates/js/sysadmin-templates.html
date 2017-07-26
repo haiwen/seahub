@@ -177,6 +177,11 @@
                 <a href="#device-errors/" class="a">{% trans "Errors" %}</a>
             </li>
             <% } %>
+            <% if (app.pageOptions.enable_limit_ipaddress) { %>
+            <li class="tab <% if (cur_tab == 'settings') { %> ui-state-active <% } %>">
+                <a href="#device-trusted-ip/" class="a">{% trans "Trusted IP" %}</a>
+            </li>
+            <% } %>
         </ul>
     </div>
     <table class="hide">
@@ -228,6 +233,11 @@
             <li class="tab <% if (cur_tab == 'errors') { %> ui-state-active <% } %>">
                 <a href="#device-errors/" class="a">{% trans "Errors" %}</a>
             </li>
+            <% if (app.pageOptions.enable_limit_ipaddress) { %>
+            <li class="tab <% if (cur_tab == 'settings') { %> ui-state-active <% } %>">
+                <a href="#device-trusted-ip/" class="a">{% trans "Trusted IP" %}</a>
+            </li>
+            <% } %>
         </ul>
         <button id="clean-device-errors" class="fright hide"><span class="vam">{% trans "Clean" %}</span></button>
     </div>
@@ -262,6 +272,56 @@
     </td>
     <td><%- error_msg %></td>
     <td><time title='<%- time %>'><%- time_from_now %></time></td>
+</script>
+
+<script type="text/template" id="device-trusted-ip-tmpl">
+    <div class="hd ovhd">
+        <ul class="tab-tabs-nav fleft">
+            <li class="tab <% if (cur_tab == 'desktop') { %> ui-state-active <% } %>">
+                <a href="#desktop-devices/" class="a">{% trans "Desktop" %}</a>
+            </li>
+            <li class="tab <% if (cur_tab == 'mobile') { %> ui-state-active <% } %>">
+                <a href="#mobile-devices/" class="a">{% trans "Mobile" %}</a>
+            </li>
+            <% if (is_pro) { %>
+            <li class="tab <% if (cur_tab == 'errors') { %> ui-state-active <% } %>">
+                <a href="#device-errors/" class="a">{% trans "Errors" %}</a>
+            </li>
+            <% } %>
+            <li class="tab <% if (cur_tab == 'settings') { %> ui-state-active <% } %>">
+                <a href="#device-trusted-ip/" class="a">{% trans "Trusted IP" %}</a>
+            </li>
+        </ul>
+        <div class="js-op-for-all fright">
+           <button id="add-trusted-ip-btn">{% trans "Add IP Address" %}</button>
+        </div>
+    </div>
+    <table class="hide">
+        <thead>
+            <tr>
+                <th width="80%">{% trans "IP Address" %}</th>
+                <th width="20%"></th>
+            </tr>
+        </thead>
+        <tbody>
+        </tbody>
+    </table>
+    <span class="loading-icon loading-tip"></span>
+    <div class="empty-tips hide">
+        <h2 class="alc">{% trans "No Trusted IP" %}</h2>
+    </div>
+    <form id="add-trusted-ip-form" onsubmit="return false" class="hide">{% csrf_token %}
+        <h3>{% trans "Add IP Address" %}</h3>
+        <label>{% trans "Trusted IP Address" %}</label><br />
+        <input name="ipaddress" id="ipaddress" class="input" /><br />
+        <p class="error alc hide"></p>
+        <button id="add-ip-form-btn">{% trans "Submit" %}</button>
+    </form>
+</script>
+
+<script type="text/template" id="device-trusted-ip-item-tmpl">
+    <td id="label-ip"><%- ip %></td>
+    <td><a id="remove-trusted-ip" style="cursor:pointer" class="op vh">{% trans "Delete" %}</a></td>
 </script>
 
 <script type="text/template" id="user-info-popup-tmpl">
