@@ -46,7 +46,7 @@ from seahub.api2.endpoints.repo_file_uploaded_bytes import RepoFileUploadedBytes
 from seahub.api2.endpoints.user_avatar import UserAvatarView
 
 # Admin
-from seahub.api2.endpoints.admin.login import Login
+from seahub.api2.endpoints.admin.login_logs import LoginLogs, AdminLoginLogs
 from seahub.api2.endpoints.admin.file_audit import FileAudit
 from seahub.api2.endpoints.admin.file_update import FileUpdate
 from seahub.api2.endpoints.admin.perm_audit import PermAudit
@@ -275,7 +275,10 @@ urlpatterns = patterns(
 
     ## admin::shares
     url(r'^api/v2.1/admin/shares/$', AdminShares.as_view(), name='api-v2.1-admin-shares'),
+
+    ## admin::admin operation logs
     url(r'^api/v2.1/admin/admin-logs/$', AdminLogs.as_view(), name='api-v2.1-admin-admin-logs'),
+    url(r'^api/v2.1/admin/admin-login-logs/$', AdminLoginLogs.as_view(), name='api-v2.1-admin-admin-login-logs'),
 
     ## admin::share-links
     url(r'^api/v2.1/admin/share-links/(?P<token>[a-f0-9]+)/$', AdminShareLink.as_view(), name='api-v2.1-admin-share-link'),
@@ -425,7 +428,7 @@ if getattr(settings, 'ENABLE_SYSADMIN_EXTRA', False):
         sys_log_file_update_export_excel, sys_log_perm_audit_export_excel, \
         sys_log_email_audit
     urlpatterns += patterns('',
-        url(r'^api/v2.1/admin/logs/login/$', Login.as_view(), name='api-v2.1-admin-logs-login'),
+        url(r'^api/v2.1/admin/logs/login/$', LoginLogs.as_view(), name='api-v2.1-admin-logs-login'),
         url(r'^sys/loginadmin/$', sys_login_admin, name='sys_login_admin'),
         url(r'^sys/loginadmin/export-excel/$', sys_login_admin_export_excel, name='sys_login_admin_export_excel'),
 

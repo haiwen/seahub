@@ -19,12 +19,14 @@ define([
     'sysadmin-app/views/group-repos',
     'sysadmin-app/views/group-members',
     'sysadmin-app/views/admin-logs',
+    'sysadmin-app/views/admin-login-logs',
     'app/views/account'
 ], function($, Backbone, Common, SideNavView, DashboardView,
     DesktopDevicesView, MobileDevicesView, DeviceErrorsView,
     ReposView, SearchReposView, SystemReposView, TrashReposView,
     SearchTrashReposView, DirView, GroupsView, SearchGroupsView,
-    GroupReposView, GroupMembersView, AdminLogsView, AccountView) {
+    GroupReposView, GroupMembersView, AdminLogsView, AdminLoginLogsView,
+    AccountView) {
 
     "use strict";
 
@@ -47,6 +49,7 @@ define([
             'groups/:group_id/libs/': 'showGroupLibraries',
             'groups/:group_id/members/': 'showGroupMembers',
             'admin-logs/': 'showAdminLogs',
+            'admin-login-logs/': 'showAdminLoginLogs',
             // Default
             '*actions': 'showDashboard'
         },
@@ -80,6 +83,7 @@ define([
             this.groupMembersView = new GroupMembersView();
 
             this.adminLogsView = new AdminLogsView();
+            this.adminLoginLogsView = new AdminLoginLogsView();
 
             app.ui.accountView = this.accountView = new AccountView();
 
@@ -316,6 +320,20 @@ define([
             this.switchCurrentView(this.adminLogsView);
             this.sideNavView.setCurTab('admin-logs');
             this.adminLogsView.show({'current_page': current_page});
+        },
+
+        showAdminLoginLogs: function() {
+            var url = window.location.href;
+            var page = url.match(/.*?page=(\d+)/);
+            if (page) {
+                var current_page = page[1];
+            } else {
+                var current_page = null;
+            }
+
+            this.switchCurrentView(this.adminLoginLogsView);
+            this.sideNavView.setCurTab('admin-logs');
+            this.adminLoginLogsView.show({'current_page': current_page});
         }
 
     });
