@@ -333,8 +333,13 @@ def sys_useradmin_export_excel(request):
         ldap_import = _('Yes') if user.source == 'LDAPImport' else ''
 
         if is_pro:
-            if user.role == GUEST_USER:
-                role = _('Guest')
+            if user.role:
+                if user.role == GUEST_USER:
+                    role = _('Guest')
+                elif user.role == DEFAULT_USER:
+                    role = _('Default')
+                else:
+                    role = user.role
             else:
                 role = _('Default')
 
