@@ -3,15 +3,15 @@
     <tr>
         <th width="3%"><input type="checkbox" /></th>
         {% if is_pro %}
-        <th width="21%">{% trans "Email" %} / {% trans "Name" %} / {% trans "Contact Email" %}</th>
-        <th width="10%">{% trans "Status" %}</th>
-        <th width="14%">{% trans "Role" %}</th>
+        <th width="22%">{% trans "Email" %} / {% trans "Name" %} / {% trans "Contact Email" %}</th>
+        <th width="8%">{% trans "Status" %}</th>
+        <th width="18%">{% trans "Role" %}</th>
         {% else %}
-        <th width="33%">{% trans "Email" %} / {% trans "Name" %} / {% trans "Contact Email" %}</th>
-        <th width="12%">{% trans "Status" %}</th>
+        <th width="34%">{% trans "Email" %} / {% trans "Name" %} / {% trans "Contact Email" %}</th>
+        <th width="14%">{% trans "Status" %}</th>
         {% endif %}
-        <th width="16%">{% trans "Space Used / Quota" %}</th>
-        <th width="22%">{% trans "Create At / Last Login" %}</th>
+        <th width="15%">{% trans "Space Used / Quota" %}</th>
+        <th width="20%">{% trans "Create At / Last Login" %}</th>
         <th width="14%"></th>
     </tr>
 
@@ -68,23 +68,23 @@
             {% else %} {# else for `if not is_admin_page` #}
             <div class="admin-role">
                 {% if user.admin_role == default_admin %}
-                    <span class="admin-role-cur-value">{% trans "Default Admin" %}</span>
+                    <span class="admin-role-cur-value">{% trans "Default Administrator" %}</span>
                 {% elif user.admin_role == system_admin %}
-                    <span class="admin-role-cur-value">{% trans "System Admin" %}</span>
+                    <span class="admin-role-cur-value">{% trans "System Administrator" %}</span>
                 {% elif user.admin_role == daily_admin %}
-                    <span class="admin-role-cur-value">{% trans "Daily Admin" %}</span>
+                    <span class="admin-role-cur-value">{% trans "Daily Administrator" %}</span>
                 {% elif user.admin_role == audit_admin %}
-                    <span class="admin-role-cur-value">{% trans "Audit Admin" %}</span>
+                    <span class="admin-role-cur-value">{% trans "Audit Administrator" %}</span>
                 {% else %}
                     <span class="admin-role-cur-value">{{user.admin_role}}</span>
                 {% endif %}
                 <span title="{% trans "Edit"%}" class="admin-role-edit-icon sf2-icon-edit op-icon vh"></span>
             </div>
             <select name="role" class="admin-role-select hide">
-                <option value={{ default_admin }}{% if user.admin_role == default_admin %} selected="selected"{% endif %}>{% trans "Default Admin" %}</option>
-                <option value={{ system_admin }}{% if user.admin_role == system_admin %} selected="selected"{% endif %}>{% trans "System Admin" %}</option>
-                <option value={{ daily_admin }}{% if user.admin_role == daily_admin %} selected="selected"{% endif %}>{% trans "Daily Admin" %}</option>
-                <option value={{ audit_admin }}{% if user.admin_role == audit_admin %} selected="selected"{% endif %}>{% trans "Audit Admin" %}</option>
+                <option value={{ default_admin }}{% if user.admin_role == default_admin %} selected="selected"{% endif %}>{% trans "Default Administrator" %}</option>
+                <option value={{ system_admin }}{% if user.admin_role == system_admin %} selected="selected"{% endif %}>{% trans "System Administrator" %}</option>
+                <option value={{ daily_admin }}{% if user.admin_role == daily_admin %} selected="selected"{% endif %}>{% trans "Daily Administrator" %}</option>
+                <option value={{ audit_admin }}{% if user.admin_role == audit_admin %} selected="selected"{% endif %}>{% trans "Audit Administrator" %}</option>
                 {% for role in extra_admin_roles %}
                 <option value={{ role }}{% if user.admin_role == role %} selected="selected"{% endif %}>{{ role }}</option>
                 {% endfor %}
@@ -122,6 +122,7 @@
           {% if user.source == "DB" %}
           <a href="#" class="reset-user-btn op vh" data-url="{% url 'user_reset' user.email %}" data-target="{{ user.email }}">{% trans "ResetPwd" %}</a>
           {% endif %}
+          <br />
           {% if is_admin_page %}
           <a href="#" data-url="{% url 'user_remove_admin' user.email %}" data-target="{{ user.email }}" class="revoke-admin-btn op vh">{% trans "Revoke Admin" %}</a>
           {% endif %}
