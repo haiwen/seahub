@@ -899,8 +899,15 @@
 </script>
 
 <script type="text/template" id="admin-logs-tmpl">
-    <div class="hd">
-        <h3>{% trans "Admin Logs" %}</h3>
+    <div class="hd ovhd">
+        <ul class="tab-tabs-nav fleft">
+            <li class="tab <% if (cur_tab == 'admin_logs') { %> ui-state-active <% } %>">
+                <a href="#admin-logs/" class="a">{% trans "Admin Logs" %}</a>
+            </li>
+            <li class="tab <% if (cur_tab == 'admin_login_logs') { %> ui-state-active <% } %>">
+                <a href="#admin-login-logs/" class="a">{% trans "Admin Login Logs" %}</a>
+            </li>
+        </ul>
     </div>
     <span class="loading-icon loading-tip"></span>
     <table class="hide">
@@ -928,5 +935,49 @@
     <td><a href="<%= admin_user_url %>"><%- email %></a></td>
     <td><%= op_title %></td>
     <td><%= op_details %></td>
+    <td><time title="<%- time %>"><%- time_from_now %></time></td>
+</script>
+
+<script type="text/template" id="admin-login-logs-tmpl">
+    <div class="hd ovhd">
+        <ul class="tab-tabs-nav fleft">
+            <li class="tab <% if (cur_tab == 'admin_logs') { %> ui-state-active <% } %>">
+                <a href="#admin-logs/" class="a">{% trans "Admin Logs" %}</a>
+            </li>
+            <li class="tab <% if (cur_tab == 'admin_login_logs') { %> ui-state-active <% } %>">
+                <a href="#admin-login-logs/" class="a">{% trans "Admin Login Logs" %}</a>
+            </li>
+        </ul>
+    </div>
+    <span class="loading-icon loading-tip"></span>
+    <table class="hide">
+        <thead>
+            <tr>
+                <th width="35%">{% trans "Email" %}</th>
+                <th width="25%">{% trans "IP" %}</th>
+                <th width="15%">{% trans "Status" %}</th>
+                <th width="25%">{% trans "Time" %}</th>
+            </tr>
+        </thead>
+        <tbody>
+        </tbody>
+    </table>
+    <div id="paginator">
+        <a class="prev js-previous hide" href="#">{% trans "Previous" %}</a>
+        <a class="next js-next hide" href="#">{% trans "Next" %}</a>
+    </div>
+    <div class="empty-tips hide">
+        <h2 class="alc">{% trans "No Admin Login Logs" %}</h2>
+    </div>
+</script>
+
+<script type="text/template" id="admin-login-log-item-tmpl">
+    <td><a href="<%= admin_user_url %>"><%- email %></a></td>
+    <td><%= login_ip %></td>
+    <% if (login_success) { %>
+    <td>{% trans "Success" %}</td>
+    <% } else { %>
+    <td>{% trans "Failed" %}</td>
+    <% } %>
     <td><time title="<%- time %>"><%- time_from_now %></time></td>
 </script>
