@@ -13,6 +13,7 @@ define([
         id: 'admin-device-trusted-ip',
 
         template: _.template($('#device-trusted-ip-tmpl').html()),
+        ipAddFormtemplate: _.template($("#add-trusted-ip-form-tmpl").html()),
 
         initialize: function() {
             this.deviceTrustedIPAddressCollection = new DeviceTrustedIPAddressCollection();
@@ -23,7 +24,6 @@ define([
 
         events: {
             'click #add-trusted-ip-btn': 'showAddTrustedIpForm',
-            'click #remove-trusted-ip': 'removeOne',
             'mouseover tbody tr': 'mouseovercard',
             'mouseout tbody tr': 'mouseoutcard',
         },
@@ -36,58 +36,51 @@ define([
             $(e.target).parent().find("#remove-trusted-ip").removeClass('vh');
         },
 
-        removeOne: function(e) {
-            $.ajax({
-                url: Common.getUrl({name: 'admin-device-trusted-ip'}) + "?ipaddress="+$(e.target).parent().parent().find(":first").html(),
-                type: "DELETE",
-                cache: false,
-                dataType: "JSON",
-                beforeSend: Common.prepareCSRFToken,
-                success: function(data){
-                    $(e.target).parent().parent().remove();
-                },
-                error: function(xhr ){
-                    Common.feedback('system error', 'error');
-                }
-            })
-        },
-
-        createOne: function() {
-            $.ajax({
-                url: Common.getUrl({name: 'admin-device-trusted-ip'}),
-                type: "POST",
-                cache: false,
-                dataType: "JSON",
-                beforeSend: Common.prepareCSRFToken,
-                data: {
-                    "ipaddress": $("#ipaddress").val()
-                },
-                success: function(data, textStatus, xhr){
-                    if (xhr.status == 201){
-                        $("#admin-device-trusted-ip tbody").append('<tr><td id="label-id">' 
-                                + data.ip + 
-                                '</td><td><a id="remove-trusted-ip" style="cursor:pointer;" class="op vh">Remove</a></td></tr>')
-                        $.modal.close();
-                    }
-                    else if (xhr.status == 200){
-                        var parsed_resp = $.parseJSON(xhr.responseText);
-                        $("#add-trusted-ip-form .error").html('ip address already exists').show();
-                    }
-                },
-                error: function(xhr, textStatus, errorThrown){
-                    if (xhr.responseText) {
-                        var parsed_resp = $.parseJSON(xhr.responseText);
-                        $("#add-trusted-ip-form .error").html(parsed_resp.error_msg).show();
-                    } else {
-                        $("#add-trusted-ip-form .error").html("Failed. Please check the network").show();
-                    }
-                }
-            })
-        },
-
         showAddTrustedIpForm: function() {
-            $('#add-trusted-ip-form').modal();
+            var $form = $(this.ipAddFormtemplate()),
+                $submitBtn = $("add-ip-form-btn"),
+                _this = this;
+
+            $form.modal()
             $('#simplemodal-container').css({'width':'auto', 'height':'auto'});
+
+            $form.submit(function(){
+                var ipaddress = $.trim($('#ipaddress', $form).val());
+                var $error = $('.error', $form);
+                if (!ipaddress) {
+                    $error.html(gettext("IP is required.")).show()
+                    return False;
+                }
+                $error.hide()
+                Common.disableButton($submitBtn);
+
+                _this.deviceTrustedIPAddressCollection.create({'ipaddress': ipaddress},{
+                    prepend: true,
+                    wait: true,
+                    success: function() {
+                        if (DeviceTrustedIPAddressCollection.length == 1) {
+                            DeviceTrustedIPAddressCollection.reset(DeviceTrustedIPAddressCollection.models);
+                        }
+                        Common.closeModal();
+                    },
+                    error: function(collection, response, options) {
+                        var err_msg;
+                        if (response.responseText) {
+                            if (response['status'] == 401 || response['status'] == 403) {
+                                err_msg = gettext("Permission error");
+                            } else {
+                                err_msg = $.parseJSON(response.responseText).error_msg;
+                            }
+                        } else {
+                            err_msg = gettext('Please check the network.');
+                        }
+                        $error.html(err_msg).show();
+                        Common.enableButton($submitBtn);
+                    }
+                });
+                return false;
+            });
+            return false;
         },
 
         render: function() {
@@ -96,7 +89,7 @@ define([
             this.$tableBody = $('tbody', this.$table);
             this.$loadingTip = this.$('.loading-tip');
             this.$emptyTip = this.$('.empty-tips');
-            $("body").on('click', '#add-ip-form-btn', this.createOne);
+            this.$error = this.$('.error');
             $("tbody tr:gt(0)").hover(this.mouseovercard, this.mouseoutcard);
         },
 
@@ -112,6 +105,7 @@ define([
         initPage: function() {
             this.$table.hide();
             this.$tableBody.empty();
+            this.$error.hide();
         },
 
         showAdminDeviceTrustedIP: function() {
@@ -149,9 +143,13 @@ define([
             }
         },
 
-        addOne: function(deviceTrustedIP) {
-            var view = new DeviceTrustedIP({model: deviceTrustedIP});
-            this.$tableBody.append(view.render().el);
+        addOne: function(ip, collection, options) {
+            var view = new DeviceTrustedIP({model: ip});
+            if (options.prepend) {
+                this.$tableBody.prepend(view.render().el);
+            } else {
+                this.$tableBody.append(view.render().el);
+            }
         }
     });
 

@@ -209,7 +209,7 @@
                 <a href="#device-errors/" class="a">{% trans "Errors" %}</a>
             </li>
             <% } %>
-            <% if (app.pageOptions.enable_limit_ipaddress) { %>
+            <% if (app.pageOptions.is_pro & app.pageOptions.enable_limit_ipaddress) { %>
             <li class="tab <% if (cur_tab == 'settings') { %> ui-state-active <% } %>">
                 <a href="#device-trusted-ip/" class="a">{% trans "Trusted IP" %}</a>
             </li>
@@ -265,7 +265,7 @@
             <li class="tab <% if (cur_tab == 'errors') { %> ui-state-active <% } %>">
                 <a href="#device-errors/" class="a">{% trans "Errors" %}</a>
             </li>
-            <% if (app.pageOptions.enable_limit_ipaddress) { %>
+            <% if (app.pageOptions.is_pro & app.pageOptions.enable_limit_ipaddress) { %>
             <li class="tab <% if (cur_tab == 'settings') { %> ui-state-active <% } %>">
                 <a href="#device-trusted-ip/" class="a">{% trans "Trusted IP" %}</a>
             </li>
@@ -342,7 +342,10 @@
     <div class="empty-tips hide">
         <h2 class="alc">{% trans "No Trusted IP" %}</h2>
     </div>
-    <form id="add-trusted-ip-form" onsubmit="return false" class="hide">{% csrf_token %}
+</script>
+
+<script type="text/template" id="add-trusted-ip-form-tmpl">
+    <form id="add-trusted-ip-form" class="hide">{% csrf_token %}
         <h3>{% trans "Add IP Address" %}</h3>
         <label>{% trans "Trusted IP Address" %}</label><br />
         <input name="ipaddress" id="ipaddress" class="input" /><br />

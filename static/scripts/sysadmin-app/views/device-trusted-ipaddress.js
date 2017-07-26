@@ -13,8 +13,40 @@ define([
 
         template: _.template($('#device-trusted-ip-item-tmpl').html()),
 
+        events: {
+            'click #remove-trusted-ip': 'deleteIP'
+        },
+
         initialize: function() {
             HLItemView.prototype.initialize.call(this);
+        },
+
+        deleteIP: function() {
+            var _this = this;
+            var ip = this.model.get('ip');
+            var popupTitle = gettext("Delete IP");
+            var popupContent = gettext("Are you sure you want to delete %s ?").replace('%s', '<span class="op-target ellipsis ellipsis-op-target" title="' + Common.HTMLescape(ip) + '">' + Common.HTMLescape(ip) + '</span>');
+            var yesCallback = function() {
+                $.ajax({
+                    url: Common.getUrl({name: 'admin-device-trusted-ip'}) + "?ipaddress="+ip,
+                    type: "DELETE",
+                    cache: false,
+                    dataType: "JSON",
+                    beforeSend: Common.prepareCSRFToken,
+                    success: function(data){
+                        _this.$el.remove();
+                        Common.feedback(gettext("Successfully deleted 1 item."), 'success');
+                    },
+                    error: function(xhr, textStatus, errorThrown) {
+                        Common.ajaxErrorHandler(xhr, textStatus, errorThrown);
+                    },
+                    complete: function() {
+                        $.modal.close();
+                    }
+                });
+            };
+            Common.showConfirm(popupTitle, popupContent, yesCallback);
+            return false;
         },
 
         render: function() {
