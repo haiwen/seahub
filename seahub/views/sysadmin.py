@@ -16,6 +16,7 @@ from django.conf import settings as dj_settings
 from django.core.urlresolvers import reverse
 from django.contrib import messages
 from django.http import HttpResponse, Http404, HttpResponseRedirect, HttpResponseNotAllowed
+
 from django.shortcuts import render_to_response, get_object_or_404
 from django.template import RequestContext
 from django.utils import timezone
@@ -34,12 +35,15 @@ from seahub.base.sudo_mode import update_sudo_mode_ts
 from seahub.base.templatetags.seahub_tags import tsstr_sec, email2nickname
 from seahub.auth import authenticate
 from seahub.auth.decorators import login_required, login_required_ajax
-from seahub.constants import GUEST_USER, DEFAULT_USER
+from seahub.constants import GUEST_USER, DEFAULT_USER, DEFAULT_ADMIN, \
+        SYSTEM_ADMIN, DAILY_ADMIN, AUDIT_ADMIN
 from seahub.institutions.models import (Institution, InstitutionAdmin,
                                         InstitutionQuota)
 from seahub.institutions.utils import get_institution_space_usage
 from seahub.invitations.models import Invitation
-from seahub.role_permissions.utils import get_available_roles
+from seahub.role_permissions.utils import get_available_roles, \
+        get_available_admin_roles
+from seahub.role_permissions.models import AdminRole
 from seahub.utils import IS_EMAIL_CONFIGURED, string2list, is_valid_username, \
     is_pro_version, send_html_email, get_user_traffic_list, get_server_id, \
     clear_token, handle_virus_record, get_virus_record_by_id, \
@@ -51,8 +55,8 @@ from seahub.utils.rpc import mute_seafile_api
 from seahub.utils.sysinfo import get_platform_name
 from seahub.utils.mail import send_html_email_with_dj_template
 from seahub.utils.ms_excel import write_xls
-from seahub.utils.user_permissions import (get_basic_user_roles,
-                                           get_user_role)
+from seahub.utils.user_permissions import get_basic_user_roles, \
+        get_user_role, get_basic_admin_roles
 from seahub.views import get_system_default_repo_id
 from seahub.forms import SetUserQuotaForm, AddUserForm, BatchAddUserForm, \
     TermsAndConditionsForm
@@ -154,6 +158,7 @@ def _populate_user_quota_usage(user):
 def sys_user_admin(request):
     """List all users from database.
     """
+
     try:
         from seahub_extra.plan.models import UserPlan
         enable_user_plan = True
@@ -258,6 +263,7 @@ def sys_user_admin(request):
 def sys_useradmin_export_excel(request):
     """ Export all users from database to excel
     """
+
     next = request.META.get('HTTP_REFERER', None)
     if not next:
         next = SITE_ROOT
@@ -363,6 +369,7 @@ def sys_useradmin_export_excel(request):
 def sys_user_admin_ldap_imported(request):
     """List all users from LDAP imported.
     """
+
     # Make sure page request is an int. If not, deliver first page.
     try:
         current_page = int(request.GET.get('page', '1'))
@@ -419,6 +426,7 @@ def sys_user_admin_ldap_imported(request):
 def sys_user_admin_ldap(request):
     """List all users from LDAP.
     """
+
     # Make sure page request is an int. If not, deliver first page.
     try:
         current_page = int(request.GET.get('page', '1'))
@@ -465,8 +473,9 @@ def sys_user_admin_ldap(request):
 def sys_user_admin_admins(request):
     """List all admins from database and ldap imported
     """
-    db_users = seaserv.get_emailusers('DB', -1, -1)
-    ldpa_imported_users = seaserv.get_emailusers('LDAPImport', -1, -1)
+
+    db_users = ccnet_api.get_emailusers('DB', -1, -1)
+    ldpa_imported_users = ccnet_api.get_emailusers('LDAPImport', -1, -1)
 
     admin_users = []
     not_admin_users = []
@@ -498,13 +507,25 @@ def sys_user_admin_admins(request):
             if last_login.username == user.email:
                 user.last_login = last_login.last_login
 
+        try:
+            admin_role = AdminRole.objects.get_admin_role(user.email)
+            user.admin_role = admin_role.role
+        except AdminRole.DoesNotExist:
+            user.admin_role = DEFAULT_ADMIN
+
+    extra_admin_roles = [x for x in get_available_admin_roles()
+                        if x not in get_basic_admin_roles()]
+
     return render_to_response(
         'sysadmin/sys_useradmin_admins.html', {
             'users': admin_users,
             'not_admin_users': not_admin_users,
             'have_ldap': get_ldap_info(),
-            'default_user': DEFAULT_USER,
-            'guest_user': GUEST_USER,
+            'extra_admin_roles': extra_admin_roles,
+            'default_admin': DEFAULT_ADMIN,
+            'system_admin': SYSTEM_ADMIN,
+            'daily_admin': DAILY_ADMIN,
+            'audit_admin': AUDIT_ADMIN,
             'is_pro': is_pro_version(),
         }, context_instance=RequestContext(request))
 
@@ -1067,6 +1088,7 @@ def user_add(request):
 def sys_group_admin_export_excel(request):
     """ Export all groups to excel
     """
+
     next = request.META.get('HTTP_REFERER', None)
     if not next:
         next = SITE_ROOT

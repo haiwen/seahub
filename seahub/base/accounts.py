@@ -17,11 +17,13 @@ from registration import signals
 
 from seahub.auth import login
 from seahub.profile.models import Profile, DetailedProfile
+from seahub.role_permissions.models import AdminRole
 from seahub.role_permissions.utils import get_enabled_role_permissions_by_role
 from seahub.utils import is_user_password_strong, \
     clear_token, get_system_admins, is_pro_version
 from seahub.utils.mail import send_html_email_with_dj_template, MAIL_PRIORITY
 from seahub.utils.licenseparse import user_number_over_limit
+from seahub.constants import DEFAULT_ADMIN
 
 try:
     from seahub.settings import CLOUD_MODE
@@ -35,6 +37,7 @@ except ImportError:
 UNUSABLE_PASSWORD = '!' # This will never be a valid hash
 
 class UserManager(object):
+
     def create_user(self, email, password=None, is_staff=False, is_active=False):
         """
         Creates and saves a User with given username and password.
@@ -98,6 +101,14 @@ class UserManager(object):
         user.source = emailuser.source
         user.role = emailuser.role
 
+        try:
+            role_obj = AdminRole.objects.get_admin_role(emailuser.email)
+            admin_role = role_obj.role
+        except AdminRole.DoesNotExist:
+            admin_role = DEFAULT_ADMIN
+
+        user.admin_role = admin_role
+
         return user
 
 class UserPermissions(object):
@@ -149,6 +160,30 @@ class UserPermissions(object):
     def role_quota(self):
         return get_enabled_role_permissions_by_role(self.user.role).get('role_quota', '')
 
+class AdminPermissions(object):
+    def __init__(self, user):
+        self.user = user
+
+    def can_view_system_info(self):
+        return True
+
+    def can_config_system(self):
+        return True
+
+    def can_manage_library(self):
+        return True
+
+    def can_manage_user(self):
+        return True
+
+    def can_manage_group(self):
+        return True
+
+    def can_view_user_log(self):
+        return True
+
+    def can_view_admin_log(self):
+        return True
 
 class User(object):
     is_staff = False
@@ -165,6 +200,7 @@ class User(object):
         self.username = email
         self.email = email
         self.permissions = UserPermissions(self)
+        self.admin_permissions = AdminPermissions(self)
 
     def __unicode__(self):
         return self.username
@@ -364,6 +400,7 @@ class User(object):
             unset_repo_passwd(r.id, self.email)
 
 class AuthBackend(object):
+
     def get_user_with_import(self, username):
         emailuser = seaserv.get_emailuser_with_import(username)
         if not emailuser:
@@ -378,6 +415,14 @@ class AuthBackend(object):
         user.org = emailuser.org
         user.source = emailuser.source
         user.role = emailuser.role
+
+        try:
+            role_obj = AdminRole.objects.get_admin_role(emailuser.email)
+            admin_role = role_obj.role
+        except AdminRole.DoesNotExist:
+            admin_role = DEFAULT_ADMIN
+
+        user.admin_role = admin_role
 
         return user
 

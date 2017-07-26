@@ -75,6 +75,7 @@ from seahub.api2.endpoints.admin.logo import AdminLogo
 from seahub.api2.endpoints.admin.favicon import AdminFavicon
 from seahub.api2.endpoints.admin.license import AdminLicense
 from seahub.api2.endpoints.admin.invitations import InvitationsView as AdminInvitationsView
+from seahub.api2.endpoints.admin.admin_role import AdminAdminRole
 
 # Uncomment the next two lines to enable the admin:
 #from django.contrib import admin
@@ -295,6 +296,9 @@ urlpatterns = patterns(
     ## admin::users
     url(r'^api/v2.1/admin/users/batch/$', AdminUsersBatch.as_view(), name='api-v2.1-admin-users-batch'),
 
+    ## admin::admin-role
+    url(r'^api/v2.1/admin/admin-role/$', AdminAdminRole.as_view(), name='api-v2.1-admin-admin-role'),
+
     ## admin::organizations
     url(r'^api/v2.1/admin/organizations/(?P<org_id>\d+)/users/$', AdminOrgUsers.as_view(), name='api-v2.1-admin-org-users'),
     url(r'^api/v2.1/admin/organizations/(?P<org_id>\d+)/users/(?P<email>[^/]+)/$', AdminOrgUser.as_view(), name='api-v2.1-admin-org-user'),
@@ -368,11 +372,8 @@ urlpatterns = patterns(
     url(r'^useradmin/remove/(?P<email>[^/]+)/$', user_remove, name="user_remove"),
     url(r'^useradmin/removetrial/(?P<user_or_org>[^/]+)/$', remove_trial, name="remove_trial"),
     url(r'^useradmin/search/$', user_search, name="user_search"),
-#    url(r'^useradmin/makeadmin/(?P<user_id>[^/]+)/$', user_make_admin, name='user_make_admin'),
     url(r'^useradmin/removeadmin/(?P<email>[^/]+)/$', user_remove_admin, name='user_remove_admin'),
     url(r'^useradmin/info/(?P<email>[^/]+)/$', user_info, name='user_info'),
-#    url(r'^useradmin/activate/(?P<user_id>[^/]+)/$', user_activate, name='user_activate'),
-#    url(r'^useradmin/deactivate/(?P<user_id>[^/]+)/$', user_deactivate, name='user_deactivate'),
     url(r'^useradmin/toggle_status/(?P<email>[^/]+)/$', user_toggle_status, name='user_toggle_status'),
     url(r'^useradmin/toggle_role/(?P<email>[^/]+)/$', user_toggle_role, name='user_toggle_role'),
     url(r'^useradmin/(?P<email>[^/]+)/set_quota/$', user_set_quota, name='user_set_quota'),
