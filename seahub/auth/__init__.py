@@ -42,7 +42,6 @@ def load_backend(path):
     return cls()
 
 def get_backends():
-    from django.conf import settings
     backends = []
     for backend_path in settings.AUTHENTICATION_BACKENDS:
         backends.append(load_backend(backend_path))
