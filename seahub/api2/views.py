@@ -252,10 +252,18 @@ class AccountInfo(APIView):
         p = Profile.objects.get_profile_by_user(email)
         d_p = DetailedProfile.objects.get_detailed_profile_by_user(email)
 
+        if is_org_context(request):
+            org_id = request.user.org.org_id
+            quota_total = seafile_api.get_org_user_quota(org_id, email)
+            quota_usage = seafile_api.get_org_user_quota_usage(org_id, email)
+        else:
+            quota_total = seafile_api.get_user_quota(email)
+            quota_usage = seafile_api.get_user_self_usage(email)
+
         info['email'] = email
         info['name'] = email2nickname(email)
-        info['total'] = seafile_api.get_user_quota(email)
-        info['usage'] = seafile_api.get_user_self_usage(email)
+        info['total'] = quota_total
+        info['usage'] = quota_usage
         info['login_id'] = p.login_id if p and p.login_id else ""
         info['department'] = d_p.department if d_p else ""
         info['contact_email'] = p.contact_email if p else ""
