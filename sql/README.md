@@ -26,4 +26,6 @@ To get the MySQL sqls:
 ```
 cd seahub
 mysqldump -u root -proot --skip-add-lock --skip-add-drop-table --skip-comments seahub  > sql/mysql.sql
+## if version > 5.5
+mysqldump -uroot -proot --compact  --skip-add-locks --skip-add-drop-table --skip-comments seahub  > sql/mysql.sql 
 ```
