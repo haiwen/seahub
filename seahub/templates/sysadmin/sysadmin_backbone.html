@@ -113,7 +113,8 @@ app["pageOptions"] = {
         "can_manage_group": '{{ admin_permissions.can_manage_group }}' === 'True',
         "can_view_user_log": '{{ admin_permissions.can_view_user_log }}' === 'True',
         "can_view_admin_log": '{{ admin_permissions.can_view_admin_log }}' === 'True'
-    }
+    },
+    enable_limit_ipaddress:  {% if enable_limit_ipaddress %} true {% else %} false {% endif %}
 };
 </script>
 <script src="{{ STATIC_URL }}scripts/i18n/{{ LANGUAGE_CODE }}/djangojs.js"></script>

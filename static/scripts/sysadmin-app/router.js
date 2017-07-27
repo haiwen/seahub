@@ -20,13 +20,14 @@ define([
     'sysadmin-app/views/group-members',
     'sysadmin-app/views/admin-logs',
     'sysadmin-app/views/admin-login-logs',
+    'sysadmin-app/views/device-trusted-ipaddresses',
     'app/views/account'
 ], function($, Backbone, Common, SideNavView, DashboardView,
     DesktopDevicesView, MobileDevicesView, DeviceErrorsView,
     ReposView, SearchReposView, SystemReposView, TrashReposView,
     SearchTrashReposView, DirView, GroupsView, SearchGroupsView,
-    GroupReposView, GroupMembersView, AdminLogsView, AdminLoginLogsView,
-    AccountView) {
+    GroupReposView, GroupMembersView, AdminLogsView, AdminLoginLogsView, 
+    DeviceTrustedIPView, AccountView) {
 
     "use strict";
 
@@ -37,6 +38,7 @@ define([
             'desktop-devices/': 'showDesktopDevices',
             'mobile-devices/': 'showMobileDevices',
             'device-errors/': 'showDeviceErrors',
+            'device-trusted-ip/': 'showDeviceTrustedIP',
             'all-libs/': 'showLibraries',
             'search-libs/': 'showSearchLibraries',
             'system-lib/': 'showSystemLibrary',
@@ -69,6 +71,7 @@ define([
             this.desktopDevicesView = new DesktopDevicesView();
             this.mobileDevicesView = new MobileDevicesView();
             this.deviceErrorsView = new DeviceErrorsView();
+            this.deviceTrustedIPView = new DeviceTrustedIPView();
 
             this.reposView = new ReposView();
             this.searchReposView = new SearchReposView();
@@ -154,6 +157,12 @@ define([
             this.switchCurrentView(this.deviceErrorsView);
             this.sideNavView.setCurTab('devices');
             this.deviceErrorsView.show();
+        },
+
+        showDeviceTrustedIP: function() {
+            this.switchCurrentView(this.deviceTrustedIPView);
+            this.sideNavView.setCurTab('devices');
+            this.deviceTrustedIPView.show()
         },
 
         showLibraries: function() {

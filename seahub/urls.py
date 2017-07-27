@@ -53,6 +53,7 @@ from seahub.api2.endpoints.admin.perm_audit import PermAudit
 from seahub.api2.endpoints.admin.sysinfo import SysInfo
 from seahub.api2.endpoints.admin.devices import AdminDevices
 from seahub.api2.endpoints.admin.device_errors import AdminDeviceErrors
+from seahub.api2.endpoints.admin.device_trusted_ip import AdminDeviceTrustedIP
 from seahub.api2.endpoints.admin.libraries import AdminLibraries, AdminLibrary
 from seahub.api2.endpoints.admin.library_dirents import AdminLibraryDirents, AdminLibraryDirent
 from seahub.api2.endpoints.admin.system_library import AdminSystemLibrary, \
@@ -247,6 +248,7 @@ urlpatterns = patterns(
     ## admin::devices
     url(r'^api/v2.1/admin/devices/$', AdminDevices.as_view(), name='api-v2.1-admin-devices'),
     url(r'^api/v2.1/admin/device-errors/$', AdminDeviceErrors.as_view(), name='api-v2.1-admin-device-errors'),
+    url(r'^api/v2.1/admin/device-trusted-ip/$', AdminDeviceTrustedIP.as_view(), name='api-v2.1-admin-device-trusted-ip'),
 
     ## admin::libraries
     url(r'^api/v2.1/admin/libraries/$', AdminLibraries.as_view(), name='api-v2.1-admin-libraries'),
