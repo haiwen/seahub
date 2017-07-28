@@ -10,9 +10,16 @@
         <th width="33%">{% trans "Email" %} / {% trans "Name" %} / {% trans "Contact Email" %}</th>
         <th width="12%">{% trans "Status" %}</th>
         {% endif %}
-        <th width="16%">{% trans "Space Used / Quota" %}</th>
-        <th width="22%">{% trans "Create At / Last Login" %}</th>
-        <th width="14%"></th>
+        {% if multi_institution %}
+            <th width="10%">{% trans "Institution" %}</th>
+            <th width="16%">{% trans "Space Used / Quota" %}</th>
+            <th width="15%">{% trans "Create At / Last Login" %}</th>
+            <th width="11%"></th>
+        {% else %}
+            <th width="16%">{% trans "Space Used / Quota" %}</th>
+            <th width="22%">{% trans "Create At / Last Login" %}</th>
+            <th width="14%"></th>
+        {% endif %}
     </tr>
 
     {% for user in users %}
@@ -66,6 +73,20 @@
             </select>
         </td>
         {% endif %}
+        {% if multi_institution %}
+        <td>
+            <div class="user-institution">
+                <span class="user-institution-cur-value"> {{ user.institution }} </span>
+                <span title="{% trans "Edit"%}" class="user-institution-edit-icon sf2-icon-edit op-icon vh"></span>
+            </div>
+            <select name="institution" class="user-institution-select hide">
+                {% for inst in institutions %}
+                    <option value={{inst}} {% if user.institution == inst %} selected="selected"{% endif %}>{{inst}}</option>
+                {% endfor %}
+                <option value="" {% if user.institution == "" %} selected="selected"{% endif %}>None</option>
+            </select>
+        </td>
+        {% endif %}
 
         <td style="font-size:11px;">
             {{ user.space_usage|seahub_filesizeformat }} /
@@ -110,4 +131,27 @@
     </p>
     <p class="error hide"></p>
     <input type="submit" value="{% trans "Submit" %}" class="submit" />
+</form>
+<form id="set-institution-form" method="post" action="" class="hide">{% csrf_token %}
+    <table>
+        <thead>
+            <tr>
+                <th width="80%">{% trans "Institution" %}</th>
+                <th width="20%"></th>
+            </tr>
+        </thead>
+        <tbody>
+            <td>
+            <select id="batch-institution-select" name="institution" class="w100">
+                {% for inst in institutions %}
+                    <option value={{inst}}>{{inst}}</option>
+                {% endfor %}
+                <option value="" selected="selected">None</option>
+            </select>
+            </td>
+            <td>
+                <input type="submit" value="{% trans "Submit" %}" class="submit" />
+            </td>
+        </tbody>
+    </table>
 </form>

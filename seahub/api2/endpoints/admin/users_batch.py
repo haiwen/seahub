@@ -16,6 +16,8 @@ from seahub.api2.throttling import UserRateThrottle
 from seahub.api2.utils import api_error
 
 from seahub.base.accounts import User
+from seahub.profile.models import Profile
+from seahub.institutions.models import Institution
 from seahub.utils.file_size import get_file_size_unit
 from seahub.admin_log.models import USER_DELETE
 from seahub.admin_log.signals import admin_operation
@@ -42,7 +44,7 @@ class AdminUsersBatch(APIView):
             return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
 
         operation = request.POST.get('operation', None)
-        if operation not in ('set-quota', 'delete-user'):
+        if operation not in ('set-quota', 'delete-user', 'set-institution'):
             error_msg = "operation can only be 'set-quota' or 'delete-user'."
             return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
 
@@ -120,5 +122,30 @@ class AdminUsersBatch(APIView):
                 }
                 admin_operation.send(sender=None, admin_name=request.user.username,
                         operation=USER_DELETE, detail=admin_op_detail)
+
+        if operation == 'set-institution':
+            institution = request.POST.get('institution', None)
+            if institution is None:
+                error_msg = 'institution name can not be blank.'
+                return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
+            emails = [email.strip() for email in emails if email.strip()]
+            if institution != '':
+                try:
+                    obj_insti = Institution.objects.get(name=institution)
+                except Institution.DoesNotExist:
+                    error_msg = 'Institution %s does not exists' % institution
+                    return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
+            for email in emails:
+                try:
+                    User.objects.get(email=email)
+                except User.DoesNotExist:
+                    continue
+
+            for email in emails:
+                profile = Profile.objects.get_profile_by_user(email)
+                if profile is None:
+                    profile = Profile(user=email)
+                profile.institution = institution
+                profile.save()
 
         return Response(result)
