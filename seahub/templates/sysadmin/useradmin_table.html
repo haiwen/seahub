@@ -10,11 +10,11 @@
         <th width="33%">{% trans "Email" %} / {% trans "Name" %} / {% trans "Contact Email" %}</th>
         <th width="12%">{% trans "Status" %}</th>
         {% endif %}
-        {% if multi_institution %}
+        {% if show_institution %}
+            <th width="14%">{% trans "Space Used / Quota" %}</th>
             <th width="10%">{% trans "Institution" %}</th>
-            <th width="16%">{% trans "Space Used / Quota" %}</th>
-            <th width="15%">{% trans "Create At / Last Login" %}</th>
-            <th width="11%"></th>
+            <th width="18%">{% trans "Create At / Last Login" %}</th>
+            <th width="10%"></th>
         {% else %}
             <th width="16%">{% trans "Space Used / Quota" %}</th>
             <th width="22%">{% trans "Create At / Last Login" %}</th>
@@ -73,21 +73,6 @@
             </select>
         </td>
         {% endif %}
-        {% if multi_institution %}
-        <td>
-            <div class="user-institution">
-                <span class="user-institution-cur-value"> {{ user.institution }} </span>
-                <span title="{% trans "Edit"%}" class="user-institution-edit-icon sf2-icon-edit op-icon vh"></span>
-            </div>
-            <select name="institution" class="user-institution-select hide">
-                {% for inst in institutions %}
-                    <option value={{inst}} {% if user.institution == inst %} selected="selected"{% endif %}>{{inst}}</option>
-                {% endfor %}
-                <option value="" {% if user.institution == "" %} selected="selected"{% endif %}>None</option>
-            </select>
-        </td>
-        {% endif %}
-
         <td style="font-size:11px;">
             {{ user.space_usage|seahub_filesizeformat }} /
             <span class="user-space-quota">
@@ -99,6 +84,22 @@
             </span>
             <span title="{% trans "Edit Quota" %}" class="quota-edit-icon sf2-icon-edit op-icon vh"></span>
         </td>
+
+        {% if show_institution %}
+        <td>
+            <div class="user-institution">
+                <span class="user-institution-cur-value">{{ user.institution }}</span>
+                <span title="{% trans "Edit"%}" class="user-institution-edit-icon sf2-icon-edit op-icon vh"></span>
+            </div>
+            <select name="institution" class="user-institution-select hide">
+                <option value="" {% if user.institution == "" %} selected="selected"{% endif %}></option>
+                {% for inst in institutions %}
+                    <option value="{{inst}}" {% if user.institution == inst %} selected="selected"{% endif %}>{{inst}}</option>
+                {% endfor %}
+            </select>
+        </td>
+        {% endif %}
+
         <td>
             {% if user.source == "DB" %}
             {{ user.ctime|tsstr_sec }} /<br />
@@ -131,23 +132,4 @@
     </p>
     <p class="error hide"></p>
     <input type="submit" value="{% trans "Submit" %}" class="submit" />
-</form>
-<form id="set-institution-form" method="post" action="" class="hide">{% csrf_token %}
-    <table>
-        <thead>
-            <tr>
-                <th width="75%">{% trans "Institution" %}</th>
-                <th width="25%"></th>
-            </tr>
-        </thead>
-        <tbody>
-            <td>
-                <input id="institution_name"  class="w100"/>
-                <p class="error hide"></p>
-            </td>
-            <td>
-                <input type="submit" value="{% trans "Submit" %}" class="submit" />
-            </td>
-        </tbody>
-    </table>
 </form>

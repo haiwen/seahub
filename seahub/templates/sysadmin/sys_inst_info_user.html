@@ -2,6 +2,11 @@
 {% load i18n seahub_tags %}
 {% load staticfiles %}
 
+{% block extra_style %}
+<link rel="stylesheet" type="text/css" href="{% static "css/select2-3.5.2.css" %}" />
+<link rel="stylesheet" type="text/css" href="{% static "css/select2.custom.css" %}" />
+{% endblock %}
+
 {% block right_panel %}
 <div class="tabnav">
     <ul class="tabnav-tabs">
@@ -9,16 +14,16 @@
         <li class="tabnav-tab"><a href="{% url 'sys_inst_info_admins' inst.pk %}">{% trans "Admins" %}</a></li>
     </ul>
     <div class="js-op-for-all fright">
-        <button id="add-user-btn">{% trans "Add user" %}</button>
+        <button id="add-member-btn">{% trans "Add members" %}</button>
     </div>
 </div>
 
-<form id="add-user-form" action="" method="post" class="hide">{% csrf_token %}
-    <h3>{% trans "Add user" %}</h3>
-    <label for="id_email">{% trans "Email" %}</label><br />
-    <input id="id_email" style="width:300px;height:30px;"/>
+<form id="add-member-form" action="" method="" class="hide">
+    <h3>{% trans "Add members" %}</h3>
+    <label>{% trans "Email" %}</label><br />
+    <input type="hidden" name="emails" /><br />
+    <p class="error hide"></p>
     <button type="submit" class="submit">{% trans "Submit" %}</button>
-    <p id="id_error" class="error hide" style="margin-top:30px;"></p>
 </form>
 {% if users %}
 <table>
@@ -43,10 +48,10 @@
             </div>
         </td>
         <td style="font-size:11px;">
-            <p> {{ user.space_usage|seahub_filesizeformat }} {% if user.space_quota > 0 %} / {{ user.space_quota|seahub_filesizeformat }} {% endif %} </p>
+            {{ user.space_usage|seahub_filesizeformat }} {% if user.space_quota > 0 %} / {{ user.space_quota|seahub_filesizeformat }} {% endif %}
         </td>
         <td style="font-size:11px;">
-        {{ user.ctime|tsstr_sec }} / {% if user.last_login %}{{user.last_login|translate_seahub_time}} {% else %} -- {% endif %}
+            {{ user.ctime|tsstr_sec }} / {% if user.last_login %}{{user.last_login|translate_seahub_time}} {% else %} -- {% endif %}
         </td>
         <td>
           <a href="#" class="js-toggle-admin op vh" data-url="{% url 'sys_inst_toggle_admin' inst.pk user.email %}" data-target="{{ user.email }}">{% if user.inst_admin %}{% trans "Revoke Admin" %}{% else %}{% trans "Set Admin" %}{% endif %}</a>
@@ -65,9 +70,6 @@
 
 {% endblock %}
 
-{% block extra_style %}
-<link rel="stylesheet" type="text/css" href="{% static "css/select2-3.5.2.css" %}"/>
-{% endblock %}
 {% block extra_script %}{{ block.super }}
 <script type="text/javascript" src= "{% static "scripts/lib/select2-3.5.2.js" %}"></script>
 
@@ -90,89 +92,6 @@ $('.user-status-edit-icon').click(function() {
     $(this).parent().addClass('hide');
     $(this).parent().next().removeClass('hide'); // show 'select'
 });
-$('#add-user-btn').click(function(){
-     $('#add-user-form').modal();
-     $('#simplemodal-container').css({'width':'auto', 'height':'auto'});
- 
-     $("#id_email").select2({
-         minimumInputLength: 1,
-         maximumSelectionSize:5,
-         multiple: true,
-         tags: [],
-         ajax: {
-             url: "{% url 'search-user' %}",
-             dataType: 'json',
-             delay: 250,
-             data: function (term, page) {
-                 return {
-                     q: term, // search term
-                 };
-             },
-             results: function(data, page){
-                 var group_list = [], groups = data.users;
-                 for (var i =0, len = groups.length; i < len; i++){
-                     group_list.push({
-                         "id": i,
-                         "email": groups[i].email,
-                         "avatar_url": groups[i].avatar_url,
-                         "name": groups[i].name
-                     });
-                 }
-                 return {results:group_list};
-             }
-         },
-         formatResult: function(item) {
-             var markup = '<li>'+
-                 '<div ><img src="' + item.avatar_url + '" width="32" height="32" class="avatar" />'+
-                 '<span class="text ellipsis">' + item.name + '<br>' + item.email + '</span></div></li>'
-             return markup;
-         },
-         formatSelection:function(item) {
-             return (item.email);
-         },
-         escapeMarkup: function (m) { return m;  }
-     });
- });
- $('#add-user-form').submit(function(){
-     var form = $(this),
-         data = ""
-         form_id = $(this).attr('id'),
-         email = $("#id_email").select2("data"),
-         submit_btn = $(this).find('[type="submit"]');
-     if (!email){
-         apply_form_error(form_id, "{% trans "Email can not be blank "%}");
-         return false;
-     } else {
-         for (var i=0; i < email.length; i++){
-             data += email[i].email;
-             data += ',';
-         }
-     }
-     disable(submit_btn);
-     $.ajax({
-         url: "{% url 'sys_inst_add_user' inst.id %}",
-         type: 'POST',
-         dataType: 'json',
-         data: {
-             'email': data
-         },
-         beforeSend: prepareCSRFToken,
-         success: function(data){
-             if(data['success']){
-                 location.reload(true);
-             }
-         },
-         error: function(xhr, textStatus, errorThrown){
-             if (xhr.responseText) {
-                 var error = $.parseJSON(xhr.responseText).error;
-                 apply_form_error(form_id, error);
-                 enable(submit_btn);
-             }
-         }
-     });
-     return false;
- });
- 
 $('.user-status-select').change(function() {
     var select = $(this),
         select_val = select.val(),
@@ -219,6 +138,58 @@ $(document).click(function(e) {
         $('.user-status').removeClass('hide');
         $('.user-status-select').addClass('hide');
     }
+});
+
+// add members
+$('#add-member-btn').click(function(){
+    var $form = $('#add-member-form');
+    $form.modal({focus: false});
+    $('#simplemodal-container').css({'width':'auto', 'height':'auto'});
+
+    $('[name="emails"]', $form).select2($.extend({
+        width: '280px',
+        placeholder: "{% trans "Search users or enter emails and press Enter" %}",
+        formatInputTooShort: "{% trans "Please enter 1 or more character" %}",
+        formatNoMatches: "{% trans "No matches" %}",
+        formatSearching: "{% trans "Searching..." %}",
+        formatAjaxError: "{% trans "Loading failed" %}"
+    }, userInputOPtionsForSelect2('{% url 'search-user' %}')));
+});
+$('#add-member-form').submit(function(){
+    var $form = $(this);
+    var $error = $('.error', $form);
+    var $submit = $('[type="submit"]', $form);
+    var emails = $('[name="emails"]', $form).select2('val');
+
+    if (!emails.length) {
+        $error.html("{% trans "It is required." %}").show();
+        return false;
+    }
+
+    disable($submit);
+    $.ajax({
+        url: "{% url 'sys_inst_add_user' inst.id %}",
+        type: 'POST',
+        dataType: 'json',
+        data: {
+            'emails': emails.join(',')
+        },
+        beforeSend: prepareCSRFToken,
+        success: function(data) {
+            location.reload(true);
+        },
+        error: function(xhr, textStatus, errorThrown) {
+            var error_msg;
+            if (xhr.responseText) {
+                error_msg = $.parseJSON(xhr.responseText).error;
+            } else {
+                error_msg = "{% trans "Failed. Please check the network." %}";
+            }
+            $error.html(error_msg).show();
+            enable($submit);
+        }
+    });
+    return false;
 });
 </script>
 {% endblock %}

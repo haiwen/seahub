@@ -228,15 +228,21 @@ def sys_user_admin(request):
             if trial_user.user_or_org == user.email:
                 user.trial_info = {'expire_date': trial_user.expire_date}
 
-        profile = Profile.objects.get_profile_by_user(user.email)
-        user.institution =  profile.institution if profile else ''
-
     platform = get_platform_name()
     server_id = get_server_id()
     pro_server = 1 if is_pro_version() else 0
     extra_user_roles = [x for x in get_available_roles()
                         if x not in get_basic_user_roles()]
-    institutions = [inst.name for inst in Institution.objects.all()]
+
+    multi_institution = getattr(dj_settings, 'MULTI_INSTITUTION', False)
+    show_institution = False
+    institutions = None
+    if multi_institution:
+        show_institution = True
+        institutions = [inst.name for inst in Institution.objects.all()]
+        for user in users:
+            profile = Profile.objects.get_profile_by_user(user.email)
+            user.institution =  profile.institution if profile else ''
 
     return render_to_response(
         'sysadmin/sys_useradmin.html', {
@@ -255,8 +261,8 @@ def sys_user_admin(request):
             'pro_server': pro_server,
             'enable_user_plan': enable_user_plan,
             'extra_user_roles': extra_user_roles,
+            'show_institution': show_institution,
             'institutions': institutions,
-            'multi_institution': getattr(dj_settings, 'MULTI_INSTITUTION', False),
         }, context_instance=RequestContext(request))
 
 @login_required
@@ -411,6 +417,16 @@ def sys_user_admin_ldap_imported(request):
     extra_user_roles = [x for x in get_available_roles()
                         if x not in get_basic_user_roles()]
 
+    multi_institution = getattr(dj_settings, 'MULTI_INSTITUTION', False)
+    show_institution = False
+    institutions = None
+    if multi_institution:
+        show_institution = True
+        institutions = [inst.name for inst in Institution.objects.all()]
+        for user in users:
+            profile = Profile.objects.get_profile_by_user(user.email)
+            user.institution =  profile.institution if profile else ''
+
     return render_to_response(
         'sysadmin/sys_user_admin_ldap_imported.html', {
             'users': users,
@@ -423,6 +439,8 @@ def sys_user_admin_ldap_imported(request):
             'extra_user_roles': extra_user_roles,
             'default_user': DEFAULT_USER,
             'guest_user': GUEST_USER,
+            'show_institution': show_institution,
+            'institutions': institutions,
         }, context_instance=RequestContext(request))
 
 @login_required
@@ -2100,49 +2118,38 @@ def sys_inst_admin(request):
 
 @login_required
 @sys_staff_required
-def sys_inst_search_inst(request):
-    key = request.GET.get('q', '')
-    if not key:
-        return HttpResponse(json.dumps({'error': "q invalid"}),
-                status=400)
-    institutions = [dict([('name', inst.name)]) for inst in Institution.objects.filter(name__contains=key)]
-    institutions.append({'name': 'None'})
-    return HttpResponse(json.dumps({"insts": institutions}), status=200,
-                       content_type='application/json; charset=utf-8')
-
-@login_required
-@sys_staff_required
 @require_POST
 def sys_inst_add_user(request, inst_id):
     content_type = 'application/json; charset=utf-8'
-    get_email = request.POST.get('email', '')
-    email_list = [em.strip() for em in get_email.split(',') if em.strip()]
+
+    emails = request.POST.get('emails', '')
+    email_list = [em.strip() for em in emails.split(',') if em.strip()]
     if len(email_list) == 0:
-        return HttpResponse(json.dumps({'error': "User can't be empty"}),
+        return HttpResponse(json.dumps({'error': "Emails can't be empty"}),
                 status=400)
     try:
         inst = Institution.objects.get(pk=inst_id)
     except Institution.DoesNotExist:
-        return HttpResponse(json.dumps({'error': "Inst does not exists"}),
+        return HttpResponse(json.dumps({'error': "Institution does not exist"}),
                 status=400)
 
     for email in email_list:
         try:
             User.objects.get(email=email)
         except Exception as e:
-            messages.error(request, u'Failed to add %s to institution: user does not exist.' % email)
+            messages.error(request, u'Failed to add %s to the institution: user does not exist.' % email)
             continue
 
         profile = Profile.objects.get_profile_by_user(email)
         if not profile:
             profile = Profile.objects.add_or_update(email, email)
         if profile.institution:
-            messages.error(request, _(u"Failed to add %s to institution: user already have institution") % email)
+            messages.error(request, _(u"Failed to add %s to the institution: user already belongs to an institution") % email)
             continue
         else:
             profile.institution = inst.name
         profile.save()
-        messages.success(request, _(u'Successfully add %s to institution.') % email)
+        messages.success(request, _(u'Successfully added %s to the institution.') % email)
 
     return HttpResponse(json.dumps({'success': True}),
             content_type=content_type)

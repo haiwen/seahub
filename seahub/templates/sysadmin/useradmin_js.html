@@ -45,14 +45,14 @@ $('.user-status-select, .user-role-select, .user-institution-select').change(fun
         data = {'s': select_val};
     } else if (select.hasClass('user-institution-select')){
         url = "{{ SITE_ROOT }}api2/accounts/" + uid + "/";
-        data = {'institution_name': select_val};
+        data = {'institution': select_val};
         ajax_type = 'PUT';
     } else {
         url = "{{ SITE_ROOT }}useradmin/toggle_role/" + uid + "/";
         data = {'r': select_val};
     }
 
-    if (select_val == 1) {
+    if (select.hasClass('user-status-select') && select_val == 1) {
         // show activating popup
         $('#activate-msg').modal();
         $('#simplemodal-container').css({'height':'auto'});
@@ -72,12 +72,7 @@ $('.user-status-select, .user-role-select, .user-institution-select').change(fun
             } else {
                 feedback("{% trans "Edit succeeded" %}", 'success');
             }
-            if (select.children('option[value="' +select.val() + '"]').text() == "None"){
-                $('.user-status-cur-value, .user-role-cur-value, .user-institution-cur-value', $select_prev).html("");
-            }
-            else{
-                $('.user-status-cur-value, .user-role-cur-value, .user-institution-cur-value', $select_prev).html(select.children('option[value="' +select.val() + '"]').text());
-            }
+            $('.user-status-cur-value, .user-role-cur-value, .user-institution-cur-value', $select_prev).html(select.children('option[value="' +select.val() + '"]').text());
             select.addClass('hide');
             $select_prev.removeClass('hide');
             $.modal.close();
@@ -128,94 +123,71 @@ $('#set-quota-btn').click(function() {
     $('#simplemodal-container').css({'width':'auto', 'height':'auto'});
 });
 
-$('#set-institution-btn').click(function(){
-    $('#set-institution-form').data({'batch': true}).modal();
-    $('#simplemodal-container').css({'width':'auto', 'height':'auto'});
+{% if show_institution %}
+$('#set-institution-btn').click(function() {
+    $('#batch-set-institution-form').modal({focus: false, minWidth: 280});
+    $('#simplemodal-container').css({'height':'auto'});
+});
+$("#batch-set-institution-form").submit(function() {
+    var $form = $(this);
+    var $error = $('.error', $form);
+    var $submit = $('[type="submit"]', $form);
 
-    $("#institution_name").select2({
-        minimumInputLength: 1,
-        maximumSelectionSize:1,
-        multiple: true,
-        tags: [],
-        ajax: {
-            url: "{% url 'sys_inst_search_inst' %}",
-            dataType: 'json',
-            delay: 250,
-            data: function (term, page) {
-                return {
-                    q: term, // search term
-                };
-            },
-            results: function(data, page){
-                var insts_list = [], insts = data.insts;
-                for (var i =0, len = insts.length; i < len; i++){
-                    insts_list.push({
-                        "id": i,
-                        "name": insts[i].name
-                    });
-                }
-                return {results:insts_list};
-            }
-        },
-        formatResult: function(item) {
-            var markup = '<li><div ><span class="text ellipsis">' + item.name + '</span></div></li>'
-            return markup;
-        },
-        formatSelection:function(item) {
-            return (item.name);
-        },
-        escapeMarkup: function (m) { return m;  }
-    });
-});
-$("#set-institution-form").submit(function(){
-    var insts = $("#institution_name").select2("data"),
-        data = "",
-        emails = [],
-        form_id = $(this).attr('id'),
-        submit_btn = $(this).find('[type="submit"]');
-    if (!insts){
-        apply_form_error(form_id, "Institution can not be blank" );
-        return false;
-    } else {
-        data = insts[0].name;
-    }
+    var institution = $('[name="institution"]', $form).val();
+    var emails = [];
     $('td [type="checkbox"]:checked').closest('tr').each(function(index, item) {
-            emails.push($(item).attr('data-userid'));
+        emails.push($(item).attr('data-userid'));
     });
-    if (data == "None"){
-        data = "";
-    }
-    disable(submit_btn);
-    var batch = $(this).data('batch');
-    if (batch){
-        $.ajax({
-            url: "{% url 'api-v2.1-admin-users-batch' %}",
-            type: "POST",
-            dataType: 'json',
-            cache: false,
-            data: {
-                'operation': 'set-institution',
-                'email': emails,
-                'institution_name': data
-            },
-            traditional: true,
-            beforeSend: prepareCSRFToken,
-            success: function(data){
-                if(data['success']){
-                    location.reload(true);
-                }
-            },
-            error: function(xhr, textStatus, errorThrown){
-                if (xhr.responseText) {
-                    var error = $.parseJSON(xhr.responseText).error;
-                    apply_form_error(form_id, error);
-                    enable(submit_btn);
-                }
+
+    disable($submit);
+    $.ajax({
+        url: "{% url 'api-v2.1-admin-users-batch' %}",
+        type: "POST",
+        dataType: 'json',
+        cache: false,
+        data: {
+            'operation': 'set-institution',
+            'email': emails,
+            'institution': institution
+        },
+        traditional: true,
+        beforeSend: prepareCSRFToken,
+        success: function(data) {
+            if (data.success.length) {
+                var emails = [];
+                $(data.success).each(function(index, item) {
+                    var $tr = $('tr[data-userid="' + item.email + '"]');
+                    $('.user-institution-cur-value', $tr).html(HTMLescape(item.institution));
+                    emails.push(item.email);
+                });
+                var msg = "{% trans "Successfully set institution for {users}." %}".replace('{users}', HTMLescape(emails.join(', ')));
+                feedback(msg, 'success');
             }
-        });
-        return false;
-    }
+            if (data.failed.length) {
+                var err_msg = '';
+                $(data.failed).each(function(index, item) {
+                    err_msg += HTMLescape(item.email) + ': ' + item.error_msg + '<br />';
+                });
+                setTimeout(function() { feedback(err_msg, 'error'); }, 1500);
+            }
+            $.modal.close();
+        },
+        error: function(xhr, textStatus, errorThrown) {
+            var error_msg;
+            if (xhr.responseText) {
+                var parsed_resp = $.parseJSON(xhr.responseText);
+                error_msg = parsed_resp.error_msg||parsed_resp.detail;
+            } else {
+                error_msg = gettext("Failed. Please check the network.");
+            }
+            $error.html(error_msg).show();
+            enable($submit);
+        }
+    });
+
+    return false;
 });
+{% endif %}
 
 $('#delete-users-btn').click(function() {
     var title = "{% trans "Delete User" %}";
