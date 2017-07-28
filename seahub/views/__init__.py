@@ -540,7 +540,7 @@ def repo_history(request, repo_id):
         c.show = False if new_merge_with_no_conflict(c) else True
 
     show_label = False
-    if ENABLE_REPO_SNAPSHOT_LABEL and user_perm == 'rw':
+    if ENABLE_REPO_SNAPSHOT_LABEL:
         show_label = True
         snapshot_labels = RevisionTags.objects.get_all_tags_by_repo(repo_id)
         for c in commits:
