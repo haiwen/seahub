@@ -42,7 +42,7 @@ from seahub.invitations.models import Invitation
 from seahub.role_permissions.utils import get_available_roles
 from seahub.utils import IS_EMAIL_CONFIGURED, string2list, is_valid_username, \
     is_pro_version, send_html_email, get_user_traffic_list, get_server_id, \
-    clear_token, handle_virus_record, get_virus_record_by_id, \
+    handle_virus_record, get_virus_record_by_id, \
     get_virus_record, FILE_AUDIT_ENABLED, get_max_upload_file_size
 from seahub.utils.file_size import get_file_size_unit
 from seahub.utils.ldap import get_ldap_info
@@ -880,10 +880,10 @@ def user_toggle_status(request, email):
             return HttpResponse(json.dumps({'success': True,
                                             'email_sent': email_sent,
                                             }), content_type=content_type)
-        else:
-            clear_token(user.email)
+
         return HttpResponse(json.dumps({'success': True}),
                             content_type=content_type)
+
     except User.DoesNotExist:
         return HttpResponse(json.dumps({'success': False}), status=500,
                             content_type=content_type)
@@ -943,7 +943,6 @@ def user_reset(request, email):
         user.set_password(new_password)
         user.save()
 
-        clear_token(user.username)
         if config.FORCE_PASSWORD_CHANGE:
             UserOptions.objects.set_force_passwd_change(user.username)
 

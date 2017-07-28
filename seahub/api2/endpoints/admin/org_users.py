@@ -10,7 +10,7 @@ from rest_framework import status
 from constance import config
 from seaserv import ccnet_api, seafile_api
 
-from seahub.utils import clear_token, is_valid_email
+from seahub.utils import is_valid_email
 from seahub.utils.licenseparse import user_number_over_limit
 from seahub.utils.file_size import get_file_size_unit
 from seahub.base.accounts import User
@@ -212,13 +212,6 @@ class AdminOrgUser(APIView):
                 user.is_active = True
             else:
                 user.is_active = False
-
-                # clear web api and repo sync token
-                # when inactive an user
-                try:
-                    clear_token(email)
-                except Exception as e:
-                    logger.error(e)
 
             try:
                 # update user status
