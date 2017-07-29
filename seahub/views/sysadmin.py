@@ -58,7 +58,7 @@ from seahub.forms import SetUserQuotaForm, AddUserForm, BatchAddUserForm, \
     TermsAndConditionsForm
 from seahub.options.models import UserOptions
 from seahub.profile.models import Profile, DetailedProfile
-from seahub.signals import repo_deleted
+from seahub.signals import repo_deleted, institution_deleted
 from seahub.share.models import FileShare, UploadLinkShare
 from seahub.admin_log.signals import admin_operation
 from seahub.admin_log.models import USER_DELETE, USER_ADD
@@ -234,6 +234,16 @@ def sys_user_admin(request):
     extra_user_roles = [x for x in get_available_roles()
                         if x not in get_basic_user_roles()]
 
+    multi_institution = getattr(dj_settings, 'MULTI_INSTITUTION', False)
+    show_institution = False
+    institutions = None
+    if multi_institution:
+        show_institution = True
+        institutions = [inst.name for inst in Institution.objects.all()]
+        for user in users:
+            profile = Profile.objects.get_profile_by_user(user.email)
+            user.institution =  profile.institution if profile else ''
+
     return render_to_response(
         'sysadmin/sys_useradmin.html', {
             'users': users,
@@ -251,6 +261,8 @@ def sys_user_admin(request):
             'pro_server': pro_server,
             'enable_user_plan': enable_user_plan,
             'extra_user_roles': extra_user_roles,
+            'show_institution': show_institution,
+            'institutions': institutions,
         }, context_instance=RequestContext(request))
 
 @login_required
@@ -405,6 +417,16 @@ def sys_user_admin_ldap_imported(request):
     extra_user_roles = [x for x in get_available_roles()
                         if x not in get_basic_user_roles()]
 
+    multi_institution = getattr(dj_settings, 'MULTI_INSTITUTION', False)
+    show_institution = False
+    institutions = None
+    if multi_institution:
+        show_institution = True
+        institutions = [inst.name for inst in Institution.objects.all()]
+        for user in users:
+            profile = Profile.objects.get_profile_by_user(user.email)
+            user.institution =  profile.institution if profile else ''
+
     return render_to_response(
         'sysadmin/sys_user_admin_ldap_imported.html', {
             'users': users,
@@ -417,6 +439,8 @@ def sys_user_admin_ldap_imported(request):
             'extra_user_roles': extra_user_roles,
             'default_user': DEFAULT_USER,
             'guest_user': GUEST_USER,
+            'show_institution': show_institution,
+            'institutions': institutions,
         }, context_instance=RequestContext(request))
 
 @login_required
@@ -2095,6 +2119,44 @@ def sys_inst_admin(request):
 @login_required
 @sys_staff_required
 @require_POST
+def sys_inst_add_user(request, inst_id):
+    content_type = 'application/json; charset=utf-8'
+
+    emails = request.POST.get('emails', '')
+    email_list = [em.strip() for em in emails.split(',') if em.strip()]
+    if len(email_list) == 0:
+        return HttpResponse(json.dumps({'error': "Emails can't be empty"}),
+                status=400)
+    try:
+        inst = Institution.objects.get(pk=inst_id)
+    except Institution.DoesNotExist:
+        return HttpResponse(json.dumps({'error': "Institution does not exist"}),
+                status=400)
+
+    for email in email_list:
+        try:
+            User.objects.get(email=email)
+        except Exception as e:
+            messages.error(request, u'Failed to add %s to the institution: user does not exist.' % email)
+            continue
+
+        profile = Profile.objects.get_profile_by_user(email)
+        if not profile:
+            profile = Profile.objects.add_or_update(email, email)
+        if profile.institution:
+            messages.error(request, _(u"Failed to add %s to the institution: user already belongs to an institution") % email)
+            continue
+        else:
+            profile.institution = inst.name
+        profile.save()
+        messages.success(request, _(u'Successfully added %s to the institution.') % email)
+
+    return HttpResponse(json.dumps({'success': True}),
+            content_type=content_type)
+
+@login_required
+@sys_staff_required
+@require_POST
 def sys_inst_remove(request, inst_id):
     """Delete an institution.
     """
@@ -2103,7 +2165,9 @@ def sys_inst_remove(request, inst_id):
     except Institution.DoesNotExist:
         raise Http404
 
+    inst_name = inst.name
     inst.delete()
+    institution_deleted.send(sender=None, inst_name = inst_name)
     messages.success(request, _('Success'))
 
     return HttpResponseRedirect(reverse('sys_inst_admin'))

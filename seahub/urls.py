@@ -352,6 +352,7 @@ urlpatterns = patterns(
     url(r'^sys/instadmin/$', sys_inst_admin, name='sys_inst_admin'),
     url(r'^sys/instadmin/(?P<inst_id>\d+)/remove/$', sys_inst_remove, name='sys_inst_remove'),
     url(r'^sys/instadmin/(?P<inst_id>\d+)/users/$', sys_inst_info_user, name='sys_inst_info_users'),
+    url(r'^sys/instadmin/(?P<inst_id>\d+)/users/add/$', sys_inst_add_user, name='sys_inst_add_user'),
     url(r'^sys/instadmin/(?P<inst_id>\d+)/users/search/$', sys_inst_search_user, name='sys_inst_search_user'),
     url(r'^sys/instadmin/(?P<inst_id>\d+)/admins/$', sys_inst_info_admins, name='sys_inst_info_admins'),
     url(r'^sys/instadmin/(?P<inst_id>\d+)/toggleadmin/(?P<email>[^/]+)/$', sys_inst_toggle_admin, name='sys_inst_toggle_admin'),

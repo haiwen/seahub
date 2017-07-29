@@ -8,7 +8,9 @@ from django.dispatch import receiver
 
 from seahub.base.fields import LowerCaseCharField
 from seahub.profile.settings import EMAIL_ID_CACHE_PREFIX, EMAIL_ID_CACHE_TIMEOUT
+from seahub.institutions.models import Institution
 from registration.signals import user_registered
+from seahub.signals import institution_deleted
 
 # Get an instance of a logger
 logger = logging.getLogger(__name__)
@@ -162,3 +164,9 @@ def update_profile_cache(sender, instance, **kwargs):
     Set profile data to cache when profile data change.
     """
     refresh_cache(instance.user)
+
+@receiver(institution_deleted)
+def remove_user_for_inst_deleted(sender, **kwargs):
+    inst_name = kwargs.get("inst_name", "")
+    Profile.objects.filter(institution=inst_name).update(institution="")
+
