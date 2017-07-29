@@ -224,6 +224,11 @@ INSTALLED_APPS = (
     'seahub.password_session',
     'seahub.admin_log',
     'seahub.wopi',
+<<<<<<< HEAD
+=======
+    'seahub.tags',
+    'seahub.revision_tag',
+>>>>>>> afda10b... [API2] ReversionTag
 )
 
 # Enabled or disable constance(web settings).
