@@ -4,16 +4,16 @@ define([
     'backbone',
     'common',
     'sysadmin-app/views/device-trusted-ipaddress',
-    'sysadmin-app/collection/device-trusted-ip'
-],function($, _, Backbone, Common, DeviceTrustedIP, DeviceTrustedIPAddressCollection) {
+    'sysadmin-app/collection/device-trusted-ipaddresses'
+],function($, _, Backbone, Common, DeviceTrustedIPAddressView, DeviceTrustedIPAddressCollection) {
     'use strict';
 
     var DeviceTrustedIPView = Backbone.View.extend({
 
         id: 'admin-device-trusted-ip',
 
-        template: _.template($('#device-trusted-ip-tmpl').html()),
-        ipAddFormtemplate: _.template($("#add-trusted-ip-form-tmpl").html()),
+        template: _.template($('#device-trusted-ipaddresses-tmpl').html()),
+        ipAddFormtemplate: _.template($("#add-trusted-ipaddress-form-tmpl").html()),
 
         initialize: function() {
             this.deviceTrustedIPAddressCollection = new DeviceTrustedIPAddressCollection();
@@ -23,28 +23,19 @@ define([
         },
 
         events: {
-            'click #add-trusted-ip-btn': 'showAddTrustedIpForm',
-            'mouseover tbody tr': 'mouseovercard',
-            'mouseout tbody tr': 'mouseoutcard',
-        },
-
-        mouseoutcard: function(e) {
-            $(e.target).parent().find("#remove-trusted-ip").addClass('vh');
-        },
-
-        mouseovercard: function(e) {
-            $(e.target).parent().find("#remove-trusted-ip").removeClass('vh');
+            'click #add-trusted-ip-btn': 'showAddTrustedIpForm'
         },
 
         showAddTrustedIpForm: function() {
             var $form = $(this.ipAddFormtemplate()),
-                $submitBtn = $("add-ip-form-btn"),
-                _this = this;
+                _this = this,
+                trustedIP = this.deviceTrustedIPAddressCollection;
 
             $form.modal()
             $('#simplemodal-container').css({'width':'auto', 'height':'auto'});
 
             $form.submit(function(){
+                var $submitBtn = $('add-ip-form-btn', $form);
                 var ipaddress = $.trim($('#ipaddress', $form).val());
                 var $error = $('.error', $form);
                 if (!ipaddress) {
@@ -54,23 +45,19 @@ define([
                 $error.hide()
                 Common.disableButton($submitBtn);
 
-                _this.deviceTrustedIPAddressCollection.create({'ipaddress': ipaddress},{
+                trustedIP.create({'ipaddress': ipaddress},{
                     prepend: true,
                     wait: true,
                     success: function() {
-                        if (DeviceTrustedIPAddressCollection.length == 1) {
-                            DeviceTrustedIPAddressCollection.reset(DeviceTrustedIPAddressCollection.models);
+                        if (trustedIP.length == 1) {
+                            trustedIP.reset(trustedIP.models);
                         }
                         Common.closeModal();
                     },
                     error: function(collection, response, options) {
                         var err_msg;
                         if (response.responseText) {
-                            if (response['status'] == 401 || response['status'] == 403) {
-                                err_msg = gettext("Permission error");
-                            } else {
-                                err_msg = $.parseJSON(response.responseText).error_msg;
-                            }
+                            err_msg = $.parseJSON(response.responseText).error_msg;
                         } else {
                             err_msg = gettext('Please check the network.');
                         }
@@ -90,22 +77,27 @@ define([
             this.$loadingTip = this.$('.loading-tip');
             this.$emptyTip = this.$('.empty-tips');
             this.$error = this.$('.error');
-            $("tbody tr:gt(0)").hover(this.mouseovercard, this.mouseoutcard);
         },
 
         hide: function() {
             this.$el.detach();
+            this.attached = false;
         },
 
         show: function() {
-            $("#right-panel").html(this.$el);
+            if (!this.attached) {
+                this.attached = true;
+                $("#right-panel").html(this.$el);
+            }
             this.showAdminDeviceTrustedIP();
         },
 
         initPage: function() {
+            this.$loadingTip.show();
             this.$table.hide();
             this.$tableBody.empty();
             this.$error.hide();
+            this.$emptyTip.hide();
         },
 
         showAdminDeviceTrustedIP: function() {
@@ -115,26 +107,25 @@ define([
             this.deviceTrustedIPAddressCollection.fetch({
                 cache: false,
                 reset: true,
-                success: function(collection, response, opts){
-                },
                 error: function(collection, response, opts){
                     var err_msg;
                     if (response.responseText) {
-                        if (response['status'] == 401 || response['status'] == 403) {
-                            err_msg = gettext("Permission error");
-                        } else {
-                            err_msg = $.parseJSON(response.responseText).error_msg;
-                        }
+                        err_msg = $.parseJSON(response.responseText).error_msg;
                     } else {
                         err_msg = gettext("Failed. Please check the network.");
                     }
                     Common.feedback(err_msg, 'error');
+                },
+                complete: function() {
+                    _this.$loadingTip.hide();
                 }
             });
         },
 
         reset: function() {
+            this.initPage();
             this.$loadingTip.hide();
+
             if (this.deviceTrustedIPAddressCollection.length > 0) {
                 this.deviceTrustedIPAddressCollection.each(this.addOne, this);
                 this.$table.show();
@@ -144,7 +135,7 @@ define([
         },
 
         addOne: function(ip, collection, options) {
-            var view = new DeviceTrustedIP({model: ip});
+            var view = new DeviceTrustedIPAddressView({model: ip});
             if (options.prepend) {
                 this.$tableBody.prepend(view.render().el);
             } else {

@@ -306,7 +306,7 @@
     <td><time title='<%- time %>'><%- time_from_now %></time></td>
 </script>
 
-<script type="text/template" id="device-trusted-ip-tmpl">
+<script type="text/template" id="device-trusted-ipaddresses-tmpl">
     <div class="hd ovhd">
         <ul class="tab-tabs-nav fleft">
             <li class="tab <% if (cur_tab == 'desktop') { %> ui-state-active <% } %>">
@@ -344,19 +344,19 @@
     </div>
 </script>
 
-<script type="text/template" id="add-trusted-ip-form-tmpl">
+<script type="text/template" id="add-trusted-ipaddress-form-tmpl">
     <form id="add-trusted-ip-form" class="hide">{% csrf_token %}
         <h3>{% trans "Add IP Address" %}</h3>
         <label>{% trans "Trusted IP Address" %}</label><br />
         <input name="ipaddress" id="ipaddress" class="input" /><br />
-        <p class="error alc hide"></p>
+        <p class="error hide"></p>
         <button id="add-ip-form-btn">{% trans "Submit" %}</button>
     </form>
 </script>
 
-<script type="text/template" id="device-trusted-ip-item-tmpl">
+<script type="text/template" id="device-trusted-ipaddress-item-tmpl">
     <td id="label-ip"><%- ip %></td>
-    <td><a id="remove-trusted-ip" style="cursor:pointer" class="op vh">{% trans "Delete" %}</a></td>
+    <td><a href="#" class="sf2-icon-delete sf2-x trusted-ip-delete-btn op-icon vh" title="{% trans "Delete" %}" aria-label="{% trans "Delete" %}"></a></td>
 </script>
 
 <script type="text/template" id="user-info-popup-tmpl">

@@ -11,10 +11,10 @@ define([
     var DeviceTrustedIpAddressView = HLItemView.extend({
         tagName: 'tr',
 
-        template: _.template($('#device-trusted-ip-item-tmpl').html()),
+        template: _.template($('#device-trusted-ipaddress-item-tmpl').html()),
 
         events: {
-            'click #remove-trusted-ip': 'deleteIP'
+            'click .trusted-ip-delete-btn': 'deleteIP'
         },
 
         initialize: function() {
