@@ -66,6 +66,10 @@ class RevisionTagsManager(models.Manager):
             revision_tag.delete()
             return True
 
+    def delete_all_revision_tag(self, repo_id, commit_id):
+        super(RevisionTagsManager, self).filter(repo_id=repo_id, 
+                                                revision_id=commit_id).delete()
+
 ########## models
 class Tags(models.Model):
     name = models.CharField(max_length=255, unique=True)

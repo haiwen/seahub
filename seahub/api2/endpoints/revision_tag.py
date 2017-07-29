@@ -15,37 +15,16 @@ from seahub.api2.utils import api_error
 from seahub.revision_tag.models import Tags, RevisionTags
 from seahub.views import check_folder_permission
 
+import seaserv
 from seaserv import seafile_api
 
 
 def check_parameter(func):
     def _decorated(view, request, *args, **kwargs):
-        if request.method == "POST":
-            repo_id = request.data.get('repo_id', '')
-            tag_names = request.data.get('tag_names', '')
-            if not tag_names:
-                error_msg = _("Tag can not be empty")
-                return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
-            names = [name.strip() for name in tag_names.split(',')]
-            tag_names = []
-            for name in names:
-                if not check_tagname(name):
-                    error_msg = _("Tag can only contains letters, numbers, dot, hyphen or underscore")
-                    return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
-                tag_names.append(name)
-        elif request.method == "DELETE":
-            repo_id = request.GET.get('repo_id', '')
-            tag_name = request.GET.get('tag_name', '')
-            if not tag_name:
-                error_msg = _("Tag can not be empty")
-                return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
-            if tag_name not in Tags.objects.get_all_tag_name():
-                error_msg = "Tag %s not found" % tag_name
-                return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
-            if not check_tagname(tag_name):
-                error_msg = _('Tag can only contains letters, numbers, dot, hyphen or underscore')
-                return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
-
+        if request.method in ["POST", "PUT"]:
+            repo_id = request.data.get("repo_id", "")
+            commit_id = request.data.get("commit_id", None)
+            tag_names = request.data.get('tag_names', None)
         if not repo_id:
             error_msg = "Repo can not be empty"
             return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
@@ -54,11 +33,36 @@ def check_parameter(func):
             error_msg = "Library %s not found" % repo_id
             return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
 
+        if tag_names is None:
+            error_msg = _("Tag can not be empty.")
+            return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
+        if not tag_names.strip():
+            if request.method == "POST":
+                error_msg = _("Tag can not be empty.")
+                return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
+            if request.method == "PUT":
+                tag_namges = []
+        else:
+            tag_names = [name.strip() for name in tag_names.split(',')]
+            for name in tag_names:
+                if not check_tagname(name):
+                    error_msg = _("Tag can only contains letters, numbers, dot, \
+                                  hyphen or underscore.")
+                    return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
+
+        if commit_id is None:
+            commit_id = repo.head_commit_id
+        else:
+            commit = seaserv.get_commit(repo_id, repo.version, commit_id)
+            if not commit:
+                error_msg = "Commit does not exists."
+                return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
+
         if check_folder_permission(request, repo_id, '/') != 'rw':
             error_msg = 'Permission denied.'
             return api_error(status.HTTP_403_FORBIDDEN, error_msg)
 
-        return func(view, request, *args, **kwargs)
+        return func(view, request, repo_id, commit_id, tag_names, *args, **kwargs)
     return _decorated
 
 
@@ -72,29 +76,19 @@ class TaggedItemsView(APIView):
     throttle_classes = (UserRateThrottle, )
 
     @check_parameter
-    def post(self, request):
-        repo_id = request.POST.get('repo_id')
-        tag_names = request.POST.get('tag_names').split(',')
-        repo = seafile_api.get_repo(repo_id)
-        if repo.head_commit_id is not None:
-            commit_id = repo.head_commit_id
-        else:
-            commit_id = seafile_api.get_commit_list(repo_id, 0, 1)[0].id
+    def post(self, request, repo_id, commit_id, tag_names):
         for name in tag_names:
             revision_tag, created = RevisionTags.objects.create_revision_tag(
                     repo_id, commit_id, name.strip(), request.user.username)
         return Response({"success": True}, status=status.HTTP_200_OK)
 
     @check_parameter
-    def delete(self, request, repo_id, tag_name):
-        repo_id = request.GET.get('repo_id')
-        tag_name = request.GET.get('tag_name')
-        commit_id = None
-        if RevisionTags.objects.delete_revision_tag(repo_id, commit_id,
-                                                           tag_name):
-            return Response({"success": True}, status=status.HTTP_200_OK)
-        else:
-            return Response({"success": True}, status=status.HTTP_202_ACCEPTED)
+    def put(self, request, repo_id, commit_id, tag_names):
+        RevisionTags.objects.delete_all_revision_tag(repo_id, commit_id)
+        for name in tag_names:
+            revision_tag, created = RevisionTags.objects.create_revision_tag(
+                repo_id, commit_id, name.strip(), request.user.username)
+        return Response({"success": True}, status=status.HTTP_200_OK)
 
 
 class TagNamesView(APIView):
