@@ -35,18 +35,6 @@ class RevisionTagsManager(models.Manager):
         except:
             return None
 
-    def get_all_tags_by_repo(self, repo_id):
-        return super(RevisionTagsManager, self).filter(repo_id=repo_id)
-
-    def get_all_tags_by_creator(self, creator):
-        return super(RevisionTagsManager, self).filter(username=creator)
-
-    def get_all_tags_by_key(self, key):
-        return super(RevisionTagsManager, self).filter(tag__name__contains=key)
-
-    def get_all_tags_by_tagname(self, tag_name):
-        return super(RevisionTagsManager, self).filter(tag__name=tag_name)
-
     def create_revision_tag(self, repo_id, commit_id, tag_name, creator):
         revision_tag = self.get_one_revision_tag(repo_id, commit_id, tag_name)
         exists = False
@@ -65,6 +53,9 @@ class RevisionTagsManager(models.Manager):
         else:
             revision_tag.delete()
             return True
+
+    def delete_all_revision_tag(self, repo_id, commit_id):
+        super(RevisionTagsManager, self).filter(repo_id=repo_id, revision_id=commit_id).delete()
 
 ########## models
 class Tags(models.Model):
@@ -96,5 +87,3 @@ class RevisionTags(models.Model):
                      "link": reverse("repo_history_view", args=[self.repo_id])+"?commit_id=%s"%self.revision_id
                      }}
 
-    def __getitem__(self, item):
-            return getattr(self, item)

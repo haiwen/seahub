@@ -25,12 +25,13 @@ class RevisionTagsTest(BaseTestCase):
         resp = self.client.post(self.url_create, {
             "tag_names": self.tag_name,
             "repo_id": self.repo.id,
+            "commit_id": ''
         })
         assert resp.status_code in [200, 201]
         resp = self.client.get(self.url+"?user="+self.admin.username)
-        assert self.tag_name in [tag["tag"] for tag in resp.data]
+        assert self.tag_name in [e["tag"] for e in resp.data]
         resp = self.client.get(self.url+"?user="+self.user.username)
-        assert not self.tag_name in [tag["tag"] for tag in resp.data]
+        assert not self.tag_name in [e["tag"] for e in resp.data]
 
     def test_get_revision_by_repo_id(self):
         p_repo = seafile_api.get_repo(self.create_repo(
@@ -42,40 +43,44 @@ class RevisionTagsTest(BaseTestCase):
         resp = self.client.post(self.url_create, {
             "tag_names": self.tag_name,
             "repo_id": self.repo.id,
+            "commit_id": ""
         })
         assert resp.status_code in [200, 201]
         resp = self.client.get(self.url+"?repo_id="+self.repo.id)
-        assert self.tag_name in [tag["tag"] for tag in resp.data]
+        assert self.tag_name in [e["tag"] for e in resp.data]
         resp = self.client.get(self.url+"?repo_id="+p_repo.id)
-        assert not self.tag_name in [tag["tag"] for tag in resp.data]
+        assert not self.tag_name in [e["tag"] for e in resp.data]
 
     def test_revisin_by_tag_name(self):
         resp = self.client.post(self.url_create, {
             "tag_names": self.tag_name,
             "repo_id": self.repo.id,
+            "commit_id": ""
         })
         assert resp.status_code in [200, 201]
         resp = self.client.get(self.url+"?tag_name="+self.tag_name)
-        assert self.tag_name in [tag["tag"] for tag in resp.data]
+        assert self.tag_name in [e["tag"] for e in resp.data]
         resp = self.client.get(self.url+"?tag_name=Hello")
-        assert not self.tag_name in [tag["tag"] for tag in resp.data]
+        assert not self.tag_name in [e["tag"] for e in resp.data]
 
     def test_revisin_by_tag_contains(self):
         resp = self.client.post(self.url_create, {
             "tag_names": self.tag_name,
             "repo_id": self.repo.id,
+            "commit_id": ""
         })
         assert resp.status_code in [200, 201]
         resp = self.client.get(self.url+"?tag_contains="+self.tag_name[:-2])
-        assert self.tag_name in [tag["tag"] for tag in resp.data]
+        assert self.tag_name in [e["tag"] for e in resp.data]
         resp = self.client.get(self.url+"?tag_contains=Hello")
-        assert not self.tag_name in [tag["tag"] for tag in resp.data]
+        assert not self.tag_name in [e["tag"] for e in resp.data]
 
     def test_revision_all(self):
         resp = self.client.post(self.url_create, {
             "tag_names": self.tag_name,
             "repo_id": self.repo.id,
+            "commit_id": ""
         })
         assert resp.status_code in [200, 201]
         resp = self.client.get(self.url)
-        assert self.tag_name in [tag["tag"] for tag in resp.data]
+        assert self.tag_name in [e["tag"] for e in resp.data]
