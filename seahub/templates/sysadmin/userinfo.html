@@ -156,9 +156,9 @@
             {% for repo in owned_repos %}
             <tr>
                 {% if repo.encrypted %}
-                <td><img src="{{MEDIA_URL}}img/sync-folder-encrypt-20.png" title="{% trans "Encrypted"%}" alt="{% trans "library icon" %}" /></td>
+                <td><img src="{{MEDIA_URL}}img/lib/24/lib-encrypted.png" title="{% trans "Encrypted"%}" alt="{% trans "library icon" %}" /></td>
                 {% else %}
-                <td><img src="{{MEDIA_URL}}img/sync-folder-20.png?t=1387267140" title="{% trans "Read-Write" %}" alt="{% trans "library icon" %}" /></td>
+                <td><img src="{{MEDIA_URL}}img/lib/24/lib.png" title="{% trans "Read-Write" %}" alt="{% trans "library icon" %}" /></td>
                 {% endif %}
 
                 {% if not repo.name %}
@@ -205,11 +205,11 @@
             {% for repo in in_repos %}
             <tr>
                 {% if repo.encrypted %}
-                <td><img src="{{MEDIA_URL}}img/sync-folder-encrypt-20.png" title="{% trans "Encrypted"%}" alt="{% trans "library icon" %}" /></td>
+                <td><img src="{{MEDIA_URL}}img/lib/24/lib-encrypted.png" title="{% trans "Encrypted"%}" alt="{% trans "library icon" %}" /></td>
                 {% elif repo.permission == 'r' %}
-                <td><img src="{{MEDIA_URL}}img/folder-no-write-20.png" title="{% trans "Read-Only"%}" alt="{% trans "library icon" %}" /></td>
+                <td><img src="{{MEDIA_URL}}img/lib/24/lib-readonly.png" title="{% trans "Read-Only"%}" alt="{% trans "library icon" %}" /></td>
                 {% else %}
-                <td><img src="{{MEDIA_URL}}img/sync-folder-20.png?t=1387267140" title="{% trans "Read-Write" %}" alt="{% trans "library icon" %}" /></td>
+                <td><img src="{{MEDIA_URL}}img/lib/24/lib.png" title="{% trans "Read-Write" %}" alt="{% trans "library icon" %}" /></td>
                 {% endif %}
                 {% if enable_sys_admin_view_repo %}
                 <td><a href="{% url 'sys_admin_repo' repo.id %}">{{ repo.name }}</a></td>
