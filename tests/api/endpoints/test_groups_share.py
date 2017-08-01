@@ -4,16 +4,15 @@ import json
 from mock import patch
 
 from django.core.urlresolvers import reverse
-from seaserv import seafile_api
 
 from seahub.test_utils import BaseTestCase
 
 
 class GroupsShareTest(BaseTestCase):
 
-    @patch('seahub.api2.endpoints.groups_share.ENABLE_SHARE_ANY_GROUPS')
+    @patch('seahub.api2.endpoints.groups_share.config')
     def test_can_get(self, mock_settings):
-        mock_settings.return_value = True
+        mock_settings.ENABLE_SHARE_ANY_GROUPS.return_value = True
         self.logout()
         self.login_as(self.admin)
         self.admin_group = self.create_group(group_name='onetoone', 

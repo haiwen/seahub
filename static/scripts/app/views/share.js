@@ -666,9 +666,9 @@ define([
                             })
                         },
                         error: function(xhr, textStatus, errorThrown) {
-                            var g_opts = '<option disabled="true">Place check network</option>';
+                            var g_opts = '<option disabled="true">Please check network</option>';
                             $('[name="groups"]', $add_item).html(g_opts).select2({
-                                placeholder: gettext("Place check network"),
+                                placeholder: gettext("Please check network"),
                             });
                             var $submitBtn = $('[type="submit"]', $add_item);
                             Common.disableButton($submitBtn);

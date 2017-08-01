@@ -4,14 +4,14 @@ from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 from rest_framework.views import APIView
 
-from seaserv import seafile_api
+from seaserv import seafile_api, ccnet_api
 
 from seahub.api2.authentication import TokenAuthentication
 from seahub.api2.throttling import UserRateThrottle
 from seahub.api2.endpoints.groups import get_group_info
 from seahub.avatar.settings import GROUP_AVATAR_DEFAULT_SIZE
 from seahub.utils import is_org_context
-from seahub.settings import ENABLE_SHARE_ANY_GROUPS
+from constance import config
 
 
 class GroupsSharableView(APIView):
@@ -25,8 +25,8 @@ class GroupsSharableView(APIView):
         """
         org_id = None
         username = request.user.username
-        if ENABLE_SHARE_ANY_GROUPS:
-            groups_list = seafile_api.get_all_groups(-1, -1)
+        if config.ENABLE_SHARE_ANY_GROUPS:
+            groups_list = ccnet_api.get_all_groups(-1, -1)
         else:
             if is_org_context(request):
                 org_id = request.user.org.org_id
