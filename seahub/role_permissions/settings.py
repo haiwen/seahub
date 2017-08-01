@@ -51,6 +51,7 @@ except AttributeError:
     pass  # ignore error if ENABLED_ROLE_PERMISSONS is not set in settings.py
 
 def get_enabled_role_permissions():
+    role_permissions = {}
     for role, perms in _default_role_perms.iteritems():
         # check role permission syntax
         for k in perms.keys():
@@ -58,6 +59,18 @@ def get_enabled_role_permissions():
                 logger.warn('"%s" is not valid permission, please review the ENABLED_ROLE_PERMISSIONS setting.' % k)
                 assert False, '"%s" is not valid permission, please review the ENABLED_ROLE_PERMISSIONS setting.' % k
 
-    return _default_role_perms
+        # create a new default permission dict every `for` loop
+        all_default_permission = {}
+        for permission in DEFAULT_ENABLED_ROLE_PERMISSIONS[DEFAULT_USER].keys():
+            if permission == 'role_quota':
+                all_default_permission[permission] = ''
+            else:
+                all_default_permission[permission] = True
+
+        # update the new default permission dict with permissions from setting
+        all_default_permission.update(perms)
+        role_permissions[role] = all_default_permission
+
+    return role_permissions
 
 ENABLED_ROLE_PERMISSIONS = get_enabled_role_permissions()
