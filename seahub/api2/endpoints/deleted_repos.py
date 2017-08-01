@@ -4,7 +4,6 @@ from rest_framework.authentication import SessionAuthentication
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 from rest_framework import status
-from django.template.defaultfilters import filesizeformat
 from seaserv import seafile_api
 
 from pysearpc import SearpcError
@@ -13,7 +12,8 @@ from seahub.api2.throttling import UserRateThrottle
 from seahub.api2.authentication import TokenAuthentication
 from seahub.api2.base import APIView
 from seahub.api2.utils import api_error
-from seahub.base.templatetags.seahub_tags import email2nickname, email2contact_email
+from seahub.base.templatetags.seahub_tags import email2nickname, \
+        email2contact_email
 from seahub.utils.timeutils import timestamp_to_isoformat_timestr
 
 logger = logging.getLogger(__name__)
@@ -57,14 +57,17 @@ class DeletedRepos(APIView):
         post_data = request.POST
         repo_id = post_data.get('repo_id', '')
         if not repo_id:
-            error_msg = "repo_id invalid"
+            error_msg = "Repo can not be empty."
+            return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
+        if repo_id not in [e.repo_id for e in seafile_api.get_trash_repos_by_owner(request.user.username)]:
+            error_msg = "Can not restore undeleted repo."
             return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
 
         try:
             seafile_api.restore_repo_from_trash(repo_id)
         except SearpcError as e:
             logger.error(e)
-            error = "Internal Server Error"
+            error_msg = "Internal Server Error"
             return api_error(status.HTTP_500_INTERNAL_SERVER_ERROR, error_msg)
 
         return Response({"success": True})

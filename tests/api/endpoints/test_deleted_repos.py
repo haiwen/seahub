@@ -10,13 +10,13 @@ from seahub.base.templatetags.seahub_tags import email2nickname, email2contact_e
 class DeletedReposTest(BaseTestCase):
 
     def test_get_deleted_repos(self):
+        self.logout()
         self.login_as(self.user)
         name = self.user.username
-        repoid = self.create_repo(name='test-repo', desc='',
+        repo = seafile_api.get_repo(self.create_repo(name='test-repo', desc='',
                                                     username=name,
-                                                    passwd=None)
-        repo = seafile_api.get_repo(repoid)
-        self.remove_repo(repoid)
+                                                    passwd=None))
+        self.remove_repo(repo.id)
 
         trashs = self.client.get(reverse("api2-v2.1-deleted-repos"))
         json_trashs = json.loads(trashs.content)
@@ -33,15 +33,31 @@ class DeletedReposTest(BaseTestCase):
         #self.assertIsNotNone(json_trashs[0]['encrypted'])
 
     def test_can_restore_deleted_repos(self):
+        self.logout()
         self.login_as(self.user)
         name = self.user.username
-        repoid = self.create_repo(name='test-repo', desc='',
+        repo = seafile_api.get_repo(self.create_repo(name='test-repo', desc='',
+                                                    username=name,
+                                                    passwd=None))
+        remove_status = self.remove_repo(repo.id)
+        assert remove_status == 0
+        response = self.client.post(
+                reverse("api2-v2.1-deleted-repos"),
+                {"repo_id": repo.id}
+                )
+        self.assertEqual(response.status_code, 200)
+
+    def test_can_restore_deleted_repos_with_notdeleted(self):
+        self.logout()
+        self.login_as(self.user)
+        name = self.user.username
+        repoid = self.create_repo(name='test-repo-no-permission', desc='',
                                                     username=name,
                                                     passwd=None)
-        remove_status = self.remove_repo(repoid)
-        assert remove_status == 0
+        self.logout()
+        self.login_as(self.admin)
         response = self.client.post(
                 reverse("api2-v2.1-deleted-repos"),
                 {"repo_id": repoid}
                 )
-        self.assertEqual(response.status_code, 200)
+        self.assertEqual(response.status_code, 400)
