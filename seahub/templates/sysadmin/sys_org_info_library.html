@@ -24,9 +24,9 @@
         {% for repo in org_repos %}
         <tr>
             {% if repo.encrypted %}
-            <td><img src="{{MEDIA_URL}}img/lib/24/lib-encrypted.png" title="{% trans "Encrypted"%}" alt="{% trans "directory icon" %}" /></td>
+            <td><img src="{{MEDIA_URL}}img/lib/48/lib-encrypted.png" width="24" title="{% trans "Encrypted"%}" alt="{% trans "library icon" %}" /></td>
             {% else %}
-            <td><img src="{{MEDIA_URL}}img/lib/24/lib.png" title="{% trans "Read-Write"%}" alt="{% trans "directory icon" %}" /></td>
+            <td><img src="{{MEDIA_URL}}img/lib/48/lib.png" width="24" title="{% trans "Read-Write"%}" alt="{% trans "library icon" %}" /></td>
             {% endif %}
             <td>{{ repo.name }}</td>
             <td style="font-size:11px;">{{ repo.id }}</td>
