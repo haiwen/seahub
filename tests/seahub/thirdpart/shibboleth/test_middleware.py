@@ -146,3 +146,35 @@ class ShibbolethRemoteUserMiddlewareTest(BaseTestCase):
 
         assert len(Profile.objects.all()) == 1
         assert Profile.objects.all()[0].nickname == ''
+
+    @override_settings(SHIBBOLETH_AFFILIATION_ROLE_MAP={
+        'employee@school.edu': 'staff',
+        'member@school.edu': 'staff',
+        'student@school.edu': 'student',
+        'patterns': (
+            ('a@*.edu', 'aaa'),
+            ('*@*.edu', 'student'),
+            ('*', 'guest'),
+        )
+    })
+    @patch('shibboleth.middleware.SHIB_ATTRIBUTE_MAP', {
+        "Shibboleth-eppn": (True, "username"),
+        "givenname": (False, "givenname"),
+        "surname": (False, "surname"),
+        "emailaddress": (False, "contact_email"),
+        "organization": (False, "institution"),
+        "Shibboleth-affiliation": (False, "affiliation"),
+        "Shibboleth-displayName": (False, "display_name"),
+    })
+    def test_get_role_by_affiliation(self):
+        obj = ShibbolethRemoteUserMiddleware()
+
+        assert obj._get_role_by_affiliation('employee@school.edu') == 'staff'
+        assert obj._get_role_by_affiliation('member@school.edu') == 'staff'
+        assert obj._get_role_by_affiliation('student@school.edu') == 'student'
+
+        # test jokers
+        assert obj._get_role_by_affiliation('student1@school.edu') == 'student'
+        assert obj._get_role_by_affiliation('a@x.edu') == 'aaa'
+        assert obj._get_role_by_affiliation('a@x.com') == 'guest'
+

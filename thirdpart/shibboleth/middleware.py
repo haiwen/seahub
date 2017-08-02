@@ -1,3 +1,5 @@
+from collections import OrderedDict
+from fnmatch import fnmatch
 import logging
 
 from django.conf import settings
@@ -156,18 +158,37 @@ class ShibbolethRemoteUserMiddleware(RemoteUserMiddleware):
 
         p.save()
 
-    def update_user_role(self, user, shib_meta):
-        affiliation = shib_meta.get('affiliation', '')
-        if not affiliation:
-            return
-
+    def _get_role_by_affiliation(self, affiliation):
         try:
             role_map = settings.SHIBBOLETH_AFFILIATION_ROLE_MAP
         except AttributeError:
             return
 
+        role = role_map.get(affiliation)
+        if role:
+            return role
+
+        if role_map.get('patterns') is not None:
+            joker_map = role_map.get('patterns')
+            try:
+                od = OrderedDict(joker_map)
+            except Exception as e:
+                logger.error(e)
+                return
+
+            for k in od:
+                if fnmatch(affiliation, k):
+                    return od[k]
+
+        return None
+
+    def update_user_role(self, user, shib_meta):
+        affiliation = shib_meta.get('affiliation', '')
+        if not affiliation:
+            return
+
         for e in affiliation.split(';'):
-            role = role_map.get(e)
+            role = self._get_role_by_affiliation(e)
             if role:
                 User.objects.update_role(user.email, role)
                 return role
