@@ -313,6 +313,9 @@ DISABLE_SYNC_WITH_ANY_FOLDER = False
 
 ENABLE_TERMS_AND_CONDITIONS = False
 
+# Enable or disable sharing to all groups
+ENABLE_SHARE_ANY_GROUPS = False
+
 # interval for request unread notifications
 UNREAD_NOTIFICATIONS_REQUEST_INTERVAL = 3 * 60 # seconds
 
@@ -701,4 +704,5 @@ CONSTANCE_CONFIG = {
     'ENABLE_TWO_FACTOR_AUTH': (ENABLE_TWO_FACTOR_AUTH,''),
 
     'TEXT_PREVIEW_EXT': (TEXT_PREVIEW_EXT, ''),
+    'ENABLE_SHARE_ANY_GROUPS': (ENABLE_SHARE_ANY_GROUPS, ''),
 }

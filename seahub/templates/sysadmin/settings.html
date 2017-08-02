@@ -69,6 +69,11 @@
         {% include "snippets/web_settings_form.html" %}
     {% endwith %}
 
+    {% with type="checkbox" setting_display_name="ENABLE_SHARE_ANY_GROUPS" setting_name="ENABLE_SHARE_ANY_GROUPS" setting_val=config_dict.ENABLE_SHARE_ANY_GROUPS %}
+        {% trans "Determines whether the user can share repo for any group" as help_tip %}
+        {% include "snippets/web_settings_form.html" %}
+    {% endwith %}
+
 
     <h4>{% trans "Password" %}</h4>
 
