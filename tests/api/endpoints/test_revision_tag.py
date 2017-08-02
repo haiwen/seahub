@@ -28,7 +28,11 @@ class RevisionTagsTest(BaseTestCase):
             "repo_id": self.repo.repo_id,
             "commit_id": ''
         })
+        c_res = json.loads(c_resp.content)
+        res_tag_name_list = [e["tag"] for e in c_res["revisionTags"]]
         self.assertIn(c_resp.status_code, [200, 201])
+        self.assertIn('test_tag_name', res_tag_name_list)
+        self.assertIn('test_tag', res_tag_name_list)
         g_resp = self.client.get(self.url_get+"?name_only=true")
         self.assertEqual(200, g_resp.status_code)
         self.assertIn('test_tag_name', g_resp.data)
@@ -40,6 +44,11 @@ class RevisionTagsTest(BaseTestCase):
         data = 'tag_names=test_tag,test_tag_one&repo_id=%s&commit_id=' % self.repo.repo_id
         resp = self.client.put(self.url, data, 'application/x-www-form-urlencoded')
         self.assertEqual(200, resp.status_code)
+        p_res = json.loads(resp.content)
+        res_tag_name_list = [e["tag"] for e in p_res["revisionTags"]]
+        self.assertIn(resp.status_code, [200, 201])
+        self.assertIn('test_tag_one', res_tag_name_list)
+        self.assertIn('test_tag', res_tag_name_list)
 
         g_resp = self.client.get(self.url_get+"?name_only=true")
         self.assertEqual(200, g_resp.status_code)
