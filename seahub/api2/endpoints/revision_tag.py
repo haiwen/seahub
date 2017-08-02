@@ -74,18 +74,22 @@ class TaggedItemsView(APIView):
 
     @check_parameter
     def post(self, request, repo_id, commit_id, tag_names):
+        revisionTags = []
         for name in tag_names:
             revision_tag, created = RevisionTags.objects.create_revision_tag(
                     repo_id, commit_id, name.strip(), request.user.username)
-        return Response({"success": True}, status=status.HTTP_200_OK)
+            revisionTags.append(revision_tag.to_dict())
+        return Response({"revisionTags": revisionTags}, status=status.HTTP_200_OK)
 
     @check_parameter
     def put(self, request, repo_id, commit_id, tag_names):
+        revisionTags = []
         RevisionTags.objects.delete_all_revision_tag(repo_id, commit_id)
         for name in tag_names:
             revision_tag, created = RevisionTags.objects.create_revision_tag(
                     repo_id, commit_id, name.strip(), request.user.username)
-        return Response({"success": True}, status=status.HTTP_200_OK)
+            revisionTags.append(revision_tag.to_dict())
+        return Response({"revisionTags": revisionTags}, status=status.HTTP_200_OK)
 
 
 class TagNamesView(APIView):
