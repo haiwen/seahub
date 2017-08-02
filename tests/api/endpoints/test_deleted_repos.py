@@ -1,4 +1,5 @@
 import json
+from mock import patch
 
 from django.core.urlresolvers import reverse
 from seaserv import seafile_api
@@ -32,7 +33,8 @@ class DeletedReposTest(BaseTestCase):
         self.assertIsNotNone(json_trashs[0]['del_time'])
         #self.assertIsNotNone(json_trashs[0]['encrypted'])
 
-    def test_can_restore_deleted_repos(self):
+    @patch('seahub.api2.endpoints.deleted_repos.seafile_api')
+    def test_can_restore_deleted_repos(self, mock_seafile_api):
         self.logout()
         self.login_as(self.user)
         name = self.user.username
@@ -40,6 +42,9 @@ class DeletedReposTest(BaseTestCase):
                                                     username=name,
                                                     passwd=None))
         remove_status = self.remove_repo(repo.id)
+        mock_seafile_api.get_trash_repos_by_owner.return_value = [data(repo.id)]
+        mock_seafile_api.get_repo_owner.return_value = self.user.username
+        mock_seafile_api.get_trash_repo_owner.return_value = self.user.username
         assert remove_status == 0
         response = self.client.post(
                 reverse("api2-v2.1-deleted-repos"),
@@ -47,17 +52,63 @@ class DeletedReposTest(BaseTestCase):
                 )
         self.assertEqual(response.status_code, 200)
 
-    def test_can_restore_deleted_repos_with_notdeleted(self):
+    @patch('seahub.api2.endpoints.deleted_repos.seafile_api')
+    def test_can_restore_deleted_repos_with_notdeleted(self, mock_seafile_api):
+        mock_seafile_api.get_repo_owner.return_value = self.user.username
+        mock_seafile_api.get_trash_repo_owner.return_value = self.user.username
         self.logout()
         self.login_as(self.user)
         name = self.user.username
         repoid = self.create_repo(name='test-repo-no-permission', desc='',
                                                     username=name,
                                                     passwd=None)
-        self.logout()
-        self.login_as(self.admin)
         response = self.client.post(
                 reverse("api2-v2.1-deleted-repos"),
                 {"repo_id": repoid}
                 )
         self.assertEqual(response.status_code, 400)
+
+    @patch('seahub.api2.endpoints.deleted_repos.seafile_api')
+    def test_can_restore_repos_notbelong_self(self, mock_seafile_api):
+        mock_seafile_api.get_repo_owner.return_value = self.user.username
+        mock_seafile_api.get_trash_repo_owner.return_value = self.user.username
+        self.logout()
+        self.login_as(self.user)
+        repo = seafile_api.get_repo(self.create_repo(name='test-repo', desc='',
+                                                    username=self.user.username,
+                                                    passwd=None))
+        remove_status = self.remove_repo(repo.id)
+        assert remove_status == 0
+        self.logout()
+        self.login_as(self.admin)
+
+        response = self.client.post(
+                reverse("api2-v2.1-deleted-repos"),
+                {"repo_id": repo.id}
+                )
+        self.assertEqual(response.status_code, 403)
+
+    @patch('seahub.api2.endpoints.deleted_repos.seafile_api')
+    def test_can_restore_repos_deleted_with_notbelong_slef(self, mock_seafile_api):
+        repo = seafile_api.get_repo(self.create_repo(name='test-repo', desc='',
+                                                    username=self.user.username,
+                                                    passwd=None))
+        remove_status = self.remove_repo(repo.id)
+        assert remove_status == 0
+        mock_seafile_api.get_repo_owner.return_value = None
+        mock_seafile_api.get_trash_repo_owner.return_value = self.user.username
+        mock_seafile_api.get_trash_repos_by_owner.return_value = [data(repo.id)]
+        self.logout()
+        self.login_as(self.user)
+        self.logout()
+        self.login_as(self.user)
+
+        response = self.client.post(
+                reverse("api2-v2.1-deleted-repos"),
+                {"repo_id": repo.id}
+                )
+        self.assertEqual(response.status_code, 200)
+
+class data:
+    def __init__(self, repo_id):
+        self.repo_id = repo_id

@@ -56,11 +56,17 @@ class DeletedRepos(APIView):
         """
         post_data = request.POST
         repo_id = post_data.get('repo_id', '')
+        username = request.user.username
         if not repo_id:
-            error_msg = "Repo can not be empty."
+            error_msg = "repo_id can not be empty."
             return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
+        owner = seafile_api.get_repo_owner(repo_id)
+        if owner is None:
+            owner = seafile_api.get_trash_repo_owner(repo_id)
+        if owner != username:
+            return api_error(status.HTTP_403_FORBIDDEN, 'Permission denied.')
         if repo_id not in [e.repo_id for e in seafile_api.get_trash_repos_by_owner(request.user.username)]:
-            error_msg = "Can not restore undeleted repo."
+            error_msg = "Failed to restore library."
             return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
 
         try:
