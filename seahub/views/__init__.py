@@ -542,7 +542,7 @@ def repo_history(request, repo_id):
     show_label = False
     if ENABLE_REPO_SNAPSHOT_LABEL:
         show_label = True
-        snapshot_labels = RevisionTags.objects.get_all_tags_by_repo(repo_id)
+        snapshot_labels = RevisionTags.objects.filter(repo_id=repo_id)
         for c in commits:
             if c.show:
                 c.labels = []
