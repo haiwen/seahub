@@ -119,9 +119,6 @@ class UserPermissions(object):
     def can_generate_upload_link(self):
         return get_enabled_role_permissions_by_role(self.user.role)['can_generate_upload_link']
 
-    def can_send_share_link_mail(self):
-        return get_enabled_role_permissions_by_role(self.user.role)['can_send_share_link_mail']
-
     def can_use_global_address_book(self):
         return get_enabled_role_permissions_by_role(self.user.role)['can_use_global_address_book']
 
@@ -152,8 +149,13 @@ class UserPermissions(object):
     def can_export_files_via_mobile_client(self):
         return get_enabled_role_permissions_by_role(self.user.role)['can_export_files_via_mobile_client']
 
+    # Add default value for compatible issue when EMAILBE_ROLE_PERMISSIONS
+    # is not updated with newly added permissions.
     def role_quota(self):
         return get_enabled_role_permissions_by_role(self.user.role).get('role_quota', '')
+
+    def can_send_share_link_mail(self):
+        return get_enabled_role_permissions_by_role(self.user.role).get('can_send_share_link_mail', True)
 
 
 class User(object):
