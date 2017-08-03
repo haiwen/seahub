@@ -112,7 +112,7 @@ class AccountTest(BaseTestCase):
 
         resp = self._do_get_info()
         json_resp = json.loads(resp.content)
-        assert len(json_resp) == 10
+        assert len(json_resp) == 11
         assert json_resp['email'] == self.user1.username
         assert json_resp['is_staff'] is False
         assert json_resp['is_active'] is True
