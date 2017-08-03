@@ -1,4 +1,5 @@
 # Copyright (c) 2012-2016 Seafile Ltd.
+import os
 import logging
 
 from pysearpc import SearpcError
@@ -13,12 +14,17 @@ from seaserv import seafile_api, ccnet_api
 from seahub.api2.authentication import TokenAuthentication
 from seahub.api2.throttling import UserRateThrottle
 from seahub.api2.utils import api_error
+
 from seahub.base.accounts import User
 from seahub.share.signals import share_repo_to_user_successful, \
-    share_repo_to_group_successful
-from seahub.utils import (is_org_context, send_perm_audit_msg)
+        share_repo_to_group_successful
+from seahub.utils import is_org_context, send_perm_audit_msg, \
+        normalize_dir_path
+from seahub.views import check_folder_permission
+from seahub.settings import MAX_PATH
 
 logger = logging.getLogger(__name__)
+
 
 class ReposBatchView(APIView):
     authentication_classes = (TokenAuthentication, SessionAuthentication)
@@ -266,5 +272,171 @@ class ReposBatchView(APIView):
                             'repo_id': repo_id,
                             'error_msg': 'Internal Server Error'
                             })
+
+        return Response(result)
+
+
+class ReposBatchCopyDirView(APIView):
+
+    authentication_classes = (TokenAuthentication, SessionAuthentication)
+    permission_classes = (IsAuthenticated, )
+    throttle_classes = (UserRateThrottle, )
+
+    def post(self, request):
+        """ Multi copy folders.
+
+        Permission checking:
+        1. User must has `r/rw` permission for src folder.
+        2. User must has `rw` permission for dst folder.
+
+        Parameter:
+        {
+            "src_repo_id":"7460f7ac-a0ff-4585-8906-bb5a57d2e118",
+            "dst_repo_id":"a3fa768d-0f00-4343-8b8d-07b4077881db",
+            "path":[
+                {"src_path":"/1/2/3/","dst_path":"/4/5/6/"},
+                {"src_path":"/a/b/c/","dst_path":"/d/e/f/"},
+            ]
+        }
+        """
+
+        # argument check
+        path_list = request.data.get('path', None)
+        if not path_list:
+            error_msg = 'path invalid.'
+            return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
+
+        src_repo_id = request.data.get('src_repo_id', None)
+        if not src_repo_id:
+            error_msg = 'src_repo_id invalid.'
+            return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
+
+        dst_repo_id = request.data.get('dst_repo_id', None)
+        if not dst_repo_id:
+            error_msg = 'dst_repo_id invalid.'
+            return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
+
+        # permission check, user must has `r/rw` permission for src folder.
+        if check_folder_permission(request, src_repo_id, '/') is None:
+            error_msg = 'Permission denied.'
+            return api_error(status.HTTP_403_FORBIDDEN, error_msg)
+
+        # permission check, user must has `rw` permission for dst folder.
+        if check_folder_permission(request, dst_repo_id, '/') != 'rw':
+            error_msg = 'Permission denied.'
+            return api_error(status.HTTP_403_FORBIDDEN, error_msg)
+
+        # resource check
+        src_repo = seafile_api.get_repo(src_repo_id)
+        if not src_repo:
+            error_msg = 'Library %s not found.' % src_repo_id
+            return api_error(status.HTTP_404_NOT_FOUND, error_msg)
+
+        dst_repo = seafile_api.get_repo(dst_repo_id)
+        if not dst_repo:
+            error_msg = 'Library %s not found.' % dst_repo_id
+            return api_error(status.HTTP_404_NOT_FOUND, error_msg)
+
+        result = {}
+        result['failed'] = []
+        result['success'] = []
+        username = request.user.username
+
+        for path_item in path_list:
+
+            src_path = path_item['src_path']
+            src_path = normalize_dir_path(src_path)
+            src_parent_dir = os.path.dirname(src_path.rstrip('/'))
+            src_parent_dir = normalize_dir_path(src_parent_dir)
+            src_obj_name = os.path.basename(src_path.rstrip('/'))
+
+            dst_path = path_item['dst_path']
+            dst_path = normalize_dir_path(dst_path)
+            dst_parent_dir = dst_path
+            dst_obj_name = src_obj_name
+
+            common_dict = {
+                'src_repo_id': src_repo_id,
+                'src_path': src_path,
+                'dst_repo_id': dst_repo_id,
+                'dst_path': dst_path,
+            }
+
+            # src/dst parameter check
+            if src_repo_id == dst_repo_id and \
+                    dst_path.startswith(src_path):
+                error_dict = {
+                    'error_msg': "The destination directory is the same as the source, or is it's subfolder."
+                }
+                common_dict.update(error_dict)
+                result['failed'].append(common_dict)
+                continue
+
+            if src_path == '/':
+                error_dict = {
+                    'error_msg': "The source path can not be '/'."
+                }
+                common_dict.update(error_dict)
+                result['failed'].append(common_dict)
+                continue
+
+            if len(dst_parent_dir + dst_obj_name) > MAX_PATH:
+                error_dict = {
+                    'error_msg': "'Destination path is too long."
+                }
+                common_dict.update(error_dict)
+                result['failed'].append(common_dict)
+                continue
+
+            # src resource check
+            if not seafile_api.get_dir_id_by_path(src_repo_id, src_path):
+                error_dict = {
+                    'error_msg': 'Folder %s not found.' % src_path
+                }
+                common_dict.update(error_dict)
+                result['failed'].append(common_dict)
+                continue
+
+            # dst resource check
+            if not seafile_api.get_dir_id_by_path(dst_repo_id, dst_path):
+                error_dict = {
+                    'error_msg': 'Folder %s not found.' % dst_path
+                }
+                common_dict.update(error_dict)
+                result['failed'].append(common_dict)
+                continue
+
+            # src path permission check, user must has `r/rw` permission for src folder.
+            if check_folder_permission(request, src_repo_id, src_parent_dir) is None:
+                error_dict = {
+                    'error_msg': 'Permission denied.'
+                }
+                common_dict.update(error_dict)
+                result['failed'].append(common_dict)
+                continue
+
+            # dst path permission check, user must has `rw` permission for dst folder.
+            if check_folder_permission(request, dst_repo_id, dst_path) != 'rw':
+                error_dict = {
+                    'error_msg': 'Permission denied.'
+                }
+                common_dict.update(error_dict)
+                result['failed'].append(common_dict)
+                continue
+
+            try:
+                # need_progress=0, synchronous=1
+                seafile_api.copy_file(src_repo_id, src_parent_dir, src_obj_name,
+                        dst_repo_id, dst_parent_dir, dst_obj_name, username, 0, 1)
+            except Exception as e:
+                logger.error(e)
+                error_dict = {
+                    'error_msg': 'Internal Server Error'
+                }
+                common_dict.update(error_dict)
+                result['failed'].append(common_dict)
+                continue
+
+            result['success'].append(common_dict)
 
         return Response(result)
