@@ -82,11 +82,11 @@ class SysInfo(APIView):
             logger.error(e)
             inactive_ldap_users = 0
 
-        active_users = active_db_users + active_ldap_users if active_ldap_users > 0 \
-                else active_db_users
+        active_users = active_db_users + active_ldap_users if \
+            active_ldap_users > 0 else active_db_users
 
-        inactive_users = inactive_db_users + inactive_ldap_users if inactive_ldap_users > 0 \
-                else inactive_db_users
+        inactive_users = inactive_db_users + inactive_ldap_users if \
+            inactive_ldap_users > 0 else inactive_db_users
 
         # get license info
         is_pro = is_pro_version()
@@ -129,10 +129,11 @@ class SysInfo(APIView):
 
         # count current connected devices
         try:
-            current_connected_devices_count = TokenV2.objects.get_current_connected_devices_count()
+            current_connected_devices_count = TokenV2.objects.\
+                    get_current_connected_devices_count()
         except Exception as e:
             logger.error(e)
-            current_connected_devices_count= 0
+            current_connected_devices_count = 0
 
         info = {
             'users_count': active_users + inactive_users,
