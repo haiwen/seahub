@@ -639,7 +639,7 @@ if EVENTS_CONFIG_FILE:
         """
         """
         with _get_seafevents_session() as session:
-            res = seafevents.get_user.get_user_activity_stats_by_day(session, start, end)
+            res = seafevents.get_user_activity_stats_by_day(session, start, end)
         return res
 
     def get_org_user_events(org_id, username, start, count):

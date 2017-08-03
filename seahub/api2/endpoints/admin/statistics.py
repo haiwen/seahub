@@ -1,5 +1,6 @@
 # Copyright (c) 2012-2016 Seafile Ltd.
 import time
+import logging
 import datetime
 
 from rest_framework.authentication import SessionAuthentication
@@ -16,6 +17,8 @@ from seahub.utils.timeutils import datetime_to_isoformat_timestr
 from seahub.api2.authentication import TokenAuthentication
 from seahub.api2.throttling import UserRateThrottle
 from seahub.api2.utils import api_error
+
+logger = logging.getLogger(__name__)
 
 
 def check_parameter(func):
@@ -52,8 +55,10 @@ def check_parameter(func):
 def get_data_by_hour_or_day(parameter, start_time, end_time, func, func_by_day):
     if parameter == "hour":
         data = func(start_time, end_time)
+        logger.error("seafile hour:%s" % str(data))
     elif parameter == "day":
         data = func_by_day(start_time, end_time)
+        logger.error("seafile day:%s" % str(data))
     return data
 
 
@@ -103,12 +108,13 @@ class FileOperationsView(APIView):
         if len(dict_data) == 0:
             return Response(status.HTTP_200_OK)
         for x, y in dict_data.items():
-            added = y.get('Added', '0')
-            deleted = y.get('Deleted', '0')
-            visited = y.get('Visited', '0')
+            added = y.get('Added', 0)
+            deleted = y.get('Deleted', 0)
+            visited = y.get('Visited', 0)
             res_data.append(dict(zip(['datetime', 'added', 'deleted',
                                       'visited'], [x, added, deleted,
                                                    visited])))
+        logger.error("seahub file ops :%s" % str(res_data))
         return Response(sorted(res_data, key=lambda x: x['datetime']))
 
 
@@ -128,6 +134,7 @@ class TotalStorageView(APIView):
         for i in data:
             timestamp = datetime_to_isoformat_timestr(i[0])
             res_data.append({'datetime': timestamp, 'total_storage': i[1]})
+        logger.error("seahub totalstorage:%s" % str(res_data))
         if len(res_data) > 0:
             return Response(sorted(res_data, key=lambda x: x['datetime']))
         else:
@@ -150,6 +157,7 @@ class ActiveUsersView(APIView):
         for i in data:
             timestamp = datetime_to_isoformat_timestr(i[0])
             res_data.append({'datetime': timestamp, 'count': i[1]})
+        logger.error("seahub active:%s" % str(res_data))
         if len(res_data) > 0:
             return Response(sorted(res_data, key=lambda x: x['datetime']))
         else:
