@@ -37,6 +37,7 @@ from seahub.base.models import ClientLoginToken
 from seahub.options.models import UserOptions, CryptoOptionNotSetError
 from seahub.profile.models import Profile
 from seahub.share.models import FileShare, UploadLinkShare
+from seahub.revision_tag.models import RevisionTags
 from seahub.utils import render_permission_error, render_error, \
     get_fileserver_root, gen_shared_upload_link, is_org_context, \
     gen_dir_share_link, gen_file_share_link, get_file_type_and_ext, \
@@ -50,7 +51,7 @@ from seahub.views.modules import MOD_PERSONAL_WIKI, enable_mod_for_user, \
     disable_mod_for_user
 import seahub.settings as settings
 from seahub.settings import AVATAR_FILE_STORAGE, \
-    ENABLE_SUB_LIBRARY, ENABLE_FOLDER_PERM
+    ENABLE_SUB_LIBRARY, ENABLE_FOLDER_PERM, ENABLE_REPO_SNAPSHOT_LABEL
 
 LIBRARY_TEMPLATES = getattr(settings, 'LIBRARY_TEMPLATES', {})
 
@@ -538,6 +539,17 @@ def repo_history(request, repo_id):
     for c in commits:
         c.show = False if new_merge_with_no_conflict(c) else True
 
+    show_label = False
+    if ENABLE_REPO_SNAPSHOT_LABEL:
+        show_label = True
+        snapshot_labels = RevisionTags.objects.filter(repo_id=repo_id)
+        for c in commits:
+            if c.show:
+                c.labels = []
+                for label in snapshot_labels:
+                    if label.revision_id == c.id:
+                        c.labels.append(label.tag.name)
+
     if len(commits_all) == per_page + 1:
         page_next = True
     else:
@@ -554,6 +566,7 @@ def repo_history(request, repo_id):
             'next_page': current_page+1,
             'page_next': page_next,
             'user_perm': user_perm,
+            'show_label': show_label,
             'referer': referer,
             }, context_instance=RequestContext(request))
 
@@ -749,6 +762,7 @@ def libraries(request):
             'enable_resumable_fileupload': settings.ENABLE_RESUMABLE_FILEUPLOAD,
             'max_number_of_files_for_fileupload': settings.MAX_NUMBER_OF_FILES_FOR_FILEUPLOAD,
             'enable_thumbnail': settings.ENABLE_THUMBNAIL,
+            'enable_repo_snapshot_label': settings.ENABLE_REPO_SNAPSHOT_LABEL,
             'thumbnail_default_size': settings.THUMBNAIL_DEFAULT_SIZE,
             'thumbnail_size_for_grid': settings.THUMBNAIL_SIZE_FOR_GRID,
             'enable_encrypted_library': config.ENABLE_ENCRYPTED_LIBRARY,

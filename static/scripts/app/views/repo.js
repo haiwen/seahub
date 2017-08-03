@@ -22,6 +22,7 @@ define([
         mobileTemplate: _.template($('#repo-mobile-tmpl').html()), // for extra small devices (phones, less than 768px)
         renameTemplate: _.template($("#repo-rename-form-template").html()),
         transferTemplate: _.template($('#repo-transfer-form-tmpl').html()),
+        addLabelTemplate: _.template($('#add-lib-label-form-tmpl').html()),
 
         events: {
             'click': 'clickItem',
@@ -34,7 +35,8 @@ define([
             'click .js-popup-history-setting': 'popupHistorySetting',
             'click .js-popup-share-link-admin': 'popupShareLinkAdmin',
             'click .js-popup-folder-perm-admin': 'popupFolderPermAdmin',
-            'click .js-repo-details': 'viewDetails'
+            'click .js-repo-details': 'viewDetails',
+            'click .js-add-label': 'addLabel'
         },
 
         initialize: function(options) {
@@ -355,6 +357,93 @@ define([
             });
 
             this.togglePopup(); // close the popup
+            return false;
+        },
+
+        addLabel: function() {
+            var _this = this;
+            this.togglePopup(); // Close the popup
+
+            var $form = $(this.addLabelTemplate());
+
+            var $el = $('<div><span class="loading-icon loading-tip"></span></div>');
+            $el.modal({focus:false, minWidth: 280});
+            $('#simplemodal-container').css({'height':'auto'});
+
+            $.ajax({
+                // get all existing repo snapshot labels of the user
+                url: Common.getUrl({'name': 'user_repo_labels'}),
+                cache: false,
+                dataType: 'json',
+                success: function(data) { // data: ['xx', ...]
+                    var s2_data = [];
+                    for (var i = 0, len = data.length; i < len; i++) {
+                        s2_data.push({
+                            'id': data[i],
+                            'text': data[i]
+                        });
+                    }
+                    $('#simplemodal-data').html($form);
+                    $('[name="labels"]', $form).select2({tags: s2_data});
+                },
+                error: function(xhr) {
+                    var error_msg;
+                    if (xhr.responseText) {
+                        var parsed_resp = $.parseJSON(xhr.responseText);
+                        error_msg = parsed_resp.error_msg || parsed_resp.detail;
+                    } else {
+                        error_msg = gettext("Failed. Please check the network.");
+                    }
+                    $('#simplemodal-data').html('<p class="error">' + error_msg + '</p>');
+                }
+            });
+
+            $form.submit(function() {
+                var $input = $('[name="labels"]', $form);
+                var labels = $input.select2('val');
+                var $error = $('.error', $form);
+                var $submit = $('[type="submit"]', $form);
+
+                if (labels.length == 0) {
+                    $error.html(gettext("It is required.")).show();
+                    return false;
+                }
+
+                Common.disableButton($submit);
+                $.ajax({
+                    url: Common.getUrl({
+                        'name': 'repo_labels'
+                    }),
+                    type: 'POST',
+                    cache: false,
+                    dataType: 'json',
+                    beforeSend: Common.prepareCSRFToken,
+                    data: {
+                        'repo_id': _this.model.get('id'),
+                        'tag_names': labels.join(',')
+                    },
+                    success: function() {
+                        var msg = gettext("Successfully added label(s) for library {placeholder}")
+                            .replace('{placeholder}', _this.model.get('name'));
+                        $.modal.close();
+                        Common.feedback(msg, 'success');
+                    },
+                    error: function(xhr) {
+                        var error_msg;
+                        if (xhr.responseText) {
+                            var parsed_resp = $.parseJSON(xhr.responseText);
+                            error_msg = parsed_resp.error_msg || parsed_resp.detail;
+                        } else {
+                            error_msg = gettext("Failed. Please check the network.");
+                        }
+                        $error.html(error_msg).show();
+                        Common.enableButton($submit);
+                    }
+                });
+
+                return false;
+            });
+
             return false;
         }
 
