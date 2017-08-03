@@ -1,10 +1,12 @@
 # Copyright (c) 2012-2016 Seafile Ltd.
 # -*- coding: utf-8 -*-
 import uuid
+import hashlib
 
 from django.db import models
 
 from seahub.base.fields import LowerCaseCharField
+
 
 ########## Manager
 class FileUUIDMapManager(models.Manager):
@@ -27,8 +29,8 @@ class FileUUIDMapManager(models.Manager):
         """
         uuid = self.get_fileuuidmap_by_path(repo_id, parent_path, filename, is_dir)
         if not uuid:
-            uuid = self.model(repo_id=repo_id, parent_path=parent_path,
-                    filename=filename, is_dir=is_dir)
+            uuid = self.model(repo_id=repo_id, parent_path=parent_path, 
+                              filename=filename, is_dir=is_dir)
             uuid.save(using=self._db)
         return uuid
 
@@ -42,13 +44,16 @@ class FileUUIDMapManager(models.Manager):
             return:
                 return uuid if it's exist,otherwise return None
         """
-        try:
-            uuid = super(FileUUIDMapManager, self).get(
-                    repo_id=repo_id, parent_path=parent_path,
-                    filename=filename, is_dir=is_dir)
-            return uuid
-        except self.model.DoesNotExist:
+        md5_repo_id_parent_path = self.model.md5_repo_id_parent_path(repo_id, parent_path)
+        uuid = super(FileUUIDMapManager, self).filter(
+            repo_id_parent_path_md5=md5_repo_id_parent_path,
+            filename=filename, is_dir=is_dir
+        )
+        if len(uuid) > 0:
+            return uuid[0]
+        else:
             return None
+
 
 class TagsManager(models.Manager):
     def get_or_create_tag(self, tagname):
@@ -58,6 +63,7 @@ class TagsManager(models.Manager):
             tag = self.model(name=tagname)
             tag.save()
             return tag
+
 
 class FileTagManager(models.Manager):
     def get_or_create_file_tag(self, repo_id, parent_path, filename, is_dir, tagname, creator):
@@ -91,10 +97,10 @@ class FileTagManager(models.Manager):
             return:
                 (tag_obj, is_exist)
         """
-        try:
-            tag = super(FileTagManager, self).get(uuid=uuid_id, tag__name=tagname)
-            return (tag, True)
-        except self.model.DoesNotExist:
+        tag = super(FileTagManager, self).filter(uuid=uuid_id, tag__name=tagname)
+        if len(tag) > 0:
+            return (tag[0], True)
+        else:
             return (None, False)
 
     def get_all_file_tag_by_path(self, repo_id, parent_path, filename, is_dir):
@@ -106,10 +112,10 @@ class FileTagManager(models.Manager):
             - `is_dir`: True or False
             return list of filetag
         """
+        uuid = FileUUIDMap.objects.get_fileuuidmap_by_path(repo_id, parent_path, 
+                                                           filename, is_dir)
         return super(FileTagManager, self).filter(
-                uuid__repo_id=repo_id,
-                uuid__parent_path=parent_path,
-                uuid__filename=filename, uuid__is_dir=is_dir
+            uuid=uuid
         )
 
     def delete_file_tag_by_path(self, repo_id, parent_path, filename, is_dir, tagname):
@@ -120,17 +126,16 @@ class FileTagManager(models.Manager):
             return:
                 always return True
         """
-        try:
-            filetag = super(FileTagManager, self).get(
-                    uuid__repo_id=repo_id,
-                    uuid__parent_path=parent_path,
-                    uuid__filename=filename,
-                    uuid__is_dir=is_dir,
-                    tag__name=tagname
-            )
+        uuid = FileUUIDMap.objects.get_fileuuidmap_by_path(repo_id, parent_path, 
+                                                           filename, is_dir)
+        filetag = super(FileTagManager, self).filter(
+            uuid=uuid,
+            tag__name=tagname
+        )
+        if len(filetag) > 0:
             filetag.delete()
             return True
-        except Exception as e:
+        else:
             return False
 
     def delete_all_filetag_by_path(self, repo_id, parent_path, filename, is_dir):
@@ -143,27 +148,44 @@ class FileTagManager(models.Manager):
             return:
                 always return True
         """
-        filetags = super(FileTagManager, self).filter(
-                uuid__repo_id=repo_id,
-                uuid__parent_path=parent_path,
-                uuid__filename=filename,
-                uuid__is_dir=is_dir
-        ).delete()
+        uuid = FileUUIDMap.objects.get_fileuuidmap_by_path(repo_id, parent_path, 
+                                                           filename, is_dir)
+        super(FileTagManager, self).filter(uuid=uuid).delete()
+
 
 ########## Model
 class FileUUIDMap(models.Model):
     uuid = models.UUIDField(primary_key=True, default=uuid.uuid4)
-    repo_id = models.CharField(max_length=36)
+    repo_id = models.CharField(max_length=36, db_index=True)
+    repo_id_parent_path_md5 = models.CharField(max_length=100, db_index=True)
     parent_path = models.TextField()
     filename = models.CharField(max_length=1024)
     is_dir = models.BooleanField()
-
     objects = FileUUIDMapManager()
 
+    @classmethod
+    def md5_repo_id_parent_path(cls, repo_id, parent_path):
+        parent_path = parent_path.rstrip('/') if parent_path != '/' else '/'
+        return hashlib.md5((repo_id + parent_path).encode('utf-8')).hexdigest()
+
+    @classmethod
+    def normalize_path(self, path):
+        return path.rstrip('/') if path != '/' else '/'
+
+    def save(self, *args, **kwargs):
+        self.parent_path = self.normalize_path(self.parent_path)
+        if not self.repo_id_parent_path_md5:
+            self.repo_id_parent_path_md5 = self.md5_repo_id_parent_path(
+                self.repo_id, self.parent_path)
+
+        super(FileUUIDMap, self).save(*args, **kwargs)
+
+
 class Tags(models.Model):
-    name = models.CharField(max_length=1024, unique=True)
+    name = models.CharField(max_length=255, unique=True)
 
     objects = TagsManager()
+
 
 class FileTag(models.Model):
     uuid = models.ForeignKey(FileUUIDMap, on_delete=models.CASCADE)
@@ -173,15 +195,13 @@ class FileTag(models.Model):
     objects = FileTagManager()
 
     def to_dict(self):
-        return {'id': self.tag.id,'name': self.tag.name,'creator': self.username}
+        return {'id': self.tag.id, 'name': self.tag.name, 'creator': self.username}
+
 
 ########## handle signals
-import  logging
-
 from django.dispatch import receiver
 from seahub.signals import rename_dirent_successful
 
-logger = logging.getLogger(__name__)
 
 @receiver(rename_dirent_successful)
 def update_fileuuidmap(sender, **kwargs):
@@ -192,7 +212,7 @@ def update_fileuuidmap(sender, **kwargs):
     dst_parent_dir = kwargs.get('dst_parent_dir')
     dst_filename = kwargs.get('dst_filename')
     is_dir = kwargs.get('is_dir')
-    src_fileuuidmap = FileUUIDMap.objects.get_fileuuidmap_by_path(src_repo_id,src_parent_dir, src_filename, is_dir)
+    src_fileuuidmap = FileUUIDMap.objects.get_fileuuidmap_by_path(src_repo_id, src_parent_dir, src_filename, is_dir)
     if src_fileuuidmap:
         src_fileuuidmap.repo_id = dst_repo_id
         src_fileuuidmap.parent_dir = dst_parent_dir
