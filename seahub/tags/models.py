@@ -2,13 +2,10 @@
 # -*- coding: utf-8 -*-
 import uuid
 import hashlib
-import logging
 
 from django.db import models
 
 from seahub.base.fields import LowerCaseCharField
-
-logger = logging.getLogger(__name__)
 
 
 ########## Manager
