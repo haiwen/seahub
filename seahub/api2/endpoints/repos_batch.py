@@ -293,7 +293,7 @@ class ReposBatchCopyDirView(APIView):
         {
             "src_repo_id":"7460f7ac-a0ff-4585-8906-bb5a57d2e118",
             "dst_repo_id":"a3fa768d-0f00-4343-8b8d-07b4077881db",
-            "path":[
+            "paths":[
                 {"src_path":"/1/2/3/","dst_path":"/4/5/6/"},
                 {"src_path":"/a/b/c/","dst_path":"/d/e/f/"},
             ]
@@ -301,9 +301,9 @@ class ReposBatchCopyDirView(APIView):
         """
 
         # argument check
-        path_list = request.data.get('path', None)
+        path_list = request.data.get('paths', None)
         if not path_list:
-            error_msg = 'path invalid.'
+            error_msg = 'paths invalid.'
             return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
 
         src_repo_id = request.data.get('src_repo_id', None)
@@ -316,12 +316,12 @@ class ReposBatchCopyDirView(APIView):
             error_msg = 'dst_repo_id invalid.'
             return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
 
-        # permission check, user must has `r/rw` permission for src folder.
+        # permission check, user must has `r/rw` permission for src repo.
         if check_folder_permission(request, src_repo_id, '/') is None:
             error_msg = 'Permission denied.'
             return api_error(status.HTTP_403_FORBIDDEN, error_msg)
 
-        # permission check, user must has `rw` permission for dst folder.
+        # permission check, user must has `rw` permission for dst repo.
         if check_folder_permission(request, dst_repo_id, '/') != 'rw':
             error_msg = 'Permission denied.'
             return api_error(status.HTTP_403_FORBIDDEN, error_msg)

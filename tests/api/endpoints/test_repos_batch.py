@@ -247,7 +247,7 @@ class ReposBatchCopyDirView(BaseTestCase):
         data = {
             "src_repo_id": self.repo_id,
             "dst_repo_id": tmp_repo_id,
-            "path": [
+            "paths": [
                 {"src_path": src_folder_1, "dst_path": dst_folder_1},
                 {"src_path": src_folder_2, "dst_path": dst_folder_2},
             ]
@@ -285,7 +285,7 @@ class ReposBatchCopyDirView(BaseTestCase):
         data = {
             "src_repo_id": self.repo_id,
             "dst_repo_id": tmp_repo_id,
-            "path": [
+            "paths": [
                 {"src_path": '/', "dst_path": '/'},
                 {"src_path": '/', "dst_path": '/'},
             ]
@@ -308,7 +308,7 @@ class ReposBatchCopyDirView(BaseTestCase):
         data = {
             "src_repo_id": self.repo_id,
             "dst_repo_id": tmp_repo_id,
-            "path": [
+            "paths": [
                 {"src_path": '/', "dst_path": '/'},
             ]
         }
@@ -323,3 +323,5 @@ class ReposBatchCopyDirView(BaseTestCase):
 
         assert json_resp['failed'][0]['error_msg'] == \
                 "The source path can not be '/'."
+
+        self.remove_repo(tmp_repo_id)
