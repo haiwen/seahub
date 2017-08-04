@@ -296,74 +296,92 @@ def sys_useradmin_export_excel(request):
                 _("Space Usage") + "(MB)", _("Space Quota") + "(MB)",
                 _("Create At"), _("Last Login"), _("Admin"), _("LDAP(imported)"),]
 
+    # only operate 100 users for every `for` loop
+    looped = 0
+    limit = 100
     data_list = []
 
-    last_logins = UserLastLogin.objects.filter(username__in=[x.email for x in users])
-    for user in users:
+    while looped < len(users):
 
-        # populate name and contact email
-        populate_user_info(user)
+        current_users = users[looped:looped+limit]
 
-        # populate space usage and quota
-        MB = get_file_size_unit('MB')
+        last_logins = UserLastLogin.objects.filter(username__in=[x.email \
+                for x in current_users])
+        user_profiles = Profile.objects.filter(user__in=[x.email \
+                for x in current_users])
 
-        _populate_user_quota_usage(user)
-        if user.space_usage > 0:
-            try:
-                space_usage_MB = round(float(user.space_usage) / MB, 2)
-            except Exception as e:
-                logger.error(e)
-                space_usage_MB = '--'
-        else:
-            space_usage_MB = ''
+        for user in current_users:
+            # populate name and contact email
+            user.contact_email = ''
+            user.name = ''
+            for profile in user_profiles:
+                if profile.user == user.email:
+                    user.contact_email = profile.contact_email
+                    user.name = profile.nickname
 
-        if user.space_quota > 0:
-            try:
-                space_quota_MB = round(float(user.space_quota) / MB, 2)
-            except Exception as e:
-                logger.error(e)
-                space_quota_MB = '--'
-        else:
-            space_quota_MB = ''
+            # populate space usage and quota
+            MB = get_file_size_unit('MB')
 
-        # populate user last login time
-        user.last_login = None
-        for last_login in last_logins:
-            if last_login.username == user.email:
-                user.last_login = last_login.last_login
-
-        if user.is_active:
-            status = _('Active')
-        else:
-            status = _('Inactive')
-
-        create_at = tsstr_sec(user.ctime) if user.ctime else ''
-        last_login = user.last_login.strftime("%Y-%m-%d %H:%M:%S") if \
-            user.last_login else ''
-
-        is_admin = _('Yes') if user.is_staff else ''
-        ldap_import = _('Yes') if user.source == 'LDAPImport' else ''
-
-        if is_pro:
-            if user.role:
-                if user.role == GUEST_USER:
-                    role = _('Guest')
-                elif user.role == DEFAULT_USER:
-                    role = _('Default')
-                else:
-                    role = user.role
+            _populate_user_quota_usage(user)
+            if user.space_usage > 0:
+                try:
+                    space_usage_MB = round(float(user.space_usage) / MB, 2)
+                except Exception as e:
+                    logger.error(e)
+                    space_usage_MB = '--'
             else:
-                role = _('Default')
+                space_usage_MB = ''
 
-            row = [user.email, user.name, user.contact_email, status, role,
-                    space_usage_MB, space_quota_MB, create_at,
-                    last_login, is_admin, ldap_import]
-        else:
-            row = [user.email, user.name, user.contact_email, status,
-                    space_usage_MB, space_quota_MB, create_at,
-                    last_login, is_admin, ldap_import]
+            if user.space_quota > 0:
+                try:
+                    space_quota_MB = round(float(user.space_quota) / MB, 2)
+                except Exception as e:
+                    logger.error(e)
+                    space_quota_MB = '--'
+            else:
+                space_quota_MB = ''
 
-        data_list.append(row)
+            # populate user last login time
+            user.last_login = None
+            for last_login in last_logins:
+                if last_login.username == user.email:
+                    user.last_login = last_login.last_login
+
+            if user.is_active:
+                status = _('Active')
+            else:
+                status = _('Inactive')
+
+            create_at = tsstr_sec(user.ctime) if user.ctime else ''
+            last_login = user.last_login.strftime("%Y-%m-%d %H:%M:%S") if \
+                user.last_login else ''
+
+            is_admin = _('Yes') if user.is_staff else ''
+            ldap_import = _('Yes') if user.source == 'LDAPImport' else ''
+
+            if is_pro:
+                if user.role:
+                    if user.role == GUEST_USER:
+                        role = _('Guest')
+                    elif user.role == DEFAULT_USER:
+                        role = _('Default')
+                    else:
+                        role = user.role
+                else:
+                    role = _('Default')
+
+                row = [user.email, user.name, user.contact_email, status, role,
+                        space_usage_MB, space_quota_MB, create_at,
+                        last_login, is_admin, ldap_import]
+            else:
+                row = [user.email, user.name, user.contact_email, status,
+                        space_usage_MB, space_quota_MB, create_at,
+                        last_login, is_admin, ldap_import]
+
+            data_list.append(row)
+
+        # update `looped` value when `for` loop finished
+        looped += limit
 
     wb = write_xls('users', head, data_list)
     if not wb:
