@@ -1,5 +1,4 @@
 # Copyright (c) 2012-2016 Seafile Ltd.
-import time
 import logging
 import datetime
 
@@ -98,13 +97,14 @@ class FileOperationsView(APIView):
         # e.g
         # dict_data -> {"datetime": datetime.datetime(2017, 5, 16, 13, 0), 'added': 1L, 'visited': 133L, 'deleted': 113L}
         # then sort dict_data,
+        data = fill_data('file_ops', start_time, end_time, group_by, data)
         res_data = []
         dict_data = {}
-        for i in data:
-            timestamp = datetime_to_isoformat_timestr(i[0])
+        for e in data:
+            timestamp = e[0]
             if dict_data.get(timestamp, None) is None:
                 dict_data[timestamp] = {}
-            dict_data[timestamp][i[1]] = i[2]
+            dict_data[timestamp][e[1]] = e[2]
         if len(dict_data) == 0:
             return Response(status.HTTP_200_OK)
         for x, y in dict_data.items():
@@ -130,10 +130,10 @@ class TotalStorageView(APIView):
             error_msg = "unsupported service"
             return api_error(status.HTTP_503_SERVICE_UNAVAILABLE, error_msg)
 
+        data = fill_data('total_storage', start_time, end_time, group_by, data)
         res_data = []
-        for i in data:
-            timestamp = datetime_to_isoformat_timestr(i[0])
-            res_data.append({'datetime': timestamp, 'total_storage': i[1]})
+        for e in data:
+            res_data.append({'datetime': e[0], 'total_storage': e[1]})
         logger.error("seahub totalstorage:%s" % str(res_data))
         if len(res_data) > 0:
             return Response(sorted(res_data, key=lambda x: x['datetime']))
@@ -153,12 +153,80 @@ class ActiveUsersView(APIView):
             error_msg = "unsupported service"
             return api_error(status.HTTP_503_SERVICE_UNAVAILABLE, error_msg)
 
+        data = fill_data('active_user', start_time, end_time, group_by, data)
         res_data = []
-        for i in data:
-            timestamp = datetime_to_isoformat_timestr(i[0])
-            res_data.append({'datetime': timestamp, 'count': i[1]})
+        for e in data:
+            res_data.append({'datetime': e[0], 'count': e[1]})
         logger.error("seahub active:%s" % str(res_data))
         if len(res_data) > 0:
             return Response(sorted(res_data, key=lambda x: x['datetime']))
         else:
             return Response(status.HTTP_200_OK)
+
+
+def fill_data(method_type, start_time, end_time, group_by, data):
+    if group_by == 'day':
+        start_time = start_time.replace(hour=0).replace(minute=0).replace(second=0)
+        end_time = end_time.replace(hour=0).replace(minute=0).replace(second=0)
+        time_delta = end_time - start_time
+        date_length = time_delta.days + 1
+    elif group_by == 'hour':
+        start_time = start_time.replace(minute=0).replace(second=0)
+        end_time = end_time.replace(minute=0).replace(second=0)
+        time_delta = end_time - start_time
+        date_length = (time_delta.days * 24) + time_delta.seconds/3600 + 1
+
+    res_data = []
+    for i in range(date_length):
+        res_data.append(1)
+    file_ops_list = []
+    if method_type =='file_ops':
+        for e in data:
+            if group_by == 'hour':
+                offset = (e[0] - start_time).seconds/3600 + (e[0] - start_time).days * 24
+            else:
+                offset = (e[0] - start_time).days
+            temp_data = (datetime_to_isoformat_timestr(e[0]), e[1], e[2])
+            file_ops_list.append(temp_data)
+            res_data[offset] = 2
+    else:
+        for e in data:
+            if group_by == 'hour':
+                offset = (e[0] - start_time).seconds/3600
+            else:
+                offset = (e[0] - start_time).days
+            temp_data = [datetime_to_isoformat_timestr(e[0])]
+            temp_data.extend(e[1:])
+            res_data[offset] = temp_data
+
+    file_ops_del = 0
+    for i in range(date_length):
+        if res_data[i] == 1:
+            if method_type == 'file_ops':
+                file_ops_del += 1
+                res_data.extend(get_fill_data(method_type, group_by, 
+                                              start_time, i))
+            else:
+                res_data[i] = get_fill_data(method_type, group_by, 
+                                            start_time, i)
+    if method_type == 'file_ops':
+        while 1 in res_data:
+            res_data.remove(1)
+        while 2 in res_data:
+            res_data.remove(2)
+        res_data.extend(file_ops_list)
+    return res_data
+
+
+def get_fill_data(method_type, group_by, start_time, offset):
+    offset = offset if group_by == 'hour' else offset * 24
+    dt = start_time + datetime.timedelta(hours=offset)
+    if method_type == 'active_user':
+        fill_data = [datetime_to_isoformat_timestr(dt), 0]
+    elif method_type == 'file_ops':
+        fill_data = [(datetime_to_isoformat_timestr(dt), 'Added', 0), 
+                     (datetime_to_isoformat_timestr(dt), 'Visited', 0), 
+                     (datetime_to_isoformat_timestr(dt), 'Delete', 0)]
+    elif method_type == 'total_storage':
+        fill_data = [datetime_to_isoformat_timestr(dt), 0]
+    return fill_data
