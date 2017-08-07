@@ -44,10 +44,16 @@
                 </a>
                 <button class="sf2-icon-list-view side-nav-toggle hidden-md-up" title="{% trans "Side Nav Menu" %}" id="js-toggle-side-nav"     aria-label="{% trans "Side Nav Menu" %}"></button>
 
-                <div id="account" class="fright">
-                    <a id="my-info" href="#" class="no-deco" aria-label="{% trans "View profile and more" %}">
-                        {% avatar request.user 36 %} <span class="icon-caret-down vam"></span>
-                    </a>
+                <div class="fright">
+                    {% if show_logout_icon %}
+                    <a id="logout-icon" href="{{ SITE_ROOT }}accounts/logout/" class="no-deco fleft" title="{% trans "Log out" %}" aria-label="{% trans "Log out" %}"><span class="sf2-icon-logout"></span></a>
+                    {% endif %}
+
+                    <div id="account" class="fright">
+                        <a id="my-info" href="#" class="no-deco" aria-label="{% trans "View profile and more" %}">
+                            {% avatar request.user 36 %} <span class="icon-caret-down vam"></span>
+                        </a>
+                    </div>
                 </div>
             </div>
         </div>

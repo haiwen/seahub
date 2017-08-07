@@ -50,22 +50,26 @@
                 <button class="sf2-icon-list-view side-nav-toggle hidden-md-up" title="{% trans "Side Nav Menu" %}" id="js-toggle-side-nav" aria-label="{% trans "Side Nav Menu" %}"></button>
 
                 <div class="fright">
-                {% if has_file_search %}
-                    {% include 'snippets/search_form.html' %}
-                {% endif %}
+                    {% if has_file_search %}
+                        {% include 'snippets/search_form.html' %}
+                    {% endif %}
 
-                <div id="notifications" class="fleft">
-                    <a href="#" class="no-deco" id="notice-icon" title="{% trans "Notifications" %}" aria-label="{% trans "Notifications" %}">
-                        <span class="sf2-icon-bell"></span>
-                        <span class="num hide">0</span>
-                    </a>
-                </div>
+                    <div id="notifications" class="fleft">
+                        <a href="#" class="no-deco" id="notice-icon" title="{% trans "Notifications" %}" aria-label="{% trans "Notifications" %}">
+                            <span class="sf2-icon-bell"></span>
+                            <span class="num hide">0</span>
+                        </a>
+                    </div>
 
-                <div id="account" class="fright">
-                    <a id="my-info" href="#" class="no-deco" aria-label="{% trans "View profile and more" %}">
-                        {% avatar request.user 36 %} <span class="icon-caret-down vam"></span>
-                    </a>
-                </div>
+                    {% if show_logout_icon %}
+                    <a id="logout-icon" href="{{ SITE_ROOT }}accounts/logout/" class="no-deco fleft" title="{% trans "Log out" %}" aria-label="{% trans "Log out" %}"><span class="sf2-icon-logout"></span></a>
+                    {% endif %}
+
+                    <div id="account" class="fright">
+                        <a id="my-info" href="#" class="no-deco" aria-label="{% trans "View profile and more" %}">
+                            {% avatar request.user 36 %} <span class="icon-caret-down vam"></span>
+                        </a>
+                    </div>
                 </div>
             </div>
         </div>
