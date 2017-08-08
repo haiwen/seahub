@@ -1339,6 +1339,9 @@ def get_folder_permission_recursively(username, repo_id, path):
     Ger permission from the innermost layer of subdirectories to root
     directory.
     """
+    if not path or not isinstance(path, basestring):
+        raise Exception('path invalid.')
+
     if not seafile_api.get_dir_id_by_path(repo_id, path):
        # get current folder's parent directory
         path = os.path.dirname(path.rstrip('/'))

@@ -520,7 +520,6 @@ class ReposBatchCreateDirView(APIView):
                     result['failed'].append(common_dict)
                     continue
 
-
             if seafile_api.get_dir_id_by_path(repo_id, path):
                 error_dict = {
                     'error_msg': 'Folder already exists.'
@@ -531,8 +530,19 @@ class ReposBatchCreateDirView(APIView):
 
             # check parent directory's permission
             parent_dir = os.path.dirname(path.rstrip('/'))
-            if get_folder_permission_recursively(
-                    username, repo_id, parent_dir) != 'rw':
+            try:
+                permission = get_folder_permission_recursively(
+                        username, repo_id, parent_dir)
+            except Exception as e:
+                logger.error(e)
+                error_dict = {
+                    'error_msg': 'Internal Server Error'
+                }
+                common_dict.update(error_dict)
+                result['failed'].append(common_dict)
+                continue
+
+            if permission != 'rw':
                 error_dict = {
                     'error_msg': 'Permission denied.'
                 }
