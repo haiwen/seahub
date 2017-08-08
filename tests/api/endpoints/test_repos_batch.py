@@ -7,6 +7,12 @@ from tests.common.utils import randstring
 from seahub.test_utils import BaseTestCase
 from seahub.utils import normalize_dir_path
 
+try:
+    from seahub.settings import LOCAL_PRO_DEV_ENV
+except ImportError:
+    LOCAL_PRO_DEV_ENV = False
+
+
 class ReposBatchViewTest(BaseTestCase):
 
     def create_new_repo(self, username):
@@ -222,6 +228,9 @@ class ReposBatchCopyDirView(BaseTestCase):
 
     def test_copy_dir(self):
 
+        if not LOCAL_PRO_DEV_ENV:
+            return
+
         self.login_as(self.user)
 
         # create two folders in src repo
@@ -325,3 +334,90 @@ class ReposBatchCopyDirView(BaseTestCase):
                 "The source path can not be '/'."
 
         self.remove_repo(tmp_repo_id)
+
+
+class ReposBatchCreateDirViewTest(BaseTestCase):
+
+    def setUp(self):
+        self.user_name = self.user.username
+        self.admin_name = self.admin.username
+        self.repo_id = self.repo.id
+        self.url = reverse('api-v2.1-repos-batch-create-dir')
+
+    def tearDown(self):
+        self.remove_repo()
+        self.remove_group()
+
+    def get_random_path(self):
+        return '/%s/%s/%s/' % (randstring(2), \
+                randstring(2), randstring(2))
+
+    def test_create_dir(self):
+
+        if not LOCAL_PRO_DEV_ENV:
+            return
+
+        path_1 = self.get_random_path()
+        path_2 = self.get_random_path()
+        path_3 = self.get_random_path()
+
+        self.login_as(self.user)
+
+        data = {
+            'repo_id': self.repo_id,
+            'paths': [path_1, path_2, path_3],
+        }
+        resp = self.client.post(self.url, data)
+        self.assertEqual(200, resp.status_code)
+
+        json_resp = json.loads(resp.content)
+        assert len(json_resp['success']) == 3
+        assert len(json_resp['failed']) == 0
+
+        assert seafile_api.get_dir_id_by_path(self.repo_id,
+                path_1) is not None
+        assert seafile_api.get_dir_id_by_path(self.repo_id,
+                path_2) is not None
+        assert seafile_api.get_dir_id_by_path(self.repo_id,
+                path_3) is not None
+
+    def test_create_dir_with_invalid_repo_permission(self):
+
+        # admin has NO permission for user's repo
+        self.login_as(self.admin)
+
+        data = {
+            'repo_id': self.repo_id,
+            'paths': 'path',
+        }
+        resp = self.client.post(self.url, data)
+        self.assertEqual(403, resp.status_code)
+
+    def test_create_dir_with_invalid_folder_permission(self):
+
+        if not LOCAL_PRO_DEV_ENV:
+            return
+
+        path_1 = self.get_random_path()
+        path_2 = self.get_random_path()
+        path_3 = self.get_random_path()
+
+        self.login_as(self.user)
+
+        data = {
+            'repo_id': self.repo_id,
+            'paths': [path_1, path_2, path_3],
+        }
+        resp = self.client.post(self.url, data)
+        self.assertEqual(200, resp.status_code)
+
+        json_resp = json.loads(resp.content)
+        assert len(json_resp['success']) == 3
+        assert len(json_resp['failed']) == 0
+
+        assert seafile_api.get_dir_id_by_path(self.repo_id,
+                path_1) is not None
+        assert seafile_api.get_dir_id_by_path(self.repo_id,
+                path_2) is not None
+        assert seafile_api.get_dir_id_by_path(self.repo_id,
+                path_3) is not None
