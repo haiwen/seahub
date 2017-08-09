@@ -1,27 +1,31 @@
 # Copyright (c) 2012-2016 Seafile Ltd.
-import logging
 import datetime
+import pytz
 
 from rest_framework.authentication import SessionAuthentication
 from rest_framework.permissions import IsAdminUser
 from rest_framework.response import Response
 from rest_framework.views import APIView
 from rest_framework import status
+from django.utils import timezone
 
 from seahub.utils import get_file_ops_stats, get_file_ops_stats_by_day, \
         get_total_storage_stats, get_total_storage_stats_by_day, \
-        get_user_activity_stats, get_user_activity_stats_by_day
+        get_user_activity_stats, get_user_activity_stats_by_day, \
+        is_pro_version, EVENTS_ENABLED
 from seahub.utils.timeutils import datetime_to_isoformat_timestr
+from seahub.settings import TIME_ZONE
 
 from seahub.api2.authentication import TokenAuthentication
 from seahub.api2.throttling import UserRateThrottle
 from seahub.api2.utils import api_error
 
-logger = logging.getLogger(__name__)
 
 
 def check_parameter(func):
     def _decorated(view, request, *args, **kwargs):
+        if not is_pro_version() or not EVENTS_ENABLED:
+            return api_error(status.HTTP_404_NOT_FOUND, 'Events not enabled.')
         start_time = request.GET.get("start", "")
         end_time = request.GET.get("end", "")
         group_by = request.GET.get("group_by", "hour")
@@ -32,7 +36,7 @@ def check_parameter(func):
             error_msg = "End time can not be empty"
             return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
         if group_by.lower() not in ["hour", "day"]:
-            error_msg = "Records can only group by day or hour"
+            error_msg = "group_by can only be day or hour."
             return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
         try:
             start_time = datetime.datetime.strptime(start_time,
@@ -52,12 +56,13 @@ def check_parameter(func):
 
 
 def get_data_by_hour_or_day(parameter, start_time, end_time, func, func_by_day):
+    timezone_name = timezone.get_current_timezone_name()
+    offset = pytz.timezone(timezone_name).localize(datetime.datetime.now()).strftime('%z')
+    offset = offset[:3] + ':' + offset[3:]
     if parameter == "hour":
-        data = func(start_time, end_time)
-        logger.error("seafile hour:%s" % str(data))
+        data = func(start_time, end_time, offset)
     elif parameter == "day":
-        data = func_by_day(start_time, end_time)
-        logger.error("seafile day:%s" % str(data))
+        data = func_by_day(start_time, end_time, offset)
     return data
 
 
@@ -83,9 +88,6 @@ class FileOperationsView(APIView):
                 the list of file operations record.
         """
         data = get_data_by_hour_or_day(group_by, start_time, end_time, get_file_ops_stats, get_file_ops_stats_by_day)
-        if data is None:
-            error_msg = "unsupported service"
-            return api_error(status.HTTP_503_SERVICE_UNAVAILABLE, error_msg)
 
         # save time to dict key, and save data to dict key  
         # e.g.
@@ -114,7 +116,6 @@ class FileOperationsView(APIView):
             res_data.append(dict(zip(['datetime', 'added', 'deleted',
                                       'visited'], [x, added, deleted,
                                                    visited])))
-        logger.error("seahub file ops :%s" % str(res_data))
         return Response(sorted(res_data, key=lambda x: x['datetime']))
 
 
@@ -126,15 +127,11 @@ class TotalStorageView(APIView):
     @check_parameter
     def get(self, request, start_time, end_time, group_by):
         data = get_data_by_hour_or_day(group_by, start_time, end_time, get_total_storage_stats, get_total_storage_stats_by_day)
-        if data is None:
-            error_msg = "unsupported service"
-            return api_error(status.HTTP_503_SERVICE_UNAVAILABLE, error_msg)
 
         data = fill_data('total_storage', start_time, end_time, group_by, data)
         res_data = []
         for e in data:
             res_data.append({'datetime': e[0], 'total_storage': e[1]})
-        logger.error("seahub totalstorage:%s" % str(res_data))
         if len(res_data) > 0:
             return Response(sorted(res_data, key=lambda x: x['datetime']))
         else:
@@ -149,15 +146,11 @@ class ActiveUsersView(APIView):
     @check_parameter
     def get(self, request, start_time, end_time, group_by):
         data = get_data_by_hour_or_day(group_by, start_time, end_time, get_user_activity_stats, get_user_activity_stats_by_day)
-        if data is None:
-            error_msg = "unsupported service"
-            return api_error(status.HTTP_503_SERVICE_UNAVAILABLE, error_msg)
 
         data = fill_data('active_user', start_time, end_time, group_by, data)
         res_data = []
         for e in data:
             res_data.append({'datetime': e[0], 'count': e[1]})
-        logger.error("seahub active:%s" % str(res_data))
         if len(res_data) > 0:
             return Response(sorted(res_data, key=lambda x: x['datetime']))
         else:
