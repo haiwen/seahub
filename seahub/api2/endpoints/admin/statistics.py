@@ -55,17 +55,6 @@ def check_parameter(func):
     return _decorated
 
 
-def get_data_by_hour_or_day(parameter, start_time, end_time, func, func_by_day):
-    timezone_name = timezone.get_current_timezone_name()
-    offset = pytz.timezone(timezone_name).localize(datetime.datetime.now()).strftime('%z')
-    offset = offset[:3] + ':' + offset[3:]
-    if parameter == "hour":
-        data = func(start_time, end_time, offset)
-    elif parameter == "day":
-        data = func_by_day(start_time, end_time, offset)
-    return data
-
-
 class FileOperationsView(APIView):
     """
     Get file operations statistics.
@@ -88,34 +77,24 @@ class FileOperationsView(APIView):
                 the list of file operations record.
         """
         data = get_data_by_hour_or_day(group_by, start_time, end_time, get_file_ops_stats, get_file_ops_stats_by_day)
+        ops_added_dict = get_init_data(start_time, end_time, group_by)
+        ops_visited_dict = get_init_data(start_time, end_time, group_by)
+        ops_deleted_dict = get_init_data(start_time, end_time, group_by)
 
-        # save time to dict key, and save data to dict key  
-        # e.g.
-        # data = [(datetime.datetime(2017, 5, 16, 13, 0), u'Added', 1L),
-        #        (datetime.datetime(2017, 5, 16, 13, 0), u'Visited', 113L),
-        #        (datetime.datetime(2017, 5, 16, 13, 0), u'Delete', 113L)]
-        # dict_data = {(datetime.datetime(2017, 5, 16, 13, 0)): {'added': 1L, 'Visited': 113L, 'Delete': 113L}}
-        # and then combined into api desired data
-        # e.g
-        # dict_data -> {"datetime": datetime.datetime(2017, 5, 16, 13, 0), 'added': 1L, 'visited': 133L, 'deleted': 113L}
-        # then sort dict_data,
-        data = fill_data('file_ops', start_time, end_time, group_by, data)
-        res_data = []
-        dict_data = {}
         for e in data:
-            timestamp = e[0]
-            if dict_data.get(timestamp, None) is None:
-                dict_data[timestamp] = {}
-            dict_data[timestamp][e[1]] = e[2]
-        if len(dict_data) == 0:
-            return Response(status.HTTP_200_OK)
-        for x, y in dict_data.items():
-            added = y.get('Added', 0)
-            deleted = y.get('Deleted', 0)
-            visited = y.get('Visited', 0)
-            res_data.append(dict(zip(['datetime', 'added', 'deleted',
-                                      'visited'], [x, added, deleted,
-                                                   visited])))
+            if e[1] == 'Added':
+                ops_added_dict[e[0]] = e[2]
+            elif e[1] == 'Visited':
+                ops_visited_dict[e[0]] = e[2]
+            elif e[1] == 'Deleted':
+                ops_deleted_dict[e[0]] = e[2]
+
+        res_data = []
+        for k, v in ops_added_dict.items():
+            res_data.append({'datetime': datetime_to_isoformat_timestr(k), 
+                         'added': v, 
+                         'visited': ops_visited_dict[k], 
+                         'deleted': ops_deleted_dict[k]})
         return Response(sorted(res_data, key=lambda x: x['datetime']))
 
 
@@ -128,14 +107,14 @@ class TotalStorageView(APIView):
     def get(self, request, start_time, end_time, group_by):
         data = get_data_by_hour_or_day(group_by, start_time, end_time, get_total_storage_stats, get_total_storage_stats_by_day)
 
-        data = fill_data('total_storage', start_time, end_time, group_by, data)
         res_data = []
+        init_data = get_init_data(start_time, end_time, group_by)
         for e in data:
-            res_data.append({'datetime': e[0], 'total_storage': e[1]})
-        if len(res_data) > 0:
-            return Response(sorted(res_data, key=lambda x: x['datetime']))
-        else:
-            return Response(status.HTTP_200_OK)
+            init_data[e[0]] = e[1]
+        for k, v in init_data.items():
+            res_data.append({'datetime': datetime_to_isoformat_timestr(k), 'total_storage': v})
+
+        return Response(sorted(res_data, key=lambda x: x['datetime']))
 
 
 class ActiveUsersView(APIView):
@@ -147,79 +126,41 @@ class ActiveUsersView(APIView):
     def get(self, request, start_time, end_time, group_by):
         data = get_data_by_hour_or_day(group_by, start_time, end_time, get_user_activity_stats, get_user_activity_stats_by_day)
 
-        data = fill_data('active_user', start_time, end_time, group_by, data)
         res_data = []
+        init_data = get_init_data(start_time, end_time, group_by)
         for e in data:
-            res_data.append({'datetime': e[0], 'count': e[1]})
-        if len(res_data) > 0:
-            return Response(sorted(res_data, key=lambda x: x['datetime']))
-        else:
-            return Response(status.HTTP_200_OK)
+            init_data[e[0]] = e[1]
+        for k, v in init_data.items():
+            res_data.append({'datetime': datetime_to_isoformat_timestr(k), 'count': v})
+
+        return Response(sorted(res_data, key=lambda x: x['datetime']))
 
 
-def fill_data(method_type, start_time, end_time, group_by, data):
-    if group_by == 'day':
-        start_time = start_time.replace(hour=0).replace(minute=0).replace(second=0)
-        end_time = end_time.replace(hour=0).replace(minute=0).replace(second=0)
-        time_delta = end_time - start_time
-        date_length = time_delta.days + 1
-    elif group_by == 'hour':
+def get_init_data(start_time, end_time, group_by):
+    res = {}
+    if group_by == 'hour':
         start_time = start_time.replace(minute=0).replace(second=0)
         end_time = end_time.replace(minute=0).replace(second=0)
         time_delta = end_time - start_time
         date_length = (time_delta.days * 24) + time_delta.seconds/3600 + 1
-
-    res_data = []
-    for i in range(date_length):
-        res_data.append(1)
-    file_ops_list = []
-    if method_type =='file_ops':
-        for e in data:
-            if group_by == 'hour':
-                offset = (e[0] - start_time).seconds/3600 + (e[0] - start_time).days * 24
-            else:
-                offset = (e[0] - start_time).days
-            temp_data = (datetime_to_isoformat_timestr(e[0]), e[1], e[2])
-            file_ops_list.append(temp_data)
-            res_data[offset] = 2
     else:
-        for e in data:
-            if group_by == 'hour':
-                offset = (e[0] - start_time).seconds/3600
-            else:
-                offset = (e[0] - start_time).days
-            temp_data = [datetime_to_isoformat_timestr(e[0])]
-            temp_data.extend(e[1:])
-            res_data[offset] = temp_data
-
-    file_ops_del = 0
-    for i in range(date_length):
-        if res_data[i] == 1:
-            if method_type == 'file_ops':
-                file_ops_del += 1
-                res_data.extend(get_fill_data(method_type, group_by, 
-                                              start_time, i))
-            else:
-                res_data[i] = get_fill_data(method_type, group_by, 
-                                            start_time, i)
-    if method_type == 'file_ops':
-        while 1 in res_data:
-            res_data.remove(1)
-        while 2 in res_data:
-            res_data.remove(2)
-        res_data.extend(file_ops_list)
-    return res_data
+        start_time = start_time.replace(hour=0).replace(minute=0).replace(second=0)
+        end_time = end_time.replace(hour=0).replace(minute=0).replace(second=0)
+        time_delta = end_time - start_time
+        date_length = time_delta.days + 1
+    for offset in range(date_length):
+        offset = offset if group_by == 'hour' else offset * 24
+        dt = start_time + datetime.timedelta(hours=offset)
+        res[dt] = 0
+    return res
 
 
-def get_fill_data(method_type, group_by, start_time, offset):
-    offset = offset if group_by == 'hour' else offset * 24
-    dt = start_time + datetime.timedelta(hours=offset)
-    if method_type == 'active_user':
-        fill_data = [datetime_to_isoformat_timestr(dt), 0]
-    elif method_type == 'file_ops':
-        fill_data = [(datetime_to_isoformat_timestr(dt), 'Added', 0), 
-                     (datetime_to_isoformat_timestr(dt), 'Visited', 0), 
-                     (datetime_to_isoformat_timestr(dt), 'Delete', 0)]
-    elif method_type == 'total_storage':
-        fill_data = [datetime_to_isoformat_timestr(dt), 0]
-    return fill_data
+def get_data_by_hour_or_day(parameter, start_time, end_time, func, func_by_day):
+    timezone_name = timezone.get_current_timezone_name()
+    offset = pytz.timezone(timezone_name).localize(datetime.datetime.now()).strftime('%z')
+    offset = offset[:3] + ':' + offset[3:]
+    if parameter == "hour":
+        data = func(start_time, end_time, offset)
+    elif parameter == "day":
+        data = func_by_day(start_time, end_time, offset)
+    return data
