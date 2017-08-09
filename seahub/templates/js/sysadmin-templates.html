@@ -8,7 +8,7 @@
             <a href="{{ SITE_ROOT }}sysadmin/#dashboard/"><span class="sf2-icon-info"></span>{% trans "Info" %}</a>
         </li>
         <li class="tab">
-            <a href="{% url "sys_statistic" %}"><span class="sf2-icon-histogram"></span>{% trans "Statistic" %}</a>
+            <a href="{% url "sys_statistic_file" %}"><span class="sf2-icon-histogram"></span>{% trans "Statistic" %}</a>
         </li>
         <li class="tab<% if (cur_tab == 'devices') { %> tab-cur<% } %>">
             <a href="{{ SITE_ROOT }}sysadmin/#desktop-devices/"><span class="sf2-icon-monitor"></span>{% trans "Devices" %}</a>

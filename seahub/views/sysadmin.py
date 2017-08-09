@@ -106,9 +106,9 @@ def sysadmin(request):
 
 @login_required
 @sys_staff_required
-def sys_statistic(request):
+def sys_statistic_file(request):
 
-    return render_to_response('sysadmin/sys_statistic.html', {
+    return render_to_response('sysadmin/sys_statistic_file.html', {
             }, context_instance=RequestContext(request))
 
 @login_required
