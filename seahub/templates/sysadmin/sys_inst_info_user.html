@@ -14,12 +14,12 @@
         <li class="tabnav-tab"><a href="{% url 'sys_inst_info_admins' inst.pk %}">{% trans "Admins" %}</a></li>
     </ul>
     <div class="js-op-for-all fright">
-        <button id="add-member-btn">{% trans "Add members" %}</button>
+        <button id="add-member-btn">{% trans "Add Members" %}</button>
     </div>
 </div>
 
 <form id="add-member-form" action="" method="" class="hide">
-    <h3>{% trans "Add members" %}</h3>
+    <h3>{% trans "Add Members" %}</h3>
     <label>{% trans "Email" %}</label><br />
     <input type="hidden" name="emails" /><br />
     <p class="error hide"></p>
@@ -148,7 +148,7 @@ $('#add-member-btn').click(function(){
 
     $('[name="emails"]', $form).select2($.extend({
         width: '280px',
-        placeholder: "{% trans "Search users or enter emails and press Enter" %}",
+        placeholder: "{% trans "Search user or enter emails and press Enter" %}",
         formatInputTooShort: "{% trans "Please enter 1 or more character" %}",
         formatNoMatches: "{% trans "No matches" %}",
         formatSearching: "{% trans "Searching..." %}",
