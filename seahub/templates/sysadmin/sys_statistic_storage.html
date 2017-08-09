@@ -10,8 +10,8 @@
 {% block right_panel %}
 <div class="tabnav ovhd">
     <ul class="tabnav-tabs fleft">
-        <li class="tabnav-tab tabnav-tab-cur"><a href="{% url 'sys_statistic' %}">{% trans "File" %}</a></li>
-        <li class="tabnav-tab"><a href="{% url 'sys_statistic_storage' %}">{% trans "Storage" %}</a></li>
+        <li class="tabnav-tab"><a href="{% url 'sys_statistic' %}">{% trans "File" %}</a></li>
+        <li class="tabnav-tab tabnav-tab-cur"><a href="{% url 'sys_statistic_storage' %}">{% trans "Storage" %}</a></li>
         <li class="tabnav-tab"><a href="{% url 'sys_statistic_user' %}">{% trans "Users" %}</a></li>
         {% if traffic_stats_enabled %}
         <li class="tabnav-tab"><a href="{{ SITE_ROOT }}sys/trafficadmin/">{% trans "Traffic" %}</a></li>
@@ -83,7 +83,7 @@ var chart;
 
 function getStatistic(options) {
     $.ajax({
-        url: '{% url 'api-v2.1-admin-statistics-file-operations' %}',
+        url: '{% url 'api-v2.1-admin-statistics-total-storage' %}',
         cache: false,
         data: options,
         dataType: 'json',
@@ -145,9 +145,7 @@ function getStatisticByTimeRange(range) {
 // render chart
 function renderChart(data, group_by) {
     var labels = [],
-        added = [],
-        deleted = [],
-        visited = [];
+        storage = [];
 
     var item;
     var datetime_ms, datetime_str;
@@ -165,9 +163,7 @@ function renderChart(data, group_by) {
             labels.push(datetime_str.substr(0, 10));
         }
 
-        added.push(item.added);
-        deleted.push(item.deleted);
-        visited.push(item.visited);
+        storage.push(item.total_storage);
     }
 
     var config = {
@@ -176,22 +172,10 @@ function renderChart(data, group_by) {
             labels: labels,
             datasets: [
                 {
-                    label: "{% trans "Visited" %}",
-                    data: visited,
+                    label: "{% trans "Total storage" %}",
+                    data: storage,
                     borderColor: '#fd913a',
                     backgroundColor: '#fd913a'
-                },
-                {
-                    label: "{% trans "Added" %}",
-                    data: added,
-                    borderColor: '#57cd6b',
-                    backgroundColor: '#57cd6b'
-                },
-                {
-                    label: "{% trans "Deleted" %}",
-                    data: deleted,
-                    borderColor: '#f75356',
-                    backgroundColor: '#f75356'
                 }
             ]
         }, // 'data' ends here
@@ -199,7 +183,8 @@ function renderChart(data, group_by) {
             title: {
                 display: true,
                 fontSize: 14,
-                text: "{% trans "File Operations" %}"
+                padding: 20,
+                text: "{% trans "Total storage" %}"
             },
             elements: {
                 line: {
@@ -209,6 +194,7 @@ function renderChart(data, group_by) {
                 }
             },
             legend: {
+                display: false,
                 labels: {
                     usePointStyle: true
                 }
@@ -222,7 +208,9 @@ function renderChart(data, group_by) {
                 yAxes: [{
                     ticks: {
                         beginAtZero: true,
-                        suggestedMax: 10
+                        callback: function(value, index, values) {
+                            return quotaSizeFormat(value, 2);
+                        }
                     }
                 }]
             }

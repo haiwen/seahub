@@ -104,12 +104,25 @@ def sysadmin(request):
             'file_audit_enabled': FILE_AUDIT_ENABLED
             }, context_instance=RequestContext(request))
 
-
 @login_required
 @sys_staff_required
 def sys_statistic(request):
 
     return render_to_response('sysadmin/sys_statistic.html', {
+            }, context_instance=RequestContext(request))
+
+@login_required
+@sys_staff_required
+def sys_statistic_storage(request):
+
+    return render_to_response('sysadmin/sys_statistic_storage.html', {
+            }, context_instance=RequestContext(request))
+
+@login_required
+@sys_staff_required
+def sys_statistic_user(request):
+
+    return render_to_response('sysadmin/sys_statistic_user.html', {
             }, context_instance=RequestContext(request))
 
 def can_view_sys_admin_repo(repo):

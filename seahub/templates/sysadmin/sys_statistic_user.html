@@ -10,9 +10,9 @@
 {% block right_panel %}
 <div class="tabnav ovhd">
     <ul class="tabnav-tabs fleft">
-        <li class="tabnav-tab tabnav-tab-cur"><a href="{% url 'sys_statistic' %}">{% trans "File" %}</a></li>
+        <li class="tabnav-tab"><a href="{% url 'sys_statistic' %}">{% trans "File" %}</a></li>
         <li class="tabnav-tab"><a href="{% url 'sys_statistic_storage' %}">{% trans "Storage" %}</a></li>
-        <li class="tabnav-tab"><a href="{% url 'sys_statistic_user' %}">{% trans "Users" %}</a></li>
+        <li class="tabnav-tab tabnav-tab-cur"><a href="{% url 'sys_statistic_user' %}">{% trans "Users" %}</a></li>
         {% if traffic_stats_enabled %}
         <li class="tabnav-tab"><a href="{{ SITE_ROOT }}sys/trafficadmin/">{% trans "Traffic" %}</a></li>
         {% endif %}
@@ -83,7 +83,7 @@ var chart;
 
 function getStatistic(options) {
     $.ajax({
-        url: '{% url 'api-v2.1-admin-statistics-file-operations' %}',
+        url: '{% url 'api-v2.1-admin-statistics-active-users' %}',
         cache: false,
         data: options,
         dataType: 'json',
@@ -144,10 +144,8 @@ function getStatisticByTimeRange(range) {
 
 // render chart
 function renderChart(data, group_by) {
-    var labels = [],
-        added = [],
-        deleted = [],
-        visited = [];
+    var labels =  [],
+        count = [];
 
     var item;
     var datetime_ms, datetime_str;
@@ -165,9 +163,7 @@ function renderChart(data, group_by) {
             labels.push(datetime_str.substr(0, 10));
         }
 
-        added.push(item.added);
-        deleted.push(item.deleted);
-        visited.push(item.visited);
+        count.push(item.count);
     }
 
     var config = {
@@ -176,22 +172,10 @@ function renderChart(data, group_by) {
             labels: labels,
             datasets: [
                 {
-                    label: "{% trans "Visited" %}",
-                    data: visited,
+                    label: "{% trans "Count" %}",
+                    data: count,
                     borderColor: '#fd913a',
                     backgroundColor: '#fd913a'
-                },
-                {
-                    label: "{% trans "Added" %}",
-                    data: added,
-                    borderColor: '#57cd6b',
-                    backgroundColor: '#57cd6b'
-                },
-                {
-                    label: "{% trans "Deleted" %}",
-                    data: deleted,
-                    borderColor: '#f75356',
-                    backgroundColor: '#f75356'
                 }
             ]
         }, // 'data' ends here
@@ -199,7 +183,8 @@ function renderChart(data, group_by) {
             title: {
                 display: true,
                 fontSize: 14,
-                text: "{% trans "File Operations" %}"
+                padding: 20,
+                text: "{% trans "Active Users" %}"
             },
             elements: {
                 line: {
@@ -209,6 +194,7 @@ function renderChart(data, group_by) {
                 }
             },
             legend: {
+                display: false,
                 labels: {
                     usePointStyle: true
                 }
