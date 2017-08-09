@@ -120,7 +120,7 @@ from seaserv import seafserv_threaded_rpc, \
     is_group_user, remove_share, get_group, \
     get_commit, get_file_id_by_path, MAX_DOWNLOAD_DIR_SIZE, edit_repo, \
     ccnet_threaded_rpc, get_personal_groups, seafile_api, \
-    create_org, ccnet_api
+    create_org, ccnet_api, send_message
 
 from constance import config
 
@@ -578,6 +578,12 @@ class Repos(APIView):
                 }
                 repos_json.append(repo)
 
+        utc_dt = datetime.datetime.utcnow()
+        timestamp = utc_dt.strftime('%Y-%m-%d %H:%M:%S')
+        try:
+            send_message('seahub.stats', 'user-login\t%s\t%s' % (email, timestamp))
+        except Exception as e:
+            logger.error('Error when sending user-login message: %s' % str(e))
         response = HttpResponse(json.dumps(repos_json), status=200,
                                 content_type=json_content_type)
         response["enable_encrypted_library"] = config.ENABLE_ENCRYPTED_LIBRARY

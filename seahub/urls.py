@@ -56,6 +56,7 @@ from seahub.api2.endpoints.admin.file_audit import FileAudit
 from seahub.api2.endpoints.admin.file_update import FileUpdate
 from seahub.api2.endpoints.admin.perm_audit import PermAudit
 from seahub.api2.endpoints.admin.sysinfo import SysInfo
+from seahub.api2.endpoints.admin.statistics import FileOperationsView, TotalStorageView, ActiveUsersView
 from seahub.api2.endpoints.admin.devices import AdminDevices
 from seahub.api2.endpoints.admin.device_errors import AdminDeviceErrors
 from seahub.api2.endpoints.admin.libraries import AdminLibraries, AdminLibrary
@@ -254,6 +255,11 @@ urlpatterns = patterns(
 
     ## admin::revision-tags
     url(r'^api/v2.1/admin/revision-tags/tagged-items/$', AdminTaggedItemsView.as_view(), name='api-v2.1-admin-revision-tags-tagged-items'),
+
+    ## admin::statistics
+    url(r'^api/v2.1/admin/statistics/file-operations/$', FileOperationsView.as_view(), name='api-v2.1-admin-statistics-file-operations'),
+    url(r'^api/v2.1/admin/statistics/total-storage/$', TotalStorageView.as_view(), name='api-v2.1-admin-statistics-total-storage'),
+    url(r'^api/v2.1/admin/statistics/active-users/$', ActiveUsersView.as_view(), name='api-v2.1-admin-statistics-active-users'),
 
     ## admin::devices
     url(r'^api/v2.1/admin/devices/$', AdminDevices.as_view(), name='api-v2.1-admin-devices'),
