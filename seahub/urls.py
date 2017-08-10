@@ -19,6 +19,7 @@ from seahub.views.sysadmin import *
 from seahub.views.ajax import *
 from seahub.views.sso import *
 from seahub.api2.endpoints.groups import Groups, Group
+from seahub.api2.endpoints.all_groups import AllGroupsView
 from seahub.api2.endpoints.group_members import GroupMembers, GroupMembersBulk, GroupMember
 from seahub.api2.endpoints.search_group import SearchGroup
 from seahub.api2.endpoints.share_links import ShareLinks, ShareLink
@@ -194,6 +195,7 @@ urlpatterns = patterns(
 
     ## user::groups
     url(r'^api/v2.1/groups/$', Groups.as_view(), name='api-v2.1-groups'),
+    url(r'^api/v2.1/groups/all/$', AllGroupsView.as_view(), name='api-v2.1-all-groups'),
     url(r'^api/v2.1/groups/(?P<group_id>\d+)/$', Group.as_view(), name='api-v2.1-group'),
     url(r'^api/v2.1/groups/(?P<group_id>\d+)/members/$', GroupMembers.as_view(), name='api-v2.1-group-members'),
     url(r'^api/v2.1/groups/(?P<group_id>\d+)/members/bulk/$', GroupMembersBulk.as_view(), name='api-v2.1-group-members-bulk'),
