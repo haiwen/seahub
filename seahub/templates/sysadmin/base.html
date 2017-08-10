@@ -15,9 +15,11 @@
             <li class="tab">
                 <a href="{{ SITE_ROOT }}sysadmin/#dashboard/"><span class="sf2-icon-info"></span>{% trans "Info" %}</a>
             </li>
+            {% if is_pro %}
             <li class="tab {% block cur_statistic %}{% endblock %}">
                 <a href="{% url "sys_statistic_file" %}"><span class="sf2-icon-histogram"></span>{% trans "Statistic" %}</a>
             </li>
+            {% endif %}
             <li class="tab">
                 <a href="{{ SITE_ROOT }}sysadmin/#desktop-devices/"><span class="sf2-icon-monitor"></span>{% trans "Devices" %}</a>
             </li>
