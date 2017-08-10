@@ -638,7 +638,19 @@ define([
                         });
                         $add_item.after(new_item.el);
                     });
-                    if (app.pageOptions.enable_share_to_all_groups){
+
+                    var groups = [];
+                    var prepareGroupsSelector = function() {
+                        var g_opts = '';
+                        for (var i = 0, len = groups.length; i < len; i++) {
+                            g_opts += '<option value="' + groups[i].id + '" data-index="' + i + '">' + groups[i].name + '</option>';
+                        }
+                        $('[name="groups"]', $add_item).html(g_opts).select2({
+                            placeholder: gettext("Select groups"),
+                            escapeMarkup: function(m) { return m; }
+                        });
+                    };
+                    if (app.pageOptions.enable_share_to_all_groups) {
                         $.ajax({
                             url: Common.getUrl({
                                 name: 'all_groups'
@@ -647,7 +659,6 @@ define([
                             dataType: 'json',
                             cache: false,
                             success: function(data){
-                                var groups = [];
                                 for (var i = 0, len = data.length; i < len; i++) {
                                     groups.push({
                                         'id': data[i].id,
@@ -657,37 +668,31 @@ define([
                                 groups.sort(function(a, b) {
                                     return Common.compareTwoWord(a.name, b.name);
                                 });
-                                var g_opts = '';
-                                for (var i = 0, len = groups.length; i < len; i++) {
-                                    g_opts += '<option value="' + groups[i].id + '" data-index="' + i + '">' + groups[i].name + '</option>';
-                                }
-                                $('[name="groups"]', $add_item).html(g_opts).select2({
-                                    placeholder: gettext("Select groups"),
-                                    escapeMarkup: function(m) { return m; }
-                                })
                             },
                             error: function(xhr, textStatus, errorThrown) {
-                                var g_opts = '<option disabled="true">Please check network</option>';
-                                $('[name="groups"]', $add_item).html(g_opts).select2({
-                                    placeholder: gettext("Please check network"),
-                                });
-                                var $submitBtn = $('[type="submit"]', $add_item);
-                                Common.disableButton($submitBtn);
+                                var pre_msg = gettext("Failed to fetch groups:");
+                                var err_msg;
+                                if (xhr.responseText) {
+                                    if (xhr.status == 403) {
+                                        err_msg = gettext("Permission error");
+                                    } else {
+                                        err_msg = xhr.responseJSON.error_msg ? xhr.responseJSON.error_msg : gettext('Error');
+                                    }
+                                } else {
+                                    err_msg = gettext('Please check the network.');
+                                }
+                                $('.error', $panel).html(pre_msg + ' ' + err_msg).show();
+                            },
+                            complete: function() {
+                                prepareGroupsSelector();
+                                $table.removeClass('hide');
                             }
                         });
                     } else {
-                        var groups = app.pageOptions.groups || [];
-                        var g_opts = '';
-                        for (var i = 0, len = groups.length; i < len; i++) {
-                                g_opts += '<option value="' + groups[i].id + '" data-index="' + i + '">' + groups[i].name + '</option>';
-                        }
-                        $('[name="groups"]', $add_item).html(g_opts).select2({
-                                placeholder: gettext("Select groups"),
-                                    escapeMarkup: function(m) { return m;  }
-                        });
+                        groups = app.pageOptions.groups || [];
+                        prepareGroupsSelector();
+                        $table.removeClass('hide');
                     }
-
-                    $table.removeClass('hide');
                 },
                 error: function(xhr, textStatus, errorThrown) {
                     var err_msg;

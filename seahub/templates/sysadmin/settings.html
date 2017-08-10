@@ -69,8 +69,11 @@
         {% include "snippets/web_settings_form.html" %}
     {% endwith %}
 
+
+    <h4>{% trans "Groups" %}</h4>
+
     {% with type="checkbox" setting_display_name="ENABLE_SHARE_TO_ALL_GROUPS" setting_name="ENABLE_SHARE_TO_ALL_GROUPS" setting_val=config_dict.ENABLE_SHARE_TO_ALL_GROUPS %}
-        {% trans "Enable share library to all groups" as help_tip %}
+        {% trans "Enable users to share libraries to any groups in the system." as help_tip %}
         {% include "snippets/web_settings_form.html" %}
     {% endwith %}
 
