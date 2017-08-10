@@ -157,6 +157,9 @@ class UserPermissions(object):
     def can_send_share_link_mail(self):
         return get_enabled_role_permissions_by_role(self.user.role).get('can_send_share_link_mail', True)
 
+    def can_use_two_factor_auth(self):
+        return get_enabled_role_permissions_by_role(self.user.role).get('can_use_two_factor_auth', True)
+
 
 class User(object):
     is_staff = False
