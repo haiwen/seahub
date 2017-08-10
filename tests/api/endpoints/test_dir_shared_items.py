@@ -196,6 +196,23 @@ class DirSharedItemsTest(BaseTestCase):
         json_resp = json.loads(resp.content)
         assert 'has been shared to' in json_resp['failed'][0]['error_msg']
 
+    def test_share_to_group_if_not_group_member(self):
+        self.login_as(self.user)
+
+        grp = self.create_group(group_name="test-grp2",
+                                 username=self.admin.username)
+
+        resp = self.client.put(
+            '/api2/repos/%s/dir/shared_items/?p=/' % (self.repo.id),
+            "share_type=group&group_id=%d&permission=rw" % (grp.id),
+            'application/x-www-form-urlencoded',
+        )
+        self.assertEqual(200, resp.status_code)
+        json_resp = json.loads(resp.content)
+        assert len(json_resp['failed']) == 1
+        assert len(json_resp['success']) == 0
+        assert json_resp['failed'][0]['error_msg'] == 'Permission denied.'
+
     def test_share_with_invalid_email(self):
         self.login_as(self.user)
         invalid_email = '%s' % randstring(6)
