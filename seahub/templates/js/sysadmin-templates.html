@@ -7,6 +7,9 @@
         <li class="tab<% if (cur_tab == 'dashboard') { %> tab-cur<% } %>">
             <a href="{{ SITE_ROOT }}sysadmin/#dashboard/"><span class="sf2-icon-info"></span>{% trans "Info" %}</a>
         </li>
+        <li class="tab">
+            <a href="{% url "sys_statistic_file" %}"><span class="sf2-icon-histogram"></span>{% trans "Statistic" %}</a>
+        </li>
         <li class="tab<% if (cur_tab == 'devices') { %> tab-cur<% } %>">
             <a href="{{ SITE_ROOT }}sysadmin/#desktop-devices/"><span class="sf2-icon-monitor"></span>{% trans "Devices" %}</a>
         </li>
@@ -42,11 +45,6 @@
         <li class="tab">
             <a href="{{ SITE_ROOT }}sys/publinkadmin/"><span class="sf2-icon-link"></span>{% trans "Links" %}</a>
         </li>
-        {% if traffic_stats_enabled %}
-        <li class="tab">
-            <a href="{{ SITE_ROOT }}sys/trafficadmin/"><span class="sf2-icon-histogram"></span>{% trans "Traffic" %}</a>
-        </li>
-        {% endif %}
         {% if sysadmin_extra_enabled %}
         <li class="tab">
             <a href="{{ SITE_ROOT }}sys/loginadmin/"><span class="sf2-icon-clock"></span>{% trans "Logs" %}</a>

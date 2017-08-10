@@ -1,0 +1,305 @@
+{% extends "sysadmin/base.html" %}
+{% load seahub_tags i18n %}
+
+{% block extra_style %}
+<link rel="stylesheet" type="text/css" href="{{MEDIA_URL}}css/jquery-ui.datepicker.min.css" />
+{% endblock %}
+
+{% block cur_statistic %}tab-cur{% endblock %}
+
+{% block right_panel %}
+<div class="tabnav ovhd">
+    <ul class="tabnav-tabs fleft">
+        <li class="tabnav-tab"><a href="{% url 'sys_statistic_file' %}">{% trans "File" %}</a></li>
+        <li class="tabnav-tab"><a href="{% url 'sys_statistic_storage' %}">{% trans "Storage" %}</a></li>
+        <li class="tabnav-tab tabnav-tab-cur"><a href="{% url 'sys_statistic_user' %}">{% trans "Users" %}</a></li>
+        {% if traffic_stats_enabled %}
+        <li class="tabnav-tab"><a href="{{ SITE_ROOT }}sys/trafficadmin/">{% trans "Traffic" %}</a></li>
+        {% endif %}
+    </ul>
+</div>
+
+<div class="system-statistic-time-range ovhd">
+    <div class="sf-btn-group fleft">
+        <button class="sf-btn-group-btn sf-btn-group-btn-first sf-btn-group-btn-cur" id="24-hours">{% trans "24 Hours" %}</button>
+        <button class="sf-btn-group-btn" id="7-days">{% trans "7 Days" %}</button>
+        <button class="sf-btn-group-btn" id="30-days">{% trans "30 Days" %}</button>
+        <button class="sf-btn-group-btn sf-btn-group-btn-last" id="1-year">{% trans "1 Year" %}</button>
+    </div>
+
+    <form action="" class="fleft date-custom-form">
+        <input type="text" name="start" class="input" placeholder="yyyy-mm-dd" />
+        <span> - </span>
+        <input type="text" name="end" class="input" placeholder="yyyy-mm-dd" />
+        <button type="submit" class="submit">{% trans "Submit" %}</button>
+        <span class="error hide"></span>
+    </form>
+</div>
+
+<div id="statistic-chart">
+    <span class="loading-icon loading-tip"></span>
+    <canvas class="hide"></canvas>
+    <p class="error hide"></p>
+</div>
+{% endblock %}
+
+{% block extra_script %}
+<script type="text/javascript" src="{{MEDIA_URL}}js/Chart.bundle.min.js"></script>
+<script type="text/javascript" src="{{MEDIA_URL}}js/jquery-ui.datepicker.min.js"></script>
+<script type="text/javascript">
+
+// date picker for date-custom
+$.datepicker.setDefaults({
+    hideIfNoPrevNext: true,
+    maxDate: 0, // today (The maximum selectable date)
+    dateFormat: 'yy-mm-dd'
+});
+$('.date-custom-form .input').datepicker();
+
+// get time string '%Y-%m-%d %H:%M:%S'
+function getTimeStr(time) { // time: in milliseconds
+    var time_obj = new Date(time);
+
+    var year = time_obj.getFullYear();
+    var month = time_obj.getMonth() + 1;
+    var date = time_obj.getDate();
+    var hour = time_obj.getHours();
+
+    var numberToString = function(number) {
+        var str = number + '';
+        return str.length == 2 ? str : '0' + str;
+    };
+
+    var time_str = [year, numberToString(month), numberToString(date)].join('-') +
+        ' ' + [numberToString(hour), '00', '00'].join(':');
+    return time_str;
+};
+
+var $chart = $('#statistic-chart');
+var $loading = $('.loading-icon', $chart);
+var $error = $('.error', $chart);
+var $canvas = $('canvas', $chart);
+var chart;
+
+function getStatistic(options) {
+    $.ajax({
+        url: '{% url 'api-v2.1-admin-statistics-active-users' %}',
+        cache: false,
+        data: options,
+        dataType: 'json',
+        success: function(data) {
+            $error.hide();
+            $canvas.show();
+            renderChart(data, options.group_by);
+        },
+        error: function(xhr) {
+            $canvas.hide();
+            $error.html("{% trans "Error" %}").show();
+        },
+        complete: function() {
+            $loading.hide();
+        }
+    });
+}
+
+// by time range
+function getStatisticByTimeRange(range) {
+    var hour_ms = 60 * 60 * 1000;
+    var day_ms = 24 * hour_ms;
+
+    var now = new Date();
+    var now_ms = now.getTime(); // ms: milliseconds
+
+    var today = new Date();
+    // set time to be '00:00:00'
+    var today_ms = today.setHours(0, 0, 0);
+
+    var start_ms;
+    var end_ms = today_ms;
+    var group_by = 'day';
+
+    switch(range) {
+        case '24h': // 24 hours
+            start_ms = now_ms - day_ms;
+            end_ms = now_ms - hour_ms;
+            group_by = 'hour';
+            break;
+        case '7d': // 7 days
+            start_ms = today_ms - 6 * day_ms; // 'today' is included
+            break;
+        case '30d': // 30 days
+            start_ms = today_ms - 29 * day_ms;
+            break;
+        case '1y': // 1 year
+            start_ms = today_ms - 364 * day_ms;
+            break;
+    }
+
+    getStatistic({
+        start: getTimeStr(start_ms),
+        end: getTimeStr(end_ms),
+        group_by: group_by
+    });
+}
+
+// render chart
+function renderChart(data, group_by) {
+    var labels =  [],
+        count = [];
+
+    var item;
+    var datetime_ms, datetime_str;
+    for (var i = 0, len = data.length; i < len; i++) {
+        item = data[i];
+
+        // datetime: 2017-06-21T07:58:01+00:00
+        datetime_ms = Date.parse(item.datetime);
+        datetime_str = getTimeStr(datetime_ms);
+        if (group_by == 'hour') {
+            // time shown in '%H:%M'
+            labels.push(datetime_str.substr(11,5));
+        } else {
+            // time shown in '%Y-%m-%d'
+            labels.push(datetime_str.substr(0, 10));
+        }
+
+        count.push(item.count);
+    }
+
+    var config = {
+        type: 'line',
+        data: {
+            labels: labels,
+            datasets: [
+                {
+                    label: "{% trans "Count" %}",
+                    data: count,
+                    borderColor: '#fd913a',
+                    backgroundColor: '#fd913a'
+                }
+            ]
+        }, // 'data' ends here
+        options: {
+            title: {
+                display: true,
+                fontSize: 14,
+                padding: 20,
+                text: "{% trans "Active Users" %}"
+            },
+            elements: {
+                line: {
+                    fill: false,
+                    tension: 0, // disable bezier curves, i.e, draw straight lines
+                    borderWidth: 2
+                }
+            },
+            legend: {
+                display: false,
+                labels: {
+                    usePointStyle: true
+                }
+            },
+            layout: {
+                padding: {
+                    right: 100
+                }
+            },
+            scales: {
+                yAxes: [{
+                    ticks: {
+                        beginAtZero: true,
+                        suggestedMax: 10
+                    }
+                }]
+            }
+        }
+    };
+
+    if (chart) { // chart instance already exists
+        chart.destroy();
+        chart = new Chart($canvas, config);
+    } else {
+        chart = new Chart($canvas, config);
+    }
+}
+
+// get statistic for the latest 24 hours
+getStatisticByTimeRange('24h');
+
+// click btns
+$rangeBtns = $('.system-statistic-time-range button');
+$('#24-hours').click(function() {
+    getStatisticByTimeRange('24h');
+    $rangeBtns.removeClass('sf-btn-group-btn-cur');
+    $(this).addClass('sf-btn-group-btn-cur');
+});
+$('#7-days').click(function() {
+    getStatisticByTimeRange('7d');
+    $rangeBtns.removeClass('sf-btn-group-btn-cur');
+    $(this).addClass('sf-btn-group-btn-cur');
+});
+$('#30-days').click(function() {
+    getStatisticByTimeRange('30d');
+    $rangeBtns.removeClass('sf-btn-group-btn-cur');
+    $(this).addClass('sf-btn-group-btn-cur');
+});
+$('#1-year').click(function() {
+    getStatisticByTimeRange('1y');
+    $rangeBtns.removeClass('sf-btn-group-btn-cur');
+    $(this).addClass('sf-btn-group-btn-cur');
+});
+
+// custom time range
+$('.date-custom-form').submit(function() {
+    var $form = $(this);
+    var $start = $('[name="start"]', $form);
+    var $end = $('[name="end"]', $form);
+    var $error = $('.error', $form);
+
+    var start_date = $start.val();
+    var end_date = $end.val();
+
+    if (!start_date || !end_date) {
+        return false;
+    }
+
+    // 'date' can be picked from datepicker, also directly input
+    var date_pattern = /^([012]\d{3})\-(0[1-9]|1[012])\-(0[1-9]|[12]\d|3[01])$/;
+    if (!date_pattern.test(start_date)) {
+        $error.html("{% trans "Invalid start date, should be yyyy-mm-dd" %}").removeClass('hide');
+        return false;
+    }
+    if (!date_pattern.test(end_date)) {
+        $error.html("{% trans "Invalid end date, should be yyyy-mm-dd" %}").removeClass('hide');
+        return false;
+    }
+
+    if (start_date > end_date) {
+        $error.html("{% trans "Start date should be earlier than end date." %}").removeClass('hide');
+        return false;
+    }
+
+    $error.addClass('hide');
+
+    var options = {
+        start: start_date + ' 00:00:00'
+    };
+    if (start_date == end_date) {
+        $.extend(options, {
+            end: end_date + ' 23:00:00',
+            group_by: 'hour'
+        });
+    } else {
+        $.extend(options, {
+            end: end_date + ' 00:00:00',
+            group_by: 'day'
+        });
+    }
+    getStatistic(options);
+
+    $rangeBtns.removeClass('sf-btn-group-btn-cur');
+
+    return false;
+});
+</script>
+{% endblock %}
