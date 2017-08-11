@@ -1,4 +1,5 @@
 # Copyright (c) 2011-2016 Seafile Ltd.
+from django.conf import settings
 from rest_framework.authentication import SessionAuthentication
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
@@ -20,7 +21,10 @@ class AllGroupsView(APIView):
     def get(self, request):
         """List all groups
         """
-        groups_list = ccnet_api.get_all_groups(-1, -1)
+        if settings.ENABLE_SHARE_TO_ALL_GROUPS:
+            groups_list = ccnet_api.get_all_groups(-1, -1)
+        else:
+            return Response([])
         try:
             avatar_size = int(request.GET.get('avatar_size', 
                                               GROUP_AVATAR_DEFAULT_SIZE))
