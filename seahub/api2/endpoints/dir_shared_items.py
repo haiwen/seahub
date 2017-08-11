@@ -12,7 +12,8 @@ from rest_framework.views import APIView
 from django.utils.translation import ugettext as _
 
 import seaserv
-from seaserv import seafile_api
+from seaserv import seafile_api, ccnet_api
+from constance import config
 
 from seahub.api2.authentication import TokenAuthentication
 from seahub.api2.permissions import IsRepoAccessible
@@ -347,11 +348,25 @@ class DirSharedItemsEndpoint(APIView):
                 try:
                     gid = int(gid)
                 except ValueError:
-                    return api_error(status.HTTP_400_BAD_REQUEST, 'group_id %s invalid.' % gid)
+                    result['failed'].append({
+                        'error_msg': _(u'group_id %s invalid.') % gid
+                        })
+                    continue
 
-                group = seaserv.get_group(gid)
+                group = ccnet_api.get_group(gid)
                 if not group:
-                    return api_error(status.HTTP_404_NOT_FOUND, 'Group %s not found' % gid)
+                    result['failed'].append({
+                        'error_msg': _(u'Group %s not found') % gid
+                        })
+                    continue
+
+                if not config.ENABLE_SHARE_TO_ALL_GROUPS and \
+                        not ccnet_api.is_group_user(gid, username):
+                    result['failed'].append({
+                        'group_name': group.group_name,
+                        'error_msg': _(u'Permission denied.')
+                        })
+                    continue
 
                 if self.has_shared_to_group(request, repo_id, path, gid):
                     result['failed'].append({
