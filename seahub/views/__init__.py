@@ -774,7 +774,8 @@ def libraries(request):
             'can_add_pub_repo': can_add_pub_repo,
             'joined_groups': joined_groups,
             'library_templates': LIBRARY_TEMPLATES.keys() if \
-                    isinstance(LIBRARY_TEMPLATES, dict) else []
+                    isinstance(LIBRARY_TEMPLATES, dict) else [],
+            'enable_share_to_all_groups': config.ENABLE_SHARE_TO_ALL_GROUPS
             }, context_instance=RequestContext(request))
 
 @login_required
