@@ -72,9 +72,10 @@
             </div>
         </div>
 
-        {% include 'js/sysadmin-templates.html' %}
 </div><!-- wrapper -->
 
+{% include 'js/common-templates.html' %}
+{% include 'js/sysadmin-templates.html' %}
 {% include "js/lib-op-popups.html" %}
 <script type="text/javascript">
 var app = {
@@ -98,6 +99,7 @@ app["pageOptions"] = {
     thumbnail_default_size: {{ thumbnail_default_size }},
     thumbnail_size_for_grid: {{ thumbnail_size_for_grid }},
     enable_encrypted_library: {% if enable_encrypted_library %} true {% else %} false {% endif %},
+    enable_repo_history_setting: {% if enable_repo_history_setting %} true {% else %} false {% endif %},
     max_upload_file_size: {% if max_upload_file_size %} {{ max_upload_file_size }} {% else %} '' {% endif %},
     folder_perm_enabled: {% if folder_perm_enabled %} true {% else %} false {% endif %},
     is_pro: {% if is_pro %} true {% else %} false {% endif %},

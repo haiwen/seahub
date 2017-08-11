@@ -406,9 +406,15 @@
     <td>
         <a href="#" class="sf2-icon-delete sf2-x repo-delete-btn op-icon vh" title="{% trans "Delete" %}" aria-label="{% trans "Delete" %}"></a>
         <a href="#" class="sf2-icon-move sf2-x repo-transfer-btn op-icon vh" title="{% trans "Transfer" %}" aria-label="{% trans "Transfer" %}"></a>
-        <% if (!encrypted) { %>
-        <a href="#" class="sf2-icon-share sf2-x repo-share-btn op-icon vh" title="{% trans "Share" %}" aria-label="{% trans "Share" %}"></a>
-        <% } %>
+        <div class="sf-dropdown sf-dropdown-inline">
+            <a href="#" class="sf2-icon-caret-down more-op-icon op-icon vh sf-dropdown-toggle" title="{% trans "More Operations" %}" aria-label="{% trans "More Operations" %}"></a>
+            <ul class="hidden-op repo-hidden-op hide sf-dropdown-menu">
+                <% if (!encrypted) { %>
+                <li><a class="op js-repo-share" href="#">{% trans "Share" %}</a></li>
+                <% } %>
+                <li><a class="op js-popup-history-setting" href="#">{% trans "History Setting" %}</a></li>
+            </ul>
+        </div>
     </td>
 </script>
 

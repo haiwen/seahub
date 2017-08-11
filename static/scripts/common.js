@@ -176,6 +176,7 @@ define([
                 case 'admin-device-errors': return siteRoot + 'api/v2.1/admin/device-errors/';
                 case 'admin-libraries': return siteRoot + 'api/v2.1/admin/libraries/';
                 case 'admin-library': return siteRoot + 'api/v2.1/admin/libraries/' + options.repo_id + '/';
+                case 'admin-library-history-limit': return siteRoot + 'api/v2.1/admin/libraries/' + options.repo_id + '/history-limit/';
                 case 'admin-library-dirents': return siteRoot + 'api/v2.1/admin/libraries/' + options.repo_id + '/dirents/';
                 case 'admin-groups': return siteRoot + 'api/v2.1/admin/groups/';
                 case 'admin-group': return siteRoot + 'api/v2.1/admin/groups/' + options.group_id + '/';
