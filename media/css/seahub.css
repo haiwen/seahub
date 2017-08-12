@@ -3659,6 +3659,11 @@ img.thumbnail {
 .web-setting-input .input {
     margin:0;
 }
+.web-setting-input .textarea {
+    box-sizing:content-box;
+    height:95px;
+    margin:0;
+}
 .web-setting-ops {
     width:100px;
     vertical-align:top;
