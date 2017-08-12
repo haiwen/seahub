@@ -9,6 +9,8 @@ from seahub.base.templatetags.seahub_tags import email2nickname
 from seahub.profile.models import Profile
 from seahub.test_utils import BaseTestCase
 from tests.common.utils import randstring
+from tests.api.urls import TOKEN_URL
+from seahub.api2.models import TokenV2
 
 class AccountTest(BaseTestCase):
     def setUp(self):
@@ -110,7 +112,7 @@ class AccountTest(BaseTestCase):
 
         resp = self._do_get_info()
         json_resp = json.loads(resp.content)
-        assert len(json_resp) == 10
+        assert len(json_resp) == 11
         assert json_resp['email'] == self.user1.username
         assert json_resp['is_staff'] is False
         assert json_resp['is_active'] is True
@@ -142,14 +144,14 @@ class AccountTest(BaseTestCase):
     def test_update_name(self):
         """only test name"""
         self.login_as(self.admin)
-        resp = self._do_update_name()
+        self._do_update_name()
         self.assertEqual(Profile.objects.get_profile_by_user(
             self.user1.username).nickname, 'user1')
 
     def test_update_loginid(self):
         """only test loginid"""
         self.login_as(self.admin)
-        resp = self._do_update_loginid()
+        self._do_update_loginid()
         self.assertEqual(Profile.objects.get_profile_by_user(
             self.user1.username).login_id, 'hello')
 
@@ -238,6 +240,29 @@ class AccountTest(BaseTestCase):
         self.assertEqual(user2_groups[0].creator_name, self.user2.username)
         self.assertEqual(user2_groups[1].id, other_group.id)
         self.assertEqual(user2_groups[1].creator_name, self.user.username)
+
+    def test_inactive_user(self):
+        self.login_as(self.admin)
+
+        username = self.user1.username
+        data = {
+            'username': username,
+            'password': 'secret',
+            'platform': 'windows',
+            'device_id': randstring(length=40),
+            'device_name': 'fake-device-name',
+            'client_version': '4.1.0',
+            'platform_version': '',
+        }
+        self.client.post(TOKEN_URL, data=data)
+        assert len(TokenV2.objects.filter(user=username)) == 1
+
+        url = reverse('api2-account', args=[self.user1.username])
+        data = 'is_active=0'
+        resp = self.client.put(url, data, 'application/x-www-form-urlencoded')
+        self.assertEqual(200, resp.status_code)
+
+        assert len(TokenV2.objects.filter(user=username)) == 0
 
     def test_delete(self):
         self.login_as(self.admin)

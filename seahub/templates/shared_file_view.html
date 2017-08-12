@@ -140,7 +140,7 @@ $('#file-save-form').submit(function() {
 {% include "snippets/file_content_js.html" %}
 
 {% if filetype == 'Image' and not err %}
-    {% if enable_thumbnail %}
+    {% if enable_thumbnail and fileext != 'gif' %}
         {% if from_shared_dir %}
         var encoded_path = encodePath('{{ path|escapejs }}'); // path: '/Portrait_8.jpg'
         $('#image-view').attr('src', '{{ SITE_ROOT }}thumbnail/{{ shared_token }}/{{ thumbnail_size_for_original }}' + encoded_path);

@@ -132,9 +132,10 @@
         {% include "snippets/web_settings_form.html" %}
     {% endwith %}
 
-    {% with type="input" setting_name="SHARE_LINK_PASSWORD_MIN_LENGTH" setting_val=config_dict.SHARE_LINK_PASSWORD_MIN_LENGTH %} {% include "snippets/web_settings_form.html" %}
+    {% with type="input" setting_name="SHARE_LINK_PASSWORD_MIN_LENGTH" setting_val=config_dict.SHARE_LINK_PASSWORD_MIN_LENGTH %}
         {% trans "download/upload link password minimum length" as setting_display_name %}
         {% trans "The least number of characters a download/upload link password should include." as help_tip %}
+        {% include "snippets/web_settings_form.html" %}
     {% endwith %}
 
     {% with type="checkbox" setting_display_name="ENABLE_USER_CREATE_ORG_REPO" setting_name="ENABLE_USER_CREATE_ORG_REPO" setting_val=config_dict.ENABLE_USER_CREATE_ORG_REPO %}
@@ -146,7 +147,7 @@
         {% trans "Extensions of online previewed files, each suffix is separated by a comma." as help_tip %}
         {% include "snippets/web_settings_form.html" %}
     {% endwith %}
-    
+
     <h4>{% trans "Sync" %}</h4>
 
     {% with type="checkbox" setting_display_name="DISABLE_SYNC_WITH_ANY_FOLDER" setting_name="DISABLE_SYNC_WITH_ANY_FOLDER" setting_val=config_dict.DISABLE_SYNC_WITH_ANY_FOLDER %}

@@ -9,6 +9,7 @@ from django.db import models
 from django.forms import ModelForm, Textarea
 from django.utils.html import escape
 from django.utils.translation import ugettext as _
+from django.core.cache import cache
 
 import seaserv
 from seaserv import seafile_api, ccnet_api
@@ -16,9 +17,11 @@ from seaserv import seafile_api, ccnet_api
 from seahub.base.fields import LowerCaseCharField
 from seahub.base.templatetags.seahub_tags import email2nickname
 from seahub.utils.repo import get_repo_shared_users
+from seahub.utils import normalize_cache_key
 
 # Get an instance of a logger
 logger = logging.getLogger(__name__)
+
 
 ########## system notification
 class Notification(models.Model):
@@ -45,6 +48,8 @@ MSG_TYPE_REPO_SHARE = 'repo_share'
 MSG_TYPE_REPO_SHARE_TO_GROUP = 'repo_share_to_group'
 MSG_TYPE_USER_MESSAGE = 'user_message'
 MSG_TYPE_FILE_COMMENT = 'file_comment'
+
+USER_NOTIFICATION_COUNT_CACHE_PREFIX = 'USER_NOTIFICATION_COUNT_'
 
 def file_uploaded_msg_to_json(file_name, repo_id, uploaded_to):
     """Encode file uploaded message to json string.
@@ -79,6 +84,10 @@ def file_comment_msg_to_json(repo_id, file_path, author, comment):
                        'author': author,
                        'comment': comment})
 
+def get_cache_key_of_unseen_notifications(username):
+    return normalize_cache_key(username,
+            USER_NOTIFICATION_COUNT_CACHE_PREFIX)
+
 
 class UserNotificationManager(models.Manager):
     def _add_user_notification(self, to_user, msg_type, detail):
@@ -92,6 +101,10 @@ class UserNotificationManager(models.Manager):
         n = super(UserNotificationManager, self).create(
             to_user=to_user, msg_type=msg_type, detail=detail)
         n.save()
+
+        cache_key = get_cache_key_of_unseen_notifications(to_user)
+        cache.delete(cache_key)
+
         return n
 
     def get_all_notifications(self, seen=None, time_since=None):

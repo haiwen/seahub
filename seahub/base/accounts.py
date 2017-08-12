@@ -1,6 +1,7 @@
 # Copyright (c) 2012-2016 Seafile Ltd.
 # encoding: utf-8
 import re
+import logging
 
 from django import forms
 from django.core.mail import send_mail
@@ -31,6 +32,8 @@ try:
     from seahub.settings import MULTI_TENANCY
 except ImportError:
     MULTI_TENANCY = False
+
+logger = logging.getLogger(__name__)
 
 UNUSABLE_PASSWORD = '!' # This will never be a valid hash
 
@@ -146,8 +149,13 @@ class UserPermissions(object):
     def can_export_files_via_mobile_client(self):
         return get_enabled_role_permissions_by_role(self.user.role)['can_export_files_via_mobile_client']
 
+    # Add default value for compatible issue when EMAILBE_ROLE_PERMISSIONS
+    # is not updated with newly added permissions.
     def role_quota(self):
         return get_enabled_role_permissions_by_role(self.user.role).get('role_quota', '')
+
+    def can_send_share_link_mail(self):
+        return get_enabled_role_permissions_by_role(self.user.role).get('can_send_share_link_mail', True)
 
 
 class User(object):
@@ -193,6 +201,14 @@ class User(object):
                 source = "DB"
             else:
                 source = "LDAP"
+
+            if not self.is_active:
+                # clear web api and repo sync token
+                # when inactive an user
+                try:
+                    clear_token(self.username)
+                except Exception as e:
+                    logger.error(e)
 
             result_code = ccnet_threaded_rpc.update_emailuser(source,
                                                               emailuser.id,
@@ -250,7 +266,13 @@ class User(object):
             for r in shared_in_repos:
                 seafile_api.remove_share(r.repo_id, r.user, username)
 
-        clear_token(username)
+        # clear web api and repo sync token
+        # when delete user
+        try:
+            clear_token(self.username)
+        except Exception as e:
+            logger.error(e)
+
         # remove current user from joined groups
         ccnet_api.remove_group_user(username)
         ccnet_api.remove_emailuser(source, username)
@@ -269,6 +291,13 @@ class User(object):
             self.set_unusable_password()
         else:
             self.password = '%s' % raw_password
+
+        # clear web api and repo sync token
+        # when user password change
+        try:
+            clear_token(self.username)
+        except Exception as e:
+            logger.error(e)
 
     def check_password(self, raw_password):
         """

@@ -51,7 +51,8 @@ from seahub.views.modules import MOD_PERSONAL_WIKI, enable_mod_for_user, \
     disable_mod_for_user
 import seahub.settings as settings
 from seahub.settings import AVATAR_FILE_STORAGE, \
-    ENABLE_SUB_LIBRARY, ENABLE_FOLDER_PERM, ENABLE_REPO_SNAPSHOT_LABEL
+    ENABLE_SUB_LIBRARY, ENABLE_FOLDER_PERM, ENABLE_REPO_SNAPSHOT_LABEL, \
+    UNREAD_NOTIFICATIONS_REQUEST_INTERVAL
 
 LIBRARY_TEMPLATES = getattr(settings, 'LIBRARY_TEMPLATES', {})
 
@@ -773,6 +774,7 @@ def libraries(request):
             'file_audit_enabled': FILE_AUDIT_ENABLED,
             'can_add_pub_repo': can_add_pub_repo,
             'joined_groups': joined_groups,
+            'unread_notifications_request_interval': UNREAD_NOTIFICATIONS_REQUEST_INTERVAL,
             'library_templates': LIBRARY_TEMPLATES.keys() if \
                     isinstance(LIBRARY_TEMPLATES, dict) else [],
             'enable_share_to_all_groups': config.ENABLE_SHARE_TO_ALL_GROUPS

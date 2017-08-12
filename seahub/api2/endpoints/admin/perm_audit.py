@@ -7,7 +7,7 @@ from rest_framework import status
 
 from seaserv import seafile_api
 
-from .utils import check_time_period_valid, \
+from seahub.api2.endpoints.utils import check_time_period_valid, \
     get_log_events_by_type_and_time
 
 from seahub.api2.authentication import TokenAuthentication

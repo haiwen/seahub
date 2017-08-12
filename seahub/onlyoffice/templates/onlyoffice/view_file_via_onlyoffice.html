@@ -24,18 +24,18 @@ var config = {
             "edit": {% if can_edit %}true{% else %}false{% endif %},
             "print": true,
             "review": true
-        },        
+        },
     },
     "documentType": "{{document_type}}", // 'text' | 'spreadsheet' | 'presentation',
     "editorConfig": {
         "callbackUrl": "{{ callback_url }}",
-        "lang": {% if ONLYOFFICE_EDITOR_LANGUAGE_SETTING %}"{{ ONLYOFFICE_EDITOR_LANGUAGE_SETTING }}"{% else %}"{{ LANGUAGE_CODE }}"{% endif %},
+        "lang": "{{ lang_code }}",
         "mode": {% if can_edit %}"edit"{% else %}"view"{% endif %},
         "user": {
             "name": "{{ username|email2nickname }}"
         }
     },
-}; 
+};
 var docEditor = new DocsAPI.DocEditor("placeholder", config);
 </script>
 {% endblock %}

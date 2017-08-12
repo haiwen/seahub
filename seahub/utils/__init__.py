@@ -1385,3 +1385,21 @@ def is_windows_operating_system(request):
         return True
     else:
         return False
+
+def get_folder_permission_recursively(username, repo_id, path):
+    """ Get folder permission recursively
+
+    Ger permission from the innermost layer of subdirectories to root
+    directory.
+    """
+    if not path or not isinstance(path, basestring):
+        raise Exception('path invalid.')
+
+    if not seafile_api.get_dir_id_by_path(repo_id, path):
+       # get current folder's parent directory
+        path = os.path.dirname(path.rstrip('/'))
+        return get_folder_permission_recursively(
+                username, repo_id, path)
+    else:
+        return seafile_api.check_permission_by_path(
+                repo_id, path, username)

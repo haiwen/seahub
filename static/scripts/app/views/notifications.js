@@ -71,8 +71,8 @@ define([
                 });
             };
             reqUnreadNum();
-            // request every 30s
-            var reqInterval = setInterval(reqUnreadNum, 30*1000);
+            // request every `unread_notifications_request_interval` seconds
+            var reqInterval = setInterval(reqUnreadNum, (app.pageOptions.unread_notifications_request_interval || 3*60)*1000);
 
             $('#notice-icon').click(function() {
                 _this.toggle();

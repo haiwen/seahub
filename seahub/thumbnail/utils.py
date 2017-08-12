@@ -49,6 +49,11 @@ def get_rotated_image(image):
     # im.transpose(method)
     # Returns a flipped or rotated copy of an image.
     # Method can be one of the following: FLIP_LEFT_RIGHT, FLIP_TOP_BOTTOM, ROTATE_90, ROTATE_180, or ROTATE_270.
+
+    # expand: Optional expansion flag.
+    # If true, expands the output image to make it large enough to hold the entire rotated image.
+    # If false or omitted, make the output image the same size as the input image.
+
     if orientation == 2:
         # Vertical image
         image = image.transpose(Image.FLIP_LEFT_RIGHT)
@@ -60,16 +65,16 @@ def get_rotated_image(image):
         # Horizontal image
     elif orientation == 5:
         # Horizontal image + Rotation 90 CCW
-        image = image.rotate(-90).transpose(Image.FLIP_LEFT_RIGHT)
+        image = image.rotate(-90, expand=True).transpose(Image.FLIP_LEFT_RIGHT)
     elif orientation == 6:
         # Rotation 270
-        image = image.rotate(-90)
+        image = image.rotate(-90, expand=True)
     elif orientation == 7:
         # Horizontal image + Rotation 270
-        image = image.rotate(90).transpose(Image.FLIP_LEFT_RIGHT)
+        image = image.rotate(90, expand=True).transpose(Image.FLIP_LEFT_RIGHT)
     elif orientation == 8:
         # Rotation 90
-        image = image.rotate(90)
+        image = image.rotate(90, expand=True)
 
     return image
 

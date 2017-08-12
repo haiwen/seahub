@@ -318,6 +318,9 @@ ENABLE_TERMS_AND_CONDITIONS = False
 # Enable or disable sharing to all groups
 ENABLE_SHARE_TO_ALL_GROUPS = False
 
+# interval for request unread notifications
+UNREAD_NOTIFICATIONS_REQUEST_INTERVAL = 3 * 60 # seconds
+
 # File preview
 FILE_PREVIEW_MAX_SIZE = 30 * 1024 * 1024
 OFFICE_PREVIEW_MAX_SIZE = 2 * 1024 * 1024
@@ -417,6 +420,9 @@ SITE_TITLE = 'Private Seafile'
 # Base name used in email sending
 SITE_NAME = 'Seafile'
 
+# Path to the license file(relative to the media path)
+LICENSE_PATH = os.path.join(PROJECT_ROOT, '../../seafile-license.txt')
+
 # Path to the favicon file (relative to the media path)
 # tip: use a different name when modify it.
 FAVICON_PATH = 'img/favicon.ico'
@@ -436,6 +442,9 @@ SERVE_STATIC = True
 
 # Enable or disable registration on web.
 ENABLE_SIGNUP = False
+
+# show 'log out' icon in top-bar or not.
+SHOW_LOGOUT_ICON = False
 
 # For security consideration, please set to match the host/domain of your site, e.g., ALLOWED_HOSTS = ['.example.com'].
 # Please refer https://docs.djangoproject.com/en/dev/ref/settings/#allowed-hosts for details.
@@ -536,7 +545,7 @@ THUMBNAIL_SIZE_FOR_GRID = 192
 THUMBNAIL_SIZE_FOR_ORIGINAL = 1024
 
 # size(MB) limit for generate thumbnail
-THUMBNAIL_IMAGE_SIZE_LIMIT = 20
+THUMBNAIL_IMAGE_SIZE_LIMIT = 30
 THUMBNAIL_IMAGE_ORIGINAL_SIZE_LIMIT = 256
 
 # video thumbnails

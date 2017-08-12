@@ -93,7 +93,7 @@
     <% } %>
 </script>
 
-<script type="text/template" id="sysinfo-header-tmpl">
+<script type="text/template" id="sysinfo-tmpl">
     <div class="header-bar">
         <h3 class="">{% trans "Info" %}</h3>
     </div>
@@ -102,16 +102,20 @@
     <span class="loading-icon loading-tip"></span>
 </script>
 
-<script type="text/template" id="sysinfo-tmpl">
+<script type="text/template" id="sysinfo-con-tmpl">
     <dl>
         <dt>{% trans "System Info" %}</dt>
-        <dd><% if (is_pro) { %>
+        <dd>
+            <% if (is_pro) { %>
                 {% trans "Professional Edition" %}
                 <% if (with_license) { %>
-                    {% trans "licensed to" %} <%- license_to %>
-                    ,
+                    {% trans "licensed to" %} <%- license_to %>,
                     {% trans "expires on" %} <%- license_expiration %>
                 <% } %>
+                <div class="license-file-upload">
+                    <input type="file" name="license" class="license-file-upload-input transparent-file-input" />
+                    <button type="button" class="license-file-upload-btn">{% trans "Upload licence" %}</button>
+                </div>
             <% } else { %>
             {% trans "Community Edition" %}
             <a href="http://manual.seafile.com/deploy_pro/migrate_from_seafile_community_server.html" target="_blank">{% trans "Upgrade to Pro Edition" %}</a>

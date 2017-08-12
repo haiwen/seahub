@@ -19,6 +19,8 @@ from seahub.api2.authentication import TokenAuthentication
 from seahub.api2.permissions import IsRepoAccessible
 from seahub.api2.throttling import UserRateThrottle
 from seahub.api2.utils import api_error
+from seahub.api2.endpoints.utils import is_org_user
+
 from seahub.base.templatetags.seahub_tags import email2nickname
 from seahub.base.accounts import User
 from seahub.share.signals import share_repo_to_user_successful, \
@@ -299,6 +301,18 @@ class DirSharedItemsEndpoint(APIView):
                 try:
                     if is_org_context(request):
                         org_id = request.user.org.org_id
+
+                        if not is_org_user(to_user, int(org_id)):
+                            org_name = request.user.org.org_name
+                            error_msg = 'User %s is not member of organization %s.' \
+                                    % (to_user, org_name)
+
+                            result['failed'].append({
+                                'email': to_user,
+                                'error_msg': error_msg
+                            })
+                            continue
+
                         if path == '/':
                             seaserv.seafserv_threaded_rpc.org_add_share(
                                     org_id, repo_id, username, to_user,
@@ -307,6 +321,15 @@ class DirSharedItemsEndpoint(APIView):
                             sub_repo_id = seafile_api.org_share_subdir_to_user(org_id,
                                     repo_id, path, username, to_user, permission)
                     else:
+
+                        if is_org_user(to_user):
+                            error_msg = 'User %s is a member of organization.' % to_user
+                            result['failed'].append({
+                                'email': to_user,
+                                'error_msg': error_msg
+                            })
+                            continue
+
                         if path == '/':
                             seafile_api.share_repo(
                                     repo_id, username, to_user, permission)

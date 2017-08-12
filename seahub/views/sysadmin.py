@@ -42,7 +42,7 @@ from seahub.invitations.models import Invitation
 from seahub.role_permissions.utils import get_available_roles
 from seahub.utils import IS_EMAIL_CONFIGURED, string2list, is_valid_username, \
     is_pro_version, send_html_email, get_user_traffic_list, get_server_id, \
-    clear_token, handle_virus_record, get_virus_record_by_id, \
+    handle_virus_record, get_virus_record_by_id, \
     get_virus_record, FILE_AUDIT_ENABLED, get_max_upload_file_size
 from seahub.utils.file_size import get_file_size_unit
 from seahub.utils.ldap import get_ldap_info
@@ -58,7 +58,7 @@ from seahub.forms import SetUserQuotaForm, AddUserForm, BatchAddUserForm, \
     TermsAndConditionsForm
 from seahub.options.models import UserOptions
 from seahub.profile.models import Profile, DetailedProfile
-from seahub.signals import repo_deleted
+from seahub.signals import repo_deleted, institution_deleted
 from seahub.share.models import FileShare, UploadLinkShare
 from seahub.admin_log.signals import admin_operation
 from seahub.admin_log.models import USER_DELETE, USER_ADD
@@ -76,7 +76,7 @@ try:
     from seahub.settings import MULTI_TENANCY
 except ImportError:
     MULTI_TENANCY = False
-from seahub.utils.two_factor_auth import HAS_TWO_FACTOR_AUTH
+from seahub.utils.two_factor_auth import has_two_factor_auth, HAS_TWO_FACTOR_AUTH
 from termsandconditions.models import TermsAndConditions
 
 logger = logging.getLogger(__name__)
@@ -255,6 +255,16 @@ def sys_user_admin(request):
     extra_user_roles = [x for x in get_available_roles()
                         if x not in get_basic_user_roles()]
 
+    multi_institution = getattr(dj_settings, 'MULTI_INSTITUTION', False)
+    show_institution = False
+    institutions = None
+    if multi_institution:
+        show_institution = True
+        institutions = [inst.name for inst in Institution.objects.all()]
+        for user in users:
+            profile = Profile.objects.get_profile_by_user(user.email)
+            user.institution =  profile.institution if profile else ''
+
     return render_to_response(
         'sysadmin/sys_useradmin.html', {
             'users': users,
@@ -272,6 +282,8 @@ def sys_user_admin(request):
             'pro_server': pro_server,
             'enable_user_plan': enable_user_plan,
             'extra_user_roles': extra_user_roles,
+            'show_institution': show_institution,
+            'institutions': institutions,
         }, context_instance=RequestContext(request))
 
 @login_required
@@ -305,69 +317,92 @@ def sys_useradmin_export_excel(request):
                 _("Space Usage") + "(MB)", _("Space Quota") + "(MB)",
                 _("Create At"), _("Last Login"), _("Admin"), _("LDAP(imported)"),]
 
+    # only operate 100 users for every `for` loop
+    looped = 0
+    limit = 100
     data_list = []
 
-    last_logins = UserLastLogin.objects.filter(username__in=[x.email for x in users])
-    for user in users:
+    while looped < len(users):
 
-        # populate name and contact email
-        populate_user_info(user)
+        current_users = users[looped:looped+limit]
 
-        # populate space usage and quota
-        MB = get_file_size_unit('MB')
+        last_logins = UserLastLogin.objects.filter(username__in=[x.email \
+                for x in current_users])
+        user_profiles = Profile.objects.filter(user__in=[x.email \
+                for x in current_users])
 
-        _populate_user_quota_usage(user)
-        if user.space_usage > 0:
-            try:
-                space_usage_MB = round(float(user.space_usage) / MB, 2)
-            except Exception as e:
-                logger.error(e)
-                space_usage_MB = '--'
-        else:
-            space_usage_MB = ''
+        for user in current_users:
+            # populate name and contact email
+            user.contact_email = ''
+            user.name = ''
+            for profile in user_profiles:
+                if profile.user == user.email:
+                    user.contact_email = profile.contact_email
+                    user.name = profile.nickname
 
-        if user.space_quota > 0:
-            try:
-                space_quota_MB = round(float(user.space_quota) / MB, 2)
-            except Exception as e:
-                logger.error(e)
-                space_quota_MB = '--'
-        else:
-            space_quota_MB = ''
+            # populate space usage and quota
+            MB = get_file_size_unit('MB')
 
-        # populate user last login time
-        user.last_login = None
-        for last_login in last_logins:
-            if last_login.username == user.email:
-                user.last_login = last_login.last_login
-
-        if user.is_active:
-            status = _('Active')
-        else:
-            status = _('Inactive')
-
-        create_at = tsstr_sec(user.ctime) if user.ctime else ''
-        last_login = user.last_login.strftime("%Y-%m-%d %H:%M:%S") if \
-            user.last_login else ''
-
-        is_admin = _('Yes') if user.is_staff else ''
-        ldap_import = _('Yes') if user.source == 'LDAPImport' else ''
-
-        if is_pro:
-            if user.role == GUEST_USER:
-                role = _('Guest')
+            _populate_user_quota_usage(user)
+            if user.space_usage > 0:
+                try:
+                    space_usage_MB = round(float(user.space_usage) / MB, 2)
+                except Exception as e:
+                    logger.error(e)
+                    space_usage_MB = '--'
             else:
-                role = _('Default')
+                space_usage_MB = ''
 
-            row = [user.email, user.name, user.contact_email, status, role,
-                    space_usage_MB, space_quota_MB, create_at,
-                    last_login, is_admin, ldap_import]
-        else:
-            row = [user.email, user.name, user.contact_email, status,
-                    space_usage_MB, space_quota_MB, create_at,
-                    last_login, is_admin, ldap_import]
+            if user.space_quota > 0:
+                try:
+                    space_quota_MB = round(float(user.space_quota) / MB, 2)
+                except Exception as e:
+                    logger.error(e)
+                    space_quota_MB = '--'
+            else:
+                space_quota_MB = ''
 
-        data_list.append(row)
+            # populate user last login time
+            user.last_login = None
+            for last_login in last_logins:
+                if last_login.username == user.email:
+                    user.last_login = last_login.last_login
+
+            if user.is_active:
+                status = _('Active')
+            else:
+                status = _('Inactive')
+
+            create_at = tsstr_sec(user.ctime) if user.ctime else ''
+            last_login = user.last_login.strftime("%Y-%m-%d %H:%M:%S") if \
+                user.last_login else ''
+
+            is_admin = _('Yes') if user.is_staff else ''
+            ldap_import = _('Yes') if user.source == 'LDAPImport' else ''
+
+            if is_pro:
+                if user.role:
+                    if user.role == GUEST_USER:
+                        role = _('Guest')
+                    elif user.role == DEFAULT_USER:
+                        role = _('Default')
+                    else:
+                        role = user.role
+                else:
+                    role = _('Default')
+
+                row = [user.email, user.name, user.contact_email, status, role,
+                        space_usage_MB, space_quota_MB, create_at,
+                        last_login, is_admin, ldap_import]
+            else:
+                row = [user.email, user.name, user.contact_email, status,
+                        space_usage_MB, space_quota_MB, create_at,
+                        last_login, is_admin, ldap_import]
+
+            data_list.append(row)
+
+        # update `looped` value when `for` loop finished
+        looped += limit
 
     wb = write_xls('users', head, data_list)
     if not wb:
@@ -408,11 +443,28 @@ def sys_user_admin_ldap_imported(request):
         populate_user_info(user)
         _populate_user_quota_usage(user)
 
+        # check user's role
+        user.is_guest = True if get_user_role(user) == GUEST_USER else False
+        user.is_default = True if get_user_role(user) == DEFAULT_USER else False
+
         # populate user last login time
         user.last_login = None
         for last_login in last_logins:
             if last_login.username == user.email:
                 user.last_login = last_login.last_login
+
+    extra_user_roles = [x for x in get_available_roles()
+                        if x not in get_basic_user_roles()]
+
+    multi_institution = getattr(dj_settings, 'MULTI_INSTITUTION', False)
+    show_institution = False
+    institutions = None
+    if multi_institution:
+        show_institution = True
+        institutions = [inst.name for inst in Institution.objects.all()]
+        for user in users:
+            profile = Profile.objects.get_profile_by_user(user.email)
+            user.institution =  profile.institution if profile else ''
 
     return render_to_response(
         'sysadmin/sys_user_admin_ldap_imported.html', {
@@ -423,6 +475,11 @@ def sys_user_admin_ldap_imported(request):
             'per_page': per_page,
             'page_next': page_next,
             'is_pro': is_pro_version(),
+            'extra_user_roles': extra_user_roles,
+            'default_user': DEFAULT_USER,
+            'guest_user': GUEST_USER,
+            'show_institution': show_institution,
+            'institutions': institutions,
         }, context_instance=RequestContext(request))
 
 @login_required
@@ -639,6 +696,13 @@ def user_info(request, email):
         else:
             g.role = _('Member')
 
+    _default_device = False
+    _has_two_factor_auth = has_two_factor_auth()
+    if _has_two_factor_auth:
+        from seahub_extra.two_factor.utils import default_device
+        _user = User.objects.get(email=email)
+        _default_device = default_device(_user)
+
     return render_to_response(
         'sysadmin/userinfo.html', {
             'owned_repos': owned_repos,
@@ -652,6 +716,8 @@ def user_info(request, email):
             'user_shared_links': user_shared_links,
             'enable_sys_admin_view_repo': ENABLE_SYS_ADMIN_VIEW_REPO,
             'personal_groups': personal_groups,
+            'two_factor_auth_enabled': _has_two_factor_auth,
+            'default_device': _default_device,
         }, context_instance=RequestContext(request))
 
 @login_required_ajax
@@ -877,10 +943,10 @@ def user_toggle_status(request, email):
             return HttpResponse(json.dumps({'success': True,
                                             'email_sent': email_sent,
                                             }), content_type=content_type)
-        else:
-            clear_token(user.email)
+
         return HttpResponse(json.dumps({'success': True}),
                             content_type=content_type)
+
     except User.DoesNotExist:
         return HttpResponse(json.dumps({'success': False}), status=500,
                             content_type=content_type)
@@ -940,7 +1006,6 @@ def user_reset(request, email):
         user.set_password(new_password)
         user.save()
 
-        clear_token(user.username)
         if config.FORCE_PASSWORD_CHANGE:
             UserOptions.objects.set_force_passwd_change(user.username)
 
@@ -2093,6 +2158,44 @@ def sys_inst_admin(request):
 @login_required
 @sys_staff_required
 @require_POST
+def sys_inst_add_user(request, inst_id):
+    content_type = 'application/json; charset=utf-8'
+
+    emails = request.POST.get('emails', '')
+    email_list = [em.strip() for em in emails.split(',') if em.strip()]
+    if len(email_list) == 0:
+        return HttpResponse(json.dumps({'error': "Emails can't be empty"}),
+                status=400)
+    try:
+        inst = Institution.objects.get(pk=inst_id)
+    except Institution.DoesNotExist:
+        return HttpResponse(json.dumps({'error': "Institution does not exist"}),
+                status=400)
+
+    for email in email_list:
+        try:
+            User.objects.get(email=email)
+        except Exception as e:
+            messages.error(request, u'Failed to add %s to the institution: user does not exist.' % email)
+            continue
+
+        profile = Profile.objects.get_profile_by_user(email)
+        if not profile:
+            profile = Profile.objects.add_or_update(email, email)
+        if profile.institution:
+            messages.error(request, _(u"Failed to add %s to the institution: user already belongs to an institution") % email)
+            continue
+        else:
+            profile.institution = inst.name
+        profile.save()
+        messages.success(request, _(u'Successfully added %s to the institution.') % email)
+
+    return HttpResponse(json.dumps({'success': True}),
+            content_type=content_type)
+
+@login_required
+@sys_staff_required
+@require_POST
 def sys_inst_remove(request, inst_id):
     """Delete an institution.
     """
@@ -2101,7 +2204,9 @@ def sys_inst_remove(request, inst_id):
     except Institution.DoesNotExist:
         raise Http404
 
+    inst_name = inst.name
     inst.delete()
+    institution_deleted.send(sender=None, inst_name = inst_name)
     messages.success(request, _('Success'))
 
     return HttpResponseRedirect(reverse('sys_inst_admin'))

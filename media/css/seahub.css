@@ -190,6 +190,7 @@
 .sf2-icon-unlock:before { content: "\e02d"; }
 .sf2-icon-admin-log:before { content: "\e02e"; }
 .sf2-icon-info:before { content: "\e02f"; }
+.sf2-icon-logout:before { content: "\e030"; }
 
 /******* tags **********/
 body,
@@ -1822,6 +1823,12 @@ button.sf-dropdown-toggle:focus {
     text-decoration:underline;
 }
 /* top-bar */
+#logout-icon {
+    margin:10px 0 0 25px;
+    font-size:22px;
+    line-height:1;
+    color:#999;
+}
 #notifications {
     position:relative;
     margin:10px 0 0 25px;
@@ -3932,6 +3939,7 @@ img.thumbnail {
     width:800px;
     overflow:auto;
 }
+
 /* tags in detail panel */
 .tags-label {
     vertical-align: top;
@@ -3943,6 +3951,7 @@ img.thumbnail {
     margin:0 8px 8px 0;
     white-space:nowrap; /* for snapshot label */
 }
+
 /* sysadmin statistic */
 .system-statistic-time-range {
     margin: 15px 0 25px;
@@ -3960,4 +3969,14 @@ img.thumbnail {
 }
 .date-custom-form .submit {
     margin-left:5px;
+}
+
+/* system info */
+.license-file-upload {
+    margin-top:5px;
+    position:relative;
+    overflow:hidden;
+}
+.license-file-upload-btn {
+    white-space:nowrap;
 }

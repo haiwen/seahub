@@ -7,7 +7,7 @@ from rest_framework.response import Response
 from rest_framework.views import APIView
 from rest_framework import status
 
-from .utils import check_time_period_valid
+from seahub.api2.endpoints.utils import check_time_period_valid
 from seahub.base.templatetags.seahub_tags import email2nickname
 from seahub.utils.timeutils import datetime_to_isoformat_timestr
 from seahub.utils import is_pro_version

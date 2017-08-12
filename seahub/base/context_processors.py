@@ -18,7 +18,7 @@ from seahub.settings import SEAFILE_VERSION, SITE_TITLE, SITE_NAME, \
     MAX_FILE_NAME, BRANDING_CSS, LOGO_PATH, LOGO_WIDTH, LOGO_HEIGHT,\
     SHOW_REPO_DOWNLOAD_BUTTON, SITE_ROOT, ENABLE_GUEST_INVITATION, \
     FAVICON_PATH, ENABLE_THUMBNAIL, THUMBNAIL_SIZE_FOR_ORIGINAL, \
-    MEDIA_ROOT
+    MEDIA_ROOT, SHOW_LOGOUT_ICON
 
 try:
     from seahub.settings import SEACLOUD_MODE
@@ -112,5 +112,6 @@ def base(request):
         'thumbnail_size_for_original': THUMBNAIL_SIZE_FOR_ORIGINAL,
         'enable_guest_invitation': ENABLE_GUEST_INVITATION,
         'enable_terms_and_conditions': dj_settings.ENABLE_TERMS_AND_CONDITIONS,
+        'show_logout_icon': SHOW_LOGOUT_ICON,
         'is_pro': True if is_pro_version() else False,
         }

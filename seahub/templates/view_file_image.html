@@ -24,7 +24,7 @@ body { overflow:hidden; }
 {% block extra_script %}{{ block.super }}
 
 <script type="text/javascript">
-{% if enable_thumbnail and not repo.encrypted %}
+{% if enable_thumbnail and not repo.encrypted and fileext != 'gif' %}
     var encoded_path = encodePath('{{ path|escapejs }}'); // path: '/Portrait_8.jpg'
     $('#image-view')
     .attr('src', '{{ SITE_ROOT }}thumbnail/{{ repo.id }}/{{ thumbnail_size_for_original }}' + encoded_path)

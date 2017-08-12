@@ -9,3 +9,4 @@ comment_file_successful = django.dispatch.Signal(providing_args=["repo", "file_p
 rename_dirent_successful = django.dispatch.Signal(providing_args=["src_repo_id", "src_parent_dir",
                                                                   "src_filename", "dst_repo_id",
                                                                   "dst_parent_dir", "dst_filename", "is_dir"])
+institution_deleted = django.dispatch.Signal(providing_args=["inst_name"])

@@ -15,7 +15,7 @@ from seahub.api2.permissions import IsProVersion
 from seahub.api2.utils import api_error
 from seahub.api2.throttling import UserRateThrottle
 from seahub.api2.authentication import TokenAuthentication
-from seahub.api2.endpoints.admin.utils import generate_links_header_for_paginator
+from seahub.api2.endpoints.utils import generate_links_header_for_paginator
 
 logger = logging.getLogger(__name__)
 
