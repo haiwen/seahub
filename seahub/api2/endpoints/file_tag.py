@@ -11,8 +11,8 @@ from django.utils.translation import ugettext_lazy as _
 
 from seahub.api2.authentication import TokenAuthentication
 from seahub.api2.throttling import UserRateThrottle
-from seahub.api2.utils import api_error, user_to_dict
-from seahub.tags.models import FileUUIDMap, FileTag, Tags
+from seahub.api2.utils import api_error
+from seahub.tags.models import FileTag
 from seahub.views import check_folder_permission
 
 from seaserv import seafile_api
