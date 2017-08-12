@@ -1,6 +1,5 @@
 # Copyright (c) 2012-2016 Seafile Ltd.
 # encoding: utf-8
-from constance import config
 from django.conf import settings
 import json
 from django.core.urlresolvers import reverse
@@ -15,7 +14,6 @@ from seaserv import seafile_api
 
 from forms import DetailedProfileForm
 from models import Profile, DetailedProfile
-from utils import refresh_cache
 from seahub.auth.decorators import login_required
 from seahub.utils import is_org_context, is_pro_version, is_valid_username
 from seahub.base.accounts import User
@@ -53,9 +51,11 @@ def edit_profile(request):
             init_dict['nickname'] = profile.nickname
             init_dict['login_id'] = profile.login_id
             init_dict['contact_email'] = profile.contact_email
+            init_dict['list_in_address_book'] = profile.list_in_address_book
         if d_profile:
             init_dict['department'] = d_profile.department
             init_dict['telephone'] = d_profile.telephone
+
         form = form_class(init_dict)
 
     # common logic
@@ -81,6 +81,7 @@ def edit_profile(request):
             'server_crypto': server_crypto,
             "sub_lib_enabled": sub_lib_enabled,
             'force_server_crypto': settings.FORCE_SERVER_CRYPTO,
+            'ENABLE_ADDRESSBOOK_OPT_IN': settings.ENABLE_ADDRESSBOOK_OPT_IN,
             'default_repo': default_repo,
             'owned_repos': owned_repos,
             'is_pro': is_pro_version(),

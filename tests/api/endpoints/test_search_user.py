@@ -17,6 +17,7 @@ class SearchUserTest(BaseTestCase):
         self.endpoint = reverse('search-user')
 
     @override_settings(CLOUD_MODE = False)
+    @override_settings(ENABLE_ADDRESSBOOK_OPT_IN = False)
     def test_can_search(self):
         email = self.admin.email
         nickname = 'admin_test'
@@ -35,7 +36,37 @@ class SearchUserTest(BaseTestCase):
         assert json_resp['users'][0]['name'] == nickname
         assert json_resp['users'][0]['contact_email'] == contact_email
 
+    @override_settings(ENABLE_ADDRESSBOOK_OPT_IN = True)
+    def test_search_when_enable_addressbook_opt_in(self):
+        email = self.admin.email
+        nickname = 'admin_test'
+        contact_email= 'new_admin_test@test.com'
+        p = Profile.objects.add_or_update(email, nickname=nickname)
+        p.contact_email = contact_email
+        p.save()
+
+        resp = self.client.get(self.endpoint + '?q=' + email)
+        json_resp = json.loads(resp.content)
+
+        self.assertEqual(200, resp.status_code)
+        assert json_resp['users'] is not None
+        assert len(json_resp['users']) == 0
+
+        p.list_in_address_book = True
+        p.save()
+
+        resp = self.client.get(self.endpoint + '?q=' + email)
+        json_resp = json.loads(resp.content)
+
+        self.assertEqual(200, resp.status_code)
+        assert json_resp['users'] is not None
+        assert json_resp['users'][0]['email'] == email
+        assert json_resp['users'][0]['avatar_url'] is not None
+        assert json_resp['users'][0]['name'] == nickname
+        assert json_resp['users'][0]['contact_email'] == contact_email
+
     @override_settings(CLOUD_MODE = False)
+    @override_settings(ENABLE_ADDRESSBOOK_OPT_IN = False)
     def test_search_myself(self):
         email = self.user.email
         nickname = 'user_test'
@@ -55,6 +86,7 @@ class SearchUserTest(BaseTestCase):
         assert json_resp['users'][0]['contact_email'] == contact_email
 
     @override_settings(CLOUD_MODE = False)
+    @override_settings(ENABLE_ADDRESSBOOK_OPT_IN = False)
     def test_search_without_myself(self):
         email = self.user.email
         resp = self.client.get(self.endpoint + '?include_self=0&q=' + email)
@@ -64,6 +96,7 @@ class SearchUserTest(BaseTestCase):
         assert len(json_resp['users']) == 0
 
     @override_settings(CLOUD_MODE = False)
+    @override_settings(ENABLE_ADDRESSBOOK_OPT_IN = False)
     def test_search_unregistered_user(self):
         resp = self.client.get(self.endpoint + '?q=unregistered_user@seafile.com')
         json_resp = json.loads(resp.content)
@@ -72,6 +105,7 @@ class SearchUserTest(BaseTestCase):
         assert len(json_resp['users']) == 0
 
     @override_settings(CLOUD_MODE = False)
+    @override_settings(ENABLE_ADDRESSBOOK_OPT_IN = False)
     def test_can_search_by_nickname(self):
         admin_email = self.admin.email
 
@@ -92,6 +126,7 @@ class SearchUserTest(BaseTestCase):
         assert json_resp['users'][0]['contact_email'] == 'new_mail@test.com'
 
     @override_settings(CLOUD_MODE = False)
+    @override_settings(ENABLE_ADDRESSBOOK_OPT_IN = False)
     def test_can_search_by_nickname_insensitive(self):
         admin_email = self.admin.email
 
@@ -124,6 +159,7 @@ class SearchUserTest(BaseTestCase):
         assert json_resp['users'][0]['contact_email'] == 'new_mail@test.com'
 
     @override_settings(CLOUD_MODE = False)
+    @override_settings(ENABLE_ADDRESSBOOK_OPT_IN = False)
     def test_can_search_by_contact_email(self):
         admin_email = self.admin.email
         nickname = 'admin_test'
@@ -146,6 +182,7 @@ class SearchUserTest(BaseTestCase):
 
     @override_settings(CLOUD_MODE = True)
     @override_settings(ENABLE_GLOBAL_ADDRESSBOOK = False)
+    @override_settings(ENABLE_ADDRESSBOOK_OPT_IN = False)
     @patch('seahub.api2.endpoints.search_user.is_org_context')
     def test_search_full_email(self, mock_is_org_context):
 
@@ -158,6 +195,7 @@ class SearchUserTest(BaseTestCase):
         assert json_resp['users'][0]['email'] == self.admin.username
 
     @patch.object(SearchUser, '_can_use_global_address_book')
+    @override_settings(ENABLE_ADDRESSBOOK_OPT_IN = False)
     def test_search_when_not_use_global_address_book(self, mock_can_use_global_address_book):
 
         mock_can_use_global_address_book.return_value = False

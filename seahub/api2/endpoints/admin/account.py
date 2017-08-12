@@ -43,6 +43,7 @@ def get_account_info(user):
     info['is_active'] = user.is_active
     info['create_time'] = user.ctime
     info['login_id'] = profile.login_id if profile else ''
+    info['list_in_address_book'] = profile.list_in_address_book if profile else False
     info['total'] = seafile_api.get_user_quota(email)
     info['usage'] = seafile_api.get_user_self_usage(email)
 
@@ -106,13 +107,23 @@ class Account(APIView):
 
     def _update_account_additional_info(self, request, email):
 
-        # update account profile
+        # update account name
         name = request.data.get("name", None)
         if name is not None:
             profile = Profile.objects.get_profile_by_user(email)
             if profile is None:
                 profile = Profile(user=email)
             profile.nickname = name
+            profile.save()
+
+        # update account list_in_address_book
+        list_in_address_book = request.data.get("list_in_address_book", None)
+        if list_in_address_book is not None:
+            profile = Profile.objects.get_profile_by_user(email)
+            if profile is None:
+                profile = Profile(user=email)
+
+            profile.list_in_address_book = list_in_address_book.lower() == 'true'
             profile.save()
 
         # update account loginid
@@ -185,6 +196,13 @@ class Account(APIView):
             if "/" in name:
                 return api_error(status.HTTP_400_BAD_REQUEST,
                         _(u"Name should not include '/'."))
+
+        # argument check for list_in_address_book
+        list_in_address_book = request.data.get("list_in_address_book", None)
+        if list_in_address_book is not None:
+            if list_in_address_book.lower() not in ('true', 'false'):
+                return api_error(status.HTTP_400_BAD_REQUEST,
+                        'list_in_address_book invalid')
 
         #argument check for loginid
         loginid = request.data.get("login_id", None)
