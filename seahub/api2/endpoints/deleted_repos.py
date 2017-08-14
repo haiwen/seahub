@@ -62,7 +62,7 @@ class DeletedRepos(APIView):
             return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
         owner = seafile_api.get_trash_repo_owner(repo_id)
         if owner is None:
-            error_msg = "repo does not in trash."
+            error_msg = "Library does not exist in trash."
             return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
         if owner != username:
             return api_error(status.HTTP_403_FORBIDDEN, 'Permission denied.')
