@@ -176,19 +176,19 @@ function renderChart(data, group_by) {
             labels: labels,
             datasets: [
                 {
-                    label: "{% trans "Visited" %}",
+                    label: "{% trans "Visited" context "files visited" %}",
                     data: visited,
                     borderColor: '#fd913a',
                     backgroundColor: '#fd913a'
                 },
                 {
-                    label: "{% trans "Added" %}",
+                    label: "{% trans "Added" context "files added" %}",
                     data: added,
                     borderColor: '#57cd6b',
                     backgroundColor: '#57cd6b'
                 },
                 {
-                    label: "{% trans "Deleted" %}",
+                    label: "{% trans "Deleted" context "files deleted" %}",
                     data: deleted,
                     borderColor: '#f75356',
                     backgroundColor: '#f75356'

@@ -132,7 +132,7 @@
         <dd><%- total_devices_count %> / <%- current_connected_devices_count %></dd>
 
         <% if (is_pro) { %>
-        <dt>{% trans "Active Users" %} / {% trans "Total Users" %} / {% trans "Limits" %}</dt>
+        <dt>{% trans "Activated Users" %} / {% trans "Total Users" %} / {% trans "Limits" %}</dt>
         <dd>
             <%- active_users_count %>
             /
@@ -145,7 +145,7 @@
             <% } %>
         </dd>
         <% } else { %>
-        <dt>{% trans "Active Users" %} / {% trans "Total Users" %}</dt>
+        <dt>{% trans "Activated Users" %} / {% trans "Total Users" %}</dt>
         <dd>
             <%- active_users_count %>
             /
