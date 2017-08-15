@@ -20,7 +20,12 @@ define([
         },
 
         events: {
+            'click .license-file-upload-btn': 'uploadFile',
             'change .license-file-upload-input': 'uploadLicenseFile'
+        },
+
+        uploadFile: function() {
+            this.$('.license-file-upload-input').trigger('click');
         },
 
         uploadLicenseFile: function() {
@@ -92,22 +97,11 @@ define([
             this.showSysinfo();
         },
 
-        setLicenceUploadUI: function() {
-            var $btn = this.$('.license-file-upload-btn');
-            this.$('.license-file-upload').css({
-                'width': $btn.outerWidth()
-            });
-            this.$('.license-file-upload-input').css({
-                'height': $btn.outerHeight()
-            });
-        },
-
         reset: function() {
             this.$loadingTip.hide();
             var json_data = this.sysinfo.toJSON();
             json_data['formatted_storage'] = Common.quotaSizeFormat(json_data['total_storage'], 1)
             this.$sysinfo.html(this.conTemplate(json_data));
-            this.setLicenceUploadUI();
         }
 
     });

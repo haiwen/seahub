@@ -30,9 +30,9 @@
     <h3>{% trans "Profile Setting" %}</h3>
     <div id="user-avatar-change">
         <label>{% trans "Avatar:" %}</label>{% avatar request.user.username 80 %}
-        <form id="user-avatar-form" enctype="multipart/form-data" method="post" action="{% url 'avatar_add' %}" class="ovhd">{% csrf_token %}
+        <form id="user-avatar-form" enctype="multipart/form-data" method="post" action="{% url 'avatar_add' %}">{% csrf_token %}
             <button type="button" id="user-avatar-chg-btn">{% trans "Change" %}</button>
-            <input type="file" name="avatar" id="user-avatar-input" />
+            <input type="file" name="avatar" id="user-avatar-input" class="hide" />
         </form>
     </div>
 
@@ -151,11 +151,52 @@
 {% block extra_script %}
 {% include 'snippets/avatar_upload_js.html' %}
 <script type="text/javascript">
-var cur_avatar = $('#user-avatar-change .avatar');
-$('#user-avatar-form').css({'left':cur_avatar.position().left + cur_avatar.outerWidth() + 10});
+// change avatar
+$('#user-avatar-chg-btn').click(function() {
+    $('#user-avatar-input').trigger('click');
+});
+$('#user-avatar-input').change(function() {
+    // check file extension
+    var file, filename, ext;
+    var allow = false;
+    var allowed_ext = ['jpg','jpeg', 'png', 'gif'];
+    if (this.files) { // IE: version lower than 10 doesn't have 'files'
+        file = this.files[0];
+        filename = file.name || file.fileName;
+    } else {
+        filename = this.value;
+    }
+    if (filename.lastIndexOf('.') != -1) { // ext exists
+        ext = filename.substr((filename.lastIndexOf('.') + 1)).toLowerCase();
+    }
+    if (ext) {
+        for (var i = 0, len = allowed_ext.length; i < len; i++) {
+            if (ext == allowed_ext[i]) {
+                allow = true;
+                break;
+            }
+        }
+    } else {
+        feedback(filename + "{% trans " is not supported. Please choose an image file." %}", 'error');
+        return false;
+    }
+
+    if (!allow) {
+        var err_msg = filename + "{% trans " is not supported. File extensions can only be " %}" + allowed_ext.join(', ');
+        feedback(err_msg, 'error');
+        return false;
+    }
+
+    // check if file size is less than 1MB
+    if (file && file.size > 1024*1024) {
+        feedback(filename + "{% trans " is too large. Allowed maximum size is 1MB." %}", 'error');
+        return false;
+    }
+
+    $('#user-avatar-form').submit();
+});
 
 $('#user-basic-info .submit').css({'margin-left': $('#user-basic-info label').outerWidth(true)});
-changeAvatar($('#user-avatar-chg-btn'), $('#user-avatar-input'), $('#user-avatar-form'));
 
 $('#account-delete-btn').click(function () {
     var title = "{% trans "Delete Account" %}",

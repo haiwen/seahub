@@ -2245,12 +2245,10 @@ button.sf-dropdown-toggle:focus {
 #user-basic-info .avatar {
     margin-bottom:8px;
 }
-#user-avatar-change {
-    position:relative;
-}
 #user-avatar-form {
-    position:absolute;
-    top:5px;
+    display:inline-block;
+    vertical-align:text-top;
+    margin-left:10px;
 }
 #repo-file-list {
     margin-bottom:100px;
@@ -2700,7 +2698,6 @@ button.sf-dropdown-toggle:focus {
     background-color:#fff;
     background-position:0 -207px;
 }
-#user-avatar-input,
 #upload-file-form .files-add input {
     cursor:pointer;
     position: absolute;
@@ -2708,9 +2705,6 @@ button.sf-dropdown-toggle:focus {
     margin: 0;
     opacity: 0;
     filter: alpha(opacity=0);
-}
-#user-avatar-input {
-    right:0;
 }
 #upload-file-form .MultiFile-label {
     padding:4px 0;
@@ -3690,15 +3684,6 @@ img.thumbnail {
     right:0;
     top:0;
 }
-.transparent-file-input {
-    position:absolute;
-    top:0;
-    right:0;
-    cursor:pointer;
-    margin:0;
-    opacity:0;
-    filter:alpha(opacity=0);
-}
 .web-setting-cur-img {
     margin-bottom:5px;
 }
@@ -3979,9 +3964,4 @@ img.thumbnail {
 /* system info */
 .license-file-upload {
     margin-top:5px;
-    position:relative;
-    overflow:hidden;
-}
-.license-file-upload-btn {
-    white-space:nowrap;
 }

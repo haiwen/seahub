@@ -113,8 +113,8 @@
                     {% trans "expires on" %} <%- license_expiration %>
                 <% } %>
                 <div class="license-file-upload">
-                    <input type="file" name="license" class="license-file-upload-input transparent-file-input" />
                     <button type="button" class="license-file-upload-btn">{% trans "Upload licence" %}</button>
+                    <input type="file" name="license" class="license-file-upload-input hide" />
                 </div>
             <% } else { %>
             {% trans "Community Edition" %}
