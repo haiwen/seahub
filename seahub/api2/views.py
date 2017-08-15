@@ -130,6 +130,7 @@ json_content_type = 'application/json; charset=utf-8'
 # Define custom HTTP status code. 4xx starts from 440, 5xx starts from 520.
 HTTP_440_REPO_PASSWD_REQUIRED = 440
 HTTP_441_REPO_PASSWD_MAGIC_REQUIRED = 441
+HTTP_443_ABOVE_QUOTA = 443
 HTTP_520_OPERATION_FAILED = 520
 
 ########## Test
@@ -1216,7 +1217,7 @@ class FileBlockDownloadLinkView(APIView):
                     'You do not have permission to access this repo.')
 
         if check_quota(repo_id) < 0:
-            return api_error(HTTP_520_OPERATION_FAILED, 'Above quota')
+            return api_error(HTTP_443_ABOVE_QUOTA, 'Above quota')
 
         token = seafile_api.get_fileserver_access_token(
                 repo_id, file_id, 'downloadblks', request.user.username)
@@ -1252,7 +1253,7 @@ class UploadLinkView(APIView):
                     'You do not have permission to access this folder.')
 
         if check_quota(repo_id) < 0:
-            return api_error(HTTP_520_OPERATION_FAILED, 'Above quota')
+            return api_error(HTTP_443_ABOVE_QUOTA, 'Above quota')
 
         token = seafile_api.get_fileserver_access_token(repo_id,
                 'dummy', 'upload', request.user.username, use_onetime=False)
@@ -1296,7 +1297,7 @@ class UpdateLinkView(APIView):
                     'You do not have permission to access this folder.')
 
         if check_quota(repo_id) < 0:
-            return api_error(HTTP_520_OPERATION_FAILED, 'Above quota')
+            return api_error(HTTP_443_ABOVE_QUOTA, 'Above quota')
 
         token = seafile_api.get_fileserver_access_token(repo_id,
                 'dummy', 'update', request.user.username)
@@ -1340,7 +1341,7 @@ class UploadBlksLinkView(APIView):
                     'You do not have permission to access this folder.')
 
         if check_quota(repo_id) < 0:
-            return api_error(HTTP_520_OPERATION_FAILED, 'Above quota')
+            return api_error(HTTP_443_ABOVE_QUOTA, 'Above quota')
 
         token = seafile_api.get_fileserver_access_token(repo_id,
                 'dummy', 'upload-blks-api', request.user.username, use_onetime=False)
@@ -1385,7 +1386,7 @@ class UploadBlksLinkView(APIView):
                     'You do not have permission to access this folder.')
 
         if check_quota(repo_id) < 0:
-            return api_error(HTTP_520_OPERATION_FAILED, 'Above quota')
+            return api_error(HTTP_443_ABOVE_QUOTA, 'Above quota')
 
         token = seafile_api.get_fileserver_access_token(repo_id,
                 'dummy', 'upload', request.user.username, use_onetime=False)
@@ -1433,7 +1434,7 @@ class UpdateBlksLinkView(APIView):
                     'You do not have permission to access this folder.')
 
         if check_quota(repo_id) < 0:
-            return api_error(HTTP_520_OPERATION_FAILED, 'Above quota')
+            return api_error(HTTP_443_ABOVE_QUOTA, 'Above quota')
 
         token = seafile_api.get_fileserver_access_token(repo_id,
                 'dummy', 'update-blks-api', request.user.username, use_onetime=False)
