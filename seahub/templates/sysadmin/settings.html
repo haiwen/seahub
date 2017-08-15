@@ -258,21 +258,9 @@ $('.web-input-setting-form, .web-textarea-setting-form').submit(function() {
 });
 
 
-$('.web-setting-file-upload').each(function(index, item) {
-    var $this = $(item);
-    var $btn = $('.web-setting-file-upload-btn', $this);
-    $this.css({
-        'width': $btn.outerWidth(),
-        'overflow': 'hidden'
-    });
-});
-$('.web-setting-file-upload-input').each(function(index, item) {
-    var $this = $(item);
-    var $btn = $this.next('.web-setting-file-upload-btn');
-    $this.css({
-        // don't set width here, to make `cursor:pointer;` work
-        'height': $btn.outerHeight()
-    });
+$('.web-setting-file-upload-btn').click(function() {
+    var $container = $(this).closest('.web-setting-file-upload');
+    $('.web-setting-file-upload-input', $container).trigger('click');
 });
 
 $('.web-setting-file-upload-input').change(function() {
