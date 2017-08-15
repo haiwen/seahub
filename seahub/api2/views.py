@@ -2209,8 +2209,13 @@ class FileView(APIView):
             if not newname:
                 return api_error(status.HTTP_400_BAD_REQUEST,
                                  'New name is missing')
+
             if len(newname) > settings.MAX_UPLOAD_FILE_NAME_LEN:
                 return api_error(status.HTTP_400_BAD_REQUEST, 'New name is too long')
+
+            if not seafile_api.is_valid_filename('fake_repo_id', newname):
+                error_msg = 'File name invalid.'
+                return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
 
             oldname = os.path.basename(path)
             if oldname == newname:
@@ -2337,6 +2342,11 @@ class FileView(APIView):
                                  'You do not have permission to create file.')
 
             new_file_name = os.path.basename(path)
+
+            if not seafile_api.is_valid_filename('fake_repo_id', new_file_name):
+                error_msg = 'File name invalid.'
+                return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
+
             new_file_name = check_filename_with_rename(repo_id, parent_dir, new_file_name)
 
             try:
@@ -2790,6 +2800,11 @@ class DirView(APIView):
 
         if operation.lower() == 'mkdir':
             new_dir_name = os.path.basename(path)
+
+            if not seafile_api.is_valid_filename('fake_repo_id', new_dir_name):
+                error_msg = 'Folder name invalid.'
+                return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
+
             create_parents = request.POST.get('create_parents', '').lower() in ('true', '1')
             if not create_parents:
                 # check whether parent dir exists
