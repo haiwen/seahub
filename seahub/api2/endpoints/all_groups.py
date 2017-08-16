@@ -1,5 +1,4 @@
 # Copyright (c) 2011-2016 Seafile Ltd.
-from django.conf import settings
 from rest_framework.authentication import SessionAuthentication
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
@@ -12,6 +11,8 @@ from seahub.api2.throttling import UserRateThrottle
 from seahub.api2.endpoints.groups import get_group_info
 from seahub.avatar.settings import GROUP_AVATAR_DEFAULT_SIZE
 
+from constance import config
+
 
 class AllGroupsView(APIView):
     authentication_classes = (TokenAuthentication, SessionAuthentication)
@@ -21,7 +22,7 @@ class AllGroupsView(APIView):
     def get(self, request):
         """List all groups
         """
-        if settings.ENABLE_SHARE_TO_ALL_GROUPS:
+        if config.ENABLE_SHARE_TO_ALL_GROUPS:
             groups_list = ccnet_api.get_all_groups(-1, -1)
         else:
             return Response([])
