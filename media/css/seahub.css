@@ -2823,7 +2823,7 @@ button.sf-dropdown-toggle:focus {
     border:1px solid #eee;
     width:auto;
     height:auto;
-    max-width:100%;
+    max-width:calc(100% - 4px);
     max-height:calc(100% - 4px);
     font-size:0;
     line-height:0;
@@ -2888,7 +2888,7 @@ button.sf-dropdown-toggle:focus {
 }
 .pdf-page {
     display:block;
-    max-width:950px;
+    max-width:100%;
     margin:0 auto 20px;
 }
 #doc-view {

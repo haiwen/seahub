@@ -7,6 +7,22 @@
 
 {% block extra_style %}
 <link rel="stylesheet" type="text/css" href="{{ MEDIA_URL }}css/file_view_extra.css" />
+<style type="text/css">
+#view-hd {
+    width:100%;
+    padding:0 15px;
+}
+#file-view {
+    border-right:4px solid transparent;
+    -webkit-transition: margin-right 0.3s ease;
+    -moz-transition: margin-right 0.3s ease;
+    transition: margin-right 0.3s ease;
+}
+#file-discussions {
+    box-shadow:none;
+    border-top:1px solid #ededed;
+}
+</style>
 {% endblock %}
 
 {% block header_css_class %}hide{% endblock %}
@@ -256,11 +272,11 @@ $(window).load(setToolbarPos).resize(setToolbarPos);
 {% elif filetype == 'Image' and not err %}
 {% else %}
 function setFileViewAreaHeight() {
-    $('body').css({'overflow':'auto'});
-    var file_view = $('#file-view').css({'height': 'auto'});
-    if ($(window).height() > file_view.outerHeight(true) + file_view.offset().top) {
-        file_view.outerHeight($(window).height() - file_view.offset().top);
-    }
+    var $fileView = $('#file-view');
+    $('#file-view').css({
+        'max-height': $(window).height() - $fileView.offset().top,
+        'overflow': 'auto'
+    });
 }
 $(window).load(setFileViewAreaHeight).resize(setFileViewAreaHeight);
 {% endif %}
@@ -312,6 +328,7 @@ var fileDiscussions = {
     init: function() {
         var _this = this;
 
+        this.setPosition();
         this.setLocale();
 
         // events
@@ -343,6 +360,10 @@ var fileDiscussions = {
 
     },
 
+    setPosition: function() {
+        this.$el.css({'top': $('#file-view').offset().top});
+    },
+
     setLocale: function() {
         var lang_code = '{{LANGUAGE_CODE}}';
         var m_lang_code;
@@ -372,11 +393,24 @@ var fileDiscussions = {
     show: function() {
         this.render();
         this.$el.css({'right': 0});
+        $('#file-view').css({'margin-right': 400});
+
+        // pdf file view with pdf.js; text file view; #file-view-tip
+        $('#pdf, .CodeMirror, #file-view-tip').css({'width':'auto', 'margin':'0 10px'});
+        // encoding selector
+        $('#file-enc-cont').css({'width': 'auto', 'margin-right':'10px'});
+
         this.setConHeight();
         this.getContent();
     },
 
     hide: function() {
+        $('#file-view').css({'margin-right': 0});
+
+        // pdf file view with pdf.js; text file view; #file-view-tip
+        // encoding selector
+        $('#pdf, .CodeMirror, #file-enc-cont, #file-view-tip').removeAttr('style');
+
         this.$el.css({'right': '-400px'});
         this.$el.empty();
     },
@@ -489,6 +523,7 @@ var fileDiscussions = {
     setConHeight: function() {
         $('.file-discussions-con', this.$el).css({
             'max-height': $(window).height()
+                - this.$el.offset().top
                 - $('.file-discussions-hd', this.$el).outerHeight(true)
                 - $('.file-discussions-footer', this.$el).outerHeight(true)
         });
