@@ -1500,6 +1500,8 @@ def get_dir_entrys_by_id(request, repo, path, dir_id, request_type=None):
             if is_pro_version():
                 entry["is_locked"] = dirent.is_locked
                 entry["lock_owner"] = dirent.lock_owner
+                if dirent.lock_owner:
+                    entry["lock_owner_name"] = email2nickname(dirent.lock_owner)
                 entry["lock_time"] = dirent.lock_time
                 if username == dirent.lock_owner:
                     entry["locked_by_me"] = True
