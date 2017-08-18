@@ -639,17 +639,60 @@ define([
                         $add_item.after(new_item.el);
                     });
 
-                    var groups = app.pageOptions.groups || [];
-                    var g_opts = '';
-                    for (var i = 0, len = groups.length; i < len; i++) {
-                        g_opts += '<option value="' + groups[i].id + '" data-index="' + i + '">' + groups[i].name + '</option>';
+                    var groups = [];
+                    var prepareGroupsSelector = function() {
+                        var g_opts = '';
+                        for (var i = 0, len = groups.length; i < len; i++) {
+                            g_opts += '<option value="' + groups[i].id + '" data-index="' + i + '">' + groups[i].name + '</option>';
+                        }
+                        $('[name="groups"]', $add_item).html(g_opts).select2({
+                            placeholder: gettext("Select groups"),
+                            escapeMarkup: function(m) { return m; }
+                        });
+                    };
+                    if (app.pageOptions.enable_share_to_all_groups) {
+                        $.ajax({
+                            url: Common.getUrl({
+                                name: 'all_groups'
+                            }),
+                            type: 'GET',
+                            dataType: 'json',
+                            cache: false,
+                            success: function(data){
+                                for (var i = 0, len = data.length; i < len; i++) {
+                                    groups.push({
+                                        'id': data[i].id,
+                                        'name': data[i].name
+                                    });
+                                }
+                                groups.sort(function(a, b) {
+                                    return Common.compareTwoWord(a.name, b.name);
+                                });
+                            },
+                            error: function(xhr, textStatus, errorThrown) {
+                                var pre_msg = gettext("Failed to fetch groups:");
+                                var err_msg;
+                                if (xhr.responseText) {
+                                    if (xhr.status == 403) {
+                                        err_msg = gettext("Permission error");
+                                    } else {
+                                        err_msg = xhr.responseJSON.error_msg ? xhr.responseJSON.error_msg : gettext('Error');
+                                    }
+                                } else {
+                                    err_msg = gettext('Please check the network.');
+                                }
+                                $('.error', $panel).html(pre_msg + ' ' + err_msg).show();
+                            },
+                            complete: function() {
+                                prepareGroupsSelector();
+                                $table.removeClass('hide');
+                            }
+                        });
+                    } else {
+                        groups = app.pageOptions.groups || [];
+                        prepareGroupsSelector();
+                        $table.removeClass('hide');
                     }
-                    $('[name="groups"]', $add_item).html(g_opts).select2({
-                        placeholder: gettext("Select groups"),
-                        escapeMarkup: function(m) { return m; }
-                    });
-
-                    $table.removeClass('hide');
                 },
                 error: function(xhr, textStatus, errorThrown) {
                     var err_msg;

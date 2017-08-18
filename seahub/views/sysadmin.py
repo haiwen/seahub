@@ -104,6 +104,27 @@ def sysadmin(request):
             'file_audit_enabled': FILE_AUDIT_ENABLED
             }, context_instance=RequestContext(request))
 
+@login_required
+@sys_staff_required
+def sys_statistic_file(request):
+
+    return render_to_response('sysadmin/sys_statistic_file.html', {
+            }, context_instance=RequestContext(request))
+
+@login_required
+@sys_staff_required
+def sys_statistic_storage(request):
+
+    return render_to_response('sysadmin/sys_statistic_storage.html', {
+            }, context_instance=RequestContext(request))
+
+@login_required
+@sys_staff_required
+def sys_statistic_user(request):
+
+    return render_to_response('sysadmin/sys_statistic_user.html', {
+            }, context_instance=RequestContext(request))
+
 def can_view_sys_admin_repo(repo):
     default_repo_id = get_system_default_repo_id()
     is_default_repo = True if repo.id == default_repo_id else False
@@ -2004,6 +2025,7 @@ def sys_settings(request):
         'USER_PASSWORD_STRENGTH_LEVEL', 'SHARE_LINK_PASSWORD_MIN_LENGTH',
         'ENABLE_USER_CREATE_ORG_REPO', 'FORCE_PASSWORD_CHANGE',
         'LOGIN_ATTEMPT_LIMIT', 'FREEZE_USER_ON_LOGIN_FAILED',
+        'ENABLE_SHARE_TO_ALL_GROUPS'
     ]
 
     if HAS_TWO_FACTOR_AUTH:

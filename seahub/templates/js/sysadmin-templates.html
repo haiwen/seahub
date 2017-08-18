@@ -7,6 +7,11 @@
         <li class="tab<% if (cur_tab == 'dashboard') { %> tab-cur<% } %>">
             <a href="{{ SITE_ROOT }}sysadmin/#dashboard/"><span class="sf2-icon-info"></span>{% trans "Info" %}</a>
         </li>
+        {% if is_pro %}
+        <li class="tab">
+            <a href="{% url "sys_statistic_file" %}"><span class="sf2-icon-histogram"></span>{% trans "Statistic" %}</a>
+        </li>
+        {% endif %}
         <li class="tab<% if (cur_tab == 'devices') { %> tab-cur<% } %>">
             <a href="{{ SITE_ROOT }}sysadmin/#desktop-devices/"><span class="sf2-icon-monitor"></span>{% trans "Devices" %}</a>
         </li>
@@ -42,11 +47,6 @@
         <li class="tab">
             <a href="{{ SITE_ROOT }}sys/publinkadmin/"><span class="sf2-icon-link"></span>{% trans "Links" %}</a>
         </li>
-        {% if traffic_stats_enabled %}
-        <li class="tab">
-            <a href="{{ SITE_ROOT }}sys/trafficadmin/"><span class="sf2-icon-histogram"></span>{% trans "Traffic" %}</a>
-        </li>
-        {% endif %}
         {% if sysadmin_extra_enabled %}
         <li class="tab">
             <a href="{{ SITE_ROOT }}sys/loginadmin/"><span class="sf2-icon-clock"></span>{% trans "Logs" %}</a>
@@ -113,8 +113,8 @@
                     {% trans "expires on" %} <%- license_expiration %>
                 <% } %>
                 <div class="license-file-upload">
-                    <input type="file" name="license" class="license-file-upload-input transparent-file-input" />
                     <button type="button" class="license-file-upload-btn">{% trans "Upload licence" %}</button>
+                    <input type="file" name="license" class="license-file-upload-input hide" />
                 </div>
             <% } else { %>
             {% trans "Community Edition" %}
@@ -132,7 +132,7 @@
         <dd><%- total_devices_count %> / <%- current_connected_devices_count %></dd>
 
         <% if (is_pro) { %>
-        <dt>{% trans "Active Users" %} / {% trans "Total Users" %} / {% trans "Limits" %}</dt>
+        <dt>{% trans "Activated Users" %} / {% trans "Total Users" %} / {% trans "Limits" %}</dt>
         <dd>
             <%- active_users_count %>
             /
@@ -145,7 +145,7 @@
             <% } %>
         </dd>
         <% } else { %>
-        <dt>{% trans "Active Users" %} / {% trans "Total Users" %}</dt>
+        <dt>{% trans "Activated Users" %} / {% trans "Total Users" %}</dt>
         <dd>
             <%- active_users_count %>
             /

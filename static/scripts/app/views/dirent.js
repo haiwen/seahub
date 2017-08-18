@@ -564,8 +564,12 @@ define([
         },
 
         viewDetails: function() {
+            var _this = this;
+
             var file_icon_size = Common.isHiDPI() ? 48 : 24;
             var data = {
+                repo_id: this.dir.repo_id,
+                dir_path: this.dir.path,
                 icon_url: this.model.getIconUrl(file_icon_size),
                 big_icon_url: this.model.getIconUrl(192),
                 dirent: this.model.attributes,
@@ -586,6 +590,40 @@ define([
             var detailsView = this.dirView.direntDetailsView;
             detailsView.show(data);
 
+            if (this.model.get('perm') == 'rw') {
+                this.getTags = function() {
+                    $.ajax({
+                        url: Common.getUrl({
+                            'name': 'tags',
+                            'repo_id': this.dir.repo_id
+                        }),
+                        cache: false,
+                        data: {
+                            'path': Common.pathJoin([this.dir.path, this.model.get('obj_name')]),
+                            'is_dir': this.model.get('is_dir') ? true : false
+                        },
+                        dataType: 'json',
+                        success: function(data) {
+                            detailsView.updateTags(data);
+                        },
+                        error: function(xhr) {
+                            var error_msg;
+                            if (xhr.responseText) {
+                                var parsed_resp = $.parseJSON(xhr.responseText);
+                                error_msg = parsed_resp.error_msg || parsed_resp.detail;
+                            } else {
+                                error_msg = gettext("Failed. Please check the network.");
+                            }
+                            detailsView.updateTags({'error_msg': error_msg});
+                        }
+                    });
+                };
+
+                if (this.model.get('is_file')) {
+                    this.getTags();
+                }
+            }
+
             // fetch other data for dir
             if (this.model.get('is_dir')) {
                 $.ajax({
@@ -604,6 +642,10 @@ define([
                             'file_count': data.file_count,
                             'size': Common.fileSizeFormat(data.size, 1)
                         });
+
+                        if (_this.model.get('perm') == 'rw') {
+                            _this.getTags();
+                        }
                     },
                     error: function(xhr) {
                         var error_msg;

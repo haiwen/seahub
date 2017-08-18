@@ -40,6 +40,6 @@ class AdminLicense(APIView):
             ccnet_api.reload_license()
         except Exception as e:
             logger.error(e)
-            error_msg = 'Interal Server Eerror'
+            error_msg = 'Internal Server Error'
             return api_error(status.HTTP_500_INTERNAL_SERVER_ERROR, error_msg)
         return Response({'success': True}, status=status.HTTP_200_OK)

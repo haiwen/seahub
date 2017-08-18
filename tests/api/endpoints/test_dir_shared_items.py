@@ -1,4 +1,5 @@
 import json
+from mock import patch
 
 from seaserv import seafile_api
 
@@ -195,6 +196,44 @@ class DirSharedItemsTest(BaseTestCase):
         self.assertEqual(200, resp.status_code)
         json_resp = json.loads(resp.content)
         assert 'has been shared to' in json_resp['failed'][0]['error_msg']
+
+    def test_share_to_group_if_not_group_member(self):
+        self.login_as(self.user)
+
+        grp = self.create_group(group_name="test-grp2",
+                                 username=self.admin.username)
+
+        resp = self.client.put(
+            '/api2/repos/%s/dir/shared_items/?p=/' % (self.repo.id),
+            "share_type=group&group_id=%d&permission=rw" % (grp.id),
+            'application/x-www-form-urlencoded',
+        )
+        self.assertEqual(200, resp.status_code)
+        json_resp = json.loads(resp.content)
+        assert len(json_resp['failed']) == 1
+        assert len(json_resp['success']) == 0
+        assert json_resp['failed'][0]['error_msg'] == 'Permission denied.'
+
+    @patch('seahub.api2.endpoints.dir_shared_items.config')
+    def test_share_to_group_if_not_group_member_2(self, mock_settings):
+
+        mock_settings.ENABLE_SHARE_TO_ALL_GROUPS.return_value = True
+
+        self.login_as(self.user)
+
+        grp = self.create_group(group_name="test-grp2",
+                                 username=self.admin.username)
+
+        resp = self.client.put(
+            '/api2/repos/%s/dir/shared_items/?p=/' % (self.repo.id),
+            "share_type=group&group_id=%d&permission=rw" % (grp.id),
+            'application/x-www-form-urlencoded',
+        )
+        self.assertEqual(200, resp.status_code)
+        json_resp = json.loads(resp.content)
+        assert len(json_resp['failed']) == 0
+        assert len(json_resp['success']) == 1
+        assert json_resp['success'][0]['group_info']['id'] == grp.id
 
     def test_share_with_invalid_email(self):
         self.login_as(self.user)

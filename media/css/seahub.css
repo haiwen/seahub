@@ -83,6 +83,7 @@
 .icon-cloud-download:before       { content: "\f0ed"; }
 .icon-download:before             { content: "\f01a"; }
 .icon-trash:before                { content: "\f014"; }
+.icon-refresh:before              { content: "\f021"; }
 .icon-plus:before                 { content: "\f067"; }
 .icon-minus:before                { content: "\f068"; }
 .icon-pencil:before               { content: "\f040"; }
@@ -681,6 +682,13 @@ textarea:-moz-placeholder {/* for FF */
     border-right-width:1px;
     border-top-right-radius:2px;
     border-bottom-right-radius:2px;
+}
+.sf-btn-group-btn:focus {
+    border-color:#c5c5c5;
+}
+.sf-btn-group-btn-cur,
+.sf-btn-group-btn:hover {
+    background:#efefef;
 }
 .sf2-icon-edit.sf-btn-group-btn {
     font-size:20px;
@@ -2012,9 +2020,73 @@ button.sf-dropdown-toggle:focus {
 .captcha {
     float:right;
 }
+#refresh-captcha {
+    margin:10px 3px 0 5px;
+}
 #id_captcha_1 {
     width:auto;
-    margin:3px 0 0;
+    height:36px;
+    padding:2px 10px;
+    border-radius:3px;
+    margin:0;
+}
+.login-panel {
+    background:#f5f6f7;
+    border-radius:3px;
+    padding:20px 60px;
+    width:390px;
+    margin:0 auto;
+    box-shadow:0 0 8px #a7a6a9;
+}
+@media (max-width:389px) {
+    .login-panel {
+        width:100%;
+        padding-left: calc((100% - 270px)/2);
+        padding-right: calc((100% - 270px)/2);
+    }
+}
+.login-panel-logo {
+    display:block;
+    margin:0 auto 20px;
+}
+.login-panel-hd {
+    font-size:18px;
+    font-weight:normal;
+    text-align:center;
+    margin:5px 0 15px;
+}
+.login-panel .input {
+    margin:0;
+    border:1px solid #cdcdcd;
+    padding:2px 10px;
+    height:36px;
+    width:248px;
+    font-size:14px;
+}
+.login-panel .name-input {
+    border-radius: 3px 3px 0 0;
+    border-bottom-width:0;
+}
+.login-panel .passwd-input {
+    border-radius: 0 0 3px 3px;
+    margin-bottom:10px;
+}
+.login-panel .remember {
+    margin:20px 0 10px;
+}
+.login-panel .submit {
+    margin:20px 0 15px;
+    border-width:0;
+    border-radius:4px;
+    width:100%;
+    height:42px;
+    background:#f59f00;
+    color:#f8f9fa;
+    font-size:14px;
+}
+.login-panel-bottom-container {
+    margin-top:10px;
+    text-align:right;
 }
 /*myhome*/
 #quota-bar {
@@ -2173,12 +2245,10 @@ button.sf-dropdown-toggle:focus {
 #user-basic-info .avatar {
     margin-bottom:8px;
 }
-#user-avatar-change {
-    position:relative;
-}
 #user-avatar-form {
-    position:absolute;
-    top:5px;
+    display:inline-block;
+    vertical-align:text-top;
+    margin-left:10px;
 }
 #repo-file-list {
     margin-bottom:100px;
@@ -2628,7 +2698,6 @@ button.sf-dropdown-toggle:focus {
     background-color:#fff;
     background-position:0 -207px;
 }
-#user-avatar-input,
 #upload-file-form .files-add input {
     cursor:pointer;
     position: absolute;
@@ -2636,9 +2705,6 @@ button.sf-dropdown-toggle:focus {
     margin: 0;
     opacity: 0;
     filter: alpha(opacity=0);
-}
-#user-avatar-input {
-    right:0;
 }
 #upload-file-form .MultiFile-label {
     padding:4px 0;
@@ -3594,6 +3660,11 @@ img.thumbnail {
 .web-setting-input .input {
     margin:0;
 }
+.web-setting-input .textarea {
+    box-sizing:content-box;
+    height:95px;
+    margin:0;
+}
 .web-setting-ops {
     width:100px;
     vertical-align:top;
@@ -3612,15 +3683,6 @@ img.thumbnail {
     position:absolute;
     right:0;
     top:0;
-}
-.transparent-file-input {
-    position:absolute;
-    top:0;
-    right:0;
-    cursor:pointer;
-    margin:0;
-    opacity:0;
-    filter:alpha(opacity=0);
 }
 .web-setting-cur-img {
     margin-bottom:5px;
@@ -3867,12 +3929,39 @@ img.thumbnail {
     width:800px;
     overflow:auto;
 }
+
+/* tags in detail panel */
+.tags-label {
+    vertical-align: top;
+}
+.cur-tag {
+    padding:1px 5px;
+    background:#eee;
+    border-radius:3px;
+    margin:0 8px 8px 0;
+    white-space:nowrap; /* for snapshot label */
+}
+
+/* sysadmin statistic */
+.system-statistic-time-range {
+    margin: 15px 0 25px;
+}
+.date-custom-form {
+    margin-left:15px;
+}
+.date-custom-form .input,
+.date-custom-form .submit {
+    margin:0;
+}
+.date-custom-form .input {
+    height:25px;
+    width:75px;
+}
+.date-custom-form .submit {
+    margin-left:5px;
+}
+
 /* system info */
 .license-file-upload {
     margin-top:5px;
-    position:relative;
-    overflow:hidden;
-}
-.license-file-upload-btn {
-    white-space:nowrap;
 }

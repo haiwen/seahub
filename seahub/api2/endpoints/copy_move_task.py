@@ -13,6 +13,7 @@ from django.utils.html import escape
 from seahub.api2.throttling import UserRateThrottle
 from seahub.api2.authentication import TokenAuthentication
 from seahub.api2.utils import api_error
+from seahub.signals import rename_dirent_successful
 
 from seahub.views import check_folder_permission
 from seahub.utils import check_filename_with_rename
@@ -21,6 +22,7 @@ from seahub.settings import MAX_PATH
 from seaserv import seafile_api
 
 logger = logging.getLogger(__name__)
+
 
 class CopyMoveTaskView(APIView):
 
@@ -72,7 +74,7 @@ class CopyMoveTaskView(APIView):
             error_msg = 'dirent_type invalid.'
             return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
 
-        if src_repo_id == dst_repo_id and  src_parent_dir == dst_parent_dir:
+        if src_repo_id == dst_repo_id and src_parent_dir == dst_parent_dir:
             error_msg = _('Invalid destination path')
             return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
 
@@ -94,19 +96,19 @@ class CopyMoveTaskView(APIView):
         src_dirent_path = posixpath.join(src_parent_dir, src_dirent_name)
         if dirent_type == 'file':
             if not seafile_api.get_file_id_by_path(src_repo_id,
-                    src_dirent_path):
+                                                   src_dirent_path):
                 error_msg = 'File %s not found.' % src_dirent_path
                 return api_error(status.HTTP_404_NOT_FOUND, error_msg)
 
         if dirent_type == 'dir':
             if not seafile_api.get_dir_id_by_path(src_repo_id,
-                    src_dirent_path):
+                                                  src_dirent_path):
                 error_msg = 'Folder %s not found.' % src_dirent_path
                 return api_error(status.HTTP_404_NOT_FOUND, error_msg)
 
         # dst resource check
         if not seafile_api.get_dir_id_by_path(dst_repo_id,
-                dst_parent_dir):
+                                              dst_parent_dir):
             error_msg = 'Folder %s not found.' % dst_parent_dir
             return api_error(status.HTTP_404_NOT_FOUND, error_msg)
 
@@ -116,7 +118,7 @@ class CopyMoveTaskView(APIView):
             return api_error(status.HTTP_403_FORBIDDEN, error_msg)
 
         new_dirent_name = check_filename_with_rename(dst_repo_id,
-                dst_parent_dir, src_dirent_name)
+                                                     dst_parent_dir, src_dirent_name)
 
         username = request.user.username
         if operation == 'move':
@@ -134,9 +136,14 @@ class CopyMoveTaskView(APIView):
 
             try:
                 res = seafile_api.move_file(src_repo_id, src_parent_dir,
-                        src_dirent_name, dst_repo_id, dst_parent_dir,
-                        new_dirent_name, replace=False, username=username,
-                        need_progress=1)
+                                            src_dirent_name, dst_repo_id, dst_parent_dir,
+                                            new_dirent_name, replace=False, username=username,
+                                            need_progress=1)
+                is_dir = True if dirent_type == 'dir' else False
+                rename_dirent_successful.send(sender=None, src_repo_id=src_repo_id,
+                                              src_parent_dir=src_parent_dir, src_filename=src_dirent_name,
+                                              dst_repo_id=dst_repo_id, dst_parent_dir=dst_parent_dir,
+                                              dst_filename=new_dirent_name, is_dir=is_dir)
             except Exception as e:
                 logger.error(e)
                 error_msg = 'Internal Server Error'
@@ -150,9 +157,9 @@ class CopyMoveTaskView(APIView):
 
             try:
                 res = seafile_api.copy_file(src_repo_id, src_parent_dir,
-                        src_dirent_name, dst_repo_id, dst_parent_dir,
-                        new_dirent_name, username=username,
-                        need_progress=1)
+                                            src_dirent_name, dst_repo_id, dst_parent_dir,
+                                            new_dirent_name, username=username,
+                                            need_progress=1)
             except Exception as e:
                 logger.error(e)
                 error_msg = 'Internal Server Error'
@@ -182,7 +189,7 @@ class CopyMoveTaskView(APIView):
             return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
 
         try:
-            res = seafile_api.cancel_copy_task(task_id) # returns 0 or -1
+            res = seafile_api.cancel_copy_task(task_id)  # returns 0 or -1
         except Exception as e:
             logger.error(e)
             error_msg = 'Internal Server Error'

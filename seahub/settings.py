@@ -224,6 +224,8 @@ INSTALLED_APPS = (
     'seahub.password_session',
     'seahub.admin_log',
     'seahub.wopi',
+    'seahub.tags',
+    'seahub.revision_tag',
 )
 
 # Enabled or disable constance(web settings).
@@ -313,6 +315,9 @@ DISABLE_SYNC_WITH_ANY_FOLDER = False
 
 ENABLE_TERMS_AND_CONDITIONS = False
 
+# Enable or disable sharing to all groups
+ENABLE_SHARE_TO_ALL_GROUPS = False
+
 # interval for request unread notifications
 UNREAD_NOTIFICATIONS_REQUEST_INTERVAL = 3 * 60 # seconds
 
@@ -324,10 +329,7 @@ FILE_ENCODING_LIST = ['auto', 'utf-8', 'gbk', 'ISO-8859-1', 'ISO-8859-5']
 FILE_ENCODING_TRY_LIST = ['utf-8', 'gbk']
 HIGHLIGHT_KEYWORD = False # If True, highlight the keywords in the file when the visit is via clicking a link in 'search result' page.
 # extensions of previewed files
-TEXT_PREVIEW_EXT = """ac, am, bat, c, cc, cmake, cpp, cs, css, diff, el, h, html,
-htm, java, js, json, less, make, org, php, pl, properties, py, rb,
-scala, script, sh, sql, txt, text, tex, vi, vim, xhtml, xml, log, csv,
-groovy, rst, patch, go"""
+TEXT_PREVIEW_EXT = """ac, am, bat, c, cc, cmake, cpp, cs, css, diff, el, h, html, htm, java, js, json, less, make, org, php, pl, properties, py, rb, scala, script, sh, sql, txt, text, tex, vi, vim, xhtml, xml, log, csv, groovy, rst, patch, go"""
 
 # Common settings(file extension, storage) for avatar and group avatar.
 AVATAR_FILE_STORAGE = '' # Replace with 'seahub.base.database_storage.DatabaseStorage' if save avatar files to database
@@ -417,6 +419,9 @@ SITE_NAME = 'Seafile'
 
 # Path to the license file(relative to the media path)
 LICENSE_PATH = os.path.join(PROJECT_ROOT, '../../seafile-license.txt')
+
+# Path to the background image file of login page(relative to the media path)
+LOGIN_BG_IMAGE_PATH = 'img/login-bg.jpg'
 
 # Path to the favicon file (relative to the media path)
 # tip: use a different name when modify it.
@@ -602,6 +607,9 @@ OTP_LOGIN_URL = '/profile/two_factor_authentication/setup/'
 # Enable personal wiki, group wiki
 ENABLE_WIKI = False
 
+# Enable 'repo snapshot label' feature
+ENABLE_REPO_SNAPSHOT_LABEL = False
+
 #####################
 # External settings #
 #####################
@@ -704,4 +712,5 @@ CONSTANCE_CONFIG = {
     'ENABLE_TWO_FACTOR_AUTH': (ENABLE_TWO_FACTOR_AUTH,''),
 
     'TEXT_PREVIEW_EXT': (TEXT_PREVIEW_EXT, ''),
+    'ENABLE_SHARE_TO_ALL_GROUPS': (ENABLE_SHARE_TO_ALL_GROUPS, ''),
 }

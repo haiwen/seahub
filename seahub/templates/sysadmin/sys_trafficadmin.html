@@ -2,10 +2,17 @@
 
 {% load seahub_tags i18n %}
 
-{% block cur_traffic %}tab-cur{% endblock %}
+{% block cur_statistic %}tab-cur{% endblock %}
 
 {% block right_panel %}
-<h3 class="hd">{% trans "User Traffic" %}</h3>
+<div class="tabnav ovhd">
+    <ul class="tabnav-tabs fleft">
+        <li class="tabnav-tab"><a href="{% url 'sys_statistic_file' %}">{% trans "File" %}</a></li>
+        <li class="tabnav-tab"><a href="{% url 'sys_statistic_storage' %}">{% trans "Storage" %}</a></li>
+        <li class="tabnav-tab"><a href="{% url 'sys_statistic_user' %}">{% trans "Users" %}</a></li>
+        <li class="tabnav-tab tabnav-tab-cur"><a href="{{ SITE_ROOT }}sys/trafficadmin/">{% trans "Traffic" %}</a></li>
+    </ul>
+</div>
 
 <p class="tip">{% trans "Tip: the traffic only includes the traffic used by sharing links." %}</p>
 

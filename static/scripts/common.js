@@ -97,6 +97,7 @@ define([
                 case 'get_dirents': return siteRoot + 'ajax/repo/' + options.repo_id + '/dirents/';
 
                 case 'dir-details': return siteRoot + 'api/v2.1/repos/' + options.repo_id + '/dir/detail/';
+                case 'tags': return siteRoot + 'api/v2.1/repos/' + options.repo_id + '/tags/';
 
                 // Repos
                 case 'repos': return siteRoot + 'api2/repos/';
@@ -123,6 +124,9 @@ define([
 
                 case 'repo_file_uploaded_bytes': return siteRoot + 'api/v2.1/repos/' + options.repo_id + '/file-uploaded-bytes/';
 
+                case 'repo_labels': return siteRoot + 'api/v2.1/revision-tags/tagged-items/';
+                case 'user_repo_labels': return siteRoot + 'api/v2.1/revision-tags/tag-names/';
+
                 // Share admin
                 case 'share_admin_repos': return siteRoot + 'api/v2.1/shared-repos/';
                 case 'share_admin_repo': return siteRoot + 'api/v2.1/shared-repos/' + options.repo_id + '/';
@@ -138,6 +142,7 @@ define([
 
                 // Group
                 case 'groups': return siteRoot + 'api/v2.1/groups/';
+                case 'all_groups': return siteRoot + 'api/v2.1/groups/all/';
                 case 'search_group': return siteRoot + 'api/v2.1/search-group/';
                 case 'group': return siteRoot + 'api/v2.1/groups/' + options.group_id + '/';
                 case 'group_members': return siteRoot + 'api/v2.1/groups/' + options.group_id + '/members/';

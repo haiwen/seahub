@@ -627,6 +627,20 @@ if EVENTS_CONFIG_FILE:
         15th events.
         """
         return _get_events(username, start, count)
+   
+    def get_user_activity_stats(start, end, offset):
+        """ Return user activity record of the specified time
+        """
+        with _get_seafevents_session() as session:
+            res = seafevents.get_user_activity_stats(session, start, end, offset)
+        return res
+
+    def get_user_activity_stats_by_day(start, end, offset):
+        """
+        """
+        with _get_seafevents_session() as session:
+            res = seafevents.get_user_activity_stats_by_day(session, start, end, offset)
+        return res
 
     def get_org_user_events(org_id, username, start, count):
         return _get_events(username, start, count, org_id=org_id)
@@ -677,6 +691,34 @@ if EVENTS_CONFIG_FILE:
 
         return events if events else None
 
+    def get_file_ops_stats(start, end, offset):
+        """ Return file audit record of specifiy time.
+        """
+        with _get_seafevents_session() as session:
+            res = seafevents.get_file_ops_stats(session, start, end, offset)
+        return res
+
+    def get_file_ops_stats_by_day(start, end, offset):
+        """ return file audit record of sepcifiy time group by day.
+        """
+        with _get_seafevents_session() as session:
+            res = seafevents.get_file_ops_stats_by_day(session, start, end, offset)
+        return res
+
+    def get_total_storage_stats(start, end, offset):
+        """ Return total storage record of specified time.
+        """
+        with _get_seafevents_session() as session:
+            res = seafevents.get_total_storage_stats(session, start, end, offset)
+        return res
+
+    def get_total_storage_stats_by_day(start, end, offset):
+        """
+        """
+        with _get_seafevents_session() as session:
+            res = seafevents.get_total_storage_stats_by_day(session, start, end, offset)
+        return res
+
     def get_file_update_events(email, org_id, repo_id, start, limit):
         """Return file update events list. (If no file update, return 'None')
 
@@ -688,7 +730,6 @@ if EVENTS_CONFIG_FILE:
         """
         with _get_seafevents_session() as session:
             events = seafevents.get_file_update_events(session, email, org_id, repo_id, start, limit)
-
         return events if events else None
 
     def get_perm_audit_events(email, org_id, repo_id, start, limit):
@@ -721,6 +762,10 @@ else:
     EVENTS_ENABLED = False
     def get_user_events():
         pass
+    def get_user_activity_stats():
+        pass
+    def get_user_activity_stats_by_day():
+        pass
     def get_log_events_by_time():
         pass
     def get_org_user_events():
@@ -730,6 +775,14 @@ else:
     def get_file_audit_events_by_path():
         pass
     def get_file_audit_events():
+        pass
+    def get_file_ops_stats():
+        pass
+    def get_file_ops_stats_by_day():
+        pass
+    def get_total_storage_stats():
+        pass
+    def get_total_storage_stats_by_day():
         pass
     def get_file_update_events():
         pass

@@ -2,16 +2,22 @@
 """
 Test repos api.
 """
+import json
+import time
 import pytest
 import uuid
 
+from django.core.urlresolvers import reverse
 from seaserv import seafile_api
+
 from tests.api.apitestbase import ApiTestBase
 from tests.api.urls import (
     REPOS_URL, DEFAULT_REPO_URL, GET_REPO_TOKENS_URL
 )
 from tests.common.utils import apiurl, urljoin, randstring
 from tests.common.common import SEAFILE_BASE_URL
+
+from seahub.test_utils import BaseTestCase
 
 # TODO: all tests should be run on an encrypted repo
 class ReposApiTest(ApiTestBase):
@@ -39,6 +45,9 @@ class ReposApiTest(ApiTestBase):
             self.assertIsNotNone(repo['name'])
             self.assertIsNotNone(repo['type'])
             self.assertIsNotNone(repo['head_commit_id'])
+            assert len(repo['modifier_email']) > 0
+            assert len(repo['modifier_name']) > 0
+            assert len(repo['modifier_contact_email']) > 0
 
     def test_get_repo_info(self):
         with self.get_tmp_repo() as repo:
@@ -51,7 +60,9 @@ class ReposApiTest(ApiTestBase):
             self.assertIsNotNone(rinfo['name'])
             self.assertIsNotNone(rinfo['root'])
             self.assertIsNotNone(rinfo['type'])
-            # elf.assertIsNotNone(rinfo['password_need']) # allow null here
+            assert len(rinfo['modifier_email']) > 0
+            assert len(rinfo['modifier_name']) > 0
+            assert len(rinfo['modifier_contact_email']) > 0
 
     def test_get_repo_history(self):
         with self.get_tmp_repo() as repo:
@@ -174,3 +185,35 @@ class ReposApiTest(ApiTestBase):
 
         # do some file operation
         self.create_file(repo['repo_id'])
+
+
+# Uncomment following to test api performance.
+# class ReposApiTest2(BaseTestCase):
+#     def setUp(self):
+#         self.num_repos = 500
+#         self.tmp_user = self.create_user()
+#         self.login_as(self.tmp_user)
+
+#         self.repo_ids = []
+#         for i in range(self.num_repos):
+#             r = self.create_repo(name='test-repo%d' % i, desc='',
+#                                  username=self.tmp_user.username, passwd=None)
+#             self.repo_ids.append(r)
+#             time.sleep(0.01)
+
+#         assert len(self.repo_ids) == self.num_repos
+
+#     def tearDown(self):
+#         self.remove_user(self.tmp_user.username)
+#         for e in self.repo_ids:
+#             self.remove_repo(e)
+
+#     def test_list_repos(self):
+#         time.sleep(1)
+#         print '--------> start list repos...'
+
+#         resp = self.client.get(reverse('api2-repos') + '?type=mine')
+#         json_resp = json.loads(resp.content)
+#         assert len(json_resp) == self.num_repos
+
+#         print '--------> end list repos.'

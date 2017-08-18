@@ -58,6 +58,10 @@ class GroupRepoTest(ApiTestBase):
             assert resp_repo['mtime'] > 0
             assert resp_repo['permission'] in ('r', 'rw')
             assert '</time>' in resp_repo['mtime_relative']
+            assert len(resp_repo['owner_nickname']) > 0
+            assert len(resp_repo['modifier_email']) > 0
+            assert len(resp_repo['modifier_contact_email']) > 0
+            assert len(resp_repo['modifier_name']) > 0
 
     def test_order_by_mtime(self):
         with self.get_tmp_group() as group:

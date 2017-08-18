@@ -38,6 +38,14 @@
         <input type="submit" value="{% trans "Submit"%}" class="submit" />
     </form>
 </script>
+<script type="text/template" id="add-lib-label-form-tmpl">
+<form action="" method="">
+    <h3 id="dialogTitle">{% trans "Label current state" %}</h3>
+    <input type="hidden" name="labels" class="w100" />
+    <p class="error hide"></p>
+    <button type="submit" class="submit">{% trans "Submit" %}</button>
+</form>
+</script>
 <script type="text/template" id="repo-tmpl">
     <td>
         <img src="<%= icon_url %>" title="<%= icon_title %>" alt="<%= icon_title %>" width="24" />
@@ -64,6 +72,9 @@
                     <li><a class="op js-popup-folder-perm-admin" href="#">{% trans "Folder Permission" %}</a></li>
                     <% } %>
                     <li><a class="op js-repo-details" href="#">{% trans "Details" %}</a></li>
+                    <% if (app.pageOptions.enable_repo_snapshot_label) { %>
+                    <li><a class="op js-add-label" href="#">{% trans "Label current state" %}</a></li>
+                    <% } %>
                 </ul>
             </div>
         </div>
@@ -811,6 +822,19 @@
                     <td><%= dirent.last_update %></td>
                 </tr>
                 <% } %>
+                <% if (dirent.perm == 'rw') { %>
+                <tr>
+                    <th class="tags-label">{% trans "Tags" %}</th>
+                    <td class="tags-container">
+                        <span class="loading-icon"></span>
+                        <ul class="cur-tags hide ovhd"></ul>
+                        <span class="sf2-icon-edit tags-edit-icon op-icon hide" title="{% trans "Edit" %}"></span>
+                        <input type="hidden" class="w100 hide tags-input" />
+                        <button class="submit tags-submit-btn hide">{% trans "Submit" %}</button>
+                        <p class="error hide"></p>
+                    </td>
+                </tr>
+                <% } %>
             </table>
 
             <% } else { %>
@@ -842,6 +866,19 @@
                 <tr>
                     <th>{% trans "Last Update" %}</th>
                     <td><%= dirent.last_update %></td>
+                </tr>
+                <% } %>
+                <% if (dirent.perm == 'rw') { %>
+                <tr>
+                    <th class="tags-label">{% trans "Tags" %}</th>
+                    <td class="tags-container">
+                        <span class="loading-icon"></span>
+                        <ul class="cur-tags hide ovhd"></ul>
+                        <span class="sf2-icon-edit tags-edit-icon op-icon hide" title="{% trans "Edit" %}"></span>
+                        <input type="hidden" class="w100 hide tags-input" />
+                        <button class="submit tags-submit-btn hide">{% trans "Submit" %}</button>
+                        <p class="error hide"></p>
+                    </td>
                 </tr>
                 <% } %>
             </table>
@@ -2073,8 +2110,8 @@
         </tbody>
     </table>
     <div class="empty-tips hide">
-        <h2 class="alc">{% trans "You have not shared any library" %}</h2>
-        <p>{% trans "You can share libraries to your friends and colleagues by clicking the share icon of your own libraries in your home page or creating a new library in groups you are in." %}</p>
+        <h2 class="alc">{% trans "You have not shared any libraries" %}</h2>
+        <p>{% trans "You can share libraries with your friends and colleagues by clicking the share icon of your own libraries in your home page or creating a new library in groups you are in." %}</p>
     </div>
     <p class="error error-tip hide"></p>
 </script>
@@ -2128,7 +2165,7 @@
         </tbody>
     </table>
     <div class="empty-tips hide">
-        <h2 class="alc">{% trans "You have not shared any folder" %}</h2>
+        <h2 class="alc">{% trans "You have not shared any folders" %}</h2>
         <p>{% trans "You can share a single folder with a registered user if you don't want to share a whole library." %}</p>
     </div>
     <p class="error error-tip hide"></p>
@@ -2163,8 +2200,8 @@
         </tbody>
     </table>
     <div class="empty-tips hide">
-        <h2 class="alc">{% trans "You don't have any download link" %}</h2>
-        <p>{% trans "You can generate a download link for a folder or a file. People receive this link can view the folder or the file online." %}</p>
+        <h2 class="alc">{% trans "You don't have any download links" %}</h2>
+        <p>{% trans "You can generate a download link for a folder or a file. Anyone who receives this link can view the folder or the file online." %}</p>
     </div>
     <p class="error error-tip hide"></p>
 </script>
@@ -2197,8 +2234,8 @@
         </tbody>
     </table>
     <div class="empty-tips hide">
-        <h2 class="alc">{% trans "You don't have any upload link" %}</h2>
-        <p>{% trans "You can generate an upload link from any folder. People receive this link can upload files to this folder." %}</p>
+        <h2 class="alc">{% trans "You don't have any upload links" %}</h2>
+        <p>{% trans "You can generate an upload link from any folder. Anyone who receives this link can upload files to this folder." %}</p>
     </div>
     <p class="error error-tip hide"></p>
 </script>

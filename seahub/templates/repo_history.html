@@ -1,10 +1,13 @@
 {% extends "base_wide_page.html" %}
 {% load seahub_tags avatar_tags i18n %}
 {% load url from future %}
+{% load staticfiles %}
 
 {% block sub_title %}{% trans "History" %} - {% endblock %}
 
 {% block extra_style %}
+<link rel="stylesheet" type="text/css" href="{% static "css/select2-3.5.2.css" %}" />
+<link rel="stylesheet" type="text/css" href="{% static "css/select2.custom.css" %}" />
 <style type="text/css">
     .go-back { top:-3px; }
 </style>
@@ -25,11 +28,20 @@
 
         <table class="commit-list">
             <tr>
+                {% if show_label %}
+                <th width="43%">{% trans "Description" %}</th>
+                <th width="12%">{% trans "Time" %}</th>
+                <th width="9%">{% trans "Modifier" %}</th>
+                <th width="12%">{% trans "Device" %} / {% trans "Version" %}</th>
+                <th width="12%">{% trans "Labels" %}</th>
+                <th width="12%">{% trans "Operations" %}</th>
+                {% else %}
                 <th width="43%">{% trans "Description" %}</th>
                 <th width="15%">{% trans "Time" %}</th>
                 <th width="15%">{% trans "Modifier" %}</th>
                 <th width="15%">{% trans "Device" %} / {% trans "Version" %}</th>
                 <th width="12%">{% trans "Operations" %}</th>
+                {% endif %}
             </tr>
 
             {% for commit in commits %}
@@ -60,6 +72,16 @@
                     API / --
                     {% endif %}
                 </td>
+                {% if show_label %}
+                <td data-id="{{ commit.id }}">
+                    {% for label in commit.labels %}
+                    <span class="cur-tag">{{ label }}</span>
+                    {% endfor %}
+                    {% if user_perm == 'rw' %}
+                    <span class="sf2-icon-edit label-edit-icon op-icon vh" title="{% trans "Edit" %}"></span>
+                    {% endif %}
+                </td>
+                {% endif %}
                 <td>
                     {% if user_perm == 'rw' %}
                         {% if forloop.first and current_page == 1 %}
@@ -81,14 +103,95 @@
             <a href="?page={{ next_page }}&referer={{referer|urlencode}}">{% trans "Next"%}</a>
             {% endif %}
         </div>
+
+{% if show_label and user_perm == 'rw' %}
+<form id="label-edit-form" action="" class="hide">
+    <h3 id="dialogTitle">{% trans "Edit labels" %}</h3>
+    <input type="hidden" name="labels" /><br />
+    <p class="error hide"></p>
+    <button type="submit" class="submit">{% trans "Submit" %}</button>
+</form>
+{% endif %}
+
 {% endblock %}
 
 {% block extra_script %}
+<script type="text/javascript" src="{% static "scripts/lib/select2-3.5.2.js" %}"></script>
 <script type="text/javascript">
     {% include 'snippets/list_commit_detail.html' %}
     $('.view-snapshot').each(function() {
         $(this).attr('href', $(this).attr('href') + '&referer=' + encodeURIComponent(location.href));
     });
+
+{% if show_label and user_perm == 'rw' %}
+$('.label-edit-icon').click(function() {
+    var $tr = $(this).parent();
+    var s2_tags = [];
+    $('.cur-tag', $tr).each(function(index, item) {
+        var label = $(item).text();
+        s2_tags.push({
+            'id': label,
+            'text': label
+        });
+    });
+
+    var $form = $('#label-edit-form');
+    $form.data('tr', $tr).modal({focus: false});
+    $('#simplemodal-container').css({'width':'auto', 'height':'auto'});
+    $('[name="labels"]')
+        .select2({
+            width: '280px',
+            tags: []
+        })
+        .select2('data', s2_tags);
+});
+$('#label-edit-form').submit(function() {
+    var $form = $(this);
+    var $input = $('[name="labels"]', $form);
+    var $error = $('.error', $form);
+    var $submit = $('[type="submit"]', $form);
+    var $tr = $form.data('tr');
+    var tags = $input.select2('val');
+
+    disable($submit);
+    $.ajax({
+        url: '{% url "api-v2.1-revision-tags-tagged-items" %}',
+        type: 'PUT',
+        cache: false,
+        dataType: 'json',
+        data: {
+            'repo_id': '{{repo.id}}',
+            'commit_id': $tr.attr('data-id'),
+            'tag_names': tags.join(',')
+        },
+        beforeSend: prepareCSRFToken,
+        success: function(data) {
+            var tags = data.revisionTags;
+            var str = '';
+            for (var i = 0, len = tags.length; i < len; i++) {
+                str += '<span class="cur-tag">' + HTMLescape(tags[i].tag) + '</span>';
+            }
+            $('.cur-tag', $tr).remove();
+            $tr.prepend(str);
+
+            $.modal.close();
+            feedback("{% trans "Successfully edited labels." %}", 'success');
+        },
+        error: function(xhr) {
+            var error_msg;
+            if (xhr.responseText) {
+                error_msg = $.parseJSON(xhr.responseText).error_msg;
+            } else {
+                error_msg = "{% trans "Failed. Please check the network." %}";
+            }
+            $error.html(error_msg).show();
+            enable($submit);
+        }
+    });
+
+    return false;
+});
+{% endif %}
 
 {% include 'snippets/go_back_js.html' %}
 </script>

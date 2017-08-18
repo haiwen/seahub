@@ -120,7 +120,7 @@ from seaserv import seafserv_threaded_rpc, \
     is_group_user, remove_share, get_group, \
     get_commit, get_file_id_by_path, MAX_DOWNLOAD_DIR_SIZE, edit_repo, \
     ccnet_threaded_rpc, get_personal_groups, seafile_api, \
-    create_org, ccnet_api
+    create_org, ccnet_api, send_message
 
 from constance import config
 
@@ -427,6 +427,10 @@ class Repos(APIView):
 
         email = request.user.username
 
+        # Use dict to reduce memcache fetch cost in large for-loop.
+        contact_email_dict = {}
+        nickname_dict = {}
+
         repos_json = []
         if filter_by['mine']:
             if is_org_context(request):
@@ -436,6 +440,14 @@ class Repos(APIView):
             else:
                 owned_repos = seafile_api.get_owned_repo_list(email,
                         ret_corrupted=True)
+
+            # Reduce memcache fetch ops.
+            modifiers_set = set([x.last_modifier for x in owned_repos])
+            for e in modifiers_set:
+                if e not in contact_email_dict:
+                    contact_email_dict[e] = email2contact_email(e)
+                if e not in nickname_dict:
+                    nickname_dict[e] = email2nickname(e)
 
             owned_repos.sort(lambda x, y: cmp(y.last_modify, x.last_modify))
             for r in owned_repos:
@@ -449,6 +461,9 @@ class Repos(APIView):
                     "owner": email,
                     "name": r.name,
                     "mtime": r.last_modify,
+                    "modifier_email": r.last_modifier,
+                    "modifier_contact_email": contact_email_dict.get(r.last_modifier, ''),
+                    "modifier_name": nickname_dict.get(r.last_modifier, ''),
                     "mtime_relative": translate_seahub_time(r.last_modify),
                     "size": r.size,
                     "size_formatted": filesizeformat(r.size),
@@ -471,6 +486,15 @@ class Repos(APIView):
                 shared_repos = seafile_api.get_share_in_repo_list(
                         email, -1, -1)
 
+            # Reduce memcache fetch ops.
+            owners_set = set([x.user for x in shared_repos])
+            modifiers_set = set([x.last_modifier for x in shared_repos])
+            for e in owners_set | modifiers_set:
+                if e not in contact_email_dict:
+                    contact_email_dict[e] = email2contact_email(e)
+                if e not in nickname_dict:
+                    nickname_dict[e] = email2nickname(e)
+
             shared_repos.sort(lambda x, y: cmp(y.last_modify, x.last_modify))
             for r in shared_repos:
                 r.password_need = is_passwd_set(r.repo_id, email)
@@ -479,9 +503,12 @@ class Repos(APIView):
                     "id": r.repo_id,
                     "owner": r.user,
                     "name": r.repo_name,
-                    "owner_nickname": email2nickname(r.user),
+                    "owner_nickname": nickname_dict.get(r.user, ''),
                     "mtime": r.last_modify,
                     "mtime_relative": translate_seahub_time(r.last_modify),
+                    "modifier_email": r.last_modifier,
+                    "modifier_contact_email": contact_email_dict.get(r.last_modifier, ''),
+                    "modifier_name": nickname_dict.get(r.last_modifier, ''),
                     "size": r.size,
                     "size_formatted": filesizeformat(r.size),
                     "encrypted": r.encrypted,
@@ -497,6 +524,15 @@ class Repos(APIView):
             groups = get_groups_by_user(request)
             group_repos = get_group_repos(request, groups)
             group_repos.sort(lambda x, y: cmp(y.last_modify, x.last_modify))
+
+            # Reduce memcache fetch ops.
+            modifiers_set = set([x.last_modifier for x in group_repos])
+            for e in modifiers_set:
+                if e not in contact_email_dict:
+                    contact_email_dict[e] = email2contact_email(e)
+                if e not in nickname_dict:
+                    nickname_dict[e] = email2nickname(e)
+
             for r in group_repos:
                 repo = {
                     "type": "grepo",
@@ -505,6 +541,9 @@ class Repos(APIView):
                     "groupid": r.group.id,
                     "name": r.name,
                     "mtime": r.last_modify,
+                    "modifier_email": r.last_modifier,
+                    "modifier_contact_email": contact_email_dict.get(r.last_modifier, ''),
+                    "modifier_name": nickname_dict.get(r.last_modifier, ''),
                     "size": r.size,
                     "encrypted": r.encrypted,
                     "permission": check_permission(r.id, email),
@@ -516,6 +555,15 @@ class Repos(APIView):
 
         if filter_by['org'] and request.user.permissions.can_view_org():
             public_repos = list_inner_pub_repos(request)
+
+            # Reduce memcache fetch ops.
+            modifiers_set = set([x.last_modifier for x in public_repos])
+            for e in modifiers_set:
+                if e not in contact_email_dict:
+                    contact_email_dict[e] = email2contact_email(e)
+                if e not in nickname_dict:
+                    nickname_dict[e] = email2nickname(e)
+
             for r in public_repos:
                 repo = {
                     "type": "grepo",
@@ -524,6 +572,9 @@ class Repos(APIView):
                     "owner": "Organization",
                     "mtime": r.last_modified,
                     "mtime_relative": translate_seahub_time(r.last_modified),
+                    "modifier_email": r.last_modifier,
+                    "modifier_contact_email": contact_email_dict.get(r.last_modifier, ''),
+                    "modifier_name": nickname_dict.get(r.last_modifier, ''),
                     "size": r.size,
                     "size_formatted": filesizeformat(r.size),
                     "encrypted": r.encrypted,
@@ -536,6 +587,12 @@ class Repos(APIView):
                 }
                 repos_json.append(repo)
 
+        utc_dt = datetime.datetime.utcnow()
+        timestamp = utc_dt.strftime('%Y-%m-%d %H:%M:%S')
+        try:
+            send_message('seahub.stats', 'user-login\t%s\t%s' % (email, timestamp))
+        except Exception as e:
+            logger.error('Error when sending user-login message: %s' % str(e))
         response = HttpResponse(json.dumps(repos_json), status=200,
                                 content_type=json_content_type)
         response["enable_encrypted_library"] = config.ENABLE_ENCRYPTED_LIBRARY
@@ -815,6 +872,9 @@ class Repo(APIView):
             "encrypted":repo.encrypted,
             "root":root_id,
             "permission": check_permission(repo.id, username),
+            "modifier_email": repo.last_modifier,
+            "modifier_contact_email": email2contact_email(repo.last_modifier),
+            "modifier_name": email2nickname(repo.last_modifier),
             "file_count": repo.file_count,
             }
         if repo.encrypted:
@@ -3890,6 +3950,9 @@ class GroupRepos(APIView):
             "owner": username,
             "owner_nickname": email2nickname(username),
             "share_from_me": True,
+            "modifier_email": repo.last_modifier,
+            "modifier_contact_email": email2contact_email(repo.last_modifier),
+            "modifier_name": email2nickname(repo.last_modifier),
         }
 
         return Response(group_repo, status=200)
@@ -3911,6 +3974,17 @@ class GroupRepos(APIView):
         repos.sort(lambda x, y: cmp(y.last_modified, x.last_modified))
         group.is_staff = is_group_staff(group, request.user)
 
+        # Use dict to reduce memcache fetch cost in large for-loop.
+        contact_email_dict = {}
+        nickname_dict = {}
+        owner_set = set([x.user for x in repos])
+        modifiers_set = set([x.modifier for x in repos])
+        for e in owner_set | modifiers_set:
+            if e not in contact_email_dict:
+                contact_email_dict[e] = email2contact_email(e)
+            if e not in nickname_dict:
+                nickname_dict[e] = email2nickname(e)
+
         repos_json = []
         for r in repos:
             repo = {
@@ -3924,8 +3998,11 @@ class GroupRepos(APIView):
                 "encrypted": r.encrypted,
                 "permission": r.permission,
                 "owner": r.user,
-                "owner_nickname": email2nickname(r.user),
+                "owner_nickname": nickname_dict.get(r.user, ''),
                 "share_from_me": True if username == r.user else False,
+                "modifier_email": r.last_modifier,
+                "modifier_contact_email": contact_email_dict.get(r.last_modifier, ''),
+                "modifier_name": nickname_dict.get(r.last_modifier, ''),
             }
             repos_json.append(repo)
 

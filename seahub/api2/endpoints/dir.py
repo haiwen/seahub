@@ -14,6 +14,7 @@ from seahub.api2.authentication import TokenAuthentication
 from seahub.api2.utils import api_error
 from seahub.api2.views import get_dir_recursively, \
     get_dir_entrys_by_id
+from seahub.signals import rename_dirent_successful
 
 from seahub.views import check_folder_permission
 from seahub.utils import check_filename_with_rename, is_valid_dirent_name, \
@@ -214,6 +215,10 @@ class DirView(APIView):
                 # rename dir
                 seafile_api.rename_file(repo_id, parent_dir, old_dir_name,
                                         new_dir_name, username)
+                rename_dirent_successful.send(sender=None, src_repo_id=repo_id,
+                        src_parent_dir=parent_dir, src_filename=old_dir_name,
+                        dst_repo_id=repo_id, dst_parent_dir=parent_dir,
+                        dst_filename=new_dir_name, is_dir=True)
 
                 new_dir_path = posixpath.join(parent_dir, new_dir_name)
                 dir_info = self.get_dir_info(repo_id, new_dir_path)
