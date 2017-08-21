@@ -1718,7 +1718,11 @@ button.sf-dropdown-toggle:focus {
 }
 #right-panel {
     padding-top:16px;
-    margin-bottom:20px;
+    padding-bottom:20px;
+    border-right:4px solid transparent;
+    -webkit-transition:margin-right 0.3s ease;
+    -moz-transition:margin-right 0.3s ease;
+    transition:margin-right 0.3s ease;
 }
 #title-panel h2 {
     margin-bottom:0.45em;

@@ -46,13 +46,20 @@ define([
 
         setConMaxHeight: function() {
             this.$('.right-side-panel-con').css({
-                'height': $(window).height() -  // this.$el `position:fixed; top:0;`
+                'height': $(window).height() - this.$el.offset().top -
                     this.$('.right-side-panel-hd').outerHeight(true)
             });
         },
 
         hide: function() {
             this.$el.css({'right': '-320px'});
+
+            if ($(window).width() >= 768) {
+                $('#right-panel').css({
+                    'width':'75%',
+                    'margin-right': 0
+                });
+            }
         },
 
         close: function() {
@@ -63,8 +70,19 @@ define([
         show: function(options) {
             this.data = options;
             this.render();
-            this.$el.css({'right': '0px'});
+            this.$el.css({
+                'box-shadow': 'none',
+                'top': $('#header').outerHeight(),
+                'right': '0px'
+            });
             this.setConMaxHeight();
+
+            if ($(window).width() >= 768) {
+                $('#right-panel').css({
+                    'width':'auto',
+                    'margin-right': '320px'
+                });
+            }
         }
 
     });

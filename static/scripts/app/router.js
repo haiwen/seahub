@@ -60,6 +60,15 @@ define([
             $('.initial-loading').hide();
             $('.main-content').show();
 
+            var setMainConHeight = function() {
+                $('#right-panel').css({
+                    'max-height': $(window).height() - $('#right-panel').offset().top,
+                    'overflow': 'auto'
+                });
+            };
+            setMainConHeight();
+            $(window).resize(setMainConHeight);
+
             Common.prepareApiCsrf();
             Common.initLocale();
 
