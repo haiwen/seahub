@@ -699,7 +699,7 @@ def user_info(request, email):
     _default_device = False
     _has_two_factor_auth = has_two_factor_auth()
     if _has_two_factor_auth:
-        from seahub_extra.two_factor.utils import default_device
+        from seahub.two_factor.utils import default_device
         _user = User.objects.get(email=email)
         _default_device = default_device(_user)
 

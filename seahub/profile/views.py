@@ -89,8 +89,8 @@ def edit_profile(request):
     }
 
     if has_two_factor_auth():
-        from seahub_extra.two_factor.models import StaticDevice
-        from seahub_extra.two_factor.utils import default_device
+        from seahub.two_factor.models import StaticDevice
+        from seahub.two_factor.utils import default_device
 
         try:
             backup_tokens = StaticDevice.objects.get(

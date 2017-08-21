@@ -12,7 +12,7 @@ urlpatterns = patterns('seahub.profile.views',
 
 if HAS_TWO_FACTOR_AUTH:
     urlpatterns += patterns('',
-        (r'^two_factor_authentication/', include('seahub_extra.two_factor.urls', 'two_factor')),
+        (r'^two_factor_authentication/', include('seahub.two_factor.urls', 'two_factor')),
     )
 
 # Move the catch-all pattern to the end.

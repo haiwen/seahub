@@ -76,7 +76,7 @@ else:
                             )
 
     if HAS_TWO_FACTOR_AUTH:
-        from seahub_extra.two_factor.views.login import TwoFactorVerifyView
+        from seahub.two_factor.views.login import TwoFactorVerifyView
         urlpatterns += patterns('',
                                 url(r'^login/two-factor-auth/$',
                                     TwoFactorVerifyView.as_view(),

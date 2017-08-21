@@ -27,7 +27,7 @@ class TwoFactorAuthView(APIView):
             error_msg = "User %s not found" % email
             return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
 
-        from seahub_extra.two_factor import devices_for_user
+        from seahub.two_factor import devices_for_user
         devices = devices_for_user(_user)
         if devices:
             for device in devices:

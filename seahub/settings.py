@@ -119,6 +119,7 @@ MIDDLEWARE_CLASSES = (
     'seahub.password_session.middleware.CheckPasswordHash',
     'seahub.base.middleware.ForcePasswdChangeMiddleware',
     'termsandconditions.middleware.TermsAndConditionsRedirectMiddleware',
+    'seahub.two_factor.middleware.OTPMiddleware',
 )
 
 SITE_ROOT_URLCONF = 'seahub.urls'
@@ -226,6 +227,7 @@ INSTALLED_APPS = (
     'seahub.wopi',
     'seahub.tags',
     'seahub.revision_tag',
+    'seahub.two_factor',
 )
 
 # Enabled or disable constance(web settings).

@@ -3,7 +3,7 @@
 from constance import config
 
 try:
-    from seahub_extra.two_factor.views.login import (
+    from seahub.two_factor.views.login import (
         two_factor_auth_enabled,
         handle_two_factor_auth,
         verify_two_factor_token,
