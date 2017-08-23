@@ -9,7 +9,6 @@ from seahub.api2.base import APIView
 from seahub.api2.throttling import UserRateThrottle
 from seahub.api2.utils import json_response, api_error
 from seahub.api2.authentication import TokenAuthentication
-from seahub.utils.two_factor_auth import has_two_factor_auth, two_factor_auth_enabled
 
 
 class TwoFactorAuthView(APIView):

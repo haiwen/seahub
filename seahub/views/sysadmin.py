@@ -76,7 +76,7 @@ try:
     from seahub.settings import MULTI_TENANCY
 except ImportError:
     MULTI_TENANCY = False
-from seahub.utils.two_factor_auth import has_two_factor_auth, HAS_TWO_FACTOR_AUTH
+from seahub.utils.two_factor_auth import has_two_factor_auth
 from termsandconditions.models import TermsAndConditions
 
 logger = logging.getLogger(__name__)
@@ -2025,11 +2025,8 @@ def sys_settings(request):
         'USER_PASSWORD_STRENGTH_LEVEL', 'SHARE_LINK_PASSWORD_MIN_LENGTH',
         'ENABLE_USER_CREATE_ORG_REPO', 'FORCE_PASSWORD_CHANGE',
         'LOGIN_ATTEMPT_LIMIT', 'FREEZE_USER_ON_LOGIN_FAILED',
-        'ENABLE_SHARE_TO_ALL_GROUPS'
+        'ENABLE_SHARE_TO_ALL_GROUPS', 'ENABLE_TWO_FACTOR_AUTH'
     ]
-
-    if HAS_TWO_FACTOR_AUTH:
-        DIGIT_WEB_SETTINGS.append('ENABLE_TWO_FACTOR_AUTH')
 
     STRING_WEB_SETTINGS = ('SERVICE_URL', 'FILE_SERVER_ROOT', 'TEXT_PREVIEW_EXT')
 
@@ -2076,7 +2073,6 @@ def sys_settings(request):
 
     return render_to_response('sysadmin/settings.html', {
         'config_dict': config_dict,
-        'has_two_factor_auth': HAS_TWO_FACTOR_AUTH,
     }, context_instance=RequestContext(request))
 
 @login_required_ajax

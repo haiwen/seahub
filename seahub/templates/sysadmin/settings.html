@@ -104,13 +104,11 @@
         {% include "snippets/web_settings_form.html" %}
     {% endwith %}
 
-    {% if has_two_factor_auth %}
     {% with type="checkbox" setting_name="ENABLE_TWO_FACTOR_AUTH" setting_val=config_dict.ENABLE_TWO_FACTOR_AUTH %}
         {% trans "enable two factor authentication" as setting_display_name %}
         {% trans "Enable two factor authentication" as help_tip %}
         {% include "snippets/web_settings_form.html" %}
     {% endwith %}
-    {% endif %}
 
     <h4>{% trans "Library" %}</h4>
 
