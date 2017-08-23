@@ -291,7 +291,8 @@ define([
         popupHistorySetting: function() {
             var options = {
                 'repo_name': this.model.get('name'),
-                'repo_id': this.model.get('id')
+                'repo_id': this.model.get('id'),
+                'url_name': 'repo_history_limit'
             };
             this.togglePopup(); // close the popup
             new HistorySettingsDialog(options);

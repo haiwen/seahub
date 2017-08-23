@@ -84,6 +84,7 @@ from seahub.api2.endpoints.admin.logo import AdminLogo
 from seahub.api2.endpoints.admin.favicon import AdminFavicon
 from seahub.api2.endpoints.admin.license import AdminLicense
 from seahub.api2.endpoints.admin.invitations import InvitationsView as AdminInvitationsView
+from seahub.api2.endpoints.admin.library_history import AdminLibraryHistoryLimit
 
 # Uncomment the next two lines to enable the admin:
 #from django.contrib import admin
@@ -281,6 +282,7 @@ urlpatterns = patterns(
     ## admin::libraries
     url(r'^api/v2.1/admin/libraries/$', AdminLibraries.as_view(), name='api-v2.1-admin-libraries'),
     url(r'^api/v2.1/admin/libraries/(?P<repo_id>[-0-9a-f]{36})/$', AdminLibrary.as_view(), name='api-v2.1-admin-library'),
+    url(r'^api/v2.1/admin/libraries/(?P<repo_id>[-0-9a-f]{36})/history-limit/$', AdminLibraryHistoryLimit.as_view(), name="api-v2.1-admin-library-history-limit"),
     url(r'^api/v2.1/admin/libraries/(?P<repo_id>[-0-9a-f]{36})/dirents/$', AdminLibraryDirents.as_view(), name='api-v2.1-admin-library-dirents'),
     url(r'^api/v2.1/admin/libraries/(?P<repo_id>[-0-9a-f]{36})/dirent/$', AdminLibraryDirent.as_view(), name='api-v2.1-admin-library-dirent'),
 
