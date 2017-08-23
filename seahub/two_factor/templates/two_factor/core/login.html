@@ -1,0 +1,51 @@
+{% extends "base.html" %}
+{% load i18n %}
+
+{% block main_content %}
+<div class="new-narrow-panel">
+    <h2 class="hd">{% trans "Two-factor authentication" %}</h2>
+    <form action="" method="post" class="con">{% csrf_token %}
+        {{ wizard.management_form }}
+        {% if wizard.steps.current == 'token' %}
+
+        {% if device.method == 'call' %}
+        <p>{% blocktrans %}We are calling your phone right now, please enter the
+            digits you hear.{% endblocktrans %}</p>
+        {% elif device.method == 'sms' %}
+        <p>{% blocktrans %}We sent you a text message, please enter the tokens we
+            sent.{% endblocktrans %}</p>
+        {% else %}
+        <p>{% trans "Open the two-factor authentication app on your device to view your authentication code and verify your identify." %}</p>
+        {% endif %}
+
+        <label for="token">{% trans "Authentication code" %}</label>
+        <input id="token" type="text" name="{{form_prefix}}otp_token" value="" class="input two-factor-auth-login-token-input" autocomplete="off" />
+
+        {% if form.errors %}
+        <p class="error">{% trans "Incorrect code" %}</p>
+        {% else %}
+        <p class="error hide"></p>
+        {% endif %}
+        <button type="submit">{% trans "Verify" %}</button>
+
+        {% if backup_tokens > 0 %}
+        <div class="two-factor-auth-login-no-phone">
+            <p class="txt-before-btn">{% trans "Don't have your phone?" %}</p>
+            <button name="wizard_goto_step" value="backup" type="submit">{% trans "Enter a two-factor backup code" %}</button>
+        </div>
+        {% endif %}
+
+        {% elif wizard.steps.current == 'backup' %}
+        <label for="token">{% trans "Backup code" %}</label>
+        <input id="token" type="text" name="{{form_prefix}}otp_token" value="" class="input" autocomplete="off" />
+        {% if form.errors %}
+        <p class="error">{% trans "Incorrect code" %}</p>
+        {% else %}
+        <p class="error hide"></p>
+        {% endif %}
+        <p class="tip">{% trans "You can enter one of your backup codes in case you lost access to your mobile device." %}</p>
+        <input type="submit" value="{% trans "Verify" %}" class="submit" />
+        {% endif %}
+    </form>
+</div>
+{% endblock %}

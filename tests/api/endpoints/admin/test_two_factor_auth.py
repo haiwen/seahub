@@ -13,12 +13,12 @@ class TwoFactorAuthViewTest(BaseTestCase):
         self.login_as(self.admin)
 
     def test_can_disable_two_factor_auth(self):
-        from seahub_extra.two_factor.models import (StaticDevice, TOTPDevice,
+        from seahub.two_factor.models import (StaticDevice, TOTPDevice,
                                                     PhoneDevice)
         totp = TOTPDevice(user=self.admin, name="", confirmed=1)
         totp.save()
 
-        from seahub_extra.two_factor import devices_for_user
+        from seahub.two_factor import devices_for_user
         devices = devices_for_user(self.admin)
         i = 0
         for device in devices_for_user(self.admin):
