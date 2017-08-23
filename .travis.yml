@@ -13,8 +13,8 @@ install:
   - pip install -r requirements.txt --allow-all-external --allow-unverified Djblets --allow-unverified PIL
   - pip install -r test-requirements.txt
 notifications:
-  email:
-    recipients:
-      - xiez1989@gmail.com
-      - imwhatiam123@gmail.com
-      - linshuai2012@gmail.com
+  email: false
+  slack:
+    rooms:
+      secure: TAfn5FZpRfzjGnHl2oiF1bF9FVg3L+ObK6gkNmdAY08xgdd8fHFOHrlD1WzrYSom3eT2OZ/5YPzrKAwbuWcMqTWc7NxjBCEDwfRu7F0DVBX/tUCd4f8H4B0LhaVpF3kNpApRV8UhIi1+2z9slP0O1BerDDn5AaTOx9YfcAFs/w8=
+    on_success: always

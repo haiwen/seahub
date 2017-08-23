@@ -130,6 +130,7 @@ json_content_type = 'application/json; charset=utf-8'
 # Define custom HTTP status code. 4xx starts from 440, 5xx starts from 520.
 HTTP_440_REPO_PASSWD_REQUIRED = 440
 HTTP_441_REPO_PASSWD_MAGIC_REQUIRED = 441
+HTTP_443_ABOVE_QUOTA = 443
 HTTP_520_OPERATION_FAILED = 520
 
 ########## Test
@@ -1276,7 +1277,7 @@ class FileBlockDownloadLinkView(APIView):
                     'You do not have permission to access this repo.')
 
         if check_quota(repo_id) < 0:
-            return api_error(HTTP_520_OPERATION_FAILED, 'Above quota')
+            return api_error(HTTP_443_ABOVE_QUOTA, 'Above quota')
 
         token = seafile_api.get_fileserver_access_token(
                 repo_id, file_id, 'downloadblks', request.user.username)
@@ -1312,7 +1313,7 @@ class UploadLinkView(APIView):
                     'You do not have permission to access this folder.')
 
         if check_quota(repo_id) < 0:
-            return api_error(HTTP_520_OPERATION_FAILED, 'Above quota')
+            return api_error(HTTP_443_ABOVE_QUOTA, 'Above quota')
 
         token = seafile_api.get_fileserver_access_token(repo_id,
                 'dummy', 'upload', request.user.username, use_onetime=False)
@@ -1356,7 +1357,7 @@ class UpdateLinkView(APIView):
                     'You do not have permission to access this folder.')
 
         if check_quota(repo_id) < 0:
-            return api_error(HTTP_520_OPERATION_FAILED, 'Above quota')
+            return api_error(HTTP_443_ABOVE_QUOTA, 'Above quota')
 
         token = seafile_api.get_fileserver_access_token(repo_id,
                 'dummy', 'update', request.user.username)
@@ -1400,7 +1401,7 @@ class UploadBlksLinkView(APIView):
                     'You do not have permission to access this folder.')
 
         if check_quota(repo_id) < 0:
-            return api_error(HTTP_520_OPERATION_FAILED, 'Above quota')
+            return api_error(HTTP_443_ABOVE_QUOTA, 'Above quota')
 
         token = seafile_api.get_fileserver_access_token(repo_id,
                 'dummy', 'upload-blks-api', request.user.username, use_onetime=False)
@@ -1445,7 +1446,7 @@ class UploadBlksLinkView(APIView):
                     'You do not have permission to access this folder.')
 
         if check_quota(repo_id) < 0:
-            return api_error(HTTP_520_OPERATION_FAILED, 'Above quota')
+            return api_error(HTTP_443_ABOVE_QUOTA, 'Above quota')
 
         token = seafile_api.get_fileserver_access_token(repo_id,
                 'dummy', 'upload', request.user.username, use_onetime=False)
@@ -1493,7 +1494,7 @@ class UpdateBlksLinkView(APIView):
                     'You do not have permission to access this folder.')
 
         if check_quota(repo_id) < 0:
-            return api_error(HTTP_520_OPERATION_FAILED, 'Above quota')
+            return api_error(HTTP_443_ABOVE_QUOTA, 'Above quota')
 
         token = seafile_api.get_fileserver_access_token(repo_id,
                 'dummy', 'update-blks-api', request.user.username, use_onetime=False)
@@ -1559,6 +1560,8 @@ def get_dir_entrys_by_id(request, repo, path, dir_id, request_type=None):
             if is_pro_version():
                 entry["is_locked"] = dirent.is_locked
                 entry["lock_owner"] = dirent.lock_owner
+                if dirent.lock_owner:
+                    entry["lock_owner_name"] = email2nickname(dirent.lock_owner)
                 entry["lock_time"] = dirent.lock_time
                 if username == dirent.lock_owner:
                     entry["locked_by_me"] = True
@@ -2209,8 +2212,13 @@ class FileView(APIView):
             if not newname:
                 return api_error(status.HTTP_400_BAD_REQUEST,
                                  'New name is missing')
+
             if len(newname) > settings.MAX_UPLOAD_FILE_NAME_LEN:
                 return api_error(status.HTTP_400_BAD_REQUEST, 'New name is too long')
+
+            if not seafile_api.is_valid_filename('fake_repo_id', newname):
+                error_msg = 'File name invalid.'
+                return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
 
             oldname = os.path.basename(path)
             if oldname == newname:
@@ -2337,6 +2345,11 @@ class FileView(APIView):
                                  'You do not have permission to create file.')
 
             new_file_name = os.path.basename(path)
+
+            if not seafile_api.is_valid_filename('fake_repo_id', new_file_name):
+                error_msg = 'File name invalid.'
+                return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
+
             new_file_name = check_filename_with_rename(repo_id, parent_dir, new_file_name)
 
             try:
@@ -2790,6 +2803,11 @@ class DirView(APIView):
 
         if operation.lower() == 'mkdir':
             new_dir_name = os.path.basename(path)
+
+            if not seafile_api.is_valid_filename('fake_repo_id', new_dir_name):
+                error_msg = 'Folder name invalid.'
+                return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
+
             create_parents = request.POST.get('create_parents', '').lower() in ('true', '1')
             if not create_parents:
                 # check whether parent dir exists
