@@ -61,10 +61,15 @@ define([
             $('.main-content').show();
 
             var setMainConHeight = function() {
-                $('#right-panel').css({
-                    'max-height': $(window).height() - $('#right-panel').offset().top,
+                var $rightPanel = $('#right-panel');
+                var maxHeight = $(window).height() - $rightPanel.offset().top;
+                $rightPanel.css({
+                    'max-height': maxHeight,
                     'overflow': 'auto'
                 });
+                if ($rightPanel.outerHeight() < maxHeight) {
+                    $rightPanel.outerHeight(maxHeight); // for `.sf-dropdown`
+                }
             };
             setMainConHeight();
             $(window).resize(setMainConHeight);

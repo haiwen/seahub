@@ -1049,7 +1049,7 @@ textarea:-moz-placeholder {/* for FF */
     top:0;
     bottom:0;
     z-index:21;
-    overflow-x:hidden;
+    overflow:hidden;
     border-left:1px solid #c9c9c9;
     box-shadow:0 0 4px #ccc;
     -webkit-transition: all 0.3s ease;

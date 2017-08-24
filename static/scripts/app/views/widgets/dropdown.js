@@ -19,9 +19,8 @@ define([
             return true;
         }
 
-        if (!view.$('.sf-dropdown-menu').is(target)
-            && !view.$('.sf-dropdown-menu').find('*').is(target))
-        {
+        if (!view.$('.sf-dropdown-menu').is(target) &&
+            !view.$('.sf-dropdown-menu').find('*').is(target)) {
             view.hide();
             if (app.ui.currentHighlightedItem) {
                 app.ui.currentHighlightedItem.rmHighlight();

@@ -46,7 +46,7 @@ define([
 
         setConMaxHeight: function() {
             this.$('.right-side-panel-con').css({
-                'height': $(window).height() - this.$el.offset().top -
+                'max-height': $(window).height() - this.$el.offset().top -
                     this.$('.right-side-panel-hd').outerHeight(true)
             });
         },
