@@ -1039,6 +1039,7 @@
                             <select name="permission" class="share-permission-select w100">
                                 <option value="rw" selected="selected">{% trans "Read-Write" %}</option>
                                 <option value="r">{% trans "Read-Only" %}</option>
+                                <option value="admin">{% trans "Admin" %}</option>
                             </select>
                         </td>
                         <td><input type="submit" value="{% trans "Submit" %}" class="submit" /></td>
@@ -1085,9 +1086,16 @@
         <img src="<%= icon_url %>" title="<%= icon_title %>" alt="<%= icon_title %>" width="24" />
     </td>
     <td><a href="#shared-libs/lib/<%= id %>"><%- name %></a></td>
+    <% if (is_admin) { %>
+    <td class="alc">
+        <a href="#" class="sf2-icon-share sf2-x repo-share-btn op-icon vh" title="{% trans "Share" %}"></a>
+        <a href="#" class="sf2-icon-delete sf2-x unshare-btn op-icon vh" title="{% trans "Leave Share" %}"></a>
+    </td>
+    <% } else { %>
     <td class="alc">
         <a href="#" class="sf2-icon-delete sf2-x unshare-btn op-icon vh" title="{% trans "Leave Share" %}"></a>
     </td>
+    <% } %>
     <td><%= size_formatted %></td>
     <td><%= mtime_relative %></td>
     <td><span title="<%- owner %>"><%- owner_nickname %></span></td>
@@ -1289,21 +1297,33 @@
     <td>
         <div class="perm">
             <span>
-            <% if (permission == 'rw') { %>
-                {% trans "Read-Write" %}
+            <% if (is_admin) { %>
+                {% trans "Admin" %}
             <% } else { %>
-                {% trans "Read-Only" %}
+                <% if (permission == 'rw') { %>
+                    {% trans "Read-Write" %}
+                <% } else { %>
+                    {% trans "Read-Only" %}
+                <% } %>
             <% } %>
             </span>
             <a href="#" title="{% trans "Edit" %}" class="perm-edit-icon sf2-icon-edit op-icon vh"></a>
         </div>
         <select class="perm-toggle-select hide w100">
-            <% if (permission == 'rw') { %>
-                <option value="rw" selected="selected" >{% trans "Read-Write" %}</option>
-                <option value="r" >{% trans "Read-Only" %}</option>
-            <% } else { %>
+            <% if (is_admin) { %>
                 <option value="rw" >{% trans "Read-Write" %}</option>
-                <option value="r" selected="selected" >{% trans "Read-Only" %}</option>
+                <option value="r" >{% trans "Read-Only" %}</option>
+                <option value="admin" selected="selected" >{% trans "Admin" %}</option>
+            <% } else { %>
+                <% if (permission == 'rw') { %>
+                    <option value="rw" selected="selected" >{% trans "Read-Write" %}</option>
+                    <option value="r" >{% trans "Read-Only" %}</option>
+                    <option value="admin" >{% trans "Admin" %}</option>
+                <% } else { %>
+                    <option value="rw" >{% trans "Read-Write" %}</option>
+                    <option value="r" selected="selected" >{% trans "Read-Only" %}</option>
+                    <option value="admin" >{% trans "Admin" %}</option>
+                <% } %>
             <% } %>
         </select>
     </td>

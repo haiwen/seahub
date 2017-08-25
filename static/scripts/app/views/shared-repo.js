@@ -3,8 +3,9 @@ define([
     'underscore',
     'backbone',
     'common',
-    'app/views/widgets/hl-item-view'
-], function($, _, Backbone, Common, HLItemView) {
+    'app/views/widgets/hl-item-view',
+    'app/views/share',
+], function($, _, Backbone, Common, HLItemView, ShareView) {
     'use strict';
 
     var SharedRepoView = HLItemView.extend({
@@ -14,11 +15,26 @@ define([
         mobileTemplate: _.template($('#shared-repo-mobile-tmpl').html()),
 
         events: {
-            'click .unshare-btn': 'removeShare'
+            'click .unshare-btn': 'removeShare',
+            'click .repo-share-btn': 'share',
         },
 
         initialize: function() {
             HLItemView.prototype.initialize.call(this);
+        },
+
+        share: function() {
+            var options = {
+                'is_repo_owner': true,
+                'user_perm': 'rw',
+                'repo_id': this.model.get('id'),
+                'repo_encrypted': this.model.get('encrypted'),
+                'is_dir': true,
+                'dirent_path': '/',
+                'obj_name': this.model.get('name')
+            };
+            new ShareView(options);
+            return false;
         },
 
         removeShare: function(e) {

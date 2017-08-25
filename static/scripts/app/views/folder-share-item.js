@@ -74,7 +74,13 @@ define([
                     'permission': perm
                 },
                 success: function () {
-                    item_data.permission = perm;
+                    if (perm == 'admin'){
+                        item_data.is_admin = true;
+                        item_data.permission = 'rw';
+                    } else {
+                        item_data.permission = perm;
+                        item_data.is_admin = false;
+                    }
                     _this.render();
                 },
                 error: function(xhr) {

@@ -576,7 +576,8 @@ define([
                                 "user_email": item.user_info.name,
                                 "user_name": item.user_info.nickname,
                                 "permission": item.permission,
-                                'for_user': true
+                                'for_user': true,
+                                'is_admin': item.is_admin
                             }
                         });
                         $add_item.after(new_item.el);
@@ -756,14 +757,15 @@ define([
                                     "user_email": item.user_info.name,
                                     "user_name": item.user_info.nickname,
                                     "permission": item.permission,
-                                    'for_user': true
+                                    'for_user': true,
+                                    'is_admin': item.is_admin
                                 }
                             });
                             $add_item.after(new_item.el);
                         });
                         emails_input.select2("val", "");
                         $('[value="rw"]', $perm).attr('selected', 'selected');
-                        $('[value="r"]', $perm).removeAttr('selected');
+                        $('[value="rw"]', $perm).nextAll().removeAttr('selected');
                         $error.addClass('hide');
                     }
                     if (data.failed.length > 0) {

@@ -1,8 +1,10 @@
 # Copyright (c) 2012-2016 Seafile Ltd.
+import operator
 import datetime
 import logging
 
 from django.db import models
+from django.db.models import Q
 from django.utils import timezone
 from django.utils.translation import ugettext_lazy as _
 from django.contrib.auth.hashers import make_password, check_password
@@ -11,6 +13,7 @@ from constance import config
 from seahub.base.fields import LowerCaseCharField
 from seahub.utils import normalize_file_path, normalize_dir_path, gen_token,\
     get_service_url
+from seahub.constants import PERMISSION_READ, PERMISSION_ADMIN
 
 # Get an instance of a logger
 logger = logging.getLogger(__name__)
@@ -149,6 +152,79 @@ class FileShareManager(models.Manager):
 
     def get_valid_dir_link_by_token(self, token):
         return self._get_valid_file_share_by_token(token)
+
+
+class ExtraSharePermissionManager(models.Manager):
+    def get_user_permission(self, repo_id, username):
+        """Get user's permission of a library.
+        return
+            e.g. 'admin'
+        """
+        record_list = super(ExtraSharePermissionManager, self).filter(
+            repo_id=repo_id, share_to=username
+        )
+        if len(record_list) > 0:
+            return record_list[0].permission
+        else:
+            return None
+
+    def get_repos_with_admin_permission(self, username):
+        """Get repo id list a user has admin permission.
+        """
+        shared_repos = super(ExtraSharePermissionManager, self).filter(
+            share_to=username, permission=PERMISSION_ADMIN
+        )
+        return [e.repo_id for e in shared_repos]
+
+    def get_admin_users_by_repo(self, repo_id):
+        """Gets the share and permissions of the record in the specified repo ID.
+        return
+            e.g. ['admin_user1', 'admin_user2']
+        """
+        shared_repos = super(ExtraSharePermissionManager, self).filter(
+            repo_id=repo_id, permission=PERMISSION_ADMIN
+        )
+
+        return [e.share_to for e in shared_repos]
+
+    def batch_is_admin(self, in_datas):
+        """return the data that input data is admin 
+        e.g.
+            in_datas:
+                [(repo_id1, username1), (repo_id2, admin1)]
+            return:
+                [(repo_id2, admin1)]
+        """
+        if len(in_datas) <= 0:
+            return []
+        query = reduce(
+            operator.or_,
+            (Q(repo_id=data[0], share_to=data[1]) for data in in_datas)
+        )
+        db_data = super(ExtraSharePermissionManager, self).filter(query).filter(permission=PERMISSION_ADMIN)
+        return [(e.repo_id, e.share_to) for e in db_data]
+
+    def create_share_permission(self, repo_id, username, permission):
+        self.model(repo_id=repo_id, share_to=username, 
+                   permission=permission).save()
+
+    def delete_share_permission(self, repo_id, share_to):
+        super(ExtraSharePermissionManager, self).filter(repo_id=repo_id, 
+                                                   share_to=share_to).delete()
+
+    def update_share_permission(self, repo_id, share_to, permission):
+        super(ExtraSharePermissionManager, self).filter(repo_id=repo_id, 
+                                                   share_to=share_to).delete()
+        if permission in [PERMISSION_ADMIN]:
+            self.create_share_permission(repo_id, share_to, permission)
+
+
+class ExtraSharePermission(models.Model):
+    repo_id = models.CharField(max_length=36, db_index=True)
+    share_to = models.CharField(max_length=255, db_index=True)
+    permission = models.CharField(max_length=30)
+    objects = ExtraSharePermissionManager()
+
 
 class FileShare(models.Model):
     """
@@ -315,7 +391,7 @@ class PrivateFileDirShareManager(models.Manager):
         """
         """
         return self.add_private_file_share(from_user, to_user, repo_id,
-                                           path, 'r')
+                                           path, PERMISSION_READ)
 
     def get_private_share_in_file(self, username, repo_id, path):
         """Get a file that private shared to ``username``.
