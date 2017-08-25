@@ -33,6 +33,10 @@
         {% include "snippets/web_settings_form.html" %}
     {% endwith %}
 
+    {% with type="file" setting_display_name="Login_Background_Image" setting_name="login_bg_image" file_path=login_bg_image_path file_width=256 file_height=256 help_tip="login-bg.jpg, 1920px * 1080px" %}
+        {% include "snippets/web_settings_form.html" %}
+    {% endwith %}
+
     <h4>{% trans "User" %}</h4>
 
     {% with type="checkbox" setting_name="ENABLE_SIGNUP" setting_val=config_dict.ENABLE_SIGNUP %}
@@ -277,6 +281,7 @@ $('.web-setting-file-upload-input').change(function() {
     switch(input_name) {
         case 'logo': url = '{% url 'api-v2.1-admin-logo' %}'; break;
         case 'favicon': url = '{% url 'api-v2.1-admin-favicon' %}'; break;
+        case 'login_bg_image': url = '{% url 'api-v2.1-admin-login-background-image' %}'; break;
     }
 
     fd.append(input_name, file);
