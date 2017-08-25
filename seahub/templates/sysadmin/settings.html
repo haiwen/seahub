@@ -33,7 +33,8 @@
         {% include "snippets/web_settings_form.html" %}
     {% endwith %}
 
-    {% with type="file" setting_display_name="Login_Background_Image" setting_name="login_bg_image" file_path=login_bg_image_path file_width=256 file_height=256 help_tip="login-bg.jpg, 1920px * 1080px" %}
+    {% with type="file" setting_name="login_bg_image" file_path=login_bg_image_path file_width=240 file_height=160 help_tip="login-bg.jpg, 2400px * 1600px" %}
+        {% trans "Login Background Image" as setting_display_name %}
         {% include "snippets/web_settings_form.html" %}
     {% endwith %}
 
