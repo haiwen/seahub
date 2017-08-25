@@ -11,6 +11,8 @@ from rest_framework import status
 
 import seaserv
 
+from seaserv import ccnet_api
+
 from seahub.api2.authentication import TokenAuthentication
 from seahub.api2.throttling import UserRateThrottle
 from seahub.api2.utils import api_error
@@ -54,16 +56,22 @@ class SearchUser(APIView):
             # if current user can use global address book
             if CLOUD_MODE:
                 if is_org_context(request):
-                    # search from org
-                    email_list += search_user_from_org(request, q)
+
+                    # get all org users
+                    url_prefix = request.user.org.url_prefix
+                    # TODO all_org_users = ccnet_api.get_org_users_by_url_prefix(url_prefix, -1, -1)
+                    all_org_users = seaserv.get_org_users_by_url_prefix(url_prefix, -1, -1)
+
+                    limited_emails = []
+                    for org_user in all_org_users:
+                        # prepare limited emails for search from profile
+                        limited_emails.append(org_user.email)
+
+                        # search user from org users
+                        if q in org_user.email:
+                            email_list.append(org_user.email)
 
                     # search from profile, limit search range in all org users
-                    limited_emails = []
-                    url_prefix = request.user.org.url_prefix
-                    all_org_users = seaserv.get_org_users_by_url_prefix(url_prefix, -1, -1)
-                    for user in all_org_users:
-                        limited_emails.append(user.email)
-
                     email_list += search_user_from_profile_with_limits(q, limited_emails)
 
                 elif ENABLE_GLOBAL_ADDRESSBOOK:
@@ -138,20 +146,6 @@ def format_searched_user_result(request, users, size):
         })
 
     return results
-
-def search_user_from_org(request, q):
-
-    # get all org users
-    url_prefix = request.user.org.url_prefix
-    all_org_users = seaserv.get_org_users_by_url_prefix(url_prefix, -1, -1)
-
-    # search user from org users
-    email_list = []
-    for org_user in all_org_users:
-        if q in org_user.email:
-            email_list.append(org_user.email)
-
-    return email_list
 
 def search_user_from_ccnet(q):
     users = []
