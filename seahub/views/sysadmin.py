@@ -65,7 +65,9 @@ from seahub.admin_log.models import USER_DELETE, USER_ADD
 import seahub.settings as settings
 from seahub.settings import INIT_PASSWD, SITE_NAME, SITE_ROOT, \
     SEND_EMAIL_ON_ADDING_SYSTEM_MEMBER, SEND_EMAIL_ON_RESETTING_USER_PASSWD, \
-    ENABLE_SYS_ADMIN_VIEW_REPO, ENABLE_GUEST_INVITATION
+    ENABLE_SYS_ADMIN_VIEW_REPO, ENABLE_GUEST_INVITATION, LOGIN_BG_IMAGE_PATH, \
+    MEDIA_ROOT
+from seahub.api2.endpoints.admin.login_bg_image import CUSTOM_LOGIN_BG_IMAGE_PATH
 try:
     from seahub.settings import ENABLE_TRIAL_ACCOUNT
 except:
@@ -2071,8 +2073,15 @@ def sys_settings(request):
         value = getattr(config, key)
         config_dict[key] = value
 
+    login_bg_image_path = LOGIN_BG_IMAGE_PATH
+    # get path that background image of login page
+    custom_login_bg_image_file = os.path.join(MEDIA_ROOT, CUSTOM_LOGIN_BG_IMAGE_PATH)
+    if os.path.exists(custom_login_bg_image_file):
+        login_bg_image_path = CUSTOM_LOGIN_BG_IMAGE_PATH
+
     return render_to_response('sysadmin/settings.html', {
         'config_dict': config_dict,
+        'login_bg_image_path': login_bg_image_path,
     }, context_instance=RequestContext(request))
 
 @login_required_ajax

@@ -422,6 +422,9 @@ SITE_NAME = 'Seafile'
 # Path to the license file(relative to the media path)
 LICENSE_PATH = os.path.join(PROJECT_ROOT, '../../seafile-license.txt')
 
+# Path to the background image file of login page(relative to the media path)
+LOGIN_BG_IMAGE_PATH = 'img/login-bg.jpg'
+
 # Path to the favicon file (relative to the media path)
 # tip: use a different name when modify it.
 FAVICON_PATH = 'img/favicon.ico'

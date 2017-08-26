@@ -85,6 +85,7 @@ from seahub.api2.endpoints.admin.favicon import AdminFavicon
 from seahub.api2.endpoints.admin.license import AdminLicense
 from seahub.api2.endpoints.admin.invitations import InvitationsView as AdminInvitationsView
 from seahub.api2.endpoints.admin.library_history import AdminLibraryHistoryLimit
+from seahub.api2.endpoints.admin.login_bg_image import AdminLoginBgImage
 
 # Uncomment the next two lines to enable the admin:
 #from django.contrib import admin
@@ -336,6 +337,7 @@ urlpatterns = patterns(
     url(r'^api/v2.1/admin/logo/$', AdminLogo.as_view(), name='api-v2.1-admin-logo'),
     url(r'^api/v2.1/admin/favicon/$', AdminFavicon.as_view(), name='api-v2.1-admin-favicon'),
     url(r'^api/v2.1/admin/license/$', AdminLicense.as_view(), name='api-v2.1-admin-license'),
+    url(r'^api/v2.1/admin/login-background-image/$', AdminLoginBgImage.as_view(), name='api-v2.1-admin-login-background-image'),
 
     ## admin::invitations
     url(r'^api/v2.1/admin/invitations/$', AdminInvitationsView.as_view(), name='api-v2.1-admin-invitations'),
