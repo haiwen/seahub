@@ -295,23 +295,20 @@ define([
         },
 
         getLibIconUrl: function(is_encrypted, is_readonly, size) {
-            if (size > 24) {
-                if (is_encrypted) {
-                    return app.config.mediaUrl + "img/lib/96/lib-encrypted.png";
-                } else if (is_readonly) {
-                    return app.config.mediaUrl + "img/lib/96/lib-readonly.png";
-                } else {
-                    return app.config.mediaUrl + "img/lib/96/lib.png";
-                }
-            } else {
-                if (is_encrypted) {
-                    return app.config.mediaUrl + "img/lib/24/lib-encrypted.png";
-                } else if (is_readonly) {
-                    return app.config.mediaUrl + "img/lib/24/lib-readonly.png";
-                } else {
-                    return app.config.mediaUrl + "img/lib/24/lib.png";
-                }
+
+            // icon name
+            var icon_name = 'lib.png';
+            if (is_encrypted) {
+                icon_name = 'lib-encrypted.png';
             }
+            if (is_readonly) {
+                icon_name = 'lib-readonly.png';
+            }
+
+            // icon size
+            var icon_size = size || 256; // 'size' can be 24, 48, or undefined. (2017.7.31)
+
+            return app.config.mediaUrl + 'img/lib/' + icon_size + '/' + icon_name;
         },
 
         getLibIconTitle: function(is_encrypted, is_readonly) {

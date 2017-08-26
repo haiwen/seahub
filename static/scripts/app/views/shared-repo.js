@@ -47,7 +47,7 @@ define([
 
         render: function() {
             var obj = this.model.toJSON();
-            var icon_size = Common.isHiDPI() ? 96 : 24;
+            var icon_size = Common.isHiDPI() ? 48 : 24;
             var icon_url = this.model.getIconUrl(icon_size);
             var tmpl = $(window).width() >= 768 ? this.template : this.mobileTemplate;
             _.extend(obj, {
