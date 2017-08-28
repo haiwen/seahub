@@ -225,7 +225,7 @@ class AdminUsers(APIView):
 
         if user_exist:
             error_msg = "User %s already exists." % email
-            return api_error(status.HTTP_404_NOT_FOUND, error_msg)
+            return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
 
         password = request.data.get('password', None)
         if not password:
