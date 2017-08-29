@@ -80,26 +80,27 @@ class AuthTokenSerializer(serializers.Serializer):
 
         populate_user_permissions(user)
 
-        if platform in DESKTOP_PLATFORMS:
-            if not user.permissions.can_connect_with_desktop_clients():
-                raise serializers.ValidationError('Not allowed to connect to desktop client.')
-        elif platform == 'android':
-            if not user.permissions.can_connect_with_android_clients():
-                raise serializers.ValidationError('Not allowed to connect to android client.')
-        elif platform == 'ios':
-            if not user.permissions.can_connect_with_ios_clients():
-                raise serializers.ValidationError('Not allowed to connect to ios client.')
-        else:
-            logger.info('%s: unrecognized device' % login_id)
-
         self._two_factor_auth(self.context['request'], user)
 
         # Now user is authenticated
         if v2:
-            token = get_token_v2(self.context['request'], username, platform, device_id, device_name,
-                                 client_version, platform_version)
+            if platform in DESKTOP_PLATFORMS:
+                if not user.permissions.can_connect_with_desktop_clients():
+                    raise serializers.ValidationError('Not allowed to connect to desktop client.')
+            elif platform == 'android':
+                if not user.permissions.can_connect_with_android_clients():
+                    raise serializers.ValidationError('Not allowed to connect to android client.')
+            elif platform == 'ios':
+                if not user.permissions.can_connect_with_ios_clients():
+                    raise serializers.ValidationError('Not allowed to connect to ios client.')
+            else:
+                logger.info('%s: unrecognized device' % login_id)
+
+            token = get_token_v2(self.context['request'], username, platform,
+                    device_id, device_name, client_version, platform_version)
         else:
             token = get_token_v1(username)
+
         return token.key
 
     def _two_factor_auth(self, request, user):
