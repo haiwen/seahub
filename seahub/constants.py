@@ -4,3 +4,8 @@ DEFAULT_USER = 'default'
 
 # Guest user have limited operations, can not create group and library.
 GUEST_USER = 'guest'
+
+# Permissions
+PERMISSION_READ = 'r'
+PERMISSION_READ_WRITE = 'rw'
+PERMISSION_ADMIN = 'admin'

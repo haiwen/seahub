@@ -46,6 +46,7 @@ from seahub.avatar.templatetags.group_avatar_tags import api_grp_avatar_url, \
         grp_avatar
 from seahub.base.accounts import User
 from seahub.base.models import UserStarredFiles, DeviceToken
+from seahub.share.models import ExtraSharePermission
 from seahub.base.templatetags.seahub_tags import email2nickname, \
     translate_seahub_time, translate_commit_desc_escape, \
     email2contact_email
@@ -485,6 +486,8 @@ class Repos(APIView):
             else:
                 shared_repos = seafile_api.get_share_in_repo_list(
                         email, -1, -1)
+            repos_with_admin_share_to = ExtraSharePermission.objects.\
+                    get_repos_with_admin_permission(email)
 
             # Reduce memcache fetch ops.
             owners_set = set([x.user for x in shared_repos])
@@ -518,6 +521,13 @@ class Repos(APIView):
                     "head_commit_id": r.head_cmmt_id,
                     "version": r.version,
                 }
+                
+
+                if r.repo_id in repos_with_admin_share_to:
+                    repo['is_admin'] = True
+                else:
+                    repo['is_admin'] = False
+
                 repos_json.append(repo)
 
         if filter_by['group']:

@@ -27,6 +27,7 @@ define([
             this.has_been_shared_out = data.has_been_shared_out;
             this.dirent_more = data.dirent_more;
             this.more_start = data.more_start;
+            this.is_admin = data.is_admin;
             return data.dirent_list; // return the array
         },
 

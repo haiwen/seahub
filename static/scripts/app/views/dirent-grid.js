@@ -203,6 +203,10 @@ define([
                 'dirent_path': dirent_path,
                 'obj_name': obj_name
             };
+            if (app.pageOptions.is_pro) {
+                options.is_admin = dir.is_admin;
+            }
+
             new ShareView(options);
             this.closeMenu();
             return false;

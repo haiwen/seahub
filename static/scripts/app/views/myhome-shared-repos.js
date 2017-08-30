@@ -4,7 +4,7 @@ define([
     'backbone',
     'common',
     'app/collections/repos',
-    'app/views/shared-repo',
+    'app/views/shared-repo'
 ], function($, _, Backbone, Common, RepoCollection, SharedRepoView) {
     'use strict';
 

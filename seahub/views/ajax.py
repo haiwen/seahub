@@ -30,7 +30,7 @@ from seahub.forms import RepoRenameDirentForm
 from seahub.options.models import UserOptions, CryptoOptionNotSetError
 from seahub.notifications.models import UserNotification
 from seahub.notifications.views import add_notice_from_info
-from seahub.share.models import UploadLinkShare
+from seahub.share.models import UploadLinkShare, ExtraSharePermission
 from seahub.signals import upload_file_successful
 from seahub.views import get_unencry_rw_repos_by_user, \
     get_diff, check_folder_permission
@@ -50,6 +50,7 @@ from seahub.thumbnail.utils import get_thumbnail_src
 from seahub.utils.file_types import IMAGE, VIDEO
 from seahub.base.templatetags.seahub_tags import translate_seahub_time, \
     email2nickname, tsstr_sec
+from seahub.constants import PERMISSION_ADMIN
 
 # Get an instance of a logger
 logger = logging.getLogger(__name__)
@@ -308,6 +309,9 @@ def list_lib_dir(request, repo_id):
                     result["has_been_shared_out"] = True
         except Exception as e:
             logger.error(e)
+
+    # for shared repo
+    result["is_admin"] = ExtraSharePermission.objects.get_user_permission(repo_id, username) == PERMISSION_ADMIN
 
     result["is_virtual"] = repo.is_virtual
     result["repo_name"] = repo.name

@@ -12,11 +12,12 @@ from seahub.api2.authentication import TokenAuthentication
 from seahub.api2.throttling import UserRateThrottle
 from seahub.api2.utils import api_error
 from seahub.utils import is_valid_username, is_org_context
+from seahub.share.models import ExtraSharePermission
 
 json_content_type = 'application/json; charset=utf-8'
 
 class BeSharedRepo(APIView):
-    authentication_classes = (TokenAuthentication, SessionAuthentication )
+    authentication_classes = (TokenAuthentication, SessionAuthentication)
     permission_classes = (IsAuthenticated,)
     throttle_classes = (UserRateThrottle, )
 
@@ -41,6 +42,10 @@ class BeSharedRepo(APIView):
                                                                username)
             else:
                 seaserv.remove_share(repo_id, from_email, username)
+
+            # Delete data of ExtraSharePermission table.
+            ExtraSharePermission.objects.delete_share_permission(repo_id, 
+                                                                 username)
 
         elif share_type == 'group':
 
