@@ -20,11 +20,17 @@ define([
             this.repo_id = options.repo_id;
             this.path = options.path;
 
+            // show info about 'is_admin'
+            this.show_admin = false;
+            if (app.pageOptions.is_pro && this.path == '/' && this.item_data.for_user) {
+                this.show_admin = true;
+            }
+
             this.render();
         },
 
         render: function () {
-            this.$el.html(this.template(this.item_data));
+            this.$el.html(this.template($.extend({}, this.item_data, {'show_admin': this.show_admin})));
             return this;
         },
 

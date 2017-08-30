@@ -824,6 +824,9 @@ define([
                     'dirent_path': path,
                     'obj_name': path == '/' ? dir.repo_name : path.substr(path.lastIndexOf('/') + 1)
                 };
+                if (app.pageOptions.is_pro) {
+                    options.is_admin = dir.is_admin;
+                }
                 new ShareView(options);
             },
 

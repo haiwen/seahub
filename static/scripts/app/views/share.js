@@ -14,6 +14,8 @@ define([
 
         initialize: function(options) {
             this.is_repo_owner = options.is_repo_owner;
+            // for shared repo
+            this.is_admin = options.is_admin; // true or undefined
             this.is_virtual = options.is_virtual;
             this.user_perm = options.user_perm;
             this.repo_id = options.repo_id;
@@ -44,7 +46,7 @@ define([
                 if (this.user_perm == 'rw' && !this.repo_encrypted && app.pageOptions.can_generate_upload_link) {
                     this.uploadLinkPanelInit();
                 }
-                if (!this.is_virtual && this.is_repo_owner) {
+                if (!this.is_virtual && (this.is_repo_owner || this.is_admin)) {
                     this.dirUserSharePanelInit();
                     this.dirGroupSharePanelInit();
 
@@ -66,12 +68,14 @@ define([
                     .replace('{placeholder}', '<span class="op-target ellipsis ellipsis-op-target" title="' + Common.HTMLescape(this.obj_name) + '">' + Common.HTMLescape(this.obj_name) + '</span>'),
                 is_dir: this.is_dir,
                 is_repo_owner: this.is_repo_owner,
+                is_admin: this.is_admin,
                 is_virtual: this.is_virtual,
                 user_perm: this.user_perm,
                 repo_id: this.repo_id,
                 can_generate_share_link: app.pageOptions.can_generate_share_link,
                 can_generate_upload_link: app.pageOptions.can_generate_upload_link,
-                repo_encrypted: this.repo_encrypted
+                repo_encrypted: this.repo_encrypted,
+                dirent_path: this.dirent_path
             }));
 
             return this;
@@ -576,8 +580,8 @@ define([
                                 "user_email": item.user_info.name,
                                 "user_name": item.user_info.nickname,
                                 "permission": item.permission,
-                                'for_user': true,
-                                'is_admin': item.is_admin
+                                'is_admin': item.is_admin,
+                                'for_user': true
                             }
                         });
                         $add_item.after(new_item.el);
@@ -757,15 +761,15 @@ define([
                                     "user_email": item.user_info.name,
                                     "user_name": item.user_info.nickname,
                                     "permission": item.permission,
-                                    'for_user': true,
-                                    'is_admin': item.is_admin
+                                    'is_admin': item.is_admin,
+                                    'for_user': true
                                 }
                             });
                             $add_item.after(new_item.el);
                         });
                         emails_input.select2("val", "");
+                        $('option', $perm).removeAttr('selected');
                         $('[value="rw"]', $perm).attr('selected', 'selected');
-                        $('[value="rw"]', $perm).nextAll().removeAttr('selected');
                         $error.addClass('hide');
                     }
                     if (data.failed.length > 0) {

@@ -4,7 +4,7 @@ define([
     'backbone',
     'common',
     'app/views/widgets/hl-item-view',
-    'app/views/share',
+    'app/views/share'
 ], function($, _, Backbone, Common, HLItemView, ShareView) {
     'use strict';
 
@@ -16,7 +16,7 @@ define([
 
         events: {
             'click .unshare-btn': 'removeShare',
-            'click .repo-share-btn': 'share',
+            'click .repo-share-btn': 'share'
         },
 
         initialize: function() {
@@ -25,7 +25,9 @@ define([
 
         share: function() {
             var options = {
-                'is_repo_owner': true,
+                'is_repo_owner': false,
+                'is_admin': true, // only for shared repo
+                'is_virtual': false,
                 'user_perm': 'rw',
                 'repo_id': this.model.get('id'),
                 'repo_encrypted': this.model.get('encrypted'),
@@ -33,6 +35,7 @@ define([
                 'dirent_path': '/',
                 'obj_name': this.model.get('name')
             };
+
             new ShareView(options);
             return false;
         },
