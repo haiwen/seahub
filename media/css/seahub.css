@@ -955,7 +955,7 @@ textarea:-moz-placeholder {/* for FF */
 .side-tabnav-tabs .tab a:focus {
     text-decoration:none;
 }
-.side-tabnav-tabs .tab .grp-list a {
+.side-tabnav-tabs .tab ul a {
     font-size:14px;
     line-height:24px;
     padding:0;
@@ -983,14 +983,14 @@ textarea:-moz-placeholder {/* for FF */
 .side-nav-toggle:hover {
     background:#ddd;
 }
-#group-nav .sharp {
+.home-side-nav .sharp {
     display:inline-block;
     width:42px;
     margin-right:5px;
     text-align:right;
     color:#aaa;
 }
-#group-nav .toggle-icon {
+.home-side-nav .toggle-icon {
     color:#999;
 }
 .side-tabnav-tabs .tab-cur a,
@@ -999,7 +999,7 @@ textarea:-moz-placeholder {/* for FF */
 }
 .side-tabnav-tabs .tab-cur [class^="sf2-icon-"],
 .side-tabnav-tabs .tab-cur a,
-#group-nav .tab-cur .sharp {
+.home-side-nav .tab-cur .sharp {
     color:#fff;
 }
 .side-tabnav-tabs .tab-cur a {
