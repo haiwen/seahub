@@ -108,7 +108,7 @@
 
     {% with type="checkbox" setting_name="ENABLE_REPO_HISTORY_SETTING" setting_val=config_dict.ENABLE_REPO_HISTORY_SETTING %}
         {% trans "library history" as setting_display_name %}
-        {% trans "Allow user to keep library history" as help_tip %}
+        {% trans "Allow user to change library history settings" as help_tip %}
         {% include "snippets/web_settings_form.html" %}
     {% endwith %}
 
