@@ -33,7 +33,8 @@ from django.views.static import serve as django_static_serve
 
 from seahub.api2.models import Token, TokenV2
 import seahub.settings
-from seahub.settings import SITE_NAME, MEDIA_URL, LOGO_PATH
+from seahub.settings import SITE_NAME, MEDIA_URL, LOGO_PATH, \
+        MEDIA_ROOT, CUSTOM_LOGO_PATH
 try:
     from seahub.settings import EVENTS_CONFIG_FILE
 except ImportError:
@@ -776,11 +777,18 @@ def send_html_email(subject, con_template, con_context, from_email, to_email,
                     reply_to=None):
     """Send HTML email
     """
+
+    # get logo path
+    logo_path = LOGO_PATH
+    custom_logo_file = os.path.join(MEDIA_ROOT, CUSTOM_LOGO_PATH)
+    if os.path.exists(custom_logo_file):
+        logo_path = CUSTOM_LOGO_PATH
+
     base_context = {
         'url_base': get_site_scheme_and_netloc(),
         'site_name': SITE_NAME,
         'media_url': MEDIA_URL,
-        'logo_path': LOGO_PATH,
+        'logo_path': logo_path,
     }
     t = loader.get_template(con_template)
     con_context.update(base_context)

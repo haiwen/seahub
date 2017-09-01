@@ -428,6 +428,9 @@ LOGO_PATH = 'img/seafile-logo.png'
 LOGO_WIDTH = 128
 LOGO_HEIGHT = 32
 
+CUSTOM_LOGO_PATH = 'custom/mylogo.png'
+CUSTOM_FAVICON_PATH = 'custom/favicon.ico'
+
 # css to modify the seafile css (e.g. css/my_site.css)
 BRANDING_CSS = ''
 
