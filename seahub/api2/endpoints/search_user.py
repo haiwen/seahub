@@ -1,4 +1,6 @@
 # Copyright (c) 2012-2016 Seafile Ltd.
+import os
+import sys
 import json
 
 from django.db.models import Q
@@ -28,6 +30,17 @@ try:
     from seahub.settings import CLOUD_MODE
 except ImportError:
     CLOUD_MODE = False
+
+try:
+    current_path = os.path.dirname(os.path.abspath(__file__))
+    seafile_conf_dir = os.path.join(current_path, \
+            '../../../../../conf')
+    sys.path.append(seafile_conf_dir)
+    from seahub_custom_functions import custom_search_user
+    CUSTOM_SEARCH_USER = True
+except ImportError as e:
+    CUSTOM_SEARCH_USER = False
+
 
 class SearchUser(APIView):
     """ Search user from contacts/all users
@@ -112,6 +125,9 @@ class SearchUser(APIView):
         if include_self == 0 and username in email_result:
             # reomve myself
             email_result.remove(username)
+
+        if CUSTOM_SEARCH_USER:
+            email_result = custom_search_user(request, email_result)
 
         # format user result
         try:
