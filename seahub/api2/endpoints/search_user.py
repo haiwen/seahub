@@ -1,5 +1,6 @@
 # Copyright (c) 2012-2016 Seafile Ltd.
 import json
+import logging
 
 from django.db.models import Q
 from django.http import HttpResponse
@@ -9,7 +10,7 @@ from rest_framework.permissions import IsAuthenticated
 from rest_framework.views import APIView
 from rest_framework import status
 
-import seaserv
+from seaserv import ccnet_api
 
 from seahub.api2.authentication import TokenAuthentication
 from seahub.api2.throttling import UserRateThrottle
@@ -23,6 +24,8 @@ from seahub.avatar.templatetags.avatar_tags import api_avatar_url
 
 from seahub.settings import ENABLE_GLOBAL_ADDRESSBOOK, \
     ENABLE_SEARCH_FROM_LDAP_DIRECTLY
+
+logger = logging.getLogger(__name__)
 
 try:
     from seahub.settings import CLOUD_MODE
@@ -54,16 +57,26 @@ class SearchUser(APIView):
             # if current user can use global address book
             if CLOUD_MODE:
                 if is_org_context(request):
-                    # search from org
-                    email_list += search_user_from_org(request, q)
+
+                    # get all org users
+                    url_prefix = request.user.org.url_prefix
+                    try:
+                        all_org_users = ccnet_api.get_org_users_by_url_prefix(url_prefix, -1, -1)
+                    except Exception as e:
+                        logger.error(e)
+                        error_msg = 'Internal Server Error'
+                        return api_error(status.HTTP_500_INTERNAL_SERVER_ERROR, error_msg)
+
+                    limited_emails = []
+                    for org_user in all_org_users:
+                        # prepare limited emails for search from profile
+                        limited_emails.append(org_user.email)
+
+                        # search user from org users
+                        if q in org_user.email:
+                            email_list.append(org_user.email)
 
                     # search from profile, limit search range in all org users
-                    limited_emails = []
-                    url_prefix = request.user.org.url_prefix
-                    all_org_users = seaserv.get_org_users_by_url_prefix(url_prefix, -1, -1)
-                    for user in all_org_users:
-                        limited_emails.append(user.email)
-
                     email_list += search_user_from_profile_with_limits(q, limited_emails)
 
                 elif ENABLE_GLOBAL_ADDRESSBOOK:
@@ -139,34 +152,20 @@ def format_searched_user_result(request, users, size):
 
     return results
 
-def search_user_from_org(request, q):
-
-    # get all org users
-    url_prefix = request.user.org.url_prefix
-    all_org_users = seaserv.get_org_users_by_url_prefix(url_prefix, -1, -1)
-
-    # search user from org users
-    email_list = []
-    for org_user in all_org_users:
-        if q in org_user.email:
-            email_list.append(org_user.email)
-
-    return email_list
-
 def search_user_from_ccnet(q):
     users = []
 
-    db_users = seaserv.ccnet_threaded_rpc.search_emailusers('DB', q, 0, 10)
+    db_users = ccnet_api.search_emailusers('DB', q, 0, 10)
     users.extend(db_users)
 
     count = len(users)
     if count < 10:
-        ldap_imported_users = seaserv.ccnet_threaded_rpc.search_emailusers('LDAP', q, 0, 10 - count)
+        ldap_imported_users = ccnet_api.search_emailusers('LDAP', q, 0, 10 - count)
         users.extend(ldap_imported_users)
 
     count = len(users)
     if count < 10 and ENABLE_SEARCH_FROM_LDAP_DIRECTLY:
-        all_ldap_users = seaserv.ccnet_threaded_rpc.search_ldapusers(q, 0, 10 - count)
+        all_ldap_users = ccnet_api.search_ldapusers(q, 0, 10 - count)
         users.extend(all_ldap_users)
 
     # `users` is already search result, no need search more

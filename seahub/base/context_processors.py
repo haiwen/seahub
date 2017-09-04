@@ -18,7 +18,7 @@ from seahub.settings import SEAFILE_VERSION, SITE_TITLE, SITE_NAME, \
     MAX_FILE_NAME, BRANDING_CSS, LOGO_PATH, LOGO_WIDTH, LOGO_HEIGHT,\
     SHOW_REPO_DOWNLOAD_BUTTON, SITE_ROOT, ENABLE_GUEST_INVITATION, \
     FAVICON_PATH, ENABLE_THUMBNAIL, THUMBNAIL_SIZE_FOR_ORIGINAL, \
-    MEDIA_ROOT, SHOW_LOGOUT_ICON
+    MEDIA_ROOT, SHOW_LOGOUT_ICON, CUSTOM_LOGO_PATH, CUSTOM_FAVICON_PATH
 
 try:
     from seahub.settings import SEACLOUD_MODE
@@ -41,9 +41,6 @@ try:
     from seahub.settings import MULTI_TENANCY
 except ImportError:
     MULTI_TENANCY = False
-
-from seahub.api2.endpoints.admin.logo import CUSTOM_LOGO_PATH
-from seahub.api2.endpoints.admin.favicon import CUSTOM_FAVICON_PATH
 
 def base(request):
     """

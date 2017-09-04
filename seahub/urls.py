@@ -62,6 +62,7 @@ from seahub.api2.endpoints.admin.sysinfo import SysInfo
 from seahub.api2.endpoints.admin.statistics import FileOperationsView, TotalStorageView, ActiveUsersView
 from seahub.api2.endpoints.admin.devices import AdminDevices
 from seahub.api2.endpoints.admin.device_errors import AdminDeviceErrors
+from seahub.api2.endpoints.admin.users import AdminUsers, AdminUser
 from seahub.api2.endpoints.admin.libraries import AdminLibraries, AdminLibrary
 from seahub.api2.endpoints.admin.library_dirents import AdminLibraryDirents, AdminLibraryDirent
 from seahub.api2.endpoints.admin.system_library import AdminSystemLibrary, \
@@ -275,6 +276,10 @@ urlpatterns = patterns(
     url(r'^api/v2.1/admin/statistics/file-operations/$', FileOperationsView.as_view(), name='api-v2.1-admin-statistics-file-operations'),
     url(r'^api/v2.1/admin/statistics/total-storage/$', TotalStorageView.as_view(), name='api-v2.1-admin-statistics-total-storage'),
     url(r'^api/v2.1/admin/statistics/active-users/$', ActiveUsersView.as_view(), name='api-v2.1-admin-statistics-active-users'),
+
+    ## admin::users
+    url(r'^api/v2.1/admin/users/$', AdminUsers.as_view(), name='api-v2.1-admin-users'),
+    url(r'^api/v2.1/admin/users/(?P<email>[^/]+)/$', AdminUser.as_view(), name='api-v2.1-admin-user'),
 
     ## admin::devices
     url(r'^api/v2.1/admin/devices/$', AdminDevices.as_view(), name='api-v2.1-admin-devices'),

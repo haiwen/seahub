@@ -11,7 +11,6 @@ from pysearpc import SearpcError
 
 from seahub.utils.devices import do_unlink_device
 from seahub.utils.timeutils import datetime_to_isoformat_timestr
-from seahub.views import is_registered_user
 
 from seahub.api2.authentication import TokenAuthentication
 from seahub.api2.throttling import UserRateThrottle
