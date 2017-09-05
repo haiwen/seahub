@@ -31,7 +31,6 @@ define([
             }
 
             this.listenTo(this.model, 'destroy', this.remove);
-            this.show_admin = options.show_admin
         },
 
         render: function() {
@@ -43,22 +42,23 @@ define([
                 group_id: this.group_id,
                 is_staff: this.is_staff,
                 // for '#groups' (no 'share_from_me')
-                share_from_me: app.pageOptions.username == this.model.get('owner') ? true : false,
+                share_from_me: app.pageOptions.username == this.model.get('owner'),
                 // 'owner_name' for '#groups', 'owner_nickname' for '#group/id/'
                 owner_name: this.model.get('owner_nickname') || this.model.get('owner_name'),
                 show_shared_by: this.show_shared_by,
                 icon_url: icon_url,
-                icon_title: this.model.getIconTitle(),
-                is_admin: this.model.get('is_admin'),
-                show_admin: this.show_admin
+                icon_title: this.model.getIconTitle()
             });
             this.$el.html(tmpl(obj));
             return this;
         },
 
+        // only for 'is_admin:true'
         share: function() {
             var options = {
-                'is_repo_owner': true,
+                'is_repo_owner': app.pageOptions.username == this.model.get('owner'),
+                'is_admin': true, // only for shared repo
+                'is_virtual': false,
                 'user_perm': 'rw',
                 'repo_id': this.model.get('id'),
                 'repo_encrypted': this.model.get('encrypted'),
@@ -66,6 +66,7 @@ define([
                 'dirent_path': '/',
                 'obj_name': this.model.get('name')
             };
+
             new ShareView(options);
             return false;
         },

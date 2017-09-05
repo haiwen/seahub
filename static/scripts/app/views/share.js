@@ -848,8 +848,8 @@ define([
                             $add_item.after(new_item.el);
                         });
                         $groups_input.select2("val", "");
+                        $('option', $perm).removeAttr('selected');
                         $('[value="rw"]', $perm).attr('selected', 'selected');
-                        $('[value="r"]', $perm).removeAttr('selected');
                         $error.addClass('hide');
                     }
                     if (data.failed.length > 0) {

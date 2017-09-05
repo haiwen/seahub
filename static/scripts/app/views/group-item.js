@@ -43,8 +43,7 @@ define([
                     model: new GroupRepo(item, {collection: groupRepos}),
                     group_id: group_id,
                     is_staff: is_staff,
-                    show_shared_by: false, // don't show 'Shared By'
-                    show_admin: false
+                    show_shared_by: false // don't show 'Shared By'
                 });
                 $listContainer.append(view.render().el);
             });
