@@ -460,22 +460,24 @@ LOGGING = {
     'filters': {
         'require_debug_false': {
             '()': 'django.utils.log.RequireDebugFalse'
-         }
-     },
+        }
+    },
     'handlers': {
         'default': {
-            'level':'INFO',
-            'class':'logging.handlers.RotatingFileHandler',
+            'level': 'INFO',
+            'class': 'logging.handlers.RotatingFileHandler',
             'filename': os.path.join(LOG_DIR, 'seahub.log'),
-            'maxBytes': 1024*1024*10, # 10 MB
-            'formatter':'standard',
+            'maxBytes': 1024*1024*100,  # 100 MB
+            'backupCount': 5,
+            'formatter': 'standard',
         },
         'request_handler': {
-                'level':'INFO',
-                'class':'logging.handlers.RotatingFileHandler',
-                'filename': os.path.join(LOG_DIR, 'seahub_django_request.log'),
-                'maxBytes': 1024*1024*10, # 10 MB
-                'formatter':'standard',
+            'level': 'INFO',
+            'class': 'logging.handlers.RotatingFileHandler',
+            'filename': os.path.join(LOG_DIR, 'seahub_django_request.log'),
+            'maxBytes': 1024*1024*100, # 100 MB
+            'backupCount': 5,
+            'formatter': 'standard',
         },
         'mail_admins': {
             'level': 'ERROR',
