@@ -25,8 +25,7 @@
     </ul>
 
     <div class="js-op-for-all fright">
-        <button id="import-users-from-excel-btn">{% trans "Import users from excel" %}</button>
-        <button id="import-users-btn">{% trans "Import users" %}</button>
+        <button id="import-users-from-excel-btn">{% trans "Import users" %}</button>
         <button id="add-user-btn">{% trans "Add user" %}</button>
         <button id="export-excel">{% trans "Export Excel" %}</button>
     </div>
@@ -71,19 +70,7 @@
     <button type="submit" class="submit">{% trans "Submit" %}</button>
 </form>
 
-<form id="upload-csv-form" class="hide" enctype="multipart/form-data" method="post" action="{% url 'batch_add_user' %}">{% csrf_token %}
-    <h3>{% trans "Import users from a CSV file" %}</h3>
-    <input type="file" name="file" />
-    <button type="button" class="button" id="csv-example-btn">{% trans "Example" %}</button>
-    <p class="tip">
-        {% trans "File format: user@mail.com,password,name,department,role,quota"%}<br />
-        {% trans "Name, department, role and quota are optional." %}
-    </p>
-    <p class="error hide">{% trans "Please choose a CSV file" %}</p>
-    <button type="submit" class="submit">{% trans "Submit" %}</button>
-</form>
-
-<form id="upload-excel-form" class="hide" enctype="multipart/form-data" method="post" action="{% url 'batch_add_user_using_excel' %}">{% csrf_token %}
+<form id="upload-excel-form" class="hide" enctype="multipart/form-data" method="post" action="{% url 'batch_add_user' %}">{% csrf_token %}
     <h3>{% trans "Import users from a .xlsx file" %}</h3>
     <input id='excel-file' type="file" name="file" />
     <button type="button" class="button" id="excel-example-btn">{% trans "Example" %}</button>
@@ -160,10 +147,7 @@ $(function(){
     {% endif %}
 });
 $("#excel-example-btn").click(function() {
-    location.href = "{% url 'batch_add_user_example' %}"+"?type=xlsx";
-});
-$("#csv-example-btn").click(function() {
-    location.href = "{% url 'batch_add_user_example' %}"+"?type=csv";
+    location.href = "{% url 'batch_add_user_example' %}";
 });
 
 $('#add-user-btn').click(function() {
@@ -262,18 +246,6 @@ $('#import-users-from-excel-btn').click(function () {
     $('#simplemodal-container').css({'width':'auto', 'height':'auto'});
 });
 $('#upload-excel-form').submit(function() {
-    var form = $(this);
-    if (!$('[name=file]', form).val()) {
-        $('.error', form).removeClass('hide');
-        return false;
-    }
-});
-
-$('#import-users-btn').click(function () {
-    $('#upload-csv-form').modal();
-    $('#simplemodal-container').css({'width':'auto', 'height':'auto'});
-});
-$('#upload-csv-form').submit(function() {
     var form = $(this);
     if (!$('[name=file]', form).val()) {
         $('.error', form).removeClass('hide');

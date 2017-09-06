@@ -1,7 +1,5 @@
 import os
 import openpyxl
-import StringIO
-import csv
 from io import BytesIO
 from mock import patch
 from django.core.urlresolvers import reverse
@@ -423,10 +421,6 @@ class BatchAddUserUsingExcelHelpTest(BaseTestCase):
         resp = self.client.get(reverse('batch_add_user_example')+"?type=xlsx")
         assert resp.status_code == 200
 
-    def test_can_get_csv(self):
-        resp = self.client.get(reverse('batch_add_user_example')+"?type=csv")
-        assert resp.status_code == 200
-
     def test_validate_excel(self):
         resp = self.client.get(reverse('batch_add_user_example')+"?type=xlsx")
         wb = openpyxl.load_workbook(filename=BytesIO(resp.content), read_only=True)
@@ -443,21 +437,4 @@ class BatchAddUserUsingExcelHelpTest(BaseTestCase):
             else:
                 assert r[4].value == 'default'
             assert r[5].value == '999'
-            i += 1
-
-    def test_validate_csv(self):
-        resp = self.client.get(reverse('batch_add_user_example')+"?type=csv")
-        filestream = StringIO.StringIO(resp.content)
-        reader = csv.reader(filestream)
-        i = 0
-        for r in reader:
-            assert r[0] == 'username@test' + str(i) + '.com'
-            assert r[1] == 'password'
-            assert r[2] == 'name_test' + str(i)
-            assert r[3] == 'department_test' + str(i)
-            if i < 10:
-                assert r[4] == 'guest'
-            else:
-                assert r[4] == 'default'
-            assert r[5] == '999'
             i += 1

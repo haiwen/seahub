@@ -2,19 +2,15 @@
 # encoding: utf-8
 
 import os
-import cStringIO
 from io import BytesIO
 from types import FunctionType
 import logging
 import json
 import re
 import datetime
-import csv, chardet, StringIO
 import time
 from constance import config
-import openpyxl
 from openpyxl import load_workbook
-from openpyxl.styles import Alignment
 
 from django.db.models import Q
 from django.conf import settings as dj_settings
@@ -1918,12 +1914,6 @@ def batch_add_user_example(request):
     next = request.META.get('HTTP_REFERER', None)
     if not next:
         next = SITE_ROOT
-    file_type = request.GET.get('type', '').lower()
-    if file_type not in ['xlsx', 'csv']:
-        error_msg = 'Only the XLSX and CSV file types are supported'
-        messages.error(request, error_msg)
-        return HttpResponseRedirect(next)
-
     data_list = []
     for i in xrange(20):
         username = "username@test" + str(i) +".com"
@@ -1937,33 +1927,20 @@ def batch_add_user_example(request):
         quota = "999"
         data_list.append([username, password, name, department, role, quota])
 
-    if file_type == 'xlsx':
-        wb = write_xls('sample', data_list[0], data_list[1:])
-        if not wb:
-            messages.error(request, _(u'Failed to export Excel'))
-            return HttpResponseRedirect(next)
+    wb = write_xls('sample', data_list[0], data_list[1:])
+    if not wb:
+        messages.error(request, _(u'Failed to export Excel'))
+        return HttpResponseRedirect(next)
 
-        response = HttpResponse(content_type='application/ms-excel')
-        response['Content-Disposition'] = 'attachment; filename=users.xlsx'
-        wb.save(response)
-        return response
-    elif file_type == 'csv':
-        def data():
-            for i in xrange(20):
-                csvfile = cStringIO.StringIO()
-                csvwriter = csv.writer(csvfile)
-                csvwriter.writerow([data_list[i][0], data_list[i][1], 
-                                   data_list[i][2], data_list[i][3], 
-                                   data_list[i][4], data_list[i][5]])
-                yield csvfile.getvalue()
-        response = HttpResponse(data(), content_type="text/csv")
-        response["Content-Disposition"] = "attachment; filename=users.csv"
-        return response
+    response = HttpResponse(content_type='application/ms-excel')
+    response['Content-Disposition'] = 'attachment; filename=users.xlsx'
+    wb.save(response)
+    return response
 
 @login_required
 @sys_staff_required
-def batch_add_user_using_excel(request):
-    """  import user from excel
+def batch_add_user(request):
+    """  Batch add users. Import users from XLSX file.
     """
     if request.method != 'POST':
         raise Http404
@@ -1991,9 +1968,6 @@ def batch_add_user_using_excel(request):
             return HttpResponseRedirect(next)
 
         for row in records:
-            if not row:
-                continue
-
             try:
                 username = row[0].strip()
                 password = row[1].strip()
@@ -2035,8 +2009,7 @@ def batch_add_user_using_excel(request):
                     logger.error(e)
 
                 try:
-                    space_quota_mb = str(row[5]).strip()
-                    space_quota_mb = int(space_quota_mb)
+                    space_quota_mb = int(row[5])
                     if space_quota_mb >= 0:
                         space_quota = int(space_quota_mb) * get_file_size_unit('MB')
                         seafile_api.set_user_quota(username, space_quota)
@@ -2061,109 +2034,6 @@ def batch_add_user_using_excel(request):
         messages.success(request, _('Import succeeded'))
     else:
         messages.error(request, _(u'Please select a xlsx file first.'))
-
-    return HttpResponseRedirect(next)
-
-@login_required
-@sys_staff_required
-def batch_add_user(request):
-    """Batch add users. Import users from CSV file.
-    """
-    if request.method != 'POST':
-        raise Http404
-
-    next = request.META.get('HTTP_REFERER', reverse(sys_user_admin))
-
-    form = BatchAddUserForm(request.POST, request.FILES)
-    if form.is_valid():
-        content = request.FILES['file'].read()
-        encoding = chardet.detect(content)['encoding']
-        if encoding != 'utf-8':
-            content = content.decode(encoding, 'replace').encode('utf-8')
-
-        filestream = StringIO.StringIO(content)
-        reader = csv.reader(filestream)
-        new_users_count = len(list(reader))
-        if user_number_over_limit(new_users=new_users_count):
-            messages.error(request, _(u'The number of users exceeds the limit.'))
-            return HttpResponseRedirect(next)
-
-        # return to the top of the file
-        filestream.seek(0)
-        reader = csv.reader(filestream)
-        for row in reader:
-
-            if not row:
-                continue
-
-            try:
-                username = row[0].strip()
-                password = row[1].strip()
-                if not is_valid_username(username) or not password:
-                    continue
-            except Exception as e:
-                logger.error(e)
-                continue
-
-            try:
-                User.objects.get(email=username)
-            except User.DoesNotExist:
-                User.objects.create_user(
-                    username, password, is_staff=False, is_active=True)
-
-                if config.FORCE_PASSWORD_CHANGE:
-                    UserOptions.objects.set_force_passwd_change(username)
-
-                # then update the user's optional info
-                try:
-                    nickname = row[2].strip()
-                    if len(nickname) <= 64 and '/' not in nickname:
-                        Profile.objects.add_or_update(username, nickname, '')
-                except Exception as e:
-                    logger.error(e)
-
-                try:
-                    department = row[3].strip()
-                    if len(department) <= 512:
-                        DetailedProfile.objects.add_or_update(username, department, '')
-                except Exception as e:
-                    logger.error(e)
-
-                try:
-                    role = row[4].strip()
-                    if is_pro_version() and role in get_available_roles():
-                        User.objects.update_role(username, role)
-                except Exception as e:
-                    logger.error(e)
-
-                try:
-                    space_quota_mb = row[5].strip()
-                    space_quota_mb = int(space_quota_mb)
-                    if space_quota_mb >= 0:
-                        space_quota = int(space_quota_mb) * get_file_size_unit('MB')
-                        seafile_api.set_user_quota(username, space_quota)
-                except Exception as e:
-                    logger.error(e)
-
-                send_html_email_with_dj_template(
-                    username, dj_template='sysadmin/user_batch_add_email.html',
-                    subject=_(u'You are invited to join %s') % SITE_NAME,
-                    context={
-                        'user': email2nickname(request.user.username),
-                        'email': username,
-                        'password': password,
-                    })
-
-                # send admin operation log signal
-                admin_op_detail = {
-                    "email": username,
-                }
-                admin_operation.send(sender=None, admin_name=request.user.username,
-                                     operation=USER_ADD, detail=admin_op_detail)
-
-        messages.success(request, _('Import succeeded'))
-    else:
-        messages.error(request, _(u'Please select a csv file first.'))
 
     return HttpResponseRedirect(next)
 
