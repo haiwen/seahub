@@ -100,7 +100,7 @@ class Profile(models.Model):
     login_id = models.CharField(max_length=225, unique=True, null=True, blank=True)
     # Contact email is used to receive emails.
     contact_email = models.EmailField(max_length=225, db_index=True, null=True, blank=True)
-    institution = models.CharField(max_length=225, db_index=True, null=True, blank=True)
+    institution = models.CharField(max_length=225, db_index=True, null=True, blank=True, default='')
     objects = ProfileManager()
 
     def set_lang_code(self, lang_code):

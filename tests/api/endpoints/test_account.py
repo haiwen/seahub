@@ -14,6 +14,7 @@ from seahub.api2.models import TokenV2
 
 class AccountTest(BaseTestCase):
     def setUp(self):
+        self.clear_cache()
         self.user1 = self.create_user('user_%s@test.com' % randstring(4),
                                       is_staff=False)
         self.user2 = self.create_user('user_%s@test.com' % randstring(4),
@@ -269,3 +270,20 @@ class AccountTest(BaseTestCase):
 
         resp = self._do_delete()
         self.assertEqual(200, resp.status_code)
+
+    def test_new_user_get_info_after_edit_profile(self):
+        new_user = self.create_user("test@new.user", is_staff=True)
+        self.login_as(new_user)
+        resp = self.client.post(reverse('edit_profile'), {
+            'nickname': 'new nickname'
+        })
+
+        resp = self.client.get(reverse('api2-account', args=[new_user.username]))
+        json_resp = json.loads(resp.content)
+        assert len(json_resp) == 11
+        assert json_resp['email'] == new_user.username
+        assert json_resp['is_staff'] is True
+        assert json_resp['is_active'] is True
+        assert json_resp['usage'] == 0
+        assert json_resp['institution'] == ''
+        self.remove_user(new_user.username)
