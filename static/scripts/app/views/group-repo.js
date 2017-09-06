@@ -24,11 +24,7 @@ define([
             
             this.group_id = options.group_id;
             this.is_staff = options.is_staff;
-
-            this.show_shared_by = true; // default
-            if (options.show_shared_by !== undefined) { // e.g. views/group-item.js
-                this.show_shared_by = options.show_shared_by;
-            }
+            this.show_repo_owner = options.show_repo_owner;
 
             this.listenTo(this.model, 'destroy', this.remove);
         },
@@ -42,10 +38,10 @@ define([
                 group_id: this.group_id,
                 is_staff: this.is_staff,
                 // for '#groups' (no 'share_from_me')
-                share_from_me: app.pageOptions.username == this.model.get('owner'),
-                // 'owner_name' for '#groups', 'owner_nickname' for '#group/id/'
+                is_repo_owner: app.pageOptions.username == this.model.get('owner'),
+                //'owner_nickname' for '#group/id/', 'owner_name' for '#groups'
                 owner_name: this.model.get('owner_nickname') || this.model.get('owner_name'),
-                show_shared_by: this.show_shared_by,
+                show_repo_owner: this.show_repo_owner,
                 icon_url: icon_url,
                 icon_title: this.model.getIconTitle()
             });
@@ -53,11 +49,9 @@ define([
             return this;
         },
 
-        // only for 'is_admin:true'
         share: function() {
             var options = {
                 'is_repo_owner': app.pageOptions.username == this.model.get('owner'),
-                'is_admin': true, // only for shared repo
                 'is_virtual': false,
                 'user_perm': 'rw',
                 'repo_id': this.model.get('id'),
@@ -66,6 +60,10 @@ define([
                 'dirent_path': '/',
                 'obj_name': this.model.get('name')
             };
+
+            if (app.pageOptions.is_pro) {
+                options.is_admin = this.model.get('is_admin'); // 'is_admin': repo is shared to the group with 'admin' perm
+            }
 
             new ShareView(options);
             return false;
