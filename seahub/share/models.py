@@ -192,7 +192,7 @@ class ExtraSharePermissionManager(models.Manager):
         e.g.
             in_datas:
                 [(repo_id1, username1), (repo_id2, admin1)]
-            return:
+            admin permission data returnd:
                 [(repo_id2, admin1)]
         """
         if len(in_datas) <= 0:
@@ -220,14 +220,6 @@ class ExtraSharePermissionManager(models.Manager):
 
 
 class ExtraGroupsSharePermissionManager(models.Manager):
-    def get_admin_groups(self, repo_id):
-        """ return admin groups in specific repo
-            e.g: ['23', '12']
-        """
-        return super(ExtraGroupsSharePermissionManager, self).filter(
-            repo_id=repo_id, permission='admin'
-        ).values_list('group_id', flat=True)
-
     def get_repos_with_admin_permission(self, gid):
         """ return admin repo in specific group
             e.g: ['repo_id1', 'repo_id2']
@@ -236,10 +228,30 @@ class ExtraGroupsSharePermissionManager(models.Manager):
             group_id=gid, permission='admin'
         ).values_list('repo_id', flat=True)
 
-    def get_all_admin_records(self):
+    def get_admin_groups_by_repo(self, repo_id):
+        """ return admin groups in specific repo
+            e.g: ['23', '12']
+        """
         return super(ExtraGroupsSharePermissionManager, self).filter(
-            permission='admin'
+            repo_id=repo_id, permission='admin'
+        ).values_list('group_id', flat=True)
+
+    def batch_is_admin_group(self, in_datas):
+        """return the data that input data is admin 
+        e.g.
+            in_datas:
+                [(repo_id1, group_id1), (repo_id2, group_id2)]
+            admin permission data returnd:
+                [(repo_id2, group_id2)]
+        """
+        if len(in_datas) <= 0:
+            return []
+        query = reduce(
+            operator.or_,
+            (Q(repo_id=data[0], group_id=data[1]) for data in in_datas)
         )
+        db_data = super(ExtraGroupsSharePermissionManager, self).filter(query).filter(permission=PERMISSION_ADMIN)
+        return [(e.repo_id, e.group_id) for e in db_data]
 
     def create_share_permission(self, repo_id, gid, permission):
         self.model(repo_id=repo_id, group_id=gid, permission=permission).save()

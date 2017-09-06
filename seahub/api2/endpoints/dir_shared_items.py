@@ -100,7 +100,7 @@ class DirSharedItemsEndpoint(APIView):
                                                                        path, repo_owner)
         ret = []
         # change is_admin to True if user in admin groups.
-        admin_groups = ExtraGroupsSharePermission.objects.get_admin_groups(repo_id)
+        admin_groups = ExtraGroupsSharePermission.objects.get_admin_groups_by_repo(repo_id)
         for item in share_items:
             ret.append({
                 "share_type": "group",
