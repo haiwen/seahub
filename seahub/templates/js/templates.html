@@ -196,7 +196,12 @@
     </td>
     <td><a href="#group/<%= group_id %>/lib/<%= id %>"><%- name %></a></td>
     <td class="alc">
-        <% if (is_staff || share_from_me) { %>
+        <% if (show_admin && app.pageOptions.is_pro) { %>
+            <% if (is_admin) { %>
+                <a href="#" class="sf2-icon-share sf2-x repo-share-btn op-icon vh" title="{% trans "Share" %}" aria-label="{% trans "Share" %}"></a>
+            <% } %>
+        <% } %>
+        <% if (is_staff || share_from_me || is_admin) { %>
             <a href="#" class="sf2-icon-delete sf2-x cancel-share op-icon vh" title="{% trans "Unshare" %}" aria-label="{% trans "Unshare" %}"></a>
         <% } %>
     </td>
@@ -1069,6 +1074,9 @@
                             <select name="permission" class="share-permission-select w100">
                                 <option value="rw" selected="selected">{% trans "Read-Write" %}</option>
                                 <option value="r">{% trans "Read-Only" %}</option>
+                                <% if (app.pageOptions.is_pro && dirent_path == '/') { %> {# only for repo #}
+                                <option value="admin">{% trans "Admin" %}</option>
+                                <% } %>
                             </select>
                         </td>
                         <td><input type="submit" value="{% trans "Submit" %}" class="submit" /></td>
@@ -1505,7 +1513,7 @@
         <th width="8%"><span class="sr-only">{% trans "Actions" %}</span><!--op--></th>
         <th width="14%">{% trans "Size" %}</th>
         <th width="18%"><a class="table-sort-op by-time" href="#">{% trans "Last Update" %} <span class="sort-icon icon-caret-up"></span></a></th>
-        <th width="16%">{% trans "Shared By" %}</th>
+        <th width="16%">{% trans "Owner" %}</th>
     </tr>
 </script>
 <script type="text/template" id="shared-repos-hd-mobile-tmpl">
