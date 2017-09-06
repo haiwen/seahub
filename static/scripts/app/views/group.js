@@ -47,7 +47,8 @@ define([
             var view = new GroupRepoView({
                 model: repo,
                 group_id: this.group_id,
-                is_staff: this.repos.is_staff
+                is_staff: this.repos.is_staff,
+                show_admin: true
             });
             if (options.prepend) {
                 this.$tableBody.prepend(view.render().el);

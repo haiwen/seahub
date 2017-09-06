@@ -638,6 +638,7 @@ define([
                                 "group_id": item.group_info.id,
                                 "group_name": item.group_info.name,
                                 "permission": item.permission,
+                                'is_admin': item.is_admin,
                                 'for_user': false
                             }
                         });
@@ -840,6 +841,7 @@ define([
                                     "group_id": item.group_info.id,
                                     "group_name": item.group_info.name,
                                     "permission": item.permission,
+                                    'is_admin': item.is_admin,
                                     'for_user': false
                                 }
                             });

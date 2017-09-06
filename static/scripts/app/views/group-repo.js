@@ -3,8 +3,9 @@ define([
     'underscore',
     'backbone',
     'common',
-    'app/views/widgets/hl-item-view'
-], function($, _, Backbone, Common, HLItemView) {
+    'app/views/widgets/hl-item-view',
+    'app/views/share'
+], function($, _, Backbone, Common, HLItemView, ShareView) {
     'use strict';
 
     var GroupRepoView = HLItemView.extend({
@@ -14,7 +15,8 @@ define([
         mobileTemplate: _.template($('#group-repo-mobile-tmpl').html()),
 
         events: {
-            'click .cancel-share': 'unshare'
+            'click .cancel-share': 'unshare',
+            'click .repo-share-btn': 'share'
         },
 
         initialize: function(options) {
@@ -29,6 +31,7 @@ define([
             }
 
             this.listenTo(this.model, 'destroy', this.remove);
+            this.show_admin = options.show_admin
         },
 
         render: function() {
@@ -45,10 +48,26 @@ define([
                 owner_name: this.model.get('owner_nickname') || this.model.get('owner_name'),
                 show_shared_by: this.show_shared_by,
                 icon_url: icon_url,
-                icon_title: this.model.getIconTitle()
+                icon_title: this.model.getIconTitle(),
+                is_admin: this.model.get('is_admin'),
+                show_admin: this.show_admin
             });
             this.$el.html(tmpl(obj));
             return this;
+        },
+
+        share: function() {
+            var options = {
+                'is_repo_owner': true,
+                'user_perm': 'rw',
+                'repo_id': this.model.get('id'),
+                'repo_encrypted': this.model.get('encrypted'),
+                'is_dir': true,
+                'dirent_path': '/',
+                'obj_name': this.model.get('name')
+            };
+            new ShareView(options);
+            return false;
         },
 
         unshare: function() {

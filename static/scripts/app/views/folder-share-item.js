@@ -22,7 +22,7 @@ define([
 
             // show info about 'is_admin'
             this.show_admin = false;
-            if (app.pageOptions.is_pro && this.path == '/' && this.item_data.for_user) {
+            if (app.pageOptions.is_pro && this.path == '/') {
                 this.show_admin = true;
             }
 
