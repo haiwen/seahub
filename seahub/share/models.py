@@ -219,6 +219,49 @@ class ExtraSharePermissionManager(models.Manager):
             self.create_share_permission(repo_id, share_to, permission)
 
 
+class ExtraGroupsSharePermissionManager(models.Manager):
+    def get_admin_groups(self, repo_id):
+        """ return admin groups in specific repo
+            e.g: ['23', '12']
+        """
+        return super(ExtraGroupsSharePermissionManager, self).filter(
+            repo_id=repo_id, permission='admin'
+        ).values_list('group_id', flat=True)
+
+    def get_repos_with_admin_permission(self, gid):
+        """ return admin repo in specific group
+            e.g: ['repo_id1', 'repo_id2']
+        """
+        return super(ExtraGroupsSharePermissionManager, self).filter(
+            group_id=gid, permission='admin'
+        ).values_list('repo_id', flat=True)
+
+    def get_all_admin_records(self):
+        return super(ExtraGroupsSharePermissionManager, self).filter(
+            permission='admin'
+        )
+
+    def create_share_permission(self, repo_id, gid, permission):
+        self.model(repo_id=repo_id, group_id=gid, permission=permission).save()
+
+    def delete_share_permission(self, repo_id, gid):
+        super(ExtraGroupsSharePermissionManager, self).filter(repo_id=repo_id, 
+                                                             group_id=gid).delete()
+
+    def update_share_permission(self, repo_id, gid, permission):
+        super(ExtraGroupsSharePermissionManager, self).filter(repo_id=repo_id, 
+                                                       group_id=gid).delete()
+        if permission in [PERMISSION_ADMIN]:
+            self.create_share_permission(repo_id, gid, permission)
+
+
+class ExtraGroupsSharePermission(models.Model):
+    repo_id = models.CharField(max_length=36, db_index=True)
+    group_id = models.CharField(max_length=20, db_index=True)
+    permission = models.CharField(max_length=30)
+    objects = ExtraGroupsSharePermissionManager()
+
+
 class ExtraSharePermission(models.Model):
     repo_id = models.CharField(max_length=36, db_index=True)
     share_to = models.CharField(max_length=255, db_index=True)
@@ -465,8 +508,12 @@ from django.dispatch import receiver
 from seahub.signals import repo_deleted
 
 @receiver(repo_deleted)
-def remove_share_links(sender, **kwargs):
+def remove_share_info(sender, **kwargs):
     repo_id = kwargs['repo_id']
 
     FileShare.objects.filter(repo_id=repo_id).delete()
     UploadLinkShare.objects.filter(repo_id=repo_id).delete()
+
+    # remove record of extra share
+    ExtraSharePermission.objects.filter(repo_id=repo_id).delete()
+    ExtraGroupsSharePermission.objects.filter(repo_id=repo_id).delete()

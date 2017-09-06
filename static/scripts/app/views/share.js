@@ -638,6 +638,7 @@ define([
                                 "group_id": item.group_info.id,
                                 "group_name": item.group_info.name,
                                 "permission": item.permission,
+                                'is_admin': item.is_admin,
                                 'for_user': false
                             }
                         });
@@ -840,14 +841,15 @@ define([
                                     "group_id": item.group_info.id,
                                     "group_name": item.group_info.name,
                                     "permission": item.permission,
+                                    'is_admin': item.is_admin,
                                     'for_user': false
                                 }
                             });
                             $add_item.after(new_item.el);
                         });
                         $groups_input.select2("val", "");
+                        $('option', $perm).removeAttr('selected');
                         $('[value="rw"]', $perm).attr('selected', 'selected');
-                        $('[value="r"]', $perm).removeAttr('selected');
                         $error.addClass('hide');
                     }
                     if (data.failed.length > 0) {

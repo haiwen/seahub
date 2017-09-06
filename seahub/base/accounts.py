@@ -23,6 +23,7 @@ from seahub.utils import is_user_password_strong, \
     clear_token, get_system_admins, is_pro_version
 from seahub.utils.mail import send_html_email_with_dj_template, MAIL_PRIORITY
 from seahub.utils.licenseparse import user_number_over_limit
+from seahub.share.models import ExtraSharePermission
 
 try:
     from seahub.settings import CLOUD_MODE
@@ -265,6 +266,7 @@ class User(object):
             shared_in_repos = seafile_api.get_share_in_repo_list(username, -1, -1)
             for r in shared_in_repos:
                 seafile_api.remove_share(r.repo_id, r.user, username)
+        ExtraSharePermission.objects.filter(share_to=username).delete()
 
         # clear web api and repo sync token
         # when delete user

@@ -15,8 +15,8 @@ define([
         mobileTemplate: _.template($('#shared-repo-mobile-tmpl').html()),
 
         events: {
-            'click .unshare-btn': 'removeShare',
-            'click .repo-share-btn': 'share'
+            'click .repo-share-btn': 'share',
+            'click .unshare-btn': 'removeShare'
         },
 
         initialize: function() {

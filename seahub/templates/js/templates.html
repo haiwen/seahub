@@ -196,13 +196,25 @@
     </td>
     <td><a href="#group/<%= group_id %>/lib/<%= id %>" class="normal"><%- name %></a></td>
     <td class="alc">
-        <% if (is_staff || share_from_me) { %>
-            <a href="#" class="sf2-icon-delete sf2-x cancel-share op-icon vh" title="{% trans "Unshare" %}" aria-label="{% trans "Unshare" %}"></a>
+        <% if (app.pageOptions.is_pro) { %>
+            <% if (is_repo_owner || is_admin) { %>
+                <a href="#" class="sf2-icon-share sf2-x repo-share-btn op-icon vh" title="{% trans "Share" %}" aria-label="{% trans "Share" %}"></a>
+            <% } %>
+            <% if (is_staff || is_repo_owner || is_admin) { %>
+                <a href="#" class="sf2-icon-delete sf2-x cancel-share op-icon vh" title="{% trans "Unshare" %}" aria-label="{% trans "Unshare" %}"></a>
+            <% } %>
+        <% } else { %>
+            <% if (is_repo_owner) { %>
+                <a href="#" class="sf2-icon-share sf2-x repo-share-btn op-icon vh" title="{% trans "Share" %}" aria-label="{% trans "Share" %}"></a>
+            <% } %>
+            <% if (is_staff || is_repo_owner) { %>
+                <a href="#" class="sf2-icon-delete sf2-x cancel-share op-icon vh" title="{% trans "Unshare" %}" aria-label="{% trans "Unshare" %}"></a>
+            <% } %>
         <% } %>
     </td>
     <td><%= size_formatted %></td>
     <td><%= mtime_relative %></td>
-    <% if (show_shared_by) { %>
+    <% if (show_repo_owner) { %>
     <td><span title="<%- owner %>"><%- owner_name %></span></td>
     <% } %>
 </script>
@@ -212,15 +224,27 @@
     </td>
     <td>
         <a href="#group/<%= group_id %>/lib/<%= id %>" class="normal"><%- name %></a><br />
-        <% if (show_shared_by) { %>
+        <% if (show_repo_owner) { %>
         <span class="repo-meta-info" title="<%- owner %>"><%- owner_name %></span>
         <% } %>
         <span class="repo-meta-info"><%= size_formatted %></span>
         <span class="repo-meta-info"><%= mtime_relative %></span>
     </td>
     <td class="alc">
-        <% if (is_staff || share_from_me) { %>
-            <a href="#" class="sf2-icon-delete sf2-x cancel-share op-icon" title="{% trans "Unshare" %}" aria-label="{% trans "Unshare" %}"></a>
+        <% if (app.pageOptions.is_pro) { %>
+            <% if (is_repo_owner || is_admin) { %>
+                <a href="#" class="sf2-icon-share sf2-x repo-share-btn op-icon" title="{% trans "Share" %}" aria-label="{% trans "Share" %}"></a>
+            <% } %>
+            <% if (is_staff || is_repo_owner || is_admin) { %>
+                <a href="#" class="sf2-icon-delete sf2-x cancel-share op-icon" title="{% trans "Unshare" %}" aria-label="{% trans "Unshare" %}"></a>
+            <% } %>
+        <% } else { %>
+            <% if (is_repo_owner) { %>
+                <a href="#" class="sf2-icon-share sf2-x repo-share-btn op-icon" title="{% trans "Share" %}" aria-label="{% trans "Share" %}"></a>
+            <% } %>
+            <% if (is_staff || is_repo_owner) { %>
+                <a href="#" class="sf2-icon-delete sf2-x cancel-share op-icon" title="{% trans "Unshare" %}" aria-label="{% trans "Unshare" %}"></a>
+            <% } %>
         <% } %>
     </td>
 </script>
@@ -1069,6 +1093,9 @@
                             <select name="permission" class="share-permission-select w100">
                                 <option value="rw" selected="selected">{% trans "Read-Write" %}</option>
                                 <option value="r">{% trans "Read-Only" %}</option>
+                                <% if (app.pageOptions.is_pro && dirent_path == '/') { %> {# only for repo #}
+                                <option value="admin">{% trans "Admin" %}</option>
+                                <% } %>
                             </select>
                         </td>
                         <td><input type="submit" value="{% trans "Submit" %}" class="submit" /></td>
@@ -1109,6 +1136,9 @@
         <span class="repo-meta-info"><%= mtime_relative %></span>
     </td>
     <td class="alc">
+        <% if (app.pageOptions.is_pro && is_admin) { %>
+        <a href="#" class="sf2-icon-share sf2-x repo-share-btn op-icon" title="{% trans "Share" %}"></a>
+        <% } %>
         <a href="#" class="sf2-icon-delete sf2-x unshare-btn op-icon" title="{% trans "Leave Share" %}"></a>
     </td>
 </script>
@@ -1507,18 +1537,18 @@
         <th width="8%"><span class="sr-only">{% trans "Actions" %}</span><!--op--></th>
         <th width="14%">{% trans "Size" %}</th>
         <th width="18%"><a class="table-sort-op by-time" href="#">{% trans "Last Update" %} <span class="sort-icon icon-caret-up"></span></a></th>
-        <th width="16%">{% trans "Shared By" %}</th>
+        <th width="16%">{% trans "Owner" %}</th>
     </tr>
 </script>
 <script type="text/template" id="shared-repos-hd-mobile-tmpl">
     <tr>
         <th width="4%"><span class="sr-only">{% trans "Library Type" %}</span><!--icon--></th>
-        <th width="92%">
+        <th width="90%">
             {% trans "Sort:" %}
             <a class="table-sort-op mobile-table-sort-op by-name" href="#">{% trans "name" %} <span class="sort-icon icon-caret-down hide"></span></a>
             <a class="table-sort-op mobile-table-sort-op by-time" href="#">{% trans "last update" %} <span class="sort-icon icon-caret-up"></span></a>
         </th>
-        <th width="4%"><span class="sr-only">{% trans "Actions" %}</span><!--op--></th>
+        <th width="6%"><span class="sr-only">{% trans "Actions" %}</span><!--op--></th>
     </tr>
 </script>
 
