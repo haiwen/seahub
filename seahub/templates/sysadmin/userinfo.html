@@ -67,10 +67,14 @@
 
             <dt>{% trans "Reference ID" %}</dt>
             <dd>
-                <span id="referenceID">
+                <span id="reference-id">
+                    {% if reference_id %}
                     {{ reference_id }}
+                    {% else %}
+                    --
+                    {% endif %}
                 </span>
-                <span id="set-referenceID" title="{% trans "Edit" %}" class="sf2-icon-edit op-icon"></span>
+                <span id="set-reference-id" title="{% trans "Edit" %}" class="sf2-icon-edit op-icon"></span>
             </dd>
 
             <dt>{% trans "Department" %}</dt>
@@ -138,9 +142,9 @@
             <input type="submit" value="{% trans "Submit" %}" class="submit" />
         </form>
 
-        <form id="set-referenceID-form" method="post" action="" class="hide">{% csrf_token %}
+        <form id="set-reference-id-form" method="post" action="" class="hide">{% csrf_token %}
             <h3>{% trans "Set user Reference ID" %}</h3>
-            <input type="text" name="referenceID" class="input" value="" /><br />
+            <input type="text" name="reference_id" class="input" value="" /><br />
             <p class="error hide"></p>
             <input type="submit" value="{% trans "Submit" %}" class="submit" />
         </form>
@@ -351,8 +355,8 @@ $('#set-loginid').click(function () {
     $("#set-loginid-form").modal({appendTo:"#main"});
     $('#simplemodal-container').css({'width':'auto', 'height':'auto'});
 })
-$('#set-referenceID').click(function () {
-    $("#set-referenceID-form").modal({appendTo:"#main"});
+$('#set-reference-id').click(function () {
+    $("#set-reference-id-form").modal({appendTo:"#main"});
     $('#simplemodal-container').css({'width':'auto', 'height':'auto'});
 })
 $('#set-dept').click(function() {
@@ -432,10 +436,7 @@ $('#set-loginid-form').submit(function() {
     var $loginid = $('#loginid');
     var $error = $('.error', $(this));
     var $submitBtn = $('[type="submit"]', $(this));
-    if (!loginid){
-        $error.html("{% trans "Login id can't be empty" %}").show();
-        return false;
-    }
+
     disable($submitBtn);
 
     $.ajax({
@@ -446,7 +447,11 @@ $('#set-loginid-form').submit(function() {
         beforeSend: prepareCSRFToken,
         data: {'email': '{{email}}', 'login_id': loginid},
         success: function(data) {
-            $loginid.html(HTMLescape(data['login_id']));
+            if (loginid == '') {
+                $loginid.html('--');
+            } else {
+                $loginid.html(HTMLescape(data['login_id']));
+            }
             $.modal.close();
         },
         error: function(xhr, textStatus, errorThrown) {
@@ -464,15 +469,11 @@ $('#set-loginid-form').submit(function() {
     return false;
 });
 
-$('#set-referenceID-form').submit(function() {
-    var referenceID = $.trim($('[name="referenceID"]', $(this)).val());
-    var $referenceID = $('#referenceID');
+$('#set-reference-id-form').submit(function() {
+    var reference_id = $.trim($('[name="reference_id"]', $(this)).val());
+    var $referenceID = $('#reference-id');
     var $error = $('.error', $(this));
     var $submitBtn = $('[type="submit"]', $(this));
-    if (!referenceID){
-        $error.html("{% trans "Reference id can't be empty" %}").show();
-        return false;
-    }
     disable($submitBtn);
 
     $.ajax({
@@ -481,9 +482,13 @@ $('#set-referenceID-form').submit(function() {
         dataType: 'json',
         cache: false,
         beforeSend: prepareCSRFToken,
-        data: {'email': '{{email}}', 'reference_id': referenceID},
+        data: {'email': '{{email}}', 'reference_id': reference_id},
         success: function(data) {
-            $referenceID.html(HTMLescape(data['reference_id']));
+            if (reference_id == '') {
+                $referenceID.html('--');
+            } else {
+                $referenceID.html(HTMLescape(data['reference_id']));
+            }
             $.modal.close();
         },
         error: function(xhr, textStatus, errorThrown) {
