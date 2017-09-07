@@ -236,21 +236,12 @@ class ExtraGroupsSharePermissionManager(models.Manager):
             repo_id=repo_id, permission='admin'
         ).values_list('group_id', flat=True)
 
-    def batch_is_admin_group(self, in_datas):
-        """return the data that input data is admin 
-        e.g.
-            in_datas:
-                [(repo_id1, group_id1), (repo_id2, group_id2)]
-            admin permission data returnd:
-                [(repo_id2, group_id2)]
+    def batch_get_repos_with_admin_permission(self, gids):
+        """ 
         """
-        if len(in_datas) <= 0:
+        if len(gids) <= 0:
             return []
-        query = reduce(
-            operator.or_,
-            (Q(repo_id=data[0], group_id=data[1]) for data in in_datas)
-        )
-        db_data = super(ExtraGroupsSharePermissionManager, self).filter(query).filter(permission=PERMISSION_ADMIN)
+        db_data = super(ExtraGroupsSharePermissionManager, self).filter(group_id__in=gids, permission=PERMISSION_ADMIN)
         return [(e.repo_id, e.group_id) for e in db_data]
 
     def create_share_permission(self, repo_id, gid, permission):
@@ -269,7 +260,7 @@ class ExtraGroupsSharePermissionManager(models.Manager):
 
 class ExtraGroupsSharePermission(models.Model):
     repo_id = models.CharField(max_length=36, db_index=True)
-    group_id = models.CharField(max_length=20, db_index=True)
+    group_id = models.IntegerField(db_index=True)
     permission = models.CharField(max_length=30)
     objects = ExtraGroupsSharePermissionManager()
 

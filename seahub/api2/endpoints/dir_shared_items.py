@@ -109,7 +109,7 @@ class DirSharedItemsEndpoint(APIView):
                     "name": seaserv.get_group(item.group_id).group_name,
                 },
                 "permission": item.perm,
-                "is_admin": str(item.group_id) in admin_groups,
+                "is_admin": item.group_id in admin_groups,
             })
         return ret
 

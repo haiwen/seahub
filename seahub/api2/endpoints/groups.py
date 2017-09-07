@@ -103,7 +103,8 @@ class Groups(APIView):
             return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
 
         groups = []
-        in_datas = []
+        gids = [g.id for g in user_groups]
+        admin_info = ExtraGroupsSharePermission.objects.batch_get_repos_with_admin_permission(gids)
         for g in user_groups:
             group_info = get_group_info(request, g.id, avatar_size)
 
@@ -126,18 +127,13 @@ class Groups(APIView):
                         "permission": r.permission,
                         "owner": r.user,
                         "owner_name": email2nickname(r.user),
+                        "is_admin": (r.id, g.id) in admin_info
                     }
                     repos.append(repo)
-                    in_datas.append([r.id, g.id])
 
                 group_info['repos'] = repos
 
             groups.append(group_info)
-
-        out_datas = ExtraGroupsSharePermission.objects.batch_is_admin_group(in_datas)
-        for g in groups:
-            for r in g['repos']:
-                r['is_admin'] = (r['id'], str(g['id'])) in out_datas
 
         return Response(groups)
 

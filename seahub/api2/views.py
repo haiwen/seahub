@@ -4019,7 +4019,7 @@ class GroupRepos(APIView):
                 "modifier_email": r.last_modifier,
                 "modifier_contact_email": contact_email_dict.get(r.last_modifier, ''),
                 "modifier_name": nickname_dict.get(r.last_modifier, ''),
-                "is_admin": str(r.id) in admin_repos,
+                "is_admin": r.id in admin_repos,
             }
             repos_json.append(repo)
 
