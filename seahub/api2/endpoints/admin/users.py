@@ -7,6 +7,7 @@ from rest_framework.permissions import IsAdminUser
 from rest_framework.response import Response
 from rest_framework.views import APIView
 from django.core.urlresolvers import reverse
+from django.utils.translation import ugettext as _
 
 from seaserv import seafile_api, ccnet_api
 
@@ -65,6 +66,21 @@ def update_user_info(request, user):
         profile.nickname = name
         profile.save()
 
+    # update account login_id
+    login_id = request.data.get("login_id", None)
+    if login_id is not None:
+        login_id = login_id.strip()
+        profile = Profile.objects.get_profile_by_user(email)
+        if profile is None:
+            profile = Profile(user=email)
+        profile.login_id = None if login_id == "" else login_id
+        profile.save()
+
+    reference_id = request.data.get("reference_id", None)
+    if reference_id is not None:
+        reference_id = reference_id.strip()
+        ccnet_api.set_reference_id(email, reference_id)
+
     department = request.data.get("department")
     if department:
         d_profile = DetailedProfile.objects.get_detailed_profile_by_user(email)
@@ -87,15 +103,18 @@ def get_user_info(email):
 
     user = User.objects.get(email=email)
     d_profile = DetailedProfile.objects.get_detailed_profile_by_user(email)
+    profile = Profile.objects.get_profile_by_user(email)
 
     info = {}
     info['email'] = email
     info['name'] = email2nickname(email)
     info['contact_email'] = email2contact_email(email)
+    info['login_id'] = profile.login_id if profile and profile.login_id else ''
 
     info['is_staff'] = user.is_staff
     info['is_active'] = user.is_active
     info['create_time'] = user.ctime
+    info['reference_id'] = user.reference_id if user.reference_id else ''
 
     info['department'] = d_profile.department if d_profile else ''
 
@@ -298,6 +317,23 @@ class AdminUser(APIView):
             if "/" in name:
                 error_msg = "Name should not include '/'."
                 return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
+
+        # argument check for login_id
+        login_id = request.data.get("login_id", None)
+        if login_id is not None:
+            login_id = login_id.strip()
+            username_by_login_id = Profile.objects.get_username_by_login_id(login_id)
+            if username_by_login_id is not None:
+                return api_error(status.HTTP_400_BAD_REQUEST, 
+                                 _(u"Login id %s already exists." % login_id))
+
+        reference_id = request.data.get("reference_id", "")
+        if reference_id:
+            if not is_valid_username(reference_id):
+                return api_error(status.HTTP_400_BAD_REQUEST, 'Reference ID %s invalid.' % reference_id)
+            primary_id = ccnet_api.get_primary_id(reference_id)
+            if primary_id:
+                return api_error(status.HTTP_400_BAD_REQUEST, 'Reference ID %s already exists.' % reference_id)
 
         department = request.data.get("department", None)
         if department:

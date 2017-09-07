@@ -698,11 +698,14 @@ def user_info(request, email):
         else:
             g.role = _('Member')
 
+    _user = User.objects.get(email=email)
+
+    reference_id = _user.reference_id
+
     _default_device = False
     _has_two_factor_auth = has_two_factor_auth()
     if _has_two_factor_auth:
         from seahub.two_factor.utils import default_device
-        _user = User.objects.get(email=email)
         _default_device = default_device(_user)
 
     return render_to_response(
@@ -720,6 +723,7 @@ def user_info(request, email):
             'personal_groups': personal_groups,
             'two_factor_auth_enabled': _has_two_factor_auth,
             'default_device': _default_device,
+            'reference_id': reference_id if reference_id else '',
         }, context_instance=RequestContext(request))
 
 @login_required_ajax

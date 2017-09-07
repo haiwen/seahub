@@ -65,6 +65,18 @@
                 <span id="set-loginid" title="{% trans "Edit"%}" class="sf2-icon-edit op-icon"></span>
             </dd>
 
+            <dt>{% trans "Reference ID" %}</dt>
+            <dd>
+                <span id="reference-id">
+                    {% if reference_id %}
+                    {{ reference_id }}
+                    {% else %}
+                    --
+                    {% endif %}
+                </span>
+                <span id="set-reference-id" title="{% trans "Edit" %}" class="sf2-icon-edit op-icon"></span>
+            </dd>
+
             <dt>{% trans "Department" %}</dt>
             <dd>
                 <span id="department">
@@ -126,6 +138,13 @@
         <form id="set-loginid-form" method="post" action="" class="hide">{% csrf_token %}
             <h3>{% trans "Set user Login ID" %}</h3>
             <input type="text" name="loginid" class="input" value="" /><br />
+            <p class="error hide"></p>
+            <input type="submit" value="{% trans "Submit" %}" class="submit" />
+        </form>
+
+        <form id="set-reference-id-form" method="post" action="" class="hide">{% csrf_token %}
+            <h3>{% trans "Set user Reference ID" %}</h3>
+            <input type="text" name="reference_id" class="input" value="" /><br />
             <p class="error hide"></p>
             <input type="submit" value="{% trans "Submit" %}" class="submit" />
         </form>
@@ -336,6 +355,10 @@ $('#set-loginid').click(function () {
     $("#set-loginid-form").modal({appendTo:"#main"});
     $('#simplemodal-container').css({'width':'auto', 'height':'auto'});
 })
+$('#set-reference-id').click(function () {
+    $("#set-reference-id-form").modal({appendTo:"#main"});
+    $('#simplemodal-container').css({'width':'auto', 'height':'auto'});
+})
 $('#set-dept').click(function() {
     $("#set-dept-form").modal({appendTo: "#main"});
     $('#simplemodal-container').css({'width':'auto', 'height':'auto'});
@@ -379,7 +402,7 @@ $('#set-name-form').submit(function() {
     disable($submitBtn);
 
     $.ajax({
-        url: '{% url 'api2-account' email %}',
+        url: '{% url 'api-v2.1-admin-user' email %}',
         type: 'PUT',
         dataType: 'json',
         cache: false,
@@ -413,21 +436,59 @@ $('#set-loginid-form').submit(function() {
     var $loginid = $('#loginid');
     var $error = $('.error', $(this));
     var $submitBtn = $('[type="submit"]', $(this));
-    if (!loginid){
-        $error.html("{% trans "Login id can't be empty" %}").show();
-        return false;
-    }
+
     disable($submitBtn);
 
     $.ajax({
-        url: '{% url 'api2-account' email %}',
+        url: '{% url 'api-v2.1-admin-user' email %}',
         type: 'PUT',
         dataType: 'json',
         cache: false,
         beforeSend: prepareCSRFToken,
         data: {'login_id': loginid},
         success: function(data) {
-            $loginid.html(HTMLescape(data['login_id']));
+            if (loginid == '') {
+                $loginid.html('--');
+            } else {
+                $loginid.html(HTMLescape(data['login_id']));
+            }
+            $.modal.close();
+        },
+        error: function(xhr, textStatus, errorThrown) {
+            var err_msg;
+            if (xhr.responseText) {
+                err_msg = $.parseJSON(xhr.responseText).error_msg;
+            } else {
+                err_msg = "{% trans "Failed. Please check the network." %}";
+            }
+            $error.html(err_msg).show();
+            enable($submitBtn);
+        }
+    });
+
+    return false;
+});
+
+$('#set-reference-id-form').submit(function() {
+    var reference_id = $.trim($('[name="reference_id"]', $(this)).val());
+    var $referenceID = $('#reference-id');
+    var $error = $('.error', $(this));
+    var $submitBtn = $('[type="submit"]', $(this));
+    disable($submitBtn);
+
+    $.ajax({
+        url: '{% url 'api-v2.1-admin-user' email %}',
+        type: 'PUT',
+        dataType: 'json',
+        cache: false,
+        beforeSend: prepareCSRFToken,
+        data: {'reference_id': reference_id},
+        success: function(data) {
+            if (reference_id == '') {
+                $referenceID.html('--');
+            } else {
+                $referenceID.html(HTMLescape(data['reference_id']));
+            }
             $.modal.close();
         },
         error: function(xhr, textStatus, errorThrown) {
@@ -453,7 +514,7 @@ $('#set-dept-form').submit(function() {
     disable($submitBtn);
 
     $.ajax({
-        url: '{% url 'api2-account' email %}',
+        url: '{% url 'api-v2.1-admin-user' email %}',
         type: 'PUT',
         dataType: 'json',
         cache: false,
@@ -497,17 +558,17 @@ $('#set-quota-form').submit(function() {
     disable($submitBtn);
 
     $.ajax({
-        url: '{% url 'api2-account' email %}',
+        url: '{% url 'api-v2.1-admin-user' email %}',
         type: 'PUT',
         dataType: 'json',
         cache: false,
         beforeSend: prepareCSRFToken,
-        data: {'storage': space_quota},
+        data: {'quota_total': space_quota},
         success: function(data) {
             if (space_quota == 0) {
                 $quota.html('--');
             } else {
-                $quota.html(quotaSizeFormat(parseInt(data['total']), 1));
+                $quota.html(quotaSizeFormat(parseInt(data['quota_total']), 1));
             }
             $.modal.close();
         },
