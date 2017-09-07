@@ -103,8 +103,10 @@ class Groups(APIView):
             return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
 
         groups = []
-        gids = [g.id for g in user_groups]
-        admin_info = ExtraGroupsSharePermission.objects.batch_get_repos_with_admin_permission(gids)
+        if with_repos:
+            gids = [g.id for g in user_groups]
+            admin_info = ExtraGroupsSharePermission.objects.batch_get_repos_with_admin_permission(gids)
+
         for g in user_groups:
             group_info = get_group_info(request, g.id, avatar_size)
 

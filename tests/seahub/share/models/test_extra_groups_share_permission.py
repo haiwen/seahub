@@ -58,4 +58,6 @@ class ExtraGroupsSharePermissionTest(BaseTestCase):
         ExtraGroupsSharePermission.objects.create_share_permission(self.repo.id, 
                                                                    new_group.id, 
                                                                    'admin')
-        self.assertEqual([(self.repo.id, self.group.id), (self.repo.id, new_group.id)], ExtraGroupsSharePermission.objects.batch_get_repos_with_admin_permission(data))
+        res = ExtraGroupsSharePermission.objects.batch_get_repos_with_admin_permission(data)
+        assert (self.repo.id, self.group.id) in res
+        assert (self.repo.id, new_group.id) in res
