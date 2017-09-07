@@ -288,3 +288,45 @@ class AdminUserTest(BaseTestCase):
         self.login_as(self.user)
         resp = self.client.delete(self.url)
         self.assertEqual(403, resp.status_code)
+
+    def test_update_login_id(self):
+        self.login_as(self.admin)
+
+        data = {"email": self.tmp_email, "login_id": ''}
+        resp = self.client.put(self.url, json.dumps(data),
+                'application/json')
+        json_resp = json.loads(resp.content)
+        assert json_resp['login_id'] == ''
+
+        data = {"email": self.tmp_email, "login_id": 'lg_id'}
+        resp = self.client.put(self.url, json.dumps(data),
+                'application/json')
+        json_resp = json.loads(resp.content)
+        assert json_resp['login_id'] == 'lg_id'
+
+        data = {"email": self.tmp_email, "login_id": ''}
+        resp = self.client.put(self.url, json.dumps(data),
+                'application/json')
+        json_resp = json.loads(resp.content)
+        assert json_resp['login_id'] == ''
+
+    def test_update_reference_id(self):
+        self.login_as(self.admin)
+
+        data = {"email": self.tmp_email, "reference_id": ''}
+        resp = self.client.put(self.url, json.dumps(data),
+                'application/json')
+        json_resp = json.loads(resp.content)
+        assert json_resp['reference_id'] == ''
+
+        data = {"email": self.tmp_email, "reference_id": 'rf@id.com'}
+        resp = self.client.put(self.url, json.dumps(data),
+                'application/json')
+        json_resp = json.loads(resp.content)
+        assert json_resp['reference_id'] == 'rf@id.com'
+
+        data = {"email": self.tmp_email, "reference_id": ''}
+        resp = self.client.put(self.url, json.dumps(data),
+                'application/json')
+        json_resp = json.loads(resp.content)
+        assert json_resp['reference_id'] == ''

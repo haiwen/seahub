@@ -100,6 +100,7 @@ class UserManager(object):
         user.org = emailuser.org
         user.source = emailuser.source
         user.role = emailuser.role
+        user.reference_id = emailuser.reference_id
 
         return user
 
