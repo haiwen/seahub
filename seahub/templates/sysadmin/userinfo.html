@@ -407,7 +407,7 @@ $('#set-name-form').submit(function() {
         dataType: 'json',
         cache: false,
         beforeSend: prepareCSRFToken,
-        data: {'email': '{{email}}', 'name': nickname},
+        data: {'name': nickname},
         success: function(data) {
             if (nickname == '') {
                 $name.html('--');
@@ -445,7 +445,7 @@ $('#set-loginid-form').submit(function() {
         dataType: 'json',
         cache: false,
         beforeSend: prepareCSRFToken,
-        data: {'email': '{{email}}', 'login_id': loginid},
+        data: {'login_id': loginid},
         success: function(data) {
             if (loginid == '') {
                 $loginid.html('--');
@@ -482,7 +482,7 @@ $('#set-reference-id-form').submit(function() {
         dataType: 'json',
         cache: false,
         beforeSend: prepareCSRFToken,
-        data: {'email': '{{email}}', 'reference_id': reference_id},
+        data: {'reference_id': reference_id},
         success: function(data) {
             if (reference_id == '') {
                 $referenceID.html('--');
@@ -519,7 +519,7 @@ $('#set-dept-form').submit(function() {
         dataType: 'json',
         cache: false,
         beforeSend: prepareCSRFToken,
-        data: {'email': '{{email}}', 'department': department},
+        data: {'department': department},
         success: function(data) {
             if (department == '') {
                 $department.html('--');
@@ -563,7 +563,7 @@ $('#set-quota-form').submit(function() {
         dataType: 'json',
         cache: false,
         beforeSend: prepareCSRFToken,
-        data: {'email': '{{email}}', 'quota_total': space_quota},
+        data: {'quota_total': space_quota},
         success: function(data) {
             if (space_quota == 0) {
                 $quota.html('--');
