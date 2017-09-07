@@ -328,10 +328,13 @@ class AdminUser(APIView):
                 return api_error(status.HTTP_400_BAD_REQUEST, 
                                  _(u"Login id %s already exists." % login_id))
 
-        reference_id = request.data.get("reference_id", None)
-        if reference_id is not None:
-            if not is_valid_username(reference_id) and reference_id != "":
+        reference_id = request.data.get("reference_id", "")
+        if reference_id:
+            if not is_valid_username(reference_id):
                 return api_error(status.HTTP_400_BAD_REQUEST, 'Reference ID %s invalid.' % reference_id)
+            primary_id = ccnet_api.get_primary_id(reference_id)
+            if primary_id:
+                return api_error(status.HTTP_400_BAD_REQUEST, 'Reference ID %s already exists.' % reference_id)
 
         department = request.data.get("department", None)
         if department:
