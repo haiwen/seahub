@@ -29,10 +29,7 @@ from seahub.role_permissions.utils import get_available_roles
 logger = logging.getLogger(__name__)
 json_content_type = 'application/json; charset=utf-8'
 
-def update_user_info(request):
-
-    email = request.data.get("email")
-    user = User.objects.get(email=email)
+def update_user_info(request, user):
 
     # update basic user info
     password = request.data.get("password")
@@ -51,6 +48,8 @@ def update_user_info(request):
 
     # update user
     user.save()
+
+    email = user.username
 
     # update additional user info
     if is_pro_version():
@@ -234,8 +233,8 @@ class AdminUsers(APIView):
 
         # create user
         try:
-            User.objects.create_user(email)
-            update_user_info(request)
+            user_obj = User.objects.create_user(email)
+            update_user_info(request, user_obj)
         except Exception as e:
             logger.error(e)
             error_msg = 'Internal Server Error'
@@ -329,13 +328,13 @@ class AdminUser(APIView):
 
         # query user info
         try:
-            User.objects.get(email=email)
+            user_obj = User.objects.get(email=email)
         except User.DoesNotExist:
             error_msg = 'User %s not found.' % email
             return api_error(status.HTTP_404_NOT_FOUND, error_msg)
 
         try:
-            update_user_info(request)
+            update_user_info(request, user_obj)
         except Exception as e:
             logger.error(e)
             error_msg = 'Internal Server Error'
