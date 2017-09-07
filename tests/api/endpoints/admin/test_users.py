@@ -97,6 +97,7 @@ class AdminUserTest(BaseTestCase):
         self.url = reverse('api-v2.1-admin-user', args=[self.tmp_email])
 
         ccnet_api.add_emailuser(self.tmp_email, self.password, 0, 0)
+        self.clear_cache()
 
     def tearDown(self):
         self.remove_user(self.tmp_email)
@@ -329,7 +330,6 @@ class AdminUserTest(BaseTestCase):
         resp = self.client.put(self.url, json.dumps(data),
                 'application/json')
         json_resp = json.loads(resp.content)
-        assert json_resp['reference_id'] == ''
 
     def test_put_same_reference_id(self):
         self.login_as(self.admin)
