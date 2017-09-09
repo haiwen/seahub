@@ -9,3 +9,8 @@ GUEST_USER = 'guest'
 PERMISSION_READ = 'r'
 PERMISSION_READ_WRITE = 'rw'
 PERMISSION_ADMIN = 'admin'
+
+DEFAULT_ADMIN = 'default_admin'
+SYSTEM_ADMIN = 'system_admin'
+DAILY_ADMIN = 'daily_admin'
+AUDIT_ADMIN = 'audit_admin'

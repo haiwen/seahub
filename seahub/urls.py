@@ -34,7 +34,6 @@ from seahub.api2.endpoints.file import FileView
 from seahub.api2.endpoints.dir import DirView, DirDetailView
 from seahub.api2.endpoints.file_tag import FileTagView
 from seahub.api2.endpoints.file_tag import FileTagsView
-from seahub.api2.endpoints.dir import DirView
 from seahub.api2.endpoints.repo_trash import RepoTrash
 from seahub.api2.endpoints.deleted_repos import DeletedRepos
 from seahub.api2.endpoints.repo_history import RepoHistory
@@ -54,7 +53,7 @@ from seahub.api2.endpoints.revision_tag import TaggedItemsView,TagNamesView
 
 # Admin
 from seahub.api2.endpoints.admin.revision_tag import AdminTaggedItemsView
-from seahub.api2.endpoints.admin.login import Login
+from seahub.api2.endpoints.admin.login_logs import LoginLogs, AdminLoginLogs
 from seahub.api2.endpoints.admin.file_audit import FileAudit
 from seahub.api2.endpoints.admin.file_update import FileUpdate
 from seahub.api2.endpoints.admin.perm_audit import PermAudit
@@ -79,7 +78,7 @@ from seahub.api2.endpoints.admin.share_links import AdminShareLink, \
 from seahub.api2.endpoints.admin.upload_links import AdminUploadLink, \
         AdminUploadLinkUpload, AdminUploadLinkCheckPassword
 from seahub.api2.endpoints.admin.users_batch import AdminUsersBatch
-from seahub.api2.endpoints.admin.logs import AdminLogs
+from seahub.api2.endpoints.admin.operation_logs import AdminOperationLogs
 from seahub.api2.endpoints.admin.org_users import AdminOrgUsers, AdminOrgUser
 from seahub.api2.endpoints.admin.logo import AdminLogo
 from seahub.api2.endpoints.admin.favicon import AdminFavicon
@@ -87,6 +86,7 @@ from seahub.api2.endpoints.admin.license import AdminLicense
 from seahub.api2.endpoints.admin.invitations import InvitationsView as AdminInvitationsView
 from seahub.api2.endpoints.admin.library_history import AdminLibraryHistoryLimit
 from seahub.api2.endpoints.admin.login_bg_image import AdminLoginBgImage
+from seahub.api2.endpoints.admin.admin_role import AdminAdminRole
 
 # Uncomment the next two lines to enable the admin:
 #from django.contrib import admin
@@ -313,7 +313,10 @@ urlpatterns = patterns(
 
     ## admin::shares
     url(r'^api/v2.1/admin/shares/$', AdminShares.as_view(), name='api-v2.1-admin-shares'),
-    url(r'^api/v2.1/admin/admin-logs/$', AdminLogs.as_view(), name='api-v2.1-admin-admin-logs'),
+
+    ## admin::admin logs
+    url(r'^api/v2.1/admin/admin-logs/$', AdminOperationLogs.as_view(), name='api-v2.1-admin-admin-operation-logs'),
+    url(r'^api/v2.1/admin/admin-login-logs/$', AdminLoginLogs.as_view(), name='api-v2.1-admin-admin-login-logs'),
 
     ## admin::share-links
     url(r'^api/v2.1/admin/share-links/(?P<token>[a-f0-9]+)/$', AdminShareLink.as_view(), name='api-v2.1-admin-share-link'),
@@ -333,6 +336,9 @@ urlpatterns = patterns(
 
     ## admin::users
     url(r'^api/v2.1/admin/users/batch/$', AdminUsersBatch.as_view(), name='api-v2.1-admin-users-batch'),
+
+    ## admin::admin-role
+    url(r'^api/v2.1/admin/admin-role/$', AdminAdminRole.as_view(), name='api-v2.1-admin-admin-role'),
 
     ## admin::organizations
     url(r'^api/v2.1/admin/organizations/(?P<org_id>\d+)/users/$', AdminOrgUsers.as_view(), name='api-v2.1-admin-org-users'),
@@ -412,11 +418,8 @@ urlpatterns = patterns(
     url(r'^useradmin/remove/(?P<email>[^/]+)/$', user_remove, name="user_remove"),
     url(r'^useradmin/removetrial/(?P<user_or_org>[^/]+)/$', remove_trial, name="remove_trial"),
     url(r'^useradmin/search/$', user_search, name="user_search"),
-#    url(r'^useradmin/makeadmin/(?P<user_id>[^/]+)/$', user_make_admin, name='user_make_admin'),
     url(r'^useradmin/removeadmin/(?P<email>[^/]+)/$', user_remove_admin, name='user_remove_admin'),
     url(r'^useradmin/info/(?P<email>[^/]+)/$', user_info, name='user_info'),
-#    url(r'^useradmin/activate/(?P<user_id>[^/]+)/$', user_activate, name='user_activate'),
-#    url(r'^useradmin/deactivate/(?P<user_id>[^/]+)/$', user_deactivate, name='user_deactivate'),
     url(r'^useradmin/toggle_status/(?P<email>[^/]+)/$', user_toggle_status, name='user_toggle_status'),
     url(r'^useradmin/toggle_role/(?P<email>[^/]+)/$', user_toggle_role, name='user_toggle_role'),
     url(r'^useradmin/(?P<email>[^/]+)/set_quota/$', user_set_quota, name='user_set_quota'),
@@ -468,7 +471,7 @@ if getattr(settings, 'ENABLE_SYSADMIN_EXTRA', False):
         sys_log_file_update_export_excel, sys_log_perm_audit_export_excel, \
         sys_log_email_audit
     urlpatterns += patterns('',
-        url(r'^api/v2.1/admin/logs/login/$', Login.as_view(), name='api-v2.1-admin-logs-login'),
+        url(r'^api/v2.1/admin/logs/login/$', LoginLogs.as_view(), name='api-v2.1-admin-logs-login'),
         url(r'^sys/loginadmin/$', sys_login_admin, name='sys_login_admin'),
         url(r'^sys/loginadmin/export-excel/$', sys_login_admin_export_excel, name='sys_login_admin_export_excel'),
 
