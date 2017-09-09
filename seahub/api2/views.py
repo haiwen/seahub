@@ -4019,7 +4019,7 @@ class GroupRepos(APIView):
                 "modifier_email": r.last_modifier,
                 "modifier_contact_email": contact_email_dict.get(r.last_modifier, ''),
                 "modifier_name": nickname_dict.get(r.last_modifier, ''),
-                "is_admin": str(r.id) in admin_repos,
+                "is_admin": r.id in admin_repos,
             }
             repos_json.append(repo)
 
@@ -4040,7 +4040,6 @@ class GroupRepo(APIView):
         group_id = group.id
 
         # only admin or owner can delete share record.
-        groups = [str(e.id) for e in get_groups_by_user(request)]
         repo_owner = get_repo_owner(request, repo_id)
         if not group.is_staff and repo_owner != username and not is_repo_admin(username, repo_id):
             return api_error(status.HTTP_403_FORBIDDEN, 'Permission denied.')

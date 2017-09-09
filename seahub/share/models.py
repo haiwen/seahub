@@ -192,7 +192,7 @@ class ExtraSharePermissionManager(models.Manager):
         e.g.
             in_datas:
                 [(repo_id1, username1), (repo_id2, admin1)]
-            return:
+            admin permission data returnd:
                 [(repo_id2, admin1)]
         """
         if len(in_datas) <= 0:
@@ -220,14 +220,6 @@ class ExtraSharePermissionManager(models.Manager):
 
 
 class ExtraGroupsSharePermissionManager(models.Manager):
-    def get_admin_groups(self, repo_id):
-        """ return admin groups in specific repo
-            e.g: ['23', '12']
-        """
-        return super(ExtraGroupsSharePermissionManager, self).filter(
-            repo_id=repo_id, permission='admin'
-        ).values_list('group_id', flat=True)
-
     def get_repos_with_admin_permission(self, gid):
         """ return admin repo in specific group
             e.g: ['repo_id1', 'repo_id2']
@@ -236,10 +228,21 @@ class ExtraGroupsSharePermissionManager(models.Manager):
             group_id=gid, permission='admin'
         ).values_list('repo_id', flat=True)
 
-    def get_all_admin_records(self):
+    def get_admin_groups_by_repo(self, repo_id):
+        """ return admin groups in specific repo
+            e.g: ['23', '12']
+        """
         return super(ExtraGroupsSharePermissionManager, self).filter(
-            permission='admin'
-        )
+            repo_id=repo_id, permission='admin'
+        ).values_list('group_id', flat=True)
+
+    def batch_get_repos_with_admin_permission(self, gids):
+        """ 
+        """
+        if len(gids) <= 0:
+            return []
+        db_data = super(ExtraGroupsSharePermissionManager, self).filter(group_id__in=gids, permission=PERMISSION_ADMIN)
+        return [(e.repo_id, e.group_id) for e in db_data]
 
     def create_share_permission(self, repo_id, gid, permission):
         self.model(repo_id=repo_id, group_id=gid, permission=permission).save()
@@ -257,7 +260,7 @@ class ExtraGroupsSharePermissionManager(models.Manager):
 
 class ExtraGroupsSharePermission(models.Model):
     repo_id = models.CharField(max_length=36, db_index=True)
-    group_id = models.CharField(max_length=20, db_index=True)
+    group_id = models.IntegerField(db_index=True)
     permission = models.CharField(max_length=30)
     objects = ExtraGroupsSharePermissionManager()
 
