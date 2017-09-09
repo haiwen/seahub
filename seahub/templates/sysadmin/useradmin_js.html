@@ -22,13 +22,13 @@ addConfirmTo($('.unset-trial'), {
 
 $('tr:gt(0)').hover(
     function() {
-        $(this).find('.user-status-edit-icon, .user-role-edit-icon').removeClass('vh');
+        $(this).find('.user-status-edit-icon, .user-role-edit-icon, .admin-role-edit-icon').removeClass('vh');
     },
     function() {
-        $(this).find('.user-status-edit-icon, .user-role-edit-icon').addClass('vh');
+        $(this).find('.user-status-edit-icon, .user-role-edit-icon, .admin-role-edit-icon').addClass('vh');
     }
 );
-$('.user-status-edit-icon, .user-role-edit-icon, .user-institution-edit-icon').click(function() {
+$('.user-status-edit-icon, .user-role-edit-icon, .user-institution-edit-icon, .admin-role-edit-icon').click(function() {
     $(this).parent().addClass('hide');
     $(this).parent().next().removeClass('hide'); // show 'select'
 });
@@ -368,5 +368,9 @@ $(document).click(function(e) {
     if (!$('.user-institution-edit-icon, .user-institution-select').is(target)) {
         $('.user-institution').removeClass('hide');
         $('.user-institution-select').addClass('hide');
+    }
+    if (!$('.admin-role-edit-icon, .admin-role-select').is(target)) {
+        $('.admin-role').removeClass('hide');
+        $('.admin-role-select').addClass('hide');
     }
 });

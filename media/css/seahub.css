@@ -2943,6 +2943,7 @@ button.sf-dropdown-toggle:focus {
 .folder-perm-select,
 .share-permission-select,
 .user-role-select,
+.admin-role-select,
 .user-status-select {
     position:relative;/*for long text in other lang in 'share admin'*/
     padding:3px 2px;

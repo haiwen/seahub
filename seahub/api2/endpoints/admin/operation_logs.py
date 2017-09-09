@@ -31,7 +31,7 @@ def get_log_info(log_obj):
     return log_info
 
 
-class AdminLogs(APIView):
+class AdminOperationLogs(APIView):
 
     authentication_classes = (TokenAuthentication, SessionAuthentication)
     throttle_classes = (UserRateThrottle,)
@@ -81,7 +81,7 @@ class AdminLogs(APIView):
 
         ## generate `Links` header for paginator
         options_dict = {'email': email, 'operation': operation}
-        base_url = reverse('api-v2.1-admin-admin-logs')
+        base_url = reverse('api-v2.1-admin-admin-operation-logs')
         links_header = generate_links_header_for_paginator(base_url,
                 page, per_page, total_count, options_dict)
         resp['Links'] = links_header

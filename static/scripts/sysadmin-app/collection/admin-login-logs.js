@@ -2,16 +2,16 @@ define([
     'underscore',
     'backbone.paginator',
     'common',
-    'sysadmin-app/models/admin-log'
-], function(_, BackbonePaginator, Common, AdminLogModel) {
+    'sysadmin-app/models/admin-login-log'
+], function(_, BackbonePaginator, Common, AdminLoginLogModel) {
     'use strict';
 
-    var AdminLogCollection = Backbone.PageableCollection.extend({
+    var AdminLoginLogCollection = Backbone.PageableCollection.extend({
 
-        model: AdminLogModel,
+        model: AdminLoginLogModel,
 
         url: function() {
-            return Common.getUrl({name: 'admin-logs'});
+            return Common.getUrl({name: 'admin-login-logs'});
         },
 
         state: {
@@ -35,5 +35,5 @@ define([
             return resp.data;
         }
     });
-    return AdminLogCollection;
+    return AdminLoginLogCollection;
 });

@@ -3,26 +3,26 @@ define([
     'underscore',
     'backbone',
     'common',
-    'sysadmin-app/views/admin-log',
-    'sysadmin-app/collection/admin-logs'
-], function($, _, Backbone, Common, AdminLogView, AdminLogCollection) {
+    'sysadmin-app/views/admin-operation-log',
+    'sysadmin-app/collection/admin-operation-logs'
+], function($, _, Backbone, Common, AdminOperationLogView, AdminOperationLogCollection) {
     'use strict';
 
-    var AdminLogsView = Backbone.View.extend({
+    var AdminOperationLogsView = Backbone.View.extend({
 
         id: 'admin-logs',
 
-        template: _.template($("#admin-logs-tmpl").html()),
+        template: _.template($("#admin-operation-logs-tmpl").html()),
 
         initialize: function() {
-            this.adminLogCollection = new AdminLogCollection();
-            this.listenTo(this.adminLogCollection, 'add', this.addOne);
-            this.listenTo(this.adminLogCollection, 'reset', this.reset);
+            this.adminOperationLogCollection = new AdminOperationLogCollection();
+            this.listenTo(this.adminOperationLogCollection, 'add', this.addOne);
+            this.listenTo(this.adminOperationLogCollection, 'reset', this.reset);
             this.render();
         },
 
         render: function() {
-            this.$el.append(this.template());
+            this.$el.html(this.template());
 
             this.$table = this.$('table');
             this.$tableBody = $('tbody', this.$table);
@@ -40,13 +40,13 @@ define([
 
         getNextPage: function() {
             this.initPage();
-            this.adminLogCollection.getNextPage({reset: true});
+            this.adminOperationLogCollection.getNextPage({reset: true});
             return false;
         },
 
         getPreviousPage: function() {
             this.initPage();
-            this.adminLogCollection.getPreviousPage({reset: true});
+            this.adminOperationLogCollection.getPreviousPage({reset: true});
             return false;
         },
 
@@ -75,13 +75,13 @@ define([
         },
 
         renderPaginator: function() {
-            if (this.adminLogCollection.hasNextPage()) {
+            if (this.adminOperationLogCollection.hasNextPage()) {
                 this.$jsNext.show();
             } else {
                 this.$jsNext.hide();
             }
 
-            if (this.adminLogCollection.hasPreviousPage()) {
+            if (this.adminOperationLogCollection.hasPreviousPage()) {
                 this.$jsPrevious.show();
             } else {
                 this.$jsPrevious.hide();
@@ -93,17 +93,17 @@ define([
 
             var _this = this;
             var current_page = parseInt(this.option.current_page) || 1;
-            var first_page = parseInt(this.adminLogCollection.state.firstPage);
-            var total_page = parseInt(this.adminLogCollection.state.totalPages);
+            var first_page = parseInt(this.adminOperationLogCollection.state.firstPage);
+            var total_page = parseInt(this.adminOperationLogCollection.state.totalPages);
 
             // `currentPage` must be firstPage <= currentPage <= totalPages if 1-based.
             if (first_page <= current_page && current_page <= total_page) {
-                this.adminLogCollection.getPage(current_page).done(function () {
+                this.adminOperationLogCollection.getPage(current_page).done(function () {
                     _this.$loadingTip.hide();
-                    var current_page = _this.adminLogCollection.state.currentPage;
-                    app.router.navigate('admin-logs/?page=' + current_page);
+                    var current_page = _this.adminOperationLogCollection.state.currentPage;
+                    app.router.navigate('admin-operation-logs/?page=' + current_page);
 
-                    if (_this.adminLogCollection.length > 0) {
+                    if (_this.adminOperationLogCollection.length > 0) {
                         _this.$table.show();
                     } else {
                         _this.$emptyTip.show();
@@ -113,8 +113,8 @@ define([
                 });
             } else {
                 // always get the first page if not use `getPage` method
-                _this.adminLogCollection.state.currentPage = 1;
-                this.adminLogCollection.fetch({
+                _this.adminOperationLogCollection.state.currentPage = 1;
+                this.adminOperationLogCollection.fetch({
                     cache: false,
                     reset: true,
                     error: function(collection, response, opts) {
@@ -138,18 +138,18 @@ define([
         },
 
         addOne: function(log) {
-            var view = new AdminLogView({model: log});
+            var view = new AdminOperationLogView({model: log});
             this.$tableBody.append(view.render().el);
         },
 
         reset: function() {
             this.$loadingTip.hide();
 
-            var current_page = this.adminLogCollection.state.currentPage;
-            app.router.navigate('admin-logs/?page=' + current_page);
+            var current_page = this.adminOperationLogCollection.state.currentPage;
+            app.router.navigate('admin-operation-logs/?page=' + current_page);
 
-            if (this.adminLogCollection.length > 0) {
-                this.adminLogCollection.each(this.addOne, this);
+            if (this.adminOperationLogCollection.length > 0) {
+                this.adminOperationLogCollection.each(this.addOne, this);
                 this.$table.show();
             } else {
                 this.$emptyTip.show();
@@ -158,5 +158,5 @@ define([
             this.renderPaginator();
         }
     });
-    return AdminLogsView;
+    return AdminOperationLogsView;
 });

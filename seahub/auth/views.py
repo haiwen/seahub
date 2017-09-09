@@ -1,7 +1,6 @@
 # Copyright (c) 2012-2016 Seafile Ltd.
 import hashlib
 import os
-import re
 import logging
 from datetime import datetime
 from django.conf import settings
@@ -22,8 +21,9 @@ from seaserv import seafile_api
 from seahub.auth import REDIRECT_FIELD_NAME, get_backends
 from seahub.auth import login as auth_login
 from seahub.auth.decorators import login_required
-from seahub.auth.forms import AuthenticationForm, CaptchaAuthenticationForm
-from seahub.auth.forms import PasswordResetForm, SetPasswordForm, PasswordChangeForm
+from seahub.auth.forms import AuthenticationForm, CaptchaAuthenticationForm, \
+        PasswordResetForm, SetPasswordForm, PasswordChangeForm
+from seahub.auth.signals import user_logged_in_failed
 from seahub.auth.tokens import default_token_generator
 from seahub.base.accounts import User
 from seahub.options.models import UserOptions
@@ -178,6 +178,7 @@ def login(request, template_name='registration/login.html',
                                             redirect_to, remember_me)
 
         # form is invalid
+        user_logged_in_failed.send(sender=None, request=request)
         failed_attempt = _incr_login_failed_attempts(username=login,
                                                     ip=ip)
 
@@ -207,6 +208,7 @@ def login(request, template_name='registration/login.html',
                             (login, ip, failed_attempt))
                 if not used_captcha_already:
                     form = CaptchaAuthenticationForm()
+
     else:
         ### GET
         failed_attempt = _get_login_failed_attempts(ip=ip)
