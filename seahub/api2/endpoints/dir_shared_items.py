@@ -431,14 +431,14 @@ class DirSharedItemsEndpoint(APIView):
                     gid = int(gid)
                 except ValueError:
                     result['failed'].append({
-                        'error_msg': _(u'group_id %s invalid.') % gid
+                        'error_msg': 'group_id %s invalid.' % gid
                         })
                     continue
 
                 group = ccnet_api.get_group(gid)
                 if not group:
                     result['failed'].append({
-                        'error_msg': _(u'Group %s not found') % gid
+                        'error_msg': 'Group %s not found' % gid
                         })
                     continue
 
@@ -446,7 +446,7 @@ class DirSharedItemsEndpoint(APIView):
                         not ccnet_api.is_group_user(gid, username):
                     result['failed'].append({
                         'group_name': group.group_name,
-                        'error_msg': _(u'Permission denied.')
+                        'error_msg': 'Permission denied.'
                         })
                     continue
 
