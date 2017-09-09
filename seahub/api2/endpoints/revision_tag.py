@@ -12,7 +12,7 @@ from django.utils.translation import ugettext as _
 from seahub.api2.throttling import UserRateThrottle
 from seahub.api2.authentication import TokenAuthentication
 from seahub.api2.utils import api_error
-from seahub.revision_tag.models import Tags, RevisionTags
+from seahub.revision_tag.models import RevisionTags
 from seahub.views import check_folder_permission
 
 import seaserv
@@ -52,7 +52,7 @@ def check_parameter(func):
             names = [name.strip() for name in tag_names.split(',')]
             for name in names:
                 if not check_tagname(name):
-                    error_msg = _("Tag can only contains letters, numbers, dot, hyphen or underscore")
+                    error_msg = _("Tag can only contain letters, numbers, dot, hyphen or underscore.")
                     return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
 
         if check_folder_permission(request, repo_id, '/') != 'rw':
