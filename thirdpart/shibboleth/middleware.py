@@ -7,7 +7,7 @@ from django.contrib.auth.middleware import RemoteUserMiddleware
 from django.core.exceptions import ImproperlyConfigured
 from django.core.urlresolvers import reverse
 from django.http import HttpResponseRedirect
-from seaserv import seafile_api
+from seaserv import seafile_api, ccnet_api
 
 from shibboleth.app_settings import SHIB_ATTRIBUTE_MAP, LOGOUT_SESSION_KEY, SHIB_USER_HEADER
 
@@ -57,6 +57,10 @@ class ShibbolethRemoteUserMiddleware(RemoteUserMiddleware):
             # request.user set to AnonymousUser by the
             # AuthenticationMiddleware).
             return
+
+        p_id = ccnet_api.get_primary_id(username)
+        if p_id is not None:
+            username = p_id
 
         # If the user is already authenticated and that user is the user we are
         # getting passed in the headers, then the correct user is already

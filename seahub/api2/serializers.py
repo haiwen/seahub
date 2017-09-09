@@ -2,6 +2,7 @@
 import logging
 
 from rest_framework import serializers
+from seaserv import ccnet_api
 
 from seahub.auth import authenticate
 from seahub.api2.models import DESKTOP_PLATFORMS
@@ -67,6 +68,10 @@ class AuthTokenSerializer(serializers.Serializer):
         username = Profile.objects.get_username_by_login_id(login_id)
         if username is None:
             username = login_id
+
+        p_id = ccnet_api.get_primary_id(username)
+        if p_id is not None:
+            username = p_id
 
         if username and password:
             user = authenticate(username=username, password=password)
