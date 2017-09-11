@@ -13,6 +13,7 @@ from .endpoints.file_comment import FileCommentView
 from .endpoints.file_comments import FileCommentsView
 from .endpoints.file_comments_counts import FileCommentsCounts
 from .endpoints.search_user import SearchUser
+from .endpoints.repos_count import ReposCount
 from .endpoints.group_discussions import GroupDiscussions
 from .endpoints.group_discussion import GroupDiscussion
 from .endpoints.send_share_link_email import SendShareLinkView
@@ -38,6 +39,7 @@ urlpatterns = patterns('',
     url(r'^search-user/$', SearchUser.as_view(), name='search-user'),
     url(r'^repos/$', Repos.as_view(), name="api2-repos"),
     url(r'^repos/public/$', PubRepos.as_view(), name="api2-pub-repos"),
+    url(r'^repos/count/$', ReposCount.as_view(), name="api2-repos-count"),
     url(r'^repos/(?P<repo_id>[-0-9a-f]{36})/$', Repo.as_view(), name="api2-repo"),
     url(r'^repos/(?P<repo_id>[-0-9a-f]{36})/history/$', RepoHistory.as_view()),
     url(r'^repos/(?P<repo_id>[-0-9a-f]{36})/user-folder-perm/$', RepoUserFolderPerm.as_view(), name="api2-repo-user-folder-perm"),
