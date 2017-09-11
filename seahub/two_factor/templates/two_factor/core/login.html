@@ -15,10 +15,10 @@
         <p>{% blocktrans %}We sent you a text message, please enter the tokens we
             sent.{% endblocktrans %}</p>
         {% else %}
-        <p>{% trans "Open the two-factor authentication app on your device to view your authentication code and verify your identify." %}</p>
+        <p>{% trans "Open the two-factor authentication app on your device to view your authentication token and verify your identify." %}</p>
         {% endif %}
 
-        <label for="token">{% trans "Authentication code" %}</label>
+        <label for="token">{% trans "Authentication token" %}</label>
         <input id="token" type="text" name="{{form_prefix}}otp_token" value="" class="input two-factor-auth-login-token-input" autocomplete="off" />
 
         {% if form.errors %}
