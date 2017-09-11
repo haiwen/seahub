@@ -72,6 +72,7 @@
                 <option value={{role}} {%if user.role == role %}selected="selected"{% endif %}>{{ role }}</option>
                 {% endfor %}
             </select>
+
             {% else %} {# else for `if not is_admin_page` #}
             <div class="admin-role">
                 {% if user.admin_role == default_admin %}
@@ -85,11 +86,8 @@
                 {% else %}
                     <span class="admin-role-cur-value">{{user.admin_role}}</span>
                 {% endif %}
-                {% if request.user.admin_role == default_admin %}
                 <span title="{% trans "Edit"%}" class="admin-role-edit-icon sf2-icon-edit op-icon vh"></span>
-                {% endif %}
             </div>
-            {% if request.user.admin_role == default_admin %}
             <select name="role" class="admin-role-select hide">
                 <option value="{{ default_admin }}"{% if user.admin_role == default_admin %} selected="selected"{% endif %}>{% trans "Default Admin" context "Default Administrator" %}</option>
                 <option value="{{ system_admin }}"{% if user.admin_role == system_admin %} selected="selected"{% endif %}>{% trans "System Admin" context "System Administrator" %}</option>
@@ -99,7 +97,6 @@
                 <option value="{{ role }}"{% if user.admin_role == role %} selected="selected"{% endif %}>{{ role }}</option>
                 {% endfor %}
             </select>
-            {% endif %}
             {% endif %}
         </td>
         {% endif %}
