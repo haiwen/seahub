@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2017-09-09 18:15+0800\n"
+"POT-Creation-Date: 2017-09-11 11:53+0800\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -352,7 +352,7 @@ msgstr ""
 #: seahub/templates/sysadmin/sudo_mode.html:10
 #: seahub/templates/sysadmin/sys_org_admin.html:32
 #: seahub/templates/sysadmin/sys_org_info_user.html:71
-#: seahub/templates/sysadmin/sys_useradmin.html:59
+#: seahub/templates/sysadmin/sys_useradmin.html:61
 msgid "Password"
 msgstr ""
 
@@ -583,8 +583,8 @@ msgstr ""
 #: seahub/templates/sysadmin/sys_inst_search_user.html:16
 #: seahub/templates/sysadmin/sys_org_info_user.html:19
 #: seahub/templates/sysadmin/sys_org_info_user.html:65
-#: seahub/templates/sysadmin/sys_useradmin.html:41
-#: seahub/templates/sysadmin/sys_useradmin_ldap.html:24
+#: seahub/templates/sysadmin/sys_useradmin.html:43
+#: seahub/templates/sysadmin/sys_useradmin_ldap.html:26
 #: seahub/templates/sysadmin/user_search.html:10
 #: seahub/templates/sysadmin/useradmin_table.html:6
 #: seahub/templates/sysadmin/useradmin_table.html:10
@@ -694,7 +694,7 @@ msgstr ""
 #: seahub/institutions/templates/institutions/user_info.html:113
 #: seahub/templates/js/sysadmin-templates.html:865
 #: seahub/templates/js/templates.html:1794
-#: seahub/templates/sysadmin/sys_useradmin.html:50
+#: seahub/templates/sysadmin/sys_useradmin.html:52
 #: seahub/templates/sysadmin/useradmin_table.html:8
 #: seahub/templates/sysadmin/userinfo.html:304 seahub/views/sysadmin.py:320
 msgid "Role"
@@ -802,7 +802,7 @@ msgstr ""
 
 #: seahub/base/management/commands/export_users.py:132
 #: seahub/invitations/models.py:16 seahub/invitations/models.py:37
-#: seahub/templates/sysadmin/sys_useradmin.html:53
+#: seahub/templates/sysadmin/sys_useradmin.html:55
 #: seahub/templates/sysadmin/useradmin_table.html:60
 #: seahub/templates/sysadmin/useradmin_table.html:70
 #: seahub/views/sysadmin.py:394
@@ -812,7 +812,7 @@ msgstr ""
 #: seahub/base/management/commands/export_users.py:134
 #: seahub/base/management/commands/export_users.py:138
 #: seahub/templates/file_edit.html:449
-#: seahub/templates/sysadmin/sys_useradmin.html:52
+#: seahub/templates/sysadmin/sys_useradmin.html:54
 #: seahub/templates/sysadmin/useradmin_table.html:62
 #: seahub/templates/sysadmin/useradmin_table.html:69
 #: seahub/views/sysadmin.py:396 seahub/views/sysadmin.py:400
@@ -1084,7 +1084,7 @@ msgstr ""
 #: seahub/templates/sysadmin/useradmin_table.html:48
 #: seahub/templates/sysadmin/useradmin_table.html:66
 #: seahub/templates/sysadmin/useradmin_table.html:89
-#: seahub/templates/sysadmin/useradmin_table.html:122
+#: seahub/templates/sysadmin/useradmin_table.html:119
 #: seahub/templates/sysadmin/userinfo.html:53
 #: seahub/templates/sysadmin/userinfo.html:65
 #: seahub/templates/sysadmin/userinfo.html:77
@@ -1129,7 +1129,7 @@ msgstr ""
 #: seahub/templates/sysadmin/sys_org_info_user.html:51
 #: seahub/templates/sysadmin/sys_terms_admin.html:40
 #: seahub/templates/sysadmin/sys_virus_scan_records.html:23
-#: seahub/templates/sysadmin/useradmin_table.html:143
+#: seahub/templates/sysadmin/useradmin_table.html:140
 #: seahub/templates/sysadmin/userinfo.html:199
 #: seahub/templates/sysadmin/userinfo.html:313
 #: seahub/templates/view_file_base.html:147
@@ -1235,13 +1235,13 @@ msgstr ""
 #: seahub/templates/sysadmin/sys_statistic_storage.html:34
 #: seahub/templates/sysadmin/sys_statistic_user.html:34
 #: seahub/templates/sysadmin/sys_terms_admin.html:71
-#: seahub/templates/sysadmin/sys_user_admin_ldap_imported.html:59
-#: seahub/templates/sysadmin/sys_useradmin.html:68
-#: seahub/templates/sysadmin/sys_useradmin.html:79
-#: seahub/templates/sysadmin/sys_useradmin.html:101
+#: seahub/templates/sysadmin/sys_user_admin_ldap_imported.html:61
+#: seahub/templates/sysadmin/sys_useradmin.html:70
+#: seahub/templates/sysadmin/sys_useradmin.html:81
+#: seahub/templates/sysadmin/sys_useradmin.html:103
 #: seahub/templates/sysadmin/sys_useradmin_admins.html:44
 #: seahub/templates/sysadmin/user_search.html:11
-#: seahub/templates/sysadmin/useradmin_table.html:166
+#: seahub/templates/sysadmin/useradmin_table.html:163
 #: seahub/templates/sysadmin/userinfo.html:128
 #: seahub/templates/sysadmin/userinfo.html:135
 #: seahub/templates/sysadmin/userinfo.html:142
@@ -1280,7 +1280,7 @@ msgstr ""
 #: seahub/templates/sysadmin/sys_org_info_user.html:166
 #: seahub/templates/sysadmin/sys_org_set_quota_js.html:35
 #: seahub/templates/sysadmin/sys_terms_admin.html:117
-#: seahub/templates/sysadmin/sys_useradmin.html:231
+#: seahub/templates/sysadmin/sys_useradmin.html:233
 #: seahub/templates/sysadmin/sys_useradmin_admins.html:94
 #: seahub/templates/sysadmin/useradmin_js.html:244
 #: seahub/templates/sysadmin/useradmin_js.html:346
@@ -2280,7 +2280,7 @@ msgid "Set Quota"
 msgstr ""
 
 #: seahub/institutions/templates/institutions/user_info.html:52
-#: seahub/templates/sysadmin/useradmin_table.html:159
+#: seahub/templates/sysadmin/useradmin_table.html:156
 #: seahub/templates/sysadmin/userinfo.html:153
 msgid "Set user storage limit"
 msgstr ""
@@ -2369,7 +2369,7 @@ msgstr ""
 #: seahub/templates/sysadmin/sys_inst_info_user.html:34
 #: seahub/templates/sysadmin/sys_inst_search_user.html:19
 #: seahub/templates/sysadmin/sys_org_info_user.html:22
-#: seahub/templates/sysadmin/sys_useradmin_ldap.html:26
+#: seahub/templates/sysadmin/sys_useradmin_ldap.html:28
 #: seahub/templates/sysadmin/useradmin_table.html:16
 #: seahub/templates/sysadmin/useradmin_table.html:20
 msgid "Create At / Last Login"
@@ -2389,10 +2389,10 @@ msgstr ""
 #: seahub/institutions/templates/institutions/useradmin.html:70
 #: seahub/templates/sysadmin/sys_inst_info_user.html:68
 #: seahub/templates/sysadmin/sys_org_info_user.html:60
-#: seahub/templates/sysadmin/sys_user_admin_ldap_imported.html:46
-#: seahub/templates/sysadmin/sys_useradmin.html:88
+#: seahub/templates/sysadmin/sys_user_admin_ldap_imported.html:48
+#: seahub/templates/sysadmin/sys_useradmin.html:90
 #: seahub/templates/sysadmin/sys_useradmin_admins.html:53
-#: seahub/templates/sysadmin/sys_useradmin_paid.html:31
+#: seahub/templates/sysadmin/sys_useradmin_paid.html:33
 #: seahub/templates/sysadmin/user_search.html:27
 msgid "Activating..., please wait"
 msgstr ""
@@ -2422,7 +2422,7 @@ msgstr ""
 #: seahub/institutions/templates/institutions/useradmin.html:128
 #: seahub/templates/sysadmin/sys_inst_info_user.html:119
 #: seahub/templates/sysadmin/sys_org_info_user.html:245
-#: seahub/templates/sysadmin/sys_useradmin_admins.html:120
+#: seahub/templates/sysadmin/sys_useradmin_admins.html:119
 #: seahub/templates/sysadmin/useradmin_js.html:73
 msgid "Edit succeeded"
 msgstr ""
@@ -2430,7 +2430,7 @@ msgstr ""
 #: seahub/institutions/templates/institutions/useradmin.html:136
 #: seahub/templates/sysadmin/sys_inst_info_user.html:127
 #: seahub/templates/sysadmin/sys_org_info_user.html:252
-#: seahub/templates/sysadmin/sys_useradmin_admins.html:127
+#: seahub/templates/sysadmin/sys_useradmin_admins.html:126
 #: seahub/templates/sysadmin/useradmin_js.html:81
 msgid "Edit failed."
 msgstr ""
@@ -3779,7 +3779,7 @@ msgstr ""
 msgid "Invite People"
 msgstr ""
 
-#: seahub/templates/home_base.html:56
+#: seahub/templates/home_base.html:56 seahub/templates/js/templates.html:1243
 msgid "Share Admin"
 msgstr ""
 
@@ -4191,8 +4191,8 @@ msgid "New Group"
 msgstr ""
 
 #: seahub/templates/js/sysadmin-templates.html:600
-#: seahub/templates/sysadmin/sys_user_admin_ldap_imported.html:23
-#: seahub/templates/sysadmin/sys_useradmin.html:28
+#: seahub/templates/sysadmin/sys_user_admin_ldap_imported.html:25
+#: seahub/templates/sysadmin/sys_useradmin.html:30
 msgid "Export Excel"
 msgstr ""
 
@@ -4597,15 +4597,15 @@ msgstr ""
 #: seahub/templates/js/templates.html:1013
 #: seahub/templates/sysadmin/sys_org_info_user.html:74
 #: seahub/templates/sysadmin/sys_org_info_user.html:98
-#: seahub/templates/sysadmin/sys_useradmin.html:62
-#: seahub/templates/sysadmin/sys_useradmin.html:156
+#: seahub/templates/sysadmin/sys_useradmin.html:64
+#: seahub/templates/sysadmin/sys_useradmin.html:158
 msgid "Show"
 msgstr ""
 
 #: seahub/templates/js/templates.html:947
 #: seahub/templates/js/templates.html:1014
 #: seahub/templates/sysadmin/sys_org_info_user.html:75
-#: seahub/templates/sysadmin/sys_useradmin.html:63
+#: seahub/templates/sysadmin/sys_useradmin.html:65
 msgid "Generate a random password"
 msgstr ""
 
@@ -4672,10 +4672,6 @@ msgstr ""
 #: seahub/templates/js/templates.html:1122
 #: seahub/templates/js/templates.html:1142
 msgid "Leave Share"
-msgstr ""
-
-#: seahub/templates/js/templates.html:1243
-msgid "Shared Admin"
 msgstr ""
 
 #: seahub/templates/js/templates.html:1307
@@ -5176,7 +5172,7 @@ msgstr ""
 #: seahub/templates/registration/registration_form.html:88
 #: seahub/templates/sysadmin/sudo_mode.html:34
 #: seahub/templates/sysadmin/sys_org_info_user.html:133
-#: seahub/templates/sysadmin/sys_useradmin.html:192
+#: seahub/templates/sysadmin/sys_useradmin.html:194
 msgid "Password cannot be blank"
 msgstr ""
 
@@ -5220,7 +5216,7 @@ msgstr ""
 #: seahub/templates/sysadmin/sudo_mode.html:18
 #: seahub/templates/sysadmin/sys_org_admin.html:34
 #: seahub/templates/sysadmin/sys_org_info_user.html:77
-#: seahub/templates/sysadmin/sys_useradmin.html:65
+#: seahub/templates/sysadmin/sys_useradmin.html:67
 msgid "Confirm Password"
 msgstr ""
 
@@ -5242,7 +5238,7 @@ msgstr ""
 #: seahub/templates/snippets/shared_link_js.html:143
 #: seahub/templates/sysadmin/sys_org_admin.html:94
 #: seahub/templates/sysadmin/sys_org_info_user.html:137
-#: seahub/templates/sysadmin/sys_useradmin.html:196
+#: seahub/templates/sysadmin/sys_useradmin.html:198
 msgid "Please enter the password again"
 msgstr ""
 
@@ -5340,7 +5336,7 @@ msgstr ""
 
 #: seahub/templates/registration/registration_form.html:84
 #: seahub/templates/sysadmin/sys_org_info_user.html:129
-#: seahub/templates/sysadmin/sys_useradmin.html:188
+#: seahub/templates/sysadmin/sys_useradmin.html:190
 msgid "Email cannot be blank"
 msgstr ""
 
@@ -5964,11 +5960,11 @@ msgstr ""
 
 #: seahub/templates/sysadmin/sys_inst_info_admins.html:8
 #: seahub/templates/sysadmin/sys_inst_info_user.html:14
-#: seahub/templates/sysadmin/sys_user_admin_ldap_imported.html:19
-#: seahub/templates/sysadmin/sys_useradmin.html:19
+#: seahub/templates/sysadmin/sys_user_admin_ldap_imported.html:20
+#: seahub/templates/sysadmin/sys_useradmin.html:20
 #: seahub/templates/sysadmin/sys_useradmin_admins.html:19
-#: seahub/templates/sysadmin/sys_useradmin_ldap.html:18
-#: seahub/templates/sysadmin/sys_useradmin_paid.html:19
+#: seahub/templates/sysadmin/sys_useradmin_ldap.html:19
+#: seahub/templates/sysadmin/sys_useradmin_paid.html:20
 msgid "Admins"
 msgstr ""
 
@@ -5976,7 +5972,7 @@ msgstr ""
 #: seahub/templates/sysadmin/sys_inst_info_user.html:57
 #: seahub/templates/sysadmin/sys_inst_search_user.html:42
 #: seahub/templates/sysadmin/useradmin_js.html:13
-#: seahub/templates/sysadmin/useradmin_table.html:150
+#: seahub/templates/sysadmin/useradmin_table.html:147
 msgid "Revoke Admin"
 msgstr ""
 
@@ -5991,7 +5987,7 @@ msgstr ""
 
 #: seahub/templates/sysadmin/sys_inst_info_base.html:31
 #: seahub/templates/sysadmin/sys_org_info_base.html:36
-#: seahub/templates/sysadmin/useradmin_table.html:163
+#: seahub/templates/sysadmin/useradmin_table.html:160
 #: seahub/templates/sysadmin/userinfo.html:157
 msgid "Tip: 0 means default limit"
 msgstr ""
@@ -6075,7 +6071,7 @@ msgstr ""
 
 #: seahub/templates/sysadmin/sys_org_admin.html:98
 #: seahub/templates/sysadmin/sys_org_info_user.html:141
-#: seahub/templates/sysadmin/sys_useradmin.html:200
+#: seahub/templates/sysadmin/sys_useradmin.html:202
 msgid "Passwords do not match"
 msgstr ""
 
@@ -6101,7 +6097,7 @@ msgid "Set org storage limit"
 msgstr ""
 
 #: seahub/templates/sysadmin/sys_org_info_base.html:35
-#: seahub/templates/sysadmin/useradmin_table.html:162
+#: seahub/templates/sysadmin/useradmin_table.html:159
 #: seahub/templates/sysadmin/userinfo.html:156
 msgid "An integer that is greater than or equal to 0."
 msgstr ""
@@ -6147,25 +6143,25 @@ msgstr ""
 
 #: seahub/templates/sysadmin/sys_org_info_user.html:13
 #: seahub/templates/sysadmin/sys_org_info_user.html:64
-#: seahub/templates/sysadmin/sys_useradmin.html:27
-#: seahub/templates/sysadmin/sys_useradmin.html:40
+#: seahub/templates/sysadmin/sys_useradmin.html:29
+#: seahub/templates/sysadmin/sys_useradmin.html:42
 msgid "Add user"
 msgstr ""
 
 #: seahub/templates/sysadmin/sys_org_info_user.html:52
-#: seahub/templates/sysadmin/useradmin_table.html:146
+#: seahub/templates/sysadmin/useradmin_table.html:143
 msgid "ResetPwd"
 msgstr ""
 
 #: seahub/templates/sysadmin/sys_org_info_user.html:68
-#: seahub/templates/sysadmin/sys_useradmin.html:44
+#: seahub/templates/sysadmin/sys_useradmin.html:46
 msgid "Name(optional)"
 msgstr ""
 
 #: seahub/templates/sysadmin/sys_org_info_user.html:101
 #: seahub/templates/sysadmin/sys_org_info_user.html:115
-#: seahub/templates/sysadmin/sys_useradmin.html:159
-#: seahub/templates/sysadmin/sys_useradmin.html:172
+#: seahub/templates/sysadmin/sys_useradmin.html:161
+#: seahub/templates/sysadmin/sys_useradmin.html:174
 msgid "Hide"
 msgstr ""
 
@@ -6338,62 +6334,62 @@ msgstr ""
 msgid "LDAP"
 msgstr ""
 
-#: seahub/templates/sysadmin/sys_user_admin_ldap_imported.html:26
-#: seahub/templates/sysadmin/sys_useradmin.html:31
+#: seahub/templates/sysadmin/sys_user_admin_ldap_imported.html:28
+#: seahub/templates/sysadmin/sys_useradmin.html:33
 #: seahub/templates/sysadmin/sys_useradmin_admins.html:26
 #: seahub/templates/sysadmin/user_search.html:16
 msgid "Set quota"
 msgstr ""
 
-#: seahub/templates/sysadmin/sys_user_admin_ldap_imported.html:28
-#: seahub/templates/sysadmin/sys_user_admin_ldap_imported.html:51
-#: seahub/templates/sysadmin/sys_useradmin.html:33
-#: seahub/templates/sysadmin/sys_useradmin.html:93
+#: seahub/templates/sysadmin/sys_user_admin_ldap_imported.html:30
+#: seahub/templates/sysadmin/sys_user_admin_ldap_imported.html:53
+#: seahub/templates/sysadmin/sys_useradmin.html:35
+#: seahub/templates/sysadmin/sys_useradmin.html:95
 msgid "Set institution"
 msgstr ""
 
-#: seahub/templates/sysadmin/sys_user_admin_ldap_imported.html:30
-#: seahub/templates/sysadmin/sys_useradmin.html:35
+#: seahub/templates/sysadmin/sys_user_admin_ldap_imported.html:32
+#: seahub/templates/sysadmin/sys_useradmin.html:37
 #: seahub/templates/sysadmin/sys_useradmin_admins.html:27
 #: seahub/templates/sysadmin/user_search.html:17
 msgid "Delete users"
 msgstr ""
 
-#: seahub/templates/sysadmin/sys_user_admin_ldap_imported.html:41
+#: seahub/templates/sysadmin/sys_user_admin_ldap_imported.html:43
 msgid "No LDAP users have been imported"
 msgstr ""
 
-#: seahub/templates/sysadmin/sys_useradmin.html:26
+#: seahub/templates/sysadmin/sys_useradmin.html:28
 msgid "Import users"
 msgstr ""
 
-#: seahub/templates/sysadmin/sys_useradmin.html:46
+#: seahub/templates/sysadmin/sys_useradmin.html:48
 msgid "Department(optional)"
 msgstr ""
 
-#: seahub/templates/sysadmin/sys_useradmin.html:50
+#: seahub/templates/sysadmin/sys_useradmin.html:52
 msgid ""
 "You can also add a user as a guest, who will not be allowed to create "
 "libraries and groups."
 msgstr ""
 
-#: seahub/templates/sysadmin/sys_useradmin.html:72
+#: seahub/templates/sysadmin/sys_useradmin.html:74
 msgid "Import users from a CSV file"
 msgstr ""
 
-#: seahub/templates/sysadmin/sys_useradmin.html:75
+#: seahub/templates/sysadmin/sys_useradmin.html:77
 msgid "File format: user@mail.com,password,name,department,role,quota"
 msgstr ""
 
-#: seahub/templates/sysadmin/sys_useradmin.html:76
+#: seahub/templates/sysadmin/sys_useradmin.html:78
 msgid "Name, department, role and quota are optional."
 msgstr ""
 
-#: seahub/templates/sysadmin/sys_useradmin.html:78
+#: seahub/templates/sysadmin/sys_useradmin.html:80
 msgid "Please choose a CSV file"
 msgstr ""
 
-#: seahub/templates/sysadmin/sys_useradmin.html:116
+#: seahub/templates/sysadmin/sys_useradmin.html:118
 #, python-format
 msgid "A new server version %(v)s is available."
 msgstr ""
@@ -6418,7 +6414,7 @@ msgstr ""
 msgid "Tip: the emails should be the users already added."
 msgstr ""
 
-#: seahub/templates/sysadmin/sys_useradmin_ldap.html:25
+#: seahub/templates/sysadmin/sys_useradmin_ldap.html:27
 #: seahub/templates/sysadmin/useradmin_table.html:14
 #: seahub/templates/sysadmin/useradmin_table.html:19
 #: seahub/templates/sysadmin/userinfo.html:97
@@ -6517,31 +6513,31 @@ msgstr ""
 msgid "Institution"
 msgstr ""
 
-#: seahub/templates/sysadmin/useradmin_table.html:78
-#: seahub/templates/sysadmin/useradmin_table.html:94
+#: seahub/templates/sysadmin/useradmin_table.html:79
+#: seahub/templates/sysadmin/useradmin_table.html:92
 msgctxt "Default Administrator"
 msgid "Default Admin"
 msgstr ""
 
-#: seahub/templates/sysadmin/useradmin_table.html:80
-#: seahub/templates/sysadmin/useradmin_table.html:95
+#: seahub/templates/sysadmin/useradmin_table.html:81
+#: seahub/templates/sysadmin/useradmin_table.html:93
 msgctxt "System Administrator"
 msgid "System Admin"
 msgstr ""
 
-#: seahub/templates/sysadmin/useradmin_table.html:82
-#: seahub/templates/sysadmin/useradmin_table.html:96
+#: seahub/templates/sysadmin/useradmin_table.html:83
+#: seahub/templates/sysadmin/useradmin_table.html:94
 msgctxt "Daily Administrator"
 msgid "Daily Admin"
 msgstr ""
 
-#: seahub/templates/sysadmin/useradmin_table.html:84
-#: seahub/templates/sysadmin/useradmin_table.html:97
+#: seahub/templates/sysadmin/useradmin_table.html:85
+#: seahub/templates/sysadmin/useradmin_table.html:95
 msgctxt "Audit Administrator"
 msgid "Audit Admin"
 msgstr ""
 
-#: seahub/templates/sysadmin/useradmin_table.html:115
+#: seahub/templates/sysadmin/useradmin_table.html:112
 #: seahub/templates/sysadmin/userinfo.html:107
 msgid "Edit Quota"
 msgstr ""
