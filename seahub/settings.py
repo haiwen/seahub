@@ -306,9 +306,6 @@ USER_STRONG_PASSWORD_REQUIRED = False
 # Force user to change password when admin add/reset a user.
 FORCE_PASSWORD_CHANGE = True
 
-# Using server side crypto by default, otherwise, let user choose crypto method.
-FORCE_SERVER_CRYPTO = True
-
 # Enable or disable repo history setting
 ENABLE_REPO_HISTORY_SETTING = True
 
