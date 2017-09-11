@@ -100,7 +100,6 @@ $('#add-admin-form').submit(function() {
 
     return false;
 });
-{% if request.user.admin_role == default_admin %}
 $('.admin-role-select').change(function() {
     var $select = $(this),
         role = $select.val(),
@@ -131,7 +130,6 @@ $('.admin-role-select').change(function() {
         }
     });
 });
-{% endif %}
 
 {% include "sysadmin/useradmin_js.html" %}
 </script>

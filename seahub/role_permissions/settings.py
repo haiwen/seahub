@@ -88,7 +88,7 @@ DEFAULT_ENABLED_ADMIN_ROLE_PERMISSIONS = {
         'can_config_system': True,
     },
     # DAILY_ADMIN can ONLY view system-info(without upload licence), statistic,
-    # libraries/users/groups, user-logs pages.
+    # libraries, users(except 'Admins'), groups, user-logs pages.
     DAILY_ADMIN: {
         'can_view_system_info': True,
         'can_view_statistic': True,

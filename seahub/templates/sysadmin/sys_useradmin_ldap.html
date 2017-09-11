@@ -15,7 +15,9 @@
         <li class="tabnav-tab"><a href="{% url 'sys_useradmin' %}">{% trans "Database" %}</a></li>
         <li class="tabnav-tab tabnav-tab-cur"><a href="{% url 'sys_useradmin_ldap' %}">{% trans "LDAP" %}</a></li>
         <li class="tabnav-tab"><a href="{% url 'sys_useradmin_ldap_imported' %}">{% trans "LDAP(imported)" %}</a></li>
+        {% if is_default_admin %}
         <li class="tabnav-tab"><a href="{% url 'sys_useradmin_admins' %}">{% trans "Admins" %}</a></li>
+        {% endif %}
     </ul>
 </div>
 
