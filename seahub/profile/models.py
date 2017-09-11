@@ -101,6 +101,7 @@ class Profile(models.Model):
     # Contact email is used to receive emails.
     contact_email = models.EmailField(max_length=225, db_index=True, null=True, blank=True)
     institution = models.CharField(max_length=225, db_index=True, null=True, blank=True, default='')
+    list_in_address_book = models.BooleanField(default=False, db_index=True)
     objects = ProfileManager()
 
     def set_lang_code(self, lang_code):
