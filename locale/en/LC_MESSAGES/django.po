@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2017-09-11 11:53+0800\n"
+"POT-Creation-Date: 2017-09-12 13:37+0800\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -17,43 +17,43 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 
-#: seahub/api2/endpoints/account.py:183
+#: seahub/api2/endpoints/admin/account.py:194
 msgid "Name is too long (maximum is 64 characters)"
 msgstr ""
 
-#: seahub/api2/endpoints/account.py:187 seahub/forms.py:44
+#: seahub/api2/endpoints/admin/account.py:198 seahub/forms.py:44
 #: seahub/profile/forms.py:17 seahub/templates/sysadmin/userinfo.html:397
 msgid "Name should not include '/'."
 msgstr ""
 
-#: seahub/api2/endpoints/account.py:195
+#: seahub/api2/endpoints/admin/account.py:213
 msgid "Login id can't be empty"
 msgstr ""
 
-#: seahub/api2/endpoints/account.py:199
+#: seahub/api2/endpoints/admin/account.py:217
 #: seahub/api2/endpoints/admin/users.py:328
 #, python-format
 msgid "Login id %s already exists."
 msgstr ""
 
-#: seahub/api2/endpoints/account.py:206
+#: seahub/api2/endpoints/admin/account.py:224
 msgid "Department is too long (maximum is 512 characters)"
 msgstr ""
 
-#: seahub/api2/endpoints/account.py:222 seahub/forms.py:155
+#: seahub/api2/endpoints/admin/account.py:240 seahub/forms.py:155
 msgid "Space quota can't be empty"
 msgstr ""
 
-#: seahub/api2/endpoints/account.py:228
+#: seahub/api2/endpoints/admin/account.py:246
 msgid "Must be an integer that is greater than or equal to 0."
 msgstr ""
 
-#: seahub/api2/endpoints/account.py:232
+#: seahub/api2/endpoints/admin/account.py:250
 #: seahub/api2/endpoints/admin/users_batch.py:80 seahub/forms.py:156
 msgid "Space quota is too low (minimum value is 0)"
 msgstr ""
 
-#: seahub/api2/endpoints/account.py:240 seahub/institutions/views.py:213
+#: seahub/api2/endpoints/admin/account.py:258 seahub/institutions/views.py:213
 #: seahub/views/sysadmin.py:772
 #, python-format
 msgid "Failed to set quota: maximum quota is %d MB"
@@ -677,7 +677,7 @@ msgstr ""
 #: seahub/base/management/commands/export_users.py:47
 #: seahub/institutions/templates/institutions/useradmin.html:17
 #: seahub/institutions/templates/institutions/useradmin_search.html:19
-#: seahub/profile/templates/profile/set_profile.html:115
+#: seahub/profile/templates/profile/set_profile.html:129
 #: seahub/templates/js/sysadmin-templates.html:964
 #: seahub/templates/sysadmin/sys_inst_info_admins.html:16
 #: seahub/templates/sysadmin/sys_inst_info_user.html:32
@@ -1098,8 +1098,8 @@ msgstr ""
 #: seahub/institutions/templates/institutions/useradmin.html:57
 #: seahub/institutions/templates/institutions/useradmin_search.html:54
 #: seahub/notifications/templates/notifications/notification_list.html:33
-#: seahub/profile/templates/profile/set_profile.html:140
-#: seahub/profile/templates/profile/set_profile.html:142
+#: seahub/profile/templates/profile/set_profile.html:154
+#: seahub/profile/templates/profile/set_profile.html:156
 #: seahub/templates/js/sysadmin-templates.html:443
 #: seahub/templates/js/sysadmin-templates.html:511
 #: seahub/templates/js/sysadmin-templates.html:576
@@ -1164,7 +1164,7 @@ msgstr ""
 #: seahub/notifications/templates/notifications/notification_list.html:14
 #: seahub/options/templates/options/set_user_options.html:14
 #: seahub/profile/templates/profile/set_profile.html:74
-#: seahub/profile/templates/profile/set_profile.html:106
+#: seahub/profile/templates/profile/set_profile.html:120
 #: seahub/share/templates/share/share_link_audit.html:22
 #: seahub/templates/decrypt_repo_form.html:11
 #: seahub/templates/file_edit.html:102 seahub/templates/file_edit.html:135
@@ -1596,13 +1596,13 @@ msgid "Choose a library as wiki:"
 msgstr ""
 
 #: seahub/group/templates/group/group_wiki.html:60
-#: seahub/profile/templates/profile/set_profile.html:105
+#: seahub/profile/templates/profile/set_profile.html:119
 #: seahub/templates/wiki/personal_wiki.html:57
 msgid "Please click and choose a library."
 msgstr ""
 
 #: seahub/group/templates/group/group_wiki.html:62
-#: seahub/profile/templates/profile/set_profile.html:107
+#: seahub/profile/templates/profile/set_profile.html:121
 #: seahub/templates/file_edit.html:103 seahub/templates/file_edit.html:152
 #: seahub/templates/file_edit.html:427
 #: seahub/templates/js/lib-op-popups.html:10
@@ -2817,14 +2817,14 @@ msgid "Default Library"
 msgstr ""
 
 #: seahub/profile/templates/profile/set_profile.html:19
-#: seahub/profile/templates/profile/set_profile.html:113
+#: seahub/profile/templates/profile/set_profile.html:127
 #: seahub/templates/sysadmin/userinfo.html:111
 msgid "Two-Factor Authentication"
 msgstr ""
 
 #: seahub/profile/templates/profile/set_profile.html:21
-#: seahub/profile/templates/profile/set_profile.html:138
-#: seahub/profile/templates/profile/set_profile.html:201
+#: seahub/profile/templates/profile/set_profile.html:152
+#: seahub/profile/templates/profile/set_profile.html:215
 msgid "Delete Account"
 msgstr ""
 
@@ -2879,115 +2879,134 @@ msgstr ""
 msgid "Telephone:"
 msgstr ""
 
-#: seahub/profile/templates/profile/set_profile.html:79
+#: seahub/profile/templates/profile/set_profile.html:80
+msgid "Global Address Book"
+msgstr ""
+
+#: seahub/profile/templates/profile/set_profile.html:87
+msgid ""
+"List your account in global address book, so that others can find you by "
+"type your name."
+msgstr ""
+
+#: seahub/profile/templates/profile/set_profile.html:93
 msgid "Language Setting"
 msgstr ""
 
-#: seahub/profile/templates/profile/set_profile.html:92
+#: seahub/profile/templates/profile/set_profile.html:106
 msgid "Default Library Setting"
 msgstr ""
 
-#: seahub/profile/templates/profile/set_profile.html:94
+#: seahub/profile/templates/profile/set_profile.html:108
 msgid "Your default library:"
 msgstr ""
 
-#: seahub/profile/templates/profile/set_profile.html:96
+#: seahub/profile/templates/profile/set_profile.html:110
 msgid ""
 "Default library is the default place to store your personal documents and "
 "pictures."
 msgstr ""
 
-#: seahub/profile/templates/profile/set_profile.html:97
+#: seahub/profile/templates/profile/set_profile.html:111
 msgid "Choose Default Library"
 msgstr ""
 
-#: seahub/profile/templates/profile/set_profile.html:100
+#: seahub/profile/templates/profile/set_profile.html:114
 msgid "Choose default library:"
 msgstr ""
 
-#: seahub/profile/templates/profile/set_profile.html:115
+#: seahub/profile/templates/profile/set_profile.html:129
 #: seahub/templates/sysadmin/userinfo.html:114
 msgid "enabled"
 msgstr ""
 
-#: seahub/profile/templates/profile/set_profile.html:117
+#: seahub/profile/templates/profile/set_profile.html:131
 #: seahub/templates/sysadmin/userinfo.html:115
 #: seahub/templates/sysadmin/userinfo.html:117
 msgid "Disable Two-Factor Authentication"
 msgstr ""
 
-#: seahub/profile/templates/profile/set_profile.html:121
+#: seahub/profile/templates/profile/set_profile.html:135
 msgid ""
 "If you don't have any device with you, you can access your account using "
 "backup codes."
 msgstr ""
 
-#: seahub/profile/templates/profile/set_profile.html:122
+#: seahub/profile/templates/profile/set_profile.html:136
 #, python-format
 msgid "You have only one backup code remaining."
 msgid_plural "You have %(counter)s backup codes remaining."
 msgstr[0] ""
 msgstr[1] ""
 
-#: seahub/profile/templates/profile/set_profile.html:125
+#: seahub/profile/templates/profile/set_profile.html:139
 msgid "Show Codes"
 msgstr ""
 
-#: seahub/profile/templates/profile/set_profile.html:129
+#: seahub/profile/templates/profile/set_profile.html:143
 msgid ""
 "Two-factor authentication is not enabled for your account. Enable two-factor "
 "authentication for enhanced account security."
 msgstr ""
 
-#: seahub/profile/templates/profile/set_profile.html:131
+#: seahub/profile/templates/profile/set_profile.html:145
 msgid "Enable Two-Factor Authentication"
 msgstr ""
 
-#: seahub/profile/templates/profile/set_profile.html:139
+#: seahub/profile/templates/profile/set_profile.html:153
 msgid "This operation will not be reverted. Please think twice!"
 msgstr ""
 
-#: seahub/profile/templates/profile/set_profile.html:179
+#: seahub/profile/templates/profile/set_profile.html:193
 msgid " is not supported. Please choose an image file."
 msgstr ""
 
-#: seahub/profile/templates/profile/set_profile.html:184
+#: seahub/profile/templates/profile/set_profile.html:198
 msgid " is not supported. File extensions can only be "
 msgstr ""
 
-#: seahub/profile/templates/profile/set_profile.html:191
+#: seahub/profile/templates/profile/set_profile.html:205
 msgid " is too large. Allowed maximum size is 1MB."
 msgstr ""
 
-#: seahub/profile/templates/profile/set_profile.html:202
+#: seahub/profile/templates/profile/set_profile.html:216
 msgid "Really want to delete your account?"
 msgstr ""
 
-#: seahub/profile/views.py:41
+#: seahub/profile/templates/profile/set_profile.html:270
+#: seahub/templates/js/sysadmin-templates.html:985
+#: seahub/templates/sysadmin/settings.html:211
+#: seahub/templates/sysadmin/settings.html:249 seahub/views/sysadmin.py:1324
+#: seahub/views/sysadmin.py:1381 seahub/views/sysadmin.py:2159
+#: seahub/views/sysadmin.py:2241 seahub/views/sysadmin.py:2412
+msgid "Success"
+msgstr ""
+
+#: seahub/profile/views.py:39
 msgid "Successfully edited profile."
 msgstr ""
 
-#: seahub/profile/views.py:45
+#: seahub/profile/views.py:43
 msgid "Failed to edit profile"
 msgstr ""
 
-#: seahub/profile/views.py:157
+#: seahub/profile/views.py:158
 msgid "Has not accepted invitation yet"
 msgstr ""
 
-#: seahub/profile/views.py:176
+#: seahub/profile/views.py:177
 msgid "Demo account can not be deleted."
 msgstr ""
 
-#: seahub/profile/views.py:202
+#: seahub/profile/views.py:203
 msgid "Failed to set default library."
 msgstr ""
 
-#: seahub/profile/views.py:206
+#: seahub/profile/views.py:207
 msgid "Can not set encrypted library as default library."
 msgstr ""
 
-#: seahub/profile/views.py:211
+#: seahub/profile/views.py:212
 #, python-format
 msgid "Successfully set \"%s\" as your default library."
 msgstr ""
@@ -4309,14 +4328,6 @@ msgstr ""
 
 #: seahub/templates/js/sysadmin-templates.html:976
 msgid "No Admin Login Logs"
-msgstr ""
-
-#: seahub/templates/js/sysadmin-templates.html:985
-#: seahub/templates/sysadmin/settings.html:211
-#: seahub/templates/sysadmin/settings.html:249 seahub/views/sysadmin.py:1324
-#: seahub/views/sysadmin.py:1381 seahub/views/sysadmin.py:2159
-#: seahub/views/sysadmin.py:2241 seahub/views/sysadmin.py:2412
-msgid "Success"
 msgstr ""
 
 #: seahub/templates/js/sysadmin-templates.html:987
