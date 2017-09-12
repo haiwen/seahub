@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2017-09-12 13:37+0800\n"
+"POT-Creation-Date: 2017-09-12 16:18+0800\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -54,7 +54,7 @@ msgid "Space quota is too low (minimum value is 0)"
 msgstr ""
 
 #: seahub/api2/endpoints/admin/account.py:258 seahub/institutions/views.py:213
-#: seahub/views/sysadmin.py:772
+#: seahub/views/sysadmin.py:771
 #, python-format
 msgid "Failed to set quota: maximum quota is %d MB"
 msgstr ""
@@ -84,7 +84,7 @@ msgstr ""
 msgid "User %s is already group owner."
 msgstr ""
 
-#: seahub/api2/endpoints/admin/libraries.py:197 seahub/views/sysadmin.py:1749
+#: seahub/api2/endpoints/admin/libraries.py:197 seahub/views/sysadmin.py:1748
 msgid "System library can not be deleted."
 msgstr ""
 
@@ -205,7 +205,7 @@ msgstr ""
 
 #: seahub/api2/endpoints/repo_set_password.py:51 seahub/api2/views.py:3037
 #: seahub/views/__init__.py:473 seahub/views/ajax.py:625
-#: seahub/views/sysadmin.py:2094
+#: seahub/views/sysadmin.py:2093
 msgid "Internal server error"
 msgstr ""
 
@@ -523,7 +523,7 @@ msgid "This value must be of length 40"
 msgstr ""
 
 #: seahub/base/accounts.py:689 seahub/forms.py:30
-#: seahub/views/sysadmin.py:1929
+#: seahub/views/sysadmin.py:1928
 msgid "The number of users exceeds the limit."
 msgstr ""
 
@@ -588,8 +588,8 @@ msgstr ""
 #: seahub/templates/sysadmin/user_search.html:10
 #: seahub/templates/sysadmin/useradmin_table.html:6
 #: seahub/templates/sysadmin/useradmin_table.html:10
-#: seahub/templates/sysadmin/userinfo.html:36 seahub/views/sysadmin.py:320
-#: seahub/views/sysadmin.py:324
+#: seahub/templates/sysadmin/userinfo.html:36 seahub/views/sysadmin.py:321
+#: seahub/views/sysadmin.py:325
 msgid "Email"
 msgstr ""
 
@@ -658,8 +658,8 @@ msgstr ""
 #: seahub/templates/wiki/personal_wiki.html:43
 #: seahub/templates/wiki/personal_wiki.html:85
 #: seahub/templates/wiki/personal_wiki_pages.html:28
-#: seahub/views/sysadmin.py:320 seahub/views/sysadmin.py:324
-#: seahub/views/sysadmin.py:1176
+#: seahub/views/sysadmin.py:321 seahub/views/sysadmin.py:325
+#: seahub/views/sysadmin.py:1175
 msgid "Name"
 msgstr ""
 
@@ -669,7 +669,7 @@ msgstr ""
 #: seahub/institutions/templates/institutions/useradmin_search.html:18
 #: seahub/templates/sysadmin/useradmin_table.html:6
 #: seahub/templates/sysadmin/useradmin_table.html:10
-#: seahub/views/sysadmin.py:320 seahub/views/sysadmin.py:324
+#: seahub/views/sysadmin.py:321 seahub/views/sysadmin.py:325
 msgid "Contact Email"
 msgstr ""
 
@@ -685,8 +685,8 @@ msgstr ""
 #: seahub/templates/sysadmin/sys_org_info_user.html:20
 #: seahub/templates/sysadmin/useradmin_table.html:7
 #: seahub/templates/sysadmin/useradmin_table.html:11
-#: seahub/templates/sysadmin/userinfo.html:114 seahub/views/sysadmin.py:320
-#: seahub/views/sysadmin.py:324
+#: seahub/templates/sysadmin/userinfo.html:114 seahub/views/sysadmin.py:321
+#: seahub/views/sysadmin.py:325
 msgid "Status"
 msgstr ""
 
@@ -696,19 +696,19 @@ msgstr ""
 #: seahub/templates/js/templates.html:1794
 #: seahub/templates/sysadmin/sys_useradmin.html:52
 #: seahub/templates/sysadmin/useradmin_table.html:8
-#: seahub/templates/sysadmin/userinfo.html:304 seahub/views/sysadmin.py:320
+#: seahub/templates/sysadmin/userinfo.html:304 seahub/views/sysadmin.py:321
 msgid "Role"
 msgstr ""
 
 #: seahub/base/management/commands/export_users.py:44
 #: seahub/base/management/commands/export_users.py:48
-#: seahub/views/sysadmin.py:321 seahub/views/sysadmin.py:325
+#: seahub/views/sysadmin.py:322 seahub/views/sysadmin.py:326
 msgid "Space Usage"
 msgstr ""
 
 #: seahub/base/management/commands/export_users.py:44
 #: seahub/base/management/commands/export_users.py:48
-#: seahub/views/sysadmin.py:321 seahub/views/sysadmin.py:325
+#: seahub/views/sysadmin.py:322 seahub/views/sysadmin.py:326
 msgid "Space Quota"
 msgstr ""
 
@@ -718,14 +718,14 @@ msgstr ""
 #: seahub/templates/sysadmin/sys_inst_admin.html:28
 #: seahub/templates/sysadmin/sys_org_info_group.html:20
 #: seahub/templates/sysadmin/sys_publink_admin.html:14
-#: seahub/templates/sysadmin/userinfo.html:305 seahub/views/sysadmin.py:322
-#: seahub/views/sysadmin.py:326 seahub/views/sysadmin.py:1176
+#: seahub/templates/sysadmin/userinfo.html:305 seahub/views/sysadmin.py:323
+#: seahub/views/sysadmin.py:327 seahub/views/sysadmin.py:1175
 msgid "Create At"
 msgstr ""
 
 #: seahub/base/management/commands/export_users.py:45
 #: seahub/base/management/commands/export_users.py:49
-#: seahub/views/sysadmin.py:322 seahub/views/sysadmin.py:326
+#: seahub/views/sysadmin.py:323 seahub/views/sysadmin.py:327
 msgid "Last Login"
 msgstr ""
 
@@ -746,8 +746,8 @@ msgstr ""
 #: seahub/templates/js/templates.html:1832
 #: seahub/templates/js/templates.html:1839
 #: seahub/templates/js/templates.html:2101
-#: seahub/templates/js/templates.html:2104 seahub/views/sysadmin.py:322
-#: seahub/views/sysadmin.py:326 seahub/views/sysadmin.py:718
+#: seahub/templates/js/templates.html:2104 seahub/views/sysadmin.py:323
+#: seahub/views/sysadmin.py:327 seahub/views/sysadmin.py:719
 msgid "Admin"
 msgstr ""
 
@@ -758,7 +758,7 @@ msgstr ""
 #: seahub/templates/sysadmin/sys_useradmin_admins.html:17
 #: seahub/templates/sysadmin/sys_useradmin_ldap.html:17
 #: seahub/templates/sysadmin/sys_useradmin_paid.html:17
-#: seahub/views/sysadmin.py:322 seahub/views/sysadmin.py:326
+#: seahub/views/sysadmin.py:323 seahub/views/sysadmin.py:327
 msgid "LDAP(imported)"
 msgstr ""
 
@@ -773,7 +773,7 @@ msgstr ""
 #: seahub/templates/sysadmin/sys_org_info_user.html:39
 #: seahub/templates/sysadmin/useradmin_table.html:44
 #: seahub/templates/sysadmin/useradmin_table.html:51
-#: seahub/views/sysadmin.py:380
+#: seahub/views/sysadmin.py:381
 msgid "Active"
 msgstr ""
 
@@ -788,7 +788,7 @@ msgstr ""
 #: seahub/templates/sysadmin/sys_org_info_user.html:40
 #: seahub/templates/sysadmin/useradmin_table.html:46
 #: seahub/templates/sysadmin/useradmin_table.html:52
-#: seahub/views/sysadmin.py:382
+#: seahub/views/sysadmin.py:383
 msgid "Inactive"
 msgstr ""
 
@@ -796,7 +796,7 @@ msgstr ""
 #: seahub/base/management/commands/export_users.py:127
 #: seahub/templates/base.html:127 seahub/templates/base_for_backbone.html:91
 #: seahub/templates/sysadmin/sysadmin_backbone.html:70
-#: seahub/views/sysadmin.py:388 seahub/views/sysadmin.py:389
+#: seahub/views/sysadmin.py:389 seahub/views/sysadmin.py:390
 msgid "Yes"
 msgstr ""
 
@@ -805,7 +805,7 @@ msgstr ""
 #: seahub/templates/sysadmin/sys_useradmin.html:55
 #: seahub/templates/sysadmin/useradmin_table.html:60
 #: seahub/templates/sysadmin/useradmin_table.html:70
-#: seahub/views/sysadmin.py:394
+#: seahub/views/sysadmin.py:395
 msgid "Guest"
 msgstr ""
 
@@ -815,7 +815,7 @@ msgstr ""
 #: seahub/templates/sysadmin/sys_useradmin.html:54
 #: seahub/templates/sysadmin/useradmin_table.html:62
 #: seahub/templates/sysadmin/useradmin_table.html:69
-#: seahub/views/sysadmin.py:396 seahub/views/sysadmin.py:400
+#: seahub/views/sysadmin.py:397 seahub/views/sysadmin.py:401
 msgid "Default"
 msgstr ""
 
@@ -1386,7 +1386,7 @@ msgstr ""
 #: seahub/forms.py:97 seahub/views/ajax.py:396 seahub/views/ajax.py:564
 #: seahub/views/ajax.py:837 seahub/views/ajax.py:841 seahub/views/ajax.py:845
 #: seahub/views/ajax.py:1122 seahub/views/file.py:1656
-#: seahub/views/sysadmin.py:1550 seahub/views/sysadmin.py:1568
+#: seahub/views/sysadmin.py:1549 seahub/views/sysadmin.py:1567
 msgid "Argument missing"
 msgstr ""
 
@@ -2465,7 +2465,7 @@ msgstr ""
 #: seahub/templates/sysadmin/sys_org_info_library.html:21
 #: seahub/templates/sysadmin/sys_publink_admin.html:13
 #: seahub/templates/sysadmin/sys_virus_scan_records.html:12
-#: seahub/views/sysadmin.py:716
+#: seahub/views/sysadmin.py:717
 msgid "Owner"
 msgstr ""
 
@@ -2475,16 +2475,16 @@ msgstr ""
 #: seahub/templates/js/sysadmin-templates.html:895
 #: seahub/templates/js/templates.html:1831
 #: seahub/templates/js/templates.html:1835
-#: seahub/templates/js/templates.html:1838 seahub/views/sysadmin.py:720
+#: seahub/templates/js/templates.html:1838 seahub/views/sysadmin.py:721
 msgid "Member"
 msgstr ""
 
-#: seahub/institutions/views.py:195 seahub/views/sysadmin.py:827
+#: seahub/institutions/views.py:195 seahub/views/sysadmin.py:826
 #, python-format
 msgid "Successfully deleted %s"
 msgstr ""
 
-#: seahub/institutions/views.py:197 seahub/views/sysadmin.py:837
+#: seahub/institutions/views.py:197 seahub/views/sysadmin.py:836
 msgid "Failed to delete: the user does not exist"
 msgstr ""
 
@@ -2976,9 +2976,9 @@ msgstr ""
 #: seahub/profile/templates/profile/set_profile.html:270
 #: seahub/templates/js/sysadmin-templates.html:985
 #: seahub/templates/sysadmin/settings.html:211
-#: seahub/templates/sysadmin/settings.html:249 seahub/views/sysadmin.py:1324
-#: seahub/views/sysadmin.py:1381 seahub/views/sysadmin.py:2159
-#: seahub/views/sysadmin.py:2241 seahub/views/sysadmin.py:2412
+#: seahub/templates/sysadmin/settings.html:249 seahub/views/sysadmin.py:1323
+#: seahub/views/sysadmin.py:1380 seahub/views/sysadmin.py:2158
+#: seahub/views/sysadmin.py:2240 seahub/views/sysadmin.py:2411
 msgid "Success"
 msgstr ""
 
@@ -2990,141 +2990,25 @@ msgstr ""
 msgid "Failed to edit profile"
 msgstr ""
 
-#: seahub/profile/views.py:158
+#: seahub/profile/views.py:157
 msgid "Has not accepted invitation yet"
 msgstr ""
 
-#: seahub/profile/views.py:177
+#: seahub/profile/views.py:176
 msgid "Demo account can not be deleted."
 msgstr ""
 
-#: seahub/profile/views.py:203
+#: seahub/profile/views.py:202
 msgid "Failed to set default library."
 msgstr ""
 
-#: seahub/profile/views.py:207
+#: seahub/profile/views.py:206
 msgid "Can not set encrypted library as default library."
 msgstr ""
 
-#: seahub/profile/views.py:212
+#: seahub/profile/views.py:211
 #, python-format
 msgid "Successfully set \"%s\" as your default library."
-msgstr ""
-
-#: seahub/settings.py:146
-msgid "Català"
-msgstr ""
-
-#: seahub/settings.py:148
-msgid "Deutsch"
-msgstr ""
-
-#: seahub/settings.py:149
-msgid "English"
-msgstr ""
-
-#: seahub/settings.py:150
-msgid "Español"
-msgstr ""
-
-#: seahub/settings.py:151
-msgid "Español de Argentina"
-msgstr ""
-
-#: seahub/settings.py:152
-msgid "Español de México"
-msgstr ""
-
-#: seahub/settings.py:153
-msgid "Français"
-msgstr ""
-
-#: seahub/settings.py:154
-msgid "Italiano"
-msgstr ""
-
-#: seahub/settings.py:155
-msgid "Íslenska"
-msgstr ""
-
-#: seahub/settings.py:156
-msgid "Latvian"
-msgstr ""
-
-#: seahub/settings.py:158
-msgid "Magyar"
-msgstr ""
-
-#: seahub/settings.py:159
-msgid "Nederlands"
-msgstr ""
-
-#: seahub/settings.py:160
-msgid "Polski"
-msgstr ""
-
-#: seahub/settings.py:161
-msgid "Portuguese, Brazil"
-msgstr ""
-
-#: seahub/settings.py:162
-msgid "Русский"
-msgstr ""
-
-#: seahub/settings.py:164
-msgid "Slovenian"
-msgstr ""
-
-#: seahub/settings.py:165
-msgid "Suomi"
-msgstr ""
-
-#: seahub/settings.py:166
-msgid "Svenska"
-msgstr ""
-
-#: seahub/settings.py:167
-msgid "Tiếng Việt"
-msgstr ""
-
-#: seahub/settings.py:168
-msgid "Türkçe"
-msgstr ""
-
-#: seahub/settings.py:169
-msgid "українська мова"
-msgstr ""
-
-#: seahub/settings.py:170
-msgid "עברית"
-msgstr ""
-
-#: seahub/settings.py:171
-msgid "العربية"
-msgstr ""
-
-#: seahub/settings.py:172
-msgid "ελληνικά"
-msgstr ""
-
-#: seahub/settings.py:173
-msgid "ไทย"
-msgstr ""
-
-#: seahub/settings.py:174
-msgid "한국어"
-msgstr ""
-
-#: seahub/settings.py:175
-msgid "日本語"
-msgstr ""
-
-#: seahub/settings.py:177
-msgid "简体中文"
-msgstr ""
-
-#: seahub/settings.py:178
-msgid "繁體中文"
 msgstr ""
 
 #: seahub/share/forms.py:20 seahub/share/forms.py:33
@@ -5696,7 +5580,7 @@ msgstr ""
 #: seahub/templates/sysadmin/org_admin_table.html:5
 #: seahub/templates/sysadmin/sys_org_info_group.html:19
 #: seahub/templates/sysadmin/sys_org_search.html:11
-#: seahub/views/sysadmin.py:1176
+#: seahub/views/sysadmin.py:1175
 msgid "Creator"
 msgstr ""
 
@@ -6143,12 +6027,12 @@ msgid "Max User Number"
 msgstr ""
 
 #: seahub/templates/sysadmin/sys_org_info_setting.html:52
-#: seahub/views/sysadmin.py:1375
+#: seahub/views/sysadmin.py:1374
 msgid "Input should be a number"
 msgstr ""
 
 #: seahub/templates/sysadmin/sys_org_info_setting.html:55
-#: seahub/views/sysadmin.py:1385
+#: seahub/views/sysadmin.py:1384
 msgid "Input number should be greater than 0"
 msgstr ""
 
@@ -6809,7 +6693,7 @@ msgstr ""
 
 #: seahub/views/__init__.py:584 seahub/views/__init__.py:625
 #: seahub/views/__init__.py:844 seahub/views/__init__.py:974
-#: seahub/views/file.py:1651 seahub/views/sysadmin.py:1666
+#: seahub/views/file.py:1651 seahub/views/sysadmin.py:1665
 msgid "Library does not exist"
 msgstr ""
 
@@ -7012,63 +6896,63 @@ msgstr ""
 msgid "Unable to download file"
 msgstr ""
 
-#: seahub/views/sysadmin.py:311 seahub/views/sysadmin.py:417
-#: seahub/views/sysadmin.py:1173 seahub/views/sysadmin.py:1185
+#: seahub/views/sysadmin.py:312 seahub/views/sysadmin.py:418
+#: seahub/views/sysadmin.py:1172 seahub/views/sysadmin.py:1184
 msgid "Failed to export Excel"
 msgstr ""
 
-#: seahub/views/sysadmin.py:778 seahub/views/sysadmin.py:804
+#: seahub/views/sysadmin.py:777 seahub/views/sysadmin.py:803
 msgid "Failed to set quota: internal server error"
 msgstr ""
 
-#: seahub/views/sysadmin.py:823
+#: seahub/views/sysadmin.py:822
 msgid "Failed to delete: the user is an organization creator"
 msgstr ""
 
-#: seahub/views/sysadmin.py:858
+#: seahub/views/sysadmin.py:857
 #, python-format
 msgid "Successfully remove trial for: %s"
 msgstr ""
 
-#: seahub/views/sysadmin.py:887
+#: seahub/views/sysadmin.py:886
 #, python-format
 msgid "Successfully revoke the admin permission of %s"
 msgstr ""
 
-#: seahub/views/sysadmin.py:889
+#: seahub/views/sysadmin.py:888
 msgid "Failed to revoke admin: the user does not exist"
 msgstr ""
 
-#: seahub/views/sysadmin.py:936
+#: seahub/views/sysadmin.py:935
 #, python-format
 msgid "Your account on %s is activated"
 msgstr ""
 
-#: seahub/views/sysadmin.py:1019
+#: seahub/views/sysadmin.py:1018
 #, python-format
 msgid "Password has been reset on %s"
 msgstr ""
 
-#: seahub/views/sysadmin.py:1044
+#: seahub/views/sysadmin.py:1043
 #, python-format
 msgid ""
 "Successfully reset password to %(passwd)s, an email has been sent to "
 "%(user)s."
 msgstr ""
 
-#: seahub/views/sysadmin.py:1049
+#: seahub/views/sysadmin.py:1048
 #, python-format
 msgid ""
 "Successfully reset password to %(passwd)s, but failed to send email to "
 "%(user)s, please check your email configuration."
 msgstr ""
 
-#: seahub/views/sysadmin.py:1053
+#: seahub/views/sysadmin.py:1052
 #, python-format
 msgid "Successfully reset password to %(passwd)s for user %(user)s."
 msgstr ""
 
-#: seahub/views/sysadmin.py:1056
+#: seahub/views/sysadmin.py:1055
 #, python-format
 msgid ""
 "Successfully reset password to %(passwd)s for user %(user)s. But email "
@@ -7076,118 +6960,118 @@ msgid ""
 "configured."
 msgstr ""
 
-#: seahub/views/sysadmin.py:1059
+#: seahub/views/sysadmin.py:1058
 msgid "Failed to reset password: user does not exist"
 msgstr ""
 
-#: seahub/views/sysadmin.py:1075 seahub/views/sysadmin.py:1991
+#: seahub/views/sysadmin.py:1074 seahub/views/sysadmin.py:1990
 #, python-format
 msgid "You are invited to join %s"
 msgstr ""
 
-#: seahub/views/sysadmin.py:1108
+#: seahub/views/sysadmin.py:1107
 #, python-format
 msgid "Fail to add user %s."
 msgstr ""
 
-#: seahub/views/sysadmin.py:1133 seahub/views/sysadmin.py:1146
+#: seahub/views/sysadmin.py:1132 seahub/views/sysadmin.py:1145
 #, python-format
 msgid "Successfully added user %s. An email notification has been sent."
 msgstr ""
 
-#: seahub/views/sysadmin.py:1136 seahub/views/sysadmin.py:1149
+#: seahub/views/sysadmin.py:1135 seahub/views/sysadmin.py:1148
 #, python-format
 msgid ""
 "Successfully added user %s. An error accurs when sending email notification, "
 "please check your email configuration."
 msgstr ""
 
-#: seahub/views/sysadmin.py:1138 seahub/views/sysadmin.py:1151
+#: seahub/views/sysadmin.py:1137 seahub/views/sysadmin.py:1150
 #, python-format
 msgid "Successfully added user %s."
 msgstr ""
 
-#: seahub/views/sysadmin.py:1153
+#: seahub/views/sysadmin.py:1152
 #, python-format
 msgid ""
 "Successfully added user %s. But email notification can not be sent, because "
 "Email service is not properly configured."
 msgstr ""
 
-#: seahub/views/sysadmin.py:1327
+#: seahub/views/sysadmin.py:1326
 msgid "Failed to rename organization"
 msgstr ""
 
-#: seahub/views/sysadmin.py:1357 seahub/views/sysadmin.py:1772
-#: seahub/views/sysadmin.py:1868
+#: seahub/views/sysadmin.py:1356 seahub/views/sysadmin.py:1771
+#: seahub/views/sysadmin.py:1867
 msgid "Successfully deleted."
 msgstr ""
 
-#: seahub/views/sysadmin.py:1661
+#: seahub/views/sysadmin.py:1660
 msgid "Failed to transfer, invalid arguments."
 msgstr ""
 
-#: seahub/views/sysadmin.py:1672
+#: seahub/views/sysadmin.py:1671
 #, python-format
 msgid "Failed to transfer, user %s not found"
 msgstr ""
 
-#: seahub/views/sysadmin.py:1678
+#: seahub/views/sysadmin.py:1677
 msgid "Can not transfer organization library"
 msgstr ""
 
-#: seahub/views/sysadmin.py:1682
+#: seahub/views/sysadmin.py:1681
 #, python-format
 msgid "Can not transfer library to organization user %s"
 msgstr ""
 
-#: seahub/views/sysadmin.py:1735
+#: seahub/views/sysadmin.py:1734
 msgid "Successfully transfered."
 msgstr ""
 
-#: seahub/views/sysadmin.py:1871
+#: seahub/views/sysadmin.py:1870
 msgid "Failed to delete, please try again later."
 msgstr ""
 
-#: seahub/views/sysadmin.py:1902
+#: seahub/views/sysadmin.py:1901
 #, python-format
 msgid "Successfully set %s as admin."
 msgstr ""
 
-#: seahub/views/sysadmin.py:1904
+#: seahub/views/sysadmin.py:1903
 #, python-format
 msgid "Failed to set %s as admin: user does not exist."
 msgstr ""
 
-#: seahub/views/sysadmin.py:2005
+#: seahub/views/sysadmin.py:2004
 msgid "Import succeeded"
 msgstr ""
 
-#: seahub/views/sysadmin.py:2007
+#: seahub/views/sysadmin.py:2006
 msgid "Please select a csv file first."
 msgstr ""
 
-#: seahub/views/sysadmin.py:2069
+#: seahub/views/sysadmin.py:2068
 msgid "Invalid setting"
 msgstr ""
 
-#: seahub/views/sysadmin.py:2076 seahub/views/sysadmin.py:2080
-#: seahub/views/sysadmin.py:2085
+#: seahub/views/sysadmin.py:2075 seahub/views/sysadmin.py:2079
+#: seahub/views/sysadmin.py:2084
 msgid "Invalid value"
 msgstr ""
 
-#: seahub/views/sysadmin.py:2217
+#: seahub/views/sysadmin.py:2216
 #, python-format
 msgid ""
 "Failed to add %s to the institution: user already belongs to an institution"
 msgstr ""
 
-#: seahub/views/sysadmin.py:2222
+#: seahub/views/sysadmin.py:2221
 #, python-format
 msgid "Successfully added %s to the institution."
 msgstr ""
 
-#: seahub/views/sysadmin.py:2546
+#: seahub/views/sysadmin.py:2545
 msgid "Successfully deleted 1 item"
 msgstr ""
 
