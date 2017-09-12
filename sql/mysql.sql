@@ -301,11 +301,11 @@ CREATE TABLE `django_content_type` (
   `model` varchar(100) NOT NULL,
   PRIMARY KEY (`id`),
   UNIQUE KEY `django_content_type_app_label_45f3b1d93ec8c61c_uniq` (`app_label`,`model`)
-) ENGINE=InnoDB AUTO_INCREMENT=63 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=64 DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 /*!40000 ALTER TABLE `django_content_type` DISABLE KEYS */;
-INSERT INTO `django_content_type` VALUES (50,'admin_log','adminlog'),(12,'api2','token'),(13,'api2','tokenv2'),(14,'avatar','avatar'),(15,'avatar','groupavatar'),(17,'base','clientlogintoken'),(22,'base','commandslastcheck'),(21,'base','devicetoken'),(19,'base','filecomment'),(20,'base','filediscuss'),(16,'base','groupenabledmodule'),(23,'base','innerpubmsg'),(24,'base','innerpubmsgreply'),(18,'base','userenabledmodule'),(25,'base','userlastlogin'),(26,'base','userstarredfiles'),(4,'captcha','captchastore'),(27,'contacts','contact'),(1,'contenttypes','contenttype'),(5,'database','constance'),(35,'group','groupmessage'),(36,'group','messageattachment'),(37,'group','messagereply'),(34,'group','publicgroup'),(29,'institutions','institution'),(28,'institutions','institutionadmin'),(30,'institutions','institutionquota'),(31,'invitations','invitation'),(38,'notifications','notification'),(39,'notifications','usernotification'),(40,'options','useroptions'),(62,'organizations','orgmemberquota'),(6,'post_office','attachment'),(8,'post_office','email'),(7,'post_office','emailtemplate'),(9,'post_office','log'),(42,'profile','detailedprofile'),(41,'profile','profile'),(3,'registration','registrationprofile'),(54,'revision_tag','revisiontags'),(55,'revision_tag','tags'),(60,'role_permissions','adminrole'),(2,'sessions','session'),(49,'share','anonymousshare'),(48,'share','extragroupssharepermission'),(47,'share','extrasharepermission'),(44,'share','fileshare'),(45,'share','orgfileshare'),(43,'share','privatefiledirshare'),(46,'share','uploadlinkshare'),(61,'sysadmin_extra','userloginlog'),(52,'tags','filetag'),(51,'tags','fileuuidmap'),(53,'tags','tags'),(10,'termsandconditions','termsandconditions'),(11,'termsandconditions','usertermsandconditions'),(56,'two_factor','phonedevice'),(59,'two_factor','staticdevice'),(57,'two_factor','statictoken'),(58,'two_factor','totpdevice'),(33,'wiki','groupwiki'),(32,'wiki','personalwiki');
+INSERT INTO `django_content_type` VALUES (50,'admin_log','adminlog'),(12,'api2','token'),(13,'api2','tokenv2'),(14,'avatar','avatar'),(15,'avatar','groupavatar'),(17,'base','clientlogintoken'),(22,'base','commandslastcheck'),(21,'base','devicetoken'),(19,'base','filecomment'),(20,'base','filediscuss'),(16,'base','groupenabledmodule'),(23,'base','innerpubmsg'),(24,'base','innerpubmsgreply'),(18,'base','userenabledmodule'),(25,'base','userlastlogin'),(26,'base','userstarredfiles'),(4,'captcha','captchastore'),(27,'contacts','contact'),(1,'contenttypes','contenttype'),(5,'database','constance'),(35,'group','groupmessage'),(36,'group','messageattachment'),(37,'group','messagereply'),(34,'group','publicgroup'),(29,'institutions','institution'),(28,'institutions','institutionadmin'),(30,'institutions','institutionquota'),(31,'invitations','invitation'),(38,'notifications','notification'),(39,'notifications','usernotification'),(40,'options','useroptions'),(63,'organizations','orgmemberquota'),(6,'post_office','attachment'),(8,'post_office','email'),(7,'post_office','emailtemplate'),(9,'post_office','log'),(42,'profile','detailedprofile'),(41,'profile','profile'),(3,'registration','registrationprofile'),(54,'revision_tag','revisiontags'),(55,'revision_tag','tags'),(60,'role_permissions','adminrole'),(2,'sessions','session'),(49,'share','anonymousshare'),(48,'share','extragroupssharepermission'),(47,'share','extrasharepermission'),(44,'share','fileshare'),(45,'share','orgfileshare'),(43,'share','privatefiledirshare'),(46,'share','uploadlinkshare'),(62,'sysadmin_extra','userloginlog'),(52,'tags','filetag'),(51,'tags','fileuuidmap'),(53,'tags','tags'),(10,'termsandconditions','termsandconditions'),(11,'termsandconditions','usertermsandconditions'),(61,'trusted_ip','trustedip'),(56,'two_factor','phonedevice'),(59,'two_factor','staticdevice'),(57,'two_factor','statictoken'),(58,'two_factor','totpdevice'),(33,'wiki','groupwiki'),(32,'wiki','personalwiki');
 /*!40000 ALTER TABLE `django_content_type` ENABLE KEYS */;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!40101 SET character_set_client = utf8 */;
@@ -319,7 +319,7 @@ CREATE TABLE `django_migrations` (
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 /*!40000 ALTER TABLE `django_migrations` DISABLE KEYS */;
-INSERT INTO `django_migrations` VALUES (1,'admin_log','0001_initial','2017-09-12 07:54:38.204173'),(2,'captcha','0001_initial','2017-09-12 07:54:38.229412'),(3,'contenttypes','0001_initial','2017-09-12 07:54:38.284805'),(4,'contenttypes','0002_remove_content_type_name','2017-09-12 07:54:38.354380'),(5,'database','0001_initial','2017-09-12 07:54:38.371998'),(6,'institutions','0001_initial','2017-09-12 07:54:38.440835'),(7,'institutions','0002_institutionquota','2017-09-12 07:54:38.491623'),(8,'invitations','0001_initial','2017-09-12 07:54:38.574096'),(9,'invitations','0002_invitation_invite_type','2017-09-12 07:54:38.600482'),(10,'invitations','0003_auto_20160510_1703','2017-09-12 07:54:38.631971'),(11,'invitations','0004_auto_20160629_1610','2017-09-12 07:54:38.671115'),(12,'invitations','0005_auto_20160629_1614','2017-09-12 07:54:38.696845'),(13,'post_office','0001_initial','2017-09-12 07:54:38.945961'),(14,'post_office','0002_add_i18n_and_backend_alias','2017-09-12 07:54:39.265697'),(15,'post_office','0003_auto_20170725_0206','2017-09-12 07:54:39.284751'),(16,'role_permissions','0001_initial','2017-09-12 07:54:39.311534'),(17,'sessions','0001_initial','2017-09-12 07:54:39.334545'),(18,'termsandconditions','0001_initial','2017-09-12 07:54:39.423324');
+INSERT INTO `django_migrations` VALUES (1,'admin_log','0001_initial','2017-09-12 10:05:26.180889'),(2,'captcha','0001_initial','2017-09-12 10:05:26.203616'),(3,'contenttypes','0001_initial','2017-09-12 10:05:26.228416'),(4,'contenttypes','0002_remove_content_type_name','2017-09-12 10:05:26.287072'),(5,'database','0001_initial','2017-09-12 10:05:26.342345'),(6,'institutions','0001_initial','2017-09-12 10:05:26.382040'),(7,'institutions','0002_institutionquota','2017-09-12 10:05:26.419270'),(8,'invitations','0001_initial','2017-09-12 10:05:26.448399'),(9,'invitations','0002_invitation_invite_type','2017-09-12 10:05:26.471655'),(10,'invitations','0003_auto_20160510_1703','2017-09-12 10:05:26.491498'),(11,'invitations','0004_auto_20160629_1610','2017-09-12 10:05:26.532763'),(12,'invitations','0005_auto_20160629_1614','2017-09-12 10:05:26.555958'),(13,'post_office','0001_initial','2017-09-12 10:05:26.760884'),(14,'post_office','0002_add_i18n_and_backend_alias','2017-09-12 10:05:27.072497'),(15,'post_office','0003_auto_20170725_0206','2017-09-12 10:05:27.089505'),(16,'role_permissions','0001_initial','2017-09-12 10:05:27.106643'),(17,'sessions','0001_initial','2017-09-12 10:05:27.132840'),(18,'termsandconditions','0001_initial','2017-09-12 10:05:27.207141');
 /*!40000 ALTER TABLE `django_migrations` ENABLE KEYS */;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!40101 SET character_set_client = utf8 */;
@@ -925,6 +925,18 @@ CREATE TABLE `termsandconditions_usertermsandconditions` (
 
 /*!40000 ALTER TABLE `termsandconditions_usertermsandconditions` DISABLE KEYS */;
 /*!40000 ALTER TABLE `termsandconditions_usertermsandconditions` ENABLE KEYS */;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `trusted_ip_trustedip` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `ip` varchar(255) NOT NULL,
+  PRIMARY KEY (`id`),
+  KEY `trusted_ip_trustedip_957b527b` (`ip`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+/*!40000 ALTER TABLE `trusted_ip_trustedip` DISABLE KEYS */;
+/*!40000 ALTER TABLE `trusted_ip_trustedip` ENABLE KEYS */;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `two_factor_phonedevice` (
