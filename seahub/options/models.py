@@ -4,7 +4,6 @@
 from django.db import models
 
 from seahub.base.fields import LowerCaseCharField
-from seahub.settings import FORCE_SERVER_CRYPTO
 from seahub.utils import is_pro_version
 
 KEY_SERVER_CRYPTO = "server_crypto"
@@ -71,26 +70,11 @@ class UserOptionsManager(models.Manager):
                                     VAL_SERVER_CRYPTO_DISABLED)
 
     def is_server_crypto(self, username):
-        """Check whether user is set server crypto. Returns ``True`` if
-        server crypto is enabled, otherwise ``False``.
-
-        Raise ``CryptoOptionNotSetError`` if this option is not set.
-
-        NOTE: Always return ``True`` if ``FORCE_SERVER_CRYPTO`` is set to
-        ``True``.
-
+        """
         Arguments:
         - `username`:
         """
-        if FORCE_SERVER_CRYPTO is True:
-            return True
-
-        try:
-            user_option = super(UserOptionsManager, self).get(
-                email=username, option_key=KEY_SERVER_CRYPTO)
-            return bool(int(user_option.option_val))
-        except UserOptions.DoesNotExist:
-            raise CryptoOptionNotSetError
+        return True
 
     def enable_user_guide(self, username):
         """

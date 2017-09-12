@@ -80,7 +80,6 @@ def edit_profile(request):
             'form': form,
             'server_crypto': server_crypto,
             "sub_lib_enabled": sub_lib_enabled,
-            'force_server_crypto': settings.FORCE_SERVER_CRYPTO,
             'ENABLE_ADDRESSBOOK_OPT_IN': settings.ENABLE_ADDRESSBOOK_OPT_IN,
             'default_repo': default_repo,
             'owned_repos': owned_repos,
