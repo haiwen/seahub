@@ -282,7 +282,9 @@ urlpatterns = patterns(
 
     ## admin::users
     url(r'^api/v2.1/admin/users/$', AdminUsers.as_view(), name='api-v2.1-admin-users'),
-    url(r'^api/v2.1/admin/users/(?P<email>[^/]+)/$', AdminUser.as_view(), name='api-v2.1-admin-user'),
+    # [^...] Matches any single character not in brackets
+    # + Matches between one and unlimited times, as many times as possible
+    url(r'^api/v2.1/admin/users/(?P<email>[^/]+@[^/]+)/$', AdminUser.as_view(), name='api-v2.1-admin-user'),
 
     ## admin::devices
     url(r'^api/v2.1/admin/devices/$', AdminDevices.as_view(), name='api-v2.1-admin-devices'),

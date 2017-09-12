@@ -307,9 +307,6 @@ USER_STRONG_PASSWORD_REQUIRED = False
 # Force user to change password when admin add/reset a user.
 FORCE_PASSWORD_CHANGE = True
 
-# Using server side crypto by default, otherwise, let user choose crypto method.
-FORCE_SERVER_CRYPTO = True
-
 # Enable or disable repo history setting
 ENABLE_REPO_HISTORY_SETTING = True
 
@@ -470,22 +467,24 @@ LOGGING = {
     'filters': {
         'require_debug_false': {
             '()': 'django.utils.log.RequireDebugFalse'
-         }
-     },
+        }
+    },
     'handlers': {
         'default': {
-            'level':'INFO',
-            'class':'logging.handlers.RotatingFileHandler',
+            'level': 'INFO',
+            'class': 'logging.handlers.RotatingFileHandler',
             'filename': os.path.join(LOG_DIR, 'seahub.log'),
-            'maxBytes': 1024*1024*10, # 10 MB
-            'formatter':'standard',
+            'maxBytes': 1024*1024*100,  # 100 MB
+            'backupCount': 5,
+            'formatter': 'standard',
         },
         'request_handler': {
-                'level':'INFO',
-                'class':'logging.handlers.RotatingFileHandler',
-                'filename': os.path.join(LOG_DIR, 'seahub_django_request.log'),
-                'maxBytes': 1024*1024*10, # 10 MB
-                'formatter':'standard',
+            'level': 'INFO',
+            'class': 'logging.handlers.RotatingFileHandler',
+            'filename': os.path.join(LOG_DIR, 'seahub_django_request.log'),
+            'maxBytes': 1024*1024*100, # 100 MB
+            'backupCount': 5,
+            'formatter': 'standard',
         },
         'mail_admins': {
             'level': 'ERROR',

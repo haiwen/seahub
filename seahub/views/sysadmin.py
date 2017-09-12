@@ -44,6 +44,7 @@ from seahub.invitations.models import Invitation
 from seahub.role_permissions.utils import get_available_roles, \
         get_available_admin_roles
 from seahub.role_permissions.models import AdminRole
+from seahub.two_factor.utils import default_device
 from seahub.utils import IS_EMAIL_CONFIGURED, string2list, is_valid_username, \
     is_pro_version, send_html_email, get_user_traffic_list, get_server_id, \
     handle_virus_record, get_virus_record_by_id, \
@@ -719,15 +720,13 @@ def user_info(request, email):
         else:
             g.role = _('Member')
 
-    _user = User.objects.get(email=email)
+    try:
+        user = User.objects.get(email=email)
+    except User.DoesNotExist:
+        raise Http404
 
-    reference_id = _user.reference_id
-
-    _default_device = False
-    _has_two_factor_auth = has_two_factor_auth()
-    if _has_two_factor_auth:
-        from seahub.two_factor.utils import default_device
-        _default_device = default_device(_user)
+    reference_id = user.reference_id
+    user_default_device = default_device(user) if has_two_factor_auth() else False
 
     return render_to_response(
         'sysadmin/userinfo.html', {
@@ -742,8 +741,8 @@ def user_info(request, email):
             'user_shared_links': user_shared_links,
             'enable_sys_admin_view_repo': ENABLE_SYS_ADMIN_VIEW_REPO,
             'personal_groups': personal_groups,
-            'two_factor_auth_enabled': _has_two_factor_auth,
-            'default_device': _default_device,
+            'two_factor_auth_enabled': has_two_factor_auth(),
+            'default_device': user_default_device,
             'reference_id': reference_id if reference_id else '',
         }, context_instance=RequestContext(request))
 

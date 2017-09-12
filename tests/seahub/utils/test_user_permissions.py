@@ -12,7 +12,7 @@ class UserPermissionsTest(BaseTestCase):
         self.remove_user(self.user.email)
 
     def test_get_user_role(self):
-        assert self.user.role is None
+        assert not self.user.role
         assert get_user_role(self.user) == DEFAULT_USER
 
         User.objects.update_role(self.user.email, 'test_role')
