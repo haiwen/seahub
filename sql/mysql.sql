@@ -301,11 +301,11 @@ CREATE TABLE `django_content_type` (
   `model` varchar(100) NOT NULL,
   PRIMARY KEY (`id`),
   UNIQUE KEY `django_content_type_app_label_45f3b1d93ec8c61c_uniq` (`app_label`,`model`)
-) ENGINE=InnoDB AUTO_INCREMENT=55 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=63 DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 /*!40000 ALTER TABLE `django_content_type` DISABLE KEYS */;
-INSERT INTO `django_content_type` VALUES (48,'admin_log','adminlog'),(12,'api2','token'),(13,'api2','tokenv2'),(14,'avatar','avatar'),(15,'avatar','groupavatar'),(17,'base','clientlogintoken'),(22,'base','commandslastcheck'),(21,'base','devicetoken'),(19,'base','filecomment'),(20,'base','filediscuss'),(16,'base','groupenabledmodule'),(23,'base','innerpubmsg'),(24,'base','innerpubmsgreply'),(18,'base','userenabledmodule'),(25,'base','userlastlogin'),(26,'base','userstarredfiles'),(4,'captcha','captchastore'),(27,'contacts','contact'),(1,'contenttypes','contenttype'),(5,'database','constance'),(35,'group','groupmessage'),(36,'group','messageattachment'),(37,'group','messagereply'),(34,'group','publicgroup'),(29,'institutions','institution'),(28,'institutions','institutionadmin'),(30,'institutions','institutionquota'),(31,'invitations','invitation'),(38,'notifications','notification'),(39,'notifications','usernotification'),(40,'options','useroptions'),(50,'organizations','orgmemberquota'),(6,'post_office','attachment'),(8,'post_office','email'),(7,'post_office','emailtemplate'),(9,'post_office','log'),(42,'profile','detailedprofile'),(41,'profile','profile'),(3,'registration','registrationprofile'),(2,'sessions','session'),(46,'share','anonymousshare'),(45,'share','fileshare'),(47,'share','orgfileshare'),(43,'share','privatefiledirshare'),(44,'share','uploadlinkshare'),(49,'sysadmin_extra','userloginlog'),(10,'termsandconditions','termsandconditions'),(11,'termsandconditions','usertermsandconditions'),(51,'two_factor','phonedevice'),(54,'two_factor','staticdevice'),(52,'two_factor','statictoken'),(53,'two_factor','totpdevice'),(33,'wiki','groupwiki'),(32,'wiki','personalwiki');
+INSERT INTO `django_content_type` VALUES (50,'admin_log','adminlog'),(12,'api2','token'),(13,'api2','tokenv2'),(14,'avatar','avatar'),(15,'avatar','groupavatar'),(17,'base','clientlogintoken'),(22,'base','commandslastcheck'),(21,'base','devicetoken'),(19,'base','filecomment'),(20,'base','filediscuss'),(16,'base','groupenabledmodule'),(23,'base','innerpubmsg'),(24,'base','innerpubmsgreply'),(18,'base','userenabledmodule'),(25,'base','userlastlogin'),(26,'base','userstarredfiles'),(4,'captcha','captchastore'),(27,'contacts','contact'),(1,'contenttypes','contenttype'),(5,'database','constance'),(35,'group','groupmessage'),(36,'group','messageattachment'),(37,'group','messagereply'),(34,'group','publicgroup'),(29,'institutions','institution'),(28,'institutions','institutionadmin'),(30,'institutions','institutionquota'),(31,'invitations','invitation'),(38,'notifications','notification'),(39,'notifications','usernotification'),(40,'options','useroptions'),(62,'organizations','orgmemberquota'),(6,'post_office','attachment'),(8,'post_office','email'),(7,'post_office','emailtemplate'),(9,'post_office','log'),(42,'profile','detailedprofile'),(41,'profile','profile'),(3,'registration','registrationprofile'),(54,'revision_tag','revisiontags'),(55,'revision_tag','tags'),(60,'role_permissions','adminrole'),(2,'sessions','session'),(49,'share','anonymousshare'),(48,'share','extragroupssharepermission'),(47,'share','extrasharepermission'),(44,'share','fileshare'),(45,'share','orgfileshare'),(43,'share','privatefiledirshare'),(46,'share','uploadlinkshare'),(61,'sysadmin_extra','userloginlog'),(52,'tags','filetag'),(51,'tags','fileuuidmap'),(53,'tags','tags'),(10,'termsandconditions','termsandconditions'),(11,'termsandconditions','usertermsandconditions'),(56,'two_factor','phonedevice'),(59,'two_factor','staticdevice'),(57,'two_factor','statictoken'),(58,'two_factor','totpdevice'),(33,'wiki','groupwiki'),(32,'wiki','personalwiki');
 /*!40000 ALTER TABLE `django_content_type` ENABLE KEYS */;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!40101 SET character_set_client = utf8 */;
@@ -315,11 +315,11 @@ CREATE TABLE `django_migrations` (
   `name` varchar(255) NOT NULL,
   `applied` datetime NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=18 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=19 DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 /*!40000 ALTER TABLE `django_migrations` DISABLE KEYS */;
-INSERT INTO `django_migrations` VALUES (1,'admin_log','0001_initial','2017-05-09 06:46:37.744868'),(2,'captcha','0001_initial','2017-05-09 06:46:37.935266'),(3,'contenttypes','0001_initial','2017-05-09 06:46:37.979257'),(4,'contenttypes','0002_remove_content_type_name','2017-05-09 06:46:38.208170'),(5,'database','0001_initial','2017-05-09 06:46:38.236030'),(6,'institutions','0001_initial','2017-05-09 06:46:38.448271'),(7,'institutions','0002_institutionquota','2017-05-09 06:46:38.646454'),(8,'invitations','0001_initial','2017-05-09 06:46:38.691074'),(9,'invitations','0002_invitation_invite_type','2017-05-09 06:46:38.732389'),(10,'invitations','0003_auto_20160510_1703','2017-05-09 06:46:38.784129'),(11,'invitations','0004_auto_20160629_1610','2017-05-09 06:46:38.862351'),(12,'invitations','0005_auto_20160629_1614','2017-05-09 06:46:38.884639'),(13,'post_office','0001_initial','2017-05-09 06:46:39.224068'),(14,'post_office','0002_add_i18n_and_backend_alias','2017-05-09 06:46:39.708011'),(15,'sessions','0001_initial','2017-05-09 06:46:39.746055'),(16,'termsandconditions','0001_initial','2017-05-09 06:46:39.880406'),(17,'two_factor','0001_initial','2017-05-09 06:46:40.161967');
+INSERT INTO `django_migrations` VALUES (1,'admin_log','0001_initial','2017-09-12 07:54:38.204173'),(2,'captcha','0001_initial','2017-09-12 07:54:38.229412'),(3,'contenttypes','0001_initial','2017-09-12 07:54:38.284805'),(4,'contenttypes','0002_remove_content_type_name','2017-09-12 07:54:38.354380'),(5,'database','0001_initial','2017-09-12 07:54:38.371998'),(6,'institutions','0001_initial','2017-09-12 07:54:38.440835'),(7,'institutions','0002_institutionquota','2017-09-12 07:54:38.491623'),(8,'invitations','0001_initial','2017-09-12 07:54:38.574096'),(9,'invitations','0002_invitation_invite_type','2017-09-12 07:54:38.600482'),(10,'invitations','0003_auto_20160510_1703','2017-09-12 07:54:38.631971'),(11,'invitations','0004_auto_20160629_1610','2017-09-12 07:54:38.671115'),(12,'invitations','0005_auto_20160629_1614','2017-09-12 07:54:38.696845'),(13,'post_office','0001_initial','2017-09-12 07:54:38.945961'),(14,'post_office','0002_add_i18n_and_backend_alias','2017-09-12 07:54:39.265697'),(15,'post_office','0003_auto_20170725_0206','2017-09-12 07:54:39.284751'),(16,'role_permissions','0001_initial','2017-09-12 07:54:39.311534'),(17,'sessions','0001_initial','2017-09-12 07:54:39.334545'),(18,'termsandconditions','0001_initial','2017-09-12 07:54:39.423324');
 /*!40000 ALTER TABLE `django_migrations` ENABLE KEYS */;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!40101 SET character_set_client = utf8 */;
@@ -530,8 +530,8 @@ CREATE TABLE `post_office_attachment_emails` (
   PRIMARY KEY (`id`),
   UNIQUE KEY `attachment_id` (`attachment_id`,`email_id`),
   KEY `post_office_att_email_id_f053bb3a1fa4afd_fk_post_office_email_id` (`email_id`),
-  CONSTRAINT `post_office_att_email_id_f053bb3a1fa4afd_fk_post_office_email_id` FOREIGN KEY (`email_id`) REFERENCES `post_office_email` (`id`),
-  CONSTRAINT `post__attachment_id_388fa287a684f8f_fk_post_office_attachment_id` FOREIGN KEY (`attachment_id`) REFERENCES `post_office_attachment` (`id`)
+  CONSTRAINT `post__attachment_id_388fa287a684f8f_fk_post_office_attachment_id` FOREIGN KEY (`attachment_id`) REFERENCES `post_office_attachment` (`id`),
+  CONSTRAINT `post_office_att_email_id_f053bb3a1fa4afd_fk_post_office_email_id` FOREIGN KEY (`email_id`) REFERENCES `post_office_email` (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -633,11 +633,13 @@ CREATE TABLE `profile_profile` (
   `login_id` varchar(225) DEFAULT NULL,
   `contact_email` varchar(225) DEFAULT NULL,
   `institution` varchar(225) DEFAULT NULL,
+  `list_in_address_book` tinyint(1) NOT NULL,
   PRIMARY KEY (`id`),
   UNIQUE KEY `user` (`user`),
   UNIQUE KEY `login_id` (`login_id`),
   KEY `profile_profile_b9973d8c` (`contact_email`),
-  KEY `profile_profile_955bfff7` (`institution`)
+  KEY `profile_profile_955bfff7` (`institution`),
+  KEY `profile_profile_3d5d3631` (`list_in_address_book`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -657,6 +659,51 @@ CREATE TABLE `registration_registrationprofile` (
 /*!40000 ALTER TABLE `registration_registrationprofile` ENABLE KEYS */;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `revision_tag_revisiontags` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `repo_id` varchar(36) NOT NULL,
+  `path` longtext NOT NULL,
+  `revision_id` varchar(255) NOT NULL,
+  `tag_id` int(11) NOT NULL,
+  `username` varchar(255) NOT NULL,
+  PRIMARY KEY (`id`),
+  KEY `revision_tag_rev_tag_id_37c2d76166c50597_fk_revision_tag_tags_id` (`tag_id`),
+  KEY `revision_tag_revisiontags_9a8c79bf` (`repo_id`),
+  KEY `revision_tag_revisiontags_5de09a8d` (`revision_id`),
+  KEY `revision_tag_revisiontags_14c4b06b` (`username`),
+  CONSTRAINT `revision_tag_rev_tag_id_37c2d76166c50597_fk_revision_tag_tags_id` FOREIGN KEY (`tag_id`) REFERENCES `revision_tag_tags` (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+/*!40000 ALTER TABLE `revision_tag_revisiontags` DISABLE KEYS */;
+/*!40000 ALTER TABLE `revision_tag_revisiontags` ENABLE KEYS */;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `revision_tag_tags` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `name` varchar(255) NOT NULL,
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `name` (`name`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+/*!40000 ALTER TABLE `revision_tag_tags` DISABLE KEYS */;
+/*!40000 ALTER TABLE `revision_tag_tags` ENABLE KEYS */;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `role_permissions_adminrole` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `email` varchar(254) NOT NULL,
+  `role` varchar(255) NOT NULL,
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `email` (`email`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+/*!40000 ALTER TABLE `role_permissions_adminrole` DISABLE KEYS */;
+/*!40000 ALTER TABLE `role_permissions_adminrole` ENABLE KEYS */;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `share_anonymousshare` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `repo_owner` varchar(255) NOT NULL,
@@ -670,6 +717,36 @@ CREATE TABLE `share_anonymousshare` (
 
 /*!40000 ALTER TABLE `share_anonymousshare` DISABLE KEYS */;
 /*!40000 ALTER TABLE `share_anonymousshare` ENABLE KEYS */;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `share_extragroupssharepermission` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `repo_id` varchar(36) NOT NULL,
+  `group_id` int(11) NOT NULL,
+  `permission` varchar(30) NOT NULL,
+  PRIMARY KEY (`id`),
+  KEY `share_extragroupssharepermission_9a8c79bf` (`repo_id`),
+  KEY `share_extragroupssharepermission_0e939a4f` (`group_id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+/*!40000 ALTER TABLE `share_extragroupssharepermission` DISABLE KEYS */;
+/*!40000 ALTER TABLE `share_extragroupssharepermission` ENABLE KEYS */;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `share_extrasharepermission` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `repo_id` varchar(36) NOT NULL,
+  `share_to` varchar(255) NOT NULL,
+  `permission` varchar(30) NOT NULL,
+  PRIMARY KEY (`id`),
+  KEY `share_extrasharepermission_9a8c79bf` (`repo_id`),
+  KEY `share_extrasharepermission_e4fb1dad` (`share_to`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+/*!40000 ALTER TABLE `share_extrasharepermission` DISABLE KEYS */;
+/*!40000 ALTER TABLE `share_extrasharepermission` ENABLE KEYS */;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `share_fileshare` (
@@ -769,6 +846,52 @@ CREATE TABLE `sysadmin_extra_userloginlog` (
 /*!40000 ALTER TABLE `sysadmin_extra_userloginlog` ENABLE KEYS */;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `tags_filetag` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `uuid_id` char(32) NOT NULL,
+  `tag_id` int(11) NOT NULL,
+  `username` varchar(255) NOT NULL,
+  PRIMARY KEY (`id`),
+  KEY `tags_filetag_uuid_id_5e2dc8ebbab85301_fk_tags_fileuuidmap_uuid` (`uuid_id`),
+  KEY `tags_filetag_tag_id_39c4746ee9d70b71_fk_tags_tags_id` (`tag_id`),
+  CONSTRAINT `tags_filetag_tag_id_39c4746ee9d70b71_fk_tags_tags_id` FOREIGN KEY (`tag_id`) REFERENCES `tags_tags` (`id`),
+  CONSTRAINT `tags_filetag_uuid_id_5e2dc8ebbab85301_fk_tags_fileuuidmap_uuid` FOREIGN KEY (`uuid_id`) REFERENCES `tags_fileuuidmap` (`uuid`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+/*!40000 ALTER TABLE `tags_filetag` DISABLE KEYS */;
+/*!40000 ALTER TABLE `tags_filetag` ENABLE KEYS */;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `tags_fileuuidmap` (
+  `uuid` char(32) NOT NULL,
+  `repo_id` varchar(36) NOT NULL,
+  `repo_id_parent_path_md5` varchar(100) NOT NULL,
+  `parent_path` longtext NOT NULL,
+  `filename` varchar(1024) NOT NULL,
+  `is_dir` tinyint(1) NOT NULL,
+  PRIMARY KEY (`uuid`),
+  KEY `tags_fileuuidmap_9a8c79bf` (`repo_id`),
+  KEY `tags_fileuuidmap_c5bf47d4` (`repo_id_parent_path_md5`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+/*!40000 ALTER TABLE `tags_fileuuidmap` DISABLE KEYS */;
+/*!40000 ALTER TABLE `tags_fileuuidmap` ENABLE KEYS */;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `tags_tags` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `name` varchar(255) NOT NULL,
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `name` (`name`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+/*!40000 ALTER TABLE `tags_tags` DISABLE KEYS */;
+/*!40000 ALTER TABLE `tags_tags` ENABLE KEYS */;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `termsandconditions_termsandconditions` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `slug` varchar(50) NOT NULL,
@@ -837,8 +960,8 @@ CREATE TABLE `two_factor_staticdevice` (
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `two_factor_statictoken` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
-  `token` varchar(16) NOT NULL,
   `device_id` int(11) NOT NULL,
+  `token` varchar(16) NOT NULL,
   PRIMARY KEY (`id`),
   KEY `two_fac_device_id_55a7b345293a7c6c_fk_two_factor_staticdevice_id` (`device_id`),
   KEY `two_factor_statictoken_94a08da1` (`token`),
