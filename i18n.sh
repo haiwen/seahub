@@ -12,7 +12,7 @@ function usage () {
     echo
 }
 
-apps="two_factor avatar base contacts group notifications organizations profile share thirdpart/auth"
+apps="seahub/two_factor"
 function is_valid_app() {
     if [[ $1 == "seahub" ]]; then
         return 0;
