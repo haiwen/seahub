@@ -255,7 +255,7 @@ class AccountTest(BaseTestCase):
 
         resp = self.client.get(reverse('api2-account', args=[new_user.username]))
         json_resp = json.loads(resp.content)
-        assert len(json_resp) == 11
+        assert len(json_resp) == 12
         assert json_resp['email'] == new_user.username
         assert json_resp['is_staff'] is True
         assert json_resp['is_active'] is True
