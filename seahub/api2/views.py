@@ -333,6 +333,7 @@ class Search(APIView):
                 error_msg = 'Library %s not found.' % search_repo
                 return api_error(status.HTTP_404_NOT_FOUND, error_msg)
 
+        username = request.user.username
         results, total, has_more = search_keyword(request, keyword)
         for e in results:
             e.pop('repo', None)
@@ -340,13 +341,16 @@ class Search(APIView):
             e.pop('last_modified_by', None)
             e.pop('name_highlight', None)
             e.pop('score', None)
+
+            repo_id = e['repo_id']
             try:
                 path = e['fullpath']
-                file_id = seafile_api.get_file_id_by_path(e['repo_id'], path)
+                file_id = seafile_api.get_file_id_by_path(repo_id, path)
                 e['oid'] = file_id
-                repo = get_repo(e['repo_id'])
+                repo = get_repo(repo_id)
                 e['repo_name'] = repo.name
                 e['size'] = get_file_size(repo.store_id, repo.version, file_id)
+                e['permission'] = seafile_api.check_permission_by_path(repo_id, path, username)
             except SearpcError as e:
                 logger.error(e)
                 pass
