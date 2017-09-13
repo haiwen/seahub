@@ -319,6 +319,10 @@ class Search(APIView):
         if not keyword:
             return api_error(status.HTTP_400_BAD_REQUEST, "Missing argument")
 
+        with_permission = request.GET.get('with_permission', 'false')
+        if with_permission and with_permission.lower() not in ('true', 'false'):
+            return api_error(status.HTTP_400_BAD_REQUEST, "with_permission invalid.")
+
         search_repo = request.GET.get('search_repo', None) # val: 'all' or 'search_repo_id'
         if search_repo and search_repo != 'all':
 
@@ -335,6 +339,7 @@ class Search(APIView):
 
         username = request.user.username
         results, total, has_more = search_keyword(request, keyword)
+
         for e in results:
             e.pop('repo', None)
             e.pop('exists', None)
@@ -343,14 +348,16 @@ class Search(APIView):
             e.pop('score', None)
 
             repo_id = e['repo_id']
+            path = e['fullpath']
             try:
-                path = e['fullpath']
-                file_id = seafile_api.get_file_id_by_path(repo_id, path)
-                e['oid'] = file_id
                 repo = get_repo(repo_id)
                 e['repo_name'] = repo.name
-                e['size'] = get_file_size(repo.store_id, repo.version, file_id)
-                e['permission'] = seafile_api.check_permission_by_path(repo_id, path, username)
+
+                dirent = seafile_api.get_dirent_by_path(repo.store_id, path)
+                e['size'] = dirent.size
+
+                if with_permission.lower() == 'true':
+                    e['permission'] = seafile_api.check_permission_by_path(repo_id, path, username)
             except SearpcError as e:
                 logger.error(e)
                 pass
