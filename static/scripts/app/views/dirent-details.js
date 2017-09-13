@@ -95,7 +95,8 @@ define([
             } else {
                 $input.show()
                 .select2({
-                    tags: []
+                    tags: [],
+                    formatNoMatches: gettext("No matches")
                 })
                 .select2('data', this.s2_tags);
             }
