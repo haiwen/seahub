@@ -37,6 +37,7 @@ from .utils import get_diff_details, \
     api_error, get_file_size, prepare_starred_files, \
     get_groups, prepare_events, \
     api_group_check, get_timestamp, json_response, is_seafile_pro
+from seahub.utils.timeutils import timestamp_to_isoformat_timestr
 
 from seahub.wopi.utils import get_wopi_dict
 from seahub.api2.base import APIView
@@ -414,6 +415,7 @@ class Repos(APIView):
             'shared': False,
             'group': False,
             'org': False,
+            'own': False
         }
 
         rtype = request.GET.get('type', "")
@@ -535,6 +537,46 @@ class Repos(APIView):
                     "version": r.version,
                 }
                 repos_json.append(repo)
+
+        if filter_by['own']:
+            q = request.GET.get('nameContains', '')
+            if is_org_context(request):
+                org_id = request.user.org.org_id
+                owned_repos = seafile_api.get_org_owned_repo_list(org_id, 
+                                                                  email, 
+                                                                  ret_corrupted=True)
+            else:
+                owned_repos = seafile_api.get_owned_repo_list(email, 
+                                                              ret_corrupted=True)
+            owned_repos.sort(lambda x, y: cmp(y.last_modify, x.last_modify))
+            for r in owned_repos:
+                # do not return virtual repos
+                if r.is_virtual:
+                    continue
+
+                shouldIn = False
+                if not q:
+                    shouldIn = True
+                if q and q.lower() in r.name.lower():
+                    shouldIn = True
+                if shouldIn:
+                    repo = {
+                        "type": "repo",
+                        "id": r.id,
+                        "owner": email,
+                        "name": r.name,
+                        "mtime": r.last_modify,
+                        "mtime_relative": timestamp_to_isoformat_timestr(r.last_modify),
+                        "size": r.size,
+                        "size_formatted": filesizeformat(r.size),
+                        "encrypted": r.encrypted,
+                        "permission": 'rw',  # Always have read-write permission to owned repo
+                        "virtual": False,
+                        "root": '',
+                        "head_commit_id": r.head_cmmt_id,
+                        "version": r.version,
+                    }
+                    repos_json.append(repo)
 
         response = HttpResponse(json.dumps(repos_json), status=200,
                                 content_type=json_content_type)
