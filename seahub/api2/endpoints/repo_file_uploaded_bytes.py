@@ -11,6 +11,8 @@ from seaserv import seafile_api
 from seahub.api2.throttling import UserRateThrottle
 from seahub.api2.utils import api_error
 
+from seahub.settings import ENABLE_RESUMABLE_FILEUPLOAD
+
 logger = logging.getLogger(__name__)
 json_content_type = 'application/json; charset=utf-8'
 
@@ -51,4 +53,8 @@ class RepoFileUploadedBytesView(APIView):
             error_msg = 'Internal Server Error'
             return api_error(status.HTTP_500_INTERNAL_SERVER_ERROR, error_msg)
 
-        return Response({"uploadedBytes": uploadedBytes})
+        response = Response({"uploadedBytes": uploadedBytes})
+        if ENABLE_RESUMABLE_FILEUPLOAD:
+            response["Accept-Ranges"] = "bytes"
+
+        return response
