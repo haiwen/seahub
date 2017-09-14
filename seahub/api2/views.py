@@ -554,29 +554,25 @@ class Repos(APIView):
                 if r.is_virtual:
                     continue
 
-                shouldIn = False
-                if not q:
-                    shouldIn = True
-                if q and q.lower() in r.name.lower():
-                    shouldIn = True
-                if shouldIn:
-                    repo = {
-                        "type": "repo",
-                        "id": r.id,
-                        "owner": email,
-                        "name": r.name,
-                        "mtime": r.last_modify,
-                        "mtime_relative": timestamp_to_isoformat_timestr(r.last_modify),
-                        "size": r.size,
-                        "size_formatted": filesizeformat(r.size),
-                        "encrypted": r.encrypted,
-                        "permission": 'rw',  # Always have read-write permission to owned repo
-                        "virtual": False,
-                        "root": '',
-                        "head_commit_id": r.head_cmmt_id,
-                        "version": r.version,
-                    }
-                    repos_json.append(repo)
+                if q and q.lower() not in r.name.lower():
+                    continue
+                repo = {
+                    "type": "repo",
+                    "id": r.id,
+                    "owner": email,
+                    "name": r.name,
+                    "mtime": r.last_modify,
+                    "mtime_relative": timestamp_to_isoformat_timestr(r.last_modify),
+                    "size": r.size,
+                    "size_formatted": filesizeformat(r.size),
+                    "encrypted": r.encrypted,
+                    "permission": 'rw',  # Always have read-write permission to owned repo
+                    "virtual": False,
+                    "root": '',
+                    "head_commit_id": r.head_cmmt_id,
+                    "version": r.version,
+                }
+                repos_json.append(repo)
 
         response = HttpResponse(json.dumps(repos_json), status=200,
                                 content_type=json_content_type)
