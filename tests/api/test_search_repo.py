@@ -4,7 +4,7 @@ from django.core.urlresolvers import reverse
 from django.template.defaultfilters import filesizeformat
 
 from seahub.test_utils import BaseTestCase
-from seahub.utils.timeutils import timestamp_to_isoformat_timestr
+from seahub.base.templatetags.seahub_tags import translate_seahub_time
 
 
 class SearchRepoTest(BaseTestCase):
@@ -15,7 +15,7 @@ class SearchRepoTest(BaseTestCase):
         self.repo_id = self.repo
 
     def test_can_search(self):
-        resp = self.client.get(self.url + "?type=own&nameContains=t")
+        resp = self.client.get(self.url + "?type=mine&nameContains=t")
         resp_json = json.loads(resp.content)
         assert self.repo.id in [e['id'] for e in resp_json]
         res_repo = [e for e in resp_json if e['id'] == self.repo.id][0]
@@ -24,7 +24,7 @@ class SearchRepoTest(BaseTestCase):
         assert res_repo['owner'] == self.user.email
         assert res_repo['name'] == self.repo.name
         assert res_repo['mtime'] == self.repo.last_modify
-        assert res_repo['mtime_relative'] == timestamp_to_isoformat_timestr(self.repo.last_modify)
+        assert res_repo['mtime_relative'] == translate_seahub_time(self.repo.last_modify)
         assert res_repo['size'] == self.repo.size
         assert res_repo['size_formatted'] == filesizeformat(self.repo.size)
         assert res_repo['encrypted'] == self.repo.encrypted
@@ -35,7 +35,7 @@ class SearchRepoTest(BaseTestCase):
         assert res_repo['version'] == self.repo.version
 
     def test_can_not_case_sensitive(self):
-        resp = self.client.get(self.url + "?type=own&nameContains=T")
+        resp = self.client.get(self.url + "?type=mine&nameContains=T")
         resp_json = json.loads(resp.content)
         assert self.repo.id in [e['id'] for e in resp_json]
         res_repo = [e for e in resp_json if e['id'] == self.repo.id][0]
@@ -44,7 +44,7 @@ class SearchRepoTest(BaseTestCase):
         assert res_repo['owner'] == self.user.email
         assert res_repo['name'] == self.repo.name
         assert res_repo['mtime'] == self.repo.last_modify
-        assert res_repo['mtime_relative'] == timestamp_to_isoformat_timestr(self.repo.last_modify)
+        assert res_repo['mtime_relative'] == translate_seahub_time(self.repo.last_modify)
         assert res_repo['size'] == self.repo.size
         assert res_repo['size_formatted'] == filesizeformat(self.repo.size)
         assert res_repo['encrypted'] == self.repo.encrypted
@@ -55,7 +55,7 @@ class SearchRepoTest(BaseTestCase):
         assert res_repo['version'] == self.repo.version
 
     def test_can_get_all_own_repo_with_no_parameter(self):
-        resp = self.client.get(self.url + "?type=own")
+        resp = self.client.get(self.url + "?type=mine")
         resp_json = json.loads(resp.content)
         assert self.repo.id in [e['id'] for e in resp_json]
         res_repo = [e for e in resp_json if e['id'] == self.repo.id][0]
@@ -64,7 +64,7 @@ class SearchRepoTest(BaseTestCase):
         assert res_repo['owner'] == self.user.email
         assert res_repo['name'] == self.repo.name
         assert res_repo['mtime'] == self.repo.last_modify
-        assert res_repo['mtime_relative'] == timestamp_to_isoformat_timestr(self.repo.last_modify)
+        assert res_repo['mtime_relative'] == translate_seahub_time(self.repo.last_modify)
         assert res_repo['size'] == self.repo.size
         assert res_repo['size_formatted'] == filesizeformat(self.repo.size)
         assert res_repo['encrypted'] == self.repo.encrypted
