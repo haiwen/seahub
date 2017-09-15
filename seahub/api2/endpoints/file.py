@@ -15,7 +15,6 @@ from django.utils.translation import ugettext as _
 from seahub.api2.throttling import UserRateThrottle
 from seahub.api2.authentication import TokenAuthentication
 from seahub.api2.utils import api_error
-from seahub.signals import rename_dirent_successful
 
 from seahub.utils import check_filename_with_rename, is_pro_version, \
     gen_file_upload_url, is_valid_dirent_name
@@ -246,10 +245,6 @@ class FileView(APIView):
             try:
                 seafile_api.rename_file(repo_id, parent_dir, oldname,
                         new_file_name, username)
-                rename_dirent_successful.send(sender=None, src_repo_id=repo_id,
-                        src_parent_dir=parent_dir, src_filename=oldname,
-                        dst_repo_id=repo_id, dst_parent_dir=parent_dir,
-                        dst_filename=new_file_name, is_dir=False)
             except SearpcError as e:
                 logger.error(e)
                 error_msg = 'Internal Server Error'
@@ -320,10 +315,6 @@ class FileView(APIView):
                 seafile_api.move_file(src_repo_id, src_dir, filename,
                         dst_repo_id, dst_dir, new_file_name, replace=False,
                         username=username, need_progress=0, synchronous=1)
-                rename_dirent_successful.send(sender=None, src_repo_id=src_repo_id,
-                        src_parent_dir=src_dir, src_filename=filename,
-                        dst_repo_id=dst_repo_id, dst_parent_dir=dst_dir,
-                        dst_filename=new_file_name, is_dir=False)
             except SearpcError as e:
                 logger.error(e)
                 error_msg = 'Internal Server Error'
