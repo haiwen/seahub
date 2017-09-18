@@ -29,6 +29,7 @@
 
 {% block extra_script %}
 <script type="text/javascript">
+$('.new-narrow-panel input[name="password"]').focus();
 $('input[type="submit"]').click(function(){
     if (!$.trim($('input[name="password"]').val())) {
         $('.error').removeClass('hide').html("{% trans "Password cannot be blank" %}");

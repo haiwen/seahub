@@ -54,3 +54,9 @@
     </div>
 </div>
 {% endblock %}
+
+{% block extra_script %}
+<script type="text/javascript">
+$('input[type="text"], input[type="number"]', $('.new-narrow-panel')).focus();
+</script>
+{% endblock %}
