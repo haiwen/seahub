@@ -121,6 +121,7 @@ MIDDLEWARE_CLASSES = (
     'seahub.base.middleware.UserPermissionMiddleware',
     'termsandconditions.middleware.TermsAndConditionsRedirectMiddleware',
     'seahub.two_factor.middleware.OTPMiddleware',
+    'seahub.trusted_ip.middleware.LimitIpMiddleware',
 )
 
 SITE_ROOT_URLCONF = 'seahub.urls'
@@ -178,6 +179,7 @@ LANGUAGES = (
 LOCALE_PATHS = (
     os.path.join(PROJECT_ROOT, 'locale'),
     os.path.join(PROJECT_ROOT, 'seahub/two_factor/locale'),
+    os.path.join(PROJECT_ROOT, 'seahub/trusted_ip/locale'),
 )
 
 TEMPLATE_CONTEXT_PROCESSORS = (
@@ -229,6 +231,7 @@ INSTALLED_APPS = (
     'seahub.revision_tag',
     'seahub.two_factor',
     'seahub.role_permissions',
+    'seahub.trusted_ip',
 )
 
 # Enabled or disable constance(web settings).
@@ -283,6 +286,10 @@ SHARE_LINK_PASSWORD_MIN_LENGTH = 8
 
 # enable or disable share link audit
 ENABLE_SHARE_LINK_AUDIT = False
+
+# enable or disable limit ip 
+ENABLE_LIMIT_IPADDRESS = False
+TRUSTED_IP_LIST = ['127.0.0.1']
 
 # Control the language that send email. Default to user's current language.
 SHARE_LINK_EMAIL_LANGUAGE = ''

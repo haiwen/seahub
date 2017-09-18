@@ -71,7 +71,7 @@ import seahub.settings as settings
 from seahub.settings import INIT_PASSWD, SITE_NAME, SITE_ROOT, \
     SEND_EMAIL_ON_ADDING_SYSTEM_MEMBER, SEND_EMAIL_ON_RESETTING_USER_PASSWD, \
     ENABLE_SYS_ADMIN_VIEW_REPO, ENABLE_GUEST_INVITATION, LOGIN_BG_IMAGE_PATH, \
-    MEDIA_ROOT
+    MEDIA_ROOT, ENABLE_LIMIT_IPADDRESS
 from seahub.api2.endpoints.admin.login_bg_image import CUSTOM_LOGIN_BG_IMAGE_PATH
 try:
     from seahub.settings import ENABLE_TRIAL_ACCOUNT
@@ -108,7 +108,8 @@ def sysadmin(request):
             'max_upload_file_size': max_upload_file_size,
             'folder_perm_enabled': folder_perm_enabled,
             'is_pro': True if is_pro_version() else False,
-            'file_audit_enabled': FILE_AUDIT_ENABLED
+            'file_audit_enabled': FILE_AUDIT_ENABLED,
+            'enable_limit_ipaddress': ENABLE_LIMIT_IPADDRESS,
             }, context_instance=RequestContext(request))
 
 @login_required

@@ -1,0 +1,73 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the PACKAGE package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: PACKAGE VERSION\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2017-09-18 16:33+0800\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"Language: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=1; plural=0;\n"
+
+#: templates/trusted_ip/403_trusted_ip.html:5
+#: templates/trusted_ip/403_trusted_ip.html:8
+msgid "The server understood the request, but is refusing to fulfill it."
+msgstr "服务器已收到请求，但拒绝继续执行。"
+
+#: templates/trusted_ip/403_trusted_ip.html:10
+msgid "Sorry, but your IP address is not in trusted IP address range."
+msgstr "你的 IP 不在可信 IP 地址范围。"
+
+#: templates/trusted_ip/403_trusted_ip.html:12
+msgid "Please contact the webmaster."
+msgstr "请联系系统管理员。"
+
+#: templates/trusted_ip/sysadmin-templates_tab.html:3
+#: templates/trusted_ip/sysadmin-templates_trusted_ip.html:17
+msgid "Trusted IP Address"
+msgstr "可信 IP 地址"
+
+#: templates/trusted_ip/sysadmin-templates_trusted_ip.html:6
+msgid "Desktop"
+msgstr ""
+
+#: templates/trusted_ip/sysadmin-templates_trusted_ip.html:9
+msgid "Mobile"
+msgstr ""
+
+#: templates/trusted_ip/sysadmin-templates_trusted_ip.html:13
+msgid "Errors"
+msgstr ""
+
+#: templates/trusted_ip/sysadmin-templates_trusted_ip.html:21
+msgid "Add IP Address"
+msgstr "增加 IP 地址"
+
+#: templates/trusted_ip/sysadmin-templates_trusted_ip.html:27
+msgid "IP Address"
+msgstr "IP 地址"
+
+#: templates/trusted_ip/sysadmin-templates_trusted_ip.html:36
+msgid "No Trusted IP Address"
+msgstr "无可信任 IP 地址"
+
+#: templates/trusted_ip/sysadmin-templates_trusted_ip.html:42
+msgid "Add Trusted IP Address"
+msgstr "增加可信 IP 地址"
+
+#: templates/trusted_ip/sysadmin-templates_trusted_ip.html:45
+msgid "Submit"
+msgstr ""
+
+#: templates/trusted_ip/sysadmin-templates_trusted_ip.html:51
+msgid "Delete"
+msgstr ""

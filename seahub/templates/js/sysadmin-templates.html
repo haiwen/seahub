@@ -209,6 +209,9 @@
                 <a href="#device-errors/" class="a">{% trans "Errors" %}</a>
             </li>
             <% } %>
+            <% if (app.pageOptions.is_pro & app.pageOptions.enable_limit_ipaddress) { %>
+            {% include "trusted_ip/sysadmin-templates_tab.html" %}
+            <% } %>
         </ul>
     </div>
     <table class="hide">
@@ -260,6 +263,9 @@
             <li class="tab <% if (cur_tab == 'errors') { %> ui-state-active <% } %>">
                 <a href="#device-errors/" class="a">{% trans "Errors" %}</a>
             </li>
+            <% if (app.pageOptions.is_pro & app.pageOptions.enable_limit_ipaddress) { %>
+            {% include "trusted_ip/sysadmin-templates_tab.html" %}
+            <% } %>
         </ul>
         <button id="clean-device-errors" class="fright hide"><span class="vam">{% trans "Clean" %}</span></button>
     </div>
@@ -295,6 +301,8 @@
     <td><%- error_msg %></td>
     <td><time title='<%- time %>'><%- time_from_now %></time></td>
 </script>
+
+{% include "trusted_ip/sysadmin-templates_trusted_ip.html" %}
 
 <script type="text/template" id="user-info-popup-tmpl">
     <div class="outer-caret up-outer-caret"><div class="inner-caret"></div></div>
