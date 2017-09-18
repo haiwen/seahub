@@ -26,6 +26,9 @@ define([
         render: function () {
             var data = this.model.toJSON();
 
+            var file_icon_size = Common.isHiDPI() ? 48 : 24;
+            data.file_icon_url = Common.getFileIconUrl(data.file_name, file_icon_size);
+
             data['is_img'] = Common.imageCheck(data['file_name']);
             data['encoded_path'] = Common.encodePath(data['path']);
             data.encoded_thumbnail_src = this.model.get('encoded_thumbnail_src') || '';

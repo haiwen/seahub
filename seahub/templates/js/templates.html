@@ -1454,7 +1454,7 @@
         <% if (encoded_thumbnail_src) { %>
             <img class="thumbnail" src="{{ SITE_ROOT }}<%= encoded_thumbnail_src %>" alt="" />
         <% } else { %>
-            <img src="{{ MEDIA_URL }}img/file/<%= icon_path %>" alt="{% trans "icon" %}" />
+            <img src="<%= file_icon_url %>" alt="{% trans "icon" %}" width="24" />
         <% } %>
     </td>
     <td>
@@ -1475,7 +1475,7 @@
         <% if (encoded_thumbnail_src) { %>
             <img class="thumbnail" src="{{ SITE_ROOT }}<%= encoded_thumbnail_src %>" alt="" />
         <% } else { %>
-            <img src="{{ MEDIA_URL }}img/file/<%= icon_path %>" alt="{% trans "icon" %}" />
+            <img src="<%= file_icon_url %>" alt="{% trans "icon" %}" width="24" />
         <% } %>
     </td>
     <td>
