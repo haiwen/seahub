@@ -1,0 +1,52 @@
+{% load i18n %}
+<script type="text/template" id="device-trusted-ipaddresses-tmpl">
+    <div class="hd ovhd">
+        <ul class="tab-tabs-nav fleft">
+            <li class="tab <% if (cur_tab == 'desktop') { %> ui-state-active <% } %>">
+                <a href="#desktop-devices/" class="a">{% trans "Desktop" %}</a>
+            </li>
+            <li class="tab <% if (cur_tab == 'mobile') { %> ui-state-active <% } %>">
+                <a href="#mobile-devices/" class="a">{% trans "Mobile" %}</a>
+            </li>
+            <% if (is_pro) { %>
+            <li class="tab <% if (cur_tab == 'errors') { %> ui-state-active <% } %>">
+                <a href="#device-errors/" class="a">{% trans "Errors" %}</a>
+            </li>
+            <% } %>
+            <li class="tab <% if (cur_tab == 'settings') { %> ui-state-active <% } %>">
+                <a href="#device-trusted-ip/" class="a">{% trans "Trusted IP Address" %}</a>
+            </li>
+        </ul>
+        <div class="js-op-for-all fright">
+           <button id="add-trusted-ip-btn">{% trans "Add" %}</button>
+        </div>
+    </div>
+    <table class="hide">
+        <thead>
+            <tr>
+                <th width="80%">{% trans "IP Address" %}</th>
+                <th width="20%"></th>
+            </tr>
+        </thead>
+        <tbody>
+        </tbody>
+    </table>
+    <span class="loading-icon loading-tip"></span>
+    <div class="empty-tips hide">
+        <h2 class="alc">{% trans "No Trusted IP Address" %}</h2>
+    </div>
+</script>
+
+<script type="text/template" id="add-trusted-ipaddress-form-tmpl">
+    <form id="add-trusted-ip-form" class="hide">{% csrf_token %}
+        <h3>{% trans "Add Trusted IP Address" %}</h3>
+        <input name="ipaddress" id="ipaddress" class="input" /><br />
+        <p class="error hide"></p>
+        <button id="add-ip-form-btn">{% trans "Submit" %}</button>
+    </form>
+</script>
+
+<script type="text/template" id="device-trusted-ipaddress-item-tmpl">
+    <td><%- ip %></td>
+    <td><a href="#" class="sf2-icon-delete sf2-x trusted-ip-delete-btn op-icon vh" title="{% trans "Delete" %}" aria-label="{% trans "Delete" %}"></a></td>
+</script>

@@ -113,7 +113,6 @@ MIDDLEWARE_CLASSES = (
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
-    'seahub.auth.middleware.LimitIpMiddleware',
     'seahub.auth.middleware.AuthenticationMiddleware',
     'seahub.base.middleware.BaseMiddleware',
     'seahub.base.middleware.InfobarMiddleware',
@@ -122,6 +121,7 @@ MIDDLEWARE_CLASSES = (
     'seahub.base.middleware.UserPermissionMiddleware',
     'termsandconditions.middleware.TermsAndConditionsRedirectMiddleware',
     'seahub.two_factor.middleware.OTPMiddleware',
+    'seahub.trusted_ip.middleware.LimitIpMiddleware',
 )
 
 SITE_ROOT_URLCONF = 'seahub.urls'
@@ -179,6 +179,7 @@ LANGUAGES = (
 LOCALE_PATHS = (
     os.path.join(PROJECT_ROOT, 'locale'),
     os.path.join(PROJECT_ROOT, 'seahub/two_factor/locale'),
+    os.path.join(PROJECT_ROOT, 'seahub/trusted_ip/locale'),
 )
 
 TEMPLATE_CONTEXT_PROCESSORS = (

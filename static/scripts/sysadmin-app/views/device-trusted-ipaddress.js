@@ -24,7 +24,7 @@ define([
         deleteIP: function() {
             var _this = this;
             var ip = this.model.get('ip');
-            var popupTitle = gettext("Delete IP Address");
+            var popupTitle = gettext("Delete");
             var popupContent = gettext("Are you sure you want to delete %s ?").replace('%s', '<span class="op-target ellipsis ellipsis-op-target" title="' + Common.HTMLescape(ip) + '">' + Common.HTMLescape(ip) + '</span>');
             var yesCallback = function() {
                 $.ajax({
