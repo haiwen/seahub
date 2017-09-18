@@ -178,6 +178,7 @@ define([
                 case 'sysinfo': return siteRoot + 'api/v2.1/admin/sysinfo/';
                 case 'admin-devices': return siteRoot + 'api/v2.1/admin/devices/';
                 case 'admin-device-errors': return siteRoot + 'api/v2.1/admin/device-errors/';
+                case 'admin-device-trusted-ip': return siteRoot + 'api/v2.1/admin/device-trusted-ip/';
                 case 'admin-libraries': return siteRoot + 'api/v2.1/admin/libraries/';
                 case 'admin-library': return siteRoot + 'api/v2.1/admin/libraries/' + options.repo_id + '/';
                 case 'admin-library-history-limit': return siteRoot + 'api/v2.1/admin/libraries/' + options.repo_id + '/history-limit/';
