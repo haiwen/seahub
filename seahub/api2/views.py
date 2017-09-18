@@ -418,6 +418,7 @@ class Repos(APIView):
             'org': False,
         }
 
+        q = request.GET.get('nameContains', '')
         rtype = request.GET.get('type', "")
         if not rtype:
             # set all to True, no filter applied
@@ -455,6 +456,9 @@ class Repos(APIView):
             for r in owned_repos:
                 # do not return virtual repos
                 if r.is_virtual:
+                    continue
+
+                if q and q.lower() not in r.name.lower():
                     continue
 
                 repo = {
@@ -501,6 +505,9 @@ class Repos(APIView):
 
             shared_repos.sort(lambda x, y: cmp(y.last_modify, x.last_modify))
             for r in shared_repos:
+                if q and q.lower() not in r.name.lower():
+                    continue
+
                 r.password_need = is_passwd_set(r.repo_id, email)
                 repo = {
                     "type": "srepo",
@@ -545,6 +552,9 @@ class Repos(APIView):
                     nickname_dict[e] = email2nickname(e)
 
             for r in group_repos:
+                if q and q.lower() not in r.name.lower():
+                    continue
+
                 repo = {
                     "type": "grepo",
                     "id": r.id,
@@ -576,6 +586,9 @@ class Repos(APIView):
                     nickname_dict[e] = email2nickname(e)
 
             for r in public_repos:
+                if q and q.lower() not in r.name.lower():
+                    continue
+
                 repo = {
                     "type": "grepo",
                     "id": r.repo_id,
