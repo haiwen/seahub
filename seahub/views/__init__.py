@@ -618,6 +618,7 @@ def repo_revert_history(request, repo_id):
 
     try:
         seafserv_threaded_rpc.revert_on_server(repo_id, commit_id, request.user.username)
+        messages.success(request, _('Successfully restored the library.'))
     except SearpcError, e:
         if e.msg == 'Bad arguments':
             return render_error(request, _(u'Invalid arguments.'))
