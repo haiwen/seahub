@@ -11,13 +11,21 @@
     <a href="#" title="{% trans "Close" %}" aria-label="{% trans "Close" %}" class="sf2-icon-x1 sf-popover-close op-icon hidden-md-up js-close-side-nav fright"></a>
     <ul class="side-textnav-tabs">
         <li class="tab"><a href="#user-basic-info">{% trans "Profile" %}</a></li>
+
+        {% if not is_ldap_user %}
+        <li class="tab"><a href="#update-user-passwd">{% trans "Password" %}</a></li>
+        {% endif %}
+
         <li class="tab"><a href="#lang-setting">{% trans "Language" %}</a></li>
+
         {% if user.permissions.can_add_repo %}
         <li class="tab"><a href="#default-lib">{% trans "Default Library" %}</a></li>
         {% endif %}
+
         {% if two_factor_auth_enabled %}
         <li class="tab"><a href="#two-factor-auth">{% trans "Two-Factor Authentication" %}</a></li>
         {% endif %}
+
         <li class="tab" id="del-account-nav"><a href="#del-account">{% trans "Delete Account" %}</a></li>
     </ul>
 </div>
@@ -37,9 +45,6 @@
     </div>
 
     <form action="" method="post">{% csrf_token %}
-        {% if not is_ldap_user %}
-        <div id="update-password"><label>{% trans "Password:" %}</label><a href="{{ SITE_ROOT }}accounts/password/change/">{% trans "Update" %}</a></div>
-        {% endif %}
         <label>{% trans "Name:" context "true name" %}</label><input type="text" name="nickname" value="{{ form.data.nickname }}" class="input" />
         {% for error in form.nickname.errors %}
         <span class="error">{{ error|escape }}</span>
@@ -74,6 +79,13 @@
         <input type="submit" value="{% trans "Submit" %}" class="submit" />
     </form>
 </div>
+
+{% if not is_ldap_user %}
+<div id="update-user-passwd" class="setting-item">
+    <h3>{% trans "Password" %}</h3>
+    <a href="{{ SITE_ROOT }}accounts/password/change/">{% trans "Update" %}</a>
+</div>
+{% endif %}
 
 {% if ENABLE_ADDRESSBOOK_OPT_IN %}
 <div class="setting-item" id="list-in-address-book">
