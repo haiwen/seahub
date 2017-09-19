@@ -2,7 +2,6 @@
 """
 import json
 from mock import patch
-from constance import config
 from django.core.urlresolvers import reverse
 from django.template.defaultfilters import filesizeformat
 
@@ -105,7 +104,6 @@ class RepoTest(BaseTestCase):
         assert res_repo['owner'] == self.user.email
         assert res_repo['name'] == self.repo.name
         assert res_repo['mtime'] == self.repo.last_modify
-        assert res_repo['modifier_email'] == self.repo.last_modifier
         assert res_repo['size'] == self.repo.size
         assert res_repo['size_formatted'] == filesizeformat(self.repo.size)
         assert res_repo['encrypted'] == self.repo.encrypted
@@ -126,7 +124,6 @@ class RepoTest(BaseTestCase):
         assert res_repo['owner'] == self.user.email
         assert res_repo['name'] == self.repo.name
         assert res_repo['mtime'] == self.repo.last_modify
-        assert res_repo['modifier_email'] == self.repo.last_modifier
         assert res_repo['size'] == self.repo.size
         assert res_repo['size_formatted'] == filesizeformat(self.repo.size)
         assert res_repo['encrypted'] == self.repo.encrypted
@@ -147,7 +144,6 @@ class RepoTest(BaseTestCase):
         assert res_repo['owner'] == self.user.email
         assert res_repo['name'] == self.repo.name
         assert res_repo['mtime'] == self.repo.last_modify
-        assert res_repo['modifier_email'] == self.repo.last_modifier
         assert res_repo['size'] == self.repo.size
         assert res_repo['size_formatted'] == filesizeformat(self.repo.size)
         assert res_repo['encrypted'] == self.repo.encrypted
@@ -179,7 +175,6 @@ class RepoTest(BaseTestCase):
         assert res_repo['owner'] == self.admin.email
         assert res_repo['name'] == share_repo.name
         assert res_repo['mtime'] == share_repo.last_modify
-        assert res_repo['modifier_email'] == share_repo.last_modifier
         assert res_repo['size'] == share_repo.size
         assert res_repo['size_formatted'] == filesizeformat(share_repo.size)
         assert res_repo['encrypted'] == share_repo.encrypted
@@ -189,7 +184,6 @@ class RepoTest(BaseTestCase):
         self.remove_repo(share_repo.id)
 
     def test_can_get_share_group_repo(self):
-        config.ENABLE_SHARE_TO_ALL_GROUPS = True
         self.logout()
         self.login_as(self.admin)
         share_repo = seafile_api.get_repo(self.create_repo(
@@ -210,7 +204,6 @@ class RepoTest(BaseTestCase):
         assert res_repo['owner'] == self.group.group_name
         assert res_repo['name'] == share_repo.name
         assert res_repo['mtime'] == share_repo.last_modify
-        assert res_repo['modifier_email'] == share_repo.last_modifier
         assert res_repo['size'] == share_repo.size
         assert res_repo['encrypted'] == share_repo.encrypted
         assert res_repo['permission'] == 'rw'
@@ -240,7 +233,6 @@ class RepoTest(BaseTestCase):
         assert res_repo['owner'] == 'Organization'
         assert res_repo['name'] == share_repo.name
         assert res_repo['mtime'] == share_repo.last_modify
-        assert res_repo['modifier_email'] == share_repo.last_modifier
         assert res_repo['size'] == share_repo.size
         assert res_repo['size_formatted'] == filesizeformat(share_repo.size)
         assert res_repo['encrypted'] == share_repo.encrypted
