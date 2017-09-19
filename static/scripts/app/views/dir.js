@@ -73,18 +73,19 @@ define([
                 this.listenTo(this.dir, 'reset', this.reset);
 
                 this.fileUploadView = new FileUploadView({dirView: this});
-                this.direntDetailsView = new DirentDetailsView();
+                this.direntDetailsView = new DirentDetailsView({dirView: this});
 
                 this.render();
 
 
                 var _this = this;
-                // scroll window: get 'more', fix 'op bar'
-                $(window).scroll(function() {
+                // get 'more', fix 'op bar'
+                $('#right-panel').scroll(function() {
                     if ($(_this.el).is(':visible')) {
                         _this.onWindowScroll();
                     }
                 });
+
                 $(window).resize(function() {
                     _this.updateDirOpBarUI();
                 });
@@ -143,6 +144,9 @@ define([
                     this.attached = true;
                     $("#right-panel").html(this.$el);
                 }
+
+                this.direntDetailsView.hide();
+
                 this.dir.setPath(category, repo_id, path);
                 this.dir.dirent_more = false;
                 this.renderDir();
@@ -177,12 +181,10 @@ define([
                 this.renderPath();
                 this.renderDirOpBar();
 
-                this.$el_con.show();
+                this.$el_con.removeAttr('style') // clean styles added by previously visited dir
+                    .show();
 
                 this.setFileInput();
-
-                // there may be a 'style' added via 'onWindowScroll()' when visiting last dir
-                this.$('.js-dir-content').removeAttr('style');
 
                 if (this.view_mode == 'list') {
                     this.renderDirentsHd();
@@ -207,7 +209,21 @@ define([
                 this.dir.limit = 100;
                 this.render_dirents_slice(this.dir.last_start, this.dir.limit);
 
-                this.updateDirOpBarUI(); // after `render_dirents_slice`
+                // after `render_dirents_slice`
+                this.updateDirOpBarUI();
+
+                this.$bar = this.$('.repo-file-list-topbar');
+                this.$bar_fixed_styles = {
+                    'position': 'fixed',
+                    'left': this.$bar.offset().left,
+                    'top': $('#header').outerHeight(true),
+                    'z-index': 12,
+                    'padding-top': $('#right-panel').css('padding-top'),
+                    'background': '#fff'
+                };
+                this.$con_fixed_styles = {
+                    'padding-top': this.$('.js-dir-content').position().top
+                };
 
                 this.getThumbnail();
             },
@@ -529,9 +545,7 @@ define([
                     can_generate_share_link: app.pageOptions.can_generate_share_link,
                     can_generate_upload_link: app.pageOptions.can_generate_upload_link,
                     enable_upload_folder: app.pageOptions.enable_upload_folder
-                })))
-                .removeAttr('style'); // there may be a 'style' added via 'onWindowScroll()' when visiting last dir
-
+                })));
 
                 if (dir.user_perm == 'rw') {
                     // add new folder/file
@@ -1369,35 +1383,28 @@ define([
                 });
             },
 
+            // '#right-panel' scroll handler
             onWindowScroll: function () {
                 // 'more'
+                var $el = $('#right-panel')[0];
                 if (this.dir.dirent_more &&
-                        $(window).scrollTop() + $(window).height() == $(document).height()) { // scroll to the bottom
+                    $el.scrollTop > 0 &&
+                    $el.clientHeight + $el.scrollTop == $el.scrollHeight) { // scroll to the bottom
                     this.render_dirents_slice(this.dir.last_start, this.dir.limit);
                     this.getThumbnail();
                 }
 
-                // fixed 'dir-op-bar'
-                var op_bar = this.$dir_op_bar,
-                    path_bar = this.$path_bar, // the element before op_bar
-                    repo_file_list = this.$('.js-dir-content'); // the element after op_bar
-                var op_bar_top = path_bar.offset().top + path_bar.outerHeight(true);
-                var fixed_styles = {
-                    'position': 'fixed',
-                    'top': 0,
-                    'left': path_bar.offset().left,
-                    'background-color': $('#header').css('background-color'),
-                    'z-index': 12 // make 'op_bar' shown on top of the checkboxes
-                };
-                if (!op_bar_top) {
-                    return;
-                }
-                if ($(window).scrollTop() >= op_bar_top) {
-                    repo_file_list.css({'margin-top':op_bar.outerHeight(true)});
-                    op_bar.outerWidth(this.$el.width()).css(fixed_styles);
+                // make $bar fixed
+                var $con = this.$('.js-dir-content');
+                if ($el.scrollTop > 0) {
+                    $con.css(this.$con_fixed_styles);
+                    this.$bar.css($.extend(this.$bar_fixed_styles, {
+                        // 'width' can be changed, e.g., when 'dirent details-panel' is shown
+                        'width': $con.width()
+                    }));
                 } else {
-                    repo_file_list.css({'margin-top':0});
-                    op_bar.removeAttr('style');
+                    $con.css({'padding-top': 0});
+                    this.$bar.removeAttr('style');
                 }
             }
 

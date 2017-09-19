@@ -143,6 +143,13 @@ define([
 
         hide: function() {
             this.$el.css({'right': '-400px'});
+
+            if ($(window).width() >= 768) {
+                $('#right-panel').css({
+                    'width': '75%',
+                    'margin-right': 0
+                });
+            }
         },
 
         close: function() {
@@ -158,8 +165,20 @@ define([
 
         show: function() {
             this.showContent();
-            this.$el.css({'right': '0px'});
+            this.$el.css({
+                'box-shadow': 'none',
+                'top': $('#header').outerHeight(),
+                'right': '0px'
+            });
             this.setConMaxHeight();
+
+            if ($(window).width() >= 768) {
+                $('#right-panel').css({
+                    'width': 'auto',
+                    'margin-right': '400px'
+                });
+            }
+
         },
 
         replyTo: function(to_user) {

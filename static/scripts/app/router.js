@@ -60,6 +60,20 @@ define([
             $('.initial-loading').hide();
             $('.main-content').show();
 
+            var setMainConHeight = function() {
+                var $rightPanel = $('#right-panel');
+                var maxHeight = $(window).height() - $rightPanel.offset().top;
+                $rightPanel.css({
+                    'max-height': maxHeight,
+                    'overflow': 'auto'
+                });
+                if ($rightPanel.outerHeight() < maxHeight) {
+                    $rightPanel.outerHeight(maxHeight); // for `.sf-dropdown`
+                }
+            };
+            setMainConHeight();
+            $(window).resize(setMainConHeight);
+
             Common.prepareApiCsrf();
             Common.initLocale();
 

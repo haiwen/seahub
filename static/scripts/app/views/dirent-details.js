@@ -12,7 +12,9 @@ define([
 
         template:  _.template($('#dirent-details-tmpl').html()),
 
-        initialize: function() {
+        initialize: function(options) {
+            this.dirView = options.dirView;
+
             $("#main").append(this.$el);
 
             var _this = this;
@@ -173,13 +175,21 @@ define([
 
         setConMaxHeight: function() {
             this.$('.right-side-panel-con').css({
-                'height': $(window).height() -  // this.$el `position:fixed; top:0;`
+                'max-height': $(window).height() - this.$el.offset().top -
                     this.$('.right-side-panel-hd').outerHeight(true)
             });
         },
 
         hide: function() {
             this.$el.css({'right': '-320px'});
+
+            if ($(window).width() >= 768) {
+                $('#right-panel').css({
+                    'width': '75%',
+                    'margin-right': 0
+                });
+                this.dirView.updateDirOpBarUI();
+            }
         },
 
         close: function() {
@@ -188,10 +198,33 @@ define([
         },
 
         show: function(options) {
+            var _this = this;
             this.data = options;
             this.render();
-            this.$el.css({'right': '0px'});
+
+            if (this.$el.css('right') == '0px') {
+                return;
+            }
+
+            this.$el.css({
+                'box-shadow': 'none',
+                'top': $('#header').outerHeight(),
+                'right': '0px'
+            });
             this.setConMaxHeight();
+
+            if ($(window).width() >= 768) {
+                this.dirView.$('.repo-op-misc').hide();
+                $('#right-panel').css({
+                    'width': 'auto',
+                    'margin-right': '320px'
+                });
+                setTimeout(function() {
+                    _this.dirView.updateDirOpBarUI();
+                    _this.dirView.$('.repo-op-misc').show();
+                }, 300); // the 'transition' duration is 0.3s
+            }
+
         },
 
         showImg: function() {
