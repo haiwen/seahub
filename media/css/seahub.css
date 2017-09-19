@@ -649,6 +649,11 @@ textarea:-moz-placeholder {/* for FF */
     padding-left:1em;
     margin-left:1em;
 }
+.menu-inner-list {
+    margin-top:4px;
+    border-top:1px solid #ddd;
+    padding-top:4px;
+}
 
 /*******ui widgets**************/
 /**** path ****/
@@ -1583,7 +1588,7 @@ button.sf-dropdown-toggle:focus {
 .sf-dropdown-menu a {
     display:block;
     padding:4px 12px;
-    min-width:110px;
+    min-width:130px;
     white-space:nowrap;
     color:#444;
     font-weight:normal;
@@ -2283,11 +2288,6 @@ button.sf-dropdown-toggle:focus {
 }
 #dir-view .repo-op .op-btn {
     padding:5px 14px;
-}
-#new-file-menu {
-    margin-top:4px;
-    border-top:1px solid #ddd;
-    padding-top:4px;
 }
 .repo-file-list {
     margin:0;
