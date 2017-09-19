@@ -190,6 +190,7 @@ class RepoTest(BaseTestCase):
 
     def test_can_get_share_group_repo(self):
         config.ENABLE_SHARE_TO_ALL_GROUPS = True
+
         self.logout()
         self.login_as(self.admin)
         share_repo = seafile_api.get_repo(self.create_repo(
