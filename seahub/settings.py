@@ -142,7 +142,7 @@ TEMPLATE_DIRS = (
 LANGUAGES = (
     # ('bg', gettext_noop(u'български език')),
     ('ca', u'Català'),
-    # ('cs', gettext_noop(u'čeština')),
+    ('cs', u'Čeština'),
     ('de', 'Deutsch'),
     ('en', 'English'),
     ('es', 'Español'),
