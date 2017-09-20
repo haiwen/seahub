@@ -328,7 +328,8 @@
                 <li><a id="add-new-dir" class="op" href="#">{% trans "New Folder" %}</a></li>
                 <li><a id="add-new-file" class="op" href="#">{% trans "New File" %}</a></li>
             </ul>
-            <ul id="new-file-menu" class="menu-inner-list">
+            <div class="menu-inner-divider"></div>
+            <ul id="new-file-menu">
                 <li><a id="add-new-md-file" class="op" href="#">{% trans "New Markdown File" %}</a></li>
                 <li><a id="add-new-excel-file" class="op" href="#">{% trans "New Excel File" %}</a></li>
                 <li><a id="add-new-ppt-file" class="op" href="#">{% trans "New PowerPoint File" %}</a></li>
@@ -452,13 +453,15 @@
                         <li><a class="op mv" href="#">{% trans "Move" %}</a></li>
                         <li><a class="op cp" href="#">{% trans "Copy" %}</a></li>
                     </ul>
-                    <ul class="menu-inner-list">
+                    <div class="menu-inner-divider"></div>
+                    <ul>
                         <% if (app.pageOptions.folder_perm_enabled && is_repo_owner && !is_virtual && has_been_shared_out) { %>
                         <li><a class="op set-folder-permission" href="#">{% trans "Permission" %}</a></li>
                         <% } %>
                         <li><a class="op view-details" href="#">{% trans "Details" %}</a></li>
                     </ul>
-                    <ul class="menu-inner-list">
+                    <div class="menu-inner-divider"></div>
+                    <ul>
                         <li><a class="op open-via-client" href="seafile://openfile?repo_id=<%- repo_id %>&path=<% print(encodeURIComponent(dirent_path + '/')); %>">{% trans "Open via Client" %}</a></li>
                     </ul>
                 </div>
@@ -524,7 +527,8 @@
                             <% } %>
                         <% } %>
                     </ul>
-                    <ul class="menu-inner-list">
+                    <div class="menu-inner-divider"></div>
+                    <ul>
                     <% if (dirent.perm == 'rw') { %>
                         <% if (app.pageOptions.folder_perm_enabled && is_repo_owner && !is_virtual && has_been_shared_out) { %>
                         <li><a class="op set-folder-permission" href="#">{% trans "Permission" %}</a></li>
@@ -610,14 +614,16 @@
                             <% } %>
                         <% } %>
                     </ul>
-                    <ul class="menu-inner-list">
+                    <div class="menu-inner-divider"></div>
+                    <ul>
                         <li><a class="op file-history" href="{{ SITE_ROOT }}repo/file_revisions/<%= repo_id %>/?p=<% print(encodeURIComponent(dirent_path)); %>&referer=<% print(encodeURIComponent(location.href)); %>">{% trans "History" %}</a></li>
                         <% if (is_pro && file_audit_enabled) { %>
                         <li><a class="op" href="{{ SITE_ROOT }}repo/file-access/<%= repo_id %>/?p=<% print(encodeURIComponent(dirent_path)); %>" target="_blank">{% trans "Access Log" %}</a></li>
                         <% } %>
                         <li><a class="op view-details" href="#">{% trans "Details" %}</a></li>
                     </ul>
-                    <ul class="menu-inner-list">
+                    <div class="menu-inner-divider"></div>
+                    <ul>
                         <li><a class="op open-via-client" href="seafile://openfile?repo_id=<%- repo_id %>&path=<% print(encodeURIComponent(dirent_path)); %>">{% trans "Open via Client" %}</a></li>
                     </ul>
                 </div>
@@ -727,7 +733,8 @@
                         <% } %>
                     <% } %>
                     </ul>
-                    <ul class="menu-inner-list">
+                    <div class="menu-inner-divider"></div>
+                    <ul>
                     <% if (dirent.perm == 'rw') { %>
                         <li><a class="op file-history" href="{{ SITE_ROOT }}repo/file_revisions/<%= repo_id %>/?p=<% print(encodeURIComponent(dirent_path)); %>">{% trans "History" %}</a></li>
                         <% if (is_pro) { %>
@@ -803,7 +810,8 @@
             <% } %>
         </ul>
 
-        <ul class="menu-inner-list">
+        <div class="menu-inner-divider"></div>
+        <ul>
             <% if (dirent.perm == 'rw') { %>
             <li><a class="op file-history" href="{{ SITE_ROOT }}repo/file_revisions/<%= repo_id %>/?p=<% print(encodeURIComponent(dirent_path)); %>&referer=<% print(encodeURIComponent(location.href)); %>">{% trans "History" %}</a></li>
                 <% if (is_pro && file_audit_enabled) { %>
@@ -816,7 +824,8 @@
         </ul>
 
         <% if (dirent.perm == 'rw') { %>
-        <ul class="menu-inner-list">
+        <div class="menu-inner-divider"></div>
+        <ul>
             <li><a class="op open-via-client" href="seafile://openfile?repo_id=<%= repo_id %>&path=<% print(encodeURIComponent(dirent_path)); %>">{% trans "Open via Client" %}</a></li>
         </ul>
         <% } %>
@@ -844,7 +853,8 @@
             <% } %>
         </ul>
 
-        <ul class="menu-inner-list">
+        <div class="menu-inner-divider"></div>
+        <ul>
         <% if (dirent.perm == 'rw') { %>
             <% if (app.pageOptions.folder_perm_enabled && is_repo_owner) { %>
             <li><a class="op set-folder-permission" href="#">{% trans "Permission" %}</a></li>
@@ -856,7 +866,8 @@
         </ul>
 
         <% if (dirent.perm == 'rw') { %>
-        <ul class="menu-inner-list">
+        <div class="menu-inner-divider"></div>
+        <ul>
             <li><a class="op open-via-client" href="seafile://openfile?repo_id=<%= repo_id %>&path=<% print(encodeURIComponent(dirent_path)); %>">{% trans "Open via Client" %}</a></li>
         </ul>
         <% } %>
