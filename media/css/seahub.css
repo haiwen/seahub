@@ -649,10 +649,9 @@ textarea:-moz-placeholder {/* for FF */
     padding-left:1em;
     margin-left:1em;
 }
-.menu-inner-list {
-    margin-top:4px;
+.menu-inner-divider {
+    margin:4px 0;
     border-top:1px solid #ddd;
-    padding-top:4px;
 }
 
 /*******ui widgets**************/
