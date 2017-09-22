@@ -1915,16 +1915,13 @@ def batch_add_user_example(request):
     if not next:
         next = SITE_ROOT
     data_list = []
-    for i in xrange(20):
-        username = "username@test" + str(i) +".com"
+    for i in xrange(5):
+        username = "test" + str(i) +"@example.com"
         password = "password"
-        name = "name_test" + str(i)
-        department = "department_test" + str(i)
-        if i < 10:
-            role = "guest"
-        else:
-            role = "default"
-        quota = "999"
+        name = "test" + str(i)
+        department = "department" + str(i)
+        role = "default"
+        quota = "1000"
         data_list.append([username, password, name, department, role, quota])
 
     wb = write_xls('sample', data_list[0], data_list[1:])
@@ -1950,12 +1947,16 @@ def batch_add_user(request):
     form = BatchAddUserForm(request.POST, request.FILES)
     if form.is_valid():
         content = request.FILES['file'].read()
+        if str(request.FILES['file']).split('.')[-1].lower() != 'xlsx':
+            messages.error(request, 'Please upload the XLSX file')
+            return HttpResponseRedirect(next)
+
         try:
             fs = BytesIO(content)
             wb = load_workbook(filename=fs, read_only=True)
         except Exception as e:
             logger.error(e)
-            messages.error(request, 'only .xlsx format file can be supported')
+            messages.error(request, 'Internal Server Error')
             return HttpResponseRedirect(next)
 
         rows = wb.worksheets[0].rows
