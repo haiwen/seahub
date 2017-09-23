@@ -56,7 +56,7 @@ from seahub.utils.licenseparse import parse_license, user_number_over_limit
 from seahub.utils.rpc import mute_seafile_api
 from seahub.utils.sysinfo import get_platform_name
 from seahub.utils.mail import send_html_email_with_dj_template
-from seahub.utils.ms_excel import write_xls
+from seahub.utils.ms_excel import write_xls, write_xls_sample
 from seahub.utils.user_permissions import get_basic_user_roles, \
         get_user_role, get_basic_admin_roles
 from seahub.views import get_system_default_repo_id
@@ -1915,6 +1915,7 @@ def batch_add_user_example(request):
     if not next:
         next = SITE_ROOT
     data_list = []
+    head = [_('username'), _('password'), _('name(option)'), _('department(option)'), _('role(option)'), _('quota(unit:MB, option)')]
     for i in xrange(5):
         username = "test" + str(i) +"@example.com"
         password = "password"
@@ -1924,7 +1925,7 @@ def batch_add_user_example(request):
         quota = "1000"
         data_list.append([username, password, name, department, role, quota])
 
-    wb = write_xls('sample', data_list[0], data_list[1:])
+    wb = write_xls_sample('sample', head, data_list)
     if not wb:
         messages.error(request, _(u'Failed to export Excel'))
         return HttpResponseRedirect(next)
