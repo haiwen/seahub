@@ -1951,7 +1951,7 @@ def batch_add_user(request):
     if form.is_valid():
         content = request.FILES['file'].read()
         if str(request.FILES['file']).split('.')[-1].lower() != 'xlsx':
-            messages.error(request, 'Please upload the XLSX file')
+            messages.error(request, _(u'Please choose a .xlsx file.'))
             return HttpResponseRedirect(next)
 
         try:
@@ -2041,7 +2041,7 @@ def batch_add_user(request):
                                      operation=USER_ADD, detail=admin_op_detail)
         messages.success(request, _('Import succeeded'))
     else:
-        messages.error(request, _(u'Please select a xlsx file first.'))
+        messages.error(request, _(u'Please choose a .xlsx file.'))
 
     return HttpResponseRedirect(next)
 

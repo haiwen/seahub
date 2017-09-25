@@ -72,9 +72,11 @@
 
 <form id="upload-excel-form" class="hide" enctype="multipart/form-data" method="post" action="{% url 'batch_add_user' %}">{% csrf_token %}
     <h3>{% trans "Import users from a .xlsx file" %}</h3>
-    <input id='excel-file' type="file" name="file" />
-    <button type="button" class="button" id="excel-example-btn">{% trans "Example" %}</button>
-    <p class="error hide">{% trans "Please choose a .xlsx file" %}</p>
+    <a href="#" id="excel-example">{% trans "Example" %}</a>
+    <br />
+    <input type="file" name="file" />
+    <br />
+    <p class="error hide">{% trans "Please choose a .xlsx file." %}</p>
     <button type="submit" class="submit">{% trans "Submit" %}</button>
 </form>
 
@@ -142,10 +144,6 @@ $(function(){
     });
     {% endif %}
 });
-$("#excel-example-btn").click(function() {
-    location.href = "{% url 'batch_add_user_example' %}";
-});
-
 $('#add-user-btn').click(function() {
     $('#add-user-form').modal();
     $('#simplemodal-container').css({'width':'auto', 'height':'auto'});
@@ -240,6 +238,10 @@ $('#add-user-form').submit(function() {
 $('#import-users-from-excel-btn').click(function () {
     $('#upload-excel-form').modal();
     $('#simplemodal-container').css({'width':'auto', 'height':'auto'});
+});
+$("#excel-example").click(function() {
+    location.href = "{% url 'batch_add_user_example' %}";
+    return false;
 });
 $('#upload-excel-form').submit(function() {
     var form = $(this);
