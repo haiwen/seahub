@@ -220,6 +220,16 @@ class ExtraSharePermissionManager(models.Manager):
 
 
 class ExtraGroupsSharePermissionManager(models.Manager):
+    def get_group_permission(self, repo_id, gid):
+        record_list = super(ExtraGroupsSharePermissionManager, self).filter(
+            repo_id=repo_id, group_id=gid
+        )
+        if len(record_list) > 0:
+            return record_list[0].permission
+        else:
+            return None
+
+
     def get_repos_with_admin_permission(self, gid):
         """ return admin repo in specific group
             e.g: ['repo_id1', 'repo_id2']

@@ -244,7 +244,7 @@ class DirSharedItemsEndpoint(APIView):
                                                                      shared_to, 
                                                                      extra_share_permission)
             send_perm_audit_msg('modify-repo-perm', username, shared_to,
-                                repo_id, path, permission)
+                                repo_id, path, extra_share_permission if extra_share_permission else permission)
 
         if shared_to_group:
             gid = request.GET.get('group_id')
@@ -280,7 +280,7 @@ class DirSharedItemsEndpoint(APIView):
                                                                            gid, 
                                                                            extra_share_permission)
             send_perm_audit_msg('modify-repo-perm', username, gid,
-                                repo_id, path, permission)
+                                repo_id, path, extra_share_permission if extra_share_permission else permission)
 
         return HttpResponse(json.dumps({'success': True}), status=200,
                             content_type=json_content_type)
@@ -415,7 +415,7 @@ class DirSharedItemsEndpoint(APIView):
                     })
 
                     send_perm_audit_msg('add-repo-perm', username, to_user,
-                                        repo_id, path, permission)
+                                        repo_id, path, extra_share_permission if extra_share_permission else permission)
                 except SearpcError as e:
                     logger.error(e)
                     result['failed'].append({
@@ -499,7 +499,7 @@ class DirSharedItemsEndpoint(APIView):
                     })
 
                     send_perm_audit_msg('add-repo-perm', username, gid,
-                                        repo_id, path, permission)
+                                        repo_id, path, extra_share_permission if extra_share_permission else permission)
                 except SearpcError as e:
                     logger.error(e)
                     result['failed'].append({
@@ -554,12 +554,13 @@ class DirSharedItemsEndpoint(APIView):
                     seafile_api.unshare_subdir_for_user(
                             repo_id, path, repo_owner, shared_to)
 
+            extra_share_permission = ExtraSharePermission.objects.get_user_permission(repo_id, shared_to)
             # Delete share permission at ExtraSharePermission table.
             if path == '/':
                 ExtraSharePermission.objects.delete_share_permission(repo_id, 
                                                                      shared_to)
             send_perm_audit_msg('delete-repo-perm', username, shared_to,
-                                repo_id, path, permission)
+                                repo_id, path, extra_share_permission if extra_share_permission else permission)
 
         if shared_to_group:
             group_id = request.GET.get('group_id')
@@ -600,12 +601,13 @@ class DirSharedItemsEndpoint(APIView):
                     seafile_api.unshare_subdir_for_group(
                             repo_id, path, repo_owner, group_id)
 
+            extra_share_permission = ExtraGroupsSharePermission.objects.get_group_permission(repo_id, group_id)
             # delete share permission if repo is deleted
             if path == '/':
                 ExtraGroupsSharePermission.objects.delete_share_permission(repo_id, 
                                                                           group_id)
             send_perm_audit_msg('delete-repo-perm', username, group_id,
-                                repo_id, path, permission)
+                                repo_id, path, extra_share_permission if extra_share_permission else permission)
 
         return HttpResponse(json.dumps({'success': True}), status=200,
                             content_type=json_content_type)
