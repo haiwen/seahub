@@ -32,37 +32,3 @@ def write_xls(sheet_name, head, data_list):
             c.value = row[col_num]
 
     return wb
-
-def write_xls_sample(sheet_name, head, data_list):
-    """write listed data into excel
-    """
-
-    try:
-        wb = openpyxl.Workbook()
-        ws = wb.get_active_sheet()
-    except Exception as e:
-        logger.error(e)
-        return None
-
-    ws.title = sheet_name
-
-    row_num = 0
-
-    ws.column_dimensions["A"].width = 24.0
-    ws.column_dimensions["C"].width = 14.0
-    ws.column_dimensions["D"].width = 18.0
-    ws.column_dimensions["E"].width = 14.0
-    ws.column_dimensions["F"].width = 21.0
-    # write table head
-    for col_num in xrange(len(head)):
-        c = ws.cell(row = row_num + 1, column = col_num + 1)
-        c.value = head[col_num]
-
-    # write table data
-    for row in data_list:
-        row_num += 1
-        for col_num in xrange(len(row)):
-            c = ws.cell(row = row_num + 1, column = col_num + 1)
-            c.value = row[col_num]
-
-    return wb
