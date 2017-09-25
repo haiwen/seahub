@@ -42,7 +42,6 @@ from seaserv import get_repo, send_message, get_commits, \
     seafserv_threaded_rpc
 from pysearpc import SearpcError
 
-from seahub.profile.models import Profile
 from seahub.wopi.utils import get_wopi_dict
 from seahub.avatar.templatetags.group_avatar_tags import grp_avatar
 from seahub.auth.decorators import login_required
@@ -507,7 +506,6 @@ def _file_view(request, repo_id, path):
             'doc_key': doc_key,
             'doc_title': doc_title,
             'doc_url': doc_url,
-            'lang_code': Profile.objects.get_user_language(username),
             'document_type': document_type,
             'callback_url': get_site_scheme_and_netloc().rstrip('/') + reverse('onlyoffice_editor_callback'),
             'can_edit': can_edit,
