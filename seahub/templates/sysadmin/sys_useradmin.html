@@ -72,7 +72,7 @@
 
 <form id="upload-excel-form" class="hide" enctype="multipart/form-data" method="post" action="{% url 'batch_add_user' %}">{% csrf_token %}
     <h3>{% trans "Import users from a .xlsx file" %}</h3>
-    <a href="#" id="excel-example">{% trans "Example" %}</a>
+    <a href="#" id="excel-example">{% trans "Download an example file" %}</a>
     <br />
     <input type="file" name="file" />
     <br />
