@@ -264,7 +264,7 @@ app["pageOptions"] = {
         {% endfor %}
         return mods_enabled;
     })(),
-    username: "{{request.user.username}}",
+    username: "{{request.user.username|escapejs}}",
     name: "{{request.user.username|email2nickname|escapejs}}",
     contact_email: "{{ request.user.username|email2contact_email|escapejs }}",
     events_enabled: {% if events_enabled %} true {% else %} false {% endif %},

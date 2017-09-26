@@ -139,6 +139,7 @@ define([
             this.$('.lock-file').on('click', _.bind(this.lockFile, this));
             this.$('.unlock-file').on('click', _.bind(this.unlockFile, this));
             this.$('.view-details').on('click', _.bind(this.viewDetails, this));
+            this.$('.file-comment').on('click', _.bind(this.viewFileComments, this));
             this.$('.set-folder-permission').on('click', _.bind(this.setFolderPerm, this));
 
             return false;
@@ -381,6 +382,20 @@ define([
                     }
                 });
             }
+
+            this.closeMenu();
+            return false;
+        },
+
+        viewFileComments: function() {
+            var file_icon_size = Common.isHiDPI() ? 48 : 24;
+            this.dirView.fileCommentsView.show({
+                'is_repo_owner': this.dir.is_repo_owner,
+                'repo_id': this.dir.repo_id,
+                'path': Common.pathJoin([this.dir.path, this.model.get('obj_name')]),
+                'icon_url': this.model.getIconUrl(file_icon_size),
+                'file_name': this.model.get('obj_name')
+            });
 
             this.closeMenu();
             return false;

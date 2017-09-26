@@ -1087,6 +1087,7 @@ textarea:-moz-placeholder {/* for FF */
 .details-panel {
     width:320px;
 }
+.file-comment-panel-item-name,
 .details-panel-item-name {
     display:inline-block;
     max-width:215px;

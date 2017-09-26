@@ -616,6 +616,7 @@
                     </ul>
                     <div class="menu-inner-divider"></div>
                     <ul>
+                        <li><a class="op file-comment" href="#">{% trans "Comment" %}</a><li>
                         <li><a class="op file-history" href="{{ SITE_ROOT }}repo/file_revisions/<%= repo_id %>/?p=<% print(encodeURIComponent(dirent_path)); %>&referer=<% print(encodeURIComponent(location.href)); %>">{% trans "History" %}</a></li>
                         <% if (is_pro && file_audit_enabled) { %>
                         <li><a class="op" href="{{ SITE_ROOT }}repo/file-access/<%= repo_id %>/?p=<% print(encodeURIComponent(dirent_path)); %>" target="_blank">{% trans "Access Log" %}</a></li>
@@ -635,6 +636,7 @@
                     <% if (!repo_encrypted) { %>
                     <li><a class="op cp" href="#">{% trans "Copy" %}</a></li>
                     <% } %>
+                    <li><a class="op file-comment" href="#">{% trans "Comment" %}</a><li>
                     <li><a class="op view-details" href="#">{% trans "Details" %}</a></li>
                 </ul>
             </div>
@@ -736,6 +738,7 @@
                     <div class="menu-inner-divider"></div>
                     <ul>
                     <% if (dirent.perm == 'rw') { %>
+                        <li><a class="op file-comment" href="#">{% trans "Comment" %}</a><li>
                         <li><a class="op file-history" href="{{ SITE_ROOT }}repo/file_revisions/<%= repo_id %>/?p=<% print(encodeURIComponent(dirent_path)); %>">{% trans "History" %}</a></li>
                         <% if (is_pro) { %>
                             <% if (file_audit_enabled) { %>
@@ -744,6 +747,7 @@
                         <% } %>
                         <li><a class="op view-details" href="#">{% trans "Details" %}</a></li>
                     <% } else if (dirent.perm == 'r') { %>
+                        <li><a class="op file-comment" href="#">{% trans "Comment" %}</a><li>
                         <li><a class="op view-details" href="#">{% trans "Details" %}</a></li>
                     <% } %>
                     </ul>
@@ -813,12 +817,15 @@
         <div class="menu-inner-divider"></div>
         <ul>
             <% if (dirent.perm == 'rw') { %>
+            <li><a class="op file-comment" href="#">{% trans "Comment" %}</a><li>
             <li><a class="op file-history" href="{{ SITE_ROOT }}repo/file_revisions/<%= repo_id %>/?p=<% print(encodeURIComponent(dirent_path)); %>&referer=<% print(encodeURIComponent(location.href)); %>">{% trans "History" %}</a></li>
                 <% if (is_pro && file_audit_enabled) { %>
                 <li><a class="op" href="{{ SITE_ROOT }}repo/file-access/<%= repo_id %>/?p=<% print(encodeURIComponent(dirent_path)); %>" target="_blank">{% trans "Access Log" %}</a></li>
                 <% } %>
             <li><a class="op view-details" href="#">{% trans "Details" %}</a></li>
+
             <% } else if (dirent.perm == 'r') { %>
+                <li><a class="op file-comment" href="#">{% trans "Comment" %}</a><li>
                 <li><a class="op view-details" href="#">{% trans "Details" %}</a></li>
             <% } %>
         </ul>
@@ -2419,4 +2426,47 @@
         <input type="submit" value="{% trans "Submit" %}" class="submit vam" />
         <span class="loading-icon vam" style="margin-left:5px;display:none;"></span>
     </form>
+</script>
+
+{# file comment #}
+<script type="text/template" id="file-comment-panel-tmpl">
+    <div class="right-side-panel-hd file-discussions-hd ovhd">
+        <a href="#" title="{% trans "Close" %}" aria-label="{% trans "Close" %}" class="sf-popover-close js-close sf2-icon-x1 op-icon fleft"></a>
+        <h3 class="right-side-panel-title">
+            <img src="<%= icon_url %>" width="24" alt="" class="vam" />
+            <span class="vam ellipsis file-comment-panel-item-name" title="<%- file_name %>"><%- file_name %></span>
+        </h3>
+    </div>
+    <div class="right-side-panel-con file-discussions-con">
+        <div class="loading-icon loading-tip"></div>
+        <ul class="file-discussion-list hide"></ul>
+        <p class="no-discussion-tip hide">{% trans "No comment yet." %}</p>
+        <p class="error hide"></p>
+    </div>
+    <div class="right-side-panel-footer file-discussions-footer">
+        <form action="" method="post" class="msg-form">
+            <img src="{% avatar_url request.user 64 %}" alt="" width="32" class="avatar-circle fleft" />
+            <div class="msg-body">
+                <textarea name="message" placeholder="{% trans "Add a comment..." %}" class="msg-input"></textarea>
+                <p class="error hide"></p>
+                <button type="submit" class="submit msg-submit">{% trans "Submit" %}</button>
+            </div>
+        </form>
+    </div>
+</script>
+<script type="text/template" id="file-comment-tmpl">
+<img src="<%= avatar_url %>" alt="" width="32" class="avatar-circle fleft" />
+<div class="msg-body">
+    <div class="ovhd">
+        <a class="msg-username ellipsis" title="<%- user_name %>" href="<%= user_profile_url %>"><%- user_name %></a>
+        <span class="msg-time" title="<%- time %>"><%- time_from_now %></span>
+        <div class="msg-ops fright vh">
+            <a class="msg-op sf2-icon-reply op-icon js-reply-msg" title="{% trans "Reply" %}" aria-label="{% trans "Reply" %}" href="#"></a>
+            <% if (can_delete_msg) { %>
+                <a class="msg-op sf2-icon-delete op-icon js-del-msg" title="{% trans "Delete" %}" aria-label="{% trans "Delete" %}" href="#" data-id="<%= id %>"></a>
+            <% } %>
+        </div>
+    </div>
+    <div class="msg-content"><%= content_marked %></div>
+</div>
 </script>
