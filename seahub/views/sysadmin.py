@@ -2,14 +2,15 @@
 # encoding: utf-8
 
 import os
+from io import BytesIO
 from types import FunctionType
 import logging
 import json
 import re
 import datetime
-import csv, chardet, StringIO
 import time
 from constance import config
+from openpyxl import load_workbook
 
 from django.db.models import Q
 from django.conf import settings as dj_settings
@@ -1907,8 +1908,39 @@ def batch_user_make_admin(request):
 
 @login_required
 @sys_staff_required
+def batch_add_user_example(request):
+    """ get example file.
+    """
+    next = request.META.get('HTTP_REFERER', None)
+    if not next:
+        next = SITE_ROOT
+    data_list = []
+    head = [_('email'), _('password'), _('name')+ '(' + _('optional') + ')', 
+            _('department')+ '(' + _('optional') + ')', _('role')+
+            '(' + _('optional') + ')', _('quota') + '(MB, ' + _('optional') + ')']
+    for i in xrange(5):
+        username = "test" + str(i) +"@example.com"
+        password = "123456"
+        name = "test" + str(i)
+        department = "department" + str(i)
+        role = "default"
+        quota = "1000"
+        data_list.append([username, password, name, department, role, quota])
+
+    wb = write_xls('sample', head, data_list)
+    if not wb:
+        messages.error(request, _(u'Failed to export Excel'))
+        return HttpResponseRedirect(next)
+
+    response = HttpResponse(content_type='application/ms-excel')
+    response['Content-Disposition'] = 'attachment; filename=users.xlsx'
+    wb.save(response)
+    return response
+
+@login_required
+@sys_staff_required
 def batch_add_user(request):
-    """Batch add users. Import users from CSV file.
+    """  Batch add users. Import users from XLSX file.
     """
     if request.method != 'POST':
         raise Http404
@@ -1918,25 +1950,30 @@ def batch_add_user(request):
     form = BatchAddUserForm(request.POST, request.FILES)
     if form.is_valid():
         content = request.FILES['file'].read()
-        encoding = chardet.detect(content)['encoding']
-        if encoding != 'utf-8':
-            content = content.decode(encoding, 'replace').encode('utf-8')
+        if str(request.FILES['file']).split('.')[-1].lower() != 'xlsx':
+            messages.error(request, _(u'Please choose a .xlsx file.'))
+            return HttpResponseRedirect(next)
 
-        filestream = StringIO.StringIO(content)
-        reader = csv.reader(filestream)
-        new_users_count = len(list(reader))
-        if user_number_over_limit(new_users=new_users_count):
+        try:
+            fs = BytesIO(content)
+            wb = load_workbook(filename=fs, read_only=True)
+        except Exception as e:
+            logger.error(e)
+            messages.error(request, _('Internal Server Error'))
+            return HttpResponseRedirect(next)
+
+        rows = wb.worksheets[0].rows
+        records = []
+        # remove first row(head field).
+        next(rows)
+        for row in rows:
+            records.append([c.value for c in row])
+
+        if user_number_over_limit(new_users=len(records)):
             messages.error(request, _(u'The number of users exceeds the limit.'))
             return HttpResponseRedirect(next)
 
-        # return to the top of the file
-        filestream.seek(0)
-        reader = csv.reader(filestream)
-        for row in reader:
-
-            if not row:
-                continue
-
+        for row in records:
             try:
                 username = row[0].strip()
                 password = row[1].strip()
@@ -1978,8 +2015,7 @@ def batch_add_user(request):
                     logger.error(e)
 
                 try:
-                    space_quota_mb = row[5].strip()
-                    space_quota_mb = int(space_quota_mb)
+                    space_quota_mb = int(row[5])
                     if space_quota_mb >= 0:
                         space_quota = int(space_quota_mb) * get_file_size_unit('MB')
                         seafile_api.set_user_quota(username, space_quota)
@@ -2001,10 +2037,9 @@ def batch_add_user(request):
                 }
                 admin_operation.send(sender=None, admin_name=request.user.username,
                                      operation=USER_ADD, detail=admin_op_detail)
-
         messages.success(request, _('Import succeeded'))
     else:
-        messages.error(request, _(u'Please select a csv file first.'))
+        messages.error(request, _(u'Please choose a .xlsx file.'))
 
     return HttpResponseRedirect(next)
 

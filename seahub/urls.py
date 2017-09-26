@@ -435,6 +435,7 @@ urlpatterns = patterns(
     url(r'^useradmin/password/reset/(?P<email>[^/]+)/$', user_reset, name='user_reset'),
     url(r'^useradmin/batchmakeadmin/$', batch_user_make_admin, name='batch_user_make_admin'),
     url(r'^useradmin/batchadduser/$', batch_add_user, name='batch_add_user'),
+    url(r'^useradmin/batchadduser/example/$', batch_add_user_example, name='batch_add_user_example'),
 
     url(r'^client-login/$', client_token_login, name='client_token_login'),
 )

@@ -25,7 +25,7 @@
     </ul>
 
     <div class="js-op-for-all fright">
-        <button id="import-users-btn">{% trans "Import users" %}</button>
+        <button id="import-users-from-excel-btn">{% trans "Import users" %}</button>
         <button id="add-user-btn">{% trans "Add user" %}</button>
         <button id="export-excel">{% trans "Export Excel" %}</button>
     </div>
@@ -70,14 +70,13 @@
     <button type="submit" class="submit">{% trans "Submit" %}</button>
 </form>
 
-<form id="upload-csv-form" class="hide" enctype="multipart/form-data" method="post" action="{% url 'batch_add_user' %}">{% csrf_token %}
-    <h3>{% trans "Import users from a CSV file" %}</h3>
+<form id="upload-excel-form" class="hide" enctype="multipart/form-data" method="post" action="{% url 'batch_add_user' %}">{% csrf_token %}
+    <h3>{% trans "Import users from a .xlsx file" %}</h3>
+    <a href="#" id="excel-example">{% trans "Download an example file" %}</a>
+    <br />
     <input type="file" name="file" />
-    <p class="tip">
-        {% trans "File format: user@mail.com,password,name,department,role,quota"%}<br />
-        {% trans "Name, department, role and quota are optional." %}
-    </p>
-    <p class="error hide">{% trans "Please choose a CSV file" %}</p>
+    <br />
+    <p class="error hide">{% trans "Please choose a .xlsx file." %}</p>
     <button type="submit" class="submit">{% trans "Submit" %}</button>
 </form>
 
@@ -145,7 +144,6 @@ $(function(){
     });
     {% endif %}
 });
-
 $('#add-user-btn').click(function() {
     $('#add-user-form').modal();
     $('#simplemodal-container').css({'width':'auto', 'height':'auto'});
@@ -237,11 +235,15 @@ $('#add-user-form').submit(function() {
     });
     return false;
 });
-$('#import-users-btn').click(function () {
-    $('#upload-csv-form').modal();
+$('#import-users-from-excel-btn').click(function () {
+    $('#upload-excel-form').modal();
     $('#simplemodal-container').css({'width':'auto', 'height':'auto'});
 });
-$('#upload-csv-form').submit(function() {
+$("#excel-example").click(function() {
+    location.href = "{% url 'batch_add_user_example' %}";
+    return false;
+});
+$('#upload-excel-form').submit(function() {
     var form = $(this);
     if (!$('[name=file]', form).val()) {
         $('.error', form).removeClass('hide');
