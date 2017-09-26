@@ -1915,9 +1915,9 @@ def batch_add_user_example(request):
     if not next:
         next = SITE_ROOT
     data_list = []
-    head = [_('email'), _('password'), _('name')+ '(' + _('option') + ')', 
-            _('department')+ '(' + _('option') + ')', _('role')+
-            '(' + _('option') + ')', _('quota') + '(MB, ' + _('option') + ')']
+    head = [_('email'), _('password'), _('name')+ '(' + _('optional') + ')', 
+            _('department')+ '(' + _('optional') + ')', _('role')+
+            '(' + _('optional') + ')', _('quota') + '(MB, ' + _('optional') + ')']
     for i in xrange(5):
         username = "test" + str(i) +"@example.com"
         password = "123456"
@@ -1959,16 +1959,14 @@ def batch_add_user(request):
             wb = load_workbook(filename=fs, read_only=True)
         except Exception as e:
             logger.error(e)
-            messages.error(request, 'Internal Server Error')
+            messages.error(request, _('Internal Server Error'))
             return HttpResponseRedirect(next)
 
         rows = wb.worksheets[0].rows
         records = []
-        head = True
+        # remove first row(head field).
+        next(rows)
         for row in rows:
-            if head:
-                head = False
-                continue
             records.append([c.value for c in row])
 
         if user_number_over_limit(new_users=len(records)):
