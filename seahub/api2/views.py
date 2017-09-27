@@ -713,6 +713,8 @@ class Repos(APIView):
         return repo_id, None
 
     def _create_enc_repo(self, request, repo_id, repo_name, repo_desc, username, org_id):
+        if not config.ENABLE_ENCRYPTED_LIBRARY:
+            return api_error(status.HTTP_403, 'NOT allow to create encrypted library.')
         if not _REPO_ID_PATTERN.match(repo_id):
             return api_error(status.HTTP_400_BAD_REQUEST, 'Repo id must be a valid uuid')
         magic = request.data.get('magic', '')
