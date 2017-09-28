@@ -86,7 +86,9 @@ $('#add-admin-form').submit(function() {
         },
         error: function(xhr) {
             var error_msg;
-            if (xhr.responseText) {
+            if (xhr.status === 403) {
+                error_msg = "{% trans 'Permission denied.' %}";
+            } else if (xhr.responseText) {
                 error_msg = $.parseJSON(xhr.responseText).error;
             } else {
                 error_msg = "{% trans "Failed. Please check the network." %}";
@@ -98,6 +100,37 @@ $('#add-admin-form').submit(function() {
 
     return false;
 });
+$('.admin-role-select').change(function() {
+    var $select = $(this),
+        role = $select.val(),
+        email = $select.parents('tr').attr('data-userid'),
+        $select_prev = $(this).prev('.admin-role'),
+        url = "{% url 'api-v2.1-admin-admin-role' %}",
+        data = {'email': email, 'role': role};
+
+    $.ajax({
+        url: url,
+        type: 'PUT',
+        dataType: 'json',
+        data: data,
+        cache: false,
+        beforeSend: prepareCSRFToken,
+        success: function(data) {
+            feedback("{% trans "Edit succeeded" %}", 'success');
+            $('.admin-role-cur-value', $select_prev).html($select.children('option[value="' + $select.val() + '"]').text());
+            $select.addClass('hide');
+            $select_prev.removeClass('hide');
+            $.modal.close();
+        },
+        error: function() {
+            feedback("{% trans "Edit failed." %}", 'error');
+            $select.addClass('hide');
+            $select_prev.removeClass('hide');
+            $.modal.close();
+        }
+    });
+});
+
 {% include "sysadmin/useradmin_js.html" %}
 </script>
 {% endblock %}

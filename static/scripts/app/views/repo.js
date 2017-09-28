@@ -49,7 +49,7 @@ define([
 
         render: function() {
             var obj = this.model.toJSON();
-            var icon_size = Common.isHiDPI() ? 96 : 24;
+            var icon_size = Common.isHiDPI() ? 48 : 24;
             var icon_url = this.model.getIconUrl(icon_size);
             var tmpl, dropdownOptions = {};
             if ($(window).width() >= 768) {
@@ -291,7 +291,8 @@ define([
         popupHistorySetting: function() {
             var options = {
                 'repo_name': this.model.get('name'),
-                'repo_id': this.model.get('id')
+                'repo_id': this.model.get('id'),
+                'url_name': 'repo_history_limit'
             };
             this.togglePopup(); // close the popup
             new HistorySettingsDialog(options);
@@ -330,10 +331,10 @@ define([
 
         viewDetails: function() {
             var obj = this.model.toJSON();
-            var icon_size = Common.isHiDPI() ? 96 : 24;
+            var icon_size = Common.isHiDPI() ? 48 : 24;
             var data = $.extend({}, obj, {
                 icon_url: this.model.getIconUrl(icon_size),
-                big_icon_url: this.model.getIconUrl(96)
+                big_icon_url: this.model.getIconUrl()
             });
             var detailsView = this.myReposView.repoDetailsView;
             detailsView.show(data);

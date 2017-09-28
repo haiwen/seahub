@@ -1,0 +1,34 @@
+{# templates in this file are used for both 'app' & 'sysadmin-app' #}
+{% load i18n %}
+<script type="text/template" id="history-settings-dialog-tmpl">
+    <h3 id="dialogTitle"><%= title %></h3>
+
+    <p class="history-settings-notice outstanding-tip hide">{% trans "Setting library history is disabled by Admin" %}</p>
+
+    <form action="" method="post">
+        <label class="radio-item">
+            <input type="radio" name="history" value="full_history" class="vam" />
+            <span class="vam">{% trans "Keep full history" %}</span>
+        </label>
+        <br />
+
+        <label class="radio-item">
+            <input type="radio" name="history" value="no_history" class="vam" />
+            <span class="vam">{% trans "Don't keep history" %}</span>
+        </label>
+        <br />
+
+        <label class="radio-item">
+            <input type="radio" name="history" value="partial_history" class="vam" />
+            <span calss="vam">{% trans "Only keep a period of history:" %}
+                <input type="text" name="days" size="4" disabled="disabled" class="input-disabled" value="<%= default_history_limit %>" /> {% trans "days" %}
+            </span>
+        </label>
+        <br />
+
+        <input type="submit" value="{% trans "Submit" %}" class="submit" />
+    </form>
+
+    <span class="loading-icon loading-tip"></span>
+    <p class="error hide"></p>
+</script>

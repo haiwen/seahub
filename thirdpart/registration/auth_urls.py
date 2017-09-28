@@ -27,7 +27,7 @@ from django.conf import settings
 from django.conf.urls import patterns, url
 
 from seahub.auth import views as auth_views
-from seahub.utils.two_factor_auth import HAS_TWO_FACTOR_AUTH
+from seahub.two_factor.views.login import TwoFactorVerifyView
 
 urlpatterns = patterns('',
                        url(r'^password/change/$',
@@ -48,6 +48,10 @@ urlpatterns = patterns('',
                        url(r'^password/reset/done/$',
                            auth_views.password_reset_done,
                            name='auth_password_reset_done'),
+
+                       url(r'^login/two-factor-auth/$',
+                           TwoFactorVerifyView.as_view(),
+                           name='two_factor_auth'),
 )
 
 if getattr(settings, 'ENABLE_LOGIN_SIMPLE_CHECK', False):
@@ -74,11 +78,3 @@ else:
                                  'next_page': settings.LOGOUT_REDIRECT_URL},
                                 name='auth_logout'),
                             )
-
-    if HAS_TWO_FACTOR_AUTH:
-        from seahub_extra.two_factor.views.login import TwoFactorVerifyView
-        urlpatterns += patterns('',
-                                url(r'^login/two-factor-auth/$',
-                                    TwoFactorVerifyView.as_view(),
-                                    name='two_factor_auth'),
-                                )

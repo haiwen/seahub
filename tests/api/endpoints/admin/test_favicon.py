@@ -4,8 +4,7 @@ from tests.common.utils import urljoin
 from tests.common.common import BASE_URL
 from django.core.urlresolvers import reverse
 
-from seahub.settings import MEDIA_ROOT
-from seahub.api2.endpoints.admin.favicon import CUSTOM_FAVICON_PATH
+from seahub.settings import MEDIA_ROOT, CUSTOM_FAVICON_PATH
 
 class AdminFaviconTest(ApiTestBase):
 

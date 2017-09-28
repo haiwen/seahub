@@ -118,7 +118,10 @@ MIDDLEWARE_CLASSES = (
     'seahub.base.middleware.InfobarMiddleware',
     'seahub.password_session.middleware.CheckPasswordHash',
     'seahub.base.middleware.ForcePasswdChangeMiddleware',
+    'seahub.base.middleware.UserPermissionMiddleware',
     'termsandconditions.middleware.TermsAndConditionsRedirectMiddleware',
+    'seahub.two_factor.middleware.OTPMiddleware',
+    'seahub.trusted_ip.middleware.LimitIpMiddleware',
 )
 
 SITE_ROOT_URLCONF = 'seahub.urls'
@@ -136,47 +139,47 @@ TEMPLATE_DIRS = (
     os.path.join(PROJECT_ROOT, 'seahub/templates'),
 )
 
-# This is defined here as a do-nothing function because we can't import
-# django.utils.translation -- that module depends on the settings.
-gettext_noop = lambda s: s
 LANGUAGES = (
-    ('ar', gettext_noop(u'العربية')),
     # ('bg', gettext_noop(u'български език')),
-    ('ca', gettext_noop(u'Català')),
+    ('ca', u'Català'),
     # ('cs', gettext_noop(u'čeština')),
-    ('de', gettext_noop(u'Deutsch')),
-    ('el', gettext_noop(u'ελληνικά')),
-    ('en', gettext_noop('English')),
-    ('es', gettext_noop('Español')),
-    ('es-ar', gettext_noop('Español de Argentina')),
-    ('es-mx', gettext_noop('Español de México')),
-    ('fi', gettext_noop('Suomi')),
-    ('fr', gettext_noop('français')),
-    ('he', gettext_noop('עברית')),
-    ('hu', gettext_noop('Magyar')),
-    ('is', gettext_noop('Íslenska')),
-    ('it', gettext_noop('Italiano')),
-    ('ja', gettext_noop('日本語')),
-    ('ko', gettext_noop('한국어')),
-    # ('lt', gettext_noop(u'Lietuvių kalba')),
-    ('lv', gettext_noop('Latvian')),
-    # ('mk', gettext_noop(u'македонски јазик')),
-    ('nl', gettext_noop('Nederlands')),
-    ('pl', gettext_noop('Polski')),
-    ('pt-br', gettext_noop('Portuguese, Brazil')),
-    ('ru', gettext_noop(u'Русский')),
-    # ('sk', gettext_noop('Slovak')),
-    ('sl', gettext_noop('Slovenian')),
-    ('sv', gettext_noop('Svenska')),
-    ('th', gettext_noop('ไทย')),
-    ('tr', gettext_noop('Türkçe')),
-    ('uk', gettext_noop('українська мова')),
-    ('vi', gettext_noop(u'Tiếng Việt')),
-    ('zh-cn', gettext_noop(u'简体中文')),
-    ('zh-tw', gettext_noop(u'繁體中文')),
+    ('de', 'Deutsch'),
+    ('en', 'English'),
+    ('es', 'Español'),
+    ('es-ar', 'Español de Argentina'),
+    ('es-mx', 'Español de México'),
+    ('fr', 'Français'),
+    ('it', 'Italiano'),
+    ('is', 'Íslenska'),
+    ('lv', 'Latvian'),
+    # ('mk', 'македонски јазик'),
+    ('hu', 'Magyar'),
+    ('nl', 'Nederlands'),
+    ('pl', 'Polski'),
+    ('pt-br', 'Portuguese, Brazil'),
+    ('ru', 'Русский'),
+    # ('sk', 'Slovak'),
+    ('sl', 'Slovenian'),
+    ('fi', 'Suomi'),
+    ('sv', 'Svenska'),
+    ('vi', 'Tiếng Việt'),
+    ('tr', 'Türkçe'),
+    ('uk', 'українська мова'),
+    ('he', 'עברית'),
+    ('ar', 'العربية'),
+    ('el', 'ελληνικά'),
+    ('th', 'ไทย'),
+    ('ko', '한국어'),
+    ('ja', '日本語'),
+    # ('lt', 'Lietuvių kalba'),
+    ('zh-cn', '简体中文'),
+    ('zh-tw', '繁體中文'),
 )
+
 LOCALE_PATHS = (
     os.path.join(PROJECT_ROOT, 'locale'),
+    os.path.join(PROJECT_ROOT, 'seahub/two_factor/locale'),
+    os.path.join(PROJECT_ROOT, 'seahub/trusted_ip/locale'),
 )
 
 TEMPLATE_CONTEXT_PROCESSORS = (
@@ -226,6 +229,9 @@ INSTALLED_APPS = (
     'seahub.wopi',
     'seahub.tags',
     'seahub.revision_tag',
+    'seahub.two_factor',
+    'seahub.role_permissions',
+    'seahub.trusted_ip',
 )
 
 # Enabled or disable constance(web settings).
@@ -281,6 +287,10 @@ SHARE_LINK_PASSWORD_MIN_LENGTH = 8
 # enable or disable share link audit
 ENABLE_SHARE_LINK_AUDIT = False
 
+# enable or disable limit ip 
+ENABLE_LIMIT_IPADDRESS = False
+TRUSTED_IP_LIST = ['127.0.0.1']
+
 # Control the language that send email. Default to user's current language.
 SHARE_LINK_EMAIL_LANGUAGE = ''
 
@@ -302,9 +312,6 @@ USER_STRONG_PASSWORD_REQUIRED = False
 # Force user to change password when admin add/reset a user.
 FORCE_PASSWORD_CHANGE = True
 
-# Using server side crypto by default, otherwise, let user choose crypto method.
-FORCE_SERVER_CRYPTO = True
-
 # Enable or disable repo history setting
 ENABLE_REPO_HISTORY_SETTING = True
 
@@ -315,6 +322,12 @@ DISABLE_SYNC_WITH_ANY_FOLDER = False
 
 ENABLE_TERMS_AND_CONDITIONS = False
 
+# Enable or disable sharing to all groups
+ENABLE_SHARE_TO_ALL_GROUPS = False
+
+# interval for request unread notifications
+UNREAD_NOTIFICATIONS_REQUEST_INTERVAL = 3 * 60 # seconds
+
 # File preview
 FILE_PREVIEW_MAX_SIZE = 30 * 1024 * 1024
 OFFICE_PREVIEW_MAX_SIZE = 2 * 1024 * 1024
@@ -323,10 +336,7 @@ FILE_ENCODING_LIST = ['auto', 'utf-8', 'gbk', 'ISO-8859-1', 'ISO-8859-5']
 FILE_ENCODING_TRY_LIST = ['utf-8', 'gbk']
 HIGHLIGHT_KEYWORD = False # If True, highlight the keywords in the file when the visit is via clicking a link in 'search result' page.
 # extensions of previewed files
-TEXT_PREVIEW_EXT = """ac, am, bat, c, cc, cmake, cpp, cs, css, diff, el, h, html,
-htm, java, js, json, less, make, org, php, pl, properties, py, rb,
-scala, script, sh, sql, txt, text, tex, vi, vim, xhtml, xml, log, csv,
-groovy, rst, patch, go"""
+TEXT_PREVIEW_EXT = """ac, am, bat, c, cc, cmake, cpp, cs, css, diff, el, h, html, htm, java, js, json, less, make, org, php, pl, properties, py, rb, scala, script, sh, sql, txt, text, tex, vi, vim, xhtml, xml, log, csv, groovy, rst, patch, go"""
 
 # Common settings(file extension, storage) for avatar and group avatar.
 AVATAR_FILE_STORAGE = '' # Replace with 'seahub.base.database_storage.DatabaseStorage' if save avatar files to database
@@ -414,6 +424,12 @@ SITE_TITLE = 'Private Seafile'
 # Base name used in email sending
 SITE_NAME = 'Seafile'
 
+# Path to the license file(relative to the media path)
+LICENSE_PATH = os.path.join(PROJECT_ROOT, '../../seafile-license.txt')
+
+# Path to the background image file of login page(relative to the media path)
+LOGIN_BG_IMAGE_PATH = 'img/login-bg.jpg'
+
 # Path to the favicon file (relative to the media path)
 # tip: use a different name when modify it.
 FAVICON_PATH = 'img/favicon.ico'
@@ -424,6 +440,9 @@ LOGO_PATH = 'img/seafile-logo.png'
 LOGO_WIDTH = 128
 LOGO_HEIGHT = 32
 
+CUSTOM_LOGO_PATH = 'custom/mylogo.png'
+CUSTOM_FAVICON_PATH = 'custom/favicon.ico'
+
 # css to modify the seafile css (e.g. css/my_site.css)
 BRANDING_CSS = ''
 
@@ -433,6 +452,9 @@ SERVE_STATIC = True
 
 # Enable or disable registration on web.
 ENABLE_SIGNUP = False
+
+# show 'log out' icon in top-bar or not.
+SHOW_LOGOUT_ICON = False
 
 # For security consideration, please set to match the host/domain of your site, e.g., ALLOWED_HOSTS = ['.example.com'].
 # Please refer https://docs.djangoproject.com/en/dev/ref/settings/#allowed-hosts for details.
@@ -450,22 +472,24 @@ LOGGING = {
     'filters': {
         'require_debug_false': {
             '()': 'django.utils.log.RequireDebugFalse'
-         }
-     },
+        }
+    },
     'handlers': {
         'default': {
-            'level':'INFO',
-            'class':'logging.handlers.RotatingFileHandler',
+            'level': 'INFO',
+            'class': 'logging.handlers.RotatingFileHandler',
             'filename': os.path.join(LOG_DIR, 'seahub.log'),
-            'maxBytes': 1024*1024*10, # 10 MB
-            'formatter':'standard',
+            'maxBytes': 1024*1024*100,  # 100 MB
+            'backupCount': 5,
+            'formatter': 'standard',
         },
         'request_handler': {
-                'level':'INFO',
-                'class':'logging.handlers.RotatingFileHandler',
-                'filename': os.path.join(LOG_DIR, 'seahub_django_request.log'),
-                'maxBytes': 1024*1024*10, # 10 MB
-                'formatter':'standard',
+            'level': 'INFO',
+            'class': 'logging.handlers.RotatingFileHandler',
+            'filename': os.path.join(LOG_DIR, 'seahub_django_request.log'),
+            'maxBytes': 1024*1024*100, # 100 MB
+            'backupCount': 5,
+            'formatter': 'standard',
         },
         'mail_admins': {
             'level': 'ERROR',
@@ -498,7 +522,7 @@ SESSION_COOKIE_AGE = 24 * 60 * 60
 # Days of remembered login info (deafult: 7 days)
 LOGIN_REMEMBER_DAYS = 7
 
-SEAFILE_VERSION = '6.1.1'
+SEAFILE_VERSION = '6.2.0'
 
 # Compress static files(css, js)
 COMPRESS_URL = MEDIA_URL
@@ -533,7 +557,7 @@ THUMBNAIL_SIZE_FOR_GRID = 192
 THUMBNAIL_SIZE_FOR_ORIGINAL = 1024
 
 # size(MB) limit for generate thumbnail
-THUMBNAIL_IMAGE_SIZE_LIMIT = 20
+THUMBNAIL_IMAGE_SIZE_LIMIT = 30
 THUMBNAIL_IMAGE_ORIGINAL_SIZE_LIMIT = 256
 
 # video thumbnails
@@ -547,6 +571,7 @@ OFFICE_TEMPLATE_ROOT = os.path.join(MEDIA_ROOT, 'office-template')
 # Global AddressBook #
 #####################
 ENABLE_GLOBAL_ADDRESSBOOK = True
+ENABLE_ADDRESSBOOK_OPT_IN = False
 
 #####################
 # Folder Permission #
@@ -700,4 +725,5 @@ CONSTANCE_CONFIG = {
     'ENABLE_TWO_FACTOR_AUTH': (ENABLE_TWO_FACTOR_AUTH,''),
 
     'TEXT_PREVIEW_EXT': (TEXT_PREVIEW_EXT, ''),
+    'ENABLE_SHARE_TO_ALL_GROUPS': (ENABLE_SHARE_TO_ALL_GROUPS, ''),
 }

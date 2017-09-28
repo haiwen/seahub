@@ -33,6 +33,11 @@
         {% include "snippets/web_settings_form.html" %}
     {% endwith %}
 
+    {% with type="file" setting_name="login_bg_image" file_path=login_bg_image_path file_width=240 file_height=160 help_tip="login-bg.jpg, 2400px * 1600px" %}
+        {% trans "Login Background Image" as setting_display_name %}
+        {% include "snippets/web_settings_form.html" %}
+    {% endwith %}
+
     <h4>{% trans "User" %}</h4>
 
     {% with type="checkbox" setting_name="ENABLE_SIGNUP" setting_val=config_dict.ENABLE_SIGNUP %}
@@ -43,7 +48,7 @@
 
     {% with type="checkbox" setting_name="ACTIVATE_AFTER_REGISTRATION" setting_val=config_dict.ACTIVATE_AFTER_REGISTRATION %}
         {% trans "activate after registration" as setting_display_name %}
-        {% trans "Activate user immediately after registration. If unchecked, an user need to be activated by administrator or via activation email" as help_tip %}
+        {% trans "Activate user immediately after registration. If unchecked, a user need to be activated by administrator or via activation email" as help_tip %}
         {% include "snippets/web_settings_form.html" %}
     {% endwith %}
 
@@ -66,6 +71,14 @@
 
     {% with type="checkbox" setting_display_name="FREEZE_USER_ON_LOGIN_FAILED" setting_name="FREEZE_USER_ON_LOGIN_FAILED" setting_val=config_dict.FREEZE_USER_ON_LOGIN_FAILED %}
         {% trans "Freeze user account when failed login attempts exceed limit." as help_tip %}
+        {% include "snippets/web_settings_form.html" %}
+    {% endwith %}
+
+
+    <h4>{% trans "Groups" %}</h4>
+
+    {% with type="checkbox" setting_display_name="ENABLE_SHARE_TO_ALL_GROUPS" setting_name="ENABLE_SHARE_TO_ALL_GROUPS" setting_val=config_dict.ENABLE_SHARE_TO_ALL_GROUPS %}
+        {% trans "Enable users to share libraries to any groups in the system." as help_tip %}
         {% include "snippets/web_settings_form.html" %}
     {% endwith %}
 
@@ -96,25 +109,23 @@
         {% include "snippets/web_settings_form.html" %}
     {% endwith %}
 
-    {% if has_two_factor_auth %}
     {% with type="checkbox" setting_name="ENABLE_TWO_FACTOR_AUTH" setting_val=config_dict.ENABLE_TWO_FACTOR_AUTH %}
         {% trans "enable two factor authentication" as setting_display_name %}
         {% trans "Enable two factor authentication" as help_tip %}
         {% include "snippets/web_settings_form.html" %}
     {% endwith %}
-    {% endif %}
 
     <h4>{% trans "Library" %}</h4>
 
     {% with type="checkbox" setting_name="ENABLE_REPO_HISTORY_SETTING" setting_val=config_dict.ENABLE_REPO_HISTORY_SETTING %}
         {% trans "library history" as setting_display_name %}
-        {% trans "Allow user to keep library history" as help_tip %}
+        {% trans "Allow user to change library history settings" as help_tip %}
         {% include "snippets/web_settings_form.html" %}
     {% endwith %}
 
     {% with type="checkbox" setting_name="ENABLE_ENCRYPTED_LIBRARY" setting_val=config_dict.ENABLE_ENCRYPTED_LIBRARY %}
         {% trans "encrypted library" as setting_display_name %}
-        {% trans "Allow user to create encrypted library" as help_tip %}
+        {% trans "Allow user to create encrypted libraries" as help_tip %}
         {% include "snippets/web_settings_form.html" %}
     {% endwith %}
 
@@ -124,21 +135,25 @@
         {% include "snippets/web_settings_form.html" %}
     {% endwith %}
 
-    {% with type="input" setting_name="SHARE_LINK_PASSWORD_MIN_LENGTH" setting_val=config_dict.SHARE_LINK_PASSWORD_MIN_LENGTH %} {% include "snippets/web_settings_form.html" %}
+    {% with type="input" setting_name="SHARE_LINK_PASSWORD_MIN_LENGTH" setting_val=config_dict.SHARE_LINK_PASSWORD_MIN_LENGTH %}
         {% trans "download/upload link password minimum length" as setting_display_name %}
         {% trans "The least number of characters a download/upload link password should include." as help_tip %}
+        {% include "snippets/web_settings_form.html" %}
     {% endwith %}
 
     {% with type="checkbox" setting_display_name="ENABLE_USER_CREATE_ORG_REPO" setting_name="ENABLE_USER_CREATE_ORG_REPO" setting_val=config_dict.ENABLE_USER_CREATE_ORG_REPO %}
-        {% trans "Allow user to add organization library. If unchecked, only system admin can add library." as help_tip %}
+        {% trans "Allow user to add organization libraries. Otherwise, only system admin can add organization libraries." as help_tip %}
         {% include "snippets/web_settings_form.html" %}
     {% endwith %}
 
-    {% with type="input" setting_display_name="Preview File Extensions" setting_name="TEXT_PREVIEW_EXT" setting_val=config_dict.TEXT_PREVIEW_EXT %}
-        {% trans "Extensions of online previewed files, each suffix is separated by a comma." as help_tip %}
+    <h4>{% trans "Online Preview" %}</h4>
+
+    {% with type="textarea" setting_name="TEXT_PREVIEW_EXT" setting_val=config_dict.TEXT_PREVIEW_EXT %}
+        {% trans "text file extensions" as setting_display_name %}
+        {% trans "Extensions of text files that can be online previewed, each suffix is separated by a comma." as help_tip %}
         {% include "snippets/web_settings_form.html" %}
     {% endwith %}
-    
+
     <h4>{% trans "Sync" %}</h4>
 
     {% with type="checkbox" setting_display_name="DISABLE_SYNC_WITH_ANY_FOLDER" setting_name="DISABLE_SYNC_WITH_ANY_FOLDER" setting_val=config_dict.DISABLE_SYNC_WITH_ANY_FOLDER %}
@@ -150,12 +165,11 @@
 
 {% block extra_script %}
 <script type="text/javascript">
-$('.web-setting-form .input').focus(function() {
+$('.input, .textarea', $('.web-setting-form')).focus(function() {
     var $otherFormSubmit = $('.web-setting-form .submit:visible');
     if ($otherFormSubmit.length > 0) {
         $otherFormSubmit.siblings('.cancel').click();
     }
-
     var $form = $(this).closest('form');
     $('.submit, .cancel', $form).show();
 });
@@ -170,7 +184,7 @@ $('.web-setting-form .cancel').click(function() {
 $(document).click(function(e) {
     var target =  e.target || event.srcElement;
     var $op = $('.web-setting-form .submit:visible');
-    if ($op.length && !$('.input, .submit, .cancel', $op.closest('form')).is(target)) {
+    if ($op.length && !$('.input, .textarea, .submit, .cancel', $op.closest('form')).is(target)) {
         $('.cancel', $op.closest('form')).click();
     }
 });
@@ -200,10 +214,10 @@ $('.web-setting-checkbox').change(function() {
     });
 });
 
-$('.web-input-setting-form').submit(function() {
+$('.web-input-setting-form, .web-textarea-setting-form').submit(function() {
     var $form = $(this),
         $error = $form.find('.error'),
-        $input = $form.find('.input'),
+        $input = $form.hasClass('web-input-setting-form') ? $('.input', $form) : $('.textarea', $form),
         $sb_btn = $('.submit', $form),
         $cancel_btn = $('.cancel', $form),
         key = $input.attr('name'),
@@ -247,21 +261,9 @@ $('.web-input-setting-form').submit(function() {
 });
 
 
-$('.web-setting-file-upload').each(function(index, item) {
-    var $this = $(item);
-    var $btn = $('.web-setting-file-upload-btn', $this);
-    $this.css({
-        'width': $btn.outerWidth(),
-        'overflow': 'hidden'
-    });
-});
-$('.web-setting-file-upload-input').each(function(index, item) {
-    var $this = $(item);
-    var $btn = $this.next('.web-setting-file-upload-btn');
-    $this.css({
-        // don't set width here, to make `cursor:pointer;` work
-        'height': $btn.outerHeight()
-    });
+$('.web-setting-file-upload-btn').click(function() {
+    var $container = $(this).closest('.web-setting-file-upload');
+    $('.web-setting-file-upload-input', $container).trigger('click');
 });
 
 $('.web-setting-file-upload-input').change(function() {
@@ -280,6 +282,7 @@ $('.web-setting-file-upload-input').change(function() {
     switch(input_name) {
         case 'logo': url = '{% url 'api-v2.1-admin-logo' %}'; break;
         case 'favicon': url = '{% url 'api-v2.1-admin-favicon' %}'; break;
+        case 'login_bg_image': url = '{% url 'api-v2.1-admin-login-background-image' %}'; break;
     }
 
     fd.append(input_name, file);

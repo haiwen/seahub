@@ -46,8 +46,7 @@ class TokenV2Manager(models.Manager):
         return devices
 
     def get_total_devices_count(self):
-        devices = super(TokenV2Manager, self).filter(wiped_at=None)
-        return len(devices)
+        return super(TokenV2Manager, self).filter(wiped_at=None).count()
 
     def get_current_connected_devices_count(self):
         # get number of devices last one hour accessed
@@ -55,8 +54,7 @@ class TokenV2Manager(models.Manager):
         date_from = datetime.datetime.now() - datetime.timedelta(hours=1)
 
         # greater than or equal to.
-        results = devices.filter(last_accessed__gte=date_from)
-        return len(results)
+        return devices.filter(last_accessed__gte=date_from).count()
 
     def get_user_devices(self, username):
         '''List user devices, most recently used first'''

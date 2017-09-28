@@ -15,6 +15,21 @@
 </form>
 {% endif %}
 
+{% if type == 'textarea' %}
+<form class="web-setting-form web-textarea-setting-form" action="">
+    <h5 class="web-setting-name">{{ setting_display_name }}</h5>
+    <div class="web-setting-input">
+        <textarea class="textarea" name="{{ setting_name }}" data-cur="{{ setting_val }}">{{ setting_val }}</textarea>
+        <p class="error hide"></p>
+        <p class="tip">{{ help_tip }}</p>
+    </div>
+    <div class="web-setting-ops">
+        <button type="submit" class="submit sf2-icon-tick tick-green vam hide" title="{% trans "Submit" %}"></button>
+        <button type="button" class="cancel sf2-icon-x2 vam hide" title="{% trans "Cancel" %}"></button>
+    </div>
+</form>
+{% endif %}
+
 {% if type == 'checkbox' %}
 <form class="web-setting-form web-checkbox-setting-form" action="">{% csrf_token %}
     <h5 class="web-setting-name">{{ setting_display_name }}</h5>
@@ -34,8 +49,8 @@
         <img src="{{ MEDIA_URL }}{{ file_path }}" alt="" width="{{ file_width }}" height="{{file_height}}" class="web-setting-cur-img" />
         <p class="tip">{{ help_tip }}</p>
         <div class="web-setting-file-upload">
-            <input type="file" name="{{ setting_name }}" class="web-setting-file-upload-input transparent-file-input" />
             <button type="button" class="web-setting-file-upload-btn">{% trans "Change" %}</button>
+            <input type="file" name="{{ setting_name }}" class="web-setting-file-upload-input hide" />
         </div>
     </div>
 </form>

@@ -12,11 +12,10 @@ from rest_framework import status
 from seahub.api2.authentication import TokenAuthentication
 from seahub.api2.throttling import UserRateThrottle
 from seahub.api2.utils import api_error
-from seahub.settings import SEAHUB_DATA_ROOT, MEDIA_ROOT
+from seahub.settings import SEAHUB_DATA_ROOT, MEDIA_ROOT, \
+        CUSTOM_LOGO_PATH
 
 logger = logging.getLogger(__name__)
-
-CUSTOM_LOGO_PATH = 'custom/mylogo.png'
 
 class AdminLogo(APIView):
 

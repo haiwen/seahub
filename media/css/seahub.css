@@ -190,6 +190,7 @@
 .sf2-icon-unlock:before { content: "\e02d"; }
 .sf2-icon-admin-log:before { content: "\e02e"; }
 .sf2-icon-info:before { content: "\e02f"; }
+.sf2-icon-logout:before { content: "\e030"; }
 
 /******* tags **********/
 body,
@@ -954,7 +955,7 @@ textarea:-moz-placeholder {/* for FF */
 .side-tabnav-tabs .tab a:focus {
     text-decoration:none;
 }
-.side-tabnav-tabs .tab .grp-list a {
+.side-tabnav-tabs .tab ul a {
     font-size:14px;
     line-height:24px;
     padding:0;
@@ -982,14 +983,14 @@ textarea:-moz-placeholder {/* for FF */
 .side-nav-toggle:hover {
     background:#ddd;
 }
-#group-nav .sharp {
+.home-side-nav .sharp {
     display:inline-block;
     width:42px;
     margin-right:5px;
     text-align:right;
     color:#aaa;
 }
-#group-nav .toggle-icon {
+.home-side-nav .toggle-icon {
     color:#999;
 }
 .side-tabnav-tabs .tab-cur a,
@@ -998,7 +999,7 @@ textarea:-moz-placeholder {/* for FF */
 }
 .side-tabnav-tabs .tab-cur [class^="sf2-icon-"],
 .side-tabnav-tabs .tab-cur a,
-#group-nav .tab-cur .sharp {
+.home-side-nav .tab-cur .sharp {
     color:#fff;
 }
 .side-tabnav-tabs .tab-cur a {
@@ -1822,6 +1823,12 @@ button.sf-dropdown-toggle:focus {
     text-decoration:underline;
 }
 /* top-bar */
+#logout-icon {
+    margin:10px 0 0 25px;
+    font-size:22px;
+    line-height:1;
+    color:#999;
+}
 #notifications {
     position:relative;
     margin:10px 0 0 25px;
@@ -2238,12 +2245,10 @@ button.sf-dropdown-toggle:focus {
 #user-basic-info .avatar {
     margin-bottom:8px;
 }
-#user-avatar-change {
-    position:relative;
-}
 #user-avatar-form {
-    position:absolute;
-    top:5px;
+    display:inline-block;
+    vertical-align:text-top;
+    margin-left:10px;
 }
 #repo-file-list {
     margin-bottom:100px;
@@ -2693,7 +2698,6 @@ button.sf-dropdown-toggle:focus {
     background-color:#fff;
     background-position:0 -207px;
 }
-#user-avatar-input,
 #upload-file-form .files-add input {
     cursor:pointer;
     position: absolute;
@@ -2701,9 +2705,6 @@ button.sf-dropdown-toggle:focus {
     margin: 0;
     opacity: 0;
     filter: alpha(opacity=0);
-}
-#user-avatar-input {
-    right:0;
 }
 #upload-file-form .MultiFile-label {
     padding:4px 0;
@@ -2816,7 +2817,7 @@ button.sf-dropdown-toggle:focus {
     border:1px solid #eee;
     width:auto;
     height:auto;
-    max-width:100%;
+    max-width:calc(100% - 4px);
     max-height:calc(100% - 4px);
     font-size:0;
     line-height:0;
@@ -2881,7 +2882,7 @@ button.sf-dropdown-toggle:focus {
 }
 .pdf-page {
     display:block;
-    max-width:950px;
+    max-width:100%;
     margin:0 auto 20px;
 }
 #doc-view {
@@ -2942,6 +2943,7 @@ button.sf-dropdown-toggle:focus {
 .folder-perm-select,
 .share-permission-select,
 .user-role-select,
+.admin-role-select,
 .user-status-select {
     position:relative;/*for long text in other lang in 'share admin'*/
     padding:3px 2px;
@@ -3659,6 +3661,11 @@ img.thumbnail {
 .web-setting-input .input {
     margin:0;
 }
+.web-setting-input .textarea {
+    box-sizing:content-box;
+    height:95px;
+    margin:0;
+}
 .web-setting-ops {
     width:100px;
     vertical-align:top;
@@ -3677,15 +3684,6 @@ img.thumbnail {
     position:absolute;
     right:0;
     top:0;
-}
-.transparent-file-input {
-    position:absolute;
-    top:0;
-    right:0;
-    cursor:pointer;
-    margin:0;
-    opacity:0;
-    filter:alpha(opacity=0);
 }
 .web-setting-cur-img {
     margin-bottom:5px;
@@ -3932,6 +3930,7 @@ img.thumbnail {
     width:800px;
     overflow:auto;
 }
+
 /* tags in detail panel */
 .tags-label {
     vertical-align: top;
@@ -3943,6 +3942,7 @@ img.thumbnail {
     margin:0 8px 8px 0;
     white-space:nowrap; /* for snapshot label */
 }
+
 /* sysadmin statistic */
 .system-statistic-time-range {
     margin: 15px 0 25px;
@@ -3960,4 +3960,9 @@ img.thumbnail {
 }
 .date-custom-form .submit {
     margin-left:5px;
+}
+
+/* system info */
+.license-file-upload {
+    margin-top:5px;
 }

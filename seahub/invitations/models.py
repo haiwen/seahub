@@ -18,7 +18,7 @@ GUEST = _('Guest')
 class InvitationManager(models.Manager):
     def add(self, inviter, accepter, invite_type=GUEST):
         token = gen_token(max_length=32)
-        expire_at = timezone.now() + timedelta(hours=INVITATIONS_TOKEN_AGE)
+        expire_at = timezone.now() + timedelta(hours=int(INVITATIONS_TOKEN_AGE))
 
         i = self.model(token=token, inviter=inviter, accepter=accepter,
                        invite_type=invite_type, expire_time=expire_at)
@@ -28,6 +28,9 @@ class InvitationManager(models.Manager):
     def get_by_inviter(self, inviter):
         return super(InvitationManager,
                 self).filter(inviter=inviter).order_by('-invite_time')
+
+    def delete_all_expire_invitation(self):
+        super(InvitationManager, self).filter(expire_time__lte=timezone.now()).delete()
 
 class Invitation(models.Model):
     INVITE_TYPE_CHOICES = (

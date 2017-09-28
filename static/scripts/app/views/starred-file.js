@@ -5,7 +5,7 @@ define([
     'common',
     'jquery.magnific-popup',
     'app/views/starred-file-item',
-    'app/collections/starred-files',
+    'app/collections/starred-files'
 ], function($, _, Backbone, Common, magnificPopup, StarredFileItem,
     StarredFilesCollection) {
     'use strict';

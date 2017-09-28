@@ -1,5 +1,11 @@
 {% extends "sysadmin/sys_inst_info_base.html" %}
 {% load i18n seahub_tags %}
+{% load staticfiles %}
+
+{% block extra_style %}
+<link rel="stylesheet" type="text/css" href="{% static "css/select2-3.5.2.css" %}" />
+<link rel="stylesheet" type="text/css" href="{% static "css/select2.custom.css" %}" />
+{% endblock %}
 
 {% block right_panel %}
 <div class="tabnav">
@@ -7,8 +13,18 @@
         <li class="tabnav-tab tabnav-tab-cur"><a href="{% url 'sys_inst_info_users' inst.pk %}">{% trans "Members" %}</a></li>
         <li class="tabnav-tab"><a href="{% url 'sys_inst_info_admins' inst.pk %}">{% trans "Admins" %}</a></li>
     </ul>
+    <div class="js-op-for-all fright">
+        <button id="add-member-btn">{% trans "Add Members" %}</button>
+    </div>
 </div>
 
+<form id="add-member-form" action="" method="" class="hide">
+    <h3>{% trans "Add Members" %}</h3>
+    <label>{% trans "Email" %}</label><br />
+    <input type="hidden" name="emails" /><br />
+    <p class="error hide"></p>
+    <button type="submit" class="submit">{% trans "Submit" %}</button>
+</form>
 {% if users %}
 <table>
     <tr>
@@ -32,10 +48,10 @@
             </div>
         </td>
         <td style="font-size:11px;">
-            <p> {{ user.space_usage|seahub_filesizeformat }} {% if user.space_quota > 0 %} / {{ user.space_quota|seahub_filesizeformat }} {% endif %} </p>
+            {{ user.space_usage|seahub_filesizeformat }} {% if user.space_quota > 0 %} / {{ user.space_quota|seahub_filesizeformat }} {% endif %}
         </td>
         <td style="font-size:11px;">
-        {{ user.ctime|tsstr_sec }} / {% if user.last_login %}{{user.last_login|translate_seahub_time}} {% else %} -- {% endif %}
+            {{ user.ctime|tsstr_sec }} / {% if user.last_login %}{{user.last_login|translate_seahub_time}} {% else %} -- {% endif %}
         </td>
         <td>
           <a href="#" class="js-toggle-admin op vh" data-url="{% url 'sys_inst_toggle_admin' inst.pk user.email %}" data-target="{{ user.email }}">{% if user.inst_admin %}{% trans "Revoke Admin" %}{% else %}{% trans "Set Admin" %}{% endif %}</a>
@@ -55,8 +71,9 @@
 {% endblock %}
 
 {% block extra_script %}{{ block.super }}
-<script type="text/javascript">
+<script type="text/javascript" src= "{% static "scripts/lib/select2-3.5.2.js" %}"></script>
 
+<script type="text/javascript">
 addConfirmTo($('.js-toggle-admin'), {
     'title': "Toggle Admin",
     'con': "Sure ?",
@@ -121,6 +138,58 @@ $(document).click(function(e) {
         $('.user-status').removeClass('hide');
         $('.user-status-select').addClass('hide');
     }
+});
+
+// add members
+$('#add-member-btn').click(function(){
+    var $form = $('#add-member-form');
+    $form.modal({focus: false});
+    $('#simplemodal-container').css({'width':'auto', 'height':'auto'});
+
+    $('[name="emails"]', $form).select2($.extend({
+        width: '280px',
+        placeholder: "{% trans "Search user or enter email and press Enter" %}",
+        formatInputTooShort: "{% trans "Please enter 1 or more character" %}",
+        formatNoMatches: "{% trans "No matches" %}",
+        formatSearching: "{% trans "Searching..." %}",
+        formatAjaxError: "{% trans "Loading failed" %}"
+    }, userInputOPtionsForSelect2('{% url 'search-user' %}')));
+});
+$('#add-member-form').submit(function(){
+    var $form = $(this);
+    var $error = $('.error', $form);
+    var $submit = $('[type="submit"]', $form);
+    var emails = $('[name="emails"]', $form).select2('val');
+
+    if (!emails.length) {
+        $error.html("{% trans "It is required." %}").show();
+        return false;
+    }
+
+    disable($submit);
+    $.ajax({
+        url: "{% url 'sys_inst_add_user' inst.id %}",
+        type: 'POST',
+        dataType: 'json',
+        data: {
+            'emails': emails.join(',')
+        },
+        beforeSend: prepareCSRFToken,
+        success: function(data) {
+            location.reload(true);
+        },
+        error: function(xhr, textStatus, errorThrown) {
+            var error_msg;
+            if (xhr.responseText) {
+                error_msg = $.parseJSON(xhr.responseText).error;
+            } else {
+                error_msg = "{% trans "Failed. Please check the network." %}";
+            }
+            $error.html(error_msg).show();
+            enable($submit);
+        }
+    });
+    return false;
 });
 </script>
 {% endblock %}

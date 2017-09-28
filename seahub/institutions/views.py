@@ -20,7 +20,7 @@ from seahub.institutions.decorators import (inst_admin_required,
                                             inst_admin_can_manage_user)
 from seahub.institutions.utils import get_institution_available_quota
 from seahub.profile.models import Profile, DetailedProfile
-from seahub.utils import is_valid_username, clear_token
+from seahub.utils import is_valid_username
 from seahub.utils.rpc import mute_seafile_api
 from seahub.utils.file_size import get_file_size_unit
 from seahub.views.sysadmin import email_user_on_activation, populate_user_info
@@ -253,8 +253,7 @@ def user_toggle_status(request, email):
             return HttpResponse(json.dumps({'success': True,
                                             'email_sent': email_sent,
                                             }), content_type=content_type)
-        else:
-            clear_token(user.email)
+
         return HttpResponse(json.dumps({'success': True}),
                             content_type=content_type)
     except User.DoesNotExist:

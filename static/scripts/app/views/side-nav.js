@@ -48,6 +48,7 @@ define([
 
         events: {
             'click #group-nav a:first': 'toggleGroupList',
+            'click #share-admin-nav a:first': 'toggleShareAdminList',
             'click #enable-mods': 'enableMods',
             'click .js-close-side-nav': 'closeNav',
             'click li > a': 'visitLink',
@@ -74,6 +75,14 @@ define([
                 Cookie.set('group_expanded', 'false');
                 this.data.show_group_list = false;
             }
+            return false;
+        },
+
+        toggleShareAdminList: function() {
+            var $shareAdmin = $('#share-admin-nav');
+
+            $('.toggle-icon', $shareAdmin).toggleClass('icon-caret-left icon-caret-down');
+            $('ul', $shareAdmin).slideToggle(250);
             return false;
         },
 

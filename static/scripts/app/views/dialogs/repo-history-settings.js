@@ -13,6 +13,7 @@ define([
         initialize: function(options) {
             this.repo_name = options.repo_name;
             this.repo_id = options.repo_id;
+            this.url_name = options.url_name;
 
             this.render();
             this.$('.op-target').css({'max-width':280}); // for long repo name
@@ -48,7 +49,7 @@ define([
 
             $.ajax({
                 url: Common.getUrl({
-                    'name': 'repo_history_limit',
+                    'name': this.url_name,
                     'repo_id': this.repo_id
                 }),
                 type: 'get',
@@ -120,7 +121,7 @@ define([
 
             $.ajax({
                 url: Common.getUrl({
-                    'name': 'repo_history_limit',
+                    'name': this.url_name,
                     'repo_id': this.repo_id
                 }),
                 type: 'put',

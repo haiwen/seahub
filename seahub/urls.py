@@ -5,6 +5,10 @@ from django.conf.urls import patterns, url, include
 from django.views.generic import TemplateView
 
 from seahub.views import *
+from seahub.views.sysadmin import *
+from seahub.views.ajax import *
+from seahub.views.sso import *
+
 from seahub.views.file import view_repo_file, view_history_file, view_trash_file,\
     view_snapshot_file, file_edit, view_shared_file, view_file_via_shared_dir,\
     text_diff, view_raw_file, view_raw_shared_file, \
@@ -15,23 +19,21 @@ from notifications.views import notification_list
 from seahub.views.wiki import personal_wiki, personal_wiki_pages, \
     personal_wiki_create, personal_wiki_page_new, personal_wiki_page_edit, \
     personal_wiki_page_delete, personal_wiki_use_lib
-from seahub.views.sysadmin import *
-from seahub.views.ajax import *
-from seahub.views.sso import *
 from seahub.api2.endpoints.groups import Groups, Group
+from seahub.api2.endpoints.all_groups import AllGroupsView
 from seahub.api2.endpoints.group_members import GroupMembers, GroupMembersBulk, GroupMember
 from seahub.api2.endpoints.search_group import SearchGroup
 from seahub.api2.endpoints.share_links import ShareLinks, ShareLink
 from seahub.api2.endpoints.shared_folders import SharedFolders
 from seahub.api2.endpoints.shared_repos import SharedRepos, SharedRepo
 from seahub.api2.endpoints.upload_links import UploadLinks, UploadLink
-from seahub.api2.endpoints.repos_batch import ReposBatchView
+from seahub.api2.endpoints.repos_batch import ReposBatchView, \
+        ReposBatchCopyDirView, ReposBatchCreateDirView
 from seahub.api2.endpoints.repos import RepoView
 from seahub.api2.endpoints.file import FileView
 from seahub.api2.endpoints.dir import DirView, DirDetailView
 from seahub.api2.endpoints.file_tag import FileTagView
 from seahub.api2.endpoints.file_tag import FileTagsView
-from seahub.api2.endpoints.dir import DirView
 from seahub.api2.endpoints.repo_trash import RepoTrash
 from seahub.api2.endpoints.deleted_repos import DeletedRepos
 from seahub.api2.endpoints.repo_history import RepoHistory
@@ -48,10 +50,11 @@ from seahub.api2.endpoints.user_enabled_modules import UserEnabledModulesView
 from seahub.api2.endpoints.repo_file_uploaded_bytes import RepoFileUploadedBytesView
 from seahub.api2.endpoints.user_avatar import UserAvatarView
 from seahub.api2.endpoints.revision_tag import TaggedItemsView,TagNamesView
+from seahub.api2.endpoints.user import User
 
 # Admin
 from seahub.api2.endpoints.admin.revision_tag import AdminTaggedItemsView
-from seahub.api2.endpoints.admin.login import Login
+from seahub.api2.endpoints.admin.login_logs import LoginLogs, AdminLoginLogs
 from seahub.api2.endpoints.admin.file_audit import FileAudit
 from seahub.api2.endpoints.admin.file_update import FileUpdate
 from seahub.api2.endpoints.admin.perm_audit import PermAudit
@@ -59,6 +62,8 @@ from seahub.api2.endpoints.admin.sysinfo import SysInfo
 from seahub.api2.endpoints.admin.statistics import FileOperationsView, TotalStorageView, ActiveUsersView
 from seahub.api2.endpoints.admin.devices import AdminDevices
 from seahub.api2.endpoints.admin.device_errors import AdminDeviceErrors
+from seahub.api2.endpoints.admin.users import AdminUsers, AdminUser
+from seahub.api2.endpoints.admin.device_trusted_ip import AdminDeviceTrustedIP
 from seahub.api2.endpoints.admin.libraries import AdminLibraries, AdminLibrary
 from seahub.api2.endpoints.admin.library_dirents import AdminLibraryDirents, AdminLibraryDirent
 from seahub.api2.endpoints.admin.system_library import AdminSystemLibrary, \
@@ -75,10 +80,15 @@ from seahub.api2.endpoints.admin.share_links import AdminShareLink, \
 from seahub.api2.endpoints.admin.upload_links import AdminUploadLink, \
         AdminUploadLinkUpload, AdminUploadLinkCheckPassword
 from seahub.api2.endpoints.admin.users_batch import AdminUsersBatch
-from seahub.api2.endpoints.admin.logs import AdminLogs
+from seahub.api2.endpoints.admin.operation_logs import AdminOperationLogs
 from seahub.api2.endpoints.admin.org_users import AdminOrgUsers, AdminOrgUser
 from seahub.api2.endpoints.admin.logo import AdminLogo
 from seahub.api2.endpoints.admin.favicon import AdminFavicon
+from seahub.api2.endpoints.admin.license import AdminLicense
+from seahub.api2.endpoints.admin.invitations import InvitationsView as AdminInvitationsView
+from seahub.api2.endpoints.admin.library_history import AdminLibraryHistoryLimit
+from seahub.api2.endpoints.admin.login_bg_image import AdminLoginBgImage
+from seahub.api2.endpoints.admin.admin_role import AdminAdminRole
 
 # Uncomment the next two lines to enable the admin:
 #from django.contrib import admin
@@ -189,12 +199,15 @@ urlpatterns = patterns(
     ## ajax lib
     url(r'^ajax/lib/(?P<repo_id>[-0-9a-f]{36})/dir/$', list_lib_dir, name="list_lib_dir"),
 
-
     ### Apps ###
     (r'^api2/', include('seahub.api2.urls')),
 
+    ## user
+    url(r'^api/v2.1/user/$', User.as_view(), name="api-v2.1-user"),
+
     ## user::groups
     url(r'^api/v2.1/groups/$', Groups.as_view(), name='api-v2.1-groups'),
+    url(r'^api/v2.1/groups/all/$', AllGroupsView.as_view(), name='api-v2.1-all-groups'),
     url(r'^api/v2.1/groups/(?P<group_id>\d+)/$', Group.as_view(), name='api-v2.1-group'),
     url(r'^api/v2.1/groups/(?P<group_id>\d+)/members/$', GroupMembers.as_view(), name='api-v2.1-group-members'),
     url(r'^api/v2.1/groups/(?P<group_id>\d+)/members/bulk/$', GroupMembersBulk.as_view(), name='api-v2.1-group-members-bulk'),
@@ -208,9 +221,11 @@ urlpatterns = patterns(
     url(r'^api/v2.1/shared-repos/$', SharedRepos.as_view(), name='api-v2.1-shared-repos'),
     url(r'^api/v2.1/shared-repos/(?P<repo_id>[-0-9a-f]{36})/$', SharedRepo.as_view(), name='api-v2.1-shared-repo'),
 
-    ## user::share-links
+    ## user::shared-download-links
     url(r'^api/v2.1/share-links/$', ShareLinks.as_view(), name='api-v2.1-share-links'),
     url(r'^api/v2.1/share-links/(?P<token>[a-f0-9]+)/$', ShareLink.as_view(), name='api-v2.1-share-link'),
+
+    ## user::shared-upload-links
     url(r'^api/v2.1/upload-links/$', UploadLinks.as_view(), name='api-v2.1-upload-links'),
     url(r'^api/v2.1/upload-links/(?P<token>[a-f0-9]+)/$', UploadLink.as_view(), name='api-v2.1-upload-link'),
 
@@ -218,10 +233,16 @@ urlpatterns = patterns(
     url(r'^api/v2.1/revision-tags/tagged-items/$', TaggedItemsView.as_view(), name='api-v2.1-revision-tags-tagged-items'),
     url(r'^api/v2.1/revision-tags/tag-names/$', TagNamesView.as_view(), name='api-v2.1-revision-tags-tag-names'),
 
-    ## user::repos
+    ## user::repos-batch-operate
     url(r'^api/v2.1/repos/batch/$', ReposBatchView.as_view(), name='api-v2.1-repos-batch'),
-    url(r'^api/v2.1/repos/(?P<repo_id>[-0-9a-f]{36})/$', RepoView.as_view(), name='api-v2.1-repo-view'),
+    url(r'^api/v2.1/repos/batch-copy-dir/$', ReposBatchCopyDirView.as_view(), name='api-v2.1-repos-batch-copy-dir'),
+    url(r'^api/v2.1/repos/batch-create-dir/$', ReposBatchCreateDirView.as_view(), name='api-v2.1-repos-batch-create-dir'),
+
+    ## user::deleted repos
     url(r'^api/v2.1/deleted-repos/$', DeletedRepos.as_view(), name='api2-v2.1-deleted-repos'),
+
+    ## user::repos
+    url(r'^api/v2.1/repos/(?P<repo_id>[-0-9a-f]{36})/$', RepoView.as_view(), name='api-v2.1-repo-view'),
     url(r'^api/v2.1/repos/(?P<repo_id>[-0-9a-f]{36})/tags/$', FileTagsView.as_view(), name="api-v2.1-filetags-view"),
     url(r'^api/v2.1/repos/(?P<repo_id>[-0-9a-f]{36})/tags/(?P<name>.*?)/$',FileTagView.as_view(), name="api-v2.1-filetag-view"),
     url(r'^api/v2.1/repos/(?P<repo_id>[-0-9a-f]{36})/file/$', FileView.as_view(), name='api-v2.1-file-view'),
@@ -242,7 +263,6 @@ urlpatterns = patterns(
     url(r'^api/v2.1/notification/$', NotificationView.as_view(), name='api-v2.1-notification'),
     url(r'^api/v2.1/user-enabled-modules/$', UserEnabledModulesView.as_view(), name='api-v2.1-user-enabled-module'),
 
-
     ## user::invitations
     url(r'^api/v2.1/invitations/$', InvitationsView.as_view()),
     url(r'^api/v2.1/invitations/(?P<token>[a-f0-9]{32})/$', InvitationView.as_view()),
@@ -261,13 +281,21 @@ urlpatterns = patterns(
     url(r'^api/v2.1/admin/statistics/total-storage/$', TotalStorageView.as_view(), name='api-v2.1-admin-statistics-total-storage'),
     url(r'^api/v2.1/admin/statistics/active-users/$', ActiveUsersView.as_view(), name='api-v2.1-admin-statistics-active-users'),
 
+    ## admin::users
+    url(r'^api/v2.1/admin/users/$', AdminUsers.as_view(), name='api-v2.1-admin-users'),
+    # [^...] Matches any single character not in brackets
+    # + Matches between one and unlimited times, as many times as possible
+    url(r'^api/v2.1/admin/users/(?P<email>[^/]+@[^/]+)/$', AdminUser.as_view(), name='api-v2.1-admin-user'),
+
     ## admin::devices
     url(r'^api/v2.1/admin/devices/$', AdminDevices.as_view(), name='api-v2.1-admin-devices'),
     url(r'^api/v2.1/admin/device-errors/$', AdminDeviceErrors.as_view(), name='api-v2.1-admin-device-errors'),
+    url(r'^api/v2.1/admin/device-trusted-ip/$', AdminDeviceTrustedIP.as_view(), name='api-v2.1-admin-device-trusted-ip'),
 
     ## admin::libraries
     url(r'^api/v2.1/admin/libraries/$', AdminLibraries.as_view(), name='api-v2.1-admin-libraries'),
     url(r'^api/v2.1/admin/libraries/(?P<repo_id>[-0-9a-f]{36})/$', AdminLibrary.as_view(), name='api-v2.1-admin-library'),
+    url(r'^api/v2.1/admin/libraries/(?P<repo_id>[-0-9a-f]{36})/history-limit/$', AdminLibraryHistoryLimit.as_view(), name="api-v2.1-admin-library-history-limit"),
     url(r'^api/v2.1/admin/libraries/(?P<repo_id>[-0-9a-f]{36})/dirents/$', AdminLibraryDirents.as_view(), name='api-v2.1-admin-library-dirents'),
     url(r'^api/v2.1/admin/libraries/(?P<repo_id>[-0-9a-f]{36})/dirent/$', AdminLibraryDirent.as_view(), name='api-v2.1-admin-library-dirent'),
 
@@ -292,7 +320,10 @@ urlpatterns = patterns(
 
     ## admin::shares
     url(r'^api/v2.1/admin/shares/$', AdminShares.as_view(), name='api-v2.1-admin-shares'),
-    url(r'^api/v2.1/admin/admin-logs/$', AdminLogs.as_view(), name='api-v2.1-admin-admin-logs'),
+
+    ## admin::admin logs
+    url(r'^api/v2.1/admin/admin-logs/$', AdminOperationLogs.as_view(), name='api-v2.1-admin-admin-operation-logs'),
+    url(r'^api/v2.1/admin/admin-login-logs/$', AdminLoginLogs.as_view(), name='api-v2.1-admin-admin-login-logs'),
 
     ## admin::share-links
     url(r'^api/v2.1/admin/share-links/(?P<token>[a-f0-9]+)/$', AdminShareLink.as_view(), name='api-v2.1-admin-share-link'),
@@ -313,6 +344,9 @@ urlpatterns = patterns(
     ## admin::users
     url(r'^api/v2.1/admin/users/batch/$', AdminUsersBatch.as_view(), name='api-v2.1-admin-users-batch'),
 
+    ## admin::admin-role
+    url(r'^api/v2.1/admin/admin-role/$', AdminAdminRole.as_view(), name='api-v2.1-admin-admin-role'),
+
     ## admin::organizations
     url(r'^api/v2.1/admin/organizations/(?P<org_id>\d+)/users/$', AdminOrgUsers.as_view(), name='api-v2.1-admin-org-users'),
     url(r'^api/v2.1/admin/organizations/(?P<org_id>\d+)/users/(?P<email>[^/]+)/$', AdminOrgUser.as_view(), name='api-v2.1-admin-org-user'),
@@ -320,6 +354,11 @@ urlpatterns = patterns(
     ## admin::logo
     url(r'^api/v2.1/admin/logo/$', AdminLogo.as_view(), name='api-v2.1-admin-logo'),
     url(r'^api/v2.1/admin/favicon/$', AdminFavicon.as_view(), name='api-v2.1-admin-favicon'),
+    url(r'^api/v2.1/admin/license/$', AdminLicense.as_view(), name='api-v2.1-admin-license'),
+    url(r'^api/v2.1/admin/login-background-image/$', AdminLoginBgImage.as_view(), name='api-v2.1-admin-login-background-image'),
+
+    ## admin::invitations
+    url(r'^api/v2.1/admin/invitations/$', AdminInvitationsView.as_view(), name='api-v2.1-admin-invitations'),
 
     (r'^avatar/', include('seahub.avatar.urls')),
     (r'^notification/', include('seahub.notifications.urls')),
@@ -369,6 +408,7 @@ urlpatterns = patterns(
     url(r'^sys/instadmin/$', sys_inst_admin, name='sys_inst_admin'),
     url(r'^sys/instadmin/(?P<inst_id>\d+)/remove/$', sys_inst_remove, name='sys_inst_remove'),
     url(r'^sys/instadmin/(?P<inst_id>\d+)/users/$', sys_inst_info_user, name='sys_inst_info_users'),
+    url(r'^sys/instadmin/(?P<inst_id>\d+)/users/add/$', sys_inst_add_user, name='sys_inst_add_user'),
     url(r'^sys/instadmin/(?P<inst_id>\d+)/users/search/$', sys_inst_search_user, name='sys_inst_search_user'),
     url(r'^sys/instadmin/(?P<inst_id>\d+)/admins/$', sys_inst_info_admins, name='sys_inst_info_admins'),
     url(r'^sys/instadmin/(?P<inst_id>\d+)/toggleadmin/(?P<email>[^/]+)/$', sys_inst_toggle_admin, name='sys_inst_toggle_admin'),
@@ -385,11 +425,8 @@ urlpatterns = patterns(
     url(r'^useradmin/remove/(?P<email>[^/]+)/$', user_remove, name="user_remove"),
     url(r'^useradmin/removetrial/(?P<user_or_org>[^/]+)/$', remove_trial, name="remove_trial"),
     url(r'^useradmin/search/$', user_search, name="user_search"),
-#    url(r'^useradmin/makeadmin/(?P<user_id>[^/]+)/$', user_make_admin, name='user_make_admin'),
     url(r'^useradmin/removeadmin/(?P<email>[^/]+)/$', user_remove_admin, name='user_remove_admin'),
     url(r'^useradmin/info/(?P<email>[^/]+)/$', user_info, name='user_info'),
-#    url(r'^useradmin/activate/(?P<user_id>[^/]+)/$', user_activate, name='user_activate'),
-#    url(r'^useradmin/deactivate/(?P<user_id>[^/]+)/$', user_deactivate, name='user_deactivate'),
     url(r'^useradmin/toggle_status/(?P<email>[^/]+)/$', user_toggle_status, name='user_toggle_status'),
     url(r'^useradmin/toggle_role/(?P<email>[^/]+)/$', user_toggle_role, name='user_toggle_role'),
     url(r'^useradmin/(?P<email>[^/]+)/set_quota/$', user_set_quota, name='user_set_quota'),
@@ -441,7 +478,7 @@ if getattr(settings, 'ENABLE_SYSADMIN_EXTRA', False):
         sys_log_file_update_export_excel, sys_log_perm_audit_export_excel, \
         sys_log_email_audit
     urlpatterns += patterns('',
-        url(r'^api/v2.1/admin/logs/login/$', Login.as_view(), name='api-v2.1-admin-logs-login'),
+        url(r'^api/v2.1/admin/logs/login/$', LoginLogs.as_view(), name='api-v2.1-admin-logs-login'),
         url(r'^sys/loginadmin/$', sys_login_admin, name='sys_login_admin'),
         url(r'^sys/loginadmin/export-excel/$', sys_login_admin_export_excel, name='sys_login_admin_export_excel'),
 

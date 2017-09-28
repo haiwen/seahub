@@ -18,7 +18,9 @@ from seahub.settings import SEAFILE_VERSION, SITE_TITLE, SITE_NAME, \
     MAX_FILE_NAME, BRANDING_CSS, LOGO_PATH, LOGO_WIDTH, LOGO_HEIGHT,\
     SHOW_REPO_DOWNLOAD_BUTTON, SITE_ROOT, ENABLE_GUEST_INVITATION, \
     FAVICON_PATH, ENABLE_THUMBNAIL, THUMBNAIL_SIZE_FOR_ORIGINAL, \
-    MEDIA_ROOT
+    MEDIA_ROOT, SHOW_LOGOUT_ICON, CUSTOM_LOGO_PATH, CUSTOM_FAVICON_PATH
+
+from seahub.constants import DEFAULT_ADMIN
 
 try:
     from seahub.settings import SEACLOUD_MODE
@@ -41,9 +43,6 @@ try:
     from seahub.settings import MULTI_TENANCY
 except ImportError:
     MULTI_TENANCY = False
-
-from seahub.api2.endpoints.admin.logo import CUSTOM_LOGO_PATH
-from seahub.api2.endpoints.admin.favicon import CUSTOM_FAVICON_PATH
 
 def base(request):
     """
@@ -80,7 +79,7 @@ def base(request):
         if os.path.exists(custom_favicon_file):
             favicon_path = CUSTOM_FAVICON_PATH
 
-    return {
+    result = {
         'seafile_version': SEAFILE_VERSION,
         'site_title': SITE_TITLE,
         'branding_css': BRANDING_CSS,
@@ -112,5 +111,11 @@ def base(request):
         'thumbnail_size_for_original': THUMBNAIL_SIZE_FOR_ORIGINAL,
         'enable_guest_invitation': ENABLE_GUEST_INVITATION,
         'enable_terms_and_conditions': dj_settings.ENABLE_TERMS_AND_CONDITIONS,
+        'show_logout_icon': SHOW_LOGOUT_ICON,
         'is_pro': True if is_pro_version() else False,
-        }
+    }
+
+    if request.user.is_staff:
+        result['is_default_admin'] = request.user.admin_role == DEFAULT_ADMIN
+
+    return result

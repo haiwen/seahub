@@ -8,9 +8,12 @@ define([
     'select2',
     'jquery.ui.tabs',
     'sysadmin-app/views/share',
-    'app/views/widgets/hl-item-view'
+    'app/views/dialogs/repo-history-settings',
+    'app/views/widgets/hl-item-view',
+    'app/views/widgets/dropdown'
 ], function($, _, Backbone, Common, Moment, Simplemodal,
-    Select2, Tabs, ShareView, HLItemView) {
+    Select2, Tabs, ShareView, HistorySettingsDialog,
+    HLItemView, DropdownView) {
 
     'use strict';
 
@@ -21,7 +24,8 @@ define([
         transferTemplate: _.template($('#library-transfer-form-tmpl').html()),
 
         events: {
-            'click .repo-share-btn': 'share',
+            'click .js-repo-share': 'share',
+            'click .js-popup-history-setting': 'popupHistorySetting',
             'click .repo-delete-btn': 'deleteLibrary',
             'click .repo-transfer-btn': 'transferLibrary'
         },
@@ -32,7 +36,23 @@ define([
                 'repo_name': this.model.get('name')
             };
             new ShareView(options);
+            this.togglePopup(); // close the popup
             return false;
+        },
+
+        popupHistorySetting: function() {
+            var options = {
+                'repo_name': this.model.get('name'),
+                'repo_id': this.model.get('id'),
+                'url_name': 'admin-library-history-limit'
+            };
+            this.togglePopup(); // close the popup
+            new HistorySettingsDialog(options);
+            return false;
+        },
+
+        togglePopup: function() {
+            this.dropdown.hide();
         },
 
         initialize: function() {
@@ -133,7 +153,7 @@ define([
 
         render: function() {
             var data = this.model.toJSON(),
-                icon_size = Common.isHiDPI() ? 96 : 24,
+                icon_size = Common.isHiDPI() ? 48 : 24,
                 icon_url = this.model.getIconUrl(icon_size),
                 last_accessed = Moment(data['last_accessed']);
 
@@ -145,6 +165,11 @@ define([
             data['time_from_now'] = Common.getRelativeTimeStr(last_accessed);
 
             this.$el.html(this.template(data));
+
+            this.dropdown = new DropdownView({
+                el: this.$('.sf-dropdown'),
+                right: 0
+            });
 
             return this;
         }

@@ -12,15 +12,53 @@ define([
         id: "admin-dashboard",
 
         template: _.template($("#sysinfo-tmpl").html()),
-        headerTemplate: _.template($("#sysinfo-header-tmpl").html()),
+        conTemplate: _.template($("#sysinfo-con-tmpl").html()),
 
         initialize: function() {
             this.sysinfo = new SysInfo();
             this.render();
         },
 
+        events: {
+            'click .license-file-upload-btn': 'uploadFile',
+            'change .license-file-upload-input': 'uploadLicenseFile'
+        },
+
+        uploadFile: function() {
+            this.$('.license-file-upload-input').trigger('click');
+        },
+
+        uploadLicenseFile: function() {
+            var $input = this.$('.license-file-upload-input');
+            var file;
+            if ($input[0].files) {
+                file = $input[0].files[0];
+            } else {
+                return;
+            }
+
+            var input_name = $input.attr('name');
+            var fd = new FormData();
+
+            fd.append(input_name, file);
+            $.ajax({
+                url: Common.getUrl({'name': 'license'}),
+                type: 'POST',
+                data: fd,
+                processData: false,
+                contentType: false,
+                beforeSend: Common.prepareCSRFToken,
+                success: function(){
+                    location.reload(true);
+                },
+                error: function(xhr) {
+                    Common.ajaxErrorHandler(xhr);
+                }
+            });
+        },
+
         render: function() {
-            this.$el.html(this.headerTemplate());
+            this.$el.html(this.template());
             this.$loadingTip = this.$('.loading-tip');
             this.$sysinfo = this.$('.sysinfo');
         },
@@ -63,7 +101,7 @@ define([
             this.$loadingTip.hide();
             var json_data = this.sysinfo.toJSON();
             json_data['formatted_storage'] = Common.quotaSizeFormat(json_data['total_storage'], 1)
-            this.$sysinfo.html(this.template(json_data));
+            this.$sysinfo.html(this.conTemplate(json_data));
         }
 
     });

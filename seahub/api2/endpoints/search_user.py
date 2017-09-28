@@ -1,22 +1,26 @@
 # Copyright (c) 2012-2016 Seafile Ltd.
-import json
+import os
+import sys
+import logging
 
 from django.db.models import Q
-from django.http import HttpResponse
+from django.conf import settings as django_settings
 
 from rest_framework.authentication import SessionAuthentication
 from rest_framework.permissions import IsAuthenticated
+from rest_framework.response import Response
 from rest_framework.views import APIView
 from rest_framework import status
 
-import seaserv
+from seaserv import ccnet_api
 
 from seahub.api2.authentication import TokenAuthentication
 from seahub.api2.throttling import UserRateThrottle
 from seahub.api2.utils import api_error
 from seahub.utils import is_valid_email, is_org_context
 from seahub.base.accounts import User
-from seahub.base.templatetags.seahub_tags import email2nickname
+from seahub.base.templatetags.seahub_tags import email2nickname, \
+        email2contact_email
 from seahub.profile.models import Profile
 from seahub.contacts.models import Contact
 from seahub.avatar.templatetags.avatar_tags import api_avatar_url
@@ -24,10 +28,23 @@ from seahub.avatar.templatetags.avatar_tags import api_avatar_url
 from seahub.settings import ENABLE_GLOBAL_ADDRESSBOOK, \
     ENABLE_SEARCH_FROM_LDAP_DIRECTLY
 
+logger = logging.getLogger(__name__)
+
 try:
     from seahub.settings import CLOUD_MODE
 except ImportError:
     CLOUD_MODE = False
+
+try:
+    current_path = os.path.dirname(os.path.abspath(__file__))
+    seafile_conf_dir = os.path.join(current_path, \
+            '../../../../../conf')
+    sys.path.append(seafile_conf_dir)
+    from seahub_custom_functions import custom_search_user
+    CUSTOM_SEARCH_USER = True
+except ImportError as e:
+    CUSTOM_SEARCH_USER = False
+
 
 class SearchUser(APIView):
     """ Search user from contacts/all users
@@ -54,16 +71,26 @@ class SearchUser(APIView):
             # if current user can use global address book
             if CLOUD_MODE:
                 if is_org_context(request):
-                    # search from org
-                    email_list += search_user_from_org(request, q)
+
+                    # get all org users
+                    url_prefix = request.user.org.url_prefix
+                    try:
+                        all_org_users = ccnet_api.get_org_users_by_url_prefix(url_prefix, -1, -1)
+                    except Exception as e:
+                        logger.error(e)
+                        error_msg = 'Internal Server Error'
+                        return api_error(status.HTTP_500_INTERNAL_SERVER_ERROR, error_msg)
+
+                    limited_emails = []
+                    for org_user in all_org_users:
+                        # prepare limited emails for search from profile
+                        limited_emails.append(org_user.email)
+
+                        # search user from org users
+                        if q in org_user.email:
+                            email_list.append(org_user.email)
 
                     # search from profile, limit search range in all org users
-                    limited_emails = []
-                    url_prefix = request.user.org.url_prefix
-                    all_org_users = seaserv.get_org_users_by_url_prefix(url_prefix, -1, -1)
-                    for user in all_org_users:
-                        limited_emails.append(user.email)
-
                     email_list += search_user_from_profile_with_limits(q, limited_emails)
 
                 elif ENABLE_GLOBAL_ADDRESSBOOK:
@@ -89,7 +116,8 @@ class SearchUser(APIView):
             # search user from user's contacts
             email_list += search_user_when_global_address_book_disabled(request, q)
 
-        ## search finished
+        ## search finished, now filter out some users
+
         # remove duplicate emails
         email_list = {}.fromkeys(email_list).keys()
 
@@ -103,6 +131,13 @@ class SearchUser(APIView):
             except User.DoesNotExist:
                 continue
 
+        if django_settings.ENABLE_ADDRESSBOOK_OPT_IN:
+            # get users who has setted to show in address book
+            listed_users = Profile.objects.filter(list_in_address_book=True).values('user')
+            listed_user_list = [ u['user'] for u in listed_users ]
+
+            email_result = list(set(email_result) & set(listed_user_list))
+
         # check if include myself in user result
         try:
             include_self = int(request.GET.get('include_self', 1))
@@ -113,6 +148,9 @@ class SearchUser(APIView):
             # reomve myself
             email_result.remove(username)
 
+        if CUSTOM_SEARCH_USER:
+            email_result = custom_search_user(request, email_result)
+
         # format user result
         try:
             size = int(request.GET.get('avatar_size', 32))
@@ -122,8 +160,7 @@ class SearchUser(APIView):
         formated_result = format_searched_user_result(
                 request, email_result[:10], size)
 
-        return HttpResponse(json.dumps({"users": formated_result}),
-                status=200, content_type='application/json; charset=utf-8')
+        return Response({"users": formated_result})
 
 def format_searched_user_result(request, users, size):
     results = []
@@ -134,39 +171,25 @@ def format_searched_user_result(request, users, size):
             "email": email,
             "avatar_url": request.build_absolute_uri(url),
             "name": email2nickname(email),
-            "contact_email": Profile.objects.get_contact_email_by_user(email),
+            "contact_email": email2contact_email(email),
         })
 
     return results
 
-def search_user_from_org(request, q):
-
-    # get all org users
-    url_prefix = request.user.org.url_prefix
-    all_org_users = seaserv.get_org_users_by_url_prefix(url_prefix, -1, -1)
-
-    # search user from org users
-    email_list = []
-    for org_user in all_org_users:
-        if q in org_user.email:
-            email_list.append(org_user.email)
-
-    return email_list
-
 def search_user_from_ccnet(q):
     users = []
 
-    db_users = seaserv.ccnet_threaded_rpc.search_emailusers('DB', q, 0, 10)
+    db_users = ccnet_api.search_emailusers('DB', q, 0, 10)
     users.extend(db_users)
 
     count = len(users)
     if count < 10:
-        ldap_imported_users = seaserv.ccnet_threaded_rpc.search_emailusers('LDAP', q, 0, 10 - count)
+        ldap_imported_users = ccnet_api.search_emailusers('LDAP', q, 0, 10 - count)
         users.extend(ldap_imported_users)
 
     count = len(users)
     if count < 10 and ENABLE_SEARCH_FROM_LDAP_DIRECTLY:
-        all_ldap_users = seaserv.ccnet_threaded_rpc.search_ldapusers(q, 0, 10 - count)
+        all_ldap_users = ccnet_api.search_ldapusers(q, 0, 10 - count)
         users.extend(all_ldap_users)
 
     # `users` is already search result, no need search more

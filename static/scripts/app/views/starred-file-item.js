@@ -26,6 +26,9 @@ define([
         render: function () {
             var data = this.model.toJSON();
 
+            var file_icon_size = Common.isHiDPI() ? 48 : 24;
+            data.file_icon_url = Common.getFileIconUrl(data.file_name, file_icon_size);
+
             data['is_img'] = Common.imageCheck(data['file_name']);
             data['encoded_path'] = Common.encodePath(data['path']);
             data.encoded_thumbnail_src = this.model.get('encoded_thumbnail_src') || '';
@@ -33,13 +36,19 @@ define([
             var tmpl = $(window).width() >= 768 ? this.template : this.mobileTemplate;
             this.$el.html(tmpl(data));
 
-            if (app.pageOptions.enable_thumbnail) {
-                this.$('.img-name-link').attr('data-mfp-src', Common.getUrl({
-                    'name': 'thumbnail_get',
-                    'repo_id': data.repo_id,
-                    'size': app.pageOptions.thumbnail_size_for_original,
-                    'path': data.encoded_path
-                }));
+            if (data['is_img']) {
+                var file_name = this.model.get('file_name');
+                var file_ext = file_name.substr(file_name.lastIndexOf('.') + 1).toLowerCase();
+                var is_gif = file_ext == 'gif' ? true : false;
+
+                if (app.pageOptions.enable_thumbnail && !is_gif) {
+                    this.$('.img-name-link').attr('data-mfp-src', Common.getUrl({
+                        'name': 'thumbnail_get',
+                        'repo_id': data.repo_id,
+                        'size': app.pageOptions.thumbnail_size_for_original,
+                        'path': data.encoded_path
+                    }));
+                }
             }
 
             return this;

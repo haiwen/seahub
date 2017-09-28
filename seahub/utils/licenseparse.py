@@ -1,5 +1,4 @@
 # Copyright (c) 2012-2016 Seafile Ltd.
-import os
 import logging
 from django.conf import settings
 from seahub.utils import is_pro_version
@@ -9,7 +8,7 @@ from seaserv import ccnet_api
 logger = logging.getLogger(__name__)
 
 def get_license_path():
-        return os.path.join(settings.PROJECT_ROOT, '../../seafile-license.txt')
+    return settings.LICENSE_PATH
 
 def parse_license():
     """Parse license file and return dict.
@@ -32,9 +31,8 @@ def parse_license():
     """
     ret = {}
     lines = []
-    license_path = get_license_path()
     try:
-        with open(license_path) as f:
+        with open(get_license_path()) as f:
             lines = f.readlines()
     except Exception as e:
         logger.warn(e)

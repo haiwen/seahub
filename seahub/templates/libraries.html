@@ -55,6 +55,8 @@
 
 <script type="text/template" id="repos-shared-to-me-tmpl">
     <h3 class="hd">{% trans "Shared with me" %}</h3>
+
+    <span class="loading-icon loading-tip"></span>
     <table class="hide">
         <thead></thead>
         <tbody></tbody>
@@ -63,7 +65,6 @@
         <h2 class="alc">{% trans "No libraries have been shared with you" %}</h2>
         <p>{% blocktrans %}No libraries have been shared directly with you. You can find more shared libraries at "Shared with groups".{% endblocktrans %}</p>
     </div>
-    <span class="loading-icon loading-tip"></span>
     <p class="error error-tip hide"></p>
 </script>
 
@@ -81,6 +82,7 @@
         {% endif %}
     </div>
 
+    <span class="loading-icon loading-tip"></span>
     <table class="repo-list hide">
         <thead></thead>
         <tbody></tbody>
@@ -89,7 +91,6 @@
         <h2 class="alc">{% trans "No public libraries" %}</h2>
         <p>{% blocktrans %}You can create a public library by clicking the "New Library" button, others can view and download this library.{% endblocktrans %}</p>
     </div>
-    <span class="loading-icon loading-tip"></span>
     <p class="error error-tip hide"></p>
 </script>
 
@@ -290,7 +291,9 @@ app["pageOptions"] = {
     is_pro: {% if is_pro %} true {% else %} false {% endif %},
     file_audit_enabled: {% if file_audit_enabled %} true {% else %} false {% endif %},
     enable_repo_snapshot_label: {% if enable_repo_snapshot_label %} true {% else %} false {% endif %},
-    cur_note: {% if request.cur_note %} {'id': '{{ request.cur_note.id }}'} {% else %} null {% endif %}
+    cur_note: {% if request.cur_note %} {'id': '{{ request.cur_note.id }}'} {% else %} null {% endif %},
+    unread_notifications_request_interval: {{ unread_notifications_request_interval }},
+    enable_share_to_all_groups: {% if enable_share_to_all_groups %} true {% else %} false {% endif %}
 };
 app.ui = {
     currentDropdown: null,

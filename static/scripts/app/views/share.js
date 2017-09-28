@@ -14,6 +14,8 @@ define([
 
         initialize: function(options) {
             this.is_repo_owner = options.is_repo_owner;
+            // for shared repo
+            this.is_admin = options.is_admin; // true or undefined
             this.is_virtual = options.is_virtual;
             this.user_perm = options.user_perm;
             this.repo_id = options.repo_id;
@@ -44,7 +46,7 @@ define([
                 if (this.user_perm == 'rw' && !this.repo_encrypted && app.pageOptions.can_generate_upload_link) {
                     this.uploadLinkPanelInit();
                 }
-                if (!this.is_virtual && this.is_repo_owner) {
+                if (!this.is_virtual && (this.is_repo_owner || this.is_admin)) {
                     this.dirUserSharePanelInit();
                     this.dirGroupSharePanelInit();
 
@@ -66,12 +68,14 @@ define([
                     .replace('{placeholder}', '<span class="op-target ellipsis ellipsis-op-target" title="' + Common.HTMLescape(this.obj_name) + '">' + Common.HTMLescape(this.obj_name) + '</span>'),
                 is_dir: this.is_dir,
                 is_repo_owner: this.is_repo_owner,
+                is_admin: this.is_admin,
                 is_virtual: this.is_virtual,
                 user_perm: this.user_perm,
                 repo_id: this.repo_id,
                 can_generate_share_link: app.pageOptions.can_generate_share_link,
                 can_generate_upload_link: app.pageOptions.can_generate_upload_link,
-                repo_encrypted: this.repo_encrypted
+                repo_encrypted: this.repo_encrypted,
+                dirent_path: this.dirent_path
             }));
 
             return this;
@@ -576,6 +580,7 @@ define([
                                 "user_email": item.user_info.name,
                                 "user_name": item.user_info.nickname,
                                 "permission": item.permission,
+                                'is_admin': item.is_admin,
                                 'for_user': true
                             }
                         });
@@ -633,23 +638,67 @@ define([
                                 "group_id": item.group_info.id,
                                 "group_name": item.group_info.name,
                                 "permission": item.permission,
+                                'is_admin': item.is_admin,
                                 'for_user': false
                             }
                         });
                         $add_item.after(new_item.el);
                     });
 
-                    var groups = app.pageOptions.groups || [];
-                    var g_opts = '';
-                    for (var i = 0, len = groups.length; i < len; i++) {
-                        g_opts += '<option value="' + groups[i].id + '" data-index="' + i + '">' + groups[i].name + '</option>';
+                    var groups = [];
+                    var prepareGroupsSelector = function() {
+                        var g_opts = '';
+                        for (var i = 0, len = groups.length; i < len; i++) {
+                            g_opts += '<option value="' + groups[i].id + '" data-index="' + i + '">' + groups[i].name + '</option>';
+                        }
+                        $('[name="groups"]', $add_item).html(g_opts).select2({
+                            placeholder: gettext("Select groups"),
+                            escapeMarkup: function(m) { return m; }
+                        });
+                    };
+                    if (app.pageOptions.enable_share_to_all_groups) {
+                        $.ajax({
+                            url: Common.getUrl({
+                                name: 'all_groups'
+                            }),
+                            type: 'GET',
+                            dataType: 'json',
+                            cache: false,
+                            success: function(data){
+                                for (var i = 0, len = data.length; i < len; i++) {
+                                    groups.push({
+                                        'id': data[i].id,
+                                        'name': data[i].name
+                                    });
+                                }
+                                groups.sort(function(a, b) {
+                                    return Common.compareTwoWord(a.name, b.name);
+                                });
+                            },
+                            error: function(xhr, textStatus, errorThrown) {
+                                var pre_msg = gettext("Failed to fetch groups:");
+                                var err_msg;
+                                if (xhr.responseText) {
+                                    if (xhr.status == 403) {
+                                        err_msg = gettext("Permission error");
+                                    } else {
+                                        err_msg = xhr.responseJSON.error_msg ? xhr.responseJSON.error_msg : gettext('Error');
+                                    }
+                                } else {
+                                    err_msg = gettext('Please check the network.');
+                                }
+                                $('.error', $panel).html(pre_msg + ' ' + err_msg).show();
+                            },
+                            complete: function() {
+                                prepareGroupsSelector();
+                                $table.removeClass('hide');
+                            }
+                        });
+                    } else {
+                        groups = app.pageOptions.groups || [];
+                        prepareGroupsSelector();
+                        $table.removeClass('hide');
                     }
-                    $('[name="groups"]', $add_item).html(g_opts).select2({
-                        placeholder: gettext("Select groups"),
-                        escapeMarkup: function(m) { return m; }
-                    });
-
-                    $table.removeClass('hide');
                 },
                 error: function(xhr, textStatus, errorThrown) {
                     var err_msg;
@@ -713,14 +762,15 @@ define([
                                     "user_email": item.user_info.name,
                                     "user_name": item.user_info.nickname,
                                     "permission": item.permission,
+                                    'is_admin': item.is_admin,
                                     'for_user': true
                                 }
                             });
                             $add_item.after(new_item.el);
                         });
                         emails_input.select2("val", "");
+                        $('option', $perm).removeAttr('selected');
                         $('[value="rw"]', $perm).attr('selected', 'selected');
-                        $('[value="r"]', $perm).removeAttr('selected');
                         $error.addClass('hide');
                     }
                     if (data.failed.length > 0) {
@@ -791,14 +841,15 @@ define([
                                     "group_id": item.group_info.id,
                                     "group_name": item.group_info.name,
                                     "permission": item.permission,
+                                    'is_admin': item.is_admin,
                                     'for_user': false
                                 }
                             });
                             $add_item.after(new_item.el);
                         });
                         $groups_input.select2("val", "");
+                        $('option', $perm).removeAttr('selected');
                         $('[value="rw"]', $perm).attr('selected', 'selected');
-                        $('[value="r"]', $perm).removeAttr('selected');
                         $error.addClass('hide');
                     }
                     if (data.failed.length > 0) {

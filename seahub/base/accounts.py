@@ -1,6 +1,7 @@
 # Copyright (c) 2012-2016 Seafile Ltd.
 # encoding: utf-8
 import re
+import logging
 
 from django import forms
 from django.core.mail import send_mail
@@ -17,11 +18,15 @@ from registration import signals
 
 from seahub.auth import login
 from seahub.profile.models import Profile, DetailedProfile
-from seahub.role_permissions.utils import get_enabled_role_permissions_by_role
+from seahub.role_permissions.models import AdminRole
+from seahub.role_permissions.utils import get_enabled_role_permissions_by_role, \
+        get_enabled_admin_role_permissions_by_role
 from seahub.utils import is_user_password_strong, \
     clear_token, get_system_admins, is_pro_version
 from seahub.utils.mail import send_html_email_with_dj_template, MAIL_PRIORITY
 from seahub.utils.licenseparse import user_number_over_limit
+from seahub.share.models import ExtraSharePermission
+from seahub.constants import DEFAULT_ADMIN
 
 try:
     from seahub.settings import CLOUD_MODE
@@ -32,9 +37,12 @@ try:
 except ImportError:
     MULTI_TENANCY = False
 
+logger = logging.getLogger(__name__)
+
 UNUSABLE_PASSWORD = '!' # This will never be a valid hash
 
 class UserManager(object):
+
     def create_user(self, email, password=None, is_staff=False, is_active=False):
         """
         Creates and saves a User with given username and password.
@@ -97,6 +105,18 @@ class UserManager(object):
         user.org = emailuser.org
         user.source = emailuser.source
         user.role = emailuser.role
+        user.reference_id = emailuser.reference_id
+
+        if user.is_staff:
+            try:
+                role_obj = AdminRole.objects.get_admin_role(emailuser.email)
+                admin_role = role_obj.role
+            except AdminRole.DoesNotExist:
+                admin_role = DEFAULT_ADMIN
+
+            user.admin_role = admin_role
+        else:
+            user.admin_role = ''
 
         return user
 
@@ -146,8 +166,42 @@ class UserPermissions(object):
     def can_export_files_via_mobile_client(self):
         return get_enabled_role_permissions_by_role(self.user.role)['can_export_files_via_mobile_client']
 
+    # Add default value for compatible issue when EMAILBE_ROLE_PERMISSIONS
+    # is not updated with newly added permissions.
     def role_quota(self):
         return get_enabled_role_permissions_by_role(self.user.role).get('role_quota', '')
+
+    def can_send_share_link_mail(self):
+        return get_enabled_role_permissions_by_role(self.user.role).get('can_send_share_link_mail', True)
+
+
+class AdminPermissions(object):
+    def __init__(self, user):
+        self.user = user
+
+    def can_view_system_info(self):
+        return get_enabled_admin_role_permissions_by_role(self.user.admin_role)['can_view_system_info']
+
+    def can_view_statistic(self):
+        return get_enabled_admin_role_permissions_by_role(self.user.admin_role)['can_view_statistic']
+
+    def can_config_system(self):
+        return get_enabled_admin_role_permissions_by_role(self.user.admin_role)['can_config_system']
+
+    def can_manage_library(self):
+        return get_enabled_admin_role_permissions_by_role(self.user.admin_role)['can_manage_library']
+
+    def can_manage_user(self):
+        return get_enabled_admin_role_permissions_by_role(self.user.admin_role)['can_manage_user']
+
+    def can_manage_group(self):
+        return get_enabled_admin_role_permissions_by_role(self.user.admin_role)['can_manage_group']
+
+    def can_view_user_log(self):
+        return get_enabled_admin_role_permissions_by_role(self.user.admin_role)['can_view_user_log']
+
+    def can_view_admin_log(self):
+        return get_enabled_admin_role_permissions_by_role(self.user.admin_role)['can_view_admin_log']
 
 
 class User(object):
@@ -165,6 +219,7 @@ class User(object):
         self.username = email
         self.email = email
         self.permissions = UserPermissions(self)
+        self.admin_permissions = AdminPermissions(self)
 
     def __unicode__(self):
         return self.username
@@ -193,6 +248,14 @@ class User(object):
                 source = "DB"
             else:
                 source = "LDAP"
+
+            if not self.is_active:
+                # clear web api and repo sync token
+                # when inactive an user
+                try:
+                    clear_token(self.username)
+                except Exception as e:
+                    logger.error(e)
 
             result_code = ccnet_threaded_rpc.update_emailuser(source,
                                                               emailuser.id,
@@ -249,8 +312,15 @@ class User(object):
             shared_in_repos = seafile_api.get_share_in_repo_list(username, -1, -1)
             for r in shared_in_repos:
                 seafile_api.remove_share(r.repo_id, r.user, username)
+        ExtraSharePermission.objects.filter(share_to=username).delete()
 
-        clear_token(username)
+        # clear web api and repo sync token
+        # when delete user
+        try:
+            clear_token(self.username)
+        except Exception as e:
+            logger.error(e)
+
         # remove current user from joined groups
         ccnet_api.remove_group_user(username)
         ccnet_api.remove_emailuser(source, username)
@@ -269,6 +339,13 @@ class User(object):
             self.set_unusable_password()
         else:
             self.password = '%s' % raw_password
+
+        # clear web api and repo sync token
+        # when user password change
+        try:
+            clear_token(self.username)
+        except Exception as e:
+            logger.error(e)
 
     def check_password(self, raw_password):
         """
@@ -364,6 +441,7 @@ class User(object):
             unset_repo_passwd(r.id, self.email)
 
 class AuthBackend(object):
+
     def get_user_with_import(self, username):
         emailuser = seaserv.get_emailuser_with_import(username)
         if not emailuser:
@@ -378,6 +456,17 @@ class AuthBackend(object):
         user.org = emailuser.org
         user.source = emailuser.source
         user.role = emailuser.role
+
+        if user.is_staff:
+            try:
+                role_obj = AdminRole.objects.get_admin_role(emailuser.email)
+                admin_role = role_obj.role
+            except AdminRole.DoesNotExist:
+                admin_role = DEFAULT_ADMIN
+
+            user.admin_role = admin_role
+        else:
+            user.admin_role = ''
 
         return user
 

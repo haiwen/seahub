@@ -4,12 +4,14 @@ from django import forms
 from django.utils.translation import ugettext_lazy as _
 from django.utils.http import int_to_base36
 
+from seaserv import ccnet_api
+
 from seahub.base.accounts import User
 from seahub.auth import authenticate
 from seahub.auth.tokens import default_token_generator
 from seahub.profile.models import Profile
 from seahub.utils import IS_EMAIL_CONFIGURED, send_html_email, \
-    is_valid_username, is_ldap_user, is_user_password_strong, clear_token
+    is_ldap_user, is_user_password_strong
 
 from captcha.fields import CaptchaField
 
@@ -45,6 +47,12 @@ class AuthenticationForm(forms.Form):
         else:
             return username
 
+    def get_primary_id_by_username(self, username):
+        """Get user's primary id in case the username is changed.
+        """
+        p_id = ccnet_api.get_primary_id(username)
+        return p_id if p_id is not None else username
+
     def clean_login(self):
         return self.cleaned_data['login'].strip()
 
@@ -55,6 +63,7 @@ class AuthenticationForm(forms.Form):
         # convert login id to username
         username = self.get_username_by_login(login)
 
+        username = self.get_primary_id_by_username(username)
         if username and password:
             self.user_cache = authenticate(username=username,
                                            password=password)
@@ -170,7 +179,6 @@ class SetPasswordForm(forms.Form):
         self.user.set_password(self.cleaned_data['new_password1'])
         if commit:
             self.user.save()
-        clear_token(self.user.username)
         return self.user
 
 class PasswordChangeForm(SetPasswordForm):

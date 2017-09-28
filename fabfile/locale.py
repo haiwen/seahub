@@ -34,7 +34,7 @@ def pull():
 def compile():
     """Compile po files.
     """
-    local('django-admin.py compilemessages')
+    local('django-admin.py compilemessages && pushd seahub/two_factor && django-admin.py compilemessages && popd && pushd seahub/trusted_ip && django-admin.py compilemessages')
 
 ########## utility functions
 def _inplace_change(filename, old_string, new_string):

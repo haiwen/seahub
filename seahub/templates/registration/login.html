@@ -8,7 +8,7 @@
 <style type="text/css">
 html, body, #wrapper { height:100%; }
 #wrapper {
-    background: url('{{ MEDIA_URL }}img/login-bg.jpg') center top no-repeat scroll;
+    background: url('{{ MEDIA_URL }}{{login_bg_image_path}}') center top no-repeat scroll;
     background-size: cover;
     padding-top:1px;
 }
@@ -89,7 +89,7 @@ html, body, #wrapper { height:100%; }
 
 {% block extra_script %}
 <script type="text/javascript">
-$('.login-panel-outer-container').prepend($($('#logo').html()).addClass('login-panel-logo'));
+$('.login-panel-outer-container').prepend($($('#logo').html()).attr({'width': 160, 'height':40}).addClass('login-panel-logo'));
 $('.login-panel-bottom-container').append($('#lang').removeClass('fright'));
 
 var $el = $('.login-panel-outer-container');

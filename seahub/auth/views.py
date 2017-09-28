@@ -1,6 +1,6 @@
 # Copyright (c) 2012-2016 Seafile Ltd.
 import hashlib
-import re
+import os
 import logging
 from datetime import datetime
 from django.conf import settings
@@ -21,8 +21,9 @@ from seaserv import seafile_api
 from seahub.auth import REDIRECT_FIELD_NAME, get_backends
 from seahub.auth import login as auth_login
 from seahub.auth.decorators import login_required
-from seahub.auth.forms import AuthenticationForm, CaptchaAuthenticationForm
-from seahub.auth.forms import PasswordResetForm, SetPasswordForm, PasswordChangeForm
+from seahub.auth.forms import AuthenticationForm, CaptchaAuthenticationForm, \
+        PasswordResetForm, SetPasswordForm, PasswordChangeForm
+from seahub.auth.signals import user_logged_in_failed
 from seahub.auth.tokens import default_token_generator
 from seahub.base.accounts import User
 from seahub.options.models import UserOptions
@@ -32,6 +33,8 @@ from seahub.utils.ip import get_remote_ip
 from seahub.utils.file_size import get_quota_from_string
 from seahub.utils.two_factor_auth import two_factor_auth_enabled, handle_two_factor_auth
 from seahub.utils.user_permissions import get_user_role
+from seahub.settings import LOGIN_BG_IMAGE_PATH, MEDIA_ROOT
+from seahub.api2.endpoints.admin.login_bg_image import CUSTOM_LOGIN_BG_IMAGE_PATH
 
 from constance import config
 
@@ -175,6 +178,7 @@ def login(request, template_name='registration/login.html',
                                             redirect_to, remember_me)
 
         # form is invalid
+        user_logged_in_failed.send(sender=None, request=request)
         failed_attempt = _incr_login_failed_attempts(username=login,
                                                     ip=ip)
 
@@ -204,6 +208,7 @@ def login(request, template_name='registration/login.html',
                             (login, ip, failed_attempt))
                 if not used_captcha_already:
                     form = CaptchaAuthenticationForm()
+
     else:
         ### GET
         failed_attempt = _get_login_failed_attempts(ip=ip)
@@ -242,6 +247,12 @@ def login(request, template_name='registration/login.html',
     enable_krb5_login = getattr(settings, 'ENABLE_KRB5_LOGIN', False)
     enable_adfs_login = getattr(settings, 'ENABLE_ADFS_LOGIN', False)
 
+    login_bg_image_path = LOGIN_BG_IMAGE_PATH
+    # get path that background image of login page
+    custom_login_bg_image_file = os.path.join(MEDIA_ROOT, CUSTOM_LOGIN_BG_IMAGE_PATH)
+    if os.path.exists(custom_login_bg_image_file):
+        login_bg_image_path = CUSTOM_LOGIN_BG_IMAGE_PATH
+
     return render_to_response(template_name, {
         'form': form,
         redirect_field_name: redirect_to,
@@ -252,6 +263,7 @@ def login(request, template_name='registration/login.html',
         'enable_shib_login': enable_shib_login,
         'enable_krb5_login': enable_krb5_login,
         'enable_adfs_login': enable_adfs_login,
+        'login_bg_image_path': login_bg_image_path,
     }, context_instance=RequestContext(request))
 
 def login_simple_check(request):

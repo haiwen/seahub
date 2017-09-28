@@ -2,6 +2,7 @@
 import logging
 
 from rest_framework import serializers
+from seaserv import ccnet_api
 
 from seahub.auth import authenticate
 from seahub.api2.models import DESKTOP_PLATFORMS
@@ -68,6 +69,10 @@ class AuthTokenSerializer(serializers.Serializer):
         if username is None:
             username = login_id
 
+        p_id = ccnet_api.get_primary_id(username)
+        if p_id is not None:
+            username = p_id
+
         if username and password:
             user = authenticate(username=username, password=password)
             if user:
@@ -80,26 +85,27 @@ class AuthTokenSerializer(serializers.Serializer):
 
         populate_user_permissions(user)
 
-        if platform in DESKTOP_PLATFORMS:
-            if not user.permissions.can_connect_with_desktop_clients():
-                raise serializers.ValidationError('Not allowed to connect to desktop client.')
-        elif platform == 'android':
-            if not user.permissions.can_connect_with_android_clients():
-                raise serializers.ValidationError('Not allowed to connect to android client.')
-        elif platform == 'ios':
-            if not user.permissions.can_connect_with_ios_clients():
-                raise serializers.ValidationError('Not allowed to connect to ios client.')
-        else:
-            logger.info('%s: unrecognized device' % login_id)
-
         self._two_factor_auth(self.context['request'], user)
 
         # Now user is authenticated
         if v2:
-            token = get_token_v2(self.context['request'], username, platform, device_id, device_name,
-                                 client_version, platform_version)
+            if platform in DESKTOP_PLATFORMS:
+                if not user.permissions.can_connect_with_desktop_clients():
+                    raise serializers.ValidationError('Not allowed to connect to desktop client.')
+            elif platform == 'android':
+                if not user.permissions.can_connect_with_android_clients():
+                    raise serializers.ValidationError('Not allowed to connect to android client.')
+            elif platform == 'ios':
+                if not user.permissions.can_connect_with_ios_clients():
+                    raise serializers.ValidationError('Not allowed to connect to ios client.')
+            else:
+                logger.info('%s: unrecognized device' % login_id)
+
+            token = get_token_v2(self.context['request'], username, platform,
+                    device_id, device_name, client_version, platform_version)
         else:
             token = get_token_v1(username)
+
         return token.key
 
     def _two_factor_auth(self, request, user):

@@ -238,8 +238,11 @@ define([
                         'repo_id': repo_id,
                         'path': Common.encodePath(dirent_path)
                     };
+
+                    var file_ext = name.substr(name.lastIndexOf('.') + 1).toLowerCase();
+                    var is_gif = file_ext == 'gif' ? true : false;
                     var item_src;
-                    if (use_thumbnail) {
+                    if (use_thumbnail && !is_gif) {
                         item_src = Common.getUrl($.extend(url_options, {
                             'name': 'thumbnail_get',
                             'size': app.pageOptions.thumbnail_size_for_original
@@ -821,6 +824,9 @@ define([
                     'dirent_path': path,
                     'obj_name': path == '/' ? dir.repo_name : path.substr(path.lastIndexOf('/') + 1)
                 };
+                if (app.pageOptions.is_pro) {
+                    options.is_admin = dir.is_admin;
+                }
                 new ShareView(options);
             },
 

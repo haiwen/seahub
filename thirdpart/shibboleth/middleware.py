@@ -1,3 +1,5 @@
+from collections import OrderedDict
+from fnmatch import fnmatch
 import logging
 
 from django.conf import settings
@@ -5,7 +7,7 @@ from django.contrib.auth.middleware import RemoteUserMiddleware
 from django.core.exceptions import ImproperlyConfigured
 from django.core.urlresolvers import reverse
 from django.http import HttpResponseRedirect
-from seaserv import seafile_api
+from seaserv import seafile_api, ccnet_api
 
 from shibboleth.app_settings import SHIB_ATTRIBUTE_MAP, LOGOUT_SESSION_KEY, SHIB_USER_HEADER
 
@@ -55,6 +57,10 @@ class ShibbolethRemoteUserMiddleware(RemoteUserMiddleware):
             # request.user set to AnonymousUser by the
             # AuthenticationMiddleware).
             return
+
+        p_id = ccnet_api.get_primary_id(username)
+        if p_id is not None:
+            username = p_id
 
         # If the user is already authenticated and that user is the user we are
         # getting passed in the headers, then the correct user is already
@@ -156,18 +162,37 @@ class ShibbolethRemoteUserMiddleware(RemoteUserMiddleware):
 
         p.save()
 
-    def update_user_role(self, user, shib_meta):
-        affiliation = shib_meta.get('affiliation', '')
-        if not affiliation:
-            return
-
+    def _get_role_by_affiliation(self, affiliation):
         try:
             role_map = settings.SHIBBOLETH_AFFILIATION_ROLE_MAP
         except AttributeError:
             return
 
+        role = role_map.get(affiliation)
+        if role:
+            return role
+
+        if role_map.get('patterns') is not None:
+            joker_map = role_map.get('patterns')
+            try:
+                od = OrderedDict(joker_map)
+            except Exception as e:
+                logger.error(e)
+                return
+
+            for k in od:
+                if fnmatch(affiliation, k):
+                    return od[k]
+
+        return None
+
+    def update_user_role(self, user, shib_meta):
+        affiliation = shib_meta.get('affiliation', '')
+        if not affiliation:
+            return
+
         for e in affiliation.split(';'):
-            role = role_map.get(e)
+            role = self._get_role_by_affiliation(e)
             if role:
                 User.objects.update_role(user.email, role)
                 return role

@@ -10,6 +10,7 @@ from seahub.base.accounts import User
 from seahub.constants import DEFAULT_USER, GUEST_USER
 from seahub.utils import is_valid_dirent_name
 from seahub.utils.licenseparse import user_number_over_limit
+from seahub.role_permissions.utils import get_available_roles
 
 class AddUserForm(forms.Form):
     """
@@ -19,8 +20,8 @@ class AddUserForm(forms.Form):
     name = forms.CharField(max_length=64, required=False)
     department = forms.CharField(max_length=512, required=False)
 
-    role = forms.ChoiceField(choices=[(DEFAULT_USER, DEFAULT_USER),
-                                      (GUEST_USER, GUEST_USER)])
+    role = forms.ChoiceField(choices=[ (i, i) for i in get_available_roles() ])
+	
     password1 = forms.CharField(widget=forms.PasswordInput())
     password2 = forms.CharField(widget=forms.PasswordInput())
 

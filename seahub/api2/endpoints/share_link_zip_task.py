@@ -9,6 +9,7 @@ from rest_framework.views import APIView
 from rest_framework import status
 
 from django.conf import settings
+from django.utils.translation import ugettext as _
 
 from seahub.api2.throttling import UserRateThrottle
 from seahub.api2.utils import api_error
@@ -91,7 +92,7 @@ class ShareLinkZipTaskView(APIView):
         dir_size = seafile_api.get_dir_size(
                 repo.store_id, repo.version, dir_id)
         if dir_size > seaserv.MAX_DOWNLOAD_DIR_SIZE:
-            error_msg = 'Unable to download directory "%s": size is too large.' % dir_name
+            error_msg = _('Unable to download directory "%s": size is too large.') % dir_name
             return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
 
         try:

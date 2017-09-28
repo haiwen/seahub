@@ -18,7 +18,7 @@ class LogsTest(BaseTestCase):
         self.repo_id= self.repo.repo_id
         self.new_user = '%s@%s.com' % (randstring(6), randstring(6))
         self.library_url = reverse('api-v2.1-admin-library', args=[self.repo_id])
-        self.admin_log_url = reverse('api-v2.1-admin-admin-logs')
+        self.admin_log_url = reverse('api-v2.1-admin-admin-operation-logs')
 
     def tearDown(self):
         self.remove_group()

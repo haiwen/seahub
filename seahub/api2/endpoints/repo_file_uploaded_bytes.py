@@ -2,33 +2,26 @@
 import logging
 import posixpath
 
-from rest_framework.authentication import SessionAuthentication
-from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 from rest_framework.views import APIView
 from rest_framework import status
 
 from seaserv import seafile_api
 
-from seahub.api2.authentication import TokenAuthentication
 from seahub.api2.throttling import UserRateThrottle
 from seahub.api2.utils import api_error
-from seahub.views import check_folder_permission
+
+from seahub.settings import ENABLE_RESUMABLE_FILEUPLOAD
 
 logger = logging.getLogger(__name__)
 json_content_type = 'application/json; charset=utf-8'
 
 class RepoFileUploadedBytesView(APIView):
 
-    authentication_classes = (TokenAuthentication, SessionAuthentication)
-    permission_classes = (IsAuthenticated,)
     throttle_classes = (UserRateThrottle,)
 
     def get(self, request, repo_id):
         """ For resumable fileupload
-
-        Permission checking:
-        1. login user.
         """
 
         # argument check
@@ -52,11 +45,6 @@ class RepoFileUploadedBytesView(APIView):
             error_msg = 'Folder %s not found.' % parent_dir
             return api_error(status.HTTP_404_NOT_FOUND, error_msg)
 
-        # permission check
-        if check_folder_permission(request, repo_id, parent_dir) != 'rw':
-            error_msg = 'Permission denied.'
-            return api_error(status.HTTP_403_FORBIDDEN, error_msg)
-
         file_path = posixpath.join(parent_dir, file_name)
         try:
             uploadedBytes = seafile_api.get_upload_tmp_file_offset(repo_id, file_path)
@@ -65,4 +53,8 @@ class RepoFileUploadedBytesView(APIView):
             error_msg = 'Internal Server Error'
             return api_error(status.HTTP_500_INTERNAL_SERVER_ERROR, error_msg)
 
-        return Response({"uploadedBytes": uploadedBytes})
+        response = Response({"uploadedBytes": uploadedBytes})
+        if ENABLE_RESUMABLE_FILEUPLOAD:
+            response["Accept-Ranges"] = "bytes"
+
+        return response

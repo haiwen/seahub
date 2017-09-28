@@ -142,6 +142,7 @@ define([
 
                 // Group
                 case 'groups': return siteRoot + 'api/v2.1/groups/';
+                case 'all_groups': return siteRoot + 'api/v2.1/groups/all/';
                 case 'search_group': return siteRoot + 'api/v2.1/search-group/';
                 case 'group': return siteRoot + 'api/v2.1/groups/' + options.group_id + '/';
                 case 'group_members': return siteRoot + 'api/v2.1/groups/' + options.group_id + '/members/';
@@ -177,8 +178,10 @@ define([
                 case 'sysinfo': return siteRoot + 'api/v2.1/admin/sysinfo/';
                 case 'admin-devices': return siteRoot + 'api/v2.1/admin/devices/';
                 case 'admin-device-errors': return siteRoot + 'api/v2.1/admin/device-errors/';
+                case 'admin-device-trusted-ip': return siteRoot + 'api/v2.1/admin/device-trusted-ip/';
                 case 'admin-libraries': return siteRoot + 'api/v2.1/admin/libraries/';
                 case 'admin-library': return siteRoot + 'api/v2.1/admin/libraries/' + options.repo_id + '/';
+                case 'admin-library-history-limit': return siteRoot + 'api/v2.1/admin/libraries/' + options.repo_id + '/history-limit/';
                 case 'admin-library-dirents': return siteRoot + 'api/v2.1/admin/libraries/' + options.repo_id + '/dirents/';
                 case 'admin-groups': return siteRoot + 'api/v2.1/admin/groups/';
                 case 'admin-group': return siteRoot + 'api/v2.1/admin/groups/' + options.group_id + '/';
@@ -192,7 +195,10 @@ define([
                 case 'admin-trash-library': return siteRoot + 'api/v2.1/admin/trash-libraries/' + options.repo_id + '/';
                 case 'admin_shares': return siteRoot + 'api/v2.1/admin/shares/';
                 case 'sys_group_admin_export_excel': return siteRoot + 'sys/groupadmin/export-excel/';
-                case 'admin-logs': return siteRoot + 'api/v2.1/admin/admin-logs/';
+                case 'admin-operation-logs': return siteRoot + 'api/v2.1/admin/admin-logs/';
+                case 'admin-login-logs': return siteRoot + 'api/v2.1/admin/admin-login-logs/';
+
+                case 'license': return siteRoot + 'api/v2.1/admin/license/';
             }
         },
 
@@ -291,23 +297,20 @@ define([
         },
 
         getLibIconUrl: function(is_encrypted, is_readonly, size) {
-            if (size > 24) {
-                if (is_encrypted) {
-                    return app.config.mediaUrl + "img/lib/96/lib-encrypted.png";
-                } else if (is_readonly) {
-                    return app.config.mediaUrl + "img/lib/96/lib-readonly.png";
-                } else {
-                    return app.config.mediaUrl + "img/lib/96/lib.png";
-                }
-            } else {
-                if (is_encrypted) {
-                    return app.config.mediaUrl + "img/lib/24/lib-encrypted.png";
-                } else if (is_readonly) {
-                    return app.config.mediaUrl + "img/lib/24/lib-readonly.png";
-                } else {
-                    return app.config.mediaUrl + "img/lib/24/lib.png";
-                }
+
+            // icon name
+            var icon_name = 'lib.png';
+            if (is_encrypted) {
+                icon_name = 'lib-encrypted.png';
             }
+            if (is_readonly) {
+                icon_name = 'lib-readonly.png';
+            }
+
+            // icon size
+            var icon_size = size || 256; // 'size' can be 24, 48, or undefined. (2017.7.31)
+
+            return app.config.mediaUrl + 'img/lib/' + icon_size + '/' + icon_name;
         },
 
         getLibIconTitle: function(is_encrypted, is_readonly) {

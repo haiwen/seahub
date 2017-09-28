@@ -29,6 +29,7 @@ from seahub.base.templatetags.seahub_tags import email2nickname, \
     translate_seahub_time
 from seahub.views.modules import is_wiki_mod_enabled_for_group, \
     enable_mod_for_group, disable_mod_for_group, MOD_GROUP_WIKI
+from seahub.share.models import ExtraGroupsSharePermission
 
 from .utils import api_check_group
 
@@ -102,8 +103,12 @@ class Groups(APIView):
             return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
 
         groups = []
+        if with_repos:
+            gids = [g.id for g in user_groups]
+            admin_info = ExtraGroupsSharePermission.objects.batch_get_repos_with_admin_permission(gids)
+
         for g in user_groups:
-            group_info = get_group_info(request, g.id , avatar_size)
+            group_info = get_group_info(request, g.id, avatar_size)
 
             if with_repos:
                 if org_id:
@@ -124,6 +129,7 @@ class Groups(APIView):
                         "permission": r.permission,
                         "owner": r.user,
                         "owner_name": email2nickname(r.user),
+                        "is_admin": (r.id, g.id) in admin_info
                     }
                     repos.append(repo)
 

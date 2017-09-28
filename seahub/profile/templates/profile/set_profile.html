@@ -11,13 +11,21 @@
     <a href="#" title="{% trans "Close" %}" aria-label="{% trans "Close" %}" class="sf2-icon-x1 sf-popover-close op-icon hidden-md-up js-close-side-nav fright"></a>
     <ul class="side-textnav-tabs">
         <li class="tab"><a href="#user-basic-info">{% trans "Profile" %}</a></li>
+
+        {% if not is_ldap_user %}
+        <li class="tab"><a href="#update-user-passwd">{% trans "Password" %}</a></li>
+        {% endif %}
+
         <li class="tab"><a href="#lang-setting">{% trans "Language" %}</a></li>
+
         {% if user.permissions.can_add_repo %}
         <li class="tab"><a href="#default-lib">{% trans "Default Library" %}</a></li>
         {% endif %}
+
         {% if two_factor_auth_enabled %}
         <li class="tab"><a href="#two-factor-auth">{% trans "Two-Factor Authentication" %}</a></li>
         {% endif %}
+
         <li class="tab" id="del-account-nav"><a href="#del-account">{% trans "Delete Account" %}</a></li>
     </ul>
 </div>
@@ -30,16 +38,13 @@
     <h3>{% trans "Profile Setting" %}</h3>
     <div id="user-avatar-change">
         <label>{% trans "Avatar:" %}</label>{% avatar request.user.username 80 %}
-        <form id="user-avatar-form" enctype="multipart/form-data" method="post" action="{% url 'avatar_add' %}" class="ovhd">{% csrf_token %}
+        <form id="user-avatar-form" enctype="multipart/form-data" method="post" action="{% url 'avatar_add' %}">{% csrf_token %}
             <button type="button" id="user-avatar-chg-btn">{% trans "Change" %}</button>
-            <input type="file" name="avatar" id="user-avatar-input" />
+            <input type="file" name="avatar" id="user-avatar-input" class="hide" />
         </form>
     </div>
 
     <form action="" method="post">{% csrf_token %}
-        {% if not is_ldap_user %}
-        <div id="update-password"><label>{% trans "Password:" %}</label><a href="{{ SITE_ROOT }}accounts/password/change/">{% trans "Update" %}</a></div>
-        {% endif %}
         <label>{% trans "Name:" context "true name" %}</label><input type="text" name="nickname" value="{{ form.data.nickname }}" class="input" />
         {% for error in form.nickname.errors %}
         <span class="error">{{ error|escape }}</span>
@@ -74,6 +79,27 @@
         <input type="submit" value="{% trans "Submit" %}" class="submit" />
     </form>
 </div>
+
+{% if not is_ldap_user %}
+<div id="update-user-passwd" class="setting-item">
+    <h3>{% trans "Password" %}</h3>
+    <a href="{{ SITE_ROOT }}accounts/password/change/">{% trans "Update" %}</a>
+</div>
+{% endif %}
+
+{% if ENABLE_ADDRESSBOOK_OPT_IN %}
+<div class="setting-item" id="list-in-address-book">
+    <h3>{% trans "Global Address Book" %}</h3>
+    <form id="list-in-address-book-form" method="post" action="">{% csrf_token %}
+        {% if form.data.list_in_address_book %}
+        <input type="checkbox" name="list_in_address_book" checked="checked">
+        {% else %}
+        <input type="checkbox" name="list_in_address_book">
+        {% endif %}
+        <label for="list_in_address_book">{% trans "List your account in global address book, so that others can find you by typing your name." %}</label>
+    </form>
+</div>
+{% endif %}
 
 <div class="setting-item" id="lang-setting">
     <h3>{% trans "Language Setting" %}</h3>
@@ -116,7 +142,7 @@
     <p><a class="sf-btn-link" href="{% url 'two_factor:disable' %}">
         {% trans "Disable Two-Factor Authentication" %}</a>
     </p>
-    
+
     <p class="txt-before-btn">
       {% blocktrans %}If you don't have any device with you, you can access your account using backup codes.{% endblocktrans %}
       {% blocktrans count counter=backup_tokens %}You have only one backup code remaining.{% plural %}You have {{ counter }} backup codes remaining.{% endblocktrans %}
@@ -149,13 +175,53 @@
 {% endblock %}
 
 {% block extra_script %}
-{% include 'snippets/avatar_upload_js.html' %}
 <script type="text/javascript">
-var cur_avatar = $('#user-avatar-change .avatar');
-$('#user-avatar-form').css({'left':cur_avatar.position().left + cur_avatar.outerWidth() + 10});
+// change avatar
+$('#user-avatar-chg-btn').click(function() {
+    $('#user-avatar-input').trigger('click');
+});
+$('#user-avatar-input').change(function() {
+    // check file extension
+    var file, filename, ext;
+    var allow = false;
+    var allowed_ext = ['jpg','jpeg', 'png', 'gif'];
+    if (this.files) { // IE: version lower than 10 doesn't have 'files'
+        file = this.files[0];
+        filename = file.name || file.fileName;
+    } else {
+        filename = this.value;
+    }
+    if (filename.lastIndexOf('.') != -1) { // ext exists
+        ext = filename.substr((filename.lastIndexOf('.') + 1)).toLowerCase();
+    }
+    if (ext) {
+        for (var i = 0, len = allowed_ext.length; i < len; i++) {
+            if (ext == allowed_ext[i]) {
+                allow = true;
+                break;
+            }
+        }
+    } else {
+        feedback(filename + "{% trans " is not supported. Please choose an image file." %}", 'error');
+        return false;
+    }
+
+    if (!allow) {
+        var err_msg = filename + "{% trans " is not supported. File extensions can only be " %}" + allowed_ext.join(', ');
+        feedback(err_msg, 'error');
+        return false;
+    }
+
+    // check if file size is less than 1MB
+    if (file && file.size > 1024*1024) {
+        feedback(filename + "{% trans " is too large. Allowed maximum size is 1MB." %}", 'error');
+        return false;
+    }
+
+    $('#user-avatar-form').submit();
+});
 
 $('#user-basic-info .submit').css({'margin-left': $('#user-basic-info label').outerWidth(true)});
-changeAvatar($('#user-avatar-chg-btn'), $('#user-avatar-input'), $('#user-avatar-form'));
 
 $('#account-delete-btn').click(function () {
     var title = "{% trans "Delete Account" %}",
@@ -191,6 +257,32 @@ $('#default-lib-form').submit(function() {
         $('.error', $(this)).removeClass('hide');
         return false;
     }
+});
+{% endif %}
+
+{% if ENABLE_ADDRESSBOOK_OPT_IN %}
+$("#list-in-address-book input[type='checkbox']").change(function() {
+    var _this = $(this), data = {};
+
+    if (_this.prop('checked')) {
+        data['list_in_address_book'] = 'true';
+    } else {
+        data['list_in_address_book'] = 'false';
+    }
+
+    $.ajax({
+        url: "{% url 'api-v2.1-user' %}",
+        type: 'PUT',
+        dataType: 'json',
+        cache: false,
+        beforeSend: prepareCSRFToken,
+        data: data,
+        success: function(data) {
+            _this.attr('checked', data['list_in_address_book']);
+            feedback("{% trans "Success" %}", 'success');
+        },
+        error: ajaxErrorHandler
+    });
 });
 {% endif %}
 

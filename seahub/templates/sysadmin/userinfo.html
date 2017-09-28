@@ -65,6 +65,18 @@
                 <span id="set-loginid" title="{% trans "Edit"%}" class="sf2-icon-edit op-icon"></span>
             </dd>
 
+            <dt>{% trans "Reference ID" %}</dt>
+            <dd>
+                <span id="reference-id">
+                    {% if reference_id %}
+                    {{ reference_id }}
+                    {% else %}
+                    --
+                    {% endif %}
+                </span>
+                <span id="set-reference-id" title="{% trans "Edit" %}" class="sf2-icon-edit op-icon"></span>
+            </dd>
+
             <dt>{% trans "Department" %}</dt>
             <dd>
                 <span id="department">
@@ -94,6 +106,19 @@
                 </span>
                 <span id="set-quota" title="{% trans "Edit Quota" %}" class="sf2-icon-edit op-icon"></span>
             </dd>
+
+            {% if two_factor_auth_enabled %}
+            <dt>{% trans "Two-Factor Authentication" %}</dt>
+            <dd>
+                {% if default_device %}
+                <p class="txt-before-btn">{% trans "Status" %}: {% trans "enabled" %}</p>
+                <button id="disable-two-factor-auth">{% trans "Disable Two-Factor Authentication" %}</button>
+                {% else %}
+                <button disabled="disabled" class="btn-disabled">{% trans "Disable Two-Factor Authentication" %}</button>
+                {% endif %}
+            </dd>
+            {% endif %}
+
         </dl>
 
         <form id="set-name-form" method="post" action="" class="hide">{% csrf_token %}
@@ -117,6 +142,13 @@
             <input type="submit" value="{% trans "Submit" %}" class="submit" />
         </form>
 
+        <form id="set-reference-id-form" method="post" action="" class="hide">{% csrf_token %}
+            <h3>{% trans "Set user Reference ID" %}</h3>
+            <input type="text" name="reference_id" class="input" value="" /><br />
+            <p class="error hide"></p>
+            <input type="submit" value="{% trans "Submit" %}" class="submit" />
+        </form>
+
         <form id="set-quota-form" method="post" class="hide">{% csrf_token %}
             <h3>{% trans "Set user storage limit" %}</h3>
             <input type="text" name="space_quota" class="input" /> MB
@@ -129,7 +161,7 @@
         </form>
     </div>
 
-    <div id="owned">
+    <div id="owned" class="hide">
         {% if owned_repos %}
         <table class="repo-list">
             <tr>
@@ -143,9 +175,9 @@
             {% for repo in owned_repos %}
             <tr>
                 {% if repo.encrypted %}
-                <td><img src="{{MEDIA_URL}}img/sync-folder-encrypt-20.png" title="{% trans "Encrypted"%}" alt="{% trans "library icon" %}" /></td>
+                <td><img src="{{MEDIA_URL}}img/lib/48/lib-encrypted.png" width="24" title="{% trans "Encrypted"%}" alt="{% trans "library icon" %}" /></td>
                 {% else %}
-                <td><img src="{{MEDIA_URL}}img/sync-folder-20.png?t=1387267140" title="{% trans "Read-Write" %}" alt="{% trans "library icon" %}" /></td>
+                <td><img src="{{MEDIA_URL}}img/lib/48/lib.png" width="24" title="{% trans "Read-Write" %}" alt="{% trans "library icon" %}" /></td>
                 {% endif %}
 
                 {% if not repo.name %}
@@ -178,7 +210,7 @@
         {% endif %}
     </div>
 
-    <div id="shared">
+    <div id="shared" class="hide">
         {% if in_repos %}
         <table>
             <tr>
@@ -192,11 +224,11 @@
             {% for repo in in_repos %}
             <tr>
                 {% if repo.encrypted %}
-                <td><img src="{{MEDIA_URL}}img/sync-folder-encrypt-20.png" title="{% trans "Encrypted"%}" alt="{% trans "library icon" %}" /></td>
+                <td><img src="{{MEDIA_URL}}img/lib/48/lib-encrypted.png" width="24" title="{% trans "Encrypted"%}" alt="{% trans "library icon" %}" /></td>
                 {% elif repo.permission == 'r' %}
-                <td><img src="{{MEDIA_URL}}img/folder-no-write-20.png" title="{% trans "Read-Only"%}" alt="{% trans "library icon" %}" /></td>
+                <td><img src="{{MEDIA_URL}}img/lib/48/lib-readonly.png" width="24" title="{% trans "Read-Only"%}" alt="{% trans "library icon" %}" /></td>
                 {% else %}
-                <td><img src="{{MEDIA_URL}}img/sync-folder-20.png?t=1387267140" title="{% trans "Read-Write" %}" alt="{% trans "library icon" %}" /></td>
+                <td><img src="{{MEDIA_URL}}img/lib/48/lib.png" width="24" title="{% trans "Read-Write" %}" alt="{% trans "library icon" %}" /></td>
                 {% endif %}
                 {% if enable_sys_admin_view_repo %}
                 <td><a href="{% url 'sys_admin_repo' repo.id %}">{{ repo.name }}</a></td>
@@ -216,7 +248,7 @@
         {% endif %}
     </div>
 
-    <div id="shared-links">
+    <div id="shared-links" class="hide">
         {% if user_shared_links%}
         <table class="sharelink-list">
             <tr>
@@ -264,7 +296,7 @@
         {% endif %}
     </div>
 
-    <div id="user-admin-groups">
+    <div id="user-admin-groups" class="hide">
         {% if personal_groups %}
         <table>
             <tr>
@@ -323,6 +355,10 @@ $('#set-loginid').click(function () {
     $("#set-loginid-form").modal({appendTo:"#main"});
     $('#simplemodal-container').css({'width':'auto', 'height':'auto'});
 })
+$('#set-reference-id').click(function () {
+    $("#set-reference-id-form").modal({appendTo:"#main"});
+    $('#simplemodal-container').css({'width':'auto', 'height':'auto'});
+})
 $('#set-dept').click(function() {
     $("#set-dept-form").modal({appendTo: "#main"});
     $('#simplemodal-container').css({'width':'auto', 'height':'auto'});
@@ -330,6 +366,27 @@ $('#set-dept').click(function() {
 $('#set-quota').click(function() {
     $("#set-quota-form").modal({appendTo: "#main"});
     $('#simplemodal-container').css({'width':'auto', 'height':'auto'});
+});
+
+$("#disable-two-factor-auth").click(function(){
+    $.ajax({
+        url: '{% url 'two-factor-auth-view' email %}',
+        type: 'DELETE',
+        cache: false,
+        beforeSend: prepareCSRFToken,
+        success:function(data){
+            location.reload(true);
+        },
+        error: function(xhr, textStatus, errorThrown) {
+            var err_msg;
+            if (xhr.responseText) {
+                err_msg = $.parseJSON(xhr.responseText).error_msg;
+            } else {
+                err_msg = "{% trans "Failed. Please check the network." %}";
+            }
+            feedback(err_msg, 'error');
+        }
+    });
 });
 
 $('#set-name-form').submit(function() {
@@ -345,7 +402,7 @@ $('#set-name-form').submit(function() {
     disable($submitBtn);
 
     $.ajax({
-        url: '{% url 'api2-account' email %}',
+        url: '{% url 'api-v2.1-admin-user' email %}',
         type: 'PUT',
         dataType: 'json',
         cache: false,
@@ -379,21 +436,59 @@ $('#set-loginid-form').submit(function() {
     var $loginid = $('#loginid');
     var $error = $('.error', $(this));
     var $submitBtn = $('[type="submit"]', $(this));
-    if (!loginid){
-        $error.html("{% trans "Login id can't be empty" %}").show();
-        return false;
-    }
+
     disable($submitBtn);
 
     $.ajax({
-        url: '{% url 'api2-account' email %}',
+        url: '{% url 'api-v2.1-admin-user' email %}',
         type: 'PUT',
         dataType: 'json',
         cache: false,
         beforeSend: prepareCSRFToken,
         data: {'login_id': loginid},
         success: function(data) {
-            $loginid.html(HTMLescape(data['login_id']));
+            if (loginid == '') {
+                $loginid.html('--');
+            } else {
+                $loginid.html(HTMLescape(data['login_id']));
+            }
+            $.modal.close();
+        },
+        error: function(xhr, textStatus, errorThrown) {
+            var err_msg;
+            if (xhr.responseText) {
+                err_msg = $.parseJSON(xhr.responseText).error_msg;
+            } else {
+                err_msg = "{% trans "Failed. Please check the network." %}";
+            }
+            $error.html(err_msg).show();
+            enable($submitBtn);
+        }
+    });
+
+    return false;
+});
+
+$('#set-reference-id-form').submit(function() {
+    var reference_id = $.trim($('[name="reference_id"]', $(this)).val());
+    var $referenceID = $('#reference-id');
+    var $error = $('.error', $(this));
+    var $submitBtn = $('[type="submit"]', $(this));
+    disable($submitBtn);
+
+    $.ajax({
+        url: '{% url 'api-v2.1-admin-user' email %}',
+        type: 'PUT',
+        dataType: 'json',
+        cache: false,
+        beforeSend: prepareCSRFToken,
+        data: {'reference_id': reference_id},
+        success: function(data) {
+            if (reference_id == '') {
+                $referenceID.html('--');
+            } else {
+                $referenceID.html(HTMLescape(data['reference_id']));
+            }
             $.modal.close();
         },
         error: function(xhr, textStatus, errorThrown) {
@@ -419,7 +514,7 @@ $('#set-dept-form').submit(function() {
     disable($submitBtn);
 
     $.ajax({
-        url: '{% url 'api2-account' email %}',
+        url: '{% url 'api-v2.1-admin-user' email %}',
         type: 'PUT',
         dataType: 'json',
         cache: false,
@@ -463,17 +558,17 @@ $('#set-quota-form').submit(function() {
     disable($submitBtn);
 
     $.ajax({
-        url: '{% url 'api2-account' email %}',
+        url: '{% url 'api-v2.1-admin-user' email %}',
         type: 'PUT',
         dataType: 'json',
         cache: false,
         beforeSend: prepareCSRFToken,
-        data: {'storage': space_quota},
+        data: {'quota_total': space_quota},
         success: function(data) {
             if (space_quota == 0) {
                 $quota.html('--');
             } else {
-                $quota.html(quotaSizeFormat(parseInt(data['total']), 1));
+                $quota.html(quotaSizeFormat(parseInt(data['quota_total']), 1));
             }
             $.modal.close();
         },
@@ -488,6 +583,7 @@ $('#set-quota-form').submit(function() {
     });
     return false;
 });
+
 addConfirmTo($('.rm-grp'), {
     'title': "{% trans "Delete Group" %}",
     'con': "{% trans "Are you sure you want to delete %s ?" %}",
