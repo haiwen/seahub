@@ -47,7 +47,7 @@ from seahub.avatar.templatetags.group_avatar_tags import api_grp_avatar_url, \
 from seahub.base.accounts import User
 from seahub.base.models import UserStarredFiles, DeviceToken
 from seahub.share.models import ExtraSharePermission, ExtraGroupsSharePermission
-from seahub.share.utils import is_repo_admin
+from seahub.share.utils import is_repo_admin, check_group_permission_by_path
 from seahub.base.templatetags.seahub_tags import email2nickname, \
     translate_seahub_time, translate_commit_desc_escape, \
     email2contact_email
@@ -3514,6 +3514,8 @@ class SharedRepo(APIView):
                 seaserv.seafserv_threaded_rpc.unset_org_inner_pub_repo(org_id, repo_id)
             else:
                 seafile_api.remove_inner_pub_repo(repo_id)
+            send_perm_audit_msg('delete-repo-perm', username, 'All',
+                                repo_id, '/', permission)
         else:
             return api_error(status.HTTP_400_BAD_REQUEST,
                              'Share type can only be personal or group or public.')
@@ -4083,14 +4085,23 @@ class GroupRepo(APIView):
         if not group.is_staff and repo_owner != username and not is_repo_admin(username, repo_id):
             return api_error(status.HTTP_403_FORBIDDEN, 'Permission denied.')
 
+        repo = seafile_api.get_repo_by_group(group_id, repo_id)
         if seaserv.is_org_group(group_id):
             org_id = seaserv.get_org_id_by_group(group_id)
+            permission = check_group_permission_by_path(repo_id, username, group_id, org_id)
             seaserv.del_org_group_repo(repo_id, org_id, group_id)
         else:
+            permission = check_group_permission_by_path(repo_id, username, group_id)
             seafile_api.unset_group_repo(repo_id, group_id, username)
+        print permission
         # delete extra share permission
         ExtraGroupsSharePermission.objects.delete_share_permission(repo_id, group_id)
-
+        if repo.is_virtual:
+            send_perm_audit_msg('delete-repo-perm', username, group_id,
+                                repo.origin_repo_id, repo.origin_path, permission)
+        else:
+            send_perm_audit_msg('delete-repo-perm', username, group_id,
+                                repo_id, '/', permission)
         return HttpResponse(json.dumps({'success': True}), status=200,
                             content_type=json_content_type)
 

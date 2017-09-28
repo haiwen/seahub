@@ -89,7 +89,7 @@ def share_dir_to_group(repo, path, owner, share_from, gid, permission, org_id=No
         share_repo_to_group_successful.send(sender=None,
             from_user=share_from, group_id=gid, repo=sub_repo)
 
-def update_user_dir_permission(repo_id, path, owner, share_from, share_to, permission, org_id=None):
+def update_user_dir_permission(repo_id, path, owner, share_to, permission, org_id=None):
     # Update the user's permission(r, rw, admin) in the repo or subdir.
     extra_share_permission = ''
     if permission == PERMISSION_ADMIN:
@@ -116,7 +116,7 @@ def update_user_dir_permission(repo_id, path, owner, share_from, share_to, permi
                                                              share_to, 
                                                              extra_share_permission)
 
-def update_group_dir_permission(repo_id, path, owner, share_from, gid, permission, org_id=None):
+def update_group_dir_permission(repo_id, path, owner, gid, permission, org_id=None):
     # Update the group's permission(r, rw, admin) in the repo or subdir.
     extra_share_permission = ''
     if permission == PERMISSION_ADMIN:
@@ -148,6 +148,8 @@ def check_user_permission_by_path(repo_id, path, share_to):
     permission = seafile_api.check_permission_by_path(repo_id, path, share_to)
     if not permission:
         return None
+    if path != '/':
+        return permission
     extra_permission = ExtraSharePermission.objects.get_user_permission(repo_id, share_to)
     return extra_permission if extra_permission else permission
 

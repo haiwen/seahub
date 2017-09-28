@@ -2228,20 +2228,32 @@
     <td>{% trans "all members"%}</td>
     <% } %>
     <td>
-        <% if (share_permission == 'rw') { %>
-            <span class="cur-perm">{% trans "Read-Write" %}</span>
+        <% if (is_admin) { %>
+            <span class="cur-perm">{% trans "Admin" %}</span>
             <a href="#" title="{% trans "Edit" %}" class="perm-edit-icon sf2-icon-edit op-icon vh"></a>
             <select class="perm-select select-white hide">
-                <option value="rw" selected="selected">{% trans "Read-Write" %}</option>
+                <option value="admin" selected="selected">{% trans "Admin" %}</option>
+                <option value="rw">{% trans "Read-Write" %}</option>
                 <option value="r">{% trans "Read-Only" %}</option>
             </select>
         <% } else { %>
-            <span class="cur-perm">{% trans "Read-Only" %}</span>
-            <a href="#" title="{% trans "Edit" %}" class="perm-edit-icon sf2-icon-edit op-icon vh"></a>
-            <select class="perm-select select-white hide">
-                <option value="rw">{% trans "Read-Write" %}</option>
-                <option value="r" selected="selected">{% trans "Read-Only" %}</option>
-            </select>
+            <% if (share_permission == 'rw') { %>
+                <span class="cur-perm">{% trans "Read-Write" %}</span>
+                <a href="#" title="{% trans "Edit" %}" class="perm-edit-icon sf2-icon-edit op-icon vh"></a>
+                <select class="perm-select select-white hide">
+                    <option value="rw" selected="selected">{% trans "Read-Write" %}</option>
+                    <option value="r">{% trans "Read-Only" %}</option>
+                    <option value="admin">{% trans "Admin" %}</option>
+                </select>
+            <% } else { %>
+                <span class="cur-perm">{% trans "Read-Only" %}</span>
+                <a href="#" title="{% trans "Edit" %}" class="perm-edit-icon sf2-icon-edit op-icon vh"></a>
+                <select class="perm-select select-white hide">
+                    <option value="rw">{% trans "Read-Write" %}</option>
+                    <option value="r" selected="selected">{% trans "Read-Only" %}</option>
+                    <option value="admin">{% trans "Admin" %}</option>
+                </select>
+            <% } %>
         <% } %>
     </td>
     <td>

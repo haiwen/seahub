@@ -220,11 +220,11 @@ class DirSharedItemsEndpoint(APIView):
                 repo_owner = seafile_api.get_org_repo_owner(repo_id)
                 org_id = request.user.org.org_id
 
-                update_user_dir_permission(repo_id, path, repo_owner, username, shared_to, permission, org_id)
+                update_user_dir_permission(repo_id, path, repo_owner, shared_to, permission, org_id)
             else:
                 repo_owner = seafile_api.get_repo_owner(repo_id)
 
-                update_user_dir_permission(repo_id, path, repo_owner, username, shared_to, permission)
+                update_user_dir_permission(repo_id, path, repo_owner, shared_to, permission)
 
             send_perm_audit_msg('modify-repo-perm', username, shared_to,
                                 repo_id, path, permission)
@@ -244,11 +244,11 @@ class DirSharedItemsEndpoint(APIView):
                 repo_owner = seafile_api.get_org_repo_owner(repo_id)
                 org_id = request.user.org.org_id
 
-                update_group_dir_permission(repo_id, path, repo_owner, username, gid, permission, org_id)
+                update_group_dir_permission(repo_id, path, repo_owner, gid, permission, org_id)
             else:
                 repo_owner = seafile_api.get_repo_owner(repo_id)
 
-                update_group_dir_permission(repo_id, path, repo_owner, username, gid, permission, None)
+                update_group_dir_permission(repo_id, path, repo_owner, gid, permission, None)
 
             send_perm_audit_msg('modify-repo-perm', username, gid,
                                 repo_id, path, permission)
@@ -459,7 +459,9 @@ class DirSharedItemsEndpoint(APIView):
                 return api_error(status.HTTP_400_BAD_REQUEST, 'Email %s invalid.' % shared_to)
 
             # if user not found, permission will be None
-            permission = check_user_permission_by_path(repo_id, '/', shared_to)
+            permission = check_user_permission_by_path(repo_id, path, shared_to)
+            print repo_id
+            print permission
 
             if is_org_context(request):
                 # when calling seafile API to share authority related functions, change the uesrname to repo owner.
@@ -501,6 +503,7 @@ class DirSharedItemsEndpoint(APIView):
             else:
                 permission = check_group_permission_by_path(repo_id, username, group_id)
 
+            repo = seafile_api.get_repo_by_group(group_id, repo_id)
             if is_org_context(request):
                 # when calling seafile API to share authority related functions, change the uesrname to repo owner.
                 repo_owner = seafile_api.get_org_repo_owner(repo_id)

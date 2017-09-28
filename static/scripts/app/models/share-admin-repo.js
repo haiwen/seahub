@@ -18,7 +18,9 @@ define([
 
         getIconTitle: function() {
             var icon_title = '';
-            if (this.get('share_permission') == "rw") {
+            if (this.get('is_admin')) {
+                icon_title = gettext("Admin");
+            } else if (this.get('share_permission') == "rw") {
                 icon_title = gettext("Read-Write");
             } else {
                 icon_title = gettext("Read-Only");
