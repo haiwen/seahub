@@ -34,7 +34,7 @@ from django.views.static import serve as django_static_serve
 from seahub.api2.models import Token, TokenV2
 import seahub.settings
 from seahub.settings import SITE_NAME, MEDIA_URL, LOGO_PATH, \
-        MEDIA_ROOT, CUSTOM_LOGO_PATH
+        MEDIA_ROOT, CUSTOM_LOGO_PATH, ENABLE_SHARE_LINK_WATERMARK
 try:
     from seahub.settings import EVENTS_CONFIG_FILE
 except ImportError:
@@ -1149,9 +1149,10 @@ if HAS_OFFICE_CONVERTER:
         return resp
 
     @cluster_delegate(delegate_add_office_convert_task)
-    def add_office_convert_task(file_id, doctype, raw_path):
+    def add_office_convert_task(file_id, doctype, raw_path, 
+                                enable_watermark=False, name=None, email=None):
         rpc = _get_office_converter_rpc()
-        d = rpc.add_task(file_id, doctype, raw_path)
+        d = rpc.add_task(file_id, doctype, raw_path, enable_watermark, name, email)
         return {
             'exists': False,
         }
@@ -1176,9 +1177,10 @@ if HAS_OFFICE_CONVERTER:
                                    os.path.join(file_id, static_filename),
                                    document_root=OFFICE_HTML_DIR)
 
-    def prepare_converted_html(raw_path, obj_id, doctype, ret_dict):
+    def prepare_converted_html(raw_path, obj_id, doctype, ret_dict, 
+                               enable_watermark=False, name=None, email=None):
         try:
-            add_office_convert_task(obj_id, doctype, raw_path)
+            add_office_convert_task(obj_id, doctype, raw_path, enable_watermark, name, email)
         except:
             logging.exception('failed to add_office_convert_task:')
             return _(u'Internal error')

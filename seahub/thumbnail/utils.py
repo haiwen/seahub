@@ -198,8 +198,11 @@ def _create_thumbnail_common(fp, thumbnail_file, size, **kwargs):
     return (True, 200)
 
 def add_text_to_image(img, user, email):
-    if img.mode != 'RGBA':
-        img = img.convert('RGBA')
+    try:
+        if img.mode != 'RGBA':
+            img = img.convert('RGBA')
+    except Exception as e:
+        logger.debug(e)
     copyImgsize = img.size[0] if img.size[0] < img.size[1] else img.size[1]
     font_size = (copyImgsize -200)/200*3 + 11
 
