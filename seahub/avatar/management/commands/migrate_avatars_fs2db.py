@@ -53,7 +53,7 @@ class Command(NoArgsCommand):
         name_md5 = hashlib.md5(name).hexdigest()
         try:
             binary = content.read()
-        except AttributeError:
+        except AttributeError, IOError:
             raise AvatarNotFoundError
 
         size = len(binary)

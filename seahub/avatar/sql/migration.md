@@ -9,7 +9,7 @@ CREATE TABLE IF NOT EXISTS `avatar_uploaded` (`filename` TEXT NOT NULL, `filenam
 ```
 cd <seafile-path>/seafile-server-latest/seahub/seahub/avatar/management/commands/
 
-wget https://raw.githubusercontent.com/haiwen/seahub/bce60291a7ed31dd40c88032c7c46843fd2505d6/seahub/avatar/management/commands/migrate_avatars_fs2db.py
+wget https://raw.githubusercontent.com/haiwen/seahub/6.2/seahub/avatar/management/commands/migrate_avatars_fs2db.py
 ```
 
 ## step 2: run migration
@@ -28,4 +28,8 @@ vi <seafile-path>/conf/seahub_settings.py
 AVATAR_FILE_STORAGE = 'seahub.base.database_storage.DatabaseStorage'
 ```
 
-## step 4: restart service and verify
+## step 4: restart seahub cache and seafile service
+
+for memcached: `service memcached restart`
+
+otherwise: `rm -rf /tmp/seahub_cache/*`
