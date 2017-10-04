@@ -7,6 +7,7 @@ from django.utils import timezone
 from django.utils.translation import ugettext as _
 
 from seahub.base.fields import LowerCaseCharField
+from seahub.invitations.utils import block_accepter
 from seahub.invitations.settings import INVITATIONS_TOKEN_AGE
 from seahub.utils import gen_token
 from seahub.utils.timeutils import datetime_to_isoformat_timestr
@@ -83,11 +84,9 @@ class Invitation(models.Model):
         if not email:
             email = self.accepter
 
-        context = {
-            'inviter': self.inviter,
-            'site_name': SITE_NAME,
-            'token': self.token,
-        }
+        context = self.to_dict()
+        context['site_name'] = SITE_NAME
+
         # subject = render_to_string('invitations/invitation_email_subject.txt',
         #                            context).rstrip()
         subject = _('%(user)s invited you to join %(site_name)s.') % {
