@@ -287,6 +287,9 @@ SHARE_LINK_PASSWORD_MIN_LENGTH = 8
 # enable or disable share link audit
 ENABLE_SHARE_LINK_AUDIT = False
 
+# share link audit code timeout
+SHARE_LINK_AUDIT_CODE_TIMEOUT = 60 * 60
+
 # enable or disable limit ip 
 ENABLE_LIMIT_IPADDRESS = False
 TRUSTED_IP_LIST = ['127.0.0.1']
