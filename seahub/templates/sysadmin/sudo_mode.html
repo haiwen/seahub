@@ -16,8 +16,8 @@
     {% endif %}
 
     <input type="submit" value="{% trans "Confirm Password" %}" class="submit" />
-    {% if enable_shib_login %}
-    <button id="shib-login" class="submit fright">{% trans "Shibboleth" %}</button>
+    {% if enable_sso %}
+    <button id="shib-login" class="submit fright">SSO</button>
     {% endif %}
 
     <div class="sudo-mode-tip">
@@ -43,7 +43,7 @@ $(function() {
     });
 });
 
-{% if enable_shib_login %}
+{% if enable_sso %}
 $(function() {
     $('#shib-login').click(function() {
         window.location = "{% url 'shib_login' %}{% if next %}?next={{ next|escape }}{% endif %}";
