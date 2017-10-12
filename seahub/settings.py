@@ -397,6 +397,9 @@ ACTIVATE_AFTER_REGISTRATION = True
 # This option will be ignored if ``ACTIVATE_AFTER_REGISTRATION`` set to ``True``.
 REGISTRATION_SEND_MAIL = False
 
+# Whether or not activate inactive user on first login. Mainly used in LDAP user sync.
+ACTIVATE_AFTER_FIRST_LOGIN = False
+
 REQUIRE_DETAIL_ON_REGISTRATION = False
 
 # Account initial password, for password resetting.

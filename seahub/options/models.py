@@ -21,6 +21,9 @@ VAL_SUB_LIB_DISABLED = "0"
 KEY_FORCE_PASSWD_CHANGE = "force_passwd_change"
 VAL_FORCE_PASSWD_CHANGE = "1"
 
+KEY_USER_LOGGED_IN = "user_logged_in"
+VAL_USER_LOGGED_IN = "1"
+
 KEY_DEFAULT_REPO = "default_repo"
 
 class CryptoOptionNotSetError(Exception):
@@ -199,6 +202,20 @@ class UserOptionsManager(models.Manager):
 
     def unset_force_passwd_change(self, username):
         return self.unset_user_option(username, KEY_FORCE_PASSWD_CHANGE)
+
+    def set_user_logged_in(self, username):
+        return self.set_user_option(username, KEY_USER_LOGGED_IN,
+                                    VAL_USER_LOGGED_IN)
+
+    def is_user_logged_in(self, username):
+        """Check whether user has logged in successfully at least once.
+        """
+        try:
+            r = super(UserOptionsManager, self).get(
+                email=username, option_key=KEY_USER_LOGGED_IN)
+            return r.option_val == VAL_USER_LOGGED_IN
+        except UserOptions.DoesNotExist:
+            return False
 
 
 class UserOptions(models.Model):
