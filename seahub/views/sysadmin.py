@@ -2052,6 +2052,7 @@ def sys_sudo_mode(request):
     if not request.user.is_staff:
         raise Http404
 
+    next = request.GET.get('next', reverse('sys_useradmin'))
     password_error = False
     if request.method == 'POST':
         password = request.POST.get('password')
@@ -2059,15 +2060,16 @@ def sys_sudo_mode(request):
             user = authenticate(username=request.user.username, password=password)
             if user:
                 update_sudo_mode_ts(request)
-                return HttpResponseRedirect(
-                    request.GET.get('next', reverse('sys_useradmin')))
+                return HttpResponseRedirect(next)
         password_error = True
 
     enable_shib_login = getattr(settings, 'ENABLE_SHIB_LOGIN', False)
+    enable_adfs_login = getattr(settings, 'ENABLE_ADFS_LOGIN', False)
     return render_to_response(
         'sysadmin/sudo_mode.html', {
             'password_error': password_error,
-            'enable_shib_login': enable_shib_login,
+            'enable_sso': enable_shib_login or enable_adfs_login,
+            'next': next,
         },
         context_instance=RequestContext(request))
 
