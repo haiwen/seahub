@@ -155,7 +155,6 @@ def login(request, template_name='registration/login.html',
     redirect_to = request.REQUEST.get(redirect_field_name, '')
     ip = get_remote_ip(request)
 
-
     if request.method == "POST":
         login = urlquote(request.REQUEST.get('login', '').strip())
         failed_attempt = _get_login_failed_attempts(username=login, ip=ip)
