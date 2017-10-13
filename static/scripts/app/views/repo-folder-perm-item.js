@@ -16,7 +16,7 @@ define([
                 $.extend(options.item_data, {'show_folder_path': false})
             }
 
-            this.data = {};
+            this.data = {show_admin: false}; // `show_admin: false`: because the tmpl is also used by 'views/folder-share-item.js'
             $.extend(this.data, options.item_data);
 
             this.render();
