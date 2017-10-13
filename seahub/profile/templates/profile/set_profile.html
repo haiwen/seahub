@@ -15,7 +15,7 @@
         {% if user.permissions.can_add_repo %}
         <li class="tab"><a href="#default-lib">{% trans "Default Library" %}</a></li>
         {% endif %}
-        {% if two_factor_auth_enabled %}
+        {% if two_factor_auth_enabled and user.permissions.can_use_two_factor_auth %}
         <li class="tab"><a href="#two-factor-auth">{% trans "Two-Factor Authentication" %}</a></li>
         {% endif %}
         <li class="tab" id="del-account-nav"><a href="#del-account">{% trans "Delete Account" %}</a></li>
@@ -108,7 +108,7 @@
 </form>
 {% endif %}
 
-{% if two_factor_auth_enabled %}
+{% if two_factor_auth_enabled and  user.permissions.can_use_two_factor_auth or default_device  %}
 <div class="setting-item" id="two-factor-auth">
     <h3>{% trans "Two-Factor Authentication" %}</h3>
     {% if default_device %}

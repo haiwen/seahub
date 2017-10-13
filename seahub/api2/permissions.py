@@ -85,7 +85,13 @@ class CanSendShareLinkMail(BasePermission):
     """
     def has_permission(self, request, *args, **kwargs):
         return request.user.permissions.can_send_share_link_mail()
-   
+
+class CanUseTwoFactorAuth(BasePermission):
+    """Check user has permission to use two factor auth.
+    """
+    def has_permission(self, request, *args, **kwargs):
+        return request.user.permissions.can_use_two_factor_auth()
+		
 class IsProVersion(BasePermission):
     """
     Check whether Seafile is pro version
