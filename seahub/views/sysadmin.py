@@ -1965,7 +1965,7 @@ def batch_add_user(request):
         rows = wb.worksheets[0].rows
         records = []
         # remove first row(head field).
-        next(rows)
+        rows.next()
         for row in rows:
             records.append([c.value for c in row])
 
