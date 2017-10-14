@@ -12,6 +12,7 @@ import re
 import os
 
 from django.conf import settings as dj_settings
+from django.utils.functional import lazy
 from constance import config
 
 from seahub.settings import SEAFILE_VERSION, SITE_TITLE, SITE_NAME, \
@@ -119,3 +120,17 @@ def base(request):
         result['is_default_admin'] = request.user.admin_role == DEFAULT_ADMIN
 
     return result
+
+def debug(request):
+    """
+    Returns context variables helpful for debugging.
+    """
+    context_extras = {}
+    if dj_settings.DEBUG and request.META.get('REMOTE_ADDR') in dj_settings.INTERNAL_IPS or \
+       dj_settings.DEBUG and request.GET.get('_dev', '') == '1':
+        context_extras['debug'] = True
+        from django.db import connection
+        # Return a lazy reference that computes connection.queries on access,
+        # to ensure it contains queries triggered after this function runs.
+        context_extras['sql_queries'] = lazy(lambda: connection.queries, list)
+    return context_extras
