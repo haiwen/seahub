@@ -286,6 +286,8 @@ define([
                 });
                 return false;
             });
+
+            return false;
         },
 
         popupHistorySetting: function() {

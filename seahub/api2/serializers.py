@@ -10,7 +10,6 @@ from seahub.api2.utils import get_token_v1, get_token_v2
 from seahub.profile.models import Profile
 from seahub.utils.two_factor_auth import has_two_factor_auth, \
         two_factor_auth_enabled, verify_two_factor_token
-from seahub.utils.user_permissions import populate_user_permissions
 
 logger = logging.getLogger(__name__)
 
@@ -82,8 +81,6 @@ class AuthTokenSerializer(serializers.Serializer):
                 raise serializers.ValidationError('Unable to login with provided credentials.')
         else:
             raise serializers.ValidationError('Must include "username" and "password"')
-
-        populate_user_permissions(user)
 
         self._two_factor_auth(self.context['request'], user)
 

@@ -118,7 +118,7 @@ define([
                 if ($('#dirent-details').css('right') == '0px') { // after `#dirent-details` is shown
                     this.viewDetails();
                 }
-                if ($('#file-comments').css('right') == '0px') {
+                if (this.model.get('is_file') && $('#file-comments').css('right') == '0px') {
                     this.viewFileComments();
                 }
             }

@@ -161,127 +161,8 @@ class SysUserAdminExportExcelTest(BaseTestCase):
         self.assertEqual(200, resp.status_code)
         assert 'application/ms-excel' in resp._headers['content-type']
 
+
 class BatchAddUserTest(BaseTestCase):
-    def setUp(self):
-        self.clear_cache()
-        self.login_as(self.admin)
-
-        self.new_users = []
-        self.csv_file = os.path.join(os.getcwd(), 'tests/seahub/views/sysadmin/batch_add_user.csv')
-        with open(self.csv_file) as f:
-            for line in f.readlines():
-                self.new_users.append(line.split(',')[0].strip())
-
-    def tearDown(self):
-        for u in self.new_users:
-            self.remove_user(u)
-
-    def test_can_batch_add(self):
-        for e in self.new_users:
-            try:
-                r = User.objects.get(e)
-            except User.DoesNotExist:
-                r = None
-            assert r is None
-
-        with open(self.csv_file) as f:
-            resp = self.client.post(reverse('batch_add_user'), {
-                'file': f
-            })
-
-        self.assertEqual(302, resp.status_code)
-        assert 'Import succeeded' in resp.cookies['messages'].value
-        for e in self.new_users:
-            assert User.objects.get(e) is not None
-
-    def test_can_batch_add_when_pwd_change_required(self):
-        config.FORCE_PASSWORD_CHANGE = 1
-
-        for e in self.new_users:
-            assert len(UserOptions.objects.filter(
-                email=e, option_key=KEY_FORCE_PASSWD_CHANGE)) == 0
-
-        for e in self.new_users:
-            try:
-                r = User.objects.get(e)
-            except User.DoesNotExist:
-                r = None
-            assert r is None
-
-        with open(self.csv_file) as f:
-            resp = self.client.post(reverse('batch_add_user'), {
-                'file': f
-            })
-
-        self.assertEqual(302, resp.status_code)
-        assert 'Import succeeded' in resp.cookies['messages'].value
-        for e in self.new_users:
-            assert User.objects.get(e) is not None
-            assert UserOptions.objects.passwd_change_required(e)
-
-    def test_can_batch_add_when_pwd_change_not_required(self):
-        config.FORCE_PASSWORD_CHANGE = 0
-
-        for e in self.new_users:
-            assert len(UserOptions.objects.filter(
-                email=e, option_key=KEY_FORCE_PASSWD_CHANGE)) == 0
-
-        for e in self.new_users:
-            try:
-                r = User.objects.get(e)
-            except User.DoesNotExist:
-                r = None
-            assert r is None
-
-        with open(self.csv_file) as f:
-            resp = self.client.post(reverse('batch_add_user'), {
-                'file': f
-            })
-
-        self.assertEqual(302, resp.status_code)
-        assert 'Import succeeded' in resp.cookies['messages'].value
-        for e in self.new_users:
-            assert User.objects.get(e) is not None
-            assert not UserOptions.objects.passwd_change_required(e)
-
-    @patch('seahub.views.sysadmin.user_number_over_limit')
-    def test_can_not_batch_add_if_user_over_limit(self, mock_user_number_over_limit):
-
-        mock_user_number_over_limit.return_value = True
-
-        for e in self.new_users:
-            try:
-                r = User.objects.get(e)
-            except User.DoesNotExist:
-                r = None
-            assert r is None
-
-        with open(self.csv_file) as f:
-            resp = self.client.post(reverse('batch_add_user'), {
-                'file': f
-            })
-
-        self.assertEqual(302, resp.status_code)
-        assert 'users exceeds the limit' in resp.cookies['messages'].value
-
-    def test_can_send_email(self):
-        self.assertEqual(0, len(Email.objects.all()))
-
-        with open(self.csv_file) as f:
-            resp = self.client.post(reverse('batch_add_user'), {
-                'file': f
-            })
-
-        self.assertEqual(302, resp.status_code)
-        self.assertNotEqual(0, len(Email.objects.all()))
-
-        email = Email.objects.all()[0]
-        assert self.new_users[0] == email.to[0]
-        assert "Email: %s" % self.new_users[0] in email.html_message
-        assert email.status == 2
-
-
-class BatchAddUserUsingExcelTest(BaseTestCase):
     def setUp(self):
         self.clear_cache()
         self.login_as(self.admin)
@@ -289,6 +170,7 @@ class BatchAddUserUsingExcelTest(BaseTestCase):
         self.new_users = []
         self.excel_file = os.path.join(os.getcwd(), 'tests/seahub/views/sysadmin/batch_add_user.xlsx')
         data_list = []
+        data_list.append(['email', 'password', 'username', 'department', 'role', 'quota'])
         for i in xrange(20):
             username = "username@test" + str(i) +".com"
             password = "password"
@@ -317,7 +199,7 @@ class BatchAddUserUsingExcelTest(BaseTestCase):
             assert r is None
 
         with open(self.excel_file) as f:
-            resp = self.client.post(reverse('batch_add_user_using_excel'), {
+            resp = self.client.post(reverse('batch_add_user'), {
                 'file': f
             })
 
@@ -341,7 +223,7 @@ class BatchAddUserUsingExcelTest(BaseTestCase):
             assert r is None
 
         with open(self.excel_file) as f:
-            resp = self.client.post(reverse('batch_add_user_using_excel'), {
+            resp = self.client.post(reverse('batch_add_user'), {
                 'file': f
             })
 
@@ -366,7 +248,7 @@ class BatchAddUserUsingExcelTest(BaseTestCase):
             assert r is None
 
         with open(self.excel_file) as f:
-            resp = self.client.post(reverse('batch_add_user_using_excel'), {
+            resp = self.client.post(reverse('batch_add_user'), {
                 'file': f
             })
 
@@ -389,7 +271,7 @@ class BatchAddUserUsingExcelTest(BaseTestCase):
             assert r is None
 
         with open(self.excel_file) as f:
-            resp = self.client.post(reverse('batch_add_user_using_excel'), {
+            resp = self.client.post(reverse('batch_add_user'), {
                 'file': f
             })
 
@@ -400,7 +282,7 @@ class BatchAddUserUsingExcelTest(BaseTestCase):
         self.assertEqual(0, len(Email.objects.all()))
 
         with open(self.excel_file) as f:
-            resp = self.client.post(reverse('batch_add_user_using_excel'), {
+            resp = self.client.post(reverse('batch_add_user'), {
                 'file': f
             })
 
@@ -413,7 +295,7 @@ class BatchAddUserUsingExcelTest(BaseTestCase):
         assert email.status == 2
 
 
-class BatchAddUserUsingExcelHelpTest(BaseTestCase):
+class BatchAddUserHelpTest(BaseTestCase):
     def setUp(self):
         self.login_as(self.admin)
 
@@ -427,14 +309,12 @@ class BatchAddUserUsingExcelHelpTest(BaseTestCase):
         assert wb.sheetnames[0] == 'sample'
         rows = wb.worksheets[0].rows
         i = 0
+        rows.next()
         for r in rows:
-            assert r[0].value == 'username@test' + str(i) + '.com'
-            assert r[1].value == 'password'
-            assert r[2].value == 'name_test' + str(i)
-            assert r[3].value == 'department_test' + str(i)
-            if i < 10:
-                assert r[4].value == 'guest'
-            else:
-                assert r[4].value == 'default'
-            assert r[5].value == '999'
+            assert r[0].value == 'test' + str(i) + '@example.com'
+            assert r[1].value == '123456'
+            assert r[2].value == 'test' + str(i)
+            assert r[3].value == 'department' + str(i)
+            assert r[4].value == 'default'
+            assert r[5].value == '1000'
             i += 1
