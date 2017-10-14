@@ -127,7 +127,8 @@ def debug(request):
     """
     context_extras = {}
     if dj_settings.DEBUG and request.META.get('REMOTE_ADDR') in dj_settings.INTERNAL_IPS or \
-       dj_settings.DEBUG and request.GET.get('_dev', '') == '1':
+       dj_settings.DEBUG and request.GET.get('_dev', '') == '1' or \
+       dj_settings.DEBUG and not dj_settings.COMPRESS_ENABLED:
         context_extras['debug'] = True
         from django.db import connection
         # Return a lazy reference that computes connection.queries on access,
