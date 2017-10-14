@@ -342,6 +342,10 @@ class Search(APIView):
         username = request.user.username
         results, total, has_more = search_keyword(request, keyword)
 
+        is_org = False
+        if is_org_context(request):
+            is_org = True
+
         for e in results:
             e.pop('repo', None)
             e.pop('exists', None)
@@ -355,7 +359,11 @@ class Search(APIView):
                 repo = get_repo(repo_id)
                 e['repo_name'] = repo.name
 
-                repo_owner = seafile_api.get_repo_owner(repo_id)
+                if is_org:
+                    repo_owner = seafile_api.get_org_repo_owner(repo_id)
+                else:
+                    repo_owner = seafile_api.get_repo_owner(repo_id)
+
                 e['repo_owner_email'] = repo_owner
                 e['repo_owner_name'] = email2nickname(repo_owner)
                 e['repo_owner_contact_email'] = email2contact_email(repo_owner)
