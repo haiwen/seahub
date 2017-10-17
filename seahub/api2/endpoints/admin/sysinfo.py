@@ -150,7 +150,7 @@ class SysInfo(APIView):
             'license_to': license_dict.get('Name', ''),
             'total_storage': total_storage,
             'total_devices_count': total_devices_count,
-            'current_connected_devices_count': current_connected_devices_count,
+            'current_connected_devices_count': current_connected_devices_count
         }
 
         return Response(info)

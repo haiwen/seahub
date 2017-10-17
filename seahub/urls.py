@@ -415,6 +415,7 @@ urlpatterns = patterns(
     url(r'^sys/instadmin/(?P<inst_id>\d+)/set_quota/$', sys_inst_set_quota, name='sys_inst_set_quota'),
     url(r'^sys/publinkadmin/$', sys_publink_admin, name='sys_publink_admin'),
     url(r'^sys/publink/remove/$', sys_publink_remove, name='sys_publink_remove'),
+    url(r'^sys/uploadlinkadmin/$', sys_upload_link_admin, name='sys_upload_link_admin'),
     url(r'^sys/uploadlink/remove/$', sys_upload_link_remove, name='sys_upload_link_remove'),
     url(r'^sys/notificationadmin/', notification_list, name='notification_list'),
     url(r'^sys/invitationadmin/$', sys_invitation_admin, name='sys_invitation_admin'),
