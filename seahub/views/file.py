@@ -1653,6 +1653,11 @@ def _office_convert_get_file_id(request, repo_id=None, commit_id=None, path=None
 
 @json_response
 def office_convert_query_status(request, cluster_internal=False):
+    shared_token = request.GET.get('shared_token', '')
+    fileshare = FileShare.objects.get_valid_file_link_by_token(shared_token)
+    if fileshare:
+        shared_by = fileshare.username
+
     if not cluster_internal and not request.is_ajax():
         raise Http404
 
@@ -1665,7 +1670,7 @@ def office_convert_query_status(request, cluster_internal=False):
 
     ret = {'success': False}
     try:
-        ret = query_office_convert_status(file_id, page, cluster_internal=cluster_internal)
+        ret = query_office_convert_status(file_id, page, cluster_internal=cluster_internal, shared_by=shared_by)
     except Exception, e:
         logging.exception('failed to call query_office_convert_status')
         ret['error'] = str(e)
@@ -1678,6 +1683,8 @@ def office_convert_get_page(request, repo_id, commit_id, path, filename, cluster
     - "1.page" "2.page" for pdf/doc/ppt
     - index.html for spreadsheets and index_html_xxx.png for images embedded in spreadsheets
     """
+    shared_token = request.GET.get('shared_token')
+
     if not HAS_OFFICE_CONVERTER:
         raise Http404
 
@@ -1690,8 +1697,10 @@ def office_convert_get_page(request, repo_id, commit_id, path, filename, cluster
     else:
         file_id = _office_convert_get_file_id(request, repo_id, commit_id, path)
 
-    if ENABLE_SHARE_LINK_WATERMARK:
-        file_id = file_id + '_watermark'
+    if ENABLE_SHARE_LINK_WATERMARK and shared_token:
+        fileshare = FileShare.objects.get_valid_file_link_by_token(shared_token)
+        if fileshare:
+            file_id = file_id + '_' + fileshare.username
 
     resp = get_office_converted_page(
         request, repo_id, commit_id, path, filename, file_id, cluster_internal=cluster_internal)

@@ -1158,9 +1158,9 @@ if HAS_OFFICE_CONVERTER:
         }
 
     @cluster_delegate(delegate_query_office_convert_status)
-    def query_office_convert_status(file_id, page):
+    def query_office_convert_status(file_id, page, shared_by=''):
         rpc = _get_office_converter_rpc()
-        d = rpc.query_convert_status(file_id, page)
+        d = rpc.query_convert_status(file_id, page, shared_by)
         ret = {}
         if d.error:
             ret['error'] = d.error
