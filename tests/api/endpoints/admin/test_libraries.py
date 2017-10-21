@@ -124,6 +124,24 @@ class AdminLibraryTest(BaseTestCase):
 
         self.library_url = reverse('api-v2.1-admin-library', args=[self.repo_id])
 
+    def test_can_get(self):
+
+        self.login_as(self.admin)
+
+        resp = self.client.get(self.library_url)
+
+        self.assertEqual(200, resp.status_code)
+
+        json_resp = json.loads(resp.content)
+        assert json_resp['owner'] == self.user_name
+        assert json_resp['name'] == self.repo.repo_name
+
+    def test_get_with_invalid_user_permission(self):
+
+        self.login_as(self.user)
+        resp = self.client.get(self.library_url)
+        self.assertEqual(403, resp.status_code)
+
     def test_can_transfer(self):
 
         self.login_as(self.admin)
