@@ -54,6 +54,16 @@ from seahub.settings import AVATAR_FILE_STORAGE, \
     ENABLE_SUB_LIBRARY, ENABLE_FOLDER_PERM, ENABLE_REPO_SNAPSHOT_LABEL, \
     UNREAD_NOTIFICATIONS_REQUEST_INTERVAL
 
+try:
+    from seahub.settings import ENABLE_OFFICE_WEB_APP
+except ImportError:
+    ENABLE_OFFICE_WEB_APP = False
+
+try:
+    from seahub.settings import ENABLE_ONLYOFFICE
+except ImportError:
+    ENABLE_ONLYOFFICE = False
+
 LIBRARY_TEMPLATES = getattr(settings, 'LIBRARY_TEMPLATES', {})
 
 from constance import config
@@ -755,6 +765,11 @@ def libraries(request):
             logger.error(e)
             joined_groups = []
 
+    if ENABLE_OFFICE_WEB_APP or ENABLE_ONLYOFFICE:
+        is_web_office = True
+    else:
+        is_web_office  = False
+
     return render_to_response('libraries.html', {
             "allow_public_share": allow_public_share,
             "guide_enabled": guide_enabled,
@@ -772,6 +787,7 @@ def libraries(request):
             'max_upload_file_size': max_upload_file_size,
             'folder_perm_enabled': folder_perm_enabled,
             'is_pro': True if is_pro_version() else False,
+            'is_web_office': is_web_office,
             'file_audit_enabled': FILE_AUDIT_ENABLED,
             'can_add_pub_repo': can_add_pub_repo,
             'joined_groups': joined_groups,
