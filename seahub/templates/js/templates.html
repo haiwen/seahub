@@ -331,9 +331,11 @@
             <div class="menu-inner-divider"></div>
             <ul id="new-file-menu">
                 <li><a id="add-new-md-file" class="op" href="#">{% trans "New Markdown File" %}</a></li>
+                <% if (app.pageOptions.is_web_office) { %>
                 <li><a id="add-new-excel-file" class="op" href="#">{% trans "New Excel File" %}</a></li>
                 <li><a id="add-new-ppt-file" class="op" href="#">{% trans "New PowerPoint File" %}</a></li>
                 <li><a id="add-new-word-file" class="op" href="#">{% trans "New Word File" %}</a></li>
+                <% } %>
             </ul>
         </div>
     </div>
