@@ -1,15 +1,6 @@
 # Copyright (c) 2012-2016 Seafile Ltd.
 from seahub.constants import DEFAULT_USER, GUEST_USER, \
         DEFAULT_ADMIN, SYSTEM_ADMIN, DAILY_ADMIN, AUDIT_ADMIN
-from seahub.utils import is_pro_version
-
-def populate_user_permissions(user):
-    if is_pro_version():
-        from seahub_extra.auth_extra.utils import populate_user_permissions
-        populate_user_permissions(user)
-    else:
-        # use default user permissions
-        pass
 
 def get_basic_user_roles():
     """Get predefined user roles.

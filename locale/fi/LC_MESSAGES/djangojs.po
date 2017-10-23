@@ -11,9 +11,9 @@ msgid ""
 msgstr ""
 "Project-Id-Version: seahub\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2017-09-12 18:01+0800\n"
-"PO-Revision-Date: 2017-09-12 09:11+0000\n"
-"Last-Translator: Teppo Sarjonen <teppo.sarjonen@gmail.com>\n"
+"POT-Creation-Date: 2017-09-25 15:40+0800\n"
+"PO-Revision-Date: 2017-09-25 07:44+0000\n"
+"Last-Translator: zheng xie <xiez1989@gmail.com>\n"
 "Language-Team: Finnish (http://www.transifex.com/haiwen/seahub/language/fi/)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -22,12 +22,12 @@ msgstr ""
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 
 #: static/scripts/app/models/deleted-repo.js:19
-#: static/scripts/app/models/repo.js:57 static/scripts/common.js:317
+#: static/scripts/app/models/repo.js:57 static/scripts/common.js:318
 msgid "Encrypted library"
 msgstr "Salattu kirjasto"
 
 #: static/scripts/app/models/deleted-repo.js:21
-#: static/scripts/app/models/repo.js:59 static/scripts/common.js:321
+#: static/scripts/app/models/repo.js:59 static/scripts/common.js:322
 #: static/scripts/sysadmin-app/models/trash-repo.js:14
 msgid "Read-Write library"
 msgstr "Luku-kirjoitus kirjasto"
@@ -37,7 +37,7 @@ msgstr "Luku-kirjoitus kirjasto"
 #: static/scripts/app/views/fileupload.js:373
 #: static/scripts/app/views/fileupload.js:387
 #: static/scripts/app/views/fileupload.js:399
-#: static/scripts/app/views/fileupload.js:411 static/scripts/common.js:575
+#: static/scripts/app/views/fileupload.js:411 static/scripts/common.js:576
 msgid "Just now"
 msgstr "Juuri nyt"
 
@@ -68,7 +68,7 @@ msgstr "Salasana on liian lyhyt"
 msgid "Passwords don't match"
 msgstr "Salasanat eivät täsmää"
 
-#: static/scripts/app/models/repo.js:61 static/scripts/common.js:319
+#: static/scripts/app/models/repo.js:61 static/scripts/common.js:320
 msgid "Read-Only library"
 msgstr "Vain luku kirjasto"
 
@@ -110,6 +110,7 @@ msgstr "Vain-Luku"
 #: static/scripts/app/views/share.js:165 static/scripts/app/views/share.js:488
 #: static/scripts/app/views/share.js:603 static/scripts/app/views/share.js:688
 #: static/scripts/app/views/share.js:712
+#: static/scripts/sysadmin-app/views/device-trusted-ipaddresses.js:62
 #: static/scripts/sysadmin-app/views/group-members.js:96
 #: static/scripts/sysadmin-app/views/groups.js:100
 #: static/scripts/sysadmin-app/views/repos.js:90
@@ -154,7 +155,7 @@ msgstr "Poistetut hakemistot"
 #: static/scripts/app/views/dialogs/repo-history-settings.js:142
 #: static/scripts/app/views/dir.js:1279 static/scripts/app/views/dir.js:1313
 #: static/scripts/app/views/dir.js:1360
-#: static/scripts/app/views/dirent-details.js:163
+#: static/scripts/app/views/dirent-details.js:164
 #: static/scripts/app/views/dirent-grid.js:337
 #: static/scripts/app/views/dirent-grid.js:378
 #: static/scripts/app/views/dirent.js:496
@@ -180,13 +181,14 @@ msgstr "Poistetut hakemistot"
 #: static/scripts/app/views/repo.js:206 static/scripts/app/views/repo.js:281
 #: static/scripts/app/views/repo.js:396 static/scripts/app/views/repo.js:438
 #: static/scripts/app/views/share.js:401 static/scripts/app/views/share.js:790
-#: static/scripts/app/views/share.js:869 static/scripts/common.js:396
-#: static/scripts/common.js:485
+#: static/scripts/app/views/share.js:869 static/scripts/common.js:397
+#: static/scripts/common.js:486
 #: static/scripts/sysadmin-app/views/admin-login-logs.js:129
 #: static/scripts/sysadmin-app/views/admin-operation-logs.js:129
 #: static/scripts/sysadmin-app/views/dashboard.js:84
 #: static/scripts/sysadmin-app/views/desktop-devices.js:105
 #: static/scripts/sysadmin-app/views/device-errors.js:92
+#: static/scripts/sysadmin-app/views/device-trusted-ipaddresses.js:115
 #: static/scripts/sysadmin-app/views/dir.js:193
 #: static/scripts/sysadmin-app/views/folder-share-item.js:89
 #: static/scripts/sysadmin-app/views/folder-share-item.js:138
@@ -287,6 +289,7 @@ msgstr "Nimeä tiedosto uudelleen"
 #: static/scripts/app/views/groups.js:112
 #: static/scripts/app/views/invitations.js:54
 #: static/scripts/app/views/repo.js:175 static/scripts/app/views/repo.js:409
+#: static/scripts/sysadmin-app/views/device-trusted-ipaddresses.js:42
 #: static/scripts/sysadmin-app/views/dir.js:82
 msgid "It is required."
 msgstr "Vaaditaan"
@@ -559,7 +562,12 @@ msgstr "%(name)s siirtäminen epäonnistui"
 msgid "Failed to copy %(name)s"
 msgstr "%(name)s kopiointi epäonnistui."
 
-#: static/scripts/app/views/dirent-details.js:115
+#: static/scripts/app/views/dirent-details.js:99 static/scripts/common.js:619
+#: static/scripts/common.js:690
+msgid "No matches"
+msgstr "Ei osumia"
+
+#: static/scripts/app/views/dirent-details.js:116
 msgid "Tag should not include ','."
 msgstr "Tagi ei voi sisältää ','."
 
@@ -586,8 +594,8 @@ msgid "Filetype not allowed"
 msgstr "Tiedostotyyppi ei ole sallittu"
 
 #: static/scripts/app/views/fileupload.js:13
-msgid "Max number of files exceeded"
-msgstr "Tiedostojen maksimäärä on ylitetty"
+msgid "Maximum number of files exceeded"
+msgstr ""
 
 #: static/scripts/app/views/fileupload.js:14
 msgid "Uploaded bytes exceed file size"
@@ -636,6 +644,7 @@ msgid "Cancel"
 msgstr "Peruuta"
 
 #: static/scripts/app/views/fileupload.js:22
+#: static/scripts/sysadmin-app/views/device-trusted-ipaddress.js:27
 msgid "Delete"
 msgstr "Poista"
 
@@ -764,6 +773,7 @@ msgid "Delete Library"
 msgstr "Tuhoa Kirjasto"
 
 #: static/scripts/app/views/repo.js:92
+#: static/scripts/sysadmin-app/views/device-trusted-ipaddress.js:28
 #: static/scripts/sysadmin-app/views/group-member.js:82
 #: static/scripts/sysadmin-app/views/group.js:31
 #: static/scripts/sysadmin-app/views/repo.js:67
@@ -846,35 +856,31 @@ msgstr "Ryhmien haku epäonnistui:"
 msgid "Success"
 msgstr "Onnistui"
 
-#: static/scripts/app/views/starred-file-item.js:66
+#: static/scripts/app/views/starred-file-item.js:69
 msgid "Successfully unstared {placeholder}"
 msgstr "Suosikki {placeholder} poistettu onnistuneesti"
 
-#: static/scripts/common.js:609
+#: static/scripts/common.js:610
 msgid "Search users or enter emails and press Enter"
 msgstr "Etsi käyttäjiä tai syötä sähköpostit ja paina Enter"
 
-#: static/scripts/common.js:617 static/scripts/common.js:688
+#: static/scripts/common.js:618 static/scripts/common.js:689
 msgid "Please enter 1 or more character"
 msgstr "Ole hyvä ja syötä 1 tai useampi merkki"
 
-#: static/scripts/common.js:618 static/scripts/common.js:689
-msgid "No matches"
-msgstr "Ei osumia"
-
-#: static/scripts/common.js:619 static/scripts/common.js:690
+#: static/scripts/common.js:620 static/scripts/common.js:691
 msgid "Searching..."
 msgstr "Etsitään..."
 
-#: static/scripts/common.js:620 static/scripts/common.js:691
+#: static/scripts/common.js:621 static/scripts/common.js:692
 msgid "Loading failed"
 msgstr "Lataus epäonnistui"
 
-#: static/scripts/common.js:680
+#: static/scripts/common.js:681
 msgid "Search groups"
 msgstr "Etsi ryhmiä"
 
-#: static/scripts/common.js:1015
+#: static/scripts/common.js:1016
 msgid "Packaging..."
 msgstr "Pakataan..."
 
@@ -943,6 +949,11 @@ msgstr "Poistettu käyttäjä {user}"
 msgid "Successfully clean all errors."
 msgstr "Kaikki virheet on poistettu onnistuneesti."
 
+#: static/scripts/sysadmin-app/views/device-trusted-ipaddress.js:39
+#: static/scripts/sysadmin-app/views/group.js:44
+msgid "Successfully deleted 1 item."
+msgstr "Onnistuneesti tuhottu 1 kohde."
+
 #: static/scripts/sysadmin-app/views/group-member.js:81
 msgid "Delete Member"
 msgstr "Poista Jäsen"
@@ -967,10 +978,6 @@ msgstr "Oletko varma, että haluat poistaa jaon %s ?"
 #: static/scripts/sysadmin-app/views/group-repo.js:42
 msgid "Successfully unshared library {placeholder}"
 msgstr "Kirjaston jako {placeholder} poistettiin onnistuneesti"
-
-#: static/scripts/sysadmin-app/views/group.js:44
-msgid "Successfully deleted 1 item."
-msgstr "Onnistuneesti tuhottu 1 kohde."
 
 #: static/scripts/sysadmin-app/views/group.js:64
 msgid "Transfer Group {group_name} To"

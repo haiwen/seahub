@@ -142,7 +142,7 @@ TEMPLATE_DIRS = (
 LANGUAGES = (
     # ('bg', gettext_noop(u'български език')),
     ('ca', u'Català'),
-    # ('cs', gettext_noop(u'čeština')),
+    ('cs', u'Čeština'),
     ('de', 'Deutsch'),
     ('en', 'English'),
     ('es', 'Español'),
@@ -184,7 +184,7 @@ LOCALE_PATHS = (
 
 TEMPLATE_CONTEXT_PROCESSORS = (
     'django.contrib.auth.context_processors.auth',
-    'django.core.context_processors.debug',
+    'seahub.base.context_processors.debug',
     'django.core.context_processors.i18n',
     'django.core.context_processors.media',
     'django.core.context_processors.static',
@@ -286,6 +286,9 @@ SHARE_LINK_PASSWORD_MIN_LENGTH = 8
 
 # enable or disable share link audit
 ENABLE_SHARE_LINK_AUDIT = False
+
+# share link audit code timeout
+SHARE_LINK_AUDIT_CODE_TIMEOUT = 60 * 60
 
 # enable or disable limit ip 
 ENABLE_LIMIT_IPADDRESS = False
@@ -408,6 +411,9 @@ ACTIVATE_AFTER_REGISTRATION = True
 # Whether or not send activation Email to user when registration complete.
 # This option will be ignored if ``ACTIVATE_AFTER_REGISTRATION`` set to ``True``.
 REGISTRATION_SEND_MAIL = False
+
+# Whether or not activate inactive user on first login. Mainly used in LDAP user sync.
+ACTIVATE_AFTER_FIRST_LOGIN = False
 
 REQUIRE_DETAIL_ON_REGISTRATION = False
 

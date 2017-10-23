@@ -1,11 +1,12 @@
 import os
+import openpyxl
+from io import BytesIO
 from mock import patch
 from django.core.urlresolvers import reverse
 from post_office.models import Email
 
 from seahub.base.accounts import User
-from seahub.options.models import (UserOptions, KEY_FORCE_PASSWD_CHANGE,
-                                   VAL_FORCE_PASSWD_CHANGE)
+from seahub.options.models import (UserOptions, KEY_FORCE_PASSWD_CHANGE)
 from seahub.test_utils import BaseTestCase
 from seahub.utils.ms_excel import write_xls as real_write_xls
 
@@ -160,16 +161,30 @@ class SysUserAdminExportExcelTest(BaseTestCase):
         self.assertEqual(200, resp.status_code)
         assert 'application/ms-excel' in resp._headers['content-type']
 
+
 class BatchAddUserTest(BaseTestCase):
     def setUp(self):
         self.clear_cache()
         self.login_as(self.admin)
 
         self.new_users = []
-        self.csv_file = os.path.join(os.getcwd(), 'tests/seahub/views/sysadmin/batch_add_user.csv')
-        with open(self.csv_file) as f:
-            for line in f.readlines():
-                self.new_users.append(line.split(',')[0].strip())
+        self.excel_file = os.path.join(os.getcwd(), 'tests/seahub/views/sysadmin/batch_add_user.xlsx')
+        data_list = []
+        data_list.append(['email', 'password', 'username', 'department', 'role', 'quota'])
+        for i in xrange(20):
+            username = "username@test" + str(i) +".com"
+            password = "password"
+            name = "name_test" + str(i)
+            department = "department_test" + str(i)
+            if i < 10:
+                role = "guest"
+            else:
+                role = "default"
+            quota = "999"
+            data_list.append([username, password, name, department, role, quota])
+            self.new_users.append(username)
+        wb = real_write_xls('test', data_list[0], data_list[1:])
+        wb.save(self.excel_file)
 
     def tearDown(self):
         for u in self.new_users:
@@ -183,7 +198,7 @@ class BatchAddUserTest(BaseTestCase):
                 r = None
             assert r is None
 
-        with open(self.csv_file) as f:
+        with open(self.excel_file) as f:
             resp = self.client.post(reverse('batch_add_user'), {
                 'file': f
             })
@@ -207,7 +222,7 @@ class BatchAddUserTest(BaseTestCase):
                 r = None
             assert r is None
 
-        with open(self.csv_file) as f:
+        with open(self.excel_file) as f:
             resp = self.client.post(reverse('batch_add_user'), {
                 'file': f
             })
@@ -232,7 +247,7 @@ class BatchAddUserTest(BaseTestCase):
                 r = None
             assert r is None
 
-        with open(self.csv_file) as f:
+        with open(self.excel_file) as f:
             resp = self.client.post(reverse('batch_add_user'), {
                 'file': f
             })
@@ -255,7 +270,7 @@ class BatchAddUserTest(BaseTestCase):
                 r = None
             assert r is None
 
-        with open(self.csv_file) as f:
+        with open(self.excel_file) as f:
             resp = self.client.post(reverse('batch_add_user'), {
                 'file': f
             })
@@ -266,7 +281,7 @@ class BatchAddUserTest(BaseTestCase):
     def test_can_send_email(self):
         self.assertEqual(0, len(Email.objects.all()))
 
-        with open(self.csv_file) as f:
+        with open(self.excel_file) as f:
             resp = self.client.post(reverse('batch_add_user'), {
                 'file': f
             })
@@ -278,3 +293,28 @@ class BatchAddUserTest(BaseTestCase):
         assert self.new_users[0] == email.to[0]
         assert "Email: %s" % self.new_users[0] in email.html_message
         assert email.status == 2
+
+
+class BatchAddUserHelpTest(BaseTestCase):
+    def setUp(self):
+        self.login_as(self.admin)
+
+    def test_can_get_excel(self):
+        resp = self.client.get(reverse('batch_add_user_example')+"?type=xlsx")
+        assert resp.status_code == 200
+
+    def test_validate_excel(self):
+        resp = self.client.get(reverse('batch_add_user_example')+"?type=xlsx")
+        wb = openpyxl.load_workbook(filename=BytesIO(resp.content), read_only=True)
+        assert wb.sheetnames[0] == 'sample'
+        rows = wb.worksheets[0].rows
+        i = 0
+        rows.next()
+        for r in rows:
+            assert r[0].value == 'test' + str(i) + '@example.com'
+            assert r[1].value == '123456'
+            assert r[2].value == 'test' + str(i)
+            assert r[3].value == 'department' + str(i)
+            assert r[4].value == 'default'
+            assert r[5].value == '1000'
+            i += 1

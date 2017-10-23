@@ -10,7 +10,6 @@ from seahub.base.accounts import User
 from seahub.api2.models import Token, TokenV2
 from seahub.api2.utils import get_client_ip
 from seahub.utils import within_time_range
-from seahub.utils.user_permissions import populate_user_permissions
 try:
     from seahub.settings import MULTI_TENANCY
 except ImportError:
@@ -82,8 +81,6 @@ class TokenAuthentication(BaseAuthentication):
             if orgs:
                 user.org = orgs[0]
 
-        populate_user_permissions(user)
-
         if user.is_active:
             return (user, token)
 
@@ -106,8 +103,6 @@ class TokenAuthentication(BaseAuthentication):
             orgs = ccnet_api.get_orgs_by_user(token.user)
             if orgs:
                 user.org = orgs[0]
-
-        populate_user_permissions(user)
 
         if user.is_active:
             need_save = False

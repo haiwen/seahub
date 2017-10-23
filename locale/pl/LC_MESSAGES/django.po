@@ -13,8 +13,8 @@ msgstr ""
 "Project-Id-Version: seahub\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2017-09-12 18:01+0800\n"
-"PO-Revision-Date: 2017-09-12 10:02+0000\n"
-"Last-Translator: zheng xie <xiez1989@gmail.com>\n"
+"PO-Revision-Date: 2017-09-23 19:30+0000\n"
+"Last-Translator: K.S. <adrespubliczny+transifex@gmail.com>\n"
 "Language-Team: Polish (http://www.transifex.com/haiwen/seahub/language/pl/)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -2901,7 +2901,7 @@ msgstr "Telefon:"
 
 #: seahub/profile/templates/profile/set_profile.html:80
 msgid "Global Address Book"
-msgstr ""
+msgstr "Globalna Książka Adresowa"
 
 #: seahub/profile/templates/profile/set_profile.html:87
 msgid ""
@@ -3833,7 +3833,7 @@ msgstr "Nie zastępuj"
 #: seahub/templates/js/sysadmin-templates.html:16
 #: seahub/templates/sysadmin/base.html:24
 msgid "Statistic"
-msgstr ""
+msgstr "Statystyka"
 
 #: seahub/templates/js/sysadmin-templates.html:22
 #: seahub/templates/sysadmin/base.html:30
@@ -4238,7 +4238,7 @@ msgstr ""
 
 #: seahub/templates/js/sysadmin-templates.html:987
 msgid "Failed"
-msgstr ""
+msgstr "Niepowodzenie"
 
 #: seahub/templates/js/templates.html:8
 msgid "Template"
@@ -4486,7 +4486,7 @@ msgstr "Położenie"
 #: seahub/templates/js/templates.html:851
 #: seahub/templates/js/templates.html:897
 msgid "Tags"
-msgstr ""
+msgstr "Tagi"
 
 #: seahub/templates/js/templates.html:919
 #: seahub/templates/snippets/file_share_popup.html:6
@@ -4818,7 +4818,7 @@ msgstr "Udostępnij"
 
 #: seahub/templates/js/templates.html:2140
 msgid "You have not shared any libraries"
-msgstr ""
+msgstr "Nie udostępniłeś żadnej biblioteki"
 
 #: seahub/templates/js/templates.html:2141
 msgid ""
@@ -4833,7 +4833,7 @@ msgstr "wszyscy członkowie"
 
 #: seahub/templates/js/templates.html:2195
 msgid "You have not shared any folders"
-msgstr ""
+msgstr "Nie masz żadnych udostępnionych folderów"
 
 #: seahub/templates/js/templates.html:2196
 msgid ""
@@ -4848,7 +4848,7 @@ msgstr "Wygaśnięcie"
 
 #: seahub/templates/js/templates.html:2230
 msgid "You don't have any download links"
-msgstr ""
+msgstr "Nie masz żadnych łącz pobierania"
 
 #: seahub/templates/js/templates.html:2231
 msgid ""
@@ -4858,7 +4858,7 @@ msgstr ""
 
 #: seahub/templates/js/templates.html:2264
 msgid "You don't have any upload links"
-msgstr ""
+msgstr "Nie masz żadnych łącz przesyłania"
 
 #: seahub/templates/js/templates.html:2265
 msgid ""
@@ -4899,7 +4899,7 @@ msgstr "Brak usuniętych bibliotek."
 
 #: seahub/templates/libraries.html:63
 msgid "No libraries have been shared with you"
-msgstr ""
+msgstr "Żadna biblioteka nie została Ci udostępniona"
 
 #: seahub/templates/libraries.html:64
 msgid ""
@@ -4921,7 +4921,7 @@ msgstr "Utwórz nową bibliotekę"
 
 #: seahub/templates/libraries.html:89
 msgid "No public libraries"
-msgstr ""
+msgstr "Brak bibliotek publicznych"
 
 #: seahub/templates/libraries.html:90
 msgid ""
@@ -4935,7 +4935,7 @@ msgstr "Moje grupy"
 
 #: seahub/templates/libraries.html:106
 msgid "You are not in any groups"
-msgstr ""
+msgstr "Nie należysz do żadnej grupy"
 
 #: seahub/templates/libraries.html:108
 msgid ""
@@ -5052,7 +5052,7 @@ msgstr "Zaloguj się"
 
 #: seahub/templates/registration/login.html:40
 msgid "Refresh"
-msgstr ""
+msgstr "Odśwież"
 
 #: seahub/templates/registration/login.html:54
 msgid "Incorrect email or password"
@@ -5065,7 +5065,7 @@ msgstr "Zapamiętaj mnie przez %(remember_days)s dni"
 
 #: seahub/templates/registration/login.html:64
 msgid "Forgot password?"
-msgstr ""
+msgstr "Nie pamiętasz hasła?"
 
 #: seahub/templates/registration/login.html:74
 #: seahub/templates/sysadmin/sudo_mode.html:20
@@ -5299,7 +5299,7 @@ msgstr "Porada: po każdej modyfikacji zostanie utworzona migawka, która przech
 
 #: seahub/templates/repo_history.html:36
 msgid "Labels"
-msgstr ""
+msgstr "Etykiety"
 
 #: seahub/templates/repo_history.html:62
 msgid "None"
@@ -5315,7 +5315,7 @@ msgstr "Pokaż migawkę"
 
 #: seahub/templates/repo_history.html:109
 msgid "Edit labels"
-msgstr ""
+msgstr "Edytuj etykiety"
 
 #: seahub/templates/repo_history.html:178
 msgid "Successfully edited labels."
@@ -5790,7 +5790,7 @@ msgstr "zaszyfrowana biblioteka"
 
 #: seahub/templates/sysadmin/settings.html:128
 msgid "Allow user to create encrypted libraries"
-msgstr ""
+msgstr "Zezwól użytkownikom na tworzenie zaszyfrowanych bibliotek"
 
 #: seahub/templates/sysadmin/settings.html:133
 msgid "library password minimum length"
@@ -5823,7 +5823,7 @@ msgstr ""
 
 #: seahub/templates/sysadmin/settings.html:152
 msgid "text file extensions"
-msgstr ""
+msgstr "rozszerzenia plików tekstowych"
 
 #: seahub/templates/sysadmin/settings.html:153
 msgid ""
@@ -6123,25 +6123,25 @@ msgstr "Ruch"
 #: seahub/templates/sysadmin/sys_statistic_storage.html:24
 #: seahub/templates/sysadmin/sys_statistic_user.html:24
 msgid "24 Hours"
-msgstr ""
+msgstr "24 godziny"
 
 #: seahub/templates/sysadmin/sys_statistic_file.html:25
 #: seahub/templates/sysadmin/sys_statistic_storage.html:25
 #: seahub/templates/sysadmin/sys_statistic_user.html:25
 msgid "7 Days"
-msgstr ""
+msgstr "7 dni"
 
 #: seahub/templates/sysadmin/sys_statistic_file.html:26
 #: seahub/templates/sysadmin/sys_statistic_storage.html:26
 #: seahub/templates/sysadmin/sys_statistic_user.html:26
 msgid "30 Days"
-msgstr ""
+msgstr "30 dni"
 
 #: seahub/templates/sysadmin/sys_statistic_file.html:27
 #: seahub/templates/sysadmin/sys_statistic_storage.html:27
 #: seahub/templates/sysadmin/sys_statistic_user.html:27
 msgid "1 Year"
-msgstr ""
+msgstr "1 rok"
 
 #: seahub/templates/sysadmin/sys_statistic_file.html:179
 msgctxt "files visited"
@@ -6151,12 +6151,12 @@ msgstr ""
 #: seahub/templates/sysadmin/sys_statistic_file.html:185
 msgctxt "files added"
 msgid "Added"
-msgstr ""
+msgstr "Dodane"
 
 #: seahub/templates/sysadmin/sys_statistic_file.html:191
 msgctxt "files deleted"
 msgid "Deleted"
-msgstr ""
+msgstr "Usunięte"
 
 #: seahub/templates/sysadmin/sys_statistic_file.html:202
 msgid "File Operations"

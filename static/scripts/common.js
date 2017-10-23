@@ -98,6 +98,7 @@ define([
 
                 case 'dir-details': return siteRoot + 'api/v2.1/repos/' + options.repo_id + '/dir/detail/';
                 case 'tags': return siteRoot + 'api/v2.1/repos/' + options.repo_id + '/tags/';
+                case 'file-comments': return siteRoot + 'api2/repos/' + options.repo_id + '/file/comments/';
 
                 // Repos
                 case 'repos': return siteRoot + 'api2/repos/';

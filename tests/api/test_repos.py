@@ -6,6 +6,7 @@ import json
 import time
 import pytest
 import uuid
+from constance import config
 
 from django.core.urlresolvers import reverse
 from seaserv import seafile_api
@@ -156,7 +157,14 @@ class ReposApiTest(ApiTestBase):
                       'repo/%s/permission-check/?op=upload' % repo_id)
         self.get(url, use_token=False, headers=headers, **kwargs)
 
+
+class NewReposApiTest(BaseTestCase):
     # @pytest.mark.xfail
+    def setUp(self):
+        self.clear_cache()
+        self.login_as(self.admin)
+        config.ENABLE_ENCRYPTED_LIBRARY = True
+
     def test_create_encrypted_repo(self):
         """Test create an encrypted repo with the secure keys generated on client
         side.
@@ -172,8 +180,8 @@ class ReposApiTest(ApiTestBase):
             'magic': enc_info.magic,
             'random_key': enc_info.random_key,
         }
-        res = self.post(REPOS_URL, data=data)
-        repo = res.json()
+        repo = self.client.post(REPOS_URL, data=data)
+        repo = json.loads(repo.content)
         assert repo['repo_id'] == repo_id
         assert repo['encrypted']
         assert repo['magic'] == enc_info.magic
@@ -181,10 +189,60 @@ class ReposApiTest(ApiTestBase):
 
         # validate the password on server
         set_password_url = apiurl('/api2/repos/{}/'.format(repo['repo_id']))
-        self.post(set_password_url, data={'password': password})
+        self.client.post(set_password_url, data={'password': password})
 
         # do some file operation
-        self.create_file(repo['repo_id'])
+        self.create_file(repo_id=repo['repo_id'], parent_dir='/', filename='repo-test', username=self.admin.username)
+
+    def test_create_encrypted_repo_with_disable_create_enc_library(self):
+        """Test create an encrypted repo with the secure keys generated on client
+        side.
+        """
+        config.ENABLE_ENCRYPTED_LIBRARY = False
+        repo_id = str(uuid.uuid4())
+        password = randstring(16)
+        enc_version = 2
+        enc_info = seafile_api.generate_magic_and_random_key(enc_version, repo_id, password)
+        data = {
+            'name': 'enc-test-with-disable-encry',
+            'repo_id': repo_id,
+            'enc_version': enc_version,
+            'magic': enc_info.magic,
+            'random_key': enc_info.random_key,
+        }
+        res = self.client.post(REPOS_URL, data=data)
+        assert res.status_code == 403
+
+    def test_create_encrypted_repo_with_invalid_repoid(self):
+        """Test create an encrypted repo with the secure keys generated on client
+        side.
+        """
+        repo_id = 'qwer'
+        password = randstring(16)
+        enc_version = 2
+        enc_info = seafile_api.generate_magic_and_random_key(enc_version, repo_id, password)
+        data = {
+            'name': 'enc-test-with-disable-encry',
+            'repo_id': repo_id,
+            'enc_version': enc_version,
+            'magic': enc_info.magic,
+            'random_key': enc_info.random_key,
+        }
+        res = self.client.post(REPOS_URL, data=data)
+        print res
+        assert res.status_code == 400
+
+#        repo = res.json()
+#        assert repo['repo_id'] == repo_id
+#        assert repo['encrypted']
+#        assert repo['magic'] == enc_info.magic
+#        assert repo['random_key'] == enc_info.random_key
+#
+#        # validate the password on server
+#        set_password_url = apiurl('/api2/repos/{}/'.format(repo['repo_id']))
+#        self.post(set_password_url, data={'password': password})
+#
+        # do some file operation
 
 
 # Uncomment following to test api performance.

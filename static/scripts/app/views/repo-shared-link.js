@@ -37,14 +37,20 @@ define([
                     'share_type': 'd' // 'd': dir
                 });
             }
+
+            var icon_size = Common.isHiDPI() ? 48 : 24;
+            var icon_url;
             if (obj.share_type == 'd') {
                 // path is ended with '/'
                 _path = path.substring(0, path.length - 1);
+                icon_url = Common.getDirIconUrl(false, icon_size); // is_readonly: false
             } else {
                 formattedSize = Common.fileSizeFormat(this.model.get('size'), 1);
+                icon_url = Common.getFileIconUrl(this.model.get('name'), icon_size);
             }
             $.extend(obj, {
                 'repo_id': this.data.repo_id,
+                'icon_url': icon_url,
                 'formattedSize': formattedSize,
                 'encoded_path': Common.encodePath(_path)
             });

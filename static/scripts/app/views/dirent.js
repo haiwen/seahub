@@ -104,6 +104,7 @@ define([
             'click .lock-file': 'lockFile',
             'click .unlock-file': 'unlockFile',
             'click .view-details': 'viewDetails',
+            'click .file-comment': 'viewFileComments',
             'click .open-via-client': 'open_via_client'
         },
 
@@ -113,9 +114,13 @@ define([
 
         clickItem: function(e) {
             var target =  e.target || event.srcElement;
-            if (this.$('td').is(target) &&
-                $('#dirent-details').css('right') == '0px') { // after `#dirent-details` is shown
-                this.viewDetails();
+            if (this.$('td').is(target)) {
+                if ($('#dirent-details').css('right') == '0px') { // after `#dirent-details` is shown
+                    this.viewDetails();
+                }
+                if (this.model.get('is_file') && $('#file-comments').css('right') == '0px') {
+                    this.viewFileComments();
+                }
             }
         },
 
@@ -663,6 +668,20 @@ define([
                     }
                 });
             }
+
+            this._hideMenu();
+            return false;
+        },
+
+        viewFileComments: function() {
+            var file_icon_size = Common.isHiDPI() ? 48 : 24;
+            this.dirView.fileCommentsView.show({
+                'is_repo_owner': this.dir.is_repo_owner,
+                'repo_id': this.dir.repo_id,
+                'path': Common.pathJoin([this.dir.path, this.model.get('obj_name')]),
+                'icon_url': this.model.getIconUrl(file_icon_size),
+                'file_name': this.model.get('obj_name')
+            });
 
             this._hideMenu();
             return false;

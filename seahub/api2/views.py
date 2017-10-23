@@ -342,6 +342,10 @@ class Search(APIView):
         username = request.user.username
         results, total, has_more = search_keyword(request, keyword)
 
+        is_org = False
+        if is_org_context(request):
+            is_org = True
+
         for e in results:
             e.pop('repo', None)
             e.pop('exists', None)
@@ -354,6 +358,15 @@ class Search(APIView):
             try:
                 repo = get_repo(repo_id)
                 e['repo_name'] = repo.name
+
+                if is_org:
+                    repo_owner = seafile_api.get_org_repo_owner(repo_id)
+                else:
+                    repo_owner = seafile_api.get_repo_owner(repo_id)
+
+                e['repo_owner_email'] = repo_owner
+                e['repo_owner_name'] = email2nickname(repo_owner)
+                e['repo_owner_contact_email'] = email2contact_email(repo_owner)
 
                 dirent = seafile_api.get_dirent_by_path(repo.store_id, path)
                 e['size'] = dirent.size
@@ -701,7 +714,7 @@ class Repos(APIView):
             passwd = None
 
         if (passwd is not None) and (not config.ENABLE_ENCRYPTED_LIBRARY):
-            return api_error(status.HTTP_403_FORBIDDEN,
+            return None, api_error(status.HTTP_403_FORBIDDEN,
                              'NOT allow to create encrypted library.')
 
         if org_id > 0:
@@ -713,8 +726,10 @@ class Repos(APIView):
         return repo_id, None
 
     def _create_enc_repo(self, request, repo_id, repo_name, repo_desc, username, org_id):
+        if not config.ENABLE_ENCRYPTED_LIBRARY:
+            return None, api_error(status.HTTP_403_FORBIDDEN, 'NOT allow to create encrypted library.')
         if not _REPO_ID_PATTERN.match(repo_id):
-            return api_error(status.HTTP_400_BAD_REQUEST, 'Repo id must be a valid uuid')
+            return None, api_error(status.HTTP_400_BAD_REQUEST, 'Repo id must be a valid uuid')
         magic = request.data.get('magic', '')
         random_key = request.data.get('random_key', '')
         try:
