@@ -6679,44 +6679,6 @@ msgstr ""
 msgid "Invalid token."
 msgstr ""
 
-#: seahub/two_factor/templates/two_factor/core/login.html:6
-msgid "Two-factor authentication"
-msgstr ""
-
-#: seahub/two_factor/templates/two_factor/core/login.html:18
-msgid "Open the two-factor authentication app on your device to view your authentication token and verify your identify."
-msgstr ""
-
-#: seahub/two_factor/templates/two_factor/core/login.html:21
-msgid "Authentication token"
-msgstr ""
-
-#: seahub/two_factor/templates/two_factor/core/login.html:25
-#: seahub/two_factor/templates/two_factor/core/login.html:42
-msgid "Incorrect code"
-msgstr ""
-
-#: seahub/two_factor/templates/two_factor/core/login.html:29
-#: seahub/two_factor/templates/two_factor/core/login.html:47
-msgid "Verify"
-msgstr ""
-
-#: seahub/two_factor/templates/two_factor/core/login.html:33
-msgid "Don't have your phone?"
-msgstr ""
-
-#: seahub/two_factor/templates/two_factor/core/login.html:34
-msgid "Enter a two-factor backup code"
-msgstr ""
-
-#: seahub/two_factor/templates/two_factor/core/login.html:39
-msgid "Backup code"
-msgstr ""
-
-#: seahub/two_factor/templates/two_factor/core/login.html:46
-msgid "You can enter one of your backup codes in case you lost access to your mobile device."
-msgstr ""
-
 #: seahub/utils/__init__.py:128
 msgid "permission error"
 msgstr ""
