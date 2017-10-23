@@ -331,9 +331,11 @@
             <div class="menu-inner-divider"></div>
             <ul id="new-file-menu">
                 <li><a id="add-new-md-file" class="op" href="#">{% trans "New Markdown File" %}</a></li>
+                <% if (app.pageOptions.is_web_office) { %>
                 <li><a id="add-new-excel-file" class="op" href="#">{% trans "New Excel File" %}</a></li>
                 <li><a id="add-new-ppt-file" class="op" href="#">{% trans "New PowerPoint File" %}</a></li>
                 <li><a id="add-new-word-file" class="op" href="#">{% trans "New Word File" %}</a></li>
+                <% } %>
             </ul>
         </div>
     </div>
@@ -1988,10 +1990,10 @@
 </script>
 <script type="text/template" id="repo-shared-link-tmpl">
     <% if (share_type == 'd') { %>
-    <td class="alc"><img src="<%= icon_url %>" alt="{% trans "Directory icon"%}" width="24" /></td>
+    <td class="alc"><img src="{{ MEDIA_URL }}img/folder-24.png" alt="{% trans "Directory icon"%}" /></td>
     <td><a href="#my-libs/lib/<%= repo_id %><%= encoded_path %>"><%- name %></a></td>
     <% } else { %>
-    <td class="alc"><img src="<%= icon_url %>" alt="{% trans "File"%}" width="24" /></td>
+    <td class="alc"><img src="{{ MEDIA_URL }}img/file/file.png" alt="{% trans "File"%}" /></td>
     <td><a href="{{SITE_ROOT}}lib/<%= repo_id %>/file<%= encoded_path %>"><%- name %></a></td>
     <% } %>
     <td><a href="{{SITE_ROOT}}profile/<% print(encodeURIComponent(create_by)); %>/"><%- creator_name %></a></td>
