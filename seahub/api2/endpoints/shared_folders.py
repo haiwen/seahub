@@ -60,6 +60,7 @@ class SharedFolders(APIView):
             result['folder_name'] = repo.name
             result['share_type'] = repo.share_type
             result['share_permission'] = repo.permission
+            result['is_admin'] = False
 
             if repo.share_type == 'personal':
                 result['user_name'] = email2nickname(repo.user)

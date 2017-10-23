@@ -35,9 +35,10 @@ class BeSharedRepo(APIView):
             if not is_valid_username(from_email):
                 return api_error(status.HTTP_400_BAD_REQUEST, 'Invalid argument')
 
+            is_org = is_org_context(request)
             repo = seafile_api.get_repo(repo_id)
-            permission = check_user_permission_by_path(repo_id, '/', username)
-            if is_org_context(request):
+            permission = check_user_permission_by_path(repo_id, from_email, username, '/', is_org)
+            if is_org:
                 org_id = request.user.org.org_id
                 seaserv.seafserv_threaded_rpc.org_remove_share(org_id,
                                                                repo_id,

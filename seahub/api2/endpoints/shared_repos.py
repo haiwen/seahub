@@ -254,8 +254,10 @@ class SharedRepo(APIView):
                 return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
 
             # if user not found, permission will be None
-            permission = seafile_api.check_permission_by_path(
-                    repo_id, '/', user)
+            permission = seafile_api.check_permission_by_path(repo_id,
+                                                              '/', user)
+            extra_permission = ExtraSharePermission.objects.get_user_permission(repo_id, user)
+            permission = extra_permission if extra_permission else permission
 
             try:
                 if org_id:
@@ -283,19 +285,10 @@ class SharedRepo(APIView):
                 error_msg = 'group_id must be integer.'
                 return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
 
-            # hacky way to get group repo permission
-            permission = ''
-            if org_id:
-                for e in seafile_api.list_org_repo_shared_group(
-                        org_id, username, repo_id):
-                    if e.group_id == group_id:
-                        permission = e.perm
-                        break
-            else:
-                for e in seafile_api.list_repo_shared_group_by_user(username, repo_id):
-                    if e.group_id == group_id:
-                        permission = e.perm
-                        break
+            repo = seafile_api.get_repo_by_group(group_id, repo_id, org_id)
+            extra_permission = ExtraGroupsSharePermission.objects.get_group_permission(repo_id, group_id)
+            permission =  extra_permission if extra_permission else repo.permission
+
 
             try:
                 if org_id:

@@ -143,33 +143,31 @@ def update_group_dir_permission(repo_id, path, owner, gid, permission, org_id=No
                                                                    gid, 
                                                                    extra_share_permission)
 
-def check_user_permission_by_path(repo_id, path, share_to):
+def check_user_permission_by_path(repo_id, shared_from, share_to, path, is_org):
     # Returns the user's permission in the repo or subdir.
     permission = seafile_api.check_permission_by_path(repo_id, path, share_to)
     if not permission:
-        return None
+        permission = seafile_api.get_shared_folder_perm(repo_id, shared_from, share_to, path, is_org)
+        if not permission:
+            return None
+
     if path != '/':
         return permission
     extra_permission = ExtraSharePermission.objects.get_user_permission(repo_id, share_to)
     return extra_permission if extra_permission else permission
 
-def check_group_permission_by_path(repo_id, username, group_id, org_id=None):
+def check_group_permission_by_path(repo_id, shared_from, group_id, path, org_id=None):
     # Returns the group's permission in the repo or subdir.
-    if org_id:
-        shared_groups = seafile_api.list_org_repo_shared_group(
-                org_id, username, repo_id)
+    is_org = org_id
+    repo = seafile_api.get_repo_by_group(group_id, repo_id, is_org)
+
+
+    if not repo:
+        permission = seafile_api.get_group_shared_folder_perm(repo_id, shared_from, path, group_id, is_org)
+        if not permission:
+            return None
     else:
-        shared_groups = seafile_api.list_repo_shared_group(
-                username, repo_id)
-
-    permission = ''
-    for e in shared_groups:
-        if e.group_id == group_id:
-            permission = e.perm
-            break
-
-    if not permission:
-        return None
+        permission = repo.permission
 
     extra_permission = ExtraGroupsSharePermission.objects.get_group_permission(repo_id, group_id)
     return extra_permission if extra_permission else permission

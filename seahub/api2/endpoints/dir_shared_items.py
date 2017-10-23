@@ -459,13 +459,10 @@ class DirSharedItemsEndpoint(APIView):
                 return api_error(status.HTTP_400_BAD_REQUEST, 'Email %s invalid.' % shared_to)
 
             # if user not found, permission will be None
-            permission = check_user_permission_by_path(repo_id, path, shared_to)
-            print repo_id
-            print permission
+            permission = check_user_permission_by_path(repo_id, repo_owner, shared_to, path, is_org_context(request))
 
             if is_org_context(request):
                 # when calling seafile API to share authority related functions, change the uesrname to repo owner.
-                repo_owner = seafile_api.get_org_repo_owner(repo_id)
                 org_id = request.user.org.org_id
                 if path == '/':
                     seaserv.seafserv_threaded_rpc.org_remove_share(
@@ -475,7 +472,6 @@ class DirSharedItemsEndpoint(APIView):
                             org_id, repo_id, path, repo_owner, shared_to)
 
             else:
-                repo_owner = seafile_api.get_repo_owner(repo_id)
                 if path == '/':
                     seaserv.remove_share(repo_id, repo_owner, shared_to)
                 else:
@@ -499,14 +495,14 @@ class DirSharedItemsEndpoint(APIView):
             # hacky way to get group repo permission
             if is_org_context(request):
                 org_id = request.user.org.org_id
-                permission = check_group_permission_by_path(repo_id, username, group_id, org_id)
+                repo_owner = seafile_api.get_org_repo_owner(repo_id)
+                permission = check_group_permission_by_path(repo_id, repo_owner, group_id, path, org_id)
             else:
-                permission = check_group_permission_by_path(repo_id, username, group_id)
+                repo_owner = seafile_api.get_repo_owner(repo_id)
+                permission = check_group_permission_by_path(repo_id, repo_owner, group_id, path)
 
-            repo = seafile_api.get_repo_by_group(group_id, repo_id)
             if is_org_context(request):
                 # when calling seafile API to share authority related functions, change the uesrname to repo owner.
-                repo_owner = seafile_api.get_org_repo_owner(repo_id)
                 org_id = request.user.org.org_id
                 if path == '/':
                     seaserv.del_org_group_repo(repo_id, org_id, group_id)
@@ -514,7 +510,6 @@ class DirSharedItemsEndpoint(APIView):
                     seafile_api.org_unshare_subdir_for_group(
                             org_id, repo_id, path, repo_owner, group_id)
             else:
-                repo_owner = seafile_api.get_repo_owner(repo_id)
                 if path == '/':
                     seafile_api.unset_group_repo(repo_id, group_id, username)
                 else:

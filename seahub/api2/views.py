@@ -47,7 +47,7 @@ from seahub.avatar.templatetags.group_avatar_tags import api_grp_avatar_url, \
 from seahub.base.accounts import User
 from seahub.base.models import UserStarredFiles, DeviceToken
 from seahub.share.models import ExtraSharePermission, ExtraGroupsSharePermission
-from seahub.share.utils import is_repo_admin, check_group_permission_by_path
+from seahub.share.utils import is_repo_admin
 from seahub.base.templatetags.seahub_tags import email2nickname, \
     translate_seahub_time, translate_commit_desc_escape, \
     email2contact_email
@@ -4085,15 +4085,17 @@ class GroupRepo(APIView):
         if not group.is_staff and repo_owner != username and not is_repo_admin(username, repo_id):
             return api_error(status.HTTP_403_FORBIDDEN, 'Permission denied.')
 
-        repo = seafile_api.get_repo_by_group(group_id, repo_id)
-        if seaserv.is_org_group(group_id):
+        is_org = seaserv.is_org_group(group_id)
+        repo = seafile_api.get_repo_by_group(group_id, repo_id, is_org)
+        extra_permission = ExtraGroupsSharePermission.objects.get_group_permission(repo_id, group_id)
+        permission =  extra_permission if extra_permission else repo.permission
+
+        if is_org:
             org_id = seaserv.get_org_id_by_group(group_id)
-            permission = check_group_permission_by_path(repo_id, username, group_id, org_id)
             seaserv.del_org_group_repo(repo_id, org_id, group_id)
         else:
-            permission = check_group_permission_by_path(repo_id, username, group_id)
             seafile_api.unset_group_repo(repo_id, group_id, username)
-        print permission
+
         # delete extra share permission
         ExtraGroupsSharePermission.objects.delete_share_permission(repo_id, group_id)
         if repo.is_virtual:
