@@ -80,7 +80,7 @@ html, body, #wrapper { height:100%; }
 
     <div class="login-panel-bottom-container">
         {% if enable_signup %}
-        <a href="{{ signup_url }}" class="normal fleft">{% trans "Signup" %}</a>
+        <a href="{{ signup_url }}" class="normal fleft" id="sign-up">{% trans "Signup" %}</a>
         {% endif %}
     </div>
 </div>
@@ -98,6 +98,7 @@ var wdHeight = $(window).height();
 if (wdHeight > elHeight) {
     $el.css({'margin-top': (wdHeight - elHeight)/2});
 }
+$('#lang').css({'margin-left': $('#sign-up').outerWidth() + 10});
 $el.removeClass('vh');
 
 $('#lang-context-selector').css({
@@ -105,7 +106,7 @@ $('#lang-context-selector').css({
     'right': 0
 });
 $('#lang-context-selector .sf-popover-con').css({
-    'max-height': $('#lang').offset().top - 2
+    'max-height': $('#lang').offset().top - 10
 });
 
 $('[name="login"]').focus();

@@ -4,7 +4,7 @@ define([
     'backbone',
     'common',
     'app/views/device',
-    'app/collections/devices',
+    'app/collections/devices'
 ], function($, _, Backbone, Common, Device, DevicesCollection) {
     'use strict';
 
@@ -17,6 +17,7 @@ define([
         initialize: function() {
             this.devices = new DevicesCollection();
             this.listenTo(this.devices, 'reset', this.reset);
+
             this.render();
         },
 
@@ -40,12 +41,13 @@ define([
 
         render: function() {
             this.$el.html(this.template());
-            $("#right-panel").html(this.$el);
 
             this.$table = this.$('table');
             this.$tableBody = this.$('tbody');
             this.$loadingTip = this.$('.loading-tip');
             this.$emptyTip = this.$('.empty-tips');
+
+            return this;
         },
 
         show: function() {

@@ -11,7 +11,7 @@ from django.utils.translation import ugettext_lazy as _
 
 from seahub.api2.authentication import TokenAuthentication
 from seahub.api2.throttling import UserRateThrottle
-from seahub.api2.utils import api_error
+from seahub.api2.utils import api_error, to_python_boolean
 from seahub.tags.models import FileTag
 from seahub.views import check_folder_permission
 
@@ -51,9 +51,10 @@ def check_parameter(func):
             error_msg = "p %s invalid." % file_path
             return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
 
-        is_dir = is_dir.lower()
-        if is_dir not in ['true', 'false']:
-            error_msg = 'is_dir %s invalid' % is_dir
+        try:
+            is_dir = to_python_boolean(is_dir)
+        except ValueError:
+            error_msg = 'is_dir invalid.'
             return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
 
         # split file_path to filename and parent_path
@@ -61,7 +62,7 @@ def check_parameter(func):
         new_file_path = file_path.rstrip('/')
         parent_path = os.path.dirname(new_file_path)
         filename = os.path.basename(new_file_path)
-        if is_dir == 'true':
+        if is_dir:
             dir_id = seafile_api.get_dir_id_by_path(repo_id, new_file_path)
             if not dir_id:
                 error_msg = 'Folder %s not found.' % file_path

@@ -32,7 +32,8 @@ from seahub.utils import string2list, gen_shared_link, \
     gen_token, normalize_cache_key
 from seahub.utils.mail import send_html_email_with_dj_template, MAIL_PRIORITY
 from seahub.settings import SITE_ROOT, REPLACE_FROM_EMAIL, \
-        ADD_REPLY_TO_HEADER, SHARE_LINK_EMAIL_LANGUAGE
+        ADD_REPLY_TO_HEADER, SHARE_LINK_EMAIL_LANGUAGE, \
+        SHARE_LINK_AUDIT_CODE_TIMEOUT
 from seahub.profile.models import Profile
 
 # Get an instance of a logger
@@ -451,9 +452,8 @@ def ajax_get_link_audit_code(request):
         }), status=400, content_type=content_type)
 
     cache_key = normalize_cache_key(email, 'share_link_audit_')
-    timeout = 60 * 60           # one hour
     code = gen_token(max_length=6)
-    cache.set(cache_key, code, timeout)
+    cache.set(cache_key, code, SHARE_LINK_AUDIT_CODE_TIMEOUT)
 
     # send code to user via email
     subject = _("Verification code for visiting share links")

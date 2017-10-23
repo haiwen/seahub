@@ -405,15 +405,15 @@ table img { vertical-align:middle; }
 }
 /********** common class ***********/
 .hl { background-color: #f8f8f8; }/*highlight*/
-.fleft { float:left }
-.fright { float:right }
+.fleft { float:left; }
+.fright { float:right; }
 .clear { clear:both; }
-.show { display:block }
+.show { display:block; }
 .inline-block { display: inline-block; }
-.hide { display:none }
+.hide { display:none; }
 .error { color:red; }
-.errorlist { color: red; }
-.error-tip { text-align:center; margin-top:5em;}
+.errorlist { color:red; }
+.error-tip { text-align:center; margin-top:5em; }
 .ovhd { overflow:hidden; }
 .bold { font-weight:bold; }
 .no-bold { font-weight:normal; }
@@ -422,7 +422,7 @@ table img { vertical-align:middle; }
 .vam { vertical-align:middle; }
 .tip { color:#808080; font-size:12px; }
 .tick-green { color:green; }
-.txt-before-btn { margin-bottom:10px; } /* e.g. settings page */
+.txt-before-btn { margin-bottom:10px; }
 .strip-tip {
     padding:3px 0;
     background:#fddaa4;
@@ -648,6 +648,10 @@ textarea:-moz-placeholder {/* for FF */
     border-left:2px solid #888;
     padding-left:1em;
     margin-left:1em;
+}
+.menu-inner-divider {
+    margin:4px 0;
+    border-top:1px solid #ddd;
 }
 
 /*******ui widgets**************/
@@ -1583,7 +1587,7 @@ button.sf-dropdown-toggle:focus {
 .sf-dropdown-menu a {
     display:block;
     padding:4px 12px;
-    min-width:110px;
+    min-width:130px;
     white-space:nowrap;
     color:#444;
     font-weight:normal;
@@ -2283,11 +2287,6 @@ button.sf-dropdown-toggle:focus {
 }
 #dir-view .repo-op .op-btn {
     padding:5px 14px;
-}
-#new-file-menu {
-    margin-top:4px;
-    border-top:1px solid #ddd;
-    padding-top:4px;
 }
 .repo-file-list {
     margin:0;
@@ -3368,7 +3367,6 @@ button.sf-dropdown-toggle:focus {
 #pwd_strength span {
     display:inline-block;
     width:70px;
-    height:16px;
     border:1px solid #fff;
     background:#e4e4e4;
     color:#cecece;
@@ -3965,4 +3963,10 @@ img.thumbnail {
 /* system info */
 .license-file-upload {
     margin-top:5px;
+}
+
+/* file comment */
+.file-comment-panel-item-name {
+    display:inline-block;
+    max-width:215px;
 }

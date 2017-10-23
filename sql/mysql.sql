@@ -319,7 +319,7 @@ CREATE TABLE `django_migrations` (
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 /*!40000 ALTER TABLE `django_migrations` DISABLE KEYS */;
-INSERT INTO `django_migrations` VALUES (1,'admin_log','0001_initial','2017-09-12 10:05:26.180889'),(2,'captcha','0001_initial','2017-09-12 10:05:26.203616'),(3,'contenttypes','0001_initial','2017-09-12 10:05:26.228416'),(4,'contenttypes','0002_remove_content_type_name','2017-09-12 10:05:26.287072'),(5,'database','0001_initial','2017-09-12 10:05:26.342345'),(6,'institutions','0001_initial','2017-09-12 10:05:26.382040'),(7,'institutions','0002_institutionquota','2017-09-12 10:05:26.419270'),(8,'invitations','0001_initial','2017-09-12 10:05:26.448399'),(9,'invitations','0002_invitation_invite_type','2017-09-12 10:05:26.471655'),(10,'invitations','0003_auto_20160510_1703','2017-09-12 10:05:26.491498'),(11,'invitations','0004_auto_20160629_1610','2017-09-12 10:05:26.532763'),(12,'invitations','0005_auto_20160629_1614','2017-09-12 10:05:26.555958'),(13,'post_office','0001_initial','2017-09-12 10:05:26.760884'),(14,'post_office','0002_add_i18n_and_backend_alias','2017-09-12 10:05:27.072497'),(15,'post_office','0003_auto_20170725_0206','2017-09-12 10:05:27.089505'),(16,'role_permissions','0001_initial','2017-09-12 10:05:27.106643'),(17,'sessions','0001_initial','2017-09-12 10:05:27.132840'),(18,'termsandconditions','0001_initial','2017-09-12 10:05:27.207141');
+INSERT INTO `django_migrations` VALUES (1,'admin_log','0001_initial','2017-09-25 05:24:11.481714'),(2,'captcha','0001_initial','2017-09-25 05:24:11.499690'),(3,'contenttypes','0001_initial','2017-09-25 05:24:11.525681'),(4,'contenttypes','0002_remove_content_type_name','2017-09-25 05:24:11.584409'),(5,'database','0001_initial','2017-09-25 05:24:11.599982'),(6,'institutions','0001_initial','2017-09-25 05:24:11.653562'),(7,'institutions','0002_institutionquota','2017-09-25 05:24:11.735524'),(8,'invitations','0001_initial','2017-09-25 05:24:11.752853'),(9,'invitations','0002_invitation_invite_type','2017-09-25 05:24:11.783917'),(10,'invitations','0003_auto_20160510_1703','2017-09-25 05:24:11.807671'),(11,'invitations','0004_auto_20160629_1610','2017-09-25 05:24:11.855233'),(12,'invitations','0005_auto_20160629_1614','2017-09-25 05:24:11.867599'),(13,'post_office','0001_initial','2017-09-25 05:24:12.089393'),(14,'post_office','0002_add_i18n_and_backend_alias','2017-09-25 05:24:12.376311'),(15,'post_office','0003_auto_20170725_0206','2017-09-25 05:24:12.392530'),(16,'role_permissions','0001_initial','2017-09-25 05:24:12.408197'),(17,'sessions','0001_initial','2017-09-25 05:24:12.436008'),(18,'termsandconditions','0001_initial','2017-09-25 05:24:12.526533');
 /*!40000 ALTER TABLE `django_migrations` ENABLE KEYS */;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!40101 SET character_set_client = utf8 */;
@@ -836,6 +836,7 @@ CREATE TABLE `sysadmin_extra_userloginlog` (
   `username` varchar(255) NOT NULL,
   `login_date` datetime NOT NULL,
   `login_ip` varchar(128) NOT NULL,
+  `login_success` tinyint(1) NOT NULL,
   PRIMARY KEY (`id`),
   KEY `sysadmin_extra_userloginlog_14c4b06b` (`username`),
   KEY `sysadmin_extra_userloginlog_28ed1ef0` (`login_date`)

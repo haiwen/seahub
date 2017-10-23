@@ -87,8 +87,8 @@ def access_token_check(func):
         request_user, repo_id, file_path = get_file_info_by_token(token)
 
         if not request_user or not repo_id or not file_path:
-            logger.error('File info invalid, user: %s, repo_id: %s, path: %s.'
-                    % request_user, repo_id, file_path)
+            logger.error('File info invalid, user: %s, repo_id: %s, path: %s.' \
+                    % (request_user, repo_id, file_path))
             return HttpResponse(json.dumps({}), status=404,
                                 content_type=json_content_type)
 
@@ -138,7 +138,7 @@ class WOPIFilesView(APIView):
                                 content_type=json_content_type)
 
         if file_size == -1:
-            logger.error('File %s not found.') % file_path
+            logger.error('File %s not found.' % file_path)
             return HttpResponse(json.dumps({}), status=401,
                                 content_type=json_content_type)
 

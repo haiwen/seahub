@@ -189,10 +189,11 @@ class FileView(APIView):
                 update_url = gen_file_upload_url(update_token, 'update-api')
 
                 # update file
+                new_file_path = posixpath.join(parent_dir, new_file_name)
                 try:
                     requests.post(
                         update_url,
-                        data={'filename': new_file_name, 'target_file': path},
+                        data={'filename': new_file_name, 'target_file': new_file_path},
                         files={'file': open(empty_file_path, 'rb')}
                     )
                 except Exception as e:

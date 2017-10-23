@@ -1,5 +1,6 @@
 # Copyright (c) 2012-2016 Seafile Ltd.
 from django.contrib.sites.models import Site
+from django.conf import settings
 from django import forms
 from django.utils.translation import ugettext_lazy as _
 from django.utils.http import int_to_base36
@@ -9,6 +10,7 @@ from seaserv import ccnet_api
 from seahub.base.accounts import User
 from seahub.auth import authenticate
 from seahub.auth.tokens import default_token_generator
+from seahub.options.models import UserOptions
 from seahub.profile.models import Profile
 from seahub.utils import IS_EMAIL_CONFIGURED, send_html_email, \
     is_ldap_user, is_user_password_strong
@@ -70,8 +72,16 @@ class AuthenticationForm(forms.Form):
             if self.user_cache is None:
                 raise forms.ValidationError(_("Please enter a correct email/username and password. Note that both fields are case-sensitive."))
             elif not self.user_cache.is_active:
-                self.errors['inactive'] = _("This account is inactive.")
-                raise forms.ValidationError(_("This account is inactive."))
+                if settings.ACTIVATE_AFTER_FIRST_LOGIN and \
+                   not UserOptions.objects.is_user_logged_in(username):
+                    """Activate user on first login."""
+                    self.user_cache.is_active = True
+                    self.user_cache.save()
+
+                    UserOptions.objects.set_user_logged_in(username)
+                else:
+                    self.errors['inactive'] = _("This account is inactive.")
+                    raise forms.ValidationError(_("This account is inactive."))
 
         # TODO: determine whether this should move to its own method.
         if self.request:

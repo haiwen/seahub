@@ -10,7 +10,7 @@ define([
                 "maxFileSize": gettext("File is too big"),
                 "minFileSize": gettext("File is too small"),
                 "acceptFileTypes": gettext("Filetype not allowed"),
-                "maxNumberOfFiles": gettext("Max number of files exceeded"),
+                "maxNumberOfFiles": gettext("Maximum number of files exceeded"),
                 "uploadedBytes": gettext("Uploaded bytes exceed file size"),
                 "emptyResult": gettext("Empty file upload result")
             },

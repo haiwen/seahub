@@ -14,10 +14,11 @@ define([
     'app/views/dirent-details',
     'app/views/fileupload',
     'app/views/share',
+    'app/views/file-comments',
     'app/views/widgets/dropdown'
     ], function($, progressbar, magnificPopup, simplemodal, _, Backbone, Common,
         FileTree, Cookies, DirentCollection, DirentView, DirentGridView,
-        DirentDetailsView, FileUploadView, ShareView, DropdownView) {
+        DirentDetailsView, FileUploadView, ShareView, FileCommentsView, DropdownView) {
         'use strict';
 
         var DirView = Backbone.View.extend({
@@ -74,6 +75,7 @@ define([
 
                 this.fileUploadView = new FileUploadView({dirView: this});
                 this.direntDetailsView = new DirentDetailsView();
+                this.fileCommentsView = new FileCommentsView();
 
                 this.render();
 
@@ -159,6 +161,7 @@ define([
                 this.attached = false;
 
                 this.direntDetailsView.hide();
+                this.fileCommentsView.hide();
             },
 
             /***** private functions *****/
@@ -174,6 +177,9 @@ define([
             },
 
             reset: function() {
+                this.direntDetailsView.hide();
+                this.fileCommentsView.hide();
+
                 this.renderPath();
                 this.renderDirOpBar();
 
@@ -673,8 +679,8 @@ define([
                     var dirent_name = $.trim($input.val());
 
                     if (!dirent_name) {
-                      Common.showFormError(form_id, gettext("It is required."));
-                      return false;
+                        Common.showFormError(form_id, gettext("It is required."));
+                        return false;
                     };
 
                     if (dirent_name.indexOf('/') != -1) {

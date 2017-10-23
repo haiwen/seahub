@@ -16,7 +16,7 @@ msgstr ""
 "Project-Id-Version: seahub\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2017-09-12 18:01+0800\n"
-"PO-Revision-Date: 2017-09-12 10:03+0000\n"
+"PO-Revision-Date: 2017-09-23 19:17+0000\n"
 "Last-Translator: llj <lingjun.li1@gmail.com>\n"
 "Language-Team: Chinese (China) (http://www.transifex.com/haiwen/seahub/language/zh_CN/)\n"
 "MIME-Version: 1.0\n"
@@ -6170,7 +6170,7 @@ msgstr "全部已用空间"
 #: seahub/templates/sysadmin/sys_statistic_user.html:175
 #: seahub/templates/sysadmin/sys_statistic_user.html:187
 msgid "Active Users"
-msgstr "激活用户数"
+msgstr "活跃用户"
 
 #: seahub/templates/sysadmin/sys_terms_admin.html:18
 #: seahub/templates/sysadmin/sys_terms_admin.html:61
