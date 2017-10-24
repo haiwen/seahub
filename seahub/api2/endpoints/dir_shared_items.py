@@ -343,6 +343,7 @@ class DirSharedItemsEndpoint(APIView):
                     continue
 
                 try:
+                    org_id = None
                     if is_org_context(request):
                         org_id = request.user.org.org_id
 
@@ -369,7 +370,7 @@ class DirSharedItemsEndpoint(APIView):
                                     org_id, repo_id, repo_owner, to_user,
                                     permission)
                         else:
-                            sub_repo_id = seafile_api.org_share_subdir_to_user(org_id,
+                            seafile_api.org_share_subdir_to_user(org_id,
                                     repo_id, path, repo_owner, to_user, permission)
                     else:
                         if is_org_user(to_user):
@@ -390,19 +391,18 @@ class DirSharedItemsEndpoint(APIView):
                             seafile_api.share_repo(
                                     repo_id, repo_owner, to_user, permission)
                         else:
-                            sub_repo_id = seafile_api.share_subdir_to_user(
+                            seafile_api.share_subdir_to_user(
                                     repo_id, path, repo_owner, to_user, permission)
 
                     if path == '/' and extra_share_permission == PERMISSION_ADMIN:
                         ExtraSharePermission.objects.create_share_permission(repo_id, to_user, extra_share_permission)
                     # send a signal when sharing repo successful
-                    if path == '/':
-                        share_repo_to_user_successful.send(sender=None,
-                                from_user=username, to_user=to_user, repo=repo)
-                    else:
-                        sub_repo = seafile_api.get_repo(sub_repo_id)
-                        share_repo_to_user_successful.send(sender=None,
-                                from_user=username, to_user=to_user, repo=sub_repo)
+                    share_repo_to_user_successful.send(sender=None,
+                                                       from_user=username,
+                                                       to_user=to_user,
+                                                       repo=repo,
+                                                       path=path,
+                                                       org_id=org_id)
 
                     result['success'].append({
                         "share_type": "user",
@@ -458,6 +458,7 @@ class DirSharedItemsEndpoint(APIView):
                     continue
 
                 try:
+                    org_id = None
                     if is_org_context(request):
                         # when calling seafile API to share authority related functions, change the uesrname to repo owner.
                         repo_owner = seafile_api.get_org_repo_owner(repo_id)
@@ -466,7 +467,7 @@ class DirSharedItemsEndpoint(APIView):
                             seafile_api.add_org_group_repo(
                                     repo_id, org_id, gid, repo_owner, permission)
                         else:
-                            sub_repo_id = seafile_api.org_share_subdir_to_group(org_id,
+                            seafile_api.org_share_subdir_to_group(org_id,
                                     repo_id, path, repo_owner, gid, permission)
                     else:
                         repo_owner = seafile_api.get_repo_owner(repo_id)
@@ -474,19 +475,18 @@ class DirSharedItemsEndpoint(APIView):
                             seafile_api.set_group_repo(
                                     repo_id, gid, repo_owner, permission)
                         else:
-                            sub_repo_id = seafile_api.share_subdir_to_group(
+                            seafile_api.share_subdir_to_group(
                                     repo_id, path, repo_owner, gid, permission)
 
                     # add share permission if between is admin and is extra permission.
                     if path == '/' and extra_share_permission == PERMISSION_ADMIN:
                         ExtraGroupsSharePermission.objects.create_share_permission(repo_id, gid, extra_share_permission)
-                    if path == '/':
-                        share_repo_to_group_successful.send(sender=None,
-                                from_user=username, group_id=gid, repo=repo)
-                    else:
-                        sub_repo = seafile_api.get_repo(sub_repo_id)
-                        share_repo_to_group_successful.send(sender=None,
-                                from_user=username, group_id=gid, repo=sub_repo)
+
+                    share_repo_to_group_successful.send(sender=None,
+                                                        from_user=username, 
+                                                        group_id=gid, 
+                                                        repo=repo, path=path,
+                                                        org_id=org_id)
 
                     result['success'].append({
                         "share_type": "group",

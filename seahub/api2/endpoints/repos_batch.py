@@ -183,6 +183,7 @@ class ReposBatchView(APIView):
                         continue
 
                     try:
+                        org_id = None
                         if is_org_context(request):
                             org_id = request.user.org.org_id
                             seaserv.seafserv_threaded_rpc.org_add_share(org_id,
@@ -194,7 +195,10 @@ class ReposBatchView(APIView):
                         # send a signal when sharing repo successful
                         repo = seafile_api.get_repo(repo_id)
                         share_repo_to_user_successful.send(sender=None,
-                                from_user=username, to_user=to_username, repo=repo)
+                                                           from_user=username,
+                                                           to_user=to_username,
+                                                           repo=repo, path='/',
+                                                           org_id=org_id)
 
                         result['success'].append({
                             "repo_id": repo_id,
@@ -243,6 +247,7 @@ class ReposBatchView(APIView):
                         continue
 
                     try:
+                        org_id = None
                         if is_org_context(request):
                             org_id = request.user.org.org_id
                             seafile_api.add_org_group_repo(
@@ -254,7 +259,10 @@ class ReposBatchView(APIView):
                         # send a signal when sharing repo successful
                         repo = seafile_api.get_repo(repo_id)
                         share_repo_to_group_successful.send(sender=None,
-                                from_user=username, group_id=to_group_id, repo=repo)
+                                                            from_user=username,
+                                                            group_id=to_group_id,
+                                                            repo=repo, path='/',
+                                                            org_id=org_id)
 
                         result['success'].append({
                             "repo_id": repo_id,

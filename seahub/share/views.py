@@ -93,6 +93,7 @@ def share_to_user(request, repo, to_user, permission):
         return False
 
     # permission check
+    org_id = None
     if is_org_context(request):
         org_id = request.user.org.org_id
         if not seaserv.ccnet_threaded_rpc.org_user_exists(org_id, to_user):
@@ -114,7 +115,8 @@ def share_to_user(request, repo, to_user, permission):
         # send a signal when sharing repo successful
         share_repo_to_user_successful.send(sender=None,
                                            from_user=from_user,
-                                           to_user=to_user, repo=repo)
+                                           to_user=to_user, repo=repo,
+                                           path='/', org_id=org_id)
         return True
 
 ########## share link
