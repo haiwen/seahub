@@ -57,11 +57,13 @@ def file_uploaded_msg_to_json(file_name, repo_id, uploaded_to):
     return json.dumps({'file_name': file_name, 'repo_id': repo_id,
                        'uploaded_to': uploaded_to})
 
-def repo_share_msg_to_json(share_from, repo_id):
-    return json.dumps({'share_from': share_from, 'repo_id': repo_id})
+def repo_share_msg_to_json(share_from, repo_id, path, org_id):
+    return json.dumps({'share_from': share_from, 'repo_id': repo_id,
+                       'path': path, 'org_id': org_id})
 
-def repo_share_to_group_msg_to_json(share_from, repo_id, group_id):
-    return json.dumps({'share_from': share_from, 'repo_id': repo_id, 'group_id': group_id})
+def repo_share_to_group_msg_to_json(share_from, repo_id, group_id, path, org_id):
+    return json.dumps({'share_from': share_from, 'repo_id': repo_id,
+                       'group_id': group_id, 'path': path, 'org_id': org_id})
 
 def group_msg_to_json(group_id, msg_from, message):
     return json.dumps({'group_id': group_id, 'msg_from': msg_from,
@@ -478,8 +480,24 @@ class UserNotification(models.Model):
 
         share_from = email2nickname(d['share_from'])
         repo_id = d['repo_id']
+        path = d.get('path', '/')
+        org_id = d.get('org_id', None)
+        repo = None
+        try:
+            if path == '/':
+                repo = seafile_api.get_repo(repo_id)
+            else:
+                if org_id:
+                    owner = seafile_api.get_org_repo_owner(repo_id)
+                    repo = seafile_api.get_org_virtual_repo(
+                        org_id, repo_id, path, owner)
+                else:
+                    owner = seafile_api.get_repo_owner(repo_id)
+                    repo = seafile_api.get_virtual_repo(repo_id, path, owner)
+        except Exception as e:
+            logger.error(e)
+            return None
 
-        repo = seafile_api.get_repo(repo_id)
         if repo is None:
             self.delete()
             return None
@@ -507,10 +525,22 @@ class UserNotification(models.Model):
         share_from = email2nickname(d['share_from'])
         repo_id = d['repo_id']
         group_id = d['group_id']
+        path = d.get('path', '/')
+        org_id = d.get('org_id', None)
 
+        repo = None
         try:
-            repo = seafile_api.get_repo(repo_id)
             group = ccnet_api.get_group(group_id)
+            if path == '/':
+                repo = seafile_api.get_repo(repo_id)
+            else:
+                if org_id:
+                    owner = seafile_api.get_org_repo_owner(repo_id)
+                    repo = seafile_api.get_org_virtual_repo(
+                        org_id, repo_id, path, owner)
+                else:
+                    owner = seafile_api.get_repo_owner(repo_id)
+                    repo = seafile_api.get_virtual_repo(repo_id, path, owner)
         except Exception as e:
             logger.error(e)
             return None
@@ -694,10 +724,12 @@ def add_share_repo_msg_cb(sender, **kwargs):
     from_user = kwargs.get('from_user', None)
     to_user = kwargs.get('to_user', None)
     repo = kwargs.get('repo', None)
+    path = kwargs.get('path', None)
+    org_id = kwargs.get('org_id', None)
 
-    assert from_user and to_user and repo is not None, 'Arguments error'
+    assert from_user and to_user and repo and path is not None, 'Arguments error'
 
-    detail = repo_share_msg_to_json(from_user, repo.id)
+    detail = repo_share_msg_to_json(from_user, repo.id, path, org_id)
     UserNotification.objects.add_repo_share_msg(to_user, detail)
 
 @receiver(share_repo_to_group_successful)
@@ -707,15 +739,17 @@ def add_share_repo_to_group_msg_cb(sender, **kwargs):
     from_user = kwargs.get('from_user', None)
     group_id = kwargs.get('group_id', None)
     repo = kwargs.get('repo', None)
+    path = kwargs.get('path', None)
+    org_id = kwargs.get('org_id', None)
 
-    assert from_user and group_id and repo is not None, 'Arguments error'
+    assert from_user and group_id and repo and path is not None, 'Arguments error'
 
     members = ccnet_api.get_group_members(int(group_id))
     for member in members:
         to_user = member.user_name
         if to_user == from_user:
             continue
-        detail = repo_share_to_group_msg_to_json(from_user, repo.id, group_id)
+        detail = repo_share_to_group_msg_to_json(from_user, repo.id, group_id, path, org_id)
         UserNotification.objects.add_repo_share_to_group_msg(to_user, detail)
 
 @receiver(grpmsg_added)
