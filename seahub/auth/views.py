@@ -302,6 +302,14 @@ def logout(request, next_page=None,
     from seahub.auth import logout
     logout(request)
 
+    # Local logout for shibboleth user.
+    shib_logout_url = getattr(settings, 'SHIBBOLETH_LOGOUT_URL', '')
+    if getattr(settings, 'ENABLE_SHIB_LOGIN', False) and shib_logout_url:
+        shib_logout_return = getattr(settings, 'SHIBBOLETH_LOGOUT_RETURN', '')
+        if shib_logout_return:
+            shib_logout_url += shib_logout_return
+        return HttpResponseRedirect(shib_logout_url)
+
     if redirect_field_name in request.REQUEST:
         next_page = request.REQUEST[redirect_field_name]
         # Security check -- don't allow redirection to a different host.
