@@ -1,4 +1,5 @@
 import json
+import pytest
 
 from django.core.urlresolvers import reverse
 
@@ -6,8 +7,9 @@ import seaserv
 from seaserv import seafile_api
 
 from seahub.profile.models import Profile
-from seahub.test_utils import BaseTestCase
+from seahub.test_utils import BaseTestCase, TRAVIS
 from tests.common.utils import randstring
+
 
 class SharedReposTest(BaseTestCase):
 
@@ -20,6 +22,7 @@ class SharedReposTest(BaseTestCase):
         seafile_api.set_group_repo(
                 self.repo.id, self.group.id,
                 self.user.username, 'rw')
+
 
     def share_repo_to_public(self):
         seafile_api.add_inner_pub_repo(
@@ -74,6 +77,19 @@ class SharedReposTest(BaseTestCase):
         assert json_resp[0]['repo_id'] == self.repo_id
         assert json_resp[0]['group_id'] == self.group_id
 
+    @pytest.mark.skipif(TRAVIS, reason="") # pylint: disable=E1101
+    def test_can_get_when_share_to_org_group(self):
+        self.share_org_repo_to_org_group_with_rw_permission()
+
+        self.login_as(self.org_user)
+        resp = self.client.get(self.url)
+        self.assertEqual(200, resp.status_code)
+        json_resp = json.loads(resp.content)
+
+        assert json_resp[0]['share_type'] == 'group'
+        assert json_resp[0]['repo_id'] == self.org_repo.id
+        assert json_resp[0]['group_id'] == self.org_group.id
+
     def test_can_get_when_share_to_public(self):
         self.share_repo_to_public()
 
@@ -113,6 +129,23 @@ class SharedReposTest(BaseTestCase):
         assert seafile_api.check_permission_by_path(
                 self.repo_id, '/', self.admin_name) == 'r'
 
+    @pytest.mark.skipif(TRAVIS, reason="") # pylint: disable=E1101
+    def test_can_update_org_user_share_perm(self):
+        self.share_org_repo_to_org_admin_with_rw_permission()
+
+        assert seafile_api.check_permission_by_path(
+                self.org_repo.id, '/', self.org_admin.username) == 'rw'
+
+        self.login_as(self.org_user)
+
+        url = reverse('api-v2.1-shared-repo', args=[self.org_repo.id])
+        data = 'permission=r&share_type=personal&user=%s' % self.org_admin.username
+        resp = self.client.put(url, data, 'application/x-www-form-urlencoded')
+
+        self.assertEqual(200, resp.status_code)
+        assert seafile_api.check_permission_by_path(
+                self.org_repo.id, '/', self.org_admin.username) == 'r'
+
     def test_can_update_group_share_perm(self):
         self.share_repo_to_group()
 
@@ -131,6 +164,28 @@ class SharedReposTest(BaseTestCase):
 
         repos = seafile_api.get_group_repos_by_owner(self.user_name)
         assert repos[0].permission == 'r'
+
+    @pytest.mark.skipif(TRAVIS, reason="") # pylint: disable=E1101
+    def test_can_update_org_group_share_perm(self):
+        self.share_org_repo_to_org_group_with_rw_permission()
+
+#        print seafile_api.get_folder_group_perm(self.repo_id, '/', int(self.group_id))
+
+        repos = seafile_api.get_org_group_repos_by_owner(self.org.org_id, self.org_user.username)
+        target_repo = [repo for repo in repos if repo.repo_id == self.org_repo.id]
+        assert target_repo[0].permission == 'rw'
+
+        self.login_as(self.org_user)
+
+        url = reverse('api-v2.1-shared-repo', args=[self.org_repo.id])
+        data = 'permission=r&share_type=group&group_id=%s' % self.org_group.id
+        resp = self.client.put(url, data, 'application/x-www-form-urlencoded')
+
+        self.assertEqual(200, resp.status_code)
+
+        repos = seafile_api.get_org_group_repos_by_owner(self.org.org_id, self.org_user.username)
+        target_repo = [repo for repo in repos if repo.repo_id == self.org_repo.id]
+        assert target_repo[0].permission == 'r'
 
     def test_can_update_public_share_perm(self):
         for r in seaserv.seafserv_threaded_rpc.list_inner_pub_repos():
@@ -171,6 +226,26 @@ class SharedReposTest(BaseTestCase):
         assert seafile_api.check_permission_by_path(
                 self.repo_id, '/', self.admin_name) == None
 
+    @pytest.mark.skipif(TRAVIS, reason="") # pylint: disable=E1101
+    def test_delete_org_user_share(self):
+        self.share_org_repo_to_org_admin_with_rw_permission()
+
+        # admin user can view repo
+        assert seafile_api.check_permission_by_path(
+                self.org_repo.id, '/', self.org_admin.username) == 'rw'
+
+        self.login_as(self.user)
+
+        args = '?share_type=personal&user=%s' % self.admin_name
+        url = reverse('api-v2.1-shared-repo', args=[self.repo_id]) + args
+        resp = self.client.delete(url, {}, 'application/x-www-form-urlencoded')
+
+        self.assertEqual(200, resp.status_code)
+
+        # admin user can NOT view repo
+        assert seafile_api.check_permission_by_path(
+                self.repo_id, '/', self.admin_name) == None
+
     def test_delete_group_share(self):
         self.share_repo_to_group()
 
@@ -189,6 +264,26 @@ class SharedReposTest(BaseTestCase):
         # repo NOT in group
         repos = seafile_api.get_group_repos_by_owner(self.user_name)
         assert len(repos) == 0
+
+    @pytest.mark.skipif(TRAVIS, reason="") # pylint: disable=E1101
+    def test_delete_org_group_share(self):
+        self.share_org_repo_to_org_group_with_rw_permission()
+
+        repos = seafile_api.get_org_group_repos_by_owner(self.org.org_id, self.org_user.username)
+        target_repo = [repo for repo in repos if repo.repo_id == self.org_repo.id]
+        assert target_repo[0].permission == 'rw'
+
+        self.login_as(self.org_user)
+
+        args = '?share_type=group&group_id=%s' % self.org_group.id
+        url = reverse('api-v2.1-shared-repo', args=[self.org_repo.id]) + args
+        resp = self.client.delete(url, {}, 'application/x-www-form-urlencoded')
+
+        self.assertEqual(200, resp.status_code)
+
+        repos = seafile_api.get_org_group_repos_by_owner(self.org.org_id, self.org_user.username)
+        target_repo = [repo for repo in repos if repo.repo_id == self.org_repo.id]
+        assert len(target_repo) == 0
 
     def test_delete_public_share(self):
         for r in seaserv.seafserv_threaded_rpc.list_inner_pub_repos():

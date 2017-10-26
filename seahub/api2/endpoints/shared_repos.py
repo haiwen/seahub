@@ -87,9 +87,9 @@ class SharedRepos(APIView):
         user_admins = ExtraSharePermission.objects.batch_is_admin(usernames)
         group_admins = ExtraGroupsSharePermission.objects.batch_get_repos_with_admin_permission(gids)
         for result in returned_result:
-            if result.has_key('group_id'):
+            if result['share_type'] == 'group':
                 result['is_admin'] = (result['repo_id'], result['group_id']) in group_admins
-            else:
+            elif result['share_type'] == 'personal':
                 result['is_admin'] = (result['repo_id'], result['user_email']) in user_admins
 
         return Response(returned_result)

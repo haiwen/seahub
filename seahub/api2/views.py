@@ -3514,8 +3514,6 @@ class SharedRepo(APIView):
                 seaserv.seafserv_threaded_rpc.unset_org_inner_pub_repo(org_id, repo_id)
             else:
                 seafile_api.remove_inner_pub_repo(repo_id)
-            send_perm_audit_msg('delete-repo-perm', username, 'All',
-                                repo_id, '/', permission)
         else:
             return api_error(status.HTTP_400_BAD_REQUEST,
                              'Share type can only be personal or group or public.')

@@ -31,14 +31,14 @@ def share_dir_to_user(repo, path, owner, share_from, share_to, permission, org_i
                                                         owner, share_to, 
                                                         permission)
         else:
-            sub_repo_id = seafile_api.org_share_subdir_to_user(org_id, repo.repo_id, 
+            seafile_api.org_share_subdir_to_user(org_id, repo.repo_id, 
                                                                path, owner, 
                                                                share_to, permission)
     else:
         if path == '/':
             seafile_api.share_repo(repo.repo_id, owner, share_to, permission)
         else:
-            sub_repo_id = seafile_api.share_subdir_to_user(repo.repo_id, path, 
+            seafile_api.share_subdir_to_user(repo.repo_id, path, 
                                                            owner, share_to, 
                                                            permission)
     if path == '/' and extra_share_permission == PERMISSION_ADMIN:
@@ -61,7 +61,7 @@ def share_dir_to_group(repo, path, owner, share_from, gid, permission, org_id=No
             seafile_api.add_org_group_repo(repo.repo_id, org_id, gid, 
                                            owner, permission)
         else:
-            sub_repo_id = seafile_api.org_share_subdir_to_group(org_id, repo.repo_id,
+            seafile_api.org_share_subdir_to_group(org_id, repo.repo_id,
                                                                 path, owner, 
                                                                 gid, permission)
     else:
@@ -69,7 +69,7 @@ def share_dir_to_group(repo, path, owner, share_from, gid, permission, org_id=No
             seafile_api.set_group_repo(repo.repo_id, gid, owner, 
                                        permission)
         else:
-            sub_repo_id = seafile_api.share_subdir_to_group(repo.repo_id, path,
+            seafile_api.share_subdir_to_group(repo.repo_id, path,
                                                             owner, gid,
                                                             permission)
 
@@ -153,7 +153,6 @@ def check_group_permission_by_path(repo_id, shared_from, group_id, path, org_id=
     # Returns the group's permission in the repo or subdir.
     is_org = org_id
     repo = seafile_api.get_repo_by_group(group_id, repo_id, is_org)
-
 
     if not repo:
         permission = seafile_api.get_group_shared_folder_perm(repo_id, shared_from, path, group_id, is_org)
