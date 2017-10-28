@@ -38,6 +38,7 @@ def utc_to_local(dt):
     local = timezone.make_naive(utc, tz)
     return local
 
+pytz_obj = pytz.timezone(settings.TIME_ZONE)
 def timestamp_to_isoformat_timestr(timestamp):
     try:
         min_ts = -(1 << 31)
@@ -48,7 +49,6 @@ def timestamp_to_isoformat_timestr(timestamp):
             dt_obj = datetime.datetime.fromtimestamp(timestamp/1000000)
 
         dt_obj = dt_obj.replace(microsecond=0)
-        pytz_obj = pytz.timezone(settings.TIME_ZONE)
         isoformat_timestr = pytz_obj.localize(dt_obj).isoformat()
         return isoformat_timestr
     except Exception as e:
@@ -58,7 +58,6 @@ def timestamp_to_isoformat_timestr(timestamp):
 def datetime_to_isoformat_timestr(datetime):
     try:
         datetime = datetime.replace(microsecond=0)
-        pytz_obj = pytz.timezone(settings.TIME_ZONE)
         isoformat_timestr = pytz_obj.localize(datetime).isoformat()
         return isoformat_timestr
     except Exception as e:
