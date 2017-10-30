@@ -53,7 +53,8 @@ def generate_discovery_cache_key(name, ext):
 
     return 'wopi_' + name + '_' + ext
 
-def get_wopi_dict(request_user, repo_id, file_path, action_name='view'):
+def get_wopi_dict(request_user, repo_id, file_path,
+        action_name='view', language_code='en'):
     """ Prepare dict data for WOPI host page
     """
 
@@ -143,6 +144,44 @@ def get_wopi_dict(request_user, repo_id, file_path, action_name='view'):
         full_action_url = action_url + '&' + urllib.urlencode(query_dict)
     else:
         full_action_url = action_url + '?' + urllib.urlencode(query_dict)
+
+    # key, collected from seahub/settings.py
+    # value, collected from https://wopi.readthedocs.io/en/latest/faq/languages.html#languages
+    lang_dict = {
+        "ar": "ar-SA",
+        "ca": "ca-ES",
+        "cs": "cs-CZ",
+        "de": "de-DE",
+        "el": "el-GR",
+        "en": "en-US",
+        "es": "es-ES",
+        "es-ar": "es-ES",
+        "es-mx": "es-ES",
+        "fi": "fi-FI",
+        "fr": "fr-FR",
+        "he": "he-IL",
+        "hu": "hu-HU",
+        "is": "is-IS",
+        "it": "it-IT",
+        "ja": "ja-JP",
+        "ko": "ko-KR",
+        "lv": "lv-LV",
+        "nl": "nl-NL",
+        "pl": "pl-PL",
+        "pt-br": "pt-BR",
+        "ru": "ru-Ru",
+        "sl": "sl-SI",
+        "sv": "sv-SE",
+        "th": "th-TH",
+        "tr": "tr-TR",
+        "uk": "uk-UA",
+        "vi": "vi-VN",
+        "zh-cn": "zh-CN",
+        "zh-tw": "zh-TW",
+    }
+    WOPI_UI_LLCC = lang_dict[language_code]
+
+    full_action_url += '&ui=%s&rs=%s' % (WOPI_UI_LLCC, WOPI_UI_LLCC)
 
     # generate access token
     user_repo_path_info = (request_user, repo_id, file_path)
