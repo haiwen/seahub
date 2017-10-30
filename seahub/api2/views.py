@@ -2127,7 +2127,7 @@ class OwaFileView(APIView):
 
         # get wopi dict
         username = request.user.username
-        wopi_dict = get_wopi_dict(username, repo_id, path, action)
+        wopi_dict = get_wopi_dict(username, repo_id, path, action, request.LANGUAGE_CODE)
 
         # send stats message
         send_file_access_msg(request, repo, path, 'api')
