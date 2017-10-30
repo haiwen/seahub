@@ -7,7 +7,6 @@ from django.utils import timezone
 from django.utils.translation import ugettext as _
 
 from seahub.base.fields import LowerCaseCharField
-from seahub.invitations.utils import block_accepter
 from seahub.invitations.settings import INVITATIONS_TOKEN_AGE
 from seahub.utils import gen_token
 from seahub.utils.timeutils import datetime_to_isoformat_timestr
