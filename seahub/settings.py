@@ -178,7 +178,6 @@ LANGUAGES = (
 
 LOCALE_PATHS = (
     os.path.join(PROJECT_ROOT, 'locale'),
-    os.path.join(PROJECT_ROOT, 'seahub/two_factor/locale'),
     os.path.join(PROJECT_ROOT, 'seahub/trusted_ip/locale'),
 )
 

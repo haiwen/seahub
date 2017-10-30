@@ -116,7 +116,7 @@ class IdempotentSessionWizardView(SessionWizardView):
         management_form = ManagementForm(self.request.POST, prefix=self.prefix)
         if not management_form.is_valid():
             raise ValidationError(
-                _('ManagementForm data is missing or has been tampered.'),
+                'ManagementForm data is missing or has been tampered.',
                 code='missing_management_form',
             )
 

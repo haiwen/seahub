@@ -20,9 +20,9 @@ logger = logging.getLogger(__name__)
 def get_available_phone_methods():
     methods = []
     if getattr(settings, 'TWO_FACTOR_CALL_GATEWAY', None):
-        methods.append(('call', _('Phone call')))
+        methods.append(('call', _('Phone Call')))
     if getattr(settings, 'TWO_FACTOR_SMS_GATEWAY', None):
-        methods.append(('sms', _('Text message')))
+        methods.append(('sms', _('Text Message')))
     return methods
 
 def get_available_methods():
