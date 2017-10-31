@@ -459,7 +459,7 @@ class DirSharedItemsEndpoint(APIView):
                 return api_error(status.HTTP_400_BAD_REQUEST, 'Email %s invalid.' % shared_to)
 
             # if user not found, permission will be None
-            permission = check_user_permission_by_path(repo_id, repo_owner, shared_to, path, is_org_context(request))
+            permission = check_user_permission_by_path(repo_id, path, shared_to, is_org_context(request))
 
             if is_org_context(request):
                 # when calling seafile API to share authority related functions, change the uesrname to repo owner.
@@ -493,13 +493,14 @@ class DirSharedItemsEndpoint(APIView):
                 return api_error(status.HTTP_400_BAD_REQUEST, 'group_id %s invalid' % group_id)
 
             # hacky way to get group repo permission
-            if is_org_context(request):
+            is_org = is_org_context(request)
+            if is_org:
                 org_id = request.user.org.org_id
                 repo_owner = seafile_api.get_org_repo_owner(repo_id)
-                permission = check_group_permission_by_path(repo_id, repo_owner, group_id, path, org_id)
+                permission = check_group_permission_by_path(repo_id, path, group_id, is_org)
             else:
                 repo_owner = seafile_api.get_repo_owner(repo_id)
-                permission = check_group_permission_by_path(repo_id, repo_owner, group_id, path)
+                permission = check_group_permission_by_path(repo_id, path, group_id, is_org)
 
             if is_org_context(request):
                 # when calling seafile API to share authority related functions, change the uesrname to repo owner.

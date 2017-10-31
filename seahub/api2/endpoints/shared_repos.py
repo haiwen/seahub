@@ -18,7 +18,8 @@ from seahub.utils import is_org_context, is_valid_username, send_perm_audit_msg
 from seahub.base.templatetags.seahub_tags import email2nickname, email2contact_email
 from seahub.share.models import ExtraSharePermission, ExtraGroupsSharePermission
 from seahub.constants import PERMISSION_READ, PERMISSION_READ_WRITE, PERMISSION_ADMIN
-from seahub.share.utils import update_user_dir_permission, update_group_dir_permission 
+from seahub.share.utils import update_user_dir_permission, update_group_dir_permission,\
+        check_user_permission_by_path, check_group_permission_by_path
 
 logger = logging.getLogger(__name__)
 
@@ -244,8 +245,10 @@ class SharedRepo(APIView):
 
         # delete share
         org_id = None
+        is_org = False
         if is_org_context(request):
             org_id = request.user.org.org_id
+            is_org = True
 
         if share_type == 'personal':
             user = request.GET.get('user', None)
@@ -253,11 +256,7 @@ class SharedRepo(APIView):
                 error_msg = 'user invalid.'
                 return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
 
-            # if user not found, permission will be None
-            permission = seafile_api.check_permission_by_path(repo_id,
-                                                              '/', user)
-            extra_permission = ExtraSharePermission.objects.get_user_permission(repo_id, user)
-            permission = extra_permission if extra_permission else permission
+            permission = check_user_permission_by_path(repo_id, '/', user, is_org)
 
             try:
                 if org_id:
@@ -285,13 +284,11 @@ class SharedRepo(APIView):
                 error_msg = 'group_id must be integer.'
                 return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
 
-            repo = seafile_api.get_repo_by_group(group_id, repo_id, org_id)
-            extra_permission = ExtraGroupsSharePermission.objects.get_group_permission(repo_id, group_id)
-            permission =  extra_permission if extra_permission else repo.permission
+            permission = check_group_permission_by_path(repo_id, '/', group_id, is_org)
 
 
             try:
-                if org_id:
+                if is_org:
                     seaserv.del_org_group_repo(repo_id, org_id, group_id)
                 else:
                     seafile_api.unset_group_repo(repo_id, group_id, username)

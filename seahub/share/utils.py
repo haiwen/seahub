@@ -136,30 +136,29 @@ def update_group_dir_permission(repo_id, path, owner, gid, permission, org_id=No
                                                                    gid, 
                                                                    extra_share_permission)
 
-def check_user_permission_by_path(repo_id, shared_from, share_to, path, is_org):
+def check_user_permission_by_path(repo_id, path, share_to, is_org=False):
     # Returns the user's permission in the repo or subdir.
-    permission = seafile_api.check_permission_by_path(repo_id, path, share_to)
-    if not permission:
-        permission = seafile_api.get_shared_folder_perm(repo_id, shared_from, share_to, path, is_org)
-        if not permission:
-            return None
+    path = None if path == '/' else path
+    repo = seafile_api.get_shared_repo_by_path(repo_id, path, share_to, is_org)
+    if not repo or not repo.permission:
+        return None
 
-    if path != '/':
-        return permission
+    if path:
+        return repo.permission
+
     extra_permission = ExtraSharePermission.objects.get_user_permission(repo_id, share_to)
-    return extra_permission if extra_permission else permission
+    return extra_permission if extra_permission else repo.permission
 
-def check_group_permission_by_path(repo_id, shared_from, group_id, path, org_id=None):
+def check_group_permission_by_path(repo_id, path, group_id, is_org=False):
     # Returns the group's permission in the repo or subdir.
-    is_org = org_id
-    repo = seafile_api.get_repo_by_group(group_id, repo_id, is_org)
+    path = None if path == '/' else path
+    repo = seafile_api.get_group_shared_repo_by_path(repo_id, path, group_id, is_org)
 
-    if not repo:
-        permission = seafile_api.get_group_shared_folder_perm(repo_id, shared_from, path, group_id, is_org)
-        if not permission:
-            return None
-    else:
-        permission = repo.permission
+    if not repo or not repo.permission:
+        return None
+
+    if path:
+        return repo.permission
 
     extra_permission = ExtraGroupsSharePermission.objects.get_group_permission(repo_id, group_id)
-    return extra_permission if extra_permission else permission
+    return extra_permission if extra_permission else repo.permission

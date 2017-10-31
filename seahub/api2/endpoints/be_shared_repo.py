@@ -37,7 +37,7 @@ class BeSharedRepo(APIView):
 
             is_org = is_org_context(request)
             repo = seafile_api.get_repo(repo_id)
-            permission = check_user_permission_by_path(repo_id, from_email, username, '/', is_org)
+            permission = check_user_permission_by_path(repo_id, '/', username, is_org)
             if is_org:
                 org_id = request.user.org.org_id
                 seaserv.seafserv_threaded_rpc.org_remove_share(org_id,
