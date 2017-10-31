@@ -11,7 +11,7 @@ define([
 
         tagName: 'tr',
 
-        template: _.template($('#share-admin-folder-tmpl').html()),
+        template: _.template($('#share-admin-repo-tmpl').html()),
 
         events: {
             'click .perm-edit-icon': 'showPermSelect',
