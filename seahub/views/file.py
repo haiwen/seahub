@@ -1655,6 +1655,7 @@ def _office_convert_get_file_id(request, repo_id=None, commit_id=None, path=None
 def office_convert_query_status(request, cluster_internal=False):
     shared_token = request.GET.get('shared_token', '')
     fileshare = FileShare.objects.get_valid_file_link_by_token(shared_token)
+    shared_by = ''
     if fileshare:
         shared_by = fileshare.username
 
@@ -1670,7 +1671,7 @@ def office_convert_query_status(request, cluster_internal=False):
 
     ret = {'success': False}
     try:
-        ret = query_office_convert_status(file_id, page, cluster_internal=cluster_internal, shared_by=shared_by)
+        ret = query_office_convert_status(file_id, page, shared_by, cluster_internal=cluster_internal)
     except Exception, e:
         logging.exception('failed to call query_office_convert_status')
         ret['error'] = str(e)
