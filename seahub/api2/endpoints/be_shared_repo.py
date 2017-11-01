@@ -13,7 +13,7 @@ from seahub.api2.throttling import UserRateThrottle
 from seahub.api2.utils import api_error
 from seahub.utils import is_valid_username, is_org_context, send_perm_audit_msg
 from seahub.share.models import ExtraSharePermission
-from seahub.share.utils import check_user_permission_by_path
+from seahub.share.utils import check_user_share_in_permission
 
 json_content_type = 'application/json; charset=utf-8'
 
@@ -37,7 +37,7 @@ class BeSharedRepo(APIView):
 
             is_org = is_org_context(request)
             repo = seafile_api.get_repo(repo_id)
-            permission = check_user_permission_by_path(repo_id, '/', username, is_org)
+            permission = check_user_share_in_permission(repo_id, username, is_org)
             if is_org:
                 org_id = request.user.org.org_id
                 seaserv.seafserv_threaded_rpc.org_remove_share(org_id,

@@ -136,29 +136,50 @@ def update_group_dir_permission(repo_id, path, owner, gid, permission, org_id=No
                                                                    gid, 
                                                                    extra_share_permission)
 
-def check_user_permission_by_path(repo_id, path, share_to, is_org=False):
-    # Returns the user's permission in the repo or subdir.
+def check_user_share_out_permission(repo_id, path, share_to, is_org=False):
+    # Return the permission you share to others.
     path = None if path == '/' else path
     repo = seafile_api.get_shared_repo_by_path(repo_id, path, share_to, is_org)
-    if not repo or not repo.permission:
+    if not repo:
         return None
 
-    if path:
-        return repo.permission
+    permission = repo.permission
+    if path is None:
+        extra_permission = ExtraSharePermission.objects.get_user_permission(repo_id, share_to)
+        permission = extra_permission if extra_permission else repo.permission
+
+    return permission
+
+def check_user_share_in_permission(repo_id, share_to, is_org=False):
+    # Return the permission to share to you.
+    repo = seafile_api.get_shared_repo_by_path(repo_id, None, share_to, is_org)
+    if not repo:
+        return None
 
     extra_permission = ExtraSharePermission.objects.get_user_permission(repo_id, share_to)
     return extra_permission if extra_permission else repo.permission
 
-def check_group_permission_by_path(repo_id, path, group_id, is_org=False):
-    # Returns the group's permission in the repo or subdir.
+def check_group_share_out_permission(repo_id, path, group_id, is_org=False):
+    # Return the permission that share to other's group.
     path = None if path == '/' else path
     repo = seafile_api.get_group_shared_repo_by_path(repo_id, path, group_id, is_org)
 
-    if not repo or not repo.permission:
+    if not repo:
         return None
 
-    if path:
-        return repo.permission
+    permission = repo.permission
+    if path is None:
+        extra_permission = ExtraGroupsSharePermission.objects.get_group_permission(repo_id, group_id)
+        permission = extra_permission if extra_permission else repo.permission
+
+    return permission
+
+def check_group_share_in_permission(repo_id, group_id, is_org=False):
+    # Returns the permission to share the group you joined.
+    repo = seafile_api.get_group_shared_repo_by_path(repo_id, None, group_id, is_org)
+
+    if not repo:
+        return None
 
     extra_permission = ExtraGroupsSharePermission.objects.get_group_permission(repo_id, group_id)
     return extra_permission if extra_permission else repo.permission

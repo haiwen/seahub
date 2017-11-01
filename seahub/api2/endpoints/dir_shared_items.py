@@ -26,8 +26,8 @@ from seahub.base.accounts import User
 from seahub.share.models import ExtraSharePermission, ExtraGroupsSharePermission
 from seahub.share.utils import is_repo_admin, share_dir_to_user, \
         share_dir_to_group, update_user_dir_permission, \
-        update_group_dir_permission, check_user_permission_by_path, \
-        check_group_permission_by_path
+        update_group_dir_permission, check_user_share_out_permission, \
+        check_group_share_out_permission
 from seahub.utils import (is_org_context, is_valid_username,
                           send_perm_audit_msg)
 from seahub.constants import PERMISSION_READ, PERMISSION_READ_WRITE, \
@@ -458,8 +458,7 @@ class DirSharedItemsEndpoint(APIView):
             if shared_to is None or not is_valid_username(shared_to):
                 return api_error(status.HTTP_400_BAD_REQUEST, 'Email %s invalid.' % shared_to)
 
-            # if user not found, permission will be None
-            permission = check_user_permission_by_path(repo_id, path, shared_to, is_org_context(request))
+            permission = check_user_share_out_permission(repo_id, path, shared_to, is_org_context(request))
 
             if is_org_context(request):
                 # when calling seafile API to share authority related functions, change the uesrname to repo owner.
@@ -494,15 +493,9 @@ class DirSharedItemsEndpoint(APIView):
 
             # hacky way to get group repo permission
             is_org = is_org_context(request)
-            if is_org:
-                org_id = request.user.org.org_id
-                repo_owner = seafile_api.get_org_repo_owner(repo_id)
-                permission = check_group_permission_by_path(repo_id, path, group_id, is_org)
-            else:
-                repo_owner = seafile_api.get_repo_owner(repo_id)
-                permission = check_group_permission_by_path(repo_id, path, group_id, is_org)
+            permission = check_group_share_out_permission(repo_id, path, group_id, is_org)
 
-            if is_org_context(request):
+            if is_org:
                 # when calling seafile API to share authority related functions, change the uesrname to repo owner.
                 org_id = request.user.org.org_id
                 if path == '/':

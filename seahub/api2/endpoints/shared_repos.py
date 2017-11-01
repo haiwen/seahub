@@ -19,7 +19,7 @@ from seahub.base.templatetags.seahub_tags import email2nickname, email2contact_e
 from seahub.share.models import ExtraSharePermission, ExtraGroupsSharePermission
 from seahub.constants import PERMISSION_READ, PERMISSION_READ_WRITE, PERMISSION_ADMIN
 from seahub.share.utils import update_user_dir_permission, update_group_dir_permission,\
-        check_user_permission_by_path, check_group_permission_by_path
+        check_user_share_out_permission, check_group_share_out_permission
 
 logger = logging.getLogger(__name__)
 
@@ -256,7 +256,7 @@ class SharedRepo(APIView):
                 error_msg = 'user invalid.'
                 return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
 
-            permission = check_user_permission_by_path(repo_id, '/', user, is_org)
+            permission = check_user_share_out_permission(repo_id, '/', user, is_org)
 
             try:
                 if org_id:
@@ -284,7 +284,7 @@ class SharedRepo(APIView):
                 error_msg = 'group_id must be integer.'
                 return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
 
-            permission = check_group_permission_by_path(repo_id, '/', group_id, is_org)
+            permission = check_group_share_out_permission(repo_id, '/', group_id, is_org)
 
 
             try:

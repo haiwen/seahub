@@ -47,7 +47,7 @@ from seahub.avatar.templatetags.group_avatar_tags import api_grp_avatar_url, \
 from seahub.base.accounts import User
 from seahub.base.models import UserStarredFiles, DeviceToken
 from seahub.share.models import ExtraSharePermission, ExtraGroupsSharePermission
-from seahub.share.utils import is_repo_admin, check_group_permission_by_path
+from seahub.share.utils import is_repo_admin
 from seahub.base.templatetags.seahub_tags import email2nickname, \
     translate_seahub_time, translate_commit_desc_escape, \
     email2contact_email
