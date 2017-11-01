@@ -1013,7 +1013,7 @@ define([
                             if (del_len > 0) {
                                 if (del_len == selected_names.length) {
                                     dirents.remove(selected_dirents);
-                                    _this.$('th .checkbox').removeClass('checkbox-checked');
+                                    _this.$('th [type=checkbox]').prop('checked', false);
                                     _this.$('#multi-dirents-op').hide();
                                     _this.$('#cur-dir-ops').show();
                                     _this.updateDirOpBarUI();
