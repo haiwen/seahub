@@ -16,6 +16,10 @@ from seahub.api2.throttling import UserRateThrottle
 from seahub.profile.models import Profile
 from seahub.utils import is_org_context, is_valid_username, send_perm_audit_msg
 from seahub.base.templatetags.seahub_tags import email2nickname, email2contact_email
+from seahub.share.models import ExtraSharePermission, ExtraGroupsSharePermission
+from seahub.constants import PERMISSION_READ, PERMISSION_READ_WRITE, PERMISSION_ADMIN
+from seahub.share.utils import update_user_dir_permission, update_group_dir_permission,\
+        check_user_share_out_permission, check_group_share_out_permission
 
 logger = logging.getLogger(__name__)
 
@@ -52,6 +56,8 @@ class SharedRepos(APIView):
 
         returned_result = []
         shared_repos.sort(lambda x, y: cmp(x.repo_name, y.repo_name))
+        usernames = []
+        gids = []
         for repo in shared_repos:
             if repo.is_virtual:
                     continue
@@ -69,13 +75,23 @@ class SharedRepos(APIView):
                 result['user_name'] = email2nickname(repo.user)
                 result['user_email'] = repo.user
                 result['contact_email'] = Profile.objects.get_contact_email_by_user(repo.user)
+                usernames.append((repo.repo_id, repo.user))
 
             if repo.share_type == 'group':
                 group = ccnet_api.get_group(repo.group_id)
                 result['group_id'] = repo.group_id
                 result['group_name'] = group.group_name
+                gids.append(repo.group_id)
 
             returned_result.append(result)
+
+        user_admins = ExtraSharePermission.objects.batch_is_admin(usernames)
+        group_admins = ExtraGroupsSharePermission.objects.batch_get_repos_with_admin_permission(gids)
+        for result in returned_result:
+            if result['share_type'] == 'group':
+                result['is_admin'] = (result['repo_id'], result['group_id']) in group_admins
+            elif result['share_type'] == 'personal':
+                result['is_admin'] = (result['repo_id'], result['user_email']) in user_admins
 
         return Response(returned_result)
 
@@ -94,7 +110,7 @@ class SharedRepo(APIView):
 
         # argument check
         permission = request.data.get('permission', None)
-        if permission not in ['r', 'rw']:
+        if permission not in [PERMISSION_READ, PERMISSION_READ_WRITE, PERMISSION_ADMIN]:
             error_msg = 'permission invalid.'
             return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
 
@@ -134,11 +150,9 @@ class SharedRepo(APIView):
             try:
                 if is_org_context(request):
                     org_id = request.user.org.org_id
-                    seaserv.seafserv_threaded_rpc.org_set_share_permission(
-                            org_id, repo_id, username, shared_to, permission)
+                    update_user_dir_permission(repo_id, '/', repo_owner, shared_to, permission, org_id)
                 else:
-                    seafile_api.set_share_permission(repo_id,
-                            username, shared_to, permission)
+                    update_user_dir_permission(repo_id, '/', repo_owner, shared_to, permission)
             except Exception as e:
                 logger.error(e)
                 error_msg = 'Internal Server Error'
@@ -167,11 +181,9 @@ class SharedRepo(APIView):
             try:
                 if is_org_context(request):
                     org_id = request.user.org.org_id
-                    seaserv.seafserv_threaded_rpc.set_org_group_repo_permission(
-                            org_id, group_id, repo_id, permission)
+                    update_group_dir_permission(repo_id, '/', repo_owner, group_id, permission, org_id)
                 else:
-                    seafile_api.set_group_repo_permission(
-                            group_id, repo_id, permission)
+                    update_group_dir_permission(repo_id, '/', repo_owner, group_id, permission)
             except Exception as e:
                 logger.error(e)
                 error_msg = 'Internal Server Error'
@@ -233,8 +245,10 @@ class SharedRepo(APIView):
 
         # delete share
         org_id = None
+        is_org = False
         if is_org_context(request):
             org_id = request.user.org.org_id
+            is_org = True
 
         if share_type == 'personal':
             user = request.GET.get('user', None)
@@ -242,9 +256,7 @@ class SharedRepo(APIView):
                 error_msg = 'user invalid.'
                 return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
 
-            # if user not found, permission will be None
-            permission = seafile_api.check_permission_by_path(
-                    repo_id, '/', user)
+            permission = check_user_share_out_permission(repo_id, '/', user, is_org)
 
             try:
                 if org_id:
@@ -272,22 +284,11 @@ class SharedRepo(APIView):
                 error_msg = 'group_id must be integer.'
                 return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
 
-            # hacky way to get group repo permission
-            permission = ''
-            if org_id:
-                for e in seafile_api.list_org_repo_shared_group(
-                        org_id, username, repo_id):
-                    if e.group_id == group_id:
-                        permission = e.perm
-                        break
-            else:
-                for e in seafile_api.list_repo_shared_group_by_user(username, repo_id):
-                    if e.group_id == group_id:
-                        permission = e.perm
-                        break
+            permission = check_group_share_out_permission(repo_id, '/', group_id, is_org)
+
 
             try:
-                if org_id:
+                if is_org:
                     seaserv.del_org_group_repo(repo_id, org_id, group_id)
                 else:
                     seafile_api.unset_group_repo(repo_id, group_id, username)
