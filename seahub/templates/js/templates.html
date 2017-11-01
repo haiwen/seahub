@@ -2224,18 +2224,38 @@
     <td title="<%- contact_email %>"><%- user_name %></td>
     <% } else if (share_type == 'group') { %>
     <td><%- group_name %></td>
-    <% } else if (share_type == 'public') { %> {# no 'public' type for 'folder' #}
+    <% } else if (share_type == 'public') { %>
     <td>{% trans "all members"%}</td>
     <% } %>
     <td>
-        <% if (is_admin) { %>
-            <span class="cur-perm">{% trans "Admin" %}</span>
-            <a href="#" title="{% trans "Edit" %}" class="perm-edit-icon sf2-icon-edit op-icon vh"></a>
-            <select class="perm-select select-white hide">
-                <option value="admin" selected="selected">{% trans "Admin" %}</option>
-                <option value="rw">{% trans "Read-Write" %}</option>
-                <option value="r">{% trans "Read-Only" %}</option>
-            </select>
+        <% if (show_admin) { %>
+            <% if (is_admin) { %>
+                <span class="cur-perm">{% trans "Admin" %}</span>
+                <a href="#" title="{% trans "Edit" %}" class="perm-edit-icon sf2-icon-edit op-icon vh"></a>
+                <select class="perm-select select-white hide">
+                    <option value="rw">{% trans "Read-Write" %}</option>
+                    <option value="r">{% trans "Read-Only" %}</option>
+                    <option value="admin" selected="selected">{% trans "Admin" %}</option>
+                </select>
+            <% } else { %>
+                <% if (share_permission == 'rw') { %>
+                    <span class="cur-perm">{% trans "Read-Write" %}</span>
+                    <a href="#" title="{% trans "Edit" %}" class="perm-edit-icon sf2-icon-edit op-icon vh"></a>
+                    <select class="perm-select select-white hide">
+                        <option value="rw" selected="selected">{% trans "Read-Write" %}</option>
+                        <option value="r">{% trans "Read-Only" %}</option>
+                        <option value="admin">{% trans "Admin" %}</option>
+                    </select>
+                <% } else { %>
+                    <span class="cur-perm">{% trans "Read-Only" %}</span>
+                    <a href="#" title="{% trans "Edit" %}" class="perm-edit-icon sf2-icon-edit op-icon vh"></a>
+                    <select class="perm-select select-white hide">
+                        <option value="rw">{% trans "Read-Write" %}</option>
+                        <option value="r" selected="selected">{% trans "Read-Only" %}</option>
+                        <option value="admin">{% trans "Admin" %}</option>
+                    </select>
+                <% } %>
+            <% } %>
         <% } else { %>
             <% if (share_permission == 'rw') { %>
                 <span class="cur-perm">{% trans "Read-Write" %}</span>
@@ -2243,7 +2263,6 @@
                 <select class="perm-select select-white hide">
                     <option value="rw" selected="selected">{% trans "Read-Write" %}</option>
                     <option value="r">{% trans "Read-Only" %}</option>
-                    <option value="admin">{% trans "Admin" %}</option>
                 </select>
             <% } else { %>
                 <span class="cur-perm">{% trans "Read-Only" %}</span>
@@ -2251,7 +2270,6 @@
                 <select class="perm-select select-white hide">
                     <option value="rw">{% trans "Read-Write" %}</option>
                     <option value="r" selected="selected">{% trans "Read-Only" %}</option>
-                    <option value="admin">{% trans "Admin" %}</option>
                 </select>
             <% } %>
         <% } %>
