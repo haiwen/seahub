@@ -47,7 +47,7 @@ from seahub.avatar.templatetags.group_avatar_tags import api_grp_avatar_url, \
 from seahub.base.accounts import User
 from seahub.base.models import UserStarredFiles, DeviceToken
 from seahub.share.models import ExtraSharePermission, ExtraGroupsSharePermission
-from seahub.share.utils import is_repo_admin
+from seahub.share.utils import is_repo_admin, check_group_share_in_permission
 from seahub.base.templatetags.seahub_tags import email2nickname, \
     translate_seahub_time, translate_commit_desc_escape, \
     email2contact_email
@@ -4085,9 +4085,7 @@ class GroupRepo(APIView):
 
         is_org = seaserv.is_org_group(group_id)
         repo = seafile_api.get_group_shared_repo_by_path(repo_id, None, group_id, is_org)
-        permission = repo.permission
-        extra_permission = ExtraGroupsSharePermission.objects.get_group_permission(repo_id, group_id)
-        permission = extra_permission if extra_permission else repo.permission
+        permission = check_group_share_in_permission(repo_id, group_id, is_org)
 
         if is_org:
             org_id = seaserv.get_org_id_by_group(group_id)

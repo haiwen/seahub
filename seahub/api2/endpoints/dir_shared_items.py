@@ -30,6 +30,7 @@ from seahub.share.utils import is_repo_admin, share_dir_to_user, \
         check_group_share_out_permission
 from seahub.utils import (is_org_context, is_valid_username,
                           send_perm_audit_msg)
+from seahub.share.signals import share_repo_to_user_successful, share_repo_to_group_successful
 from seahub.constants import PERMISSION_READ, PERMISSION_READ_WRITE, \
         PERMISSION_ADMIN
 
@@ -359,6 +360,11 @@ class DirSharedItemsEndpoint(APIView):
                         "is_admin": permission == PERMISSION_ADMIN
                     })
 
+                    # send a signal when sharing repo successful
+                    share_repo_to_user_successful.send(sender=None, from_user=username,
+                                                       to_user=to_user, repo=repo,
+                                                       path=path, org_id=org_id)
+
                     send_perm_audit_msg('add-repo-perm', username, to_user,
                                         repo_id, path, permission)
                 except SearpcError as e:
@@ -424,6 +430,11 @@ class DirSharedItemsEndpoint(APIView):
                         "permission": PERMISSION_READ_WRITE if permission == PERMISSION_ADMIN else permission,
                         "is_admin": permission == PERMISSION_ADMIN
                     })
+
+                    share_repo_to_group_successful.send(sender=None,
+                                                        from_user=username,
+                                                        group_id=gid, repo=repo,
+                                                        path=path, org_id=org_id)
 
                     send_perm_audit_msg('add-repo-perm', username, gid,
                                         repo_id, path, permission)

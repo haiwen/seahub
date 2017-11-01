@@ -1,7 +1,6 @@
 from seahub.group.utils import is_group_member
 from seahub.constants import PERMISSION_ADMIN, PERMISSION_READ_WRITE
 from seahub.share.models import ExtraSharePermission, ExtraGroupsSharePermission
-from seahub.share.signals import share_repo_to_user_successful, share_repo_to_group_successful
 
 import seaserv
 from seaserv import seafile_api
@@ -44,11 +43,6 @@ def share_dir_to_user(repo, path, owner, share_from, share_to, permission, org_i
     if path == '/' and extra_share_permission == PERMISSION_ADMIN:
         ExtraSharePermission.objects.create_share_permission(repo.repo_id, share_to, extra_share_permission)
 
-    # send a signal when sharing repo successful
-    share_repo_to_user_successful.send(sender=None, from_user=share_from,
-                                       to_user=share_to, repo=repo,
-                                       path=path, org_id=org_id)
-
 def share_dir_to_group(repo, path, owner, share_from, gid, permission, org_id=None):
     # Share  repo or subdir to group with permission(r, rw, admin).
     extra_share_permission = ''
@@ -76,11 +70,6 @@ def share_dir_to_group(repo, path, owner, share_from, gid, permission, org_id=No
     # add share permission if between is admin and is extra permission.
     if path == '/' and extra_share_permission == PERMISSION_ADMIN:
         ExtraGroupsSharePermission.objects.create_share_permission(repo.repo_id, gid, extra_share_permission)
-
-    share_repo_to_group_successful.send(sender=None,
-                                        from_user=share_from,
-                                        group_id=gid, repo=repo,
-                                        path=path, org_id=org_id)
 
 def update_user_dir_permission(repo_id, path, owner, share_to, permission, org_id=None):
     # Update the user's permission(r, rw, admin) in the repo or subdir.
