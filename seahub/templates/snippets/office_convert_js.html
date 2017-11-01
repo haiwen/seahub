@@ -39,7 +39,8 @@ var OfficePreviewer = function(repo_id, path, token, commit_id) {
         if (this.token) {
             params['token'] = token;
         }
-        return params ? url + '?' + $.param(params) : url;
+        res = params ? url + '?' + $.param(params) : url;
+        return res + '&shared_token={{shared_token}}'
     }
 
     var url = window.location.href;
@@ -63,7 +64,7 @@ OfficePreviewer.prototype.check_page_status = function() {
     var _this = this;
     $.ajax({
         context: this,
-        url: this.page_status_url(page),
+        url: this.page_status_url(page) + '&shared_token={{shared_token}}',
         cache: false,
         dataType: 'json',
         success: function(data) {
