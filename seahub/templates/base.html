@@ -50,6 +50,9 @@
                     {% include 'snippets/search_form.html' %}
                 {% endif %}
 
+                    {% if show_logout_icon %}
+                    <a id="logout-icon" href="{{ SITE_ROOT }}accounts/logout/" class="no-deco fleft" title="{% trans "Log out" %}" aria-label="{% trans "Log out" %}"><span class="sf2-icon-logout"></span></a>
+                    {% endif %}
 
                 <div id="account" class="fright">
                     <a id="my-info" href="#" class="no-deco" aria-label="{% trans "View profile and more" %}">
