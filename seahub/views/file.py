@@ -18,12 +18,6 @@ import mimetypes
 import urlparse
 import datetime
 import hashlib
-import tempfile
-from StringIO import StringIO
-from PIL import Image
-from reportlab.pdfgen import canvas
-from reportlab.lib.pagesizes import letter
-from pdfrw import PdfReader, PdfWriter, PageMerge
 
 from django.core import signing
 from django.core.cache import cache
@@ -54,7 +48,7 @@ from seahub.avatar.templatetags.group_avatar_tags import grp_avatar
 from seahub.auth.decorators import login_required
 from seahub.base.decorators import repo_passwd_set_required
 from seahub.share.models import FileShare, check_share_link_common
-from seahub.share.decorators import share_link_audit
+from seahub.share.decorators import share_link_audit, share_link_dl_watermark
 from seahub.wiki.utils import get_wiki_dirent
 from seahub.wiki.models import WikiDoesNotExist, WikiPageMissing
 from seahub.utils import render_error, is_org_context, \
@@ -254,15 +248,15 @@ def handle_document(raw_path, obj_id, fileext, ret_dict):
 def handle_spreadsheet(raw_path, obj_id, fileext, ret_dict):
     handle_document(raw_path, obj_id, fileext, ret_dict)
 
-def handle_pdf(raw_path, obj_id, fileext, ret_dict, 
-               enable_watermark=False, name=None, email=None):
+def handle_pdf(raw_path, obj_id, fileext, ret_dict, email=None):
     if USE_PDFJS:
         # use pdfjs to preview PDF
         pass
     elif HAS_OFFICE_CONVERTER:
         # use pdf2htmlEX to prefiew PDF
         err = prepare_converted_html(raw_path, obj_id, fileext, ret_dict,
-                                    enable_watermark, name, email)
+                                     ENABLE_SHARE_LINK_WATERMARK,
+                                     email2nickname(email), email)
         # populate return value dict
         ret_dict['err'] = err
     else:
@@ -832,6 +826,7 @@ def _download_file_from_share_link(request, fileshare):
     return HttpResponseRedirect(gen_file_get_url(dl_token, filename))
 
 @share_link_audit
+@share_link_dl_watermark
 def view_shared_file(request, fileshare):
     """
     View file via shared link.
@@ -864,73 +859,20 @@ def view_shared_file(request, fileshare):
     fileshare.view_cnt = F('view_cnt') + 1
     fileshare.save()
 
-    access_token = seafile_api.get_fileserver_access_token(repo.id,
-            obj_id, 'view', '', use_onetime=False)
-
-    if not access_token:
-        return render_error(request, _(u'Unable to view file'))
-
     # send statistic messages
     file_size = seafile_api.get_file_size(repo.store_id, repo.version, obj_id)
     if request.GET.get('dl', '') == '1':
         if fileshare.get_permissions()['can_download'] is False:
             raise Http404
 
-        if ENABLE_SHARE_LINK_WATERMARK:
-            filetype, fileext = get_file_type_and_ext(filename)
-            watermark_parent_path = os.path.join(WATERMARK_PATH, filetype)
-            if not os.path.exists(watermark_parent_path):
-                os.makedirs(watermark_parent_path)
-
-            watermark_source_path = os.path.join(watermark_parent_path, obj_id)
-
-            if filetype == 'Image':
-                if os.path.exists(watermark_source_path):
-                    image = Image.open(watermark_source_path)
-                else:
-                    image_content = urllib2.urlopen(gen_file_get_url(access_token, filename)).read()
-                    image = Image.open(StringIO(image_content))
-                    image = add_text_to_image(image, shared_by, email2nickname(shared_by))
-                    image.save(watermark_source_path, 'PNG')
-
-                response = HttpResponse(content_type='image/png')
-                response['Content-Disposition'] = 'attachment; filename=%s' % filename
-                image.save(response, 'PNG')
-                return response
-
-            if filetype == 'PDF':
-                if os.path.exists(watermark_source_path):
-                    pdfreader = PdfReader(watermark_source_path)
-                else:
-                    pdf_content = urllib2.urlopen(gen_file_get_url(access_token, filename)).read()
-                    pdfreader = PdfReader(StringIO(pdf_content))
-                    if pdfreader.Encrypt:
-                        logger.info("%s has been encrypted" % filename)
-                    else:
-                        for page in pdfreader.pages:
-                            info = PageMerge().add(page)
-                            zero, zero, width, height = info.xobj_box
-                            fd, temp_watermark = tempfile.mkstemp(suffix='PDF')
-                            os.close(fd)
-                            c = canvas.Canvas(temp_watermark, pagesize=letter)
-                            c.setFillColorRGB(0, 1, 0)
-                            c.setFontSize(20)
-                            c.rotate(30)
-                            c.drawString(width/2 - 200, height / 3, email2nickname(shared_by))
-                            c.drawString(width/2 - 100, height / 3, shared_by)
-                            c.save()
-                            watermark = PageMerge().add(PdfReader(temp_watermark).pages[0])[0]
-
-                            PageMerge(page).add(watermark, prepend=False).render()
-
-                    response = HttpResponse(content_type='application/pdf')
-                    response['Content-Disposition'] = 'attachment; filename=%s' % filename
-                    PdfWriter(response, trailer=pdfreader).write()
-                    return response
 
         # download shared file
         return _download_file_from_share_link(request, fileshare)
 
+    access_token = seafile_api.get_fileserver_access_token(repo.id,
+        obj_id, 'view', '', use_onetime=False)
+    if not access_token:
+        return render_error(request, _(u'Unable to view file'))
 
     raw_path = gen_file_get_url(access_token, filename)
     if request.GET.get('raw', '') == '1':
@@ -968,8 +910,7 @@ def view_shared_file(request, fileshare):
         elif filetype == SPREADSHEET:
             handle_spreadsheet(inner_path, obj_id, fileext, ret_dict)
         elif filetype == PDF:
-            handle_pdf(inner_path, obj_id, fileext, ret_dict, 
-                       ENABLE_SHARE_LINK_WATERMARK, email2nickname(shared_by), shared_by)
+            handle_pdf(inner_path, obj_id, fileext, ret_dict, shared_by)
     else:
         ret_dict['err'] = err_msg
 
