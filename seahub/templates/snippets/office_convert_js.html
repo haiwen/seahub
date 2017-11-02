@@ -40,7 +40,7 @@ var OfficePreviewer = function(repo_id, path, token, commit_id) {
             params['token'] = token;
         }
         res = params ? url + '?' + $.param(params) : url;
-        return res + '&shared_token={{shared_token}}'
+        return res + '&shared_token={{shared_token}}';
     }
 
     var url = window.location.href;
