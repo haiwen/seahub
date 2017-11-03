@@ -4,6 +4,7 @@ import os
 import re
 import urllib
 import urllib2
+import base64
 import uuid
 import logging
 import hashlib
@@ -1150,17 +1151,21 @@ if HAS_OFFICE_CONVERTER:
 
     @cluster_delegate(delegate_add_office_convert_task)
     def add_office_convert_task(file_id, doctype, raw_path, 
-                                enable_watermark=False, name=None, email=None):
+                                watermark='', convert_tmp_filename=''):
+        if convert_tmp_filename == '':
+            convert_tmp_filename = file_id
         rpc = _get_office_converter_rpc()
-        d = rpc.add_task(file_id, doctype, raw_path, enable_watermark, name, email)
+        d = rpc.add_task(file_id, doctype, raw_path, watermark, convert_tmp_filename)
         return {
             'exists': False,
         }
 
     @cluster_delegate(delegate_query_office_convert_status)
-    def query_office_convert_status(file_id, page, shared_by=''):
+    def query_office_convert_status(file_id, page, convert_tmp_filename=''):
+        if convert_tmp_filename == '': 
+            convert_tmp_filename = file_id 
         rpc = _get_office_converter_rpc()
-        d = rpc.query_convert_status(file_id, page, shared_by)
+        d = rpc.query_convert_status(file_id, page, convert_tmp_filename)
         ret = {}
         if d.error:
             ret['error'] = d.error
@@ -1178,9 +1183,9 @@ if HAS_OFFICE_CONVERTER:
                                    document_root=OFFICE_HTML_DIR)
 
     def prepare_converted_html(raw_path, obj_id, doctype, ret_dict, 
-                               enable_watermark=False, name=None, email=None):
+                               watermark='', convert_tmp_filename=''):
         try:
-            add_office_convert_task(obj_id, doctype, raw_path, enable_watermark, name, email)
+            add_office_convert_task(obj_id, doctype, raw_path, watermark, convert_tmp_filename)
         except:
             logging.exception('failed to add_office_convert_task:')
             return _(u'Internal error')
@@ -1413,3 +1418,8 @@ def get_folder_permission_recursively(username, repo_id, path):
     else:
         return seafile_api.check_permission_by_path(
                 repo_id, path, username)
+
+def get_convert_tmp_filename(file_id, email):
+    """encode convert_temp_filename
+    """
+    return file_id + base64.b64encode(email)

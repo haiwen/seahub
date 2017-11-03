@@ -57,7 +57,7 @@ from seahub.utils import render_error, is_org_context, \
     mkstemp, EMPTY_SHA1, HtmlDiff, gen_inner_file_get_url, \
     user_traffic_over_limit, get_file_audit_events_by_path, \
     generate_file_audit_event_type, FILE_AUDIT_ENABLED, gen_token, \
-    get_site_scheme_and_netloc, get_conf_text_ext
+    get_site_scheme_and_netloc, get_conf_text_ext, get_convert_tmp_filename
 from seahub.utils.ip import get_remote_ip
 from seahub.utils.timeutils import utc_to_local
 from seahub.utils.file_types import (IMAGE, PDF, DOCUMENT, SPREADSHEET, AUDIO,
@@ -248,15 +248,19 @@ def handle_document(raw_path, obj_id, fileext, ret_dict):
 def handle_spreadsheet(raw_path, obj_id, fileext, ret_dict):
     handle_document(raw_path, obj_id, fileext, ret_dict)
 
-def handle_pdf(raw_path, obj_id, fileext, ret_dict, email=None):
+def handle_pdf(raw_path, obj_id, fileext, ret_dict, email=''):
     if USE_PDFJS:
         # use pdfjs to preview PDF
         pass
     elif HAS_OFFICE_CONVERTER:
+        watermark = ''
+        convert_tmp_filename = ''
+        if ENABLE_SHARE_LINK_WATERMARK:
+            watermark = email2nickname(email) + '\t' + email if email else ''
+            convert_tmp_filename = get_convert_tmp_filename(obj_id, email)
         # use pdf2htmlEX to prefiew PDF
         err = prepare_converted_html(raw_path, obj_id, fileext, ret_dict,
-                                     ENABLE_SHARE_LINK_WATERMARK,
-                                     email2nickname(email), email)
+                                    watermark, convert_tmp_filename)
         # populate return value dict
         ret_dict['err'] = err
     else:
@@ -875,7 +879,7 @@ def view_shared_file(request, fileshare):
         return render_error(request, _(u'Unable to view file'))
 
     raw_path = gen_file_get_url(access_token, filename)
-    if request.GET.get('raw', '') == '1':
+    if not ENABLE_SHARE_LINK_WATERMARK and request.GET.get('raw', '') == '1':
         if fileshare.get_permissions()['can_download'] is False:
             raise Http404
 
@@ -1594,11 +1598,6 @@ def _office_convert_get_file_id(request, repo_id=None, commit_id=None, path=None
 
 @json_response
 def office_convert_query_status(request, cluster_internal=False):
-    shared_token = request.GET.get('shared_token', '')
-    fileshare = FileShare.objects.get_valid_file_link_by_token(shared_token)
-    shared_by = ''
-    if fileshare:
-        shared_by = fileshare.username
 
     if not cluster_internal and not request.is_ajax():
         raise Http404
@@ -1612,7 +1611,16 @@ def office_convert_query_status(request, cluster_internal=False):
 
     ret = {'success': False}
     try:
-        ret = query_office_convert_status(file_id, page, shared_by, cluster_internal=cluster_internal)
+        if ENABLE_SHARE_LINK_WATERMARK:
+            shared_token = request.GET.get('shared_token', '')
+            fileshare = FileShare.objects.get_valid_file_link_by_token(shared_token)
+            if not fileshare:
+                ret = query_office_convert_status(file_id, page, cluster_internal=cluster_internal)
+            else:
+                convert_tmp_filename = get_convert_tmp_filename(file_id, fileshare.username)
+                ret = query_office_convert_status(file_id, page, convert_tmp_filename, cluster_internal=cluster_internal)
+        else:
+            ret = query_office_convert_status(file_id, page, cluster_internal=cluster_internal)
     except Exception, e:
         logging.exception('failed to call query_office_convert_status')
         ret['error'] = str(e)
@@ -1642,7 +1650,7 @@ def office_convert_get_page(request, repo_id, commit_id, path, filename, cluster
     if ENABLE_SHARE_LINK_WATERMARK and shared_token:
         fileshare = FileShare.objects.get_valid_file_link_by_token(shared_token)
         if fileshare:
-            file_id = file_id + '_' + fileshare.username
+            file_id = get_convert_tmp_filename(file_id, fileshare.username)
 
     resp = get_office_converted_page(
         request, repo_id, commit_id, path, filename, file_id, cluster_internal=cluster_internal)
