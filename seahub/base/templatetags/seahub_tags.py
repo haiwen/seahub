@@ -1,5 +1,5 @@
 # Copyright (c) 2012-2016 Seafile Ltd.
-# encoding: utf-8
+# -*- coding: utf-8 -*-
 import datetime as dt
 from datetime import datetime
 import re

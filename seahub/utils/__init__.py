@@ -1419,7 +1419,7 @@ def get_folder_permission_recursively(username, repo_id, path):
         return seafile_api.check_permission_by_path(
                 repo_id, path, username)
 
-def get_convert_tmp_filename(file_id, email):
+def get_convert_tmp_filename(file_id, watermark):
     """encode convert_temp_filename
     """
-    return file_id + base64.b64encode(email)
+    return file_id + base64.b64encode(watermark)
