@@ -85,7 +85,7 @@ def get_rotated_image(image):
 
     return image
 
-def generate_thumbnail(request, repo_id, size, path, watermark=False, shared_by=''):
+def generate_thumbnail(request, repo_id, size, path, watermark=''):
     """ generate and save thumbnail if not exist
 
     before generate thumbnail, you should check:
@@ -108,7 +108,7 @@ def generate_thumbnail(request, repo_id, size, path, watermark=False, shared_by=
     if not file_id:
         return (False, 400)
 
-    thumbnail_file = get_thumbnail_file_path(THUMBNAIL_ROOT, file_id, size, watermark=watermark, shared_by=shared_by)
+    thumbnail_file = get_thumbnail_file_path(THUMBNAIL_ROOT, file_id, size, watermark=watermark)
     if os.path.exists(thumbnail_file):
         return (True, 200)
 
@@ -138,7 +138,7 @@ def generate_thumbnail(request, repo_id, size, path, watermark=False, shared_by=
     try:
         image_file = urllib2.urlopen(inner_path)
         f = StringIO(image_file.read())
-        return _create_thumbnail_common(f, thumbnail_file, size, email=shared_by, watermark=watermark)
+        return _create_thumbnail_common(f, thumbnail_file, size, email=watermark)
     except Exception as e:
         logger.error(e)
         return (False, 500)
@@ -187,7 +187,7 @@ def _create_thumbnail_common(fp, thumbnail_file, size, **kwargs):
     if image.mode not in ["1", "L", "P", "RGB", "RGBA"]:
         image = image.convert("RGB")
 
-    if kwargs['watermark'] and kwargs['email']:
+    if kwargs['email']:
         image = add_text_to_image(image, email2nickname(kwargs['email']), kwargs['email'])
     else:
         image = get_rotated_image(image)
@@ -225,9 +225,9 @@ def add_text_to_image(img, user, email):
     image_width_text = Image.alpha_composite(img, test_overlay)
     return image_width_text
 
-def get_thumbnail_file_path(root_dir, file_id, size, watermark=False, shared_by=''):
-    if  watermark and shared_by:
-        path = os.path.join(root_dir, str(size), file_id + '_' + shared_by)
+def get_thumbnail_file_path(root_dir, file_id, size, watermark=''):
+    if  watermark:
+        path = os.path.join(root_dir, str(size), file_id + '_' + watermark)
     else:
         path = os.path.join(root_dir, str(size), file_id)
     return path

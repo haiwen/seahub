@@ -250,10 +250,10 @@ def share_link_thumbnail_get(request, token, size, path):
 
     success = True
     thumbnail_file = get_thumbnail_file_path(THUMBNAIL_ROOT, obj_id, size, \
-            watermark=ENABLE_SHARE_LINK_WATERMARK, shared_by=fileshare.username)
+            watermark=fileshare.username)
     if not os.path.exists(thumbnail_file):
         success, status_code = generate_thumbnail(request, repo_id, size, \
-                image_path, watermark=ENABLE_SHARE_LINK_WATERMARK, shared_by=fileshare.username)
+                image_path, watermark=fileshare.username)
 
     if success:
         try:
