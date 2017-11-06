@@ -146,6 +146,7 @@ class SysInfo(APIView):
             'is_pro': is_pro,
             'with_license': with_license,
             'license_expiration': license_dict.get('Expiration', ''),
+            'license_mode': license_dict.get('Mode', ''),
             'license_maxusers': max_users,
             'license_to': license_dict.get('Name', ''),
             'total_storage': total_storage,
