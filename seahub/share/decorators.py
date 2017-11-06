@@ -147,8 +147,9 @@ def share_link_dl_watermark(func):
 
                         PageMerge(page).add(watermark, prepend=False).render()
 
-                response = HttpResponse(content_type='application/pdf')
-                response['Content-Disposition'] = 'attachment; filename=%s' % filename
-                PdfWriter(response, trailer=pdfreader).write()
-                return response
+                PdfWriter(watermark_source_path, trailer=pdfreader).write()
+            response = HttpResponse(content_type='application/pdf')
+            response['Content-Disposition'] = 'attachment; filename=%s' % filename
+            PdfWriter(response, trailer=pdfreader).write()
+            return response
     return _decorated
