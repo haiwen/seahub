@@ -986,56 +986,42 @@ def get_groups_by_user(request):
     username = request.user.username
     if is_org_context(request):
         org_id = request.user.org.org_id
-        return seaserv.get_org_groups_by_user(org_id, username)
+        return ccnet_api.get_org_groups_by_user(org_id, username)
     else:
-        return seaserv.get_personal_groups_by_user(username)
+        return ccnet_api.get_personal_groups_by_user(username)
 
 def get_group_repos(request, groups):
     """Get repos shared to groups.
     """
-    group_repos = []
+
+    all_group_repos = []
     if is_org_context(request):
         org_id = request.user.org.org_id
-        # For each group I joined...
-        for grp in groups:
-            # Get group repos, and for each group repos...
-            for r_id in seafile_api.get_org_group_repoids(org_id, grp.id):
-                repo_owner = seafile_api.get_org_repo_owner(r_id)
+        for group in groups:
+            org_group_repos = seafile_api.get_org_group_repos(org_id, group.id)
+            for repo in org_group_repos:
                 # Convert repo properties due to the different collumns in Repo
                 # and SharedRepo
-                r = get_repo(r_id)
-                if not r:
-                    continue
-                r.repo_id = r.id
-                r.repo_name = r.name
-                r.repo_desc = r.desc
-                r.last_modified = get_repo_last_modify(r)
-                r.share_type = 'group'
-                r.user = repo_owner
-                r.user_perm = check_folder_permission(request, r_id, '/')
-                r.group = grp
-                group_repos.append(r)
+                repo.share_type = 'group'
+                repo.user = seafile_api.get_org_repo_owner(repo.repo_id)
+                repo.user_perm = check_folder_permission(request, repo.repo_id, '/')
+                repo.group = group
+
+                all_group_repos.append(repo)
     else:
-        # For each group I joined...
-        for grp in groups:
-            # Get group repos, and for each group repos...
-            for r_id in seafile_api.get_group_repoids(grp.id):
-                repo_owner = seafile_api.get_repo_owner(r_id)
+        for group in groups:
+            group_repos = seafile_api.get_repos_by_group(group.id)
+            for repo in group_repos:
                 # Convert repo properties due to the different collumns in Repo
                 # and SharedRepo
-                r = get_repo(r_id)
-                if not r:
-                    continue
-                r.repo_id = r.id
-                r.repo_name = r.name
-                r.repo_desc = r.desc
-                r.last_modified = get_repo_last_modify(r)
-                r.share_type = 'group'
-                r.user = repo_owner
-                r.user_perm = check_folder_permission(request, r_id, '/')
-                r.group = grp
-                group_repos.append(r)
-    return group_repos
+                repo.share_type = 'group'
+                repo.user = seafile_api.get_repo_owner(repo.repo_id)
+                repo.user_perm = check_folder_permission(request, repo.repo_id, '/')
+                repo.group = group
+
+                all_group_repos.append(repo)
+
+    return all_group_repos
 
 def get_file_upload_url_ul(request, token):
     """Get file upload url in dir upload link.
