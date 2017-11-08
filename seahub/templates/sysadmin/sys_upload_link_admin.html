@@ -18,7 +18,7 @@
 {% if uploadlinks %}
 <table>
     <tr>
-        <th width="25%">{% trans "Path" %}</th>
+        <th width="25%">{% trans "Name" %}</th>
         <th width="25%">{% trans "Owner" %}</th>
         <th width="20%"><a class="table-sort-op by-time" href="#">{% trans "Create At" %} {% if sort_by == 'time' %}<span class="sort-icon icon-caret-down"></span>{% elif sort_by == '-time' %}<span class="sort-icon icon-caret-up"></span>{% endif %}</a></th>
         <th width="12%"><a class="table-sort-op by-count" href="#">{% trans "Visit" %} {% if sort_by == 'count' %}<span class="sort-icon icon-caret-up"></span>{% elif sort_by == '-count' %}<span class="sort-icon icon-caret-down"></span>{% endif %}</a></th>
@@ -26,11 +26,7 @@
     </tr>
     {% for uploadlink in uploadlinks %}
     <tr>
-        {% if enable_sys_admin_view_repo %}
-            <td><a href="{{ SITE_ROOT }}sysadmin/#libs/{{ uploadlink.repo_id }}{{ uploadlink.path }}">{{ uploadlink.path }}</a></td>
-        {% else %}
-            <td>{{ uploadlink.path }}</td>
-        {% endif %}
+        <td>{{ uploadlink.path }}</td>
         <td><a href="{{ SITE_ROOT }}useradmin/info/{{ uploadlink.username }}/">{{ uploadlink.username }}</a></td>
         <td>{{ uploadlink.ctime|translate_seahub_time }} </td>
         <td>{{ uploadlink.view_cnt }}</td>

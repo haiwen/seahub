@@ -72,7 +72,7 @@ import seahub.settings as settings
 from seahub.settings import INIT_PASSWD, SITE_NAME, SITE_ROOT, \
     SEND_EMAIL_ON_ADDING_SYSTEM_MEMBER, SEND_EMAIL_ON_RESETTING_USER_PASSWD, \
     ENABLE_SYS_ADMIN_VIEW_REPO, ENABLE_GUEST_INVITATION, LOGIN_BG_IMAGE_PATH, \
-    MEDIA_ROOT, ENABLE_LIMIT_IPADDRESS, ENABLE_SYS_ADMIN_VIEW_REPO
+    MEDIA_ROOT, ENABLE_LIMIT_IPADDRESS
 from seahub.api2.endpoints.admin.login_bg_image import CUSTOM_LOGIN_BG_IMAGE_PATH
 try:
     from seahub.settings import ENABLE_TRIAL_ACCOUNT
@@ -1575,8 +1575,7 @@ def sys_upload_link_admin(request):
             'per_page': per_page,
             'page_next': page_next,
             'per_page': per_page,
-            'sort_by': sort_by,
-            'enable_sys_admin_view_repo': ENABLE_SYS_ADMIN_VIEW_REPO
+            'sort_by': sort_by
         },
         context_instance=RequestContext(request))
 
