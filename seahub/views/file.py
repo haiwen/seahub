@@ -465,7 +465,9 @@ def _file_view(request, repo_id, path):
                 ((not is_locked) or (is_locked and locked_by_me)):
             action_name = 'edit'
 
-        wopi_dict = get_wopi_dict(username, repo_id, path, action_name)
+        wopi_dict = get_wopi_dict(username, repo_id, path,
+                action_name, request.LANGUAGE_CODE)
+
         if wopi_dict:
             send_file_access_msg(request, repo, path, 'web')
             return render_to_response('view_wopi_file.html', wopi_dict,

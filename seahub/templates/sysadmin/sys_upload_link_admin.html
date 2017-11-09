@@ -6,32 +6,32 @@
 {% block right_panel %}
     <div class="hd ovhd">
         <ul class="tab-tabs-nav fleft">
-            <li class="tab ui-state-active">
+            <li class="tab">
                 <a href="{{ SITE_ROOT }}sys/publinkadmin/" class="a">{% trans "Download Links" %}</a>
             </li>
-            <li class="tab">
+            <li class="tab ui-state-active">
                 <a href="{{ SITE_ROOT }}sys/uploadlinkadmin/" class="a">{% trans "Upload Links" %}</a>
             </li>
         </ul>
     </div>
 
-{% if publinks %}
+{% if uploadlinks %}
 <table>
     <tr>
         <th width="25%">{% trans "Name" %}</th>
         <th width="25%">{% trans "Owner" %}</th>
-        <th width="20%"><a class="table-sort-op by-time" href="#">{% trans "Create At" %} {% if sort_by == 'time_down' %}<span class="sort-icon icon-caret-down"></span>{% elif sort_by == 'time_up' %}<span class="sort-icon icon-caret-up"></span>{% endif %}</a></th>
-        <th width="12%"><a class="table-sort-op by-count" href="#">{% trans "Count" %} {% if sort_by == 'count_down' %}<span class="sort-icon icon-caret-up"></span>{% elif sort_by == 'count_up' %}<span class="sort-icon icon-caret-down"></span>{% endif %}</a></th>
+        <th width="20%"><a class="table-sort-op by-time" href="#">{% trans "Create At" %} {% if sort_by == 'time' %}<span class="sort-icon icon-caret-down"></span>{% elif sort_by == '-time' %}<span class="sort-icon icon-caret-up"></span>{% endif %}</a></th>
+        <th width="12%"><a class="table-sort-op by-count" href="#">{% trans "Visit" %} {% if sort_by == 'count' %}<span class="sort-icon icon-caret-up"></span>{% elif sort_by == '-count' %}<span class="sort-icon icon-caret-down"></span>{% endif %}</a></th>
         <th width="18%">{% trans "Operations" %}</th>
     </tr>
-    {% for publink in publinks %}
+    {% for uploadlink in uploadlinks %}
     <tr>
-        <td>{{ publink.name }}</td>
-        <td><a href="{{ SITE_ROOT }}useradmin/info/{{ publink.username }}/">{{ publink.username }}</a></td>
-        <td>{{ publink.ctime|translate_seahub_time }} </td>
-        <td>{{ publink.view_cnt }}</td>
+        <td>{{ uploadlink.path }}</td>
+        <td><a href="{{ SITE_ROOT }}useradmin/info/{{ uploadlink.username }}/">{{ uploadlink.username }}</a></td>
+        <td>{{ uploadlink.ctime|translate_seahub_time }} </td>
+        <td>{{ uploadlink.view_cnt }}</td>
         <td>
-            <a class="op vh rm-link" href="#" data-token="{{ publink.token }}">{% trans "Remove" %}</a>
+            <a class="op vh rm-link" href="#" data-token="{{ uploadlink.token }}">{% trans "Remove" %}</a>
         </td>
     </tr>
     {% endfor %}
@@ -74,7 +74,7 @@
 $('.rm-link').click(function() {
     var _this = $(this);
     $.ajax({
-        url: '{% url 'sys_publink_remove' %}',
+        url: '{% url 'sys_upload_link_remove' %}',
         type: 'POST',
         data: {'t': _this.attr('data-token')},
         cache: false,
@@ -89,20 +89,20 @@ $('.rm-link').click(function() {
 });
 
 var sort_by = '{{ sort_by }}';
-var url = '{% url 'sys_publink_admin' %}' + '?per_page={{ per_page }}';
+var url = '{% url 'sys_upload_link_admin' %}' + '?per_page={{ per_page }}';
 $(".by-time").on('click', function () {
-    if (sort_by == 'time_down') {
-        location.href = url + '&sort_by=time_up';
+    if (sort_by == 'time') {
+        location.href = url + '&sort_by=-time';
     } else {
-        location.href = url + '&sort_by=time_down';
+        location.href = url + '&sort_by=time';
     }
     return false;
 });
 $(".by-count").on('click', function () {
-    if (sort_by == 'count_down') {
-        location.href = url + '&sort_by=count_up';
+    if (sort_by == 'count') {
+        location.href = url + '&sort_by=-count';
     } else {
-        location.href = url + '&sort_by=count_down';
+        location.href = url + '&sort_by=count';
     }
     return false;
 });

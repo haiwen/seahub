@@ -8,6 +8,8 @@ from rest_framework.response import Response
 from rest_framework.views import APIView
 from seaserv import seafile_api
 from pysearpc import SearpcError
+from django.db.models import Count
+from django.core.urlresolvers import reverse
 
 from seahub.api2.authentication import TokenAuthentication
 from seahub.api2.permissions import IsRepoAccessible
@@ -17,6 +19,7 @@ from seahub.avatar.settings import AVATAR_DEFAULT_SIZE
 from seahub.base.models import FileComment
 from seahub.utils.repo import get_repo_owner
 from seahub.signals import comment_file_successful
+from seahub.api2.endpoints.utils import generate_links_header_for_paginator
 
 logger = logging.getLogger(__name__)
 
@@ -36,19 +39,31 @@ class FileCommentsView(APIView):
         try:
             avatar_size = int(request.GET.get('avatar_size',
                                               AVATAR_DEFAULT_SIZE))
+            page = int(request.GET.get('page', '1'))
+            per_page = int(request.GET.get('per_page', '25'))
         except ValueError:
             avatar_size = AVATAR_DEFAULT_SIZE
+            page = 1
+            per_page = 25
 
+        start = (page - 1) * per_page
+        end = page * per_page 
+
+        total_count = FileComment.objects.get_by_file_path(repo_id, path).count()
         comments = []
-        for o in FileComment.objects.get_by_file_path(repo_id, path):
+        for o in FileComment.objects.get_by_file_path(repo_id, path)[start: end]:
             comment = o.to_dict()
             comment.update(user_to_dict(o.author, request=request,
                                         avatar_size=avatar_size))
             comments.append(comment)
 
-        return Response({
-            "comments": comments,
-        })
+        result = {'comments': comments, 'total_count': total_count}
+        resp = Response(result)
+        base_url = reverse('api2-file-comments', args=[repo_id])
+        links_header = generate_links_header_for_paginator(base_url, page, 
+                                                           per_page, total_count)
+        resp['Links'] = links_header
+        return resp
 
     def post(self, request, repo_id, format=None):
         """Post a comments of a file.

@@ -37,8 +37,7 @@ except ImportError:
     CLOUD_MODE = False
 
 urlpatterns += patterns('',
-    url(r'^register/$',
-        register,
+    url(r'^register/$', register,
         reg_dict,
         name='registration_register'),
     url(r'^register/complete/$',

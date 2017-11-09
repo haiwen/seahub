@@ -33,8 +33,7 @@
 </head>
 <body>
 
-{% get_current_language as LANGUAGE_CODE %}
-<form id="office_form" name="office_form" target="office_frame" action="{{action_url}}&ui={{LANGUAGE_CODE}}&rs={{LANGUAGE_CODE}}" method="post">
+<form id="office_form" name="office_form" target="office_frame" action="{{action_url}}" method="post">
     <input name="access_token" value="{{access_token}}" type="hidden"/>
     <input name="access_token_ttl" value="{{access_token_ttl}}" type="hidden"/>
 </form>

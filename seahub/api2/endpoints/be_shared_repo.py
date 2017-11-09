@@ -11,8 +11,9 @@ from seaserv import seafile_api
 from seahub.api2.authentication import TokenAuthentication
 from seahub.api2.throttling import UserRateThrottle
 from seahub.api2.utils import api_error
-from seahub.utils import is_valid_username, is_org_context
+from seahub.utils import is_valid_username, is_org_context, send_perm_audit_msg
 from seahub.share.models import ExtraSharePermission
+from seahub.share.utils import check_user_share_in_permission
 
 json_content_type = 'application/json; charset=utf-8'
 
@@ -34,7 +35,10 @@ class BeSharedRepo(APIView):
             if not is_valid_username(from_email):
                 return api_error(status.HTTP_400_BAD_REQUEST, 'Invalid argument')
 
-            if is_org_context(request):
+            is_org = is_org_context(request)
+            repo = seafile_api.get_repo(repo_id)
+            permission = check_user_share_in_permission(repo_id, username, is_org)
+            if is_org:
                 org_id = request.user.org.org_id
                 seaserv.seafserv_threaded_rpc.org_remove_share(org_id,
                                                                repo_id,
@@ -46,6 +50,13 @@ class BeSharedRepo(APIView):
             # Delete data of ExtraSharePermission table.
             ExtraSharePermission.objects.delete_share_permission(repo_id, 
                                                                  username)
+            if repo.is_virtual:
+                send_perm_audit_msg('delete-repo-perm', username, username,
+                        repo.origin_repo_id, repo.origin_path, permission)
+            else:
+                send_perm_audit_msg('delete-repo-perm', username, username,
+                        repo_id, '/', permission)
+
 
         elif share_type == 'group':
 

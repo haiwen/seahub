@@ -1537,6 +1537,48 @@ def sys_publink_admin(request):
         },
         context_instance=RequestContext(request))
 
+@login_required
+@sys_staff_required
+def sys_upload_link_admin(request):
+    # Make sure page request is an int. If not, deliver first page.
+    try:
+        current_page = int(request.GET.get('page', '1'))
+        per_page = int(request.GET.get('per_page', '100'))
+    except ValueError:
+        current_page = 1
+        per_page = 100
+
+    offset = per_page * (current_page -1)
+    limit = per_page + 1
+    sort_by = request.GET.get('sort_by', '-time')
+
+    if sort_by == 'time':
+        uploadlinks = UploadLinkShare.objects.all().order_by('ctime')[offset:offset+limit]
+    elif sort_by == '-count':
+        uploadlinks = UploadLinkShare.objects.all().order_by('-view_cnt')[offset:offset+limit]
+    elif sort_by == 'count':
+        uploadlinks = UploadLinkShare.objects.all().order_by('view_cnt')[offset:offset+limit]
+    else:
+        uploadlinks = UploadLinkShare.objects.all().order_by('-ctime')[offset:offset+limit]
+
+    if len(uploadlinks) == per_page + 1:
+        page_next = True
+    else:
+        page_next = False
+
+    return render_to_response(
+        'sysadmin/sys_upload_link_admin.html', {
+            'uploadlinks': uploadlinks,
+            'current_page': current_page,
+            'prev_page': current_page-1,
+            'next_page': current_page+1,
+            'per_page': per_page,
+            'page_next': page_next,
+            'per_page': per_page,
+            'sort_by': sort_by
+        },
+        context_instance=RequestContext(request))
+
 @login_required_ajax
 @sys_staff_required
 @require_POST
@@ -1965,7 +2007,7 @@ def batch_add_user(request):
         rows = wb.worksheets[0].rows
         records = []
         # remove first row(head field).
-        next(rows)
+        rows.next()
         for row in rows:
             records.append([c.value for c in row])
 

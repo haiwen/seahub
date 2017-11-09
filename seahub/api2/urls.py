@@ -82,7 +82,7 @@ urlpatterns = patterns('',
     url(r'^shared-upload-links/$', SharedUploadLinksView.as_view()),
     url(r'^repo-tokens/$', RepoTokensView.as_view(), name='api2-repo-tokens'),
 
-    url(r'^organization/$', OrganizationView.as_view()),
+    url(r'^organization/$', OrganizationView.as_view(), name='api2-org'),
 
     url(r'^f/(?P<token>[a-f0-9]+)/$', SharedFileView.as_view()),
     url(r'^f/(?P<token>[a-f0-9]+)/detail/$', SharedFileDetailView.as_view()),

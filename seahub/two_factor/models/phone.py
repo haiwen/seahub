@@ -30,7 +30,7 @@ class PhoneDevice(Device):
                            default=random_hex,
                            help_text="Hex-encoded secret key")
     method = models.CharField(max_length=4, choices=PHONE_METHODS,
-                              verbose_name=_('method'))
+                              verbose_name=_('Method'))
 
     def __repr__(self):
         return '<PhoneDevice(number={!r}, method={!r}>'.format(

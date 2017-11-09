@@ -20,6 +20,8 @@ from seahub.views import get_system_default_repo_id
 from seahub.admin_log.signals import admin_operation
 from seahub.admin_log.models import REPO_CREATE, REPO_DELETE, REPO_TRANSFER
 
+from seahub.base.templatetags.seahub_tags import email2nickname, email2contact_email
+
 try:
     from seahub.settings import MULTI_TENANCY
 except ImportError:
@@ -36,10 +38,15 @@ def get_repo_info(repo):
         except Exception:
             org_repo_owner = None
 
+    owner = repo_owner or org_repo_owner
+
     result = {}
     result['id'] = repo.repo_id
     result['name'] = repo.repo_name
-    result['owner'] = repo_owner or org_repo_owner
+    result['owner'] = owner
+    result['owner_email'] = owner
+    result['owner_name'] = email2nickname(owner)
+    result['owner_contact_email'] = email2contact_email(owner)
     result['size'] = repo.size
     result['size_formatted'] = filesizeformat(repo.size)
     result['encrypted'] = repo.encrypted
@@ -186,6 +193,21 @@ class AdminLibrary(APIView):
     authentication_classes = (TokenAuthentication, SessionAuthentication)
     throttle_classes = (UserRateThrottle,)
     permission_classes = (IsAdminUser,)
+
+    def get(self, request, repo_id, format=None):
+        """ get info of a library
+
+        Permission checking:
+        1. only admin can perform this action.
+        """
+        repo = seafile_api.get_repo(repo_id)
+        if not repo:
+            error_msg = 'Library %s not found.' % repo_id
+            return api_error(status.HTTP_404_NOT_FOUND, error_msg)
+
+        repo_info = get_repo_info(repo)
+
+        return Response(repo_info)
 
     def delete(self, request, repo_id, format=None):
         """ delete a library

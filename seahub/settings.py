@@ -178,13 +178,12 @@ LANGUAGES = (
 
 LOCALE_PATHS = (
     os.path.join(PROJECT_ROOT, 'locale'),
-    os.path.join(PROJECT_ROOT, 'seahub/two_factor/locale'),
     os.path.join(PROJECT_ROOT, 'seahub/trusted_ip/locale'),
 )
 
 TEMPLATE_CONTEXT_PROCESSORS = (
     'django.contrib.auth.context_processors.auth',
-    'django.core.context_processors.debug',
+    'seahub.base.context_processors.debug',
     'django.core.context_processors.i18n',
     'django.core.context_processors.media',
     'django.core.context_processors.static',

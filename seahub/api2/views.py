@@ -47,7 +47,7 @@ from seahub.avatar.templatetags.group_avatar_tags import api_grp_avatar_url, \
 from seahub.base.accounts import User
 from seahub.base.models import UserStarredFiles, DeviceToken
 from seahub.share.models import ExtraSharePermission, ExtraGroupsSharePermission
-from seahub.share.utils import is_repo_admin
+from seahub.share.utils import is_repo_admin, check_group_share_in_permission
 from seahub.base.templatetags.seahub_tags import email2nickname, \
     translate_seahub_time, translate_commit_desc_escape, \
     email2contact_email
@@ -342,6 +342,10 @@ class Search(APIView):
         username = request.user.username
         results, total, has_more = search_keyword(request, keyword)
 
+        is_org = False
+        if is_org_context(request):
+            is_org = True
+
         for e in results:
             e.pop('repo', None)
             e.pop('exists', None)
@@ -354,6 +358,15 @@ class Search(APIView):
             try:
                 repo = get_repo(repo_id)
                 e['repo_name'] = repo.name
+
+                if is_org:
+                    repo_owner = seafile_api.get_org_repo_owner(repo_id)
+                else:
+                    repo_owner = seafile_api.get_repo_owner(repo_id)
+
+                e['repo_owner_email'] = repo_owner
+                e['repo_owner_name'] = email2nickname(repo_owner)
+                e['repo_owner_contact_email'] = email2contact_email(repo_owner)
 
                 dirent = seafile_api.get_dirent_by_path(repo.store_id, path)
                 e['size'] = dirent.size
@@ -1397,7 +1410,7 @@ class UpdateLinkView(APIView):
             return api_error(HTTP_443_ABOVE_QUOTA, 'Above quota')
 
         token = seafile_api.get_fileserver_access_token(repo_id,
-                'dummy', 'update', request.user.username)
+                'dummy', 'update', request.user.username, use_onetime=False)
 
         if not token:
             error_msg = 'Internal Server Error'
@@ -2114,7 +2127,7 @@ class OwaFileView(APIView):
 
         # get wopi dict
         username = request.user.username
-        wopi_dict = get_wopi_dict(username, repo_id, path, action)
+        wopi_dict = get_wopi_dict(username, repo_id, path, action, request.LANGUAGE_CODE)
 
         # send stats message
         send_file_access_msg(request, repo, path, 'api')
@@ -4070,14 +4083,24 @@ class GroupRepo(APIView):
         if not group.is_staff and repo_owner != username and not is_repo_admin(username, repo_id):
             return api_error(status.HTTP_403_FORBIDDEN, 'Permission denied.')
 
-        if seaserv.is_org_group(group_id):
+        is_org = seaserv.is_org_group(group_id)
+        repo = seafile_api.get_group_shared_repo_by_path(repo_id, None, group_id, is_org)
+        permission = check_group_share_in_permission(repo_id, group_id, is_org)
+
+        if is_org:
             org_id = seaserv.get_org_id_by_group(group_id)
             seaserv.del_org_group_repo(repo_id, org_id, group_id)
         else:
             seafile_api.unset_group_repo(repo_id, group_id, username)
+
         # delete extra share permission
         ExtraGroupsSharePermission.objects.delete_share_permission(repo_id, group_id)
-
+        if repo.is_virtual:
+            send_perm_audit_msg('delete-repo-perm', username, group_id,
+                                repo.origin_repo_id, repo.origin_path, permission)
+        else:
+            send_perm_audit_msg('delete-repo-perm', username, group_id,
+                                repo_id, '/', permission)
         return HttpResponse(json.dumps({'success': True}), status=200,
                             content_type=json_content_type)
 

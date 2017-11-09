@@ -1,11 +1,15 @@
+import os
 import json
+import pytest
 from mock import patch
 
+import seaserv
 from seaserv import seafile_api
 
 from tests.common.utils import randstring
 
-from seahub.test_utils import BaseTestCase
+from seahub.test_utils import BaseTestCase, TRAVIS
+
 
 class DirSharedItemsTest(BaseTestCase):
 
@@ -21,6 +25,8 @@ class DirSharedItemsTest(BaseTestCase):
     def tearDown(self):
         self.remove_repo()
         self.remove_group()
+        if not TRAVIS:
+            self.remove_org_repo()
 
     def share_repo_to_user_and_group(self):
 
@@ -32,6 +38,14 @@ class DirSharedItemsTest(BaseTestCase):
         seafile_api.set_group_repo(self.repo_id,
                 self.group_id, self.user_name, 'rw')
 
+    def share_org_repo_to_org_user_and_org_group(self):
+
+        seaserv.seafserv_threaded_rpc.org_add_share(self.org.org_id, self.org_repo.repo_id, 
+                                                    self.org_user.username, self.org_admin.username,
+                                                    'rw')
+        seafile_api.add_org_group_repo(self.org_repo.repo_id, self.org.org_id,
+                                       self.org_group.id, self.org_user.username, 'rw')
+
     def share_folder_to_user_and_group(self):
 
         # share folder to user
@@ -41,6 +55,18 @@ class DirSharedItemsTest(BaseTestCase):
         # share folder to group
         seafile_api.share_subdir_to_group(self.repo_id,
                 self.folder_path, self.user_name, self.group_id, 'rw')
+
+    def share_org_folder_to_org_user_and_org_group(self):
+        seafile_api.org_share_subdir_to_user(self.org.org_id,
+                                             self.org_repo.repo_id, 
+                                             self.org_folder,
+                                             self.org_user.username,
+                                             self.org_admin.username,
+                                             'rw')
+
+        seafile_api.org_share_subdir_to_group(self.org.org_id, self.org_repo.repo_id,
+                                              self.org_folder, self.org_user.username, 
+                                              self.org_group.id, 'rw')
 
     # test get request
     def test_can_list_repo_share_info(self):
@@ -116,6 +142,29 @@ class DirSharedItemsTest(BaseTestCase):
         json_resp = json.loads(resp.content)
         assert 'has been shared to' in json_resp['failed'][0]['error_msg']
 
+    @pytest.mark.skipif(TRAVIS, reason="") # pylint: disable=E1101
+    def test_can_share_repo_to_org_users(self):
+        self.login_as(self.org_user)
+        resp = self.client.put(
+            '/api2/repos/%s/dir/shared_items/?p=/' % self.org_repo.id,
+            "share_type=user&username=%s" % self.org_admin.email,
+            'application/x-www-form-urlencoded',
+        )
+        self.assertEqual(200, resp.status_code)
+        json_resp = json.loads(resp.content)
+        assert len(json_resp['success']) == 1
+        assert json_resp['success'][0]['permission'] == 'r'
+
+        # test share failed when share the same item to the same user
+        resp = self.client.put(
+            '/api2/repos/%s/dir/shared_items/?p=/' % self.org_repo.id,
+            "share_type=user&username=%s" % self.org_admin.email,
+            'application/x-www-form-urlencoded',
+        )
+        self.assertEqual(200, resp.status_code)
+        json_resp = json.loads(resp.content)
+        assert 'has been shared to' in json_resp['failed'][0]['error_msg']
+
     def test_can_share_folder_to_users(self):
         self.login_as(self.user)
 
@@ -135,6 +184,32 @@ class DirSharedItemsTest(BaseTestCase):
             '/api2/repos/%s/dir/shared_items/?p=%s' % (self.repo.id,
                                                        self.folder),
             "share_type=user&username=%s" % self.admin.email,
+            'application/x-www-form-urlencoded',
+        )
+        self.assertEqual(200, resp.status_code)
+        json_resp = json.loads(resp.content)
+        assert 'has been shared to' in json_resp['failed'][0]['error_msg']
+
+    @pytest.mark.skipif(TRAVIS, reason="") # pylint: disable=E1101
+    def test_can_share_folder_to_org_users(self):
+        self.login_as(self.org_user)
+
+        resp = self.client.put(
+            '/api2/repos/%s/dir/shared_items/?p=%s' % (self.org_repo.id,
+                                                       self.org_folder),
+            "share_type=user&username=%s" % self.org_admin.email,
+            'application/x-www-form-urlencoded',
+        )
+        self.assertEqual(200, resp.status_code)
+        json_resp = json.loads(resp.content)
+        assert len(json_resp['success']) == 1
+        assert json_resp['success'][0]['permission'] == 'r'
+
+        # test share failed when share the same item to the same user
+        resp = self.client.put(
+            '/api2/repos/%s/dir/shared_items/?p=%s' % (self.org_repo.id,
+                                                       self.org_folder),
+            "share_type=user&username=%s" % self.org_admin.email,
             'application/x-www-form-urlencoded',
         )
         self.assertEqual(200, resp.status_code)
@@ -161,6 +236,33 @@ class DirSharedItemsTest(BaseTestCase):
         # test share failed when share the same item to the same group
         resp = self.client.put(
             '/api2/repos/%s/dir/shared_items/?p=/' % (self.repo.id),
+            "share_type=group&group_id=%d&group_id=%d&permission=rw" % (grp1.id, grp2.id),
+            'application/x-www-form-urlencoded',
+        )
+        self.assertEqual(200, resp.status_code)
+        json_resp = json.loads(resp.content)
+        assert 'has been shared to' in json_resp['failed'][0]['error_msg']
+
+    @pytest.mark.skipif(TRAVIS, reason="") # pylint: disable=E1101
+    def test_can_share_repo_to_org_groups(self):
+        self.login_as(self.org_user)
+        grp1 = self.org_group
+        grp2 = self.create_org_group(group_name='test-org-grp2',
+                                     username=self.org_user.username)
+
+        resp = self.client.put(
+            '/api2/repos/%s/dir/shared_items/?p=/' % (self.org_repo.id),
+            "share_type=group&group_id=%d&group_id=%d&permission=rw" % (grp1.id, grp2.id),
+            'application/x-www-form-urlencoded',
+        )
+        self.assertEqual(200, resp.status_code)
+        json_resp = json.loads(resp.content)
+        assert len(json_resp['success']) == 2
+        assert json_resp['success'][0]['permission'] == 'rw'
+
+        # test share failed when share the same item to the same group
+        resp = self.client.put(
+            '/api2/repos/%s/dir/shared_items/?p=/' % (self.org_repo.id),
             "share_type=group&group_id=%d&group_id=%d&permission=rw" % (grp1.id, grp2.id),
             'application/x-www-form-urlencoded',
         )
@@ -196,6 +298,35 @@ class DirSharedItemsTest(BaseTestCase):
         self.assertEqual(200, resp.status_code)
         json_resp = json.loads(resp.content)
         assert 'has been shared to' in json_resp['failed'][0]['error_msg']
+
+    @pytest.mark.skipif(TRAVIS, reason="") # pylint: disable=E1101
+    def test_can_share_folder_to_org_groups(self):
+        self.login_as(self.org_user)
+
+        grp1 = self.org_group
+        grp2 = self.create_org_group(group_name="test-org-grp2",
+                                     username=self.org_user.username)
+
+        resp = self.client.put(
+            '/api2/repos/%s/dir/shared_items/?p=%s' % (self.org_repo.id,
+                                                       self.org_folder),
+            "share_type=group&group_id=%d&group_id=%d&permission=rw" % (grp1.id, grp2.id),
+            'application/x-www-form-urlencoded',
+        )
+        self.assertEqual(200, resp.status_code)
+        json_resp = json.loads(resp.content)
+        assert len(json_resp['success']) == 2
+        assert json_resp['success'][0]['permission'] == 'rw'
+
+        # test share failed when share the same item to the same group
+        resp = self.client.put(
+            '/api2/repos/%s/dir/shared_items/?p=%s' % (self.org_repo.id,
+                                                       self.org_folder),
+            "share_type=group&group_id=%d&group_id=%d&permission=rw" % (grp1.id, grp2.id),
+            'application/x-www-form-urlencoded',
+        )
+        self.assertEqual(200, resp.status_code)
+        json_resp = json.loads(resp.content)
 
     def test_share_to_group_if_not_group_member(self):
         self.login_as(self.user)
@@ -300,6 +431,24 @@ class DirSharedItemsTest(BaseTestCase):
         json_resp = json.loads(resp.content)
         assert json_resp[0]['permission'] == 'r'
 
+    @pytest.mark.skipif(TRAVIS, reason="") # pylint: disable=E1101
+    def test_can_modify_org_user_repo_share_perm(self):
+        self.share_org_repo_to_org_user_and_org_group()
+        self.login_as(self.org_user)
+
+        resp = self.client.post('/api2/repos/%s/dir/shared_items/?p=/&share_type=user&username=%s' % (
+            self.org_repo.id,
+            self.org_admin.username), {
+                'permission': 'r'
+            }
+        )
+        json_resp = json.loads(resp.content)
+        assert json_resp['success'] is True
+
+        resp = self.client.get('/api2/repos/%s/dir/shared_items/?p=/&share_type=user' % self.org_repo.repo_id)
+        json_resp = json.loads(resp.content)
+        assert json_resp[0]['permission'] == 'r'
+
     def test_can_modify_user_folder_share_perm(self):
         self.share_folder_to_user_and_group()
         self.login_as(self.user)
@@ -320,6 +469,28 @@ class DirSharedItemsTest(BaseTestCase):
         json_resp = json.loads(resp.content)
         assert json_resp[0]['permission'] == 'r'
 
+    @pytest.mark.skipif(TRAVIS, reason="") # pylint: disable=E1101
+    def test_can_modify_org_user_folder_share_perm(self):
+        self.share_org_folder_to_org_user_and_org_group()
+        self.login_as(self.org_user)
+
+        resp = self.client.post('/api2/repos/%s/dir/shared_items/?p=%s&share_type=user&username=%s' % (
+            self.org_repo.id,
+            self.org_folder,
+            self.org_admin.username), {
+                'permission': 'r'
+            }
+        )
+        json_resp = json.loads(resp.content)
+        assert json_resp['success'] is True
+
+        resp = self.client.get('/api2/repos/%s/dir/shared_items/?p=%s&share_type=user' % (
+            self.org_repo.id,
+            self.org_folder))
+        json_resp = json.loads(resp.content)
+        assert json_resp[0]['permission'] == 'r'
+
+
     def test_can_modify_group_repo_share_perm(self):
         self.share_repo_to_user_and_group()
         self.login_as(self.user)
@@ -334,6 +505,24 @@ class DirSharedItemsTest(BaseTestCase):
         assert json_resp['success'] is True
 
         resp = self.client.get('/api2/repos/%s/dir/shared_items/?p=/&share_type=group' % self.repo_id)
+        json_resp = json.loads(resp.content)
+        assert json_resp[0]['permission'] == 'r'
+
+    @pytest.mark.skipif(TRAVIS, reason="") # pylint: disable=E1101
+    def test_can_modify_org_group_repo_share_perm(self):
+        self.share_org_repo_to_org_user_and_org_group()
+        self.login_as(self.org_user)
+
+        resp = self.client.post('/api2/repos/%s/dir/shared_items/?p=/&share_type=group&group_id=%d' % (
+            self.org_repo.id,
+            self.org_group.id), {
+                'permission': 'r'
+            }
+        )
+        json_resp = json.loads(resp.content)
+        assert json_resp['success'] is True
+
+        resp = self.client.get('/api2/repos/%s/dir/shared_items/?p=/&share_type=group' % self.org_repo.id)
         json_resp = json.loads(resp.content)
         assert json_resp[0]['permission'] == 'r'
 
@@ -353,6 +542,26 @@ class DirSharedItemsTest(BaseTestCase):
 
         resp = self.client.get('/api2/repos/%s/dir/shared_items/?p=%s&share_type=group' %
                 (self.repo_id, self.folder))
+        json_resp = json.loads(resp.content)
+        assert json_resp[0]['permission'] == 'r'
+
+    @pytest.mark.skipif(TRAVIS, reason="") # pylint: disable=E1101
+    def test_can_modify_org_group_folder_share_perm(self):
+        self.share_org_folder_to_org_user_and_org_group()
+        self.login_as(self.org_user)
+
+        resp = self.client.post('/api2/repos/%s/dir/shared_items/?p=%s&share_type=group&group_id=%d' % (
+            self.org_repo.id,
+            self.org_folder,
+            self.org_group.id), {
+                'permission': 'r'
+            }
+        )
+        json_resp = json.loads(resp.content)
+        assert json_resp['success'] is True
+
+        resp = self.client.get('/api2/repos/%s/dir/shared_items/?p=%s&share_type=group' %
+                (self.org_repo.id, self.org_folder))
         json_resp = json.loads(resp.content)
         assert json_resp[0]['permission'] == 'r'
 
@@ -419,6 +628,21 @@ class DirSharedItemsTest(BaseTestCase):
         json_resp = json.loads(resp.content)
         assert len(json_resp) == 0
 
+    @pytest.mark.skipif(TRAVIS, reason="") # pylint: disable=E1101
+    def test_can_unshare_org_repo_to_org_user(self):
+        self.share_org_repo_to_org_user_and_org_group()
+        self.login_as(self.org_user)
+
+        resp = self.client.delete('/api2/repos/%s/dir/shared_items/?p=/&share_type=user&username=%s' % (
+            self.org_repo.id, self.org_admin.username))
+        self.assertEqual(200, resp.status_code)
+        json_resp = json.loads(resp.content)
+        assert json_resp['success'] is True
+
+        resp = self.client.get('/api2/repos/%s/dir/shared_items/?p=/&share_type=user' % self.org_repo.id)
+        json_resp = json.loads(resp.content)
+        assert len(json_resp) == 0
+
     def test_can_unshare_folder_to_user(self):
         self.share_folder_to_user_and_group()
         self.login_as(self.user)
@@ -435,6 +659,27 @@ class DirSharedItemsTest(BaseTestCase):
         resp = self.client.get('/api2/repos/%s/dir/shared_items/?p=%s&share_type=user' % (
             self.repo.id,
             self.folder))
+
+        json_resp = json.loads(resp.content)
+        assert len(json_resp) == 0
+
+    @pytest.mark.skipif(TRAVIS, reason="") # pylint: disable=E1101
+    def test_can_unshare_org_folder_to_org_user(self):
+        self.share_org_folder_to_org_user_and_org_group()
+        self.login_as(self.org_user)
+
+        resp = self.client.delete('/api2/repos/%s/dir/shared_items/?p=%s&share_type=user&username=%s' % (
+            self.org_repo.id,
+            self.org_folder,
+            self.org_admin.username
+        ))
+        self.assertEqual(200, resp.status_code)
+        json_resp = json.loads(resp.content)
+        assert json_resp['success'] is True
+
+        resp = self.client.get('/api2/repos/%s/dir/shared_items/?p=%s&share_type=user' % (
+            self.org_repo.id,
+            self.org_folder))
 
         json_resp = json.loads(resp.content)
         assert len(json_resp) == 0
@@ -456,6 +701,24 @@ class DirSharedItemsTest(BaseTestCase):
         json_resp = json.loads(resp.content)
         assert len(json_resp) == 0
 
+    @pytest.mark.skipif(TRAVIS, reason="") # pylint: disable=E1101
+    def test_can_unshare_org_repo_to_org_group(self):
+        self.share_org_repo_to_org_user_and_org_group()
+        self.login_as(self.org_user)
+
+        resp = self.client.delete('/api2/repos/%s/dir/shared_items/?p=/&share_type=group&group_id=%d' % (
+            self.org_repo.id,
+            self.org_group.id
+        ))
+        self.assertEqual(200, resp.status_code)
+        json_resp = json.loads(resp.content)
+        assert json_resp['success'] is True
+
+        resp = self.client.get('/api2/repos/%s/dir/shared_items/?p=/&share_type=group' % self.org_repo.id)
+
+        json_resp = json.loads(resp.content)
+        assert len(json_resp) == 0
+
     def test_can_unshare_folder_to_group(self):
         self.share_folder_to_user_and_group()
         self.login_as(self.user)
@@ -471,6 +734,26 @@ class DirSharedItemsTest(BaseTestCase):
 
         resp = self.client.get('/api2/repos/%s/dir/shared_items/?p=%s&share_type=group' % (
             self.repo.id, self.folder))
+
+        json_resp = json.loads(resp.content)
+        assert len(json_resp) == 0
+
+    @pytest.mark.skipif(TRAVIS, reason="") # pylint: disable=E1101
+    def test_can_unshare_org_folder_to_org_group(self):
+        self.share_org_folder_to_org_user_and_org_group()
+        self.login_as(self.org_user)
+
+        resp = self.client.delete('/api2/repos/%s/dir/shared_items/?p=%s&share_type=group&group_id=%d' % (
+            self.org_repo.id,
+            self.org_folder,
+            self.org_group.id
+        ))
+        self.assertEqual(200, resp.status_code)
+        json_resp = json.loads(resp.content)
+        assert json_resp['success'] is True
+
+        resp = self.client.get('/api2/repos/%s/dir/shared_items/?p=%s&share_type=group' % (
+            self.org_repo.id, self.org_folder))
 
         json_resp = json.loads(resp.content)
         assert len(json_resp) == 0

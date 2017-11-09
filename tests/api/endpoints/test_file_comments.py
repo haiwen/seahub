@@ -20,18 +20,24 @@ class FileCommentsTest(BaseTestCase):
         self.remove_user(self.tmp_user.email)
 
     def test_can_list(self):
-        o = FileComment.objects.add_by_file_path(repo_id=self.repo.id,
-                                                 file_path=self.file,
-                                                 author=self.tmp_user.username,
-                                                 comment='test comment')
-        resp = self.client.get(self.endpoint)
+        for i in xrange(10):
+            o = FileComment.objects.add_by_file_path(repo_id=self.repo.id,
+                                                     file_path=self.file,
+                                                     author=self.tmp_user.username,
+                                                     comment='test comment'+str(i))
+        resp = self.client.get(self.endpoint + '&page=2&per_page=5')
         self.assertEqual(200, resp.status_code)
 
         json_resp = json.loads(resp.content)
-        assert len(json_resp['comments']) == 1
-        assert json_resp['comments'][0]['comment'] == o.comment
+        assert len(resp._headers.get('links')) == 2
+        assert resp._headers.get('links')[0] == 'Links'
+        link = reverse('api2-file-comments', args=[self.repo.id]) + '?per_page=5&page=1'
+        assert link in resp._headers.get('links')[1]
+        assert len(json_resp['comments']) == 5
+        assert json_resp['comments'][0]['comment'] == 'test comment5'
         assert json_resp['comments'][0]['user_email'] == self.tmp_user.email
         assert 'avatars' in json_resp['comments'][0]['avatar_url']
+        assert json_resp['total_count'] == 10
 
     def test_can_list_with_avatar_size(self):
         o = FileComment.objects.add_by_file_path(repo_id=self.repo.id,
@@ -46,6 +52,7 @@ class FileCommentsTest(BaseTestCase):
         assert json_resp['comments'][0]['comment'] == o.comment
         assert json_resp['comments'][0]['user_email'] == self.tmp_user.email
         assert 'avatars' in json_resp['comments'][0]['avatar_url']
+        assert json_resp['total_count'] == 1
 
     def test_can_post(self):
         resp = self.client.post(self.endpoint, {

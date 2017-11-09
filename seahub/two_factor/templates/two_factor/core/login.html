@@ -3,7 +3,7 @@
 
 {% block main_content %}
 <div class="new-narrow-panel">
-    <h2 class="hd">{% trans "Two-factor authentication" %}</h2>
+    <h2 class="hd">{% trans "Two-Factor Authentication" %}</h2>
     <form action="" method="post" class="con">{% csrf_token %}
         {{ wizard.management_form }}
         {% if wizard.steps.current == 'token' %}
