@@ -65,6 +65,18 @@
                 <span id="set-loginid" title="{% trans "Edit"%}" class="sf2-icon-edit op-icon"></span>
             </dd>
 
+            <dt>{% trans "Contact Email" %}</dt>
+            <dd>
+                <span id="contactemail">
+                    {% if profile and profile.contact_email %}
+                    {{ profile.contact_email }}
+                    {% else %}
+                    --
+                    {% endif %}
+                </span>
+                {# TODO: <span id="set-contactemail" title="{% trans "Edit"%}" class="sf2-icon-edit op-icon"></span> #}
+            </dd>
+
             <dt>{% trans "Reference ID" %}</dt>
             <dd>
                 <span id="reference-id">
