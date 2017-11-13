@@ -74,7 +74,7 @@
                     --
                     {% endif %}
                 </span>
-                {# TODO: <span id="set-contactemail" title="{% trans "Edit"%}" class="sf2-icon-edit op-icon"></span> #}
+                <span id="set-contactemail" title="{% trans "Edit"%}" class="sf2-icon-edit op-icon"></span>
             </dd>
 
             <dt>{% trans "Reference ID" %}</dt>
@@ -150,6 +150,13 @@
         <form id="set-loginid-form" method="post" action="" class="hide">{% csrf_token %}
             <h3>{% trans "Set user Login ID" %}</h3>
             <input type="text" name="loginid" class="input" value="" /><br />
+            <p class="error hide"></p>
+            <input type="submit" value="{% trans "Submit" %}" class="submit" />
+        </form>
+
+        <form id="set-contactemail-form" method="post" action="", class="hide">{% csrf_token %}
+            <h3>{% trans "Set user contact email" %}</h3>
+            <input type="text" name="contactemail" class="input" value="" /><br />
             <p class="error hide"></p>
             <input type="submit" value="{% trans "Submit" %}" class="submit" />
         </form>
@@ -367,6 +374,10 @@ $('#set-loginid').click(function () {
     $("#set-loginid-form").modal({appendTo:"#main"});
     $('#simplemodal-container').css({'width':'auto', 'height':'auto'});
 })
+$('#set-contactemail').click(function() {
+    $("#set-contactemail-form").modal({appendTo: "#main"});
+    $('#simplemodal-container').css({'width':'auto', 'height':'auto'});
+});
 $('#set-reference-id').click(function () {
     $("#set-reference-id-form").modal({appendTo:"#main"});
     $('#simplemodal-container').css({'width':'auto', 'height':'auto'});
@@ -463,6 +474,44 @@ $('#set-loginid-form').submit(function() {
                 $loginid.html('--');
             } else {
                 $loginid.html(HTMLescape(data['login_id']));
+            }
+            $.modal.close();
+        },
+        error: function(xhr, textStatus, errorThrown) {
+            var err_msg;
+            if (xhr.responseText) {
+                err_msg = $.parseJSON(xhr.responseText).error_msg;
+            } else {
+                err_msg = "{% trans "Failed. Please check the network." %}";
+            }
+            $error.html(err_msg).show();
+            enable($submitBtn);
+        }
+    });
+
+    return false;
+});
+
+$('#set-contactemail-form').submit(function() {
+    var contactemail = $.trim($('[name="contactemail"]', $(this)).val());
+    var $name = $('#contactemail');
+    var $error = $('.error', $(this));
+
+    var $submitBtn = $('[type="submit"]', $(this));
+    disable($submitBtn);
+
+    $.ajax({
+        url: '{% url 'api-v2.1-admin-user' email %}',
+        type: 'PUT',
+        dataType: 'json',
+        cache: false,
+        beforeSend: prepareCSRFToken,
+        data: {'contact_email': contactemail},
+        success: function(data) {
+            if (data['contact_email'] == ''){
+                $name.html('--');
+            } else {
+                $name.html(HTMLescape(data['contact_email']));
             }
             $.modal.close();
         },
