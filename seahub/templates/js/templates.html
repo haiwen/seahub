@@ -1046,10 +1046,16 @@
                 <div id="download-link-operations" class="hide">
                     <dl>
                         <dt>{% trans "Link: " %}</dt>
-                        <dd id="download-link"></dd>
+                        <dd id="download-link">
+                            <span></span>
+                            <input type="text" readonly="readonly" value="" class="shared-link hide" />
+                        </dd>
                         <% if (!is_dir) { %>
                         <dt>{% trans "Direct Download Link: " %}</dt>
-                        <dd id="direct-dl-link"></dd>
+                        <dd id="direct-dl-link">
+                            <span></span>
+                            <input type="text" readonly="readonly" value="" class="shared-link hide" />
+                        </dd>
                         <% } %>
                     </dl>
                     {% if user.permissions.can_send_share_link_mail %}
@@ -1094,7 +1100,12 @@
                     <input type="submit" value="{% trans 'Generate'%}" />
                 </form>
                 <div id="upload-link-operations" class="hide">
-                    <p><span class="vam">{% trans 'Upload Link: ' %}</span><span id="upload-link"></span><!--input type="text" readonly="readonly" id="shared-link-text" class="vam" /--></p>
+                    <dl>
+                        <dt>{% trans "Upload Link: " %}</dt>
+                        <dd id="upload-link">
+                            <input type="text" readonly="readonly" value="" class="shared-link hide" />
+                        </dd>
+                    </dl>
                     {% if user.permissions.can_send_share_link_mail %}
                         <button id="send-upload-link">{% trans 'Send' %}</button>
                     {% endif %}
