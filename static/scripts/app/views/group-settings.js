@@ -177,8 +177,8 @@ define([
                     data: {
                         'owner': email
                     },
-                    success: function() {
-                        // after the transfer, the former owner becomes a common admin of the group.
+                    success: function(data) {
+                        _this.groupView.group = data;
                         Common.feedback(gettext("Successfully transferred the group. You are now a normal member of the group."), 'success');
                         $.modal.close();
                     },
