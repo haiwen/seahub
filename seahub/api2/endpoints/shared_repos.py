@@ -14,6 +14,7 @@ from seahub.api2.utils import api_error
 from seahub.api2.authentication import TokenAuthentication
 from seahub.api2.throttling import UserRateThrottle
 from seahub.profile.models import Profile
+from seahub.base.accounts import User
 from seahub.utils import is_org_context, is_valid_username, send_perm_audit_msg
 from seahub.base.templatetags.seahub_tags import email2nickname, email2contact_email
 from seahub.share.models import ExtraSharePermission, ExtraGroupsSharePermission
@@ -72,6 +73,13 @@ class SharedRepos(APIView):
             result['modifier_contact_email'] = email2contact_email(repo.last_modifier)
 
             if repo.share_type == 'personal':
+                try:
+                    User.objects.get(email=repo.user)
+                except User.DoesNotExist:
+                    seafile_api.remove_share(repo.repo_id,
+                            username, repo.user)
+                    continue
+
                 result['user_name'] = email2nickname(repo.user)
                 result['user_email'] = repo.user
                 result['contact_email'] = Profile.objects.get_contact_email_by_user(repo.user)
@@ -79,6 +87,10 @@ class SharedRepos(APIView):
 
             if repo.share_type == 'group':
                 group = ccnet_api.get_group(repo.group_id)
+                if not group:
+                    seafile_api.unset_group_repo(repo.repo_id,
+                            repo.group_id, username)
+                    continue
                 result['group_id'] = repo.group_id
                 result['group_name'] = group.group_name
                 gids.append(repo.group_id)
