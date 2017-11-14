@@ -66,6 +66,10 @@ html, body, #wrapper { height:100%; }
         <button type="submit" class="submit">{% trans "Log In" %}</button>
     </form>
 
+    {% if enable_oauth %}
+    <a href="{% url 'oauth_login' %}" title="{% trans "Single Sign-On" %}">{% trans "Single Sign-On" %}</a>
+    {% endif %}
+
     {% if enable_adfs_login %}
     <a id="adfs-login" href="#" class="normal">ADFS</a>
     {% endif %}
