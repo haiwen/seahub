@@ -2742,10 +2742,12 @@ button.sf-dropdown-toggle:focus {
 .file-view-meta-info {
     margin:0;
 }
+.shared-link,
 #shared-link,
 #shared-upload-link,
 #shared-link-text,
 #shared-upload-link-text {
+    background:transparent;
     border:0;
 }
 #shared-link-text,
