@@ -101,6 +101,20 @@ class SharedReposTest(BaseTestCase):
         assert json_resp[0]['share_type'] == 'public'
 
     def test_get_with_invalid_repo_permission(self):
+
+        user_shared_repos = \
+                seafile_api.get_share_out_repo_list(self.admin_name, -1, -1)
+        for repo in user_shared_repos:
+            seafile_api.remove_share(repo.repo_id, self.admin_name, repo.user)
+
+        group_shared_repos = seafile_api.get_group_repos_by_owner(self.admin_name)
+        for repo in group_shared_repos:
+            seafile_api.unset_group_repo(repo.repo_id, repo.group_id, self.admin_name)
+
+        public_shared_repos = seafile_api.list_inner_pub_repos_by_owner(self.admin_name)
+        for repo in public_shared_repos:
+            seafile_api.remove_inner_pub_repo(repo.repo_id)
+
         self.share_repo_to_user()
         self.share_repo_to_group()
         self.share_repo_to_public()
