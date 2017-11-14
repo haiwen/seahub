@@ -864,17 +864,6 @@ textarea:-moz-placeholder {/* for FF */
     margin-bottom:1em;
 }
 /* Hide for mobile, show later */
-@media (min-width: 768px) {
-    .side-nav {
-        position:fixed;
-        top:52px;
-        bottom:0;
-        z-index:1;
-        padding:20px;
-        overflow:hidden;
-        border-right:1px solid #eee;
-    }
-}
 @media (max-width: 767px) {
     .side-nav {
         background: #f8f8f8;
@@ -888,6 +877,17 @@ textarea:-moz-placeholder {/* for FF */
         overflow:hidden;
         border-right:1px solid #eee;
         box-shadow:0 0 4px #ccc;
+    }
+}
+@media (min-width: 768px) {
+    .side-nav {
+        position:fixed;
+        top:52px;
+        bottom:0;
+        z-index:1;
+        padding:20px;
+        overflow:hidden;
+        border-right:1px solid #eee;
     }
 }
 .side-nav:hover {
