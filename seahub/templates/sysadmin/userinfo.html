@@ -67,14 +67,14 @@
 
             <dt>{% trans "Contact Email" %}</dt>
             <dd>
-                <span id="contactemail">
+                <span id="contact-email">
                     {% if profile and profile.contact_email %}
                     {{ profile.contact_email }}
                     {% else %}
                     --
                     {% endif %}
                 </span>
-                <span id="set-contactemail" title="{% trans "Edit"%}" class="sf2-icon-edit op-icon"></span>
+                <span id="set-contact-email" title="{% trans "Edit"%}" class="sf2-icon-edit op-icon"></span>
             </dd>
 
             <dt>{% trans "Reference ID" %}</dt>
@@ -154,9 +154,9 @@
             <input type="submit" value="{% trans "Submit" %}" class="submit" />
         </form>
 
-        <form id="set-contactemail-form" method="post" action="", class="hide">{% csrf_token %}
+        <form id="set-contact-email-form" method="post" action="" class="hide">{% csrf_token %}
             <h3>{% trans "Set user contact email" %}</h3>
-            <input type="text" name="contactemail" class="input" value="" /><br />
+            <input type="text" name="contact_email" class="input" value="" /><br />
             <p class="error hide"></p>
             <input type="submit" value="{% trans "Submit" %}" class="submit" />
         </form>
@@ -374,8 +374,8 @@ $('#set-loginid').click(function () {
     $("#set-loginid-form").modal({appendTo:"#main"});
     $('#simplemodal-container').css({'width':'auto', 'height':'auto'});
 })
-$('#set-contactemail').click(function() {
-    $("#set-contactemail-form").modal({appendTo: "#main"});
+$('#set-contact-email').click(function() {
+    $("#set-contact-email-form").modal({appendTo: "#main"});
     $('#simplemodal-container').css({'width':'auto', 'height':'auto'});
 });
 $('#set-reference-id').click(function () {
@@ -492,12 +492,13 @@ $('#set-loginid-form').submit(function() {
     return false;
 });
 
-$('#set-contactemail-form').submit(function() {
-    var contactemail = $.trim($('[name="contactemail"]', $(this)).val());
-    var $name = $('#contactemail');
-    var $error = $('.error', $(this));
+$('#set-contact-email-form').submit(function() {
+    var $form = $(this);
+    var contact_email = $.trim($('[name="contact_email"]', $form).val());
+    var $contactEmail = $('#contact-email');
+    var $error = $('.error', $form);
 
-    var $submitBtn = $('[type="submit"]', $(this));
+    var $submitBtn = $('[type="submit"]', $form);
     disable($submitBtn);
 
     $.ajax({
@@ -506,12 +507,12 @@ $('#set-contactemail-form').submit(function() {
         dataType: 'json',
         cache: false,
         beforeSend: prepareCSRFToken,
-        data: {'contact_email': contactemail},
+        data: {'contact_email': contact_email},
         success: function(data) {
             if (data['contact_email'] == ''){
-                $name.html('--');
+                $contactEmail.html('--');
             } else {
-                $name.html(HTMLescape(data['contact_email']));
+                $contactEmail.html(HTMLescape(data['contact_email']));
             }
             $.modal.close();
         },
