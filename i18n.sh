@@ -12,7 +12,7 @@ function usage () {
     echo
 }
 
-apps="seahub/two_factor seahub/trusted_ip"
+apps="seahub/trusted_ip"
 function is_valid_app() {
     if [[ $1 == "seahub" ]]; then
         return 0;
