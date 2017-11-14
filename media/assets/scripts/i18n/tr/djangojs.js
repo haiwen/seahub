@@ -37,9 +37,10 @@
   /* formatting library */
 
   django.formats = {
-    "DATETIME_FORMAT": "d F Y H:i:s", 
+    "DATETIME_FORMAT": "d F Y H:i", 
     "DATETIME_INPUT_FORMATS": [
       "%d/%m/%Y %H:%M:%S", 
+      "%d/%m/%Y %H:%M:%S.%f", 
       "%d/%m/%Y %H:%M", 
       "%d/%m/%Y", 
       "%Y-%m-%d %H:%M:%S", 
@@ -58,12 +59,13 @@
     "FIRST_DAY_OF_WEEK": "1", 
     "MONTH_DAY_FORMAT": "d F", 
     "NUMBER_GROUPING": "3", 
-    "SHORT_DATETIME_FORMAT": "d M Y H:i:s", 
+    "SHORT_DATETIME_FORMAT": "d M Y H:i", 
     "SHORT_DATE_FORMAT": "d M Y", 
     "THOUSAND_SEPARATOR": ".", 
-    "TIME_FORMAT": "H:i:s", 
+    "TIME_FORMAT": "H:i", 
     "TIME_INPUT_FORMATS": [
       "%H:%M:%S", 
+      "%H:%M:%S.%f", 
       "%H:%M"
     ], 
     "YEAR_MONTH_FORMAT": "F Y"
