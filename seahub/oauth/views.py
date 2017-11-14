@@ -2,7 +2,6 @@
 
 import os
 import logging
-from requests_oauthlib import OAuth2Session
 from django.http import HttpResponseRedirect
 from django.template import RequestContext
 from django.shortcuts import render_to_response
@@ -18,6 +17,8 @@ logger = logging.getLogger(__name__)
 
 ENABLE_OAUTH = getattr(settings, 'ENABLE_OAUTH', False)
 if ENABLE_OAUTH:
+
+    from requests_oauthlib import OAuth2Session
 
     if getattr(settings, 'OAUTH_ENABLE_INSECURE_TRANSPORT', False):
         os.environ['OAUTHLIB_INSECURE_TRANSPORT'] = '1'
