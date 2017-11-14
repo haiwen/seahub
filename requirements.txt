@@ -14,3 +14,4 @@ pytz==2015.7
 django-formtools
 qrcode
 requests
+requests_oauthlib==0.8.0

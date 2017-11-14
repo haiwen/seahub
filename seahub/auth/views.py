@@ -245,6 +245,7 @@ def login(request, template_name='registration/login.html',
     enable_shib_login = getattr(settings, 'ENABLE_SHIB_LOGIN', False)
     enable_krb5_login = getattr(settings, 'ENABLE_KRB5_LOGIN', False)
     enable_adfs_login = getattr(settings, 'ENABLE_ADFS_LOGIN', False)
+    enable_oauth = getattr(settings, 'ENABLE_OAUTH', False)
 
     login_bg_image_path = LOGIN_BG_IMAGE_PATH
     # get path that background image of login page
@@ -262,6 +263,7 @@ def login(request, template_name='registration/login.html',
         'enable_shib_login': enable_shib_login,
         'enable_krb5_login': enable_krb5_login,
         'enable_adfs_login': enable_adfs_login,
+        'enable_oauth': enable_oauth,
         'login_bg_image_path': login_bg_image_path,
     }, context_instance=RequestContext(request))
 
