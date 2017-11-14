@@ -28,7 +28,7 @@ var config = {
             "review": true
         },
     },
-    "documentType": "{{document_type}}", // 'text' | 'spreadsheet' | 'presentation',
+    "documentType": "{{document_type}}",
     "editorConfig": {
         "callbackUrl": "{{ callback_url }}",
         "lang": "{{ LANGUAGE_CODE }}",
@@ -37,6 +37,7 @@ var config = {
             "name": "{{ username|email2nickname }}"
         }
     },
+    {% if token %}"token": "{{token}}"{% endif %}
 };
 var docEditor = new DocsAPI.DocEditor("placeholder", config);
 </script>
