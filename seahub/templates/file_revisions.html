@@ -88,6 +88,9 @@
                     {% if can_compare and not forloop.last %}
                     <a href="{% url 'text_diff' repo.id %}?p={{commit.path|urlencode}}&commit={{commit.id}}" class="op vh text-diff">{% trans 'Diff' %}</a>
                     {% endif %}
+                    {% if user_perm == 'rw' and not commit.is_first_commit %}
+                    <a href="{% url 'repo_history_view' repo.id %}?commit_id={{ commit.id }}" class="op vh view-snapshot">{% trans "View Snapshot" %}</a>
+                    {% endif %}
                 </td>
             </tr>
             {% endfor %}
