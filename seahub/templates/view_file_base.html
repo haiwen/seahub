@@ -127,7 +127,7 @@
         <form action="" method="post" class="msg-form">
             <img src="{% avatar_url request.user 64 %}" alt="" width="32" class="avatar-circle fleft" />
             <div class="msg-body">
-                <textarea name="message" placeholder="{% trans "Add a comment..." %}" class="msg-input"></textarea>
+                <textarea name="message" placeholder="{% trans "Add a comment..." %}" title="{% trans "Add a comment..." %}" aria-label="{% trans "Add a comment..." %}" class="msg-input"></textarea>
                 <p class="error hide"></p>
                 <button type="submit" class="submit msg-submit">{% trans "Submit" %}</button>
             </div>

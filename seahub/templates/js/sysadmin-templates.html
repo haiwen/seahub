@@ -105,18 +105,18 @@
     <% if (cur_tab == 'libraries') { %>
         <% if (option == 'all') { %>
             <form action="{% url 'sys_repo_search' %}" method="get" class="side-search-form" id="libs-search-form">
-                <input type="text" name="name" class="input" value="" placeholder="{% trans "Search libraries by name..." %}" />
+                <input type="text" name="name" class="input" value="" placeholder="{% trans "Search libraries by name..." %}" title="{% trans "Search libraries by name..." %}" aria-label="{% trans "Search libraries by name..." %}" />
             </form>
         <% } %>
         <% if (option == 'trash') { %>
             <form action="{% url 'sys_trash_repo_search' %}" method="get" class="side-search-form" id="trash-libs-search-form">
-                <input type="text" name="name" class="input" value="" placeholder="{% trans "Search libraries by owner..." %}" />
+                <input type="text" name="name" class="input" value="" placeholder="{% trans "Search libraries by owner..." %}" title="{% trans "Search libraries by owner..." %}" aria-label="{% trans "Search libraries by owner..." %}" />
             </form>
         <% } %>
     <% } %>
     <% if (cur_tab == 'groups') { %>
         <form action="{% url 'sys_group_search' %}" method="get" class="side-search-form" id="groups-search-form">
-            <input type="text" name="name" class="input" value="" placeholder="{% trans "Search groups by name..." %}" />
+            <input type="text" name="name" class="input" value="" placeholder="{% trans "Search groups by name..." %}" title="{% trans "Search groups by name..." %}" aria-label="{% trans "Search groups by name..." %}" />
         </form>
     <% } %>
 </script>
