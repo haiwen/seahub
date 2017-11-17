@@ -67,7 +67,7 @@ html, body, #wrapper { height:100%; }
     </form>
 
     {% if enable_oauth %}
-    <a href="{% url 'oauth_login' %}" title="{% trans "Single Sign-On" %}">{% trans "Single Sign-On" %}</a>
+    <a href="{% url 'oauth_login' %}" class="normal">{% trans "Single Sign-On" %}</a>
     {% endif %}
 
     {% if enable_adfs_login %}
