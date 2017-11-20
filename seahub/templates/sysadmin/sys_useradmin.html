@@ -105,45 +105,6 @@
 {% endblock %}
 {% block extra_script %}
 <script type="text/javascript">
-$(function(){
-    // check if server version is the latest one
-    $.ajax({
-        url: 'https://www.seafile.com/ajax/check_server_version/?v=' + e('{{seafile_version}}') + '&p=' + e('{{platform}}') + '&id=' + '{{server_id}}' + '&pro=' + '{{pro_server}}',
-        dataType: 'jsonp',
-        jsonpCallback: 'xx',
-        crossDomain: true,
-        success: function(data) {
-            if (data['need_update']) {
-                var tip = "{% trans "A new server version %(v)s is available." %}";
-                tip = tip.replace('%(v)s', data['new_version']);
-                $('#right-panel').prepend('<p class="strip-tip">' + tip + '</p>');
-            }
-        }
-    });
-
-    {% if is_pro %}
-    // check if seafile license expired
-    $.ajax({
-        url: "{% url 'sys_check_license' %}",
-        dataType: 'json',
-        cache: false,
-        success: function(data) {
-            var tip;
-
-            if (data['already_expired']) {
-                tip = "Your license expired on %(date)s.";
-            } else if (data['to_be_expired']) {
-                tip = "Your license will expire on %(date)s.";
-            }
-
-            if (data['already_expired'] || data['to_be_expired']) {
-                tip = tip.replace('%(date)s', data['expiration_date']);
-                $('#right-panel').prepend('<p class="strip-tip">' + tip + '</p>');
-            }
-        }
-    });
-    {% endif %}
-});
 $('#add-user-btn').click(function() {
     $('#add-user-form').modal();
     $('#simplemodal-container').css({'width':'auto', 'height':'auto'});
