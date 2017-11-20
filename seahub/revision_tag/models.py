@@ -53,11 +53,9 @@ class RevisionTagsManager(models.Manager):
             revision_tag.delete()
             return True
 
-    def delet_revision_tag_by_name(self, repo_id, tag_name):
+    def delete_revision_tag_by_name(self, repo_id, tag_name):
         tags = super(RevisionTagsManager, self).filter(repo_id=repo_id, tag__name=tag_name)
-        n_tag = len(tags)
         tags.delete()
-        return n_tag > 0
 
     def delete_all_revision_tag(self, repo_id, commit_id):
         super(RevisionTagsManager, self).filter(repo_id=repo_id, revision_id=commit_id).delete()

@@ -74,7 +74,3 @@ class RevisionTagsTest(BaseTestCase):
         self.delete_url = self.url + '?repo_id=' + self.repo.repo_id + '&tag_name=test_tag'
         resp = self.client.delete(self.delete_url)
         self.assertEqual(200, resp.status_code)
-
-        self.delete_url = self.url + '?repo_id=' + self.repo.repo_id + '&tag_name=test_tag_did_not_exists'
-        resp = self.client.delete(self.delete_url)
-        self.assertEqual(202, resp.status_code)

@@ -112,11 +112,8 @@ class TaggedItemsView(APIView):
         if check_folder_permission(request, repo_id, '/') != 'rw':
             error_msg = "Permission denied."
             return api_error(status.HTTP_403_FORBIDDEN, error_msg)
-        exists = RevisionTags.objects.delet_revision_tag_by_name(repo_id, tag_name)
-        if exists:
-            return Response(status=status.HTTP_200_OK)
-        else:
-            return Response(status=status.HTTP_202_ACCEPTED)
+        RevisionTags.objects.delete_revision_tag_by_name(repo_id, tag_name)
+        return Response(status=status.HTTP_200_OK)
 
 
 class TagNamesView(APIView):
