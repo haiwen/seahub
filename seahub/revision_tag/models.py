@@ -37,7 +37,6 @@ class RevisionTagsManager(models.Manager):
 
     def create_revision_tag(self, repo_id, commit_id, tag_name, creator):
         revision_tag = self.get_one_revision_tag(repo_id, commit_id, tag_name)
-        exists = False
         if revision_tag:
             return revision_tag, False
         else:
@@ -53,6 +52,10 @@ class RevisionTagsManager(models.Manager):
         else:
             revision_tag.delete()
             return True
+
+    def delete_revision_tag_by_name(self, repo_id, tag_name):
+        tags = super(RevisionTagsManager, self).filter(repo_id=repo_id, tag__name=tag_name)
+        tags.delete()
 
     def delete_all_revision_tag(self, repo_id, commit_id):
         super(RevisionTagsManager, self).filter(repo_id=repo_id, revision_id=commit_id).delete()
