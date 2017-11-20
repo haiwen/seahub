@@ -9,11 +9,10 @@ from rest_framework.views import APIView
 from rest_framework import status
 from django.utils import timezone
 
-from seahub.utils import get_file_ops_stats, get_file_ops_stats_by_day, \
+from seahub.utils import get_file_ops_stats_by_day, \
         get_total_storage_stats_by_day, get_user_activity_stats_by_day, \
         is_pro_version, EVENTS_ENABLED
 from seahub.utils.timeutils import datetime_to_isoformat_timestr
-from seahub.settings import TIME_ZONE
 
 from seahub.api2.authentication import TokenAuthentication
 from seahub.api2.throttling import UserRateThrottle
@@ -66,19 +65,14 @@ class FileOperationsView(APIView):
             param:
                 start: the start time of the query.
                 end: the end time of the query.
-                group_by: group records by day or by hour, default group by hour.
             return:
                 the list of file operations record.
         """
-        group_by = request.GET.get("group_by", "hour")
-        if group_by.lower() not in ["hour", "day"]:
-            error_msg = "group_by can only be day or hour."
-            return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
-
-        data = get_data_by_hour_or_day(group_by, start_time, end_time, get_file_ops_stats, get_file_ops_stats_by_day)
-        ops_added_dict = get_init_data(start_time, end_time, group_by)
-        ops_visited_dict = get_init_data(start_time, end_time, group_by)
-        ops_deleted_dict = get_init_data(start_time, end_time, group_by)
+        offset = get_time_offset()
+        data = get_file_ops_stats_by_day(start_time, end_time, offset)
+        ops_added_dict = get_init_data(start_time, end_time)
+        ops_visited_dict = get_init_data(start_time, end_time)
+        ops_deleted_dict = get_init_data(start_time, end_time)
 
         for e in data:
             if e[1] == 'Added':
@@ -107,7 +101,7 @@ class TotalStorageView(APIView):
         data = get_total_storage_stats_by_day(start_time, end_time, get_time_offset())
 
         res_data = []
-        init_data = get_init_data(start_time, end_time, 'day')
+        init_data = get_init_data(start_time, end_time)
         for e in data:
             init_data[e[0]] = e[1]
         for k, v in init_data.items():
@@ -126,7 +120,7 @@ class ActiveUsersView(APIView):
         data = get_user_activity_stats_by_day(start_time, end_time, get_time_offset())
 
         res_data = []
-        init_data = get_init_data(start_time, end_time, 'day')
+        init_data = get_init_data(start_time, end_time)
         for e in data:
             init_data[e[0]] = e[1]
         for k, v in init_data.items():
@@ -135,20 +129,14 @@ class ActiveUsersView(APIView):
         return Response(sorted(res_data, key=lambda x: x['datetime']))
 
 
-def get_init_data(start_time, end_time, group_by):
+def get_init_data(start_time, end_time):
     res = {}
-    if group_by == 'hour':
-        start_time = start_time.replace(minute=0).replace(second=0)
-        end_time = end_time.replace(minute=0).replace(second=0)
-        time_delta = end_time - start_time
-        date_length = (time_delta.days * 24) + time_delta.seconds/3600 + 1
-    else:
-        start_time = start_time.replace(hour=0).replace(minute=0).replace(second=0)
-        end_time = end_time.replace(hour=0).replace(minute=0).replace(second=0)
-        time_delta = end_time - start_time
-        date_length = time_delta.days + 1
+    start_time = start_time.replace(hour=0).replace(minute=0).replace(second=0)
+    end_time = end_time.replace(hour=0).replace(minute=0).replace(second=0)
+    time_delta = end_time - start_time
+    date_length = time_delta.days + 1
     for offset in range(date_length):
-        offset = offset if group_by == 'hour' else offset * 24
+        offset = offset * 24
         dt = start_time + datetime.timedelta(hours=offset)
         res[dt] = 0
     return res
@@ -157,12 +145,3 @@ def get_time_offset():
     timezone_name = timezone.get_current_timezone_name()
     offset = pytz.timezone(timezone_name).localize(datetime.datetime.now()).strftime('%z')
     return offset[:3] + ':' + offset[3:]
-
-
-def get_data_by_hour_or_day(parameter, start_time, end_time, func, func_by_day):
-    offset = get_time_offset()
-    if parameter == "hour":
-        data = func(start_time, end_time, offset)
-    elif parameter == "day":
-        data = func_by_day(start_time, end_time, offset)
-    return data

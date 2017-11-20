@@ -685,13 +685,6 @@ if EVENTS_CONFIG_FILE:
 
         return events if events else None
 
-    def get_file_ops_stats(start, end, offset):
-        """ Return file audit record of specifiy time.
-        """
-        with _get_seafevents_session() as session:
-            res = seafevents.get_file_ops_stats(session, start, end, offset)
-        return res
-
     def get_file_ops_stats_by_day(start, end, offset):
         """ return file audit record of sepcifiy time group by day.
         """
@@ -760,8 +753,6 @@ else:
     def get_file_audit_events_by_path():
         pass
     def get_file_audit_events():
-        pass
-    def get_file_ops_stats():
         pass
     def get_file_ops_stats_by_day():
         pass
