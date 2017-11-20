@@ -1959,7 +1959,7 @@ def batch_add_user_example(request):
     data_list = []
     head = [_('Email'), _('Password'), _('Name')+ '(' + _('Optional') + ')', 
             _('Department')+ '(' + _('Optional') + ')', _('Role')+
-            '(' + _('Optional') + ')', _('Quota') + '(MB, ' + _('Optional') + ')']
+            '(' + _('Optional') + ')', _('Space Quota') + '(MB, ' + _('Optional') + ')']
     for i in xrange(5):
         username = "test" + str(i) +"@example.com"
         password = "123456"
