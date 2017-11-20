@@ -1957,9 +1957,9 @@ def batch_add_user_example(request):
     if not next:
         next = SITE_ROOT
     data_list = []
-    head = [_('email'), _('password'), _('name')+ '(' + _('optional') + ')', 
-            _('department')+ '(' + _('optional') + ')', _('role')+
-            '(' + _('optional') + ')', _('quota') + '(MB, ' + _('optional') + ')']
+    head = [_('Email'), _('Password'), _('Name')+ '(' + _('Optional') + ')', 
+            _('Department')+ '(' + _('Optional') + ')', _('Role')+
+            '(' + _('Optional') + ')', _('Quota') + '(MB, ' + _('Optional') + ')']
     for i in xrange(5):
         username = "test" + str(i) +"@example.com"
         password = "123456"
