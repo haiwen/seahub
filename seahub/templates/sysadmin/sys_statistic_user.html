@@ -21,8 +21,7 @@
 
 <div class="system-statistic-time-range ovhd">
     <div class="sf-btn-group fleft">
-        <button class="sf-btn-group-btn sf-btn-group-btn-first sf-btn-group-btn-cur" id="24-hours">{% trans "24 Hours" %}</button>
-        <button class="sf-btn-group-btn" id="7-days">{% trans "7 Days" %}</button>
+        <button class="sf-btn-group-btn sf-btn-group-btn-first sf-btn-group-btn-cur" id="7-days">{% trans "7 Days" %}</button>
         <button class="sf-btn-group-btn" id="30-days">{% trans "30 Days" %}</button>
         <button class="sf-btn-group-btn sf-btn-group-btn-last" id="1-year">{% trans "1 Year" %}</button>
     </div>
@@ -223,16 +222,11 @@ function renderChart(data, group_by) {
     }
 }
 
-// get statistic for the latest 24 hours
-getStatisticByTimeRange('24h');
+// data shown in default
+getStatisticByTimeRange('7d');
 
 // click btns
 $rangeBtns = $('.system-statistic-time-range button');
-$('#24-hours').click(function() {
-    getStatisticByTimeRange('24h');
-    $rangeBtns.removeClass('sf-btn-group-btn-cur');
-    $(this).addClass('sf-btn-group-btn-cur');
-});
 $('#7-days').click(function() {
     getStatisticByTimeRange('7d');
     $rangeBtns.removeClass('sf-btn-group-btn-cur');
@@ -282,19 +276,10 @@ $('.date-custom-form').submit(function() {
     $error.addClass('hide');
 
     var options = {
-        start: start_date + ' 00:00:00'
+        start: start_date + ' 00:00:00',
+        end: end_date + ' 00:00:00',
+        group_by: 'day'
     };
-    if (start_date == end_date) {
-        $.extend(options, {
-            end: end_date + ' 23:00:00',
-            group_by: 'hour'
-        });
-    } else {
-        $.extend(options, {
-            end: end_date + ' 00:00:00',
-            group_by: 'day'
-        });
-    }
     getStatistic(options);
 
     $rangeBtns.removeClass('sf-btn-group-btn-cur');
