@@ -11,6 +11,7 @@ from django.utils.translation import ugettext as _
 from seahub import auth
 from seahub.profile.models import Profile
 from seahub.utils import is_valid_email
+from seahub.base.accounts import User
 import seahub.settings as settings
 
 logger = logging.getLogger(__name__)
@@ -121,16 +122,16 @@ def oauth_callback(request):
 
         for item, attr in ATTRIBUTE_MAP.items():
             required, user_attr = attr
-            value = str(user_info_json.get(item, ''))
+            value = user_info_json.get(item, '')
 
-            # ccnet email
-            if user_attr == 'email':
-                user_info[user_attr] = value if is_valid_email(value) else \
-                        '%s@%s' % (value, PROVIDER_DOMAIN)
-            else:
-                user_info[user_attr] = value
-
-            if required and not value:
+            if value:
+                # ccnet email
+                if user_attr == 'email':
+                    user_info[user_attr] = value if is_valid_email(str(value)) else \
+                            '%s@%s' % (str(value), PROVIDER_DOMAIN)
+                else:
+                    user_info[user_attr] = value
+            elif required:
                 error = True
 
         return user_info, error
@@ -145,7 +146,10 @@ def oauth_callback(request):
 
     # seahub authenticate user
     email = user_info['email']
-    user = auth.authenticate(remote_user=email)
+    try:
+        user = auth.authenticate(remote_user=email)
+    except User.DoesNotExist:
+        user = None
 
     if not user or not user.is_active:
         logger.error('User %s not found or inactive.' % email)
@@ -172,11 +176,11 @@ def oauth_callback(request):
 
     if name:
         profile.nickname = name.strip()
+        profile.save()
 
     if contact_email:
         profile.contact_email = contact_email.strip()
-
-    profile.save()
+        profile.save()
 
     # redirect user to home page
     return HttpResponseRedirect(reverse('libraries'))
