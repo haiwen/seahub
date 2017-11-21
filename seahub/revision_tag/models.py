@@ -75,6 +75,8 @@ class RevisionTags(models.Model):
 
     def to_dict(self):
         repo = seafile_api.get_repo(self.repo_id)
+        if not repo:
+            return None
         commit = seaserv.get_commit(repo.id, repo.revision, self.revision_id)
         email = commit.creator_name
         return  {"tag":self.tag.name,

@@ -84,3 +84,14 @@ class RevisionTagsTest(BaseTestCase):
         assert resp.status_code in [200, 201]
         resp = self.client.get(self.url)
         assert self.tag_name in [e["tag"] for e in resp.data]
+
+    def test_get_all_tag_when_repo_deleted(self):
+        resp = self.client.post(self.url_create, {
+            "tag_names": self.tag_name,
+            "repo_id": self.repo.id,
+            "commit_id": ""
+        })
+        assert resp.status_code in [200, 201]
+        seafile_api.remove_repo(self.repo.id)
+        resp = self.client.get(self.url)
+        assert resp.status_code in [200, 201]
