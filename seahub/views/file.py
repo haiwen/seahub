@@ -1526,6 +1526,8 @@ def office_convert_add_task(request):
         file_id = request.POST.get('file_id')
         doctype = request.POST.get('doctype')
         raw_path = request.POST.get('raw_path')
+        watermark = request.POST.get('watermark')
+        convert_tmp_filename = request.POST.get('convert_tmp_filename')
     except KeyError:
         return HttpResponseBadRequest('invalid params')
 
@@ -1535,7 +1537,9 @@ def office_convert_add_task(request):
     if len(file_id) != 40:
         return HttpResponseBadRequest('invalid params')
 
-    return add_office_convert_task(file_id, doctype, raw_path, internal=True)
+    return add_office_convert_task(file_id, doctype, raw_path, internal=True,
+                                   watermark=watermark,
+                                   convert_tmp_filename=convert_tmp_filename)
 
 def _check_office_convert_perm(request, repo_id, path, ret):
     token = request.GET.get('token', '')

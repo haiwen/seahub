@@ -1098,12 +1098,15 @@ if HAS_OFFICE_CONVERTER:
 
         return decorated
 
-    def delegate_add_office_convert_task(file_id, doctype, raw_path):
+    def delegate_add_office_convert_task(file_id, doctype, raw_path, 
+                                         watermark='', convert_tmp_filename=''):
         url = urljoin(OFFICE_CONVERTOR_ROOT, '/office-convert/internal/add-task/')
         data = urllib.urlencode({
             'file_id': file_id,
             'doctype': doctype,
             'raw_path': raw_path,
+            'watermark': watermark,
+            'convert_tmp_filename': convert_tmp_filename
         })
 
         headers = _office_convert_token_header(file_id)
