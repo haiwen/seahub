@@ -46,9 +46,12 @@
                 {% block header_right %}
                 {% if request.user.is_authenticated %}
                 <div class="fright">
+
+                {% block top_search %}
                 {% if has_file_search %}
                     {% include 'snippets/search_form.html' %}
                 {% endif %}
+                {% endblock %}
 
 
                 <div id="account" class="fright">
