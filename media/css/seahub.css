@@ -3250,6 +3250,7 @@ button.sf-dropdown-toggle:focus {
 	padding:20px;
 }
 .help-con img {
+    max-width:100%;
     margin:5px 0;
 }
 #right-panel.help-con .hd {
