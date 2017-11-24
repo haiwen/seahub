@@ -893,7 +893,11 @@ def mkstemp():
 
     '''
     fd, path = tempfile.mkstemp()
-    system_encoding = locale.getdefaultlocale()[1]
+    try:
+        system_encoding = locale.getdefaultlocale()[1]
+    except Exception as e:
+        logging.info(e)
+        system_encoding = locale.getdefaultlocale(envvars=('LC_ALL', 'LANG', 'LC_CTYPE', 'LANGUAGE'))[1]
     if system_encoding is not None:
         path_utf8 = path.decode(system_encoding).encode('UTF-8')
         return fd, path_utf8
