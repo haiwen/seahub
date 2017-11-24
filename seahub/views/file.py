@@ -502,6 +502,7 @@ def _file_view(request, repo_id, path):
         else:
             can_edit = False
 
+        send_file_access_msg(request, repo, path, 'web')
         return render_to_response('onlyoffice/view_file_via_onlyoffice.html', {
             'ONLYOFFICE_APIJS_URL': ONLYOFFICE_APIJS_URL,
             'file_type': fileext,
