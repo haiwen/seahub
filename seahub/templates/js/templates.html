@@ -1424,7 +1424,7 @@
             </span>
             <a href="#" title="{% trans "Edit" %}" class="perm-edit-icon sf2-icon-edit op-icon vh"></a>
         </div>
-        <select class="perm-toggle-select hide w100">
+        <select class="perm-toggle-select select-white hide w100">
             <% if (show_admin) { %>
                 <% if (is_admin) { %>
                     <option value="rw">{% trans "Read-Write" %}</option>
@@ -2448,7 +2448,7 @@
 <script type="text/template" id="share-admin-link-popup-tmpl">
     <div>
         <p><%= link %></p>
-        <input type="text" readonly="readonly" value="<%= link %>" id="shared-link" class="hide" />
+        <input type="text" readonly="readonly" value="<%= link %>" class="shared-link hide" />
     </div>
 </script>
 

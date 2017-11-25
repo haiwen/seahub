@@ -16,17 +16,21 @@
 
 {% if notices %}
 <table id="notices-table">
+    <thead>
     <tr>
         <th width="7%"></th>
         <th width="73%">{% trans "Message"%}</th>
         <th width="20%">{% trans "Time"%}</th>
     </tr>
+    </thead>
+    <tbody>
     {% include "notifications/user_notification_tr.html" %}
+    </tbody>
 </table>
 {% if notices_more %}
 <div id="notices-more">
     <div id="notices-loading" class="hide"><span class="loading-icon"></span></div>
-    <button id="notices-more-btn">{% trans 'More' %}</button>
+    <button id="notices-more-btn" class="full-width-btn">{% trans 'More' %}</button>
     <p id="notices-error" class="error hide"></p>
 </div>
 {% endif %}
