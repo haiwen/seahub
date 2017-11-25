@@ -8,6 +8,8 @@ from django.shortcuts import render_to_response
 from django.core.urlresolvers import reverse
 from django.utils.translation import ugettext as _
 
+from constance import config
+
 from seahub import auth
 from seahub.profile.models import Profile
 from seahub.utils import is_valid_email
@@ -146,6 +148,16 @@ def oauth_callback(request):
 
     # seahub authenticate user
     email = user_info['email']
+
+    try:
+        User.objects.get(email=email)
+    except User.DoesNotExist:
+        if not config.ENABLE_SIGNUP:
+            logger.error('%s not found but user registration is disabled.' % email)
+            return render_to_response('error.html', {
+                    'error_msg': _('Error, please contact administrator.'),
+                    }, context_instance=RequestContext(request))
+
     try:
         user = auth.authenticate(remote_user=email)
     except User.DoesNotExist:
