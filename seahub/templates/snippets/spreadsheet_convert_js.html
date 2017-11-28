@@ -14,7 +14,7 @@ $(function() {
     function check_status () {
         var url = "{% url 'office_convert_query_status' %}?" + $.param({
             repo_id: '{{ repo.id }}',
-            path: '{{ path }}',
+            path: '{{ path|escapejs }}',
             token: '{{ shared_token }}',
             commit_id: commit_id,
             doctype: 'spreadsheet'
