@@ -759,6 +759,10 @@ if EVENTS_CONFIG_FILE:
     def get_virus_record_by_id(vid):
         with _get_seafevents_session() as session:
             return seafevents.get_virus_record_by_id(session, vid)
+
+    def get_file_revision(repo_id, file_path):
+        with _get_seafevents_session() as session:
+            return seafevents.get_file_revision(session, repo_id, file_path)
 else:
     EVENTS_ENABLED = False
     def get_user_events():
@@ -794,6 +798,8 @@ else:
     def handle_virus_record():
         pass
     def get_virus_record_by_id(vid):
+        pass
+    def get_file_revision():
         pass
 
 def calc_file_path_hash(path, bits=12):
@@ -1024,6 +1030,21 @@ if EVENTS_CONFIG_FILE:
         return enabled
 
     FILE_AUDIT_ENABLED = check_file_audit_enabled()
+
+# file history related
+FILE_HISTORY_ENABLED = False
+FILE_HISTORY_SUFFIX = []
+if EVENTS_CONFIG_FILE:
+    def check_file_history_enabled():
+        enabled = seafevents.is_file_history_enabled(parsed_events_conf)
+        if enabled:
+            logging.debug('seafevents file history: enabled')
+        else:
+            logging.debug('seafevents file history: not enabled')
+        return enabled
+
+    FILE_HISTORY_ENABLED = check_file_history_enabled()
+    FILE_HISTORY_SUFFIX = seafevents.get_file_history_suffix(parsed_events_conf)
 
 # office convert related
 HAS_OFFICE_CONVERTER = False

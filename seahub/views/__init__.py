@@ -44,7 +44,8 @@ from seahub.utils import render_permission_error, render_error, \
     get_user_repos, EMPTY_SHA1, gen_file_get_url, \
     new_merge_with_no_conflict, get_max_upload_file_size, \
     is_pro_version, FILE_AUDIT_ENABLED, is_valid_dirent_name, \
-    is_org_repo_creation_allowed, is_windows_operating_system
+    is_org_repo_creation_allowed, is_windows_operating_system, \
+    FILE_HISTORY_ENABLED, get_file_revision, FILE_HISTORY_SUFFIX
 from seahub.utils.star import get_dir_starred_files
 from seahub.utils.timeutils import utc_to_local
 from seahub.views.modules import MOD_PERSONAL_WIKI, enable_mod_for_user, \
@@ -851,26 +852,42 @@ def render_file_revisions (request, repo_id):
     else:
         can_compare = False
 
-    try:
-        commits = seafile_api.get_file_revisions(repo_id, path, -1, -1, days)
-    except SearpcError, e:
-        logger.error(e.msg)
-        return render_error(request, e.msg)
+    reference_seafevents = False
+    if FILE_HISTORY_ENABLED and os.path.splitext(path)[1] in FILE_HISTORY_SUFFIX:
+        reference_seafevents = True
+        commits = get_file_revision(repo_id, path)
+    else:
+        try:
+            commits = seafile_api.get_file_revisions(repo_id, path, -1, -1, days)
+        except SearpcError, e:
+            logger.error(e.msg)
+            return render_error(request, e.msg)
 
     if not commits:
         return render_error(request, _(u'No revisions found'))
+
+    cur_path = path
+    if not reference_seafevents:
+        for commit in commits:
+            commit.ctime = commit.props.ctime
+            commit.renamed_old_path = commit.rev_renamed_old_path
+            commit.file_size = commit.rev_file_size
+            commit.file_id = commit.rev_file_id
+            commit.path = cur_path
+            commit.creator = commit.creator_name
+            if commit.rev_renamed_old_path:
+                cur_path = '/' + commit.rev_renamed_old_path
+    else:
+        for commit in commits:
+            commit.path = cur_path
+            if commit.renamed_old_path:
+                cur_path = '/' + commit.renamed_old_path
 
     # Check whether user is repo owner
     if validate_owner(request, repo_id):
         is_owner = True
     else:
         is_owner = False
-
-    cur_path = path
-    for commit in commits:
-        commit.path = cur_path
-        if commit.rev_renamed_old_path:
-            cur_path = '/' + commit.rev_renamed_old_path
 
     zipped = gen_path_link(path, repo.name)
 
@@ -898,6 +915,7 @@ def render_file_revisions (request, repo_id):
         'can_revert_file': can_revert_file,
         'days': days,
         'referer': referer,
+        'reference_seafevents': reference_seafevents
         }, context_instance=RequestContext(request))
 
 @login_required
