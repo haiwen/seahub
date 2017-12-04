@@ -599,6 +599,7 @@ define([
                                 "user_name": item.user_info.nickname,
                                 "permission": item.permission,
                                 'is_admin': item.is_admin,
+                                'is_preview': item.is_preview,
                                 'for_user': true
                             }
                         });
@@ -657,6 +658,7 @@ define([
                                 "group_name": item.group_info.name,
                                 "permission": item.permission,
                                 'is_admin': item.is_admin,
+                                'is_preview': item.is_preview,
                                 'for_user': false
                             }
                         });
@@ -781,6 +783,7 @@ define([
                                     "user_name": item.user_info.nickname,
                                     "permission": item.permission,
                                     'is_admin': item.is_admin,
+                                    'is_preview': item.is_preview,
                                     'for_user': true
                                 }
                             });
@@ -860,6 +863,7 @@ define([
                                     "group_name": item.group_info.name,
                                     "permission": item.permission,
                                     'is_admin': item.is_admin,
+                                    'is_preview': item.is_preview,
                                     'for_user': false
                                 }
                             });

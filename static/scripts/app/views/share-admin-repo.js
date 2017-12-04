@@ -62,9 +62,11 @@ define([
                 beforeSend: Common.prepareCSRFToken,
                 success: function() {
                     if (perm == 'admin'){
-                        _this.model.set({'share_permission': 'rw', 'is_admin': true});
+                        _this.model.set({'share_permission': 'rw', 'is_admin': true, 'is_preview': false});
+                    } else if (perm == 'preview') {
+                        _this.model.set({'share_permission': 'rw', 'is_admin': false, 'is_preview': true});
                     } else {
-                        _this.model.set({'share_permission': perm, 'is_admin': false});
+                        _this.model.set({'share_permission': perm, 'is_admin': false, 'is_preview': false});
                     }
                     Common.feedback(gettext("Successfully modified permission"), 'success');
                 },

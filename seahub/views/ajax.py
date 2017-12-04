@@ -280,6 +280,7 @@ def list_lib_dir(request, repo_id):
     else:
         repo_owner = seafile_api.get_repo_owner(repo.id)
 
+    is_preview = ExtraSharePermission.objects.get_user_permission(repo_id, username) == 'preview'
     result["is_repo_owner"] = False
     result["has_been_shared_out"] = False
     if repo_owner == username:
@@ -314,7 +315,7 @@ def list_lib_dir(request, repo_id):
 
     result["is_virtual"] = repo.is_virtual
     result["repo_name"] = repo.name
-    result["user_perm"] = user_perm
+    result["user_perm"] = 'preview' if is_preview and user_perm == 'r' else user_perm
     # check quota for fileupload
     result["no_quota"] = True if seaserv.check_quota(repo.id) < 0 else False
     result["encrypted"] = repo.encrypted
@@ -327,7 +328,7 @@ def list_lib_dir(request, repo_id):
         d_['last_modified'] = d.last_modified
         d_['last_update'] = translate_seahub_time(d.last_modified)
         d_['p_dpath'] = posixpath.join(path, d.obj_name)
-        d_['perm'] = d.permission # perm for sub dir in current dir
+        d_['perm'] = 'preview' if is_preview and d.permission == 'r' else d.permission # perm for sub dir in current dir
         dirent_list.append(d_)
 
     size = int(request.GET.get('thumbnail_size', THUMBNAIL_DEFAULT_SIZE))
@@ -341,7 +342,7 @@ def list_lib_dir(request, repo_id):
         f_['starred'] = f.starred
         f_['file_size'] = filesizeformat(f.file_size)
         f_['obj_id'] = f.obj_id
-        f_['perm'] = f.permission # perm for file in current dir
+        f_['perm'] = 'preview' if is_preview and f.permission == 'r' else f.permission # perm for file in current dir
 
         file_type, file_ext = get_file_type_and_ext(f.obj_name)
         if file_type == IMAGE:

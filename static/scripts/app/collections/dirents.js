@@ -28,6 +28,7 @@ define([
             this.dirent_more = data.dirent_more;
             this.more_start = data.more_start;
             this.is_admin = data.is_admin;
+            this.is_preview = data.is_preview;
             return data.dirent_list; // return the array
         },
 

@@ -82,10 +82,16 @@ define([
                 success: function () {
                     if (perm == 'admin'){
                         item_data.is_admin = true;
+                        item_data.is_preview = false;
                         item_data.permission = 'rw';
+                    } else if (perm == 'preview'){
+                        item_data.is_admin = false;
+                        item_data.is_preview = true;
+                        item_data.permission = 'r';
                     } else {
                         item_data.permission = perm;
                         item_data.is_admin = false;
+                        item_data.is_preview = false;
                     }
                     _this.render();
                 },

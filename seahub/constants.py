@@ -9,6 +9,7 @@ GUEST_USER = 'guest'
 PERMISSION_READ = 'r'
 PERMISSION_READ_WRITE = 'rw'
 PERMISSION_ADMIN = 'admin'
+PERMISSION_PREVIEW = 'preview'
 
 DEFAULT_ADMIN = 'default_admin'
 SYSTEM_ADMIN = 'system_admin'

@@ -13,7 +13,8 @@ from constance import config
 from seahub.base.fields import LowerCaseCharField
 from seahub.utils import normalize_file_path, normalize_dir_path, gen_token,\
     get_service_url
-from seahub.constants import PERMISSION_READ, PERMISSION_ADMIN
+from seahub.constants import PERMISSION_READ, PERMISSION_ADMIN, \
+        PERMISSION_PREVIEW
 
 # Get an instance of a logger
 logger = logging.getLogger(__name__)
@@ -177,12 +178,23 @@ class ExtraSharePermissionManager(models.Manager):
         return [e.repo_id for e in shared_repos]
 
     def get_admin_users_by_repo(self, repo_id):
-        """Gets the share and permissions of the record in the specified repo ID.
+        """Gets a admin of the user in the specified repo ID.
         return
             e.g. ['admin_user1', 'admin_user2']
         """
         shared_repos = super(ExtraSharePermissionManager, self).filter(
             repo_id=repo_id, permission=PERMISSION_ADMIN
+        )
+
+        return [e.share_to for e in shared_repos]
+
+    def get_preview_users_by_repo(self, repo_id):
+        """Gets a preview of the user in the specified repo ID.
+        return
+            e.g. ['prev_user1', 'prev_user2']
+        """
+        shared_repos = super(ExtraSharePermissionManager, self).filter(
+            repo_id=repo_id, permission=PERMISSION_PREVIEW
         )
 
         return [e.share_to for e in shared_repos]
@@ -204,6 +216,23 @@ class ExtraSharePermissionManager(models.Manager):
         db_data = super(ExtraSharePermissionManager, self).filter(query).filter(permission=PERMISSION_ADMIN)
         return [(e.repo_id, e.share_to) for e in db_data]
 
+    def batch_is_preview(self, in_datas):
+        """return the data that input data is preview
+        e.g.
+            in_datas:
+                [(repo_id1, username1), (repo_id2, admin1)]
+            preview permission data returnd:
+                [(repo_id2, admin1)]
+        """
+        if len(in_datas) <= 0:
+            return []
+        query = reduce(
+            operator.or_,
+            (Q(repo_id=data[0], share_to=data[1]) for data in in_datas)
+        )
+        db_data = super(ExtraSharePermissionManager, self).filter(query).filter(permission=PERMISSION_PREVIEW)
+        return [(e.repo_id, e.share_to) for e in db_data]
+
     def create_share_permission(self, repo_id, username, permission):
         self.model(repo_id=repo_id, share_to=username, 
                    permission=permission).save()
@@ -215,7 +244,7 @@ class ExtraSharePermissionManager(models.Manager):
     def update_share_permission(self, repo_id, share_to, permission):
         super(ExtraSharePermissionManager, self).filter(repo_id=repo_id, 
                                                    share_to=share_to).delete()
-        if permission in [PERMISSION_ADMIN]:
+        if permission in [PERMISSION_ADMIN, PERMISSION_PREVIEW]:
             self.create_share_permission(repo_id, share_to, permission)
 
 
@@ -246,12 +275,34 @@ class ExtraGroupsSharePermissionManager(models.Manager):
             repo_id=repo_id, permission='admin'
         ).values_list('group_id', flat=True)
 
+    def get_preview_groups_by_repo(self, repo_id):
+        """ return preview groups in specific repo
+            e.g: ['23', '12']
+        """
+        return super(ExtraGroupsSharePermissionManager, self).filter(
+            repo_id=repo_id, permission='preview'
+        ).values_list('group_id', flat=True)
+
     def batch_get_repos_with_admin_permission(self, gids):
-        """ 
+        """ The return permission is admin and the record in the parameter gids
+            e.g:
+                input: gids = ['2', '10']
+                res: [('admin_repo_id', '2'), ('admin_repo_id2', '2')]
         """
         if len(gids) <= 0:
             return []
         db_data = super(ExtraGroupsSharePermissionManager, self).filter(group_id__in=gids, permission=PERMISSION_ADMIN)
+        return [(e.repo_id, e.group_id) for e in db_data]
+
+    def batch_get_repos_with_preview_permission(self, gids):
+        """ The return permission is preview and the record in the parameter gids
+            e.g:
+                input: gids = ['2', '10']
+                res: [('preview_repo_id', '2'), ('preview_repo_id2', '2')]
+        """
+        if len(gids) <= 0:
+            return []
+        db_data = super(ExtraGroupsSharePermissionManager, self).filter(group_id__in=gids, permission=PERMISSION_PREVIEW)
         return [(e.repo_id, e.group_id) for e in db_data]
 
     def create_share_permission(self, repo_id, gid, permission):
@@ -264,7 +315,7 @@ class ExtraGroupsSharePermissionManager(models.Manager):
     def update_share_permission(self, repo_id, gid, permission):
         super(ExtraGroupsSharePermissionManager, self).filter(repo_id=repo_id, 
                                                        group_id=gid).delete()
-        if permission in [PERMISSION_ADMIN]:
+        if permission in [PERMISSION_ADMIN, PERMISSION_PREVIEW]:
             self.create_share_permission(repo_id, gid, permission)
 
 
