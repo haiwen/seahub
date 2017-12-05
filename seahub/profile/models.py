@@ -16,17 +16,31 @@ from seahub.signals import institution_deleted
 logger = logging.getLogger(__name__)
 
 class ProfileManager(models.Manager):
-    def add_or_update(self, username, nickname, intro='', lang_code=None):
+    def add_or_update(self, username, nickname=None, intro=None, lang_code=None,
+                      login_id=None, contact_email=None, institution=None):
         """Add or update user profile.
         """
         try:
             profile = self.get(user=username)
-            profile.nickname = nickname
-            profile.intro = intro
-            profile.lang_code = lang_code
         except Profile.DoesNotExist:
-            profile = self.model(user=username, nickname=nickname,
-                                 intro=intro, lang_code=lang_code)
+            profile = self.model(user=username)
+
+        if nickname is not None:
+            nickname = nickname.strip()
+            profile.nickname = nickname
+        if intro is not None:
+            profile.intro = intro
+        if lang_code is not None:
+            profile.lang_code = lang_code
+        if login_id is not None:
+            login_id = login_id.strip()
+            profile.login_id = login_id
+        if contact_email is not None:
+            contact_email = contact_email.strip()
+            profile.contact_email = contact_email
+        if institution is not None:
+            institution = institution.strip()
+            profile.institution = institution
         profile.save(using=self._db)
         return profile
 
@@ -49,6 +63,15 @@ class ProfileManager(models.Manager):
         try:
             return super(ProfileManager, self).get(user=username)
         except Profile.DoesNotExist:
+            return None
+
+    def get_profile_by_contact_email(self, contact_email):
+        res =  super(ProfileManager, self).filter(contact_email=contact_email)
+        if len(res) > 0:
+            if len(res) > 1:
+                logger.warning('Repeated contact email %s' % contact_email)
+            return res[0]
+        else:
             return None
 
     def get_contact_email_by_user(self, username):

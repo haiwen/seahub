@@ -9,7 +9,7 @@ dist: locale uglify statici18n collectstatic
 
 locale:
 	@echo "--> Compile locales"
-	django-admin.py compilemessages && cd seahub/two_factor && django-admin.py compilemessages
+	django-admin.py compilemessages
 	@echo ""
 
 uglify:

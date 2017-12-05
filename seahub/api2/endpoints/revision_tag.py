@@ -91,6 +91,30 @@ class TaggedItemsView(APIView):
             revisionTags.append(revision_tag.to_dict())
         return Response({"revisionTags": revisionTags}, status=status.HTTP_200_OK)
 
+    def delete(self, request):
+        repo_id = request.GET.get('repo_id', '')
+        tag_name = request.GET.get('tag_name', '')
+        if not repo_id:
+            error_msg = "repo_id can not be empty"
+            return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
+        repo = seafile_api.get_repo(repo_id)
+        if not repo:
+            error_msg = "Library %s not found" % repo_id
+            return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
+
+        if not tag_name:
+            error_msg = "tag_name can not be empty"
+            return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
+        if not check_tagname(tag_name):
+            error_msg = _("Tag can only contain letters, numbers, dot, hyphen or underscore.")
+            return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
+
+        if check_folder_permission(request, repo_id, '/') != 'rw':
+            error_msg = "Permission denied."
+            return api_error(status.HTTP_403_FORBIDDEN, error_msg)
+        RevisionTags.objects.delete_revision_tag_by_name(repo_id, tag_name)
+        return Response(status=status.HTTP_200_OK)
+
 
 class TagNamesView(APIView):
     authentication_classes = (TokenAuthentication, SessionAuthentication)

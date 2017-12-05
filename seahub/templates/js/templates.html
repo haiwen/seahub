@@ -1046,10 +1046,16 @@
                 <div id="download-link-operations" class="hide">
                     <dl>
                         <dt>{% trans "Link: " %}</dt>
-                        <dd id="download-link"></dd>
+                        <dd id="download-link">
+                            <span></span>
+                            <input type="text" readonly="readonly" value="" class="shared-link hide" />
+                        </dd>
                         <% if (!is_dir) { %>
                         <dt>{% trans "Direct Download Link: " %}</dt>
-                        <dd id="direct-dl-link"></dd>
+                        <dd id="direct-dl-link">
+                            <span></span>
+                            <input type="text" readonly="readonly" value="" class="shared-link hide" />
+                        </dd>
                         <% } %>
                     </dl>
                     {% if user.permissions.can_send_share_link_mail %}
@@ -1058,7 +1064,7 @@
                     <button id="delete-download-link">{% trans 'Delete' %}</button>
                     <form id="send-download-link-form" action="" class="hide">
                         <label for="email">{% trans "Send to:"%}</label><br />
-                        <input type="text" class="input" name="email" placeholder="{% trans "Emails, Seperated by ','"%}" id="email" /><br />
+                        <input type="text" class="input" name="email" placeholder="{% trans "Emails, separated by ','"%}" title="{% trans "Emails, separated by ','"%}" id="email" /><br />
                         <label for="extra-msg">{% trans "Message (optional):"%}</label><br />
                         <textarea class="textarea" name="extra_msg" id="extra-msg"></textarea><br />
                         <p class="error hide"></p>
@@ -1094,14 +1100,19 @@
                     <input type="submit" value="{% trans 'Generate'%}" />
                 </form>
                 <div id="upload-link-operations" class="hide">
-                    <p><span class="vam">{% trans 'Upload Link: ' %}</span><span id="upload-link"></span><!--input type="text" readonly="readonly" id="shared-link-text" class="vam" /--></p>
+                    <dl>
+                        <dt>{% trans "Upload Link: " %}</dt>
+                        <dd id="upload-link">
+                            <input type="text" readonly="readonly" value="" class="shared-link hide" />
+                        </dd>
+                    </dl>
                     {% if user.permissions.can_send_share_link_mail %}
                         <button id="send-upload-link">{% trans 'Send' %}</button>
                     {% endif %}
                     <button id="delete-upload-link">{% trans 'Delete' %}</button>
                     <form id="send-upload-link-form" action="" class="hide">
                         <label for="u-email">{% trans "Send to:"%}</label><br />
-                        <input type="text" class="input" name="email" placeholder="{% trans "Emails, Seperated by ','"%}" id="u-email" /><br />
+                        <input type="text" class="input" name="email" placeholder="{% trans "Emails, separated by ','"%}" title="{% trans "Emails, separated by ','"%}" id="u-email" /><br />
                         <label for="u-extra-msg">{% trans "Message (optional):"%}</label><br />
                         <textarea class="textarea" name="extra_msg" id="u-extra-msg"></textarea><br />
                         <p class="error hide"></p>
@@ -1413,7 +1424,7 @@
             </span>
             <a href="#" title="{% trans "Edit" %}" class="perm-edit-icon sf2-icon-edit op-icon vh"></a>
         </div>
-        <select class="perm-toggle-select hide w100">
+        <select class="perm-toggle-select select-white hide w100">
             <% if (show_admin) { %>
                 <% if (is_admin) { %>
                     <option value="rw">{% trans "Read-Write" %}</option>
@@ -1709,11 +1720,11 @@
 </script>
 <script type="text/template" id="top-search-form-tmpl">
 <% if (search_repo_id) { %>
-    <input type="text" class="search-input" name="q" placeholder="{% if search_wiki %}{% trans "Search files in this wiki" %}{% else %}{% trans "Search files in this library" %}{% endif %}" value="{{ keyword }}" /> <input type="hidden" name="search_repo" value="<%= search_repo_id %>" />
+    <input type="text" class="search-input" name="q" placeholder="{% if search_wiki %}{% trans "Search files in this wiki" %}{% else %}{% trans "Search files in this library" %}{% endif %}" title="{% if search_wiki %}{% trans "Search files in this wiki" %}{% else %}{% trans "Search files in this library" %}{% endif %}" aria-label="{% if search_wiki %}{% trans "Search files in this wiki" %}{% else %}{% trans "Search files in this library" %}{% endif %}" value="{{ keyword }}" /> <input type="hidden" name="search_repo" value="<%= search_repo_id %>" />
 <% } else { %>
-    <input type="text" class="search-input" name="q" placeholder="{% trans 'Search Files' %}" value="{{ keyword }}" />
+    <input type="text" class="search-input" name="q" placeholder="{% trans "Search Files" %}" title="{% trans "Search Files" %}" aria-label="{% trans "Search Files" %}" value="{{ keyword }}" />
 <% } %>
-<!--span class="icon-caret-down" title="{% trans "advanced" %}"></span--><button type="submit" class="search-submit"><span class="icon-search"></span></button>
+<!--span class="icon-caret-down" title="{% trans "advanced" %}"></span--><button type="submit" class="search-submit" aria-label="{% trans "Submit" %}"><span class="icon-search"></span></button>
 </script>
 <script type="text/template" id="group-item-tmpl">
     <h4 class="group-name ellipsis"><a href="#group/<%= id %>/" title="<%- name %>" class="a normal"><%- name %></a></h4>
@@ -2437,7 +2448,7 @@
 <script type="text/template" id="share-admin-link-popup-tmpl">
     <div>
         <p><%= link %></p>
-        <input type="text" readonly="readonly" value="<%= link %>" id="shared-link" class="hide" />
+        <input type="text" readonly="readonly" value="<%= link %>" class="shared-link hide" />
     </div>
 </script>
 
@@ -2509,7 +2520,7 @@
         <form action="" method="post" class="msg-form">
             <img src="{% avatar_url request.user 64 %}" alt="" width="32" class="avatar-circle fleft" />
             <div class="msg-body">
-                <textarea name="message" placeholder="{% trans "Add a comment..." %}" class="msg-input"></textarea>
+                <textarea name="message" placeholder="{% trans "Add a comment..." %}" title="{% trans "Add a comment..." %}" aria-label="{% trans "Add a comment..." %}" class="msg-input"></textarea>
                 <p class="error hide"></p>
                 <button type="submit" class="submit msg-submit">{% trans "Submit" %}</button>
             </div>

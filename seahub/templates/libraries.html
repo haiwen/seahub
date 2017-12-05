@@ -182,7 +182,7 @@
         <form action="" method="post" class="msg-form">
             <img src="{% avatar_url request.user 64 %}" alt="" width="32" class="avatar-circle fleft" />
             <div class="msg-body">
-                <textarea name="message" placeholder="{% trans "Add a discussion..." %}" class="msg-input"></textarea>
+                <textarea name="message" placeholder="{% trans "Add a discussion..." %}" title="{% trans "Add a discussion..." %}" aria-label="{% trans "Add a discussion..." %}" class="msg-input"></textarea>
                 <button type="submit" class="submit msg-submit">{% trans "Submit" %}</button>
             </div>
         </form>
@@ -205,7 +205,7 @@
 <script type="text/template" id="activities-tmpl">
     <div id="activities-body" class="hide"></div>
     <span class="loading-icon loading-tip"></span>
-    <button id="activities-more" class="hide">{% trans 'More' %}</button>
+    <button id="activities-more" class="full-width-btn hide">{% trans 'More' %}</button>
 </script>
 
 <script type="text/template" id="devices-tmpl">

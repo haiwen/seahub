@@ -192,12 +192,6 @@ class AdminGroupMember(APIView):
             error_msg = 'Group %d not found.' % group_id
             return api_error(status.HTTP_404_NOT_FOUND, error_msg)
 
-        try:
-            User.objects.get(email=email)
-        except User.DoesNotExist:
-            error_msg = 'User %s not found.' % email
-            return api_error(status.HTTP_404_NOT_FOUND, error_msg)
-
         # delete member from group
         try:
             if not is_group_member(group_id, email):

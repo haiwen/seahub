@@ -58,4 +58,9 @@ class AdminTaggedItemsView(APIView):
             revision_tags = revision_tags.filter(tag__name__contains=tag_contains)
 
         revision_tags = sorted(revision_tags, key=lambda revision_tags: revision_tags.tag)
-        return Response([revision_tag.to_dict() for revision_tag in revision_tags])
+        res = []
+        for revision_tag in revision_tags:
+            tag = revision_tag.to_dict()
+            if tag is not None:
+                res.append(tag)
+        return Response(res)

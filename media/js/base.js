@@ -106,13 +106,13 @@ function addConfirmTo(op_ele, popup) {
     op_ele.click(function() {
         var con = '';
         if ($(this).data('target') && popup['con'].indexOf('%s') != -1) {
-            con = popup['con'].replace('%s', '<span class="op-target">' + HTMLescape($(this).data('target')) + '</span>');
+            con = popup['con'].replace('%s', '<span class="op-target ellipsis ellipsis-op-target">' + HTMLescape($(this).data('target')) + '</span>');
         } else {
             con = popup['con'];
         }
         $('#confirm-con').html('<h3>' + popup['title'] + '</h3><p>' + con + '</p>');
         $('#confirm-popup').modal({appendTo:'#main'});
-        $('#simplemodal-container').css({'height':'auto'});
+        $('#simplemodal-container').css({'width': 'auto', 'height':'auto'});
         $('#confirm-yes').data('url', $(this).data('url')).click(function() {
             if (popup.post) { // use form post
                 $('<form>', {

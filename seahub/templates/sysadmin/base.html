@@ -1,6 +1,8 @@
 {% extends "base.html" %}
 {% load i18n %}
 
+{% block top_search %}{% endblock %} {# no 'file search' for system admin pages #}
+
 {% block admin_link %}
     <a href="{{ SITE_ROOT }}" title="{% trans "Exit admin panel" %}" class="item">{% trans "Exit admin panel" %}</a>
 {% endblock %}

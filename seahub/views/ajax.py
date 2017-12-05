@@ -988,7 +988,7 @@ def get_groups_by_user(request):
         org_id = request.user.org.org_id
         return ccnet_api.get_org_groups_by_user(org_id, username)
     else:
-        return ccnet_api.get_personal_groups_by_user(username)
+        return seaserv.get_personal_groups_by_user(username)
 
 def get_group_repos(request, groups):
     """Get repos shared to groups.

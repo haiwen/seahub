@@ -65,6 +65,18 @@
                 <span id="set-loginid" title="{% trans "Edit"%}" class="sf2-icon-edit op-icon"></span>
             </dd>
 
+            <dt>{% trans "Contact Email" %}</dt>
+            <dd>
+                <span id="contact-email">
+                    {% if profile and profile.contact_email %}
+                    {{ profile.contact_email }}
+                    {% else %}
+                    --
+                    {% endif %}
+                </span>
+                <span id="set-contact-email" title="{% trans "Edit"%}" class="sf2-icon-edit op-icon"></span>
+            </dd>
+
             <dt>{% trans "Reference ID" %}</dt>
             <dd>
                 <span id="reference-id">
@@ -138,6 +150,13 @@
         <form id="set-loginid-form" method="post" action="" class="hide">{% csrf_token %}
             <h3>{% trans "Set user Login ID" %}</h3>
             <input type="text" name="loginid" class="input" value="" /><br />
+            <p class="error hide"></p>
+            <input type="submit" value="{% trans "Submit" %}" class="submit" />
+        </form>
+
+        <form id="set-contact-email-form" method="post" action="" class="hide">{% csrf_token %}
+            <h3>{% trans "Set user contact email" %}</h3>
+            <input type="text" name="contact_email" class="input" value="" /><br />
             <p class="error hide"></p>
             <input type="submit" value="{% trans "Submit" %}" class="submit" />
         </form>
@@ -355,6 +374,10 @@ $('#set-loginid').click(function () {
     $("#set-loginid-form").modal({appendTo:"#main"});
     $('#simplemodal-container').css({'width':'auto', 'height':'auto'});
 })
+$('#set-contact-email').click(function() {
+    $("#set-contact-email-form").modal({appendTo: "#main"});
+    $('#simplemodal-container').css({'width':'auto', 'height':'auto'});
+});
 $('#set-reference-id').click(function () {
     $("#set-reference-id-form").modal({appendTo:"#main"});
     $('#simplemodal-container').css({'width':'auto', 'height':'auto'});
@@ -451,6 +474,45 @@ $('#set-loginid-form').submit(function() {
                 $loginid.html('--');
             } else {
                 $loginid.html(HTMLescape(data['login_id']));
+            }
+            $.modal.close();
+        },
+        error: function(xhr, textStatus, errorThrown) {
+            var err_msg;
+            if (xhr.responseText) {
+                err_msg = $.parseJSON(xhr.responseText).error_msg;
+            } else {
+                err_msg = "{% trans "Failed. Please check the network." %}";
+            }
+            $error.html(err_msg).show();
+            enable($submitBtn);
+        }
+    });
+
+    return false;
+});
+
+$('#set-contact-email-form').submit(function() {
+    var $form = $(this);
+    var contact_email = $.trim($('[name="contact_email"]', $form).val());
+    var $contactEmail = $('#contact-email');
+    var $error = $('.error', $form);
+
+    var $submitBtn = $('[type="submit"]', $form);
+    disable($submitBtn);
+
+    $.ajax({
+        url: '{% url 'api-v2.1-admin-user' email %}',
+        type: 'PUT',
+        dataType: 'json',
+        cache: false,
+        beforeSend: prepareCSRFToken,
+        data: {'contact_email': contact_email},
+        success: function(data) {
+            if (data['contact_email'] == ''){
+                $contactEmail.html('--');
+            } else {
+                $contactEmail.html(HTMLescape(data['contact_email']));
             }
             $.modal.close();
         },

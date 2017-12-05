@@ -105,7 +105,7 @@
         <img src="{{MEDIA_URL}}img/lock.png" alt="" aria-hidden="true" />
         <p class="intro" id="dialogTitle">{% trans "This library is password protected" %}</p>
         <p class="error hide"></p>
-        <input type="password" name="password" class="input" placeholder="{% trans "Password" %}" /><br />
+        <input type="password" name="password" class="input" placeholder="{% trans "Password" %}" title="{% trans "Password" %}" aria-label="{% trans "Password" %}" /><br />
         <button type="submit" class="submit">{% trans "Submit" %}</button>
         <p class="tip">{% trans '*The password will be kept in the server for only 1 hour.' %}</p>
     </form>

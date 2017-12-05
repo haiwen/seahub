@@ -83,6 +83,7 @@ define([
 
         events: {
             'click [type="checkbox"]': 'clickCheckbox',
+            'click .shared-link': 'clickToSelect',
 
             // download link
             'submit #generate-download-link-form': 'generateDownloadLink',
@@ -117,6 +118,54 @@ define([
             $el.closest('.checkbox-label').next('div').toggleClass('hide');
         },
 
+        clickToSelect: function(e) {
+            $(e.currentTarget).select();
+        },
+
+        renderDownloadLink: function(link_data) {
+            var link = link_data.link,
+                d_link = link + '?dl=1'; // direct download link
+            var $link = this.$('#download-link'),
+                $dLink = this.$('#direct-dl-link');
+            var $span = $('span', $link),
+                $input = $('input', $link),
+                $dSpan = $('span', $dLink),
+                $dInput = $('input', $dLink);
+
+            this.download_link = link; // for 'link send'
+            this.download_link_token = link_data.token; // for 'link delete'
+
+            $span.html(link);
+            if (link_data.permissions.can_download) {
+                $dLink.show().prev('dt').show();
+                $dSpan.html(d_link);
+            } else {
+                $dLink.hide().prev('dt').hide();
+            }
+
+            if (link_data.is_expired) {
+                this.$('#send-download-link').addClass('hide');
+                this.$('#download-link, #direct-dl-link').append(' <span class="error">(' + gettext('Expired') + ')</span>');
+            }
+            this.$('#download-link-operations').removeClass('hide');
+
+            $input.val(link).css({'width': $span.width() + 2}).show();
+            $span.hide();
+            $dInput.val(d_link).css({'width': $dSpan.width() + 2}).show();
+            $dSpan.hide();
+        },
+
+        renderUploadLink: function(link_data) {
+            var link = link_data.link;
+            this.upload_link = link;
+            this.upload_link_token = link_data.token;
+
+            var $link = this.$('#upload-link'),
+                $input = $('input', $link);
+            $input.val(link).attr({'size': link.length}).show();
+            this.$('#upload-link-operations').removeClass('hide');
+        },
+
         downloadLinkPanelInit: function() {
             var $panel = $('#download-link-share');
             var $loadingTip = this.$('.loading-tip');
@@ -133,22 +182,8 @@ define([
                 dataType: 'json',
                 success: function(data) { // data is [] or [{...}]
                     if (data.length == 1) {
-                        var link_data = data[0],
-                            link = link_data.link;
-                        _this.download_link = link; // for 'link send'
-                        _this.download_link_token = link_data.token; // for 'link delete'
-                        _this.$('#download-link').html(link);
-
-                        if (app.pageOptions.is_pro && !link_data.permissions.can_download) {
-                            _this.$('#direct-dl-link').hide().prev('dt').hide();
-                        }
-
-                        _this.$('#direct-dl-link').html(link + '?dl=1');
-                        if (link_data.is_expired) {
-                            _this.$('#send-download-link').addClass('hide');
-                            _this.$('#download-link, #direct-dl-link').append(' <span class="error">(' + gettext('Expired') + ')</span>');
-                        }
-                        _this.$('#download-link-operations').removeClass('hide');
+                        var link_data = data[0];
+                        _this.renderDownloadLink(link_data);
                     } else {
                         _this.$('#generate-download-link-form').removeClass('hide');
                     }
@@ -314,22 +349,9 @@ define([
                 }
 
                 if (link_type == 'download') {
-                    _this.$('#download-link').html(data["link"]); // TODO: add 'click & select' func
-                    if (data.permissions.can_download) {
-                        _this.$('#direct-dl-link').show().prev('dt').show();
-                    } else {
-                        _this.$('#direct-dl-link').hide().prev('dt').hide();
-                    }
-                    _this.$('#direct-dl-link').html(data['link'] + '?dl=1');
-
-                    _this.download_link = data["link"]; // for 'link send'
-                    _this.download_link_token = data["token"]; // for 'link delete'
-                    _this.$('#download-link-operations').removeClass('hide');
+                    _this.renderDownloadLink(data);
                 } else {
-                    _this.$('#upload-link').html(data["link"]);
-                    _this.upload_link = data["link"];
-                    _this.upload_link_token = data["token"];
-                    _this.$('#upload-link-operations').removeClass('hide');
+                    _this.renderUploadLink(data);
                 }
             };
 
@@ -465,12 +487,8 @@ define([
                 dataType: 'json',
                 success: function(data) { // data is [] or [{...}]
                     if (data.length == 1) {
-                        var link_data = data[0],
-                            link = link_data.link;
-                        _this.upload_link_token = link_data.token;
-                        _this.upload_link = link;
-                        _this.$('#upload-link').html(link);
-                        _this.$('#upload-link-operations').removeClass('hide');
+                        var link_data = data[0];
+                        _this.renderUploadLink(link_data);
                     } else {
                         _this.$('#generate-upload-link-form').removeClass('hide');
                     }

@@ -6,6 +6,7 @@ from rest_framework.authentication import SessionAuthentication
 from rest_framework.permissions import IsAdminUser
 from rest_framework.response import Response
 from rest_framework.views import APIView
+from django.core.cache import cache
 from django.core.urlresolvers import reverse
 from django.utils.translation import ugettext as _
 
@@ -20,8 +21,9 @@ from seahub.base.accounts import User
 from seahub.base.templatetags.seahub_tags import email2nickname, \
         email2contact_email
 from seahub.profile.models import Profile, DetailedProfile
+from seahub.profile.settings import CONTACT_CACHE_TIMEOUT, CONTACT_CACHE_PREFIX
 from seahub.utils import is_valid_username, is_org_context, \
-        is_pro_version
+        is_pro_version, normalize_cache_key, is_valid_email
 from seahub.utils.timeutils import timestamp_to_isoformat_timestr
 from seahub.utils.file_size import get_file_size_unit
 from seahub.role_permissions.utils import get_available_roles
@@ -58,23 +60,21 @@ def update_user_info(request, user):
         if role:
             User.objects.update_role(email, role)
 
-    name = request.data.get("name")
-    if name:
-        profile = Profile.objects.get_profile_by_user(email)
-        if profile is None:
-            profile = Profile(user=email)
-        profile.nickname = name
-        profile.save()
+    nickname = request.data.get("name", None)
+    if nickname is not None:
+        Profile.objects.add_or_update(email, nickname)
 
     # update account login_id
     login_id = request.data.get("login_id", None)
     if login_id is not None:
-        login_id = login_id.strip()
-        profile = Profile.objects.get_profile_by_user(email)
-        if profile is None:
-            profile = Profile(user=email)
-        profile.login_id = None if login_id == "" else login_id
-        profile.save()
+        Profile.objects.add_or_update(email, login_id=login_id)
+
+    # update account contact email
+    contact_email = request.data.get('contact_email', None)
+    if contact_email is not None:
+        Profile.objects.add_or_update(email, contact_email=contact_email)
+        key = normalize_cache_key(email, CONTACT_CACHE_PREFIX)
+        cache.set(key, contact_email, CONTACT_CACHE_TIMEOUT)
 
     reference_id = request.data.get("reference_id", None)
     if reference_id is not None:
@@ -108,7 +108,7 @@ def get_user_info(email):
     info = {}
     info['email'] = email
     info['name'] = email2nickname(email)
-    info['contact_email'] = email2contact_email(email)
+    info['contact_email'] = profile.contact_email if profile and profile.contact_email else ''
     info['login_id'] = profile.login_id if profile and profile.login_id else ''
 
     info['is_staff'] = user.is_staff
@@ -327,7 +327,17 @@ class AdminUser(APIView):
                 return api_error(status.HTTP_400_BAD_REQUEST, 
                                  _(u"Login id %s already exists." % login_id))
 
-        reference_id = request.data.get("reference_id", "").strip()
+        contact_email = request.data.get("contact_email", None)
+        if contact_email is not None and contact_email.strip() != '':
+            if not is_valid_email(contact_email):
+                error_msg = 'Contact email invalid.'
+                return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
+            profile = Profile.objects.get_profile_by_contact_email(contact_email)
+            if profile:
+                error_msg = 'Contact email %s already exists.' % contact_email
+                return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
+
+        reference_id = request.data.get("reference_id", "")
         if reference_id:
             if ' ' in reference_id:
                 return api_error(status.HTTP_400_BAD_REQUEST, 'Reference ID can not contain spaces.')

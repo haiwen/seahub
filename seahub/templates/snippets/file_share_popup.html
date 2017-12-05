@@ -41,13 +41,13 @@
                 </div>
                 <button id="gen-link-btn" class="hide">{% trans "Generate"%}</button>
                 <div id="share-link-body" class="hide">
-                    <p style="margin-top:3px;"><span class="vam">{% trans 'Link: ' %}</span><input type="text" readonly="readonly" id="shared-link-text" class="vam" /></p>
+                    <p style="margin-top:3px;"><span class="vam">{% trans 'Link: ' %}</span><input type="text" readonly="readonly" id="shared-link-text" class="shared-link vam" /></p>
                     <button id="send-link">{% trans 'Send' %}</button>
                     <button id="rm-shared-link">{% trans 'Delete' %}</button>
 
                     <form id="link-send-form" action="" method="post" class="hide">{% csrf_token %}
                         <label for="link-send-input">{% trans "Send to:"%}</label><br />
-                        <input type="text" class="input" id="link-send-input" name="email" placeholder="{% trans "Emails, Seperated by ','"%}" /><br />
+                        <input type="text" class="input" id="link-send-input" name="email" placeholder="{% trans "Emails, separated by ','"%}" title="{% trans "Emails, separated by ','"%}" /><br />
                         <input type="hidden" name="file_shared_link" value="{{ dir_shared_link }}" />
                         <input type="hidden" name="file_shared_name" value="" />
                         <input type="hidden" name="file_shared_type" value="" />

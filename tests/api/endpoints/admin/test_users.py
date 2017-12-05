@@ -6,7 +6,8 @@ from tests.common.utils import randstring
 from django.core.urlresolvers import reverse
 from seahub.constants import DEFAULT_USER, GUEST_USER
 from seahub.test_utils import BaseTestCase
-from seahub.base.templatetags.seahub_tags import email2nickname
+from seahub.base.templatetags.seahub_tags import email2nickname, \
+        email2contact_email
 from seahub.profile.models import DetailedProfile
 from seahub.utils.file_size import get_file_size_unit
 
@@ -242,6 +243,33 @@ class AdminUserTest(BaseTestCase):
         assert json_resp['name'] == tmp_name
 
         assert email2nickname(self.tmp_email) == tmp_name
+
+    def test_update_contact_email(self):
+
+        self.login_as(self.admin)
+
+        # change user name
+        tmp_email = randstring(10) + '@seafile.test'
+        data = {'contact_email': tmp_email}
+        resp = self.client.put(self.url, json.dumps(data),
+                'application/json')
+        json_resp = json.loads(resp.content)
+        self.assertEqual(200, resp.status_code)
+        assert json_resp['contact_email'] == tmp_email
+
+        assert email2contact_email(self.tmp_email) == tmp_email
+
+    def test_update_contact_email_with_invalid(self):
+        self.login_as(self.admin)
+
+        # change user name
+        tmp_email = randstring(10)
+        data = {'contact_email': tmp_email}
+        resp = self.client.put(self.url, json.dumps(data),
+                'application/json')
+        json_resp = json.loads(resp.content)
+        self.assertEqual(400, resp.status_code)
+
 
     def test_update_department(self):
 

@@ -76,7 +76,7 @@
         <br/>
         {% endif %}
 
-        <input type="submit" value="{% trans "Submit" %}" class="submit" />
+        <input type="submit" value="{% trans "Submit" %}" class="submit vh" />
     </form>
 </div>
 
@@ -221,7 +221,7 @@ $('#user-avatar-input').change(function() {
     $('#user-avatar-form').submit();
 });
 
-$('#user-basic-info .submit').css({'margin-left': $('#user-basic-info label').outerWidth(true)});
+$('#user-basic-info .submit').css({'margin-left': $('#user-basic-info label').outerWidth(true)}).removeClass('vh');
 
 $('#account-delete-btn').click(function () {
     var title = "{% trans "Delete Account" %}",

@@ -11,15 +11,19 @@
 <form action="{% url 'notification_add' %}" method="post" class="hide" id="add-n-form">{% csrf_token %}
     <h3>{% trans "Add new notification" %}</h3>
     <textarea name="message" class="textarea"></textarea><br />
+    <p class="error hide"></p>
     <input type="submit" value="{% trans "Submit" %}" class="submit" />
 </form>
 
 {% if notes %}
 <table>
-    <tr>
-        <th width="75%">{% trans "Notification Detail" %}</th>
-        <th width="25%">{% trans "Operations" %}</th>
-    </tr>
+    <thead>
+        <tr>
+            <th width="75%">{% trans "Notification Detail" %}</th>
+            <th width="25%">{% trans "Operations" %}</th>
+        </tr>
+    </thead>
+    <tbody>
     {% for note in notes %}
     <tr>
         <td>{{ note.message }}
@@ -28,12 +32,13 @@
         {% endif %}
         <td>
           {% if note.primary != 1 %}
-          <a href="#" data="{{ SITE_ROOT }}notification/set-primary/{{ note.id }}/" class="note-change-btn op vh">{% trans "Set to current" %}</a>
+          <a href="#" data-id="{{ note.id }}" class="set-cur-btn op vh">{% trans "Set to current" %}</a>
           {% endif %}
           <a href="#" data-url="{{ SITE_ROOT }}notification/delete/{{ note.id }}/" data-target="{{ note.message }}" class="note-delete-btn op vh">{% trans "Delete" %}</a>
         </td>
     </tr>
     {% endfor %}
+    </tbody>
 </table>
 {% else %}
 <p>{% trans "Empty" %}</p>
@@ -44,17 +49,25 @@
 <script type="text/javascript">
 $('#add-n').click(function() {
     $('#add-n-form').modal();
-    $('#simplemodal-container').css({'height':'auto'});
+    $('#simplemodal-container').css({'width':'auto', 'height':'auto'});
     return false;
+});
+$('#add-n-form').submit(function() {
+    var $form = $(this);
+    var msg = $.trim($('[name="message"]', $form).val());
+    if (!msg) {
+        $('.error', $form).html("{% trans "It is required." %}").show();
+        return false;
+    }
 });
 addConfirmTo($('.note-delete-btn'), {
     'title':"{% trans "Delete Notification" %}",
     'con':"{% trans "Are you sure you want to delete %s ?" %}"
 });
 
-$('.note-change-btn').click(function() {
-    window.location = $(this).attr('data');
-})
+$('.set-cur-btn').click(function() {
+    location.href = '{{ SITE_ROOT }}notification/set-primary/' + $(this).attr('data-id') + '/';
+});
 </script>
 {% endblock %}
  
