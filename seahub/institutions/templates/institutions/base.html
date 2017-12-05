@@ -1,12 +1,14 @@
 {% extends "base.html" %}
 {% load i18n %}
 
+{% block main_class %}d-flex ovhd{% endblock %}
+
 {% block admin_link %}
 <a href="{{ SITE_ROOT }}" title="{% trans "Exit admin panel" %}" class="item">{% trans "Exit admin panel" %}</a>
 {% endblock %}
 
 {% block main_content %}
-<div class="row">
+<div class="row flex-1 d-flex">
     <div class="side-nav side-tabnav col-md-3">
         <a href="#" title="{% trans "Close" %}" aria-label="{% trans "Close" %}" class="sf2-icon-x1 sf-popover-close op-icon hidden-md-up js-close-side-nav fright"></a>
         {% block left_panel %}
@@ -23,7 +25,7 @@
         {% endblock %}
     </div>
 
-    <div id="right-panel" class="col-md-9 col-md-offset-3">
+    <div id="right-panel" class="col-md-9 ov-auto flex-1">
         {% block right_panel %}{% endblock %}
     </div>
 </div>

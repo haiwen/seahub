@@ -23,7 +23,7 @@ define([
             this.$account = $('#account');
 
             var _this = this;
-            $('#my-info').click(function() {
+            $('.account-toggle').click(function() {
                 _this.toggle();
                 return false;
             });
@@ -49,7 +49,7 @@ define([
                     _this.$loadingTip.hide();
                     _this.$space.html(data['html']).removeClass('hide');
                 },
-                error: function (xhr, textStatus, errorThrown) {
+                error: function(xhr, textStatus, errorThrown) {
                     _this.$loadingTip.hide();
                     var err_msg;
                     if (xhr.responseText) {

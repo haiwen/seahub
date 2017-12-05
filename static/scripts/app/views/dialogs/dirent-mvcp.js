@@ -24,7 +24,7 @@ define([
             this.show_cur_repo = this.dirent.get('perm') == 'rw' ? true : false;
 
             this.render();
-            this.$el.modal({appendTo:'#main', autoResize:true, focus:false});
+            this.$el.modal({autoResize:true, focus:false});
             $('#simplemodal-container').css({'width':'auto', 'height':'auto'});
 
             if (this.show_cur_repo) {

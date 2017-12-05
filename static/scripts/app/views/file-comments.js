@@ -11,12 +11,12 @@ define([
     var View = Backbone.View.extend({
 
         id: 'file-comments',
-        className: 'right-side-panel',
+        className: 'comments-panel',
 
         template: _.template($('#file-comment-panel-tmpl').html()),
 
-        initialize: function() {
-            $("#main").append(this.$el);
+        initialize: function(options) {
+            this.dirView = options.dirView;
 
             this.collection = new Collection();
             this.listenTo(this.collection, 'add', this.addOne);
@@ -28,9 +28,6 @@ define([
                 if (e.which == 27) {
                     _this.hide();
                 }
-            });
-            $(window).resize(function() {
-                _this.setConHeight();
             });
         },
 
@@ -65,14 +62,21 @@ define([
                 'icon_url': options.icon_url,
                 'file_name': options.file_name
             });
-            this.$el.css({'right': 0});
-            this.setConHeight();
+
+            if ($('#' + this.id).length == 0) {
+                this.dirView.$mainCon.append(this.$el);
+                if (!this.$el.is(':visible')) {
+                    this.$el.show();
+                }
+            } else {
+                this.$el.show();
+            }
+
             this.getContent();
         },
 
         hide: function() {
-            this.$el.css({'right': '-400px'});
-            this.$el.empty();
+            this.$el.hide();
         },
 
         reset: function() {
@@ -176,15 +180,6 @@ define([
             });
 
             this.$listContainer.append(view.render().el);
-        },
-
-        setConHeight: function() {
-            $('.file-discussions-con', this.$el).css({
-                'max-height': $(window).height()
-                    - this.$el.offset().top
-                    - $('.file-discussions-hd', this.$el).outerHeight(true)
-                    - $('.file-discussions-footer', this.$el).outerHeight(true)
-            });
         },
 
         scrollConToBottom: function() {

@@ -13,47 +13,57 @@ define([
     'use strict';
 
     var OrganizationView = Backbone.View.extend({
-        id: 'organization',
+        el: '.main-panel',
 
         template: _.template($('#organization-repos-tmpl').html()),
-        reposHdTemplate: _.template($('#shared-repos-hd-tmpl').html()),
-        mobileReposHdTemplate: _.template($('#shared-repos-hd-mobile-tmpl').html()),
+        toolbarTemplate: _.template($('#org-repos-toolbar-tmpl').html()),
+        theadTemplate: _.template($('#shared-repos-hd-tmpl').html()),
+        theadMobileTemplate: _.template($('#shared-repos-hd-mobile-tmpl').html()),
 
         initialize: function(options) {
             this.repos = new PubRepoCollection();
             this.listenTo(this.repos, 'add', this.addOne);
             this.listenTo(this.repos, 'reset', this.reset);
-            this.render();
         },
 
-        render: function() {
-            this.$el.html(this.template());
+        renderToolbar: function() {
+            this.$toolbar = $('<div class="cur-view-toolbar" id="org-repos-toolbar"></div>').html(this.toolbarTemplate());
+            this.$('.common-toolbar').before(this.$toolbar);
+
+            this.dropdown = new DropdownView({
+                el: this.$('#org-repos-toolbar .js-add-pub-lib-dropdown')
+            });
+        },
+
+        renderMainCon: function() {
+            this.$mainCon = $('<div class="main-panel-main" id="org-repos"></div>').html(this.template());
+            this.$el.append(this.$mainCon);
+
             this.$table = this.$('table');
             this.$tableHead = $('thead', this.$table);
             this.$tableBody = $('tbody', this.$table);
             this.$loadingTip = this.$('.loading-tip');
             this.$emptyTip = this.$('.empty-tips');
-
-            this.dropdown = new DropdownView({
-                el: this.$('.js-add-pub-lib-dropdown'),
-                right: '0px'
-            });
+            return this;
         },
 
         show: function() {
-            $("#right-panel").html(this.$el);
+            this.renderToolbar();
+            this.renderMainCon();
+
             this.showRepoList();
         },
 
         hide: function() {
-            this.$el.detach();
+            this.$toolbar.detach();
+            this.$mainCon.detach();
         },
 
         events: {
-            'click .share-existing': 'addRepo',
-            'click .create-new': 'createRepo',
-            'click .by-name': 'sortByName',
-            'click .by-time': 'sortByTime'
+            'click #org-repos-toolbar .share-existing': 'addRepo',
+            'click #org-repos-toolbar .create-new': 'createRepo',
+            'click #org-repos .by-name': 'sortByName',
+            'click #org-repos .by-time': 'sortByTime'
         },
 
         createRepo: function() {
@@ -77,8 +87,8 @@ define([
             }
         },
 
-        renderReposHd: function() {
-            var tmpl = $(window).width() >= 768 ? this.reposHdTemplate : this.mobileReposHdTemplate;
+        renderThead: function() {
+            var tmpl = $(window).width() >= 768 ? this.theadTemplate : this.theadMobileTemplate;
             this.$tableHead.html(tmpl());
         },
 
@@ -87,7 +97,7 @@ define([
             this.$loadingTip.hide();
             if (this.repos.length) {
                 this.$emptyTip.hide();
-                this.renderReposHd();
+                this.renderThead();
                 this.$tableBody.empty();
 
                 // sort

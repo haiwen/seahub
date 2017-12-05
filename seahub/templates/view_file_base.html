@@ -8,10 +8,15 @@
 {% block extra_style %}
 <link rel="stylesheet" type="text/css" href="{{ MEDIA_URL }}css/file_view_extra.css" />
 <style type="text/css">
+#main {
+    overflow:visible;
+}
 #view-hd {
     width:100%;
     padding:0 15px 12px;
     border-bottom:1px solid #c9c9c9;
+    display:flex;
+    justify-content:space-between;
 }
 #file-view {
     border:none;
@@ -28,11 +33,10 @@
 {% endblock %}
 
 {% block header_css_class %}hide{% endblock %}
-{% block main_css_class %}{% endblock %} {# remove the padding-top css #}
 
 {% block main_content %}
-    <div id="view-hd" class="ovhd">
-        <div class="fleft">
+    <div id="view-hd">
+        <div>
             <h2 class="file-view-hd">
                 <span class="vam">{{ filename }}</span>
                 {% if is_starred %}
@@ -56,7 +60,7 @@
             </div>
         </div>
 
-        <div class="sf-btn-group file-view-op fright">
+        <div class="sf-btn-group file-view-op">
             <a class="sf-btn-group-btn sf-btn-group-btn-first sf-btn-link op-icon sf2-icon-folder" href="{% url 'view_common_lib_dir' repo.id parent_dir|strip_slash %}" title="{% trans "Open parent folder" %}"></a>
 
             {% if can_lock_unlock_file %}

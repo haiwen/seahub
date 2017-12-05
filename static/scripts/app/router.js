@@ -58,7 +58,7 @@ define([
 
         initialize: function() {
             $('.initial-loading').hide();
-            $('.main-content').show();
+            $('.main-content').removeClass('hide');
 
             Common.prepareApiCsrf();
             Common.initLocale();
@@ -87,8 +87,6 @@ define([
             app.ui.accountView = this.accountView = new AccountView();
             app.pageOptions.sort_mode = Cookies.get('sort_mode') || 'name_up';
 
-            this.currentView = this.myReposView;
-
             var _this = this;
             var originalWindowWidth = $(window).width();
             $(window).resize(function() {
@@ -96,6 +94,7 @@ define([
                 if (_this.currentView.reset) {
                     if ((originalWindowWidth < 768 && curWidth >= 768 ) ||
                         (originalWindowWidth >= 768 && curWidth < 768)) {
+                        // Todo
                         _this.currentView.reset();
                     }
                 }
@@ -128,12 +127,13 @@ define([
         },
 
         switchCurrentView: function(newView) {
-            if (this.currentView != newView) {
-                this.currentView.hide();
+            if (!this.currentView) {
                 this.currentView = newView;
-            }
-            if (app.ui.groupDiscussions) {
-                app.ui.groupDiscussions.hide();
+            } else {
+                if (this.currentView != newView) {
+                    this.currentView.hide();
+                    this.currentView = newView;
+                }
             }
         },
 

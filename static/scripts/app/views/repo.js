@@ -74,7 +74,7 @@ define([
         clickItem: function(e) {
             var target =  e.target || event.srcElement;
             if (this.$('td').is(target) &&
-                $('#repo-details').css('right') == '0px') { // after `#repo-details` is shown
+                this.myReposView.repoDetailsView.$el.is(':visible')) {
                 this.viewDetails();
             }
         },
