@@ -88,9 +88,14 @@ class SharedRepos(APIView):
             if repo.share_type == 'group':
                 group = ccnet_api.get_group(repo.group_id)
                 if not group:
-                    seafile_api.unset_group_repo(repo.repo_id,
-                            repo.group_id, username)
+                    if is_org_context(request):
+                        seafile_api.del_org_group_repo(repo.repo_id,
+                                org_id, repo.group_id)
+                    else:
+                        seafile_api.unset_group_repo(repo.repo_id,
+                                repo.group_id, username)
                     continue
+
                 result['group_id'] = repo.group_id
                 result['group_name'] = group.group_name
                 gids.append(repo.group_id)

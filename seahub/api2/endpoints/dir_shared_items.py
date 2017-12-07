@@ -101,17 +101,30 @@ class DirSharedItemsEndpoint(APIView):
                 share_items = seafile_api.get_shared_groups_for_subdir(repo_id,
                                                                        path, repo_owner)
         ret = []
+        username = request.user.username
         # change is_admin to True if user in admin groups.
         admin_groups = ExtraGroupsSharePermission.objects.get_admin_groups_by_repo(repo_id)
         for item in share_items:
+
+            group_id = item.group_id
+            group = ccnet_api.get_group(group_id)
+            if not group:
+                if is_org_context(request):
+                    seafile_api.del_org_group_repo(repo_id,
+                            org_id, group_id)
+                else:
+                    seafile_api.unset_group_repo(repo_id,
+                            group_id, username)
+                continue
+
             ret.append({
                 "share_type": "group",
                 "group_info": {
-                    "id": item.group_id,
-                    "name": seaserv.get_group(item.group_id).group_name,
+                    "id": group_id,
+                    "name": group.group_name,
                 },
                 "permission": item.perm,
-                "is_admin": item.group_id in admin_groups,
+                "is_admin": group_id in admin_groups,
             })
         return ret
 
