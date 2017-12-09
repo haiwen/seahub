@@ -921,7 +921,14 @@ def demo(request):
     """
     Login as demo account.
     """
-    user = User.objects.get(email=settings.CLOUD_DEMO_USER)
+
+    try:
+        user = User.objects.get(email=settings.CLOUD_DEMO_USER)
+    except User.DoesNotExist:
+        user = User.objects.create_user(settings.CLOUD_DEMO_USER, is_active=True)
+        user.set_unusable_password()
+        user.save()
+
     for backend in get_backends():
         user.backend = "%s.%s" % (backend.__module__, backend.__class__.__name__)
 
