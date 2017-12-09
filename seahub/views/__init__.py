@@ -269,6 +269,9 @@ def get_unencry_rw_repos_by_user(request):
     accessible_repos = []
 
     for r in owned_repos:
+        if r.is_virtual:
+            continue
+
         if not has_repo(accessible_repos, r) and not r.encrypted:
             accessible_repos.append(r)
 
