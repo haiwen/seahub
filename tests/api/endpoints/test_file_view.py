@@ -9,6 +9,7 @@ from django.core.urlresolvers import reverse
 
 from seahub.test_utils import BaseTestCase
 from seahub.utils import check_filename_with_rename
+from seahub.utils.file_revisions import get_all_file_revisions
 
 from tests.common.utils import randstring
 
@@ -484,8 +485,7 @@ class FileViewTest(BaseTestCase):
         new_file_path = '/' + new_name
 
         # get file revisions
-        commits = seafile_api.get_file_revisions(
-                self.repo_id, new_file_path, -1, -1, 100)
+        commits = get_all_file_revisions(self.repo_id, new_file_path)
 
         # then revert file
         data = {
@@ -504,8 +504,7 @@ class FileViewTest(BaseTestCase):
         new_file_path = '/' + new_name
 
         # get file revisions
-        commits = seafile_api.get_file_revisions(
-                self.repo_id, new_file_path, -1, -1, 100)
+        commits = get_all_file_revisions(self.repo_id, new_file_path)
 
         # then revert file
         data = {
@@ -523,8 +522,7 @@ class FileViewTest(BaseTestCase):
         new_file_path = '/' + new_name
 
         # get file revisions
-        commits = seafile_api.get_file_revisions(
-                self.repo_id, new_file_path, -1, -1, 100)
+        commits = get_all_file_revisions(self.repo_id, new_file_path)
 
         self.share_repo_to_admin_with_r_permission()
         self.login_as(self.admin)

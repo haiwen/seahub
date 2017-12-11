@@ -70,6 +70,8 @@ from seahub.utils import gen_file_get_url, gen_token, gen_file_upload_url, \
     gen_shared_upload_link, convert_cmmt_desc_link, is_valid_dirent_name, \
     is_org_repo_creation_allowed, is_windows_operating_system, \
     get_no_duplicate_obj_name
+
+from seahub.utils.file_revisions import get_file_revisions_after_renamed
 from seahub.utils.devices import do_unlink_device
 from seahub.utils.repo import get_sub_repo_abbrev_origin_path, get_repo_owner
 from seahub.utils.star import star_file, unstar_file
@@ -2622,24 +2624,39 @@ class FileRevision(APIView):
         return get_repo_file(request, repo_id, obj_id, file_name, 'download')
 
 class FileHistory(APIView):
-    authentication_classes = (TokenAuthentication, )
+    authentication_classes = (TokenAuthentication,)
     permission_classes = (IsAuthenticated,)
-    throttle_classes = (UserRateThrottle, )
+    throttle_classes = (UserRateThrottle,)
 
     def get(self, request, repo_id, format=None):
+        """ Get file history.
+        """
+
         path = request.GET.get('p', None)
         if path is None:
-            return api_error(status.HTTP_400_BAD_REQUEST, 'Path is missing.')
+            error_msg = 'p invalid.'
+            return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
+
+        repo = seafile_api.get_repo(repo_id)
+        if not repo:
+            error_msg = 'Library %s not found.' % repo_id
+            return api_error(status.HTTP_404_NOT_FOUND, error_msg)
+
+        file_id = seafile_api.get_file_id_by_path(repo_id, path)
+        if not file_id:
+            error_msg = 'File %s not found.' % path
+            return api_error(status.HTTP_404_NOT_FOUND, error_msg)
+
+        if check_folder_permission(request, repo_id, path) != 'rw':
+            error_msg = 'Permission denied.'
+            return api_error(status.HTTP_403_FORBIDDEN, error_msg)
 
         try:
-            commits = seafserv_threaded_rpc.list_file_revisions(repo_id, path,
-                                                                -1, -1)
-        except SearpcError as e:
+            commits = get_file_revisions_after_renamed(repo_id, path)
+        except Exception as e:
             logger.error(e)
-            return api_error(status.HTTP_500_INTERNAL_SERVER_ERROR, "Internal error")
-
-        if not commits:
-            return api_error(status.HTTP_404_NOT_FOUND, 'File not found.')
+            error_msg = 'Internal Server Error'
+            return api_error(status.HTTP_500_INTERNAL_SERVER_ERROR, error_msg)
 
         for commit in commits:
             creator_name = commit.creator_name
@@ -2651,7 +2668,8 @@ class FileHistory(APIView):
 
             commit._dict['user_info'] = user_info
 
-        return HttpResponse(json.dumps({"commits": commits}, cls=SearpcObjEncoder), status=200, content_type=json_content_type)
+        return HttpResponse(json.dumps({"commits": commits},
+            cls=SearpcObjEncoder), status=200, content_type=json_content_type)
 
 class FileSharedLinkView(APIView):
     """
@@ -3242,8 +3260,7 @@ class SharedFileDetailView(APIView):
         file_id = None
         try:
             file_id = seafile_api.get_file_id_by_path(repo_id, path)
-            commits = seafserv_threaded_rpc.list_file_revisions(repo_id, path,
-                                                                -1, -1)
+            commits = get_file_revisions_after_renamed(repo_id, path)
             c = commits[0]
         except SearpcError, e:
             return api_error(HTTP_520_OPERATION_FAILED,

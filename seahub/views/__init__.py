@@ -823,27 +823,28 @@ def validate_filename(request):
     content_type = 'application/json; charset=utf-8'
     return HttpResponse(json.dumps(result), content_type=content_type)
 
-def render_file_revisions (request, repo_id):
-    """List all history versions of a file."""
-
-    days_str = request.GET.get('days', '')
-    try:
-        days = int(days_str)
-    except ValueError:
-        days = 7
-
-    path = request.GET.get('p', '/')
-    if path[-1] == '/':
-        path = path[:-1]
-    u_filename = os.path.basename(path)
-
-    if not path:
-        return render_error(request)
-
+@login_required
+def file_revisions(request, repo_id):
+    """List file revisions in file version history page.
+    """
     repo = get_repo(repo_id)
     if not repo:
         error_msg = _(u"Library does not exist")
         return render_error(request, error_msg)
+
+    # perm check
+    if not check_folder_permission(request, repo_id, '/'):
+        error_msg = _(u"Permission denied.")
+        return render_error(request, error_msg)
+
+    path = request.GET.get('p', '/')
+    if not path:
+        return render_error(request)
+
+    if path[-1] == '/':
+        path = path[:-1]
+
+    u_filename = os.path.basename(path)
 
     filetype = get_file_type_and_ext(u_filename)[0].lower()
     if filetype == 'text' or filetype == 'markdown':
@@ -851,26 +852,11 @@ def render_file_revisions (request, repo_id):
     else:
         can_compare = False
 
-    try:
-        commits = seafile_api.get_file_revisions(repo_id, path, -1, -1, days)
-    except SearpcError, e:
-        logger.error(e.msg)
-        return render_error(request, e.msg)
-
-    if not commits:
-        return render_error(request, _(u'No revisions found'))
-
     # Check whether user is repo owner
     if validate_owner(request, repo_id):
         is_owner = True
     else:
         is_owner = False
-
-    cur_path = path
-    for commit in commits:
-        commit.path = cur_path
-        if commit.rev_renamed_old_path:
-            cur_path = '/' + commit.rev_renamed_old_path
 
     zipped = gen_path_link(path, repo.name)
 
@@ -882,8 +868,6 @@ def render_file_revisions (request, repo_id):
         (is_locked and not locked_by_me):
         can_revert_file = False
 
-    commits[0].is_first_commit = True
-
     # for 'go back'
     referer = request.GET.get('referer', '')
 
@@ -892,27 +876,12 @@ def render_file_revisions (request, repo_id):
         'path': path,
         'u_filename': u_filename,
         'zipped': zipped,
-        'commits': commits,
         'is_owner': is_owner,
         'can_compare': can_compare,
         'can_revert_file': can_revert_file,
-        'days': days,
         'referer': referer,
         }, context_instance=RequestContext(request))
 
-@login_required
-def file_revisions(request, repo_id):
-    """List file revisions in file version history page.
-    """
-    repo = get_repo(repo_id)
-    if not repo:
-        raise Http404
-
-    # perm check
-    if check_folder_permission(request, repo_id, '/') is None:
-        raise Http404
-
-    return render_file_revisions(request, repo_id)
 
 def demo(request):
     """
