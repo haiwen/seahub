@@ -3,7 +3,6 @@
 
 {% block sub_title %}{% trans "Log In" %} - {% endblock %}
 {% block header_css_class %}hide{% endblock %}
-{% block main_css_class %}{% endblock %}
 {% block extra_style %}
 <style type="text/css">
 html, body, #wrapper { height:100%; }
@@ -11,9 +10,6 @@ html, body, #wrapper { height:100%; }
     background: url('{{ MEDIA_URL }}{{login_bg_image_path}}') center top no-repeat scroll;
     background-size: cover;
     padding-top:1px;
-}
-#main {
-    min-height:0;
 }
 #lang {
     margin:0;

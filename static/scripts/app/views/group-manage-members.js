@@ -22,7 +22,6 @@ define([
             // for long group name
             this.$('.op-target').css({'max-width': 270});
             this.$el.modal({
-                appendTo: '#main',
                 focus: false,
                 containerCss: {
                     'width': 560

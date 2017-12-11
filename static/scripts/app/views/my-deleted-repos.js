@@ -9,11 +9,11 @@ define([
     'use strict';
 
     var ReposView = Backbone.View.extend({
-        id: "my-deleted-repos",
+        el: ".main-panel",
 
         template: _.template($('#my-deleted-repos-tmpl').html()),
-        reposHdTemplate: _.template($('#my-deleted-repos-hd-tmpl').html()),
-        mobileReposHdTemplate: _.template($('#my-deleted-repos-hd-mobile-tmpl').html()),
+        theadTemplate: _.template($('#my-deleted-repos-hd-tmpl').html()),
+        theadMobileTemplate: _.template($('#my-deleted-repos-hd-mobile-tmpl').html()),
 
         events: {
         },
@@ -22,12 +22,12 @@ define([
             this.repos = new RepoCollection();
             this.listenTo(this.repos, 'add', this.addOne);
             this.listenTo(this.repos, 'reset', this.reset);
-
-            this.render();
         },
 
-        render: function() {
-            this.$el.html(this.template());
+        renderMainCon: function() {
+            this.$mainCon = $('<div class="main-panel-main" id="my-deleted-repos"></div>').html(this.template());
+            this.$el.append(this.$mainCon);
+
             this.$table = this.$('table');
             this.$tableHead = $('thead', this.$table);
             this.$tableBody = $('tbody', this.$table);
@@ -42,8 +42,8 @@ define([
             this.$tableBody.append(view.render().el);
         },
 
-        renderReposHd: function() {
-            var tmpl = $(window).width() >= 768 ? this.reposHdTemplate : this.mobileReposHdTemplate;
+        renderThead: function() {
+            var tmpl = $(window).width() >= 768 ? this.theadTemplate : this.theadMobileTemplate;
             this.$tableHead.html(tmpl());
         },
 
@@ -52,7 +52,7 @@ define([
             this.$loadingTip.hide();
             if (this.repos.length) {
                 this.$emptyTip.hide();
-                this.renderReposHd();
+                this.renderThead();
                 this.$tableBody.empty();
 
                 this.repos.each(this.addOne, this);
@@ -91,12 +91,12 @@ define([
         },
 
         show: function() {
-            $("#right-panel").html(this.$el);
+            this.renderMainCon();
             this.showRepos();
         },
 
         hide: function() {
-            this.$el.detach();
+            this.$mainCon.detach();
         }
 
     });

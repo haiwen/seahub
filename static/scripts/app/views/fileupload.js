@@ -93,7 +93,7 @@ define([
             })
             .bind('fileuploadadd', function(e, data) {
                 // for drag & drop
-                if (!dirView.$el.is(':visible')) {
+                if (!$('#dir-view').is(':visible')) {
                     return false;
                 }
                 if (dirents.user_perm && dirents.user_perm != 'rw') {

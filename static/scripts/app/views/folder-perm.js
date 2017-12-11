@@ -31,7 +31,6 @@ define([
                 });
             }
             this.$el.modal({
-                appendTo: "#main",
                 focus: false
             });
             if ($(window).width() >= 768) {

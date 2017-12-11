@@ -339,7 +339,7 @@ define([
             var $yesBtn = $('#confirm-yes');
 
             $cont.html('<h3>' + title + '</h3><p>' + content + '</p>');
-            $popup.modal({appendTo: '#main'});
+            $popup.modal();
             $('#simplemodal-container').css({'height':'auto'});
 
             $yesBtn.click(yesCallback);
@@ -360,7 +360,7 @@ define([
             });
 
             $cont.html(html);
-            $popup.modal({appendTo: '#main'});
+            $popup.modal();
             $('#simplemodal-container').css({'height':'auto'});
 
             $yesBtn.click(function() {
@@ -379,7 +379,7 @@ define([
                 $('.messages').html('<li class="' + type + '">' + this.HTMLescape(con) + '</li>');
             } else {
                 var html = '<ul class="messages"><li class="' + type + '">' + this.HTMLescape(con) + '</li></ul>';
-                $('#main').append(html);
+                $('#wrapper').append(html);
             }
             $('.messages').css({'left':($(window).width() - $('.messages').width())/2, 'top':10}).removeClass('hide');
             setTimeout(function() { $('.messages').addClass('hide'); }, time);

@@ -122,8 +122,8 @@ define([
                     },
                     success: function() {
                         $.modal.close();
+                        _this.groupView.updateName(new_name);
                         app.ui.sideNavView.updateGroups();
-                        _this.groupView.renderGroupTop();
                     },
                     error: function(xhr) {
                         var error_msg;
@@ -218,9 +218,13 @@ define([
                 data: {
                     'wiki_enabled': wiki_enabled
                 },
-                success: function() {
+                success: function(data) {
                     _this.hide();
-                    _this.groupView.renderGroupTop();
+                    _this.groupView.group = data;
+                    _this.groupView.renderToolbar2({
+                        'id': data.id,
+                        'wiki_enabled': data.wiki_enabled
+                    });
                 },
                 error: function(xhr) {
                     var error_msg;
@@ -345,7 +349,7 @@ define([
                     url: Common.getUrl({
                         'name': 'group_member',
                         'group_id': _this.groupView.group.id,
-                        'email': encodeURIComponent(app.pageOptions.username),
+                        'email': encodeURIComponent(app.pageOptions.username)
                     }),
                     type: 'delete',
                     dataType: 'json',

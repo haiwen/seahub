@@ -10,7 +10,7 @@ define([
 
     var View = Backbone.View.extend({
         id: 'group-discussions',
-        className: 'right-side-panel',
+        className: 'comments-panel',
 
         template:  _.template($('#group-discussions-tmpl').html()),
 
@@ -22,9 +22,6 @@ define([
             this.listenTo(this.collection, 'reset', this.reset);
 
             this.render();
-            $("#main").append(this.$el);
-
-            app.ui.groupDiscussions = this;
 
             var _this = this;
             $(document).keydown(function(e) {
@@ -32,10 +29,6 @@ define([
                 if (e.which == 27) {
                     _this.hide();
                 }
-            });
-
-            $(window).resize(function() {
-                _this.setConMaxHeight();
             });
         },
 
@@ -83,6 +76,7 @@ define([
         render: function() {
             this.$el.html(this.template());
 
+            this.$con = this.$('#group-discussions-con');
             this.$loadingTip = this.$('.loading-tip');
             this.$listContainer = this.$('#group-discussion-list');
             this.$emptyTip = this.$('.no-discussion-tip');
@@ -128,38 +122,40 @@ define([
                 }
             });
 
-            this.$(".msg-input").focus();
-            app.router.navigate('group/' + this.groupView.group.id + '/discussions/');
-        },
-
-        // set max-height for '.sf-popover-con'
-        setConMaxHeight: function() {
-            this.$('.group-discussions-con').css({
-                'height': $(window).height() - this.$el.offset().top
-                    - this.$('.group-discussions-hd').outerHeight(true)
-                    - this.$('.group-discussions-footer').outerHeight(true)
-            });
+            //this.$(".msg-input").focus();
+            //app.router.navigate('group/' + this.groupView.group.id + '/discussions/');
         },
 
         hide: function() {
-            this.$el.css({'right': '-400px'});
+            this.$el.hide();
         },
 
         close: function() {
-            app.router.navigate('group/' + this.groupView.group.id + '/');
+            //app.router.navigate('group/' + this.groupView.group.id + '/');
             this.hide();
             return false;
         },
 
         toggle: function() {
-            this.show();
+            if (this.$el.is(':visible')) {
+                this.hide();
+            } else {
+                this.show();
+            }
             return false;
         },
 
         show: function() {
+            if (!$('#' + this.id).length) {
+                this.groupView.$mainCon.append(this.$el);
+                if (!this.$el.is(':visible')) { // `this.hide` was called last time
+                    this.$el.show();
+                }
+            } else {
+                this.$el.show();
+            }
+
             this.showContent();
-            this.$el.css({'right': '0px'});
-            this.setConMaxHeight();
         },
 
         replyTo: function(to_user) {
@@ -189,7 +185,7 @@ define([
                         sumHeight += $(this).outerHeight(true);
                     });
                     // scroll
-                    _this.$('.group-discussions-con').scrollTop(sumHeight - 50); // 50: keep at least 50px gap from the top
+                    _this.$con.scrollTop(sumHeight - 50); // 50: keep at least 50px gap from the top
                 },
                 error: function(collection, response, opts) {
                     var err_msg;
@@ -254,7 +250,7 @@ define([
 
         // scroll to the bottom
         scrollConToBottom: function() {
-            var $el = this.$('.group-discussions-con');
+            var $el = this.$con;
             $el.scrollTop($el[0].scrollHeight - $el[0].clientHeight);
         }
 

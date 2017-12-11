@@ -1,5 +1,7 @@
 {% load i18n %}
-                <form id="top-search-form" method="get" action="{% url 'search' %}" class="search-form fleft">
+                <a href="{% url 'search' %}" class="hidden-md-up top-search-link"><span class="icon-search"></span></a>
+
+                <form id="top-search-form" method="get" action="{% url 'search' %}" class="hidden-sm-down search-form">
                     {% if search_repo_id %}
                     <input type="text" class="search-input" name="q" placeholder="{% if search_wiki %}{% trans "Search files in this wiki" %}{% else %}{% trans "Search files in this library" %}{% endif %}" title="{% if search_wiki %}{% trans "Search files in this wiki" %}{% else %}{% trans "Search files in this library" %}{% endif %}" aria-label="{% if search_wiki %}{% trans "Search files in this wiki" %}{% else %}{% trans "Search files in this library" %}{% endif %}" value="{{ keyword }}" />
                     <input type="hidden" name="search_repo" value="{{ search_repo_id }}" />
@@ -69,7 +71,7 @@
                                 <span class="vam">{% trans "markdown" %}</span>
                             </label>
                             <br/>
-                            <input type="text" value="{{ input_fileexts }}" name="input_fexts" placeholder="{% trans "Input file extensions here, separate with ','" %}" title="{% trans "Input file extensions here, separate with ','" %}" aria-label="{% trans "Input file extensions here, separate with ','" %}" class="fileext-input" />
+                            <input type="text" value="{{ input_fileexts }}" name="input_fexts" placeholder="{% trans "Input file extensions here, separate with ','" %}" title="{% trans "Input file extensions here, separate with ','" %}" aria-label="{% trans "Input file extensions here, separate with ','" %}" class="input fileext-input" />
                             <p class="error hide">{% trans "Please select at least one file type or input at least one file extension" %}</p>
                         </div>
                     </div>
