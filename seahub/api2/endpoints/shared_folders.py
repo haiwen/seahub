@@ -68,6 +68,16 @@ class SharedFolders(APIView):
 
             if repo.share_type == 'group':
                 group = ccnet_api.get_group(repo.group_id)
+
+                if not group:
+                    if is_org_context(request):
+                        seafile_api.org_unshare_subdir_for_group(org_id,
+                                repo.repo_id, repo.origin_path, username, repo.group_id)
+                    else:
+                        seafile_api.unshare_subdir_for_group(
+                                repo.repo_id, repo.origin_path, username, repo.group_id)
+                    continue
+
                 result['group_id'] = repo.group_id
                 result['group_name'] = group.group_name
 
