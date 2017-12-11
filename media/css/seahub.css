@@ -3057,6 +3057,7 @@ button.sf-dropdown-toggle:focus {
     }
 }
 #search-form,
+#search-link-form,
 #search-user-form,
 #search-group-form,
 #search-repo-form {
@@ -3161,11 +3162,13 @@ button.sf-dropdown-toggle:focus {
 }
 #search-repo-form label,
 #search-group-form label,
+#search-link-form label,
 #search-user-form label {
     width:3.5em;
 }
 #search-repo-form .submit,
 #search-group-form .submit,
+#search-link-form .submit,
 #search-user-form .submit {
     margin-left:3.5em;
 }

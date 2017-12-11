@@ -1617,6 +1617,35 @@ def sys_upload_link_remove(request):
 
 @login_required
 @sys_staff_required
+def link_search(request):
+    sort_by = request.GET.get('sort_by', 'time_up')
+    token = request.GET.get('token', '')
+
+    if sort_by == 'time_down':
+        publinks = FileShare.objects.filter(token__startswith=token).order_by('ctime')
+    elif sort_by == 'count_up':
+        publinks = FileShare.objects.filter(token__startswith=token).order_by('-view_cnt')
+    elif sort_by == 'count_down':
+        publinks = FileShare.objects.filter(token__startswith=token).order_by('view_cnt')
+    else:
+        publinks = FileShare.objects.filter(token__startswith=token).order_by('-ctime')
+
+    for l in publinks:
+        if l.is_file_share_link():
+            l.name = os.path.basename(l.path)
+        else:
+            l.name = os.path.dirname(l.path)
+
+    return render_to_response(
+        'sysadmin/link_search.html', {
+            'publinks': publinks,
+            'sort_by': sort_by,
+            'token': token
+        },
+        context_instance=RequestContext(request))
+
+@login_required
+@sys_staff_required
 def user_search(request):
     """Search a user.
     """

@@ -1,26 +1,22 @@
 {% extends "sysadmin/base.html" %}
-{% load i18n seahub_tags %}
+{% load seahub_tags i18n %}
 
 {% block cur_links %}tab-cur{% endblock %}
 
-{% block left_panel %}{{block.super}}
-<form action="{% url 'link_search' %}" method="get" class="side-search-form">
-    <input type="text" name="token" class="input" value="" placeholder="{% trans "Search links..." %}" />
-</form>
-{% endblock %}
-
 {% block right_panel %}
-    <div class="hd ovhd">
-        <ul class="tab-tabs-nav fleft">
-            <li class="tab ui-state-active">
-                <a href="{{ SITE_ROOT }}sys/publinkadmin/" class="a">{% trans "Download Links" %}</a>
-            </li>
-            <li class="tab">
-                <a href="{{ SITE_ROOT }}sys/uploadlinkadmin/" class="a">{% trans "Upload Links" %}</a>
-            </li>
-        </ul>
-    </div>
+<h3>{% trans "Search Link"%}</h3>
 
+<form id="search-link-form" method="get" action=".">
+  <label>{% trans "Token" %}</label><input type="text" name="token" class="input" value="{{token}}" /><br />
+  <input type="submit" value="{% trans "Submit" %}" class="submit" />
+</form>
+<div class="ovhd">
+    <h3 class="fleft">{% trans "Result"%}</h3>
+    <div class="js-op-for-selected fright hide">
+        <button id="set-quota-btn">{% trans "Set quota" %}</button>
+        <button id="delete-users-btn">{% trans "Delete users" %}</button>
+    </div>
+</div>
 {% if publinks %}
 <table>
     <tr>
@@ -42,41 +38,26 @@
     </tr>
     {% endfor %}
 </table>
-
-<div id="paginator">
-    {% if current_page != 1 %}
-    <a href="?page={{ prev_page }}&per_page={{ per_page }}&sort_by={{ sort_by }}">{% trans "Previous" %}</a>
-    {% endif %}
-    {% if page_next %}
-    <a href="?page={{ next_page }}&per_page={{ per_page }}&sort_by={{ sort_by }}">{% trans "Next" %}</a>
-    {% endif %}
-    {% if current_page != 1 or page_next %}
-    |
-    {% endif %}
-    <span>{% trans "Per page: " %}</span>
-    {% if per_page == 25 %}
-    <span> 25 </span>
-    {% else %}
-    <a href="?per_page=25&sort_by={{ sort_by }}" class="per-page">25</a>
-    {% endif %}
-    {% if per_page == 50 %}
-    <span> 50 </span>
-    {% else %}
-    <a href="?per_page=50&sort_by={{ sort_by }}" class="per-page">50</a>
-    {% endif %}
-    {% if per_page == 100 %}
-    <span> 100 </span>
-    {% else %}
-    <a href="?per_page=100&sort_by={{ sort_by }}" class="per-page">100</a>
-    {% endif %}
-</div>
 {% else %}
-<p>{% trans "Empty" %}</p>
+<p>{% trans "No result" %}</p>
 {% endif %}
+
+
+
+<div id="activate-msg" class="hide">
+    <p>{% trans "Activating..., please wait" %}</p>
+</div>
+
 {% endblock %}
 
 {% block extra_script %}
 <script type="text/javascript">
+$('#search-link-form').submit(function() {
+    if (!$.trim($('[name="token"]', $(this)).val())) {
+        return false;
+    }
+});
+
 $('.rm-link').click(function() {
     var _this = $(this);
     $.ajax({
@@ -95,20 +76,20 @@ $('.rm-link').click(function() {
 });
 
 var sort_by = '{{ sort_by }}';
-var url = '{% url 'sys_publink_admin' %}' + '?per_page={{ per_page }}';
+var url = '{% url 'link_search' %}';
 $(".by-time").on('click', function () {
     if (sort_by == 'time_down') {
-        location.href = url + '&sort_by=time_up';
+        location.href = url + '?sort_by=time_up&token={{token}}';
     } else {
-        location.href = url + '&sort_by=time_down';
+        location.href = url + '?sort_by=time_down&token={{token}}';
     }
     return false;
 });
 $(".by-count").on('click', function () {
     if (sort_by == 'count_down') {
-        location.href = url + '&sort_by=count_up';
+        location.href = url + '?sort_by=count_up&token={{token}}';
     } else {
-        location.href = url + '&sort_by=count_down';
+        location.href = url + '?sort_by=count_down&token={{token}}';
     }
     return false;
 });

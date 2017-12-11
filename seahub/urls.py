@@ -424,6 +424,7 @@ urlpatterns = patterns(
     url(r'^sys/publink/remove/$', sys_publink_remove, name='sys_publink_remove'),
     url(r'^sys/uploadlinkadmin/$', sys_upload_link_admin, name='sys_upload_link_admin'),
     url(r'^sys/uploadlink/remove/$', sys_upload_link_remove, name='sys_upload_link_remove'),
+    url(r'^sys/link-search/$', link_search, name="link_search"),
     url(r'^sys/notificationadmin/', notification_list, name='notification_list'),
     url(r'^sys/invitationadmin/$', sys_invitation_admin, name='sys_invitation_admin'),
     url(r'^sys/invitationadmin/remove/$', sys_invitation_remove, name='sys_invitation_remove'),
