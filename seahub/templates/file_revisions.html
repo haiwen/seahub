@@ -176,15 +176,14 @@ var get_file_revisions = function(path, commit_id) {
 
                     $tbodyContainer.append($(tmpl(render_data)));
                     is_first_commit = false;
-
-                    if (next_start_commit) {
-                        $history_more_btn.removeClass('hide');
-                    } else {
-                        $history_more_btn.addClass('hide');
-                    }
                 });
+                if (next_start_commit) {
+                    $history_more_btn.removeClass('hide');
+                } else {
+                    $history_more_btn.addClass('hide');
+                }
             } else if (next_start_commit) {
-                var path = (rev_renamed_old_path == undefined) ? file_path : rev_renamed_old_path;
+                var path = rev_renamed_old_path ? rev_renamed_old_path : file_path;
                 get_file_revisions(path, next_start_commit);
             }
 
@@ -203,12 +202,14 @@ var get_file_revisions = function(path, commit_id) {
 };
 
 // get first batch of file revisions
+// seahub web api will use repo's first head commit_id
+// if no commit_id parameter passed
 get_file_revisions(file_path);
 
 $('#history-more-btn').click(function() {
     // get more batch of file revisions
     // next_start_commit = resp.next_start_commit;
-    var path = (rev_renamed_old_path == undefined) ? file_path : rev_renamed_old_path;
+    var path = rev_renamed_old_path ? rev_renamed_old_path : file_path;
     get_file_revisions(path, next_start_commit);
 });
 

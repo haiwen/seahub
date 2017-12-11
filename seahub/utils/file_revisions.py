@@ -4,7 +4,7 @@ import time
 from seaserv import seafile_api
 from seahub.settings import GET_FILE_HISTORY_TIMEOUT
 
-def get_file_revisions_within_limit(repo_id, path, commit_id=None, limit=100):
+def get_file_revisions_within_limit(repo_id, path, commit_id=None, limit=50):
     if not commit_id:
         repo = seafile_api.get_repo(repo_id)
         commit_id = repo.head_cmmt_id
@@ -23,7 +23,7 @@ def get_file_revisions_after_renamed(repo_id, path):
     keep_on_search = True
     while keep_on_search:
         file_revisions = seafile_api.get_file_revisions(repo_id,
-                commit_id, path, 100)
+                commit_id, path, 50)
 
         all_file_revisions += file_revisions[0:-1]
 

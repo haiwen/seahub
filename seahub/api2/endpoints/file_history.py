@@ -88,11 +88,11 @@ class FileHistoryView(APIView):
             return api_error(status.HTTP_403_FORBIDDEN, error_msg)
 
         # get file history
-        limit = request.GET.get('limit', 15)
+        limit = request.GET.get('limit', 50)
         try:
-            limit = 100 if int(limit) < 1 else int(limit)
+            limit = 50 if int(limit) < 1 else int(limit)
         except ValueError:
-            limit = 100
+            limit = 50
 
         try:
             file_revisions, next_start_commit = get_file_revisions_within_limit(
