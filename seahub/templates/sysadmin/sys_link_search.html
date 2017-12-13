@@ -7,7 +7,9 @@
 <h3>{% trans "Search Link"%}</h3>
 
 <form id="search-link-form" method="get" action=".">
-    <label>{% trans "Token" %}</label><input type="text" name="token" class="input" value="{{token}}" placeholder="{% trans "please input at least 3 characters" %}" title="{% trans "please input at least 3 characters" %}" /><br />
+    <p class="tip">{% trans "Tip: please input at least 3 characters." %}</p>
+    <label>{% trans "Token" %}</label><br />
+    <input type="text" name="token" class="input" value="{{token}}" /><br />
     <input type="submit" value="{% trans "Submit" %}" class="submit" />
 </form>
 
@@ -37,8 +39,6 @@
 {% else %}
 <p>{% trans "No result" %}</p>
 {% endif %}
-
-
 
 {% endblock %}
 
