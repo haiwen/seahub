@@ -7,29 +7,25 @@
 <h3>{% trans "Search Link"%}</h3>
 
 <form id="search-link-form" method="get" action=".">
-  <label>{% trans "Token" %}</label><input type="text" name="token" class="input" value="{{token}}" /><br />
+    <label>{% trans "Token" %}</label><input type="text" name="token" class="input" value="{{token}}" placeholder="{% trans "please input at least 3 characters" %}" title="{% trans "please input at least 3 characters" %}"/><br />
   <input type="submit" value="{% trans "Submit" %}" class="submit" />
 </form>
 <div class="ovhd">
     <h3 class="fleft">{% trans "Result"%}</h3>
-    <div class="js-op-for-selected fright hide">
-        <button id="set-quota-btn">{% trans "Set quota" %}</button>
-        <button id="delete-users-btn">{% trans "Delete users" %}</button>
-    </div>
 </div>
 {% if publinks %}
 <table>
     <tr>
         <th width="25%">{% trans "Name" %}</th>
         <th width="25%">{% trans "Owner" %}</th>
-        <th width="20%"><a class="table-sort-op by-time" href="#">{% trans "Create At" %} {% if sort_by == 'time_down' %}<span class="sort-icon icon-caret-down"></span>{% elif sort_by == 'time_up' %}<span class="sort-icon icon-caret-up"></span>{% endif %}</a></th>
-        <th width="12%"><a class="table-sort-op by-count" href="#">{% trans "Count" %} {% if sort_by == 'count_down' %}<span class="sort-icon icon-caret-up"></span>{% elif sort_by == 'count_up' %}<span class="sort-icon icon-caret-down"></span>{% endif %}</a></th>
+        <th width="20%"><a href="#">{% trans "Create At" %}</a></th>
+        <th width="12%"><a href="#">{% trans "Count" %}</a></th>
         <th width="18%">{% trans "Operations" %}</th>
     </tr>
     {% for publink in publinks %}
     <tr>
         <td>{{ publink.name }}</td>
-        <td><a href="{{ SITE_ROOT }}useradmin/info/{{ publink.username }}/">{{ publink.username }}</a></td>
+        <td><a href="{{ SITE_ROOT }}useradmin/info/{{ publink.username|urlencode }}/">{{ publink.username }}</a></td>
         <td>{{ publink.ctime|translate_seahub_time }} </td>
         <td>{{ publink.view_cnt }}</td>
         <td>
@@ -44,16 +40,12 @@
 
 
 
-<div id="activate-msg" class="hide">
-    <p>{% trans "Activating..., please wait" %}</p>
-</div>
-
 {% endblock %}
 
 {% block extra_script %}
 <script type="text/javascript">
 $('#search-link-form').submit(function() {
-    if (!$.trim($('[name="token"]', $(this)).val())) {
+    if ($.trim($('[name="token"]', $(this)).val()).length < 3) {
         return false;
     }
 });
@@ -75,23 +67,5 @@ $('.rm-link').click(function() {
     return false;
 });
 
-var sort_by = '{{ sort_by }}';
-var url = '{% url 'link_search' %}';
-$(".by-time").on('click', function () {
-    if (sort_by == 'time_down') {
-        location.href = url + '?sort_by=time_up&token={{token}}';
-    } else {
-        location.href = url + '?sort_by=time_down&token={{token}}';
-    }
-    return false;
-});
-$(".by-count").on('click', function () {
-    if (sort_by == 'count_down') {
-        location.href = url + '?sort_by=count_up&token={{token}}';
-    } else {
-        location.href = url + '?sort_by=count_down&token={{token}}';
-    }
-    return false;
-});
 </script>
 {% endblock %}

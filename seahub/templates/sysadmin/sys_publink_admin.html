@@ -5,7 +5,7 @@
 
 {% block left_panel %}{{block.super}}
 <form action="{% url 'link_search' %}" method="get" class="side-search-form">
-    <input type="text" name="token" class="input" value="" placeholder="{% trans "Search links..." %}" />
+    <input type="text" name="token" class="input" value="" placeholder="{% trans "Search download links by token..." %}" />
 </form>
 {% endblock %}
 
@@ -33,7 +33,7 @@
     {% for publink in publinks %}
     <tr>
         <td>{{ publink.name }}</td>
-        <td><a href="{{ SITE_ROOT }}useradmin/info/{{ publink.username }}/">{{ publink.username }}</a></td>
+        <td><a href="{{ SITE_ROOT }}useradmin/info/{{ publink.username|urlencode}}/">{{ publink.username }}</a></td>
         <td>{{ publink.ctime|translate_seahub_time }} </td>
         <td>{{ publink.view_cnt }}</td>
         <td>
