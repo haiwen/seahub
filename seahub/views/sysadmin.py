@@ -1617,7 +1617,7 @@ def sys_upload_link_remove(request):
 
 @login_required
 @sys_staff_required
-def link_search(request):
+def sys_link_search(request):
     token = request.GET.get('token', '')
 
     if len(token) < 3:
@@ -1625,14 +1625,14 @@ def link_search(request):
     else:
         publinks = FileShare.objects.filter(token__startswith=token)
 
-        for l in publinks:
-            if l.is_file_share_link():
-                l.name = os.path.basename(l.path)
-            else:
-                l.name = os.path.dirname(l.path)
+    for l in publinks:
+        if l.is_file_share_link():
+            l.name = os.path.basename(l.path)
+        else:
+            l.name = os.path.dirname(l.path)
 
     return render_to_response(
-        'sysadmin/link_search.html', {
+        'sysadmin/sys_link_search.html', {
             'publinks': publinks,
             'token': token
         },

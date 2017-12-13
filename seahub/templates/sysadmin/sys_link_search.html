@@ -25,7 +25,7 @@
     {% for publink in publinks %}
     <tr>
         <td>{{ publink.name }}</td>
-        <td><a href="{{ SITE_ROOT }}useradmin/info/{{ publink.username|urlencode }}/">{{ publink.username }}</a></td>
+        <td><a href="{% url 'user_info' publink.username %}">{{ publink.username }}</a></td>
         <td>{{ publink.ctime|translate_seahub_time }} </td>
         <td>{{ publink.view_cnt }}</td>
         <td>
@@ -61,7 +61,7 @@ $('.rm-link').click(function() {
         beforeSend: prepareCSRFToken,
         success: function() {
             _this.closest('tr').remove();
-            feedback("{% trans "Successfully deleted the link." %}", 'success');
+            feedback("{% trans "Successfully deleted 1 item." %}", 'success');
         },
         error: ajaxErrorHandler
     });

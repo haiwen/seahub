@@ -27,7 +27,7 @@
     {% for uploadlink in uploadlinks %}
     <tr>
         <td>{{ uploadlink.path }}</td>
-        <td><a href="{{ SITE_ROOT }}useradmin/info/{{ uploadlink.username }}/">{{ uploadlink.username }}</a></td>
+        <td><a href="{% url 'user_info' uploadlink.username %}">{{ uploadlink.username }}</a></td>
         <td>{{ uploadlink.ctime|translate_seahub_time }} </td>
         <td>{{ uploadlink.view_cnt }}</td>
         <td>

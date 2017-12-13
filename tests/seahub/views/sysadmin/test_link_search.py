@@ -31,7 +31,7 @@ class AdminSearchShareLinkText(BaseTestCase):
         self.login_as(self.admin)
         token = self._add_file_share_link()
 
-        url = reverse('link_search') + '?token=' + token
+        url = reverse('sys_link_search') + '?token=' + token
         resp = self.client.get(url)
         self.assertEqual(200, resp.status_code)
         self.assertEqual(token, resp.context['publinks'][0].token)
@@ -40,7 +40,7 @@ class AdminSearchShareLinkText(BaseTestCase):
         self.login_as(self.admin)
         token = self._add_file_share_link()
 
-        url = reverse('link_search') + '?token=' + token[:3]
+        url = reverse('sys_link_search') + '?token=' + token[:3]
         resp = self.client.get(url)
         self.assertEqual(200, resp.status_code)
         tokens = []
@@ -51,7 +51,7 @@ class AdminSearchShareLinkText(BaseTestCase):
     def test_search_file_share_link_info_by_invalid_token(self):
         self.login_as(self.admin)
 
-        url = reverse('link_search') + '?token=' + 'i am a invalid token'
+        url = reverse('sys_link_search') + '?token=' + 'i am a invalid token'
         resp = self.client.get(url)
         self.assertEqual(200, resp.status_code)
         self.assertEqual(0, len(resp.context['publinks']))
@@ -59,7 +59,7 @@ class AdminSearchShareLinkText(BaseTestCase):
     def test_search_file_share_link_info_by_short_token(self):
         self.login_as(self.admin)
 
-        url = reverse('link_search') + '?token=' + 'i'
+        url = reverse('sys_link_search') + '?token=' + 'i'
         resp = self.client.get(url)
         self.assertEqual(200, resp.status_code)
         self.assertEqual(0, len(resp.context['publinks']))
