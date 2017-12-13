@@ -55,3 +55,11 @@ class AdminSearchShareLinkText(BaseTestCase):
         resp = self.client.get(url)
         self.assertEqual(200, resp.status_code)
         self.assertEqual(0, len(resp.context['publinks']))
+
+    def test_search_file_share_link_info_by_short_token(self):
+        self.login_as(self.admin)
+
+        url = reverse('link_search') + '?token=' + 'i'
+        resp = self.client.get(url)
+        self.assertEqual(200, resp.status_code)
+        self.assertEqual(0, len(resp.context['publinks']))

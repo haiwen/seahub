@@ -1618,21 +1618,22 @@ def sys_upload_link_remove(request):
 @login_required
 @sys_staff_required
 def link_search(request):
-    sort_by = request.GET.get('sort_by', 'time_up')
     token = request.GET.get('token', '')
 
-    publinks = FileShare.objects.filter(token__startswith=token)
+    if len(token) < 3:
+        publinks = []
+    else:
+        publinks = FileShare.objects.filter(token__startswith=token)
 
-    for l in publinks:
-        if l.is_file_share_link():
-            l.name = os.path.basename(l.path)
-        else:
-            l.name = os.path.dirname(l.path)
+        for l in publinks:
+            if l.is_file_share_link():
+                l.name = os.path.basename(l.path)
+            else:
+                l.name = os.path.dirname(l.path)
 
     return render_to_response(
         'sysadmin/link_search.html', {
             'publinks': publinks,
-            'sort_by': sort_by,
             'token': token
         },
         context_instance=RequestContext(request))

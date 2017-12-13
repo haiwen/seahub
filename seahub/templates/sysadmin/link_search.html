@@ -7,20 +7,20 @@
 <h3>{% trans "Search Link"%}</h3>
 
 <form id="search-link-form" method="get" action=".">
-    <label>{% trans "Token" %}</label><input type="text" name="token" class="input" value="{{token}}" placeholder="{% trans "please input at least 3 characters" %}" title="{% trans "please input at least 3 characters" %}"/><br />
-  <input type="submit" value="{% trans "Submit" %}" class="submit" />
+    <label>{% trans "Token" %}</label><input type="text" name="token" class="input" value="{{token}}" placeholder="{% trans "please input at least 3 characters" %}" title="{% trans "please input at least 3 characters" %}" /><br />
+    <input type="submit" value="{% trans "Submit" %}" class="submit" />
 </form>
-<div class="ovhd">
-    <h3 class="fleft">{% trans "Result"%}</h3>
-</div>
+
+<h3>{% trans "Result" %}</h3>
+
 {% if publinks %}
 <table>
     <tr>
         <th width="25%">{% trans "Name" %}</th>
         <th width="25%">{% trans "Owner" %}</th>
-        <th width="20%"><a href="#">{% trans "Create At" %}</a></th>
-        <th width="12%"><a href="#">{% trans "Count" %}</a></th>
-        <th width="18%">{% trans "Operations" %}</th>
+        <th width="20%">{% trans "Create At" %}</th>
+        <th width="12%">{% trans "Count" %}</th>
+        <th width="18%"></th>
     </tr>
     {% for publink in publinks %}
     <tr>
@@ -61,6 +61,7 @@ $('.rm-link').click(function() {
         beforeSend: prepareCSRFToken,
         success: function() {
             _this.closest('tr').remove();
+            feedback("{% trans "Successfully deleted the link." %}", 'success');
         },
         error: ajaxErrorHandler
     });
