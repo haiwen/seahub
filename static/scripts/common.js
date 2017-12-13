@@ -375,14 +375,23 @@ define([
 
         feedback: function(con, type, time) {
             var time = time || 5000;
+            var $el;
+            var hide_pos_top,
+                show_pos_top = '15px';
             if ($('.messages').length > 0) {
-                $('.messages').html('<li class="' + type + '">' + this.HTMLescape(con) + '</li>');
+                $el = $('.messages').html('<li class="' + type + '">' + this.HTMLescape(con) + '</li>');
             } else {
-                var html = '<ul class="messages"><li class="' + type + '">' + this.HTMLescape(con) + '</li></ul>';
-                $('#main').append(html);
+                $el = $('<ul class="messages"><li class="' + type + '">' + this.HTMLescape(con) + '</li></ul>');
+                $('#main').append($el);
             }
-            $('.messages').css({'left':($(window).width() - $('.messages').width())/2, 'top':10}).removeClass('hide');
-            setTimeout(function() { $('.messages').addClass('hide'); }, time);
+
+            hide_pos_top = '-' + ($el.outerHeight() + parseInt(show_pos_top)) + 'px';
+
+            // add transition: from 'hide' to 'show'. the transition effect is offered by CSS.
+            $el.css({'left':($(window).width() - $el.width())/2, 'top': hide_pos_top});
+            setTimeout(function() { $el.css({'top': show_pos_top}); }, 10);
+
+            setTimeout(function() { $el.css({'top': hide_pos_top}); }, time);
         },
 
         showFormError: function(formid, error_msg) {

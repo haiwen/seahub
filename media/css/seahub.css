@@ -1128,6 +1128,9 @@ textarea:-moz-placeholder {/* for FF */
     -moz-box-shadow: 0 2px 4px rgba(0,0,0,0.2);
     -webkit-box-shadow: 0 2px 4px rgba(0,0,0,0.2);
     z-index:999; /* for repo.html: to show on top of fixed-hd */
+    -webkit-transition: top 0.5s ease;
+    -moz-transition: top 0.5s ease;
+    transition: top 0.5s ease;
 }
 .messages .info {
     padding:5px;

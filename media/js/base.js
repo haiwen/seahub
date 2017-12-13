@@ -5,12 +5,6 @@ $('#title-panel, #left-panel, #right-panel').each(function() { // for ie 7
 });
 $('#tabs').tabs({cookie:{expires:1}});
 
-// handle messages
-if ($('.messages')[0]) {
-    $('#main').append($('.messages'));
-    $('.messages').css({'left':($(window).width() - $('.messages').width())/2, 'top':10}).removeClass('hide');
-    setTimeout(function() { $('.messages').addClass('hide'); }, 10000);
-}
 
 $(function() {
 
@@ -410,15 +404,43 @@ function apply_form_error(formid, error_msg) {
 // show feedback
 function feedback(con, type, time) {
     var time = time || 5000;
-    if ($('.messages')[0]) {
-        $('.messages').html('<li class="' + type + '">' + con + '</li>');
+    var $el;
+    var hide_pos_top,
+        show_pos_top = '15px';
+    if ($('.messages').length > 0) {
+        $el = $('.messages').html('<li class="' + type + '">' + this.HTMLescape(con) + '</li>');
     } else {
-        var html = '<ul class="messages"><li class="' + type + '">' + con + '</li></ul>';
-        $('#main').append(html);
+        $el = $('<ul class="messages"><li class="' + type + '">' + this.HTMLescape(con) + '</li></ul>');
+        $('#main').append($el);
     }
-    $('.messages').css({'left':($(window).width() - $('.messages').width())/2, 'top':10}).removeClass('hide');
-    setTimeout(function() { $('.messages').addClass('hide'); }, time);
+
+    hide_pos_top = '-' + ($el.outerHeight() + parseInt(show_pos_top)) + 'px';
+
+    // add transition: from 'hide' to 'show'. the transition effect is offered by CSS.
+    $el.css({'left':($(window).width() - $el.width())/2, 'top': hide_pos_top});
+    setTimeout(function() { $el.css({'top': show_pos_top}); }, 10);
+
+    setTimeout(function() { $el.css({'top': hide_pos_top}); }, time);
 }
+
+// handle existing messages (in base.html)
+(function() {
+    var $el;
+    var hide_pos_top,
+        show_pos_top = '15px';
+    if ($('.messages').length > 0) {
+        $el = $('.messages');
+
+        hide_pos_top = '-' + ($el.outerHeight() + parseInt(show_pos_top)) + 'px';
+
+        // add transition: from 'hide' to 'show'. the transition effect is offered by CSS.
+        $el.css({'left':($(window).width() - $el.width())/2, 'top': hide_pos_top});
+        setTimeout(function() { $el.css({'top': show_pos_top}); }, 10);
+
+        setTimeout(function() { $el.css({'top': hide_pos_top}); }, 5000);
+    }
+})();
+
 function disable(btn) {
     btn.attr('disabled', 'disabled').addClass('btn-disabled');
 }
