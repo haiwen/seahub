@@ -99,9 +99,14 @@ define([
                 if (dirents.user_perm && dirents.user_perm != 'rw') {
                     return false;
                 }
+
                 popup.removeClass('hide');
                 cancel_all_btn.removeClass('hide');
                 close_icon.addClass('hide');
+
+                // in case the popup was folded.
+                popup.height(parseInt(_this.popup_height));
+                $('.fileupload-buttonbar, table', popup).removeClass('hide');
 
                 var path = dirents.path;
                 popup.fileupload('option', {
