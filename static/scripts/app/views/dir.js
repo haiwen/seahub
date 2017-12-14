@@ -162,6 +162,7 @@ define([
 
                 this.direntDetailsView.hide();
                 this.fileCommentsView.hide();
+                this.fileUploadView.closePopup();
             },
 
             /***** private functions *****/

@@ -113,6 +113,8 @@ define([
         hide: function() {
             this.$el.detach();
             this.attached = false;
+
+            this.fileUploadView.closePopup();
         },
 
         show: function(repo_id, path) {
