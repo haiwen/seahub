@@ -3075,6 +3075,7 @@ button.sf-dropdown-toggle:focus {
 #search-form .input_and_submit {
     display:inline-block;
     position:relative;
+    width:60%;
 }
 #search-form .advanced-search {
     color:#666;
@@ -3083,7 +3084,7 @@ button.sf-dropdown-toggle:focus {
     margin-left:4px;
 }
 #search-form .search-input {
-    width:392px;
+    width:calc(100% - 35px);
     height:24px;
     padding:0 30px 0 5px;
 }
