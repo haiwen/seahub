@@ -3,6 +3,7 @@ import hashlib
 import re
 import logging
 from datetime import datetime
+from importlib import import_module
 
 from constance import config
 
@@ -108,7 +109,20 @@ class TwoFactorVerifyView(SessionWizardView):
 
         if not is_safe_url(url=redirect_to, host=self.request.get_host()):
             redirect_to = str(settings.LOGIN_REDIRECT_URL)
-        return redirect(redirect_to)
+
+        res = HttpResponseRedirect(redirect_to)
+        if form_list[0].is_valid():
+            remember_me = form_list[0].cleaned_data['remember_me']
+            if remember_me:
+                s = remember_device(self.user.username)
+                res.set_cookie(
+                    'S2FA', s.session_key,
+                    max_age=settings.TWO_FACTOR_DEVICE_REMEMBER_DAYS * 24 * 60 * 60,
+                    domain=settings.SESSION_COOKIE_DOMAIN,
+                    path=settings.SESSION_COOKIE_PATH,
+                    secure=settings.SESSION_COOKIE_SECURE or None,
+                    httponly=settings.SESSION_COOKIE_HTTPONLY or None)
+        return res
 
     def get_form_kwargs(self, step=None):
         if step in ('token', 'backup'):
@@ -168,9 +182,9 @@ class TwoFactorVerifyView(SessionWizardView):
 
         context['cancel_url'] = settings.LOGOUT_URL
         context['form_prefix'] = '%s-' % self.steps.current
-
         login_bg_image_path = get_login_bg_image_path()
         context['login_bg_image_path'] = login_bg_image_path
+        context['remember_days'] = settings.TWO_FACTOR_DEVICE_REMEMBER_DAYS
 
         return context
 
@@ -212,3 +226,26 @@ def verify_two_factor_token(username, token):
     device = TOTPDevice.objects.device_for_user(username)
     if device:
         return device.verify_token(token)
+
+def remember_device(s_data):
+    SessionStore = import_module(settings.SESSION_ENGINE).SessionStore
+    s = SessionStore()
+    s.set_expiry(settings.TWO_FACTOR_DEVICE_REMEMBER_DAYS * 24 * 60 * 60)
+    s['2fa-skip'] = s_data
+    s.create()
+    return s
+
+def is_device_remembered(request_header, user):
+    if not request_header:
+        return False
+
+    # User must be authenticated, otherwise this function is wrong used.
+    assert user.is_authenticated()
+
+    SessionStore = import_module(settings.SESSION_ENGINE).SessionStore
+    s = SessionStore(request_header)
+    try:
+        username = s['2fa-skip']
+        return username == user.username
+    except KeyError:
+        return False

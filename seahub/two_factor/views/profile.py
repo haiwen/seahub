@@ -58,4 +58,7 @@ class DisableView(CheckTwoFactorEnabledMixin, FormView):
     def form_valid(self, form):
         for device in devices_for_user(self.request.user):
             device.delete()
-        return HttpResponseRedirect(reverse('edit_profile'))
+
+        resp = HttpResponseRedirect(reverse('edit_profile'))
+        resp.delete_cookie('S2FA', domain=settings.SESSION_COOKIE_DOMAIN)
+        return resp

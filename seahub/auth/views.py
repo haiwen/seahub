@@ -29,6 +29,7 @@ from seahub.auth.utils import (
 from seahub.base.accounts import User
 from seahub.options.models import UserOptions
 from seahub.profile.models import Profile
+from seahub.two_factor.views.login import is_device_remembered
 from seahub.utils import is_ldap_user
 from seahub.utils.ip import get_remote_ip
 from seahub.utils.file_size import get_quota_from_string
@@ -54,7 +55,8 @@ def log_user_in(request, user, redirect_to):
 
     clear_login_failed_attempts(request, user.username)
 
-    if two_factor_auth_enabled(user):
+    if two_factor_auth_enabled(user) and \
+       not is_device_remembered(request.COOKIES.get('S2FA', ''), user):
         return handle_two_factor_auth(request, user, redirect_to)
 
     # Okay, security checks complete. Log the user in.

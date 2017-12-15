@@ -3,6 +3,7 @@
 import logging
 import os
 import stat
+from importlib import import_module
 import json
 import datetime
 import posixpath
@@ -18,6 +19,7 @@ from rest_framework.permissions import IsAuthenticated, IsAdminUser
 from rest_framework.reverse import reverse
 from rest_framework.response import Response
 
+from django.conf import settings as dj_settings
 from django.contrib.auth.hashers import check_password
 from django.contrib.sites.models import RequestSite
 from django.db import IntegrityError
@@ -180,12 +182,45 @@ class ObtainAuthToken(APIView):
     renderer_classes = (renderers.JSONRenderer,)
 
     def post(self, request):
+        headers = {}
         context = { 'request': request }
         serializer = AuthTokenSerializer(data=request.data, context=context)
         if serializer.is_valid():
             key = serializer.validated_data
-            return Response({'token': key})
-        headers = {}
+
+            trust_dev = False
+            try:
+                trust_dev_header = int(request.META.get('HTTP_X_SEAFILE_2FA_TRUST_DEVICE', ''))
+                trust_dev = True if trust_dev_header == 1 else False
+            except ValueError:
+                trust_dev = False
+
+            skip_2fa_header = request.META.get('HTTP_X_SEAFILE_S2FA', None)
+            if skip_2fa_header is None:
+                if trust_dev:
+                    # 2fa login with trust device,
+                    # create new session, and return session id.
+                    pass 
+                else:
+                    # No 2fa login or 2fa login without trust device,
+                    # return token only.
+                    return Response({'token': key})
+            else:
+                # 2fa login without OTP token,
+                # get or create session, and return session id
+                pass
+
+            SessionStore = import_module(dj_settings.SESSION_ENGINE).SessionStore
+            s = SessionStore(skip_2fa_header)
+            if not s.exists(skip_2fa_header) or s.is_empty():
+                from seahub.two_factor.views.login import remember_device
+                s = remember_device(request.data['username'])
+
+            headers = {
+                'X-SEAFILE-S2FA': s.session_key
+            }
+            return Response({'token': key}, headers=headers)
+
         if serializer.two_factor_auth_failed:
             # Add a special response header so the client knows to ask the user
             # for the 2fa token.
