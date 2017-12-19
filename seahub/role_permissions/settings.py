@@ -2,12 +2,25 @@
 import logging
 
 from django.conf import settings
+from seaserv import seafile_api
 
+from seahub.utils import is_pro_version
 from seahub.constants import DEFAULT_USER, GUEST_USER, \
         DEFAULT_ADMIN, SYSTEM_ADMIN, DAILY_ADMIN, AUDIT_ADMIN
 
+from seahub.settings import ENABLE_STORAGE_CLASSES
+
 # Get an instance of a logger
 logger = logging.getLogger(__name__)
+
+storage_ids = []
+if is_pro_version() and ENABLE_STORAGE_CLASSES:
+    storage_classes = seafile_api.get_all_storage_classes()
+    for s in storage_classes:
+        if s.is_default:
+            storage_ids.insert(0, s.storage_id)
+        else:
+            storage_ids.append(s.storage_id)
 
 DEFAULT_ENABLED_ROLE_PERMISSIONS = {
     DEFAULT_USER: {
@@ -24,6 +37,7 @@ DEFAULT_ENABLED_ROLE_PERMISSIONS = {
         'can_connect_with_ios_clients': True,
         'can_connect_with_desktop_clients': True,
         'can_export_files_via_mobile_client': True,
+        'storage_ids': storage_ids,
         'role_quota': '',
     },
     GUEST_USER: {
@@ -40,6 +54,7 @@ DEFAULT_ENABLED_ROLE_PERMISSIONS = {
         'can_connect_with_ios_clients': False,
         'can_connect_with_desktop_clients': False,
         'can_export_files_via_mobile_client': False,
+        'storage_ids': storage_ids,
         'role_quota': '',
     },
 }
