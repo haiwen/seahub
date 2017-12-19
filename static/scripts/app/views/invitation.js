@@ -34,7 +34,7 @@ define([
                 beforeSend: Common.prepareCSRFToken,
                 success: function() {
                     _this.remove();
-                    Common.feedback(gettext("Successfully deleted 1 item"), 'success');
+                    Common.feedback(gettext("Successfully deleted 1 item."), 'success');
                 },
                 error: function(xhr) {
                     Common.ajaxErrorHandler(xhr);

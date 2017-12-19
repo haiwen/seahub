@@ -46,38 +46,80 @@ define([
             $('#simplemodal-container').css({'height':'auto'});
 
             $form.submit(function() {
-                var accepter = $.trim($('input[name="accepter"]', $form).val());
+                var accepters = $.trim($('input[name="accepter"]', $form).val());
+                var accepter_list = [];
+                var email;
+
                 var $error = $('.error', $form);
                 var $submitBtn = $('[type="submit"]', $form);
                 var $loading = $('.loading-icon', $form);
-                if (!accepter) {
+
+                if (!accepters) {
                     $error.html(gettext("It is required.")).show();
                     return false;
                 };
+                accepters = accepters.split(',');
+                for (var i = 0, len = accepters.length; i < len; i++) {
+                    email = $.trim(accepters[i]);
+                    if (email) {
+                        accepter_list.push(email);
+                    }
+                }
+                if (!accepter_list.length) {
+                    return false;
+                }
 
                 $error.hide();
                 Common.disableButton($submitBtn);
                 $loading.show();
-                _this.collection.create({
-                    'type': 'guest',
-                    'accepter': accepter
-                }, {
-                    wait: true,
-                    prepend: true,
-                    success: function() {
-                        if (_this.collection.length == 1) {
-                            _this.reset();
+                $.ajax({
+                    url: Common.getUrl({'name': 'invitations_batch'}),
+                    type: 'POST',
+                    cache: false,
+                    data: {
+                        'type': 'guest',
+                        'accepter': accepter_list
+                    },
+                    traditional: true,
+                    beforeSend: Common.prepareCSRFToken,
+                    success: function(data) {
+                        var msgs = [];
+                        if (data.success.length) {
+                            var msg;
+                            _this.collection.add(data.success, {prepend: true});
+                            if (_this.collection.length == data.success.length) {
+                                _this.reset();
+                            }
+                            if (data.success.length == 1) {
+                                msg = gettext('Successfully invited %(email).')
+                                    .replace('%(email)', data.success[0].accepter);
+                            } else {
+                                msg = gettext('Successfully invited %(email) and %(num) other people.')
+                                    .replace('%(email)', data.success[0].accepter)
+                                    .replace('%(num)', data.success.length - 1);
+                            }
+                            msgs.push({'msg': msg, 'type': 'success'});
+                        }
+                        if (data.failed.length) {
+                            $(data.failed).each(function(index, item) {
+                                var err_msg = item.email + ': ' + item.error_msg;
+                                msgs.push({'msg': err_msg, 'type': 'error'});
+                            });
+                        }
+                        if (msgs.length) {
+                            Common.feedback(msgs);
                         }
                         $.modal.close();
                     },
-                    error: function(collection, response, options) {
+                    error: function(xhr) {
                         var err_msg;
-                        if (response.responseText) {
-                            err_msg = response.responseJSON.error_msg||response.responseJSON.detail;
+                        if (xhr.responseText) {
+                            err_msg = xhr.responseJSON.error_msg||xhr.responseJSON.detail;
                         } else {
                             err_msg = gettext('Please check the network.');
                         }
                         $error.html(err_msg).show();
+
                         Common.enableButton($submitBtn);
                     },
                     complete: function() {
