@@ -49,3 +49,21 @@ def get_repo_shared_users(repo_id, repo_owner, include_groups=True):
             ret += [x.user_name for x in g_members if x.user_name != repo_owner]
 
     return list(set(ret))
+
+def create_repo_with_storage_backend(request):
+    username = request.user.username
+    repo_name = request.data.get("name")
+    passwd = request.data.get("passwd", None) or None
+
+    storage_id = request.data.get("storage_id", None) or None
+    storage_classes = seafile_api.get_all_storage_classes()
+    storage_ids = request.user.permissions.storage_ids()
+
+    if storage_id not in \
+            [s.storage_id for s in storage_classes if s.storage_id in storage_ids ]:
+        storage_id = storage_ids[0]
+
+    repo_id = seafile_api.create_repo(repo_name,
+            '', username, passwd, storage_id)
+
+    return repo_id

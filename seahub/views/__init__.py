@@ -50,7 +50,7 @@ from seahub.utils.timeutils import utc_to_local
 from seahub.views.modules import MOD_PERSONAL_WIKI, enable_mod_for_user, \
     disable_mod_for_user
 import seahub.settings as settings
-from seahub.settings import AVATAR_FILE_STORAGE, \
+from seahub.settings import AVATAR_FILE_STORAGE, ENABLE_STORAGE_CLASSES, \
     ENABLE_SUB_LIBRARY, ENABLE_FOLDER_PERM, ENABLE_REPO_SNAPSHOT_LABEL, \
     UNREAD_NOTIFICATIONS_REQUEST_INTERVAL
 
@@ -758,6 +758,22 @@ def libraries(request):
             logger.error(e)
             joined_groups = []
 
+    storages = []
+    if is_pro_version() and ENABLE_STORAGE_CLASSES :
+
+        all_storages_dict = {}
+        storage_classes = seafile_api.get_all_storage_classes()
+        for storage in storage_classes:
+            all_storages_dict[storage.storage_id] = storage.storage_name
+
+        for storage_id in request.user.permissions.storage_ids():
+            if storage_id in all_storages_dict.keys():
+                storage_dict = {
+                    'storage_id': storage_id,
+                    'storage_name': all_storages_dict[storage_id],
+                }
+                storages.append(storage_dict)
+
     return render_to_response('libraries.html', {
             "allow_public_share": allow_public_share,
             "guide_enabled": guide_enabled,
@@ -778,6 +794,8 @@ def libraries(request):
             'file_audit_enabled': FILE_AUDIT_ENABLED,
             'can_add_pub_repo': can_add_pub_repo,
             'joined_groups': joined_groups,
+            'storages': storages,
+            'enable_storage_classes': ENABLE_STORAGE_CLASSES,
             'unread_notifications_request_interval': UNREAD_NOTIFICATIONS_REQUEST_INTERVAL,
             'library_templates': LIBRARY_TEMPLATES.keys() if \
                     isinstance(LIBRARY_TEMPLATES, dict) else [],

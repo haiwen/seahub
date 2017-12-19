@@ -7,9 +7,17 @@
         <% if (app.pageOptions.is_pro && library_templates.length > 0) { %>
         <label for="library-template">{% trans "Template"%}</label><br/>
         <select name="library_template" id="library-template" class="select">
-            <option value="">{% trans "Select a template" %}</option>
             <% for (var i = 0, len = library_templates.length; i < len; i++) { %>
             <option value="<%- library_templates[i] %>"><%- library_templates[i] %></option>
+            <% } %>
+        </select>
+        <br/>
+        <% } %>
+        <% if (app.pageOptions.is_pro && app.pageOptions.enable_storage_classes && app.pageOptions.storages.length > 1) { %>
+        <label for="storage">{% trans "Storage backend"%}</label><br/>
+        <select name="storage" id="storage" class="select">
+            <% for (var i = 0, len = app.pageOptions.storages.length; i < len; i++) { %>
+            <option value="<%- app.pageOptions.storages[i].storage_id %>"><%- app.pageOptions.storages[i].storage_name %></option>
             <% } %>
         </select>
         <br/>
@@ -84,6 +92,9 @@
     <td></td>
     <% } %>
     <td><%= size_formatted %></td>
+    <% if (app.pageOptions.is_pro && app.pageOptions.enable_storage_classes && app.pageOptions.storages.length > 0) { %>
+    <td><%- storage_name %></td>
+    <% } %>
     <td><%= mtime_relative %></td>
 </script>
 <script type="text/template" id="repo-mobile-tmpl">
@@ -1587,8 +1598,14 @@
         <th width="4%"><span class="sr-only">{% trans "Library Type" %}</span><!--icon--></th>
         <th width="42%"><a class="table-sort-op by-name" href="#">{% trans "Name" %} <span class="sort-icon icon-caret-down hide"></span></a></th>
         <th width="14%"><span class="sr-only">{% trans "Actions" %}</span></th>
+    <% if (app.pageOptions.is_pro && app.pageOptions.enable_storage_classes && app.pageOptions.storages.length > 0) { %>
+        <th width="10%">{% trans "Size" %}</th>
+        <th width="20%">{% trans "Storage backend" %}</th>
+        <th width="10%"><a class="table-sort-op by-time" href="#">{% trans "Last Update" %} <span class="sort-icon icon-caret-up"></span></a></th>
+        <% } else { %>
         <th width="20%">{% trans "Size" %}</th>
         <th width="20%"><a class="table-sort-op by-time" href="#">{% trans "Last Update" %} <span class="sort-icon icon-caret-up"></span></a></th>
+        <% } %>
     </tr>
 </script>
 <script type="text/template" id="my-repos-hd-mobile-tmpl">

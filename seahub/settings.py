@@ -233,7 +233,10 @@ INSTALLED_APPS = (
     'seahub.trusted_ip',
 )
 
-# Enabled or disable constance(web settings).
+# Enable or disable multiple storage backends.
+ENABLE_STORAGE_CLASSES = False
+
+# Enable or disable constance(web settings).
 ENABLE_SETTINGS_VIA_WEB = True
 CONSTANCE_BACKEND = 'constance.backends.database.DatabaseBackend'
 CONSTANCE_DATABASE_CACHE_BACKEND = 'default'

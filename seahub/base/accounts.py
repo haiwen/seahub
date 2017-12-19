@@ -174,6 +174,8 @@ class UserPermissions(object):
     def can_send_share_link_mail(self):
         return get_enabled_role_permissions_by_role(self.user.role).get('can_send_share_link_mail', True)
 
+    def storage_ids(self):
+        return get_enabled_role_permissions_by_role(self.user.role).get('storage_ids', [])
 
 class AdminPermissions(object):
     def __init__(self, user):

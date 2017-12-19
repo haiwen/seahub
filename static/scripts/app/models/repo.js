@@ -16,12 +16,14 @@ define([
             encrypted: false,
             owner: "-",
             owner_nickname: "-",
+            storage_name: "-",
             permission: "rw"
         },
 
         parse: function(response) {
             var attrs = _.clone(response);
             attrs.id = response.id || response.repo_id;
+            attrs.storage_name = response.storage_name;
             attrs.name = response.name || response.repo_name;
             attrs.desc = response.desc || response.repo_desc;
             attrs.size_formatted = response.size_formatted || response.repo_size_formatted;

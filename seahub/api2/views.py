@@ -73,7 +73,7 @@ from seahub.utils import gen_file_get_url, gen_token, gen_file_upload_url, \
 
 from seahub.utils.file_revisions import get_file_revisions_after_renamed
 from seahub.utils.devices import do_unlink_device
-from seahub.utils.repo import get_sub_repo_abbrev_origin_path, get_repo_owner
+from seahub.utils.repo import get_repo_owner, create_repo_with_storage_backend
 from seahub.utils.star import star_file, unstar_file
 from seahub.utils.file_types import DOCUMENT
 from seahub.utils.file_size import get_file_size_unit
@@ -90,7 +90,7 @@ if HAS_OFFICE_CONVERTER:
     from seahub.utils import query_office_convert_status, prepare_converted_html
 import seahub.settings as settings
 from seahub.settings import THUMBNAIL_EXTENSION, THUMBNAIL_ROOT, \
-    FILE_LOCK_EXPIRATION_DAYS, \
+    FILE_LOCK_EXPIRATION_DAYS, ENABLE_STORAGE_CLASSES, \
     ENABLE_THUMBNAIL, ENABLE_FOLDER_PERM
 try:
     from seahub.settings import CLOUD_MODE
@@ -428,6 +428,10 @@ def repo_download_info(request, repo_id, gen_sync_token=True):
         'repo_version': repo_version,
         'head_commit_id': repo.head_cmmt_id,
         }
+
+    if is_pro_version() and ENABLE_STORAGE_CLASSES:
+        info_json['storage_name'] = repo.storage_name
+
     return Response(info_json)
 
 class Repos(APIView):
@@ -506,6 +510,11 @@ class Repos(APIView):
                     "head_commit_id": r.head_cmmt_id,
                     "version": r.version,
                 }
+
+                if is_pro_version() and ENABLE_STORAGE_CLASSES:
+                    repo['storage_name'] = r.storage_name
+                    repo['storage_id'] = r.storage_id
+
                 repos_json.append(repo)
 
         if filter_by['shared']:
@@ -720,11 +729,15 @@ class Repos(APIView):
                              'NOT allow to create encrypted library.')
 
         if org_id > 0:
-            repo_id = seafile_api.create_org_repo(repo_name, repo_desc,
-                                                  username, passwd, org_id)
+            repo_id = seafile_api.create_org_repo(repo_name,
+                    repo_desc, username, passwd, org_id)
         else:
-            repo_id = seafile_api.create_repo(repo_name, repo_desc,
-                                                username, passwd)
+            if is_pro_version() and ENABLE_STORAGE_CLASSES:
+                repo_id = create_repo_with_storage_backend(request)
+            else:
+                repo_id = seafile_api.create_repo(repo_name,
+                        repo_desc, username, passwd)
+
         return repo_id, None
 
     def _create_enc_repo(self, request, repo_id, repo_name, repo_desc, username, org_id):
@@ -825,8 +838,12 @@ class PubRepos(APIView):
             seaserv.seafserv_threaded_rpc.set_org_inner_pub_repo(
                 org_id, repo.id, permission)
         else:
-            repo_id = seafile_api.create_repo(repo_name, repo_desc,
-                                              username, passwd)
+            if is_pro_version() and ENABLE_STORAGE_CLASSES:
+                repo_id = create_repo_with_storage_backend(request)
+            else:
+                repo_id = seafile_api.create_repo(repo_name,
+                        repo_desc, username, passwd)
+
             repo = seafile_api.get_repo(repo_id)
             seafile_api.add_inner_pub_repo(repo.id, permission)
 
@@ -3994,8 +4011,12 @@ class GroupRepos(APIView):
             seafile_api.add_org_group_repo(repo_id, org_id, group.id,
                                            username, permission)
         else:
-            repo_id = seafile_api.create_repo(repo_name, repo_desc,
-                                              username, passwd)
+            if is_pro_version() and ENABLE_STORAGE_CLASSES:
+                repo_id = create_repo_with_storage_backend(request)
+            else:
+                repo_id = seafile_api.create_repo(repo_name,
+                        repo_desc, username, passwd)
+
             repo = seafile_api.get_repo(repo_id)
             seafile_api.set_group_repo(repo.id, group.id, username, permission)
 
