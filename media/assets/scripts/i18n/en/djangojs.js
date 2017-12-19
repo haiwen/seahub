@@ -40,15 +40,17 @@
     "DATETIME_FORMAT": "N j, Y, P", 
     "DATETIME_INPUT_FORMATS": [
       "%Y-%m-%d %H:%M:%S", 
+      "%Y-%m-%d %H:%M:%S.%f", 
       "%Y-%m-%d %H:%M", 
       "%Y-%m-%d", 
       "%m/%d/%Y %H:%M:%S", 
+      "%m/%d/%Y %H:%M:%S.%f", 
       "%m/%d/%Y %H:%M", 
       "%m/%d/%Y", 
       "%m/%d/%y %H:%M:%S", 
+      "%m/%d/%y %H:%M:%S.%f", 
       "%m/%d/%y %H:%M", 
-      "%m/%d/%y", 
-      "%Y-%m-%d %H:%M:%S.%f"
+      "%m/%d/%y"
     ], 
     "DATE_FORMAT": "N j, Y", 
     "DATE_INPUT_FORMATS": [
@@ -66,6 +68,7 @@
     "TIME_FORMAT": "P", 
     "TIME_INPUT_FORMATS": [
       "%H:%M:%S", 
+      "%H:%M:%S.%f", 
       "%H:%M"
     ], 
     "YEAR_MONTH_FORMAT": "F Y"
