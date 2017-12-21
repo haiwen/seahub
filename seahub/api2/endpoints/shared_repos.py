@@ -18,7 +18,8 @@ from seahub.base.accounts import User
 from seahub.utils import is_org_context, is_valid_username, send_perm_audit_msg
 from seahub.base.templatetags.seahub_tags import email2nickname, email2contact_email
 from seahub.share.models import ExtraSharePermission, ExtraGroupsSharePermission
-from seahub.constants import PERMISSION_READ, PERMISSION_READ_WRITE, PERMISSION_ADMIN
+from seahub.constants import PERMISSION_READ, PERMISSION_READ_WRITE, \
+        PERMISSION_ADMIN, PERMISSION_PREVIEW
 from seahub.share.utils import update_user_dir_permission, update_group_dir_permission,\
         check_user_share_out_permission, check_group_share_out_permission
 
@@ -103,12 +104,16 @@ class SharedRepos(APIView):
             returned_result.append(result)
 
         user_admins = ExtraSharePermission.objects.batch_is_admin(usernames)
+        user_preview = ExtraSharePermission.objects.batch_is_preview(usernames)
         group_admins = ExtraGroupsSharePermission.objects.batch_get_repos_with_admin_permission(gids)
+        group_preview = ExtraGroupsSharePermission.objects.batch_get_repos_with_preview_permission(gids)
         for result in returned_result:
             if result['share_type'] == 'group':
                 result['is_admin'] = (result['repo_id'], result['group_id']) in group_admins
+                result['is_preview'] = (result['repo_id'], result['group_id']) in group_preview
             elif result['share_type'] == 'personal':
                 result['is_admin'] = (result['repo_id'], result['user_email']) in user_admins
+                result['is_preview'] = (result['repo_id'], result['user_email']) in user_preview
 
         return Response(returned_result)
 
@@ -127,7 +132,8 @@ class SharedRepo(APIView):
 
         # argument check
         permission = request.data.get('permission', None)
-        if permission not in [PERMISSION_READ, PERMISSION_READ_WRITE, PERMISSION_ADMIN]:
+        if permission not in [PERMISSION_READ, PERMISSION_READ_WRITE, 
+                              PERMISSION_ADMIN, PERMISSION_PREVIEW]:
             error_msg = 'permission invalid.'
             return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
 

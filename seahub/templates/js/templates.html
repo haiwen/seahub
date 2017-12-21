@@ -350,7 +350,7 @@
     </div>
     <% } %>
 
-    <% if (!encrypted && (can_generate_share_link || can_generate_upload_link || is_repo_owner)) { %>
+    <% if (!encrypted && (can_generate_share_link || can_generate_upload_link || is_repo_owner) && user_perm != 'preview') { %>
     <button class="op-btn" id="share-cur-dir">{% trans "Share" %}</button>
     <% } %>
     </div><!-- div#cur-dir-ops ends here -->
@@ -446,10 +446,11 @@
         <div class="op-container">
             <div class="displayed-op">
 
-                <a class="op-icon download sf2-icon-download sf2-x vh download-dir" href="#" title="{% trans "Download" %}" aria-label="{% trans "Download" %}"></a>
-
-                <% if (!repo_encrypted && (can_generate_share_link || can_generate_upload_link || is_repo_owner)) { %>
-                    <a href="#" class="op-icon share sf2-icon-share sf2-x vh" title="{% trans "Share" %}" aria-label="{% trans "Share" %}"></a>
+                <%  if (dirent.perm != 'preview') { %>
+                    <a class="op-icon download sf2-icon-download sf2-x vh download-dir" href="#" title="{% trans "Download" %}" aria-label="{% trans "Download" %}"></a>
+                    <% if (!repo_encrypted && (can_generate_share_link || can_generate_upload_link || is_repo_owner)) { %>
+                        <a href="#" class="op-icon share sf2-icon-share sf2-x vh" title="{% trans "Share" %}" aria-label="{% trans "Share" %}"></a>
+                    <% } %>
                 <% } %>
                 <% if (dirent.perm == 'rw') { %>
                     <a href="#" class="op-icon delete sf2-icon-delete sf2-x vh" title="{% trans "Delete" %}" aria-label="{% trans "Delete" %}"></a>
@@ -484,6 +485,13 @@
                     <% if (!repo_encrypted) { %>
                     <li><a class="op cp" href="#">{% trans "Copy" %}</a></li>
                     <% } %>
+                    <li><a class="op view-details" href="#">{% trans "Details" %}</a></li>
+                </ul>
+            </div>
+            <% } else if (dirent.perm == 'preview') { %>
+            <div class="sf-dropdown sf-dropdown-inline">
+                <a href="#" class="more-op-icon sf2-icon-caret-down op-icon vh sf-dropdown-toggle" title="{% trans "More Operations" %}" aria-label="{% trans "More Operations" %}"></a>
+                <ul class="hide sf-dropdown-menu">
                     <li><a class="op view-details" href="#">{% trans "Details" %}</a></li>
                 </ul>
             </div>
@@ -599,9 +607,11 @@
     <td class="dirent-op">
         <div class="op-container">
             <div class="displayed-op">
-                <a class="op-icon download sf2-icon-download sf2-x vh" href="<%= download_url %>" title="{% trans "Download" %}" aria-label="{% trans "Download" %}"></a>
-                <% if (!repo_encrypted && can_generate_share_link) { %>
-                <a href="#" class="op-icon share sf2-icon-share sf2-x vh" title="{% trans "Share" %}" aria-label="{% trans "Share" %}"></a>
+                <% if (dirent.perm != 'preview') { %>
+                    <a class="op-icon download sf2-icon-download sf2-x vh" href="<%= download_url %>" title="{% trans "Download" %}" aria-label="{% trans "Download" %}"></a>
+                    <% if (!repo_encrypted && can_generate_share_link) { %>
+                    <a href="#" class="op-icon share sf2-icon-share sf2-x vh" title="{% trans "Share" %}" aria-label="{% trans "Share" %}"></a>
+                    <% } %>
                 <% } %>
                 <% if (dirent.perm == 'rw') { %>
                     <a href="#" class="op-icon delete sf2-icon-delete sf2-x vh" title="{% trans "Delete" %}" aria-label="{% trans "Delete" %}"></a>
@@ -649,6 +659,14 @@
                     <% } %>
                     <li><a class="op file-comment" href="#">{% trans "Comment" %}</a><li>
                     <li><a class="op file-history" href="{{ SITE_ROOT }}repo/file_revisions/<%= repo_id %>/?p=<% print(encodeURIComponent(dirent_path)); %>&referer=<% print(encodeURIComponent(location.href)); %>">{% trans "History" %}</a></li>
+                    <li><a class="op view-details" href="#">{% trans "Details" %}</a></li>
+                </ul>
+            </div>
+            <% } else if (dirent.perm == 'preview') { %>
+            <div class="sf-dropdown sf-dropdown-inline">
+                <a class="more-op-icon sf2-icon-caret-down op-icon vh sf-dropdown-toggle" title="{% trans "More Operations" %}" aria-label="{% trans "More Operations" %}"></a>
+                <ul class="hidden-op dirent-hidden-op hide sf-dropdown-menu">
+                    <li><a class="op file-comment" href="#">{% trans "Comment" %}</a><li>
                     <li><a class="op view-details" href="#">{% trans "Details" %}</a></li>
                 </ul>
             </div>
@@ -1164,6 +1182,7 @@
                                 <option value="r">{% trans "Read-Only" %}</option>
                                 <% if (app.pageOptions.is_pro && dirent_path == '/') { %> {# only for repo #}
                                 <option value="admin">{% trans "Admin" %}</option>
+                                <option value="preview">{% trans "Preview" %}</option>
                                 <% } %>
                             </select>
                         </td>
@@ -1194,6 +1213,7 @@
                                 <option value="r">{% trans "Read-Only" %}</option>
                                 <% if (app.pageOptions.is_pro && dirent_path == '/') { %> {# only for repo #}
                                 <option value="admin">{% trans "Admin" %}</option>
+                                <option value="preview">{% trans "Preview" %}</option>
                                 <% } %>
                             </select>
                         </td>
@@ -1428,6 +1448,8 @@
             <span>
                 <% if (show_admin && is_admin) { %>
                     {% trans "Admin" %}
+                <% } else if (show_admin && is_preview) { %>
+                    {% trans "Preview" %}
                 <% } else { %>
                     <% if (permission == 'rw') { %>
                         {% trans "Read-Write" %}
@@ -1444,15 +1466,23 @@
                     <option value="rw">{% trans "Read-Write" %}</option>
                     <option value="r">{% trans "Read-Only" %}</option>
                     <option value="admin" selected="selected">{% trans "Admin" %}</option>
+                    <option value="preview">{% trans "Preview" %}</option>
+                <% } else if (is_preview) { %>
+                    <option value="rw">{% trans "Read-Write" %}</option>
+                    <option value="r">{% trans "Read-Only" %}</option>
+                    <option value="admin">{% trans "Admin" %}</option>
+                    <option value="preview" selected="selected">{% trans "Preview" %}</option>
                 <% } else { %>
                     <% if (permission == 'rw') { %>
                         <option value="rw" selected="selected">{% trans "Read-Write" %}</option>
                         <option value="r">{% trans "Read-Only" %}</option>
                         <option value="admin">{% trans "Admin" %}</option>
+                        <option value="preview">{% trans "Preview" %}</option>
                     <% } else { %>
                         <option value="rw">{% trans "Read-Write" %}</option>
                         <option value="r" selected="selected">{% trans "Read-Only" %}</option>
                         <option value="admin">{% trans "Admin" %}</option>
+                        <option value="preview">{% trans "Preview" %}</option>
                     <% } %>
                 <% } %>
             <% } else { %>
@@ -2267,6 +2297,16 @@
                     <option value="rw">{% trans "Read-Write" %}</option>
                     <option value="r">{% trans "Read-Only" %}</option>
                     <option value="admin" selected="selected">{% trans "Admin" %}</option>
+                    <option value="preview">{% trans "Preview" %}</option>
+                </select>
+            <% } else if (is_preview) { %>
+                <span class="cur-perm">{% trans "Preview" %}</span>
+                <a href="#" title="{% trans "Edit" %}" class="perm-edit-icon sf2-icon-edit op-icon vh"></a>
+                <select class="perm-select select-white hide">
+                    <option value="rw">{% trans "Read-Write" %}</option>
+                    <option value="r">{% trans "Read-Only" %}</option>
+                    <option value="admin">{% trans "Admin" %}</option>
+                    <option value="preview" selected="selected">{% trans "Preview" %}</option>
                 </select>
             <% } else { %>
                 <% if (share_permission == 'rw') { %>
@@ -2276,6 +2316,7 @@
                         <option value="rw" selected="selected">{% trans "Read-Write" %}</option>
                         <option value="r">{% trans "Read-Only" %}</option>
                         <option value="admin">{% trans "Admin" %}</option>
+                        <option value="preview">{% trans "Preview" %}</option>
                     </select>
                 <% } else { %>
                     <span class="cur-perm">{% trans "Read-Only" %}</span>
@@ -2284,6 +2325,7 @@
                         <option value="rw">{% trans "Read-Write" %}</option>
                         <option value="r" selected="selected">{% trans "Read-Only" %}</option>
                         <option value="admin">{% trans "Admin" %}</option>
+                        <option value="preview">{% trans "Preview" %}</option>
                     </select>
                 <% } %>
             <% } %>

@@ -32,7 +32,7 @@ from seahub.utils import (is_org_context, is_valid_username,
                           send_perm_audit_msg)
 from seahub.share.signals import share_repo_to_user_successful, share_repo_to_group_successful
 from seahub.constants import PERMISSION_READ, PERMISSION_READ_WRITE, \
-        PERMISSION_ADMIN
+        PERMISSION_ADMIN, PERMISSION_PREVIEW
 
 
 logger = logging.getLogger(__name__)
@@ -69,6 +69,7 @@ class DirSharedItemsEndpoint(APIView):
 
         # change is_admin to True if user is repo admin.
         admin_users = ExtraSharePermission.objects.get_admin_users_by_repo(repo_id)
+        preview_users = ExtraSharePermission.objects.get_preview_users_by_repo(repo_id)
         ret = []
         for item in share_items:
             ret.append({
@@ -78,7 +79,8 @@ class DirSharedItemsEndpoint(APIView):
                     "nickname": email2nickname(item.user),
                 },
                 "permission": item.perm,
-                "is_admin": item.user in admin_users
+                "is_admin": item.user in admin_users,
+                "is_preview": item.user in preview_users
             })
         return ret
 
@@ -103,6 +105,7 @@ class DirSharedItemsEndpoint(APIView):
         ret = []
         # change is_admin to True if user in admin groups.
         admin_groups = ExtraGroupsSharePermission.objects.get_admin_groups_by_repo(repo_id)
+        preview_groups = ExtraGroupsSharePermission.objects.get_preview_groups_by_repo(repo_id)
         for item in share_items:
 
             group_id = item.group_id
@@ -130,7 +133,8 @@ class DirSharedItemsEndpoint(APIView):
                     "name": group.group_name,
                 },
                 "permission": item.perm,
-                "is_admin": group_id in admin_groups,
+                "is_admin": item.group_id in admin_groups,
+                "is_preview": item.group_id in preview_groups
             })
         return ret
 
@@ -217,7 +221,8 @@ class DirSharedItemsEndpoint(APIView):
             return api_error(status.HTTP_404_NOT_FOUND, 'Folder %s not found.' % path)
 
         permission = request.data.get('permission', PERMISSION_READ)
-        if permission not in [PERMISSION_READ, PERMISSION_READ_WRITE, PERMISSION_ADMIN]:
+        if permission not in [PERMISSION_READ, PERMISSION_READ_WRITE, 
+                              PERMISSION_ADMIN, PERMISSION_PREVIEW]:
             return api_error(status.HTTP_400_BAD_REQUEST, 'permission invalid.')
 
         repo_owner = self.get_repo_owner(request, repo_id)
@@ -295,7 +300,8 @@ class DirSharedItemsEndpoint(APIView):
             return api_error(status.HTTP_403_FORBIDDEN, 'Permission denied.')
 
         permission = request.data.get('permission', PERMISSION_READ)
-        if permission not in [PERMISSION_READ, PERMISSION_READ_WRITE, PERMISSION_ADMIN]:
+        if permission not in [PERMISSION_READ, PERMISSION_READ_WRITE, 
+                              PERMISSION_ADMIN, PERMISSION_PREVIEW]:
             return api_error(status.HTTP_400_BAD_REQUEST, 'permission invalid.')
 
         result = {}
@@ -330,6 +336,7 @@ class DirSharedItemsEndpoint(APIView):
 
                 try:
                     org_id = None
+                    res = None
                     if is_org_context(request):
                         org_id = request.user.org.org_id
 
@@ -351,7 +358,7 @@ class DirSharedItemsEndpoint(APIView):
                             error_msg = "Library can not be shared to owner"
                             return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
 
-                        share_dir_to_user(repo, path, repo_owner, username, to_user, permission, org_id)
+                        res = share_dir_to_user(repo, path, repo_owner, username, to_user, permission, org_id)
                     else:
                         if is_org_user(to_user):
                             error_msg = 'User %s is a member of organization.' % to_user
@@ -367,17 +374,9 @@ class DirSharedItemsEndpoint(APIView):
                             error_msg = "Library can not be shared to owner"
                             return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
 
-                        share_dir_to_user(repo, path, repo_owner, username, to_user, permission, None)
+                        res = share_dir_to_user(repo, path, repo_owner, username, to_user, permission, None)
 
-                    result['success'].append({
-                        "share_type": "user",
-                        "user_info": {
-                            "name": to_user,
-                            "nickname": email2nickname(to_user),
-                        },
-                        "permission": PERMISSION_READ_WRITE if permission == PERMISSION_ADMIN else permission,
-                        "is_admin": permission == PERMISSION_ADMIN
-                    })
+                    result['success'].append(res)
 
                     # send a signal when sharing repo successful
                     share_repo_to_user_successful.send(sender=None, from_user=username,
@@ -429,26 +428,20 @@ class DirSharedItemsEndpoint(APIView):
 
                 try:
                     org_id = None
+                    res = None
                     if is_org_context(request):
                         # when calling seafile API to share authority related functions, change the uesrname to repo owner.
                         repo_owner = seafile_api.get_org_repo_owner(repo_id)
                         org_id = request.user.org.org_id
 
-                        share_dir_to_group(repo, path, repo_owner, username, gid, permission, org_id)
+                        res = share_dir_to_group(repo, path, repo_owner, username, gid, permission, org_id)
                     else:
                         repo_owner = seafile_api.get_repo_owner(repo_id)
 
-                        share_dir_to_group(repo, path, repo_owner, username, gid, permission, None)
+                        res = share_dir_to_group(repo, path, repo_owner, username, gid, permission, None)
 
-                    result['success'].append({
-                        "share_type": "group",
-                        "group_info": {
-                            "id": gid,
-                            "name": group.group_name,
-                        },
-                        "permission": PERMISSION_READ_WRITE if permission == PERMISSION_ADMIN else permission,
-                        "is_admin": permission == PERMISSION_ADMIN
-                    })
+                    res['group_info']['name'] = group.group_name
+                    result['success'].append(res)
 
                     share_repo_to_group_successful.send(sender=None,
                                                         from_user=username,

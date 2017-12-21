@@ -368,6 +368,7 @@ define([
             };
             if (app.pageOptions.is_pro) {
                 options.is_admin = dir.is_admin;
+                options.is_preview = dir.is_preview;
             }
 
             new ShareView(options);
