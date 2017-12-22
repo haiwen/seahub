@@ -277,7 +277,7 @@ ENABLE_UPLOAD_FOLDER = True
 ENABLE_RESUMABLE_FILEUPLOAD = False
 
 ## maxNumberOfFiles for fileupload
-MAX_NUMBER_OF_FILES_FOR_FILEUPLOAD = 500
+MAX_NUMBER_OF_FILES_FOR_FILEUPLOAD = 1000
 
 # enable encrypt library
 ENABLE_ENCRYPTED_LIBRARY = True
@@ -396,9 +396,9 @@ CACHES = {
 # rest_framwork
 REST_FRAMEWORK = {
     'DEFAULT_THROTTLE_RATES': {
-        'ping': '600/minute',
-        'anon': '5/minute',
-        'user': '300/minute',
+        'ping': '3000/minute',
+        'anon': '60/minute',
+        'user': '3000/minute',
     },
     # https://github.com/tomchristie/django-rest-framework/issues/2891
     'UNICODE_JSON': False,
