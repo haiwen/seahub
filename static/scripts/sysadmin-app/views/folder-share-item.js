@@ -13,12 +13,16 @@ define([
 
         initialize: function(options) {
             this.item_data = options.item_data;
+            this.show_admin = false;
+            if (app.pageOptions.is_pro) {
+                this.show_admin = true;
+            }
             this.repo_id = options.repo_id;
             this.render();
         },
 
         render: function () {
-            this.$el.html(this.template(this.item_data));
+            this.$el.html(this.template($.extend({}, this.item_data, {'show_admin': this.show_admin})));
             return this;
         },
 
@@ -77,6 +81,7 @@ define([
                 data: data,
                 success: function (data) {
                     item_data.permission = data.permission;
+                    item_data.is_admin = data.is_admin;
                     _this.render();
                 },
                 error: function(xhr) {
