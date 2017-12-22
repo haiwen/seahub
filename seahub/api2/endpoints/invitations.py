@@ -124,19 +124,15 @@ class InvitationsBatchView(APIView):
 
 	    try:
 		User.objects.get(accepter)
-		user_exists = True
                 result['failed'].append({
                     'email': accepter,
                     'error_msg': _('User %s already exists.') % accepter
                     })
                 continue
-	    except User.DoesNotExist:
-		user_exists = False
-
-	    i = Invitation.objects.add(inviter=request.user.username,
-				       accepter=accepter)
-	    i.send_to(email=accepter)
-
-	    result['success'].append(i.to_dict())
+            except User.DoesNotExist:
+                i = Invitation.objects.add(inviter=request.user.username,
+                                           accepter=accepter)
+                i.send_to(email=accepter)
+                result['success'].append(i.to_dict())
 
         return Response(result)
