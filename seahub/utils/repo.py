@@ -1,13 +1,11 @@
 # Copyright (c) 2012-2016 Seafile Ltd.
 # -*- coding: utf-8 -*-
 import logging
-from django.utils.translation import ugettext as _
 
 import seaserv
 from seaserv import seafile_api
 
 from seahub.utils import EMPTY_SHA1, is_org_context
-from seahub.base.accounts import User
 
 logger = logging.getLogger(__name__)
 
@@ -50,20 +48,44 @@ def get_repo_shared_users(repo_id, repo_owner, include_groups=True):
 
     return list(set(ret))
 
-def create_repo_with_storage_backend(request):
-    username = request.user.username
-    repo_name = request.data.get("name")
-    passwd = request.data.get("passwd", None) or None
+def get_library_storages(request):
+    """ Return all storages info.
 
-    storage_id = request.data.get("storage_id", None) or None
-    storage_classes = seafile_api.get_all_storage_classes()
-    storage_ids = request.user.permissions.storage_ids()
+    1. If not enable user role feature OR
+       haven't configured `storage_ids` option in user role setting:
 
-    if storage_id not in \
-            [s.storage_id for s in storage_classes if s.storage_id in storage_ids ]:
-        storage_id = storage_ids[0]
+       Return storage info getted from seafile_api.
+       And always put the default storage as the first item in the returned list.
 
-    repo_id = seafile_api.create_repo(repo_name,
-            '', username, passwd, storage_id)
+    2. If have configured `storage_ids` option in user role setting:
 
-    return repo_id
+       Only return storage info in `storage_ids`.
+       Filter out the wrong stotage id(s).
+       Not change the order of the `storage_ids` list.
+    """
+
+    all_storages = []
+    for storage in seafile_api.get_all_storage_classes():
+        storage_info = {
+            'storage_id': storage.storage_id,
+            'storage_name': storage.storage_name,
+            'is_default': storage.is_default,
+        }
+        if storage.is_default:
+            all_storages.insert(0, storage_info)
+        else:
+            all_storages.append(storage_info)
+
+    user_role_storage_ids = request.user.permissions.storage_ids()
+    if not user_role_storage_ids:
+        return all_storages
+
+    user_role_storages = []
+    for user_role_storage_id in user_role_storage_ids:
+        for storage in all_storages:
+            if storage['storage_id'] == user_role_storage_id:
+                user_role_storages.append(storage)
+                continue
+
+    return user_role_storages
+
