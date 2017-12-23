@@ -39,7 +39,7 @@
                 <img src="{{ MEDIA_URL }}{{ logo_path }}" title="{{ site_title }}" alt="logo" width="{{logo_width}}" height="{{logo_height}}" />
                 {% endif %}
             </a>
-            <span class="sf2-icon-list-view side-nav-toggle hidden-md-up hide" title="{% trans "Side Nav Menu" %}" id="js-toggle-side-nav" aria-label="{% trans "Side Nav Menu" %}"></span>
+            <span class="sf2-icon-menu side-nav-toggle hidden-md-up hide" title="{% trans "Side Nav Menu" %}" id="js-toggle-side-nav" aria-label="{% trans "Side Nav Menu" %}"></span>
 
             {% block header_right %}
             {% if request.user.is_authenticated %}
@@ -54,7 +54,7 @@
                     <a id="my-info" href="#" class="account-toggle no-deco hidden-sm-down" aria-label="{% trans "View profile and more" %}">
                         {% avatar request.user 36 %} <span class="icon-caret-down vam"></span>
                     </a>
-                    <span class="account-toggle icon-ellipsis-vertical mobile-icon hidden-md-up" aria-label="{% trans "View profile and more" %}"></span>
+                    <span class="account-toggle sf2-icon-more mobile-icon hidden-md-up" aria-label="{% trans "View profile and more" %}"></span>
                     <div id="user-info-popup" class="account-popup sf-popover hide">
                         <div class="outer-caret up-outer-caret"><div class="inner-caret"></div></div>
                         <div class="sf-popover-con">

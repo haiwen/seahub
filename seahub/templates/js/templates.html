@@ -2,7 +2,7 @@
 
 <script type="text/template" id="my-repos-toolbar-tmpl">
     <button class="repo-create btn-white hidden-sm-down"><span aria-hidden="true" class="icon-plus-square add vam"></span><span class="vam">{% trans "New Library" %}</span></button>
-    <span aria-label="{% trans "New Library" %}" class="hidden-md-up repo-create icon-plus-square mobile-icon"></span>
+    <span aria-label="{% trans "New Library" %}" class="hidden-md-up repo-create sf2-icon-plus2 mobile-icon"></span>
     <div id="my-libs-more-op" class="sf-dropdown sf-dropdown-inline hidden-sm-down">
         <button class="sf-dropdown-toggle btn-white more-op-btn-white">{% trans "More" %}</button>
         <ul class="sf-dropdown-menu hide">
@@ -205,7 +205,7 @@
 <script type="text/template" id="groups-toolbar-tmpl">
     {% if user.permissions.can_add_group %}
     <button id="add-group" class="btn-white hidden-sm-down"><span aria-hidden="true" class="icon-plus-square add vam"></span><span class="vam">{% trans "New Group" %}</span></button>
-    <span id="add-group" class="icon-plus-square hidden-md-up mobile-icon" aria-label="{% trans "New Group" %}"></span>
+    <span id="add-group" class="sf2-icon-plus2 mobile-icon hidden-md-up" aria-label="{% trans "New Group" %}"></span>
     {% endif %}
 </script>
 <script type="text/template" id="add-group-form-tmpl">
@@ -282,7 +282,7 @@
 {% if can_add_pub_repo %}
     <div class="sf-dropdown js-add-pub-lib-dropdown">
         <button class="btn-white sf-dropdown-toggle hidden-sm-down"><span aria-hidden="true" class="icon-plus-square add vam"></span><span class="vam">{% trans "Add Library"%}</span></button>
-        <span aria-label="{% trans "Add Library" %}" class="hidden-md-up sf-dropdown-toggle icon-plus-square mobile-icon"></span>
+        <span aria-label="{% trans "Add Library" %}" class="hidden-md-up sf-dropdown-toggle sf2-icon-plus2 mobile-icon"></span>
         <ul class="sf-dropdown-menu hide">
             <li><a class="op share-existing" href="#">{% trans "Share existing libraries" %}</a></li>
             <li><a class="op create-new" href="#">{% trans "Create a new library" %}</a></li>
@@ -348,13 +348,13 @@
     <% if (!no_quota) { %>
     <div id="basic-upload" class="inline-block">
         <button class="basic-upload-btn btn-white hidden-sm-down">{% trans "Upload" %}</button>
-        <span class="basic-upload-btn icon-upload mobile-icon hidden-md-up" aria-label="{% trans "Upload" %}"></span>
+        <span class="basic-upload-btn sf2-icon-upload mobile-icon hidden-md-up" aria-label="{% trans "Upload" %}"></span>
         <input id="basic-upload-input" class="hide" type="file" name="file" multiple />
     </div>
     <% if (app.pageOptions.enable_upload_folder) { %>
     <div id="advanced-upload" class="sf-dropdown sf-dropdown-inline">
         <button class="sf-dropdown-toggle btn-white hidden-sm-down">{% trans "Upload" %}</button>
-        <span class="sf-dropdown-toggle icon-upload mobile-icon hidden-md-up" aria-label="{% trans "Upload" %}"></span>
+        <span class="sf-dropdown-toggle sf2-icon-upload mobile-icon hidden-md-up" aria-label="{% trans "Upload" %}"></span>
         <ul id="upload-menu" class="sf-dropdown-menu hide">
             <li>
                 <a class="op advanced-upload-file" href="#">{% trans "Upload Files" %}</a>
@@ -372,7 +372,7 @@
     <% } %>
     <div id="add-new" class="sf-dropdown sf-dropdown-inline">
         <button class="sf-dropdown-toggle btn-white hidden-sm-down">{% trans "New" %}</button>
-        <span class="icon-plus-square sf-dropdown-toggle hidden-md-up mobile-icon" aria-label="{% trans "New" %}"></span>
+        <span class="sf2-icon-plus2 sf-dropdown-toggle hidden-md-up mobile-icon" aria-label="{% trans "New" %}"></span>
         <div class="sf-dropdown-menu hide">
             <ul>
                 <li><a id="add-new-dir" class="op" href="#">{% trans "New Folder" %}</a></li>
@@ -1426,7 +1426,7 @@
 <script type="text/template" id="group-toolbar-tmpl">
     {% if user.permissions.can_add_repo %}
     <button class="repo-create btn-white hidden-sm-down"><span class="icon-plus-square add vam"></span><span class="vam">{% trans "New Library" %}</span></button>
-    <span class="repo-create icon-plus-square mobile-icon hidden-md-up" aria-label="{% trans "New Library" %}"></span>
+    <span class="repo-create sf2-icon-plus2 mobile-icon hidden-md-up" aria-label="{% trans "New Library" %}"></span>
     {% endif %}
 </script>
 <script type="text/template" id="group-path-tmpl">
@@ -2561,7 +2561,7 @@
 
 <script type="text/template" id="invitations-toolbar-tmpl">
 <button id="invite-people" class="btn-white hidden-sm-down"><span aria-hidden="true" class="icon-plus-square add vam"></span><span class="vam">{% trans "Invite People" %}</span></button>
-<span id="invite-people" class="hidden-md-up icon-plus-square mobile-icon" aria-label="{% trans "Invite People" %}"></span>
+<span id="invite-people" class="hidden-md-up sf2-icon-plus2 mobile-icon" aria-label="{% trans "Invite People" %}"></span>
 </script>
 <script type="text/template" id="invitations-tmpl">
 <div class="cur-view-path">
