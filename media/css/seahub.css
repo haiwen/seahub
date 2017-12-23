@@ -192,6 +192,10 @@
 .sf2-icon-admin-log:before { content: "\e02e"; }
 .sf2-icon-info:before { content: "\e02f"; }
 .sf2-icon-logout:before { content: "\e030"; }
+.sf2-icon-menu:before { content: "\e031"; }
+.sf2-icon-more:before { content: "\e032"; }
+.sf2-icon-plus2:before { content: "\e033"; }
+.sf2-icon-upload:before { content: "\e034"; }
 
 /******* tags **********/
 html, body {
@@ -1986,7 +1990,7 @@ button.sf-dropdown-toggle:focus {
 }
 @media (max-width:767px) {
     .cur-view-toolbar {
-        margin-top:8px;
+        margin-top:6px;
     }
     .cur-view-toolbar .mobile-icon {
         color:#999;
@@ -2026,7 +2030,7 @@ button.sf-dropdown-toggle:focus {
 }
 @media (max-width: 390px) {
     #logout-icon {
-        margin-left:8px;
+        margin-left:10px;
     }
 }
 
@@ -2115,7 +2119,6 @@ button.sf-dropdown-toggle:focus {
         font-size:22px;
         line-height:1;
         color:#999;
-        padding:0 8px;
         margin-top:8px;
     }
 }
