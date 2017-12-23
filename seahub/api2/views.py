@@ -73,7 +73,7 @@ from seahub.utils import gen_file_get_url, gen_token, gen_file_upload_url, \
 
 from seahub.utils.file_revisions import get_file_revisions_after_renamed
 from seahub.utils.devices import do_unlink_device
-from seahub.utils.repo import get_repo_owner, create_repo_with_storage_backend
+from seahub.utils.repo import get_repo_owner, get_library_storages
 from seahub.utils.star import star_file, unstar_file
 from seahub.utils.file_types import DOCUMENT
 from seahub.utils.file_size import get_file_size_unit
@@ -733,7 +733,19 @@ class Repos(APIView):
                     repo_desc, username, passwd, org_id)
         else:
             if is_pro_version() and ENABLE_STORAGE_CLASSES:
-                repo_id = create_repo_with_storage_backend(request)
+
+                storages = get_library_storages(request)
+                storage_id = request.data.get("storage_id", None)
+                if not storage_id:
+                    storage_id = storages[0]['storage_id']
+
+                if storage_id not in [s['storage_id'] for s in storages]:
+                    error_msg = 'storage_id invalid.'
+                    return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
+
+                repo_id = seafile_api.create_repo(repo_name,
+                        repo_desc, username, passwd, storage_id)
+
             else:
                 repo_id = seafile_api.create_repo(repo_name,
                         repo_desc, username, passwd)
@@ -839,7 +851,18 @@ class PubRepos(APIView):
                 org_id, repo.id, permission)
         else:
             if is_pro_version() and ENABLE_STORAGE_CLASSES:
-                repo_id = create_repo_with_storage_backend(request)
+
+                storages = get_library_storages(request)
+                storage_id = request.data.get("storage_id", None)
+                if not storage_id:
+                    storage_id = storages[0]['storage_id']
+
+                if storage_id not in [s['storage_id'] for s in storages]:
+                    error_msg = 'storage_id invalid.'
+                    return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
+
+                repo_id = seafile_api.create_repo(repo_name,
+                        repo_desc, username, passwd, storage_id)
             else:
                 repo_id = seafile_api.create_repo(repo_name,
                         repo_desc, username, passwd)
@@ -4012,7 +4035,18 @@ class GroupRepos(APIView):
                                            username, permission)
         else:
             if is_pro_version() and ENABLE_STORAGE_CLASSES:
-                repo_id = create_repo_with_storage_backend(request)
+
+                storages = get_library_storages(request)
+                storage_id = request.data.get("storage_id", None)
+                if not storage_id:
+                    storage_id = storages[0]['storage_id']
+
+                if storage_id not in [s['storage_id'] for s in storages]:
+                    error_msg = 'storage_id invalid.'
+                    return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
+
+                repo_id = seafile_api.create_repo(repo_name,
+                        repo_desc, username, passwd, storage_id)
             else:
                 repo_id = seafile_api.create_repo(repo_name,
                         repo_desc, username, passwd)

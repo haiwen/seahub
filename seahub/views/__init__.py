@@ -46,6 +46,7 @@ from seahub.utils import render_permission_error, render_error, \
     is_pro_version, FILE_AUDIT_ENABLED, is_valid_dirent_name, \
     is_org_repo_creation_allowed, is_windows_operating_system
 from seahub.utils.star import get_dir_starred_files
+from seahub.utils.repo import get_library_storages
 from seahub.utils.timeutils import utc_to_local
 from seahub.views.modules import MOD_PERSONAL_WIKI, enable_mod_for_user, \
     disable_mod_for_user
@@ -759,20 +760,8 @@ def libraries(request):
             joined_groups = []
 
     storages = []
-    if is_pro_version() and ENABLE_STORAGE_CLASSES :
-
-        all_storages_dict = {}
-        storage_classes = seafile_api.get_all_storage_classes()
-        for storage in storage_classes:
-            all_storages_dict[storage.storage_id] = storage.storage_name
-
-        for storage_id in request.user.permissions.storage_ids():
-            if storage_id in all_storages_dict.keys():
-                storage_dict = {
-                    'storage_id': storage_id,
-                    'storage_name': all_storages_dict[storage_id],
-                }
-                storages.append(storage_dict)
+    if is_pro_version() and ENABLE_STORAGE_CLASSES:
+        storages = get_library_storages(request)
 
     return render_to_response('libraries.html', {
             "allow_public_share": allow_public_share,
