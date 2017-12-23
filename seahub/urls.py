@@ -91,6 +91,8 @@ from seahub.api2.endpoints.admin.invitations import InvitationsView as AdminInvi
 from seahub.api2.endpoints.admin.library_history import AdminLibraryHistoryLimit
 from seahub.api2.endpoints.admin.login_bg_image import AdminLoginBgImage
 from seahub.api2.endpoints.admin.admin_role import AdminAdminRole
+from seahub.api2.endpoints.admin.address_book.groups import AdminAddressBookGroups
+from seahub.api2.endpoints.admin.address_book.group import AdminAddressBookGroup
 
 # Uncomment the next two lines to enable the admin:
 #from django.contrib import admin
@@ -383,6 +385,10 @@ urlpatterns = patterns(
     url(r'^inst/', include('seahub.institutions.urls', app_name='institutions', namespace='institutions')),
     url(r'^invite/', include('seahub.invitations.urls', app_name='invitations', namespace='invitations')),
     url(r'^terms/', include('termsandconditions.urls')),
+
+    ## admin::address book
+    url(r'^api/v2.1/admin/address-book/groups/$', AdminAddressBookGroups.as_view(), name='api-v2.1-admin-address-book-groups'),
+    url(r'^api/v2.1/admin/address-book/groups/(?P<group_id>\d+)/$', AdminAddressBookGroup.as_view(), name='api-v2.1-admin-address-book-group'),
 
     ### system admin ###
     url(r'^sysadmin/$', sysadmin, name='sysadmin'),
