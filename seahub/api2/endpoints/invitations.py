@@ -93,37 +93,37 @@ class InvitationsBatchView(APIView):
         result['failed'] = []
         result['success'] = []
 
-	for accepter in accepters:
+        for accepter in accepters:
 
             if not accepter.strip():
                 continue
 
-	    accepter = accepter.lower()
+            accepter = accepter.lower()
 
-	    if not is_valid_email(accepter):
+            if not is_valid_email(accepter):
                 result['failed'].append({
                     'email': accepter,
                     'error_msg': _('Email %s invalid.') % accepter
                     })
                 continue
 
-	    if block_accepter(accepter):
+            if block_accepter(accepter):
                 result['failed'].append({
                     'email': accepter,
                     'error_msg': _('The email address is not allowed to be invited as a guest.')
                     })
                 continue
 
-	    if Invitation.objects.filter(inviter=request.user.username,
-					 accepter=accepter).count() > 0:
+            if Invitation.objects.filter(inviter=request.user.username,
+                    accepter=accepter).count() > 0:
                 result['failed'].append({
                     'email': accepter,
                     'error_msg': _('%s is already invited.') % accepter
                     })
                 continue
 
-	    try:
-		User.objects.get(accepter)
+            try:
+                User.objects.get(accepter)
                 result['failed'].append({
                     'email': accepter,
                     'error_msg': _('User %s already exists.') % accepter
@@ -131,7 +131,7 @@ class InvitationsBatchView(APIView):
                 continue
             except User.DoesNotExist:
                 i = Invitation.objects.add(inviter=request.user.username,
-                                           accepter=accepter)
+                        accepter=accepter)
                 i.send_to(email=accepter)
                 result['success'].append(i.to_dict())
 
