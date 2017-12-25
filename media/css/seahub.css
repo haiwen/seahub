@@ -994,11 +994,8 @@ textarea:-moz-placeholder {/* for FF */
 }
 .side-nav-toggle {
     font-size:1.5rem;
-    color:#666;
+    color:#999;
     margin-right:15px;
-}
-.side-nav-toggle:hover {
-    background:#ddd;
 }
 .home-side-nav .sharp {
     display:inline-block;
