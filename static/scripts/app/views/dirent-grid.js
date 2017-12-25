@@ -123,6 +123,9 @@ define([
                 can_generate_upload_link: app.pageOptions.can_generate_upload_link,
                 is_pro: app.pageOptions.is_pro,
                 file_audit_enabled: app.pageOptions.file_audit_enabled,
+                is_virtual: dir.is_virtual,
+                is_admin: dir.is_admin,
+                has_been_shared_out: dir.has_been_shared_out,
                 repo_encrypted: dir.encrypted
             });
             this.$el.append(op);

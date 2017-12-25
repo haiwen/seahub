@@ -22,6 +22,23 @@ class RepoUserFolderPermTest(BaseTestCase):
     def tearDown(self):
         self.remove_repo()
 
+    def share_repo_to_admin_with_admin_permission(self):
+        # share user's repo to admin with 'admin' permission
+        self.logout()
+        self.login_as(self.user)
+        share_url = reverse('api2-dir-shared-items', kwargs=dict(repo_id=self.repo.id))
+        data = "share_type=user&permission=admin&username=%s" % self.admin.username
+        self.client.put(share_url, data, 'application/x-www-form-urlencoded')
+        self.logout()
+
+    def share_repo_to_group_with_admin_permission(self):
+        self.logout()
+        self.login_as(self.user)
+        share_group_url = reverse('api2-dir-shared-items', kwargs=dict(repo_id=self.repo.id))
+        data = "share_type=group&permission=admin&group_id=%s" % self.group.id
+        self.client.put(share_group_url, data, 'application/x-www-form-urlencoded')
+        self.logout()
+
     def test_can_get_folder_perm(self):
 
         if not LOCAL_PRO_DEV_ENV:
@@ -32,6 +49,41 @@ class RepoUserFolderPermTest(BaseTestCase):
 
         self.login_as(self.user)
 
+        resp = self.client.get(reverse("api2-repo-user-folder-perm", args=[self.user_repo_id]))
+        self.assertEqual(200, resp.status_code)
+
+        json_resp = json.loads(resp.content)
+        assert json_resp[0]['user_email'] == self.admin_email
+        assert json_resp[0]['repo_id'] == self.user_repo_id
+        assert json_resp[0]['permission'] == self.perm_r
+        assert json_resp[0]['folder_path'] == self.user_folder_path
+
+    def test_can_get_folder_perm_with_admin(self):
+        if not LOCAL_PRO_DEV_ENV:
+            return
+        self.share_repo_to_admin_with_admin_permission()
+        self.login_as(self.admin)
+
+        seafile_api.add_folder_user_perm(self.user_repo_id,
+            self.user_folder_path, self.perm_r, self.admin_email)
+        resp = self.client.get(reverse("api2-repo-user-folder-perm", args=[self.user_repo_id]))
+        self.assertEqual(200, resp.status_code)
+
+        json_resp = json.loads(resp.content)
+        assert json_resp[0]['user_email'] == self.admin_email
+        assert json_resp[0]['repo_id'] == self.user_repo_id
+        assert json_resp[0]['permission'] == self.perm_r
+        assert json_resp[0]['folder_path'] == self.user_folder_path
+
+    def test_can_get_folder_perm_with_admin_group(self):
+        if not LOCAL_PRO_DEV_ENV:
+            return
+        self.share_repo_to_group_with_admin_permission()
+        self.add_admin_to_group()
+        self.login_as(self.admin)
+
+        seafile_api.add_folder_user_perm(self.user_repo_id,
+            self.user_folder_path, self.perm_r, self.admin_email)
         resp = self.client.get(reverse("api2-repo-user-folder-perm", args=[self.user_repo_id]))
         self.assertEqual(200, resp.status_code)
 
@@ -67,6 +119,41 @@ class RepoUserFolderPermTest(BaseTestCase):
         json_resp = json.loads(resp.content)
         assert json_resp[0]['permission'] == self.perm_rw
 
+    def test_can_modify_folder_perm_with_admin(self):
+        if not LOCAL_PRO_DEV_ENV:
+            return
+        self.share_repo_to_admin_with_admin_permission()
+        self.login_as(self.admin)
+
+        seafile_api.add_folder_user_perm(self.user_repo_id,
+            self.user_folder_path, self.perm_r, self.admin_email)
+        url = reverse("api2-repo-user-folder-perm", args=[self.user_repo_id])
+        data = 'user_email=%s&folder_path=%s&permission=%s' % (self.admin_email,
+            self.user_folder_path, self.perm_rw)
+        resp = self.client.put(url, data, 'application/x-www-form-urlencoded')
+        self.assertEqual(200, resp.status_code)
+        resp = self.client.get(reverse("api2-repo-user-folder-perm", args=[self.user_repo_id]))
+        json_resp = json.loads(resp.content)
+        assert json_resp[0]['permission'] == self.perm_rw
+
+    def test_can_modify_folder_perm_with_admin_group(self):
+        if not LOCAL_PRO_DEV_ENV:
+            return
+        self.share_repo_to_group_with_admin_permission()
+        self.add_admin_to_group()
+        self.login_as(self.admin)
+
+        seafile_api.add_folder_user_perm(self.user_repo_id,
+            self.user_folder_path, self.perm_r, self.admin_email)
+        url = reverse("api2-repo-user-folder-perm", args=[self.user_repo_id])
+        data = 'user_email=%s&folder_path=%s&permission=%s' % (self.admin_email,
+            self.user_folder_path, self.perm_rw)
+        resp = self.client.put(url, data, 'application/x-www-form-urlencoded')
+        self.assertEqual(200, resp.status_code)
+        resp = self.client.get(reverse("api2-repo-user-folder-perm", args=[self.user_repo_id]))
+        json_resp = json.loads(resp.content)
+        assert json_resp[0]['permission'] == self.perm_rw
+
     def test_can_not_modify_if_not_repo_owner(self):
         self.login_as(self.admin)
 
@@ -97,6 +184,53 @@ class RepoUserFolderPermTest(BaseTestCase):
             return
 
         self.login_as(self.user)
+
+        url = reverse("api2-repo-user-folder-perm", args=[self.user_repo_id])
+        data = {
+            "user_email": self.admin_email,
+            "folder_path": self.user_folder_path,
+            "permission": self.perm_rw
+        }
+
+        resp = self.client.post(url, data)
+        self.assertEqual(200, resp.status_code)
+
+        resp = self.client.get(reverse("api2-repo-user-folder-perm", args=[self.user_repo_id]))
+        json_resp = json.loads(resp.content)
+        assert json_resp[0]['user_email'] == self.admin_email
+        assert json_resp[0]['repo_id'] == self.user_repo_id
+        assert json_resp[0]['permission'] == self.perm_rw
+        assert json_resp[0]['folder_path'] == self.user_folder_path
+
+    def test_can_add_folder_perm_with_admin(self):
+        if not LOCAL_PRO_DEV_ENV:
+            return
+        self.share_repo_to_admin_with_admin_permission()
+        self.login_as(self.admin)
+
+        url = reverse("api2-repo-user-folder-perm", args=[self.user_repo_id])
+        data = {
+            "user_email": self.admin_email,
+            "folder_path": self.user_folder_path,
+            "permission": self.perm_rw
+        }
+
+        resp = self.client.post(url, data)
+        self.assertEqual(200, resp.status_code)
+
+        resp = self.client.get(reverse("api2-repo-user-folder-perm", args=[self.user_repo_id]))
+        json_resp = json.loads(resp.content)
+        assert json_resp[0]['user_email'] == self.admin_email
+        assert json_resp[0]['repo_id'] == self.user_repo_id
+        assert json_resp[0]['permission'] == self.perm_rw
+        assert json_resp[0]['folder_path'] == self.user_folder_path
+
+    def test_can_add_folder_perm_with_admin_group(self):
+        if not LOCAL_PRO_DEV_ENV:
+            return
+        self.share_repo_to_group_with_admin_permission()
+        self.add_admin_to_group()
+        self.login_as(self.admin)
 
         url = reverse("api2-repo-user-folder-perm", args=[self.user_repo_id])
         data = {
@@ -161,6 +295,49 @@ class RepoUserFolderPermTest(BaseTestCase):
 
         self.login_as(self.user)
 
+        resp = self.client.get(reverse("api2-repo-user-folder-perm", args=[self.user_repo_id]))
+        json_resp = json.loads(resp.content)
+        assert len(json_resp) == 1
+
+        url = reverse("api2-repo-user-folder-perm", args=[self.user_repo_id])
+        data = 'user_email=%s&folder_path=%s' % (self.admin_email, self.user_folder_path)
+        resp = self.client.delete(url, data, 'application/x-www-form-urlencoded')
+        self.assertEqual(200, resp.status_code)
+
+        resp = self.client.get(reverse("api2-repo-user-folder-perm", args=[self.user_repo_id]))
+        json_resp = json.loads(resp.content)
+        assert len(json_resp) == 0
+
+    def test_can_delete_folder_perm_with_admin(self):
+        if not LOCAL_PRO_DEV_ENV:
+            return
+        self.share_repo_to_admin_with_admin_permission()
+        self.login_as(self.admin)
+
+        seafile_api.add_folder_user_perm(self.user_repo_id,
+            self.user_folder_path, self.perm_r, self.admin_email)
+        resp = self.client.get(reverse("api2-repo-user-folder-perm", args=[self.user_repo_id]))
+        json_resp = json.loads(resp.content)
+        assert len(json_resp) == 1
+
+        url = reverse("api2-repo-user-folder-perm", args=[self.user_repo_id])
+        data = 'user_email=%s&folder_path=%s' % (self.admin_email, self.user_folder_path)
+        resp = self.client.delete(url, data, 'application/x-www-form-urlencoded')
+        self.assertEqual(200, resp.status_code)
+
+        resp = self.client.get(reverse("api2-repo-user-folder-perm", args=[self.user_repo_id]))
+        json_resp = json.loads(resp.content)
+        assert len(json_resp) == 0
+
+    def test_can_delete_folder_perm_with_admin_group(self):
+        if not LOCAL_PRO_DEV_ENV:
+            return
+        self.share_repo_to_group_with_admin_permission()
+        self.add_admin_to_group()
+        self.login_as(self.admin)
+
+        seafile_api.add_folder_user_perm(self.user_repo_id,
+            self.user_folder_path, self.perm_r, self.admin_email)
         resp = self.client.get(reverse("api2-repo-user-folder-perm", args=[self.user_repo_id]))
         json_resp = json.loads(resp.content)
         assert len(json_resp) == 1

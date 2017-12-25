@@ -73,7 +73,7 @@ from seahub.utils.file_revisions import get_file_revisions_after_renamed
 from seahub.utils.devices import do_unlink_device
 from seahub.utils.repo import get_repo_owner, get_library_storages, \
         get_locked_files_by_dir, get_related_users_by_repo, \
-        is_valid_repo_id_format
+        is_valid_repo_id_format, can_set_folder_perm_by_user
 from seahub.utils.star import star_file, unstar_file
 from seahub.utils.file_types import DOCUMENT
 from seahub.utils.file_size import get_file_size_unit
@@ -4852,7 +4852,7 @@ class RepoUserFolderPerm(APIView):
         """ List repo user folder perms (by folder_path).
 
         Permission checking:
-        1. repo owner & pro edition.
+        1. ( repo owner | admin ) & pro edition & enable folder perm.
         """
 
         # resource check
@@ -4868,7 +4868,7 @@ class RepoUserFolderPerm(APIView):
             repo_owner = seafile_api.get_repo_owner(repo_id)
 
         username = request.user.username
-        if not (is_pro_version() and ENABLE_FOLDER_PERM and username == repo_owner):
+        if not (is_pro_version() and can_set_folder_perm_by_user(username, repo, repo_owner)):
             error_msg = 'Permission denied.'
             return api_error(status.HTTP_403_FORBIDDEN, error_msg)
 
@@ -4895,7 +4895,7 @@ class RepoUserFolderPerm(APIView):
         """ Add repo user folder perm.
 
         Permission checking:
-        1. repo owner & pro edition & enable folder perm.
+        1. ( repo owner | admin ) & pro edition & enable folder perm.
         """
 
         # argument check
@@ -4927,7 +4927,7 @@ class RepoUserFolderPerm(APIView):
             repo_owner = seafile_api.get_repo_owner(repo_id)
 
         username = request.user.username
-        if not (is_pro_version() and ENABLE_FOLDER_PERM and username == repo_owner):
+        if not (is_pro_version() and can_set_folder_perm_by_user(username, repo, repo_owner)):
             error_msg = 'Permission denied.'
             return api_error(status.HTTP_403_FORBIDDEN, error_msg)
 
@@ -4983,7 +4983,7 @@ class RepoUserFolderPerm(APIView):
         """ Modify repo user folder perm.
 
         Permission checking:
-        1. repo owner & pro edition & enable folder perm.
+        1. ( repo owner | admin ) & pro edition & enable folder perm.
         """
 
         # argument check
@@ -5026,7 +5026,7 @@ class RepoUserFolderPerm(APIView):
             repo_owner = seafile_api.get_repo_owner(repo_id)
 
         username = request.user.username
-        if not (is_pro_version() and ENABLE_FOLDER_PERM and username == repo_owner):
+        if not (is_pro_version() and can_set_folder_perm_by_user(username, repo, repo_owner)):
             error_msg = 'Permission denied.'
             return api_error(status.HTTP_403_FORBIDDEN, error_msg)
 
@@ -5048,6 +5048,11 @@ class RepoUserFolderPerm(APIView):
             return api_error(status.HTTP_500_INTERNAL_SERVER_ERROR, error_msg)
 
     def delete(self, request, repo_id, format=None):
+        """ Remove repo user folder perms.
+
+        Permission checking:
+        1. ( repo owner | admin ) & pro edition & enable folder perm.
+        """
 
         # argument check
         user = request.data.get('user_email', None)
@@ -5080,8 +5085,7 @@ class RepoUserFolderPerm(APIView):
             repo_owner = seafile_api.get_repo_owner(repo_id)
 
         username = request.user.username
-        if not (is_pro_version() and ENABLE_FOLDER_PERM) or \
-                repo.is_virtual or username != repo_owner:
+        if not (is_pro_version() and can_set_folder_perm_by_user(username, repo, repo_owner)):
             error_msg = 'Permission denied.'
             return api_error(status.HTTP_403_FORBIDDEN, error_msg)
 
@@ -5123,7 +5127,7 @@ class RepoGroupFolderPerm(APIView):
         """ List repo group folder perms (by folder_path).
 
         Permission checking:
-        1. repo owner & pro edition.
+        1. ( repo owner | admin ) & pro edition & enable folder perm.
         """
 
         # resource check
@@ -5139,7 +5143,7 @@ class RepoGroupFolderPerm(APIView):
             repo_owner = seafile_api.get_repo_owner(repo_id)
 
         username = request.user.username
-        if not (is_pro_version() and ENABLE_FOLDER_PERM and username == repo_owner):
+        if not (is_pro_version() and can_set_folder_perm_by_user(username, repo, repo_owner)):
             error_msg = 'Permission denied.'
             return api_error(status.HTTP_403_FORBIDDEN, error_msg)
 
@@ -5166,7 +5170,7 @@ class RepoGroupFolderPerm(APIView):
         """ Add repo group folder perm.
 
         Permission checking:
-        1. repo owner & pro edition & enable folder perm.
+        1. ( repo owner | admin ) & pro edition & enable folder perm.
         """
 
         # argument check
@@ -5198,7 +5202,7 @@ class RepoGroupFolderPerm(APIView):
             repo_owner = seafile_api.get_repo_owner(repo_id)
 
         username = request.user.username
-        if not (is_pro_version() and ENABLE_FOLDER_PERM and username == repo_owner):
+        if not (is_pro_version() and can_set_folder_perm_by_user(username, repo, repo_owner)):
             error_msg = 'Permission denied.'
             return api_error(status.HTTP_403_FORBIDDEN, error_msg)
 
@@ -5253,7 +5257,7 @@ class RepoGroupFolderPerm(APIView):
         """ Modify repo group folder perm.
 
         Permission checking:
-        1. repo owner & pro edition & enable folder perm.
+        1. ( repo owner | admin ) & pro edition & enable folder perm.
         """
 
         # argument check
@@ -5300,7 +5304,7 @@ class RepoGroupFolderPerm(APIView):
             repo_owner = seafile_api.get_repo_owner(repo_id)
 
         username = request.user.username
-        if not (is_pro_version() and ENABLE_FOLDER_PERM and username == repo_owner):
+        if not (is_pro_version() and can_set_folder_perm_by_user(username, repo, repo_owner)):
             error_msg = 'Permission denied.'
             return api_error(status.HTTP_403_FORBIDDEN, error_msg)
 
@@ -5322,6 +5326,11 @@ class RepoGroupFolderPerm(APIView):
             return api_error(status.HTTP_500_INTERNAL_SERVER_ERROR, error_msg)
 
     def delete(self, request, repo_id, format=None):
+        """ Remove repo group folder perm.
+
+        Permission checking:
+        1. ( repo owner | admin ) & pro edition & enable folder perm.
+        """
         # arguments check
         group_id = request.data.get('group_id', None)
         path = request.data.get('folder_path', None)
@@ -5357,8 +5366,7 @@ class RepoGroupFolderPerm(APIView):
             repo_owner = seafile_api.get_repo_owner(repo_id)
 
         username = request.user.username
-        if not (is_pro_version() and ENABLE_FOLDER_PERM) or \
-                repo.is_virtual or username != repo_owner:
+        if not (is_pro_version() and can_set_folder_perm_by_user(username, repo, repo_owner)):
             error_msg = 'Permission denied.'
             return api_error(status.HTTP_403_FORBIDDEN, error_msg)
 
