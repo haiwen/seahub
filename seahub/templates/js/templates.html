@@ -2514,7 +2514,7 @@
     <form id="invitation-form" action="" method="post">{% csrf_token %}
         <h3 id="dialogTitle">{% trans "Invite People" %}</h3>
         <label for="accepter">{% trans "Email" %}</label><br/>
-        <input id="accepter" type="text" name="accepter" value="" class="input" /><br />
+        <input id="accepter" type="text" name="accepter" value="" class="input" placeholder="{% trans "Emails, separated by ','"%}" title="{% trans "Emails, separated by ','"%}" /><br />
         <p class="error hide"></p>
         <input type="submit" value="{% trans "Submit" %}" class="submit vam" />
         <span class="loading-icon vam" style="margin-left:5px;display:none;"></span>
