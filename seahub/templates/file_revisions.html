@@ -31,23 +31,25 @@
                 {% endfor %}
             </p>
 
-            <span class="fright">
-                {% if days != 7 %}
-                <a href="?p={{path|urlencode}}&days=7&referer={{referer|urlencode}}">{% trans "a week" %}</a> /
-                {% else %}
-                {% trans "a week" %} /
-                {% endif %}
-                {% if days != 30 %}
-                <a href="?p={{path|urlencode}}&days=30&referer={{referer|urlencode}}">{% trans "a month" %}</a> /
-                {% else %}
-                {% trans "a month" %} /
-                {% endif %}
-                {% if days != -1 %}
-                <a href="?p={{path|urlencode}}&days=-1&referer={{referer|urlencode}}">{% trans "all" %}</a>
-                {% else %}
-                {% trans "all" %}
-                {% endif %}
-            </span>
+            {% if not reference_seafevents %}
+                <span class="fright">
+                    {% if days != 7 %}
+                    <a href="?p={{path|urlencode}}&days=7&referer={{referer|urlencode}}">{% trans "a week" %}</a> /
+                    {% else %}
+                    {% trans "a week" %} /
+                    {% endif %}
+                    {% if days != 30 %}
+                    <a href="?p={{path|urlencode}}&days=30&referer={{referer|urlencode}}">{% trans "a month" %}</a> /
+                    {% else %}
+                    {% trans "a month" %} /
+                    {% endif %}
+                    {% if days != -1 %}
+                    <a href="?p={{path|urlencode}}&days=-1&referer={{referer|urlencode}}">{% trans "all" %}</a>
+                    {% else %}
+                    {% trans "all" %}
+                    {% endif %}
+                </span>
+            {% endif %}
         </div>
         <table class="commit-list">
             <tr>
@@ -59,31 +61,31 @@
             {% for commit in commits %}
             <tr>
                 <td class="time">
-                    {{ commit.props.ctime|translate_seahub_time }}
+                    {{ commit.ctime|translate_seahub_time }}
                     {% if commit.is_first_commit %}
                     {% trans '(current version)' %}
                     {% endif %}
 
-                    {% if commit.rev_renamed_old_path %}
-                    <br /><span class="tip">{% blocktrans with old_path=commit.rev_renamed_old_path %}(Renamed or moved from {{ old_path }}){% endblocktrans %}</span>
+                    {% if commit.renamed_old_path %}
+                    <br /><span class="tip">{% blocktrans with old_path=commit.renamed_old_path %}(Renamed or moved from {{ old_path }}){% endblocktrans %}</span>
                     {% endif %}
                 </td>
 
-                {% if commit.creator_name %}
+                {% if commit.creator %}
                 <td>
-                    {% avatar commit.creator_name 16 %}
-                    <a href="{% url 'user_profile' commit.creator_name %}" class="vam">{{ commit.creator_name|email2nickname }}</a>
+                    {% avatar commit.creator 16 %}
+                    <a href="{% url 'user_profile' commit.creator %}" class="vam">{{ commit.creator|email2nickname }}</a>
                 </td>
                 {% else %}
                 <td>{% trans 'Unknown' %}</td>
                 {% endif %}
 
-                <td>{{ commit.rev_file_size|filesizeformat }} </td>
+                <td>{{ commit.file_size|filesizeformat }} </td>
                 <td>
                     {% if can_revert_file and not commit.is_first_commit %}
                     <a href="#" class="op vh restore-file" data-commit_id="{{ commit.id }}" data-commit_path="{{ commit.path }}">{% trans 'Restore' %}</a>
                     {% endif %}
-                    <a href="{% url "download_file" repo.id commit.rev_file_id %}?p={{commit.path|urlencode}}" class="op vh">{% trans 'Download' %}</a>
+                    <a href="{% url "download_file" repo.id commit.file_id %}?p={{commit.path|urlencode}}" class="op vh">{% trans 'Download' %}</a>
                     <a href="{% url 'view_history_file' repo.id %}?obj_id={{ commit.rev_file_id }}&commit_id={{ commit.id }}&p={{commit.path|urlencode}}" class="op vh" target="_blank">{% trans 'View' %}</a>
                     {% if can_compare and not forloop.last %}
                     <a href="{% url 'text_diff' repo.id %}?p={{commit.path|urlencode}}&commit={{commit.id}}" class="op vh text-diff">{% trans 'Diff' %}</a>
