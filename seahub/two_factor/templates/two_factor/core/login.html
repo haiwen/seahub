@@ -1,8 +1,9 @@
-{% extends "base.html" %}
+{% extends "registration/login.html" %}
 {% load i18n %}
 
 {% block main_content %}
-<div class="new-narrow-panel">
+<div class="login-panel-outer-container vh">
+<div class="login-panel">
     <h2 class="hd">{% trans "Two-Factor Authentication" %}</h2>
     <form action="" method="post" class="con">{% csrf_token %}
         {{ wizard.management_form }}
@@ -26,12 +27,12 @@
         {% else %}
         <p class="error hide"></p>
         {% endif %}
-        <button type="submit">{% trans "Verify" %}</button>
+        <button type="submit" class="btn-white">{% trans "Verify" %}</button>
 
         {% if backup_tokens > 0 %}
         <div class="two-factor-auth-login-no-phone">
             <p class="txt-before-btn">{% trans "Don't have your phone?" %}</p>
-            <button name="wizard_goto_step" value="backup" type="submit">{% trans "Enter a two-factor backup code" %}</button>
+            <button name="wizard_goto_step" value="backup" type="submit" class="btn-white">{% trans "Enter a two-factor backup code" %}</button>
         </div>
         {% endif %}
 
@@ -48,10 +49,22 @@
         {% endif %}
     </form>
 </div>
+</div>
 {% endblock %}
 
 {% block extra_script %}
 <script type="text/javascript">
+$('.login-panel-outer-container').prepend($($('#logo').html()).attr({'width': 160, 'height':40}).addClass('login-panel-logo'));
+
+var $el = $('.login-panel-outer-container');
+var elHeight = $el.outerHeight();
+var wdHeight = $(window).height();
+if (wdHeight > elHeight) {
+    $el.css({'margin-top': (wdHeight - elHeight)/2});
+}
+$el.removeClass('vh');
+
+
 $('.new-narrow-panel .input').focus();
 </script>
 {% endblock %}
