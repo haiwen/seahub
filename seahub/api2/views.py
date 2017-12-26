@@ -327,8 +327,9 @@ class Search(APIView):
         if with_permission and with_permission.lower() not in ('true', 'false'):
             return api_error(status.HTTP_400_BAD_REQUEST, "with_permission invalid.")
 
-        search_repo = request.GET.get('search_repo', None) # val: 'all' or 'search_repo_id'
-        if search_repo and search_repo != 'all':
+        search_repo = request.GET.get('search_repo', None) # val: 'search_repo_id' or scope
+        if search_repo and \
+                search_repo not in ('all', 'mine', 'shared', 'group', 'public'):
 
             try:
                 repo = seafile_api.get_repo(search_repo)
