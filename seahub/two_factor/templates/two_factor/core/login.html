@@ -27,12 +27,14 @@
         {% else %}
         <p class="error hide"></p>
         {% endif %}
-        <button type="submit" class="btn-white">{% trans "Verify" %}</button>
+        <button type="submit" class="submit">{% trans "Verify" %}</button>
 
         {% if backup_tokens > 0 %}
         <div class="two-factor-auth-login-no-phone">
-            <p class="txt-before-btn">{% trans "Don't have your phone?" %}</p>
-            <button name="wizard_goto_step" value="backup" type="submit" class="btn-white">{% trans "Enter a two-factor backup code" %}</button>
+            <p>
+            {% trans "Don't have your phone?" %}
+            <button name="wizard_goto_step" value="backup" type="submit" class="sf-link-btn">{% trans "Enter a two-factor backup code" %}</button>
+            </p>
         </div>
         {% endif %}
 
@@ -45,7 +47,7 @@
         <p class="error hide"></p>
         {% endif %}
         <p class="tip">{% trans "You can enter one of your backup codes in case you lost access to your mobile device." %}</p>
-        <input type="submit" value="{% trans "Verify" %}" class="submit" />
+        <button type="submit" class="submit">{% trans "Verify" %}</button>
         {% endif %}
     </form>
 </div>

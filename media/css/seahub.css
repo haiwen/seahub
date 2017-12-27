@@ -227,9 +227,6 @@ a.normal {font-weight: normal;}
 a:focus, a:hover {
     color: #eb8205;
 }
-a.black {
-    color:#322;
-}
 a.table-sort-op {
     color:inherit;
     font-weight:normal;
@@ -659,6 +656,19 @@ textarea:-moz-placeholder {/* for FF */
 .shared-link {
     background:transparent;
     border:0;
+}
+/**** btn with link styles ****/
+.sf-link-btn {
+    color:#eb8205;
+    border:none;
+    padding:0;
+    background:none;
+}
+.sf-link-btn:focus,
+.sf-link-btn:hover {
+    color:#eb8205;
+    background:none;
+    text-decoration:underline;
 }
 
 /*******ui widgets**************/
@@ -3828,9 +3838,6 @@ img.thumbnail {
 }
 .input.two-factor-auth-login-token-input {
     margin-bottom:15px;
-}
-.two-factor-auth-login-no-phone {
-    margin-top:3rem;
 }
 #id_generator-token,
 #id_sms-number,
