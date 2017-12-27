@@ -1165,12 +1165,12 @@ define([
                                             _this.updateDirOpBarUI();
                                         } else {
                                             $(dirs).each(function() {
-                                                if (this.get('obj_name') in data['success']) {
+                                                if (data['success'].indexOf(this.get('obj_name')) != -1) {
                                                     dirents.remove(this);
                                                 }
                                             });
                                             $(files).each(function() {
-                                                if (this.get('obj_name') in data['success']) {
+                                                if (data['success'].indexOf(this.get('obj_name')) != -1) {
                                                     dirents.remove(this);
                                                 }
                                             });
@@ -1194,7 +1194,6 @@ define([
                                     }
 
                                     msg_s = msg_s.replace('%(name)s', data['success'][0]).replace('%(amount)s', success_len - 1);
-                                    //msg_s += ' <a href="' + view_url + '">' + "View" + '</a>';
                                     Common.feedback(msg_s, 'success');
                                 }
 
