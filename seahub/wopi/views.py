@@ -19,9 +19,9 @@ from pysearpc import SearpcError
 from seaserv import seafile_api
 
 from seahub.base.accounts import User
-from seahub.views import check_file_lock
 from seahub.utils import gen_inner_file_get_url, \
     gen_file_upload_url, get_file_type_and_ext, is_pro_version
+from seahub.utils.file_op import check_file_lock
 from seahub.base.templatetags.seahub_tags import email2nickname
 
 from seahub.settings import SITE_ROOT
@@ -174,8 +174,15 @@ class WOPIFilesView(APIView):
 
         filename = os.path.basename(file_path)
         filetype, fileext = get_file_type_and_ext(filename)
-        is_locked, locked_by_me = check_file_lock(repo_id,
-                file_path, request_user)
+
+        try:
+            is_locked, locked_by_me = check_file_lock(repo_id,
+                    file_path, request_user)
+        except Exception as e:
+            logger.error(e)
+            return HttpResponse(json.dumps({}),
+                    status=500, content_type=json_content_type)
+
         perm = seafile_api.check_permission_by_path(repo_id,
                 file_path, request_user)
 

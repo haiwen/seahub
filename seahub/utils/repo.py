@@ -89,3 +89,28 @@ def get_library_storages(request):
 
     return user_role_storages
 
+def get_locked_files_by_dir(request, repo_id, folder_path):
+    """ Get locked files in a folder
+
+    Returns:
+        A dict contains locked file name and locker owner.
+
+        locked_files = {
+            'file_name': 'lock_owner';
+            ...
+        }
+    """
+
+    username = request.user.username
+
+    # get lock files
+    dir_id = seafile_api.get_dir_id_by_path(repo_id, folder_path)
+    dirents = seafile_api.list_dir_with_perm(repo_id,
+            folder_path, dir_id, username, -1, -1)
+
+    locked_files = {}
+    for dirent in dirents:
+        if dirent.is_locked:
+            locked_files[dirent.obj_name] = dirent.lock_owner
+
+    return locked_files

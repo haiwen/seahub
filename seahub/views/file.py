@@ -34,7 +34,6 @@ from django.utils.translation import ugettext as _
 from django.views.decorators.http import require_POST
 from django.template.defaultfilters import filesizeformat
 from django.views.decorators.csrf import csrf_exempt
-from constance import config
 
 from seaserv import seafile_api
 from seaserv import get_repo, send_message, get_commits, \
@@ -43,7 +42,6 @@ from seaserv import get_repo, send_message, get_commits, \
 from pysearpc import SearpcError
 
 from seahub.wopi.utils import get_wopi_dict
-from seahub.avatar.templatetags.group_avatar_tags import grp_avatar
 from seahub.auth.decorators import login_required
 from seahub.base.decorators import repo_passwd_set_required
 from seahub.share.models import FileShare, check_share_link_common
@@ -55,17 +53,20 @@ from seahub.utils import render_error, is_org_context, \
     render_permission_error, is_pro_version, is_textual_file, \
     mkstemp, EMPTY_SHA1, HtmlDiff, gen_inner_file_get_url, \
     user_traffic_over_limit, get_file_audit_events_by_path, \
-    generate_file_audit_event_type, FILE_AUDIT_ENABLED, gen_token, \
-    get_site_scheme_and_netloc, get_conf_text_ext
+    generate_file_audit_event_type, FILE_AUDIT_ENABLED, \
+    get_site_scheme_and_netloc, get_conf_text_ext, \
+    HAS_OFFICE_CONVERTER, FILEEXT_TYPE_MAP
+
 from seahub.utils.ip import get_remote_ip
 from seahub.utils.timeutils import utc_to_local
-from seahub.utils.file_types import (IMAGE, PDF, DOCUMENT, SPREADSHEET, AUDIO,
-                                     MARKDOWN, TEXT, VIDEO)
+from seahub.utils.file_types import (IMAGE, PDF,
+        DOCUMENT, SPREADSHEET, AUDIO, MARKDOWN, TEXT, VIDEO)
 from seahub.utils.star import is_file_starred
-from seahub.utils import HAS_OFFICE_CONVERTER, FILEEXT_TYPE_MAP
-from seahub.utils.http import json_response, int_param, BadRequestException, RequestForbbiddenException
-from seahub.views import check_folder_permission, check_file_lock, \
-    get_unencry_rw_repos_by_user
+from seahub.utils.http import json_response, int_param, \
+        BadRequestException, RequestForbbiddenException
+from seahub.utils.file_op import check_file_lock
+from seahub.views import check_folder_permission, \
+        get_unencry_rw_repos_by_user
 
 if HAS_OFFICE_CONVERTER:
     from seahub.utils import (
@@ -450,7 +451,11 @@ def _file_view(request, repo_id, path):
         raw_path, inner_path, user_perm = get_file_view_path_and_perm(
             request, repo_id, obj_id, path)
 
-    is_locked, locked_by_me = check_file_lock(repo_id, path, username)
+    try:
+        is_locked, locked_by_me = check_file_lock(repo_id, path, username)
+    except Exception as e:
+        logger.error(e)
+        is_locked, locked_by_me = False, False
 
     # check if use office web app to view/edit file
     if not repo.encrypted and ENABLE_OFFICE_WEB_APP:
@@ -1159,9 +1164,11 @@ def file_edit_submit(request, repo_id):
     if check_folder_permission(request, repo_id, parent_dir) != 'rw':
         return error_json(_(u'Permission denied'))
 
-    is_locked, locked_by_me = check_file_lock(repo_id, path, username)
-    if (is_locked, locked_by_me) == (None, None):
-        return error_json(_(u'Check file lock error'))
+    try:
+        is_locked, locked_by_me = check_file_lock(repo_id, path, username)
+    except Exception as e:
+        logger.error(e)
+        return error_json(_(u'Internal Server Error'))
 
     if is_locked and not locked_by_me:
         return error_json(_(u'File is locked'))

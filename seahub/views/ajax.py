@@ -45,9 +45,11 @@ from seahub.utils import check_filename_with_rename, EMPTY_SHA1, \
     get_repo_last_modify, gen_file_upload_url, is_org_context, \
     get_file_type_and_ext, is_pro_version
 from seahub.utils.star import get_dir_starred_files
+from seahub.utils.file_types import IMAGE, VIDEO
+from seahub.utils.file_op import check_file_lock
+from seahub.utils.repo import get_locked_files_by_dir
 from seahub.base.accounts import User
 from seahub.thumbnail.utils import get_thumbnail_src
-from seahub.utils.file_types import IMAGE, VIDEO
 from seahub.share.utils import is_repo_admin
 from seahub.base.templatetags.seahub_tags import translate_seahub_time, \
     email2nickname, tsstr_sec
@@ -420,6 +422,19 @@ def rename_dirent(request, repo_id):
             err_msg = _('Permission denied')
             return HttpResponse(json.dumps({'error': err_msg}), status=403,
                                 content_type=content_type)
+        # check file lock
+        try:
+            is_locked, locked_by_me = check_file_lock(repo_id, full_path, username)
+        except Exception as e:
+            logger.error(e)
+            err_msg = 'Internal Server Error'
+            return HttpResponse(json.dumps({'error': err_msg}), status=500,
+                                content_type=content_type)
+
+        if is_locked and not locked_by_me:
+            err_msg = _("File is locked")
+            return HttpResponse(json.dumps({'error': err_msg}), status=403,
+                                content_type=content_type)
 
     if newname == oldname:
         return HttpResponse(json.dumps({'success': True}),
@@ -478,6 +493,20 @@ def delete_dirent(request, repo_id):
             return HttpResponse(json.dumps({'error': err_msg}), status=403,
                                 content_type=content_type)
 
+        # check file lock
+        try:
+            is_locked, locked_by_me = check_file_lock(repo_id, full_path, username)
+        except Exception as e:
+            logger.error(e)
+            err_msg = 'Internal Server Error'
+            return HttpResponse(json.dumps({'error': err_msg}), status=500,
+                                content_type=content_type)
+
+        if is_locked and not locked_by_me:
+            err_msg = _("File is locked")
+            return HttpResponse(json.dumps({'error': err_msg}), status=403,
+                                content_type=content_type)
+
     # delete file/dir
     try:
         seafile_api.del_file(repo_id, parent_dir, dirent_name, username)
@@ -512,12 +541,29 @@ def delete_dirents(request, repo_id):
                 status=400, content_type=content_type)
 
     # permission checking
-    username = request.user.username
     deleted = []
     undeleted = []
+    allowed_dirents_names = []
+    username = request.user.username
+
+    locked_files = get_locked_files_by_dir(request, repo_id, parent_dir)
+
+    # check parent dir perm for files
+    if check_folder_permission(request, repo_id, parent_dir) != 'rw':
+        undeleted += dirents_names
+    else:
+        for dirent_name in dirents_names:
+            if dirent_name not in locked_files.keys():
+                # file is not locked
+                allowed_dirents_names.append(dirent_name)
+            elif locked_files[dirent_name] == username:
+                # file is locked by current user
+                allowed_dirents_names.append(dirent_name)
+            else:
+                undeleted.append(dirent_name)
 
     multi_files = ''
-    for dirent_name in dirents_names:
+    for dirent_name in allowed_dirents_names:
         full_path = posixpath.join(parent_dir, dirent_name)
         if check_folder_permission(request, repo.id, full_path) != 'rw':
             undeleted.append(dirent_name)
@@ -648,12 +694,21 @@ def mv_dirents(request, src_repo_id, src_path, dst_repo_id, dst_path,
     allowed_files = []
     allowed_dirs = []
 
+    locked_files = get_locked_files_by_dir(request, src_repo_id, src_path)
+
     # check parent dir perm for files
     if check_folder_permission(request, src_repo_id, src_path) != 'rw':
-        allowed_files = []
         failed += obj_file_names
     else:
-        allowed_files = obj_file_names
+        for file_name in obj_file_names:
+            if file_name not in locked_files.keys():
+                # file is not locked
+                allowed_files.append(file_name)
+            elif locked_files[file_name] == username:
+                # file is locked by current user
+                allowed_files.append(file_name)
+            else:
+                failed.append(file_name)
 
     for obj_name in obj_dir_names:
         src_dir = posixpath.join(src_path, obj_name)

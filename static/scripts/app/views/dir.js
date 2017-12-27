@@ -1321,7 +1321,7 @@ define([
                                 error: function(xhr) {
                                     var err;
                                     if (xhr.responseText) {
-                                        err = $.parseJSON(xhr.responseText).error;
+                                        err = $.parseJSON(xhr.responseText).error||$.parseJSON(xhr.responseText).error_msg;
                                     } else {
                                         err = gettext("Failed. Please check the network.");
                                     }
