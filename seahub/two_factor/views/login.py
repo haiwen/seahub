@@ -1,6 +1,5 @@
 # Copyright (c) 2012-2016 Seafile Ltd.
 import hashlib
-import os
 import re
 import logging
 from datetime import datetime
@@ -35,8 +34,7 @@ from seahub.two_factor.forms import TOTPTokenAuthForm, BackupTokenAuthForm, Auth
 from seahub.two_factor.utils import default_device
 from seahub.two_factor.views.utils import class_view_decorator
 
-from seahub.settings import LOGIN_BG_IMAGE_PATH, MEDIA_ROOT
-from seahub.api2.endpoints.admin.login_bg_image import CUSTOM_LOGIN_BG_IMAGE_PATH
+from seahub.utils.auth import get_login_bg_image_path
 
 
 # Get an instance of a logger
@@ -171,11 +169,7 @@ class TwoFactorVerifyView(SessionWizardView):
         context['cancel_url'] = settings.LOGOUT_URL
         context['form_prefix'] = '%s-' % self.steps.current
 
-        login_bg_image_path = LOGIN_BG_IMAGE_PATH
-        # get path that background image of login page
-        custom_login_bg_image_file = os.path.join(MEDIA_ROOT, CUSTOM_LOGIN_BG_IMAGE_PATH)
-        if os.path.exists(custom_login_bg_image_file):
-            login_bg_image_path = CUSTOM_LOGIN_BG_IMAGE_PATH
+        login_bg_image_path = get_login_bg_image_path()
         context['login_bg_image_path'] = login_bg_image_path
 
         return context

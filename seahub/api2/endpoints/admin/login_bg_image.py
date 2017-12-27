@@ -12,10 +12,10 @@ from seahub.api2.authentication import TokenAuthentication
 from seahub.api2.throttling import UserRateThrottle
 from seahub.api2.utils import api_error
 from seahub.settings import SEAHUB_DATA_ROOT, MEDIA_ROOT
+from seahub.utils.auth import get_custom_login_bg_image_path
 
 logger = logging.getLogger(__name__)
 
-CUSTOM_LOGIN_BG_IMAGE_PATH = 'custom/login-bg.jpg'
 
 
 class AdminLoginBgImage(APIView):
@@ -33,20 +33,21 @@ class AdminLoginBgImage(APIView):
         if not os.path.exists(SEAHUB_DATA_ROOT):
             os.makedirs(SEAHUB_DATA_ROOT)
 
+        custom_login_bg_image_path = get_custom_login_bg_image_path()
         custom_dir = os.path.join(SEAHUB_DATA_ROOT,
-                os.path.dirname(CUSTOM_LOGIN_BG_IMAGE_PATH))
+                os.path.dirname(custom_login_bg_image_path))
         if not os.path.exists(custom_dir):
             os.makedirs(custom_dir)
 
         try:
             custom_login_bg_image_file = os.path.join(SEAHUB_DATA_ROOT,
-                    CUSTOM_LOGIN_BG_IMAGE_PATH)
+                    custom_login_bg_image_path)
             # save login background image file to custom dir
             with open(custom_login_bg_image_file, 'w') as fd:
                 fd.write(image_file.read())
 
             custom_symlink = os.path.join(MEDIA_ROOT,
-                    os.path.dirname(CUSTOM_LOGIN_BG_IMAGE_PATH))
+                    os.path.dirname(custom_login_bg_image_path))
             # create symlink for custom dir
             if not os.path.exists(custom_symlink):
                 os.symlink(custom_dir, custom_symlink)
