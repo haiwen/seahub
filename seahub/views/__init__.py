@@ -47,6 +47,7 @@ from seahub.utils import render_permission_error, render_error, \
     is_org_repo_creation_allowed, is_windows_operating_system
 from seahub.utils.star import get_dir_starred_files
 from seahub.utils.repo import get_library_storages
+from seahub.utils.file_op import check_file_lock
 from seahub.utils.timeutils import utc_to_local
 from seahub.views.modules import MOD_PERSONAL_WIKI, enable_mod_for_user, \
     disable_mod_for_user
@@ -103,33 +104,6 @@ def check_folder_permission(request, repo_id, path):
     """
     username = request.user.username
     return seafile_api.check_permission_by_path(repo_id, path, username)
-
-def check_file_lock(repo_id, file_path, username):
-    """ check if file is locked to current user
-    according to returned value of seafile_api.check_file_lock:
-
-    0: not locked
-    1: locked by other
-    2: locked by me
-    -1: error
-
-    return (is_locked, locked_by_me)
-    """
-    try:
-        return_value = seafile_api.check_file_lock(repo_id,
-            file_path.lstrip('/'), username)
-    except SearpcError as e:
-        logger.error(e)
-        return (None, None)
-
-    if return_value == 0:
-        return (False, False)
-    elif return_value == 1:
-        return (True , False)
-    elif return_value == 2:
-        return (True, True)
-    else:
-        return (None, None)
 
 def gen_path_link(path, repo_name):
     """
@@ -873,7 +847,12 @@ def file_revisions(request, repo_id):
     can_revert_file = True
     username = request.user.username
 
-    is_locked, locked_by_me = check_file_lock(repo_id, path, username)
+    try:
+        is_locked, locked_by_me = check_file_lock(repo_id, path, username)
+    except Exception as e:
+        logger.error(e)
+        is_locked, locked_by_me = False, False
+
     if seafile_api.check_permission_by_path(repo_id, path, username) != 'rw' or \
         (is_locked and not locked_by_me):
         can_revert_file = False

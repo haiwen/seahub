@@ -17,6 +17,7 @@ from seahub.signals import rename_dirent_successful
 
 from seahub.views import check_folder_permission
 from seahub.utils import check_filename_with_rename
+from seahub.utils.file_op import check_file_lock
 from seahub.settings import MAX_PATH
 
 from seaserv import seafile_api
@@ -118,10 +119,15 @@ class CopyMoveTaskView(APIView):
             return api_error(status.HTTP_403_FORBIDDEN, error_msg)
 
         new_dirent_name = check_filename_with_rename(dst_repo_id,
-                                                     dst_parent_dir, src_dirent_name)
+                dst_parent_dir, src_dirent_name)
 
         username = request.user.username
         if operation == 'move':
+            # permission check for src parent dir
+            if check_folder_permission(request, src_repo_id, src_parent_dir) != 'rw':
+                error_msg = 'Permission denied.'
+                return api_error(status.HTTP_403_FORBIDDEN, error_msg)
+
             if dirent_type == 'dir' and src_repo_id == dst_repo_id and \
                     dst_parent_dir.startswith(src_dirent_path + '/'):
 
@@ -129,10 +135,19 @@ class CopyMoveTaskView(APIView):
                     % {'src': escape(src_dirent_path), 'des': escape(dst_parent_dir)}
                 return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
 
-            # permission check for src parent dir
-            if check_folder_permission(request, src_repo_id, src_parent_dir) != 'rw':
-                error_msg = 'Permission denied.'
-                return api_error(status.HTTP_403_FORBIDDEN, error_msg)
+            if dirent_type == 'file':
+                # check file lock
+                try:
+                    is_locked, locked_by_me = check_file_lock(src_repo_id,
+                            src_dirent_path, username)
+                except Exception as e:
+                    logger.error(e)
+                    error_msg = 'Internal Server Error'
+                    return api_error(status.HTTP_500_INTERNAL_SERVER_ERROR, error_msg)
+
+                if is_locked and not locked_by_me:
+                    error_msg = _("File is locked")
+                    return api_error(status.HTTP_403_FORBIDDEN, error_msg)
 
             try:
                 res = seafile_api.move_file(src_repo_id, src_parent_dir,

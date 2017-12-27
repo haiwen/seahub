@@ -604,7 +604,9 @@
                 <a href="#" class="op-icon share sf2-icon-share sf2-x vh" title="{% trans "Share" %}" aria-label="{% trans "Share" %}"></a>
                 <% } %>
                 <% if (dirent.perm == 'rw') { %>
+                <% if (!dirent.is_locked || (dirent.is_locked && dirent.locked_by_me)) { %>
                     <a href="#" class="op-icon delete sf2-icon-delete sf2-x vh" title="{% trans "Delete" %}" aria-label="{% trans "Delete" %}"></a>
+                <% } %>
                 <% } %>
             </div>
             <% if (dirent.perm == 'rw') { %>
@@ -612,8 +614,10 @@
                 <a href="#" class="more-op-icon sf2-icon-caret-down op-icon vh sf-dropdown-toggle" title="{% trans "More Operations"%}" aria-label="{% trans "More Operations" %}"></a>
                 <div class="hide sf-dropdown-menu">
                     <ul>
+                        <% if (!dirent.is_locked || (dirent.is_locked && dirent.locked_by_me)) { %>
                         <li><a class="op rename" href="#">{% trans "Rename" %}</a></li>
                         <li><a class="op mv" href="#">{% trans "Move" %}</a></li>
+                        <% } %>
                         <li><a class="op cp" href="#">{% trans "Copy" %}</a></li>
                         <% if (is_pro) { %>
                             <% if (dirent.is_locked) { %>
@@ -726,9 +730,11 @@
                     <li><a class="op share" href="#">{% trans "Share" %}</a></li>
                     <% } %>
                     <% if (dirent.perm == 'rw') { %>
+                    <% if (!dirent.is_locked || (dirent.is_locked && dirent.locked_by_me)) { %>
                     <li><a class="op delete" href="#">{% trans "Delete" %}</a></li>
                     <li><a class="op rename" href="#">{% trans "Rename" %}</a></li>
                     <li><a class="op mv" href="#">{% trans "Move" %}</a></li>
+                    <% } %>
                     <li><a class="op cp" href="#">{% trans "Copy" %}</a></li>
                         <% if (is_pro) { %>
                         <% if (dirent.is_locked) { %>
@@ -807,9 +813,11 @@
             <li><a class="op share" href="#">{% trans "Share" %}</a></li>
             <% } %>
             <% if (dirent.perm == 'rw') { %>
+            <% if (!dirent.is_locked || (dirent.is_locked && dirent.locked_by_me)) { %>
             <li><a class="op delete" href="#">{% trans "Delete" %}</a></li>
             <li><a class="op rename" href="#">{% trans "Rename" %}</a></li>
             <li><a class="op mv" href="#">{% trans "Move" %}</a></li>
+            <% } %>
             <li><a class="op cp" href="#">{% trans "Copy" %}</a></li>
                 <% if (is_pro) { %>
                     <% if (dirent.is_locked) { %>

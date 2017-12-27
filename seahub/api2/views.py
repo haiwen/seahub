@@ -73,14 +73,15 @@ from seahub.utils import gen_file_get_url, gen_token, gen_file_upload_url, \
 
 from seahub.utils.file_revisions import get_file_revisions_after_renamed
 from seahub.utils.devices import do_unlink_device
-from seahub.utils.repo import get_repo_owner, get_library_storages
+from seahub.utils.repo import get_repo_owner, get_library_storages, \
+        get_locked_files_by_dir
 from seahub.utils.star import star_file, unstar_file
 from seahub.utils.file_types import DOCUMENT
 from seahub.utils.file_size import get_file_size_unit
+from seahub.utils.file_op import check_file_lock
 from seahub.utils.timeutils import utc_to_local, datetime_to_isoformat_timestr
-from seahub.views import is_registered_user, check_file_lock, \
-    group_events_data, get_diff, create_default_library, \
-    list_inner_pub_repos, check_folder_permission
+from seahub.views import is_registered_user, check_folder_permission, \
+    create_default_library, list_inner_pub_repos
 from seahub.views.ajax import get_groups_by_user, get_group_repos
 from seahub.views.file import get_file_view_path_and_perm, send_file_access_msg
 if HAS_FILE_SEARCH:
@@ -1817,27 +1818,34 @@ class OpDeleteView(APIView):
     permission_classes = (IsAuthenticated, )
 
     def post(self, request, repo_id, format=None):
+
+        parent_dir = request.GET.get('p')
+        file_names = request.POST.get("file_names")
+        if not parent_dir or not file_names:
+            return api_error(status.HTTP_404_NOT_FOUND,
+                             'File or directory not found.')
+
         repo = get_repo(repo_id)
         if not repo:
             return api_error(status.HTTP_404_NOT_FOUND, 'Library not found.')
 
         username = request.user.username
-        if check_folder_permission(request, repo_id, '/') != 'rw':
+        if check_folder_permission(request, repo_id, parent_dir) != 'rw':
             return api_error(status.HTTP_403_FORBIDDEN,
                              'You do not have permission to delete this file.')
 
-        if not check_folder_permission(request, repo_id, '/'):
-            return api_error(status.HTTP_403_FORBIDDEN, 'Permission denied.')
-
-        parent_dir = request.GET.get('p')
-        file_names = request.POST.get("file_names")
-
-        if not parent_dir or not file_names:
-            return api_error(status.HTTP_404_NOT_FOUND,
-                             'File or directory not found.')
+        allowed_file_names = []
+        locked_files = get_locked_files_by_dir(request, repo_id, parent_dir)
+        for file_name in file_names.split(':'):
+            if file_name not in locked_files.keys():
+                # file is not locked
+                allowed_file_names.append(file_name)
+            elif locked_files[file_name] == username:
+                # file is locked by current user
+                allowed_file_names.append(file_name)
 
         try:
-            multi_files = "\t".join(file_names.split(':'))
+            multi_files = "\t".join(allowed_file_names)
             seafile_api.del_file(repo_id, parent_dir,
                                  multi_files, username)
         except SearpcError as e:
@@ -1899,8 +1907,18 @@ class OpMoveView(APIView):
             return api_error(status.HTTP_403_FORBIDDEN,
                     'You do not have permission to move file to destination folder.')
 
+        allowed_obj_names = []
+        locked_files = get_locked_files_by_dir(request, repo_id, parent_dir)
+        for file_name in obj_names.split(':'):
+            if file_name not in locked_files.keys():
+                # file is not locked
+                allowed_obj_names.append(file_name)
+            elif locked_files[file_name] == username:
+                # file is locked by current user
+                allowed_obj_names.append(file_name)
+
         # check if all file/dir existes
-        obj_names = obj_names.strip(':').split(':')
+        obj_names = allowed_obj_names
         dirents = seafile_api.list_dir_by_path(repo_id, parent_dir)
         exist_obj_names = [dirent.obj_name for dirent in dirents]
         if not set(obj_names).issubset(exist_obj_names):
@@ -2481,10 +2499,16 @@ class FileView(APIView):
         if check_folder_permission(request, repo_id, parent_dir) != 'rw':
             return api_error(status.HTTP_403_FORBIDDEN, 'Permission denied.')
 
+        # check file lock
+        try:
+            is_locked, locked_by_me = check_file_lock(repo_id, path, username)
+        except Exception as e:
+            logger.error(e)
+            error_msg = 'Internal Server Error'
+            return api_error(status.HTTP_500_INTERNAL_SERVER_ERROR, error_msg)
+
         operation = request.data.get('operation', '')
         if operation.lower() == 'lock':
-
-            is_locked, locked_by_me = check_file_lock(repo_id, path, username)
             if is_locked:
                 return api_error(status.HTTP_403_FORBIDDEN, 'File is already locked')
 
@@ -2498,7 +2522,6 @@ class FileView(APIView):
                 return api_error(status.HTTP_500_INTERNAL_SERVER_ERROR, 'Internal error')
 
         if operation.lower() == 'unlock':
-            is_locked, locked_by_me = check_file_lock(repo_id, path, username)
             if not is_locked:
                 return api_error(status.HTTP_403_FORBIDDEN, 'File is not locked')
             if not locked_by_me:

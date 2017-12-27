@@ -281,7 +281,7 @@ define([
                 },
                 error: function(xhr) {
                     if (xhr.responseText) {
-                        Common.feedback($.parseJSON(xhr.responseText).error);
+                        Common.feedback($.parseJSON(xhr.responseText).error||$.parseJSON(xhr.responseText).error_msg, 'error');
                     } else {
                         Common.feedback(gettext("Please check the network."), 'error');
                     }
