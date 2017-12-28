@@ -197,6 +197,6 @@ def add_notice_from_info(notices):
                 notice.default_avatar_url = default_avatar_url
 
         else:
-            pass
+            notice.default_avatar_url = default_avatar_url
 
     return notices
