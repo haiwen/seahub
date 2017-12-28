@@ -3,14 +3,20 @@
 
 {% block cur_links %}tab-cur{% endblock %}
 
+{% block left_panel %}{{block.super}}
+<form action="{% url 'sys_link_search' %}" method="get" class="side-search-form">
+    <input type="text" name="token" class="input" value="" placeholder="{% trans "Search download links by token..." %}" />
+</form>
+{% endblock %}
+
 {% block right_panel %}
     <div class="hd ovhd">
         <ul class="tab-tabs-nav fleft">
             <li class="tab ui-state-active">
-                <a href="{{ SITE_ROOT }}sys/publinkadmin/" class="a">{% trans "Download Links" %}</a>
+                <a href="{% url 'sys_publink_admin' %}" class="a">{% trans "Download Links" %}</a>
             </li>
             <li class="tab">
-                <a href="{{ SITE_ROOT }}sys/uploadlinkadmin/" class="a">{% trans "Upload Links" %}</a>
+                <a href="{% url 'sys_upload_link_admin' %}" class="a">{% trans "Upload Links" %}</a>
             </li>
         </ul>
     </div>
@@ -19,15 +25,17 @@
 <table>
     <tr>
         <th width="25%">{% trans "Name" %}</th>
-        <th width="25%">{% trans "Owner" %}</th>
-        <th width="20%"><a class="table-sort-op by-time" href="#">{% trans "Create At" %} {% if sort_by == 'time_down' %}<span class="sort-icon icon-caret-down"></span>{% elif sort_by == 'time_up' %}<span class="sort-icon icon-caret-up"></span>{% endif %}</a></th>
-        <th width="12%"><a class="table-sort-op by-count" href="#">{% trans "Count" %} {% if sort_by == 'count_down' %}<span class="sort-icon icon-caret-up"></span>{% elif sort_by == 'count_up' %}<span class="sort-icon icon-caret-down"></span>{% endif %}</a></th>
-        <th width="18%">{% trans "Operations" %}</th>
+        <th width="19%">{% trans "Token" %}</th>
+        <th width="22%">{% trans "Owner" %}</th>
+        <th width="18%"><a class="table-sort-op by-time" href="#">{% trans "Create At" %} {% if sort_by == 'time_down' %}<span class="sort-icon icon-caret-down"></span>{% elif sort_by == 'time_up' %}<span class="sort-icon icon-caret-up"></span>{% endif %}</a></th>
+        <th width="8%"><a class="table-sort-op by-count" href="#">{% trans "Count" %} {% if sort_by == 'count_down' %}<span class="sort-icon icon-caret-up"></span>{% elif sort_by == 'count_up' %}<span class="sort-icon icon-caret-down"></span>{% endif %}</a></th>
+        <th width="8%"></th>
     </tr>
     {% for publink in publinks %}
     <tr>
         <td>{{ publink.name }}</td>
-        <td><a href="{{ SITE_ROOT }}useradmin/info/{{ publink.username }}/">{{ publink.username }}</a></td>
+        <td>{{ publink.token }}</td>
+        <td><a href="{% url 'user_info' publink.username %}">{{ publink.username }}</a></td>
         <td>{{ publink.ctime|translate_seahub_time }} </td>
         <td>{{ publink.view_cnt }}</td>
         <td>

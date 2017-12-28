@@ -153,10 +153,12 @@ define([
                     search_repo_id: ''
                 }));
 
+
                 if (this.$toolbar) { // when an enc lib is not decrypted, no $toolbar
                     this.$toolbar.detach();
                 }
                 this.$mainCon.detach();
+                this.fileUploadView.closePopup();
             },
 
             /***** private functions *****/
@@ -1153,12 +1155,12 @@ define([
                                             _this.$('#cur-dir-ops').show();
                                         } else {
                                             $(dirs).each(function() {
-                                                if (this.get('obj_name') in data['success']) {
+                                                if (data['success'].indexOf(this.get('obj_name')) != -1) {
                                                     dirents.remove(this);
                                                 }
                                             });
                                             $(files).each(function() {
-                                                if (this.get('obj_name') in data['success']) {
+                                                if (data['success'].indexOf(this.get('obj_name')) != -1) {
                                                     dirents.remove(this);
                                                 }
                                             });
@@ -1182,7 +1184,6 @@ define([
                                     }
 
                                     msg_s = msg_s.replace('%(name)s', data['success'][0]).replace('%(amount)s', success_len - 1);
-                                    //msg_s += ' <a href="' + view_url + '">' + "View" + '</a>';
                                     Common.feedback(msg_s, 'success');
                                 }
 
@@ -1212,7 +1213,9 @@ define([
                     } else {
                         // when mv/cp to another lib, files/dirs should be handled one by one, and need to show progress
                         var op_objs = dirents.where({'selected':true}),
-                            i = 0;
+                            i = 0,
+                            success_num = 0,
+                            first_item;
                         // progress popup
                         var mv_progress_popup = $(_this.mvProgressTemplate());
                         var details = $('#mv-details', mv_progress_popup),
@@ -1255,6 +1258,10 @@ define([
                                                     bar.css('width', parseInt((i + 1)/op_objs.length*100, 10) + '%').show();
                                                     if (op == 'mv') {
                                                         dirents.remove(op_obj);
+                                                    }
+                                                    success_num += 1;
+                                                    if (success_num == 1) {
+                                                        first_item = obj_name;
                                                     }
                                                     endOrContinue();
                                                 } else { // failed or canceled
@@ -1303,7 +1310,7 @@ define([
                                 error: function(xhr) {
                                     var err;
                                     if (xhr.responseText) {
-                                        err = $.parseJSON(xhr.responseText).error;
+                                        err = $.parseJSON(xhr.responseText).error||$.parseJSON(xhr.responseText).error_msg;
                                     } else {
                                         err = gettext("Failed. Please check the network.");
                                     }
@@ -1321,6 +1328,28 @@ define([
                                 setTimeout(function () { $.modal.close(); }, 500);
                                 if (op == 'mv') {
                                     _this.updateMagnificPopupOptions();
+                                }
+                                if (success_num > 0) {
+                                    var msg_s;
+                                    if (op == 'mv') {
+                                        if (success_num == 1) {
+                                            msg_s = gettext("Successfully moved %(name)s.");
+                                        } else if (success_num == 2) {
+                                            msg_s = gettext("Successfully moved %(name)s and 1 other item.");
+                                        } else {
+                                            msg_s = gettext("Successfully moved %(name)s and %(amount)s other items.");
+                                        }
+                                    } else { // cp
+                                        if (success_num == 1) {
+                                            msg_s = gettext("Successfully copied %(name)s.");
+                                        } else if (success_num == 2) {
+                                            msg_s = gettext("Successfully copied %(name)s and 1 other item.");
+                                        } else {
+                                            msg_s = gettext("Successfully copied %(name)s and %(amount)s other items.");
+                                        }
+                                    }
+                                    msg_s = msg_s.replace('%(name)s', first_item).replace('%(amount)s', success_num - 1);
+                                    setTimeout(function() { Common.feedback(msg_s, 'success'); }, 600);
                                 }
                             } else {
                                 mvcpDirent(++i);

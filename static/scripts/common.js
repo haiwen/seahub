@@ -170,6 +170,7 @@ define([
                 case 'events': return siteRoot + 'api2/events/';
                 case 'devices': return siteRoot + 'api2/devices/';
                 case 'invitations': return siteRoot + 'api/v2.1/invitations/';
+                case 'invitations_batch': return siteRoot + 'api/v2.1/invitations/batch/';
                 case 'invitation': return siteRoot + 'api/v2.1/invitations/' + options.token + '/';
                 case 'search_user': return siteRoot + 'api2/search-user/';
                 case 'user_profile': return siteRoot + 'profile/' + options.username + '/';
@@ -374,15 +375,35 @@ define([
         },
 
         feedback: function(con, type, time) {
+            var _this = this;
             var time = time || 5000;
-            if ($('.messages').length > 0) {
-                $('.messages').html('<li class="' + type + '">' + this.HTMLescape(con) + '</li>');
-            } else {
-                var html = '<ul class="messages"><li class="' + type + '">' + this.HTMLescape(con) + '</li></ul>';
-                $('#wrapper').append(html);
+            var $el;
+            var hide_pos_top,
+                show_pos_top = '15px';
+
+            var $con, str = '';
+            if (typeof con == 'string') { // most of the time
+                $con = $('<li class="' + type + '">' + this.HTMLescape(con) + '</li>');
+            } else { // [{'msg':'', 'type':''}]
+                $(con).each(function(index, item) {
+                    str += '<li class="' + item.type + '">' + _this.HTMLescape(item.msg) + '</li>';
+                });
+                $con = $(str);
             }
-            $('.messages').css({'left':($(window).width() - $('.messages').width())/2, 'top':10}).removeClass('hide');
-            setTimeout(function() { $('.messages').addClass('hide'); }, time);
+            if ($('.messages').length > 0) {
+                $el = $('.messages').html($con);
+            } else {
+                $el = $('<ul class="messages"></ul>').html($con);
+                $('#main').append($el);
+            }
+
+            hide_pos_top = '-' + ($el.outerHeight() + parseInt(show_pos_top)) + 'px';
+
+            // add transition: from 'hide' to 'show'. the transition effect is offered by CSS.
+            $el.css({'left':($(window).width() - $el.width())/2, 'top': hide_pos_top});
+            setTimeout(function() { $el.css({'top': show_pos_top}); }, 10);
+
+            setTimeout(function() { $el.css({'top': hide_pos_top}); }, time);
         },
 
         showFormError: function(formid, error_msg) {

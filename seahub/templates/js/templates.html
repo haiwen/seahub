@@ -19,9 +19,17 @@
         <% if (app.pageOptions.is_pro && library_templates.length > 0) { %>
         <label for="library-template">{% trans "Template"%}</label><br/>
         <select name="library_template" id="library-template" class="select">
-            <option value="">{% trans "Select a template" %}</option>
             <% for (var i = 0, len = library_templates.length; i < len; i++) { %>
             <option value="<%- library_templates[i] %>"><%- library_templates[i] %></option>
+            <% } %>
+        </select>
+        <br/>
+        <% } %>
+        <% if (app.pageOptions.is_pro && app.pageOptions.enable_storage_classes && app.pageOptions.storages.length > 1) { %>
+        <label for="storage">{% trans "Storage backend"%}</label><br/>
+        <select name="storage" id="storage" class="select">
+            <% for (var i = 0, len = app.pageOptions.storages.length; i < len; i++) { %>
+            <option value="<%- app.pageOptions.storages[i].storage_id %>"><%- app.pageOptions.storages[i].storage_name %></option>
             <% } %>
         </select>
         <br/>
@@ -96,6 +104,9 @@
     <td></td>
     <% } %>
     <td><%= size_formatted %></td>
+    <% if (app.pageOptions.is_pro && app.pageOptions.enable_storage_classes && app.pageOptions.storages.length > 0) { %>
+    <td><%- storage_name %></td>
+    <% } %>
     <td><%= mtime_relative %></td>
 </script>
 <script type="text/template" id="repo-mobile-tmpl">
@@ -641,7 +652,9 @@
                 <a href="#" class="op-icon share sf2-icon-share sf2-x vh" title="{% trans "Share" %}" aria-label="{% trans "Share" %}"></a>
                 <% } %>
                 <% if (dirent.perm == 'rw') { %>
+                <% if (!dirent.is_locked || (dirent.is_locked && dirent.locked_by_me)) { %>
                     <a href="#" class="op-icon delete sf2-icon-delete sf2-x vh" title="{% trans "Delete" %}" aria-label="{% trans "Delete" %}"></a>
+                <% } %>
                 <% } %>
             </div>
             <% if (dirent.perm == 'rw') { %>
@@ -649,8 +662,10 @@
                 <a href="#" class="more-op-icon sf2-icon-caret-down op-icon vh sf-dropdown-toggle" title="{% trans "More Operations"%}" aria-label="{% trans "More Operations" %}"></a>
                 <div class="hide sf-dropdown-menu">
                     <ul>
+                        <% if (!dirent.is_locked || (dirent.is_locked && dirent.locked_by_me)) { %>
                         <li><a class="op rename" href="#">{% trans "Rename" %}</a></li>
                         <li><a class="op mv" href="#">{% trans "Move" %}</a></li>
+                        <% } %>
                         <li><a class="op cp" href="#">{% trans "Copy" %}</a></li>
                         <% if (is_pro) { %>
                             <% if (dirent.is_locked) { %>
@@ -685,6 +700,7 @@
                     <li><a class="op cp" href="#">{% trans "Copy" %}</a></li>
                     <% } %>
                     <li><a class="op file-comment" href="#">{% trans "Comment" %}</a><li>
+                    <li><a class="op file-history" href="{{ SITE_ROOT }}repo/file_revisions/<%= repo_id %>/?p=<% print(encodeURIComponent(dirent_path)); %>&referer=<% print(encodeURIComponent(location.href)); %>">{% trans "History" %}</a></li>
                     <li><a class="op view-details" href="#">{% trans "Details" %}</a></li>
                 </ul>
             </div>
@@ -762,9 +778,11 @@
                     <li><a class="op share" href="#">{% trans "Share" %}</a></li>
                     <% } %>
                     <% if (dirent.perm == 'rw') { %>
+                    <% if (!dirent.is_locked || (dirent.is_locked && dirent.locked_by_me)) { %>
                     <li><a class="op delete" href="#">{% trans "Delete" %}</a></li>
                     <li><a class="op rename" href="#">{% trans "Rename" %}</a></li>
                     <li><a class="op mv" href="#">{% trans "Move" %}</a></li>
+                    <% } %>
                     <li><a class="op cp" href="#">{% trans "Copy" %}</a></li>
                         <% if (is_pro) { %>
                         <% if (dirent.is_locked) { %>
@@ -796,6 +814,7 @@
                         <li><a class="op view-details" href="#">{% trans "Details" %}</a></li>
                     <% } else if (dirent.perm == 'r') { %>
                         <li><a class="op file-comment" href="#">{% trans "Comment" %}</a><li>
+                        <li><a class="op file-history" href="{{ SITE_ROOT }}repo/file_revisions/<%= repo_id %>/?p=<% print(encodeURIComponent(dirent_path)); %>">{% trans "History" %}</a></li>
                         <li><a class="op view-details" href="#">{% trans "Details" %}</a></li>
                     <% } %>
                     </ul>
@@ -842,9 +861,11 @@
             <li><a class="op share" href="#">{% trans "Share" %}</a></li>
             <% } %>
             <% if (dirent.perm == 'rw') { %>
+            <% if (!dirent.is_locked || (dirent.is_locked && dirent.locked_by_me)) { %>
             <li><a class="op delete" href="#">{% trans "Delete" %}</a></li>
             <li><a class="op rename" href="#">{% trans "Rename" %}</a></li>
             <li><a class="op mv" href="#">{% trans "Move" %}</a></li>
+            <% } %>
             <li><a class="op cp" href="#">{% trans "Copy" %}</a></li>
                 <% if (is_pro) { %>
                     <% if (dirent.is_locked) { %>
@@ -874,6 +895,7 @@
 
             <% } else if (dirent.perm == 'r') { %>
                 <li><a class="op file-comment" href="#">{% trans "Comment" %}</a><li>
+                <li><a class="op file-history" href="{{ SITE_ROOT }}repo/file_revisions/<%= repo_id %>/?p=<% print(encodeURIComponent(dirent_path)); %>&referer=<% print(encodeURIComponent(location.href)); %>">{% trans "History" %}</a></li>
                 <li><a class="op view-details" href="#">{% trans "Details" %}</a></li>
             <% } %>
         </ul>
@@ -1677,8 +1699,14 @@
         <th width="4%"><span class="sr-only">{% trans "Library Type" %}</span><!--icon--></th>
         <th width="42%"><a class="table-sort-op by-name" href="#">{% trans "Name" %} <span class="sort-icon icon-caret-down hide"></span></a></th>
         <th width="14%"><span class="sr-only">{% trans "Actions" %}</span></th>
+    <% if (app.pageOptions.is_pro && app.pageOptions.enable_storage_classes && app.pageOptions.storages.length > 0) { %>
+        <th width="10%">{% trans "Size" %}</th>
+        <th width="20%">{% trans "Storage backend" %}</th>
+        <th width="10%"><a class="table-sort-op by-time" href="#">{% trans "Last Update" %} <span class="sort-icon icon-caret-up"></span></a></th>
+        <% } else { %>
         <th width="20%">{% trans "Size" %}</th>
         <th width="20%"><a class="table-sort-op by-time" href="#">{% trans "Last Update" %} <span class="sort-icon icon-caret-up"></span></a></th>
+        <% } %>
     </tr>
 </script>
 <script type="text/template" id="my-repos-thead-mobile-tmpl">
@@ -2606,7 +2634,7 @@
     <form id="invitation-form" action="" method="post">{% csrf_token %}
         <h3 id="dialogTitle">{% trans "Invite People" %}</h3>
         <label for="accepter">{% trans "Email" %}</label><br/>
-        <input id="accepter" type="text" name="accepter" value="" class="input" /><br />
+        <input id="accepter" type="text" name="accepter" value="" class="input" placeholder="{% trans "Emails, separated by ','"%}" title="{% trans "Emails, separated by ','"%}" /><br />
         <p class="error hide"></p>
         <input type="submit" value="{% trans "Submit" %}" class="submit vam" />
         <span class="loading-icon vam" style="margin-left:5px;display:none;"></span>

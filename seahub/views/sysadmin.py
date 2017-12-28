@@ -59,6 +59,7 @@ from seahub.utils.mail import send_html_email_with_dj_template
 from seahub.utils.ms_excel import write_xls
 from seahub.utils.user_permissions import get_basic_user_roles, \
         get_user_role, get_basic_admin_roles
+from seahub.utils.auth import get_login_bg_image_path
 from seahub.views import get_system_default_repo_id
 from seahub.forms import SetUserQuotaForm, AddUserForm, BatchAddUserForm, \
     TermsAndConditionsForm
@@ -71,9 +72,8 @@ from seahub.admin_log.models import USER_DELETE, USER_ADD
 import seahub.settings as settings
 from seahub.settings import INIT_PASSWD, SITE_NAME, SITE_ROOT, \
     SEND_EMAIL_ON_ADDING_SYSTEM_MEMBER, SEND_EMAIL_ON_RESETTING_USER_PASSWD, \
-    ENABLE_SYS_ADMIN_VIEW_REPO, ENABLE_GUEST_INVITATION, LOGIN_BG_IMAGE_PATH, \
-    MEDIA_ROOT, ENABLE_LIMIT_IPADDRESS
-from seahub.api2.endpoints.admin.login_bg_image import CUSTOM_LOGIN_BG_IMAGE_PATH
+    ENABLE_SYS_ADMIN_VIEW_REPO, ENABLE_GUEST_INVITATION, \
+    ENABLE_LIMIT_IPADDRESS
 try:
     from seahub.settings import ENABLE_TRIAL_ACCOUNT
 except:
@@ -1617,6 +1617,29 @@ def sys_upload_link_remove(request):
 
 @login_required
 @sys_staff_required
+def sys_link_search(request):
+    token = request.GET.get('token', '')
+
+    if len(token) < 3:
+        publinks = []
+    else:
+        publinks = FileShare.objects.filter(token__startswith=token)
+
+    for l in publinks:
+        if l.is_file_share_link():
+            l.name = os.path.basename(l.path)
+        else:
+            l.name = os.path.dirname(l.path)
+
+    return render_to_response(
+        'sysadmin/sys_link_search.html', {
+            'publinks': publinks,
+            'token': token
+        },
+        context_instance=RequestContext(request))
+
+@login_required
+@sys_staff_required
 def user_search(request):
     """Search a user.
     """
@@ -2178,11 +2201,7 @@ def sys_settings(request):
         value = getattr(config, key)
         config_dict[key] = value
 
-    login_bg_image_path = LOGIN_BG_IMAGE_PATH
-    # get path that background image of login page
-    custom_login_bg_image_file = os.path.join(MEDIA_ROOT, CUSTOM_LOGIN_BG_IMAGE_PATH)
-    if os.path.exists(custom_login_bg_image_file):
-        login_bg_image_path = CUSTOM_LOGIN_BG_IMAGE_PATH
+    login_bg_image_path = get_login_bg_image_path()
 
     return render_to_response('sysadmin/settings.html', {
         'config_dict': config_dict,

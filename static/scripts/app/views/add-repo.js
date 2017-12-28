@@ -49,7 +49,8 @@ define([
                 passwd1: $('input[name=passwd]', this.$el).val(),
                 passwd2: $('input[name=passwd_again]', this.$el).val(),
                 passwd: $('input[name=passwd]', this.$el).val(),
-                library_template: $('[name="library_template"]', this.$el).val()
+                library_template: $('[name="library_template"]', this.$el).val(),
+                storage_id: $('[name="storage"]', this.$el).val()
             };
         },
 

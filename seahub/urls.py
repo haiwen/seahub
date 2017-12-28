@@ -32,6 +32,7 @@ from seahub.api2.endpoints.repos_batch import ReposBatchView, \
         ReposBatchCopyDirView, ReposBatchCreateDirView
 from seahub.api2.endpoints.repos import RepoView
 from seahub.api2.endpoints.file import FileView
+from seahub.api2.endpoints.file_history import FileHistoryView
 from seahub.api2.endpoints.dir import DirView, DirDetailView
 from seahub.api2.endpoints.file_tag import FileTagView
 from seahub.api2.endpoints.file_tag import FileTagsView
@@ -44,7 +45,7 @@ from seahub.api2.endpoints.share_link_zip_task import ShareLinkZipTaskView
 from seahub.api2.endpoints.query_zip_progress import QueryZipProgressView
 from seahub.api2.endpoints.copy_move_task import CopyMoveTaskView
 from seahub.api2.endpoints.query_copy_move_progress import QueryCopyMoveProgressView
-from seahub.api2.endpoints.invitations import InvitationsView
+from seahub.api2.endpoints.invitations import InvitationsView, InvitationsBatchView
 from seahub.api2.endpoints.invitation import InvitationView
 from seahub.api2.endpoints.notifications import NotificationsView, NotificationView
 from seahub.api2.endpoints.user_enabled_modules import UserEnabledModulesView
@@ -253,6 +254,7 @@ urlpatterns = patterns(
     url(r'^api/v2.1/repos/(?P<repo_id>[-0-9a-f]{36})/tags/$', FileTagsView.as_view(), name="api-v2.1-filetags-view"),
     url(r'^api/v2.1/repos/(?P<repo_id>[-0-9a-f]{36})/tags/(?P<name>.*?)/$',FileTagView.as_view(), name="api-v2.1-filetag-view"),
     url(r'^api/v2.1/repos/(?P<repo_id>[-0-9a-f]{36})/file/$', FileView.as_view(), name='api-v2.1-file-view'),
+    url(r'^api/v2.1/repos/(?P<repo_id>[-0-9a-f]{36})/file/history/$', FileHistoryView.as_view(), name='api-v2.1-file-history-view'),
     url(r'^api/v2.1/repos/(?P<repo_id>[-0-9a-f]{36})/dir/$', DirView.as_view(), name='api-v2.1-dir-view'),
     url(r'^api/v2.1/repos/(?P<repo_id>[-0-9a-f]{36})/dir/detail/$', DirDetailView.as_view(), name='api-v2.1-dir-detail-view'),
     url(r'^api/v2.1/repos/(?P<repo_id>[-0-9a-f]{36})/trash/$', RepoTrash.as_view(), name='api-v2.1-repo-trash'),
@@ -272,6 +274,7 @@ urlpatterns = patterns(
 
     ## user::invitations
     url(r'^api/v2.1/invitations/$', InvitationsView.as_view()),
+    url(r'^api/v2.1/invitations/batch/$', InvitationsBatchView.as_view()),
     url(r'^api/v2.1/invitations/(?P<token>[a-f0-9]{32})/$', InvitationView.as_view()),
 
     ## user::avatar
@@ -424,6 +427,7 @@ urlpatterns = patterns(
     url(r'^sys/publink/remove/$', sys_publink_remove, name='sys_publink_remove'),
     url(r'^sys/uploadlinkadmin/$', sys_upload_link_admin, name='sys_upload_link_admin'),
     url(r'^sys/uploadlink/remove/$', sys_upload_link_remove, name='sys_upload_link_remove'),
+    url(r'^sys/link-search/$', sys_link_search, name="sys_link_search"),
     url(r'^sys/notificationadmin/', notification_list, name='notification_list'),
     url(r'^sys/invitationadmin/$', sys_invitation_admin, name='sys_invitation_admin'),
     url(r'^sys/invitationadmin/remove/$', sys_invitation_remove, name='sys_invitation_remove'),

@@ -12,4 +12,3 @@ class RepoBasicInfoTest(BaseTestCase):
 
         self.assertEqual(200, resp.status_code)
         self.assertTemplateUsed(resp, 'file_revisions.html')
-        assert len(resp.context['commits']) == 1

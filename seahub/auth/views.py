@@ -1,6 +1,5 @@
 # Copyright (c) 2012-2016 Seafile Ltd.
 import hashlib
-import os
 import logging
 from datetime import datetime
 from django.conf import settings
@@ -33,8 +32,7 @@ from seahub.utils.ip import get_remote_ip
 from seahub.utils.file_size import get_quota_from_string
 from seahub.utils.two_factor_auth import two_factor_auth_enabled, handle_two_factor_auth
 from seahub.utils.user_permissions import get_user_role
-from seahub.settings import LOGIN_BG_IMAGE_PATH, MEDIA_ROOT
-from seahub.api2.endpoints.admin.login_bg_image import CUSTOM_LOGIN_BG_IMAGE_PATH
+from seahub.utils.auth import get_login_bg_image_path
 
 from constance import config
 
@@ -247,11 +245,7 @@ def login(request, template_name='registration/login.html',
     enable_adfs_login = getattr(settings, 'ENABLE_ADFS_LOGIN', False)
     enable_oauth = getattr(settings, 'ENABLE_OAUTH', False)
 
-    login_bg_image_path = LOGIN_BG_IMAGE_PATH
-    # get path that background image of login page
-    custom_login_bg_image_file = os.path.join(MEDIA_ROOT, CUSTOM_LOGIN_BG_IMAGE_PATH)
-    if os.path.exists(custom_login_bg_image_file):
-        login_bg_image_path = CUSTOM_LOGIN_BG_IMAGE_PATH
+    login_bg_image_path = get_login_bg_image_path()
 
     return render_to_response(template_name, {
         'form': form,

@@ -17,9 +17,11 @@ from seahub.api2.authentication import TokenAuthentication
 from seahub.api2.utils import api_error
 
 from seahub.utils import check_filename_with_rename, is_pro_version, \
-    gen_file_upload_url, is_valid_dirent_name
+    gen_file_upload_url, is_valid_dirent_name, normalize_file_path, \
+    normalize_dir_path
 from seahub.utils.timeutils import timestamp_to_isoformat_timestr
-from seahub.views import check_folder_permission, check_file_lock
+from seahub.views import check_folder_permission
+from seahub.utils.file_op import check_file_lock
 
 from seahub.settings import MAX_UPLOAD_FILE_NAME_LEN, \
     FILE_LOCK_EXPIRATION_DAYS, OFFICE_TEMPLATE_ROOT
@@ -43,7 +45,13 @@ class FileView(APIView):
     def get_file_info(self, username, repo_id, file_path):
 
         file_obj = seafile_api.get_dirent_by_path(repo_id, file_path)
-        is_locked, locked_by_me = check_file_lock(repo_id, file_path, username)
+
+        try:
+            is_locked, locked_by_me = check_file_lock(repo_id, file_path, username)
+        except Exception as e:
+            logger.error(e)
+            is_locked = False
+
         file_info = {
             'type': 'file',
             'repo_id': repo_id,
@@ -109,9 +117,11 @@ class FileView(APIView):
 
         # argument check
         path = request.GET.get('p', None)
-        if not path or path[0] != '/':
+        if not path:
             error_msg = 'p invalid.'
             return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
+
+        path = normalize_file_path(path)
 
         operation = request.data.get('operation', None)
         if not operation:
@@ -239,6 +249,18 @@ class FileView(APIView):
                 error_msg = 'Permission denied.'
                 return api_error(status.HTTP_403_FORBIDDEN, error_msg)
 
+            # check file lock
+            try:
+                is_locked, locked_by_me = check_file_lock(repo_id, path, username)
+            except Exception as e:
+                logger.error(e)
+                error_msg = 'Internal Server Error'
+                return api_error(status.HTTP_500_INTERNAL_SERVER_ERROR, error_msg)
+
+            if is_locked and not locked_by_me:
+                error_msg = _("File is locked")
+                return api_error(status.HTTP_403_FORBIDDEN, error_msg)
+
             # rename file
             new_file_name = check_filename_with_rename(repo_id, parent_dir,
                     new_file_name)
@@ -265,6 +287,8 @@ class FileView(APIView):
             if not dst_dir:
                 error_msg = 'dst_dir invalid.'
                 return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
+
+            dst_dir = normalize_dir_path(dst_dir)
 
             # resource check for source file
             try:
@@ -301,10 +325,19 @@ class FileView(APIView):
                 error_msg = 'Permission denied.'
                 return api_error(status.HTTP_403_FORBIDDEN, error_msg)
 
-            # move file
-            if dst_dir[-1] != '/': # Append '/' to the end of directory if necessary
-                dst_dir += '/'
+            # check file lock
+            try:
+                is_locked, locked_by_me = check_file_lock(repo_id, path, username)
+            except Exception as e:
+                logger.error(e)
+                error_msg = 'Internal Server Error'
+                return api_error(status.HTTP_500_INTERNAL_SERVER_ERROR, error_msg)
 
+            if is_locked and not locked_by_me:
+                error_msg = _("File is locked")
+                return api_error(status.HTTP_403_FORBIDDEN, error_msg)
+
+            # move file
             if src_repo_id == dst_repo_id and src_dir == dst_dir:
                 file_info = self.get_file_info(username, repo_id, path)
                 return Response(file_info)
@@ -335,6 +368,8 @@ class FileView(APIView):
             if not dst_dir:
                 error_msg = 'dst_dir invalid.'
                 return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
+
+            dst_dir = normalize_dir_path(dst_dir)
 
             # resource check for source file
             try:
@@ -372,9 +407,6 @@ class FileView(APIView):
                 return api_error(status.HTTP_403_FORBIDDEN, error_msg)
 
             # copy file
-            if dst_dir[-1] != '/': # Append '/' to the end of directory if necessary
-                dst_dir += '/'
-
             if src_repo_id == dst_repo_id and src_dir == dst_dir:
                 file_info = self.get_file_info(username, repo_id, path)
                 return Response(file_info)
@@ -405,9 +437,12 @@ class FileView(APIView):
                     error_msg = 'Permission denied.'
                     return api_error(status.HTTP_403_FORBIDDEN, error_msg)
 
-                is_locked, locked_by_me = check_file_lock(repo_id, path, username)
-                if (is_locked, locked_by_me) == (None, None):
-                    error_msg = _("Check file lock error")
+                # check file lock
+                try:
+                    is_locked, locked_by_me = check_file_lock(repo_id, path, username)
+                except Exception as e:
+                    logger.error(e)
+                    error_msg = 'Internal Server Error'
                     return api_error(status.HTTP_500_INTERNAL_SERVER_ERROR, error_msg)
 
                 if is_locked and not locked_by_me:
@@ -445,6 +480,7 @@ class FileView(APIView):
         if not path:
             error_msg = 'p invalid.'
             return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
+        path = normalize_file_path(path)
 
         operation = request.data.get('operation', None)
         if not operation:
@@ -474,7 +510,13 @@ class FileView(APIView):
             return api_error(status.HTTP_403_FORBIDDEN, error_msg)
 
         username = request.user.username
-        is_locked, locked_by_me = check_file_lock(repo_id, path, username)
+        try:
+            is_locked, locked_by_me = check_file_lock(repo_id, path, username)
+        except Exception as e:
+            logger.error(e)
+            error_msg = 'Internal Server Error'
+            return api_error(status.HTTP_500_INTERNAL_SERVER_ERROR, error_msg)
+
         if operation == 'lock':
             if not is_locked:
                 # lock file
@@ -485,6 +527,10 @@ class FileView(APIView):
                     logger.error(e)
                     error_msg = 'Internal Server Error'
                     return api_error(status.HTTP_500_INTERNAL_SERVER_ERROR, error_msg)
+            else:
+                if not locked_by_me:
+                    error_msg = _("File is locked")
+                    return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
 
         if operation == 'unlock':
             if is_locked:
@@ -516,6 +562,8 @@ class FileView(APIView):
             error_msg = 'p invalid.'
             return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
 
+        path = normalize_file_path(path)
+
         # resource check
         repo = seafile_api.get_repo(repo_id)
         if not repo:
@@ -528,8 +576,22 @@ class FileView(APIView):
 
         # permission check
         parent_dir = os.path.dirname(path)
+
+        username = request.user.username
         if check_folder_permission(request, repo_id, parent_dir) != 'rw':
             error_msg = 'Permission denied.'
+            return api_error(status.HTTP_403_FORBIDDEN, error_msg)
+
+        # check file lock
+        try:
+            is_locked, locked_by_me = check_file_lock(repo_id, path, username)
+        except Exception as e:
+            logger.error(e)
+            error_msg = 'Internal Server Error'
+            return api_error(status.HTTP_500_INTERNAL_SERVER_ERROR, error_msg)
+
+        if is_locked and not locked_by_me:
+            error_msg = _("File is locked")
             return api_error(status.HTTP_403_FORBIDDEN, error_msg)
 
         # delete file

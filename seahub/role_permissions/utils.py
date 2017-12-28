@@ -42,4 +42,3 @@ def get_enabled_admin_role_permissions_by_role(role):
         role = DEFAULT_ADMIN
 
     return ENABLED_ADMIN_ROLE_PERMISSIONS[role]
-

@@ -1,0 +1,74 @@
+{% extends "sysadmin/base.html" %}
+{% load seahub_tags i18n %}
+
+{% block cur_links %}tab-cur{% endblock %}
+
+{% block right_panel %}
+<h3>{% trans "Search Link"%}</h3>
+
+<form id="search-link-form" method="get" action=".">
+    <p class="tip">{% trans "Tip: please input at least 3 characters." %}</p>
+    <label>{% trans "Token" %}</label><br />
+    <input type="text" name="token" class="input" value="{{token}}" /><br />
+    <input type="submit" value="{% trans "Submit" %}" class="submit" />
+</form>
+
+<h3>{% trans "Result" %}</h3>
+
+{% if publinks %}
+<table>
+    <tr>
+        <th width="25%">{% trans "Name" %}</th>
+        <th width="19%">{% trans "Token" %}</th>
+        <th width="22%">{% trans "Owner" %}</th>
+        <th width="18%">{% trans "Create At" %}</th>
+        <th width="8%">{% trans "Count" %}</th>
+        <th width="8%"></th>
+    </tr>
+    {% for publink in publinks %}
+    <tr>
+        <td>{{ publink.name }}</td>
+        <td>{{ publink.token }}</td>
+        <td><a href="{% url 'user_info' publink.username %}">{{ publink.username }}</a></td>
+        <td>{{ publink.ctime|translate_seahub_time }} </td>
+        <td>{{ publink.view_cnt }}</td>
+        <td>
+            <a class="op vh rm-link" href="#" data-token="{{ publink.token }}">{% trans "Remove" %}</a>
+        </td>
+    </tr>
+    {% endfor %}
+</table>
+{% else %}
+<p>{% trans "No result" %}</p>
+{% endif %}
+
+{% endblock %}
+
+{% block extra_script %}
+<script type="text/javascript">
+$('#search-link-form').submit(function() {
+    if ($.trim($('[name="token"]', $(this)).val()).length < 3) {
+        return false;
+    }
+});
+
+$('.rm-link').click(function() {
+    var _this = $(this);
+    $.ajax({
+        url: '{% url 'sys_publink_remove' %}',
+        type: 'POST',
+        data: {'t': _this.attr('data-token')},
+        cache: false,
+        dataType: 'json',
+        beforeSend: prepareCSRFToken,
+        success: function() {
+            _this.closest('tr').remove();
+            feedback("{% trans "Successfully deleted 1 item." %}", 'success');
+        },
+        error: ajaxErrorHandler
+    });
+    return false;
+});
+
+</script>
+{% endblock %}

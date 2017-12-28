@@ -2,7 +2,9 @@
 *~
 *#
 seahub.db*
+seahub*.db
 local_settings.py
+local_settings*
 startserver.sh
 thirdpart/django
 thirdpart/djblets

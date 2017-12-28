@@ -72,3 +72,67 @@ class InvitationsView(APIView):
         i.send_to(email=accepter)
 
         return Response(i.to_dict(), status=201)
+
+
+class InvitationsBatchView(APIView):
+    authentication_classes = (TokenAuthentication, SessionAuthentication)
+    permission_classes = (IsAuthenticated, CanInviteGuest)
+    throttle_classes = (UserRateThrottle,)
+
+    def post(self, request):
+
+        itype = request.data.get('type', '').lower()
+        if not itype or itype != 'guest':
+            return api_error(status.HTTP_400_BAD_REQUEST, 'type invalid.')
+
+        accepters = request.data.getlist('accepter', None)
+        if not accepters:
+            return api_error(status.HTTP_400_BAD_REQUEST, 'accepters invalid.')
+
+        result = {}
+        result['failed'] = []
+        result['success'] = []
+
+        for accepter in accepters:
+
+            if not accepter.strip():
+                continue
+
+            accepter = accepter.lower()
+
+            if not is_valid_email(accepter):
+                result['failed'].append({
+                    'email': accepter,
+                    'error_msg': _('Email %s invalid.') % accepter
+                    })
+                continue
+
+            if block_accepter(accepter):
+                result['failed'].append({
+                    'email': accepter,
+                    'error_msg': _('The email address is not allowed to be invited as a guest.')
+                    })
+                continue
+
+            if Invitation.objects.filter(inviter=request.user.username,
+                    accepter=accepter).count() > 0:
+                result['failed'].append({
+                    'email': accepter,
+                    'error_msg': _('%s is already invited.') % accepter
+                    })
+                continue
+
+            try:
+                User.objects.get(accepter)
+                result['failed'].append({
+                    'email': accepter,
+                    'error_msg': _('User %s already exists.') % accepter
+                    })
+                continue
+            except User.DoesNotExist:
+                i = Invitation.objects.add(inviter=request.user.username,
+                        accepter=accepter)
+                i.send_to(email=accepter)
+                result['success'].append(i.to_dict())
+
+        return Response(result)

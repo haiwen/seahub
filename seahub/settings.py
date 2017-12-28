@@ -233,7 +233,10 @@ INSTALLED_APPS = (
     'seahub.trusted_ip',
 )
 
-# Enabled or disable constance(web settings).
+# Enable or disable multiple storage backends.
+ENABLE_STORAGE_CLASSES = False
+
+# Enable or disable constance(web settings).
 ENABLE_SETTINGS_VIA_WEB = True
 CONSTANCE_BACKEND = 'constance.backends.database.DatabaseBackend'
 CONSTANCE_DATABASE_CACHE_BACKEND = 'default'
@@ -274,7 +277,7 @@ ENABLE_UPLOAD_FOLDER = True
 ENABLE_RESUMABLE_FILEUPLOAD = False
 
 ## maxNumberOfFiles for fileupload
-MAX_NUMBER_OF_FILES_FOR_FILEUPLOAD = 500
+MAX_NUMBER_OF_FILES_FOR_FILEUPLOAD = 1000
 
 # enable encrypt library
 ENABLE_ENCRYPTED_LIBRARY = True
@@ -393,9 +396,9 @@ CACHES = {
 # rest_framwork
 REST_FRAMEWORK = {
     'DEFAULT_THROTTLE_RATES': {
-        'ping': '600/minute',
-        'anon': '5/minute',
-        'user': '300/minute',
+        'ping': '3000/minute',
+        'anon': '60/minute',
+        'user': '3000/minute',
     },
     # https://github.com/tomchristie/django-rest-framework/issues/2891
     'UNICODE_JSON': False,
@@ -403,6 +406,7 @@ REST_FRAMEWORK = {
 REST_FRAMEWORK_THROTTING_WHITELIST = []
 
 # file and path
+GET_FILE_HISTORY_TIMEOUT = 10 * 60 # seconds
 MAX_UPLOAD_FILE_NAME_LEN    = 255
 MAX_FILE_NAME 		    = MAX_UPLOAD_FILE_NAME_LEN
 MAX_PATH 		    = 4096

@@ -46,11 +46,13 @@ from seahub.utils import render_permission_error, render_error, \
     is_pro_version, FILE_AUDIT_ENABLED, is_valid_dirent_name, \
     is_org_repo_creation_allowed, is_windows_operating_system
 from seahub.utils.star import get_dir_starred_files
+from seahub.utils.repo import get_library_storages
+from seahub.utils.file_op import check_file_lock
 from seahub.utils.timeutils import utc_to_local
 from seahub.views.modules import MOD_PERSONAL_WIKI, enable_mod_for_user, \
     disable_mod_for_user
 import seahub.settings as settings
-from seahub.settings import AVATAR_FILE_STORAGE, \
+from seahub.settings import AVATAR_FILE_STORAGE, ENABLE_STORAGE_CLASSES, \
     ENABLE_SUB_LIBRARY, ENABLE_FOLDER_PERM, ENABLE_REPO_SNAPSHOT_LABEL, \
     UNREAD_NOTIFICATIONS_REQUEST_INTERVAL
 
@@ -102,33 +104,6 @@ def check_folder_permission(request, repo_id, path):
     """
     username = request.user.username
     return seafile_api.check_permission_by_path(repo_id, path, username)
-
-def check_file_lock(repo_id, file_path, username):
-    """ check if file is locked to current user
-    according to returned value of seafile_api.check_file_lock:
-
-    0: not locked
-    1: locked by other
-    2: locked by me
-    -1: error
-
-    return (is_locked, locked_by_me)
-    """
-    try:
-        return_value = seafile_api.check_file_lock(repo_id,
-            file_path.lstrip('/'), username)
-    except SearpcError as e:
-        logger.error(e)
-        return (None, None)
-
-    if return_value == 0:
-        return (False, False)
-    elif return_value == 1:
-        return (True , False)
-    elif return_value == 2:
-        return (True, True)
-    else:
-        return (None, None)
 
 def gen_path_link(path, repo_name):
     """
@@ -269,6 +244,9 @@ def get_unencry_rw_repos_by_user(request):
     accessible_repos = []
 
     for r in owned_repos:
+        if r.is_virtual:
+            continue
+
         if not has_repo(accessible_repos, r) and not r.encrypted:
             accessible_repos.append(r)
 
@@ -755,6 +733,10 @@ def libraries(request):
             logger.error(e)
             joined_groups = []
 
+    storages = []
+    if is_pro_version() and ENABLE_STORAGE_CLASSES:
+        storages = get_library_storages(request)
+
     return render_to_response('libraries.html', {
             "allow_public_share": allow_public_share,
             "guide_enabled": guide_enabled,
@@ -775,6 +757,8 @@ def libraries(request):
             'file_audit_enabled': FILE_AUDIT_ENABLED,
             'can_add_pub_repo': can_add_pub_repo,
             'joined_groups': joined_groups,
+            'storages': storages,
+            'enable_storage_classes': ENABLE_STORAGE_CLASSES,
             'unread_notifications_request_interval': UNREAD_NOTIFICATIONS_REQUEST_INTERVAL,
             'library_templates': LIBRARY_TEMPLATES.keys() if \
                     isinstance(LIBRARY_TEMPLATES, dict) else [],
@@ -823,27 +807,28 @@ def validate_filename(request):
     content_type = 'application/json; charset=utf-8'
     return HttpResponse(json.dumps(result), content_type=content_type)
 
-def render_file_revisions (request, repo_id):
-    """List all history versions of a file."""
-
-    days_str = request.GET.get('days', '')
-    try:
-        days = int(days_str)
-    except ValueError:
-        days = 7
-
-    path = request.GET.get('p', '/')
-    if path[-1] == '/':
-        path = path[:-1]
-    u_filename = os.path.basename(path)
-
-    if not path:
-        return render_error(request)
-
+@login_required
+def file_revisions(request, repo_id):
+    """List file revisions in file version history page.
+    """
     repo = get_repo(repo_id)
     if not repo:
         error_msg = _(u"Library does not exist")
         return render_error(request, error_msg)
+
+    # perm check
+    if not check_folder_permission(request, repo_id, '/'):
+        error_msg = _(u"Permission denied.")
+        return render_error(request, error_msg)
+
+    path = request.GET.get('p', '/')
+    if not path:
+        return render_error(request)
+
+    if path[-1] == '/':
+        path = path[:-1]
+
+    u_filename = os.path.basename(path)
 
     filetype = get_file_type_and_ext(u_filename)[0].lower()
     if filetype == 'text' or filetype == 'markdown':
@@ -851,38 +836,26 @@ def render_file_revisions (request, repo_id):
     else:
         can_compare = False
 
-    try:
-        commits = seafile_api.get_file_revisions(repo_id, path, -1, -1, days)
-    except SearpcError, e:
-        logger.error(e.msg)
-        return render_error(request, e.msg)
-
-    if not commits:
-        return render_error(request, _(u'No revisions found'))
-
     # Check whether user is repo owner
     if validate_owner(request, repo_id):
         is_owner = True
     else:
         is_owner = False
 
-    cur_path = path
-    for commit in commits:
-        commit.path = cur_path
-        if commit.rev_renamed_old_path:
-            cur_path = '/' + commit.rev_renamed_old_path
-
     zipped = gen_path_link(path, repo.name)
 
     can_revert_file = True
     username = request.user.username
 
-    is_locked, locked_by_me = check_file_lock(repo_id, path, username)
+    try:
+        is_locked, locked_by_me = check_file_lock(repo_id, path, username)
+    except Exception as e:
+        logger.error(e)
+        is_locked, locked_by_me = False, False
+
     if seafile_api.check_permission_by_path(repo_id, path, username) != 'rw' or \
         (is_locked and not locked_by_me):
         can_revert_file = False
-
-    commits[0].is_first_commit = True
 
     # for 'go back'
     referer = request.GET.get('referer', '')
@@ -892,33 +865,25 @@ def render_file_revisions (request, repo_id):
         'path': path,
         'u_filename': u_filename,
         'zipped': zipped,
-        'commits': commits,
         'is_owner': is_owner,
         'can_compare': can_compare,
         'can_revert_file': can_revert_file,
-        'days': days,
         'referer': referer,
         }, context_instance=RequestContext(request))
 
-@login_required
-def file_revisions(request, repo_id):
-    """List file revisions in file version history page.
-    """
-    repo = get_repo(repo_id)
-    if not repo:
-        raise Http404
-
-    # perm check
-    if check_folder_permission(request, repo_id, '/') is None:
-        raise Http404
-
-    return render_file_revisions(request, repo_id)
 
 def demo(request):
     """
     Login as demo account.
     """
-    user = User.objects.get(email=settings.CLOUD_DEMO_USER)
+
+    try:
+        user = User.objects.get(email=settings.CLOUD_DEMO_USER)
+    except User.DoesNotExist:
+        user = User.objects.create_user(settings.CLOUD_DEMO_USER, is_active=True)
+        user.set_unusable_password()
+        user.save()
+
     for backend in get_backends():
         user.backend = "%s.%s" % (backend.__module__, backend.__class__.__name__)
 

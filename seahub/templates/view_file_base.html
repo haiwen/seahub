@@ -587,7 +587,11 @@ var fileDiscussions = {
 fileDiscussions.init();
 
 $('#discuss').click(function() {
-    fileDiscussions.show();
+    if (parseInt(fileDiscussions.$el.css('right')) == 0) {
+        fileDiscussions.hide();
+    } else {
+        fileDiscussions.show();
+    }
 });
 $(document).keydown(function(e) {
     // ESCAPE key pressed

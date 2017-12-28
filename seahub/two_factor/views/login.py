@@ -34,6 +34,8 @@ from seahub.two_factor.forms import TOTPTokenAuthForm, BackupTokenAuthForm, Auth
 from seahub.two_factor.utils import default_device
 from seahub.two_factor.views.utils import class_view_decorator
 
+from seahub.utils.auth import get_login_bg_image_path
+
 
 # Get an instance of a logger
 logger = logging.getLogger(__name__)
@@ -166,6 +168,10 @@ class TwoFactorVerifyView(SessionWizardView):
 
         context['cancel_url'] = settings.LOGOUT_URL
         context['form_prefix'] = '%s-' % self.steps.current
+
+        login_bg_image_path = get_login_bg_image_path()
+        context['login_bg_image_path'] = login_bg_image_path
+
         return context
 
     def render_done(self, form, **kwargs):

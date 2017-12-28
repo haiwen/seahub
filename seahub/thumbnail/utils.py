@@ -119,7 +119,7 @@ def generate_thumbnail(request, repo_id, size, path):
 
     # image thumbnails
     if file_size > THUMBNAIL_IMAGE_SIZE_LIMIT * 1024**2:
-        return (False, 403)
+        return (False, 400)
 
     token = seafile_api.get_fileserver_access_token(repo_id,
             file_id, 'view', '', use_onetime=True)

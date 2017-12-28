@@ -2,7 +2,6 @@
 import logging
 
 from django.conf import settings
-
 from seahub.constants import DEFAULT_USER, GUEST_USER, \
         DEFAULT_ADMIN, SYSTEM_ADMIN, DAILY_ADMIN, AUDIT_ADMIN
 
@@ -24,6 +23,7 @@ DEFAULT_ENABLED_ROLE_PERMISSIONS = {
         'can_connect_with_ios_clients': True,
         'can_connect_with_desktop_clients': True,
         'can_export_files_via_mobile_client': True,
+        'storage_ids': [],
         'role_quota': '',
     },
     GUEST_USER: {
@@ -40,6 +40,7 @@ DEFAULT_ENABLED_ROLE_PERMISSIONS = {
         'can_connect_with_ios_clients': False,
         'can_connect_with_desktop_clients': False,
         'can_export_files_via_mobile_client': False,
+        'storage_ids': [],
         'role_quota': '',
     },
 }
