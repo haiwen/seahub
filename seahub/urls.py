@@ -20,7 +20,7 @@ from seahub.views.wiki import personal_wiki, personal_wiki_pages, \
     personal_wiki_create, personal_wiki_page_new, personal_wiki_page_edit, \
     personal_wiki_page_delete, personal_wiki_use_lib
 from seahub.api2.endpoints.groups import Groups, Group
-from seahub.api2.endpoints.all_groups import AllGroupsView
+from seahub.api2.endpoints.groups_can_share_repo_to import GroupsCanShareRepoToView
 from seahub.api2.endpoints.group_libraries import GroupLibraries, GroupLibrary
 from seahub.api2.endpoints.group_members import GroupMembers, GroupMembersBulk, GroupMember
 from seahub.api2.endpoints.search_group import SearchGroup
@@ -210,8 +210,9 @@ urlpatterns = patterns(
     url(r'^api/v2.1/user/$', User.as_view(), name="api-v2.1-user"),
 
     ## user::groups
+    url(r'^api/v2.1/groups-can-share-repo-to/$', GroupsCanShareRepoToView.as_view(), name='api-v2.1-groups-can-share-repo-to'),
+
     url(r'^api/v2.1/groups/$', Groups.as_view(), name='api-v2.1-groups'),
-    url(r'^api/v2.1/groups/all/$', AllGroupsView.as_view(), name='api-v2.1-all-groups'),
     url(r'^api/v2.1/groups/(?P<group_id>\d+)/$', Group.as_view(), name='api-v2.1-group'),
 
     url(r'^api/v2.1/groups/(?P<group_id>\d+)/libraries/$', GroupLibraries.as_view(), name='api-v2.1-group-libraries'),

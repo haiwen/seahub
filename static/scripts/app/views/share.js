@@ -677,7 +677,7 @@ define([
                     if (app.pageOptions.enable_share_to_all_groups) {
                         $.ajax({
                             url: Common.getUrl({
-                                name: 'all_groups'
+                                name: 'groups_can_share_repo_to'
                             }),
                             type: 'GET',
                             dataType: 'json',
