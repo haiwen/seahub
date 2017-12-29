@@ -38,7 +38,7 @@ from seahub.group.utils import is_group_member, is_group_admin_or_owner, \
     get_group_member_info
 import seahub.settings as settings
 from seahub.settings import ENABLE_THUMBNAIL, THUMBNAIL_ROOT, \
-    THUMBNAIL_DEFAULT_SIZE, SHOW_TRAFFIC, MEDIA_URL
+    THUMBNAIL_DEFAULT_SIZE, SHOW_TRAFFIC, MEDIA_URL, ENABLE_VIDEO_THUMBNAIL
 from seahub.utils import check_filename_with_rename, EMPTY_SHA1, \
     gen_block_get_url, TRAFFIC_STATS_ENABLED, get_user_traffic_stat,\
     new_merge_with_no_conflict, get_commit_before_new_merge, \
@@ -345,14 +345,23 @@ def list_lib_dir(request, repo_id):
         f_['obj_id'] = f.obj_id
         f_['perm'] = f.permission # perm for file in current dir
 
-        file_type, file_ext = get_file_type_and_ext(f.obj_name)
-        if file_type == IMAGE:
-            f_['is_img'] = True
-        if file_type == VIDEO:
-            f_['is_video'] = True
-        if file_type == IMAGE or file_type == VIDEO:
-            if not repo.encrypted and ENABLE_THUMBNAIL and \
-                os.path.exists(os.path.join(THUMBNAIL_ROOT, str(size), f.obj_id)):
+        if not repo.encrypted and ENABLE_THUMBNAIL:
+            # used for providing a way to determine
+            # if send a request to create thumbnail.
+            file_type, file_ext = get_file_type_and_ext(f.obj_name)
+            if file_type == IMAGE:
+                f_['is_img'] = True
+
+            if file_type == VIDEO and ENABLE_VIDEO_THUMBNAIL:
+                f_['is_video'] = True
+
+            # if thumbnail has already been created, return its src.
+            # Then web browser will use this src to get thumbnail instead of
+            # recreating it.
+            thumbnail_file_path = os.path.join(THUMBNAIL_ROOT, str(size), f.obj_id)
+            thumbnail_exist = os.path.exists(thumbnail_file_path)
+            if thumbnail_exist and (file_type == IMAGE or
+                    file_type == VIDEO and ENABLE_VIDEO_THUMBNAIL):
                 file_path = posixpath.join(path, f.obj_name)
                 src = get_thumbnail_src(repo_id, size, file_path)
                 f_['encoded_thumbnail_src'] = urlquote(src)
