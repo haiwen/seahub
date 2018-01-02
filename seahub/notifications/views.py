@@ -139,22 +139,17 @@ def add_notice_from_info(notices):
     '''
     default_avatar_url = get_default_avatar_url()
     for notice in notices:
+        notice.default_avatar_url = default_avatar_url
+
         if notice.is_user_message():
             d = notice.user_message_detail_to_dict()
             if d.get('msg_from') is not None:
                 notice.msg_from = d.get('msg_from')
-            else:
-                notice.default_avatar_url = default_avatar_url
 
         elif notice.is_group_msg():
             d = notice.group_message_detail_to_dict()
             if d.get('msg_from') is not None:
                 notice.msg_from = d.get('msg_from')
-            else:
-                notice.default_avatar_url = default_avatar_url
-
-        elif notice.is_file_uploaded_msg():
-            notice.default_avatar_url = default_avatar_url
 
         elif notice.is_repo_share_msg():
             try:
@@ -162,7 +157,6 @@ def add_notice_from_info(notices):
                 notice.msg_from = d['share_from']
             except Exception as e:
                 logger.error(e)
-                notice.default_avatar_url = default_avatar_url
 
         elif notice.is_repo_share_to_group_msg():
             try:
@@ -170,7 +164,6 @@ def add_notice_from_info(notices):
                 notice.msg_from = d['share_from']
             except Exception as e:
                 logger.error(e)
-                notice.default_avatar_url = default_avatar_url
 
         elif notice.is_group_join_request():
             try:
@@ -178,7 +171,6 @@ def add_notice_from_info(notices):
                 notice.msg_from = d['username']
             except Exception as e:
                 logger.error(e)
-                notice.default_avatar_url = default_avatar_url
 
         elif notice.is_add_user_to_group():
             try:
@@ -186,7 +178,6 @@ def add_notice_from_info(notices):
                 notice.msg_from = d['group_staff']
             except Exception as e:
                 logger.error(e)
-                notice.default_avatar_url = default_avatar_url
 
         elif notice.is_file_comment_msg():
             try:
@@ -194,9 +185,5 @@ def add_notice_from_info(notices):
                 notice.msg_from = d['author']
             except Exception as e:
                 logger.error(e)
-                notice.default_avatar_url = default_avatar_url
-
-        else:
-            notice.default_avatar_url = default_avatar_url
 
     return notices
