@@ -48,6 +48,7 @@ from seahub.utils.star import get_dir_starred_files
 from seahub.utils.file_types import IMAGE, VIDEO
 from seahub.utils.file_op import check_file_lock
 from seahub.utils.repo import get_locked_files_by_dir
+from seahub.utils.error_msg import file_type_error_msg, file_size_error_msg
 from seahub.base.accounts import User
 from seahub.thumbnail.utils import get_thumbnail_src
 from seahub.share.utils import is_repo_admin
@@ -1235,6 +1236,19 @@ def ajax_group_members_import(request, group_id):
     username = request.user.username
     content_type = 'application/json; charset=utf-8'
 
+    # get and convert uploaded file
+    uploaded_file = request.FILES['file']
+    ext = os.path.splitext(uploaded_file.name)[1].lower()
+    if ext != '.csv':
+        result['error'] = file_type_error_msg(ext, "csv")
+        return HttpResponse(json.dumps(result), status=400,
+                        content_type=content_type)
+
+    if uploaded_file.size > 10 * 1024 * 1024:
+        result['error'] = file_size_error_msg(uploaded_file.size, 10 * 1024 * 1024)
+        return HttpResponse(json.dumps(result), status=400,
+                        content_type=content_type)
+
     group_id = int(group_id)
     try:
         group = seaserv.get_group(group_id)
@@ -1253,14 +1267,6 @@ def ajax_group_members_import(request, group_id):
         logger.error(e)
         result['error'] = 'Internal Server Error'
         return HttpResponse(json.dumps(result), status=500,
-                        content_type=content_type)
-
-
-    # get and convert uploaded file
-    uploaded_file = request.FILES['file']
-    if uploaded_file.size > 10 * 1024 * 1024:
-        result['error'] = _(u'Failed, file is too large')
-        return HttpResponse(json.dumps(result), status=403,
                         content_type=content_type)
 
     try:

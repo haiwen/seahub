@@ -37,4 +37,3 @@ def check_file_lock(repo_id, file_path, username):
         return (True, True)
     else:
         raise SearpcError('check file lock error')
-

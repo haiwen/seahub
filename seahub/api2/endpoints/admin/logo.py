@@ -14,6 +14,9 @@ from seahub.api2.throttling import UserRateThrottle
 from seahub.api2.utils import api_error
 from seahub.settings import SEAHUB_DATA_ROOT, MEDIA_ROOT, \
         CUSTOM_LOGO_PATH
+from seahub.utils import get_file_type_and_ext, PREVIEW_FILEEXT
+from seahub.utils.file_types import IMAGE
+from seahub.utils.error_msg import file_type_error_msg, file_size_error_msg
 
 logger = logging.getLogger(__name__)
 
@@ -27,7 +30,17 @@ class AdminLogo(APIView):
 
         logo_file = request.FILES.get('logo', None)
         if not logo_file:
-            error_msg = 'logo invalid.'
+            error_msg = 'Logo can not be found.'
+            logger.error(error_msg)
+            return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
+
+        file_type, ext = get_file_type_and_ext(logo_file.name)
+        if file_type != IMAGE:
+            error_msg = file_type_error_msg(ext, PREVIEW_FILEEXT.get(IMAGE))
+            return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
+
+        if logo_file.size > 1024 * 1024 * 20: # 20mb
+            error_msg = file_size_error_msg(logo_file.size, 20*1024*1024)
             return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
 
         if not os.path.exists(SEAHUB_DATA_ROOT):
