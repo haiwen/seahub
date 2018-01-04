@@ -2129,21 +2129,21 @@ def sys_sudo_mode(request):
             if user:
                 update_sudo_mode_ts(request)
 
-                from seahub.auth.views import _clear_login_failed_attempts
-                _clear_login_failed_attempts(request, username)
+                from seahub.auth.utils import clear_login_failed_attempts
+                clear_login_failed_attempts(request, username)
 
                 return HttpResponseRedirect(next)
         password_error = True
 
-        from seahub.auth.views import _get_login_failed_attempts, _incr_login_failed_attempts
-        failed_attempt = _get_login_failed_attempts(username=urlquote(username), ip=ip)
+        from seahub.auth.utils import get_login_failed_attempts, incr_login_failed_attempts
+        failed_attempt = get_login_failed_attempts(username=username, ip=ip)
         if failed_attempt >= config.LOGIN_ATTEMPT_LIMIT:
             # logout user
             from seahub.auth import logout
             logout(request)
             return HttpResponseRedirect('auth_login')
         else:
-            _incr_login_failed_attempts(username=urlquote(username), ip=ip)
+            incr_login_failed_attempts(username=username, ip=ip)
 
     enable_shib_login = getattr(settings, 'ENABLE_SHIB_LOGIN', False)
     enable_adfs_login = getattr(settings, 'ENABLE_ADFS_LOGIN', False)
