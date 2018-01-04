@@ -200,6 +200,9 @@ define([
                 case 'admin-operation-logs': return siteRoot + 'api/v2.1/admin/admin-logs/';
                 case 'admin-login-logs': return siteRoot + 'api/v2.1/admin/admin-login-logs/';
 
+                case 'admin-address-book-groups': return siteRoot + 'api/v2.1/admin/address-book/groups/';
+                case 'admin-address-book-group': return siteRoot + 'api/v2.1/admin/address-book/groups/' + options.group_id + '/';
+
                 case 'license': return siteRoot + 'api/v2.1/admin/license/';
             }
         },

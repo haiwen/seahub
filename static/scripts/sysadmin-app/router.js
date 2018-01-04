@@ -8,16 +8,22 @@ define([
     'sysadmin-app/views/desktop-devices',
     'sysadmin-app/views/mobile-devices',
     'sysadmin-app/views/device-errors',
+
     'sysadmin-app/views/repos',
     'sysadmin-app/views/search-repos',
     'sysadmin-app/views/system-repo',
     'sysadmin-app/views/trash-repos',
     'sysadmin-app/views/search-trash-repos',
     'sysadmin-app/views/dir',
+
+    'sysadmin-app/views/address-book',
+    'sysadmin-app/views/address-book-group',
+
     'sysadmin-app/views/groups',
     'sysadmin-app/views/search-groups',
     'sysadmin-app/views/group-repos',
     'sysadmin-app/views/group-members',
+
     'sysadmin-app/views/admin-operation-logs',
     'sysadmin-app/views/admin-login-logs',
     'sysadmin-app/views/device-trusted-ipaddresses',
@@ -25,9 +31,11 @@ define([
 ], function($, Backbone, Common, SideNavView, DashboardView,
     DesktopDevicesView, MobileDevicesView, DeviceErrorsView,
     ReposView, SearchReposView, SystemReposView, TrashReposView,
-    SearchTrashReposView, DirView, GroupsView, SearchGroupsView,
-    GroupReposView, GroupMembersView, AdminOperationLogsview, AdminLoginLogsView,
-    DeviceTrustedIPView, AccountView) {
+    SearchTrashReposView, DirView,
+    AddressBookView, AddressBookGroupView,
+    GroupsView, SearchGroupsView, GroupReposView, GroupMembersView,
+    AdminOperationLogsview, AdminLoginLogsView, DeviceTrustedIPView,
+    AccountView) {
 
     "use strict";
 
@@ -39,17 +47,23 @@ define([
             'mobile-devices/': 'showMobileDevices',
             'device-errors/': 'showDeviceErrors',
             'device-trusted-ip/': 'showDeviceTrustedIP',
+
             'all-libs/': 'showLibraries',
             'search-libs/': 'showSearchLibraries',
             'system-lib/': 'showSystemLibrary',
             'trash-libs/': 'showTrashLibraries',
             'search-trash-libs/': 'showSearchTrashLibraries',
             'libs/:repo_id(/*path)': 'showLibraryDir',
+
+            'address-book/': 'showAddressBook',
+            'address-book/groups/:group_id/': 'showAddressBookGroup',
+
             'groups/': 'showGroups',
             'search-groups/': 'showSearchGroups',
             'groups/:group_id/': 'showGroupLibraries',
             'groups/:group_id/libs/': 'showGroupLibraries',
             'groups/:group_id/members/': 'showGroupMembers',
+
             'admin-operation-logs/': 'showAdminOperationLogs',
             'admin-login-logs/': 'showAdminLoginLogs',
             // Default
@@ -78,6 +92,9 @@ define([
             this.trashReposView = new TrashReposView();
             this.searchTrashReposView = new SearchTrashReposView();
             this.dirView = new DirView();
+
+            this.addressBookView = new AddressBookView();
+            this.addressBookGroupView = new AddressBookGroupView();
 
             this.groupsView = new GroupsView();
             this.searchGroupsView = new SearchGroupsView();
@@ -312,6 +329,30 @@ define([
             this.switchCurrentView(this.groupMembersView);
             this.sideNavView.setCurTab('groups');
             this.groupMembersView.show(group_id);
+        },
+
+        showAddressBook: function() {
+            if (!app.pageOptions.is_pro ||
+                !app.pageOptions.admin_permissions.can_manage_group) {
+                this.showDashboard();
+                return false;
+            }
+
+            this.switchCurrentView(this.addressBookView);
+            this.sideNavView.setCurTab('address-book');
+            this.addressBookView.show();
+        },
+
+        showAddressBookGroup: function(group_id) {
+            if (!app.pageOptions.is_pro ||
+                !app.pageOptions.admin_permissions.can_manage_group) {
+                this.showDashboard();
+                return false;
+            }
+
+            this.switchCurrentView(this.addressBookGroupView);
+            this.sideNavView.setCurTab('address-book');
+            this.addressBookGroupView.show({'group_id': group_id});
         },
 
         showAdminOperationLogs: function() {
