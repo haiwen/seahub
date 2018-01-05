@@ -1999,14 +1999,10 @@ button.sf-dropdown-toggle:focus {
     min-width: 55px;
 }
 @media (max-width:767px) {
-    .cur-view-toolbar {
-        margin-top:6px;
-    }
     .cur-view-toolbar .mobile-icon {
         color:#999;
-        line-height:1;
+        line-height:1.63;
         font-size:22px;
-        vertical-align:middle;
         margin-right:8px;
     }
 }
@@ -2123,7 +2119,7 @@ button.sf-dropdown-toggle:focus {
 }
 @media (max-width:767px) {
     #account {
-        margin:6px 0 0 10px;
+        margin:5px 0 0 10px;
     }
     .account-toggle {
         font-size:22px;
