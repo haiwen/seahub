@@ -2141,7 +2141,7 @@ def sys_sudo_mode(request):
             # logout user
             from seahub.auth import logout
             logout(request)
-            return HttpResponseRedirect('auth_login')
+            return HttpResponseRedirect(reverse('auth_login'))
         else:
             incr_login_failed_attempts(username=username, ip=ip)
 
