@@ -17,11 +17,11 @@ from django.conf import settings as dj_settings
 from django.core.urlresolvers import reverse
 from django.contrib import messages
 from django.http import HttpResponse, Http404, HttpResponseRedirect, HttpResponseNotAllowed
-
 from django.shortcuts import render_to_response, get_object_or_404
 from django.template import RequestContext
 from django.utils import timezone
 from django.utils.translation import ugettext as _
+from django.utils.http import urlquote
 
 import seaserv
 from seaserv import ccnet_threaded_rpc, seafserv_threaded_rpc, \
@@ -50,6 +50,7 @@ from seahub.utils import IS_EMAIL_CONFIGURED, string2list, is_valid_username, \
     is_pro_version, send_html_email, get_user_traffic_list, get_server_id, \
     handle_virus_record, get_virus_record_by_id, \
     get_virus_record, FILE_AUDIT_ENABLED, get_max_upload_file_size
+from seahub.utils.ip import get_remote_ip
 from seahub.utils.file_size import get_file_size_unit
 from seahub.utils.ldap import get_ldap_info
 from seahub.utils.licenseparse import parse_license, user_number_over_limit
@@ -2121,12 +2122,28 @@ def sys_sudo_mode(request):
     password_error = False
     if request.method == 'POST':
         password = request.POST.get('password')
+        username = request.user.username
+        ip = get_remote_ip(request)
         if password:
-            user = authenticate(username=request.user.username, password=password)
+            user = authenticate(username=username, password=password)
             if user:
                 update_sudo_mode_ts(request)
+
+                from seahub.auth.utils import clear_login_failed_attempts
+                clear_login_failed_attempts(request, username)
+
                 return HttpResponseRedirect(next)
         password_error = True
+
+        from seahub.auth.utils import get_login_failed_attempts, incr_login_failed_attempts
+        failed_attempt = get_login_failed_attempts(username=username, ip=ip)
+        if failed_attempt >= config.LOGIN_ATTEMPT_LIMIT:
+            # logout user
+            from seahub.auth import logout
+            logout(request)
+            return HttpResponseRedirect(reverse('auth_login'))
+        else:
+            incr_login_failed_attempts(username=username, ip=ip)
 
     enable_shib_login = getattr(settings, 'ENABLE_SHIB_LOGIN', False)
     enable_adfs_login = getattr(settings, 'ENABLE_ADFS_LOGIN', False)
