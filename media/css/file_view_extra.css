@@ -1,5 +1,4 @@
 #main {
-    min-height:0;
     padding:0;
 }
 #view-hd,
@@ -12,6 +11,7 @@
 #view-hd,
 #shared-file-view-hd {
     margin-top:4px;
+    flex-shrink:0;
 }
 #file-op .avatar {
     vertical-align:middle;
@@ -29,10 +29,6 @@
     background:#f4f4f4;
     border:1px solid #ededed;
     margin-top:12px;
-    height:10000px;
-}
-body {
-    overflow:hidden;
 }
 @media (max-width:950px) {
     #file-view {

@@ -4,7 +4,7 @@
 content of files that can be viewed online shows here.
 For details please refer to 'snippets/file_content_js.html'.
 {% endcomment %}
-<div id="file-view" {% if filetype == 'Image' and not err %}class="image-file-view"{% endif %}>
+<div id="file-view" class="flex-auto ov-auto {% if filetype == 'Image' and not err %}d-flex{% endif %}">
     {% include 'snippets/file_encoding.html' %}
     {% if not err %}
         {% if filetype == 'Text' or filetype == 'Markdown' %}
@@ -20,6 +20,7 @@ For details please refer to 'snippets/file_content_js.html'.
         {% endif %}
 
         {% if filetype == 'Image' %}
+            <div class="image-file-view flex-1">
             {% if from_shared_dir %}
                 {% if img_prev %}
                 <a href="?p={{img_prev|urlencode}}" id="img-prev" title="{% trans 'you can also press ← ' %}"><span class="icon-chevron-left"></span></a>
@@ -30,6 +31,7 @@ For details please refer to 'snippets/file_content_js.html'.
             {% endif %}
             <span class="loading-icon"></span>
             <img src="" alt="{{ file_name }}" id="image-view" class="hide" />
+            </div>
         {% endif %}
         
         {% if filetype == 'Document' or filetype == 'PDF' and not use_pdfjs %} 

@@ -15,14 +15,6 @@ function getOutputScale(ctx) {
     };
 }
 
-function setFileViewAreaHeight() {
-    var $fileView = $('#file-view');
-    $fileView.css({
-        'max-height': $(window).height() - $fileView.offset().top,
-        'overflow': 'auto'
-    });
-}
-
 try {
     PDFJS.workerSrc = '{{MEDIA_URL}}js/pdf.worker.js';
     $('#file-view').html('<div id="pdf"><span class="loading-icon loading-tip"></span></div>');
@@ -64,11 +56,6 @@ try {
                     viewport: viewport
                 });
 
-                // after rendering the first page
-                if (pageNumber == 1) {
-                    setFileViewAreaHeight();
-                }
-
                 if (pageNumber < shownPageCount) {
                     pageNumber++;
                     getPageAndRender(pageNumber);
@@ -86,7 +73,4 @@ try {
 } catch(e) {
     var tip = "{% trans "You can use IE 10 or other browsers, for example, Firefox, to view it online." %}";
     $('#file-view').html('<div id="file-view-tip"><p>' + tip + '</p></div>');
-    setFileViewAreaHeight();
 }
-
-$(window).resize(setFileViewAreaHeight);

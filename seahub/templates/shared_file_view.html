@@ -19,6 +19,7 @@ body {
 </style>
 {% endblock %}
 
+{% block main_class %}ovhd d-flex fd-col{% endblock %}
 {% block main_content %}
     {% if traffic_over_limit %}
         <p class="strip-tip">{% trans "File download is disabled: the share link traffic of owner is used up." %}</p>
@@ -89,19 +90,6 @@ $(function () {
     var $hd = $('#shared-file-view-hd');
     $('.js-file-info', $hd).css({'max-width': $hd.width() - $('.js-file-op', $hd).outerWidth(true) - 10});
 });
-
-{% if filetype == 'PDF' and use_pdfjs and not err %}
-{% elif filetype == 'Image' and not err %}
-{% else %}
-function setFileViewAreaHeight() {
-    $('body').css({'overflow':'auto'});
-    var file_view = $('#file-view').css({'height': 'auto'});
-    if ($(window).height() > file_view.outerHeight(true) + file_view.offset().top) {
-        file_view.outerHeight($(window).height() - file_view.offset().top);
-    }
-}
-$(window).load(setFileViewAreaHeight).resize(setFileViewAreaHeight);
-{% endif %}
 
 {% if request.user.is_authenticated and request.user.username != shared_by and permissions.can_download %}
 $('#save').click(function() {
