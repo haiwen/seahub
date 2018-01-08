@@ -13,6 +13,9 @@ from seahub.api2.throttling import UserRateThrottle
 from seahub.api2.utils import api_error
 from seahub.settings import SEAHUB_DATA_ROOT, MEDIA_ROOT
 from seahub.utils.auth import get_custom_login_bg_image_path
+from seahub.utils import get_file_type_and_ext, PREVIEW_FILEEXT
+from seahub.utils.file_types import IMAGE
+from seahub.utils.error_msg import file_type_error_msg, file_size_error_msg
 
 logger = logging.getLogger(__name__)
 
@@ -27,11 +30,20 @@ class AdminLoginBgImage(APIView):
     def post(self, request):
         image_file = request.FILES.get('login_bg_image', None)
         if not image_file:
-            error_msg = 'background image invalid'
+            error_msg = 'Image can not be found.'
             return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
 
         if not os.path.exists(SEAHUB_DATA_ROOT):
             os.makedirs(SEAHUB_DATA_ROOT)
+
+        file_type, ext = get_file_type_and_ext(image_file.name)
+        if file_type != IMAGE:
+            error_msg = file_type_error_msg(ext, PREVIEW_FILEEXT.get('Image'))
+            return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
+
+        if image_file.size > 1024 * 1024 * 20: # 20mb
+            error_msg = file_size_error_msg(image_file.size, 20*1024*1024)
+            return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
 
         custom_login_bg_image_path = get_custom_login_bg_image_path()
         custom_dir = os.path.join(SEAHUB_DATA_ROOT,

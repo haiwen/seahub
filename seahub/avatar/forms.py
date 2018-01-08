@@ -5,11 +5,11 @@ from django import forms
 from django.forms import widgets
 from django.utils.safestring import mark_safe
 from django.utils.translation import ugettext_lazy as _
-from django.template.defaultfilters import filesizeformat
 
 from seahub.avatar.models import Avatar
 from seahub.avatar.settings import (AVATAR_MAX_AVATARS_PER_USER, AVATAR_MAX_SIZE,
                              AVATAR_ALLOWED_FILE_EXTS, AVATAR_DEFAULT_SIZE)
+from seahub.utils.error_msg import file_type_error_msg, file_size_error_msg
 
 
 def avatar_img(avatar, size):
@@ -31,13 +31,11 @@ class UploadAvatarForm(forms.Form):
         if AVATAR_ALLOWED_FILE_EXTS:
             (root, ext) = os.path.splitext(data.name.lower())
             if ext not in AVATAR_ALLOWED_FILE_EXTS:
-               raise forms.ValidationError(
-                _(u"%(ext)s is an invalid file extension. Authorized extensions are : %(valid_exts_list)s") % 
-                { 'ext' : ext, 'valid_exts_list' : ", ".join(AVATAR_ALLOWED_FILE_EXTS) }) 
+                error_msg = file_type_error_msg(ext, AVATAR_ALLOWED_FILE_EXTS)
+                raise forms.ValidationError(error_msg)
         if data.size > AVATAR_MAX_SIZE:
-            raise forms.ValidationError(
-                _(u"Your file is too big (%(size)s), the maximum allowed size is %(max_valid_size)s") %
-                { 'size' : filesizeformat(data.size), 'max_valid_size' : filesizeformat(AVATAR_MAX_SIZE)} )
+            error_msg = file_size_error_msg(data.size, AVATAR_MAX_SIZE)
+            raise forms.ValidationError(error_msg)
         count = Avatar.objects.filter(emailuser=self.emailuser).count()
         if AVATAR_MAX_AVATARS_PER_USER > 1 and \
            count >= AVATAR_MAX_AVATARS_PER_USER: 
@@ -54,13 +52,11 @@ class GroupAvatarForm(forms.Form):
         if AVATAR_ALLOWED_FILE_EXTS:
             (root, ext) = os.path.splitext(data.name.lower())
             if ext not in AVATAR_ALLOWED_FILE_EXTS:
-                raise forms.ValidationError(
-                    _(u"%(ext)s is an invalid file extension. Authorized extensions are : %(valid_exts_list)s") % 
-                    { 'ext' : ext, 'valid_exts_list' : ", ".join(AVATAR_ALLOWED_FILE_EXTS) })  
+                error_msg = file_type_error_msg(ext, AVATAR_ALLOWED_FILE_EXTS)
+                raise forms.ValidationError(error_msg)
             if data.size > AVATAR_MAX_SIZE:
-                raise forms.ValidationError(
-                    _(u"Your file is too big (%(size)s), the maximum allowed size is %(max_valid_size)s") %
-                    { 'size' : filesizeformat(data.size), 'max_valid_size' : filesizeformat(AVATAR_MAX_SIZE)})
+                error_msg = file_size_error_msg(data.size, AVATAR_MAX_SIZE)
+                raise forms.ValidationError(error_msg)
     
 
 class PrimaryAvatarForm(forms.Form):

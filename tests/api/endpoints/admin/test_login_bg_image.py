@@ -21,12 +21,12 @@ class AdminLogoTest(BaseTestCase):
         assert not os.path.exists(custom_symlink)
 
         # update user avatar
-        logo_url = reverse('api-v2.1-admin-logo')
-        logo_url = urljoin(BASE_URL, logo_url)
-        logo_file = os.path.join(os.getcwd(), 'media/img/seafile-logo.png')
+        image_url = reverse('api-v2.1-admin-login-background-image')
+        image_url = urljoin(BASE_URL, image_url)
+        image_file = os.path.join(os.getcwd(), 'media/img/seafile-logo.png')
 
-        with open(logo_file, 'rb') as f:
-            resp = self.client.post(logo_url, {'logo': f})
+        with open(image_file, 'rb') as f:
+            resp = self.client.post(image_url, {'login_bg_image': f})
         json_resp = json.loads(resp.content)
 
         assert 200 == resp.status_code
@@ -38,28 +38,28 @@ class AdminLogoTest(BaseTestCase):
         self.logout()
 
         # update user avatar
-        logo_url = reverse('api-v2.1-admin-logo')
-        logo_url = urljoin(BASE_URL, logo_url)
-        logo_file = os.path.join(os.getcwd(), 'media/img/seafile-logo.png')
+        image_url = reverse('api-v2.1-admin-login-background-image')
+        image_url = urljoin(BASE_URL, image_url)
+        image_file = os.path.join(os.getcwd(), 'media/img/seafile-logo.png')
 
-        with open(logo_file, 'rb') as f:
-            resp = self.client.post(logo_url, {'logo': f})
+        with open(image_file, 'rb') as f:
+            resp = self.client.post(image_url, {'login_bg_image': f})
 
         assert 403 == resp.status_code
 
-
     def test_update_logo_with_invalid_file_type(self):
         with open('test.noimage', 'w') as f:
-            f.write('1')
+            f.write('hello')
 
-        logo_url = reverse('api-v2.1-admin-logo')
-        logo_url = urljoin(BASE_URL, logo_url)
-        logo_file = os.path.join(os.getcwd(), 'test.noimage')
+        image_url = reverse('api-v2.1-admin-login-background-image')
+        image_url = urljoin(BASE_URL, image_url)
+        image_file = os.path.join(os.getcwd(), 'test.noimage')
 
-        with open(logo_file, 'rb') as f:
-            resp = self.client.post(logo_url, {'logo': f})
-        json_resp = json.loads(resp.content)
+        with open(image_file, 'rb') as f:
+            resp = self.client.post(image_url, {'login_bg_image': f})
 
-        os.remove(logo_file)
+            json_resp = json.loads(resp.content)
+
+        os.remove(image_file)
         assert 400 == resp.status_code
         assert json_resp['error_msg'] == "Filetype not allowed."
