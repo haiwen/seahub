@@ -9,8 +9,8 @@ msgstr ""
 "Project-Id-Version: seahub\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2017-12-19 15:54+0800\n"
-"PO-Revision-Date: 2017-12-19 07:56+0000\n"
-"Last-Translator: zheng xie <xiez1989@gmail.com>\n"
+"PO-Revision-Date: 2017-12-26 19:03+0000\n"
+"Last-Translator: Qubit Bit\n"
 "Language-Team: Latvian (http://www.transifex.com/haiwen/seahub/language/lv/)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -5081,7 +5081,7 @@ msgstr "Jūsu klienti (Desktop/Android/iOS), tiks uzskaitīti šeit."
 
 #: seahub/templates/nav_footer.html:2
 msgid "Help"
-msgstr ""
+msgstr "Palīdzība"
 
 #: seahub/templates/nav_footer.html:3
 msgid "About"
@@ -5089,7 +5089,7 @@ msgstr "Par"
 
 #: seahub/templates/nav_footer.html:4
 msgid "Clients"
-msgstr ""
+msgstr "Klients"
 
 #: seahub/templates/nav_footer.html:8
 msgid "Server Version: "
@@ -6189,7 +6189,7 @@ msgstr "Atstatīt"
 #: seahub/templates/sysadmin/sys_org_info_user.html:68
 #: seahub/templates/sysadmin/sys_useradmin.html:46
 msgid "Name(optional)"
-msgstr ""
+msgstr "Vārds (obligāti)"
 
 #: seahub/templates/sysadmin/sys_org_info_user.html:101
 #: seahub/templates/sysadmin/sys_org_info_user.html:115
@@ -6221,7 +6221,7 @@ msgstr ""
 #: seahub/templates/sysadmin/sys_statistic_user.html:14
 #: seahub/templates/sysadmin/sys_trafficadmin.html:11
 msgid "Storage"
-msgstr ""
+msgstr "Krātuve"
 
 #: seahub/templates/sysadmin/sys_statistic_file.html:17
 #: seahub/templates/sysadmin/sys_statistic_storage.html:17
@@ -6288,7 +6288,7 @@ msgstr ""
 #: seahub/templates/sysadmin/sys_statistic_storage.html:174
 #: seahub/templates/sysadmin/sys_statistic_storage.html:186
 msgid "Total storage"
-msgstr ""
+msgstr "Kopā krātuve"
 
 #: seahub/templates/sysadmin/sys_statistic_user.html:174
 #: seahub/templates/sysadmin/sys_statistic_user.html:186
@@ -6790,7 +6790,7 @@ msgstr "Nederīgs marķieris"
 
 #: seahub/two_factor/forms.py:20 seahub/two_factor/models/phone.py:33
 msgid "Method"
-msgstr ""
+msgstr "Metode"
 
 #: seahub/two_factor/forms.py:31
 msgid "Phone Number"
@@ -6891,7 +6891,7 @@ msgstr ""
 #: seahub/two_factor/templates/two_factor/core/login.html:29
 #: seahub/two_factor/templates/two_factor/core/login.html:47
 msgid "Verify"
-msgstr ""
+msgstr "Pārbaudīt"
 
 #: seahub/two_factor/templates/two_factor/core/login.html:33
 msgid "Don't have your phone?"
@@ -7399,116 +7399,116 @@ msgstr "Jums nav atļaujas izveidot Wiki"
 
 #: tsinghua-auth-fix/seahub/settings.py:143
 msgid "العربية"
-msgstr ""
+msgstr "العربية"
 
 #: tsinghua-auth-fix/seahub/settings.py:145
 msgid "Català"
-msgstr ""
+msgstr "Català"
 
 #: tsinghua-auth-fix/seahub/settings.py:147
 msgid "Deutsch"
-msgstr ""
+msgstr "Deutsch"
 
 #: tsinghua-auth-fix/seahub/settings.py:148
 msgid "ελληνικά"
-msgstr ""
+msgstr "ελληνικά"
 
 #: tsinghua-auth-fix/seahub/settings.py:149
 msgid "English"
-msgstr ""
+msgstr "English"
 
 #: tsinghua-auth-fix/seahub/settings.py:150
 msgid "Español"
-msgstr ""
+msgstr "Español"
 
 #: tsinghua-auth-fix/seahub/settings.py:151
 msgid "Español de Argentina"
-msgstr ""
+msgstr "Español de Argentina"
 
 #: tsinghua-auth-fix/seahub/settings.py:152
 msgid "Español de México"
-msgstr ""
+msgstr "Español de México"
 
 #: tsinghua-auth-fix/seahub/settings.py:153
 msgid "Suomi"
-msgstr ""
+msgstr "Suomi"
 
 #: tsinghua-auth-fix/seahub/settings.py:154
 msgid "français"
-msgstr ""
+msgstr "français"
 
 #: tsinghua-auth-fix/seahub/settings.py:155
 msgid "עברית"
-msgstr ""
+msgstr "עברית"
 
 #: tsinghua-auth-fix/seahub/settings.py:156
 msgid "Magyar"
-msgstr ""
+msgstr "Magyar"
 
 #: tsinghua-auth-fix/seahub/settings.py:157
 msgid "Íslenska"
-msgstr ""
+msgstr "Íslenska"
 
 #: tsinghua-auth-fix/seahub/settings.py:158
 msgid "Italiano"
-msgstr ""
+msgstr "Italiano"
 
 #: tsinghua-auth-fix/seahub/settings.py:159
 msgid "日本語"
-msgstr ""
+msgstr "日本語"
 
 #: tsinghua-auth-fix/seahub/settings.py:160
 msgid "한국어"
-msgstr ""
+msgstr "한국어"
 
 #: tsinghua-auth-fix/seahub/settings.py:162
 msgid "Latvian"
-msgstr ""
+msgstr "Latvian"
 
 #: tsinghua-auth-fix/seahub/settings.py:164
 msgid "Nederlands"
-msgstr ""
+msgstr "Nederlands"
 
 #: tsinghua-auth-fix/seahub/settings.py:165
 msgid "Polski"
-msgstr ""
+msgstr "Polski"
 
 #: tsinghua-auth-fix/seahub/settings.py:166
 msgid "Portuguese, Brazil"
-msgstr ""
+msgstr "Portuguese, Brazil"
 
 #: tsinghua-auth-fix/seahub/settings.py:167
 msgid "Русский"
-msgstr ""
+msgstr "Русский"
 
 #: tsinghua-auth-fix/seahub/settings.py:169
 msgid "Slovenian"
-msgstr ""
+msgstr "Slovenian"
 
 #: tsinghua-auth-fix/seahub/settings.py:170
 msgid "Svenska"
-msgstr ""
+msgstr "Svenska"
 
 #: tsinghua-auth-fix/seahub/settings.py:171
 msgid "ไทย"
-msgstr ""
+msgstr "ไทย"
 
 #: tsinghua-auth-fix/seahub/settings.py:172
 msgid "Türkçe"
-msgstr ""
+msgstr "Türkçe"
 
 #: tsinghua-auth-fix/seahub/settings.py:173
 msgid "українська мова"
-msgstr ""
+msgstr "українська мова"
 
 #: tsinghua-auth-fix/seahub/settings.py:174
 msgid "Tiếng Việt"
-msgstr ""
+msgstr "Tiếng Việt"
 
 #: tsinghua-auth-fix/seahub/settings.py:175
 msgid "简体中文"
-msgstr ""
+msgstr "简体中文"
 
 #: tsinghua-auth-fix/seahub/settings.py:176
 msgid "繁體中文"
-msgstr ""
+msgstr "繁體中文"

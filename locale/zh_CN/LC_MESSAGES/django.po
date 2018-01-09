@@ -10,15 +10,15 @@
 # llj <lingjun.li1@gmail.com>, 2017
 # Daniel Pan <daniel.pan@seafile.com>, 2015-2016
 # llj <lingjun.li1@gmail.com>, 2014
-# zheng xie <xiez1989@gmail.com>, 2014-2017
+# zheng xie <xiez1989@gmail.com>, 2014-2018
 # zMingGit <517046497@qq.com>, 2017
 msgid ""
 msgstr ""
 "Project-Id-Version: seahub\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2017-12-19 15:54+0800\n"
-"PO-Revision-Date: 2017-12-19 07:59+0000\n"
-"Last-Translator: imwhatiam <imwhatiam123@gmail.com>\n"
+"PO-Revision-Date: 2018-01-09 06:03+0000\n"
+"Last-Translator: zheng xie <xiez1989@gmail.com>\n"
 "Language-Team: Chinese (China) (http://www.transifex.com/haiwen/seahub/language/zh_CN/)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -757,7 +757,7 @@ msgstr "创建时间"
 #: seahub/base/management/commands/export_users.py:49
 #: seahub/views/sysadmin.py:325 seahub/views/sysadmin.py:329
 msgid "Last Login"
-msgstr "上次登陆"
+msgstr "上次登录"
 
 #: seahub/base/management/commands/export_users.py:45
 #: seahub/base/management/commands/export_users.py:49
@@ -3003,7 +3003,7 @@ msgstr "关闭两步验证"
 msgid ""
 "If you don't have any device with you, you can access your account using "
 "backup codes."
-msgstr "如果你身边没有设备，可以通过备用验证码来登陆账户。"
+msgstr "如果你身边没有设备，可以通过备用验证码来登录账户。"
 
 #: seahub/profile/templates/profile/set_profile.html:148
 #, python-format
@@ -3019,7 +3019,7 @@ msgstr "显示验证码"
 msgid ""
 "Two-factor authentication is not enabled for your account. Enable two-factor"
 " authentication for enhanced account security."
-msgstr "你的账户并未开始两步验证，请开启两步验证增加账户安全性。"
+msgstr "你的账号并未开启两步验证，请开启两步验证增加账号安全性。"
 
 #: seahub/profile/templates/profile/set_profile.html:157
 #: seahub/two_factor/templates/two_factor/core/setup.html:6
@@ -5146,7 +5146,7 @@ msgstr "忘记密码？"
 
 #: seahub/templates/registration/login.html:70
 msgid "Single Sign-On"
-msgstr "单点登陆"
+msgstr "单点登录"
 
 #: seahub/templates/registration/login.html:78
 msgid "Shibboleth"
@@ -5799,7 +5799,7 @@ msgstr "用户注册后发送激活邮件。"
 
 #: seahub/templates/sysadmin/settings.html:62
 msgid "keep sign in"
-msgstr "免登陆"
+msgstr "免登录"
 
 #: seahub/templates/sysadmin/settings.html:63
 msgid "Number of days that keep user sign in."
@@ -6060,7 +6060,7 @@ msgstr "提示：请输入至少3个字符。"
 #: seahub/two_factor/forms.py:169 seahub/two_factor/forms.py:175
 #: seahub/two_factor/forms.py:296
 msgid "Token"
-msgstr "方法"
+msgstr "验证码"
 
 #: seahub/templates/sysadmin/sys_link_search.html:25
 #: seahub/templates/sysadmin/sys_publink_admin.html:31

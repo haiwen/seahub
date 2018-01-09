@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: seahub\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2017-09-25 15:40+0800\n"
+"POT-Creation-Date: 2017-12-19 15:54+0800\n"
 "PO-Revision-Date: 2017-09-25 07:44+0000\n"
 "Last-Translator: zheng xie <xiez1989@gmail.com>\n"
 "Language-Team: Korean (http://www.transifex.com/haiwen/seahub/language/ko/)\n"
@@ -19,53 +19,53 @@ msgstr ""
 "Plural-Forms: nplurals=1; plural=0;\n"
 
 #: static/scripts/app/models/deleted-repo.js:19
-#: static/scripts/app/models/repo.js:57 static/scripts/common.js:318
+#: static/scripts/app/models/repo.js:59 static/scripts/common.js:319
 msgid "Encrypted library"
 msgstr "암호화 라이브러리"
 
 #: static/scripts/app/models/deleted-repo.js:21
-#: static/scripts/app/models/repo.js:59 static/scripts/common.js:322
+#: static/scripts/app/models/repo.js:61 static/scripts/common.js:323
 #: static/scripts/sysadmin-app/models/trash-repo.js:14
 msgid "Read-Write library"
 msgstr "읽기-쓰기 라이브러리"
 
-#: static/scripts/app/models/dirent.js:113 static/scripts/app/views/dir.js:635
-#: static/scripts/app/views/dir.js:706
-#: static/scripts/app/views/fileupload.js:373
-#: static/scripts/app/views/fileupload.js:387
-#: static/scripts/app/views/fileupload.js:399
-#: static/scripts/app/views/fileupload.js:411 static/scripts/common.js:576
+#: static/scripts/app/models/dirent.js:113 static/scripts/app/views/dir.js:642
+#: static/scripts/app/views/dir.js:713
+#: static/scripts/app/views/fileupload.js:378
+#: static/scripts/app/views/fileupload.js:392
+#: static/scripts/app/views/fileupload.js:404
+#: static/scripts/app/views/fileupload.js:416 static/scripts/common.js:586
 msgid "Just now"
 msgstr "지금"
 
-#: static/scripts/app/models/repo.js:32
+#: static/scripts/app/models/repo.js:34
 msgid "Name is required"
 msgstr "이름이 필요합니다"
 
-#: static/scripts/app/models/repo.js:35
+#: static/scripts/app/models/repo.js:37
 #: static/scripts/app/views/dialogs/dirent-rename.js:65
-#: static/scripts/app/views/dir.js:620 static/scripts/app/views/dir.js:681
-#: static/scripts/app/views/dirent.js:478 static/scripts/app/views/repo.js:181
+#: static/scripts/app/views/dir.js:627 static/scripts/app/views/dir.js:688
+#: static/scripts/app/views/dirent.js:483 static/scripts/app/views/repo.js:181
 msgid "Name should not include '/'."
 msgstr "이름에 '/' 문자를 넣으면 안됩니다."
 
-#: static/scripts/app/models/repo.js:39 static/scripts/app/views/share.js:243
+#: static/scripts/app/models/repo.js:41 static/scripts/app/views/share.js:278
 msgid "Please enter password"
 msgstr "암호를 입력하세요"
 
-#: static/scripts/app/models/repo.js:40 static/scripts/app/views/share.js:251
+#: static/scripts/app/models/repo.js:42 static/scripts/app/views/share.js:286
 msgid "Please enter the password again"
 msgstr "암호를 다시 입력하세요"
 
-#: static/scripts/app/models/repo.js:42 static/scripts/app/views/share.js:247
+#: static/scripts/app/models/repo.js:44 static/scripts/app/views/share.js:282
 msgid "Password is too short"
 msgstr "암호가 너무 짧습니다"
 
-#: static/scripts/app/models/repo.js:44 static/scripts/app/views/share.js:255
+#: static/scripts/app/models/repo.js:46 static/scripts/app/views/share.js:290
 msgid "Passwords don't match"
 msgstr "암호가 일치하지 않습니다"
 
-#: static/scripts/app/models/repo.js:61 static/scripts/common.js:320
+#: static/scripts/app/models/repo.js:63 static/scripts/common.js:321
 msgid "Read-Only library"
 msgstr "읽기 전용 라이브러리"
 
@@ -82,7 +82,8 @@ msgstr "읽기 전용"
 #: static/scripts/app/views/account.js:58
 #: static/scripts/app/views/dialogs/repo-folder-perm-admin.js:134
 #: static/scripts/app/views/dialogs/repo-share-link-admin.js:96
-#: static/scripts/app/views/dir.js:476 static/scripts/app/views/dirent.js:281
+#: static/scripts/app/views/dir.js:483 static/scripts/app/views/dirent.js:286
+#: static/scripts/app/views/file-comments.js:116
 #: static/scripts/app/views/group-discussions.js:125
 #: static/scripts/app/views/group-discussions.js:203
 #: static/scripts/app/views/group-discussions.js:246
@@ -99,14 +100,14 @@ msgstr "읽기 전용"
 #: static/scripts/app/views/notifications.js:63
 #: static/scripts/app/views/notifications.js:163
 #: static/scripts/app/views/organization.js:125
-#: static/scripts/app/views/repo-shared-link.js:84
+#: static/scripts/app/views/repo-shared-link.js:90
 #: static/scripts/app/views/share-admin-folders.js:98
 #: static/scripts/app/views/share-admin-repos.js:100
 #: static/scripts/app/views/share-admin-share-links.js:150
 #: static/scripts/app/views/share-admin-upload-links.js:64
-#: static/scripts/app/views/share.js:165 static/scripts/app/views/share.js:488
-#: static/scripts/app/views/share.js:603 static/scripts/app/views/share.js:688
-#: static/scripts/app/views/share.js:712
+#: static/scripts/app/views/share.js:200 static/scripts/app/views/share.js:506
+#: static/scripts/app/views/share.js:621 static/scripts/app/views/share.js:706
+#: static/scripts/app/views/share.js:730
 #: static/scripts/sysadmin-app/views/device-trusted-ipaddresses.js:62
 #: static/scripts/sysadmin-app/views/group-members.js:96
 #: static/scripts/sysadmin-app/views/groups.js:100
@@ -150,14 +151,16 @@ msgstr "삭제한 디렉터리"
 #: static/scripts/app/views/dialogs/repo-folder-perm-admin.js:302
 #: static/scripts/app/views/dialogs/repo-history-settings.js:83
 #: static/scripts/app/views/dialogs/repo-history-settings.js:142
-#: static/scripts/app/views/dir.js:1279 static/scripts/app/views/dir.js:1313
-#: static/scripts/app/views/dir.js:1360
+#: static/scripts/app/views/dir.js:1292 static/scripts/app/views/dir.js:1326
+#: static/scripts/app/views/dir.js:1395
 #: static/scripts/app/views/dirent-details.js:164
-#: static/scripts/app/views/dirent-grid.js:337
-#: static/scripts/app/views/dirent-grid.js:378
-#: static/scripts/app/views/dirent.js:496
-#: static/scripts/app/views/dirent.js:619
-#: static/scripts/app/views/dirent.js:660
+#: static/scripts/app/views/dirent-grid.js:338
+#: static/scripts/app/views/dirent-grid.js:379
+#: static/scripts/app/views/dirent.js:501
+#: static/scripts/app/views/dirent.js:624
+#: static/scripts/app/views/dirent.js:665
+#: static/scripts/app/views/file-comment.js:52
+#: static/scripts/app/views/file-comments.js:159
 #: static/scripts/app/views/folder-perm.js:205
 #: static/scripts/app/views/folder-share-item.js:97
 #: static/scripts/app/views/folder-share-item.js:133
@@ -176,17 +179,17 @@ msgstr "삭제한 디렉터리"
 #: static/scripts/app/views/repo-folder-perm-item.js:86
 #: static/scripts/app/views/repo-folder-perm-item.js:127
 #: static/scripts/app/views/repo.js:206 static/scripts/app/views/repo.js:281
-#: static/scripts/app/views/repo.js:396 static/scripts/app/views/repo.js:438
-#: static/scripts/app/views/share.js:401 static/scripts/app/views/share.js:790
-#: static/scripts/app/views/share.js:869 static/scripts/common.js:397
-#: static/scripts/common.js:486
+#: static/scripts/app/views/repo.js:398 static/scripts/app/views/repo.js:440
+#: static/scripts/app/views/share.js:423 static/scripts/app/views/share.js:808
+#: static/scripts/app/views/share.js:887 static/scripts/common.js:407
+#: static/scripts/common.js:496
 #: static/scripts/sysadmin-app/views/admin-login-logs.js:129
 #: static/scripts/sysadmin-app/views/admin-operation-logs.js:129
 #: static/scripts/sysadmin-app/views/dashboard.js:84
 #: static/scripts/sysadmin-app/views/desktop-devices.js:105
 #: static/scripts/sysadmin-app/views/device-errors.js:92
 #: static/scripts/sysadmin-app/views/device-trusted-ipaddresses.js:115
-#: static/scripts/sysadmin-app/views/dir.js:193
+#: static/scripts/sysadmin-app/views/dir.js:195
 #: static/scripts/sysadmin-app/views/folder-share-item.js:89
 #: static/scripts/sysadmin-app/views/folder-share-item.js:138
 #: static/scripts/sysadmin-app/views/group-member.js:71
@@ -254,17 +257,17 @@ msgstr "실패했습니다."
 
 #: static/scripts/app/views/dialogs/dirent-mvcp.js:132
 #: static/scripts/app/views/dialogs/dirent-mvcp.js:163
-#: static/scripts/app/views/dir.js:1351
+#: static/scripts/app/views/dir.js:1386
 msgid "Canceled."
 msgstr "취소했습니다."
 
 #: static/scripts/app/views/dialogs/dirent-mvcp.js:195
-#: static/scripts/app/views/dir.js:1122
+#: static/scripts/app/views/dir.js:1129
 msgid "Invalid destination path"
 msgstr "잘못된 대상 경로"
 
 #: static/scripts/app/views/dialogs/dirent-mvcp.js:214
-#: static/scripts/app/views/dirent.js:272
+#: static/scripts/app/views/dirent.js:277
 msgid "Successfully moved %(name)s"
 msgstr "%(name)s 이동에 성공했습니다"
 
@@ -281,11 +284,11 @@ msgid "Rename File"
 msgstr "파일 이름 바꾸기"
 
 #: static/scripts/app/views/dialogs/dirent-rename.js:59
-#: static/scripts/app/views/dir.js:615 static/scripts/app/views/dir.js:676
-#: static/scripts/app/views/dirent.js:472
+#: static/scripts/app/views/dir.js:622 static/scripts/app/views/dir.js:683
+#: static/scripts/app/views/dirent.js:477
 #: static/scripts/app/views/groups.js:112
 #: static/scripts/app/views/invitations.js:54
-#: static/scripts/app/views/repo.js:175 static/scripts/app/views/repo.js:409
+#: static/scripts/app/views/repo.js:175 static/scripts/app/views/repo.js:411
 #: static/scripts/sysadmin-app/views/device-trusted-ipaddresses.js:42
 #: static/scripts/sysadmin-app/views/dir.js:82
 msgid "It is required."
@@ -344,6 +347,7 @@ msgstr "항목 1개만 선택할 수 있습니다"
 
 #: static/scripts/app/views/dialogs/repo-folder-perm-admin.js:129
 #: static/scripts/app/views/dialogs/repo-share-link-admin.js:91
+#: static/scripts/app/views/file-comments.js:111
 #: static/scripts/app/views/group-discussions.js:120
 #: static/scripts/app/views/group-discussions.js:198
 #: static/scripts/app/views/group-manage-members.js:112
@@ -358,15 +362,15 @@ msgstr "항목 1개만 선택할 수 있습니다"
 #: static/scripts/app/views/share-admin-repos.js:95
 #: static/scripts/app/views/share-admin-share-links.js:145
 #: static/scripts/app/views/share-admin-upload-links.js:59
-#: static/scripts/app/views/share.js:160 static/scripts/app/views/share.js:483
-#: static/scripts/app/views/share.js:598 static/scripts/app/views/share.js:683
-#: static/scripts/app/views/share.js:707
+#: static/scripts/app/views/share.js:195 static/scripts/app/views/share.js:501
+#: static/scripts/app/views/share.js:616 static/scripts/app/views/share.js:701
+#: static/scripts/app/views/share.js:725
 #: static/scripts/sysadmin-app/views/admin-login-logs.js:124
 #: static/scripts/sysadmin-app/views/admin-operation-logs.js:124
 #: static/scripts/sysadmin-app/views/dashboard.js:79
 #: static/scripts/sysadmin-app/views/desktop-devices.js:100
 #: static/scripts/sysadmin-app/views/device-errors.js:87
-#: static/scripts/sysadmin-app/views/dir.js:188
+#: static/scripts/sysadmin-app/views/dir.js:190
 #: static/scripts/sysadmin-app/views/group-members.js:152
 #: static/scripts/sysadmin-app/views/group-repos.js:70
 #: static/scripts/sysadmin-app/views/groups.js:163
@@ -396,171 +400,171 @@ msgstr "라이브러리 기록 설정에 성공했습니다."
 msgid "{placeholder} Share Links"
 msgstr "{placeholder} 공유 링크"
 
-#: static/scripts/app/views/dir.js:52
+#: static/scripts/app/views/dir.js:53
 #: static/scripts/app/views/starred-file.js:106
 msgid "Close (Esc)"
 msgstr "닫기(Esc)"
 
-#: static/scripts/app/views/dir.js:53
+#: static/scripts/app/views/dir.js:54
 #: static/scripts/app/views/starred-file.js:107
 msgid "Loading..."
 msgstr "불러오는 중..."
 
-#: static/scripts/app/views/dir.js:56
+#: static/scripts/app/views/dir.js:57
 #: static/scripts/app/views/starred-file.js:110
 msgid "Previous (Left arrow key)"
 msgstr "이전(왼쪽 화살표 키)"
 
-#: static/scripts/app/views/dir.js:57
+#: static/scripts/app/views/dir.js:58
 #: static/scripts/app/views/starred-file.js:111
 msgid "Next (Right arrow key)"
 msgstr "다음(오른쪽 화살표 키)"
 
-#: static/scripts/app/views/dir.js:58
+#: static/scripts/app/views/dir.js:59
 #: static/scripts/app/views/starred-file.js:112
 msgid "%curr% of %total%"
 msgstr "%total% 중 %curr%"
 
-#: static/scripts/app/views/dir.js:63
+#: static/scripts/app/views/dir.js:64
 #: static/scripts/app/views/starred-file.js:118
 msgid "Open in New Tab"
 msgstr "새 탭 열기"
 
-#: static/scripts/app/views/dir.js:66
+#: static/scripts/app/views/dir.js:67
 #: static/scripts/app/views/starred-file.js:121
 msgid "<a href=\"%url%\" target=\"_blank\">The image</a> could not be loaded."
 msgstr "<a href=\"%url%\" target=\"_blank\">이미지</a>를 불러올 수 없습니다."
 
-#: static/scripts/app/views/dir.js:418
+#: static/scripts/app/views/dir.js:425
 msgid "Password is required."
 msgstr "암호가 필요합니다."
 
-#: static/scripts/app/views/dir.js:687
+#: static/scripts/app/views/dir.js:694
 msgid "Only an extension there, please input a name."
 msgstr "확장자만 있습니다. 이름을 입력하세요."
 
-#: static/scripts/app/views/dir.js:725
+#: static/scripts/app/views/dir.js:732
 msgid "New File"
 msgstr "새 파일"
 
-#: static/scripts/app/views/dir.js:733
+#: static/scripts/app/views/dir.js:740
 msgid "New Markdown File"
 msgstr "새 마크다운 파일"
 
-#: static/scripts/app/views/dir.js:741
+#: static/scripts/app/views/dir.js:748
 msgid "New Excel File"
 msgstr "새 액셀 파일"
 
-#: static/scripts/app/views/dir.js:749
+#: static/scripts/app/views/dir.js:756
 msgid "New PowerPoint File"
 msgstr "새 파워포인트 파일"
 
-#: static/scripts/app/views/dir.js:757
+#: static/scripts/app/views/dir.js:764
 msgid "New Word File"
 msgstr "새 워드 파일"
 
-#: static/scripts/app/views/dir.js:984 static/scripts/app/views/dir.js:1127
+#: static/scripts/app/views/dir.js:991 static/scripts/app/views/dir.js:1134
 msgid "Processing..."
 msgstr "처리 중..."
 
-#: static/scripts/app/views/dir.js:1022
+#: static/scripts/app/views/dir.js:1029
 msgid "Successfully deleted %(name)s."
 msgstr "%(name)s을(를) 성공적으로 삭제했습니다."
 
-#: static/scripts/app/views/dir.js:1024
+#: static/scripts/app/views/dir.js:1031
 msgid "Successfully deleted %(name)s and 1 other item."
 msgstr "%(name)s 및 항목 1개를 성공적으로 삭제했습니다."
 
-#: static/scripts/app/views/dir.js:1026
+#: static/scripts/app/views/dir.js:1033
 msgid "Successfully deleted %(name)s and %(amount)s other items."
 msgstr "%(name)s 및 항목 %(amount)s개를 성공적으로 삭제했습니다."
 
-#: static/scripts/app/views/dir.js:1035
+#: static/scripts/app/views/dir.js:1042
 msgid "Failed to delete %(name)s."
 msgstr "%(name)s 삭제에 실패했습니다."
 
-#: static/scripts/app/views/dir.js:1037
+#: static/scripts/app/views/dir.js:1044
 msgid "Failed to delete %(name)s and 1 other item."
 msgstr "%(name)s 및 항목 1개 삭제에 실패했습니다."
 
-#: static/scripts/app/views/dir.js:1039
+#: static/scripts/app/views/dir.js:1046
 msgid "Failed to delete %(name)s and %(amount)s other items."
 msgstr "%(name)s 및 항목 %(amount)s개 삭제에 실패했습니다."
 
-#: static/scripts/app/views/dir.js:1052
+#: static/scripts/app/views/dir.js:1059
 msgid "Delete Items"
 msgstr "항목 삭제"
 
-#: static/scripts/app/views/dir.js:1053
+#: static/scripts/app/views/dir.js:1060
 msgid "Are you sure you want to delete these selected items?"
 msgstr "정말로 선택한 항목을 삭제할까요?"
 
-#: static/scripts/app/views/dir.js:1067
+#: static/scripts/app/views/dir.js:1074
 msgid "Move selected item(s) to:"
 msgstr "선택한 항목을 옮길 위치:"
 
-#: static/scripts/app/views/dir.js:1067
+#: static/scripts/app/views/dir.js:1074
 msgid "Copy selected item(s) to:"
 msgstr "선택한 항목을 복사할 위치:"
 
-#: static/scripts/app/views/dir.js:1172
+#: static/scripts/app/views/dir.js:1179 static/scripts/app/views/dir.js:1347
 msgid "Successfully moved %(name)s."
 msgstr "%(name)s을(를) 성공적으로 이동했습니다."
 
-#: static/scripts/app/views/dir.js:1174
+#: static/scripts/app/views/dir.js:1181 static/scripts/app/views/dir.js:1349
 msgid "Successfully moved %(name)s and 1 other item."
 msgstr "%(name)s 및 항목 1개를 성공적으로 이동했습니다."
 
-#: static/scripts/app/views/dir.js:1176
+#: static/scripts/app/views/dir.js:1183 static/scripts/app/views/dir.js:1351
 msgid "Successfully moved %(name)s and %(amount)s other items."
 msgstr "%(name)s 및 항목 %(amount)s개를 성공적으로 이동했습니다."
 
-#: static/scripts/app/views/dir.js:1181
+#: static/scripts/app/views/dir.js:1188 static/scripts/app/views/dir.js:1355
 msgid "Successfully copied %(name)s."
 msgstr "%(name)s을(를) 성공적으로 복사했습니다."
 
-#: static/scripts/app/views/dir.js:1183
+#: static/scripts/app/views/dir.js:1190 static/scripts/app/views/dir.js:1357
 msgid "Successfully copied %(name)s and 1 other item."
 msgstr "%(name)s 및 항목 1개를 성공적으로 복사했습니다."
 
-#: static/scripts/app/views/dir.js:1185
+#: static/scripts/app/views/dir.js:1192 static/scripts/app/views/dir.js:1359
 msgid "Successfully copied %(name)s and %(amount)s other items."
 msgstr "%(name)s 및 항목 %(amount)s개를 성공적으로 복사했습니다."
 
-#: static/scripts/app/views/dir.js:1197
+#: static/scripts/app/views/dir.js:1204
 msgid "Internal error. Failed to move %(name)s and %(amount)s other item(s)."
 msgstr "내부 오류입니다. %(name)s 및 항목 %(amount)s개 이동에 실패했습니다."
 
-#: static/scripts/app/views/dir.js:1199
+#: static/scripts/app/views/dir.js:1206
 msgid "Internal error. Failed to move %(name)s."
 msgstr "내부 오류입니다. %(name)s 이동에 실패했습니다."
 
-#: static/scripts/app/views/dir.js:1203
+#: static/scripts/app/views/dir.js:1210
 msgid "Internal error. Failed to copy %(name)s and %(amount)s other item(s)."
 msgstr "내부 오류입니다. %(name)s 및 항목 %(amount)s개 복사에 실패했습니다."
 
-#: static/scripts/app/views/dir.js:1205
+#: static/scripts/app/views/dir.js:1212
 msgid "Internal error. Failed to copy %(name)s."
 msgstr "내부 오류입니다. %(name)s 복사에 실패했습니다."
 
-#: static/scripts/app/views/dir.js:1245
+#: static/scripts/app/views/dir.js:1254
 msgid "Moving file %(index)s of %(total)s"
 msgstr "파일 %(total)s개 중 %(index)s개 이동 중"
 
-#: static/scripts/app/views/dir.js:1245
+#: static/scripts/app/views/dir.js:1254
 msgid "Copying file %(index)s of %(total)s"
 msgstr "파일 %(total)s개 중 %(index)s개 복사 중"
 
-#: static/scripts/app/views/dir.js:1267
+#: static/scripts/app/views/dir.js:1280
 msgid "Failed to move %(name)s"
 msgstr "%(name)s 이동에 실패했습니다."
 
-#: static/scripts/app/views/dir.js:1267
+#: static/scripts/app/views/dir.js:1280
 msgid "Failed to copy %(name)s"
 msgstr "%(name)s 복사에 실패했습니다."
 
-#: static/scripts/app/views/dirent-details.js:99 static/scripts/common.js:619
-#: static/scripts/common.js:690
+#: static/scripts/app/views/dirent-details.js:99 static/scripts/common.js:629
+#: static/scripts/common.js:700
 msgid "No matches"
 msgstr "일치하는 결과가 없습니다"
 
@@ -573,8 +577,8 @@ msgstr ""
 msgid "locked by {placeholder}"
 msgstr "{placeholder}이(가) 잠금"
 
-#: static/scripts/app/views/dirent-grid.js:176
-#: static/scripts/app/views/dirent.js:383
+#: static/scripts/app/views/dirent-grid.js:177
+#: static/scripts/app/views/dirent.js:388
 msgid "Successfully deleted %(name)s"
 msgstr "%(name)s을(를) 성공적으로 삭제했습니다"
 
@@ -618,9 +622,9 @@ msgstr "업로드 결과가 빈 파일입니다"
 #: static/scripts/app/views/share-admin-repos.js:97
 #: static/scripts/app/views/share-admin-share-links.js:147
 #: static/scripts/app/views/share-admin-upload-links.js:61
-#: static/scripts/app/views/share.js:162 static/scripts/app/views/share.js:485
-#: static/scripts/app/views/share.js:600 static/scripts/app/views/share.js:685
-#: static/scripts/app/views/share.js:709
+#: static/scripts/app/views/share.js:197 static/scripts/app/views/share.js:503
+#: static/scripts/app/views/share.js:618 static/scripts/app/views/share.js:703
+#: static/scripts/app/views/share.js:727
 msgid "Error"
 msgstr "오류"
 
@@ -661,19 +665,19 @@ msgstr "파일 업로드를 취소했습니다"
 msgid "File Upload failed"
 msgstr "파일 업로드에 실패했습니다"
 
-#: static/scripts/app/views/fileupload.js:216
+#: static/scripts/app/views/fileupload.js:221
 msgid "Failed to get upload url"
 msgstr "업로드 URL 가져오기에 실패했습니다"
 
-#: static/scripts/app/views/fileupload.js:249
+#: static/scripts/app/views/fileupload.js:254
 msgid "Failed to get update url"
 msgstr "업로드 URL 가져오기에 실패했습니다"
 
-#: static/scripts/app/views/fileupload.js:260
+#: static/scripts/app/views/fileupload.js:265
 msgid "Replace file {filename}?"
 msgstr "{filename} 파일을 바꿀까요?"
 
-#: static/scripts/app/views/fileupload.js:286
+#: static/scripts/app/views/fileupload.js:291
 msgid "File is locked"
 msgstr "파일이 잠겨있습니다"
 
@@ -682,7 +686,7 @@ msgid "Set {placeholder}'s permission"
 msgstr "{placeholder} 권한 설정"
 
 #: static/scripts/app/views/folder-perm.js:113
-#: static/scripts/app/views/share.js:655
+#: static/scripts/app/views/share.js:673
 msgid "Select groups"
 msgstr "그룹 선택"
 
@@ -744,7 +748,7 @@ msgstr "정말로 이 그룹에서 나가시겠습니까?"
 
 #: static/scripts/app/views/invitation.js:37
 #: static/scripts/app/views/share-admin-folder.js:91
-#: static/scripts/app/views/share-admin-repo.js:95
+#: static/scripts/app/views/share-admin-repo.js:99
 #: static/scripts/app/views/share-admin-share-link.js:55
 #: static/scripts/app/views/share-admin-upload-link.js:54
 msgid "Successfully deleted 1 item"
@@ -793,12 +797,12 @@ msgstr "다음 위치로 {library_name} 라이브러리 전송"
 msgid "Successfully transferred the library."
 msgstr "라이브러리 전송에 성공했습니다."
 
-#: static/scripts/app/views/repo.js:427
+#: static/scripts/app/views/repo.js:429
 msgid "Successfully added label(s) for library {placeholder}"
 msgstr ""
 
 #: static/scripts/app/views/share-admin-folder.js:63
-#: static/scripts/app/views/share-admin-repo.js:65
+#: static/scripts/app/views/share-admin-repo.js:69
 msgid "Successfully modified permission"
 msgstr "권한 설정을 성공적으로 바꿨습니다"
 
@@ -807,40 +811,40 @@ msgstr "권한 설정을 성공적으로 바꿨습니다"
 msgid "Share {placeholder}"
 msgstr "{placeholder} 공유"
 
-#: static/scripts/app/views/share.js:149
+#: static/scripts/app/views/share.js:148
 msgid "Expired"
 msgstr "유효기간 경과함"
 
-#: static/scripts/app/views/share.js:188 static/scripts/app/views/share.js:189
-#: static/scripts/app/views/share.js:210 static/scripts/app/views/share.js:211
+#: static/scripts/app/views/share.js:223 static/scripts/app/views/share.js:224
+#: static/scripts/app/views/share.js:245 static/scripts/app/views/share.js:246
 msgid "Hide"
 msgstr "숨김"
 
-#: static/scripts/app/views/share.js:206 static/scripts/app/views/share.js:207
+#: static/scripts/app/views/share.js:241 static/scripts/app/views/share.js:242
 msgid "Show"
 msgstr "표시"
 
-#: static/scripts/app/views/share.js:265
+#: static/scripts/app/views/share.js:300
 msgid "Please enter days."
 msgstr "일자를 입력하세요."
 
-#: static/scripts/app/views/share.js:269
+#: static/scripts/app/views/share.js:304
 msgid "Please enter valid days"
 msgstr "유효 기간을 입력하세요"
 
-#: static/scripts/app/views/share.js:368
+#: static/scripts/app/views/share.js:390
 msgid "Please input at least an email."
 msgstr "최소한 하나의 전자메일 주소를 입력하세요."
 
-#: static/scripts/app/views/share.js:385
+#: static/scripts/app/views/share.js:407
 msgid "Successfully sent to {placeholder}"
 msgstr "{placeholder}에게 성공적으로 보냈습니다"
 
-#: static/scripts/app/views/share.js:389
+#: static/scripts/app/views/share.js:411
 msgid "Failed to send to {placeholder}"
 msgstr "{placeholder}에게 보내기에 실패했습니다"
 
-#: static/scripts/app/views/share.js:679
+#: static/scripts/app/views/share.js:697
 msgid "Failed to fetch groups:"
 msgstr ""
 
@@ -857,27 +861,27 @@ msgstr "성공"
 msgid "Successfully unstared {placeholder}"
 msgstr "{placeholder}을(를) 성공적으로 별표 해제했습니다."
 
-#: static/scripts/common.js:610
+#: static/scripts/common.js:620
 msgid "Search users or enter emails and press Enter"
 msgstr "사용자를 검색하거나 전자메일 주소를 입력한 후 엔터 키를 누르십시오"
 
-#: static/scripts/common.js:618 static/scripts/common.js:689
+#: static/scripts/common.js:628 static/scripts/common.js:699
 msgid "Please enter 1 or more character"
 msgstr "하나 이상의 문자를 입력하세요"
 
-#: static/scripts/common.js:620 static/scripts/common.js:691
+#: static/scripts/common.js:630 static/scripts/common.js:701
 msgid "Searching..."
 msgstr "검색 중..."
 
-#: static/scripts/common.js:621 static/scripts/common.js:692
+#: static/scripts/common.js:631 static/scripts/common.js:702
 msgid "Loading failed"
 msgstr "불러오기에 실패했습니다"
 
-#: static/scripts/common.js:681
+#: static/scripts/common.js:691
 msgid "Search groups"
 msgstr "그룹 검색"
 
-#: static/scripts/common.js:1016
+#: static/scripts/common.js:1026
 msgid "Packaging..."
 msgstr "꾸러미 처리 중..."
 

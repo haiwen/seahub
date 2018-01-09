@@ -3,14 +3,14 @@
 # This file is distributed under the same license as the PACKAGE package.
 # 
 # Translators:
-# Audronis G. <audroniui@gmail.com>, 2017
+# Audronis G. <audroniui@gmail.com>, 2017-2018
 # zheng xie <xiez1989@gmail.com>, 2017
 msgid ""
 msgstr ""
 "Project-Id-Version: seahub\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2017-12-19 15:54+0800\n"
-"PO-Revision-Date: 2017-12-19 07:59+0000\n"
+"PO-Revision-Date: 2018-01-05 11:53+0000\n"
 "Last-Translator: Audronis G. <audroniui@gmail.com>\n"
 "Language-Team: Lithuanian (http://www.transifex.com/haiwen/seahub/language/lt/)\n"
 "MIME-Version: 1.0\n"
@@ -2824,18 +2824,18 @@ msgstr "Pranešimai"
 
 #: seahub/notifications/templates/notifications/user_notification_list.html:12
 msgid "Mark all read"
-msgstr ""
+msgstr "Žymėti visus kaip skaitytus"
 
 #: seahub/notifications/templates/notifications/user_notification_list.html:13
 msgid "Clear"
-msgstr ""
+msgstr "Išvalyti"
 
 #: seahub/notifications/templates/notifications/user_notification_list.html:33
 #: seahub/templates/file_revisions.html:52 seahub/templates/libraries.html:18
 #: seahub/templates/libraries.html:208
 #: seahub/templates/repo_dir_recycle_view.html:59
 msgid "More"
-msgstr ""
+msgstr "Daugiau"
 
 #: seahub/notifications/views.py:130
 msgid "Successfully cleared all notices."
@@ -2844,7 +2844,7 @@ msgstr "Visi pranešimai sėkmingai išvalyti"
 #: seahub/oauth/views.py:74 seahub/oauth/views.py:95 seahub/oauth/views.py:116
 #: seahub/oauth/views.py:146 seahub/oauth/views.py:158
 msgid "Error, please contact administrator."
-msgstr ""
+msgstr "Klaida, susisiekite su administratoriumi."
 
 #: seahub/options/templates/options/set_user_options.html:7
 msgid "Please choose how to view encrypted libraries online:"
@@ -2852,7 +2852,7 @@ msgstr ""
 
 #: seahub/options/templates/options/set_user_options.html:10
 msgid "Send passwords to the server."
-msgstr ""
+msgstr "Siųsti slaptažodžius į serverį."
 
 #: seahub/options/templates/options/set_user_options.html:10
 msgid "Files will be decrypted in the server before being sent to you."
@@ -2886,58 +2886,58 @@ msgstr ""
 #: seahub/templates/sysadmin/sys_org_info_setting.html:11
 #: seahub/templates/sysadmin/sys_org_info_user.html:10
 msgid "Settings"
-msgstr ""
+msgstr "Nustatymai"
 
 #: seahub/profile/templates/profile/set_profile.html:19
 msgid "Language"
-msgstr ""
+msgstr "Kalba"
 
 #: seahub/profile/templates/profile/set_profile.html:22
 msgid "Default Library"
-msgstr ""
+msgstr "Numatytoji biblioteka"
 
 #: seahub/profile/templates/profile/set_profile.html:26
 #: seahub/profile/templates/profile/set_profile.html:139
 #: seahub/templates/sysadmin/userinfo.html:123
 #: seahub/two_factor/templates/two_factor/core/login.html:6
 msgid "Two-Factor Authentication"
-msgstr ""
+msgstr "Dviejų lygių autentikacija"
 
 #: seahub/profile/templates/profile/set_profile.html:29
 #: seahub/profile/templates/profile/set_profile.html:164
 #: seahub/profile/templates/profile/set_profile.html:227
 msgid "Delete Account"
-msgstr ""
+msgstr "Ištrinti paskyrą"
 
 #: seahub/profile/templates/profile/set_profile.html:38
 msgid "Profile Setting"
-msgstr ""
+msgstr "Profilio nustatymai"
 
 #: seahub/profile/templates/profile/set_profile.html:40
 msgid "Avatar:"
-msgstr ""
+msgstr "Avataras:"
 
 #: seahub/profile/templates/profile/set_profile.html:42
 #: seahub/templates/snippets/web_settings_form.html:52
 msgid "Change"
-msgstr ""
+msgstr "Pakeisti"
 
 #: seahub/profile/templates/profile/set_profile.html:48
 msgctxt "true name"
 msgid "Name:"
-msgstr ""
+msgstr "Vardas:"
 
 #: seahub/profile/templates/profile/set_profile.html:55
 msgid "Username:"
-msgstr ""
+msgstr "Vartotojo vardas:"
 
 #: seahub/profile/templates/profile/set_profile.html:56
 msgid "You can use this field at login."
-msgstr ""
+msgstr "Galite naudoti šį lauką prisijugimui."
 
 #: seahub/profile/templates/profile/set_profile.html:61
 msgid "Contact Email:"
-msgstr ""
+msgstr "Kontaktinis el. paštas:"
 
 #: seahub/profile/templates/profile/set_profile.html:62
 msgid "Your notifications will be sent to this email."
@@ -2945,16 +2945,16 @@ msgstr "Jūsų pranešimai bus išsiųsti šiam el. pašto adresui."
 
 #: seahub/profile/templates/profile/set_profile.html:67
 msgid "Department:"
-msgstr ""
+msgstr "Skyrius:"
 
 #: seahub/profile/templates/profile/set_profile.html:72
 msgid "Telephone:"
-msgstr ""
+msgstr "Telefonas:"
 
 #: seahub/profile/templates/profile/set_profile.html:86
 #: seahub/templates/sysadmin/sys_terms_admin.html:39
 msgid "Update"
-msgstr ""
+msgstr "Atnaujinti"
 
 #: seahub/profile/templates/profile/set_profile.html:92
 msgid "Global Address Book"
@@ -2968,41 +2968,41 @@ msgstr ""
 
 #: seahub/profile/templates/profile/set_profile.html:105
 msgid "Language Setting"
-msgstr ""
+msgstr "Kalbos nustatymai"
 
 #: seahub/profile/templates/profile/set_profile.html:118
 msgid "Default Library Setting"
-msgstr ""
+msgstr "Numatytosios bibliotekos nustatymai"
 
 #: seahub/profile/templates/profile/set_profile.html:120
 msgid "Your default library:"
-msgstr ""
+msgstr "Jūsų numatytoji biblioteka:"
 
 #: seahub/profile/templates/profile/set_profile.html:122
 msgid ""
 "Default library is the default place to store your personal documents and "
 "pictures."
-msgstr ""
+msgstr "Numatytoji biblioteka yra pagrindinė vieta kurioje saugomi asmeniniai dokumentai ir paveikslėliai."
 
 #: seahub/profile/templates/profile/set_profile.html:123
 msgid "Choose Default Library"
-msgstr ""
+msgstr "Pasirinkite numatytąją biblioteką"
 
 #: seahub/profile/templates/profile/set_profile.html:126
 msgid "Choose default library:"
-msgstr ""
+msgstr "Pasirinkite numatytąją biblioteką:"
 
 #: seahub/profile/templates/profile/set_profile.html:141
 #: seahub/templates/sysadmin/userinfo.html:126
 msgid "enabled"
-msgstr ""
+msgstr "įjungta"
 
 #: seahub/profile/templates/profile/set_profile.html:143
 #: seahub/templates/sysadmin/userinfo.html:127
 #: seahub/templates/sysadmin/userinfo.html:129
 #: seahub/two_factor/templates/two_factor/profile/disable.html:6
 msgid "Disable Two-Factor Authentication"
-msgstr ""
+msgstr "Išjungti dviejų lygių autentikacija"
 
 #: seahub/profile/templates/profile/set_profile.html:147
 msgid ""
@@ -3026,33 +3026,33 @@ msgstr ""
 msgid ""
 "Two-factor authentication is not enabled for your account. Enable two-factor"
 " authentication for enhanced account security."
-msgstr ""
+msgstr "Dviejų lygių autentikacija jūsų paskyrai neįjungta. Norėdami padidinti paskyros saugumą įjunkite dviejų lygių autentikaciją."
 
 #: seahub/profile/templates/profile/set_profile.html:157
 #: seahub/two_factor/templates/two_factor/core/setup.html:6
 #: seahub/two_factor/templates/two_factor/core/setup_complete.html:5
 msgid "Enable Two-Factor Authentication"
-msgstr ""
+msgstr "Įjungti dviejų lygių autentikacija"
 
 #: seahub/profile/templates/profile/set_profile.html:165
 msgid "This operation will not be reverted. Please think twice!"
-msgstr ""
+msgstr "Šis veiksmas negrįžtamas. Pagalvokite prieš atlikdami!"
 
 #: seahub/profile/templates/profile/set_profile.html:205
 msgid " is not supported. Please choose an image file."
-msgstr ""
+msgstr "nepalaikoma. Pasirinkite paveikslėlio bylą."
 
 #: seahub/profile/templates/profile/set_profile.html:210
 msgid " is not supported. File extensions can only be "
-msgstr ""
+msgstr "nepalaikoma. Bylos plėtinys gali būti tik"
 
 #: seahub/profile/templates/profile/set_profile.html:217
 msgid " is too large. Allowed maximum size is 1MB."
-msgstr ""
+msgstr "per didelis. Didžiausias leidžiamas dydis 1 MB."
 
 #: seahub/profile/templates/profile/set_profile.html:228
 msgid "Really want to delete your account?"
-msgstr ""
+msgstr "Tikrai norite ištrinti savo paskyrą?"
 
 #: seahub/profile/templates/profile/set_profile.html:282
 #: seahub/templates/js/sysadmin-templates.html:1000
@@ -3061,7 +3061,7 @@ msgstr ""
 #: seahub/views/sysadmin.py:1382 seahub/views/sysadmin.py:2261
 #: seahub/views/sysadmin.py:2343 seahub/views/sysadmin.py:2514
 msgid "Success"
-msgstr ""
+msgstr "Sėkmingai"
 
 #: seahub/profile/views.py:39
 msgid "Successfully edited profile."
@@ -4768,42 +4768,42 @@ msgstr "Pašalinti Wiki"
 #: seahub/templates/js/templates.html:1830
 #: seahub/templates/js/templates.html:1848
 msgid "Import Members"
-msgstr ""
+msgstr "Importuoti narius"
 
 #: seahub/templates/js/templates.html:1831
 #: seahub/templates/js/templates.html:1849
 msgid "Manage Members"
-msgstr ""
+msgstr "Tvarkyti narius"
 
 #: seahub/templates/js/templates.html:1834
 msgid "Dismiss"
-msgstr ""
+msgstr "Nutraukti"
 
 #: seahub/templates/js/templates.html:1853
 msgid "Leave group"
-msgstr ""
+msgstr "Palikti grupę"
 
 #: seahub/templates/js/templates.html:1860
 msgid "Rename Group To"
-msgstr ""
+msgstr "Pervardinti grupę į"
 
 #: seahub/templates/js/templates.html:1869
 msgid "Transfer Group To"
-msgstr ""
+msgstr "Perduoti grupę į"
 
 #: seahub/templates/js/templates.html:1877
 msgid "Import group members from a CSV file"
-msgstr ""
+msgstr "Importuoti grupės narius iš CSV bylos"
 
 #: seahub/templates/js/templates.html:1879
 msgid "File format: user@mail.com"
-msgstr ""
+msgstr "Bylos formatas: vartotojas@mail.com"
 
 #: seahub/templates/js/templates.html:1889
 #: seahub/templates/sysadmin/sys_inst_admin.html:12
 #: seahub/templates/sysadmin/sys_terms_admin.html:9
 msgid "Add"
-msgstr ""
+msgstr "Įtraukti"
 
 #: seahub/templates/js/templates.html:1971
 #: seahub/templates/js/templates.html:2372
@@ -4811,7 +4811,7 @@ msgstr ""
 #: seahub/templates/sysadmin/sys_publink_admin.html:16
 #: seahub/templates/sysadmin/sys_upload_link_admin.html:10
 msgid "Download Links"
-msgstr ""
+msgstr "Atsisiuntimo nuorodos"
 
 #: seahub/templates/js/templates.html:1974
 #: seahub/templates/js/templates.html:2376
@@ -4819,12 +4819,12 @@ msgstr ""
 #: seahub/templates/sysadmin/sys_publink_admin.html:19
 #: seahub/templates/sysadmin/sys_upload_link_admin.html:13
 msgid "Upload Links"
-msgstr ""
+msgstr "Įkėlimo nuorodos"
 
 #: seahub/templates/js/templates.html:1986
 #: seahub/templates/js/templates.html:2005
 msgid "Created By"
-msgstr ""
+msgstr "Sukurta"
 
 #: seahub/templates/js/templates.html:1988
 #: seahub/templates/js/templates.html:2007
@@ -4833,14 +4833,14 @@ msgstr ""
 #: seahub/templates/sysadmin/sys_upload_link_admin.html:25
 #: seahub/templates/sysadmin/userinfo.html:278
 msgid "Visits"
-msgstr ""
+msgstr "Apsilankimai"
 
 #: seahub/templates/js/templates.html:2022
 #: seahub/templates/sysadmin/userinfo.html:289
 #: seahub/templates/sysadmin/userinfo.html:299
 #: seahub/templates/view_shared_dir.html:60
 msgid "Directory icon"
-msgstr ""
+msgstr "Aplanko piktrograma"
 
 #: seahub/templates/js/templates.html:2032
 #: seahub/templates/js/templates.html:2453
@@ -4853,32 +4853,32 @@ msgstr ""
 #: seahub/templates/sysadmin/userinfo.html:296
 #: seahub/templates/sysadmin/userinfo.html:305
 msgid "Remove"
-msgstr ""
+msgstr "Pašalinti"
 
 #: seahub/templates/js/templates.html:2060
 #: seahub/templates/js/templates.html:2104
 msgid "Folder"
-msgstr ""
+msgstr "Aplankas"
 
 #: seahub/templates/js/templates.html:2071
 #: seahub/templates/js/templates.html:2090
 #: seahub/templates/js/templates.html:2117
 #: seahub/templates/js/templates.html:2136
 msgid "Select a folder"
-msgstr ""
+msgstr "Pasirinkti aplanką"
 
 #: seahub/templates/js/templates.html:2151
 msgid "Old Password"
-msgstr ""
+msgstr "Senas slaptažodis"
 
 #: seahub/templates/js/templates.html:2153
 #: seahub/templates/registration/password_change_form.html:18
 msgid "New Password"
-msgstr ""
+msgstr "Naujas slaptažodis"
 
 #: seahub/templates/js/templates.html:2155
 msgid "New Password Again"
-msgstr ""
+msgstr "Naujas slaptažodis dar kartą"
 
 #: seahub/templates/js/templates.html:2184
 msgid "See All Notifications"
@@ -4887,33 +4887,33 @@ msgstr "Žiūrėti visus pranešimus"
 #: seahub/templates/js/templates.html:2236
 #: seahub/templates/js/templates.html:2353
 msgid "Share To"
-msgstr ""
+msgstr "Bendrinti su"
 
 #: seahub/templates/js/templates.html:2245
 msgid "You have not shared any libraries"
-msgstr ""
+msgstr "Neturite bendrinamų bibliotekų"
 
 #: seahub/templates/js/templates.html:2246
 msgid ""
 "You can share libraries with your friends and colleagues by clicking the "
 "share icon of your own libraries in your home page or creating a new library"
 " in groups you are in."
-msgstr ""
+msgstr "Galite bendrinti biblioteką su draugais ir kolegomis paspausdami bibliotekos bendrinimo piktogramą savo namų puslapyje arba sukūrę naują biblioteką grupėje, kurioje esate."
 
 #: seahub/templates/js/templates.html:2259
 #: seahub/templates/js/templates.html:2321
 msgid "all members"
-msgstr ""
+msgstr "visi nariai"
 
 #: seahub/templates/js/templates.html:2362
 msgid "You have not shared any folders"
-msgstr ""
+msgstr "Neturite bendrinamų aplankų"
 
 #: seahub/templates/js/templates.html:2363
 msgid ""
 "You can share a single folder with a registered user if you don't want to "
 "share a whole library."
-msgstr ""
+msgstr "Jei nenorite bendrinti visos bibliotekos, registruotiems vartotojams galite bendrinti pasirinktą aplanką."
 
 #: seahub/templates/js/templates.html:2389
 #: seahub/templates/js/templates.html:2486
@@ -4932,7 +4932,7 @@ msgstr ""
 
 #: seahub/templates/js/templates.html:2431
 msgid "You don't have any upload links"
-msgstr ""
+msgstr "Neturite įkėlimo nuorodų"
 
 #: seahub/templates/js/templates.html:2432
 msgid ""
@@ -4942,33 +4942,33 @@ msgstr ""
 
 #: seahub/templates/js/templates.html:2485
 msgid "Invite Time"
-msgstr ""
+msgstr "Pakvietimo laikas"
 
 #: seahub/templates/js/templates.html:2487
 msgid "Accepted"
-msgstr ""
+msgstr "Priimta"
 
 #: seahub/templates/js/templates.html:2495
 msgid "You have not invited any people."
-msgstr ""
+msgstr "Nesate pakvietę nė vieno žmogaus."
 
 #: seahub/templates/js/templates.html:2536
 #: seahub/templates/view_file_base.html:123
 msgid "No comment yet."
-msgstr ""
+msgstr "Komentarų dar nėra."
 
 #: seahub/templates/js/templates.html:2543
 #: seahub/templates/view_file_base.html:130
 msgid "Add a comment..."
-msgstr ""
+msgstr "Parašyti komentarą..."
 
 #: seahub/templates/libraries.html:20 seahub/templates/libraries.html.py:41
 msgid "Deleted Libraries"
-msgstr ""
+msgstr "Ištrintos bibliotekos"
 
 #: seahub/templates/libraries.html:30
 msgid "You have not created any libraries"
-msgstr ""
+msgstr "Nesate sukūrę nė vienos bibliotekos"
 
 #: seahub/templates/libraries.html:31
 msgid ""
@@ -4979,7 +4979,7 @@ msgstr ""
 
 #: seahub/templates/libraries.html:49
 msgid "No deleted libraries."
-msgstr ""
+msgstr "Nėra ištrintų bibliotekų."
 
 #: seahub/templates/libraries.html:65
 msgid "No libraries have been shared with you"
@@ -4993,33 +4993,33 @@ msgstr ""
 
 #: seahub/templates/libraries.html:76
 msgid "Add Library"
-msgstr ""
+msgstr "Pridėti biblioteką"
 
 #: seahub/templates/libraries.html:78
 msgid "Share existing libraries"
-msgstr ""
+msgstr "Bendrinti esamas bibliotekas"
 
 #: seahub/templates/libraries.html:79
 msgid "Create a new library"
-msgstr ""
+msgstr "Sukurti naują biblioteką"
 
 #: seahub/templates/libraries.html:91
 msgid "No public libraries"
-msgstr ""
+msgstr "Nėra viešų bibliotekų"
 
 #: seahub/templates/libraries.html:92
 msgid ""
 "You can create a public library by clicking the \"New Library\" button, "
 "others can view and download this library."
-msgstr ""
+msgstr "Viešą biblioteką galite sukurti paspaudę mygtuką \"Nauja biblioteka\", kiti vartotojai galės peržiūrėti ir atsisiųsti šią biblioteką."
 
 #: seahub/templates/libraries.html:99
 msgid "My Groups"
-msgstr ""
+msgstr "Mano grupės"
 
 #: seahub/templates/libraries.html:107
 msgid "You are not in any groups"
-msgstr ""
+msgstr "Nepriklausote nė vienai grupei"
 
 #: seahub/templates/libraries.html:109
 msgid ""
@@ -5052,7 +5052,7 @@ msgstr ""
 
 #: seahub/templates/libraries.html:176
 msgid "More..."
-msgstr ""
+msgstr "Daugiau..."
 
 #: seahub/templates/libraries.html:178
 msgid "No discussion in this group yet."
@@ -5082,27 +5082,27 @@ msgstr ""
 
 #: seahub/templates/nav_footer.html:2
 msgid "Help"
-msgstr ""
+msgstr "Pagalba"
 
 #: seahub/templates/nav_footer.html:3
 msgid "About"
-msgstr ""
+msgstr "Apie"
 
 #: seahub/templates/nav_footer.html:4
 msgid "Clients"
-msgstr ""
+msgstr "Klientai"
 
 #: seahub/templates/nav_footer.html:8
 msgid "Server Version: "
-msgstr ""
+msgstr "Serverio versija:"
 
 #: seahub/templates/nav_footer.html:8
 msgid "Seafile"
-msgstr ""
+msgstr "Seafile"
 
 #: seahub/templates/nav_footer.html:9
 msgid "About Us"
-msgstr ""
+msgstr "Apie mus"
 
 #: seahub/templates/registration/activation_email.html:12
 #, python-format
@@ -5122,7 +5122,7 @@ msgstr ""
 #: seahub/templates/registration/activation_email.html:18
 #: seahub/templates/registration/registration_form.html:46
 msgid "Sign Up"
-msgstr ""
+msgstr "Registruotis"
 
 #: seahub/templates/registration/login.html:4
 #: seahub/templates/registration/login.html:33
@@ -5132,44 +5132,44 @@ msgstr ""
 #: seahub/templates/sysadmin/user_add_email.html:25
 #: seahub/templates/sysadmin/user_batch_add_email.html:21
 msgid "Log In"
-msgstr ""
+msgstr "Prisijungti"
 
 #: seahub/templates/registration/login.html:40
 msgid "Refresh"
-msgstr ""
+msgstr "Atnaujinti"
 
 #: seahub/templates/registration/login.html:54
 msgid "Incorrect email or password"
-msgstr ""
+msgstr "Neteisingas el. paštas arba slaptažodis"
 
 #: seahub/templates/registration/login.html:62
 #, python-format
 msgid "Remember me for %(remember_days)s days "
-msgstr ""
+msgstr "Atsiminti mane %(remember_days)s d."
 
 #: seahub/templates/registration/login.html:64
 msgid "Forgot password?"
-msgstr ""
+msgstr "Pamiršote slaptažodį?"
 
 #: seahub/templates/registration/login.html:70
 msgid "Single Sign-On"
-msgstr ""
+msgstr "Bendras prisijungimas"
 
 #: seahub/templates/registration/login.html:78
 msgid "Shibboleth"
-msgstr ""
+msgstr "Shibboleth"
 
 #: seahub/templates/registration/login.html:82
 msgid "Kerberos"
-msgstr ""
+msgstr "Kerberos"
 
 #: seahub/templates/registration/login.html:133
 msgid "Failed to refresh the CAPTCHA, please try again later."
-msgstr ""
+msgstr "Nepavyko atnaujinti CAPTCHA, pamėginkite vėliau."
 
 #: seahub/templates/registration/login.html:141
 msgid "Email or username cannot be blank"
-msgstr ""
+msgstr "El. pašto adresas arba vartotojo vardas negali būti tuščias"
 
 #: seahub/templates/registration/login.html:145
 #: seahub/templates/registration/password_change_form.html:66
@@ -5178,28 +5178,28 @@ msgstr ""
 #: seahub/templates/sysadmin/sys_org_info_user.html:133
 #: seahub/templates/sysadmin/sys_useradmin.html:153
 msgid "Password cannot be blank"
-msgstr ""
+msgstr "Slaptažodis negali būti tuščias"
 
 #: seahub/templates/registration/logout.html:4
 msgid "Log Out"
-msgstr ""
+msgstr "Atsijungti"
 
 #: seahub/templates/registration/logout.html:8
 msgid "Thanks for your participation! "
-msgstr ""
+msgstr "Dėkojame už dalyvavimą!"
 
 #: seahub/templates/registration/logout.html:8
 #: seahub/templates/registration/password_change_done.html:10
 msgid "Log in again"
-msgstr ""
+msgstr "Prisijungti iš naujo"
 
 #: seahub/templates/registration/password_change_done.html:4
 msgid "Password Change Successfully"
-msgstr ""
+msgstr "Slaptažodis sėkmingai pakeistas"
 
 #: seahub/templates/registration/password_change_done.html:9
 msgid "Your password has been changed successfully."
-msgstr ""
+msgstr "Slaptažodis sėkmingai pakeistas."
 
 #: seahub/templates/registration/password_change_form.html:3
 #: seahub/templates/registration/password_change_form.html:11
