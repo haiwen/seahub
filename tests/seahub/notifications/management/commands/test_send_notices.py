@@ -1,8 +1,10 @@
 from django.core import mail
 from django.core.management import call_command
 
+from seahub.invitations.models import Invitation
 from seahub.notifications.models import (
-    UserNotification, repo_share_msg_to_json, file_comment_msg_to_json)
+    UserNotification, repo_share_msg_to_json, file_comment_msg_to_json,
+    guest_invitation_accepted_msg_to_json)
 from seahub.profile.models import Profile
 from seahub.test_utils import BaseTestCase
 
@@ -43,3 +45,18 @@ class CommandTest(BaseTestCase):
         assert mail.outbox[0].to[0] == 'a@a.com'
         assert 'new comment from user %s' % self.user.username in mail.outbox[0].body
         assert '/foo' in mail.outbox[0].body
+
+    def test_send_guest_invitation_notice(self):
+        self.assertEqual(len(mail.outbox), 0)
+
+        inv = Invitation.objects.add(self.user.username, 'test@test.com')
+        inv.accept()
+
+        detail = guest_invitation_accepted_msg_to_json(inv.pk)
+        UserNotification.objects.add_guest_invitation_accepted_msg(
+            inv.inviter, detail)
+
+        call_command('send_notices')
+        self.assertEqual(len(mail.outbox), 1)
+        assert mail.outbox[0].to[0] == self.user.username
+        assert 'Guest test@test.com' in mail.outbox[0].body

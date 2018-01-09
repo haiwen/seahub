@@ -10,6 +10,7 @@ from seahub.auth import get_backends
 from seahub.base.accounts import User
 from seahub.constants import GUEST_USER
 from seahub.invitations.models import Invitation
+from seahub.invitations.signals import accept_guest_invitation_successful
 from seahub.settings import SITE_ROOT
 
 def token_view(request, token):
@@ -38,6 +39,11 @@ def token_view(request, token):
             for backend in get_backends():
                 u.backend = "%s.%s" % (backend.__module__, backend.__class__.__name__)
             auth_login(request, u)
+
+            # send signal to notify inviter
+            accept_guest_invitation_successful.send(
+                sender=None, invitation_obj=i)
+
             return HttpResponseRedirect(SITE_ROOT)
 
     return render_to_response('invitations/token_view.html', {
