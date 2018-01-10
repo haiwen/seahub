@@ -18,18 +18,19 @@ class UserTest(BaseTestCase):
         # print email.html_message
 
     def test_delete_user_options(self):
+        test_email = '123@123.com'
 
-        assert len(UserOptions.objects.filter(email='123@123.com')) == 0
+        assert len(UserOptions.objects.filter(email=test_email)) == 0
 
-        User.objects.create_user('123@123.com')
-        UserOptions.objects.enable_server_crypto('123@123.com')
+        User.objects.create_user(test_email)
+        UserOptions.objects.enable_server_crypto(test_email)
 
-        assert len(UserOptions.objects.filter(email='123@123.com')) == 1
+        assert len(UserOptions.objects.filter(email=test_email)) == 1
 
-        user_options = UserOptions.objects.get(email='123@123.com')
-        user_options.delete()
-
-        assert len(UserOptions.objects.filter(email='123@123.com')) == 0
+        user = User.objects.get(email=test_email)
+        user.delete()
+        
+        assert len(UserOptions.objects.filter(email=test_email)) == 0
 
 class UserPermissionsTest(BaseTestCase):
     def test_permissions(self):
