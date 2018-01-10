@@ -331,6 +331,13 @@ class User(object):
         if settings.ENABLE_TERMS_AND_CONDITIONS:
             from termsandconditions.models import UserTermsAndConditions
             UserTermsAndConditions.objects.filter(username=username).delete()
+        self.delete_user_options(username)
+
+    def delete_user_options(self, username):
+        """Remove user's all options.
+        """
+        from seahub.options.models import UserOptions
+        UserOptions.objects.filter(email=username).delete()
 
     def get_and_delete_messages(self):
         messages = []
