@@ -5,6 +5,9 @@ from tests.common.common import BASE_URL
 from django.core.urlresolvers import reverse
 
 from seahub.test_utils import BaseTestCase
+from seahub.utils import PREVIEW_FILEEXT
+from seahub.utils.file_types import IMAGE
+from seahub.utils.error_msg import file_type_error_msg
 from seahub.settings import MEDIA_ROOT, CUSTOM_FAVICON_PATH
 
 class AdminFaviconTest(BaseTestCase):
@@ -58,4 +61,4 @@ class AdminFaviconTest(BaseTestCase):
             resp = self.client.post(logo_url, {'favicon': f})
         json_resp = json.loads(resp.content)
         assert resp.status_code == 400
-        assert json_resp['error_msg'] == "Filetype not allowed."
+        assert json_resp['error_msg'] == file_type_error_msg('noico', PREVIEW_FILEEXT.get(IMAGE))

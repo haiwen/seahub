@@ -6,6 +6,9 @@ from django.core.urlresolvers import reverse
 
 from seahub.test_utils import BaseTestCase
 from seahub.settings import MEDIA_ROOT, CUSTOM_LOGO_PATH
+from seahub.utils import PREVIEW_FILEEXT
+from seahub.utils.file_types import IMAGE
+from seahub.utils.error_msg import file_type_error_msg
 
 
 class AdminLogoTest(BaseTestCase):
@@ -62,4 +65,4 @@ class AdminLogoTest(BaseTestCase):
 
         os.remove(logo_file)
         assert 400 == resp.status_code
-        assert json_resp['error_msg'] == "Filetype not allowed."
+        assert json_resp['error_msg'] == file_type_error_msg('noimage', PREVIEW_FILEEXT.get(IMAGE))

@@ -31,7 +31,7 @@ class AdminLicense(APIView):
             return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
 
         file_type, ext = get_file_type_and_ext(license_file.name)
-        if file_type != 'txt':
+        if ext != 'txt':
             error_msg = file_type_error_msg(ext, 'txt')
             return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
 

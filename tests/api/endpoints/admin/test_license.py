@@ -5,6 +5,7 @@ from django.core.urlresolvers import reverse
 
 from seahub.api2.endpoints.admin import license as license_api
 from seahub.settings import LICENSE_PATH
+from seahub.utils.error_msg import file_type_error_msg
 from seahub.test_utils import BaseTestCase
 from tests.common.utils import urljoin
 from tests.common.common import BASE_URL
@@ -42,5 +43,5 @@ class AdminLicenseTest(BaseTestCase):
             resp = self.client.post(url, {'license': f})
         json_resp = json.loads(resp.content)
         assert 400 == resp.status_code
-        assert "Filetype not allowed." == json_resp['error_msg']
+        assert file_type_error_msg('notxt', 'txt') == json_resp['error_msg']
 
