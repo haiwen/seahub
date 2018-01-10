@@ -1,6 +1,7 @@
 from seahub.test_utils import BaseTestCase
 from seahub.base.accounts import User, RegistrationForm
 
+from seahub.options.models import UserOptions
 from post_office.models import Email
 
 class UserTest(BaseTestCase):
@@ -14,8 +15,21 @@ class UserTest(BaseTestCase):
 
         assert len(Email.objects.all()) > 0
         # email = Email.objects.all()[0]
-        # print email.html_message
-
+        # print email.html_message 
+    
+    def test_delete_user_options(self):
+       
+	assert len(UserOptions.objects.filter(email='123@123.com')) == 0
+	
+	User.objects.create_user('123@123.com')
+        UserOptions.objects.enable_server_crypto('123@123.com') 
+	
+	assert len(UserOptions.objects.filter(email='123@123.com')) == 1
+        
+	user_options = UserOptions.objects.get(email='123@123.com')
+        user_options.delete()
+	
+	assert len(UserOptions.objects.filter(email='123@123.com')) == 0 
 
 class UserPermissionsTest(BaseTestCase):
     def test_permissions(self):
