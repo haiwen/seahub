@@ -1064,44 +1064,6 @@ textarea:-moz-placeholder {/* for FF */
 .checkbox-label {
     display:block;
 }
-/**** right side panel ****/
-.right-side-panel {
-    background: #fff;
-    width:400px;
-    position:fixed;
-    right:-400px;
-    top:0;
-    bottom:0;
-    z-index:21;
-    overflow:hidden;
-    border-left:1px solid #c9c9c9;
-    box-shadow:0 0 4px #ccc;
-    -webkit-transition: all 0.3s ease;
-    -moz-transition: all 0.3s ease;
-    transition: all 0.3s ease;
-}
-@media (max-width:400px) {
-    .right-side-panel {
-        width:100%;
-    }
-}
-.right-side-panel-hd {
-    background:#f8f8f8;
-    padding:10px;
-    border-bottom:1px solid #c9c9c9;
-}
-.right-side-panel-title {
-    text-align:center;
-    margin:0;
-}
-.right-side-panel-con {
-    overflow-y:auto;
-}
-.right-side-panel-footer {
-    position:absolute;
-    bottom:0;
-    width:100%;
-}
 
 /**** details-side-panel ****/
 .details-panel {
