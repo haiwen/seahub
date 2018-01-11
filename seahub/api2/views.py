@@ -76,7 +76,7 @@ from seahub.utils import gen_file_get_url, gen_token, gen_file_upload_url, \
 from seahub.utils.file_revisions import get_file_revisions_after_renamed
 from seahub.utils.devices import do_unlink_device
 from seahub.utils.repo import get_repo_owner, get_library_storages, \
-        get_locked_files_by_dir
+        get_locked_files_by_dir, get_related_users_by_repo
 from seahub.utils.star import star_file, unstar_file
 from seahub.utils.file_types import DOCUMENT
 from seahub.utils.file_size import get_file_size_unit
@@ -1068,28 +1068,35 @@ class Repo(APIView):
         return Response("unsupported operation")
 
     def delete(self, request, repo_id, format=None):
-        username = request.user.username
         repo = seafile_api.get_repo(repo_id)
         if not repo:
-            return api_error(status.HTTP_400_BAD_REQUEST,
-                             'Library does not exist.')
+            error_msg = 'Library %s not found.' % repo_id
+            return api_error(status.HTTP_404_NOT_FOUND, error_msg)
 
         # check permission
+        org_id = None
         if is_org_context(request):
+            org_id = request.user.org.org_id
             repo_owner = seafile_api.get_org_repo_owner(repo.id)
         else:
             repo_owner = seafile_api.get_repo_owner(repo.id)
-        is_owner = True if username == repo_owner else False
-        if not is_owner:
-            return api_error(
-                status.HTTP_403_FORBIDDEN,
-                'You do not have permission to delete this library.'
-            )
 
-        usernames = seaserv.get_related_users_by_repo(repo_id)
+        username = request.user.username
+        if username != repo_owner:
+            error_msg = 'Permission denied.'
+            return api_error(status.HTTP_403_FORBIDDEN, error_msg)
+
+        try:
+            usernames = get_related_users_by_repo(repo_id, org_id)
+        except Exception as e:
+            logger.error(e)
+            usernames = []
+
+        # remove repo
         seafile_api.remove_repo(repo_id)
+
         repo_deleted.send(sender=None,
-                          org_id=-1,
+                          org_id=org_id,
                           usernames=usernames,
                           repo_owner=repo_owner,
                           repo_id=repo_id,
