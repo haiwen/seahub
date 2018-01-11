@@ -7,7 +7,14 @@ from registration import signals
 from constance import config
 
 
-class EmailAdminOnRegistrationTest(BaseTestCase):
+class RegisterSignalMixin(object):
+    def _send_signal(self):
+        signals.user_registered.send(sender=self.__class__,
+                                     user=self.user,
+                                     request=self.fake_request)
+
+
+class EmailAdminOnRegistrationTest(BaseTestCase, RegisterSignalMixin):
     """Send admins emails with message that a new user joined.
     """
     def setUp(self):
@@ -17,11 +24,6 @@ class EmailAdminOnRegistrationTest(BaseTestCase):
 
     def tearDown(self):
         config.ACTIVATE_AFTER_REGISTRATION = self.old_config
-
-    def _send_signal(self):
-        signals.user_registered.send(sender=self.__class__,
-                                     user=self.user,
-                                     request=self.fake_request)
 
     @override_settings(
         NOTIFY_ADMIN_AFTER_REGISTRATION=True,
@@ -36,13 +38,24 @@ class EmailAdminOnRegistrationTest(BaseTestCase):
         assert len(mail.outbox) > 0
 
 
-class EmailAdminOnRegistrationTest2(BaseTestCase):
+class EmailAdminOnRegistrationTest2(BaseTestCase, RegisterSignalMixin):
     """Send admins emails with activate link.
     """
     def setUp(self):
+        self.clear_cache()
+
+        self.old_cfg1 = config.ENABLE_SIGNUP
+        self.old_cfg2 = config.ACTIVATE_AFTER_REGISTRATION
+        self.old_cfg3 = config.REGISTRATION_SEND_MAIL
+
         config.ENABLE_SIGNUP = True
         self.email = 'newuser@test.com'
         self.remove_user(self.email)
+
+    def tearDown(self):
+        config.ENABLE_SIGNUP = self.old_cfg1
+        config.ACTIVATE_AFTER_REGISTRATION = self.old_cfg2
+        config.REGISTRATION_SEND_MAIL = self.old_cfg3
 
     def test_notify_admin_to_activate(self):
         assert bool(config.ENABLE_SIGNUP) is True
@@ -51,11 +64,7 @@ class EmailAdminOnRegistrationTest2(BaseTestCase):
         config.ACTIVATE_AFTER_REGISTRATION = False
         config.REGISTRATION_SEND_MAIL = False
 
-        resp = self.client.post(reverse('registration_register'), {
-            'email': self.email,
-            'password1': '123',
-            'password2': '123'
-        })
-        self.assertRedirects(resp, 'http://testserver/accounts/register/complete/')
+        self._send_signal()
+
         assert len(mail.outbox) != 0
         assert 'a newly registered account need to be activated' in mail.outbox[0].body
