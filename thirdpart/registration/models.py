@@ -334,12 +334,12 @@ def notify_admins_on_register_complete(reg_email):
         "reg_email": reg_email,
     }
 
-    subject = render_to_string('registration/register_complete_email_subject.txt',
+    subject = render_to_string('registration/register_complete_email_subject.html',
                                ctx_dict)
     # Email subject *must not* contain newlines
     subject = ''.join(subject.splitlines())
 
-    message = render_to_string('registration/register_complete_email.txt',
+    message = render_to_string('registration/register_complete_email.html',
                                ctx_dict)
 
     admins = User.objects.get_superusers()
