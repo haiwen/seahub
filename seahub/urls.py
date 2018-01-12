@@ -383,6 +383,7 @@ urlpatterns = patterns(
     url(r'^inst/', include('seahub.institutions.urls', app_name='institutions', namespace='institutions')),
     url(r'^invite/', include('seahub.invitations.urls', app_name='invitations', namespace='invitations')),
     url(r'^terms/', include('termsandconditions.urls')),
+    url(r'^wikis/', include('seahub.wiki.urls', app_name='wiki', namespace='wiki')),
 
     ### system admin ###
     url(r'^sysadmin/$', sysadmin, name='sysadmin'),

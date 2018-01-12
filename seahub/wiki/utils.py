@@ -1,6 +1,7 @@
 # Copyright (c) 2012-2016 Seafile Ltd.
 # -*- coding: utf-8 -*-
 import os
+import re
 import stat
 import urllib2
 
@@ -170,4 +171,10 @@ def convert_wiki_link(content, url_prefix, repo_id, username):
 
     return re.sub(r'\[\[(.+?)\]\]|(`.+?`)', repl, content)
 
+def is_valid_wiki_name(name):
+    if len(name) > 255:
+        return False
+    return re.match('^[\w\s-]+$', name, re.U)
 
+def slugfy_wiki_name(name):
+    return slugify(name, ok=SLUG_OK)
