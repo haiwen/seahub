@@ -4,14 +4,14 @@
 # 
 # Translators:
 # Petr Zientek <shmaic@gmail.com>, 2017
-# Tomáš Holan <mail@tomasholan.eu>, 2017
+# Tomáš Holan <mail@tomasholan.eu>, 2017-2018
 # Tomáš Kubalík <tkubalik@ifrog.cz>, 2017
 msgid ""
 msgstr ""
 "Project-Id-Version: seahub\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2017-12-19 15:54+0800\n"
-"PO-Revision-Date: 2017-09-25 09:53+0000\n"
+"POT-Creation-Date: 2018-01-12 18:04+0800\n"
+"PO-Revision-Date: 2018-01-12 12:23+0000\n"
 "Last-Translator: Tomáš Holan <mail@tomasholan.eu>\n"
 "Language-Team: Czech (http://www.transifex.com/haiwen/seahub/language/cs/)\n"
 "MIME-Version: 1.0\n"
@@ -21,12 +21,12 @@ msgstr ""
 "Plural-Forms: nplurals=3; plural=(n==1) ? 0 : (n>=2 && n<=4) ? 1 : 2;\n"
 
 #: static/scripts/app/models/deleted-repo.js:19
-#: static/scripts/app/models/repo.js:59 static/scripts/common.js:319
+#: static/scripts/app/models/repo.js:59 static/scripts/common.js:320
 msgid "Encrypted library"
 msgstr "Šifrovaná knihovna"
 
 #: static/scripts/app/models/deleted-repo.js:21
-#: static/scripts/app/models/repo.js:61 static/scripts/common.js:323
+#: static/scripts/app/models/repo.js:61 static/scripts/common.js:324
 #: static/scripts/sysadmin-app/models/trash-repo.js:14
 msgid "Read-Write library"
 msgstr "Čtení / zápis do knihovny"
@@ -36,7 +36,7 @@ msgstr "Čtení / zápis do knihovny"
 #: static/scripts/app/views/fileupload.js:378
 #: static/scripts/app/views/fileupload.js:392
 #: static/scripts/app/views/fileupload.js:404
-#: static/scripts/app/views/fileupload.js:416 static/scripts/common.js:586
+#: static/scripts/app/views/fileupload.js:416 static/scripts/common.js:598
 msgid "Just now"
 msgstr "Právě teď"
 
@@ -67,7 +67,7 @@ msgstr "Heslo je příliš krátké."
 msgid "Passwords don't match"
 msgstr "Hesla se neshodují."
 
-#: static/scripts/app/models/repo.js:63 static/scripts/common.js:321
+#: static/scripts/app/models/repo.js:63 static/scripts/common.js:322
 msgid "Read-Only library"
 msgstr "Knihovna pouze pro čtení."
 
@@ -95,7 +95,7 @@ msgstr "Pouze čtení"
 #: static/scripts/app/views/group.js:110 static/scripts/app/views/group.js:143
 #: static/scripts/app/views/groups.js:83
 #: static/scripts/app/views/groups.js:134
-#: static/scripts/app/views/invitations.js:78
+#: static/scripts/app/views/invitations.js:119
 #: static/scripts/app/views/my-deleted-repos.js:86
 #: static/scripts/app/views/myhome-repos.js:104
 #: static/scripts/app/views/myhome-shared-repos.js:81
@@ -153,8 +153,8 @@ msgstr "Smazané adresáře"
 #: static/scripts/app/views/dialogs/repo-folder-perm-admin.js:302
 #: static/scripts/app/views/dialogs/repo-history-settings.js:83
 #: static/scripts/app/views/dialogs/repo-history-settings.js:142
-#: static/scripts/app/views/dir.js:1292 static/scripts/app/views/dir.js:1326
-#: static/scripts/app/views/dir.js:1395
+#: static/scripts/app/views/dir.js:1291 static/scripts/app/views/dir.js:1325
+#: static/scripts/app/views/dir.js:1394
 #: static/scripts/app/views/dirent-details.js:164
 #: static/scripts/app/views/dirent-grid.js:338
 #: static/scripts/app/views/dirent-grid.js:379
@@ -177,14 +177,14 @@ msgstr "Smazané adresáře"
 #: static/scripts/app/views/group-settings.js:287
 #: static/scripts/app/views/group-settings.js:327
 #: static/scripts/app/views/group-settings.js:362
-#: static/scripts/app/views/invitations.js:146
+#: static/scripts/app/views/invitations.js:188
 #: static/scripts/app/views/repo-folder-perm-item.js:86
 #: static/scripts/app/views/repo-folder-perm-item.js:127
 #: static/scripts/app/views/repo.js:206 static/scripts/app/views/repo.js:281
 #: static/scripts/app/views/repo.js:398 static/scripts/app/views/repo.js:440
 #: static/scripts/app/views/share.js:423 static/scripts/app/views/share.js:808
-#: static/scripts/app/views/share.js:887 static/scripts/common.js:407
-#: static/scripts/common.js:496
+#: static/scripts/app/views/share.js:887 static/scripts/common.js:419
+#: static/scripts/common.js:508
 #: static/scripts/sysadmin-app/views/admin-login-logs.js:129
 #: static/scripts/sysadmin-app/views/admin-operation-logs.js:129
 #: static/scripts/sysadmin-app/views/dashboard.js:84
@@ -259,7 +259,7 @@ msgstr "Chyba."
 
 #: static/scripts/app/views/dialogs/dirent-mvcp.js:132
 #: static/scripts/app/views/dialogs/dirent-mvcp.js:163
-#: static/scripts/app/views/dir.js:1386
+#: static/scripts/app/views/dir.js:1385
 msgid "Canceled."
 msgstr "Zrušeno."
 
@@ -289,7 +289,7 @@ msgstr "Přejmenovat soubor"
 #: static/scripts/app/views/dir.js:622 static/scripts/app/views/dir.js:683
 #: static/scripts/app/views/dirent.js:477
 #: static/scripts/app/views/groups.js:112
-#: static/scripts/app/views/invitations.js:54
+#: static/scripts/app/views/invitations.js:58
 #: static/scripts/app/views/repo.js:175 static/scripts/app/views/repo.js:411
 #: static/scripts/sysadmin-app/views/device-trusted-ipaddresses.js:42
 #: static/scripts/sysadmin-app/views/dir.js:82
@@ -355,7 +355,7 @@ msgstr "Můžete vybrat pouze 1 položku"
 #: static/scripts/app/views/group-manage-members.js:112
 #: static/scripts/app/views/group-members.js:75
 #: static/scripts/app/views/group.js:138 static/scripts/app/views/groups.js:78
-#: static/scripts/app/views/invitations.js:141
+#: static/scripts/app/views/invitations.js:183
 #: static/scripts/app/views/my-deleted-repos.js:81
 #: static/scripts/app/views/myhome-repos.js:99
 #: static/scripts/app/views/myhome-shared-repos.js:76
@@ -509,64 +509,64 @@ msgstr "Přesunout vybrané položky do:"
 msgid "Copy selected item(s) to:"
 msgstr "Kopírovat vybrané položky do:"
 
-#: static/scripts/app/views/dir.js:1179 static/scripts/app/views/dir.js:1347
+#: static/scripts/app/views/dir.js:1179 static/scripts/app/views/dir.js:1346
 msgid "Successfully moved %(name)s."
 msgstr "Úspěšně přesunuto %(name)s."
 
-#: static/scripts/app/views/dir.js:1181 static/scripts/app/views/dir.js:1349
+#: static/scripts/app/views/dir.js:1181 static/scripts/app/views/dir.js:1348
 msgid "Successfully moved %(name)s and 1 other item."
 msgstr "Úspěšně přesunuto %(name)s. a 1 další položka"
 
-#: static/scripts/app/views/dir.js:1183 static/scripts/app/views/dir.js:1351
+#: static/scripts/app/views/dir.js:1183 static/scripts/app/views/dir.js:1350
 msgid "Successfully moved %(name)s and %(amount)s other items."
 msgstr "Úspěšně přesunuto %(name)s a %(amount)s dalších položek."
 
-#: static/scripts/app/views/dir.js:1188 static/scripts/app/views/dir.js:1355
+#: static/scripts/app/views/dir.js:1188 static/scripts/app/views/dir.js:1354
 msgid "Successfully copied %(name)s."
 msgstr "Úspěšně zkopírováno %(name)s."
 
-#: static/scripts/app/views/dir.js:1190 static/scripts/app/views/dir.js:1357
+#: static/scripts/app/views/dir.js:1190 static/scripts/app/views/dir.js:1356
 msgid "Successfully copied %(name)s and 1 other item."
 msgstr "Úspěšně zkopírováno %(name)s a 1 další položka."
 
-#: static/scripts/app/views/dir.js:1192 static/scripts/app/views/dir.js:1359
+#: static/scripts/app/views/dir.js:1192 static/scripts/app/views/dir.js:1358
 msgid "Successfully copied %(name)s and %(amount)s other items."
 msgstr "Úspěšně zkopírováno %(name)s a %(amount)s dalších položek."
 
-#: static/scripts/app/views/dir.js:1204
+#: static/scripts/app/views/dir.js:1203
 msgid "Internal error. Failed to move %(name)s and %(amount)s other item(s)."
 msgstr "Vnitřní chyba. Chyba při přesunu %(name)s a %(amount)s dalších položek."
 
-#: static/scripts/app/views/dir.js:1206
+#: static/scripts/app/views/dir.js:1205
 msgid "Internal error. Failed to move %(name)s."
 msgstr "Vnitřní chyba. Chyba při přesunu %(name)s."
 
-#: static/scripts/app/views/dir.js:1210
+#: static/scripts/app/views/dir.js:1209
 msgid "Internal error. Failed to copy %(name)s and %(amount)s other item(s)."
 msgstr "Vnitřní chyba. Chyba při kopírování %(name)s a %(amount)s dalších položek."
 
-#: static/scripts/app/views/dir.js:1212
+#: static/scripts/app/views/dir.js:1211
 msgid "Internal error. Failed to copy %(name)s."
 msgstr "Vnitřní chyba. Chyba při kopírování %(name)s."
 
-#: static/scripts/app/views/dir.js:1254
+#: static/scripts/app/views/dir.js:1253
 msgid "Moving file %(index)s of %(total)s"
 msgstr "Přesunuji soubor %(index)s z %(total)s"
 
-#: static/scripts/app/views/dir.js:1254
+#: static/scripts/app/views/dir.js:1253
 msgid "Copying file %(index)s of %(total)s"
 msgstr "Kopíruji soubor %(index)s z %(total)s"
 
-#: static/scripts/app/views/dir.js:1280
+#: static/scripts/app/views/dir.js:1279
 msgid "Failed to move %(name)s"
 msgstr "Chyba při přesunu %(name)s"
 
-#: static/scripts/app/views/dir.js:1280
+#: static/scripts/app/views/dir.js:1279
 msgid "Failed to copy %(name)s"
 msgstr "Chyba při kopírování %(name)s"
 
-#: static/scripts/app/views/dirent-details.js:99 static/scripts/common.js:629
-#: static/scripts/common.js:700
+#: static/scripts/app/views/dirent-details.js:99 static/scripts/common.js:641
+#: static/scripts/common.js:712
 msgid "No matches"
 msgstr "Žádná shoda"
 
@@ -749,12 +749,18 @@ msgid "Are you sure you want to quit this group?"
 msgstr "Skutečne chcete opustit tuto skupinu?"
 
 #: static/scripts/app/views/invitation.js:37
-#: static/scripts/app/views/share-admin-folder.js:91
-#: static/scripts/app/views/share-admin-repo.js:99
-#: static/scripts/app/views/share-admin-share-link.js:55
-#: static/scripts/app/views/share-admin-upload-link.js:54
-msgid "Successfully deleted 1 item"
+#: static/scripts/sysadmin-app/views/device-trusted-ipaddress.js:39
+#: static/scripts/sysadmin-app/views/group.js:44
+msgid "Successfully deleted 1 item."
 msgstr "Úspěšně smazána 1 položka"
+
+#: static/scripts/app/views/invitations.js:94
+msgid "Successfully invited %(email)."
+msgstr "Úspěšně pozván %(email)."
+
+#: static/scripts/app/views/invitations.js:97
+msgid "Successfully invited %(email) and %(num) other people."
+msgstr "Úspěšně pozván %(email) a dalších %(num) lidí."
 
 #: static/scripts/app/views/notifications.js:58
 msgid "You have logged out."
@@ -807,6 +813,13 @@ msgstr "Úspěšně přidány štítky pro knihovnu {placeholder}"
 #: static/scripts/app/views/share-admin-repo.js:69
 msgid "Successfully modified permission"
 msgstr "Oprávnění byla úspěšně změněna"
+
+#: static/scripts/app/views/share-admin-folder.js:91
+#: static/scripts/app/views/share-admin-repo.js:99
+#: static/scripts/app/views/share-admin-share-link.js:55
+#: static/scripts/app/views/share-admin-upload-link.js:54
+msgid "Successfully deleted 1 item"
+msgstr "Úspěšně smazána 1 položka"
 
 #: static/scripts/app/views/share.js:67
 #: static/scripts/sysadmin-app/views/share.js:41
@@ -863,27 +876,27 @@ msgstr "Úspěch"
 msgid "Successfully unstared {placeholder}"
 msgstr "Úspěšně označeno hvězdou {placeholder}"
 
-#: static/scripts/common.js:620
+#: static/scripts/common.js:632
 msgid "Search users or enter emails and press Enter"
 msgstr "Vyhledejte uživatele nebo emaily a stiskněte Enter"
 
-#: static/scripts/common.js:628 static/scripts/common.js:699
+#: static/scripts/common.js:640 static/scripts/common.js:711
 msgid "Please enter 1 or more character"
 msgstr "Prosím zadejte 1 nebo více znaků"
 
-#: static/scripts/common.js:630 static/scripts/common.js:701
+#: static/scripts/common.js:642 static/scripts/common.js:713
 msgid "Searching..."
 msgstr "Vyhledávání..."
 
-#: static/scripts/common.js:631 static/scripts/common.js:702
+#: static/scripts/common.js:643 static/scripts/common.js:714
 msgid "Loading failed"
 msgstr "Načítání selhalo"
 
-#: static/scripts/common.js:691
+#: static/scripts/common.js:703
 msgid "Search groups"
 msgstr "Vyhledej skupiny"
 
-#: static/scripts/common.js:1026
+#: static/scripts/common.js:1038
 msgid "Packaging..."
 msgstr "Balím..."
 
@@ -951,11 +964,6 @@ msgstr "Uživatel {user} byl smazán"
 #: static/scripts/sysadmin-app/views/device-errors.js:39
 msgid "Successfully clean all errors."
 msgstr "Úspěšně vačištěny všechny chyba"
-
-#: static/scripts/sysadmin-app/views/device-trusted-ipaddress.js:39
-#: static/scripts/sysadmin-app/views/group.js:44
-msgid "Successfully deleted 1 item."
-msgstr "Úspěšně smazána 1 položka"
 
 #: static/scripts/sysadmin-app/views/group-member.js:81
 msgid "Delete Member"

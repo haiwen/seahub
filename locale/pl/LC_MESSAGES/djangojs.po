@@ -8,9 +8,9 @@ msgid ""
 msgstr ""
 "Project-Id-Version: seahub\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2017-12-19 15:54+0800\n"
-"PO-Revision-Date: 2017-10-26 15:28+0000\n"
-"Last-Translator: K.S. <adrespubliczny+transifex@gmail.com>\n"
+"POT-Creation-Date: 2018-01-12 18:04+0800\n"
+"PO-Revision-Date: 2018-01-12 09:55+0000\n"
+"Last-Translator: zheng xie <xiez1989@gmail.com>\n"
 "Language-Team: Polish (http://www.transifex.com/haiwen/seahub/language/pl/)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -19,12 +19,12 @@ msgstr ""
 "Plural-Forms: nplurals=4; plural=(n==1 ? 0 : (n%10>=2 && n%10<=4) && (n%100<12 || n%100>14) ? 1 : n!=1 && (n%10>=0 && n%10<=1) || (n%10>=5 && n%10<=9) || (n%100>=12 && n%100<=14) ? 2 : 3);\n"
 
 #: static/scripts/app/models/deleted-repo.js:19
-#: static/scripts/app/models/repo.js:59 static/scripts/common.js:319
+#: static/scripts/app/models/repo.js:59 static/scripts/common.js:320
 msgid "Encrypted library"
 msgstr "Biblioteka zaszyfrowana"
 
 #: static/scripts/app/models/deleted-repo.js:21
-#: static/scripts/app/models/repo.js:61 static/scripts/common.js:323
+#: static/scripts/app/models/repo.js:61 static/scripts/common.js:324
 #: static/scripts/sysadmin-app/models/trash-repo.js:14
 msgid "Read-Write library"
 msgstr "Biblioteka do odczytu i zapisu"
@@ -34,7 +34,7 @@ msgstr "Biblioteka do odczytu i zapisu"
 #: static/scripts/app/views/fileupload.js:378
 #: static/scripts/app/views/fileupload.js:392
 #: static/scripts/app/views/fileupload.js:404
-#: static/scripts/app/views/fileupload.js:416 static/scripts/common.js:586
+#: static/scripts/app/views/fileupload.js:416 static/scripts/common.js:598
 msgid "Just now"
 msgstr "Przed chwilą"
 
@@ -65,7 +65,7 @@ msgstr "Hasło jest zbyt krótkie"
 msgid "Passwords don't match"
 msgstr "Hasła nie są identyczne"
 
-#: static/scripts/app/models/repo.js:63 static/scripts/common.js:321
+#: static/scripts/app/models/repo.js:63 static/scripts/common.js:322
 msgid "Read-Only library"
 msgstr "Biblioteka tylko do odczytu"
 
@@ -93,7 +93,7 @@ msgstr "Tylko odczyt"
 #: static/scripts/app/views/group.js:110 static/scripts/app/views/group.js:143
 #: static/scripts/app/views/groups.js:83
 #: static/scripts/app/views/groups.js:134
-#: static/scripts/app/views/invitations.js:78
+#: static/scripts/app/views/invitations.js:119
 #: static/scripts/app/views/my-deleted-repos.js:86
 #: static/scripts/app/views/myhome-repos.js:104
 #: static/scripts/app/views/myhome-shared-repos.js:81
@@ -151,8 +151,8 @@ msgstr "Usunięte katalogi"
 #: static/scripts/app/views/dialogs/repo-folder-perm-admin.js:302
 #: static/scripts/app/views/dialogs/repo-history-settings.js:83
 #: static/scripts/app/views/dialogs/repo-history-settings.js:142
-#: static/scripts/app/views/dir.js:1292 static/scripts/app/views/dir.js:1326
-#: static/scripts/app/views/dir.js:1395
+#: static/scripts/app/views/dir.js:1291 static/scripts/app/views/dir.js:1325
+#: static/scripts/app/views/dir.js:1394
 #: static/scripts/app/views/dirent-details.js:164
 #: static/scripts/app/views/dirent-grid.js:338
 #: static/scripts/app/views/dirent-grid.js:379
@@ -175,14 +175,14 @@ msgstr "Usunięte katalogi"
 #: static/scripts/app/views/group-settings.js:287
 #: static/scripts/app/views/group-settings.js:327
 #: static/scripts/app/views/group-settings.js:362
-#: static/scripts/app/views/invitations.js:146
+#: static/scripts/app/views/invitations.js:188
 #: static/scripts/app/views/repo-folder-perm-item.js:86
 #: static/scripts/app/views/repo-folder-perm-item.js:127
 #: static/scripts/app/views/repo.js:206 static/scripts/app/views/repo.js:281
 #: static/scripts/app/views/repo.js:398 static/scripts/app/views/repo.js:440
 #: static/scripts/app/views/share.js:423 static/scripts/app/views/share.js:808
-#: static/scripts/app/views/share.js:887 static/scripts/common.js:407
-#: static/scripts/common.js:496
+#: static/scripts/app/views/share.js:887 static/scripts/common.js:419
+#: static/scripts/common.js:508
 #: static/scripts/sysadmin-app/views/admin-login-logs.js:129
 #: static/scripts/sysadmin-app/views/admin-operation-logs.js:129
 #: static/scripts/sysadmin-app/views/dashboard.js:84
@@ -257,7 +257,7 @@ msgstr "Niepowodzenie."
 
 #: static/scripts/app/views/dialogs/dirent-mvcp.js:132
 #: static/scripts/app/views/dialogs/dirent-mvcp.js:163
-#: static/scripts/app/views/dir.js:1386
+#: static/scripts/app/views/dir.js:1385
 msgid "Canceled."
 msgstr "Anulowano."
 
@@ -287,7 +287,7 @@ msgstr "Zmień nazwę pliku"
 #: static/scripts/app/views/dir.js:622 static/scripts/app/views/dir.js:683
 #: static/scripts/app/views/dirent.js:477
 #: static/scripts/app/views/groups.js:112
-#: static/scripts/app/views/invitations.js:54
+#: static/scripts/app/views/invitations.js:58
 #: static/scripts/app/views/repo.js:175 static/scripts/app/views/repo.js:411
 #: static/scripts/sysadmin-app/views/device-trusted-ipaddresses.js:42
 #: static/scripts/sysadmin-app/views/dir.js:82
@@ -353,7 +353,7 @@ msgstr "Możesz wybrać tylko 1 element"
 #: static/scripts/app/views/group-manage-members.js:112
 #: static/scripts/app/views/group-members.js:75
 #: static/scripts/app/views/group.js:138 static/scripts/app/views/groups.js:78
-#: static/scripts/app/views/invitations.js:141
+#: static/scripts/app/views/invitations.js:183
 #: static/scripts/app/views/my-deleted-repos.js:81
 #: static/scripts/app/views/myhome-repos.js:99
 #: static/scripts/app/views/myhome-shared-repos.js:76
@@ -507,64 +507,64 @@ msgstr "Przenieś wybrane elementy do:"
 msgid "Copy selected item(s) to:"
 msgstr "Kopiuj wybrane elementy do:"
 
-#: static/scripts/app/views/dir.js:1179 static/scripts/app/views/dir.js:1347
+#: static/scripts/app/views/dir.js:1179 static/scripts/app/views/dir.js:1346
 msgid "Successfully moved %(name)s."
 msgstr "Pomyślnie przeniesiono %(name)s."
 
-#: static/scripts/app/views/dir.js:1181 static/scripts/app/views/dir.js:1349
+#: static/scripts/app/views/dir.js:1181 static/scripts/app/views/dir.js:1348
 msgid "Successfully moved %(name)s and 1 other item."
 msgstr "Pomyślnie przeniesiono %(name)s i 1 inny element."
 
-#: static/scripts/app/views/dir.js:1183 static/scripts/app/views/dir.js:1351
+#: static/scripts/app/views/dir.js:1183 static/scripts/app/views/dir.js:1350
 msgid "Successfully moved %(name)s and %(amount)s other items."
 msgstr "Pomyślnie przeniesiono %(name)s i %(amount)s innych elementów."
 
-#: static/scripts/app/views/dir.js:1188 static/scripts/app/views/dir.js:1355
+#: static/scripts/app/views/dir.js:1188 static/scripts/app/views/dir.js:1354
 msgid "Successfully copied %(name)s."
 msgstr "Pomyślnie skopiowano %(name)s."
 
-#: static/scripts/app/views/dir.js:1190 static/scripts/app/views/dir.js:1357
+#: static/scripts/app/views/dir.js:1190 static/scripts/app/views/dir.js:1356
 msgid "Successfully copied %(name)s and 1 other item."
 msgstr "Pomyślnie skopiowano %(name)s i 1 inny element."
 
-#: static/scripts/app/views/dir.js:1192 static/scripts/app/views/dir.js:1359
+#: static/scripts/app/views/dir.js:1192 static/scripts/app/views/dir.js:1358
 msgid "Successfully copied %(name)s and %(amount)s other items."
 msgstr "Pomyślnie skopiowano %(name)s i %(amount)s innych elementów."
 
-#: static/scripts/app/views/dir.js:1204
+#: static/scripts/app/views/dir.js:1203
 msgid "Internal error. Failed to move %(name)s and %(amount)s other item(s)."
 msgstr "Błąd wewnętrzny. Nie można przenieść %(name)s i %(amount)s innych elementów."
 
-#: static/scripts/app/views/dir.js:1206
+#: static/scripts/app/views/dir.js:1205
 msgid "Internal error. Failed to move %(name)s."
 msgstr "Błąd wewnętrzny. Nie można przenieść %(name)s."
 
-#: static/scripts/app/views/dir.js:1210
+#: static/scripts/app/views/dir.js:1209
 msgid "Internal error. Failed to copy %(name)s and %(amount)s other item(s)."
 msgstr "Błąd wewnętrzny. Nie można skopiować %(name)s i %(amount)s innych elementów."
 
-#: static/scripts/app/views/dir.js:1212
+#: static/scripts/app/views/dir.js:1211
 msgid "Internal error. Failed to copy %(name)s."
 msgstr "Błąd wewnętrzny. Nie można skopiować %(name)s."
 
-#: static/scripts/app/views/dir.js:1254
+#: static/scripts/app/views/dir.js:1253
 msgid "Moving file %(index)s of %(total)s"
 msgstr "Przenoszenie pliku %(index)s z %(total)s"
 
-#: static/scripts/app/views/dir.js:1254
+#: static/scripts/app/views/dir.js:1253
 msgid "Copying file %(index)s of %(total)s"
 msgstr "Kopiowanie pliku %(index)s z %(total)s"
 
-#: static/scripts/app/views/dir.js:1280
+#: static/scripts/app/views/dir.js:1279
 msgid "Failed to move %(name)s"
 msgstr "Nie można przenieść %(name)s"
 
-#: static/scripts/app/views/dir.js:1280
+#: static/scripts/app/views/dir.js:1279
 msgid "Failed to copy %(name)s"
 msgstr "Nie można skopiować %(name)s"
 
-#: static/scripts/app/views/dirent-details.js:99 static/scripts/common.js:629
-#: static/scripts/common.js:700
+#: static/scripts/app/views/dirent-details.js:99 static/scripts/common.js:641
+#: static/scripts/common.js:712
 msgid "No matches"
 msgstr "Brak wyników"
 
@@ -747,12 +747,18 @@ msgid "Are you sure you want to quit this group?"
 msgstr "Czy na pewno chcesz opuścić tę grupę?"
 
 #: static/scripts/app/views/invitation.js:37
-#: static/scripts/app/views/share-admin-folder.js:91
-#: static/scripts/app/views/share-admin-repo.js:99
-#: static/scripts/app/views/share-admin-share-link.js:55
-#: static/scripts/app/views/share-admin-upload-link.js:54
-msgid "Successfully deleted 1 item"
-msgstr "Pomyślnie usunięto 1 element"
+#: static/scripts/sysadmin-app/views/device-trusted-ipaddress.js:39
+#: static/scripts/sysadmin-app/views/group.js:44
+msgid "Successfully deleted 1 item."
+msgstr "Pomyślnie usunięto 1 element."
+
+#: static/scripts/app/views/invitations.js:94
+msgid "Successfully invited %(email)."
+msgstr ""
+
+#: static/scripts/app/views/invitations.js:97
+msgid "Successfully invited %(email) and %(num) other people."
+msgstr ""
 
 #: static/scripts/app/views/notifications.js:58
 msgid "You have logged out."
@@ -805,6 +811,13 @@ msgstr "Pomyślnie dodano etykiety do biblioteki {placeholder}"
 #: static/scripts/app/views/share-admin-repo.js:69
 msgid "Successfully modified permission"
 msgstr "Pomyślnie zmieniono uprawnienia"
+
+#: static/scripts/app/views/share-admin-folder.js:91
+#: static/scripts/app/views/share-admin-repo.js:99
+#: static/scripts/app/views/share-admin-share-link.js:55
+#: static/scripts/app/views/share-admin-upload-link.js:54
+msgid "Successfully deleted 1 item"
+msgstr "Pomyślnie usunięto 1 element"
 
 #: static/scripts/app/views/share.js:67
 #: static/scripts/sysadmin-app/views/share.js:41
@@ -861,27 +874,27 @@ msgstr "Sukces"
 msgid "Successfully unstared {placeholder}"
 msgstr "Pomyślnie usunięto {placeholder} z ulubionych"
 
-#: static/scripts/common.js:620
+#: static/scripts/common.js:632
 msgid "Search users or enter emails and press Enter"
 msgstr "Wyszukaj użytkowników lub podaj adresy email i naciśnij Enter."
 
-#: static/scripts/common.js:628 static/scripts/common.js:699
+#: static/scripts/common.js:640 static/scripts/common.js:711
 msgid "Please enter 1 or more character"
 msgstr "Proszę podać 1 lub więcej znaków"
 
-#: static/scripts/common.js:630 static/scripts/common.js:701
+#: static/scripts/common.js:642 static/scripts/common.js:713
 msgid "Searching..."
 msgstr "Wyszukiwanie..."
 
-#: static/scripts/common.js:631 static/scripts/common.js:702
+#: static/scripts/common.js:643 static/scripts/common.js:714
 msgid "Loading failed"
 msgstr "Niepowodzenie wczytywania"
 
-#: static/scripts/common.js:691
+#: static/scripts/common.js:703
 msgid "Search groups"
 msgstr "Szukaj grup"
 
-#: static/scripts/common.js:1026
+#: static/scripts/common.js:1038
 msgid "Packaging..."
 msgstr "Pakowanie..."
 
@@ -949,11 +962,6 @@ msgstr "Usunięto użytkownika {user}"
 #: static/scripts/sysadmin-app/views/device-errors.js:39
 msgid "Successfully clean all errors."
 msgstr "Pomyślnie wyczyszczono wszystkie błędy."
-
-#: static/scripts/sysadmin-app/views/device-trusted-ipaddress.js:39
-#: static/scripts/sysadmin-app/views/group.js:44
-msgid "Successfully deleted 1 item."
-msgstr "Pomyślnie usunięto 1 element."
 
 #: static/scripts/sysadmin-app/views/group-member.js:81
 msgid "Delete Member"
