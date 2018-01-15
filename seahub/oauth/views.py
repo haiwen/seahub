@@ -42,9 +42,6 @@ if ENABLE_OAUTH:
     }
     ATTRIBUTE_MAP.update(getattr(settings, 'OAUTH_ATTRIBUTE_MAP', {}))
 
-    session = OAuth2Session(client_id=CLIENT_ID,
-            scope=SCOPE, redirect_uri=REDIRECT_URL)
-
 def oauth_check(func):
     """ Decorator for check if OAuth valid.
     """
@@ -86,6 +83,9 @@ def oauth_login(request):
     Redirect the user/resource owner to the OAuth provider (i.e. Github)
     using an URL with a few key OAuth parameters.
     """
+    session = OAuth2Session(client_id=CLIENT_ID,
+                            scope=SCOPE, redirect_uri=REDIRECT_URL)
+
     try:
         authorization_url, state = session.authorization_url(
                 AUTHORIZATION_URL)
@@ -95,6 +95,7 @@ def oauth_login(request):
                 'error_msg': _('Error, please contact administrator.'),
                 }, context_instance=RequestContext(request))
 
+    request.session['oauth_state'] = state
     return HttpResponseRedirect(authorization_url)
 
 # Step 2: User authorization, this happens on the provider.
@@ -106,6 +107,10 @@ def oauth_callback(request):
     callback URL. With this redirection comes an authorization code included
     in the redirect URL. We will use that to obtain an access token.
     """
+    session = OAuth2Session(client_id=CLIENT_ID, scope=SCOPE,
+                            state=request.session.get('oauth_state', None),
+                            redirect_uri=REDIRECT_URL)
+
     try:
         session.fetch_token(TOKEN_URL, client_secret=CLIENT_SECRET,
                 authorization_response=request.get_full_path())
