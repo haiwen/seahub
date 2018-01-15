@@ -723,9 +723,12 @@ class UserNotification(models.Model):
             self.delete()
             return
 
-        msg = _('Guest %(user)s accepted your <a href="%(href)s">invitation</a> at %(time)s.') % {
+        # Use same msg as in notice_email.html, so there will be only one msg
+        # in django.po.
+        msg = _('Guest %(user)s accepted your <a href="%(url_base)s%(inv_url)s">invitation</a> at %(time)s.') % {
             'user': inv.accepter,
-            'href': settings.SITE_ROOT + '#invitations/',
+            'url_base': '',
+            'inv_url': settings.SITE_ROOT + '#invitations/',
             'time': inv.accept_time.strftime("%Y-%m-%d %H:%M:%S"),
         }
         return msg
