@@ -39,3 +39,4 @@ deps
 ghostdriver.log
 seahub/thumbnail/thumb/*
 .virtualenv
+tags

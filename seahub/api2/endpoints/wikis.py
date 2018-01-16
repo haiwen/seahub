@@ -73,3 +73,26 @@ class WikisView(APIView):
                                 content_type=content_type)
 
         return Response(wiki.to_dict())
+
+
+class WikiView(APIView):
+    authentication_classes = (TokenAuthentication, SessionAuthentication)
+    permission_classes = (IsAuthenticated, )
+    throttle_classes = (UserRateThrottle, )
+
+    def delete(self, request, slug):
+        """Delete a wiki.
+        """
+        username = request.user.username
+        try:
+            owner = Wiki.objects.get(slug=slug).username
+        except Wiki.DoesNotExist:
+            error_msg = 'Wiki not found.'
+            return api_error(status.HTTP_404_NOT_FOUND, error_msg)
+        if owner != username:
+            error_msg = 'Permission denied.'
+            return api_error(status.HTTP_403_FORBIDDEN, error_msg)
+
+        Wiki.objects.filter(slug=slug).delete()
+
+        return Response({"success": True})

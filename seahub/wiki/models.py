@@ -10,6 +10,7 @@ from seahub.utils import get_service_url
 from seahub.utils.timeutils import (timestamp_to_isoformat_timestr,
                                     datetime_to_isoformat_timestr)
 
+
 class WikiDoesNotExist(Exception):
     pass
 
