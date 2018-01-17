@@ -33,6 +33,8 @@ class RepoTest(BaseTestCase):
         self.assertIsNotNone(json_resp['root'])
         self.assertIsNotNone(json_resp['type'])
         self.assertIsNotNone(json_resp['file_count'])
+        self.assertIsNotNone(json_resp['groupid'])
+        self.assertIsNotNone(json_resp['group_name'])
 
     def test_can_delete(self):
         self.login_as(self.user)

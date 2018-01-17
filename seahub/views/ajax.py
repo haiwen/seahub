@@ -1044,49 +1044,6 @@ def space_and_traffic(request):
                             context_instance=RequestContext(request))
     return HttpResponse(json.dumps({"html": html}), content_type=content_type)
 
-def get_groups_by_user(request):
-    """List user groups.
-    """
-    username = request.user.username
-    if is_org_context(request):
-        org_id = request.user.org.org_id
-        return ccnet_api.get_org_groups_by_user(org_id, username)
-    else:
-        return seaserv.get_personal_groups_by_user(username)
-
-def get_group_repos(request, groups):
-    """Get repos shared to groups.
-    """
-
-    all_group_repos = []
-    if is_org_context(request):
-        org_id = request.user.org.org_id
-        for group in groups:
-            org_group_repos = seafile_api.get_org_group_repos(org_id, group.id)
-            for repo in org_group_repos:
-                # Convert repo properties due to the different collumns in Repo
-                # and SharedRepo
-                repo.share_type = 'group'
-                repo.user = seafile_api.get_org_repo_owner(repo.repo_id)
-                repo.user_perm = check_folder_permission(request, repo.repo_id, '/')
-                repo.group = group
-
-                all_group_repos.append(repo)
-    else:
-        for group in groups:
-            group_repos = seafile_api.get_repos_by_group(group.id)
-            for repo in group_repos:
-                # Convert repo properties due to the different collumns in Repo
-                # and SharedRepo
-                repo.share_type = 'group'
-                repo.user = seafile_api.get_repo_owner(repo.repo_id)
-                repo.user_perm = check_folder_permission(request, repo.repo_id, '/')
-                repo.group = group
-
-                all_group_repos.append(repo)
-
-    return all_group_repos
-
 def get_file_upload_url_ul(request, token):
     """Get file upload url in dir upload link.
 

@@ -84,7 +84,6 @@ from seahub.utils.file_op import check_file_lock
 from seahub.utils.timeutils import utc_to_local, datetime_to_isoformat_timestr
 from seahub.views import is_registered_user, check_folder_permission, \
     create_default_library, list_inner_pub_repos
-from seahub.views.ajax import get_groups_by_user, get_group_repos
 from seahub.views.file import get_file_view_path_and_perm, send_file_access_msg
 if HAS_FILE_SEARCH:
     from seahub_extra.search.views import search_keyword
@@ -601,7 +600,6 @@ class Repos(APIView):
                     "head_commit_id": r.head_cmmt_id,
                     "version": r.version,
                 }
-                
 
                 if r.repo_id in repos_with_admin_share_to:
                     repo['is_admin'] = True
@@ -611,8 +609,13 @@ class Repos(APIView):
                 repos_json.append(repo)
 
         if filter_by['group']:
-            groups = get_groups_by_user(request)
-            group_repos = get_group_repos(request, groups)
+            if is_org_context(request):
+                org_id = request.user.org.org_id
+                group_repos = seafile_api.get_org_group_repos_by_user(email,
+                        org_id)
+            else:
+                group_repos = seafile_api.get_group_repos_by_user(email)
+
             group_repos.sort(lambda x, y: cmp(y.last_modify, x.last_modify))
 
             # Reduce memcache fetch ops.
@@ -629,17 +632,18 @@ class Repos(APIView):
 
                 repo = {
                     "type": "grepo",
-                    "id": r.id,
-                    "owner": r.group.group_name,
-                    "groupid": r.group.id,
-                    "name": r.name,
+                    "id": r.repo_id,
+                    "name": r.repo_name,
+                    "groupid": r.group_id,
+                    "group_name": r.group_name,
+                    "owner": r.group_name,
                     "mtime": r.last_modify,
                     "modifier_email": r.last_modifier,
-                    "modifier_contact_email": contact_email_dict.get(r.last_modifier, ''),
                     "modifier_name": nickname_dict.get(r.last_modifier, ''),
+                    "modifier_contact_email": contact_email_dict.get(r.last_modifier, ''),
                     "size": r.size,
                     "encrypted": r.encrypted,
-                    "permission": check_permission(r.id, email),
+                    "permission": r.permission,
                     "root": '',
                     "head_commit_id": r.head_cmmt_id,
                     "version": r.version,
