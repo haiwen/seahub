@@ -316,10 +316,7 @@ def get_user_repos(username, org_id=None):
     if org_id is None:
         owned_repos = seafile_api.get_owned_repo_list(username)
         shared_repos = seafile_api.get_share_in_repo_list(username, -1, -1)
-        groups_repos = []
-        for group in seaserv.get_personal_groups_by_user(username):
-            # TODO: use seafile_api.get_group_repos
-            groups_repos += seaserv.get_group_repos(group.id, username)
+        groups_repos = seafile_api.get_group_repos_by_user(username)
         if CLOUD_MODE:
             public_repos = []
         else:
@@ -333,12 +330,12 @@ def get_user_repos(username, org_id=None):
             r.desc = r.repo_desc
             r.last_modify = r.last_modified
     else:
-        owned_repos = seafile_api.get_org_owned_repo_list(org_id, username)
-        shared_repos = seafile_api.get_org_share_in_repo_list(org_id, username,
-                                                              -1, -1)
-        groups_repos = []
-        for group in seaserv.get_org_groups_by_user(org_id, username):
-            groups_repos += seafile_api.get_org_group_repos(org_id, group.id)
+        owned_repos = seafile_api.get_org_owned_repo_list(org_id,
+                username)
+        shared_repos = seafile_api.get_org_share_in_repo_list(org_id,
+                username, -1, -1)
+        groups_repos = seafile_api.get_org_group_repos_by_user(username,
+                org_id)
         public_repos = seaserv.seafserv_threaded_rpc.list_org_inner_pub_repos(org_id)
 
         for r in shared_repos + groups_repos + public_repos:
