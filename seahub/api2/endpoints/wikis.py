@@ -62,7 +62,8 @@ class WikisView(APIView):
 
         username = request.user.username
         try:
-            wiki = Wiki.objects.add(name, permission, username, org_id)
+            wiki = Wiki.objects.add(name, username, permission=permission,
+                                    org_id=org_id)
         except DuplicateWikiNameError:
             result['error'] = _('%s is taken by others, please try another name.') % name
             return HttpResponse(json.dumps(result), status=400,
@@ -95,4 +96,4 @@ class WikiView(APIView):
 
         Wiki.objects.filter(slug=slug).delete()
 
-        return Response({"success": True})
+        return Response()

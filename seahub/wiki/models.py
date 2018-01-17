@@ -59,7 +59,8 @@ class DuplicateWikiNameError(Exception):
 
 
 class WikiManager(models.Manager):
-    def add(self, wiki_name, username, permission='private', org_id=-1):
+    def add(self, wiki_name, username, permission='private', repo_id=None,
+            org_id=-1):
         if not permission:
             permission = 'private'
 
@@ -68,17 +69,19 @@ class WikiManager(models.Manager):
         if self.filter(slug=slug).count() > 0:
             raise DuplicateWikiNameError
 
-        if org_id > 0:
-            repo_id = seafile_api.create_org_repo(wiki_name, '', username,
-                                                  passwd=None, org_id=org_id)
-        else:
-            repo_id = seafile_api.create_repo(wiki_name, '', username,
-                                              passwd=None)
+        if repo_id is None:     # create new repo to store the wiki pages
+            if org_id > 0:
+                repo_id = seafile_api.create_org_repo(wiki_name, '', username,
+                                                      passwd=None, org_id=org_id)
+            else:
+                repo_id = seafile_api.create_repo(wiki_name, '', username,
+                                                  passwd=None)
 
         wiki = self.model(username=username, name=wiki_name, slug=slug,
                           repo_id=repo_id, permission=permission)
         wiki.save(using=self._db)
         return wiki
+
 
 class Wiki(models.Model):
     """New wiki model to enable a user has multiple wikis and replace
@@ -108,11 +111,21 @@ class Wiki(models.Model):
 
     @property
     def updated_at(self):
+        assert len(self.repo_id) == 36
+
         repo = seafile_api.get_repo(self.repo_id)
         if not repo:
             return ''
 
         return repo.last_modify
+
+    def has_read_perm(self, user):
+        if self.permisson == 'public':
+            return True
+        elif self.permission == 'login-user':
+            return True if user.is_authenticated() else False
+        else:                   # private
+            return True if user.username == self.username else False
 
     def to_dict(self):
         return {

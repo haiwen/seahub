@@ -283,7 +283,7 @@ urlpatterns = patterns(
 
     ## user::wiki
     url(r'^api/v2.1/wikis/$', WikisView.as_view(), name='api-v2.1-wikis'),
-    url(r'^api/v2.1/wikis/(?P<slug>[^/]+)/$', WikiView.as_view(), name='api-v2.1-wikis'),
+    url(r'^api/v2.1/wikis/(?P<slug>[^/]+)/$', WikiView.as_view(), name='api-v2.1-wiki'),
 
     ## admin::sysinfo
     url(r'^api/v2.1/admin/sysinfo/$', SysInfo.as_view(), name='api-v2.1-sysinfo'),
