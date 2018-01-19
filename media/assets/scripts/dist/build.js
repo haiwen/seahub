@@ -1,1 +1,0 @@
-({mainConfigFile:"common.js",baseUrl:".",findNestedDependencies:!0,removeCombined:!0,dir:"dist",modules:[{name:"main"}]});
