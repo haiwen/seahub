@@ -3,7 +3,7 @@
 # This file is distributed under the same license as the PACKAGE package.
 # 
 # Translators:
-# 1resu <user1@systemausfall.org>, 2015-2016
+# 1resu <inactive+1resu@transifex.com>, 2015-2016
 # 3Stadt <matthieu@3-stadt.de>, 2017
 # A. Heß <schnuecks78@gmail.com>, 2016
 # Andreas Vollmer | HU Berlin <andreas.vollmer@cms.hu-berlin.de>, 2015-2018
