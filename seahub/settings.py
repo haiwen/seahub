@@ -483,7 +483,12 @@ ALLOWED_HOSTS = ['*']
 # Logging
 LOGGING = {
     'version': 1,
-    'disable_existing_loggers': True,
+
+    # Enable existing loggers so that gunicorn errors will be bubbled up when
+    # server side error page "Internal Server Error" occurs.
+    # ref: https://www.caktusgroup.com/blog/2015/01/27/Django-Logging-Configuration-logging_config-default-settings-logger/
+    'disable_existing_loggers': False,
+
     'formatters': {
         'standard': {
             'format': '%(asctime)s [%(levelname)s] %(name)s:%(lineno)s %(funcName)s %(message)s'
@@ -503,14 +508,6 @@ LOGGING = {
             'backupCount': 5,
             'formatter': 'standard',
         },
-        'request_handler': {
-            'level': 'INFO',
-            'class': 'logging.handlers.RotatingFileHandler',
-            'filename': os.path.join(LOG_DIR, 'seahub_django_request.log'),
-            'maxBytes': 1024*1024*100, # 100 MB
-            'backupCount': 5,
-            'formatter': 'standard',
-        },
         'mail_admins': {
             'level': 'ERROR',
             'filters': ['require_debug_false'],
@@ -524,7 +521,7 @@ LOGGING = {
             'propagate': True
         },
         'django.request': {
-            'handlers': ['request_handler', 'mail_admins'],
+            'handlers': ['default', 'mail_admins'],
             'level': 'INFO',
             'propagate': False
         },
