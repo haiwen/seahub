@@ -33,8 +33,6 @@ class RepoTest(BaseTestCase):
         self.assertIsNotNone(json_resp['root'])
         self.assertIsNotNone(json_resp['type'])
         self.assertIsNotNone(json_resp['file_count'])
-        self.assertIsNotNone(json_resp['groupid'])
-        self.assertIsNotNone(json_resp['group_name'])
 
     def test_can_delete(self):
         self.login_as(self.user)
@@ -220,6 +218,8 @@ class RepoTest(BaseTestCase):
         assert res_repo['root'] == ''
         assert res_repo['head_commit_id'] == share_repo.head_cmmt_id
         assert res_repo['version'] == share_repo.version
+        assert res_repo['groupid'] == self.group.id
+        assert res_repo['group_name'] == self.group.group_name
         self.remove_repo(share_repo.id)
 
     @patch('seahub.base.accounts.UserPermissions.can_view_org')
