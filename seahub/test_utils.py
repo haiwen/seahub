@@ -62,6 +62,18 @@ class Fixtures(Exam):
         return r
 
     @fixture
+    def enc_repo(self):
+        r = seafile_api.get_repo(self.create_repo(name='test-enc-repo', desc='',
+                                                  username=self.user.username,
+                                                  passwd='123'))
+
+        self.create_file(repo_id=r.id, parent_dir='/',
+                         filename='test.txt', username='test@test.com')
+
+        assert r is not None
+        return r
+
+    @fixture
     def file(self):
         return self.create_file(repo_id=self.repo.id,
                                 parent_dir='/',
@@ -328,6 +340,7 @@ class Fixtures(Exam):
 class BaseTestCase(TestCase, Fixtures):
     def tearDown(self):
         self.remove_repo(self.repo.id)
+        self.remove_repo(self.enc_repo.id)
 
     def login_as(self, user, password=None):
         if isinstance(user, basestring):
