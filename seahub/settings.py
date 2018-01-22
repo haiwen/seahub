@@ -13,6 +13,8 @@ PROJECT_ROOT = os.path.join(os.path.dirname(__file__), os.pardir)
 DEBUG = False
 TEMPLATE_DEBUG = DEBUG
 
+CLOUD_MODE = False
+
 ADMINS = (
     # ('Your Name', 'your_email@domain.com'),
 )
