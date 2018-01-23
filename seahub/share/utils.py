@@ -3,7 +3,7 @@ from seahub.constants import PERMISSION_ADMIN, PERMISSION_READ_WRITE
 from seahub.share.models import ExtraSharePermission, ExtraGroupsSharePermission
 
 import seaserv
-from seaserv import seafile_api
+from seaserv import seafile_api, ccnet_api
 
 def is_repo_admin(username, repo_id):
     is_administrator = ExtraSharePermission.objects.\
@@ -17,7 +17,7 @@ def is_repo_admin(username, repo_id):
 
     return is_administrator or belong_to_admin_group
 
-def share_dir_to_user(repo, path, owner, share_from, share_to, permission, org_id=None):
+def share_dir_to_user(repo, path, owner, share_to, permission, org_id=None):
     # Share  repo or subdir to user with permission(r, rw, admin).
     extra_share_permission = ''
     if permission == PERMISSION_ADMIN:
@@ -43,7 +43,7 @@ def share_dir_to_user(repo, path, owner, share_from, share_to, permission, org_i
     if path == '/' and extra_share_permission == PERMISSION_ADMIN:
         ExtraSharePermission.objects.create_share_permission(repo.repo_id, share_to, extra_share_permission)
 
-def share_dir_to_group(repo, path, owner, share_from, gid, permission, org_id=None):
+def share_dir_to_group(repo, path, owner, gid, permission, org_id=None):
     # Share  repo or subdir to group with permission(r, rw, admin).
     extra_share_permission = ''
     if permission == PERMISSION_ADMIN:
@@ -125,8 +125,56 @@ def update_group_dir_permission(repo_id, path, owner, gid, permission, org_id=No
                                                                    gid, 
                                                                    extra_share_permission)
 
+def unshare_dir_to_user(repo, path, repo_owner, shared_to, org_id=None):
+    """ unshare the user permission of repo/folder.
+    """
+    if org_id:
+        if path == '/':
+            seaserv.seafserv_threaded_rpc.org_remove_share(
+                    org_id, repo.repo_id, repo_owner, shared_to)
+        else:
+            seafile_api.org_unshare_subdir_for_user(
+                    org_id, repo.repo_id, path, repo_owner, shared_to)
+
+    else:
+        if path == '/':
+            seaserv.remove_share(repo.repo_id, repo_owner, shared_to)
+        else:
+            seafile_api.unshare_subdir_for_user(
+                    repo.repo_id, path, repo_owner, shared_to)
+
+    # Delete share permission at ExtraSharePermission table.
+    if path == '/':
+        ExtraSharePermission.objects.delete_share_permission(repo.repo_id, 
+                                                             shared_to)
+
+def unshare_dir_to_group(repo, path, repo_owner, group_id, org_id=None):
+    """ unshare the user permission of repo/folder 
+    """
+    if org_id:
+        # when calling seafile API to share authority related functions, change the uesrname to repo owner.
+        if path == '/':
+            seaserv.del_org_group_repo(repo.repo_id, org_id, group_id)
+        else:
+            seafile_api.org_unshare_subdir_for_group(
+                    org_id, repo.repo_id, path, repo_owner, group_id)
+    else:
+        if path == '/':
+            seafile_api.unset_group_repo(repo.repo_id, group_id, repo_owner)
+        else:
+            seafile_api.unshare_subdir_for_group(
+                    repo.repo_id, path, repo_owner, group_id)
+
+    # delete share permission if repo is deleted
+    if path == '/':
+        ExtraGroupsSharePermission.objects.delete_share_permission(repo.repo_id, 
+                                                                   group_id)
+
 def check_user_share_out_permission(repo_id, path, share_to, is_org=False):
-    # Return the permission you share to others.
+    """ Return the permissions you share with others.
+
+        Because in the operation you share with other, you can know the shared is folder or repo.
+    """
     path = None if path == '/' else path
     repo = seafile_api.get_shared_repo_by_path(repo_id, path, share_to, is_org)
     if not repo:
@@ -140,7 +188,10 @@ def check_user_share_out_permission(repo_id, path, share_to, is_org=False):
     return permission
 
 def check_user_share_in_permission(repo_id, share_to, is_org=False):
-    # Return the permission to share to you.
+    """ Return the permissions that others share with you.
+
+        Because the repo shared with you, you don't know if the repo is virtual repo.
+    """
     repo = seafile_api.get_shared_repo_by_path(repo_id, None, share_to, is_org)
     if not repo:
         return None
@@ -172,3 +223,65 @@ def check_group_share_in_permission(repo_id, group_id, is_org=False):
 
     extra_permission = ExtraGroupsSharePermission.objects.get_group_permission(repo_id, group_id)
     return extra_permission if extra_permission else repo.permission
+
+def has_shared_to_user(repo_id, path, username, org_id=None):
+    if org_id:
+        # when calling seafile API to share authority related functions, change the uesrname to repo owner.
+        repo_owner = seafile_api.get_org_repo_owner(repo_id)
+        if path == '/':
+            share_items = seafile_api.list_org_repo_shared_to(org_id,
+                                                              repo_owner,
+                                                              repo_id)
+        else:
+            share_items = seafile_api.get_org_shared_users_for_subdir(org_id,
+                                                                      repo_id,
+                                                                      path,
+                                                                      repo_owner)
+    else:
+        repo_owner = seafile_api.get_repo_owner(repo_id)
+        if path == '/':
+            share_items = seafile_api.list_repo_shared_to(repo_owner, repo_id)
+        else:
+            share_items = seafile_api.get_shared_users_for_subdir(repo_id,
+                                                                  path, repo_owner)
+    return username in [item.user for item in share_items]
+
+def has_shared_to_group(repo_id, path, gid, org_id=None):
+    if org_id:
+        # when calling seafile API to share authority related functions, change the uesrname to repo owner.
+        repo_owner = seafile_api.get_org_repo_owner(repo_id)
+        if path == '/':
+            share_items = seafile_api.list_org_repo_shared_group(org_id,
+                    repo_owner, repo_id)
+        else:
+            share_items = seafile_api.get_org_shared_groups_for_subdir(org_id,
+                    repo_id, path, repo_owner)
+    else:
+        repo_owner = seafile_api.get_repo_owner(repo_id)
+        if path == '/':
+            share_items = seafile_api.list_repo_shared_group_by_user(repo_owner, repo_id)
+        else:
+            share_items = seafile_api.get_shared_groups_for_subdir(repo_id,
+                                                                   path, repo_owner)
+
+    for item in share_items:
+
+        group_id = item.group_id
+        group = ccnet_api.get_group(group_id)
+        ## Deleting groups that do not exist in ccnet but exist in the seafile.
+        if not group:
+            if org_id:
+                if path == '/':
+                    seafile_api.del_org_group_repo(repo_id, org_id, group_id)
+                else:
+                    seafile_api.org_unshare_subdir_for_group(
+                            org_id, repo_id, path, repo_owner, group_id)
+            else:
+                if path == '/':
+                    seafile_api.unset_group_repo(repo_id, group_id,
+                            repo_owner)
+                else:
+                    seafile_api.unshare_subdir_for_group(
+                            repo_id, path, repo_owner, group_id)
+
+    return gid in [item.group_id for item in share_items]

@@ -148,7 +148,7 @@ class GroupLibraries(APIView):
                     '', username, password)
 
         repo = seafile_api.get_repo(repo_id)
-        share_dir_to_group(repo, '/', username, username, group_id,
+        share_dir_to_group(repo, '/', username, group_id,
                 permission, org_id if is_org else None)
 
         # for activities
