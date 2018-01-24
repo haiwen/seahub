@@ -125,6 +125,12 @@ class FileTagManager(models.Manager):
             uuid=uuid
         )
 
+    def get_file_tags_by_parent_path(self, repo_id, parent_path):
+        uuid = FileUUIDMap.objects.get_fileuuidmaps_by_parent_path(repo_id, parent_path)
+        return super(FileTagManager, self).filter(
+            uuid=uuid
+        )
+
     def delete_file_tag_by_path(self, repo_id, parent_path, filename, is_dir, tagname):
         """ delete one specific filetag
             args:
@@ -202,4 +208,4 @@ class FileTag(models.Model):
     objects = FileTagManager()
 
     def to_dict(self):
-        return {'id': self.tag.id, 'name': self.tag.name, 'creator': self.username}
+        return {'id': self.tag.id, 'name': self.tag.name, 'creator': self.username, 'filename': self.uuid.filename}
