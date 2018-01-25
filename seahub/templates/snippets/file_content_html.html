@@ -4,7 +4,7 @@
 content of files that can be viewed online shows here.
 For details please refer to 'snippets/file_content_js.html'.
 {% endcomment %}
-<div id="file-view" {% if filetype == 'Image' and not err %}class="image-file-view"{% endif %}>
+<div id="file-view" {% if filetype == 'Image' or filetype == 'SVG' and not err %}class="image-file-view"{% endif %}>
     {% include 'snippets/file_encoding.html' %}
     {% if not err %}
         {% if filetype == 'Text' or filetype == 'Markdown' %}
@@ -30,6 +30,11 @@ For details please refer to 'snippets/file_content_js.html'.
             {% endif %}
             <span class="loading-icon"></span>
             <img src="" alt="{{ file_name }}" id="image-view" class="hide" />
+        {% endif %}
+
+        {% if filetype == 'SVG' %}
+            <span class="loading-icon"></span>
+            <img src="{{raw_path}}" alt="{{ file_name }}" id="svg-view" class="hide" />
         {% endif %}
         
         {% if filetype == 'Document' or filetype == 'PDF' and not use_pdfjs %} 

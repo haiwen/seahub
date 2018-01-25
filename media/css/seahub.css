@@ -2783,8 +2783,11 @@ button.sf-dropdown-toggle:focus {
     font-size:0;
     line-height:0;
 }
+#svg-view {
+    max-width:calc(100% - 4px);
+    max-height:calc(100% - 4px);
+}
 #docu-view,
-#svg-view,
 #md-view,
 #md-edit {
     background:#fff;
@@ -2825,10 +2828,6 @@ button.sf-dropdown-toggle:focus {
 .anchor:hover {
    text-decoration:none;
 }
-#svg-view {
-    min-height:500px;/*for ff*/
-}
-#svg-view,
 #pdf {
     width:950px;
     margin:0 auto;
@@ -2856,7 +2855,6 @@ button.sf-dropdown-toggle:focus {
 #md-view {
     padding:40px 96px;
 }
-/* for repo, file_view page. */
 #side-toolbar {
     position:fixed;
     right:0;
