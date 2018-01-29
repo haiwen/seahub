@@ -20,6 +20,7 @@ from seahub.base.accounts import User
 from seahub.utils.file_size import get_file_size_unit
 from seahub.base.templatetags.seahub_tags import email2nickname,\
         email2contact_email
+from seahub.share.models import ExtraSharePermission, ExtraGroupsSharePermission
 
 TRAVIS = 'TRAVIS' in os.environ
 
@@ -264,6 +265,12 @@ class Fixtures(Exam):
         seafile_api.share_repo(self.repo.id, self.user.username,
                 self.admin.username, 'rw')
 
+    def share_repo_to_admin_with_admin_permission(self):
+        # share user's repo to admin with 'admin' permission
+        seafile_api.share_repo(self.repo.id, self.user.username,
+                self.admin.username, 'rw')
+        ExtraSharePermission.objects.create_share_permission(self.repo.id, self.admin.username, 'admin')
+
     def share_org_repo_to_org_admin_with_rw_permission(self):
         seaserv.seafserv_threaded_rpc.org_add_share(self.org.org_id, self.org_repo.repo_id, 
                                                     self.org_user.username, self.org_admin.username,
@@ -309,6 +316,11 @@ class Fixtures(Exam):
     def share_repo_to_group_with_rw_permission(self):
         seafile_api.set_group_repo(
                 self.repo.id, self.group.id, self.user.username, 'rw')
+
+    def share_repo_to_group_with_admin_permission(self):
+        seafile_api.set_group_repo(
+                self.repo.id, self.group.id, self.user.username, 'rw')
+        ExtraGroupsSharePermission.objects.create_share_permission(self.repo.id, self.group.id, 'admin')
 
     def share_org_repo_to_org_group_with_r_permission(self):
         seafile_api.add_org_group_repo(self.org_repo.repo_id, self.org.org_id,
