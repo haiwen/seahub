@@ -1,8 +1,10 @@
 # -*- coding: utf-8 -*-
 import json
-from mock import patch
 
+from mock import patch
+from seaserv import seafile_api
 from django.core.urlresolvers import reverse
+
 from seahub.test_utils import BaseTestCase
 from seahub.share.models import FileShare
 from seahub.api2.permissions import CanGenerateShareLink
@@ -102,6 +104,18 @@ class ShareLinksTest(BaseTestCase):
         assert 'f' in json_resp['link']
 
         self._remove_share_link(json_resp['token'])
+
+    def test_create_file_share_link_in_enc_repo(self):
+        self.login_as(self.user)
+
+        resp = self.client.post(self.url, {'path': '/', 'repo_id': self.enc_repo.id})
+        self.assertEqual(403, resp.status_code)
+
+    def test_create_file_share_link_in_other_repo(self):
+        self.login_as(self.admin)
+
+        resp = self.client.post(self.url, {'path': self.file_path, 'repo_id': self.repo_id})
+        self.assertEqual(403, resp.status_code)
 
     def test_create_file_share_link_with_permissions(self):
         self.login_as(self.user)
