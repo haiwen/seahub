@@ -18,7 +18,7 @@ define([
             this.imgIndex = options.imgIndex;
 
             this.render();
-            this.$el.modal({appendTo:'#main', focus: false});
+            this.$el.modal({focus: false});
             $('#simplemodal-container').css({'width':'auto', 'height':'auto'});
 
             var $input = this.$('[name="newname"]');

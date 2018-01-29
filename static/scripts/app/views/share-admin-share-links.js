@@ -12,7 +12,7 @@ define([
 
     var ShareAdminShareLinksView = Backbone.View.extend({
 
-        id: 'share-admin-download-links',
+        el: '.main-panel',
 
         template: _.template($('#share-admin-download-links-tmpl').html()),
 
@@ -20,12 +20,11 @@ define([
             this.links = new ShareAdminShareLinkCollection();
             this.listenTo(this.links, 'add', this.addOne);
             this.listenTo(this.links, 'reset', this.reset);
-            this.render();
         },
 
         events: {
-            'click .by-name': 'sortByName',
-            'click .by-time': 'sortByTime'
+            'click #share-admin-download-links .by-name': 'sortByName',
+            'click #share-admin-download-links .by-time': 'sortByTime'
         },
 
         // initialSort: dirs come first
@@ -107,8 +106,10 @@ define([
             return false;
         },
 
-        render: function() {
-            this.$el.html(this.template({'can_generate_upload_link': app.pageOptions.can_generate_upload_link}));
+        renderMainCon: function() {
+            this.$mainCon = $('<div class="main-panel-main" id="share-admin-download-links"></div>').html(this.template());
+            this.$el.append(this.$mainCon);
+
             this.$table = this.$('table');
             this.$sortByNameIcon = this.$('.by-name .sort-icon');
             this.$sortByTimeIcon = this.$('.by-time .sort-icon');
@@ -118,15 +119,11 @@ define([
         },
 
         hide: function() {
-            this.$el.detach();
-            this.attached = false;
+            this.$mainCon.detach();
         },
 
         show: function() {
-            if (!this.attached) {
-                this.attached = true;
-                $("#right-panel").html(this.$el);
-            }
+            this.renderMainCon();
             this.showContent();
         },
 

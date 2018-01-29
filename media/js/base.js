@@ -8,7 +8,7 @@ $('#tabs').tabs({cookie:{expires:1}});
 
 $(function() {
 
-    $('#my-info').click(function() {
+    $('.account-toggle').click(function() {
         var popup = $('#user-info-popup');
         popup.toggleClass('hide');
         if (!popup.hasClass('hide')) {
@@ -51,7 +51,7 @@ $(document).click(function(e) {
             popup.addClass('hide');
         }
     };
-    closePopup($('#user-info-popup'), $('#my-info'));
+    closePopup($('#user-info-popup'), $('.account-toggle'));
 });
 
 // search: disable submit when input nothing

@@ -8,12 +8,12 @@ define([
 
     var View = Backbone.View.extend({
         id: 'dirent-details',
-        className: 'details-panel right-side-panel',
+        className: 'details-panel',
 
         template:  _.template($('#dirent-details-tmpl').html()),
 
-        initialize: function() {
-            $("#main").append(this.$el);
+        initialize: function(options) {
+            this.dirView = options.dirView;
 
             var _this = this;
             $(document).keydown(function(e) {
@@ -21,10 +21,6 @@ define([
                 if (e.which == 27) {
                     _this.hide();
                 }
-            });
-
-            $(window).resize(function() {
-                _this.setConMaxHeight();
             });
         },
 
@@ -171,15 +167,8 @@ define([
             });
         },
 
-        setConMaxHeight: function() {
-            this.$('.right-side-panel-con').css({
-                'height': $(window).height() -  // this.$el `position:fixed; top:0;`
-                    this.$('.right-side-panel-hd').outerHeight(true)
-            });
-        },
-
         hide: function() {
-            this.$el.css({'right': '-320px'});
+            this.$el.hide();
         },
 
         close: function() {
@@ -188,10 +177,18 @@ define([
         },
 
         show: function(options) {
+            var _this = this;
             this.data = options;
             this.render();
-            this.$el.css({'right': '0px'});
-            this.setConMaxHeight();
+
+            if ($('#' + this.id).length == 0) {
+                this.dirView.$mainCon.append(this.$el);
+                if (!this.$el.is(':visible')) {
+                    this.$el.show();
+                }
+            } else {
+                this.$el.show();
+            }
         },
 
         showImg: function() {

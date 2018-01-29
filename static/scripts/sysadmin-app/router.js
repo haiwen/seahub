@@ -57,15 +57,14 @@ define([
         },
 
         initialize: function() {
-            $('#initial-loading-view').hide();
+            $('#initial-loading').hide()
+                .next('.row').removeClass('hide');
 
             Common.prepareApiCsrf();
             Common.initLocale();
 
+            this.accountView = new AccountView();
             this.sideNavView = new SideNavView();
-            app.ui = {
-                sideNavView: this.sideNavView
-            };
 
             this.dashboardView = new DashboardView();
             this.desktopDevicesView = new DesktopDevicesView();
@@ -88,7 +87,10 @@ define([
             this.adminOperationLogsview = new AdminOperationLogsview();
             this.adminLoginLogsView = new AdminLoginLogsView();
 
-            app.ui.accountView = this.accountView = new AccountView();
+            app.ui = {
+                sideNavView: this.sideNavView,
+                accountView: this.accountView
+            };
 
             this.currentView = this.dashboardView;
 

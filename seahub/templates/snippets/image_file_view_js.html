@@ -1,6 +1,5 @@
 function setFileViewAreaHeight() {
     var $fileView = $('#file-view');
-    $fileView.outerHeight($(window).height() - $fileView.offset().top);
 
     var $arrow = $('#img-prev, #img-next');
     $arrow.css({'top': ($fileView.outerHeight() - $arrow.height())/2});

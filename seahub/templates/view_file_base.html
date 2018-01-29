@@ -12,27 +12,27 @@
     width:100%;
     padding:0 15px 12px;
     border-bottom:1px solid #c9c9c9;
+    display:flex;
+    justify-content:space-between;
+    flex-shrink:0;
 }
 #file-view {
     border:none;
     border-right:4px solid transparent;
     margin-top:0;
-    -webkit-transition: margin-right 0.3s ease;
-    -moz-transition: margin-right 0.3s ease;
-    transition: margin-right 0.3s ease;
 }
 #file-discussions {
-    box-shadow:none;
+    width:400px;
 }
 </style>
 {% endblock %}
 
 {% block header_css_class %}hide{% endblock %}
-{% block main_css_class %}{% endblock %} {# remove the padding-top css #}
+{% block main_class %}ovhd d-flex fd-col{% endblock %}
 
 {% block main_content %}
-    <div id="view-hd" class="ovhd">
-        <div class="fleft">
+    <div id="view-hd">
+        <div>
             <h2 class="file-view-hd">
                 <span class="vam">{{ filename }}</span>
                 {% if is_starred %}
@@ -56,7 +56,7 @@
             </div>
         </div>
 
-        <div class="sf-btn-group file-view-op fright">
+        <div class="sf-btn-group file-view-op">
             <a class="sf-btn-group-btn sf-btn-group-btn-first sf-btn-link op-icon sf2-icon-folder" href="{% url 'view_common_lib_dir' repo.id parent_dir|strip_slash %}" title="{% trans "Open parent folder" %}"></a>
 
             {% if can_lock_unlock_file %}
@@ -89,19 +89,21 @@
             <button id="discuss" class="sf-btn-group-btn sf-btn-group-btn-last op-icon sf2-icon-msgs" title="{% trans "Comment" %}"></button>
         </div>
 
-        <div id="file-discussions" class="right-side-panel"></div>
     </div>
 
-    <div id="file-view" {% if filetype == 'Image' and not err %}class="image-file-view"{% endif %}>
-      {% if err %}
-        <div id="file-view-tip">
-        {% if err != 'invalid extension' %}
-            <p class="error">{{ err }}</p>
-        {% endif %}
+    <div class="d-flex flex-auto ovhd"> {# 'ovhd' is for Firefox #}
+        <div id="file-view" class="flex-1 ov-auto {% block file_view_extra_class %}{% endblock %}">
+          {% if err %}
+            <div id="file-view-tip">
+            {% if err != 'invalid extension' %}
+                <p class="error">{{ err }}</p>
+            {% endif %}
+            </div>
+          {% else %}
+              {% block file_view %}{% endblock %}
+          {% endif %}
         </div>
-      {% else %}
-          {% block file_view %}{% endblock %}
-      {% endif %}
+        <div id="file-discussions" class="comments-panel" style="display:none;"></div>
     </div>
 
     {% include "snippets/file_share_popup.html" %}
@@ -113,17 +115,17 @@
     </div>
 
 <script type="text/template" id="discussion-panel-tmpl">
-    <div class="right-side-panel-hd file-discussions-hd ovhd">
-        <a href="#" title="{% trans "Close" %}" aria-label="{% trans "Close" %}" class="sf-popover-close js-close sf2-icon-x1 op-icon fleft"></a>
-        <h3 class="right-side-panel-title">{% trans "Comments" %}</h3>
+    <div class="comments-panel-hd file-discussions-hd ovhd">
+        <a href="#" title="{% trans "Close" %}" aria-label="{% trans "Close" %}" class="sf-popover-close js-close sf2-icon-x1 op-icon"></a>
+        <h3 class="comments-panel-title">{% trans "Comments" %}</h3>
     </div>
-    <div class="right-side-panel-con file-discussions-con">
+    <div class="comments-panel-con file-discussions-con">
         <div class="loading-icon loading-tip"></div>
         <ul class="file-discussion-list hide"></ul>
         <p class="no-discussion-tip hide">{% trans "No comment yet." %}</p>
         <p class="error hide"></p>
     </div>
-    <div class="right-side-panel-footer file-discussions-footer">
+    <div class="comments-panel-footer file-discussions-footer">
         <form action="" method="post" class="msg-form">
             <img src="{% avatar_url request.user 64 %}" alt="" width="32" class="avatar-circle fleft" />
             <div class="msg-body">
@@ -270,20 +272,6 @@ function setToolbarPos() {
 })();
 $(window).load(setToolbarPos).resize(setToolbarPos);
 
-{% if filetype == 'PDF' and use_pdfjs and not err %}
-{% elif filetype == 'Image' and not err %}
-{% else %}
-function setFileViewAreaHeight() {
-    var $fileView = $('#file-view');
-    $('#file-view').css({
-        'max-height': $(window).height() - $fileView.offset().top,
-        'overflow': 'auto'
-    });
-}
-$(window).load(setFileViewAreaHeight).resize(setFileViewAreaHeight);
-{% endif %}
-
-
 {% if highlight_keyword %}
 var ref_list = document.referrer.split('?');
 // referrer is 'search result' page, i.e, '{{SITE_ROOT}}search/?q=xx..'
@@ -330,7 +318,6 @@ var fileDiscussions = {
     init: function() {
         var _this = this;
 
-        this.setPosition();
         this.setLocale();
 
         // events
@@ -362,10 +349,6 @@ var fileDiscussions = {
 
     },
 
-    setPosition: function() {
-        this.$el.css({'top': $('#file-view').offset().top});
-    },
-
     setLocale: function() {
         var lang_code = '{{LANGUAGE_CODE}}';
         var m_lang_code;
@@ -394,27 +377,23 @@ var fileDiscussions = {
 
     show: function() {
         this.render();
-        this.$el.css({'right': 0});
-        $('#file-view').css({'margin-right': 400});
+        this.$el.show();
 
         // pdf file view with pdf.js; text file view; #file-view-tip
         $('#pdf, .CodeMirror, #file-view-tip').css({'width':'auto', 'margin':'0 10px'});
         // encoding selector
         $('#file-enc-cont').css({'width': 'auto', 'margin-right':'10px'});
 
-        this.setConHeight();
         this.getContent();
     },
 
     hide: function() {
-        $('#file-view').css({'margin-right': 0});
 
         // pdf file view with pdf.js; text file view; #file-view-tip
         // encoding selector
         $('#pdf, .CodeMirror, #file-enc-cont, #file-view-tip').removeAttr('style');
 
-        this.$el.css({'right': '-400px'});
-        this.$el.empty();
+        this.$el.empty().hide();
     },
 
     getContent: function() {
@@ -522,15 +501,6 @@ var fileDiscussions = {
         this.$listContainer.append($item);
     },
 
-    setConHeight: function() {
-        $('.file-discussions-con', this.$el).css({
-            'max-height': $(window).height()
-                - this.$el.offset().top
-                - $('.file-discussions-hd', this.$el).outerHeight(true)
-                - $('.file-discussions-footer', this.$el).outerHeight(true)
-        });
-    },
-
     scrollConToBottom: function() {
         var $el = $('.file-discussions-con', this.$el);
         $el.scrollTop($el[0].scrollHeight - $el[0].clientHeight);
@@ -583,7 +553,7 @@ var fileDiscussions = {
 fileDiscussions.init();
 
 $('#discuss').click(function() {
-    if (parseInt(fileDiscussions.$el.css('right')) == 0) {
+    if (fileDiscussions.$el.is(':visible')) {
         fileDiscussions.hide();
     } else {
         fileDiscussions.show();
@@ -594,9 +564,6 @@ $(document).keydown(function(e) {
     if (e.which == 27) {
         fileDiscussions.hide();
     }
-});
-$(window).resize(function() {
-    fileDiscussions.setConHeight();
 });
 
 // for 'go back'

@@ -23,86 +23,89 @@
 </head>
 
 <body>
-    <div id="wrapper" role="application" class="{{ LANGUAGE_CODE }}">
+    <div id="wrapper" role="application" class="{{ LANGUAGE_CODE }} h100 d-flex fd-col">
         <!--[if lt IE 10]>
-        <p id="top-browser-tip" class="top-bar fixed-top-bar">{% trans "We no longer support this version of IE. Please upgrade it to version 10 or above." %} <span id="top-browser-tip-close" class="top-bar-click">{% trans "Close" %}</span></p>
+        <p id="top-browser-tip" class="top-bar>{% trans "We no longer support this version of IE. Please upgrade it to version 10 or above." %} <span id="top-browser-tip-close" class="top-bar-click">{% trans "Close" %}</span></p>
         <![endif]-->
         {% block info_bar_message %}
         {% if request.user.is_authenticated and request.cur_note %}
-        <div id="info-bar" class="fixed-top-bar">
+        <div id="info-bar">
             <p id="info-bar-info">{{ request.cur_note.message|urlize }}</p>
             <span class="close sf2-icon-x1 op-icon" title="{% trans "Close" %}"></span>
         </div>
         {% endif %}
         {% endblock info_bar_message %}
 
-        <div id="header" role="banner" class="navbar navbar-fixed-top">
-            <div id="header-inner">
-                {% block notice_panel %}{% endblock %}
-                <a href="{{ SITE_ROOT }}" id="logo" class="hidden-sm-down fleft">
-                    {% if seacloud_mode %}
-                    <img src="{{ MEDIA_URL }}img/seacloud_logo.png?t=1398068110" title="Seacloud" alt="logo" width="186" height="31" />
-                    {% else %}
-                    <img src="{{ MEDIA_URL }}{{ logo_path }}" title="{{ site_title }}" alt="logo" width="{{logo_width}}" height="{{logo_height}}" />
-                    {% endif %}
-                </a>
-
-                <button class="sf2-icon-list-view side-nav-toggle hidden-md-up" title="{% trans "Side Nav Menu" %}" id="js-toggle-side-nav" aria-label="{% trans "Side Nav Menu" %}"></button>
-
-                <div class="fright">
-                    {% if has_file_search %}
-                        {% include 'snippets/search_form.html' %}
-                    {% endif %}
-
-                    <div id="notifications" class="fleft">
-                        <a href="#" class="no-deco" id="notice-icon" title="{% trans "Notifications" %}" aria-label="{% trans "Notifications" %}">
-                            <span class="sf2-icon-bell"></span>
-                            <span class="num hide">0</span>
-                        </a>
-                    </div>
-
-                    {% if show_logout_icon %}
-                    <a id="logout-icon" href="{{ SITE_ROOT }}accounts/logout/" class="no-deco fleft" title="{% trans "Log out" %}" aria-label="{% trans "Log out" %}"><span class="sf2-icon-logout"></span></a>
-                    {% endif %}
-
-                    <div id="account" class="fright">
-                        <a id="my-info" href="#" class="no-deco" aria-label="{% trans "View profile and more" %}">
-                            {% avatar request.user 36 %} <span class="icon-caret-down vam"></span>
-                        </a>
-                    </div>
-                </div>
-            </div>
-        </div>
-
-        <div id="main" class="clear container-fluid top-padding">
-            <div class="row initial-loading">
+        <div id="main" class="container-fluid w100 flex-auto ovhd d-flex fd-col"> {# 'ovhd' is for firefox #}
+            <div class="initial-loading">
                 <span class="loading-icon loading-tip"></span>
             </div>
 
-            <div class="row main-content hide">
-                <div class="side-nav side-tabnav home-side-nav col-md-3" id="side-nav" role="navigation"></div>
-                <div id="right-panel" class="col-md-9 col-md-offset-3">
-                    {% block right_panel %}{% endblock %}
+            <div class="row main-content flex-auto ovhd d-flex hide"> {# 'ovhd' is for firefox #}
+                <div class="side-panel col-md-3">
+                    <div class="side-panel-top panel-top">
+                        <a href="{{ SITE_ROOT }}" id="logo">
+                            {% if seacloud_mode %}
+                            <img src="{{ MEDIA_URL }}img/seacloud_logo.png?t=1398068110" title="Seacloud" alt="logo" width="186" height="31" />
+                            {% else %}
+                            <img src="{{ MEDIA_URL }}{{ logo_path }}" title="{{ site_title }}" alt="logo" width="{{logo_width}}" height="{{logo_height}}" />
+                            {% endif %}
+                        </a>
+                        <a href="#" title="{% trans "Close" %}" aria-label="{% trans "Close" %}" class="sf2-icon-x1 sf-popover-close side-panel-close op-icon hidden-md-up js-close"></a>
+                    </div>
+                    <div id="side-nav" class="home-side-nav" role="navigation"></div> {# #side-nav: to be compatible with old code #}
+                </div>
+
+                <div class="col-md-9 main-panel flex-auto ovhd">
+                    <div class="main-panel-top panel-top">
+                        <span class="sf2-icon-menu side-nav-toggle hidden-md-up" title="{% trans "Side Nav Menu" %}" id="js-toggle-side-nav" aria-label="{% trans "Side Nav Menu" %}"></span>
+                        {# place for '<div class="cur-view-toolbar" id=""></div>' #}
+                        <div class="common-toolbar">
+                            {% if has_file_search %}
+                                {% include 'snippets/search_form.html' %}
+                            {% endif %}
+
+                            <div id="notifications">
+                                <a href="#" class="no-deco" id="notice-icon" title="{% trans "Notifications" %}" aria-label="{% trans "Notifications" %}">
+                                    <span class="sf2-icon-bell"></span>
+                                    <span class="num hide">0</span>
+                                </a>
+                            </div>
+
+                            {% if show_logout_icon %}
+                            <a id="logout-icon" href="{{ SITE_ROOT }}accounts/logout/" class="no-deco" title="{% trans "Log out" %}" aria-label="{% trans "Log out" %}"><span class="sf2-icon-logout"></span></a>
+                            {% endif %}
+
+                            <div id="account">
+                                <a id="my-info" href="#" class="account-toggle no-deco hidden-sm-down" aria-label="{% trans "View profile and more" %}">
+                                    {% avatar request.user 36 %} <span class="icon-caret-down vam"></span>
+                                </a>
+                                <span class="account-toggle sf2-icon-more mobile-icon hidden-md-up" aria-label="{% trans "View profile and more" %}"></span>
+                            </div>
+                        </div>
+                    </div>
+
+                    {# place for '<div class="main-panel-main" id=""></div>' #}
                 </div>
             </div>
+        </div> {# #main #}
 
-            <div id="confirm-popup" class="hide">
-                <div id="confirm-con"></div>
-                <button id="confirm-yes">{% trans "Yes"%}</button>
-                <button class="simplemodal-close">{% trans "No"%}</button>
-            </div>
+        <div id="confirm-popup" class="hide">
+            <div id="confirm-con"></div>
+            <button id="confirm-yes">{% trans "Yes"%}</button>
+            <button class="simplemodal-close">{% trans "No"%}</button>
+        </div>
 
-            <div id="guide-for-new" class="hide">
-                <span class="icon-lightbulb fleft" aria-hidden="true"></span>
-                <div class="txt">
-                    <h3 id="dialogTitle">{% blocktrans with site_name=site_name %}Welcome to {{site_name}}{% endblocktrans %}</h3>
-                    {% if user.permissions.can_add_repo %}
-                    <p>{% blocktrans with site_name=site_name %}{{site_name}} organizes files into libraries. Each library can be synced and shared separately. We have created a personal library for you. You can create more libraries later.{% endblocktrans %}</p>
-                    {% else %}
-                    <p>{% blocktrans with site_name=site_name %}{{site_name}} organizes files into libraries. Each library can be synced and shared separately. Howerver, since you are a guest user now, you can not create libraries.{% endblocktrans %}</p>
-                    {% endif %}
-                    <button class="simplemodal-close" style="margin:8px 0 0 0;">{% trans "Close" %}</button>
-                </div>
+        <div id="guide-for-new" class="hide">
+            <span class="icon-lightbulb fleft" aria-hidden="true"></span>
+            <div class="txt">
+                <h3 id="dialogTitle">{% blocktrans with site_name=site_name %}Welcome to {{site_name}}{% endblocktrans %}</h3>
+                {% if user.permissions.can_add_repo %}
+                <p>{% blocktrans with site_name=site_name %}{{site_name}} organizes files into libraries. Each library can be synced and shared separately. We have created a personal library for you. You can create more libraries later.{% endblocktrans %}</p>
+                {% else %}
+                <p>{% blocktrans with site_name=site_name %}{{site_name}} organizes files into libraries. Each library can be synced and shared separately. Howerver, since you are a guest user now, you can not create libraries.{% endblocktrans %}</p>
+                {% endif %}
+                <button class="simplemodal-close" style="margin:8px 0 0 0;">{% trans "Close" %}</button>
             </div>
         </div>
 

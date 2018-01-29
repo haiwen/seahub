@@ -340,7 +340,7 @@ define([
             var $yesBtn = $('#confirm-yes');
 
             $cont.html('<h3>' + title + '</h3><p>' + content + '</p>');
-            $popup.modal({appendTo: '#main'});
+            $popup.modal();
             $('#simplemodal-container').css({'height':'auto'});
 
             $yesBtn.click(yesCallback);
@@ -361,7 +361,7 @@ define([
             });
 
             $cont.html(html);
-            $popup.modal({appendTo: '#main'});
+            $popup.modal();
             $('#simplemodal-container').css({'height':'auto'});
 
             $yesBtn.click(function() {

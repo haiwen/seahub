@@ -8,7 +8,7 @@ define([
     'use strict';
 
     var sideNavView = Backbone.View.extend({
-        el: '#side-nav',
+        el: '.side-panel',
 
         template: _.template($("#side-nav-tmpl").html()),
         enableModTemplate: _.template($("#myhome-mods-enable-form-tmpl").html()),
@@ -42,7 +42,7 @@ define([
         },
 
         render: function() {
-            this.$el.html(this.template(this.data));
+            this.$('#side-nav').html(this.template(this.data));
             return this;
         },
 
@@ -50,8 +50,8 @@ define([
             'click #group-nav a:first': 'toggleGroupList',
             'click #share-admin-nav a:first': 'toggleShareAdminList',
             'click #enable-mods': 'enableMods',
-            'click .js-close-side-nav': 'closeNav',
-            'click li > a': 'visitLink',
+            'click .js-close': 'close',
+            'click #side-nav li > a': 'visitLink',
             'click .js-about': 'showAbout',
 
             // for touch devices
@@ -203,7 +203,7 @@ define([
             this.$el.css({ 'left':'-300px' });
         },
 
-        closeNav: function() {
+        close: function() {
             this.hide();
             return false;
         },

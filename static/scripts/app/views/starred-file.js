@@ -11,7 +11,7 @@ define([
     'use strict';
 
     var StarredFileView = Backbone.View.extend({
-        id: 'starred-file',
+        el: '.main-panel',
 
         template: _.template($('#starred-file-tmpl').html()),
         theadTemplate: _.template($('#starred-file-thead-tmpl').html()),
@@ -19,7 +19,6 @@ define([
         initialize: function() {
             this.starredFiles = new StarredFilesCollection();
             this.listenTo(this.starredFiles, 'reset', this.reset);
-            this.render();
         },
 
         addOne: function(starredFile) {
@@ -92,8 +91,9 @@ define([
             this.starredFiles.fetch({reset: true});
         },
 
-        render: function() {
-            this.$el.html(this.template());
+        renderMainCon: function() {
+            this.$mainCon = $('<div class="main-panel-main" id="org-repos"></div>').html(this.template());
+            this.$el.append(this.$mainCon);
 
             this.$table = this.$('table');
             this.$tableBody = this.$('tbody');
@@ -128,12 +128,12 @@ define([
         },
 
         show: function() {
-            $("#right-panel").html(this.$el);
+            this.renderMainCon();
             this.showStarredFiles();
         },
 
         hide: function() {
-            this.$el.detach();
+            this.$mainCon.detach();
         }
 
     });

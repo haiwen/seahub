@@ -22,7 +22,7 @@
 </head>
 
 <body>
-    <div id="wrapper" role="application" class="{{ LANGUAGE_CODE }}">
+    <div id="wrapper" role="application" class="{{ LANGUAGE_CODE }} d-flex fd-col h100">
         {% block info_bar_message %}
         {% if request.user.is_authenticated and request.cur_note %}
         <div id="info-bar">
@@ -32,36 +32,30 @@
         {% endif %}
         {% endblock info_bar_message %}
 
-        <div id="header" role="banner" class="navbar navbar-fixed-top">
-            <div id="header-inner">
-                {% block notice_panel %}{% endblock %}
-                <a href="{{ SITE_ROOT }}" id="logo" class="hidden-sm-down fleft">
+        <div id="header" role="banner" class="d-flex">
+                <a href="{{ SITE_ROOT }}" id="logo" class="hidden-sm-down">
                     {% if seacloud_mode %}
                     <img src="{{ MEDIA_URL }}img/seacloud_logo.png?t=1398068110" title="Seacloud" alt="logo" width="186" height="31" />
                     {% else %}
                     <img src="{{ MEDIA_URL }}{{ logo_path }}" title="{{ site_title }}" alt="logo" width="{{logo_width}}" height="{{logo_height}}" />
                     {% endif %}
                 </a>
-                <button class="sf2-icon-list-view side-nav-toggle hidden-md-up" title="{% trans "Side Nav Menu" %}" id="js-toggle-side-nav"     aria-label="{% trans "Side Nav Menu" %}"></button>
+                <span class="sf2-icon-menu side-nav-toggle hidden-md-up" title="{% trans "Side Nav Menu" %}" id="js-toggle-side-nav" aria-label="{% trans "Side Nav Menu" %}"></span>
 
-                <div id="account" class="fright">
-                    <a id="my-info" href="#" class="no-deco" aria-label="{% trans "View profile and more" %}">
+                <div id="account">
+                    <a id="my-info" href="#" class="account-toggle no-deco hidden-sm-down" aria-label="{% trans "View profile and more" %}">
                         {% avatar request.user 36 %} <span class="icon-caret-down vam"></span>
                     </a>
+                    <span class="account-toggle sf2-icon-more mobile-icon hidden-md-up" aria-label="{% trans "View profile and more" %}"></span>
                 </div>
-            </div>
         </div>
 
-        <div id="main" class="clear container-fluid top-padding">
-            <div class="row">
+        <div id="main" class="container-fluid w100 flex-auto ovhd d-flex">
+            <span class="loading-icon loading-tip" id="initial-loading"></span>
+            <div class="row flex-1 d-flex hide">
                 <div class="side-nav side-tabnav col-md-3" id="side-nav" role="navigation"></div>
-                <div id="right-panel" class="col-md-9 col-md-offset-3">
+                <div id="right-panel" class="col-md-9 ov-auto flex-1">
                     {% block right_panel %}{% endblock %}
-                </div>
-                <div id="main-panel" class="clear w100 ovhd">
-                    <div id="initial-loading-view">
-                        <span class="loading-icon loading-tip"></span>
-                    </div>
                 </div>
             </div>
 

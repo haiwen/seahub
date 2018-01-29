@@ -54,6 +54,13 @@ class FileUUIDMapManager(models.Manager):
         else:
             return None
 
+    def get_fileuuidmaps_by_parent_path(self, repo_id, parent_path):
+        parent_path = FileUUIDMap.normalize_path(parent_path)
+        uuids = super(FileUUIDMapManager, self).filter(
+            repo_id=repo_id, parent_path=parent_path
+        )
+        return uuids
+
 
 class TagsManager(models.Manager):
     def get_or_create_tag(self, tagname):
@@ -196,26 +203,3 @@ class FileTag(models.Model):
 
     def to_dict(self):
         return {'id': self.tag.id, 'name': self.tag.name, 'creator': self.username}
-
-
-########## handle signals
-from django.dispatch import receiver
-from seahub.signals import rename_dirent_successful
-
-
-@receiver(rename_dirent_successful)
-def update_fileuuidmap(sender, **kwargs):
-    src_repo_id = kwargs.get('src_repo_id')
-    src_parent_dir = kwargs.get('src_parent_dir')
-    src_filename = kwargs.get('src_filename')
-    dst_repo_id = kwargs.get('dst_repo_id')
-    dst_parent_dir = kwargs.get('dst_parent_dir')
-    dst_filename = kwargs.get('dst_filename')
-    is_dir = kwargs.get('is_dir')
-    src_fileuuidmap = FileUUIDMap.objects.get_fileuuidmap_by_path(src_repo_id, src_parent_dir, src_filename, is_dir)
-    if src_fileuuidmap:
-        src_fileuuidmap.repo_id = dst_repo_id
-        src_fileuuidmap.parent_dir = dst_parent_dir
-        src_fileuuidmap.filename = dst_filename
-        src_fileuuidmap.is_dir = is_dir
-        src_fileuuidmap.save()

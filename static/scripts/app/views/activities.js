@@ -10,7 +10,7 @@ define([
 
     var ActivitiesView = Backbone.View.extend({
 
-        id: 'activities',
+        el: '.main-panel',
 
         template: _.template($('#activities-tmpl').html()),
 
@@ -20,7 +20,6 @@ define([
         initialize: function () {
             this.activities = new ActivityCollection();
             this.moreOffset = 0;
-            this.render();
         },
 
         events: {
@@ -92,20 +91,22 @@ define([
             });
         },
 
-        render: function() {
-            this.$el.html(this.template());
+        renderMainCon: function() {
+            this.$mainCon = $('<div class="main-panel-main" id="activities"></div>').html(this.template());
+            this.$el.append(this.$mainCon);
+
             this.$activitiesBody = this.$('#activities-body');
             this.$activitiesMore = this.$('#activities-more');
             this.$loadingTip = this.$('.loading-tip');
         },
 
         show: function() {
-            $("#right-panel").html(this.$el);
+            this.renderMainCon();
             this.showActivities();
         },
 
         hide: function () {
-            this.$el.detach();
+            this.$mainCon.detach();
         }
 
     });
