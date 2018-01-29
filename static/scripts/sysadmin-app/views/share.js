@@ -40,7 +40,8 @@ define([
             this.$el.html(this.template({
                 title: gettext("Share {placeholder}")
                     .replace('{placeholder}', '<span class="op-target ellipsis ellipsis-op-target" title="' + Common.HTMLescape(this.repo_name) + '">' + Common.HTMLescape(this.repo_name) + '</span>'),
-                repo_id: this.repo_id
+                repo_id: this.repo_id,
+                is_pro: app.pageOptions.is_pro
             }));
 
             return this;
@@ -76,6 +77,7 @@ define([
                                 "user_email": item.user_email,
                                 "user_name": item.user_name,
                                 "permission": item.permission,
+                                "is_admin": item.is_admin, 
                                 "for_user": true
                             }
                         });
@@ -113,6 +115,7 @@ define([
                                 "group_id": item.group_id,
                                 "group_name": item.group_name,
                                 "permission": item.permission,
+                                "is_admin": item.is_admin,
                                 'for_user': false
                             }
                         });
@@ -164,6 +167,7 @@ define([
                                     "user_email": item.user_email,
                                     "user_name": item.user_name,
                                     "permission": item.permission,
+                                    'is_admin': item.is_admin,
                                     'for_user': true
                                 }
                             });
@@ -237,6 +241,7 @@ define([
                                     "group_id": item.group_id,
                                     "group_name": item.group_name,
                                     "permission": item.permission,
+                                    'is_admin': item.is_admin,
                                     'for_user': false
                                 }
                             });
