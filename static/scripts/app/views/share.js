@@ -787,8 +787,8 @@ define([
                             $add_item.after(new_item.el);
                         });
                         emails_input.select2("val", "");
-                        $('option', $perm).removeAttr('selected');
-                        $('[value="rw"]', $perm).attr('selected', 'selected');
+                        $('option', $perm).prop('selected', false);
+                        $('[value="rw"]', $perm).prop('selected', true);
                         $error.addClass('hide');
                     }
                     if (data.failed.length > 0) {
@@ -866,8 +866,8 @@ define([
                             $add_item.after(new_item.el);
                         });
                         $groups_input.select2("val", "");
-                        $('option', $perm).removeAttr('selected');
-                        $('[value="rw"]', $perm).attr('selected', 'selected');
+                        $('option', $perm).prop('selected', false);
+                        $('[value="rw"]', $perm).prop('selected', true);
                         $error.addClass('hide');
                     }
                     if (data.failed.length > 0) {

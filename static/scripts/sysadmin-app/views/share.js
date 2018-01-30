@@ -174,8 +174,8 @@ define([
                             $user_share_item.after(new_item.el);
                         });
                         $emails_input.select2("val", "");
-                        $('[value="rw"]', $perm).attr('selected', 'selected');
-                        $('[value="r"]', $perm).removeAttr('selected');
+                        $('option', $perm).prop('selected', false);
+                        $('[value="rw"]', $perm).prop('selected', true);
                         $error.addClass('hide');
                     }
                     if (data.failed.length > 0) {
@@ -248,8 +248,8 @@ define([
                             $group_share_item.after(new_item.el);
                         });
                         $groups_input.select2("val", "");
-                        $('[value="rw"]', $perm).attr('selected', 'selected');
-                        $('[value="r"]', $perm).removeAttr('selected');
+                        $('option', $perm).prop('selected', false);
+                        $('[value="rw"]', $perm).prop('selected', true);
                         $error.addClass('hide');
                     }
                     if (data.failed.length > 0) {
