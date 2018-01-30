@@ -52,9 +52,6 @@ $('#mark-all-read').click(function() {
             dataType: 'json',
             beforeSend: prepareCSRFToken,
             success: function() {
-                var msg_ct = $("#msg-count");
-                $('.num', msg_ct).html(0).addClass('hide');
-                document.title = msg_ct.data('orig_doc_title');
                 unread_items.removeClass('unread').addClass('read');
             },
             error: ajaxErrorHandler
