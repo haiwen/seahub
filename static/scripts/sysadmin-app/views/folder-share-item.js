@@ -18,7 +18,7 @@ define([
         },
 
         render: function () {
-            this.$el.html(this.template(this.item_data));
+            this.$el.html(this.template($.extend({}, this.item_data, {is_pro: app.pageOptions.is_pro})));
             return this;
         },
 
@@ -77,6 +77,7 @@ define([
                 data: data,
                 success: function (data) {
                     item_data.permission = data.permission;
+                    item_data.is_admin = data.is_admin;
                     _this.render();
                 },
                 error: function(xhr) {
