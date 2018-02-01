@@ -1,10 +1,15 @@
 import json
+from mock import patch
+
 from django.utils import timezone
 from django.core.urlresolvers import reverse
+from django.core import mail
 
 from seahub.invitations.models import Invitation
 from seahub.notifications.models import UserNotification
 from seahub.test_utils import BaseTestCase
+from registration import signals
+
 
 
 class TokenViewTest(BaseTestCase):
@@ -55,3 +60,18 @@ class TokenViewTest(BaseTestCase):
         obj = UserNotification.objects.all()[0]
         d = json.loads(obj.detail)
         assert d['invitation_id'] == self.iv.pk
+
+    def _send_signal(self):
+        signals.user_registered.send(sender=self.__class__,
+                                     user=self.user,
+                                     request=self.fake_request)
+
+    @patch('seahub.invitations.views.NOTIFY_ADMIN_AFTER_REGISTRATION', True)
+    def test_notify_admin_after_registration(self):
+        self.assertEqual(len(mail.outbox), 0)
+        self._send_signal()
+
+        assert 'New account created' in mail.outbox[0].subject
+        assert '%s is joined' % self.user.email in mail.outbox[0].body
+
+        assert len(mail.outbox) > 0

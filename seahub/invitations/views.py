@@ -11,7 +11,8 @@ from seahub.base.accounts import User
 from seahub.constants import GUEST_USER
 from seahub.invitations.models import Invitation
 from seahub.invitations.signals import accept_guest_invitation_successful
-from seahub.settings import SITE_ROOT
+from seahub.settings import SITE_ROOT, NOTIFY_ADMIN_AFTER_REGISTRATION
+from registration.models import notify_admins_on_register_complete
 
 def token_view(request, token):
     """Show form to let user set password.
@@ -43,6 +44,10 @@ def token_view(request, token):
             # send signal to notify inviter
             accept_guest_invitation_successful.send(
                 sender=None, invitation_obj=i)
+
+            # send email to notify admin
+            if NOTIFY_ADMIN_AFTER_REGISTRATION:
+                notify_admins_on_register_complete(u.email)
 
             return HttpResponseRedirect(SITE_ROOT)
 
