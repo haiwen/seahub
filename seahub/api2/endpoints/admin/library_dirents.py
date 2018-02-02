@@ -11,14 +11,15 @@ from rest_framework.views import APIView
 from rest_framework import status
 from django.template.defaultfilters import filesizeformat
 
-from seaserv import seafile_api, seafserv_threaded_rpc
+from seaserv import seafile_api
 from pysearpc import SearpcError
 
 from seahub.utils.timeutils import timestamp_to_isoformat_timestr
 from seahub.views.sysadmin import can_view_sys_admin_repo
 from seahub.views.file import send_file_access_msg
 from seahub.utils import is_org_context, gen_file_get_url, \
-    check_filename_with_rename, is_valid_dirent_name
+    check_filename_with_rename, is_valid_dirent_name, \
+    normalize_dir_path, normalize_file_path
 from seahub.views import get_system_default_repo_id
 
 from seahub.api2.authentication import TokenAuthentication
@@ -26,6 +27,23 @@ from seahub.api2.throttling import UserRateThrottle
 from seahub.api2.utils import api_error
 
 logger = logging.getLogger(__name__)
+
+def common_check(func):
+    """ Decorator for check if repo exists and admin can view user's repo
+    """
+    def _decorated(view, request, repo_id, *args, **kwargs):
+        repo = seafile_api.get_repo(repo_id)
+        if not repo:
+            error_msg = 'Library %s not found.' % repo_id
+            return api_error(status.HTTP_404_NOT_FOUND, error_msg)
+
+        if not can_view_sys_admin_repo(repo):
+            error_msg = 'Feature disabled.'
+            return api_error(status.HTTP_403_FORBIDDEN, error_msg)
+
+        return func(view, request, repo_id, *args, **kwargs)
+
+    return _decorated
 
 def get_dirent_info(dirent):
 
@@ -49,27 +67,15 @@ class AdminLibraryDirents(APIView):
     throttle_classes = (UserRateThrottle,)
     permission_classes = (IsAdminUser,)
 
+    @common_check
     def get(self, request, repo_id, format=None):
-        """ get all file/folder in a library
+        """ Get all file/folder in a library
         """
 
         repo = seafile_api.get_repo(repo_id)
-        if not repo:
-            error_msg = 'Library %s not found.' % repo_id
-            return api_error(status.HTTP_404_NOT_FOUND, error_msg)
-
-        if not can_view_sys_admin_repo(repo):
-            error_msg = 'Feature disabled.'
-            return api_error(status.HTTP_403_FORBIDDEN, error_msg)
 
         parent_dir = request.GET.get('parent_dir', '/')
-        if not parent_dir:
-            error_msg = 'parent_dir invalid.'
-            return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
-
-        if parent_dir[-1] != '/':
-            parent_dir = parent_dir + '/'
-
+        parent_dir = normalize_dir_path(parent_dir)
         dir_id = seafile_api.get_dir_id_by_path(repo_id, parent_dir)
         if not dir_id:
             error_msg = 'Folder %s not found.' % parent_dir
@@ -81,7 +87,7 @@ class AdminLibraryDirents(APIView):
             repo_owner = seafile_api.get_repo_owner(repo_id)
 
         try:
-            dirs = seafserv_threaded_rpc.list_dir_with_perm(repo_id,
+            dirs = seafile_api.list_dir_with_perm(repo_id,
                 parent_dir, dir_id, repo_owner, -1, -1)
         except SearpcError as e:
             logger.error(e)
@@ -101,27 +107,13 @@ class AdminLibraryDirents(APIView):
 
         return Response(return_results)
 
+    @common_check
     def post(self, request, repo_id, format=None):
         """ create file/folder in a library
         """
 
-        repo = seafile_api.get_repo(repo_id)
-        if not repo:
-            error_msg = 'Library %s not found.' % repo_id
-            return api_error(status.HTTP_404_NOT_FOUND, error_msg)
-
-        if not can_view_sys_admin_repo(repo):
-            error_msg = 'Feature disabled.'
-            return api_error(status.HTTP_403_FORBIDDEN, error_msg)
-
         parent_dir = request.GET.get('parent_dir', '/')
-        if not parent_dir:
-            error_msg = 'parent_dir invalid.'
-            return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
-
-        if parent_dir[-1] != '/':
-            parent_dir = parent_dir + '/'
-
+        parent_dir = normalize_dir_path(parent_dir)
         dir_id = seafile_api.get_dir_id_by_path(repo_id, parent_dir)
         if not dir_id:
             error_msg = 'Folder %s not found.' % parent_dir
@@ -132,11 +124,18 @@ class AdminLibraryDirents(APIView):
             error_msg = 'obj_name invalid.'
             return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
 
-        obj_name = check_filename_with_rename(repo_id, parent_dir, obj_name)
+        is_file = request.data.get('is_file', 'false')
+        is_file = is_file.lower()
+        if is_file not in ('true', 'false'):
+            error_msg = 'is_file invalid.'
 
         username = request.user.username
+        obj_name = check_filename_with_rename(repo_id, parent_dir, obj_name)
         try:
-            seafile_api.post_dir(repo_id, parent_dir, obj_name, username)
+            if is_file == 'true':
+                seafile_api.post_empty_file(repo_id, parent_dir, obj_name, username)
+            else:
+                seafile_api.post_dir(repo_id, parent_dir, obj_name, username)
         except SearpcError as e:
             logger.error(e)
             error_msg = 'Internal Server Error'
@@ -154,26 +153,19 @@ class AdminLibraryDirent(APIView):
     throttle_classes = (UserRateThrottle,)
     permission_classes = (IsAdminUser,)
 
+    @common_check
     def get(self, request, repo_id):
         """ get info of a single file/folder in a library
         """
 
         repo = seafile_api.get_repo(repo_id)
-        if not repo:
-            error_msg = 'Library %s not found.' % repo_id
-            return api_error(status.HTTP_404_NOT_FOUND, error_msg)
-
-        if not can_view_sys_admin_repo(repo):
-            error_msg = 'Feature disabled.'
-            return api_error(status.HTTP_403_FORBIDDEN, error_msg)
 
         path = request.GET.get('path', None)
         if not path:
             error_msg = 'path invalid.'
             return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
 
-        if path[0] != '/':
-            path = '/' + path
+        path = normalize_file_path(path)
 
         try:
             dirent = seafile_api.get_dirent_by_path(repo_id, path)
@@ -183,7 +175,7 @@ class AdminLibraryDirent(APIView):
             return api_error(status.HTTP_500_INTERNAL_SERVER_ERROR, error_msg)
 
         if not dirent:
-            error_msg = 'file/folder %s not found.' % path
+            error_msg = 'File or folder %s not found.' % path
             return api_error(status.HTTP_404_NOT_FOUND, error_msg)
 
         if stat.S_ISDIR(dirent.mode):
@@ -209,26 +201,79 @@ class AdminLibraryDirent(APIView):
 
         return Response(dirent_info)
 
+    @common_check
+    def put(self, request, repo_id):
+        """ Copy a single file/folder to other place.
+        """
+
+        # check parameter for src
+        path = request.GET.get('path', None)
+        if not path:
+            error_msg = 'path invalid.'
+            return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
+
+        try:
+            dirent = seafile_api.get_dirent_by_path(repo_id, path)
+        except Exception as e:
+            logger.error(e)
+            error_msg = 'Internal Server Error'
+            return api_error(status.HTTP_500_INTERNAL_SERVER_ERROR, error_msg)
+
+        if not dirent:
+            error_msg = 'File or folder %s not found.' % path
+            return api_error(status.HTTP_404_NOT_FOUND, error_msg)
+
+        if path == '/':
+            error_msg = 'path invalid.'
+            return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
+
+        # normalize path to '/1/2/3' format
+        # NOT ends with '/'
+        path = normalize_file_path(path)
+
+        # now get `src_dir` and `obj_name` according to normalized path
+        src_repo_id = repo_id
+        src_dir = os.path.dirname(path)
+        src_obj_name = os.path.basename(path)
+
+        # check parameter for dst
+        dst_repo_id = request.data.get('dst_repo_id', src_repo_id)
+        if dst_repo_id != src_repo_id and not seafile_api.get_repo(dst_repo_id):
+            error_msg = 'Library %s not found.' % dst_repo_id
+            return api_error(status.HTTP_404_NOT_FOUND, error_msg)
+
+        dst_dir = request.data.get('dst_dir', '/')
+        if dst_dir != '/':
+            dst_dir = normalize_dir_path(dst_dir)
+            if not seafile_api.get_dir_id_by_path(dst_repo_id, dst_dir):
+                error_msg = 'Folder %s not found.' % dst_dir
+                return api_error(status.HTTP_404_NOT_FOUND, error_msg)
+
+        # copy file
+        username = request.user.username
+        dst_obj_name = check_filename_with_rename(dst_repo_id, dst_dir,
+                src_obj_name)
+        try:
+            seafile_api.copy_file(src_repo_id, src_dir, src_obj_name, dst_repo_id,
+                      dst_dir, dst_obj_name, username, need_progress=0, synchronous=1)
+        except SearpcError as e:
+            logger.error(e)
+            error_msg = 'Internal Server Error'
+            return api_error(status.HTTP_500_INTERNAL_SERVER_ERROR, error_msg)
+
+        return Response({'success': True})
+
+    @common_check
     def delete(self, request, repo_id):
         """ delete a single file/folder in a library
         """
-
-        repo = seafile_api.get_repo(repo_id)
-        if not repo:
-            error_msg = 'Library %s not found.' % repo_id
-            return api_error(status.HTTP_404_NOT_FOUND, error_msg)
-
-        if not can_view_sys_admin_repo(repo):
-            error_msg = 'Feature disabled.'
-            return api_error(status.HTTP_403_FORBIDDEN, error_msg)
 
         path = request.GET.get('path', None)
         if not path:
             error_msg = 'path invalid.'
             return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
 
-        if path[0] != '/':
-            path = '/' + path
+        path = normalize_file_path(path)
 
         file_id = None
         dir_id = None
@@ -247,7 +292,7 @@ class AdminLibraryDirent(APIView):
         file_name = os.path.basename(path)
         try:
             seafile_api.del_file(repo_id,
-                parent_dir, file_name, request.user.username)
+                    parent_dir, file_name, request.user.username)
         except SearpcError as e:
             logger.error(e)
             error_msg = 'Internal Server Error'

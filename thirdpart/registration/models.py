@@ -325,6 +325,30 @@ def notify_admins_on_activate_request(reg_email):
         except Exception as e:
             logger.error(e)
 
+def notify_admins_on_register_complete(reg_email):
+    ctx_dict = {
+        "site_name": settings.SITE_NAME,
+        "user_search_link": "%s%s?email=%s" % (
+            get_site_scheme_and_netloc(), reverse("user_search"),
+            urlquote(reg_email)),
+        "reg_email": reg_email,
+    }
+
+    subject = render_to_string('registration/register_complete_email_subject.html',
+                               ctx_dict)
+    # Email subject *must not* contain newlines
+    subject = ''.join(subject.splitlines())
+
+    message = render_to_string('registration/register_complete_email.html',
+                               ctx_dict)
+
+    admins = User.objects.get_superusers()
+    for admin in admins:
+        try:
+            admin.email_user(subject, message, settings.DEFAULT_FROM_EMAIL)
+        except Exception as e:
+            logger.error(e)
+
 @receiver(user_registered)
 def email_admin_on_registration(sender, **kwargs):
     """Send an email notification to admin when a newly registered user need
@@ -337,3 +361,7 @@ def email_admin_on_registration(sender, **kwargs):
             bool(config.REGISTRATION_SEND_MAIL) is False:
         reg_email = kwargs['user'].email
         notify_admins_on_activate_request(reg_email)
+
+    if settings.NOTIFY_ADMIN_AFTER_REGISTRATION is True:
+        reg_email = kwargs['user'].email
+        notify_admins_on_register_complete(reg_email)

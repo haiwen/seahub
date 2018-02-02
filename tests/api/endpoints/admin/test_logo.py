@@ -1,12 +1,19 @@
 import os
-from tests.api.apitestbase import ApiTestBase
+import json
 from tests.common.utils import urljoin
 from tests.common.common import BASE_URL
 from django.core.urlresolvers import reverse
 
+from seahub.test_utils import BaseTestCase
 from seahub.settings import MEDIA_ROOT, CUSTOM_LOGO_PATH
+from seahub.utils import PREVIEW_FILEEXT
+from seahub.utils.file_types import IMAGE
+from seahub.utils.error_msg import file_type_error_msg
 
-class AdminLogoTest(ApiTestBase):
+
+class AdminLogoTest(BaseTestCase):
+    def setUp(self):
+        self.login_as(self.admin)
 
     def test_update_logo(self):
 
@@ -21,19 +28,41 @@ class AdminLogoTest(ApiTestBase):
         logo_url = urljoin(BASE_URL, logo_url)
         logo_file = os.path.join(os.getcwd(), 'media/img/seafile-logo.png')
 
-        with open(logo_file) as f:
-            json_resp = self.admin_post(logo_url, files={'logo': f}).json()
+        with open(logo_file, 'rb') as f:
+            resp = self.client.post(logo_url, {'logo': f})
+        json_resp = json.loads(resp.content)
 
+        assert 200 == resp.status_code
         assert json_resp['success'] == True
         assert os.path.exists(custom_symlink)
         assert os.path.islink(custom_symlink)
 
     def test_update_logo_with_invalid_user_permission(self):
+        self.logout()
 
         # update user avatar
         logo_url = reverse('api-v2.1-admin-logo')
         logo_url = urljoin(BASE_URL, logo_url)
         logo_file = os.path.join(os.getcwd(), 'media/img/seafile-logo.png')
 
-        with open(logo_file) as f:
-            json_resp = self.post(logo_url, files={'logo': f}, expected=403).json()
+        with open(logo_file, 'rb') as f:
+            resp = self.client.post(logo_url, {'logo': f})
+
+        assert 403 == resp.status_code
+
+
+    def test_update_logo_with_invalid_file_type(self):
+        with open('test.noimage', 'w') as f:
+            f.write('1')
+
+        logo_url = reverse('api-v2.1-admin-logo')
+        logo_url = urljoin(BASE_URL, logo_url)
+        logo_file = os.path.join(os.getcwd(), 'test.noimage')
+
+        with open(logo_file, 'rb') as f:
+            resp = self.client.post(logo_url, {'logo': f})
+        json_resp = json.loads(resp.content)
+
+        os.remove(logo_file)
+        assert 400 == resp.status_code
+        assert json_resp['error_msg'] == file_type_error_msg('noimage', PREVIEW_FILEEXT.get(IMAGE))

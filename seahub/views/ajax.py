@@ -38,7 +38,7 @@ from seahub.group.utils import is_group_member, is_group_admin_or_owner, \
     get_group_member_info
 import seahub.settings as settings
 from seahub.settings import ENABLE_THUMBNAIL, THUMBNAIL_ROOT, \
-    THUMBNAIL_DEFAULT_SIZE, SHOW_TRAFFIC, MEDIA_URL
+    THUMBNAIL_DEFAULT_SIZE, SHOW_TRAFFIC, MEDIA_URL, ENABLE_VIDEO_THUMBNAIL
 from seahub.utils import check_filename_with_rename, EMPTY_SHA1, \
     gen_block_get_url, TRAFFIC_STATS_ENABLED, get_user_traffic_stat,\
     new_merge_with_no_conflict, get_commit_before_new_merge, \
@@ -48,6 +48,7 @@ from seahub.utils.star import get_dir_starred_files
 from seahub.utils.file_types import IMAGE, VIDEO
 from seahub.utils.file_op import check_file_lock
 from seahub.utils.repo import get_locked_files_by_dir
+from seahub.utils.error_msg import file_type_error_msg, file_size_error_msg
 from seahub.base.accounts import User
 from seahub.thumbnail.utils import get_thumbnail_src
 from seahub.share.utils import is_repo_admin
@@ -345,14 +346,23 @@ def list_lib_dir(request, repo_id):
         f_['obj_id'] = f.obj_id
         f_['perm'] = f.permission # perm for file in current dir
 
-        file_type, file_ext = get_file_type_and_ext(f.obj_name)
-        if file_type == IMAGE:
-            f_['is_img'] = True
-        if file_type == VIDEO:
-            f_['is_video'] = True
-        if file_type == IMAGE or file_type == VIDEO:
-            if not repo.encrypted and ENABLE_THUMBNAIL and \
-                os.path.exists(os.path.join(THUMBNAIL_ROOT, str(size), f.obj_id)):
+        if not repo.encrypted and ENABLE_THUMBNAIL:
+            # used for providing a way to determine
+            # if send a request to create thumbnail.
+            file_type, file_ext = get_file_type_and_ext(f.obj_name)
+            if file_type == IMAGE:
+                f_['is_img'] = True
+
+            if file_type == VIDEO and ENABLE_VIDEO_THUMBNAIL:
+                f_['is_video'] = True
+
+            # if thumbnail has already been created, return its src.
+            # Then web browser will use this src to get thumbnail instead of
+            # recreating it.
+            thumbnail_file_path = os.path.join(THUMBNAIL_ROOT, str(size), f.obj_id)
+            thumbnail_exist = os.path.exists(thumbnail_file_path)
+            if thumbnail_exist and (file_type == IMAGE or
+                    file_type == VIDEO and ENABLE_VIDEO_THUMBNAIL):
                 file_path = posixpath.join(path, f.obj_name)
                 src = get_thumbnail_src(repo_id, size, file_path)
                 f_['encoded_thumbnail_src'] = urlquote(src)
@@ -1034,49 +1044,6 @@ def space_and_traffic(request):
                             context_instance=RequestContext(request))
     return HttpResponse(json.dumps({"html": html}), content_type=content_type)
 
-def get_groups_by_user(request):
-    """List user groups.
-    """
-    username = request.user.username
-    if is_org_context(request):
-        org_id = request.user.org.org_id
-        return ccnet_api.get_org_groups_by_user(org_id, username)
-    else:
-        return seaserv.get_personal_groups_by_user(username)
-
-def get_group_repos(request, groups):
-    """Get repos shared to groups.
-    """
-
-    all_group_repos = []
-    if is_org_context(request):
-        org_id = request.user.org.org_id
-        for group in groups:
-            org_group_repos = seafile_api.get_org_group_repos(org_id, group.id)
-            for repo in org_group_repos:
-                # Convert repo properties due to the different collumns in Repo
-                # and SharedRepo
-                repo.share_type = 'group'
-                repo.user = seafile_api.get_org_repo_owner(repo.repo_id)
-                repo.user_perm = check_folder_permission(request, repo.repo_id, '/')
-                repo.group = group
-
-                all_group_repos.append(repo)
-    else:
-        for group in groups:
-            group_repos = seafile_api.get_repos_by_group(group.id)
-            for repo in group_repos:
-                # Convert repo properties due to the different collumns in Repo
-                # and SharedRepo
-                repo.share_type = 'group'
-                repo.user = seafile_api.get_repo_owner(repo.repo_id)
-                repo.user_perm = check_folder_permission(request, repo.repo_id, '/')
-                repo.group = group
-
-                all_group_repos.append(repo)
-
-    return all_group_repos
-
 def get_file_upload_url_ul(request, token):
     """Get file upload url in dir upload link.
 
@@ -1226,6 +1193,19 @@ def ajax_group_members_import(request, group_id):
     username = request.user.username
     content_type = 'application/json; charset=utf-8'
 
+    # get and convert uploaded file
+    uploaded_file = request.FILES['file']
+    ext = os.path.splitext(uploaded_file.name)[1].lower()
+    if ext != '.csv':
+        result['error'] = file_type_error_msg(ext, "csv")
+        return HttpResponse(json.dumps(result), status=400,
+                        content_type=content_type)
+
+    if uploaded_file.size > 10 * 1024 * 1024:
+        result['error'] = file_size_error_msg(uploaded_file.size, 10 * 1024 * 1024)
+        return HttpResponse(json.dumps(result), status=400,
+                        content_type=content_type)
+
     group_id = int(group_id)
     try:
         group = seaserv.get_group(group_id)
@@ -1244,14 +1224,6 @@ def ajax_group_members_import(request, group_id):
         logger.error(e)
         result['error'] = 'Internal Server Error'
         return HttpResponse(json.dumps(result), status=500,
-                        content_type=content_type)
-
-
-    # get and convert uploaded file
-    uploaded_file = request.FILES['file']
-    if uploaded_file.size > 10 * 1024 * 1024:
-        result['error'] = _(u'Failed, file is too large')
-        return HttpResponse(json.dumps(result), status=403,
                         content_type=content_type)
 
     try:

@@ -56,6 +56,7 @@ class SharedFolders(APIView):
 
             result = {}
             result['repo_id'] = repo.origin_repo_id
+            result['repo_name'] = repo.origin_repo_name
             result['path'] = repo.origin_path
             result['folder_name'] = repo.name
             result['share_type'] = repo.share_type

@@ -20,14 +20,15 @@ from seahub.views.wiki import personal_wiki, personal_wiki_pages, \
     personal_wiki_create, personal_wiki_page_new, personal_wiki_page_edit, \
     personal_wiki_page_delete, personal_wiki_use_lib
 from seahub.api2.endpoints.groups import Groups, Group
-from seahub.api2.endpoints.all_groups import AllGroupsView
+from seahub.api2.endpoints.shareable_groups import ShareableGroups
 from seahub.api2.endpoints.group_libraries import GroupLibraries, GroupLibrary
 from seahub.api2.endpoints.group_members import GroupMembers, GroupMembersBulk, GroupMember
 from seahub.api2.endpoints.search_group import SearchGroup
 from seahub.api2.endpoints.share_links import ShareLinks, ShareLink
 from seahub.api2.endpoints.shared_folders import SharedFolders
 from seahub.api2.endpoints.shared_repos import SharedRepos, SharedRepo
-from seahub.api2.endpoints.upload_links import UploadLinks, UploadLink
+from seahub.api2.endpoints.upload_links import UploadLinks, UploadLink, \
+        UploadLinkUpload
 from seahub.api2.endpoints.repos_batch import ReposBatchView, \
         ReposBatchCopyDirView, ReposBatchCreateDirView
 from seahub.api2.endpoints.repos import RepoView
@@ -210,8 +211,9 @@ urlpatterns = patterns(
     url(r'^api/v2.1/user/$', User.as_view(), name="api-v2.1-user"),
 
     ## user::groups
+    url(r'^api/v2.1/shareable-groups/$', ShareableGroups.as_view(), name='api-v2.1-shareable-groups'),
+
     url(r'^api/v2.1/groups/$', Groups.as_view(), name='api-v2.1-groups'),
-    url(r'^api/v2.1/groups/all/$', AllGroupsView.as_view(), name='api-v2.1-all-groups'),
     url(r'^api/v2.1/groups/(?P<group_id>\d+)/$', Group.as_view(), name='api-v2.1-group'),
 
     url(r'^api/v2.1/groups/(?P<group_id>\d+)/libraries/$', GroupLibraries.as_view(), name='api-v2.1-group-libraries'),
@@ -236,6 +238,7 @@ urlpatterns = patterns(
     ## user::shared-upload-links
     url(r'^api/v2.1/upload-links/$', UploadLinks.as_view(), name='api-v2.1-upload-links'),
     url(r'^api/v2.1/upload-links/(?P<token>[a-f0-9]+)/$', UploadLink.as_view(), name='api-v2.1-upload-link'),
+    url(r'^api/v2.1/upload-links/(?P<token>[a-f0-9]+)/upload/$', UploadLinkUpload.as_view(), name='api-v2.1-upload-link-upload'),
 
     ## user::revision-tags
     url(r'^api/v2.1/revision-tags/tagged-items/$', TaggedItemsView.as_view(), name='api-v2.1-revision-tags-tagged-items'),

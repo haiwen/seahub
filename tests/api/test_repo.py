@@ -218,6 +218,8 @@ class RepoTest(BaseTestCase):
         assert res_repo['root'] == ''
         assert res_repo['head_commit_id'] == share_repo.head_cmmt_id
         assert res_repo['version'] == share_repo.version
+        assert res_repo['groupid'] == self.group.id
+        assert res_repo['group_name'] == self.group.group_name
         self.remove_repo(share_repo.id)
 
     @patch('seahub.base.accounts.UserPermissions.can_view_org')

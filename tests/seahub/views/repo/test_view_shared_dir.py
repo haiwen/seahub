@@ -28,6 +28,21 @@ class SharedDirTest(TestCase, Fixtures):
 
         self.assertContains(resp, '<h2>%s</h2>' % self.repo.name)
 
+    def test_cannot_render_enc_repo(self):
+        share_file_info = {
+            'username': 'test@test.com',
+            'repo_id': self.enc_repo.id,
+            'path': '/',
+            'password': None,
+            'expire_date': None,
+        }
+        fs = FileShare.objects.create_dir_link(**share_file_info)
+        resp = self.client.get(
+            reverse('view_shared_dir', args=[fs.token])
+        )
+        self.assertEqual(200, resp.status_code)
+        self.assertTemplateUsed(resp, 'error.html')
+
     def test_view_raw_file_via_shared_dir(self):
         resp = self.client.get(
             reverse('view_file_via_shared_dir', args=[self.fs.token]) + '?p=' + self.file + '&raw=1'

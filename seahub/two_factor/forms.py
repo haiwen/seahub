@@ -295,6 +295,7 @@ class OTPAuthenticationFormMixin(object):
 class AuthenticationTokenForm(OTPAuthenticationFormMixin, Form):
     otp_token = forms.IntegerField(label=_("Token"), min_value=1,
                                    max_value=int('9' * totp_digits()))
+    remember_me = forms.BooleanField(required=False)
 
     def __init__(self, user, request=None, *args, **kwargs):
         """

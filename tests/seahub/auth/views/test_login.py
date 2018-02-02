@@ -7,7 +7,7 @@ from constance import config
 
 from seahub.base.accounts import User
 from seahub.auth.forms import AuthenticationForm, CaptchaAuthenticationForm
-from seahub.auth.views import LOGIN_ATTEMPT_PREFIX
+from seahub.auth.utils import LOGIN_ATTEMPT_PREFIX
 from seahub.options.models import UserOptions
 from seahub.profile.models import Profile
 from seahub.test_utils import BaseTestCase

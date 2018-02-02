@@ -709,21 +709,43 @@
 <td>
     <div class="perm">
         <span>
-        <% if (permission == 'rw') { %>
-            {% trans "Read-Write" %}
+        <% if (is_pro && is_admin) { %>
+            {% trans "Admin" %}
         <% } else { %>
-            {% trans "Read-Only" %}
+            <% if (permission == 'rw') { %>
+                {% trans "Read-Write" %}
+            <% } else { %>
+                {% trans "Read-Only" %}
+            <% } %>
         <% } %>
         </span>
         <a href="#" title="{% trans "Edit" %}" class="perm-edit-icon sf2-icon-edit op-icon vh"></a>
     </div>
     <select class="perm-toggle-select select-white hide w100">
-        <% if (permission == 'rw') { %>
-            <option value="rw" selected="selected" >{% trans "Read-Write" %}</option>
-            <option value="r" >{% trans "Read-Only" %}</option>
+        <% if (is_pro) { %>
+            <% if (is_admin) { %>
+                <option value="rw">{% trans "Read-Write" %}</option>
+                <option value="r">{% trans "Read-Only" %}</option>
+                <option value="admin" selected="selected">{% trans "Admin" %}</option>
+            <% } else { %>
+                <% if (permission == 'rw') { %>
+                    <option value="rw" selected="selected">{% trans "Read-Write" %}</option>
+                    <option value="r">{% trans "Read-Only" %}</option>
+                    <option value="admin">{% trans "Admin" %}</option>
+                <% } else { %>
+                    <option value="rw">{% trans "Read-Write" %}</option>
+                    <option value="r" selected="selected">{% trans "Read-Only" %}</option>
+                    <option value="admin">{% trans "Admin" %}</option>
+                <% } %>
+            <% } %>
         <% } else { %>
-            <option value="rw" >{% trans "Read-Write" %}</option>
-            <option value="r" selected="selected" >{% trans "Read-Only" %}</option>
+            <% if (permission == 'rw') { %>
+                <option value="rw" selected="selected">{% trans "Read-Write" %}</option>
+                <option value="r">{% trans "Read-Only" %}</option>
+            <% } else { %>
+                <option value="rw">{% trans "Read-Write" %}</option>
+                <option value="r" selected="selected">{% trans "Read-Only" %}</option>
+            <% } %>
         <% } %>
     </select>
 </td>
@@ -760,6 +782,9 @@
                         <select name="permission" class="share-permission-select w100">
                             <option value="rw" selected="selected">{% trans "Read-Write" %}</option>
                             <option value="r">{% trans "Read-Only" %}</option>
+                            <% if (is_pro) { %>
+                                <option value="admin">{% trans "Admin" %}</option>
+                            <% } %>
                         </select>
                     </td>
                     <td><input type="submit" value="{% trans "Submit" %}" class="submit" /></td>
@@ -787,6 +812,9 @@
                         <select name="permission" class="share-permission-select w100">
                             <option value="rw" selected="selected">{% trans "Read-Write" %}</option>
                             <option value="r">{% trans "Read-Only" %}</option>
+                            <% if (is_pro) { %>
+                                <option value="admin">{% trans "Admin" %}</option>
+                            <% } %>
                         </select>
                     </td>
                     <td><input type="submit" value="{% trans "Submit" %}" class="submit" /></td>

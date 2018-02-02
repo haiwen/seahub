@@ -3,6 +3,7 @@
 import logging
 import os
 import stat
+from importlib import import_module
 import json
 import datetime
 import posixpath
@@ -18,6 +19,7 @@ from rest_framework.permissions import IsAuthenticated, IsAdminUser
 from rest_framework.reverse import reverse
 from rest_framework.response import Response
 
+from django.conf import settings as dj_settings
 from django.contrib.auth.hashers import check_password
 from django.contrib.sites.models import RequestSite
 from django.db import IntegrityError
@@ -74,7 +76,7 @@ from seahub.utils import gen_file_get_url, gen_token, gen_file_upload_url, \
 from seahub.utils.file_revisions import get_file_revisions_after_renamed
 from seahub.utils.devices import do_unlink_device
 from seahub.utils.repo import get_repo_owner, get_library_storages, \
-        get_locked_files_by_dir
+        get_locked_files_by_dir, get_related_users_by_repo
 from seahub.utils.star import star_file, unstar_file
 from seahub.utils.file_types import DOCUMENT
 from seahub.utils.file_size import get_file_size_unit
@@ -82,7 +84,6 @@ from seahub.utils.file_op import check_file_lock
 from seahub.utils.timeutils import utc_to_local, datetime_to_isoformat_timestr
 from seahub.views import is_registered_user, check_folder_permission, \
     create_default_library, list_inner_pub_repos
-from seahub.views.ajax import get_groups_by_user, get_group_repos
 from seahub.views.file import get_file_view_path_and_perm, send_file_access_msg
 if HAS_FILE_SEARCH:
     from seahub_extra.search.views import search_keyword
@@ -180,12 +181,45 @@ class ObtainAuthToken(APIView):
     renderer_classes = (renderers.JSONRenderer,)
 
     def post(self, request):
+        headers = {}
         context = { 'request': request }
         serializer = AuthTokenSerializer(data=request.data, context=context)
         if serializer.is_valid():
             key = serializer.validated_data
-            return Response({'token': key})
-        headers = {}
+
+            trust_dev = False
+            try:
+                trust_dev_header = int(request.META.get('HTTP_X_SEAFILE_2FA_TRUST_DEVICE', ''))
+                trust_dev = True if trust_dev_header == 1 else False
+            except ValueError:
+                trust_dev = False
+
+            skip_2fa_header = request.META.get('HTTP_X_SEAFILE_S2FA', None)
+            if skip_2fa_header is None:
+                if trust_dev:
+                    # 2fa login with trust device,
+                    # create new session, and return session id.
+                    pass 
+                else:
+                    # No 2fa login or 2fa login without trust device,
+                    # return token only.
+                    return Response({'token': key})
+            else:
+                # 2fa login without OTP token,
+                # get or create session, and return session id
+                pass
+
+            SessionStore = import_module(dj_settings.SESSION_ENGINE).SessionStore
+            s = SessionStore(skip_2fa_header)
+            if not s.exists(skip_2fa_header) or s.is_empty():
+                from seahub.two_factor.views.login import remember_device
+                s = remember_device(request.data['username'])
+
+            headers = {
+                'X-SEAFILE-S2FA': s.session_key
+            }
+            return Response({'token': key}, headers=headers)
+
         if serializer.two_factor_auth_failed:
             # Add a special response header so the client knows to ask the user
             # for the 2fa token.
@@ -566,7 +600,6 @@ class Repos(APIView):
                     "head_commit_id": r.head_cmmt_id,
                     "version": r.version,
                 }
-                
 
                 if r.repo_id in repos_with_admin_share_to:
                     repo['is_admin'] = True
@@ -576,8 +609,13 @@ class Repos(APIView):
                 repos_json.append(repo)
 
         if filter_by['group']:
-            groups = get_groups_by_user(request)
-            group_repos = get_group_repos(request, groups)
+            if is_org_context(request):
+                org_id = request.user.org.org_id
+                group_repos = seafile_api.get_org_group_repos_by_user(email,
+                        org_id)
+            else:
+                group_repos = seafile_api.get_group_repos_by_user(email)
+
             group_repos.sort(lambda x, y: cmp(y.last_modify, x.last_modify))
 
             # Reduce memcache fetch ops.
@@ -594,17 +632,18 @@ class Repos(APIView):
 
                 repo = {
                     "type": "grepo",
-                    "id": r.id,
-                    "owner": r.group.group_name,
-                    "groupid": r.group.id,
-                    "name": r.name,
+                    "id": r.repo_id,
+                    "name": r.repo_name,
+                    "groupid": r.group_id,
+                    "group_name": r.group_name,
+                    "owner": r.group_name,
                     "mtime": r.last_modify,
                     "modifier_email": r.last_modifier,
-                    "modifier_contact_email": contact_email_dict.get(r.last_modifier, ''),
                     "modifier_name": nickname_dict.get(r.last_modifier, ''),
+                    "modifier_contact_email": contact_email_dict.get(r.last_modifier, ''),
                     "size": r.size,
                     "encrypted": r.encrypted,
-                    "permission": check_permission(r.id, email),
+                    "permission": r.permission,
                     "root": '',
                     "head_commit_id": r.head_cmmt_id,
                     "version": r.version,
@@ -1033,28 +1072,35 @@ class Repo(APIView):
         return Response("unsupported operation")
 
     def delete(self, request, repo_id, format=None):
-        username = request.user.username
         repo = seafile_api.get_repo(repo_id)
         if not repo:
-            return api_error(status.HTTP_400_BAD_REQUEST,
-                             'Library does not exist.')
+            error_msg = 'Library %s not found.' % repo_id
+            return api_error(status.HTTP_404_NOT_FOUND, error_msg)
 
         # check permission
+        org_id = None
         if is_org_context(request):
+            org_id = request.user.org.org_id
             repo_owner = seafile_api.get_org_repo_owner(repo.id)
         else:
             repo_owner = seafile_api.get_repo_owner(repo.id)
-        is_owner = True if username == repo_owner else False
-        if not is_owner:
-            return api_error(
-                status.HTTP_403_FORBIDDEN,
-                'You do not have permission to delete this library.'
-            )
 
-        usernames = seaserv.get_related_users_by_repo(repo_id)
+        username = request.user.username
+        if username != repo_owner:
+            error_msg = 'Permission denied.'
+            return api_error(status.HTTP_403_FORBIDDEN, error_msg)
+
+        try:
+            usernames = get_related_users_by_repo(repo_id, org_id)
+        except Exception as e:
+            logger.error(e)
+            usernames = []
+
+        # remove repo
         seafile_api.remove_repo(repo_id)
+
         repo_deleted.send(sender=None,
-                          org_id=-1,
+                          org_id=org_id,
                           usernames=usernames,
                           repo_owner=repo_owner,
                           repo_id=repo_id,

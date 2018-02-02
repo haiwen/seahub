@@ -13,6 +13,8 @@ PROJECT_ROOT = os.path.join(os.path.dirname(__file__), os.pardir)
 DEBUG = False
 TEMPLATE_DEBUG = DEBUG
 
+CLOUD_MODE = False
+
 ADMINS = (
     # ('Your Name', 'your_email@domain.com'),
 )
@@ -420,6 +422,10 @@ ACTIVATE_AFTER_REGISTRATION = True
 # This option will be ignored if ``ACTIVATE_AFTER_REGISTRATION`` set to ``True``.
 REGISTRATION_SEND_MAIL = False
 
+# Whether or not send notify email to sytem admins when user registered or
+# first login through Shibboleth.
+NOTIFY_ADMIN_AFTER_REGISTRATION = False
+
 # Whether or not activate inactive user on first login. Mainly used in LDAP user sync.
 ACTIVATE_AFTER_FIRST_LOGIN = False
 
@@ -477,7 +483,12 @@ ALLOWED_HOSTS = ['*']
 # Logging
 LOGGING = {
     'version': 1,
-    'disable_existing_loggers': True,
+
+    # Enable existing loggers so that gunicorn errors will be bubbled up when
+    # server side error page "Internal Server Error" occurs.
+    # ref: https://www.caktusgroup.com/blog/2015/01/27/Django-Logging-Configuration-logging_config-default-settings-logger/
+    'disable_existing_loggers': False,
+
     'formatters': {
         'standard': {
             'format': '%(asctime)s [%(levelname)s] %(name)s:%(lineno)s %(funcName)s %(message)s'
@@ -497,14 +508,6 @@ LOGGING = {
             'backupCount': 5,
             'formatter': 'standard',
         },
-        'request_handler': {
-            'level': 'INFO',
-            'class': 'logging.handlers.RotatingFileHandler',
-            'filename': os.path.join(LOG_DIR, 'seahub_django_request.log'),
-            'maxBytes': 1024*1024*100, # 100 MB
-            'backupCount': 5,
-            'formatter': 'standard',
-        },
         'mail_admins': {
             'level': 'ERROR',
             'filters': ['require_debug_false'],
@@ -518,7 +521,7 @@ LOGGING = {
             'propagate': True
         },
         'django.request': {
-            'handlers': ['request_handler', 'mail_admins'],
+            'handlers': ['default', 'mail_admins'],
             'level': 'INFO',
             'propagate': False
         },
@@ -526,7 +529,7 @@ LOGGING = {
 }
 
 #Login Attempt
-LOGIN_ATTEMPT_LIMIT = 3
+LOGIN_ATTEMPT_LIMIT = 5
 LOGIN_ATTEMPT_TIMEOUT = 15 * 60 # in seconds (default: 15 minutes)
 FREEZE_USER_ON_LOGIN_FAILED = False # deactivate user account when login attempts exceed limit
 
@@ -630,6 +633,7 @@ CLOUD_DEMO_USER = 'demo@seafile.com'
 
 ENABLE_TWO_FACTOR_AUTH = False
 OTP_LOGIN_URL = '/profile/two_factor_authentication/setup/'
+TWO_FACTOR_DEVICE_REMEMBER_DAYS = 90
 
 # Enable personal wiki, group wiki
 ENABLE_WIKI = False

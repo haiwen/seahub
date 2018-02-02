@@ -2,7 +2,9 @@ from django.conf import settings
 from django.contrib.auth.backends import RemoteUserBackend
 
 from seahub.base.accounts import User
-from registration.models import notify_admins_on_activate_request
+from registration.models import (
+    notify_admins_on_activate_request, notify_admins_on_register_complete)
+
 
 class OauthRemoteUserBackend(RemoteUserBackend):
     """
@@ -49,6 +51,8 @@ class OauthRemoteUserBackend(RemoteUserBackend):
                     email=username, is_active=self.activate_after_creation)
                 if user and self.activate_after_creation is False:
                     notify_admins_on_activate_request(user.email)
+                if user and settings.NOTIFY_ADMIN_AFTER_REGISTRATION is True:
+                    notify_admins_on_register_complete(user.email)
             else:
                 user = None
 
