@@ -410,7 +410,10 @@ class Search(APIView):
                 e['size'] = dirent.size
 
                 if with_permission.lower() == 'true':
-                    e['permission'] = seafile_api.check_permission_by_path(repo_id, path, username)
+                    permission = seafile_api.check_permission_by_path(repo_id, path, username)
+                    if not permission:
+                        continue
+                    e['permission'] = permission
             except SearpcError as e:
                 logger.error(e)
                 pass
