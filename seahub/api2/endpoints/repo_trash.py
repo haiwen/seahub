@@ -13,6 +13,7 @@ from seahub.api2.authentication import TokenAuthentication
 from seahub.api2.utils import api_error
 
 from seahub.utils.timeutils import timestamp_to_isoformat_timestr
+from seahub.utils.repo import get_repo_owner
 from seahub.views import check_folder_permission
 
 from seaserv import seafile_api
@@ -121,3 +122,39 @@ class RepoTrash(APIView):
         }
 
         return Response(result)
+
+    def delete(self, request, repo_id, format=None):
+        """ Clean library's trash.
+
+        Permission checking:
+        1. only repo owner can perform this action.
+        """
+
+        # argument check
+        try:
+            keep_days = int(request.data.get('keep_days', 0))
+        except ValueError:
+            error_msg = 'keep_days invalid.'
+            return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
+
+        # resource check
+        repo = seafile_api.get_repo(repo_id)
+        if not repo:
+            error_msg = 'Library %s not found.' % repo_id
+            return api_error(status.HTTP_404_NOT_FOUND, error_msg)
+
+        # permission check
+        username = request.user.username
+        repo_owner = get_repo_owner(request, repo_id)
+        if username != repo_owner:
+            error_msg = 'Permission denied.'
+            return api_error(status.HTTP_403_FORBIDDEN, error_msg)
+
+        try:
+            seafile_api.clean_up_repo_history(repo_id, keep_days)
+        except Exception as e:
+            logger.error(e)
+            error_msg = 'Internal Server Error'
+            return api_error(status.HTTP_500_INTERNAL_SERVER_ERROR, error_msg)
+
+        return Response({'success': True})
