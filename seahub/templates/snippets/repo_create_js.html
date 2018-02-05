@@ -6,13 +6,13 @@ $(function() {
         dataType: 'script',
         cache: true,
         success: function() {
-            $('#repo-create').click(function() {
+            $('#repo-create').on('click', function() {
                 $('#repo-create-form').modal({appendTo: '#main', autoResize: true});
             });
         }
     });
 });
-$('#encrypt-switch').click(function () {
+$('#encrypt-switch').on('click', function () {
     var form = $('#repo-create-form'),
         pwd_input = $('input[type="password"]', form);
 
@@ -22,7 +22,7 @@ $('#encrypt-switch').click(function () {
         pwd_input.attr('disabled', true).addClass('input-disabled');
     }
 });
-$('#repo-create-form').submit(function() {
+$('#repo-create-form').on('submit', function() {
     var form = $(this),
         form_id = form.attr('id'),
         name = $('[name="repo_name"]', form).val(),
@@ -100,7 +100,7 @@ $('#repo-create-form').submit(function() {
             repoCreateSuccessCallback(data);
         },
         error: function(xhr, textStatus, errorThrown) {
-            var error = $.parseJSON(xhr.responseText).error;
+            var error = JSON.parse(xhr.responseText).error;
             apply_form_error(form_id, error);
             enable(submit_btn);
         }

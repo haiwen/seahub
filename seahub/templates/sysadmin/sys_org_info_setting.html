@@ -38,7 +38,7 @@
 {% include 'sysadmin/sys_org_set_quota_js.html' %}
 
 {% if org_member_quota %}
-$('#org_member_quota').submit(function() {
+$('#org_member_quota').on('submit', function() {
     var form = $(this),
         form_id = form.attr('id'),
         member_quota = $('[name="member_quota"]', form).val(),

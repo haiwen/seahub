@@ -105,11 +105,11 @@
 {% endblock %}
 {% block extra_script %}
 <script type="text/javascript">
-$('#add-user-btn').click(function() {
+$('#add-user-btn').on('click', function() {
     $('#add-user-form').modal();
     $('#simplemodal-container').css({'width':'auto', 'height':'auto'});
 });
-$('#add-user-form .show-or-hide-password').click(function() {
+$('#add-user-form .show-or-hide-password').on('click', function() {
     var icon = $(this),
         passwd_input = $('input[name=password1], input[name=password2]', $('#add-user-form'));
     icon.toggleClass('icon-eye icon-eye-slash');
@@ -121,7 +121,7 @@ $('#add-user-form .show-or-hide-password').click(function() {
         passwd_input.prop('type', 'text');
     }
 });
-$('#add-user-form .generate-random-password').click(function() {
+$('#add-user-form .generate-random-password').on('click', function() {
     var form = $('#add-user-form');
     var random_password = '';
     var possible = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789abcdefghijklmnopqrstuvwxyz0123456789';
@@ -133,7 +133,7 @@ $('#add-user-form .generate-random-password').click(function() {
     .attr('title', "{% trans "Hide" %}")
     .removeClass('icon-eye').addClass('icon-eye-slash');
 });
-$('#add-user-form').submit(function() {
+$('#add-user-form').on('submit', function() {
     var form = $(this),
         form_id = $(this).attr('id'),
         email = $.trim(form.children('[name="email"]').val()),
@@ -187,7 +187,7 @@ $('#add-user-form').submit(function() {
         },  
         error: function(jqXHR, textStatus, errorThrown) {
             if (jqXHR.responseText) {
-                apply_form_error(form_id, $.parseJSON(jqXHR.responseText).error);
+                apply_form_error(form_id, JSON.parse(jqXHR.responseText).error);
             } else {
                 apply_form_error(form_id, "{% trans "Failed. Please check the network." %}");
             }
@@ -196,22 +196,22 @@ $('#add-user-form').submit(function() {
     });
     return false;
 });
-$('#import-users-from-excel-btn').click(function () {
+$('#import-users-from-excel-btn').on('click', function () {
     $('#upload-excel-form').modal();
     $('#simplemodal-container').css({'width':'auto', 'height':'auto'});
 });
-$("#excel-example").click(function() {
+$("#excel-example").on('click', function() {
     location.href = "{% url 'batch_add_user_example' %}";
     return false;
 });
-$('#upload-excel-form').submit(function() {
+$('#upload-excel-form').on('submit', function() {
     var form = $(this);
     if (!$('[name=file]', form).val()) {
         $('.error', form).removeClass('hide');
         return false;
     }
 });
-$("#export-excel").click(function() {
+$("#export-excel").on('click', function() {
     location.href = "{% url 'sys_useradmin_export_excel' %}";
 });
 {% include "sysadmin/useradmin_js.html" %}

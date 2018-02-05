@@ -95,7 +95,7 @@
 
 {% block extra_script %}
 <script type="text/javascript">
-$('#group-nav a:first').click(function() {
+$('#group-nav a:first').on('click', function() {
     $('#group-nav .toggle-icon').toggleClass('icon-caret-left icon-caret-down');
     $('#group-nav .grp-list').slideToggle();
     return false;

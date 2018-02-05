@@ -34,8 +34,8 @@
 
 {% block extra_script %}
 <script type="text/javascript">
-$('input[type="submit"]').click(function() {
-    if (!$.trim($('#id_avatar').attr('value'))) {
+$('input[type="submit"]').on('click', function() {
+    if (!$.trim($('#id_avatar').val())) {
         $('.error').removeClass('hide');
         return false;
     }

@@ -20,7 +20,7 @@ define([
             this.listenTo(this.repos, 'reset', this.reset);
 
             var _this = this;
-            $(document).click(function(e) {
+            $(document).on('click', function(e) {
                 var target = e.target || event.srcElement;
                 var $select = _this.$('.perm-select:visible');
                 if ($select.length && !$select.is(target)) {

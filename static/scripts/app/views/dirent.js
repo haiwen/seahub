@@ -282,7 +282,7 @@ define([
                 },
                 error: function(xhr) {
                     if (xhr.responseText) {
-                        Common.feedback($.parseJSON(xhr.responseText).error||$.parseJSON(xhr.responseText).error_msg, 'error');
+                        Common.feedback(JSON.parse(xhr.responseText).error||JSON.parse(xhr.responseText).error_msg, 'error');
                     } else {
                         Common.feedback(gettext("Please check the network."), 'error');
                     }
@@ -426,10 +426,10 @@ define([
             var $input = $('[name="newname"]', form);
             var dot_index = dirent_name.lastIndexOf('.');
             if (!this.model.get('is_dir') && dot_index != -1) {
-                $input[0].focus();
+                $input.trigger('focus');
                 $input[0].setSelectionRange(0, dot_index);
             } else {
-                $input.select();
+                $input.trigger('select');
             }
 
             this._hideMenu();
@@ -467,10 +467,10 @@ define([
                 _this.$el.attr('draggable', true);
                 return false; // stop bubbling (to 'doc click to hide .hidden-op')
             };
-            $('.cancel', form).click(cancelRename);
+            $('.cancel', form).on('click', cancelRename);
 
             var _this = this;
-            form.submit(function() {
+            form.on('submit', function() {
                 var new_name = $.trim($('[name="newname"]', form).val());
                 var err_msg;
 
@@ -497,7 +497,7 @@ define([
                 var after_op_error = function(xhr) {
                     var err_msg;
                     if (xhr.responseText) {
-                        err_msg = $.parseJSON(xhr.responseText).error_msg;
+                        err_msg = JSON.parse(xhr.responseText).error_msg;
                     } else {
                         err_msg = gettext("Failed. Please check the network.");
                     }
@@ -622,7 +622,7 @@ define([
                         error: function(xhr) {
                             var error_msg;
                             if (xhr.responseText) {
-                                var parsed_resp = $.parseJSON(xhr.responseText);
+                                var parsed_resp = JSON.parse(xhr.responseText);
                                 error_msg = parsed_resp.error_msg || parsed_resp.detail;
                             } else {
                                 error_msg = gettext("Failed. Please check the network.");
@@ -663,7 +663,7 @@ define([
                     error: function(xhr) {
                         var error_msg;
                         if (xhr.responseText) {
-                            var parsed_resp = $.parseJSON(xhr.responseText);
+                            var parsed_resp = JSON.parse(xhr.responseText);
                             error_msg = parsed_resp.error_msg || parsed_resp.detail;
                         } else {
                             error_msg = gettext("Failed. Please check the network.");

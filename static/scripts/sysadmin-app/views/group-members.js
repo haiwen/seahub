@@ -41,7 +41,7 @@ define([
                 placeholder: gettext("Search user or enter email and press Enter")
             }));
 
-            $form.submit(function() {
+            $form.on('submit', function() {
                 var group_id = _this.groupMemberCollection.group_id;
                 var emails = $.trim($('[name="email"]', $form).val());
                 var $error = $('.error', $form);
@@ -151,7 +151,7 @@ define([
                         if (response['status'] == 401 || response['status'] == 403) {
                             err_msg = gettext("Permission error");
                         } else {
-                            err_msg = $.parseJSON(response.responseText).error_msg;
+                            err_msg = JSON.parse(response.responseText).error_msg;
                         }
                     } else {
                         err_msg = gettext("Failed. Please check the network.");

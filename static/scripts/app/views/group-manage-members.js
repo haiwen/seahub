@@ -47,7 +47,7 @@ define([
             this.$error = this.$('.error');
 
             var _this = this;
-            $(window).resize(function() {
+            $(window).on('resize', function() {
                 _this.setConMaxHeight();
             });
             // click other place to hide '.role-edit'
@@ -63,7 +63,7 @@ define([
                     $td.find('.cur-role, .role-edit-icon').show();
                 }
             };
-            $(document).click(hideRoleEdit);
+            $(document).on('click', hideRoleEdit);
         },
 
         render: function() {

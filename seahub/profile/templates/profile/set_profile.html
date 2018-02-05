@@ -179,10 +179,10 @@
 {% block extra_script %}
 <script type="text/javascript">
 // change avatar
-$('#user-avatar-chg-btn').click(function() {
+$('#user-avatar-chg-btn').on('click', function() {
     $('#user-avatar-input').trigger('click');
 });
-$('#user-avatar-input').change(function() {
+$('#user-avatar-input').on('change', function() {
     // check file extension
     var file, filename, ext;
     var allow = false;
@@ -220,12 +220,12 @@ $('#user-avatar-input').change(function() {
         return false;
     }
 
-    $('#user-avatar-form').submit();
+    $('#user-avatar-form').trigger('submit');
 });
 
 $('#user-basic-info .submit').css({'margin-left': $('#user-basic-info label').outerWidth(true)}).removeClass('vh');
 
-$('#account-delete-btn').click(function () {
+$('#account-delete-btn').on('click', function () {
     var title = "{% trans "Delete Account" %}",
         con = "{% trans "Really want to delete your account?" %}";
 
@@ -233,8 +233,8 @@ $('#account-delete-btn').click(function () {
     $('#confirm-popup').modal({appendTo:'#main'});
     $('#simplemodal-container').css({'height':'auto'});
 
-    $('#confirm-yes').click(function() {
-        $('#account-delete-form').submit();
+    $('#confirm-yes').on('click', function() {
+        $('#account-delete-form').trigger('submit');
     });
 });
 
@@ -247,13 +247,13 @@ var all_repos = [];
         'data': {'repo_id': '{{ a_repo.props.id }}', 'path': '/'}
     });
 {% endfor %}
-$('#choose-default-lib').click(function() {
+$('#choose-default-lib').on('click', function() {
     var $form = $('#default-lib-form');
     $form.modal({appendTo:'#main', autoResize:true, focus:false});
     $('#simplemodal-container').css({'width':'auto', 'height':'auto'});
     FileTree.renderDirTree($('#repos-dirs').data('site_root', '{{SITE_ROOT}}'), $form, all_repos);
 });
-$('#default-lib-form').submit(function() {
+$('#default-lib-form').on('submit', function() {
     var dst_repo = $('[name="dst_repo"]', $(this)).val();
     if (!$.trim(dst_repo)) {
         $('.error', $(this)).removeClass('hide');
@@ -263,7 +263,7 @@ $('#default-lib-form').submit(function() {
 {% endif %}
 
 {% if ENABLE_ADDRESSBOOK_OPT_IN %}
-$("#list-in-address-book input[type='checkbox']").change(function() {
+$("#list-in-address-book input[type='checkbox']").on('change', function() {
     var _this = $(this), data = {};
 
     if (_this.prop('checked')) {
@@ -295,12 +295,12 @@ $("#list-in-address-book input[type='checkbox']").change(function() {
     lang_context.parent().css({'position':'relative'});
     lang_selector.css({'top': lang_context.position().top + lang_context.height() + 3});
 
-    lang_context.click(function() {
+    lang_context.on('click', function() {
         lang_selector.toggleClass('hide');
         return false;
-    }).focus(function() { $(this).blur(); });
+    }).on('focus', function() { $(this).trigger('blur'); });
 
-    $(document).click(function(e) {
+    $(document).on('click', function(e) {
         var element = e.target || e.srcElement;
         if (element.id != 'lang-context-selector' && element.id != 'lang-context') {
             lang_selector.addClass('hide');

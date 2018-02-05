@@ -1,5 +1,5 @@
 {% extends "sysadmin/base.html" %}
-{% load seahub_tags i18n %}
+{% load seahub_tags i18n staticfiles %}
 
 {% block extra_style %}
 <link rel="stylesheet" type="text/css" href="{{MEDIA_URL}}css/jquery-ui.datepicker.min.css" />
@@ -44,7 +44,7 @@
 
 {% block extra_script %}
 <script type="text/javascript" src="{{MEDIA_URL}}js/Chart.bundle.min.js"></script>
-<script type="text/javascript" src="{{MEDIA_URL}}js/jquery-ui.datepicker.min.js"></script>
+<script type="text/javascript" src="{% static "scripts/lib/jquery-ui.min.js" %}"></script>
 <script type="text/javascript">
 
 // date picker for date-custom
@@ -227,24 +227,24 @@ getStatisticByTimeRange('7d');
 
 // click btns
 $rangeBtns = $('.system-statistic-time-range button');
-$('#7-days').click(function() {
+$('#7-days').on('click', function() {
     getStatisticByTimeRange('7d');
     $rangeBtns.removeClass('sf-btn-group-btn-cur');
     $(this).addClass('sf-btn-group-btn-cur');
 });
-$('#30-days').click(function() {
+$('#30-days').on('click', function() {
     getStatisticByTimeRange('30d');
     $rangeBtns.removeClass('sf-btn-group-btn-cur');
     $(this).addClass('sf-btn-group-btn-cur');
 });
-$('#1-year').click(function() {
+$('#1-year').on('click', function() {
     getStatisticByTimeRange('1y');
     $rangeBtns.removeClass('sf-btn-group-btn-cur');
     $(this).addClass('sf-btn-group-btn-cur');
 });
 
 // custom time range
-$('.date-custom-form').submit(function() {
+$('.date-custom-form').on('submit', function() {
     var $form = $(this);
     var $start = $('[name="start"]', $form);
     var $end = $('[name="end"]', $form);

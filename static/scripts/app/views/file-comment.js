@@ -47,7 +47,7 @@ define([
                 error: function(model, response) {
                     var err_msg;
                     if (response.responseText) {
-                        err_msg = $.parseJSON(response.responseText).error_msg;
+                        err_msg = JSON.parse(response.responseText).error_msg;
                     } else {
                         err_msg = gettext("Failed. Please check the network.");
                     }

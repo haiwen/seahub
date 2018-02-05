@@ -89,12 +89,11 @@ define([
 
             var _this = this;
             var originalWindowWidth = $(window).width();
-            $(window).resize(function() {
+            $(window).on('resize', function() {
                 var curWidth = $(window).width();
                 if (_this.currentView.reset) {
                     if ((originalWindowWidth < 768 && curWidth >= 768 ) ||
                         (originalWindowWidth >= 768 && curWidth < 768)) {
-                        // Todo
                         _this.currentView.reset();
                     }
                 }
@@ -102,7 +101,7 @@ define([
             });
 
             // for popups such as '#share-popup'
-            $(window).resize(function() {
+            $(window).on('resize', function() {
                 var $el = $('#share-popup, #repo-share-link-admin-dialog, #repo-folder-perm-popup, #folder-perm-popup');
                 if ($el.is(':visible')) {
                     if ($(window).width() < 768) {
@@ -120,8 +119,8 @@ define([
             });
 
 
-            $('#info-bar .close').click(Common.closeTopNoticeBar);
-            $('#top-browser-tip-close').click(function () {
+            $('#info-bar .close').on('click', Common.closeTopNoticeBar);
+            $('#top-browser-tip-close').on('click', function () {
                 $('#top-browser-tip').addClass('hide');
             });
         },

@@ -1,10 +1,11 @@
 define([
     'jquery',
+    'jquery.ui', /* for tabs */
     'underscore',
     'backbone',
     'common',
     'sysadmin-app/views/folder-share-item'
-], function($, _, Backbone, Common, FolderShareItemView) {
+], function($, jQueryUI, _, Backbone, Common, FolderShareItemView) {
     'use strict';
 
     var SharePopupView = Backbone.View.extend({
@@ -170,8 +171,8 @@ define([
                             $user_share_item.after(new_item.el);
                         });
                         $emails_input.select2("val", "");
-                        $('[value="rw"]', $perm).attr('selected', 'selected');
-                        $('[value="r"]', $perm).removeAttr('selected');
+                        $('option', $perm).prop('selected', false);
+                        $('[value="rw"]', $perm).prop('selected', true);
                         $error.addClass('hide');
                     }
                     if (data.failed.length > 0) {
@@ -185,7 +186,7 @@ define([
                 error: function(xhr) {
                     var err_msg;
                     if (xhr.responseText) {
-                        err_msg = Common.HTMLescape($.parseJSON(xhr.responseText).error_msg);
+                        err_msg = Common.HTMLescape(JSON.parse(xhr.responseText).error_msg);
                     } else {
                         err_msg = gettext("Failed. Please check the network.");
                     }
@@ -243,8 +244,8 @@ define([
                             $group_share_item.after(new_item.el);
                         });
                         $groups_input.select2("val", "");
-                        $('[value="rw"]', $perm).attr('selected', 'selected');
-                        $('[value="r"]', $perm).removeAttr('selected');
+                        $('option', $perm).prop('selected', false);
+                        $('[value="rw"]', $perm).prop('selected', true);
                         $error.addClass('hide');
                     }
                     if (data.failed.length > 0) {
@@ -258,7 +259,7 @@ define([
                 error: function(xhr) {
                     var err_msg;
                     if (xhr.responseText) {
-                        err_msg = Common.HTMLescape($.parseJSON(xhr.responseText).error_msg);
+                        err_msg = Common.HTMLescape(JSON.parse(xhr.responseText).error_msg);
                     } else {
                         err_msg = gettext("Failed. Please check the network.");
                     }

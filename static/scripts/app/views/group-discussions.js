@@ -24,7 +24,7 @@ define([
             this.render();
 
             var _this = this;
-            $(document).keydown(function(e) {
+            $(document).on('keydown', function(e) {
                 // ESCAPE key pressed
                 if (e.which == 27) {
                     _this.hide();
@@ -122,7 +122,7 @@ define([
                 }
             });
 
-            //this.$(".msg-input").focus();
+            //this.$(".msg-input").trigger('focus');
             //app.router.navigate('group/' + this.groupView.group.id + '/discussions/');
         },
 
@@ -162,7 +162,7 @@ define([
             var str = "@" + to_user + " ";
             var $input = this.$('[name="message"]').val(str);
             Common.setCaretPosition($input[0], str.length);
-            $input.focus();
+            $input.trigger('focus');
         },
 
         loadMore: function() {

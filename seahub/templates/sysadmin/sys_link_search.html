@@ -46,13 +46,13 @@
 
 {% block extra_script %}
 <script type="text/javascript">
-$('#search-link-form').submit(function() {
+$('#search-link-form').on('submit', function() {
     if ($.trim($('[name="token"]', $(this)).val()).length < 3) {
         return false;
     }
 });
 
-$('.rm-link').click(function() {
+$('.rm-link').on('click', function() {
     var _this = $(this);
     $.ajax({
         url: '{% url 'sys_publink_remove' %}',

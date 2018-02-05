@@ -25,7 +25,7 @@
 {% endblock %}
 {% block extra_script %}
 <script type="text/javascript">
-$('#get-code').click(function() {
+$('#get-code').on('click', function() {
     var email = $.trim($('input[name="email"]').val());
     if (!email) {
         return false;
@@ -65,7 +65,7 @@ $('#get-code').click(function() {
         error: function(xhr) {
             var err_msg = '';
             if (xhr.responseText) {
-                err_msg = $.parseJSON(xhr.responseText).error;
+                err_msg = JSON.parse(xhr.responseText).error;
             } else {
                 err_msg = "{% trans "Failed. Please check the network." %}";
             }
@@ -74,7 +74,7 @@ $('#get-code').click(function() {
     });
 });
 
-$('#link-audit-form').submit(function() {
+$('#link-audit-form').on('submit', function() {
     var email = $.trim($('[name="email"]').val());
     var code = $.trim($('[name="code"]').val());
     if (!email || !code) {

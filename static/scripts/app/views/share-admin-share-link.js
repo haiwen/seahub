@@ -34,8 +34,8 @@ define([
             $input.css({'width': $p.width() + 2});
             $p.hide();
             $input.show();
-            $input.click(function() {
-                $(this).select();
+            $input.on('click', function() {
+                $(this).trigger('select');
             });
             return false;
         },

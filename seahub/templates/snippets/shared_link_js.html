@@ -33,7 +33,7 @@ function showSharePopup(op, name, aj_data, type, cur_path) {
     $('#simplemodal-container').css({'height':'auto', 'width':'auto'});
 }
 
-$('#send-link').click(function() {
+$('#send-link').on('click', function() {
     $(this).addClass('hide');
     $('#rm-shared-link').addClass('hide');
     var input = $('#link-send-input');
@@ -44,11 +44,11 @@ $('#send-link').click(function() {
     //addAutocomplete('#link-send-input', '#link-send-form', share_list);
 });
 
-$("#link-send-form .cancel").click(function() {
+$("#link-send-form .cancel").on('click', function() {
     $('#link-send-form, #send-link, #rm-shared-link').toggleClass('hide');
 });
 
-$("#link-send-form").submit(function(event) {
+$("#link-send-form").on('submit', function(event) {
     var form = $(this),
         file_shared_link = form.children('input[name="file_shared_link"]').val(),
         email = $.trim(form.children('input[name="email"]').val()),
@@ -95,7 +95,7 @@ $("#link-send-form").submit(function(event) {
             enable(submit_btn);
             var err_str = '';
             if (xhr.responseText) {
-                var err = jQuery.parseJSON(xhr.responseText);
+                var err = JSON.parse(xhr.responseText);
                 if (err.error) {
                     err_str = err.error;
                 } else {
@@ -112,11 +112,11 @@ $("#link-send-form").submit(function(event) {
    return false;
 });
 
-$('#shared-link-text').click(function() {
-    $(this).select();
+$('#shared-link-text').on('click', function() {
+    $(this).trigger('select');
 });
 
-$('#gen-link-btn').click(function() {
+$('#gen-link-btn').on('click', function() {
     var gen_link_btn = $(this),
         obj = gen_link_btn.data('obj'),
         form = $('#link-options'),
@@ -200,7 +200,7 @@ $('#gen-link-btn').click(function() {
     return false;
 });
 
-$('#rm-shared-link').click(function() {
+$('#rm-shared-link').on('click', function() {
     var obj = $(this).data('obj'),
         token = obj.attr('data-token');
 
@@ -219,7 +219,7 @@ $('#rm-shared-link').click(function() {
     });
 });
 
-$('#link-passwd-switch').click(function () {
+$('#link-passwd-switch').on('click', function () {
     var form = $('#link-options'),
         pwd_input = $('input[type="password"]', form);
     var link_passwd = $('#link-passwd');
@@ -233,7 +233,7 @@ $('#link-passwd-switch').click(function () {
     }
 });
 
-$('#link-expire-switch').click(function () {
+$('#link-expire-switch').on('click', function () {
     var form = $('#link-options'),
         days_input = $('input[name="expire-days"]', form);
     var link_expire = $('#link-expire');

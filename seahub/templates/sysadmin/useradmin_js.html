@@ -20,19 +20,11 @@ addConfirmTo($('.unset-trial'), {
     'post': true // post request
 });
 
-$('tr:gt(0)').hover(
-    function() {
-        $(this).find('.user-status-edit-icon, .user-role-edit-icon, .admin-role-edit-icon').removeClass('vh');
-    },
-    function() {
-        $(this).find('.user-status-edit-icon, .user-role-edit-icon, .admin-role-edit-icon').addClass('vh');
-    }
-);
-$('.user-status-edit-icon, .user-role-edit-icon, .user-institution-edit-icon, .admin-role-edit-icon').click(function() {
+$('.user-status-edit-icon, .user-role-edit-icon, .user-institution-edit-icon, .admin-role-edit-icon').on('click', function() {
     $(this).parent().addClass('hide');
     $(this).parent().next().removeClass('hide'); // show 'select'
 });
-$('.user-status-select, .user-role-select, .user-institution-select').change(function() {
+$('.user-status-select, .user-role-select, .user-institution-select').on('change', function() {
     var select = $(this),
         select_val = select.val(),
         ajax_type = 'POST',
@@ -89,7 +81,7 @@ $('.user-status-select, .user-role-select, .user-institution-select').change(fun
 // for 'select'
 var $opForAll = $('.js-op-for-all');
 var $opForSelected = $('.js-op-for-selected');
-$('th [type="checkbox"]').click(function() {
+$('th [type="checkbox"]').on('click', function() {
     var all_checked = $(this).prop('checked');
     if (all_checked) {
         $('td [type="checkbox"]').prop('checked', true);
@@ -102,7 +94,7 @@ $('th [type="checkbox"]').click(function() {
     }
 });
 
-$('td [type="checkbox"]').click(function() {
+$('td [type="checkbox"]').on('click', function() {
     if ($('td [type="checkbox"]:checked').length) {
         $opForAll.hide();
         $opForSelected.show();
@@ -118,17 +110,17 @@ $('td [type="checkbox"]').click(function() {
     }
 });
 
-$('#set-quota-btn').click(function() {
+$('#set-quota-btn').on('click', function() {
     $('#set-quota-form').data({'batch': true}).modal();
     $('#simplemodal-container').css({'width':'auto', 'height':'auto'});
 });
 
 {% if show_institution %}
-$('#set-institution-btn').click(function() {
+$('#set-institution-btn').on('click', function() {
     $('#batch-set-institution-form').modal({focus: false, minWidth: 280});
     $('#simplemodal-container').css({'height':'auto'});
 });
-$("#batch-set-institution-form").submit(function() {
+$("#batch-set-institution-form").on('submit', function() {
     var $form = $(this);
     var $error = $('.error', $form);
     var $submit = $('[type="submit"]', $form);
@@ -175,7 +167,7 @@ $("#batch-set-institution-form").submit(function() {
         error: function(xhr, textStatus, errorThrown) {
             var error_msg;
             if (xhr.responseText) {
-                var parsed_resp = $.parseJSON(xhr.responseText);
+                var parsed_resp = JSON.parse(xhr.responseText);
                 error_msg = parsed_resp.error_msg||parsed_resp.detail;
             } else {
                 error_msg = gettext("Failed. Please check the network.");
@@ -189,7 +181,7 @@ $("#batch-set-institution-form").submit(function() {
 });
 {% endif %}
 
-$('#delete-users-btn').click(function() {
+$('#delete-users-btn').on('click', function() {
     var title = "{% trans "Delete User" %}";
     var content = "{% trans "Are you sure you want to delete the selected user(s) ?" %}";
     var yesCallback = function() {
@@ -239,7 +231,7 @@ $('#delete-users-btn').click(function() {
             error: function(xhr, textStatus, errorThrown) {
                 var err_msg;
                 if (xhr.responseText) {
-                    err_msg = $.parseJSON(xhr.responseText).error_msg;
+                    err_msg = JSON.parse(xhr.responseText).error_msg;
                 } else {
                     err_msg = "{% trans "Failed. Please check the network." %}";
                 }
@@ -254,14 +246,14 @@ $('#delete-users-btn').click(function() {
 });
 
 // edit quota
-$('.quota-edit-icon').click(function() {
+$('.quota-edit-icon').on('click', function() {
     var email = $(this).closest('tr').attr('data-userid');
     var $spaceQuota = $(this).prev('.user-space-quota');
     $('#set-quota-form').data({'batch': false, 'email': email, '$spaceQuota': $spaceQuota}).modal();
     $('#simplemodal-container').css({'width':'auto', 'height':'auto'});
 });
 
-$('#set-quota-form').submit(function() {
+$('#set-quota-form').on('submit', function() {
     var space_quota = $.trim($('[name="space_quota"]', $(this)).val());
     var $error = $('.error', $(this));
     if (!space_quota) {
@@ -341,7 +333,7 @@ $('#set-quota-form').submit(function() {
         error: function(xhr, textStatus, errorThrown) {
             var err_msg;
             if (xhr.responseText) {
-                err_msg = $.parseJSON(xhr.responseText).error_msg;
+                err_msg = JSON.parse(xhr.responseText).error_msg;
             } else {
                 err_msg = "{% trans "Failed. Please check the network." %}";
             }
@@ -354,7 +346,7 @@ $('#set-quota-form').submit(function() {
 });
 
 // select shows, but the user doesn't select a value, or doesn't change the permission, click other place to hide the select
-$(document).click(function(e) {
+$(document).on('click', function(e) {
     var target = e.target || event.srcElement;
     // target can't be edit-icon
     if (!$('.user-status-edit-icon, .user-status-select').is(target)) {

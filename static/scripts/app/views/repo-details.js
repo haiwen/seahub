@@ -14,7 +14,7 @@ define([
 
         initialize: function() {
             var _this = this;
-            $(document).keydown(function(e) {
+            $(document).on('keydown', function(e) {
                 // ESCAPE key pressed
                 if (e.which == 27) {
                     _this.hide();

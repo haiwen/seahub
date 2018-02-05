@@ -23,7 +23,7 @@ define([
             this.$account = $('#account');
 
             var _this = this;
-            $('.account-toggle').click(function() {
+            $('.account-toggle').on('click', function() {
                 _this.toggle();
                 return false;
             });
@@ -53,7 +53,7 @@ define([
                     _this.$loadingTip.hide();
                     var err_msg;
                     if (xhr.responseText) {
-                        err_msg = $.parseJSON(xhr.responseText).error;
+                        err_msg = JSON.parse(xhr.responseText).error;
                     } else {
                         err_msg = gettext('Please check the network.');
                     }

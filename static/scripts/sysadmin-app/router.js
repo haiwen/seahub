@@ -94,7 +94,7 @@ define([
 
             this.currentView = this.dashboardView;
 
-            $('#info-bar .close').click(Common.closeTopNoticeBar);
+            $('#info-bar .close').on('click', Common.closeTopNoticeBar);
         },
 
         switchCurrentView: function(newView) {

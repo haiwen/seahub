@@ -130,23 +130,22 @@
         </div>
 </div><!-- wrapper -->
 
-<script type="text/javascript" src="{{ MEDIA_URL }}js/jquery-1.12.1.min.js" id="jquery"></script>{# 'id="jquery"' is for pdf file view with pdf2html #}
+<script type="text/javascript" src="{% static "scripts/lib/jquery.min.js" %}" id="jquery"></script>{# 'id="jquery"' is for pdf file view with pdf2html #}
 <script type="text/javascript" src="{% static "scripts/lib/jquery.simplemodal.js" %}"></script>
-<script type="text/javascript" src="{% static "scripts/lib/jquery.ui.tabs.js" %}"></script>
 <script type="text/javascript" src="{% static "scripts/lib/jstree.min.js" %}"></script>
 <script type="text/javascript" src="{{ MEDIA_URL }}js/jq.min.js"></script>
-<script type="text/javascript" src="{{ MEDIA_URL }}js/base.js?t=1404370380"></script>
+<script type="text/javascript" src="{{ MEDIA_URL }}js/base.js"></script>
 <script type="text/javascript">
 function ajaxErrorHandler(xhr, textStatus, errorThrown) {
     if (xhr.responseText) {
-        feedback($.parseJSON(xhr.responseText).error||$.parseJSON(xhr.responseText).error_msg, 'error');
+        feedback(JSON.parse(xhr.responseText).error||JSON.parse(xhr.responseText).error_msg, 'error');
     } else {
         feedback("{% trans "Failed. Please check the network." %}", 'error');
     }
 }
 {% if request.user.is_authenticated %}
 {% if request.cur_note %}
-$('#info-bar .close').click(function() {
+$('#info-bar .close').on('click', function() {
     $('#info-bar').addClass('hide');
     if (navigator.cookieEnabled) {
         var date = new Date(),
@@ -194,13 +193,13 @@ $('#info-bar .close').click(function() {
             });
         }
     };
-    $(window).resize(function() {
+    $(window).on('resize', function() {
         if (lang_selector.is(':visible')) {
             setLangSelectorMaxHeight();
         }
     });
 
-    lang_context.click(function() {
+    lang_context.on('click', function() {
         lang_selector.toggleClass('hide');
         if (lang_selector.is(':visible')) {
             setLangSelectorMaxHeight();
@@ -208,7 +207,7 @@ $('#info-bar .close').click(function() {
         return false;
     });
 
-    $(document).click(function(e) {
+    $(document).on('click', function(e) {
         var element = e.target || e.srcElement;
         if (element.id != 'lang-context-selector' && element.id != 'lang-context') {
             lang_selector.addClass('hide');
@@ -221,11 +220,11 @@ if ($('.side-nav').length) {
      $('#logo').addClass('hidden-sm-down');
      $('#js-toggle-side-nav').removeClass('hide');
 }
-$('#js-toggle-side-nav').click(function() {
+$('#js-toggle-side-nav').on('click', function() {
     $('.side-nav').addClass('side-nav-shown');
     return false;
 });
-$('.js-close-side-nav').click(function() {
+$('.js-close-side-nav').on('click', function() {
     $('.side-nav').removeClass('side-nav-shown');
     return false;
 });

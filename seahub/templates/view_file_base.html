@@ -158,8 +158,9 @@
 {% endblock %}
 
 {% block extra_script %}
+<script type="text/javascript" src="{% static "scripts/lib/jquery-ui.min.js" %}"></script> {# for 'tabs' used in share popup #}
 <script type="text/javascript" src="{% static "scripts/lib/underscore.js" %}"></script>
-<script type="text/javascript" src="{% static "scripts/lib/moment-with-locales.js" %}"></script>
+<script type="text/javascript" src="{% static "scripts/lib/moment-with-locales.min.js" %}"></script>
 <script type="text/javascript" src="{% static "scripts/lib/marked.min.js" %}"></script>
 {% if highlight_keyword %}
 <script type="text/javascript" src="{{ MEDIA_URL }}js/findAndReplaceDOMText.js"></script>
@@ -173,7 +174,7 @@ $(function() {
 
 // share link
 {% include "snippets/shared_link_js.html" %}
-$('#share').click(function() {
+$('#share').on('click', function() {
     var op = $(this),
         name = "{{filename|escapejs}}",
         path = "{{path|escapejs}}",
@@ -191,7 +192,7 @@ $('#share').click(function() {
 
 
 // star file
-$('#file-star').click(function() {
+$('#file-star').on('click', function() {
     var op_icon = $(this), url_base;
     url_base = '{% url "starredfiles" %}';
 
@@ -232,7 +233,7 @@ $('#file-star').click(function() {
 
 {% if can_lock_unlock_file %}
 // lock/unlock file
-$('#lock-file, #unlock-file').click(function() {
+$('#lock-file, #unlock-file').on('click', function() {
     var op = $(this).attr('id') == 'lock-file' ? 'lock' : 'unlock',
         path = '{{path|escapejs}}';
     $.ajax({
@@ -259,10 +260,10 @@ function setToolbarPos() {
 }
 (function () {
     var to_top = $('#back-to-top');
-    to_top.click(function() {
+    to_top.on('click', function() {
         $(window).scrollTop(0);
     });
-    $(window).scroll(function() {
+    $(window).on('scroll', function() {
         if ($(window).scrollTop() > 0) {
             to_top.show();
         } else {
@@ -270,7 +271,7 @@ function setToolbarPos() {
         }
     });
 })();
-$(window).load(setToolbarPos).resize(setToolbarPos);
+$(window).on('load resize', setToolbarPos);
 
 {% if highlight_keyword %}
 var ref_list = document.referrer.split('?');
@@ -292,7 +293,7 @@ if (ref_list.length > 1 && ref_list[0].indexOf('search') > 0) {
     };
 }
 
-$(window).load(function() {
+$(window).on('load', function() {
     if (highlight_kw) {
         // hl kw in file title
         highlight_kw($('.file-view-hd span')[0]);
@@ -418,7 +419,7 @@ var fileDiscussions = {
             error: function(xhr) {
                 var err_msg;
                 if (xhr.responseText) {
-                    err_msg = $.parseJSON(xhr.responseText).error_msg;
+                    err_msg = JSON.parse(xhr.responseText).error_msg;
                 } else {
                     err_msg = "{% trans "Failed. Please check the network." %}";
                 }
@@ -461,7 +462,7 @@ var fileDiscussions = {
             error: function(xhr) {
                 var err_msg;
                 if (xhr.responseText) {
-                    err_msg = $.parseJSON(xhr.responseText).error_msg;
+                    err_msg = JSON.parse(xhr.responseText).error_msg;
                 } else {
                     err_msg = "{% trans "Failed. Please check the network." %}";
                 }
@@ -510,7 +511,7 @@ var fileDiscussions = {
         var str = "@" + to_user + " ";
         var $input = this.$msgInput.val(str);
         setCaretPos($input[0], str.length);
-        $input.focus();
+        $input.trigger('focus');
     },
 
     // delete a comment
@@ -531,7 +532,7 @@ var fileDiscussions = {
             error: function(xhr) {
                 var err_msg;
                 if (xhr.responseText) {
-                    err_msg = $.parseJSON(xhr.responseText).error_msg;
+                    err_msg = JSON.parse(xhr.responseText).error_msg;
                 } else {
                     err_msg = "{% trans "Failed. Please check the network." %}";
                 }
@@ -552,14 +553,14 @@ var fileDiscussions = {
 // init
 fileDiscussions.init();
 
-$('#discuss').click(function() {
+$('#discuss').on('click', function() {
     if (fileDiscussions.$el.is(':visible')) {
         fileDiscussions.hide();
     } else {
         fileDiscussions.show();
     }
 });
-$(document).keydown(function(e) {
+$(document).on('keydown', function(e) {
     // ESCAPE key pressed
     if (e.which == 27) {
         fileDiscussions.hide();

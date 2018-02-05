@@ -149,7 +149,7 @@ define([
             }).append(form);
             $op_td.hide();
             $name_span.hide();
-            $('[name="newname"]', form).select();
+            $('[name="newname"]', form).trigger('select');
 
             this.togglePopup();
             app.ui.freezeItemHightlight = true;
@@ -164,11 +164,11 @@ define([
                 });
                 return false; // stop bubbling (to 'doc click to hide .hidden-op')
             };
-            $('.cancel', form).click(cancelRename);
+            $('.cancel', form).on('click', cancelRename);
 
             var form_id = form.attr('id');
             var _this = this;
-            form.submit(function() {
+            form.on('submit', function() {
                 var new_name = $.trim($('[name="newname"]', form).val());
                 var err_msg;
                 if (!new_name) {
@@ -201,7 +201,7 @@ define([
                 var after_op_error = function(xhr) {
                     var err_msg;
                     if (xhr.responseText) {
-                        err_msg = $.parseJSON(xhr.responseText).error||$.parseJSON(xhr.responseText).error_msg;
+                        err_msg = JSON.parse(xhr.responseText).error||JSON.parse(xhr.responseText).error_msg;
                     } else {
                         err_msg = gettext("Failed. Please check the network.");
                     }
@@ -246,7 +246,7 @@ define([
                 formatSelectionTooBig: gettext("You cannot select any more choices")
             }));
 
-            $form.submit(function() {
+            $form.on('submit', function() {
                 var email = $.trim($('[name="email"]', $(this)).val());
                 if (!email) {
                     return false;
@@ -276,7 +276,7 @@ define([
                     error: function(xhr) {
                         var error_msg;
                         if (xhr.responseText) {
-                            error_msg = $.parseJSON(xhr.responseText).error_msg;
+                            error_msg = JSON.parse(xhr.responseText).error_msg;
                         } else {
                             error_msg = gettext("Failed. Please check the network.");
                         }
@@ -392,7 +392,7 @@ define([
                 error: function(xhr) {
                     var error_msg;
                     if (xhr.responseText) {
-                        var parsed_resp = $.parseJSON(xhr.responseText);
+                        var parsed_resp = JSON.parse(xhr.responseText);
                         error_msg = parsed_resp.error_msg || parsed_resp.detail;
                     } else {
                         error_msg = gettext("Failed. Please check the network.");
@@ -401,7 +401,7 @@ define([
                 }
             });
 
-            $form.submit(function() {
+            $form.on('submit', function() {
                 var $input = $('[name="labels"]', $form);
                 var labels = $input.select2('val');
                 var $error = $('.error', $form);
@@ -434,7 +434,7 @@ define([
                     error: function(xhr) {
                         var error_msg;
                         if (xhr.responseText) {
-                            var parsed_resp = $.parseJSON(xhr.responseText);
+                            var parsed_resp = JSON.parse(xhr.responseText);
                             error_msg = parsed_resp.error_msg || parsed_resp.detail;
                         } else {
                             error_msg = gettext("Failed. Please check the network.");

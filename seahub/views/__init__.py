@@ -773,21 +773,6 @@ def repo_set_access_property(request, repo_id):
     return HttpResponseRedirect(reverse("view_common_lib_dir", args=[repo_id, '']))
 
 @login_required
-def file_upload_progress_page(request):
-    '''
-    As iframe in repo_upload_file.html, for solving problem in chrome.
-
-    '''
-    uuid = request.GET.get('uuid', '')
-    fileserver_root = get_fileserver_root()
-    upload_progress_con_id = request.GET.get('upload_progress_con_id', '')
-    return render_to_response('file_upload_progress_page.html', {
-            'uuid': uuid,
-            'fileserver_root': fileserver_root,
-            'upload_progress_con_id': upload_progress_con_id,
-            }, context_instance=RequestContext(request))
-
-@login_required
 def validate_filename(request):
     repo_id     = request.GET.get('repo_id')
     filename    = request.GET.get('filename')

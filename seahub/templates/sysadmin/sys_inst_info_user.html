@@ -80,19 +80,11 @@ addConfirmTo($('.js-toggle-admin'), {
     'post': true
 });
 
-$('tr:gt(0)').hover(
-    function() {
-        $(this).find('.user-status-edit-icon').removeClass('vh');
-    },
-    function() {
-        $(this).find('.user-status-edit-icon').addClass('vh');
-    }
-);
-$('.user-status-edit-icon').click(function() {
+$('.user-status-edit-icon').on('click', function() {
     $(this).parent().addClass('hide');
     $(this).parent().next().removeClass('hide'); // show 'select'
 });
-$('.user-status-select').change(function() {
+$('.user-status-select').on('change', function() {
     var select = $(this),
         select_val = select.val(),
         uid = select.parents('tr').attr('data-userid'),
@@ -131,7 +123,7 @@ $('.user-status-select').change(function() {
         }
     });
 });
-$(document).click(function(e) {
+$(document).on('click', function(e) {
     var target = e.target || event.srcElement;
     // target can't be edit-icon
     if (!$('.user-status-edit-icon, .user-status-select').is(target)) {
@@ -141,7 +133,7 @@ $(document).click(function(e) {
 });
 
 // add members
-$('#add-member-btn').click(function(){
+$('#add-member-btn').on('click', function(){
     var $form = $('#add-member-form');
     $form.modal({focus: false});
     $('#simplemodal-container').css({'width':'auto', 'height':'auto'});
@@ -155,7 +147,7 @@ $('#add-member-btn').click(function(){
         formatAjaxError: "{% trans "Loading failed" %}"
     }, userInputOPtionsForSelect2('{% url 'search-user' %}')));
 });
-$('#add-member-form').submit(function(){
+$('#add-member-form').on('submit', function(){
     var $form = $(this);
     var $error = $('.error', $form);
     var $submit = $('[type="submit"]', $form);
@@ -181,7 +173,7 @@ $('#add-member-form').submit(function(){
         error: function(xhr, textStatus, errorThrown) {
             var error_msg;
             if (xhr.responseText) {
-                error_msg = $.parseJSON(xhr.responseText).error;
+                error_msg = JSON.parse(xhr.responseText).error;
             } else {
                 error_msg = "{% trans "Failed. Please check the network." %}";
             }

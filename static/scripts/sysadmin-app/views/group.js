@@ -75,7 +75,7 @@ define([
                 formatSelectionTooBig: gettext("You cannot select any more choices")
             }));
 
-            $form.submit(function() {
+            $form.on('submit', function() {
                 var email = $.trim($('[name="email"]', $(this)).val());
                 var $submitBtn = $('[type="submit"]', $(this));
 
@@ -103,7 +103,7 @@ define([
                     error: function(xhr) {
                         var error_msg;
                         if (xhr.responseText) {
-                            error_msg = $.parseJSON(xhr.responseText).error_msg;
+                            error_msg = JSON.parse(xhr.responseText).error_msg;
                         } else {
                             error_msg = gettext("Failed. Please check the network.");
                         }

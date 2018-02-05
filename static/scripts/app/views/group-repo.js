@@ -80,7 +80,7 @@ define([
                 error: function(model, response) {
                     var err;
                     if (response.responseText) {
-                        err = $.parseJSON(response.responseText).error_msg;
+                        err = JSON.parse(response.responseText).error_msg;
                     } else {
                         err = gettext("Failed. Please check the network.");
                     }

@@ -29,8 +29,8 @@
 
 {% block extra_script %}
 <script type="text/javascript">
-$('.new-narrow-panel input[name="password"]').focus();
-$('input[type="submit"]').click(function(){
+$('.new-narrow-panel input[name="password"]').trigger('focus');
+$('input[type="submit"]').on('click', function(){
     if (!$.trim($('input[name="password"]').val())) {
         $('.error').removeClass('hide').html("{% trans "Password cannot be blank" %}");
         return false;
@@ -45,7 +45,7 @@ $(function() {
 
 {% if enable_sso %}
 $(function() {
-    $('#shib-login').click(function() {
+    $('#shib-login').on('click', function() {
         window.location = "{% url 'shib_login' %}{% if next %}?next={{ next|escape }}{% endif %}";
         return false;
     });

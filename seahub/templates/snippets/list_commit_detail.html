@@ -32,7 +32,7 @@ function listCommitDetails(url, t) {
                 }
             }
             $('#ls-ch').html(heading + time + con);
-            $(window).resize();
+            $(window).trigger('resize');
         },
         error: function() {
             $('#ls-ch').html("{% trans "Unknown error." %}");
@@ -40,7 +40,7 @@ function listCommitDetails(url, t) {
         }
     });
 }
-$('.lsch').click(function() {
+$('.lsch').on('click', function() {
     listCommitDetails($(this).data('url'), $(this).data('time'));
     return false;
 });

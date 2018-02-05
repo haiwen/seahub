@@ -81,7 +81,7 @@
 $('#main-panel').removeClass('ovhd');
 
 {% if enable_clean %}
-$('#online-gc').click(function() {
+$('#online-gc').on('click', function() {
     $('#gc-form').modal({focus:false});
     $("#simplemodal-container").css({'height':'auto'});
 });
@@ -136,7 +136,7 @@ var get_more_trash = function() {
             $trash_more_loading.addClass('hide');
             var error;
             if (xhr.responseText) {
-                error = $.parseJSON(xhr.responseText).error;
+                error = JSON.parse(xhr.responseText).error;
             } else {
                 error = "{% trans "Failed. Please check the network." %}";
             }
@@ -148,7 +148,7 @@ var get_more_trash = function() {
 // get 'first' batch of trash
 get_more_trash();
 
-$('#trash-more-btn').click(function() {
+$('#trash-more-btn').on('click', function() {
     get_more_trash();
 });
 
@@ -170,7 +170,7 @@ $('table').on("click", ".restore-file, .restore-dir", function() {
         },
         error: function ajaxErrorHandler(xhr, textStatus, errorThrown) {
             if (xhr.responseText) {
-                feedback($.parseJSON(xhr.responseText).error_msg, 'error');
+                feedback(JSON.parse(xhr.responseText).error_msg, 'error');
             } else {
                 feedback("{% trans "Failed. Please check the network." %}", 'error');
             }

@@ -19,11 +19,11 @@ define([
             this.render();
 
             var _this = this;
-            $('#js-toggle-side-nav').click(function() {
+            $('#js-toggle-side-nav').on('click', function() {
                 _this.show();
                 return false;
             });
-            $(window).resize(function() {
+            $(window).on('resize', function() {
                 if ($(window).width() >= 768) {
                     _this.show();
                 }

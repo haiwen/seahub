@@ -84,12 +84,12 @@ define([
                         _this.$el.append('<p>' + Common.HTMLescape(data['cmt_desc']) + '</p>');
                     }
 
-                    $(window).resize();
+                    $(window).trigger('resize');
                 },
                 after_op_error: function(xhr) {
                     var err_msg;
                     if (xhr.responseText) {
-                        err_msg = $.parseJSON(xhr.responseText).error;
+                        err_msg = JSON.parse(xhr.responseText).error;
                     } else {
                         err_msg = gettext("Failed. Please check the network.");
                     }

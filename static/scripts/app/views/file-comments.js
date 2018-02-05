@@ -23,7 +23,7 @@ define([
             this.listenTo(this.collection, 'reset', this.reset);
 
             var _this = this;
-            $(document).keydown(function(e) {
+            $(document).on('keydown', function(e) {
                 // ESCAPE key pressed
                 if (e.which == 27) {
                     _this.hide();
@@ -114,7 +114,7 @@ define([
                         if (response['status'] == 401 || response['status'] == 403) {
                             err_msg = gettext("Permission error");
                         } else {
-                            err_msg = $.parseJSON(response.responseText).error_msg;
+                            err_msg = JSON.parse(response.responseText).error_msg;
                         }
                     } else {
                         err_msg = gettext('Please check the network.');
@@ -158,7 +158,7 @@ define([
                 error: function(xhr) {
                     var err_msg;
                     if (xhr.responseText) {
-                        err_msg = $.parseJSON(xhr.responseText).error_msg;
+                        err_msg = JSON.parse(xhr.responseText).error_msg;
                     } else {
                         err_msg = gettext("Failed. Please check the network.");
                     }
@@ -191,7 +191,7 @@ define([
             var str = "@" + to_user + " ";
             var $input = this.$msgInput.val(str);
             Common.setCaretPos($input[0], str.length);
-            $input.focus();
+            $input.trigger('focus');
         }
 
     });

@@ -39,11 +39,11 @@
 
 {% block extra_script %}
 <script type="text/javascript">
-$('#clear').click(function() {
+$('#clear').on('click', function() {
     location.href = "{% url 'user_notification_remove' %}";
 });
 
-$('#mark-all-read').click(function() {
+$('#mark-all-read').on('click', function() {
     var unread_items = $('#notices-table .unread');
     if (unread_items.length > 0) {
         $.ajax({
@@ -52,9 +52,6 @@ $('#mark-all-read').click(function() {
             dataType: 'json',
             beforeSend: prepareCSRFToken,
             success: function() {
-                var msg_ct = $("#msg-count");
-                $('.num', msg_ct).html(0).addClass('hide');
-                document.title = msg_ct.data('orig_doc_title');
                 unread_items.removeClass('unread').addClass('read');
             },
             error: ajaxErrorHandler
@@ -62,12 +59,12 @@ $('#mark-all-read').click(function() {
     }
 });
 
-$('.detail', $('#notices-table')).click(function() {
+$('#notices-table .detail').on('click', function() {
     location.href = $('.brief a', $(this).parent()).attr('href');
 });
 
 var start = {{start}}, limit = {{limit}};
-$('#notices-more-btn').click(function() {
+$('#notices-more-btn').on('click', function() {
     $(this).addClass('hide');
     $('#notices-loading').removeClass('hide');
     $.ajax({
@@ -78,7 +75,7 @@ $('#notices-more-btn').click(function() {
             $('#notices-loading').addClass('hide');
             $('#notices-table').append(data['html']);
 
-            $('.detail', $('#notices-table')).unbind().click(function() {
+            $('#notices-table .detail').off().on('click', function() {
                 location.href = $('.brief a', $(this).parent()).attr('href');
             });
 

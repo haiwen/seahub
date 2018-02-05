@@ -11,7 +11,7 @@ define([
     */
 
     // There can be only one visible sf-popover view
-    $(document).click(function(e) {
+    $(document).on('click', function(e) {
         var view = app.ui.currentPopover;
         var target = e.target || event.srcElement;
 
@@ -26,7 +26,7 @@ define([
         return true;
     });
 
-    $(document).keydown(function(e) {
+    $(document).on('keydown', function(e) {
         // ESCAPE key pressed
         if (e.keyCode == 27) {
             var view = app.ui.currentPopover;
@@ -36,7 +36,7 @@ define([
         }
     });
 
-    $(window).resize(function() {
+    $(window).on('resize', function() {
         var view = app.ui.currentPopover;
         if (!view) {
             return true;
