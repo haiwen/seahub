@@ -8,10 +8,9 @@ from django.views.generic import TemplateView, FormView
 
 from seahub.auth.decorators import login_required
 
-from seahub.two_factor import user_has_device, devices_for_user
 from seahub.two_factor.forms import DisableForm
-from seahub.two_factor.models import StaticDevice
-from seahub.two_factor.utils import default_device
+from seahub.two_factor.models import (StaticDevice, devices_for_user,
+                                      user_has_device, default_device)
 from seahub.two_factor.views.utils import class_view_decorator, CheckTwoFactorEnabledMixin
 
 

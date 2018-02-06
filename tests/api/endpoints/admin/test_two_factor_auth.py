@@ -3,6 +3,7 @@ import pytest
 from django.core.urlresolvers import reverse
 
 from seahub.test_utils import BaseTestCase
+from seahub.two_factor.models import TOTPDevice, devices_for_user
 
 TRAVIS = 'TRAVIS' in os.environ
 
@@ -13,12 +14,9 @@ class TwoFactorAuthViewTest(BaseTestCase):
         self.login_as(self.admin)
 
     def test_can_disable_two_factor_auth(self):
-        from seahub.two_factor.models import (StaticDevice, TOTPDevice,
-                                                    PhoneDevice)
         totp = TOTPDevice(user=self.admin, name="", confirmed=1)
         totp.save()
 
-        from seahub.two_factor import devices_for_user
         devices = devices_for_user(self.admin)
         i = 0
         for device in devices_for_user(self.admin):

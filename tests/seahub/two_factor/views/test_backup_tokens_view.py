@@ -1,8 +1,7 @@
 from django.core.urlresolvers import reverse
 from constance import config
 
-from seahub.two_factor.models import StaticDevice
-from seahub.two_factor import user_has_device
+from seahub.two_factor.models import StaticDevice, user_has_device
 from seahub.test_utils import BaseTestCase
 
 

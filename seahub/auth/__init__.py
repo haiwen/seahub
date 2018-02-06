@@ -1,12 +1,12 @@
 # Copyright (c) 2012-2016 Seafile Ltd.
 import datetime
+from importlib import import_module
 from warnings import warn
+
 from django.conf import settings
 from django.core.exceptions import ImproperlyConfigured
-from django.utils.importlib import import_module
 
 from seahub.auth.signals import user_logged_in
-from seahub.utils import is_org_context
 
 from constance import config
 
@@ -99,8 +99,10 @@ def logout(request):
     """
     request.session.flush()
     if hasattr(request, 'user'):
-        from seahub.base.accounts import User 
+        from seahub.base.accounts import User
         if isinstance(request.user, User):
+            # Do not directly/indirectly import models in package root level.
+            from seahub.utils import is_org_context
             if is_org_context(request):
                 org_id = request.user.org.org_id
                 request.user.remove_org_repo_passwds(org_id)

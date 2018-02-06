@@ -32,13 +32,12 @@ from seahub.auth.forms import AuthenticationForm
 
 from seahub.two_factor import login as two_factor_login
 from seahub.two_factor.decorators import otp_required
-from seahub.two_factor.models import (StaticToken, StaticDevice,
-                                            PhoneDevice, get_available_methods)
-from seahub.two_factor.utils import random_hex, totp_digits
+from seahub.two_factor.models import (StaticDevice, PhoneDevice,
+                                      get_available_methods, default_device)
+from seahub.two_factor.utils import random_hex, totp_digits, get_otpauth_url
 
 from seahub.two_factor.forms import (MethodForm, TOTPDeviceForm,
                                            PhoneNumberForm, DeviceValidationForm)
-from seahub.two_factor.utils import get_otpauth_url, default_device
 from seahub.two_factor.views.utils import (class_view_decorator,
                                                  CheckTwoFactorEnabledMixin,
                                                  IdempotentSessionWizardView)

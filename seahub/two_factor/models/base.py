@@ -75,7 +75,7 @@ class Device(models.Model):
 
             device == Device.from_persistent_id(device.persistent_id)
         """
-        from seahub.two_factor import import_class
+        from seahub.two_factor.utils import import_class
 
         try:
             device_type, device_id = path.rsplit('/', 1)

@@ -44,7 +44,7 @@ from seahub.invitations.models import Invitation
 from seahub.role_permissions.utils import get_available_roles, \
         get_available_admin_roles
 from seahub.role_permissions.models import AdminRole
-from seahub.two_factor.utils import default_device
+from seahub.two_factor.models import default_device
 from seahub.utils import IS_EMAIL_CONFIGURED, string2list, is_valid_username, \
     is_pro_version, send_html_email, get_user_traffic_list, get_server_id, \
     handle_virus_record, get_virus_record_by_id, \

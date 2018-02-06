@@ -9,7 +9,7 @@ from seahub.api2.base import APIView
 from seahub.api2.throttling import UserRateThrottle
 from seahub.api2.utils import json_response, api_error
 from seahub.api2.authentication import TokenAuthentication
-from seahub.two_factor import devices_for_user
+from seahub.two_factor.models import devices_for_user
 
 
 class TwoFactorAuthView(APIView):

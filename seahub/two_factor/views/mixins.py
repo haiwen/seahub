@@ -10,7 +10,7 @@ from seahub.auth import REDIRECT_FIELD_NAME
 from django.core.exceptions import PermissionDenied
 from django.shortcuts import redirect
 
-from ..utils import default_device
+from seahub.two_factor.models import default_device
 
 
 class OTPRequiredMixin(object):
