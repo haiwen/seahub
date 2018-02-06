@@ -28,10 +28,10 @@ from seahub.auth import REDIRECT_FIELD_NAME
 from seahub.base.decorators import sys_staff_required, require_POST
 from seahub.group.utils import validate_group_name, BadGroupNameError, \
     ConflictGroupNameError
-from seahub.wiki import get_group_wiki_repo, get_group_wiki_page, \
-    get_wiki_pages
 from seahub.wiki.models import WikiDoesNotExist, WikiPageMissing, GroupWiki
-from seahub.wiki.utils import clean_page_name, page_name_to_file_name
+from seahub.wiki.utils import (clean_page_name, page_name_to_file_name,
+                               get_wiki_pages, get_group_wiki_repo,
+                               get_group_wiki_page)
 from seahub.settings import SITE_ROOT, SITE_NAME
 from seahub.utils import render_error, send_html_email, is_org_context
 from seahub.views import is_registered_user, check_folder_permission

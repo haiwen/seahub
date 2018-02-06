@@ -63,7 +63,7 @@ class PersonalWikiTest(TestCase):
         res = personal_wiki(request)
         self.assertEqual('/home/wiki/home/', res['Location'])
 
-    @patch('seahub.views.wiki.get_personal_wiki_page')
+    @patch('seahub.views.wiki.utils.get_personal_wiki_page')
     @patch('seahub.base.models.FileContributors.objects.get_file_contributors')
     def test_wiki_found(self, mock_get_file_contributors,
                         mock_get_personal_wiki_page):
