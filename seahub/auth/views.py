@@ -8,7 +8,7 @@ from django.views.decorators.csrf import csrf_protect
 from django.core.urlresolvers import reverse
 from django.contrib import messages
 from django.shortcuts import render
-from django.contrib.sites.models import Site, RequestSite
+from django.contrib.sites.shortcuts import get_current_site
 from django.http import HttpResponseRedirect, Http404
 
 from django.utils.http import urlquote, base36_to_int, is_safe_url
@@ -30,7 +30,7 @@ from seahub.base.accounts import User
 from seahub.options.models import UserOptions
 from seahub.profile.models import Profile
 from seahub.two_factor.views.login import is_device_remembered
-from seahub.utils import is_ldap_user
+from seahub.utils import is_ldap_user, get_site_name
 from seahub.utils.ip import get_remote_ip
 from seahub.utils.file_size import get_quota_from_string
 from seahub.utils.two_factor_auth import two_factor_auth_enabled, handle_two_factor_auth
@@ -162,11 +162,7 @@ def login(request, template_name='registration/login.html',
             form = authentication_form()
 
     request.session.set_test_cookie()
-
-    if Site._meta.installed:
-        current_site = Site.objects.get_current()
-    else:
-        current_site = RequestSite(request)
+    current_site = get_current_site(request)
 
     multi_tenancy = getattr(settings, 'MULTI_TENANCY', False)
 
@@ -193,7 +189,7 @@ def login(request, template_name='registration/login.html',
         'form': form,
         redirect_field_name: redirect_to,
         'site': current_site,
-        'site_name': current_site.name,
+        'site_name': get_site_name(),
         'remember_days': config.LOGIN_REMEMBER_DAYS,
         'signup_url': signup_url,
         'enable_shib_login': enable_shib_login,
@@ -302,8 +298,7 @@ def password_reset(request, is_admin_site=False, template_name='registration/pas
                 opts['domain_override'] = request.META['HTTP_HOST']
             else:
                 opts['email_template_name'] = email_template_name
-                if not Site._meta.installed:
-                    opts['domain_override'] = RequestSite(request).domain
+                opts['domain_override'] = get_current_site(request).domain
             try:
                 form.save(**opts)
             except Exception, e:

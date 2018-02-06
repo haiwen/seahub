@@ -21,7 +21,7 @@ from rest_framework.response import Response
 
 from django.conf import settings as dj_settings
 from django.contrib.auth.hashers import check_password
-from django.contrib.sites.models import RequestSite
+from django.contrib.sites.shortcuts import get_current_site
 from django.db import IntegrityError
 from django.db.models import F
 from django.http import HttpResponse
@@ -1813,7 +1813,7 @@ def get_shared_link(request, repo_id, path):
             return api_error(status.HTTP_500_INTERNAL_SERVER_ERROR, e.msg)
 
     http_or_https = request.is_secure() and 'https' or 'http'
-    domain = RequestSite(request).domain
+    domain = get_current_site(request).domain
     file_shared_link = '%s://%s%sf/%s/' % (http_or_https, domain,
                                            settings.SITE_ROOT, token)
     return file_shared_link

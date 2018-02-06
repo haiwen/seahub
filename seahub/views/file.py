@@ -21,7 +21,7 @@ import hashlib
 
 from django.core import signing
 from django.core.cache import cache
-from django.contrib.sites.models import RequestSite
+from django.contrib.sites.shortcuts import get_current_site
 from django.contrib import messages
 from django.core.urlresolvers import reverse
 from django.db.models import F
@@ -566,7 +566,7 @@ def _file_view(request, repo_id, path):
         username=username).filter(path=path)
     fileshare = l[0] if len(l) > 0 else None
     http_or_https = request.is_secure() and 'https' or 'http'
-    domain = RequestSite(request).domain
+    domain = get_current_site(request).domain
     if fileshare:
         file_shared_link = gen_file_share_link(fileshare.token)
     else:

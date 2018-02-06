@@ -813,6 +813,11 @@ def get_site_scheme_and_netloc():
     parse_result = urlparse(get_service_url())
     return "%s://%s" % (parse_result.scheme, parse_result.netloc)
 
+def get_site_name():
+    """Return site name from settings.
+    """
+    return SITE_NAME
+
 def send_html_email(subject, con_template, con_context, from_email, to_email,
                     reply_to=None):
     """Send HTML email

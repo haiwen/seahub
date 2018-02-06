@@ -8,8 +8,7 @@ from django.core.mail import send_mail
 from django.utils import translation
 from django.utils.translation import ugettext_lazy as _
 from django.conf import settings
-from django.contrib.sites.models import RequestSite
-from django.contrib.sites.models import Site
+from django.contrib.sites.shortcuts import get_current_site
 import seaserv
 from seaserv import ccnet_threaded_rpc, unset_repo_passwd, is_passwd_set, \
     seafile_api, ccnet_api
@@ -21,7 +20,7 @@ from seahub.profile.models import Profile, DetailedProfile
 from seahub.role_permissions.models import AdminRole
 from seahub.role_permissions.utils import get_enabled_role_permissions_by_role, \
         get_enabled_admin_role_permissions_by_role
-from seahub.utils import is_user_password_strong, \
+from seahub.utils import is_user_password_strong, get_site_name, \
     clear_token, get_system_admins, is_pro_version
 from seahub.utils.mail import send_html_email_with_dj_template, MAIL_PRIORITY
 from seahub.utils.licenseparse import user_number_over_limit
@@ -396,7 +395,7 @@ class User(object):
                     u.email, dj_template='sysadmin/user_freeze_email.html',
                     subject=_('Account %(account)s froze on %(site)s.') % {
                         "account": self.email,
-                        "site": settings.SITE_NAME,
+                        "site": get_site_name(),
                     },
                     context={'user': self.email},
                     priority=MAIL_PRIORITY.now
@@ -560,10 +559,7 @@ class RegistrationBackend(object):
         """
         email, password = kwargs['email'], kwargs['password1']
         username = email
-        if Site._meta.installed:
-            site = Site.objects.get_current()
-        else:
-            site = RequestSite(request)
+        site = get_current_site(request)
 
         from registration.models import RegistrationProfile
         if bool(config.ACTIVATE_AFTER_REGISTRATION) is True:

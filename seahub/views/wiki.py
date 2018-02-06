@@ -15,7 +15,6 @@ import urllib
 import urllib2
 import chardet
 
-from django.contrib.sites.models import Site, RequestSite
 from django.core.urlresolvers import reverse
 from django.contrib import messages
 from django.http import HttpResponse, HttpResponseBadRequest, Http404, \
