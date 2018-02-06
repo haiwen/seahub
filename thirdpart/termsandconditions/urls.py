@@ -6,11 +6,8 @@
 # pylint: disable=W0401, W0614, E1120
 
 from django.conf.urls import url
-from django.contrib import admin
 from .views import TermsView, AcceptTermsView, EmailTermsView
 from .models import DEFAULT_TERMS_SLUG
-
-admin.autodiscover()
 
 urlpatterns = (
     # # View Default Terms

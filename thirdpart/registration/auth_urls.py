@@ -24,57 +24,57 @@ consult a specific backend's documentation for details.
 """
 
 from django.conf import settings
-from django.conf.urls import patterns, url
+from django.conf.urls import url
 
 from seahub.auth import views as auth_views
 from seahub.two_factor.views.login import TwoFactorVerifyView
 
-urlpatterns = patterns('',
-                       url(r'^password/change/$',
-                           auth_views.password_change,
-                           name='auth_password_change'),
-                       url(r'^password/change/done/$',
-                           auth_views.password_change_done,
-                           name='auth_password_change_done'),
-                       url(r'^password/reset/$',
-                           auth_views.password_reset,
-                           name='auth_password_reset'),
-                       url(r'^password/reset/confirm/(?P<uidb36>[0-9A-Za-z]+)-(?P<token>.+)/$',
-                           auth_views.password_reset_confirm,
-                           name='auth_password_reset_confirm'),
-                       url(r'^password/reset/complete/$',
-                           auth_views.password_reset_complete,
-                           name='auth_password_reset_complete'),
-                       url(r'^password/reset/done/$',
-                           auth_views.password_reset_done,
-                           name='auth_password_reset_done'),
+urlpatterns = [
+    url(r'^password/change/$',
+        auth_views.password_change,
+        name='auth_password_change'),
+    url(r'^password/change/done/$',
+        auth_views.password_change_done,
+        name='auth_password_change_done'),
+    url(r'^password/reset/$',
+        auth_views.password_reset,
+        name='auth_password_reset'),
+    url(r'^password/reset/confirm/(?P<uidb36>[0-9A-Za-z]+)-(?P<token>.+)/$',
+        auth_views.password_reset_confirm,
+        name='auth_password_reset_confirm'),
+    url(r'^password/reset/complete/$',
+        auth_views.password_reset_complete,
+        name='auth_password_reset_complete'),
+    url(r'^password/reset/done/$',
+        auth_views.password_reset_done,
+        name='auth_password_reset_done'),
 
-                       url(r'^login/two-factor-auth/$',
-                           TwoFactorVerifyView.as_view(),
-                           name='two_factor_auth'),
-)
+    url(r'^login/two-factor-auth/$',
+        TwoFactorVerifyView.as_view(),
+        name='two_factor_auth'),
+]
 
 if getattr(settings, 'ENABLE_LOGIN_SIMPLE_CHECK', False):
-    urlpatterns += patterns('',
-                            (r'^login/simple_check/$',
-                             auth_views.login_simple_check),
-                            )
+    urlpatterns += [
+        url(r'^login/simple_check/$',
+            auth_views.login_simple_check),
+    ]
 
 if getattr(settings, 'ENABLE_SSO', False):
-    urlpatterns += patterns('',
-                            url(r'^login/$', 'django_cas.views.login'),
-                            url(r'^logout/$', 'django_cas.views.logout'),
-                            )
+    urlpatterns += [
+        url(r'^login/$', 'django_cas.views.login'),
+        url(r'^logout/$', 'django_cas.views.logout'),
+    ]
 else:
-    urlpatterns += patterns('',
-                            url(r'^login/$',
-                                auth_views.login,
-                                {'template_name': 'registration/login.html',
-                                 'redirect_if_logged_in': 'libraries'},
-                                name='auth_login'),
-                            url(r'^logout/$',
-                                auth_views.logout,
-                                {'template_name': 'registration/logout.html',
-                                 'next_page': settings.LOGOUT_REDIRECT_URL},
-                                name='auth_logout'),
-                            )
+    urlpatterns += [
+        url(r'^login/$',
+            auth_views.login,
+            {'template_name': 'registration/login.html',
+             'redirect_if_logged_in': 'libraries'},
+            name='auth_login'),
+        url(r'^logout/$',
+            auth_views.logout,
+            {'template_name': 'registration/logout.html',
+             'next_page': settings.LOGOUT_REDIRECT_URL},
+            name='auth_logout'),
+    ]

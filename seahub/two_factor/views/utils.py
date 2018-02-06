@@ -4,7 +4,6 @@ import logging
 from constance import config
 from django.core.exceptions import ValidationError
 from django.utils.decorators import method_decorator
-from django.utils.functional import lazy_property
 from django.utils.translation import ugettext as _
 from django.core.urlresolvers import reverse
 from django.http import HttpResponseRedirect
@@ -40,8 +39,8 @@ class ExtraSessionStorage(SessionStorage):
     def _set_validated_step_data(self, validated_step_data):
         self.data[self.validated_step_data_key] = validated_step_data
 
-    validated_step_data = lazy_property(_get_validated_step_data,
-                                        _set_validated_step_data)
+    validated_step_data = property(_get_validated_step_data,
+                                   _set_validated_step_data)
 
 
 class IdempotentSessionWizardView(SessionWizardView):

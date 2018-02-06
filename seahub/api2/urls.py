@@ -1,5 +1,5 @@
 # Copyright (c) 2012-2016 Seafile Ltd.
-from django.conf.urls import patterns, url, include
+from django.conf.urls import url, include
 
 from .views import *
 from .views_misc import ServerInfoView
@@ -18,7 +18,7 @@ from .endpoints.group_discussion import GroupDiscussion
 from .endpoints.send_share_link_email import SendShareLinkView
 from .endpoints.send_upload_link_email import SendUploadLinkView
 
-urlpatterns = patterns('',
+urlpatterns = [
     url(r'^ping/$', Ping.as_view()),
     url(r'^auth/ping/$', AuthPing.as_view()),
     url(r'^auth-token/', ObtainAuthToken.as_view()),
@@ -107,18 +107,18 @@ urlpatterns = patterns('',
     url(r'^repos/(?P<repo_id>[-0-9-a-f]{36})/fileops/delete/$', OpDeleteView.as_view(), name="api2-fileops-delete"),
     url(r'^repos/(?P<repo_id>[-0-9-a-f]{36})/fileops/copy/$', OpCopyView.as_view(), name="api2-fileops-copy"),
     url(r'^repos/(?P<repo_id>[-0-9-a-f]{36})/fileops/move/$', OpMoveView.as_view(), name="api2-fileops-move"),
-)
+]
 
 # serve office converter static files
 from seahub.utils import HAS_OFFICE_CONVERTER
 if HAS_OFFICE_CONVERTER:
     from seahub.utils import OFFICE_HTML_DIR
-    urlpatterns += patterns('',
+    urlpatterns += [
         url(r'^office-convert/static/(?P<path>.*)$', 'django.views.static.serve', {'document_root': OFFICE_HTML_DIR}, name='api_office_convert_static'),
-    )
-    urlpatterns += patterns('',
+    ]
+    urlpatterns += [
         url(r'^office-convert/status/$', OfficeConvertQueryStatus.as_view()),
-    )
-    urlpatterns += patterns('',
+    ]
+    urlpatterns += [
         url(r'^office-convert/generate/repos/(?P<repo_id>[-0-9-a-f]{36})/$', OfficeGenerateView.as_view()),
-    )
+    ]
