@@ -346,9 +346,14 @@ class RegDevice(APIView):
 class Search(APIView):
     """ Search all the repos
     """
-    authentication_classes = (TokenAuthentication, )
+    authentication_classes = (TokenAuthentication, SessionAuthentication)
     permission_classes = (IsAuthenticated,)
     throttle_classes = (UserRateThrottle, )
+
+    def _search_keyword(self, request, keyword):
+
+        results, total, has_more = search_keyword(request, keyword)
+        return results, total, has_more
 
     def get(self, request, format=None):
         if not HAS_FILE_SEARCH:
@@ -366,19 +371,24 @@ class Search(APIView):
         if search_repo and \
                 search_repo not in ('all', 'mine', 'shared', 'group', 'public'):
 
+            repo_id = search_repo
             try:
-                repo = seafile_api.get_repo(search_repo)
+                repo = seafile_api.get_repo(repo_id)
             except Exception as e:
                 logger.error(e)
                 error_msg = 'Internal Server Error'
                 return api_error(status.HTTP_500_INTERNAL_SERVER_ERROR, error_msg)
 
             if not repo:
-                error_msg = 'Library %s not found.' % search_repo
+                error_msg = 'Library %s not found.' % repo_id
                 return api_error(status.HTTP_404_NOT_FOUND, error_msg)
 
+            if not check_folder_permission(request, repo_id, '/'):
+                error_msg = 'Permission denied.'
+                return api_error(status.HTTP_403_FORBIDDEN, error_msg)
+
         username = request.user.username
-        results, total, has_more = search_keyword(request, keyword)
+        results, total, has_more = self._search_keyword(request, keyword)
 
         is_org = False
         if is_org_context(request):
