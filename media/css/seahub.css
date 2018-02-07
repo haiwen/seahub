@@ -1004,14 +1004,16 @@ textarea:-moz-placeholder {/* for FF */
 .side-nav-toggle:hover {
     background:#ddd;
 }
-.home-side-nav .sharp {
+#group-nav .sharp,
+#share-admin-nav .sharp {
     display:inline-block;
     width:42px;
     margin-right:5px;
     text-align:right;
     color:#aaa;
 }
-.home-side-nav .toggle-icon {
+#group-nav .toggle-icon,
+#share-admin-nav .toggle-icon {
     color:#999;
 }
 .side-tabnav-tabs .tab-cur a,
@@ -1020,7 +1022,8 @@ textarea:-moz-placeholder {/* for FF */
 }
 .side-tabnav-tabs .tab-cur [class^="sf2-icon-"],
 .side-tabnav-tabs .tab-cur a,
-.home-side-nav .tab-cur .sharp {
+#group-nav .tab-cur .sharp,
+#share-admin-nav .tab-cur .sharp {
     color:#fff;
 }
 .side-tabnav-tabs .tab-cur a {
