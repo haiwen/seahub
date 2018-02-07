@@ -1,9 +1,9 @@
 import json
-from mock import patch
 
 from django.utils import timezone
 from django.core.urlresolvers import reverse
 from django.core import mail
+from django.test import override_settings
 
 from seahub.invitations.models import Invitation
 from seahub.notifications.models import UserNotification
@@ -66,7 +66,9 @@ class TokenViewTest(BaseTestCase):
                                      user=self.user,
                                      request=self.fake_request)
 
-    @patch('seahub.invitations.views.NOTIFY_ADMIN_AFTER_REGISTRATION', True)
+    @override_settings(
+                NOTIFY_ADMIN_AFTER_REGISTRATION=True,
+            )
     def test_notify_admin_after_registration(self):
         self.assertEqual(len(mail.outbox), 0)
         self._send_signal()
