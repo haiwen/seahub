@@ -497,9 +497,18 @@ LOGGING = {
     'filters': {
         'require_debug_false': {
             '()': 'django.utils.log.RequireDebugFalse'
-        }
+        },
+        'require_debug_true': {
+            '()': 'django.utils.log.RequireDebugTrue'
+        },
     },
     'handlers': {
+        'console': {
+            'level': 'DEBUG',
+            'filters': ['require_debug_true'],
+            'class': 'logging.StreamHandler',
+            'formatter': 'standard',
+        },
         'default': {
             'level': 'INFO',
             'class': 'logging.handlers.RotatingFileHandler',
@@ -522,6 +531,11 @@ LOGGING = {
         },
         'django.request': {
             'handlers': ['default', 'mail_admins'],
+            'level': 'INFO',
+            'propagate': False
+        },
+        'py.warnings': {
+            'handlers': ['console', ],
             'level': 'INFO',
             'propagate': False
         },
