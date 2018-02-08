@@ -1,12 +1,30 @@
 {% extends 'view_file_base.html' %}
 {% load i18n %}
 
+{% block extra_style %}{{ block.super }}
+<style type="text/css">
+#file-view {
+    text-align:center;
+}
+</style>
+{% endblock %}
+
+{% block file_view_extra_class %}image-file-view{% endblock %}
+
+{% block file_view %}
+<span class="loading-icon"></span>
+<img src="{{ raw_path }}" alt="{{ filename }}" id="svg-view" class="hide" />
+{% endblock %}
+
 {% block extra_script %}{{ block.super }}
 <script type="text/javascript">
-    if (!$.browser.mozilla && !$.browser.safari && !($.browser.msie && parseInt($.browser.version) > 8)) {
-        $('#file-view').html('<div id="file-view-tip"><p>{% trans "To view it online, you can use firefox, chrome or IE 9." %}</p></div>');
-    } else {
-        $('#file-view').html('<iframe src="{{ raw_path }}" frameborder="0" id="svg-view"></iframe>');
-    }
+function setFileViewAreaHeight() {
+    var $fileView = $('#file-view');
+    $fileView.outerHeight($(window).height() - $fileView.offset().top);
+}
+setFileViewAreaHeight();
+$(window).resize(setFileViewAreaHeight);
+$('#svg-view').prev('.loading-icon').hide();
+$('#svg-view').show();
 </script>
 {% endblock %}

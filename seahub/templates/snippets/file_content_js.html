@@ -21,11 +21,14 @@
 {% endif %}
 
 {% if filetype == 'SVG' %}
-    if (!$.browser.mozilla && !$.browser.safari && !($.browser.msie && parseInt($.browser.version) > 8)) {
-        $('#file-view').html('<div id="file-view-tip"><p>' + "{% trans "To view it online, you can use firefox, chrome or IE 9." %}" + '</p></div>');
-    } else {
-        $('#file-view').html('<iframe src="{{ raw_path }}" frameborder="0" id="svg-view"></iframe>');
-    }
+function setFileViewAreaHeight() {
+    var $fileView = $('#file-view');
+    $fileView.outerHeight($(window).height() - $fileView.offset().top);
+}
+setFileViewAreaHeight();
+$(window).resize(setFileViewAreaHeight);
+$('#svg-view').prev('.loading-icon').hide();
+$('#svg-view').show();
 {% endif %}
 
 {% if filetype == 'Markdown' %}

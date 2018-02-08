@@ -9,6 +9,8 @@ body { overflow:hidden; }
 </style>
 {% endblock %}
 
+{% block file_view_extra_class %}image-file-view{% endblock %}
+
 {% block file_view %}
     {% if img_prev %}
     <a href="{% url 'view_lib_file' repo.id img_prev %}" id="img-prev" title="{% trans 'you can also press ← ' %}"><span class="icon-chevron-left"></span></a>
