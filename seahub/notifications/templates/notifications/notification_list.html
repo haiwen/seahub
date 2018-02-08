@@ -47,12 +47,12 @@
 
 {% block extra_script %}
 <script type="text/javascript">
-$('#add-n').click(function() {
+$('#add-n').on('click', function() {
     $('#add-n-form').modal();
     $('#simplemodal-container').css({'width':'auto', 'height':'auto'});
     return false;
 });
-$('#add-n-form').submit(function() {
+$('#add-n-form').on('submit', function() {
     var $form = $(this);
     var msg = $.trim($('[name="message"]', $form).val());
     if (!msg) {
@@ -65,7 +65,7 @@ addConfirmTo($('.note-delete-btn'), {
     'con':"{% trans "Are you sure you want to delete %s ?" %}"
 });
 
-$('.set-cur-btn').click(function() {
+$('.set-cur-btn').on('click', function() {
     location.href = '{{ SITE_ROOT }}notification/set-primary/' + $(this).attr('data-id') + '/';
 });
 </script>

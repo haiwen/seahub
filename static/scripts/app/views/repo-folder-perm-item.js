@@ -81,7 +81,7 @@ define([
                 error: function(xhr) {
                     var err;
                     if (xhr.responseText) {
-                        err = $.parseJSON(xhr.responseText).error;
+                        err = JSON.parse(xhr.responseText).error;
                     } else {
                         err = gettext("Failed. Please check the network.");
                     }
@@ -122,7 +122,7 @@ define([
                 error: function(xhr) {
                     var err;
                     if (xhr.responseText) {
-                        err = $.parseJSON(xhr.responseText).error;
+                        err = JSON.parse(xhr.responseText).error;
                     } else {
                         err = gettext("Failed. Please check the network.");
                     }

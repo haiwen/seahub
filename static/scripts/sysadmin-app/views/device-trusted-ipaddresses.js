@@ -34,7 +34,7 @@ define([
             $form.modal()
             $('#simplemodal-container').css({'width':'auto', 'height':'auto'});
 
-            $form.submit(function(){
+            $form.on('submit', function(){
                 var $submitBtn = $('add-ip-form-btn', $form);
                 var ipaddress = $.trim($('#ipaddress', $form).val());
                 var $error = $('.error', $form);
@@ -57,7 +57,7 @@ define([
                     error: function(collection, response, options) {
                         var err_msg;
                         if (response.responseText) {
-                            err_msg = $.parseJSON(response.responseText).error_msg;
+                            err_msg = JSON.parse(response.responseText).error_msg;
                         } else {
                             err_msg = gettext('Please check the network.');
                         }
@@ -110,7 +110,7 @@ define([
                 error: function(collection, response, opts){
                     var err_msg;
                     if (response.responseText) {
-                        err_msg = $.parseJSON(response.responseText).error_msg;
+                        err_msg = JSON.parse(response.responseText).error_msg;
                     } else {
                         err_msg = gettext("Failed. Please check the network.");
                     }

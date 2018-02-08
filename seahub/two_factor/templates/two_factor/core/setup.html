@@ -57,6 +57,6 @@
 
 {% block extra_script %}
 <script type="text/javascript">
-$('input[type="text"], input[type="number"]', $('.new-narrow-panel')).focus();
+$('input[type="text"], input[type="number"]', $('.new-narrow-panel')).trigger('focus');
 </script>
 {% endblock %}

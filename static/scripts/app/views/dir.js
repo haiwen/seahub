@@ -1,6 +1,6 @@
 define([
     'jquery',
-    'jquery.ui.progressbar',
+    'jquery.ui',
     'jquery.magnific-popup',
     'simplemodal',
     'underscore',
@@ -16,7 +16,7 @@ define([
     'app/views/share',
     'app/views/file-comments',
     'app/views/widgets/dropdown'
-    ], function($, progressbar, magnificPopup, simplemodal, _, Backbone, Common,
+    ], function($, jQueryUI, magnificPopup, simplemodal, _, Backbone, Common,
         FileTree, Cookies, DirentCollection, DirentView, DirentGridView,
         DirentDetailsView, FileUploadView, ShareView, FileCommentsView, DropdownView) {
         'use strict';
@@ -82,17 +82,17 @@ define([
                 this.fileCommentsView = new FileCommentsView({dirView: this});
 
                 // hide 'rename form'
-                $(document).click(function(e) {
+                $(document).on('click', function(e) {
                     var target =  e.target || event.srcElement;
                     var $form = $('#rename-form');
                     if ($form.length && !$form.find('*').is(target)) {
                         var $tr = $form.closest('tr'); // get $tr before $form removed in `.cancel click()`
-                        $('.cancel', $form).click();
+                        $('.cancel', $form).trigger('click');
                     }
                 });
 
                 // for 'grid view': click to hide the contextmenu of '.grid-item'
-                $(document).click(function(e) {
+                $(document).on('click', function(e) {
                     var target =  e.target || event.srcElement;
                     var $popup = $('.grid-item-op');
                     if ($popup.length > 0 &&
@@ -123,7 +123,7 @@ define([
                 this.$gridViewContainer = this.$('.grid-view');
 
                 var _this = this;
-                $('.cur-view-main-con', this.$mainCon).scroll(function() {
+                $('.cur-view-main-con', this.$mainCon).on('scroll', function() {
                     _this.getMore();
                 });
             },
@@ -403,7 +403,7 @@ define([
                     }
                 });
                 $('#simplemodal-container').css({'height':'auto'});
-                $form.submit(function() {
+                $form.on('submit', function() {
                     var passwd = $.trim($('[name="password"]', $form).val());
                     if (!passwd) {
                         $('.error', $form).html(gettext("Password is required.")).removeClass('hide');
@@ -610,7 +610,7 @@ define([
                 form.modal();
                 $('#simplemodal-container').css({'height':'auto'});
 
-                form.submit(function() {
+                form.on('submit', function() {
                     var dirent_name = $.trim($('input[name="name"]', form).val());
 
                     if (!dirent_name) {
@@ -668,9 +668,9 @@ define([
                 $('#simplemodal-container').css({'height':'auto'});
 
                 Common.setCaretPos($input[0], 0);
-                $input.focus();
+                $input.trigger('focus');
 
-                $form.submit(function() {
+                $form.on('submit', function() {
                     var dirent_name = $.trim($input.val());
 
                     if (!dirent_name) {
@@ -1105,7 +1105,7 @@ define([
                 $(files).each(function() {
                     file_names.push(this.get('obj_name'));
                 });
-                form.submit(function() {
+                form.on('submit', function() {
                     var dst_repo = $('[name="dst_repo"]', form).val(),
                         dst_path = $('[name="dst_path"]', form).val(),
                         url_main;
@@ -1276,7 +1276,7 @@ define([
                                         error: function(xhr, textStatus, errorThrown) {
                                             var error;
                                             if (xhr.responseText) {
-                                                error = $.parseJSON(xhr.responseText).error;
+                                                error = JSON.parse(xhr.responseText).error;
                                             } else {
                                                 error = gettext("Failed. Please check the network.");
                                             }
@@ -1310,7 +1310,7 @@ define([
                                 error: function(xhr) {
                                     var err;
                                     if (xhr.responseText) {
-                                        err = $.parseJSON(xhr.responseText).error||$.parseJSON(xhr.responseText).error_msg;
+                                        err = JSON.parse(xhr.responseText).error||JSON.parse(xhr.responseText).error_msg;
                                     } else {
                                         err = gettext("Failed. Please check the network.");
                                     }
@@ -1362,7 +1362,7 @@ define([
                             }
                         };
                         mvcpDirent();
-                        cancel_btn.click(function() {
+                        cancel_btn.on('click', function() {
                             Common.disableButton(cancel_btn);
                             var task_id = $(this).data('task_id');
                             $.ajax({
@@ -1379,7 +1379,7 @@ define([
                                 error: function(xhr, textStatus, errorThrown) {
                                     var error;
                                     if (xhr.responseText) {
-                                        error = $.parseJSON(xhr.responseText).error;
+                                        error = JSON.parse(xhr.responseText).error;
                                     } else {
                                         error = gettext("Failed. Please check the network.");
                                     }

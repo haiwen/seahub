@@ -64,9 +64,9 @@ define([
                     } else {
                         _this.$radios.filter('[value=partial_history]').prop('checked', true);
                         _this.$days_input.prop('disabled', false).removeClass('input-disabled');
-                        _this.$days_input.attr('value', data.keep_days);
+                        _this.$days_input.val(data.keep_days);
                     }
-                    _this.$radios.filter(':checked').focus();
+                    _this.$radios.filter(':checked').trigger('focus');
 
                     if (!app.pageOptions.enable_repo_history_setting) {
                         _this.$('.history-settings-notice').removeClass('hide');
@@ -78,7 +78,7 @@ define([
                 error: function(xhr) {
                     var err_msg;
                     if (xhr.responseText) {
-                        err_msg = $.parseJSON(xhr.responseText).error_msg;
+                        err_msg = JSON.parse(xhr.responseText).error_msg;
                     } else {
                         err_msg = gettext("Failed. Please check the network.");
                     }
@@ -137,7 +137,7 @@ define([
                 error: function(xhr) {
                     var err_msg;
                     if (xhr.responseText) {
-                        err_msg = $.parseJSON(xhr.responseText).error_msg;
+                        err_msg = JSON.parse(xhr.responseText).error_msg;
                     } else {
                         err_msg = gettext("Failed. Please check the network.");
                     }

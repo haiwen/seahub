@@ -62,7 +62,7 @@
 
 {% block extra_script %}{{block.super}}
 <script type="text/javascript">
-$('.contact-edit').click(function() {
+$('.contact-edit').on('click', function() {
     var contact = $(this).parent();
     var form = $('#contact-edit-form');
     form.find('[name="contact_email"]').val(contact.data('email'));
@@ -70,7 +70,7 @@ $('.contact-edit').click(function() {
     form.modal({appendTo: '#main'});
     return false;
 });
-$('#contact-edit-form').submit(function() {
+$('#contact-edit-form').on('submit', function() {
     var form = $(this),
         form_id = $(this).attr('id');
     $.ajax({
@@ -91,7 +91,7 @@ $('#contact-edit-form').submit(function() {
         },
         error: function(jqXHR, textStatus, errorThrown) {
             if (jqXHR.responseText) {
-                var errors = $.parseJSON(jqXHR.responseText);
+                var errors = JSON.parse(jqXHR.responseText);
                 var str = '';
                 for (var i in errors) {
                     str += errors[i].join();
@@ -108,10 +108,10 @@ $('#contact-edit-form').submit(function() {
 
 addConfirmTo($('.contact-delete'), {'title':"{% trans "Delete Contact" %}", 'con':"{% trans "Are you sure you want to delete %s ?" %}"});
 
-$('#contact-add').click(function() {
+$('#contact-add').on('click', function() {
     $('#contact-add-form').modal({appendTo: '#main'});
 })
-$('#contact-add-form').submit(function() {
+$('#contact-add-form').on('submit', function() {
     var form = $(this),
         form_id = $(this).attr('id'),
         email = $.trim(form.find('input[name="contact_email"]').val());

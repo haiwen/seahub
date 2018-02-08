@@ -160,7 +160,7 @@
 {% endblock %}
 
 {% block extra_script %}
-<script type="text/javascript" src="{% static "scripts/lib/jquery.magnific-popup.js" %}"></script>
+<script type="text/javascript" src="{% static "scripts/lib/jquery.magnific-popup.min.js" %}"></script>
 <script type="text/javascript">
 var cur_path = '{{path|escapejs}}';
 var share_link_token = '{{token}}';
@@ -203,7 +203,7 @@ $('.img-img-link').magnificPopup(magnificOptions);
 
 
 {% if not traffic_over_limit and permissions.can_download %}
-$('.shared-dir-zip, .download-dir').click(function (e) {
+$('.shared-dir-zip, .download-dir').on('click', function (e) {
     var cur_download_dir_path;
     var interval,
         zip_token,
@@ -233,7 +233,7 @@ $('.shared-dir-zip, .download-dir').click(function (e) {
             },
             error: function(xhr) {
                 if (xhr.responseText) {
-                    feedback($.parseJSON(xhr.responseText).error_msg, 'error');
+                    feedback(JSON.parse(xhr.responseText).error_msg, 'error');
                 } else {
                     feedback("{% trans "Failed. Please check the network." %}", 'error');
                 }
@@ -255,7 +255,7 @@ $('.shared-dir-zip, .download-dir').click(function (e) {
         },
         error: function(xhr) {
             if (xhr.responseText) {
-                feedback($.parseJSON(xhr.responseText).error_msg, 'error');
+                feedback(JSON.parse(xhr.responseText).error_msg, 'error');
             } else {
                 feedback("{% trans "Failed. Please check the network." %}", 'error');
             }
@@ -283,7 +283,7 @@ $(function() {
             dataType: 'json',
             success: function(data) {
                 if (data) {
-                    img_icon.attr("src", '{{ SITE_ROOT }}' + data.encoded_thumbnail_src).load(function() {
+                    img_icon.attr("src", '{{ SITE_ROOT }}' + data.encoded_thumbnail_src).on('load', function() {
                         $(this).removeClass("not-thumbnail").addClass("thumbnail")
                         .removeAttr('width'); // for grid view
                     });
@@ -301,15 +301,14 @@ $(function() {
 });
 {% endif %}
 
-$('.grid-item').hover(
-    function () {
-        $('.img-link, .text-link', $(this)).addClass('hl');
-        $('.op-icon', $(this)).removeClass('vh');
-    },
-    function () {
-        $('.img-link, .text-link', $(this)).removeClass('hl');
-        $('.op-icon', $(this)).addClass('vh');
-    }
-);
+$('.grid-item')
+.on('mouseenter', function () {
+    $('.img-link, .text-link', $(this)).addClass('hl');
+    $('.op-icon', $(this)).removeClass('vh');
+})
+.on('mouseleave', function () {
+    $('.img-link, .text-link', $(this)).removeClass('hl');
+    $('.op-icon', $(this)).addClass('vh');
+});
 </script>
 {% endblock %}

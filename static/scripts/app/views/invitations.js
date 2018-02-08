@@ -52,7 +52,7 @@ define([
             $form.modal();
             $('#simplemodal-container').css({'height':'auto'});
 
-            $form.submit(function() {
+            $form.on('submit', function() {
                 var accepters = $.trim($('input[name="accepter"]', $form).val());
                 var accepter_list = [];
                 var email;
@@ -188,7 +188,7 @@ define([
                         if (response['status'] == 401 || response['status'] == 403) {
                             err_msg = gettext("Permission error");
                         } else {
-                            err_msg = $.parseJSON(response.responseText).error_msg;
+                            err_msg = JSON.parse(response.responseText).error_msg;
                         }
                     } else {
                         err_msg = gettext("Failed. Please check the network.");

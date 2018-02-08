@@ -85,7 +85,7 @@ define([
                 error: function(xhr) {
                     var err_msg;
                     if (xhr.responseText) {
-                        err_msg = $.parseJSON(response.responseText).error_msg;
+                        err_msg = JSON.parse(response.responseText).error_msg;
                     } else {
                         err_msg = gettext('Please check the network.');
                     }

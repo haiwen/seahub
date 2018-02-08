@@ -123,13 +123,12 @@ OfficePreviewer.prototype.add_toolbar = function() {
     $toolbar.css({'left': $(window).width()/2 - $toolbar.outerWidth(true)/2});
 
     setTimeout(function () { $toolbar.css({'opacity':0}); }, 4000);
-    $toolbar.hover(
-        function() { $(this).css({'opacity': 1}); },
-        function() { $(this).css({'opacity': 0}); }
-    );
+    $toolbar
+    .on('mouseenter', function() { $(this).css({'opacity': 1}); })
+    .on('mouseleave', function() { $(this).css({'opacity': 0}); });
 
     var scale_ratio_offset = 0.1;
-    $('#zoom-in, #zoom-out').click($.proxy(function(event) {
+    $('#zoom-in, #zoom-out').on('click', $.proxy(function(event) {
         // zoom in/out
         var scale_ratio = this.scale_ratio;
         var op = event.target.id;
@@ -185,7 +184,7 @@ OfficePreviewer.prototype.load_page = function(index) {
 
     this.iframes.push(iframe[0]);
     var self = this;
-    iframe.load(function() {
+    iframe.on('load', function() {
         // set proper scale factor when iframe is loaded
         if (self.scale_ratio != 1) {
             self.scale_iframe(this);

@@ -69,7 +69,7 @@ define([
                 formatSelectionTooBig: gettext("You cannot select any more choices")
             }));
 
-            $form.submit(function() {
+            $form.on('submit', function() {
                 var group_name = $.trim($('[name="group_name"]', $form).val());
                 var group_owner = $.trim($('[name="group_owner"]', $form).val());
                 var $error = $('.error', $form);
@@ -162,7 +162,7 @@ define([
                         if (response['status'] == 401 || response['status'] == 403) {
                             err_msg = gettext("Permission error");
                         } else {
-                            err_msg = $.parseJSON(response.responseText).error_msg;
+                            err_msg = JSON.parse(response.responseText).error_msg;
                         }
                     } else {
                         err_msg = gettext("Failed. Please check the network.");

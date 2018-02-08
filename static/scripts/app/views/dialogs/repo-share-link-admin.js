@@ -3,10 +3,11 @@ define([
     'underscore',
     'backbone',
     'common',
+    'jquery.ui', /* for tabs */
     'app/collections/repo-shared-download-links',
     'app/collections/repo-shared-upload-links',
     'app/views/repo-shared-link'
-], function($, _, Backbone, Common, DownloadLinks, UploadLinks, LinkView) {
+], function($, _, Backbone, Common, jQueryUI, DownloadLinks, UploadLinks, LinkView) {
     'use strict';
 
     var RepoShareLinkAdminDialog = Backbone.View.extend({
@@ -90,7 +91,7 @@ define([
                         if (response['status'] == 401 || response['status'] == 403) {
                             err_msg = gettext("Permission error");
                         } else {
-                            err_msg = $.parseJSON(response.responseText).error_msg;
+                            err_msg = JSON.parse(response.responseText).error_msg;
                         }
                     } else {
                         err_msg = gettext('Please check the network.');

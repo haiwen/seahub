@@ -1,5 +1,6 @@
 {% extends "sysadmin/base.html" %}
-{% load seahub_tags i18n %}
+{% load seahub_tags i18n staticfiles %}
+
 {% block cur_users %}tab-cur{% endblock %}
 
 {% block left_panel %}{{block.super}}
@@ -55,14 +56,15 @@
 {% endblock %}
 
 {% block extra_script %}
+<script type="text/javascript" src="{% static "scripts/lib/jquery-ui.min.js" %}"></script> {# for tabs #}
 <script type="text/javascript">
-$('#add-admin-btn').click(function() {
+$('#add-admin-btn').on('click', function() {
     var form = $("#add-admin-form");
     form.modal({appendTo: "#main", focus:false});
     $('#simplemodal-container').css({'height':'auto', 'padding':0});
     $('#add-admin-tabs').tabs();
 });
-$('#add-admin-form').submit(function() {
+$('#add-admin-form').on('submit', function() {
     var $form = $(this),
         emails = $.trim($('[name="user_email"]', $form).val());
 
@@ -89,7 +91,7 @@ $('#add-admin-form').submit(function() {
             if (xhr.status === 403) {
                 error_msg = "{% trans 'Permission denied.' %}";
             } else if (xhr.responseText) {
-                error_msg = $.parseJSON(xhr.responseText).error;
+                error_msg = JSON.parse(xhr.responseText).error;
             } else {
                 error_msg = "{% trans "Failed. Please check the network." %}";
             }
@@ -100,7 +102,7 @@ $('#add-admin-form').submit(function() {
 
     return false;
 });
-$('.admin-role-select').change(function() {
+$('.admin-role-select').on('change', function() {
     var $select = $(this),
         role = $select.val(),
         email = $select.parents('tr').attr('data-userid'),

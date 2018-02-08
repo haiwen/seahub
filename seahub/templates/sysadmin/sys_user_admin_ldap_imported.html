@@ -66,7 +66,7 @@
 
 {% block extra_script %}
 <script type="text/javascript">
-$("#export-excel").click(function() {
+$("#export-excel").on('click', function() {
     location.href = "{% url 'sys_useradmin_export_excel' %}";
 });
 {% include "sysadmin/useradmin_js.html" %}

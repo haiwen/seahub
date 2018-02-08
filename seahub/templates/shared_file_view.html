@@ -92,7 +92,7 @@ $(function () {
 });
 
 {% if request.user.is_authenticated and request.user.username != shared_by and permissions.can_download %}
-$('#save').click(function() {
+$('#save').on('click', function() {
     var $form = $('#file-save-form');
     $form.modal({appendTo:'#main', autoResize:true, focus:false});
     $('#simplemodal-container').css({'width':'auto', 'height':'auto'});
@@ -114,7 +114,7 @@ $('#save').click(function() {
         }
     });
 });
-$('#file-save-form').submit(function() {
+$('#file-save-form').on('submit', function() {
     var $form = $(this),
         dst_repo = $('[name="dst_repo"]', $form).val(),
         dst_path = $('[name="dst_path"]', $form).val();
@@ -145,10 +145,10 @@ $('#file-save-form').submit(function() {
 
 {% if not permissions.can_download %}
 $(document)
-.contextmenu(function() {
+.on('contextmenu', function() {
     return false;
 })
-.bind('keydown', function(e) {
+.on('keydown', function(e) {
     // prevent ctrl + s/p/a/c, i.e, 'save', 'print', 'select all', 'copy'
     if (e.ctrlKey && (e.which == 83 || e.which == 80 || e.which == 65 || e.which == 67)) {
         e.preventDefault();

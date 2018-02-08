@@ -16,7 +16,7 @@ define([
             this.dirView = options.dirView;
 
             var _this = this;
-            $(document).keydown(function(e) {
+            $(document).on('keydown', function(e) {
                 // ESCAPE key pressed
                 if (e.which == 27) {
                     _this.hide();
@@ -34,7 +34,7 @@ define([
             this.$el.html(this.template(this.data));
 
             var _this = this;
-            this.$('.details-panel-img-container img').load(function() {
+            this.$('.details-panel-img-container img').on('load', function() {
                 _this.showImg();
             });
             this.$('.thumbnail').on('error', function() {
@@ -154,7 +154,7 @@ define([
                 error: function(xhr) {
                     var error_msg;
                     if (xhr.responseText) {
-                        var parsed_resp = $.parseJSON(xhr.responseText);
+                        var parsed_resp = JSON.parse(xhr.responseText);
                         error_msg = parsed_resp.error_msg || parsed_resp.detail;
                     } else {
                         error_msg = gettext("Failed. Please check the network.");

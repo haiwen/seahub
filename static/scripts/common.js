@@ -27,13 +27,11 @@ require.config({
         }
     },
     paths: {
-        'jquery': 'lib/jquery',
-        'jquery.ui.core': 'lib/jquery.ui.core',
-        'jquery.ui.widget': 'lib/jquery.ui.widget.1.11.1',
-        'jquery.ui.progressbar': 'lib/jquery.ui.progressbar',
-        'jquery.ui.tabs': 'lib/jquery.ui.tabs',
+        'jquery': 'lib/jquery.min',
+        'jquery.ui': 'lib/jquery-ui.min', // TODO: it uses deprecated methods in jquery 3
 
         // for fileupload
+        'jquery.ui.widget': 'lib/jquery.ui.widget.1.11.1',
         'tmpl': 'lib/tmpl.min',
         'jquery.iframe-transport': 'lib/jquery.iframe-transport',
         'jquery.fileupload': 'lib/jquery.fileupload',
@@ -41,14 +39,12 @@ require.config({
         'jquery.fileupload-validate': 'lib/jquery.fileupload-validate',
         'jquery.fileupload-ui': 'lib/jquery.fileupload-ui',
 
-        'jquery.magnific-popup': 'lib/jquery.magnific-popup',
-
-        'js.cookie': 'lib/js.cookie',
-
-        simplemodal: 'lib/jquery.simplemodal',
-        jstree: 'lib/jstree.min',
-        select2: 'lib/select2-3.5.2',
-        moment: 'lib/moment-with-locales',
+        'jquery.magnific-popup': 'lib/jquery.magnific-popup.min', // TODO: it uses deprecated methods in jquery 3
+        'js.cookie': 'lib/js.cookie.min',
+        simplemodal: 'lib/jquery.simplemodal', // TODO: it uses deprecated methods in jquery 3
+        jstree: 'lib/jstree.min', // TODO: it uses deprecated methods in jquery 3
+        select2: 'lib/select2-3.5.2', // TODO
+        moment: 'lib/moment-with-locales.min',
         marked: 'lib/marked.min',
 
         underscore: 'lib/underscore',
@@ -343,7 +339,7 @@ define([
             $popup.modal();
             $('#simplemodal-container').css({'height':'auto'});
 
-            $yesBtn.click(yesCallback);
+            $yesBtn.on('click', yesCallback);
         },
 
         confirm_with_extra_option_template: _.template($('#confirm-dialog-with-extra-option-tmpl').html()),
@@ -364,7 +360,7 @@ define([
             $popup.modal();
             $('#simplemodal-container').css({'height':'auto'});
 
-            $yesBtn.click(function() {
+            $yesBtn.on('click', function() {
                 var extraOptionChecked = $('#confirm-extra-option:checked').val() === 'on';
                 yesCallback(extraOptionChecked);
             });
@@ -413,7 +409,7 @@ define([
 
         ajaxErrorHandler: function(xhr, textStatus, errorThrown) {
             if (xhr.responseText) {
-                var parsed_resp = $.parseJSON(xhr.responseText);
+                var parsed_resp = JSON.parse(xhr.responseText);
                 this.feedback(parsed_resp.error||parsed_resp.error_msg||parsed_resp.detail, 'error');
             } else {
                 this.feedback(gettext("Failed. Please check the network."), 'error');
@@ -421,11 +417,11 @@ define([
         },
 
         enableButton: function(btn) {
-            btn.removeAttr('disabled').removeClass('btn-disabled');
+            btn.prop('disabled', false).removeClass('btn-disabled');
         },
 
         disableButton: function(btn) {
-            btn.attr('disabled', 'disabled').addClass('btn-disabled');
+            btn.prop('disabled', true).addClass('btn-disabled');
         },
 
         setCaretPos: function(inputor, pos) {
@@ -503,7 +499,7 @@ define([
                 after_op_error = function(xhr, textStatus, errorThrown) {
                     var err;
                     if (xhr.responseText) {
-                        err = $.parseJSON(xhr.responseText).error||$.parseJSON(xhr.responseText).error_msg;
+                        err = JSON.parse(xhr.responseText).error||JSON.parse(xhr.responseText).error_msg;
                     } else {
                         err = gettext("Failed. Please check the network.");
                     }

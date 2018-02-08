@@ -36,11 +36,11 @@
 
 {% block extra_script %}{{block.super}}
 <script type="text/javascript">
-$('#page-create').click(function() {
+$('#page-create').on('click', function() {
     $('#page-create-form').modal({appendTo: '#main'});
     $('#simplemodal-container').css({'height':'auto'});
 });
-$('#page-create-form').submit(function() {
+$('#page-create-form').on('submit', function() {
     var page_name = $.trim($('[name="page_name"]', $(this)).val());
     if (!page_name) {
         return false;

@@ -32,7 +32,7 @@
 
 {% block extra_script %}
 <script type="text/javascript">
-$('#search-user-form').submit(function() {
+$('#search-user-form').on('submit', function() {
     if (!$.trim($('[name="email"]', $(this)).val())) {
         return false;
     }

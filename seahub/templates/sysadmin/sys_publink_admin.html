@@ -79,7 +79,7 @@
 
 {% block extra_script %}
 <script type="text/javascript">
-$('.rm-link').click(function() {
+$('.rm-link').on('click', function() {
     var _this = $(this);
     $.ajax({
         url: '{% url 'sys_publink_remove' %}',

@@ -30,11 +30,11 @@ define([
                 'can_generate_upload_link': app.pageOptions.can_generate_upload_link
             };
             var _this = this;
-            $('#js-toggle-side-nav').click(function() {
+            $('#js-toggle-side-nav').on('click', function() {
                 _this.show();
                 return false;
             });
-            $(window).resize(function() {
+            $(window).on('resize', function() {
                 if ($(window).width() >= 768) {
                     _this.show();
                 }
@@ -95,7 +95,7 @@ define([
             form.modal({focus:false});
             $('#simplemodal-container').css('height', 'auto');
 
-            $('.checkbox-orig', form).click(function() {
+            $('.checkbox-orig', form).on('click', function() {
                 $(this).parent().toggleClass('checkbox-checked');
             });
 
@@ -103,7 +103,7 @@ define([
                 original_checked = checkbox.prop('checked'),
                _this = this;
 
-            form.submit(function() {
+            form.on('submit', function() {
                 var cur_checked = checkbox.prop('checked');
                 if (cur_checked == original_checked) {
                     return false;

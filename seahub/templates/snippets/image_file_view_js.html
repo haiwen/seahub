@@ -5,20 +5,20 @@ function setFileViewAreaHeight() {
     $arrow.css({'top': ($fileView.outerHeight() - $arrow.height())/2});
 }
 setFileViewAreaHeight();
-$(window).resize(setFileViewAreaHeight);
-$('#image-view').load(function() {
+$(window).on('resize', setFileViewAreaHeight);
+$('#image-view').on('load', function() {
     $('.image-file-view .loading-icon').hide();
     $(this).show();
 });
 
 {% if img_prev or img_next %} {# for view_file_image & view_file_via_shared_dir #}
 var input_focus = false;
-$('input, textarea').focus(function() {
+$('input, textarea').on('focus', function() {
     input_focus = true;
-}).blur(function() {
+}).on('blur', function() {
     input_focus = false;
 });
-$('body').bind('keydown', function(e) {
+$('body').on('keydown', function(e) {
     if (!input_focus) { // so cursor move in form input element can work normally
         {% if img_prev %}
         if (e.keyCode == 37) { // press '<-'

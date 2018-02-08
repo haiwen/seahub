@@ -86,8 +86,6 @@
 	browser.ie7 = browser.msie && /msie 7.0/.test(ua);
 	browser.boxModel = (document.compatMode === "CSS1Compat");
 
-	var focusedBeforeDialog;
-
 	/*
 	 * Create and display a modal dialog.
 	 *
@@ -258,7 +256,7 @@
 				s.d.placeholder = false;
 
 				// if the object came from the DOM, keep track of its parent
-				if (data.parent().parent().size() > 0) {
+				if (data.parent().parent().length > 0) {
 					data.before($('<span></span>')
 						.attr('id', 'simplemodal-placeholder')
 						.css({display: 'none'}));
@@ -325,7 +323,6 @@
 			// create the overlay
 			s.d.overlay = $('<div></div>')
 				.attr('id', s.o.overlayId)
-				.attr('tabIndex', -1)
 				.addClass('simplemodal-overlay')
 				.css($.extend(s.o.overlayCss, {
 					display: 'none',
@@ -340,8 +337,10 @@
 				.appendTo(s.o.appendTo);
 
 			// create the container
-			s.d.container = $('<div role="dialog" aria-labelledby="dialogTitle" aria-describedby="dialogDiscription"></div>')
+			s.d.container = $('<div></div>')
 				.attr('id', s.o.containerId)
+				//Adding role attribute with value 'dialog' for 508 compliance.
+				.attr('role', 'dialog')
 				.addClass('simplemodal-container')
 				.css($.extend(
 					{position: s.o.fixed ? 'fixed' : 'absolute'},
@@ -353,7 +352,8 @@
 					: '')
 				.appendTo(s.o.appendTo);
 
-			s.d.wrap = $('<div role="document"></div>')
+			s.d.wrap = $('<div></div>')
+				.attr('tabIndex', -1)
 				.addClass('simplemodal-wrap')
 				.css({height: '100%', outline: 0, width: '100%'})
 				.appendTo(s.d.container);
@@ -599,7 +599,7 @@
 				st = s.d.container.css('position') !== 'fixed' ? wndw.scrollTop() : 0;
 
 			if (s.o.position && Object.prototype.toString.call(s.o.position) === '[object Array]') {
-				top = st + (s.o.position[0] || hc);
+				top = parseFloat(st) + parseFloat(s.o.position[0] || hc);
 				left = s.o.position[1] || vc;
 			} else {
 				top = st + hc;
@@ -651,7 +651,6 @@
 				s.d.data.show();
 			}
 
-			focusedBeforeDialog = document.activeElement;
 			s.o.focus && s.focus();
 
 			// bind default events
@@ -673,8 +672,6 @@
 			if (!s.d.data) {
 				return false;
 			}
-
-			focusedBeforeDialog && focusedBeforeDialog.focus();
 
 			// remove the default events
 			s.unbindEvents();

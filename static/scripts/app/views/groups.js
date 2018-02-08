@@ -113,7 +113,7 @@ define([
 
             var groups = this.groups;
             var _this = this;
-            $form.submit(function() {
+            $form.on('submit', function() {
                 var group_name = $.trim($('[name="group_name"]', $form).val());
                 var $error = $('.error', $form);
                 var $submitBtn = $('[type="submit"]', $form);

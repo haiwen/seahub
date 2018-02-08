@@ -78,12 +78,12 @@
 {% block extra_script %}
 <script type="text/javascript" src="{{MEDIA_URL}}js/editormd/lib/marked.min.js"></script>
 <script type="text/javascript">
-$('#add-btn').click(function() {
+$('#add-btn').on('click', function() {
     $('#tc-form').modal();
     $('#simplemodal-container').css({'width':'auto', 'height':'auto'});
 });
 
-$('#tc-form').submit(function(){
+$('#tc-form').on('submit', function(){
     var $form = $(this),
         form_id = $form.attr('id'),
         $submit_btn = $form.find('[type="submit"]'),
@@ -112,7 +112,7 @@ $('#tc-form').submit(function(){
         },
         error: function(jqXHR, textStatus, errorThrown) {
             if (jqXHR.responseText) {
-                apply_form_error(form_id, $.parseJSON(jqXHR.responseText).error);
+                apply_form_error(form_id, JSON.parse(jqXHR.responseText).error);
             } else {
                 apply_form_error(form_id, "{% trans "Failed. Please check the network." %}");
             }
@@ -123,7 +123,7 @@ $('#tc-form').submit(function(){
     return false;
 });
 
-$('.js-update').click(function() {
+$('.js-update').on('click', function() {
     var $form = $('#tc-form');
     $form.modal({focus: false});
     $('#simplemodal-container').css({'width':'auto', 'height':'auto'});
@@ -156,7 +156,7 @@ marked.setOptions({
     sanitize: true // Ignore any HTML that has been input
 });
 
-$('.js-text').click(function() {
+$('.js-text').on('click', function() {
     $('#tc-preview')
     .html(marked($(this).attr('data-msg')))
     .css({'max-height': $(window).height() - 120}) // 120: the vertical paddings of #tc-preview & the popup

@@ -15,7 +15,7 @@
 {% endblock %}
 {% block extra_script %}
 <script type="text/javascript">
-$('#repo-decrypt-form').submit(function() {
+$('#repo-decrypt-form').on('submit', function() {
     var $form = $(this),
         password = $.trim($('[name="password"]', $form).val()),
         $error = $('.error', $form);
@@ -42,7 +42,7 @@ $('#repo-decrypt-form').submit(function() {
         error: function(xhr) {
             var error;
             if (xhr.responseText) {
-                error = $.parseJSON(xhr.responseText).error_msg;
+                error = JSON.parse(xhr.responseText).error_msg;
             } else {
                 error = "{% trans "Failed. Please check the network." %}";
             }

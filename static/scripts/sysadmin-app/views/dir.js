@@ -76,7 +76,7 @@ define([
             form.modal({appendTo:'#main'});
             $('#simplemodal-container').css({'height':'auto'});
 
-            form.submit(function() {
+            form.on('submit', function() {
                 var obj_name = $.trim($('input[name="name"]', form).val());
                 if (!obj_name) {
                     Common.showFormError(form_id, gettext("It is required."));
@@ -189,7 +189,7 @@ define([
                         if (response['status'] == 401 || response['status'] == 403) {
                             err_msg = gettext("Permission error");
                         } else {
-                            err_msg = $.parseJSON(response.responseText).error_msg;
+                            err_msg = JSON.parse(response.responseText).error_msg;
                         }
                     } else {
                         err_msg = gettext("Failed. Please check the network.");

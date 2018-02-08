@@ -79,7 +79,7 @@ $('#file-view').html('<div id="file-view-tip"></div>');
 {% endif %}{# 'if not err' ends here. #}
 
 {% if filetype == 'Text' or filetype == 'Markdown' %}
-    $('#file-enc').change(function() {
+    $('#file-enc').on('change', function() {
         var file_enc = $(this).val();
         var s = location.search;
         if (s.indexOf('?') == -1) {

@@ -1,10 +1,11 @@
 define([
     'jquery',
+    'jquery.ui', /* for tabs */
     'underscore',
     'backbone',
     'common',
     'app/views/folder-share-item'
-], function($, _, Backbone, Common, FolderShareItemView) {
+], function($, jQueryUI, _, Backbone, Common, FolderShareItemView) {
     'use strict';
 
     var SharePopupView = Backbone.View.extend({
@@ -119,7 +120,7 @@ define([
         },
 
         clickToSelect: function(e) {
-            $(e.currentTarget).select();
+            $(e.currentTarget).trigger('select');
         },
 
         renderDownloadLink: function(link_data) {
@@ -418,7 +419,7 @@ define([
                 Common.enableButton(submit_btn);
                 var err;
                 if (xhr.responseText) {
-                    err = $.parseJSON(xhr.responseText).error;
+                    err = JSON.parse(xhr.responseText).error;
                 } else {
                     err = gettext("Failed. Please check the network.");
                 }
@@ -787,8 +788,8 @@ define([
                             $add_item.after(new_item.el);
                         });
                         emails_input.select2("val", "");
-                        $('option', $perm).removeAttr('selected');
-                        $('[value="rw"]', $perm).attr('selected', 'selected');
+                        $('option', $perm).prop('selected', false);
+                        $('[value="rw"]', $perm).prop('selected', true);
                         $error.addClass('hide');
                     }
                     if (data.failed.length > 0) {
@@ -802,7 +803,7 @@ define([
                 error: function(xhr) {
                     var err_msg;
                     if (xhr.responseText) {
-                        var parsed_resp = $.parseJSON(xhr.responseText);
+                        var parsed_resp = JSON.parse(xhr.responseText);
                         err_msg = parsed_resp.error||parsed_resp.error_msg;
                     } else {
                         err_msg = gettext("Failed. Please check the network.");
@@ -866,8 +867,8 @@ define([
                             $add_item.after(new_item.el);
                         });
                         $groups_input.select2("val", "");
-                        $('option', $perm).removeAttr('selected');
-                        $('[value="rw"]', $perm).attr('selected', 'selected');
+                        $('option', $perm).prop('selected', false);
+                        $('[value="rw"]', $perm).prop('selected', true);
                         $error.addClass('hide');
                     }
                     if (data.failed.length > 0) {
@@ -881,7 +882,7 @@ define([
                 error: function(xhr) {
                     var err_msg;
                     if (xhr.responseText) {
-                        var parsed_resp = $.parseJSON(xhr.responseText);
+                        var parsed_resp = JSON.parse(xhr.responseText);
                         err_msg = parsed_resp.error||parsed_resp.error_msg;
                     } else {
                         err_msg = gettext("Failed. Please check the network.");
