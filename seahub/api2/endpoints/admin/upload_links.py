@@ -94,7 +94,7 @@ class AdminUploadLinkUpload(APIView):
     throttle_classes = (UserRateThrottle,)
 
     def get(self, request, token):
-        """ Get FileServer url of the shared file.
+        """ Get FileServer url of the shared folder.
 
         Permission checking:
         1. only admin can perform this action.
