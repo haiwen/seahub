@@ -169,3 +169,7 @@ def get_related_users_by_repo(repo_id, org_id=None):
                 users.append(member.user_name)
 
     return users
+
+# TODO
+def is_valid_repo_id_format(repo_id):
+    return len(repo_id) == 36

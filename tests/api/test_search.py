@@ -14,7 +14,6 @@ class SearchTest(BaseTestCase):
         self.repo_id = self.repo.id
         self.url = reverse('api_search')
 
-        self.mock_has_more = False
         self.mock_total = 15
         self.mock_results = [
             {
@@ -33,24 +32,27 @@ class SearchTest(BaseTestCase):
         ]
 
     @patch('seahub.api2.views.HAS_FILE_SEARCH', True)
-    @patch.object(Search, '_search_keyword')
-    def test_can_search_file(self, mock_search_keyword):
+    @patch.object(Search, '_search_in_repos')
+    def test_can_search_file(self, mock_search_in_repos):
 
-        mock_search_keyword.return_value = self.mock_results, \
-                self.mock_total, self.mock_has_more
+        mock_search_in_repos.return_value = self.mock_results, \
+                self.mock_total
 
         self.login_as(self.user)
         resp = self.client.get(self.url + '?q=lian')
-
-        json_resp = json.loads(resp.content)
         self.assertEqual(200, resp.status_code)
 
-    @patch('seahub.api2.views.HAS_FILE_SEARCH', True)
-    @patch.object(Search, '_search_keyword')
-    def test_can_not_search_with_invalid_repo_permission(self, mock_search_keyword):
+        json_resp = json.loads(resp.content)
 
-        mock_search_keyword.return_value = self.mock_results, \
-                self.mock_total, self.mock_has_more
+        assert json_resp['total'] == self.mock_total
+        assert json_resp['results'][0]['repo_id'] == self.mock_results[0]['repo_id']
+
+    @patch('seahub.api2.views.HAS_FILE_SEARCH', True)
+    @patch.object(Search, '_search_in_a_single_repo')
+    def test_can_not_search_with_invalid_repo_permission(self, mock_search_in_a_single_repo):
+
+        mock_search_in_a_single_repo.return_value = self.mock_results, \
+                self.mock_total
 
         self.login_as(self.admin)
         resp = self.client.get(self.url + '?q=lian&search_repo=%s' %
@@ -58,12 +60,7 @@ class SearchTest(BaseTestCase):
         self.assertEqual(403, resp.status_code)
 
     @patch('seahub.api2.views.HAS_FILE_SEARCH', True)
-    @patch.object(Search, '_search_keyword')
-    def test_can_not_search_without_q_parameter(self, mock_search_keyword):
-
-        mock_search_keyword.return_value = self.mock_results, \
-                self.mock_total, self.mock_has_more
-
-        self.login_as(self.admin)
+    def test_can_not_search_without_q_parameter(self):
+        self.login_as(self.user)
         resp = self.client.get(self.url)
         self.assertEqual(400, resp.status_code)
