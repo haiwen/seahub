@@ -16,55 +16,56 @@ from pysearpc import SearpcError
 
 from seahub.api2.utils import api_error
 from seahub.api2.authentication import TokenAuthentication
-from seahub.api2.throttling import UserRateThrottle
+from seahub.api2.throttling import AnonRateThrottle, UserRateThrottle
 from seahub.api2.permissions import CanGenerateUploadLink
 
 from seahub.share.models import UploadLinkShare
-from seahub.utils import gen_shared_upload_link
+from seahub.utils import gen_shared_upload_link, gen_file_upload_url
 from seahub.views import check_folder_permission
 from seahub.utils.timeutils import datetime_to_isoformat_timestr
 
 logger = logging.getLogger(__name__)
+
+def get_upload_link_info(uls):
+    data = {}
+    token = uls.token
+
+    repo_id = uls.repo_id
+    try:
+        repo = seafile_api.get_repo(repo_id)
+    except Exception as e:
+        logger.error(e)
+        repo = None
+
+    path = uls.path
+    if path:
+        obj_name = '/' if path == '/' else os.path.basename(path.rstrip('/'))
+    else:
+        obj_name = ''
+
+    if uls.ctime:
+        ctime = datetime_to_isoformat_timestr(uls.ctime)
+    else:
+        ctime = ''
+
+    data['repo_id'] = repo_id
+    data['repo_name'] = repo.repo_name if repo else ''
+    data['path'] = path
+    data['obj_name'] = obj_name
+    data['view_cnt'] = uls.view_cnt
+    data['ctime'] = ctime
+    data['link'] = gen_shared_upload_link(token)
+    data['token'] = token
+    data['username'] = uls.username
+
+    return data
+
 
 class UploadLinks(APIView):
 
     authentication_classes = (TokenAuthentication, SessionAuthentication)
     permission_classes = (IsAuthenticated, CanGenerateUploadLink)
     throttle_classes = (UserRateThrottle, )
-
-    def _get_upload_link_info(self, uls):
-        data = {}
-        token = uls.token
-
-        repo_id = uls.repo_id
-        try:
-            repo = seafile_api.get_repo(repo_id)
-        except Exception as e:
-            logger.error(e)
-            repo = None
-
-        path = uls.path
-        if path:
-            obj_name = '/' if path == '/' else os.path.basename(path.rstrip('/'))
-        else:
-            obj_name = ''
-
-        if uls.ctime:
-            ctime = datetime_to_isoformat_timestr(uls.ctime)
-        else:
-            ctime = ''
-
-        data['repo_id'] = repo_id
-        data['repo_name'] = repo.repo_name if repo else ''
-        data['path'] = path
-        data['obj_name'] = obj_name
-        data['view_cnt'] = uls.view_cnt
-        data['ctime'] = ctime
-        data['link'] = gen_shared_upload_link(token)
-        data['token'] = token
-        data['username'] = uls.username
-
-        return data
 
     def get(self, request):
         """ Get all upload links of a user.
@@ -108,7 +109,7 @@ class UploadLinks(APIView):
 
         result = []
         for uls in upload_link_shares:
-            link_info = self._get_upload_link_info(uls)
+            link_info = get_upload_link_info(uls)
             result.append(link_info)
 
         if len(result) == 1:
@@ -169,7 +170,7 @@ class UploadLinks(APIView):
             uls = UploadLinkShare.objects.create_upload_link_share(username,
                 repo_id, path, password)
 
-        link_info = self._get_upload_link_info(uls)
+        link_info = get_upload_link_info(uls)
         return Response(link_info)
 
 class UploadLink(APIView):
@@ -191,7 +192,7 @@ class UploadLink(APIView):
             error_msg = 'token %s not found.' % token
             return api_error(status.HTTP_404_NOT_FOUND, error_msg)
 
-        link_info = self._get_upload_link_info(uls)
+        link_info = get_upload_link_info(uls)
         return Response(link_info)
 
     def delete(self, request, token):
@@ -220,3 +221,49 @@ class UploadLink(APIView):
             return api_error(status.HTTP_500_INTERNAL_SERVER_ERROR, error_msg)
 
         return Response({'success': True})
+
+
+class UploadLinkUpload(APIView):
+
+    throttle_classes = (AnonRateThrottle, )
+
+    def get(self, request, token):
+        """ Get file upload url according to upload link token.
+
+        Permission checking:
+        1. anyone has the upload link token can perform this action;
+        """
+
+        try:
+            uls = UploadLinkShare.objects.get(token=token)
+        except UploadLinkShare.DoesNotExist:
+            error_msg = 'token %s not found.' % token
+            return api_error(status.HTTP_404_NOT_FOUND, error_msg)
+
+        # currently not support encrypted upload link
+        if uls.is_encrypted():
+            error_msg = 'Upload link %s is encrypted.' % token
+            return api_error(status.HTTP_403_FORBIDDEN, error_msg)
+
+        repo_id = uls.repo_id
+        repo = seafile_api.get_repo(repo_id)
+        if not repo:
+            error_msg = 'Library %s not found.' % repo_id
+            return api_error(status.HTTP_404_NOT_FOUND, error_msg)
+
+        path = uls.path
+        dir_id = seafile_api.get_dir_id_by_path(repo_id, path)
+        if not dir_id:
+            error_msg = 'Folder %s not found.' % path
+            return api_error(status.HTTP_404_NOT_FOUND, error_msg)
+
+        token = seafile_api.get_fileserver_access_token(repo_id,
+                dir_id, 'upload', uls.username, use_onetime=False)
+
+        if not token:
+            error_msg = 'Internal Server Error'
+            return api_error(status.HTTP_500_INTERNAL_SERVER_ERROR, error_msg)
+
+        result = {}
+        result['upload_link'] = gen_file_upload_url(token, 'upload-api')
+        return Response(result)
