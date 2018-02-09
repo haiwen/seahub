@@ -97,3 +97,28 @@ class WikiView(APIView):
         Wiki.objects.filter(slug=slug).delete()
 
         return Response()
+
+    def put(self, request, slug):
+        """Edit a wiki permission
+        """
+        username = request.user.username
+
+        try:
+            wiki = Wiki.objects.get(slug=slug)
+        except Wiki.DoesNotExist:
+            error_msg = "Wiki not found."
+            return api_error(status.HTTP_404_NOT_FOUND, error_msg)
+
+        if wiki.username != username:
+            error_msg = 'Permission denied.'
+            return api_error(status.HTTP_403_FORBIDDEN, error_msg)
+
+        permission = request.data.get('permission', '').lower()
+        if permission not in [x[0] for x in Wiki.PERM_CHOICES]:
+            msg = 'Permission invalid'
+            return api_error(status.HTTP_400_BAD_REQUEST, msg)
+
+        wiki.permission = permission
+        wiki.save()
+        return Response(wiki.to_dict())
+

@@ -57,3 +57,11 @@ class WikiViewTest(BaseTestCase):
         self.assertEqual(200, resp.status_code)
 
         assert len(Wiki.objects.all()) == 0
+
+    def test_can_edit_wiki_perm(self):
+        resp = self.client.put(self.url, "permission=public", 'application/x-www-form-urlencoded')
+        json_resp = json.loads(resp.content)
+
+        self.assertEqual(200, resp.status_code)
+        assert json_resp["permission"] == "public"
+
