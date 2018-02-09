@@ -63,7 +63,8 @@ def slug(request, slug, page_name="home"):
         # create missing page...
         filename = page_name_to_file_name(clean_page_name(page_name))
         if not seaserv.post_empty_file(repo.id, "/", filename, username):
-            return render_error(request, _("Failed to create wiki page. Please retry later."))
+            logger.error('Faied to post empty file.')
+            return render_error(request, _("Internal Server Error"))
         # ...and redirect
         return HttpResponseRedirect(reverse('wiki:slug', args=[slug, page_name]))
 

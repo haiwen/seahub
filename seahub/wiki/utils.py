@@ -172,9 +172,10 @@ def convert_wiki_link(content, url_prefix, repo_id, username):
     return re.sub(r'\[\[(.+?)\]\]|(`.+?`)', repl, content)
 
 def is_valid_wiki_name(name):
-    if len(name) > 255:
+    name = name.strip()
+    if len(name) > 255 or len(name) < 1:
         return False
-    return re.match('^[\w\s-]+$', name, re.U)
+    return True if re.match('^[\w\s-]+$', name, re.U) else False
 
 def slugfy_wiki_name(name):
     return slugify(name, ok=SLUG_OK)

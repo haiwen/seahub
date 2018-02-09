@@ -69,6 +69,7 @@ class WikiManager(models.Manager):
         if self.filter(slug=slug).count() > 0:
             raise DuplicateWikiNameError
 
+        now = timezone.now()
         if repo_id is None:     # create new repo to store the wiki pages
             if org_id > 0:
                 repo_id = seafile_api.create_org_repo(wiki_name, '', username,
@@ -77,8 +78,12 @@ class WikiManager(models.Manager):
                 repo_id = seafile_api.create_repo(wiki_name, '', username,
                                                   passwd=None)
 
+        repo = seafile_api.get_repo(repo_id)
+        assert repo is not None
+
         wiki = self.model(username=username, name=wiki_name, slug=slug,
-                          repo_id=repo_id, permission=permission)
+                          repo_id=repo.id, permission=permission,
+                          created_at=now)
         wiki.save(using=self._db)
         return wiki
 
@@ -88,9 +93,9 @@ class Wiki(models.Model):
     personal wiki.
     """
     PERM_CHOICES = (
-        ('private', _('private')),
-        ('public', _('public')),
-        ('login-user', _('login user'))
+        ('private', 'private'),
+        ('public', 'public'),
+        ('login-user', 'login user')
     )
 
     username = LowerCaseCharField(max_length=255)
@@ -131,6 +136,7 @@ class Wiki(models.Model):
         return {
             'id': self.pk,
             'name': self.name,
+            'slug': self.slug,
             'link': self.link,
             'permission': self.permission,
             'created_at': datetime_to_isoformat_timestr(self.created_at),
