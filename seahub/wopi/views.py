@@ -20,7 +20,7 @@ from seaserv import seafile_api
 
 from seahub.base.accounts import User
 from seahub.utils import gen_inner_file_get_url, \
-    gen_file_upload_url, get_file_type_and_ext, is_pro_version
+    gen_inner_file_upload_url, get_file_type_and_ext, is_pro_version
 from seahub.utils.file_op import check_file_lock
 from seahub.base.templatetags.seahub_tags import email2nickname
 
@@ -348,7 +348,7 @@ class WOPIFilesContentsView(APIView):
                 return HttpResponse(json.dumps({}), status=500,
                         content_type=json_content_type)
 
-            update_url = gen_file_upload_url(token, 'update-api')
+            update_url = gen_inner_file_upload_url('update-api', token)
 
             # update file
             files = {
