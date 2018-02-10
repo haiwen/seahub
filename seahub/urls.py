@@ -400,7 +400,6 @@ urlpatterns = patterns(
     url(r'^sysadmin/#search-libs/$', fake_view, name='sys_repo_search'),
     url(r'^sysadmin/#search-trash-libs/$', fake_view, name='sys_trash_repo_search'),
     url(r'^sysadmin/#search-groups/$', fake_view, name='sys_group_search'),
-    url(r'^sys/seafadmin/transfer/$', sys_repo_transfer, name='sys_repo_transfer'),
     url(r'^sys/seafadmin/delete/(?P<repo_id>[-0-9a-f]{36})/$', sys_repo_delete, name='sys_repo_delete'),
     url(r'^sys/useradmin/$', sys_user_admin, name='sys_useradmin'),
     url(r'^sys/useradmin/export-excel/$', sys_useradmin_export_excel, name='sys_useradmin_export_excel'),
