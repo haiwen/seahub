@@ -71,7 +71,7 @@ from seahub.utils import gen_file_get_url, gen_token, gen_file_upload_url, \
     get_org_user_events, calculate_repos_last_modify, send_perm_audit_msg, \
     gen_shared_upload_link, convert_cmmt_desc_link, is_valid_dirent_name, \
     is_org_repo_creation_allowed, is_windows_operating_system, \
-    get_no_duplicate_obj_name, PREVIEW_FILEEXT
+    get_no_duplicate_obj_name
 
 from seahub.utils.file_revisions import get_file_revisions_after_renamed
 from seahub.utils.devices import do_unlink_device
@@ -87,7 +87,7 @@ from seahub.views import is_registered_user, check_folder_permission, \
     create_default_library, list_inner_pub_repos
 from seahub.views.file import get_file_view_path_and_perm, send_file_access_msg
 if HAS_FILE_SEARCH:
-    from seahub_extra.search.utils import search_file_by_name, search_repo_file_by_name
+    from seahub_extra.search.utils import search_file_by_name, search_repo_file_by_name, SEARCH_FILEEXT
 from seahub.utils import HAS_OFFICE_CONVERTER
 if HAS_OFFICE_CONVERTER:
     from seahub.utils import query_office_convert_status, prepare_converted_html
@@ -412,8 +412,8 @@ class Search(APIView):
             suffixes = []
             if len(custom_ftypes) > 0:
                 for ftp in custom_ftypes:
-                    if PREVIEW_FILEEXT.has_key(ftp):
-                        for ext in PREVIEW_FILEEXT[ftp]:
+                    if SEARCH_FILEEXT.has_key(ftp):
+                        for ext in SEARCH_FILEEXT[ftp]:
                             suffixes.append(ext)
 
             if input_fileexts:
