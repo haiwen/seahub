@@ -293,6 +293,9 @@ class WOPIFilesView(APIView):
                 return response_409
 
         else:
+            logger.info('HTTP_X_WOPI_OVERRIDE: %s' % x_wopi_override)
+            logger.info('HTTP_X_WOPI_LOCK: %s' % x_wopi_lock)
+            logger.info('HTTP_X_WOPI_OLDLOCK: %s' % x_wopi_oldlock)
             return HttpResponse(json.dumps({'error_msg': 'HTTP_X_WOPI_OVERRIDE invalid'}),
                     status=401, content_type=json_content_type)
 
