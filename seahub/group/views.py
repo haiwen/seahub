@@ -18,7 +18,7 @@ from django.utils.translation import ugettext as _
 from seahub.auth.decorators import login_required, login_required_ajax
 import seaserv
 from seaserv import ccnet_threaded_rpc, seafile_api, \
-    get_group_repos, is_group_user, get_group, create_repo, \
+    get_group_repos, is_group_user, get_group, \
     remove_repo, get_file_id_by_path, post_empty_file, del_file
 from pysearpc import SearpcError
 
@@ -413,7 +413,7 @@ def group_wiki_create(request, group):
     passwd = None
     permission = "rw"
 
-    repo_id = create_repo(repo_name, repo_desc, user, passwd)
+    repo_id = seafile_api.create_repo(repo_name, repo_desc, user, passwd)
     if not repo_id:
         return json_error(_(u'Failed to create'), 500)
 
