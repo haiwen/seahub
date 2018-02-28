@@ -23,7 +23,7 @@ body { overflow:hidden; }
 <link rel="stylesheet" href="{{MEDIA_URL}}css/video-js.min.css" />
 {% endif %}
 
-{% if filetype == 'Document' or filetype == 'PDF' and not use_pdfjs %}
+{% if filetype == 'Document' %}
     {% include 'snippets/office_convert_style.html' %}
 {% endif %}
 
