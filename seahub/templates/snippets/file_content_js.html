@@ -45,7 +45,7 @@
     {% endifnotequal %}
 {% endif %}
 
-{% if filetype == 'Document' or filetype == 'PDF' and not use_pdfjs %}
+{% if filetype == 'Document' %}
     {% include 'snippets/office_convert_js.html' %}
 {% endif %}
 
@@ -53,7 +53,7 @@
     {% include 'snippets/spreadsheet_convert_js.html' %}
 {% endif %}
 
-{% if filetype == 'PDF' and use_pdfjs %}
+{% if filetype == 'PDF' %}
     {% include 'snippets/pdfjs_file_viewer.html' %}
 {% endif %}
 

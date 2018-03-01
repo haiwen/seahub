@@ -76,7 +76,7 @@ if HAS_OFFICE_CONVERTER:
 
 import seahub.settings as settings
 from seahub.settings import FILE_ENCODING_LIST, FILE_PREVIEW_MAX_SIZE, \
-    FILE_ENCODING_TRY_LIST, USE_PDFJS, MEDIA_URL
+    FILE_ENCODING_TRY_LIST, MEDIA_URL
 
 try:
     from seahub.settings import ENABLE_OFFICE_WEB_APP
@@ -245,19 +245,6 @@ def handle_document(raw_path, obj_id, fileext, ret_dict):
 def handle_spreadsheet(raw_path, obj_id, fileext, ret_dict):
     handle_document(raw_path, obj_id, fileext, ret_dict)
 
-def handle_pdf(raw_path, obj_id, fileext, ret_dict):
-    if USE_PDFJS:
-        # use pdfjs to preview PDF
-        pass
-    elif HAS_OFFICE_CONVERTER:
-        # use pdf2htmlEX to prefiew PDF
-        err = prepare_converted_html(raw_path, obj_id, fileext, ret_dict)
-        # populate return value dict
-        ret_dict['err'] = err
-    else:
-        # can't preview PDF
-        ret_dict['filetype'] = 'Unknown'
-
 def convert_md_link(file_content, repo_id, username):
     def repl(matchobj):
         if matchobj.group(2):   # return origin string in backquotes
@@ -311,7 +298,7 @@ def file_size_exceeds_preview_limit(file_size, file_type):
     """Check whether file size exceeds the preview limit base on different
     type of file.
     """
-    if file_type in (DOCUMENT, PDF) and HAS_OFFICE_CONVERTER:
+    if file_type in (DOCUMENT, ) and HAS_OFFICE_CONVERTER:
         if file_size > OFFICE_PREVIEW_MAX_SIZE:
             err = _(u'File size surpasses %s, can not be opened online.') % \
                 filesizeformat(OFFICE_PREVIEW_MAX_SIZE)
@@ -336,7 +323,7 @@ def can_preview_file(file_name, file_size, repo=None):
 
     file_type, file_ext = get_file_type_and_ext(file_name)
 
-    if repo and repo.encrypted and (file_type in (DOCUMENT, SPREADSHEET, PDF)):
+    if repo and repo.encrypted and (file_type in (DOCUMENT, SPREADSHEET)):
         return (False, _(u'The library is encrypted, can not open file online.'))
 
     if file_ext in FILEEXT_TYPE_MAP or file_ext in get_conf_text_ext():  # check file extension
@@ -357,14 +344,11 @@ def send_file_access_msg_when_preview(request, repo, path, access_from):
     filename = os.path.basename(path)
     filetype, fileext = get_file_type_and_ext(filename)
 
-    if filetype in (TEXT, IMAGE, MARKDOWN, VIDEO, AUDIO):
+    if filetype in (TEXT, IMAGE, MARKDOWN, VIDEO, AUDIO, PDF):
         send_file_access_msg(request, repo, path, access_from)
 
-    if filetype in (DOCUMENT, SPREADSHEET, PDF) and \
+    if filetype in (DOCUMENT, SPREADSHEET) and \
         HAS_OFFICE_CONVERTER:
-        send_file_access_msg(request, repo, path, access_from)
-
-    if filetype == PDF and USE_PDFJS:
         send_file_access_msg(request, repo, path, access_from)
 
 @login_required
@@ -547,8 +531,6 @@ def _file_view(request, repo_id, path):
             handle_document(inner_path, obj_id, fileext, ret_dict)
         elif filetype == SPREADSHEET:
             handle_spreadsheet(inner_path, obj_id, fileext, ret_dict)
-        elif filetype == PDF:
-            handle_pdf(inner_path, obj_id, fileext, ret_dict)
         elif filetype == IMAGE:
             parent_dir = os.path.dirname(path)
             dirs = seafile_api.list_dir_by_commit_and_path(current_commit.repo_id,
@@ -644,7 +626,6 @@ def _file_view(request, repo_id, path):
             'encoding': ret_dict['encoding'],
             'file_encoding_list': ret_dict['file_encoding_list'],
             'filetype': ret_dict['filetype'],
-            'use_pdfjs': USE_PDFJS,
             'latest_contributor': latest_contributor,
             'last_modified': last_modified,
             'last_commit_id': repo.head_cmmt_id,
@@ -708,8 +689,6 @@ def view_history_file_common(request, repo_id, ret_dict):
                 handle_document(inner_path, obj_id, fileext, ret_dict)
             elif filetype == SPREADSHEET:
                 handle_spreadsheet(inner_path, obj_id, fileext, ret_dict)
-            elif filetype == PDF:
-                handle_pdf(inner_path, obj_id, fileext, ret_dict)
             else:
                 pass
         else:
@@ -725,7 +704,6 @@ def view_history_file_common(request, repo_id, ret_dict):
     ret_dict['raw_path'] = raw_path
     if not ret_dict.has_key('filetype'):
         ret_dict['filetype'] = filetype
-    ret_dict['use_pdfjs'] = USE_PDFJS
 
 @repo_passwd_set_required
 def view_history_file(request, repo_id):
@@ -910,8 +888,6 @@ def view_shared_file(request, fileshare):
             handle_document(inner_path, obj_id, fileext, ret_dict)
         elif filetype == SPREADSHEET:
             handle_spreadsheet(inner_path, obj_id, fileext, ret_dict)
-        elif filetype == PDF:
-            handle_pdf(inner_path, obj_id, fileext, ret_dict)
     else:
         ret_dict['err'] = err_msg
 
@@ -937,7 +913,6 @@ def view_shared_file(request, fileshare):
             'encoding': ret_dict['encoding'],
             'file_encoding_list': ret_dict['file_encoding_list'],
             'filetype': ret_dict['filetype'],
-            'use_pdfjs': USE_PDFJS,
             'accessible_repos': accessible_repos,
             'save_to_link': save_to_link,
             'traffic_over_limit': traffic_over_limit,
@@ -1091,8 +1066,6 @@ def view_file_via_shared_dir(request, fileshare):
             handle_document(inner_path, obj_id, fileext, ret_dict)
         elif filetype == SPREADSHEET:
             handle_spreadsheet(inner_path, obj_id, fileext, ret_dict)
-        elif filetype == PDF:
-            handle_pdf(inner_path, obj_id, fileext, ret_dict)
         elif filetype == IMAGE:
             current_commit = get_commits(repo_id, 0, 1)[0]
             real_parent_dir = os.path.dirname(real_path)
@@ -1141,7 +1114,6 @@ def view_file_via_shared_dir(request, fileshare):
             'encoding': ret_dict['encoding'],
             'file_encoding_list':ret_dict['file_encoding_list'],
             'filetype': ret_dict['filetype'],
-            'use_pdfjs':USE_PDFJS,
             'zipped': zipped,
             'img_prev': img_prev,
             'img_next': img_next,

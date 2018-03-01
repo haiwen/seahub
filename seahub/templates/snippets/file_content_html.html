@@ -34,7 +34,7 @@ For details please refer to 'snippets/file_content_js.html'.
             </div>
         {% endif %}
         
-        {% if filetype == 'Document' or filetype == 'PDF' and not use_pdfjs %} 
+        {% if filetype == 'Document' %} 
             {% include 'snippets/office_convert_html.html' %}
         {% endif %}
 
