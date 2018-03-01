@@ -421,38 +421,6 @@ def dir_recycle_view(request, repo_id):
     else:
         return render_dir_recycle_dir(request, repo_id, commit_id, dir_path, referer)
 
-@login_required
-def repo_online_gc(request, repo_id):
-    if request.method != 'POST':
-        raise Http404
-
-    repo = get_repo(repo_id)
-    if not repo:
-        raise Http404
-
-    referer = request.META.get('HTTP_REFERER', None)
-    next = settings.SITE_ROOT if referer is None else referer
-
-    username = request.user.username
-    if is_org_context(request):
-        repo_owner = seafile_api.get_org_repo_owner(repo.id)
-    else:
-        repo_owner = seafile_api.get_repo_owner(repo.id)
-    is_repo_owner = True if repo_owner == username else False
-    if not is_repo_owner:
-        messages.error(request, _('Permission denied'))
-        return HttpResponseRedirect(next)
-
-    day = int(request.POST.get('day'))
-    try:
-        seafile_api.clean_up_repo_history(repo.id, day)
-    except SearpcError as e:
-        logger.error(e)
-        messages.error(request, _('Internal server error'))
-        return HttpResponseRedirect(next)
-
-    return HttpResponseRedirect(next)
-
 def can_access_repo_setting(request, repo_id, username):
     repo = seafile_api.get_repo(repo_id)
     if not repo:

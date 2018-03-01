@@ -61,7 +61,7 @@
 {% endif %}
 
 {% if enable_clean %}
-<form id="gc-form" class="hide" method="post" action="{% url "repo_online_gc" repo.id %}">{% csrf_token %}
+<form id="gc-form" class="hide" action="">
     <h3 id="dialogTitle">{% trans "Clean" %}</h3>
     <p>{% trans "Clear files in trash and history：" %}</p>
     <select name="day" class="w100" style="margin-bottom:5px;">
@@ -70,6 +70,7 @@
         <option value="30">{% trans "1 month ago" %}</option>
         <option value="0">{% trans "all" %}</option>
     </select>
+    <p class="error hide"></p>
     <button type="submit" class="submit">{% trans "Submit" %}</button>
     <button type="button" class="simplemodal-close">{% trans "Cancel" %}</button>
 </form>
@@ -85,6 +86,38 @@ $('#online-gc').click(function() {
     $('#gc-form').modal({focus:false});
     $("#simplemodal-container").css({'height':'auto'});
 });
+$('#gc-form').submit(function(){
+    var $form = $(this);
+    var $submit = $('[type="submit"]', $form);
+    var $select = $('[name="day"]', $form);
+    var $error = $('.error', $form);
+    var value = $('option:selected', $select).val();
+    disable($submit);
+    $.ajax({
+        url: '{% url "api-v2.1-repo-trash" repo.id %}',
+        type: 'DELETE',
+        cache: false,
+        dataType: 'json',
+        data: {
+            'keep_days':  value
+        },
+        beforeSend: prepareCSRFToken,
+        success: function(data) {
+            location.reload();
+        },
+        error: function(xhr) {
+            var error_msg;
+            if (xhr.responseText) {
+                error_msg = $.parseJSON(xhr.responseText).error_msg;
+            } else {
+                error_msg = "{% trans "Failed. Please check the network." %}";
+            }
+            $error.html(error_msg).show();
+            enable($submit);
+        }
+    });
+    return false;
+})
 {% endif %}
 
 {% if show_recycle_root %}

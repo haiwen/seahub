@@ -12,6 +12,7 @@ from seahub.api2.throttling import UserRateThrottle
 from seahub.api2.authentication import TokenAuthentication
 from seahub.api2.utils import api_error
 
+from seahub.signals import clean_up_repo_trash
 from seahub.utils.timeutils import timestamp_to_isoformat_timestr
 from seahub.utils.repo import get_repo_owner
 from seahub.views import check_folder_permission
@@ -152,6 +153,8 @@ class RepoTrash(APIView):
 
         try:
             seafile_api.clean_up_repo_history(repo_id, keep_days)
+            org_id = None if not request.user.org else request.user.org.org_id
+            clean_up_repo_trash.send(sender=None, org_id=org_id, operator=username, repo_id=repo_id, repo_name=repo.name, days=keep_days)
         except Exception as e:
             logger.error(e)
             error_msg = 'Internal Server Error'

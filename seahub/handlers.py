@@ -11,6 +11,10 @@ if not hasattr(settings, 'EVENTS_CONFIG_FILE'):
 
     def repo_deleted_cb(sender, **kwargs):
         pass
+
+    def clean_up_repo_trash_cb(sender, **kwargs):
+        pass
+
 else:
 
     import seafevents
@@ -33,9 +37,9 @@ else:
 
         session = SeafEventsSession()
         if org_id > 0:
-            seafevents.save_org_user_events (session, org_id, etype, detail, users, None)
+            seafevents.save_org_user_events(session, org_id, etype, detail, users, None)
         else:
-            seafevents.save_user_events (session, etype, detail, users, None)
+            seafevents.save_user_events(session, etype, detail, users, None)
         session.close()
 
         LIBRARY_TEMPLATES = getattr(settings, 'LIBRARY_TEMPLATES', {})
@@ -74,7 +78,31 @@ else:
 
         session = SeafEventsSession()
         if org_id > 0:
-            seafevents.save_org_user_events (session, org_id, etype, detail, users, None)
+            seafevents.save_org_user_events(session, org_id, etype, detail, users, None)
         else:
-            seafevents.save_user_events (session, etype, detail, users, None)
+            seafevents.save_user_events(session, etype, detail, users, None)
+        session.close()
+
+    def clean_up_repo_trash_cb(sender, **kwargs):
+        """When a repo trash is deleted, the operator will be recorded.
+        """
+        org_id = kwargs['org_id']
+        operator = kwargs['operator']
+        repo_id = kwargs['repo_id']
+        days = kwargs.get('days', None)
+        repo_name = kwargs['repo_name']
+        etype = 'clean-up-repo-trash'
+
+        detail = {
+            'repo_id': repo_id,
+            'days': days,
+            'repo_name': repo_name
+        }
+
+        users = [operator]
+        session = SeafEventsSession()
+        if org_id > 0:
+            seafevents.save_org_user_events(session, org_id, etype, detail, users, None)
+        else:
+            seafevents.save_user_events(session, etype, detail, users, None)
         session.close()
