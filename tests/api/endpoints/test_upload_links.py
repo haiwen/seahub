@@ -6,6 +6,8 @@ from django.core.urlresolvers import reverse
 
 from tests.common.utils import upload_file_test, randstring
 
+from seaserv import seafile_api
+
 from seahub.test_utils import BaseTestCase
 from seahub.share.models import UploadLinkShare
 from seahub.api2.permissions import CanGenerateUploadLink
@@ -18,6 +20,8 @@ except ImportError:
 class UploadLinksTest(BaseTestCase):
 
     def setUp(self):
+        self.user_name = self.user.username
+        self.admin_name = self.admin.username
         self.repo_id = self.repo.id
         self.folder_path= self.folder
         self.url = reverse('api-v2.1-upload-links')
@@ -26,8 +30,8 @@ class UploadLinksTest(BaseTestCase):
         self.remove_repo()
 
     def _add_upload_link(self):
-        upload_link = UploadLinkShare.objects.create_upload_link_share(self.user.username,
-            self.repo.id, self.folder, None, None)
+        upload_link = UploadLinkShare.objects.create_upload_link_share(self.user_name,
+            self.repo_id, self.folder_path, None, None)
 
         return upload_link.token
 
@@ -172,6 +176,8 @@ class UploadLinkUploadTest(BaseTestCase):
 
     def setUp(self):
 
+        self.user_name = self.user.username
+        self.admin_name = self.admin.username
         self.repo_id = self.repo.id
         self.folder_path= self.folder
         self.invalid_token = '00000000000000000000'
@@ -179,7 +185,7 @@ class UploadLinkUploadTest(BaseTestCase):
     def _add_upload_link(self, password=None):
 
         fs = UploadLinkShare.objects.create_upload_link_share(
-                self.user.username, self.repo.id, self.folder_path, password, None)
+                self.user_name, self.repo_id, self.folder_path, password, None)
 
         return fs.token
 
@@ -216,6 +222,29 @@ class UploadLinkUploadTest(BaseTestCase):
     def test_can_not_get_upload_link_for_encrypted_upload_link_share(self):
 
         token = self._add_upload_link(password=randstring(10))
+        url = reverse('api-v2.1-upload-link-upload', args=[token])
+        resp = self.client.get(url)
+        self.assertEqual(403, resp.status_code)
+
+    def test_can_not_get_upload_link_with_invalid_creator_repo_permission(self):
+
+        # user share repo to admin
+        seafile_api.share_repo(self.repo_id, self.user_name, self.admin_name, 'rw')
+
+        # admin create upload link
+        upload_link = UploadLinkShare.objects.create_upload_link_share(
+                self.admin_name, self.repo_id, '/', None, None)
+        token = upload_link.token
+
+        # can get url for upload file
+        url = reverse('api-v2.1-upload-link-upload', args=[token])
+        resp = self.client.get(url)
+        self.assertEqual(200, resp.status_code)
+
+        # user unshare repo
+        seafile_api.remove_share(self.repo_id, self.user_name, self.admin_name)
+
+        # can not get url for upload file
         url = reverse('api-v2.1-upload-link-upload', args=[token])
         resp = self.client.get(url)
         self.assertEqual(403, resp.status_code)

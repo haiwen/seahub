@@ -85,6 +85,11 @@ class ShareLinkZipTaskView(APIView):
             error_msg = 'Folder %s not found.' % real_path
             return api_error(status.HTTP_404_NOT_FOUND, error_msg)
 
+        if not seafile_api.check_permission_by_path(repo_id, '/',
+                fileshare.username):
+            error_msg = 'Permission denied.'
+            return api_error(status.HTTP_403_FORBIDDEN, error_msg)
+
         # get file server access token
         dir_name = repo.name if real_path == '/' else \
                 os.path.basename(real_path.rstrip('/'))
