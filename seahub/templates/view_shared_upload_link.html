@@ -46,6 +46,7 @@
                 <div class="progress-extended"></div>
             </div>
             <p class="saving-tip alc hide"><img src="{{MEDIA_URL}}img/loading-icon.gif" alt="" style="margin-right:5px;" class="vam" />{% trans "Saving..." %}</p>
+            <p class="error hide"></p>
         </div>
         <table class="fileupload-table"><tbody class="files" data-toggle="modal-gallery" data-target="#modal-gallery"></tbody></table>
     </form>
@@ -186,8 +187,15 @@ form.fileupload({
                 }
 
             },
-            error: function() {
-                file.error = "{% trans "Failed to get upload url" %}";
+            error: function(xhr) {
+                var error_msg;
+                if (xhr.responseJSON) {
+                    error_msg = xhr.responseJSON.error;
+                } else {
+                    error_msg = "{% trans "Error" %}";
+                }
+                data.abort();
+                $('.fileupload-buttonbar .error').html(error_msg).show();
             }
         });
         return false;
