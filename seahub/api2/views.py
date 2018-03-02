@@ -87,7 +87,7 @@ from seahub.views import is_registered_user, check_folder_permission, \
     create_default_library, list_inner_pub_repos
 from seahub.views.file import get_file_view_path_and_perm, send_file_access_msg
 if HAS_FILE_SEARCH:
-    from seahub_extra.search.utils import search_file_by_name, search_repo_file_by_name, SEARCH_FILEEXT
+    from seahub_extra.search.utils import search_files, get_search_repos_map, SEARCH_FILEEXT
 from seahub.utils import HAS_OFFICE_CONVERTER
 if HAS_OFFICE_CONVERTER:
     from seahub.utils import query_office_convert_status, prepare_converted_html
@@ -351,18 +351,7 @@ class Search(APIView):
     permission_classes = (IsAuthenticated,)
     throttle_classes = (UserRateThrottle, )
 
-    def _search_in_a_single_repo(self, request, repo, keyword, suffixes, start, size):
-        results, total = search_repo_file_by_name(request,
-                repo, keyword, suffixes, start, size)
-        return results, total
-
-    def _search_in_repos(self, request, keyword, suffixes, start, size):
-        results, total = search_file_by_name(request,
-                keyword, suffixes, start, size)
-        return results, total
-
     def get(self, request, format=None):
-
         if not HAS_FILE_SEARCH:
             error_msg = 'Search not supported.'
             return api_error(status.HTTP_404_NOT_FOUND, error_msg)
@@ -423,6 +412,9 @@ class Search(APIView):
                     if i_ext:
                         suffixes.append(i_ext)
 
+        username = request.user.username
+        org_id = request.user.org.org_id if is_org_context(request) else None
+        repo_id_map = {}
         # check recourse and permissin when search in a single repo
         if is_valid_repo_id_format(search_repo):
             repo_id = search_repo
@@ -436,17 +428,15 @@ class Search(APIView):
             if not check_folder_permission(request, repo_id, '/'):
                 error_msg = 'Permission denied.'
                 return api_error(status.HTTP_403_FORBIDDEN, error_msg)
+            repo_id_map[repo_id] = repo
+        else:
+            shared_from = request.GET.get('shared_from', None)
+            not_shared_from = request.GET.get('not_shared_from', None)
+            repo_id_map = get_search_repos_map(search_repo, username, org_id, shared_from, not_shared_from)
 
         # search file
         try:
-            # search file::search in a single repo
-            if is_valid_repo_id_format(search_repo):
-                results, total = self._search_in_a_single_repo(request,
-                        repo, keyword, suffixes, start, size)
-            else:
-                # search file::search in all repos user can access
-                results, total = self._search_in_repos(request,
-                        keyword, suffixes, start, size)
+            results, total = search_files(repo_id_map, keyword, suffixes, start, size, org_id)
         except Exception as e:
             logger.error(e)
             error_msg = 'Internal Server Error'
@@ -460,20 +450,6 @@ class Search(APIView):
             e.pop('score', None)
 
             repo_id = e['repo_id']
-            path = e['fullpath']
-            try:
-                repo = seafile_api.get_repo(repo_id)
-                repo_owner = get_repo_owner(request, repo_id)
-                dirent = seafile_api.get_dirent_by_path(repo.store_id, path)
-            except Exception as e:
-                logger.error(e)
-                continue
-
-            e['repo_name'] = repo.name
-            e['repo_owner_email'] = repo_owner
-            e['repo_owner_name'] = email2nickname(repo_owner)
-            e['repo_owner_contact_email'] = email2contact_email(repo_owner)
-            e['size'] = dirent.size
 
             if with_permission.lower() == 'true':
                 permission = check_folder_permission(request, repo_id, '/')
