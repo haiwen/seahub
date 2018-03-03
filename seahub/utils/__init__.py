@@ -1011,7 +1011,10 @@ if EVENTS_CONFIG_FILE:
         return enabled
 
     def get_office_converter_html_dir():
-        return seafevents.get_office_converter_html_dir(parsed_events_conf)
+        return seafevents.get_office_converter_dir(parsed_events_conf, 'html')
+
+    def get_office_converter_pdf_dir():
+        return seafevents.get_office_converter_dir(parsed_events_conf, 'pdf')
 
     def get_office_converter_limit():
         return seafevents.get_office_converter_limit(parsed_events_conf)
@@ -1021,6 +1024,7 @@ if EVENTS_CONFIG_FILE:
 if HAS_OFFICE_CONVERTER:
 
     OFFICE_HTML_DIR = get_office_converter_html_dir()
+    OFFICE_PDF_DIR = get_office_converter_pdf_dir()
     OFFICE_PREVIEW_MAX_SIZE, OFFICE_PREVIEW_MAX_PAGES = get_office_converter_limit()
 
     from seafevents.office_converter import OfficeConverterRpcClient
@@ -1083,9 +1087,9 @@ if HAS_OFFICE_CONVERTER:
 
         return json.loads(ret)
 
-    def delegate_query_office_convert_status(file_id, page):
+    def delegate_query_office_convert_status(file_id, doctype):
         url = urljoin(OFFICE_CONVERTOR_ROOT, '/office-convert/internal/status/')
-        url += '?file_id=%s&page=%s' % (file_id, page)
+        url += '?file_id=%s&doctype=%s' % (file_id, doctype)
         headers = _office_convert_token_header(file_id)
         ret = do_urlopen(url, headers=headers).read()
 
@@ -1130,9 +1134,9 @@ if HAS_OFFICE_CONVERTER:
         }
 
     @cluster_delegate(delegate_query_office_convert_status)
-    def query_office_convert_status(file_id, page):
+    def query_office_convert_status(file_id, doctype):
         rpc = _get_office_converter_rpc()
-        d = rpc.query_convert_status(file_id, page)
+        d = rpc.query_convert_status(file_id, doctype)
         ret = {}
         if d.error:
             ret['error'] = d.error
@@ -1145,9 +1149,14 @@ if HAS_OFFICE_CONVERTER:
 
     @cluster_delegate(delegate_get_office_converted_page)
     def get_office_converted_page(request, repo_id, commit_id, path, static_filename, file_id):
+        office_out_dir = OFFICE_HTML_DIR
+        filepath = os.path.join(file_id, static_filename)
+        if static_filename.endswith('.pdf'):
+            office_out_dir = OFFICE_PDF_DIR
+            filepath = static_filename
         return django_static_serve(request,
-                                   os.path.join(file_id, static_filename),
-                                   document_root=OFFICE_HTML_DIR)
+                                   filepath,
+                                   document_root=office_out_dir)
 
     def prepare_converted_html(raw_path, obj_id, doctype, ret_dict):
         try:

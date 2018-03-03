@@ -23,10 +23,6 @@ body { overflow:hidden; }
 <link rel="stylesheet" href="{{MEDIA_URL}}css/video-js.min.css" />
 {% endif %}
 
-{% if filetype == 'Document' %}
-    {% include 'snippets/office_convert_style.html' %}
-{% endif %}
-
 {% if filetype == 'SpreadSheet' %}
     {% include 'snippets/spreadsheet_convert_style.html' %}
 {% endif %}

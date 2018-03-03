@@ -1573,7 +1573,6 @@ def office_convert_query_status(request, cluster_internal=False):
         raise Http404
 
     doctype = request.GET.get('doctype', None)
-    page = 0 if doctype == 'spreadsheet' else int_param(request, 'page')
     if cluster_internal:
         file_id = _office_convert_get_file_id_internal(request)
     else:
@@ -1581,18 +1580,19 @@ def office_convert_query_status(request, cluster_internal=False):
 
     ret = {'success': False}
     try:
-        ret = query_office_convert_status(file_id, page, cluster_internal=cluster_internal)
+        ret = query_office_convert_status(file_id, doctype, cluster_internal=cluster_internal)
     except Exception, e:
         logging.exception('failed to call query_office_convert_status')
         ret['error'] = str(e)
 
     return ret
 
-_OFFICE_PAGE_PATTERN = re.compile(r'^[\d]+\.page|file\.css|file\.outline|index.html|index_html_.*.png$')
+_OFFICE_PAGE_PATTERN = re.compile(r'^[\d]+\.page|file\.css|file\.outline|index.html|index_html_.*.png|[a-z0-9]+\.pdf$')
 def office_convert_get_page(request, repo_id, commit_id, path, filename, cluster_internal=False):
     """Valid static file path inclueds:
     - "1.page" "2.page" for pdf/doc/ppt
     - index.html for spreadsheets and index_html_xxx.png for images embedded in spreadsheets
+    - 77e168722458356507a1f373714aa9b575491f09.pdf
     """
     if not HAS_OFFICE_CONVERTER:
         raise Http404
@@ -1605,6 +1605,9 @@ def office_convert_get_page(request, repo_id, commit_id, path, filename, cluster
         file_id = _office_convert_get_file_id_internal(request)
     else:
         file_id = _office_convert_get_file_id(request, repo_id, commit_id, path)
+
+    if filename.endswith('.pdf'):
+        filename = "{0}.pdf".format(file_id)
 
     resp = get_office_converted_page(
         request, repo_id, commit_id, path, filename, file_id, cluster_internal=cluster_internal)
