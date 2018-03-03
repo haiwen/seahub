@@ -2467,6 +2467,9 @@ button.sf-dropdown-toggle:focus {
 .fileupload-buttonbar .cancel {
     *margin-left:5px;
 }
+.fixed-upload-file-dialog .total-error {
+    margin:10px;
+}
 .fileupload-progress {
     margin-top:5px;
 }
