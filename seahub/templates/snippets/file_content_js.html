@@ -46,7 +46,7 @@
 {% endif %}
 
 {% if filetype == 'Document' %}
-    {% include 'snippets/office_convert_js.html' %}
+    {% include 'snippets/document_file_viewer.html' %}
 {% endif %}
 
 {% if filetype == 'SpreadSheet' %}
@@ -54,6 +54,7 @@
 {% endif %}
 
 {% if filetype == 'PDF' %}
+    var raw_path = "{{ raw_path|escapejs }}";
     {% include 'snippets/pdfjs_file_viewer.html' %}
 {% endif %}
 
