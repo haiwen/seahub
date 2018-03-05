@@ -1061,10 +1061,21 @@ def get_file_upload_url_ul(request, token):
         return HttpResponse(json.dumps({"error": _("Bad upload link token.")}),
                             status=400, content_type=content_type)
 
+    shared_by = uls.username
     repo_id = uls.repo_id
     r = request.GET.get('r', '')
     if repo_id != r:            # perm check
         return HttpResponse(json.dumps({"error": _("Bad repo id in upload link.")}),
+                            status=403, content_type=content_type)
+
+    repo = get_repo(repo_id)
+    if not repo:
+        return HttpResponse(json.dumps({"error": _("Library does not exist")}),
+                            status=404, content_type=content_type)
+
+    if repo.encrypted or \
+            seafile_api.check_permission_by_path(repo_id, '/', shared_by) != 'rw':
+        return HttpResponse(json.dumps({"error": _("Permission denied")}),
                             status=403, content_type=content_type)
 
     username = request.user.username or request.session.get('anonymous_email') or ''
