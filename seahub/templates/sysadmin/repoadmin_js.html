@@ -24,36 +24,43 @@ $('.repo-transfer-btn').click(function(){
         formatSelectionTooBig: "{% trans "You cannot select any more choices" %}"
     }, userInputOPtionsForSelect2('{% url 'search-user' %}')));
 
-    $('#repo-transfer-form').submit(function() {
-
-        var email = $.trim($(this).children('[name="email"]').val());
-
-        if (!email || !repo_id) {
-            return false;
-        }
-
-        $.ajax({
-            url: '{{SITE_ROOT}}api/v2.1/admin/libraries/' + encodeURIComponent(repo_id) + '/',
-            data: {'owner': email},
-            type: 'PUT',
-            cache: false,
-            beforeSend: prepareCSRFToken,
-            dataType: 'json',
-            success: function() {
-                $tr.remove();
-                feedback("{% trans "Successfully transfered 1 item." %}", 'success');
-            },
-            error: function(xhr, textStatus, errorThrown) {
-                ajaxErrorHandler(xhr, textStatus, errorThrown);
-            },
-            complete: function() {
-                $.modal.close();
-            }
-        });
-        return false;
-    });
+    $('input[name="repo_id"]', form).val(repo_id);
+    form.data('tr', $tr);
+    return false;
 });
 
+$('#repo-transfer-form').submit(function() {
+    var form = $(this),
+        form_id = form.attr('id'),
+        repo_id = $('[name="repo_id"]', form).val(),
+        email = $.trim(form.children('[name="email"]').val());
+    var $tr = form.data('tr');
+
+    if (!email) {
+        return false;
+    }
+
+    $.ajax({
+        url: '{{SITE_ROOT}}api/v2.1/admin/libraries/' + encodeURIComponent(repo_id) + '/',
+        data: {'owner': email},
+        type: 'PUT',
+        cache: false,
+        beforeSend: prepareCSRFToken,
+        dataType: 'json',
+        success: function() {
+            $tr.remove();
+            feedback("{% trans "Successfully transfered 1 item." %}", 'success');
+        },
+        error: function(xhr, textStatus, errorThrown) {
+            ajaxErrorHandler(xhr, textStatus, errorThrown);
+        },
+        complete: function() {
+            $.modal.close();
+        }
+    });
+
+    return false;
+});
 
 $('#main-panel').removeClass('ovhd');
 
