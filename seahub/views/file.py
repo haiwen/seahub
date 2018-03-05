@@ -1587,10 +1587,9 @@ def office_convert_query_status(request, cluster_internal=False):
 
     return ret
 
-_OFFICE_PAGE_PATTERN = re.compile(r'^[\d]+\.page|file\.css|file\.outline|index.html|index_html_.*.png|[a-z0-9]+\.pdf$')
+_OFFICE_PAGE_PATTERN = re.compile(r'^file\.css|file\.outline|index.html|index_html_.*.png|[a-z0-9]+\.pdf$')
 def office_convert_get_page(request, repo_id, commit_id, path, filename, cluster_internal=False):
     """Valid static file path inclueds:
-    - "1.page" "2.page" for pdf/doc/ppt
     - index.html for spreadsheets and index_html_xxx.png for images embedded in spreadsheets
     - 77e168722458356507a1f373714aa9b575491f09.pdf
     """

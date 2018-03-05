@@ -54,6 +54,7 @@
 {% endif %}
 
 {% if filetype == 'PDF' %}
+    var raw_path = "{{ raw_path|escapejs }}";
     {% include 'snippets/pdfjs_file_viewer.html' %}
 {% endif %}
 
