@@ -439,6 +439,25 @@ def gen_inner_file_get_url(token, filename):
     else:
         return gen_file_get_url(token, filename)
 
+def gen_inner_file_upload_url(op, token):
+    """Generate inner fileserver upload url.
+
+    If ``ENABLE_INNER_FILESERVER`` set to False(defaults to True), will
+    returns outer fileserver file url.
+
+    Arguments:
+    - `op`:
+    - `token`:
+
+    Returns:
+        e.g., http://127.0.0.1:<port>/<op>/<token>
+        http://127.0.0.1:8082/update-api/80c69afa-9438-4ee6-a297-a24fadb10750
+    """
+    if ENABLE_INNER_FILESERVER:
+        return '%s/%s/%s' % (get_inner_fileserver_root(), op, token)
+    else:
+        return gen_file_upload_url(token, op)
+
 def get_max_upload_file_size():
     """Get max upload file size from config file, defaults to no limit.
 
