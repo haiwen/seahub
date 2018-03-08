@@ -1048,20 +1048,22 @@ def convert_cmmt_desc_link(request):
         if d.status == 'add' or d.status == 'mod':  # Add or modify file
             return HttpResponseRedirect(
                 reverse('view_lib_file', args=[repo_id, '/' + d.name]))
-        elif d.status == 'mov':  # Move or Rename file
-            return HttpResponseRedirect(
-                reverse('view_lib_file', args=[repo_id, '/' + d.new_name]))
+        elif d.status == 'mov':  # Move or Rename non-empty file/folder
+            if '/' in d.new_name:
+                new_dir_name = d.new_name.split('/')[0]
+                return HttpResponseRedirect(
+                    reverse('view_common_lib_dir',
+                            args=[repo_id, new_dir_name]))
+            else:
+                return HttpResponseRedirect(
+                    reverse('view_lib_file', args=[repo_id, '/' + d.new_name]))
         elif d.status == 'newdir':
             return HttpResponseRedirect(
                 reverse('view_common_lib_dir', args=[repo_id, d.name.strip('/')]))
         else:
             continue
 
-    # Shoud never reach here.
-    logger.warn('OUT OF CONTROL!')
-    logger.warn('repo_id: %s, cmmt_id: %s, name: %s' % (repo_id, cmmt_id, name))
-    for d in diff_result:
-        logger.warn('diff_result: %s' % (d.__dict__))
+    # Empty file/foder rename will reach here.
     raise Http404
 
 @login_required
