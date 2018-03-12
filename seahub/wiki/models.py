@@ -125,7 +125,7 @@ class Wiki(models.Model):
         return repo.last_modify
 
     def has_read_perm(self, user):
-        if self.permisson == 'public':
+        if self.permission == 'public':
             return True
         elif self.permission == 'login-user':
             return True if user.is_authenticated() else False
