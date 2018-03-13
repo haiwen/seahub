@@ -7,7 +7,7 @@ import urllib2
 import logging
 from StringIO import StringIO
 
-from PIL import Image
+from PIL import Image, ImageFile
 from seaserv import get_file_id_by_path, get_repo, get_file_size, \
     seafile_api
 
@@ -20,6 +20,7 @@ from seahub.settings import THUMBNAIL_IMAGE_SIZE_LIMIT, \
 # Get an instance of a logger
 logger = logging.getLogger(__name__)
 
+ImageFile.LOAD_TRUNCATED_IMAGES = True
 if ENABLE_VIDEO_THUMBNAIL:
     try:
         from moviepy.editor import VideoFileClip
@@ -167,7 +168,11 @@ def _create_thumbnail_common(fp, thumbnail_file, size):
 
     `fp` can be a filename (string) or a file object.
     """
-    image = Image.open(fp)
+    try:
+        image = Image.open(fp)
+    except Exception as e:
+        logger.error(e)
+        return (False, 500)
 
     # check image memory cost size limit
     # use RGBA as default mode(4x8-bit pixels, true colour with transparency mask)
