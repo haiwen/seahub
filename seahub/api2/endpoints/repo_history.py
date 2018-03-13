@@ -69,7 +69,7 @@ class RepoHistory(APIView):
         if repo.encrypted and \
                 (repo.enc_version == 1 or (repo.enc_version == 2 and server_crypto)):
             try:
-                ret = seafile_api.is_passwd_set(repo_id, username)
+                ret = seafile_api.is_password_set(repo_id, username)
                 if ret == 1:
                     password_set = True
             except Exception as e:
