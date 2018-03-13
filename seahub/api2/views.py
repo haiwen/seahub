@@ -382,6 +382,10 @@ class Search(APIView):
             error_msg = 'search_repo invalid.'
             return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
 
+        search_path = request.GET.get('search_path', None)
+        if search_path is not None and search_path[0] != '/':
+            search_path = "/{0}".format(search_path)
+
         search_ftypes = request.GET.get('search_ftypes', 'all') # val: 'all' or 'custom'
         search_ftypes = search_ftypes.lower()
         if search_ftypes not in ('all', 'custom'):
@@ -436,7 +440,7 @@ class Search(APIView):
 
         # search file
         try:
-            results, total = search_files(repo_id_map, keyword, suffixes, start, size, org_id)
+            results, total = search_files(repo_id_map, search_path, keyword, suffixes, start, size, org_id)
         except Exception as e:
             logger.error(e)
             error_msg = 'Internal Server Error'
