@@ -1,7 +1,7 @@
 # Copyright (c) 2012-2016 Seafile Ltd.
 import os
 import logging
-from PIL import Image
+from PIL import Image, ImageFile
 
 from rest_framework.authentication import SessionAuthentication
 from rest_framework.permissions import IsAdminUser
@@ -19,6 +19,7 @@ from seahub.utils.file_types import IMAGE
 from seahub.utils.error_msg import file_type_error_msg, file_size_error_msg
 
 logger = logging.getLogger(__name__)
+ImageFile.LOAD_TRUNCATED_IMAGES = True
 
 class AdminLogo(APIView):
 
