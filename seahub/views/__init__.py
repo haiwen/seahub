@@ -845,7 +845,7 @@ def demo(request):
     Login as demo account.
     """
     from django.conf import settings as dj_settings
-    if dj_settings.CLOUD_MODE is False:
+    if not dj_settings.ENABLE_DEMO_USER:
         raise Http404
 
     try:

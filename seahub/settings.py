@@ -643,6 +643,7 @@ REPLACE_FROM_EMAIL = False
 # Add ``Reply-to`` header, see RFC #822.
 ADD_REPLY_TO_HEADER = False
 
+ENABLE_DEMO_USER = False
 CLOUD_DEMO_USER = 'demo@seafile.com'
 
 ENABLE_TWO_FACTOR_AUTH = False

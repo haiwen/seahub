@@ -6,19 +6,20 @@ from seahub.test_utils import BaseTestCase
 
 
 class DemoTest(BaseTestCase):
+
     def setUp(self):
         self.url = '/demo/'
 
-    def test_404_if_not_cloud_mode(self):
+    def test_404_if_not_enabled_demo_user(self):
         resp = self.client.get(self.url)
         self.assertEqual(404, resp.status_code)
 
-    @override_settings(CLOUD_MODE=True)
+    @override_settings(ENABLE_DEMO_USER=True)
     def test_user_doesnot_exists(self):
         resp = self.client.get(self.url)
         self.assertEqual(404, resp.status_code)
 
-    @override_settings(CLOUD_MODE=True)
+    @override_settings(ENABLE_DEMO_USER=True)
     def test_demo_user(self):
         u = User.objects.create_user(email=settings.CLOUD_DEMO_USER)
 
