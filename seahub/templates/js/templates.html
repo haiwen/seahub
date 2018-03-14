@@ -1730,6 +1730,13 @@
         <p>{% trans "Deleted library" %} <%- activity.repo_name %></p>
         <% } %>
 
+        <% if (activity.etype == "clean-up-repo-trash") { %>
+            <a href="#common/lib/<%= activity.repo_id %>/" class="updated-repo normal fright"><%- activity.repo_name %></a>
+            <span class="cmt-desc">
+            <%- activity.desc %>
+            </span>
+        <% } %>
+
         <p><a class="normal" href="{{ SITE_ROOT }}profile/<% print(encodeURIComponent(activity.author)); %>/"><%- activity.name %></a> <span class="time"><%= activity.time_relative %></span></p>
     </div>
 </script>

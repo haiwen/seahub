@@ -3869,6 +3869,13 @@ class EventsView(APIView):
                 d['converted_cmmt_desc'] = translate_commit_desc_escape(convert_cmmt_desc_link(e.commit))
                 d['more_files'] = e.commit.more_files
                 d['repo_encrypted'] = e.repo.encrypted
+            elif e.etype == 'clean-up-repo-trash':
+                d['repo_id'] = e.repo_id
+                d['author'] = e.username
+                d['time'] = datetime_to_isoformat_timestr(e.timestamp)
+                d['days'] = e.days
+                d['repo_name'] = e.repo_name
+                d['etype'] = e.etype
             else:
                 d['repo_id'] = e.repo_id
                 d['repo_name'] = e.repo_name
