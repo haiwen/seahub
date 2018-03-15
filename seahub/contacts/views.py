@@ -4,9 +4,9 @@ import logging
 import json
 from django.http import HttpResponse, HttpResponseBadRequest, \
     HttpResponseRedirect
-from django.shortcuts import render_to_response, Http404
+from django.shortcuts import render, Http404
 from django.core.urlresolvers import reverse
-from django.template import RequestContext
+
 from django.core.exceptions import ObjectDoesNotExist
 from django.forms.models import modelformset_factory
 from django.contrib import messages
@@ -44,11 +44,11 @@ def contact_list(request):
     #                   'note':''}
     # edit_form = ContactEditForm(edit_init_data)
 
-    return render_to_response('contacts/contact_list.html', {
+    return render(request, 'contacts/contact_list.html', {
         'contacts': contacts,
         # 'form': form,
         # 'edit_form': edit_form,
-        }, context_instance=RequestContext(request))
+        })
 
 @login_required_ajax
 def contact_add(request):

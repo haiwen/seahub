@@ -7,10 +7,10 @@ from django.conf import settings
 from django.views.decorators.csrf import csrf_protect
 from django.core.urlresolvers import reverse
 from django.contrib import messages
-from django.shortcuts import render_to_response
+from django.shortcuts import render
 from django.contrib.sites.models import Site, RequestSite
 from django.http import HttpResponseRedirect, Http404
-from django.template import RequestContext
+
 from django.utils.http import urlquote, base36_to_int, is_safe_url
 from django.utils.translation import ugettext as _
 from django.views.decorators.cache import never_cache
@@ -189,7 +189,7 @@ def login(request, template_name='registration/login.html',
 
     login_bg_image_path = get_login_bg_image_path()
 
-    return render_to_response(template_name, {
+    return render(request, template_name, {
         'form': form,
         redirect_field_name: redirect_to,
         'site': current_site,
@@ -201,7 +201,7 @@ def login(request, template_name='registration/login.html',
         'enable_adfs_login': enable_adfs_login,
         'enable_oauth': enable_oauth,
         'login_bg_image_path': login_bg_image_path,
-    }, context_instance=RequestContext(request))
+    })
 
 def login_simple_check(request):
     """A simple check for login called by thirdpart systems(OA, etc).
@@ -259,9 +259,9 @@ def logout(request, next_page=None,
         if redirect_to:
             return HttpResponseRedirect(redirect_to)
         else:
-            return render_to_response(template_name, {
+            return render(request, template_name, {
                 'title': _('Logged out')
-            }, context_instance=RequestContext(request))
+            })
     else:
         # Redirect to this page until the session has been cleared.
         return HttpResponseRedirect(next_page or request.path)
@@ -309,19 +309,19 @@ def password_reset(request, is_admin_site=False, template_name='registration/pas
             except Exception, e:
                 logger.error(str(e))
                 messages.error(request, _(u'Failed to send email, please contact administrator.'))
-                return render_to_response(template_name, {
+                return render(request, template_name, {
                         'form': form,
-                        }, context_instance=RequestContext(request))
+                        })
             else:
                 return HttpResponseRedirect(post_reset_redirect)
     else:
         form = password_reset_form()
-    return render_to_response(template_name, {
+    return render(request, template_name, {
         'form': form,
-    }, context_instance=RequestContext(request))
+    })
 
 def password_reset_done(request, template_name='registration/password_reset_done.html'):
-    return render_to_response(template_name, context_instance=RequestContext(request))
+    return render(request, template_name)
 
 # Doesn't need csrf_protect since no-one can guess the URL
 def password_reset_confirm(request, uidb36=None, token=None, template_name='registration/password_reset_confirm.html',
@@ -340,8 +340,7 @@ def password_reset_confirm(request, uidb36=None, token=None, template_name='regi
     except (ValueError, User.DoesNotExist):
         user = None
 
-    context_instance = RequestContext(request)
-
+    context_instance = {}
     if token_generator.check_token(user, token):
         context_instance['validlink'] = True
         if request.method == 'POST':
@@ -355,11 +354,10 @@ def password_reset_confirm(request, uidb36=None, token=None, template_name='regi
         context_instance['validlink'] = False
         form = None
     context_instance['form'] = form
-    return render_to_response(template_name, context_instance=context_instance)
+    return render(request, template_name, context_instance)
 
 def password_reset_complete(request, template_name='registration/password_reset_complete.html'):
-    return render_to_response(template_name, context_instance=RequestContext(request,
-                                                                             {'login_url': settings.LOGIN_URL}))
+    return render(request, template_name, {'login_url': settings.LOGIN_URL})
 
 @csrf_protect
 @login_required
@@ -386,13 +384,13 @@ def password_change(request, template_name='registration/password_change_form.ht
     else:
         form = password_change_form(user=request.user)
 
-    return render_to_response(template_name, {
+    return render(request, template_name, {
         'form': form,
         'min_len': config.USER_PASSWORD_MIN_LENGTH,
         'strong_pwd_required': config.USER_STRONG_PASSWORD_REQUIRED,
         'level': config.USER_PASSWORD_STRENGTH_LEVEL,
         'force_passwd_change': request.session.get('force_passwd_change', False),
-    }, context_instance=RequestContext(request))
+    })
 
 def password_change_done(request, template_name='registration/password_change_done.html'):
-    return render_to_response(template_name, context_instance=RequestContext(request))
+    return render(request, template_name)

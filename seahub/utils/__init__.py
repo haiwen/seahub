@@ -23,8 +23,8 @@ from seaserv import seafile_api
 
 from django.core.urlresolvers import reverse
 from django.core.mail import EmailMessage
-from django.shortcuts import render_to_response
-from django.template import RequestContext, Context, loader
+from django.shortcuts import render
+from django.template import Context, loader
 from django.utils.translation import ugettext as _
 from django.http import HttpResponseRedirect, HttpResponse, HttpResponseNotModified
 from django.utils.http import urlquote
@@ -131,8 +131,7 @@ def render_permission_error(request, msg=None, extra_ctx=None):
         for k in extra_ctx:
             ctx[k] = extra_ctx[k]
 
-    return render_to_response('error.html', ctx,
-                              context_instance=RequestContext(request))
+    return render(request, 'error.html', ctx)
 
 def render_error(request, msg=None, extra_ctx=None):
     """
@@ -146,8 +145,7 @@ def render_error(request, msg=None, extra_ctx=None):
         for k in extra_ctx:
             ctx[k] = extra_ctx[k]
 
-    return render_to_response('error.html', ctx,
-                              context_instance=RequestContext(request))
+    return render(request, 'error.html', ctx)
 
 def list_to_string(l):
     """

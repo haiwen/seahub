@@ -26,8 +26,7 @@ from django.contrib import messages
 from django.core.urlresolvers import reverse
 from django.db.models import F
 from django.http import HttpResponse, Http404, HttpResponseRedirect, HttpResponseBadRequest, HttpResponseForbidden
-from django.shortcuts import render_to_response
-from django.template import RequestContext
+from django.shortcuts import render
 from django.utils.http import urlquote
 from django.utils.encoding import force_bytes
 from django.utils.translation import ugettext as _
@@ -459,8 +458,7 @@ def _file_view(request, repo_id, path):
 
         if wopi_dict:
             send_file_access_msg(request, repo, path, 'web')
-            return render_to_response('view_wopi_file.html', wopi_dict,
-                      context_instance=RequestContext(request))
+            return render(request, 'view_wopi_file.html', wopi_dict)
 
     if ENABLE_ONLYOFFICE and not repo.encrypted and \
        fileext in ONLYOFFICE_FILE_EXTENSION:
@@ -492,7 +490,7 @@ def _file_view(request, repo_id, path):
             can_edit = False
 
         send_file_access_msg(request, repo, path, 'web')
-        return render_to_response('onlyoffice/view_file_via_onlyoffice.html', {
+        return render(request, 'onlyoffice/view_file_via_onlyoffice.html', {
             'ONLYOFFICE_APIJS_URL': ONLYOFFICE_APIJS_URL,
             'file_type': fileext,
             'doc_key': doc_key,
@@ -502,7 +500,7 @@ def _file_view(request, repo_id, path):
             'callback_url': get_site_scheme_and_netloc().rstrip('/') + reverse('onlyoffice_editor_callback'),
             'can_edit': can_edit,
             'username': username,
-        }, context_instance=RequestContext(request))
+        })
 
     # check if the user is the owner or not, for 'private share'
     if is_org_context(request):
@@ -605,7 +603,7 @@ def _file_view(request, repo_id, path):
     else:
         can_lock_unlock_file = False
 
-    return render_to_response(template, {
+    return render(request, template, {
             'repo': repo,
             'is_repo_owner': is_repo_owner,
             'obj_id': obj_id,
@@ -640,7 +638,7 @@ def _file_view(request, repo_id, path):
             'img_prev': img_prev,
             'img_next': img_next,
             'highlight_keyword': settings.HIGHLIGHT_KEYWORD,
-            }, context_instance=RequestContext(request))
+            })
 
 def view_history_file_common(request, repo_id, ret_dict):
     # check arguments
@@ -717,8 +715,7 @@ def view_history_file(request, repo_id):
     repo = ret_dict['repo']
     ret_dict['zipped'] = gen_path_link(path, repo.name)
 
-    return render_to_response('view_history_file.html', ret_dict,
-                              context_instance=RequestContext(request))
+    return render(request, 'view_history_file.html', ret_dict)
 
 @repo_passwd_set_required
 def view_trash_file(request, repo_id):
@@ -735,8 +732,7 @@ def view_trash_file(request, repo_id):
         tmp_path = posixpath.join(basedir.rstrip('/'), ret_dict['path'].lstrip('/'))
         ret_dict['path'] = tmp_path
 
-    return render_to_response('view_trash_file.html', ret_dict,
-                              context_instance=RequestContext(request), )
+    return render(request, 'view_trash_file.html', ret_dict)
 
 @repo_passwd_set_required
 def view_snapshot_file(request, repo_id):
@@ -750,8 +746,7 @@ def view_snapshot_file(request, repo_id):
     repo = ret_dict['repo']
     ret_dict['zipped'] = gen_path_link(path, repo.name)
 
-    return render_to_response('view_snapshot_file.html', ret_dict,
-                              context_instance=RequestContext(request), )
+    return render(request, 'view_snapshot_file.html', ret_dict)
 
 def _download_file_from_share_link(request, fileshare):
     """Download shared file.
@@ -816,8 +811,7 @@ def view_shared_file(request, fileshare):
     password_check_passed, err_msg = check_share_link_common(request, fileshare)
     if not password_check_passed:
         d = {'token': token, 'view_name': 'view_shared_file', 'err_msg': err_msg}
-        return render_to_response('share_access_validation.html', d,
-                                  context_instance=RequestContext(request))
+        return render(request, 'share_access_validation.html', d)
 
     shared_by = fileshare.username
     repo_id = fileshare.repo_id
@@ -900,7 +894,7 @@ def view_shared_file(request, fileshare):
 
     permissions = fileshare.get_permissions()
 
-    return render_to_response('shared_file_view.html', {
+    return render(request, 'shared_file_view.html', {
             'repo': repo,
             'obj_id': obj_id,
             'path': path,
@@ -920,7 +914,7 @@ def view_shared_file(request, fileshare):
             'save_to_link': save_to_link,
             'traffic_over_limit': traffic_over_limit,
             'permissions': permissions,
-            }, context_instance=RequestContext(request))
+            })
 
 def view_raw_shared_file(request, token, obj_id, file_name):
     """Returns raw content of a shared file.
@@ -943,8 +937,7 @@ def view_raw_shared_file(request, token, obj_id, file_name):
         else:
             d['view_name'] = 'view_shared_dir'
 
-        return render_to_response('share_access_validation.html', d,
-                                  context_instance=RequestContext(request))
+        return render(request, 'share_access_validation.html', d)
 
     repo_id = fileshare.repo_id
     repo = get_repo(repo_id)
@@ -997,8 +990,7 @@ def view_file_via_shared_dir(request, fileshare):
              'path': req_path,
              'err_msg': err_msg,
          }
-        return render_to_response('share_access_validation.html', d,
-                                  context_instance=RequestContext(request))
+        return render(request, 'share_access_validation.html', d)
 
     shared_by = fileshare.username
     repo_id = fileshare.repo_id
@@ -1106,7 +1098,7 @@ def view_file_via_shared_dir(request, fileshare):
     traffic_over_limit = user_traffic_over_limit(shared_by)
     permissions = fileshare.get_permissions()
 
-    return render_to_response('shared_file_view.html', {
+    return render(request, 'shared_file_view.html', {
             'repo': repo,
             'obj_id': obj_id,
             'from_shared_dir': True,
@@ -1129,7 +1121,7 @@ def view_file_via_shared_dir(request, fileshare):
             'img_next': img_next,
             'traffic_over_limit': traffic_over_limit,
             'permissions': permissions,
-            }, context_instance=RequestContext(request))
+            })
 
 def file_edit_submit(request, repo_id):
     content_type = 'application/json; charset=utf-8'
@@ -1293,7 +1285,7 @@ def file_edit(request, repo_id):
     elif page_from == 'personal_wiki_page_edit' or page_from == 'personal_wiki_page_new':
         cancel_url = reverse('personal_wiki', args=[wiki_name])
 
-    return render_to_response('file_edit.html', {
+    return render(request, 'file_edit.html', {
         'repo':repo,
         'u_filename':u_filename,
         'wiki_name': wiki_name,
@@ -1310,7 +1302,7 @@ def file_edit(request, repo_id):
         'from': page_from,
         'gid': gid,
         'cancel_url': cancel_url,
-    }, context_instance=RequestContext(request))
+    })
 
 @login_required
 def view_raw_file(request, repo_id, file_path):
@@ -1488,7 +1480,7 @@ def text_diff(request, repo_id):
 
     referer = request.GET.get('referer', '')
 
-    return render_to_response('text_diff.html', {
+    return render(request, 'text_diff.html', {
         'u_filename':u_filename,
         'repo': repo,
         'path': path,
@@ -1498,7 +1490,7 @@ def text_diff(request, repo_id):
         'diff_result_table': diff_result_table,
         'is_new_file': is_new_file,
         'referer': referer,
-    }, context_instance=RequestContext(request))
+    })
 
 ########## office related
 @require_POST
@@ -1691,7 +1683,7 @@ def file_access(request, repo_id):
     filename = os.path.basename(path)
     zipped = gen_path_link(path, repo.name)
     extra_href = "&p=%s" % urlquote(path)
-    return render_to_response('file_access.html', {
+    return render(request, 'file_access.html', {
         'repo': repo,
         'path': path,
         'filename': filename,
@@ -1703,4 +1695,4 @@ def file_access(request, repo_id):
         'next_page': current_page+1,
         'per_page': per_page,
         'page_next': page_next,
-        }, context_instance=RequestContext(request))
+        })

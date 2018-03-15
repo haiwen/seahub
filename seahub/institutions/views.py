@@ -5,8 +5,8 @@ import logging
 from django.core.urlresolvers import reverse
 from django.contrib import messages
 from django.http import HttpResponseRedirect, HttpResponse
-from django.shortcuts import render_to_response
-from django.template import RequestContext
+from django.shortcuts import render
+
 from django.utils.translation import ugettext as _
 import seaserv
 from seaserv import seafile_api
@@ -48,9 +48,9 @@ def info(request):
     """
     inst = request.user.institution
 
-    return render_to_response('institutions/info.html', {
+    return render(request, 'institutions/info.html', {
         'inst': inst,
-    }, context_instance=RequestContext(request))
+    })
 
 @inst_admin_required
 def useradmin(request):
@@ -85,7 +85,7 @@ def useradmin(request):
             if e.username == u.username:
                 u.last_login = e.last_login
 
-    return render_to_response('institutions/useradmin.html', {
+    return render(request, 'institutions/useradmin.html', {
         'inst': inst,
         'users': users,
         'current_page': current_page,
@@ -93,7 +93,7 @@ def useradmin(request):
         'next_page': current_page + 1,
         'per_page': per_page,
         'page_next': page_next,
-    }, context_instance=RequestContext(request))
+    })
 
 @inst_admin_required
 def useradmin_search(request):
@@ -121,11 +121,11 @@ def useradmin_search(request):
             if e.username == u.username:
                 u.last_login = e.last_login
 
-    return render_to_response('institutions/useradmin_search.html', {
+    return render(request, 'institutions/useradmin_search.html', {
         'inst': inst,
         'users': users,
         'q': q,
-    }, context_instance=RequestContext(request))
+    })
 
 @inst_admin_required
 @inst_admin_can_manage_user
@@ -167,7 +167,7 @@ def user_info(request, email):
 
     available_quota = get_institution_available_quota(request.user.institution)
 
-    return render_to_response(
+    return render(request, 
         'institutions/user_info.html', {
             'owned_repos': owned_repos,
             'space_quota': space_quota,
@@ -178,7 +178,7 @@ def user_info(request, email):
             'd_profile': d_profile,
             'personal_groups': personal_groups,
             'available_quota': available_quota,
-        }, context_instance=RequestContext(request))
+        })
 
 @require_POST
 @inst_admin_required

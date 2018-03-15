@@ -13,8 +13,7 @@ from django.core.urlresolvers import reverse
 from django.contrib import messages
 from django.http import HttpResponse, Http404, \
     HttpResponseRedirect
-from django.shortcuts import render_to_response, redirect
-from django.template import RequestContext
+from django.shortcuts import render, redirect
 from django.utils.http import urlquote
 from django.utils.html import escape
 from django.utils.translation import ugettext as _
@@ -273,13 +272,13 @@ def render_recycle_root(request, repo_id, referer):
     if is_repo_owner:
         enable_clean = True
 
-    return render_to_response('repo_dir_recycle_view.html', {
+    return render(request, 'repo_dir_recycle_view.html', {
             'show_recycle_root': True,
             'repo': repo,
             'repo_dir_name': repo.name,
             'enable_clean': enable_clean,
             'referer': referer,
-            }, context_instance=RequestContext(request))
+            })
 
 def render_recycle_dir(request, repo_id, commit_id, referer):
     basedir = request.GET.get('base', '')
@@ -318,7 +317,7 @@ def render_recycle_dir(request, repo_id, commit_id, referer):
         else:
             dirent.is_dir = False
 
-    return render_to_response('repo_dir_recycle_view.html', {
+    return render(request, 'repo_dir_recycle_view.html', {
             'show_recycle_root': False,
             'repo': repo,
             'repo_dir_name': repo.name,
@@ -328,20 +327,20 @@ def render_recycle_dir(request, repo_id, commit_id, referer):
             'basedir': basedir,
             'path': path,
             'referer': referer,
-            }, context_instance=RequestContext(request))
+            })
 
 def render_dir_recycle_root(request, repo_id, dir_path, referer):
     repo = get_repo(repo_id)
     if not repo:
         raise Http404
 
-    return render_to_response('repo_dir_recycle_view.html', {
+    return render(request, 'repo_dir_recycle_view.html', {
             'show_recycle_root': True,
             'repo': repo,
             'repo_dir_name': os.path.basename(dir_path.rstrip('/')),
             'dir_path': dir_path,
             'referer': referer,
-            }, context_instance=RequestContext(request))
+            })
 
 def render_dir_recycle_dir(request, repo_id, commit_id, dir_path, referer):
     basedir = request.GET.get('base', '')
@@ -379,7 +378,7 @@ def render_dir_recycle_dir(request, repo_id, commit_id, dir_path, referer):
         else:
             dirent.is_dir = False
 
-    return render_to_response('repo_dir_recycle_view.html', {
+    return render(request, 'repo_dir_recycle_view.html', {
             'show_recycle_root': False,
             'repo': repo,
             'repo_dir_name': os.path.basename(dir_path.rstrip('/')),
@@ -390,7 +389,7 @@ def render_dir_recycle_dir(request, repo_id, commit_id, dir_path, referer):
             'path': path,
             'dir_path': dir_path,
             'referer': referer,
-            }, context_instance=RequestContext(request))
+            })
 
 @login_required
 def repo_recycle_view(request, repo_id):
@@ -505,7 +504,7 @@ def repo_history(request, repo_id):
     # for 'go back'
     referer = request.GET.get('referer', '')
 
-    return render_to_response('repo_history.html', {
+    return render(request, 'repo_history.html', {
             "repo": repo,
             "commits": commits,
             'current_page': current_page,
@@ -515,7 +514,7 @@ def repo_history(request, repo_id):
             'user_perm': user_perm,
             'show_label': show_label,
             'referer': referer,
-            }, context_instance=RequestContext(request))
+            })
 
 @login_required
 @require_POST
@@ -705,7 +704,7 @@ def libraries(request):
     if is_pro_version() and ENABLE_STORAGE_CLASSES:
         storages = get_library_storages(request)
 
-    return render_to_response('libraries.html', {
+    return render(request, 'libraries.html', {
             "allow_public_share": allow_public_share,
             "guide_enabled": guide_enabled,
             "sub_lib_enabled": sub_lib_enabled,
@@ -731,7 +730,7 @@ def libraries(request):
             'library_templates': LIBRARY_TEMPLATES.keys() if \
                     isinstance(LIBRARY_TEMPLATES, dict) else [],
             'enable_share_to_all_groups': config.ENABLE_SHARE_TO_ALL_GROUPS
-            }, context_instance=RequestContext(request))
+            })
 
 @login_required
 def repo_set_access_property(request, repo_id):
@@ -813,7 +812,7 @@ def file_revisions(request, repo_id):
     # for 'go back'
     referer = request.GET.get('referer', '')
 
-    return render_to_response('file_revisions.html', {
+    return render(request, 'file_revisions.html', {
         'repo': repo,
         'path': path,
         'u_filename': u_filename,
@@ -822,7 +821,7 @@ def file_revisions(request, repo_id):
         'can_compare': can_compare,
         'can_revert_file': can_revert_file,
         'referer': referer,
-        }, context_instance=RequestContext(request))
+        })
 
 
 def demo(request):
@@ -1085,8 +1084,7 @@ def underscore_template(request, template):
     if not template.startswith('js'):  # light security check
         raise Http404
 
-    return render_to_response(template, {},
-                              context_instance=RequestContext(request))
+    return render(request, template, {})
 
 def fake_view(request, **kwargs):
     """
