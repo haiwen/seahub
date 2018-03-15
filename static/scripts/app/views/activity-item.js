@@ -20,6 +20,13 @@ define([
 
         initialize: function(activity) {
             this.activity = activity;
+            if (activity.etype == 'clean-up-repo-trash') {
+                if (activity.days == 0) {
+                    this.activity.desc =  gettext('Removed all items from trash.');
+                } else {
+                    this.activity.desc = gettext('Removed items older than {n} days from trash.').replace('{n}', this.activity.days);
+                }
+            }
         },
 
         showDetails: function () {

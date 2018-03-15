@@ -28,7 +28,7 @@ define([
 
         fileupdateConfirmTemplate: _.template($("#fileupdate-confirm-template").html()),
 
-        initialize: function (options) {
+        initialize: function(options) {
             var dirView = this.dirView = options.dirView;
             var dirents = dirView.dir;
 
@@ -217,8 +217,15 @@ define([
                                 }
                             }
                         },
-                        error: function() {
-                            file.error = gettext("Failed to get upload url");
+                        error: function(xhr) {
+                            var error_msg;
+                            if (xhr.responseJSON) {
+                                error_msg = xhr.responseJSON.error_msg;
+                            } else {
+                                error_msg = gettext("Error");
+                            }
+                            data.abort();
+                            _this.$('.total-error').html(error_msg).show();
                         }
                     });
                 };
@@ -250,8 +257,15 @@ define([
                             data.url = returned_url;
                             data.jqXHR = popup.fileupload('send', data);
                         },
-                        error: function() {
-                            file.error = gettext("Failed to get update url");
+                        error: function(xhr) {
+                            var error_msg;
+                            if (xhr.responseJSON) {
+                                error_msg = xhr.responseJSON.error_msg;
+                            } else {
+                                error_msg = gettext("Error");
+                            }
+                            data.abort();
+                            _this.$('.total-error').html(error_msg).show();
                         }
                     });
                 };

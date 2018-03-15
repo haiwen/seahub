@@ -13,6 +13,9 @@ from seahub.api2.throttling import UserRateThrottle
 from seahub.api2.utils import api_error
 from seahub.settings import SEAHUB_DATA_ROOT, MEDIA_ROOT, \
         CUSTOM_FAVICON_PATH
+from seahub.utils import get_file_type_and_ext, PREVIEW_FILEEXT
+from seahub.utils.file_types import IMAGE
+from seahub.utils.error_msg import file_type_error_msg, file_size_error_msg
 
 logger = logging.getLogger(__name__)
 
@@ -26,7 +29,16 @@ class AdminFavicon(APIView):
 
         favicon_file = request.FILES.get('favicon', None)
         if not favicon_file:
-            error_msg = 'favicon invalid.'
+            error_msg = 'Favicon can not be found.'
+            return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
+
+        file_type, ext = get_file_type_and_ext(favicon_file.name)
+        if file_type != IMAGE:
+            error_msg = file_type_error_msg(ext, PREVIEW_FILEEXT.get(IMAGE))
+            return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
+
+        if favicon_file.size > 1024 * 1024 * 20: # 20mb
+            error_msg = file_size_error_msg(favicon_file.size, 20*1024*1024)
             return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
 
         if not os.path.exists(SEAHUB_DATA_ROOT):

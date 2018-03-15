@@ -3,7 +3,7 @@
 import logging
 
 import seaserv
-from seaserv import seafile_api
+from seaserv import seafile_api, ccnet_api
 
 from seahub.utils import EMPTY_SHA1, is_org_context
 
@@ -114,3 +114,62 @@ def get_locked_files_by_dir(request, repo_id, folder_path):
             locked_files[dirent.obj_name] = dirent.lock_owner
 
     return locked_files
+
+def get_shared_groups_by_repo(repo_id, org_id=None):
+    if not org_id:
+        group_ids = seafile_api.get_shared_group_ids_by_repo(
+                repo_id)
+    else:
+        group_ids = seafile_api.org_get_shared_group_ids_by_repo(org_id,
+                repo_id)
+
+    if not group_ids:
+        return []
+
+    groups = []
+    for group_id in group_ids:
+        group = ccnet_api.get_group(int(group_id))
+        if group:
+            groups.append(group)
+
+    return groups
+
+def get_related_users_by_repo(repo_id, org_id=None):
+    """ Return all users who can view this library.
+
+    1. repo owner
+    2. users repo has been shared to
+    3. members of groups repo has been shared to
+    """
+
+    users = []
+
+    if org_id:
+        repo_owner = seafile_api.get_org_repo_owner(repo_id)
+        user_shared_to = seafile_api.list_org_repo_shared_to(org_id,
+                repo_owner, repo_id)
+    else:
+        repo_owner = seafile_api.get_repo_owner(repo_id)
+        user_shared_to = seafile_api.list_repo_shared_to(
+                repo_owner, repo_id)
+
+    # 1. repo owner
+    users.append(repo_owner)
+
+    # 2. users repo has been shared to
+    for user in user_shared_to:
+        users.append(user.user)
+
+    # 3. members of groups repo has been shared to
+    groups = get_shared_groups_by_repo(repo_id, org_id)
+    for group in groups:
+        members = ccnet_api.get_group_members(group.id)
+        for member in members:
+            if member.user_name not in users:
+                users.append(member.user_name)
+
+    return users
+
+# TODO
+def is_valid_repo_id_format(repo_id):
+    return len(repo_id) == 36

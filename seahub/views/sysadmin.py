@@ -17,11 +17,11 @@ from django.conf import settings as dj_settings
 from django.core.urlresolvers import reverse
 from django.contrib import messages
 from django.http import HttpResponse, Http404, HttpResponseRedirect, HttpResponseNotAllowed
-
 from django.shortcuts import render_to_response, get_object_or_404
 from django.template import RequestContext
 from django.utils import timezone
 from django.utils.translation import ugettext as _
+from django.utils.http import urlquote
 
 import seaserv
 from seaserv import ccnet_threaded_rpc, seafserv_threaded_rpc, \
@@ -50,6 +50,7 @@ from seahub.utils import IS_EMAIL_CONFIGURED, string2list, is_valid_username, \
     is_pro_version, send_html_email, get_user_traffic_list, get_server_id, \
     handle_virus_record, get_virus_record_by_id, \
     get_virus_record, FILE_AUDIT_ENABLED, get_max_upload_file_size
+from seahub.utils.ip import get_remote_ip
 from seahub.utils.file_size import get_file_size_unit
 from seahub.utils.ldap import get_ldap_info
 from seahub.utils.licenseparse import parse_license, user_number_over_limit
@@ -1713,97 +1714,6 @@ def user_search(request):
 @login_required
 @sys_staff_required
 @require_POST
-def sys_repo_transfer(request):
-    """Transfer a repo to others.
-    """
-    repo_id = request.POST.get('repo_id', None)
-    new_owner = request.POST.get('email', None)
-
-    next = request.META.get('HTTP_REFERER', None)
-    if not next:
-        next = reverse('sys_repo_admin')
-
-    if not (repo_id and new_owner):
-        messages.error(request, _(u'Failed to transfer, invalid arguments.'))
-        return HttpResponseRedirect(next)
-
-    repo = seafile_api.get_repo(repo_id)
-    if not repo:
-        messages.error(request, _(u'Library does not exist'))
-        return HttpResponseRedirect(next)
-
-    try:
-        User.objects.get(email=new_owner)
-    except User.DoesNotExist:
-        messages.error(request, _(u'Failed to transfer, user %s not found') % new_owner)
-        return HttpResponseRedirect(next)
-
-    if MULTI_TENANCY:
-        try:
-            if seafserv_threaded_rpc.get_org_id_by_repo_id(repo_id) > 0:
-                messages.error(request, _(u'Can not transfer organization library'))
-                return HttpResponseRedirect(next)
-
-            if ccnet_api.get_orgs_by_user(new_owner):
-                messages.error(request, _(u'Can not transfer library to organization user %s') % new_owner)
-                return HttpResponseRedirect(next)
-        except Exception as e:
-            logger.error(e)
-            messages.error(request, 'Internal Server Error')
-            return HttpResponseRedirect(next)
-
-    repo_owner = seafile_api.get_repo_owner(repo_id)
-
-    # get repo shared to user/group list
-    shared_users = seafile_api.list_repo_shared_to(
-            repo_owner, repo_id)
-    shared_groups = seafile_api.list_repo_shared_group_by_user(
-            repo_owner, repo_id)
-
-    # get all pub repos
-    pub_repos = []
-    if not request.cloud_mode:
-        pub_repos = seafile_api.list_inner_pub_repos_by_owner(repo_owner)
-
-    # transfer repo
-    seafile_api.set_repo_owner(repo_id, new_owner)
-
-    # reshare repo to user
-    for shared_user in shared_users:
-        shared_username = shared_user.user
-
-        if new_owner == shared_username:
-            continue
-
-        seafile_api.share_repo(repo_id, new_owner,
-                shared_username, shared_user.perm)
-
-    # reshare repo to group
-    for shared_group in shared_groups:
-        shared_group_id = shared_group.group_id
-
-        if not ccnet_api.is_group_user(shared_group_id, new_owner):
-            continue
-
-        seafile_api.set_group_repo(repo_id, shared_group_id,
-                new_owner, shared_group.perm)
-
-    # check if current repo is pub-repo
-    # if YES, reshare current repo to public
-    for pub_repo in pub_repos:
-        if repo_id != pub_repo.id:
-            continue
-
-        seafile_api.add_inner_pub_repo(repo_id, pub_repo.permission)
-
-        break
-
-    messages.success(request, _(u'Successfully transfered.'))
-    return HttpResponseRedirect(next)
-
-@login_required
-@sys_staff_required
-@require_POST
 def sys_repo_delete(request, repo_id):
     """Delete a repo.
     """
@@ -2121,12 +2031,28 @@ def sys_sudo_mode(request):
     password_error = False
     if request.method == 'POST':
         password = request.POST.get('password')
+        username = request.user.username
+        ip = get_remote_ip(request)
         if password:
-            user = authenticate(username=request.user.username, password=password)
+            user = authenticate(username=username, password=password)
             if user:
                 update_sudo_mode_ts(request)
+
+                from seahub.auth.utils import clear_login_failed_attempts
+                clear_login_failed_attempts(request, username)
+
                 return HttpResponseRedirect(next)
         password_error = True
+
+        from seahub.auth.utils import get_login_failed_attempts, incr_login_failed_attempts
+        failed_attempt = get_login_failed_attempts(username=username, ip=ip)
+        if failed_attempt >= config.LOGIN_ATTEMPT_LIMIT:
+            # logout user
+            from seahub.auth import logout
+            logout(request)
+            return HttpResponseRedirect(reverse('auth_login'))
+        else:
+            incr_login_failed_attempts(username=username, ip=ip)
 
     enable_shib_login = getattr(settings, 'ENABLE_SHIB_LOGIN', False)
     enable_adfs_login = getattr(settings, 'ENABLE_ADFS_LOGIN', False)

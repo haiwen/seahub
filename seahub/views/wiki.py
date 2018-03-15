@@ -172,7 +172,7 @@ def personal_wiki_create(request):
     passwd = None
     permission = "rw"
 
-    repo_id = seaserv.create_repo(repo_name, repo_desc, username, passwd)
+    repo_id = seafile_api.create_repo(repo_name, repo_desc, username, passwd)
     if not repo_id:
         return json_error(_(u'Failed to create'), 500)
 

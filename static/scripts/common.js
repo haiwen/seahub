@@ -139,7 +139,7 @@ define([
 
                 // Group
                 case 'groups': return siteRoot + 'api/v2.1/groups/';
-                case 'all_groups': return siteRoot + 'api/v2.1/groups/all/';
+                case 'shareable_groups': return siteRoot + 'api/v2.1/shareable-groups/';
                 case 'search_group': return siteRoot + 'api/v2.1/search-group/';
                 case 'group': return siteRoot + 'api/v2.1/groups/' + options.group_id + '/';
                 case 'group_members': return siteRoot + 'api/v2.1/groups/' + options.group_id + '/members/';

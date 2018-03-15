@@ -1007,14 +1007,16 @@ textarea:-moz-placeholder {/* for FF */
     color:#999;
     margin-right:15px;
 }
-.home-side-nav .sharp {
+#group-nav .sharp,
+#share-admin-nav .sharp {
     display:inline-block;
     width:42px;
     margin-right:5px;
     text-align:right;
     color:#aaa;
 }
-.home-side-nav .toggle-icon {
+#group-nav .toggle-icon,
+#share-admin-nav .toggle-icon {
     color:#999;
 }
 .side-tabnav-tabs .tab-cur a,
@@ -1023,7 +1025,8 @@ textarea:-moz-placeholder {/* for FF */
 }
 .side-tabnav-tabs .tab-cur [class^="sf2-icon-"],
 .side-tabnav-tabs .tab-cur a,
-.home-side-nav .tab-cur .sharp {
+#group-nav .tab-cur .sharp,
+#share-admin-nav .tab-cur .sharp {
     color:#fff;
 }
 .side-tabnav-tabs .tab-cur a {
@@ -2623,6 +2626,9 @@ button.sf-dropdown-toggle:focus {
 .fileupload-buttonbar .cancel {
     *margin-left:5px;
 }
+.fixed-upload-file-dialog .total-error {
+    margin:10px;
+}
 .fileupload-progress {
     margin-top:5px;
 }
@@ -2942,8 +2948,11 @@ button.sf-dropdown-toggle:focus {
     font-size:0;
     line-height:0;
 }
+#svg-view {
+    max-width:calc(100% - 4px);
+    max-height:calc(100% - 4px);
+}
 #docu-view,
-#svg-view,
 #md-view,
 #md-edit {
     background:#fff;
@@ -2984,10 +2993,6 @@ button.sf-dropdown-toggle:focus {
 .anchor:hover {
    text-decoration:none;
 }
-#svg-view {
-    min-height:500px;/*for ff*/
-}
-#svg-view,
 #pdf {
     width:950px;
     margin:0 auto;
@@ -3015,7 +3020,6 @@ button.sf-dropdown-toggle:focus {
 #md-view {
     padding:40px 96px;
 }
-/* for repo, file_view page. */
 #side-toolbar {
     position:fixed;
     right:0;

@@ -830,6 +830,9 @@ def view_shared_file(request, fileshare):
     if not obj_id:
         return render_error(request, _(u'File does not exist'))
 
+    if not seafile_api.check_permission_by_path(repo_id, '/', shared_by):
+        return render_error(request, _(u'Permission denied'))
+
     filename = os.path.basename(path)
     filetype, fileext = get_file_type_and_ext(filename)
 
@@ -965,6 +968,10 @@ def view_raw_shared_file(request, token, obj_id, file_name):
     if real_obj_id != obj_id:   # perm check
         raise Http404
 
+    if not seafile_api.check_permission_by_path(repo_id, '/',
+            fileshare.username):
+        return render_error(request, _(u'Permission denied'))
+
     filename = os.path.basename(file_path)
     username = request.user.username
     token = seafile_api.get_fileserver_access_token(repo_id,
@@ -993,13 +1000,6 @@ def view_file_via_shared_dir(request, fileshare):
         return render_to_response('share_access_validation.html', d,
                                   context_instance=RequestContext(request))
 
-    if request.GET.get('dl', '') == '1':
-        if fileshare.get_permissions()['can_download'] is False:
-            raise Http404
-
-        # download shared file
-        return _download_file_from_share_link(request, fileshare)
-
     shared_by = fileshare.username
     repo_id = fileshare.repo_id
     repo = get_repo(repo_id)
@@ -1019,6 +1019,16 @@ def view_file_via_shared_dir(request, fileshare):
     obj_id = seafile_api.get_file_id_by_path(repo_id, real_path)
     if not obj_id:
         return render_error(request, _(u'File does not exist'))
+
+    if not seafile_api.check_permission_by_path(repo_id, '/', shared_by):
+        return render_error(request, _(u'Permission denied'))
+
+    if request.GET.get('dl', '') == '1':
+        if fileshare.get_permissions()['can_download'] is False:
+            raise Http404
+
+        # download shared file
+        return _download_file_from_share_link(request, fileshare)
 
     filename = os.path.basename(req_path)
     if request.GET.get('raw', '0') == '1':

@@ -6,6 +6,7 @@ import json
 import logging
 
 from django.db import models
+from django.conf import settings
 from django.forms import ModelForm, Textarea
 from django.utils.html import escape
 from django.utils.translation import ugettext as _
@@ -16,8 +17,10 @@ from seaserv import seafile_api, ccnet_api
 
 from seahub.base.fields import LowerCaseCharField
 from seahub.base.templatetags.seahub_tags import email2nickname
+from seahub.invitations.models import Invitation
 from seahub.utils.repo import get_repo_shared_users
 from seahub.utils import normalize_cache_key
+from seahub.utils.timeutils import datetime_to_isoformat_timestr
 
 # Get an instance of a logger
 logger = logging.getLogger(__name__)
@@ -48,6 +51,7 @@ MSG_TYPE_REPO_SHARE = 'repo_share'
 MSG_TYPE_REPO_SHARE_TO_GROUP = 'repo_share_to_group'
 MSG_TYPE_USER_MESSAGE = 'user_message'
 MSG_TYPE_FILE_COMMENT = 'file_comment'
+MSG_TYPE_GUEST_INVITATION_ACCEPTED = 'guest_invitation_accepted'
 
 USER_NOTIFICATION_COUNT_CACHE_PREFIX = 'USER_NOTIFICATION_COUNT_'
 
@@ -85,6 +89,9 @@ def file_comment_msg_to_json(repo_id, file_path, author, comment):
                        'file_path': file_path,
                        'author': author,
                        'comment': comment})
+
+def guest_invitation_accepted_msg_to_json(invitation_id):
+    return json.dumps({'invitation_id': invitation_id})
 
 def get_cache_key_of_unseen_notifications(username):
     return normalize_cache_key(username,
@@ -278,6 +285,13 @@ class UserNotificationManager(models.Manager):
         """
         return self._add_user_notification(to_user, MSG_TYPE_FILE_COMMENT, detail)
 
+    def add_guest_invitation_accepted_msg(self, to_user, detail):
+        """Nofity ``to_user`` that a guest has accpeted an invitation.
+        """
+        return self._add_user_notification(
+            to_user, MSG_TYPE_GUEST_INVITATION_ACCEPTED, detail)
+
+
 class UserNotification(models.Model):
     to_user = LowerCaseCharField(db_index=True, max_length=255)
     msg_type = models.CharField(db_index=True, max_length=30)
@@ -368,6 +382,9 @@ class UserNotification(models.Model):
 
     def is_file_comment_msg(self):
         return self.msg_type == MSG_TYPE_FILE_COMMENT
+
+    def is_guest_invitation_accepted_msg(self):
+        return self.msg_type == MSG_TYPE_GUEST_INVITATION_ACCEPTED
 
     def group_message_detail_to_dict(self):
         """Parse group message detail, returns dict contains ``group_id`` and
@@ -692,6 +709,31 @@ class UserNotification(models.Model):
         }
         return msg
 
+    def format_guest_invitation_accepted_msg(self):
+        try:
+            d = json.loads(self.detail)
+        except Exception as e:
+            logger.error(e)
+            return _(u"Internal error")
+
+        inv_id = d['invitation_id']
+        try:
+            inv = Invitation.objects.get(pk=inv_id)
+        except Invitation.DoesNotExist:
+            self.delete()
+            return
+
+        # Use same msg as in notice_email.html, so there will be only one msg
+        # in django.po.
+        msg = _('Guest %(user)s accepted your <a href="%(url_base)s%(inv_url)s">invitation</a> at %(time)s.') % {
+            'user': inv.accepter,
+            'url_base': '',
+            'inv_url': settings.SITE_ROOT + '#invitations/',
+            'time': inv.accept_time.strftime("%Y-%m-%d %H:%M:%S"),
+        }
+        return msg
+
+
 ########## handle signals
 from django.core.urlresolvers import reverse
 from django.dispatch import receiver
@@ -700,6 +742,7 @@ from seahub.signals import upload_file_successful, comment_file_successful
 from seahub.group.signals import grpmsg_added, group_join_request, add_user_to_group
 from seahub.share.signals import share_repo_to_user_successful, \
     share_repo_to_group_successful
+from seahub.invitations.signals import accept_guest_invitation_successful
 
 @receiver(upload_file_successful)
 def add_upload_file_msg_cb(sender, **kwargs):
@@ -803,3 +846,11 @@ def comment_file_successful_cb(sender, **kwargs):
     for u in notify_users:
         detail = file_comment_msg_to_json(repo.id, file_path, author, comment)
         UserNotification.objects.add_file_comment_msg(u, detail)
+
+@receiver(accept_guest_invitation_successful)
+def accept_guest_invitation_successful_cb(sender, **kwargs):
+    inv_obj = kwargs['invitation_obj']
+
+    detail = guest_invitation_accepted_msg_to_json(inv_obj.pk)
+    UserNotification.objects.add_guest_invitation_accepted_msg(
+        inv_obj.inviter, detail)

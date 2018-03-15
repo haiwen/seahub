@@ -172,3 +172,45 @@ def check_group_share_in_permission(repo_id, group_id, is_org=False):
 
     extra_permission = ExtraGroupsSharePermission.objects.get_group_permission(repo_id, group_id)
     return extra_permission if extra_permission else repo.permission
+
+def has_shared_to_user(repo_id, path, username, org_id=None):
+    if org_id:
+        # when calling seafile API to share authority related functions, change the uesrname to repo owner.
+        repo_owner = seafile_api.get_org_repo_owner(repo_id)
+        if path == '/':
+            share_items = seafile_api.list_org_repo_shared_to(org_id,
+                                                              repo_owner,
+                                                              repo_id)
+        else:
+            share_items = seafile_api.get_org_shared_users_for_subdir(org_id,
+                                                                      repo_id,
+                                                                      path,
+                                                                      repo_owner)
+    else:
+        repo_owner = seafile_api.get_repo_owner(repo_id)
+        if path == '/':
+            share_items = seafile_api.list_repo_shared_to(repo_owner, repo_id)
+        else:
+            share_items = seafile_api.get_shared_users_for_subdir(repo_id,
+                                                                  path, repo_owner)
+    return username in [item.user for item in share_items]
+
+def has_shared_to_group(repo_id, path, gid, org_id=None):
+    if org_id:
+        # when calling seafile API to share authority related functions, change the uesrname to repo owner.
+        repo_owner = seafile_api.get_org_repo_owner(repo_id)
+        if path == '/':
+            share_items = seafile_api.list_org_repo_shared_group(org_id,
+                    repo_owner, repo_id)
+        else:
+            share_items = seafile_api.get_org_shared_groups_for_subdir(org_id,
+                    repo_id, path, repo_owner)
+    else:
+        repo_owner = seafile_api.get_repo_owner(repo_id)
+        if path == '/':
+            share_items = seafile_api.list_repo_shared_group_by_user(repo_owner, repo_id)
+        else:
+            share_items = seafile_api.get_shared_groups_for_subdir(repo_id,
+                                                                   path, repo_owner)
+
+    return gid in [item.group_id for item in share_items]

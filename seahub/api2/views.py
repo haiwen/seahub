@@ -3,6 +3,7 @@
 import logging
 import os
 import stat
+from importlib import import_module
 import json
 import datetime
 import posixpath
@@ -18,6 +19,7 @@ from rest_framework.permissions import IsAuthenticated, IsAdminUser
 from rest_framework.reverse import reverse
 from rest_framework.response import Response
 
+from django.conf import settings as dj_settings
 from django.contrib.auth.hashers import check_password
 from django.contrib.sites.models import RequestSite
 from django.db import IntegrityError
@@ -74,7 +76,8 @@ from seahub.utils import gen_file_get_url, gen_token, gen_file_upload_url, \
 from seahub.utils.file_revisions import get_file_revisions_after_renamed
 from seahub.utils.devices import do_unlink_device
 from seahub.utils.repo import get_repo_owner, get_library_storages, \
-        get_locked_files_by_dir
+        get_locked_files_by_dir, get_related_users_by_repo, \
+        is_valid_repo_id_format
 from seahub.utils.star import star_file, unstar_file
 from seahub.utils.file_types import DOCUMENT
 from seahub.utils.file_size import get_file_size_unit
@@ -82,10 +85,9 @@ from seahub.utils.file_op import check_file_lock
 from seahub.utils.timeutils import utc_to_local, datetime_to_isoformat_timestr
 from seahub.views import is_registered_user, check_folder_permission, \
     create_default_library, list_inner_pub_repos
-from seahub.views.ajax import get_groups_by_user, get_group_repos
 from seahub.views.file import get_file_view_path_and_perm, send_file_access_msg
 if HAS_FILE_SEARCH:
-    from seahub_extra.search.views import search_keyword
+    from seahub_extra.search.utils import search_files, get_search_repos_map, SEARCH_FILEEXT
 from seahub.utils import HAS_OFFICE_CONVERTER
 if HAS_OFFICE_CONVERTER:
     from seahub.utils import query_office_convert_status, prepare_converted_html
@@ -180,12 +182,45 @@ class ObtainAuthToken(APIView):
     renderer_classes = (renderers.JSONRenderer,)
 
     def post(self, request):
+        headers = {}
         context = { 'request': request }
         serializer = AuthTokenSerializer(data=request.data, context=context)
         if serializer.is_valid():
             key = serializer.validated_data
-            return Response({'token': key})
-        headers = {}
+
+            trust_dev = False
+            try:
+                trust_dev_header = int(request.META.get('HTTP_X_SEAFILE_2FA_TRUST_DEVICE', ''))
+                trust_dev = True if trust_dev_header == 1 else False
+            except ValueError:
+                trust_dev = False
+
+            skip_2fa_header = request.META.get('HTTP_X_SEAFILE_S2FA', None)
+            if skip_2fa_header is None:
+                if trust_dev:
+                    # 2fa login with trust device,
+                    # create new session, and return session id.
+                    pass
+                else:
+                    # No 2fa login or 2fa login without trust device,
+                    # return token only.
+                    return Response({'token': key})
+            else:
+                # 2fa login without OTP token,
+                # get or create session, and return session id
+                pass
+
+            SessionStore = import_module(dj_settings.SESSION_ENGINE).SessionStore
+            s = SessionStore(skip_2fa_header)
+            if not s.exists(skip_2fa_header) or s.is_empty():
+                from seahub.two_factor.views.login import remember_device
+                s = remember_device(request.data['username'])
+
+            headers = {
+                'X-SEAFILE-S2FA': s.session_key
+            }
+            return Response({'token': key}, headers=headers)
+
         if serializer.two_factor_auth_failed:
             # Add a special response header so the client knows to ask the user
             # for the 2fa token.
@@ -312,43 +347,104 @@ class RegDevice(APIView):
 class Search(APIView):
     """ Search all the repos
     """
-    authentication_classes = (TokenAuthentication, )
+    authentication_classes = (TokenAuthentication, SessionAuthentication)
     permission_classes = (IsAuthenticated,)
     throttle_classes = (UserRateThrottle, )
 
     def get(self, request, format=None):
         if not HAS_FILE_SEARCH:
-            return api_error(status.HTTP_404_NOT_FOUND, "Search not supported")
+            error_msg = 'Search not supported.'
+            return api_error(status.HTTP_404_NOT_FOUND, error_msg)
 
+        # argument check
         keyword = request.GET.get('q', None)
         if not keyword:
-            return api_error(status.HTTP_400_BAD_REQUEST, "Missing argument")
+            error_msg = 'q invalid.'
+            return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
+
+        try:
+            current_page = int(request.GET.get('page', '1'))
+            per_page = int(request.GET.get('per_page', '25'))
+        except ValueError:
+            current_page = 1
+            per_page = 25
+
+        start = (current_page - 1) * per_page
+        size = per_page
+        if start < 0 or size < 0:
+            error_msg = 'page or per_page invalid.'
+            return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
+
+        search_repo = request.GET.get('search_repo', 'all') # val: scope or 'repo_id'
+        search_repo = search_repo.lower()
+        if not is_valid_repo_id_format(search_repo) and \
+                search_repo not in ('all', 'mine', 'shared', 'group', 'public'):
+            error_msg = 'search_repo invalid.'
+            return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
+
+        search_path = request.GET.get('search_path', None)
+        if search_path is not None and search_path[0] != '/':
+            search_path = "/{0}".format(search_path)
+
+        search_ftypes = request.GET.get('search_ftypes', 'all') # val: 'all' or 'custom'
+        search_ftypes = search_ftypes.lower()
+        if search_ftypes not in ('all', 'custom'):
+            error_msg = 'search_ftypes invalid.'
+            return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
 
         with_permission = request.GET.get('with_permission', 'false')
-        if with_permission and with_permission.lower() not in ('true', 'false'):
-            return api_error(status.HTTP_400_BAD_REQUEST, "with_permission invalid.")
+        with_permission = with_permission.lower()
+        if with_permission not in ('true', 'false'):
+            error_msg = 'with_permission invalid.'
+            return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
 
-        search_repo = request.GET.get('search_repo', None) # val: 'search_repo_id' or scope
-        if search_repo and \
-                search_repo not in ('all', 'mine', 'shared', 'group', 'public'):
+        suffixes = None
+        custom_ftypes =  request.GET.getlist('ftype') # types like 'Image', 'Video'... same in utils/file_types.py
+        input_fileexts = request.GET.get('input_fexts', '') # file extension input by the user
+        if search_ftypes == 'custom':
+            suffixes = []
+            if len(custom_ftypes) > 0:
+                for ftp in custom_ftypes:
+                    if SEARCH_FILEEXT.has_key(ftp):
+                        for ext in SEARCH_FILEEXT[ftp]:
+                            suffixes.append(ext)
 
-            try:
-                repo = seafile_api.get_repo(search_repo)
-            except Exception as e:
-                logger.error(e)
-                error_msg = 'Internal Server Error'
-                return api_error(status.HTTP_500_INTERNAL_SERVER_ERROR, error_msg)
-
-            if not repo:
-                error_msg = 'Library %s not found.' % search_repo
-                return api_error(status.HTTP_404_NOT_FOUND, error_msg)
+            if input_fileexts:
+                input_fexts = input_fileexts.split(',')
+                for i_ext in input_fexts:
+                    i_ext = i_ext.strip()
+                    if i_ext:
+                        suffixes.append(i_ext)
 
         username = request.user.username
-        results, total, has_more = search_keyword(request, keyword)
+        org_id = request.user.org.org_id if is_org_context(request) else None
+        repo_id_map = {}
+        # check recourse and permissin when search in a single repo
+        if is_valid_repo_id_format(search_repo):
+            repo_id = search_repo
+            repo = seafile_api.get_repo(repo_id)
+            # recourse check
+            if not repo:
+                error_msg = 'Library %s not found.' % repo_id
+                return api_error(status.HTTP_404_NOT_FOUND, error_msg)
 
-        is_org = False
-        if is_org_context(request):
-            is_org = True
+            # permission check
+            if not check_folder_permission(request, repo_id, '/'):
+                error_msg = 'Permission denied.'
+                return api_error(status.HTTP_403_FORBIDDEN, error_msg)
+            repo_id_map[repo_id] = repo
+        else:
+            shared_from = request.GET.get('shared_from', None)
+            not_shared_from = request.GET.get('not_shared_from', None)
+            repo_id_map = get_search_repos_map(search_repo, username, org_id, shared_from, not_shared_from)
+
+        # search file
+        try:
+            results, total = search_files(repo_id_map, search_path, keyword, suffixes, start, size, org_id)
+        except Exception as e:
+            logger.error(e)
+            error_msg = 'Internal Server Error'
+            return api_error(status.HTTP_500_INTERNAL_SERVER_ERROR, error_msg)
 
         for e in results:
             e.pop('repo', None)
@@ -358,31 +454,15 @@ class Search(APIView):
             e.pop('score', None)
 
             repo_id = e['repo_id']
-            path = e['fullpath']
-            try:
-                repo = get_repo(repo_id)
-                e['repo_name'] = repo.name
 
-                if is_org:
-                    repo_owner = seafile_api.get_org_repo_owner(repo_id)
-                else:
-                    repo_owner = seafile_api.get_repo_owner(repo_id)
+            if with_permission.lower() == 'true':
+                permission = check_folder_permission(request, repo_id, '/')
+                if not permission:
+                    continue
+                e['permission'] = permission
 
-                e['repo_owner_email'] = repo_owner
-                e['repo_owner_name'] = email2nickname(repo_owner)
-                e['repo_owner_contact_email'] = email2contact_email(repo_owner)
-
-                dirent = seafile_api.get_dirent_by_path(repo.store_id, path)
-                e['size'] = dirent.size
-
-                if with_permission.lower() == 'true':
-                    e['permission'] = seafile_api.check_permission_by_path(repo_id, path, username)
-            except SearpcError as e:
-                logger.error(e)
-                pass
-
-        res = { "total":total, "results":results, "has_more":has_more }
-        return Response(res)
+        has_more = True if total > current_page * per_page else False
+        return Response({"total":total, "results":results, "has_more":has_more})
 
 ########## Repo related
 def repo_download_info(request, repo_id, gen_sync_token=True):
@@ -566,7 +646,6 @@ class Repos(APIView):
                     "head_commit_id": r.head_cmmt_id,
                     "version": r.version,
                 }
-                
 
                 if r.repo_id in repos_with_admin_share_to:
                     repo['is_admin'] = True
@@ -576,8 +655,13 @@ class Repos(APIView):
                 repos_json.append(repo)
 
         if filter_by['group']:
-            groups = get_groups_by_user(request)
-            group_repos = get_group_repos(request, groups)
+            if is_org_context(request):
+                org_id = request.user.org.org_id
+                group_repos = seafile_api.get_org_group_repos_by_user(email,
+                        org_id)
+            else:
+                group_repos = seafile_api.get_group_repos_by_user(email)
+
             group_repos.sort(lambda x, y: cmp(y.last_modify, x.last_modify))
 
             # Reduce memcache fetch ops.
@@ -594,17 +678,18 @@ class Repos(APIView):
 
                 repo = {
                     "type": "grepo",
-                    "id": r.id,
-                    "owner": r.group.group_name,
-                    "groupid": r.group.id,
-                    "name": r.name,
+                    "id": r.repo_id,
+                    "name": r.repo_name,
+                    "groupid": r.group_id,
+                    "group_name": r.group_name,
+                    "owner": r.group_name,
                     "mtime": r.last_modify,
                     "modifier_email": r.last_modifier,
-                    "modifier_contact_email": contact_email_dict.get(r.last_modifier, ''),
                     "modifier_name": nickname_dict.get(r.last_modifier, ''),
+                    "modifier_contact_email": contact_email_dict.get(r.last_modifier, ''),
                     "size": r.size,
                     "encrypted": r.encrypted,
-                    "permission": check_permission(r.id, email),
+                    "permission": r.permission,
                     "root": '',
                     "head_commit_id": r.head_cmmt_id,
                     "version": r.version,
@@ -1033,28 +1118,35 @@ class Repo(APIView):
         return Response("unsupported operation")
 
     def delete(self, request, repo_id, format=None):
-        username = request.user.username
         repo = seafile_api.get_repo(repo_id)
         if not repo:
-            return api_error(status.HTTP_400_BAD_REQUEST,
-                             'Library does not exist.')
+            error_msg = 'Library %s not found.' % repo_id
+            return api_error(status.HTTP_404_NOT_FOUND, error_msg)
 
         # check permission
+        org_id = None
         if is_org_context(request):
+            org_id = request.user.org.org_id
             repo_owner = seafile_api.get_org_repo_owner(repo.id)
         else:
             repo_owner = seafile_api.get_repo_owner(repo.id)
-        is_owner = True if username == repo_owner else False
-        if not is_owner:
-            return api_error(
-                status.HTTP_403_FORBIDDEN,
-                'You do not have permission to delete this library.'
-            )
 
-        usernames = seaserv.get_related_users_by_repo(repo_id)
+        username = request.user.username
+        if username != repo_owner:
+            error_msg = 'Permission denied.'
+            return api_error(status.HTTP_403_FORBIDDEN, error_msg)
+
+        try:
+            usernames = get_related_users_by_repo(repo_id, org_id)
+        except Exception as e:
+            logger.error(e)
+            usernames = []
+
+        # remove repo
         seafile_api.remove_repo(repo_id)
+
         repo_deleted.send(sender=None,
-                          org_id=-1,
+                          org_id=org_id,
                           usernames=usernames,
                           repo_owner=repo_owner,
                           repo_id=repo_id,
@@ -3777,6 +3869,13 @@ class EventsView(APIView):
                 d['converted_cmmt_desc'] = translate_commit_desc_escape(convert_cmmt_desc_link(e.commit))
                 d['more_files'] = e.commit.more_files
                 d['repo_encrypted'] = e.repo.encrypted
+            elif e.etype == 'clean-up-repo-trash':
+                d['repo_id'] = e.repo_id
+                d['author'] = e.username
+                d['time'] = datetime_to_isoformat_timestr(e.timestamp)
+                d['days'] = e.days
+                d['repo_name'] = e.repo_name
+                d['etype'] = e.etype
             else:
                 d['repo_id'] = e.repo_id
                 d['repo_name'] = e.repo_name

@@ -20,6 +20,7 @@ import seahub.settings as settings
 from seahub.avatar.templatetags.avatar_tags import avatar
 from seahub.avatar.util import get_default_avatar_url
 from seahub.base.templatetags.seahub_tags import email2nickname
+from seahub.invitations.models import Invitation
 from seahub.profile.models import Profile
 
 # Get an instance of a logger
@@ -169,6 +170,20 @@ class Command(BaseCommand):
         notice.author = author
         return notice
 
+    def format_guest_invitation_accepted_msg(self, notice):
+        d = json.loads(notice.detail)
+        inv_id = d['invitation_id']
+        try:
+            inv = Invitation.objects.get(pk=inv_id)
+        except Invitation.DoesNotExist:
+            self.delete()
+            return None
+
+        notice.inv_accepter = inv.accepter
+        notice.inv_url = '#invitations/'
+        notice.inv_accept_at = inv.accept_time.strftime("%Y-%m-%d %H:%M:%S")
+        return notice
+
     def get_user_language(self, username):
         return Profile.objects.get_user_language(username)
 
@@ -254,6 +269,12 @@ class Command(BaseCommand):
 
                 elif notice.is_file_comment_msg():
                     notice = self.format_file_comment_msg(notice)
+
+                elif notice.is_guest_invitation_accepted_msg():
+                    notice = self.format_guest_invitation_accepted_msg(notice)
+
+                if notice is None:
+                    continue
 
                 notices.append(notice)
 

@@ -13,6 +13,8 @@ from seahub.api2.authentication import TokenAuthentication
 from seahub.api2.throttling import UserRateThrottle
 from seahub.api2.utils import api_error
 from seahub.settings import LICENSE_PATH
+from seahub.utils import get_file_type_and_ext
+from seahub.utils.error_msg import file_type_error_msg, file_size_error_msg
 
 logger = logging.getLogger(__name__)
 
@@ -25,7 +27,16 @@ class AdminLicense(APIView):
     def post(self, request):
         license_file = request.FILES.get('license', None)
         if not license_file:
-            error_msg = 'license invalid.'
+            error_msg = 'license can not be found.'
+            return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
+
+        file_type, ext = get_file_type_and_ext(license_file.name)
+        if ext != 'txt':
+            error_msg = file_type_error_msg(ext, 'txt')
+            return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
+
+        if license_file.size > 1024 * 1024 * 5: # 5mb
+            error_msg = file_size_error_msg(license_file.size, 5*1024*1024)
             return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
 
         license_dir = os.path.dirname(LICENSE_PATH)

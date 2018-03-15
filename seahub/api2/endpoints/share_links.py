@@ -226,6 +226,10 @@ class ShareLinks(APIView):
             error_msg = 'Library %s not found.' % repo_id
             return api_error(status.HTTP_404_NOT_FOUND, error_msg)
 
+        if repo.encrypted:
+            error_msg = 'Permission denied.'
+            return api_error(status.HTTP_403_FORBIDDEN, error_msg)
+
         try:
             obj_id, s_type = self._generate_obj_id_and_type_by_path(repo_id, path)
         except SearpcError as e:

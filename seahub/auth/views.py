@@ -5,7 +5,6 @@ from datetime import datetime
 from django.conf import settings
 # Avoid shadowing the login() view below.
 from django.views.decorators.csrf import csrf_protect
-from django.core.cache import cache
 from django.core.urlresolvers import reverse
 from django.contrib import messages
 from django.shortcuts import render_to_response
@@ -24,9 +23,13 @@ from seahub.auth.forms import AuthenticationForm, CaptchaAuthenticationForm, \
         PasswordResetForm, SetPasswordForm, PasswordChangeForm
 from seahub.auth.signals import user_logged_in_failed
 from seahub.auth.tokens import default_token_generator
+from seahub.auth.utils import (
+    get_login_failed_attempts, incr_login_failed_attempts,
+    clear_login_failed_attempts)
 from seahub.base.accounts import User
 from seahub.options.models import UserOptions
 from seahub.profile.models import Profile
+from seahub.two_factor.views.login import is_device_remembered
 from seahub.utils import is_ldap_user
 from seahub.utils.ip import get_remote_ip
 from seahub.utils.file_size import get_quota_from_string
@@ -41,7 +44,6 @@ from seahub.password_session import update_session_auth_hash
 # Get an instance of a logger
 logger = logging.getLogger(__name__)
 
-LOGIN_ATTEMPT_PREFIX = 'UserLoginAttempt_'
 
 def log_user_in(request, user, redirect_to):
     # Ensure the user-originating redirection url is safe.
@@ -51,78 +53,19 @@ def log_user_in(request, user, redirect_to):
     if request.session.test_cookie_worked():
         request.session.delete_test_cookie()
 
-    _clear_login_failed_attempts(request, user)
+    clear_login_failed_attempts(request, user.username)
 
     if two_factor_auth_enabled(user):
-        return handle_two_factor_auth(request, user, redirect_to)
+        if is_device_remembered(request.COOKIES.get('S2FA', ''), user):
+            from seahub.two_factor.utils import default_device
+            user.otp_device = default_device(user)
+        else:
+            return handle_two_factor_auth(request, user, redirect_to)
 
     # Okay, security checks complete. Log the user in.
     auth_login(request, user)
 
     return HttpResponseRedirect(redirect_to)
-
-def _get_login_failed_attempts(username=None, ip=None):
-    """Get login failed attempts base on username and ip.
-    If both username and ip are provided, return the max value.
-
-    Arguments:
-    - `username`:
-    - `ip`:
-    """
-    if username is None and ip is None:
-        return 0
-
-    username_attempts = ip_attempts = 0
-
-    if username:
-        username_attempts = cache.get(LOGIN_ATTEMPT_PREFIX + username, 0)
-
-    if ip:
-        ip_attempts = cache.get(LOGIN_ATTEMPT_PREFIX + ip, 0)
-
-    return max(username_attempts, ip_attempts)
-
-def _incr_login_failed_attempts(username=None, ip=None):
-    """Increase login failed attempts by 1 for both username and ip.
-
-    Arguments:
-    - `username`:
-    - `ip`:
-
-    Returns new value of failed attempts.
-    """
-    timeout = settings.LOGIN_ATTEMPT_TIMEOUT
-    username_attempts = 1
-    ip_attempts = 1
-
-    if username:
-        try:
-            username_attempts = cache.incr(LOGIN_ATTEMPT_PREFIX + username)
-        except ValueError:
-            cache.set(LOGIN_ATTEMPT_PREFIX + username, 1, timeout)
-
-    if ip:
-        try:
-            ip_attempts = cache.incr(LOGIN_ATTEMPT_PREFIX + ip)
-        except ValueError:
-            cache.set(LOGIN_ATTEMPT_PREFIX + ip, 1, timeout)
-
-    return max(username_attempts, ip_attempts)
-
-def _clear_login_failed_attempts(request, user):
-    """Clear login failed attempts records.
-
-    Arguments:
-    - `request`:
-    """
-    username = user.username
-    ip = get_remote_ip(request)
-
-    cache.delete(LOGIN_ATTEMPT_PREFIX + urlquote(username))
-    cache.delete(LOGIN_ATTEMPT_PREFIX + ip)
-    p = Profile.objects.get_profile_by_user(username)
-    if p and p.login_id:
-        cache.delete(LOGIN_ATTEMPT_PREFIX + urlquote(p.login_id))
 
 def _handle_login_form_valid(request, user, redirect_to, remember_me):
     if UserOptions.objects.passwd_change_required(
@@ -154,8 +97,8 @@ def login(request, template_name='registration/login.html',
     ip = get_remote_ip(request)
 
     if request.method == "POST":
-        login = urlquote(request.REQUEST.get('login', '').strip())
-        failed_attempt = _get_login_failed_attempts(username=login, ip=ip)
+        login = request.REQUEST.get('login', '').strip()
+        failed_attempt = get_login_failed_attempts(username=login, ip=ip)
         remember_me = True if request.REQUEST.get('remember_me',
                                                   '') == 'on' else False
 
@@ -176,7 +119,7 @@ def login(request, template_name='registration/login.html',
 
         # form is invalid
         user_logged_in_failed.send(sender=None, request=request)
-        failed_attempt = _incr_login_failed_attempts(username=login,
+        failed_attempt = incr_login_failed_attempts(username=login,
                                                     ip=ip)
 
         if failed_attempt >= config.LOGIN_ATTEMPT_LIMIT:
@@ -184,7 +127,6 @@ def login(request, template_name='registration/login.html',
                 # log user in if password is valid otherwise freeze account
                 logger.warn('Login attempt limit reached, try freeze the user, email/username: %s, ip: %s, attemps: %d' %
                             (login, ip, failed_attempt))
-                login = request.REQUEST.get('login', '')
                 email = Profile.objects.get_username_by_login_id(login)
                 if email is None:
                     email = login
@@ -208,7 +150,7 @@ def login(request, template_name='registration/login.html',
 
     else:
         ### GET
-        failed_attempt = _get_login_failed_attempts(ip=ip)
+        failed_attempt = get_login_failed_attempts(ip=ip)
         if failed_attempt >= config.LOGIN_ATTEMPT_LIMIT:
             if bool(config.FREEZE_USER_ON_LOGIN_FAILED) is True:
                 form = authentication_form()

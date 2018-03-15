@@ -195,6 +195,10 @@ def view_shared_dir(request, fileshare):
     if not repo:
         raise Http404
 
+    if repo.encrypted or not \
+            seafile_api.check_permission_by_path(repo_id, '/', username):
+        return render_error(request, _(u'Permission denied'))
+
     # Check path still exist, otherwise show error
     if not seafile_api.get_dir_id_by_path(repo.id, fileshare.path):
         return render_error(request, _('"%s" does not exist.') % fileshare.path)
@@ -288,6 +292,10 @@ def view_shared_upload_link(request, uploadlink):
     repo = get_repo(repo_id)
     if not repo:
         raise Http404
+
+    if repo.encrypted or \
+            seafile_api.check_permission_by_path(repo_id, '/', username) != 'rw':
+        return render_error(request, _(u'Permission denied'))
 
     uploadlink.view_cnt = F('view_cnt') + 1
     uploadlink.save()

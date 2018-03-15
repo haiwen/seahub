@@ -95,10 +95,10 @@ EMPTY_SHA1 = '0000000000000000000000000000000000000000'
 MAX_INT = 2147483647
 
 PREVIEW_FILEEXT = {
-    IMAGE: ('gif', 'jpeg', 'jpg', 'png', 'ico', 'bmp'),
+    IMAGE: ('gif', 'jpeg', 'jpg', 'png', 'ico', 'bmp', 'tif', 'tiff', 'eps'),
     DOCUMENT: ('doc', 'docx', 'ppt', 'pptx', 'odt', 'fodt', 'odp', 'fodp'),
     SPREADSHEET: ('xls', 'xlsx', 'ods', 'fods'),
-    # SVG: ('svg',),
+    SVG: ('svg',),
     PDF: ('pdf',),
     MARKDOWN: ('markdown', 'md'),
     VIDEO: ('mp4', 'ogv', 'webm', 'mov'),
@@ -316,10 +316,7 @@ def get_user_repos(username, org_id=None):
     if org_id is None:
         owned_repos = seafile_api.get_owned_repo_list(username)
         shared_repos = seafile_api.get_share_in_repo_list(username, -1, -1)
-        groups_repos = []
-        for group in seaserv.get_personal_groups_by_user(username):
-            # TODO: use seafile_api.get_group_repos
-            groups_repos += seaserv.get_group_repos(group.id, username)
+        groups_repos = seafile_api.get_group_repos_by_user(username)
         if CLOUD_MODE:
             public_repos = []
         else:
@@ -333,12 +330,12 @@ def get_user_repos(username, org_id=None):
             r.desc = r.repo_desc
             r.last_modify = r.last_modified
     else:
-        owned_repos = seafile_api.get_org_owned_repo_list(org_id, username)
-        shared_repos = seafile_api.get_org_share_in_repo_list(org_id, username,
-                                                              -1, -1)
-        groups_repos = []
-        for group in seaserv.get_org_groups_by_user(org_id, username):
-            groups_repos += seafile_api.get_org_group_repos(org_id, group.id)
+        owned_repos = seafile_api.get_org_owned_repo_list(org_id,
+                username)
+        shared_repos = seafile_api.get_org_share_in_repo_list(org_id,
+                username, -1, -1)
+        groups_repos = seafile_api.get_org_group_repos_by_user(username,
+                org_id)
         public_repos = seaserv.seafserv_threaded_rpc.list_org_inner_pub_repos(org_id)
 
         for r in shared_repos + groups_repos + public_repos:
@@ -441,6 +438,25 @@ def gen_inner_file_get_url(token, filename):
                                    urlquote(filename))
     else:
         return gen_file_get_url(token, filename)
+
+def gen_inner_file_upload_url(op, token):
+    """Generate inner fileserver upload url.
+
+    If ``ENABLE_INNER_FILESERVER`` set to False(defaults to True), will
+    returns outer fileserver file url.
+
+    Arguments:
+    - `op`:
+    - `token`:
+
+    Returns:
+        e.g., http://127.0.0.1:<port>/<op>/<token>
+        http://127.0.0.1:8082/update-api/80c69afa-9438-4ee6-a297-a24fadb10750
+    """
+    if ENABLE_INNER_FILESERVER:
+        return '%s/%s/%s' % (get_inner_fileserver_root(), op, token)
+    else:
+        return gen_file_upload_url(token, op)
 
 def get_max_upload_file_size():
     """Get max upload file size from config file, defaults to no limit.

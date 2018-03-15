@@ -8,6 +8,7 @@ from seahub.auth import authenticate
 from seahub.api2.models import DESKTOP_PLATFORMS
 from seahub.api2.utils import get_token_v1, get_token_v2
 from seahub.profile.models import Profile
+from seahub.two_factor.views.login import is_device_remembered
 from seahub.utils.two_factor_auth import has_two_factor_auth, \
         two_factor_auth_enabled, verify_two_factor_token
 
@@ -108,6 +109,11 @@ class AuthTokenSerializer(serializers.Serializer):
     def _two_factor_auth(self, request, user):
         if not has_two_factor_auth() or not two_factor_auth_enabled(user):
             return
+
+        if is_device_remembered(request.META.get('HTTP_X_SEAFILE_S2FA', ''),
+                                user):
+            return
+
         token = request.META.get('HTTP_X_SEAFILE_OTP', '')
         if not token:
             self.two_factor_auth_failed = True
@@ -117,6 +123,7 @@ class AuthTokenSerializer(serializers.Serializer):
             self.two_factor_auth_failed = True
             msg = 'Two factor auth token is invalid.'
             raise serializers.ValidationError(msg)
+
 
 class AccountSerializer(serializers.Serializer):
     email = serializers.EmailField()
