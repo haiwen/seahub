@@ -35,8 +35,10 @@ For details please refer to 'snippets/file_content_js.html'.
         {% endif %}
 
         {% if filetype == 'SVG' %}
-            <span class="loading-icon"></span>
-            <img src="{{raw_path}}" alt="{{ file_name }}" id="svg-view" class="hide" />
+            <div class="image-file-view flex-1">
+                <span class="loading-icon"></span>
+                <img src="{{raw_path}}" alt="{{ file_name }}" id="svg-view" class="hide" />
+            </div>
         {% endif %}
         
         {% if filetype == 'SpreadSheet' %}
