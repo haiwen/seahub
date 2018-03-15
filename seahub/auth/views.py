@@ -93,14 +93,14 @@ def login(request, template_name='registration/login.html',
     if request.user.is_authenticated() and redirect_if_logged_in:
         return HttpResponseRedirect(reverse(redirect_if_logged_in))
 
-    redirect_to = request.REQUEST.get(redirect_field_name, '')
+    redirect_to = request.GET.get(redirect_field_name, '')
     ip = get_remote_ip(request)
 
     if request.method == "POST":
-        login = request.REQUEST.get('login', '').strip()
+        login = request.POST.get('login', '').strip()
         failed_attempt = get_login_failed_attempts(username=login, ip=ip)
-        remember_me = True if request.REQUEST.get('remember_me',
-                                                  '') == 'on' else False
+        remember_me = True if request.POST.get('remember_me',
+                                               '') == 'on' else False
 
         # check the form
         used_captcha_already = False
@@ -205,8 +205,8 @@ def login_simple_check(request):
     Token generation: MD5(secret_key + foo@foo.com + 2014-1-1).hexdigest()
     Token length: 32 hexadecimal digits.
     """
-    username = request.REQUEST.get('user', '')
-    random_key = request.REQUEST.get('token', '')
+    username = request.GET.get('user', '')
+    random_key = request.GET.get('token', '')
 
     if not username or not random_key:
         raise Http404
@@ -244,14 +244,14 @@ def logout(request, next_page=None,
             shib_logout_url += shib_logout_return
         return HttpResponseRedirect(shib_logout_url)
 
-    if redirect_field_name in request.REQUEST:
-        next_page = request.REQUEST[redirect_field_name]
+    if redirect_field_name in request.GET:
+        next_page = request.GET[redirect_field_name]
         # Security check -- don't allow redirection to a different host.
         if not is_safe_url(url=next_page, host=request.get_host()):
             next_page = request.path
 
     if next_page is None:
-        redirect_to = request.REQUEST.get(redirect_field_name, '')
+        redirect_to = request.GET.get(redirect_field_name, '')
         if redirect_to:
             return HttpResponseRedirect(redirect_to)
         else:

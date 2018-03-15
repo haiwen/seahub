@@ -200,7 +200,7 @@ def register(request, backend, success_url=None, form_class=None,
             else:
                 return redirect(success_url)
     else:
-        userid = request.REQUEST.get('userid', '')
+        userid = request.GET.get('userid', '')
         form = form_class(initial={'userid': userid })
 
     if extra_context is None:

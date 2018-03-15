@@ -1000,7 +1000,7 @@ def check_set_repo_password(request, repo):
                 'You do not have permission to access this library.')
 
     if repo.encrypted:
-        password = request.REQUEST.get('password', default=None)
+        password = request.POST.get('password', default=None)
         if not password:
             return api_error(HTTP_440_REPO_PASSWD_REQUIRED,
                              'Library password is needed.')
@@ -1067,7 +1067,7 @@ class Repo(APIView):
 
         op = request.GET.get('op', 'setpassword')
         if op == 'checkpassword':
-            magic = request.REQUEST.get('magic', default=None)
+            magic = request.GET.get('magic', default=None)
             if not magic:
                 return api_error(HTTP_441_REPO_PASSWD_MAGIC_REQUIRED,
                                  'Library password magic is needed.')
