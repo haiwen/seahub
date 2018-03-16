@@ -120,7 +120,9 @@ define([
         },
 
         show: function() {
-            $("#right-panel").html(this.$el);
+            if (!$('#' + this.id).length) {
+                $("#right-panel").html(this.$el);
+            }
             this.showMyRepos();
         },
 
