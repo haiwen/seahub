@@ -3,8 +3,7 @@
 import os
 import logging
 from django.http import HttpResponseRedirect
-from django.template import RequestContext
-from django.shortcuts import render_to_response
+from django.shortcuts import render
 from django.core.urlresolvers import reverse
 from django.utils.translation import ugettext as _
 
@@ -67,9 +66,9 @@ def oauth_check(func):
                 error = True
 
         if error:
-            return render_to_response('error.html', {
+            return render(request, 'error.html', {
                     'error_msg': _('Error, please contact administrator.'),
-                    }, context_instance=RequestContext(request))
+                    })
 
         return func(request)
 
@@ -91,9 +90,9 @@ def oauth_login(request):
                 AUTHORIZATION_URL)
     except Exception as e:
         logger.error(e)
-        return render_to_response('error.html', {
+        return render(request, 'error.html', {
                 'error_msg': _('Error, please contact administrator.'),
-                }, context_instance=RequestContext(request))
+                })
 
     request.session['oauth_state'] = state
     return HttpResponseRedirect(authorization_url)
@@ -117,9 +116,9 @@ def oauth_callback(request):
         user_info_resp = session.get(USER_INFO_URL)
     except Exception as e:
         logger.error(e)
-        return render_to_response('error.html', {
+        return render(request, 'error.html', {
                 'error_msg': _('Error, please contact administrator.'),
-                }, context_instance=RequestContext(request))
+                })
 
     def format_user_info(user_info_resp):
 
@@ -147,9 +146,9 @@ def oauth_callback(request):
     if error:
         logger.error('Required user info not found.')
         logger.error(user_info)
-        return render_to_response('error.html', {
+        return render(request, 'error.html', {
                 'error_msg': _('Error, please contact administrator.'),
-                }, context_instance=RequestContext(request))
+                })
 
     # seahub authenticate user
     email = user_info['email']
@@ -159,9 +158,9 @@ def oauth_callback(request):
     except User.DoesNotExist:
         if not config.ENABLE_SIGNUP:
             logger.error('%s not found but user registration is disabled.' % email)
-            return render_to_response('error.html', {
+            return render(request, 'error.html', {
                     'error_msg': _('Error, please contact administrator.'),
-                    }, context_instance=RequestContext(request))
+                    })
 
     try:
         user = auth.authenticate(remote_user=email)
@@ -171,9 +170,9 @@ def oauth_callback(request):
     if not user or not user.is_active:
         logger.error('User %s not found or inactive.' % email)
         # a page for authenticate user failed
-        return render_to_response('error.html', {
+        return render(request, 'error.html', {
                 'error_msg': _(u'User %s not found.') % email
-                }, context_instance=RequestContext(request))
+                })
 
     # User is valid.  Set request.user and persist user in the session
     # by logging the user in.

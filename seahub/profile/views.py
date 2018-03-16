@@ -4,8 +4,7 @@ from django.conf import settings
 import json
 from django.core.urlresolvers import reverse
 from django.http import HttpResponse, HttpResponseRedirect, Http404
-from django.shortcuts import render_to_response
-from django.template import RequestContext
+from django.shortcuts import render
 from django.contrib import messages
 from django.utils.translation import ugettext as _
 
@@ -101,8 +100,7 @@ def edit_profile(request):
         resp_dict['default_device'] = default_device(request.user)
         resp_dict['backup_tokens'] = backup_tokens
 
-    return render_to_response('profile/set_profile.html', resp_dict,
-                              context_instance=RequestContext(request))
+    return render(request, 'profile/set_profile.html', resp_dict)
 
 @login_required
 def user_profile(request, username):
@@ -124,12 +122,12 @@ def user_profile(request, username):
         contact_email = ''
         d_profile = None
 
-    return render_to_response('profile/user_profile.html', {
+    return render(request, 'profile/user_profile.html', {
             'user': user,
             'nickname': nickname,
             'contact_email': contact_email,
             'd_profile': d_profile,
-            }, context_instance=RequestContext(request))
+            })
 
 @login_required
 def get_user_profile(request, user):

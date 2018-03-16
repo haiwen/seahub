@@ -8,8 +8,8 @@ from django.contrib.auth.models import User, Group
 from django.contrib import messages
 from django.core.exceptions import PermissionDenied
 from django.http import HttpResponseRedirect, Http404
-from django.shortcuts import render_to_response, get_object_or_404
-from django.template import RequestContext
+from django.shortcuts import render, get_object_or_404
+
 from django.utils.html import escape
 from django.utils.decorators import method_decorator
 from django.utils.translation import ugettext, ugettext_lazy as _
@@ -121,7 +121,7 @@ class UserAdmin(admin.ModelAdmin):
         fieldsets = [(None, {'fields': form.base_fields.keys()})]
         adminForm = admin.helpers.AdminForm(form, fieldsets, {})
 
-        return render_to_response(self.change_user_password_template or 'admin/auth/user/change_password.html', {
+        return render(request, self.change_user_password_template or 'admin/auth/user/change_password.html', {
             'title': _('Change password: %s') % escape(user.username),
             'adminForm': adminForm,
             'form': form,
@@ -136,7 +136,7 @@ class UserAdmin(admin.ModelAdmin):
             'save_as': False,
             'show_save': True,
             'root_path': self.admin_site.root_path,
-        }, context_instance=RequestContext(request))
+        })
 
 
 admin.site.register(Group, GroupAdmin)

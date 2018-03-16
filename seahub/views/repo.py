@@ -7,8 +7,7 @@ import logging
 from django.core.urlresolvers import reverse
 from django.db.models import F
 from django.http import Http404, HttpResponseRedirect
-from django.shortcuts import render_to_response
-from django.template import RequestContext
+from django.shortcuts import render
 from django.utils.translation import ugettext as _
 from django.utils.http import urlquote
 
@@ -131,10 +130,10 @@ def repo_history_view(request, repo_id):
     if repo.encrypted and \
         (repo.enc_version == 1 or (repo.enc_version == 2 and server_crypto)) \
         and not is_password_set(repo.id, username):
-        return render_to_response('decrypt_repo_form.html', {
+        return render(request, 'decrypt_repo_form.html', {
                 'repo': repo,
                 'next': get_next_url_from_request(request) or reverse("view_common_lib_dir", args=[repo_id, '']),
-                }, context_instance=RequestContext(request))
+                })
 
     commit_id = request.GET.get('commit_id', None)
     if commit_id is None:
@@ -152,7 +151,7 @@ def repo_history_view(request, repo_id):
 
     referer = request.GET.get('referer', '')
 
-    return render_to_response('repo_history_view.html', {
+    return render(request, 'repo_history_view.html', {
             'repo': repo,
             "is_repo_owner": is_repo_owner,
             'user_perm': user_perm,
@@ -162,7 +161,7 @@ def repo_history_view(request, repo_id):
             'path': path,
             'zipped': zipped,
             'referer': referer,
-            }, context_instance=RequestContext(request))
+            })
 
 ########## shared dir/uploadlink
 @share_link_audit
@@ -172,8 +171,7 @@ def view_shared_dir(request, fileshare):
     password_check_passed, err_msg = check_share_link_common(request, fileshare)
     if not password_check_passed:
         d = {'token': token, 'view_name': 'view_shared_dir', 'err_msg': err_msg}
-        return render_to_response('share_access_validation.html', d,
-                                  context_instance=RequestContext(request))
+        return render(request, 'share_access_validation.html', d)
 
     username = fileshare.username
     repo_id = fileshare.repo_id
@@ -248,7 +246,7 @@ def view_shared_dir(request, fileshare):
                 src = get_share_link_thumbnail_src(token, thumbnail_size, req_image_path)
                 f.encoded_thumbnail_src = urlquote(src)
 
-    return render_to_response('view_shared_dir.html', {
+    return render(request, 'view_shared_dir.html', {
             'repo': repo,
             'token': token,
             'path': req_path,
@@ -262,7 +260,7 @@ def view_shared_dir(request, fileshare):
             'ENABLE_THUMBNAIL': ENABLE_THUMBNAIL,
             'mode': mode,
             'thumbnail_size': thumbnail_size,
-            }, context_instance=RequestContext(request))
+            })
 
 @share_link_audit
 def view_shared_upload_link(request, uploadlink):
@@ -273,8 +271,7 @@ def view_shared_upload_link(request, uploadlink):
                                                              is_upload_link=True)
     if not password_check_passed:
         d = {'token': token, 'view_name': 'view_shared_upload_link', 'err_msg': err_msg}
-        return render_to_response('share_access_validation.html', d,
-                                  context_instance=RequestContext(request))
+        return render(request, 'share_access_validation.html', d)
 
     username = uploadlink.username
     repo_id = uploadlink.repo_id
@@ -302,7 +299,7 @@ def view_shared_upload_link(request, uploadlink):
 
     no_quota = True if seaserv.check_quota(repo_id) < 0 else False
 
-    return render_to_response('view_shared_upload_link.html', {
+    return render(request, 'view_shared_upload_link.html', {
             'repo': repo,
             'path': path,
             'username': username,
@@ -313,4 +310,4 @@ def view_shared_upload_link(request, uploadlink):
             'enable_upload_folder': ENABLE_UPLOAD_FOLDER,
             'enable_resumable_fileupload': ENABLE_RESUMABLE_FILEUPLOAD,
             'max_number_of_files_for_fileupload': MAX_NUMBER_OF_FILES_FOR_FILEUPLOAD,
-            }, context_instance=RequestContext(request))
+            })

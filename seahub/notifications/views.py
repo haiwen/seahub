@@ -6,8 +6,7 @@ from django.conf import settings
 from django.core.urlresolvers import reverse
 from django.contrib import messages
 from django.http import HttpResponseRedirect, Http404, HttpResponse
-from django.shortcuts import render_to_response
-from django.template import RequestContext
+from django.shortcuts import render
 from django.template.loader import render_to_string
 from django.utils.translation import ugettext as _
 
@@ -26,9 +25,9 @@ def notification_list(request):
         raise Http404
     notes = Notification.objects.all().order_by('-id')
 
-    return render_to_response('notifications/notification_list.html', {
+    return render(request, 'notifications/notification_list.html', {
             'notes': notes,
-            }, context_instance=RequestContext(request))
+            })
 
 @login_required
 def notification_add(request):
@@ -80,12 +79,12 @@ def user_notification_list(request):
 
     notices_more = True if len(notices) == count else False
 
-    return render_to_response("notifications/user_notification_list.html", {
+    return render(request, "notifications/user_notification_list.html", {
             'notices': notices,
             'start': count,
             'limit': limit,
             'notices_more': notices_more,
-            }, context_instance=RequestContext(request))
+            })
 
 @login_required_ajax
 def user_notification_more(request):

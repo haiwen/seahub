@@ -25,10 +25,7 @@ from django.contrib.sites.models import RequestSite
 from django.db import IntegrityError
 from django.db.models import F
 from django.http import HttpResponse
-from django.template import RequestContext
-from django.template.loader import render_to_string
 from django.template.defaultfilters import filesizeformat
-from django.shortcuts import render_to_response
 from django.utils import timezone
 from django.utils.translation import ugettext as _
 

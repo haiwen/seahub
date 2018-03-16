@@ -1,8 +1,8 @@
 # Copyright (c) 2012-2016 Seafile Ltd.
 from django.core.urlresolvers import reverse
 from django.http import Http404, HttpResponseRedirect, HttpResponseNotAllowed
-from django.shortcuts import render_to_response
-from django.template import RequestContext
+from django.shortcuts import render
+
 from django.utils.http import urlquote
 from seaserv import get_repo, is_passwd_set
 
@@ -58,15 +58,15 @@ def repo_passwd_set_required(func):
             try:
                 server_crypto = UserOptions.objects.is_server_crypto(username)
             except CryptoOptionNotSetError:
-                return render_to_response('options/set_user_options.html', {
-                        }, context_instance=RequestContext(request))
+                return render(request, 'options/set_user_options.html', {
+                        })
 
             if (repo.enc_version == 1 or (repo.enc_version == 2 and server_crypto)) \
                     and not is_passwd_set(repo_id, username):
-                return render_to_response('decrypt_repo_form.html', {
+                return render(request, 'decrypt_repo_form.html', {
                         'repo': repo,
                         'next': request.get_full_path(),
-                        }, context_instance=RequestContext(request))
+                        })
 
             if repo.enc_version == 2 and not server_crypto:
                 return render_error(request, _(u'Files in this library can not be viewed online.'))
