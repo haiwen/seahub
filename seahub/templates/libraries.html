@@ -300,7 +300,6 @@ app["pageOptions"] = {
     enable_repo_snapshot_label: {% if enable_repo_snapshot_label %} true {% else %} false {% endif %},
     unread_notifications_request_interval: {{ unread_notifications_request_interval }},
     enable_share_to_all_groups: {% if enable_share_to_all_groups %} true {% else %} false {% endif %},
-    enable_storage_classes: {% if enable_storage_classes %} true {% else %} false {% endif %},
     cur_note: {% if request.cur_note %} {'id': '{{ request.cur_note.id }}'} {% else %} null {% endif %}
 };
 app.ui = {
