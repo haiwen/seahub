@@ -86,7 +86,7 @@ $('#online-gc').on('click', function() {
     $('#gc-form').modal({focus:false});
     $("#simplemodal-container").css({'height':'auto'});
 });
-$('#gc-form').submit(function(){
+$('#gc-form').on('submit', function(){
     var $form = $(this);
     var $submit = $('[type="submit"]', $form);
     var $select = $('[name="day"]', $form);
@@ -108,7 +108,7 @@ $('#gc-form').submit(function(){
         error: function(xhr) {
             var error_msg;
             if (xhr.responseText) {
-                error_msg = $.parseJSON(xhr.responseText).error_msg;
+                error_msg = JSON.parse(xhr.responseText).error_msg;
             } else {
                 error_msg = "{% trans "Failed. Please check the network." %}";
             }

@@ -23,7 +23,7 @@ function setFileViewAreaHeight() {
     $fileView.outerHeight($(window).height() - $fileView.offset().top);
 }
 setFileViewAreaHeight();
-$(window).resize(setFileViewAreaHeight);
+$(window).on('resize', setFileViewAreaHeight);
 $('#svg-view').prev('.loading-icon').hide();
 $('#svg-view').show();
 </script>
