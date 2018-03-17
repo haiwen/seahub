@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2018-01-12 18:04+0800\n"
+"POT-Creation-Date: 2018-03-17 12:59+0800\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -30,10 +30,10 @@ msgstr ""
 
 #: static/scripts/app/models/dirent.js:113 static/scripts/app/views/dir.js:642
 #: static/scripts/app/views/dir.js:713
-#: static/scripts/app/views/fileupload.js:378
 #: static/scripts/app/views/fileupload.js:392
-#: static/scripts/app/views/fileupload.js:404
-#: static/scripts/app/views/fileupload.js:416 static/scripts/common.js:598
+#: static/scripts/app/views/fileupload.js:406
+#: static/scripts/app/views/fileupload.js:418
+#: static/scripts/app/views/fileupload.js:430 static/scripts/common.js:598
 msgid "Just now"
 msgstr ""
 
@@ -90,8 +90,7 @@ msgstr ""
 #: static/scripts/app/views/group-manage-members.js:146
 #: static/scripts/app/views/group-members.js:80
 #: static/scripts/app/views/group.js:110 static/scripts/app/views/group.js:143
-#: static/scripts/app/views/groups.js:83
-#: static/scripts/app/views/groups.js:134
+#: static/scripts/app/views/groups.js:83 static/scripts/app/views/groups.js:134
 #: static/scripts/app/views/invitations.js:119
 #: static/scripts/app/views/my-deleted-repos.js:86
 #: static/scripts/app/views/myhome-repos.js:104
@@ -112,6 +111,14 @@ msgstr ""
 #: static/scripts/sysadmin-app/views/groups.js:100
 #: static/scripts/sysadmin-app/views/repos.js:90
 msgid "Please check the network."
+msgstr ""
+
+#: static/scripts/app/views/activity-item.js:25
+msgid "Removed all items from trash."
+msgstr ""
+
+#: static/scripts/app/views/activity-item.js:27
+msgid "Removed items older than {n} days from trash."
 msgstr ""
 
 #: static/scripts/app/views/deleted-repo.js:58
@@ -189,8 +196,8 @@ msgstr ""
 #: static/scripts/sysadmin-app/views/device-errors.js:92
 #: static/scripts/sysadmin-app/views/device-trusted-ipaddresses.js:115
 #: static/scripts/sysadmin-app/views/dir.js:195
-#: static/scripts/sysadmin-app/views/folder-share-item.js:89
-#: static/scripts/sysadmin-app/views/folder-share-item.js:138
+#: static/scripts/sysadmin-app/views/folder-share-item.js:90
+#: static/scripts/sysadmin-app/views/folder-share-item.js:139
 #: static/scripts/sysadmin-app/views/group-member.js:71
 #: static/scripts/sysadmin-app/views/group-members.js:157
 #: static/scripts/sysadmin-app/views/group-repos.js:75
@@ -202,8 +209,8 @@ msgstr ""
 #: static/scripts/sysadmin-app/views/search-groups.js:76
 #: static/scripts/sysadmin-app/views/search-repos.js:77
 #: static/scripts/sysadmin-app/views/search-trash-repos.js:113
-#: static/scripts/sysadmin-app/views/share.js:190
-#: static/scripts/sysadmin-app/views/share.js:263
+#: static/scripts/sysadmin-app/views/share.js:194
+#: static/scripts/sysadmin-app/views/share.js:268
 #: static/scripts/sysadmin-app/views/system-repo.js:59
 #: static/scripts/sysadmin-app/views/trash-repos.js:142
 msgid "Failed. Please check the network."
@@ -606,6 +613,8 @@ msgid "Empty file upload result"
 msgstr ""
 
 #: static/scripts/app/views/fileupload.js:17
+#: static/scripts/app/views/fileupload.js:225
+#: static/scripts/app/views/fileupload.js:265
 #: static/scripts/app/views/group-discussions.js:122
 #: static/scripts/app/views/group-discussions.js:200
 #: static/scripts/app/views/group-manage-members.js:114
@@ -664,19 +673,11 @@ msgstr ""
 msgid "File Upload failed"
 msgstr ""
 
-#: static/scripts/app/views/fileupload.js:221
-msgid "Failed to get upload url"
-msgstr ""
-
-#: static/scripts/app/views/fileupload.js:254
-msgid "Failed to get update url"
-msgstr ""
-
-#: static/scripts/app/views/fileupload.js:265
+#: static/scripts/app/views/fileupload.js:279
 msgid "Replace file {filename}?"
 msgstr ""
 
-#: static/scripts/app/views/fileupload.js:291
+#: static/scripts/app/views/fileupload.js:305
 msgid "File is locked"
 msgstr ""
 
