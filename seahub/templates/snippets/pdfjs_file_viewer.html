@@ -28,32 +28,66 @@ try {
         // show at most 50 pages
         var shownPageCount = pdf.numPages < 50 ? pdf.numPages : 50;
 
+        var maxPageWidth = $('#pdf').width();
         var getPageAndRender = function (pageNumber) {
             pdf.getPage(pageNumber).then(function(page) {
                 var scale = 1.5;
                 var viewport = page.getViewport(scale);
-                var $canvas = $('<canvas class="pdf-page"></canvas>');
-                var canvas = $canvas[0];
-
-                var ctx = canvas.getContext('2d', {alpha: false});
-                var outputScale = getOutputScale(ctx);
+                if (viewport.width > maxPageWidth) {
+                    // set a proper scale
+                    viewport = viewport.clone({'scale': maxPageWidth / (viewport.width / 1.5)});
+                }
 
                 var width = Math.floor(viewport.width);
                 var height = Math.floor(viewport.height);
 
-                canvas.width = width * outputScale.sx;
-                canvas.height = height * outputScale.sy;
-                canvas.style.width = width + 'px';
-                canvas.style.height = height + 'px';
+                var $canvas = $('<canvas class="pdf-page-canvas"></canvas>');
+                var canvas = $canvas[0];
+                var ctx = canvas.getContext('2d', {alpha: false});
+                var outputScale = getOutputScale(ctx);
+
+                $canvas
+                .attr({
+                    'width': width * outputScale.sx,
+                    'height': height * outputScale.sy
+                })
+                .css({
+                    'width': width,
+                    'height': height
+                });
 
                 if (outputScale.scaled) {
                     ctx.scale(outputScale.sx, outputScale.sy);
                 }
 
-                $loadingTip.before($canvas);
+                var $textLayer = $('<div class="pdf-page-text-layer"></div>');
+                $loadingTip.before($('<div class="pdf-page"></div>').append($canvas).append($textLayer));
+
+                var canvasOffset = $canvas.offset();
+                $textLayer
+                .css({
+                    'width': width,
+                    'height': height
+                })
+                .offset({
+                    top: canvasOffset.top,
+                    left: canvasOffset.left
+                });
+
                 page.render({
                     canvasContext: ctx,
                     viewport: viewport
+                });
+
+                page
+                .getTextContent({'normalizeWhitespace': true})
+                .then(function(text) {
+                    PDFJS.renderTextLayer({
+                        textContent: text,
+                        textContentStream: page.streamTextContent(),
+                        container: $textLayer[0],
+                        viewport: viewport
+                    });
                 });
 
                 if (pageNumber < shownPageCount) {
