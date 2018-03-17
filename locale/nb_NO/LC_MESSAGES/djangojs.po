@@ -9,8 +9,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: seahub\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2018-01-12 18:04+0800\n"
-"PO-Revision-Date: 2018-01-12 09:55+0000\n"
+"POT-Creation-Date: 2018-03-17 10:26+0800\n"
+"PO-Revision-Date: 2018-03-17 02:38+0000\n"
 "Last-Translator: zheng xie <xiez1989@gmail.com>\n"
 "Language-Team: Norwegian Bokmål (Norway) (http://www.transifex.com/haiwen/seahub/language/nb_NO/)\n"
 "MIME-Version: 1.0\n"
@@ -32,10 +32,10 @@ msgstr "Skrivbart bibliotek"
 
 #: static/scripts/app/models/dirent.js:113 static/scripts/app/views/dir.js:642
 #: static/scripts/app/views/dir.js:713
-#: static/scripts/app/views/fileupload.js:378
 #: static/scripts/app/views/fileupload.js:392
-#: static/scripts/app/views/fileupload.js:404
-#: static/scripts/app/views/fileupload.js:416 static/scripts/common.js:598
+#: static/scripts/app/views/fileupload.js:406
+#: static/scripts/app/views/fileupload.js:418
+#: static/scripts/app/views/fileupload.js:430 static/scripts/common.js:598
 msgid "Just now"
 msgstr "Nettopp"
 
@@ -116,6 +116,14 @@ msgstr "Lesbar"
 msgid "Please check the network."
 msgstr "Vennligst sjekk nettverkstilkoblingen."
 
+#: static/scripts/app/views/activity-item.js:25
+msgid "Removed all items from trash."
+msgstr ""
+
+#: static/scripts/app/views/activity-item.js:27
+msgid "Removed items older than {n} days from trash."
+msgstr ""
+
 #: static/scripts/app/views/deleted-repo.js:58
 msgid "Successfully restored library {placeholder}"
 msgstr ""
@@ -191,8 +199,8 @@ msgstr "Slettede kataloger"
 #: static/scripts/sysadmin-app/views/device-errors.js:92
 #: static/scripts/sysadmin-app/views/device-trusted-ipaddresses.js:115
 #: static/scripts/sysadmin-app/views/dir.js:195
-#: static/scripts/sysadmin-app/views/folder-share-item.js:89
-#: static/scripts/sysadmin-app/views/folder-share-item.js:138
+#: static/scripts/sysadmin-app/views/folder-share-item.js:90
+#: static/scripts/sysadmin-app/views/folder-share-item.js:139
 #: static/scripts/sysadmin-app/views/group-member.js:71
 #: static/scripts/sysadmin-app/views/group-members.js:157
 #: static/scripts/sysadmin-app/views/group-repos.js:75
@@ -204,8 +212,8 @@ msgstr "Slettede kataloger"
 #: static/scripts/sysadmin-app/views/search-groups.js:76
 #: static/scripts/sysadmin-app/views/search-repos.js:77
 #: static/scripts/sysadmin-app/views/search-trash-repos.js:113
-#: static/scripts/sysadmin-app/views/share.js:190
-#: static/scripts/sysadmin-app/views/share.js:263
+#: static/scripts/sysadmin-app/views/share.js:194
+#: static/scripts/sysadmin-app/views/share.js:268
 #: static/scripts/sysadmin-app/views/system-repo.js:59
 #: static/scripts/sysadmin-app/views/trash-repos.js:142
 msgid "Failed. Please check the network."
@@ -608,6 +616,8 @@ msgid "Empty file upload result"
 msgstr "Resultatet er en tom filopplasting"
 
 #: static/scripts/app/views/fileupload.js:17
+#: static/scripts/app/views/fileupload.js:225
+#: static/scripts/app/views/fileupload.js:265
 #: static/scripts/app/views/group-discussions.js:122
 #: static/scripts/app/views/group-discussions.js:200
 #: static/scripts/app/views/group-manage-members.js:114
@@ -666,19 +676,11 @@ msgstr "Filoppastingen ble avbrutt"
 msgid "File Upload failed"
 msgstr "Mislykket filopplasting"
 
-#: static/scripts/app/views/fileupload.js:221
-msgid "Failed to get upload url"
-msgstr "Lykkes ikke med å få en opplastingslenke"
-
-#: static/scripts/app/views/fileupload.js:254
-msgid "Failed to get update url"
-msgstr "Lykkes ikke med å få en oppdateringslenke"
-
-#: static/scripts/app/views/fileupload.js:265
+#: static/scripts/app/views/fileupload.js:279
 msgid "Replace file {filename}?"
 msgstr "Erstatt fil {filename}?"
 
-#: static/scripts/app/views/fileupload.js:291
+#: static/scripts/app/views/fileupload.js:305
 msgid "File is locked"
 msgstr "Filen er låst"
 

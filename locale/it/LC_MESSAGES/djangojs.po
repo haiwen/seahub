@@ -3,13 +3,14 @@
 # This file is distributed under the same license as the PACKAGE package.
 # 
 # Translators:
-# Stefano Ruberti <stefano.ruberti@gmail.com>, 2017
+# Paolo Barbolini <paolo@paolo565.org>, 2018
+# Stefano Ruberti <stefano.ruberti@gmail.com>, 2017-2018
 msgid ""
 msgstr ""
 "Project-Id-Version: seahub\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2018-01-12 18:04+0800\n"
-"PO-Revision-Date: 2018-01-12 09:55+0000\n"
+"POT-Creation-Date: 2018-03-17 10:26+0800\n"
+"PO-Revision-Date: 2018-03-17 02:38+0000\n"
 "Last-Translator: zheng xie <xiez1989@gmail.com>\n"
 "Language-Team: Italian (http://www.transifex.com/haiwen/seahub/language/it/)\n"
 "MIME-Version: 1.0\n"
@@ -27,14 +28,14 @@ msgstr "Libreria crittografata"
 #: static/scripts/app/models/repo.js:61 static/scripts/common.js:324
 #: static/scripts/sysadmin-app/models/trash-repo.js:14
 msgid "Read-Write library"
-msgstr "Libreria in sola lettura"
+msgstr "Libreria in Lettura-Scrittura"
 
 #: static/scripts/app/models/dirent.js:113 static/scripts/app/views/dir.js:642
 #: static/scripts/app/views/dir.js:713
-#: static/scripts/app/views/fileupload.js:378
 #: static/scripts/app/views/fileupload.js:392
-#: static/scripts/app/views/fileupload.js:404
-#: static/scripts/app/views/fileupload.js:416 static/scripts/common.js:598
+#: static/scripts/app/views/fileupload.js:406
+#: static/scripts/app/views/fileupload.js:418
+#: static/scripts/app/views/fileupload.js:430 static/scripts/common.js:598
 msgid "Just now"
 msgstr "Proprio adesso"
 
@@ -47,7 +48,7 @@ msgstr "Il nome è obbligatorio"
 #: static/scripts/app/views/dir.js:627 static/scripts/app/views/dir.js:688
 #: static/scripts/app/views/dirent.js:483 static/scripts/app/views/repo.js:181
 msgid "Name should not include '/'."
-msgstr "Il nome non dovrebbe includere '/'."
+msgstr "Il nome non dovrebbe contenere '/'."
 
 #: static/scripts/app/models/repo.js:41 static/scripts/app/views/share.js:278
 msgid "Please enter password"
@@ -67,7 +68,7 @@ msgstr "Le Password non corrispondono"
 
 #: static/scripts/app/models/repo.js:63 static/scripts/common.js:322
 msgid "Read-Only library"
-msgstr "Libreria in sola lettura"
+msgstr "Libreria in Lettura-Scrittura"
 
 #: static/scripts/app/models/share-admin-folder.js:25
 #: static/scripts/app/models/share-admin-repo.js:22
@@ -115,6 +116,14 @@ msgstr "Sola lettura"
 msgid "Please check the network."
 msgstr "Si prega di controllare la configurazione di rete."
 
+#: static/scripts/app/views/activity-item.js:25
+msgid "Removed all items from trash."
+msgstr ""
+
+#: static/scripts/app/views/activity-item.js:27
+msgid "Removed items older than {n} days from trash."
+msgstr ""
+
 #: static/scripts/app/views/deleted-repo.js:58
 msgid "Successfully restored library {placeholder}"
 msgstr "Libreria {placeholder} ripristinata con successo "
@@ -125,7 +134,7 @@ msgstr "Nuovi file"
 
 #: static/scripts/app/views/details.js:53
 msgid "Deleted files"
-msgstr "File cancellati"
+msgstr "File eliminati"
 
 #: static/scripts/app/views/details.js:59
 msgid "Renamed or Moved files"
@@ -141,7 +150,7 @@ msgstr "Nuove cartelle"
 
 #: static/scripts/app/views/details.js:77
 msgid "Deleted directories"
-msgstr "Cartelle rimosse"
+msgstr "Cartelle eliminate"
 
 #: static/scripts/app/views/details.js:94
 #: static/scripts/app/views/dialogs/dirent-mvcp.js:143
@@ -190,8 +199,8 @@ msgstr "Cartelle rimosse"
 #: static/scripts/sysadmin-app/views/device-errors.js:92
 #: static/scripts/sysadmin-app/views/device-trusted-ipaddresses.js:115
 #: static/scripts/sysadmin-app/views/dir.js:195
-#: static/scripts/sysadmin-app/views/folder-share-item.js:89
-#: static/scripts/sysadmin-app/views/folder-share-item.js:138
+#: static/scripts/sysadmin-app/views/folder-share-item.js:90
+#: static/scripts/sysadmin-app/views/folder-share-item.js:139
 #: static/scripts/sysadmin-app/views/group-member.js:71
 #: static/scripts/sysadmin-app/views/group-members.js:157
 #: static/scripts/sysadmin-app/views/group-repos.js:75
@@ -203,8 +212,8 @@ msgstr "Cartelle rimosse"
 #: static/scripts/sysadmin-app/views/search-groups.js:76
 #: static/scripts/sysadmin-app/views/search-repos.js:77
 #: static/scripts/sysadmin-app/views/search-trash-repos.js:113
-#: static/scripts/sysadmin-app/views/share.js:190
-#: static/scripts/sysadmin-app/views/share.js:263
+#: static/scripts/sysadmin-app/views/share.js:194
+#: static/scripts/sysadmin-app/views/share.js:268
 #: static/scripts/sysadmin-app/views/system-repo.js:59
 #: static/scripts/sysadmin-app/views/trash-repos.js:142
 msgid "Failed. Please check the network."
@@ -213,7 +222,7 @@ msgstr "Errore. Si prega di verificare la configurazione di rete."
 #: static/scripts/app/views/device.js:42
 #: static/scripts/sysadmin-app/views/device.js:42
 msgid "Unlink device"
-msgstr "collega dispositivo"
+msgstr "Scollega dispositivo"
 
 #: static/scripts/app/views/device.js:43
 #: static/scripts/sysadmin-app/views/device.js:43
@@ -237,7 +246,7 @@ msgstr "Sposta {placeholder} in:"
 
 #: static/scripts/app/views/dialogs/dirent-mvcp.js:53
 msgid "Copy {placeholder} to:"
-msgstr "Copia {placeholder} in:"
+msgstr "Copia {placeholder} in:"
 
 #: static/scripts/app/views/dialogs/dirent-mvcp.js:101
 msgid "Moving %(name)s"
@@ -497,7 +506,7 @@ msgstr "Elimina elementi"
 
 #: static/scripts/app/views/dir.js:1060
 msgid "Are you sure you want to delete these selected items?"
-msgstr "Sei sicuro di voler eliminare questi elementi selezionati?"
+msgstr "Sei sicuro di voler eliminare gli elementi selezionati?"
 
 #: static/scripts/app/views/dir.js:1074
 msgid "Move selected item(s) to:"
@@ -509,7 +518,7 @@ msgstr "Copia gli elementi selezionati su:"
 
 #: static/scripts/app/views/dir.js:1179 static/scripts/app/views/dir.js:1346
 msgid "Successfully moved %(name)s."
-msgstr "%(name)sspostato con successo. "
+msgstr "%(name)s spostato con successo. "
 
 #: static/scripts/app/views/dir.js:1181 static/scripts/app/views/dir.js:1348
 msgid "Successfully moved %(name)s and 1 other item."
@@ -533,11 +542,11 @@ msgstr "%(name)s copiato con successo e %(amount)s altri articoli."
 
 #: static/scripts/app/views/dir.js:1203
 msgid "Internal error. Failed to move %(name)s and %(amount)s other item(s)."
-msgstr "Errore interno. Mancato spostamento %(name)s e %(amount)s altri articol(o/i)."
+msgstr "Errore interno. Impossibile spostare %(name)s e %(amount)s altri articol(o/i)."
 
 #: static/scripts/app/views/dir.js:1205
 msgid "Internal error. Failed to move %(name)s."
-msgstr "Errore interno. Mancato spostamento %(name)s."
+msgstr "Errore interno. Impossibile spostare %(name)s."
 
 #: static/scripts/app/views/dir.js:1209
 msgid "Internal error. Failed to copy %(name)s and %(amount)s other item(s)."
@@ -607,6 +616,8 @@ msgid "Empty file upload result"
 msgstr "Risultato del caricamento del file vuoto"
 
 #: static/scripts/app/views/fileupload.js:17
+#: static/scripts/app/views/fileupload.js:225
+#: static/scripts/app/views/fileupload.js:265
 #: static/scripts/app/views/group-discussions.js:122
 #: static/scripts/app/views/group-discussions.js:200
 #: static/scripts/app/views/group-manage-members.js:114
@@ -665,19 +676,11 @@ msgstr "Caricamento file annullato"
 msgid "File Upload failed"
 msgstr "Caricamento file fallito"
 
-#: static/scripts/app/views/fileupload.js:221
-msgid "Failed to get upload url"
-msgstr "Impossibile ottenere l'URL di caricamento"
-
-#: static/scripts/app/views/fileupload.js:254
-msgid "Failed to get update url"
-msgstr "Impossibile ottenere l'URL di aggiornamento"
-
-#: static/scripts/app/views/fileupload.js:265
+#: static/scripts/app/views/fileupload.js:279
 msgid "Replace file {filename}?"
 msgstr "Sostituisci il file {filename}?"
 
-#: static/scripts/app/views/fileupload.js:291
+#: static/scripts/app/views/fileupload.js:305
 msgid "File is locked"
 msgstr "Il file è bloccato"
 
@@ -754,11 +757,11 @@ msgstr "1 oggetto Eliminato con successo."
 
 #: static/scripts/app/views/invitations.js:94
 msgid "Successfully invited %(email)."
-msgstr ""
+msgstr "Invitato con successo %(email)."
 
 #: static/scripts/app/views/invitations.js:97
 msgid "Successfully invited %(email) and %(num) other people."
-msgstr ""
+msgstr "Invitato con successo %(email) e %(num) altre persone."
 
 #: static/scripts/app/views/notifications.js:58
 msgid "You have logged out."
@@ -791,7 +794,7 @@ msgstr "Sei sicuro di voler eliminare %s ?"
 #: static/scripts/app/views/repo.js:102
 #: static/scripts/sysadmin-app/views/repo.js:80
 msgid "Successfully deleted."
-msgstr "liminato con successo."
+msgstr "Eliminato con successo."
 
 #: static/scripts/app/views/repo.js:235
 #: static/scripts/sysadmin-app/views/repo.js:98
@@ -884,7 +887,7 @@ msgstr "Prego inserire 1 o più caratteri"
 
 #: static/scripts/common.js:642 static/scripts/common.js:713
 msgid "Searching..."
-msgstr "Ricerca in corso ..."
+msgstr "Ricerca in corso..."
 
 #: static/scripts/common.js:643 static/scripts/common.js:714
 msgid "Loading failed"
@@ -896,7 +899,7 @@ msgstr "Cerca gruppi"
 
 #: static/scripts/common.js:1038
 msgid "Packaging..."
-msgstr "Confezionamento..."
+msgstr "Creazione del file zip in corso..."
 
 #: static/scripts/sysadmin-app/views/admin-operation-log.js:40
 msgid "Create Library"
@@ -912,7 +915,7 @@ msgstr "Libreria {library_name} rimossa"
 
 #: static/scripts/sysadmin-app/views/admin-operation-log.js:57
 msgid "Transfer Library"
-msgstr "Trasferimento Libreria"
+msgstr "Trasferisci Libreria"
 
 #: static/scripts/sysadmin-app/views/admin-operation-log.js:58
 msgid "Transferred library {library_name} from {user_from} to {user_to}"
@@ -928,11 +931,11 @@ msgstr "Gruppo {group_name} creato"
 
 #: static/scripts/sysadmin-app/views/admin-operation-log.js:74
 msgid "Transfer Group"
-msgstr "Trasferimento Gruppo"
+msgstr "Trasferisci Gruppo"
 
 #: static/scripts/sysadmin-app/views/admin-operation-log.js:75
 msgid "Transferred group {group_name} from {user_from} to {user_to}"
-msgstr "Gruoppo {group_name} trasferito da {user_from} a {user_to}"
+msgstr "Gruppo {group_name} trasferito da {user_from} a {user_to}"
 
 #: static/scripts/sysadmin-app/views/admin-operation-log.js:82
 #: static/scripts/sysadmin-app/views/group.js:30
@@ -941,7 +944,7 @@ msgstr "Elimina gruppo"
 
 #: static/scripts/sysadmin-app/views/admin-operation-log.js:83
 msgid "Deleted group {group_name}"
-msgstr "Gruoppo {group_name} eliminato"
+msgstr "Gruppo {group_name} eliminato"
 
 #: static/scripts/sysadmin-app/views/admin-operation-log.js:88
 msgid "Add User"
@@ -977,20 +980,20 @@ msgstr "L'email è richiesta"
 
 #: static/scripts/sysadmin-app/views/group-repo.js:28
 msgid "Unshare Library"
-msgstr "Libreria non condivisa"
+msgstr "Annulla condivisione libreria"
 
 #: static/scripts/sysadmin-app/views/group-repo.js:29
 #, javascript-format
 msgid "Are you sure you want to unshare %s ?"
-msgstr "Sei sicuro di voler annullare la condivisione %s ?"
+msgstr "Sei sicuro di voler annullare la condivisione della libreria %s ?"
 
 #: static/scripts/sysadmin-app/views/group-repo.js:42
 msgid "Successfully unshared library {placeholder}"
-msgstr "Libreria {placeholder} non condivisa con successo"
+msgstr "Condivisione della libreria {placeholder} annullata con successo"
 
 #: static/scripts/sysadmin-app/views/group.js:64
 msgid "Transfer Group {group_name} To"
-msgstr "Gruppo {group_name} trasferito a"
+msgstr "Trasferisci il Gruppo {group_name} a"
 
 #: static/scripts/sysadmin-app/views/group.js:101
 msgid "Successfully transferred the group."
