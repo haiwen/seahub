@@ -3,6 +3,7 @@ from abc import abstractmethod
 import datetime
 import hashlib
 import os
+import logging
 
 from seahub.base.fields import LowerCaseCharField
 
@@ -30,6 +31,9 @@ from seahub.avatar.settings import (AVATAR_STORAGE_DIR, AVATAR_RESIZE_METHOD,
                              AVATAR_HASH_USERDIRNAMES, AVATAR_HASH_FILENAMES,
                              AVATAR_THUMB_QUALITY, AUTO_GENERATE_AVATAR_SIZES,
                              GROUP_AVATAR_STORAGE_DIR)
+
+# Get an instance of a logger
+logger = logging.getLogger(__name__)
 
 def avatar_file_path(instance=None, filename=None, size=None, ext=None):
     if isinstance(instance, Avatar):
@@ -80,40 +84,42 @@ class AvatarBase(object):
     """
     def thumbnail_exists(self, size):
         return self.avatar.storage.exists(self.avatar_name(size))
-    
+
     def create_thumbnail(self, size, quality=None):
         # invalidate the cache of the thumbnail with the given size first
         if isinstance(self, Avatar):
             invalidate_cache(self.emailuser, size)
-            
+
         try:
             orig = self.avatar.storage.open(self.avatar.name, 'rb').read()
             image = Image.open(StringIO(orig))
-        except IOError:
-            return # What should we do here?  Render a "sorry, didn't work" img?
-        quality = quality or AVATAR_THUMB_QUALITY
-        (w, h) = image.size
-        if w != size or h != size:
-            if w > h:
-                diff = (w - h) / 2
-                image = image.crop((diff, 0, w - diff, h))
+
+            quality = quality or AVATAR_THUMB_QUALITY
+            (w, h) = image.size
+            if w != size or h != size:
+                if w > h:
+                    diff = (w - h) / 2
+                    image = image.crop((diff, 0, w - diff, h))
+                else:
+                    diff = (h - w) / 2
+                    image = image.crop((0, diff, w, h - diff))
+                if image.mode != "RGBA":
+                    image = image.convert("RGBA")
+                image = image.resize((size, size), AVATAR_RESIZE_METHOD)
+                thumb = StringIO()
+                image.save(thumb, AVATAR_THUMB_FORMAT, quality=quality)
+                thumb_file = ContentFile(thumb.getvalue())
             else:
-                diff = (h - w) / 2
-                image = image.crop((0, diff, w, h - diff))
-            if image.mode != "RGBA":
-                image = image.convert("RGBA")
-            image = image.resize((size, size), AVATAR_RESIZE_METHOD)
-            thumb = StringIO()
-            image.save(thumb, AVATAR_THUMB_FORMAT, quality=quality)
-            thumb_file = ContentFile(thumb.getvalue())
-        else:
-            thumb_file = ContentFile(orig)
-        thumb = self.avatar.storage.save(self.avatar_name(size), thumb_file)
+                thumb_file = ContentFile(orig)
+            thumb = self.avatar.storage.save(self.avatar_name(size), thumb_file)
+        except Exception as e:
+            logger.error(e)
+            return # What should we do here?  Render a "sorry, didn't work" img?
 
     def avatar_url(self, size):
         return self.avatar.storage.url(self.avatar_name(size))
 
-    @abstractmethod    
+    @abstractmethod
     def save(self, *args, **kwargs):
         pass
     
