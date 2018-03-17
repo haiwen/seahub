@@ -71,7 +71,7 @@ from seahub.utils import gen_file_get_url, gen_token, gen_file_upload_url, \
     get_org_user_events, calculate_repos_last_modify, send_perm_audit_msg, \
     gen_shared_upload_link, convert_cmmt_desc_link, is_valid_dirent_name, \
     is_org_repo_creation_allowed, is_windows_operating_system, \
-    get_no_duplicate_obj_name
+    get_no_duplicate_obj_name, normalize_dir_path
 
 from seahub.utils.file_revisions import get_file_revisions_after_renamed
 from seahub.utils.devices import do_unlink_device
@@ -383,8 +383,16 @@ class Search(APIView):
             return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
 
         search_path = request.GET.get('search_path', None)
-        if search_path is not None and search_path[0] != '/':
-            search_path = "/{0}".format(search_path)
+        if search_path:
+            search_path = normalize_dir_path(search_path)
+            if not is_valid_repo_id_format(search_repo):
+                error_msg = 'search_path invalid.'
+                return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
+
+            dir_id = seafile_api.get_dir_id_by_path(repo_id, search_path)
+            if not dir_id:
+                error_msg = 'Folder %s not found.' % search_path
+                return api_error(status.HTTP_404_NOT_FOUND, error_msg)
 
         search_ftypes = request.GET.get('search_ftypes', 'all') # val: 'all' or 'custom'
         search_ftypes = search_ftypes.lower()
