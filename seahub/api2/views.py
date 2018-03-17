@@ -364,10 +364,10 @@ class Search(APIView):
 
         try:
             current_page = int(request.GET.get('page', '1'))
-            per_page = int(request.GET.get('per_page', '25'))
+            per_page = int(request.GET.get('per_page', '10'))
         except ValueError:
             current_page = 1
-            per_page = 25
+            per_page = 10
 
         start = (current_page - 1) * per_page
         size = per_page
