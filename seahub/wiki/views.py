@@ -29,7 +29,7 @@ from seahub.views import check_folder_permission
 # Get an instance of a logger
 logger = logging.getLogger(__name__)
 
-@login_required
+
 def slug(request, slug, page_name="home"):
     """Show wiki page.
     """

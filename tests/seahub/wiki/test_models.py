@@ -14,7 +14,6 @@ class WikiTest(BaseTestCase):
         assert 'new-wiki' == d['slug']
         assert 'T' in d['created_at']
         assert 'T' in d['updated_at']
-
         seafile_api.remove_repo(wiki.repo_id)
 
 

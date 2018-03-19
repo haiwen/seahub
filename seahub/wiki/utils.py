@@ -18,6 +18,7 @@ from seahub.utils.slugify import slugify
 from seahub.utils import render_error, render_permission_error, string2list, \
     gen_file_get_url, get_file_type_and_ext, gen_inner_file_get_url, get_service_url
 from seahub.utils.file_types import IMAGE
+from seahub.utils.timeutils import timestamp_to_isoformat_timestr
 from models import WikiPageMissing, WikiDoesNotExist, GroupWiki, PersonalWiki
 
 logger = logging.getLogger(__name__)
@@ -211,12 +212,16 @@ def get_wiki_page_object(wiki_object, page_name):
     slug = wiki_object.slug
     page_url = get_service_url().strip() + reverse('wiki:slug', args=[slug, page_name])
 
-    return {
-            "name": page_name,
-            "link": page_url,
-            "file_link": file_url, 
-            "file_edit_link": edit_url,
-            "updated_at": last_modified,
-            "last_modifier": latest_contributor
-            }
+    # FIX ME: move to top after wiki code refactor
+    from seahub.base.templatetags.seahub_tags import email2nickname, \
+        email2contact_email
 
+    return {"name": page_name,
+            "link": page_url,
+            "file_link": file_url,
+            "file_edit_link": edit_url,
+            "updated_at": timestamp_to_isoformat_timestr(last_modified),
+            "last_modifier": latest_contributor,
+            "last_modifier_contact_email": email2contact_email(latest_contributor),
+            "last_modifier_name": email2nickname(latest_contributor),
+            }

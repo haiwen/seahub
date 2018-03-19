@@ -77,7 +77,7 @@ class WikiPagesView(APIView):
 
         page_name = request.POST.get('name', '')
         if not page_name:
-            error_msg = 'Pagename invalid'
+            error_msg = 'name invalid'
             return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
 
         page_name = clean_page_name(page_name)
@@ -143,7 +143,7 @@ class WikiPageView(APIView):
         try:
             wiki_dirent = get_wiki_dirent(repo.id, page_name)
         except WikiPageMissing:
-            error_msg = "WikiPage not found."
+            error_msg = "Page %s not found." % page_name
             return api_error(status.HTTP_404_NOT_FOUND, error_msg)
 
         url = get_inner_file_url(repo, wiki_dirent.obj_id, wiki_dirent.obj_name)
