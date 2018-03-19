@@ -1031,7 +1031,36 @@ def convert_cmmt_desc_link(request):
         else:
             continue
 
-    # Empty file/foder rename will reach here.
+    status_list = [d.status for d in diff_result]
+    # Rename empty file/folder
+    if len(status_list) == 2:
+        if 'add' in status_list and 'del' in status_list:
+            for d in diff_result:
+                if d.status != 'add':
+                    continue
+
+                return HttpResponseRedirect(
+                    reverse('view_lib_file', args=[repo_id, '/' + d.name]))
+
+        if 'newdir' in status_list and 'deldir' in status_list:
+            for d in diff_result:
+                if d.status != 'newdir':
+                    continue
+
+                return HttpResponseRedirect(
+                    reverse('view_common_lib_dir', args=[repo_id, d.name]))
+
+    # Rename folder with empty files
+    if len(status_list) > 2:
+        if 'deldir' in status_list and 'add' in status_list:
+            for d in diff_result:
+                if d.status != 'add':
+                    continue
+
+                new_dir = d.name.split('/')[0]
+                return HttpResponseRedirect(
+                    reverse('view_common_lib_dir', args=[repo_id, new_dir]))
+
     raise Http404
 
 @login_required
