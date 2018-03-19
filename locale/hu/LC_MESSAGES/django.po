@@ -3700,7 +3700,7 @@ msgstr "Különbség"
 #: seahub/templates/file_revisions.html:167
 #, python-brace-format
 msgid "(Renamed or moved from {placeholder})"
-msgstr "(Átnevezve vagy mozgatva {from_placeholder}-ról/ről.)"
+msgstr "(Átnevezve vagy mozgatva {placeholder}-ról/ről.)"
 
 #: seahub/templates/file_revisions.html:229
 #, python-brace-format
