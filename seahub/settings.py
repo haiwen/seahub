@@ -11,7 +11,6 @@ from seaserv import FILE_SERVER_ROOT, FILE_SERVER_PORT, SERVICE_URL
 PROJECT_ROOT = os.path.join(os.path.dirname(__file__), os.pardir)
 
 DEBUG = False
-TEMPLATE_DEBUG = DEBUG
 
 CLOUD_MODE = False
 
@@ -101,13 +100,6 @@ STATICFILES_FINDERS = (
 # Make this unique, and don't share it with anybody.
 SECRET_KEY = 'n*v0=jz-1rz@(4gx^tf%6^e7c&um@2)g-l=3_)t@19a69n1nv6'
 
-# List of callables that know how to import templates from various sources.
-TEMPLATE_LOADERS = (
-    'django.template.loaders.filesystem.Loader',
-    'django.template.loaders.app_directories.Loader',
-#     'django.template.loaders.eggs.Loader',
-)
-
 # Order is important
 MIDDLEWARE_CLASSES = (
     'django.contrib.sessions.middleware.SessionMiddleware',
@@ -126,6 +118,7 @@ MIDDLEWARE_CLASSES = (
     'seahub.trusted_ip.middleware.LimitIpMiddleware',
 )
 
+
 SITE_ROOT_URLCONF = 'seahub.urls'
 ROOT_URLCONF = 'seahub.utils.rooturl'
 SITE_ROOT = '/'
@@ -133,13 +126,30 @@ SITE_ROOT = '/'
 # Python dotted path to the WSGI application used by Django's runserver.
 WSGI_APPLICATION = 'seahub.wsgi.application'
 
-TEMPLATE_DIRS = (
-    # Put strings here, like "/home/html/django_templates" or "C:/www/django/templates".
-    # Always use forward slashes, even on Windows.
-    # Don't forget to use absolute paths, not relative paths.
-    os.path.join(PROJECT_ROOT, '../../seahub-data/custom/templates'),
-    os.path.join(PROJECT_ROOT, 'seahub/templates'),
-)
+TEMPLATES = [
+    {
+        'BACKEND': 'django.template.backends.django.DjangoTemplates',
+        'DIRS': [
+            os.path.join(PROJECT_ROOT, '../../seahub-data/custom/templates'),
+            os.path.join(PROJECT_ROOT, 'seahub/templates'),
+        ],
+        'APP_DIRS': True,
+        'OPTIONS': {
+            'context_processors': [
+                'django.template.context_processors.i18n',
+                'django.template.context_processors.media',
+                'django.template.context_processors.static',
+                'django.template.context_processors.request',
+                'django.contrib.messages.context_processors.messages',
+
+                'seahub.auth.context_processors.auth',
+                'seahub.base.context_processors.base',
+                'seahub.base.context_processors.debug',
+            ],
+        },
+    },
+]
+
 
 LANGUAGES = (
     # ('bg', gettext_noop(u'български език')),
@@ -181,18 +191,6 @@ LANGUAGES = (
 LOCALE_PATHS = (
     os.path.join(PROJECT_ROOT, 'locale'),
     os.path.join(PROJECT_ROOT, 'seahub/trusted_ip/locale'),
-)
-
-TEMPLATE_CONTEXT_PROCESSORS = (
-    'django.contrib.auth.context_processors.auth',
-    'seahub.base.context_processors.debug',
-    'django.core.context_processors.i18n',
-    'django.core.context_processors.media',
-    'django.core.context_processors.static',
-    # 'djblets.util.context_processors.siteRoot',
-    'django.core.context_processors.request',
-    'django.contrib.messages.context_processors.messages',
-    'seahub.base.context_processors.base',
 )
 
 INSTALLED_APPS = (

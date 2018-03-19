@@ -1093,7 +1093,7 @@ def fake_view(request, **kwargs):
     As the urls start with '#',
     http request will not access this function
     """
-    pass
+    return HttpResponse()
 
 def client_token_login(request):
     """Login from desktop client with a generated token.

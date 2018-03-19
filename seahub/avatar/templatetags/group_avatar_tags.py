@@ -4,6 +4,7 @@ import logging
 from django.conf import settings
 from django.core.cache import cache
 from django import template
+from django.utils.html import format_html
 
 from seahub.avatar.settings import (GROUP_AVATAR_DEFAULT_SIZE, AVATAR_CACHE_TIMEOUT,
                              GROUP_AVATAR_DEFAULT_URL)
@@ -73,4 +74,4 @@ def grp_avatar(group_id, size=GROUP_AVATAR_DEFAULT_SIZE):
 
     img = """<img src="%s" alt="" width="%s" height="%s" class="avatar" />""" % (url, size, size)
     cache.set(key, img, AVATAR_CACHE_TIMEOUT)
-    return img
+    return format_html(img)

@@ -1,7 +1,7 @@
 from django.conf import settings
 from django.db import connection
-from django.contrib.auth.backends import RemoteUserBackend
 
+from seahub.auth.backends import RemoteUserBackend
 from seahub.base.accounts import User
 from registration.models import (
     notify_admins_on_activate_request, notify_admins_on_register_complete)
