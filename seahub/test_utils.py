@@ -1,4 +1,5 @@
 # Copyright (c) 2012-2016 Seafile Ltd.
+from importlib import import_module
 import os
 from uuid import uuid4
 
@@ -8,7 +9,6 @@ from django.conf import settings
 from django.http import SimpleCookie
 from django.test import RequestFactory
 from django.test import TestCase
-from django.utils.importlib import import_module
 from exam.decorators import fixture
 from exam.cases import Exam
 import seaserv
