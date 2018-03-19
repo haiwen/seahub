@@ -261,7 +261,7 @@ class AdminLibraryDirent(APIView):
             error_msg = 'Internal Server Error'
             return api_error(status.HTTP_500_INTERNAL_SERVER_ERROR, error_msg)
 
-        return Response({'success': True})
+        return Response({'success': True, 'dst_item_name': dst_obj_name})
 
     @common_check
     def delete(self, request, repo_id):
