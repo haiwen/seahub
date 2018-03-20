@@ -22,6 +22,7 @@ from seahub.avatar.util import get_default_avatar_url
 from seahub.base.templatetags.seahub_tags import email2nickname
 from seahub.invitations.models import Invitation
 from seahub.profile.models import Profile
+from seahub.constants import HASH_URLS
 
 # Get an instance of a logger
 logger = logging.getLogger(__name__)
@@ -73,7 +74,7 @@ class Command(BaseCommand):
         message = d['message']
         group = ccnet_api.get_group(int(group_id))
 
-        notice.group_url = reverse('group_discuss', args=[group.id])
+        notice.group_url = HASH_URLS['GROUP_DISCUSS'] % {'group_id': group.id}
         notice.notice_from = escape(email2nickname(d['msg_from']))
         notice.group_name = group.group_name
         notice.avatar_src = self.get_avatar_src(d['msg_from'])
@@ -85,7 +86,7 @@ class Command(BaseCommand):
         repo_id = d['repo_id']
         repo = seafile_api.get_repo(repo_id)
 
-        notice.repo_url = reverse("view_common_lib_dir", args=[repo_id, ''])
+        notice.repo_url = HASH_URLS["VIEW_COMMON_LIB_DIR"] % {'repo_id': repo_id, 'path': ''}
         notice.notice_from = escape(email2nickname(d['share_from']))
         notice.repo_name = repo.name
         notice.avatar_src = self.get_avatar_src(d['share_from'])
@@ -100,11 +101,11 @@ class Command(BaseCommand):
         group_id = d['group_id']
         group = ccnet_api.get_group(group_id)
 
-        notice.repo_url = reverse("view_common_lib_dir", args=[repo_id, ''])
+        notice.repo_url = HASH_URLS["VIEW_COMMON_LIB_DIR"] % {'repo_id': repo_id, 'path': ''}
         notice.notice_from = escape(email2nickname(d['share_from']))
         notice.repo_name = repo.name
         notice.avatar_src = self.get_avatar_src(d['share_from'])
-        notice.group_url = reverse("group_info", args=[group.id])
+        notice.group_url = HASH_URLS['GROUP_INFO'] % {'group_id': group.id}
         notice.group_name = group.group_name
 
         return notice
@@ -117,7 +118,7 @@ class Command(BaseCommand):
         uploaded_to = d['uploaded_to'].rstrip('/')
         file_path = uploaded_to + '/' + file_name
         file_link = reverse('view_lib_file', args=[repo_id, file_path])
-        folder_link = reverse('view_common_lib_dir', args=[repo_id, uploaded_to.strip('/')])
+        folder_link = HASH_URLS["VIEW_COMMON_LIB_DIR"] % {'repo_id': repo_id, 'path': uploaded_to.strip('/')}
         folder_name = os.path.basename(uploaded_to)
 
         notice.file_link = file_link
@@ -137,7 +138,7 @@ class Command(BaseCommand):
 
         notice.grpjoin_user_profile_url = reverse('user_profile',
                                                   args=[username])
-        notice.grpjoin_group_url = reverse('group_members', args=[group_id])
+        notice.grpjoin_group_url = HASH_URLS['GROUP_MEMBERS'] % {'group_id': group_id}
         notice.notice_from = escape(email2nickname(username))
         notice.grpjoin_group_name = group.group_name
         notice.grpjoin_request_msg = join_request_msg
@@ -155,7 +156,7 @@ class Command(BaseCommand):
         notice.avatar_src = self.get_avatar_src(group_staff)
         notice.group_staff_profile_url = reverse('user_profile',
                                                   args=[group_staff])
-        notice.group_url = reverse('group_info', args=[group_id])
+        notice.group_url = HASH_URLS['GROUP_INFO'] % {'group_id': group_id}
         notice.group_name = group.group_name
         return notice
 

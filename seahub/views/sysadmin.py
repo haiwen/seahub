@@ -36,7 +36,7 @@ from seahub.base.templatetags.seahub_tags import tsstr_sec, email2nickname
 from seahub.auth import authenticate
 from seahub.auth.decorators import login_required, login_required_ajax
 from seahub.constants import GUEST_USER, DEFAULT_USER, DEFAULT_ADMIN, \
-        SYSTEM_ADMIN, DAILY_ADMIN, AUDIT_ADMIN
+        SYSTEM_ADMIN, DAILY_ADMIN, AUDIT_ADMIN, HASH_URLS
 from seahub.institutions.models import (Institution, InstitutionAdmin,
                                         InstitutionQuota)
 from seahub.institutions.utils import get_institution_space_usage
@@ -1713,7 +1713,7 @@ def sys_repo_delete(request, repo_id):
     """
     next = request.META.get('HTTP_REFERER', None)
     if not next:
-        next = reverse('sys_repo_admin')
+        next = HASH_URLS['SYS_REPO_ADMIN']
 
     if get_system_default_repo_id() == repo_id:
         messages.error(request, _('System library can not be deleted.'))

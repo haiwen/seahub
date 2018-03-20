@@ -57,7 +57,7 @@
         </div>
 
         <div class="sf-btn-group file-view-op">
-            <a class="sf-btn-group-btn sf-btn-group-btn-first sf-btn-link op-icon sf2-icon-folder" href="{% url 'view_common_lib_dir' repo.id parent_dir|strip_slash %}" title="{% trans "Open parent folder" %}"></a>
+            <a class="sf-btn-group-btn sf-btn-group-btn-first sf-btn-link op-icon sf2-icon-folder" href="{{ SITE_ROOT }}#common/lib/{{ repo.id }}/{{ parent_dir|strip_slash }}" title="{% trans "Open parent folder" %}"></a>
 
             {% if can_lock_unlock_file %}
                 {% if not file_locked %}

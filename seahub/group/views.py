@@ -38,6 +38,7 @@ from seahub.views import is_registered_user, check_folder_permission
 from seahub.views.modules import get_enabled_mods_by_group, \
     get_available_mods_by_group
 from seahub.share.models import ExtraGroupsSharePermission
+from seahub.constants import HASH_URLS
 
 from seahub.forms import SharedRepoCreateForm
 
@@ -93,7 +94,7 @@ def group_check(func):
         group_id_int = int(group_id) # Checked by URL Conf
         group = get_group(group_id_int)
         if not group:
-            return HttpResponseRedirect(reverse('group_list', args=[]))
+            return HttpResponseRedirect(HASH_URLS['GROUP_LIST'])
         group.is_staff = False
         if PublicGroup.objects.filter(group_id=group.id):
             group.is_pub = True

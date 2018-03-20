@@ -1323,7 +1323,7 @@
         <li class="tab" id="group-nav">
             <a href="#" class="ellipsis" title="{% trans "Shared with groups" %}"><span aria-hidden="true" class="toggle-icon icon-caret-down fright"></span><span aria-hidden="true" class="sf2-icon-group"></span>{% trans "Shared with groups" %}</a>
             <ul class="grp-list">
-                <li<% if (cur_group_tab == 'groups') { %> class="tab-cur"<% }%>><a href="{% url 'group_list' %}"><span class="sharp" aria-hidden="true">#</span>{% trans "All Groups" %}</a></li>
+                <li<% if (cur_group_tab == 'groups') { %> class="tab-cur"<% }%>><a href="{{ SITE_ROOT }}#groups/"><span class="sharp" aria-hidden="true">#</span>{% trans "All Groups" %}</a></li>
                 <% for (var i = 0, len = groups.length; i < len; i++) { %>
                     <% if (cur_group_id == groups[i].id) { %>
                     <li class="tab-cur">
@@ -1345,7 +1345,7 @@
             <ul class="grp-list hide">
             <% } %>
                 <li>
-                    <a href="{% url 'group_list' %}"><span class="sharp" aria-hidden="true">#</span>{% trans "All Groups" %}</a>
+                    <a href="{{ SITE_ROOT }}#groups/"><span class="sharp" aria-hidden="true">#</span>{% trans "All Groups" %}</a>
                 </li>
                 <% for (var i = 0, len = groups.length; i < len; i++) { %>
                 <li>
@@ -1452,7 +1452,7 @@
     {% endif %}
 </script>
 <script type="text/template" id="group-path-tmpl">
-    <a href="{% url 'group_list' %}" class="normal">{% trans "Groups" %}</a>
+    <a href="{{ SITE_ROOT }}#groups/" class="normal">{% trans "Groups" %}</a>
     <span class="path-split">/</span>
     <span class="group-name"><%- name %></span>
 </script>

@@ -31,6 +31,7 @@ from seahub.settings import ENABLE_UPLOAD_FOLDER, \
     MAX_NUMBER_OF_FILES_FOR_FILEUPLOAD
 from seahub.utils.file_types import IMAGE, VIDEO
 from seahub.thumbnail.utils import get_share_link_thumbnail_src
+from seahub.constants import HASH_URLS
 
 # Get an instance of a logger
 logger = logging.getLogger(__name__)
@@ -127,17 +128,18 @@ def repo_history_view(request, repo_id):
         # Assume server_crypto is ``False`` if this option is not set.
         server_crypto = False
 
+    reverse_url = HASH_URLS["VIEW_COMMON_LIB_DIR"] % {'repo_id': repo_id, 'path': ''}
     if repo.encrypted and \
         (repo.enc_version == 1 or (repo.enc_version == 2 and server_crypto)) \
         and not is_password_set(repo.id, username):
         return render(request, 'decrypt_repo_form.html', {
                 'repo': repo,
-                'next': get_next_url_from_request(request) or reverse("view_common_lib_dir", args=[repo_id, '']),
+                'next': get_next_url_from_request(request) or reverse_url,
                 })
 
     commit_id = request.GET.get('commit_id', None)
     if commit_id is None:
-        return HttpResponseRedirect(reverse("view_common_lib_dir", args=[repo_id, '']))
+        return HttpResponseRedirect(reverse_url)
     current_commit = get_commit(repo.id, repo.version, commit_id)
     if not current_commit:
         current_commit = get_commit(repo.id, repo.version, repo.head_cmmt_id)

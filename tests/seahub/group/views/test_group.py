@@ -1,6 +1,7 @@
 from django.core.urlresolvers import reverse
 
 from seahub.test_utils import BaseTestCase
+from seahub.constants import HASH_URLS
 
 
 class GroupDiscussTest(BaseTestCase):
@@ -11,5 +12,5 @@ class GroupDiscussTest(BaseTestCase):
         self.remove_group()
 
     def test_can_render(self):
-        resp = self.client.get(reverse('group_discuss', args=[self.group.id]))
+        resp = self.client.get(HASH_URLS['GROUP_DISCUSS']% {'group_id': self.group.id})
         self.assertEqual(200, resp.status_code)

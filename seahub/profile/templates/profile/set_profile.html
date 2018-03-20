@@ -118,7 +118,7 @@
 <div class="setting-item" id="default-lib">
     <h3>{% trans "Default Library Setting" %}</h3>
     {% if default_repo %}
-    <p>{% trans "Your default library:" %} <a href="{% url 'view_common_lib_dir' default_repo.id '' %}">{{default_repo.name}}</a>.</p>
+    <p>{% trans "Your default library:" %} <a href="{{ SITE_ROOT }}#common/lib/{{ default_repo.id }}/">{{default_repo.name}}</a>.</p>
     {% endif %}
     <p class="txt-before-btn">{% trans "Default library is the default place to store your personal documents and pictures." %}</p>
     <button id="choose-default-lib">{% trans "Choose Default Library" %}</button>
