@@ -73,6 +73,16 @@ class WikisView(APIView):
             return HttpResponse(json.dumps(result), status=500,
                                 content_type=content_type)
 
+        # create home page
+        page_name = "home.md"
+        try:
+            seafile_api.post_empty_file(wiki.repo_id, '/',
+                                        page_name, request.user.username)
+        except SearpcError as e:
+            logger.error(e)
+            error_msg = 'Internal Server Error'
+            return api_error(status.HTTP_500_INTERNAL_SERVER_ERROR, error_msg)
+
         return Response(wiki.to_dict())
 
 
