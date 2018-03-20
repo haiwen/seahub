@@ -60,7 +60,7 @@
 
 {% block extra_script %}{{block.super}}
 <script type="text/javascript" src="{{MEDIA_URL}}js/editormd/lib/marked.min.js"></script>
-<script type="text/javascript" src="{% static "scripts/lib/moment-with-locales.js" %}"></script> {# TODO: after 'upgrade-jquery', it shoulde be changed. #}
+<script type="text/javascript" src="{% static "scripts/lib/moment-with-locales.min.js" %}"></script>
 <script type="text/javascript">
 var renderer = new marked.Renderer();
 // remove 'id' attribute for headings

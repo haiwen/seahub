@@ -68,7 +68,7 @@
 
 {% block extra_script %}{{block.super}}
 <script type="text/javascript" src="{% static "scripts/lib/underscore.js" %}"></script>
-<script type="text/javascript" src="{% static "scripts/lib/moment-with-locales.js" %}"></script> {# TODO: after 'upgrade-jquery', it shoulde be changed. #}
+<script type="text/javascript" src="{% static "scripts/lib/moment-with-locales.min.js" %}"></script>
 <script type="text/javascript">
 // get wiki list
 $.ajax({
