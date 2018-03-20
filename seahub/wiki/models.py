@@ -108,6 +108,7 @@ class Wiki(models.Model):
 
     class Meta:
         unique_together = (('username', 'repo_id'),)
+        ordering = ["name"]
 
     @property
     def link(self):

@@ -5,7 +5,8 @@ import urllib2
 
 from rest_framework import status
 from rest_framework.authentication import SessionAuthentication
-from rest_framework.permissions import IsAuthenticated
+from rest_framework.permissions import (
+    IsAuthenticated, IsAuthenticatedOrReadOnly)
 from rest_framework.response import Response
 from rest_framework.views import APIView
 from seaserv import seafile_api, get_file_id_by_path
@@ -24,7 +25,7 @@ logger = logging.getLogger(__name__)
 
 class WikiPagesView(APIView):
     authentication_classes = (TokenAuthentication, SessionAuthentication)
-    permission_classes = (IsAuthenticated, )
+    permission_classes = (IsAuthenticatedOrReadOnly, )
     throttle_classes = (UserRateThrottle, )
 
     def get(slef, request, slug):
@@ -55,6 +56,10 @@ class WikiPagesView(APIView):
         for _, page_name in pages.iteritems():
             wiki_page_object = get_wiki_page_object(wiki, page_name)
             wiki_pages_object.append(wiki_page_object)
+
+        # sort pages by name
+        wiki_pages_object.sort(lambda x, y: cmp(x['name'].lower(),
+                                                y['name'].lower()))
 
         return Response({
                 "data": wiki_pages_object
@@ -112,7 +117,7 @@ class WikiPagesView(APIView):
 
 class WikiPageView(APIView):
     authentication_classes = (TokenAuthentication, SessionAuthentication)
-    permission_classes = (IsAuthenticated, )
+    permission_classes = (IsAuthenticatedOrReadOnly, )
     throttle_classes = (UserRateThrottle, )
 
     def get(self, request, slug, page_name="home"):
