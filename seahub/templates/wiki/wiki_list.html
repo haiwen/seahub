@@ -1,0 +1,327 @@
+{% extends "home_base.html" %}
+
+{% load seahub_tags avatar_tags i18n staticfiles %}
+{% load url from future %}
+
+{% block sub_title %}{% trans "Wikis" %} - {% endblock %}
+
+{% block cur_personal_wiki %}tab-cur{% endblock %}
+
+{% block right_panel %}
+    <div class="hd d-flex">
+        <h3>{% trans "Wikis" %}</h3>
+        <button class="btn-white" id="new-wiki">{% trans "New Wiki" %}</button>
+    </div>
+    <span class="loading-icon loading-tip"></span>
+    <table class="wiki-list hide">
+        <thead>
+            <tr>
+                <td width="30%">{% trans "Name" %}</td>
+                <td width="20%">{% trans "Permission" %}</td>
+                <td width="20%">{% trans "Created At" %}</td>
+                <td width="20%">{% trans "Last Update" %}</td>
+                <td width="10%"><!-- operation --></td>
+            </tr>
+        </thead>
+        <tbody></tbody>
+    </table>
+    <div class="empty-tips hide">
+        <h2 class="alc">{% trans "You do not have any wiki" %}</h2>
+        <p>{% trans "Seafile Wiki enables you to organize your knowledge in a simple way. The contents of wiki is stored in a normal library with pre-defined file/folder structure. This enables you to edit your wiki in your desktop and then sync back to the server." %}</p>
+    </div>
+    <p class="error wiki-list-error hide"></p>
+
+    <form id="new-wiki-form" action="" method="post" class="hide">{% csrf_token %}
+        <h3 id="dialogTitle">{% trans "New Wiki" %}</h3>
+        <label for="wiki-name">{% trans "Name" %}</label><br/>
+        <input type="text" name="name" value="" maxlength="{{max_file_name}}" class="input" id="wiki-name" /><br />
+        <label for="wiki-permission">{% trans "Permission" %}</label><br/>
+        <select name="permission" id="wiki-permission" class="w100">
+            <option value="private" selected="selected">{% trans "private" %}</option>
+            <option value="login-user">{% trans "logged-in users" %}</option>
+            <option value="public">{% trans "public" %}</option>
+        </select><br />
+        <p class="error hide"></p>
+        <button type="submit" class="submit">{% trans "Submit" %}</button>
+    </form>
+
+    <script type="text/script" id="wiki-tmpl">
+        <tr data-slug="<%= slug %>">
+            <td><a href="<%= link %>"><%- name %></a></td>
+            <td>
+                <span class="cur-perm"><%= permission_text %></span>
+                <a href="#" title="{% trans "Edit" %}" class="perm-edit-icon sf2-icon-edit op-icon vh"></a>
+                <select class="perm-select select-white hide">
+                    <option value="private" <% if (permission == 'private') { %>selected="selected"<% } %>>{% trans "private" %}</option>
+                    <option value="login-user" <% if (permission == 'login-user') { %>selected="selected"<% } %>>{% trans "logged-in users" %}</option>
+                    <option value="public" <% if (permission == 'public') { %>selected="selected"<% } %>>{% trans "public" %}</option>
+                </select>
+            </td>
+            <td title="<%= create_time %>"><%= create_time_from_now %></td>
+            <td title="<%= update_time %>"><%= update_time_from_now %></td>
+            <td>
+                <span class="delete-wiki sf2-icon-delete op-icon vh" title="{% trans "Delete" %}"></span>
+            </td>
+        </tr>
+    </script>
+{% endblock %}
+
+{% block extra_script %}{{block.super}}
+<script type="text/javascript" src="{% static "scripts/lib/underscore.js" %}"></script>
+<script type="text/javascript" src="{% static "scripts/lib/moment-with-locales.js" %}"></script> {# TODO: after 'upgrade-jquery', it shoulde be changed. #}
+<script type="text/javascript">
+// get wiki list
+$.ajax({
+    url: '{% url 'api-v2.1-wikis' %}',
+    cache: false,
+    dataType: 'json',
+    success: function(data) {
+        var list = data.data;
+        var $tbody = $('tbody');
+        if (list.length) {
+            $(list).each(function(index, item) {
+                $tbody.append(wiki.render(item));
+            });
+            $('table').show();
+        } else {
+            $('.empty-tips').show();
+        }
+    },
+    error: function(xhr) {
+        var error_msg;
+        if (xhr.responseText) {
+            try {
+                error_msg = JSON.parse(xhr.responseText).error_msg;
+            } catch(e) {
+                error_msg = "{% trans "Error" %}";
+            }
+        } else {
+            error_msg = "{% trans "Please check the network." %}";
+        }
+        $('.wiki-list-error').html(error_msg).show();
+    },
+    complete: function() {
+        $('#right-panel .loading-tip').hide();
+    }
+});
+
+// create new wiki
+$('#new-wiki').on('click', function() {
+    $('#new-wiki-form').modal();
+    $('#simplemodal-container').css({'width':'auto', 'height':'auto'});
+});
+
+$('#new-wiki-form').on('submit', function () {
+    var $form = $(this),
+        $error = $('.error', $form),
+        name = $('[name="name"]', $form).val(),
+        permission = $('[name="permission"]', $form).val();
+    var $table = $('table'),
+        $tbody = $('tbody'),
+        $emptyTips = $('.empty-tips');
+
+    if (!$.trim(name)) {
+        $error.html("{% trans "Name is required." %}").show();
+        return false;
+    }
+
+    var $submitBtn = $('[type="submit"]', $form);
+    disable($submitBtn);
+
+    $.ajax({
+        url: '{% url 'api-v2.1-wikis' %}',
+        type: 'POST',
+        dataType: 'json',
+        cache: false,
+        beforeSend: prepareCSRFToken,
+        data: {
+            'name': name,
+            'permission': permission
+        },
+        success: function(data) {
+            $.modal.close();
+            var $wiki = wiki.render(data);
+            if ($emptyTips.is(':visible')) {
+                $tbody.append($wiki);
+                $emptyTips.hide();
+                $table.show();
+            } else {
+                $tbody.prepend($wiki);
+            }
+        },
+        error: function(xhr) {
+            var error_msg;
+            if (xhr.responseText) {
+                try {
+                    error_msg = JSON.parse(xhr.responseText).error_msg;
+                } catch(e) {
+                    error_msg = "{% trans "Error" %}";
+                }
+            } else {
+                error_msg = "{% trans "Please check the network." %}";
+            }
+            $error.html(error_msg).show();
+            enable($submitBtn);
+        }
+    });
+
+    return false;
+});
+
+$('table')
+.on('click', '.delete-wiki', function(e) { // delete a wiki
+    var $el = $(this).closest('tr');
+    var slug = $el.attr('data-slug');
+    var title = "{% trans "Delete Wiki" %}",
+        content = "{% trans "Are you sure you want to delete this wiki?" %}";
+    var yesCallback = function(e) {
+        wiki.del({
+            $el: $el,
+            slug: slug
+        });
+        $.modal.close();
+    };
+    showConfirm(title, content, yesCallback);
+})
+.on('click', '.perm-edit-icon', function(e) { // edit perm of a wiki
+    var $el = $(this).closest('tr');
+
+    $('.cur-perm, .perm-edit-icon', $el).hide();
+    $('.perm-select', $el).show();
+
+    return false;
+})
+.on('change', '.perm-select', function(e) {
+    var perm = $(this).val();
+    var $el = $(this).closest('tr');
+    var slug = $el.attr('data-slug');
+
+    wiki.editPerm({
+        $el: $el,
+        slug: slug,
+        perm: perm
+    });
+});
+var $wikiList = $('.wiki-list');
+$(document).on('click', function(e) {
+    var target = e.target || event.srcElement;
+    if (!$('.perm-edit-icon, .perm-select', $wikiList).is(target)) {
+        $('.cur-perm, .perm-edit-icon', $wikiList).show();
+        $('.perm-select', $wikiList).hide();
+    }
+});
+
+var wiki = {
+
+    init: function() {
+        this.setLocale();
+    },
+
+    tmpl: _.template($('#wiki-tmpl').html()),
+
+    render: function(obj) {
+        var getPermText = function(data) {
+            switch(data) {
+                case 'private': return "{% trans "private" %}";
+                case 'login-user': return "{% trans "logged-in users" %}";
+                case 'public': return "{% trans "public" %}";
+            }
+        };
+
+        var create_at_m = moment(obj.created_at);
+        var update_at_m = moment(obj.updated_at);
+        var data = $.extend({}, obj, {
+            'permission_text': getPermText(obj.permission),
+            'create_time': create_at_m.format('LLLL'),
+            'create_time_from_now': this.util_getRelativeTimeStr(create_at_m),
+            'update_time': update_at_m.format('LLLL'),
+            'update_time_from_now': this.util_getRelativeTimeStr(update_at_m)
+        });
+
+        return $(this.tmpl(data));
+    },
+
+    del: function(options) {
+        var slug = options.slug,
+            $el = options.$el;
+        $.ajax({
+            url: '{{SITE_ROOT}}api/v2.1/wikis/' + encodeURIComponent(slug) + '/',
+            type: 'DELETE',
+            cache: false,
+            beforeSend: prepareCSRFToken,
+            success: function(data) {
+                $el.remove();
+                feedback("{% trans "Successfully deleted 1 item." %}", 'success');
+            },
+            error: function(xhr) {
+                var error_msg;
+                if (xhr.responseText) {
+                    try {
+                        error_msg = JSON.parse(xhr.responseText).error_msg;
+                    } catch(e) {
+                        error_msg = "{% trans "Error" %}";
+                    }
+                } else {
+                    error_msg = "{% trans "Please check the network." %}";
+                }
+                feedback(error_msg, 'error');
+            }
+        });
+    },
+
+    editPerm: function(options) {
+        var slug = options.slug,
+            perm = options.perm,
+            $el = options.$el;
+        $.ajax({
+            url: '{{SITE_ROOT}}api/v2.1/wikis/' + encodeURIComponent(slug) + '/',
+            type: 'PUT',
+            cache: false,
+            data: {'permission': perm},
+            beforeSend: prepareCSRFToken,
+            success: function(data) {
+                $el.replaceWith(wiki.render(data));
+                feedback("{% trans "Successfully edited the permission." %}", 'success');
+            },
+            error: function(xhr) {
+                var error_msg;
+                if (xhr.responseText) {
+                    try {
+                        error_msg = JSON.parse(xhr.responseText).error_msg;
+                    } catch(e) {
+                        error_msg = "{% trans "Error" %}";
+                    }
+                } else {
+                    error_msg = "{% trans "Please check the network." %}";
+                }
+                feedback(error_msg, 'error');
+            }
+        });
+    },
+
+    setLocale: function() {
+        var lang_code = '{{LANGUAGE_CODE}}';
+        var m_lang_code;
+        if (lang_code == 'en') {
+            m_lang_code = 'en-gb';
+        } else if (lang_code == 'es-ar' || lang_code == 'es-mx') {
+            m_lang_code = 'es';
+        } else {
+            m_lang_code = lang_code;
+        }
+        moment.locale(m_lang_code);
+    },
+
+    util_getRelativeTimeStr: function(m) {
+        var now = new Date();
+        if (m - now > 0) {
+            return "{% trans "Just now" %}";
+        } else {
+            return m.fromNow();
+        }
+    }
+};
+wiki.init();
+
+</script>
+{% endblock %}

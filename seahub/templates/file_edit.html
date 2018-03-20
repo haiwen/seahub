@@ -469,7 +469,7 @@ function editSubmit() {
 
     $.ajax({
         type: "POST",
-        url: '{{ SITE_ROOT }}repo/{{repo.id}}/file/edit/?p={{path|urlencode}}&head={{head_id}}&from={{from}}&gid={{gid}}',
+        url: '{{ SITE_ROOT }}repo/{{repo.id}}/file/edit/?p={{path|urlencode}}&head={{head_id}}&from={{from}}&gid={{gid}}&wiki_slug={{wiki_slug}}',
         dataType: 'json',
         cache: false,
         beforeSend: prepareCSRFToken,

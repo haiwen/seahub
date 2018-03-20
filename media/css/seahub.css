@@ -2976,7 +2976,7 @@ button.sf-dropdown-toggle:focus {
     border: 1px solid #DDD;
     box-shadow: 0 1px 1px #CCC;
     border-radius: 2px;
-    max-width:688px;
+    max-width:calc(100% - 12px);
     margin:15px 0;
 }
 #wiki-content .file-icon {
@@ -3171,7 +3171,8 @@ button.sf-dropdown-toggle:focus {
 #wiki-area {
     padding: 30px 0 0;
 }
-#wiki-last-modified {
+#wiki-last-modified,
+#wiki-page-last-modified {
     margin-top: 10px;
     font-size:12px;
     color: #666;
@@ -4100,4 +4101,12 @@ img.thumbnail {
 .dir-toolbar-2 .op-link:hover {
     color:#eb8205;
     text-decoration:none;
+}
+
+/* wiki */
+#new-wiki {
+    margin-left:auto;
+}
+.wiki-nav {
+    margin-right:auto;
 }

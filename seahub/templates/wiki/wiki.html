@@ -1,0 +1,311 @@
+{% extends "home_base.html" %}
+
+{% load seahub_tags avatar_tags i18n staticfiles %}
+{% load url from future %}
+
+{% block sub_title %}{{wiki.name}} - {% endblock %}
+
+{% block cur_personal_wiki %}tab-cur{% endblock %}
+
+{% block right_panel %}
+    <div class="path-bar">
+        <a href="{% url 'wiki:list' %}" class="normal">{% trans "Wikis" %}</a>
+        <span class="path-split">/</span>
+        <span>{{ wiki.name }}</span>
+    </div>
+    <div class="wiki-top d-flex">
+        <ul class="wiki-nav d-flex">
+            <li class="item{% if page_name == 'home' %} cur-item{% endif %}"><a href="{% url 'wiki:slug' wiki.slug %}" class="link" id="wiki-home-page-link">{% trans "Home" %}</a></li>
+            <li class="item"><a href="#" class="link" id="wiki-pages-link">{% trans "Pages" %}</a></li>
+            {% if user_can_write %}
+            <li class="item"><a href="{% url 'repo_history' repo_id %}" class="link" id="wiki-history">{% trans "Wiki History" %}</a></li>
+            {% endif %}
+        </ul>
+
+        {% if user_can_write %}
+        <div>
+            <button id="new-page" class="btn-white">{% trans "New Page" %}</button>
+            <button id="delete-page" class="btn-white">{% trans "Delete Page" %}</button>
+            <a class="sf-btn-link btn-white" href="{% url 'wiki:edit_page' wiki.slug page_name %}" id="edit-page">{% trans "Edit Page" %}</a>
+            <a class="sf-btn-link btn-white" href="{% url 'file_revisions' repo_id %}?p={{path|urlencode}}" id="page-history">{% trans "Page History" %}</a>
+        </div>
+        {% endif %}
+    </div>
+
+    <div id="wiki-area" class="article">
+        <span class="loading-icon loading-tip"></span>
+        <p class="error hide"></p>
+        <div id="wiki-page" class="hide">
+            <h1 id="wiki-page-name" class="bold"></h1>
+            <div id="wiki-content"></div>
+            <p id="wiki-page-last-modified"></p>
+        </div>
+    </div>
+
+    <div id="wiki-pages-container" class="hide">
+        <span class="loading-icon loading-tip"></span>
+        <ul id="wiki-pages" class="hide"></ul>
+        <p class="error hide"></p>
+    </div>
+
+    <form id="page-create-form" action="" method="post" class="hide">{% csrf_token %}
+        <h3 id="dialogTitle">{% trans "New Page" %}</h3>
+        <label for="page-name">{% trans "Name" %}</label><br/>
+        <input id="page-name" type="text" name="page_name" value="" maxlength="{{max_file_name}}" class="input" /><br />
+        <p class="error hide"></p>
+        <input type="submit" value="{% trans "Submit"%}" class="submit" />
+    </form>
+
+{% endblock %}
+
+{% block extra_script %}{{block.super}}
+<script type="text/javascript" src="{{MEDIA_URL}}js/editormd/lib/marked.min.js"></script>
+<script type="text/javascript" src="{% static "scripts/lib/moment-with-locales.js" %}"></script> {# TODO: after 'upgrade-jquery', it shoulde be changed. #}
+<script type="text/javascript">
+var renderer = new marked.Renderer();
+// remove 'id' attribute for headings
+renderer.heading = function (text, level) {
+    return '<h' + level + '>' + text + '</h' + level + '>';
+};
+marked.setOptions({
+    renderer: renderer,
+    breaks: true, // keep linebreak
+    smartLists: true,
+    sanitize: true // Ignore any HTML that has been input
+});
+
+var time_utils = {
+    setLocale: function() {
+        var lang_code = '{{LANGUAGE_CODE}}';
+        var m_lang_code;
+        if (lang_code == 'en') {
+            m_lang_code = 'en-gb';
+        } else if (lang_code == 'es-ar' || lang_code == 'es-mx') {
+            m_lang_code = 'es';
+        } else {
+            m_lang_code = lang_code;
+        }
+        moment.locale(m_lang_code);
+    },
+
+    getRelativeTimeStr: function(m) {
+        var now = new Date();
+        if (m - now > 0) {
+            return "{% trans "Just now" %}";
+        } else {
+            return m.fromNow();
+        }
+    }
+};
+time_utils.setLocale();
+
+// show current page
+function showCurrentPage() {
+    var $container = $('#wiki-area');
+    var $loadingTip = $('.loading-tip', $container);
+    var $error = $('.error', $container);
+
+    $.ajax({
+        url: '{% url 'api-v2.1-wiki-page' wiki.slug page_name %}',
+        type: 'GET',
+        dataType: 'json',
+        cache: false,
+        success: function(data) { // { meta: {wiki page object}, content: string }
+            $error.hide();
+
+            $('#wiki-page-name').html(HTMLescape(data.meta.name));
+
+            $('#wiki-content')
+            .html(addAnchorsToHeaders(marked(data.content)))
+            .find('h1, h2')
+            .on('mouseenter', function() {
+                $('.anchor', $(this)).removeClass('vh');
+            })
+            .on('mouseleave', function() {
+                $('.anchor', $(this)).addClass('vh');
+            });
+
+            var update_at_m = moment(data.meta.updated_at);
+            var update_time = update_at_m.format('LLLL'),
+            update_time_from_now = time_utils.getRelativeTimeStr(update_at_m);
+            var last_modified_str = "{% trans "Last modified by %(modifier)s, %(modify_time)s" %}"
+                .replace('%(modifier)s', data.meta.last_modifier_name)
+                .replace('%(modify_time)s', '<span title="' + update_time + '">' + update_time_from_now + '</span>');
+            $('#wiki-page-last-modified').html(last_modified_str);
+
+            $('#wiki-page').show(); 
+        },
+        error: function(xhr) {
+            var error_msg;
+            if (xhr.responseText) {
+                try {
+                    error_msg = JSON.parse(xhr.responseText).error_msg;
+                } catch(e) {
+                    error_msg = "{% trans "Error" %}";
+                }
+            } else {
+                error_msg = "{% trans "Please check the network." %}";
+            }
+            $error.html(error_msg).show();
+        },
+        complete: function() {
+            $loadingTip.hide();
+        }
+    });
+}
+showCurrentPage();
+
+// show page list
+$('#wiki-pages-link').on('click', function() {
+    var $container = $('#wiki-pages-container');
+    var $list = $('ul', $container);
+    var $error = $('.error', $container);
+
+    $('#wiki-home-page-link').closest('.item').removeClass('cur-item');
+    $('#delete-page, #edit-page, #page-history, #wiki-area').hide();
+
+    $(this).closest('.item').addClass('cur-item');
+    $container.show();
+    $.ajax({
+        url: '{% url 'api-v2.1-wiki-pages' wiki.slug %}',
+        type: 'GET',
+        cache: false,
+        dataType: 'json',
+        success: function(data) {
+            $error.hide();
+
+            var str = '';
+            var pages = data.data;
+            // sort by name
+            pages.sort(function(a, b) {
+                // make 'home' as the first one
+                if (a.name == 'home') {
+                    return -1;
+                }
+                if (b.name == 'home') {
+                    return 1;
+                }
+
+                if (a.name.toLowerCase() < b.name.toLowerCase()) {
+                    return -1;
+                } else {
+                    return 1;
+                }
+            });
+            $(pages).each(function(index, item) {
+                str += '<li><a href="' + item.link + '">' + HTMLescape(item.name) + '</a></li>';
+            });
+            $list.html($(str)).show();
+        },
+        error: function(xhr) {
+            var error_msg;
+            if (xhr.responseText) {
+                try {
+                    error_msg = JSON.parse(xhr.responseText).error_msg;
+                } catch(e) {
+                    error_msg = "{% trans "Error" %}";
+                }
+            } else {
+                error_msg = "{% trans "Please check the network." %}";
+            }
+            $error.html(error_msg).show();
+        },
+        complete: function() {
+            $('.loading-tip', $container).hide();
+        }
+    });
+
+    return false;
+});
+
+
+// new page
+$('#new-page').on('click', function() {
+    $('#page-create-form').modal({appendTo: '#main'});
+    $('#simplemodal-container').css({'width':'auto', 'height':'auto'});
+});
+$('#page-create-form').on('submit', function() {
+    var $form = $(this),
+        $error = $('.error', $form),
+        $submit = $('[type="submit"]', $form);
+    var page_name = $.trim($('[name="page_name"]', $(this)).val());
+    if (!page_name) {
+        $error.html("{% trans "It is required." %}").show(); 
+        return false;
+    }
+   
+    $error.hide();
+    disable($submit);
+    $.ajax({
+        url: '{% url 'api-v2.1-wiki-pages' wiki.slug %}',
+        type: 'POST',
+        dataType: 'json',
+        cache: false,
+        data: {'name': page_name},
+        beforeSend: prepareCSRFToken,
+        success: function(data) {
+            // turn to 'file edit'
+            location.href = '{% url 'file_edit' wiki.repo_id %}?p=' +
+                encodeURIComponent('/' + data.name + '.md') + 
+                '&from=wikis_wiki_page_new&wiki_slug={{wiki.slug}}';
+        },
+        error: function(xhr) {
+            var error_msg;
+            if (xhr.responseText) {
+                try {
+                    error_msg = JSON.parse(xhr.responseText).error_msg;
+                } catch(e) {
+                    error_msg = "{% trans "Error" %}";
+                }
+            } else {
+                error_msg = "{% trans "Please check the network." %}";
+            }
+            $error.html(error_msg).show();
+            enable($submit);
+        }
+    });
+
+    return false;
+});
+
+// delete page
+$('#delete-page').on('click', function() {
+    var title = "{% trans "Delete Page" %}",
+    	content = "{% trans "Are you sure you want to delete this page?" %}";
+    var yesCallback = function() {
+        $.modal.close();
+        $.ajax({
+            url: '{% url 'api-v2.1-wiki-page' wiki.slug page_name %}',
+            type: 'DELETE',
+            datatype: 'json',
+            cache: false,
+            beforeSend: prepareCSRFToken,
+            success: function(data) {
+                // go back to wiki 'home' page.
+                location.href = "{% url 'wiki:slug' wiki.slug %}";
+            },
+            error: function(xhr) {
+                var error_msg;
+                if (xhr.responseText) {
+                    try {
+                        error_msg = JSON.parse(xhr.responseText).error_msg;
+                    } catch(e) {
+                        error_msg = "{% trans "Error" %}";
+                    }
+                } else {
+                    error_msg = "{% trans "Please check the network." %}";
+                }
+                feedback(error_msg, 'error');
+            }
+        });
+    };
+	showConfirm(title, content, yesCallback);	
+});
+
+// for 'go back'
+var $pageHistory = $('#page-history');
+$pageHistory.attr('href', $pageHistory.attr('href') + '&referer=' + encodeURIComponent(location.href));
+var $wikiHistory = $('#wiki-history');
+$wikiHistory.attr('href', $wikiHistory.attr('href') + '?referer=' + encodeURIComponent(location.href));
+</script>
+{% endblock %}

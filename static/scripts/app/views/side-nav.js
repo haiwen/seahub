@@ -95,10 +95,6 @@ define([
             form.modal({focus:false});
             $('#simplemodal-container').css('height', 'auto');
 
-            $('.checkbox-orig', form).on('click', function() {
-                $(this).parent().toggleClass('checkbox-checked');
-            });
-
             var checkbox = $('[name="personal_wiki"]'),
                 original_checked = checkbox.prop('checked'),
                _this = this;

@@ -1379,7 +1379,7 @@
         <% for (var i = 0, len = mods_enabled.length; i < len; i++) { %>
             <% if (mods_enabled[i] == 'personal wiki') { %>
                 <li class="tab">
-                    <a href="{% url 'personal_wiki' %}"><span aria-hidden="true" class="sf2-icon-wiki"></span>{% trans "Personal Wiki" %}</a>
+                    <a href="{% url 'wiki:list' %}"><span aria-hidden="true" class="sf2-icon-wiki"></span>{% trans "Wiki" %}</a>
                 </li>
             <% } %>
         <% } %>
@@ -1435,7 +1435,7 @@
                 <% } else { %>
                 <input type="checkbox" name="personal_wiki" class="vam" />
                 <% } %>
-                <span class="checkbox-option">{% trans "Personal Wiki" %}</span>
+                <span class="checkbox-option">{% trans "Wiki" %}</span>
             </label>
             </li>
             <% } %>
