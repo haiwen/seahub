@@ -63,15 +63,6 @@ def slug(request, slug, page_name="home"):
         check_folder_permission(request, wiki.repo_id, '/') == 'rw':
         user_can_write = True
 
-    if request.cloud_mode and request.user.org is not None:
-        org_id = request.user.org.org_id
-        joined_groups = seaserv.get_org_groups_by_user(org_id, username)
-    else:
-        joined_groups = seaserv.get_personal_groups_by_user(username)
-
-    if joined_groups:
-        joined_groups.sort(lambda x, y: cmp(x.group_name.lower(), y.group_name.lower()))
-
     # 1. get wiki repo
     repo = seafile_api.get_repo(wiki.repo_id)
     if not repo:
@@ -86,7 +77,6 @@ def slug(request, slug, page_name="home"):
                 "repo_id": repo.id,
                 "search_repo_id": repo.id,
                 "search_wiki": True,
-                "grps": joined_groups,
             }, context_instance=RequestContext(request))
 
 

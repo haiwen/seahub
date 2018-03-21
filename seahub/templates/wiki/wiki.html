@@ -7,30 +7,33 @@
 
 {% block cur_personal_wiki %}tab-cur{% endblock %}
 
+{% block left_panel %}
+<h3 class="wiki-pages-heading">{% trans "Pages" %}</h3>
+<div id="wiki-pages-container">
+    <span class="loading-icon loading-tip"></span>
+    <ul id="wiki-page-list" class="hide"></ul>
+    <p class="error hide"></p>
+</div>
+{% endblock %}
+
 {% block right_panel %}
-    <div class="path-bar">
+    <div class="path-bar hd">
         <a href="{% url 'wiki:list' %}" class="normal">{% trans "Wikis" %}</a>
         <span class="path-split">/</span>
-        <span>{{ wiki.name }}</span>
+        <a href="{% url 'wiki:slug' wiki.slug %}" class="normal">{{ wiki.name }}</a>
+        <span class="path-split">/</span>
+        <span>{{ page_name }}</span>
     </div>
-    <div class="wiki-top d-flex">
-        <ul class="wiki-nav d-flex">
-            <li class="item{% if page_name == 'home' %} cur-item{% endif %}"><a href="{% url 'wiki:slug' wiki.slug %}" class="link" id="wiki-home-page-link">{% trans "Home" %}</a></li>
-            <li class="item"><a href="#" class="link" id="wiki-pages-link">{% trans "Pages" %}</a></li>
-            {% if user_can_write %}
-            <li class="item"><a href="{% url 'repo_history' repo_id %}" class="link" id="wiki-history">{% trans "Wiki History" %}</a></li>
-            {% endif %}
-        </ul>
 
-        {% if user_can_write %}
-        <div>
-            <button id="new-page" class="btn-white">{% trans "New Page" %}</button>
-            <button id="delete-page" class="btn-white">{% trans "Delete Page" %}</button>
-            <a class="sf-btn-link btn-white" href="{% url 'wiki:edit_page' wiki.slug page_name %}" id="edit-page">{% trans "Edit Page" %}</a>
-            <a class="sf-btn-link btn-white" href="{% url 'file_revisions' repo_id %}?p={{path|urlencode}}" id="page-history">{% trans "Page History" %}</a>
-        </div>
-        {% endif %}
+    {% if user_can_write %}
+    <div class="wiki-page-ops">
+        <!--a class="sf-btn-link btn-white" href="{% url 'repo_history' repo_id %}" id="wiki-history">{% trans "Wiki History" %}</a-->
+        <button id="new-page" class="btn-white">{% trans "New Page" %}</button>
+        <button id="delete-page" class="btn-white">{% trans "Delete Page" %}</button>
+        <a class="sf-btn-link btn-white" href="{% url 'wiki:edit_page' wiki.slug page_name %}" id="edit-page">{% trans "Edit Page" %}</a>
+        <a class="sf-btn-link btn-white" href="{% url 'file_revisions' repo_id %}?p={{path|urlencode}}" id="page-history">{% trans "Page History" %}</a>
     </div>
+    {% endif %}
 
     <div id="wiki-area" class="article">
         <span class="loading-icon loading-tip"></span>
@@ -40,12 +43,6 @@
             <div id="wiki-content"></div>
             <p id="wiki-page-last-modified"></p>
         </div>
-    </div>
-
-    <div id="wiki-pages-container" class="hide">
-        <span class="loading-icon loading-tip"></span>
-        <ul id="wiki-pages" class="hide"></ul>
-        <p class="error hide"></p>
     </div>
 
     <form id="page-create-form" action="" method="post" class="hide">{% csrf_token %}
@@ -156,24 +153,17 @@ function showCurrentPage() {
 showCurrentPage();
 
 // show page list
-$('#wiki-pages-link').on('click', function() {
+(function() {
     var $container = $('#wiki-pages-container');
     var $list = $('ul', $container);
     var $error = $('.error', $container);
 
-    $('#wiki-home-page-link').closest('.item').removeClass('cur-item');
-    $('#delete-page, #edit-page, #page-history, #wiki-area').hide();
-
-    $(this).closest('.item').addClass('cur-item');
-    $container.show();
     $.ajax({
         url: '{% url 'api-v2.1-wiki-pages' wiki.slug %}',
         type: 'GET',
         cache: false,
         dataType: 'json',
         success: function(data) {
-            $error.hide();
-
             var str = '';
             var pages = data.data;
             // sort by name
@@ -193,7 +183,7 @@ $('#wiki-pages-link').on('click', function() {
                 }
             });
             $(pages).each(function(index, item) {
-                str += '<li><a href="' + item.link + '">' + HTMLescape(item.name) + '</a></li>';
+                str += '<li><img src="{{MEDIA_URL}}img/file/24/txt.png" class="vam" /><a href="' + item.link + '" class="wiki-page-link vam">' + HTMLescape(item.name) + '</a></li>';
             });
             $list.html($(str)).show();
         },
@@ -216,8 +206,7 @@ $('#wiki-pages-link').on('click', function() {
     });
 
     return false;
-});
-
+})();
 
 // new page
 $('#new-page').on('click', function() {
