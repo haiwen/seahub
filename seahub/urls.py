@@ -44,6 +44,7 @@ from seahub.api2.endpoints.repo_set_password import RepoSetPassword
 from seahub.api2.endpoints.zip_task import ZipTaskView
 from seahub.api2.endpoints.share_link_zip_task import ShareLinkZipTaskView
 from seahub.api2.endpoints.query_zip_progress import QueryZipProgressView
+from seahub.api2.endpoints.cancel_zip_task import CancelZipTaskView
 from seahub.api2.endpoints.copy_move_task import CopyMoveTaskView
 from seahub.api2.endpoints.query_copy_move_progress import QueryCopyMoveProgressView
 from seahub.api2.endpoints.invitations import InvitationsView, InvitationsBatchView
@@ -249,6 +250,7 @@ urlpatterns = [
     url(r'^api/v2.1/repos/(?P<repo_id>[-0-9a-f]{36})/file-uploaded-bytes/$', RepoFileUploadedBytesView.as_view(), name='api-v2.1-repo-file-uploaded-bytes'),
     url(r'^api/v2.1/share-link-zip-task/$', ShareLinkZipTaskView.as_view(), name='api-v2.1-share-link-zip-task'),
     url(r'^api/v2.1/query-zip-progress/$', QueryZipProgressView.as_view(), name='api-v2.1-query-zip-progress'),
+    url(r'^api/v2.1/cancel-zip-task/$', CancelZipTaskView.as_view(), name='api-v2.1-cancel-zip-task'),
     url(r'^api/v2.1/copy-move-task/$', CopyMoveTaskView.as_view(), name='api-v2.1-copy-move-task'),
     url(r'^api/v2.1/query-copy-move-progress/$', QueryCopyMoveProgressView.as_view(), name='api-v2.1-query-copy-move-progress'),
     url(r'^api/v2.1/notifications/$', NotificationsView.as_view(), name='api-v2.1-notifications'),
