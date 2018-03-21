@@ -8,19 +8,13 @@ from seahub import urls
 from seahub.test_utils import BaseTestCase
 from seahub.views.sysadmin import sys_virus_scan_records
 
+urlpatterns = seahub.urls.urlpatterns + [
+    url(r'^sys/virus_scan_records/$', sys_virus_scan_records, name='sys_virus_scan_records'),
+]
 
+
+@override_settings(ROOT_URLCONF=__name__)
 class CommandTest(BaseTestCase):
-    urls = 'seahub.urls'
-
-    def setUp(self):
-        # http://stackoverflow.com/questions/4892210/django-urlresolver-adding-urls-at-runtime-for-testing
-        super(CommandTest, self).setUp()
-
-        self.original_urls = seahub.urls.urlpatterns
-        seahub.urls.urlpatterns += patterns(
-            '',
-            url(r'^sys/virus_scan_records/$', sys_virus_scan_records, name='sys_virus_scan_records'),
-        )
 
     def test_can_send(self):
         self.assertEqual(len(mail.outbox), 0)

@@ -2,10 +2,18 @@ from mock import patch
 
 from django.conf.urls import url
 from django.core.urlresolvers import reverse
+from django.test import override_settings
 
 import seahub
+from seahub import urls
 from seahub.test_utils import BaseTestCase
 from seahub.views.sysadmin import sys_virus_scan_records, sys_delete_virus_scan_records
+
+# http://stackoverflow.com/questions/4892210/django-urlresolver-adding-urls-at-runtime-for-testing
+urlpatterns = seahub.urls.urlpatterns + [
+    url(r'^sys/virus_scan_records/$', sys_virus_scan_records, name='sys_virus_scan_records'),
+    url(r'^sys/virus_scan_records/delete/(?P<vid>\d+)/$', sys_delete_virus_scan_records, name='sys_delete_virus_scan_records'),
+]
 
 
 class VirusScanRecord(object):
@@ -13,19 +21,8 @@ class VirusScanRecord(object):
         self.repo_id = repo_id
 
 
+@override_settings(ROOT_URLCONF=__name__)
 class SysVirusScanRecordsTest(BaseTestCase):
-    urls = 'seahub.urls'
-
-    def setUp(self):
-        # http://stackoverflow.com/questions/4892210/django-urlresolver-adding-urls-at-runtime-for-testing
-        super(SysVirusScanRecordsTest, self).setUp()
-
-        self.original_urls = seahub.urls.urlpatterns
-        seahub.urls.urlpatterns += [
-            url(r'^sys/virus_scan_records/$', sys_virus_scan_records, name='sys_virus_scan_records'),
-            url(r'^sys/virus_scan_records/delete/(?P<vid>\d+)/$', sys_delete_virus_scan_records, name='sys_delete_virus_scan_records'),
-        ]
-
     @patch('seahub.views.sysadmin.get_virus_record')
     def test_can_list_empty(self, mock_get_virus_record):
         mock_get_virus_record.return_value = []

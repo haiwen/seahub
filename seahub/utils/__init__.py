@@ -843,7 +843,7 @@ def send_html_email(subject, con_template, con_context, from_email, to_email,
         if reply_to is not None:
             headers['Reply-to'] = reply_to
 
-    msg = EmailMessage(subject, t.render(Context(con_context)), from_email,
+    msg = EmailMessage(subject, t.render(con_context), from_email,
                        to_email, headers=headers)
     msg.content_subtype = "html"
     msg.send()
