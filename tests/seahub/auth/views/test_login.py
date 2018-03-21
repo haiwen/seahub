@@ -3,7 +3,8 @@ from django.core.cache import cache
 from django.core.urlresolvers import reverse
 from django.utils.http import urlquote
 
-from constance import config
+import pytest
+pytestmark = pytest.mark.django_db
 
 from seahub.base.accounts import User
 from seahub.auth.forms import AuthenticationForm, CaptchaAuthenticationForm
@@ -118,8 +119,11 @@ class LoginCaptchaTest(BaseTestCase, LoginTestMixin):
     def setUp(self):
         self.clear_cache()      # make sure cache is clean
 
-        config.LOGIN_ATTEMPT_LIMIT = 3
-        config.FREEZE_USER_ON_LOGIN_FAILED = False
+        from constance import config
+        self.config = config
+
+        self.config.LOGIN_ATTEMPT_LIMIT = 3
+        self.config.FREEZE_USER_ON_LOGIN_FAILED = False
 
     def tearDown(self):
         self.clear_cache()
@@ -185,8 +189,11 @@ class FreezeUserOnLoginFailedTest(BaseTestCase, LoginTestMixin):
     def setUp(self):
         self.clear_cache()      # make sure cache is clean
 
-        config.LOGIN_ATTEMPT_LIMIT = 3
-        config.FREEZE_USER_ON_LOGIN_FAILED = True
+        from constance import config
+        self.config = config
+
+        self.config.LOGIN_ATTEMPT_LIMIT = 3
+        self.config.FREEZE_USER_ON_LOGIN_FAILED = True
 
         self.tmp_user = self.create_user()
 
@@ -195,7 +202,7 @@ class FreezeUserOnLoginFailedTest(BaseTestCase, LoginTestMixin):
         self.remove_user(self.tmp_user.username)
 
     def test_can_freeze(self):
-        assert bool(config.FREEZE_USER_ON_LOGIN_FAILED) is True
+        assert bool(self.config.FREEZE_USER_ON_LOGIN_FAILED) is True
 
         resp = self._login_page()
         assert isinstance(resp.context['form'], AuthenticationForm) is True

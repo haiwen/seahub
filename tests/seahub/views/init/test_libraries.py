@@ -1,8 +1,8 @@
 import json
 
 from django.core.urlresolvers import reverse
-
-from constance import config
+import pytest
+pytestmark = pytest.mark.django_db
 
 from seahub.options.models import UserOptions
 from seahub.test_utils import BaseTestCase
@@ -10,6 +10,8 @@ from seahub.test_utils import BaseTestCase
 class LibrariesTest(BaseTestCase):
     def setUp(self):
         self.url = reverse('libraries')
+        from constance import config
+        self.config = config
 
     def test_user_guide(self):
         self.login_as(self.user)
@@ -34,15 +36,15 @@ class LibrariesTest(BaseTestCase):
         # user
         self.login_as(self.user)
 
-        config.ENABLE_USER_CREATE_ORG_REPO = 1
-        assert bool(config.ENABLE_USER_CREATE_ORG_REPO) is True
+        self.config.ENABLE_USER_CREATE_ORG_REPO = 1
+        assert bool(self.config.ENABLE_USER_CREATE_ORG_REPO) is True
 
         resp = self.client.get(self.url)
         self.assertEqual(200, resp.status_code)
         assert resp.context['can_add_pub_repo'] is True
 
-        config.ENABLE_USER_CREATE_ORG_REPO = 0
-        assert bool(config.ENABLE_USER_CREATE_ORG_REPO) is False
+        self.config.ENABLE_USER_CREATE_ORG_REPO = 0
+        assert bool(self.config.ENABLE_USER_CREATE_ORG_REPO) is False
 
         resp = self.client.get(self.url)
         self.assertEqual(200, resp.status_code)
@@ -54,15 +56,15 @@ class LibrariesTest(BaseTestCase):
         # admin
         self.login_as(self.admin)
 
-        config.ENABLE_USER_CREATE_ORG_REPO = 1
-        assert bool(config.ENABLE_USER_CREATE_ORG_REPO) is True
+        self.config.ENABLE_USER_CREATE_ORG_REPO = 1
+        assert bool(self.config.ENABLE_USER_CREATE_ORG_REPO) is True
 
         resp = self.client.get(self.url)
         self.assertEqual(200, resp.status_code)
         assert resp.context['can_add_pub_repo'] is True
 
-        config.ENABLE_USER_CREATE_ORG_REPO = 0
-        assert bool(config.ENABLE_USER_CREATE_ORG_REPO) is False
+        self.config.ENABLE_USER_CREATE_ORG_REPO = 0
+        assert bool(self.config.ENABLE_USER_CREATE_ORG_REPO) is False
 
         resp = self.client.get(self.url)
         self.assertEqual(200, resp.status_code)

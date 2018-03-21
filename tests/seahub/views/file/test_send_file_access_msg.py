@@ -1,6 +1,6 @@
-from django.contrib.auth.models import AnonymousUser
 from django.test.client import RequestFactory
 
+from seahub.auth.models import AnonymousUser
 from seahub.test_utils import BaseTestCase
 from seahub.views.file import send_file_access_msg
 

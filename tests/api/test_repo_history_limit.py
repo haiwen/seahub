@@ -2,16 +2,20 @@
 """
 import json
 
+import pytest
+pytestmark = pytest.mark.django_db
+
 from django.core.urlresolvers import reverse
 
-from constance import config
-
 from seahub.test_utils import BaseTestCase
+
 
 class RepoTest(BaseTestCase):
 
     def setUp(self):
         self.user_repo_id = self.repo.id
+        from constance import config
+        self.config = config
 
     def tearDown(self):
         self.remove_repo()
@@ -26,7 +30,7 @@ class RepoTest(BaseTestCase):
     def test_can_get_history_limit_if_setting_not_enabled(self):
         self.login_as(self.user)
 
-        config.ENABLE_REPO_HISTORY_SETTING = False
+        self.config.ENABLE_REPO_HISTORY_SETTING = False
 
         resp = self.client.get(reverse("api2-repo-history-limit", args=[self.user_repo_id]))
         json_resp = json.loads(resp.content)
@@ -90,7 +94,7 @@ class RepoTest(BaseTestCase):
     def test_can_not_set_if_setting_not_enabled(self):
         self.login_as(self.user)
 
-        config.ENABLE_REPO_HISTORY_SETTING = False
+        self.config.ENABLE_REPO_HISTORY_SETTING = False
 
         url = reverse("api2-repo-history-limit", args=[self.user_repo_id])
         data = 'keep_days=%s' % 6
