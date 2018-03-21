@@ -1,6 +1,6 @@
 from mock import patch
 
-from django.conf.urls import patterns, url
+from django.conf.urls import url
 from django.core.urlresolvers import reverse
 
 import seahub
@@ -21,11 +21,10 @@ class SysVirusScanRecordsTest(BaseTestCase):
         super(SysVirusScanRecordsTest, self).setUp()
 
         self.original_urls = seahub.urls.urlpatterns
-        seahub.urls.urlpatterns += patterns(
-            '',
+        seahub.urls.urlpatterns += [
             url(r'^sys/virus_scan_records/$', sys_virus_scan_records, name='sys_virus_scan_records'),
             url(r'^sys/virus_scan_records/delete/(?P<vid>\d+)/$', sys_delete_virus_scan_records, name='sys_delete_virus_scan_records'),
-        )
+        ]
 
     @patch('seahub.views.sysadmin.get_virus_record')
     def test_can_list_empty(self, mock_get_virus_record):
