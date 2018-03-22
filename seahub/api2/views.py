@@ -25,8 +25,6 @@ from django.contrib.sites.models import RequestSite
 from django.db import IntegrityError
 from django.db.models import F
 from django.http import HttpResponse
-from django.template import RequestContext
-from django.template.loader import render_to_string
 from django.template.defaultfilters import filesizeformat
 from django.shortcuts import render_to_response
 from django.utils import timezone
@@ -386,10 +384,10 @@ class Search(APIView):
         if search_path:
             search_path = normalize_dir_path(search_path)
             if not is_valid_repo_id_format(search_repo):
-                error_msg = 'search_path invalid.'
+                error_msg = 'search_repo invalid.'
                 return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
 
-            dir_id = seafile_api.get_dir_id_by_path(repo_id, search_path)
+            dir_id = seafile_api.get_dir_id_by_path(search_repo, search_path)
             if not dir_id:
                 error_msg = 'Folder %s not found.' % search_path
                 return api_error(status.HTTP_404_NOT_FOUND, error_msg)
