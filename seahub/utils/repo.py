@@ -5,7 +5,10 @@ import logging
 import seaserv
 from seaserv import seafile_api, ccnet_api
 
-from seahub.utils import EMPTY_SHA1, is_org_context
+from seahub.utils import EMPTY_SHA1, is_org_context, is_pro_version
+
+from seahub.settings import ENABLE_STORAGE_CLASSES, \
+        STORAGE_CLASS_MAPPING_POLICY
 
 logger = logging.getLogger(__name__)
 
@@ -49,7 +52,7 @@ def get_repo_shared_users(repo_id, repo_owner, include_groups=True):
     return list(set(ret))
 
 def get_library_storages(request):
-    """ Return all storages info.
+    """ Return info of storages can be used.
 
     1. If not enable user role feature OR
        haven't configured `storage_ids` option in user role setting:
@@ -64,8 +67,21 @@ def get_library_storages(request):
        Not change the order of the `storage_ids` list.
     """
 
+    if not is_pro_version():
+        return []
+
+    if not ENABLE_STORAGE_CLASSES:
+        return []
+
+    # get all storages info
+    try:
+        storage_classes = seafile_api.get_all_storage_classes()
+    except Exception as e:
+        logger.error(e)
+        return []
+
     all_storages = []
-    for storage in seafile_api.get_all_storage_classes():
+    for storage in storage_classes:
         storage_info = {
             'storage_id': storage.storage_id,
             'storage_name': storage.storage_name,
@@ -76,18 +92,27 @@ def get_library_storages(request):
         else:
             all_storages.append(storage_info)
 
-    user_role_storage_ids = request.user.permissions.storage_ids()
-    if not user_role_storage_ids:
+    if STORAGE_CLASS_MAPPING_POLICY == 'USER_SELECT':
+
         return all_storages
 
-    user_role_storages = []
-    for user_role_storage_id in user_role_storage_ids:
-        for storage in all_storages:
-            if storage['storage_id'] == user_role_storage_id:
-                user_role_storages.append(storage)
-                continue
+    elif STORAGE_CLASS_MAPPING_POLICY == 'ROLE_BASED':
+        user_role_storage_ids = request.user.permissions.storage_ids()
+        if not user_role_storage_ids:
+            return all_storages
 
-    return user_role_storages
+        user_role_storages = []
+        for user_role_storage_id in user_role_storage_ids:
+            for storage in all_storages:
+                if storage['storage_id'] == user_role_storage_id:
+                    user_role_storages.append(storage)
+                    continue
+
+        return user_role_storages
+
+    else:
+        # STORAGE_CLASS_MAPPING_POLICY == 'REPO_ID_MAPPING'
+        return []
 
 def get_locked_files_by_dir(request, repo_id, folder_path):
     """ Get locked files in a folder

@@ -52,7 +52,7 @@ from seahub.utils.timeutils import utc_to_local
 from seahub.views.modules import MOD_PERSONAL_WIKI, enable_mod_for_user, \
     disable_mod_for_user
 import seahub.settings as settings
-from seahub.settings import AVATAR_FILE_STORAGE, ENABLE_STORAGE_CLASSES, \
+from seahub.settings import AVATAR_FILE_STORAGE, \
     ENABLE_SUB_LIBRARY, ENABLE_FOLDER_PERM, ENABLE_REPO_SNAPSHOT_LABEL, \
     UNREAD_NOTIFICATIONS_REQUEST_INTERVAL
 
@@ -701,10 +701,6 @@ def libraries(request):
             logger.error(e)
             joined_groups = []
 
-    storages = []
-    if is_pro_version() and ENABLE_STORAGE_CLASSES:
-        storages = get_library_storages(request)
-
     return render_to_response('libraries.html', {
             "allow_public_share": allow_public_share,
             "guide_enabled": guide_enabled,
@@ -725,8 +721,7 @@ def libraries(request):
             'file_audit_enabled': FILE_AUDIT_ENABLED,
             'can_add_pub_repo': can_add_pub_repo,
             'joined_groups': joined_groups,
-            'storages': storages,
-            'enable_storage_classes': ENABLE_STORAGE_CLASSES,
+            'storages': get_library_storages(request),
             'unread_notifications_request_interval': UNREAD_NOTIFICATIONS_REQUEST_INTERVAL,
             'library_templates': LIBRARY_TEMPLATES.keys() if \
                     isinstance(LIBRARY_TEMPLATES, dict) else [],

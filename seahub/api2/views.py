@@ -92,7 +92,7 @@ if HAS_OFFICE_CONVERTER:
 import seahub.settings as settings
 from seahub.settings import THUMBNAIL_EXTENSION, THUMBNAIL_ROOT, \
     FILE_LOCK_EXPIRATION_DAYS, ENABLE_STORAGE_CLASSES, \
-    ENABLE_THUMBNAIL, ENABLE_FOLDER_PERM
+    ENABLE_THUMBNAIL, ENABLE_FOLDER_PERM, STORAGE_CLASS_MAPPING_POLICY
 try:
     from seahub.settings import CLOUD_MODE
 except ImportError:
@@ -827,18 +827,21 @@ class Repos(APIView):
         else:
             if is_pro_version() and ENABLE_STORAGE_CLASSES:
 
-                storages = get_library_storages(request)
-                storage_id = request.data.get("storage_id", None)
-                if not storage_id:
-                    storage_id = storages[0]['storage_id']
+                if STORAGE_CLASS_MAPPING_POLICY in ('USER_SELECT',
+                        'ROLE_BASED'):
 
-                if storage_id not in [s['storage_id'] for s in storages]:
-                    error_msg = 'storage_id invalid.'
-                    return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
+                    storages = get_library_storages(request)
+                    storage_id = request.data.get("storage_id", None)
+                    if storage_id and storage_id not in [s['storage_id'] for s in storages]:
+                        error_msg = 'storage_id invalid.'
+                        return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
 
-                repo_id = seafile_api.create_repo(repo_name,
-                        repo_desc, username, passwd, storage_id)
-
+                    repo_id = seafile_api.create_repo(repo_name,
+                            repo_desc, username, passwd, storage_id)
+                else:
+                    # STORAGE_CLASS_MAPPING_POLICY == 'REPO_ID_MAPPING'
+                    repo_id = seafile_api.create_repo(repo_name,
+                            repo_desc, username, passwd)
             else:
                 repo_id = seafile_api.create_repo(repo_name,
                         repo_desc, username, passwd)
@@ -945,17 +948,21 @@ class PubRepos(APIView):
         else:
             if is_pro_version() and ENABLE_STORAGE_CLASSES:
 
-                storages = get_library_storages(request)
-                storage_id = request.data.get("storage_id", None)
-                if not storage_id:
-                    storage_id = storages[0]['storage_id']
+                if STORAGE_CLASS_MAPPING_POLICY in ('USER_SELECT',
+                        'ROLE_BASED'):
 
-                if storage_id not in [s['storage_id'] for s in storages]:
-                    error_msg = 'storage_id invalid.'
-                    return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
+                    storages = get_library_storages(request)
+                    storage_id = request.data.get("storage_id", None)
+                    if storage_id and storage_id not in [s['storage_id'] for s in storages]:
+                        error_msg = 'storage_id invalid.'
+                        return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
 
-                repo_id = seafile_api.create_repo(repo_name,
-                        repo_desc, username, passwd, storage_id)
+                    repo_id = seafile_api.create_repo(repo_name,
+                            repo_desc, username, passwd, storage_id)
+                else:
+                    # STORAGE_CLASS_MAPPING_POLICY == 'REPO_ID_MAPPING'
+                    repo_id = seafile_api.create_repo(repo_name,
+                            repo_desc, username, passwd)
             else:
                 repo_id = seafile_api.create_repo(repo_name,
                         repo_desc, username, passwd)
@@ -4165,17 +4172,21 @@ class GroupRepos(APIView):
         else:
             if is_pro_version() and ENABLE_STORAGE_CLASSES:
 
-                storages = get_library_storages(request)
-                storage_id = request.data.get("storage_id", None)
-                if not storage_id:
-                    storage_id = storages[0]['storage_id']
+                if STORAGE_CLASS_MAPPING_POLICY in ('USER_SELECT',
+                        'ROLE_BASED'):
 
-                if storage_id not in [s['storage_id'] for s in storages]:
-                    error_msg = 'storage_id invalid.'
-                    return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
+                    storages = get_library_storages(request)
+                    storage_id = request.data.get("storage_id", None)
+                    if storage_id and storage_id not in [s['storage_id'] for s in storages]:
+                        error_msg = 'storage_id invalid.'
+                        return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
 
-                repo_id = seafile_api.create_repo(repo_name,
-                        repo_desc, username, passwd, storage_id)
+                    repo_id = seafile_api.create_repo(repo_name,
+                            repo_desc, username, passwd, storage_id)
+                else:
+                    # STORAGE_CLASS_MAPPING_POLICY == 'REPO_ID_MAPPING'
+                    repo_id = seafile_api.create_repo(repo_name,
+                            repo_desc, username, passwd)
             else:
                 repo_id = seafile_api.create_repo(repo_name,
                         repo_desc, username, passwd)
