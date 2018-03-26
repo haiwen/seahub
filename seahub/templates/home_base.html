@@ -4,7 +4,7 @@
 {% block main_class %}d-flex ovhd{% endblock %}
 
 {% block main_content %}
-<div class="row flex-1 d-flex">
+<div class="row flex-1 d-flex w100 ovhd"> {# 'ovhd' is for Firefox #}
     <div id="side-nav" class="side-nav side-tabnav col-md-3" >
         <a href="#" title="{% trans "Close" %}" aria-label="{% trans "Close" %}" class="sf2-icon-x1 sf-popover-close op-icon hidden-md-up js-close-side-nav fright"></a>
         {% block left_panel %}
