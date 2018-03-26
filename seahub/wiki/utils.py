@@ -1,8 +1,10 @@
 # Copyright (c) 2012-2016 Seafile Ltd.
 # -*- coding: utf-8 -*-
 import os
+import re
 import stat
 import urllib2
+import logging
 
 from django.core.urlresolvers import reverse
 from django.utils.http import urlquote
@@ -14,10 +16,12 @@ from pysearpc import SearpcError
 from seahub.utils import EMPTY_SHA1
 from seahub.utils.slugify import slugify
 from seahub.utils import render_error, render_permission_error, string2list, \
-    gen_file_get_url, get_file_type_and_ext, gen_inner_file_get_url
+    gen_file_get_url, get_file_type_and_ext, gen_inner_file_get_url, get_service_url
 from seahub.utils.file_types import IMAGE
+from seahub.utils.timeutils import timestamp_to_isoformat_timestr
 from models import WikiPageMissing, WikiDoesNotExist, GroupWiki, PersonalWiki
 
+logger = logging.getLogger(__name__)
 
 __all__ = ["get_wiki_dirent", "clean_page_name", "page_name_to_file_name"]
 
@@ -170,4 +174,54 @@ def convert_wiki_link(content, url_prefix, repo_id, username):
 
     return re.sub(r'\[\[(.+?)\]\]|(`.+?`)', repl, content)
 
+def is_valid_wiki_name(name):
+    name = name.strip()
+    if len(name) > 255 or len(name) < 1:
+        return False
+    return True if re.match('^[\w\s-]+$', name, re.U) else False
 
+def slugfy_wiki_name(name):
+    return slugify(name, ok=SLUG_OK)
+
+def get_wiki_page_object(wiki_object, page_name):
+    page_name = clean_page_name(page_name)
+    filepath = "/" + page_name + ".md"
+    repo_id = wiki_object.repo_id
+
+    try:
+        dirent = seafile_api.get_dirent_by_path(repo_id, filepath)
+        if dirent:
+            latest_contributor, last_modified = dirent.modifier, dirent.mtime
+        else:
+            latest_contributor, last_modified = None, 0
+    except SearpcError as e:
+        logger.error(e)
+        latest_contributor, last_modified = None, 0
+
+    try:
+        repo = seafile_api.get_repo(wiki_object.repo_id)
+    except SearpcError as e:
+        logger.error(e)
+
+    file_url = get_inner_file_url(repo, dirent.obj_id, dirent.obj_name)
+
+    edit_url = get_service_url().strip() + "%s?p=%s" % (
+          reverse('file_edit', args=[repo_id]),
+          urlquote(filepath.encode('utf-8')))
+
+    slug = wiki_object.slug
+    page_url = get_service_url().strip() + reverse('wiki:slug', args=[slug, page_name])
+
+    # FIX ME: move to top after wiki code refactor
+    from seahub.base.templatetags.seahub_tags import email2nickname, \
+        email2contact_email
+
+    return {"name": page_name,
+            "link": page_url,
+            "file_link": file_url,
+            "file_edit_link": edit_url,
+            "updated_at": timestamp_to_isoformat_timestr(last_modified),
+            "last_modifier": latest_contributor,
+            "last_modifier_contact_email": email2contact_email(latest_contributor),
+            "last_modifier_name": email2nickname(latest_contributor),
+            }
