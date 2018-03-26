@@ -1202,6 +1202,10 @@ def file_edit_submit(request, repo_id):
     elif req_from == 'personal_wiki_page_edit' or req_from == 'personal_wiki_page_new':
         wiki_name = os.path.splitext(os.path.basename(path))[0]
         next = reverse('personal_wiki', args=[wiki_name])
+    elif req_from == 'wikis_wiki_page_edit' or req_from == 'wikis_wiki_page_new':
+        wiki_slug = request.GET.get('wiki_slug', '')
+        wiki_page_name = os.path.splitext(os.path.basename(path))[0]
+        next = reverse('wiki:slug', args=[wiki_slug, wiki_page_name])
     else:
         next = reverse('view_lib_file', args=[repo_id, path])
 
@@ -1279,11 +1283,15 @@ def file_edit(request, repo_id):
     cancel_url = reverse('view_lib_file', args=[repo.id, path])
     page_from = request.GET.get('from', '')
     gid = request.GET.get('gid', '')
+    wiki_slug = request.GET.get('wiki_slug', '')
     wiki_name = os.path.splitext(u_filename)[0]
     if page_from == 'wiki_page_edit' or page_from == 'wiki_page_new':
         cancel_url = reverse('group_wiki', args=[gid, wiki_name])
     elif page_from == 'personal_wiki_page_edit' or page_from == 'personal_wiki_page_new':
         cancel_url = reverse('personal_wiki', args=[wiki_name])
+    elif page_from == 'wikis_wiki_page_edit' or page_from == 'wikis_wiki_page_new':
+        wiki_page_name = wiki_name
+        cancel_url = reverse('wiki:slug', args=[wiki_slug, wiki_page_name])
 
     return render(request, 'file_edit.html', {
         'repo':repo,
@@ -1301,6 +1309,7 @@ def file_edit(request, repo_id):
         'head_id': head_id,
         'from': page_from,
         'gid': gid,
+        'wiki_slug': wiki_slug,
         'cancel_url': cancel_url,
     })
 

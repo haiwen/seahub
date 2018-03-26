@@ -2976,7 +2976,7 @@ button.sf-dropdown-toggle:focus {
     border: 1px solid #DDD;
     box-shadow: 0 1px 1px #CCC;
     border-radius: 2px;
-    max-width:688px;
+    max-width:calc(100% - 12px);
     margin:15px 0;
 }
 #wiki-content .file-icon {
@@ -3168,10 +3168,44 @@ button.sf-dropdown-toggle:focus {
     color:#333;
     font-weight:normal;
 }
+#new-wiki {
+    margin-left:auto;
+}
+.wiki-page-ops {
+    position:fixed;
+    top:10px;
+}
+@media (min-width: 768px) {
+    .wiki-page-ops:before {
+        content:'';
+        border-left:1px solid #ddd;
+        position:absolute;
+        top:3px;
+        left:-16px;
+        bottom:3px;
+    }
+}
+.wiki-pages-heading {
+    text-align:center;
+    padding-bottom:.5em;
+    border-bottom:1px solid #e8e8e8;
+}
+#wiki-page-list {
+    line-height:1.8;
+    margin-top:1.6em;
+}
+.wiki-page-link,
+.wiki-page-link:hover {
+   font-size:1.15em;
+   font-weight:normal;
+   color:#444;
+   margin-left:5px;
+}
 #wiki-area {
     padding: 30px 0 0;
 }
-#wiki-last-modified {
+#wiki-last-modified,
+#wiki-page-last-modified {
     margin-top: 10px;
     font-size:12px;
     color: #666;

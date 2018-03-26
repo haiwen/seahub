@@ -52,7 +52,9 @@ from seahub.api2.endpoints.notifications import NotificationsView, NotificationV
 from seahub.api2.endpoints.user_enabled_modules import UserEnabledModulesView
 from seahub.api2.endpoints.repo_file_uploaded_bytes import RepoFileUploadedBytesView
 from seahub.api2.endpoints.user_avatar import UserAvatarView
-from seahub.api2.endpoints.revision_tag import TaggedItemsView,TagNamesView
+from seahub.api2.endpoints.wikis import WikisView, WikiView
+from seahub.api2.endpoints.wiki_pages import WikiPageView, WikiPagesView
+from seahub.api2.endpoints.revision_tag import TaggedItemsView, TagNamesView
 from seahub.api2.endpoints.user import User
 
 # Admin
@@ -263,6 +265,12 @@ urlpatterns = [
     ## user::avatar
     url(r'^api/v2.1/user-avatar/$', UserAvatarView.as_view(), name='api-v2.1-user-avatar'),
 
+    ## user::wiki
+    url(r'^api/v2.1/wikis/$', WikisView.as_view(), name='api-v2.1-wikis'),
+    url(r'^api/v2.1/wikis/(?P<slug>[^/]+)/$', WikiView.as_view(), name='api-v2.1-wiki'),
+    url(r'^api/v2.1/wikis/(?P<slug>[^/]+)/pages/$', WikiPagesView.as_view(), name='api-v2.1-wiki-pages'),
+    url(r'^api/v2.1/wikis/(?P<slug>[^/]+)/pages/(?P<page_name>[^/]+)/$', WikiPageView.as_view(), name='api-v2.1-wiki-page'),
+
     ## admin::sysinfo
     url(r'^api/v2.1/admin/sysinfo/$', SysInfo.as_view(), name='api-v2.1-sysinfo'),
 
@@ -366,6 +374,7 @@ urlpatterns = [
     url(r'^inst/', include('seahub.institutions.urls', app_name='institutions', namespace='institutions')),
     url(r'^invite/', include('seahub.invitations.urls', app_name='invitations', namespace='invitations')),
     url(r'^terms/', include('termsandconditions.urls')),
+    url(r'^wikis/', include('seahub.wiki.urls', app_name='wiki', namespace='wiki')),
 
     ### system admin ###
     url(r'^sysadmin/$', sysadmin, name='sysadmin'),
