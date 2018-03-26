@@ -6,7 +6,7 @@ from django.utils.translation import ugettext_lazy as _
 from seaserv import seafile_api
 
 from seahub.base.fields import LowerCaseCharField
-from seahub.utils import get_service_url
+from seahub.utils import get_site_scheme_and_netloc
 from seahub.utils.timeutils import (timestamp_to_isoformat_timestr,
                                     datetime_to_isoformat_timestr)
 
@@ -112,8 +112,8 @@ class Wiki(models.Model):
 
     @property
     def link(self):
-        return get_service_url().strip() + reverse('wiki:slug',
-                                                   args=[self.slug])
+        return get_site_scheme_and_netloc().rstrip('/') + reverse('wiki:slug',
+                                                                  args=[self.slug])
 
     @property
     def updated_at(self):

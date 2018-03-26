@@ -7,7 +7,7 @@ from seaserv import seafile_api
 from django.core.urlresolvers import reverse
 from django.http import HttpResponse, HttpResponseBadRequest, Http404, \
     HttpResponseRedirect
-from django.shortcuts import render_to_response, get_object_or_404
+from django.shortcuts import render, get_object_or_404
 from django.template import Context, loader, RequestContext
 from django.utils.translation import ugettext as _
 
@@ -42,15 +42,14 @@ def wiki_list(request):
     if joined_groups:
         joined_groups.sort(lambda x, y: cmp(x.group_name.lower(), y.group_name.lower()))
 
-    return render_to_response("wiki/wiki_list.html", {
-	"grps": joined_groups,
-	}, context_instance=RequestContext(request))
+    return render(request, "wiki/wiki_list.html", {
+        "grps": joined_groups,
+    })
 
 
 def slug(request, slug, page_name="home"):
     """Show wiki page.
     """
-    username = request.user.username
     # get wiki object or 404
     wiki = get_object_or_404(Wiki, slug=slug)
 
@@ -58,26 +57,17 @@ def slug(request, slug, page_name="home"):
     if not wiki.has_read_perm(request.user):
         raise Http404
 
-    user_can_write = False
-    if request.user.is_authenticated() and \
-        check_folder_permission(request, wiki.repo_id, '/') == 'rw':
-        user_can_write = True
+    user_can_write = True if request.user.username == wiki.username else False
 
-    # 1. get wiki repo
-    repo = seafile_api.get_repo(wiki.repo_id)
-    if not repo:
-        assert False, "TODO"
-
-    return render_to_response(
-            "wiki/wiki.html", {
-                "wiki": wiki,
-                "page_name": page_name,
-                "user_can_write": user_can_write,
-                "path": '/' + page_name + '.md',
-                "repo_id": repo.id,
-                "search_repo_id": repo.id,
-                "search_wiki": True,
-            }, context_instance=RequestContext(request))
+    return render(request, "wiki/wiki.html", {
+        "wiki": wiki,
+        "page_name": page_name,
+        "user_can_write": user_can_write,
+        "path": '/' + page_name + '.md',
+        "repo_id": wiki.repo_id,
+        "search_repo_id": wiki.repo_id,
+        "search_wiki": True,
+    }, context_instance=RequestContext(request))
 
 
 @login_required
@@ -86,6 +76,9 @@ def edit_page(request, slug, page_name="home"):
 
     # get wiki object or 404
     wiki = get_object_or_404(Wiki, slug=slug)
+
+    if request.user.username != wiki.username:
+        raise Http404
 
     filepath = "/" + page_name + ".md"
     url = "%s?p=%s&from=wikis_wiki_page_edit&wiki_slug=%s" % (

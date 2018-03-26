@@ -13,10 +13,9 @@ from django.utils.encoding import smart_str
 import seaserv
 from seaserv import seafile_api
 from pysearpc import SearpcError
-from seahub.utils import EMPTY_SHA1
 from seahub.utils.slugify import slugify
-from seahub.utils import render_error, render_permission_error, string2list, \
-    gen_file_get_url, get_file_type_and_ext, gen_inner_file_get_url, get_service_url
+from seahub.utils import gen_file_get_url, get_file_type_and_ext, \
+    gen_inner_file_get_url, get_site_scheme_and_netloc
 from seahub.utils.file_types import IMAGE
 from seahub.utils.timeutils import timestamp_to_isoformat_timestr
 from models import WikiPageMissing, WikiDoesNotExist, GroupWiki, PersonalWiki
@@ -24,7 +23,6 @@ from models import WikiPageMissing, WikiDoesNotExist, GroupWiki, PersonalWiki
 logger = logging.getLogger(__name__)
 
 __all__ = ["get_wiki_dirent", "clean_page_name", "page_name_to_file_name"]
-
 
 
 SLUG_OK = "!@#$%^&()_+-,.;'"
@@ -205,12 +203,13 @@ def get_wiki_page_object(wiki_object, page_name):
 
     file_url = get_inner_file_url(repo, dirent.obj_id, dirent.obj_name)
 
-    edit_url = get_service_url().strip() + "%s?p=%s" % (
-          reverse('file_edit', args=[repo_id]),
-          urlquote(filepath.encode('utf-8')))
+    edit_url = get_site_scheme_and_netloc().rstrip('/') + "%s?p=%s" % (
+        reverse('file_edit', args=[repo_id]),
+        urlquote(filepath.encode('utf-8')))
 
     slug = wiki_object.slug
-    page_url = get_service_url().strip() + reverse('wiki:slug', args=[slug, page_name])
+    page_url = get_site_scheme_and_netloc().rstrip('/') + reverse('wiki:slug',
+                                                                  args=[slug, page_name])
 
     # FIX ME: move to top after wiki code refactor
     from seahub.base.templatetags.seahub_tags import email2nickname, \

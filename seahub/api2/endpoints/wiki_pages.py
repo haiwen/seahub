@@ -77,7 +77,7 @@ class WikiPagesView(APIView):
         # perm check
         username = request.user.username
         if wiki.username != username:
-            error_msg = 'Permission denied.'
+            error_msg = _('Permission denied.')
             return api_error(status.HTTP_403_FORBIDDEN, error_msg)
 
         page_name = request.POST.get('name', '')
@@ -95,19 +95,20 @@ class WikiPagesView(APIView):
                 error_msg = "Wiki library not found."
                 return api_error(status.HTTP_404_NOT_FOUND, error_msg)
         except SearpcError:
-            error_msg = "Internal Server Error"
+            error_msg = _("Internal Server Error")
             return api_error(status.HTTP_500_INTERNAL_SERVER_ERROR, error_msg)
 
         # check whether file exists
         if get_file_id_by_path(repo.id, filepath):
-            error_msg = 'Page "%s" already exists.' % filename
+            error_msg = _('Page "%s" already exists.') % filename
             return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
 
         try:
             seafile_api.post_empty_file(repo.id, '/',
                                         filename, request.user.username)
-        except SearpcError, e:
-            error_msg = 'Internal Server Error'
+        except SearpcError as e:
+            logger.error(e)
+            error_msg = _('Internal Server Error')
             return api_error(status.HTTP_500_INTERNAL_SERVER_ERROR, error_msg)
 
         wiki_page_object = get_wiki_page_object(wiki, page_name)
@@ -142,13 +143,13 @@ class WikiPageView(APIView):
                 error_msg = "Wiki library not found."
                 return api_error(status.HTTP_404_NOT_FOUND, error_msg)
         except SearpcError:
-            error_msg = "Internal Server Error."
+            error_msg = _("Internal Server Error")
             return api_error(status.HTTP_500_INTERNAL_SERVER_ERROR, error_msg)
 
         try:
             wiki_dirent = get_wiki_dirent(repo.id, page_name)
         except WikiPageMissing:
-            error_msg = "Page %s not found." % page_name
+            error_msg = _("Page %s not found.") % page_name
             return api_error(status.HTTP_404_NOT_FOUND, error_msg)
 
         url = get_inner_file_url(repo, wiki_dirent.obj_id, wiki_dirent.obj_name)
@@ -160,7 +161,7 @@ class WikiPageView(APIView):
         return Response({
             "meta": wiki_page_object,
             "content": content
-            })
+        })
 
     def delete(self, request, slug, page_name):
         """Delete a page in a wiki
@@ -173,7 +174,7 @@ class WikiPageView(APIView):
 
         username = request.user.username
         if wiki.username != username:
-            error_msg = 'Permission denied.'
+            error_msg = _('Permission denied.')
             return api_error(status.HTTP_403_FORBIDDEN, error_msg)
 
         try:
@@ -182,7 +183,7 @@ class WikiPageView(APIView):
                 error_msg = "Wiki library not found."
                 return api_error(status.HTTP_404_NOT_FOUND, error_msg)
         except SearpcError:
-            error_msg = "Internal Server Error."
+            error_msg = _("Internal Server Error")
             return api_error(status.HTTP_500_INTERNAL_SERVER_ERROR, error_msg)
 
         file_name = page_name + ".md"
@@ -192,7 +193,7 @@ class WikiPageView(APIView):
                                  file_name, request.user.username)
         except SearpcError as e:
             logger.error(e)
-            error_msg = 'Internal Server Error'
+            error_msg = _('Internal Server Error')
             return api_error(status.HTTP_500_INTERNAL_SERVER_ERROR, error_msg)
 
         return Response()
