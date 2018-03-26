@@ -204,7 +204,7 @@
                     {% if repo.encrypted %}
                         <td>{{ repo.name }}</td>
                     {% elif enable_sys_admin_view_repo %}
-                        <td><a href="{% url 'sys_admin_repo' repo.id %}">{{ repo.name }}</a></td>
+                        <td><a href="{{ SITE_ROOT }}sysadmin/#libs/{{ repo.id }}/">{{ repo.name }}</a></td>
                     {% else %}
                         <td>{{ repo.name }}</td>
                     {% endif %}
@@ -249,7 +249,7 @@
                 <td><img src="{{MEDIA_URL}}img/lib/48/lib.png" width="24" title="{% trans "Read-Write" %}" alt="{% trans "library icon" %}" /></td>
                 {% endif %}
                 {% if enable_sys_admin_view_repo %}
-                <td><a href="{% url 'sys_admin_repo' repo.id %}">{{ repo.name }}</a></td>
+                <td><a href="{{ SITE_ROOT }}sysadmin/#libs/{{ repo.id }}/">{{ repo.name }}</a></td>
                 {% else %}
                 <td>{{ repo.name }}</td>
                 {% endif %}

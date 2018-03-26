@@ -12,3 +12,10 @@ class RepoRevertHistoryTest(BaseTestCase):
         })
         self.assertEqual(200, resp.status_code)
         assert 'Invalid arguments' in resp.content
+
+    def test_passwd_true(self):
+        resp = self.client.post(reverse('repo_revert_history', args=[self.enc_repo.id]) + '?commit_id=xxx', {})
+
+        self.assertEqual(302, resp.status_code)
+        assert '/#common/lib/%(repo_id)s/%(path)s' % {
+                 'repo_id': self.enc_repo.id, 'path': ''} in resp.url

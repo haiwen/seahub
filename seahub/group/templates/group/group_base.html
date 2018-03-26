@@ -13,7 +13,7 @@
     {% block left_panel %}
         <div class="hd">
             <h3>
-                {% grp_avatar group.props.id 32 %} <a title="{{ group.group_name }}" class="grp-name ellipsis vam" href="{% url 'group_info' group.id %}">{{ group.group_name }}</a>
+                {% grp_avatar group.props.id 32 %} <a title="{{ group.group_name }}" class="grp-name ellipsis vam" href="{{ SITE_ROOT }}#group/{{ group.id }}/%}">{{ group.group_name }}</a>
             </h3>
         </div>
     {% endblock %}

@@ -12,3 +12,10 @@ class RepoHistoryTest(BaseTestCase):
         self.assertEqual(200, resp.status_code)
         self.assertTemplateUsed(resp, 'repo_history.html')
         assert len(resp.context['commits']) == 1
+
+    def test_passwd_true(self):
+        resp = self.client.get(reverse('repo_history', args=[self.enc_repo.id]))
+
+        self.assertEqual(302, resp.status_code)
+        assert '/#common/lib/%(repo_id)s/%(path)s' % {
+                 'repo_id': self.enc_repo.id, 'path': ''} in resp.url

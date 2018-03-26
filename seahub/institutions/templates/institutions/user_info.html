@@ -78,7 +78,7 @@
                     {% if repo.encrypted %}
                         <td>{{ repo.name }}</td>
                     {% elif enable_sys_admin_view_repo %}
-                        <td><a href="{% url 'sys_admin_repo' repo.id %}">{{ repo.name }}</a></td>
+                        <td><a href="{{ SITE_ROOT }}sysadmin/#libs/{{ repo.id }}/">{{ repo.name }}</a></td>
                     {% else %}
                         <td>{{ repo.name }}</td>
                     {% endif %}

@@ -67,6 +67,8 @@ from seahub.utils.file_op import check_file_lock
 from seahub.views import check_folder_permission, \
         get_unencry_rw_repos_by_user
 
+from seahub.constants import HASH_URLS
+
 if HAS_OFFICE_CONVERTER:
     from seahub.utils import (
         query_office_convert_status, add_office_convert_task,
@@ -1381,7 +1383,8 @@ def download_file(request, repo_id, obj_id):
         raise Http404
 
     if repo.encrypted and not seafile_api.is_password_set(repo_id, username):
-        return HttpResponseRedirect(reverse('view_common_lib_dir', args=[repo_id, '']))
+        reverse_url = HASH_URLS["VIEW_COMMON_LIB_DIR"] % {'repo_id': repo_id, 'path': ''}
+        return HttpResponseRedirect(reverse_url)
 
     # only check the permissions at the repo level
     # to prevent file can not be downloaded on the history page

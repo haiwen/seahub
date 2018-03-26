@@ -55,6 +55,7 @@ from seahub.share.utils import is_repo_admin
 from seahub.base.templatetags.seahub_tags import translate_seahub_time, \
     email2nickname, tsstr_sec
 from seahub.constants import PERMISSION_ADMIN
+from seahub.constants import HASH_URLS
 
 # Get an instance of a logger
 logger = logging.getLogger(__name__)
@@ -752,7 +753,7 @@ def mv_dirents(request, src_repo_id, src_path, dst_repo_id, dst_path,
             success.append(obj_name)
 
     if len(success) > 0:
-        url = reverse("view_common_lib_dir", args=[dst_repo_id, dst_path.strip('/')])
+        url = HASH_URLS["VIEW_COMMON_LIB_DIR"] % {'repo_id': dst_repo_id, 'path': dst_path.strip('/')},
 
     result = {'success': success, 'failed': failed, 'url': url}
     return HttpResponse(json.dumps(result), content_type=content_type)
@@ -795,7 +796,7 @@ def cp_dirents(request, src_repo_id, src_path, dst_repo_id, dst_path, obj_file_n
             success.append(obj_name)
 
     if len(success) > 0:
-        url = reverse("view_common_lib_dir", args=[dst_repo_id, dst_path.strip('/')])
+        url = HASH_URLS["VIEW_COMMON_LIB_DIR"] % {'repo_id': dst_repo_id, 'path': dst_path.strip('/')},
 
     result = {'success': success, 'failed': failed, 'url': url}
     return HttpResponse(json.dumps(result), content_type=content_type)

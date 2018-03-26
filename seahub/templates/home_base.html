@@ -23,7 +23,7 @@
                 <a href="#" class="ellipsis" title="{% trans "Shared with groups" %}"><span class="toggle-icon icon-caret-left fright" aria-hidden="true"></span><span class="sf2-icon-group" aria-hidden="true"></span>{% trans "Shared with groups" %}</a>
                 <ul class="grp-list hide">
                     <li>
-                        <a href="{% url 'group_list' %}"><span class="sharp" aria-hidden="true">#</span>{% trans "All Groups" %}</a>
+                        <a href="{{ SITE_ROOT }}#groups/"><span class="sharp" aria-hidden="true">#</span>{% trans "All Groups" %}</a>
                     </li>
                     {% for grp in grps %}
                     <li>
