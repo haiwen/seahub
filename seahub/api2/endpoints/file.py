@@ -18,7 +18,7 @@ from seahub.api2.utils import api_error
 from seahub.signals import rename_dirent_successful
 
 from seahub.utils import check_filename_with_rename, is_pro_version, \
-    gen_file_upload_url, is_valid_dirent_name, normalize_file_path, \
+    gen_inner_file_upload_url, is_valid_dirent_name, normalize_file_path, \
     normalize_dir_path
 from seahub.utils.timeutils import timestamp_to_isoformat_timestr
 from seahub.views import check_folder_permission
@@ -196,8 +196,7 @@ class FileView(APIView):
                     error_msg = 'Internal Server Error'
                     return api_error(status.HTTP_500_INTERNAL_SERVER_ERROR, error_msg)
 
-                update_url = gen_file_upload_url(update_token, 'update-api')
-
+                update_url = gen_inner_file_upload_url('update-api', update_token)
                 # update file
                 new_file_path = posixpath.join(parent_dir, new_file_name)
                 try:

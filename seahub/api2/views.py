@@ -68,7 +68,7 @@ from seahub.utils import gen_file_get_url, gen_token, gen_file_upload_url, \
     gen_file_share_link, gen_dir_share_link, is_org_context, gen_shared_link, \
     get_org_user_events, calculate_repos_last_modify, send_perm_audit_msg, \
     gen_shared_upload_link, convert_cmmt_desc_link, is_valid_dirent_name, \
-    is_org_repo_creation_allowed, is_windows_operating_system, \
+    is_org_repo_creation_allowed, \
     get_no_duplicate_obj_name, normalize_dir_path
 
 from seahub.utils.file_revisions import get_file_revisions_after_renamed

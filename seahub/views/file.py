@@ -474,8 +474,8 @@ def _file_view(request, repo_id, path):
         wopi_dict = get_wopi_dict(username, repo_id, path,
                 action_name, request.LANGUAGE_CODE)
 
-        wopi_dict['doc_title'] = doc_title
         if wopi_dict:
+            wopi_dict['doc_title'] = doc_title
             send_file_access_msg(request, repo, path, 'web')
             return render_to_response('view_wopi_file.html', wopi_dict,
                       context_instance=RequestContext(request))
