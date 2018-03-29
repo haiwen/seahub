@@ -929,7 +929,7 @@ def view_shared_file(request, fileshare):
             'traffic_over_limit': traffic_over_limit,
             'permissions': permissions,
             'convert_tmp_filename': convert_tmp_filename,
-            'dl_enabled': not ENABLE_SHARE_LINK_WATERMARK
+            'enable_share_link_watermark': ENABLE_SHARE_LINK_WATERMARK,
             })
 
 def view_raw_shared_file(request, token, obj_id, file_name):
@@ -1147,7 +1147,7 @@ def view_file_via_shared_dir(request, fileshare):
             'traffic_over_limit': traffic_over_limit,
             'permissions': permissions,
             'convert_tmp_filename': convert_tmp_filename,
-            'dl_enabled': not ENABLE_SHARE_LINK_WATERMARK
+            'enable_share_link_watermark': ENABLE_SHARE_LINK_WATERMARK,
             })
 
 def file_edit_submit(request, repo_id):

@@ -49,6 +49,7 @@ $('#svg-view').show();
 {% endif %}
 
 {% if filetype == 'Document' %}
+    var fileType = 'document';
     {% include 'snippets/document_file_viewer.html' %}
 {% endif %}
 
@@ -57,8 +58,14 @@ $('#svg-view').show();
 {% endif %}
 
 {% if filetype == 'PDF' %}
+{% if enable_share_link_watermark %}
+    var fileType = 'pdf';
+    // add watermark
+    {% include 'snippets/document_file_viewer.html' %}
+{% else %}
     var raw_path = "{{ raw_path|escapejs }}";
-    {% include 'snippets/pdf_file_viewer.html' %}
+    {% include 'snippets/pdfjs_file_viewer.html' %}
+{% endif %}
 {% endif %}
 
 {% if filetype == 'Video' %}
