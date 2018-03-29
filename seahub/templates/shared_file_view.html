@@ -139,13 +139,20 @@ $('#file-save-form').on('submit', function() {
         $('#image-view').attr('src', '{{ SITE_ROOT }}thumbnail/{{ shared_token }}/{{ thumbnail_size_for_original }}/' + encodeURIComponent('{{file_name|escapejs}}'));
         {% endif %}
 
-        {% if not enable_share_link_watermark %}
         $('#image-view').on('error', function() { // fail to load thumbnail
+            {% if enable_share_link_watermark %}
+            $('.image-file-view .loading-icon').hide();
+            $(this).replaceWith('<p class="error">{% trans "Failed to load the image." %}</p>');
+            {% else %}
+            // request raw_path for only once
             if ($(this).attr('src') != '{{ raw_path|escapejs }}') {
                 $(this).attr('src', '{{ raw_path|escapejs }}');
+            } else {
+                $('.image-file-view .loading-icon').hide();
+                $(this).replaceWith('<p class="error">{% trans "Failed to load the image." %}</p>');
             }
-        })
-        {% endif %}
+            {% endif %}
+        });
     {% else %}
         $('#image-view').attr('src', '{{ raw_path|escapejs }}');
     {% endif %}

@@ -1077,22 +1077,14 @@ def view_file_via_shared_dir(request, fileshare):
     if can_preview:
         send_file_access_msg_when_preview(request, repo, real_path, 'share-link')
 
-        watermark = ''
-        convert_tmp_filename = ''
-        if ENABLE_SHARE_LINK_WATERMARK:
-            watermark = email2nickname(shared_by) + '\t' + shared_by 
-            convert_tmp_filename = get_convert_tmp_filename(obj_id, watermark)
-
         """Choose different approach when dealing with different type of file."""
         if is_textual_file(file_type=filetype):
             handle_textual_file(request, filetype, inner_path, ret_dict)
         elif filetype == DOCUMENT:
             handle_document(inner_path, obj_id, fileext, ret_dict)
-            handle_document(inner_path, obj_id, fileext, ret_dict, watermark, convert_tmp_filename)
+            handle_document(inner_path, obj_id, fileext, ret_dict)
         elif filetype == SPREADSHEET:
             handle_spreadsheet(inner_path, obj_id, fileext, ret_dict)
-        elif filetype == PDF:
-            handle_pdf(inner_path, obj_id, fileext, ret_dict, watermark, convert_tmp_filename)
         elif filetype == IMAGE:
             current_commit = get_commits(repo_id, 0, 1)[0]
             real_parent_dir = os.path.dirname(real_path)
@@ -1146,8 +1138,6 @@ def view_file_via_shared_dir(request, fileshare):
             'img_next': img_next,
             'traffic_over_limit': traffic_over_limit,
             'permissions': permissions,
-            'convert_tmp_filename': convert_tmp_filename,
-            'enable_share_link_watermark': ENABLE_SHARE_LINK_WATERMARK,
             })
 
 def file_edit_submit(request, repo_id):
