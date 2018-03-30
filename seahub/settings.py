@@ -327,6 +327,9 @@ USER_STRONG_PASSWORD_REQUIRED = False
 # Force user to change password when admin add/reset a user.
 FORCE_PASSWORD_CHANGE = True
 
+# Enable a user to change password in 'settings' page.
+ENABLE_CHANGE_PASSWORD = True
+
 # Enable or disable repo history setting
 ENABLE_REPO_HISTORY_SETTING = True
 
