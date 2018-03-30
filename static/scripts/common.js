@@ -80,6 +80,7 @@ define([
                 case 'download_dir_zip_url': return fileServerRoot + 'zip/' + options.zip_token;
                 case 'zip_task': return siteRoot + 'api/v2.1/repos/' + options.repo_id + '/zip-task/';
                 case 'query_zip_progress': return siteRoot + 'api/v2.1/query-zip-progress/';
+                case 'cancel_zip_task': return siteRoot + 'api/v2.1/cancel-zip-task/';
                 case 'copy_move_task': return siteRoot + 'api/v2.1/copy-move-task/';
                 case 'query_copy_move_progress': return siteRoot + 'api/v2.1/query-copy-move-progress/';
                 case 'rename_dir': return siteRoot + 'api/v2.1/repos/' + options.repo_id + '/dir/';
@@ -1057,6 +1058,22 @@ define([
                 });
             };
 
+            var cancelZipTask = function() {
+                $.ajax({
+                    url: _this.getUrl({name: 'cancel_zip_task'}),
+                    type: 'POST',
+                    dataType: 'json',
+                    data: {'token': zip_token},
+                    beforeSend: _this.prepareCSRFToken,
+                    success: function() {
+                        // do nothing
+                    },
+                    error: function(xhr) {
+                        // do nothing
+                    }
+                });
+            };
+
             $.ajax({
                 url: _this.getUrl({
                     name: 'zip_task',
@@ -1070,7 +1087,13 @@ define([
                 dataType: 'json',
                 success: function(data) {
                     zip_token = data['zip_token'];
-                    $tip.html(packagingTip).modal();
+                    $tip.html(packagingTip).modal({
+                        onClose: function() {
+                            clearInterval(interval); // stop querying the progress
+                            cancelZipTask();
+                            $.modal.close();
+                        }
+                    });
                     $('#simplemodal-container').css({'width':'auto'});
                     queryZipProgress();
                     interval = setInterval(queryZipProgress, 1000);
