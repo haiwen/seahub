@@ -11,7 +11,7 @@ from django.views.decorators.csrf import csrf_exempt
 from seaserv import seafile_api
 
 from .settings import VERIFY_ONLYOFFICE_CERTIFICATE
-from seahub.utils import gen_file_upload_url
+from seahub.utils import gen_inner_file_upload_url
 
 # Get an instance of a logger
 logger = logging.getLogger(__name__)
@@ -59,7 +59,7 @@ def onlyoffice_editor_callback(request):
             if not update_token:
                 return HttpResponse('{"error": 0}')
 
-            update_url = gen_file_upload_url(update_token, 'update-api')
+            update_url = gen_inner_file_upload_url(update_token, 'update-api')
 
             files = {
                 'file': file_content,
