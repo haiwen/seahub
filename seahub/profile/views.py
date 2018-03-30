@@ -85,6 +85,7 @@ def edit_profile(request):
             'is_pro': is_pro_version(),
             'is_ldap_user': is_ldap_user(request.user),
             'two_factor_auth_enabled': has_two_factor_auth(),
+            'ENABLE_CHANGE_PASSWORD': settings.ENABLE_CHANGE_PASSWORD,
     }
 
     if has_two_factor_auth():

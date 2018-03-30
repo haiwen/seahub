@@ -13,7 +13,7 @@
     <ul class="side-textnav-tabs">
         <li class="tab"><a href="#user-basic-info">{% trans "Profile" %}</a></li>
 
-        {% if not is_ldap_user %}
+        {% if not is_ldap_user and ENABLE_CHANGE_PASSWORD %}
         <li class="tab"><a href="#update-user-passwd">{% trans "Password" %}</a></li>
         {% endif %}
 
@@ -81,7 +81,7 @@
     </form>
 </div>
 
-{% if not is_ldap_user %}
+{% if not is_ldap_user and ENABLE_CHANGE_PASSWORD %}
 <div id="update-user-passwd" class="setting-item">
     <h3>{% trans "Password" %}</h3>
     <a href="{{ SITE_ROOT }}accounts/password/change/">{% trans "Update" %}</a>
