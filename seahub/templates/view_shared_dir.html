@@ -207,7 +207,8 @@ $('.shared-dir-zip, .download-dir').on('click', function (e) {
     var cur_download_dir_path;
     var interval,
         zip_token,
-        queryZipProgress;
+        queryZipProgress,
+        cancelZipTask;
     var packagingTip = "{% trans "Packaging..." %}";
     var $tip = $('<p></p>');
 
@@ -242,13 +243,35 @@ $('.shared-dir-zip, .download-dir').on('click', function (e) {
         });
     };
 
+    cancelZipTask = function() {
+        $.ajax({
+            url: '{% url 'api-v2.1-cancel-zip-task' %}',
+            type: 'POST',
+            dataType: 'json',
+            data: {'token': zip_token},
+            beforeSend: prepareCSRFToken,
+            success: function() {
+                // do nothing
+            },
+            error: function(xhr) {
+                // do nothing
+            }
+        });
+    };
+
     $.ajax({
         url: '{% url 'api-v2.1-share-link-zip-task' %}' + '?share_link_token=' + share_link_token + '&path=' + encodeURIComponent(cur_download_dir_path),
         cache: false,
         dataType: 'json',
         success: function(data) {
             zip_token = data['zip_token'];
-            $tip.html(packagingTip).modal();
+            $tip.html(packagingTip).modal({
+                onClose: function() {
+                    clearInterval(interval); // stop querying the progress
+                    cancelZipTask();
+                    $.modal.close();
+                }
+            });
             $('#simplemodal-container').css({'width':'auto'});
             queryZipProgress();
             interval = setInterval(queryZipProgress, 1000);

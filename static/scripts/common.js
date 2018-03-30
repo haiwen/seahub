@@ -1058,14 +1058,18 @@ define([
                 });
             };
 
-            var cancelZipTask = function(){
+            var cancelZipTask = function() {
                 $.ajax({
-                    url: _this.getUrl({name: 'cancel_zip_task'}) + '?token=' + zip_token,
-                    success: function(date) {
-                        clearInterval(interval);
+                    url: _this.getUrl({name: 'cancel_zip_task'}),
+                    type: 'POST',
+                    dataType: 'json',
+                    data: {'token': zip_token},
+                    beforeSend: _this.prepareCSRFToken,
+                    success: function() {
+                        // do nothing
                     },
                     error: function(xhr) {
-                        _this.ajaxErrorHandler(xhr);
+                        // do nothing
                     }
                 });
             };
@@ -1083,9 +1087,14 @@ define([
                 dataType: 'json',
                 success: function(data) {
                     zip_token = data['zip_token'];
-                    $tip.html(packagingTip).modal();
+                    $tip.html(packagingTip).modal({
+                        onClose: function() {
+                            clearInterval(interval); // stop querying the progress
+                            cancelZipTask();
+                            $.modal.close();
+                        }
+                    });
                     $('#simplemodal-container').css({'width':'auto'});
-                    $('.simplemodal-close').click(function(){ cancelZipTask(); });
                     queryZipProgress();
                     interval = setInterval(queryZipProgress, 1000);
                 },
