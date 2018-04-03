@@ -16,10 +16,11 @@ from seaserv import get_repo, get_file_id_by_path
 from seahub.auth.decorators import login_required_ajax, login_required
 from seahub.views import check_folder_permission
 from seahub.settings import THUMBNAIL_DEFAULT_SIZE, THUMBNAIL_EXTENSION, \
-    THUMBNAIL_ROOT, ENABLE_THUMBNAIL
+    THUMBNAIL_ROOT, ENABLE_THUMBNAIL, ENABLE_SHARE_LINK_WATERMARK
 from seahub.thumbnail.utils import generate_thumbnail, \
     get_thumbnail_src, get_share_link_thumbnail_src
 from seahub.share.models import FileShare, check_share_link_common
+from seahub.thumbnail.utils import get_thumbnail_file_path
 
 # Get an instance of a logger
 logger = logging.getLogger(__name__)
@@ -246,9 +247,15 @@ def share_link_thumbnail_get(request, token, size, path):
         return HttpResponse()
 
     success = True
-    thumbnail_file = os.path.join(THUMBNAIL_ROOT, str(size), obj_id)
+    if ENABLE_SHARE_LINK_WATERMARK:
+        watermark = fileshare.username
+    else:
+        watermark = ''
+    thumbnail_file = get_thumbnail_file_path(THUMBNAIL_ROOT, obj_id, size, \
+            watermark=watermark)
     if not os.path.exists(thumbnail_file):
-        success, status_code = generate_thumbnail(request, repo_id, size, image_path)
+        success, status_code = generate_thumbnail(request, repo_id, size, \
+                image_path, watermark=watermark)
 
     if success:
         try:

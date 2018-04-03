@@ -6,6 +6,7 @@
 {% if not err %}
 <script type="text/javascript" src="{{MEDIA_URL}}js/pdf.js"></script>
 <script type="text/javascript">
+    var fileType = 'document';
     {% include 'snippets/document_file_viewer.html' %}
 </script>
 {% endif %}

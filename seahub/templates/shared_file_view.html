@@ -44,15 +44,18 @@ body {
         </div>
 
         <div class="fright js-file-op">
-            {% if permissions.can_download %}
+            {% if not enable_share_link_watermark and permissions.can_download %}
+
             {% if request.user.is_authenticated and request.user.username != shared_by %}
               {% if save_to_link %}
               <button data="{{save_to_link}}" id="save" class="shared-file-op-btn">{% trans "Save to..."%}</button>
               {% endif %}
             {% endif %}
+
             {% if not traffic_over_limit %}
               <a href="{% if from_shared_dir %}?p={{path|urlencode}}&dl=1{% else %}?dl=1{% endif %}" class="obv-btn shared-file-op-btn">{% trans "Download" %} ({{file_size|filesizeformat}})</a>
             {% endif %}
+
             {% endif %}
         </div>
     </div>
@@ -135,9 +138,21 @@ $('#file-save-form').on('submit', function() {
         {% else %}
         $('#image-view').attr('src', '{{ SITE_ROOT }}thumbnail/{{ shared_token }}/{{ thumbnail_size_for_original }}/' + encodeURIComponent('{{file_name|escapejs}}'));
         {% endif %}
+
         $('#image-view').on('error', function() { // fail to load thumbnail
-            $(this).attr('src', '{{ raw_path|escapejs }}');
-        })
+            {% if enable_share_link_watermark %}
+            $('.image-file-view .loading-icon').hide();
+            $(this).replaceWith('<p class="error">{% trans "Failed to load the image." %}</p>');
+            {% else %}
+            // request raw_path for only once
+            if ($(this).attr('src') != '{{ raw_path|escapejs }}') {
+                $(this).attr('src', '{{ raw_path|escapejs }}');
+            } else {
+                $('.image-file-view .loading-icon').hide();
+                $(this).replaceWith('<p class="error">{% trans "Failed to load the image." %}</p>');
+            }
+            {% endif %}
+        });
     {% else %}
         $('#image-view').attr('src', '{{ raw_path|escapejs }}');
     {% endif %}
