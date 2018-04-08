@@ -154,6 +154,7 @@ urlpatterns = [
 
     ### Misc ###
     url(r'^image-view/(?P<filename>.*)$', image_view, name='image_view'),
+    url(r'^custom-css/$', custom_css_view, name='custom_css'),
     url(r'^i18n/$', i18n, name='i18n'),
     url(r'^convert_cmmt_desc_link/$', convert_cmmt_desc_link, name='convert_cmmt_desc_link'),
     url(r'^modules/toggle/$', toggle_modules, name="toggle_modules"),

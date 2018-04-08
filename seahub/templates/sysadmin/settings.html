@@ -22,10 +22,10 @@
         {% include "snippets/web_settings_form.html" %}
     {% endwith %}
   
-    <h4>Branding</h4>
+    <h4>{% trans "Branding" %}</h4>
 
     {% with type="input" setting_display_name="SITE_TITLE" setting_name="SITE_TITLE" setting_val=config_dict.SITE_TITLE %}
-        {% trans "Site title showing in browser tab" as help_tip %}
+        {% trans "Site title shown in a browser tab" as help_tip %}
         {% include "snippets/web_settings_form.html" %}
     {% endwith %}
 
@@ -44,6 +44,17 @@
 
     {% with type="file" setting_name="login_bg_image" file_path=login_bg_image_path file_width=240 file_height=160 help_tip="login-bg.jpg, 2400px * 1600px" %}
         {% trans "Login Background Image" as setting_display_name %}
+        {% include "snippets/web_settings_form.html" %}
+    {% endwith %}
+
+    {% with type="checkbox" setting_name="ENABLE_BRANDING_CSS" setting_val=config_dict.ENABLE_BRANDING_CSS %}
+        {% trans "ENABLE_BRANDING_CSS" as setting_display_name %}
+        {% trans "Enable user use custom css" as help_tip %}
+        {% include "snippets/web_settings_form.html" %}
+    {% endwith %}
+
+    {% with type="css_textarea" setting_name="CUSTOM_CSS" setting_val=config_dict.CUSTOM_CSS %}
+        {% trans "Custom css content" as setting_display_name %}
         {% include "snippets/web_settings_form.html" %}
     {% endwith %}
 

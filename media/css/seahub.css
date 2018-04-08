@@ -3814,7 +3814,8 @@ img.thumbnail {
 }
 .web-setting-name,
 .web-setting-input,
-.web-setting-ops {
+.web-setting-ops,
+.web-setting-ops-x1 {
     display:inline-block;
 }
 .web-setting-name {
@@ -3836,9 +3837,20 @@ img.thumbnail {
     height:95px;
     margin:0;
 }
+.web-setting-input .textarea-x1 {
+    width:inherit;
+    height:247px;
+}
 .web-setting-ops {
     width:100px;
     vertical-align:top;
+}
+.web-setting-ops-x1 {
+    vertical-align: bottom;
+    height: 50px;
+}
+.web-setting-ops-x1 .submit {
+    margin-left: 30px;
 }
 .web-setting-form .submit,
 .web-setting-input {

@@ -1077,6 +1077,11 @@ def image_view(request, filename):
         response['Content-Encoding'] = content_encoding
     return response
 
+def custom_css_view(request):
+    file_content = config.CUSTOM_CSS
+    response = HttpResponse(content=file_content, content_type='text/css')
+    return response
+
 def underscore_template(request, template):
     """Serve underscore template through Django, mainly for I18n.
 
