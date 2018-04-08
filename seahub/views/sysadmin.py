@@ -48,7 +48,8 @@ from seahub.two_factor.models import default_device
 from seahub.utils import IS_EMAIL_CONFIGURED, string2list, is_valid_username, \
     is_pro_version, send_html_email, get_user_traffic_list, get_server_id, \
     handle_virus_record, get_virus_record_by_id, \
-    get_virus_record, FILE_AUDIT_ENABLED, get_max_upload_file_size
+    get_virus_record, FILE_AUDIT_ENABLED, get_max_upload_file_size, \
+    get_site_name
 from seahub.utils.ip import get_remote_ip
 from seahub.utils.file_size import get_file_size_unit
 from seahub.utils.ldap import get_ldap_info
@@ -70,7 +71,7 @@ from seahub.share.models import FileShare, UploadLinkShare
 from seahub.admin_log.signals import admin_operation
 from seahub.admin_log.models import USER_DELETE, USER_ADD
 import seahub.settings as settings
-from seahub.settings import INIT_PASSWD, SITE_NAME, SITE_ROOT, \
+from seahub.settings import INIT_PASSWD, SITE_ROOT, \
     SEND_EMAIL_ON_ADDING_SYSTEM_MEMBER, SEND_EMAIL_ON_RESETTING_USER_PASSWD, \
     ENABLE_SYS_ADMIN_VIEW_REPO, ENABLE_GUEST_INVITATION, \
     ENABLE_LIMIT_IPADDRESS
@@ -933,7 +934,7 @@ def email_user_on_activation(user):
     c = {
         'username': user.email,
         }
-    send_html_email(_(u'Your account on %s is activated') % SITE_NAME,
+    send_html_email(_(u'Your account on %s is activated') % get_site_name(),
             'sysadmin/user_activation_email.html', c, None, [user.email])
 
 @login_required_ajax
@@ -1016,7 +1017,7 @@ def send_user_reset_email(request, email, password):
         'email': email,
         'password': password,
         }
-    send_html_email(_(u'Password has been reset on %s') % SITE_NAME,
+    send_html_email(_(u'Password has been reset on %s') % get_site_name(),
             'sysadmin/user_reset_email.html', c, None, [email])
 
 @login_required
@@ -1072,7 +1073,7 @@ def send_user_add_mail(request, email, password):
         'email': email,
         'password': password,
         }
-    send_html_email(_(u'You are invited to join %s') % SITE_NAME,
+    send_html_email(_(u'You are invited to join %s') % get_site_name(),
             'sysadmin/user_add_email.html', c, None, [email])
 
 @login_required_ajax
@@ -1992,7 +1993,7 @@ def batch_add_user(request):
 
                 send_html_email_with_dj_template(
                     username, dj_template='sysadmin/user_batch_add_email.html',
-                    subject=_(u'You are invited to join %s') % SITE_NAME,
+                    subject=_(u'You are invited to join %s') % get_site_name(),
                     context={
                         'user': email2nickname(request.user.username),
                         'email': username,
@@ -2076,7 +2077,8 @@ def sys_settings(request):
         'ENABLE_SHARE_TO_ALL_GROUPS', 'ENABLE_TWO_FACTOR_AUTH'
     ]
 
-    STRING_WEB_SETTINGS = ('SERVICE_URL', 'FILE_SERVER_ROOT', 'TEXT_PREVIEW_EXT')
+    STRING_WEB_SETTINGS = ('SERVICE_URL', 'FILE_SERVER_ROOT', 'TEXT_PREVIEW_EXT',
+                           'SITE_NAME', 'SITE_TITLE')
 
     if request.is_ajax() and request.method == "POST":
         content_type = 'application/json; charset=utf-8'
