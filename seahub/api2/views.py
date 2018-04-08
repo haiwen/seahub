@@ -1705,24 +1705,46 @@ class UpdateBlksLinkView(APIView):
         url = gen_file_upload_url(token, 'update-blks-api')
         return Response(url)
 
-def get_dir_recursively(username, repo_id, path, all_dirs):
+def get_dir_recursively(username, repo_id, path, all_dirs, with_files=False):
     path_id = seafile_api.get_dir_id_by_path(repo_id, path)
-    dirs = seafserv_threaded_rpc.list_dir_with_perm(repo_id, path,
+    dirs = seafile_api.list_dir_with_perm(repo_id, path,
             path_id, username, -1, -1)
 
-    for dirent in dirs:
-        if stat.S_ISDIR(dirent.mode):
+    if not with_files:
+        for dirent in dirs:
+            if stat.S_ISDIR(dirent.mode):
+                entry = {}
+                entry["type"] = 'dir'
+                entry["parent_dir"] = path
+                entry["id"] = dirent.obj_id
+                entry["name"] = dirent.obj_name
+                entry["mtime"] = dirent.mtime
+                entry["permission"] = dirent.permission
+                all_dirs.append(entry)
+
+                sub_path = posixpath.join(path, dirent.obj_name)
+                get_dir_recursively(username, repo_id, sub_path, all_dirs,
+                        with_files)
+    else:
+        for dirent in dirs:
             entry = {}
-            entry["type"] = 'dir'
+            if stat.S_ISDIR(dirent.mode):
+                entry["type"] = 'dir'
+            else:
+                entry["type"] = 'file'
+
             entry["parent_dir"] = path
             entry["id"] = dirent.obj_id
             entry["name"] = dirent.obj_name
             entry["mtime"] = dirent.mtime
             entry["permission"] = dirent.permission
+
             all_dirs.append(entry)
 
-            sub_path = posixpath.join(path, dirent.obj_name)
-            get_dir_recursively(username, repo_id, sub_path, all_dirs)
+            if stat.S_ISDIR(dirent.mode):
+                sub_path = posixpath.join(path, dirent.obj_name)
+                get_dir_recursively(username, repo_id, sub_path, all_dirs,
+                        with_files)
 
     return all_dirs
 
@@ -3007,8 +3029,10 @@ class DirView(APIView):
                             "If you want to get recursive dir entries, you should set 'recursive' argument as '1'.")
 
                 if recursive == '1':
+                    with_files = request.GET.get('with_files', '0') == '1'
                     username = request.user.username
-                    dir_list = get_dir_recursively(username, repo_id, path, [])
+                    dir_list = get_dir_recursively(username, repo_id, path, [],
+                            with_files)
                     dir_list.sort(lambda x, y: cmp(x['name'].lower(), y['name'].lower()))
                     response = HttpResponse(json.dumps(dir_list), status=200,
                                             content_type=json_content_type)
