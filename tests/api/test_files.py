@@ -355,7 +355,6 @@ class FilesApiTest(ApiTestBase):
 
     def test_list_recursive_dir(self):
         with self.get_tmp_repo() as repo:
-
             # create test dir
             data = {'operation': 'mkdir'}
             dir_list = ['/1/', '/1/2/', '/1/2/3/', '/4/', '/4/5/', '/6/']
@@ -371,6 +370,22 @@ class FilesApiTest(ApiTestBase):
                 self.assertEqual(dirent['type'], 'dir')
                 full_path = posixpath.join(dirent['parent_dir'], dirent['name']) + '/'
                 self.assertIn(full_path, dir_list)
+
+            # get recursive dir with files info
+            # create test file
+            tmp_file_name = '%s.txt' % randstring()
+            self.create_file(repo, fname=tmp_file_name)
+
+            dirents = self.get(repo.dir_url + '?t=d&recursive=1&with_files=1').json()
+            self.assertHasLen(dirents, len(dir_list) + 1)
+            for dirent in dirents:
+                self.assertIsNotNone(dirent['id'])
+                if dirent['type'] == 'dir':
+                    full_dir_path = posixpath.join(dirent['parent_dir'], dirent['name']) + '/'
+                    self.assertIn(full_dir_path, dir_list)
+                else:
+                    full_file_path = posixpath.join(dirent['parent_dir'], dirent['name'])
+                    self.assertEqual('/' + tmp_file_name, full_file_path)
 
     def test_remove_dir(self):
         with self.get_tmp_repo() as repo:
