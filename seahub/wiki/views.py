@@ -67,7 +67,7 @@ def slug(request, slug, page_name="home"):
         "repo_id": wiki.repo_id,
         "search_repo_id": wiki.repo_id,
         "search_wiki": True,
-    }, context_instance=RequestContext(request))
+    })
 
 
 @login_required
