@@ -12,9 +12,10 @@ from seahub.api2.authentication import TokenAuthentication
 from seahub.api2.throttling import UserRateThrottle
 from seahub.api2.utils import api_error
 from seahub.utils import IS_EMAIL_CONFIGURED, is_valid_username, \
-    is_valid_email, string2list, gen_shared_upload_link, send_html_email
+    is_valid_email, string2list, gen_shared_upload_link, send_html_email, \
+    get_site_name
 from seahub.share.models import UploadLinkShare
-from seahub.settings import REPLACE_FROM_EMAIL, ADD_REPLY_TO_HEADER, SITE_NAME
+from seahub.settings import REPLACE_FROM_EMAIL, ADD_REPLY_TO_HEADER
 from seahub.profile.models import Profile
 
 logger = logging.getLogger(__name__)
@@ -91,7 +92,7 @@ class SendUploadLinkView(APIView):
                 reply_to = None
 
             c['shared_upload_link'] = gen_shared_upload_link(token)
-            title = _(u'An upload link is shared to you on %s') % SITE_NAME
+            title = _(u'An upload link is shared to you on %s') % get_site_name()
             template = 'shared_upload_link_email.html'
 
             # send email

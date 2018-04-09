@@ -29,7 +29,7 @@ from seahub.views import is_registered_user, check_folder_permission
 from seahub.utils import string2list, gen_shared_link, \
     gen_shared_upload_link, IS_EMAIL_CONFIGURED, check_filename_with_rename, \
     is_valid_username, is_valid_email, send_html_email, is_org_context, \
-    gen_token, normalize_cache_key
+    gen_token, normalize_cache_key, get_site_name
 from seahub.utils.mail import send_html_email_with_dj_template, MAIL_PRIORITY
 from seahub.settings import SITE_ROOT, REPLACE_FROM_EMAIL, \
         ADD_REPLY_TO_HEADER, SHARE_LINK_EMAIL_LANGUAGE, \
@@ -134,8 +134,6 @@ def send_shared_link(request):
         data = json.dumps({'error':_(u'Sending shared link failed. Email service is not properly configured, please contact administrator.')})
         return HttpResponse(data, status=500, content_type=content_type)
 
-    from seahub.settings import SITE_NAME
-
     form = FileLinkShareForm(request.POST)
     if form.is_valid():
         email = form.cleaned_data['email']
@@ -183,14 +181,14 @@ def send_shared_link(request):
             try:
                 if file_shared_type == 'f':
                     c['file_shared_type'] = _(u"file")
-                    send_html_email(_(u'A file is shared to you on %s') % SITE_NAME,
+                    send_html_email(_(u'A file is shared to you on %s') % get_site_name(),
                                     'shared_link_email.html',
                                     c, from_email, [to_email],
                                     reply_to=reply_to
                                     )
                 else:
                     c['file_shared_type'] = _(u"directory")
-                    send_html_email(_(u'A directory is shared to you on %s') % SITE_NAME,
+                    send_html_email(_(u'A directory is shared to you on %s') % get_site_name(),
                                     'shared_link_email.html',
                                     c, from_email, [to_email],
                                     reply_to=reply_to)
@@ -262,8 +260,6 @@ def send_shared_upload_link(request):
         data = json.dumps({'error':_(u'Sending shared upload link failed. Email service is not properly configured, please contact administrator.')})
         return HttpResponse(data, status=500, content_type=content_type)
 
-    from seahub.settings import SITE_NAME
-
     form = UploadLinkShareForm(request.POST)
     if form.is_valid():
         email = form.cleaned_data['email']
@@ -302,7 +298,7 @@ def send_shared_upload_link(request):
                 reply_to = None
 
             try:
-                send_html_email(_(u'An upload link is shared to you on %s') % SITE_NAME,
+                send_html_email(_(u'An upload link is shared to you on %s') % get_site_name(),
                                 'shared_upload_link_email.html',
                                 c, from_email, [to_email],
                                 reply_to=reply_to)

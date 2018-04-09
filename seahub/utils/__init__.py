@@ -816,7 +816,7 @@ def get_site_scheme_and_netloc():
 def get_site_name():
     """Return site name from settings.
     """
-    return SITE_NAME
+    return config.SITE_NAME
 
 def send_html_email(subject, con_template, con_context, from_email, to_email,
                     reply_to=None):
@@ -831,7 +831,7 @@ def send_html_email(subject, con_template, con_context, from_email, to_email,
 
     base_context = {
         'url_base': get_site_scheme_and_netloc(),
-        'site_name': SITE_NAME,
+        'site_name': get_site_name(),
         'media_url': MEDIA_URL,
         'logo_path': logo_path,
     }

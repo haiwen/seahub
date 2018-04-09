@@ -32,8 +32,9 @@ from seahub.wiki.models import WikiDoesNotExist, WikiPageMissing, GroupWiki
 from seahub.wiki.utils import (clean_page_name, page_name_to_file_name,
                                get_wiki_pages, get_group_wiki_repo,
                                get_group_wiki_page)
-from seahub.settings import SITE_ROOT, SITE_NAME
-from seahub.utils import render_error, send_html_email, is_org_context
+from seahub.settings import SITE_ROOT
+from seahub.utils import render_error, send_html_email, is_org_context, \
+    get_site_name
 from seahub.views import is_registered_user, check_folder_permission
 from seahub.views.modules import get_enabled_mods_by_group, \
     get_available_mods_by_group
@@ -188,7 +189,7 @@ def send_group_member_add_mail(request, group, from_user, to_user):
         'group': group,
         }
 
-    subject = _(u'You are invited to join a group on %s') % SITE_NAME
+    subject = _(u'You are invited to join a group on %s') % get_site_name()
     send_html_email(subject, 'group/add_member_email.html', c, None, [to_user])
 
 @login_required_ajax

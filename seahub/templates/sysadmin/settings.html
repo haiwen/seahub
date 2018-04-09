@@ -21,9 +21,18 @@
         {% trans "The internal URL for downloading/uploading files. Users will not be able to download/upload files if this is not set correctly. If you config Seafile behind Nginx/Apache, it should be SERVICE_URL/seafhttp, like https://seafile.example.com/seafhttp ." as help_tip %}
         {% include "snippets/web_settings_form.html" %}
     {% endwith %}
+  
+    <h4>Branding</h4>
 
+    {% with type="input" setting_display_name="SITE_TITLE" setting_name="SITE_TITLE" setting_val=config_dict.SITE_TITLE %}
+        {% trans "Site title showing in browser tab" as help_tip %}
+        {% include "snippets/web_settings_form.html" %}
+    {% endwith %}
 
-    <h4>Logo</h4>
+    {% with type="input" setting_display_name="SITE_NAME" setting_name="SITE_NAME" setting_val=config_dict.SITE_NAME %}
+        {% trans "Site name used in email sending" as help_tip %}
+        {% include "snippets/web_settings_form.html" %}
+    {% endwith %}
 
     {% with type="file" setting_display_name="Logo" setting_name="logo" file_path=logo_path file_width=256 file_height=64 help_tip="logo.png, 256px * 64px" %}
         {% include "snippets/web_settings_form.html" %}

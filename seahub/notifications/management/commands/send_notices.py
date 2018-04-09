@@ -23,11 +23,12 @@ from seahub.base.templatetags.seahub_tags import email2nickname
 from seahub.invitations.models import Invitation
 from seahub.profile.models import Profile
 from seahub.constants import HASH_URLS
+from seahub.utils import get_site_name
 
 # Get an instance of a logger
 logger = logging.getLogger(__name__)
 
-subject = _('New notice on %s') % settings.SITE_NAME
+subject = _('New notice on %s') % get_site_name()
 
 class Command(BaseCommand):
     help = 'Send Email notifications to user if he/she has an unread notices every period of seconds .'
@@ -291,7 +292,7 @@ class Command(BaseCommand):
                 }
 
             try:
-                send_html_email(_('New notice on %s') % settings.SITE_NAME,
+                send_html_email(_('New notice on %s') % get_site_name(),
                                 'notifications/notice_email.html', c,
                                 None, [to_user])
 
