@@ -44,16 +44,18 @@ else:
 
         LIBRARY_TEMPLATES = getattr(settings, 'LIBRARY_TEMPLATES', {})
         library_template = kwargs['library_template']
-        if isinstance(library_template, unicode):
-            library_template = library_template.encode('utf-8')
 
-        try:
-            dir_path_list = LIBRARY_TEMPLATES[library_template]
-            for dir_path in dir_path_list:
-                seafile_api.mkdir_with_parents(repo_id, '/',
-                        dir_path.strip('/'), creator)
-        except Exception as e:
-            logger.error(e)
+        if LIBRARY_TEMPLATES and library_template:
+            if isinstance(library_template, unicode):
+                library_template = library_template.encode('utf-8')
+
+            try:
+                dir_path_list = LIBRARY_TEMPLATES[library_template]
+                for dir_path in dir_path_list:
+                    seafile_api.mkdir_with_parents(repo_id, '/',
+                            dir_path.strip('/'), creator)
+            except Exception as e:
+                logger.error(e)
 
     def repo_deleted_cb(sender, **kwargs):
         """When a repo is deleted, an event would be added to every user in all

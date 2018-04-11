@@ -67,8 +67,8 @@ from seahub.utils import gen_file_get_url, gen_token, gen_file_upload_url, \
     gen_file_share_link, gen_dir_share_link, is_org_context, gen_shared_link, \
     get_org_user_events, calculate_repos_last_modify, send_perm_audit_msg, \
     gen_shared_upload_link, convert_cmmt_desc_link, is_valid_dirent_name, \
-    is_org_repo_creation_allowed, is_windows_operating_system, \
-    get_no_duplicate_obj_name
+    is_org_repo_creation_allowed, \
+    get_no_duplicate_obj_name, normalize_dir_path
 
 from seahub.utils.file_revisions import get_file_revisions_after_renamed
 from seahub.utils.devices import do_unlink_device
@@ -91,7 +91,7 @@ if HAS_OFFICE_CONVERTER:
 import seahub.settings as settings
 from seahub.settings import THUMBNAIL_EXTENSION, THUMBNAIL_ROOT, \
     FILE_LOCK_EXPIRATION_DAYS, ENABLE_STORAGE_CLASSES, \
-    ENABLE_THUMBNAIL, ENABLE_FOLDER_PERM
+    ENABLE_THUMBNAIL, ENABLE_FOLDER_PERM, STORAGE_CLASS_MAPPING_POLICY
 try:
     from seahub.settings import CLOUD_MODE
 except ImportError:
@@ -361,10 +361,10 @@ class Search(APIView):
 
         try:
             current_page = int(request.GET.get('page', '1'))
-            per_page = int(request.GET.get('per_page', '25'))
+            per_page = int(request.GET.get('per_page', '10'))
         except ValueError:
             current_page = 1
-            per_page = 25
+            per_page = 10
 
         start = (current_page - 1) * per_page
         size = per_page
@@ -380,8 +380,16 @@ class Search(APIView):
             return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
 
         search_path = request.GET.get('search_path', None)
-        if search_path is not None and search_path[0] != '/':
-            search_path = "/{0}".format(search_path)
+        if search_path:
+            search_path = normalize_dir_path(search_path)
+            if not is_valid_repo_id_format(search_repo):
+                error_msg = 'search_repo invalid.'
+                return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
+
+            dir_id = seafile_api.get_dir_id_by_path(search_repo, search_path)
+            if not dir_id:
+                error_msg = 'Folder %s not found.' % search_path
+                return api_error(status.HTTP_404_NOT_FOUND, error_msg)
 
         search_ftypes = request.GET.get('search_ftypes', 'all') # val: 'all' or 'custom'
         search_ftypes = search_ftypes.lower()
@@ -818,18 +826,21 @@ class Repos(APIView):
         else:
             if is_pro_version() and ENABLE_STORAGE_CLASSES:
 
-                storages = get_library_storages(request)
-                storage_id = request.data.get("storage_id", None)
-                if not storage_id:
-                    storage_id = storages[0]['storage_id']
+                if STORAGE_CLASS_MAPPING_POLICY in ('USER_SELECT',
+                        'ROLE_BASED'):
 
-                if storage_id not in [s['storage_id'] for s in storages]:
-                    error_msg = 'storage_id invalid.'
-                    return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
+                    storages = get_library_storages(request)
+                    storage_id = request.data.get("storage_id", None)
+                    if storage_id and storage_id not in [s['storage_id'] for s in storages]:
+                        error_msg = 'storage_id invalid.'
+                        return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
 
-                repo_id = seafile_api.create_repo(repo_name,
-                        repo_desc, username, passwd, storage_id)
-
+                    repo_id = seafile_api.create_repo(repo_name,
+                            repo_desc, username, passwd, storage_id)
+                else:
+                    # STORAGE_CLASS_MAPPING_POLICY == 'REPO_ID_MAPPING'
+                    repo_id = seafile_api.create_repo(repo_name,
+                            repo_desc, username, passwd)
             else:
                 repo_id = seafile_api.create_repo(repo_name,
                         repo_desc, username, passwd)
@@ -936,17 +947,21 @@ class PubRepos(APIView):
         else:
             if is_pro_version() and ENABLE_STORAGE_CLASSES:
 
-                storages = get_library_storages(request)
-                storage_id = request.data.get("storage_id", None)
-                if not storage_id:
-                    storage_id = storages[0]['storage_id']
+                if STORAGE_CLASS_MAPPING_POLICY in ('USER_SELECT',
+                        'ROLE_BASED'):
 
-                if storage_id not in [s['storage_id'] for s in storages]:
-                    error_msg = 'storage_id invalid.'
-                    return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
+                    storages = get_library_storages(request)
+                    storage_id = request.data.get("storage_id", None)
+                    if storage_id and storage_id not in [s['storage_id'] for s in storages]:
+                        error_msg = 'storage_id invalid.'
+                        return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
 
-                repo_id = seafile_api.create_repo(repo_name,
-                        repo_desc, username, passwd, storage_id)
+                    repo_id = seafile_api.create_repo(repo_name,
+                            repo_desc, username, passwd, storage_id)
+                else:
+                    # STORAGE_CLASS_MAPPING_POLICY == 'REPO_ID_MAPPING'
+                    repo_id = seafile_api.create_repo(repo_name,
+                            repo_desc, username, passwd)
             else:
                 repo_id = seafile_api.create_repo(repo_name,
                         repo_desc, username, passwd)
@@ -1689,24 +1704,46 @@ class UpdateBlksLinkView(APIView):
         url = gen_file_upload_url(token, 'update-blks-api')
         return Response(url)
 
-def get_dir_recursively(username, repo_id, path, all_dirs):
+def get_dir_recursively(username, repo_id, path, all_dirs, with_files=False):
     path_id = seafile_api.get_dir_id_by_path(repo_id, path)
-    dirs = seafserv_threaded_rpc.list_dir_with_perm(repo_id, path,
+    dirs = seafile_api.list_dir_with_perm(repo_id, path,
             path_id, username, -1, -1)
 
-    for dirent in dirs:
-        if stat.S_ISDIR(dirent.mode):
+    if not with_files:
+        for dirent in dirs:
+            if stat.S_ISDIR(dirent.mode):
+                entry = {}
+                entry["type"] = 'dir'
+                entry["parent_dir"] = path
+                entry["id"] = dirent.obj_id
+                entry["name"] = dirent.obj_name
+                entry["mtime"] = dirent.mtime
+                entry["permission"] = dirent.permission
+                all_dirs.append(entry)
+
+                sub_path = posixpath.join(path, dirent.obj_name)
+                get_dir_recursively(username, repo_id, sub_path, all_dirs,
+                        with_files)
+    else:
+        for dirent in dirs:
             entry = {}
-            entry["type"] = 'dir'
+            if stat.S_ISDIR(dirent.mode):
+                entry["type"] = 'dir'
+            else:
+                entry["type"] = 'file'
+
             entry["parent_dir"] = path
             entry["id"] = dirent.obj_id
             entry["name"] = dirent.obj_name
             entry["mtime"] = dirent.mtime
             entry["permission"] = dirent.permission
+
             all_dirs.append(entry)
 
-            sub_path = posixpath.join(path, dirent.obj_name)
-            get_dir_recursively(username, repo_id, sub_path, all_dirs)
+            if stat.S_ISDIR(dirent.mode):
+                sub_path = posixpath.join(path, dirent.obj_name)
+                get_dir_recursively(username, repo_id, sub_path, all_dirs,
+                        with_files)
 
     return all_dirs
 
@@ -2991,8 +3028,10 @@ class DirView(APIView):
                             "If you want to get recursive dir entries, you should set 'recursive' argument as '1'.")
 
                 if recursive == '1':
+                    with_files = request.GET.get('with_files', '0') == '1'
                     username = request.user.username
-                    dir_list = get_dir_recursively(username, repo_id, path, [])
+                    dir_list = get_dir_recursively(username, repo_id, path, [],
+                            with_files)
                     dir_list.sort(lambda x, y: cmp(x['name'].lower(), y['name'].lower()))
                     response = HttpResponse(json.dumps(dir_list), status=200,
                                             content_type=json_content_type)
@@ -3221,8 +3260,7 @@ class DirSubRepoView(APIView):
             return api_error(status.HTTP_404_NOT_FOUND, error_msg)
 
         # permission check
-        if not check_folder_permission(request, repo_id, path) or \
-                not request.user.permissions.can_add_repo():
+        if not check_folder_permission(request, repo_id, path):
             error_msg = 'Permission denied.'
             return api_error(status.HTTP_403_FORBIDDEN, error_msg)
 
@@ -4156,17 +4194,21 @@ class GroupRepos(APIView):
         else:
             if is_pro_version() and ENABLE_STORAGE_CLASSES:
 
-                storages = get_library_storages(request)
-                storage_id = request.data.get("storage_id", None)
-                if not storage_id:
-                    storage_id = storages[0]['storage_id']
+                if STORAGE_CLASS_MAPPING_POLICY in ('USER_SELECT',
+                        'ROLE_BASED'):
 
-                if storage_id not in [s['storage_id'] for s in storages]:
-                    error_msg = 'storage_id invalid.'
-                    return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
+                    storages = get_library_storages(request)
+                    storage_id = request.data.get("storage_id", None)
+                    if storage_id and storage_id not in [s['storage_id'] for s in storages]:
+                        error_msg = 'storage_id invalid.'
+                        return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
 
-                repo_id = seafile_api.create_repo(repo_name,
-                        repo_desc, username, passwd, storage_id)
+                    repo_id = seafile_api.create_repo(repo_name,
+                            repo_desc, username, passwd, storage_id)
+                else:
+                    # STORAGE_CLASS_MAPPING_POLICY == 'REPO_ID_MAPPING'
+                    repo_id = seafile_api.create_repo(repo_name,
+                            repo_desc, username, passwd)
             else:
                 repo_id = seafile_api.create_repo(repo_name,
                         repo_desc, username, passwd)

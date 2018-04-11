@@ -22,7 +22,7 @@ from seahub.share.models import FileShare, UploadLinkShare, \
 from seahub.views import gen_path_link, get_repo_dirents, \
     check_folder_permission
 
-from seahub.utils import gen_file_upload_url, gen_dir_share_link, \
+from seahub.utils import  gen_dir_share_link, \
     gen_shared_upload_link, user_traffic_over_limit, render_error, \
     get_file_type_and_ext
 from seahub.settings import ENABLE_UPLOAD_FOLDER, \
@@ -62,19 +62,6 @@ def get_nav_path(path, repo_name):
 
 def is_no_quota(repo_id):
     return True if seaserv.check_quota(repo_id) < 0 else False
-
-def get_upload_url(request, repo_id):
-    username = request.user.username
-    if check_folder_permission(request, repo_id, '/') == 'rw':
-        token = seafile_api.get_fileserver_access_token(repo_id,
-                'dummy', 'upload', username)
-
-        if not token:
-            return ''
-
-        return gen_file_upload_url(token, 'upload')
-    else:
-        return ''
 
 def get_fileshare(repo_id, username, path):
     if path == '/':    # no shared link for root dir

@@ -51,7 +51,7 @@ from seahub.utils.timeutils import utc_to_local
 from seahub.views.modules import MOD_PERSONAL_WIKI, enable_mod_for_user, \
     disable_mod_for_user
 import seahub.settings as settings
-from seahub.settings import AVATAR_FILE_STORAGE, ENABLE_STORAGE_CLASSES, \
+from seahub.settings import AVATAR_FILE_STORAGE, \
     ENABLE_SUB_LIBRARY, ENABLE_FOLDER_PERM, ENABLE_REPO_SNAPSHOT_LABEL, \
     UNREAD_NOTIFICATIONS_REQUEST_INTERVAL
 from seahub.constants import HASH_URLS
@@ -703,10 +703,6 @@ def libraries(request):
             logger.error(e)
             joined_groups = []
 
-    storages = []
-    if is_pro_version() and ENABLE_STORAGE_CLASSES:
-        storages = get_library_storages(request)
-
     return render(request, 'libraries.html', {
             "allow_public_share": allow_public_share,
             "guide_enabled": guide_enabled,
@@ -727,8 +723,7 @@ def libraries(request):
             'file_audit_enabled': FILE_AUDIT_ENABLED,
             'can_add_pub_repo': can_add_pub_repo,
             'joined_groups': joined_groups,
-            'storages': storages,
-            'enable_storage_classes': ENABLE_STORAGE_CLASSES,
+            'storages': get_library_storages(request),
             'unread_notifications_request_interval': UNREAD_NOTIFICATIONS_REQUEST_INTERVAL,
             'library_templates': LIBRARY_TEMPLATES.keys() if \
                     isinstance(LIBRARY_TEMPLATES, dict) else [],
@@ -1018,7 +1013,36 @@ def convert_cmmt_desc_link(request):
         else:
             continue
 
-    # Empty file/foder rename will reach here.
+    status_list = [d.status for d in diff_result]
+    # Rename empty file/folder
+    if len(status_list) == 2:
+        if 'add' in status_list and 'del' in status_list:
+            for d in diff_result:
+                if d.status != 'add':
+                    continue
+
+                return HttpResponseRedirect(
+                    reverse('view_lib_file', args=[repo_id, '/' + d.name]))
+
+        if 'newdir' in status_list and 'deldir' in status_list:
+            for d in diff_result:
+                if d.status != 'newdir':
+                    continue
+
+                return HttpResponseRedirect(
+                    reverse('view_common_lib_dir', args=[repo_id, d.name]))
+
+    # Rename folder with empty files
+    if len(status_list) > 2:
+        if 'deldir' in status_list and 'add' in status_list:
+            for d in diff_result:
+                if d.status != 'add':
+                    continue
+
+                new_dir = d.name.split('/')[0]
+                return HttpResponseRedirect(
+                    reverse('view_common_lib_dir', args=[repo_id, new_dir]))
+
     raise Http404
 
 @login_required

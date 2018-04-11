@@ -442,6 +442,7 @@ def _file_view(request, repo_id, path):
         logger.error(e)
         is_locked, locked_by_me = False, False
 
+    doc_title = os.path.basename(path)
     # check if use office web app to view/edit file
     if not repo.encrypted and ENABLE_OFFICE_WEB_APP:
         action_name = None
@@ -459,6 +460,7 @@ def _file_view(request, repo_id, path):
                 action_name, request.LANGUAGE_CODE)
 
         if wopi_dict:
+            wopi_dict['doc_title'] = doc_title
             send_file_access_msg(request, repo, path, 'web')
             return render(request, 'view_wopi_file.html', wopi_dict)
 
@@ -471,7 +473,6 @@ def _file_view(request, repo_id, path):
             document_type = 'presentation'
         else:
             document_type = 'text'
-        doc_title = os.path.basename(path)
 
         dl_token = seafile_api.get_fileserver_access_token(repo.id,
                 obj_id, 'download', username, use_onetime=True)

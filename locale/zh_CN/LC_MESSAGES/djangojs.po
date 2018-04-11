@@ -3,6 +3,7 @@
 # This file is distributed under the same license as the PACKAGE package.
 # 
 # Translators:
+# zMingGit <517046497@qq.com>, 2018
 # Alfred <alfredhuang211@qq.com>, 2015
 # Daniel Pan <daniel.pan@seafile.com>, 2016
 # imwhatiam <imwhatiam123@gmail.com>, 2015-2017
@@ -13,9 +14,9 @@ msgid ""
 msgstr ""
 "Project-Id-Version: seahub\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2018-01-12 18:04+0800\n"
-"PO-Revision-Date: 2018-01-18 08:19+0000\n"
-"Last-Translator: llj <lingjun.li1@gmail.com>\n"
+"POT-Creation-Date: 2018-03-17 10:26+0800\n"
+"PO-Revision-Date: 2018-03-17 02:53+0000\n"
+"Last-Translator: zMingGit <517046497@qq.com>\n"
 "Language-Team: Chinese (China) (http://www.transifex.com/haiwen/seahub/language/zh_CN/)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -36,10 +37,10 @@ msgstr "可读写资料库"
 
 #: static/scripts/app/models/dirent.js:113 static/scripts/app/views/dir.js:642
 #: static/scripts/app/views/dir.js:713
-#: static/scripts/app/views/fileupload.js:378
 #: static/scripts/app/views/fileupload.js:392
-#: static/scripts/app/views/fileupload.js:404
-#: static/scripts/app/views/fileupload.js:416 static/scripts/common.js:598
+#: static/scripts/app/views/fileupload.js:406
+#: static/scripts/app/views/fileupload.js:418
+#: static/scripts/app/views/fileupload.js:430 static/scripts/common.js:598
 msgid "Just now"
 msgstr "刚才"
 
@@ -120,6 +121,14 @@ msgstr "只读"
 msgid "Please check the network."
 msgstr "请检查网络是否已连接。"
 
+#: static/scripts/app/views/activity-item.js:25
+msgid "Removed all items from trash."
+msgstr "删除了回收站中的所有条目."
+
+#: static/scripts/app/views/activity-item.js:27
+msgid "Removed items older than {n} days from trash."
+msgstr "删除了回收站中{n}天前的条目."
+
 #: static/scripts/app/views/deleted-repo.js:58
 msgid "Successfully restored library {placeholder}"
 msgstr "成功还原资料库 {placeholder}"
@@ -195,8 +204,8 @@ msgstr "删除的目录"
 #: static/scripts/sysadmin-app/views/device-errors.js:92
 #: static/scripts/sysadmin-app/views/device-trusted-ipaddresses.js:115
 #: static/scripts/sysadmin-app/views/dir.js:195
-#: static/scripts/sysadmin-app/views/folder-share-item.js:89
-#: static/scripts/sysadmin-app/views/folder-share-item.js:138
+#: static/scripts/sysadmin-app/views/folder-share-item.js:90
+#: static/scripts/sysadmin-app/views/folder-share-item.js:139
 #: static/scripts/sysadmin-app/views/group-member.js:71
 #: static/scripts/sysadmin-app/views/group-members.js:157
 #: static/scripts/sysadmin-app/views/group-repos.js:75
@@ -208,8 +217,8 @@ msgstr "删除的目录"
 #: static/scripts/sysadmin-app/views/search-groups.js:76
 #: static/scripts/sysadmin-app/views/search-repos.js:77
 #: static/scripts/sysadmin-app/views/search-trash-repos.js:113
-#: static/scripts/sysadmin-app/views/share.js:190
-#: static/scripts/sysadmin-app/views/share.js:263
+#: static/scripts/sysadmin-app/views/share.js:194
+#: static/scripts/sysadmin-app/views/share.js:268
 #: static/scripts/sysadmin-app/views/system-repo.js:59
 #: static/scripts/sysadmin-app/views/trash-repos.js:142
 msgid "Failed. Please check the network."
@@ -612,6 +621,8 @@ msgid "Empty file upload result"
 msgstr "空文件"
 
 #: static/scripts/app/views/fileupload.js:17
+#: static/scripts/app/views/fileupload.js:225
+#: static/scripts/app/views/fileupload.js:265
 #: static/scripts/app/views/group-discussions.js:122
 #: static/scripts/app/views/group-discussions.js:200
 #: static/scripts/app/views/group-manage-members.js:114
@@ -670,19 +681,11 @@ msgstr "文件上传已取消"
 msgid "File Upload failed"
 msgstr "文件上传失败"
 
-#: static/scripts/app/views/fileupload.js:221
-msgid "Failed to get upload url"
-msgstr "无法获得上传链接"
-
-#: static/scripts/app/views/fileupload.js:254
-msgid "Failed to get update url"
-msgstr "无法获得更新链接"
-
-#: static/scripts/app/views/fileupload.js:265
+#: static/scripts/app/views/fileupload.js:279
 msgid "Replace file {filename}?"
 msgstr "覆盖文件 {filename} ？"
 
-#: static/scripts/app/views/fileupload.js:291
+#: static/scripts/app/views/fileupload.js:305
 msgid "File is locked"
 msgstr "文件已锁定"
 

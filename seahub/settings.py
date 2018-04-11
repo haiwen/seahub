@@ -237,6 +237,9 @@ INSTALLED_APPS = (
 # Enable or disable multiple storage backends.
 ENABLE_STORAGE_CLASSES = False
 
+# `USER_SELECT` or `ROLE_BASED` or `REPO_ID_MAPPING`
+STORAGE_CLASS_MAPPING_POLICY = 'USER_SELECT'
+
 # Enable or disable constance(web settings).
 ENABLE_SETTINGS_VIA_WEB = True
 CONSTANCE_BACKEND = 'constance.backends.database.DatabaseBackend'

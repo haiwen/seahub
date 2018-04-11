@@ -25,12 +25,17 @@
         </select>
         <br/>
         <% } %>
-        <% if (app.pageOptions.is_pro && app.pageOptions.enable_storage_classes && app.pageOptions.storages.length > 1) { %>
+        <% if (app.pageOptions.storages.length > 1) { %>
         <label for="storage">{% trans "Storage backend"%}</label><br/>
         <select name="storage" id="storage" class="select">
             <% for (var i = 0, len = app.pageOptions.storages.length; i < len; i++) { %>
             <option value="<%- app.pageOptions.storages[i].storage_id %>"><%- app.pageOptions.storages[i].storage_name %></option>
             <% } %>
+        </select>
+        <br/>
+        <% } else if (app.pageOptions.storages.length = 1) { %>
+        <select name="storage" id="storage" class="select hide">
+            <option value="<%- app.pageOptions.storages[0].storage_id %>"><%- app.pageOptions.storages[0].storage_name %></option>
         </select>
         <br/>
         <% } %>
@@ -104,7 +109,7 @@
     <td></td>
     <% } %>
     <td><%= size_formatted %></td>
-    <% if (app.pageOptions.is_pro && app.pageOptions.enable_storage_classes && app.pageOptions.storages.length > 0) { %>
+    <% if (app.pageOptions.storages.length > 0) { %>
     <td><%- storage_name %></td>
     <% } %>
     <td><%= mtime_relative %></td>
@@ -1699,7 +1704,7 @@
         <th width="4%"><span class="sr-only">{% trans "Library Type" %}</span><!--icon--></th>
         <th width="42%"><a class="table-sort-op by-name" href="#">{% trans "Name" %} <span class="sort-icon icon-caret-down hide"></span></a></th>
         <th width="14%"><span class="sr-only">{% trans "Actions" %}</span></th>
-    <% if (app.pageOptions.is_pro && app.pageOptions.enable_storage_classes && app.pageOptions.storages.length > 0) { %>
+    <% if (app.pageOptions.storages.length > 0) { %>
         <th width="10%">{% trans "Size" %}</th>
         <th width="20%">{% trans "Storage backend" %}</th>
         <th width="10%"><a class="table-sort-op by-time" href="#">{% trans "Last Update" %} <span class="sort-icon icon-caret-up"></span></a></th>

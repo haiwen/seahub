@@ -4,13 +4,14 @@
 # 
 # Translators:
 # gergely fodor <fodi666@gmail.com>, 2016
+# Kelemen Norbert <nkelemen18@nkelemen.hu>, 2018
 # Szabolcs Gyuris <szimszon@oregpreshaz.eu>, 2015-2017
 msgid ""
 msgstr ""
 "Project-Id-Version: seahub\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2018-01-12 18:04+0800\n"
-"PO-Revision-Date: 2018-01-12 09:55+0000\n"
+"POT-Creation-Date: 2018-03-17 10:26+0800\n"
+"PO-Revision-Date: 2018-03-17 02:38+0000\n"
 "Last-Translator: zheng xie <xiez1989@gmail.com>\n"
 "Language-Team: Hungarian (http://www.transifex.com/haiwen/seahub/language/hu/)\n"
 "MIME-Version: 1.0\n"
@@ -32,10 +33,10 @@ msgstr "Írható-olvasható kötet"
 
 #: static/scripts/app/models/dirent.js:113 static/scripts/app/views/dir.js:642
 #: static/scripts/app/views/dir.js:713
-#: static/scripts/app/views/fileupload.js:378
 #: static/scripts/app/views/fileupload.js:392
-#: static/scripts/app/views/fileupload.js:404
-#: static/scripts/app/views/fileupload.js:416 static/scripts/common.js:598
+#: static/scripts/app/views/fileupload.js:406
+#: static/scripts/app/views/fileupload.js:418
+#: static/scripts/app/views/fileupload.js:430 static/scripts/common.js:598
 msgid "Just now"
 msgstr "Éppen most"
 
@@ -48,7 +49,7 @@ msgstr "Név szükséges"
 #: static/scripts/app/views/dir.js:627 static/scripts/app/views/dir.js:688
 #: static/scripts/app/views/dirent.js:483 static/scripts/app/views/repo.js:181
 msgid "Name should not include '/'."
-msgstr ""
+msgstr "Név nem tartalmazhat \"/\" jelet."
 
 #: static/scripts/app/models/repo.js:41 static/scripts/app/views/share.js:278
 msgid "Please enter password"
@@ -116,9 +117,17 @@ msgstr "Csak olvaható"
 msgid "Please check the network."
 msgstr "Ellenőrizze a hálózatot."
 
+#: static/scripts/app/views/activity-item.js:25
+msgid "Removed all items from trash."
+msgstr ""
+
+#: static/scripts/app/views/activity-item.js:27
+msgid "Removed items older than {n} days from trash."
+msgstr ""
+
 #: static/scripts/app/views/deleted-repo.js:58
 msgid "Successfully restored library {placeholder}"
-msgstr ""
+msgstr "{placeholder} visszaállítva"
 
 #: static/scripts/app/views/details.js:47
 msgid "New files"
@@ -191,8 +200,8 @@ msgstr "Törölt könyvtárak"
 #: static/scripts/sysadmin-app/views/device-errors.js:92
 #: static/scripts/sysadmin-app/views/device-trusted-ipaddresses.js:115
 #: static/scripts/sysadmin-app/views/dir.js:195
-#: static/scripts/sysadmin-app/views/folder-share-item.js:89
-#: static/scripts/sysadmin-app/views/folder-share-item.js:138
+#: static/scripts/sysadmin-app/views/folder-share-item.js:90
+#: static/scripts/sysadmin-app/views/folder-share-item.js:139
 #: static/scripts/sysadmin-app/views/group-member.js:71
 #: static/scripts/sysadmin-app/views/group-members.js:157
 #: static/scripts/sysadmin-app/views/group-repos.js:75
@@ -204,8 +213,8 @@ msgstr "Törölt könyvtárak"
 #: static/scripts/sysadmin-app/views/search-groups.js:76
 #: static/scripts/sysadmin-app/views/search-repos.js:77
 #: static/scripts/sysadmin-app/views/search-trash-repos.js:113
-#: static/scripts/sysadmin-app/views/share.js:190
-#: static/scripts/sysadmin-app/views/share.js:263
+#: static/scripts/sysadmin-app/views/share.js:194
+#: static/scripts/sysadmin-app/views/share.js:268
 #: static/scripts/sysadmin-app/views/system-repo.js:59
 #: static/scripts/sysadmin-app/views/trash-repos.js:142
 msgid "Failed. Please check the network."
@@ -446,23 +455,23 @@ msgstr "Csak a kiterjesztés van, kérem adja meg a nevet."
 
 #: static/scripts/app/views/dir.js:732
 msgid "New File"
-msgstr ""
+msgstr "Új fájl"
 
 #: static/scripts/app/views/dir.js:740
 msgid "New Markdown File"
-msgstr ""
+msgstr "Új Markdown fájl"
 
 #: static/scripts/app/views/dir.js:748
 msgid "New Excel File"
-msgstr ""
+msgstr "Új Excel fájl"
 
 #: static/scripts/app/views/dir.js:756
 msgid "New PowerPoint File"
-msgstr ""
+msgstr "Új PowerPoint fájl"
 
 #: static/scripts/app/views/dir.js:764
 msgid "New Word File"
-msgstr ""
+msgstr "Új Word fájl"
 
 #: static/scripts/app/views/dir.js:991 static/scripts/app/views/dir.js:1134
 msgid "Processing..."
@@ -571,7 +580,7 @@ msgstr "Nincs találat"
 
 #: static/scripts/app/views/dirent-details.js:116
 msgid "Tag should not include ','."
-msgstr ""
+msgstr "A Tag nem tartalmazhaz ',' karaktert."
 
 #: static/scripts/app/views/dirent-grid.js:59
 #: static/scripts/app/views/dirent.js:69
@@ -597,7 +606,7 @@ msgstr "Nem engedélyezett fájltípus"
 
 #: static/scripts/app/views/fileupload.js:13
 msgid "Maximum number of files exceeded"
-msgstr ""
+msgstr "Fájlok maximális száma elérve"
 
 #: static/scripts/app/views/fileupload.js:14
 msgid "Uploaded bytes exceed file size"
@@ -608,6 +617,8 @@ msgid "Empty file upload result"
 msgstr "Üres fájl feltöltés"
 
 #: static/scripts/app/views/fileupload.js:17
+#: static/scripts/app/views/fileupload.js:225
+#: static/scripts/app/views/fileupload.js:265
 #: static/scripts/app/views/group-discussions.js:122
 #: static/scripts/app/views/group-discussions.js:200
 #: static/scripts/app/views/group-manage-members.js:114
@@ -666,19 +677,11 @@ msgstr "Fájl feltöltés megszakítva"
 msgid "File Upload failed"
 msgstr "Fájl feltöltés sikertelen"
 
-#: static/scripts/app/views/fileupload.js:221
-msgid "Failed to get upload url"
-msgstr "A feltöltési linket nem lehet elérni"
-
-#: static/scripts/app/views/fileupload.js:254
-msgid "Failed to get update url"
-msgstr "A frissítési linket nem lehet elérni"
-
-#: static/scripts/app/views/fileupload.js:265
+#: static/scripts/app/views/fileupload.js:279
 msgid "Replace file {filename}?"
 msgstr "Felülírja: {filename}?"
 
-#: static/scripts/app/views/fileupload.js:291
+#: static/scripts/app/views/fileupload.js:305
 msgid "File is locked"
 msgstr "A fájl zárolva van"
 
@@ -755,23 +758,23 @@ msgstr "1 elem sikeresen törölve."
 
 #: static/scripts/app/views/invitations.js:94
 msgid "Successfully invited %(email)."
-msgstr ""
+msgstr "%(email) sikeresen meghívva"
 
 #: static/scripts/app/views/invitations.js:97
 msgid "Successfully invited %(email) and %(num) other people."
-msgstr ""
+msgstr "%(email) és további %(num) ember meghívva."
 
 #: static/scripts/app/views/notifications.js:58
 msgid "You have logged out."
-msgstr ""
+msgstr "Sikeresen kijelentkeztél."
 
 #: static/scripts/app/views/notifications.js:58
 msgid "Log in"
-msgstr ""
+msgstr "Bejelentkezés"
 
 #: static/scripts/app/views/notifications.js:63
 msgid "Refresh"
-msgstr ""
+msgstr "Frissítés"
 
 #: static/scripts/app/views/repo.js:91
 #: static/scripts/sysadmin-app/views/admin-operation-log.js:51
@@ -806,7 +809,7 @@ msgstr "Kötet átadása sikeres."
 
 #: static/scripts/app/views/repo.js:429
 msgid "Successfully added label(s) for library {placeholder}"
-msgstr ""
+msgstr "Címkék hozzáadva a(z) {placeholder} kötethez."
 
 #: static/scripts/app/views/share-admin-folder.js:63
 #: static/scripts/app/views/share-admin-repo.js:69
@@ -860,7 +863,7 @@ msgstr "Sikertelen küldés ide: {placeholder}"
 
 #: static/scripts/app/views/share.js:697
 msgid "Failed to fetch groups:"
-msgstr ""
+msgstr "Csoportok betöltése sikertelen:"
 
 #: static/scripts/app/views/shared-repo.js:46
 #: static/scripts/sysadmin-app/views/dirent.js:49
@@ -901,39 +904,39 @@ msgstr "Csomagolás"
 
 #: static/scripts/sysadmin-app/views/admin-operation-log.js:40
 msgid "Create Library"
-msgstr ""
+msgstr "Kötet létrehozása"
 
 #: static/scripts/sysadmin-app/views/admin-operation-log.js:41
 msgid "Created library {library_name} with {owner} as its owner"
-msgstr ""
+msgstr "{library_name} létrehozva. Tulajdonos: {owner}"
 
 #: static/scripts/sysadmin-app/views/admin-operation-log.js:52
 msgid "Deleted library {library_name}"
-msgstr ""
+msgstr "{library_name} kötet törölve"
 
 #: static/scripts/sysadmin-app/views/admin-operation-log.js:57
 msgid "Transfer Library"
-msgstr ""
+msgstr "Kötet átadása"
 
 #: static/scripts/sysadmin-app/views/admin-operation-log.js:58
 msgid "Transferred library {library_name} from {user_from} to {user_to}"
-msgstr ""
+msgstr "{group_name} kötet új tulajdonosa {user_to}. Régi tulajdonos: {user_from}"
 
 #: static/scripts/sysadmin-app/views/admin-operation-log.js:69
 msgid "Create Group"
-msgstr ""
+msgstr "Csoport létrehozása"
 
 #: static/scripts/sysadmin-app/views/admin-operation-log.js:70
 msgid "Created group {group_name}"
-msgstr ""
+msgstr "Csoport létrehozva: {group_name}"
 
 #: static/scripts/sysadmin-app/views/admin-operation-log.js:74
 msgid "Transfer Group"
-msgstr ""
+msgstr "Csoport átadása"
 
 #: static/scripts/sysadmin-app/views/admin-operation-log.js:75
 msgid "Transferred group {group_name} from {user_from} to {user_to}"
-msgstr ""
+msgstr "{group_name} csoport új tulajdonosa {user_to}. Régi tulajdonos: {user_from}"
 
 #: static/scripts/sysadmin-app/views/admin-operation-log.js:82
 #: static/scripts/sysadmin-app/views/group.js:30
@@ -942,23 +945,23 @@ msgstr "Csoport törlése"
 
 #: static/scripts/sysadmin-app/views/admin-operation-log.js:83
 msgid "Deleted group {group_name}"
-msgstr ""
+msgstr "Csoport törölve: {group_name}"
 
 #: static/scripts/sysadmin-app/views/admin-operation-log.js:88
 msgid "Add User"
-msgstr ""
+msgstr "Felhasználó hozzáadása"
 
 #: static/scripts/sysadmin-app/views/admin-operation-log.js:89
 msgid "Added user {user}"
-msgstr ""
+msgstr "Felhasználó hozzáadva: {user}"
 
 #: static/scripts/sysadmin-app/views/admin-operation-log.js:94
 msgid "Delete User"
-msgstr ""
+msgstr "Felhasználó törlése"
 
 #: static/scripts/sysadmin-app/views/admin-operation-log.js:95
 msgid "Deleted user {user}"
-msgstr ""
+msgstr "Felhasználó törölve: {user}"
 
 #: static/scripts/sysadmin-app/views/device-errors.js:39
 msgid "Successfully clean all errors."
