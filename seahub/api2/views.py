@@ -1433,6 +1433,15 @@ class RepoOwner(APIView):
                 seafile_api.set_group_repo(repo_id, shared_group_id,
                         new_owner, shared_group.perm)
 
+        # reshare repo to links
+        try:
+            UploadLinkShare.objects.filter(username=username, repo_id=repo_id).update(username=new_owner)
+            FileShare.objects.filter(username=username, repo_id=repo_id).update(username=new_owner)
+        except Exception as e:
+            logger.error(e)
+            error_msg = 'Internal Server Error'
+            return api_error(status.HTTP_500_INTERNAL_SERVER_ERROR, error_msg)
+
         # check if current repo is pub-repo
         # if YES, reshare current repo to public
         for pub_repo in pub_repos:
