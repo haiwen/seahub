@@ -3,14 +3,14 @@
 # This file is distributed under the same license as the PACKAGE package.
 # 
 # Translators:
-# K.S. <adrespubliczny+transifex@gmail.com>, 2015-2017
+# K.S. <adrespubliczny+transifex@gmail.com>, 2015-2018
 msgid ""
 msgstr ""
 "Project-Id-Version: seahub\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2018-03-17 10:26+0800\n"
-"PO-Revision-Date: 2018-03-17 02:38+0000\n"
-"Last-Translator: zheng xie <xiez1989@gmail.com>\n"
+"PO-Revision-Date: 2018-03-17 09:22+0000\n"
+"Last-Translator: K.S. <adrespubliczny+transifex@gmail.com>\n"
 "Language-Team: Polish (http://www.transifex.com/haiwen/seahub/language/pl/)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -117,11 +117,11 @@ msgstr "Proszę sprawdzić sieć."
 
 #: static/scripts/app/views/activity-item.js:25
 msgid "Removed all items from trash."
-msgstr ""
+msgstr "Usunięto z kosza wszystkie elementy."
 
 #: static/scripts/app/views/activity-item.js:27
 msgid "Removed items older than {n} days from trash."
-msgstr ""
+msgstr "Usunięto z kosza elementy starsze niż {n} dni."
 
 #: static/scripts/app/views/deleted-repo.js:58
 msgid "Successfully restored library {placeholder}"
@@ -756,11 +756,11 @@ msgstr "Pomyślnie usunięto 1 element."
 
 #: static/scripts/app/views/invitations.js:94
 msgid "Successfully invited %(email)."
-msgstr ""
+msgstr "Pomyślnie zaproszono %(email)."
 
 #: static/scripts/app/views/invitations.js:97
 msgid "Successfully invited %(email) and %(num) other people."
-msgstr ""
+msgstr "Pomyślnie zaproszono %(email) i %(num) innych osób."
 
 #: static/scripts/app/views/notifications.js:58
 msgid "You have logged out."
