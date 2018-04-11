@@ -334,6 +334,9 @@ class User(object):
             UserTermsAndConditions.objects.filter(username=username).delete()
         self.delete_user_options(username)
 
+    def get_username(self):
+        return self.username
+
     def delete_user_options(self, username):
         """Remove user's all options.
         """

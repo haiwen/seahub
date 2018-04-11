@@ -60,21 +60,16 @@ if getattr(settings, 'ENABLE_LOGIN_SIMPLE_CHECK', False):
             auth_views.login_simple_check),
     ]
 
-if getattr(settings, 'ENABLE_SSO', False):
-    urlpatterns += [
-        url(r'^login/$', 'django_cas.views.login'),
-        url(r'^logout/$', 'django_cas.views.logout'),
-    ]
-else:
-    urlpatterns += [
-        url(r'^login/$',
-            auth_views.login,
-            {'template_name': 'registration/login.html',
-             'redirect_if_logged_in': 'libraries'},
-            name='auth_login'),
-        url(r'^logout/$',
-            auth_views.logout,
-            {'template_name': 'registration/logout.html',
-             'next_page': settings.LOGOUT_REDIRECT_URL},
-            name='auth_logout'),
-    ]
+
+urlpatterns += [
+    url(r'^login/$',
+        auth_views.login,
+        {'template_name': 'registration/login.html',
+         'redirect_if_logged_in': 'libraries'},
+        name='auth_login'),
+    url(r'^logout/$',
+        auth_views.logout,
+        {'template_name': 'registration/logout.html',
+         'next_page': settings.LOGOUT_REDIRECT_URL},
+        name='auth_logout'),
+]

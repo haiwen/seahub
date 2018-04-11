@@ -109,9 +109,9 @@ from seahub.api2.endpoints.admin.group_owned_libraries import AdminGroupOwnedLib
 
 urlpatterns = [
     url(r'^accounts/', include('seahub.base.registration_urls')),
-    url(r'^sso/$', sso),
-    url(r'^shib-login/', shib_login, name="shib_login"),
 
+    url(r'^sso/$', sso, name='sso'),
+    url(r'^shib-login/', shib_login, name="shib_login"),
     url(r'^oauth/', include('seahub.oauth.urls')),
 
     url(r'^$', libraries, name='libraries'),
@@ -582,4 +582,14 @@ if getattr(settings, 'ENABLE_ONLYOFFICE', False):
     from seahub.onlyoffice.views import onlyoffice_editor_callback
     urlpatterns += [
         url(r'^onlyoffice/editor-callback/$', onlyoffice_editor_callback, name='onlyoffice_editor_callback'),
+    ]
+
+if getattr(settings, 'ENABLE_CAS', False):
+    from seahub_extra.django_cas_ng.views import login as cas_login
+    from seahub_extra.django_cas_ng.views import logout as cas_logout
+    from seahub_extra.django_cas_ng.views import callback as cas_callback
+    urlpatterns += [
+        url(r'^accounts/cas-login/$', cas_login, name='cas_ng_login'),
+        url(r'^accounts/cas-logout/$', cas_logout, name='cas_ng_logout'),
+        url(r'^accounts/cas-callback/$', cas_callback, name='cas_ng_proxy_callback'),
     ]
