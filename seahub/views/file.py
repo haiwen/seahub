@@ -354,22 +354,7 @@ def send_file_access_msg_when_preview(request, repo, path, access_from):
 
 @login_required
 @repo_passwd_set_required
-def view_repo_file(request, repo_id):
-    """
-    Old 'file view' that put path in parameter
-    """
-    path = request.GET.get('p', '/').rstrip('/')
-    return _file_view(request, repo_id, path)
-
-@login_required
-@repo_passwd_set_required
 def view_lib_file(request, repo_id, path):
-    """
-    New 'file view' that not put path in parameter
-    """
-    return _file_view(request, repo_id, path)
-
-def _file_view(request, repo_id, path):
     """
     Steps to view file:
     1. Get repo id and file path.

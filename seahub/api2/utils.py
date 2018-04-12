@@ -26,7 +26,7 @@ from seahub.group.models import GroupMessage, MessageReply, \
     MessageAttachment, PublicGroup
 from seahub.group.views import is_group_staff
 from seahub.notifications.models import UserNotification
-from seahub.utils import api_convert_desc_link, get_file_type_and_ext, \
+from seahub.utils import get_file_type_and_ext, \
     gen_file_get_url, get_site_scheme_and_netloc
 from seahub.utils.paginator import Paginator
 from seahub.utils.file_types import IMAGE
@@ -119,15 +119,6 @@ def get_msg_group_id(msg_id):
         return None
 
     return msg.group_id
-
-def prepare_events(event_groups):
-    for g in event_groups:
-        for e in g["events"]:
-            if e.etype != "repo-delete":
-                e.link = "api://repos/%s" % e.repo_id
-
-            if e.etype == "repo-update":
-                api_convert_desc_link(e)
 
 def get_group_msgs(groupid, page, username):
 

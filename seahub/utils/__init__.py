@@ -958,45 +958,6 @@ def api_tsstr_sec(value):
     except:
         return datetime.fromtimestamp(value/1000000).strftime("%Y-%m-%d %H:%M:%S")
 
-
-def api_convert_desc_link(e):
-    """Wrap file/folder with ``<a></a>`` in commit description.
-    """
-    commit = e.commit
-    repo_id = commit.repo_id
-    cmmt_id = commit.id
-
-    def link_repl(matchobj):
-        op = matchobj.group(1)
-        file_or_dir = matchobj.group(2)
-        remaining = matchobj.group(3)
-
-        tmp_str = '%s "<span class="file-name">%s</span>"'
-        if remaining:
-            url = reverse('api_repo_history_changes', args=[repo_id])
-            e.link = "%s?commit_id=%s" % (url, cmmt_id)
-            e.dtime = api_tsstr_sec(commit.props.ctime)
-            return (tmp_str + ' %s') % (op, file_or_dir, remaining)
-        else:
-            diff_result = seafile_api.diff_commits(repo_id, '', cmmt_id)
-            if diff_result:
-                for d in diff_result:
-                    if file_or_dir not in d.name:
-                        # skip to next diff_result if file/folder user clicked does not
-                        # match the diff_result
-                        continue
-
-                    if d.status == 'add' or d.status == 'mod':
-                        e.link = "api://repo/%s/files/?p=/%s" % (repo_id, d.name)
-                    elif d.status == 'mov':
-                        e.link = "api://repo/%s/files/?p=/%s" % (repo_id, d.new_name)
-                    elif d.status == 'newdir':
-                        e.link = "api://repo/%s/dir/?p=/%s" % (repo_id, d.name)
-                    else:
-                        continue
-            return tmp_str % (op, file_or_dir)
-    e.desc = re.sub(API_CMMT_DESC_PATT, link_repl, commit.desc)
-
 MORE_PATT = r'and \d+ more (?:files|directories)'
 def more_files_in_commit(commit):
     """Check whether added/deleted/modified more files in commit description.

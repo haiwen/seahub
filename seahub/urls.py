@@ -9,7 +9,7 @@ from seahub.views.sysadmin import *
 from seahub.views.ajax import *
 from seahub.views.sso import *
 
-from seahub.views.file import view_repo_file, view_history_file, view_trash_file,\
+from seahub.views.file import view_history_file, view_trash_file,\
     view_snapshot_file, file_edit, view_shared_file, view_file_via_shared_dir,\
     text_diff, view_raw_file, view_raw_shared_file, \
     download_file, view_lib_file, file_access
@@ -133,7 +133,6 @@ urlpatterns = [
     url(r'^repo/history/view/(?P<repo_id>[-0-9a-f]{36})/$', repo_history_view, name='repo_history_view'),
     url(r'^repo/recycle/(?P<repo_id>[-0-9a-f]{36})/$', repo_recycle_view, name='repo_recycle_view'),
     url(r'^dir/recycle/(?P<repo_id>[-0-9a-f]{36})/$', dir_recycle_view, name='dir_recycle_view'),
-    url(r'^repo/(?P<repo_id>[-0-9a-f]{36})/files/$', view_repo_file, name="repo_view_file"),
     url(r'^repo/(?P<repo_id>[-0-9a-f]{36})/raw/(?P<file_path>.*)$', view_raw_file, name="view_raw_file"),
     url(r'^repo/(?P<repo_id>[-0-9a-f]{36})/history/files/$', view_history_file, name="view_history_file"),
     url(r'^repo/(?P<repo_id>[-0-9a-f]{36})/trash/files/$', view_trash_file, name="view_trash_file"),
