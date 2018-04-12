@@ -19,7 +19,7 @@ from seahub.signals import repo_deleted
 from seahub.views import get_system_default_repo_id
 from seahub.admin_log.signals import admin_operation
 from seahub.admin_log.models import REPO_CREATE, REPO_DELETE, REPO_TRANSFER
-
+from seahub.share.models import FileShare, UploadLinkShare
 from seahub.base.templatetags.seahub_tags import email2nickname, email2contact_email
 
 try:
@@ -338,6 +338,15 @@ class AdminLibrary(APIView):
 
             seafile_api.set_group_repo(repo_id, shared_group_id,
                     new_owner, shared_group.perm)
+
+        # reshare repo to links
+        try:
+            UploadLinkShare.objects.filter(username=repo_owner, repo_id=repo_id).update(username=new_owner)
+            FileShare.objects.filter(username=repo_owner, repo_id=repo_id).update(username=new_owner)
+        except Exception as e:
+            logger.error(e)
+            error_msg = 'Internal Server Error'
+            return api_error(status.HTTP_500_INTERNAL_SERVER_ERROR, error_msg)
 
         # check if current repo is pub-repo
         # if YES, reshare current repo to public

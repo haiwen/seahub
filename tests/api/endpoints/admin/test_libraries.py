@@ -2,6 +2,7 @@ import json
 from django.core.urlresolvers import reverse
 from seahub.test_utils import BaseTestCase
 from tests.common.utils import randstring
+from seahub.share.models import FileShare, UploadLinkShare
 
 class AdminLibrariesTest(BaseTestCase):
 
@@ -123,6 +124,11 @@ class AdminLibraryTest(BaseTestCase):
         self.repo_id= self.repo.repo_id
 
         self.library_url = reverse('api-v2.1-admin-library', args=[self.repo_id])
+        self.fs_share = FileShare.objects.create_dir_link(self.user.username,
+             self.repo_id, self.folder, None, None)
+
+        self.fs_upload = UploadLinkShare.objects.create_upload_link_share(self.user.username,
+             self.repo_id, self.folder, None, None)
 
     def test_can_get(self):
 
@@ -187,3 +193,27 @@ class AdminLibraryTest(BaseTestCase):
         self.login_as(self.user)
         resp = self.client.delete(self.library_url)
         self.assertEqual(403, resp.status_code)
+
+    def test_reshare_to_share_links_after_transfer_repo(self):
+        self.login_as(self.admin)
+
+        assert len(UploadLinkShare.objects.all()) == 1
+
+        data = 'owner=%s' % self.admin_name
+        resp = self.client.put(self.library_url, data, 'application/x-www-form-urlencoded')
+
+        self.assertEqual(200, resp.status_code)
+        json_resp = json.loads(resp.content)
+        assert json_resp['owner'] == self.admin_name
+
+    def test_reshare_to_upload_links_after_transfer_repo(self):
+        self.login_as(self.admin)
+
+        assert len(UploadLinkShare.objects.all()) == 1
+
+        data = 'owner=%s' % self.admin_name
+        resp = self.client.put(self.library_url, data, 'application/x-www-form-urlencoded')
+
+        self.assertEqual(200, resp.status_code)
+        json_resp = json.loads(resp.content)
+        assert json_resp['owner'] == self.admin_name
