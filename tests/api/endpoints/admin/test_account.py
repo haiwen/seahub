@@ -198,10 +198,14 @@ class AccountTest(BaseTestCase):
 
         user1_groups = seaserv.get_personal_groups_by_user(self.user1.username)
         self.assertEqual(len(user1_groups), 2)
-        self.assertEqual(user1_groups[0].id, user1_group.id)
-        self.assertEqual(user1_groups[0].creator_name, self.user1.username)
-        self.assertEqual(user1_groups[1].id, other_group.id)
-        self.assertEqual(user1_groups[1].creator_name, self.user.username)
+
+        real_creator = sorted([self.user1.username, self.user.username])
+        test_creator = sorted([x.creator_name for x in user1_groups])
+        self.assertEqual(real_creator, test_creator)
+
+        real_id = sorted([user1_group.id, other_group.id])
+        test_id = sorted([x.id for x in user1_groups])
+        self.assertEqual(real_id, test_id)
 
         # user2 had no repos
         user2_repos = seafile_api.get_owned_repo_list(self.user2.username)
@@ -222,10 +226,14 @@ class AccountTest(BaseTestCase):
         # the first group, but second group should remain the same
         user1_groups = seaserv.get_personal_groups_by_user(self.user1.username)
         self.assertEqual(len(user1_groups), 2)
-        self.assertEqual(user1_groups[0].id, user1_group.id)
-        self.assertNotEqual(user1_groups[0].creator_name, self.user1.username)
-        self.assertEqual(user1_groups[1].id, other_group.id)
-        self.assertEqual(user1_groups[1].creator_name, self.user.username)
+
+        real_creator = sorted([self.user1.username, self.user.username])
+        test_creator = sorted([x.creator_name for x in user1_groups])
+        self.assertNotEqual(real_creator, test_creator)
+
+        real_id = sorted([user1_group.id, other_group.id])
+        test_id = sorted([x.id for x in user1_groups])
+        self.assertEqual(real_id, test_id)
 
         # user2 should have the repo used to be user1's
         new_user2_repos = seafile_api.get_owned_repo_list(self.user2.username)
@@ -235,10 +243,14 @@ class AccountTest(BaseTestCase):
         # but second group should remain the same
         user2_groups = seaserv.get_personal_groups_by_user(self.user2.username)
         self.assertEqual(len(user2_groups), 2)
-        self.assertEqual(user2_groups[0].id, user1_group.id)
-        self.assertEqual(user2_groups[0].creator_name, self.user2.username)
-        self.assertEqual(user2_groups[1].id, other_group.id)
-        self.assertEqual(user2_groups[1].creator_name, self.user.username)
+
+        real_creator = sorted([self.user2.username, self.user.username])
+        test_creator = sorted([x.creator_name for x in user2_groups])
+        self.assertEqual(real_creator, test_creator)
+
+        real_id = sorted([user1_group.id, other_group.id])
+        test_id = sorted([x.id for x in user2_groups])
+        self.assertEqual(real_id, test_id)
 
     def test_delete(self):
         self.login_as(self.admin)
