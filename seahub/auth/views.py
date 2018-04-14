@@ -57,7 +57,7 @@ def log_user_in(request, user, redirect_to):
 
     if two_factor_auth_enabled(user):
         if is_device_remembered(request.COOKIES.get('S2FA', ''), user):
-            from seahub.two_factor.utils import default_device
+            from seahub.two_factor.models import default_device
             user.otp_device = default_device(user)
         else:
             return handle_two_factor_auth(request, user, redirect_to)
