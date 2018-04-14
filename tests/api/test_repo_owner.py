@@ -5,6 +5,7 @@ from django.core.urlresolvers import reverse
 
 from seahub.test_utils import BaseTestCase
 from seahub.base.accounts import User
+from seahub.share.models import FileShare, UploadLinkShare
 from tests.common.utils import randstring
 
 from seaserv import seafile_api, ccnet_api
@@ -15,6 +16,12 @@ class RepoOwnerTest(BaseTestCase):
         self.user_name = self.user.username
         self.user_repo_id = self.repo.id
         self.group_id = self.group.id
+        self.fs_share = FileShare.objects.create_dir_link(self.user.username,
+             self.user_repo_id, self.folder, None, None)
+
+        self.fs_upload = UploadLinkShare.objects.create_upload_link_share(self.user.username,
+             self.user_repo_id, self.folder, None, None)
+
 
     def tearDown(self):
         self.remove_repo()
@@ -195,3 +202,27 @@ class RepoOwnerTest(BaseTestCase):
 
         resp = self.client.put(url, data, 'application/x-www-form-urlencoded')
         self.assertEqual(404, resp.status_code)
+
+    def test_reshare_to_share_links_after_transfer_repo(self):
+        self.login_as(self.user)
+
+        assert len(UploadLinkShare.objects.all()) == 1
+
+        url = reverse("api2-repo-owner", args=[self.user_repo_id])
+        data = 'owner=%s' % self.admin.email
+        resp = self.client.put(url, data, 'application/x-www-form-urlencoded')
+
+        fs = FileShare.objects.get(repo_id=self.user_repo_id)
+        assert fs.username == self.admin.email
+
+    def test_reshare_to_upload_links_after_transfer_repo(self):
+        self.login_as(self.user)
+
+        assert len(UploadLinkShare.objects.all()) == 1
+
+        url = reverse("api2-repo-owner", args=[self.user_repo_id])
+        data = 'owner=%s' % self.admin.email
+        self.client.put(url, data, 'application/x-www-form-urlencoded')
+
+        fs = UploadLinkShare.objects.get(repo_id=self.user_repo_id)
+        assert fs.username == self.admin.email

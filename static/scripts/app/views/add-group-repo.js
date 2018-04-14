@@ -13,7 +13,6 @@ define([
             return {
                 showSharePerm: true,
                 enable_encrypted_library: app.pageOptions.enable_encrypted_library,
-                storages: app.pageOptions.storages,
                 library_templates: app.pageOptions.library_templates
             };
         },

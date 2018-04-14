@@ -6,6 +6,7 @@
 # Ádám Radovits <adamradovits12@hotmail.com>, 2014
 # gergely fodor <fodi666@gmail.com>, 2016
 # gkiss1988 <mail.gery@gmail.com>, 2013
+# imwhatiam <imwhatiam123@gmail.com>, 2018
 # Kelemen Norbert <nkelemen18@nkelemen.hu>, 2018
 # gkiss1988 <mail.gery@gmail.com>, 2013
 # Mate Ory <orymate@ubuntu.com>, 2013
@@ -17,8 +18,8 @@ msgstr ""
 "Project-Id-Version: seahub\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2018-03-17 10:26+0800\n"
-"PO-Revision-Date: 2018-03-17 02:38+0000\n"
-"Last-Translator: zheng xie <xiez1989@gmail.com>\n"
+"PO-Revision-Date: 2018-04-11 05:26+0000\n"
+"Last-Translator: imwhatiam <imwhatiam123@gmail.com>\n"
 "Language-Team: Hungarian (http://www.transifex.com/haiwen/seahub/language/hu/)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -119,7 +120,7 @@ msgstr "Ez az elem megosztva vele:%s"
 
 #: seahub/api2/endpoints/admin/users_batch.py:76
 msgid "must be an integer that is greater than or equal to 0."
-msgstr ""
+msgstr "Csak 0 vagy nagyobb egész lehet."
 
 #: seahub/api2/endpoints/copy_move_task.py:79 seahub/views/ajax.py:632
 msgid "Invalid destination path"
@@ -2991,7 +2992,7 @@ msgstr "Globális névjegyzék"
 msgid ""
 "List your account in global address book, so that others can find you by "
 "typing your name."
-msgstr ""
+msgstr "Felhasználói fiókja listázása a globális névjegyzékben, így másik megtalálhatják Önt a nevének bírásával."
 
 #: seahub/profile/templates/profile/set_profile.html:105
 msgid "Language Setting"
@@ -3700,7 +3701,7 @@ msgstr "Különbség"
 #: seahub/templates/file_revisions.html:167
 #, python-brace-format
 msgid "(Renamed or moved from {placeholder})"
-msgstr "(Átnevezve vagy mozgatva {from_placeholder}-ról/ről.)"
+msgstr "(Átnevezve vagy mozgatva {placeholder}-ról/ről.)"
 
 #: seahub/templates/file_revisions.html:229
 #, python-brace-format
@@ -4353,7 +4354,7 @@ msgstr "Jelszó ismét"
 
 #: seahub/templates/js/templates.html:51 seahub/templates/js/templates.html:84
 msgid "Label current state"
-msgstr ""
+msgstr "Jelenlegi állapot címke"
 
 #: seahub/templates/js/templates.html:70
 #: seahub/templates/js/templates.html:119
@@ -5052,13 +5053,13 @@ msgstr "Nem tagja egy csoportnak sem"
 msgid ""
 "Groups allow multiple people to collaborate on libraries. You can create a "
 "group by clicking the \"New Group\" button."
-msgstr ""
+msgstr "A csoportok lehetővé teszik több felhasználó számára a közreműködést köteteken.  Új csoportot az „Új csoport” gomb megnyomásával hozhat létre."
 
 #: seahub/templates/libraries.html:111
 msgid ""
 "Groups allow multiple people to collaborate on libraries. Groups you join "
 "will be listed here."
-msgstr ""
+msgstr "A csoportok lehetővé teszik több felhasználó számára a közreműködést köteteken. Az itt található listában azok a csoportok találhatóak, melyeknek Ön is tagja."
 
 #: seahub/templates/libraries.html:138
 msgid ""
@@ -5341,16 +5342,16 @@ msgstr "Hamarosan küldünk egy e-mailt a jelszóváltoztatáshoz"
 msgid ""
 "You're receiving this e-mail because you are the admin of %(site_name)s, and"
 " a new user %(reg_email)s is joined."
-msgstr ""
+msgstr "Azért kapja ezt az E-mailt, mert Adminisztrátor a/az%(site_name)s oldalon és egy új felhasználó, %(reg_email)scsatlakozott."
 
 #: seahub/templates/registration/register_complete_email.html:3
 msgid "Please click the following link to view the new account:"
-msgstr ""
+msgstr "Kattintson a következő hivatkozásra az új felhasználói fiók megtekintéséhez:"
 
 #: seahub/templates/registration/register_complete_email_subject.html:1
 #, python-format
 msgid "New account created on %(site_name)s"
-msgstr ""
+msgstr "Új felhasználó létrehozva a következő oldalon: %(site_name)s"
 
 #: seahub/templates/registration/registration_complete.html:4
 #: seahub/templates/shibboleth/complete.html:4
@@ -5506,12 +5507,12 @@ msgstr "Mentés ide:"
 msgid ""
 "%(escaped_nickname)s shared a %(file_shared_type)s <span style=\"font-"
 "weight:bold;\">%(file_shared_name)s</span> to you on %(site_name)s:"
-msgstr ""
+msgstr "%(escaped_nickname)smegosztott egy %(file_shared_type)s <span style=\"font-weight:bold;\">%(file_shared_name)s</span> -t Önnel itt: %(site_name)s,"
 
 #: seahub/templates/shared_upload_link_email.html:11
 #, python-format
 msgid "%(escaped_nickname)s shared an upload link to you on %(site_name)s."
-msgstr ""
+msgstr "%(escaped_nickname)s megosztott Önnel egy feltöltési hivatkozást a következő oldalon: %(site_name)s."
 
 #: seahub/templates/shared_upload_link_email.html:15
 msgid "You can go to the following page and upload your files:"
@@ -5780,7 +5781,7 @@ msgstr "Nem lehet többet kiválasztani"
 
 #: seahub/templates/sysadmin/repoadmin_js.html:52
 msgid "Successfully transfered 1 item."
-msgstr ""
+msgstr "1 elem átadása sikeres."
 
 #: seahub/templates/sysadmin/repoadmin_js.html:72
 #: seahub/templates/sysadmin/sys_org_info_library.html:60
@@ -5812,7 +5813,7 @@ msgid ""
 "download/upload files if this is not set correctly. If you config Seafile "
 "behind Nginx/Apache, it should be SERVICE_URL/seafhttp, like "
 "https://seafile.example.com/seafhttp ."
-msgstr ""
+msgstr "A belső URL a fájlok le/feltöltéséhez. Hibás beállítás esetén a felhasználók nem lesznek képesek le/feltölteni fájlokat. Amennyiben Nginx/Apache mögött fut a Seafile szerver, SERVICE_URL/seafhttp-nek kell lennie, pl.: https://seafile.example.com/seafhttp."
 
 #: seahub/templates/sysadmin/settings.html:37
 msgid "Login Background Image"
@@ -5852,19 +5853,19 @@ msgstr "Bejelentkezve maradok"
 
 #: seahub/templates/sysadmin/settings.html:63
 msgid "Number of days that keep user sign in."
-msgstr ""
+msgstr "Napok száma, amíg a felhasználó bejelentkezve marad."
 
 #: seahub/templates/sysadmin/settings.html:68
 msgid "The maximum number of failed login attempts before showing CAPTCHA."
-msgstr ""
+msgstr "Maximális sikertelen bejelentkezési kísérletek a CAPTCHA megjelenítése előtt."
 
 #: seahub/templates/sysadmin/settings.html:73
 msgid "Freeze user account when failed login attempts exceed limit."
-msgstr ""
+msgstr "Felhasználói fiók felfüggesztése, ha a sikertelen bejelentkezési kísérletek száma elérte a limitet."
 
 #: seahub/templates/sysadmin/settings.html:81
 msgid "Enable users to share libraries to any groups in the system."
-msgstr ""
+msgstr "Engedélyezi a felhasználóknak, kötetek megosztását bármely csoporttal a rendszerben."
 
 #: seahub/templates/sysadmin/settings.html:89
 msgid "strong password"
@@ -5872,7 +5873,7 @@ msgstr "Erős jelszó"
 
 #: seahub/templates/sysadmin/settings.html:90
 msgid "Force user to use a strong password when sign up or change password."
-msgstr ""
+msgstr "Megköveteli a felhasználótól erős jelszó használatát regisztráció vagy jelszóváltás alkalmával."
 
 #: seahub/templates/sysadmin/settings.html:95
 msgid "force password change"
@@ -5881,7 +5882,7 @@ msgstr "Kényszerített jelszóváltás"
 #: seahub/templates/sysadmin/settings.html:96
 msgid ""
 "Force user to change password when account is newly added or reset by admin"
-msgstr ""
+msgstr "Kényszeríti a felhasználót jelszavának megváltoztatására, új felhasználói fiók létrehozásakor, vagy ha egy Adminisztrátor alaphelyzetbe állítja azt."
 
 #: seahub/templates/sysadmin/settings.html:101
 msgid "password minimum length"
@@ -5889,7 +5890,7 @@ msgstr "Jelszó minimális hossza"
 
 #: seahub/templates/sysadmin/settings.html:102
 msgid "The least number of characters an account password should include."
-msgstr ""
+msgstr "Felhasználó jelszavának minimális hossza."
 
 #: seahub/templates/sysadmin/settings.html:107
 msgid "password strength level"
@@ -5900,7 +5901,7 @@ msgid ""
 "The level(1-4) of an account password's strength. For example, '3' means "
 "password must have at least 3 of the following: num, upper letter, lower "
 "letter and other symbols"
-msgstr ""
+msgstr "Felhasználó jelszavának erőssége (1-4). Például a '3' azt jelenti, hogy a jelszónak legalább három típust kell tartalmaznia a következőkből: szám, nagybetű, kisbetű, és egyéb karakterek."
 
 #: seahub/templates/sysadmin/settings.html:113
 msgid "enable two factor authentication"
@@ -5916,7 +5917,7 @@ msgstr "Kötetnapló"
 
 #: seahub/templates/sysadmin/settings.html:122
 msgid "Allow user to change library history settings"
-msgstr ""
+msgstr "Engedélyezi a felhasználóknak, a kötetnapló beállításainak módosítását."
 
 #: seahub/templates/sysadmin/settings.html:127
 msgid "encrypted library"
@@ -5924,7 +5925,7 @@ msgstr "Titkosított kötet"
 
 #: seahub/templates/sysadmin/settings.html:128
 msgid "Allow user to create encrypted libraries"
-msgstr ""
+msgstr "Engedélyezi a felhasználóknak titkosítot kötet létrehozását."
 
 #: seahub/templates/sysadmin/settings.html:133
 msgid "library password minimum length"
@@ -5933,7 +5934,7 @@ msgstr "Kötetjelszó minimális hossza"
 #: seahub/templates/sysadmin/settings.html:134
 msgid ""
 "The least number of characters an encrypted library password should include."
-msgstr ""
+msgstr "Titkosított kötet jelszavának minimális hossza."
 
 #: seahub/templates/sysadmin/settings.html:139
 msgid "download/upload link password minimum length"
@@ -5943,13 +5944,13 @@ msgstr "Le/Feltöltési hivatkozás jelszó minimális hossza"
 msgid ""
 "The least number of characters a download/upload link password should "
 "include."
-msgstr ""
+msgstr "Le/Feltöltési hivatkozás minimális hossza."
 
 #: seahub/templates/sysadmin/settings.html:145
 msgid ""
 "Allow user to add organization libraries. Otherwise, only system admin can "
 "add organization libraries."
-msgstr ""
+msgstr "Engedélyezi a felhasználók számára szervezeti kötetek létrehozását. Egyéb esetben csak Adminisztrátor tud létrehozni szervezeti kötetet."
 
 #: seahub/templates/sysadmin/settings.html:149
 msgid "Online Preview"
@@ -5963,7 +5964,7 @@ msgstr "Szövegfájl kiterjesztések"
 msgid ""
 "Extensions of text files that can be online previewed, each suffix is "
 "separated by a comma."
-msgstr ""
+msgstr "Szöveg fájl kiterjesztések, melyek online megtekíthetőek. Minden végződést ','-vel kell elválasztani."
 
 #: seahub/templates/sysadmin/settings.html:157
 msgid "Sync"
@@ -5973,7 +5974,7 @@ msgstr "Szinkronizálás"
 msgid ""
 "If turn on, the desktop clients will not be able to sync a folder outside "
 "the default Seafile folder."
-msgstr ""
+msgstr "Ha bekapcsolva, az asztali kliensalkalmazások nem tudnak az alapértelmezett Seafile mappán kívüli mappát szinkronizálni."
 
 #: seahub/templates/sysadmin/sudo_mode.html:8
 msgid "Confirm password to continue"
@@ -6497,7 +6498,7 @@ msgstr "%(username)s felhasználói fiók aktiválásra került itt: %(site_name
 msgid ""
 "%(escaped_nickname)s invited you to join organization \"%(org_name)s\" on "
 "%(site_name)s."
-msgstr ""
+msgstr "%(escaped_nickname)smeghívott a/az \"%(org_name)s\" szervezetbe a következő oldalon: %(site_name)s."
 
 #: seahub/templates/sysadmin/user_add_email.html:15
 #: seahub/templates/sysadmin/user_batch_add_email.html:12
@@ -6543,7 +6544,7 @@ msgstr "Biztosan törli %s adminisztrátori jogait?"
 #: seahub/templates/sysadmin/useradmin_js.html:163
 #, python-brace-format
 msgid "Successfully set institution for {users}."
-msgstr ""
+msgstr "Intézmény sikeresen beállítva: {users}."
 
 #: seahub/templates/sysadmin/useradmin_js.html:194
 msgid "Are you sure you want to delete the selected user(s) ?"
@@ -6552,17 +6553,17 @@ msgstr "Biztoson törölni kívánja a kijelelt felhasználó(ka)t?"
 #: seahub/templates/sysadmin/useradmin_js.html:221
 #, python-brace-format
 msgid "Successfully deleted {users}."
-msgstr ""
+msgstr "{users} sikeresen törölve."
 
 #: seahub/templates/sysadmin/useradmin_js.html:304
 #, python-brace-format
 msgid "Successfully set quota for {users}."
-msgstr ""
+msgstr "Kvóta sikeresen beállítva {users} számára"
 
 #: seahub/templates/sysadmin/useradmin_js.html:330
 #, python-brace-format
 msgid "Successfully set quota for {user}."
-msgstr ""
+msgstr "Kvóta sikeresen bállítba {user} számára."
 
 #: seahub/templates/sysadmin/useradmin_table.html:15
 msgid "Institution"
@@ -6590,7 +6591,7 @@ msgstr ""
 #: seahub/templates/sysadmin/useradmin_table.html:95
 msgctxt "Audit Administrator"
 msgid "Audit Admin"
-msgstr ""
+msgstr "Vizsgáló Admin"
 
 #: seahub/templates/sysadmin/useradmin_table.html:112
 #: seahub/templates/sysadmin/userinfo.html:119
@@ -6603,11 +6604,11 @@ msgstr "Szervezet"
 
 #: seahub/templates/sysadmin/userinfo.html:56
 msgid "Login ID"
-msgstr ""
+msgstr "Felhasználónév"
 
 #: seahub/templates/sysadmin/userinfo.html:80
 msgid "Reference ID"
-msgstr ""
+msgstr "Referencia ID"
 
 #: seahub/templates/sysadmin/userinfo.html:137
 msgid "Set user name"
@@ -6619,15 +6620,15 @@ msgstr "Osztály beállítása"
 
 #: seahub/templates/sysadmin/userinfo.html:151
 msgid "Set user Login ID"
-msgstr ""
+msgstr "Felhasználónév beállítása"
 
 #: seahub/templates/sysadmin/userinfo.html:158
 msgid "Set user contact email"
-msgstr ""
+msgstr "Kapcsolat E-mail beállítása"
 
 #: seahub/templates/sysadmin/userinfo.html:165
 msgid "Set user Reference ID"
-msgstr ""
+msgstr "Referencia ID beállítása"
 
 #: seahub/templates/sysadmin/userinfo.html:238
 msgid "Share From"
@@ -6837,11 +6838,11 @@ msgstr "Telefonszám"
 
 #: seahub/two_factor/forms.py:44 seahub/two_factor/forms.py:68
 msgid "Entered token is not valid."
-msgstr ""
+msgstr "A beírt token érvénytelen."
 
 #: seahub/two_factor/forms.py:152 seahub/two_factor/forms.py:241
 msgid "Please enter your OTP token"
-msgstr ""
+msgstr "Kérjük írja be az OTP tokenjét"
 
 #: seahub/two_factor/forms.py:266
 #, python-brace-format
@@ -7021,7 +7022,7 @@ msgstr ""
 msgid ""
 "Congratulations, you've successfully enabled two-factor\n"
 "      authentication."
-msgstr ""
+msgstr "Gratulálunk, sikeresen beállította a kétlépcsős azonosítást."
 
 #: seahub/two_factor/templates/two_factor/core/setup_complete.html:14
 msgid ""
@@ -7400,7 +7401,7 @@ msgstr "Az érték érvénytelen"
 #, python-format
 msgid ""
 "Failed to add %s to the institution: user already belongs to an institution"
-msgstr ""
+msgstr "%shozzáadása sikertelen az intézményhez: a felhasználó már egy intézmény tagja."
 
 #: seahub/views/sysadmin.py:2246
 #, python-format

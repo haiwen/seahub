@@ -99,7 +99,7 @@ def get_library_storages(request):
     elif STORAGE_CLASS_MAPPING_POLICY == 'ROLE_BASED':
         user_role_storage_ids = request.user.permissions.storage_ids()
         if not user_role_storage_ids:
-            return all_storages
+            return []
 
         user_role_storages = []
         for user_role_storage_id in user_role_storage_ids:

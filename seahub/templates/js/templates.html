@@ -25,6 +25,7 @@
         </select>
         <br/>
         <% } %>
+        <% if (!$.isEmptyObject(app.pageOptions.storages)) { %>
         <% if (app.pageOptions.storages.length > 1) { %>
         <label for="storage">{% trans "Storage backend"%}</label><br/>
         <select name="storage" id="storage" class="select">
@@ -38,6 +39,7 @@
             <option value="<%- app.pageOptions.storages[0].storage_id %>"><%- app.pageOptions.storages[0].storage_name %></option>
         </select>
         <br/>
+        <% } %>
         <% } %>
         <% if (showSharePerm) { %>
         <label for="share-permission">{% trans "Share Permission" %}</label><br />
@@ -1706,8 +1708,8 @@
         <th width="14%"><span class="sr-only">{% trans "Actions" %}</span></th>
     <% if (app.pageOptions.storages.length > 0) { %>
         <th width="10%">{% trans "Size" %}</th>
-        <th width="20%">{% trans "Storage backend" %}</th>
-        <th width="10%"><a class="table-sort-op by-time" href="#">{% trans "Last Update" %} <span class="sort-icon icon-caret-up"></span></a></th>
+        <th width="15%">{% trans "Storage backend" %}</th>
+        <th width="15%"><a class="table-sort-op by-time" href="#">{% trans "Last Update" %} <span class="sort-icon icon-caret-up"></span></a></th>
         <% } else { %>
         <th width="20%">{% trans "Size" %}</th>
         <th width="20%"><a class="table-sort-op by-time" href="#">{% trans "Last Update" %} <span class="sort-icon icon-caret-up"></span></a></th>
