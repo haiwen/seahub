@@ -93,7 +93,7 @@ def login(request, template_name='registration/login.html',
     if request.user.is_authenticated() and redirect_if_logged_in:
         return HttpResponseRedirect(reverse(redirect_if_logged_in))
 
-    redirect_to = request.GET.get(redirect_field_name, '')
+    redirect_to = request.POST.get(redirect_field_name, '')
     ip = get_remote_ip(request)
 
     if request.method == "POST":
