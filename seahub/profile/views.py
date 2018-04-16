@@ -178,6 +178,11 @@ def delete_user_account(request):
     user = User.objects.get(email=username)
     user.delete()
 
+    if is_pro_version():
+        from seahub_extra.sysadmin_extra.models import userloginlog
+        user_log = userloginlog.objects.filter(username=username)
+        user_log.delete()
+
     if is_org_context(request):
         org_id = request.user.org.org_id
         seaserv.ccnet_threaded_rpc.remove_org_user(org_id, username)
