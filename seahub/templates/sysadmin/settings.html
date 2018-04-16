@@ -49,12 +49,12 @@
 
     {% with type="checkbox" setting_name="ENABLE_BRANDING_CSS" setting_val=config_dict.ENABLE_BRANDING_CSS %}
         {% trans "ENABLE_BRANDING_CSS" as setting_display_name %}
-        {% trans "Enable user use custom css" as help_tip %}
+        {% trans "Use custom CSS" as help_tip %}
         {% include "snippets/web_settings_form.html" %}
     {% endwith %}
 
-    {% with type="css_textarea" setting_name="CUSTOM_CSS" setting_val=config_dict.CUSTOM_CSS %}
-        {% trans "Custom css content" as setting_display_name %}
+    {% with type="code-textarea" setting_name="CUSTOM_CSS" setting_val=config_dict.CUSTOM_CSS %}
+        {% trans "Custom CSS" as setting_display_name %}
         {% include "snippets/web_settings_form.html" %}
     {% endwith %}
 
@@ -197,7 +197,7 @@ $('.input, .textarea', $('.web-setting-form')).on('focus', function() {
 $('.web-setting-form .cancel').on('click', function() {
     var $form = $(this).closest('form');
     $('.error, .submit, .cancel', $form).hide();
-    var $input = $('.input', $form);
+    var $input = $('.input, .textarea', $form);
     $input.val($input.attr('data-cur'));
 });
 

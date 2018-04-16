@@ -30,15 +30,17 @@
 </form>
 {% endif %}
 
-{% if type == 'css_textarea' %}
-<form class="web-setting-form web-textarea-setting-form">
+{% if type == 'code-textarea' %}
+<form class="web-setting-form web-textarea-setting-form" action="">
     <h5 class="web-setting-name">{{ setting_display_name }}</h5>
     <div class="web-setting-input">
-        <textarea class="textarea textarea-x1" name="{{ setting_name }}" data-cur="{{ setting_val }}">{{ setting_val }}</textarea>
+        <textarea class="textarea code-textarea" name="{{ setting_name }}" data-cur="{{ setting_val }}">{{ setting_val }}</textarea>
         <p class="error hide"></p>
+        {% if help_tip %}
         <p class="tip">{{ help_tip }}</p>
+        {% endif %}
     </div>
-    <div class="web-setting-ops-x1">
+    <div class="web-setting-ops">
         <button type="submit" class="submit sf2-icon-tick tick-green vam hide" title="{% trans "Submit" %}"></button>
         <button type="button" class="cancel sf2-icon-x2 vam hide" title="{% trans "Cancel" %}"></button>
     </div>

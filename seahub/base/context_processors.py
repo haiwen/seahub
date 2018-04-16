@@ -84,7 +84,7 @@ def base(request):
     result = {
         'seafile_version': SEAFILE_VERSION,
         'site_title': config.SITE_TITLE,
-        'branding_css': config.ENABLE_BRANDING_CSS,
+        'enable_branding_css': config.ENABLE_BRANDING_CSS,
         'favicon_path': favicon_path,
         'logo_path': logo_path,
         'logo_width': LOGO_WIDTH,
