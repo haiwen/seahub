@@ -1976,7 +1976,7 @@ button.sf-dropdown-toggle:focus {
     color:#1f0600;
     padding:1px 25px 1px 10px;
     background:#fddaa4;
-    z-index:25;
+    position:relative;
 }
 #info-bar .close {
     position:absolute;
