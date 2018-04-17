@@ -53,17 +53,30 @@
                 <a href="{{ SITE_ROOT }}#invitations/"><span aria-hidden="true" class="sf2-icon-invite"></span>{% trans "Invite People" %}</a>
             </li>
             {% endif %}
-        </ul>
 
-        <h3 class="hd">{% trans "Share Admin" %}</h3>
-        <ul class="side-tabnav-tabs">
-            {% if user.permissions.can_add_repo %}
-            <li class="tab {% block cur_share_libs %}{% endblock %}"><a href="{{ SITE_ROOT }}#share-admin-libs/"><span class="sf2-icon-library" aria-hidden="true"></span>{% trans "Libraries" %}</a></li>
-            <li class="tab {% block cur_share_folders %}{% endblock %}"><a href="{{ SITE_ROOT }}#share-admin-folders/"><span class="sf2-icon-folder" aria-hidden="true"></span>{% trans "Folders" %}</a></li>
-            {% endif %}
-            <li class="tab {% block cur_share_links %}{% endblock %}"><a href="{{ SITE_ROOT }}#share-admin-share-links/"><span class="sf2-icon-link" aria-hidden="true"></span>{% trans "Links" %}</a></li>
+            <li class="tab" id="share-admin-nav">
+                <a href="#" class="ellipsis" title="{% trans "Share Admin" %}"><span class="toggle-icon icon-caret-left fright" aria-hidden="true"></span><span aria-hidden="true" class="sf2-icon-wrench"></span>{% trans "Share Admin" %}</a>
+                <ul class="hide">
+                    {% if user.permissions.can_add_repo %}
+                    <li>
+                        <a href="{{ SITE_ROOT }}#share-admin-libs/"><span aria-hidden="true" class="sharp">#</span>{% trans "Libraries" %}</a>
+                    </li>
+                    <li>
+                        <a href="{{ SITE_ROOT }}#share-admin-folders/"><span aria-hidden="true" class="sharp">#</span>{% trans "Folders" %}</a>
+                    </li>
+                    {% endif %}
+                    {% if user.permissions.can_generate_share_link %}
+                    <li>
+                        <a href="{{ SITE_ROOT }}#share-admin-share-links/"><span aria-hidden="true" class="sharp">#</span>{% trans "Links" %}</a>
+                    </li>
+                    {% elif user.permissions.can_generate_upload_link %}
+                    <li>
+                        <a href="{{ SITE_ROOT }}#share-admin-upload-links/"><span aria-hidden="true" class="sharp">#</span>{% trans "Links" %}</a>
+                    </li>
+                    {% endif %}
+                </ul>
+            </li>
         </ul>
-
         {% endblock %}
     </div>
 
@@ -98,6 +111,12 @@
 $('#group-nav a:first').on('click', function() {
     $('#group-nav .toggle-icon').toggleClass('icon-caret-left icon-caret-down');
     $('#group-nav .grp-list').slideToggle();
+    return false;
+});
+$('#share-admin-nav').on('click', 'a:first', function() {
+    var $shareAdmin = $('#share-admin-nav');
+    $('.toggle-icon', $shareAdmin).toggleClass('icon-caret-left icon-caret-down');
+    $('ul', $shareAdmin).slideToggle(250);
     return false;
 });
 </script>

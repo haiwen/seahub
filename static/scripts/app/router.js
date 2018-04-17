@@ -283,25 +283,25 @@ define([
         showShareAdminRepos: function() {
             this.switchCurrentView(this.shareAdminReposView);
             this.shareAdminReposView.show();
-            this.sideNavView.setCurTab('share-admin-repos');
+            this.sideNavView.setCurTab('share-admin-repos', {'show_share_admin': true});
         },
 
         showShareAdminFolders: function() {
             this.switchCurrentView(this.shareAdminFoldersView);
             this.shareAdminFoldersView.show();
-            this.sideNavView.setCurTab('share-admin-folders');
+            this.sideNavView.setCurTab('share-admin-folders', {'show_share_admin': true});
         },
 
         showShareAdminShareLinks: function() {
             this.switchCurrentView(this.shareAdminShareLinksView);
             this.shareAdminShareLinksView.show();
-            this.sideNavView.setCurTab('share-admin-links');
+            this.sideNavView.setCurTab('share-admin-links', {'show_share_admin': true});
         },
 
         showShareAdminUploadLinks: function() {
             this.switchCurrentView(this.shareAdminUploadLinksView);
             this.shareAdminUploadLinksView.show();
-            this.sideNavView.setCurTab('share-admin-links');
+            this.sideNavView.setCurTab('share-admin-links', {'show_share_admin': true});
         }
 
     });

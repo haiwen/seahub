@@ -3191,8 +3191,12 @@ button.sf-dropdown-toggle:focus {
     border-bottom:1px solid #e8e8e8;
 }
 #wiki-page-list {
-    line-height:1.8;
     margin-top:1.6em;
+}
+.wiki-page-list-item {
+    word-break:break-all;
+    line-height:1.6;
+    margin:3px 0;
 }
 .wiki-page-link,
 .wiki-page-link:hover {
@@ -3202,11 +3206,11 @@ button.sf-dropdown-toggle:focus {
    margin-left:5px;
 }
 #wiki-area {
-    padding: 30px 0 0;
+    padding:30px 0 0;
 }
 #wiki-last-modified,
 #wiki-page-last-modified {
-    margin-top: 10px;
+    margin-top:40px;
     font-size:12px;
     color: #666;
 }
