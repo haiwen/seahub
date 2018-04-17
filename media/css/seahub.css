@@ -3836,6 +3836,10 @@ img.thumbnail {
     height:95px;
     margin:0;
 }
+.web-setting-input .code-textarea {
+    width:calc(100% - 38px);
+    height:245px;
+}
 .web-setting-ops {
     width:100px;
     vertical-align:top;

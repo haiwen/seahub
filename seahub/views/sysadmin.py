@@ -2074,11 +2074,12 @@ def sys_settings(request):
         'USER_PASSWORD_STRENGTH_LEVEL', 'SHARE_LINK_PASSWORD_MIN_LENGTH',
         'ENABLE_USER_CREATE_ORG_REPO', 'FORCE_PASSWORD_CHANGE',
         'LOGIN_ATTEMPT_LIMIT', 'FREEZE_USER_ON_LOGIN_FAILED',
-        'ENABLE_SHARE_TO_ALL_GROUPS', 'ENABLE_TWO_FACTOR_AUTH'
+        'ENABLE_SHARE_TO_ALL_GROUPS', 'ENABLE_TWO_FACTOR_AUTH',
+        'ENABLE_BRANDING_CSS',
     ]
 
     STRING_WEB_SETTINGS = ('SERVICE_URL', 'FILE_SERVER_ROOT', 'TEXT_PREVIEW_EXT',
-                           'SITE_NAME', 'SITE_TITLE')
+                           'SITE_NAME', 'SITE_TITLE', 'CUSTOM_CSS')
 
     if request.is_ajax() and request.method == "POST":
         content_type = 'application/json; charset=utf-8'
