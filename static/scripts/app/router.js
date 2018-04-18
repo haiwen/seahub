@@ -237,7 +237,12 @@ define([
         },
 
         showGroupDiscussions: function(group_id) {
-            this.showGroup(group_id, {showDiscussions: true});
+            if (app.pageOptions.enable_group_discussion) {
+                this.showGroup(group_id, {showDiscussions: true});
+            } else {
+                this.showGroup(group_id);
+                app.router.navigate('group/' + group_id + '/');
+            }
         },
 
         showOrgRepos: function() {

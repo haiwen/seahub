@@ -660,6 +660,7 @@ def _file_view(request, repo_id, path):
             'img_prev': img_prev,
             'img_next': img_next,
             'highlight_keyword': settings.HIGHLIGHT_KEYWORD,
+            'enable_file_comment': settings.ENABLE_FILE_COMMENT,
             }, context_instance=RequestContext(request))
 
 def view_history_file_common(request, repo_id, ret_dict):

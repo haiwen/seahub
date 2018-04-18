@@ -53,7 +53,11 @@ define([
                 'wiki_enabled': this.groupView.group.wiki_enabled
             }));
 
-            $("#group-settings-icon").after(this.$el);
+            var $icon = $("#group-settings-icon");
+            $icon.after(this.$el);
+            $('.outer-caret', this.$el).css({
+                'right': $('#group').width() - $icon.position().left - $icon.width()
+            });
         },
 
         highlightItem: function(e) {
