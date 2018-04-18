@@ -725,7 +725,9 @@ def libraries(request):
             'unread_notifications_request_interval': UNREAD_NOTIFICATIONS_REQUEST_INTERVAL,
             'library_templates': LIBRARY_TEMPLATES.keys() if \
                     isinstance(LIBRARY_TEMPLATES, dict) else [],
-            'enable_share_to_all_groups': config.ENABLE_SHARE_TO_ALL_GROUPS
+            'enable_share_to_all_groups': config.ENABLE_SHARE_TO_ALL_GROUPS,
+            'enable_group_discussion': settings.ENABLE_GROUP_DISCUSSION,
+            'enable_file_comment': settings.ENABLE_FILE_COMMENT,
             }, context_instance=RequestContext(request))
 
 @login_required
