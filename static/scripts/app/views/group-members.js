@@ -82,7 +82,12 @@ define([
                     _this.$error.html(err_msg).show();
                 }
             });
-            $("#group-members-icon").after(this.$el);
+
+            var $icon = $("#group-members-icon");
+            $icon.after(this.$el);
+            $('.outer-caret', this.$el).css({
+                'right': $('#group').width() - $icon.position().left - $icon.width()
+            });
         }
 
     });
