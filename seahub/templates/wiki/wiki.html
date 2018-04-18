@@ -38,7 +38,7 @@
         <span class="loading-icon loading-tip"></span>
         <p class="error hide"></p>
         <div id="wiki-page" class="hide">
-            <h1 id="wiki-page-name" class="bold"></h1>
+            <!--h1 id="wiki-page-name" class="bold"></h1-->
             <div id="wiki-content"></div>
             <p id="wiki-page-last-modified"></p>
         </div>
@@ -109,7 +109,7 @@ function showCurrentPage() {
         success: function(data) { // { meta: {wiki page object}, content: string }
             $error.hide();
 
-            $('#wiki-page-name').html(HTMLescape(data.meta.name));
+            //$('#wiki-page-name').html(HTMLescape(data.meta.name));
 
             $('#wiki-content')
             .html(addAnchorsToHeaders(marked(data.content)))
@@ -152,6 +152,15 @@ function showCurrentPage() {
 showCurrentPage();
 
 // show page list
+var isHiDPI = function() {
+    var pixelRatio = window.devicePixelRatio ? window.devicePixelRatio : 1;
+    if (pixelRatio > 1) {
+        return true;
+    } else {
+        return false;
+    }
+};
+
 (function() {
     var $container = $('#wiki-pages-container');
     var $list = $('ul', $container);
@@ -165,6 +174,7 @@ showCurrentPage();
         success: function(data) {
             var str = '';
             var pages = data.data;
+            var icon_size = isHiDPI() ? 192 : 24;
             // sort by name
             pages.sort(function(a, b) {
                 // make 'home' as the first one
@@ -182,7 +192,7 @@ showCurrentPage();
                 }
             });
             $(pages).each(function(index, item) {
-                str += '<li><img src="{{MEDIA_URL}}img/file/24/txt.png" class="vam" /><a href="' + item.link + '" class="wiki-page-link vam">' + HTMLescape(item.name) + '</a></li>';
+                str += '<li class="wiki-page-list-item"><img src="{{MEDIA_URL}}img/file/' + icon_size + '/txt.png" width="24" class="vam" /><a href="' + item.link + '" class="wiki-page-link vam">' + HTMLescape(item.name) + '</a></li>';
             });
             $list.html($(str)).show();
         },

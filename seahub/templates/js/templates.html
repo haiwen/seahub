@@ -1401,8 +1401,12 @@
         {% endif %}
 
         <li class="tab" id="share-admin-nav">
-            <a href="#" class="ellipsis" title="{% trans "Share Admin" %}"><span class="toggle-icon icon-caret-left fright" aria-hidden="true"></span><span aria-hidden="true" class="sf2-icon-wrench"></span>{% trans "Share Admin" %}</a>
+            <a href="#" class="ellipsis" title="{% trans "Share Admin" %}"><span class="toggle-icon <% if (show_share_admin) { %> icon-caret-down <% } else { %> icon-caret-left <% } %> fright" aria-hidden="true"></span><span aria-hidden="true" class="sf2-icon-wrench"></span>{% trans "Share Admin" %}</a>
+            <% if (show_share_admin) { %>
+            <ul>
+            <% } else { %>
             <ul class="hide">
+            <% } %>
                 <% if (can_add_repo) { %>
                 <li class="<% if (cur_tab == 'share-admin-repos') { %>tab-cur<% } %>">
                     <a href="{{ SITE_ROOT }}#share-admin-libs/"><span aria-hidden="true" class="sharp">#</span>{% trans "Libraries" %}</a>
