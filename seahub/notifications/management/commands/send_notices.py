@@ -16,7 +16,6 @@ from seaserv import seafile_api, ccnet_api
 from seahub.base.models import CommandsLastCheck
 from seahub.notifications.models import UserNotification
 from seahub.utils import send_html_email, get_site_scheme_and_netloc
-import seahub.settings as settings
 from seahub.avatar.templatetags.avatar_tags import avatar
 from seahub.avatar.util import get_default_avatar_url
 from seahub.base.templatetags.seahub_tags import email2nickname
@@ -28,7 +27,6 @@ from seahub.utils import get_site_name
 # Get an instance of a logger
 logger = logging.getLogger(__name__)
 
-subject = _('New notice on %s') % get_site_name()
 
 class Command(BaseCommand):
     help = 'Send Email notifications to user if he/she has an unread notices every period of seconds .'

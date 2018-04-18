@@ -15,10 +15,10 @@ class SSOTest(BaseTestCase):
     def test_sso(self):
         resp = self.client.get(self.url)
         self.assertEqual(302, resp.status_code)
-        assert resp.get('location') == 'http://testserver/'
+        assert resp.get('location') == '/'
 
         resp = self.client.get(self.url + '?next=/foo')
-        assert resp.get('location') == 'http://testserver/foo'
+        assert resp.get('location') == '/foo'
 
         resp = self.client.get(self.url + '?next=' + urlquote('http://testserver\@example.com'))
-        self.assertRegexpMatches(resp['Location'], r'http://testserver%s' % settings.LOGIN_REDIRECT_URL)
+        self.assertRegexpMatches(resp['Location'], settings.LOGIN_REDIRECT_URL)

@@ -10,7 +10,8 @@ from seahub.options.models import (UserOptions, KEY_FORCE_PASSWD_CHANGE)
 from seahub.test_utils import BaseTestCase
 from seahub.utils.ms_excel import write_xls as real_write_xls
 
-from constance import config
+import pytest
+pytestmark = pytest.mark.django_db
 
 from seaserv import ccnet_threaded_rpc
 
@@ -167,6 +168,9 @@ class BatchAddUserTest(BaseTestCase):
         self.clear_cache()
         self.login_as(self.admin)
 
+        from constance import config
+        self.config = config
+
         self.new_users = []
         self.excel_file = os.path.join(os.getcwd(), 'tests/seahub/views/sysadmin/batch_add_user.xlsx')
         data_list = []
@@ -209,7 +213,7 @@ class BatchAddUserTest(BaseTestCase):
             assert User.objects.get(e) is not None
 
     def test_can_batch_add_when_pwd_change_required(self):
-        config.FORCE_PASSWORD_CHANGE = 1
+        self.config.FORCE_PASSWORD_CHANGE = 1
 
         for e in self.new_users:
             assert len(UserOptions.objects.filter(
@@ -234,7 +238,7 @@ class BatchAddUserTest(BaseTestCase):
             assert UserOptions.objects.passwd_change_required(e)
 
     def test_can_batch_add_when_pwd_change_not_required(self):
-        config.FORCE_PASSWORD_CHANGE = 0
+        self.config.FORCE_PASSWORD_CHANGE = 0
 
         for e in self.new_users:
             assert len(UserOptions.objects.filter(

@@ -1,6 +1,7 @@
 #coding: UTF-8
 from django.core.cache import cache
-from constance import config
+import pytest
+pytestmark = pytest.mark.django_db
 
 from seahub.share.models import FileShare, UploadLinkShare
 from seahub.test_utils import BaseTestCase
@@ -11,12 +12,15 @@ class FileSharedLinkApiTest(BaseTestCase):
 
     def setUp(self):
         cache.clear()
-        self.curr_passwd_len = config.SHARE_LINK_PASSWORD_MIN_LENGTH
-        config.SHARE_LINK_PASSWORD_MIN_LENGTH = 3
+        from constance import config
+        self.config = config
+
+        self.curr_passwd_len = self.config.SHARE_LINK_PASSWORD_MIN_LENGTH
+        self.config.SHARE_LINK_PASSWORD_MIN_LENGTH = 3
 
     def tearDown(self):
         self.remove_repo()
-        config.SHARE_LINK_PASSWORD_MIN_LENGTH = self.curr_passwd_len
+        self.config.SHARE_LINK_PASSWORD_MIN_LENGTH = self.curr_passwd_len
 
     def test_create_file_shared_link_with_invalid_path(self):
         self.login_as(self.user)

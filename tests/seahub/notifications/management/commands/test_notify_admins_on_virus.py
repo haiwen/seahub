@@ -1,6 +1,6 @@
 from django.core import mail
 from django.core.management import call_command
-from django.conf.urls import patterns, url
+from django.conf.urls import url
 from django.test import override_settings
 
 import seahub
@@ -11,7 +11,6 @@ from seahub.views.sysadmin import sys_virus_scan_records
 urlpatterns = seahub.urls.urlpatterns + [
     url(r'^sys/virus_scan_records/$', sys_virus_scan_records, name='sys_virus_scan_records'),
 ]
-
 
 @override_settings(ROOT_URLCONF=__name__)
 class CommandTest(BaseTestCase):

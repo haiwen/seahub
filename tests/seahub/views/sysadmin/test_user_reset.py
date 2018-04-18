@@ -1,7 +1,8 @@
 from mock import patch
 from django.core import mail
 from django.core.urlresolvers import reverse
-from constance import config
+import pytest
+pytestmark = pytest.mark.django_db
 
 from seahub.base.accounts import User
 from seahub.options.models import (UserOptions, KEY_FORCE_PASSWD_CHANGE,
@@ -13,6 +14,8 @@ from seahub.test_utils import BaseTestCase
 class UserResetTest(BaseTestCase):
     def setUp(self):
         self.clear_cache()
+        from constance import config
+        self.config = config
 
         self.login_as(self.admin)
 
@@ -37,7 +40,7 @@ class UserResetTest(BaseTestCase):
         self.assertEqual(len(mail.outbox), 1)
 
     def test_can_reset_when_pwd_change_required(self):
-        config.FORCE_PASSWORD_CHANGE = 1
+        self.config.FORCE_PASSWORD_CHANGE = 1
 
         assert len(UserOptions.objects.filter(
             email=self.user.username, option_key=KEY_FORCE_PASSWD_CHANGE)) == 0
@@ -55,7 +58,7 @@ class UserResetTest(BaseTestCase):
             option_key=KEY_FORCE_PASSWD_CHANGE).option_val == VAL_FORCE_PASSWD_CHANGE
 
     def test_can_reset_when_pwd_change_not_required(self):
-        config.FORCE_PASSWORD_CHANGE = 0
+        self.config.FORCE_PASSWORD_CHANGE = 0
 
         assert len(UserOptions.objects.filter(
             email=self.user.username, option_key=KEY_FORCE_PASSWD_CHANGE)) == 0

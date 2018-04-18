@@ -2,7 +2,10 @@
 """
 import json
 from mock import patch
-from constance import config
+
+import pytest
+pytestmark = pytest.mark.django_db
+
 from django.core.urlresolvers import reverse
 from django.template.defaultfilters import filesizeformat
 
@@ -17,6 +20,9 @@ class RepoTest(BaseTestCase):
         self.login_as(self.user)
         self.url = reverse('api2-repos')
         self.repo_id = self.repo
+
+        from constance import config
+        self.config = config
 
     def test_can_fetch(self):
         self.login_as(self.user)
@@ -189,7 +195,7 @@ class RepoTest(BaseTestCase):
         self.remove_repo(share_repo.id)
 
     def test_can_get_share_group_repo(self):
-        config.ENABLE_SHARE_TO_ALL_GROUPS = True
+        self.config.ENABLE_SHARE_TO_ALL_GROUPS = True
 
         self.logout()
         self.login_as(self.admin)

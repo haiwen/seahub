@@ -6,7 +6,8 @@ import json
 import time
 import pytest
 import uuid
-from constance import config
+import pytest
+pytestmark = pytest.mark.django_db
 
 from django.core.urlresolvers import reverse
 from seaserv import seafile_api
@@ -163,7 +164,11 @@ class NewReposApiTest(BaseTestCase):
     def setUp(self):
         self.clear_cache()
         self.login_as(self.admin)
-        config.ENABLE_ENCRYPTED_LIBRARY = True
+
+        from constance import config
+        self.config = config
+
+        self.config.ENABLE_ENCRYPTED_LIBRARY = True
 
     def test_create_encrypted_repo(self):
         """Test create an encrypted repo with the secure keys generated on client
@@ -198,7 +203,7 @@ class NewReposApiTest(BaseTestCase):
         """Test create an encrypted repo with the secure keys generated on client
         side.
         """
-        config.ENABLE_ENCRYPTED_LIBRARY = False
+        self.config.ENABLE_ENCRYPTED_LIBRARY = False
         repo_id = str(uuid.uuid4())
         password = randstring(16)
         enc_version = 2
