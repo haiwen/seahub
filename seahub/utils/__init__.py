@@ -1150,7 +1150,7 @@ if HAS_OFFICE_CONVERTER:
         rpc = _get_office_converter_rpc()
         d = rpc.query_convert_status(file_id, page)
         ret = {}
-        if d.error:
+        if hasattr(d, 'error') and d.error:
             ret['error'] = d.error
             ret['status'] = 'ERROR'
         else:
