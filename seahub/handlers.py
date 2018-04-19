@@ -18,7 +18,6 @@ if not hasattr(settings, 'EVENTS_CONFIG_FILE'):
 else:
 
     import seafevents
-    from utils import SeafEventsSession
 
     def repo_created_cb(sender, **kwargs):
         org_id  = kwargs['org_id']
@@ -34,6 +33,10 @@ else:
         }
 
         users = [creator]
+
+        # Move here to avoid model import during Django setup.
+        # TODO: Don't register signal/hanlders during Seahub start.
+        from utils import SeafEventsSession
 
         session = SeafEventsSession()
         if org_id > 0:
@@ -78,6 +81,7 @@ else:
 
         users = usernames
 
+        from utils import SeafEventsSession
         session = SeafEventsSession()
         if org_id > 0:
             seafevents.save_org_user_events(session, org_id, etype, detail, users, None)
@@ -102,6 +106,8 @@ else:
         }
 
         users = [operator]
+
+        from utils import SeafEventsSession
         session = SeafEventsSession()
         if org_id > 0:
             seafevents.save_org_user_events(session, org_id, etype, detail, users, None)

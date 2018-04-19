@@ -113,8 +113,10 @@ urlpatterns = [
 from seahub.utils import HAS_OFFICE_CONVERTER
 if HAS_OFFICE_CONVERTER:
     from seahub.utils import OFFICE_HTML_DIR
+    from django.views.static import serve as static_view
+
     urlpatterns += [
-        url(r'^office-convert/static/(?P<path>.*)$', 'django.views.static.serve', {'document_root': OFFICE_HTML_DIR}, name='api_office_convert_static'),
+        url(r'^office-convert/static/(?P<path>.*)$', static_view, {'document_root': OFFICE_HTML_DIR}, name='api_office_convert_static'),
     ]
     urlpatterns += [
         url(r'^office-convert/status/$', OfficeConvertQueryStatus.as_view()),
