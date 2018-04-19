@@ -12,7 +12,7 @@ from rest_framework import status
 from seahub.api2.throttling import UserRateThrottle
 from seahub.api2.authentication import TokenAuthentication
 from seahub.api2.utils import api_error
-from seahub.api2.views import get_dir_recursively, \
+from seahub.api2.views import get_dir_file_recursively, \
     get_dir_entrys_by_id
 from seahub.signals import rename_dirent_successful
 
@@ -56,9 +56,16 @@ class DirView(APIView):
         1. user with either 'r' or 'rw' permission.
         """
 
-        path = request.GET.get('p', '/')
-        if path[-1] != '/':
-            path = path + '/'
+        # argument check
+        recursive = request.GET.get('recursive', '0')
+        if recursive not in ('1', '0'):
+            error_msg = "If you want to get recursive dir entries, you should set 'recursive' argument as '1'."
+            return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
+
+        request_type = request.GET.get('t', '')
+        if request_type and request_type not in ('f', 'd'):
+            error_msg = "'t'(type) should be 'f' or 'd'."
+            return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
 
         # recource check
         repo = seafile_api.get_repo(repo_id)
@@ -66,19 +73,17 @@ class DirView(APIView):
             error_msg = 'Library %s not found.' % repo_id
             return api_error(status.HTTP_404_NOT_FOUND, error_msg)
 
-        try:
-            dir_id = seafile_api.get_dir_id_by_path(repo_id, path)
-        except SearpcError as e:
-            logger.error(e)
-            error_msg = 'Internal Server Error'
-            return api_error(status.HTTP_500_INTERNAL_SERVER_ERROR, error_msg)
+        path = request.GET.get('p', '/')
+        path = normalize_dir_path(path)
 
+        dir_id = seafile_api.get_dir_id_by_path(repo_id, path)
         if not dir_id:
             error_msg = 'Folder %s not found.' % path
             return api_error(status.HTTP_404_NOT_FOUND, error_msg)
 
         # permission check
-        if not check_folder_permission(request, repo_id, path):
+        permission = check_folder_permission(request, repo_id, path)
+        if not permission:
             error_msg = 'Permission denied.'
             return api_error(status.HTTP_403_FORBIDDEN, error_msg)
 
@@ -87,29 +92,29 @@ class DirView(APIView):
             resp = Response({'success': True})
             resp["oid"] = dir_id
             return resp
-        else:
-            request_type = request.GET.get('t', None)
-            if request_type and request_type not in ('f', 'd'):
-                error_msg = "'t'(type) should be 'f' or 'd'."
-                return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
 
-            if request_type == 'd':
-                recursive = request.GET.get('recursive', '0')
-                if recursive not in ('1', '0'):
-                    error_msg = "If you want to get recursive dir entries, you should set 'recursive' argument as '1'."
-                    return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
+        if recursive == '1':
+            result = []
+            username = request.user.username
+            dir_file_list = get_dir_file_recursively(username, repo_id, path, [])
+            if request_type == 'f':
+                for item in dir_file_list:
+                    if item['type'] == 'file':
+                        result.append(item)
+            elif request_type == 'd':
+                for item in dir_file_list:
+                    if item['type'] == 'dir':
+                        result.append(item)
+            else:
+                result = dir_file_list
 
-                if recursive == '1':
-                    username = request.user.username
-                    dir_list = get_dir_recursively(username, repo_id, path, [])
-                    dir_list.sort(lambda x, y: cmp(x['name'].lower(), y['name'].lower()))
+            result.sort(lambda x, y: cmp(x['name'].lower(), y['name'].lower()))
+            resp = Response(result)
+            resp["oid"] = dir_id
+            resp["dir_perm"] = permission
+            return resp
 
-                    resp = Response(dir_list)
-                    resp["oid"] = dir_id
-                    resp["dir_perm"] = seafile_api.check_permission_by_path(repo_id, path, username)
-                    return resp
-
-            return get_dir_entrys_by_id(request, repo, path, dir_id, request_type)
+        return get_dir_entrys_by_id(request, repo, path, dir_id, request_type)
 
     def post(self, request, repo_id, format=None):
         """ Create, rename, revert dir.
