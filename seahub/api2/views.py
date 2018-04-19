@@ -1714,46 +1714,59 @@ class UpdateBlksLinkView(APIView):
         url = gen_file_upload_url(token, 'update-blks-api')
         return Response(url)
 
-def get_dir_recursively(username, repo_id, path, all_dirs, with_files=False):
+def get_dir_file_recursively(username, repo_id, path, all_dirs):
+    is_pro = is_pro_version()
     path_id = seafile_api.get_dir_id_by_path(repo_id, path)
     dirs = seafile_api.list_dir_with_perm(repo_id, path,
             path_id, username, -1, -1)
 
-    if not with_files:
-        for dirent in dirs:
-            if stat.S_ISDIR(dirent.mode):
-                entry = {}
-                entry["type"] = 'dir'
-                entry["parent_dir"] = path
-                entry["id"] = dirent.obj_id
-                entry["name"] = dirent.obj_name
-                entry["mtime"] = dirent.mtime
-                entry["permission"] = dirent.permission
-                all_dirs.append(entry)
+    for dirent in dirs:
+        entry = {}
+        if stat.S_ISDIR(dirent.mode):
+            entry["type"] = 'dir'
+        else:
+            entry["type"] = 'file'
+            entry['modifier_email'] = dirent.modifier
+            entry["size"] = dirent.size
 
-                sub_path = posixpath.join(path, dirent.obj_name)
-                get_dir_recursively(username, repo_id, sub_path, all_dirs,
-                        with_files)
-    else:
-        for dirent in dirs:
-            entry = {}
-            if stat.S_ISDIR(dirent.mode):
-                entry["type"] = 'dir'
-            else:
-                entry["type"] = 'file'
+            if is_pro:
+                entry["is_locked"] = dirent.is_locked
+                entry["lock_owner"] = dirent.lock_owner
+                if dirent.lock_owner:
+                    entry["lock_owner_name"] = email2nickname(dirent.lock_owner)
+                entry["lock_time"] = dirent.lock_time
+                if username == dirent.lock_owner:
+                    entry["locked_by_me"] = True
+                else:
+                    entry["locked_by_me"] = False
 
-            entry["parent_dir"] = path
-            entry["id"] = dirent.obj_id
-            entry["name"] = dirent.obj_name
-            entry["mtime"] = dirent.mtime
-            entry["permission"] = dirent.permission
+        entry["parent_dir"] = path
+        entry["id"] = dirent.obj_id
+        entry["name"] = dirent.obj_name
+        entry["mtime"] = dirent.mtime
+        entry["permission"] = dirent.permission
 
-            all_dirs.append(entry)
+        all_dirs.append(entry)
 
-            if stat.S_ISDIR(dirent.mode):
-                sub_path = posixpath.join(path, dirent.obj_name)
-                get_dir_recursively(username, repo_id, sub_path, all_dirs,
-                        with_files)
+        # Use dict to reduce memcache fetch cost in large for-loop.
+        file_list =  [item for item in all_dirs if item['type'] == 'file']
+        contact_email_dict = {}
+        nickname_dict = {}
+        modifiers_set = set([x['modifier_email'] for x in file_list])
+        for e in modifiers_set:
+            if e not in contact_email_dict:
+                contact_email_dict[e] = email2contact_email(e)
+            if e not in nickname_dict:
+                nickname_dict[e] = email2nickname(e)
+
+        for e in file_list:
+            e['modifier_contact_email'] = contact_email_dict.get(e['modifier_email'], '')
+            e['modifier_name'] = nickname_dict.get(e['modifier_email'], '')
+
+
+        if stat.S_ISDIR(dirent.mode):
+            sub_path = posixpath.join(path, dirent.obj_name)
+            get_dir_file_recursively(username, repo_id, sub_path, all_dirs)
 
     return all_dirs
 
@@ -2995,27 +3008,35 @@ class DirView(APIView):
     throttle_classes = (UserRateThrottle, )
 
     def get(self, request, repo_id, format=None):
-        # list dir
-        repo = get_repo(repo_id)
+
+        # argument check
+        recursive = request.GET.get('recursive', '0')
+        if recursive not in ('1', '0'):
+            error_msg = "If you want to get recursive dir entries, you should set 'recursive' argument as '1'."
+            return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
+
+        request_type = request.GET.get('t', '')
+        if request_type and request_type not in ('f', 'd'):
+            error_msg = "'t'(type) should be 'f' or 'd'."
+            return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
+
+        # recource check
+        repo = seafile_api.get_repo(repo_id)
         if not repo:
-            return api_error(status.HTTP_404_NOT_FOUND, 'Library not found.')
+            error_msg = 'Library %s not found.' % repo_id
+            return api_error(status.HTTP_404_NOT_FOUND, error_msg)
 
         path = request.GET.get('p', '/')
-        if path[-1] != '/':
-            path = path + '/'
+        path = normalize_dir_path(path)
 
-        try:
-            dir_id = seafile_api.get_dir_id_by_path(repo_id, path)
-        except SearpcError as e:
-            logger.error(e)
-            return api_error(HTTP_520_OPERATION_FAILED,
-                             "Failed to get dir id by path.")
-
+        dir_id = seafile_api.get_dir_id_by_path(repo_id, path)
         if not dir_id:
             error_msg = 'Folder %s not found.' % path
             return api_error(status.HTTP_404_NOT_FOUND, error_msg)
 
-        if check_folder_permission(request, repo_id, path) is None:
+        # permission check
+        permission = check_folder_permission(request, repo_id, path)
+        if not permission:
             error_msg = 'Permission denied.'
             return api_error(status.HTTP_403_FORBIDDEN, error_msg)
 
@@ -3025,32 +3046,30 @@ class DirView(APIView):
                                     content_type=json_content_type)
             response["oid"] = dir_id
             return response
-        else:
-            request_type = request.GET.get('t', None)
-            if request_type and request_type not in ('f', 'd'):
-                return api_error(status.HTTP_400_BAD_REQUEST,
-                        "'t'(type) should be 'f' or 'd'.")
 
-            if request_type == 'd':
-                recursive = request.GET.get('recursive', '0')
-                if recursive not in ('1', '0'):
-                    return api_error(status.HTTP_400_BAD_REQUEST,
-                            "If you want to get recursive dir entries, you should set 'recursive' argument as '1'.")
+        if recursive == '1':
+            result = []
+            username = request.user.username
+            dir_file_list = get_dir_file_recursively(username, repo_id, path, [])
+            if request_type == 'f':
+                for item in dir_file_list:
+                    if item['type'] == 'file':
+                        result.append(item)
+            elif request_type == 'd':
+                for item in dir_file_list:
+                    if item['type'] == 'dir':
+                        result.append(item)
+            else:
+                result = dir_file_list
 
-                if recursive == '1':
-                    with_files = request.GET.get('with_files', '0') == '1'
-                    username = request.user.username
-                    dir_list = get_dir_recursively(username, repo_id, path, [],
-                            with_files)
-                    dir_list.sort(lambda x, y: cmp(x['name'].lower(), y['name'].lower()))
-                    response = HttpResponse(json.dumps(dir_list), status=200,
-                                            content_type=json_content_type)
-                    response["oid"] = dir_id
-                    response["dir_perm"] = seafile_api.check_permission_by_path(repo_id, path, username)
+            result.sort(lambda x, y: cmp(x['name'].lower(), y['name'].lower()))
+            response = HttpResponse(json.dumps(result), status=200,
+                                    content_type=json_content_type)
+            response["oid"] = dir_id
+            response["dir_perm"] = permission
+            return response
 
-                    return response
-
-            return get_dir_entrys_by_id(request, repo, path, dir_id, request_type)
+        return get_dir_entrys_by_id(request, repo, path, dir_id, request_type)
 
     def post(self, request, repo_id, format=None):
         # new dir

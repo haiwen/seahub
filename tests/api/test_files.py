@@ -376,7 +376,7 @@ class FilesApiTest(ApiTestBase):
             tmp_file_name = '%s.txt' % randstring()
             self.create_file(repo, fname=tmp_file_name)
 
-            dirents = self.get(repo.dir_url + '?t=d&recursive=1&with_files=1').json()
+            dirents = self.get(repo.dir_url + '?recursive=1').json()
             self.assertHasLen(dirents, len(dir_list) + 1)
             for dirent in dirents:
                 self.assertIsNotNone(dirent['id'])
