@@ -1,27 +1,15 @@
-import os
+# Copyright (c) 2012-2016 Seafile Ltd.
 import logging
 import urllib2
 
 import seaserv
-from seaserv import seafile_api
 from django.core.urlresolvers import reverse
-from django.http import HttpResponse, HttpResponseBadRequest, Http404, \
-    HttpResponseRedirect
+from django.http import Http404, HttpResponseRedirect
 from django.shortcuts import render, get_object_or_404
-from django.template import Context, loader, RequestContext
-from django.utils.translation import ugettext as _
-
-import seaserv
-from seaserv import seafile_api
-from pysearpc import SearpcError
 
 from seahub.auth.decorators import login_required
 from seahub.base.decorators import user_mods_check
-from seahub.wiki.models import Wiki, WikiDoesNotExist, WikiPageMissing
-from seahub.wiki.utils import (clean_page_name, page_name_to_file_name,
-                               get_wiki_dirent, get_inner_file_url,
-                               get_personal_wiki_page)
-from seahub.utils import render_error
+from seahub.wiki.models import Wiki
 from seahub.views import check_folder_permission
 
 # Get an instance of a logger
@@ -57,7 +45,12 @@ def slug(request, slug, page_name="home"):
     if not wiki.has_read_perm(request.user):
         raise Http404
 
-    user_can_write = True if request.user.username == wiki.username else False
+    req_user = request.user.username
+    if req_user == wiki.username or check_folder_permission(
+            request, wiki.repo_id, '/') == 'rw':
+        user_can_write = True
+    else:
+        user_can_write = False
 
     return render(request, "wiki/wiki.html", {
         "wiki": wiki,
