@@ -74,15 +74,8 @@ class AdminAddressBookGroups(APIView):
             error_msg = _(u'There is already a group with that name.')
             return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
 
+        # Group owner is 'system admin'
         group_owner = request.data.get('group_owner', '')
-        if group_owner:
-            try:
-                User.objects.get(email=group_owner)
-            except User.DoesNotExist:
-                error_msg = 'User %s not found.' % group_owner
-                return api_error(status.HTTP_404_NOT_FOUND, error_msg)
-        else:
-            group_owner = request.user.username
 
         try:
             parent_group = int(request.data.get('parent_group', -1))

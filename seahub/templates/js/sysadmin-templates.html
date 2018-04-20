@@ -49,7 +49,7 @@
 
         {% if is_pro and user.admin_permissions.can_manage_group %}
         <li class="tab<% if (cur_tab == 'address-book') { %> tab-cur<% } %>">
-            <a href="{{ SITE_ROOT }}sysadmin/#address-book/"><span class="sf2-icon-contacts"></span>{% trans "Address Book" %}</a>
+            <a href="{{ SITE_ROOT }}sysadmin/#address-book/"><span class="sf2-icon-organization"></span>{% trans "Address Book" %}</a>
         </li>
         {% endif %}
 
@@ -683,6 +683,16 @@
     </form>
 </script>
 
+<script type="text/template" id="address-book-group-add-form-tmpl">
+    <form id="group-add-form" action="" method="post" class="hide">{% csrf_token %}
+        <h3 id="dialogTitle">{% trans "New Group" %}</h3>
+        <label for="group-name">{% trans "Name" %}</label><br />
+        <input type="text" name="group_name" value="" class="input" id="group-name" /><br />
+        <p class="error hide"></p>
+        <input type="submit" class="submit" value="{% trans "Submit" %}" />
+    </form>
+</script>
+
 <script type="text/template" id="group-item-tmpl">
     <td><a href="{{ SITE_ROOT }}sysadmin/#groups/<%= id %>/libs/"><%- name %></a></td>
     <td><a href="{{ SITE_ROOT }}useradmin/info/<% print(encodeURIComponent(owner)); %>/"><%- owner %></a></td>
@@ -1023,10 +1033,9 @@
     <table>
         <thead>
             <tr>
-                <th width="35%">{% trans "Name" %}</th>
-                <th width="30%">{% trans "Owner" %}</th>
-                <th width="25%">{% trans "Created At" %}</th>
-                <th width="10%"><!--Operations--></th>
+                <th width="50%">{% trans "Name" %}</th>
+                <th width="30%">{% trans "Created At" %}</th>
+                <th width="20%"><!--Operations--></th>
             </tr>
         </thead>
         <tbody>
@@ -1051,10 +1060,9 @@
         <table class="hide">
             <thead>
                 <tr>
-                    <th width="35%">{% trans "Name" %}</th>
-                    <th width="30%">{% trans "Owner" %}</th>
-                    <th width="25%">{% trans "Created At" %}</th>
-                    <th width="10%"><!--Operations--></th>
+                    <th width="50%">{% trans "Name" %}</th>
+                    <th width="30%">{% trans "Created At" %}</th>
+                    <th width="20%"><!--Operations--></th>
                 </tr>
             </thead>
             <tbody>
@@ -1091,7 +1099,6 @@
 </script>
 <script type="text/template" id="address-book-group-item-tmpl">
     <td><a href="{{ SITE_ROOT }}sysadmin/#address-book/groups/<%= id %>/"><%- name %></a></td>
-    <td><a href="{{ SITE_ROOT }}useradmin/info/<% print(encodeURIComponent(owner)); %>/"><%- owner %></a></td>
     <td><time title="<%= time %>"><%= time_from_now %></time></td>
     <td>
         <a href="#" class="sf2-icon-delete sf2-x group-delete-btn op-icon vh" title="{% trans "Delete" %}" aria-label="{% trans "Delete" %}"></a>

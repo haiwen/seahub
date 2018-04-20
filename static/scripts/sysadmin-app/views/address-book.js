@@ -13,7 +13,7 @@ define([
         id: 'address-book',
 
         template: _.template($("#address-book-tmpl").html()),
-        groupAddFormTemplate: _.template($("#group-add-form-tmpl").html()),
+        groupAddFormTemplate: _.template($("#address-book-group-add-form-tmpl").html()),
 
         initialize: function() {
             this.groupCollection = new GroupCollection();
@@ -52,18 +52,9 @@ define([
             $form.modal();
             $('#simplemodal-container').css({'height':'auto'});
 
-            $('[name="group_owner"]', $form).select2($.extend(
-                Common.contactInputOptionsForSelect2(), {
-                width: '268px',
-                containerCss: {'margin-bottom': '5px'},
-                maximumSelectionSize: 1,
-                placeholder: gettext("Search user or enter email and press Enter"), // to override 'placeholder' returned by `Common.conta...`
-                formatSelectionTooBig: gettext("You cannot select any more choices")
-            }));
-
             $form.submit(function() {
                 var group_name = $.trim($('[name="group_name"]', $form).val());
-                var group_owner = $.trim($('[name="group_owner"]', $form).val());
+                var group_owner = 'system admin';
                 var $error = $('.error', $form);
                 var $submitBtn = $('[type="submit"]', $form);
 
