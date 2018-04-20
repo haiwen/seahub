@@ -22,7 +22,8 @@ from seahub.views.wiki import personal_wiki, personal_wiki_pages, \
 from seahub.api2.endpoints.groups import Groups, Group
 from seahub.api2.endpoints.shareable_groups import ShareableGroups
 from seahub.api2.endpoints.group_libraries import GroupLibraries, GroupLibrary
-from seahub.api2.endpoints.group_owned_libraries import GroupOwnedLibraries, GroupOwnedLibrary
+from seahub.api2.endpoints.group_owned_libraries import GroupOwnedLibraries, \
+        GroupOwnedLibrary, GroupOwnedLibraryFolderPermission
 from seahub.api2.endpoints.group_members import GroupMembers, GroupMembersBulk, GroupMember
 from seahub.api2.endpoints.search_group import SearchGroup
 from seahub.api2.endpoints.share_links import ShareLinks, ShareLink
@@ -208,6 +209,7 @@ urlpatterns = [
 
     url(r'^api/v2.1/groups/(?P<group_id>\d+)/group-owned-libraries/$', GroupOwnedLibraries.as_view(), name='api-v2.1-group-owned-libraries'),
     url(r'^api/v2.1/groups/(?P<group_id>\d+)/group-owned-libraries/(?P<repo_id>[-0-9a-f]{36})/$', GroupOwnedLibrary.as_view(), name='api-v2.1-owned-group-library'),
+    url(r'^api/v2.1/groups/(?P<group_id>\d+)/group-owned-libraries/(?P<repo_id>[-0-9a-f]{36})/folder-permission/$', GroupOwnedLibraryFolderPermission.as_view(), name='api-v2.1-owned-group-library-folder-permission'),
 
     url(r'^api/v2.1/groups/(?P<group_id>\d+)/members/$', GroupMembers.as_view(), name='api-v2.1-group-members'),
     url(r'^api/v2.1/groups/(?P<group_id>\d+)/members/bulk/$', GroupMembersBulk.as_view(), name='api-v2.1-group-members-bulk'),
