@@ -519,8 +519,14 @@ class UserNotification(models.Model):
             self.delete()
             return None
 
-        msg = _(u"%(user)s has shared a library named <a href='%(href)s'>%(repo_name)s</a> to you.") %  {
+        if path == '/':
+            notice_msg = 'has shared a library named'
+        else:
+            notice_msg = 'has shared a folder named'
+
+        msg = _(u"%(user)s %(notice_msg)s <a href='%(href)s'>%(repo_name)s</a> to you.") %  {
             'user': escape(share_from),
+            'notice_msg': notice_msg,
             'href': reverse('view_common_lib_dir', args=[repo.id, '']),
             'repo_name': escape(repo.name),
             }
@@ -566,8 +572,14 @@ class UserNotification(models.Model):
             self.delete()
             return None
 
-        msg = _(u"%(user)s has shared a library named <a href='%(repo_href)s'>%(repo_name)s</a> to group <a href='%(group_href)s'>%(group_name)s</a>.") %  {
+        if path == '/':
+            notice_msg = 'has shared a library named'
+        else:
+            notice_msg = 'has shared a folder named'
+
+        msg = _(u"%(user)s %(notice_msg)s <a href='%(repo_href)s'>%(repo_name)s</a> to group <a href='%(group_href)s'>%(group_name)s</a>.") %  {
             'user': escape(share_from),
+            'notice_msg': notice_msg,
             'repo_href': reverse('view_common_lib_dir', args=[repo.id, '']),
             'repo_name': escape(repo.name),
             'group_href': reverse('group_info', args=[group.id]),
