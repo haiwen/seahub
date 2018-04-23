@@ -11,6 +11,7 @@ from django.forms import ModelForm, Textarea
 from django.utils.html import escape
 from django.utils.translation import ugettext as _
 from django.core.cache import cache
+from django.template.loader import render_to_string
 
 import seaserv
 from seaserv import seafile_api, ccnet_api
@@ -511,6 +512,7 @@ class UserNotification(models.Model):
                 else:
                     owner = seafile_api.get_repo_owner(repo_id)
                     repo = seafile_api.get_virtual_repo(repo_id, path, owner)
+
         except Exception as e:
             logger.error(e)
             return None
@@ -520,16 +522,19 @@ class UserNotification(models.Model):
             return None
 
         if path == '/':
-            notice_msg = 'has shared a library named'
+            msg = render_to_string(
+                'notifications/notice_msg/repo_share_msg.html', {
+                    'user': share_from,
+                    'lib_url': reverse('view_common_lib_dir', args=[repo.id, '']),
+                    'lib_name': repo.name,
+                })
         else:
-            notice_msg = 'has shared a folder named'
-
-        msg = _(u"%(user)s %(notice_msg)s <a href='%(href)s'>%(repo_name)s</a> to you.") %  {
-            'user': escape(share_from),
-            'notice_msg': notice_msg,
-            'href': reverse('view_common_lib_dir', args=[repo.id, '']),
-            'repo_name': escape(repo.name),
-            }
+            msg = render_to_string(
+                'notifications/notice_msg/folder_share_msg.html', {
+                    'user': share_from,
+                    'lib_url': reverse('view_common_lib_dir', args=[repo.id, '']),
+                    'lib_name': repo.name,
+                })
 
         return msg
 
@@ -573,18 +578,17 @@ class UserNotification(models.Model):
             return None
 
         if path == '/':
-            notice_msg = 'has shared a library named'
+            msg_patt = _(u"%(user)s has shared a library named <a href='%(repo_href)s'>%(repo_name)s</a> to group <a href='%(group_href)s'>%(group_name)s</a>.")
         else:
-            notice_msg = 'has shared a folder named'
+            msg_patt = _(u"%(user)s has shared a folder named <a href='%(repo_href)s'>%(repo_name)s</a> to group <a href='%(group_href)s'>%(group_name)s</a>.")
 
-        msg = _(u"%(user)s %(notice_msg)s <a href='%(repo_href)s'>%(repo_name)s</a> to group <a href='%(group_href)s'>%(group_name)s</a>.") %  {
+        msg = msg_patt % {
             'user': escape(share_from),
-            'notice_msg': notice_msg,
             'repo_href': reverse('view_common_lib_dir', args=[repo.id, '']),
             'repo_name': escape(repo.name),
             'group_href': reverse('group_info', args=[group.id]),
             'group_name': escape(group.group_name),
-            }
+        }
 
         return msg
 

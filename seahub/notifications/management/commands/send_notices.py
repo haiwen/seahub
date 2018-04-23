@@ -84,20 +84,17 @@ class Command(BaseCommand):
         d = json.loads(notice.detail)
         repo_id = d['repo_id']
         repo = seafile_api.get_repo(repo_id)
-
         path = d['path']
         if path == '/':
             shared_type = 'library'
-            repo_name = repo.name
         else:
             shared_type = 'folder'
-            repo_name = path.split('/')[-1]
             owner = seafile_api.get_repo_owner(repo_id)
             repo = seafile_api.get_virtual_repo(repo_id, path, owner)
 
         notice.repo_url = reverse("view_common_lib_dir", args=[repo.id, ''])
         notice.notice_from = escape(email2nickname(d['share_from']))
-        notice.repo_name = repo_name
+        notice.repo_name = repo.name
         notice.avatar_src = self.get_avatar_src(d['share_from'])
         notice.shared_type = shared_type
 
@@ -114,16 +111,14 @@ class Command(BaseCommand):
         path = d['path']
         if path == '/':
             shared_type = 'library'
-            repo_name = repo.name
         else:
             shared_type = 'folder'
-            repo_name = path.split('/')[-1]
             owner = seafile_api.get_repo_owner(repo_id)
             repo = seafile_api.get_virtual_repo(repo_id, path, owner)
 
         notice.repo_url = reverse("view_common_lib_dir", args=[repo.id, ''])
         notice.notice_from = escape(email2nickname(d['share_from']))
-        notice.repo_name = repo_name
+        notice.repo_name = repo.name
         notice.avatar_src = self.get_avatar_src(d['share_from'])
         notice.group_url = reverse("group_info", args=[group.id])
         notice.group_name = group.group_name
