@@ -49,13 +49,13 @@
 
         {% if is_pro and user.admin_permissions.can_manage_group %}
         <li class="tab<% if (cur_tab == 'address-book') { %> tab-cur<% } %>">
-            <a href="{{ SITE_ROOT }}sysadmin/#address-book/"><span class="sf2-icon-organization"></span>{% trans "Address Book" %}</a>
+            <a href="{{ SITE_ROOT }}sysadmin/#address-book/"><span class="sf2-icon-organization"></span>{% trans "Organization" %}</a>
         </li>
         {% endif %}
 
         {% if multi_tenancy and is_default_admin %}
         <li class="tab">
-            <a href="{{ SITE_ROOT }}sys/orgadmin/"><span class="sf2-icon-organization"></span>{% trans "Organizations" %}</a>
+            <a href="{{ SITE_ROOT }}sys/orgadmin/"><span class="sf2-icon-organization"></span>{% trans "Multi-Tenancy" %}</a>
         </li>
         {% endif %}
 
