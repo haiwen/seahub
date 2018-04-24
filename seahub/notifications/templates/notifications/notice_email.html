@@ -31,7 +31,7 @@ You've got {{num}} new notices on {{ site_name }}:
 
                 {% elif notice.is_repo_share_msg %}
                     <p style="line-height:1.5; margin:.2em 10px .2em 0;">
-                        {% if shared_type == 'library' %}
+                        {% if notice.shared_type == 'library' %}
                         {% include "notifications/notice_msg/repo_share_msg.html" with user=notice.notice_from lib_url=notice.repo_url lib_name=notice.repo_name %}
                         {% else %}
                         {% include "notifications/notice_msg/folder_share_msg.html" with user=notice.notice_from lib_url=notice.repo_url lib_name=notice.repo_name %}
