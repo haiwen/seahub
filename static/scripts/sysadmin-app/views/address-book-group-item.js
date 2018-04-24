@@ -4,21 +4,26 @@ define([
     'backbone',
     'common',
     'moment',
+    'simplemodal',
     'app/views/widgets/hl-item-view'
-], function($, _, Backbone, Common, Moment, HLItemView) {
+], function($, _, Backbone, Common, Moment, Simplemodal, HLItemView) {
     'use strict';
 
     var GroupView = HLItemView.extend({
         tagName: 'tr',
 
         template: _.template($('#address-book-group-item-tmpl').html()),
+        setQuotaFormTemplate: _.template($('#address-book-group-quota-set-form-tmpl').html()),
 
         events: {
-            'click .group-delete-btn': 'deleteGroup'
+            'click .group-delete-btn': 'deleteGroup',
+            'click .quota-edit-icon': 'setQuota'
         },
 
         initialize: function() {
             HLItemView.prototype.initialize.call(this);
+
+            this.listenTo(this.model, "change", this.render);
         },
 
         deleteGroup: function() {
@@ -52,12 +57,62 @@ define([
             return false;
         },
 
+        setQuota: function() {
+            var model = this.model;
+
+            var $form = $(this.setQuotaFormTemplate());
+            $form.modal();
+            $('#simplemodal-container').css({'width':'auto', 'height':'auto'});
+
+            $form.on('submit', function() {
+                var $error = $('.error', $form);
+                var $submitBtn = $('[type="submit"]', $form);
+                var quota = $.trim($('[name="quota"]', $form).val());
+
+                if (!quota) {
+                    $error.html(gettext("It is required.")).show();
+                    return false;
+                }
+
+                Common.disableButton($submitBtn);
+                $.ajax({
+                    url: Common.getUrl({
+                        'name':'admin-address-book-group',
+                        'group_id': model.get('id')
+                    }),
+                    type: 'PUT',
+                    cache: false,
+                    beforeSend: Common.prepareCSRFToken,
+                    data: {'quota': quota == -2 ? -2 : quota * 1000000},
+                    dataType: 'json',
+                    success: function(data) {
+                        model.set({'quota': data.quota});
+                        $.modal.close();
+                    },
+                    error: function(xhr) {
+                        var err_msg;
+                        if (xhr.responseText) {
+                            err_msg = $.parseJSON(xhr.responseText).error_msg;
+                        } else {
+                            err_msg = gettext("Failed. Please check the network.");
+                        }
+                        $error.html(err_msg).show();
+                        Common.enableButton($submitBtn);
+                    }
+                });
+
+                return false;
+            });
+        },
+
         render: function() {
             var data = this.model.toJSON(),
                 created_at = Moment(data['created_at']);
 
             data['time'] = created_at.format('LLLL');
             data['time_from_now'] = Common.getRelativeTimeStr(created_at);
+
+            data['quota_shown'] = data['quota'] == -2 ? '--' : Common.quotaSizeFormat(data['quota']);
 
             this.$el.html(this.template(data));
 

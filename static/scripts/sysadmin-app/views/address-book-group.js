@@ -5,8 +5,11 @@ define([
     'common',
     'sysadmin-app/views/address-book-group-item',
     'sysadmin-app/views/group-member',
-    'sysadmin-app/collection/address-book-group'
-], function($, _, Backbone, Common, GroupItemView, MemberItemView, GroupCollection) {
+    'sysadmin-app/views/address-book-group-library',
+    'sysadmin-app/collection/address-book-group',
+    'sysadmin-app/collection/group-repos'
+], function($, _, Backbone, Common, GroupItemView, MemberItemView,
+    LibItemView, GroupCollection, GroupRepoCollection) {
     'use strict';
 
     var view = Backbone.View.extend({
@@ -17,6 +20,7 @@ define([
         pathTemplate: _.template($("#address-book-group-path-tmpl").html()),
         groupAddFormTemplate: _.template($("#address-book-group-add-form-tmpl").html()),
         addMemberFormTemplate: _.template($('#add-group-member-form-tmpl').html()),
+        addLibFormTemplate: _.template($("#address-book-library-add-form-tmpl").html()),
 
         initialize: function() {
             this.groupCollection = new GroupCollection();
@@ -26,6 +30,11 @@ define([
             // members
             this.memberCollection = new Backbone.Collection();
             this.listenTo(this.memberCollection, 'add', this.addMember);
+
+            // libraries
+            this.groupRepoCollection = new GroupRepoCollection();
+            this.listenTo(this.groupRepoCollection, 'reset', this.resetLibraries);
+            this.listenTo(this.groupRepoCollection, 'add', this.addLibrary);
 
             this.render();
         },
@@ -43,6 +52,12 @@ define([
             this.$members = this.$('.members');
             this.$membersTable = $('table', this.$members);
             this.$membersTableBody = $('tbody', this.$membersTable);
+            this.$membersEmptyTip = $('.empty-tip', this.$members);
+
+            this.$libs = this.$('.libraries');
+            this.$libsTable = $('table', this.$libs);
+            this.$libsTableBody = $('tbody', this.$libsTable);
+            this.$libsEmptyTip = $('.empty-tip', this.$libs);
 
             this.$loadingTip = this.$('.loading-tip');
             this.$error = this.$('.error');
@@ -50,7 +65,8 @@ define([
 
         events: {
             'click .js-add-group': 'addGroup',
-            'click .js-add-member': 'newMember'
+            'click .js-add-member': 'newMember',
+            'click .js-add-library': 'newLibrary'
         },
 
         initPage: function() {
@@ -66,6 +82,12 @@ define([
             this.$members.hide();
             this.$membersTable.hide();
             this.$membersTableBody.empty();
+            this.$membersEmptyTip.hide();
+
+            this.$libs.hide();
+            this.$libsTable.hide();
+            this.$libsTableBody.empty();
+            this.$libsEmptyTip.hide();
 
             this.$error.hide();
         },
@@ -167,6 +189,10 @@ define([
                     success: function(data) {
                         if (data.success.length > 0) {
                             _this.memberCollection.add(data.success, {prepend: true});
+                            if (_this.memberCollection.length == 1) {
+                                _this.$membersEmptyTip.hide();
+                                _this.$membersTable.show();
+                            }
                         }
 
                         var err_str = '';
@@ -197,6 +223,60 @@ define([
             return false;
         },
 
+        newLibrary: function() {
+            var _this = this;
+
+            var $form = $(this.addLibFormTemplate());
+            $form.modal();
+            $('#simplemodal-container').css({'height':'auto', 'width':'auto'});
+
+            $form.submit(function() {
+                var name = $.trim($('[name="library_name"]', $form).val());
+                var $error = $('.error', $form);
+                var $submitBtn = $('[type="submit"]', $form);
+
+                if (!name) {
+                    $error.html(gettext("It is required.")).show();
+                    return false;
+                }
+
+                $error.hide();
+                Common.disableButton($submitBtn);
+
+                $.ajax({
+                    url: Common.getUrl({
+                        'name': 'group_owned_libraries',
+                        'group_id': _this.options.group_id
+                    }),
+                    type: 'POST',
+                    dataType: 'json',
+                    data: {'repo_name': name},
+                    traditional: true,
+                    beforeSend: Common.prepareCSRFToken,
+                    success: function(data) {
+                        _this.groupRepoCollection.add(data, {prepend: true});
+                        if (_this.groupRepoCollection.length == 1) {
+                            _this.$libsEmptyTip.hide();
+                            _this.$libsTable.show();
+                        }
+                        Common.closeModal();
+                    },
+                    error: function(jqXHR, textStatus, errorThrown){
+                        var err_msg;
+                        if (jqXHR.responseText) {
+                            err_msg = jqXHR.responseJSON.error_msg;
+                        } else {
+                            err_msg = gettext('Please check the network.');
+                        }
+                        $error.html(err_msg).show();
+                        Common.enableButton($submitBtn);
+                    }
+                });
+                return false;
+            });
+            return false;
+		},
+
         hide: function() {
             this.$el.detach();
             this.attached = false;
@@ -219,6 +299,9 @@ define([
                 data: {'return_ancestors': true},
                 cache: false,
                 reset: true,
+                success: function() {
+                    _this.getLibs();
+                },
                 error: function(collection, response, opts) {
                     var err_msg;
                     if (response.responseText) {
@@ -236,6 +319,47 @@ define([
                     _this.$loadingTip.hide();
                 }
             });
+        },
+
+        getLibs: function() {
+            var _this = this;
+            this.groupRepoCollection.setGroupId(this.options.group_id);
+            this.groupRepoCollection.fetch({
+                cache: false,
+                reset: true,
+                error: function(collection, response, opts) {
+                    var err_msg;
+                    if (response.responseText) {
+                        if (response['status'] == 401 || response['status'] == 403) {
+                            err_msg = gettext("Permission error");
+                        } else {
+                            err_msg = $.parseJSON(response.responseText).error_msg;
+                        }
+                    } else {
+                        err_msg = gettext("Failed. Please check the network.");
+                    }
+                    _this.$error.html(err_msg).show();
+                }
+            });
+        },
+
+        resetLibraries: function() {
+            if (this.groupRepoCollection.length > 0) {
+                this.groupRepoCollection.each(this.addLibrary, this);
+                this.$libsTable.show();
+            } else {
+                this.$libsEmptyTip.show();
+            }
+            this.$libs.show();
+        },
+
+        addLibrary: function(item, collection, options) {
+            var view = new LibItemView({model: item, group_id: this.options.group_id});
+            if (options.prepend) {
+                this.$libsTableBody.prepend(view.render().el);
+            } else {
+                this.$libsTableBody.append(view.render().el);
+            }
         },
 
         renderPath: function() {
@@ -258,10 +382,13 @@ define([
             }
             this.$groups.show();
 
-            // There is at least 1 member, the owner.
             this.memberCollection.reset(this.groupCollection.data.members);
-            this.memberCollection.each(this.addMember, this);
-            this.$membersTable.show();
+            if (this.memberCollection.length > 0) {
+                this.memberCollection.each(this.addMember, this);
+                this.$membersTable.show();
+            } else {
+                this.$membersEmptyTip.show();
+            }
             this.$members.show();
         },
 
