@@ -77,7 +77,7 @@ define([
                 Common.disableButton($submitBtn);
                 $.ajax({
                     url: Common.getUrl({
-                        'name':'admin-address-book-group',
+                        'name':'admin-group',
                         'group_id': model.get('id')
                     }),
                     type: 'PUT',
@@ -112,7 +112,16 @@ define([
             data['time'] = created_at.format('LLLL');
             data['time_from_now'] = Common.getRelativeTimeStr(created_at);
 
-            data['quota_shown'] = data['quota'] == -2 ? '--' : Common.quotaSizeFormat(data['quota']);
+            switch(data['quota']) {
+                case -2: // no limit
+                    data['quota_shown'] = '--';
+                    break;
+                case -1: // not set or error
+                    data['quota_shown'] = 0;
+                    break;
+                default:
+                    data['quota_shown'] = Common.quotaSizeFormat(data['quota']);
+            }
 
             this.$el.html(this.template(data));
 

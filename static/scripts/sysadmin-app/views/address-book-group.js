@@ -245,7 +245,7 @@ define([
 
                 $.ajax({
                     url: Common.getUrl({
-                        'name': 'group_owned_libraries',
+                        'name': 'admin-group-owned-libraries',
                         'group_id': _this.options.group_id
                     }),
                     type: 'POST',

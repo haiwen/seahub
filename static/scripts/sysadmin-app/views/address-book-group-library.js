@@ -26,13 +26,13 @@ define([
 
         del: function() {
             var _this = this;
-            var repo_name = this.model.get('repo_name');
+            var repo_name = this.model.get('repo_name') || this.model.get('name');
             var popupTitle = gettext("Delete Library");
             var popupContent = gettext("Are you sure you want to delete %s ?").replace('%s', '<span class="op-target ellipsis ellipsis-op-target" title="' + Common.HTMLescape(repo_name) + '">' + Common.HTMLescape(repo_name) + '</span>');
             var yesCallback = function() {
                 $.ajax({
                     url: Common.getUrl({
-                        'name': 'group_owned_library',
+                        'name': 'admin-group-owned-library',
                         'group_id': _this.group_id,
                         'repo_id': _this.model.get('repo_id')
                     }),
