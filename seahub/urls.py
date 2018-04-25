@@ -97,8 +97,8 @@ from seahub.api2.endpoints.admin.invitations import InvitationsView as AdminInvi
 from seahub.api2.endpoints.admin.library_history import AdminLibraryHistoryLimit
 from seahub.api2.endpoints.admin.login_bg_image import AdminLoginBgImage
 from seahub.api2.endpoints.admin.admin_role import AdminAdminRole
-from seahub.api2.endpoints.admin.address_book.groups import AdminAddressBookGroups
-from seahub.api2.endpoints.admin.address_book.group import AdminAddressBookGroup
+from seahub.api2.endpoints.admin.address_book.groups import AdminAddressBookGroups, \
+        AdminAddressBookGroup
 
 urlpatterns = [
     url(r'^accounts/', include('seahub.base.registration_urls')),

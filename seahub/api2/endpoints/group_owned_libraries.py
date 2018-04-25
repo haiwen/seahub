@@ -181,7 +181,7 @@ class GroupOwnedLibraryFolderPermission(APIView):
 
         path = request.data.get('path', None)
         if not path:
-            error_msg = '_path invalid.'
+            error_msg = 'path invalid.'
             return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
 
         perm = request.data.get('permission', None)
