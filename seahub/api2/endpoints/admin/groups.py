@@ -32,6 +32,7 @@ def get_group_info(group_id):
         "name": group.group_name,
         "owner": group.creator_name,
         "created_at": isoformat_timestr,
+        "quota": seafile_api.get_group_quota(group_id),
     }
 
     return group_info
@@ -162,17 +163,14 @@ class AdminGroup(APIView):
     permission_classes = (IsAdminUser,)
 
     def put(self, request, group_id):
-        """ Admin transfer a group
+        """ Admin update a group
+
+        1. transfer a group.
+        2. set group quota
 
         Permission checking:
         1. Admin user;
         """
-
-        # argument check
-        new_owner = request.data.get('new_owner', None)
-        if not new_owner or not is_valid_username(new_owner):
-            error_msg = 'new_owner %s invalid.' % new_owner
-            return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
 
         # recourse check
         group_id = int(group_id) # Checked by URL Conf
@@ -181,43 +179,65 @@ class AdminGroup(APIView):
             error_msg = 'Group %d not found.' % group_id
             return api_error(status.HTTP_404_NOT_FOUND, error_msg)
 
-        # check if new_owner exists,
-        # NOT need to check old_owner for old_owner may has been deleted.
-        try:
-            User.objects.get(email=new_owner)
-        except User.DoesNotExist:
-            error_msg = 'User %s not found.' % new_owner
-            return api_error(status.HTTP_404_NOT_FOUND, error_msg)
+        new_owner = request.data.get('new_owner', '')
+        if new_owner:
+            if not is_valid_username(new_owner):
+                error_msg = 'new_owner %s invalid.' % new_owner
+                return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
 
-        old_owner = group.creator_name
-        if new_owner == old_owner:
-            error_msg = _(u'User %s is already group owner.') % new_owner
-            return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
+            # check if new_owner exists,
+            # NOT need to check old_owner for old_owner may has been deleted.
+            try:
+                User.objects.get(email=new_owner)
+            except User.DoesNotExist:
+                error_msg = 'User %s not found.' % new_owner
+                return api_error(status.HTTP_404_NOT_FOUND, error_msg)
 
-        # transfer a group
-        try:
-            if not is_group_member(group_id, new_owner):
-                ccnet_api.group_add_member(group_id, old_owner, new_owner)
+            old_owner = group.creator_name
+            if new_owner == old_owner:
+                error_msg = _(u'User %s is already group owner.') % new_owner
+                return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
 
-            if not is_group_admin(group_id, new_owner):
-                ccnet_api.group_set_admin(group_id, new_owner)
+            # transfer a group
+            try:
+                if not is_group_member(group_id, new_owner):
+                    ccnet_api.group_add_member(group_id, old_owner, new_owner)
 
-            ccnet_api.set_group_creator(group_id, new_owner)
-            ccnet_api.group_unset_admin(group_id, old_owner)
-        except SearpcError as e:
-            logger.error(e)
-            error_msg = 'Internal Server Error'
-            return api_error(status.HTTP_500_INTERNAL_SERVER_ERROR, error_msg)
+                if not is_group_admin(group_id, new_owner):
+                    ccnet_api.group_set_admin(group_id, new_owner)
 
-        # send admin operation log signal
-        admin_op_detail = {
-            "id": group_id,
-            "name": group.group_name,
-            "from": old_owner,
-            "to": new_owner,
-        }
-        admin_operation.send(sender=None, admin_name=request.user.username,
-                operation=GROUP_TRANSFER, detail=admin_op_detail)
+                ccnet_api.set_group_creator(group_id, new_owner)
+                ccnet_api.group_unset_admin(group_id, old_owner)
+            except SearpcError as e:
+                logger.error(e)
+                error_msg = 'Internal Server Error'
+                return api_error(status.HTTP_500_INTERNAL_SERVER_ERROR, error_msg)
+
+            # send admin operation log signal
+            admin_op_detail = {
+                "id": group_id,
+                "name": group.group_name,
+                "from": old_owner,
+                "to": new_owner,
+            }
+            admin_operation.send(sender=None, admin_name=request.user.username,
+                    operation=GROUP_TRANSFER, detail=admin_op_detail)
+
+        # set group quota
+        group_quota = request.data.get('quota', '')
+        if group_quota:
+            try:
+                group_quota = int(group_quota)
+            except ValueError:
+                error_msg = 'quota invalid.'
+                return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
+
+            try:
+                seafile_api.set_group_quota(group_id, group_quota)
+            except Exception as e:
+                logger.error(e)
+                error_msg = 'Internal Server Error'
+                return api_error(status.HTTP_500_INTERNAL_SERVER_ERROR, error_msg)
 
         group_info = get_group_info(group_id)
         return Response(group_info)
