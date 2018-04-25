@@ -84,11 +84,25 @@ class Command(BaseCommand):
         d = json.loads(notice.detail)
         repo_id = d['repo_id']
         repo = seafile_api.get_repo(repo_id)
+        path = d['path']
+        org_id = d.get('org_id', None)
+        if path == '/':
+            shared_type = 'library'
+        else:
+            shared_type = 'folder'
+            if org_id:
+                owner = seafile_api.get_org_repo_owner(repo_id)
+                repo = seafile_api.get_org_virtual_repo(
+                    org_id, repo_id, path, owner)
+            else:
+                owner = seafile_api.get_repo_owner(repo_id)
+                repo = seafile_api.get_virtual_repo(repo_id, path, owner)
 
-        notice.repo_url = reverse("view_common_lib_dir", args=[repo_id, ''])
+        notice.repo_url = reverse("view_common_lib_dir", args=[repo.id, ''])
         notice.notice_from = escape(email2nickname(d['share_from']))
         notice.repo_name = repo.name
         notice.avatar_src = self.get_avatar_src(d['share_from'])
+        notice.shared_type = shared_type
 
         return notice
 
@@ -99,13 +113,28 @@ class Command(BaseCommand):
         repo = seafile_api.get_repo(repo_id)
         group_id = d['group_id']
         group = ccnet_api.get_group(group_id)
+        org_id = d.get('org_id', None)
 
-        notice.repo_url = reverse("view_common_lib_dir", args=[repo_id, ''])
+        path = d['path']
+        if path == '/':
+            shared_type = 'library'
+        else:
+            shared_type = 'folder'
+            if org_id:
+                owner = seafile_api.get_org_repo_owner(repo_id)
+                repo = seafile_api.get_org_virtual_repo(
+                    org_id, repo_id, path, owner)
+            else:
+                owner = seafile_api.get_repo_owner(repo_id)
+                repo = seafile_api.get_virtual_repo(repo_id, path, owner)
+
+        notice.repo_url = reverse("view_common_lib_dir", args=[repo.id, ''])
         notice.notice_from = escape(email2nickname(d['share_from']))
         notice.repo_name = repo.name
         notice.avatar_src = self.get_avatar_src(d['share_from'])
         notice.group_url = reverse("group_info", args=[group.id])
         notice.group_name = group.group_name
+        notice.shared_type = shared_type
 
         return notice
 
