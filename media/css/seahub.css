@@ -680,6 +680,12 @@ textarea:-moz-placeholder {/* for FF */
     background:none;
     text-decoration:underline;
 }
+.small-hd {
+    padding:3px 10px;
+    background:#f7f7f7;
+    border-radius:2px;
+    margin:15px 0;
+}
 
 /*******ui widgets**************/
 /**** path ****/
@@ -4142,4 +4148,11 @@ img.thumbnail {
 .dir-toolbar-2 .op-link:hover {
     color:#eb8205;
     text-decoration:none;
+}
+
+/* address book */
+#address-book-group .empty-tip {
+    color:#a4a4a4;
+    text-align:center;
+    margin-bottom:30px;
 }

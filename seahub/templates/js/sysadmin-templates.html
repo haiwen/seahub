@@ -47,6 +47,12 @@
         </li>
         {% endif %}
 
+        {% if is_pro and user.admin_permissions.can_manage_group %}
+        <li class="tab<% if (cur_tab == 'address-book') { %> tab-cur<% } %>">
+            <a href="{{ SITE_ROOT }}sysadmin/#address-book/"><span class="sf2-icon-organization"></span>{% trans "Departments" %}</a>
+        </li>
+        {% endif %}
+
         {% if multi_tenancy and is_default_admin %}
         <li class="tab">
             <a href="{{ SITE_ROOT }}sys/orgadmin/"><span class="sf2-icon-organization"></span>{% trans "Organizations" %}</a>
@@ -1031,4 +1037,158 @@
     <% } %>
     </td>
     <td><time title="<%- time %>"><%- time_from_now %></time></td>
+</script>
+
+{# address book #}
+<script type="text/template" id="address-book-tmpl">
+    <div class="hd ovhd">
+        <h3 class="fleft">{% trans "Departments" %}</h3>
+        <div class="fright">
+            <button class="btn-white js-add-group">{% trans "New Group" %}</button>
+        </div>
+    </div>
+    <span class="loading-icon loading-tip"></span>
+    <table>
+        <thead>
+            <tr>
+                <th width="40%">{% trans "Name" %}</th>
+                <th width="25%">{% trans "Created At" %}</th>
+                <th width="20%">{% trans "Quota" %}</th>
+                <th width="15%"><!--Operations--></th>
+            </tr>
+        </thead>
+        <tbody>
+        </tbody>
+    </table>
+    <div class="empty-tips hide">
+        <h2 class="alc">{% trans "No groups" %}</h2>
+    </div>
+    <p class="error error-tip hide"></p>
+</script>
+<script type="text/template" id="address-book-group-tmpl">
+    <div class="hd ovhd">
+        <h3 class="fleft group-path"></h3>
+        <div class="fright">
+            <button class="btn-white js-add-group">{% trans "New Group" %}</button>
+            <button class="btn-white js-add-member">{% trans "Add Member" %}</button>
+            <button class="btn-white js-add-library">{% trans "New Library" %}</button>
+        </div>
+    </div>
+    <span class="loading-icon loading-tip"></span>
+    <div class="groups">
+        <h4 class="small-hd">{% trans "Groups" %}</h4>
+        <table class="hide">
+            <thead>
+                <tr>
+                    <th width="40%">{% trans "Name" %}</th>
+                    <th width="25%">{% trans "Created At" %}</th>
+                    <th width="25%">{% trans "Quota" %}</th>
+                    <th width="10%"><!--Operations--></th>
+                </tr>
+            </thead>
+            <tbody>
+            </tbody>
+        </table>
+        <p class="empty-tip hide">{% trans "No groups" %}</p>
+    </div>
+    <div class="members">
+        <h4 class="small-hd">{% trans "Members" %}</h4>
+        <table class="hide">
+            <thead>
+                <tr>
+                    <th width="5%"></th>
+                    <th width="25%">{% trans "Name" %}</th>
+                    <th width="35%">{% trans "Email" %}</th>
+                    <th width="25%">{% trans "Role" %}</th>
+                    <th width="10%"><!--Operations--></th>
+                </tr>
+            </thead>
+            <tbody>
+            </tbody>
+        </table>
+        <p class="empty-tip hide">{% trans "No members" %}</p>
+    </div>
+    <div class="libraries">
+        <h4 class="small-hd">{% trans "Libraries" %}</h4>
+        <table class="hide">
+            <thead>
+                <tr>
+                    <th width="5%"></th>
+                    <th width="55%">{% trans "Name" %}</th>
+                    <th width="30%">{% trans "Size" %}</th>
+                    <th width="10%"><!--Operations--></th>
+                </tr>
+            </thead>
+            <tbody>
+            </tbody>
+        </table>
+        <p class="empty-tip hide">{% trans "No libraries" %}</p>
+    </div>
+    <p class="error error-tip hide"></p>
+</script>
+<script type="text/template" id="address-book-group-path-tmpl">
+    <a href="#address-book/" class="normal">{% trans "Departments" %}</a>
+    <span class="path-split">/</span>
+    <% for (var i = 0,len = ancestor_groups.length; i < len; i++) { %>
+    <a href="#address-book/groups/<%= ancestor_groups[i].id %>/" class="normal"><%- ancestor_groups[i].name %></a>
+    <span class="path-split">/</span>
+    <% } %>
+    <%- name %>
+</script>
+<script type="text/template" id="address-book-group-item-tmpl">
+    <td><a href="{{ SITE_ROOT }}sysadmin/#address-book/groups/<%= id %>/"><%- name %></a></td>
+    <td><time title="<%= time %>"><%= time_from_now %></time></td>
+    <td>
+        <span><%= quota_shown %></span>
+        <span title="{% trans "Edit Quota" %}" class="quota-edit-icon sf2-icon-edit op-icon vh"></span>
+    </td>
+    <td>
+        <a href="#" class="sf2-icon-delete sf2-x group-delete-btn op-icon vh" title="{% trans "Delete" %}" aria-label="{% trans "Delete" %}"></a>
+    </td>
+</script>
+<script type="text/template" id="address-book-group-add-form-tmpl">
+    <form id="group-add-form" action="" method="post" class="hide">{% csrf_token %}
+        <h3 id="dialogTitle">{% trans "New Group" %}</h3>
+        <label for="group-name">{% trans "Name" %}</label><br />
+        <input type="text" name="group_name" value="" class="input" id="group-name" /><br />
+        <p class="error hide"></p>
+        <input type="submit" class="submit" value="{% trans "Submit" %}" />
+    </form>
+</script>
+<script type="text/template" id="address-book-group-quota-set-form-tmpl">
+<form id="set-quota-form" method="post" action="" class="hide">{% csrf_token %}
+    <h3>{% trans "Set group quota" %}</h3>
+    <input type="text" name="quota" class="input" /> MB
+    <p class="tip">
+        <span>{% trans "An integer that is greater than 0 or equal to -2." %}</span><br />
+        <span>{% trans "Tip: -2 means no limit." %}</span>
+    </p>
+    <p class="error hide"></p>
+    <input type="submit" value="{% trans "Submit" %}" class="submit" />
+</form>
+</script>
+<script type="text/template" id="address-book-group-library-item-tmpl">
+    <td>
+        <img src="<%= icon_url %>" title="<%= icon_title %>" alt="<%= icon_title %>" width="24" />
+    </td>
+    <td>
+        <% if (enable_sys_admin_view_repo && is_pro && !encrypted) { %>
+        <a href="#libs/<%= repo_id %>/"><%- name %></a>
+        <% } else { %>
+        <%- name %>
+        <% } %>
+    </td>
+    <td><%- formatted_size %></td>
+    <td>
+        <a href="#" class="sf2-icon-delete sf2-x repo-delete-btn op-icon vh" title="{% trans "Delete" %}" aria-label="{% trans "Delete" %}"></a>
+    </td>
+</script>
+<script type="text/template" id="address-book-library-add-form-tmpl">
+    <form id="library-add-form" action="" method="post" class="hide">{% csrf_token %}
+        <h3 id="dialogTitle">{% trans "New Library" %}</h3>
+        <label for="library-name">{% trans "Name" %}</label><br />
+        <input type="text" name="library_name" value="" class="input" id="library-name" /><br />
+        <p class="error hide"></p>
+        <input type="submit" class="submit" value="{% trans "Submit" %}" />
+    </form>
 </script>

@@ -186,6 +186,8 @@ define([
                 case 'admin-group': return siteRoot + 'api/v2.1/admin/groups/' + options.group_id + '/';
                 case 'admin-group-libraries': return siteRoot + 'api/v2.1/admin/groups/' + options.group_id + '/libraries/';
                 case 'admin-group-library': return siteRoot + 'api/v2.1/admin/groups/' + options.group_id + '/libraries/' + options.repo_id + '/';
+                case 'admin-group-owned-libraries': return siteRoot + 'api/v2.1/admin/groups/' + options.group_id + '/group-owned-libraries/';
+                case 'admin-group-owned-library': return siteRoot + 'api/v2.1/admin/groups/' + options.group_id + '/group-owned-libraries/' + options.repo_id + '/';
                 case 'admin-group-members': return siteRoot + 'api/v2.1/admin/groups/' + options.group_id + '/members/';
                 case 'admin-group-member': return siteRoot + 'api/v2.1/admin/groups/' + options.group_id + '/members/' + options.email+ '/';
                 case 'admin-system-library': return siteRoot + 'api/v2.1/admin/system-library/';
@@ -196,6 +198,9 @@ define([
                 case 'sys_group_admin_export_excel': return siteRoot + 'sys/groupadmin/export-excel/';
                 case 'admin-operation-logs': return siteRoot + 'api/v2.1/admin/admin-logs/';
                 case 'admin-login-logs': return siteRoot + 'api/v2.1/admin/admin-login-logs/';
+
+                case 'admin-address-book-groups': return siteRoot + 'api/v2.1/admin/address-book/groups/';
+                case 'admin-address-book-group': return siteRoot + 'api/v2.1/admin/address-book/groups/' + options.group_id + '/';
 
                 case 'license': return siteRoot + 'api/v2.1/admin/license/';
             }
