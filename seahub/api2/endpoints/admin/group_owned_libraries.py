@@ -2,14 +2,12 @@
 import logging
 
 from rest_framework.authentication import SessionAuthentication
-from rest_framework.permissions import IsAuthenticated
+from rest_framework.permissions import IsAdminUser
 from rest_framework.response import Response
 from rest_framework.views import APIView
 from rest_framework import status
 
 from seaserv import seafile_api
-
-from constance import config
 
 from seahub.api2.utils import api_error
 from seahub.api2.throttling import UserRateThrottle
@@ -17,7 +15,6 @@ from seahub.api2.authentication import TokenAuthentication
 from seahub.api2.endpoints.utils import api_check_group
 
 from seahub.signals import repo_created
-from seahub.group.utils import is_group_admin
 from seahub.utils import is_valid_dirent_name, \
         is_pro_version, normalize_dir_path
 from seahub.utils.repo import get_library_storages, get_repo_owner
@@ -46,18 +43,14 @@ def get_group_owned_repo_info(request, repo_id):
 
     return repo_info
 
-class GroupOwnedLibraries(APIView):
+class AdminGroupOwnedLibraries(APIView):
     authentication_classes = (TokenAuthentication, SessionAuthentication)
-    permission_classes = (IsAuthenticated,)
+    permission_classes = (IsAdminUser,)
     throttle_classes = (UserRateThrottle,)
 
     @api_check_group
     def post(self, request, group_id):
         """ Add a group owned library.
-
-        Permission checking:
-        1. role permission, can_add_repo;
-        1. is group admin;
         """
 
         # argument check
@@ -68,9 +61,6 @@ class GroupOwnedLibraries(APIView):
             return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
 
         password = request.data.get("password", None)
-        if password and not config.ENABLE_ENCRYPTED_LIBRARY:
-            error_msg = 'NOT allow to create encrypted library.'
-            return api_error(status.HTTP_403_FORBIDDEN, error_msg)
 
         permission = request.data.get('permission', PERMISSION_READ_WRITE)
         if permission not in [PERMISSION_READ, PERMISSION_READ_WRITE]:
@@ -78,14 +68,6 @@ class GroupOwnedLibraries(APIView):
             return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
 
         # permission check
-        if not request.user.permissions.can_add_repo():
-            error_msg = 'Permission denied.'
-            return api_error(status.HTTP_403_FORBIDDEN, error_msg)
-
-        if not is_group_admin(group_id, request.user.username):
-            error_msg = 'Permission denied.'
-            return api_error(status.HTTP_403_FORBIDDEN, error_msg)
-
         group_quota = seafile_api.get_group_quota(group_id)
         group_quota = int(group_quota)
         if group_quota <= 0 and group_quota != -2:
@@ -133,17 +115,14 @@ class GroupOwnedLibraries(APIView):
         info['permission'] = permission
         return Response(info)
 
-class GroupOwnedLibrary(APIView):
+class AdminGroupOwnedLibrary(APIView):
     authentication_classes = (TokenAuthentication, SessionAuthentication)
-    permission_classes = (IsAuthenticated,)
+    permission_classes = (IsAdminUser,)
     throttle_classes = (UserRateThrottle,)
 
     @api_check_group
     def delete(self, request, group_id, repo_id):
         """ Delete a group owned library.
-
-        Permission checking:
-        1. is group admin;
         """
 
         repo = seafile_api.get_repo(repo_id)
@@ -152,11 +131,6 @@ class GroupOwnedLibrary(APIView):
             return api_error(status.HTTP_404_NOT_FOUND, error_msg)
 
         group_id = int(group_id)
-        username = request.user.username
-        if not is_group_admin(group_id, username):
-            error_msg = 'Permission denied.'
-            return api_error(status.HTTP_403_FORBIDDEN, error_msg)
-
         try:
             seafile_api.delete_group_owned_repo(group_id, repo_id)
         except Exception as e:
@@ -166,17 +140,14 @@ class GroupOwnedLibrary(APIView):
 
         return Response({'success': True})
 
-class GroupOwnedLibraryFolderPermission(APIView):
+class AdminGroupOwnedLibraryFolderPermission(APIView):
     authentication_classes = (TokenAuthentication, SessionAuthentication)
-    permission_classes = (IsAuthenticated,)
+    permission_classes = (IsAdminUser,)
     throttle_classes = (UserRateThrottle,)
 
     @api_check_group
     def put(self, request, group_id, repo_id):
         """ Set sub repo folder permission.
-
-        Permission checking:
-        1. is group admin;
         """
 
         path = request.data.get('path', None)
@@ -202,11 +173,6 @@ class GroupOwnedLibraryFolderPermission(APIView):
 
         # permission check
         group_id = int(group_id)
-        username = request.user.username
-        if not is_group_admin(group_id, username):
-            error_msg = 'Permission denied.'
-            return api_error(status.HTTP_403_FORBIDDEN, error_msg)
-
         try:
             seafile_api.add_folder_group_perm(repo_id, path, perm, group_id)
         except Exception as e:
