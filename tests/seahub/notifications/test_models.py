@@ -33,15 +33,15 @@ class UserNotificationTest(BaseTestCase):
         share_dir_to_user(self.repo, folder_path, self.user.username,
                           self.user.username, 'bar@bar.com', 'rw', None)
         notice = UserNotification.objects.add_repo_share_msg(
-            'bar@bar.com',
-            repo_share_msg_to_json(self.user.username, self.repo.id, folder_path, None))
+            self.user.username,
+            repo_share_msg_to_json('bar@bar.com', self.repo.id, folder_path, None))
         msg = notice.format_repo_share_msg()
 
         assert msg is not None
-        assert 'test has shared a folder named' in msg
+        assert 'bar has shared a folder named' in msg
 
     def test_format_repo_share_to_group_msg(self):
-        notice = UserNotification.objects.add_repo_share_msg(
+        notice = UserNotification.objects.add_repo_share_to_group_msg(
             self.user.username,
             repo_share_to_group_msg_to_json('bar@bar.com', self.repo.id, self.group.id, '/', None))
 
@@ -52,11 +52,11 @@ class UserNotificationTest(BaseTestCase):
     def test_format_repo_share_to_group_msg_with_folder(self):
         folder_path = self.folder
         share_dir_to_group(self.repo, folder_path, self.user.username,
-                          self.user.username, self.group.id, 'rw', None)
-        notice = UserNotification.objects.add_repo_share_msg(
-            'bar@bar.com',
-            repo_share_to_group_msg_to_json(self.user.username, self.repo.id, self.group.id, folder_path, None))
+                           self.user.username, self.group.id, 'rw', None)
+        notice = UserNotification.objects.add_repo_share_to_group_msg(
+            self.user.username,
+            repo_share_to_group_msg_to_json('bar@bar.com', self.repo.id, self.group.id, folder_path, None))
         msg = notice.format_repo_share_to_group_msg()
 
         assert msg is not None
-        assert 'test has shared a folder named' in msg 
+        assert 'bar has shared a folder named' in msg

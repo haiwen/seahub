@@ -39,7 +39,13 @@ You've got {{num}} new notices on {{ site_name }}:
                     </p>
 
                 {% elif notice.is_repo_share_to_group_msg %}
-                    <p style="line-height:1.5; margin:.2em 10px .2em 0;">{% blocktrans with user=notice.notice_from lib_url=notice.repo_url lib_name=notice.repo_name group_url=notice.group_url group_name=notice.group_name shared_type=notice.shared_type %}{{user}} has shared a {{shared_type}} named <a href="{{url_base}}{{lib_url}}">{{lib_name}}</a> to group <a href="{{url_base}}{{group_url}}">{{group_name}}</a>.{% endblocktrans %}</p>
+                    <p style="line-height:1.5; margin:.2em 10px .2em 0;">
+                        {% if notice.shared_type == 'library' %}
+                        {% include "notifications/notice_msg/repo_share_to_group_msg.html" with user=notice.notice_from lib_url=notice.repo_url lib_name=notice.repo_name group_url=notice.group_url group_name=notice.group_name %}
+                        {% else %}
+                        {% include "notifications/notice_msg/folder_share_to_group_msg.html" with user=notice.notice_from lib_url=notice.repo_url lib_name=notice.repo_name group_url=notice.group_url group_name=notice.group_name %}
+                        {% endif %}
+                    </p>
 
                 {% elif notice.is_user_message %}
                     <p style="line-height:1.5; margin:.2em 10px .2em 0;">{% blocktrans with msg_url=notice.user_msg_url user=notice.notice_from %}You have received a <a href="{{ url_base }}{{msg_url}}">new message</a> from {{user}}.{% endblocktrans %}</p>

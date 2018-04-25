@@ -5,18 +5,18 @@ from django.core.management import call_command
 from seahub.invitations.models import Invitation
 from seahub.notifications.models import (
     UserNotification, repo_share_msg_to_json, file_comment_msg_to_json,
-    guest_invitation_accepted_msg_to_json)
+    guest_invitation_accepted_msg_to_json, repo_share_to_group_msg_to_json)
 from seahub.profile.models import Profile
 from seahub.test_utils import BaseTestCase
-from seahub.share.utils import share_dir_to_user
+from seahub.share.utils import share_dir_to_user, share_dir_to_group
+
 
 class CommandTest(BaseTestCase):
 
-    def test_can_send(self):
+    def test_can_send_repo_share_msg(self):
         self.assertEqual(len(mail.outbox), 0)
         UserNotification.objects.add_repo_share_msg(
             self.user.username, repo_share_msg_to_json('bar@bar.com', self.repo.id, '/', None))
-        Profile.objects.add_or_update(self.user.username, 'nickname')
 
         call_command('send_notices')
         self.assertEqual(len(mail.outbox), 1)
@@ -28,13 +28,37 @@ class CommandTest(BaseTestCase):
         share_dir_to_user(self.repo, self.folder, 'bar@bar.com', 'bar@bar.com', self.user.username, 'rw', org_id=None)
         UserNotification.objects.add_repo_share_msg(
             self.user.username, repo_share_msg_to_json('bar@bar.com', self.repo.id, self.folder, None))
-        Profile.objects.add_or_update(self.user.username, 'nickname')
 
         call_command('send_notices')
         self.assertEqual(len(mail.outbox), 1)
         assert mail.outbox[0].to[0] == self.user.username
-        print mail.outbox[0].body
         assert 'bar has shared a folder named' in mail.outbox[0].body
+
+    def test_can_send_repo_share_to_group_msg(self):
+        self.assertEqual(len(mail.outbox), 0)
+        UserNotification.objects.add_repo_share_to_group_msg(
+            self.user.username,
+            repo_share_to_group_msg_to_json('bar@bar.com', self.repo.id, self.group.id, '/', None))
+
+        call_command('send_notices')
+        self.assertEqual(len(mail.outbox), 1)
+        assert mail.outbox[0].to[0] == self.user.username
+        assert 'bar has shared a library named' in mail.outbox[0].body
+        assert 'group/%d' % self.group.id in mail.outbox[0].body
+
+    def test_can_send_folder_share_to_group_msg(self):
+        folder_path = self.folder
+        share_dir_to_group(self.repo, folder_path, self.user.username,
+                           self.user.username, self.group.id, 'rw', None)
+        UserNotification.objects.add_repo_share_to_group_msg(
+            self.user.username,
+            repo_share_to_group_msg_to_json('bar@bar.com', self.repo.id,
+                                            self.group.id, folder_path, None))
+        call_command('send_notices')
+        self.assertEqual(len(mail.outbox), 1)
+        assert mail.outbox[0].to[0] == self.user.username
+        assert 'bar has shared a folder named' in mail.outbox[0].body
+        assert 'group/%d' % self.group.id in mail.outbox[0].body
 
     # def test_can_send_with_Chinese_lang(self):
     #      self.assertEqual(len(mail.outbox), 0)

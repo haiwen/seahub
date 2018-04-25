@@ -522,19 +522,15 @@ class UserNotification(models.Model):
             return None
 
         if path == '/':
-            msg = render_to_string(
-                'notifications/notice_msg/repo_share_msg.html', {
-                    'user': share_from,
-                    'lib_url': reverse('view_common_lib_dir', args=[repo.id, '']),
-                    'lib_name': repo.name,
-                })
+            tmpl = 'notifications/notice_msg/repo_share_msg.html'
         else:
-            msg = render_to_string(
-                'notifications/notice_msg/folder_share_msg.html', {
-                    'user': share_from,
-                    'lib_url': reverse('view_common_lib_dir', args=[repo.id, '']),
-                    'lib_name': repo.name,
-                })
+            tmpl = 'notifications/notice_msg/folder_share_msg.html'
+
+        msg = render_to_string(tmpl, {
+            'user': share_from,
+            'lib_url': reverse('view_common_lib_dir', args=[repo.id, '']),
+            'lib_name': repo.name,
+        })
 
         return msg
 
@@ -578,17 +574,17 @@ class UserNotification(models.Model):
             return None
 
         if path == '/':
-            msg_patt = _(u"%(user)s has shared a library named <a href='%(repo_href)s'>%(repo_name)s</a> to group <a href='%(group_href)s'>%(group_name)s</a>.")
+            tmpl = 'notifications/notice_msg/repo_share_to_group_msg.html'
         else:
-            msg_patt = _(u"%(user)s has shared a folder named <a href='%(repo_href)s'>%(repo_name)s</a> to group <a href='%(group_href)s'>%(group_name)s</a>.")
+            tmpl = 'notifications/notice_msg/folder_share_to_group_msg.html'
 
-        msg = msg_patt % {
-            'user': escape(share_from),
-            'repo_href': reverse('view_common_lib_dir', args=[repo.id, '']),
-            'repo_name': escape(repo.name),
-            'group_href': reverse('group_info', args=[group.id]),
-            'group_name': escape(group.group_name),
-        }
+        msg = render_to_string(tmpl, {
+            'user': share_from,
+            'lib_url': reverse('view_common_lib_dir', args=[repo.id, '']),
+            'lib_name': repo.name,
+            'group_url': reverse('group_info', args=[group.id]),
+            'group_name': group.group_name,
+        })
 
         return msg
 
