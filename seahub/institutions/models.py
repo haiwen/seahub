@@ -2,6 +2,8 @@
 from django.db import models
 from django.utils import timezone
 
+from seahub.base.fields import LowerCaseCharField
+
 
 class Institution(models.Model):
     name = models.CharField(max_length=200)
@@ -10,7 +12,7 @@ class Institution(models.Model):
 
 class InstitutionAdmin(models.Model):
     institution = models.ForeignKey(Institution)
-    user = models.EmailField()
+    user = LowerCaseCharField(max_length=255, db_index=True)
 
 
 class InstitutionQuotaManager(models.Manager):
