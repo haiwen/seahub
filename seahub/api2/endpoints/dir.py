@@ -108,7 +108,6 @@ class DirView(APIView):
             else:
                 result = dir_file_list
 
-            result.sort(lambda x, y: cmp(x['name'].lower(), y['name'].lower()))
             resp = Response(result)
             resp["oid"] = dir_id
             resp["dir_perm"] = permission
