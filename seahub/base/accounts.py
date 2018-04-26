@@ -324,9 +324,11 @@ class User(object):
 
         # remove current user from joined groups
         ccnet_api.remove_group_user(username)
-        ccnet_api.remove_emailuser(source, username)
-        Profile.objects.delete_profile_by_user(username)
 
+        ccnet_api.remove_emailuser(source, username)
+        signals.user_deleted.send(sender=self.__class__, username=username)
+
+        Profile.objects.delete_profile_by_user(username)
         if settings.ENABLE_TERMS_AND_CONDITIONS:
             from termsandconditions.models import UserTermsAndConditions
             UserTermsAndConditions.objects.filter(username=username).delete()
