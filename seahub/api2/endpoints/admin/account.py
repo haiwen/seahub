@@ -21,7 +21,7 @@ from seahub.base.accounts import User
 from seahub.base.templatetags.seahub_tags import email2nickname
 from seahub.profile.models import Profile, DetailedProfile
 from seahub.institutions.models import Institution
-from seahub.utils import is_valid_username, is_org_context
+from seahub.utils import is_valid_username, is_org_context, is_pro_version
 from seahub.utils.file_size import get_file_size_unit
 
 
@@ -351,6 +351,11 @@ class Account(APIView):
             return api_error(status.HTTP_400_BAD_REQUEST, 'Email %s invalid.' % email)
 
         # delete account
+        if is_pro_version():
+            from seahub_extra.sysadmin_extra.models import UserLoginLog
+            user_log = UserLoginLog.objects.filter(username=email)
+            user_log.delete()
+
         try:
             user = User.objects.get(email=email)
             user.delete()

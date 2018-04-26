@@ -837,6 +837,11 @@ def user_remove(request, email):
     except User.DoesNotExist:
         messages.error(request, _(u'Failed to delete: the user does not exist'))
 
+    if is_pro_version():
+        from seahub_extra.sysadmin_extra.models import UserLoginLog
+        user_log = UserLoginLog.objects.filter(username=email)
+        user_log.delete()
+
     return HttpResponseRedirect(next)
 
 @login_required
