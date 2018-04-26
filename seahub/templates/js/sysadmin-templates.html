@@ -49,7 +49,7 @@
 
         {% if is_pro and user.admin_permissions.can_manage_group %}
         <li class="tab<% if (cur_tab == 'address-book') { %> tab-cur<% } %>">
-            <a href="{{ SITE_ROOT }}sysadmin/#address-book/"><span class="sf2-icon-organization"></span>{% trans "Departments" %}</a>
+            <a href="{{ SITE_ROOT }}sysadmin/#address-book/"><span class="sf2-icon-organization"></span>{% trans "Departments" context "address book" %}</a>
         </li>
         {% endif %}
 
@@ -1042,7 +1042,7 @@
 {# address book #}
 <script type="text/template" id="address-book-tmpl">
     <div class="hd ovhd">
-        <h3 class="fleft">{% trans "Departments" %}</h3>
+        <h3 class="fleft">{% trans "Departments" context "address book" %}</h3>
         <div class="fright">
             <button class="btn-white js-add-group">{% trans "New Group" %}</button>
         </div>
@@ -1127,7 +1127,7 @@
     <p class="error error-tip hide"></p>
 </script>
 <script type="text/template" id="address-book-group-path-tmpl">
-    <a href="#address-book/" class="normal">{% trans "Departments" %}</a>
+    <a href="#address-book/" class="normal">{% trans "Departments" context "address book" %}</a>
     <span class="path-split">/</span>
     <% for (var i = 0,len = ancestor_groups.length; i < len; i++) { %>
     <a href="#address-book/groups/<%= ancestor_groups[i].id %>/" class="normal"><%- ancestor_groups[i].name %></a>
