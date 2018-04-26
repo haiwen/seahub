@@ -3062,7 +3062,6 @@ class DirView(APIView):
             else:
                 result = dir_file_list
 
-            result.sort(lambda x, y: cmp(x['name'].lower(), y['name'].lower()))
             response = HttpResponse(json.dumps(result), status=200,
                                     content_type=json_content_type)
             response["oid"] = dir_id
