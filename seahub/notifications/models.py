@@ -11,6 +11,7 @@ from django.forms import ModelForm, Textarea
 from django.utils.html import escape
 from django.utils.translation import ugettext as _
 from django.core.cache import cache
+from django.template.loader import render_to_string
 
 import seaserv
 from seaserv import seafile_api, ccnet_api
@@ -513,6 +514,7 @@ class UserNotification(models.Model):
                 else:
                     owner = seafile_api.get_repo_owner(repo_id)
                     repo = seafile_api.get_virtual_repo(repo_id, path, owner)
+
         except Exception as e:
             logger.error(e)
             return None
@@ -521,11 +523,19 @@ class UserNotification(models.Model):
             self.delete()
             return None
 
-        msg = _(u"%(user)s has shared a library named <a href='%(href)s'>%(repo_name)s</a> to you.") %  {
-            'user': escape(share_from),
-            'href': HASH_URLS["VIEW_COMMON_LIB_DIR"] % {'repo_id':repo.id, 'path': ''}, 
-            'repo_name': escape(repo.name),
-            }
+        if path == '/':
+            tmpl = 'notifications/notice_msg/repo_share_msg.html'
+        else:
+            tmpl = 'notifications/notice_msg/folder_share_msg.html'
+
+        msg = render_to_string(tmpl, {
+            'user': share_from,
+            'lib_url': HASH_URLS["VIEW_COMMON_LIB_DIR"] % {
+                'repo_id': repo.id,
+                'path': ''
+            },
+            'lib_name': repo.name,
+        })
 
         return msg
 
@@ -568,13 +578,21 @@ class UserNotification(models.Model):
             self.delete()
             return None
 
-        msg = _(u"%(user)s has shared a library named <a href='%(repo_href)s'>%(repo_name)s</a> to group <a href='%(group_href)s'>%(group_name)s</a>.") %  {
-            'user': escape(share_from),
-            'repo_href': HASH_URLS["VIEW_COMMON_LIB_DIR"] % {'repo_id': repo.id, 'path': ''},
-            'repo_name': escape(repo.name),
-            'group_href': HASH_URLS['GROUP_INFO'] % {'group_id': group.id},
-            'group_name': escape(group.group_name),
-            }
+        if path == '/':
+            tmpl = 'notifications/notice_msg/repo_share_to_group_msg.html'
+        else:
+            tmpl = 'notifications/notice_msg/folder_share_to_group_msg.html'
+
+        msg = render_to_string(tmpl, {
+            'user': share_from,
+            'lib_url': HASH_URLS["VIEW_COMMON_LIB_DIR"] % {
+                'repo_id': repo.id,
+                'path': ''
+            },
+            'lib_name': repo.name,
+            'group_url': HASH_URLS['GROUP_INFO'] % {'group_id': group.id},
+            'group_name': group.group_name,
+        })
 
         return msg
 

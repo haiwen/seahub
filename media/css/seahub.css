@@ -3932,12 +3932,6 @@ img.thumbnail {
     top:42px;
     right:0;
 }
-#group-members .outer-caret {
-    right:37px;
-}
-#group-settings .outer-caret {
-    right:72px;
-}
 .group-setting-list {
     border-bottom:1px solid #e3e3e5;
 }

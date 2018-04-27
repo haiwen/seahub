@@ -2,11 +2,14 @@ from seahub.notifications.models import (
     UserNotification, repo_share_msg_to_json, file_comment_msg_to_json,
     repo_share_to_group_msg_to_json, file_uploaded_msg_to_json,
     group_join_request_to_json, add_user_to_group_to_json, group_msg_to_json)
-
+from seahub.share.utils import share_dir_to_user, share_dir_to_group
 from seahub.test_utils import BaseTestCase
 
 
 class UserNotificationTest(BaseTestCase):
+    def setUp(self):
+        self.clear_cache()
+
     def test_format_file_comment_msg(self):
         detail = file_comment_msg_to_json(self.repo.id, self.file,
                                           self.user.username, 'test comment')
@@ -25,25 +28,9 @@ class UserNotificationTest(BaseTestCase):
         assert '/#common/lib/%(repo_id)s/%(path)s' % {'repo_id': self.repo.id,
                                                       'path': upload_to.strip('/')} in msg
 
-    def test_format_repo_share_msg(self):
-        detail = repo_share_msg_to_json('share@share.com', self.repo.id, '/', -1)
-        notice = UserNotification.objects.add_repo_share_msg('to@to.com', detail)
-
-        msg = notice.format_repo_share_msg()
-        assert '/#common/lib/%(repo_id)s/%(path)s' % {'repo_id': self.repo.id,
-                                                      'path': ''} in msg
-
-    def test_format_repo_share_to_group_msg(self):
-        detail = repo_share_to_group_msg_to_json('repo@share.com', self.repo.id, self.group.id, '/', -1)
-        notice = UserNotification.objects.add_repo_share_to_group_msg('group@share.com', detail)
-
-        msg = notice.format_repo_share_to_group_msg()
-        assert '/#common/lib/%(repo_id)s/%(path)s' % {'repo_id': self.repo.id, 'path': ''} in msg
-        assert '/#group/%(group_id)s/' % {'group_id': self.group.id} in msg
-
     def test_format_group_message_title(self):
         detail = group_msg_to_json(self.group.id, 'from@email.com', 'message')
-        notice = UserNotification(to_user= 'to@user.com', msg_type='group_msg', detail=detail)
+        notice = UserNotification(to_user='to@user.com', msg_type='group_msg', detail=detail)
         msg = notice.format_group_message_title()
         assert '/#group/%(group_id)s/discussions/' % {'group_id': self.group.id} in msg
 
@@ -60,3 +47,48 @@ class UserNotificationTest(BaseTestCase):
                                                                        detail=detail)
         msg = notice.format_add_user_to_group()
         assert '/#group/%(group_id)s/' % {'group_id': self.group.id} in msg
+
+    def test_format_repo_share_msg(self):
+        notice = UserNotification.objects.add_repo_share_msg(
+            self.user.username,
+            repo_share_msg_to_json('bar@bar.com', self.repo.id, '/', None))
+
+        msg = notice.format_repo_share_msg()
+        assert msg is not None
+        assert 'bar has shared a library named' in msg
+        assert '/#common/lib/%(repo_id)s/%(path)s' % {'repo_id': self.repo.id,
+                                                      'path': ''} in msg
+
+    def test_format_repo_share_msg_with_folder(self):
+        folder_path = self.folder
+        share_dir_to_user(self.repo, folder_path, self.user.username,
+                          self.user.username, 'bar@bar.com', 'rw', None)
+        notice = UserNotification.objects.add_repo_share_msg(
+            self.user.username,
+            repo_share_msg_to_json('bar@bar.com', self.repo.id, folder_path, None))
+        msg = notice.format_repo_share_msg()
+
+        assert msg is not None
+        assert 'bar has shared a folder named' in msg
+
+    def test_format_repo_share_to_group_msg(self):
+        notice = UserNotification.objects.add_repo_share_to_group_msg(
+            self.user.username,
+            repo_share_to_group_msg_to_json('bar@bar.com', self.repo.id, self.group.id, '/', None))
+
+        msg = notice.format_repo_share_to_group_msg()
+        assert msg is not None
+        assert 'bar has shared a library named' in msg
+        assert '/#group/%(group_id)s/' % {'group_id': self.group.id} in msg
+
+    def test_format_repo_share_to_group_msg_with_folder(self):
+        folder_path = self.folder
+        share_dir_to_group(self.repo, folder_path, self.user.username,
+                           self.user.username, self.group.id, 'rw', None)
+        notice = UserNotification.objects.add_repo_share_to_group_msg(
+            self.user.username,
+            repo_share_to_group_msg_to_json('bar@bar.com', self.repo.id, self.group.id, folder_path, None))
+        msg = notice.format_repo_share_to_group_msg()
+
+        assert msg is not None
+        assert 'bar has shared a folder named' in msg

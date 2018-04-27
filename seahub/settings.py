@@ -345,6 +345,12 @@ ENABLE_SHARE_TO_ALL_GROUPS = False
 # interval for request unread notifications
 UNREAD_NOTIFICATIONS_REQUEST_INTERVAL = 3 * 60 # seconds
 
+# Enable group discussion
+ENABLE_GROUP_DISCUSSION = True
+
+# Enable file comments
+ENABLE_FILE_COMMENT = True
+
 # File preview
 FILE_PREVIEW_MAX_SIZE = 30 * 1024 * 1024
 OFFICE_PREVIEW_MAX_SIZE = 2 * 1024 * 1024
