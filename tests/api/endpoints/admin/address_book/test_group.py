@@ -6,9 +6,17 @@ from seaserv import ccnet_api
 from seahub.test_utils import BaseTestCase
 from tests.common.utils import randstring
 
+try:
+    from seahub.settings import LOCAL_PRO_DEV_ENV
+except ImportError:
+    LOCAL_PRO_DEV_ENV = False
+
 class GroupsTest(BaseTestCase):
 
     def setUp(self):
+        if not LOCAL_PRO_DEV_ENV:
+            return
+
         self.user_name = self.user.username
         self.admin_name = self.admin.username
 
@@ -20,9 +28,15 @@ class GroupsTest(BaseTestCase):
                            args=[self.top_group_id])
 
     def tearDown(self):
+        if not LOCAL_PRO_DEV_ENV:
+            return
+
         self.remove_group(self.top_group_id)
 
     def test_can_list_child_groups(self):
+        if not LOCAL_PRO_DEV_ENV:
+            return
+
         child_group_id = ccnet_api.create_group('child group xxx',
                                                 self.user.username,
                                                 parent_group_id=self.top_group_id)
@@ -37,6 +51,9 @@ class GroupsTest(BaseTestCase):
         self.remove_group(child_group_id)
 
     def test_can_ancestor_groups(self):
+        if not LOCAL_PRO_DEV_ENV:
+            return
+
         child_group_id = ccnet_api.create_group('child group xxx',
                                                 self.user.username,
                                                 parent_group_id=self.top_group_id)
@@ -52,10 +69,16 @@ class GroupsTest(BaseTestCase):
         self.remove_group(child_group_id)
 
     def test_can_delete_group(self):
+        if not LOCAL_PRO_DEV_ENV:
+            return
+
         resp = self.client.delete(self.url)
         self.assertEqual(200, resp.status_code)
 
     def test_cannot_delete_group_with_child(self):
+        if not LOCAL_PRO_DEV_ENV:
+            return
+
         child_group_id = ccnet_api.create_group('child group xxx',
                                                 self.user.username,
                                                 parent_group_id=self.top_group_id)

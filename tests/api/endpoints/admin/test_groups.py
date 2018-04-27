@@ -123,7 +123,7 @@ class GroupTest(BaseTestCase):
 
         # invalid new owner
         url = reverse('api-v2.1-admin-group', args=[self.group_id])
-        data = 'invalid_new_owner=%s' % self.admin_name
+        data = 'new_owner=%s' % randstring(6)
         resp = self.client.put(url, data, 'application/x-www-form-urlencoded')
         self.assertEqual(400, resp.status_code)
 
