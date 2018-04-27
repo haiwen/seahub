@@ -12,7 +12,7 @@ from seaserv import seafile_api, ccnet_api
 from pysearpc import SearpcError
 
 from seahub.base.accounts import User
-from seahub.utils import is_valid_username
+from seahub.utils import is_valid_username, is_pro_version
 from seahub.utils.timeutils import timestamp_to_isoformat_timestr
 from seahub.group.utils import is_group_member, is_group_admin, \
         validate_group_name, check_group_name_conflict
@@ -32,8 +32,10 @@ def get_group_info(group_id):
         "name": group.group_name,
         "owner": group.creator_name,
         "created_at": isoformat_timestr,
-        "quota": seafile_api.get_group_quota(group_id),
     }
+
+    if is_pro_version():
+        group_info['quota'] = seafile_api.get_group_quota(group_id)
 
     return group_info
 

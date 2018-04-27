@@ -13,6 +13,11 @@ from seahub.test_utils import BaseTestCase
 from seahub.notifications.management.commands.send_notices import Command
 from seahub.share.utils import share_dir_to_user, share_dir_to_group
 
+try:
+    from seahub.settings import LOCAL_PRO_DEV_ENV
+except ImportError:
+    LOCAL_PRO_DEV_ENV = False
+
 
 class CommandTest(BaseTestCase):
 
@@ -115,6 +120,9 @@ class CommandTest(BaseTestCase):
         assert 'Guest test@test.com' in mail.outbox[0].body
 
     def test_format_repo_share_msg(self):
+        if not LOCAL_PRO_DEV_ENV:
+            return
+
         detail = repo_share_msg_to_json('share@share.com', self.repo.id, '', -1)
         notice = UserNotification.objects.add_repo_share_msg('to@to.com', detail)
         resp = Command().format_repo_share_msg(notice)
@@ -129,6 +137,9 @@ class CommandTest(BaseTestCase):
         assert resp.group_url == '/#group/%(group_id)s/discussions/' % {'group_id': self.group.id}
 
     def test_format_repo_share_to_group_msg(self):
+        if not LOCAL_PRO_DEV_ENV:
+            return
+
         detail = repo_share_to_group_msg_to_json('repo@share.com', self.repo.id, self.group.id, '', -1)
         notice = UserNotification.objects.add_repo_share_to_group_msg('group@share.com', detail)
         resp = Command().format_repo_share_to_group_msg(notice)
