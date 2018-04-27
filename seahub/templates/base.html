@@ -23,7 +23,7 @@
     <div id="wrapper" class="{{ LANGUAGE_CODE }} d-flex fd-col h100">
         {% block info_bar_message %}
         {% if request.user.is_authenticated and request.cur_note %}
-        <div id="info-bar" class="fixed-top-bar">
+        <div id="info-bar">
             <p id="info-bar-info">{{ request.cur_note.message|urlize }}</p>
             <span class="close sf2-icon-x1 op-icon" data="{{ request.cur_note.id }}" title="{% trans "Close" %}"></span>
         </div>
