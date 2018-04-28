@@ -40,7 +40,7 @@ require.config({
         'jquery.fileupload-ui': 'lib/jquery.fileupload-ui',
 
         'jquery.magnific-popup': 'lib/jquery.magnific-popup.min', // TODO: it uses deprecated methods in jquery 3
-        'js.cookie': 'lib/js.cookie.min',
+        'js.cookie': 'lib/js.cookie',
         simplemodal: 'lib/jquery.simplemodal', // TODO: it uses deprecated methods in jquery 3
         jstree: 'lib/jstree.min', // TODO: it uses deprecated methods in jquery 3
         select2: 'lib/select2-3.5.2', // TODO
