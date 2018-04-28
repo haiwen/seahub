@@ -20,7 +20,7 @@ from seahub.api2.throttling import UserRateThrottle
 from seahub.api2.utils import api_error
 from seahub.wiki.models import Wiki, DuplicateWikiNameError
 from seahub.wiki.utils import is_valid_wiki_name
-from seahub.utils import is_org_context
+from seahub.utils import is_org_context, get_user_repos
 
 logger = logging.getLogger(__name__)
 
@@ -33,8 +33,43 @@ class WikisView(APIView):
     def get(self, request, format=None):
         """List all wikis.
         """
+        # parse request params
+        filter_by = {
+            'mine': False,
+            'shared': False,
+            'group': False,
+            'org': False,
+        }
+
+        rtype = request.GET.get('type', "")
+        if not rtype:
+            # set all to True, no filter applied
+            filter_by = filter_by.fromkeys(filter_by.iterkeys(), True)
+
+        for f in rtype.split(','):
+            f = f.strip()
+            filter_by[f] = True
+
         username = request.user.username
-        ret = [x.to_dict() for x in Wiki.objects.filter(username=username)]
+        org_id = request.user.org.org_id if is_org_context(request) else None
+        (owned, shared, groups, public) = get_user_repos(username, org_id)
+
+        filter_repo_ids = []
+        if filter_by['mine']:
+            filter_repo_ids += ([r.id for r in owned])
+
+        if filter_by['shared']:
+            filter_repo_ids += ([r.id for r in shared])
+
+        if filter_by['group']:
+            filter_repo_ids += ([r.id for r in groups])
+
+        if filter_by['org']:
+            filter_repo_ids += ([r.id for r in public])
+
+        filter_repo_ids = list(set(filter_repo_ids))
+        ret = [x.to_dict() for x in Wiki.objects.filter(
+            repo_id__in=filter_repo_ids)]
 
         return Response({'data': ret})
 
