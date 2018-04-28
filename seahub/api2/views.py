@@ -3107,14 +3107,21 @@ class DirView(APIView):
                     error_msg = 'Permission denied.'
                     return api_error(status.HTTP_403_FORBIDDEN, error_msg)
 
-                new_dir_name = check_filename_with_rename(repo_id, parent_dir, new_dir_name)
-                try:
-                    seafile_api.post_dir(repo_id, parent_dir,
-                                         new_dir_name, username)
-                except SearpcError as e:
-                    logger.error(e)
-                    return api_error(HTTP_520_OPERATION_FAILED,
-                                     'Failed to make directory.')
+                retry_count = 0
+                while retry_count < 10:
+                    new_dir_name = check_filename_with_rename(repo_id,
+                            parent_dir, new_dir_name)
+                    try:
+                        seafile_api.post_dir(repo_id,
+                                parent_dir, new_dir_name, username)
+                        break
+                    except SearpcError as e:
+                        if str(e) == 'file already exists':
+                            retry_count += 1
+                        else:
+                            logger.error(e)
+                            return api_error(HTTP_520_OPERATION_FAILED,
+                                         'Failed to make directory.')
             else:
                 if not is_seafile_pro():
                     return api_error(status.HTTP_400_BAD_REQUEST,
