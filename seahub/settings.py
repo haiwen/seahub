@@ -254,7 +254,8 @@ AUTHENTICATION_BACKENDS = (
 ENABLE_OAUTH = False
 
 LOGIN_REDIRECT_URL = '/profile/'
-LOGIN_URL = SITE_ROOT + 'accounts/login'
+LOGIN_URL = '/accounts/login/'
+LOGOUT_URL = '/accounts/logout/'
 LOGOUT_REDIRECT_URL = None
 
 ACCOUNT_ACTIVATION_DAYS = 7
