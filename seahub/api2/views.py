@@ -2786,7 +2786,7 @@ class FileView(APIView):
         return reloaddir_if_necessary(request, repo, parent_dir)
 
 class FileDetailView(APIView):
-    authentication_classes = (TokenAuthentication, )
+    authentication_classes = (TokenAuthentication, SessionAuthentication)
     permission_classes = (IsAuthenticated,)
     throttle_classes = (UserRateThrottle, )
 

@@ -1,0 +1,145 @@
+
+/**** article ****/
+.article {
+  padding:40px 60px 40px 60px;
+  font-size:14px;
+  line-height:1.6;
+  color:#333;
+}
+.article h2,
+.article h3,
+.article h4,
+.article h5,
+.article h6 {
+  margin: 1.2em 0 0.4em;
+  color:#333;
+  font-weight:bold;
+}
+.article h2 {
+  border-bottom: 1px solid #ccc;
+  line-height: 1.5;
+}
+.article h1 + p, .article h2 + p, .article h3 + p, .article h4 + p, .article h5 + p, .article h6 + p,
+.article h1 + pre, .article h2 + pre, .article h3 + pre, .article h4 + pre, .article h5 + pre, .article h6 + pre,
+.article h1 + ul, .article h2 + ul, .article h3 + ul, .article h4 + ul, .article h5 + ul, .article h6 + ul,
+.article h1 + ol, .article h2 + ol, .article h3 + ol, .article h4 + ol, .article h5 + ol, .article h6 + ol {
+  margin-top: 0;
+}
+.article p {
+  margin:0.8em 0;
+  white-space:pre-wrap;
+}
+.article ul {
+  list-style-type:disc;
+}
+.article ul,
+.article ol {
+  padding-left:2em;
+  margin:0.5em 0;
+}
+.article li p:first-child {
+  margin-top: 0px;
+  margin-bottom: 0px;
+}
+.article li.task-list-item p:nth-child(2) {
+  margin-top: 0px;
+  margin-bottom: 0px;
+}
+.article li.task-list-item {
+  position: relative;
+  list-style: none;
+}
+.article li.task-list-item input[type="checkbox"] {
+  position: absolute;
+  left: -1.8em;
+  top: 0.4em;
+  display: inline-block;
+}
+
+.article input[type="checkbox"] {
+  width: auto;
+}
+
+.article pre {
+  font-size:13px;
+  padding:5px 10px;
+  background:#f8f8f8;
+  border:1px solid #ddd;
+  border-radius:3px;
+  -moz-border-radius:3px;
+  -webkit-border-radius:3px;
+  margin:1em 0;
+  white-space: pre-wrap;
+}
+
+.article .code p {
+  white-space:pre-wrap;
+  padding:0;
+  margin:0;
+  border:none;
+}
+
+.article .html-element.active {
+  border: 1px solid #eb8205;
+}
+.article span.html-element {
+  display:inline-block;
+  margin-left:1px;
+  margin-right:1px;
+  background: #f4f4f4;
+  border: 1px solid #bbb;
+  border-radius: 2px;
+}
+.article div.html-element {
+  background: #f4f4f4;
+  border: 1px solid #bbb;
+  border-radius: 2px;
+  margin:0.8em 0;
+}
+
+.article a {
+  font-weight:normal;
+}
+
+.article blockquote {
+  color: #777;
+  padding: 0 15px;
+  border-left: 4px solid #DDD;
+  margin: 1.2em 0;
+  font-style: italic;
+}
+
+.article table {
+  width: 100%;
+  border-collapse: collapse;
+  border-left: 1px solid #ddd;
+  border-top: 1px solid #ddd;
+  margin: 10px 0;
+}
+.article tr:nth-child(2n) {
+  background-color: #F8F8F8;
+}
+.article th,
+.article td {
+  padding:6px 13px;
+}
+.article table p {
+  margin: 0;
+}
+.article table tr, .article table th {
+  display: flex;
+}
+
+.article table td, .article table th {
+  flex: 1;
+  padding: 10px 10px;
+  border-width: 0 1px 1px 0;
+  border-style: solid;
+  border-color: #ccc;
+  word-break: break-all;
+  line-height: 1.5;
+}
+
+.article hr.active {
+  border-top: 1px solid #eb8205;
+}

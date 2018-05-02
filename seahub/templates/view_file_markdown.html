@@ -1,85 +1,31 @@
-{% extends 'view_file_base.html' %}
-{% load i18n %}
+{% load render_bundle from webpack_loader %}
+{% load static %}
+<!DOCTYPE html>
+<html>
+    <head>
+         <meta charset="UTF-8" />
+         <title>{{ filename }}</title>
 
-
-{% block extra_style %}{{block.super}}
-<link rel="stylesheet" type="text/css" media="print" href="{{ MEDIA_URL }}css/print_for_file_view.css" />
-{% endblock %}
-
-{% block update_detail %}
-{% if last_commit_id %}
-  <span class="vam">{% trans "updated this file"%}, <a class="file-diff" href="{% url 'text_diff' repo.id %}?p={{path|urlencode}}&commit={{last_commit_id}}&file_enc={{file_enc}}">{% trans "Detail"%}</a>.</span>
-{% endif %}
-{% endblock %}
-
-{% block edit_file %}
-{% if file_perm == 'rw' and not err%}
-<a class="sf-btn-group-btn sf-btn-link op-icon sf2-icon-edit" href="{{ SITE_ROOT }}repo/{{ repo.id }}/file/edit/?p={{ path|urlencode }}&file_enc={{file_enc}}" id="edit" title="{% trans "Edit"%}"></a>
-{% endif %}
-{% endblock %}
-
-{% block file_view %}
-    {% if encoding != None %}
-    <div id="file-enc-cont">
-        <label for="file-enc">{% trans "Encoding:" %}</label>
-        <select id="file-enc">
-            {% for enc in file_encoding_list %}
-            <option value="{{ enc }}" {% if encoding and encoding == enc %} selected="selected" {% endif %}>{% if enc == 'auto'%}{% trans "auto detect" %}{% else %}{{ enc }}{% endif %}</option>
-            {% endfor %}
-        </select>
-    </div>
-    {% endif %}
-
-    {% ifnotequal file_content None %}
-    <div id="md-view" class="article"></div>
-    {% endifnotequal %}
-    
-{% endblock %}
-
-{% block extra_script %}{{ block.super }}
-<script type="text/javascript" src="{{MEDIA_URL}}js/editormd/lib/marked.min.js"></script>
-<script type="text/javascript">
-    {% ifnotequal file_content None %}
-    var renderer = new marked.Renderer();
-    // remove 'id' attribute for headings
-    renderer.heading = function (text, level) {
-        return '<h' + level + '>' + text + '</h' + level + '>';
-    };
-    marked.setOptions({
-        renderer: renderer,
-        breaks: true, // keep linebreak
-        smartLists: true,
-        sanitize: true // Ignore any HTML that has been input
-    });
-    $('#md-view').html(marked('{{ file_content|escapejs }}')).children(':first').css('margin-top', '0');
-    {% endifnotequal %}
-
-    $('#file-enc').on('change', function() {
-        var file_enc = $(this).val();
-        var s = location.search;
-        if (s.indexOf('?') == -1) {
-            location.search = '?file_enc=' + file_enc;
-        } else {
-            if (s.indexOf('file_enc') == -1) {
-                location.search += '&file_enc=' + file_enc; 
-            } else {
-                var params = s.substr(1).split('&');
-                var param;
-                for (var i = 0, len = params.length; i < len; i++) {
-                    param = params[i].split('=');
-                    if (param[0] == 'file_enc') {
-                        param[1] = file_enc;
-                        params[i] = param.join('=');
-                        break;
-                    }
-                }
-                location.search = '?' + params.join('&');
-            }
-        }
-    })
-
-    // for 'go back'
-    var $fileDiff = $('.file-diff');
-    $fileDiff.attr('href', $fileDiff.attr('href') + '&referer=' + encodeURIComponent(location.href));
-</script>
-{% endblock%}
+         <link rel="shortcut icon" href="{{ MEDIA_URL }}{{ favicon_path }}" />
+    </head>
+    <body>
+         <div id="root"></div>
+         <script type="text/javascript">
+           window.app = {
+              config: {
+                  mediaUrl: '{{ MEDIA_URL }}',
+                  siteRoot: '{{ SITE_ROOT }}',
+              },
+              pageOptions: {
+                  repoID: '{{ repo.id }}',
+                  filePath: '{{ path }}',
+                  fileName: '{{ filename }}',
+                  domain: '{{ domain }}',
+                  protocol: '{{ protocol }}',
+                  lang: '{{ language_code }}',
+              }
+          }
+         </script>
+         {% render_bundle 'main' %}
+    </body>
+</html>
