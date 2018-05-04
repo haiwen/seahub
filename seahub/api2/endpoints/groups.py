@@ -56,6 +56,7 @@ def get_group_info(request, group_id, avatar_size=GROUP_AVATAR_DEFAULT_SIZE):
     isoformat_timestr = timestamp_to_isoformat_timestr(group.timestamp)
     group_info = {
         "id": group.id,
+        "parent_group_id": group.parent_group_id,
         "name": group.group_name,
         "owner": group.creator_name,
         "created_at": isoformat_timestr,

@@ -148,6 +148,8 @@ define([
                 case 'group_member_bulk': return siteRoot + 'api/v2.1/groups/' + options.group_id + '/members/bulk/';
                 case 'group_import_members': return siteRoot + 'ajax/group/' + options.group_id + '/members/import/';
                 case 'group_repos': return siteRoot + 'api2/groups/' + options.group_id + '/repos/';
+                case 'group_owned_repos': return siteRoot + 'api/v2.1/groups/' + options.group_id + '/group-owned-libraries/';
+                case 'group_owned_repo': return siteRoot + 'api/v2.1/groups/' + options.group_id + '/group-owned-libraries/' + options.repo_id + '/';
                 case 'group_discussions': return siteRoot + 'api2/groups/' + options.group_id + '/discussions/';
                 case 'group_discussion': return siteRoot + 'api2/groups/' + options.group_id + '/discussions/' + options.discussion_id + '/';
 
