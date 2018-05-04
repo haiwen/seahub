@@ -6,6 +6,7 @@ from django.utils.translation import ugettext_lazy as _
 from seaserv import seafile_api
 
 from seahub.base.fields import LowerCaseCharField
+from seahub.base.templatetags.seahub_tags import email2nickname
 from seahub.utils import get_site_scheme_and_netloc
 from seahub.utils.timeutils import (timestamp_to_isoformat_timestr,
                                     datetime_to_isoformat_timestr)
@@ -101,7 +102,7 @@ class Wiki(models.Model):
     username = LowerCaseCharField(max_length=255)
     name = models.CharField(max_length=255)
     slug = models.CharField(max_length=255, unique=True)
-    repo_id = models.CharField(max_length=36)
+    repo_id = models.CharField(max_length=36, db_index=True)
     permission = models.CharField(max_length=50)  # private, public, login
     created_at = models.DateTimeField(default=timezone.now, db_index=True)
     objects = WikiManager()
@@ -136,6 +137,8 @@ class Wiki(models.Model):
     def to_dict(self):
         return {
             'id': self.pk,
+            'owner': self.username,
+            'owner_nickname': email2nickname(self.username),
             'name': self.name,
             'slug': self.slug,
             'link': self.link,

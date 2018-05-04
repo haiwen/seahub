@@ -4,6 +4,7 @@ from django.core.urlresolvers import reverse
 import seaserv
 from seaserv import seafile_api, ccnet_api
 
+from seahub.share.utils import share_dir_to_user
 from seahub.wiki.models import Wiki
 from seahub.test_utils import BaseTestCase
 
@@ -29,6 +30,29 @@ class WikisViewTest(BaseTestCase):
         assert len(json_resp['data']) == 1
         assert json_resp['data'][0]['name'] == wiki.name
         assert 'wikis/test-wiki' in json_resp['data'][0]['link']
+        assert json_resp['data'][0]['owner'] == self.user.username
+
+    def test_can_list_others(self):
+        self.logout()
+        self.login_as(self.admin)
+
+        resp = self.client.get(self.url)
+        self.assertEqual(200, resp.status_code)
+        json_resp = json.loads(resp.content)
+        assert len(json_resp['data']) == 0
+
+        share_from = self.user.username
+        share_to = self.admin.username
+        share_dir_to_user(self.repo, '/', share_from, share_from, share_to, 'r')
+        wiki = Wiki.objects.add('test wiki', self.user.username,
+                                repo_id=self.repo.id)
+
+        resp = self.client.get(self.url)
+        json_resp = json.loads(resp.content)
+        assert len(json_resp['data']) == 1
+        assert json_resp['data'][0]['name'] == wiki.name
+        assert 'wikis/test-wiki' in json_resp['data'][0]['link']
+        assert json_resp['data'][0]['owner'] == self.user.username
 
     def test_can_add(self):
         assert len(Wiki.objects.all()) == 0

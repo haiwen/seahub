@@ -16,9 +16,10 @@
         <thead>
             <tr>
                 <td width="30%">{% trans "Name" %}</td>
-                <td width="20%">{% trans "Permission" %}</td>
-                <td width="20%">{% trans "Created At" %}</td>
-                <td width="20%">{% trans "Last Update" %}</td>
+                <td width="15%">{% trans "Permission" %}</td>
+                <td width="15%">{% trans "Owner" %}</td>
+                <td width="15%">{% trans "Created At" %}</td>
+                <td width="15%">{% trans "Last Update" %}</td>
                 <td width="10%"><!-- operation --></td>
             </tr>
         </thead>
@@ -56,6 +57,7 @@
                     <option value="public" <% if (permission == 'public') { %>selected="selected"<% } %>>{% trans "public" %}</option>
                 </select>
             </td>
+            <td><a href="<%= owner_profile_url %>"><%- owner_nickname %></a></td>
             <td title="<%= create_time %>"><%= create_time_from_now %></td>
             <td title="<%= update_time %>"><%= update_time_from_now %></td>
             <td>
@@ -231,6 +233,7 @@ var wiki = {
         var update_at_m = moment(obj.updated_at);
         var data = $.extend({}, obj, {
             'permission_text': getPermText(obj.permission),
+            'owner_profile_url': '{{SITE_ROOT}}profile/' + encodeURIComponent(obj.owner) + '/',
             'create_time': create_at_m.format('LLLL'),
             'create_time_from_now': this.util_getRelativeTimeStr(create_at_m),
             'update_time': update_at_m.format('LLLL'),
