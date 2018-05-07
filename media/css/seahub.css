@@ -119,6 +119,7 @@
 .icon-plus-square:before          { content: "\f0fe"; }
 .icon-envelope:before             { content: "\f0e0"; }
 .icon-ellipsis-vertical:before    { content: "\f142"; }
+.icon-building:before             { content: "\f0f7"; }
 .fa-1x {
     font-size: 1.3em;
 }

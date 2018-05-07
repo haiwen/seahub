@@ -1484,6 +1484,9 @@
     <a href="{{ SITE_ROOT }}#groups/" class="normal">{% trans "Groups" %}</a>
     <span class="path-split">/</span>
     <span class="group-name"><%- name %></span>
+    <% if (is_address_book_group) { %>
+    <span class="icon-building" title="{% trans "This is a special group representing a department." %}"></span>
+    <% } %>
 </script>
 <script type="text/template" id="group-toolbar2-tmpl">
     <% if (app.pageOptions.enable_wiki) { %>

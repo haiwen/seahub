@@ -45,7 +45,9 @@ define([
         },
 
         addGroup: function () {
-            var $form = $(this.groupAddFormTemplate()),
+            var $form = $(this.groupAddFormTemplate({
+                    'title': gettext("New Department")
+                })),
                 groups = this.groupCollection,
                 _this = this;
 

@@ -128,6 +128,7 @@ define([
 
                     var user_can_add_repo = false;
                     var user_is_admin = false;
+                    var is_address_book_group = false;
                     if ($.inArray(app.pageOptions.username, data.admins) != -1) {
                         user_is_admin = true;
                     }
@@ -136,6 +137,7 @@ define([
                         _this.group.show_repo_owner = true; // for repo list
                         _this.group.repos_for_new = _this.repos; // for creating a new library
                     } else { // address book group
+                        is_address_book_group = true;
                         _this.group.show_repo_owner = false;
                         if (app.pageOptions.is_pro && user_is_admin) {
                             user_can_add_repo = true;
@@ -149,7 +151,8 @@ define([
                     }
 
                     _this.renderPath({
-                        'name': data.name
+                        'name': data.name,
+                        'is_address_book_group': is_address_book_group
                     });
                     _this.renderToolbar2({
                         'id': data.id,
