@@ -23,7 +23,7 @@ import seaserv
 from seaserv import get_repo, get_commits, \
     seafserv_threaded_rpc, seafserv_rpc, is_repo_owner, \
     get_file_size, MAX_DOWNLOAD_DIR_SIZE, \
-    seafile_api
+    seafile_api, ccnet_api
 from pysearpc import SearpcError
 
 from seahub.avatar.util import get_avatar_file_storage
@@ -694,7 +694,7 @@ def libraries(request):
         org_id = request.user.org.org_id
         joined_groups = seaserv.get_org_groups_by_user(org_id, username)
     else:
-        joined_groups = seaserv.get_personal_groups_by_user(username)
+        joined_groups = ccnet_api.get_groups(username, return_ancestors=True)
 
     if joined_groups:
         try:
@@ -702,6 +702,9 @@ def libraries(request):
         except Exception as e:
             logger.error(e)
             joined_groups = []
+
+    joined_groups_exclude_address_book = [item for item in joined_groups if
+            item.parent_group_id == 0]
 
     return render(request, 'libraries.html', {
             "allow_public_share": allow_public_share,
@@ -723,6 +726,7 @@ def libraries(request):
             'file_audit_enabled': FILE_AUDIT_ENABLED,
             'can_add_pub_repo': can_add_pub_repo,
             'joined_groups': joined_groups,
+            'joined_groups_exclude_address_book': joined_groups_exclude_address_book,
             'storages': get_library_storages(request),
             'unread_notifications_request_interval': UNREAD_NOTIFICATIONS_REQUEST_INTERVAL,
             'library_templates': LIBRARY_TEMPLATES.keys() if \

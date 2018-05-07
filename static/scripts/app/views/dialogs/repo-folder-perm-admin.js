@@ -102,7 +102,7 @@ define([
                         placeholder: gettext("Search user or enter email and press Enter") // to override 'placeholder' returned by `Common.conta...`
                     }));
             } else {
-                var groups = app.pageOptions.groups || [];
+                var groups = app.pageOptions.joined_groups_exclude_address_book || [];
                 var g_opts = '';
                 for (var i = 0, len = groups.length; i < len; i++) {
                     g_opts += '<option value="' + groups[i].id + '" data-index="' + i + '">' + groups[i].name + '</option>';

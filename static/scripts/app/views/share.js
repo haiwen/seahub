@@ -714,7 +714,7 @@ define([
                             }
                         });
                     } else {
-                        groups = app.pageOptions.groups || [];
+                        groups = app.pageOptions.joined_groups_exclude_address_book || [];
                         prepareGroupsSelector();
                         $table.removeClass('hide');
                     }
