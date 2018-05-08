@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2018-05-08 11:20+0800\n"
+"POT-Creation-Date: 2018-05-08 13:35+0800\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -60,7 +60,8 @@ msgid "Failed to set quota: maximum quota is %d MB"
 msgstr ""
 
 #: seahub/api2/endpoints/admin/address_book/groups.py:70
-msgid "Name can only contain letters, numbers, blank, hyphen or underscore"
+#: seahub/api2/endpoints/wikis.py:86
+msgid "Name can only contain letters, numbers, blank, hyphen or underscore."
 msgstr ""
 
 #: seahub/api2/endpoints/admin/address_book/groups.py:75
@@ -334,10 +335,6 @@ msgstr ""
 #: seahub/templates/wiki/personal_wiki.html:153
 #: seahub/templates/wiki/wiki_list.html:125
 msgid "Name is required."
-msgstr ""
-
-#: seahub/api2/endpoints/wikis.py:86
-msgid "Name can only contain letters, numbers, blank, hyphen or underscore."
 msgstr ""
 
 #: seahub/api2/endpoints/wikis.py:103
@@ -6968,7 +6965,7 @@ msgstr ""
 
 #: seahub/templates/wiki/wiki.html:127
 #, python-brace-format
-msgid "Last modified by {placeholder1}, {placeholder2}"
+msgid "Last modified by {modifier_placeholder}, {modify_time_placeholder}"
 msgstr ""
 
 #: seahub/templates/wiki/wiki_list.html:12
@@ -7400,19 +7397,15 @@ msgstr ""
 msgid "The library is encrypted, can not open file online."
 msgstr ""
 
-#: seahub/views/file.py:374 seahub/views/file.py:387 seahub/views/file.py:712
-#: seahub/views/file.py:726 seahub/views/file.py:743 seahub/views/file.py:851
-#: seahub/views/file.py:1036 seahub/views/file.py:1049
-#: seahub/views/file.py:1254
+#: seahub/views/file.py:374 seahub/views/file.py:387 seahub/views/file.py:592
+#: seahub/views/file.py:712 seahub/views/file.py:726 seahub/views/file.py:743
+#: seahub/views/file.py:851 seahub/views/file.py:1036
+#: seahub/views/file.py:1049 seahub/views/file.py:1254
 msgid "Unable to view file"
 msgstr ""
 
 #: seahub/views/file.py:576
 msgid "Error when prepare Office Online file preview page."
-msgstr ""
-
-#: seahub/views/file.py:592
-msgid "Unable to view file."
 msgstr ""
 
 #: seahub/views/file.py:598
