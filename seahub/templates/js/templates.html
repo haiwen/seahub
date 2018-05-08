@@ -1253,6 +1253,11 @@
                     </tbody>
                 </table>
                 <p class="error hide"></p>
+                {% if enable_guest_invitation and user.permissions.can_invite_guest %}
+                    <a href="{{ SITE_ROOT }}#invitations/" onclick="$.modal.close(); return true;">
+                        <span aria-hidden="true" class="sf2-icon-invite"></span>&nbsp;{% trans "Invite People" %}
+                    </a>
+                {% endif %}
             </div>
 
             <div id="dir-group-share" class="tabs-panel hide">
@@ -2041,6 +2046,11 @@
     <input type="hidden" name="user_name" />
     <input type="submit" value="{% trans "Add" %}" class="submit" />
 </form>
+{% if enable_guest_invitation and user.permissions.can_invite_guest %}
+	<a href="{{ SITE_ROOT }}#invitations/" onclick="$.modal.close(); return true;">
+		<span aria-hidden="true" class="sf2-icon-invite"></span>&nbsp;{% trans "Invite People" %}
+	</a>
+{% endif %}
 <div class="members">
     <table>
         <thead>
