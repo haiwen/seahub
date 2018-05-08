@@ -59,7 +59,7 @@ def onlyoffice_editor_callback(request):
             if not update_token:
                 return HttpResponse('{"error": 0}')
 
-            update_url = gen_inner_file_upload_url(update_token, 'update-api')
+            update_url = gen_inner_file_upload_url('update-api', update_token)
 
             files = {
                 'file': file_content,
