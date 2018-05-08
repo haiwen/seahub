@@ -3923,6 +3923,9 @@ img.thumbnail {
     display:flex;
     justify-content:space-between;
 }
+.address-book-group-icon {
+    color:#888;
+}
 .group-toolbar-2 {
     position:relative;
     flex:none;
