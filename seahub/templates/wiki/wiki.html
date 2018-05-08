@@ -124,9 +124,9 @@ function showCurrentPage() {
             var update_at_m = moment(data.meta.updated_at);
             var update_time = update_at_m.format('LLLL'),
             update_time_from_now = time_utils.getRelativeTimeStr(update_at_m);
-            var last_modified_str = "{% trans "Last modified by %(modifier)s, %(modify_time)s" %}"
-                .replace('%(modifier)s', data.meta.last_modifier_name)
-                .replace('%(modify_time)s', '<span title="' + update_time + '">' + update_time_from_now + '</span>');
+            var last_modified_str = "{% trans "Last modified by {placeholder1}, {placeholder2}" %}"
+                .replace('{placeholder1}', data.meta.last_modifier_name)
+                .replace('{placeholder2}', '<span title="' + update_time + '">' + update_time_from_now + '</span>');
             $('#wiki-page-last-modified').html(last_modified_str);
 
             $('#wiki-page').show(); 
