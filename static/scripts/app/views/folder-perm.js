@@ -103,7 +103,7 @@ define([
             $('[name="email"]', this.$add_user_perm).select2(Common.contactInputOptionsForSelect2());
 
             // use select2 to 'group' input in 'add group perm'
-            var groups = app.pageOptions.groups || [],
+            var groups = app.pageOptions.joined_groups_exclude_address_book || [],
                 g_opts = '';
             for (var i = 0, len = groups.length; i < len; i++) {
                 g_opts += '<option value="' + groups[i].id + '" data-index="' + i + '">' + groups[i].name + '</option>';

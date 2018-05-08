@@ -224,6 +224,13 @@ app["pageOptions"] = {
         {% endfor %}
         return groups;
     })(),
+    joined_groups_exclude_address_book: (function () {
+        var groups = [];
+        {% for group in joined_groups_exclude_address_book %}
+        groups.push({'name': '{{group.group_name}}', 'id': '{{group.id}}'});
+        {% endfor %}
+        return groups;
+    })(),
     library_templates: (function () {
         var templates = [];
         {% for template in library_templates %}
