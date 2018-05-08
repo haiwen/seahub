@@ -77,7 +77,12 @@ define([
         },
 
         events: {
+            'click .invite-link-in-popup': 'closePopup',
             'submit form': 'formSubmit'
+        },
+
+        closePopup: function() {
+            $.modal.close();
         },
 
         addOne: function(item, collection, options) {

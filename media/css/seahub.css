@@ -4154,3 +4154,11 @@ img.thumbnail {
     text-align:center;
     margin-bottom:30px;
 }
+.invite-link-in-popup,
+.invite-link-in-popup:hover {
+    text-decoration:none;
+}
+#share-popup .invite-link-in-popup {
+    display:inline-block;
+    margin-top:4px;
+}
