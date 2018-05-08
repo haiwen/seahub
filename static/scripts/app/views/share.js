@@ -109,6 +109,7 @@ define([
             'keydown #generate-upload-link-form .show-or-hide-password': 'showOrHideUploadPassword',
 
             // dir private share
+            'click .invite-link-in-popup': 'closePopup',
             'click #add-dir-user-share-item .submit': 'dirUserShare',
             'click #add-dir-group-share-item .submit': 'dirGroupShare'
         },
@@ -736,6 +737,10 @@ define([
                     $loadingTip.hide();
                 }
             });
+        },
+
+        closePopup: function() {
+            $.modal.close();
         },
 
         dirUserShare: function () {

@@ -1252,6 +1252,12 @@
                     </tr>
                     </tbody>
                 </table>
+                {% if enable_guest_invitation and user.permissions.can_invite_guest %}
+                <a href="{{ SITE_ROOT }}#invitations/" class="invite-link-in-popup">
+                    <span aria-hidden="true" class="sf2-icon-invite vam"></span>
+                    <span class="vam">{% trans "Invite People" %}</span>
+                </a>
+                {% endif %}
                 <p class="error hide"></p>
             </div>
 
@@ -2041,6 +2047,12 @@
     <input type="hidden" name="user_name" />
     <input type="submit" value="{% trans "Add" %}" class="submit" />
 </form>
+{% if enable_guest_invitation and user.permissions.can_invite_guest %}
+<a href="{{ SITE_ROOT }}#invitations/" class="invite-link-in-popup">
+    <span aria-hidden="true" class="sf2-icon-invite vam"></span>
+    <span class="vam">{% trans "Invite People" %}</span>
+</a>
+{% endif %}
 <div class="members">
     <table>
         <thead>
