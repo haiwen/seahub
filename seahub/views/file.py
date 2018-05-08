@@ -589,7 +589,7 @@ def view_lib_file(request, repo_id, path):
                     file_id, 'download', username, use_onetime=True)
 
             if not dl_token:
-                return_dict['err'] = _(u'Unable to view file.')
+                return_dict['err'] = _(u'Unable to view file')
                 return render(request, 'view_file_base.html', return_dict)
 
             doc_url = gen_file_get_url(dl_token, filename)
