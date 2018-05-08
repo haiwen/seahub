@@ -1,6 +1,6 @@
 {% extends "base_wide_page.html" %}
 {% load seahub_tags avatar_tags i18n %}
-{% load url from future %}
+
 {% load staticfiles %}
 
 {% block sub_title %}{% trans "History" %} - {% endblock %}
@@ -124,7 +124,7 @@
     });
 
 {% if show_label and user_perm == 'rw' %}
-$('.label-edit-icon').click(function() {
+$('.label-edit-icon').on('click', function() {
     var $tr = $(this).parent();
     var s2_tags = [];
     $('.cur-tag', $tr).each(function(index, item) {
@@ -145,7 +145,7 @@ $('.label-edit-icon').click(function() {
         })
         .select2('data', s2_tags);
 });
-$('#label-edit-form').submit(function() {
+$('#label-edit-form').on('submit', function() {
     var $form = $(this);
     var $input = $('[name="labels"]', $form);
     var $error = $('.error', $form);
@@ -180,7 +180,7 @@ $('#label-edit-form').submit(function() {
         error: function(xhr) {
             var error_msg;
             if (xhr.responseText) {
-                error_msg = $.parseJSON(xhr.responseText).error_msg;
+                error_msg = JSON.parse(xhr.responseText).error_msg;
             } else {
                 error_msg = "{% trans "Failed. Please check the network." %}";
             }

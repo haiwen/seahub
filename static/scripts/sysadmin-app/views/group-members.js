@@ -38,24 +38,18 @@ define([
                 Common.contactInputOptionsForSelect2(), {
                 width: '275px',
                 containerCss: {'margin-bottom': '5px'},
-                placeholder: gettext("Search user or enter email and press Enter")
+                placeholder: gettext("Search users or enter emails and press Enter")
             }));
 
-            $form.submit(function() {
+            $form.on('submit', function() {
                 var group_id = _this.groupMemberCollection.group_id;
                 var emails = $.trim($('[name="email"]', $form).val());
                 var $error = $('.error', $form);
                 var $submitBtn = $('[type="submit"]', $form);
 
                 if (!emails) {
-                    $error.html(gettext("Email is required.")).show();
+                    $error.html(gettext("It is required.")).show();
                     return false;
-                }
-
-                var input_emails = [];
-                var emails_list = emails.split(',');
-                for (var i = 0; i < emails_list.length; i++) {
-                    input_emails.push(emails_list[i]);
                 }
 
                 $error.hide();
@@ -70,7 +64,7 @@ define([
                     dataType: 'json',
                     beforeSend: Common.prepareCSRFToken,
                     traditional: true,
-                    data: {'email': input_emails},
+                    data: {'email': emails.split(',')},
                     success: function(data) {
                         if (data.success.length > 0) {
                             _this.groupMemberCollection.add(data.success, {prepend: true});
@@ -151,7 +145,7 @@ define([
                         if (response['status'] == 401 || response['status'] == 403) {
                             err_msg = gettext("Permission error");
                         } else {
-                            err_msg = $.parseJSON(response.responseText).error_msg;
+                            err_msg = JSON.parse(response.responseText).error_msg;
                         }
                     } else {
                         err_msg = gettext("Failed. Please check the network.");

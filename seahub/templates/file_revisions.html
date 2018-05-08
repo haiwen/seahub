@@ -1,7 +1,7 @@
 {% extends 'base_wide_page.html' %}
 
 {% load seahub_tags avatar_tags i18n staticfiles %}
-{% load url from future %}
+
 
 {% block sub_title %}{% trans "History" %} - {% endblock %}
 
@@ -26,7 +26,7 @@
                 {% trans 'Current Path:' %}
                 {% for name, link in zipped %}
                 {% if not forloop.last %}
-                <a href="{% url 'view_common_lib_dir' repo.id link|strip_slash %}">{{ name }}</a> /
+                <a href="{{ SITE_ROOT }}#common/lib/{{ repo.id }}/{{ link|strip_slash }}">{{ name }}</a> /
                 {% else %}
                 <a href="{% url 'view_lib_file' repo.id path %}" target="_blank" >{{ name }}</a>
                 {% endif %}
@@ -57,7 +57,7 @@
 {% block extra_script %}
 
 <script type="text/javascript" src="{% static "scripts/lib/underscore.js" %}"></script>
-<script type="text/javascript" src="{% static "scripts/lib/moment-with-locales.js" %}"></script>
+<script type="text/javascript" src="{% static "scripts/lib/moment-with-locales.min.js" %}"></script>
 
 <script type="text/template" id="file-history-tr-tmpl">
 <tr>
@@ -192,7 +192,7 @@ var get_file_revisions = function(path, commit_id) {
             $history_more_loading.addClass('hide');
             var error;
             if (xhr.responseText) {
-                error = $.parseJSON(xhr.responseText).error_msg;
+                error = JSON.parse(xhr.responseText).error_msg;
             } else {
                 error = "{% trans "Failed. Please check the network." %}";
             }
@@ -206,7 +206,7 @@ var get_file_revisions = function(path, commit_id) {
 // if no commit_id parameter passed
 get_file_revisions(file_path);
 
-$('#history-more-btn').click(function() {
+$('#history-more-btn').on('click', function() {
     // get more batch of file revisions
     // next_start_commit = resp.next_start_commit;
     var path = rev_renamed_old_path ? rev_renamed_old_path : file_path;

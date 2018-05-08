@@ -3,11 +3,12 @@ define([
     'underscore',
     'backbone',
     'common',
+    'jquery.ui', /* for tabs */
     'file-tree',
     'app/collections/repo-user-folder-perm',
     'app/collections/repo-group-folder-perm',
     'app/views/repo-folder-perm-item'
-], function($, _, Backbone, Common, FileTree, UserFolderPerm, GroupFolderPerm, ItemView) {
+], function($, _, Backbone, Common, jQueryUI, FileTree, UserFolderPerm, GroupFolderPerm, ItemView) {
     'use strict';
 
     var View = Backbone.View.extend({
@@ -74,7 +75,7 @@ define([
                     $td.find('.cur-perm, .edit-icon').show();
                 }
             };
-            $(document).click(hideItemEdit);
+            $(document).on('click', hideItemEdit);
         },
 
         render: function() {
@@ -101,7 +102,7 @@ define([
                         placeholder: gettext("Search user or enter email and press Enter") // to override 'placeholder' returned by `Common.conta...`
                     }));
             } else {
-                var groups = app.pageOptions.groups || [];
+                var groups = app.pageOptions.joined_groups_exclude_address_book || [];
                 var g_opts = '';
                 for (var i = 0, len = groups.length; i < len; i++) {
                     g_opts += '<option value="' + groups[i].id + '" data-index="' + i + '">' + groups[i].name + '</option>';
@@ -128,7 +129,7 @@ define([
                         if (response['status'] == 401 || response['status'] == 403) {
                             err_msg = gettext("Permission error");
                         } else {
-                            err_msg = $.parseJSON(response.responseText).error_msg;
+                            err_msg = JSON.parse(response.responseText).error_msg;
                         }
                     } else {
                         err_msg = gettext('Please check the network.');
@@ -282,8 +283,8 @@ define([
 
                         $email_or_group.select2('val', '');
                         $path.val('');
-                        $('[value="rw"]', $perm).attr('selected', 'selected');
-                        $('[value="r"]', $perm).removeAttr('selected');
+                        $('option', $perm).prop('selected', false);
+                        $('[value="rw"]', $perm).prop('selected', true);
                         $error.addClass('hide');
                     }
                     if (data.failed.length > 0) {
@@ -297,7 +298,7 @@ define([
                 error: function(xhr) {
                     var error_msg;
                     if (xhr.responseText) {
-                        error_msg = $.parseJSON(xhr.responseText).error_msg;
+                        error_msg = JSON.parse(xhr.responseText).error_msg;
                     } else {
                         error_msg = gettext("Failed. Please check the network.");
                     }

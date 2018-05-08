@@ -36,7 +36,7 @@ function init() {
     ###############################
     # create database and two new users: an admin, and a normal user
     ###############################
-    $PYTHON ./manage.py syncdb
+    $PYTHON ./manage.py migrate --noinput
 
     # create normal user
     $PYTHON -c "import ccnet; pool = ccnet.ClientPool('${CCNET_CONF_DIR}'); ccnet_threaded_rpc = ccnet.CcnetThreadedRpcClient(pool, req_pool=True); ccnet_threaded_rpc.add_emailuser('${SEAHUB_TEST_USERNAME}', '${SEAHUB_TEST_PASSWORD}', 0, 1);"

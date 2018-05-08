@@ -12,20 +12,27 @@ define([
 
     var InvitationsView = Backbone.View.extend({
 
-        id: 'invitations',
+        el: '.main-panel',
 
         template: _.template($('#invitations-tmpl').html()),
+        toolbarTemplate: _.template($('#invitations-toolbar-tmpl').html()),
         inviteFormTemplate: _.template($('#invitation-form-tmpl').html()),
 
         initialize: function() {
             this.collection = new InvitedPeopleCollection();
             this.listenTo(this.collection, 'add', this.addOne);
             this.listenTo(this.collection, 'reset', this.reset);
-            this.render();
         },
 
-        render: function() {
-            this.$el.html(this.template());
+        renderToolbar: function() {
+            this.$toolbar = $('<div class="cur-view-toolbar" id="invitations-toolbar"></div>').html(this.toolbarTemplate());
+            this.$('.common-toolbar').before(this.$toolbar);
+        },
+
+        renderMainCon: function() {
+            this.$mainCon = $('<div class="main-panel-main" id="invitations"></div>').html(this.template());
+            this.$el.append(this.$mainCon);
+
             this.$loadingTip = this.$('.loading-tip');
             this.$table = this.$('table');
             this.$tableBody = $('tbody', this.$table);
@@ -42,10 +49,10 @@ define([
             var $form = $(this.inviteFormTemplate());
             var form_id = $form.attr('id');
 
-            $form.modal({appendTo:'#main'});
+            $form.modal();
             $('#simplemodal-container').css({'height':'auto'});
 
-            $form.submit(function() {
+            $form.on('submit', function() {
                 var accepters = $.trim($('input[name="accepter"]', $form).val());
                 var accepter_list = [];
                 var email;
@@ -162,10 +169,9 @@ define([
         },
 
         show: function() {
-            if (!this.attached) {
-                this.attached = true;
-                $("#right-panel").html(this.$el);
-            }
+            this.renderToolbar();
+            this.renderMainCon();
+
             this.showContent();
         },
 
@@ -182,7 +188,7 @@ define([
                         if (response['status'] == 401 || response['status'] == 403) {
                             err_msg = gettext("Permission error");
                         } else {
-                            err_msg = $.parseJSON(response.responseText).error_msg;
+                            err_msg = JSON.parse(response.responseText).error_msg;
                         }
                     } else {
                         err_msg = gettext("Failed. Please check the network.");
@@ -196,8 +202,8 @@ define([
         },
 
         hide: function() {
-            this.$el.detach();
-            this.attached = false;
+            this.$toolbar.detach();
+            this.$mainCon.detach();
         }
 
     });

@@ -9,16 +9,16 @@ define([
     'use strict';
 
     var GroupsView = Backbone.View.extend({
-        id: 'groups',
+        el: '.main-panel',
 
         template: _.template($('#groups-tmpl').html()),
+        toolbarTemplate: _.template($('#groups-toolbar-tmpl').html()),
+        addGroupTemplate: _.template($('#add-group-form-tmpl').html()),
 
         initialize: function(options) {
             this.groups = new Groups();
             this.listenTo(this.groups, 'add', this.addOne);
             this.listenTo(this.groups, 'reset', this.reset);
-
-            this.render();
         },
 
         events: {
@@ -50,8 +50,15 @@ define([
             }
         },
 
-        render: function() {
-            this.$el.html(this.template());
+        renderToolbar: function() {
+            this.$toolbar = $('<div class="cur-view-toolbar" id="groups-toolbar"></div>').html(this.toolbarTemplate());
+            this.$('.common-toolbar').before(this.$toolbar);
+        },
+
+        renderMainCon: function() {
+            this.$mainCon = $('<div class="main-panel-main" id="groups"></div>').html(this.template());
+            this.$el.append(this.$mainCon);
+
             this.$loadingTip = this.$('.loading-tip');
             this.$groupList = this.$('#group-list');
             this.$emptyTip = this.$('.empty-tips');
@@ -88,22 +95,25 @@ define([
         },
 
         show: function() {
-            $("#right-panel").html(this.$el);
+            this.renderToolbar();
+            this.renderMainCon();
+
             this.showGroups();
         },
 
         hide: function() {
-            this.$el.detach();
+            this.$toolbar.detach();
+            this.$mainCon.detach();
         },
 
         addGroup: function () {
-            var $form = $('#group-add-form');
+            var $form = $(this.addGroupTemplate());
             $form.modal();
             $('#simplemodal-container').css({'height':'auto'});
 
             var groups = this.groups;
             var _this = this;
-            $form.submit(function() {
+            $form.on('submit', function() {
                 var group_name = $.trim($('[name="group_name"]', $form).val());
                 var $error = $('.error', $form);
                 var $submitBtn = $('[type="submit"]', $form);

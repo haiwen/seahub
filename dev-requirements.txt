@@ -1,0 +1,5 @@
+-r requirements.txt
+
+fabric
+transifex-client
+mysqlclient==1.3.12

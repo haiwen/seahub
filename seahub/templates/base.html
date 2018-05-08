@@ -1,5 +1,4 @@
 {% load seahub_tags avatar_tags group_avatar_tags i18n staticfiles %}
-{% load url from future %}
 
 <!DOCTYPE html>
 <html lang="{{ LANGUAGE_CODE }}">
@@ -17,47 +16,44 @@
 <link rel="stylesheet" type="text/css" href="{% static "css/magnific-popup.css" %}" />
 <link rel="stylesheet" type="text/css" href="{{ MEDIA_URL }}css/seahub.css?t=1398068110" />
 {% block extra_style %}{% endblock %}
-{% if branding_css != '' %}<link rel="stylesheet" type="text/css" href="{{ MEDIA_URL }}{{ branding_css }}" />{% endif %}
+{% if enable_branding_css %}<link rel="stylesheet" type="text/css" href="{% url 'custom_css' %}" />{% endif %}
 </head>
 
 <body>
-    <div id="wrapper" class="{{ LANGUAGE_CODE }}">
+    <div id="wrapper" class="{{ LANGUAGE_CODE }} d-flex fd-col h100">
         {% block info_bar_message %}
         {% if request.user.is_authenticated and request.cur_note %}
-        <div id="info-bar" class="fixed-top-bar">
+        <div id="info-bar">
             <p id="info-bar-info">{{ request.cur_note.message|urlize }}</p>
             <span class="close sf2-icon-x1 op-icon" data="{{ request.cur_note.id }}" title="{% trans "Close" %}"></span>
         </div>
         {% endif %}
         {% endblock info_bar_message %}
 
-        <div id="header" class="navbar {% block header_css_class %}navbar-fixed-top{% endblock %}">
-            <div id="header-inner">
-                {% block notice_panel %}{% endblock %}
-                <a href="{{ SITE_ROOT }}" id="logo" class="fleft">
-                    {% if seacloud_mode %}
-                    <img src="{{ MEDIA_URL }}img/seacloud_logo.png?t=1398068110" title="Seacloud" alt="logo" width="186" height="31" />
-                    {% else %}
-                    <img src="{{ MEDIA_URL }}{{ logo_path }}" title="{{ site_title }}" alt="logo" width="{{logo_width}}" height="{{logo_height}}" />
-                    {% endif %}
-                </a>
-                <button class="sf2-icon-list-view side-nav-toggle hidden-md-up hide" title="{% trans "Side Nav Menu" %}" id="js-toggle-side-nav" aria-label="{% trans "Side Nav Menu" %}"></button>
+        <div id="header" class="{% block header_css_class %}d-flex{% endblock %}">
+            <a href="{{ SITE_ROOT }}" id="logo">
+                {% if seacloud_mode %}
+                <img src="{{ MEDIA_URL }}img/seacloud_logo.png?t=1398068110" title="Seacloud" alt="logo" width="186" height="31" />
+                {% else %}
+                <img src="{{ MEDIA_URL }}{{ logo_path }}" title="{{ site_title }}" alt="logo" width="{{logo_width}}" height="{{logo_height}}" />
+                {% endif %}
+            </a>
+            <span class="sf2-icon-menu side-nav-toggle hidden-md-up hide" title="{% trans "Side Nav Menu" %}" id="js-toggle-side-nav" aria-label="{% trans "Side Nav Menu" %}"></span>
 
-                {% block header_right %}
-                {% if request.user.is_authenticated %}
-                <div class="fright">
-
+            {% block header_right %}
+            {% if request.user.is_authenticated %}
+            <div class="d-flex">
                 {% block top_search %}
                 {% if has_file_search %}
                     {% include 'snippets/search_form.html' %}
                 {% endif %}
                 {% endblock %}
 
-
-                <div id="account" class="fright">
-                    <a id="my-info" href="#" class="no-deco" aria-label="{% trans "View profile and more" %}">
+                <div id="account">
+                    <a id="my-info" href="#" class="account-toggle no-deco hidden-sm-down" aria-label="{% trans "View profile and more" %}">
                         {% avatar request.user 36 %} <span class="icon-caret-down vam"></span>
                     </a>
+                    <span class="account-toggle sf2-icon-more mobile-icon hidden-md-up" aria-label="{% trans "View profile and more" %}"></span>
                     <div id="user-info-popup" class="account-popup sf-popover hide">
                         <div class="outer-caret up-outer-caret"><div class="inner-caret"></div></div>
                         <div class="sf-popover-con">
@@ -86,24 +82,23 @@
                         </div>
                     </div>
                 </div>
-                </div>
-                {% else %} {# for non-logged-in user #}
-                <div class="fright" id="lang">
-                    <a href="#" id="lang-context" data-lang="{{ LANGUAGE_CODE }}">{{ LANGUAGE_CODE|language_name_local }} <span class="icon-caret-down"></span></a>
-                    <div id="lang-context-selector" class="sf-popover hide">
-                        <ul class="sf-popover-con">
-                            {% for LANG in LANGUAGES %}
-                            <li><a href="{% url 'i18n' %}?lang={{ LANG.0 }}">{{ LANG.1 }}</a></li>
-                            {% endfor %}
-                        </ul>
-                    </div>
-                </div>
-                {% endif %}
-                {% endblock %}
             </div>
+            {% else %} {# for non-logged-in user #}
+            <div id="lang">
+                <a href="#" id="lang-context" data-lang="{{ LANGUAGE_CODE }}">{{ LANGUAGE_CODE|language_name_local }} <span class="icon-caret-down"></span></a>
+                <div id="lang-context-selector" class="sf-popover hide">
+                    <ul class="sf-popover-con">
+                        {% for LANG in LANGUAGES %}
+                        <li><a href="{% url 'i18n' %}?lang={{ LANG.0 }}">{{ LANG.1 }}</a></li>
+                        {% endfor %}
+                    </ul>
+                </div>
+            </div>
+            {% endif %}
+            {% endblock %}
         </div>
 
-        <div id="main" class="clear container-fluid {% block main_css_class %}top-padding{% endblock %}">
+        <div id="main" class="container-fluid w100 flex-auto {% block main_class %}ov-auto{% endblock %}">{# since #wrapper is `d-flex`, 'w100' is necessary here. #}
             {% block main_content %}
             <div class="row">
                 <div id="main-panel" class="w100 ovhd">
@@ -111,46 +106,45 @@
                 </div>
             </div>
             {% endblock %}
-
-            {% if messages %}
-            <ul class="messages">
-                {% for message in messages %}
-                <li class="{{ message.tags }}">
-                    {% if 'safe' in message.tags %}
-                        {{ message|safe }}
-                    {% else %}
-                        {{ message }}
-                    {% endif %}
-                </li>
-                {% endfor %}
-            </ul>
-            {% endif %}
-            <div id="confirm-popup" class="hide">
-                <div id="confirm-con"></div>
-                <button id="confirm-yes">{% trans "Yes" %}</button>
-                <button class="simplemodal-close">{% trans "No" %}</button>
-            </div>
         </div>
 
+        {% if messages %}
+        <ul class="messages hide">
+            {% for message in messages %}
+            <li class="{{ message.tags }}">
+                {% if 'safe' in message.tags %}
+                    {{ message|safe }}
+                {% else %}
+                    {{ message }}
+                {% endif %}
+            </li>
+            {% endfor %}
+        </ul>
+        {% endif %}
+
+        <div id="confirm-popup" class="hide">
+            <div id="confirm-con"></div>
+            <button id="confirm-yes">{% trans "Yes" %}</button>
+            <button class="simplemodal-close">{% trans "No" %}</button>
+        </div>
 </div><!-- wrapper -->
 
-<script type="text/javascript" src="{{ MEDIA_URL }}js/jquery-1.12.1.min.js" id="jquery"></script>{# 'id="jquery"' is for pdf file view with pdf2html #}
+<script type="text/javascript" src="{% static "scripts/lib/jquery.min.js" %}" id="jquery"></script>{# 'id="jquery"' is for pdf file view with pdf2html #}
 <script type="text/javascript" src="{% static "scripts/lib/jquery.simplemodal.js" %}"></script>
-<script type="text/javascript" src="{% static "scripts/lib/jquery.ui.tabs.js" %}"></script>
 <script type="text/javascript" src="{% static "scripts/lib/jstree.min.js" %}"></script>
 <script type="text/javascript" src="{{ MEDIA_URL }}js/jq.min.js"></script>
-<script type="text/javascript" src="{{ MEDIA_URL }}js/base.js?t=1404370380"></script>
+<script type="text/javascript" src="{{ MEDIA_URL }}js/base.js"></script>
 <script type="text/javascript">
 function ajaxErrorHandler(xhr, textStatus, errorThrown) {
     if (xhr.responseText) {
-        feedback($.parseJSON(xhr.responseText).error||$.parseJSON(xhr.responseText).error_msg, 'error');
+        feedback(JSON.parse(xhr.responseText).error||JSON.parse(xhr.responseText).error_msg, 'error');
     } else {
         feedback("{% trans "Failed. Please check the network." %}", 'error');
     }
 }
 {% if request.user.is_authenticated %}
 {% if request.cur_note %}
-$('#info-bar .close').click(function() {
+$('#info-bar .close').on('click', function() {
     $('#info-bar').addClass('hide');
     if (navigator.cookieEnabled) {
         var date = new Date(),
@@ -198,13 +192,13 @@ $('#info-bar .close').click(function() {
             });
         }
     };
-    $(window).resize(function() {
+    $(window).on('resize', function() {
         if (lang_selector.is(':visible')) {
             setLangSelectorMaxHeight();
         }
     });
 
-    lang_context.click(function() {
+    lang_context.on('click', function() {
         lang_selector.toggleClass('hide');
         if (lang_selector.is(':visible')) {
             setLangSelectorMaxHeight();
@@ -212,7 +206,7 @@ $('#info-bar .close').click(function() {
         return false;
     });
 
-    $(document).click(function(e) {
+    $(document).on('click', function(e) {
         var element = e.target || e.srcElement;
         if (element.id != 'lang-context-selector' && element.id != 'lang-context') {
             lang_selector.addClass('hide');
@@ -222,21 +216,16 @@ $('#info-bar .close').click(function() {
 {% endif %}
 
 if ($('.side-nav').length) {
-    $('#logo').addClass('hidden-sm-down');
-    $('#js-toggle-side-nav').removeClass('hide');
+     $('#logo').addClass('hidden-sm-down');
+     $('#js-toggle-side-nav').removeClass('hide');
 }
-$('#js-toggle-side-nav').click(function() {
-    $('.side-nav').css({'left': 0});
+$('#js-toggle-side-nav').on('click', function() {
+    $('.side-nav').addClass('side-nav-shown');
     return false;
 });
-$('.js-close-side-nav').click(function() {
-    $('.side-nav').css({'left': '-300px'});
+$('.js-close-side-nav').on('click', function() {
+    $('.side-nav').removeClass('side-nav-shown');
     return false;
-});
-$(window).resize(function() {
-    if ($(window).width() >= 768) {
-        $('.side-nav').css({'left': 0});
-    }
 });
 </script>
 {% block extra_script %}{% endblock %}

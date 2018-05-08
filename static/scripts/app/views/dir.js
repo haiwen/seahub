@@ -1,6 +1,6 @@
 define([
     'jquery',
-    'jquery.ui.progressbar',
+    'jquery.ui',
     'jquery.magnific-popup',
     'simplemodal',
     'underscore',
@@ -16,26 +16,31 @@ define([
     'app/views/share',
     'app/views/file-comments',
     'app/views/widgets/dropdown'
-    ], function($, progressbar, magnificPopup, simplemodal, _, Backbone, Common,
+    ], function($, jQueryUI, magnificPopup, simplemodal, _, Backbone, Common,
         FileTree, Cookies, DirentCollection, DirentView, DirentGridView,
         DirentDetailsView, FileUploadView, ShareView, FileCommentsView, DropdownView) {
         'use strict';
 
         var DirView = Backbone.View.extend({
-            id: 'dir-view',
+            el: '.main-panel',
 
             template: _.template($('#dir-view-tmpl').html()),
 
-            path_bar_template: _.template($('#dir-path-bar-tmpl').html()),
-            dir_op_bar_template: _.template($('#dir-op-bar-tmpl').html()),
-            dirents_hd_template: _.template($('#dirents-hd-tmpl').html()),
-            dirents_hd_mobile_template: _.template($('#dirents-hd-mobile-tmpl').html()),
-            top_search_form_template: _.template($('#top-search-form-tmpl').html()),
+            toolbarTemplate: _.template($('#dir-view-toolbar-tmpl').html()),
+            toolbar2Template: _.template($('#dir-view-toolbar2-tmpl').html()),
+
+            pathTemplate: _.template($('#dir-view-path-tmpl').html()),
+
+            theadTemplate: _.template($('#dir-view-thead-tmpl').html()), // '<thead>'
+            theadMobileTemplate: _.template($('#dir-view-thead-mobile-tmpl').html()),
 
             newDirTemplate: _.template($("#add-new-dir-form-template").html()),
             newFileTemplate: _.template($("#add-new-file-form-template").html()),
             mvcpTemplate: _.template($("#mvcp-form-template").html()),
             mvProgressTemplate: _.template($("#mv-progress-popup-template").html()),
+
+            topSearchFormTemplate: _.template($('#top-search-form-tmpl').html()),
+            repoDecryptFormTemplate: _.template($('#repo-decrypt-form-template').html()),
 
             initialize: function(options) {
                 var view_mode = Cookies.get('view_mode');
@@ -68,41 +73,26 @@ define([
                     }
                 };
 
-
                 this.dir = new DirentCollection();
                 this.listenTo(this.dir, 'add', this.addOne);
                 this.listenTo(this.dir, 'reset', this.reset);
 
                 this.fileUploadView = new FileUploadView({dirView: this});
-                this.direntDetailsView = new DirentDetailsView();
-                this.fileCommentsView = new FileCommentsView();
-
-                this.render();
-
-
-                var _this = this;
-                // scroll window: get 'more', fix 'op bar'
-                $(window).scroll(function() {
-                    if ($(_this.el).is(':visible')) {
-                        _this.onWindowScroll();
-                    }
-                });
-                $(window).resize(function() {
-                    _this.updateDirOpBarUI();
-                });
+                this.direntDetailsView = new DirentDetailsView({dirView: this});
+                this.fileCommentsView = new FileCommentsView({dirView: this});
 
                 // hide 'rename form'
-                $(document).click(function(e) {
+                $(document).on('click', function(e) {
                     var target =  e.target || event.srcElement;
                     var $form = $('#rename-form');
                     if ($form.length && !$form.find('*').is(target)) {
                         var $tr = $form.closest('tr'); // get $tr before $form removed in `.cancel click()`
-                        $('.cancel', $form).click();
+                        $('.cancel', $form).trigger('click');
                     }
                 });
 
                 // for 'grid view': click to hide the contextmenu of '.grid-item'
-                $(document).click(function(e) {
+                $(document).on('click', function(e) {
                     var target =  e.target || event.srcElement;
                     var $popup = $('.grid-item-op');
                     if ($popup.length > 0 &&
@@ -116,19 +106,26 @@ define([
 
             },
 
-            render: function() {
-                this.$el.html(this.template());
-                this.attached = false;
-                this.$dirent_list = this.$('.repo-file-list');
-                this.$dirent_grid = this.$('.grid-view');
-                this.$dirent_list_body = this.$('.repo-file-list tbody');
-                this.$loading_tip = this.$('.loading-tip');
-                this.$error = this.$('.error');
-                this.$el_con = this.$('.repo-file-list-topbar, .js-dir-content');
+            renderMainCon: function() {
+                if ($('#dir-view').length) {
+                    return;
+                }
 
-                this.$path_bar = this.$('.path-bar');
-                // For compatible with css, we use .repo-op instead of .dir-op
-                this.$dir_op_bar = this.$('.repo-op');
+                this.$mainCon = $('<div class="main-panel-main main-panel-main-with-side" id="dir-view"></div>').html(this.template());
+                this.$el.append(this.$mainCon);
+
+                this.$loadingTip = this.$('.loading-tip');
+                this.$con = this.$('.js-dir-content');
+                this.$error = this.$('.error');
+
+                this.$table = this.$('.repo-file-list');
+                this.$tbody = $('tbody', this.$table);
+                this.$gridViewContainer = this.$('.grid-view');
+
+                var _this = this;
+                $('.cur-view-main-con', this.$mainCon).on('scroll', function() {
+                    _this.getMore();
+                });
             },
 
             // public function
@@ -136,32 +133,31 @@ define([
             // 'category' is sth. like url prefix
             // options: for rendering from group view, currently is { group_name: group_name }
             showDir: function(category, repo_id, path, options) {
-                $('#top-search-form').html(this.top_search_form_template({
+                $('#top-search-form').html(this.topSearchFormTemplate({
                     search_repo_id: repo_id
                 }));
 
                 this.contextOptions = options;
-                if (!this.attached) {
-                    this.attached = true;
-                    $("#right-panel").html(this.$el);
-                }
+                this.renderMainCon();
+
                 this.dir.setPath(category, repo_id, path);
                 this.dir.dirent_more = false;
+
                 this.renderDir();
             },
 
             // public function
             // hide the folder view
             hide: function() {
-                $('#top-search-form').html(this.top_search_form_template({
+                $('#top-search-form').html(this.topSearchFormTemplate({
                     search_repo_id: ''
                 }));
 
-                this.$el.detach();
-                this.attached = false;
 
-                this.direntDetailsView.hide();
-                this.fileCommentsView.hide();
+                if (this.$toolbar) { // when an enc lib is not decrypted, no $toolbar
+                    this.$toolbar.detach();
+                }
+                this.$mainCon.detach();
                 this.fileUploadView.closePopup();
             },
 
@@ -170,64 +166,53 @@ define([
                 var view;
                 if (this.view_mode == 'list') {
                     view = new DirentView({model: dirent, dirView: this});
-                    this.$dirent_list_body.append(view.render().el);
+                    this.$tbody.append(view.render().el);
                 } else {
                     view = new DirentGridView({model: dirent, dirView: this});
-                    this.$dirent_grid.append(view.render().el);
+                    this.$gridViewContainer.append(view.render().el);
                 }
             },
 
+            // this.view_mode == 'list'
+            addListOne: function(dirent) {
+                var view = new DirentView({model: dirent, dirView: this});
+                this.$tbody.append(view.render().el);
+            },
+
+            // 'grid'
+            addGridOne: function(dirent) {
+                var view = new DirentGridView({model: dirent, dirView: this});
+                this.$gridViewContainer.append(view.render().el);
+            },
+
             reset: function() {
-                this.direntDetailsView.hide();
-                this.fileCommentsView.hide();
-
+                this.renderToolbar();
                 this.renderPath();
-                this.renderDirOpBar();
 
-                this.$el_con.show();
+                this.$con.hide();
 
-                this.setFileInput();
+                this.$table.hide();
+                this.$tbody.empty();
+                this.$gridViewContainer.hide().empty();
 
-                // there may be a 'style' added via 'onWindowScroll()' when visiting last dir
-                this.$('.js-dir-content').removeAttr('style');
-
-                if (this.view_mode == 'list') {
-                    this.renderDirentsHd();
-                }
-
-                this.$dirent_grid.empty();
-                this.$dirent_list_body.empty();
+                this.$con.show();
 
                 if (this.view_mode == 'list') {
-                    this.$dirent_list.show();
-                    this.$dirent_grid.hide();
+                    this.renderThead();
+                    Common.updateSortIconByMode({'context': this.$table});
+                    this.$table.show();
                 } else {
-                    this.$dirent_list.hide();
-                    this.$dirent_grid.show();
+                    this.$gridViewContainer.show();
                 }
 
                 // sort
-                Common.updateSortIconByMode({'context': this.$el});
                 this.sortDirents();
 
                 this.dir.last_start = 0;
                 this.dir.limit = 100;
                 this.render_dirents_slice(this.dir.last_start, this.dir.limit);
 
-                this.updateDirOpBarUI(); // after `render_dirents_slice`
-
                 this.getThumbnail();
-            },
-
-            updateDirOpBarUI: function() {
-                var width;
-                if ($(window).width() > 500) {
-                    width = this.$('.repo-op').width() - parseInt(this.$('.repo-op-misc').css('margin-left')) - 5;
-                    width -= $('#multi-dirents-op').is(':visible') ? $('#multi-dirents-op').width() : $('#cur-dir-ops').width();
-                    this.$('.repo-op-misc').css({'width': width});
-                } else {
-                    this.$('.repo-op-misc').removeAttr('style');
-                }
             },
 
             updateMagnificPopupOptions: function(options) {
@@ -403,13 +388,12 @@ define([
 
             _showLibDecryptDialog: function() {
                 var _this = this;
-                var form = $($('#repo-decrypt-form-template').html());
+                var $form = $(this.repoDecryptFormTemplate());
                 var decrypt_success = false;
-                form.modal({
+                $form.modal({
                     containerCss: {'padding': '1px'},
                     onClose: function () {
                         $.modal.close();
-                        _this.$el_con.show();
                         if (!decrypt_success) {
                             app.router.navigate(
                                 _this.dir.category + '/', // need to append '/' at end
@@ -419,15 +403,15 @@ define([
                     }
                 });
                 $('#simplemodal-container').css({'height':'auto'});
-                form.submit(function() {
-                    var passwd = $.trim($('[name="password"]', form).val());
+                $form.on('submit', function() {
+                    var passwd = $.trim($('[name="password"]', $form).val());
                     if (!passwd) {
-                        $('.error', form).html(gettext("Password is required.")).removeClass('hide');
+                        $('.error', $form).html(gettext("Password is required.")).removeClass('hide');
                         return false;
                     }
                     Common.ajaxPost({
-                        form: form,
-                        form_id: form.attr('id'),
+                        form: $form,
+                        form_id: $form.attr('id'),
                         post_url: Common.getUrl({
                             'name': 'api_v2.1_repo_set_password',
                             'repo_id': _this.dir.repo_id
@@ -446,10 +430,10 @@ define([
             },
 
             renderDir: function() {
-                this.$loading_tip.show();
-                this.$error.hide();
-                this.$el_con.hide();
 
+                this.$loadingTip.show();
+                this.$con.hide();
+                this.$error.hide();
 
                 var _this = this;
                 var thumbnail_size = app.pageOptions.thumbnail_default_size;
@@ -465,12 +449,8 @@ define([
                         'thumbnail_size': thumbnail_size
                     },
                     success: function() {
-                        _this.$loading_tip.hide();
                     },
                     error: function(collection, response, opts) {
-                        _this.$loading_tip.hide();
-                        _this.$el_con.hide();
-
                         var err_msg;
                         if (response.responseText) {
                             if (response.responseJSON.lib_need_decrypt) {
@@ -483,6 +463,9 @@ define([
                             err_msg = gettext('Please check the network.');
                         }
                         _this.$error.html(err_msg).show();
+                    },
+                    complete: function() {
+                        _this.$loadingTip.hide();
                     }
                 });
             },
@@ -518,27 +501,33 @@ define([
                     });
                 }
 
-                this.$path_bar.html(this.path_bar_template(obj));
+                this.$('.dir-path').html(this.pathTemplate(obj));
             },
 
-            renderDirOpBar: function() {
+            renderToolbar: function() {
                 var dir = this.dir;
-
-                this.$dir_op_bar.html($.trim(this.dir_op_bar_template({
+                var data = {
                     user_perm: dir.user_perm,
                     no_quota: dir.no_quota,
                     encrypted: dir.encrypted,
                     mode: this.view_mode,
                     path: dir.path,
                     repo_id: dir.repo_id,
-                    site_root: app.pageOptions.site_root,
                     is_repo_owner: dir.is_repo_owner,
-                    can_generate_share_link: app.pageOptions.can_generate_share_link,
-                    can_generate_upload_link: app.pageOptions.can_generate_upload_link,
-                    enable_upload_folder: app.pageOptions.enable_upload_folder
-                })))
-                .removeAttr('style'); // there may be a 'style' added via 'onWindowScroll()' when visiting last dir
+                    site_root: app.pageOptions.site_root
+                };
 
+                if (!$('#dir-view-toolbar').length) {
+                    this.$toolbar = $('<div class="cur-view-toolbar d-flex" id="dir-view-toolbar"></div>').html(this.toolbarTemplate(data));
+                    this.$('.common-toolbar').before(this.$toolbar);
+                } else {
+                    this.$toolbar.html(this.toolbarTemplate(data));
+                }
+
+                this.$('.dir-toolbar-2').html(this.toolbar2Template(data));
+
+                // for 'upload'
+                this.setFileInput();
 
                 if (dir.user_perm == 'rw') {
                     // add new folder/file
@@ -548,14 +537,15 @@ define([
                 }
             },
 
-            renderDirentsHd: function() {
-                var tmpl = $(window).width() < 768 ? this.dirents_hd_mobile_template : this.dirents_hd_template;
+            renderThead: function() {
+                var tmpl = $(window).width() < 768 ? this.theadMobileTemplate : this.theadTemplate;
                 this.$('thead').html(tmpl());
             },
 
             render_dirents_slice: function(start, limit) {
                 var dir = this.dir;
-                _.each(dir.slice(start, start + limit), this.addOne, this);
+                var addOne = this.view_mode == 'list' ? this.addListOne : this.addGridOne;
+                _.each(dir.slice(start, start + limit), addOne, this);
                 if (dir.length > start + limit) {
                     dir.dirent_more = true;
                     dir.last_start = start + limit;
@@ -566,6 +556,10 @@ define([
 
             // Directory Operations
             events: {
+                'click #dir-view-toolbar .basic-upload-btn': 'uploadFile',
+                'click #dir-view-toolbar .advanced-upload-file': 'advancedUploadFile',
+                'click #dir-view-toolbar .advanced-upload-folder': 'advancedUploadFolder',
+
                 'click #add-new li a': 'closeNewDropdown',
                 'click #add-new-dir': 'newDir',
                 'click #add-new-file': 'newCommonFile',
@@ -573,19 +567,20 @@ define([
                 'click #add-new-excel-file': 'newExcelFile',
                 'click #add-new-ppt-file': 'newPPTFile',
                 'click #add-new-word-file': 'newWordFile',
+
                 'click #share-cur-dir': 'share',
                 'click #js-switch-grid-view': 'switchToGridView',
                 'click #js-switch-list-view': 'switchToListView',
-                'click th.select': 'select',
+
                 'click #mv-dirents': 'mv',
                 'click #cp-dirents': 'cp',
                 'click #del-dirents': 'del',
                 'click #download-dirents': 'download',
-                'click .by-name': 'sortByName',
-                'click .by-time': 'sortByTime',
-                'click .basic-upload-btn': 'uploadFile',
-                'click .advanced-upload-file': 'advancedUploadFile',
-                'click .advanced-upload-folder': 'advancedUploadFolder'
+
+                'click #dir-view th.select': 'select',
+                'click #dir-view .by-name': 'sortByName',
+                'click #dir-view .by-time': 'sortByTime'
+                //'scroll #dir-view .cur-view-main-con': 'getMore' // It doesn't work.
             },
 
             uploadFile: function() {
@@ -612,10 +607,10 @@ define([
                     dir = this.dir,
                     dirView = this;
 
-                form.modal({appendTo:'#main'});
+                form.modal();
                 $('#simplemodal-container').css({'height':'auto'});
 
-                form.submit(function() {
+                form.on('submit', function() {
                     var dirent_name = $.trim($('input[name="name"]', form).val());
 
                     if (!dirent_name) {
@@ -628,7 +623,7 @@ define([
                         return false;
                     }
 
-                    var post_data = { 'operation': 'mkdir' },
+                    var post_data = {'operation': 'mkdir'},
                         post_url = Common.getUrl({name: "new_dir", repo_id: dir.repo_id})
                                    + '?p=' + encodeURIComponent(Common.pathJoin([dir.path, dirent_name]));
                     var after_op_success = function(data) {
@@ -647,10 +642,10 @@ define([
 
                     Common.ajaxPost({
                         'form': form,
+                        'form_id': form_id,
                         'post_url': post_url,
                         'post_data': post_data,
-                        'after_op_success': after_op_success,
-                        'form_id': form_id
+                        'after_op_success': after_op_success
                     });
 
                     return false;
@@ -667,16 +662,15 @@ define([
                     dirView = this;
 
                 $form.modal({
-                    appendTo: '#main',
                     focus: false,
                     containerCss: {'padding':'20px 25px'}
                 });
                 $('#simplemodal-container').css({'height':'auto'});
 
                 Common.setCaretPos($input[0], 0);
-                $input.focus();
+                $input.trigger('focus');
 
-                $form.submit(function() {
+                $form.on('submit', function() {
                     var dirent_name = $.trim($input.val());
 
                     if (!dirent_name) {
@@ -717,10 +711,10 @@ define([
 
                     Common.ajaxPost({
                         'form': $form,
+                        'form_id': form_id,
                         'post_url': post_url,
                         'post_data': post_data,
-                        'after_op_success': after_op_success,
-                        'form_id': form_id
+                        'after_op_success': after_op_success
                     });
 
                     return false;
@@ -768,36 +762,34 @@ define([
             },
 
             addNewFile: function(new_dirent) {
-                var dirView = this,
-                    dir = this.dir;
-
+                var view, $el;
                 if (this.view_mode == 'list') {
-                    var view = new DirentView({model: new_dirent, dirView: dirView});
-                    var new_file = view.render().el;
+                    view = new DirentView({model: new_dirent, dirView: this});
+                    $el = view.render().el;
                     // put the new file as the first file
-                    if ($('tr', dirView.$dirent_list_body).length == 0) {
-                        dirView.$dirent_list_body.append(new_file);
+                    if ($('tr', this.$tbody).length == 0) {
+                        this.$tbody.append($el);
                     } else {
-                        var dirs = dir.where({'is_dir':true});
+                        var dirs = this.dir.where({'is_dir':true});
                         if (dirs.length == 0) {
-                            dirView.$dirent_list_body.prepend(new_file);
+                            this.$tbody.prepend($el);
                         } else {
                             // put the new file after the last dir
-                            $($('tr', dirView.$dirent_list_body)[dirs.length - 1]).after(new_file);
+                            $($('tr', this.$tbody)[dirs.length - 1]).after($el);
                         }
                     }
                 } else {
-                    var gview = new DirentGridView({model: new_dirent, dirView: dirView});
-                    var grid_new_file = gview.render().el;
-                    if ($('.grid-item', dirView.$dirent_grid).length == 0) {
-                        dirView.$dirent_grid.append(grid_new_file);
+                    view = new DirentGridView({model: new_dirent, dirView: this});
+                    $el = view.render().el;
+                    if ($('.grid-item', this.$gridViewContainer).length == 0) {
+                        this.$gridViewContainer.append($el);
                     } else {
-                        var dirs = dir.where({'is_dir':true});
+                        var dirs = this.dir.where({'is_dir':true});
                         if (dirs.length == 0) {
-                            dirView.$dirent_grid.prepend(grid_new_file);
+                            this.$gridViewContainer.prepend($el);
                         } else {
                             // put the new file after the last dir
-                            $($('.grid-item', dirView.$dirent_grid)[dirs.length - 1]).after(grid_new_file);
+                            $($('.grid-item', this.$gridViewContainer)[dirs.length - 1]).after($el);
                         }
                     }
                 }
@@ -808,14 +800,14 @@ define([
             },
 
             addNewDir: function(new_dirent) {
-                var dirView = this;
+                // put the new dir as the first one
+                var view;
                 if (this.view_mode == 'list') {
-                    var view = new DirentView({model: new_dirent, dirView: dirView});
-                    // put the new dir as the first one
-                    dirView.$dirent_list_body.prepend(view.render().el);
+                    view = new DirentView({model: new_dirent, dirView: this});
+                    this.$tbody.prepend(view.render().el);
                 } else {
-                    var gview = new DirentGridView({model: new_dirent, dirView: dirView});
-                    dirView.$dirent_grid.prepend(gview.render().el);
+                    view = new DirentGridView({model: new_dirent, dirView: this});
+                    this.$gridViewContainer.prepend(view.render().el);
                 }
             },
 
@@ -839,23 +831,25 @@ define([
 
             switchToGridView: function() {
                 if (this.view_mode == 'grid') {
-                    return false;
+                    return;
                 } else {
                     this.view_mode = 'grid';
                     Cookies.set('view_mode', 'grid');
+                    this.$('.list-view-icon-btn').removeClass('active');
+                    this.$('.grid-view-icon-btn').addClass('active');
                     this.renderDir();
-                    return false;
                 }
             },
 
             switchToListView: function() {
                 if (this.view_mode == 'list') {
-                    return false;
+                    return;
                 } else {
                     this.view_mode = 'list';
                     Cookies.set('view_mode', 'list');
+                    this.$('.grid-view-icon-btn').removeClass('active');
+                    this.$('.list-view-icon-btn').addClass('active');
                     this.renderDir();
-                    return false;
                 }
             },
 
@@ -917,10 +911,10 @@ define([
 
             sortByName: function() {
                 Common.toggleSortByNameMode();
-                Common.updateSortIconByMode({'context': this.$el});
+                Common.updateSortIconByMode({'context': this.$table});
                 this.sortDirents();
 
-                this.$dirent_list_body.empty();
+                this.$tbody.empty();
                 this.render_dirents_slice(0, this.dir.limit);
                 this.dir.comparator = null;
                 return false;
@@ -928,10 +922,10 @@ define([
 
             sortByTime: function () {
                 Common.toggleSortByTimeMode();
-                Common.updateSortIconByMode({'context': this.$el});
+                Common.updateSortIconByMode({'context': this.$table});
                 this.sortDirents();
 
-                this.$dirent_list_body.empty();
+                this.$tbody.empty();
                 this.render_dirents_slice(0, this.dir.limit);
                 this.dir.comparator = null;
                 return false;
@@ -951,7 +945,7 @@ define([
                     dir.each(function(model) {
                         model.set({'selected': true}, {silent: true});
                     });
-                    $dirents_op.css({'display':'inline-block'});
+                    $dirents_op.show();
                     $curDirOps.hide();
                 } else {
                     $all_dirent_checkbox.prop('checked', false);
@@ -961,8 +955,6 @@ define([
                     $dirents_op.hide();
                     $curDirOps.show();
                 }
-
-                this.updateDirOpBarUI();
             },
 
             download: function () {
@@ -1014,10 +1006,9 @@ define([
                             if (del_len > 0) {
                                 if (del_len == selected_names.length) {
                                     dirents.remove(selected_dirents);
-                                    _this.$('th [type=checkbox]').prop('checked', false);
+                                    $('th [type=checkbox]', _this.$table).prop('checked', false);
                                     _this.$('#multi-dirents-op').hide();
                                     _this.$('#cur-dir-ops').show();
-                                    _this.updateDirOpBarUI();
                                 } else {
                                     $(selected_dirents).each(function() {
                                         if (data['deleted'].indexOf(this.get('obj_name')) != -1) {
@@ -1086,7 +1077,7 @@ define([
                     show_cur_repo: show_cur_repo,
                     show_other_repos: !dir.encrypted
                 }));
-                form.modal({appendTo:'#main', autoResize:true, focus:false});
+                form.modal({autoResize:true, focus:false});
                 $('#simplemodal-container').css({'width':'auto', 'height':'auto'});
 
                 if (show_cur_repo) {
@@ -1114,7 +1105,7 @@ define([
                 $(files).each(function() {
                     file_names.push(this.get('obj_name'));
                 });
-                form.submit(function() {
+                form.on('submit', function() {
                     var dst_repo = $('[name="dst_repo"]', form).val(),
                         dst_path = $('[name="dst_path"]', form).val(),
                         url_main;
@@ -1162,7 +1153,6 @@ define([
                                             _this.$('th .checkbox').removeClass('checkbox-checked');
                                             _this.$('#multi-dirents-op').hide();
                                             _this.$('#cur-dir-ops').show();
-                                            _this.updateDirOpBarUI();
                                         } else {
                                             $(dirs).each(function() {
                                                 if (data['success'].indexOf(this.get('obj_name')) != -1) {
@@ -1286,7 +1276,7 @@ define([
                                         error: function(xhr, textStatus, errorThrown) {
                                             var error;
                                             if (xhr.responseText) {
-                                                error = $.parseJSON(xhr.responseText).error;
+                                                error = JSON.parse(xhr.responseText).error;
                                             } else {
                                                 error = gettext("Failed. Please check the network.");
                                             }
@@ -1320,7 +1310,7 @@ define([
                                 error: function(xhr) {
                                     var err;
                                     if (xhr.responseText) {
-                                        err = $.parseJSON(xhr.responseText).error||$.parseJSON(xhr.responseText).error_msg;
+                                        err = JSON.parse(xhr.responseText).error||JSON.parse(xhr.responseText).error_msg;
                                     } else {
                                         err = gettext("Failed. Please check the network.");
                                     }
@@ -1372,7 +1362,7 @@ define([
                             }
                         };
                         mvcpDirent();
-                        cancel_btn.click(function() {
+                        cancel_btn.on('click', function() {
                             Common.disableButton(cancel_btn);
                             var task_id = $(this).data('task_id');
                             $.ajax({
@@ -1389,7 +1379,7 @@ define([
                                 error: function(xhr, textStatus, errorThrown) {
                                     var error;
                                     if (xhr.responseText) {
-                                        error = $.parseJSON(xhr.responseText).error;
+                                        error = JSON.parse(xhr.responseText).error;
                                     } else {
                                         error = gettext("Failed. Please check the network.");
                                     }
@@ -1403,35 +1393,13 @@ define([
                 });
             },
 
-            onWindowScroll: function () {
-                // 'more'
+            getMore: function () {
+                var $el = this.$('.cur-view-main-con')[0];
                 if (this.dir.dirent_more &&
-                        $(window).scrollTop() + $(window).height() == $(document).height()) { // scroll to the bottom
+                    $el.scrollTop > 0 &&
+                    $el.clientHeight + $el.scrollTop == $el.scrollHeight) { // scroll to the bottom
                     this.render_dirents_slice(this.dir.last_start, this.dir.limit);
                     this.getThumbnail();
-                }
-
-                // fixed 'dir-op-bar'
-                var op_bar = this.$dir_op_bar,
-                    path_bar = this.$path_bar, // the element before op_bar
-                    repo_file_list = this.$('.js-dir-content'); // the element after op_bar
-                var op_bar_top = path_bar.offset().top + path_bar.outerHeight(true);
-                var fixed_styles = {
-                    'position': 'fixed',
-                    'top': 0,
-                    'left': path_bar.offset().left,
-                    'background-color': $('#header').css('background-color'),
-                    'z-index': 12 // make 'op_bar' shown on top of the checkboxes
-                };
-                if (!op_bar_top) {
-                    return;
-                }
-                if ($(window).scrollTop() >= op_bar_top) {
-                    repo_file_list.css({'margin-top':op_bar.outerHeight(true)});
-                    op_bar.outerWidth(this.$el.width()).css(fixed_styles);
-                } else {
-                    repo_file_list.css({'margin-top':0});
-                    op_bar.removeAttr('style');
                 }
             }
 

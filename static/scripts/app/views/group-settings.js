@@ -106,7 +106,7 @@ define([
             $form.modal();
             $('#simplemodal-container').css({'width':'auto', 'height':'auto'});
 
-            $form.submit(function() {
+            $form.on('submit', function() {
                 var new_name = $.trim($('[name="new_name"]', $(this)).val());
                 if (!new_name || new_name == _this.groupView.group.name) {
                     return false;
@@ -126,13 +126,13 @@ define([
                     },
                     success: function() {
                         $.modal.close();
+                        _this.groupView.updateName(new_name);
                         app.ui.sideNavView.updateGroups();
-                        _this.groupView.renderGroupTop();
                     },
                     error: function(xhr) {
                         var error_msg;
                         if (xhr.responseText) {
-                            error_msg = $.parseJSON(xhr.responseText).error_msg;
+                            error_msg = JSON.parse(xhr.responseText).error_msg;
                         } else {
                             error_msg = gettext("Failed. Please check the network.");
                         }
@@ -159,7 +159,7 @@ define([
                 formatSelectionTooBig: gettext("You cannot select any more choices")
             }));
 
-            $form.submit(function() {
+            $form.on('submit', function() {
                 var email = $.trim($('[name="email"]', $(this)).val());
                 if (!email) {
                     return false;
@@ -189,7 +189,7 @@ define([
                     error: function(xhr) {
                         var error_msg;
                         if (xhr.responseText) {
-                            error_msg = $.parseJSON(xhr.responseText).error_msg;
+                            error_msg = JSON.parse(xhr.responseText).error_msg;
                         } else {
                             error_msg = gettext("Failed. Please check the network.");
                         }
@@ -222,14 +222,18 @@ define([
                 data: {
                     'wiki_enabled': wiki_enabled
                 },
-                success: function() {
+                success: function(data) {
                     _this.hide();
-                    _this.groupView.renderGroupTop();
+                    _this.groupView.group = data;
+                    _this.groupView.renderToolbar2({
+                        'id': data.id,
+                        'wiki_enabled': data.wiki_enabled
+                    });
                 },
                 error: function(xhr) {
                     var error_msg;
                     if (xhr.responseText) {
-                        error_msg = $.parseJSON(xhr.responseText).error_msg;
+                        error_msg = JSON.parse(xhr.responseText).error_msg;
                     } else {
                         error_msg = gettext("Failed. Please check the network.");
                     }
@@ -245,7 +249,7 @@ define([
             $form.modal({focus:false});
             $('#simplemodal-container').css({'width':'auto', 'height':'auto'});
 
-            $form.submit(function() {
+            $form.on('submit', function() {
                 var $fileInput = $('[name=file]', $form)[0];
                 var $error = $('.error', $form);
                 if (!$fileInput.files.length) {
@@ -286,7 +290,7 @@ define([
                     error: function(xhr) {
                         var error_msg;
                         if (xhr.responseText) {
-                            error_msg = $.parseJSON(xhr.responseText).error;
+                            error_msg = JSON.parse(xhr.responseText).error;
                         } else {
                             error_msg = gettext("Failed. Please check the network.");
                         }
@@ -326,7 +330,7 @@ define([
                     error: function(xhr) {
                         var error_msg;
                         if (xhr.responseText) {
-                            error_msg = $.parseJSON(xhr.responseText).error_msg;
+                            error_msg = JSON.parse(xhr.responseText).error_msg;
                         } else {
                             error_msg = gettext("Failed. Please check the network.");
                         }
@@ -349,7 +353,7 @@ define([
                     url: Common.getUrl({
                         'name': 'group_member',
                         'group_id': _this.groupView.group.id,
-                        'email': encodeURIComponent(app.pageOptions.username),
+                        'email': encodeURIComponent(app.pageOptions.username)
                     }),
                     type: 'delete',
                     dataType: 'json',
@@ -361,7 +365,7 @@ define([
                     error: function(xhr) {
                         var err_msg;
                         if (xhr.responseText) {
-                            err_msg = $.parseJSON(xhr.responseText).error_msg;
+                            err_msg = JSON.parse(xhr.responseText).error_msg;
                         } else {
                             err_msg = gettext("Failed. Please check the network.");
                         }

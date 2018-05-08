@@ -1,10 +1,10 @@
 {% load i18n%}
-$('#set-quota').click(function() {
+$('#set-quota').on('click', function() {
     $("#set-quota-form").modal({appendTo: "#main"});
     return false;
 });
 
-$('#set-quota-form .submit').click(function() {
+$('#set-quota-form').on('submit', function() {
     var form = $('#set-quota-form'),
         form_id = form.attr('id');
 
@@ -30,7 +30,7 @@ $('#set-quota-form .submit').click(function() {
         },
         error: function(xhr, textStatus, errorThrown) {
             if (xhr.responseText) {
-                apply_form_error(form_id, $.parseJSON(xhr.responseText).error);
+                apply_form_error(form_id, JSON.parse(xhr.responseText).error);
             } else {
                 apply_form_error(form_id, "{% trans "Failed. Please check the network." %}");
             }

@@ -1,11 +1,10 @@
 {% extends 'view_file_base.html' %}
 {% load i18n %}
-{% load url from future %}
+
 
 {% block extra_style %}{{block.super}}
 <style type="text/css">
-body { overflow:hidden; }
-#file-view { text-align:center; padding:30px 0; height:10000px; position:relative; }
+#file-view { text-align:center; padding:30px 0; position:relative; }
 </style>
 {% endblock %}
 
@@ -24,7 +23,6 @@ body { overflow:hidden; }
 {% endblock %}
 
 {% block extra_script %}{{ block.super }}
-
 <script type="text/javascript">
 {% if enable_thumbnail and not repo.encrypted and fileext != 'gif' %}
     var encoded_path = encodePath('{{ path|escapejs }}'); // path: '/Portrait_8.jpg'

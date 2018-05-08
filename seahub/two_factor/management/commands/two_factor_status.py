@@ -2,7 +2,7 @@
 from django.core.management.base import BaseCommand, CommandError
 from django.contrib.auth import get_user_model
 
-from ...utils import default_device
+from seahub.two_factor.models import default_device
 
 User = get_user_model()
 

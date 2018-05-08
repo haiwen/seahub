@@ -11,8 +11,8 @@ import StringIO
 
 from django.core.urlresolvers import reverse
 from django.http import HttpResponse, Http404
-from django.template import RequestContext
 from django.template.loader import render_to_string
+from django.shortcuts import render
 from django.utils.http import urlquote
 from django.utils.html import escape
 from django.utils.translation import ugettext as _
@@ -55,6 +55,7 @@ from seahub.share.utils import is_repo_admin
 from seahub.base.templatetags.seahub_tags import translate_seahub_time, \
     email2nickname, tsstr_sec
 from seahub.constants import PERMISSION_ADMIN
+from seahub.constants import HASH_URLS
 
 # Get an instance of a logger
 logger = logging.getLogger(__name__)
@@ -752,7 +753,7 @@ def mv_dirents(request, src_repo_id, src_path, dst_repo_id, dst_path,
             success.append(obj_name)
 
     if len(success) > 0:
-        url = reverse("view_common_lib_dir", args=[dst_repo_id, dst_path.strip('/')])
+        url = HASH_URLS["VIEW_COMMON_LIB_DIR"] % {'repo_id': dst_repo_id, 'path': dst_path.strip('/')},
 
     result = {'success': success, 'failed': failed, 'url': url}
     return HttpResponse(json.dumps(result), content_type=content_type)
@@ -795,7 +796,7 @@ def cp_dirents(request, src_repo_id, src_path, dst_repo_id, dst_path, obj_file_n
             success.append(obj_name)
 
     if len(success) > 0:
-        url = reverse("view_common_lib_dir", args=[dst_repo_id, dst_path.strip('/')])
+        url = HASH_URLS["VIEW_COMMON_LIB_DIR"] % {'repo_id': dst_repo_id, 'path': dst_path.strip('/')},
 
     result = {'success': success, 'failed': failed, 'url': url}
     return HttpResponse(json.dumps(result), content_type=content_type)
@@ -846,8 +847,7 @@ def get_current_commit(request, repo_id):
         'repo': repo,
         'info_commit': info_commit
     }
-    html = render_to_string('snippets/current_commit.html', ctx,
-                            context_instance=RequestContext(request))
+    html = render_to_string(request, 'snippets/current_commit.html', ctx)
     return HttpResponse(json.dumps({'html': html}),
                         content_type=content_type)
 
@@ -971,9 +971,8 @@ def get_popup_notices(request):
     result_notices = add_notice_from_info(result_notices)
 
     ctx_notices = {"notices": result_notices}
-    notice_html = render_to_string(
-            'snippets/notice_html.html', ctx_notices,
-            context_instance=RequestContext(request))
+    notice_html = render_to_string( 
+            'snippets/notice_html.html', ctx_notices)
 
     return HttpResponse(json.dumps({
                 "notice_html": notice_html,
@@ -1038,10 +1037,10 @@ def space_and_traffic(request):
         "traffic_stat": traffic_stat,
         "ENABLE_PAYMENT": ENABLE_PAYMENT,
         "payment_url": payment_url,
+        "user": request.user
     }
 
-    html = render_to_string('snippets/space_and_traffic.html', ctx,
-                            context_instance=RequestContext(request))
+    html = render_to_string('snippets/space_and_traffic.html', ctx)
     return HttpResponse(json.dumps({"html": html}), content_type=content_type)
 
 def get_file_upload_url_ul(request, token):

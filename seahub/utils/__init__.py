@@ -23,8 +23,8 @@ from seaserv import seafile_api
 
 from django.core.urlresolvers import reverse
 from django.core.mail import EmailMessage
-from django.shortcuts import render_to_response
-from django.template import RequestContext, Context, loader
+from django.shortcuts import render
+from django.template import Context, loader
 from django.utils.translation import ugettext as _
 from django.http import HttpResponseRedirect, HttpResponse, HttpResponseNotModified
 from django.utils.http import urlquote
@@ -131,8 +131,7 @@ def render_permission_error(request, msg=None, extra_ctx=None):
         for k in extra_ctx:
             ctx[k] = extra_ctx[k]
 
-    return render_to_response('error.html', ctx,
-                              context_instance=RequestContext(request))
+    return render(request, 'error.html', ctx)
 
 def render_error(request, msg=None, extra_ctx=None):
     """
@@ -146,8 +145,7 @@ def render_error(request, msg=None, extra_ctx=None):
         for k in extra_ctx:
             ctx[k] = extra_ctx[k]
 
-    return render_to_response('error.html', ctx,
-                              context_instance=RequestContext(request))
+    return render(request, 'error.html', ctx)
 
 def list_to_string(l):
     """
@@ -815,6 +813,11 @@ def get_site_scheme_and_netloc():
     parse_result = urlparse(get_service_url())
     return "%s://%s" % (parse_result.scheme, parse_result.netloc)
 
+def get_site_name():
+    """Return site name from settings.
+    """
+    return config.SITE_NAME
+
 def send_html_email(subject, con_template, con_context, from_email, to_email,
                     reply_to=None):
     """Send HTML email
@@ -828,7 +831,7 @@ def send_html_email(subject, con_template, con_context, from_email, to_email,
 
     base_context = {
         'url_base': get_site_scheme_and_netloc(),
-        'site_name': SITE_NAME,
+        'site_name': get_site_name(),
         'media_url': MEDIA_URL,
         'logo_path': logo_path,
     }
@@ -840,7 +843,7 @@ def send_html_email(subject, con_template, con_context, from_email, to_email,
         if reply_to is not None:
             headers['Reply-to'] = reply_to
 
-    msg = EmailMessage(subject, t.render(Context(con_context)), from_email,
+    msg = EmailMessage(subject, t.render(con_context), from_email,
                        to_email, headers=headers)
     msg.content_subtype = "html"
     msg.send()
@@ -955,45 +958,6 @@ def api_tsstr_sec(value):
     except:
         return datetime.fromtimestamp(value/1000000).strftime("%Y-%m-%d %H:%M:%S")
 
-
-def api_convert_desc_link(e):
-    """Wrap file/folder with ``<a></a>`` in commit description.
-    """
-    commit = e.commit
-    repo_id = commit.repo_id
-    cmmt_id = commit.id
-
-    def link_repl(matchobj):
-        op = matchobj.group(1)
-        file_or_dir = matchobj.group(2)
-        remaining = matchobj.group(3)
-
-        tmp_str = '%s "<span class="file-name">%s</span>"'
-        if remaining:
-            url = reverse('api_repo_history_changes', args=[repo_id])
-            e.link = "%s?commit_id=%s" % (url, cmmt_id)
-            e.dtime = api_tsstr_sec(commit.props.ctime)
-            return (tmp_str + ' %s') % (op, file_or_dir, remaining)
-        else:
-            diff_result = seafile_api.diff_commits(repo_id, '', cmmt_id)
-            if diff_result:
-                for d in diff_result:
-                    if file_or_dir not in d.name:
-                        # skip to next diff_result if file/folder user clicked does not
-                        # match the diff_result
-                        continue
-
-                    if d.status == 'add' or d.status == 'mod':
-                        e.link = "api://repo/%s/files/?p=/%s" % (repo_id, d.name)
-                    elif d.status == 'mov':
-                        e.link = "api://repo/%s/files/?p=/%s" % (repo_id, d.new_name)
-                    elif d.status == 'newdir':
-                        e.link = "api://repo/%s/dir/?p=/%s" % (repo_id, d.name)
-                    else:
-                        continue
-            return tmp_str % (op, file_or_dir)
-    e.desc = re.sub(API_CMMT_DESC_PATT, link_repl, commit.desc)
-
 MORE_PATT = r'and \d+ more (?:files|directories)'
 def more_files_in_commit(commit):
     """Check whether added/deleted/modified more files in commit description.
@@ -1027,7 +991,10 @@ if EVENTS_CONFIG_FILE:
         return enabled
 
     def get_office_converter_html_dir():
-        return seafevents.get_office_converter_html_dir(parsed_events_conf)
+        return seafevents.get_office_converter_dir(parsed_events_conf, 'html')
+
+    def get_office_converter_pdf_dir():
+        return seafevents.get_office_converter_dir(parsed_events_conf, 'pdf')
 
     def get_office_converter_limit():
         return seafevents.get_office_converter_limit(parsed_events_conf)
@@ -1037,6 +1004,7 @@ if EVENTS_CONFIG_FILE:
 if HAS_OFFICE_CONVERTER:
 
     OFFICE_HTML_DIR = get_office_converter_html_dir()
+    OFFICE_PDF_DIR = get_office_converter_pdf_dir()
     OFFICE_PREVIEW_MAX_SIZE, OFFICE_PREVIEW_MAX_PAGES = get_office_converter_limit()
 
     from seafevents.office_converter import OfficeConverterRpcClient
@@ -1099,9 +1067,9 @@ if HAS_OFFICE_CONVERTER:
 
         return json.loads(ret)
 
-    def delegate_query_office_convert_status(file_id, page):
+    def delegate_query_office_convert_status(file_id, doctype):
         url = urljoin(OFFICE_CONVERTOR_ROOT, '/office-convert/internal/status/')
-        url += '?file_id=%s&page=%s' % (file_id, page)
+        url += '?file_id=%s&doctype=%s' % (file_id, doctype)
         headers = _office_convert_token_header(file_id)
         ret = do_urlopen(url, headers=headers).read()
 
@@ -1146,9 +1114,9 @@ if HAS_OFFICE_CONVERTER:
         }
 
     @cluster_delegate(delegate_query_office_convert_status)
-    def query_office_convert_status(file_id, page):
+    def query_office_convert_status(file_id, doctype):
         rpc = _get_office_converter_rpc()
-        d = rpc.query_convert_status(file_id, page)
+        d = rpc.query_convert_status(file_id, doctype)
         ret = {}
         if d.error:
             ret['error'] = d.error
@@ -1161,9 +1129,14 @@ if HAS_OFFICE_CONVERTER:
 
     @cluster_delegate(delegate_get_office_converted_page)
     def get_office_converted_page(request, repo_id, commit_id, path, static_filename, file_id):
+        office_out_dir = OFFICE_HTML_DIR
+        filepath = os.path.join(file_id, static_filename)
+        if static_filename.endswith('.pdf'):
+            office_out_dir = OFFICE_PDF_DIR
+            filepath = static_filename
         return django_static_serve(request,
-                                   os.path.join(file_id, static_filename),
-                                   document_root=OFFICE_HTML_DIR)
+                                   filepath,
+                                   document_root=office_out_dir)
 
     def prepare_converted_html(raw_path, obj_id, doctype, ret_dict):
         try:

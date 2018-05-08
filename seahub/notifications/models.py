@@ -22,6 +22,7 @@ from seahub.invitations.models import Invitation
 from seahub.utils.repo import get_repo_shared_users
 from seahub.utils import normalize_cache_key
 from seahub.utils.timeutils import datetime_to_isoformat_timestr
+from seahub.constants import HASH_URLS 
 
 # Get an instance of a logger
 logger = logging.getLogger(__name__)
@@ -30,7 +31,7 @@ logger = logging.getLogger(__name__)
 ########## system notification
 class Notification(models.Model):
     message = models.CharField(max_length=512)
-    primary = models.BooleanField(default=False)
+    primary = models.BooleanField(default=False, db_index=True)
 
 class NotificationForm(ModelForm):
     """
@@ -461,12 +462,13 @@ class UserNotification(models.Model):
             if d['uploaded_to'] == '/':
                 # current upload path is '/'
                 file_path = '/' + filename
-                link = reverse('view_common_lib_dir', args=[repo_id, ''])
+                link = HASH_URLS["VIEW_COMMON_LIB_DIR"] % {'repo_id': repo_id, 'path': ''}
                 name = repo.name
             else:
                 uploaded_to = d['uploaded_to'].rstrip('/')
                 file_path = uploaded_to + '/' + filename
-                link = reverse('view_common_lib_dir', args=[repo_id, uploaded_to.lstrip('/')])
+                link = HASH_URLS["VIEW_COMMON_LIB_DIR"] % {'repo_id': repo_id,
+                                              'path': uploaded_to.lstrip('/')}
                 name = os.path.basename(uploaded_to)
 
             file_link = reverse('view_lib_file', args=[repo_id, file_path])
@@ -528,7 +530,10 @@ class UserNotification(models.Model):
 
         msg = render_to_string(tmpl, {
             'user': share_from,
-            'lib_url': reverse('view_common_lib_dir', args=[repo.id, '']),
+            'lib_url': HASH_URLS["VIEW_COMMON_LIB_DIR"] % {
+                'repo_id': repo.id,
+                'path': ''
+            },
             'lib_name': repo.name,
         })
 
@@ -580,9 +585,12 @@ class UserNotification(models.Model):
 
         msg = render_to_string(tmpl, {
             'user': share_from,
-            'lib_url': reverse('view_common_lib_dir', args=[repo.id, '']),
+            'lib_url': HASH_URLS["VIEW_COMMON_LIB_DIR"] % {
+                'repo_id': repo.id,
+                'path': ''
+            },
             'lib_name': repo.name,
-            'group_url': reverse('group_info', args=[group.id]),
+            'group_url': HASH_URLS['GROUP_INFO'] % {'group_id': group.id},
             'group_name': group.group_name,
         })
 
@@ -610,11 +618,11 @@ class UserNotification(models.Model):
 
         if msg_from is None:
             msg = _(u"<a href='%(href)s'>%(group_name)s</a> has a new discussion.") % {
-                'href': reverse('group_discuss', args=[group.id]),
+                'href': HASH_URLS['GROUP_DISCUSS'] % {'group_id': group.id},
                 'group_name': group.group_name}
         else:
             msg = _(u"%(user)s posted a new discussion in <a href='%(href)s'>%(group_name)s</a>.") % {
-                'href': reverse('group_discuss', args=[group.id]),
+                'href': HASH_URLS['GROUP_DISCUSS'] % {'group_id': group.id},
                 'user': escape(email2nickname(msg_from)),
                 'group_name': escape(group.group_name)
             }
@@ -662,7 +670,7 @@ class UserNotification(models.Model):
         msg = _(u"User <a href='%(user_profile)s'>%(username)s</a> has asked to join group <a href='%(href)s'>%(group_name)s</a>, verification message: %(join_request_msg)s") % {
             'user_profile': reverse('user_profile', args=[username]),
             'username': username,
-            'href': reverse('group_members', args=[group_id]),
+            'href': HASH_URLS['GROUP_MEMBERS'] % {'group_id': group_id},
             'group_name': escape(group.group_name),
             'join_request_msg': escape(join_request_msg),
             }
@@ -691,7 +699,7 @@ class UserNotification(models.Model):
         msg = _(u"User <a href='%(user_profile)s'>%(group_staff)s</a> has added you to group <a href='%(href)s'>%(group_name)s</a>") % {
             'user_profile': reverse('user_profile', args=[group_staff]),
             'group_staff': group_staff,
-            'href': reverse('group_info', args=[group_id]),
+            'href': HASH_URLS['GROUP_INFO'] % {'group_id': group_id},
             'group_name': escape(group.group_name)}
         return msg
 

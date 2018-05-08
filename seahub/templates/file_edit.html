@@ -1,6 +1,6 @@
 {% extends 'base.html' %}
 {% load seahub_tags i18n %}
-{% load url from future %}
+
 {% block sub_title %}{{u_filename}} - {% endblock %}
 
 {% block extra_style %}
@@ -83,15 +83,13 @@
 </style>
 {% endblock %}
 
-{% block main_css_class %}{% endblock %}
-
 {% block main_panel %}
     <div id="path-op" class="ovhd">
          <p class="path fleft">
          {% trans "Current path: " %}
          {% for name, link in zipped %}
             {% if not forloop.last %}
-                <a href="{% url 'view_common_lib_dir' repo.id link|strip_slash %}">{{ name }}</a> /
+            <a href="{{ SITE_ROOT }}#common/lib/{{ repo.id }}/{{ link|strip_slash }}">{{ name }}</a> /
             {% else %}
                 <a href="{% url 'view_lib_file' repo.id path %}" target="_blank">{{ name }}</a>
             {% endif %}
@@ -204,7 +202,7 @@ if ('localStorage' in window && window['localStorage'] !== null) {
 <script type="text/javascript">
 {% if not err and file_content != None %}
 // make '#path-op' fixed when scroll
-$(window).scroll(function() {
+$(window).on('scroll', function() {
     var $path = $('#path-op');
     var $edit = $('#file-edit');
     var offset = ($(window).width() - parseInt($path.css('width')))/2;
@@ -232,7 +230,7 @@ if ('localStorage' in window && window['localStorage'] !== null) {
         saved_tip.removeClass('hide');
     }
 
-    $('#load-draft-btn').click(function() {
+    $('#load-draft-btn').on('click', function() {
         $.modal.close();
         {% if filetype == 'Text' %}
         editor.setValue(saved_draft);
@@ -243,7 +241,7 @@ if ('localStorage' in window && window['localStorage'] !== null) {
         feedback("{% trans "Draft successfully loaded" %}", 'success', 1000);
     });
 
-    $('#discard-draft-btn, #file-edit-cancel').click(function() {
+    $('#discard-draft-btn, #file-edit-cancel').on('click', function() {
         browserStorage.remove(key);
     });
 }
@@ -356,14 +354,14 @@ var mdEditor = editormd('md-editor', {
                 },
                 error: function(xhr) {
                     if (xhr.responseText) {
-                        feedback($.parseJSON(xhr.responseText).error||$.parseJSON(xhr.responseText).error_msg, 'error');
+                        feedback(JSON.parse(xhr.responseText).error||JSON.parse(xhr.responseText).error_msg, 'error');
                     } else {
                         feedback("{% trans "Please check the network." %}", 'error');
                     }
                 }
             });
 
-            $form.submit(function() {
+            $form.on('submit', function() {
                 var dst_repo = $('[name="dst_repo"]', $form).val(),
                     dst_path = $('[name="dst_path"]', $form).val();
 
@@ -457,7 +455,7 @@ var mdEditor = editormd('md-editor', {
 
 $('#op-after-edit').removeClass('vh');
 
-$('#file-edit-submit').click(function () {
+$('#file-edit-submit').on('click', function() {
     disable($(this));
     editSubmit();
 });
@@ -471,7 +469,7 @@ function editSubmit() {
 
     $.ajax({
         type: "POST",
-        url: '{{ SITE_ROOT }}repo/{{repo.id}}/file/edit/?p={{path|urlencode}}&head={{head_id}}&from={{from}}&gid={{gid}}',
+        url: '{{ SITE_ROOT }}repo/{{repo.id}}/file/edit/?p={{path|urlencode}}&head={{head_id}}&from={{from}}&gid={{gid}}&wiki_slug={{wiki_slug}}',
         dataType: 'json',
         cache: false,
         beforeSend: prepareCSRFToken,
@@ -484,7 +482,7 @@ function editSubmit() {
         },
         error: function(xhr, textStatus, errorThrown) {
             if (xhr.responseText) {
-                var resp = jQuery.parseJSON(xhr.responseText);
+                var resp = JSON.parse(xhr.responseText);
                 feedback(resp['error'], 'error');
                 if (resp['op'] == 'decrypt') {
                     $('#repo-decrypt-form').modal();
@@ -504,7 +502,7 @@ $('#repo-decrypt-form').modal();
 $('#simplemodal-container').css({'height':'auto'});
 {% endif %}
 
-$('#repo-decrypt-form').submit(function() {
+$('#repo-decrypt-form').on('submit', function() {
     var $form = $(this);
     var $pwd_input = $('input[name="password"]', $form);
     var pwd = $.trim($pwd_input.val());
@@ -540,7 +538,7 @@ $('#repo-decrypt-form').submit(function() {
         error: function(xhr) {
             var err = '';
             if (xhr.responseText) {
-                err = $.parseJSON(xhr.responseText).error_msg;
+                err = JSON.parse(xhr.responseText).error_msg;
             } else {
                 err = "{% trans "Failed. Please check the network." %}";
             }

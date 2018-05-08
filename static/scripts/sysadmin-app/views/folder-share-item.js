@@ -83,7 +83,7 @@ define([
                 error: function(xhr) {
                     var err_msg;
                     if (xhr.responseText) {
-                        var parsed_resp = $.parseJSON(xhr.responseText);
+                        var parsed_resp = JSON.parse(xhr.responseText);
                         err_msg = parsed_resp.error||parsed_resp.error_msg;
                         err_msg = Common.HTMLescape(err_msg);
                     } else {
@@ -132,7 +132,7 @@ define([
                 error: function (xhr) {
                     var err_msg;
                     if (xhr.responseText) {
-                        var parsed_resp = $.parseJSON(xhr.responseText);
+                        var parsed_resp = JSON.parse(xhr.responseText);
                         err_msg = parsed_resp.error||parsed_resp.error_msg;
                         err_msg = Common.HTMLescape(err_msg);
                     } else {

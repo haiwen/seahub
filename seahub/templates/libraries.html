@@ -3,43 +3,44 @@
 {% load staticfiles %}
 
 {% block sub_title %}{% trans "Libraries" %} - {% endblock %}
-
-{% block right_panel %}
+{% block extra_style %}
+<style type="text/css">
+html,body {
+    height:100%;
+    overflow:hidden;
+}
+</style>
 {% endblock %}
 
 {% block extra_script %}
 <script type="text/template" id="my-own-repos-tmpl">
-    <div class="hd">
-        <h3 class="fleft">{% trans "My Libraries" %}</h3>
-        <div class="fright">
-            <button class="repo-create btn-white"><span aria-hidden="true" class="icon-plus-square add vam"></span><span class="vam">{% trans "New Library" %}</span></button>
-
-            <div id="my-libs-more-op" class="sf-dropdown sf-dropdown-inline">
-                <button class="sf-dropdown-toggle btn-white more-op-btn-white">{% trans "More" %}</button>
-                <ul class="sf-dropdown-menu hide">
-                    <li><a href="#my-libs/deleted/">{% trans "Deleted Libraries" %}</a></li>
-                </ul>
-            </div>
+<div class="cur-view-main"> {# .cur-view-main is only for view with side panel #}
+    <div class="cur-view-path">
+        <h3>{% trans "My Libraries" %}</h3>
+    </div>
+    <div class="cur-view-main-con">
+        <table class="hide">
+            <thead></thead>
+            <tbody></tbody>
+        </table>
+        <div class="empty-tips hide">
+            <h2 class="alc">{% trans "You have not created any libraries" %}</h2>
+            <p>{% trans "You can create a library to organize your files. For example, you can create one for each of your projects. Each library can be synchronized and shared separately." %}</p>
         </div>
+        <span class="loading-icon loading-tip"></span>
+        <p class="error error-tip hide"></p>
     </div>
-    <table class="my-own-repos-table hide">
-        <thead></thead>
-        <tbody></tbody>
-    </table>
-    <div class="empty-tips hide">
-        <h2 class="alc">{% trans "You have not created any libraries" %}</h2>
-        <p>{% trans "You can create a library to organize your files. For example, you can create one for each of your projects. Each library can be synchronized and shared separately." %}</p>
-    </div>
-    <span class="loading-icon loading-tip"></span>
-    <p class="error error-tip hide"></p>
+</div>
+{# <div class="cur-view-side"></div> #}
 </script>
 
 <script type="text/template" id="my-deleted-repos-tmpl">
-    <p class="path-bar">
-        <a href="#my-libs/" class="normal">{% trans "My Libraries" %}</a>
-        <span class="path-split">/</span>
-        <span>{% trans "Deleted Libraries" %}</span>
-    </p>
+<div class="cur-view-path cur-view-path-path">
+    <a href="#my-libs/" class="normal">{% trans "My Libraries" %}</a>
+    <span class="path-split">/</span>
+    <span>{% trans "Deleted Libraries" %}</span>
+</div>
+<div class="cur-view-main-con">
     <p class="tip">{% trans "Tip: libraries deleted 30 days ago will be cleaned automatically."%}</p>
     <table class="my-deleted-repos-table hide">
         <thead></thead>
@@ -50,12 +51,16 @@
     </div>
     <span class="loading-icon loading-tip"></span>
     <p class="error error-tip hide"></p>
+</div>
 </script>
 
 
 <script type="text/template" id="repos-shared-to-me-tmpl">
-    <h3 class="hd">{% trans "Shared with me" %}</h3>
+<div class="cur-view-path">
+    <h3>{% trans "Shared with me" %}</h3>
+</div>
 
+<div class="cur-view-main-con">
     <span class="loading-icon loading-tip"></span>
     <table class="hide">
         <thead></thead>
@@ -66,22 +71,15 @@
         <p>{% blocktrans %}No libraries have been shared directly with you. You can find more shared libraries at "Shared with groups".{% endblocktrans %}</p>
     </div>
     <p class="error error-tip hide"></p>
+</div>
 </script>
 
 <script type="text/template" id="organization-repos-tmpl">
-    <div class="hd">{# no 'ovhd' as there is a .dropdown-menu in it #}
-        <h3 class="fleft">{% trans "Shared with all" %}</h3>
-        {% if can_add_pub_repo %}
-        <div class="fright sf-dropdown js-add-pub-lib-dropdown">
-            <button class="btn-white sf-dropdown-toggle"><span aria-hidden="true" class="icon-plus-square add vam"></span><span class="vam">{% trans "Add Library"%}</span></button>
-            <ul class="sf-dropdown-menu hide">
-                <li><a class="op share-existing" href="#">{% trans "Share existing libraries" %}</a></li>
-                <li><a class="op create-new" href="#">{% trans "Create a new library" %}</a></li>
-            </ul>
-        </div>
-        {% endif %}
-    </div>
+<div class="cur-view-path">
+    <h3>{% trans "Shared with all" %}</h3>
+</div>
 
+<div class="cur-view-main-con">
     <span class="loading-icon loading-tip"></span>
     <table class="repo-list hide">
         <thead></thead>
@@ -92,16 +90,14 @@
         <p>{% blocktrans %}You can create a public library by clicking the "New Library" button, others can view and download this library.{% endblocktrans %}</p>
     </div>
     <p class="error error-tip hide"></p>
+</div>
 </script>
 
 <script type="text/template" id="groups-tmpl">
-    <div class="hd ovhd">
-        <h3 class="fleft">{% trans "My Groups" %}</h3>
-        {% if user.permissions.can_add_group %}
-        <button id="add-group" class="btn-white fright"><span aria-hidden="true" class="icon-plus-square add vam"></span><span class="vam">{% trans "New Group" %}</span></button>
-        {% endif %}
-    </div>
-
+<div class="cur-view-path">
+    <h3>{% trans "My Groups" %}</h3>
+</div>
+<div class="cur-view-main-con">
     <div id="group-list" class="hide"></div>
     <div class="empty-tips hide">
         <h2 class="alc">{% trans "You are not in any groups" %}</h2>
@@ -113,84 +109,38 @@
     </div>
     <span class="loading-icon loading-tip"></span>
     <p class="error error-tip hide"></p>
-
-    {% if user.permissions.can_add_group %}
-    <form id="group-add-form" action="" method="post" class="hide">{% csrf_token %}
-        <h3 id="dialogTitle">{% trans "New Group" %}</h3>
-        <label for="group-name">{% trans "Name" %}</label><br />
-        <input type="text" name="group_name" value="" class="input" id="group-name" /><br />
-        <p class="error hide"></p>
-        <input type="submit" class="submit" value="{% trans "Submit" %}" />
-    </form>
-    {% endif %}
+</div>
 </script>
 
 <script type="text/template" id="group-tmpl">
-    <div id="group-top"></div>
-
-    <div id="group-repos">
+<div class="cur-view-main">
+    <div class="cur-view-path" id="group-path">
+        <div class="group-path cur-view-path-path">
+        </div>
+        <div class="group-toolbar-2">
+        </div>
+    </div>
+    <div class="cur-view-main-con" id="group-repos">
+        <span class="loading-icon loading-tip"></span>
         <table class="hide">
             <thead></thead>
             <tbody></tbody>
         </table>
-        <div class="empty-tips" style="margin-bottom:150px; display:none;">
+        <div class="empty-tips hide">
             <h2 class="alc">{% trans "No library is shared to this group" %}</h2>
             <p>{% blocktrans %}You can share libraries by clicking the "New Library" button above or the "Share" icon on your libraries list.{% endblocktrans %}</p>
             <p>{% trans "Libraries shared as writable can be downloaded and synced by other group members. Read only libraries can only be downloaded, updates by others will not be uploaded." %}</p>
         </div>
-        <span class="loading-icon loading-tip"></span>
         <p class="error error-tip hide"></p>
     </div>
-</script>
-
-<script type="text/template" id="group-settings-tmpl">
-    <div class="outer-caret up-outer-caret"><div class="inner-caret"></div></div>
-    <div class="sf-popover-hd ovhd">
-        <a href="#" title="{% trans "Close" %}" aria-label="{% trans "Close" %}" class="sf-popover-close js-close sf2-icon-x1 op-icon fright"></a>
-        <h3 class="sf-popover-title">{% trans "Settings" %}</h3>
-    </div>
-    <div class="sf-popover-con">
-    </div>
-</script>
-
-<script type="text/template" id="group-members-tmpl">
-    <div class="outer-caret up-outer-caret"><div class="inner-caret"></div></div>
-    <div class="sf-popover-hd ovhd">
-        <a href="#" title="{% trans "Close" %}" aria-label="{% trans "Close" %}" class="sf-popover-close js-close sf2-icon-x1 op-icon fright"></a>
-        <h3 class="sf-popover-title">{% trans "Members" %}</h3>
-    </div>
-    <div class="sf-popover-con">
-        <div class="loading-icon loading-tip"></div>
-        <ul id="group-member-list" class="hide"></ul>
-        <p class="error hide"></p>
-    </div>
-</script>
-
-<script type="text/template" id="group-discussions-tmpl">
-    <div class="right-side-panel-hd group-discussions-hd ovhd">
-        <a href="#" title="{% trans "Close" %}" aria-label="{% trans "Close" %}" class="sf-popover-close js-close sf2-icon-x1 op-icon fleft"></a>
-        <h3 class="right-side-panel-title">{% trans "Discussions" %}</h3>
-    </div>
-    <div class="right-side-panel-con group-discussions-con">
-        <div class="loading-icon loading-tip"></div>
-        <p class="load-more-discussion hide js-load-more">{% trans "More..." %}</p>
-        <ul id="group-discussion-list" class="hide"></ul>
-        <p class="no-discussion-tip hide">{% trans "No discussion in this group yet." %}</p>
-        <p class="error hide"></p>
-    </div>
-    <div class="right-side-panel-footer group-discussions-footer">
-        <form action="" method="post" class="msg-form">
-            <img src="{% avatar_url request.user 64 %}" alt="" width="32" class="avatar-circle fleft" />
-            <div class="msg-body">
-                <textarea name="message" placeholder="{% trans "Add a discussion..." %}" title="{% trans "Add a discussion..." %}" aria-label="{% trans "Add a discussion..." %}" class="msg-input"></textarea>
-                <button type="submit" class="submit msg-submit">{% trans "Submit" %}</button>
-            </div>
-        </form>
-    </div>
+</div>
 </script>
 
 <script type="text/template" id="starred-file-tmpl">
-    <h3 class="hd">{% trans "Favorites" %}</h3>
+<div class="cur-view-path">
+    <h3>{% trans "Favorites" %}</h3>
+</div>
+<div class="cur-view-main-con">
     <table class="hide">
         <thead></thead>
         <tbody></tbody>
@@ -200,16 +150,25 @@
         <h2 class="alc">{% trans "You don't have any starred files yet" %}</h2>
         <p>{% blocktrans %}You can mark files as important by clicking the "Star" button on the file viewing page. Starred files will be listed here.{% endblocktrans %}</p>
     </div>
+</div>
 </script>
 
 <script type="text/template" id="activities-tmpl">
+<div class="cur-view-path">
+    <h3>{% trans "Activities" %}</h3>
+</div>
+<div class="cur-view-main-con">
     <div id="activities-body" class="hide"></div>
     <span class="loading-icon loading-tip"></span>
     <button id="activities-more" class="full-width-btn hide">{% trans 'More' %}</button>
+</div>
 </script>
 
 <script type="text/template" id="devices-tmpl">
-    <h3 class="hd">{% trans "Linked Devices" %}</h3>
+<div class="cur-view-path">
+    <h3>{% trans "Linked Devices" %}</h3>
+</div>
+<div class="cur-view-main-con">
     <table class="hide">
         <thead>
             <tr>
@@ -227,11 +186,33 @@
         <h2 class="alc">{% trans "You do not have connected devices" %}</h2>
         <p>{% trans "Your clients (Desktop/Android/iOS) will be listed here." %}</p>
     </div>
+</div>
 </script>
 
-{% include "js/dir-view.html" %}
+<script type="text/template" id="dir-view-tmpl">
+<div class="cur-view-main">
+    <div class="cur-view-path" id="dir-view-path">
+        <div class="dir-path cur-view-path-path"></div>
+        <div class="dir-toolbar-2"></div>
+    </div>
+    <div class="cur-view-main-con">
+        <span class="loading-icon loading-tip"></span>
+        <div class="js-dir-content hide">
+            <table class="repo-file-list hide">
+                <thead></thead>
+                <tbody></tbody>
+            </table>
+            <ul class="grid-view hide">
+            </ul>
+        </div>
+        <p class="error hide"></p>
+    </div>
+</div>
+{# <div class="cur-view-side"></div> #}
+</script>
 
 {% include "js/lib-op-popups.html" %}
+
 <script type="text/javascript">
 app["pageOptions"] = {
     site_root: "{{ SITE_ROOT }}",
@@ -239,6 +220,13 @@ app["pageOptions"] = {
     groups: (function () {
         var groups = [];
         {% for group in joined_groups %}
+        groups.push({'name': '{{group.group_name}}', 'id': '{{group.id}}'});
+        {% endfor %}
+        return groups;
+    })(),
+    joined_groups_exclude_address_book: (function () {
+        var groups = [];
+        {% for group in joined_groups_exclude_address_book %}
         groups.push({'name': '{{group.group_name}}', 'id': '{{group.id}}'});
         {% endfor %}
         return groups;
@@ -308,8 +296,7 @@ app.ui = {
     currentDropdown: null,
     currentPopover: null,
     currentHighlightedItem: null,
-    freezeItemHightlight: false,
-    groupDiscussions: null
+    freezeItemHightlight: false
 };
 </script>
 {% if debug %}

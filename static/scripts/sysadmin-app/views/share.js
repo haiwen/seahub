@@ -1,10 +1,11 @@
 define([
     'jquery',
+    'jquery.ui', /* for tabs */
     'underscore',
     'backbone',
     'common',
     'sysadmin-app/views/folder-share-item'
-], function($, _, Backbone, Common, FolderShareItemView) {
+], function($, jQueryUI, _, Backbone, Common, FolderShareItemView) {
     'use strict';
 
     var SharePopupView = Backbone.View.extend({
@@ -189,7 +190,7 @@ define([
                 error: function(xhr) {
                     var err_msg;
                     if (xhr.responseText) {
-                        err_msg = Common.HTMLescape($.parseJSON(xhr.responseText).error_msg);
+                        err_msg = Common.HTMLescape(JSON.parse(xhr.responseText).error_msg);
                     } else {
                         err_msg = gettext("Failed. Please check the network.");
                     }
@@ -263,7 +264,7 @@ define([
                 error: function(xhr) {
                     var err_msg;
                     if (xhr.responseText) {
-                        err_msg = Common.HTMLescape($.parseJSON(xhr.responseText).error_msg);
+                        err_msg = Common.HTMLescape(JSON.parse(xhr.responseText).error_msg);
                     } else {
                         err_msg = gettext("Failed. Please check the network.");
                     }

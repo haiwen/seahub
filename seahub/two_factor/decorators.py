@@ -3,7 +3,7 @@ from __future__ import absolute_import, division, print_function, unicode_litera
 
 
 from seahub.auth.decorators import user_passes_test
-from seahub.two_factor import user_has_device
+from seahub.two_factor.models import user_has_device
 from seahub.two_factor.conf import settings
 
 def otp_required(view=None, redirect_field_name='next', login_url=None, if_configured=False):

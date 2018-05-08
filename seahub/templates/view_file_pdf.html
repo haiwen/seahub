@@ -2,34 +2,12 @@
 {% load i18n %}
 {% load staticfiles %}
 
-{% block extra_style %}{{ block.super }}
-{% if not err and not use_pdfjs %}
-    {% include 'snippets/office_convert_style.html' %}
-    <link rel="stylesheet" type="text/css" media="print" href="{{ MEDIA_URL }}css/print_for_file_view.css" />
-{% endif %}
-{% endblock %}
-
-{% block file_view %}
-{% if not err and not use_pdfjs %}
-    {% include 'snippets/office_convert_html.html' %}
-{% endif %}
-{% endblock %}
-
 {% block extra_script %}{{ block.super }}
 {% if not err %}
-
-{% if not use_pdfjs %}
-<script type="text/javascript">
-    {% include 'snippets/office_convert_js.html' %}
-</script>
-
-{% else %}
 <script type="text/javascript" src="{{MEDIA_URL}}js/pdf.js"></script>
 <script type="text/javascript">
+    var raw_path = "{{ raw_path|escapejs }}";
     {% include 'snippets/pdfjs_file_viewer.html' %}
 </script>
 {% endif %}
-
-{% endif %}
-
 {% endblock %}

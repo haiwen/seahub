@@ -1,0 +1,71 @@
+{% load i18n %}
+
+var OfficePreviewer = function(repo_id, path, token, commit_id) {
+    this.repo_id = repo_id;
+    this.path = path;
+    // only non-null when viewing in shared links
+    this.token = token;
+    this.commit_id = commit_id;
+
+    this.status_url = function() {
+        var params = {
+            repo_id: repo_id,
+            commit_id: this.commit_id,
+            path: path,
+            doctype: 'document'
+        };
+        if (this.token) {
+            params['token'] = this.token;
+        }
+        return "{% url 'office_convert_query_status' %}?" + $.param(params);
+    }
+};
+
+OfficePreviewer.prototype.start = function() {
+    this.check_status();
+    return this;
+};
+
+OfficePreviewer.prototype.check_status = function() {
+    var _this = this;
+    $.ajax({
+        context: this,
+        url: this.status_url(),
+        cache: false,
+        dataType: 'json',
+        success: function(data) {
+            var status = data['status'];
+            switch (status) {
+                case 'PROCESSING':
+                    setTimeout($.proxy(this.check_status, this), 2000);
+                    break;
+                case 'ERROR':
+                    var str = "{% trans "Document convertion failed." %}";
+                    $('#file-view').html('<div id="file-view-tip"><p class="error">' + str + '</p></div>');
+                    break;
+                case 'DONE':
+                    this.load_page();
+            }
+        },
+        error: function(xhr, textStatus, errorThrown) {
+            var str;
+            if (xhr.responseText) {
+                str = "{% trans "Document convertion failed." %}";
+            } else {
+                str = "{% trans "Failed. Please check the network." %}";
+            }
+            $('#file-view').html('<div id="file-view-tip"><p class="error">' + str + '</p></div>');
+        }
+    });
+};
+
+OfficePreviewer.prototype.load_page = function() {
+    var raw_path = '{{ SITE_ROOT }}office-convert/static/{{ repo.id  }}/' + this.commit_id + '{{ path|urlencode  }}/fake.pdf?token={{shared_token}}'
+    {% include "snippets/pdfjs_file_viewer.html" %}
+};
+
+$(function() {
+    var commit_id = '{{ current_commit.id }}' || '{{ repo.head_cmmt_id }}';
+    $('#file-view').html('<div id="pdf"><span class="loading-icon loading-tip"></span></div>');
+    new OfficePreviewer('{{ repo.id }}', '{{ path|escapejs }}', '{{ shared_token }}', commit_id).start();
+});

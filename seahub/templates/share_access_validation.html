@@ -21,7 +21,7 @@
 {% endblock %}
 {% block extra_script %}
 <script type="text/javascript">
-$('#share-passwd-form').submit(function() {
+$('#share-passwd-form').on('submit', function() {
     var form = $(this),
         pwd = $('[name="password"]', form).val(),
         err = $('.error',form);

@@ -1,10 +1,10 @@
 // search-form: top-search-form, advanced-search-form, search-form in search result page
-$('.search-form').submit(function() {
+$('.search-form').on('submit', function() {
     if (!$.trim($(this).find('.search-input').val())) {
         return false;
     }
 });
-$('#top-search-form .icon-caret-down').click(function() {
+$('#top-search-form .icon-caret-down').on('click', function() {
     var form = $(this).parent(),
         q = form.find('[name="q"]').val(),
         advanced_form = $('#advanced-search-form');
@@ -14,13 +14,13 @@ $('#top-search-form .icon-caret-down').click(function() {
         advanced_form.find('.search-input').val(q);
     }
 });
-$('.search-filetypes .item:first-child').click(function() {
+$('.search-filetypes .item:first-child').on('click', function() {
     $(this).parents('.search-form').find('.custom-ftype-options').addClass('hide');
 });
-$('.search-filetypes .item:last-child').click(function() {
+$('.search-filetypes .item:last-child').on('click', function() {
     $(this).parents('.search-form').find('.custom-ftype-options').removeClass('hide');
 });
-$('#advanced-search-form').submit(function() {
+$('#advanced-search-form').on('submit', function() {
     if ($('#custom-search-ftypes').attr('checked') &&
         $('.custom-ftype-options .checkbox-checked').length == 0 &&
         !$.trim($('.custom-ftype-options .fileext-input').val())) {
@@ -28,7 +28,7 @@ $('#advanced-search-form').submit(function() {
         return false;
     }
 });
-$(document).click(function(e) {
+$(document).on('click', function(e) {
     var target = e.target || event.srcElement,
         popup = $('#advanced-search-form'),
         popup_switch = $('#top-search-form .icon-caret-down');

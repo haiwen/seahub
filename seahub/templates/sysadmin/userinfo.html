@@ -1,7 +1,6 @@
 {% extends "sysadmin/base.html" %}
-{% load i18n avatar_tags seahub_tags %}
-{% load i18n staticfiles %}
-{% load url from future %}
+{% load i18n avatar_tags seahub_tags staticfiles %}
+
 
 {% block extra_style %}
 <link rel="stylesheet" type="text/css" href="{% static "css/select2-3.5.2.css" %}" />
@@ -205,7 +204,7 @@
                     {% if repo.encrypted %}
                         <td>{{ repo.name }}</td>
                     {% elif enable_sys_admin_view_repo %}
-                        <td><a href="{% url 'sys_admin_repo' repo.id %}">{{ repo.name }}</a></td>
+                        <td><a href="{{ SITE_ROOT }}sysadmin/#libs/{{ repo.id }}/">{{ repo.name }}</a></td>
                     {% else %}
                         <td>{{ repo.name }}</td>
                     {% endif %}
@@ -250,7 +249,7 @@
                 <td><img src="{{MEDIA_URL}}img/lib/48/lib.png" width="24" title="{% trans "Read-Write" %}" alt="{% trans "library icon" %}" /></td>
                 {% endif %}
                 {% if enable_sys_admin_view_repo %}
-                <td><a href="{% url 'sys_admin_repo' repo.id %}">{{ repo.name }}</a></td>
+                <td><a href="{{ SITE_ROOT }}sysadmin/#libs/{{ repo.id }}/">{{ repo.name }}</a></td>
                 {% else %}
                 <td>{{ repo.name }}</td>
                 {% endif %}
@@ -346,11 +345,14 @@
 
 
 {% block extra_script %}
+<script type="text/javascript" src="{% static "scripts/lib/jquery-ui.min.js" %}"></script> {# for tabs #}
 <script type="text/javascript" src="{% static "scripts/lib/select2-3.5.2.js" %}"></script>
 <script type="text/javascript">
+$('#tabs').tabs({cookie:{expires:1}});
+
 {% include "sysadmin/repoadmin_js.html" %}
 
-$('.rm-link').click(function() {
+$('.rm-link').on('click', function() {
     var _this = $(this);
     $.ajax({
         url: _this.attr('data-url'),
@@ -366,32 +368,32 @@ $('.rm-link').click(function() {
     });
     return false;
 });
-$('#set-name').click(function() {
+$('#set-name').on('click', function() {
     $("#set-name-form").modal({appendTo: "#main"});
     $('#simplemodal-container').css({'width':'auto', 'height':'auto'});
 });
-$('#set-loginid').click(function () {
+$('#set-loginid').on('click', function () {
     $("#set-loginid-form").modal({appendTo:"#main"});
     $('#simplemodal-container').css({'width':'auto', 'height':'auto'});
 })
-$('#set-contact-email').click(function() {
+$('#set-contact-email').on('click', function() {
     $("#set-contact-email-form").modal({appendTo: "#main"});
     $('#simplemodal-container').css({'width':'auto', 'height':'auto'});
 });
-$('#set-reference-id').click(function () {
+$('#set-reference-id').on('click', function () {
     $("#set-reference-id-form").modal({appendTo:"#main"});
     $('#simplemodal-container').css({'width':'auto', 'height':'auto'});
 })
-$('#set-dept').click(function() {
+$('#set-dept').on('click', function() {
     $("#set-dept-form").modal({appendTo: "#main"});
     $('#simplemodal-container').css({'width':'auto', 'height':'auto'});
 });
-$('#set-quota').click(function() {
+$('#set-quota').on('click', function() {
     $("#set-quota-form").modal({appendTo: "#main"});
     $('#simplemodal-container').css({'width':'auto', 'height':'auto'});
 });
 
-$("#disable-two-factor-auth").click(function(){
+$("#disable-two-factor-auth").on('click', function(){
     $.ajax({
         url: '{% url 'two-factor-auth-view' email %}',
         type: 'DELETE',
@@ -403,7 +405,7 @@ $("#disable-two-factor-auth").click(function(){
         error: function(xhr, textStatus, errorThrown) {
             var err_msg;
             if (xhr.responseText) {
-                err_msg = $.parseJSON(xhr.responseText).error_msg;
+                err_msg = JSON.parse(xhr.responseText).error_msg;
             } else {
                 err_msg = "{% trans "Failed. Please check the network." %}";
             }
@@ -412,7 +414,7 @@ $("#disable-two-factor-auth").click(function(){
     });
 });
 
-$('#set-name-form').submit(function() {
+$('#set-name-form').on('submit', function() {
     var nickname = $.trim($('[name="nickname"]', $(this)).val());
     var $name = $('#nickname');
     var $error = $('.error', $(this));
@@ -442,7 +444,7 @@ $('#set-name-form').submit(function() {
         error: function(xhr, textStatus, errorThrown) {
             var err_msg;
             if (xhr.responseText) {
-                err_msg = $.parseJSON(xhr.responseText).error_msg;
+                err_msg = JSON.parse(xhr.responseText).error_msg;
             } else {
                 err_msg = "{% trans "Failed. Please check the network." %}";
             }
@@ -454,7 +456,7 @@ $('#set-name-form').submit(function() {
     return false;
 });
 
-$('#set-loginid-form').submit(function() {
+$('#set-loginid-form').on('submit', function() {
     var loginid = $.trim($('[name="loginid"]', $(this)).val());
     var $loginid = $('#loginid');
     var $error = $('.error', $(this));
@@ -480,7 +482,7 @@ $('#set-loginid-form').submit(function() {
         error: function(xhr, textStatus, errorThrown) {
             var err_msg;
             if (xhr.responseText) {
-                err_msg = $.parseJSON(xhr.responseText).error_msg;
+                err_msg = JSON.parse(xhr.responseText).error_msg;
             } else {
                 err_msg = "{% trans "Failed. Please check the network." %}";
             }
@@ -492,7 +494,7 @@ $('#set-loginid-form').submit(function() {
     return false;
 });
 
-$('#set-contact-email-form').submit(function() {
+$('#set-contact-email-form').on('submit', function() {
     var $form = $(this);
     var contact_email = $.trim($('[name="contact_email"]', $form).val());
     var $contactEmail = $('#contact-email');
@@ -519,7 +521,7 @@ $('#set-contact-email-form').submit(function() {
         error: function(xhr, textStatus, errorThrown) {
             var err_msg;
             if (xhr.responseText) {
-                err_msg = $.parseJSON(xhr.responseText).error_msg;
+                err_msg = JSON.parse(xhr.responseText).error_msg;
             } else {
                 err_msg = "{% trans "Failed. Please check the network." %}";
             }
@@ -531,7 +533,7 @@ $('#set-contact-email-form').submit(function() {
     return false;
 });
 
-$('#set-reference-id-form').submit(function() {
+$('#set-reference-id-form').on('submit', function() {
     var reference_id = $.trim($('[name="reference_id"]', $(this)).val());
     var $referenceID = $('#reference-id');
     var $error = $('.error', $(this));
@@ -556,7 +558,7 @@ $('#set-reference-id-form').submit(function() {
         error: function(xhr, textStatus, errorThrown) {
             var err_msg;
             if (xhr.responseText) {
-                err_msg = $.parseJSON(xhr.responseText).error_msg;
+                err_msg = JSON.parse(xhr.responseText).error_msg;
             } else {
                 err_msg = "{% trans "Failed. Please check the network." %}";
             }
@@ -568,7 +570,7 @@ $('#set-reference-id-form').submit(function() {
     return false;
 });
 
-$('#set-dept-form').submit(function() {
+$('#set-dept-form').on('submit', function() {
     var department = $.trim($('[name="department"]', $(this)).val());
     var $department = $('#department');
     var $error = $('.error', $(this));
@@ -593,7 +595,7 @@ $('#set-dept-form').submit(function() {
         error: function(xhr, textStatus, errorThrown) {
             var err_msg;
             if (xhr.responseText) {
-                err_msg = $.parseJSON(xhr.responseText).error_msg;
+                err_msg = JSON.parse(xhr.responseText).error_msg;
             } else {
                 err_msg = "{% trans "Failed. Please check the network." %}";
             }
@@ -605,7 +607,7 @@ $('#set-dept-form').submit(function() {
     return false;
 });
 
-$('#set-quota-form').submit(function() {
+$('#set-quota-form').on('submit', function() {
     var form = $(this),
         form_id = form.attr('id'),
         space_quota = $.trim($('input[name="space_quota"]', form).val());
@@ -636,7 +638,7 @@ $('#set-quota-form').submit(function() {
         },
         error: function(xhr, textStatus, errorThrown) {
             if (xhr.responseText) {
-                apply_form_error(form_id, $.parseJSON(xhr.responseText).error_msg);
+                apply_form_error(form_id, JSON.parse(xhr.responseText).error_msg);
             } else {
                 apply_form_error(form_id, "{% trans "Failed. Please check the network." %}");
             }

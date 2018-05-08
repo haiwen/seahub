@@ -27,13 +27,11 @@ require.config({
         }
     },
     paths: {
-        'jquery': 'lib/jquery',
-        'jquery.ui.core': 'lib/jquery.ui.core',
-        'jquery.ui.widget': 'lib/jquery.ui.widget.1.11.1',
-        'jquery.ui.progressbar': 'lib/jquery.ui.progressbar',
-        'jquery.ui.tabs': 'lib/jquery.ui.tabs',
+        'jquery': 'lib/jquery.min',
+        'jquery.ui': 'lib/jquery-ui.min', // TODO: it uses deprecated methods in jquery 3
 
         // for fileupload
+        'jquery.ui.widget': 'lib/jquery.ui.widget.1.11.1',
         'tmpl': 'lib/tmpl.min',
         'jquery.iframe-transport': 'lib/jquery.iframe-transport',
         'jquery.fileupload': 'lib/jquery.fileupload',
@@ -41,14 +39,12 @@ require.config({
         'jquery.fileupload-validate': 'lib/jquery.fileupload-validate',
         'jquery.fileupload-ui': 'lib/jquery.fileupload-ui',
 
-        'jquery.magnific-popup': 'lib/jquery.magnific-popup',
-
+        'jquery.magnific-popup': 'lib/jquery.magnific-popup.min', // TODO: it uses deprecated methods in jquery 3
         'js.cookie': 'lib/js.cookie',
-
-        simplemodal: 'lib/jquery.simplemodal',
-        jstree: 'lib/jstree.min',
-        select2: 'lib/select2-3.5.2',
-        moment: 'lib/moment-with-locales',
+        simplemodal: 'lib/jquery.simplemodal', // TODO: it uses deprecated methods in jquery 3
+        jstree: 'lib/jstree.min', // TODO: it uses deprecated methods in jquery 3
+        select2: 'lib/select2-3.5.2', // TODO
+        moment: 'lib/moment-with-locales.min',
         marked: 'lib/marked.min',
 
         underscore: 'lib/underscore',
@@ -84,6 +80,7 @@ define([
                 case 'download_dir_zip_url': return fileServerRoot + 'zip/' + options.zip_token;
                 case 'zip_task': return siteRoot + 'api/v2.1/repos/' + options.repo_id + '/zip-task/';
                 case 'query_zip_progress': return siteRoot + 'api/v2.1/query-zip-progress/';
+                case 'cancel_zip_task': return siteRoot + 'api/v2.1/cancel-zip-task/';
                 case 'copy_move_task': return siteRoot + 'api/v2.1/copy-move-task/';
                 case 'query_copy_move_progress': return siteRoot + 'api/v2.1/query-copy-move-progress/';
                 case 'rename_dir': return siteRoot + 'api/v2.1/repos/' + options.repo_id + '/dir/';
@@ -189,6 +186,8 @@ define([
                 case 'admin-group': return siteRoot + 'api/v2.1/admin/groups/' + options.group_id + '/';
                 case 'admin-group-libraries': return siteRoot + 'api/v2.1/admin/groups/' + options.group_id + '/libraries/';
                 case 'admin-group-library': return siteRoot + 'api/v2.1/admin/groups/' + options.group_id + '/libraries/' + options.repo_id + '/';
+                case 'admin-group-owned-libraries': return siteRoot + 'api/v2.1/admin/groups/' + options.group_id + '/group-owned-libraries/';
+                case 'admin-group-owned-library': return siteRoot + 'api/v2.1/admin/groups/' + options.group_id + '/group-owned-libraries/' + options.repo_id + '/';
                 case 'admin-group-members': return siteRoot + 'api/v2.1/admin/groups/' + options.group_id + '/members/';
                 case 'admin-group-member': return siteRoot + 'api/v2.1/admin/groups/' + options.group_id + '/members/' + options.email+ '/';
                 case 'admin-system-library': return siteRoot + 'api/v2.1/admin/system-library/';
@@ -199,6 +198,9 @@ define([
                 case 'sys_group_admin_export_excel': return siteRoot + 'sys/groupadmin/export-excel/';
                 case 'admin-operation-logs': return siteRoot + 'api/v2.1/admin/admin-logs/';
                 case 'admin-login-logs': return siteRoot + 'api/v2.1/admin/admin-login-logs/';
+
+                case 'admin-address-book-groups': return siteRoot + 'api/v2.1/admin/address-book/groups/';
+                case 'admin-address-book-group': return siteRoot + 'api/v2.1/admin/address-book/groups/' + options.group_id + '/';
 
                 case 'license': return siteRoot + 'api/v2.1/admin/license/';
             }
@@ -340,10 +342,10 @@ define([
             var $yesBtn = $('#confirm-yes');
 
             $cont.html('<h3>' + title + '</h3><p>' + content + '</p>');
-            $popup.modal({appendTo: '#main'});
+            $popup.modal();
             $('#simplemodal-container').css({'height':'auto'});
 
-            $yesBtn.click(yesCallback);
+            $yesBtn.on('click', yesCallback);
         },
 
         confirm_with_extra_option_template: _.template($('#confirm-dialog-with-extra-option-tmpl').html()),
@@ -361,10 +363,10 @@ define([
             });
 
             $cont.html(html);
-            $popup.modal({appendTo: '#main'});
+            $popup.modal();
             $('#simplemodal-container').css({'height':'auto'});
 
-            $yesBtn.click(function() {
+            $yesBtn.on('click', function() {
                 var extraOptionChecked = $('#confirm-extra-option:checked').val() === 'on';
                 yesCallback(extraOptionChecked);
             });
@@ -413,7 +415,7 @@ define([
 
         ajaxErrorHandler: function(xhr, textStatus, errorThrown) {
             if (xhr.responseText) {
-                var parsed_resp = $.parseJSON(xhr.responseText);
+                var parsed_resp = JSON.parse(xhr.responseText);
                 this.feedback(parsed_resp.error||parsed_resp.error_msg||parsed_resp.detail, 'error');
             } else {
                 this.feedback(gettext("Failed. Please check the network."), 'error');
@@ -421,11 +423,11 @@ define([
         },
 
         enableButton: function(btn) {
-            btn.removeAttr('disabled').removeClass('btn-disabled');
+            btn.prop('disabled', false).removeClass('btn-disabled');
         },
 
         disableButton: function(btn) {
-            btn.attr('disabled', 'disabled').addClass('btn-disabled');
+            btn.prop('disabled', true).addClass('btn-disabled');
         },
 
         setCaretPos: function(inputor, pos) {
@@ -503,7 +505,7 @@ define([
                 after_op_error = function(xhr, textStatus, errorThrown) {
                     var err;
                     if (xhr.responseText) {
-                        err = $.parseJSON(xhr.responseText).error||$.parseJSON(xhr.responseText).error_msg;
+                        err = JSON.parse(xhr.responseText).error||JSON.parse(xhr.responseText).error_msg;
                     } else {
                         err = gettext("Failed. Please check the network.");
                     }
@@ -1061,6 +1063,22 @@ define([
                 });
             };
 
+            var cancelZipTask = function() {
+                $.ajax({
+                    url: _this.getUrl({name: 'cancel_zip_task'}),
+                    type: 'POST',
+                    dataType: 'json',
+                    data: {'token': zip_token},
+                    beforeSend: _this.prepareCSRFToken,
+                    success: function() {
+                        // do nothing
+                    },
+                    error: function(xhr) {
+                        // do nothing
+                    }
+                });
+            };
+
             $.ajax({
                 url: _this.getUrl({
                     name: 'zip_task',
@@ -1074,7 +1092,13 @@ define([
                 dataType: 'json',
                 success: function(data) {
                     zip_token = data['zip_token'];
-                    $tip.html(packagingTip).modal();
+                    $tip.html(packagingTip).modal({
+                        onClose: function() {
+                            clearInterval(interval); // stop querying the progress
+                            cancelZipTask();
+                            $.modal.close();
+                        }
+                    });
                     $('#simplemodal-container').css({'width':'auto'});
                     queryZipProgress();
                     interval = setInterval(queryZipProgress, 1000);

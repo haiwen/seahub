@@ -11,26 +11,23 @@ define([
     var View = Backbone.View.extend({
 
         id: 'file-comments',
-        className: 'right-side-panel',
+        className: 'comments-panel',
 
         template: _.template($('#file-comment-panel-tmpl').html()),
 
-        initialize: function() {
-            $("#main").append(this.$el);
+        initialize: function(options) {
+            this.dirView = options.dirView;
 
             this.collection = new Collection();
             this.listenTo(this.collection, 'add', this.addOne);
             this.listenTo(this.collection, 'reset', this.reset);
 
             var _this = this;
-            $(document).keydown(function(e) {
+            $(document).on('keydown', function(e) {
                 // ESCAPE key pressed
                 if (e.which == 27) {
                     _this.hide();
                 }
-            });
-            $(window).resize(function() {
-                _this.setConHeight();
             });
         },
 
@@ -65,14 +62,21 @@ define([
                 'icon_url': options.icon_url,
                 'file_name': options.file_name
             });
-            this.$el.css({'right': 0});
-            this.setConHeight();
+
+            if ($('#' + this.id).length == 0) {
+                this.dirView.$mainCon.append(this.$el);
+                if (!this.$el.is(':visible')) {
+                    this.$el.show();
+                }
+            } else {
+                this.$el.show();
+            }
+
             this.getContent();
         },
 
         hide: function() {
-            this.$el.css({'right': '-400px'});
-            this.$el.empty();
+            this.$el.hide();
         },
 
         reset: function() {
@@ -110,7 +114,7 @@ define([
                         if (response['status'] == 401 || response['status'] == 403) {
                             err_msg = gettext("Permission error");
                         } else {
-                            err_msg = $.parseJSON(response.responseText).error_msg;
+                            err_msg = JSON.parse(response.responseText).error_msg;
                         }
                     } else {
                         err_msg = gettext('Please check the network.');
@@ -154,7 +158,7 @@ define([
                 error: function(xhr) {
                     var err_msg;
                     if (xhr.responseText) {
-                        err_msg = $.parseJSON(xhr.responseText).error_msg;
+                        err_msg = JSON.parse(xhr.responseText).error_msg;
                     } else {
                         err_msg = gettext("Failed. Please check the network.");
                     }
@@ -178,15 +182,6 @@ define([
             this.$listContainer.append(view.render().el);
         },
 
-        setConHeight: function() {
-            $('.file-discussions-con', this.$el).css({
-                'max-height': $(window).height()
-                    - this.$el.offset().top
-                    - $('.file-discussions-hd', this.$el).outerHeight(true)
-                    - $('.file-discussions-footer', this.$el).outerHeight(true)
-            });
-        },
-
         scrollConToBottom: function() {
             var $el = this.$('.file-discussions-con');
             $el.scrollTop($el[0].scrollHeight - $el[0].clientHeight);
@@ -196,7 +191,7 @@ define([
             var str = "@" + to_user + " ";
             var $input = this.$msgInput.val(str);
             Common.setCaretPos($input[0], str.length);
-            $input.focus();
+            $input.trigger('focus');
         }
 
     });

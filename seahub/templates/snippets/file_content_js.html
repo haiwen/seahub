@@ -26,7 +26,7 @@ function setFileViewAreaHeight() {
     $fileView.outerHeight($(window).height() - $fileView.offset().top);
 }
 setFileViewAreaHeight();
-$(window).resize(setFileViewAreaHeight);
+$(window).on('resize', setFileViewAreaHeight);
 $('#svg-view').prev('.loading-icon').hide();
 $('#svg-view').show();
 {% endif %}
@@ -48,15 +48,16 @@ $('#svg-view').show();
     {% endifnotequal %}
 {% endif %}
 
-{% if filetype == 'Document' or filetype == 'PDF' and not use_pdfjs %}
-    {% include 'snippets/office_convert_js.html' %}
+{% if filetype == 'Document' %}
+    {% include 'snippets/document_file_viewer.html' %}
 {% endif %}
 
 {% if filetype == 'SpreadSheet' %}
     {% include 'snippets/spreadsheet_convert_js.html' %}
 {% endif %}
 
-{% if filetype == 'PDF' and use_pdfjs %}
+{% if filetype == 'PDF' %}
+    var raw_path = "{{ raw_path|escapejs }}";
     {% include 'snippets/pdfjs_file_viewer.html' %}
 {% endif %}
 
@@ -82,7 +83,7 @@ $('#file-view').html('<div id="file-view-tip"></div>');
 {% endif %}{# 'if not err' ends here. #}
 
 {% if filetype == 'Text' or filetype == 'Markdown' %}
-    $('#file-enc').change(function() {
+    $('#file-enc').on('change', function() {
         var file_enc = $(this).val();
         var s = location.search;
         if (s.indexOf('?') == -1) {

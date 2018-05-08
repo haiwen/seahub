@@ -9,8 +9,7 @@ from django.utils.translation import ugettext as _
 from django.utils.http import urlquote
 from django.http import HttpResponse
 from django.views.decorators.http import condition
-from django.shortcuts import render_to_response
-from django.template import RequestContext
+from django.shortcuts import render
 
 from seaserv import get_repo, get_file_id_by_path
 
@@ -230,8 +229,7 @@ def share_link_thumbnail_get(request, token, size, path):
     password_check_passed, err_msg = check_share_link_common(request, fileshare)
     if not password_check_passed:
         d = {'token': token, 'view_name': 'view_shared_dir', 'err_msg': err_msg}
-        return render_to_response('share_access_validation.html', d,
-                                  context_instance=RequestContext(request))
+        return render(request, 'share_access_validation.html', d)
 
     image_path = get_real_path_by_fs_and_req_path(fileshare, path)
 

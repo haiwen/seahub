@@ -1,11 +1,11 @@
 from mock import patch
 
 from django.core.cache import cache
-from django.contrib.auth.models import AnonymousUser
 from django.http import HttpResponse, Http404
 from django.test import override_settings
 from django.test.client import RequestFactory
 
+from seahub.auth.models import AnonymousUser
 from seahub.test_utils import BaseTestCase
 from seahub.share.decorators import share_link_audit
 from seahub.share.models import FileShare

@@ -18,16 +18,16 @@ define([
             this.imgIndex = options.imgIndex;
 
             this.render();
-            this.$el.modal({appendTo:'#main', focus: false});
+            this.$el.modal({focus: false});
             $('#simplemodal-container').css({'width':'auto', 'height':'auto'});
 
             var $input = this.$('[name="newname"]');
             var dot_index = this.dirent.get('obj_name').lastIndexOf('.');
             if (!this.dirent.get('is_dir') && dot_index != -1) {
-                $input[0].focus();
+                $input.trigger('focus');
                 $input[0].setSelectionRange(0, dot_index);
             } else {
-                $input.select();
+                $input.trigger('select');
             }
 
             this.$error = this.$('.error');
@@ -91,7 +91,7 @@ define([
                 error: function(xhr, textStatus, errorThrown) {
                     var err;
                     if (xhr.responseText) {
-                        err = $.parseJSON(xhr.responseText).error;
+                        err = JSON.parse(xhr.responseText).error;
                     } else {
                         err = gettext("Failed. Please check the network.");
                     }

@@ -17,8 +17,7 @@ from django.conf import settings as dj_settings
 from django.core.urlresolvers import reverse
 from django.contrib import messages
 from django.http import HttpResponse, Http404, HttpResponseRedirect, HttpResponseNotAllowed
-from django.shortcuts import render_to_response, get_object_or_404
-from django.template import RequestContext
+from django.shortcuts import render, get_object_or_404
 from django.utils import timezone
 from django.utils.translation import ugettext as _
 from django.utils.http import urlquote
@@ -37,7 +36,7 @@ from seahub.base.templatetags.seahub_tags import tsstr_sec, email2nickname
 from seahub.auth import authenticate
 from seahub.auth.decorators import login_required, login_required_ajax
 from seahub.constants import GUEST_USER, DEFAULT_USER, DEFAULT_ADMIN, \
-        SYSTEM_ADMIN, DAILY_ADMIN, AUDIT_ADMIN
+        SYSTEM_ADMIN, DAILY_ADMIN, AUDIT_ADMIN, HASH_URLS
 from seahub.institutions.models import (Institution, InstitutionAdmin,
                                         InstitutionQuota)
 from seahub.institutions.utils import get_institution_space_usage
@@ -45,11 +44,12 @@ from seahub.invitations.models import Invitation
 from seahub.role_permissions.utils import get_available_roles, \
         get_available_admin_roles
 from seahub.role_permissions.models import AdminRole
-from seahub.two_factor.utils import default_device
+from seahub.two_factor.models import default_device
 from seahub.utils import IS_EMAIL_CONFIGURED, string2list, is_valid_username, \
     is_pro_version, send_html_email, get_user_traffic_list, get_server_id, \
     handle_virus_record, get_virus_record_by_id, \
-    get_virus_record, FILE_AUDIT_ENABLED, get_max_upload_file_size
+    get_virus_record, FILE_AUDIT_ENABLED, get_max_upload_file_size, \
+    get_site_name
 from seahub.utils.ip import get_remote_ip
 from seahub.utils.file_size import get_file_size_unit
 from seahub.utils.ldap import get_ldap_info
@@ -71,7 +71,7 @@ from seahub.share.models import FileShare, UploadLinkShare
 from seahub.admin_log.signals import admin_operation
 from seahub.admin_log.models import USER_DELETE, USER_ADD
 import seahub.settings as settings
-from seahub.settings import INIT_PASSWD, SITE_NAME, SITE_ROOT, \
+from seahub.settings import INIT_PASSWD, SITE_ROOT, \
     SEND_EMAIL_ON_ADDING_SYSTEM_MEMBER, SEND_EMAIL_ON_RESETTING_USER_PASSWD, \
     ENABLE_SYS_ADMIN_VIEW_REPO, ENABLE_GUEST_INVITATION, \
     ENABLE_LIMIT_IPADDRESS
@@ -97,7 +97,7 @@ def sysadmin(request):
 
     folder_perm_enabled = True if is_pro_version() and settings.ENABLE_FOLDER_PERM else False
 
-    return render_to_response('sysadmin/sysadmin_backbone.html', {
+    return render(request, 'sysadmin/sysadmin_backbone.html', {
             'enable_sys_admin_view_repo': ENABLE_SYS_ADMIN_VIEW_REPO,
             'enable_upload_folder': settings.ENABLE_UPLOAD_FOLDER,
             'enable_resumable_fileupload': settings.ENABLE_RESUMABLE_FILEUPLOAD,
@@ -112,28 +112,28 @@ def sysadmin(request):
             'is_pro': True if is_pro_version() else False,
             'file_audit_enabled': FILE_AUDIT_ENABLED,
             'enable_limit_ipaddress': ENABLE_LIMIT_IPADDRESS,
-            }, context_instance=RequestContext(request))
+            })
 
 @login_required
 @sys_staff_required
 def sys_statistic_file(request):
 
-    return render_to_response('sysadmin/sys_statistic_file.html', {
-            }, context_instance=RequestContext(request))
+    return render(request, 'sysadmin/sys_statistic_file.html', {
+            })
 
 @login_required
 @sys_staff_required
 def sys_statistic_storage(request):
 
-    return render_to_response('sysadmin/sys_statistic_storage.html', {
-            }, context_instance=RequestContext(request))
+    return render(request, 'sysadmin/sys_statistic_storage.html', {
+            })
 
 @login_required
 @sys_staff_required
 def sys_statistic_user(request):
 
-    return render_to_response('sysadmin/sys_statistic_user.html', {
-            }, context_instance=RequestContext(request))
+    return render(request, 'sysadmin/sys_statistic_user.html', {
+            })
 
 def can_view_sys_admin_repo(repo):
     default_repo_id = get_system_default_repo_id()
@@ -211,10 +211,10 @@ def sys_user_admin(request):
                 if e.username == u.username:
                     u.last_login = e.last_login
 
-        return render_to_response('sysadmin/sys_useradmin_paid.html', {
+        return render(request, 'sysadmin/sys_useradmin_paid.html', {
             'users': users,
             'enable_user_plan': enable_user_plan,
-        }, context_instance=RequestContext(request))
+        })
 
     ### List all users
     # Make sure page request is an int. If not, deliver first page.
@@ -276,7 +276,7 @@ def sys_user_admin(request):
             profile = Profile.objects.get_profile_by_user(user.email)
             user.institution =  profile.institution if profile else ''
 
-    return render_to_response(
+    return render(request, 
         'sysadmin/sys_useradmin.html', {
             'users': users,
             'current_page': current_page,
@@ -295,7 +295,7 @@ def sys_user_admin(request):
             'extra_user_roles': extra_user_roles,
             'show_institution': show_institution,
             'institutions': institutions,
-        }, context_instance=RequestContext(request))
+        })
 
 @login_required
 @sys_staff_required
@@ -479,7 +479,7 @@ def sys_user_admin_ldap_imported(request):
             profile = Profile.objects.get_profile_by_user(user.email)
             user.institution =  profile.institution if profile else ''
 
-    return render_to_response(
+    return render(request, 
         'sysadmin/sys_user_admin_ldap_imported.html', {
             'users': users,
             'current_page': current_page,
@@ -493,7 +493,7 @@ def sys_user_admin_ldap_imported(request):
             'guest_user': GUEST_USER,
             'show_institution': show_institution,
             'institutions': institutions,
-        }, context_instance=RequestContext(request))
+        })
 
 @login_required
 @sys_staff_required
@@ -530,7 +530,7 @@ def sys_user_admin_ldap(request):
             if last_login.username == user.email:
                 user.last_login = last_login.last_login
 
-    return render_to_response(
+    return render(request, 
         'sysadmin/sys_useradmin_ldap.html', {
             'users': users,
             'current_page': current_page,
@@ -539,8 +539,7 @@ def sys_user_admin_ldap(request):
             'per_page': per_page,
             'page_next': page_next,
             'is_pro': is_pro_version(),
-        },
-        context_instance=RequestContext(request))
+        })
 
 @login_required
 @sys_staff_required
@@ -590,7 +589,7 @@ def sys_user_admin_admins(request):
     extra_admin_roles = [x for x in get_available_admin_roles()
                         if x not in get_basic_admin_roles()]
 
-    return render_to_response(
+    return render(request, 
         'sysadmin/sys_useradmin_admins.html', {
             'users': admin_users,
             'not_admin_users': not_admin_users,
@@ -601,7 +600,7 @@ def sys_user_admin_admins(request):
             'daily_admin': DAILY_ADMIN,
             'audit_admin': AUDIT_ADMIN,
             'is_pro': is_pro_version(),
-        }, context_instance=RequestContext(request))
+        })
 
 @login_required
 @sys_staff_required
@@ -731,7 +730,7 @@ def user_info(request, email):
     reference_id = user.reference_id
     user_default_device = default_device(user) if has_two_factor_auth() else False
 
-    return render_to_response(
+    return render(request, 
         'sysadmin/userinfo.html', {
             'owned_repos': owned_repos,
             'space_quota': space_quota,
@@ -747,7 +746,7 @@ def user_info(request, email):
             'two_factor_auth_enabled': has_two_factor_auth(),
             'default_device': user_default_device,
             'reference_id': reference_id if reference_id else '',
-        }, context_instance=RequestContext(request))
+        })
 
 @login_required_ajax
 @sys_staff_required
@@ -935,7 +934,7 @@ def email_user_on_activation(user):
     c = {
         'username': user.email,
         }
-    send_html_email(_(u'Your account on %s is activated') % SITE_NAME,
+    send_html_email(_(u'Your account on %s is activated') % get_site_name(),
             'sysadmin/user_activation_email.html', c, None, [user.email])
 
 @login_required_ajax
@@ -1018,7 +1017,7 @@ def send_user_reset_email(request, email, password):
         'email': email,
         'password': password,
         }
-    send_html_email(_(u'Password has been reset on %s') % SITE_NAME,
+    send_html_email(_(u'Password has been reset on %s') % get_site_name(),
             'sysadmin/user_reset_email.html', c, None, [email])
 
 @login_required
@@ -1074,7 +1073,7 @@ def send_user_add_mail(request, email, password):
         'email': email,
         'password': password,
         }
-    send_html_email(_(u'You are invited to join %s') % SITE_NAME,
+    send_html_email(_(u'You are invited to join %s') % get_site_name(),
             'sysadmin/user_add_email.html', c, None, [email])
 
 @login_required_ajax
@@ -1223,12 +1222,12 @@ def sys_org_admin(request):
             o.is_expired = True if e.expire_date < timezone.now() else False
             orgs.append(o)
 
-        return render_to_response('sysadmin/sys_org_admin.html', {
+        return render(request, 'sysadmin/sys_org_admin.html', {
             'orgs': orgs,
             'enable_org_plan': enable_org_plan,
             'hide_paginator': True,
             'paid_page': True,
-            }, context_instance=RequestContext(request))
+            })
 
     orgs_plus_one = ccnet_threaded_rpc.get_all_orgs(per_page * (current_page - 1),
                                                     per_page + 1)
@@ -1265,7 +1264,7 @@ def sys_org_admin(request):
         else:
             org.is_expired = False
 
-    return render_to_response('sysadmin/sys_org_admin.html', {
+    return render(request, 'sysadmin/sys_org_admin.html', {
             'orgs': orgs,
             'current_page': current_page,
             'prev_page': current_page-1,
@@ -1274,7 +1273,7 @@ def sys_org_admin(request):
             'page_next': page_next,
             'enable_org_plan': enable_org_plan,
             'all_page': True,
-            }, context_instance=RequestContext(request))
+            })
 
 @login_required
 @sys_staff_required
@@ -1302,12 +1301,12 @@ def sys_org_search(request):
                 if creator in o.creator.lower():
                     orgs.append(o)
 
-    return render_to_response(
+    return render(request, 
         'sysadmin/sys_org_search.html', {
             'orgs': orgs,
             'name': org_name,
             'creator': creator,
-        }, context_instance=RequestContext(request))
+        })
 
 @login_required
 @sys_staff_required
@@ -1439,8 +1438,8 @@ def sys_org_info_user(request, org_id):
             if last_login.username == user.email:
                 user.last_login = last_login.last_login
 
-    return render_to_response('sysadmin/sys_org_info_user.html',
-           org_basic_info, context_instance=RequestContext(request))
+    return render(request, 'sysadmin/sys_org_info_user.html',
+           org_basic_info)
 
 
 @login_required
@@ -1450,8 +1449,8 @@ def sys_org_info_group(request, org_id):
     org_id = int(org_id)
     org_basic_info = sys_get_org_base_info(org_id)
 
-    return render_to_response('sysadmin/sys_org_info_group.html',
-           org_basic_info, context_instance=RequestContext(request))
+    return render(request, 'sysadmin/sys_org_info_group.html',
+           org_basic_info)
 
 @login_required
 @sys_staff_required
@@ -1470,8 +1469,8 @@ def sys_org_info_library(request, org_id):
             repo.owner = None
 
     org_basic_info["org_repos"] = org_repos
-    return render_to_response('sysadmin/sys_org_info_library.html',
-           org_basic_info, context_instance=RequestContext(request))
+    return render(request, 'sysadmin/sys_org_info_library.html',
+           org_basic_info)
 
 @login_required
 @sys_staff_required
@@ -1486,9 +1485,8 @@ def sys_org_info_setting(request, org_id):
     else:
         org_basic_info['org_member_quota'] = None
 
-    return render_to_response('sysadmin/sys_org_info_setting.html',
-                              org_basic_info,
-                              context_instance=RequestContext(request))
+    return render(request, 'sysadmin/sys_org_info_setting.html',
+                              org_basic_info)
 
 @login_required
 @sys_staff_required
@@ -1525,7 +1523,7 @@ def sys_publink_admin(request):
         else:
             l.name = os.path.dirname(l.path)
 
-    return render_to_response(
+    return render(request, 
         'sysadmin/sys_publink_admin.html', {
             'publinks': publinks,
             'current_page': current_page,
@@ -1535,8 +1533,7 @@ def sys_publink_admin(request):
             'page_next': page_next,
             'per_page': per_page,
             'sort_by': sort_by,
-        },
-        context_instance=RequestContext(request))
+        })
 
 @login_required
 @sys_staff_required
@@ -1567,7 +1564,7 @@ def sys_upload_link_admin(request):
     else:
         page_next = False
 
-    return render_to_response(
+    return render(request, 
         'sysadmin/sys_upload_link_admin.html', {
             'uploadlinks': uploadlinks,
             'current_page': current_page,
@@ -1577,8 +1574,7 @@ def sys_upload_link_admin(request):
             'page_next': page_next,
             'per_page': per_page,
             'sort_by': sort_by
-        },
-        context_instance=RequestContext(request))
+        })
 
 @login_required_ajax
 @sys_staff_required
@@ -1632,12 +1628,11 @@ def sys_link_search(request):
         else:
             l.name = os.path.dirname(l.path)
 
-    return render_to_response(
+    return render(request, 
         'sysadmin/sys_link_search.html', {
             'publinks': publinks,
             'token': token
-        },
-        context_instance=RequestContext(request))
+        })
 
 @login_required
 @sys_staff_required
@@ -1702,14 +1697,14 @@ def user_search(request):
     extra_user_roles = [x for x in get_available_roles()
                         if x not in get_basic_user_roles()]
 
-    return render_to_response('sysadmin/user_search.html', {
+    return render(request, 'sysadmin/user_search.html', {
             'users': users,
             'email': email,
             'default_user': DEFAULT_USER,
             'guest_user': GUEST_USER,
             'is_pro': is_pro_version(),
             'extra_user_roles': extra_user_roles,
-            }, context_instance=RequestContext(request))
+            })
 
 @login_required
 @sys_staff_required
@@ -1719,7 +1714,7 @@ def sys_repo_delete(request, repo_id):
     """
     next = request.META.get('HTTP_REFERER', None)
     if not next:
-        next = reverse('sys_repo_admin')
+        next = HASH_URLS['SYS_REPO_ADMIN']
 
     if get_system_default_repo_id() == repo_id:
         messages.error(request, _('System library can not be deleted.'))
@@ -1773,7 +1768,7 @@ def sys_traffic_admin(request):
     for info in traffic_info_list:
         info['total'] = info['file_view'] + info['file_download'] + info['dir_download']
 
-    return render_to_response(
+    return render(request, 
         'sysadmin/sys_trafficadmin.html', {
             'traffic_info_list': traffic_info_list,
             'month': month,
@@ -1782,8 +1777,7 @@ def sys_traffic_admin(request):
             'next_page': current_page+1,
             'per_page': per_page,
             'page_next': page_next,
-        },
-        context_instance=RequestContext(request))
+        })
 
 @login_required
 @sys_staff_required
@@ -1819,7 +1813,7 @@ def sys_virus_scan_records(request):
         r.repo.owner = seafile_api.get_repo_owner(r.repo.repo_id)
         records.append(r)
 
-    return render_to_response(
+    return render(request, 
         'sysadmin/sys_virus_scan_records.html', {
             'records': records,
             'current_page': current_page,
@@ -1827,7 +1821,7 @@ def sys_virus_scan_records(request):
             'next_page': current_page + 1,
             'per_page': per_page,
             'page_next': page_next,
-        }, context_instance=RequestContext(request))
+        })
 
 @login_required
 @sys_staff_required
@@ -1999,7 +1993,7 @@ def batch_add_user(request):
 
                 send_html_email_with_dj_template(
                     username, dj_template='sysadmin/user_batch_add_email.html',
-                    subject=_(u'You are invited to join %s') % SITE_NAME,
+                    subject=_(u'You are invited to join %s') % get_site_name(),
                     context={
                         'user': email2nickname(request.user.username),
                         'email': username,
@@ -2056,13 +2050,12 @@ def sys_sudo_mode(request):
 
     enable_shib_login = getattr(settings, 'ENABLE_SHIB_LOGIN', False)
     enable_adfs_login = getattr(settings, 'ENABLE_ADFS_LOGIN', False)
-    return render_to_response(
+    return render(request, 
         'sysadmin/sudo_mode.html', {
             'password_error': password_error,
             'enable_sso': enable_shib_login or enable_adfs_login,
             'next': next,
-        },
-        context_instance=RequestContext(request))
+        })
 
 @login_required
 @sys_staff_required
@@ -2081,10 +2074,12 @@ def sys_settings(request):
         'USER_PASSWORD_STRENGTH_LEVEL', 'SHARE_LINK_PASSWORD_MIN_LENGTH',
         'ENABLE_USER_CREATE_ORG_REPO', 'FORCE_PASSWORD_CHANGE',
         'LOGIN_ATTEMPT_LIMIT', 'FREEZE_USER_ON_LOGIN_FAILED',
-        'ENABLE_SHARE_TO_ALL_GROUPS', 'ENABLE_TWO_FACTOR_AUTH'
+        'ENABLE_SHARE_TO_ALL_GROUPS', 'ENABLE_TWO_FACTOR_AUTH',
+        'ENABLE_BRANDING_CSS',
     ]
 
-    STRING_WEB_SETTINGS = ('SERVICE_URL', 'FILE_SERVER_ROOT', 'TEXT_PREVIEW_EXT')
+    STRING_WEB_SETTINGS = ('SERVICE_URL', 'FILE_SERVER_ROOT', 'TEXT_PREVIEW_EXT',
+                           'SITE_NAME', 'SITE_TITLE', 'CUSTOM_CSS')
 
     if request.is_ajax() and request.method == "POST":
         content_type = 'application/json; charset=utf-8'
@@ -2129,10 +2124,10 @@ def sys_settings(request):
 
     login_bg_image_path = get_login_bg_image_path()
 
-    return render_to_response('sysadmin/settings.html', {
+    return render(request, 'sysadmin/settings.html', {
         'config_dict': config_dict,
         'login_bg_image_path': login_bg_image_path,
-    }, context_instance=RequestContext(request))
+    })
 
 @login_required_ajax
 @sys_staff_required
@@ -2200,7 +2195,7 @@ def sys_inst_admin(request):
     else:
         page_next = False
 
-    return render_to_response(
+    return render(request, 
         'sysadmin/sys_inst_admin.html', {
             'insts': insts[:per_page],
             'current_page': current_page,
@@ -2208,7 +2203,7 @@ def sys_inst_admin(request):
             'next_page': current_page + 1,
             'per_page': per_page,
             'page_next': page_next,
-        }, context_instance=RequestContext(request))
+        })
 
 @login_required
 @sys_staff_required
@@ -2312,7 +2307,7 @@ def sys_inst_info_user(request, inst_id):
     space_quota = InstitutionQuota.objects.get_or_none(institution=inst)
     space_usage = get_institution_space_usage(inst)
 
-    return render_to_response('sysadmin/sys_inst_info_user.html', {
+    return render(request, 'sysadmin/sys_inst_info_user.html', {
         'inst': inst,
         'users': users,
         'users_count': users_count,
@@ -2323,7 +2318,7 @@ def sys_inst_info_user(request, inst_id):
         'page_next': page_next,
         'space_usage': space_usage,
         'space_quota': space_quota,
-    }, context_instance=RequestContext(request))
+    })
 
 @login_required
 @sys_staff_required
@@ -2361,12 +2356,12 @@ def sys_inst_search_user(request, inst_id):
 
     users_count = Profile.objects.filter(institution=inst.name).count()
 
-    return render_to_response('sysadmin/sys_inst_search_user.html', {
+    return render(request, 'sysadmin/sys_inst_search_user.html', {
         'q': q,
         'inst': inst,
         'users': users,
         'users_count': users_count,
-    }, context_instance=RequestContext(request))
+    })
 
 @login_required
 @sys_staff_required
@@ -2393,11 +2388,11 @@ def sys_inst_info_admins(request, inst_id):
 
     users_count = Profile.objects.filter(institution=inst.name).count()
 
-    return render_to_response('sysadmin/sys_inst_info_admins.html', {
+    return render(request, 'sysadmin/sys_inst_info_admins.html', {
         'inst': inst,
         'admins': admins,
         'users_count': users_count,
-    }, context_instance=RequestContext(request))
+    })
 
 @login_required
 @sys_staff_required
@@ -2487,7 +2482,7 @@ def sys_invitation_admin(request):
     else:
         page_next = False
 
-    return render_to_response(
+    return render(request, 
         'sysadmin/sys_invitations_admin.html', {
             'invitations': invitations,
             'current_page': current_page,
@@ -2495,8 +2490,7 @@ def sys_invitation_admin(request):
             'next_page': current_page+1,
             'per_page': per_page,
             'page_next': page_next,
-        },
-        context_instance=RequestContext(request))
+        })
 
 @login_required
 @sys_staff_required
@@ -2558,9 +2552,9 @@ def sys_terms_admin(request):
 
     tc_list = TermsAndConditions.objects.all().order_by('-date_created')
 
-    return render_to_response('sysadmin/sys_terms_admin.html', {
+    return render(request, 'sysadmin/sys_terms_admin.html', {
         'object_list': tc_list,
-    }, context_instance=RequestContext(request))
+    })
 
 @login_required
 @sys_staff_required

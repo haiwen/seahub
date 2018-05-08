@@ -1,15 +1,20 @@
 # Copyright (c) 2011-2016 Seafile Ltd.
 # -*- coding: utf-8 -*-
 import json
+import pytest
+pytestmark = pytest.mark.django_db
+
 from django.core.urlresolvers import reverse
 from seahub.test_utils import BaseTestCase
 from tests.common.utils import randstring
-from constance import config
 
 
 class ShareableGroupsTest(BaseTestCase):
 
     def setUp(self):
+        from constance import config
+        self.config = config
+
         self.login_as(self.user)
         self.group_id = self.group.id
         self.group_name = self.group.group_name
@@ -20,10 +25,11 @@ class ShareableGroupsTest(BaseTestCase):
     def tearDown(self):
         self.remove_group()
         self.remove_repo()
+        self.clear_cache()
 
     def test_can_get(self):
 
-        config.ENABLE_SHARE_TO_ALL_GROUPS = 1
+        self.config.ENABLE_SHARE_TO_ALL_GROUPS = 1
 
         admin_group_name = randstring(10)
         admin_group = self.create_group(group_name=admin_group_name,
@@ -42,7 +48,7 @@ class ShareableGroupsTest(BaseTestCase):
 
     def test_can_get_with_disable_config(self):
 
-        config.ENABLE_SHARE_TO_ALL_GROUPS = 0
+        self.config.ENABLE_SHARE_TO_ALL_GROUPS = 0
 
         admin_group_name = randstring(10)
         admin_group = self.create_group(group_name=admin_group_name,

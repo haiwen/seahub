@@ -21,9 +21,18 @@
         {% trans "The internal URL for downloading/uploading files. Users will not be able to download/upload files if this is not set correctly. If you config Seafile behind Nginx/Apache, it should be SERVICE_URL/seafhttp, like https://seafile.example.com/seafhttp ." as help_tip %}
         {% include "snippets/web_settings_form.html" %}
     {% endwith %}
+  
+    <h4>{% trans "Branding" %}</h4>
 
+    {% with type="input" setting_display_name="SITE_TITLE" setting_name="SITE_TITLE" setting_val=config_dict.SITE_TITLE %}
+        {% trans "Site title shown in a browser tab" as help_tip %}
+        {% include "snippets/web_settings_form.html" %}
+    {% endwith %}
 
-    <h4>Logo</h4>
+    {% with type="input" setting_display_name="SITE_NAME" setting_name="SITE_NAME" setting_val=config_dict.SITE_NAME %}
+        {% trans "Site name used in email sending" as help_tip %}
+        {% include "snippets/web_settings_form.html" %}
+    {% endwith %}
 
     {% with type="file" setting_display_name="Logo" setting_name="logo" file_path=logo_path file_width=256 file_height=64 help_tip="logo.png, 256px * 64px" %}
         {% include "snippets/web_settings_form.html" %}
@@ -35,6 +44,17 @@
 
     {% with type="file" setting_name="login_bg_image" file_path=login_bg_image_path file_width=240 file_height=160 help_tip="login-bg.jpg, 2400px * 1600px" %}
         {% trans "Login Background Image" as setting_display_name %}
+        {% include "snippets/web_settings_form.html" %}
+    {% endwith %}
+
+    {% with type="checkbox" setting_name="ENABLE_BRANDING_CSS" setting_val=config_dict.ENABLE_BRANDING_CSS %}
+        {% trans "ENABLE_BRANDING_CSS" as setting_display_name %}
+        {% trans "Use custom CSS" as help_tip %}
+        {% include "snippets/web_settings_form.html" %}
+    {% endwith %}
+
+    {% with type="code-textarea" setting_name="CUSTOM_CSS" setting_val=config_dict.CUSTOM_CSS %}
+        {% trans "Custom CSS" as setting_display_name %}
         {% include "snippets/web_settings_form.html" %}
     {% endwith %}
 
@@ -165,31 +185,31 @@
 
 {% block extra_script %}
 <script type="text/javascript">
-$('.input, .textarea', $('.web-setting-form')).focus(function() {
+$('.input, .textarea', $('.web-setting-form')).on('focus', function() {
     var $otherFormSubmit = $('.web-setting-form .submit:visible');
     if ($otherFormSubmit.length > 0) {
-        $otherFormSubmit.siblings('.cancel').click();
+        $otherFormSubmit.siblings('.cancel').trigger('click');
     }
     var $form = $(this).closest('form');
     $('.submit, .cancel', $form).show();
 });
 
-$('.web-setting-form .cancel').click(function() {
+$('.web-setting-form .cancel').on('click', function() {
     var $form = $(this).closest('form');
     $('.error, .submit, .cancel', $form).hide();
-    var $input = $('.input', $form);
+    var $input = $('.input, .textarea', $form);
     $input.val($input.attr('data-cur'));
 });
 
-$(document).click(function(e) {
+$(document).on('click', function(e) {
     var target =  e.target || event.srcElement;
     var $op = $('.web-setting-form .submit:visible');
     if ($op.length && !$('.input, .textarea, .submit, .cancel', $op.closest('form')).is(target)) {
-        $('.cancel', $op.closest('form')).click();
+        $('.cancel', $op.closest('form')).trigger('click');
     }
 });
 
-$('.web-setting-checkbox').change(function() {
+$('.web-setting-checkbox').on('change', function() {
     var checkbox = $(this),
         value,
         key = checkbox.attr('name');
@@ -214,7 +234,7 @@ $('.web-setting-checkbox').change(function() {
     });
 });
 
-$('.web-input-setting-form, .web-textarea-setting-form').submit(function() {
+$('.web-input-setting-form, .web-textarea-setting-form').on('submit', function() {
     var $form = $(this),
         $error = $form.find('.error'),
         $input = $form.hasClass('web-input-setting-form') ? $('.input', $form) : $('.textarea', $form),
@@ -229,7 +249,7 @@ $('.web-input-setting-form, .web-textarea-setting-form').submit(function() {
     }
 
     if (value == $input.attr('data-cur')) { // no change
-        $cancel_btn.click();
+        $cancel_btn.trigger('click');
         return false;
     }
 
@@ -250,7 +270,7 @@ $('.web-input-setting-form, .web-textarea-setting-form').submit(function() {
         },
         error: function(jqXHR, textStatus, errorThrown) {
             if (jqXHR.responseText) {
-                $error.html($.parseJSON(jqXHR.responseText).error).show();
+                $error.html(JSON.parse(jqXHR.responseText).error).show();
             } else {
                 $error.html("{% trans "Failed. Please check the network." %}").show();
             }
@@ -261,12 +281,12 @@ $('.web-input-setting-form, .web-textarea-setting-form').submit(function() {
 });
 
 
-$('.web-setting-file-upload-btn').click(function() {
+$('.web-setting-file-upload-btn').on('click', function() {
     var $container = $(this).closest('.web-setting-file-upload');
     $('.web-setting-file-upload-input', $container).trigger('click');
 });
 
-$('.web-setting-file-upload-input').change(function() {
+$('.web-setting-file-upload-input').on('change', function() {
     var $input = $(this);
     var file;
     if ($input[0].files) {

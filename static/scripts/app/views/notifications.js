@@ -64,7 +64,7 @@ define([
                                 $('#wrapper').prepend($el);
                             }
                         }
-                        $('.top-bar-click', $el).click(function() {
+                        $('.top-bar-click', $el).on('click', function() {
                             location.reload(true);
                         });
                     }
@@ -74,7 +74,7 @@ define([
             // request every `unread_notifications_request_interval` seconds
             var reqInterval = setInterval(reqUnreadNum, (app.pageOptions.unread_notifications_request_interval || 3*60)*1000);
 
-            $('#notice-icon').click(function() {
+            $('#notice-icon').on('click', function() {
                 _this.toggle();
                 return false;
             });
@@ -158,7 +158,7 @@ define([
                     _this.$loadingTip.hide();
                     var err_msg;
                     if (xhr.responseText) {
-                        err_msg = $.parseJSON(xhr.responseText).error;
+                        err_msg = JSON.parse(xhr.responseText).error;
                     } else {
                         err_msg = gettext('Please check the network.');
                     }

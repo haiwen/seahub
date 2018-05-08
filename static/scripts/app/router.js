@@ -58,7 +58,7 @@ define([
 
         initialize: function() {
             $('.initial-loading').hide();
-            $('.main-content').show();
+            $('.main-content').removeClass('hide');
 
             Common.prepareApiCsrf();
             Common.initLocale();
@@ -87,11 +87,9 @@ define([
             app.ui.accountView = this.accountView = new AccountView();
             app.pageOptions.sort_mode = Cookies.get('sort_mode') || 'name_up';
 
-            this.currentView = this.myReposView;
-
             var _this = this;
             var originalWindowWidth = $(window).width();
-            $(window).resize(function() {
+            $(window).on('resize', function() {
                 var curWidth = $(window).width();
                 if (_this.currentView.reset) {
                     if ((originalWindowWidth < 768 && curWidth >= 768 ) ||
@@ -103,7 +101,7 @@ define([
             });
 
             // for popups such as '#share-popup'
-            $(window).resize(function() {
+            $(window).on('resize', function() {
                 var $el = $('#share-popup, #repo-share-link-admin-dialog, #repo-folder-perm-popup, #folder-perm-popup');
                 if ($el.is(':visible')) {
                     if ($(window).width() < 768) {
@@ -121,19 +119,20 @@ define([
             });
 
 
-            $('#info-bar .close').click(Common.closeTopNoticeBar);
-            $('#top-browser-tip-close').click(function () {
+            $('#info-bar .close').on('click', Common.closeTopNoticeBar);
+            $('#top-browser-tip-close').on('click', function () {
                 $('#top-browser-tip').addClass('hide');
             });
         },
 
         switchCurrentView: function(newView) {
-            if (this.currentView != newView) {
-                this.currentView.hide();
+            if (!this.currentView) {
                 this.currentView = newView;
-            }
-            if (app.ui.groupDiscussions) {
-                app.ui.groupDiscussions.hide();
+            } else {
+                if (this.currentView != newView) {
+                    this.currentView.hide();
+                    this.currentView = newView;
+                }
             }
         },
 
@@ -289,25 +288,25 @@ define([
         showShareAdminRepos: function() {
             this.switchCurrentView(this.shareAdminReposView);
             this.shareAdminReposView.show();
-            this.sideNavView.setCurTab('share-admin-repos');
+            this.sideNavView.setCurTab('share-admin-repos', {'show_share_admin': true});
         },
 
         showShareAdminFolders: function() {
             this.switchCurrentView(this.shareAdminFoldersView);
             this.shareAdminFoldersView.show();
-            this.sideNavView.setCurTab('share-admin-folders');
+            this.sideNavView.setCurTab('share-admin-folders', {'show_share_admin': true});
         },
 
         showShareAdminShareLinks: function() {
             this.switchCurrentView(this.shareAdminShareLinksView);
             this.shareAdminShareLinksView.show();
-            this.sideNavView.setCurTab('share-admin-links');
+            this.sideNavView.setCurTab('share-admin-links', {'show_share_admin': true});
         },
 
         showShareAdminUploadLinks: function() {
             this.switchCurrentView(this.shareAdminUploadLinksView);
             this.shareAdminUploadLinksView.show();
-            this.sideNavView.setCurTab('share-admin-links');
+            this.sideNavView.setCurTab('share-admin-links', {'show_share_admin': true});
         }
 
     });

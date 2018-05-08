@@ -1,4 +1,5 @@
 # Copyright (c) 2012-2016 Seafile Ltd.
+from importlib import import_module
 import os
 from uuid import uuid4
 
@@ -8,7 +9,6 @@ from django.conf import settings
 from django.http import SimpleCookie
 from django.test import RequestFactory
 from django.test import TestCase
-from django.utils.importlib import import_module
 from exam.decorators import fixture
 from exam.cases import Exam
 import seaserv
@@ -166,7 +166,7 @@ class Fixtures(Exam):
         seafile_api.post_empty_file(**kwargs)
         return kwargs['parent_dir'] + kwargs['filename']
 
-    def create_file_with_content(self, file_name, parent_dir='/', content='abc',
+    def create_file_with_content(self, file_name, parent_dir='/', content='junk content',
                                  username=''):
         seafile_api.post_empty_file(self.repo.id, parent_dir, file_name, username)
 
@@ -174,7 +174,7 @@ class Fixtures(Exam):
         fd, tmp_file = mkstemp()
 
         try:
-            bytesWritten = os.write(fd, 'junk content')
+            bytesWritten = os.write(fd, content)
         except:
             bytesWritten = -1
         finally:

@@ -47,11 +47,11 @@
 
 {% block extra_script %}
 <script type="text/javascript">
-$('#add-inst-btn').click(function() {
+$('#add-inst-btn').on('click', function() {
     $('#add-inst-form').modal();
     $('#simplemodal-container').css({'width':'auto', 'height':'auto'});
 });
-$('#add-inst-form').submit(function() {
+$('#add-inst-form').on('submit', function() {
     var form = $(this),
     form_id = $(this).attr('id'),
         name = $.trim(form.find('[name="name"]').val());

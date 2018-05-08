@@ -5,8 +5,7 @@ Views which allow users to create and activate accounts.
 
 
 from django.shortcuts import redirect
-from django.shortcuts import render_to_response
-from django.template import RequestContext
+from django.shortcuts import render
 from django.http import Http404
 
 from registration.backends import get_backend
@@ -87,13 +86,13 @@ def activate(request, backend,
 
     if extra_context is None:
         extra_context = {}
-    context = RequestContext(request)
+    context = {}
     for key, value in extra_context.items():
         context[key] = callable(value) and value() or value
 
-    return render_to_response(template_name,
+    return render(request, template_name,
                               kwargs,
-                              context_instance=context)
+                              context=context)
 
 
 def register(request, backend, success_url=None, form_class=None,
@@ -201,12 +200,13 @@ def register(request, backend, success_url=None, form_class=None,
             else:
                 return redirect(success_url)
     else:
-        userid = request.REQUEST.get('userid', '')
+        userid = request.GET.get('userid', '')
         form = form_class(initial={'userid': userid })
 
     if extra_context is None:
         extra_context = {}
-    context = RequestContext(request)
+    from django.template import RequestContext
+    context = {}
     for key, value in extra_context.items():
         context[key] = callable(value) and value() or value
 
@@ -214,9 +214,9 @@ def register(request, backend, success_url=None, form_class=None,
     if src:
         form = form_class(initial={'email': src})
 
-    return render_to_response(template_name, {
-        'form': form,
-        'min_len': config.USER_PASSWORD_MIN_LENGTH,
-        'strong_pwd_required': config.USER_STRONG_PASSWORD_REQUIRED,
-        'level': config.USER_PASSWORD_STRENGTH_LEVEL,
-    }, context_instance=context)
+    context['form'] = form
+    context['min_len'] = config.USER_PASSWORD_MIN_LENGTH
+    context['strong_pwd_required'] = config.USER_STRONG_PASSWORD_REQUIRED
+    context['level'] = config.USER_PASSWORD_STRENGTH_LEVEL
+
+    return render(request, template_name, context)

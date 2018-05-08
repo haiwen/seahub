@@ -6,11 +6,9 @@ from django import forms
 from django.forms import ModelForm, Form
 from django.utils.translation import ugettext_lazy as _
 
-from seahub.two_factor import devices_for_user, match_token
 from seahub.two_factor.oath import totp
 from seahub.two_factor.models import (Device, TOTPDevice, StaticDevice,
-                                            PhoneDevice)
-
+                                      PhoneDevice, devices_for_user, match_token)
 
 from .models import get_available_methods
 from .utils import totp_digits

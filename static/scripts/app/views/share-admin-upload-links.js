@@ -12,7 +12,7 @@ define([
 
     var ShareAdminUploadLinksView = Backbone.View.extend({
 
-        id: 'share-admin-upload-links',
+        el: '.main-panel',
 
         template: _.template($('#share-admin-upload-links-tmpl').html()),
 
@@ -20,11 +20,12 @@ define([
             this.links = new ShareAdminUploadLinkCollection();
             this.listenTo(this.links, 'add', this.addOne);
             this.listenTo(this.links, 'reset', this.reset);
-            this.render();
         },
 
-        render: function() {
-            this.$el.html(this.template({'can_generate_share_link': app.pageOptions.can_generate_share_link}));
+        renderMainCon: function() {
+            this.$mainCon = $('<div class="main-panel-main" id="share-admin-upload-links"></div>').html(this.template());
+            this.$el.append(this.$mainCon);
+
             this.$table = this.$('table');
             this.$tableBody = $('tbody', this.$table);
             this.$loadingTip = this.$('.loading-tip');
@@ -32,15 +33,11 @@ define([
         },
 
         hide: function() {
-            this.$el.detach();
-            this.attached = false;
+            this.$mainCon.detach();
         },
 
         show: function() {
-            if (!this.attached) {
-                this.attached = true;
-                $("#right-panel").html(this.$el);
-            }
+            this.renderMainCon();
             this.showContent();
         },
 

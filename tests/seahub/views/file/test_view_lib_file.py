@@ -7,6 +7,7 @@ from django.core.urlresolvers import reverse
 from seahub.test_utils import BaseTestCase
 
 class ViewLibFileTest(BaseTestCase):
+
     def setUp(self):
         # self.login_as(self.user)
         pass
@@ -79,14 +80,8 @@ class ViewLibFileTest(BaseTestCase):
         self.assertEqual(200, resp.status_code)
         self.assertTemplateUsed(resp, 'view_file_text.html')
         assert resp.context['filetype'].lower() == 'text'
-        assert resp.context['err'] == ''
         assert resp.context['file_content'] == ''
         assert resp.context['encoding'] == 'utf-8'
-
-        # token for text file is one time only
-        raw_path = resp.context['raw_path']
-        r = requests.get(raw_path)
-        self.assertEqual(400, r.status_code)
 
     def test_ms_doc_without_office_converter(self):
         self.login_as(self.user)
@@ -97,16 +92,7 @@ class ViewLibFileTest(BaseTestCase):
 
         resp = self.client.get(url)
         self.assertEqual(200, resp.status_code)
-        self.assertTemplateUsed(resp, 'view_file_unknown.html')
-        assert resp.context['filetype'].lower() == 'unknown'
-        assert resp.context['err'] == ''
-
-        # token for doc file is one time only
-        raw_path = resp.context['raw_path']
-        r = requests.get(raw_path)
-        self.assertEqual(200, r.status_code)
-        r = requests.get(raw_path)
-        self.assertEqual(400, r.status_code)
+        self.assertTemplateUsed(resp, 'view_file_base.html')
 
     # @patch('seahub.views.file.HAS_OFFICE_CONVERTER', True)
     # @patch('seahub.views.file.can_preview_file')
@@ -146,7 +132,6 @@ class ViewLibFileTest(BaseTestCase):
         self.assertEqual(200, resp.status_code)
         self.assertTemplateUsed(resp, 'view_file_pdf.html')
         assert resp.context['filetype'].lower() == 'pdf'
-        assert resp.context['err'] == ''
 
         # token for doc file is one time only
         raw_path = resp.context['raw_path']
@@ -169,7 +154,6 @@ class ViewLibFileTest(BaseTestCase):
         self.assertEqual(200, resp.status_code)
         self.assertTemplateUsed(resp, 'view_file_image.html')
         assert resp.context['filetype'].lower() == 'image'
-        assert resp.context['err'] == ''
         assert resp.context['img_next'] == '/foo2.jpg'
         assert resp.context['img_prev'] is None
 
@@ -191,7 +175,6 @@ class ViewLibFileTest(BaseTestCase):
         self.assertEqual(200, resp.status_code)
         self.assertTemplateUsed(resp, 'view_file_video.html')
         assert resp.context['filetype'].lower() == 'video'
-        assert resp.context['err'] == ''
 
         raw_path = resp.context['raw_path']
         for _ in range(3):      # token for video is not one time only

@@ -8,7 +8,7 @@ define([
     'use strict';
 
     var sideNavView = Backbone.View.extend({
-        el: '#side-nav',
+        el: '.side-panel',
 
         template: _.template($("#side-nav-tmpl").html()),
         enableModTemplate: _.template($("#myhome-mods-enable-form-tmpl").html()),
@@ -25,16 +25,17 @@ define([
                 'show_group_list': this.group_expanded, // when cur_tab is not 'group'
                 'groups': app.pageOptions.groups,
                 'mods_enabled': app.pageOptions.user_mods_enabled,
+                'show_share_admin': false, // show 'share admin' nav list or not
                 'can_add_repo': app.pageOptions.can_add_repo,
                 'can_generate_share_link': app.pageOptions.can_generate_share_link,
                 'can_generate_upload_link': app.pageOptions.can_generate_upload_link
             };
             var _this = this;
-            $('#js-toggle-side-nav').click(function() {
+            $('#js-toggle-side-nav').on('click', function() {
                 _this.show();
                 return false;
             });
-            $(window).resize(function() {
+            $(window).on('resize', function() {
                 if ($(window).width() >= 768) {
                     _this.show();
                 }
@@ -42,7 +43,7 @@ define([
         },
 
         render: function() {
-            this.$el.html(this.template(this.data));
+            this.$('#side-nav').html(this.template(this.data));
             return this;
         },
 
@@ -50,8 +51,8 @@ define([
             'click #group-nav a:first': 'toggleGroupList',
             'click #share-admin-nav a:first': 'toggleShareAdminList',
             'click #enable-mods': 'enableMods',
-            'click .js-close-side-nav': 'closeNav',
-            'click li > a': 'visitLink',
+            'click .js-close': 'close',
+            'click #side-nav li > a': 'visitLink',
             'click .js-about': 'showAbout',
 
             // for touch devices
@@ -95,15 +96,11 @@ define([
             form.modal({focus:false});
             $('#simplemodal-container').css('height', 'auto');
 
-            $('.checkbox-orig', form).click(function() {
-                $(this).parent().toggleClass('checkbox-checked');
-            });
-
             var checkbox = $('[name="personal_wiki"]'),
                 original_checked = checkbox.prop('checked'),
                _this = this;
 
-            form.submit(function() {
+            form.on('submit', function() {
                 var cur_checked = checkbox.prop('checked');
                 if (cur_checked == original_checked) {
                     return false;
@@ -203,7 +200,7 @@ define([
             this.$el.css({ 'left':'-300px' });
         },
 
-        closeNav: function() {
+        close: function() {
             this.hide();
             return false;
         },

@@ -1,7 +1,7 @@
 {% extends "base_wide_page.html" %}
 
 {% load seahub_tags avatar_tags i18n %}
-{% load url from future %}
+
 
 {% block extra_style %}
 <style type="text/css">
@@ -91,7 +91,7 @@ addConfirmTo($('#repo-revert'), {
     'post':true
 });
 
-$('.restore-file, .restore-dir').click(function() {
+$('.restore-file, .restore-dir').on('click', function() {
     var _this = $(this),
         commit_id = _this.attr('data-commit_id'),
         path = _this.attr('data-commit_path'),

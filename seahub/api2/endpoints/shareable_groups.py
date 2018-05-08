@@ -54,6 +54,6 @@ class ShareableGroups(APIView):
             avatar_size = GROUP_AVATAR_DEFAULT_SIZE
 
         result = [get_group_info(request, g.id, avatar_size)
-                for g in groups]
+                for g in groups if g.parent_group_id == 0]
 
         return Response(result)

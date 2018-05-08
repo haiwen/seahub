@@ -1,6 +1,6 @@
 {% extends 'view_file_base.html' %}
 {% load i18n %}
-{% load url from future %}
+
 
 {% block extra_style %}{{block.super}}
 <link rel="stylesheet" type="text/css" media="print" href="{{ MEDIA_URL }}css/print_for_file_view.css" />
@@ -54,7 +54,7 @@
     $('#md-view').html(marked('{{ file_content|escapejs }}')).children(':first').css('margin-top', '0');
     {% endifnotequal %}
 
-    $('#file-enc').change(function() {
+    $('#file-enc').on('change', function() {
         var file_enc = $(this).val();
         var s = location.search;
         if (s.indexOf('?') == -1) {

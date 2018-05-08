@@ -28,11 +28,10 @@ from seahub.utils.ip import get_remote_ip
 from seahub.profile.models import Profile
 
 from seahub.two_factor import login as two_factor_login
-from seahub.two_factor import user_has_device
-from seahub.two_factor.models import StaticDevice, TOTPDevice, PhoneDevice
+from seahub.two_factor.models import (StaticDevice, TOTPDevice, default_device,
+                                      user_has_device)
 
 from seahub.two_factor.forms import TOTPTokenAuthForm, BackupTokenAuthForm, AuthenticationTokenForm
-from seahub.two_factor.utils import default_device
 from seahub.two_factor.views.utils import class_view_decorator
 
 from seahub.utils.auth import get_login_bg_image_path

@@ -10,7 +10,7 @@ define([
 
     var ShareAdminFoldersView = Backbone.View.extend({
 
-        id: 'share-admin-folders',
+        el: '.main-panel',
 
         template: _.template($('#share-admin-folders-tmpl').html()),
 
@@ -18,10 +18,9 @@ define([
             this.folders = new ShareAdminFolderCollection();
             this.listenTo(this.folders, 'add', this.addOne);
             this.listenTo(this.folders, 'reset', this.reset);
-            this.render();
 
             var _this = this;
-            $(document).click(function(e) {
+            $(document).on('click', function(e) {
                 var target = e.target || event.srcElement;
                 var $select = _this.$('.perm-select:visible');
                 if ($select.length && !$select.is(target)) {
@@ -32,7 +31,7 @@ define([
         },
 
         events: {
-            'click .by-name': 'sortByName'
+            'click #share-admin-folders .by-name': 'sortByName'
         },
 
         sortByName: function() {
@@ -57,8 +56,10 @@ define([
             return false;
         },
 
-        render: function() {
-            this.$el.html(this.template());
+        renderMainCon: function() {
+            this.$mainCon = $('<div class="main-panel-main" id="share-admin-folders"></div>').html(this.template());
+            this.$el.append(this.$mainCon);
+
             this.$table = this.$('table');
             this.$sortIcon = $('.by-name .sort-icon', this.$table);
             this.$tableBody = $('tbody', this.$table);
@@ -67,15 +68,12 @@ define([
         },
 
         hide: function() {
-            this.$el.detach();
-            this.attached = false;
+            this.$mainCon.detach();
         },
 
         show: function() {
-            if (!this.attached) {
-                this.attached = true;
-                $("#right-panel").html(this.$el);
-            }
+            this.renderMainCon();
+
             this.showContent();
         },
 

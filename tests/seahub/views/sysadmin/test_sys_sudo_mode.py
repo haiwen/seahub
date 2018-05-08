@@ -1,6 +1,7 @@
 from django.core.urlresolvers import reverse
 
-from constance import config
+import pytest
+pytestmark = pytest.mark.django_db
 
 from seahub.test_utils import BaseTestCase
 
@@ -8,15 +9,17 @@ from seahub.test_utils import BaseTestCase
 class SysSettingsTest(BaseTestCase):
     def setUp(self):
         self.clear_cache()      # make sure cache is clean
+        from constance import config
+        self.config = config
 
-        self.old_config = config.LOGIN_ATTEMPT_LIMIT
-        config.LOGIN_ATTEMPT_LIMIT = 1
+        self.old_config = self.config.LOGIN_ATTEMPT_LIMIT
+        self.config.LOGIN_ATTEMPT_LIMIT = 1
 
         self.url = reverse('sys_sudo_mode')
         self.login_as(self.admin)
 
     def tearDown(self):
-        config.LOGIN_ATTEMPT_LIMIT = self.old_config
+        self.config.LOGIN_ATTEMPT_LIMIT = self.old_config
         self.clear_cache()
 
     def test_can_get(self):

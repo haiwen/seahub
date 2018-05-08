@@ -11,7 +11,6 @@ from seaserv import FILE_SERVER_ROOT, FILE_SERVER_PORT, SERVICE_URL
 PROJECT_ROOT = os.path.join(os.path.dirname(__file__), os.pardir)
 
 DEBUG = False
-TEMPLATE_DEBUG = DEBUG
 
 CLOUD_MODE = False
 
@@ -101,13 +100,6 @@ STATICFILES_FINDERS = (
 # Make this unique, and don't share it with anybody.
 SECRET_KEY = 'n*v0=jz-1rz@(4gx^tf%6^e7c&um@2)g-l=3_)t@19a69n1nv6'
 
-# List of callables that know how to import templates from various sources.
-TEMPLATE_LOADERS = (
-    'django.template.loaders.filesystem.Loader',
-    'django.template.loaders.app_directories.Loader',
-#     'django.template.loaders.eggs.Loader',
-)
-
 # Order is important
 MIDDLEWARE_CLASSES = (
     'django.contrib.sessions.middleware.SessionMiddleware',
@@ -126,6 +118,7 @@ MIDDLEWARE_CLASSES = (
     'seahub.trusted_ip.middleware.LimitIpMiddleware',
 )
 
+
 SITE_ROOT_URLCONF = 'seahub.urls'
 ROOT_URLCONF = 'seahub.utils.rooturl'
 SITE_ROOT = '/'
@@ -133,13 +126,30 @@ SITE_ROOT = '/'
 # Python dotted path to the WSGI application used by Django's runserver.
 WSGI_APPLICATION = 'seahub.wsgi.application'
 
-TEMPLATE_DIRS = (
-    # Put strings here, like "/home/html/django_templates" or "C:/www/django/templates".
-    # Always use forward slashes, even on Windows.
-    # Don't forget to use absolute paths, not relative paths.
-    os.path.join(PROJECT_ROOT, '../../seahub-data/custom/templates'),
-    os.path.join(PROJECT_ROOT, 'seahub/templates'),
-)
+TEMPLATES = [
+    {
+        'BACKEND': 'django.template.backends.django.DjangoTemplates',
+        'DIRS': [
+            os.path.join(PROJECT_ROOT, '../../seahub-data/custom/templates'),
+            os.path.join(PROJECT_ROOT, 'seahub/templates'),
+        ],
+        'APP_DIRS': True,
+        'OPTIONS': {
+            'context_processors': [
+                'django.template.context_processors.i18n',
+                'django.template.context_processors.media',
+                'django.template.context_processors.static',
+                'django.template.context_processors.request',
+                'django.contrib.messages.context_processors.messages',
+
+                'seahub.auth.context_processors.auth',
+                'seahub.base.context_processors.base',
+                'seahub.base.context_processors.debug',
+            ],
+        },
+    },
+]
+
 
 LANGUAGES = (
     # ('bg', gettext_noop(u'български език')),
@@ -183,23 +193,12 @@ LOCALE_PATHS = (
     os.path.join(PROJECT_ROOT, 'seahub/trusted_ip/locale'),
 )
 
-TEMPLATE_CONTEXT_PROCESSORS = (
-    'django.contrib.auth.context_processors.auth',
-    'seahub.base.context_processors.debug',
-    'django.core.context_processors.i18n',
-    'django.core.context_processors.media',
-    'django.core.context_processors.static',
-    # 'djblets.util.context_processors.siteRoot',
-    'django.core.context_processors.request',
-    'django.contrib.messages.context_processors.messages',
-    'seahub.base.context_processors.base',
-)
-
 INSTALLED_APPS = (
     'django.contrib.contenttypes',
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'django.contrib.auth',
 
     'registration',
     'captcha',
@@ -255,7 +254,8 @@ AUTHENTICATION_BACKENDS = (
 ENABLE_OAUTH = False
 
 LOGIN_REDIRECT_URL = '/profile/'
-LOGIN_URL = SITE_ROOT + 'accounts/login'
+LOGIN_URL = '/accounts/login/'
+LOGOUT_URL = '/accounts/logout/'
 LOGOUT_REDIRECT_URL = None
 
 ACCOUNT_ACTIVATION_DAYS = 7
@@ -355,7 +355,6 @@ ENABLE_FILE_COMMENT = True
 # File preview
 FILE_PREVIEW_MAX_SIZE = 30 * 1024 * 1024
 OFFICE_PREVIEW_MAX_SIZE = 2 * 1024 * 1024
-USE_PDFJS = True
 FILE_ENCODING_LIST = ['auto', 'utf-8', 'gbk', 'ISO-8859-1', 'ISO-8859-5']
 FILE_ENCODING_TRY_LIST = ['utf-8', 'gbk']
 HIGHLIGHT_KEYWORD = False # If True, highlight the keywords in the file when the visit is via clicking a link in 'search result' page.
@@ -475,8 +474,8 @@ LOGO_HEIGHT = 32
 CUSTOM_LOGO_PATH = 'custom/mylogo.png'
 CUSTOM_FAVICON_PATH = 'custom/favicon.ico'
 
-# css to modify the seafile css (e.g. css/my_site.css)
-BRANDING_CSS = ''
+# Enable custom css to modify the seafile css
+ENABLE_BRANDING_CSS = False
 
 # Using Django to server static file. Set to `False` if deployed behide a web
 # server.
@@ -771,4 +770,10 @@ CONSTANCE_CONFIG = {
 
     'TEXT_PREVIEW_EXT': (TEXT_PREVIEW_EXT, ''),
     'ENABLE_SHARE_TO_ALL_GROUPS': (ENABLE_SHARE_TO_ALL_GROUPS, ''),
+
+    'SITE_NAME': (SITE_NAME, ''),
+    'SITE_TITLE': (SITE_TITLE, ''),
+
+    'ENABLE_BRANDING_CSS': (ENABLE_BRANDING_CSS, ''),
+    'CUSTOM_CSS': ('', ''),
 }

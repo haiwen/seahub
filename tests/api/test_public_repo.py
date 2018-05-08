@@ -1,6 +1,8 @@
 import json
 
-from constance import config
+import pytest
+pytestmark = pytest.mark.django_db
+
 from seaserv import seafile_api, ccnet_threaded_rpc
 
 from seahub.test_utils import BaseTestCase
@@ -8,13 +10,16 @@ from seahub.test_utils import BaseTestCase
 
 class RepoPublicTest(BaseTestCase):
     def setUp(self):
+        from constance import config
+        self.config = config
+
         self.repo_id = self.create_repo(name='test-admin-repo', desc='',
                                         username=self.admin.username,
                                         passwd=None)
         self.url = '/api2/shared-repos/%s/' % self.repo_id
         self.user_repo_url = '/api2/shared-repos/%s/' % self.repo.id
 
-        config.ENABLE_USER_CREATE_ORG_REPO = 1
+        self.config.ENABLE_USER_CREATE_ORG_REPO = 1
 
     def tearDown(self):
         self.remove_repo(self.repo_id)
@@ -48,9 +53,9 @@ class RepoPublicTest(BaseTestCase):
         assert 'success' in json_resp
 
     def test_admin_can_set_pub_repo_when_setting_disalbed(self):
-        assert bool(config.ENABLE_USER_CREATE_ORG_REPO) is True
-        config.ENABLE_USER_CREATE_ORG_REPO = False
-        assert bool(config.ENABLE_USER_CREATE_ORG_REPO) is False
+        assert bool(self.config.ENABLE_USER_CREATE_ORG_REPO) is True
+        self.config.ENABLE_USER_CREATE_ORG_REPO = False
+        assert bool(self.config.ENABLE_USER_CREATE_ORG_REPO) is False
 
         self.login_as(self.admin)
 
@@ -60,9 +65,9 @@ class RepoPublicTest(BaseTestCase):
         assert 'success' in json_resp
 
     def test_user_can_not_set_pub_repo_when_setting_disalbed(self):
-        assert bool(config.ENABLE_USER_CREATE_ORG_REPO) is True
-        config.ENABLE_USER_CREATE_ORG_REPO = False
-        assert bool(config.ENABLE_USER_CREATE_ORG_REPO) is False
+        assert bool(self.config.ENABLE_USER_CREATE_ORG_REPO) is True
+        self.config.ENABLE_USER_CREATE_ORG_REPO = False
+        assert bool(self.config.ENABLE_USER_CREATE_ORG_REPO) is False
 
         self.login_as(self.user)
 

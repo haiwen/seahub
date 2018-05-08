@@ -29,5 +29,5 @@ class EditProfileTest(BaseTestCase):
             'nickname': 'new nickname'
         })
         self.assertEqual(302, resp.status_code)
-        self.assertRegexpMatches(resp['Location'], r'http://testserver/profile/')
+        self.assertRegexpMatches(resp['Location'], r'/profile/')
         assert email2nickname(self.tmp_user.username) == 'new nickname'

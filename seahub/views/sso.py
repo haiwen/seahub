@@ -8,8 +8,8 @@ from seahub.auth import REDIRECT_FIELD_NAME
 
 def sso(request):
     # Ensure the user-originating redirection url is safe.
-    if REDIRECT_FIELD_NAME in request.REQUEST:
-        next_page = request.REQUEST[REDIRECT_FIELD_NAME]
+    if REDIRECT_FIELD_NAME in request.GET:
+        next_page = request.GET[REDIRECT_FIELD_NAME]
         if not is_safe_url(url=next_page, host=request.get_host()):
             next_page = settings.LOGIN_REDIRECT_URL
     else:

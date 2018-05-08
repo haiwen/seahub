@@ -85,12 +85,12 @@
 <script type="text/javascript">
 {% include 'sysadmin/sys_org_set_quota_js.html' %}
 
-$('#add-user-btn').click(function() {
+$('#add-user-btn').on('click', function() {
     $('#add-user-form').modal();
     $('#simplemodal-container').css({'width':'auto', 'height':'auto'});
 });
 
-$('#add-user-form .show-or-hide-password').click(function() {
+$('#add-user-form .show-or-hide-password').on('click', function() {
     var icon = $(this),
         passwd_input = $('input[name=password1], input[name=password2]', $('#add-user-form'));
     icon.toggleClass('icon-eye icon-eye-slash');
@@ -103,7 +103,7 @@ $('#add-user-form .show-or-hide-password').click(function() {
     }
 });
 
-$('#add-user-form .generate-random-password').click(function() {
+$('#add-user-form .generate-random-password').on('click', function() {
     var form = $('#add-user-form');
     var random_password = '';
     var possible = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789abcdefghijklmnopqrstuvwxyz0123456789';
@@ -116,7 +116,7 @@ $('#add-user-form .generate-random-password').click(function() {
     .removeClass('icon-eye').addClass('icon-eye-slash');
 });
 
-$('#add-user-form').submit(function() {
+$('#add-user-form').on('submit', function() {
     var form = $(this),
         form_id = $(this).attr('id'),
         org_id = {{ org.org_id }},
@@ -161,7 +161,7 @@ $('#add-user-form').submit(function() {
         },
         error: function(jqXHR, textStatus, errorThrown) {
             if (jqXHR.responseText) {
-                apply_form_error(form_id, $.parseJSON(jqXHR.responseText).error_msg);
+                apply_form_error(form_id, JSON.parse(jqXHR.responseText).error_msg);
             } else {
                 apply_form_error(form_id, "{% trans "Failed. Please check the network." %}");
             }
@@ -171,7 +171,7 @@ $('#add-user-form').submit(function() {
     return false;
 });
 
-$('.remove-user-btn').click(function() {
+$('.remove-user-btn').on('click', function() {
     var _this = $(this),
         uid = _this.parents('tr').attr('data-userid'),
         url = _this.parents('tr').attr('data-url'),
@@ -207,21 +207,12 @@ addConfirmTo($('.reset-user-btn'), {
     'post': true // post request
 });
 
-$('tr:gt(0)').hover(
-    function() {
-        $(this).find('.user-status-edit-icon').removeClass('vh');
-    },
-    function() {
-        $(this).find('.user-status-edit-icon').addClass('vh');
-    }
-);
-
-$('.user-status-edit-icon').click(function() {
+$('.user-status-edit-icon').on('click', function() {
     $(this).parent().addClass('hide');
     $(this).parent().next().removeClass('hide'); // show 'select'
 });
 
-$('.user-status-select').change(function() {
+$('.user-status-select').on('change', function() {
     var select = $(this),
         select_val = select.val(),
         uid = select.parents('tr').attr('data-userid'),
@@ -257,7 +248,7 @@ $('.user-status-select').change(function() {
     });
 });
 
-$(document).click(function(e) {
+$(document).on('click', function(e) {
     var target = e.target || event.srcElement;
     // target can't be edit-icon
     if (!$('.user-status-edit-icon, .user-status-select').is(target)) {

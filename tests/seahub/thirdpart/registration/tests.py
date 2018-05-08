@@ -1,5 +1,5 @@
 from django.core import mail
-from django.contrib.sites.models import RequestSite
+from django.contrib.sites.shortcuts import get_current_site
 from django.test import TestCase
 from django.test.client import RequestFactory
 
@@ -12,7 +12,7 @@ class RegistrationTest(TestCase):
 
     def setUp(self):
         self.request = RequestFactory().get('/accounts/signup/')
-        self.site = RequestSite(self.request)
+        self.site = get_current_site(self.request)
 
     def tearDown(self):
         self.request = None

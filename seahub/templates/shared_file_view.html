@@ -19,6 +19,7 @@ body {
 </style>
 {% endblock %}
 
+{% block main_class %}ovhd d-flex fd-col{% endblock %}
 {% block main_content %}
     {% if traffic_over_limit %}
         <p class="strip-tip">{% trans "File download is disabled: the share link traffic of owner is used up." %}</p>
@@ -90,21 +91,8 @@ $(function () {
     $('.js-file-info', $hd).css({'max-width': $hd.width() - $('.js-file-op', $hd).outerWidth(true) - 10});
 });
 
-{% if filetype == 'PDF' and use_pdfjs and not err %}
-{% elif filetype == 'Image' and not err %}
-{% else %}
-function setFileViewAreaHeight() {
-    $('body').css({'overflow':'auto'});
-    var file_view = $('#file-view').css({'height': 'auto'});
-    if ($(window).height() > file_view.outerHeight(true) + file_view.offset().top) {
-        file_view.outerHeight($(window).height() - file_view.offset().top);
-    }
-}
-$(window).load(setFileViewAreaHeight).resize(setFileViewAreaHeight);
-{% endif %}
-
 {% if request.user.is_authenticated and request.user.username != shared_by and permissions.can_download %}
-$('#save').click(function() {
+$('#save').on('click', function() {
     var $form = $('#file-save-form');
     $form.modal({appendTo:'#main', autoResize:true, focus:false});
     $('#simplemodal-container').css({'width':'auto', 'height':'auto'});
@@ -126,7 +114,7 @@ $('#save').click(function() {
         }
     });
 });
-$('#file-save-form').submit(function() {
+$('#file-save-form').on('submit', function() {
     var $form = $(this),
         dst_repo = $('[name="dst_repo"]', $form).val(),
         dst_path = $('[name="dst_path"]', $form).val();
@@ -157,10 +145,10 @@ $('#file-save-form').submit(function() {
 
 {% if not permissions.can_download %}
 $(document)
-.contextmenu(function() {
+.on('contextmenu', function() {
     return false;
 })
-.bind('keydown', function(e) {
+.on('keydown', function(e) {
     // prevent ctrl + s/p/a/c, i.e, 'save', 'print', 'select all', 'copy'
     if (e.ctrlKey && (e.which == 83 || e.which == 80 || e.which == 65 || e.which == 67)) {
         e.preventDefault();

@@ -2,8 +2,7 @@
 from django.core.cache import cache
 from django.conf import settings
 from django.http import Http404
-from django.shortcuts import render_to_response
-from django.template import RequestContext
+from django.shortcuts import render
 
 from seahub.share.models import FileShare, UploadLinkShare
 from seahub.utils import normalize_cache_key, is_pro_version
@@ -31,9 +30,9 @@ def share_link_audit(func):
             return func(request, fileshare, *args, **kwargs)
 
         if request.method == 'GET':
-            return render_to_response('share/share_link_audit.html', {
+            return render(request, 'share/share_link_audit.html', {
                 'token': token,
-            }, context_instance=RequestContext(request))
+            })
         elif request.method == 'POST':
             code = request.POST.get('code', '')
             email = request.POST.get('email', '')
@@ -47,12 +46,12 @@ def share_link_audit(func):
                 cache.delete(cache_key)
                 return func(request, fileshare, *args, **kwargs)
             else:
-                return render_to_response('share/share_link_audit.html', {
+                return render(request, 'share/share_link_audit.html', {
                     'err_msg': 'Invalid token, please try again.',
                     'email': email,
                     'code': code,
                     'token': token,
-                }, context_instance=RequestContext(request))
+                })
         else:
             assert False, 'TODO'
 

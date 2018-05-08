@@ -146,7 +146,7 @@ define([
         prepareOtherReposTree: function(options) {
             var _this = this;
 
-            $('#other-repos .hd').click(function() {
+            $('#other-repos .hd').on('click', function() {
                 var $span = $('span', $(this)),
                     $form = $('#mv-form'),
                     $loading_tip = $(this).next(),

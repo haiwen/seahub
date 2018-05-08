@@ -63,7 +63,7 @@
 {% block extra_script %}
 <script type="text/javascript">
 // rm a single invitation
-$('.rm').click(function() {
+$('.rm').on('click', function() {
     var _this = $(this);
     $.ajax({
         url: '{% url 'sys_invitation_remove' %}',
@@ -81,7 +81,7 @@ $('.rm').click(function() {
 });
 
 // rm all expired invitations
-$("#rm-all-expired").click(function() {
+$("#rm-all-expired").on('click', function() {
     $.ajax({
         url: '{% url 'api-v2.1-admin-invitations' %}?type=expired',
         type: 'DELETE',

@@ -38,8 +38,6 @@ define([
         render: function() {
             var dir = this.dir;
             var dirent_path = Common.pathJoin([dir.path, this.model.get('obj_name')]);
-            var is_pro = app.pageOptions.is_pro;
-            var file_audit_enabled = app.pageOptions.file_audit_enabled;
             var file_icon_size = Common.isHiDPI() ? 48 : 24;
             var template;
             if (this.model.get('is_dir')) {
@@ -55,16 +53,18 @@ define([
                 icon_url: this.model.getIconUrl(file_icon_size),
                 url: this.model.getWebUrl(),
                 download_url: this.model.getDownloadUrl(),
+
                 category: dir.category,
                 repo_id: dir.repo_id,
                 is_repo_owner: dir.is_repo_owner,
                 is_virtual: dir.is_virtual,
+                repo_encrypted: dir.encrypted,
                 has_been_shared_out: dir.has_been_shared_out,
+
                 can_generate_share_link: app.pageOptions.can_generate_share_link,
                 can_generate_upload_link: app.pageOptions.can_generate_upload_link,
-                is_pro: is_pro,
-                file_audit_enabled: file_audit_enabled,
-                repo_encrypted: dir.encrypted
+                is_pro: app.pageOptions.is_pro,
+                file_audit_enabled: app.pageOptions.file_audit_enabled
             }));
             this.$('.file-locked-icon').attr('title', gettext("locked by {placeholder}").replace('{placeholder}', this.model.get('lock_owner_name')));
             this.dropdown = new DropdownView({
@@ -115,10 +115,12 @@ define([
         clickItem: function(e) {
             var target =  e.target || event.srcElement;
             if (this.$('td').is(target)) {
-                if ($('#dirent-details').css('right') == '0px') { // after `#dirent-details` is shown
+                if (this.dirView.direntDetailsView.$el.is(':visible')) {
                     this.viewDetails();
                 }
-                if (this.model.get('is_file') && $('#file-comments').css('right') == '0px') {
+
+                if (this.model.get('is_file') &&
+                    this.dirView.fileCommentsView.$el.is(':visible')) {
                     this.viewFileComments();
                 }
             }
@@ -151,7 +153,6 @@ define([
                 $dirents_op.hide();
                 $curDirOps.show();
             }
-            dirView.updateDirOpBarUI();
             if (checked_num == dirView.$('tr:gt(0)').length) {
                 $toggle_all_checkbox.prop('checked', true);
             } else {
@@ -281,7 +282,7 @@ define([
                 },
                 error: function(xhr) {
                     if (xhr.responseText) {
-                        Common.feedback($.parseJSON(xhr.responseText).error||$.parseJSON(xhr.responseText).error_msg, 'error');
+                        Common.feedback(JSON.parse(xhr.responseText).error||JSON.parse(xhr.responseText).error_msg, 'error');
                     } else {
                         Common.feedback(gettext("Please check the network."), 'error');
                     }
@@ -347,7 +348,7 @@ define([
         },
 
         viewImageWithPopup: function() {
-            var index = $('.img-name-link', this.dirView.$dirent_list).index(this.$('.img-name-link'));
+            var index = $('.img-name-link', this.dirView.$table).index(this.$('.img-name-link'));
             $.magnificPopup.open(this.dirView.magnificPopupOptions, index);
         },
 
@@ -379,7 +380,7 @@ define([
         del: function() {
             var _this = this;
             if (this.model.get('is_img')) {
-                var index = $('.img-name-link', this.dirView.$dirent_list).index(this.$('.img-name-link'));
+                var index = $('.img-name-link', this.dirView.$table).index(this.$('.img-name-link'));
             }
 
             var dirent_name = this.model.get('obj_name');
@@ -425,10 +426,10 @@ define([
             var $input = $('[name="newname"]', form);
             var dot_index = dirent_name.lastIndexOf('.');
             if (!this.model.get('is_dir') && dot_index != -1) {
-                $input[0].focus();
+                $input.trigger('focus');
                 $input[0].setSelectionRange(0, dot_index);
             } else {
-                $input.select();
+                $input.trigger('select');
             }
 
             this._hideMenu();
@@ -443,7 +444,7 @@ define([
                 _this.$el.attr('draggable', true);
 
                 if (_this.model.get('is_img')) {
-                    var index = $('.img-name-link', _this.dirView.$dirent_list).index(_this.$('.img-name-link'));
+                    var index = $('.img-name-link', _this.dirView.$table).index(_this.$('.img-name-link'));
                     _this.dirView.updateMagnificPopupOptions({
                         'op': 'update-item',
                         'index': index,
@@ -466,10 +467,10 @@ define([
                 _this.$el.attr('draggable', true);
                 return false; // stop bubbling (to 'doc click to hide .hidden-op')
             };
-            $('.cancel', form).click(cancelRename);
+            $('.cancel', form).on('click', cancelRename);
 
             var _this = this;
-            form.submit(function() {
+            form.on('submit', function() {
                 var new_name = $.trim($('[name="newname"]', form).val());
                 var err_msg;
 
@@ -496,7 +497,7 @@ define([
                 var after_op_error = function(xhr) {
                     var err_msg;
                     if (xhr.responseText) {
-                        err_msg = $.parseJSON(xhr.responseText).error_msg;
+                        err_msg = JSON.parse(xhr.responseText).error_msg;
                     } else {
                         err_msg = gettext("Failed. Please check the network.");
                     }
@@ -521,7 +522,7 @@ define([
                 'op_type': op_type
             };
             if (this.model.get('is_img') && op_type == 'mv') {
-                var index = $('.img-name-link', this.dirView.$dirent_list).index(this.$('.img-name-link'));
+                var index = $('.img-name-link', this.dirView.$table).index(this.$('.img-name-link'));
                 $.extend(options, {
                     'dirView': this.dirView,
                     'imgIndex': index
@@ -573,8 +574,12 @@ define([
         },
 
         viewDetails: function() {
-            var _this = this;
+            if (this.dirView.fileCommentsView.$el.is(':visible')) {
+                this.dirView.fileCommentsView.hide();
+            }
 
+            var _this = this;
+            var detailsView = this.dirView.direntDetailsView;
             var file_icon_size = Common.isHiDPI() ? 48 : 24;
             var data = {
                 repo_id: this.dir.repo_id,
@@ -596,7 +601,6 @@ define([
                 });
             }
 
-            var detailsView = this.dirView.direntDetailsView;
             detailsView.show(data);
 
             if (this.model.get('perm') == 'rw') {
@@ -618,7 +622,7 @@ define([
                         error: function(xhr) {
                             var error_msg;
                             if (xhr.responseText) {
-                                var parsed_resp = $.parseJSON(xhr.responseText);
+                                var parsed_resp = JSON.parse(xhr.responseText);
                                 error_msg = parsed_resp.error_msg || parsed_resp.detail;
                             } else {
                                 error_msg = gettext("Failed. Please check the network.");
@@ -659,7 +663,7 @@ define([
                     error: function(xhr) {
                         var error_msg;
                         if (xhr.responseText) {
-                            var parsed_resp = $.parseJSON(xhr.responseText);
+                            var parsed_resp = JSON.parse(xhr.responseText);
                             error_msg = parsed_resp.error_msg || parsed_resp.detail;
                         } else {
                             error_msg = gettext("Failed. Please check the network.");
@@ -674,6 +678,10 @@ define([
         },
 
         viewFileComments: function() {
+            if (this.dirView.direntDetailsView.$el.is(':visible')) {
+                this.dirView.direntDetailsView.hide();
+            }
+
             var file_icon_size = Common.isHiDPI() ? 48 : 24;
             this.dirView.fileCommentsView.show({
                 'is_repo_owner': this.dir.is_repo_owner,

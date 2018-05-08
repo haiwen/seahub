@@ -13,8 +13,7 @@ from django.core.urlresolvers import reverse
 from django.contrib import messages
 from django.http import HttpResponse, Http404, \
     HttpResponseRedirect
-from django.shortcuts import render_to_response, redirect
-from django.template import RequestContext
+from django.shortcuts import render, redirect
 from django.utils.http import urlquote
 from django.utils.html import escape
 from django.utils.translation import ugettext as _
@@ -24,7 +23,7 @@ import seaserv
 from seaserv import get_repo, get_commits, \
     seafserv_threaded_rpc, seafserv_rpc, is_repo_owner, \
     get_file_size, MAX_DOWNLOAD_DIR_SIZE, \
-    seafile_api
+    seafile_api, ccnet_api
 from pysearpc import SearpcError
 
 from seahub.avatar.util import get_avatar_file_storage
@@ -55,6 +54,7 @@ import seahub.settings as settings
 from seahub.settings import AVATAR_FILE_STORAGE, \
     ENABLE_SUB_LIBRARY, ENABLE_FOLDER_PERM, ENABLE_REPO_SNAPSHOT_LABEL, \
     UNREAD_NOTIFICATIONS_REQUEST_INTERVAL
+from seahub.constants import HASH_URLS
 
 LIBRARY_TEMPLATES = getattr(settings, 'LIBRARY_TEMPLATES', {})
 
@@ -176,7 +176,7 @@ def get_repo_dirents(request, repo, commit, path, offset=-1, limit=-1):
         uploadlinks = UploadLinkShare.objects.filter(repo_id=repo.id).filter(username=username)
 
 
-        view_dir_base = reverse("view_common_lib_dir", args=[repo.id, ''])
+        view_dir_base = HASH_URLS["VIEW_COMMON_LIB_DIR"] % {'repo_id': repo.id, 'path': ''}
         dl_dir_base = reverse('repo_download_dir', args=[repo.id])
         file_history_base = reverse('file_revisions', args=[repo.id])
         for dirent in dirs:
@@ -273,13 +273,13 @@ def render_recycle_root(request, repo_id, referer):
     if is_repo_owner:
         enable_clean = True
 
-    return render_to_response('repo_dir_recycle_view.html', {
+    return render(request, 'repo_dir_recycle_view.html', {
             'show_recycle_root': True,
             'repo': repo,
             'repo_dir_name': repo.name,
             'enable_clean': enable_clean,
             'referer': referer,
-            }, context_instance=RequestContext(request))
+            })
 
 def render_recycle_dir(request, repo_id, commit_id, referer):
     basedir = request.GET.get('base', '')
@@ -318,7 +318,7 @@ def render_recycle_dir(request, repo_id, commit_id, referer):
         else:
             dirent.is_dir = False
 
-    return render_to_response('repo_dir_recycle_view.html', {
+    return render(request, 'repo_dir_recycle_view.html', {
             'show_recycle_root': False,
             'repo': repo,
             'repo_dir_name': repo.name,
@@ -328,20 +328,20 @@ def render_recycle_dir(request, repo_id, commit_id, referer):
             'basedir': basedir,
             'path': path,
             'referer': referer,
-            }, context_instance=RequestContext(request))
+            })
 
 def render_dir_recycle_root(request, repo_id, dir_path, referer):
     repo = get_repo(repo_id)
     if not repo:
         raise Http404
 
-    return render_to_response('repo_dir_recycle_view.html', {
+    return render(request, 'repo_dir_recycle_view.html', {
             'show_recycle_root': True,
             'repo': repo,
             'repo_dir_name': os.path.basename(dir_path.rstrip('/')),
             'dir_path': dir_path,
             'referer': referer,
-            }, context_instance=RequestContext(request))
+            })
 
 def render_dir_recycle_dir(request, repo_id, commit_id, dir_path, referer):
     basedir = request.GET.get('base', '')
@@ -379,7 +379,7 @@ def render_dir_recycle_dir(request, repo_id, commit_id, dir_path, referer):
         else:
             dirent.is_dir = False
 
-    return render_to_response('repo_dir_recycle_view.html', {
+    return render(request, 'repo_dir_recycle_view.html', {
             'show_recycle_root': False,
             'repo': repo,
             'repo_dir_name': os.path.basename(dir_path.rstrip('/')),
@@ -390,7 +390,7 @@ def render_dir_recycle_dir(request, repo_id, commit_id, dir_path, referer):
             'path': path,
             'dir_path': dir_path,
             'referer': referer,
-            }, context_instance=RequestContext(request))
+            })
 
 @login_required
 def repo_recycle_view(request, repo_id):
@@ -472,7 +472,8 @@ def repo_history(request, repo_id):
             return render_error(request, e.msg)
 
         if not password_set:
-            return HttpResponseRedirect(reverse("view_common_lib_dir", args=[repo_id, '']))
+            reverse_url = HASH_URLS["VIEW_COMMON_LIB_DIR"] % {'repo_id': repo_id, 'path': ''}
+            return HttpResponseRedirect(reverse_url)
 
     try:
         current_page = int(request.GET.get('page', '1'))
@@ -505,7 +506,7 @@ def repo_history(request, repo_id):
     # for 'go back'
     referer = request.GET.get('referer', '')
 
-    return render_to_response('repo_history.html', {
+    return render(request, 'repo_history.html', {
             "repo": repo,
             "commits": commits,
             'current_page': current_page,
@@ -515,7 +516,7 @@ def repo_history(request, repo_id):
             'user_perm': user_perm,
             'show_label': show_label,
             'referer': referer,
-            }, context_instance=RequestContext(request))
+            })
 
 @login_required
 @require_POST
@@ -556,7 +557,8 @@ def repo_revert_history(request, repo_id):
             return render_error(request, e.msg)
 
         if not password_set:
-            return HttpResponseRedirect(reverse("view_common_lib_dir", args=[repo_id, '']))
+            reverse_url = HASH_URLS["VIEW_COMMON_LIB_DIR"] % {'repo_id': repo_id, 'path': ''}
+            return HttpResponseRedirect(reverse_url)
 
     commit_id = request.GET.get('commit_id', '')
     if not commit_id:
@@ -580,7 +582,7 @@ def repo_revert_history(request, repo_id):
 def fpath_to_link(repo_id, path, is_dir=False):
     """Translate file path of a repo to its view link"""
     if is_dir:
-        href = reverse("view_common_lib_dir", args=[repo_id, path.encode('utf-8').strip('/')])
+        href = HASH_URLS["VIEW_COMMON_LIB_DIR"] % {'repo_id': repo_id, 'path': path.encode('utf-8').strip('/')}
     else:
         if not path.startswith('/'):
             p = '/' + path
@@ -692,7 +694,7 @@ def libraries(request):
         org_id = request.user.org.org_id
         joined_groups = seaserv.get_org_groups_by_user(org_id, username)
     else:
-        joined_groups = seaserv.get_personal_groups_by_user(username)
+        joined_groups = ccnet_api.get_groups(username, return_ancestors=True)
 
     if joined_groups:
         try:
@@ -701,7 +703,10 @@ def libraries(request):
             logger.error(e)
             joined_groups = []
 
-    return render_to_response('libraries.html', {
+    joined_groups_exclude_address_book = [item for item in joined_groups if
+            item.parent_group_id == 0]
+
+    return render(request, 'libraries.html', {
             "allow_public_share": allow_public_share,
             "guide_enabled": guide_enabled,
             "sub_lib_enabled": sub_lib_enabled,
@@ -721,6 +726,7 @@ def libraries(request):
             'file_audit_enabled': FILE_AUDIT_ENABLED,
             'can_add_pub_repo': can_add_pub_repo,
             'joined_groups': joined_groups,
+            'joined_groups_exclude_address_book': joined_groups_exclude_address_book,
             'storages': get_library_storages(request),
             'unread_notifications_request_interval': UNREAD_NOTIFICATIONS_REQUEST_INTERVAL,
             'library_templates': LIBRARY_TEMPLATES.keys() if \
@@ -728,29 +734,15 @@ def libraries(request):
             'enable_share_to_all_groups': config.ENABLE_SHARE_TO_ALL_GROUPS,
             'enable_group_discussion': settings.ENABLE_GROUP_DISCUSSION,
             'enable_file_comment': settings.ENABLE_FILE_COMMENT,
-            }, context_instance=RequestContext(request))
+            })
 
 @login_required
 def repo_set_access_property(request, repo_id):
     ap = request.GET.get('ap', '')
     seafserv_threaded_rpc.repo_set_access_property(repo_id, ap)
+    reverse_url = HASH_URLS["VIEW_COMMON_LIB_DIR"] % {'repo_id': repo_id, 'path': ''}
 
-    return HttpResponseRedirect(reverse("view_common_lib_dir", args=[repo_id, '']))
-
-@login_required
-def file_upload_progress_page(request):
-    '''
-    As iframe in repo_upload_file.html, for solving problem in chrome.
-
-    '''
-    uuid = request.GET.get('uuid', '')
-    fileserver_root = get_fileserver_root()
-    upload_progress_con_id = request.GET.get('upload_progress_con_id', '')
-    return render_to_response('file_upload_progress_page.html', {
-            'uuid': uuid,
-            'fileserver_root': fileserver_root,
-            'upload_progress_con_id': upload_progress_con_id,
-            }, context_instance=RequestContext(request))
+    return HttpResponseRedirect(reverse_url)
 
 @login_required
 def validate_filename(request):
@@ -825,7 +817,7 @@ def file_revisions(request, repo_id):
     # for 'go back'
     referer = request.GET.get('referer', '')
 
-    return render_to_response('file_revisions.html', {
+    return render(request, 'file_revisions.html', {
         'repo': repo,
         'path': path,
         'u_filename': u_filename,
@@ -834,7 +826,7 @@ def file_revisions(request, repo_id):
         'can_compare': can_compare,
         'can_revert_file': can_revert_file,
         'referer': referer,
-        }, context_instance=RequestContext(request))
+        })
 
 
 def demo(request):
@@ -1016,15 +1008,14 @@ def convert_cmmt_desc_link(request):
         elif d.status == 'mov':  # Move or Rename non-empty file/folder
             if '/' in d.new_name:
                 new_dir_name = d.new_name.split('/')[0]
-                return HttpResponseRedirect(
-                    reverse('view_common_lib_dir',
-                            args=[repo_id, new_dir_name]))
+                reverse_url = HASH_URLS["VIEW_COMMON_LIB_DIR"] % {'repo_id': repo_id, 'path': new_dir_name}
+                return HttpResponseRedirect(reverse_url)
             else:
                 return HttpResponseRedirect(
                     reverse('view_lib_file', args=[repo_id, '/' + d.new_name]))
         elif d.status == 'newdir':
-            return HttpResponseRedirect(
-                reverse('view_common_lib_dir', args=[repo_id, d.name.strip('/')]))
+            reverse_url = HASH_URLS["VIEW_COMMON_LIB_DIR"] % {'repo_id': repo_id, 'path': d.name.strip('/')},
+            return HttpResponseRedirect(reverse_url)
         else:
             continue
 
@@ -1116,6 +1107,11 @@ def image_view(request, filename):
         response['Content-Encoding'] = content_encoding
     return response
 
+def custom_css_view(request):
+    file_content = config.CUSTOM_CSS
+    response = HttpResponse(content=file_content, content_type='text/css')
+    return response
+
 def underscore_template(request, template):
     """Serve underscore template through Django, mainly for I18n.
 
@@ -1126,8 +1122,7 @@ def underscore_template(request, template):
     if not template.startswith('js'):  # light security check
         raise Http404
 
-    return render_to_response(template, {},
-                              context_instance=RequestContext(request))
+    return render(request, template, {})
 
 def fake_view(request, **kwargs):
     """
@@ -1136,7 +1131,7 @@ def fake_view(request, **kwargs):
     As the urls start with '#',
     http request will not access this function
     """
-    pass
+    return HttpResponse()
 
 def client_token_login(request):
     """Login from desktop client with a generated token.

@@ -16,12 +16,13 @@ from django.utils.functional import lazy
 from constance import config
 
 from seahub.settings import SEAFILE_VERSION, SITE_TITLE, SITE_NAME, \
-    MAX_FILE_NAME, BRANDING_CSS, LOGO_PATH, LOGO_WIDTH, LOGO_HEIGHT,\
+    MAX_FILE_NAME, LOGO_PATH, LOGO_WIDTH, LOGO_HEIGHT,\
     SHOW_REPO_DOWNLOAD_BUTTON, SITE_ROOT, ENABLE_GUEST_INVITATION, \
     FAVICON_PATH, ENABLE_THUMBNAIL, THUMBNAIL_SIZE_FOR_ORIGINAL, \
     MEDIA_ROOT, SHOW_LOGOUT_ICON, CUSTOM_LOGO_PATH, CUSTOM_FAVICON_PATH
 
 from seahub.constants import DEFAULT_ADMIN
+from seahub.utils import get_site_name
 
 try:
     from seahub.settings import SEACLOUD_MODE
@@ -82,8 +83,8 @@ def base(request):
 
     result = {
         'seafile_version': SEAFILE_VERSION,
-        'site_title': SITE_TITLE,
-        'branding_css': BRANDING_CSS,
+        'site_title': config.SITE_TITLE,
+        'enable_branding_css': config.ENABLE_BRANDING_CSS,
         'favicon_path': favicon_path,
         'logo_path': logo_path,
         'logo_width': LOGO_WIDTH,
@@ -91,7 +92,7 @@ def base(request):
         'seacloud_mode': SEACLOUD_MODE,
         'cloud_mode': request.cloud_mode,
         'org': org,
-        'site_name': SITE_NAME,
+        'site_name': get_site_name(),
         'enable_signup': config.ENABLE_SIGNUP,
         'max_file_name': MAX_FILE_NAME,
         'has_file_search': HAS_FILE_SEARCH,

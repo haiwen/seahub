@@ -1,6 +1,6 @@
 # Copyright (c) 2012-2016 Seafile Ltd.
 from django.conf import settings
-from django.conf.urls import patterns, url, include
+from django.conf.urls import url, include
 # from django.views.generic.simple import direct_to_template
 from django.views.generic import TemplateView
 
@@ -9,7 +9,7 @@ from seahub.views.sysadmin import *
 from seahub.views.ajax import *
 from seahub.views.sso import *
 
-from seahub.views.file import view_repo_file, view_history_file, view_trash_file,\
+from seahub.views.file import view_history_file, view_trash_file,\
     view_snapshot_file, file_edit, view_shared_file, view_file_via_shared_dir,\
     text_diff, view_raw_file, view_raw_shared_file, \
     download_file, view_lib_file, file_access
@@ -22,6 +22,8 @@ from seahub.views.wiki import personal_wiki, personal_wiki_pages, \
 from seahub.api2.endpoints.groups import Groups, Group
 from seahub.api2.endpoints.shareable_groups import ShareableGroups
 from seahub.api2.endpoints.group_libraries import GroupLibraries, GroupLibrary
+from seahub.api2.endpoints.group_owned_libraries import GroupOwnedLibraries, \
+        GroupOwnedLibrary, GroupOwnedLibraryFolderPermission
 from seahub.api2.endpoints.group_members import GroupMembers, GroupMembersBulk, GroupMember
 from seahub.api2.endpoints.search_group import SearchGroup
 from seahub.api2.endpoints.share_links import ShareLinks, ShareLink
@@ -44,6 +46,7 @@ from seahub.api2.endpoints.repo_set_password import RepoSetPassword
 from seahub.api2.endpoints.zip_task import ZipTaskView
 from seahub.api2.endpoints.share_link_zip_task import ShareLinkZipTaskView
 from seahub.api2.endpoints.query_zip_progress import QueryZipProgressView
+from seahub.api2.endpoints.cancel_zip_task import CancelZipTaskView
 from seahub.api2.endpoints.copy_move_task import CopyMoveTaskView
 from seahub.api2.endpoints.query_copy_move_progress import QueryCopyMoveProgressView
 from seahub.api2.endpoints.invitations import InvitationsView, InvitationsBatchView
@@ -52,7 +55,9 @@ from seahub.api2.endpoints.notifications import NotificationsView, NotificationV
 from seahub.api2.endpoints.user_enabled_modules import UserEnabledModulesView
 from seahub.api2.endpoints.repo_file_uploaded_bytes import RepoFileUploadedBytesView
 from seahub.api2.endpoints.user_avatar import UserAvatarView
-from seahub.api2.endpoints.revision_tag import TaggedItemsView,TagNamesView
+from seahub.api2.endpoints.wikis import WikisView, WikiView
+from seahub.api2.endpoints.wiki_pages import WikiPageView, WikiPagesView
+from seahub.api2.endpoints.revision_tag import TaggedItemsView, TagNamesView
 from seahub.api2.endpoints.user import User
 
 # Admin
@@ -92,28 +97,17 @@ from seahub.api2.endpoints.admin.invitations import InvitationsView as AdminInvi
 from seahub.api2.endpoints.admin.library_history import AdminLibraryHistoryLimit
 from seahub.api2.endpoints.admin.login_bg_image import AdminLoginBgImage
 from seahub.api2.endpoints.admin.admin_role import AdminAdminRole
+from seahub.api2.endpoints.admin.address_book.groups import AdminAddressBookGroups, \
+        AdminAddressBookGroup
+from seahub.api2.endpoints.admin.group_owned_libraries import AdminGroupOwnedLibraries, \
+        AdminGroupOwnedLibrary, AdminGroupOwnedLibraryFolderPermission
 
-# Uncomment the next two lines to enable the admin:
-#from django.contrib import admin
-#admin.autodiscover()
-
-urlpatterns = patterns(
-    '',
-    # Example:
-    # (r'^seahub/', include('seahub.foo.urls')),
-
-    # Uncomment the admin/doc line below and add 'django.contrib.admindocs'
-    # to INSTALLED_APPS to enable admin documentation:
-    # (r'^admin/doc/', include('django.contrib.admindocs.urls')),
-
-    # Uncomment the next line to enable the admin:
-    #(r'^admin/', include(admin.site.urls)),
-
-    (r'^accounts/', include('seahub.base.registration_urls')),
-    (r'^sso/$', sso),
+urlpatterns = [
+    url(r'^accounts/', include('seahub.base.registration_urls')),
+    url(r'^sso/$', sso),
     url(r'^shib-login/', shib_login, name="shib_login"),
 
-    (r'^oauth/', include('seahub.oauth.urls')),
+    url(r'^oauth/', include('seahub.oauth.urls')),
 
     url(r'^$', libraries, name='libraries'),
     #url(r'^home/$', direct_to_template, { 'template': 'home.html' } ),
@@ -127,13 +121,10 @@ urlpatterns = patterns(
     url(r'^home/wiki_page_edit/(?P<page_name>[^/]+)$', personal_wiki_page_edit, name='personal_wiki_page_edit'),
     url(r'^home/wiki_page_delete/(?P<page_name>[^/]+)$', personal_wiki_page_delete, name='personal_wiki_page_delete'),
 
-    # url(r'^home/public/reply/(?P<msg_id>[\d]+)/$', innerpub_msg_reply, name='innerpub_msg_reply'),
-    # url(r'^home/owner/(?P<owner_name>[^/]+)/$', ownerhome, name='ownerhome'),
-
     # revert repo
     url(r'^repo/history/revert/(?P<repo_id>[-0-9a-f]{36})/$', repo_revert_history, name='repo_revert_history'),
 
-    (r'^repo/upload_check/$', validate_filename),
+    url(r'^repo/upload_check/$', validate_filename),
     url(r'^repo/download_dir/(?P<repo_id>[-0-9a-f]{36})/$', repo_download_dir, name='repo_download_dir'),
     url(r'^repo/file_revisions/(?P<repo_id>[-0-9a-f]{36})/$', file_revisions, name='file_revisions'),
     url(r'^repo/file-access/(?P<repo_id>[-0-9a-f]{36})/$', file_access, name='file_access'),
@@ -142,7 +133,6 @@ urlpatterns = patterns(
     url(r'^repo/history/view/(?P<repo_id>[-0-9a-f]{36})/$', repo_history_view, name='repo_history_view'),
     url(r'^repo/recycle/(?P<repo_id>[-0-9a-f]{36})/$', repo_recycle_view, name='repo_recycle_view'),
     url(r'^dir/recycle/(?P<repo_id>[-0-9a-f]{36})/$', dir_recycle_view, name='dir_recycle_view'),
-    url(r'^repo/(?P<repo_id>[-0-9a-f]{36})/files/$', view_repo_file, name="repo_view_file"),
     url(r'^repo/(?P<repo_id>[-0-9a-f]{36})/raw/(?P<file_path>.*)$', view_raw_file, name="view_raw_file"),
     url(r'^repo/(?P<repo_id>[-0-9a-f]{36})/history/files/$', view_history_file, name="view_history_file"),
     url(r'^repo/(?P<repo_id>[-0-9a-f]{36})/trash/files/$', view_trash_file, name="view_trash_file"),
@@ -169,7 +159,7 @@ urlpatterns = patterns(
 
     ### Misc ###
     url(r'^image-view/(?P<filename>.*)$', image_view, name='image_view'),
-    (r'^file_upload_progress_page/$', file_upload_progress_page),
+    url(r'^custom-css/$', custom_css_view, name='custom_css'),
     url(r'^i18n/$', i18n, name='i18n'),
     url(r'^convert_cmmt_desc_link/$', convert_cmmt_desc_link, name='convert_cmmt_desc_link'),
     url(r'^modules/toggle/$', toggle_modules, name="toggle_modules"),
@@ -204,7 +194,7 @@ urlpatterns = patterns(
     url(r'^ajax/lib/(?P<repo_id>[-0-9a-f]{36})/dir/$', list_lib_dir, name="list_lib_dir"),
 
     ### Apps ###
-    (r'^api2/', include('seahub.api2.urls')),
+    url(r'^api2/', include('seahub.api2.urls')),
 
     ## user
     url(r'^api/v2.1/user/$', User.as_view(), name="api-v2.1-user"),
@@ -217,7 +207,9 @@ urlpatterns = patterns(
 
     url(r'^api/v2.1/groups/(?P<group_id>\d+)/libraries/$', GroupLibraries.as_view(), name='api-v2.1-group-libraries'),
     url(r'^api/v2.1/groups/(?P<group_id>\d+)/libraries/(?P<repo_id>[-0-9a-f]{36})/$', GroupLibrary.as_view(), name='api-v2.1-group-library'),
-
+    url(r'^api/v2.1/groups/(?P<group_id>\d+)/group-owned-libraries/$', GroupOwnedLibraries.as_view(), name='api-v2.1-group-owned-libraries'),
+    url(r'^api/v2.1/groups/(?P<group_id>\d+)/group-owned-libraries/(?P<repo_id>[-0-9a-f]{36})/$', GroupOwnedLibrary.as_view(), name='api-v2.1-owned-group-library'),
+    url(r'^api/v2.1/groups/(?P<group_id>\d+)/group-owned-libraries/(?P<repo_id>[-0-9a-f]{36})/folder-permission/$', GroupOwnedLibraryFolderPermission.as_view(), name='api-v2.1-owned-group-library-folder-permission'),
     url(r'^api/v2.1/groups/(?P<group_id>\d+)/members/$', GroupMembers.as_view(), name='api-v2.1-group-members'),
     url(r'^api/v2.1/groups/(?P<group_id>\d+)/members/bulk/$', GroupMembersBulk.as_view(), name='api-v2.1-group-members-bulk'),
     url(r'^api/v2.1/groups/(?P<group_id>\d+)/members/(?P<email>[^/]+)/$', GroupMember.as_view(), name='api-v2.1-group-member'),
@@ -268,6 +260,7 @@ urlpatterns = patterns(
     url(r'^api/v2.1/repos/(?P<repo_id>[-0-9a-f]{36})/file-uploaded-bytes/$', RepoFileUploadedBytesView.as_view(), name='api-v2.1-repo-file-uploaded-bytes'),
     url(r'^api/v2.1/share-link-zip-task/$', ShareLinkZipTaskView.as_view(), name='api-v2.1-share-link-zip-task'),
     url(r'^api/v2.1/query-zip-progress/$', QueryZipProgressView.as_view(), name='api-v2.1-query-zip-progress'),
+    url(r'^api/v2.1/cancel-zip-task/$', CancelZipTaskView.as_view(), name='api-v2.1-cancel-zip-task'),
     url(r'^api/v2.1/copy-move-task/$', CopyMoveTaskView.as_view(), name='api-v2.1-copy-move-task'),
     url(r'^api/v2.1/query-copy-move-progress/$', QueryCopyMoveProgressView.as_view(), name='api-v2.1-query-copy-move-progress'),
     url(r'^api/v2.1/notifications/$', NotificationsView.as_view(), name='api-v2.1-notifications'),
@@ -281,6 +274,12 @@ urlpatterns = patterns(
 
     ## user::avatar
     url(r'^api/v2.1/user-avatar/$', UserAvatarView.as_view(), name='api-v2.1-user-avatar'),
+
+    ## user::wiki
+    url(r'^api/v2.1/wikis/$', WikisView.as_view(), name='api-v2.1-wikis'),
+    url(r'^api/v2.1/wikis/(?P<slug>[^/]+)/$', WikiView.as_view(), name='api-v2.1-wiki'),
+    url(r'^api/v2.1/wikis/(?P<slug>[^/]+)/pages/$', WikiPagesView.as_view(), name='api-v2.1-wiki-pages'),
+    url(r'^api/v2.1/wikis/(?P<slug>[^/]+)/pages/(?P<page_name>[^/]+)/$', WikiPageView.as_view(), name='api-v2.1-wiki-page'),
 
     ## admin::sysinfo
     url(r'^api/v2.1/admin/sysinfo/$', SysInfo.as_view(), name='api-v2.1-sysinfo'),
@@ -329,6 +328,9 @@ urlpatterns = patterns(
     url(r'^api/v2.1/admin/groups/(?P<group_id>\d+)/libraries/(?P<repo_id>[-0-9a-f]{36})/$', AdminGroupLibrary.as_view(), name='api-v2.1-admin-group-library'),
     url(r'^api/v2.1/admin/groups/(?P<group_id>\d+)/members/$', AdminGroupMembers.as_view(), name='api-v2.1-admin-group-members'),
     url(r'^api/v2.1/admin/groups/(?P<group_id>\d+)/members/(?P<email>[^/]+)/$', AdminGroupMember.as_view(), name='api-v2.1-admin-group-member'),
+    url(r'^api/v2.1/admin/groups/(?P<group_id>\d+)/group-owned-libraries/$', AdminGroupOwnedLibraries.as_view(), name='api-v2.1-admin-group-owned-libraries'),
+    url(r'^api/v2.1/admin/groups/(?P<group_id>\d+)/group-owned-libraries/(?P<repo_id>[-0-9a-f]{36})/$', AdminGroupOwnedLibrary.as_view(), name='api-v2.1-admin-owned-group-library'),
+    url(r'^api/v2.1/admin/groups/(?P<group_id>\d+)/group-owned-libraries/(?P<repo_id>[-0-9a-f]{36})/folder-permission/$', AdminGroupOwnedLibraryFolderPermission.as_view(), name='api-v2.1-admin-owned-group-library-folder-permission'),
 
     ## admin::shares
     url(r'^api/v2.1/admin/shares/$', AdminShares.as_view(), name='api-v2.1-admin-shares'),
@@ -372,19 +374,24 @@ urlpatterns = patterns(
     ## admin::invitations
     url(r'^api/v2.1/admin/invitations/$', AdminInvitationsView.as_view(), name='api-v2.1-admin-invitations'),
 
-    (r'^avatar/', include('seahub.avatar.urls')),
-    (r'^notification/', include('seahub.notifications.urls')),
-    (r'^contacts/', include('seahub.contacts.urls')),
-    (r'^group/', include('seahub.group.urls')),
-    (r'^options/', include('seahub.options.urls')),
-    (r'^profile/', include('seahub.profile.urls')),
-    (r'^share/', include('seahub.share.urls')),
-    (r'^help/', include('seahub.help.urls')),
+    url(r'^avatar/', include('seahub.avatar.urls')),
+    url(r'^notification/', include('seahub.notifications.urls')),
+    url(r'^contacts/', include('seahub.contacts.urls')),
+    url(r'^group/', include('seahub.group.urls')),
+    url(r'^options/', include('seahub.options.urls')),
+    url(r'^profile/', include('seahub.profile.urls')),
+    url(r'^share/', include('seahub.share.urls')),
+    url(r'^help/', include('seahub.help.urls')),
     url(r'^captcha/', include('captcha.urls')),
-    (r'^thumbnail/', include('seahub.thumbnail.urls')),
+    url(r'^thumbnail/', include('seahub.thumbnail.urls')),
     url(r'^inst/', include('seahub.institutions.urls', app_name='institutions', namespace='institutions')),
     url(r'^invite/', include('seahub.invitations.urls', app_name='invitations', namespace='invitations')),
     url(r'^terms/', include('termsandconditions.urls')),
+    url(r'^wikis/', include('seahub.wiki.urls', app_name='wiki', namespace='wiki')),
+
+    ## admin::address book
+    url(r'^api/v2.1/admin/address-book/groups/$', AdminAddressBookGroups.as_view(), name='api-v2.1-admin-address-book-groups'),
+    url(r'^api/v2.1/admin/address-book/groups/(?P<group_id>\d+)/$', AdminAddressBookGroup.as_view(), name='api-v2.1-admin-address-book-group'),
 
     ### system admin ###
     url(r'^sysadmin/$', sysadmin, name='sysadmin'),
@@ -451,38 +458,39 @@ urlpatterns = patterns(
     url(r'^useradmin/batchadduser/example/$', batch_add_user_example, name='batch_add_user_example'),
 
     url(r'^client-login/$', client_token_login, name='client_token_login'),
-)
+]
 
 from seahub.utils import EVENTS_ENABLED
 if EVENTS_ENABLED:
-    urlpatterns += patterns(
-        '',
+    urlpatterns += [
         url(r'^sys/virus_scan_records/$', sys_virus_scan_records, name='sys_virus_scan_records'),
         url(r'^sys/virus_scan_records/delete/(?P<vid>\d+)/$', sys_delete_virus_scan_records, name='sys_delete_virus_scan_records'),
-    )
+    ]
 
 if settings.SERVE_STATIC:
+    from django.views.static import serve as static_view
     media_url = settings.MEDIA_URL.strip('/')
-    urlpatterns += patterns('',
-        (r'^%s/(?P<path>.*)$' % (media_url), 'django.views.static.serve', {'document_root': settings.MEDIA_ROOT}),
-    )
+    urlpatterns += [
+        url(r'^%s/(?P<path>.*)$' % (media_url), static_view,
+            {'document_root': settings.MEDIA_ROOT}),
+    ]
 
-urlpatterns += patterns(
-    '', (r'^demo/', demo),
-)
+urlpatterns += [
+    url(r'^demo/', demo),
+]
 
 from seahub.utils import HAS_FILE_SEARCH
 if HAS_FILE_SEARCH:
     from seahub_extra.search.views import search, pubuser_search
-    urlpatterns += patterns('',
+    urlpatterns += [
         url(r'^search/$', search, name='search'),
         url(r'^pubinfo/users/search/$', pubuser_search, name='pubuser_search'),
-    )
+    ]
 
 if getattr(settings, 'ENABLE_PAYMENT', False):
-    urlpatterns += patterns('',
-        (r'^pay/', include('seahub_extra.pay.urls')),
-    )
+    urlpatterns += [
+        url(r'^pay/', include('seahub_extra.pay.urls')),
+    ]
 
 
 if getattr(settings, 'ENABLE_SYSADMIN_EXTRA', False):
@@ -491,7 +499,7 @@ if getattr(settings, 'ENABLE_SYSADMIN_EXTRA', False):
         sys_login_admin_export_excel, sys_log_file_audit_export_excel, \
         sys_log_file_update_export_excel, sys_log_perm_audit_export_excel, \
         sys_log_email_audit
-    urlpatterns += patterns('',
+    urlpatterns += [
         url(r'^api/v2.1/admin/logs/login/$', LoginLogs.as_view(), name='api-v2.1-admin-logs-login'),
         url(r'^sys/loginadmin/$', sys_login_admin, name='sys_login_admin'),
         url(r'^sys/loginadmin/export-excel/$', sys_login_admin_export_excel, name='sys_login_admin_export_excel'),
@@ -508,25 +516,24 @@ if getattr(settings, 'ENABLE_SYSADMIN_EXTRA', False):
         url(r'^api/v2.1/admin/logs/perm-audit/$', PermAudit.as_view(), name='api-v2.1-admin-logs-perm-audit'),
         url(r'^sys/log/permaudit/$', sys_log_perm_audit, name='sys_log_perm_audit'),
         url(r'^sys/log/permaudit/export-excel/$', sys_log_perm_audit_export_excel, name='sys_log_perm_audit_export_excel'),
-    )
+    ]
 
 if getattr(settings, 'MULTI_TENANCY', False):
-    urlpatterns += patterns('',
-        (r'^org/', include('seahub_extra.organizations.urls')),
-    )
+    urlpatterns += [
+        url(r'^org/', include('seahub_extra.organizations.urls')),
+    ]
 
 if getattr(settings, 'ENABLE_SHIB_LOGIN', False):
-    urlpatterns += patterns(
-        '',
+    urlpatterns += [
         url(r'^shib-complete/', TemplateView.as_view(template_name='shibboleth/complete.html'), name="shib_complete"),
         url(r'^shib-success/', TemplateView.as_view(template_name="shibboleth/success.html"), name="shib_success"),
-    )
+    ]
 
 
 if getattr(settings, 'ENABLE_KRB5_LOGIN', False):
-    urlpatterns += patterns(
-        '', url(r'^krb5-login/', shib_login, name="krb5_login"),
-    )
+    urlpatterns += [
+        url(r'^krb5-login/', shib_login, name="krb5_login"),
+    ]
 
 # serve office converter static files
 from seahub.utils import HAS_OFFICE_CONVERTER, CLUSTER_MODE, OFFICE_CONVERTOR_NODE
@@ -534,40 +541,38 @@ if HAS_OFFICE_CONVERTER:
     from seahub.views.file import (
         office_convert_query_status, office_convert_get_page, office_convert_add_task
     )
-    urlpatterns += patterns('',
+    urlpatterns += [
         url(r'^office-convert/static/(?P<repo_id>[-0-9a-f]{36})/(?P<commit_id>[0-9a-f]{40})/(?P<path>.+)/(?P<filename>[^/].+)$',
             office_convert_get_page,
             name='office_convert_get_page'),
         url(r'^office-convert/status/$', office_convert_query_status, name='office_convert_query_status'),
-    )
+    ]
 
     if CLUSTER_MODE and OFFICE_CONVERTOR_NODE:
-        urlpatterns += patterns('',
+        urlpatterns += [
             url(r'^office-convert/internal/add-task/$', office_convert_add_task),
             url(r'^office-convert/internal/status/$', office_convert_query_status, {'cluster_internal': True}),
             url(r'^office-convert/internal/static/(?P<repo_id>[-0-9a-f]{36})/(?P<commit_id>[0-9a-f]{40})/(?P<path>.+)/(?P<filename>[^/].+)$',
                 office_convert_get_page, {'cluster_internal': True}),
-        )
+        ]
 
 if TRAFFIC_STATS_ENABLED:
     from seahub.views.sysadmin import sys_traffic_admin
-    urlpatterns += patterns('',
+    urlpatterns += [
         url(r'^sys/trafficadmin/$', sys_traffic_admin, name='sys_trafficadmin'),
-    )
+    ]
 
 if getattr(settings, 'ENABLE_ADFS_LOGIN', False):
     from seahub_extra.adfs_auth.views import assertion_consumer_service, \
         auth_complete
-    urlpatterns += patterns(
-        '',
+    urlpatterns += [
         url(r'^saml2/acs/$', assertion_consumer_service, name='saml2_acs'),
         url(r'^saml2/complete/$', auth_complete, name='saml2_complete'),
         (r'^saml2/', include('djangosaml2.urls')),
-    )
+    ]
 
 if getattr(settings, 'ENABLE_ONLYOFFICE', False):
     from seahub.onlyoffice.views import onlyoffice_editor_callback
-    urlpatterns += patterns(
-        '',
+    urlpatterns += [
         url(r'^onlyoffice/editor-callback/$', onlyoffice_editor_callback, name='onlyoffice_editor_callback'),
-    )
+    ]

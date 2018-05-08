@@ -6,6 +6,7 @@ import hashlib
 from django import template
 from django.utils.translation import ugettext as _
 from django.core.urlresolvers import reverse
+from django.utils.html import format_html
 
 from seahub.base.accounts import User
 from seahub.base.templatetags.seahub_tags import email2nickname
@@ -69,7 +70,7 @@ def avatar(user, size=AVATAR_DEFAULT_SIZE):
             logger.error(e)
             url = get_default_avatar_non_registered_url()
 
-    return """<img src="%s" width="%s" height="%s" class="avatar" />""" % (url, size, size)
+    return format_html("""<img src="%s" width="%s" height="%s" class="avatar" />""" % (url, size, size))
 
 @cache_result
 @register.simple_tag

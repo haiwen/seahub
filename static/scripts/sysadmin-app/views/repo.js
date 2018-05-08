@@ -6,13 +6,12 @@ define([
     'moment',
     'simplemodal',
     'select2',
-    'jquery.ui.tabs',
     'sysadmin-app/views/share',
     'app/views/dialogs/repo-history-settings',
     'app/views/widgets/hl-item-view',
     'app/views/widgets/dropdown'
 ], function($, _, Backbone, Common, Moment, Simplemodal,
-    Select2, Tabs, ShareView, HistorySettingsDialog,
+    Select2, ShareView, HistorySettingsDialog,
     HLItemView, DropdownView) {
 
     'use strict';
@@ -109,7 +108,7 @@ define([
                 formatSelectionTooBig: gettext("You cannot select any more choices")
             }));
 
-            $form.submit(function() {
+            $form.on('submit', function() {
                 var email = $.trim($('[name="email"]', $(this)).val());
                 if (!email) {
                     return false;
@@ -138,7 +137,7 @@ define([
                     error: function(xhr) {
                         var error_msg;
                         if (xhr.responseText) {
-                            error_msg = $.parseJSON(xhr.responseText).error_msg;
+                            error_msg = JSON.parse(xhr.responseText).error_msg;
                         } else {
                             error_msg = gettext("Failed. Please check the network.");
                         }

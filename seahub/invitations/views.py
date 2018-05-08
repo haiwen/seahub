@@ -1,8 +1,8 @@
 # Copyright (c) 2012-2016 Seafile Ltd.
 from django.contrib import messages
 from django.http import HttpResponseRedirect, Http404
-from django.shortcuts import get_object_or_404, render_to_response
-from django.template import RequestContext
+from django.shortcuts import get_object_or_404, render
+
 from django.utils.translation import ugettext as _
 
 from seahub.auth import login as auth_login
@@ -51,6 +51,6 @@ def token_view(request, token):
 
             return HttpResponseRedirect(SITE_ROOT)
 
-    return render_to_response('invitations/token_view.html', {
+    return render(request, 'invitations/token_view.html', {
         'iv': i,
-    }, context_instance=RequestContext(request))
+    })

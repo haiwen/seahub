@@ -10,15 +10,13 @@ define([
 
     var DevicesView = Backbone.View.extend({
 
-        id: 'devices',
+        el: '.main-panel',
 
         template: _.template($('#devices-tmpl').html()),
 
         initialize: function() {
             this.devices = new DevicesCollection();
             this.listenTo(this.devices, 'reset', this.reset);
-
-            this.render();
         },
 
         addOne: function(device) {
@@ -39,8 +37,9 @@ define([
             }
         },
 
-        render: function() {
-            this.$el.html(this.template());
+        renderMainCon: function() {
+            this.$mainCon = $('<div class="main-panel-main" id="devices"></div>').html(this.template());
+            this.$el.append(this.$mainCon);
 
             this.$table = this.$('table');
             this.$tableBody = this.$('tbody');
@@ -51,12 +50,12 @@ define([
         },
 
         show: function() {
-            $("#right-panel").html(this.$el);
+            this.renderMainCon();
             this.devices.fetch({reset: true});
         },
 
         hide: function() {
-            this.$el.detach();
+            this.$mainCon.detach();
         }
 
     });

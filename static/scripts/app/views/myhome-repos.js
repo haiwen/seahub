@@ -13,17 +13,19 @@ define([
     'use strict';
 
     var ReposView = Backbone.View.extend({
-        id: "my-own-repos",
+        el: '.main-panel',
 
         template: _.template($('#my-own-repos-tmpl').html()),
-        reposHdTemplate: _.template($('#my-repos-hd-tmpl').html()),
-        mobileReposHdTemplate: _.template($('#my-repos-hd-mobile-tmpl').html()),
+        toolbarTemplate: _.template($('#my-repos-toolbar-tmpl').html()),
+        theadTemplate: _.template($('#my-repos-thead-tmpl').html()),
+        theadMobileTemplate: _.template($('#my-repos-thead-mobile-tmpl').html()),
 
         events: {
-            'click .repo-create': 'createRepo',
-            'click .by-name': 'sortByName',
-            'click .by-time': 'sortByTime',
-            'click #my-libs-more-op a': 'closeDropdown'
+            'click #my-repos-toolbar .repo-create': 'createRepo',
+            'click #my-libs-more-op a': 'closeDropdown',
+
+            'click #my-repos .by-name': 'sortByName',
+            'click #my-repos .by-time': 'sortByTime'
         },
 
         initialize: function(options) {
@@ -32,13 +34,6 @@ define([
             this.listenTo(this.repos, 'reset', this.reset);
 
             this.repoDetailsView = new RepoDetailsView();
-
-            this.render();
-
-            this.more_op_dropdown = new DropdownView({
-                el: this.$("#my-libs-more-op"),
-                right: 0
-            })
         },
 
         addOne: function(repo, collection, options) {
@@ -50,21 +45,16 @@ define([
             }
         },
 
-        renderReposHd: function() {
-            var tmpl = $(window).width() >= 768 ? this.reposHdTemplate : this.mobileReposHdTemplate;
-            this.$tableHead.html(tmpl());
-        },
-
         reset: function() {
             this.$('.error').hide();
             this.$loadingTip.hide();
             if (this.repos.length) {
                 this.$emptyTip.hide();
-                this.renderReposHd();
+                this.renderThead();
                 this.$tableBody.empty();
 
                 // sort
-                Common.updateSortIconByMode({'context': this.$el});
+                Common.updateSortIconByMode({'context': this.$table});
                 Common.sortLibs({'libs': this.repos});
 
                 this.repos.each(this.addOne, this);
@@ -75,7 +65,7 @@ define([
             }
 
             if (app.pageOptions.guide_enabled) {
-                $('#guide-for-new').modal({appendTo: '#main', focus:false});
+                $('#guide-for-new').modal({focus:false});
                 $('#simplemodal-container').css({'height':'auto'});
                 app.pageOptions.guide_enabled = false;
             }
@@ -86,7 +76,7 @@ define([
             this.$loadingTip.show();
             var _this = this;
             this.repos.fetch({
-                cache: false, // for IE
+                cache: false,
                 reset: true,
                 success: function (collection, response, opts) {
                 },
@@ -108,28 +98,43 @@ define([
             });
         },
 
-        render: function() {
-            this.$el.html(this.template());
+        renderThead: function() {
+            var tmpl = $(window).width() >= 768 ? this.theadTemplate : this.theadMobileTemplate;
+            this.$tableHead.html(tmpl());
+        },
+
+        renderToolbar: function() {
+            this.$toolbar = $('<div class="cur-view-toolbar" id="my-repos-toolbar"></div>').html(this.toolbarTemplate());
+            this.$('.common-toolbar').before(this.$toolbar);
+
+            this.more_op_dropdown = new DropdownView({
+                el: this.$("#my-libs-more-op")
+            });
+        },
+
+        renderMainCon: function() {
+            this.$mainCon = $('<div class="main-panel-main main-panel-main-with-side" id="my-repos"></div>').html(this.template());
+            this.$el.append(this.$mainCon);
+
             this.$table = this.$('table');
             this.$tableHead = $('thead', this.$table);
             this.$tableBody = $('tbody', this.$table);
             this.$loadingTip = this.$('.loading-tip');
             this.$emptyTip = this.$('.empty-tips');
-            this.$repoCreateBtn = this.$('.repo-create');
-            return this;
         },
 
         show: function() {
-            if (!$('#' + this.id).length) {
-                $("#right-panel").html(this.$el);
+            if (!$('#my-repos').length) {
+                this.renderToolbar();
+                this.renderMainCon();
             }
+
             this.showMyRepos();
         },
 
         hide: function() {
-            this.$el.detach();
-
-            this.repoDetailsView.hide();
+            this.$toolbar.detach();
+            this.$mainCon.detach();
         },
 
         createRepo: function() {
@@ -138,7 +143,7 @@ define([
 
         sortByName: function() {
             Common.toggleSortByNameMode();
-            Common.updateSortIconByMode({'context': this.$el});
+            Common.updateSortIconByMode({'context': this.$table});
             Common.sortLibs({'libs': this.repos});
 
             this.$tableBody.empty();
@@ -150,7 +155,7 @@ define([
 
         sortByTime: function() {
             Common.toggleSortByTimeMode();
-            Common.updateSortIconByMode({'context': this.$el});
+            Common.updateSortIconByMode({'context': this.$table});
             Common.sortLibs({'libs': this.repos});
 
             this.$tableBody.empty();

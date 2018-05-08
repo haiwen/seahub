@@ -53,7 +53,7 @@
 
 {% block extra_script %}
 <script type="text/javascript">
-$('#add-btn').click(function() {
+$('#add-btn').on('click', function() {
     $('#add-org-form').modal();
     $('#simplemodal-container').css({'width':'auto', 'height':'auto'});
 });
@@ -64,7 +64,7 @@ addConfirmTo($('.remove-btn'), {
     'post': true // post request
 });
 
-$('#add-org-form').submit(function() {
+$('#add-org-form').on('submit', function() {
     var form = $(this),
         form_id = form.attr('id'),
         submit_btn = form.find('[type="submit"]'),
@@ -121,7 +121,7 @@ $('#add-org-form').submit(function() {
         },
         error: function(jqXHR, textStatus, errorThrown) {
             if (jqXHR.responseText) {
-                apply_form_error(form_id, $.parseJSON(jqXHR.responseText).error);
+                apply_form_error(form_id, JSON.parse(jqXHR.responseText).error);
             } else {
                 apply_form_error(form_id, "{% trans "Failed. Please check the network." %}");
             }

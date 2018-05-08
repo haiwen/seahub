@@ -63,7 +63,7 @@ $("#id_password1")
     template: '<div class="popover" role="tooltip"><div class="arrow"></div><div class="popover-content"></div></div>',
     trigger: 'focus'
 })
-.keyup(function() {
+.on('keyup', function() {
     var pwd = $(this).val();
     if ($.trim(pwd)) {
         var level = getStrengthLevel(pwd);
@@ -74,7 +74,7 @@ $("#id_password1")
 });
 {% endif %}
 
-$('form').submit(function(){
+$('form').on('submit', function(){
     var email = $.trim($('input[name="email"]').val()),
         pwd1 = $.trim($('input[name="password1"]').val()),
         pwd2 = $.trim($('input[name="password2"]').val());

@@ -14,20 +14,22 @@ define([
     'use strict';
 
     var GroupView = Backbone.View.extend({
-        id: 'group',
+        el: '.main-panel',
 
         template: _.template($('#group-tmpl').html()),
-        groupTopTemplate: _.template($('#group-top-tmpl').html()),
-        reposHdTemplate: _.template($('#shared-repos-hd-tmpl').html()),
-        mobileReposHdTemplate: _.template($('#shared-repos-hd-mobile-tmpl').html()),
+        toolbarTemplate: _.template($('#group-toolbar-tmpl').html()),
+        toolbar2Template: _.template($('#group-toolbar2-tmpl').html()),
+        pathTemplate: _.template($('#group-path-tmpl').html()),
+        theadTemplate: _.template($('#shared-repos-hd-tmpl').html()),
+        theadMobileTemplate: _.template($('#shared-repos-hd-mobile-tmpl').html()),
 
         events: {
             'click #group-settings-icon': 'toggleSettingsPanel',
             'click #group-members-icon': 'toggleMembersPanel',
             'click #group-discussions-icon': 'toggleDiscussionsPanel',
-            'click .repo-create': 'createRepo',
-            'click .by-name': 'sortByName',
-            'click .by-time': 'sortByTime'
+            'click #group-toolbar .repo-create': 'createRepo',
+            'click #group-repos .by-name': 'sortByName',
+            'click #group-repos .by-time': 'sortByTime'
         },
 
         initialize: function(options) {
@@ -37,10 +39,9 @@ define([
             this.listenTo(this.repos, 'add', this.addOne);
             this.listenTo(this.repos, 'reset', this.reset);
 
-            this.settingsView = new GroupSettingsView({ groupView: this });
-            this.membersView = new GroupMembersView({ groupView: this });
-            this.discussionsView = new GroupDiscussionsView({ groupView: this });
-            this.render();
+            this.settingsView = new GroupSettingsView({groupView: this});
+            this.membersView = new GroupMembersView({groupView: this});
+            this.discussionsView = new GroupDiscussionsView({groupView: this});
         },
 
         addOne: function(repo, collection, options) {
@@ -57,17 +58,15 @@ define([
             }
         },
 
-        renderReposHd: function() {
-            var tmpl = $(window).width() >= 768 ? this.reposHdTemplate : this.mobileReposHdTemplate;
+        renderThead: function() {
+            var tmpl = $(window).width() >= 768 ? this.theadTemplate : this.theadMobileTemplate;
             this.$tableHead.html(tmpl());
         },
 
         reset: function() {
-            this.$('.error').hide();
-            this.$loadingTip.hide();
             if (this.repos.length) {
                 this.$emptyTip.hide();
-                this.renderReposHd();
+                this.renderThead();
                 this.$tableBody.empty();
 
                 // sort
@@ -83,9 +82,14 @@ define([
 
         },
 
-        renderGroupTop: function(options) {
+        showGroup: function(options) {
             var _this = this;
-            var $groupTop = $('#group-top');
+
+            this.$table.hide();
+            this.$emptyTip.hide();
+            this.$error.hide();
+            this.$loadingTip.show();
+
             $.ajax({
                 url: Common.getUrl({
                     'name': 'group',
@@ -93,9 +97,17 @@ define([
                 }),
                 cache: false,
                 dataType: 'json',
-                success: function (data) {
+                success: function(data) {
                     _this.group = data;
-                    $groupTop.html(_this.groupTopTemplate(data));
+                    _this.$toolbar.removeClass('hide');
+                    _this.renderPath({
+                        'name': data.name
+                    });
+                    _this.renderToolbar2({
+                        'id': data.id,
+                        'wiki_enabled': data.wiki_enabled
+                    });
+                    _this.showRepoList();
                     if (options) {
                         if (options.showDiscussions) {
                             _this.showDiscussions();
@@ -105,33 +117,29 @@ define([
                 error: function(xhr) {
                     var err_msg;
                     if (xhr.responseText) {
-                        err_msg = $.parseJSON(xhr.responseText).error_msg;
+                        err_msg = JSON.parse(xhr.responseText).error_msg;
                     } else {
                         err_msg = gettext("Please check the network.");
                     }
-                    $groupTop.html('<p class="error">' + err_msg + '</p>');
+                    _this.$toolbar.addClass('hide');
+                    _this.$path.empty();
+                    _this.$toolbar2.empty();
+                    _this.$loadingTip.hide();
+                    _this.$error.html(err_msg).show();
                 }
             });
         },
 
-        showRepoList: function(group_id, options) {
-            this.group_id = group_id;
-            this.$emptyTip.hide();
-            this.renderGroupTop(options);
-            this.$table.hide();
-            var $loadingTip = this.$loadingTip;
-            $loadingTip.show();
+        showRepoList: function() {
             var _this = this;
-            this.repos.setGroupID(group_id);
+            this.repos.setGroupID(this.group_id);
             this.repos.fetch({
                 cache: false,
                 reset: true,
                 data: {from: 'web'},
-                success: function (collection, response, opts) {
+                success: function(collection, response, opts) {
                 },
-                error: function (collection, response, opts) {
-                    $loadingTip.hide();
-                    var $error = _this.$('.error');
+                error: function(collection, response, opts) {
                     var err_msg;
                     if (response.responseText) {
                         if (response['status'] == 401 || response['status'] == 403) {
@@ -142,34 +150,59 @@ define([
                     } else {
                         err_msg = gettext('Please check the network.');
                     }
-                    $error.html(err_msg).show();
+                    _this.$error.html(err_msg).show();
+                },
+                complete: function() {
+                    _this.$loadingTip.hide();
                 }
             });
         },
 
-        render: function() {
-            this.$el.html(this.template());
-            this.$table = this.$('table');
-            this.$tableHead = this.$('thead');
-            this.$tableBody = this.$('tbody');
-            this.$loadingTip = this.$('#group-repos .loading-tip');
+        renderToolbar: function() {
+            this.$toolbar = $('<div class="cur-view-toolbar hide" id="group-toolbar"></div>').html(this.toolbarTemplate());
+            this.$('.common-toolbar').before(this.$toolbar);
+        },
+
+        renderMainCon: function() {
+            this.$mainCon = $('<div class="main-panel-main main-panel-main-with-side" id="group"></div>').html(this.template());
+            this.$el.append(this.$mainCon);
+
+            this.$path = $('.group-path', this.$mainCon);
+            this.$toolbar2 = $('.group-toolbar-2', this.$mainCon);
+            this.$table = $('table', this.$mainCon);
+            this.$tableHead = $('thead', this.$table);
+            this.$tableBody = $('tbody', this.$table);
+            this.$loadingTip = $('.loading-tip', this.$mainCon);
             this.$emptyTip = this.$('#group-repos .empty-tips');
-            this.attached = false;
+            this.$error = $('.error', this.$mainCon);
+        },
+
+        renderPath: function(data) {
+            this.$path.html(this.pathTemplate(data));
+        },
+
+        renderToolbar2: function(data) {
+            this.$toolbar2.html(this.toolbar2Template(data));
+        },
+
+        // update group name. e.g 'rename'
+        updateName: function(new_name) {
+            this.group.name = new_name;
+            $('.group-name', this.$mainCon).html(Common.HTMLescape(new_name));
         },
 
         show: function(group_id, options) {
-            if (!this.attached) {
-                // if the user swith bettern different groups,
-                // the group view is already attached.
-                $("#right-panel").html(this.$el);
-                this.attached = true;
+            if (!$('#group').length) {
+                this.renderToolbar();
+                this.renderMainCon();
             }
-            this.showRepoList(group_id, options);
+            this.group_id = group_id;
+            this.showGroup(options);
         },
 
         hide: function() {
-            this.attached = false;
-            this.$el.detach();
+            this.$toolbar.detach();
+            this.$mainCon.detach();
         },
 
         createRepo: function() {

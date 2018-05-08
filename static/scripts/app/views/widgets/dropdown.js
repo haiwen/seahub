@@ -11,7 +11,7 @@ define([
     */
 
     // There can be only one visible dropdown view
-    $(document).click(function(e) {
+    $(document).on('click', function(e) {
         var view = app.ui.currentDropdown;
         var target = e.target || event.srcElement;
 
@@ -19,9 +19,8 @@ define([
             return true;
         }
 
-        if (!view.$('.sf-dropdown-menu').is(target)
-            && !view.$('.sf-dropdown-menu').find('*').is(target))
-        {
+        if (!view.$('.sf-dropdown-menu').is(target) &&
+            !view.$('.sf-dropdown-menu').find('*').is(target)) {
             view.hide();
             if (app.ui.currentHighlightedItem) {
                 app.ui.currentHighlightedItem.rmHighlight();
@@ -30,7 +29,7 @@ define([
         return true;
     });
 
-    $(document).keydown(function(e) {
+    $(document).on('keydown', function(e) {
         // ESCAPE key pressed
         if (e.keyCode == 27) {
             var view = app.ui.currentDropdown;

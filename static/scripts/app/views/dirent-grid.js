@@ -91,7 +91,7 @@ define([
 
         showPopupMenu: function(e) {
             // make sure there is only 1 menu popup
-            $('.grid-item-op', this.dirView.$dirent_grid).remove();
+            $('.grid-item-op', this.dirView.$gridViewContainer).remove();
 
             var dir = this.dir;
             var template;
@@ -147,7 +147,7 @@ define([
 
         viewImageWithPopup: function() {
             if (this.model.get('is_img')) {
-                var index = $('.img-grid-item', this.dirView.$dirent_grid).index(this.$el);
+                var index = $('.img-grid-item', this.dirView.$gridViewContainer).index(this.$el);
                 $.magnificPopup.open(this.dirView.magnificPopupOptions, index); // open by index
             }
         },
@@ -167,7 +167,7 @@ define([
         del: function() {
             var _this = this;
             if (this.model.get('is_img')) {
-                var index = $('.img-grid-item', this.dirView.$dirent_grid).index(this.$el);
+                var index = $('.img-grid-item', this.dirView.$gridViewContainer).index(this.$el);
             }
 
             this.closeMenu();
@@ -222,7 +222,7 @@ define([
             };
 
             if (this.model.get('is_img') && op_type == 'mv') {
-                var index = $('.img-grid-item', this.dirView.$dirent_grid).index(this.$el);
+                var index = $('.img-grid-item', this.dirView.$gridViewContainer).index(this.$el);
                 $.extend(options, {
                     'dirView': this.dirView,
                     'imgIndex': index
@@ -242,7 +242,7 @@ define([
             };
 
             if (this.model.get('is_img')) {
-                var index = $('.img-grid-item', this.dirView.$dirent_grid).index(this.$el);
+                var index = $('.img-grid-item', this.dirView.$gridViewContainer).index(this.$el);
                 $.extend(options, {
                     'dirView': this.dirView,
                     'imgIndex': index
@@ -287,8 +287,12 @@ define([
         },
 
         viewDetails: function() {
-            var _this = this;
+            if (this.dirView.fileCommentsView.$el.is(':visible')) {
+                this.dirView.fileCommentsView.hide();
+            }
 
+            var _this = this;
+            var detailsView = this.dirView.direntDetailsView;
             var file_icon_size = Common.isHiDPI() ? 48 : 24;
             var data = {
                 repo_id: this.dir.repo_id,
@@ -310,7 +314,6 @@ define([
                 });
             }
 
-            var detailsView = this.dirView.direntDetailsView;
             detailsView.show(data);
 
             if (this.model.get('perm') == 'rw') {
@@ -332,7 +335,7 @@ define([
                         error: function(xhr) {
                             var error_msg;
                             if (xhr.responseText) {
-                                var parsed_resp = $.parseJSON(xhr.responseText);
+                                var parsed_resp = JSON.parse(xhr.responseText);
                                 error_msg = parsed_resp.error_msg || parsed_resp.detail;
                             } else {
                                 error_msg = gettext("Failed. Please check the network.");
@@ -373,7 +376,7 @@ define([
                     error: function(xhr) {
                         var error_msg;
                         if (xhr.responseText) {
-                            var parsed_resp = $.parseJSON(xhr.responseText);
+                            var parsed_resp = JSON.parse(xhr.responseText);
                             error_msg = parsed_resp.error_msg || parsed_resp.detail;
                         } else {
                             error_msg = gettext("Failed. Please check the network.");
@@ -388,6 +391,10 @@ define([
         },
 
         viewFileComments: function() {
+            if (this.dirView.direntDetailsView.$el.is(':visible')) {
+                this.dirView.direntDetailsView.hide();
+            }
+
             var file_icon_size = Common.isHiDPI() ? 48 : 24;
             this.dirView.fileCommentsView.show({
                 'is_repo_owner': this.dir.is_repo_owner,

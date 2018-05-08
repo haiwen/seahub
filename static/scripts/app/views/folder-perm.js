@@ -3,10 +3,10 @@ define([
     'underscore',
     'backbone',
     'common',
-    'jquery.ui.tabs',
+    'jquery.ui', /* for tabs */
     'select2',
     'app/views/repo-folder-perm-item'
-], function($, _, Backbone, Common, Tabs, Select2, RepoFolderPermItemView) {
+], function($, _, Backbone, Common, jQueryUI, Select2, RepoFolderPermItemView) {
     'use strict';
 
     var FolderPermView = Backbone.View.extend({
@@ -31,7 +31,6 @@ define([
                 });
             }
             this.$el.modal({
-                appendTo: "#main",
                 focus: false
             });
             if ($(window).width() >= 768) {
@@ -104,7 +103,7 @@ define([
             $('[name="email"]', this.$add_user_perm).select2(Common.contactInputOptionsForSelect2());
 
             // use select2 to 'group' input in 'add group perm'
-            var groups = app.pageOptions.groups || [],
+            var groups = app.pageOptions.joined_groups_exclude_address_book || [],
                 g_opts = '';
             for (var i = 0, len = groups.length; i < len; i++) {
                 g_opts += '<option value="' + groups[i].id + '" data-index="' + i + '">' + groups[i].name + '</option>';
@@ -200,7 +199,7 @@ define([
                 error: function(xhr) {
                     var error_msg;
                     if (xhr.responseText) {
-                        error_msg = $.parseJSON(xhr.responseText).error_msg;
+                        error_msg = JSON.parse(xhr.responseText).error_msg;
                     } else {
                         error_msg = gettext("Failed. Please check the network.");
                     }

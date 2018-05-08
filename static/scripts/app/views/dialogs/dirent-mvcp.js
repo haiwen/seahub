@@ -3,8 +3,9 @@ define([
     'underscore',
     'backbone',
     'common',
-    'file-tree'
-], function($, _, Backbone, Common, FileTree) {
+    'file-tree',
+    'jquery.ui' /* for `progressbar()` */
+], function($, _, Backbone, Common, FileTree, jQueryUI) {
     'use strict';
 
     var DirentMvcpDialog = Backbone.View.extend({
@@ -24,7 +25,7 @@ define([
             this.show_cur_repo = this.dirent.get('perm') == 'rw' ? true : false;
 
             this.render();
-            this.$el.modal({appendTo:'#main', autoResize:true, focus:false});
+            this.$el.modal({autoResize:true, focus:false});
             $('#simplemodal-container').css({'width':'auto', 'height':'auto'});
 
             if (this.show_cur_repo) {
@@ -138,7 +139,7 @@ define([
                     error: function(xhr, textStatus, errorThrown) {
                         var error;
                         if (xhr.responseText) {
-                            error = $.parseJSON(xhr.responseText).error;
+                            error = JSON.parse(xhr.responseText).error;
                         } else {
                             error = gettext("Failed. Please check the network.");
                         }
@@ -150,7 +151,7 @@ define([
                 });
             };
 
-            cancel_btn.click(function() {
+            cancel_btn.on('click', function() {
                 Common.disableButton(cancel_btn);
                 $.ajax({
                     url: Common.getUrl({name: 'copy_move_task'}),
@@ -167,7 +168,7 @@ define([
                     error: function(xhr, textStatus, errorThrown) {
                         var error;
                         if (xhr.responseText) {
-                            error = $.parseJSON(xhr.responseText).error;
+                            error = JSON.parse(xhr.responseText).error;
                         } else {
                             error = gettext("Failed. Please check the network.");
                         }

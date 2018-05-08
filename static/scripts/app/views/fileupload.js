@@ -93,7 +93,7 @@ define([
             })
             .bind('fileuploadadd', function(e, data) {
                 // for drag & drop
-                if (!dirView.$el.is(':visible')) {
+                if (!$('#dir-view').is(':visible')) {
                     return false;
                 }
                 if (dirents.user_perm && dirents.user_perm != 'rw') {
@@ -295,7 +295,7 @@ define([
                         }
                     });
                     $('#simplemodal-container').css({'width':'auto', 'height':'auto'});
-                    $('.yes', confirm_popup).click(function() {
+                    $('.yes', confirm_popup).on('click', function() {
                         var selected_file = dirents.findWhere({'obj_name': file.name});
                         if (selected_file.get('is_locked')) {
                             if (selected_file.get('locked_by_me')) {
@@ -310,7 +310,7 @@ define([
                             $.modal.close();
                         }
                     });
-                    $('.no', confirm_popup).click(function() {
+                    $('.no', confirm_popup).on('click', function() {
                         file.choose_to_upload = true;
                         $.modal.close();
                     });

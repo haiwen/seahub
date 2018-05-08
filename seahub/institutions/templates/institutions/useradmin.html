@@ -74,25 +74,17 @@
 
 {% block extra_script %}
 <script type="text/javascript">
- addConfirmTo($('.remove-user-btn'), {
-     'title':"{% trans "Delete User" %}",
-     'con':"{% trans "Are you sure you want to delete %s ?" %}",
-     'post': true // post request
- });
+addConfirmTo($('.remove-user-btn'), {
+    'title':"{% trans "Delete User" %}",
+    'con':"{% trans "Are you sure you want to delete %s ?" %}",
+    'post': true // post request
+});
 
-$('tr:gt(0)').hover(
-    function() {
-        $(this).find('.user-status-edit-icon, .user-role-edit-icon').removeClass('vh');
-    },
-    function() {
-        $(this).find('.user-status-edit-icon, .user-role-edit-icon').addClass('vh');
-    }
-);
-$('.user-status-edit-icon, .user-role-edit-icon').click(function() {
+$('.user-status-edit-icon, .user-role-edit-icon').on('click', function() {
     $(this).parent().addClass('hide');
     $(this).parent().next().removeClass('hide'); // show 'select'
 });
-$('.user-status-select, .user-role-select').change(function() {
+$('.user-status-select, .user-role-select').on('change', function() {
     var select = $(this),
         select_val = select.val(),
         uid = select.parents('tr').attr('data-userid'),
@@ -141,7 +133,7 @@ $('.user-status-select, .user-role-select').change(function() {
     });
 });
 // select shows, but the user doesn't select a value, or doesn't change the permission, click other place to hide the select
-$(document).click(function(e) {
+$(document).on('click', function(e) {
     var target = e.target || event.srcElement;
     // target can't be edit-icon
     if (!$('.user-status-edit-icon, .user-status-select').is(target)) {

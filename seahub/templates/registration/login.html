@@ -3,7 +3,6 @@
 
 {% block sub_title %}{% trans "Log In" %} - {% endblock %}
 {% block header_css_class %}hide{% endblock %}
-{% block main_css_class %}{% endblock %}
 {% block extra_style %}
 <style type="text/css">
 html, body, #wrapper { height:100%; }
@@ -11,9 +10,6 @@ html, body, #wrapper { height:100%; }
     background: url('{{ MEDIA_URL }}{{login_bg_image_path}}') center top no-repeat scroll;
     background-size: cover;
     padding-top:1px;
-}
-#main {
-    min-height:0;
 }
 #lang {
     margin:0;
@@ -113,14 +109,14 @@ $('#lang-context-selector .sf-popover-con').css({
     'max-height': $('#lang').offset().top - 10
 });
 
-$('[name="login"]').focus();
+$('[name="login"]').trigger('focus');
 
 function setCaptchaInputWidth() {
     $('#id_captcha_1').outerWidth($('.input').outerWidth() - $('.captcha').width() - $('#refresh-captcha').outerWidth(true) - 10);
 }
-$(window).load(setCaptchaInputWidth);
-$('.captcha').load(setCaptchaInputWidth);
-$('#refresh-captcha').click(function() {
+$(window).on('load', setCaptchaInputWidth);
+$('.captcha').on('load', setCaptchaInputWidth);
+$('#refresh-captcha').on('click', function() {
     $.ajax({
         url: '{% url 'captcha-refresh' %}',
         dataType:'json',
@@ -136,7 +132,7 @@ $('#refresh-captcha').click(function() {
     return false;
 });
 
-$('input[type="submit"]').click(function(){
+$('.login-panel form').on('submit', function(){
     if (!$.trim($('input[name="login"]').val())) {
         $('.error').removeClass('hide').html("{% trans "Email or username cannot be blank" %}");
         return false;
@@ -155,7 +151,7 @@ $(function() {
 
 {% if enable_shib_login %}
 $(function() {
-    $('#shib-login').click(function() {
+    $('#shib-login').on('click', function() {
         window.location = "{% url 'shib_login' %}{% if next %}?next={{ next|escape }}{% endif %}" + encodeURIComponent(document.location.hash);
         return false;
     });
@@ -164,7 +160,7 @@ $(function() {
 
 {% if enable_krb5_login %}
 $(function() {
-    $('#krb5-login').click(function() {
+    $('#krb5-login').on('click', function() {
         window.location = "{% url 'krb5_login' %}{% if next %}?next={{ next|escape }}{% endif %}";
         return false;
     });
@@ -173,7 +169,7 @@ $(function() {
 
 {% if enable_adfs_login %}
 $(function() {
-    $('#adfs-login').click(function() {
+    $('#adfs-login').on('click', function() {
         window.location = "{% url 'saml2_login' %}{% if next %}?next={{ next|escape }}{% endif %}";
         return false;
     });

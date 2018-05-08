@@ -39,11 +39,11 @@
 
 {% block extra_script %}
 <script type="text/javascript">
-$('#clear').click(function() {
+$('#clear').on('click', function() {
     location.href = "{% url 'user_notification_remove' %}";
 });
 
-$('#mark-all-read').click(function() {
+$('#mark-all-read').on('click', function() {
     var unread_items = $('#notices-table .unread');
     if (unread_items.length > 0) {
         $.ajax({
@@ -59,12 +59,12 @@ $('#mark-all-read').click(function() {
     }
 });
 
-$('.detail', $('#notices-table')).click(function() {
+$('#notices-table .detail').on('click', function() {
     location.href = $('.brief a', $(this).parent()).attr('href');
 });
 
 var start = {{start}}, limit = {{limit}};
-$('#notices-more-btn').click(function() {
+$('#notices-more-btn').on('click', function() {
     $(this).addClass('hide');
     $('#notices-loading').removeClass('hide');
     $.ajax({
@@ -75,7 +75,7 @@ $('#notices-more-btn').click(function() {
             $('#notices-loading').addClass('hide');
             $('#notices-table').append(data['html']);
 
-            $('.detail', $('#notices-table')).unbind().click(function() {
+            $('#notices-table .detail').off().on('click', function() {
                 location.href = $('.brief a', $(this).parent()).attr('href');
             });
 

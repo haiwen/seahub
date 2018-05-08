@@ -7,7 +7,7 @@ except ImportError:
 else:
     User = get_user_model()
 
-from seahub.two_factor import devices_for_user
+from seahub.two_factor.models import devices_for_user
 
 
 class Command(BaseCommand):

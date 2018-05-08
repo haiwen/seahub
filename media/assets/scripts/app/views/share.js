@@ -466,7 +466,7 @@ define([
                 width: '400px'
             },Common.contactInputOptionsForSelect2()));
 
-            var groups = app.pageOptions.groups || [];
+            var groups = app.pageOptions.joined_groups_exclude_address_book || [];
             var g_opts = '';
             for (var i = 0, len = groups.length; i < len; i++) {
                 g_opts += '<option value="' + groups[i].id + '" data-index="' + i + '">' + groups[i].name + '</option>';

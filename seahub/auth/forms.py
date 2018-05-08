@@ -1,5 +1,4 @@
 # Copyright (c) 2012-2016 Seafile Ltd.
-from django.contrib.sites.models import Site
 from django.conf import settings
 from django import forms
 from django.utils.translation import ugettext_lazy as _
@@ -13,7 +12,7 @@ from seahub.auth.tokens import default_token_generator
 from seahub.options.models import UserOptions
 from seahub.profile.models import Profile
 from seahub.utils import IS_EMAIL_CONFIGURED, send_html_email, \
-    is_ldap_user, is_user_password_strong
+    is_ldap_user, is_user_password_strong, get_site_name
 
 from captcha.fields import CaptchaField
 
@@ -132,8 +131,7 @@ class PasswordResetForm(forms.Form):
 
         user = self.users_cache
         if not domain_override:
-            current_site = Site.objects.get_current()
-            site_name = current_site.name
+            site_name = get_site_name()
         else:
             site_name = domain_override
 

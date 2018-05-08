@@ -1,6 +1,7 @@
 # Copyright (c) 2012-2016 Seafile Ltd.
 from __future__ import absolute_import, division, print_function, unicode_literals
 
+import sys
 from binascii import hexlify, unhexlify
 from os import urandom
 
@@ -12,17 +13,6 @@ except ImportError:
 from django.conf import settings
 from django.core.exceptions import ValidationError
 from django.utils import six
-
-
-def default_device(user):
-    if not user or user.is_anonymous():
-        return
-
-    # to avoid circular import
-    from seahub.two_factor import devices_for_user
-    for device in devices_for_user(user):
-        if device:
-            return device
 
 def get_otpauth_url(accountname, secret, issuer=None, digits=None):
     # For a complete run-through of all the parameters, have a look at the
@@ -116,3 +106,18 @@ def random_hex(length=20):
     :rtype: str
     """
     return hexlify(urandom(length))
+
+def import_class(path):
+    """
+    Imports a class based on a full Python path ('pkg.pkg.mod.Class'). This
+    does not trap any exceptions if the path is not valid.
+    """
+    module, name = path.rsplit('.', 1)
+    __import__(module)
+    mod = sys.modules[module]
+    cls = getattr(mod, name)
+
+    return cls
+
+# # Move here to avoid circular import
+# from seahub.two_factor.models import (StaticDevice, TOTPDevice, PhoneDevice)

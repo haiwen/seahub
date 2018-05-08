@@ -10,8 +10,8 @@ from django.core.urlresolvers import reverse
 from django.contrib import messages
 from django.http import HttpResponse, HttpResponseRedirect, Http404, \
     HttpResponseBadRequest
-from django.shortcuts import render_to_response
-from django.template import RequestContext
+from django.shortcuts import render
+
 from django.utils.http import urlquote
 from django.utils.translation import ugettext as _
 
@@ -28,16 +28,18 @@ from seahub.auth import REDIRECT_FIELD_NAME
 from seahub.base.decorators import sys_staff_required, require_POST
 from seahub.group.utils import validate_group_name, BadGroupNameError, \
     ConflictGroupNameError
-from seahub.wiki import get_group_wiki_repo, get_group_wiki_page, \
-    get_wiki_pages
 from seahub.wiki.models import WikiDoesNotExist, WikiPageMissing, GroupWiki
-from seahub.wiki.utils import clean_page_name, page_name_to_file_name
-from seahub.settings import SITE_ROOT, SITE_NAME
-from seahub.utils import render_error, send_html_email, is_org_context
+from seahub.wiki.utils import (clean_page_name, page_name_to_file_name,
+                               get_wiki_pages, get_group_wiki_repo,
+                               get_group_wiki_page)
+from seahub.settings import SITE_ROOT
+from seahub.utils import render_error, send_html_email, is_org_context, \
+    get_site_name
 from seahub.views import is_registered_user, check_folder_permission
 from seahub.views.modules import get_enabled_mods_by_group, \
     get_available_mods_by_group
 from seahub.share.models import ExtraGroupsSharePermission
+from seahub.constants import HASH_URLS
 
 from seahub.forms import SharedRepoCreateForm
 
@@ -93,7 +95,7 @@ def group_check(func):
         group_id_int = int(group_id) # Checked by URL Conf
         group = get_group(group_id_int)
         if not group:
-            return HttpResponseRedirect(reverse('group_list', args=[]))
+            return HttpResponseRedirect(HASH_URLS['GROUP_LIST'])
         group.is_staff = False
         if PublicGroup.objects.filter(group_id=group.id):
             group.is_pub = True
@@ -120,9 +122,9 @@ def group_check(func):
             group.view_perm = "pub"
             return func(request, group, *args, **kwargs)
 
-        return render_to_response('error.html', {
+        return render(request, 'error.html', {
                 'error_msg': _('Permission denied'),
-                }, context_instance=RequestContext(request))
+                })
 
     return _decorated
 
@@ -187,7 +189,7 @@ def send_group_member_add_mail(request, group, from_user, to_user):
         'group': group,
         }
 
-    subject = _(u'You are invited to join a group on %s') % SITE_NAME
+    subject = _(u'You are invited to join a group on %s') % get_site_name()
     send_html_email(subject, 'group/add_member_email.html', c, None, [to_user])
 
 @login_required_ajax
@@ -285,14 +287,14 @@ def group_wiki(request, group, page_name="home"):
         wiki_exists = False
         group_repos = get_group_repos(group.id, username)
         group_repos = [r for r in group_repos if not r.encrypted]
-        return render_to_response("group/group_wiki.html", {
+        return render(request, "group/group_wiki.html", {
                 "group" : group,
                 "is_staff": group.is_staff,
                 "wiki_exists": wiki_exists,
                 "mods_enabled": mods_enabled,
                 "mods_available": mods_available,
                 "group_repos": group_repos,
-                }, context_instance=RequestContext(request))
+                })
     except WikiPageMissing:
         '''create that page for user if he/she is a group member'''
         if not is_group_user(group.id, username):
@@ -332,7 +334,7 @@ def group_wiki(request, group, page_name="home"):
         except (WikiDoesNotExist, WikiPageMissing) as e:
             wiki_index_exists = False
 
-        return render_to_response("group/group_wiki.html", {
+        return render(request, "group/group_wiki.html", {
             "group" : group,
             "is_staff": group.is_staff,
             "wiki_exists": wiki_exists,
@@ -349,7 +351,7 @@ def group_wiki(request, group, page_name="home"):
             "repo_perm": repo_perm,
             "wiki_index_exists": wiki_index_exists,
             "index_content": index_content,
-            }, context_instance=RequestContext(request))
+            })
 
 @group_check
 def group_wiki_pages(request, group):
@@ -374,7 +376,7 @@ def group_wiki_pages(request, group):
     mods_available = get_available_mods_by_group(group.id)
     mods_enabled = get_enabled_mods_by_group(group.id)
 
-    return render_to_response("group/group_wiki_pages.html", {
+    return render(request, "group/group_wiki_pages.html", {
             "group": group,
             "pages": pages,
             "is_staff": group.is_staff,
@@ -384,7 +386,7 @@ def group_wiki_pages(request, group):
             "repo_perm": repo_perm,
             "mods_enabled": mods_enabled,
             "mods_available": mods_available,
-            }, context_instance=RequestContext(request))
+            })
 
 @login_required_ajax
 @group_check

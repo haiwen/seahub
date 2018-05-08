@@ -1,6 +1,6 @@
 {% load i18n%}
 
-$('.repo-transfer-btn').click(function(){
+$('.repo-transfer-btn').on('click', function(){
     var btn_ct = $(this).parents('td'),
         $tr = $(this).closest('tr'),
         repo_id = btn_ct.data('id'),
@@ -29,7 +29,7 @@ $('.repo-transfer-btn').click(function(){
     return false;
 });
 
-$('#repo-transfer-form').submit(function() {
+$('#repo-transfer-form').on('submit', function() {
     var form = $(this),
         form_id = form.attr('id'),
         repo_id = $('[name="repo_id"]', form).val(),
@@ -64,7 +64,7 @@ $('#repo-transfer-form').submit(function() {
 
 $('#main-panel').removeClass('ovhd');
 
-$('.repo-delete-btn').click(function() {
+$('.repo-delete-btn').on('click', function() {
     var $tr = $(this).closest('tr');
     var $td = $(this).closest('td');
     var repo_id = $td.data('id');

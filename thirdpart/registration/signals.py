@@ -6,3 +6,5 @@ user_registered = Signal(providing_args=["user", "request"])
 
 # A user has activated his or her account.
 user_activated = Signal(providing_args=["user", "request"])
+
+user_deleted = Signal(providing_args=['username'])

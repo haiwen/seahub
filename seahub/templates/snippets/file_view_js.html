@@ -1,7 +1,7 @@
 {% if filetype == 'Text' %}
 <script type="text/javascript" src="{{MEDIA_URL}}codemirror/codemirror-2.36.js"></script>
 {% endif %}
-{% if filetype == 'PDF' and use_pdfjs %}
+{% if filetype == 'PDF' or filetype == 'Document' %}
 <script type="text/javascript" src="{{MEDIA_URL}}js/pdf.js"></script>
 {% endif %}
 {% if filetype == 'Audio' %}

@@ -21,12 +21,11 @@ from rest_framework.response import Response
 
 from django.conf import settings as dj_settings
 from django.contrib.auth.hashers import check_password
-from django.contrib.sites.models import RequestSite
+from django.contrib.sites.shortcuts import get_current_site
 from django.db import IntegrityError
 from django.db.models import F
 from django.http import HttpResponse
 from django.template.defaultfilters import filesizeformat
-from django.shortcuts import render_to_response
 from django.utils import timezone
 from django.utils.translation import ugettext as _
 
@@ -35,8 +34,7 @@ from .authentication import TokenAuthentication
 from .serializers import AuthTokenSerializer
 from .utils import get_diff_details, \
     api_error, get_file_size, prepare_starred_files, \
-    get_groups, prepare_events, \
-    api_group_check, get_timestamp, json_response, is_seafile_pro
+    get_groups, api_group_check, get_timestamp, json_response, is_seafile_pro
 
 from seahub.wopi.utils import get_wopi_dict
 from seahub.api2.base import APIView
@@ -1016,7 +1014,7 @@ def check_set_repo_password(request, repo):
                 'You do not have permission to access this library.')
 
     if repo.encrypted:
-        password = request.REQUEST.get('password', default=None)
+        password = request.POST.get('password', default=None)
         if not password:
             return api_error(HTTP_440_REPO_PASSWD_REQUIRED,
                              'Library password is needed.')
@@ -1083,7 +1081,7 @@ class Repo(APIView):
 
         op = request.GET.get('op', 'setpassword')
         if op == 'checkpassword':
-            magic = request.REQUEST.get('magic', default=None)
+            magic = request.GET.get('magic', default=None)
             if not magic:
                 return api_error(HTTP_441_REPO_PASSWD_MAGIC_REQUIRED,
                                  'Library password magic is needed.')
@@ -1873,7 +1871,7 @@ def get_shared_link(request, repo_id, path):
             return api_error(status.HTTP_500_INTERNAL_SERVER_ERROR, e.msg)
 
     http_or_https = request.is_secure() and 'https' or 'http'
-    domain = RequestSite(request).domain
+    domain = get_current_site(request).domain
     file_shared_link = '%s://%s%sf/%s/' % (http_or_https, domain,
                                            settings.SITE_ROOT, token)
     return file_shared_link

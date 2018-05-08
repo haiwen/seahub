@@ -15,14 +15,12 @@ import urllib
 import urllib2
 import chardet
 
-from django.contrib.sites.models import Site, RequestSite
 from django.core.urlresolvers import reverse
 from django.contrib import messages
 from django.http import HttpResponse, HttpResponseBadRequest, Http404, \
     HttpResponseRedirect
-from django.shortcuts import render_to_response, redirect
+from django.shortcuts import render, redirect
 from django.template import Context, loader, RequestContext
-from django.template.loader import render_to_string
 from django.utils.http import urlquote
 from django.utils.translation import ugettext as _
 
@@ -33,10 +31,10 @@ from pysearpc import SearpcError
 from seahub.auth.decorators import login_required
 from seahub.base.decorators import user_mods_check
 from seahub.wiki.models import PersonalWiki, WikiDoesNotExist, WikiPageMissing
-from seahub.wiki import get_personal_wiki_page, get_personal_wiki_repo, \
-    convert_wiki_link, get_wiki_pages
+from seahub.wiki.utils import (get_personal_wiki_page,
+                               get_personal_wiki_repo, get_wiki_pages,
+                               clean_page_name, page_name_to_file_name)
 from seahub.wiki.forms import WikiCreateForm, WikiNewPageForm
-from seahub.wiki.utils import clean_page_name, page_name_to_file_name
 from seahub.utils import render_error
 from seahub.views import check_folder_permission
 
@@ -64,11 +62,11 @@ def personal_wiki(request, page_name="home"):
         wiki_exists = False
         owned_repos = seafile_api.get_owned_repo_list(username)
         owned_repos = [r for r in owned_repos if not r.encrypted]
-        return render_to_response("wiki/personal_wiki.html", {
+        return render(request, "wiki/personal_wiki.html", {
                 "wiki_exists": wiki_exists,
                 "owned_repos": owned_repos,
                 "grps": joined_groups,
-                }, context_instance=RequestContext(request))
+                })
     except WikiPageMissing:
         repo = get_personal_wiki_repo(username)
         filename = page_name_to_file_name(clean_page_name(page_name))
@@ -96,7 +94,7 @@ def personal_wiki(request, page_name="home"):
         except (WikiDoesNotExist, WikiPageMissing) as e:
             wiki_index_exists = False
 
-        return render_to_response("wiki/personal_wiki.html", { 
+        return render(request, "wiki/personal_wiki.html", { 
             "wiki_exists": wiki_exists,
             "content": content,
             "page": os.path.splitext(dirent.obj_name)[0],
@@ -109,7 +107,7 @@ def personal_wiki(request, page_name="home"):
             "wiki_index_exists": wiki_index_exists,
             "index_content": index_content,
             "grps": joined_groups,
-            }, context_instance=RequestContext(request))
+            })
 
 @login_required
 @user_mods_check
@@ -137,13 +135,13 @@ def personal_wiki_pages(request):
     except WikiDoesNotExist:
         return render_error(request, _('Wiki does not exists.'))
 
-    return render_to_response("wiki/personal_wiki_pages.html", {
+    return render(request, "wiki/personal_wiki_pages.html", {
             "pages": pages,
             "repo_id": repo.id,
             "search_repo_id": repo.id,
             "search_wiki": True,
             "grps": joined_groups,
-            }, context_instance=RequestContext(request))
+            })
 
 
 @login_required

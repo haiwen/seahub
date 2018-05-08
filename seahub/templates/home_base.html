@@ -1,8 +1,10 @@
 {% extends "base.html" %}
 {% load i18n %}
 
+{% block main_class %}d-flex ovhd{% endblock %}
+
 {% block main_content %}
-<div class="row">
+<div class="row flex-1 d-flex w100 ovhd"> {# 'ovhd' is for Firefox #}
     <div id="side-nav" class="side-nav side-tabnav col-md-3" >
         <a href="#" title="{% trans "Close" %}" aria-label="{% trans "Close" %}" class="sf2-icon-x1 sf-popover-close op-icon hidden-md-up js-close-side-nav fright"></a>
         {% block left_panel %}
@@ -21,7 +23,7 @@
                 <a href="#" class="ellipsis" title="{% trans "Shared with groups" %}"><span class="toggle-icon icon-caret-left fright" aria-hidden="true"></span><span class="sf2-icon-group" aria-hidden="true"></span>{% trans "Shared with groups" %}</a>
                 <ul class="grp-list hide">
                     <li>
-                        <a href="{% url 'group_list' %}"><span class="sharp" aria-hidden="true">#</span>{% trans "All Groups" %}</a>
+                        <a href="{{ SITE_ROOT }}#groups/"><span class="sharp" aria-hidden="true">#</span>{% trans "All Groups" %}</a>
                     </li>
                     {% for grp in grps %}
                     <li>
@@ -42,7 +44,7 @@
             {% endif %}
             {% for mod in request.user.mods_enabled %}
             {% if mod == 'personal wiki' %}
-            <li class="tab {% block cur_personal_wiki %}{% endblock %}"><a href="{% url 'personal_wiki' %}"><span class="sf2-icon-wiki" aria-hidden="true"></span>{% trans "Personal Wiki" %}</a></li>
+            <li class="tab {% block cur_personal_wiki %}{% endblock %}"><a href="{% url 'wiki:list' %}"><span class="sf2-icon-wiki" aria-hidden="true"></span>{% trans "Wiki" %}</a></li>
             {% endif %}
             {% endfor %}
             <li class="tab"><a href="{{ SITE_ROOT }}#devices/" class="ellipsis" title="{% trans "Linked Devices" %}"><span class="sf2-icon-monitor" aria-hidden="true"></span>{% trans "Linked Devices" %}</a></li>
@@ -51,21 +53,34 @@
                 <a href="{{ SITE_ROOT }}#invitations/"><span aria-hidden="true" class="sf2-icon-invite"></span>{% trans "Invite People" %}</a>
             </li>
             {% endif %}
-        </ul>
 
-        <h3 class="hd">{% trans "Share Admin" %}</h3>
-        <ul class="side-tabnav-tabs">
-            {% if user.permissions.can_add_repo %}
-            <li class="tab {% block cur_share_libs %}{% endblock %}"><a href="{{ SITE_ROOT }}#share-admin-libs/"><span class="sf2-icon-library" aria-hidden="true"></span>{% trans "Libraries" %}</a></li>
-            <li class="tab {% block cur_share_folders %}{% endblock %}"><a href="{{ SITE_ROOT }}#share-admin-folders/"><span class="sf2-icon-folder" aria-hidden="true"></span>{% trans "Folders" %}</a></li>
-            {% endif %}
-            <li class="tab {% block cur_share_links %}{% endblock %}"><a href="{{ SITE_ROOT }}#share-admin-share-links/"><span class="sf2-icon-link" aria-hidden="true"></span>{% trans "Links" %}</a></li>
+            <li class="tab" id="share-admin-nav">
+                <a href="#" class="ellipsis" title="{% trans "Share Admin" %}"><span class="toggle-icon icon-caret-left fright" aria-hidden="true"></span><span aria-hidden="true" class="sf2-icon-wrench"></span>{% trans "Share Admin" %}</a>
+                <ul class="hide">
+                    {% if user.permissions.can_add_repo %}
+                    <li>
+                        <a href="{{ SITE_ROOT }}#share-admin-libs/"><span aria-hidden="true" class="sharp">#</span>{% trans "Libraries" %}</a>
+                    </li>
+                    <li>
+                        <a href="{{ SITE_ROOT }}#share-admin-folders/"><span aria-hidden="true" class="sharp">#</span>{% trans "Folders" %}</a>
+                    </li>
+                    {% endif %}
+                    {% if user.permissions.can_generate_share_link %}
+                    <li>
+                        <a href="{{ SITE_ROOT }}#share-admin-share-links/"><span aria-hidden="true" class="sharp">#</span>{% trans "Links" %}</a>
+                    </li>
+                    {% elif user.permissions.can_generate_upload_link %}
+                    <li>
+                        <a href="{{ SITE_ROOT }}#share-admin-upload-links/"><span aria-hidden="true" class="sharp">#</span>{% trans "Links" %}</a>
+                    </li>
+                    {% endif %}
+                </ul>
+            </li>
         </ul>
-
         {% endblock %}
     </div>
 
-    <div id="right-panel" class="col-md-9 col-md-offset-3">
+    <div id="right-panel" class="col-md-9 ov-auto flex-1">
         {% block right_panel %}{% endblock %}
     </div>
 
@@ -93,9 +108,15 @@
 
 {% block extra_script %}
 <script type="text/javascript">
-$('#group-nav a:first').click(function() {
+$('#group-nav a:first').on('click', function() {
     $('#group-nav .toggle-icon').toggleClass('icon-caret-left icon-caret-down');
     $('#group-nav .grp-list').slideToggle();
+    return false;
+});
+$('#share-admin-nav').on('click', 'a:first', function() {
+    var $shareAdmin = $('#share-admin-nav');
+    $('.toggle-icon', $shareAdmin).toggleClass('icon-caret-left icon-caret-down');
+    $('ul', $shareAdmin).slideToggle(250);
     return false;
 });
 </script>

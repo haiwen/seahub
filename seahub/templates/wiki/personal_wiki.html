@@ -1,7 +1,7 @@
 {% extends "home_base.html" %}
 
 {% load seahub_tags avatar_tags i18n %}
-{% load url from future %}
+
 
 {% block sub_title %}{% trans "Personal Wiki" %} - {% endblock %}
 
@@ -108,20 +108,19 @@ marked.setOptions({
 });
 $('#wiki-content')
 .html(addAnchorsToHeaders(marked('{{ content|escapejs }}')))
-.find('h1, h2').hover(
-    function() {
-        $('.anchor', $(this)).removeClass('vh');
-    },  
-    function() {
-        $('.anchor', $(this)).addClass('vh');
-    }
-);  
+.find('h1, h2')
+.on('mouseenter', function() {
+    $('.anchor', $(this)).removeClass('vh');
+})  
+.on('mouseleave', function() {
+    $('.anchor', $(this)).addClass('vh');
+});  
 
-$('#page-create').click(function() {
+$('#page-create').on('click', function() {
     $('#page-create-form').modal({appendTo: '#main'});
     $('#simplemodal-container').css({'height':'auto'});
 });
-$('#page-create-form').submit(function() {
+$('#page-create-form').on('submit', function() {
     var page_name = $.trim($('[name="page_name"]', $(this)).val());
     if (!page_name) {
         return false;
@@ -132,7 +131,7 @@ addConfirmTo($('#page-delete'), {
     'title': "{% trans "Delete Page" %}",
     'con': "{% trans "Are you sure you want to delete this page?" %}"
 });
-$('a.wiki-page-missing').click(function() {
+$('a.wiki-page-missing').on('click', function() {
     $('#page-create-form').modal({appendTo: '#main'});
     $('#simplemodal-container').css({'height':'auto'});
     $('#page-name').val($(this).text());
@@ -140,12 +139,12 @@ $('a.wiki-page-missing').click(function() {
 });
 
 {% else %}
-$('#wiki-create').click(function() {
+$('#wiki-create').on('click', function() {
     $('#wiki-create-form').modal({appendTo: '#main'});
     $('#simplemodal-container').css({'height':'auto'});
     return false;
 });
-$('#wiki-create-form').submit(function () {
+$('#wiki-create-form').on('submit', function () {
     var form = $(this),
         form_id = form.attr('id'),
         repo_name = $('[name="repo_name"]', form).val(),
@@ -176,7 +175,7 @@ $('#wiki-create-form').submit(function () {
             location.href = data['href'];
         },
         error: function(data, textStatus, jqXHR) {
-            var errors = $.parseJSON(data.responseText);
+            var errors = JSON.parse(data.responseText);
             $.each(errors, function(index, value) {
                 apply_form_error(form_id, value);
             });
@@ -198,14 +197,14 @@ var all_repos = [];
         }
     });
 {% endfor %}
-$('#wiki-use-lib').click(function() {
+$('#wiki-use-lib').on('click', function() {
     var $form = $('#wiki-use-lib-form');
     $form.modal({appendTo:'#main', autoResize:true, focus:false});
     $('#simplemodal-container').css({'width':'auto', 'height':'auto'});
     FileTree.renderDirTree($('#repos-dirs').data('site_root', '{{SITE_ROOT}}'), $form, all_repos);
     return false;
 });
-$('#wiki-use-lib-form').submit(function() {
+$('#wiki-use-lib-form').on('submit', function() {
     var dst_repo = $('[name="dst_repo"]', $(this)).val();
     if (!$.trim(dst_repo)) {
         $('.error', $(this)).removeClass('hide');
@@ -224,10 +223,10 @@ $('#wiki-index-con').html(marked('{{ index_content|escapejs }}'));
 $('#edit-index').attr('href', "{% url 'personal_wiki_page_edit' page_name %}");
 {% endwith %}
 {% else %}
-$('#create-index').click(function() {
-    var form = $('#page-create-form');
-    $('[name="page_name"]', form).val('index');
-    form.submit();
+$('#create-index').on('click', function() {
+    var $form = $('#page-create-form');
+    $('[name="page_name"]', $form).val('index');
+    $form.trigger('submit');
 });
 {% endif %}
 {% endif %}
