@@ -10,8 +10,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: seahub\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2018-03-17 10:26+0800\n"
-"PO-Revision-Date: 2018-03-17 02:38+0000\n"
+"POT-Creation-Date: 2018-05-08 13:35+0800\n"
+"PO-Revision-Date: 2018-05-08 03:23+0000\n"
 "Last-Translator: zheng xie <xiez1989@gmail.com>\n"
 "Language-Team: Portuguese (Brazil) (http://www.transifex.com/haiwen/seahub/language/pt_BR/)\n"
 "MIME-Version: 1.0\n"
@@ -21,22 +21,23 @@ msgstr ""
 "Plural-Forms: nplurals=2; plural=(n > 1);\n"
 
 #: static/scripts/app/models/deleted-repo.js:19
-#: static/scripts/app/models/repo.js:59 static/scripts/common.js:320
+#: static/scripts/app/models/repo.js:59 static/scripts/common.js:324
 msgid "Encrypted library"
 msgstr "Biblioteca encriptada"
 
 #: static/scripts/app/models/deleted-repo.js:21
-#: static/scripts/app/models/repo.js:61 static/scripts/common.js:324
+#: static/scripts/app/models/repo.js:61 static/scripts/common.js:328
 #: static/scripts/sysadmin-app/models/trash-repo.js:14
 msgid "Read-Write library"
 msgstr "Biblioteca no modo leitura-escrita"
 
-#: static/scripts/app/models/dirent.js:113 static/scripts/app/views/dir.js:642
-#: static/scripts/app/views/dir.js:713
+#: static/scripts/app/models/dirent.js:113 static/scripts/app/views/dir.js:637
+#: static/scripts/app/views/dir.js:707
 #: static/scripts/app/views/fileupload.js:392
 #: static/scripts/app/views/fileupload.js:406
 #: static/scripts/app/views/fileupload.js:418
-#: static/scripts/app/views/fileupload.js:430 static/scripts/common.js:598
+#: static/scripts/app/views/fileupload.js:430
+#: static/scripts/app/views/group.js:59 static/scripts/common.js:602
 msgid "Just now"
 msgstr "Agora mesmo"
 
@@ -46,28 +47,28 @@ msgstr "Nome requerido"
 
 #: static/scripts/app/models/repo.js:37
 #: static/scripts/app/views/dialogs/dirent-rename.js:65
-#: static/scripts/app/views/dir.js:627 static/scripts/app/views/dir.js:688
-#: static/scripts/app/views/dirent.js:483 static/scripts/app/views/repo.js:181
+#: static/scripts/app/views/dir.js:622 static/scripts/app/views/dir.js:682
+#: static/scripts/app/views/dirent.js:484 static/scripts/app/views/repo.js:181
 msgid "Name should not include '/'."
 msgstr "O Nome não pode incluir \"/\"."
 
-#: static/scripts/app/models/repo.js:41 static/scripts/app/views/share.js:278
+#: static/scripts/app/models/repo.js:41 static/scripts/app/views/share.js:279
 msgid "Please enter password"
 msgstr "Por favor insira a senha"
 
-#: static/scripts/app/models/repo.js:42 static/scripts/app/views/share.js:286
+#: static/scripts/app/models/repo.js:42 static/scripts/app/views/share.js:287
 msgid "Please enter the password again"
 msgstr "Por favor insira a senha novamente"
 
-#: static/scripts/app/models/repo.js:44 static/scripts/app/views/share.js:282
+#: static/scripts/app/models/repo.js:44 static/scripts/app/views/share.js:283
 msgid "Password is too short"
 msgstr "Senha muito curta"
 
-#: static/scripts/app/models/repo.js:46 static/scripts/app/views/share.js:290
+#: static/scripts/app/models/repo.js:46 static/scripts/app/views/share.js:291
 msgid "Passwords don't match"
 msgstr "Senhas não coincidem"
 
-#: static/scripts/app/models/repo.js:63 static/scripts/common.js:322
+#: static/scripts/app/models/repo.js:63 static/scripts/common.js:326
 msgid "Read-Only library"
 msgstr "Biblioteca no modo somente leitura"
 
@@ -82,36 +83,40 @@ msgid "Read-Only"
 msgstr "Somente Leitura"
 
 #: static/scripts/app/views/account.js:58
-#: static/scripts/app/views/dialogs/repo-folder-perm-admin.js:134
-#: static/scripts/app/views/dialogs/repo-share-link-admin.js:96
-#: static/scripts/app/views/dir.js:483 static/scripts/app/views/dirent.js:286
-#: static/scripts/app/views/file-comments.js:116
-#: static/scripts/app/views/group-discussions.js:125
-#: static/scripts/app/views/group-discussions.js:203
-#: static/scripts/app/views/group-discussions.js:246
-#: static/scripts/app/views/group-manage-members.js:117
-#: static/scripts/app/views/group-manage-members.js:146
+#: static/scripts/app/views/dialogs/repo-folder-perm-admin.js:135
+#: static/scripts/app/views/dialogs/repo-share-link-admin.js:97
+#: static/scripts/app/views/dir.js:463 static/scripts/app/views/dirent.js:287
+#: static/scripts/app/views/file-comments.js:120
+#: static/scripts/app/views/group-discussions.js:119
+#: static/scripts/app/views/group-discussions.js:199
+#: static/scripts/app/views/group-discussions.js:242
+#: static/scripts/app/views/group-manage-members.js:116
+#: static/scripts/app/views/group-manage-members.js:145
 #: static/scripts/app/views/group-members.js:80
-#: static/scripts/app/views/group.js:110 static/scripts/app/views/group.js:143
-#: static/scripts/app/views/groups.js:83
-#: static/scripts/app/views/groups.js:134
-#: static/scripts/app/views/invitations.js:119
+#: static/scripts/app/views/group.js:173 static/scripts/app/views/group.js:202
+#: static/scripts/app/views/groups.js:90
+#: static/scripts/app/views/groups.js:144
+#: static/scripts/app/views/invitations.js:126
 #: static/scripts/app/views/my-deleted-repos.js:86
-#: static/scripts/app/views/myhome-repos.js:104
-#: static/scripts/app/views/myhome-shared-repos.js:81
+#: static/scripts/app/views/myhome-repos.js:94
+#: static/scripts/app/views/myhome-shared-repos.js:79
 #: static/scripts/app/views/notifications.js:63
 #: static/scripts/app/views/notifications.js:163
-#: static/scripts/app/views/organization.js:125
+#: static/scripts/app/views/organization.js:135
 #: static/scripts/app/views/repo-shared-link.js:90
-#: static/scripts/app/views/share-admin-folders.js:98
-#: static/scripts/app/views/share-admin-repos.js:100
-#: static/scripts/app/views/share-admin-share-links.js:150
-#: static/scripts/app/views/share-admin-upload-links.js:64
-#: static/scripts/app/views/share.js:200 static/scripts/app/views/share.js:506
-#: static/scripts/app/views/share.js:621 static/scripts/app/views/share.js:706
-#: static/scripts/app/views/share.js:730
+#: static/scripts/app/views/share-admin-folders.js:96
+#: static/scripts/app/views/share-admin-repos.js:96
+#: static/scripts/app/views/share-admin-share-links.js:147
+#: static/scripts/app/views/share-admin-upload-links.js:61
+#: static/scripts/app/views/share.js:201 static/scripts/app/views/share.js:507
+#: static/scripts/app/views/share.js:622 static/scripts/app/views/share.js:707
+#: static/scripts/app/views/share.js:731
+#: static/scripts/sysadmin-app/views/address-book-group.js:143
+#: static/scripts/sysadmin-app/views/address-book-group.js:217
+#: static/scripts/sysadmin-app/views/address-book-group.js:271
+#: static/scripts/sysadmin-app/views/address-book.js:89
 #: static/scripts/sysadmin-app/views/device-trusted-ipaddresses.js:62
-#: static/scripts/sysadmin-app/views/group-members.js:96
+#: static/scripts/sysadmin-app/views/group-members.js:90
 #: static/scripts/sysadmin-app/views/groups.js:100
 #: static/scripts/sysadmin-app/views/repos.js:90
 msgid "Please check the network."
@@ -154,45 +159,49 @@ msgid "Deleted directories"
 msgstr "Diretórios excluídos"
 
 #: static/scripts/app/views/details.js:94
-#: static/scripts/app/views/dialogs/dirent-mvcp.js:143
-#: static/scripts/app/views/dialogs/dirent-mvcp.js:172
+#: static/scripts/app/views/dialogs/dirent-mvcp.js:144
+#: static/scripts/app/views/dialogs/dirent-mvcp.js:173
 #: static/scripts/app/views/dialogs/dirent-rename.js:96
 #: static/scripts/app/views/dialogs/repo-change-password.js:94
-#: static/scripts/app/views/dialogs/repo-folder-perm-admin.js:302
+#: static/scripts/app/views/dialogs/repo-folder-perm-admin.js:303
 #: static/scripts/app/views/dialogs/repo-history-settings.js:83
 #: static/scripts/app/views/dialogs/repo-history-settings.js:142
-#: static/scripts/app/views/dir.js:1291 static/scripts/app/views/dir.js:1325
-#: static/scripts/app/views/dir.js:1394
-#: static/scripts/app/views/dirent-details.js:164
-#: static/scripts/app/views/dirent-grid.js:338
-#: static/scripts/app/views/dirent-grid.js:379
-#: static/scripts/app/views/dirent.js:501
-#: static/scripts/app/views/dirent.js:624
-#: static/scripts/app/views/dirent.js:665
+#: static/scripts/app/views/dir.js:1281 static/scripts/app/views/dir.js:1315
+#: static/scripts/app/views/dir.js:1384
+#: static/scripts/app/views/dirent-details.js:160
+#: static/scripts/app/views/dirent-grid.js:341
+#: static/scripts/app/views/dirent-grid.js:382
+#: static/scripts/app/views/dirent.js:502
+#: static/scripts/app/views/dirent.js:628
+#: static/scripts/app/views/dirent.js:669
 #: static/scripts/app/views/file-comment.js:52
-#: static/scripts/app/views/file-comments.js:159
-#: static/scripts/app/views/folder-perm.js:205
+#: static/scripts/app/views/file-comments.js:163
+#: static/scripts/app/views/folder-perm.js:204
 #: static/scripts/app/views/folder-share-item.js:97
 #: static/scripts/app/views/folder-share-item.js:133
 #: static/scripts/app/views/group-discussion.js:94
 #: static/scripts/app/views/group-manage-member.js:79
 #: static/scripts/app/views/group-manage-member.js:105
-#: static/scripts/app/views/group-manage-members.js:180
-#: static/scripts/app/views/group-repo.js:85
-#: static/scripts/app/views/group-settings.js:133
-#: static/scripts/app/views/group-settings.js:190
-#: static/scripts/app/views/group-settings.js:230
-#: static/scripts/app/views/group-settings.js:287
-#: static/scripts/app/views/group-settings.js:327
-#: static/scripts/app/views/group-settings.js:362
-#: static/scripts/app/views/invitations.js:188
+#: static/scripts/app/views/group-manage-members.js:179
+#: static/scripts/app/views/group-repo.js:113
+#: static/scripts/app/views/group-settings.js:137
+#: static/scripts/app/views/group-settings.js:194
+#: static/scripts/app/views/group-settings.js:238
+#: static/scripts/app/views/group-settings.js:295
+#: static/scripts/app/views/group-settings.js:335
+#: static/scripts/app/views/group-settings.js:370
+#: static/scripts/app/views/invitations.js:194
 #: static/scripts/app/views/repo-folder-perm-item.js:86
 #: static/scripts/app/views/repo-folder-perm-item.js:127
 #: static/scripts/app/views/repo.js:206 static/scripts/app/views/repo.js:281
 #: static/scripts/app/views/repo.js:398 static/scripts/app/views/repo.js:440
-#: static/scripts/app/views/share.js:423 static/scripts/app/views/share.js:808
-#: static/scripts/app/views/share.js:887 static/scripts/common.js:419
-#: static/scripts/common.js:508
+#: static/scripts/app/views/share.js:424 static/scripts/app/views/share.js:809
+#: static/scripts/app/views/share.js:888 static/scripts/common.js:423
+#: static/scripts/common.js:512
+#: static/scripts/sysadmin-app/views/address-book-group-item.js:97
+#: static/scripts/sysadmin-app/views/address-book-group.js:316
+#: static/scripts/sysadmin-app/views/address-book-group.js:341
+#: static/scripts/sysadmin-app/views/address-book.js:129
 #: static/scripts/sysadmin-app/views/admin-login-logs.js:129
 #: static/scripts/sysadmin-app/views/admin-operation-logs.js:129
 #: static/scripts/sysadmin-app/views/dashboard.js:84
@@ -203,18 +212,18 @@ msgstr "Diretórios excluídos"
 #: static/scripts/sysadmin-app/views/folder-share-item.js:90
 #: static/scripts/sysadmin-app/views/folder-share-item.js:139
 #: static/scripts/sysadmin-app/views/group-member.js:71
-#: static/scripts/sysadmin-app/views/group-members.js:157
+#: static/scripts/sysadmin-app/views/group-members.js:151
 #: static/scripts/sysadmin-app/views/group-repos.js:75
 #: static/scripts/sysadmin-app/views/group.js:108
 #: static/scripts/sysadmin-app/views/groups.js:168
 #: static/scripts/sysadmin-app/views/mobile-devices.js:106
-#: static/scripts/sysadmin-app/views/repo.js:143
+#: static/scripts/sysadmin-app/views/repo.js:142
 #: static/scripts/sysadmin-app/views/repos.js:163
 #: static/scripts/sysadmin-app/views/search-groups.js:76
 #: static/scripts/sysadmin-app/views/search-repos.js:77
 #: static/scripts/sysadmin-app/views/search-trash-repos.js:113
-#: static/scripts/sysadmin-app/views/share.js:194
-#: static/scripts/sysadmin-app/views/share.js:268
+#: static/scripts/sysadmin-app/views/share.js:195
+#: static/scripts/sysadmin-app/views/share.js:269
 #: static/scripts/sysadmin-app/views/system-repo.js:59
 #: static/scripts/sysadmin-app/views/trash-repos.js:142
 msgid "Failed. Please check the network."
@@ -241,47 +250,47 @@ msgstr "Excluir arquivos deste dispositivo da próxima vez em que ele estiver on
 msgid "Successfully unlink %(name)s."
 msgstr "O dispositivo %(name)s foi desconectado com sucesso."
 
-#: static/scripts/app/views/dialogs/dirent-mvcp.js:53
+#: static/scripts/app/views/dialogs/dirent-mvcp.js:54
 msgid "Move {placeholder} to:"
 msgstr "Mover {placeholder} para:"
 
-#: static/scripts/app/views/dialogs/dirent-mvcp.js:53
+#: static/scripts/app/views/dialogs/dirent-mvcp.js:54
 msgid "Copy {placeholder} to:"
 msgstr "Copiar {placeholder} para:"
 
-#: static/scripts/app/views/dialogs/dirent-mvcp.js:101
+#: static/scripts/app/views/dialogs/dirent-mvcp.js:102
 msgid "Moving %(name)s"
 msgstr "Movendo %(name)s"
 
-#: static/scripts/app/views/dialogs/dirent-mvcp.js:101
+#: static/scripts/app/views/dialogs/dirent-mvcp.js:102
 msgid "Copying %(name)s"
 msgstr "Copiando %(name)s"
 
-#: static/scripts/app/views/dialogs/dirent-mvcp.js:117
+#: static/scripts/app/views/dialogs/dirent-mvcp.js:118
 msgid "Saving..."
 msgstr "Salvando..."
 
-#: static/scripts/app/views/dialogs/dirent-mvcp.js:132
+#: static/scripts/app/views/dialogs/dirent-mvcp.js:133
 msgid "Failed."
 msgstr "Falhou"
 
-#: static/scripts/app/views/dialogs/dirent-mvcp.js:132
-#: static/scripts/app/views/dialogs/dirent-mvcp.js:163
-#: static/scripts/app/views/dir.js:1385
+#: static/scripts/app/views/dialogs/dirent-mvcp.js:133
+#: static/scripts/app/views/dialogs/dirent-mvcp.js:164
+#: static/scripts/app/views/dir.js:1375
 msgid "Canceled."
 msgstr "Cancelados"
 
-#: static/scripts/app/views/dialogs/dirent-mvcp.js:195
-#: static/scripts/app/views/dir.js:1129
+#: static/scripts/app/views/dialogs/dirent-mvcp.js:196
+#: static/scripts/app/views/dir.js:1120
 msgid "Invalid destination path"
 msgstr "Caminho de destino inválido"
 
-#: static/scripts/app/views/dialogs/dirent-mvcp.js:214
-#: static/scripts/app/views/dirent.js:277
+#: static/scripts/app/views/dialogs/dirent-mvcp.js:215
+#: static/scripts/app/views/dirent.js:278
 msgid "Successfully moved %(name)s"
 msgstr "%(name)s movido com sucesso"
 
-#: static/scripts/app/views/dialogs/dirent-mvcp.js:217
+#: static/scripts/app/views/dialogs/dirent-mvcp.js:218
 msgid "Successfully copied %(name)s"
 msgstr "%(name)s copiado com sucesso"
 
@@ -294,13 +303,17 @@ msgid "Rename File"
 msgstr "Renonear Arquivo"
 
 #: static/scripts/app/views/dialogs/dirent-rename.js:59
-#: static/scripts/app/views/dir.js:622 static/scripts/app/views/dir.js:683
-#: static/scripts/app/views/dirent.js:477
-#: static/scripts/app/views/groups.js:112
-#: static/scripts/app/views/invitations.js:58
+#: static/scripts/app/views/dir.js:617 static/scripts/app/views/dir.js:677
+#: static/scripts/app/views/dirent.js:478
+#: static/scripts/app/views/groups.js:122
+#: static/scripts/app/views/invitations.js:65
 #: static/scripts/app/views/repo.js:175 static/scripts/app/views/repo.js:411
+#: static/scripts/sysadmin-app/views/address-book-group-item.js:73
+#: static/scripts/sysadmin-app/views/address-book-group.js:174
+#: static/scripts/sysadmin-app/views/address-book-group.js:241
 #: static/scripts/sysadmin-app/views/device-trusted-ipaddresses.js:42
 #: static/scripts/sysadmin-app/views/dir.js:82
+#: static/scripts/sysadmin-app/views/group-members.js:51
 msgid "It is required."
 msgstr "Obrigatorio"
 
@@ -332,56 +345,58 @@ msgstr "A nova senha e sua confirmação não são iguais"
 msgid "Successfully changed library password."
 msgstr "Senha da biblioteca alterada com sucesso."
 
-#: static/scripts/app/views/dialogs/repo-folder-perm-admin.js:82
+#: static/scripts/app/views/dialogs/repo-folder-perm-admin.js:83
 msgid "{placeholder} Folder Permission"
 msgstr "{placeholder} Permissão da Pasta"
 
-#: static/scripts/app/views/dialogs/repo-folder-perm-admin.js:101
-#: static/scripts/app/views/group-settings.js:154
+#: static/scripts/app/views/dialogs/repo-folder-perm-admin.js:102
+#: static/scripts/app/views/group-settings.js:158
 #: static/scripts/app/views/repo.js:245
-#: static/scripts/sysadmin-app/views/group-members.js:41
 #: static/scripts/sysadmin-app/views/group.js:74
 #: static/scripts/sysadmin-app/views/groups.js:68
-#: static/scripts/sysadmin-app/views/repo.js:108
+#: static/scripts/sysadmin-app/views/repo.js:107
 #: static/scripts/sysadmin-app/views/repos.js:58
 msgid "Search user or enter email and press Enter"
 msgstr "Procure o usuário pelo nome ou e-mail e pressione Enter"
 
-#: static/scripts/app/views/dialogs/repo-folder-perm-admin.js:110
+#: static/scripts/app/views/dialogs/repo-folder-perm-admin.js:111
 msgid "Select a group"
 msgstr "Selecionar um grupo"
 
-#: static/scripts/app/views/dialogs/repo-folder-perm-admin.js:112
+#: static/scripts/app/views/dialogs/repo-folder-perm-admin.js:113
 msgid "You can only select 1 item"
 msgstr "Você pode selecionar apenas 1 item"
 
-#: static/scripts/app/views/dialogs/repo-folder-perm-admin.js:129
-#: static/scripts/app/views/dialogs/repo-share-link-admin.js:91
-#: static/scripts/app/views/file-comments.js:111
-#: static/scripts/app/views/group-discussions.js:120
-#: static/scripts/app/views/group-discussions.js:198
-#: static/scripts/app/views/group-manage-members.js:112
+#: static/scripts/app/views/dialogs/repo-folder-perm-admin.js:130
+#: static/scripts/app/views/dialogs/repo-share-link-admin.js:92
+#: static/scripts/app/views/file-comments.js:115
+#: static/scripts/app/views/group-discussions.js:114
+#: static/scripts/app/views/group-discussions.js:194
+#: static/scripts/app/views/group-manage-members.js:111
 #: static/scripts/app/views/group-members.js:75
-#: static/scripts/app/views/group.js:138 static/scripts/app/views/groups.js:78
-#: static/scripts/app/views/invitations.js:183
+#: static/scripts/app/views/group.js:197 static/scripts/app/views/groups.js:85
+#: static/scripts/app/views/invitations.js:189
 #: static/scripts/app/views/my-deleted-repos.js:81
-#: static/scripts/app/views/myhome-repos.js:99
-#: static/scripts/app/views/myhome-shared-repos.js:76
-#: static/scripts/app/views/organization.js:120
-#: static/scripts/app/views/share-admin-folders.js:93
-#: static/scripts/app/views/share-admin-repos.js:95
-#: static/scripts/app/views/share-admin-share-links.js:145
-#: static/scripts/app/views/share-admin-upload-links.js:59
-#: static/scripts/app/views/share.js:195 static/scripts/app/views/share.js:501
-#: static/scripts/app/views/share.js:616 static/scripts/app/views/share.js:701
-#: static/scripts/app/views/share.js:725
+#: static/scripts/app/views/myhome-repos.js:89
+#: static/scripts/app/views/myhome-shared-repos.js:74
+#: static/scripts/app/views/organization.js:130
+#: static/scripts/app/views/share-admin-folders.js:91
+#: static/scripts/app/views/share-admin-repos.js:91
+#: static/scripts/app/views/share-admin-share-links.js:142
+#: static/scripts/app/views/share-admin-upload-links.js:56
+#: static/scripts/app/views/share.js:196 static/scripts/app/views/share.js:502
+#: static/scripts/app/views/share.js:617 static/scripts/app/views/share.js:702
+#: static/scripts/app/views/share.js:726
+#: static/scripts/sysadmin-app/views/address-book-group.js:311
+#: static/scripts/sysadmin-app/views/address-book-group.js:336
+#: static/scripts/sysadmin-app/views/address-book.js:124
 #: static/scripts/sysadmin-app/views/admin-login-logs.js:124
 #: static/scripts/sysadmin-app/views/admin-operation-logs.js:124
 #: static/scripts/sysadmin-app/views/dashboard.js:79
 #: static/scripts/sysadmin-app/views/desktop-devices.js:100
 #: static/scripts/sysadmin-app/views/device-errors.js:87
 #: static/scripts/sysadmin-app/views/dir.js:190
-#: static/scripts/sysadmin-app/views/group-members.js:152
+#: static/scripts/sysadmin-app/views/group-members.js:146
 #: static/scripts/sysadmin-app/views/group-repos.js:70
 #: static/scripts/sysadmin-app/views/groups.js:163
 #: static/scripts/sysadmin-app/views/mobile-devices.js:101
@@ -394,7 +409,7 @@ msgstr "Você pode selecionar apenas 1 item"
 msgid "Permission error"
 msgstr "Erro de Permissão"
 
-#: static/scripts/app/views/dialogs/repo-folder-perm-admin.js:192
+#: static/scripts/app/views/dialogs/repo-folder-perm-admin.js:193
 msgid "Please click and choose a directory."
 msgstr "Por favor clique e selecione um diretório."
 
@@ -406,179 +421,179 @@ msgstr "{placeholder} Configuração do Histórico"
 msgid "Successfully set library history."
 msgstr "Histórico da biblioteca atualizado com sucesso."
 
-#: static/scripts/app/views/dialogs/repo-share-link-admin.js:64
+#: static/scripts/app/views/dialogs/repo-share-link-admin.js:65
 msgid "{placeholder} Share Links"
 msgstr "{placeholder}  Compartilhar Links"
 
-#: static/scripts/app/views/dir.js:53
+#: static/scripts/app/views/dir.js:58
 #: static/scripts/app/views/starred-file.js:106
 msgid "Close (Esc)"
 msgstr "Fechar(Esc)"
 
-#: static/scripts/app/views/dir.js:54
+#: static/scripts/app/views/dir.js:59
 #: static/scripts/app/views/starred-file.js:107
 msgid "Loading..."
 msgstr "Carregando..."
 
-#: static/scripts/app/views/dir.js:57
+#: static/scripts/app/views/dir.js:62
 #: static/scripts/app/views/starred-file.js:110
 msgid "Previous (Left arrow key)"
 msgstr "Voltar (Seta para a esquerda)"
 
-#: static/scripts/app/views/dir.js:58
+#: static/scripts/app/views/dir.js:63
 #: static/scripts/app/views/starred-file.js:111
 msgid "Next (Right arrow key)"
 msgstr "Proximo (Seta para a direita)"
 
-#: static/scripts/app/views/dir.js:59
+#: static/scripts/app/views/dir.js:64
 #: static/scripts/app/views/starred-file.js:112
 msgid "%curr% of %total%"
 msgstr "%curr% do %total%"
 
-#: static/scripts/app/views/dir.js:64
+#: static/scripts/app/views/dir.js:69
 #: static/scripts/app/views/starred-file.js:118
 msgid "Open in New Tab"
 msgstr "Abrir Nova Aba"
 
-#: static/scripts/app/views/dir.js:67
+#: static/scripts/app/views/dir.js:72
 #: static/scripts/app/views/starred-file.js:121
 msgid "<a href=\"%url%\" target=\"_blank\">The image</a> could not be loaded."
 msgstr "<a href=\"%url%\" target=\"_blank\">A imagem</a> não pode ser carregada."
 
-#: static/scripts/app/views/dir.js:425
+#: static/scripts/app/views/dir.js:409
 msgid "Password is required."
 msgstr "Senha obrigatoria"
 
-#: static/scripts/app/views/dir.js:694
+#: static/scripts/app/views/dir.js:688
 msgid "Only an extension there, please input a name."
 msgstr "Há apenas uma extensão aqui, por favor, insira um nome."
 
-#: static/scripts/app/views/dir.js:732
+#: static/scripts/app/views/dir.js:726
 msgid "New File"
 msgstr "Novo Arquivo"
 
-#: static/scripts/app/views/dir.js:740
+#: static/scripts/app/views/dir.js:734
 msgid "New Markdown File"
 msgstr "Novo Arquivo Markdown"
 
-#: static/scripts/app/views/dir.js:748
+#: static/scripts/app/views/dir.js:742
 msgid "New Excel File"
 msgstr "Novo Arquivo Excel"
 
-#: static/scripts/app/views/dir.js:756
+#: static/scripts/app/views/dir.js:750
 msgid "New PowerPoint File"
 msgstr "Novo Arquivo PowerPoint"
 
-#: static/scripts/app/views/dir.js:764
+#: static/scripts/app/views/dir.js:758
 msgid "New Word File"
 msgstr "Novo Arquivo Word"
 
-#: static/scripts/app/views/dir.js:991 static/scripts/app/views/dir.js:1134
+#: static/scripts/app/views/dir.js:983 static/scripts/app/views/dir.js:1125
 msgid "Processing..."
 msgstr "Processando..."
 
-#: static/scripts/app/views/dir.js:1029
+#: static/scripts/app/views/dir.js:1020
 msgid "Successfully deleted %(name)s."
 msgstr "%(name)s excluídos com sucesso."
 
-#: static/scripts/app/views/dir.js:1031
+#: static/scripts/app/views/dir.js:1022
 msgid "Successfully deleted %(name)s and 1 other item."
 msgstr "Sucesso ao excluir %(name)s e 1 outro item."
 
-#: static/scripts/app/views/dir.js:1033
+#: static/scripts/app/views/dir.js:1024
 msgid "Successfully deleted %(name)s and %(amount)s other items."
 msgstr "Excluído com êxito% (name)s e %(amount) s outros itens."
 
-#: static/scripts/app/views/dir.js:1042
+#: static/scripts/app/views/dir.js:1033
 msgid "Failed to delete %(name)s."
 msgstr "Falha ao excluir %(name)s."
 
-#: static/scripts/app/views/dir.js:1044
+#: static/scripts/app/views/dir.js:1035
 msgid "Failed to delete %(name)s and 1 other item."
 msgstr "Falha ao excluir %(name)s e 1 outro items"
 
-#: static/scripts/app/views/dir.js:1046
+#: static/scripts/app/views/dir.js:1037
 msgid "Failed to delete %(name)s and %(amount)s other items."
 msgstr "Falha ao excluir %(name)s e %(amount)s outros items."
 
-#: static/scripts/app/views/dir.js:1059
+#: static/scripts/app/views/dir.js:1050
 msgid "Delete Items"
 msgstr "Excluir items"
 
-#: static/scripts/app/views/dir.js:1060
+#: static/scripts/app/views/dir.js:1051
 msgid "Are you sure you want to delete these selected items?"
 msgstr "Tem certeza que deseja excluir os items selecionados?"
 
-#: static/scripts/app/views/dir.js:1074
+#: static/scripts/app/views/dir.js:1065
 msgid "Move selected item(s) to:"
 msgstr "Mover itens selecionados para:"
 
-#: static/scripts/app/views/dir.js:1074
+#: static/scripts/app/views/dir.js:1065
 msgid "Copy selected item(s) to:"
 msgstr "Copiar itens selecionados para:"
 
-#: static/scripts/app/views/dir.js:1179 static/scripts/app/views/dir.js:1346
+#: static/scripts/app/views/dir.js:1169 static/scripts/app/views/dir.js:1336
 msgid "Successfully moved %(name)s."
 msgstr "Movidos com sucesso %(name)s."
 
-#: static/scripts/app/views/dir.js:1181 static/scripts/app/views/dir.js:1348
+#: static/scripts/app/views/dir.js:1171 static/scripts/app/views/dir.js:1338
 msgid "Successfully moved %(name)s and 1 other item."
 msgstr "%(name)s e  1 outro item.copiados com sucesso"
 
-#: static/scripts/app/views/dir.js:1183 static/scripts/app/views/dir.js:1350
+#: static/scripts/app/views/dir.js:1173 static/scripts/app/views/dir.js:1340
 msgid "Successfully moved %(name)s and %(amount)s other items."
 msgstr "%(name)s e %(amount)s outros items.copiados com sucesso"
 
-#: static/scripts/app/views/dir.js:1188 static/scripts/app/views/dir.js:1354
+#: static/scripts/app/views/dir.js:1178 static/scripts/app/views/dir.js:1344
 msgid "Successfully copied %(name)s."
 msgstr " %(name)s. copiados com sucesso"
 
-#: static/scripts/app/views/dir.js:1190 static/scripts/app/views/dir.js:1356
+#: static/scripts/app/views/dir.js:1180 static/scripts/app/views/dir.js:1346
 msgid "Successfully copied %(name)s and 1 other item."
 msgstr "%(name)s  copiado com sucesso e  1 outro items"
 
-#: static/scripts/app/views/dir.js:1192 static/scripts/app/views/dir.js:1358
+#: static/scripts/app/views/dir.js:1182 static/scripts/app/views/dir.js:1348
 msgid "Successfully copied %(name)s and %(amount)s other items."
 msgstr "%(name)s and %(amount)s outros items.copiados com sucesso"
 
-#: static/scripts/app/views/dir.js:1203
+#: static/scripts/app/views/dir.js:1193
 msgid "Internal error. Failed to move %(name)s and %(amount)s other item(s)."
 msgstr "Erro interno. Falha ao mover %(name)s e %(amount)s outros item(s)."
 
-#: static/scripts/app/views/dir.js:1205
+#: static/scripts/app/views/dir.js:1195
 msgid "Internal error. Failed to move %(name)s."
 msgstr "Erro interno. Falha ao mover %(name)s."
 
-#: static/scripts/app/views/dir.js:1209
+#: static/scripts/app/views/dir.js:1199
 msgid "Internal error. Failed to copy %(name)s and %(amount)s other item(s)."
 msgstr "Erro intero. Falha ao copiar %(name)s e %(amount)s outros item(s)."
 
-#: static/scripts/app/views/dir.js:1211
+#: static/scripts/app/views/dir.js:1201
 msgid "Internal error. Failed to copy %(name)s."
 msgstr "Erro interno. Falha ao copiar  %(name)s."
 
-#: static/scripts/app/views/dir.js:1253
+#: static/scripts/app/views/dir.js:1243
 msgid "Moving file %(index)s of %(total)s"
 msgstr "Movendo %(index) arquivos de %(total)s"
 
-#: static/scripts/app/views/dir.js:1253
+#: static/scripts/app/views/dir.js:1243
 msgid "Copying file %(index)s of %(total)s"
 msgstr "Copiando %(index) arquivos de %(total)s"
 
-#: static/scripts/app/views/dir.js:1279
+#: static/scripts/app/views/dir.js:1269
 msgid "Failed to move %(name)s"
 msgstr "Falha ao mover %(name)s"
 
-#: static/scripts/app/views/dir.js:1279
+#: static/scripts/app/views/dir.js:1269
 msgid "Failed to copy %(name)s"
 msgstr "Falha ao copiar %(name)s"
 
-#: static/scripts/app/views/dirent-details.js:99 static/scripts/common.js:641
-#: static/scripts/common.js:712
+#: static/scripts/app/views/dirent-details.js:95 static/scripts/common.js:645
+#: static/scripts/common.js:716
 msgid "No matches"
 msgstr "Nenhum ocorrência"
 
-#: static/scripts/app/views/dirent-details.js:116
+#: static/scripts/app/views/dirent-details.js:112
 msgid "Tag should not include ','."
 msgstr ""
 
@@ -588,7 +603,7 @@ msgid "locked by {placeholder}"
 msgstr "Bloqueado por {placeholder}"
 
 #: static/scripts/app/views/dirent-grid.js:177
-#: static/scripts/app/views/dirent.js:388
+#: static/scripts/app/views/dirent.js:389
 msgid "Successfully deleted %(name)s"
 msgstr "%(name)s excluído com sucesso"
 
@@ -619,24 +634,24 @@ msgstr "Resultado do carregamento de arquivos vazio"
 #: static/scripts/app/views/fileupload.js:17
 #: static/scripts/app/views/fileupload.js:225
 #: static/scripts/app/views/fileupload.js:265
-#: static/scripts/app/views/group-discussions.js:122
-#: static/scripts/app/views/group-discussions.js:200
-#: static/scripts/app/views/group-manage-members.js:114
-#: static/scripts/app/views/group-manage-members.js:178
+#: static/scripts/app/views/group-discussions.js:116
+#: static/scripts/app/views/group-discussions.js:196
+#: static/scripts/app/views/group-manage-members.js:113
+#: static/scripts/app/views/group-manage-members.js:177
 #: static/scripts/app/views/group-members.js:77
-#: static/scripts/app/views/group.js:140 static/scripts/app/views/groups.js:80
+#: static/scripts/app/views/group.js:199 static/scripts/app/views/groups.js:87
 #: static/scripts/app/views/my-deleted-repos.js:83
-#: static/scripts/app/views/myhome-repos.js:101
-#: static/scripts/app/views/myhome-shared-repos.js:78
-#: static/scripts/app/views/organization.js:122
-#: static/scripts/app/views/repo-details.js:41
-#: static/scripts/app/views/share-admin-folders.js:95
-#: static/scripts/app/views/share-admin-repos.js:97
-#: static/scripts/app/views/share-admin-share-links.js:147
-#: static/scripts/app/views/share-admin-upload-links.js:61
-#: static/scripts/app/views/share.js:197 static/scripts/app/views/share.js:503
-#: static/scripts/app/views/share.js:618 static/scripts/app/views/share.js:703
-#: static/scripts/app/views/share.js:727
+#: static/scripts/app/views/myhome-repos.js:91
+#: static/scripts/app/views/myhome-shared-repos.js:76
+#: static/scripts/app/views/organization.js:132
+#: static/scripts/app/views/repo-details.js:35
+#: static/scripts/app/views/share-admin-folders.js:93
+#: static/scripts/app/views/share-admin-repos.js:93
+#: static/scripts/app/views/share-admin-share-links.js:144
+#: static/scripts/app/views/share-admin-upload-links.js:58
+#: static/scripts/app/views/share.js:198 static/scripts/app/views/share.js:504
+#: static/scripts/app/views/share.js:619 static/scripts/app/views/share.js:704
+#: static/scripts/app/views/share.js:728
 msgid "Error"
 msgstr "Erro"
 
@@ -685,12 +700,12 @@ msgstr "Substituir arquivo {filename}?"
 msgid "File is locked"
 msgstr "Arquivo está bloqueado"
 
-#: static/scripts/app/views/folder-perm.js:60
+#: static/scripts/app/views/folder-perm.js:59
 msgid "Set {placeholder}'s permission"
 msgstr "Setar {placeholder}'s  permissão"
 
-#: static/scripts/app/views/folder-perm.js:113
-#: static/scripts/app/views/share.js:673
+#: static/scripts/app/views/folder-perm.js:112
+#: static/scripts/app/views/share.js:674
 msgid "Select groups"
 msgstr "Selecionar grupos"
 
@@ -702,65 +717,71 @@ msgstr "Edição falhou"
 msgid "Delete failed"
 msgstr "Exclusão falhou"
 
-#: static/scripts/app/views/group-manage-members.js:71
+#: static/scripts/app/views/group-manage-members.js:70
 msgid "{placeholder} Members"
 msgstr "{placeholder} Membros"
 
-#: static/scripts/app/views/group-repo.js:77
+#: static/scripts/app/views/group-repo.js:47
+#: static/scripts/sysadmin-app/views/address-book-group-library.js:44
+msgid "Successfully deleted library {placeholder}"
+msgstr ""
+
+#: static/scripts/app/views/group-repo.js:105
 #: static/scripts/app/views/organization-repo.js:50
 msgid "Successfully unshared 1 item."
 msgstr "O compartilhamento foi removido com sucesso."
 
-#: static/scripts/app/views/group-settings.js:155
+#: static/scripts/app/views/group-settings.js:159
 #: static/scripts/app/views/repo.js:246
 #: static/scripts/sysadmin-app/views/group.js:75
 #: static/scripts/sysadmin-app/views/groups.js:69
-#: static/scripts/sysadmin-app/views/repo.js:109
+#: static/scripts/sysadmin-app/views/repo.js:108
 #: static/scripts/sysadmin-app/views/repos.js:59
 msgid "You cannot select any more choices"
 msgstr "Você não pode selecionar mais opções"
 
-#: static/scripts/app/views/group-settings.js:182
+#: static/scripts/app/views/group-settings.js:186
 msgid ""
 "Successfully transferred the group. You are now a normal member of the "
 "group."
 msgstr "O grupo foi transferido com sucesso. Você agora é um membro regular do grupo."
 
-#: static/scripts/app/views/group-settings.js:248
+#: static/scripts/app/views/group-settings.js:256
 msgid "Please choose a CSV file"
 msgstr "Por favor selecione um arquivo no formato CSV"
 
-#: static/scripts/app/views/group-settings.js:279
+#: static/scripts/app/views/group-settings.js:287
 msgid "Successfully imported."
 msgstr "Importado com sucesso."
 
-#: static/scripts/app/views/group-settings.js:307
+#: static/scripts/app/views/group-settings.js:315
 msgid "Dismiss Group"
 msgstr "Ignorar Grupo"
 
-#: static/scripts/app/views/group-settings.js:308
+#: static/scripts/app/views/group-settings.js:316
 msgid "Really want to dismiss this group?"
 msgstr "Você realmente deseja ignorar este grupo?"
 
-#: static/scripts/app/views/group-settings.js:341
+#: static/scripts/app/views/group-settings.js:349
 msgid "Quit Group"
 msgstr "Sair do Grupo"
 
-#: static/scripts/app/views/group-settings.js:342
+#: static/scripts/app/views/group-settings.js:350
 msgid "Are you sure you want to quit this group?"
 msgstr "Você tem certeza que deseja sair deste grupo?"
 
 #: static/scripts/app/views/invitation.js:37
+#: static/scripts/sysadmin-app/views/address-book-group-item.js:46
 #: static/scripts/sysadmin-app/views/device-trusted-ipaddress.js:39
 #: static/scripts/sysadmin-app/views/group.js:44
 msgid "Successfully deleted 1 item."
 msgstr "Item excluído com sucesso."
 
-#: static/scripts/app/views/invitations.js:94
+#: static/scripts/app/views/invitations.js:101
 msgid "Successfully invited %(email)."
 msgstr ""
 
-#: static/scripts/app/views/invitations.js:97
+#: static/scripts/app/views/invitations.js:104
 msgid "Successfully invited %(email) and %(num) other people."
 msgstr ""
 
@@ -777,33 +798,36 @@ msgid "Refresh"
 msgstr "Atualizar"
 
 #: static/scripts/app/views/repo.js:91
+#: static/scripts/sysadmin-app/views/address-book-group-library.js:30
 #: static/scripts/sysadmin-app/views/admin-operation-log.js:51
-#: static/scripts/sysadmin-app/views/repo.js:66
+#: static/scripts/sysadmin-app/views/repo.js:65
 #: static/scripts/sysadmin-app/views/trash-repo.js:28
 msgid "Delete Library"
 msgstr "Excluir Biblioteca"
 
 #: static/scripts/app/views/repo.js:92
+#: static/scripts/sysadmin-app/views/address-book-group-item.js:33
+#: static/scripts/sysadmin-app/views/address-book-group-library.js:31
 #: static/scripts/sysadmin-app/views/device-trusted-ipaddress.js:28
 #: static/scripts/sysadmin-app/views/group-member.js:82
 #: static/scripts/sysadmin-app/views/group.js:31
-#: static/scripts/sysadmin-app/views/repo.js:67
+#: static/scripts/sysadmin-app/views/repo.js:66
 #, javascript-format
 msgid "Are you sure you want to delete %s ?"
 msgstr "Você tem certeza que deseja excluir %s ?"
 
 #: static/scripts/app/views/repo.js:102
-#: static/scripts/sysadmin-app/views/repo.js:80
+#: static/scripts/sysadmin-app/views/repo.js:79
 msgid "Successfully deleted."
 msgstr "Excluído com sucesso."
 
 #: static/scripts/app/views/repo.js:235
-#: static/scripts/sysadmin-app/views/repo.js:98
+#: static/scripts/sysadmin-app/views/repo.js:97
 msgid "Transfer Library {library_name} To"
 msgstr "Transferir Biblioteca {library_name} para"
 
 #: static/scripts/app/views/repo.js:274
-#: static/scripts/sysadmin-app/views/repo.js:136
+#: static/scripts/sysadmin-app/views/repo.js:135
 msgid "Successfully transferred the library."
 msgstr "Biblioteca transferida com sucesso."
 
@@ -823,45 +847,45 @@ msgstr "Permissões modificadas com sucesso"
 msgid "Successfully deleted 1 item"
 msgstr "Sucesso ao excluir 1 item. "
 
-#: static/scripts/app/views/share.js:67
-#: static/scripts/sysadmin-app/views/share.js:41
+#: static/scripts/app/views/share.js:68
+#: static/scripts/sysadmin-app/views/share.js:42
 msgid "Share {placeholder}"
 msgstr "Compartilhar {placeholder}"
 
-#: static/scripts/app/views/share.js:148
+#: static/scripts/app/views/share.js:149
 msgid "Expired"
 msgstr "Expirado"
 
-#: static/scripts/app/views/share.js:223 static/scripts/app/views/share.js:224
-#: static/scripts/app/views/share.js:245 static/scripts/app/views/share.js:246
+#: static/scripts/app/views/share.js:224 static/scripts/app/views/share.js:225
+#: static/scripts/app/views/share.js:246 static/scripts/app/views/share.js:247
 msgid "Hide"
 msgstr "Esconder"
 
-#: static/scripts/app/views/share.js:241 static/scripts/app/views/share.js:242
+#: static/scripts/app/views/share.js:242 static/scripts/app/views/share.js:243
 msgid "Show"
 msgstr "Mostrar"
 
-#: static/scripts/app/views/share.js:300
+#: static/scripts/app/views/share.js:301
 msgid "Please enter days."
 msgstr "Por favor insira os dias"
 
-#: static/scripts/app/views/share.js:304
+#: static/scripts/app/views/share.js:305
 msgid "Please enter valid days"
 msgstr "Por favor insira dias validos"
 
-#: static/scripts/app/views/share.js:390
+#: static/scripts/app/views/share.js:391
 msgid "Please input at least an email."
 msgstr "Por favor, insira pelo menos um e-mail."
 
-#: static/scripts/app/views/share.js:407
+#: static/scripts/app/views/share.js:408
 msgid "Successfully sent to {placeholder}"
 msgstr "Enviado com sucesso para {placeholder}"
 
-#: static/scripts/app/views/share.js:411
+#: static/scripts/app/views/share.js:412
 msgid "Failed to send to {placeholder}"
 msgstr "Falha ao enviar para  {placeholder}"
 
-#: static/scripts/app/views/share.js:697
+#: static/scripts/app/views/share.js:698
 msgid "Failed to fetch groups:"
 msgstr ""
 
@@ -878,29 +902,50 @@ msgstr "Sucesso"
 msgid "Successfully unstared {placeholder}"
 msgstr "{placeholder} desmarcado com sucesso"
 
-#: static/scripts/common.js:632
+#: static/scripts/common.js:636
+#: static/scripts/sysadmin-app/views/address-book-group.js:165
+#: static/scripts/sysadmin-app/views/group-members.js:41
 msgid "Search users or enter emails and press Enter"
 msgstr "Digite o nome do usuário ou o e-mail e tecle Enter"
 
-#: static/scripts/common.js:640 static/scripts/common.js:711
+#: static/scripts/common.js:644 static/scripts/common.js:715
 msgid "Please enter 1 or more character"
 msgstr "Por favor  digite 1 ou mais caracteres"
 
-#: static/scripts/common.js:642 static/scripts/common.js:713
+#: static/scripts/common.js:646 static/scripts/common.js:717
 msgid "Searching..."
 msgstr "Procurando..."
 
-#: static/scripts/common.js:643 static/scripts/common.js:714
+#: static/scripts/common.js:647 static/scripts/common.js:718
 msgid "Loading failed"
 msgstr "Falha no carregamento"
 
-#: static/scripts/common.js:703
+#: static/scripts/common.js:707
 msgid "Search groups"
 msgstr "Procurar grupos"
 
-#: static/scripts/common.js:1038
+#: static/scripts/common.js:1042
 msgid "Packaging..."
 msgstr "Empacotando..."
+
+#: static/scripts/sysadmin-app/views/address-book-group-item.js:32
+msgid "Delete Department"
+msgstr ""
+
+#: static/scripts/sysadmin-app/views/address-book-group.js:99
+msgid "New Sub-department"
+msgstr ""
+
+#: static/scripts/sysadmin-app/views/address-book-group.js:111
+#: static/scripts/sysadmin-app/views/address-book.js:64
+#: static/scripts/sysadmin-app/views/groups.js:79
+#: static/scripts/sysadmin-app/views/repos.js:69
+msgid "Name is required."
+msgstr "É necessário fornecer nome."
+
+#: static/scripts/sysadmin-app/views/address-book.js:49
+msgid "New Department"
+msgstr ""
 
 #: static/scripts/sysadmin-app/views/admin-operation-log.js:40
 msgid "Create Library"
@@ -975,10 +1020,6 @@ msgstr "Excluir Membro"
 msgid "Successfully deleted member {placeholder}"
 msgstr "Sucesso ao excluído membro {placeholder}"
 
-#: static/scripts/sysadmin-app/views/group-members.js:51
-msgid "Email is required."
-msgstr "É necessário informar email."
-
 #: static/scripts/sysadmin-app/views/group-repo.js:28
 msgid "Unshare Library"
 msgstr "Descompartilhar Biblioteca"
@@ -999,11 +1040,6 @@ msgstr "Transferir Grupo {group_name} para"
 #: static/scripts/sysadmin-app/views/group.js:101
 msgid "Successfully transferred the group."
 msgstr "Grupo transferido com sucesso."
-
-#: static/scripts/sysadmin-app/views/groups.js:79
-#: static/scripts/sysadmin-app/views/repos.js:69
-msgid "Name is required."
-msgstr "É necessário fornecer nome."
 
 #: static/scripts/sysadmin-app/views/search-trash-repos.js:46
 msgid "Delete Library By Owner"
