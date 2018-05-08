@@ -29,7 +29,7 @@ define([
         deleteGroup: function() {
             var _this = this;
             var group_name = this.model.get('name');
-            var popupTitle = gettext("Delete Group");
+            var popupTitle = gettext("Delete Department");
             var popupContent = gettext("Are you sure you want to delete %s ?").replace('%s', '<span class="op-target ellipsis ellipsis-op-target" title="' + Common.HTMLescape(group_name) + '">' + Common.HTMLescape(group_name) + '</span>');
             var yesCallback = function() {
                 $.ajax({

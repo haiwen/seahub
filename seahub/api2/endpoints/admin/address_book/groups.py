@@ -62,17 +62,17 @@ class AdminAddressBookGroups(APIView):
         """
         group_name = request.data.get('group_name', '').strip()
         if not group_name:
-            error_msg = 'group_name %s invalid.' % group_name
+            error_msg = 'name %s invalid.' % group_name
             return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
 
         # Check whether group name is validate.
         if not validate_group_name(group_name):
-            error_msg = _(u'Group name can only contain letters, numbers, blank, hyphen or underscore')
+            error_msg = _(u'Name can only contain letters, numbers, blank, hyphen or underscore')
             return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
 
         # Check whether group name is duplicated.
         if check_group_name_conflict(request, group_name):
-            error_msg = _(u'There is already a group with that name.')
+            error_msg = _(u'The name already exists.')
             return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
 
         # Group owner is 'system admin'
@@ -177,7 +177,7 @@ class AdminAddressBookGroup(APIView):
         try:
             ret_code = ccnet_api.remove_group(group_id)
             if ret_code == -1:
-                error_msg = 'Failed to remove: this group has child groups.'
+                error_msg = 'Failed to remove: this department has sub-departments.'
                 return api_error(status.HTTP_400_BAD_REQUEST,
                                  error_msg)
 

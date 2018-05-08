@@ -15,6 +15,7 @@ define([
         mobileTemplate: _.template($('#group-repo-mobile-tmpl').html()),
 
         events: {
+            'click .delete-repo': 'delRepo', // for group owned repo
             'click .cancel-share': 'unshare',
             'click .repo-share-btn': 'share'
         },
@@ -23,10 +24,36 @@ define([
             HLItemView.prototype.initialize.call(this);
             
             this.group_id = options.group_id;
+            this.parent_group_id = options.parent_group_id;
             this.is_staff = options.is_staff;
             this.show_repo_owner = options.show_repo_owner;
 
             this.listenTo(this.model, 'destroy', this.remove);
+        },
+
+        delRepo: function() {
+            var _this = this;
+            $.ajax({
+                url: Common.getUrl({
+                    'name': 'group_owned_repo',
+                    'group_id': this.group_id,
+                    'repo_id': this.model.get('id')
+                }),
+                type: 'DELETE',
+                cache: false,
+                dataType: 'json',
+                beforeSend: Common.prepareCSRFToken,
+                success: function() {
+                    var msg = gettext("Successfully deleted library {placeholder}")
+                        .replace('{placeholder}', _this.model.get('name'));
+                    _this.remove();
+                    Common.feedback(msg, 'success');
+                },
+                error: function(xhr, textStatus, errorThrown) {
+                    Common.ajaxErrorHandler(xhr, textStatus, errorThrown);
+                }
+            });
+            return false;
         },
 
         render: function() {
@@ -36,6 +63,7 @@ define([
             var tmpl = $(window).width() >= 768 ? this.template : this.mobileTemplate;
             $.extend(obj, {
                 group_id: this.group_id,
+                parent_group_id: this.parent_group_id,
                 is_staff: this.is_staff,
                 // for '#groups' (no 'share_from_me')
                 is_repo_owner: app.pageOptions.username == this.model.get('owner'),

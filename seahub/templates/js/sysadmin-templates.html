@@ -1044,7 +1044,7 @@
     <div class="hd ovhd">
         <h3 class="fleft">{% trans "Departments" context "address book" %}</h3>
         <div class="fright">
-            <button class="btn-white js-add-group">{% trans "New Group" %}</button>
+            <button class="btn-white js-add-group">{% trans "New Department" %}</button>
         </div>
     </div>
     <span class="loading-icon loading-tip"></span>
@@ -1061,7 +1061,7 @@
         </tbody>
     </table>
     <div class="empty-tips hide">
-        <h2 class="alc">{% trans "No groups" %}</h2>
+        <h2 class="alc">{% trans "No departments" %}</h2>
     </div>
     <p class="error error-tip hide"></p>
 </script>
@@ -1069,14 +1069,14 @@
     <div class="hd ovhd">
         <h3 class="fleft group-path"></h3>
         <div class="fright">
-            <button class="btn-white js-add-group">{% trans "New Group" %}</button>
+            <button class="btn-white js-add-group">{% trans "New Sub-department" %}</button>
             <button class="btn-white js-add-member">{% trans "Add Member" %}</button>
             <button class="btn-white js-add-library">{% trans "New Library" %}</button>
         </div>
     </div>
     <span class="loading-icon loading-tip"></span>
     <div class="groups">
-        <h4 class="small-hd">{% trans "Groups" %}</h4>
+        <h4 class="small-hd">{% trans "Sub-departments" %}</h4>
         <table class="hide">
             <thead>
                 <tr>
@@ -1089,7 +1089,7 @@
             <tbody>
             </tbody>
         </table>
-        <p class="empty-tip hide">{% trans "No groups" %}</p>
+        <p class="empty-tip hide">{% trans "No sub-departments" %}</p>
     </div>
     <div class="members">
         <h4 class="small-hd">{% trans "Members" %}</h4>
@@ -1148,7 +1148,7 @@
 </script>
 <script type="text/template" id="address-book-group-add-form-tmpl">
     <form id="group-add-form" action="" method="post" class="hide">{% csrf_token %}
-        <h3 id="dialogTitle">{% trans "New Group" %}</h3>
+        <h3 id="dialogTitle"><%= title %></h3>
         <label for="group-name">{% trans "Name" %}</label><br />
         <input type="text" name="group_name" value="" class="input" id="group-name" /><br />
         <p class="error hide"></p>
@@ -1157,7 +1157,7 @@
 </script>
 <script type="text/template" id="address-book-group-quota-set-form-tmpl">
 <form id="set-quota-form" method="post" action="" class="hide">{% csrf_token %}
-    <h3>{% trans "Set group quota" %}</h3>
+    <h3>{% trans "Set quota" %}</h3>
     <input type="text" name="quota" class="input" /> MB
     <p class="tip">
         <span>{% trans "An integer that is greater than 0 or equal to -2." %}</span><br />

@@ -43,15 +43,22 @@ define([
 
         // Generate the attributes for a new GroupRepo item.
         newAttributes: function() {
-            return {
+            var data = {
                 name: $.trim($('input[name=repo_name]', this.$el).val()),
                 encrypted: $('#encrypt-switch').prop('checked'),
-                passwd1: $('input[name=passwd]', this.$el).val(),
-                passwd2: $('input[name=passwd_again]', this.$el).val(),
-                passwd: $('input[name=passwd]', this.$el).val(),
                 library_template: $('[name="library_template"]', this.$el).val(),
                 storage_id: $('[name="storage"]', this.$el).val()
             };
+
+            if (data.encrypted) {
+                $.extend(data, {
+                    passwd1: $('input[name=passwd]', this.$el).val(),
+                    passwd2: $('input[name=passwd_again]', this.$el).val(),
+                    passwd: $('input[name=passwd]', this.$el).val()
+                });
+            }
+
+            return data;
         },
 
         // TODO: move to common

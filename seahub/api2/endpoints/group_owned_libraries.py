@@ -34,15 +34,15 @@ def get_group_owned_repo_info(request, repo_id):
     repo = seafile_api.get_repo(repo_id)
 
     repo_info = {}
-    repo_info['repo_id'] = repo_id
-    repo_info['repo_name'] = repo.name
+    repo_info['id'] = repo_id
+    repo_info['name'] = repo.name
 
     repo_info['mtime'] = timestamp_to_isoformat_timestr(repo.last_modified)
     repo_info['size'] = repo.size
     repo_info['encrypted'] = repo.encrypted
 
     repo_owner = get_repo_owner(request, repo_id)
-    repo_info['owner_email'] = repo_owner
+    repo_info['owner'] = repo_owner
 
     return repo_info
 
@@ -61,13 +61,13 @@ class GroupOwnedLibraries(APIView):
         """
 
         # argument check
-        repo_name = request.data.get("repo_name", None)
+        repo_name = request.data.get("name", None)
         if not repo_name or \
                 not is_valid_dirent_name(repo_name):
-            error_msg = "repo_name invalid."
+            error_msg = "name invalid."
             return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
 
-        password = request.data.get("password", None)
+        password = request.data.get("passwd", None)
         if password and not config.ENABLE_ENCRYPTED_LIBRARY:
             error_msg = 'NOT allow to create encrypted library.'
             return api_error(status.HTTP_403_FORBIDDEN, error_msg)

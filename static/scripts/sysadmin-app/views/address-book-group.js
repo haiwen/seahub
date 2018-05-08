@@ -95,7 +95,9 @@ define([
         addGroup: function() {
             var _this = this;
 
-            var $form = $(this.groupAddFormTemplate());
+            var $form = $(this.groupAddFormTemplate({
+                'title': gettext("New Sub-department")
+            }));
             $form.modal();
             $('#simplemodal-container').css({'height':'auto'});
 
