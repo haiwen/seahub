@@ -68,9 +68,15 @@ define([
                 var $error = $('.error', $form);
                 var $submitBtn = $('[type="submit"]', $form);
                 var quota = $.trim($('[name="quota"]', $form).val());
+                var quota_int = parseInt(quota);
 
                 if (!quota) {
                     $error.html(gettext("It is required.")).show();
+                    return false;
+                }
+
+                if (!(quota_int == quota &&
+                    (quota_int > 0 || quota_int == -2))) {
                     return false;
                 }
 
