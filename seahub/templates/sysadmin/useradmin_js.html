@@ -286,11 +286,15 @@ $('#set-quota-form').on('submit', function() {
                     $(data.success).each(function(index, item) {
                         var $tr = $('tr[data-userid="' + item.email + '"]');
                         var $quota = $('.user-space-quota', $tr);
-                        if (space_quota == 0) {
+
+                        if (space_quota >= 0) {
+                            $quota.html(quotaSizeFormat(parseInt(item.quota_total), 1));
+                        } else if (space_quota == -2) {
                             $quota.html('--');
                         } else {
-                            $quota.html(quotaSizeFormat(parseInt(item.quota_total), 1));
+                            $quota.html("{% trans "Error" %}");
                         }
+
                         emails.push(item.email);
                     });
                     var msg = "{% trans "Successfully set quota for {users}." %}".replace('{users}', HTMLescape(emails.join(', ')));
@@ -314,10 +318,12 @@ $('#set-quota-form').on('submit', function() {
             type: 'PUT',
             data: {'storage': space_quota},
             success: function(data) {
-                if (space_quota == 0) {
-                    $spaceQuota.html('--');
-                } else {
+                if (space_quota >= 0) {
                     $spaceQuota.html(quotaSizeFormat(parseInt(data['total']), 1));
+                } else if (space_quota == -2) {
+                    $quota.html('--');
+                } else {
+                    $quota.html("{% trans "Error" %}");
                 }
                 var msg = "{% trans "Successfully set quota for {user}." %}".replace('{user}', HTMLescape(data.email));
                 feedback(msg, 'success');
