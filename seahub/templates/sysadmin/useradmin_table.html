@@ -103,10 +103,12 @@
         <td style="font-size:11px;">
             {{ user.space_usage|seahub_filesizeformat }} /
             <span class="user-space-quota">
-                {% if user.space_quota > 0 %}
+                {% if user.space_quota >= 0 %}
                 {{ user.space_quota|seahub_filesizeformat }}
-                {% else %}
+                {% elif user.space_quota == -2 %}
                 --
+                {% else %}
+                {% trans "Error" %}
                 {% endif %}
             </span>
             <span title="{% trans "Edit Quota" %}" class="quota-edit-icon sf2-icon-edit op-icon vh"></span>
