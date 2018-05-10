@@ -118,15 +118,22 @@ define([
             data['time'] = created_at.format('LLLL');
             data['time_from_now'] = Common.getRelativeTimeStr(created_at);
 
+            data['quota_error'] = false;
             switch(data['quota']) {
                 case -2: // no limit
                     data['quota_shown'] = '--';
                     break;
                 case -1: // not set or error
-                    data['quota_shown'] = 0;
+                    data['quota_shown'] = gettext("Error");
+                    data['quota_error'] = true;
                     break;
                 default:
-                    data['quota_shown'] = Common.quotaSizeFormat(data['quota']);
+                    if (data['quota'] > 0) {
+                        data['quota_shown'] = Common.quotaSizeFormat(data['quota']);
+                    } else {
+                        data['quota_shown'] = gettext("Error");
+                        data['quota_error'] = true;
+                    }
             }
 
             this.$el.html(this.template(data));
