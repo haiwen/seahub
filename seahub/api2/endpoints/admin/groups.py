@@ -234,6 +234,10 @@ class AdminGroup(APIView):
                 error_msg = 'quota invalid.'
                 return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
 
+            if not (group_quota > 0 or group_quota == -2):
+                error_msg = 'quota invalid.'
+                return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
+
             try:
                 seafile_api.set_group_quota(group_id, group_quota)
             except Exception as e:
