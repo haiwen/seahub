@@ -694,7 +694,7 @@
 <script type="text/template" id="group-item-tmpl">
     <td><a href="{{ SITE_ROOT }}sysadmin/#groups/<%= id %>/libs/"><%- name %></a></td>
     <td>
-        <% if (owner && owner.indexOf('system admin') == -1) { %>
+        <% if (owner != 'system admin') { %>
         <a href="{{ SITE_ROOT }}useradmin/info/<% print(encodeURIComponent(owner)); %>/"><%- owner %></a>
         <% } else { %>
         --
@@ -702,7 +702,7 @@
     </td>
     <td><time title="<%= time %>"><%= time_from_now %></time></td>
     <td>
-        <% if (owner && owner.indexOf('system admin') == -1) { %>
+        <% if (owner != 'system admin') { %>
         <a href="#" class="sf2-icon-delete sf2-x group-delete-btn op-icon vh" title="{% trans "Delete" %}" aria-label="{% trans "Delete" %}"></a>
         <a href="#" class="sf2-icon-move sf2-x group-transfer-btn op-icon vh" title="{% trans "Transfer" %}" aria-label="{% trans "Transfer" %}"></a>
         <% } %>
@@ -1155,7 +1155,7 @@
     <td><a href="{{ SITE_ROOT }}sysadmin/#address-book/groups/<%= id %>/"><%- name %></a></td>
     <td><time title="<%= time %>"><%= time_from_now %></time></td>
     <td>
-        <span><%= quota_shown %></span>
+        <span <% if (quota_error) { %>class="error"<% } %>><%= quota_shown %></span>
         <span title="{% trans "Edit Quota" %}" class="quota-edit-icon sf2-icon-edit op-icon vh"></span>
     </td>
     <td>
