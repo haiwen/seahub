@@ -170,13 +170,22 @@ class DirView(APIView):
                 return api_error(status.HTTP_400_BAD_REQUEST,
                                  'name invalid.')
 
-            new_dir_name = check_filename_with_rename(repo_id, parent_dir, new_dir_name)
-            try:
-                seafile_api.post_dir(repo_id, parent_dir, new_dir_name, username)
-            except SearpcError as e:
-                logger.error(e)
-                error_msg = 'Internal Server Error'
-                return api_error(status.HTTP_500_INTERNAL_SERVER_ERROR, error_msg)
+            retry_count = 0
+            while retry_count < 10:
+                new_dir_name = check_filename_with_rename(repo_id,
+                        parent_dir, new_dir_name)
+                try:
+                    seafile_api.post_dir(repo_id,
+                            parent_dir, new_dir_name, username)
+                    break
+                except SearpcError as e:
+                    if str(e) == 'file already exists':
+                        retry_count += 1
+                    else:
+                        logger.error(e)
+                        error_msg = 'Internal Server Error'
+                        return api_error(status.HTTP_500_INTERNAL_SERVER_ERROR,
+                                error_msg)
 
             new_dir_path = posixpath.join(parent_dir, new_dir_name)
             dir_info = self.get_dir_info(repo_id, new_dir_path)
