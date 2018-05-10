@@ -324,7 +324,7 @@ class AdminUser(APIView):
             login_id = login_id.strip()
             username_by_login_id = Profile.objects.get_username_by_login_id(login_id)
             if username_by_login_id is not None:
-                return api_error(status.HTTP_400_BAD_REQUEST, 
+                return api_error(status.HTTP_400_BAD_REQUEST,
                                  _(u"Login id %s already exists." % login_id))
 
         contact_email = request.data.get("contact_email", None)
