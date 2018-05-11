@@ -14,6 +14,7 @@ from seaserv import seafile_api, ccnet_api
 from seahub.api2.authentication import TokenAuthentication
 from seahub.api2.throttling import UserRateThrottle
 from seahub.api2.utils import api_error
+from seahub.api2.views import HTTP_443_ABOVE_QUOTA
 
 from seahub.base.accounts import User
 from seahub.share.signals import share_repo_to_user_successful, \
@@ -344,6 +345,24 @@ class ReposBatchCopyDirView(APIView):
         if not dst_repo:
             error_msg = 'Library %s not found.' % dst_repo_id
             return api_error(status.HTTP_404_NOT_FOUND, error_msg)
+
+        # get total size of file/dir to be copied
+        total_size = 0
+        for path_item in path_list:
+            src_path = path_item['src_path']
+            src_path = normalize_dir_path(src_path)
+
+            current_size = 0
+            current_dir_id = seafile_api.get_dir_id_by_path(src_repo_id,
+                    src_path)
+            current_size = seafile_api.get_dir_size(src_repo.store_id,
+                    src_repo.version, current_dir_id)
+
+            total_size += current_size
+
+        # check if above quota for dst repo
+        if seafile_api.check_quota(dst_repo_id, total_size) < 0:
+            return api_error(HTTP_443_ABOVE_QUOTA, 'Above quota')
 
         result = {}
         result['failed'] = []

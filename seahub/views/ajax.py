@@ -47,7 +47,7 @@ from seahub.utils import check_filename_with_rename, EMPTY_SHA1, \
 from seahub.utils.star import get_dir_starred_files
 from seahub.utils.file_types import IMAGE, VIDEO
 from seahub.utils.file_op import check_file_lock
-from seahub.utils.repo import get_locked_files_by_dir
+from seahub.utils.repo import get_locked_files_by_dir, get_repo_owner
 from seahub.utils.error_msg import file_type_error_msg, file_size_error_msg
 from seahub.base.accounts import User
 from seahub.thumbnail.utils import get_thumbnail_src
@@ -734,6 +734,35 @@ def mv_dirents(request, src_repo_id, src_path, dst_repo_id, dst_path,
         else:
             allowed_dirs.append(obj_name)
 
+    # only check quota when move file/dir between different user's repo
+    if get_repo_owner(request, src_repo_id) != get_repo_owner(request, dst_repo_id):
+        # get total size of file/dir to be copied
+        total_size = 0
+        repo = seafile_api.get_repo(src_repo_id)
+        for obj_name in obj_file_names + obj_dir_names:
+
+            current_size = 0
+            current_path = posixpath.join(src_path, obj_name)
+
+            current_file_id = seafile_api.get_file_id_by_path(src_repo_id,
+                    current_path)
+            if current_file_id:
+                current_size = seafile_api.get_file_size(repo.store_id,
+                        repo.version, current_file_id)
+
+            current_dir_id = seafile_api.get_dir_id_by_path(src_repo_id,
+                    current_path)
+            if current_dir_id:
+                current_size = seafile_api.get_dir_size(repo.store_id,
+                        repo.version, current_dir_id)
+
+            total_size += current_size
+
+        # check if above quota for dst repo
+        if seafile_api.check_quota(dst_repo_id, total_size) < 0:
+            return HttpResponse(json.dumps({'error': 'Above quota'}),
+                                status=443, content_type=content_type)
+
     success = []
     url = None
     for obj_name in allowed_files + allowed_dirs:
@@ -776,6 +805,33 @@ def cp_dirents(request, src_repo_id, src_path, dst_repo_id, dst_path, obj_file_n
                 % {'src': escape(src_dir), 'des': escape(dst_path)}
             result['error'] = error_msg
             return HttpResponse(json.dumps(result), status=400, content_type=content_type)
+
+    # get total size of file/dir to be copied
+    total_size = 0
+    repo = seafile_api.get_repo(src_repo_id)
+    for obj_name in obj_file_names + obj_dir_names:
+
+        current_size = 0
+        current_path = posixpath.join(src_path, obj_name)
+
+        current_file_id = seafile_api.get_file_id_by_path(src_repo_id,
+                current_path)
+        if current_file_id:
+            current_size = seafile_api.get_file_size(repo.store_id,
+                    repo.version, current_file_id)
+
+        current_dir_id = seafile_api.get_dir_id_by_path(src_repo_id,
+                current_path)
+        if current_dir_id:
+            current_size = seafile_api.get_dir_size(repo.store_id,
+                    repo.version, current_dir_id)
+
+        total_size += current_size
+
+    # check if above quota for dst repo
+    if seafile_api.check_quota(dst_repo_id, total_size) < 0:
+        return HttpResponse(json.dumps({'error': 'Above quota'}),
+                            status=443, content_type=content_type)
 
     failed = []
     success = []
