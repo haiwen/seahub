@@ -576,6 +576,7 @@ COMPRESS_CSS_FILTERS = [
     'compressor.filters.cssmin.CSSMinFilter',
 ]
 
+CAPTCHA_IMAGE_SIZE = (90, 42)
 
 ###################
 # Image Thumbnail #
