@@ -255,9 +255,15 @@ $('.quota-edit-icon').on('click', function() {
 
 $('#set-quota-form').on('submit', function() {
     var space_quota = $.trim($('[name="space_quota"]', $(this)).val());
+    var quota_int = parseInt(space_quota);
     var $error = $('.error', $(this));
+
     if (!space_quota) {
         $error.html("{% trans "It is required." %}").show();
+        return false;
+    }
+
+    if (!(quota_int == space_quota && quota_int >= 0)) {
         return false;
     }
 
@@ -266,6 +272,18 @@ $('#set-quota-form').on('submit', function() {
 
     var batch = $(this).data('batch');
     var options = {};
+    var getQuotaShown = function(quota) {
+        var quota_shown;
+        if (quota >= 0) {
+            quota_shown = quotaSizeFormat(parseInt(quota), 1);
+        } else if (quota == -2) {
+            quota_shown = '--';
+        } else {
+            quota_shown = '<span class="error">{% trans "Error" %}</span>';
+        }
+        return quota_shown;
+    };
+
     if (batch) {
         var emails = [];
         $('td [type="checkbox"]:checked').closest('tr').each(function(index, item) {
@@ -286,11 +304,7 @@ $('#set-quota-form').on('submit', function() {
                     $(data.success).each(function(index, item) {
                         var $tr = $('tr[data-userid="' + item.email + '"]');
                         var $quota = $('.user-space-quota', $tr);
-                        if (space_quota == 0) {
-                            $quota.html('--');
-                        } else {
-                            $quota.html(quotaSizeFormat(parseInt(item.quota_total), 1));
-                        }
+                        $quota.html(getQuotaShown(item.quota_total));
                         emails.push(item.email);
                     });
                     var msg = "{% trans "Successfully set quota for {users}." %}".replace('{users}', HTMLescape(emails.join(', ')));
@@ -314,11 +328,7 @@ $('#set-quota-form').on('submit', function() {
             type: 'PUT',
             data: {'storage': space_quota},
             success: function(data) {
-                if (space_quota == 0) {
-                    $spaceQuota.html('--');
-                } else {
-                    $spaceQuota.html(quotaSizeFormat(parseInt(data['total']), 1));
-                }
+                $spaceQuota.html(getQuotaShown(data.total));
                 var msg = "{% trans "Successfully set quota for {user}." %}".replace('{user}', HTMLescape(data.email));
                 feedback(msg, 'success');
                 $.modal.close();
