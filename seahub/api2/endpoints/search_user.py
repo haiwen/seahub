@@ -242,8 +242,9 @@ def search_user_when_global_address_book_disabled(request, q):
 
     email_list += search_user_from_profile_with_limits(q, limited_emails)
 
-    if is_valid_email(q):
-        # if `q` is a valid email
+    current_user = User.objects.get(email=username)
+    if is_valid_email(q) and current_user.role.lower() != 'guest':
+        # if `q` is a valid email and current is not a guest user
         email_list.append(q)
 
         # get user whose `contact_email` is `q`
