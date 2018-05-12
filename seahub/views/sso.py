@@ -24,5 +24,8 @@ def sso(request):
     if getattr(settings, 'ENABLE_ADFS_LOGIN', False):
         return HttpResponseRedirect(reverse('saml2_login'))
 
+    if getattr(settings, 'ENABLE_OAUTH', False):
+        return HttpResponseRedirect(reverse('oauth_login'))
+
 def shib_login(request):
     return sso(request)

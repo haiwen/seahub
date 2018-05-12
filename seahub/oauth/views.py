@@ -10,6 +10,7 @@ from django.utils.translation import ugettext as _
 
 from constance import config
 
+from seahub.api2.utils import get_token_v1, get_token_v2
 from seahub import auth
 from seahub.profile.models import Profile
 from seahub.utils import is_valid_email
@@ -114,7 +115,15 @@ def oauth_callback(request):
     try:
         session.fetch_token(TOKEN_URL, client_secret=CLIENT_SECRET,
                 authorization_response=request.get_full_path())
-        user_info_resp = session.get(USER_INFO_URL)
+
+        if session._client.__dict__['token'].has_key('user_id'):
+            # used for sjtu.edu.cn
+            # https://xjq12311.gitbooks.io/sjtu-engtc/content/
+            user_id = session._client.__dict__['token']['user_id']
+            user_info_resp = session.get(USER_INFO_URL + '?user_id=%s' % user_id)
+        else:
+            user_info_resp = session.get(USER_INFO_URL)
+
     except Exception as e:
         logger.error(e)
         return render_to_response('error.html', {
@@ -199,5 +208,28 @@ def oauth_callback(request):
         profile.contact_email = contact_email.strip()
         profile.save()
 
+    # generate auth token for Seafile client
+    keys = (
+        'platform',
+        'device_id',
+        'device_name',
+        'client_version',
+        'platform_version',
+    )
+
+    if all([key in request.GET for key in keys]):
+        platform = request.GET['platform']
+        device_id = request.GET['device_id']
+        device_name = request.GET['device_name']
+        client_version = request.GET['client_version']
+        platform_version = request.GET['platform_version']
+        token = get_token_v2(
+            request, request.user.username, platform, device_id,
+            device_name, client_version, platform_version)
+    else:
+        token = get_token_v1(request.user.username)
+
     # redirect user to home page
-    return HttpResponseRedirect(reverse('libraries'))
+    response = HttpResponseRedirect(reverse('libraries'))
+    response.set_cookie('seahub_auth', email + '@' + token.key)
+    return response
