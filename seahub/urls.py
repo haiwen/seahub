@@ -23,7 +23,8 @@ from seahub.api2.endpoints.groups import Groups, Group
 from seahub.api2.endpoints.shareable_groups import ShareableGroups
 from seahub.api2.endpoints.group_libraries import GroupLibraries, GroupLibrary
 from seahub.api2.endpoints.group_owned_libraries import GroupOwnedLibraries, \
-        GroupOwnedLibrary, GroupOwnedLibraryFolderPermission
+        GroupOwnedLibrary, GroupOwnedLibraryUserFolderPermission, \
+        GroupOwnedLibraryGroupFolderPermission
 from seahub.api2.endpoints.group_members import GroupMembers, GroupMembersBulk, GroupMember
 from seahub.api2.endpoints.search_group import SearchGroup
 from seahub.api2.endpoints.share_links import ShareLinks, ShareLink
@@ -100,7 +101,7 @@ from seahub.api2.endpoints.admin.admin_role import AdminAdminRole
 from seahub.api2.endpoints.admin.address_book.groups import AdminAddressBookGroups, \
         AdminAddressBookGroup
 from seahub.api2.endpoints.admin.group_owned_libraries import AdminGroupOwnedLibraries, \
-        AdminGroupOwnedLibrary, AdminGroupOwnedLibraryFolderPermission
+        AdminGroupOwnedLibrary
 
 urlpatterns = [
     url(r'^accounts/', include('seahub.base.registration_urls')),
@@ -209,7 +210,8 @@ urlpatterns = [
     url(r'^api/v2.1/groups/(?P<group_id>\d+)/libraries/(?P<repo_id>[-0-9a-f]{36})/$', GroupLibrary.as_view(), name='api-v2.1-group-library'),
     url(r'^api/v2.1/groups/(?P<group_id>\d+)/group-owned-libraries/$', GroupOwnedLibraries.as_view(), name='api-v2.1-group-owned-libraries'),
     url(r'^api/v2.1/groups/(?P<group_id>\d+)/group-owned-libraries/(?P<repo_id>[-0-9a-f]{36})/$', GroupOwnedLibrary.as_view(), name='api-v2.1-owned-group-library'),
-    url(r'^api/v2.1/groups/(?P<group_id>\d+)/group-owned-libraries/(?P<repo_id>[-0-9a-f]{36})/folder-permission/$', GroupOwnedLibraryFolderPermission.as_view(), name='api-v2.1-owned-group-library-folder-permission'),
+    url(r'^api/v2.1/group-owned-libraries/(?P<repo_id>[-0-9a-f]{36})/user-folder-permission/$', GroupOwnedLibraryUserFolderPermission.as_view(), name='api-v2.1-group-owned-library-user-folder-permission'),
+    url(r'^api/v2.1/group-owned-libraries/(?P<repo_id>[-0-9a-f]{36})/group-folder-permission/$', GroupOwnedLibraryGroupFolderPermission.as_view(), name='api-v2.1-group-owned-library-group-folder-permission'),
     url(r'^api/v2.1/groups/(?P<group_id>\d+)/members/$', GroupMembers.as_view(), name='api-v2.1-group-members'),
     url(r'^api/v2.1/groups/(?P<group_id>\d+)/members/bulk/$', GroupMembersBulk.as_view(), name='api-v2.1-group-members-bulk'),
     url(r'^api/v2.1/groups/(?P<group_id>\d+)/members/(?P<email>[^/]+)/$', GroupMember.as_view(), name='api-v2.1-group-member'),
@@ -330,7 +332,6 @@ urlpatterns = [
     url(r'^api/v2.1/admin/groups/(?P<group_id>\d+)/members/(?P<email>[^/]+)/$', AdminGroupMember.as_view(), name='api-v2.1-admin-group-member'),
     url(r'^api/v2.1/admin/groups/(?P<group_id>\d+)/group-owned-libraries/$', AdminGroupOwnedLibraries.as_view(), name='api-v2.1-admin-group-owned-libraries'),
     url(r'^api/v2.1/admin/groups/(?P<group_id>\d+)/group-owned-libraries/(?P<repo_id>[-0-9a-f]{36})/$', AdminGroupOwnedLibrary.as_view(), name='api-v2.1-admin-owned-group-library'),
-    url(r'^api/v2.1/admin/groups/(?P<group_id>\d+)/group-owned-libraries/(?P<repo_id>[-0-9a-f]{36})/folder-permission/$', AdminGroupOwnedLibraryFolderPermission.as_view(), name='api-v2.1-admin-owned-group-library-folder-permission'),
 
     ## admin::shares
     url(r'^api/v2.1/admin/shares/$', AdminShares.as_view(), name='api-v2.1-admin-shares'),

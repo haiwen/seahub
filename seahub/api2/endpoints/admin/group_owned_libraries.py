@@ -16,7 +16,7 @@ from seahub.api2.endpoints.utils import api_check_group
 
 from seahub.signals import repo_created
 from seahub.utils import is_valid_dirent_name, \
-        is_pro_version, normalize_dir_path
+        is_pro_version
 from seahub.utils.repo import get_library_storages, get_repo_owner
 from seahub.utils.timeutils import timestamp_to_isoformat_timestr
 from seahub.share.signals import share_repo_to_group_successful
@@ -133,48 +133,6 @@ class AdminGroupOwnedLibrary(APIView):
         group_id = int(group_id)
         try:
             seafile_api.delete_group_owned_repo(group_id, repo_id)
-        except Exception as e:
-            logger.error(e)
-            error_msg = 'Internal Server Error'
-            return api_error(status.HTTP_500_INTERNAL_SERVER_ERROR, error_msg)
-
-        return Response({'success': True})
-
-class AdminGroupOwnedLibraryFolderPermission(APIView):
-    authentication_classes = (TokenAuthentication, SessionAuthentication)
-    permission_classes = (IsAdminUser,)
-    throttle_classes = (UserRateThrottle,)
-
-    @api_check_group
-    def put(self, request, group_id, repo_id):
-        """ Set sub repo folder permission.
-        """
-
-        path = request.data.get('path', None)
-        if not path:
-            error_msg = 'path invalid.'
-            return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
-
-        perm = request.data.get('permission', None)
-        if not perm or perm not in [PERMISSION_READ, PERMISSION_READ_WRITE]:
-            error_msg = 'permission invalid.'
-            return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
-
-        # resource check
-        repo = seafile_api.get_repo(repo_id)
-        if not repo:
-            error_msg = 'Library %s not found.' % repo_id
-            return api_error(status.HTTP_404_NOT_FOUND, error_msg)
-
-        path = normalize_dir_path(path)
-        if not seafile_api.get_dir_id_by_path(repo_id, path):
-            error_msg = 'Folder %s not found.' % path
-            return api_error(status.HTTP_404_NOT_FOUND, error_msg)
-
-        # permission check
-        group_id = int(group_id)
-        try:
-            seafile_api.add_folder_group_perm(repo_id, path, perm, group_id)
         except Exception as e:
             logger.error(e)
             error_msg = 'Internal Server Error'
