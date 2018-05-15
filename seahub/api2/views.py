@@ -80,7 +80,8 @@ from seahub.utils.star import star_file, unstar_file
 from seahub.utils.file_types import DOCUMENT
 from seahub.utils.file_size import get_file_size_unit
 from seahub.utils.file_op import check_file_lock
-from seahub.utils.timeutils import utc_to_local, datetime_to_isoformat_timestr
+from seahub.utils.timeutils import utc_to_local, \
+        datetime_to_isoformat_timestr, datetime_to_timestamp
 from seahub.views import is_registered_user, check_folder_permission, \
     create_default_library, list_inner_pub_repos
 from seahub.views.file import get_file_view_path_and_perm, send_file_access_msg
@@ -3942,7 +3943,7 @@ class EventsView(APIView):
             elif e.etype == 'clean-up-repo-trash':
                 d['repo_id'] = e.repo_id
                 d['author'] = e.username
-                d['time'] = datetime_to_isoformat_timestr(e.timestamp)
+                d['time'] = datetime_to_timestamp(e.timestamp)
                 d['days'] = e.days
                 d['repo_name'] = e.repo_name
                 d['etype'] = e.etype
@@ -3954,10 +3955,7 @@ class EventsView(APIView):
                 else:
                     d['author'] = e.repo_owner
 
-                epoch = datetime.datetime(1970, 1, 1)
-                local = utc_to_local(e.timestamp)
-                time_diff = local - epoch
-                d['time'] = time_diff.seconds + (time_diff.days * 24 * 3600)
+                d['time'] = datetime_to_timestamp(e.timestamp)
 
             size = request.GET.get('size', 36)
             url, is_default, date_uploaded = api_avatar_url(d['author'], size)
