@@ -87,7 +87,7 @@ class Groups(APIView):
             org_id = request.user.org.org_id
             user_groups = seaserv.get_org_groups_by_user(org_id, username)
         else:
-            user_groups = seaserv.get_personal_groups_by_user(username)
+            user_groups = ccnet_api.get_groups(username, return_ancestors=True)
 
         try:
             avatar_size = int(request.GET.get('avatar_size', GROUP_AVATAR_DEFAULT_SIZE))

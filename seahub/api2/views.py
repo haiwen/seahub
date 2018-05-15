@@ -52,7 +52,7 @@ from seahub.base.templatetags.seahub_tags import email2nickname, \
 from seahub.group.views import remove_group_common, \
     rename_group_with_new_name, is_group_staff
 from seahub.group.utils import BadGroupNameError, ConflictGroupNameError, \
-    validate_group_name
+    validate_group_name, is_group_member
 from seahub.thumbnail.utils import generate_thumbnail
 from seahub.notifications.models import UserNotification
 from seahub.options.models import UserOptions
@@ -120,7 +120,7 @@ from seaserv import seafserv_threaded_rpc, \
     get_personal_groups_by_user, get_session_info, is_personal_repo, \
     get_repo, check_permission, get_commits, is_passwd_set,\
     check_quota, list_share_repos, get_group_repos_by_owner, get_group_repoids, \
-    is_group_user, remove_share, get_group, \
+    remove_share, get_group, \
     get_commit, get_file_id_by_path, MAX_DOWNLOAD_DIR_SIZE, edit_repo, \
     ccnet_threaded_rpc, get_personal_groups, seafile_api, \
     create_org, ccnet_api, send_message
@@ -1421,7 +1421,7 @@ class RepoOwner(APIView):
         for shared_group in shared_groups:
             shared_group_id = shared_group.group_id
 
-            if not ccnet_api.is_group_user(shared_group_id, new_owner):
+            if not is_group_member(shared_group_id, new_owner):
                 continue
 
             if org_id:
@@ -4281,7 +4281,7 @@ class GroupRepos(APIView):
         username = request.user.username
 
         if group.is_pub:
-            if not request.user.is_staff and not is_group_user(group.id, username):
+            if not request.user.is_staff and not is_group_member(group.id, username):
                 return api_error(status.HTTP_403_FORBIDDEN, 'Permission denied.')
 
         if is_org_context(request):

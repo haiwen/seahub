@@ -53,8 +53,22 @@ def check_group_name_conflict(request, new_group_name):
 
     return False
 
-def is_group_member(group_id, email):
-    return ccnet_api.is_group_user(int(group_id), email)
+def is_group_member(group_id, email, in_structure=None):
+
+    group_id = int(group_id)
+
+    if in_structure in (True, False):
+        return ccnet_api.is_group_user(group_id, email, in_structure)
+
+    group = ccnet_api.get_group(group_id)
+    if group.parent_group_id == 0:
+        # -1: top address book group
+        #  0: group not in address book
+        # >0: sub group in address book
+        # if `in_structure` is False, NOT check sub groups in address book
+        return ccnet_api.is_group_user(group_id, email, in_structure=False)
+    else:
+        return ccnet_api.is_group_user(group_id, email)
 
 def is_group_admin(group_id, email):
     return ccnet_api.check_group_staff(int(group_id), email)

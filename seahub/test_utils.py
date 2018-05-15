@@ -15,6 +15,7 @@ import seaserv
 from seaserv import seafile_api, ccnet_threaded_rpc, ccnet_api, create_org,\
         seafserv_threaded_rpc
 
+from seahub.group.utils import is_group_member
 from seahub.utils import mkstemp
 from seahub.base.accounts import User
 from seahub.utils.file_size import get_file_size_unit
@@ -346,7 +347,7 @@ class Fixtures(Exam):
         ccnet_api.group_add_member(
                 self.group.id, self.user.username, self.admin.username)
 
-        assert ccnet_api.is_group_user(self.group.id, self.admin.username)
+        assert is_group_member(self.group.id, self.admin.username)
 
 
 class BaseTestCase(TestCase, Fixtures):

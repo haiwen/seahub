@@ -18,16 +18,16 @@ from django.utils.translation import ugettext as _
 from seahub.auth.decorators import login_required, login_required_ajax
 import seaserv
 from seaserv import ccnet_threaded_rpc, seafile_api, \
-    get_group_repos, is_group_user, get_group, \
+    get_group_repos, get_group, \
     remove_repo, get_file_id_by_path, post_empty_file, del_file
 from pysearpc import SearpcError
 
 from models import PublicGroup
-from forms import MessageForm, GroupAddForm, WikiCreateForm
+from forms import MessageForm, WikiCreateForm
 from seahub.auth import REDIRECT_FIELD_NAME
 from seahub.base.decorators import sys_staff_required, require_POST
 from seahub.group.utils import validate_group_name, BadGroupNameError, \
-    ConflictGroupNameError
+    ConflictGroupNameError, is_group_member
 from seahub.wiki.models import WikiDoesNotExist, WikiPageMissing, GroupWiki
 from seahub.wiki.utils import (clean_page_name, page_name_to_file_name,
                                get_wiki_pages, get_group_wiki_repo,
@@ -112,7 +112,7 @@ def group_check(func):
                 group.view_perm = "pub"
                 return func(request, group, *args, **kwargs)
 
-        joined = is_group_user(group_id_int, request.user.username)
+        joined = is_group_member(group_id_int, request.user.username)
         if joined:
             group.view_perm = "joined"
             group.is_staff = is_group_staff(group, request.user)
@@ -209,7 +209,7 @@ def create_group_repo(request, group_id):
 
     # Check whether user belongs to the group.
     username = request.user.username
-    if not is_group_user(group_id, username):
+    if not is_group_member(group_id, username):
         return json_error(_(u'Failed to create: you are not in the group.'))
 
     form = SharedRepoCreateForm(request.POST)
@@ -297,7 +297,7 @@ def group_wiki(request, group, page_name="home"):
                 })
     except WikiPageMissing:
         '''create that page for user if he/she is a group member'''
-        if not is_group_user(group.id, username):
+        if not is_group_member(group.id, username):
             raise Http404
 
         repo = get_group_wiki_repo(group, username)

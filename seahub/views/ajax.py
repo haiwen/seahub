@@ -70,9 +70,6 @@ def get_commit(repo_id, repo_version, commit_id):
 def get_group(gid):
     return seaserv.get_group(gid)
 
-def is_group_user(gid, username):
-    return seaserv.is_group_user(gid, username)
-
 ########## repo related
 @login_required_ajax
 def get_dirents(request, repo_id):
@@ -161,7 +158,7 @@ def get_unenc_group_repos(request, group_id):
         return HttpResponse(json.dumps({"error": err_msg}), status=400,
                             content_type=content_type)
 
-    joined = is_group_user(group_id_int, request.user.username)
+    joined = is_group_member(group_id_int, request.user.username)
     if not joined and not request.user.is_staff:
         err_msg = _(u"Permission denied")
         return HttpResponse(json.dumps({"error": err_msg}), status=403,
@@ -1279,7 +1276,7 @@ def ajax_group_members_import(request, group_id):
                 })
             continue
 
-        if is_group_member(group_id, email):
+        if is_group_member(group_id, email, in_structure=False):
             result['failed'].append({
                 'email': email,
                 'error_msg': _(u'User %s is already a group member.') % email

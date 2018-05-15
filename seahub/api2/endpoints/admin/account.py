@@ -23,6 +23,7 @@ from seahub.profile.models import Profile, DetailedProfile
 from seahub.institutions.models import Institution
 from seahub.utils import is_valid_username, is_org_context
 from seahub.utils.file_size import get_file_size_unit
+from seahub.group.utils import is_group_member
 
 
 logger = logging.getLogger(__name__)
@@ -93,7 +94,7 @@ class Account(APIView):
 
             # transfer joined groups to new user
             for g in seaserv.get_personal_groups_by_user(from_user):
-                if not seaserv.is_group_user(g.id, user2.username):
+                if not is_group_member(g.id, user2.username):
                     # add new user to the group on behalf of the group creator
                     ccnet_threaded_rpc.group_add_member(g.id, g.creator_name,
                                                         to_user)

@@ -23,6 +23,7 @@ from seahub.api2.endpoints.utils import is_org_user
 
 from seahub.base.templatetags.seahub_tags import email2nickname
 from seahub.base.accounts import User
+from seahub.group.utils import is_group_member
 from seahub.share.models import ExtraSharePermission, ExtraGroupsSharePermission
 from seahub.share.utils import is_repo_admin, share_dir_to_user, \
         share_dir_to_group, update_user_dir_permission, \
@@ -413,7 +414,7 @@ class DirSharedItemsEndpoint(APIView):
                     continue
 
                 if not config.ENABLE_SHARE_TO_ALL_GROUPS and \
-                        not ccnet_api.is_group_user(gid, username):
+                        not is_group_member(gid, username):
                     result['failed'].append({
                         'group_name': group.group_name,
                         'error_msg': 'Permission denied.'

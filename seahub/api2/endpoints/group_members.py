@@ -283,7 +283,7 @@ class GroupMembersBulk(APIView):
                     })
                 continue
 
-            if seaserv.is_group_user(group_id, email):
+            if is_group_member(group_id, email, in_structure=False):
                 result['failed'].append({
                     'email': email,
                     'error_msg': _(u'User %s is already a group member.') % email
