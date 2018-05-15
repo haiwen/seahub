@@ -450,7 +450,8 @@ define([
                     },
                     success: function() {
                         _this.dir.user_can_set_folder_perm = false;
-                        if (_this.contextOptions.group_id) { // the repo is in a group
+                        if (_this.contextOptions &&
+                            _this.contextOptions.group_id) { // the repo is in a group
                             _this.getGroupInfo();
                         } else {
                             _this.reset();

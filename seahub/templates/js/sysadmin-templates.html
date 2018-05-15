@@ -1082,17 +1082,15 @@
     <p class="error error-tip hide"></p>
 </script>
 <script type="text/template" id="address-book-group-tmpl">
-    <div class="hd ovhd">
-        <h3 class="fleft group-path"></h3>
-        <div class="fright">
-            <button class="btn-white js-add-group">{% trans "New Sub-department" %}</button>
-            <button class="btn-white js-add-member">{% trans "Add Member" %}</button>
-            <button class="btn-white js-add-library">{% trans "New Library" %}</button>
-        </div>
+    <div class="hd">
+        <h3 class="group-path"></h3>
     </div>
     <span class="loading-icon loading-tip"></span>
     <div class="groups">
-        <h4 class="small-hd">{% trans "Sub-departments" %}</h4>
+        <div class="small-hd">
+            <h4 class="small-hd-heading">{% trans "Sub-departments" %}</h4>
+            <button class="btn-white js-add-group">{% trans "New Sub-department" %}</button>
+        </div>
         <table class="hide">
             <thead>
                 <tr>
@@ -1108,7 +1106,10 @@
         <p class="empty-tip hide">{% trans "No sub-departments" %}</p>
     </div>
     <div class="members">
-        <h4 class="small-hd">{% trans "Members" %}</h4>
+        <div class="small-hd">
+            <h4 class="small-hd-heading">{% trans "Members" %}</h4>
+            <button class="btn-white js-add-member">{% trans "Add Member" %}</button>
+        </div>
         <table class="hide">
             <thead>
                 <tr>
@@ -1125,7 +1126,10 @@
         <p class="empty-tip hide">{% trans "No members" %}</p>
     </div>
     <div class="libraries">
-        <h4 class="small-hd">{% trans "Libraries" %}</h4>
+        <div class="small-hd">
+            <h4 class="small-hd-heading">{% trans "Libraries" %}</h4>
+            <button class="btn-white js-add-library">{% trans "New Library" %}</button>
+        </div>
         <table class="hide">
             <thead>
                 <tr>
