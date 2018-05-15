@@ -527,7 +527,7 @@
                     </ul>
                     <div class="menu-inner-divider"></div>
                     <ul>
-                        <% if (app.pageOptions.folder_perm_enabled && is_repo_owner && !is_virtual && has_been_shared_out) { %>
+                        <% if (can_set_folder_perm) { %>
                         <li><a class="op set-folder-permission" href="#">{% trans "Permission" %}</a></li>
                         <% } %>
                         <li><a class="op view-details" href="#">{% trans "Details" %}</a></li>
@@ -602,7 +602,7 @@
                     <div class="menu-inner-divider"></div>
                     <ul>
                     <% if (dirent.perm == 'rw') { %>
-                        <% if (app.pageOptions.folder_perm_enabled && is_repo_owner && !is_virtual && has_been_shared_out) { %>
+                        <% if (can_set_folder_perm) { %>
                         <li><a class="op set-folder-permission" href="#">{% trans "Permission" %}</a></li>
                         <% } %>
                         <li><a class="op view-details" href="#">{% trans "Details" %}</a></li>
@@ -958,7 +958,7 @@
         <div class="menu-inner-divider"></div>
         <ul>
         <% if (dirent.perm == 'rw') { %>
-            <% if (app.pageOptions.folder_perm_enabled && is_repo_owner) { %>
+            <% if (can_set_folder_perm) { %>
             <li><a class="op set-folder-permission" href="#">{% trans "Permission" %}</a></li>
             <% } %>
             <li><a class="op view-details" href="#">{% trans "Details" %}</a></li>

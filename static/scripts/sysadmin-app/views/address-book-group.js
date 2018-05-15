@@ -191,10 +191,8 @@ define([
                     success: function(data) {
                         if (data.success.length > 0) {
                             _this.memberCollection.add(data.success, {prepend: true});
-                            if (_this.memberCollection.length == 1) {
-                                _this.$membersEmptyTip.hide();
-                                _this.$membersTable.show();
-                            }
+                            _this.$membersEmptyTip.hide();
+                            _this.$membersTable.show();
                         }
 
                         var err_str = '';

@@ -125,6 +125,9 @@ define([
                 case 'repo_labels': return siteRoot + 'api/v2.1/revision-tags/tagged-items/';
                 case 'user_repo_labels': return siteRoot + 'api/v2.1/revision-tags/tag-names/';
 
+                case 'group-owned-library-user-folder-permission': return siteRoot + 'api/v2.1/group-owned-libraries/' + options.repo_id + '/user-folder-permission/';
+                case 'group-owned-library-group-folder-permission': return siteRoot + 'api/v2.1/group-owned-libraries/' + options.repo_id + '/group-folder-permission/';
+
                 // Share admin
                 case 'share_admin_repos': return siteRoot + 'api/v2.1/shared-repos/';
                 case 'share_admin_repo': return siteRoot + 'api/v2.1/shared-repos/' + options.repo_id + '/';
@@ -150,6 +153,8 @@ define([
                 case 'group_repos': return siteRoot + 'api2/groups/' + options.group_id + '/repos/';
                 case 'group_owned_repos': return siteRoot + 'api/v2.1/groups/' + options.group_id + '/group-owned-libraries/';
                 case 'group_owned_repo': return siteRoot + 'api/v2.1/groups/' + options.group_id + '/group-owned-libraries/' + options.repo_id + '/';
+                case 'address_book_sub_groups': return siteRoot + 'api/v2.1/address-book/groups/' + options.group_id + '/sub-groups/';
+                case 'address_book_group_search_members': return siteRoot + 'api/v2.1/address-book/groups/' + options.group_id + '/search-member/';
                 case 'group_discussions': return siteRoot + 'api2/groups/' + options.group_id + '/discussions/';
                 case 'group_discussion': return siteRoot + 'api2/groups/' + options.group_id + '/discussions/' + options.discussion_id + '/';
 
@@ -630,8 +635,16 @@ define([
             }
         },
 
-        contactInputOptionsForSelect2: function() {
+        contactInputOptionsForSelect2: function(options) {
             var _this = this;
+
+            var url;
+            if (options && options.url) {
+                url = options.url;
+            } else {
+                url = _this.getUrl({name: 'search_user'});
+            }
+
             return {
                 placeholder: gettext("Search users or enter emails and press Enter"),
 
@@ -647,7 +660,7 @@ define([
                 formatAjaxError: gettext("Loading failed"),
 
                 ajax: {
-                    url: _this.getUrl({name: 'search_user'}),
+                    url: url,
                     dataType: 'json',
                     delay: 250,
                     cache: true,
@@ -657,7 +670,7 @@ define([
                         };
                     },
                     results: function(data) {
-                        var user_list = [], users = data['users'];
+                        var user_list = [], users = data['users'] || data;
 
                         for (var i = 0, len = users.length; i < len; i++) {
                             user_list.push({ // 'id' & 'text' are required by the plugin
