@@ -64,9 +64,19 @@ define([
             } else {
                 $.extend(data, {'group_id': this.data.group_id});
             }
+            var url_name;
+            if (this.data.is_group_owned_repo) {
+                url_name = for_user ?
+                    'group-owned-library-user-folder-permission' :
+                    'group-owned-library-group-folder-permission';
+            } else {
+                url_name = for_user ?
+                    'repo_user_folder_perm' :
+                    'repo_group_folder_perm';
+            }
             $.ajax({
                 url: Common.getUrl({
-                    name: for_user ? 'repo_user_folder_perm' : 'repo_group_folder_perm',
+                    name: url_name,
                     repo_id: this.data.repo_id
                 }),
                 type: 'PUT',
@@ -106,9 +116,19 @@ define([
             } else {
                 $.extend(data, {'group_id': this.data.group_id});
             }
+            var url_name;
+            if (this.data.is_group_owned_repo) {
+                url_name = for_user ?
+                    'group-owned-library-user-folder-permission' :
+                    'group-owned-library-group-folder-permission';
+            } else {
+                url_name = for_user ?
+                    'repo_user_folder_perm' :
+                    'repo_group_folder_perm';
+            }
             $.ajax({
                 url: Common.getUrl({
-                    name: for_user ? 'repo_user_folder_perm' : 'repo_group_folder_perm',
+                    name: url_name,
                     repo_id: this.data.repo_id
                 }),
                 type: 'DELETE',
