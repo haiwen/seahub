@@ -19,6 +19,7 @@ from seahub.admin_log.signals import admin_operation
 from seahub.admin_log.models import GROUP_DELETE
 from seahub.api2.utils import to_python_boolean, api_error
 from seahub.api2.throttling import UserRateThrottle
+from seahub.api2.permissions import IsProVersion
 from seahub.api2.authentication import TokenAuthentication
 
 logger = logging.getLogger(__name__)
@@ -40,7 +41,7 @@ def address_book_group_to_dict(group):
 class AdminAddressBookGroups(APIView):
     authentication_classes = (TokenAuthentication, SessionAuthentication)
     throttle_classes = (UserRateThrottle,)
-    permission_classes = (IsAdminUser,)
+    permission_classes = (IsAdminUser, IsProVersion)
 
     def get(self, request):
         """List top groups in address book."""
@@ -108,7 +109,7 @@ class AdminAddressBookGroups(APIView):
 class AdminAddressBookGroup(APIView):
     authentication_classes = (TokenAuthentication, SessionAuthentication)
     throttle_classes = (UserRateThrottle,)
-    permission_classes = (IsAdminUser,)
+    permission_classes = (IsAdminUser, IsProVersion)
 
     def get(self, request, group_id):
         """List child groups and members in an address book group."""

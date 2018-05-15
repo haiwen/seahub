@@ -11,6 +11,7 @@ from seaserv import seafile_api
 
 from seahub.api2.utils import api_error
 from seahub.api2.throttling import UserRateThrottle
+from seahub.api2.permissions import IsProVersion
 from seahub.api2.authentication import TokenAuthentication
 from seahub.api2.endpoints.utils import api_check_group
 
@@ -45,7 +46,7 @@ def get_group_owned_repo_info(request, repo_id):
 
 class AdminGroupOwnedLibraries(APIView):
     authentication_classes = (TokenAuthentication, SessionAuthentication)
-    permission_classes = (IsAdminUser,)
+    permission_classes = (IsAdminUser, IsProVersion)
     throttle_classes = (UserRateThrottle,)
 
     @api_check_group
@@ -117,7 +118,7 @@ class AdminGroupOwnedLibraries(APIView):
 
 class AdminGroupOwnedLibrary(APIView):
     authentication_classes = (TokenAuthentication, SessionAuthentication)
-    permission_classes = (IsAdminUser,)
+    permission_classes = (IsAdminUser, IsProVersion)
     throttle_classes = (UserRateThrottle,)
 
     @api_check_group

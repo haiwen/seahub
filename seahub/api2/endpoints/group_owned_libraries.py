@@ -15,6 +15,7 @@ from constance import config
 
 from seahub.api2.utils import api_error
 from seahub.api2.throttling import UserRateThrottle
+from seahub.api2.permissions import IsProVersion
 from seahub.api2.authentication import TokenAuthentication
 from seahub.api2.endpoints.utils import api_check_group
 
@@ -53,7 +54,7 @@ def get_group_owned_repo_info(request, repo_id):
 
 class GroupOwnedLibraries(APIView):
     authentication_classes = (TokenAuthentication, SessionAuthentication)
-    permission_classes = (IsAuthenticated,)
+    permission_classes = (IsAuthenticated, IsProVersion)
     throttle_classes = (UserRateThrottle,)
 
     @api_check_group
@@ -140,7 +141,7 @@ class GroupOwnedLibraries(APIView):
 
 class GroupOwnedLibrary(APIView):
     authentication_classes = (TokenAuthentication, SessionAuthentication)
-    permission_classes = (IsAuthenticated,)
+    permission_classes = (IsAuthenticated, IsProVersion)
     throttle_classes = (UserRateThrottle,)
 
     @api_check_group
@@ -178,7 +179,7 @@ def get_group_id_by_repo_owner(repo_owner):
 
 class GroupOwnedLibraryUserFolderPermission(APIView):
     authentication_classes = (TokenAuthentication, SessionAuthentication)
-    permission_classes = (IsAuthenticated,)
+    permission_classes = (IsAuthenticated, IsProVersion)
     throttle_classes = (UserRateThrottle,)
 
     def _get_user_folder_perm_info(self, email, repo_id, path, perm):
@@ -449,7 +450,7 @@ class GroupOwnedLibraryUserFolderPermission(APIView):
 
 class GroupOwnedLibraryGroupFolderPermission(APIView):
     authentication_classes = (TokenAuthentication, SessionAuthentication)
-    permission_classes = (IsAuthenticated,)
+    permission_classes = (IsAuthenticated, IsProVersion)
     throttle_classes = (UserRateThrottle,)
 
     def _get_group_folder_perm_info(self, group_id, repo_id, path, perm):

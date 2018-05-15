@@ -16,7 +16,7 @@ from django.http import HttpResponse
 from rest_framework.response import Response
 from rest_framework import status, serializers
 from seaserv import seafile_api, get_personal_groups_by_user, \
-        is_group_user, get_group, seafserv_threaded_rpc
+        get_group, seafserv_threaded_rpc
 from pysearpc import SearpcError
 
 from seahub.base.accounts import User
@@ -25,6 +25,7 @@ from seahub.base.templatetags.seahub_tags import email2nickname, \
 from seahub.group.models import GroupMessage, MessageReply, \
     MessageAttachment, PublicGroup
 from seahub.group.views import is_group_staff
+from seahub.group.utils import is_group_member
 from seahub.notifications.models import UserNotification
 from seahub.utils import get_file_type_and_ext, \
     gen_file_get_url, get_site_scheme_and_netloc
@@ -303,7 +304,7 @@ def api_group_check(func):
         else:
             group.is_pub = False
 
-        joined = is_group_user(group_id_int, request.user.username)
+        joined = is_group_member(group_id_int, request.user.username)
         if joined:
             group.view_perm = "joined"
             group.is_staff = is_group_staff(group, request.user)
