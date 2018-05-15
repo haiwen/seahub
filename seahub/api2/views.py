@@ -393,6 +393,14 @@ class Search(APIView):
                 error_msg = 'Folder %s not found.' % search_path
                 return api_error(status.HTTP_404_NOT_FOUND, error_msg)
 
+        obj_type = request.GET.get('obj_type', None)
+        if obj_type:
+            obj_type = obj_type.lower()
+
+        if obj_type and obj_type not in ('dir', 'file'):
+            error_msg = 'obj_type invalid.'
+            return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
+
         search_ftypes = request.GET.get('search_ftypes', 'all') # val: 'all' or 'custom'
         search_ftypes = search_ftypes.lower()
         if search_ftypes not in ('all', 'custom'):
@@ -447,9 +455,13 @@ class Search(APIView):
             repo_id_map, repo_type_map = get_search_repos_map(search_repo,
                     username, org_id, shared_from, not_shared_from)
 
+        obj_desc = {
+            'obj_type': obj_type,
+            'suffixes': suffixes
+        }
         # search file
         try:
-            results, total = search_files(repo_id_map, search_path, keyword, suffixes, start, size, org_id)
+            results, total = search_files(repo_id_map, search_path, keyword, obj_desc, start, size, org_id)
         except Exception as e:
             logger.error(e)
             error_msg = 'Internal Server Error'
