@@ -222,8 +222,10 @@ define([
             var group_name = Common.groupId2Name(group_id);
             if (group_name) {
                 this.switchCurrentView(this.dirView);
-                this.dirView.showDir('group/' + group_id, repo_id, path,
-                    {'group_name': group_name});
+                this.dirView.showDir('group/' + group_id, repo_id, path, {
+                        'group_id': group_id,
+                        'group_name': group_name
+                    });
                 this.sideNavView.setCurTab('group', {
                     'cur_group_tab': '',
                     'cur_group_id': group_id

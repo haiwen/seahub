@@ -70,9 +70,9 @@ define([
                 if ($el.length &&
                     !$el.is(target) &&
                     !$el.find('*').is(target) &&
-                    !$td.find('.edit-icon').is(target)) {
-                    $el.hide();
-                    $td.find('.cur-perm, .edit-icon').show();
+                    !$td.find('.perm-edit-icon').is(target)) {
+                    $el.addClass('hide');
+                    $td.find('.perm').removeClass('hide');
                 }
             };
             $(document).on('click', hideItemEdit);

@@ -105,6 +105,12 @@ define([
             this.$('.img-link').addClass('hl');
             this.$('.text-link').addClass('hl');
 
+            var can_set_folder_perm = false;
+            if (app.pageOptions.folder_perm_enabled && !dir.is_virtual &&
+                ((dir.is_repo_owner && dir.has_been_shared_out) || dir.user_can_set_folder_perm)) {
+                can_set_folder_perm = true;
+            }
+
             var op = template({
                 dirent: this.model.attributes,
                 dirent_path: this.model.getPath(),
@@ -112,6 +118,7 @@ define([
                 category: dir.category,
                 repo_id: dir.repo_id,
                 is_repo_owner: dir.is_repo_owner,
+                can_set_folder_perm: can_set_folder_perm,
                 can_generate_share_link: app.pageOptions.can_generate_share_link,
                 can_generate_upload_link: app.pageOptions.can_generate_upload_link,
                 is_pro: app.pageOptions.is_pro,
@@ -256,8 +263,12 @@ define([
             var options = {
                 'obj_name': this.model.get('obj_name'),
                 'dir_path': this.dir.path,
-                'repo_id': this.dir.repo_id
+                'repo_id': this.dir.repo_id,
+                'is_group_owned_repo': this.dir.user_can_set_folder_perm ? true : false
             };
+            if (options.is_group_owned_repo) {
+                options.group_id = this.dirView.contextOptions.group_id;
+            }
             new FolderPermView(options);
             return false;
         },
