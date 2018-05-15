@@ -439,10 +439,12 @@ class Search(APIView):
                 error_msg = 'Permission denied.'
                 return api_error(status.HTTP_403_FORBIDDEN, error_msg)
             repo_id_map[repo_id] = repo
+            repo_type_map = {}
         else:
             shared_from = request.GET.get('shared_from', None)
             not_shared_from = request.GET.get('not_shared_from', None)
-            repo_id_map = get_search_repos_map(search_repo, username, org_id, shared_from, not_shared_from)
+            repo_id_map, repo_type_map = get_search_repos_map(search_repo,
+                    username, org_id, shared_from, not_shared_from)
 
         # search file
         try:
@@ -466,6 +468,12 @@ class Search(APIView):
                 if not permission:
                     continue
                 e['permission'] = permission
+
+            # get repo type
+            if repo_type_map.has_key(repo_id):
+                e['repo_type'] = repo_type_map[repo_id]
+            else:
+                e['repo_type'] = ''
 
         has_more = True if total > current_page * per_page else False
         return Response({"total":total, "results":results, "has_more":has_more})
