@@ -682,10 +682,16 @@ textarea:-moz-placeholder {/* for FF */
     text-decoration:underline;
 }
 .small-hd {
-    padding:3px 10px;
+    display:flex;
+    justify-content:space-between;
+    padding:8px 10px;
     background:#f7f7f7;
     border-radius:2px;
     margin:15px 0;
+}
+.small-hd-heading {
+    margin:0;
+    line-height:29px;
 }
 
 /*******ui widgets**************/
@@ -4154,6 +4160,10 @@ img.thumbnail {
     text-align:center;
     margin-bottom:30px;
 }
+#address-book-group .hd {
+    height:auto;
+}
+
 .invite-link-in-popup,
 .invite-link-in-popup:hover {
     text-decoration:none;
