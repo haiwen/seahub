@@ -145,6 +145,50 @@ class GroupOwnedLibrary(APIView):
     throttle_classes = (UserRateThrottle,)
 
     @api_check_group
+    def put(self, request, group_id, repo_id):
+        """ Rename a library.
+
+        Permission checking:
+        1. is group admin;
+        """
+
+        # argument check
+        new_repo_name = request.data.get('name', '')
+        if not new_repo_name:
+            error_msg = 'name invalid.'
+            return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
+
+        if not is_valid_dirent_name(new_repo_name):
+            error_msg = 'name invalid.'
+            return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
+
+        # resource check
+        repo = seafile_api.get_repo(repo_id)
+        if not repo:
+            error_msg = 'Library %s not found.' % repo_id
+            return api_error(status.HTTP_404_NOT_FOUND, error_msg)
+
+        # permission check
+        group_id = int(group_id)
+        username = request.user.username
+        if not is_group_admin(group_id, username):
+            error_msg = 'Permission denied.'
+            return api_error(status.HTTP_403_FORBIDDEN, error_msg)
+
+        # rename repo
+        try:
+            repo_owner = get_repo_owner(request, repo_id)
+            # desc is ''
+            seafile_api.edit_repo(repo_id, new_repo_name, '', repo_owner)
+        except Exception as e:
+            logger.error(e)
+            error_msg = 'Internal Server Error'
+            return api_error(status.HTTP_500_INTERNAL_SERVER_ERROR, error_msg)
+
+        repo_info = get_group_owned_repo_info(request, repo_id)
+        return Response(repo_info)
+
+    @api_check_group
     def delete(self, request, group_id, repo_id):
         """ Delete a group owned library.
 
