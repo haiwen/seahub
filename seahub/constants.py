@@ -1,4 +1,5 @@
 # Copyright (c) 2012-2016 Seafile Ltd.
+import seahub.settings as settings
 # Default user have common operations, like creating group and library.
 DEFAULT_USER = 'default'
 
@@ -16,11 +17,11 @@ DAILY_ADMIN = 'daily_admin'
 AUDIT_ADMIN = 'audit_admin'
 
 HASH_URLS = {
-        'VIEW_COMMON_LIB_DIR': u'/#common/lib/%(repo_id)s/%(path)s',
-        'GROUP_INFO': u'/#group/%(group_id)s/',
-        'GROUP_MEMBERS': u'/#group/%(group_id)s/members/',
-        'GROUP_DISCUSS': u'/#group/%(group_id)s/discussions/',
-        'GROUP_LIST': u'/#groups/',
-        'SYS_REPO_ADMIN': u'/sysadmin/#all-libs/',
+        'VIEW_COMMON_LIB_DIR': settings.SITE_ROOT + '#common/lib/%(repo_id)s/%(path)s',
+        'GROUP_INFO': settings.SITE_ROOT + '#group/%(group_id)s/',
+        'GROUP_MEMBERS': settings.SITE_ROOT + '#group/%(group_id)s/members/',
+        'GROUP_DISCUSS': settings.SITE_ROOT + '#group/%(group_id)s/discussions/',
+        'GROUP_LIST': settings.SITE_ROOT + '#groups/',
+        'SYS_REPO_ADMIN': settings.SITE_ROOT + 'sysadmin/#all-libs/',
 
         }
