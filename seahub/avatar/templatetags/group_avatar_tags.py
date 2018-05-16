@@ -51,7 +51,7 @@ def grp_avatar(group_id, size=GROUP_AVATAR_DEFAULT_SIZE):
     key = get_grp_cache_key(group_id, size)
     val = cache.get(key)
     if val:
-        return val
+        return format_html(val)
 
     # Get from DB, and refresh cache
     grp_avatars = GroupAvatar.objects.filter(group_id=group_id)
