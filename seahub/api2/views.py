@@ -2095,6 +2095,33 @@ class OpMoveView(APIView):
             return api_error(status.HTTP_400_BAD_REQUEST,
                              'file_names invalid.')
 
+        # only check quota when move file/dir between different user's repo
+        if get_repo_owner(request, repo_id) != get_repo_owner(request, dst_repo):
+            # get total size of file/dir to be copied
+            total_size = 0
+            for obj_name in obj_names:
+
+                current_size = 0
+                current_path = posixpath.join(parent_dir, obj_name)
+
+                current_file_id = seafile_api.get_file_id_by_path(repo_id,
+                        current_path)
+                if current_file_id:
+                    current_size = seafile_api.get_file_size(repo.store_id,
+                            repo.version, current_file_id)
+
+                current_dir_id = seafile_api.get_dir_id_by_path(repo_id,
+                        current_path)
+                if current_dir_id:
+                    current_size = seafile_api.get_dir_size(repo.store_id,
+                            repo.version, current_dir_id)
+
+                total_size += current_size
+
+            # check if above quota for dst repo
+            if seafile_api.check_quota(dst_repo, total_size) < 0:
+                return api_error(HTTP_443_ABOVE_QUOTA, 'Above quota')
+
         # make new name
         dst_dirents = seafile_api.list_dir_by_path(dst_repo, dst_dir)
         dst_obj_names = [dirent.obj_name for dirent in dst_dirents]
@@ -2187,6 +2214,31 @@ class OpCopyView(APIView):
         if not set(obj_names).issubset(exist_obj_names):
             return api_error(status.HTTP_400_BAD_REQUEST,
                              'file_names invalid.')
+
+        # get total size of file/dir to be copied
+        total_size = 0
+        for obj_name in obj_names:
+
+            current_size = 0
+            current_path = posixpath.join(parent_dir, obj_name)
+
+            current_file_id = seafile_api.get_file_id_by_path(repo_id,
+                    current_path)
+            if current_file_id:
+                current_size = seafile_api.get_file_size(repo.store_id,
+                        repo.version, current_file_id)
+
+            current_dir_id = seafile_api.get_dir_id_by_path(repo_id,
+                    current_path)
+            if current_dir_id:
+                current_size = seafile_api.get_dir_size(repo.store_id,
+                        repo.version, current_dir_id)
+
+            total_size += current_size
+
+        # check if above quota for dst repo
+        if seafile_api.check_quota(dst_repo, total_size) < 0:
+            return api_error(HTTP_443_ABOVE_QUOTA, 'Above quota')
 
         # make new name
         dst_dirents = seafile_api.list_dir_by_path(dst_repo, dst_dir)

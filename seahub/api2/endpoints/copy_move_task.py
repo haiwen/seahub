@@ -13,10 +13,12 @@ from django.utils.html import escape
 from seahub.api2.throttling import UserRateThrottle
 from seahub.api2.authentication import TokenAuthentication
 from seahub.api2.utils import api_error
+from seahub.api2.views import HTTP_443_ABOVE_QUOTA
 from seahub.signals import rename_dirent_successful
 
 from seahub.views import check_folder_permission
 from seahub.utils import check_filename_with_rename
+from seahub.utils.repo import get_repo_owner
 from seahub.utils.file_op import check_file_lock
 from seahub.settings import MAX_PATH
 
@@ -94,20 +96,32 @@ class CopyMoveTaskView(APIView):
             return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
 
         # src resource check
+        src_repo = seafile_api.get_repo(src_repo_id)
+        if not src_repo:
+            error_msg = 'Library %s not found.' % src_repo_id
+            return api_error(status.HTTP_404_NOT_FOUND, error_msg)
+
         src_dirent_path = posixpath.join(src_parent_dir, src_dirent_name)
+        file_id = None
         if dirent_type == 'file':
-            if not seafile_api.get_file_id_by_path(src_repo_id,
-                                                   src_dirent_path):
+            file_id = seafile_api.get_file_id_by_path(src_repo_id, src_dirent_path)
+            if not file_id:
                 error_msg = 'File %s not found.' % src_dirent_path
                 return api_error(status.HTTP_404_NOT_FOUND, error_msg)
 
+        dir_id = None
         if dirent_type == 'dir':
-            if not seafile_api.get_dir_id_by_path(src_repo_id,
-                                                  src_dirent_path):
+            dir_id = seafile_api.get_dir_id_by_path(src_repo_id, src_dirent_path)
+            if not dir_id:
                 error_msg = 'Folder %s not found.' % src_dirent_path
                 return api_error(status.HTTP_404_NOT_FOUND, error_msg)
 
         # dst resource check
+        dst_repo = seafile_api.get_repo(dst_repo_id)
+        if not dst_repo:
+            error_msg = 'Library %s not found.' % dst_repo_id
+            return api_error(status.HTTP_404_NOT_FOUND, error_msg)
+
         if not seafile_api.get_dir_id_by_path(dst_repo_id,
                                               dst_parent_dir):
             error_msg = 'Folder %s not found.' % dst_parent_dir
@@ -117,6 +131,23 @@ class CopyMoveTaskView(APIView):
         if check_folder_permission(request, dst_repo_id, dst_parent_dir) != 'rw':
             error_msg = 'Permission denied.'
             return api_error(status.HTTP_403_FORBIDDEN, error_msg)
+
+        if operation == 'copy' or \
+                operation == 'move' and \
+                get_repo_owner(request, src_repo_id) != get_repo_owner(request, dst_repo_id):
+
+            current_size = 0
+            if file_id:
+                current_size = seafile_api.get_file_size(src_repo.store_id,
+                        src_repo.version, file_id)
+
+            if dir_id:
+                current_size = seafile_api.get_dir_size(src_repo.store_id,
+                        src_repo.version, dir_id)
+
+            # check if above quota for dst repo
+            if seafile_api.check_quota(dst_repo_id, current_size) < 0:
+                return api_error(HTTP_443_ABOVE_QUOTA, 'Above quota')
 
         new_dirent_name = check_filename_with_rename(dst_repo_id,
                 dst_parent_dir, src_dirent_name)
@@ -154,6 +185,7 @@ class CopyMoveTaskView(APIView):
                                             src_dirent_name, dst_repo_id, dst_parent_dir,
                                             new_dirent_name, replace=False, username=username,
                                             need_progress=1)
+
                 is_dir = True if dirent_type == 'dir' else False
                 rename_dirent_successful.send(sender=None, src_repo_id=src_repo_id,
                                               src_parent_dir=src_parent_dir, src_filename=src_dirent_name,
