@@ -33,7 +33,7 @@ define([
             this.listenTo(this.repos, 'add', this.addOne);
             this.listenTo(this.repos, 'reset', this.reset);
 
-            this.repoDetailsView = new RepoDetailsView();
+            this.repoDetailsView = new RepoDetailsView({'parentView': this});
         },
 
         addOne: function(repo, collection, options) {

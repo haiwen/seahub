@@ -12,8 +12,10 @@ define([
 
         template:  _.template($('#repo-details-tmpl').html()),
 
-        initialize: function() {
+        initialize: function(options) {
             var _this = this;
+
+            this.parentView = options.parentView;
             $(document).on('keydown', function(e) {
                 // ESCAPE key pressed
                 if (e.which == 27) {
@@ -52,7 +54,7 @@ define([
             this.render();
 
             if (!$('#' + this.id).length) {
-                $('#my-repos').append(this.$el);
+                this.parentView.$('.main-panel-main-with-side').append(this.$el);
                 if (!this.$el.is(':visible')) {
                     this.$el.show();
                 }
