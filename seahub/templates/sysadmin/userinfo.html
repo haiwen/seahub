@@ -170,7 +170,7 @@
         </form>
 
         <form id="set-quota-form" method="post" class="hide">{% csrf_token %}
-            <h3>{% trans "Set user storage limit" %}</h3>
+            <h3>{% trans "Set quota" %}</h3>
             <input type="text" name="space_quota" class="input" /> MB
             <p class="tip">
             <span>{% trans "An integer that is greater than or equal to 0." %}</span><br />
@@ -621,6 +621,7 @@ $('#set-quota-form').on('submit', function() {
     }
 
     if (!(quota_int == space_quota && quota_int >= 0)) {
+        apply_form_error(form_id, "{% trans "Invalid quota." %}");
         return false;
     }
 

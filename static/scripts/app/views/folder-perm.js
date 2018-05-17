@@ -21,7 +21,8 @@ define([
             this.dir_path = options.dir_path;
             this.is_group_owned_repo = options.is_group_owned_repo;
             this.group_id = options.group_id;
-            this.path = Common.pathJoin([this.dir_path, this.obj_name])
+            this.path = this.dir_path == '/' ? '/' :
+                Common.pathJoin([this.dir_path, this.obj_name]);
 
             this.render();
 

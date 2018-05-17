@@ -7,11 +7,14 @@ define([
     'app/collections/group-owned-repos', // for address book group
     'app/views/group-repo',
     'app/views/add-group-repo',
+    'app/views/add-department-repo',
+    'app/views/repo-details',
     'app/views/group-members',
     'app/views/group-discussions',
     'app/views/group-settings'
 ], function($, _, Backbone, Common, GroupRepos, GroupOwnedRepos, GroupRepoView,
-    AddGroupRepoView, GroupMembersView, GroupDiscussionsView, GroupSettingsView) {
+    AddGroupRepoView, AddDepartmentRepoView, RepoDetailsView,
+    GroupMembersView, GroupDiscussionsView, GroupSettingsView) {
     'use strict';
 
     var GroupView = Backbone.View.extend({
@@ -47,6 +50,8 @@ define([
             this.settingsView = new GroupSettingsView({groupView: this});
             this.membersView = new GroupMembersView({groupView: this});
             this.discussionsView = new GroupDiscussionsView({groupView: this});
+
+            this.repoDetailsView = new RepoDetailsView({'parentView': this});
         },
 
         addOne: function(repo, collection, options) {
@@ -64,7 +69,8 @@ define([
                 model: repo,
                 group_id: this.group_id,
                 parent_group_id: this.group.parent_group_id,
-                show_repo_owner: this.group.show_repo_owner,
+                show_repo_owner: this.group.is_address_book_group ? false : true,
+                repoDetailsView: this.repoDetailsView,
                 is_staff: this.repos.is_staff
             });
 
@@ -102,10 +108,22 @@ define([
                 this.repos.each(this.addOne, this);
                 this.$table.show();
             } else {
-                this.$emptyTip.show();
+                this.showEmptyTip();
                 this.$table.hide();
             }
 
+        },
+
+        showEmptyTip: function() {
+            if (this.group.is_address_book_group) {
+                if (this.group.user_is_admin) {
+                    this.$emptyTip.filter('.address-book-group-empty-tips-for-admin').show();
+                } else {
+                    this.$emptyTip.filter('.address-book-group-empty-tips-for-member').show();
+                }
+            } else {
+                this.$emptyTip.filter('.common-group-empty-tips').show();
+            }
         },
 
         showGroup: function(options) {
@@ -128,17 +146,16 @@ define([
 
                     var user_can_add_repo = false;
                     var user_is_admin = false;
-                    var is_address_book_group = false;
                     if ($.inArray(app.pageOptions.username, data.admins) != -1) {
                         user_is_admin = true;
                     }
+                    _this.group.is_address_book_group = false;
+                    _this.group.user_is_admin = user_is_admin;
                     if (data.parent_group_id == 0) { // common group
                         user_can_add_repo = true;
-                        _this.group.show_repo_owner = true; // for repo list
                         _this.group.repos_for_new = _this.repos; // for creating a new library
                     } else { // address book group
-                        is_address_book_group = true;
-                        _this.group.show_repo_owner = false;
+                        _this.group.is_address_book_group = true;
                         if (app.pageOptions.is_pro && user_is_admin) {
                             user_can_add_repo = true;
                             _this.group.repos_for_new = _this.ownedRepos; // for creating a new library
@@ -152,7 +169,7 @@ define([
 
                     _this.renderPath({
                         'name': data.name,
-                        'is_address_book_group': is_address_book_group
+                        'is_address_book_group': _this.group.is_address_book_group
                     });
                     _this.renderToolbar2({
                         'id': data.id,
@@ -249,6 +266,11 @@ define([
                 this.renderToolbar();
                 this.renderMainCon();
             }
+            // when switch from a group to another group
+            if (this.repoDetailsView.$el.is(':visible')) {
+                this.repoDetailsView.hide();
+            }
+
             this.group_id = group_id;
             this.showGroup(options);
         },
@@ -261,7 +283,11 @@ define([
         createRepo: function() {
             var repos = this.group.repos_for_new;
             repos.setGroupID(this.group_id);
-            new AddGroupRepoView(repos);
+            if (this.group.is_address_book_group) {
+                new AddDepartmentRepoView(repos);
+            } else {
+                new AddGroupRepoView(repos);
+            }
         },
 
         sortByName: function() {

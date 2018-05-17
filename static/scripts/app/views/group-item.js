@@ -16,7 +16,8 @@ define([
         events: {
         },
 
-        initialize: function() {
+        initialize: function(options) {
+            this.repoDetailsView = options.repoDetailsView;
         },
 
         render: function() {
@@ -36,6 +37,7 @@ define([
             var group_id = this.model.get('id'),
                 parent_group_id = this.model.get('parent_group_id'),
                 is_staff = $.inArray(app.pageOptions.username, this.model.get('admins')) != -1 ? true : false,
+                repoDetailsView = this.repoDetailsView,
                 $listContainer = this.$('tbody');
             var groupRepos = new GroupRepos();
             groupRepos.setGroupID(group_id);
@@ -45,6 +47,7 @@ define([
                     group_id: group_id,
                     parent_group_id: parent_group_id,
                     is_staff: is_staff,
+                    repoDetailsView: repoDetailsView,
                     show_repo_owner: false // don't show 'Owner'
                 });
                 $listContainer.append(view.render().el);

@@ -155,7 +155,7 @@
 </table>
 
 <form id="set-quota-form" method="post" action="" class="hide">{% csrf_token %}
-    <h3>{% trans "Set user storage limit" %}</h3>
+    <h3>{% trans "Set quota" %}</h3>
     <input type="text" name="space_quota" class="input" /> MB
     <p class="tip">
     <span>{% trans "An integer that is greater than or equal to 0." %}</span><br />

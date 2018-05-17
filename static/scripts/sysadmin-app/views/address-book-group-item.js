@@ -77,6 +77,7 @@ define([
 
                 if (!(quota_int == quota &&
                     (quota_int > 0 || quota_int == -2))) {
+                    $error.html(gettext("Invalid quota.")).show();
                     return false;
                 }
 

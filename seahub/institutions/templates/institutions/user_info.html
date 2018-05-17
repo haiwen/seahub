@@ -44,7 +44,7 @@
         </dl>
 
         <form id="set-quota-form" method="post" class="hide">{% csrf_token %}
-            <h3>{% trans "Set user storage limit" %}</h3>
+            <h3>{% trans "Set Quota" %}</h3>
             <input type="hidden" name="email" value="{{ email }}" />
             <input type="text" name="space_quota" class="input" /> MB
             <p class="tip">{% trans "Available quota:" %} {{ available_quota|seahub_filesizeformat}}</p>

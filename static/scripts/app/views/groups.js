@@ -4,8 +4,10 @@ define([
     'backbone',
     'common',
     'app/collections/groups',
+    'app/views/repo-details',
     'app/views/group-item'
-], function($, _, Backbone, Common, Groups, GroupItemView) {
+], function($, _, Backbone, Common, Groups, RepoDetailsView,
+    GroupItemView) {
     'use strict';
 
     var GroupsView = Backbone.View.extend({
@@ -19,6 +21,8 @@ define([
             this.groups = new Groups();
             this.listenTo(this.groups, 'add', this.addOne);
             this.listenTo(this.groups, 'reset', this.reset);
+
+            this.repoDetailsView = new RepoDetailsView({'parentView': this});
         },
 
         events: {
@@ -27,7 +31,8 @@ define([
 
         addOne: function(group, collection, options) {
             var view = new GroupItemView({
-                model: group
+                model: group,
+                repoDetailsView: this.repoDetailsView
             });
             if (options.prepend) {
                 this.$groupList.prepend(view.render().el);
@@ -56,7 +61,7 @@ define([
         },
 
         renderMainCon: function() {
-            this.$mainCon = $('<div class="main-panel-main" id="groups"></div>').html(this.template());
+            this.$mainCon = $('<div class="main-panel-main main-panel-main-with-side" id="groups"></div>').html(this.template());
             this.$el.append(this.$mainCon);
 
             this.$loadingTip = this.$('.loading-tip');
