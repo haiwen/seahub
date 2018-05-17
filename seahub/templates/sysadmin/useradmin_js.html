@@ -264,6 +264,7 @@ $('#set-quota-form').on('submit', function() {
     }
 
     if (!(quota_int == space_quota && quota_int >= 0)) {
+        $error.html("{% trans "Invalid quota." %}").show();
         return false;
     }
 

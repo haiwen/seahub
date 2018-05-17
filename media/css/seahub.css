@@ -3907,15 +3907,15 @@ img.thumbnail {
 #groups .group-name .a {
     color:#322;
 }
-#groups table {
+#group-list table {
     margin:0 0 32px;
 }
-#groups th {
+#group-list th {
     font-size:0;
     padding:0;
+    border-bottom:0;
 }
-#groups th,
-#groups td {
+#groups-list td {
     border-bottom:0;
 }
 #groups .empty-tip {

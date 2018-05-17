@@ -94,6 +94,7 @@ html,body {
 </script>
 
 <script type="text/template" id="groups-tmpl">
+<div class="cur-view-main">
 <div class="cur-view-path">
     <h3>{% trans "My Groups" %}</h3>
 </div>
@@ -109,6 +110,7 @@ html,body {
     </div>
     <span class="loading-icon loading-tip"></span>
     <p class="error error-tip hide"></p>
+</div>
 </div>
 </script>
 
@@ -126,10 +128,17 @@ html,body {
             <thead></thead>
             <tbody></tbody>
         </table>
-        <div class="empty-tips hide">
+        <div class="empty-tips common-group-empty-tips hide">
             <h2 class="alc">{% trans "No library is shared to this group" %}</h2>
             <p>{% blocktrans %}You can share libraries by clicking the "New Library" button above or the "Share" icon on your libraries list.{% endblocktrans %}</p>
             <p>{% trans "Libraries shared as writable can be downloaded and synced by other group members. Read only libraries can only be downloaded, updates by others will not be uploaded." %}</p>
+        </div>
+        <div class="empty-tips address-book-group-empty-tips-for-member hide">
+            <h2 class="alc">{% trans "No libraries" %}</h2>
+        </div>
+        <div class="empty-tips address-book-group-empty-tips-for-admin hide">
+            <h2 class="alc">{% trans "No libraries" %}</h2>
+            <p>{% blocktrans %}You can create libraries by clicking the "New Library" button above.{% endblocktrans %}</p>
         </div>
         <p class="error error-tip hide"></p>
     </div>
