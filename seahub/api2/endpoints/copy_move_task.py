@@ -147,7 +147,7 @@ class CopyMoveTaskView(APIView):
 
             # check if above quota for dst repo
             if seafile_api.check_quota(dst_repo_id, current_size) < 0:
-                return api_error(HTTP_443_ABOVE_QUOTA, 'Above quota')
+                return api_error(HTTP_443_ABOVE_QUOTA, _(u"Out of quota."))
 
         new_dirent_name = check_filename_with_rename(dst_repo_id,
                 dst_parent_dir, src_dirent_name)

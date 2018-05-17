@@ -1506,7 +1506,7 @@ class FileBlockDownloadLinkView(APIView):
                     'You do not have permission to access this repo.')
 
         if check_quota(repo_id) < 0:
-            return api_error(HTTP_443_ABOVE_QUOTA, 'Above quota')
+            return api_error(HTTP_443_ABOVE_QUOTA, _(u"Out of quota."))
 
         token = seafile_api.get_fileserver_access_token(
                 repo_id, file_id, 'downloadblks', request.user.username)
@@ -1542,7 +1542,7 @@ class UploadLinkView(APIView):
                     'You do not have permission to access this folder.')
 
         if check_quota(repo_id) < 0:
-            return api_error(HTTP_443_ABOVE_QUOTA, 'Above quota')
+            return api_error(HTTP_443_ABOVE_QUOTA, _(u"Out of quota."))
 
         token = seafile_api.get_fileserver_access_token(repo_id,
                 'dummy', 'upload', request.user.username, use_onetime=False)
@@ -1586,7 +1586,7 @@ class UpdateLinkView(APIView):
                     'You do not have permission to access this folder.')
 
         if check_quota(repo_id) < 0:
-            return api_error(HTTP_443_ABOVE_QUOTA, 'Above quota')
+            return api_error(HTTP_443_ABOVE_QUOTA, _(u"Out of quota."))
 
         token = seafile_api.get_fileserver_access_token(repo_id,
                 'dummy', 'update', request.user.username, use_onetime=False)
@@ -1630,7 +1630,7 @@ class UploadBlksLinkView(APIView):
                     'You do not have permission to access this folder.')
 
         if check_quota(repo_id) < 0:
-            return api_error(HTTP_443_ABOVE_QUOTA, 'Above quota')
+            return api_error(HTTP_443_ABOVE_QUOTA, _(u"Out of quota."))
 
         token = seafile_api.get_fileserver_access_token(repo_id,
                 'dummy', 'upload-blks-api', request.user.username, use_onetime=False)
@@ -1675,7 +1675,7 @@ class UploadBlksLinkView(APIView):
                     'You do not have permission to access this folder.')
 
         if check_quota(repo_id) < 0:
-            return api_error(HTTP_443_ABOVE_QUOTA, 'Above quota')
+            return api_error(HTTP_443_ABOVE_QUOTA, _(u"Out of quota."))
 
         token = seafile_api.get_fileserver_access_token(repo_id,
                 'dummy', 'upload', request.user.username, use_onetime=False)
@@ -1723,7 +1723,7 @@ class UpdateBlksLinkView(APIView):
                     'You do not have permission to access this folder.')
 
         if check_quota(repo_id) < 0:
-            return api_error(HTTP_443_ABOVE_QUOTA, 'Above quota')
+            return api_error(HTTP_443_ABOVE_QUOTA, _(u"Out of quota."))
 
         token = seafile_api.get_fileserver_access_token(repo_id,
                 'dummy', 'update-blks-api', request.user.username, use_onetime=False)
@@ -2120,7 +2120,7 @@ class OpMoveView(APIView):
 
             # check if above quota for dst repo
             if seafile_api.check_quota(dst_repo, total_size) < 0:
-                return api_error(HTTP_443_ABOVE_QUOTA, 'Above quota')
+                return api_error(HTTP_443_ABOVE_QUOTA, _(u"Out of quota."))
 
         # make new name
         dst_dirents = seafile_api.list_dir_by_path(dst_repo, dst_dir)
@@ -2238,7 +2238,7 @@ class OpCopyView(APIView):
 
         # check if above quota for dst repo
         if seafile_api.check_quota(dst_repo, total_size) < 0:
-            return api_error(HTTP_443_ABOVE_QUOTA, 'Above quota')
+            return api_error(HTTP_443_ABOVE_QUOTA, _(u"Out of quota."))
 
         # make new name
         dst_dirents = seafile_api.list_dir_by_path(dst_repo, dst_dir)
