@@ -760,7 +760,7 @@ def mv_dirents(request, src_repo_id, src_path, dst_repo_id, dst_path,
 
         # check if above quota for dst repo
         if seafile_api.check_quota(dst_repo_id, total_size) < 0:
-            return HttpResponse(json.dumps({'error': 'Above quota'}),
+            return HttpResponse(json.dumps({'error': _(u"Out of quota.")}),
                                 status=443, content_type=content_type)
 
     success = []
@@ -830,7 +830,7 @@ def cp_dirents(request, src_repo_id, src_path, dst_repo_id, dst_path, obj_file_n
 
     # check if above quota for dst repo
     if seafile_api.check_quota(dst_repo_id, total_size) < 0:
-        return HttpResponse(json.dumps({'error': 'Above quota'}),
+        return HttpResponse(json.dumps({'error': _(u"Out of quota.")}),
                             status=443, content_type=content_type)
 
     failed = []

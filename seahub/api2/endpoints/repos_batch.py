@@ -8,6 +8,8 @@ from rest_framework.authentication import SessionAuthentication
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 from rest_framework.views import APIView
+from django.utils.translation import ugettext as _
+
 import seaserv
 from seaserv import seafile_api, ccnet_api
 
@@ -362,7 +364,7 @@ class ReposBatchCopyDirView(APIView):
 
         # check if above quota for dst repo
         if seafile_api.check_quota(dst_repo_id, total_size) < 0:
-            return api_error(HTTP_443_ABOVE_QUOTA, 'Above quota')
+            return api_error(HTTP_443_ABOVE_QUOTA,  _(u"Out of quota."))
 
         result = {}
         result['failed'] = []
