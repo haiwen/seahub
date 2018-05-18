@@ -19,7 +19,10 @@ define([
             this.repo_id = options.repo_id;
             this.obj_name = options.obj_name;
             this.dir_path = options.dir_path;
-            this.path = Common.pathJoin([this.dir_path, this.obj_name])
+            this.is_group_owned_repo = options.is_group_owned_repo;
+            this.group_id = options.group_id;
+            this.path = this.dir_path == '/' ? '/' :
+                Common.pathJoin([this.dir_path, this.obj_name]);
 
             this.render();
 
@@ -68,14 +71,19 @@ define([
             // show existing user folder perm items
             Common.ajaxGet({
                 'get_url': Common.getUrl({
-                    name: 'repo_user_folder_perm',
+                    name: this.is_group_owned_repo ?
+                        'group-owned-library-user-folder-permission' :
+                        'repo_user_folder_perm',
                     repo_id: this.repo_id
                 }),
                 'data': {'folder_path': this.path},
-                'after_op_success': function (data) {
+                'after_op_success': function(data) {
                     $(data).each(function(index, item) {
                         var perm_item = new RepoFolderPermItemView({
-                            item_data: $.extend(item, {'for_user': true})
+                            item_data: $.extend(item, {
+                                'is_group_owned_repo': _this.is_group_owned_repo,
+                                'for_user': true
+                            })
                         });
                         _this.$add_user_perm.after(perm_item.el);
                     });
@@ -85,14 +93,19 @@ define([
             // show existing group folder perm items
             Common.ajaxGet({
                 'get_url': Common.getUrl({
-                    name: 'repo_group_folder_perm',
+                    name: this.is_group_owned_repo ?
+                        'group-owned-library-group-folder-permission' :
+                        'repo_group_folder_perm',
                     repo_id: this.repo_id
                 }),
                 'data': {'folder_path': this.path},
                 'after_op_success': function (data) {
                     $(data).each(function(index, item) {
                         var perm_item = new RepoFolderPermItemView({
-                            item_data: $.extend(item, {'for_user': false})
+                            item_data: $.extend(item, {
+                                'is_group_owned_repo': _this.is_group_owned_repo,
+                                'for_user': false
+                            })
                         });
                         _this.$add_group_perm.after(perm_item.el);
                     });
@@ -100,18 +113,50 @@ define([
             });
 
             // use select2 to 'user' input in 'add user perm'
-            $('[name="email"]', this.$add_user_perm).select2(Common.contactInputOptionsForSelect2());
+            var url;
+            if (this.is_group_owned_repo) {
+                url = Common.getUrl({
+                    'name': 'address_book_group_search_members',
+                    'group_id': this.group_id
+                });
+            }
+            $('[name="email"]', this.$add_user_perm).select2(
+                    Common.contactInputOptionsForSelect2({'url': url}));
 
             // use select2 to 'group' input in 'add group perm'
-            var groups = app.pageOptions.joined_groups_exclude_address_book || [],
-                g_opts = '';
-            for (var i = 0, len = groups.length; i < len; i++) {
-                g_opts += '<option value="' + groups[i].id + '" data-index="' + i + '">' + groups[i].name + '</option>';
+            var groups;
+            var prepareGroupSelector = function(groups) {
+                var g_opts = '';
+                for (var i = 0, len = groups.length; i < len; i++) {
+                    g_opts += '<option value="' + groups[i].id + '" data-index="' + i + '">' + groups[i].name + '</option>';
+                }
+                $('[name="group"]', _this.$add_group_perm).html(g_opts).select2({
+                    placeholder: gettext("Select groups"),
+                    escapeMarkup: function(m) { return m; }
+                });
+            };
+            if (this.is_group_owned_repo) {
+                $.ajax({
+                    url: Common.getUrl({
+                        'name': 'address_book_sub_groups',
+                        'group_id': this.group_id
+                    }),
+                    cache: false,
+                    dataType: 'json',
+                    success: function(data) {
+                        groups = data;
+                    },
+                    error: function(xhr) {
+                        groups = [];
+                    },
+                    complete: function() {
+                        prepareGroupSelector(groups);
+                    }
+                });
+            } else {
+                groups = app.pageOptions.joined_groups_exclude_address_book || [];
+                prepareGroupSelector(groups);
             }
-            $('[name="group"]', this.$add_group_perm).html(g_opts).select2({
-                placeholder: gettext("Select groups"),
-                escapeMarkup: function(m) { return m; }
-            });
         },
 
         events: {
@@ -126,7 +171,12 @@ define([
                 $form = this.$add_user_perm;
                 $error = $('#user-folder-perm .error');
 
-                url = Common.getUrl({name: 'repo_user_folder_perm', repo_id: this.repo_id});
+                url = Common.getUrl({
+                    name: this.is_group_owned_repo ?
+                        'group-owned-library-user-folder-permission' :
+                        'repo_user_folder_perm',
+                    repo_id: this.repo_id
+                });
                 var emails_group_ids_input = $('[name="email"]', $form),
                     emails = emails_group_ids_input.val(),
                     perm = $('[name="permission"]', $form).val();
@@ -141,13 +191,22 @@ define([
                     'permission': perm
                 };
 
-                extended_data = {'for_user': true};
+                extended_data = {
+                    'is_group_owned_repo': this.is_group_owned_repo,
+                    'for_user': true
+                };
 
             } else {
                 $form = this.$add_group_perm;
                 $error = $('#group-folder-perm .error');
 
-                url = Common.getUrl({name: 'repo_group_folder_perm', repo_id: this.repo_id});
+                url = Common.getUrl({
+                    name: this.is_group_owned_repo ?
+                        'group-owned-library-group-folder-permission' :
+                        'repo_group_folder_perm',
+                    repo_id: this.repo_id
+                });
+
                 var emails_group_ids_input = $('[name="group"]', $form),
                     group_ids = emails_group_ids_input.val().join(','),
                     perm = $('[name="permission"]', $form).val();
@@ -162,7 +221,10 @@ define([
                     'permission': perm
                 };
 
-                extended_data = {'for_user': false};
+                extended_data = {
+                    'is_group_owned_repo': this.is_group_owned_repo,
+                    'for_user': false
+                };
             }
 
             var $submit_btn = $form.children('[type="submit"]');

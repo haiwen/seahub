@@ -443,12 +443,19 @@ define([
                 var dir = this.dir;
                 dir.fetch({
                     cache: false,
-                    reset: true,
+                    //reset: true,
                     data: {
                         'p': dir.path,
                         'thumbnail_size': thumbnail_size
                     },
                     success: function() {
+                        _this.dir.user_can_set_folder_perm = false;
+                        if (_this.contextOptions &&
+                            _this.contextOptions.group_id) { // the repo is in a group
+                            _this.getGroupInfo();
+                        } else {
+                            _this.reset();
+                        }
                     },
                     error: function(collection, response, opts) {
                         var err_msg;
@@ -466,6 +473,34 @@ define([
                     },
                     complete: function() {
                         _this.$loadingTip.hide();
+                    }
+                });
+            },
+
+            getGroupInfo: function() {
+                var _this = this;
+                $.ajax({
+                    url: Common.getUrl({
+                        'name': 'group',
+                        'group_id': this.contextOptions.group_id
+                    }),
+                    cache: false,
+                    dataType: 'json',
+                    success: function(data) {
+                        if (data.parent_group_id != 0 && // address book group
+                            $.inArray(app.pageOptions.username, data.admins) != -1) { // user is group admin
+                            _this.dir.user_can_set_folder_perm = true;
+                        }
+                        _this.reset();
+                    },
+                    error: function(xhr) {
+                        var err_msg;
+                        if (xhr.responseText) {
+                            err_msg = JSON.parse(xhr.responseText).error_msg;
+                        } else {
+                            err_msg = gettext("Please check the network.");
+                        }
+                        _this.$error.html(err_msg).show();
                     }
                 });
             },

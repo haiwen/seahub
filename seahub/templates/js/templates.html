@@ -65,6 +65,17 @@
         <input type="submit" value="{% trans "Submit"%}" class="submit" />
     </form>
 </script>
+
+<script type="text/template" id="create-department-repo-tmpl">
+    <form id="repo-create-form" action="" method="post">{% csrf_token %}
+        <h3 id="dialogTitle">{% trans "New Department Library"%}</h3>
+        <label for="repo-name">{% trans "Name"%}</label><br/>
+        <input id="repo-name" type="text" name="repo_name" value="" maxlength="{{max_file_name}}" class="input" /><br />
+        <p class="error hide"></p>
+        <input type="submit" value="{% trans "Submit"%}" class="submit" />
+    </form>
+</script>
+
 <script type="text/template" id="add-lib-label-form-tmpl">
 <form action="" method="">
     <h3 id="dialogTitle">{% trans "Label current state" %}</h3>
@@ -240,8 +251,8 @@
     <td>
         <img src="<%= icon_url %>" title="<%= icon_title %>" alt="<%= icon_title %>" width="24" />
     </td>
-    <td><a href="#group/<%= group_id %>/lib/<%= id %>" class="normal"><%- name %></a></td>
-    <td class="alc">
+    <td><span class="repo-name-span"><a href="#group/<%= group_id %>/lib/<%= id %>" class="normal"><%- name %></a></span></td>
+    <td class="repo-op-td">
         <% if (app.pageOptions.is_pro) { %>
             <% if (parent_group_id == 0) { %>
                 <% if (is_repo_owner || is_admin) { %>
@@ -253,6 +264,16 @@
             <% } else { %>
                 <% if (is_staff) { %>
                     <a href="#" class="sf2-icon-delete sf2-x delete-repo op-icon vh" title="{% trans "Delete" %}" aria-label="{% trans "Delete" %}"></a>
+                    <div class="sf-dropdown sf-dropdown-inline">
+                        <a href="#" class="sf2-icon-caret-down more-op-icon op-icon vh sf-dropdown-toggle" title="{% trans "More Operations" %}" aria-label="{% trans "More Operations" %}"></a>
+                        <ul class="hidden-op repo-hidden-op hide sf-dropdown-menu">
+                            <li><a class="op js-repo-rename" href="#">{% trans "Rename" %}</a></li>
+                            <% if (app.pageOptions.folder_perm_enabled) { %>
+                            <li><a class="op js-set-repo-perm" href="#">{% trans "Permission" %}</a></li>
+                            <% } %>
+                            <li><a class="op js-repo-details" href="#">{% trans "Details" %}</a></li>
+                        </ul>
+                    </div>
                 <% } %>
             <% } %>
         <% } else { %>
@@ -275,21 +296,41 @@
         <img src="<%= icon_url %>" title="<%= icon_title %>" alt="<%= icon_title %>" width="24" />
     </td>
     <td>
-        <a href="#group/<%= group_id %>/lib/<%= id %>" class="normal"><%- name %></a><br />
-        <% if (show_repo_owner) { %>
-        <span class="repo-meta-info" title="<%- owner %>"><%- owner_name %></span>
-        <% } %>
-        <span class="repo-meta-info"><%= size_formatted %></span>
-        <span class="repo-meta-info"><%= mtime_relative %></span>
+        <span class="repo-name-span">
+            <a href="#group/<%= group_id %>/lib/<%= id %>" class="normal"><%- name %></a><br />
+            <% if (show_repo_owner) { %>
+            <span class="repo-meta-info" title="<%- owner %>"><%- owner_name %></span>
+            <% } %>
+            <span class="repo-meta-info"><%= size_formatted %></span>
+            <span class="repo-meta-info"><%= mtime_relative %></span>
+        </span>
     </td>
-    <td class="alc">
+    <td class="repo-op-td">
         <% if (app.pageOptions.is_pro) { %>
-            <% if (is_repo_owner || is_admin) { %>
-                <a href="#" class="sf2-icon-share sf2-x repo-share-btn op-icon" title="{% trans "Share" %}" aria-label="{% trans "Share" %}"></a>
+            <% if (parent_group_id == 0) { %>
+                <% if (is_repo_owner || is_admin) { %>
+                    <a href="#" class="sf2-icon-share sf2-x repo-share-btn op-icon" title="{% trans "Share" %}" aria-label="{% trans "Share" %}"></a>
+                <% } %>
+                <% if (is_staff || is_repo_owner || is_admin) { %>
+                    <a href="#" class="sf2-icon-delete sf2-x cancel-share op-icon" title="{% trans "Unshare" %}" aria-label="{% trans "Unshare" %}"></a>
+                <% } %>
+
+            <% } else { %>
+                <% if (is_staff) { %>
+                    <div class="sf-dropdown sf-dropdown-inline">
+                        <a href="#" class="sf2-icon-caret-down more-op-icon op-icon sf-dropdown-toggle" title="{% trans "More Operations" %}" aria-label="{% trans "More Operations" %}"></a>
+                        <ul class="hidden-op repo-hidden-op hide sf-dropdown-menu">
+                            <li><a class="op delete-repo" href="#">{% trans "Delete" %}</a></li>
+                            <li><a class="op js-repo-rename" href="#">{% trans "Rename" %}</a></li>
+                            <% if (app.pageOptions.folder_perm_enabled) { %>
+                            <li><a class="op js-set-repo-perm" href="#">{% trans "Permission" %}</a></li>
+                            <% } %>
+                            <li><a class="op js-repo-details" href="#">{% trans "Details" %}</a></li>
+                        </ul>
+                    </div>
+                <% } %>
             <% } %>
-            <% if (is_staff || is_repo_owner || is_admin) { %>
-                <a href="#" class="sf2-icon-delete sf2-x cancel-share op-icon" title="{% trans "Unshare" %}" aria-label="{% trans "Unshare" %}"></a>
-            <% } %>
+
         <% } else { %>
             <% if (is_repo_owner) { %>
                 <a href="#" class="sf2-icon-share sf2-x repo-share-btn op-icon" title="{% trans "Share" %}" aria-label="{% trans "Share" %}"></a>
@@ -527,7 +568,7 @@
                     </ul>
                     <div class="menu-inner-divider"></div>
                     <ul>
-                        <% if (app.pageOptions.folder_perm_enabled && is_repo_owner && !is_virtual && has_been_shared_out) { %>
+                        <% if (can_set_folder_perm) { %>
                         <li><a class="op set-folder-permission" href="#">{% trans "Permission" %}</a></li>
                         <% } %>
                         <li><a class="op view-details" href="#">{% trans "Details" %}</a></li>
@@ -602,7 +643,7 @@
                     <div class="menu-inner-divider"></div>
                     <ul>
                     <% if (dirent.perm == 'rw') { %>
-                        <% if (app.pageOptions.folder_perm_enabled && is_repo_owner && !is_virtual && has_been_shared_out) { %>
+                        <% if (can_set_folder_perm) { %>
                         <li><a class="op set-folder-permission" href="#">{% trans "Permission" %}</a></li>
                         <% } %>
                         <li><a class="op view-details" href="#">{% trans "Details" %}</a></li>
@@ -958,7 +999,7 @@
         <div class="menu-inner-divider"></div>
         <ul>
         <% if (dirent.perm == 'rw') { %>
-            <% if (app.pageOptions.folder_perm_enabled && is_repo_owner) { %>
+            <% if (can_set_folder_perm) { %>
             <li><a class="op set-folder-permission" href="#">{% trans "Permission" %}</a></li>
             <% } %>
             <li><a class="op view-details" href="#">{% trans "Details" %}</a></li>
@@ -1917,7 +1958,7 @@
         <tbody></tbody>
     </table>
     <% } else { %>
-    <p class="empty-tip alc">{% trans "No library is shared to this group" %}</p>
+    <p class="empty-tip alc">{% trans "No libraries" %}</p>
     <% } %>
 </script>
 <script type="text/template" id="group-item-mobile-tmpl">
@@ -1934,7 +1975,7 @@
         <tbody></tbody>
     </table>
     <% } else { %>
-    <p class="empty-tip alc">{% trans "No library is shared to this group" %}</p>
+    <p class="empty-tip alc">{% trans "No libraries" %}</p>
     <% } %>
 </script>
 
