@@ -78,8 +78,11 @@ def update_user_info(request, user):
 
     reference_id = request.data.get("reference_id", None)
     if reference_id is not None:
-        reference_id = reference_id.strip()
-        ccnet_api.set_reference_id(email, reference_id)
+        if reference_id.strip():
+            ccnet_api.set_reference_id(email, reference_id.strip())
+        else:
+            # remove reference id
+            ccnet_api.set_reference_id(email, None)
 
     department = request.data.get("department")
     if department:

@@ -78,7 +78,8 @@ from seahub.utils.star import star_file, unstar_file
 from seahub.utils.file_types import DOCUMENT
 from seahub.utils.file_size import get_file_size_unit
 from seahub.utils.file_op import check_file_lock
-from seahub.utils.timeutils import utc_to_local, datetime_to_isoformat_timestr
+from seahub.utils.timeutils import utc_to_local, \
+        datetime_to_isoformat_timestr, datetime_to_timestamp
 from seahub.views import is_registered_user, check_folder_permission, \
     create_default_library, list_inner_pub_repos
 from seahub.views.file import get_file_view_path_and_perm, send_file_access_msg
@@ -390,6 +391,14 @@ class Search(APIView):
                 error_msg = 'Folder %s not found.' % search_path
                 return api_error(status.HTTP_404_NOT_FOUND, error_msg)
 
+        obj_type = request.GET.get('obj_type', None)
+        if obj_type:
+            obj_type = obj_type.lower()
+
+        if obj_type and obj_type not in ('dir', 'file'):
+            error_msg = 'obj_type invalid.'
+            return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
+
         search_ftypes = request.GET.get('search_ftypes', 'all') # val: 'all' or 'custom'
         search_ftypes = search_ftypes.lower()
         if search_ftypes not in ('all', 'custom'):
@@ -437,14 +446,20 @@ class Search(APIView):
                 error_msg = 'Permission denied.'
                 return api_error(status.HTTP_403_FORBIDDEN, error_msg)
             repo_id_map[repo_id] = repo
+            repo_type_map = {}
         else:
             shared_from = request.GET.get('shared_from', None)
             not_shared_from = request.GET.get('not_shared_from', None)
-            repo_id_map = get_search_repos_map(search_repo, username, org_id, shared_from, not_shared_from)
+            repo_id_map, repo_type_map = get_search_repos_map(search_repo,
+                    username, org_id, shared_from, not_shared_from)
 
+        obj_desc = {
+            'obj_type': obj_type,
+            'suffixes': suffixes
+        }
         # search file
         try:
-            results, total = search_files(repo_id_map, search_path, keyword, suffixes, start, size, org_id)
+            results, total = search_files(repo_id_map, search_path, keyword, obj_desc, start, size, org_id)
         except Exception as e:
             logger.error(e)
             error_msg = 'Internal Server Error'
@@ -464,6 +479,12 @@ class Search(APIView):
                 if not permission:
                     continue
                 e['permission'] = permission
+
+            # get repo type
+            if repo_type_map.has_key(repo_id):
+                e['repo_type'] = repo_type_map[repo_id]
+            else:
+                e['repo_type'] = ''
 
         has_more = True if total > current_page * per_page else False
         return Response({"total":total, "results":results, "has_more":has_more})
@@ -1483,7 +1504,7 @@ class FileBlockDownloadLinkView(APIView):
                     'You do not have permission to access this repo.')
 
         if check_quota(repo_id) < 0:
-            return api_error(HTTP_443_ABOVE_QUOTA, 'Above quota')
+            return api_error(HTTP_443_ABOVE_QUOTA, _(u"Out of quota."))
 
         token = seafile_api.get_fileserver_access_token(
                 repo_id, file_id, 'downloadblks', request.user.username)
@@ -1519,7 +1540,7 @@ class UploadLinkView(APIView):
                     'You do not have permission to access this folder.')
 
         if check_quota(repo_id) < 0:
-            return api_error(HTTP_443_ABOVE_QUOTA, 'Above quota')
+            return api_error(HTTP_443_ABOVE_QUOTA, _(u"Out of quota."))
 
         token = seafile_api.get_fileserver_access_token(repo_id,
                 'dummy', 'upload', request.user.username, use_onetime=False)
@@ -1563,7 +1584,7 @@ class UpdateLinkView(APIView):
                     'You do not have permission to access this folder.')
 
         if check_quota(repo_id) < 0:
-            return api_error(HTTP_443_ABOVE_QUOTA, 'Above quota')
+            return api_error(HTTP_443_ABOVE_QUOTA, _(u"Out of quota."))
 
         token = seafile_api.get_fileserver_access_token(repo_id,
                 'dummy', 'update', request.user.username, use_onetime=False)
@@ -1607,7 +1628,7 @@ class UploadBlksLinkView(APIView):
                     'You do not have permission to access this folder.')
 
         if check_quota(repo_id) < 0:
-            return api_error(HTTP_443_ABOVE_QUOTA, 'Above quota')
+            return api_error(HTTP_443_ABOVE_QUOTA, _(u"Out of quota."))
 
         token = seafile_api.get_fileserver_access_token(repo_id,
                 'dummy', 'upload-blks-api', request.user.username, use_onetime=False)
@@ -1652,7 +1673,7 @@ class UploadBlksLinkView(APIView):
                     'You do not have permission to access this folder.')
 
         if check_quota(repo_id) < 0:
-            return api_error(HTTP_443_ABOVE_QUOTA, 'Above quota')
+            return api_error(HTTP_443_ABOVE_QUOTA, _(u"Out of quota."))
 
         token = seafile_api.get_fileserver_access_token(repo_id,
                 'dummy', 'upload', request.user.username, use_onetime=False)
@@ -1700,7 +1721,7 @@ class UpdateBlksLinkView(APIView):
                     'You do not have permission to access this folder.')
 
         if check_quota(repo_id) < 0:
-            return api_error(HTTP_443_ABOVE_QUOTA, 'Above quota')
+            return api_error(HTTP_443_ABOVE_QUOTA, _(u"Out of quota."))
 
         token = seafile_api.get_fileserver_access_token(repo_id,
                 'dummy', 'update-blks-api', request.user.username, use_onetime=False)
@@ -2072,6 +2093,33 @@ class OpMoveView(APIView):
             return api_error(status.HTTP_400_BAD_REQUEST,
                              'file_names invalid.')
 
+        # only check quota when move file/dir between different user's repo
+        if get_repo_owner(request, repo_id) != get_repo_owner(request, dst_repo):
+            # get total size of file/dir to be copied
+            total_size = 0
+            for obj_name in obj_names:
+
+                current_size = 0
+                current_path = posixpath.join(parent_dir, obj_name)
+
+                current_file_id = seafile_api.get_file_id_by_path(repo_id,
+                        current_path)
+                if current_file_id:
+                    current_size = seafile_api.get_file_size(repo.store_id,
+                            repo.version, current_file_id)
+
+                current_dir_id = seafile_api.get_dir_id_by_path(repo_id,
+                        current_path)
+                if current_dir_id:
+                    current_size = seafile_api.get_dir_size(repo.store_id,
+                            repo.version, current_dir_id)
+
+                total_size += current_size
+
+            # check if above quota for dst repo
+            if seafile_api.check_quota(dst_repo, total_size) < 0:
+                return api_error(HTTP_443_ABOVE_QUOTA, _(u"Out of quota."))
+
         # make new name
         dst_dirents = seafile_api.list_dir_by_path(dst_repo, dst_dir)
         dst_obj_names = [dirent.obj_name for dirent in dst_dirents]
@@ -2164,6 +2212,31 @@ class OpCopyView(APIView):
         if not set(obj_names).issubset(exist_obj_names):
             return api_error(status.HTTP_400_BAD_REQUEST,
                              'file_names invalid.')
+
+        # get total size of file/dir to be copied
+        total_size = 0
+        for obj_name in obj_names:
+
+            current_size = 0
+            current_path = posixpath.join(parent_dir, obj_name)
+
+            current_file_id = seafile_api.get_file_id_by_path(repo_id,
+                    current_path)
+            if current_file_id:
+                current_size = seafile_api.get_file_size(repo.store_id,
+                        repo.version, current_file_id)
+
+            current_dir_id = seafile_api.get_dir_id_by_path(repo_id,
+                    current_path)
+            if current_dir_id:
+                current_size = seafile_api.get_dir_size(repo.store_id,
+                        repo.version, current_dir_id)
+
+            total_size += current_size
+
+        # check if above quota for dst repo
+        if seafile_api.check_quota(dst_repo, total_size) < 0:
+            return api_error(HTTP_443_ABOVE_QUOTA, _(u"Out of quota."))
 
         # make new name
         dst_dirents = seafile_api.list_dir_by_path(dst_repo, dst_dir)
@@ -3940,7 +4013,7 @@ class EventsView(APIView):
             elif e.etype == 'clean-up-repo-trash':
                 d['repo_id'] = e.repo_id
                 d['author'] = e.username
-                d['time'] = datetime_to_isoformat_timestr(e.timestamp)
+                d['time'] = datetime_to_timestamp(e.timestamp)
                 d['days'] = e.days
                 d['repo_name'] = e.repo_name
                 d['etype'] = e.etype
@@ -3952,10 +4025,7 @@ class EventsView(APIView):
                 else:
                     d['author'] = e.repo_owner
 
-                epoch = datetime.datetime(1970, 1, 1)
-                local = utc_to_local(e.timestamp)
-                time_diff = local - epoch
-                d['time'] = time_diff.seconds + (time_diff.days * 24 * 3600)
+                d['time'] = datetime_to_timestamp(e.timestamp)
 
             size = request.GET.get('size', 36)
             url, is_default, date_uploaded = api_avatar_url(d['author'], size)
