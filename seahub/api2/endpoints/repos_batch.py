@@ -15,6 +15,7 @@ from seahub.api2.authentication import TokenAuthentication
 from seahub.api2.throttling import UserRateThrottle
 from seahub.api2.utils import api_error
 
+from seahub.group.utils import is_group_member
 from seahub.base.accounts import User
 from seahub.share.signals import share_repo_to_user_successful, \
         share_repo_to_group_successful
@@ -234,7 +235,7 @@ class ReposBatchView(APIView):
                     return api_error(status.HTTP_404_NOT_FOUND, error_msg)
 
                 group_name = group.group_name
-                if not ccnet_api.is_group_user(to_group_id, username):
+                if not is_group_member(to_group_id, username):
                     error_msg = 'User %s is not member of group %s.' % (username, group_name)
                     return api_error(status.HTTP_403_FORBIDDEN, error_msg)
 

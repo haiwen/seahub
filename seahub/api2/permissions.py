@@ -7,8 +7,9 @@ from rest_framework.permissions import BasePermission
 
 from django.conf import settings
 
-from seaserv import check_permission, is_repo_owner, ccnet_api
+from seaserv import check_permission, is_repo_owner
 from seahub.utils import is_pro_version
+from seahub.group.utils import is_group_member
 
 SAFE_METHODS = ['GET', 'HEAD', 'OPTIONS']
 
@@ -56,7 +57,7 @@ class IsGroupMember(BasePermission):
     def has_permission(self, request, view, obj=None):
         group_id = int(view.kwargs.get('group_id', ''))
         username = request.user.username if request.user else ''
-        return True if ccnet_api.is_group_user(group_id, username) else False
+        return True if is_group_member(group_id, username) else False
 
 
 class CanInviteGuest(BasePermission):

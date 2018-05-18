@@ -21,6 +21,7 @@ from seahub.admin_log.signals import admin_operation
 from seahub.admin_log.models import REPO_CREATE, REPO_DELETE, REPO_TRANSFER
 from seahub.share.models import FileShare, UploadLinkShare
 from seahub.base.templatetags.seahub_tags import email2nickname, email2contact_email
+from seahub.group.utils import is_group_member
 
 try:
     from seahub.settings import MULTI_TENANCY
@@ -333,7 +334,7 @@ class AdminLibrary(APIView):
         for shared_group in shared_groups:
             shared_group_id = shared_group.group_id
 
-            if not ccnet_api.is_group_user(shared_group_id, new_owner):
+            if not is_group_member(shared_group_id, new_owner):
                 continue
 
             seafile_api.set_group_repo(repo_id, shared_group_id,
