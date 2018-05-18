@@ -8,7 +8,7 @@ from seaserv import seafile_api, ccnet_api
 from seahub.utils import EMPTY_SHA1, is_org_context, is_pro_version
 
 from seahub.settings import ENABLE_STORAGE_CLASSES, \
-        STORAGE_CLASS_MAPPING_POLICY
+        STORAGE_CLASS_MAPPING_POLICY, ENABLE_FOLDER_PERM
 
 logger = logging.getLogger(__name__)
 
@@ -202,3 +202,21 @@ def get_related_users_by_repo(repo_id, org_id=None):
 # TODO
 def is_valid_repo_id_format(repo_id):
     return len(repo_id) == 36
+
+def can_set_folder_perm_by_user(username, repo, repo_owner):
+    """ user can get/update/add/delete folder perm feature must comply with the following
+            setting: ENABLE_FOLDER_PERM
+            repo:repo is not virtual
+            permission: is admin or repo owner.
+    """
+    if not ENABLE_FOLDER_PERM:
+        return False
+    if repo.is_virtual:
+        return False
+    is_admin = is_repo_admin(username, repo.id)
+    if username != repo_owner and not is_admin:
+        return False
+    return True
+
+# TODO
+from seahub.share.utils import is_repo_admin

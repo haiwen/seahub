@@ -107,7 +107,9 @@ define([
 
             var can_set_folder_perm = false;
             if (app.pageOptions.folder_perm_enabled && !dir.is_virtual &&
-                ((dir.is_repo_owner && dir.has_been_shared_out) || dir.user_can_set_folder_perm)) {
+                ((dir.is_repo_owner && dir.has_been_shared_out) ||
+                dir.is_admin || // the repo is shared with 'admin' permission
+                dir.user_can_set_folder_perm)) {
                 can_set_folder_perm = true;
             }
 
