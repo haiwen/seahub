@@ -26,18 +26,32 @@ def is_valid_email(value):
         raise exceptions.ValidationError(_('Enter a valid e-mail address.'))
 
 class Command(BaseCommand):
-    option_list = BaseCommand.option_list + (
-        make_option('--username', dest='username', default=None,
-            help='Specifies the username for the superuser.'),
-        make_option('--email', dest='email', default=None,
-            help='Specifies the email address for the superuser.'),
-        make_option('--noinput', action='store_false', dest='interactive', default=True,
-            help='Tells Django to NOT prompt the user for input of any kind. '    \
-                 'You must use --username and --email with --noinput, and '      \
-                 'superusers created with --noinput will not be able to log in '  \
-                 'until they\'re given a valid password.'),
-    )
     help = 'Used to create a superuser.'
+    requires_migrations_checks = False
+
+    def __init__(self, *args, **kwargs):
+        super(Command, self).__init__(*args, **kwargs)
+
+    def add_arguments(self, parser):
+        parser.add_argument(
+            '--noinput', '--no-input',
+            action='store_false', dest='interactive', default=True,
+            help=(
+                'Tells Django to NOT prompt the user for input of any kind. '
+                'You must use --%s with --noinput, along with an option for '
+                'any other required field. Superusers created with --noinput will '
+                'not be able to log in until they\'re given a valid password.' %
+                'username'
+            ),
+        )
+
+        for field in ['username', 'email', 'password']:
+            parser.add_argument(
+                '--%s' % field,
+                # dest=field,
+                default=None,
+                help='Specifies the %s for the superuser.' % field,
+            )
 
     def handle(self, *args, **options):
         username = options.get('username', None)

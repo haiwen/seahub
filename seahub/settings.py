@@ -198,6 +198,10 @@ INSTALLED_APPS = (
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+
+    # In order to overide command `createsuperuser`, base app *must* before auth app.
+    # ref: https://docs.djangoproject.com/en/1.11/howto/custom-management-commands/#overriding-commands
+    'seahub.base',
     'django.contrib.auth',
 
     'registration',
@@ -211,7 +215,6 @@ INSTALLED_APPS = (
 
     'seahub.api2',
     'seahub.avatar',
-    'seahub.base',
     'seahub.contacts',
     'seahub.institutions',
     'seahub.invitations',
