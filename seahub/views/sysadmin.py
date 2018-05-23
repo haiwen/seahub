@@ -189,7 +189,7 @@ def sys_user_admin(request):
     try:
         from seahub_extra.plan.models import UserPlan
         enable_user_plan = True
-    except ImportError:
+    except Exception:
         enable_user_plan = False
 
     if enable_user_plan and request.GET.get('filter', '') == 'paid':
