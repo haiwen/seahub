@@ -150,6 +150,9 @@ TEMPLATES = [
                 'django.template.context_processors.request',
                 'django.contrib.messages.context_processors.messages',
 
+                'social_django.context_processors.backends',
+                'social_django.context_processors.login_redirect',
+
                 'seahub.auth.context_processors.auth',
                 'seahub.base.context_processors.base',
                 'seahub.base.context_processors.debug',
@@ -221,6 +224,7 @@ INSTALLED_APPS = (
     'post_office',
     'termsandconditions',
     'webpack_loader',
+    'social_django',
 
     'seahub.api2',
     'seahub.avatar',
@@ -258,8 +262,47 @@ CONSTANCE_BACKEND = 'constance.backends.database.DatabaseBackend'
 CONSTANCE_DATABASE_CACHE_BACKEND = 'default'
 
 AUTHENTICATION_BACKENDS = (
+    'social_core.backends.github.GithubOAuth2',
+    'social_core.backends.google.GoogleOAuth2',
+    'seahub.social_core.backends.weixin_enterprise.WeixinWorkOAuth2',
+
     'seahub.base.accounts.AuthBackend',
     'seahub.oauth.backends.OauthRemoteUserBackend',
+)
+
+SOCIAL_AUTH_URL_NAMESPACE = 'social'
+SOCIAL_AUTH_VERIFY_SSL = True
+SOCIAL_AUTH_METHODS = (
+    ('github', 'Github'),
+    ('google-oauth2', 'Google'),
+    ('weixin-work', 'WeChat Work'),
+)
+
+SOCIAL_AUTH_GITHUB_KEY = ''
+SOCIAL_AUTH_GITHUB_SECRET = ''
+
+SOCIAL_AUTH_GOOGLE_OAUTH2_KEY = ''
+SOCIAL_AUTH_GOOGLE_OAUTH2_SECRET = ''
+
+SOCIAL_AUTH_WEIXIN_WORK_AGENTID = ''
+SOCIAL_AUTH_WEIXIN_WORK_KEY = ''
+SOCIAL_AUTH_WEIXIN_WORK_SECRET = ''
+
+
+SOCIAL_AUTH_PIPELINE = (
+    'social_core.pipeline.social_auth.social_details',
+    'social_core.pipeline.social_auth.social_uid',
+    'social_core.pipeline.social_auth.auth_allowed',
+
+    'seahub.social_core.pipeline.social_auth.social_user',
+    'seahub.social_core.pipeline.user.get_username',
+    'seahub.social_core.pipeline.user.create_user',
+    'seahub.social_core.pipeline.social_auth.associate_user',
+
+    'social_core.pipeline.social_auth.load_extra_data',
+    # 'social_core.pipeline.user.user_details',
+
+    'seahub.social_core.pipeline.user.save_profile',
 )
 
 ENABLE_OAUTH = False

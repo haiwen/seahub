@@ -42,7 +42,7 @@ UNUSABLE_PASSWORD = '!' # This will never be a valid hash
 
 class UserManager(object):
 
-    def create_user(self, email, password=None, is_staff=False, is_active=False):
+    def create_user(self, email, password=None, is_staff=False, is_active=False, save_profile=True):
         """
         Creates and saves a User with given username and password.
         """
@@ -57,9 +57,10 @@ class UserManager(object):
         user.set_password(password)
         user.save()
 
-        Profile.objects.add_or_update(username=virtual_id,
-                                      nickname=email.split('@')[0],
-                                      contact_email=email)
+        if save_profile:
+            Profile.objects.add_or_update(username=virtual_id,
+                                          nickname=email.split('@')[0],
+                                          contact_email=email)
 
         return self.get(email=virtual_id)
 
