@@ -29,7 +29,7 @@ from django.http import HttpResponse, Http404, HttpResponseRedirect, HttpRespons
 from django.shortcuts import render
 from django.utils.http import urlquote
 from django.utils.encoding import force_bytes
-from django.utils.translation import ugettext as _
+from django.utils.translation import get_language, ugettext as _
 from django.views.decorators.http import require_POST
 from django.template.defaultfilters import filesizeformat
 from django.views.decorators.csrf import csrf_exempt
@@ -498,7 +498,10 @@ def view_lib_file(request, repo_id, path):
         return_dict['file_encoding_list'] = file_encoding_list
 
         if filetype == MARKDOWN:
+            return_dict['protocol'] = request.is_secure() and 'https' or 'http'
+            return_dict['domain'] = get_current_site(request).domain
             return_dict['file_content'] = convert_md_link(file_content, repo_id, username)
+            return_dict['language_code'] = get_language()
         else:
             return_dict['file_content'] = file_content
 

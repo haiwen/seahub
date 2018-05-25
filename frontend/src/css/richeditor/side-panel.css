@@ -1,0 +1,125 @@
+/*tree view */
+.tree-node:not([type = 'dir']):hover {
+  background-color: rgb(255,239,178);
+}
+
+.tree-node {
+  min-width: -moz-max-content;
+  min-width: -webkit-max-content;
+  min-width: max-content;
+}
+
+.tree-node-inner {
+  position: relative;
+  padding-left: 12px;
+}
+
+/*
+  the main reason to icon can not be align is that .folder has a real width it take the place
+   of .tree-node-inner causing tree-node-icon not aligned , use absolute can make sure .tree-node-icon
+   is always at the far left of .tree-node-inner
+*/
+.folder-toggle-icon {
+  position: absolute;
+  left: 0;
+  line-height: 1.5;
+}
+
+.tree-node-icon {
+  margin-right: 0.4rem;
+  margin-left: 0.1rem;
+  display: inline-block;
+  width: 1rem;
+  text-align: center;
+}
+
+.side-panel {
+  user-select: none;
+  height:100%;
+}
+.side-panel .nav {
+  border-bottom: 1px solid #eee;
+  padding-top: 10px;
+  padding-bottom: 10px;
+  min-width: 125px;
+  height: 36px;
+}
+.side-panel .nav-link {
+  color: #888;
+}
+.side-panel .nav-link.active {
+  color: #eb8205;
+}
+.side-panel-content {
+  padding-top: 8px;
+  padding-bottom: 8px;
+  height: calc(100% - 36px);
+  overflow: auto;
+  font-size: 0.875rem;
+}
+
+.image-view {
+  width: 200px;
+  height: 150px;
+  position: absolute;
+  background-color: #fff;
+  z-index: 1004;
+  box-shadow: 0 0 10px #aaa;
+  border-radius: 3px;
+  line-height: 150px;
+  overflow: hidden;
+  font-size: 0;
+  text-align: center;
+}
+
+.image-view img {
+  max-width: 100%;
+  max-height: 100%;
+}
+
+.image-view i {
+  width: 100%;
+  height: 100%;
+  text-align: center;
+  line-height: 150px;
+  font-size: 30px;
+  color: #eb8205;
+  -moz-animation: rotate 1.5s ease infinite;
+  -webkit-animation: rotate 1.5s ease infinite;
+  animation: rotate 1.5s ease infinite;
+}
+
+@keyframes rotate {
+  0% {
+    transform: rotate(0deg);
+  }
+
+  100% {
+    transform: rotate(360deg);
+  }
+}
+
+.outline-h2 {
+  margin-left: 20px;
+  line-height: 2.5;
+  color:#364149;
+  white-space: nowrap;
+  cursor:pointer;
+}
+.outline-h2:hover {
+  color: #eb8205;
+}
+.outline-h3 {
+  margin-left: 40px;
+  line-height: 2.5;
+  color:#364149;
+  white-space: nowrap;
+  cursor:pointer;
+}
+.outline-h3:hover {
+  color: #eb8205;
+}
+.tree-view {
+  padding-left: 10px;
+  line-height: 1.5;
+}

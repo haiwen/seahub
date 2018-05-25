@@ -1,0 +1,65 @@
+/*topbar style*/
+.menu > * {
+  display: inline-block;
+}
+
+.menu > * + * {
+  margin-left: 10px;
+}
+
+.btn-active {
+  color: #0c0c0c;
+  cursor: pointer;
+}
+
+.btn-active[data-active='true'] {
+  color: #eb8205;
+}
+
+.tableToolBar {
+  font-size: 12px;
+}
+
+.tableToolBar div .symbol {
+  font-size: 14px;
+}
+
+.tableToolBar:after {
+  content: '';
+  display: block;
+  clear: both;
+}
+
+.tableToolBar div:not(first):not(.drop-list) {
+  /*display: inline-block;*/
+  margin-left:10px;
+}
+
+/*topbar style*/
+.title {
+  width:128px;
+  margin-top: 16px;
+}
+
+.menu {
+  display: inline-block;
+  margin-right: 20px;
+}
+.toolbar-menu {
+  margin-top: 18px;
+}
+
+.topbar-file-info {
+  display: inline-block;
+  margin-top: 10px;
+  margin-left: 8px;
+  float: left;
+}
+.topbar-file-info .file-name {
+  font-size: 1.2rem;
+  font-weight: bold;
+}
+.topbar-file-info .file-mtime {
+  font-size: 0.8rem;
+  color: #666;
+}

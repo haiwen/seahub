@@ -1,0 +1,8 @@
+.rendered-markdown.article {
+  padding:0 20px 20px;
+}
+
+.CodeMirror {
+  height: auto;
+  font-size: 0.8125rem;
+}
