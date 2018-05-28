@@ -2,32 +2,30 @@
 {% load i18n %}
 <html>
 <head>
+    <title>{{doc_title}}</title>
+    <link rel="shortcut icon" href="{{ MEDIA_URL }}{{ favicon_path }}" />
     <meta charset="utf-8">
-
     <!-- Enable IE Standards mode -->
     <meta http-equiv="x-ua-compatible" content="ie=edge">
-
-    <title>{{doc_title}}</title>
     <meta name="description" content="">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-
     <style type="text/css">
+        html,
         body {
             margin: 0;
             padding: 0;
+            height:100%;
             overflow:hidden;
         }
         #office_frame {
-            width: 100%;
-            height: 100%;
-            position: absolute;
-            top: 0;
-            left: 0;
-            right: 0;
-            bottom: 0;
-            margin: 0;
-            border: none;
             display: block;
+            width:100%;
+            height: 100%;
+            border: none;
+            margin: 0;
+        }
+        .hide {
+            display:none;
         }
     </style>
 </head>
@@ -38,17 +36,11 @@
     <input name="access_token_ttl" value="{{access_token_ttl}}" type="hidden"/>
 </form>
 
-<span id="frameholder"></span>
+<iframe id="office_frame" name="office_frame" class="hide" allowfullscreen ></iframe>
 
 <script type="text/javascript">
-    var frameholder = document.getElementById('frameholder');
-    var office_frame = document.createElement('iframe');
-    office_frame.setAttribute('allowFullScreen', '');
-    office_frame.name = 'office_frame';
-    office_frame.id ='office_frame';
-    frameholder.appendChild(office_frame);
     document.getElementById('office_form').submit();
+    document.getElementById('office_frame').className = '';
 </script>
-
 </body>
 </html>
