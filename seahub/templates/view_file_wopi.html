@@ -43,6 +43,7 @@
 <script type="text/javascript">
     var frameholder = document.getElementById('frameholder');
     var office_frame = document.createElement('iframe');
+    office_frame.setAttribute('allowFullScreen', '');
     office_frame.name = 'office_frame';
     office_frame.id ='office_frame';
     frameholder.appendChild(office_frame);
