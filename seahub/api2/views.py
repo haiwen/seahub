@@ -447,7 +447,8 @@ class Search(APIView):
             if not check_folder_permission(request, repo_id, '/'):
                 error_msg = 'Permission denied.'
                 return api_error(status.HTTP_403_FORBIDDEN, error_msg)
-            repo_id_map[repo_id] = repo
+            map_id = repo.origin_repo_id if repo.origin_repo_id else repo_id
+            repo_id_map[map_id] = repo
             repo_type_map = {}
         else:
             shared_from = request.GET.get('shared_from', None)
