@@ -159,6 +159,8 @@ def translate_commit_desc(value):
         return value.replace('Changed library name or description', _('Changed library name or description'))
     elif value.startswith('Merged') or value.startswith('Auto merge'):
         return _('Auto merge by seafile system')
+    elif value.startswith('Created library'):
+        return _('Created library')
     else:
         # Use regular expression to translate commit description.
         # Commit description has two forms, e.g., 'Added "foo.txt" and 3 more files.' or 'Added "foo.txt".'
@@ -228,6 +230,8 @@ def translate_commit_desc_escape(value):
         return_value = escape(value.replace('Changed library name or description', _('Changed library name or description')))
     elif value.startswith('Merged') or value.startswith('Auto merge'):
         return_value = escape(_('Auto merge by seafile system'))
+    elif value.startswith('Created library'):
+        return_value = escape(_('Created library'))
     else:
         # Use regular expression to translate commit description.
         # Commit description has two forms, e.g., 'Added "foo.txt" and 3 more files.' or 'Added "foo.txt".'
