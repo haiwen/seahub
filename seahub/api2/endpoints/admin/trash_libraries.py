@@ -128,6 +128,10 @@ class AdminTrashLibrary(APIView):
         1. only admin can perform this action.
         """
 
+        if not seafile_api.get_trash_repo_owner(repo_id):
+            error_msg = "Library does not exist in trash."
+            return api_error(status.HTTP_404_NOT_FOUND, error_msg)
+
         try:
             seafile_api.restore_repo_from_trash(repo_id)
         except SearpcError as e:
