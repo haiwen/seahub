@@ -179,10 +179,11 @@ def login(request, template_name='registration/login.html',
     else:
         signup_url = ''
 
-    enable_shib_login = getattr(settings, 'ENABLE_SHIB_LOGIN', False)
-    enable_krb5_login = getattr(settings, 'ENABLE_KRB5_LOGIN', False)
-    enable_adfs_login = getattr(settings, 'ENABLE_ADFS_LOGIN', False)
-    enable_oauth = getattr(settings, 'ENABLE_OAUTH', False)
+    enable_sso = getattr(settings, 'ENABLE_SHIB_LOGIN', False) or \
+                 getattr(settings, 'ENABLE_KRB5_LOGIN', False) or \
+                 getattr(settings, 'ENABLE_ADFS_LOGIN', False) or \
+                 getattr(settings, 'ENABLE_OAUTH', False) or \
+                 getattr(settings, 'ENABLE_CAS', False)
 
     login_bg_image_path = get_login_bg_image_path()
 
@@ -193,10 +194,7 @@ def login(request, template_name='registration/login.html',
         'site_name': get_site_name(),
         'remember_days': config.LOGIN_REMEMBER_DAYS,
         'signup_url': signup_url,
-        'enable_shib_login': enable_shib_login,
-        'enable_krb5_login': enable_krb5_login,
-        'enable_adfs_login': enable_adfs_login,
-        'enable_oauth': enable_oauth,
+        'enable_sso': enable_sso,
         'login_bg_image_path': login_bg_image_path,
     })
 
@@ -244,6 +242,10 @@ def logout(request, next_page=None,
         if shib_logout_return:
             shib_logout_url += shib_logout_return
         return HttpResponseRedirect(shib_logout_url)
+
+    # Local logout for cas user.
+    if getattr(settings, 'ENABLE_CAS', False):
+        return HttpResponseRedirect(reverse('cas_ng_logout'))
 
     if redirect_field_name in request.GET:
         next_page = request.GET[redirect_field_name]

@@ -62,20 +62,8 @@ html, body, #wrapper { height:100%; }
         <button type="submit" class="submit">{% trans "Log In" %}</button>
     </form>
 
-    {% if enable_oauth %}
-    <a href="{% url 'oauth_login' %}" class="normal">{% trans "Single Sign-On" %}</a>
-    {% endif %}
-
-    {% if enable_adfs_login %}
-    <a id="adfs-login" href="#" class="normal">ADFS</a>
-    {% endif %}
-
-    {% if enable_shib_login %}
-    <a id="shib-login" href="#" class="normal">{% trans "Shibboleth" %}</a>
-    {% endif %}
-
-    {% if enable_krb5_login %}
-    <a id="krb5-login" href="#" class="normal">{% trans "Kerberos" %}</a>
+    {% if enable_sso %}
+    <a id="sso" href="#" class="normal">{% trans "Single Sign-On" %}</a>
     {% endif %}
 
     <div class="login-panel-bottom-container">
@@ -149,31 +137,14 @@ $(function() {
     });
 });
 
-{% if enable_shib_login %}
+{% if enable_sso %}
 $(function() {
-    $('#shib-login').on('click', function() {
-        window.location = "{% url 'shib_login' %}{% if next %}?next={{ next|escape }}{% endif %}" + encodeURIComponent(document.location.hash);
+    $('#sso').on('click', function() {
+        window.location = "{% url 'sso' %}{% if next %}?next={{ next|escape }}{% endif %}" + encodeURIComponent(document.location.hash);
         return false;
     });
 });
 {% endif %}
 
-{% if enable_krb5_login %}
-$(function() {
-    $('#krb5-login').on('click', function() {
-        window.location = "{% url 'krb5_login' %}{% if next %}?next={{ next|escape }}{% endif %}";
-        return false;
-    });
-});
-{% endif %}
-
-{% if enable_adfs_login %}
-$(function() {
-    $('#adfs-login').on('click', function() {
-        window.location = "{% url 'saml2_login' %}{% if next %}?next={{ next|escape }}{% endif %}";
-        return false;
-    });
-});
-{% endif %}
 </script>
 {% endblock %}
