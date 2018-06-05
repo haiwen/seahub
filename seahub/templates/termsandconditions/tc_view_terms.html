@@ -1,0 +1,8 @@
+{% extends 'base_wide_page.html' %}
+
+{% block wide_page_content %}
+    <h1>{{ terms.name|safe }}</h1>
+    <div id="tc-content" class="article">
+        {{ terms.text|safe }}
+    </div>
+{% endblock %}

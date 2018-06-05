@@ -180,6 +180,14 @@
         {% trans "If turn on, the desktop clients will not be able to sync a folder outside the default Seafile folder." as help_tip %}
         {% include "snippets/web_settings_form.html" %}
     {% endwith %}
+
+    <h4>{% trans "Terms" %}</h4>
+
+    {% with type="checkbox" setting_display_name="ENABLE_TERMS_AND_CONDITIONS" setting_name="ENABLE_TERMS_AND_CONDITIONS" setting_val=config_dict.ENABLE_TERMS_AND_CONDITIONS%}
+        {% trans "If turn on, enable system admin add T&C, all users need to accept terms before using." as help_tip %}
+        {% include "snippets/web_settings_form.html" %}
+    {% endwith %}
+
 </div>
 {% endblock %}
 

@@ -3,6 +3,7 @@ from .models import TermsAndConditions
 from django.conf import settings
 import logging
 from .pipeline import redirect_to_terms_accept
+from constance import config
 
 LOGGER = logging.getLogger(name='termsandconditions')
 
@@ -19,7 +20,7 @@ class TermsAndConditionsRedirectMiddleware(object):
 
     def process_request(self, request):
         """Process each request to app to ensure terms have been accepted"""
-        if not settings.ENABLE_TERMS_AND_CONDITIONS:
+        if not config.ENABLE_TERMS_AND_CONDITIONS:
             return None
 
         LOGGER.debug('termsandconditions.middleware')
