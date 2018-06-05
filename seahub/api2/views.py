@@ -445,7 +445,8 @@ class Search(APIView):
             if not check_folder_permission(request, repo_id, '/'):
                 error_msg = 'Permission denied.'
                 return api_error(status.HTTP_403_FORBIDDEN, error_msg)
-            repo_id_map[repo_id] = repo
+            map_id = repo.origin_repo_id if repo.origin_repo_id else repo_id
+            repo_id_map[map_id] = repo
             repo_type_map = {}
         else:
             shared_from = request.GET.get('shared_from', None)
@@ -1302,6 +1303,12 @@ class DownloadRepo(APIView):
     throttle_classes = (UserRateThrottle, )
 
     def get(self, request, repo_id, format=None):
+
+        repo = seafile_api.get_repo(repo_id)
+        if not repo:
+            error_msg = 'Library %s not found.' % repo_id
+            return api_error(status.HTTP_404_NOT_FOUND, error_msg)
+
         if not check_folder_permission(request, repo_id, '/'):
             return api_error(status.HTTP_403_FORBIDDEN,
                     'You do not have permission to access this library.')
