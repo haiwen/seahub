@@ -1373,3 +1373,6 @@ def get_folder_permission_recursively(username, repo_id, path):
     else:
         return seafile_api.check_permission_by_path(
                 repo_id, path, username)
+
+def gen_user_virtual_id():
+    return gen_token(max_length=32) + '@auth.local'

@@ -65,7 +65,10 @@ class AuthTokenSerializer(serializers.Serializer):
         else:
             raise serializers.ValidationError('invalid params')
 
-        username = Profile.objects.get_username_by_login_id(login_id)
+        p = Profile.objects.get_profile_by_contact_email(login_id)
+        username = login_id if p is None else p.user
+
+        username = Profile.objects.get_username_by_login_id(username)
         if username is None:
             username = login_id
 
