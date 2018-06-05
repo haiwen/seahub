@@ -4,9 +4,7 @@
 
     {% if space_quota > 0 %}
     <div id="quota-bar">
-        <a href="http://www.seafile.com/{% if LANGUAGE_CODE != 'zh-cn' %}en/{% endif %}help/quota/" target="_blank">
-            <span id="quota-usage" class="usage" style="width:{{rates.space_usage}};"></span>
-        </a>
+        <span id="quota-usage" class="usage" style="width:{{rates.space_usage}};"></span>
     </div>
     {% endif %}
 
