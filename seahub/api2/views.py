@@ -411,6 +411,41 @@ class Search(APIView):
             error_msg = 'with_permission invalid.'
             return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
 
+        time_from = request.GET.get('time_from', None)
+        time_to = request.GET.get('time_to', None)
+        if time_from is not None:
+            try:
+                time_from = int(time_from)
+            except:
+                error_msg = 'time_from invalid.'
+                return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
+
+        if time_to is not None:
+            try:
+                time_to = int(time_to)
+            except:
+                error_msg = 'time_to invalid.'
+                return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
+
+        size_from = request.GET.get('size_from', None)
+        size_to = request.GET.get('size_to', None)
+        if size_from is not None:
+            try:
+                size_from = int(size_from)
+            except:
+                error_msg = 'size_from invalid.'
+                return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
+
+        if size_to is not None:
+            try:
+                size_to = int(size_to)
+            except:
+                error_msg = 'size_to invalid.'
+                return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
+
+        time_range = (time_from, time_to)
+        size_range = (size_from, size_to)
+
         suffixes = None
         custom_ftypes =  request.GET.getlist('ftype') # types like 'Image', 'Video'... same in utils/file_types.py
         input_fileexts = request.GET.get('input_fexts', '') # file extension input by the user
@@ -456,7 +491,9 @@ class Search(APIView):
 
         obj_desc = {
             'obj_type': obj_type,
-            'suffixes': suffixes
+            'suffixes': suffixes,
+            'time_range': time_range,
+            'size_range': size_range
         }
         # search file
         try:
