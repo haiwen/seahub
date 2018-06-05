@@ -11,7 +11,7 @@ from .models import DEFAULT_TERMS_SLUG
 
 urlpatterns = (
     # # View Default Terms
-    # url(r'^$', TermsView.as_view(), {"slug": DEFAULT_TERMS_SLUG}, name="tc_view_page"),
+    url(r'^$', TermsView.as_view(), {"slug": DEFAULT_TERMS_SLUG}, name="tc_view_page"),
 
     # # View Specific Active Terms
     # url(r'^view/(?P<slug>[a-zA-Z0-9_.-]+)/$', TermsView.as_view(), name="tc_view_specific_page"),
