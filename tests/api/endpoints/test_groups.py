@@ -32,7 +32,7 @@ class GroupsTest(BaseTestCase):
         self.assertEqual(200, resp.status_code)
 
         json_resp = json.loads(resp.content)
-        assert len(json_resp[0]) == 7
+        assert len(json_resp[0]) == 8
 
         group_ids = []
         for group in json_resp:
@@ -45,7 +45,7 @@ class GroupsTest(BaseTestCase):
         self.assertEqual(200, resp.status_code)
 
         json_resp = json.loads(resp.content)
-        assert len(json_resp[0]) == 8
+        assert len(json_resp[0]) == 9
 
         group_ids = []
         group_repos = []
@@ -68,7 +68,7 @@ class GroupsTest(BaseTestCase):
         self.assertEqual(201, resp.status_code)
 
         json_resp = json.loads(resp.content)
-        assert len(json_resp) == 7
+        assert len(json_resp) == 8
         assert json_resp['name'] == new_group_name
         assert json_resp['owner'] == self.user.email
 
@@ -80,7 +80,7 @@ class GroupsTest(BaseTestCase):
         self.assertEqual(201, resp.status_code)
 
         json_resp = json.loads(resp.content)
-        assert len(json_resp) == 7
+        assert len(json_resp) == 8
         assert json_resp['name'] == new_group_name
         assert json_resp['owner'] == self.user.email
 
