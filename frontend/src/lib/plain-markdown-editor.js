@@ -1,5 +1,5 @@
 import React from 'react';
-import { IconButton, Button, ButtonGroup } from "./topbarcomponent/editorToolBar";
+import { IconButton, Button, ButtonGroup, CollabUsersButton } from "./topbarcomponent/editorToolBar";
 import { Dropdown, DropdownToggle, DropdownMenu, DropdownItem } from 'reactstrap'
 import { processor } from "./seafile-markdown2html"
 import Alert from 'react-s-alert';
@@ -239,6 +239,9 @@ class PlainMarkdownEditor extends React.Component {
           </ButtonGroup>
         )}
         <MoreMenu switchToRichTextEditor={this.props.switchToRichTextEditor} t={ t }/>
+
+        <CollabUsersButton tooltip={t('show_users_on_this_document')} users={this.props.collabUsers} id={'usersButton'} />
+
         <Alert stack={{limit: 3}} />
       </div>
     );

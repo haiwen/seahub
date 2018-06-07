@@ -1,10 +1,17 @@
 var webpack = require('webpack')
 var WebpackDevServer = require('webpack-dev-server')
 var config = require('./webpack.config.dev')
+const paths = require('./paths');
 
 new WebpackDevServer(webpack(config), {
   publicPath: config.output.publicPath,
   hot: true,
+  watchOptions: {
+    aggregateTimeout: 1000,
+    poll: true,
+    poll: 5000,
+    ignored: paths.appNodeModules,
+  },
   contentBase: '../assets',
   historyApiFallback: true,
   headers: {
