@@ -23,9 +23,11 @@
                   domain: '{{ domain }}',
                   protocol: '{{ protocol }}',
                   lang: '{{ language_code }}',
+                  username: '{{ user.username }}',
               }
           }
          </script>
+
          {% render_bundle 'main' %}
     </body>
 </html>

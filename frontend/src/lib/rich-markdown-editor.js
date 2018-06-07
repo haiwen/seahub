@@ -19,7 +19,11 @@ import '../css/richeditor/right-panel.css';
 import '../css/richeditor/side-panel.css';
 import 'react-s-alert/dist/s-alert-default.css';
 import 'react-s-alert/dist/s-alert-css-effects/scale.css';
+<<<<<<< HEAD
 import { IconButton, TableToolBar, Button, ButtonGroup, MoreMenu, HeaderList } from "./topbarcomponent/editorToolBar";
+=======
+import { IconButton, TableToolBar, Button, ButtonGroup, MoreMenu, CollabUsersButton } from "./topbarcomponent/editorToolBar";
+>>>>>>> [frontend/editor] Using socket.io to show online/editing users
 
 import { translate } from "react-i18next";
 import FileInfoView  from "./topbarcomponent/file-info";
@@ -637,7 +641,12 @@ class RichMarkdownEditor extends React.Component {
         <MoreMenu id={'moreButton'} text={t('more')} showHelpDialog={this.showHelpDialog} switchToMarkDownViewer ={this.props.switchToMarkDownViewer}  switchToPlainTextEditor={this.props.switchToPlainTextEditor}/>
 =======
         <MoreMenu id={'moreButton'} text={t('more')} showHelpDialog={this.showHelpDialog}  switchToPlainTextEditor={this.props.switchToPlainTextEditor} t={ t }/>
+<<<<<<< HEAD
 >>>>>>> update seafile editor
+=======
+        <CollabUsersButton tooltip={t('show_users_on_this_document')} users={this.props.collabUsers} id={'usersButton'} />
+
+>>>>>>> [frontend/editor] Using socket.io to show online/editing users
         <AddImageDialog
           showAddImageDialog={this.state.showAddImageDialog}
           toggleImageDialog={this.toggleImageDialog}

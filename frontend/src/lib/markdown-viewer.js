@@ -1,6 +1,6 @@
 import React from 'react';
 import { processor, processorGetAST } from "./seafile-markdown2html"
-import { IconButton, Button, ButtonGroup } from "./topbarcomponent/editorToolBar";
+import { IconButton, CollabUsersButton, Button, ButtonGroup } from "./topbarcomponent/editorToolBar";
 import TreeView from '../tree-view/tree-view';
 import OutlineView from './viewer-outline';
 import dayjs from 'dayjs';
@@ -93,11 +93,13 @@ class MarkdownViewer extends React.Component {
   }
 
   renderToolbar() {
-    const { t } = this.props
+    const { t, collabUsers } = this.props
     return (
       <div>
         <ButtonGroup>
           <IconButton text={t('edit')} id={'editButton'} icon={"fa fa-edit"} onMouseDown={this.onEdit} />
+          <CollabUsersButton tooltip={t('show_users_on_this_document')} users={collabUsers} id={'usersButton'} />
+
         </ButtonGroup>
       </div>
     );

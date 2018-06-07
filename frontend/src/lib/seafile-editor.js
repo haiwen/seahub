@@ -106,18 +106,39 @@ class SeafileEditor extends React.Component {
 
   convertAndCheckNeedSave = (newValue) => {
     let currentContent = serialize(newValue.toJSON()).trim();
+<<<<<<< HEAD
     let contentChanged = currentContent !== this.state.savedContent.trim();
+=======
+    let contentChanged = currentContent != this.state.savedContent.trim();
+
+>>>>>>> [frontend/editor] Using socket.io to show online/editing users
     this.setState({
       currentContent: currentContent,
       contentChanged: contentChanged
     })
+<<<<<<< HEAD
   };
+=======
+
+    if (contentChanged) {
+      this.props.onContentChange()
+    }
+  }
+>>>>>>> [frontend/editor] Using socket.io to show online/editing users
 
   onCheckNeedSave = (newContent) => {
     this.setState({
       contentChanged: newContent !== this.state.savedContent
     })
+<<<<<<< HEAD
   };
+=======
+
+    if (newContent != this.state.savedContent) {
+      this.props.onContentChange()
+    }
+  }
+>>>>>>> [frontend/editor] Using socket.io to show online/editing users
 
   onChange = (change) => {
     if (this.state.mode === 'rich') {
@@ -211,6 +232,7 @@ class SeafileEditor extends React.Component {
 =======
 >>>>>>> update seafile editor
           fileInfo={this.state.fileInfo}
+          collabUsers={this.props.collabUsers}
         />
       );
     } else if (this.state.mode === "plain") {
@@ -225,6 +247,7 @@ class SeafileEditor extends React.Component {
           onSave={this.onPlainEditorSave}
           onChange={this.onChange}
           fileInfo={this.state.fileInfo}
+          collabUsers={this.props.collabUsers}
         />
       );
     } else if (this.state.mode === "viewer") {
