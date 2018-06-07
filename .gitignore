@@ -46,7 +46,8 @@ seahub/thumbnail/thumb/*
 .pytest_cache/
 tags
 
-seahub/frontend/webpack-stats.dev.json
-seahub/frontend/webpack.config.dev.js
-seahub/frontend/node_modules
+frontend/config/webpack.config.dev.js
+frontend/webpack-stats.dev.json
+frontend/webpack.config.dev.js
+frontend/node_modules
 
