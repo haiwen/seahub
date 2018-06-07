@@ -1117,17 +1117,17 @@ def user_add(request):
                 operation=USER_ADD, detail=admin_op_detail)
 
         if user:
-            User.objects.update_role(email, role)
+            User.objects.update_role(user.username, role)
             if config.FORCE_PASSWORD_CHANGE:
-                UserOptions.objects.set_force_passwd_change(email)
+                UserOptions.objects.set_force_passwd_change(user.username)
             if name:
-                Profile.objects.add_or_update(email, name, '')
+                Profile.objects.add_or_update(user.username, name, '')
             if department:
-                DetailedProfile.objects.add_or_update(email, department, '')
+                DetailedProfile.objects.add_or_update(user.username, department, '')
 
         if request.user.org:
             org_id = request.user.org.org_id
-            ccnet_threaded_rpc.add_org_user(org_id, email, 0)
+            ccnet_threaded_rpc.add_org_user(org_id, user.username, 0)
             if IS_EMAIL_CONFIGURED:
                 try:
                     send_user_add_mail(request, email, password)

@@ -1,5 +1,5 @@
 {% extends "base.html" %}
-{% load avatar_tags i18n %}
+{% load avatar_tags i18n seahub_tags %}
 
 {% block sub_title %}{% trans "Settings" %} - {% endblock %}
 
@@ -161,6 +161,35 @@
 </div>
 {% endif %}
 
+<div class="setting-item" id="social-auth">
+    <h3>{% trans "Social Login" %}</h3>
+    <p class="txt-before-btn">{% trans "Current enabled social logins" %}:
+      <ul>
+        {% for e in enabled_social_auth %}
+        <li>
+          {{e.provider_name}} - Last connected {{ e.extra_data.auth_time|translate_seahub_time }}
+          <a class="social-disconnect" href="#" data-url="{% url "social:disconnect" e.provider %}">Disconnect</a>
+        </li>
+        {% empty %}
+        <li>--</li>
+        {% endfor %}
+      </ul>
+    </p>
+
+    <p class="txt-before-btn">{% trans "Available social logins" %}:
+      <ul>
+        {% for a in available_social_auth %}
+        <li>
+          {{a.1}}
+          <a href="{% url "social:begin" a.0 %}">Connect</a>
+        </li>
+        {% empty %}
+        <li>--</li>
+        {% endfor %}
+      </ul>
+    </p>
+</div>
+
 <div class="setting-item" id="del-account">
     <h3>{% trans "Delete Account" %}</h3>
     <p class="txt-before-btn">{% trans "This operation will not be reverted. Please think twice!" %}</p>
@@ -306,5 +335,12 @@ $("#list-in-address-book input[type='checkbox']").on('change', function() {
         }
     });
 })();
+
+addConfirmTo($('.social-disconnect'), {
+    'title':"{% trans "Disconnect" %}",
+    'con':"{% trans "Are you sure you want to disconnect?" %}",
+    'post':true
+});
+
 </script>
 {% endblock %}
