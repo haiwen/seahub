@@ -1,4 +1,4 @@
-import { Editor, getEventTransfer, getEventRange } from 'slate-react';
+import { getEventTransfer, getEventRange } from 'slate-react';
 import isUrl from 'is-url';
 import isHotkey from 'is-hotkey';
 import { Inline, Text, Mark, Range } from 'slate';
@@ -26,7 +26,7 @@ function removeAllMark(change) {
   }
 
   return change;
-};
+}
 
 function matchCode(
   currentTextNode,
@@ -135,7 +135,8 @@ function matchBoldItalic(
 function SeafileSlatePlugin(options) {
   let {
     editCode,
-    editTable
+    editTable,
+    editBlockquote,
   } = options;
 
   return {
@@ -306,21 +307,21 @@ function SeafileSlatePlugin(options) {
         case '-':
         case '+':
         case '1.':
-        return 'list_item'
+        return 'list_item';
         case '>':
-        return 'block-quote'
+        return 'block-quote';
         case '#':
-        return 'header_one'
+        return 'header_one';
         case '##':
-        return 'header_two'
+        return 'header_two';
         case '###':
-        return 'header_three'
+        return 'header_three';
         case '####':
-        return 'header_four'
+        return 'header_four';
         case '#####':
-        return 'header_five'
+        return 'header_five';
         case '######':
-        return 'header_six'
+        return 'header_six';
         default:
         return null
       }
@@ -333,35 +334,35 @@ function SeafileSlatePlugin(options) {
     */
 
     onEnter(event, change) {
-      const { value } = change
-      if (value.isExpanded) return
+      const { value } = change;
+      if (value.isExpanded) return;
 
-      const { startBlock, startOffset, endOffset } = value
+      const { startBlock, endOffset } = value;
       /*
       if (startOffset === 0 && startBlock.text.length === 0)
         return this.onBackspace(event, change)
       */
       //console.log(startBlock)
-      if (endOffset !== startBlock.text.length) return
+      if (endOffset !== startBlock.text.length) return;
 
       /* enter code block if put ``` */
       if (startBlock.text === '```') {
-        event.preventDefault()
-        editCode.changes.wrapCodeBlockByKey(change, startBlock.key)
+        event.preventDefault();
+        editCode.changes.wrapCodeBlockByKey(change, startBlock.key);
         // move the cursor to the start of new code block
-        change.collapseToStartOf(change.value.document.getDescendant(startBlock.key))
+        change.collapseToStartOf(change.value.document.getDescendant(startBlock.key));
         // remove string '```'
-        change.deleteForward(3)
+        change.deleteForward(3);
         return true
       }
 
       /* enter hr block if put *** or --- */
       if (startBlock.text === '***' || startBlock.text === '---') {
-        event.preventDefault()
+        event.preventDefault();
         change.removeNodeByKey(startBlock.key).insertBlock({
           type: 'hr',
           isVoid: true
-        }).collapseToStartOfNextBlock()
+        }).collapseToStartOfNextBlock();
         return true
       }
 
@@ -382,8 +383,8 @@ function SeafileSlatePlugin(options) {
         return;
       }
 
-      event.preventDefault()
-      change.splitBlock().setBlocks('paragraph')
+      event.preventDefault();
+      change.splitBlock().setBlocks('paragraph');
       return true
     },
 
@@ -450,21 +451,22 @@ function SeafileSlatePlugin(options) {
       if (this.editor.isInCode())
         return;
 
-      const { value } = change
-      if (value.isExpanded) return
+      const { value } = change;
+      if (value.isExpanded) return;
 
-      const { startBlock, startOffset } = value
-      const chars = startBlock.text.slice(0, startOffset).replace(/\s*/g, '')
-      const type = this.getType(chars)
+      const { startBlock, startOffset } = value;
+      const chars = startBlock.text.slice(0, startOffset).replace(/\s*/g, '');
+      const type = this.getType(chars);
 
-      if (!type)
+      if (!type) {
         return this.handleInlineMarks(event, change);
-      if (type === 'list_item' && startBlock.type === 'list_item')
+      }
+      if (type === 'list_item' && startBlock.type === 'list_item') {
         return this.handleInlineMarks(event, change);
-
+      }
       // handle block shortcut
-      event.preventDefault()
-      change.setBlocks(type)
+      event.preventDefault();
+      change.setBlocks(type);
 
       if (type === 'list_item') {
         if (chars === "1.") {
@@ -472,9 +474,11 @@ function SeafileSlatePlugin(options) {
         } else {
           change.wrapBlock('unordered_list')
         }
+      } else if (type === 'block-quote') {
+        editBlockquote.changes.wrapInBlockquote(change);
       }
 
-      change.extendToStartOf(startBlock).delete()
+      change.extendToStartOf(startBlock).delete();
       return true
     },
 
@@ -486,22 +490,22 @@ function SeafileSlatePlugin(options) {
     * @param {Change} change
     */
     onBackspace(event, change) {
-      const { value } = change
-      if (value.isExpanded) return
+      const { value } = change;
+      if (value.isExpanded) return;
       // If the cursor not at the start of node, do nothing
-      if (value.startOffset !== 0) return
+      if (value.startOffset !== 0) return;
 
-      const { startBlock } = value
+      const { startBlock } = value;
       // If the cursor at the start of a paragraph, do nothing
-      if (startBlock.type == 'paragraph') return
-      if (startBlock.type == 'code_line') return
+      if (startBlock.type === 'paragraph') return;
+      if (startBlock.type === 'code_line') return;
 
-      event.preventDefault()
-      change.setBlocks('paragraph')
+      event.preventDefault();
+      change.setBlocks('paragraph');
 
-      const { document } = value
+      const { document } = value;
       if (startBlock.type === 'list-item') {
-        const pNode = document.getParent(startBlock.key)
+        const pNode = document.getParent(startBlock.key);
         // unwrap the parent 'numbered-list' or 'bulleted-list'
         change.unwrapBlock(pNode.type)
       }
@@ -558,10 +562,11 @@ function SeafileSlatePlugin(options) {
 
           if (editor.props.editorUtilities.isInternalFileLink(text)) {
             let index = text.lastIndexOf("/");
-            if (index == -1) {
+            if (index === -1) {
               return;
             }
-            var fileName = text.substring(index + 1);
+            var name = text.substring(index + 8);
+            var fileName = decodeURIComponent(name)
             var t = Text.create({
               text: fileName
             });

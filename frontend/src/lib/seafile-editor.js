@@ -13,15 +13,11 @@ const lodash = require('lodash');
 
 class SeafileEditor extends React.Component {
 
-  state = {
-    isTreeDataLoaded: false,
-    editor: "rich",
-    initialPlainValue: "", // for plain editor
-    richValue: deserialize(""),
-    currentContent: "",
-    savedContent: "",
-    contentChanged: false,
-    saving: false
+
+  setFileInfoMtime = () => {
+    this.setState({
+      fileInfo: Object.assign({}, this.state.fileInfo, {mtime: (new Date().getTime()/1000)})
+    });
   }
 
   constructor(props) {
@@ -29,6 +25,18 @@ class SeafileEditor extends React.Component {
     this.checkNeedSave = lodash.throttle(this.onCheckNeedSave, 1000);
     this.convertAndCheckNeedSave = lodash.throttle(
       this.convertAndCheckNeedSave, 1000);
+    
+    this.state = {
+      isTreeDataLoaded: false,
+      editor: "rich",
+      initialPlainValue: "", // for plain editor
+      richValue: deserialize(""),
+      currentContent: "",
+      savedContent: "",
+      contentChanged: false,
+      saving: false,
+      fileInfo: this.props.fileInfo
+    }
   }
 
   setContent(markdownContent) {
@@ -52,7 +60,8 @@ class SeafileEditor extends React.Component {
   }
 
   componentWillReceiveProps(nextProps) {
-    this.setContent(nextProps.markdownContent);
+    console.log(nextProps,'will receiveprops');
+    // this.setContent(nextProps.markdownContent);
   }
 
   onUnload = event => {
@@ -144,15 +153,18 @@ class SeafileEditor extends React.Component {
   onRichEditorSave = () => {
     const value = this.state.richValue;
     const str = serialize(value.toJSON());
-    this.saveContent(str)
+    this.saveContent(str);
+    this.setFileInfoMtime();
   }
 
   onPlainEditorSave = () => {
     const str = this.state.currentContent;
-    this.saveContent(str)
+    this.saveContent(str);
+    this.setFileInfoMtime();
   }
 
   render() {
+
     if (this.state.editor === "rich") {
       return (
         <RichMarkdownEditor
@@ -163,6 +175,7 @@ class SeafileEditor extends React.Component {
           value={this.state.richValue}
           contentChanged={this.state.contentChanged}
           saving={this.state.saving}
+          fileInfo={this.state.fileInfo}
         />
       );
     } else if (this.state.editor === "plain") {
@@ -176,6 +189,7 @@ class SeafileEditor extends React.Component {
           switchToRichTextEditor={this.switchToRichTextEditor}
           onSave={this.onPlainEditorSave}
           onChange={this.onChange}
+          fileInfo={this.state.fileInfo}
         />
       );
     }
