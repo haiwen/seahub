@@ -1,6 +1,7 @@
 import React from 'react';
 import { Button, Modal, ModalHeader, ModalBody, ModalFooter } from 'reactstrap';
 import validUrl from 'valid-url';
+import { translate } from "react-i18next";
 
 class AddLinkDialog extends React.Component {
   state = {
@@ -41,4 +42,4 @@ class AddLinkDialog extends React.Component {
   }
 }
 
-export default AddLinkDialog;
+export default translate('translations')(AddLinkDialog);

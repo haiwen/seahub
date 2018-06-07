@@ -1,6 +1,7 @@
 import React from 'react';
 import { Button, Modal, ModalHeader, ModalBody, ModalFooter } from 'reactstrap';
 import validUrl from 'valid-url';
+import { translate } from "react-i18next";
 
 class AddImageDialog extends React.Component {
 
@@ -43,4 +44,4 @@ class AddImageDialog extends React.Component {
 
 }
 
-export default AddImageDialog;
+export default translate("translations")(AddImageDialog);

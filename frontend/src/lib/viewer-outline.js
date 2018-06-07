@@ -10,9 +10,9 @@ class OutlineItem extends React.Component {
     const node = this.props.node;
     var c;
     if (node.depth === 2) {
-      c = "outline-h2";
+      c = "seafile-md-viewer-outline-heading2";
     } else if (node.depth === 3) {
-      c = "outline-h3";
+      c = "seafile-md-viewer-outline-heading3";
     }
 
     return (
@@ -27,24 +27,24 @@ class OutlineView extends React.Component {
 
   render() {
     const root = this.props.treeRoot;
-    var headerList = root.children.filter(node => {
+    var headingList = root.children.filter(node => {
       return (node.type === "heading" &&
         (node.depth === 2 || node.depth === 3));
     })
 
-    for (let i = 0; i < headerList.length; i++) {
-      for (let child of headerList[i].children) {
+    for (let i = 0; i < headingList.length; i++) {
+      for (let child of headingList[i].children) {
         if (child.type === "text") {
-          headerList[i].text = child.value;
+          headingList[i].text = child.value;
           break;
         }
       }
-      headerList[i].key = i;
+      headingList[i].key = i;
     }
 
     return (
       <div className="seafile-viewer-outline">
-        {headerList.map(node => {
+        {headingList.map(node => {
           return (
             <OutlineItem
               key={node.key}
