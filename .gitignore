@@ -42,6 +42,6 @@ seahub/thumbnail/thumb/*
 tags
 
 seahub/frontend/webpack-stats.dev.json
-seahub/frontend/webpack-stats.pro.json
+seahub/frontend/webpack.config.dev.js
 seahub/frontend/node_modules
 

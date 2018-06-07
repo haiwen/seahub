@@ -18,8 +18,8 @@
               },
               pageOptions: {
                   repoID: '{{ repo.id }}',
-                  filePath: '{{ path|safe }}',
-                  fileName: '{{ filename|safe }}',
+                  filePath: '{{ path|escapejs }}',
+                  fileName: '{{ filename|escapejs }}',
                   domain: '{{ domain }}',
                   protocol: '{{ protocol }}',
                   lang: '{{ language_code }}',

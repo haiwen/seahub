@@ -64,7 +64,7 @@ module.exports = {
     chunkFilename: 'static/js/[name].chunk.js',
     // This is the URL that app is served from. We use "/" in development.
     // Tell django to use this URL to load packages and not use STATIC_URL + bundle_name
-    publicPath: 'http://192.168.49.130:3000/assets/bundles/', 
+    publicPath: 'http://localhost:3000/assets/bundles/', 
     // Point sourcemap entries to original disk location (format as URL on Windows)
     devtoolModuleFilenameTemplate: info =>
       path.resolve(info.absoluteResourcePath).replace(/\\/g, '/'),
