@@ -67,6 +67,7 @@ class MoreMenu extends React.Component {
         </DropdownToggle>
         <DropdownMenu className={'drop-list'}>
           <DropdownItem onMouseDown={this.props.switchToPlainTextEditor}>{this.props.t('switch_to_plain_text_editor')}</DropdownItem>
+          <DropdownItem onMouseDown={this.props.showHelpDialog}>{this.props.t('help')}</DropdownItem>
         </DropdownMenu>
       </Dropdown>
     )

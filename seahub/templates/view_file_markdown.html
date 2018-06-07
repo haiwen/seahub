@@ -18,8 +18,8 @@
               },
               pageOptions: {
                   repoID: '{{ repo.id }}',
-                  filePath: '{{ path }}',
-                  fileName: '{{ filename }}',
+                  filePath: '{{ path|safe }}',
+                  fileName: '{{ filename|safe }}',
                   domain: '{{ domain }}',
                   protocol: '{{ protocol }}',
                   lang: '{{ language_code }}',

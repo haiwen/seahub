@@ -12,6 +12,7 @@ import CheckListItem from './check-list-item';
 import { Inline, Text } from 'slate';
 import AddImageDialog from './add-image-dialog';
 import AddLinkDialog from './add-link-dialog';
+import UserHelpDialog from './user-help'
 import SeafileSlatePlugin from './seafile-slate-plugin';
 import Alert from 'react-s-alert';
 import '../css/richeditor/right-panel.css';
@@ -21,7 +22,7 @@ import 'react-s-alert/dist/s-alert-css-effects/scale.css';
 import { IconButton, TableToolBar, Button, ButtonGroup, MoreMenu } from "./topbarcomponent/editorToolBar";
 
 import { translate } from "react-i18next";
-
+import FileInfoView  from "./topbarcomponent/file-info";
 const DEFAULT_NODE = 'paragraph';
 const editCode = EditCode();
 
@@ -64,7 +65,8 @@ const insertImages = InsertImages({
 
 var seafileSlatePlugin = new SeafileSlatePlugin({
   editCode,
-  editTable
+  editTable,
+  editBlockquote
 });
 
 const plugins = [
@@ -86,7 +88,8 @@ class RichMarkdownEditor extends React.Component {
     leftNavMode: "files",
     showAddLinkDialog: false,
     rightWidth: 75,
-    resizeFlag: false
+    resizeFlag: false,
+    isShowHelpDialog:false
   };
 
   constructor(props) {
@@ -189,7 +192,19 @@ class RichMarkdownEditor extends React.Component {
     this.setState({
       showAddLinkDialog: !this.state.showAddLinkDialog
     });
-  }
+  };
+
+  showHelpDialog = () => {
+    this.setState({
+      isShowHelpDialog: true
+    })
+  };
+
+  hideHelpDialog = () => {
+    this.setState({
+      isShowHelpDialog: false
+    });
+  };
 
   /**
    * Check if the any of the currently selected blocks are of `type`.
@@ -289,7 +304,8 @@ class RichMarkdownEditor extends React.Component {
     const value = this.props.value
     const { selection } = value
     const change = value.change()
-    this.onChange(editCode.changes.toggleCodeBlock(change))
+    // the second param is used to turn codeBlock to paragraph
+    this.onChange(editCode.changes.toggleCodeBlock(change, 'paragraph'));
   }
 
   /**
@@ -491,13 +507,14 @@ class RichMarkdownEditor extends React.Component {
   };
 
   render() {
-    const value = this.props.value;
+
     const onResizeMove = this.state.resizeFlag ? this.onResizeMouseMove : null;
+    const { t } = this.props;
     return (
       <div className='seafile-editor'>
         <div className="seafile-editor-topbar">
-          <div className="title"><img src={ require('../assets/seafile-logo.png') } alt=""/></div>
-            {this.renderToolbar()}
+          <FileInfoView  fileInfo={this.props.fileInfo}/>
+          {this.renderToolbar()}
         </div>
         <div className="seafile-editor-main d-flex" onMouseMove={onResizeMove} onMouseUp={this.onResizeMouseUp}>
             <div className="seafile-editor-left-panel align-self-start" style={{width:(100-this.state.rightWidth)+'%'}}>
@@ -507,11 +524,11 @@ class RichMarkdownEditor extends React.Component {
                 editorUtilities={this.props.editorUtilities}
               />
             </div>
-            <div className="seafile-editor-right-panel align-self-end" style={{width:this.state.rightWidth+'%'}}>
+            <div className="seafile-editor-right-panel d-flex align-self-end" style={{width:this.state.rightWidth+'%'}}>
               <div className="seafile-editor-resize" onMouseDown={this.onResizeMouseDown}></div>
-              <div className="editor-container">
-              <div className="editor article">
-                <Editor
+              <div className="editor-container align-self-start">
+                <div className="editor article">
+                  <Editor
                     value={this.props.value}
                     autoFocus={true}
                     plugins={plugins}
@@ -521,9 +538,12 @@ class RichMarkdownEditor extends React.Component {
                     renderMark={this.renderMark}
                     onDrop={this.onDrop}
                     editorUtilities={this.props.editorUtilities}
-                />
+                  />
+                </div>
               </div>
-              </div>
+              {
+                this.state.isShowHelpDialog ? <UserHelpDialog userHelp={t('userHelp',{returnObjects: true})} hideHelpDialog={this.hideHelpDialog}/>:null
+              }
           </div>
         </div>
       </div>
@@ -571,6 +591,7 @@ class RichMarkdownEditor extends React.Component {
           <ButtonGroup>
             {this.renderMarkButton("BOLD", "fa fa-bold")}
             {this.renderMarkButton('ITALIC', 'fa fa-italic')}
+            {this.renderMarkButton('CODE', 'fa fa-code')}
           </ButtonGroup>
         }
         { showBlockButton === true &&
@@ -595,7 +616,7 @@ class RichMarkdownEditor extends React.Component {
             <IconButton text={t('insert_link')} id={'linkButton'} icon={'fa fa-link'} isActive={isLinkActive} onMouseDown={this.onToggleLink}/>
           }
           { showCodeButton === true &&
-            <IconButton text={t('code')} id={'codeButton'} icon={"fa fa-code"} onMouseDown={this.onToggleCode} isActive={isCodeActive}/>
+            <IconButton text={t('code')} id={'codeButton'} icon={"fa fa-code fa-code"} onMouseDown={this.onToggleCode} isActive={isCodeActive}/>
           }
           { showAddTableButton === true && this.renderAddTableButton()}
           { showImageButton === true &&
@@ -605,8 +626,8 @@ class RichMarkdownEditor extends React.Component {
         { isTableActive === true && this.renderTableToolbar()}
         { this.props.saving ? (
           <ButtonGroup>
-            <button type={"button"} className={"btn btn-icon btn-secondary btn-active btn-loading"} >
-              <i className={"fa fa-save"}/>
+            <button type={"button"} className={"btn btn-icon btn-secondary btn-active"} >
+              <i className={"fa fa-spin fa-spinner"}/>
             </button>
           </ButtonGroup>
         ) : (
@@ -614,13 +635,14 @@ class RichMarkdownEditor extends React.Component {
             <IconButton text={t('save')} id={'saveButton'} icon={"fa fa-save"} onMouseDown={this.onSave} disabled={!isSaveActive} isActive={isSaveActive}/>
           </ButtonGroup>
         )}
-        <MoreMenu id={'moreButton'} text={t('more')}  switchToPlainTextEditor={this.props.switchToPlainTextEditor} t={ t }/>
+        <MoreMenu id={'moreButton'} text={t('more')} showHelpDialog={this.showHelpDialog}  switchToPlainTextEditor={this.props.switchToPlainTextEditor} t={ t }/>
         <AddImageDialog
           showAddImageDialog={this.state.showAddImageDialog}
           toggleImageDialog={this.toggleImageDialog}
           onInsertImage={this.onInsertImage}
           t = { t }
         />
+
         <AddLinkDialog
           showAddLinkDialog={this.state.showAddLinkDialog}
           toggleLinkDialog={this.toggleLinkDialog}
@@ -697,8 +719,10 @@ class RichMarkdownEditor extends React.Component {
     const onMouseDown = event => this.onClickMark(event, type);
     if (type ==='BOLD') {
       toolTipText = 'bold'
-    } else {
+    } else if (type === 'ITALIC') {
       toolTipText = 'italic'
+    } else {
+      toolTipText = 'inline_code'
     }
     return (
       // eslint-disable-next-line react/jsx-no-bind

@@ -1,3 +1,18 @@
+/*set scroll bar*/
+body ::-webkit-scrollbar{
+  width: 8px;
+  height: 8px;
+}
+
+body ::-webkit-scrollbar-button {
+  display: none;
+}
+
+body ::-webkit-scrollbar-thumb {
+  background-color: rgb(206, 206, 212);
+  border-radius: 10px;
+}
+
 .seafile-editor {
   position: fixed;
   width: 100%;
@@ -33,6 +48,8 @@
   height: 100%;
   background-color: rgb(250,250,249);
   overflow-x: hidden;
+  display: flex;
+  flex: 0 0 1;
   position: relative; /* for seafile-editor-resize */
 }
 
