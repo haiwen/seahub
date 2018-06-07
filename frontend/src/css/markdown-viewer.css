@@ -24,9 +24,12 @@
   overflow:auto;
   background:#fafaf9;
 }
+<<<<<<< HEAD
 .seafile-md-viewer-main-panel {
   flex:auto;
 }
+=======
+>>>>>>> update seafile editor
 .seafile-md-viewer-rendered-content {
   background: #fff;
   padding:30px 30px 15px;
@@ -54,6 +57,10 @@
   .seafile-md-viewer-main-panel {
     margin-left:5%;
     max-width:calc(90% - 260px);
+<<<<<<< HEAD
+=======
+    flex: auto;
+>>>>>>> update seafile editor
   }
   .seafile-md-viewer-side-panel {
     width:260px;

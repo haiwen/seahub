@@ -633,7 +633,11 @@ class RichMarkdownEditor extends React.Component {
             <IconButton text={t('save')} id={'saveButton'} icon={"fa fa-save"} onMouseDown={this.onSave} disabled={!isSaveActive} isActive={isSaveActive}/>
           </ButtonGroup>
         )}
+<<<<<<< HEAD
         <MoreMenu id={'moreButton'} text={t('more')} showHelpDialog={this.showHelpDialog} switchToMarkDownViewer ={this.props.switchToMarkDownViewer}  switchToPlainTextEditor={this.props.switchToPlainTextEditor}/>
+=======
+        <MoreMenu id={'moreButton'} text={t('more')} showHelpDialog={this.showHelpDialog}  switchToPlainTextEditor={this.props.switchToPlainTextEditor} t={ t }/>
+>>>>>>> update seafile editor
         <AddImageDialog
           showAddImageDialog={this.state.showAddImageDialog}
           toggleImageDialog={this.toggleImageDialog}

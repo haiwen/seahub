@@ -18,7 +18,11 @@ class SeafileEditor extends React.Component {
     this.setState({
       fileInfo: Object.assign({}, this.state.fileInfo, {mtime: (new Date().getTime()/1000)})
     });
+<<<<<<< HEAD
   };
+=======
+  }
+>>>>>>> update seafile editor
 
   constructor(props) {
     super(props);
@@ -28,11 +32,18 @@ class SeafileEditor extends React.Component {
     
     this.state = {
       isTreeDataLoaded: false,
+<<<<<<< HEAD
       mode: "viewer",
       initialPlainValue: "", // for plain editor
       richValue: deserialize(""),
       // currentContent is markdown object, the root value of viewer, richEditor and plainEditor
       currentContent: this.props.markdownContent,
+=======
+      editor: "rich",
+      initialPlainValue: "", // for plain editor
+      richValue: deserialize(""),
+      currentContent: "",
+>>>>>>> update seafile editor
       savedContent: "",
       contentChanged: false,
       saving: false,
@@ -163,17 +174,29 @@ class SeafileEditor extends React.Component {
     const str = serialize(value.toJSON());
     this.saveContent(str);
     this.setFileInfoMtime();
+<<<<<<< HEAD
   };
+=======
+  }
+>>>>>>> update seafile editor
 
   onPlainEditorSave = () => {
     const str = this.state.currentContent;
     this.saveContent(str);
     this.setFileInfoMtime();
+<<<<<<< HEAD
   };
 
   render() {
 
     if (this.state.mode === "rich") {
+=======
+  }
+
+  render() {
+
+    if (this.state.editor === "rich") {
+>>>>>>> update seafile editor
       return (
         <RichMarkdownEditor
           editorUtilities={this.props.editorUtilities}
@@ -183,7 +206,10 @@ class SeafileEditor extends React.Component {
           value={this.state.richValue}
           contentChanged={this.state.contentChanged}
           saving={this.state.saving}
+<<<<<<< HEAD
           switchToMarkDownViewer={this.switchToMarkDownViewer}
+=======
+>>>>>>> update seafile editor
           fileInfo={this.state.fileInfo}
         />
       );

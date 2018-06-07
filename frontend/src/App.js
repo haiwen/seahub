@@ -168,7 +168,7 @@ class App extends React.Component {
           editorUtilities={editorUtilities}
         />
       );
-    }   
+    }
   }
 }
 
