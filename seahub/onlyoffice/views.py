@@ -31,7 +31,7 @@ def onlyoffice_editor_callback(request):
 
     post_data = json.loads(request.body)
     status = int(post_data.get('status', -1))
-    if status == 2:             # document is ready for saving
+    if status == 2 or status == 6:             # document is ready for saving
         # the link to the edited document to be saved with the document storage
         # service. The link is present when the status value is equal to 2 or 3 only.
         url = post_data.get('url')
