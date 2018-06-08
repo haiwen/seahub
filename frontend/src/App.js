@@ -9,7 +9,7 @@ import openSocket from 'socket.io-client';
 const socket = openSocket(process.env.SOCKETIO_HOST || '')
 
 let repoID = window.app.pageOptions.repoID;
-let username = window.app.pageOptions.username;
+let user = window.app.pageOptions.user
 let filePath = window.app.pageOptions.filePath;
 let fileName = window.app.pageOptions.fileName;
 let siteRoot = window.app.config.siteRoot;
@@ -144,7 +144,7 @@ class App extends React.Component {
 
   joinUser(user) {
     console.log('joinUser: ', user);
-    Alert.success(`user ${user} joined`, {
+    Alert.success(`user ${user.name} joined`, {
       position: 'bottom-right',
       effect: 'scale',
       timeout: 3000
@@ -153,7 +153,7 @@ class App extends React.Component {
 
   removeUser(user) {
     console.log('removeUser: ', user);
-    Alert.info(`user ${user} left`, {
+    Alert.info(`user ${user.name} left`, {
       position: 'bottom-right',
       effect: 'scale',
       timeout: 3000
@@ -168,12 +168,12 @@ class App extends React.Component {
   }
 
   emitUserEditing() {
-    socket.emit('editing event', {room: repoID+encodeURIComponent(filePath), user: username});
+    socket.emit('editing event', {room: repoID+encodeURIComponent(filePath), user: user});
   }
 
   receiveUserEditing(user) {
     console.log('user editing: ', user);
-    Alert.warning(`user ${user} is editing this file!`, {
+    Alert.warning(`user ${user.name} is editing this file!`, {
       position: 'bottom-right',
       effect: 'scale',
       timeout: 5000
@@ -185,7 +185,7 @@ class App extends React.Component {
     const url = `${siteRoot}api2/repos/${repoID}/file/?p=${path}&reuse=1`;
     const infoPath =`${siteRoot}api2/repos/${repoID}/file/detail/?p=${path}`;
 
-    socket.emit('room', {room: repoID+encodeURIComponent(filePath), user: username});
+    socket.emit('room', {room: repoID+encodeURIComponent(filePath), user: user});
 
     fetch(infoPath, {credentials:'same-origin'})
       .then((response) => response.json())
@@ -208,6 +208,19 @@ class App extends React.Component {
     })
   }
 
+<<<<<<< HEAD
+=======
+  componentWillUnmount() {
+    socket.emit('leave room', {room: repoID+encodeURIComponent(filePath), user: user});
+  }
+  
+  switchToEditor = () => {
+    this.setState({
+      mode: "edit"
+    })
+  }
+
+>>>>>>> Use user.name instead of username
   render() {
     if (this.state.loading) {
       return (

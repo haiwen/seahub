@@ -1,5 +1,5 @@
 {% load render_bundle from webpack_loader %}
-{% load static %}
+{% load static seahub_tags %}
 <!DOCTYPE html>
 <html>
     <head>
@@ -23,7 +23,11 @@
                   domain: '{{ domain }}',
                   protocol: '{{ protocol }}',
                   lang: '{{ language_code }}',
-                  username: '{{ user.username }}',
+                  user: {
+                    username: '{{ user.username|escapejs }}',
+                    name: '{{ user.username|email2nickname|escapejs }}',
+                    contact_email: '{{ user.username|email2contact_email|escapejs }}'
+                  }
               }
           }
          </script>

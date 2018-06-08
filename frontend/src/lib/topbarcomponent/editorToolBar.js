@@ -166,7 +166,7 @@ class CollabUsersButton extends React.Component {
         <DropdownMenu className={'drop-list'}>
           {
             this.props.users.map((user, idx) => (
-              <DropdownItem key={idx}><i className="fa fa-user"></i> {user}</DropdownItem>
+              <DropdownItem key={idx}><i className="fa fa-user"></i> {user.name}</DropdownItem>
             ))
           }
       </DropdownMenu>
