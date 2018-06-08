@@ -17,9 +17,10 @@ from seahub.api2.utils import api_error
 from seahub.api2.throttling import UserRateThrottle
 from seahub.api2.permissions import IsProVersion
 from seahub.api2.authentication import TokenAuthentication
-from seahub.api2.endpoints.utils import api_check_group
+from seahub.api2.endpoints.utils import api_check_group, is_org_user
 
-from seahub.base.templatetags.seahub_tags import email2nickname
+from seahub.base.templatetags.seahub_tags import email2nickname, \
+        email2contact_email
 from seahub.base.accounts import User
 from seahub.signals import repo_created
 from seahub.group.utils import is_group_admin
@@ -28,7 +29,10 @@ from seahub.utils import is_valid_dirent_name, \
         send_perm_audit_msg
 from seahub.utils.repo import get_library_storages, get_repo_owner
 from seahub.utils.timeutils import timestamp_to_isoformat_timestr
-from seahub.share.signals import share_repo_to_group_successful
+from seahub.share.signals import share_repo_to_user_successful, share_repo_to_group_successful
+from seahub.share.utils import share_dir_to_user, share_dir_to_group, update_user_dir_permission, \
+        check_user_share_out_permission, update_group_dir_permission, \
+        check_group_share_out_permission
 from seahub.constants import PERMISSION_READ, PERMISSION_READ_WRITE
 
 from seahub.settings import ENABLE_STORAGE_CLASSES, STORAGE_CLASS_MAPPING_POLICY
@@ -778,3 +782,527 @@ class GroupOwnedLibraryGroupFolderPermission(APIView):
             logger.error(e)
             error_msg = 'Internal Server Error'
             return api_error(status.HTTP_500_INTERNAL_SERVER_ERROR, error_msg)
+
+
+class GroupOwnedLibraryUserShare(APIView):
+
+    authentication_classes = (TokenAuthentication, SessionAuthentication)
+    permission_classes = (IsAuthenticated, IsProVersion)
+    throttle_classes = (UserRateThrottle,)
+
+    def list_user_shared_items(self, request, repo_id, path):
+
+        repo_owner = seafile_api.get_repo_owner(repo_id)
+        if path == '/':
+            share_items = seafile_api.list_repo_shared_to(repo_owner,
+                    repo_id)
+        else:
+            share_items = seafile_api.get_shared_users_for_subdir(repo_id,
+                    path, repo_owner)
+
+        ret = []
+        for item in share_items:
+            email = item.user
+            ret.append({
+                "user_email": email,
+                "user_name": email2nickname(email),
+                "user_contact_email": email2contact_email(email),
+                "permission": item.perm
+            })
+        return ret
+
+    def has_shared_to_user(self, request, repo_id, path, username):
+        items = self.list_user_shared_items(request, repo_id, path)
+
+        has_shared = False
+        for item in items:
+            if username == item['user_email']:
+                has_shared = True
+                break
+
+        return has_shared
+
+    def get(self, request, repo_id):
+        """ List repo user share info.
+
+        Permission checking:
+        1. is group admin
+        """
+
+        # resource check
+        repo = seafile_api.get_repo(repo_id)
+        if not repo:
+            error_msg = 'Library %s not found.' % repo_id
+            return api_error(status.HTTP_404_NOT_FOUND, error_msg)
+
+        repo_owner = get_repo_owner(request, repo_id)
+        group_id = get_group_id_by_repo_owner(repo_owner)
+        if not ccnet_api.get_group(group_id):
+            error_msg = 'Group %s not found.' % group_id
+            return api_error(status.HTTP_404_NOT_FOUND, error_msg)
+
+        path = request.GET.get('path', '/')
+        if not seafile_api.get_dir_id_by_path(repo_id, path):
+            error_msg = 'Folder %s not found.' % path
+            return api_error(status.HTTP_404_NOT_FOUND, error_msg)
+
+        # permission check
+        username = request.user.username
+        if not is_group_admin(group_id, username):
+            error_msg = 'Permission denied.'
+            return api_error(status.HTTP_403_FORBIDDEN, error_msg)
+
+        result = self.list_user_shared_items(request, repo_id, path)
+        return Response(result)
+
+    def post(self, request, repo_id):
+        """ Share repo to users.
+
+        Permission checking:
+        1. is group admin
+        """
+
+        # parameter check
+        permission = request.data.get('permission', PERMISSION_READ)
+        if permission not in [PERMISSION_READ, PERMISSION_READ_WRITE]:
+            error_msg = 'permission invalid.'
+            return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
+
+        # resource check
+        repo = seafile_api.get_repo(repo_id)
+        if not repo:
+            error_msg = 'Library %s not found.' % repo_id
+            return api_error(status.HTTP_404_NOT_FOUND, error_msg)
+
+        repo_owner = get_repo_owner(request, repo_id)
+        group_id = get_group_id_by_repo_owner(repo_owner)
+        if not ccnet_api.get_group(group_id):
+            error_msg = 'Group %s not found.' % group_id
+            return api_error(status.HTTP_404_NOT_FOUND, error_msg)
+
+        path = request.data.get('path', '/')
+        if not seafile_api.get_dir_id_by_path(repo_id, path):
+            error_msg = 'Folder %s not found.' % path
+            return api_error(status.HTTP_404_NOT_FOUND, error_msg)
+
+        # permission check
+        username = request.user.username
+        if not is_group_admin(group_id, username):
+            error_msg = 'Permission denied.'
+            return api_error(status.HTTP_403_FORBIDDEN, error_msg)
+
+        # share repo to user
+        result = {}
+        result['failed'] = []
+        result['success'] = []
+
+        share_to_users = request.data.getlist('username')
+        for to_user in share_to_users:
+            to_user = to_user.strip()
+            if not is_valid_username(to_user):
+                result['failed'].append({
+                    'email': to_user,
+                    'error_msg': _(u'username invalid.')
+                    })
+                continue
+
+            try:
+                User.objects.get(email=to_user)
+            except User.DoesNotExist:
+                result['failed'].append({
+                    'email': to_user,
+                    'error_msg': _(u'User %s not found.') % to_user
+                    })
+                continue
+
+            if self.has_shared_to_user(request, repo_id, path, to_user):
+                result['failed'].append({
+                    'email': to_user,
+                    'error_msg': _(u'This item has been shared to %s.') % to_user
+                    })
+                continue
+
+            if is_org_user(to_user):
+                error_msg = 'User %s is a member of organization.' % to_user
+                result['failed'].append({
+                    'email': to_user,
+                    'error_msg': error_msg
+                })
+                continue
+
+            # can't share to owner
+            if to_user == repo_owner:
+                error_msg = "Library can not be shared to owner."
+                result['failed'].append({
+                    'email': to_user,
+                    'error_msg': error_msg
+                })
+                continue
+
+            share_dir_to_user(repo, path, repo_owner, username, to_user, permission)
+
+            result['success'].append({
+                "user_email": to_user,
+                "user_name": email2nickname(to_user),
+                "user_contact_email": email2contact_email(to_user),
+                "permission": permission,
+            })
+
+            # send a signal when sharing repo successful
+            share_repo_to_user_successful.send(sender=None,
+                    from_user=username, to_user=to_user,
+                    repo=repo, path=path, org_id=None)
+
+            send_perm_audit_msg('add-repo-perm',
+                    username, to_user, repo_id, path, permission)
+
+        return Response(result)
+
+    def put(self, request, repo_id):
+        """ Update repo user share permission.
+
+        Permission checking:
+        1. is group admin
+        """
+
+        # parameter check
+        to_user = request.data.get('username', None)
+        if not to_user:
+            error_msg = 'username invalid.'
+            return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
+
+        if not is_valid_username(to_user):
+            error_msg = 'username invalid.'
+            return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
+
+        permission = request.data.get('permission', PERMISSION_READ)
+        if permission not in [PERMISSION_READ, PERMISSION_READ_WRITE]:
+            error_msg = 'permission invalid.'
+            return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
+
+        # resource check
+        repo = seafile_api.get_repo(repo_id)
+        if not repo:
+            error_msg = 'Library %s not found.' % repo_id
+            return api_error(status.HTTP_404_NOT_FOUND, error_msg)
+
+        repo_owner = get_repo_owner(request, repo_id)
+        group_id = get_group_id_by_repo_owner(repo_owner)
+        if not ccnet_api.get_group(group_id):
+            error_msg = 'Group %s not found.' % group_id
+            return api_error(status.HTTP_404_NOT_FOUND, error_msg)
+
+        path = request.data.get('path', '/')
+        if not seafile_api.get_dir_id_by_path(repo_id, path):
+            error_msg = 'Folder %s not found.' % path
+            return api_error(status.HTTP_404_NOT_FOUND, error_msg)
+
+        try:
+            User.objects.get(email=to_user)
+        except User.DoesNotExist:
+            error_msg = 'User %s not found.' % to_user
+            return api_error(status.HTTP_404_NOT_FOUND, error_msg)
+
+        # permission check
+        username = request.user.username
+        if not is_group_admin(group_id, username):
+            error_msg = 'Permission denied.'
+            return api_error(status.HTTP_403_FORBIDDEN, error_msg)
+
+        update_user_dir_permission(repo_id, path, repo_owner, to_user, permission)
+        send_perm_audit_msg('modify-repo-perm', username, to_user, repo_id, path, permission)
+        return Response({'success': True})
+
+    def delete(self, request, repo_id, format=None):
+        """ Delete repo user share permission.
+
+        Permission checking:
+        1. is group admin
+        """
+
+        # parameter check
+        to_user = request.data.get('username', None)
+        if not to_user:
+            error_msg = 'username invalid.'
+            return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
+
+        # permission check
+        repo_owner = get_repo_owner(request, repo_id)
+        group_id = get_group_id_by_repo_owner(repo_owner)
+        username = request.user.username
+        if not is_group_admin(group_id, username):
+            error_msg = 'Permission denied.'
+            return api_error(status.HTTP_403_FORBIDDEN, error_msg)
+
+        path = request.data.get('path', '/')
+        if path == '/':
+            seafile_api.remove_share(repo_id, repo_owner, to_user)
+        else:
+            seafile_api.unshare_subdir_for_user(
+                    repo_id, path, repo_owner, to_user)
+
+        permission = check_user_share_out_permission(repo_id, path, to_user, False)
+        send_perm_audit_msg('delete-repo-perm', username, to_user,
+                            repo_id, path, permission)
+
+        return Response({'success': True})
+
+
+class GroupOwnedLibraryGroupShare(APIView):
+
+    authentication_classes = (TokenAuthentication, SessionAuthentication)
+    permission_classes = (IsAuthenticated, IsProVersion)
+    throttle_classes = (UserRateThrottle,)
+
+    def list_group_shared_items(self, request, repo_id, path):
+
+        repo_owner = seafile_api.get_repo_owner(repo_id)
+        if path == '/':
+            share_items = seafile_api.list_repo_shared_group_by_user(repo_owner, repo_id)
+        else:
+            share_items = seafile_api.get_shared_groups_for_subdir(repo_id,
+                    path, repo_owner)
+
+        ret = []
+        for item in share_items:
+
+            group_id = item.group_id
+            group = ccnet_api.get_group(group_id)
+
+            if not group:
+                if path == '/':
+                    seafile_api.unset_group_repo(repo_id, group_id,
+                            repo_owner)
+                else:
+                    seafile_api.unshare_subdir_for_group(
+                            repo_id, path, repo_owner, group_id)
+                continue
+
+            ret.append({
+                "group_id": group_id,
+                "group_name": group.group_name,
+                "permission": item.perm,
+            })
+        return ret
+
+    def has_shared_to_group(self, request, repo_id, path, group_id):
+        items = self.list_group_shared_items(request, repo_id, path)
+
+        has_shared = False
+        for item in items:
+            if group_id == item['group_id']:
+                has_shared = True
+                break
+
+        return has_shared
+
+    def get(self, request, repo_id, format=None):
+        """ List repo group share info.
+
+        Permission checking:
+        1. is group admin
+        """
+
+        # resource check
+        repo = seafile_api.get_repo(repo_id)
+        if not repo:
+            error_msg = 'Library %s not found.' % repo_id
+            return api_error(status.HTTP_404_NOT_FOUND, error_msg)
+
+        repo_owner = get_repo_owner(request, repo_id)
+        group_id = get_group_id_by_repo_owner(repo_owner)
+        if not ccnet_api.get_group(group_id):
+            error_msg = 'Group %s not found.' % group_id
+            return api_error(status.HTTP_404_NOT_FOUND, error_msg)
+
+        path = request.GET.get('path', '/')
+        if not seafile_api.get_dir_id_by_path(repo_id, path):
+            error_msg = 'Folder %s not found.' % path
+            return api_error(status.HTTP_404_NOT_FOUND, error_msg)
+
+        # permission check
+        username = request.user.username
+        if not is_group_admin(group_id, username):
+            error_msg = 'Permission denied.'
+            return api_error(status.HTTP_403_FORBIDDEN, error_msg)
+
+        result = self.list_group_shared_items(request, repo_id, path)
+        return Response(result)
+
+    def post(self, request, repo_id, format=None):
+        """ Share repo to group.
+
+        Permission checking:
+        1. is group admin
+        """
+
+        # parameter check
+        permission = request.data.get('permission', PERMISSION_READ)
+        if permission not in [PERMISSION_READ, PERMISSION_READ_WRITE]:
+            error_msg = 'permission invalid.'
+            return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
+
+        # resource check
+        repo = seafile_api.get_repo(repo_id)
+        if not repo:
+            error_msg = 'Library %s not found.' % repo_id
+            return api_error(status.HTTP_404_NOT_FOUND, error_msg)
+
+        repo_owner = get_repo_owner(request, repo_id)
+        group_id = get_group_id_by_repo_owner(repo_owner)
+        if not ccnet_api.get_group(group_id):
+            error_msg = 'Group %s not found.' % group_id
+            return api_error(status.HTTP_404_NOT_FOUND, error_msg)
+
+        path = request.data.get('path', '/')
+        if not seafile_api.get_dir_id_by_path(repo_id, path):
+            error_msg = 'Folder %s not found.' % path
+            return api_error(status.HTTP_404_NOT_FOUND, error_msg)
+
+        # permission check
+        username = request.user.username
+        if not is_group_admin(group_id, username):
+            error_msg = 'Permission denied.'
+            return api_error(status.HTTP_403_FORBIDDEN, error_msg)
+
+        result = {}
+        result['failed'] = []
+        result['success'] = []
+
+        group_ids = request.data.getlist('group_id')
+        for gid in group_ids:
+            try:
+                gid = int(gid)
+            except ValueError:
+                result['failed'].append({
+                    'error_msg': 'group_id %s invalid.' % gid
+                    })
+                continue
+
+            group = ccnet_api.get_group(gid)
+            if not group:
+                result['failed'].append({
+                    'error_msg': 'Group %s not found' % gid
+                    })
+                continue
+
+            if self.has_shared_to_group(request, repo_id, path, gid):
+                result['failed'].append({
+                    'group_name': group.group_name,
+                    'error_msg': _(u'This item has been shared to %s.') % group.group_name
+                    })
+                continue
+
+            share_dir_to_group(repo, path, repo_owner, username, gid, permission, None)
+            result['success'].append({
+                "group_id": gid,
+                "group_name": group.group_name,
+                "permission": permission,
+            })
+
+            share_repo_to_group_successful.send(sender=None,
+                    from_user=username, group_id=gid, repo=repo, path=path,
+                    org_id=None)
+
+            send_perm_audit_msg('add-repo-perm', username, gid,
+                                repo_id, path, permission)
+
+        return Response(result)
+
+    def put(self, request, repo_id, format=None):
+        """ Update repo group share permission.
+
+        Permission checking:
+        1. is group admin
+        """
+
+        # parameter check
+        to_group_id = request.data.get('group_id', None)
+        if not to_group_id:
+            error_msg = 'group_id invalid.'
+            return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
+
+        try:
+            to_group_id = int(to_group_id)
+        except ValueError:
+            error_msg = 'group_id invalid.'
+            return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
+
+        permission = request.data.get('permission', PERMISSION_READ)
+        if permission not in [PERMISSION_READ, PERMISSION_READ_WRITE]:
+            error_msg = 'permission invalid.'
+            return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
+
+        # resource check
+        repo = seafile_api.get_repo(repo_id)
+        if not repo:
+            error_msg = 'Library %s not found.' % repo_id
+            return api_error(status.HTTP_404_NOT_FOUND, error_msg)
+
+        repo_owner = get_repo_owner(request, repo_id)
+        group_id = get_group_id_by_repo_owner(repo_owner)
+        if not ccnet_api.get_group(group_id):
+            error_msg = 'Group %s not found.' % group_id
+            return api_error(status.HTTP_404_NOT_FOUND, error_msg)
+
+        if not ccnet_api.get_group(to_group_id):
+            error_msg = 'Group %s not found.' % to_group_id
+            return api_error(status.HTTP_404_NOT_FOUND, error_msg)
+
+        path = request.data.get('path', '/')
+        if not seafile_api.get_dir_id_by_path(repo_id, path):
+            error_msg = 'Folder %s not found.' % path
+            return api_error(status.HTTP_404_NOT_FOUND, error_msg)
+
+        # permission check
+        username = request.user.username
+        if not is_group_admin(group_id, username):
+            error_msg = 'Permission denied.'
+            return api_error(status.HTTP_403_FORBIDDEN, error_msg)
+
+        update_group_dir_permission(repo_id, path,
+                repo_owner, to_group_id, permission, None)
+        send_perm_audit_msg('modify-repo-perm',
+                username, to_group_id, repo_id, path, permission)
+
+        return Response({'success': True})
+
+    def delete(self, request, repo_id, format=None):
+        """ Delete repo group share permission.
+
+        Permission checking:
+        1. is group admin
+        """
+
+        # parameter check
+        to_group_id = request.data.get('group_id', None)
+        if not to_group_id:
+            error_msg = 'group_id invalid.'
+            return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
+
+        try:
+            to_group_id = int(to_group_id)
+        except ValueError:
+            error_msg = 'group_id invalid.'
+            return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
+
+        # permission check
+        username = request.user.username
+        repo_owner = get_repo_owner(request, repo_id)
+        group_id = get_group_id_by_repo_owner(repo_owner)
+        if not is_group_admin(group_id, username):
+            error_msg = 'Permission denied.'
+            return api_error(status.HTTP_403_FORBIDDEN, error_msg)
+
+        path = request.data.get('path', '/')
+        if path == '/':
+            seafile_api.unset_group_repo(repo_id, to_group_id, username)
+        else:
+            seafile_api.unshare_subdir_for_group(
+                    repo_id, path, repo_owner, group_id)
+
+        permission = check_group_share_out_permission(repo_id, path, group_id, False)
+        send_perm_audit_msg('delete-repo-perm', username, group_id,
+                            repo_id, path, permission)
+
+        return Response({'success': True})
