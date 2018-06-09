@@ -72,16 +72,3 @@
     </div>
 </form>
 {% endif %}
-
-{% if type == 'terms' %}
-<form class="web-setting-form web-checkbox-setting-form" action="">{% csrf_token %}
-    <h5 class="web-setting-name">{{ setting_display_name }}</h5>
-    <div class="web-setting-input">
-        <label class="checkbox-label">
-            <input class="web-setting-checkbox vam terms-checked" type="checkbox" name="{{ setting_name }}"{% if setting_val %} checked="checked"{% endif %} />
-            <span class="vam">{{ help_tip }}</span>
-        </label>
-    </div>
-</form>
-{% endif %}
-
