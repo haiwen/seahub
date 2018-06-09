@@ -450,6 +450,7 @@ define([
                     },
                     success: function() {
                         _this.dir.user_can_set_folder_perm = false;
+                        _this.is_address_book_group_admin = false;
                         if (_this.contextOptions &&
                             _this.contextOptions.group_id) { // the repo is in a group
                             _this.getGroupInfo();
@@ -490,6 +491,9 @@ define([
                         if (data.parent_group_id != 0 && // address book group
                             $.inArray(app.pageOptions.username, data.admins) != -1) { // user is group admin
                             _this.dir.user_can_set_folder_perm = true;
+
+                            _this.is_address_book_group_admin = true;
+                            _this.parent_group_id = data.parent_group_id;
                         }
                         _this.reset();
                     },
@@ -860,6 +864,13 @@ define([
                 };
                 if (app.pageOptions.is_pro) {
                     options.is_admin = dir.is_admin;
+
+                    if (this.is_address_book_group_admin) {
+                        $.extend(options, {
+                            is_address_book_group_admin: true,
+                            parent_group_id: this.parent_group_id
+                        });
+                    }
                 }
                 new ShareView(options);
             },

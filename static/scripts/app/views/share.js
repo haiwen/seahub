@@ -15,8 +15,14 @@ define([
 
         initialize: function(options) {
             this.is_repo_owner = options.is_repo_owner;
+
             // for shared repo
             this.is_admin = options.is_admin; // true or undefined
+
+            // for group owned repo
+            this.is_address_book_group_admin = options.is_address_book_group_admin;
+            this.parent_group_id = options.parent_group_id;
+
             this.is_virtual = options.is_virtual;
             this.user_perm = options.user_perm;
             this.repo_id = options.repo_id;
@@ -24,6 +30,15 @@ define([
             this.dirent_path = options.dirent_path;
             this.obj_name = options.obj_name;
             this.is_dir = options.is_dir;
+
+            // share to user/group
+            var enable_dir_private_share = false;
+            if (!this.is_virtual &&
+                (this.is_repo_owner || this.is_admin ||
+                (this.is_address_book_group_admin && this.dirent_path == '/'))) {
+                enable_dir_private_share = true;
+            }
+            this.enable_dir_private_share = enable_dir_private_share;
 
             this.render();
 
@@ -47,7 +62,7 @@ define([
                 if (this.user_perm == 'rw' && !this.repo_encrypted && app.pageOptions.can_generate_upload_link) {
                     this.uploadLinkPanelInit();
                 }
-                if (!this.is_virtual && (this.is_repo_owner || this.is_admin)) {
+                if (this.enable_dir_private_share) {
                     this.dirUserSharePanelInit();
                     this.dirGroupSharePanelInit();
 
@@ -64,19 +79,27 @@ define([
         },
 
         render: function () {
+            var show_admin_perm_option = false;
+            if (app.pageOptions.is_pro &&
+                this.dirent_path == '/' && // only for repo
+                !this.parent_group_id) { // not for group owned repo
+                show_admin_perm_option = true;
+            }
+
             this.$el.html(this.template({
                 title: gettext("Share {placeholder}")
                     .replace('{placeholder}', '<span class="op-target ellipsis ellipsis-op-target" title="' + Common.HTMLescape(this.obj_name) + '">' + Common.HTMLescape(this.obj_name) + '</span>'),
+
                 is_dir: this.is_dir,
-                is_repo_owner: this.is_repo_owner,
-                is_admin: this.is_admin,
-                is_virtual: this.is_virtual,
+
+                enable_dir_private_share: this.enable_dir_private_share,
+                show_admin_perm_option: show_admin_perm_option,
+
                 user_perm: this.user_perm,
                 repo_id: this.repo_id,
-                can_generate_share_link: app.pageOptions.can_generate_share_link,
-                can_generate_upload_link: app.pageOptions.can_generate_upload_link,
                 repo_encrypted: this.repo_encrypted,
-                dirent_path: this.dirent_path
+                can_generate_share_link: app.pageOptions.can_generate_share_link,
+                can_generate_upload_link: app.pageOptions.can_generate_upload_link
             }));
 
             return this;
@@ -572,23 +595,63 @@ define([
             });
         },
 
+        prepareUserItemData: function(item) {
+            var item_data = {
+                'for_user': true
+            };
+            if (this.parent_group_id) { // group owned repo
+                // [{permission: "rw", user_name: "llj", user_email: "llj@1.com", user_contact_email: "llj@1.com"}]
+                $.extend(item_data, {
+                    "user_email": item.user_email,
+                    "user_name": item.user_name,
+                    "permission": item.permission,
+                    'parent_group_id': this.parent_group_id
+                });
+            } else {
+                $.extend(item_data, {
+                    "user_email": item.user_info.name,
+                    "user_name": item.user_info.nickname,
+                    "permission": item.permission,
+                    'is_admin': item.is_admin
+                });
+            }
+
+            return item_data;
+        },
+
         dirUserSharePanelInit: function() {
+            var _this = this;
+
             var $loadingTip = this.$('.loading-tip').show();
             var $panel = this.$('#dir-user-share');
             var $table = $('table', $panel);
             var $add_item = $('#add-dir-user-share-item');
+
             var repo_id = this.repo_id,
                 path = this.dirent_path;
-
-            $.ajax({
-                url: Common.getUrl({
+            var url, data;
+            if (this.parent_group_id) {
+                url = Common.getUrl({
+                    name: 'group_owned_repo_user_share',
+                    repo_id: repo_id
+                });
+                data = {
+                    'path': path
+                };
+            } else {
+                url = Common.getUrl({
                     name: 'dir_shared_items',
                     repo_id: repo_id
-                }),
-                data: {
+                });
+                data = {
                     'p': path,
                     'share_type': 'user'
-                },
+                };
+            }
+
+            $.ajax({
+                url: url,
+                data: data,
                 cache: false,
                 dataType: 'json',
                 success: function(data) {
@@ -596,13 +659,7 @@ define([
                         var new_item = new FolderShareItemView({
                             'repo_id': repo_id,
                             'path': path,
-                            'item_data': {
-                                "user_email": item.user_info.name,
-                                "user_name": item.user_info.nickname,
-                                "permission": item.permission,
-                                'is_admin': item.is_admin,
-                                'for_user': true
-                            }
+                            'item_data': _this.prepareUserItemData(item)
                         });
                         $add_item.after(new_item.el);
                     });
@@ -630,43 +687,144 @@ define([
             });
         },
 
+        prepareGroupItemData: function(item) {
+            var item_data = {
+                'for_user': false
+            };
+            if (this.parent_group_id) { // address book group
+                $.extend(item_data, {
+                    "group_id": item.group_id,
+                    "group_name": item.group_name,
+                    "permission": item.permission,
+                    "parent_group_id": this.parent_group_id
+                });
+            } else {
+                $.extend(item_data, {
+                    "group_id": item.group_info.id,
+                    "group_name": item.group_info.name,
+                    "permission": item.permission,
+                    'is_admin': item.is_admin
+                });
+            }
+
+            return item_data;
+        },
+
+        // for common repo
+        prepareAvailableGroups: function(options) {
+            var groups = [];
+
+            if (app.pageOptions.enable_share_to_all_groups) {
+                $.ajax({
+                    url: Common.getUrl({
+                        name: 'shareable_groups'
+                    }),
+                    type: 'GET',
+                    dataType: 'json',
+                    cache: false,
+                    success: function(data){
+                        for (var i = 0, len = data.length; i < len; i++) {
+                            groups.push({
+                                'id': data[i].id,
+                                'name': data[i].name
+                            });
+                        }
+                        groups.sort(function(a, b) {
+                            return Common.compareTwoWord(a.name, b.name);
+                        });
+                    },
+                    error: function(xhr, textStatus, errorThrown) {
+                        // do nothing
+                    },
+                    complete: function() {
+                        options.callback(groups);
+                    }
+                });
+            } else {
+                groups = app.pageOptions.joined_groups_exclude_address_book || [];
+                options.callback(groups);
+            }
+        },
+
+        // for group owned repo
+        prepareAvailableGroupsForGroupOwnedRepo: function(options) {
+            var groups = [];
+            $.ajax({
+                url: Common.getUrl({
+                    name: 'all_groups'
+                }),
+                type: 'GET',
+                dataType: 'json',
+                cache: false,
+                success: function(data){
+                    for (var i = 0, len = data.length; i < len; i++) {
+                        groups.push({
+                            'id': data[i].id,
+                            'name': data[i].name
+                        });
+                    }
+                    groups.sort(function(a, b) {
+                        return Common.compareTwoWord(a.name, b.name);
+                    });
+                },
+                error: function(xhr, textStatus, errorThrown) {
+                    // do nothing
+                },
+                complete: function() {
+                    options.callback(groups);
+                }
+            });
+        },
+
         dirGroupSharePanelInit: function() {
+            var _this = this;
+
             var $loadingTip = this.$('.loading-tip').show();
             var $panel = this.$('#dir-group-share');
             var $table = $('table', $panel);
             var $add_item = $('#add-dir-group-share-item');
+
+            var url, data;
             var repo_id = this.repo_id,
                 path = this.dirent_path;
 
-            $.ajax({
-                url: Common.getUrl({
+            if (this.parent_group_id) { // group owned repo
+                url = Common.getUrl({
+                    name: 'group_owned_repo_group_share',
+                    repo_id: repo_id
+                });
+                data = {
+                    'path': path
+                };
+            } else {
+                url = Common.getUrl({
                     name: 'dir_shared_items',
                     repo_id: repo_id
-                }),
-                data: {
+                });
+                data = {
                     'p': path,
                     'share_type': 'group'
-                },
+                };
+            }
+
+            $.ajax({
+                url: url,
+                data: data,
                 cache: false,
                 dataType: 'json',
                 success: function(data) {
+                    // for 'group owned repo', the data is like
+                    // `[{"permission":"rw","group_id":4,"group_name":"ab group"}]`
                     $(data).each(function(index, item) {
                         var new_item = new FolderShareItemView({
                             'repo_id': repo_id,
                             'path': path,
-                            'item_data': {
-                                "group_id": item.group_info.id,
-                                "group_name": item.group_info.name,
-                                "permission": item.permission,
-                                'is_admin': item.is_admin,
-                                'for_user': false
-                            }
+                            'item_data': _this.prepareGroupItemData(item)
                         });
                         $add_item.after(new_item.el);
                     });
 
-                    var groups = [];
-                    var prepareGroupsSelector = function() {
+                    var prepareGroupsSelector = function(groups) {
                         var g_opts = '';
                         for (var i = 0, len = groups.length; i < len; i++) {
                             g_opts += '<option value="' + groups[i].id + '" data-index="' + i + '">' + groups[i].name + '</option>';
@@ -675,49 +833,12 @@ define([
                             placeholder: gettext("Select groups"),
                             escapeMarkup: function(m) { return m; }
                         });
-                    };
-                    if (app.pageOptions.enable_share_to_all_groups) {
-                        $.ajax({
-                            url: Common.getUrl({
-                                name: 'shareable_groups'
-                            }),
-                            type: 'GET',
-                            dataType: 'json',
-                            cache: false,
-                            success: function(data){
-                                for (var i = 0, len = data.length; i < len; i++) {
-                                    groups.push({
-                                        'id': data[i].id,
-                                        'name': data[i].name
-                                    });
-                                }
-                                groups.sort(function(a, b) {
-                                    return Common.compareTwoWord(a.name, b.name);
-                                });
-                            },
-                            error: function(xhr, textStatus, errorThrown) {
-                                var pre_msg = gettext("Failed to fetch groups:");
-                                var err_msg;
-                                if (xhr.responseText) {
-                                    if (xhr.status == 403) {
-                                        err_msg = gettext("Permission error");
-                                    } else {
-                                        err_msg = xhr.responseJSON.error_msg ? xhr.responseJSON.error_msg : gettext('Error');
-                                    }
-                                } else {
-                                    err_msg = gettext('Please check the network.');
-                                }
-                                $('.error', $panel).html(pre_msg + ' ' + err_msg).show();
-                            },
-                            complete: function() {
-                                prepareGroupsSelector();
-                                $table.removeClass('hide');
-                            }
-                        });
-                    } else {
-                        groups = app.pageOptions.joined_groups_exclude_address_book || [];
-                        prepareGroupsSelector();
                         $table.removeClass('hide');
+                    };
+                    if (_this.parent_group_id) { // group owned repo
+                        _this.prepareAvailableGroupsForGroupOwnedRepo({'callback': prepareGroupsSelector});
+                    } else {
+                        _this.prepareAvailableGroups({'callback': prepareGroupsSelector});
                     }
                 },
                 error: function(xhr, textStatus, errorThrown) {
@@ -744,6 +865,8 @@ define([
         },
 
         dirUserShare: function () {
+            var _this = this;
+
             var $panel = $('#dir-user-share');
             var $form = this.$('#add-dir-user-share-item'); // pseudo form
 
@@ -761,34 +884,47 @@ define([
             var $error = $('.error', $panel);
             var $submitBtn = $('[type="submit"]', $form);
 
-            Common.disableButton($submitBtn);
-            $.ajax({
-                url: Common.getUrl({
+            var url, method, data;
+            if (this.parent_group_id) { // group owned repo
+                url = Common.getUrl({
+                    name: 'group_owned_repo_user_share',
+                    repo_id: repo_id
+                });
+                method = 'POST';
+                data = {
+                    'permission': perm,
+                    'path': path,
+                    'username': emails.split(',')
+                };
+            } else {
+                url = Common.getUrl({
                     name: 'dir_shared_items',
                     repo_id: repo_id
-                }) + '?p=' + encodeURIComponent(path),
-                dataType: 'json',
-                method: 'PUT',
-                beforeSend: Common.prepareCSRFToken,
-                traditional: true,
-                data: {
+                }) + '?p=' + encodeURIComponent(path);
+                method = 'PUT';
+                data = {
                     'share_type': 'user',
                     'username': emails.split(','),
                     'permission': perm
-                },
+                };
+            }
+
+            Common.disableButton($submitBtn);
+            $.ajax({
+                url: url,
+                dataType: 'json',
+                method: method,
+                beforeSend: Common.prepareCSRFToken,
+                traditional: true,
+                data: data,
                 success: function(data) {
+                    // success: [{permission: "rw", user_name: "llj", user_email: "llj@1.com", user_contact_email: "llj@1.com"}]
                     if (data.success.length > 0) {
                         $(data.success).each(function(index, item) {
                             var new_item = new FolderShareItemView({
                                 'repo_id': repo_id,
                                 'path': path,
-                                'item_data': {
-                                    "user_email": item.user_info.name,
-                                    "user_name": item.user_info.nickname,
-                                    "permission": item.permission,
-                                    'is_admin': item.is_admin,
-                                    'for_user': true
-                                }
+                                'item_data': _this.prepareUserItemData(item)
                             });
                             $add_item.after(new_item.el);
                         });
@@ -822,6 +958,8 @@ define([
         },
 
         dirGroupShare: function () {
+            var _this = this;
+
             var $panel = $('#dir-group-share');
             var $form = this.$('#add-dir-group-share-item'); // pseudo form
 
@@ -840,34 +978,46 @@ define([
             var $error = $('.error', $panel);
             var $submitBtn = $('[type="submit"]', $form);
 
-            Common.disableButton($submitBtn);
-            $.ajax({
-                url: Common.getUrl({
+            var url, method, data;
+            if (this.parent_group_id) {
+                url = Common.getUrl({
+                    name: 'group_owned_repo_group_share',
+                    repo_id: repo_id
+                });
+                method = 'POST';
+                data = {
+                    'path': path,
+                    'group_id': groups,
+                    'permission': perm
+                };
+            } else {
+                url = Common.getUrl({
                     name: 'dir_shared_items',
                     repo_id: repo_id
-                }) + '?p=' + encodeURIComponent(path),
-                dataType: 'json',
-                method: 'PUT',
-                beforeSend: Common.prepareCSRFToken,
-                traditional: true,
-                data: {
+                }) + '?p=' + encodeURIComponent(path);
+                method = 'PUT';
+                data = {
                     'share_type': 'group',
                     'group_id': groups,
                     'permission': perm
-                },
+                };
+            }
+
+            Common.disableButton($submitBtn);
+            $.ajax({
+                url: url,
+                dataType: 'json',
+                method: method,
+                beforeSend: Common.prepareCSRFToken,
+                traditional: true,
+                data: data,
                 success: function(data) {
                     if (data.success.length > 0) {
                         $(data.success).each(function(index, item) {
                             var new_item = new FolderShareItemView({
                                 'repo_id': repo_id,
                                 'path': path,
-                                'item_data': {
-                                    "group_id": item.group_info.id,
-                                    "group_name": item.group_info.name,
-                                    "permission": item.permission,
-                                    'is_admin': item.is_admin,
-                                    'for_user': false
-                                }
+                                'item_data': _this.prepareGroupItemData(item)
                             });
                             $add_item.after(new_item.el);
                         });
