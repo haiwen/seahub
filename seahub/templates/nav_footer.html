@@ -1,6 +1,9 @@
 {% load i18n %}
 <a href="{{SITE_ROOT}}help/" target="_blank" class="item">{% trans "Help" %}</a>
 <a href="#" class="js-about item">{% trans "About" %}</a>
+{% if enable_terms_and_conditions %}
+<a href="{{SITE_ROOT}}terms/" class="item">{% trans "Terms" %}</a>
+{% endif %}
 <a href="{% url 'download_client' %}" class="item last-item"><span aria-hidden="true" class="sf2-icon-monitor vam"></span> <span class="vam">{% trans "Clients" %}</span></a>
 
 <div class="about-content hide">
