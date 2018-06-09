@@ -78,10 +78,7 @@ class TermsAndConditions(models.Model):
                 date_active__lte=timezone.now(),
                 slug=slug).latest('date_active')
         except TermsAndConditions.DoesNotExist:
-            if slug == DEFAULT_TERMS_SLUG:
-                active_terms = TermsAndConditions.create_default_terms()
-            else:  # pragma: nocover
-                raise Http404
+            raise Http404
 
         return active_terms
 
