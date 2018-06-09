@@ -11,8 +11,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: seahub\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2018-06-09 11:28+0800\n"
-"PO-Revision-Date: 2018-06-09 03:30+0000\n"
+"POT-Creation-Date: 2018-06-09 16:04+0800\n"
+"PO-Revision-Date: 2018-06-09 08:06+0000\n"
 "Last-Translator: zheng xie <xiez1989@gmail.com>\n"
 "Language-Team: Czech (http://www.transifex.com/haiwen/seahub/language/cs/)\n"
 "MIME-Version: 1.0\n"
@@ -1408,7 +1408,7 @@ msgstr "Upravit kontakt"
 #: seahub/templates/snippets/document_file_viewer.html:55
 #: seahub/templates/snippets/shared_link_js.html:107
 #: seahub/templates/snippets/spreadsheet_convert_js.html:39
-#: seahub/templates/sysadmin/settings.html:282
+#: seahub/templates/sysadmin/settings.html:291
 #: seahub/templates/sysadmin/sys_inst_info_base.html:75
 #: seahub/templates/sysadmin/sys_inst_info_user.html:178
 #: seahub/templates/sysadmin/sys_org_admin.html:126
@@ -2693,7 +2693,7 @@ msgstr "Nastavit Vaše heslo"
 
 #: seahub/invitations/templates/invitations/token_view.html:26
 #: seahub/notifications/templates/notifications/notification_list.html:59
-#: seahub/templates/sysadmin/settings.html:254
+#: seahub/templates/sysadmin/settings.html:263
 #: seahub/templates/sysadmin/sys_inst_info_user.html:157
 #: seahub/templates/sysadmin/useradmin_js.html:262
 #: seahub/templates/sysadmin/userinfo.html:619
@@ -3166,7 +3166,7 @@ msgstr "Opravdu chcete smazat svůj účet?"
 #: seahub/profile/templates/profile/set_profile.html:283
 #: seahub/templates/js/sysadmin-templates.html:1050
 #: seahub/templates/sysadmin/settings.html:238
-#: seahub/templates/sysadmin/settings.html:276 seahub/views/sysadmin.py:1325
+#: seahub/templates/sysadmin/settings.html:285 seahub/views/sysadmin.py:1325
 #: seahub/views/sysadmin.py:1382 seahub/views/sysadmin.py:2178
 #: seahub/views/sysadmin.py:2260 seahub/views/sysadmin.py:2431
 msgid "Success"
@@ -6184,8 +6184,8 @@ msgstr "Pokud bude zapnuté, desktopoví klienti nebudou schopni synchronizovat 
 
 #: seahub/templates/sysadmin/settings.html:186
 msgid ""
-"If turn on, enable system admin add T&C, all users need to accept terms "
-"before using."
+"Enable system admin to add Terms and Conditions, and all users will have to "
+"accept the terms."
 msgstr ""
 
 #: seahub/templates/sysadmin/sudo_mode.html:8

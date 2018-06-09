@@ -17,9 +17,9 @@ msgid ""
 msgstr ""
 "Project-Id-Version: seahub\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2018-06-09 11:28+0800\n"
-"PO-Revision-Date: 2018-06-09 03:52+0000\n"
-"Last-Translator: C_Q <helloworld.c@outlook.com>\n"
+"POT-Creation-Date: 2018-06-09 16:04+0800\n"
+"PO-Revision-Date: 2018-06-09 08:25+0000\n"
+"Last-Translator: llj <lingjun.li1@gmail.com>\n"
 "Language-Team: Chinese (China) (http://www.transifex.com/haiwen/seahub/language/zh_CN/)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -1399,7 +1399,7 @@ msgstr "编辑联系人"
 #: seahub/templates/snippets/document_file_viewer.html:55
 #: seahub/templates/snippets/shared_link_js.html:107
 #: seahub/templates/snippets/spreadsheet_convert_js.html:39
-#: seahub/templates/sysadmin/settings.html:282
+#: seahub/templates/sysadmin/settings.html:291
 #: seahub/templates/sysadmin/sys_inst_info_base.html:75
 #: seahub/templates/sysadmin/sys_inst_info_user.html:178
 #: seahub/templates/sysadmin/sys_org_admin.html:126
@@ -2684,7 +2684,7 @@ msgstr "设置你的密码"
 
 #: seahub/invitations/templates/invitations/token_view.html:26
 #: seahub/notifications/templates/notifications/notification_list.html:59
-#: seahub/templates/sysadmin/settings.html:254
+#: seahub/templates/sysadmin/settings.html:263
 #: seahub/templates/sysadmin/sys_inst_info_user.html:157
 #: seahub/templates/sysadmin/useradmin_js.html:262
 #: seahub/templates/sysadmin/userinfo.html:619
@@ -3151,7 +3151,7 @@ msgstr "确定要注销该帐号吗？"
 #: seahub/profile/templates/profile/set_profile.html:283
 #: seahub/templates/js/sysadmin-templates.html:1050
 #: seahub/templates/sysadmin/settings.html:238
-#: seahub/templates/sysadmin/settings.html:276 seahub/views/sysadmin.py:1325
+#: seahub/templates/sysadmin/settings.html:285 seahub/views/sysadmin.py:1325
 #: seahub/views/sysadmin.py:1382 seahub/views/sysadmin.py:2178
 #: seahub/views/sysadmin.py:2260 seahub/views/sysadmin.py:2431
 msgid "Success"
@@ -6169,9 +6169,9 @@ msgstr "如果启用此功能，桌面客户端将不能同步 Seafile 目录外
 
 #: seahub/templates/sysadmin/settings.html:186
 msgid ""
-"If turn on, enable system admin add T&C, all users need to accept terms "
-"before using."
-msgstr "如果启用此功能，系统管理员可以添加软件使用条款，所有用户在使用前需接受条款。"
+"Enable system admin to add Terms and Conditions, and all users will have to "
+"accept the terms."
+msgstr "允许系统管理员添加条款，并且所有用户都必须接受该条款。"
 
 #: seahub/templates/sysadmin/sudo_mode.html:8
 msgid "Confirm password to continue"
