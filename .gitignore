@@ -36,9 +36,14 @@ shutdown.sh
 cscope*
 docs/_build/*
 deps
-ghostdriver.log
+
 seahub/thumbnail/thumb/*
+
 .virtualenv
+.env
+.dumbjump
+.projectile
+.pytest_cache/
 tags
 
 seahub/frontend/webpack-stats.dev.json
