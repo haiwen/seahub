@@ -8,8 +8,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: seahub\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2018-05-18 14:46+0800\n"
-"PO-Revision-Date: 2018-05-18 06:47+0000\n"
+"POT-Creation-Date: 2018-06-09 11:28+0800\n"
+"PO-Revision-Date: 2018-06-09 03:30+0000\n"
 "Last-Translator: zheng xie <xiez1989@gmail.com>\n"
 "Language-Team: Arabic (http://www.transifex.com/haiwen/seahub/language/ar/)\n"
 "MIME-Version: 1.0\n"
@@ -32,7 +32,7 @@ msgid "Login id can't be empty"
 msgstr ""
 
 #: seahub/api2/endpoints/admin/account.py:218
-#: seahub/api2/endpoints/admin/users.py:328
+#: seahub/api2/endpoints/admin/users.py:331
 #, python-format
 msgid "Login id %s already exists."
 msgstr ""
@@ -122,28 +122,38 @@ msgstr ""
 msgid "must be an integer that is greater than or equal to 0."
 msgstr ""
 
-#: seahub/api2/endpoints/copy_move_task.py:78 seahub/views/ajax.py:631
+#: seahub/api2/endpoints/copy_move_task.py:80 seahub/views/ajax.py:631
 msgid "Invalid destination path"
 msgstr "مسار الوجهة غير صحيح"
 
-#: seahub/api2/endpoints/copy_move_task.py:82
+#: seahub/api2/endpoints/copy_move_task.py:84
 msgid "Destination path is too long."
 msgstr "مسار الوجهة طويل جدا."
 
-#: seahub/api2/endpoints/copy_move_task.py:133 seahub/views/ajax.py:725
+#: seahub/api2/endpoints/copy_move_task.py:149
+#: seahub/api2/endpoints/repos_batch.py:368 seahub/api2/views.py:1551
+#: seahub/api2/views.py:1587 seahub/api2/views.py:1631
+#: seahub/api2/views.py:1675 seahub/api2/views.py:1720
+#: seahub/api2/views.py:1768 seahub/api2/views.py:2165
+#: seahub/api2/views.py:2283 seahub/templates/js/templates.html:436
+#: seahub/views/ajax.py:684 seahub/views/ajax.py:762 seahub/views/ajax.py:832
+msgid "Out of quota."
+msgstr "نفدت المساحة المخصصة."
+
+#: seahub/api2/endpoints/copy_move_task.py:164 seahub/views/ajax.py:725
 #, python-format
 msgid "Can not move directory %(src)s to its subdirectory %(des)s"
 msgstr "لا يمكن نقل المجلد %(src)s إلى المجلدات المتفرعة منه %(des)s"
 
-#: seahub/api2/endpoints/copy_move_task.py:148
+#: seahub/api2/endpoints/copy_move_task.py:179
 #: seahub/api2/endpoints/file.py:260 seahub/api2/endpoints/file.py:336
 #: seahub/api2/endpoints/file.py:448 seahub/api2/endpoints/file.py:531
 #: seahub/api2/endpoints/file.py:593 seahub/views/ajax.py:444
-#: seahub/views/ajax.py:515 seahub/views/file.py:1149
+#: seahub/views/ajax.py:515 seahub/views/file.py:1152
 msgid "File is locked"
 msgstr "الملف مقفل"
 
-#: seahub/api2/endpoints/copy_move_task.py:211
+#: seahub/api2/endpoints/copy_move_task.py:242
 msgid "Cancel failed"
 msgstr "فشل الإلغاء"
 
@@ -151,7 +161,7 @@ msgstr "فشل الإلغاء"
 msgid "username invalid."
 msgstr ""
 
-#: seahub/api2/endpoints/dir_shared_items.py:321 seahub/oauth/views.py:174
+#: seahub/api2/endpoints/dir_shared_items.py:321 seahub/oauth/views.py:183
 #, python-format
 msgid "User %s not found."
 msgstr ""
@@ -161,8 +171,8 @@ msgstr ""
 #: seahub/api2/endpoints/wiki_pages.py:146
 #: seahub/api2/endpoints/wiki_pages.py:186
 #: seahub/api2/endpoints/wiki_pages.py:196 seahub/group/views.py:366
-#: seahub/views/__init__.py:943 seahub/views/ajax.py:1091
-#: seahub/views/ajax.py:1095 seahub/views/file.py:1146
+#: seahub/views/__init__.py:943 seahub/views/ajax.py:1147
+#: seahub/views/ajax.py:1151 seahub/views/file.py:1149
 #: seahub/views/sysadmin.py:1931 seahub/views/wiki.py:134
 msgid "Internal Server Error"
 msgstr "خطأ داخلي في الخادم"
@@ -173,7 +183,7 @@ msgstr "خطأ داخلي في الخادم"
 #: seahub/templates/sysadmin/sys_useradmin_admins.html:92
 #: seahub/thumbnail/views.py:51 seahub/thumbnail/views.py:163
 #: seahub/views/__init__.py:778 seahub/views/ajax.py:222
-#: seahub/views/ajax.py:816 seahub/views/wiki.py:201
+#: seahub/views/ajax.py:872 seahub/views/wiki.py:201
 msgid "Permission denied."
 msgstr "الترخيص مرفوض."
 
@@ -185,14 +195,14 @@ msgid "Tag can only contain letters, numbers, dot, hyphen or underscore."
 msgstr ""
 
 #: seahub/api2/endpoints/group_members.py:93
-#: seahub/api2/endpoints/group_members.py:289 seahub/views/ajax.py:1283
+#: seahub/api2/endpoints/group_members.py:289 seahub/views/ajax.py:1339
 #, python-format
 msgid "User %s is already a group member."
 msgstr "المستخدم %s عضو في المجموعة بالفعل."
 
 #: seahub/api2/endpoints/group_members.py:99
-#: seahub/api2/endpoints/group_members.py:298 seahub/api2/views.py:1349
-#: seahub/views/ajax.py:1292
+#: seahub/api2/endpoints/group_members.py:298 seahub/api2/views.py:1414
+#: seahub/views/ajax.py:1348
 #, python-format
 msgid "User %s not found in organization."
 msgstr "المستخدم %s غير موجود في النظام."
@@ -214,7 +224,7 @@ msgid "%s is already invited."
 msgstr "لقد تم دعوة %s مسبقا."
 
 #: seahub/api2/endpoints/invitations.py:68
-#: seahub/api2/endpoints/invitations.py:129 seahub/base/accounts.py:706
+#: seahub/api2/endpoints/invitations.py:129 seahub/base/accounts.py:709
 #, python-format
 msgid "User %s already exists."
 msgstr "المستخدم %s موجود مسبقا."
@@ -239,16 +249,16 @@ msgstr "المستخدم %s موجود مسبقا."
 msgid "Error"
 msgstr "خطأ"
 
-#: seahub/api2/endpoints/repo_set_password.py:48 seahub/api2/views.py:3315
+#: seahub/api2/endpoints/repo_set_password.py:48 seahub/api2/views.py:3432
 msgid "Wrong password"
 msgstr "كلمة مرور غير صحيحة"
 
-#: seahub/api2/endpoints/repo_set_password.py:51 seahub/api2/views.py:3318
+#: seahub/api2/endpoints/repo_set_password.py:51 seahub/api2/views.py:3435
 #: seahub/views/ajax.py:679 seahub/views/sysadmin.py:2117
 msgid "Internal server error"
 msgstr "خطأ داخلي في الخادم"
 
-#: seahub/api2/endpoints/repo_set_password.py:54 seahub/api2/views.py:3321
+#: seahub/api2/endpoints/repo_set_password.py:54 seahub/api2/views.py:3438
 msgid "Decrypt library error"
 msgstr "خطأ فك تشفير المكتبة"
 
@@ -365,7 +375,7 @@ msgid "Email or Username"
 msgstr "البريد أو اسم المستخدم"
 
 #: seahub/auth/forms.py:27 seahub/auth/forms.py:213
-#: seahub/base/accounts.py:684
+#: seahub/base/accounts.py:687
 #: seahub/invitations/templates/invitations/token_view.html:13
 #: seahub/profile/templates/profile/set_profile.html:17
 #: seahub/profile/templates/profile/set_profile.html:86
@@ -377,7 +387,7 @@ msgstr "البريد أو اسم المستخدم"
 #: seahub/templates/registration/login.html:32
 #: seahub/templates/registration/registration_form.html:24
 #: seahub/templates/snippets/file_share_popup.html:18
-#: seahub/templates/sysadmin/settings.html:106
+#: seahub/templates/sysadmin/settings.html:105
 #: seahub/templates/sysadmin/sudo_mode.html:10
 #: seahub/templates/sysadmin/sys_org_admin.html:32
 #: seahub/templates/sysadmin/sys_org_info_user.html:71
@@ -436,7 +446,7 @@ msgid "New password confirmation"
 msgstr "تأكيد كلمة المرور"
 
 #: seahub/auth/forms.py:183 seahub/auth/forms.py:225
-#: seahub/base/accounts.py:740
+#: seahub/base/accounts.py:743
 msgid "The two password fields didn't match."
 msgstr "كلمتي المرور غير متطابقتان."
 
@@ -448,7 +458,7 @@ msgstr "كلمو المرور السابقة"
 msgid "Your old password was entered incorrectly. Please enter it again."
 msgstr "كلمة المرور السابقة غير صحيحة. الرجاء إعادة الادخال."
 
-#: seahub/auth/forms.py:214 seahub/base/accounts.py:686
+#: seahub/auth/forms.py:214 seahub/base/accounts.py:689
 msgid "Password (again)"
 msgstr "كلمة المرور(إعادة)"
 
@@ -456,15 +466,15 @@ msgstr "كلمة المرور(إعادة)"
 msgid "This account has been frozen due to too many failed login attempts."
 msgstr "تم تجميد الحساب نتيجة لمحاولات دخول فاشلة كثيرة."
 
-#: seahub/auth/views.py:260
+#: seahub/auth/views.py:262
 msgid "Logged out"
 msgstr "تم تسجيل الخروج"
 
-#: seahub/auth/views.py:307
+#: seahub/auth/views.py:309
 msgid "Failed to send email, please contact administrator."
 msgstr "فشل ارسال البريد، اتصل بالمسئول."
 
-#: seahub/auth/views.py:366
+#: seahub/auth/views.py:368
 msgid "Can not update password, please contact LDAP admin."
 msgstr "لا يمكن تحديث كلمة المرور، الرجاء الاتصال بمدير LDAP."
 
@@ -530,51 +540,51 @@ msgstr "تم تحديث شعارك بنجاح"
 msgid "Successfully deleted the requested avatars."
 msgstr "تم حذف الشعارات المحددة بنجاح."
 
-#: seahub/base/accounts.py:398
+#: seahub/base/accounts.py:401
 #, python-format
 msgid "Account %(account)s froze on %(site)s."
 msgstr "الحساب %(account)s تجمد على %(site)s."
 
-#: seahub/base/accounts.py:675
+#: seahub/base/accounts.py:678
 msgid "Email address"
 msgstr "عنوان الريد"
 
-#: seahub/base/accounts.py:680
+#: seahub/base/accounts.py:683
 msgid "Username"
 msgstr "اسم المستخدم"
 
-#: seahub/base/accounts.py:681
+#: seahub/base/accounts.py:684
 msgid "This value must be of length 40"
 msgstr "القيمة يجب أن تكون بطول 40 خانة"
 
-#: seahub/base/accounts.py:696 seahub/forms.py:30
+#: seahub/base/accounts.py:699 seahub/forms.py:30
 #: seahub/views/sysadmin.py:1942
 msgid "The number of users exceeds the limit."
 msgstr "عدد المستخدمين تجاوز الحد المسموح."
 
-#: seahub/base/accounts.py:700
+#: seahub/base/accounts.py:703
 msgid "Enter a valid email address."
 msgstr "أدخل عنوان بريد صحيح."
 
-#: seahub/base/accounts.py:710
+#: seahub/base/accounts.py:713
 msgid "Invalid user id."
 msgstr "رمز دخول غير صحيح."
 
-#: seahub/base/accounts.py:761 seahub/templates/js/templates.html:526
+#: seahub/base/accounts.py:764 seahub/templates/js/templates.html:526
 #: seahub/templates/js/templates.html:1796
 #: seahub/templates/js/templates.html:1842
 msgid "name"
 msgstr "اسم"
 
-#: seahub/base/accounts.py:764
+#: seahub/base/accounts.py:767
 msgid "department"
 msgstr "ادارة"
 
-#: seahub/base/accounts.py:767
+#: seahub/base/accounts.py:770
 msgid "telephone"
 msgstr "التلفون"
 
-#: seahub/base/accounts.py:770
+#: seahub/base/accounts.py:773
 msgid "note"
 msgstr "ملاحظة"
 
@@ -923,40 +933,46 @@ msgid "Added or modified"
 msgstr "مضاف أو معدل"
 
 #: seahub/base/templatetags/seahub_tags.py:150
-#: seahub/base/templatetags/seahub_tags.py:219
+#: seahub/base/templatetags/seahub_tags.py:221
 msgid "Reverted library to status at"
 msgstr "مكتبة معادة الى الحالة في"
 
 #: seahub/base/templatetags/seahub_tags.py:153
-#: seahub/base/templatetags/seahub_tags.py:222
+#: seahub/base/templatetags/seahub_tags.py:224
 #, python-format
 msgid "Reverted file \"%(file)s\" to status at %(time)s."
 msgstr "ملف \"%(file)s\" معاد الى الحالة في %(time)s."
 
 #: seahub/base/templatetags/seahub_tags.py:157
-#: seahub/base/templatetags/seahub_tags.py:226
+#: seahub/base/templatetags/seahub_tags.py:228
 msgid "Recovered deleted directory"
 msgstr "تم استعادة مجلد محذوف"
 
 #: seahub/base/templatetags/seahub_tags.py:159
-#: seahub/base/templatetags/seahub_tags.py:228 seahub/views/ajax.py:1150
+#: seahub/base/templatetags/seahub_tags.py:230 seahub/views/ajax.py:1206
 msgid "Changed library name or description"
 msgstr "تم تغيير اسم او وصف المكتبة"
 
 #: seahub/base/templatetags/seahub_tags.py:161
-#: seahub/base/templatetags/seahub_tags.py:230
+#: seahub/base/templatetags/seahub_tags.py:232
 msgid "Auto merge by seafile system"
 msgstr "دمج تلقائي بواسطة نظام seafile"
 
-#: seahub/base/templatetags/seahub_tags.py:305
-#: seahub/base/templatetags/seahub_tags.py:341
+#: seahub/base/templatetags/seahub_tags.py:163
+#: seahub/base/templatetags/seahub_tags.py:234
+#: seahub/templates/js/templates.html:1907
+msgid "Created library"
+msgstr "مكتبة منشأة"
+
+#: seahub/base/templatetags/seahub_tags.py:309
+#: seahub/base/templatetags/seahub_tags.py:345
 #: seahub/templates/file_revisions.html:116
 #: seahub/templates/view_file_base.html:551 seahub/templates/wiki/wiki.html:90
 #: seahub/templates/wiki/wiki_list.html:320
 msgid "Just now"
 msgstr "الان"
 
-#: seahub/base/templatetags/seahub_tags.py:316
+#: seahub/base/templatetags/seahub_tags.py:320
 #, python-format
 msgid "%(days)d day ago"
 msgid_plural "%(days)d days ago"
@@ -967,7 +983,7 @@ msgstr[3] "منذ %(days)d أيام"
 msgstr[4] "منذ %(days)d يوما"
 msgstr[5] "منذ %(days)d يوم"
 
-#: seahub/base/templatetags/seahub_tags.py:323
+#: seahub/base/templatetags/seahub_tags.py:327
 #, python-format
 msgid "%(hours)d hour ago"
 msgid_plural "%(hours)d hours ago"
@@ -978,7 +994,7 @@ msgstr[3] "منذ %(hours)d ساعات"
 msgstr[4] "منذ %(hours)d ساعة"
 msgstr[5] "منذ %(hours)d ساعة"
 
-#: seahub/base/templatetags/seahub_tags.py:330
+#: seahub/base/templatetags/seahub_tags.py:334
 #, python-format
 msgid "%(minutes)d minute ago"
 msgid_plural "%(minutes)d minutes ago"
@@ -989,7 +1005,7 @@ msgstr[3] "منذ %(minutes)d دقائق"
 msgstr[4] "منذ %(minutes)d دقيقة"
 msgstr[5] "منذ %(minutes)d دقيقة"
 
-#: seahub/base/templatetags/seahub_tags.py:336
+#: seahub/base/templatetags/seahub_tags.py:340
 #, python-format
 msgid "%(seconds)d second ago"
 msgid_plural "%(seconds)d seconds ago"
@@ -1000,7 +1016,7 @@ msgstr[3] "منذ %(seconds)d ثواني"
 msgstr[4] "منذ %(seconds)d ثانية"
 msgstr[5] "منذ %(seconds)d ثانية"
 
-#: seahub/base/templatetags/seahub_tags.py:460
+#: seahub/base/templatetags/seahub_tags.py:464
 #: seahub/institutions/templates/institutions/user_info.html:72
 #: seahub/templates/js/sysadmin-templates.html:738
 #: seahub/templates/js/sysadmin-templates.html:749
@@ -1041,7 +1057,7 @@ msgstr[5] "منذ %(seconds)d ثانية"
 msgid "Read-Write"
 msgstr "قراءة-كتابة"
 
-#: seahub/base/templatetags/seahub_tags.py:462
+#: seahub/base/templatetags/seahub_tags.py:466
 #: seahub/templates/js/sysadmin-templates.html:740
 #: seahub/templates/js/sysadmin-templates.html:750
 #: seahub/templates/js/sysadmin-templates.html:755
@@ -1078,8 +1094,8 @@ msgstr "قراءة-كتابة"
 msgid "Read-Only"
 msgstr "للقراءة فقط"
 
-#: seahub/base/templatetags/seahub_tags.py:486
-#: seahub/base/templatetags/seahub_tags.py:498
+#: seahub/base/templatetags/seahub_tags.py:490
+#: seahub/base/templatetags/seahub_tags.py:502
 #, python-format
 msgid "%(size)d byte"
 msgid_plural "%(size)d bytes"
@@ -1090,27 +1106,27 @@ msgstr[3] "%(size)d بايتات"
 msgstr[4] "%(size)d بايت"
 msgstr[5] "%(size)d بايت"
 
-#: seahub/base/templatetags/seahub_tags.py:500
+#: seahub/base/templatetags/seahub_tags.py:504
 #, python-format
 msgid "%s KB"
 msgstr "%s KB"
 
-#: seahub/base/templatetags/seahub_tags.py:502
+#: seahub/base/templatetags/seahub_tags.py:506
 #, python-format
 msgid "%s MB"
 msgstr "%s MB"
 
-#: seahub/base/templatetags/seahub_tags.py:504
+#: seahub/base/templatetags/seahub_tags.py:508
 #, python-format
 msgid "%s GB"
 msgstr "%s GB"
 
-#: seahub/base/templatetags/seahub_tags.py:506
+#: seahub/base/templatetags/seahub_tags.py:510
 #, python-format
 msgid "%s TB"
 msgstr "%s TB"
 
-#: seahub/base/templatetags/seahub_tags.py:508
+#: seahub/base/templatetags/seahub_tags.py:512
 #, python-format
 msgid "%s PB"
 msgstr "%s PB"
@@ -1195,7 +1211,6 @@ msgstr "العمليات"
 #: seahub/templates/sysadmin/userinfo.html:76
 #: seahub/templates/sysadmin/userinfo.html:88
 #: seahub/templates/sysadmin/userinfo.html:100
-#: seahub/templates/view_file_markdown.html:17
 #: seahub/templates/view_file_text.html:22
 #: seahub/templates/wiki/wiki_list.html:53
 msgid "Edit"
@@ -1400,7 +1415,7 @@ msgstr "تحرير جهة الاتصال"
 #: seahub/templates/snippets/document_file_viewer.html:55
 #: seahub/templates/snippets/shared_link_js.html:107
 #: seahub/templates/snippets/spreadsheet_convert_js.html:39
-#: seahub/templates/sysadmin/settings.html:275
+#: seahub/templates/sysadmin/settings.html:282
 #: seahub/templates/sysadmin/sys_inst_info_base.html:75
 #: seahub/templates/sysadmin/sys_inst_info_user.html:178
 #: seahub/templates/sysadmin/sys_org_admin.html:126
@@ -1512,8 +1527,8 @@ msgid "Name %s is not valid"
 msgstr "الاسم %s غير صحيح"
 
 #: seahub/forms.py:97 seahub/views/ajax.py:406 seahub/views/ajax.py:618
-#: seahub/views/ajax.py:899 seahub/views/ajax.py:903 seahub/views/ajax.py:907
-#: seahub/views/ajax.py:1137 seahub/views/file.py:1651
+#: seahub/views/ajax.py:955 seahub/views/ajax.py:959 seahub/views/ajax.py:963
+#: seahub/views/ajax.py:1193 seahub/views/file.py:1654
 #: seahub/views/sysadmin.py:1590 seahub/views/sysadmin.py:1608
 msgid "Argument missing"
 msgstr "متغير مفقود"
@@ -1839,10 +1854,10 @@ msgstr "الوصف مطلوب."
 #: seahub/group/views.py:126 seahub/share/views.py:228
 #: seahub/views/__init__.py:540 seahub/views/ajax.py:163
 #: seahub/views/ajax.py:424 seahub/views/ajax.py:431 seahub/views/ajax.py:494
-#: seahub/views/ajax.py:501 seahub/views/ajax.py:637 seahub/views/ajax.py:1075
-#: seahub/views/ajax.py:1117 seahub/views/file.py:829 seahub/views/file.py:967
-#: seahub/views/file.py:1017 seahub/views/file.py:1140
-#: seahub/views/file.py:1660 seahub/views/repo.py:110 seahub/views/repo.py:187
+#: seahub/views/ajax.py:501 seahub/views/ajax.py:637 seahub/views/ajax.py:1131
+#: seahub/views/ajax.py:1173 seahub/views/file.py:832 seahub/views/file.py:970
+#: seahub/views/file.py:1020 seahub/views/file.py:1143
+#: seahub/views/file.py:1663 seahub/views/repo.py:110 seahub/views/repo.py:187
 #: seahub/views/repo.py:284
 msgid "Permission denied"
 msgstr "الترخيص مرفوض"
@@ -2371,7 +2386,7 @@ msgstr "إجمالي المستخدمين"
 #: seahub/templates/js/templates.html:481
 #: seahub/templates/js/templates.html:1531
 #: seahub/templates/sysadmin/base.html:57
-#: seahub/templates/sysadmin/settings.html:98
+#: seahub/templates/sysadmin/settings.html:97
 #: seahub/templates/sysadmin/sys_org_info_group.html:9
 #: seahub/templates/sysadmin/sys_org_info_library.html:9
 #: seahub/templates/sysadmin/sys_org_info_setting.html:9
@@ -2685,7 +2700,7 @@ msgstr "حدد كلمة مرور"
 
 #: seahub/invitations/templates/invitations/token_view.html:26
 #: seahub/notifications/templates/notifications/notification_list.html:59
-#: seahub/templates/sysadmin/settings.html:247
+#: seahub/templates/sysadmin/settings.html:254
 #: seahub/templates/sysadmin/sys_inst_info_user.html:157
 #: seahub/templates/sysadmin/useradmin_js.html:262
 #: seahub/templates/sysadmin/userinfo.html:619
@@ -2942,8 +2957,8 @@ msgstr "أكثر"
 msgid "Successfully cleared all notices."
 msgstr "تم تصفية كل الملاحظات بنجاح."
 
-#: seahub/oauth/views.py:70 seahub/oauth/views.py:94 seahub/oauth/views.py:120
-#: seahub/oauth/views.py:150 seahub/oauth/views.py:162
+#: seahub/oauth/views.py:71 seahub/oauth/views.py:95 seahub/oauth/views.py:129
+#: seahub/oauth/views.py:159 seahub/oauth/views.py:171
 msgid "Error, please contact administrator."
 msgstr ""
 
@@ -2982,7 +2997,7 @@ msgstr "تلميح: الطريقة الأخيرة أكثر أمنا، ولكنه
 #: seahub/templates/js/templates.html:1577
 #: seahub/templates/js/templates.html:2405
 #: seahub/templates/sysadmin/base.html:39
-#: seahub/templates/sysadmin/settings.html:7
+#: seahub/templates/sysadmin/settings.html:6
 #: seahub/templates/sysadmin/sys_org_info_group.html:11
 #: seahub/templates/sysadmin/sys_org_info_library.html:11
 #: seahub/templates/sysadmin/sys_org_info_setting.html:11
@@ -3161,8 +3176,8 @@ msgstr "هل حقا تريد حذف حسابك؟"
 
 #: seahub/profile/templates/profile/set_profile.html:283
 #: seahub/templates/js/sysadmin-templates.html:1050
-#: seahub/templates/sysadmin/settings.html:231
-#: seahub/templates/sysadmin/settings.html:269 seahub/views/sysadmin.py:1325
+#: seahub/templates/sysadmin/settings.html:238
+#: seahub/templates/sysadmin/settings.html:276 seahub/views/sysadmin.py:1325
 #: seahub/views/sysadmin.py:1382 seahub/views/sysadmin.py:2178
 #: seahub/views/sysadmin.py:2260 seahub/views/sysadmin.py:2431
 msgid "Success"
@@ -3259,7 +3274,7 @@ msgstr "فشل إرسال رابط تحميل مشترك. لم يتم تكوين
 #: seahub/share/views.py:332 seahub/thumbnail/views.py:39
 #: seahub/thumbnail/views.py:158 seahub/views/ajax.py:210
 #: seahub/views/ajax.py:399 seahub/views/ajax.py:476 seahub/views/ajax.py:540
-#: seahub/views/ajax.py:606 seahub/views/ajax.py:809 seahub/views/ajax.py:1108
+#: seahub/views/ajax.py:606 seahub/views/ajax.py:865 seahub/views/ajax.py:1164
 msgid "Library does not exist."
 msgstr "المكتبة غير موجودة."
 
@@ -3370,7 +3385,7 @@ msgid ""
 msgstr "ينظم %(site_name)s الملفات في مكتبات. كل مكتبة يمكن مزامنتها مشاركتها بشكل منفصل. و مع ذلك، بما أنك الان مستخدم ضيف، لا يمكنك إنشاء مكتبات."
 
 #: seahub/templates/choose_register.html:13
-#: seahub/templates/registration/login.html:83
+#: seahub/templates/registration/login.html:71
 #: seahub/templates/registration/registration_form.html:11
 msgid "Signup"
 msgstr "تسجيل جديد"
@@ -3448,7 +3463,7 @@ msgstr "المسار الحالي:"
 #: seahub/templates/js/templates.html:1273
 #: seahub/templates/js/templates.html:1665
 #: seahub/templates/js/templates.html:2263
-#: seahub/templates/sysadmin/settings.html:61
+#: seahub/templates/sysadmin/settings.html:60
 #: seahub/templates/sysadmin/sys_trafficadmin.html:26
 msgid "User"
 msgstr "مستخدم"
@@ -3544,7 +3559,7 @@ msgstr "تم حفظ المسودة."
 #: seahub/templates/js/templates.html:1721
 #: seahub/templates/js/templates.html:2600
 #: seahub/templates/js/templates.html:2637
-#: seahub/templates/sysadmin/settings.html:138
+#: seahub/templates/sysadmin/settings.html:137
 #: seahub/templates/sysadmin/sys_virus_scan_records.html:11
 msgid "Library"
 msgstr "مكتبة"
@@ -4437,7 +4452,6 @@ msgid "Operation"
 msgstr ""
 
 #: seahub/templates/js/sysadmin-templates.html:989
-#: seahub/templates/view_file_markdown.html:11
 #: seahub/templates/view_file_text.html:16
 msgid "Detail"
 msgstr "تفصيل"
@@ -4648,10 +4662,6 @@ msgstr "نسخ"
 #: seahub/templates/js/templates.html:425
 msgid "Upload Files"
 msgstr "تحميل ملفات"
-
-#: seahub/templates/js/templates.html:436
-msgid "Out of quota"
-msgstr ""
 
 #: seahub/templates/js/templates.html:439
 #: seahub/templates/js/templates.html:440
@@ -4958,10 +4968,6 @@ msgstr "نوع المكتبة"
 #: seahub/templates/js/templates.html:1850
 msgid "Select libraries to share"
 msgstr "حدد المكتبات للمشاركة"
-
-#: seahub/templates/js/templates.html:1907
-msgid "Created library"
-msgstr "مكتبة منشأة"
 
 #: seahub/templates/js/templates.html:1911
 msgid "Deleted library"
@@ -5316,19 +5322,24 @@ msgstr ""
 msgid "About"
 msgstr "حول"
 
-#: seahub/templates/nav_footer.html:4
+#: seahub/templates/nav_footer.html:5
+#: seahub/templates/sysadmin/settings.html:183
+msgid "Terms"
+msgstr ""
+
+#: seahub/templates/nav_footer.html:7
 msgid "Clients"
 msgstr ""
 
-#: seahub/templates/nav_footer.html:8
+#: seahub/templates/nav_footer.html:11
 msgid "Server Version: "
 msgstr "إصدارة الخادم: "
 
-#: seahub/templates/nav_footer.html:8
+#: seahub/templates/nav_footer.html:11
 msgid "Seafile"
 msgstr ""
 
-#: seahub/templates/nav_footer.html:9
+#: seahub/templates/nav_footer.html:12
 msgid "About Us"
 msgstr ""
 
@@ -5383,23 +5394,15 @@ msgstr ""
 msgid "Single Sign-On"
 msgstr ""
 
-#: seahub/templates/registration/login.html:74
-msgid "Shibboleth"
-msgstr "Shibboleth"
-
-#: seahub/templates/registration/login.html:78
-msgid "Kerberos"
-msgstr "Kerberos"
-
-#: seahub/templates/registration/login.html:129
+#: seahub/templates/registration/login.html:117
 msgid "Failed to refresh the CAPTCHA, please try again later."
 msgstr "فشل تحديث كلمة التحقق، الرجاء المحاولة مرة أخرى لاحقاً."
 
-#: seahub/templates/registration/login.html:137
+#: seahub/templates/registration/login.html:125
 msgid "Email or username cannot be blank"
 msgstr "البريد الإلكتروني أو اسم المستخدم لا يمكن أن يكون فارغاً"
 
-#: seahub/templates/registration/login.html:141
+#: seahub/templates/registration/login.html:129
 #: seahub/templates/registration/password_change_form.html:66
 #: seahub/templates/registration/registration_form.html:88
 #: seahub/templates/sysadmin/sudo_mode.html:35
@@ -5741,13 +5744,11 @@ msgid "you can also press → "
 msgstr "يمكنك ايضا الضفط على → "
 
 #: seahub/templates/snippets/file_encoding.html:5
-#: seahub/templates/view_file_markdown.html:24
 #: seahub/templates/view_file_text.html:29
 msgid "Encoding:"
 msgstr "الترميز:"
 
 #: seahub/templates/snippets/file_encoding.html:8
-#: seahub/templates/view_file_markdown.html:27
 #: seahub/templates/view_file_text.html:32
 msgid "auto detect"
 msgstr "اكتشاف تلقائي"
@@ -5913,11 +5914,11 @@ msgstr "الرجاء ادخال أيام صحيحة"
 msgid "Used:"
 msgstr "مُستخدم:"
 
-#: seahub/templates/snippets/space_and_traffic.html:19
+#: seahub/templates/snippets/space_and_traffic.html:17
 msgid "Traffic this month:"
 msgstr "الحركة هذا الشهر:"
 
-#: seahub/templates/snippets/space_and_traffic.html:23
+#: seahub/templates/snippets/space_and_traffic.html:21
 msgid "Payment"
 msgstr "الدفع"
 
@@ -5986,20 +5987,20 @@ msgstr "حذف مكتبة"
 msgid "Successfully deleted 1 item."
 msgstr "تم حذف عنصر واحد بنجاح."
 
-#: seahub/templates/sysadmin/settings.html:11
+#: seahub/templates/sysadmin/settings.html:10
 msgid ""
 "Note: Settings via web interface are saved in database table (seahub-"
 "db/constance_config). They have a higher priority over the settings in "
 "config files."
 msgstr "ملاحظة: الاعدادات في واجهة الويب يتم حفظها في جدول قاعدة البيانات (seahub-db/constance_config). هذه الاعدادات لديها أولوية أكبر من الاعدادات المحفوظة في ملف الاعداد."
 
-#: seahub/templates/sysadmin/settings.html:16
+#: seahub/templates/sysadmin/settings.html:15
 msgid ""
 "The URL of the server, like https://seafile.example.com or "
 "http://192.168.1.2:8000"
 msgstr ""
 
-#: seahub/templates/sysadmin/settings.html:21
+#: seahub/templates/sysadmin/settings.html:20
 msgid ""
 "The internal URL for downloading/uploading files. Users will not be able to "
 "download/upload files if this is not set correctly. If you config Seafile "
@@ -6007,189 +6008,195 @@ msgid ""
 "https://seafile.example.com/seafhttp ."
 msgstr ""
 
-#: seahub/templates/sysadmin/settings.html:25
+#: seahub/templates/sysadmin/settings.html:24
 msgid "Branding"
 msgstr ""
 
-#: seahub/templates/sysadmin/settings.html:28
+#: seahub/templates/sysadmin/settings.html:27
 msgid "Site title shown in a browser tab"
 msgstr ""
 
-#: seahub/templates/sysadmin/settings.html:33
+#: seahub/templates/sysadmin/settings.html:32
 msgid "Site name used in email sending"
 msgstr ""
 
-#: seahub/templates/sysadmin/settings.html:46
+#: seahub/templates/sysadmin/settings.html:45
 msgid "Login Background Image"
 msgstr ""
 
-#: seahub/templates/sysadmin/settings.html:51
+#: seahub/templates/sysadmin/settings.html:50
 msgid "ENABLE_BRANDING_CSS"
 msgstr ""
 
-#: seahub/templates/sysadmin/settings.html:52
+#: seahub/templates/sysadmin/settings.html:51
 msgid "Use custom CSS"
 msgstr ""
 
-#: seahub/templates/sysadmin/settings.html:57
+#: seahub/templates/sysadmin/settings.html:56
 msgid "Custom CSS"
 msgstr ""
 
-#: seahub/templates/sysadmin/settings.html:64
+#: seahub/templates/sysadmin/settings.html:63
 msgid "allow new registrations"
 msgstr ""
 
-#: seahub/templates/sysadmin/settings.html:65
+#: seahub/templates/sysadmin/settings.html:64
 msgid ""
 "Allow new user registrations. Uncheck this to prevent anyone from creating a"
 " new account."
 msgstr ""
 
-#: seahub/templates/sysadmin/settings.html:70
+#: seahub/templates/sysadmin/settings.html:69
 msgid "activate after registration"
 msgstr ""
 
-#: seahub/templates/sysadmin/settings.html:71
+#: seahub/templates/sysadmin/settings.html:70
 msgid ""
 "Activate user immediately after registration. If unchecked, a user need to "
 "be activated by administrator or via activation email"
 msgstr ""
 
-#: seahub/templates/sysadmin/settings.html:76
+#: seahub/templates/sysadmin/settings.html:75
 msgid "send activation email"
 msgstr ""
 
-#: seahub/templates/sysadmin/settings.html:77
+#: seahub/templates/sysadmin/settings.html:76
 msgid "Send activation Email after user registration."
 msgstr ""
 
-#: seahub/templates/sysadmin/settings.html:82
+#: seahub/templates/sysadmin/settings.html:81
 msgid "keep sign in"
 msgstr ""
 
-#: seahub/templates/sysadmin/settings.html:83
+#: seahub/templates/sysadmin/settings.html:82
 msgid "Number of days that keep user sign in."
 msgstr ""
 
-#: seahub/templates/sysadmin/settings.html:88
+#: seahub/templates/sysadmin/settings.html:87
 msgid "The maximum number of failed login attempts before showing CAPTCHA."
 msgstr ""
 
-#: seahub/templates/sysadmin/settings.html:93
+#: seahub/templates/sysadmin/settings.html:92
 msgid "Freeze user account when failed login attempts exceed limit."
 msgstr ""
 
-#: seahub/templates/sysadmin/settings.html:101
+#: seahub/templates/sysadmin/settings.html:100
 msgid "Enable users to share libraries to any groups in the system."
 msgstr ""
 
-#: seahub/templates/sysadmin/settings.html:109
+#: seahub/templates/sysadmin/settings.html:108
 msgid "strong password"
 msgstr ""
 
-#: seahub/templates/sysadmin/settings.html:110
+#: seahub/templates/sysadmin/settings.html:109
 msgid "Force user to use a strong password when sign up or change password."
 msgstr ""
 
-#: seahub/templates/sysadmin/settings.html:115
+#: seahub/templates/sysadmin/settings.html:114
 msgid "force password change"
 msgstr ""
 
-#: seahub/templates/sysadmin/settings.html:116
+#: seahub/templates/sysadmin/settings.html:115
 msgid ""
 "Force user to change password when account is newly added or reset by admin"
 msgstr ""
 
-#: seahub/templates/sysadmin/settings.html:121
+#: seahub/templates/sysadmin/settings.html:120
 msgid "password minimum length"
 msgstr ""
 
-#: seahub/templates/sysadmin/settings.html:122
+#: seahub/templates/sysadmin/settings.html:121
 msgid "The least number of characters an account password should include."
 msgstr ""
 
-#: seahub/templates/sysadmin/settings.html:127
+#: seahub/templates/sysadmin/settings.html:126
 msgid "password strength level"
 msgstr ""
 
-#: seahub/templates/sysadmin/settings.html:128
+#: seahub/templates/sysadmin/settings.html:127
 msgid ""
 "The level(1-4) of an account password's strength. For example, '3' means "
 "password must have at least 3 of the following: num, upper letter, lower "
 "letter and other symbols"
 msgstr ""
 
-#: seahub/templates/sysadmin/settings.html:133
+#: seahub/templates/sysadmin/settings.html:132
 msgid "enable two factor authentication"
 msgstr ""
 
-#: seahub/templates/sysadmin/settings.html:134
+#: seahub/templates/sysadmin/settings.html:133
 msgid "Enable two factor authentication"
 msgstr ""
 
-#: seahub/templates/sysadmin/settings.html:141
+#: seahub/templates/sysadmin/settings.html:140
 msgid "library history"
 msgstr ""
 
-#: seahub/templates/sysadmin/settings.html:142
+#: seahub/templates/sysadmin/settings.html:141
 msgid "Allow user to change library history settings"
 msgstr ""
 
-#: seahub/templates/sysadmin/settings.html:147
+#: seahub/templates/sysadmin/settings.html:146
 msgid "encrypted library"
 msgstr ""
 
-#: seahub/templates/sysadmin/settings.html:148
+#: seahub/templates/sysadmin/settings.html:147
 msgid "Allow user to create encrypted libraries"
 msgstr ""
 
-#: seahub/templates/sysadmin/settings.html:153
+#: seahub/templates/sysadmin/settings.html:152
 msgid "library password minimum length"
 msgstr ""
 
-#: seahub/templates/sysadmin/settings.html:154
+#: seahub/templates/sysadmin/settings.html:153
 msgid ""
 "The least number of characters an encrypted library password should include."
 msgstr ""
 
-#: seahub/templates/sysadmin/settings.html:159
+#: seahub/templates/sysadmin/settings.html:158
 msgid "download/upload link password minimum length"
 msgstr ""
 
-#: seahub/templates/sysadmin/settings.html:160
+#: seahub/templates/sysadmin/settings.html:159
 msgid ""
 "The least number of characters a download/upload link password should "
 "include."
 msgstr ""
 
-#: seahub/templates/sysadmin/settings.html:165
+#: seahub/templates/sysadmin/settings.html:164
 msgid ""
 "Allow user to add organization libraries. Otherwise, only system admin can "
 "add organization libraries."
 msgstr ""
 
-#: seahub/templates/sysadmin/settings.html:169
+#: seahub/templates/sysadmin/settings.html:168
 msgid "Online Preview"
 msgstr ""
 
-#: seahub/templates/sysadmin/settings.html:172
+#: seahub/templates/sysadmin/settings.html:171
 msgid "text file extensions"
 msgstr ""
 
-#: seahub/templates/sysadmin/settings.html:173
+#: seahub/templates/sysadmin/settings.html:172
 msgid ""
 "Extensions of text files that can be online previewed, each suffix is "
 "separated by a comma."
 msgstr ""
 
-#: seahub/templates/sysadmin/settings.html:177
+#: seahub/templates/sysadmin/settings.html:176
 msgid "Sync"
 msgstr ""
 
-#: seahub/templates/sysadmin/settings.html:180
+#: seahub/templates/sysadmin/settings.html:179
 msgid ""
 "If turn on, the desktop clients will not be able to sync a folder outside "
 "the default Seafile folder."
+msgstr ""
+
+#: seahub/templates/sysadmin/settings.html:186
+msgid ""
+"If turn on, enable system admin add T&C, all users need to accept terms "
+"before using."
 msgstr ""
 
 #: seahub/templates/sysadmin/sudo_mode.html:8
@@ -6876,7 +6883,6 @@ msgid "Sorry, this user is not registered yet."
 msgstr "المعذرة، هذا المستخدم لم مسجل بعد."
 
 #: seahub/templates/view_file_base.html:53
-#: seahub/templates/view_file_markdown.html:11
 #: seahub/templates/view_file_text.html:16
 msgid "updated this file"
 msgstr "حدث هذا الملف"
@@ -7074,7 +7080,7 @@ msgid "Successfully edited the permission."
 msgstr ""
 
 #: seahub/thumbnail/views.py:45 seahub/thumbnail/views.py:169
-#: seahub/views/__init__.py:572 seahub/views/file.py:1163
+#: seahub/views/__init__.py:572 seahub/views/file.py:1166
 msgid "Invalid arguments."
 msgstr "معاملات غير صحيحة."
 
@@ -7317,7 +7323,7 @@ msgstr "عاجز عن عرض تعديلات المكتبة"
 
 #: seahub/views/__init__.py:531 seahub/views/__init__.py:574
 #: seahub/views/__init__.py:773 seahub/views/__init__.py:899
-#: seahub/views/ajax.py:1070 seahub/views/file.py:1646
+#: seahub/views/ajax.py:1126 seahub/views/file.py:1649
 msgid "Library does not exist"
 msgstr "المكتبة غير موجودة"
 
@@ -7342,7 +7348,7 @@ msgstr "خطأ غير معروف"
 msgid "\"%s\" does not exist."
 msgstr "\"%s\" غير موجود."
 
-#: seahub/views/__init__.py:924 seahub/views/file.py:1129
+#: seahub/views/__init__.py:924 seahub/views/file.py:1132
 msgid "Internal Error"
 msgstr "خطأ داخلي"
 
@@ -7371,11 +7377,11 @@ msgstr "لا يوجد مسار."
 msgid "The group doesn't exist"
 msgstr "المجموعة غير موجودة"
 
-#: seahub/views/ajax.py:228 seahub/views/ajax.py:829 seahub/views/ajax.py:1131
+#: seahub/views/ajax.py:228 seahub/views/ajax.py:885 seahub/views/ajax.py:1187
 msgid "Library is encrypted."
 msgstr "المكتبة مشفرة."
 
-#: seahub/views/ajax.py:234 seahub/views/ajax.py:835
+#: seahub/views/ajax.py:234 seahub/views/ajax.py:891
 msgid "Error: no head commit id"
 msgstr "خطأ: لا يوجد معرف حفظ رئيسي"
 
@@ -7393,45 +7399,41 @@ msgstr "خطأ داخلي. فشل حذف %s."
 msgid "Destination path is too long for %s."
 msgstr "مسار الوجهة طويل جدا على %s."
 
-#: seahub/views/ajax.py:684
-msgid "Out of quota."
-msgstr "نفدت المساحة المخصصة."
-
-#: seahub/views/ajax.py:767
+#: seahub/views/ajax.py:796
 msgid "You do not have permission to copy files/folders in this directory"
 msgstr "ليس لديك الصلاحية لنسخ الملفات/المجلدات في هذا المجلد"
 
-#: seahub/views/ajax.py:774
+#: seahub/views/ajax.py:803
 #, python-format
 msgid "Can not copy directory %(src)s to its subdirectory %(des)s"
 msgstr "لا يمكن نسخ المجلد %(src)s إلى المجلدات المتفرعة منه %(des)s"
 
-#: seahub/views/ajax.py:869
+#: seahub/views/ajax.py:925
 msgid "Failed to get file block list"
 msgstr "فشل الحصول على قائمة حظر الملف"
 
-#: seahub/views/ajax.py:878
+#: seahub/views/ajax.py:934
 msgid "FileServer access token invalid."
 msgstr ""
 
-#: seahub/views/ajax.py:912
+#: seahub/views/ajax.py:968
 msgid "Wrong repo id"
 msgstr "معرف تقرير خاطئ"
 
-#: seahub/views/ajax.py:921 seahub/views/file.py:368 seahub/views/file.py:826
-#: seahub/views/file.py:1014 seahub/views/file.py:1655
+#: seahub/views/ajax.py:977 seahub/views/file.py:368 seahub/views/file.py:829
+#: seahub/views/file.py:1017 seahub/views/file.py:1658
 msgid "File does not exist"
 msgstr "الملف غير موجود"
 
-#: seahub/views/ajax.py:1058
+#: seahub/views/ajax.py:1114
 msgid "Bad upload link token."
 msgstr "رمز رابط تحميل غير صالح."
 
-#: seahub/views/ajax.py:1065
+#: seahub/views/ajax.py:1121
 msgid "Bad repo id in upload link."
 msgstr "معرف تقرير غير صالح في رابط التحميل."
 
-#: seahub/views/ajax.py:1153
+#: seahub/views/ajax.py:1209
 msgid "No conflict in the merge."
 msgstr "لا يوجد تعارضات في الدمج."
 
@@ -7443,7 +7445,7 @@ msgstr "HTTPError: فشل في فتح ملف على الإنترنت"
 msgid "URLError: failed to open file online"
 msgstr "URLError: فشل في فتح ملف على الإنترنت"
 
-#: seahub/views/file.py:170 seahub/views/file.py:1181
+#: seahub/views/file.py:170 seahub/views/file.py:1184
 msgid "The encoding you chose is not proper."
 msgstr "الترميز الذي اخترته غير مناسب."
 
@@ -7452,71 +7454,71 @@ msgid "Unknown file encoding"
 msgstr "ترميز الملف غير معروف"
 
 #: seahub/views/file.py:305 seahub/views/file.py:314 seahub/views/file.py:476
-#: seahub/views/file.py:520 seahub/views/file.py:628
+#: seahub/views/file.py:523 seahub/views/file.py:631
 #, python-format
 msgid "File size surpasses %s, can not be opened online."
 msgstr "حجم الملف يتجاوز %s، ولا يمكن فتحه على الإنترنت."
 
-#: seahub/views/file.py:329 seahub/views/file.py:553
+#: seahub/views/file.py:329 seahub/views/file.py:556
 msgid "The library is encrypted, can not open file online."
 msgstr "المكتبة مشفرة، و لا يمكن فتحها على الانترنت."
 
-#: seahub/views/file.py:374 seahub/views/file.py:387 seahub/views/file.py:592
-#: seahub/views/file.py:712 seahub/views/file.py:726 seahub/views/file.py:743
-#: seahub/views/file.py:851 seahub/views/file.py:1036
-#: seahub/views/file.py:1049 seahub/views/file.py:1254
+#: seahub/views/file.py:374 seahub/views/file.py:387 seahub/views/file.py:595
+#: seahub/views/file.py:715 seahub/views/file.py:729 seahub/views/file.py:746
+#: seahub/views/file.py:854 seahub/views/file.py:1039
+#: seahub/views/file.py:1052 seahub/views/file.py:1257
 msgid "Unable to view file"
 msgstr "غير قادر على عرض الملف"
 
-#: seahub/views/file.py:576
+#: seahub/views/file.py:579
 msgid "Error when prepare Office Online file preview page."
 msgstr ""
 
-#: seahub/views/file.py:598
+#: seahub/views/file.py:601
 msgid "Error when prepare OnlyOffice file preview page."
 msgstr ""
 
-#: seahub/views/file.py:769
+#: seahub/views/file.py:772
 msgid "Unable to download file, invalid file path"
 msgstr "غير قادر على تنزيل الملف، مسار الملف غير صحيح"
 
-#: seahub/views/file.py:778
+#: seahub/views/file.py:781
 msgid "Unable to download file, wrong file path"
 msgstr "غير قادر على تنزيل الملف، مسار الملف خاطئ"
 
-#: seahub/views/file.py:783
+#: seahub/views/file.py:786
 msgid "Unable to download file, share link traffic is used up."
 msgstr "غير قادر على تنزيل الملف، تم استهلاك حركة بيانات رابط المشاركة."
 
-#: seahub/views/file.py:799
+#: seahub/views/file.py:802
 msgid "Unable to download file."
 msgstr ""
 
-#: seahub/views/file.py:861
+#: seahub/views/file.py:864
 msgid "Unable to view raw file, share link traffic is used up."
 msgstr "غير قادر على عرض الملف، تم استهلاك حركة بيانات رابط المشاركة."
 
-#: seahub/views/file.py:1153
+#: seahub/views/file.py:1156
 msgid "The library does not exist."
 msgstr "المكتبة غير موجودة."
 
-#: seahub/views/file.py:1157
+#: seahub/views/file.py:1160
 msgid "The library is encrypted."
 msgstr "المكتبة مشفرة."
 
-#: seahub/views/file.py:1242
+#: seahub/views/file.py:1245
 msgid "Unable to edit file"
 msgstr "غير قادر على تحرير الملف"
 
-#: seahub/views/file.py:1248
+#: seahub/views/file.py:1251
 msgid "The file does not exist."
 msgstr "الملف غير موجود."
 
-#: seahub/views/file.py:1280
+#: seahub/views/file.py:1283
 msgid "Edit online is not offered for this type of file."
 msgstr "التحرير على الانترنت ليس مسموح لهذا النوع من الملفات."
 
-#: seahub/views/file.py:1397 seahub/views/file.py:1402
+#: seahub/views/file.py:1400 seahub/views/file.py:1405
 msgid "Unable to download file"
 msgstr "غير قادر على تنزيل الملف"
 
