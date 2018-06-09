@@ -2,7 +2,6 @@
 {% load seahub_tags i18n %}
 
 {% block cur_settings %}tab-cur{% endblock %}
-
 {% block right_panel %}
 <h3 class="hd">{% trans "Settings" %}</h3>
 
@@ -180,6 +179,14 @@
         {% trans "If turn on, the desktop clients will not be able to sync a folder outside the default Seafile folder." as help_tip %}
         {% include "snippets/web_settings_form.html" %}
     {% endwith %}
+
+    <h4>{% trans "Terms" %}</h4>
+
+    {% with type="terms" setting_display_name="ENABLE_TERMS_AND_CONDITIONS" setting_name="ENABLE_TERMS_AND_CONDITIONS" setting_val=config_dict.ENABLE_TERMS_AND_CONDITIONS%}
+        {% trans "If turn on, enable system admin add T&C, all users need to accept terms before using." as help_tip %}
+        {% include "snippets/web_settings_form.html" %}
+    {% endwith %}
+
 </div>
 {% endblock %}
 
@@ -319,5 +326,17 @@ $('.web-setting-file-upload-input').on('change', function() {
         error: ajaxErrorHandler
     });
 });
+
+$('.terms-checked').on('change', function() {
+    var checkbox = $(this),
+        key = checkbox.attr('name');
+
+    if (checkbox.prop('checked')) {
+        $('.tc').removeClass('hide');
+    } else {
+        $('.tc').addClass('hide');
+    }
+});
+
 </script>
 {% endblock %}

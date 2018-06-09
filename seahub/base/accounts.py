@@ -329,7 +329,7 @@ class User(object):
         signals.user_deleted.send(sender=self.__class__, username=username)
 
         Profile.objects.delete_profile_by_user(username)
-        if settings.ENABLE_TERMS_AND_CONDITIONS:
+        if config.ENABLE_TERMS_AND_CONDITIONS:
             from termsandconditions.models import UserTermsAndConditions
             UserTermsAndConditions.objects.filter(username=username).delete()
         self.delete_user_options(username)
