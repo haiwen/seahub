@@ -16,6 +16,7 @@ define([
 
         template: _.template($('#group-repo-tmpl').html()),
         mobileTemplate: _.template($('#group-repo-mobile-tmpl').html()),
+
         renameTemplate: _.template($("#repo-rename-form-template").html()),
 
         events: {
@@ -259,6 +260,14 @@ define([
 
             if (app.pageOptions.is_pro) {
                 options.is_admin = this.model.get('is_admin'); // 'is_admin': repo is shared to the group with 'admin' perm
+
+                // private share group owned repo
+                if (this.parent_group_id && this.is_staff) {
+                    $.extend(options, {
+                        'is_address_book_group_admin': true,
+                        'parent_group_id': this.parent_group_id
+                    });
+                }
             }
 
             new ShareView(options);

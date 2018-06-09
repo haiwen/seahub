@@ -143,6 +143,7 @@ define([
 
                 // Group
                 case 'groups': return siteRoot + 'api/v2.1/groups/';
+                case 'all_groups': return siteRoot + 'api/v2.1/all-groups/';
                 case 'shareable_groups': return siteRoot + 'api/v2.1/shareable-groups/';
                 case 'search_group': return siteRoot + 'api/v2.1/search-group/';
                 case 'group': return siteRoot + 'api/v2.1/groups/' + options.group_id + '/';
@@ -153,6 +154,8 @@ define([
                 case 'group_repos': return siteRoot + 'api2/groups/' + options.group_id + '/repos/';
                 case 'group_owned_repos': return siteRoot + 'api/v2.1/groups/' + options.group_id + '/group-owned-libraries/';
                 case 'group_owned_repo': return siteRoot + 'api/v2.1/groups/' + options.group_id + '/group-owned-libraries/' + options.repo_id + '/';
+                case 'group_owned_repo_user_share': return siteRoot + 'api/v2.1/group-owned-libraries/' + options.repo_id + '/user-share/';
+                case 'group_owned_repo_group_share': return siteRoot + 'api/v2.1/group-owned-libraries/' + options.repo_id + '/group-share/';
                 case 'address_book_sub_groups': return siteRoot + 'api/v2.1/address-book/groups/' + options.group_id + '/sub-groups/';
                 case 'address_book_group_search_members': return siteRoot + 'api/v2.1/address-book/groups/' + options.group_id + '/search-member/';
                 case 'group_discussions': return siteRoot + 'api2/groups/' + options.group_id + '/discussions/';

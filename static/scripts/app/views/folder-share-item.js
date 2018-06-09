@@ -22,7 +22,9 @@ define([
 
             // show info about 'is_admin'
             this.show_admin = false;
-            if (app.pageOptions.is_pro && this.path == '/') {
+            if (app.pageOptions.is_pro &&
+                this.path == '/' &&
+                !this.item_data.parent_group_id) { // not for group owned repo
                 this.show_admin = true;
             }
 
@@ -60,27 +62,55 @@ define([
 
         editPerm: function (e) {
             var _this = this;
-            var item_data = this.item_data;
-            var url = Common.getUrl({
-                    name: 'dir_shared_items',
-                    repo_id: this.repo_id
-                }) + '?p=' + encodeURIComponent(this.path);
-            if (item_data.for_user) {
-                url += '&share_type=user&username=' + encodeURIComponent(item_data.user_email);
-            } else {
-                url += '&share_type=group&group_id=' + encodeURIComponent(item_data.group_id);
-            }
             var perm = $(e.currentTarget).val();
+            var item_data = this.item_data;
+            var url, method, data;
+            if (item_data.parent_group_id) { // group owned repo
+                if (item_data.for_user) {
+                    url = Common.getUrl({
+                        name: 'group_owned_repo_user_share',
+                        repo_id: this.repo_id
+                    });
+                    data = {
+                        'username': item_data.user_email,
+                        'permission': perm,
+                        'path': this.path
+                    };
+                } else {
+                    url = Common.getUrl({
+                        name: 'group_owned_repo_group_share',
+                        repo_id: this.repo_id
+                    });
+                    data = {
+                        'group_id': item_data.group_id,
+                        'permission': perm,
+                        'path': this.path
+                    };
+                }
+                method = 'PUT';
+            } else {
+                url = Common.getUrl({
+                        name: 'dir_shared_items',
+                        repo_id: this.repo_id
+                    }) + '?p=' + encodeURIComponent(this.path);
+                if (item_data.for_user) {
+                    url += '&share_type=user&username=' + encodeURIComponent(item_data.user_email);
+                } else {
+                    url += '&share_type=group&group_id=' + encodeURIComponent(item_data.group_id);
+                }
+                data = {
+                    'permission': perm
+                };
+                method = 'POST';
+            }
             $.ajax({
                 url: url,
                 dataType: 'json',
-                method: 'POST',
+                method: method,
                 beforeSend: Common.prepareCSRFToken,
-                data: {
-                    'permission': perm
-                },
+                data: data,
                 success: function () {
-                    if (perm == 'admin'){
+                    if (perm == 'admin') {
                         item_data.is_admin = true;
                         item_data.permission = 'rw';
                     } else {
@@ -108,20 +138,45 @@ define([
         del: function () {
             var _this = this;
             var item_data = this.item_data;
-            var url = Common.getUrl({
-                    name: 'dir_shared_items',
-                    repo_id: this.repo_id
-                }) + '?p=' + encodeURIComponent(this.path);
-            if (item_data.for_user) {
-                url += '&share_type=user&username=' + encodeURIComponent(item_data.user_email);
+            var url, data = {};
+
+            if (item_data.parent_group_id) { // group owned repo
+                if (item_data.for_user) {
+                    url = Common.getUrl({
+                        name: 'group_owned_repo_user_share',
+                        repo_id: this.repo_id
+                    });
+                    data = {
+                        'username': item_data.user_email,
+                        'path': this.path
+                    };
+                } else {
+                    url = Common.getUrl({
+                        name: 'group_owned_repo_group_share',
+                        repo_id: this.repo_id
+                    });
+                    data = {
+                        'group_id': item_data.group_id,
+                        'p': this.path  // TODO: 'p'?
+                    };
+                }
             } else {
-                url += '&share_type=group&group_id=' + encodeURIComponent(item_data.group_id);
+                url = Common.getUrl({
+                        name: 'dir_shared_items',
+                        repo_id: this.repo_id
+                    }) + '?p=' + encodeURIComponent(this.path);
+                if (item_data.for_user) {
+                    url += '&share_type=user&username=' + encodeURIComponent(item_data.user_email);
+                } else {
+                    url += '&share_type=group&group_id=' + encodeURIComponent(item_data.group_id);
+                }
             }
             $.ajax({
                 url: url,
                 dataType: 'json',
                 method: 'DELETE',
                 beforeSend: Common.prepareCSRFToken,
+                data: data,
                 success: function () {
                     _this.remove();
                 },
