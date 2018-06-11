@@ -5,6 +5,8 @@ import { processor } from "./seafile-markdown2html"
 import Alert from 'react-s-alert';
 import isHotkey from 'is-hotkey';
 import { translate } from "react-i18next";
+import FileInfoView  from './topbarcomponent/file-info';
+
 const ReactDOM = require('react-dom');
 const className = require('classnames');
 const lodash = require('lodash');
@@ -42,7 +44,7 @@ class CodeMirror extends React.Component {
     this.codeMirror.on('focus', this.focusChanged.bind(this, true));
     this.codeMirror.on('blur', this.focusChanged.bind(this, false));
     this.codeMirror.on('scroll', this.scrollChanged);
-    this.codeMirror.setValue(this.props.defaultValue || this.props.initialValue || '');
+
   }
 
   componentWillUnmount () {
@@ -53,6 +55,7 @@ class CodeMirror extends React.Component {
   }
 
   componentWillReceiveProps(nextProps) {
+
     if (this.codeMirror && nextProps.initialValue !== undefined && nextProps.initialValue !== this.props.initialValue) {
       if (this.props.preserveScrollPosition) {
         var prevScrollPosition = this.codeMirror.getScrollInfo();
@@ -62,25 +65,10 @@ class CodeMirror extends React.Component {
         this.codeMirror.setValue(nextProps.initialValue);
       }
     }
-    if (typeof nextProps.options === 'object') {
-      for (let optionName in nextProps.options) {
-        if (nextProps.options.hasOwnProperty(optionName)) {
-          this.setOptionIfChanged(optionName, nextProps.options[optionName]);
-        }
-      }
-    }
+
   }
 
-  setOptionIfChanged (optionName, newValue) {
-    const oldValue = this.codeMirror.getOption(optionName);
-    if (!lodash.isEqual(oldValue, newValue)) {
-      this.codeMirror.setOption(optionName, newValue);
-    }
-  }
 
-  getCodeMirror () {
-    return this.codeMirror;
-  }
 
   focus = () => {
     if (this.codeMirror) {
@@ -120,7 +108,7 @@ class CodeMirror extends React.Component {
         <textarea
           ref={ref => this.textareaNode = ref}
           name={this.props.name || this.props.path}
-          defaultValue={this.props.value}
+          defaultValue={this.props.initialValue}
           autoComplete="off"
           autoFocus={this.props.autoFocus}
         />
@@ -160,6 +148,8 @@ class MoreMenu extends React.Component {
   }
 }
 
+let TransMoreMenu = translate("translations")(MoreMenu);
+
 
 /*
 
@@ -181,6 +171,16 @@ On Save:
 */
 
 class PlainMarkdownEditor extends React.Component {
+
+  constructor (props){
+    super (props);
+    this.options = {
+      lineNumbers: true,
+      mode: "markdown",
+      lineWrapping: true,
+      scrollbarStyle: null
+    }
+  }
 
   state = {
     html: "",
@@ -240,7 +240,7 @@ class PlainMarkdownEditor extends React.Component {
             <IconButton id={'saveButton'} text={t('save')} icon={"fa fa-save"} onMouseDown={this.props.onSave} disabled={!isSaveActive} isActive={isSaveActive} />
           </ButtonGroup>
         )}
-        <MoreMenu switchToRichTextEditor={this.props.switchToRichTextEditor} t={ t }/>
+        <TransMoreMenu switchToRichTextEditor={this.props.switchToRichTextEditor}/>
         <Alert stack={{limit: 3}} />
       </div>
     );
@@ -291,22 +291,17 @@ class PlainMarkdownEditor extends React.Component {
   }
 
   render() {
-    var options = {
-			lineNumbers: true,
-      mode: "markdown",
-      lineWrapping: true,
-		};
 
     return (
       <div className='seafile-editor'>
         <div className="seafile-editor-topbar">
-          <div className="title"><img src={ require('../assets/seafile-logo.png') } alt=""/></div>
+          <FileInfoView  fileInfo={this.props.fileInfo}/>
           {this.renderToolbar()}
         </div>
         <div className="seafile-editor-main d-flex">
           <div className="plain-editor-left-panel" onKeyDown={this.onHotKey} onMouseLeave={this.onLeaveLeftPanel} onMouseEnter={this.onEnterLeftPanel}  onScroll={this.state.leftIsBindScroll ? this.onLeftScroll : null}>
             <CodeMirror initialValue={this.props.initialValue}
-              onChange={this.updateCode} options={options} />
+              onChange={this.updateCode} options={this.options} />
           </div>
           <div className="plain-editor-right-panel" onMouseEnter={this.onEnterRightPanel} onMouseLeave={this.onLeaveRightPanel} onScroll={this.state.rightIsBindScroll ? this.onRightScroll :null}>
             <div className="preview">

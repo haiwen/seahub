@@ -1,56 +1,90 @@
-.seafile-viewer {
-  position: fixed;
-  width: 100%;
-  height: 100%;
-  min-width: 960px;
+#root {
+  height:100%;
 }
-
-.seafile-viewer-topbar {
-  width: 100%;
-  height: 68px;
-  display: flex;
-  justify-content: space-between;
+.seafile-md-viewer {
+  height: 100%;
+}
+.seafile-md-viewer-topbar {
+  padding: 10px;
   background-color: #fff;
-  padding: 0px 10px;
   border-bottom: 1px solid #e5e5e5;
   box-shadow: 0 3px 2px -2px rgba(200,200,200,.15);
-  user-select: none;
+  flex-shrink:0;
 }
-
-.seafile-viewer-main {
-  height: calc(100% - 68px);
-  width: 100%;
+.seafile-md-viewer-filename {
+  font-size:1.2rem;
+  margin-bottom:4px;
 }
-.viewer-left-panel {
-  height: 100%;
-  width: 25%;
-  background-color: #fafafa;
-  border-right: 1px solid rgb(230,230,221);
-  overflow-y: auto;
-  font-size: 0.875rem;
+.seafile-md-viewer-file-modify-time {
+  font-size: .8rem;
+  color: #666;
 }
-
-.viewer-left-panel .side-panel .nav {
-  padding-left: 6px;
-  color: #a0a0a0;
+.seafile-md-viewer-main {
+  flex:auto;
+  overflow:auto;
+  background:#fafaf9;
 }
-
-.viewer-right-panel {
-  height: 100%;
-  width: 75%;
-  background-color: rgb(250,250,249);
-  overflow-x: hidden;
+.seafile-md-viewer-main-panel {
+  flex:auto;
 }
-
-.viewer-right-panel .preview-container {
-  height: 100%;
-  overflow-y: auto;
-}
-
-.viewer-right-panel .rendered-markdown {
-  min-height: calc(100% - 40px);
+.seafile-md-viewer-rendered-content {
   background: #fff;
   padding:30px 30px 15px;
-  margin: 20px 40px;
-  border: 1px solid rgb(230,230,221);
+  border:1px solid #e6e6dd;
+  min-height: calc(100% - 60px);
+  margin-top:20px;
+  margin-bottom:20px;
+}
+.seafile-md-viewer-side-panel {
+  position:fixed;
+  margin-top:20px;
+  max-height:calc(100% - 120px);
+  overflow:hidden;
+  user-select: none;
+}
+.seafile-md-viewer-side-panel:hover {
+  overflow:auto;
+}
+@media (max-width:991.8px) {
+  .seafile-md-viewer-side-panel {
+    display:none;
+  }
+}
+@media (min-width:992px) {
+  .seafile-md-viewer-main-panel {
+    margin-left:5%;
+    max-width:calc(90% - 260px);
+  }
+  .seafile-md-viewer-side-panel {
+    width:260px;
+    right:5%;
+    padding-left: 1.25rem;
+    padding-right: 0.75rem;
+  }
+}
+.seafile-md-viewer-side-panel-heading {
+  padding:7px 0;
+  border-bottom: 1px solid #eee;
+  color: #a0a0a0;
+}
+.seafile-md-viewer-side-panel-content {
+  padding:8px 0;
+  font-size: 0.875rem;
+}
+.seafile-md-viewer-outline-heading2,
+.seafile-md-viewer-outline-heading3 {
+  margin-left: .75rem;
+  line-height: 2.5;
+  color:#666;
+  white-space: nowrap;
+  overflow:hidden;
+  text-overflow:ellipsis;
+  cursor:pointer;
+}
+.seafile-md-viewer-outline-heading3 {
+  margin-left: 2rem;
+}
+.seafile-md-viewer-outline-heading2:hover,
+.seafile-md-viewer-outline-heading3:hover {
+  color: #eb8205;
 }

@@ -1,5 +1,6 @@
 import React from 'react'
 import { Dropdown, DropdownToggle, DropdownMenu, DropdownItem, Tooltip } from 'reactstrap'
+import { translate } from "react-i18next";
 
 class DropDownBox extends React.Component {
   constructor(props) {
@@ -31,6 +32,8 @@ class DropDownBox extends React.Component {
   }
 }
 
+let TransDropDownBox = translate("translations")(DropDownBox);
+
 class MoreMenu extends React.Component {
 
   constructor(props) {
@@ -60,13 +63,15 @@ class MoreMenu extends React.Component {
     return (
       <Dropdown isOpen={this.state.dropdownOpen} toggle={this.DropDowntoggle}>
         <DropdownToggle id={this.props.id}>
-          <i className="fa fa-ellipsis-v"></i>
+          <i className="fa fa-ellipsis-v"/>
           <Tooltip toggle={this.ToolTipToggle} delay={{show: 0, hide: 0}} target={this.props.id}  placement='bottom'  isOpen={this.state.tooltipOpen}>
             {this.props.text}
           </Tooltip>
         </DropdownToggle>
         <DropdownMenu className={'drop-list'}>
           <DropdownItem onMouseDown={this.props.switchToPlainTextEditor}>{this.props.t('switch_to_plain_text_editor')}</DropdownItem>
+          <DropdownItem onMouseDown={this.props.switchToMarkDownViewer}>{this.props.t('switch_to_viewer')}</DropdownItem>
+          <DropdownItem onMouseDown={this.props.showHelpDialog}>{this.props.t('help')}</DropdownItem>
         </DropdownMenu>
       </Dropdown>
     )
@@ -117,7 +122,7 @@ class IconButton extends React.Component {
               className={"btn btn-icon btn-secondary btn-active"}
               data-active={ this.props.isActive || false }
               disabled={this.props.disabled}>
-        <i className={this.props.icon}></i>
+        <i className={this.props.icon}/>
         <Tooltip toggle={this.toggle} delay={{show: 0, hide: 0}} target={this.props.id}  placement='bottom'  isOpen={this.state.tooltipOpen}>
           {this.props.text}
         </Tooltip>
@@ -144,10 +149,48 @@ class TableToolBar extends React.Component {
           <Button>{this.props.t('row')}</Button>
           <Button onMouseDown={this.props.onRemoveRow}>-</Button>
         </ButtonGroup>
-        <DropDownBox onSetAlign={this.props.onSetAlign} t={this.props.t}/>
+        <TransDropDownBox onSetAlign={this.props.onSetAlign}/>
       </div>
     )
   }
 }
 
-export { IconButton, TableToolBar, Button, ButtonGroup, MoreMenu }
+class HeaderList extends React.Component {
+  constructor(props) {
+    super(props);
+    this.state= {
+      dropdownOpen:false,
+    }
+  }
+
+  toggle= () => {
+    this.setState({
+      dropdownOpen:!this.state.dropdownOpen
+    });
+  }
+
+  render() {
+    return (
+      <Dropdown isOpen={this.state.dropdownOpen} toggle={this.toggle}>
+        <DropdownToggle caret>
+          {this.props.t(this.props.headerType)}
+        </DropdownToggle>
+        <DropdownMenu className={'drop-list'}>
+          <DropdownItem onMouseDown={event => {this.props.onClickBlock(event, "paragraph")}}>{this.props.t('paragraph')}</DropdownItem>
+          <DropdownItem onMouseDown={event => {this.props.onClickBlock(event, "header_one")}}>{this.props.t('header_one')}</DropdownItem>
+          <DropdownItem onMouseDown={event => {this.props.onClickBlock(event, "header_two")}}>{this.props.t('header_two')}</DropdownItem>
+          <DropdownItem onMouseDown={event => {this.props.onClickBlock(event, "header_three")}}>{this.props.t('header_three')}</DropdownItem>
+          <DropdownItem onMouseDown={event => {this.props.onClickBlock(event, "header_four")}}>{this.props.t('header_four')}</DropdownItem>
+          <DropdownItem onMouseDown={event => {this.props.onClickBlock(event, "header_five")}}>{this.props.t('header_five')}</DropdownItem>
+          <DropdownItem onMouseDown={event => {this.props.onClickBlock(event, "header_six")}}>{this.props.t('header_six')}</DropdownItem>
+        </DropdownMenu>
+      </Dropdown>
+    )
+  }
+}
+
+TableToolBar = translate("translations")(TableToolBar);
+MoreMenu = translate("translations")(MoreMenu);
+HeaderList = translate("translations")(HeaderList);
+
+export { IconButton, TableToolBar, Button, ButtonGroup, MoreMenu, HeaderList }

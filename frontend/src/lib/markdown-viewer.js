@@ -43,13 +43,11 @@ class ViewerSidePanel extends React.Component {
     }
 
     return (
-      <div className="side-panel">
-        <ul className="nav">
-          <li className="nav-item">
-            Contents
-          </li>
-        </ul>
-        <div className="side-panel-content">
+      <div className="seafile-md-viewer-side-panel">
+        <div className="seafile-md-viewer-side-panel-heading">
+          Contents
+        </div>
+        <div className="seafile-md-viewer-side-panel-content">
         { this.state.navItem == "files" &&
         <TreeView
           editorUtilities={this.props.editorUtilities}
@@ -97,7 +95,7 @@ class MarkdownViewer extends React.Component {
   renderToolbar() {
     const { t } = this.props
     return (
-      <div className="menu toolbar-menu">
+      <div>
         <ButtonGroup>
           <IconButton text={t('edit')} id={'editButton'} icon={"fa fa-edit"} onMouseDown={this.onEdit} />
         </ButtonGroup>
@@ -108,35 +106,26 @@ class MarkdownViewer extends React.Component {
   render() {
     var html = processor.processSync(this.props.markdownContent).toString();
     var treeRoot = processorGetAST.runSync(processorGetAST.parse(this.props.markdownContent));
-    var modifyTime = dayjs(this.props.fileInfo.mtime*1000).format("YYYY-MM-DD HH:mm:ss");
+    var modifyTime = dayjs(this.props.fileInfo.mtime*1000).format("YYYY-MM-DD HH:mm");
 
     return (
-      <div className='seafile-viewer'>
-        <div className="seafile-viewer-topbar">
-          <div className="topbar-file-info">
-            <div className="file-name">
-              {this.props.fileInfo.name}
-            </div>
-            <div className="file-mtime">
-              {modifyTime}
-            </div>
+      <div className="seafile-md-viewer d-flex flex-column">
+        <div className="seafile-md-viewer-topbar d-flex justify-content-between">
+          <div>
+            <h1 className="seafile-md-viewer-filename">{this.props.fileInfo.name}</h1>
+            <p className="seafile-md-viewer-file-modify-time">{modifyTime}</p>
           </div>
           {this.renderToolbar()}
         </div>
-        <div className="seafile-viewer-main d-flex">
-          <div className="viewer-left-panel align-self-start">
-            <ViewerSidePanel
-              treeRoot={treeRoot}
-              viewer={this}
-              editorUtilities={this.props.editorUtilities}
-            />
+        <div className="seafile-md-viewer-main d-flex">
+          <div className="seafile-md-viewer-main-panel">
+            <div className="seafile-md-viewer-rendered-content article" dangerouslySetInnerHTML={{ __html: html }}></div>
           </div>
-          <div className="viewer-right-panel align-self-end">
-            <div className="preview-container">
-              <div className="rendered-markdown article" dangerouslySetInnerHTML={{ __html: html }}>
-              </div>
-            </div>
-          </div>
+          <ViewerSidePanel
+            treeRoot={treeRoot}
+            viewer={this}
+            editorUtilities={this.props.editorUtilities}
+          />
         </div>
       </div>
     )

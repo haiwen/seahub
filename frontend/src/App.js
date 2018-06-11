@@ -3,7 +3,6 @@ import ReactDOM from 'react-dom';
 import SeafileEditor from './lib/seafile-editor';
 import MarkdownViewer from './lib/markdown-viewer';
 import 'whatwg-fetch';
-import dayjs from 'dayjs';
 
 let repoID = window.app.pageOptions.repoID;
 let filePath = window.app.pageOptions.filePath;
@@ -80,9 +79,9 @@ class EditorUtilities {
   getFileURL(fileNode) {
     var url;
     if (fileNode.isImage()) {
-      url = protocol + '://' + domain + siteRoot + "lib/" + repoID + "/file" + fileNode.path() + "?raw=1";
+      url = protocol + '://' + domain + siteRoot + "lib/" + repoID + "/file" + encodeURIComponent(fileNode.path()) + "?raw=1";
     } else {
-      url = protocol + '://' + domain + siteRoot + "lib/" + repoID + "/file" + fileNode.path();
+      url = protocol + '://' + domain + siteRoot + "lib/" + repoID + "/file" + encodeURIComponent(fileNode.path());
     }
     return url;
   }
@@ -120,7 +119,7 @@ class App extends React.Component {
       this.state = {
         markdownContent: "",
         loading: true,
-        mode: "view"
+        mode: "editor",
       };
       this.fileInfo = {
         name: fileName,
@@ -129,8 +128,9 @@ class App extends React.Component {
     }
 
   componentDidMount() {
-    const url = `${siteRoot}api2/repos/${repoID}/file/?p=${filePath}&reuse=1`;
-    const infoPath =`${siteRoot}api2/repos/${repoID}/file/detail/?p=${filePath}`;
+    const path = encodeURIComponent(filePath)
+    const url = `${siteRoot}api2/repos/${repoID}/file/?p=${path}&reuse=1`;
+    const infoPath =`${siteRoot}api2/repos/${repoID}/file/detail/?p=${path}`;
 
     fetch(infoPath, {credentials:'same-origin'})
       .then((response) => response.json())
@@ -153,12 +153,6 @@ class App extends React.Component {
     })
   }
 
-  switchToEditor = () => {
-    this.setState({
-      mode: "edit"
-    })
-  }
-
   render() {
     if (this.state.loading) {
       return (
@@ -166,7 +160,7 @@ class App extends React.Component {
           <div className="lds-ripple page-centered"><div></div><div></div></div>
         </div>
       )
-    } else if (this.state.mode == "edit") {
+    } else if (this.state.mode === "editor") {
       return (
         <SeafileEditor
           fileInfo={this.fileInfo}
@@ -174,16 +168,7 @@ class App extends React.Component {
           editorUtilities={editorUtilities}
         />
       );
-    } else if (this.state.mode == "view") {
-      return (
-        <MarkdownViewer
-          fileInfo={this.fileInfo}
-          markdownContent={this.state.markdownContent}
-          switchToEditor={this.switchToEditor}
-          editorUtilities={this.props.editorUtilities}
-        />    
-      ) 
-    }
+    }   
   }
 }
 

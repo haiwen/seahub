@@ -234,6 +234,13 @@ function _slateNodeToMD(node) {
           type: 'html',
           value: node.data.html
         };
+      default :
+        // turn the block to paragraph default when it`s type is unknown
+        mdNodes = parseChildren(node);
+        return {
+          type: 'paragraph',
+          children: mdNodes
+        }
     }
   } else if (node.object == "text") {
     return _text2MdNodes(node);
@@ -261,7 +268,13 @@ function _slateNodeToMD(node) {
           type: 'html',
           value: node.data.html
         };
+      // turn inlines to text default, when there is no node.type
+      default:
+        return _text2MdNodes(node)
     }
+  } else {
+    // turn the node to text default when it`s type neither is inline, block or text
+    return _text2MdNodes(node);
   }
 }
 
