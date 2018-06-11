@@ -1127,7 +1127,7 @@ class GroupOwnedLibraryGroupShare(APIView):
             return api_error(status.HTTP_403_FORBIDDEN, error_msg)
 
         result = self.list_group_shared_items(request, repo_id, path)
-        return Response(result)
+        return Response([item for item in result if item['group_id'] != group_id])
 
     def post(self, request, repo_id, format=None):
         """ Share repo to group.
