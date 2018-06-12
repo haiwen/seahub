@@ -221,14 +221,23 @@ define([
             var icon_size = Common.isHiDPI() ? 48 : 24;
             var icon_url = this.model.getIconUrl(icon_size);
             var tmpl = $(window).width() >= 768 ? this.template : this.mobileTemplate;
+            var owner_name;
+            if (obj.owner.indexOf('@seafile_group') == -1) {
+                // 'owner_nickname' for '#group/id/'
+                // 'owner_name' for '#groups'
+                owner_name =  this.model.get('owner_nickname') || this.model.get('owner_name');
+            } else {
+                // owner: "18@seafile_group"
+                // It's a group owned repo
+                owner_name = obj.group_name;
+            }
             $.extend(obj, {
                 group_id: this.group_id,
                 parent_group_id: this.parent_group_id,
                 is_staff: this.is_staff,
                 // for '#groups' (no 'share_from_me')
                 is_repo_owner: app.pageOptions.username == this.model.get('owner'),
-                //'owner_nickname' for '#group/id/', 'owner_name' for '#groups'
-                owner_name: this.model.get('owner_nickname') || this.model.get('owner_name'),
+                owner_name: owner_name,
                 show_repo_owner: this.show_repo_owner,
                 icon_url: icon_url,
                 icon_title: this.model.getIconTitle()
