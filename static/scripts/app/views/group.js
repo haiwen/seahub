@@ -25,7 +25,6 @@ define([
         toolbar2Template: _.template($('#group-toolbar2-tmpl').html()),
         pathTemplate: _.template($('#group-path-tmpl').html()),
         theadTemplate: _.template($('#shared-repos-hd-tmpl').html()),
-        ownedReposTheadTemplate: _.template($('#group-owned-repos-hd-tmpl').html()),
         theadMobileTemplate: _.template($('#shared-repos-hd-mobile-tmpl').html()),
 
         events: {
@@ -69,7 +68,7 @@ define([
                 model: repo,
                 group_id: this.group_id,
                 parent_group_id: this.group.parent_group_id,
-                show_repo_owner: this.group.is_address_book_group ? false : true,
+                show_repo_owner: true,
                 repoDetailsView: this.repoDetailsView,
                 is_staff: this.repos.is_staff
             });
@@ -86,11 +85,7 @@ define([
             if ($(window).width() < 768) {
                 tmpl = this.theadMobileTemplate;
             } else {
-                if (this.group.parent_group_id == 0) {
-                    tmpl = this.theadTemplate;
-                } else {
-                    tmpl = this.ownedReposTheadTemplate;
-                }
+                tmpl = this.theadTemplate;
             }
             this.$tableHead.html(tmpl());
         },
@@ -175,6 +170,11 @@ define([
                         'id': data.id,
                         'wiki_enabled': data.wiki_enabled
                     });
+                    // for common member in a group, there is only 'leave group' option in the 'settings' popup
+                    // in an address book group, a common member can't 'leave group'
+                    if (data.parent_group_id != 0 && !user_is_admin) {
+                        $('#group-settings-icon').hide();
+                    }
                     _this.showRepoList();
                     if (options) {
                         if (options.showDiscussions) {

@@ -259,10 +259,11 @@
                     <a href="#" class="sf2-icon-share sf2-x repo-share-btn op-icon vh" title="{% trans "Share" %}" aria-label="{% trans "Share" %}"></a>
                 <% } %>
                 <% if (is_staff || is_repo_owner || is_admin) { %>
-                    <a href="#" class="sf2-icon-delete sf2-x cancel-share op-icon vh" title="{% trans "Unshare" %}" aria-label="{% trans "Unshare" %}"></a>
+                    <a href="#" class="sf2-icon-x2 sf2-x cancel-share op-icon vh" title="{% trans "Unshare" %}" aria-label="{% trans "Unshare" %}"></a>
                 <% } %>
-            <% } else { %>
+            <% } else { %> {# It is an address book group #}
                 <% if (is_staff) { %>
+                <% if (owner == group_id + '@seafile_group') { %> {# this repo belongs to the current group #}
                     <a href="#" class="sf2-icon-share sf2-x repo-share-btn op-icon vh" title="{% trans "Share" %}" aria-label="{% trans "Share" %}"></a>
                     <a href="#" class="sf2-icon-delete sf2-x delete-repo op-icon vh" title="{% trans "Delete" %}" aria-label="{% trans "Delete" %}"></a>
                     <div class="sf-dropdown sf-dropdown-inline">
@@ -275,6 +276,9 @@
                             <li><a class="op js-repo-details" href="#">{% trans "Details" %}</a></li>
                         </ul>
                     </div>
+                <% } else { %>
+                    <a href="#" class="sf2-icon-x2 sf2-x cancel-share op-icon vh" title="{% trans "Unshare" %}" aria-label="{% trans "Unshare" %}"></a>
+                <% } %>
                 <% } %>
             <% } %>
         <% } else { %>
@@ -1826,15 +1830,6 @@
         <th width="14%">{% trans "Size" %}</th>
         <th width="18%"><a class="table-sort-op by-time" href="#">{% trans "Last Update" %} <span class="sort-icon icon-caret-up"></span></a></th>
         <th width="16%">{% trans "Owner" %}</th>
-    </tr>
-</script>
-<script type="text/template" id="group-owned-repos-hd-tmpl">
-    <tr>
-        <th width="4%"><span class="sr-only">{% trans "Library Type" %}</span><!--icon--></th>
-        <th width="46%"><a class="table-sort-op by-name" href="#">{% trans "Name" %} <span class="sort-icon icon-caret-down hide"></span></a></th>
-        <th width="10%"><span class="sr-only">{% trans "Actions" %}</span><!--op--></th>
-        <th width="20%">{% trans "Size" %}</th>
-        <th width="20%"><a class="table-sort-op by-time" href="#">{% trans "Last Update" %} <span class="sort-icon icon-caret-up"></span></a></th>
     </tr>
 </script>
 <script type="text/template" id="shared-repos-hd-mobile-tmpl">

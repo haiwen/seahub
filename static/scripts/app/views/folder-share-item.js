@@ -157,7 +157,7 @@ define([
                     });
                     data = {
                         'group_id': item_data.group_id,
-                        'p': this.path  // TODO: 'p'?
+                        'path': this.path
                     };
                 }
             } else {
