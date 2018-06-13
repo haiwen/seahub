@@ -16,16 +16,26 @@ from seahub.utils.timeutils import timestamp_to_isoformat_timestr
 from seahub.api2.authentication import TokenAuthentication
 from seahub.api2.throttling import UserRateThrottle
 from seahub.api2.utils import api_error
+from seahub.group.utils import group_id_to_name
+
+from seahub.api2.endpoints.group_owned_libraries import get_group_id_by_repo_owner
 
 logger = logging.getLogger(__name__)
 
 def get_trash_repo_info(repo):
 
     result = {}
+
+    owner = repo.owner_id
+
     result['name'] = repo.repo_name
     result['id'] = repo.repo_id
-    result['owner'] = repo.owner_id
+    result['owner'] = owner
     result['delete_time'] = timestamp_to_isoformat_timestr(repo.del_time)
+
+    if '@seafile_group' in owner:
+        group_id = get_group_id_by_repo_owner(owner)
+        result['group_name'] = group_id_to_name(group_id)
 
     return result
 

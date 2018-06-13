@@ -52,7 +52,7 @@ from seahub.base.templatetags.seahub_tags import email2nickname, \
 from seahub.group.views import remove_group_common, \
     rename_group_with_new_name, is_group_staff
 from seahub.group.utils import BadGroupNameError, ConflictGroupNameError, \
-    validate_group_name, is_group_member
+    validate_group_name, is_group_member, group_id_to_name
 from seahub.thumbnail.utils import generate_thumbnail
 from seahub.notifications.models import UserNotification
 from seahub.options.models import UserOptions
@@ -4440,6 +4440,7 @@ class GroupRepos(APIView):
                 "modifier_contact_email": contact_email_dict.get(r.last_modifier, ''),
                 "modifier_name": nickname_dict.get(r.last_modifier, ''),
                 "is_admin": r.id in admin_repos,
+                "group_name": group_id_to_name(r.group_id),
             }
             repos_json.append(repo)
 
