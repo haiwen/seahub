@@ -46,6 +46,7 @@ from seahub.api2.endpoints.share_link_zip_task import ShareLinkZipTaskView
 from seahub.api2.endpoints.query_zip_progress import QueryZipProgressView
 from seahub.api2.endpoints.copy_move_task import CopyMoveTaskView
 from seahub.api2.endpoints.query_copy_move_progress import QueryCopyMoveProgressView
+from seahub.api2.endpoints.move_folder_merge import MoveFolderMergeView
 from seahub.api2.endpoints.invitations import InvitationsView, InvitationsBatchView
 from seahub.api2.endpoints.invitation import InvitationView
 from seahub.api2.endpoints.notifications import NotificationsView, NotificationView
@@ -270,6 +271,9 @@ urlpatterns = patterns(
     url(r'^api/v2.1/query-zip-progress/$', QueryZipProgressView.as_view(), name='api-v2.1-query-zip-progress'),
     url(r'^api/v2.1/copy-move-task/$', CopyMoveTaskView.as_view(), name='api-v2.1-copy-move-task'),
     url(r'^api/v2.1/query-copy-move-progress/$', QueryCopyMoveProgressView.as_view(), name='api-v2.1-query-copy-move-progress'),
+
+    url(r'^api/v2.1/move-folder-merge/$', MoveFolderMergeView.as_view(), name='api-v2.1-move-folder-merge'),
+
     url(r'^api/v2.1/notifications/$', NotificationsView.as_view(), name='api-v2.1-notifications'),
     url(r'^api/v2.1/notification/$', NotificationView.as_view(), name='api-v2.1-notification'),
     url(r'^api/v2.1/user-enabled-modules/$', UserEnabledModulesView.as_view(), name='api-v2.1-user-enabled-module'),
