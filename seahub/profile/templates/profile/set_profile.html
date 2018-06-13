@@ -104,7 +104,7 @@
 
 <div class="setting-item" id="lang-setting">
     <h3>{% trans "Language Setting" %}</h3>
-    <a href="#" id="lang-context" data-lang="{{ LANGUAGE_CODE }}">{{ LANGUAGE_CODE|language_name_local }} <span class="icon-caret-down"></span></a>
+    <a href="#" id="lang-context" data-lang="{{ LANGUAGE_CODE }}">{{ LANGUAGE_CODE|language_name_local|capfirst }} <span class="icon-caret-down"></span></a>
     <div id="lang-context-selector" class="sf-popover hide" >
         <ul class="sf-popover-con">
             {% for LANG in LANGUAGES %}
