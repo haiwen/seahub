@@ -208,23 +208,34 @@ class AdminAddressBookGroup(APIView):
         if not group:
             return Response({'success': True})
 
-        group_owner = group.creator_name
-        group_name = group.group_name
+        if seafile_api.if_group_has_group_owned_repo(group_id):
+            error_msg = 'failed to remove: this department has libraries.'
+            return api_error(status.HTTP_403_FORBIDDEN, error_msg)
 
         try:
+            # remove libraries in group
+            seafile_api.remove_group_repos(group_id)
+
+            # remove members in group
+            members = ccnet_api.get_group_members(group_id)
+            for member in members:
+                email = member.user_name
+                ccnet_api.group_remove_member(group_id, 'unused_user_name', email)
+
             ret_code = ccnet_api.remove_group(group_id)
             if ret_code == -1:
-                error_msg = 'Failed to remove: this department has sub-departments.'
-                return api_error(status.HTTP_400_BAD_REQUEST,
-                                 error_msg)
+                error_msg = 'failed to remove: this department has sub-departments.'
+                return api_error(status.http_400_bad_request, error_msg)
 
-            seafile_api.remove_group_repos(group_id)
         except Exception as e:
             logger.error(e)
             error_msg = 'Internal Server Error'
             return api_error(status.HTTP_500_INTERNAL_SERVER_ERROR, error_msg)
 
         # send admin operation log signal
+        group_owner = group.creator_name
+        group_name = group.group_name
+
         admin_op_detail = {
             "id": group_id,
             "name": group_name,

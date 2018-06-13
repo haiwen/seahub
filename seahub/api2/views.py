@@ -39,6 +39,7 @@ from .utils import get_diff_details, \
 from seahub.wopi.utils import get_wopi_dict
 from seahub.api2.base import APIView
 from seahub.api2.models import TokenV2, DESKTOP_PLATFORMS
+from seahub.api2.endpoints.group_owned_libraries import get_group_id_by_repo_owner
 from seahub.avatar.templatetags.avatar_tags import api_avatar_url, avatar
 from seahub.avatar.templatetags.group_avatar_tags import api_grp_avatar_url, \
         grp_avatar
@@ -4423,6 +4424,12 @@ class GroupRepos(APIView):
                 get_repos_with_admin_permission(group.id)
         repos_json = []
         for r in repos:
+
+            group_name_of_address_book_library = ''
+            if '@seafile_group' in r.user:
+                group_id_of_address_book_library = get_group_id_by_repo_owner(r.user)
+                group_name_of_address_book_library = group_id_to_name(group_id_of_address_book_library)
+
             repo = {
                 "id": r.id,
                 "name": r.name,
@@ -4440,7 +4447,7 @@ class GroupRepos(APIView):
                 "modifier_contact_email": contact_email_dict.get(r.last_modifier, ''),
                 "modifier_name": nickname_dict.get(r.last_modifier, ''),
                 "is_admin": r.id in admin_repos,
-                "group_name": group_id_to_name(r.group_id),
+                "group_name": group_name_of_address_book_library,
             }
             repos_json.append(repo)
 
