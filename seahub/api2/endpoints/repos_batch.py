@@ -19,13 +19,20 @@ from seahub.api2.utils import api_error
 from seahub.api2.views import HTTP_443_ABOVE_QUOTA
 
 from seahub.base.accounts import User
+from seahub.share.utils import is_repo_admin, \
+        check_user_share_out_permission, check_group_share_out_permission
+from seahub.share.models import ExtraSharePermission, ExtraGroupsSharePermission
 from seahub.share.signals import share_repo_to_user_successful, \
         share_repo_to_group_successful
 from seahub.utils import is_org_context, send_perm_audit_msg, \
         normalize_dir_path, get_folder_permission_recursively, \
         normalize_file_path, check_filename_with_rename
+from seahub.utils.repo import get_repo_owner
+
 from seahub.views import check_folder_permission
 from seahub.settings import MAX_PATH
+from seahub.constants import PERMISSION_READ, PERMISSION_READ_WRITE, \
+        PERMISSION_ADMIN
 
 logger = logging.getLogger(__name__)
 
@@ -87,12 +94,15 @@ class ReposBatchView(APIView):
     def post(self, request):
 
         # argument check
-        operation = request.data.get('operation')
-
-        # operation could be `share`, `delete`, `transfer`
-        # we now only use `share`
-        if not operation or operation not in ('share'):
+        operation = request.data.get('operation', None)
+        if not operation:
             error_msg = 'operation invalid.'
+            return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
+
+        # operation could be `share`, `unshare`, `delete`, `transfer`
+        # we now only use `share`, `unshare`
+        if operation not in ('share', 'unshare'):
+            error_msg = 'operation can only be "share", "unshare".'
             return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
 
         result = {}
@@ -113,35 +123,30 @@ class ReposBatchView(APIView):
                 })
                 continue
 
-            if is_org_context(request):
-                org_id = request.user.org.org_id
-                org_repo_owner = seafile_api.get_org_repo_owner(repo_id)
-                if not username == org_repo_owner:
-                    result['failed'].append({
-                        'repo_id': repo_id,
-                        'error_msg': 'Permission denied.'
-                    })
-                    continue
-            else:
-                if not seafile_api.is_repo_owner(username, repo_id):
-                    result['failed'].append({
-                        'repo_id': repo_id,
-                        'error_msg': 'Permission denied.'
-                    })
-                    continue
+            repo_owner = get_repo_owner(request, repo_id)
+            if repo_owner != username and not is_repo_admin(username, repo_id):
+                result['failed'].append({
+                    'repo_id': repo_id,
+                    'error_msg': 'Permission denied.'
+                })
+                continue
 
             valid_repo_id_list.append(repo_id)
 
         # share repo
         if operation == 'share':
 
-            share_type = request.data.get('share_type')
-            if share_type != 'user' and share_type != 'group':
+            share_type = request.data.get('share_type', None)
+            if not share_type:
                 error_msg = 'share_type invalid.'
                 return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
 
+            if share_type not in ('user', 'group'):
+                error_msg = 'share_type can only be "user", "group".'
+                return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
+
             permission = request.data.get('permission', 'rw')
-            if permission not in ('r', 'rw'):
+            if permission not in [PERMISSION_READ, PERMISSION_READ_WRITE, PERMISSION_ADMIN]:
                 error_msg = 'permission invalid.'
                 return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
 
@@ -162,7 +167,7 @@ class ReposBatchView(APIView):
                 try:
                     org_of_to_user = ccnet_api.get_orgs_by_user(to_username)
                 except Exception as e:
-                    logger.debug(e)
+                    logger.error(e)
                     org_of_to_user = []
 
                 if is_org_context(request):
@@ -284,6 +289,123 @@ class ReposBatchView(APIView):
                             'repo_id': repo_id,
                             'error_msg': 'Internal Server Error'
                             })
+
+        # unshare repo
+        if operation == 'unshare':
+
+            share_type = request.data.get('share_type', None)
+            if not share_type:
+                error_msg = 'share_type invalid.'
+                return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
+
+            if share_type not in ('user', 'group'):
+                error_msg = 'share_type can only be "user", "group".'
+                return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
+
+            # unshare repo from user
+            if share_type == 'user':
+                to_username = request.data.get('username', None)
+                if not to_username:
+                    error_msg = 'username invalid.'
+                    return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
+
+                for repo_id in valid_repo_id_list:
+
+                    if not self.has_shared_to_user(request, repo_id, to_username):
+                        result['failed'].append({
+                            'repo_id': repo_id,
+                            'error_msg': 'This item has not been shared to %s.' % to_username
+                            })
+                        continue
+
+                    repo_owner = get_repo_owner(request, repo_id)
+                    try:
+                        # get share permission before unshare operation
+                        permission = check_user_share_out_permission(repo_id,
+                                '/', to_username, is_org_context(request))
+
+                        if is_org_context(request):
+                            # when calling seafile API to share authority related functions, change the uesrname to repo owner.
+                            org_id = request.user.org.org_id
+                            seafile_api.org_remove_share(org_id, repo_id, repo_owner, to_username)
+                        else:
+                            seafile_api.remove_share(repo_id, repo_owner, to_username)
+
+                        # Delete share permission at ExtraSharePermission table.
+                        ExtraSharePermission.objects.delete_share_permission(repo_id,
+                                to_username)
+
+                        # send message
+                        send_perm_audit_msg('delete-repo-perm', username,
+                                to_username, repo_id, '/', permission)
+
+                        result['success'].append({
+                            "repo_id": repo_id,
+                            "username": to_username,
+                        })
+                    except Exception as e:
+                        logger.error(e)
+                        result['failed'].append({
+                            'repo_id': repo_id,
+                            'error_msg': 'Internal Server Error'
+                        })
+
+            # unshare repo from group
+            if share_type == 'group':
+                to_group_id = request.data.get('group_id', None)
+                if not to_group_id:
+                    error_msg = 'group_id invalid.'
+                    return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
+
+                try:
+                    to_group_id = int(to_group_id)
+                except ValueError:
+                    error_msg = 'group_id invalid.'
+                    return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
+
+                group = ccnet_api.get_group(to_group_id)
+                group_name = group.group_name if group else ''
+
+                for repo_id in valid_repo_id_list:
+                    if not self.has_shared_to_group(request, repo_id, to_group_id):
+                        result['failed'].append({
+                            'repo_id': repo_id,
+                            'error_msg': 'This item has not been shared to %s.' % group_name
+                        })
+                        continue
+
+                    try:
+                        # get share permission before unshare operation
+                        permission = check_group_share_out_permission(repo_id,
+                                '/', to_group_id, is_org_context(request))
+
+                        org_id = None
+                        if is_org_context(request):
+                            org_id = request.user.org.org_id
+                            seafile_api.del_org_group_repo(repo_id, org_id, to_group_id)
+                        else:
+                            seafile_api.unset_group_repo(
+                                    repo_id, to_group_id, username)
+
+                        # Delete share permission at ExtraSharePermission table.
+                        ExtraGroupsSharePermission.objects.delete_share_permission(repo_id,
+                                to_group_id)
+
+                        # send message
+                        send_perm_audit_msg('delete-repo-perm', username,
+                                to_group_id, repo_id, '/', permission)
+
+                        result['success'].append({
+                            "repo_id": repo_id,
+                            "group_id": to_group_id,
+                            "group_name": group_name,
+                        })
+                    except SearpcError as e:
+                        logger.error(e)
+                        result['failed'].append({
+                            'repo_id': repo_id,
+                            'error_msg': 'Internal Server Error'
+                        })
 
         return Response(result)
 
