@@ -2,6 +2,7 @@
 """
 Tools for i18n.
 """
+import os
 from fabric.api import local, task
 from fabric.colors import red, green
 
@@ -9,7 +10,13 @@ from fabric.colors import red, green
 def make(default=True, lang='en'):
     """Update source language.
     """
-    local('django-admin.py makemessages -l %s -e py,html -i "thirdpart*" -i "docs*" -i "seahub/two_factor/gateways" -i "seahub/two_factor/templates/two_factor/core/otp_required.html" -i "seahub/two_factor/templates/two_factor/core/phone_register.html" -i "seahub/two_factor/templates/two_factor/profile/profile.html"' % lang)
+    # add strings in 'organization'
+    os.symlink('../seahub-extra/seahub_extra/organizations', 'seahub/organizations')
+
+    local('django-admin.py makemessages -s -l %s -e py,html -i "thirdpart*" -i "docs*" -i "seahub/two_factor/gateways" -i "seahub/two_factor/templates/two_factor/core/otp_required.html" -i "seahub/two_factor/templates/two_factor/core/phone_register.html" -i "seahub/two_factor/templates/two_factor/profile/profile.html"' % lang)
+
+    # remove 'organization' symlink to make codebase clean
+    os.remove('seahub/organizations')
 
     # some version of makemessages will produce "%%" in the string, replace that
     # to "%".

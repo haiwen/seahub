@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2018-06-09 16:04+0800\n"
+"POT-Creation-Date: 2018-06-14 18:26+0800\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -70,8 +70,8 @@ msgstr ""
 
 #: seahub/api2/endpoints/admin/default_library.py:31
 #: seahub/api2/endpoints/admin/default_library.py:32
-#: seahub/views/__init__.py:634 seahub/views/__init__.py:635
-#: seahub/views/__init__.py:640 seahub/views/__init__.py:641
+#: seahub/views/__init__.py:635 seahub/views/__init__.py:636
+#: seahub/views/__init__.py:641 seahub/views/__init__.py:642
 msgid "My Library"
 msgstr ""
 
@@ -170,7 +170,7 @@ msgstr ""
 #: seahub/api2/endpoints/wiki_pages.py:146
 #: seahub/api2/endpoints/wiki_pages.py:186
 #: seahub/api2/endpoints/wiki_pages.py:196 seahub/group/views.py:366
-#: seahub/views/__init__.py:943 seahub/views/ajax.py:1147
+#: seahub/views/__init__.py:944 seahub/views/ajax.py:1147
 #: seahub/views/ajax.py:1151 seahub/views/file.py:1149
 #: seahub/views/sysadmin.py:1931 seahub/views/wiki.py:134
 msgid "Internal Server Error"
@@ -181,7 +181,7 @@ msgstr ""
 #: seahub/api2/endpoints/wiki_pages.py:177 seahub/group/views.py:453
 #: seahub/templates/sysadmin/sys_useradmin_admins.html:92
 #: seahub/thumbnail/views.py:51 seahub/thumbnail/views.py:163
-#: seahub/views/__init__.py:778 seahub/views/ajax.py:222
+#: seahub/views/__init__.py:779 seahub/views/ajax.py:222
 #: seahub/views/ajax.py:872 seahub/views/wiki.py:201
 msgid "Permission denied."
 msgstr ""
@@ -302,7 +302,7 @@ msgid "An upload link is shared to you on %s"
 msgstr ""
 
 #: seahub/api2/endpoints/share_link_zip_task.py:100
-#: seahub/views/__init__.py:927
+#: seahub/views/__init__.py:928
 #, python-format
 msgid "Unable to download directory \"%s\": size is too large."
 msgstr ""
@@ -1831,7 +1831,7 @@ msgid "Description is required."
 msgstr ""
 
 #: seahub/group/views.py:126 seahub/share/views.py:228
-#: seahub/views/__init__.py:540 seahub/views/ajax.py:163
+#: seahub/views/__init__.py:541 seahub/views/ajax.py:163
 #: seahub/views/ajax.py:424 seahub/views/ajax.py:431 seahub/views/ajax.py:494
 #: seahub/views/ajax.py:501 seahub/views/ajax.py:637 seahub/views/ajax.py:1131
 #: seahub/views/ajax.py:1173 seahub/views/file.py:832 seahub/views/file.py:970
@@ -3353,17 +3353,19 @@ msgid ""
 "create libraries."
 msgstr ""
 
-#: seahub/templates/choose_register.html:13
+#: seahub/templates/choose_register.html:3
+#: seahub/templates/choose_register.html:8
 #: seahub/templates/registration/login.html:71
-#: seahub/templates/registration/registration_form.html:11
+#: seahub/templates/registration/registration_form.html:3
+#: seahub/templates/registration/registration_form.html:12
 msgid "Signup"
 msgstr ""
 
-#: seahub/templates/choose_register.html:14
+#: seahub/templates/choose_register.html:9
 msgid "Create a personal account"
 msgstr ""
 
-#: seahub/templates/choose_register.html:15
+#: seahub/templates/choose_register.html:10
 msgid "Create an organization account"
 msgstr ""
 
@@ -5373,7 +5375,7 @@ msgstr ""
 
 #: seahub/templates/registration/login.html:129
 #: seahub/templates/registration/password_change_form.html:66
-#: seahub/templates/registration/registration_form.html:88
+#: seahub/templates/registration/registration_form.html:91
 #: seahub/templates/sysadmin/sudo_mode.html:35
 #: seahub/templates/sysadmin/sys_org_info_user.html:133
 #: seahub/templates/sysadmin/sys_useradmin.html:153
@@ -5425,7 +5427,7 @@ msgid "Confirm Password"
 msgstr ""
 
 #: seahub/templates/registration/password_change_form.html:37
-#: seahub/templates/registration/registration_form.html:58
+#: seahub/templates/registration/registration_form.html:61
 #, python-format
 msgid ""
 "Passwords must have at least %(min_len)s characters and contain %(level)s of "
@@ -5437,7 +5439,7 @@ msgid "Current password cannot be blank"
 msgstr ""
 
 #: seahub/templates/registration/password_change_form.html:70
-#: seahub/templates/registration/registration_form.html:92
+#: seahub/templates/registration/registration_form.html:95
 #: seahub/templates/snippets/repo_create_js.html:54
 #: seahub/templates/snippets/shared_link_js.html:143
 #: seahub/templates/sysadmin/sys_org_admin.html:94
@@ -5447,7 +5449,7 @@ msgid "Please enter the password again"
 msgstr ""
 
 #: seahub/templates/registration/password_change_form.html:74
-#: seahub/templates/registration/registration_form.html:96
+#: seahub/templates/registration/registration_form.html:99
 #: seahub/templates/snippets/repo_create_js.html:58
 #: seahub/templates/snippets/shared_link_js.html:147
 msgid "Passwords don't match"
@@ -5546,15 +5548,11 @@ msgstr ""
 msgid "Signup function is not enabled."
 msgstr ""
 
-#: seahub/templates/registration/registration_form.html:3
-msgid "Register"
-msgstr ""
-
 #: seahub/templates/registration/registration_form.html:14
 msgid "Welcome back, you are already signed in."
 msgstr ""
 
-#: seahub/templates/registration/registration_form.html:84
+#: seahub/templates/registration/registration_form.html:87
 #: seahub/templates/sysadmin/sys_org_info_user.html:129
 #: seahub/templates/sysadmin/sys_useradmin.html:149
 msgid "Email cannot be blank"
@@ -7047,7 +7045,7 @@ msgid "Successfully edited the permission."
 msgstr ""
 
 #: seahub/thumbnail/views.py:45 seahub/thumbnail/views.py:169
-#: seahub/views/__init__.py:572 seahub/views/file.py:1166
+#: seahub/views/__init__.py:573 seahub/views/file.py:1166
 msgid "Invalid arguments."
 msgstr ""
 
@@ -7282,55 +7280,55 @@ msgstr ""
 msgid "permission error"
 msgstr ""
 
-#: seahub/views/__init__.py:399 seahub/views/__init__.py:415
+#: seahub/views/__init__.py:400 seahub/views/__init__.py:416
 msgid "Unable to view recycle page"
 msgstr ""
 
-#: seahub/views/__init__.py:451
+#: seahub/views/__init__.py:452
 msgid "Unable to view library modification"
 msgstr ""
 
-#: seahub/views/__init__.py:531 seahub/views/__init__.py:574
-#: seahub/views/__init__.py:773 seahub/views/__init__.py:899
+#: seahub/views/__init__.py:532 seahub/views/__init__.py:575
+#: seahub/views/__init__.py:774 seahub/views/__init__.py:900
 #: seahub/views/ajax.py:1126 seahub/views/file.py:1649
 msgid "Library does not exist"
 msgstr ""
 
-#: seahub/views/__init__.py:565
+#: seahub/views/__init__.py:566
 msgid "Please specify history ID"
 msgstr ""
 
-#: seahub/views/__init__.py:569
+#: seahub/views/__init__.py:570
 msgid "Successfully restored the library."
 msgstr ""
 
-#: seahub/views/__init__.py:576
+#: seahub/views/__init__.py:577
 msgid "History you specified does not exist"
 msgstr ""
 
-#: seahub/views/__init__.py:578
+#: seahub/views/__init__.py:579
 msgid "Unknown error"
 msgstr ""
 
-#: seahub/views/__init__.py:906 seahub/views/repo.py:191
+#: seahub/views/__init__.py:907 seahub/views/repo.py:191
 #, python-format
 msgid "\"%s\" does not exist."
 msgstr ""
 
-#: seahub/views/__init__.py:924 seahub/views/file.py:1132
+#: seahub/views/__init__.py:925 seahub/views/file.py:1132
 msgid "Internal Error"
 msgstr ""
 
-#: seahub/views/__init__.py:946
+#: seahub/views/__init__.py:947
 #, python-format
 msgid "Unable to download \"%s\""
 msgstr ""
 
-#: seahub/views/__init__.py:1068
+#: seahub/views/__init__.py:1069
 msgid "Successfully enable \"Personal Wiki\"."
 msgstr ""
 
-#: seahub/views/__init__.py:1073
+#: seahub/views/__init__.py:1074
 msgid "Successfully disable \"Personal Wiki\"."
 msgstr ""
 
