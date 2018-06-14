@@ -246,12 +246,13 @@ class AdminLibrary(APIView):
             repo_owner = seafile_api.get_org_repo_owner(repo_id)
 
         try:
-            seafile_api.remove_repo(repo_id)
             related_usernames = seaserv.get_related_users_by_repo(repo_id)
+            seafile_api.remove_repo(repo_id)
 
             # send signal for seafevents
-            repo_deleted.send(sender=None, org_id=-1, usernames=related_usernames,
-                    repo_owner=repo_owner, repo_id=repo_id, repo_name=repo.name)
+            repo_deleted.send(sender=None, org_id=-1, operator=request.user.username,
+                    usernames=related_usernames, repo_owner=repo_owner,
+                    repo_id=repo_id, repo_name=repo.name)
 
         except Exception as e:
             logger.error(e)

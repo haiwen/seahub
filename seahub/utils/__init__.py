@@ -549,6 +549,20 @@ if EVENTS_CONFIG_FILE:
                 return True
         return False
 
+    def _same_activities(e1, e2):
+        """Two events are equal should follow two rules:
+        1. event1.repo_id = event2.repo_id
+        2. event1.timstamp = event2.timestamp
+        3. event1.op_type = event2.op_type
+        4. event1.obj_type == event2.obj_type
+        5. event1.path == event2.path
+        6. event1.op_user == event2.op_user
+        """
+        if e1.repo_id == e2.repo_id and e1.timestamp == e2.timestamp and \
+                e1.op_type == e2.op_type and e1.obj_type == e2.obj_type and \
+                e1.path == e2.path and e1.op_user == e2.op_user:
+                    return True
+
     def _get_events(username, start, count, org_id=None):
         ev_session = SeafEventsSession()
 
@@ -562,6 +576,7 @@ if EVENTS_CONFIG_FILE:
                 if not events:
                     break
 
+                # filter duplicatly commit and merged commit
                 for e1 in events:
                     duplicate = False
                     for e2 in valid_events:
@@ -589,6 +604,22 @@ if EVENTS_CONFIG_FILE:
                 e.commit.converted_cmmt_desc = convert_cmmt_desc_link(e.commit)
                 e.commit.more_files = more_files_in_commit(e.commit)
         return valid_events, start + total_used
+
+    def _get_activities(username, start, count, org_id=None):
+        ev_session = SeafEventsSession()
+
+        events, total_count = [], 0
+        try:
+            if org_id > 0:
+                events, total_count = seafevents.get_org_user_activities(ev_session,
+                        org_id, username, start, count)
+            else:
+                events, total_count = seafevents.get_user_activities(ev_session,
+                        username, start, count)
+        finally:
+            ev_session.close()
+
+        return events, total_count
 
     def _get_events_inner(ev_session, username, start, limit, org_id=None):
         '''Read events from seafevents database, and remove events that are
@@ -632,6 +663,7 @@ if EVENTS_CONFIG_FILE:
 
         return valid_events
 
+
     def get_user_events(username, start, count):
         """Return user events list and a new start.
 
@@ -642,6 +674,18 @@ if EVENTS_CONFIG_FILE:
         15th events.
         """
         return _get_events(username, start, count)
+
+    def get_user_activities(username, start, count):
+        """Return user events list and a new start.
+        For example:
+        ``get_user_activities('foo@example.com', 0, 10)`` returns the first 10
+        ``get_user_activities('foo@example.com', 4, 10)`` returns the 6th through
+                 15th events.
+        """
+        return _get_activities(username, start, count)
+
+    def get_org_user_activities(org_id, username, start, count):
+        return _get_activities(username, start, count, org_id=org_id)
    
     def get_user_activity_stats_by_day(start, end, offset):
         """
@@ -761,6 +805,10 @@ else:
     def get_log_events_by_time():
         pass
     def get_org_user_events():
+        pass
+    def get_user_activities():
+        pass
+    def get_org_user_activities():
         pass
     def generate_file_audit_event_type():
         pass
