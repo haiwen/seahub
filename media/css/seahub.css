@@ -2252,6 +2252,9 @@ button.sf-dropdown-toggle:focus {
     margin-top:10px;
     text-align:right;
 }
+#signup-form .input {
+    margin-bottom:5px;
+}
 /*myhome*/
 #quota-bar {
     display:block;

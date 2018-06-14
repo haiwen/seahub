@@ -1,56 +1,59 @@
-{% extends "base.html" %}
+{% extends "registration/login.html" %}
 {% load i18n %}
-{% block sub_title %}{% trans "Register" %} - {% endblock %}
+{% block sub_title %}{% trans "Signup" %} - {% endblock %}
 
-{% block extra_style %}
+{% block extra_style %}{{block.super}}
 <link rel="stylesheet" type="text/css" href="{{ MEDIA_URL }}css/bootstrap.popover.min.css" />
 {% endblock %}
 
 {% block main_content %}
-<div class="new-narrow-panel">
-    <h2 class="hd">{% trans "Signup" %}</h2>
-    <div class="con">
-{% if request.user.is_authenticated %}
-    <p>{% trans "Welcome back, you are already signed in." %}</p>
-{% else %}
-    <form action="" method="post">{% csrf_token %}
-        {% if form.name.field.required %}
-        <label for="id_name">{% trans "Name" %}</label>
-        {{ form.name }} {{ form.name.errors }}
+<div class="login-panel-outer-container vh">
+    <div class="login-panel">
+        <h1 class="login-panel-hd">{% trans "Signup" %}</h1>
+        {% if request.user.is_authenticated %}
+        <p>{% trans "Welcome back, you are already signed in." %}</p>
+        {% else %}
+        <form action="" method="post" id="signup-form">{% csrf_token %}
+            {% if form.name.field.required %}
+            <label for="id_name">{% trans "Name" %}</label>
+            {{ form.name }} {{ form.name.errors }}
+            {% endif %}
+
+            <label for="id_email">{% trans "Email" %}</label>
+            {{ form.email }}            {{ form.email.errors }}
+            <label for="id_password1">{% trans "Password" %}</label>
+            {{ form.password1 }}        {{ form.password1.errors }}
+            <div id="pwd_strength"></div>
+            <label for="id_password2">{% trans "Confirm Password" %}</label>
+            {{ form.password2 }}        {{ form.password2.errors }}
+
+            {% if form.department.field.required %}
+            <label for="id_department">{% trans "Department" %}</label>
+            {{ form.department }}       {{ form.department.errors }}
+            {% endif %}
+
+            {% if form.telephone.field.required %}
+            <label for="id_telephone">{% trans "Telephone" %}</label>
+            {{ form.telephone }}        {{ form.telephone.errors }}
+            {% endif %}
+
+            {% if form.note.field.required %}
+            <label for="id_note">{% trans "Note" %}</label>
+            {{ form.note }}             {{ form.note.errors }}
+            {% endif %}
+
+            <p class="error hide"></p>
+            <button type="submit" class="submit">{% trans "Sign Up" %}</button>
+        </form>
+        <div class="login-panel-bottom-container">
+            {# language will be shown here #}
+        </div>
         {% endif %}
-
-        <label for="id_email">{% trans "Email" %}</label>
-        {{ form.email }}            {{ form.email.errors }}
-        <label for="id_password1">{% trans "Password" %}</label>
-        {{ form.password1 }}        {{ form.password1.errors }}
-        <div id="pwd_strength"></div>
-        <label for="id_password2">{% trans "Confirm Password" %}</label>
-        {{ form.password2 }}        {{ form.password2.errors }}
-
-        {% if form.department.field.required %}
-        <label for="id_department">{% trans "Department" %}</label>
-        {{ form.department }}       {{ form.department.errors }}
-        {% endif %}
-
-        {% if form.telephone.field.required %}
-        <label for="id_telephone">{% trans "Telephone" %}</label>
-        {{ form.telephone }}        {{ form.telephone.errors }}
-        {% endif %}
-
-        {% if form.note.field.required %}
-        <label for="id_note">{% trans "Note" %}</label>
-        {{ form.note }}             {{ form.note.errors }}
-        {% endif %}
-
-        <p class="error hide"></p>
-        <input type="submit" value="{% trans "Sign Up" %}" class="submit" />
-    </form>
-{% endif %}
     </div>
 </div>
 {% endblock %}
 
-{% block extra_script %}
+{% block extra_script %}{{ block.super }}
 <script type="text/javascript" src="{{MEDIA_URL}}js/bootstrap.min.js"></script>
 <script type="text/javascript">
 {% if strong_pwd_required %}
@@ -74,7 +77,7 @@ $("#id_password1")
 });
 {% endif %}
 
-$('form').on('submit', function(){
+$('#signup-form').on('submit', function(){
     var email = $.trim($('input[name="email"]').val()),
         pwd1 = $.trim($('input[name="password1"]').val()),
         pwd2 = $.trim($('input[name="password2"]').val());

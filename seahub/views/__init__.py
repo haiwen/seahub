@@ -48,6 +48,7 @@ from seahub.utils.star import get_dir_starred_files
 from seahub.utils.repo import get_library_storages
 from seahub.utils.file_op import check_file_lock
 from seahub.utils.timeutils import utc_to_local
+from seahub.utils.auth import get_login_bg_image_path
 from seahub.views.modules import MOD_PERSONAL_WIKI, enable_mod_for_user, \
     disable_mod_for_user
 import seahub.settings as settings
@@ -1159,3 +1160,13 @@ def client_token_login(request):
             auth_login(request, user)
 
     return HttpResponseRedirect(request.GET.get("next", reverse('libraries')))
+
+def choose_register(request):
+    """
+    Choose register
+    """
+    login_bg_image_path = get_login_bg_image_path()
+
+    return render(request, 'choose_register.html', {
+        'login_bg_image_path': login_bg_image_path
+    })

@@ -27,7 +27,7 @@ html, body, #wrapper { height:100%; }
 <div class="login-panel-outer-container vh">
 <div class="login-panel">
     <h1 class="login-panel-hd">{% trans "Log In" %}</h1>
-    <form action="" method="post">{% csrf_token %}
+    <form action="" method="post" id="login-form">{% csrf_token %}
         <input type="text" name="login" placeholder="{% trans "Email or Username" %}" aria-label="{% trans "Email or Username" %}" title="{% trans "Email or Username" %}" value="" class="input name-input" /><br />
         <input type="password" name="password" placeholder="{% trans "Password" %}" aria-label="{% trans "Password" %}" title="{% trans "Password" %}" value="" class="input passwd-input" autocomplete="off" />
 
@@ -120,7 +120,7 @@ $('#refresh-captcha').on('click', function() {
     return false;
 });
 
-$('.login-panel form').on('submit', function(){
+$('#login-form').on('submit', function(){
     if (!$.trim($('input[name="login"]').val())) {
         $('.error').removeClass('hide').html("{% trans "Email or username cannot be blank" %}");
         return false;
