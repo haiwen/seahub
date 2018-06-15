@@ -11,7 +11,7 @@ def make(default=True, lang='en'):
     """Update source language.
     """
     # add strings in 'organization'
-    os.symlink('../seahub-extra/seahub_extra/organizations', 'seahub/organizations')
+    os.symlink('../../seahub-extra/seahub_extra/organizations', 'seahub/organizations')
 
     local('django-admin.py makemessages -s -l %s -e py,html -i "thirdpart*" -i "docs*" -i "seahub/two_factor/gateways" -i "seahub/two_factor/templates/two_factor/core/otp_required.html" -i "seahub/two_factor/templates/two_factor/core/phone_register.html" -i "seahub/two_factor/templates/two_factor/profile/profile.html"' % lang)
 
