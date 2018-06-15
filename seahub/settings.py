@@ -161,7 +161,8 @@ TEMPLATES = [
     },
 ]
 
-
+# django.utils.translation -- that module depends on the settings.
+gettext_noop = lambda s: s
 LANGUAGES = (
     # ('bg', gettext_noop(u'български език')),
     ('ca', u'Català'),
@@ -262,9 +263,8 @@ CONSTANCE_BACKEND = 'constance.backends.database.DatabaseBackend'
 CONSTANCE_DATABASE_CACHE_BACKEND = 'default'
 
 AUTHENTICATION_BACKENDS = (
-    'social_core.backends.github.GithubOAuth2',
-    'social_core.backends.google.GoogleOAuth2',
     'seahub.social_core.backends.weixin_enterprise.WeixinWorkOAuth2',
+    'seahub.social_core.backends.weixin_enterprise.WeixinWorkOAuth2APP',
 
     'seahub.base.accounts.AuthBackend',
     'seahub.oauth.backends.OauthRemoteUserBackend',
@@ -273,21 +273,23 @@ AUTHENTICATION_BACKENDS = (
 SOCIAL_AUTH_URL_NAMESPACE = 'social'
 SOCIAL_AUTH_VERIFY_SSL = True
 SOCIAL_AUTH_METHODS = (
-    ('github', 'Github'),
-    ('google-oauth2', 'Google'),
-    ('weixin-work', 'WeChat Work'),
+    ('weixin-work', gettext_noop('WeChat Work')),
+    # ('weixin-work-app', 'WeChat Work App'),
 )
 
-SOCIAL_AUTH_GITHUB_KEY = ''
-SOCIAL_AUTH_GITHUB_SECRET = ''
+# SOCIAL_AUTH_GITHUB_KEY = ''
+# SOCIAL_AUTH_GITHUB_SECRET = ''
 
-SOCIAL_AUTH_GOOGLE_OAUTH2_KEY = ''
-SOCIAL_AUTH_GOOGLE_OAUTH2_SECRET = ''
+# SOCIAL_AUTH_GOOGLE_OAUTH2_KEY = ''
+# SOCIAL_AUTH_GOOGLE_OAUTH2_SECRET = ''
 
 SOCIAL_AUTH_WEIXIN_WORK_AGENTID = ''
 SOCIAL_AUTH_WEIXIN_WORK_KEY = ''
 SOCIAL_AUTH_WEIXIN_WORK_SECRET = ''
 
+SOCIAL_AUTH_WEIXIN_WORK_APP_AGENTID = ''
+SOCIAL_AUTH_WEIXIN_WORK_APP_KEY = ''
+SOCIAL_AUTH_WEIXIN_WORK_APP_SECRET = ''
 
 SOCIAL_AUTH_PIPELINE = (
     'social_core.pipeline.social_auth.social_details',
@@ -307,7 +309,7 @@ SOCIAL_AUTH_PIPELINE = (
 
 ENABLE_OAUTH = False
 
-LOGIN_REDIRECT_URL = '/profile/'
+LOGIN_REDIRECT_URL = '/'
 LOGIN_URL = '/accounts/login/'
 LOGOUT_URL = '/accounts/logout/'
 LOGOUT_REDIRECT_URL = None

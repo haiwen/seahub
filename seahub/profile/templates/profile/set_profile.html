@@ -163,12 +163,12 @@
 
 <div class="setting-item" id="social-auth">
     <h3>{% trans "Social Login" %}</h3>
-    <p class="txt-before-btn">{% trans "Current enabled social logins" %}:
+    <p class="txt-before-btn">{% trans "Enabled social logins" %}:
       <ul>
         {% for e in enabled_social_auth %}
         <li>
-          {{e.provider_name}} - Last connected {{ e.extra_data.auth_time|translate_seahub_time }}
-          <a class="social-disconnect" href="#" data-url="{% url "social:disconnect" e.provider %}">Disconnect</a>
+          {{e.provider_name}} - {% trans "Last Login "%}: {{ e.extra_data.auth_time|translate_seahub_time }}
+          <a class="social-disconnect" href="#" data-url="{% url "social:disconnect" e.provider %}">{% trans "Disconnect" %}</a>
         </li>
         {% empty %}
         <li>--</li>
@@ -181,7 +181,7 @@
         {% for a in available_social_auth %}
         <li>
           {{a.1}}
-          <a href="{% url "social:begin" a.0 %}">Connect</a>
+          <a href="{% url "social:begin" a.0 %}">{% trans "Connect" %}</a>
         </li>
         {% empty %}
         <li>--</li>

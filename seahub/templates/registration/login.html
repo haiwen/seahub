@@ -66,10 +66,7 @@ html, body, #wrapper { height:100%; }
     <a id="sso" href="#" class="normal">{% trans "Single Sign-On" %}</a>
     {% endif %}
 
-    <a href="{% url "social:begin" "github" %}">Github</a>
-    <a href="{% url "social:begin" "google-oauth2" %}">Google</a>
-    <a href="{% url "social:begin" "weixin-work" %}">WeChat Work</a>
-
+    <a href="{% url "social:begin" "weixin-work" %}"><span class="sf2-icon-msgs op-icon"></span> {% trans "WeChat Work" %}</a>
 
     <div class="login-panel-bottom-container">
         {% if enable_signup %}
