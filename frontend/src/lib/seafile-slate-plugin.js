@@ -565,14 +565,9 @@ function SeafileSlatePlugin(options) {
             if (index === -1) {
               return;
             }
-<<<<<<< HEAD
 
             var name = text.substring(index + 8);
             var fileName = decodeURIComponent(name);
-=======
-            var name = text.substring(index + 8);
-            var fileName = decodeURIComponent(name)
->>>>>>> update seafile editor
             var t = Text.create({
               text: fileName
             });

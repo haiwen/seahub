@@ -18,11 +18,7 @@ class SeafileEditor extends React.Component {
     this.setState({
       fileInfo: Object.assign({}, this.state.fileInfo, {mtime: (new Date().getTime()/1000)})
     });
-<<<<<<< HEAD
   };
-=======
-  }
->>>>>>> update seafile editor
 
   constructor(props) {
     super(props);
@@ -32,18 +28,11 @@ class SeafileEditor extends React.Component {
     
     this.state = {
       isTreeDataLoaded: false,
-<<<<<<< HEAD
       mode: "viewer",
       initialPlainValue: "", // for plain editor
       richValue: deserialize(""),
       // currentContent is markdown object, the root value of viewer, richEditor and plainEditor
       currentContent: this.props.markdownContent,
-=======
-      editor: "rich",
-      initialPlainValue: "", // for plain editor
-      richValue: deserialize(""),
-      currentContent: "",
->>>>>>> update seafile editor
       savedContent: "",
       contentChanged: false,
       saving: false,
@@ -106,39 +95,18 @@ class SeafileEditor extends React.Component {
 
   convertAndCheckNeedSave = (newValue) => {
     let currentContent = serialize(newValue.toJSON()).trim();
-<<<<<<< HEAD
     let contentChanged = currentContent !== this.state.savedContent.trim();
-=======
-    let contentChanged = currentContent != this.state.savedContent.trim();
-
->>>>>>> [frontend/editor] Using socket.io to show online/editing users
     this.setState({
       currentContent: currentContent,
       contentChanged: contentChanged
     })
-<<<<<<< HEAD
   };
-=======
-
-    if (contentChanged) {
-      this.props.onContentChange()
-    }
-  }
->>>>>>> [frontend/editor] Using socket.io to show online/editing users
 
   onCheckNeedSave = (newContent) => {
     this.setState({
       contentChanged: newContent !== this.state.savedContent
     })
-<<<<<<< HEAD
   };
-=======
-
-    if (newContent != this.state.savedContent) {
-      this.props.onContentChange()
-    }
-  }
->>>>>>> [frontend/editor] Using socket.io to show online/editing users
 
   onChange = (change) => {
     if (this.state.mode === 'rich') {
@@ -195,29 +163,17 @@ class SeafileEditor extends React.Component {
     const str = serialize(value.toJSON());
     this.saveContent(str);
     this.setFileInfoMtime();
-<<<<<<< HEAD
   };
-=======
-  }
->>>>>>> update seafile editor
 
   onPlainEditorSave = () => {
     const str = this.state.currentContent;
     this.saveContent(str);
     this.setFileInfoMtime();
-<<<<<<< HEAD
   };
 
   render() {
 
     if (this.state.mode === "rich") {
-=======
-  }
-
-  render() {
-
-    if (this.state.editor === "rich") {
->>>>>>> update seafile editor
       return (
         <RichMarkdownEditor
           editorUtilities={this.props.editorUtilities}
@@ -227,12 +183,8 @@ class SeafileEditor extends React.Component {
           value={this.state.richValue}
           contentChanged={this.state.contentChanged}
           saving={this.state.saving}
-<<<<<<< HEAD
           switchToMarkDownViewer={this.switchToMarkDownViewer}
-=======
->>>>>>> update seafile editor
           fileInfo={this.state.fileInfo}
-          collabUsers={this.props.collabUsers}
         />
       );
     } else if (this.state.mode === "plain") {
@@ -247,7 +199,6 @@ class SeafileEditor extends React.Component {
           onSave={this.onPlainEditorSave}
           onChange={this.onChange}
           fileInfo={this.state.fileInfo}
-          collabUsers={this.props.collabUsers}
         />
       );
     } else if (this.state.mode === "viewer") {

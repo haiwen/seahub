@@ -131,51 +131,6 @@ class IconButton extends React.Component {
   }
 }
 
-class CollabUsersButton extends React.Component {
-
-  constructor(props) {
-    super(props);
-
-    this.state = {
-      dropdownOpen: false,
-      tooltipOpen: false,
-    }
-  }
-
-  dropdownToggle = () => {
-    this.setState({
-      dropdownOpen: !this.state.dropdownOpen
-    });
-  }
-
-  tooltipToggle = () => {
-    this.setState({
-      tooltipOpen: !this.state.tooltipOpen && !this.state.dropdownOpen
-    })
-  }
-
-  render() {
-    return (
-      <Dropdown isOpen={this.state.dropdownOpen} toggle={this.dropdownToggle}>
-        <DropdownToggle id={this.props.id}>
-          <i className="fa fa-users"></i> {this.props.users.length}
-          <Tooltip toggle={this.tooltipToggle} delay={{show: 0, hide: 0}} target={this.props.id} placement='bottom' isOpen={this.state.tooltipOpen}>
-            {this.props.tooltip}
-          </Tooltip>
-        </DropdownToggle>
-        <DropdownMenu className={'drop-list'}>
-          {
-            this.props.users.map((user, idx) => (
-              <DropdownItem key={idx}><i className="fa fa-user"></i> {user.name}</DropdownItem>
-            ))
-          }
-      </DropdownMenu>
-        </Dropdown>
-    )
-  }
-  
-}
-
 
 class TableToolBar extends React.Component {
   render() {
@@ -200,7 +155,6 @@ class TableToolBar extends React.Component {
   }
 }
 
-<<<<<<< HEAD
 class HeaderList extends React.Component {
   constructor(props) {
     super(props);
@@ -240,6 +194,3 @@ MoreMenu = translate("translations")(MoreMenu);
 HeaderList = translate("translations")(HeaderList);
 
 export { IconButton, TableToolBar, Button, ButtonGroup, MoreMenu, HeaderList }
-=======
-export { IconButton, CollabUsersButton, TableToolBar, Button, ButtonGroup, MoreMenu }
->>>>>>> [frontend/editor] Using socket.io to show online/editing users

@@ -4,12 +4,7 @@ import SeafileEditor from './lib/seafile-editor';
 import MarkdownViewer from './lib/markdown-viewer';
 import 'whatwg-fetch';
 
-import Alert from 'react-s-alert';
-import openSocket from 'socket.io-client';
-const socket = openSocket(process.env.SOCKETIO_HOST || '')
-
 let repoID = window.app.pageOptions.repoID;
-let user = window.app.pageOptions.user
 let filePath = window.app.pageOptions.filePath;
 let fileName = window.app.pageOptions.fileName;
 let siteRoot = window.app.config.siteRoot;
@@ -124,68 +119,18 @@ class App extends React.Component {
       this.state = {
         markdownContent: "",
         loading: true,
-<<<<<<< HEAD
         mode: "editor",
-=======
-        mode: "view",
->>>>>>> [frontend/editor] Using socket.io to show online/editing users
       };
       this.fileInfo = {
         name: fileName,
-        path: filePath,
-        collabUsers: [],
+        path: filePath
       };
-
-    socket.on('new user join', (user) => this.joinUser(user))
-    socket.on('user left room', (user) => this.removeUser(user))
-    socket.on('update users', (users) => this.updateUsers(users))
-    socket.on('user editing', (user) => this.receiveUserEditing(user))
-  }
-
-  joinUser(user) {
-    console.log('joinUser: ', user);
-    Alert.success(`user ${user.name} joined`, {
-      position: 'bottom-right',
-      effect: 'scale',
-      timeout: 3000
-    });
-  }
-
-  removeUser(user) {
-    console.log('removeUser: ', user);
-    Alert.info(`user ${user.name} left`, {
-      position: 'bottom-right',
-      effect: 'scale',
-      timeout: 3000
-    });
-    
-  }
-
-  updateUsers(users) {
-    console.log('updateUsers', users);
-    console.log(socket.id);
-    this.fileInfo.collabUsers = Object.values(users);
-  }
-
-  emitUserEditing() {
-    socket.emit('editing event', {room: repoID+encodeURIComponent(filePath), user: user});
-  }
-
-  receiveUserEditing(user) {
-    console.log('user editing: ', user);
-    Alert.warning(`user ${user.name} is editing this file!`, {
-      position: 'bottom-right',
-      effect: 'scale',
-      timeout: 5000
-    });
-  }
+    }
 
   componentDidMount() {
     const path = encodeURIComponent(filePath)
     const url = `${siteRoot}api2/repos/${repoID}/file/?p=${path}&reuse=1`;
     const infoPath =`${siteRoot}api2/repos/${repoID}/file/detail/?p=${path}`;
-
-    socket.emit('room', {room: repoID+encodeURIComponent(filePath), user: user});
 
     fetch(infoPath, {credentials:'same-origin'})
       .then((response) => response.json())
@@ -208,19 +153,6 @@ class App extends React.Component {
     })
   }
 
-<<<<<<< HEAD
-=======
-  componentWillUnmount() {
-    socket.emit('leave room', {room: repoID+encodeURIComponent(filePath), user: user});
-  }
-  
-  switchToEditor = () => {
-    this.setState({
-      mode: "edit"
-    })
-  }
-
->>>>>>> Use user.name instead of username
   render() {
     if (this.state.loading) {
       return (
@@ -236,7 +168,7 @@ class App extends React.Component {
           editorUtilities={editorUtilities}
         />
       );
-    }
+    }   
   }
 }
 
