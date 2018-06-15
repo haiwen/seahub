@@ -18,6 +18,7 @@ html, body { padding:0; margin:0; height:100%; }
 <script type="text/javascript" src="{{ ONLYOFFICE_APIJS_URL }}"></script>
 <script type="text/javascript">
 var config = {
+    "type": window.screen.width < 992 ? 'mobile' : 'desktop',
     "document": {
         "fileType": "{{ file_type }}",
         "key": "{{doc_key}}",
