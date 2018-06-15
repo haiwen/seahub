@@ -217,11 +217,11 @@ class AdminAddressBookGroup(APIView):
             return api_error(status.HTTP_500_INTERNAL_SERVER_ERROR, error_msg)
 
         if has_repo:
-            error_msg = _(u'Failed to remove: this department has libraries.')
+            error_msg = _(u'There are libraries in this department.')
             return api_error(status.HTTP_403_FORBIDDEN, error_msg)
 
         if len(child_groups) > 0:
-            error_msg = _(u'Failed to remove: this department has sub groups.')
+            error_msg = _(u'There are sub-departments in this department.')
             return api_error(status.HTTP_403_FORBIDDEN, error_msg)
 
         try:
