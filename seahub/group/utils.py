@@ -2,11 +2,12 @@
 # -*- coding: utf-8 -*-
 import re
 import logging
+from django.core.cache import cache
 
 import seaserv
 from seaserv import ccnet_api
 
-from seahub.utils import is_org_context
+from seahub.utils import is_org_context, normalize_cache_key
 from seahub.profile.models import Profile
 from seahub.base.templatetags.seahub_tags import email2nickname
 from seahub.avatar.settings import AVATAR_DEFAULT_SIZE
@@ -120,3 +121,24 @@ def get_group_member_info(request, group_id, email, avatar_size=AVATAR_DEFAULT_S
     }
 
     return member_info
+
+GROUP_ID_CACHE_PREFIX = "GROUP_ID_"
+GROUP_ID_CACHE_TIMEOUT = 24 * 60 * 60
+
+def group_id_to_name(group_id):
+
+    group_id = str(group_id)
+
+    key = normalize_cache_key(group_id, GROUP_ID_CACHE_PREFIX)
+    cached_group_name = cache.get(key)
+    if cached_group_name:
+        return cached_group_name
+
+    group = ccnet_api.get_group(int(group_id))
+    if not group:
+        return ''
+
+    group_name = group.group_name
+    cache.set(key, group_name, GROUP_ID_CACHE_TIMEOUT)
+
+    return group_name

@@ -21,7 +21,9 @@ from seahub.admin_log.signals import admin_operation
 from seahub.admin_log.models import REPO_CREATE, REPO_DELETE, REPO_TRANSFER
 from seahub.share.models import FileShare, UploadLinkShare
 from seahub.base.templatetags.seahub_tags import email2nickname, email2contact_email
-from seahub.group.utils import is_group_member
+from seahub.group.utils import is_group_member, group_id_to_name
+
+from seahub.api2.endpoints.group_owned_libraries import get_group_id_by_repo_owner
 
 try:
     from seahub.settings import MULTI_TENANCY
@@ -52,6 +54,10 @@ def get_repo_info(repo):
     result['size_formatted'] = filesizeformat(repo.size)
     result['encrypted'] = repo.encrypted
     result['file_count'] = repo.file_count
+
+    if '@seafile_group' in owner:
+        group_id = get_group_id_by_repo_owner(repo_owner)
+        result['group_name'] = group_id_to_name(group_id)
 
     return result
 
