@@ -580,7 +580,15 @@ def view_lib_file(request, repo_id, path):
                 return render(request, 'view_file_base.html', return_dict)
 
         if ENABLE_ONLYOFFICE and fileext in ONLYOFFICE_FILE_EXTENSION:
-            doc_key = hashlib.md5(force_bytes(repo_id + path + file_id)).hexdigest()[:20]
+
+            if repo.is_virtual:
+                origin_repo_id = repo.origin_repo_id
+                origin_file_path = posixpath.join(repo.origin_path, path.strip('/'))
+                doc_key = hashlib.md5(force_bytes(origin_repo_id + \
+                        origin_file_path + file_id)).hexdigest()[:20]
+            else:
+                doc_key = hashlib.md5(force_bytes(repo_id + path + file_id)).hexdigest()[:20]
+
             if fileext in ('xls', 'xlsx', 'ods', 'fods', 'csv'):
                 document_type = 'spreadsheet'
             elif fileext in ('pptx', 'ppt', 'odp', 'fodp', 'ppsx', 'pps'):
