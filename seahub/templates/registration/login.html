@@ -66,7 +66,12 @@ html, body, #wrapper { height:100%; }
     <a id="sso" href="#" class="normal">{% trans "Single Sign-On" %}</a>
     {% endif %}
 
-    <a href="{% url "social:begin" "weixin-work" %}"><span class="sf2-icon-msgs op-icon"></span> {% trans "WeChat Work" %}</a>
+    <span>
+    {% trans "Login with: " %}
+    <a href="{% url "social:begin" "weixin-work" %}">
+        <img src="{{MEDIA_URL}}img/weixin.png" width="24" alt="" title="{% trans "WeChat for work" %}" />
+    </a>
+    </span>
 
     <div class="login-panel-bottom-container">
         {% if enable_signup %}
