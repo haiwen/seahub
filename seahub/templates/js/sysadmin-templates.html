@@ -692,7 +692,13 @@
 </script>
 
 <script type="text/template" id="group-item-tmpl">
-    <td><a href="{{ SITE_ROOT }}sysadmin/#groups/<%= id %>/libs/"><%- name %></a></td>
+    <td>
+        <% if (parent_group_id == 0) { %>
+        <a href="{{ SITE_ROOT }}sysadmin/#groups/<%= id %>/libs/"><%- name %></a>
+        <% } else { %>
+        <a href="{{ SITE_ROOT }}sysadmin/#address-book/groups/<%= id %>/"><%- name %></a>
+        <% } %>
+    </td>
     <td>
         <% if (owner != 'system admin') { %>
         <a href="{{ SITE_ROOT }}useradmin/info/<% print(encodeURIComponent(owner)); %>/"><%- owner %></a>
