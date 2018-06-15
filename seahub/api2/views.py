@@ -2887,6 +2887,12 @@ class FileDetailView(APIView):
         entry["id"] = obj_id
         entry["mtime"] = last_modified
 
+        try:
+            UserStarredFiles.objects.get(repo_id=repo_id, path=path)
+            entry["starred"] = True
+        except UserStarredFiles.DoesNotExist:
+            entry["starred"] = False
+
         return HttpResponse(json.dumps(entry), status=200,
                             content_type=json_content_type)
 
