@@ -1,0 +1,604 @@
+#wrapper {
+}
+
+/* custom scrollbar */
+::-webkit-scrollbar {
+    height: 9px;
+    width: 9px;
+}
+::-webkit-scrollbar-button {
+    display: block;
+    height: 4px;
+}
+::-webkit-scrollbar-track-piece {
+    background: #e9e9eb;
+}
+::-webkit-scrollbar-track-piece:vertical:start {
+    border-radius:5px 5px 0 0;
+}
+::-webkit-scrollbar-track-piece:vertical:end {
+    border-radius:0 0 5px 5px;
+}
+::-webkit-scrollbar-track-piece:horizontal:start {
+    border-radius:5px 0 0 5px;
+}
+::-webkit-scrollbar-track-piece:horizontal:end {
+    border-radius:0 5px 5px 0;
+}
+::-webkit-scrollbar-thumb:vertical,
+::-webkit-scrollbar-thumb:horizontal {
+    background: #ccc;
+    border-radius: 5px;
+    display: block;
+}
+
+/****** sf2-icon-xx ********/
+@font-face {
+    font-family: 'seafile-font2';
+    src:url('sf_font2/seafile-font2.eot');
+    src:url('sf_font2/seafile-font2.eot?#iefix') format('embedded-opentype'),
+        url('sf_font2/seafile-font2.woff') format('woff'),
+        url('sf_font2/seafile-font2.ttf') format('truetype'),
+        url('sf_font2/seafile-font2.svg#seafile-font2') format('svg');
+    font-weight: normal;
+    font-style: normal;
+}
+[class^="sf2-icon-"],
+[class*=" sf2-icon-"] {
+    font-family: 'seafile-font2';
+    speak: none;
+    font-weight: normal;
+    font-variant: normal;
+    text-transform: none;
+    -webkit-font-smoothing: antialiased;
+}
+
+.sf2-icon-menu:before { content: "\e031"; }
+.sf2-icon-more:before { content: "\e032"; }
+.sf2-icon-x1:before { content:"\e01d"; }
+.sf2-icon-user:before { content:"\e00f"; }
+.sf2-icon-share:before { content:"\e011"; }
+.sf2-icon-organization:before { content:"\e010"; }
+.sf2-icon-group:before { content:"\e00c"; }
+.sf2-icon-star:before { content:"\e012"; }
+.sf2-icon-clock:before { content:"\e002"; }
+.sf2-icon-monitor:before { content:"\e007"; }
+.sf2-icon-wrench:before { content:"\e001"; }
+.sf2-icon-bell:before { content:"\e003"; }
+
+/****** icon-xx ********/
+/* Font Awesome 3.2.1 by Dave Gandy - http://fortawesome.github.com/Font-Awesome */
+@font-face {
+    font-family: 'FontAwesome';
+    src: url('font/fontawesome-webfont.eot?v=3.0.1');
+    src: url('font/fontawesome-webfont.eot?#iefix&v=3.0.1') format('embedded-opentype'),
+    url('font/fontawesome-webfont.woff?v=3.0.1') format('woff'),
+    url('font/fontawesome-webfont.ttf?v=3.0.1') format('truetype');
+    font-weight: normal;
+    font-style: normal;
+}
+[class^="icon-"],
+[class*=" icon-"] {
+    font-family: FontAwesome;
+    font-weight: normal;
+    font-style: normal;
+    text-decoration: inherit;
+    -webkit-font-smoothing: antialiased;
+    vertical-align: baseline;
+    speak: none;
+}
+.icon-caret-down:before           { content: "\f0d7"; }
+.icon-caret-left:before           { content: "\f0d9"; }
+
+/* common class */
+.vam { vertical-align:middle; }
+.flex-auto { flex:auto; }
+.flex-1 { flex:1; }
+.hide { display:none; }
+
+#right-panel {
+    color: #495057;
+    background-color: #f5f7fb;
+    font:13px/1.5 Arial, Helvetica, sans-serif;
+}
+
+#header {
+    background:#f4f4f7;
+    width:100%;
+    height:53px;
+    font-size: 14px;
+    border-bottom: 1px solid #e8e8e8;
+    padding:8px 16px 4px;
+    /*display:flex;*/
+    justify-content:space-between;
+    flex-shrink:0;
+}
+
+/* header */
+#logo {
+    margin-right:30px;
+}
+
+h3 {
+    font-size: 16px;
+    color: #322;
+    font-weight: normal;
+}
+
+h1, h2, h3, h4,
+h5, h6 {
+    line-height: 1.5;
+}
+
+#account {
+    position:relative;
+    margin-left:32px;
+}
+
+#my-info {
+    display:inline-block;
+    color:#d6d6d6;
+}
+#account .avatar {
+    vertical-align:middle;
+    border-radius:1000px;
+}
+
+@media (max-width:767px) {
+    #account {
+        margin:5px 0 0 10px;
+    }
+    .account-toggle {
+        font-size:22px;
+        line-height:1;
+        color:#999;
+        margin-top:8px;
+    }
+}
+
+.account-popup .avatar {
+    float:left;
+}
+
+.account-popup .txt {
+    margin-left:45px;
+}
+
+.account-popup {
+    right:0;
+    top:52px;
+    font-size:13px;
+}
+
+.account-popup .outer-caret {
+    top:-10px;
+    right:16px;
+}
+
+.account-popup .sf-popover-con {
+    padding:0;
+}
+
+.account-popup .item {
+    display:block;
+    padding:8px 18px;
+    border-bottom:1px solid #ddd;
+}
+
+.account-popup a.item {
+    color:#333;
+    font-weight:normal;
+}
+
+.account-popup a.item:hover {
+    background:#fafafa;
+    text-decoration:none;
+}
+
+#account .manage {
+    position:absolute;
+    left:60px;
+    top:-16px;
+}
+
+#account .manage .a:hover {
+    text-decoration:none;
+}
+
+.no-deco,
+.no-deco:hover,
+.no-deco:focus {
+    text-decoration:none;
+}
+
+@media (max-width:767px) {
+    .cur-view-toolbar .mobile-icon {
+        color:#999;
+        line-height:1.63;
+        font-size:22px;
+        margin-right:8px;
+    }
+}
+
+.sf-popover {
+    width:240px;
+    background:#fff;
+    border:1px solid #c9c9c9;
+    border-radius:3px;
+    box-shadow:0 0 4px #ccc;
+    position:absolute;
+    z-index: 20;
+}
+
+/**** caret ****/
+.outer-caret,
+.inner-caret {
+    height:0;
+    width:0;
+    border-width:14px 14px 0; /* default: arrow to the bottom */
+    border-style:dashed solid; /* 'dashed' for firefox */
+    border-color:#CBCBCB transparent;
+    z-index:100;
+    margin:0 auto;
+}
+.inner-caret {
+    border-top-color:#fff;
+    position:relative;
+    top:-15px;
+    left:-14px;
+}
+.up-outer-caret,
+.up-outer-caret .inner-caret {
+    border-width:0 10px 10px;
+}
+.up-outer-caret .inner-caret {
+    border-bottom-color:#fff;
+    top:1px;
+    left:-10px;
+}
+.up-outer-caret {
+    position:absolute;
+    top:-11px;
+}
+
+.sf-popover-con {
+    padding:0 10px;
+    overflow:auto;
+}
+
+.loading-icon {
+    display:inline-block;
+    width:26px;
+    height:26px;
+    border:2px solid #eee;
+    border-left-color:#aaa;
+    border-radius:50%;
+    -moz-animation:loading 0.9s infinite linear;
+    -webkit-animation:loading 0.9s infinite linear;
+    animation:loading 0.9s infinite linear;
+}
+.loading-tip {
+    display:block;
+    margin:1em auto;
+}
+
+.sf-popover-close {
+    font-size:16px;
+    color:#b9b9b9;
+    margin:4px 0 0;
+}
+
+a.op-icon:focus {
+    outline:none;
+    text-decoration:none;
+}
+.op-icon:hover {/** for <a> **/
+    color:#888;
+    text-decoration:none;
+}
+
+.ellipsis {
+    white-space:nowrap;
+    overflow:hidden;
+    text-overflow:ellipsis;
+}
+
+ul {
+    list-style: none
+}
+
+body, ul, li {
+    padding:0;
+    margin:0
+}
+
+html, body {
+    height: 100%;
+    overflow: hidden;
+}
+
+#right-panel {
+    padding-top:16px;
+    padding-bottom:20px;
+}
+
+.full-width-btn {
+    width:100%;
+    padding:.5em 0;
+    background:#efefef;
+    border:0;
+    color:#777;
+}
+
+.full-width-btn:hover {
+    color:#000;
+    background:#dfdfdf;
+}
+
+/**** side-tabnav ****/
+.side-textnav .hd,
+.side-info .hd {
+    padding-bottom:4px;
+    border-bottom:1px solid #ddd;
+    margin-bottom:1em;
+}
+@media (max-width: 767px) {
+    .side-nav {
+        background: #f8f8f8;
+        width:300px;
+        position:fixed;
+        left:-300px;
+        top:0;
+        bottom:0;
+        z-index:1;
+        box-shadow:0 0 4px #ccc;
+        -webkit-transition: all 0.3s ease;
+        -moz-transition: all 0.3s ease;
+        transition: all 0.3s ease;
+    }
+    .side-nav-shown {
+        left:0;
+    }
+}
+.side-nav {
+    padding:20px;
+    overflow:hidden;
+    border-right:1px solid #eee;
+}
+.side-nav:hover {
+    overflow-y:auto;
+}
+.home-side-nav {
+    flex:auto;
+    display:flex;
+    flex-direction:column;
+    justify-content:space-between; /* make .side-nav-footer on the bottom */
+    overflow:hidden; /* for ff */
+    border-right:1px solid #eee;
+}
+.side-nav-con {
+    overflow:hidden;
+    padding:20px;
+}
+.side-nav-con:hover {
+    overflow-y:auto;
+}
+.side-nav-footer {
+    display:flex;
+    flex-shrink:0;
+    padding:12px 20px 16px;
+    background:#f8f8f8;
+    border-top:1px solid #eee;
+}
+.side-nav-footer .item {
+    color:#666;
+    font-weight: normal;
+    margin-right:10px;
+}
+.side-nav-footer .last-item {
+    margin-left:auto;
+}
+.side-tabnav .hd {
+    margin-bottom:0.5em;
+}
+.side-tabnav h3.hd,
+.side-tabnav .hd h3 {
+    color:#f7941d;
+}
+.side-tabnav .hd h3 {
+    margin-bottom:0;
+}
+.side-tabnav .hd .avatar { /*for 'group'*/
+    vertical-align:middle;
+    border-radius:1000px;
+    margin:0 6px 0 4px;
+}
+.side-tabnav .grp-name { /*for 'group'*/
+    display:inline-block;
+    max-width:130px;
+    font-weight:normal;
+}
+.side-tabnav-tabs {
+    margin-bottom:1em;
+}
+.side-tabnav-tabs .tab {
+    border-radius:2px;
+    overflow:hidden;
+}
+.side-tabnav-tabs .tab a { /* for IE 11: no border-radius here */
+    display:block;
+    font-size:15px;
+    padding:4px 4px 4px 0;
+    color:#333;
+    font-weight:normal;
+}
+.side-tabnav-tabs .tab a:focus {
+    text-decoration:none;
+}
+.side-tabnav-tabs .tab ul a {
+    font-size:14px;
+    line-height:24px;
+    padding:0;
+}
+.side-tabnav-tabs .tab a:hover {
+    background-color:#feefb8;
+    text-decoration:none;
+}
+.side-tabnav-tabs .tab [class^="sf2-icon-"] {
+    display:inline-block;
+    width:42px;
+    margin-right:5px;
+    text-align:center;
+    vertical-align:middle;
+    font-size:24px;
+    line-height:1;
+    color:#999;
+}
+.side-nav-toggle {
+    font-size:1.5rem;
+    color:#999;
+    margin-right:15px;
+}
+#group-nav .sharp,
+#share-admin-nav .sharp {
+    display:inline-block;
+    width:42px;
+    margin-right:5px;
+    text-align:right;
+    color:#aaa;
+}
+#group-nav .toggle-icon,
+#share-admin-nav .toggle-icon {
+    color:#999;
+}
+.side-tabnav-tabs .tab-cur a,
+.side-tabnav-tabs .tab-cur a:hover {
+    background-color:#feac74;
+}
+.side-tabnav-tabs .tab-cur [class^="sf2-icon-"],
+.side-tabnav-tabs .tab-cur a,
+#group-nav .tab-cur .sharp,
+#share-admin-nav .tab-cur .sharp {
+    color:#fff;
+}
+.side-tabnav-tabs .tab-cur a {
+    font-weight:bold;
+}
+.side-textnav .hd {
+    margin:2em 0 .5em;
+}
+.side-textnav-tabs .tab a {
+    display:block;
+    padding:10px 0;
+    font-weight:normal;
+    color:#999;
+    border-bottom:1px solid #eee;
+    margin-bottom:3px;
+}
+.side-textnav-tabs .tab-cur a,
+.side-textnav-tabs .tab a:hover {
+    color:#de3f1c;
+    text-decoration:none;
+}
+
+.common-toolbar {
+    margin-left:auto;
+    display:flex;
+}
+#notifications {
+    position:relative;
+    margin:5px 0 0 25px;
+}
+@media (max-width: 390px) {
+    #notifications {
+        margin-left:8px;
+    }
+}
+#notifications .sf2-icon-bell {
+    font-size:24px;
+    line-height:1;
+    color:#999;
+}
+.main-panel {
+    padding:0;
+    display:flex;
+    flex-direction:column;
+}
+.cur-view-main-con {
+    padding:10px 16px 20px;
+    border-right:4px solid transparent;
+    overflow:auto;
+    flex:auto;
+}
+.side-panel {
+    display:flex;
+    flex-direction:column;
+    padding:0;
+    overflow:hidden;
+}
+@media (max-width: 767px) {
+    .side-panel {
+        background:#f8f8f8;
+        width:300px;
+        height:100%;
+        position:fixed;
+        left:-300px;
+        z-index:1; /* important! */
+        -webkit-transition: all 0.3s ease;
+        -moz-transition: all 0.3s ease;
+        transition: all 0.3s ease;
+    }
+}
+.panel-top {
+    padding:.5rem 1rem .25rem;
+    background:#f4f4f7;
+    border-bottom: 1px solid #e8e8e8;
+    display:flex;
+    flex-shrink:0;
+}
+.side-panel-top {
+    padding: .45rem 1rem;
+}
+@media (max-width: 767px) {
+    .side-panel-top {
+        border-right:1px solid #eee;
+    }
+}
+.side-panel-close {
+    margin:10px 0 0 auto;
+}
+.side-nav-footer {
+    display:flex;
+    flex-shrink:0;
+    padding:12px 20px 16px;
+    background:#f8f8f8;
+    border-top:1px solid #eee;
+}
+.side-nav-footer .item {
+    color:#666;
+    font-weight: normal;
+    margin-right:10px;
+}
+.side-nav-footer .last-item {
+    margin-left:auto;
+}
+
+.op-icon {
+    font-size:20px;
+    line-height:1;
+    color:#888;
+    cursor:pointer;
+    margin-right:3px;
+    vertical-align:middle;
+}
+
+/* about dialog */
+.about-content {
+    min-width: 280px;
+    padding-top: 20px;
+    text-align: center;
+}
+
+.left-zero {
+    left: 0px;
+}
