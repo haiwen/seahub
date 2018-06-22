@@ -3292,6 +3292,11 @@ button.sf-dropdown-toggle:focus {
     border-bottom:1px dotted #ddd;
     margin-bottom:3px;
 }
+.search-time-range {
+    border-top:1px dotted #ddd;
+    margin-top:3px;
+    padding-top:3px;
+}
 .custom-ftype-options {
     font-size:13px;
     padding:2px 0;
