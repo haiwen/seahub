@@ -3245,10 +3245,6 @@ class DirView(APIView):
                             return api_error(HTTP_520_OPERATION_FAILED,
                                          'Failed to make directory.')
             else:
-                if not is_seafile_pro():
-                    return api_error(status.HTTP_400_BAD_REQUEST,
-                                     'Feature not supported.')
-
                 if check_folder_permission(request, repo_id, '/') != 'rw':
                     error_msg = 'Permission denied.'
                     return api_error(status.HTTP_403_FORBIDDEN, error_msg)
