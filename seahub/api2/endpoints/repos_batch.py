@@ -581,8 +581,6 @@ class ReposBatchCreateDirView(APIView):
                 continue
 
             try:
-                # TODO
-                # move seafile_api.mkdir_with_parents() to CE version
                 # rename obj name if name is existed
                 seafile_api.mkdir_with_parents(repo_id, '/', path.strip('/'), username)
             except Exception as e:
