@@ -265,7 +265,7 @@ function feedback(con, type, time) {
         hide_pos_top = '-' + ($el.outerHeight() + parseInt(show_pos_top)) + 'px';
 
         // add transition: from 'hide' to 'show'. the transition effect is offered by CSS.
-        $el.css({'left':($(window).width() - $el.width())/2, 'top': hide_pos_top});
+        $el.css({'left':($(window).width() - $el.width())/2, 'top': hide_pos_top}).removeClass('hide');
         setTimeout(function() { $el.css({'top': show_pos_top}); }, 10);
 
         setTimeout(function() { $el.css({'top': hide_pos_top}); }, 5000);
