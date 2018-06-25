@@ -45,7 +45,7 @@ from seahub.avatar.templatetags.avatar_tags import api_avatar_url, avatar
 from seahub.avatar.templatetags.group_avatar_tags import api_grp_avatar_url, \
         grp_avatar
 from seahub.base.accounts import User
-from seahub.base.models import UserStarredFiles, DeviceToken
+from seahub.base.models import UserStarredFiles, DeviceToken, RepoSecretKey
 from seahub.share.models import ExtraSharePermission, ExtraGroupsSharePermission
 from seahub.share.utils import is_repo_admin, check_group_share_in_permission
 from seahub.base.templatetags.seahub_tags import email2nickname, \
@@ -868,6 +868,14 @@ class Repos(APIView):
                 repo_id = seafile_api.create_repo(repo_name,
                         repo_desc, username, passwd)
 
+        if passwd:
+            try:
+                # get secret_key, then save it to database
+                secret_key = seafile_api.get_secret_key(repo_id, passwd)
+                RepoSecretKey.objects.add_secret_key(repo_id, secret_key)
+            except Exception as e:
+                logger.error(e)
+
         return repo_id, None
 
     def _create_enc_repo(self, request, repo_id, repo_name, repo_desc, username, org_id):
@@ -1018,8 +1026,18 @@ class PubRepos(APIView):
 def set_repo_password(request, repo, password):
     assert password, 'password must not be none'
 
+    repo_id = repo.id
     try:
-        seafile_api.set_passwd(repo.id, request.user.username, password)
+        seafile_api.set_passwd(repo_id, request.user.username, password)
+
+        try:
+            if not RepoSecretKey.objects.get_secret_key(repo_id):
+                # get secret_key, then save it to database
+                secret_key = seafile_api.get_secret_key(repo_id, password)
+                RepoSecretKey.objects.add_secret_key(repo_id, secret_key)
+        except Exception as e:
+            logger.error(e)
+
     except SearpcError, e:
         if e.msg == 'Bad arguments':
             return api_error(status.HTTP_400_BAD_REQUEST, e.msg)
@@ -1031,6 +1049,7 @@ def set_repo_password(request, repo, password):
             return api_error(status.HTTP_500_INTERNAL_SERVER_ERROR, e.msg)
         else:
             return api_error(status.HTTP_500_INTERNAL_SERVER_ERROR, e.msg)
+
 
 def check_set_repo_password(request, repo):
     if not check_permission(repo.id, request.user.username):

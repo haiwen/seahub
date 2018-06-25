@@ -14,8 +14,9 @@ from pysearpc import SearpcError
 from seahub.api2.authentication import TokenAuthentication
 from seahub.api2.throttling import UserRateThrottle
 from seahub.api2.utils import api_error
-
-from seahub.utils import is_org_context
+from seahub.utils.repo import is_repo_owner
+from seahub.base.models import RepoSecretKey
+from seahub.views import check_folder_permission
 
 logger = logging.getLogger(__name__)
 
@@ -26,20 +27,36 @@ class RepoSetPassword(APIView):
     throttle_classes = (UserRateThrottle,)
 
     def post(self, request, repo_id):
+        """ Check if repo password is correct.
 
-        repo = seafile_api.get_repo(repo_id)
-        if not repo:
-            error_msg = 'Library %s not found.' % repo_id
-            return api_error(status.HTTP_404_NOT_FOUND, error_msg)
+        Permission checking:
+        1. User can access current repo.
+        """
 
+        # argument check
         password = request.POST.get('password', None)
         if not password:
             error_msg = 'password invalid.'
             return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
 
+        # resource check
+        repo = seafile_api.get_repo(repo_id)
+        if not repo:
+            error_msg = 'Library %s not found.' % repo_id
+            return api_error(status.HTTP_404_NOT_FOUND, error_msg)
+
+        if not repo.encrypted:
+            error_msg = 'Library %s is not encrypted.' % repo_id
+            return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
+
+        # permission check
+        if not check_folder_permission(request, repo_id, '/'):
+            error_msg = 'Permission denied.'
+            return api_error(status.HTTP_403_FORBIDDEN, error_msg)
+
+        # check the password is correct
         try:
             seafile_api.set_passwd(repo_id, request.user.username, password)
-            return Response({'success': True})
         except SearpcError as e:
             if e.msg == 'Bad arguments':
                 error_msg = 'Bad arguments'
@@ -54,22 +71,28 @@ class RepoSetPassword(APIView):
                 error_msg = _(u'Decrypt library error')
                 return api_error(status.HTTP_500_INTERNAL_SERVER_ERROR, error_msg)
 
+        try:
+            if not RepoSecretKey.objects.get_secret_key(repo_id):
+                # get secret_key, then save it to database
+                secret_key = seafile_api.get_secret_key(repo_id, password)
+                RepoSecretKey.objects.add_secret_key(repo_id, secret_key)
+        except Exception as e:
+            logger.error(e)
+
+        return Response({'success': True})
+
     def put(self, request, repo_id):
-        """ Change repo password.
+        """ Change/Init repo password.
 
         Permission checking:
         1. repo owner
         """
 
         # argument check
-        old_password = request.POST.get('old_password', None)
-        if not old_password:
-            error_msg = 'old_password invalid.'
-            return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
-
-        new_password = request.POST.get('new_password', None)
-        if not new_password:
-            error_msg = 'new_password invalid.'
+        operation = request.POST.get('operation', 'change-password')
+        operation = operation.lower()
+        if operation not in ('change-password', 'reset-password', 'can-reset-password'):
+            error_msg = 'operation invalid.'
             return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
 
         # resource check
@@ -78,25 +101,68 @@ class RepoSetPassword(APIView):
             error_msg = 'Library %s not found.' % repo_id
             return api_error(status.HTTP_404_NOT_FOUND, error_msg)
 
-        # permission check
-        if is_org_context(request):
-            repo_owner = seafile_api.get_org_repo_owner(repo.id)
-        else:
-            repo_owner = seafile_api.get_repo_owner(repo.id)
+        if not repo.encrypted:
+            error_msg = 'Library %s is not encrypted.' % repo_id
+            return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
 
+        # permission check
         username = request.user.username
-        if username != repo_owner:
+        if not is_repo_owner(request, repo_id, username):
             error_msg = 'Permission denied.'
             return api_error(status.HTTP_403_FORBIDDEN, error_msg)
 
-        # change password
-        try:
-            seafile_api.change_repo_passwd(repo_id, old_password, new_password, username)
-        except SearpcError as e:
-            if e.msg == 'Incorrect password':
-                error_msg = _(u'Wrong old password')
-                return api_error(status.HTTP_403_FORBIDDEN, error_msg)
+        if operation == 'change-password':
+
+            old_password = request.POST.get('old_password', None)
+            if not old_password:
+                error_msg = 'old_password invalid.'
+                return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
+
+            new_password = request.POST.get('new_password', None)
+            if not new_password:
+                error_msg = 'new_password invalid.'
+                return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
+
+            try:
+                seafile_api.change_repo_passwd(repo_id, old_password, new_password, username)
+            except Exception as e:
+                if e.msg == 'Incorrect password':
+                    error_msg = _(u'Wrong old password')
+                    return api_error(status.HTTP_403_FORBIDDEN, error_msg)
+                else:
+                    logger.error(e)
+                    error_msg = 'Internal Server Error'
+                    return api_error(status.HTTP_500_INTERNAL_SERVER_ERROR, error_msg)
+
+            try:
+                if not RepoSecretKey.objects.get_secret_key(repo_id):
+                    # get secret_key, then save it to database
+                    secret_key = seafile_api.get_secret_key(repo_id, new_password)
+                    RepoSecretKey.objects.add_secret_key(repo_id, secret_key)
+            except Exception as e:
+                logger.error(e)
+
+        if operation == 'can-reset-password':
+            if not RepoSecretKey.objects.get_secret_key(repo_id):
+                return Response({'allowed': False})
             else:
+                return Response({'allowed': True})
+
+        if operation == 'reset-password':
+
+            new_password = request.POST.get('new_password', None)
+            if not new_password:
+                error_msg = 'new_password invalid.'
+                return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
+
+            secret_key =  RepoSecretKey.objects.get_secret_key(repo_id)
+            if not secret_key:
+                error_msg = 'repo_id invalid.'
+                return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
+
+            try:
+                seafile_api.reset_repo_passwd(repo_id, username, secret_key, new_password)
+            except Exception as e:
                 logger.error(e)
                 error_msg = 'Internal Server Error'
                 return api_error(status.HTTP_500_INTERNAL_SERVER_ERROR, error_msg)

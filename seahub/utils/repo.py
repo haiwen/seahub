@@ -38,6 +38,10 @@ def get_repo_owner(request, repo_id):
     else:
         return seafile_api.get_repo_owner(repo_id)
 
+def is_repo_owner(request, repo_id, username):
+
+    return username == get_repo_owner(request, repo_id)
+
 def get_repo_shared_users(repo_id, repo_owner, include_groups=True):
     """Return a list contains users and group users. Repo owner is ommited.
     """
