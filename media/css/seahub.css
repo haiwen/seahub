@@ -197,6 +197,7 @@
 .sf2-icon-more:before { content: "\e032"; }
 .sf2-icon-plus2:before { content: "\e033"; }
 .sf2-icon-upload:before { content: "\e034"; }
+.sf2-icon-x3:before { content: "\e035"; }
 
 /******* tags **********/
 html, body {
