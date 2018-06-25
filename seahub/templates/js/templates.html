@@ -259,7 +259,7 @@
                     <a href="#" class="sf2-icon-share sf2-x repo-share-btn op-icon vh" title="{% trans "Share" %}" aria-label="{% trans "Share" %}"></a>
                 <% } %>
                 <% if (is_staff || is_repo_owner || is_admin) { %>
-                    <a href="#" class="sf2-icon-x2 sf2-x cancel-share op-icon vh" title="{% trans "Unshare" %}" aria-label="{% trans "Unshare" %}"></a>
+                    <a href="#" class="sf2-icon-x3 sf2-x cancel-share op-icon vh" title="{% trans "Unshare" %}" aria-label="{% trans "Unshare" %}"></a>
                 <% } %>
             <% } else { %> {# It is an address book group #}
                 <% if (is_staff) { %>
@@ -277,7 +277,7 @@
                         </ul>
                     </div>
                 <% } else { %>
-                    <a href="#" class="sf2-icon-x2 sf2-x cancel-share op-icon vh" title="{% trans "Unshare" %}" aria-label="{% trans "Unshare" %}"></a>
+                    <a href="#" class="sf2-icon-x3 sf2-x cancel-share op-icon vh" title="{% trans "Unshare" %}" aria-label="{% trans "Unshare" %}"></a>
                 <% } %>
                 <% } %>
             <% } %>
@@ -286,7 +286,7 @@
                 <a href="#" class="sf2-icon-share sf2-x repo-share-btn op-icon vh" title="{% trans "Share" %}" aria-label="{% trans "Share" %}"></a>
             <% } %>
             <% if (is_staff || is_repo_owner) { %>
-                <a href="#" class="sf2-icon-delete sf2-x cancel-share op-icon vh" title="{% trans "Unshare" %}" aria-label="{% trans "Unshare" %}"></a>
+                <a href="#" class="sf2-icon-x3 sf2-x cancel-share op-icon vh" title="{% trans "Unshare" %}" aria-label="{% trans "Unshare" %}"></a>
             <% } %>
         <% } %>
     </td>
@@ -317,11 +317,12 @@
                     <a href="#" class="sf2-icon-share sf2-x repo-share-btn op-icon" title="{% trans "Share" %}" aria-label="{% trans "Share" %}"></a>
                 <% } %>
                 <% if (is_staff || is_repo_owner || is_admin) { %>
-                    <a href="#" class="sf2-icon-delete sf2-x cancel-share op-icon" title="{% trans "Unshare" %}" aria-label="{% trans "Unshare" %}"></a>
+                    <a href="#" class="sf2-icon-x3 sf2-x cancel-share op-icon" title="{% trans "Unshare" %}" aria-label="{% trans "Unshare" %}"></a>
                 <% } %>
 
             <% } else { %>
                 <% if (is_staff) { %>
+                    <% if (owner == group_id + '@seafile_group') { %> {# this repo belongs to the current group #}
                     <div class="sf-dropdown sf-dropdown-inline">
                         <a href="#" class="sf2-icon-caret-down more-op-icon op-icon sf-dropdown-toggle" title="{% trans "More Operations" %}" aria-label="{% trans "More Operations" %}"></a>
                         <ul class="hidden-op repo-hidden-op hide sf-dropdown-menu">
@@ -334,6 +335,9 @@
                             <li><a class="op js-repo-details" href="#">{% trans "Details" %}</a></li>
                         </ul>
                     </div>
+                    <% } else { %>
+                        <a href="#" class="sf2-icon-x3 sf2-x cancel-share op-icon" title="{% trans "Unshare" %}" aria-label="{% trans "Unshare" %}"></a>
+                    <% } %>
                 <% } %>
             <% } %>
 
@@ -342,7 +346,7 @@
                 <a href="#" class="sf2-icon-share sf2-x repo-share-btn op-icon" title="{% trans "Share" %}" aria-label="{% trans "Share" %}"></a>
             <% } %>
             <% if (is_staff || is_repo_owner) { %>
-                <a href="#" class="sf2-icon-delete sf2-x cancel-share op-icon" title="{% trans "Unshare" %}" aria-label="{% trans "Unshare" %}"></a>
+                <a href="#" class="sf2-icon-x3 sf2-x cancel-share op-icon" title="{% trans "Unshare" %}" aria-label="{% trans "Unshare" %}"></a>
             <% } %>
         <% } %>
     </td>
