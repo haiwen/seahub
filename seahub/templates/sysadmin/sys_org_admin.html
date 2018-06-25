@@ -115,9 +115,7 @@ $('#add-org-form').on('submit', function() {
             'password2': pwd2
         },
         success: function(data) {
-            if (data['success']) {
-                location.reload(true);
-            }   
+            location.reload(true);
         },
         error: function(jqXHR, textStatus, errorThrown) {
             if (jqXHR.responseText) {
@@ -125,9 +123,8 @@ $('#add-org-form').on('submit', function() {
             } else {
                 apply_form_error(form_id, "{% trans "Failed. Please check the network." %}");
             }
+            enable(submit_btn);
         }
-    }).complete(function() {
-        enable(submit_btn);
     });
 
     return false;
