@@ -75,7 +75,7 @@ from seahub.utils.file_revisions import get_file_revisions_after_renamed
 from seahub.utils.devices import do_unlink_device
 from seahub.utils.repo import get_repo_owner, get_library_storages, \
         get_locked_files_by_dir, get_related_users_by_repo, \
-        is_valid_repo_id_format
+        is_valid_repo_id_format, add_encrypted_repo_secret_key_to_database
 from seahub.utils.star import star_file, unstar_file
 from seahub.utils.file_types import DOCUMENT
 from seahub.utils.file_size import get_file_size_unit
@@ -93,7 +93,8 @@ if HAS_OFFICE_CONVERTER:
 import seahub.settings as settings
 from seahub.settings import THUMBNAIL_EXTENSION, THUMBNAIL_ROOT, \
     FILE_LOCK_EXPIRATION_DAYS, ENABLE_STORAGE_CLASSES, \
-    ENABLE_THUMBNAIL, ENABLE_FOLDER_PERM, STORAGE_CLASS_MAPPING_POLICY
+    ENABLE_THUMBNAIL, ENABLE_FOLDER_PERM, STORAGE_CLASS_MAPPING_POLICY, \
+    ENABLE_RESET_ENCRYPTED_REPO_PASSWORD
 try:
     from seahub.settings import CLOUD_MODE
 except ImportError:
@@ -868,13 +869,8 @@ class Repos(APIView):
                 repo_id = seafile_api.create_repo(repo_name,
                         repo_desc, username, passwd)
 
-        if passwd:
-            try:
-                # get secret_key, then save it to database
-                secret_key = seafile_api.get_secret_key(repo_id, passwd)
-                RepoSecretKey.objects.add_secret_key(repo_id, secret_key)
-            except Exception as e:
-                logger.error(e)
+        if passwd and ENABLE_RESET_ENCRYPTED_REPO_PASSWORD:
+            add_encrypted_repo_secret_key_to_database(repo_id, passwd)
 
         return repo_id, None
 
@@ -1030,13 +1026,8 @@ def set_repo_password(request, repo, password):
     try:
         seafile_api.set_passwd(repo_id, request.user.username, password)
 
-        try:
-            if not RepoSecretKey.objects.get_secret_key(repo_id):
-                # get secret_key, then save it to database
-                secret_key = seafile_api.get_secret_key(repo_id, password)
-                RepoSecretKey.objects.add_secret_key(repo_id, secret_key)
-        except Exception as e:
-            logger.error(e)
+        if ENABLE_RESET_ENCRYPTED_REPO_PASSWORD:
+            add_encrypted_repo_secret_key_to_database(repo_id, password)
 
     except SearpcError, e:
         if e.msg == 'Bad arguments':

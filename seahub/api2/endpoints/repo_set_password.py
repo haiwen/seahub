@@ -14,9 +14,11 @@ from pysearpc import SearpcError
 from seahub.api2.authentication import TokenAuthentication
 from seahub.api2.throttling import UserRateThrottle
 from seahub.api2.utils import api_error
-from seahub.utils.repo import is_repo_owner
+from seahub.utils.repo import is_repo_owner, add_encrypted_repo_secret_key_to_database
 from seahub.base.models import RepoSecretKey
 from seahub.views import check_folder_permission
+
+from seahub.settings import ENABLE_RESET_ENCRYPTED_REPO_PASSWORD
 
 logger = logging.getLogger(__name__)
 
@@ -71,13 +73,8 @@ class RepoSetPassword(APIView):
                 error_msg = _(u'Decrypt library error')
                 return api_error(status.HTTP_500_INTERNAL_SERVER_ERROR, error_msg)
 
-        try:
-            if not RepoSecretKey.objects.get_secret_key(repo_id):
-                # get secret_key, then save it to database
-                secret_key = seafile_api.get_secret_key(repo_id, password)
-                RepoSecretKey.objects.add_secret_key(repo_id, secret_key)
-        except Exception as e:
-            logger.error(e)
+        if ENABLE_RESET_ENCRYPTED_REPO_PASSWORD:
+            add_encrypted_repo_secret_key_to_database(repo_id, password)
 
         return Response({'success': True})
 
@@ -134,21 +131,24 @@ class RepoSetPassword(APIView):
                     error_msg = 'Internal Server Error'
                     return api_error(status.HTTP_500_INTERNAL_SERVER_ERROR, error_msg)
 
-            try:
-                if not RepoSecretKey.objects.get_secret_key(repo_id):
-                    # get secret_key, then save it to database
-                    secret_key = seafile_api.get_secret_key(repo_id, new_password)
-                    RepoSecretKey.objects.add_secret_key(repo_id, secret_key)
-            except Exception as e:
-                logger.error(e)
+            if ENABLE_RESET_ENCRYPTED_REPO_PASSWORD:
+                add_encrypted_repo_secret_key_to_database(repo_id, new_password)
 
         if operation == 'can-reset-password':
+            if not ENABLE_RESET_ENCRYPTED_REPO_PASSWORD:
+                error_msg = 'Feature disabled.'
+                return api_error(status.HTTP_403_FORBIDDEN, error_msg)
+
             if not RepoSecretKey.objects.get_secret_key(repo_id):
                 return Response({'allowed': False})
             else:
                 return Response({'allowed': True})
 
         if operation == 'reset-password':
+
+            if not ENABLE_RESET_ENCRYPTED_REPO_PASSWORD:
+                error_msg = 'Feature disabled.'
+                return api_error(status.HTTP_403_FORBIDDEN, error_msg)
 
             new_password = request.POST.get('new_password', None)
             if not new_password:
