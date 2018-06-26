@@ -46,7 +46,7 @@ from seahub.utils import check_filename_with_rename, EMPTY_SHA1, \
     get_file_type_and_ext, is_pro_version
 from seahub.utils.star import get_dir_starred_files
 from seahub.utils.file_types import IMAGE, VIDEO
-from seahub.utils.file_op import check_file_lock
+from seahub.utils.file_op import check_file_lock, ONLINE_OFFICE_LOCK_OWNER
 from seahub.utils.repo import get_locked_files_by_dir, get_repo_owner
 from seahub.utils.error_msg import file_type_error_msg, file_size_error_msg
 from seahub.base.accounts import User
@@ -370,10 +370,14 @@ def list_lib_dir(request, repo_id):
             f_['is_locked'] = True if f.is_locked else False
             f_['lock_owner'] = f.lock_owner
             f_['lock_owner_name'] = email2nickname(f.lock_owner)
-            if username == f.lock_owner:
+
+            f_['locked_by_me'] = False
+            if f.lock_owner == username:
                 f_['locked_by_me'] = True
-            else:
-                f_['locked_by_me'] = False
+
+            if f.lock_owner == ONLINE_OFFICE_LOCK_OWNER and \
+                    repo_owner == username:
+                f_['locked_by_me'] = True
 
         dirent_list.append(f_)
 

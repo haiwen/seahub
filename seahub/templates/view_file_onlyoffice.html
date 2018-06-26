@@ -1,4 +1,4 @@
-{% load seahub_tags i18n %}
+{% load seahub_tags i18n staticfiles %}
 
 <!DOCTYPE html>
 <html>
@@ -15,33 +15,60 @@ html, body { padding:0; margin:0; height:100%; }
 <div id="placeholder"></div>
 
 {% get_current_language as LANGUAGE_CODE %}
+<script type="text/javascript" src="{% static "scripts/lib/jquery.min.js" %}"></script>
+<script type="text/javascript" src="{{ MEDIA_URL }}js/base.js"></script>
 <script type="text/javascript" src="{{ ONLYOFFICE_APIJS_URL }}"></script>
 <script type="text/javascript">
-var config = {
-    "type": window.screen.width < 992 ? 'mobile' : 'desktop',
-    "document": {
-        "fileType": "{{ file_type }}",
-        "key": "{{doc_key}}",
-        "title": "{{doc_title}}",
-        "url": "{{doc_url}}",
-        "permissions": {
-            "download": true,
-            "edit": {% if can_edit %}true{% else %}false{% endif %},
-            "print": true,
-            "review": true
+    var config = {
+        "type": window.screen.width < 992 ? 'mobile' : 'desktop',
+        "document": {
+            "fileType": "{{ file_type }}",
+            "key": "{{ doc_key }}",
+            "title": "{{ doc_title|escapejs }}",
+            "url": "{{ doc_url }}",
+            "permissions": {
+                "download": true,
+                "edit": {% if can_edit %}true{% else %}false{% endif %},
+                "print": true,
+                "review": true
+            }
         },
-    },
-    "documentType": "{{document_type}}", // 'text' | 'spreadsheet' | 'presentation',
-    "editorConfig": {
-        "callbackUrl": "{{ callback_url }}",
-        "lang": "{{ LANGUAGE_CODE }}",
-        "mode": {% if can_edit %}"edit"{% else %}"view"{% endif %},
-        "user": {
-            "name": "{{ username|email2nickname }}"
+        "documentType": "{{ document_type }}", // 'text' | 'spreadsheet' | 'presentation',
+        "editorConfig": {
+            "callbackUrl": "{{ callback_url }}",
+            "lang": "{{ LANGUAGE_CODE }}",
+            "mode": {% if can_edit %}"edit"{% else %}"view"{% endif %},
+            "user": {
+                "name": "{{ username|email2nickname|escapejs }}"
+            }
         }
-    },
-};
-var docEditor = new DocsAPI.DocEditor("placeholder", config);
+    };
+    var docEditor = new DocsAPI.DocEditor("placeholder", config);
+
+    var interval;
+    var refreshLock = function() {
+        $.ajax({
+            url: '{% url "api-v2.1-file-view" repo_id %}' + '?p={{path|urlencode}}',
+            type: 'PUT',
+            dataType: 'json',
+            data: {
+                'operation': 'refresh-lock'
+            },
+            cache: false,
+            beforeSend: prepareCSRFToken,
+            success: function(data) {
+            },
+            error: function(xhr) {
+                if (xhr.responseText) {
+                    feedback(JSON.parse(xhr.responseText).error_msg, 'error');
+                } else {
+                    feedback("{% trans "Failed. Please check the network." %}", 'error');
+                }
+                clearInterval(interval);
+            }
+        });
+    };
+    interval = setInterval(refreshLock, 60 * 1000);
 </script>
 </body>
 </html>

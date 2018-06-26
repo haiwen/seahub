@@ -21,7 +21,7 @@ from seaserv import seafile_api
 from seahub.base.accounts import User
 from seahub.utils import gen_inner_file_get_url, \
     gen_inner_file_upload_url, get_file_type_and_ext, is_pro_version
-from seahub.utils.file_op import check_file_lock
+from seahub.utils.file_op import check_file_lock, if_locked_by_online_office
 from seahub.base.templatetags.seahub_tags import email2nickname
 
 from seahub.settings import SITE_ROOT
@@ -183,13 +183,15 @@ class WOPIFilesView(APIView):
             return HttpResponse(json.dumps({}),
                     status=500, content_type=json_content_type)
 
+        locked_by_online_office = if_locked_by_online_office(repo_id, file_path)
+
         perm = seafile_api.check_permission_by_path(repo_id,
                 file_path, request_user)
 
         if ENABLE_OFFICE_WEB_APP_EDIT and not repo.encrypted and \
-            perm == 'rw' and ((not is_locked) or (is_locked and locked_by_me)) and \
-                fileext in OFFICE_WEB_APP_EDIT_FILE_EXTENSION:
-
+                perm == 'rw' and fileext in OFFICE_WEB_APP_EDIT_FILE_EXTENSION and \
+                ((not is_locked) or (is_locked and locked_by_me) or \
+                (is_locked and locked_by_online_office)):
             result['UserCanWrite'] = True
 
         return HttpResponse(json.dumps(result), status=200,
