@@ -21,7 +21,7 @@ from seahub.utils import check_filename_with_rename, is_pro_version, \
     normalize_dir_path
 from seahub.utils.timeutils import timestamp_to_isoformat_timestr
 from seahub.views import check_folder_permission
-from seahub.utils.file_op import check_file_lock
+from seahub.utils.file_op import check_file_lock, if_locked_by_online_office
 
 from seahub.settings import MAX_UPLOAD_FILE_NAME_LEN, \
     FILE_LOCK_EXPIRATION_DAYS, OFFICE_TEMPLATE_ROOT
@@ -464,7 +464,7 @@ class FileView(APIView):
             return Response({'success': True})
 
     def put(self, request, repo_id, format=None):
-        """ Currently only for lock and unlock file operation.
+        """ Currently only support lock, unlock, refresh-lock file.
 
         Permission checking:
         1. user with 'rw' permission for current file;
@@ -487,8 +487,8 @@ class FileView(APIView):
             return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
 
         operation = operation.lower()
-        if operation not in ('lock', 'unlock'):
-            error_msg = "operation can only be 'lock', or 'unlock'."
+        if operation not in ('lock', 'unlock', 'refresh-lock'):
+            error_msg = "operation can only be 'lock', 'unlock' or 'refresh-lock'."
             return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
 
         # resource check
@@ -516,34 +516,62 @@ class FileView(APIView):
             error_msg = 'Internal Server Error'
             return api_error(status.HTTP_500_INTERNAL_SERVER_ERROR, error_msg)
 
+        # check if is locked by online office
+        locked_by_online_office = if_locked_by_online_office(repo_id, path)
+
         if operation == 'lock':
+
+            if is_locked:
+                error_msg = _("File is locked")
+                return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
+
+            # lock file
+            expire = request.data.get('expire', FILE_LOCK_EXPIRATION_DAYS)
+            try:
+                seafile_api.lock_file(repo_id, path, username, expire)
+            except SearpcError, e:
+                logger.error(e)
+                error_msg = 'Internal Server Error'
+                return api_error(status.HTTP_500_INTERNAL_SERVER_ERROR, error_msg)
+
+        if operation == 'unlock':
+
             if not is_locked:
-                # lock file
-                expire = request.data.get('expire', FILE_LOCK_EXPIRATION_DAYS)
+                error_msg = _("File is not locked.")
+                return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
+
+            # file can only be locked by normal user or OnlineOffice
+            is_repo_owner = seafile_api.is_repo_owner(username, repo_id)
+            if locked_by_me or \
+                    (locked_by_online_office and is_repo_owner):
+                # unlock file
                 try:
-                    seafile_api.lock_file(repo_id, path.lstrip('/'), username, expire)
+                    seafile_api.unlock_file(repo_id, path)
                 except SearpcError, e:
                     logger.error(e)
                     error_msg = 'Internal Server Error'
                     return api_error(status.HTTP_500_INTERNAL_SERVER_ERROR, error_msg)
             else:
-                if not locked_by_me:
-                    error_msg = _("File is locked")
-                    return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
+                error_msg = 'You can not unlock this file.'
+                return api_error(status.HTTP_403_FORBIDDEN, error_msg)
 
-        if operation == 'unlock':
-            if is_locked:
-                if not locked_by_me:
-                    error_msg = 'You can not unlock this file.'
-                    return api_error(status.HTTP_403_FORBIDDEN, error_msg)
+        if operation == 'refresh-lock':
 
-                # unlock file
+            if not is_locked:
+                error_msg = _("File is not locked.")
+                return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
+
+            if locked_by_me or locked_by_online_office:
+                # refresh lock file
                 try:
-                    seafile_api.unlock_file(repo_id, path.lstrip('/'))
+                    seafile_api.refresh_file_lock(repo_id, path)
                 except SearpcError, e:
                     logger.error(e)
                     error_msg = 'Internal Server Error'
                     return api_error(status.HTTP_500_INTERNAL_SERVER_ERROR, error_msg)
+            else:
+                error_msg = _("You can not refresh this file's lock.")
+                return api_error(status.HTTP_403_FORBIDDEN, error_msg)
 
         file_info = self.get_file_info(username, repo_id, path)
         return Response(file_info)

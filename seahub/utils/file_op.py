@@ -11,6 +11,8 @@ from seahub.settings import ENABLE_FOLDER_PERM
 # Get an instance of a logger
 logger = logging.getLogger(__name__)
 
+ONLINE_OFFICE_LOCK_OWNER = 'OnlineOffice'
+
 def check_file_lock(repo_id, file_path, username):
     """ Check if file is locked to current user
 
@@ -37,3 +39,14 @@ def check_file_lock(repo_id, file_path, username):
         return (True, True)
     else:
         raise SearpcError('check file lock error')
+
+def if_locked_by_online_office(repo_id, path):
+
+    locked_by_online_office = False
+    if is_pro_version():
+        lock_info = seafile_api.get_lock_info(repo_id, path)
+        if lock_info and lock_info.user == ONLINE_OFFICE_LOCK_OWNER:
+            locked_by_online_office = True
+
+    return locked_by_online_office
+
