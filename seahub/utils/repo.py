@@ -6,6 +6,7 @@ import seaserv
 from seaserv import seafile_api, ccnet_api
 
 from seahub.utils import EMPTY_SHA1, is_org_context, is_pro_version
+from seahub.base.models import RepoSecretKey
 
 from seahub.settings import ENABLE_STORAGE_CLASSES, \
         STORAGE_CLASS_MAPPING_POLICY
@@ -202,3 +203,12 @@ def get_related_users_by_repo(repo_id, org_id=None):
 # TODO
 def is_valid_repo_id_format(repo_id):
     return len(repo_id) == 36
+
+def add_encrypted_repo_secret_key_to_database(repo_id, password):
+    try:
+        if not RepoSecretKey.objects.get_secret_key(repo_id):
+            # get secret_key, then save it to database
+            secret_key = seafile_api.get_secret_key(repo_id, password)
+            RepoSecretKey.objects.add_secret_key(repo_id, secret_key)
+    except Exception as e:
+        logger.error(e)
