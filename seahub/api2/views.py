@@ -4723,7 +4723,8 @@ class OrganizationView(APIView):
     def post(self, request, format=None):
 
         if not CLOUD_MODE or not MULTI_TENANCY:
-            return api_error(status.HTTP_403_FORBIDDEN, 'Permission denied')
+            error_msg = 'Feature is not enabled.'
+            return api_error(status.HTTP_403_FORBIDDEN, error_msg)
 
         username = request.POST.get('username', None)
         password = request.POST.get('password', None)

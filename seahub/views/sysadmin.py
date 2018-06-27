@@ -1418,6 +1418,9 @@ def sys_org_info_user(request, org_id):
 
     org_id = int(org_id)
 
+    if not ccnet_api.get_org_by_id(org_id):
+        raise Http404
+
     org_basic_info = sys_get_org_base_info(org_id)
     users = org_basic_info["users"]
     last_logins = UserLastLogin.objects.filter(username__in=[x.email for x in users])
@@ -1447,6 +1450,10 @@ def sys_org_info_user(request, org_id):
 def sys_org_info_group(request, org_id):
 
     org_id = int(org_id)
+
+    if not ccnet_api.get_org_by_id(org_id):
+        raise Http404
+
     org_basic_info = sys_get_org_base_info(org_id)
 
     return render(request, 'sysadmin/sys_org_info_group.html',
@@ -1457,6 +1464,10 @@ def sys_org_info_group(request, org_id):
 def sys_org_info_library(request, org_id):
 
     org_id = int(org_id)
+
+    if not ccnet_api.get_org_by_id(org_id):
+        raise Http404
+
     org_basic_info = sys_get_org_base_info(org_id)
 
     # library
@@ -1477,6 +1488,10 @@ def sys_org_info_library(request, org_id):
 def sys_org_info_setting(request, org_id):
 
     org_id = int(org_id)
+
+    if not ccnet_api.get_org_by_id(org_id):
+        raise Http404
+
     org_basic_info = sys_get_org_base_info(org_id)
 
     if getattr(settings, 'ORG_MEMBER_QUOTA_ENABLED', False):
