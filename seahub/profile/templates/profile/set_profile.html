@@ -64,12 +64,7 @@
         <br/>
         {% endif %}
 
-        {% if form.department and form.telephone %}
-        <label>{% trans "Department:" %}</label><input type="text" name="department" value="{{ form.data.department }}" class="input" />
-        {% for error in form.department.errors %}
-        <span class="error">{{ error|escape }}</span>
-        {% endfor %}
-        <br/>
+        {% if form.telephone %}
         <label>{% trans "Telephone:" %}</label><input type="text" name="telephone" value="{{ form.data.telephone }}" class="input" />
         {% for error in form.telephone.errors %}
         <span class="error">{{ error|escape }}</span>
