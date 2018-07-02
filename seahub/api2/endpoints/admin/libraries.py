@@ -41,7 +41,7 @@ def get_repo_info(repo):
         except Exception:
             org_repo_owner = None
 
-    owner = repo_owner or org_repo_owner
+    owner = repo_owner or org_repo_owner or ''
 
     result = {}
     result['id'] = repo.repo_id
