@@ -183,7 +183,7 @@ var magnificOptions = {
             var img_link = '<a href="' + $el.attr('href') + '" target="_blank">' + "{% trans "Open in New Tab" %}" + '</a>';
             return img_name + '<br />' + img_link;
         },
-        tError: '{% trans '<a href="%url%" target="_blank">The image</a> could not be loaded.' %}' // Error message when image could not be loaded
+        tError: "{% trans "<a href='%url%' target='_blank'>The image</a> could not be loaded." %}" // Error message when image could not be loaded
     }
 };
 
