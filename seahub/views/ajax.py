@@ -972,9 +972,17 @@ def upload_file_done(request):
         result['error'] = _('Wrong repo id')
         return HttpResponse(json.dumps(result), status=400, content_type=ct)
 
-    owner = seafile_api.get_repo_owner(repo_id)
-    if not owner:               # this is an org repo, get org repo owner
-        owner = seafile_api.get_org_repo_owner(repo_id)
+    # get upload link share creator
+    token = request.GET.get('token', '')
+    if not token:
+        result['error'] = _('Argument missing')
+        return HttpResponse(json.dumps(result), status=400, content_type=ct)
+
+    uls = UploadLinkShare.objects.get_valid_upload_link_by_token(token)
+    if uls is None:
+        result['error'] = _('Bad upload link token.')
+        return HttpResponse(json.dumps(result), status=400, content_type=ct)
+    creator = uls.username
 
     file_path = path.rstrip('/') + '/' + filename
     if seafile_api.get_file_id_by_path(repo_id, file_path) is None:
@@ -985,7 +993,7 @@ def upload_file_done(request):
     upload_file_successful.send(sender=None,
                                 repo_id=repo_id,
                                 file_path=file_path,
-                                owner=owner)
+                                owner=creator)
 
     return HttpResponse(json.dumps({'success': True}), content_type=ct)
 
