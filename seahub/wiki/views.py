@@ -46,7 +46,9 @@ def slug(request, slug, page_name="home"):
         raise Http404
 
     req_user = request.user.username
-    if req_user == wiki.username or check_folder_permission(
+    if not req_user:
+        user_can_write = False
+    elif req_user == wiki.username or check_folder_permission(
             request, wiki.repo_id, '/') == 'rw':
         user_can_write = True
     else:
