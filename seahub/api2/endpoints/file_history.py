@@ -6,12 +6,14 @@ from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 from rest_framework.views import APIView
 from rest_framework import status
+from django.core.urlresolvers import reverse
 
 from seaserv import seafile_api
 
 from seahub.api2.throttling import UserRateThrottle
 from seahub.api2.authentication import TokenAuthentication
 from seahub.api2.utils import api_error
+from seahub.api2.endpoints.utils import generate_links_header_for_paginator
 from seahub.utils import get_file_history
 from seahub.utils.timeutils import datetime_to_isoformat_timestr, timestamp_to_isoformat_timestr
 from seahub.utils.file_revisions import get_file_revisions_within_limit
@@ -161,8 +163,12 @@ class NewFileHistoryView(APIView):
 
         try:
             avatar_size = int(request.GET.get('avatar_size', 32))
+            page = int(request.GET.get('page', '1'))
+            per_page = int(request.GET.get('per_page', '25'))
         except ValueError:
             avatar_size = 32
+            page = 1
+            per_page = 25
 
         # Don't use seafile_api.get_file_id_by_path()
         # if path parameter is `rev_renamed_old_path`.
@@ -178,29 +184,26 @@ class NewFileHistoryView(APIView):
             error_msg = 'Permission denied.'
             return api_error(status.HTTP_403_FORBIDDEN, error_msg)
 
-        # get file history
-        start = request.GET.get('start', 0)
-        try:
-            start = 0 if int(start) < 1 else int(start)
-        except ValueError:
-            start = 0
-
-        count = request.GET.get('count', 50)
-        try:
-            count = 50 if int(count) < 1 else int(count)
-        except ValueError:
-            count = 50
+        start = (page - 1) * per_page
+        count = per_page
 
         try:
-            file_revisions, next_start = get_file_history(repo_id, path, start, count)
+            file_revisions, total_count = get_file_history(repo_id, path, start, count)
         except Exception as e:
             logger.error(e)
             error_msg = 'Internal Server Error'
             return api_error(status.HTTP_500_INTERNAL_SERVER_ERROR, error_msg)
 
-        result = [get_new_file_history_info(ent, avatar_size) for ent in file_revisions]
+        data = [get_new_file_history_info(ent, avatar_size) for ent in file_revisions]
+        result = {
+            "data": data,
+            "total_count": total_count
+            }
 
-        return Response({
-            "data": result,
-            "next_start": next_start or False
-            })
+        resp = Response(result)
+        base_url = reverse('api-v2.1-new-file-history-view', args=[repo_id])
+        links_header = generate_links_header_for_paginator(base_url, page,
+                                                           per_page, total_count)
+        resp['Links'] = links_header
+
+        return resp
