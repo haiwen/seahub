@@ -582,7 +582,7 @@ if getattr(settings, 'ENABLE_ADFS_LOGIN', False):
     urlpatterns += [
         url(r'^saml2/acs/$', assertion_consumer_service, name='saml2_acs'),
         url(r'^saml2/complete/$', auth_complete, name='saml2_complete'),
-        (r'^saml2/', include('djangosaml2.urls')),
+        url(r'^saml2/', include('djangosaml2.urls')),
     ]
 
 if getattr(settings, 'ENABLE_ONLYOFFICE', False):
