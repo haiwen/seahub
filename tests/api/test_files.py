@@ -218,6 +218,10 @@ class FilesApiTest(ApiTestBase):
             self.assertIsNotNone(detail['type'])
             self.assertIsNotNone(detail['name'])
             self.assertIsNotNone(detail['size'])
+            self.assertIsNotNone(detail['starred'])
+            self.assertIsNotNone(detail['last_modifier_email'])
+            self.assertIsNotNone(detail['last_modifier_name'])
+            self.assertIsNotNone(detail['last_modifier_contact_email'])
 
     def test_get_file_history(self):
         with self.get_tmp_repo() as repo:
