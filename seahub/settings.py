@@ -492,7 +492,10 @@ LOGO_HEIGHT = 32
 CUSTOM_LOGO_PATH = 'custom/mylogo.png'
 CUSTOM_FAVICON_PATH = 'custom/favicon.ico'
 
-# Enable custom css to modify the seafile css
+# used before version 6.3: the relative path of css file under seahub-data (e.g. custom/custom.css)
+BRANDING_CSS = ''
+
+# used in 6.3+, enable setting custom css via admin web interface
 ENABLE_BRANDING_CSS = False
 
 # Using Django to server static file. Set to `False` if deployed behide a web
