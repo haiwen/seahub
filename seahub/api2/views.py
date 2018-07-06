@@ -2894,6 +2894,10 @@ class FileDetailView(APIView):
         except UserStarredFiles.DoesNotExist:
             entry["starred"] = False
 
+        entry["last_modifier_email"] = latest_contributor
+        entry["last_modifier_name"] = email2nickname(latest_contributor)
+        entry["last_modifier_contact_email"] = email2contact_email(latest_contributor)
+
         return HttpResponse(json.dumps(entry), status=200,
                             content_type=json_content_type)
 
