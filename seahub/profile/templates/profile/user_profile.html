@@ -11,12 +11,6 @@
     <p title="{{ nickname }}" class="user-profile-nickname ellipsis">{{ nickname }}</p>
     <ul>
         {% if d_profile %}
-        {% if d_profile.department %}
-        <li title="{{ d_profile.department }}" class="user-profile-info ellipsis">
-            <span class="user-profile-info-icon icon-building fa-1x vam"></span>
-            <span class="vam">{{ d_profile.department }}</span>
-        </li>
-        {% endif %}
         {% if d_profile.telephone %}
         <li title="{{ d_profile.telephone }}" class="user-profile-info ellipsis">
             <span class="user-profile-info-icon icon-phone fa-1x vam"></span>

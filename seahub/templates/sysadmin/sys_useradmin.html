@@ -45,8 +45,6 @@
 
     <label for="id_name">{% trans "Name(optional)" %}</label><br />
     <input type="text" name="name" id="id_name" class="input" /><br />
-    <label for="id_dept">{% trans "Department(optional)" %}</label><br />
-    <input type="text" name="department" id="id_dept" class="input" /><br />
 
     {% if is_pro %}
     <label>{% trans "Role"%}</label><span class="icon-question-sign" title="{% trans "You can also add a user as a guest, who will not be allowed to create libraries and groups." %}" style="color:#666; margin-left:3px;"></span>
@@ -138,7 +136,6 @@ $('#add-user-form').on('submit', function() {
         form_id = $(this).attr('id'),
         email = $.trim(form.children('[name="email"]').val()),
         name = $.trim($('[name="name"]', form).val()),
-        department = $.trim($('[name="department"]', form).val()),
         {% if is_pro %}
         role = $('select[name="role"]', form).val(),
         {% endif %}
@@ -173,7 +170,6 @@ $('#add-user-form').on('submit', function() {
         data: {
             'email': email,
             'name': name,
-            'department': department,
             {% if is_pro %}
             'role': role,
             {% endif %}

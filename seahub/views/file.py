@@ -61,9 +61,10 @@ from seahub.utils.timeutils import utc_to_local
 from seahub.utils.file_types import (IMAGE, PDF, SVG,
         DOCUMENT, SPREADSHEET, AUDIO, MARKDOWN, TEXT, VIDEO)
 from seahub.utils.star import is_file_starred
-from seahub.utils.http import json_response, int_param, \
+from seahub.utils.http import json_response, \
         BadRequestException, RequestForbbiddenException
-from seahub.utils.file_op import check_file_lock
+from seahub.utils.file_op import check_file_lock, \
+        ONLINE_OFFICE_LOCK_OWNER, if_locked_by_online_office
 from seahub.views import check_folder_permission, \
         get_unencry_rw_repos_by_user
 from seahub.utils.repo import is_repo_owner
@@ -106,6 +107,7 @@ try:
             ONLYOFFICE_FILE_EXTENSION, ONLYOFFICE_EDIT_FILE_EXTENSION
 except ImportError:
     ENABLE_ONLYOFFICE = False
+
 
 # Get an instance of a logger
 logger = logging.getLogger(__name__)
@@ -415,7 +417,10 @@ def view_lib_file(request, repo_id, path):
         is_locked, locked_by_me = check_file_lock(repo_id, path, username)
     except Exception as e:
         logger.error(e)
-        is_locked, locked_by_me = False, False
+        is_locked = False
+        locked_by_me = False
+
+    locked_by_online_office = if_locked_by_online_office(repo_id, path)
 
     if is_pro_version() and permission == 'rw':
         can_lock_unlock_file = True
@@ -565,22 +570,39 @@ def view_lib_file(request, repo_id, path):
             # then check if can edit file
             if ENABLE_OFFICE_WEB_APP_EDIT and permission == 'rw' and \
                     fileext in OFFICE_WEB_APP_EDIT_FILE_EXTENSION and \
-                    ((not is_locked) or (is_locked and locked_by_me)):
+                    ((not is_locked) or (is_locked and locked_by_me) or \
+                    (is_locked and locked_by_online_office)):
                 action_name = 'edit'
 
             wopi_dict = get_wopi_dict(username, repo_id, path,
                     action_name, request.LANGUAGE_CODE)
-
-            if wopi_dict:
-                wopi_dict['doc_title'] = filename
-                send_file_access_msg(request, repo, path, 'web')
-                return render(request, 'view_file_wopi.html', wopi_dict)
-            else:
+            if not wopi_dict:
                 return_dict['err'] = _(u'Error when prepare Office Online file preview page.')
                 return render(request, 'view_file_base.html', return_dict)
 
+            if is_pro_version() and action_name == 'edit':
+                if not is_locked:
+                    seafile_api.lock_file(repo_id, path, ONLINE_OFFICE_LOCK_OWNER, 0)
+                elif locked_by_online_office:
+                    seafile_api.refresh_file_lock(repo_id, path)
+
+            wopi_dict['doc_title'] = filename
+            wopi_dict['repo_id'] = repo_id
+            wopi_dict['path'] = path
+            send_file_access_msg(request, repo, path, 'web')
+
+            return render(request, 'view_file_wopi.html', wopi_dict)
+
         if ENABLE_ONLYOFFICE and fileext in ONLYOFFICE_FILE_EXTENSION:
-            doc_key = hashlib.md5(force_bytes(repo_id + path + file_id)).hexdigest()[:20]
+
+            if repo.is_virtual:
+                origin_repo_id = repo.origin_repo_id
+                origin_file_path = posixpath.join(repo.origin_path, path.strip('/'))
+                doc_key = hashlib.md5(force_bytes(origin_repo_id + \
+                        origin_file_path + file_id)).hexdigest()[:20]
+            else:
+                doc_key = hashlib.md5(force_bytes(repo_id + path + file_id)).hexdigest()[:20]
+
             if fileext in ('xls', 'xlsx', 'ods', 'fods', 'csv'):
                 document_type = 'spreadsheet'
             elif fileext in ('pptx', 'ppt', 'odp', 'fodp', 'ppsx', 'pps'):
@@ -603,15 +625,23 @@ def view_lib_file(request, repo_id, path):
 
             cache.set("ONLYOFFICE_%s" % doc_key, doc_info, None)
 
+            can_edit = False
             if permission == 'rw' and \
                     fileext in ONLYOFFICE_EDIT_FILE_EXTENSION and \
-                    ((not is_locked) or (is_locked and locked_by_me)):
+                    ((not is_locked) or (is_locked and locked_by_me) or \
+                    (is_locked and locked_by_online_office)):
                 can_edit = True
-            else:
-                can_edit = False
+
+            if is_pro_version() and can_edit:
+                if not is_locked:
+                    seafile_api.lock_file(repo_id, path, ONLINE_OFFICE_LOCK_OWNER, 0)
+                elif locked_by_online_office:
+                    seafile_api.refresh_file_lock(repo_id, path)
 
             send_file_access_msg(request, repo, path, 'web')
             return render(request, 'view_file_onlyoffice.html', {
+                'repo_id': repo_id,
+                'path': path,
                 'ONLYOFFICE_APIJS_URL': ONLYOFFICE_APIJS_URL,
                 'file_type': fileext,
                 'doc_key': doc_key,

@@ -1418,6 +1418,9 @@ def sys_org_info_user(request, org_id):
 
     org_id = int(org_id)
 
+    if not ccnet_api.get_org_by_id(org_id):
+        raise Http404
+
     org_basic_info = sys_get_org_base_info(org_id)
     users = org_basic_info["users"]
     last_logins = UserLastLogin.objects.filter(username__in=[x.email for x in users])
@@ -1447,6 +1450,10 @@ def sys_org_info_user(request, org_id):
 def sys_org_info_group(request, org_id):
 
     org_id = int(org_id)
+
+    if not ccnet_api.get_org_by_id(org_id):
+        raise Http404
+
     org_basic_info = sys_get_org_base_info(org_id)
 
     return render(request, 'sysadmin/sys_org_info_group.html',
@@ -1457,6 +1464,10 @@ def sys_org_info_group(request, org_id):
 def sys_org_info_library(request, org_id):
 
     org_id = int(org_id)
+
+    if not ccnet_api.get_org_by_id(org_id):
+        raise Http404
+
     org_basic_info = sys_get_org_base_info(org_id)
 
     # library
@@ -1477,6 +1488,10 @@ def sys_org_info_library(request, org_id):
 def sys_org_info_setting(request, org_id):
 
     org_id = int(org_id)
+
+    if not ccnet_api.get_org_by_id(org_id):
+        raise Http404
+
     org_basic_info = sys_get_org_base_info(org_id)
 
     if getattr(settings, 'ORG_MEMBER_QUOTA_ENABLED', False):
@@ -1885,16 +1900,14 @@ def batch_add_user_example(request):
         next = SITE_ROOT
     data_list = []
     head = [_('Email'), _('Password'), _('Name')+ '(' + _('Optional') + ')', 
-            _('Department')+ '(' + _('Optional') + ')', _('Role')+
-            '(' + _('Optional') + ')', _('Space Quota') + '(MB, ' + _('Optional') + ')']
+            _('Role') + '(' + _('Optional') + ')', _('Space Quota') + '(MB, ' + _('Optional') + ')']
     for i in xrange(5):
         username = "test" + str(i) +"@example.com"
         password = "123456"
         name = "test" + str(i)
-        department = "department" + str(i)
         role = "default"
         quota = "1000"
-        data_list.append([username, password, name, department, role, quota])
+        data_list.append([username, password, name, role, quota])
 
     wb = write_xls('sample', head, data_list)
     if not wb:
@@ -1970,21 +1983,14 @@ def batch_add_user(request):
                     logger.error(e)
 
                 try:
-                    department = row[3].strip()
-                    if len(department) <= 512:
-                        DetailedProfile.objects.add_or_update(username, department, '')
-                except Exception as e:
-                    logger.error(e)
-
-                try:
-                    role = row[4].strip()
+                    role = row[3].strip()
                     if is_pro_version() and role in get_available_roles():
                         User.objects.update_role(username, role)
                 except Exception as e:
                     logger.error(e)
 
                 try:
-                    space_quota_mb = int(row[5])
+                    space_quota_mb = int(row[4])
                     if space_quota_mb >= 0:
                         space_quota = int(space_quota_mb) * get_file_size_unit('MB')
                         seafile_api.set_user_quota(username, space_quota)

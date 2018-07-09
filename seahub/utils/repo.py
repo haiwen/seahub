@@ -6,6 +6,7 @@ import seaserv
 from seaserv import seafile_api, ccnet_api
 
 from seahub.utils import EMPTY_SHA1, is_org_context, is_pro_version
+from seahub.base.models import RepoSecretKey
 
 from seahub.settings import ENABLE_STORAGE_CLASSES, \
         STORAGE_CLASS_MAPPING_POLICY, ENABLE_FOLDER_PERM
@@ -39,7 +40,6 @@ def get_repo_owner(request, repo_id):
         return seafile_api.get_repo_owner(repo_id)
 
 def is_repo_owner(request, repo_id, username):
-
     return username == get_repo_owner(request, repo_id)
 
 def get_repo_shared_users(repo_id, repo_owner, include_groups=True):
@@ -217,6 +217,15 @@ def can_set_folder_perm_by_user(username, repo, repo_owner):
     if username != repo_owner and not is_admin:
         return False
     return True
+
+def add_encrypted_repo_secret_key_to_database(repo_id, password):
+    try:
+        if not RepoSecretKey.objects.get_secret_key(repo_id):
+            # get secret_key, then save it to database
+            secret_key = seafile_api.get_secret_key(repo_id, password)
+            RepoSecretKey.objects.add_secret_key(repo_id, secret_key)
+    except Exception as e:
+        logger.error(e)
 
 # TODO
 from seahub.share.utils import is_repo_admin

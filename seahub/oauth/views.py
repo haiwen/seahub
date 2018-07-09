@@ -34,6 +34,7 @@ if ENABLE_OAUTH:
     TOKEN_URL = getattr(settings, 'OAUTH_TOKEN_URL', '')
     USER_INFO_URL = getattr(settings, 'OAUTH_USER_INFO_URL', '')
     SCOPE = getattr(settings, 'OAUTH_SCOPE', '')
+    ACCESS_TOKEN_IN_URI = getattr(settings, 'OAUTH_ACCESS_TOKEN_IN_URI', False)
 
     # Used for init an user for Seahub.
     PROVIDER_DOMAIN = getattr(settings, 'OAUTH_PROVIDER_DOMAIN', '')
@@ -112,7 +113,7 @@ def oauth_callback(request):
                             redirect_uri=REDIRECT_URL)
 
     try:
-        session.fetch_token(TOKEN_URL, client_secret=CLIENT_SECRET,
+        token = session.fetch_token(TOKEN_URL, client_secret=CLIENT_SECRET,
                 authorization_response=request.get_full_path())
 
         if session._client.__dict__['token'].has_key('user_id'):
@@ -121,7 +122,11 @@ def oauth_callback(request):
             user_id = session._client.__dict__['token']['user_id']
             user_info_resp = session.get(USER_INFO_URL + '?user_id=%s' % user_id)
         else:
-            user_info_resp = session.get(USER_INFO_URL)
+            user_info_url = USER_INFO_URL
+            if ACCESS_TOKEN_IN_URI:
+                code = request.GET.get('code')
+                user_info_url = USER_INFO_URL + '?access_token=%s&code=%s' % (token['access_token'], code)
+            user_info_resp = session.get(user_info_url)
 
     except Exception as e:
         logger.error(e)
@@ -130,7 +135,7 @@ def oauth_callback(request):
                 })
 
     def format_user_info(user_info_resp):
-
+        logger.info('user info resp: %s' % user_info_resp.text)
         error = False
         user_info = {}
         user_info_json = user_info_resp.json()

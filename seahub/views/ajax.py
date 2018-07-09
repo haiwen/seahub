@@ -46,7 +46,7 @@ from seahub.utils import check_filename_with_rename, EMPTY_SHA1, \
     get_file_type_and_ext, is_pro_version
 from seahub.utils.star import get_dir_starred_files
 from seahub.utils.file_types import IMAGE, VIDEO
-from seahub.utils.file_op import check_file_lock
+from seahub.utils.file_op import check_file_lock, ONLINE_OFFICE_LOCK_OWNER
 from seahub.utils.repo import get_locked_files_by_dir, get_repo_owner
 from seahub.utils.error_msg import file_type_error_msg, file_size_error_msg
 from seahub.base.accounts import User
@@ -370,10 +370,14 @@ def list_lib_dir(request, repo_id):
             f_['is_locked'] = True if f.is_locked else False
             f_['lock_owner'] = f.lock_owner
             f_['lock_owner_name'] = email2nickname(f.lock_owner)
-            if username == f.lock_owner:
+
+            f_['locked_by_me'] = False
+            if f.lock_owner == username:
                 f_['locked_by_me'] = True
-            else:
-                f_['locked_by_me'] = False
+
+            if f.lock_owner == ONLINE_OFFICE_LOCK_OWNER and \
+                    repo_owner == username:
+                f_['locked_by_me'] = True
 
         dirent_list.append(f_)
 
@@ -968,9 +972,17 @@ def upload_file_done(request):
         result['error'] = _('Wrong repo id')
         return HttpResponse(json.dumps(result), status=400, content_type=ct)
 
-    owner = seafile_api.get_repo_owner(repo_id)
-    if not owner:               # this is an org repo, get org repo owner
-        owner = seafile_api.get_org_repo_owner(repo_id)
+    # get upload link share creator
+    token = request.GET.get('token', '')
+    if not token:
+        result['error'] = _('Argument missing')
+        return HttpResponse(json.dumps(result), status=400, content_type=ct)
+
+    uls = UploadLinkShare.objects.get_valid_upload_link_by_token(token)
+    if uls is None:
+        result['error'] = _('Bad upload link token.')
+        return HttpResponse(json.dumps(result), status=400, content_type=ct)
+    creator = uls.username
 
     file_path = path.rstrip('/') + '/' + filename
     if seafile_api.get_file_id_by_path(repo_id, file_path) is None:
@@ -981,7 +993,7 @@ def upload_file_done(request):
     upload_file_successful.send(sender=None,
                                 repo_id=repo_id,
                                 file_path=file_path,
-                                owner=owner)
+                                owner=creator)
 
     return HttpResponse(json.dumps({'success': True}), content_type=ct)
 

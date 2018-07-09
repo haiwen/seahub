@@ -88,18 +88,6 @@
                 <span id="set-reference-id" title="{% trans "Edit" %}" class="sf2-icon-edit op-icon"></span>
             </dd>
 
-            <dt>{% trans "Department" %}</dt>
-            <dd>
-                <span id="department">
-                    {% if d_profile and d_profile.department %}
-                    {{ d_profile.department }}
-                    {% else %}
-                    --
-                    {% endif %}
-                </span>
-                <span id="set-dept" title="{% trans "Edit"%}" class="sf2-icon-edit op-icon"></span>
-            </dd>
-
             {% if d_profile and d_profile.telephone %}
             <dt>{% trans "Telephone" %}</dt>
             <dd>{{ d_profile.telephone }}</dd>
@@ -554,43 +542,6 @@ $('#set-reference-id-form').on('submit', function() {
                 $referenceID.html('--');
             } else {
                 $referenceID.html(HTMLescape(data['reference_id']));
-            }
-            $.modal.close();
-        },
-        error: function(xhr, textStatus, errorThrown) {
-            var err_msg;
-            if (xhr.responseText) {
-                err_msg = JSON.parse(xhr.responseText).error_msg;
-            } else {
-                err_msg = "{% trans "Failed. Please check the network." %}";
-            }
-            $error.html(err_msg).show();
-            enable($submitBtn);
-        }
-    });
-
-    return false;
-});
-
-$('#set-dept-form').on('submit', function() {
-    var department = $.trim($('[name="department"]', $(this)).val());
-    var $department = $('#department');
-    var $error = $('.error', $(this));
-    var $submitBtn = $('[type="submit"]', $(this));
-    disable($submitBtn);
-
-    $.ajax({
-        url: '{% url 'api-v2.1-admin-user' email %}',
-        type: 'PUT',
-        dataType: 'json',
-        cache: false,
-        beforeSend: prepareCSRFToken,
-        data: {'department': department},
-        success: function(data) {
-            if (department == '') {
-                $department.html('--');
-            } else {
-                $department.html(HTMLescape(data['department']));
             }
             $.modal.close();
         },

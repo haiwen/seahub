@@ -44,7 +44,7 @@ from seahub.avatar.templatetags.avatar_tags import api_avatar_url, avatar
 from seahub.avatar.templatetags.group_avatar_tags import api_grp_avatar_url, \
         grp_avatar
 from seahub.base.accounts import User
-from seahub.base.models import UserStarredFiles, DeviceToken
+from seahub.base.models import UserStarredFiles, DeviceToken, RepoSecretKey
 from seahub.share.models import ExtraSharePermission, ExtraGroupsSharePermission
 from seahub.share.utils import is_repo_admin, check_group_share_in_permission
 from seahub.base.templatetags.seahub_tags import email2nickname, \
@@ -74,7 +74,8 @@ from seahub.utils.file_revisions import get_file_revisions_after_renamed
 from seahub.utils.devices import do_unlink_device
 from seahub.utils.repo import get_repo_owner, get_library_storages, \
         get_locked_files_by_dir, get_related_users_by_repo, \
-        is_valid_repo_id_format, can_set_folder_perm_by_user
+        is_valid_repo_id_format, can_set_folder_perm_by_user, \
+        add_encrypted_repo_secret_key_to_database
 from seahub.utils.star import star_file, unstar_file
 from seahub.utils.file_types import DOCUMENT
 from seahub.utils.file_size import get_file_size_unit
@@ -92,7 +93,8 @@ if HAS_OFFICE_CONVERTER:
 import seahub.settings as settings
 from seahub.settings import THUMBNAIL_EXTENSION, THUMBNAIL_ROOT, \
     FILE_LOCK_EXPIRATION_DAYS, ENABLE_STORAGE_CLASSES, \
-    ENABLE_THUMBNAIL, ENABLE_FOLDER_PERM, STORAGE_CLASS_MAPPING_POLICY
+    ENABLE_THUMBNAIL, ENABLE_FOLDER_PERM, STORAGE_CLASS_MAPPING_POLICY, \
+    ENABLE_RESET_ENCRYPTED_REPO_PASSWORD
 try:
     from seahub.settings import CLOUD_MODE
 except ImportError:
@@ -904,6 +906,9 @@ class Repos(APIView):
                 repo_id = seafile_api.create_repo(repo_name,
                         repo_desc, username, passwd)
 
+        if passwd and ENABLE_RESET_ENCRYPTED_REPO_PASSWORD:
+            add_encrypted_repo_secret_key_to_database(repo_id, passwd)
+
         return repo_id, None
 
     def _create_enc_repo(self, request, repo_id, repo_name, repo_desc, username, org_id):
@@ -1054,8 +1059,13 @@ class PubRepos(APIView):
 def set_repo_password(request, repo, password):
     assert password, 'password must not be none'
 
+    repo_id = repo.id
     try:
-        seafile_api.set_passwd(repo.id, request.user.username, password)
+        seafile_api.set_passwd(repo_id, request.user.username, password)
+
+        if ENABLE_RESET_ENCRYPTED_REPO_PASSWORD:
+            add_encrypted_repo_secret_key_to_database(repo_id, password)
+
     except SearpcError, e:
         if e.msg == 'Bad arguments':
             return api_error(status.HTTP_400_BAD_REQUEST, e.msg)
@@ -1067,6 +1077,7 @@ def set_repo_password(request, repo, password):
             return api_error(status.HTTP_500_INTERNAL_SERVER_ERROR, e.msg)
         else:
             return api_error(status.HTTP_500_INTERNAL_SERVER_ERROR, e.msg)
+
 
 def check_set_repo_password(request, repo):
     if not check_permission(repo.id, request.user.username):
@@ -2894,6 +2905,10 @@ class FileDetailView(APIView):
         except UserStarredFiles.DoesNotExist:
             entry["starred"] = False
 
+        entry["last_modifier_email"] = latest_contributor
+        entry["last_modifier_name"] = email2nickname(latest_contributor)
+        entry["last_modifier_contact_email"] = email2contact_email(latest_contributor)
+
         return HttpResponse(json.dumps(entry), status=200,
                             content_type=json_content_type)
 
@@ -3245,10 +3260,6 @@ class DirView(APIView):
                             return api_error(HTTP_520_OPERATION_FAILED,
                                          'Failed to make directory.')
             else:
-                if not is_seafile_pro():
-                    return api_error(status.HTTP_400_BAD_REQUEST,
-                                     'Feature not supported.')
-
                 if check_folder_permission(request, repo_id, '/') != 'rw':
                     error_msg = 'Permission denied.'
                     return api_error(status.HTTP_403_FORBIDDEN, error_msg)
@@ -4727,7 +4738,8 @@ class OrganizationView(APIView):
     def post(self, request, format=None):
 
         if not CLOUD_MODE or not MULTI_TENANCY:
-            return api_error(status.HTTP_403_FORBIDDEN, 'Permission denied')
+            error_msg = 'Feature is not enabled.'
+            return api_error(status.HTTP_403_FORBIDDEN, error_msg)
 
         username = request.POST.get('username', None)
         password = request.POST.get('password', None)

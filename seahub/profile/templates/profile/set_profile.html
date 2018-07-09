@@ -19,10 +19,6 @@
 
         <li class="tab"><a href="#lang-setting">{% trans "Language" %}</a></li>
 
-        {% if user.permissions.can_add_repo %}
-        <li class="tab"><a href="#default-lib">{% trans "Default Library" %}</a></li>
-        {% endif %}
-
         {% if two_factor_auth_enabled %}
         <li class="tab"><a href="#two-factor-auth">{% trans "Two-Factor Authentication" %}</a></li>
         {% endif %}
@@ -64,12 +60,7 @@
         <br/>
         {% endif %}
 
-        {% if form.department and form.telephone %}
-        <label>{% trans "Department:" %}</label><input type="text" name="department" value="{{ form.data.department }}" class="input" />
-        {% for error in form.department.errors %}
-        <span class="error">{{ error|escape }}</span>
-        {% endfor %}
-        <br/>
+        {% if form.telephone %}
         <label>{% trans "Telephone:" %}</label><input type="text" name="telephone" value="{{ form.data.telephone }}" class="input" />
         {% for error in form.telephone.errors %}
         <span class="error">{{ error|escape }}</span>
@@ -113,27 +104,6 @@
         </ul>
     </div>
 </div>
-
-{% if user.permissions.can_add_repo %}
-<div class="setting-item" id="default-lib">
-    <h3>{% trans "Default Library Setting" %}</h3>
-    {% if default_repo %}
-    <p>{% trans "Your default library:" %} <a href="{{ SITE_ROOT }}#common/lib/{{ default_repo.id }}/">{{default_repo.name}}</a>.</p>
-    {% endif %}
-    <p class="txt-before-btn">{% trans "Default library is the default place to store your personal documents and pictures." %}</p>
-    <button id="choose-default-lib">{% trans "Choose Default Library" %}</button>
-</div>
-<form id="default-lib-form" action="{% url 'default_repo' %}" method="post" class="file-choose-form hide">{% csrf_token %}
-    <h3 id="dialogTitle">{% trans "Choose default library:" %}</h3>
-    <div class="dir-tree-cont">
-        <div id="repos-dirs"></div>
-    </div>
-    <input type="hidden" name="dst_repo" value="" />
-    <p class="error hide">{% trans "Please click and choose a library."%}</p>
-    <input type="submit" value="{% trans "Submit"%}" class="submit" />
-    <button class="simplemodal-close">{% trans "Cancel"%}</button>
-</form>
-{% endif %}
 
 {% if two_factor_auth_enabled %}
 <div class="setting-item" id="two-factor-auth">
@@ -236,30 +206,6 @@ $('#account-delete-btn').on('click', function () {
         $('#account-delete-form').trigger('submit');
     });
 });
-
-
-{% if user.permissions.can_add_repo %}
-var all_repos = [];
-{% for a_repo in owned_repos %}
-    all_repos.push({
-        'text': HTMLescape('{{ a_repo.props.name|escapejs }}'),
-        'data': {'repo_id': '{{ a_repo.props.id }}', 'path': '/'}
-    });
-{% endfor %}
-$('#choose-default-lib').on('click', function() {
-    var $form = $('#default-lib-form');
-    $form.modal({appendTo:'#main', autoResize:true, focus:false});
-    $('#simplemodal-container').css({'width':'auto', 'height':'auto'});
-    FileTree.renderDirTree($('#repos-dirs').data('site_root', '{{SITE_ROOT}}'), $form, all_repos);
-});
-$('#default-lib-form').on('submit', function() {
-    var dst_repo = $('[name="dst_repo"]', $(this)).val();
-    if (!$.trim(dst_repo)) {
-        $('.error', $(this)).removeClass('hide');
-        return false;
-    }
-});
-{% endif %}
 
 {% if ENABLE_ADDRESSBOOK_OPT_IN %}
 $("#list-in-address-book input[type='checkbox']").on('change', function() {
