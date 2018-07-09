@@ -315,3 +315,30 @@ class ClientLoginToken(models.Model):
 
     def __unicode__(self):
         return "/".join(self.username, self.token)
+
+
+class RepoSecretKeyManager(models.Manager):
+
+    def get_secret_key(self, repo_id):
+        try:
+            repo_secret_key = self.get(repo_id=repo_id)
+        except RepoSecretKey.DoesNotExist:
+            return None
+
+        return repo_secret_key.secret_key
+
+    def add_secret_key(self, repo_id, secret_key):
+
+        repo_secret_key = self.model(repo_id=repo_id, secret_key=secret_key)
+        repo_secret_key.save(using=self._db)
+
+        return repo_secret_key
+
+
+class RepoSecretKey(models.Model):
+    """
+    """
+    repo_id = models.CharField(unique=True, max_length=36, db_index=True)
+    secret_key = models.CharField(max_length=44)
+
+    objects = RepoSecretKeyManager()

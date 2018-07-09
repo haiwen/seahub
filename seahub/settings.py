@@ -298,6 +298,9 @@ MAX_NUMBER_OF_FILES_FOR_FILEUPLOAD = 1000
 # enable encrypt library
 ENABLE_ENCRYPTED_LIBRARY = True
 
+# enable reset encrypt library's password when user forget password
+ENABLE_RESET_ENCRYPTED_REPO_PASSWORD = False
+
 # mininum length for password of encrypted library
 REPO_PASSWORD_MIN_LENGTH = 8
 
