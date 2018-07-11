@@ -8,7 +8,6 @@ from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.authentication import SessionAuthentication
-from django.core.urlresolvers import reverse
 
 from seahub.base.templatetags.seahub_tags import translate_seahub_time, \
         email2contact_email
@@ -18,7 +17,6 @@ from seahub.utils.timeutils import utc_to_local
 from seahub.api2.utils import api_error
 from seahub.api2.throttling import UserRateThrottle
 from seahub.api2.authentication import TokenAuthentication
-from seahub.api2.endpoints.utils import generate_links_header_for_paginator
 from seahub.base.templatetags.seahub_tags import email2nickname
 from seahub.avatar.templatetags.avatar_tags import api_avatar_url
 
@@ -48,12 +46,9 @@ class ActivitiesView(APIView):
 
         if is_org_context(request):
             org_id = request.user.org.org_id
-            events, total_count = get_org_user_activities(org_id, email,
-                                                                 start,
-                                                                 count)
+            events = get_org_user_activities(org_id, email, start, count)
         else:
-            events, total_count = get_user_activities(email, start,
-                                                             count)
+            events = get_user_activities(email, start, count)
 
         events_list = []
         for e in events:
@@ -90,13 +85,7 @@ class ActivitiesView(APIView):
             events_list.append(d)
 
         ret = {
-            'events': events_list,
-            'total_count': total_count
+            'events': events_list
             }
 
-        resp = Response(ret)
-        base_url = reverse('api-v2.1-acitvity')
-        links_header = generate_links_header_for_paginator(base_url, page,
-                                                           per_page, total_count)
-        resp['Links'] = links_header
-        return resp
+        return Response(ret)

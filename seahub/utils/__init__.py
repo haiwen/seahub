@@ -611,15 +611,15 @@ if EVENTS_CONFIG_FILE:
         events, total_count = [], 0
         try:
             if org_id > 0:
-                events, total_count = seafevents.get_org_user_activities(ev_session,
+                events = seafevents.get_org_user_activities(ev_session,
                         org_id, username, start, count)
             else:
-                events, total_count = seafevents.get_user_activities(ev_session,
+                events = seafevents.get_user_activities(ev_session,
                         username, start, count)
         finally:
             ev_session.close()
 
-        return events, total_count
+        return events
 
     def _get_events_inner(ev_session, username, start, limit, org_id=None):
         '''Read events from seafevents database, and remove events that are
