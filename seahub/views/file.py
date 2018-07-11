@@ -34,7 +34,7 @@ from django.views.decorators.http import require_POST
 from django.template.defaultfilters import filesizeformat
 from django.views.decorators.csrf import csrf_exempt
 
-from seaserv import seafile_api
+from seaserv import seafile_api, ccnet_api
 from seaserv import get_repo, send_message, get_commits, \
     get_file_id_by_path, get_commit, get_file_size, \
     seafserv_threaded_rpc
@@ -68,6 +68,7 @@ from seahub.utils.file_op import check_file_lock, \
 from seahub.views import check_folder_permission, \
         get_unencry_rw_repos_by_user
 from seahub.utils.repo import is_repo_owner
+from seahub.group.utils import is_group_member
 
 from seahub.constants import HASH_URLS
 
@@ -370,13 +371,44 @@ def view_lib_file(request, repo_id, path):
         return render_error(request, _(u'File does not exist'))
 
     # permission check
+    username = request.user.username
     parent_dir = os.path.dirname(path)
+
     permission = check_folder_permission(request, repo_id, parent_dir)
     if not permission:
-        return render_permission_error(request, _(u'Unable to view file'))
+
+        converted_repo_path = seafile_api.convert_repo_path(repo_id, path, username)
+        converted_repo_path = json.loads(converted_repo_path)
+
+        repo_id = converted_repo_path['repo_id']
+        repo = seafile_api.get_repo(repo_id)
+        if not repo:
+            raise Http404
+
+        path = converted_repo_path['path']
+        path = normalize_file_path(path)
+        file_id = seafile_api.get_file_id_by_path(repo_id, path)
+        if not file_id:
+            return render_error(request, _(u'File does not exist'))
+
+        group_id = ''
+        if converted_repo_path.has_key('group_id'):
+            group_id = converted_repo_path['group_id']
+            if not ccnet_api.get_group(group_id):
+                return render_error(request, _(u'Group does not exist'))
+
+            if not is_group_member(group_id, username):
+                return render_permission_error(request, _(u'Unable to view file'))
+
+        parent_dir = os.path.dirname(path)
+        permission = check_folder_permission(request, repo_id, path)
+        if not permission:
+            return render_permission_error(request, _(u'Unable to view file'))
+
+        next_url = reverse('view_lib_file', args=[repo_id, path])
+        return HttpResponseRedirect(next_url)
 
     # download file or view raw file
-    username = request.user.username
     filename = os.path.basename(path)
     dl = request.GET.get('dl', '0') == '1'
     raw = request.GET.get('raw', '0') == '1'
