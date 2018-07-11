@@ -74,7 +74,9 @@ class TagsManager(models.Manager):
 
 class FileTagManager(models.Manager):
     def get_or_create_file_tag(self, repo_id, parent_path, filename, is_dir, tagname, creator):
-        """ create filetag if tag does not exist, otherwise directly to True
+        """ Create filetag if tag does not exist, otherwise directly to True
+            Must always pass origin_repo_id and origin_path
+
             args:
             - `uuid`: uuid of filemap
             - `tagname`:

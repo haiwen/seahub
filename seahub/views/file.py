@@ -40,6 +40,7 @@ from seaserv import get_repo, send_message, get_commits, \
     seafserv_threaded_rpc
 from pysearpc import SearpcError
 
+from seahub.tags.models import FileUUIDMap
 from seahub.wopi.utils import get_wopi_dict
 from seahub.auth.decorators import login_required
 from seahub.base.decorators import repo_passwd_set_required
@@ -355,6 +356,26 @@ def send_file_access_msg_when_preview(request, repo, path, access_from):
     if filetype in (DOCUMENT, SPREADSHEET) and \
         HAS_OFFICE_CONVERTER:
         send_file_access_msg(request, repo, path, access_from)
+
+@login_required
+def view_lib_file_via_smart_link(request, dirent_uuid, dirent_name):
+
+    uuid_map = FileUUIDMap.objects.get_fileuuidmap_by_uuid(dirent_uuid)
+    if not uuid_map:
+        raise Http404
+
+    repo_id = uuid_map.repo_id
+    parent_path = uuid_map.parent_path
+    dirent_name_from_uuid_map = uuid_map.filename
+    is_dir = uuid_map.is_dir
+
+    dirent_path = posixpath.join(parent_path, dirent_name_from_uuid_map.strip('/'))
+    if not is_dir:
+        redirect_to = reverse('view_lib_file', args=[repo_id, dirent_path])
+    else:
+        redirect_to = '/#common/lib/%s/%s' % (repo_id, dirent_path.strip('/'))
+
+    return HttpResponseRedirect(redirect_to)
 
 @login_required
 @repo_passwd_set_required
