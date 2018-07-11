@@ -2460,13 +2460,66 @@ button.sf-dropdown-toggle:focus {
     text-align:center;
 }
 .repo-file-list .dirent-name {
-    display:inline-block;
+    display: inline;
+    vertical-align: middle;
 }
+.repo-file-list .dirent-smart-link {
+    display: none;
+    margin-left: 4px;
+    color: #aaa;
+    cursor: pointer;
+}
+.hl .dirent-smart-link {
+    display: inline;
+    vertical-align: middle;
+}
+.smart-link-container {
+    width: 400px;
+    box-sizing: border-box;
+    overflow: hidden;
+    padding:10px 20px;
+    position: relative;
+}
+.smart-link-wraper {
+    width: 100%;
+    margin-bottom: 15px;
+    word-break: break-all;
+}
+.smart-link-wraper .smart-link-href {
+    display: none;
+}
+.input-copy-wrapper {
+    position: absolute;
+    left:-99999px;
+    top: 100px;
+}
+.smart-link-loading {
+    border: 2px solid #eee;
+    border-left: 2px solid #aaa;
+    border-radius: 50%;
+    display: block;
+    height: 20px;
+    width: 20px;
+    margin: 0 auto;
+    animation: loading 0.9s infinite linear;
+}
+.smart-link-operation {
+    display: none;
+}
+.smart-link-close {
+    margin-left: 5px;
+}
+
 @media (max-width:767px) {
     .repo-file-list .dirent-name,
     .repo-file-list .img-name-link {
         display:block;
     }
+    .repo-file-list .dirent-name a,
+    .repo-file-list .img-name-link a {
+        vertical-align: middle;
+    }
+
 }
 .repo-file-list .file-locked-icon {
     position:absolute;
@@ -2516,7 +2569,7 @@ button.sf-dropdown-toggle:focus {
     padding:10px 20px;
 }
 @media (max-width:579px) {
-    .file-choose-form {
+    .file-choose-form,.smart-link-container {
         padding:0;
         width:280px;
     }

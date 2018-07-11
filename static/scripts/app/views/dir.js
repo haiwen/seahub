@@ -448,7 +448,12 @@ define([
                         'p': dir.path,
                         'thumbnail_size': thumbnail_size
                     },
-                    success: function() {
+                    success: function(collection, response, opts) {
+
+                        if (response.next_url) {
+                            window.open(response.next_url, '_self')
+                        }
+
                         _this.dir.user_can_set_folder_perm = false;
                         _this.is_address_book_group_admin = false;
                         if (_this.contextOptions &&

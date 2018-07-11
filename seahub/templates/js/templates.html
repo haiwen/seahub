@@ -553,6 +553,7 @@
     <td class="dirent-icon"><img src="<%= icon_url %>" width="24" alt="" /></td>
     <td>
         <span class="dirent-name"><a href="<%= url %>" class="dir-link normal"><%- dirent.obj_name %></a></span>
+        <span class="dirent-smart-link sf2-icon-link" title="{% trans 'Smart link' %}"></span>
     </td>
     <td class="dirent-op">
         <div class="op-container">
@@ -622,6 +623,7 @@
     <td>
         <span class="dirent-name">
         <a href="<%= url %>" class="dir-link normal"><%- dirent.obj_name %></a>
+        <span class="dirent-smart-link sf2-icon-link" title="{% trans 'Smart link' %}"></span>
         <br />
         <% if (dirent.last_modified) { %>
         <span class="dirent-meta-info"><%= dirent.last_update %></span>
@@ -707,6 +709,7 @@
             <a class="normal" href="<%= url %>" target="_blank"><%- dirent.obj_name %></a>
             <% } %>
         </span>
+        <span class="dirent-smart-link sf2-icon-link" title="{% trans 'Smart link' %}"></span>
     </td>
     <td class="dirent-op">
         <div class="op-container">
@@ -821,8 +824,10 @@
         <span class="dirent-name">
             <% if (dirent.is_img) { %>
             <a class="normal img-name-link" href="<%= url %>" target="_blank"><%- dirent.obj_name %></a>
+            <span class="dirent-smart-link sf2-icon-link" title= "{% trans 'Smart link' %}"></span>
             <% } else { %>
             <a class="normal" href="<%= url %>" target="_blank"><%- dirent.obj_name %></a>
+            <span class="dirent-smart-link sf2-icon-link" title= "{% trans 'Smart link' %}"></span>
             <br />
             <% } %>
             <span class="dirent-meta-info"><%= dirent.file_size %></span>
@@ -2785,4 +2790,21 @@
     </div>
     <div class="msg-content"><%= content_marked %></div>
 </div>
+</script>
+<script type="text/template" id="smart-link-tmpl">
+    <div class="smart-link-container">
+        <h3 id="dialogTitle">{% trans "Smart link" %}</h3>
+        <div class="smart-link-wraper">
+            <div class="smart-link-loading"></div>
+            <a target="_blank" class="smart-link-href" href=""></a>
+        </div>
+        <div class="smart-link-operation">
+            <button class="smart-link-copy">{% trans "Copy" %}</button>
+            <button class="smart-link-close">{% trans "Close" %}</button>
+        </div>
+        <!-- used to copy text to clipBoard-->
+        <div class="input-copy-wrapper">
+            <input class="copy-input" type="text">
+        </div>
+    </div>
 </script>

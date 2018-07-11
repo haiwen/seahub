@@ -50,3 +50,4 @@ seahub/frontend/webpack-stats.dev.json
 seahub/frontend/webpack-stats.pro.json
 seahub/frontend/node_modules
 
+/.idea

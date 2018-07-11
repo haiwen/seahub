@@ -6,10 +6,11 @@ define([
     'file-tree',
     'app/views/share',
     'app/views/dialogs/dirent-mvcp',
+    "app/views/dialogs/dirent-smart-link",
     'app/views/folder-perm',
     'app/views/widgets/hl-item-view',
     'app/views/widgets/dropdown'
-], function($, _, Backbone, Common, FileTree, ShareView, DirentMvcpDialog,
+], function($, _, Backbone, Common, FileTree, ShareView, DirentMvcpDialog, DirentSmartLinkDialog,
     FolderPermView, HLItemView, DropdownView) {
     'use strict';
 
@@ -94,7 +95,7 @@ define([
             'click .file-star': 'starFile',
             'click .dirent-name': 'visitDirent',
             'click .img-name-link': 'viewImageWithPopup',
-
+            'click .dirent-smart-link': 'getSmartLink',
             // mv by 'drag & drop'
             'dragstart': 'itemDragstart',
             'dragover': 'itemDragover',
@@ -114,6 +115,11 @@ define([
             'click .view-details': 'viewDetails',
             'click .file-comment': 'viewFileComments',
             'click .open-via-client': 'open_via_client'
+        },
+
+        getSmartLink: function() {
+            new DirentSmartLinkDialog({dir: this.dir, attributes: this.model.attributes});
+            return false;
         },
 
         _hideMenu: function() {
