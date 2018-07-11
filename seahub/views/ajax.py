@@ -197,6 +197,61 @@ def unenc_rw_repos(request):
     repo_list.sort(lambda x, y: cmp(x['name'].lower(), y['name'].lower()))
     return HttpResponse(json.dumps(repo_list), content_type=content_type)
 
+def convert_repo_path_when_can_not_view_folder(request, repo_id, path):
+
+    content_type = 'application/json; charset=utf-8'
+
+    path = normalize_dir_path(path)
+    username = request.user.username
+    converted_repo_path = seafile_api.convert_repo_path(repo_id, path, username)
+    if not converted_repo_path:
+        err_msg = _(u'Permission denied.')
+        return HttpResponse(json.dumps({'error': err_msg}),
+                            status=403, content_type=content_type)
+
+    converted_repo_path = json.loads(converted_repo_path)
+
+    repo_id = converted_repo_path['repo_id']
+    repo = seafile_api.get_repo(repo_id)
+    if not repo:
+        err_msg = 'Library not found.'
+        return HttpResponse(json.dumps({'error': err_msg}),
+                            status=404, content_type=content_type)
+
+    path = converted_repo_path['path']
+    path = normalize_dir_path(path)
+    dir_id = seafile_api.get_dir_id_by_path(repo.id, path)
+    if not dir_id:
+        err_msg = 'Folder not found.'
+        return HttpResponse(json.dumps({'error': err_msg}),
+                            status=404, content_type=content_type)
+
+    group_id = ''
+    if converted_repo_path.has_key('group_id'):
+        group_id = converted_repo_path['group_id']
+        if not ccnet_api.get_group(group_id):
+            err_msg = 'Group not found.'
+            return HttpResponse(json.dumps({'error': err_msg}),
+                                status=404, content_type=content_type)
+
+        if not is_group_member(group_id, username):
+            err_msg = _(u'Permission denied.')
+            return HttpResponse(json.dumps({'error': err_msg}),
+                                status=403, content_type=content_type)
+
+    user_perm = check_folder_permission(request, repo_id, path)
+    if not user_perm:
+        err_msg = _(u'Permission denied.')
+        return HttpResponse(json.dumps({'error': err_msg}),
+                            status=403, content_type=content_type)
+
+    if not group_id:
+        next_url = '#shared-libs/lib/%s/%s' % (repo_id, path.strip('/'))
+    else:
+        next_url = '#group/%s/lib/%s/%s' % (group_id, repo_id, path.strip('/'))
+
+    return HttpResponse(json.dumps({'next_url': next_url}), content_type=content_type)
+
 @login_required_ajax
 def list_lib_dir(request, repo_id):
     '''
@@ -224,56 +279,7 @@ def list_lib_dir(request, repo_id):
     # perm for current dir
     user_perm = check_folder_permission(request, repo_id, path)
     if not user_perm:
-
-        converted_repo_path = seafile_api.convert_repo_path(repo_id, path, username)
-        if not converted_repo_path:
-            err_msg = _(u'Permission denied.')
-            return HttpResponse(json.dumps({'error': err_msg}),
-                                status=403, content_type=content_type)
-
-        converted_repo_path = json.loads(converted_repo_path)
-
-        repo_id = converted_repo_path['repo_id']
-        repo = seafile_api.get_repo(repo_id)
-        if not repo:
-            err_msg = 'Library not found.'
-            return HttpResponse(json.dumps({'error': err_msg}),
-                                status=404, content_type=content_type)
-
-        path = converted_repo_path['path']
-        path = normalize_dir_path(path)
-        dir_id = seafile_api.get_dir_id_by_path(repo.id, path)
-        if not dir_id:
-            err_msg = 'Folder not found.'
-            return HttpResponse(json.dumps({'error': err_msg}),
-                                status=404, content_type=content_type)
-
-        group_id = ''
-        if converted_repo_path.has_key('group_id'):
-            group_id = converted_repo_path['group_id']
-            if not ccnet_api.get_group(group_id):
-                err_msg = 'Group not found.'
-                return HttpResponse(json.dumps({'error': err_msg}),
-                                    status=404, content_type=content_type)
-
-            if not is_group_member(group_id, username):
-                err_msg = _(u'Permission denied.')
-                return HttpResponse(json.dumps({'error': err_msg}),
-                                    status=403, content_type=content_type)
-
-        user_perm = check_folder_permission(request, repo_id, path)
-        if not user_perm:
-            err_msg = _(u'Permission denied.')
-            return HttpResponse(json.dumps({'error': err_msg}),
-                                status=403, content_type=content_type)
-
-        if not group_id:
-            next_url = '#shared-libs/lib/%s/%s' % (repo_id, path.strip('/'))
-        else:
-            next_url = '#group/%s/lib/%s/%s' % (group_id, repo_id, path.strip('/'))
-
-        result['next_url'] = next_url
-        return HttpResponse(json.dumps(result), content_type=content_type)
+        return convert_repo_path_when_can_not_view_folder(request, repo_id, path)
 
     if repo.encrypted \
             and not seafile_api.is_password_set(repo.id, username):

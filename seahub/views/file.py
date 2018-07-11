@@ -377,6 +377,44 @@ def view_lib_file_via_smart_link(request, dirent_uuid, dirent_name):
 
     return HttpResponseRedirect(redirect_to)
 
+def convert_repo_path_when_can_not_view_file(request, repo_id, path):
+
+    path = normalize_file_path(path)
+    username = request.user.username
+    converted_repo_path = seafile_api.convert_repo_path(repo_id, path, username)
+    if not converted_repo_path:
+        return render_permission_error(request, _(u'Unable to view file'))
+
+    converted_repo_path = json.loads(converted_repo_path)
+
+    repo_id = converted_repo_path['repo_id']
+    repo = seafile_api.get_repo(repo_id)
+    if not repo:
+        raise Http404
+
+    path = converted_repo_path['path']
+    path = normalize_file_path(path)
+    file_id = seafile_api.get_file_id_by_path(repo_id, path)
+    if not file_id:
+        return render_error(request, _(u'File does not exist'))
+
+    group_id = ''
+    if converted_repo_path.has_key('group_id'):
+        group_id = converted_repo_path['group_id']
+        if not ccnet_api.get_group(group_id):
+            return render_error(request, _(u'Group does not exist'))
+
+        if not is_group_member(group_id, username):
+            return render_permission_error(request, _(u'Unable to view file'))
+
+    parent_dir = os.path.dirname(path)
+    permission = check_folder_permission(request, repo_id, parent_dir)
+    if not permission:
+        return render_permission_error(request, _(u'Unable to view file'))
+
+    next_url = reverse('view_lib_file', args=[repo_id, path])
+    return HttpResponseRedirect(next_url)
+
 @login_required
 @repo_passwd_set_required
 def view_lib_file(request, repo_id, path):
@@ -397,40 +435,7 @@ def view_lib_file(request, repo_id, path):
 
     permission = check_folder_permission(request, repo_id, parent_dir)
     if not permission:
-
-        converted_repo_path = seafile_api.convert_repo_path(repo_id, path, username)
-        if not converted_repo_path:
-            return render_permission_error(request, _(u'Unable to view file'))
-
-        converted_repo_path = json.loads(converted_repo_path)
-
-        repo_id = converted_repo_path['repo_id']
-        repo = seafile_api.get_repo(repo_id)
-        if not repo:
-            raise Http404
-
-        path = converted_repo_path['path']
-        path = normalize_file_path(path)
-        file_id = seafile_api.get_file_id_by_path(repo_id, path)
-        if not file_id:
-            return render_error(request, _(u'File does not exist'))
-
-        group_id = ''
-        if converted_repo_path.has_key('group_id'):
-            group_id = converted_repo_path['group_id']
-            if not ccnet_api.get_group(group_id):
-                return render_error(request, _(u'Group does not exist'))
-
-            if not is_group_member(group_id, username):
-                return render_permission_error(request, _(u'Unable to view file'))
-
-        parent_dir = os.path.dirname(path)
-        permission = check_folder_permission(request, repo_id, path)
-        if not permission:
-            return render_permission_error(request, _(u'Unable to view file'))
-
-        next_url = reverse('view_lib_file', args=[repo_id, path])
-        return HttpResponseRedirect(next_url)
+        return convert_repo_path_when_can_not_view_file(request, repo_id, path)
 
     # download file or view raw file
     filename = os.path.basename(path)
