@@ -34,9 +34,12 @@ class ActivitiesView(APIView):
 
         try:
             page = int(request.GET.get('page', ''))
-            per_page = int(request.GET.get('per_page', ''))
         except ValueError:
             page = 1
+
+        try:
+            per_page = int(request.GET.get('per_page', ''))
+        except ValueError:
             per_page = 25
 
         start = (page - 1) * per_page
