@@ -1,4 +1,4 @@
-{% load seahub_tags avatar_tags group_avatar_tags i18n staticfiles %}
+{% load seahub_tags avatar_tags i18n staticfiles compress %}
 
 <!DOCTYPE html>
 <html lang="{{ LANGUAGE_CODE }}">
@@ -11,10 +11,14 @@
 {% endblock %}
 <meta http-equiv="x-ua-compatible" content="ie=edge" />
 <link rel="shortcut icon" href="{{ MEDIA_URL }}{{ favicon_path }}" />
+{% compress css %}
 <link rel="stylesheet" type="text/css" href="{% static "css/seafile-ui.css" %}" />
-<link rel="stylesheet" type="text/css" href="{{ MEDIA_URL }}css/seahub_react.css?t=1398068110" />
+<link rel="stylesheet" type="text/css" href="{{ MEDIA_URL }}css/seahub.css" />
+{% endcompress %}
 {% block extra_style %}{% endblock %}
-{% if enable_branding_css %}<link rel="stylesheet" type="text/css" href="{% url 'custom_css' %}" />{% endif %}
+{% if enable_branding_css %}
+<link rel="stylesheet" type="text/css" href="{% url 'custom_css' %}" />
+{% endif %}
 </head>
 
 <body>
@@ -36,6 +40,7 @@
          }
      };
 </script>
+<script src="{{ STATIC_URL }}scripts/i18n/{{ LANGUAGE_CODE }}/djangojs.js"></script>
 {% block extra_script %}{% endblock %}
 </body>
 </html>

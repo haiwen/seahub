@@ -96,12 +96,6 @@
 .flex-1 { flex:1; }
 .hide { display:none; }
 
-#right-panel {
-    color: #495057;
-    background-color: #f5f7fb;
-    font:13px/1.5 Arial, Helvetica, sans-serif;
-}
-
 #header {
     background:#f4f4f7;
     width:100%;

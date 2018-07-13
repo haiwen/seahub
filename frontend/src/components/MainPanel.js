@@ -76,9 +76,7 @@ class MainPanel extends Component {
           </div>
         </div>
       </div>
-      <div id="right-panel" className="cur-view-main-con">
-        <FilesActivities />
-      </div>
+      <FilesActivities />
     </div>
     )
   }
