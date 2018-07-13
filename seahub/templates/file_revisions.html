@@ -66,7 +66,7 @@
         <% if (is_first_commit) { %>
         {% trans '(current version)' %}
         <% } %>
-        <% if (rev_renamed_old_path) { %>
+        <% if (op_type == 'rename' || op_type == 'move') { %>
         <br /><span class="tip"><%- renamed_or_moved_tip %></span>
         <% } %>
     </td>
@@ -122,39 +122,38 @@ var util_getRelativeTimeStr = function(m) {
 setLocale();
 
 var file_path = '{{path|escapejs}}',
-    next_start_commit, rev_renamed_old_path,
+    next_start, rev_renamed_old_path,
     is_first_commit = true,
     $tbodyContainer = $('tbody'),
     $history_more_btn = $('#history-more-btn'),
     $history_more_loading = $('#history-more-loading'),
     tmpl = _.template($('#file-history-tr-tmpl').html());
 
-var get_file_revisions = function(path, commit_id) {
+var get_file_revisions = function(path, start) {
 
     $history_more_btn.addClass('hide');
     $history_more_loading.removeClass('hide');
 
     var data = {
-        'path': path
+        'path': path,
+        'start': start
     }; // for the first request
 
-    if (commit_id != undefined) {
-        $.extend(data, {'commit_id': commit_id});
-    }
 
     $.ajax({
-        url:'{% url "api-v2.1-file-history-view" repo.id %}',
+        url:'{% url "api-v2.1-new-file-history-view" repo.id %}',
         data: data,
         cache: false,
         dataType: 'json',
         success: function(resp) {
-            next_start_commit = resp.next_start_commit;
+            next_start = resp.next_start;
             $history_more_loading.addClass('hide');
 
             if (resp.data.length) {
                 $(resp.data).each(function(index, item) {
-                    if (item.rev_renamed_old_path) {
-                        rev_renamed_old_path = item.rev_renamed_old_path;
+                    console.log(item);
+                    if (item.op_type == 'rename' || item.op_type == 'move') {
+                        rev_renamed_old_path = item.old_path;
                     }
 
                     var creator_profile_url = '{{SITE_ROOT}}profile/' + encodeURIComponent(item.creator_email);
@@ -164,7 +163,7 @@ var get_file_revisions = function(path, commit_id) {
                     var m = moment(item.ctime);
                     var render_data = $.extend({}, item, {
                         'is_first_commit': is_first_commit,
-                        'renamed_or_moved_tip': "{% trans '(Renamed or moved from {placeholder})' %}".replace('{placeholder}', item.rev_renamed_old_path),
+                        'renamed_or_moved_tip': "{% trans '(Renamed or moved from {placeholder})' %}".replace('{placeholder}', item.old_path),
                         'size': filesizeformat(item.size),
                         'time': m.format('LLLL'),
                         'time_from_now': util_getRelativeTimeStr(m),
@@ -177,14 +176,14 @@ var get_file_revisions = function(path, commit_id) {
                     $tbodyContainer.append($(tmpl(render_data)));
                     is_first_commit = false;
                 });
-                if (next_start_commit) {
+                if (next_start) {
                     $history_more_btn.removeClass('hide');
                 } else {
                     $history_more_btn.addClass('hide');
                 }
-            } else if (next_start_commit) {
-                var path = rev_renamed_old_path ? rev_renamed_old_path : file_path;
-                get_file_revisions(path, next_start_commit);
+            } else if (next_start) {
+                var path = file_path;
+                get_file_revisions(path, next_start);
             }
 
         },
@@ -204,13 +203,13 @@ var get_file_revisions = function(path, commit_id) {
 // get first batch of file revisions
 // seahub web api will use repo's first head commit_id
 // if no commit_id parameter passed
-get_file_revisions(file_path);
+get_file_revisions(file_path, 0);
 
 $('#history-more-btn').on('click', function() {
     // get more batch of file revisions
     // next_start_commit = resp.next_start_commit;
     var path = rev_renamed_old_path ? rev_renamed_old_path : file_path;
-    get_file_revisions(path, next_start_commit);
+    get_file_revisions(path, next_start);
 });
 
 $('.commit-list').on('click', '.restore-file', function () {
@@ -230,7 +229,7 @@ $('.commit-list').on('click', '.restore-file', function () {
             feedback(msg, 'success');
             $tbodyContainer.empty();
             is_first_commit = true;
-            get_file_revisions(file_path);
+            get_file_revisions(file_path, 0);
         },
         error: ajaxErrorHandler
     });

@@ -44,7 +44,7 @@ from seahub.api2.endpoints.repos_batch import ReposBatchView, \
         ReposBatchCopyItemView, ReposBatchMoveItemView
 from seahub.api2.endpoints.repos import RepoView
 from seahub.api2.endpoints.file import FileView
-from seahub.api2.endpoints.file_history import FileHistoryView
+from seahub.api2.endpoints.file_history import FileHistoryView, NewFileHistoryView
 from seahub.api2.endpoints.dir import DirView, DirDetailView
 from seahub.api2.endpoints.file_tag import FileTagView
 from seahub.api2.endpoints.file_tag import FileTagsView
@@ -272,6 +272,7 @@ urlpatterns = [
     url(r'^api/v2.1/repos/(?P<repo_id>[-0-9a-f]{36})/tags/(?P<name>.*?)/$',FileTagView.as_view(), name="api-v2.1-filetag-view"),
     url(r'^api/v2.1/repos/(?P<repo_id>[-0-9a-f]{36})/file/$', FileView.as_view(), name='api-v2.1-file-view'),
     url(r'^api/v2.1/repos/(?P<repo_id>[-0-9a-f]{36})/file/history/$', FileHistoryView.as_view(), name='api-v2.1-file-history-view'),
+    url(r'^api/v2.1/repos/(?P<repo_id>[-0-9a-f]{36})/file/new_history/$', NewFileHistoryView.as_view(), name='api-v2.1-new-file-history-view'),
     url(r'^api/v2.1/repos/(?P<repo_id>[-0-9a-f]{36})/dir/$', DirView.as_view(), name='api-v2.1-dir-view'),
     url(r'^api/v2.1/repos/(?P<repo_id>[-0-9a-f]{36})/dir/detail/$', DirDetailView.as_view(), name='api-v2.1-dir-detail-view'),
     url(r'^api/v2.1/repos/(?P<repo_id>[-0-9a-f]{36})/trash/$', RepoTrash.as_view(), name='api-v2.1-repo-trash'),
