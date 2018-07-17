@@ -43,7 +43,8 @@ from seahub.utils import check_filename_with_rename, EMPTY_SHA1, \
     gen_block_get_url, TRAFFIC_STATS_ENABLED, get_user_traffic_stat,\
     new_merge_with_no_conflict, get_commit_before_new_merge, \
     get_repo_last_modify, gen_file_upload_url, is_org_context, \
-    get_file_type_and_ext, is_pro_version, normalize_dir_path
+    get_file_type_and_ext, is_pro_version, normalize_dir_path, \
+    FILEEXT_TYPE_MAP
 from seahub.utils.star import get_dir_starred_files
 from seahub.utils.file_types import IMAGE, VIDEO
 from seahub.utils.file_op import check_file_lock, ONLINE_OFFICE_LOCK_OWNER
@@ -392,23 +393,26 @@ def list_lib_dir(request, repo_id):
         if not repo.encrypted and ENABLE_THUMBNAIL:
             # used for providing a way to determine
             # if send a request to create thumbnail.
-            file_type, file_ext = get_file_type_and_ext(f.obj_name)
+
+            fileExt = os.path.splitext(f.obj_name)[1][1:].lower()
+            file_type = FILEEXT_TYPE_MAP.get(fileExt)
             if file_type == IMAGE:
                 f_['is_img'] = True
 
             if file_type == VIDEO and ENABLE_VIDEO_THUMBNAIL:
                 f_['is_video'] = True
 
-            # if thumbnail has already been created, return its src.
-            # Then web browser will use this src to get thumbnail instead of
-            # recreating it.
-            thumbnail_file_path = os.path.join(THUMBNAIL_ROOT, str(size), f.obj_id)
-            thumbnail_exist = os.path.exists(thumbnail_file_path)
-            if thumbnail_exist and (file_type == IMAGE or
-                    file_type == VIDEO and ENABLE_VIDEO_THUMBNAIL):
-                file_path = posixpath.join(path, f.obj_name)
-                src = get_thumbnail_src(repo_id, size, file_path)
-                f_['encoded_thumbnail_src'] = urlquote(src)
+            if file_type == IMAGE or \
+                    file_type == VIDEO and ENABLE_VIDEO_THUMBNAIL:
+                # if thumbnail has already been created, return its src.
+                # Then web browser will use this src to get thumbnail instead of
+                # recreating it.
+                thumbnail_file_path = os.path.join(THUMBNAIL_ROOT, str(size), f.obj_id)
+                thumbnail_exist = os.path.exists(thumbnail_file_path)
+                if thumbnail_exist:
+                    file_path = posixpath.join(path, f.obj_name)
+                    src = get_thumbnail_src(repo_id, size, file_path)
+                    f_['encoded_thumbnail_src'] = urlquote(src)
 
         if is_pro_version():
             f_['is_locked'] = True if f.is_locked else False
