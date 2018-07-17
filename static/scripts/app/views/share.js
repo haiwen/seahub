@@ -713,37 +713,31 @@ define([
         // for common repo
         prepareAvailableGroups: function(options) {
             var groups = [];
-
-            if (app.pageOptions.enable_share_to_all_groups) {
-                $.ajax({
-                    url: Common.getUrl({
-                        name: 'shareable_groups'
-                    }),
-                    type: 'GET',
-                    dataType: 'json',
-                    cache: false,
-                    success: function(data){
-                        for (var i = 0, len = data.length; i < len; i++) {
-                            groups.push({
-                                'id': data[i].id,
-                                'name': data[i].name
-                            });
-                        }
-                        groups.sort(function(a, b) {
-                            return Common.compareTwoWord(a.name, b.name);
+            $.ajax({
+                url: Common.getUrl({
+                    name: app.pageOptions.enable_share_to_all_groups ? 'shareable_groups' : 'groups'
+                }),
+                type: 'GET',
+                dataType: 'json',
+                cache: false,
+                success: function(data){
+                    for (var i = 0, len = data.length; i < len; i++) {
+                        groups.push({
+                            'id': data[i].id,
+                            'name': data[i].name
                         });
-                    },
-                    error: function(xhr, textStatus, errorThrown) {
-                        // do nothing
-                    },
-                    complete: function() {
-                        options.callback(groups);
                     }
-                });
-            } else {
-                groups = app.pageOptions.joined_groups_exclude_address_book || [];
-                options.callback(groups);
-            }
+                    groups.sort(function(a, b) {
+                        return Common.compareTwoWord(a.name, b.name);
+                    });
+                },
+                error: function(xhr, textStatus, errorThrown) {
+                    // do nothing
+                },
+                complete: function() {
+                    options.callback(groups);
+                }
+            });
         },
 
         // for group owned repo
