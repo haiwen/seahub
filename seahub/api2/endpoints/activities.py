@@ -12,7 +12,7 @@ from rest_framework.authentication import SessionAuthentication
 from seahub.base.templatetags.seahub_tags import translate_seahub_time, \
         email2contact_email
 from seahub.utils import EVENTS_ENABLED, is_org_context, \
-        get_org_user_activities, get_user_activities
+        get_user_activities
 from seahub.utils.timeutils import utc_to_local
 from seahub.api2.utils import api_error
 from seahub.api2.throttling import UserRateThrottle
@@ -47,11 +47,7 @@ class ActivitiesView(APIView):
 
         email = request.user.username
 
-        if is_org_context(request):
-            org_id = request.user.org.org_id
-            events = get_org_user_activities(org_id, email, start, count)
-        else:
-            events = get_user_activities(email, start, count)
+        events = get_user_activities(email, start, count)
 
         events_list = []
         for e in events:
