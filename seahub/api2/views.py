@@ -2882,6 +2882,10 @@ class FileDetailView(APIView):
         if not obj_id:
             return api_error(status.HTTP_404_NOT_FOUND, 'File not found.')
 
+        if not check_folder_permission(request, repo_id, '/'):
+            error_msg = 'Permission denied.'
+            return api_error(status.HTTP_403_FORBIDDEN, error_msg)
+
         # fetch file contributors and latest contributor
         try:
             # get real path for sub repo
