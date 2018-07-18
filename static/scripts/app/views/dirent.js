@@ -427,12 +427,14 @@ define([
 
             var $name = this.$('.dirent-name'),
                 $op = this.$('.dirent-op'),
-                $td = $name.closest('td');
+                $td = $name.closest('td'),
+                $smart_link = this.$('.dirent-smart-link');
             $td.attr('colspan', 2).css({
                 'width': $name.width() + $op.outerWidth(),
                 'height': $name.height()
             }).append(form);
             $op.hide();
+            $smart_link.hide();
             $name.hide();
 
             this.$el.attr('draggable', false);
@@ -474,6 +476,7 @@ define([
                 form.remove();
                 $op.show();
                 $name.show();
+                $smart_link.removeAttr('style');
                 $td.attr('colspan', 1).css({
                     'width': $name.width()
                 });
