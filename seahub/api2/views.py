@@ -731,8 +731,9 @@ class Repos(APIView):
             group_repos.sort(lambda x, y: cmp(y.last_modify, x.last_modify))
 
             # Reduce memcache fetch ops.
+            share_from_set = set([x.user for x in group_repos])
             modifiers_set = set([x.last_modifier for x in group_repos])
-            for e in modifiers_set:
+            for e in modifiers_set | share_from_set:
                 if e not in contact_email_dict:
                     contact_email_dict[e] = email2contact_email(e)
                 if e not in nickname_dict:
@@ -759,6 +760,9 @@ class Repos(APIView):
                     "root": '',
                     "head_commit_id": r.head_cmmt_id,
                     "version": r.version,
+                    "share_from": r.user,
+                    "share_from_name": nickname_dict.get(r.user, ''),
+                    "share_from_contact_email": contact_email_dict.get(r.user, ''),
                 }
                 repos_json.append(repo)
 
@@ -766,8 +770,9 @@ class Repos(APIView):
             public_repos = list_inner_pub_repos(request)
 
             # Reduce memcache fetch ops.
+            share_from_set = set([x.user for x in public_repos])
             modifiers_set = set([x.last_modifier for x in public_repos])
-            for e in modifiers_set:
+            for e in modifiers_set | share_from_set:
                 if e not in contact_email_dict:
                     contact_email_dict[e] = email2contact_email(e)
                 if e not in nickname_dict:
@@ -792,6 +797,8 @@ class Repos(APIView):
                     "encrypted": r.encrypted,
                     "permission": r.permission,
                     "share_from": r.user,
+                    "share_from_name": nickname_dict.get(r.user, ''),
+                    "share_from_contact_email": contact_email_dict.get(r.user, ''),
                     "share_type": r.share_type,
                     "root": '',
                     "head_commit_id": r.head_cmmt_id,
