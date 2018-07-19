@@ -2930,11 +2930,9 @@ class FileDetailView(APIView):
             logger.error(e)
             entry["size"] = 0
 
-        try:
-            UserStarredFiles.objects.get(repo_id=repo_id, path=path)
-            entry["starred"] = True
-        except UserStarredFiles.DoesNotExist:
-            entry["starred"] = False
+        starred_files = UserStarredFiles.objects.filter(repo_id=repo_id,
+                path=path)
+        entry["starred"] = True if len(starred_files) > 0 else False
 
         return Response(entry)
 
