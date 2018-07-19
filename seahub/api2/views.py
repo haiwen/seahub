@@ -608,6 +608,8 @@ class Repos(APIView):
             filter_by[f] = True
 
         email = request.user.username
+        owner_name = email2nickname(email)
+        owner_contact_email = email2contact_email(email)
 
         # Use dict to reduce memcache fetch cost in large for-loop.
         contact_email_dict = {}
@@ -644,6 +646,8 @@ class Repos(APIView):
                     "type": "repo",
                     "id": r.id,
                     "owner": email,
+                    "owner_name": owner_name,
+                    "owner_contact_email": owner_contact_email,
                     "name": r.name,
                     "mtime": r.last_modify,
                     "modifier_email": r.last_modifier,
@@ -697,6 +701,8 @@ class Repos(APIView):
                     "type": "srepo",
                     "id": r.repo_id,
                     "owner": r.user,
+                    "owner_name": nickname_dict.get(r.user, ''),
+                    "owner_contact_email": contact_email_dict.get(r.user, ''),
                     "name": r.repo_name,
                     "owner_nickname": nickname_dict.get(r.user, ''),
                     "mtime": r.last_modify,
