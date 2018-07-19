@@ -1,7 +1,5 @@
 import React from 'react';
-import ReactDOM from 'react-dom';
-import SeafileEditor from './lib/seafile-editor';
-import MarkdownViewer from './lib/markdown-viewer';
+import SeafileEditor from '@seafile/seafile-editor';
 import 'whatwg-fetch';
 
 let repoID = window.app.pageOptions.repoID;
@@ -12,6 +10,10 @@ let domain = window.app.pageOptions.domain;
 let protocol = window.app.pageOptions.protocol;
 
 let dirPath = '/';
+
+const serviceUrl = window.app.config.serviceUrl;
+const seafileCollabServer = window.app.config.seafileCollabServer;
+const userInfo = window.app.userInfo;
 
 const updateUrl = `${siteRoot}api2/repos/${repoID}/update-link/?p=${dirPath}`;
 const uploadUrl = `${siteRoot}api2/repos/${repoID}/upload-link/?p=${dirPath}&from=web`;
@@ -35,6 +37,13 @@ function getImageFileNameWithTimestamp() {
 }
 
 class EditorUtilities {
+
+  constructor () {
+    this.repoID = repoID;
+    this.filePath = filePath;
+    this.serviceUrl = serviceUrl;
+  }
+  
   saveContent(content) {
     return (fetch(updateUrl, {credentials: 'same-origin'})
       .then(res => res.json())
@@ -44,6 +53,10 @@ class EditorUtilities {
     );
   }
 
+  getParentDectionaryUrl() {
+    return this.serviceUrl + "/#common/lib/" + this.repoID + "/";
+  }
+  
   _getImageURL(fileName) {
     const url = `${protocol}://${domain}${siteRoot}lib/${repoID}/file/images/${fileName}?raw=1`;
     return url;
@@ -120,10 +133,15 @@ class App extends React.Component {
         markdownContent: "",
         loading: true,
         mode: "editor",
-      };
-      this.fileInfo = {
-        name: fileName,
-        path: filePath
+        fileInfo: {
+          repoID: repoID,
+          name: fileName,
+          path: filePath,
+          mtime: null,
+          size: 0,
+          starred: false,
+        },
+        collabServer: seafileCollabServer ? seafileCollabServer : null,
       };
     }
 
@@ -135,8 +153,15 @@ class App extends React.Component {
     fetch(infoPath, {credentials:'same-origin'})
       .then((response) => response.json())
       .then(res => {
-        this.fileInfo.mtime = res.mtime;
-        this.fileInfo.size = res.size;
+        let { mtime, size, starred } = res;
+        this.setState((prevState, props) => ({
+          fileInfo: {
+            ...prevState.fileInfo,
+            mtime,
+            size,
+            starred
+          }
+        }));
 
       fetch(url, {credentials: 'same-origin'})
         .then(res => res.json())
@@ -163,9 +188,11 @@ class App extends React.Component {
     } else if (this.state.mode === "editor") {
       return (
         <SeafileEditor
-          fileInfo={this.fileInfo}
+          fileInfo={this.state.fileInfo}
           markdownContent={this.state.markdownContent}
           editorUtilities={editorUtilities}
+          userInfo={this.state.collabServer ? userInfo : null}
+          collabServer={this.state.collabServer}
         />
       );
     }   

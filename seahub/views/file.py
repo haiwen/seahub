@@ -55,7 +55,8 @@ from seahub.utils import render_error, is_org_context, \
     user_traffic_over_limit, get_file_audit_events_by_path, \
     generate_file_audit_event_type, FILE_AUDIT_ENABLED, \
     get_site_scheme_and_netloc, get_conf_text_ext, \
-    HAS_OFFICE_CONVERTER, FILEEXT_TYPE_MAP, normalize_file_path
+    HAS_OFFICE_CONVERTER, FILEEXT_TYPE_MAP, normalize_file_path, \
+    get_service_url
 
 from seahub.utils.ip import get_remote_ip
 from seahub.utils.timeutils import utc_to_local
@@ -81,7 +82,7 @@ if HAS_OFFICE_CONVERTER:
 
 import seahub.settings as settings
 from seahub.settings import FILE_ENCODING_LIST, FILE_PREVIEW_MAX_SIZE, \
-    FILE_ENCODING_TRY_LIST, MEDIA_URL
+    FILE_ENCODING_TRY_LIST, MEDIA_URL, SEAFILE_COLLAB_SERVER
 
 try:
     from seahub.settings import ENABLE_OFFICE_WEB_APP
@@ -567,7 +568,9 @@ def view_lib_file(request, repo_id, path):
             return_dict['protocol'] = request.is_secure() and 'https' or 'http'
             return_dict['domain'] = get_current_site(request).domain
             return_dict['file_content'] = convert_md_link(file_content, repo_id, username)
+            return_dict['serviceUrl'] = get_service_url()
             return_dict['language_code'] = get_language()
+            return_dict['seafile_collab_server'] = SEAFILE_COLLAB_SERVER
         else:
             return_dict['file_content'] = file_content
 
