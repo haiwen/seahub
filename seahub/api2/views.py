@@ -2910,11 +2910,9 @@ class FileDetailView(APIView):
         entry["id"] = obj_id
         entry["mtime"] = last_modified
 
-        try:
-            UserStarredFiles.objects.get(repo_id=repo_id, path=path)
-            entry["starred"] = True
-        except UserStarredFiles.DoesNotExist:
-            entry["starred"] = False
+        starred_files = UserStarredFiles.objects.filter(repo_id=repo_id,
+                path=path)
+        entry["starred"] = True if len(starred_files) > 0 else False
 
         entry["last_modifier_email"] = latest_contributor
         entry["last_modifier_name"] = email2nickname(latest_contributor)
