@@ -35,11 +35,11 @@
           sent.{% endblocktrans %}</p>
       {% endif %}
     {% else %}
-      <p class="alert alert-warning" role="alert">{% blocktrans %}We've
+      <p class="alert alert-warning" role="alert">We've
         encountered an issue with the selected authentication method. Please
         go back and verify that you entered your information correctly, try
         again, or use a different authentication method instead. If the issue
-        persists, contact the site administrator.{% endblocktrans %}</p>
+        persists, contact the site administrator.</p>
     {% endif %}
   {% elif wizard.steps.current == 'yubikey' %}
     <p>{% blocktrans %}To identify and verify your YubiKey, please insert a
