@@ -6,7 +6,7 @@
 # zMingGit <517046497@qq.com>, 2018
 # Alfred <alfredhuang211@qq.com>, 2015
 # Daniel Pan <daniel.pan@seafile.com>, 2016
-# imwhatiam <imwhatiam123@gmail.com>, 2015-2017
+# imwhatiam <imwhatiam123@gmail.com>, 2015-2018
 # llj <lingjun.li1@gmail.com>, 2017-2018
 # Daniel Pan <daniel.pan@seafile.com>, 2015
 # zheng xie <xiez1989@gmail.com>, 2015
@@ -14,9 +14,9 @@ msgid ""
 msgstr ""
 "Project-Id-Version: seahub\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2018-06-15 14:46+0800\n"
-"PO-Revision-Date: 2018-06-15 06:35+0000\n"
-"Last-Translator: zheng xie <xiez1989@gmail.com>\n"
+"POT-Creation-Date: 2018-07-20 11:07+0800\n"
+"PO-Revision-Date: 2018-07-20 07:23+0000\n"
+"Last-Translator: imwhatiam <imwhatiam123@gmail.com>\n"
 "Language-Team: Chinese (China) (http://www.transifex.com/haiwen/seahub/language/zh_CN/)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -25,23 +25,23 @@ msgstr ""
 "Plural-Forms: nplurals=1; plural=0;\n"
 
 #: static/scripts/app/models/deleted-repo.js:19
-#: static/scripts/app/models/repo.js:59 static/scripts/common.js:332
+#: static/scripts/app/models/repo.js:59 static/scripts/common.js:333
 msgid "Encrypted library"
 msgstr "加密资料库"
 
 #: static/scripts/app/models/deleted-repo.js:21
-#: static/scripts/app/models/repo.js:61 static/scripts/common.js:336
+#: static/scripts/app/models/repo.js:61 static/scripts/common.js:337
 #: static/scripts/sysadmin-app/models/trash-repo.js:14
 msgid "Read-Write library"
 msgstr "可读写资料库"
 
-#: static/scripts/app/models/dirent.js:113 static/scripts/app/views/dir.js:676
-#: static/scripts/app/views/dir.js:746
+#: static/scripts/app/models/dirent.js:113 static/scripts/app/views/dir.js:681
+#: static/scripts/app/views/dir.js:751
 #: static/scripts/app/views/fileupload.js:392
 #: static/scripts/app/views/fileupload.js:406
 #: static/scripts/app/views/fileupload.js:418
 #: static/scripts/app/views/fileupload.js:430
-#: static/scripts/app/views/group.js:63 static/scripts/common.js:610
+#: static/scripts/app/views/group.js:63 static/scripts/common.js:611
 msgid "Just now"
 msgstr "刚才"
 
@@ -51,8 +51,8 @@ msgstr "名称为必填项"
 
 #: static/scripts/app/models/repo.js:37
 #: static/scripts/app/views/dialogs/dirent-rename.js:65
-#: static/scripts/app/views/dir.js:661 static/scripts/app/views/dir.js:721
-#: static/scripts/app/views/dirent.js:492
+#: static/scripts/app/views/dir.js:666 static/scripts/app/views/dir.js:726
+#: static/scripts/app/views/dirent.js:501
 #: static/scripts/app/views/group-repo.js:133
 #: static/scripts/app/views/repo.js:181
 msgid "Name should not include '/'."
@@ -74,7 +74,7 @@ msgstr "密码太短"
 msgid "Passwords don't match"
 msgstr "两次输入的密码不一致"
 
-#: static/scripts/app/models/repo.js:63 static/scripts/common.js:334
+#: static/scripts/app/models/repo.js:63 static/scripts/common.js:335
 msgid "Read-Only library"
 msgstr "只读资料库"
 
@@ -91,8 +91,8 @@ msgstr "只读"
 #: static/scripts/app/views/account.js:58
 #: static/scripts/app/views/dialogs/repo-folder-perm-admin.js:135
 #: static/scripts/app/views/dialogs/repo-share-link-admin.js:97
-#: static/scripts/app/views/dir.js:471 static/scripts/app/views/dir.js:505
-#: static/scripts/app/views/dirent.js:295
+#: static/scripts/app/views/dir.js:476 static/scripts/app/views/dir.js:510
+#: static/scripts/app/views/dirent.js:301
 #: static/scripts/app/views/file-comments.js:120
 #: static/scripts/app/views/group-discussions.js:119
 #: static/scripts/app/views/group-discussions.js:199
@@ -116,7 +116,7 @@ msgstr "只读"
 #: static/scripts/app/views/share-admin-share-links.js:147
 #: static/scripts/app/views/share-admin-upload-links.js:61
 #: static/scripts/app/views/share.js:225 static/scripts/app/views/share.js:531
-#: static/scripts/app/views/share.js:680 static/scripts/app/views/share.js:853
+#: static/scripts/app/views/share.js:680 static/scripts/app/views/share.js:847
 #: static/scripts/sysadmin-app/views/address-book-group.js:143
 #: static/scripts/sysadmin-app/views/address-book-group.js:215
 #: static/scripts/sysadmin-app/views/address-book-group.js:269
@@ -172,14 +172,14 @@ msgstr "删除的目录"
 #: static/scripts/app/views/dialogs/repo-folder-perm-admin.js:303
 #: static/scripts/app/views/dialogs/repo-history-settings.js:83
 #: static/scripts/app/views/dialogs/repo-history-settings.js:142
-#: static/scripts/app/views/dir.js:1327 static/scripts/app/views/dir.js:1361
-#: static/scripts/app/views/dir.js:1430
+#: static/scripts/app/views/dir.js:1332 static/scripts/app/views/dir.js:1366
+#: static/scripts/app/views/dir.js:1435
 #: static/scripts/app/views/dirent-details.js:160
 #: static/scripts/app/views/dirent-grid.js:354
 #: static/scripts/app/views/dirent-grid.js:395
-#: static/scripts/app/views/dirent.js:510
-#: static/scripts/app/views/dirent.js:640
-#: static/scripts/app/views/dirent.js:681
+#: static/scripts/app/views/dirent.js:519
+#: static/scripts/app/views/dirent.js:649
+#: static/scripts/app/views/dirent.js:690
 #: static/scripts/app/views/file-comment.js:52
 #: static/scripts/app/views/file-comments.js:163
 #: static/scripts/app/views/folder-perm.js:266
@@ -202,9 +202,9 @@ msgstr "删除的目录"
 #: static/scripts/app/views/repo-folder-perm-item.js:147
 #: static/scripts/app/views/repo.js:206 static/scripts/app/views/repo.js:281
 #: static/scripts/app/views/repo.js:398 static/scripts/app/views/repo.js:440
-#: static/scripts/app/views/share.js:448 static/scripts/app/views/share.js:950
-#: static/scripts/app/views/share.js:1043 static/scripts/common.js:431
-#: static/scripts/common.js:520
+#: static/scripts/app/views/share.js:448 static/scripts/app/views/share.js:944
+#: static/scripts/app/views/share.js:1037 static/scripts/common.js:432
+#: static/scripts/common.js:521
 #: static/scripts/sysadmin-app/views/address-book-group-item.js:104
 #: static/scripts/sysadmin-app/views/address-book-group.js:314
 #: static/scripts/sysadmin-app/views/address-book-group.js:339
@@ -283,17 +283,17 @@ msgstr "失败。"
 
 #: static/scripts/app/views/dialogs/dirent-mvcp.js:133
 #: static/scripts/app/views/dialogs/dirent-mvcp.js:164
-#: static/scripts/app/views/dir.js:1421
+#: static/scripts/app/views/dir.js:1426
 msgid "Canceled."
 msgstr "已取消。"
 
 #: static/scripts/app/views/dialogs/dirent-mvcp.js:196
-#: static/scripts/app/views/dir.js:1166
+#: static/scripts/app/views/dir.js:1171
 msgid "Invalid destination path"
 msgstr "目标路径无效"
 
 #: static/scripts/app/views/dialogs/dirent-mvcp.js:215
-#: static/scripts/app/views/dirent.js:286
+#: static/scripts/app/views/dirent.js:292
 msgid "Successfully moved %(name)s"
 msgstr "成功移动 %(name)s。"
 
@@ -310,8 +310,8 @@ msgid "Rename File"
 msgstr "重命名文件"
 
 #: static/scripts/app/views/dialogs/dirent-rename.js:59
-#: static/scripts/app/views/dir.js:656 static/scripts/app/views/dir.js:716
-#: static/scripts/app/views/dirent.js:486
+#: static/scripts/app/views/dir.js:661 static/scripts/app/views/dir.js:721
+#: static/scripts/app/views/dirent.js:495
 #: static/scripts/app/views/group-repo.js:127
 #: static/scripts/app/views/groups.js:127
 #: static/scripts/app/views/invitations.js:65
@@ -324,6 +324,10 @@ msgstr "重命名文件"
 #: static/scripts/sysadmin-app/views/group-members.js:51
 msgid "It is required."
 msgstr "必填项。"
+
+#: static/scripts/app/views/dialogs/dirent-smart-link.js:50
+msgid "Smart link copied to clipboard"
+msgstr "智能链接已复制到剪切板"
 
 #: static/scripts/app/views/dialogs/repo-change-password.js:26
 msgid "Change Password of Library {placeholder}"
@@ -393,7 +397,7 @@ msgstr "只能选择1个项目"
 #: static/scripts/app/views/share-admin-share-links.js:142
 #: static/scripts/app/views/share-admin-upload-links.js:56
 #: static/scripts/app/views/share.js:220 static/scripts/app/views/share.js:526
-#: static/scripts/app/views/share.js:675 static/scripts/app/views/share.js:848
+#: static/scripts/app/views/share.js:675 static/scripts/app/views/share.js:842
 #: static/scripts/sysadmin-app/views/address-book-group.js:309
 #: static/scripts/sysadmin-app/views/address-book-group.js:334
 #: static/scripts/sysadmin-app/views/address-book.js:124
@@ -471,132 +475,132 @@ msgstr "<a href=\"%url%\" target=\"_blank\">图片</a> 无法被加载。"
 msgid "Password is required."
 msgstr "密码为必填项。"
 
-#: static/scripts/app/views/dir.js:727
+#: static/scripts/app/views/dir.js:732
 msgid "Only an extension there, please input a name."
 msgstr "请输入完整的文件名。"
 
-#: static/scripts/app/views/dir.js:765
+#: static/scripts/app/views/dir.js:770
 msgid "New File"
 msgstr "新建文件"
 
-#: static/scripts/app/views/dir.js:773
+#: static/scripts/app/views/dir.js:778
 msgid "New Markdown File"
 msgstr "新建 Markdown 文件"
 
-#: static/scripts/app/views/dir.js:781
+#: static/scripts/app/views/dir.js:786
 msgid "New Excel File"
 msgstr "新建 Excel 文件"
 
-#: static/scripts/app/views/dir.js:789
+#: static/scripts/app/views/dir.js:794
 msgid "New PowerPoint File"
 msgstr "新建 PowerPoint 文件"
 
-#: static/scripts/app/views/dir.js:797
+#: static/scripts/app/views/dir.js:802
 msgid "New Word File"
 msgstr "新建 Word 文件"
 
-#: static/scripts/app/views/dir.js:1029 static/scripts/app/views/dir.js:1171
+#: static/scripts/app/views/dir.js:1034 static/scripts/app/views/dir.js:1176
 msgid "Processing..."
 msgstr "处理中..."
 
-#: static/scripts/app/views/dir.js:1066
+#: static/scripts/app/views/dir.js:1071
 msgid "Successfully deleted %(name)s."
 msgstr "成功删除 %(name)s。"
 
-#: static/scripts/app/views/dir.js:1068
+#: static/scripts/app/views/dir.js:1073
 msgid "Successfully deleted %(name)s and 1 other item."
 msgstr "成功删除 %(name)s 和其他一项内容。"
 
-#: static/scripts/app/views/dir.js:1070
+#: static/scripts/app/views/dir.js:1075
 msgid "Successfully deleted %(name)s and %(amount)s other items."
 msgstr "成功删除 %(name)s 和其他 %(amount)s 项内容。"
 
-#: static/scripts/app/views/dir.js:1079
+#: static/scripts/app/views/dir.js:1084
 msgid "Failed to delete %(name)s."
 msgstr "删除 %(name)s 失败。"
 
-#: static/scripts/app/views/dir.js:1081
+#: static/scripts/app/views/dir.js:1086
 msgid "Failed to delete %(name)s and 1 other item."
 msgstr "删除 %(name)s 以及另外1项失败。"
 
-#: static/scripts/app/views/dir.js:1083
+#: static/scripts/app/views/dir.js:1088
 msgid "Failed to delete %(name)s and %(amount)s other items."
 msgstr "删除 %(name)s 以及另外 %(amount)s 项失败。"
 
-#: static/scripts/app/views/dir.js:1096
+#: static/scripts/app/views/dir.js:1101
 msgid "Delete Items"
 msgstr "删除条目"
 
-#: static/scripts/app/views/dir.js:1097
+#: static/scripts/app/views/dir.js:1102
 msgid "Are you sure you want to delete these selected items?"
 msgstr "确定要删除选中的条目吗？"
 
-#: static/scripts/app/views/dir.js:1111
+#: static/scripts/app/views/dir.js:1116
 msgid "Move selected item(s) to:"
 msgstr "将已选条目移动到："
 
-#: static/scripts/app/views/dir.js:1111
+#: static/scripts/app/views/dir.js:1116
 msgid "Copy selected item(s) to:"
 msgstr "将已选条目复制到："
 
-#: static/scripts/app/views/dir.js:1215 static/scripts/app/views/dir.js:1382
+#: static/scripts/app/views/dir.js:1220 static/scripts/app/views/dir.js:1387
 msgid "Successfully moved %(name)s."
 msgstr "成功移动 %(name)s。"
 
-#: static/scripts/app/views/dir.js:1217 static/scripts/app/views/dir.js:1384
+#: static/scripts/app/views/dir.js:1222 static/scripts/app/views/dir.js:1389
 msgid "Successfully moved %(name)s and 1 other item."
 msgstr "成功移动 %(name)s 和另1项条目。"
 
-#: static/scripts/app/views/dir.js:1219 static/scripts/app/views/dir.js:1386
+#: static/scripts/app/views/dir.js:1224 static/scripts/app/views/dir.js:1391
 msgid "Successfully moved %(name)s and %(amount)s other items."
 msgstr "成功移动 %(name)s 和其他 %(amount)s 项条目。"
 
-#: static/scripts/app/views/dir.js:1224 static/scripts/app/views/dir.js:1390
+#: static/scripts/app/views/dir.js:1229 static/scripts/app/views/dir.js:1395
 msgid "Successfully copied %(name)s."
 msgstr "成功复制 %(name)s。"
 
-#: static/scripts/app/views/dir.js:1226 static/scripts/app/views/dir.js:1392
+#: static/scripts/app/views/dir.js:1231 static/scripts/app/views/dir.js:1397
 msgid "Successfully copied %(name)s and 1 other item."
 msgstr "成功复制 %(name)s 和另1项条目。"
 
-#: static/scripts/app/views/dir.js:1228 static/scripts/app/views/dir.js:1394
+#: static/scripts/app/views/dir.js:1233 static/scripts/app/views/dir.js:1399
 msgid "Successfully copied %(name)s and %(amount)s other items."
 msgstr "成功复制 %(name)s 和其他 %(amount)s 项条目。"
 
-#: static/scripts/app/views/dir.js:1239
+#: static/scripts/app/views/dir.js:1244
 msgid "Internal error. Failed to move %(name)s and %(amount)s other item(s)."
 msgstr "内部错误。移动 %(name)s 和其他 %(amount)s 项内容失败。"
 
-#: static/scripts/app/views/dir.js:1241
+#: static/scripts/app/views/dir.js:1246
 msgid "Internal error. Failed to move %(name)s."
 msgstr "内部错误。移动 %(name)s 失败。"
 
-#: static/scripts/app/views/dir.js:1245
+#: static/scripts/app/views/dir.js:1250
 msgid "Internal error. Failed to copy %(name)s and %(amount)s other item(s)."
 msgstr "内部错误。复制 %(name)s 和其他 %(amount)s 项内容失败。"
 
-#: static/scripts/app/views/dir.js:1247
+#: static/scripts/app/views/dir.js:1252
 msgid "Internal error. Failed to copy %(name)s."
 msgstr "内部错误。复制 %(name)s 失败。"
 
-#: static/scripts/app/views/dir.js:1289
+#: static/scripts/app/views/dir.js:1294
 msgid "Moving file %(index)s of %(total)s"
 msgstr "正在移动文件 %(index)s / %(total)s"
 
-#: static/scripts/app/views/dir.js:1289
+#: static/scripts/app/views/dir.js:1294
 msgid "Copying file %(index)s of %(total)s"
 msgstr "正在复制文件  %(index)s / %(total)s"
 
-#: static/scripts/app/views/dir.js:1315
+#: static/scripts/app/views/dir.js:1320
 msgid "Failed to move %(name)s"
 msgstr "移动 %(name)s 失败"
 
-#: static/scripts/app/views/dir.js:1315
+#: static/scripts/app/views/dir.js:1320
 msgid "Failed to copy %(name)s"
 msgstr "复制 %(name)s 失败"
 
-#: static/scripts/app/views/dirent-details.js:95 static/scripts/common.js:661
-#: static/scripts/common.js:732
+#: static/scripts/app/views/dirent-details.js:95 static/scripts/common.js:662
+#: static/scripts/common.js:733
 msgid "No matches"
 msgstr "没有匹配项"
 
@@ -605,12 +609,12 @@ msgid "Tag should not include ','."
 msgstr "标签不应该包含 ','。"
 
 #: static/scripts/app/views/dirent-grid.js:59
-#: static/scripts/app/views/dirent.js:77
+#: static/scripts/app/views/dirent.js:78
 msgid "locked by {placeholder}"
 msgstr "被 {placeholder} 锁定"
 
 #: static/scripts/app/views/dirent-grid.js:186
-#: static/scripts/app/views/dirent.js:397
+#: static/scripts/app/views/dirent.js:403
 msgid "Successfully deleted %(name)s"
 msgstr "删除 %(name)s 成功"
 
@@ -657,7 +661,7 @@ msgstr "空文件"
 #: static/scripts/app/views/share-admin-share-links.js:144
 #: static/scripts/app/views/share-admin-upload-links.js:58
 #: static/scripts/app/views/share.js:222 static/scripts/app/views/share.js:528
-#: static/scripts/app/views/share.js:677 static/scripts/app/views/share.js:850
+#: static/scripts/app/views/share.js:677 static/scripts/app/views/share.js:844
 #: static/scripts/sysadmin-app/views/address-book-group-item.js:128
 #: static/scripts/sysadmin-app/views/address-book-group-item.js:135
 msgid "Error"
@@ -713,7 +717,7 @@ msgid "Set {placeholder}'s permission"
 msgstr "设置 {placeholder} 权限"
 
 #: static/scripts/app/views/folder-perm.js:134
-#: static/scripts/app/views/share.js:833
+#: static/scripts/app/views/share.js:827
 msgid "Select groups"
 msgstr "选择群组"
 
@@ -906,29 +910,29 @@ msgstr "成功"
 msgid "Successfully unstared {placeholder}"
 msgstr "成功取消星标 {placeholder}"
 
-#: static/scripts/common.js:652
+#: static/scripts/common.js:653
 #: static/scripts/sysadmin-app/views/address-book-group.js:165
 #: static/scripts/sysadmin-app/views/group-members.js:41
 msgid "Search users or enter emails and press Enter"
 msgstr "搜索用户或输入电子邮件，然后按Enter"
 
-#: static/scripts/common.js:660 static/scripts/common.js:731
+#: static/scripts/common.js:661 static/scripts/common.js:732
 msgid "Please enter 1 or more character"
 msgstr "请输入 1 个或更多字符"
 
-#: static/scripts/common.js:662 static/scripts/common.js:733
+#: static/scripts/common.js:663 static/scripts/common.js:734
 msgid "Searching..."
 msgstr "搜索中..."
 
-#: static/scripts/common.js:663 static/scripts/common.js:734
+#: static/scripts/common.js:664 static/scripts/common.js:735
 msgid "Loading failed"
 msgstr "加载失败"
 
-#: static/scripts/common.js:723
+#: static/scripts/common.js:724
 msgid "Search groups"
 msgstr "查找群组"
 
-#: static/scripts/common.js:1058
+#: static/scripts/common.js:1059
 msgid "Packaging..."
 msgstr "正在打包"
 
