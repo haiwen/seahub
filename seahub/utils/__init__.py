@@ -549,20 +549,6 @@ if EVENTS_CONFIG_FILE:
                 return True
         return False
 
-    def _same_activities(e1, e2):
-        """Two events are equal should follow two rules:
-        1. event1.repo_id = event2.repo_id
-        2. event1.timstamp = event2.timestamp
-        3. event1.op_type = event2.op_type
-        4. event1.obj_type == event2.obj_type
-        5. event1.path == event2.path
-        6. event1.op_user == event2.op_user
-        """
-        if e1.repo_id == e2.repo_id and e1.timestamp == e2.timestamp and \
-                e1.op_type == e2.op_type and e1.obj_type == e2.obj_type and \
-                e1.path == e2.path and e1.op_user == e2.op_user:
-                    return True
-
     def _get_events(username, start, count, org_id=None):
         ev_session = SeafEventsSession()
 
