@@ -263,6 +263,7 @@ AUTHENTICATION_BACKENDS = (
 )
 
 ENABLE_OAUTH = False
+ENABLE_WATERMARK = False
 
 LOGIN_REDIRECT_URL = '/profile/'
 LOGIN_URL = '/accounts/login/'

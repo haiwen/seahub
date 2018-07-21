@@ -1,0 +1,22 @@
+{% load seahub_tags %}
+watermark.load({
+    watermark_txt: "{{request.user.username|escapejs|email2nickname}}",
+    watermark_id: 'watermark-container',
+
+    watermark_x:20,
+    watermark_y:20,
+    watermark_rows:0,
+    watermark_cols:0,
+    watermark_x_space:100,
+    watermark_y_space:50,
+
+    watermark_font:'Arial',
+
+    watermark_color:'black',
+    watermark_fontsize:'18px',
+
+    watermark_alpha:0.04,
+    watermark_width:150,
+    watermark_height:50,
+    watermark_angle:20
+});
