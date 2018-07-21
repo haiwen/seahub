@@ -81,7 +81,7 @@ if HAS_OFFICE_CONVERTER:
 
 import seahub.settings as settings
 from seahub.settings import FILE_ENCODING_LIST, FILE_PREVIEW_MAX_SIZE, \
-    FILE_ENCODING_TRY_LIST, MEDIA_URL
+    FILE_ENCODING_TRY_LIST, MEDIA_URL, ENABLE_WATERMARK
 
 try:
     from seahub.settings import ENABLE_OFFICE_WEB_APP
@@ -467,6 +467,7 @@ def view_lib_file(request, repo_id, path):
         'file_perm': permission,
         'highlight_keyword': settings.HIGHLIGHT_KEYWORD,
         'enable_file_comment': settings.ENABLE_FILE_COMMENT,
+        'enable_watermark': ENABLE_WATERMARK,
     }
 
     # check whether file is starred
@@ -653,6 +654,7 @@ def view_lib_file(request, repo_id, path):
             wopi_dict['doc_title'] = filename
             wopi_dict['repo_id'] = repo_id
             wopi_dict['path'] = path
+            wopi_dict['enable_watermark'] = ENABLE_WATERMARK
             send_file_access_msg(request, repo, path, 'web')
 
             return render(request, 'view_file_wopi.html', wopi_dict)
@@ -718,6 +720,7 @@ def view_lib_file(request, repo_id, path):
                 'callback_url': get_site_scheme_and_netloc().rstrip('/') + reverse('onlyoffice_editor_callback'),
                 'can_edit': can_edit,
                 'username': username,
+                'enable_watermark': ENABLE_WATERMARK,
             })
 
         if not HAS_OFFICE_CONVERTER:
@@ -801,6 +804,7 @@ def view_history_file_common(request, repo_id, ret_dict):
     ret_dict['current_commit'] = current_commit
     ret_dict['fileext'] = fileext
     ret_dict['raw_path'] = raw_path
+    ret_dict['enable_watermark'] = ENABLE_WATERMARK
     if not ret_dict.has_key('filetype'):
         ret_dict['filetype'] = filetype
 
@@ -1015,6 +1019,7 @@ def view_shared_file(request, fileshare):
             'save_to_link': save_to_link,
             'traffic_over_limit': traffic_over_limit,
             'permissions': permissions,
+            'enable_watermark': ENABLE_WATERMARK,
             })
 
 def view_raw_shared_file(request, token, obj_id, file_name):
@@ -1222,6 +1227,7 @@ def view_file_via_shared_dir(request, fileshare):
             'img_next': img_next,
             'traffic_over_limit': traffic_over_limit,
             'permissions': permissions,
+            'enable_watermark': ENABLE_WATERMARK,
             })
 
 def file_edit_submit(request, repo_id):
