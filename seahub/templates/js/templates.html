@@ -293,7 +293,7 @@
     <td><%= size_formatted %></td>
     <td><%= mtime_relative %></td>
     <% if (show_repo_owner) { %>
-    <td><span title="<%- owner %>"><%- owner_name %></span></td>
+    <td><span title="<%- owner_name %>"><%- owner_name %></span></td>
     <% } %>
 </script>
 <script type="text/template" id="group-repo-mobile-tmpl">
@@ -304,7 +304,7 @@
         <span class="repo-name-span">
             <a href="#group/<%= group_id %>/lib/<%= id %>" class="normal"><%- name %></a><br />
             <% if (show_repo_owner) { %>
-            <span class="repo-meta-info" title="<%- owner %>"><%- owner_name %></span>
+            <span class="repo-meta-info" title="<%- owner_name %>"><%- owner_name %></span>
             <% } %>
             <span class="repo-meta-info"><%= size_formatted %></span>
             <span class="repo-meta-info"><%= mtime_relative %></span>
@@ -1366,7 +1366,7 @@
     </td>
     <td><%= size_formatted %></td>
     <td><%= mtime_relative %></td>
-    <td><span title="<%- owner %>"><%- owner_nickname %></span></td>
+    <td><span title="<%- owner_nickname %>"><%- owner_nickname %></span></td>
 </script>
 <script type="text/template" id="shared-repo-mobile-tmpl">
     <td>
