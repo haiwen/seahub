@@ -154,7 +154,9 @@ class RepoTrash(APIView):
         try:
             seafile_api.clean_up_repo_history(repo_id, keep_days)
             org_id = None if not request.user.org else request.user.org.org_id
-            clean_up_repo_trash.send(sender=None, org_id=org_id, operator=username, repo_id=repo_id, repo_name=repo.name, days=keep_days)
+            clean_up_repo_trash.send(sender=None, org_id=org_id,
+                    operator=username, repo_id=repo_id, repo_name=repo.name,
+                    repo_owner=repo_owner, days=keep_days)
         except Exception as e:
             logger.error(e)
             error_msg = 'Internal Server Error'

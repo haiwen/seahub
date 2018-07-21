@@ -1751,9 +1751,9 @@ def sys_repo_delete(request, repo_id):
         repo_owner = seafile_api.get_repo_owner(repo_id)
 
     seafile_api.remove_repo(repo_id)
-    repo_deleted.send(sender=None, org_id=org_id, usernames=usernames,
-                      repo_owner=repo_owner, repo_id=repo_id,
-                      repo_name=repo_name)
+    repo_deleted.send(sender=None, org_id=org_id, operator=request.user.username,
+            usernames=usernames, repo_owner=repo_owner, repo_id=repo_id,
+            repo_name=repo_name)
 
     messages.success(request, _(u'Successfully deleted.'))
     return HttpResponseRedirect(next)

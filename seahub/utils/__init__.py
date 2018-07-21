@@ -562,6 +562,7 @@ if EVENTS_CONFIG_FILE:
                 if not events:
                     break
 
+                # filter duplicatly commit and merged commit
                 for e1 in events:
                     duplicate = False
                     for e2 in valid_events:
@@ -589,6 +590,18 @@ if EVENTS_CONFIG_FILE:
                 e.commit.converted_cmmt_desc = convert_cmmt_desc_link(e.commit)
                 e.commit.more_files = more_files_in_commit(e.commit)
         return valid_events, start + total_used
+
+    def _get_activities(username, start, count):
+        ev_session = SeafEventsSession()
+
+        events, total_count = [], 0
+        try:
+            events = seafevents.get_user_activities(ev_session,
+                    username, start, count)
+        finally:
+            ev_session.close()
+
+        return events
 
     def _get_events_inner(ev_session, username, start, limit, org_id=None):
         '''Read events from seafevents database, and remove events that are
@@ -632,6 +645,7 @@ if EVENTS_CONFIG_FILE:
 
         return valid_events
 
+
     def get_user_events(username, start, count):
         """Return user events list and a new start.
 
@@ -642,7 +656,16 @@ if EVENTS_CONFIG_FILE:
         15th events.
         """
         return _get_events(username, start, count)
-   
+
+    def get_user_activities(username, start, count):
+        """Return user events list and a new start.
+        For example:
+        ``get_user_activities('foo@example.com', 0, 10)`` returns the first 10
+        ``get_user_activities('foo@example.com', 4, 10)`` returns the 6th through
+                 15th events.
+        """
+        return _get_activities(username, start, count)
+
     def get_user_activity_stats_by_day(start, end, offset):
         """
         """
@@ -761,6 +784,8 @@ else:
     def get_log_events_by_time():
         pass
     def get_org_user_events():
+        pass
+    def get_user_activities():
         pass
     def generate_file_audit_event_type():
         pass

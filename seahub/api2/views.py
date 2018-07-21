@@ -1229,6 +1229,7 @@ class Repo(APIView):
 
         repo_deleted.send(sender=None,
                           org_id=org_id,
+                          operator=username,
                           usernames=usernames,
                           repo_owner=repo_owner,
                           repo_id=repo_id,
