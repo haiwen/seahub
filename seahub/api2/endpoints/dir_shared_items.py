@@ -302,11 +302,15 @@ class DirSharedItemsEndpoint(APIView):
         if permission not in [PERMISSION_READ, PERMISSION_READ_WRITE, PERMISSION_ADMIN]:
             return api_error(status.HTTP_400_BAD_REQUEST, 'permission invalid.')
 
+        org_id = request.user.org.org_id if is_org_context(request) else None
+
         result = {}
         result['failed'] = []
         result['success'] = []
 
         if share_type == 'user':
+
+            valid_share_to_users = []
             share_to_users = request.data.getlist('username')
             for to_user in share_to_users:
                 if not is_valid_username(to_user):
@@ -332,71 +336,88 @@ class DirSharedItemsEndpoint(APIView):
                         })
                     continue
 
-                try:
-                    org_id = None
-                    if is_org_context(request):
-                        org_id = request.user.org.org_id
-
-                        if not is_org_user(to_user, int(org_id)):
-                            org_name = request.user.org.org_name
-                            error_msg = 'User %s is not member of organization %s.' \
-                                    % (to_user, org_name)
-
-                            result['failed'].append({
-                                'email': to_user,
-                                'error_msg': error_msg
-                            })
-                            continue
-
-                        # when calling seafile API to share authority related functions, change the uesrname to repo owner.
-                        repo_owner = seafile_api.get_org_repo_owner(repo_id)
-                        # can't share to owner
-                        if to_user == repo_owner:
-                            error_msg = "Library can not be shared to owner"
-                            return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
-
-                        share_dir_to_user(repo, path, repo_owner, username, to_user, permission, org_id)
-                    else:
-                        if is_org_user(to_user):
-                            error_msg = 'User %s is a member of organization.' % to_user
-                            result['failed'].append({
-                                'email': to_user,
-                                'error_msg': error_msg
-                            })
-                            continue
-
-                        repo_owner = seafile_api.get_repo_owner(repo_id)
-                        # can't share to owner
-                        if to_user == repo_owner:
-                            error_msg = "Library can not be shared to owner"
-                            return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
-
-                        share_dir_to_user(repo, path, repo_owner, username, to_user, permission, None)
-
-                    result['success'].append({
-                        "share_type": "user",
-                        "user_info": {
-                            "name": to_user,
-                            "nickname": email2nickname(to_user),
-                        },
-                        "permission": PERMISSION_READ_WRITE if permission == PERMISSION_ADMIN else permission,
-                        "is_admin": permission == PERMISSION_ADMIN
-                    })
-
-                    # send a signal when sharing repo successful
-                    share_repo_to_user_successful.send(sender=None, from_user=username,
-                                                       to_user=to_user, repo=repo,
-                                                       path=path, org_id=org_id)
-
-                    send_perm_audit_msg('add-repo-perm', username, to_user,
-                                        repo_id, path, permission)
-                except SearpcError as e:
-                    logger.error(e)
+                if to_user == repo_owner:
                     result['failed'].append({
                         'email': to_user,
-                        'error_msg': 'Internal Server Error'
+                        'error_msg': _(u'Library can not be shared to owner.')
                         })
                     continue
+
+                if is_org_context(request):
+                    if not is_org_user(to_user, int(org_id)):
+                        org_name = request.user.org.org_name
+                        error_msg = 'User %s is not member of organization %s.' \
+                                % (to_user, org_name)
+
+                        result['failed'].append({
+                            'email': to_user,
+                            'error_msg': error_msg
+                        })
+                        continue
+                elif is_org_user(to_user):
+                    error_msg = 'User %s is a member of organization.' % to_user
+                    result['failed'].append({
+                        'email': to_user,
+                        'error_msg': error_msg
+                    })
+                    continue
+
+                valid_share_to_users.append(to_user)
+
+            success_shared_users = []
+            # share repo
+            if path == '/':
+                try:
+                    to_users_json = json.dumps(valid_share_to_users)
+                    if is_org_context(request):
+                        seafile_api.org_share_repo_to_users(org_id, repo_id, username,
+                                to_users_json, permission)
+                    else:
+                        seafile_api.share_repo_to_users(repo_id, username,
+                                to_users_json, permission)
+                except Exception as e:
+                    logger.error(e)
+                    error_msg = 'Internal Server Error'
+                    return api_error(status.HTTP_500_INTERNAL_SERVER_ERROR, error_msg)
+
+                success_shared_users.extend(valid_share_to_users)
+
+            # share folder
+            else:
+                for to_user in valid_share_to_users:
+                    try:
+                        share_dir_to_user(repo, path, repo_owner, username,
+                                to_user, permission, org_id)
+                    except Exception as e:
+                        logger.error(e)
+                        error_msg = _('Internal Server Error')
+                        result['failed'].append({
+                            'email': to_user,
+                            'error_msg': error_msg
+                        })
+                        continue
+
+                    success_shared_users.append(to_user)
+
+            # send share repo signal and add repo permission message
+            for to_user in success_shared_users:
+                result['success'].append({
+                    "share_type": "user",
+                    "user_info": {
+                        "name": to_user,
+                        "nickname": email2nickname(to_user),
+                    },
+                    "permission": PERMISSION_READ_WRITE if permission == PERMISSION_ADMIN else permission,
+                    "is_admin": permission == PERMISSION_ADMIN
+                })
+
+                # send a signal when sharing repo successful
+                share_repo_to_user_successful.send(sender=None, from_user=username,
+                                                   to_user=to_user, repo=repo,
+                                                   path=path, org_id=org_id)
+
+                send_perm_audit_msg('add-repo-perm', username, to_user,
+                                    repo_id, path, permission)
 
         if share_type == 'group':
             group_ids = request.data.getlist('group_id')
