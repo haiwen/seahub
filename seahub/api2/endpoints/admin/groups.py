@@ -32,11 +32,9 @@ def get_group_info(group_id):
         "name": group.group_name,
         "owner": group.creator_name,
         "created_at": isoformat_timestr,
+        "quota": seafile_api.get_group_quota(group_id) if is_pro_version() else 0,
+        "parent_group_id": group.parent_group_id if is_pro_version() else 0
     }
-
-    if is_pro_version():
-        group_info['quota'] = seafile_api.get_group_quota(group_id)
-        group_info['parent_group_id'] = group.parent_group_id
 
     return group_info
 
