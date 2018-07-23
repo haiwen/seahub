@@ -1997,7 +1997,6 @@
                 <span class="group-admin-txt">{% trans "admin" %}</span>
             <% } %>
         </p>
-        <p class="txt-item ellipsis" title="<%- contact_email %>"><%- contact_email %></p>
     </div>
 </script>
 
@@ -2105,16 +2104,14 @@
             <% if (is_owner) { %>
             <tr>
                 <th width="5%"></th>
-                <th width="25%">{% trans "Name" %}</th>
-                <th width="35%">{% trans "Email" %}</th>
+                <th width="60%">{% trans "Name" %}</th>
                 <th width="25%">{% trans "Role" %}</th>
                 <th width="10%"><!--Operations--></th>
             </tr>
             <% } else { %>
             <tr>
                 <th width="5%"></th>
-                <th width="30%">{% trans "Name" %}</th>
-                <th width="55%">{% trans "Email" %}</th>
+                <th width="85%">{% trans "Name" %}</th>
                 <th width="10%"><!--Operations--></th>
             </tr>
             <% } %>
@@ -2133,7 +2130,6 @@
 <td>
     <a href="{{ SITE_ROOT }}profile/<% print(encodeURIComponent(email)); %>/"><%- name %></a>
 </td>
-<td><%- contact_email %></td>
 
 <% if (is_owner) { %>
     <% if (username == email) { %>
@@ -2403,7 +2399,6 @@
             {% avatar request.user 36 %}
             <div class="txt">
                 <%- app.pageOptions.name %><br />
-                <%- app.pageOptions.contact_email %>
             </div>
         </div>
         <div class="loading-icon loading-tip"></div>
