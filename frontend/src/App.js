@@ -1,6 +1,8 @@
 import React from 'react';
 import SeafileEditor from '@seafile/seafile-editor';
 import 'whatwg-fetch';
+import { SeafileAPI } from './seafile-js'
+
 
 let repoID = window.app.pageOptions.repoID;
 let filePath = window.app.pageOptions.filePath;
@@ -10,14 +12,14 @@ let domain = window.app.pageOptions.domain;
 let protocol = window.app.pageOptions.protocol;
 
 let dirPath = '/';
-
+console.log(window.app);
 const serviceUrl = window.app.config.serviceUrl;
 const seafileCollabServer = window.app.config.seafileCollabServer;
 const userInfo = window.app.userInfo;
 
 const updateUrl = `${siteRoot}api2/repos/${repoID}/update-link/?p=${dirPath}`;
 const uploadUrl = `${siteRoot}api2/repos/${repoID}/upload-link/?p=${dirPath}&from=web`;
-
+let seafileAPI = new SeafileAPI();
 function updateFile(uploadLink, filePath, fileName, content) {
   var formData = new FormData();
   formData.append("target_file", filePath);
@@ -45,12 +47,33 @@ class EditorUtilities {
   }
   
   saveContent(content) {
+    console.log(updateUrl);
     return (fetch(updateUrl, {credentials: 'same-origin'})
       .then(res => res.json())
       .then(res => {
         return updateFile(res, filePath, fileName, content)
       })
     );
+  }
+
+  unStarFile () {
+
+    return seafileAPI.unStarFile(this.repoID,this.filePath);
+  }
+
+  starFile() {
+    console.log('starFile');
+    let form = new FormData();
+    form.append('repo_id', repoID);
+    form.append('p', filePath);
+    return (
+      fetch('/api2/starredfiles/',{
+        method: "POST",
+        body: form,
+        credentials: 'same-origin',
+      })
+    )
+    // return seafileAPI.starFile(this.repoID,this.filePath);
   }
 
   getParentDectionaryUrl() {

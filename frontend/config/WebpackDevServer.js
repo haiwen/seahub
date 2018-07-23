@@ -12,7 +12,7 @@ new WebpackDevServer(webpack(config), {
     "Access-Control-Allow-Methods": "GET, POST, PUT, DELETE, PATCH, OPTIONS",
     "Access-Control-Allow-Headers": "X-Requested-With, content-type, Authorization"
   }
-}).listen(3000, '0.0.0.0', function (err, result) {
+}).listen(3001, '0.0.0.0', function (err, result) {
   if (err) {
     console.log(err)
   }
