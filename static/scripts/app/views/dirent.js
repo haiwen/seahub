@@ -80,7 +80,7 @@ define([
                 el: this.$('.sf-dropdown'),
                 right: '0'
             });
-
+            this.mobileMenu = this.$(".mobile-menu-container");
             // for image files
             this.$('.img-name-link').magnificPopup(this.dirView.magnificPopupOptions);
 
@@ -114,7 +114,10 @@ define([
             'click .unlock-file': 'unlockFile',
             'click .view-details': 'viewDetails',
             'click .file-comment': 'viewFileComments',
-            'click .open-via-client': 'open_via_client'
+            'click .open-via-client': 'open_via_client',
+            'click .mobile-menu-control': 'showMobileMenu',
+            'click .mobile-menu-mask': 'closeMobileMenu',
+            'click .download-close-menu': 'hideMobileMenu'
         },
 
         getSmartLink: function() {
@@ -367,6 +370,7 @@ define([
         },
 
         share: function() {
+            this.hideMobileMenu();
             var dir = this.dir,
                 obj_name = this.model.get('obj_name'),
                 dirent_path = Common.pathJoin([dir.path, obj_name]);
@@ -392,6 +396,7 @@ define([
         },
 
         del: function() {
+            this.hideMobileMenu();
             var _this = this;
             if (this.model.get('is_img')) {
                 var index = $('.img-name-link', this.dirView.$table).index(this.$('.img-name-link'));
@@ -418,6 +423,7 @@ define([
         },
 
         rename: function() {
+            this.hideMobileMenu();
             var _this = this;
             var dirent_name = this.model.get('obj_name');
 
@@ -532,6 +538,7 @@ define([
         },
 
         mvcp: function(e) {
+            this.hideMobileMenu();
             var op_type = $(e.currentTarget).hasClass('mv') ? 'mv' : 'cp';
             var options = {
                 'dir': this.dir,
@@ -552,6 +559,7 @@ define([
         },
 
         setFolderPerm: function() {
+            this.hideMobileMenu();
             var options = {
                 'obj_name': this.model.get('obj_name'),
                 'dir_path': this.dir.path,
@@ -567,6 +575,7 @@ define([
         },
 
         lockFile: function() {
+            this.hideMobileMenu();
             var _this = this;
             this._hideMenu();
             this.model.lockFile({
@@ -581,6 +590,7 @@ define([
         },
 
         unlockFile: function() {
+            this.hideMobileMenu();
             var _this = this;
             this._hideMenu();
             this.model.unlockFile({
@@ -595,6 +605,7 @@ define([
         },
 
         viewDetails: function() {
+            this.hideMobileMenu();
             if (this.dirView.fileCommentsView.$el.is(':visible')) {
                 this.dirView.fileCommentsView.hide();
             }
@@ -699,6 +710,7 @@ define([
         },
 
         viewFileComments: function() {
+            this.hideMobileMenu();
             if (this.dirView.direntDetailsView.$el.is(':visible')) {
                 this.dirView.direntDetailsView.hide();
             }
@@ -717,8 +729,29 @@ define([
         },
 
         open_via_client: function() {
+            this.hideMobileMenu();
             this._hideMenu();
             return true;
+        },
+
+        showMobileMenu : function(event) {
+            var mobileMenu = this.mobileMenu.length ? this.mobileMenu : null;
+            if(mobileMenu){
+                mobileMenu.slideDown('fast');
+            }
+            return false;
+        },
+
+        hideMobileMenu: function() {
+            var mobileMenu = this.mobileMenu.length ? this.mobileMenu : null;
+            if(mobileMenu){
+                mobileMenu.slideUp('fast');
+            }
+        },
+
+        closeMobileMenu: function(){
+            this.hideMobileMenu();
+            return false;
         }
 
     });
