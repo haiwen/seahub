@@ -100,13 +100,11 @@ class WikisView(APIView):
             wiki = Wiki.objects.add(name, username, permission=permission,
                                     org_id=org_id)
         except DuplicateWikiNameError:
-            result['error'] = _('%s is taken by others, please try another name.') % name
-            return HttpResponse(json.dumps(result), status=400,
-                                content_type=content_type)
+            msg = _('%s is taken by others, please try another name.') % name
+            return api_error(status.HTTP_400_BAD_REQUEST, msg)
         except IntegrityError:
-            result['error'] = 'Internal Server Error'
-            return HttpResponse(json.dumps(result), status=500,
-                                content_type=content_type)
+            msg = 'Internal Server Error'
+            return api_error(status.HTTP_500_INTERNAL_SERVER_ERROR, msg)
 
         # create home page
         page_name = "home.md"
@@ -115,8 +113,8 @@ class WikisView(APIView):
                                         page_name, request.user.username)
         except SearpcError as e:
             logger.error(e)
-            error_msg = 'Internal Server Error'
-            return api_error(status.HTTP_500_INTERNAL_SERVER_ERROR, error_msg)
+            msg = 'Internal Server Error'
+            return api_error(status.HTTP_500_INTERNAL_SERVER_ERROR, msg)
 
         return Response(wiki.to_dict())
 
