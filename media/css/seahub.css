@@ -2377,7 +2377,7 @@ button.sf-dropdown-toggle:focus {
 }
 .es #user-basic-info label,
 .hu #user-basic-info label {
-    width:7em;
+    width:7.5em;
 }
 .it #user-basic-info label {
     width:6em;
@@ -4233,4 +4233,45 @@ img.thumbnail {
 #share-popup .invite-link-in-popup {
     display:inline-block;
     margin-top:4px;
+}
+
+/* mobile-menu */
+.mobile-menu-mask {
+    position: fixed;
+    width: 100%;
+    height: 100%;
+    top: 0;
+    left: 0;
+    z-index: 99;
+    background-color: #000;
+    opacity: 0.1;
+}
+
+.mobile-menu-content {
+    position: fixed;
+    width: 100%;
+    left: 0;
+    bottom: 0;
+    z-index: 100;
+    background-color: #fff;
+}
+
+.mobile-menu-content ul {
+    border-top: solid 1px #eee;
+}
+
+.mobile-menu-content ul li {
+    line-height: 40px;
+    text-align: center;
+}
+
+.mobile-menu-content ul li:hover{
+    background-color: #eb8205;
+}
+
+.mobile-menu-content a {
+    display: inline-block;
+    width: 100%;
+    height: 100%;
+    color: #000;
 }
