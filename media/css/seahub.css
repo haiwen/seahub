@@ -2480,6 +2480,11 @@ button.sf-dropdown-toggle:focus {
     padding:10px 20px;
     position: relative;
 }
+.smart-link-help {
+    color: #bbb;
+    word-break: break-all;
+    word-wrap: break-word;
+}
 .smart-link-wraper {
     width: 100%;
     margin-bottom: 15px;

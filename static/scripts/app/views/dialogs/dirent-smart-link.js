@@ -47,7 +47,7 @@ define([
             var $el = this.$el;
             $el.find('.copy-input').val($el.find('.smart-link-href').html()).select();
             document.execCommand('copy');
-            Common.feedback(gettext("Smart link copied to clipboard"), 'success');
+            Common.feedback(gettext("Internal link copied to clipboard"), 'success');
             $.modal.close();
         },
 

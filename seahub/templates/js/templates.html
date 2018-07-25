@@ -553,7 +553,7 @@
     <td class="dirent-icon"><img src="<%= icon_url %>" width="24" alt="" /></td>
     <td>
         <span class="dirent-name"><a href="<%= url %>" class="dir-link normal"><%- dirent.obj_name %></a></span>
-        <span class="dirent-smart-link sf2-icon-link" title="{% trans 'Smart link' %}"></span>
+        <span class="dirent-smart-link sf2-icon-link" title="{% trans 'Internal link' %}"></span>
     </td>
     <td class="dirent-op">
         <div class="op-container">
@@ -623,7 +623,7 @@
     <td>
         <span class="dirent-name">
         <a href="<%= url %>" class="dir-link normal"><%- dirent.obj_name %></a>
-        <span class="dirent-smart-link sf2-icon-link" title="{% trans 'Smart link' %}"></span>
+        <span class="dirent-smart-link sf2-icon-link" title="{% trans 'Internal link' %}"></span>
         <br />
         <% if (dirent.last_modified) { %>
         <span class="dirent-meta-info"><%= dirent.last_update %></span>
@@ -709,7 +709,7 @@
             <a class="normal" href="<%= url %>" target="_blank"><%- dirent.obj_name %></a>
             <% } %>
         </span>
-        <span class="dirent-smart-link sf2-icon-link" title="{% trans 'Smart link' %}"></span>
+        <span class="dirent-smart-link sf2-icon-link" title="{% trans 'Internal link' %}"></span>
     </td>
     <td class="dirent-op">
         <div class="op-container">
@@ -824,10 +824,10 @@
         <span class="dirent-name">
             <% if (dirent.is_img) { %>
             <a class="normal img-name-link" href="<%= url %>" target="_blank"><%- dirent.obj_name %></a>
-            <span class="dirent-smart-link sf2-icon-link" title= "{% trans 'Smart link' %}"></span>
+            <span class="dirent-smart-link sf2-icon-link" title= "{% trans 'Internal link' %}"></span>
             <% } else { %>
             <a class="normal" href="<%= url %>" target="_blank"><%- dirent.obj_name %></a>
-            <span class="dirent-smart-link sf2-icon-link" title= "{% trans 'Smart link' %}"></span>
+            <span class="dirent-smart-link sf2-icon-link" title= "{% trans 'Internal link' %}"></span>
             <br />
             <% } %>
             <span class="dirent-meta-info"><%= dirent.file_size %></span>
@@ -2793,7 +2793,12 @@
 </script>
 <script type="text/template" id="smart-link-tmpl">
     <div class="smart-link-container">
-        <h3 id="dialogTitle">{% trans "Smart link" %}</h3>
+        <h3 id="dialogTitle">{% trans "Internal link" %}</h3>
+        <p class="smart-link-help">
+            <span>
+                {% trans "An internal link is a link to a file or folder that can be accessed by users with read permission to the file or folder. The link will still point to the file or folder after the file or folder be renamed or moved." %}
+            </span>
+        </p>
         <div class="smart-link-wraper">
             <div class="smart-link-loading"></div>
             <a target="_blank" class="smart-link-href" href=""></a>
