@@ -65,6 +65,12 @@
         {% include "snippets/web_settings_form.html" %}
     {% endwith %}
 
+    {% with type="checkbox" setting_name="ENABLE_USER_CLEAN_TRASH" setting_val=config_dict.ENABLE_USER_CLEAN_TRASH %}
+        {% trans "Recycle bin display and hide" as setting_display_name %}
+        {% trans "Enable users to clean library trash" as help_tip %}
+        {% include "snippets/web_settings_form.html" %}
+    {% endwith %}
+
     {% with type="checkbox" setting_name="ACTIVATE_AFTER_REGISTRATION" setting_val=config_dict.ACTIVATE_AFTER_REGISTRATION %}
         {% trans "activate after registration" as setting_display_name %}
         {% trans "Activate user immediately after registration. If unchecked, a user need to be activated by administrator or via activation email" as help_tip %}
