@@ -15,7 +15,7 @@ from seahub.api2.authentication import TokenAuthentication
 from seahub.api2.throttling import UserRateThrottle
 from seahub.api2.utils import api_error
 
-from seahub.utils import normalize_file_path, get_file_upload_info
+from seahub.utils import normalize_file_path
 from seahub.utils.timeutils import timestamp_to_isoformat_timestr, \
         datetime_to_isoformat_timestr
 from seahub.base.templatetags.seahub_tags import email2nickname, \
@@ -91,26 +91,11 @@ class AdminFileDetail(APIView):
         entry["last_modifier_contact_email"] = email2contact_email(latest_contributor)
 
         try:
-
             file_size = seafile_api.get_file_size(real_repo_id,
                     repo.repo_version, obj_id)
             entry["size"] = file_size
         except Exception as e:
             logger.error(e)
             entry["size"] = 0
-
-        try:
-            file_upload_info = get_file_upload_info(real_repo_id, real_path)
-        except Exception as e:
-            logger.error(e)
-            file_upload_info = None
-
-        uploader = file_upload_info.user if file_upload_info else ''
-        upload_time = file_upload_info.upload_time if file_upload_info else ''
-
-        entry["uploader_email"] = uploader
-        entry["uploader_name"] = email2nickname(uploader)
-        entry["uploader_contact_email"] = email2contact_email(uploader)
-        entry["upload_time"] = datetime_to_isoformat_timestr(upload_time)
 
         return Response(entry)
