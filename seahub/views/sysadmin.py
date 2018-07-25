@@ -2,6 +2,7 @@
 # encoding: utf-8
 
 import os
+import sys
 from io import BytesIO
 from types import FunctionType
 import logging
@@ -74,7 +75,7 @@ import seahub.settings as settings
 from seahub.settings import INIT_PASSWD, SITE_ROOT, \
     SEND_EMAIL_ON_ADDING_SYSTEM_MEMBER, SEND_EMAIL_ON_RESETTING_USER_PASSWD, \
     ENABLE_SYS_ADMIN_VIEW_REPO, ENABLE_GUEST_INVITATION, \
-    ENABLE_LIMIT_IPADDRESS
+    ENABLE_LIMIT_IPADDRESS, ENABLE_USER_CLEAN_TRASH
 try:
     from seahub.settings import ENABLE_TRIAL_ACCOUNT
 except:
@@ -112,6 +113,7 @@ def sysadmin(request):
             'thumbnail_default_size': settings.THUMBNAIL_DEFAULT_SIZE,
             'thumbnail_size_for_grid': settings.THUMBNAIL_SIZE_FOR_GRID,
             'enable_encrypted_library': config.ENABLE_ENCRYPTED_LIBRARY,
+            'enable_clean_setting': config.ENABLE_USER_CLEAN_TRASH,  # new enable clean
             'enable_repo_history_setting': config.ENABLE_REPO_HISTORY_SETTING,
             'max_upload_file_size': max_upload_file_size,
             'folder_perm_enabled': folder_perm_enabled,
@@ -2088,7 +2090,7 @@ def sys_settings(request):
         'ENABLE_USER_CREATE_ORG_REPO', 'FORCE_PASSWORD_CHANGE',
         'LOGIN_ATTEMPT_LIMIT', 'FREEZE_USER_ON_LOGIN_FAILED',
         'ENABLE_SHARE_TO_ALL_GROUPS', 'ENABLE_TWO_FACTOR_AUTH',
-        'ENABLE_BRANDING_CSS', 'ENABLE_TERMS_AND_CONDITIONS',
+        'ENABLE_BRANDING_CSS', 'ENABLE_TERMS_AND_CONDITIONS', 'ENABLE_USER_CLEAN_TRASH'
     ]
 
     STRING_WEB_SETTINGS = ('SERVICE_URL', 'FILE_SERVER_ROOT', 'TEXT_PREVIEW_EXT',
