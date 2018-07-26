@@ -11,7 +11,6 @@ from seahub.profile.settings import EMAIL_ID_CACHE_PREFIX, EMAIL_ID_CACHE_TIMEOU
 from seahub.institutions.models import Institution
 from registration.signals import user_registered
 from seahub.signals import institution_deleted
-from .settings import CONTACT_EMAIL_FALLBACK_TO_USERNAME
 
 # Get an instance of a logger
 logger = logging.getLogger(__name__)
@@ -82,10 +81,7 @@ class ProfileManager(models.Manager):
         if p and p.contact_email:
             return p.contact_email
 
-        if CONTACT_EMAIL_FALLBACK_TO_USERNAME is True:
-            return username
-        else:
-            return ''
+        return username
 
     def get_username_by_login_id(self, login_id):
         """Convert a user's login id to username(login email).
