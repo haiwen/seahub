@@ -112,4 +112,43 @@ class SmartLink(APIView):
         dirent_uuid = uuid_map.uuid
         smart_link = gen_smart_link(dirent_uuid, dirent_name)
 
-        return Response({'smart_link': smart_link})
+        result = {}
+        result['smart_link'] = smart_link
+        result['smart_link_token'] = dirent_uuid
+
+        return Response(result)
+
+
+class SmartLinkToken(APIView):
+
+    authentication_classes = (TokenAuthentication, SessionAuthentication)
+    permission_classes = (IsAuthenticated,)
+    throttle_classes = (UserRateThrottle,)
+
+    def get(self, request, token):
+        """ Get library/file/folder info via smart link token.
+        """
+
+        uuid_map = FileUUIDMap.objects.get_fileuuidmap_by_uuid(token)
+        if not uuid_map:
+            error_msg = 'token invalid.'
+            return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
+
+        repo_id = uuid_map.repo_id
+        parent_path = uuid_map.parent_path
+        filename = uuid_map.filename
+        is_dir = uuid_map.is_dir
+
+        # permission check
+        if not check_folder_permission(request, repo_id, parent_path):
+            error_msg = 'Permission denied.'
+            return api_error(status.HTTP_403_FORBIDDEN, error_msg)
+
+        full_path = posixpath.join(parent_path, filename)
+
+        result = {}
+        result['repo_id'] = repo_id
+        result['path'] = full_path
+        result['is_dir'] = is_dir
+
+        return Response(result)
