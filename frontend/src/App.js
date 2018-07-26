@@ -54,7 +54,8 @@ class EditorUtilities {
   }
 
   getParentDectionaryUrl() {
-    return this.serviceUrl + "/#common/lib/" + this.repoID + "/";
+    let parentPath = this.filePath.substring(0, this.filePath.lastIndexOf('/'));
+    return this.serviceUrl + "/#common/lib/" + this.repoID + parentPath;
   }
   
   _getImageURL(fileName) {
@@ -100,7 +101,7 @@ class EditorUtilities {
   }
   
   isInternalFileLink(url) {
-    var re = new RegExp(protocol + '://' + domain + siteRoot + "lib/" + "[0-9a-f\-]{36}/file.*");
+    var re = new RegExp(this.serviceUrl + "/lib/[0-9a-f-]{36}/file.*");
     return re.test(url);
   }
 

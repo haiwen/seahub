@@ -568,7 +568,7 @@ def view_lib_file(request, repo_id, path):
             return_dict['protocol'] = request.is_secure() and 'https' or 'http'
             return_dict['domain'] = get_current_site(request).domain
             return_dict['file_content'] = convert_md_link(file_content, repo_id, username)
-            return_dict['serviceUrl'] = get_service_url()
+            return_dict['serviceUrl'] = get_service_url().rstrip('/')
             return_dict['language_code'] = get_language()
             return_dict['seafile_collab_server'] = SEAFILE_COLLAB_SERVER
         else:
