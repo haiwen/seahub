@@ -28,6 +28,7 @@
   "switch_to_plain_text_editor": "切换至普通文本编辑器",
   "switch_to_rich_text_editor": "切换至富文本编辑器",
   "switch_to_viewer": "切换到只读模式",
+  "back_to_parent_directory": "返回上级目录",
   "help": "帮助",
   "remove_table": "清除表格",
   "column": "列",
