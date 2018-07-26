@@ -28,6 +28,7 @@
   "switch_to_plain_text_editor": "Switch to Plain Text Editor",
   "switch_to_rich_text_editor": "Switch to Rich Text Editor",
   "switch_to_viewer": "Switch to Markdown Viewer",
+  "back_to_parent_directory":"Back to parent directory",
   "help": "help",
   "remove_table": "Remove Table",
   "column": "Column",
