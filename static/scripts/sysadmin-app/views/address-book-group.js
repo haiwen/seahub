@@ -160,17 +160,15 @@ define([
 
             $('[name="email"]', $form).select2($.extend(
                 Common.contactInputOptionsForSelect2(), {
-                width: '275px',
-                containerCss: {'margin-bottom': '5px'},
-                placeholder: gettext("Search users or enter emails and press Enter")
+                width: '280px'
             }));
 
             $form.submit(function() {
-                var emails = $.trim($('[name="email"]', $form).val());
+                var emails = $('[name="email"]', $form).val();
                 var $error = $('.error', $form);
                 var $submitBtn = $('[type="submit"]', $form);
 
-                if (!emails) {
+                if (!emails.length) {
                     $error.html(gettext("It is required.")).show();
                     return false;
                 }
@@ -185,7 +183,7 @@ define([
                     }),
                     type: 'POST',
                     dataType: 'json',
-                    data: {'email': emails.split(',')},
+                    data: {'email': emails},
                     traditional: true,
                     beforeSend: Common.prepareCSRFToken,
                     success: function(data) {

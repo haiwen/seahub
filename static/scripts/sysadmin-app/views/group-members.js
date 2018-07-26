@@ -36,18 +36,16 @@ define([
 
             $('[name="email"]', $form).select2($.extend(
                 Common.contactInputOptionsForSelect2(), {
-                width: '275px',
-                containerCss: {'margin-bottom': '5px'},
-                placeholder: gettext("Search users or enter emails and press Enter")
+                width: '280px'
             }));
 
             $form.on('submit', function() {
                 var group_id = _this.groupMemberCollection.group_id;
-                var emails = $.trim($('[name="email"]', $form).val());
+                var emails = $('[name="email"]', $form).val();
                 var $error = $('.error', $form);
                 var $submitBtn = $('[type="submit"]', $form);
 
-                if (!emails) {
+                if (!emails.length) {
                     $error.html(gettext("It is required.")).show();
                     return false;
                 }
@@ -64,7 +62,7 @@ define([
                     dataType: 'json',
                     beforeSend: Common.prepareCSRFToken,
                     traditional: true,
-                    data: {'email': emails.split(',')},
+                    data: {'email': emails},
                     success: function(data) {
                         if (data.success.length > 0) {
                             _this.groupMemberCollection.add(data.success, {prepend: true});
