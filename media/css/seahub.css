@@ -1641,6 +1641,7 @@ a.sf-popover-item {
 }
 .user-item .txt-item {
     margin:0;
+    line-height: 32px;
 }
 /**** sf-dropdown ******/
 .sf-dropdown {
@@ -2112,6 +2113,10 @@ button.sf-dropdown-toggle:focus {
 }
 .account-popup .txt {
     margin-left:45px;
+    line-height: 36px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
 }
 .account-popup {
     right:0;
