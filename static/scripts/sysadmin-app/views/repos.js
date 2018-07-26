@@ -52,16 +52,14 @@ define([
 
             $('[name="library_owner"]', $form).select2($.extend(
                 Common.contactInputOptionsForSelect2(), {
-                width: '268px',
-                containerCss: {'margin-bottom': '5px'},
-                maximumSelectionSize: 1,
-                placeholder: gettext("Search user or enter email and press Enter"), // to override 'placeholder' returned by `Common.conta...`
-                formatSelectionTooBig: gettext("You cannot select any more choices")
+                width: '100%',
+                maximumSelectionLength: 1,
+                placeholder: gettext("Search user or enter email and press Enter")
             }));
 
             $form.on('submit', function() {
                 var library_name = $.trim($('[name="library_name"]', $form).val());
-                var library_owner = $.trim($('[name="library_owner"]', $form).val());
+                var library_owner = $('[name="library_owner"]', $form).val();
                 var $error = $('.error', $form);
                 var $submitBtn = $('[type="submit"]', $form);
 
@@ -73,7 +71,10 @@ define([
                 $error.hide();
                 Common.disableButton($submitBtn);
 
-                repos.create({'name': library_name, 'owner': library_owner}, {
+                repos.create({
+                    'name': library_name,
+                    'owner': library_owner[0]
+                }, {
                     prepend: true,
                     wait: true,
                     success: function() {

@@ -341,7 +341,17 @@ function HTMLescape(html){
 
 function userInputOPtionsForSelect2(user_search_url) {
     return {
-        tags: [],
+
+		// with 'tags', the user can directly enter, not just select
+        tags: true,
+		tokenSeparators: [',', ' '],
+        createTag: function(params) {
+            var term = $.trim(params.term);
+            return {
+                'id': term,
+                'text': term
+            };
+        },
 
         minimumInputLength: 1, // input at least 1 character
 
@@ -352,10 +362,10 @@ function userInputOPtionsForSelect2(user_search_url) {
             cache: true,
             data: function (params) {
                 return {
-                    q: params
+                    q: params.term
                 };
             },
-            results: function (data) {
+            processResults: function(data) {
                 var user_list = [], users = data['users'];
                 for (var i = 0, len = users.length; i < len; i++) {
                     user_list.push({ // 'id' & 'text' are required by the plugin
@@ -374,23 +384,17 @@ function userInputOPtionsForSelect2(user_search_url) {
         },
 
         // format items shown in the drop-down menu
-        formatResult: function(item) {
+        templateResult: function(item) {
             if (item.avatar_url) {
-                return '<img src="' + item.avatar_url + '" width="32" height="32" class="avatar">' + '<span class="text ellipsis">' + HTMLescape(item.name) + '<br />' + HTMLescape(item.id) + '</span>';
+                return '<img src="' + item.avatar_url + '" width="32" height="32" class="avatar vam">' + '<span class="text ellipsis vam">' + HTMLescape(item.name) + '<br />' + HTMLescape(item.id) + '</span>';
             } else {
                 return; // if no match, show nothing
             }
         },
 
         // format selected item shown in the input
-        formatSelection: function(item) {
+        templateSelection: function(item) {
             return HTMLescape(item.name || item.id); // if no name, show the email, i.e., when directly input, show the email
-        },
-
-        createSearchChoice: function(term) {
-            return {
-                'id': $.trim(term)
-            };
         },
 
         escapeMarkup: function(m) { return m; }

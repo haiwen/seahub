@@ -14,6 +14,7 @@
 <link rel="stylesheet" type="text/css" href="{% static "css/bootstrap.min.css" %}"/>
 <link rel="stylesheet" type="text/css" href="{{ MEDIA_URL }}css/jstree_default_theme/style.min.css" />
 <link rel="stylesheet" type="text/css" href="{% static "css/magnific-popup.css" %}" />
+<link rel="stylesheet" type="text/css" href="{% static "css/select2.min.css" %}" />
 <link rel="stylesheet" type="text/css" href="{{ MEDIA_URL }}css/seahub.css?t=1398068110" />
 {% block extra_style %}{% endblock %}
 {% if branding_css != '' %}<link rel="stylesheet" type="text/css" href="{{ MEDIA_URL }}{{ branding_css }}" />{% endif %} 
@@ -143,6 +144,44 @@ function ajaxErrorHandler(xhr, textStatus, errorThrown) {
         feedback("{% trans "Failed. Please check the network." %}", 'error');
     }
 }
+
+// i18n for select2
+var i18n_select2 = {
+    errorLoading: function() {
+        return "{% trans "Loading failed" %}";
+    },
+    inputTooLong: function(e) { // not used in seahub
+        var t = e.input.length - e.maximum,
+        n = "Please delete " + t + " character";
+        return t != 1 && (n += "s"), n
+    },
+    inputTooShort: function(e) {
+        /*
+           var t = e.minimum - e.input.length,
+           n = "Please enter " + t + " or more characters";
+           return n
+         */
+        return "{% trans "Please enter 1 or more character" %}";
+    },
+    loadingMore: function() { // not used in seahub
+        return "Loading more results…"
+    },
+    maximumSelected: function(e) {
+        /*
+           var t = "You can only select " + e.maximum + " item";
+           return e.maximum != 1 && (t += "s"), t
+         */
+        return "{% trans "You cannot select any more choices" %}";
+    },
+    noResults: function() {
+        //return "No results found"
+        return "{% trans "No matches" %}";
+    },
+    searching: function() {
+        return "{% trans "Searching..." %}";
+    }
+};
+
 {% if request.user.is_authenticated %}
 {% if request.cur_note %}
 $('#info-bar .close').on('click', function() {
