@@ -1,6 +1,5 @@
 #wrapper {
 }
-
 /* custom scrollbar */
 ::-webkit-scrollbar {
     height: 9px;
@@ -148,6 +147,7 @@ h5, h6 {
 #my-info {
     display:inline-block;
     color:#d6d6d6;
+    cursor:pointer;
 }
 #account .avatar {
     vertical-align:middle;
@@ -560,14 +560,14 @@ html, body {
     }
 }
 .panel-top {
-    padding:.65rem 1rem .25rem;
+    padding:.5rem 1rem;
     background:#f4f4f7;
     border-bottom: 1px solid #e8e8e8;
     display:flex;
     flex-shrink:0;
 }
 .side-panel-top {
-    padding: .45rem 1rem;
+    padding: .5rem 1rem;
 }
 @media (max-width: 767px) {
     .side-panel-top {
@@ -686,42 +686,8 @@ html, body {
 }
 #top-search-form .search-input {
     width:155px;
+    font-size: 0.875rem;
     padding:1px 30px 1px 5px;
-}
-#search-form,
-#search-link-form,
-#search-user-form,
-#search-group-form,
-#search-repo-form {
-    padding:10px;
-    background:#f7f7f8;
-    border-radius:2px;
-    margin-bottom:1.2rem;
-}
-#search-form {
-    margin-top:30px;
-}
-#search-form .input_and_submit {
-    display:inline-block;
-    position:relative;
-    width:60%;
-}
-#search-form .advanced-search {
-    color:#666;
-    font-size:16px;
-    cursor:pointer;
-    margin-left:4px;
-}
-#search-form .search-input {
-    width:calc(100% - 35px);
-    height:24px;
-    padding:0 30px 0 5px;
-}
-#search-results a {
-    font-weight: normal;
-}
-#search-results b {
-    font-weight: bold;
 }
 
 input[type=text] {

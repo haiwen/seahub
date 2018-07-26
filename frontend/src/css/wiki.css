@@ -8,14 +8,14 @@
 
 .wiki-pages-heading {
     text-align:center;
-    padding-bottom:.5em;
+    padding:.5rem 0rem;
     border-bottom:1px solid #e8e8e8;
 }
 .wiki-pages-container {
 }
 
 .wiki-md-viewer-rendered-content {
-  
+  padding: 30px 0 0;
 }
 
 .wiki-page-ops {
