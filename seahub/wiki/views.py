@@ -11,6 +11,7 @@ from seahub.auth.decorators import login_required
 from seahub.base.decorators import user_mods_check
 from seahub.wiki.models import Wiki
 from seahub.views import check_folder_permission
+from seahub.utils import get_service_url
 
 # Get an instance of a logger
 logger = logging.getLogger(__name__)
@@ -62,6 +63,7 @@ def slug(request, slug, page_name="home"):
         "repo_id": wiki.repo_id,
         "search_repo_id": wiki.repo_id,
         "search_wiki": True,
+        "service_url": get_service_url().rstrip('/')
     })
 
 

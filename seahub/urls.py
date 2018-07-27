@@ -66,7 +66,7 @@ from seahub.api2.endpoints.user_enabled_modules import UserEnabledModulesView
 from seahub.api2.endpoints.repo_file_uploaded_bytes import RepoFileUploadedBytesView
 from seahub.api2.endpoints.user_avatar import UserAvatarView
 from seahub.api2.endpoints.wikis import WikisView, WikiView
-from seahub.api2.endpoints.wiki_pages import WikiPageView, WikiPagesView
+from seahub.api2.endpoints.wiki_pages import WikiPageView, WikiPagesView, WikiPagesDirView, WikiPageContentView
 from seahub.api2.endpoints.revision_tag import TaggedItemsView, TagNamesView
 from seahub.api2.endpoints.user import User
 
@@ -306,6 +306,8 @@ urlpatterns = [
     url(r'^api/v2.1/wikis/$', WikisView.as_view(), name='api-v2.1-wikis'),
     url(r'^api/v2.1/wikis/(?P<slug>[^/]+)/$', WikiView.as_view(), name='api-v2.1-wiki'),
     url(r'^api/v2.1/wikis/(?P<slug>[^/]+)/pages/$', WikiPagesView.as_view(), name='api-v2.1-wiki-pages'),
+    url(r'^api/v2.1/wikis/(?P<slug>[^/]+)/pages/dir/$', WikiPagesDirView.as_view(), name='api-v2.1-wiki-pages-dir'),
+    url(r'^api/v2.1/wikis/(?P<slug>[^/]+)/content/$', WikiPageContentView.as_view(), name='api-v2.1-wiki-pages-content'),
     url(r'^api/v2.1/wikis/(?P<slug>[^/]+)/pages/(?P<page_name>[^/]+)/$', WikiPageView.as_view(), name='api-v2.1-wiki-page'),
 
     ## admin::sysinfo

@@ -1,5 +1,6 @@
 # Copyright (c) 2012-2016 Seafile Ltd.
 
+import os
 import logging
 import urllib2
 
@@ -13,22 +14,26 @@ from seaserv import seafile_api, get_file_id_by_path
 from pysearpc import SearpcError
 from django.utils.translation import ugettext as _
 
+from seahub.views.file import send_file_access_msg
+from seahub.api2.views import get_dir_file_recursively
 from seahub.api2.authentication import TokenAuthentication
 from seahub.api2.throttling import UserRateThrottle
 from seahub.api2.utils import api_error
 from seahub.wiki.models import Wiki, WikiPageMissing
 from seahub.wiki.utils import (clean_page_name, get_wiki_pages, get_inner_file_url,
                                get_wiki_dirent, get_wiki_page_object)
+from seahub.utils import gen_file_get_url
 
 logger = logging.getLogger(__name__)
 
+HTTP_520_OPERATION_FAILED = 520
 
 class WikiPagesView(APIView):
     authentication_classes = (TokenAuthentication, SessionAuthentication)
     permission_classes = (IsAuthenticatedOrReadOnly, )
     throttle_classes = (UserRateThrottle, )
 
-    def get(slef, request, slug):
+    def get(self, request, slug):
         """List all pages in a wiki.
         """
         try:
@@ -197,3 +202,119 @@ class WikiPageView(APIView):
             return api_error(status.HTTP_500_INTERNAL_SERVER_ERROR, error_msg)
 
         return Response()
+
+class WikiPagesDirView(APIView):
+    authentication_classes = (TokenAuthentication, SessionAuthentication)
+    permission_classes = (IsAuthenticatedOrReadOnly, )
+    throttle_classes = (UserRateThrottle, )
+
+    def get(self, request, slug):
+        """List all dir files in a wiki.
+        """
+        try:
+            wiki = Wiki.objects.get(slug=slug)
+        except Wiki.DoesNotExist:
+            error_msg = "Wiki not found."
+            return api_error(status.HTTP_404_NOT_FOUND, error_msg)
+
+        # perm check
+        if not wiki.has_read_perm(request.user):
+            error_msg = "Permission denied"
+            return api_error(status.HTTP_403_FORBIDDEN, error_msg)
+
+        try:
+            repo = seafile_api.get_repo(wiki.repo_id)
+            if not repo:
+                error_msg = "Wiki library not found."
+                return api_error(status.HTTP_404_NOT_FOUND, error_msg)
+        except SearpcError:
+            error_msg = "Internal Server Error"
+            return api_error(status.HTTP_500_INTERNAL_SERVER_ERROR, error_msg)
+
+        dir_id = seafile_api.get_dir_id_by_path(repo.repo_id, '/')
+        if not dir_id:
+            error_msg = 'Folder %s not found.' % '/'
+            return api_error(status.HTTP_404_NOT_FOUND, error_msg)
+
+        username = request.user.username
+        dir_file_list = get_dir_file_recursively(username, repo.repo_id, '/', [])
+
+        return Response({
+            "dir_file_list": dir_file_list
+        })
+
+class WikiPageContentView(APIView):
+    authentication_classes = (TokenAuthentication, SessionAuthentication)
+    permission_classes = (IsAuthenticatedOrReadOnly, )
+    throttle_classes = (UserRateThrottle, )
+
+    def get(self, request, slug):
+        """Get content of a wiki
+        """
+        try:
+            wiki = Wiki.objects.get(slug=slug)
+        except Wiki.DoesNotExist:
+            error_msg = "Wiki not found."
+            return api_error(status.HTTP_404_NOT_FOUND, error_msg)
+
+        # perm check
+        if not wiki.has_read_perm(request.user):
+            error_msg = 'Permission denied.'
+            return api_error(status.HTTP_403_FORBIDDEN, error_msg)
+
+        try:
+            repo = seafile_api.get_repo(wiki.repo_id)
+            if not repo:
+                error_msg = "Wiki library not found."
+                return api_error(status.HTTP_404_NOT_FOUND, error_msg)
+        except SearpcError:
+            error_msg = _("Internal Server Error")
+            return api_error(status.HTTP_500_INTERNAL_SERVER_ERROR, error_msg)
+
+        path = request.GET.get('p', '/')
+
+        file_id = None
+        try:
+            file_id = seafile_api.get_file_id_by_path(repo.repo_id, path)
+        except SearpcError as e:
+            logger.error(e)
+            return api_error(HTTP_520_OPERATION_FAILED,
+                             "Failed to get file id by path.")
+        if not file_id:
+            return api_error(status.HTTP_404_NOT_FOUND, "File not found")
+
+        # send stats message
+        send_file_access_msg(request, repo, path, 'api')
+
+        file_name = os.path.basename(path)
+        token = seafile_api.get_fileserver_access_token(repo.repo_id,
+                file_id, 'download', request.user.username, 'False')
+
+        if not token:
+            error_msg = 'Internal Server Error'
+            return api_error(status.HTTP_500_INTERNAL_SERVER_ERROR, error_msg)
+
+        url = gen_file_get_url(token, file_name)
+        file_response = urllib2.urlopen(url)
+        content = file_response.read()
+        
+        try:
+            dirent = seafile_api.get_dirent_by_path(repo.repo_id, path)
+            if dirent:
+                latest_contributor, last_modified = dirent.modifier, dirent.mtime
+            else:
+                latest_contributor, last_modified = None, 0
+        except SearpcError as e:
+            logger.error(e)
+            latest_contributor, last_modified = None, 0
+
+        # FIX ME: move to top after wiki code refactor
+        from seahub.base.templatetags.seahub_tags import email2nickname, \
+                 email2contact_email
+
+        print last_modified, email2nickname(latest_contributor), email2contact_email(latest_contributor)
+        return Response({
+            "content": content,
+            "latest_contributor": email2nickname(latest_contributor),
+            "last_modified": last_modified,
+            })

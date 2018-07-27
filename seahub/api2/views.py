@@ -284,7 +284,7 @@ class Accounts(APIView):
 class AccountInfo(APIView):
     """ Show account info.
     """
-    authentication_classes = (TokenAuthentication, )
+    authentication_classes = (TokenAuthentication, SessionAuthentication)
     permission_classes = (IsAuthenticated,)
     throttle_classes = (UserRateThrottle, )
 
@@ -302,6 +302,11 @@ class AccountInfo(APIView):
             quota_total = seafile_api.get_user_quota(email)
             quota_usage = seafile_api.get_user_self_usage(email)
 
+        if quota_total > 0:
+            info['space_usage'] = str(float(quota_usage) / quota_total * 100) + '%'
+        else:                       # no space quota set in config
+            info['space_usage'] = '0%'
+
         info['email'] = email
         info['name'] = email2nickname(email)
         info['total'] = quota_total
@@ -310,6 +315,7 @@ class AccountInfo(APIView):
         info['department'] = d_p.department if d_p else ""
         info['contact_email'] = p.contact_email if p else ""
         info['institution'] = p.institution if p and p.institution else ""
+        info['is_staff'] = request.user.is_staff
 
         return Response(info)
 
@@ -4542,7 +4548,7 @@ class GroupRepo(APIView):
                             content_type=json_content_type)
 
 class UserAvatarView(APIView):
-    authentication_classes = (TokenAuthentication, )
+    authentication_classes = (TokenAuthentication, SessionAuthentication)
     permission_classes = (IsAuthenticated,)
     throttle_classes = (UserRateThrottle, )
 
