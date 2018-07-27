@@ -1,9 +1,8 @@
 import React from 'react';
-import ReactDOM from 'react-dom';
-import SeafileEditor from './lib/seafile-editor';
-import MarkdownViewer from './lib/markdown-viewer';
+import SeafileEditor from '@seafile/seafile-editor';
 import 'whatwg-fetch';
-
+import { SeafileAPI } from 'seafile-js';
+import cookie from 'react-cookies'
 let repoID = window.app.pageOptions.repoID;
 let filePath = window.app.pageOptions.filePath;
 let fileName = window.app.pageOptions.fileName;
@@ -13,28 +12,13 @@ let protocol = window.app.pageOptions.protocol;
 
 let dirPath = '/';
 
-const updateUrl = `${siteRoot}api2/repos/${repoID}/update-link/?p=${dirPath}`;
-const uploadUrl = `${siteRoot}api2/repos/${repoID}/upload-link/?p=${dirPath}&from=web`;
-
-function handleFetchErrors(response) {
-  if (!response.ok) {
-    // response 4xx/5xx will be caught, and rejected in the promise chain
-    throw Error(response.statusText);
-  }
-  return response;
-}
-
-function updateFile(uploadLink, filePath, fileName, content) {
-  var formData = new FormData();
-  formData.append("target_file", filePath);
-  formData.append("filename", fileName);
-  var blob = new Blob([content], { type: "text/plain"});
-  formData.append("file", blob);
-  return fetch(uploadLink, {
-    method: "POST",
-    body: formData,
-  }).then(handleFetchErrors);
-}
+const serviceUrl = window.app.config.serviceUrl;
+const seafileCollabServer = window.app.config.seafileCollabServer;
+const userInfo = window.app.userInfo;
+// init seafileAPI
+let seafileAPI = new SeafileAPI();
+let xcsrfHeaders = cookie.load('csrftoken');
+seafileAPI.initForSeahubUsage({ xcsrfHeaders });
 
 function getImageFileNameWithTimestamp() {
   var d = Date.now();
@@ -42,26 +26,49 @@ function getImageFileNameWithTimestamp() {
 }
 
 class EditorUtilities {
+
+  constructor () {
+    this.repoID = repoID;
+    this.filePath = filePath;
+    this.serviceUrl = serviceUrl;
+  }
+  
   saveContent(content) {
-    return (fetch(updateUrl, {credentials: 'same-origin'})
-      .then(res => res.json())
-      .then(res => {
-        return updateFile(res, filePath, fileName, content)
+    return (
+      seafileAPI.getUpdateLink(repoID, dirPath).then((res) => {
+        const uploadLink = res.data;
+        return seafileAPI.updateFile(uploadLink, filePath, fileName, content)
       })
-    );
+    )
   }
 
+  unStarFile () {
+    return (
+      seafileAPI.unStarFile(repoID, this.filePath)
+    )
+  }
+
+  starFile() {
+    return (
+      seafileAPI.starFile(this.repoID, this.filePath)
+    )
+  }
+
+  getParentDectionaryUrl() {
+    let parentPath = this.filePath.substring(0, this.filePath.lastIndexOf('/'));
+    return this.serviceUrl + "/#common/lib/" + this.repoID + parentPath;
+  }
+  
   _getImageURL(fileName) {
     const url = `${protocol}://${domain}${siteRoot}lib/${repoID}/file/images/${fileName}?raw=1`;
     return url;
   }
 
   uploadImage = (imageFile) => {
-    return fetch(uploadUrl, {credentials: 'same-origin'})
-      .then(res => res.json())
-      .then(res => {
-        const uploadLink = res + "?ret-json=1";
-        // change image file name
+    return (
+      seafileAPI.getUploadLink(repoID, dirPath).then((res) => {
+        let uploadLinkComponent = res.data;
+        const uploadLink = uploadLinkComponent + "?ret-json=1";
         const name = getImageFileNameWithTimestamp();
         const blob = imageFile.slice(0, -1, 'image/png');
         const newFile = new File([blob], name, {type: 'image/png'});
@@ -69,19 +76,16 @@ class EditorUtilities {
         formData.append("parent_dir", "/");
         formData.append("relative_path", "images");
         formData.append("file", newFile);
-        // upload the image
-        return fetch(uploadLink, {
-          method: "POST",
-          body: formData,
-        })
-      }).then(resp => {
-        return resp.json();
-      }).then(json => {
-      // The returned json is a list of uploaded files, need to get the first one
-        var filename = json[0].name;
+        return {uploadLink, formData}
+      }).then(({ uploadLink, formData}) => {
+        return seafileAPI.uploadImage(uploadLink, formData)
+      }).then ((res) => {
+        let resArr = res.data[0];
+        let filename = resArr.name;
         return this._getImageURL(filename);
-      });
-    }
+      })
+    )
+  }
 
   getFileURL(fileNode) {
     var url;
@@ -94,25 +98,21 @@ class EditorUtilities {
   }
   
   isInternalFileLink(url) {
-    var re = new RegExp(protocol + '://' + domain + siteRoot + "lib/" + "[0-9a-f\-]{36}/file.*");
+    var re = new RegExp(this.serviceUrl + "/lib/[0-9a-f-]{36}/file.*");
     return re.test(url);
   }
 
   getFiles() {
-    const dirUrl = `${siteRoot}api2/repos/${repoID}/dir/?p=${dirPath}&recursive=1`
-    return fetch(dirUrl, {credentials: 'same-origin'})
-      .then(res => res.json())
-      .then(items => {
-        const files = items.map(item => {
-          return {
-            name: item.name,
-            type: item.type === 'dir' ? 'dir' : 'file',
-            isExpanded: item.type === 'dir' ? true : false,
-            parent_path: item.parent_dir,
-          }
-        })
-        return files;
+    return seafileAPI.listDir(repoID, dirPath, { recursive: true} ).then((response) => {
+      var files = response.data.map((item) => {
+        return {
+          name: item.name,
+          type: item.type === 'dir' ? 'dir' : 'file',
+          parent_path: item.parent_dir
+        }
       })
+      return files;
+    })
   }
 }
 
@@ -127,36 +127,40 @@ class App extends React.Component {
         markdownContent: "",
         loading: true,
         mode: "editor",
-      };
-      this.fileInfo = {
-        name: fileName,
-        path: filePath
+        fileInfo: {
+          repoID: repoID,
+          name: fileName,
+          path: filePath,
+          mtime: null,
+          size: 0,
+          starred: false,
+        },
+        collabServer: seafileCollabServer ? seafileCollabServer : null,
       };
     }
 
   componentDidMount() {
-    const path = encodeURIComponent(filePath)
-    const url = `${siteRoot}api2/repos/${repoID}/file/?p=${path}&reuse=1`;
-    const infoPath =`${siteRoot}api2/repos/${repoID}/file/detail/?p=${path}`;
 
-    fetch(infoPath, {credentials:'same-origin'})
-      .then((response) => response.json())
-      .then(res => {
-        this.fileInfo.mtime = res.mtime;
-        this.fileInfo.size = res.size;
+    seafileAPI.getFileInfo(repoID, filePath).then((res) => {
+      let { mtime, size, starred } = res.data;
+      this.setState((prevState, props) => ({
+        fileInfo: {
+          ...prevState.fileInfo,
+          mtime,
+          size,
+          starred
+        }
+      }));
 
-      fetch(url, {credentials: 'same-origin'})
-        .then(res => res.json())
-        .then(res => {
-          fetch(res)
-            .then(response => response.text())
-            .then(body => {
-              this.setState({
-                markdownContent: body,
-                loading: false
-            });
+      seafileAPI.getFileDownloadLink(repoID, filePath).then((res) => {
+        const downLoadUrl = res.data;
+        seafileAPI.getFileContent(downLoadUrl).then((res) => {
+          this.setState({
+            markdownContent: res.data,
+            loading: false
+          })
         })
-      })
+      });
     })
   }
 
@@ -170,13 +174,14 @@ class App extends React.Component {
     } else if (this.state.mode === "editor") {
       return (
         <SeafileEditor
-          fileInfo={this.fileInfo}
+          fileInfo={this.state.fileInfo}
           markdownContent={this.state.markdownContent}
           editorUtilities={editorUtilities}
+          userInfo={this.state.collabServer ? userInfo : null}
+          collabServer={this.state.collabServer}
         />
       );
     }   
   }
 }
-
 export default App;
