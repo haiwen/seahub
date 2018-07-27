@@ -733,7 +733,7 @@ def view_lib_file(request, repo_id, path):
             return_dict['err'] = error_msg
             return render(request, 'view_file_base.html', return_dict)
 
-        error_msg = prepare_converted_html(raw_path, file_id, fileext, return_dict)
+        error_msg = prepare_converted_html(inner_path, file_id, fileext, return_dict)
         if error_msg:
             return_dict['err'] = error_msg
             return render(request, template, return_dict)
