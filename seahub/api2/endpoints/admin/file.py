@@ -92,7 +92,7 @@ class AdminFileDetail(APIView):
 
         try:
             file_size = seafile_api.get_file_size(real_repo_id,
-                    repo.repo_version, obj_id)
+                    repo.version, obj_id)
             entry["size"] = file_size
         except Exception as e:
             logger.error(e)
