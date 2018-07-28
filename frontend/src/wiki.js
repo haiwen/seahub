@@ -125,7 +125,7 @@ class Wiki extends Component {
 
   render() {
     return (
-      <div id="main" className="row w-100 no-gutters">
+      <div id="main">
         <SidePanel
           onFileClick={this.onFileClick}
           closeSideBar={this.state.closeSideBar}

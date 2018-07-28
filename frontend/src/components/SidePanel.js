@@ -21,7 +21,7 @@ class SidePanel extends Component {
 
   render() {
     return (
-      <div className={`side-panel col-md-3 ${this.props.closeSideBar ? "": "left-zero"}`}>
+      <div className={`side-panel ${this.props.closeSideBar ? "": "left-zero"}`}>
         <div className="side-panel-top panel-top">
           <a href={siteRoot} id="logo">
             <img src={mediaUrl + logoPath} title={siteTitle} alt="logo" width={logoWidth} height={logoHeight} />

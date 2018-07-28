@@ -14,7 +14,7 @@ class MainPanel extends Component {
 
   render() {
     return (
-      <div className="col-md-9 main-panel flex-auto o-hidden">
+      <div className="main-panel o-hidden">
         <div className="main-panel-top panel-top">
           <span className="sf2-icon-menu side-nav-toggle hidden-md-up d-md-none" title="Side Nav Menu" onClick={this.onMenuClick}></span>
           <div className="common-toolbar">
@@ -22,19 +22,23 @@ class MainPanel extends Component {
             <Account />
           </div>
         </div>
-        <div className="cur-view-main-con">
-          <div className="path-bar hd">
-            <a href={siteRoot + 'wikis/'} className="normal">Wikis</a>
-            <span className="path-split">/</span>
-            <a href={siteRoot + 'wikis/' + slug}className="normal">{slug}</a>
-            <span className="path-split">/</span>
-            <span>{this.props.fileName}</span>
+        <div className="cur-view-main">
+          <div className="cur-view-path">
+            <div className="path-containter">
+              <a href={siteRoot + 'wikis/'} className="normal">Wikis</a>
+              <span className="path-split">/</span>
+              <a href={siteRoot + 'wikis/' + slug} className="normal">{slug}</a>
+              <span className="path-split">/</span>
+              <span>{this.props.fileName}</span>
+            </div>
           </div>
-          <MarkdownViewer
-            markdownContent={this.props.content}
-            onLinkClick={this.props.onLinkClick}
-          />
-          <p id="wiki-page-last-modified">Last modified by {this.props.latestContributor}, <span>{this.props.lastModified}</span></p>
+          <div className="cur-view-main-con">
+            <MarkdownViewer
+              markdownContent={this.props.content}
+              onLinkClick={this.props.onLinkClick}
+            />
+            <p id="wiki-page-last-modified">Last modified by {this.props.latestContributor}, <span>{this.props.lastModified}</span></p>
+          </div>
         </div>
     </div>
     )
