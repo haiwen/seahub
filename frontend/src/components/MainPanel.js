@@ -13,6 +13,17 @@ class MainPanel extends Component {
   }
 
   render() {
+    var filePathList = this.props.filePath.split('/');
+    var pathElem = filePathList.map((item, index) => {
+      if (item == "") {
+        return;
+      } else {
+        return (
+          <span key={index}><span className="path-split">/</span>{item}</span>
+        )
+      }
+    });
+
     return (
       <div className="main-panel o-hidden">
         <div className="main-panel-top panel-top">
@@ -28,8 +39,7 @@ class MainPanel extends Component {
               <a href={siteRoot + 'wikis/'} className="normal">Wikis</a>
               <span className="path-split">/</span>
               <a href={siteRoot + 'wikis/' + slug} className="normal">{slug}</a>
-              <span className="path-split">/</span>
-              <span>{this.props.fileName}</span>
+              {pathElem}
             </div>
           </div>
           <div className="cur-view-main-con">

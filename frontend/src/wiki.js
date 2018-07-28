@@ -44,6 +44,7 @@ class Wiki extends Component {
       content: '',
       closeSideBar: false,
       fileName: 'home.md',
+      filePath: '/home.md',
       latestContributor: '',
       lastModified: '',
     };
@@ -51,12 +52,25 @@ class Wiki extends Component {
   }
 
   componentDidMount() {
-    this.loadFile("home.md", "/home.md");
+    this.loadFile("/home.md");
+  }
 
+  fileNameFromPath(filePath) {
+    let index = filePath.lastIndexOf("/");
+    if (index == -1) {
+      return "";
+    } else {
+      return filePath.substring(index + 1);
+    }
   }
 
   isInternalWikiLink(url) {
     var re = new RegExp(serviceUrl + '/wikis/'+ slug + "/.*\.md");
+    return re.test(url);
+  }
+
+  isInternalMarkdownLink(url) {
+    var re = new RegExp(serviceUrl + '/lib/' + repoID + '/file' + '.*\.md');
     return re.test(url);
   }
 
@@ -67,10 +81,22 @@ class Wiki extends Component {
     return path;
   }
 
+  getPathFromInternalMarkdownLink(url) {
+    var re = new RegExp(serviceUrl + '/lib/' + repoID + '/file' + "(.*\.md)");
+    var array = re.exec(url);
+    var path = decodeURIComponent(array[1]);
+    return path;
+  }
+
   onLinkClick = (event) => {
     const url = event.target.href;
     if (this.isInternalWikiLink(url)) {
       let path = this.getWikiLink(url);
+      this.loadFile(path);
+      return;
+    }
+    if (this.isInternalMarkdownLink(url)) {
+      let path = this.getPathFromInternalMarkdownLink(url);
       this.loadFile(path);
     }
   }
@@ -79,18 +105,18 @@ class Wiki extends Component {
     if (node.isMarkdown()) {
       this.setState({
         fileName: node.name,
-      })
-      if (node.parent_path === '/') {
-        this.loadFile(node.name)
-      } else {
-        this.loadFile(node.path)
-      }
+      });
+      this.loadFile(node.path);
     }
   }
 
   loadFile(filePath) {
+    this.setState({
+      fileName: this.fileNameFromPath(filePath),
+      filePath: filePath
+    });
     const path = encodeURIComponent(filePath);
-    const url = siteRoot + 'api/v2.1/wikis/' + slug + '/content/' + '?p=/' + filePath;
+    const url = siteRoot + 'api/v2.1/wikis/' + slug + '/content/' + '?p=' + filePath;
     fetch(url, {credentials: 'same-origin'})
       .then(res => res.json())
       .then(res => {
@@ -101,9 +127,7 @@ class Wiki extends Component {
         })
       })
 
-
-
-    let fileUrl = '/wikis/' + slug + '/' + filePath;
+    let fileUrl = '/wikis/' + slug + filePath;
     window.history.pushState({urlPath: fileUrl, filePath: filePath}, filePath, fileUrl);
   }
 
@@ -135,6 +159,7 @@ class Wiki extends Component {
         <MainPanel
           content={this.state.content}
           fileName={this.state.fileName}
+          filePath={this.state.filePath}
           onLinkClick={this.onLinkClick}
           onMenuClick={this.onMenuClick}
           latestContributor={this.state.latestContributor}

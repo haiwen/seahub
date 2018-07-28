@@ -233,6 +233,7 @@ a:hover { color:#eb8205; }
     flex:1 0 auto;
     display:flex;
     flex-direction:column;
+    height: 100%;
 }
 .cur-view-path {
     flex-shrink:0;

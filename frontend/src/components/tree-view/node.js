@@ -56,7 +56,7 @@ class Node {
       type: this.type,
       isExpanded: this.isExpanded
     });
-    n.children = this.children.map(child => { child.copy(); child.parent = n; return child; });
+    n.children = this.children.map(child => { var newChild = child.copy(); newChild.parent = n; return newChild; });
     return n;
   }
 

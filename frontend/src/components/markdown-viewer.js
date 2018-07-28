@@ -8,6 +8,8 @@ var URL = require('url-parse');
 
 require('../lib/code-hight-package');
 
+const contentClass = "wiki-md-viewer-rendered-content";
+
 class MarkdownViewerContent extends React.Component {
 
   constructor(props) {
@@ -16,7 +18,7 @@ class MarkdownViewerContent extends React.Component {
 
   componentDidUpdate () {
     Prism.highlightAll();
-    var links = document.querySelectorAll(".seafile-md-viewer-main-panel a");
+    var links = document.querySelectorAll(`.${contentClass} a`);
     links.forEach((li) => {li.addEventListener("click", this.onLinkClick); });
   }
 
@@ -29,9 +31,11 @@ class MarkdownViewerContent extends React.Component {
     return (
       <div>
         { this.props.renderingContent ? (
-          <div className="wiki-md-viewer-rendered-content article">Loading...</div>
+          <div className={contentClass + " article"}>Loading...</div>
         ) : (
-          <div ref={(mdContent) => {this.mdContentRef = mdContent;} } className="wiki-md-viewer-rendered-content article" dangerouslySetInnerHTML={{ __html: this.props.html }}/>
+          <div ref={(mdContent) => {this.mdContentRef = mdContent;} }
+            className={contentClass + " article"}
+            dangerouslySetInnerHTML={{ __html: this.props.html }}/>
         )}
       </div>
       )
