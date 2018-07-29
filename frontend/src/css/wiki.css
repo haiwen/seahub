@@ -14,10 +14,34 @@
   border-bottom:1px solid #e8e8e8;
 }
 .wiki-pages-container {
+  overflow: hidden;
 }
-
+.wiki-pages-container:hover {
+  overflow: auto;
+}
 .wiki-md-viewer-rendered-content {
   padding: 30px 0 0;
+}
+.wiki-pages-container .tree-node-inner {
+  line-height: 1.625;
+}
+.wiki-pages-container .folder-toggle-icon {
+  color: #c0c0c0;
+  line-height: 1.625;
+}
+.wiki-pages-container .tree-node-icon {
+  color: #b0b0b0;
+}
+.wiki-main .cur-view-path {
+  box-shadow: 0px 1px 2px 0px #f0f0f0;
+  border-bottom: 1px solid #e8e8e8;
+}
+.wiki-main .cur-view-path::after {
+  display:none;
+}
+.wiki-main .cur-view-main-con {
+  padding-left: 40px;
+  padding-right: 40px;
 }
 
 .wiki-page-ops {

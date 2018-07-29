@@ -228,10 +228,9 @@ a:hover { color:#eb8205; }
     margin-left:auto;
 }
 .cur-view-main {
-    flex:1 0 auto;
+    flex:1 1 auto;
     display:flex;
     flex-direction:column;
-    height: 100%;
 }
 .cur-view-path {
     flex-shrink:0;
@@ -250,9 +249,9 @@ a:hover { color:#eb8205; }
 }
 .cur-view-main-con {
     padding:10px 16px 20px;
-    border-right:4px solid transparent;
     overflow:auto;
     flex:auto;
+    height: calc(100% - 40px);
 }
 .cur-view-main-con .hd {
     padding-bottom:0;

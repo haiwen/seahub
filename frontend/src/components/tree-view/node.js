@@ -96,6 +96,10 @@ class Node {
     }
   }
 
+  isDir() {
+    return this.type == "dir";
+  }
+
   /**
    * Return a JSON representation of the node.
    *

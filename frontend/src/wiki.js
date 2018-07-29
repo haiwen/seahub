@@ -76,7 +76,7 @@ class Wiki extends Component {
   }
 
   getWikiLink(url) {
-    var re = new RegExp(serviceUrl + '/wikis/'+ slug + "/(.*\.md)");
+    var re = new RegExp(serviceUrl + '/wikis/'+ slug + "(/.*\.md)");
     var array = re.exec(url);
     var path = decodeURIComponent(array[1]);
     return path;
@@ -150,7 +150,7 @@ class Wiki extends Component {
 
   render() {
     return (
-      <div id="main">
+      <div id="main" class="wiki-main">
         <SidePanel
           onFileClick={this.onFileClick}
           closeSideBar={this.state.closeSideBar}

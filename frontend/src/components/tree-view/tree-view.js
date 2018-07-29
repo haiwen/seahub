@@ -131,6 +131,10 @@ class TreeView extends React.PureComponent {
   }
 
   onClick = (e, node) => {
+    if (node.isDir()) {
+      this.toggleCollapse(node);
+      return;
+    }
     this.props.onClick(e, node);
   }
 

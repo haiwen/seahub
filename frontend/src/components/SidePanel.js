@@ -30,7 +30,7 @@ class SidePanel extends Component {
         </div>
         <div id="side-nav" className="wiki-side-nav" role="navigation">
           <h3 className="wiki-pages-heading">Pages</h3>
-          <div id="wiki-pages-container">
+          <div className="wiki-pages-container">
             <TreeView
               editorUtilities={this.props.editorUtilities}
               onClick={this.onFileClick}
