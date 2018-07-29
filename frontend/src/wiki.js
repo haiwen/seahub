@@ -14,6 +14,7 @@ const slug = window.wiki.config.slug;
 const repoID = window.wiki.config.repoId;
 const siteRoot = window.app.config.siteRoot;
 const serviceUrl = window.wiki.config.serviceUrl;
+const initialFilePath = window.wiki.config.initial_file_path;
 const dirPath = '/';
 
 class EditorUtilities {
@@ -43,8 +44,8 @@ class Wiki extends Component {
     this.state = {
       content: '',
       closeSideBar: false,
-      fileName: 'home.md',
-      filePath: '/home.md',
+      fileName: '',
+      filePath: '',
       latestContributor: '',
       lastModified: '',
     };
@@ -52,7 +53,7 @@ class Wiki extends Component {
   }
 
   componentDidMount() {
-    this.loadFile("/home.md");
+    this.loadFile(initialFilePath);
   }
 
   fileNameFromPath(filePath) {

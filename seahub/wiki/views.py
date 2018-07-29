@@ -36,11 +36,12 @@ def wiki_list(request):
     })
 
 
-def slug(request, slug, page_name="home"):
+def slug(request, slug, file_path="home.md"):
     """Show wiki page.
     """
     # get wiki object or 404
     wiki = get_object_or_404(Wiki, slug=slug)
+    file_path = "/" + file_path;
 
     # perm check
     if not wiki.has_read_perm(request.user):
@@ -57,9 +58,9 @@ def slug(request, slug, page_name="home"):
 
     return render(request, "wiki/wiki.html", {
         "wiki": wiki,
-        "page_name": page_name,
+        "page_name": file_path,
         "user_can_write": user_can_write,
-        "path": '/' + page_name + '.md',
+        "file_path": file_path,
         "repo_id": wiki.repo_id,
         "search_repo_id": wiki.repo_id,
         "search_wiki": True,
