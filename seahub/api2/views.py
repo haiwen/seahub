@@ -289,19 +289,32 @@ class AccountInfo(APIView):
     throttle_classes = (UserRateThrottle, )
 
     def get(self, request, format=None):
-        info = {}
+
+        # argument check
+        get_quota = request.GET.get('get_quota', 'true')
+        get_quota = get_quota.lower()
+        if get_quota not in ('true', 'false'):
+            error_msg = 'get_quota invalid.'
+            return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
+
+        # get user quota
+        quota_total = ''
+        quota_usage = ''
         email = request.user.username
+
+        if get_quota == 'true':
+            if is_org_context(request):
+                org_id = request.user.org.org_id
+                quota_total = seafile_api.get_org_user_quota(org_id, email)
+                quota_usage = seafile_api.get_org_user_quota_usage(org_id, email)
+            else:
+                quota_total = seafile_api.get_user_quota(email)
+                quota_usage = seafile_api.get_user_self_usage(email)
+
         p = Profile.objects.get_profile_by_user(email)
         d_p = DetailedProfile.objects.get_detailed_profile_by_user(email)
 
-        if is_org_context(request):
-            org_id = request.user.org.org_id
-            quota_total = seafile_api.get_org_user_quota(org_id, email)
-            quota_usage = seafile_api.get_org_user_quota_usage(org_id, email)
-        else:
-            quota_total = seafile_api.get_user_quota(email)
-            quota_usage = seafile_api.get_user_self_usage(email)
-
+        info = {}
         info['email'] = email
         info['name'] = email2nickname(email)
         info['total'] = quota_total
