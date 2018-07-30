@@ -37,13 +37,6 @@ class FilesActivitiesContent extends Component {
 
 class TableBody extends Component {
 
-  HTMLescape(html) {
-    return document.createElement('div')
-      .appendChild(document.createTextNode(html))
-      .parentNode
-      .innerHTML;
-  }
-
   encodePath(path) {
     let path_arr = path.split('/'),
     path_arr_ = []; 
@@ -59,26 +52,26 @@ class TableBody extends Component {
       let userProfileURL = `${siteRoot}profile/${encodeURIComponent(item.author_email)}/`;
 
       let libURL = `${siteRoot}#common/lib/${item.repo_id}`;
-      let libLink = `<a href=${libURL}>${this.HTMLescape(item.repo_name)}</a>`;
-      let smallLibLink = `<a class="small" href=${libURL}>${this.HTMLescape(item.repo_name)}</a>`;
+      let libLink = <a href={libURL}>{item.repo_name}</a>;
+      let smallLibLink = <a className="small" href={libURL}>{item.repo_name}</a>;
 
       if (item.obj_type == 'repo') {
         switch(item.op_type) {
           case 'create':
             op = gettext("Created a library");
-            details = libLink;
+            details = <td>{libLink}</td>;
             break;
           case 'rename':
             op = gettext("Renamed a library");
-            details = `${this.HTMLescape(item.old_repo_name)} => ${libLink}`;
+            details = <td>{item.old_repo_name} => {libLink}</td>;
             break;
           case 'delete':
             op = gettext("Deleted a library");
-            details = `${this.HTMLescape(item.repo_name)}`;
+            details = <td>{item.repo_name}</td>;
             break;
           case 'recover':
             op = gettext("Restored a library");
-            details = libLink;
+            details = <td>{libLink}</td>;
             break;
           case 'clean-up-trash':
             if (item.days == 0) {
@@ -86,63 +79,63 @@ class TableBody extends Component {
             } else {
               op = gettext("Removed items older than {n} days from trash.").replace('{n}', item.days);
             }
-            details = libLink;
+            details = <td>{libLink}</td>;
             break;
         }
       } else if (item.obj_type == 'file') {
         let fileURL = `${siteRoot}lib/${item.repo_id}/file${this.encodePath(item.path)}`;
-        let fileLink = `<a href=${fileURL}>${this.HTMLescape(item.name)}</a>`;
+        let fileLink = <a href={fileURL}>{item.name}</a>;
         switch(item.op_type) {
           case 'create':
             op = gettext("Created a file");
-            details = `${fileLink}<br />${smallLibLink}`;
+            details = <td>{fileLink}<br />{smallLibLink}</td>;
             break;
           case 'delete':
             op = gettext("Deleted a file");
-            details = `${this.HTMLescape(item.name)}<br />${smallLibLink}`;
+            details = <td>{item.name}<br />{smallLibLink}</td>;
             break;
           case 'recover':
             op = gettext("Restored a file");
-            details = `${fileLink}<br />${smallLibLink}`;
+            details = <td>{fileLink}<br />{smallLibLink}</td>;
             break;
           case 'rename':
             op = gettext("Renamed a file");
-            details = `${this.HTMLescape(item.old_name)} => ${fileLink}<br />${smallLibLink}`;
+            details = <td>{item.old_name} => {fileLink}<br />{smallLibLink}</td>;
             break;
           case 'move':
-            let filePathLink = `<a href=${fileURL}>${this.HTMLescape(item.path)}</a>`;
+            let filePathLink = <a href={fileURL}>{item.path}</a>;
             op = gettext("Moved a file");
-            details = `${this.HTMLescape(item.old_path)} => ${filePathLink}<br />${smallLibLink}`;
+            details = <td>{item.old_path} => {filePathLink}<br />{smallLibLink}</td>;
             break;
           case 'edit': // update
             op = gettext("Updated a file");
-            details = `${fileLink}<br />${smallLibLink}`;
+            details = <td>{fileLink}<br />{smallLibLink}</td>;
             break;
         }
       } else { // dir
         let dirURL = `${siteRoot}#common/lib/${item.repo_id}${this.encodePath(item.path)}`;
-        let dirLink = `<a href=${dirURL}>${this.HTMLescape(item.name)}</a>`;
+        let dirLink = <a href={dirURL}>{item.name}</a>;
         switch(item.op_type) {
           case 'create':
             op = gettext("Created a folder");
-            details = `${dirLink}<br />${smallLibLink}`;
+            details = <td>{dirLink}<br />{smallLibLink}</td>;
             break;
           case 'delete':
             op = gettext("Deleted a folder");
-            details = `${this.HTMLescape(item.name)}<br />${smallLibLink}`;
+            details = <td>{item.name}<br />{smallLibLink}</td>;
             break;
           case 'recover':
             op = gettext("Restored a folder");
-            details = `${dirLink}<br />${smallLibLink}`;
+            details = <td>{dirLink}<br />{smallLibLink}</td>;
             break;
           case 'rename':
             op = gettext("Renamed a folder");
-            details = `${this.HTMLescape(item.old_name)} => ${dirLink}<br />${smallLibLink}`;
+            details = <td>{item.old_name} => {dirLink}<br />{smallLibLink}</td>;
             break;
           case 'move':
-            let dirPathLink = `<a href=${dirURL}>${this.HTMLescape(item.path)}</a>`;
+            let dirPathLink = <a href={dirURL}>{item.path}</a>;
             op = gettext("Moved a folder");
-            details = `${this.HTMLescape(item.old_path)} => ${dirPathLink}<br />${smallLibLink}`;
+            details = <td>{item.old_path} => {dirPathLink}<br />{smallLibLink}</td>;
             break;
         }
       }
@@ -153,10 +146,10 @@ class TableBody extends Component {
             <img src={item.avatar_url} alt="" width="24" className="avatar" />
           </td>
           <td>
-            <a href={userProfileURL}>{this.HTMLescape(item.author_name)}</a>
+            <a href={userProfileURL}>{item.author_name}</a>
           </td>
           <td>{op}</td>
-          <td dangerouslySetInnerHTML={{__html:details}}></td>
+          {details}
           <td dangerouslySetInnerHTML={{__html:item.time_relative}}></td>
         </tr>
       );
