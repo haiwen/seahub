@@ -18,8 +18,8 @@ msgstr ""
 "Project-Id-Version: seahub\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2018-07-30 11:31+0800\n"
-"PO-Revision-Date: 2018-07-30 03:34+0000\n"
-"Last-Translator: zheng xie <xiez1989@gmail.com>\n"
+"PO-Revision-Date: 2018-07-30 08:29+0000\n"
+"Last-Translator: imwhatiam <imwhatiam123@gmail.com>\n"
 "Language-Team: Chinese (China) (http://www.transifex.com/haiwen/seahub/language/zh_CN/)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -5412,7 +5412,7 @@ msgstr "更新时间"
 #: seahub/templates/js/templates.html:830
 #: seahub/templates/js/templates.html:2791
 msgid "Internal link"
-msgstr ""
+msgstr "内部链接"
 
 #: seahub/templates/js/templates.html:589
 #: seahub/templates/js/templates.html:760
@@ -5848,7 +5848,7 @@ msgid ""
 "An internal link is a link to a file or folder that can be accessed by users"
 " with read permission to the file or folder. The link will still point to "
 "the file or folder after the file or folder be renamed or moved."
-msgstr ""
+msgstr "内部链接是指向文件或目录的链接，只有对该文件或目录有访问权限的人可以访问。在文件或目录移动或重命名后，该链接依旧会指向这个文件或目录。"
 
 #: seahub/templates/libraries.html:27
 msgid "You have not created any libraries"

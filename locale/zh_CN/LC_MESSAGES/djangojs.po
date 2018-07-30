@@ -14,8 +14,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: seahub\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2018-07-20 11:07+0800\n"
-"PO-Revision-Date: 2018-07-20 07:23+0000\n"
+"POT-Creation-Date: 2018-07-30 11:32+0800\n"
+"PO-Revision-Date: 2018-07-30 08:30+0000\n"
 "Last-Translator: imwhatiam <imwhatiam123@gmail.com>\n"
 "Language-Team: Chinese (China) (http://www.transifex.com/haiwen/seahub/language/zh_CN/)\n"
 "MIME-Version: 1.0\n"
@@ -326,8 +326,8 @@ msgid "It is required."
 msgstr "必填项。"
 
 #: static/scripts/app/views/dialogs/dirent-smart-link.js:50
-msgid "Smart link copied to clipboard"
-msgstr "智能链接已复制到剪切板"
+msgid "Internal link copied to clipboard"
+msgstr "内部链接已经被复制到剪切板"
 
 #: static/scripts/app/views/dialogs/repo-change-password.js:26
 msgid "Change Password of Library {placeholder}"
