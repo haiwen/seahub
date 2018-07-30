@@ -2,7 +2,6 @@ import React, { Component } from 'react';
 import Search from './search';
 import MarkdownViewer from './markdown-viewer';
 import Account from './account';
-import moment from 'moment';
 
 const siteRoot = window.app.config.siteRoot;
 const slug = window.wiki.config.slug;

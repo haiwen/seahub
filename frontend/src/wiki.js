@@ -7,7 +7,7 @@ import './assets/css/fa-solid.css';
 import './assets/css/fa-regular.css';
 import './assets/css/fontawesome.css';
 import './css/initial-style.css';
-import './css/richeditor/side-panel.css';
+import './css/side-panel.css';
 import './css/wiki.css';
 
 const slug = window.wiki.config.slug;
@@ -65,22 +65,12 @@ class Wiki extends Component {
     }
   }
 
-  isInternalWikiLink(url) {
-    var re = new RegExp(serviceUrl + '/wikis/'+ slug + "/.*\.md");
-    return re.test(url);
-  }
 
   isInternalMarkdownLink(url) {
     var re = new RegExp(serviceUrl + '/lib/' + repoID + '/file' + '.*\.md');
     return re.test(url);
   }
 
-  getWikiLink(url) {
-    var re = new RegExp(serviceUrl + '/wikis/'+ slug + "(/.*\.md)");
-    var array = re.exec(url);
-    var path = decodeURIComponent(array[1]);
-    return path;
-  }
 
   getPathFromInternalMarkdownLink(url) {
     var re = new RegExp(serviceUrl + '/lib/' + repoID + '/file' + "(.*\.md)");
@@ -91,11 +81,6 @@ class Wiki extends Component {
 
   onLinkClick = (event) => {
     const url = event.target.href;
-    if (this.isInternalWikiLink(url)) {
-      let path = this.getWikiLink(url);
-      this.loadFile(path);
-      return;
-    }
     if (this.isInternalMarkdownLink(url)) {
       let path = this.getPathFromInternalMarkdownLink(url);
       this.loadFile(path);
@@ -104,9 +89,6 @@ class Wiki extends Component {
 
   onFileClick = (e, node) => {
     if (node.isMarkdown()) {
-      this.setState({
-        fileName: node.name,
-      });
       this.loadFile(node.path);
     }
   }
@@ -150,7 +132,7 @@ class Wiki extends Component {
 
   render() {
     return (
-      <div id="main" class="wiki-main">
+      <div id="main" className="wiki-main">
         <SidePanel
           onFileClick={this.onFileClick}
           closeSideBar={this.state.closeSideBar}

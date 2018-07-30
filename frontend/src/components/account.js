@@ -84,38 +84,25 @@ class Account extends Component {
       })
       .then(resp => resp.json())
       .then(resp => {
-        console.log(resp);
         this.setState({
           userName: resp.name,
           contactEmail: resp.email,
           usageRate: resp.space_usage,
-          quotaUsage: this.converQuota(resp.usage),
-          quotaTotal: this.converQuota(resp.total),
+          quotaUsage: this.bytesToSize(resp.usage),
+          quotaTotal: this.bytesToSize(resp.total),
           isStaff: resp.is_staff
         })
       })
   }
 
-  converQuota = (limit) => {
-  		let size = "";
-  		if( limit < 0.1 * 1000 ){
-  			size = limit.toFixed(1) + " Bytes";
-  		}else if(limit < 0.1 * 1000 * 1000 ){
-  			size = (limit / 1024).toFixed(1) + " KB";
-  		}else if(limit < 0.1 * 1000 * 1000 * 1000){
-  			size = (limit / (1000 * 1000)).toFixed(1) + " MB";
-  		}else{
-  			size = (limit / (1000 * 1000 * 1000)).toFixed(1) + " GB";
-  		}
-
-  		let sizestr = size + "";
-  		let len = sizestr.indexOf("\.");
-  		let dec = sizestr.substr(len + 1, 2);
-  		if(dec == "00"){
-  			return sizestr.substring(0,len) + sizestr.substr(len + 3,2);
-  		}
-  		return sizestr;
-  	}
+  bytesToSize = (bytes) => {
+    if(bytes < 0) return '--'
+    const sizes = ['bytes', 'KB', 'MB', 'GB', 'TB', 'PB']
+    if (bytes === 0) return bytes + sizes[0]
+    const i = parseInt(Math.floor(Math.log(bytes) / Math.log(1000)), 10)
+    if (i === 0) return bytes + ' ' + sizes[i]
+    return (bytes / (1000 ** i)).toFixed(1) + ' ' + sizes[i]
+  }
 
   renderMenu = () => {
     if(this.state.isStaff){

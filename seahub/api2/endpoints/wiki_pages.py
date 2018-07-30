@@ -21,8 +21,9 @@ from seahub.api2.throttling import UserRateThrottle
 from seahub.api2.utils import api_error
 from seahub.wiki.models import Wiki, WikiPageMissing
 from seahub.wiki.utils import (clean_page_name, get_wiki_pages, get_inner_file_url,
-                               get_wiki_dirent, get_wiki_page_object)
+                               get_wiki_dirent, get_wiki_page_object, get_wiki_dirs_by_path)
 from seahub.utils import gen_file_get_url
+from seahub.base.templatetags.seahub_tags import email2contact_email, email2nickname
 
 logger = logging.getLogger(__name__)
 
@@ -236,12 +237,12 @@ class WikiPagesDirView(APIView):
             error_msg = 'Folder %s not found.' % '/'
             return api_error(status.HTTP_404_NOT_FOUND, error_msg)
 
-        username = request.user.username
-        dir_file_list = get_dir_file_recursively(username, repo.repo_id, '/', [])
+        all_dirs = get_wiki_dirs_by_path(repo.repo_id, '/', [])
 
         return Response({
-            "dir_file_list": dir_file_list
+            "dir_file_list": all_dirs
         })
+
 
 class WikiPageContentView(APIView):
     authentication_classes = (TokenAuthentication, SessionAuthentication)
@@ -272,6 +273,7 @@ class WikiPageContentView(APIView):
             return api_error(status.HTTP_500_INTERNAL_SERVER_ERROR, error_msg)
 
         path = request.GET.get('p', '/')
+
 
         file_id = None
         try:
@@ -308,11 +310,6 @@ class WikiPageContentView(APIView):
             logger.error(e)
             latest_contributor, last_modified = None, 0
 
-        # FIX ME: move to top after wiki code refactor
-        from seahub.base.templatetags.seahub_tags import email2nickname, \
-                 email2contact_email
-
-        print last_modified, email2nickname(latest_contributor), email2contact_email(latest_contributor)
         return Response({
             "content": content,
             "latest_contributor": email2nickname(latest_contributor),

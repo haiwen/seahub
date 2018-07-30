@@ -1,12 +1,12 @@
 import React from 'react';
-import { processor, processorGetAST } from '../lib/seafile-markdown2html';
+import { processor, processorGetAST } from '@seafile/seafile-editor/src/lib/seafile-markdown2html';
 import TreeView from './tree-view/tree-view';
 import Prism from 'prismjs';
 import { translate } from 'react-i18next';
 
 var URL = require('url-parse');
 
-require('../lib/code-hight-package');
+require('@seafile/seafile-editor/src/lib/code-hight-package');
 
 const contentClass = "wiki-md-viewer-rendered-content";
 

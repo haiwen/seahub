@@ -5,6 +5,7 @@ import re
 import stat
 import urllib2
 import logging
+import posixpath
 
 from django.core.urlresolvers import reverse
 from django.utils.http import urlquote
@@ -224,3 +225,25 @@ def get_wiki_page_object(wiki_object, page_name):
             "last_modifier_contact_email": email2contact_email(latest_contributor),
             "last_modifier_name": email2nickname(latest_contributor),
             }
+
+
+def get_wiki_dirs_by_path(repo_id, path, all_dirs):
+    dirs = seafile_api.list_dir_by_path(repo_id, path)
+
+    for dirent in dirs:
+        entry = {}
+        if stat.S_ISDIR(dirent.mode):
+            entry["type"] = 'dir'
+        else:
+            entry["type"] = 'file'
+
+        entry["parent_dir"] = path
+        entry["name"] = dirent.obj_name
+
+        all_dirs.append(entry)
+
+        if stat.S_ISDIR(dirent.mode):
+            sub_path = posixpath.join(path, dirent.obj_name)
+            get_wiki_dirs_by_path(repo_id, sub_path, all_dirs)
+
+    return all_dirs
