@@ -72,7 +72,7 @@
             {% endif %}
             </div>
           {% else %}
-                {% block file_view %}{% endblock %}
+            {% block file_view %}{% endblock %}
           {% endif %}
         </div>
         <div id="file-discussions" class="comments-panel" style="display:none;"></div>
@@ -581,11 +581,11 @@ $(document).on('keydown', function(e) {
 });
 
 var DropDownMenu = {
-    $el : $("#file-view-op"),
-    $mobileTmp : _.template($("#mobile-editor-tools-tmpl").html()),
-    $deviceTmp : _.template($("#editor-tools-tmpl").html()),
+    $el: $("#file-view-op"),
+    $mobileTmp: _.template($("#mobile-editor-tools-tmpl").html()),
+    $deviceTmp: _.template($("#editor-tools-tmpl").html()),
 
-    init: function(){
+    init: function() {
         var _this = this;
         this.render();
         window.onresize = function(){
@@ -593,7 +593,7 @@ var DropDownMenu = {
         }
     },
 
-    render : function(){
+    render: function() {
         var _this = this;
         var template = $(window).width() > 992 ? this.$deviceTmp : this.$mobileTmp;
         this.$el.html(template);
@@ -617,7 +617,7 @@ var DropDownMenu = {
         });
         
         //if mobile : bind the popmenu event
-        if($(".sf2-mobile-menu-toggle").length){
+        if ($(".sf2-mobile-menu-toggle").length) {
             $(".sf2-mobile-menu-toggle").on('click',function(){
                 _this.clickToShowPopMenu();
                 return false;
@@ -625,7 +625,7 @@ var DropDownMenu = {
             $(document).on('click', function(e){
                 var target = e.target || event.srcElement;
                 var isDisplay = $('.sf2-mobile-menu').css('display') === "block" ? true : false;
-                if(!isDisplay){
+                if (!isDisplay) {
                     return true;
                 }
 
@@ -641,7 +641,7 @@ var DropDownMenu = {
         }
     },
 
-    clickToggleLock : function(eventSource){
+    clickToggleLock: function(eventSource) {
         this.clickToClosePopMenu();
         var op = $(eventSource).attr('id') == 'lock-file' ? 'lock' : 'unlock',
             path = '{{path|escapejs}}';
@@ -659,7 +659,7 @@ var DropDownMenu = {
         });
     },
 
-    clickToShare : function(eventSource){
+    clickToShare: function(eventSource) {
         this.clickToClosePopMenu();
         var op = $(eventSource),
             name = "{{filename|escapejs}}",
@@ -676,7 +676,7 @@ var DropDownMenu = {
         return false;
     },
 
-    clickToCommet : function(){
+    clickToCommet: function() {
         if (fileDiscussions.$el.is(':visible')) {
             fileDiscussions.hide();
         } else {
@@ -684,12 +684,12 @@ var DropDownMenu = {
         }
     },
 
-    clickToClosePopMenu : function(){
+    clickToClosePopMenu: function() {
         $(".sf2-mobile-menu-mask").hide();
         $(".sf2-mobile-menu").hide();
     },
     
-    clickToShowPopMenu : function(){
+    clickToShowPopMenu: function() {
         $(".sf2-mobile-menu-mask").show();
         $(".sf2-mobile-menu").show();
     }

@@ -461,9 +461,9 @@ define([
             return false;
         },
 
-        showMobileMenu : function(event) {
+        showMobileMenu: function(event) {
             var mobileMenu = this.mobileMenu.length ? this.mobileMenu : null;
-            if(mobileMenu){
+            if (mobileMenu) {
                 mobileMenu.slideDown('fast');
             }
             return false;
@@ -471,12 +471,12 @@ define([
 
         hideMobileMenu: function() {
             var mobileMenu = this.mobileMenu.length ? this.mobileMenu : null;
-            if(mobileMenu){
+            if (mobileMenu) {
                 mobileMenu.slideUp('fast');
             }
         },
 
-        closeMobileMenu: function(){
+        closeMobileMenu: function() {
             this.hideMobileMenu();
             return false;
         }
