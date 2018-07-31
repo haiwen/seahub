@@ -40,13 +40,8 @@ $('#repo-decrypt-form').on('submit', function() {
             location.href = "{{ next|escapejs }}";
         },
         error: function(xhr) {
-            var error;
-            if (xhr.responseText) {
-                error = JSON.parse(xhr.responseText).error_msg;
-            } else {
-                error = "{% trans "Failed. Please check the network." %}";
-            }
-            $error.html(error).removeClass('hide');
+            var error_msg = prepareAjaxErrorMsg(xhr);
+            $error.html(error_msg).removeClass('hide');
             enable($submitBtn);
         }
     });

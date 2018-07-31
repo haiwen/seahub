@@ -64,13 +64,8 @@ define([
                     });
                 },
                 error: function(xhr) {
-                    var err_msg;
-                    if (xhr.responseText) {
-                        err_msg = JSON.parse(xhr.responseText).error_msg;
-                    } else {
-                        err_msg = gettext("Failed. Please check the network.");
-                    }
-                    Common.feedback(err_msg, 'error');
+                    var error_msg = Common.prepareAjaxErrorMsg(xhr);
+                    Common.feedback(error_msg, 'error');
                 }
             });
         },

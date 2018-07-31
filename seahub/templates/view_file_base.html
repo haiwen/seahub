@@ -421,13 +421,8 @@ var fileDiscussions = {
                 }
             },
             error: function(xhr) {
-                var err_msg;
-                if (xhr.responseText) {
-                    err_msg = JSON.parse(xhr.responseText).error_msg;
-                } else {
-                    err_msg = "{% trans "Failed. Please check the network." %}";
-                }
-                _this.$conError.html(err_msg).show();
+                var error_msg = prepareAjaxErrorMsg(xhr);
+                _this.$conError.html(error_msg).show();
             },
             complete: function() {
                 _this.$loadingTip.hide();
@@ -464,13 +459,8 @@ var fileDiscussions = {
                 _this.scrollConToBottom();
             },
             error: function(xhr) {
-                var err_msg;
-                if (xhr.responseText) {
-                    err_msg = JSON.parse(xhr.responseText).error_msg;
-                } else {
-                    err_msg = "{% trans "Failed. Please check the network." %}";
-                }
-                $formError.html(err_msg).show();
+                var error_msg = prepareAjaxErrorMsg(xhr);
+                $formError.html(error_msg).show();
             },
             complete: function() {
                 enable($submitBtn);
@@ -533,15 +523,7 @@ var fileDiscussions = {
                     _this.$listContainer.hide();
                 }
             },
-            error: function(xhr) {
-                var err_msg;
-                if (xhr.responseText) {
-                    err_msg = JSON.parse(xhr.responseText).error_msg;
-                } else {
-                    err_msg = "{% trans "Failed. Please check the network." %}";
-                }
-                feedback(err_msg, 'error');
-            }
+            error: ajaxErrorHandler
         });
     },
 

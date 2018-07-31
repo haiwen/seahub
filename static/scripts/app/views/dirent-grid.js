@@ -346,13 +346,7 @@ define([
                             detailsView.updateTags(data);
                         },
                         error: function(xhr) {
-                            var error_msg;
-                            if (xhr.responseText) {
-                                var parsed_resp = JSON.parse(xhr.responseText);
-                                error_msg = parsed_resp.error_msg || parsed_resp.detail;
-                            } else {
-                                error_msg = gettext("Failed. Please check the network.");
-                            }
+                            var error_msg = Common.prepareAjaxErrorMsg(xhr);
                             detailsView.updateTags({'error_msg': error_msg});
                         }
                     });
@@ -387,13 +381,7 @@ define([
                         }
                     },
                     error: function(xhr) {
-                        var error_msg;
-                        if (xhr.responseText) {
-                            var parsed_resp = JSON.parse(xhr.responseText);
-                            error_msg = parsed_resp.error_msg || parsed_resp.detail;
-                        } else {
-                            error_msg = gettext("Failed. Please check the network.");
-                        }
+                        var error_msg = Common.prepareAjaxErrorMsg(xhr);
                         detailsView.update({'error_msg': error_msg});
                     }
                 });

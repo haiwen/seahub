@@ -274,13 +274,8 @@ define([
                     }
                 },
                 error: function(xhr) {
-                    var error_msg;
-                    if (xhr.responseText) {
-                        error_msg = JSON.parse(xhr.responseText).error_msg;
-                    } else {
-                        error_msg = gettext("Failed. Please check the network.");
-                    }
-                    $error.html(error_msg).removeClass('hide');
+                    var error_msg = Common.prepareAjaxErrorMsg(xhr);
+                    $error.html(error_msg).show();
                 }
             });
         }

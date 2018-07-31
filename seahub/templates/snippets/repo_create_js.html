@@ -100,8 +100,8 @@ $('#repo-create-form').on('submit', function() {
             repoCreateSuccessCallback(data);
         },
         error: function(xhr, textStatus, errorThrown) {
-            var error = JSON.parse(xhr.responseText).error;
-            apply_form_error(form_id, error);
+            var error_msg = prepareAjaxErrorMsg(xhr);
+            apply_form_error(form_id, error_msg);
             enable(submit_btn);
         }
     });

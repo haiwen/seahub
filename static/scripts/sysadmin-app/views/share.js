@@ -194,13 +194,8 @@ define([
                     }
                 },
                 error: function(xhr) {
-                    var err_msg;
-                    if (xhr.responseText) {
-                        err_msg = Common.HTMLescape(JSON.parse(xhr.responseText).error_msg);
-                    } else {
-                        err_msg = gettext("Failed. Please check the network.");
-                    }
-                    $error.html(err_msg).removeClass('hide');
+                    var error_msg = Common.prepareAjaxErrorMsg(xhr);
+                    $error.html(error_msg).removeClass('hide');
                 },
                 complete: function() {
                     Common.enableButton($submitBtn);
@@ -268,12 +263,7 @@ define([
                     }
                 },
                 error: function(xhr) {
-                    var err_msg;
-                    if (xhr.responseText) {
-                        err_msg = Common.HTMLescape(JSON.parse(xhr.responseText).error_msg);
-                    } else {
-                        err_msg = gettext("Failed. Please check the network.");
-                    }
+                    var error_msg = Common.prepareAjaxErrorMsg(xhr);
                     $error.html(err_msg).removeClass('hide');
                 },
                 complete: function() {

@@ -199,13 +199,8 @@ define([
                     _this.model.set({ 'name': new_name }); // it will trigger 'change' event
                 };
                 var after_op_error = function(xhr) {
-                    var err_msg;
-                    if (xhr.responseText) {
-                        err_msg = JSON.parse(xhr.responseText).error||JSON.parse(xhr.responseText).error_msg;
-                    } else {
-                        err_msg = gettext("Failed. Please check the network.");
-                    }
-                    Common.feedback(err_msg, 'error');
+                    var error_msg = Common.prepareAjaxErrorMsg(xhr);
+                    Common.feedback(error_msg, 'error');
                     Common.enableButton(submit_btn);
                 };
 
@@ -273,12 +268,7 @@ define([
                         Common.feedback(gettext("Successfully transferred the library."), 'success');
                     },
                     error: function(xhr) {
-                        var error_msg;
-                        if (xhr.responseText) {
-                            error_msg = JSON.parse(xhr.responseText).error_msg;
-                        } else {
-                            error_msg = gettext("Failed. Please check the network.");
-                        }
+                        var error_msg = Common.prepareAjaxErrorMsg(xhr);
                         $('.error', $form).html(error_msg).show();
                         Common.enableButton($submitBtn);
                     }
@@ -394,13 +384,7 @@ define([
                     });
                 },
                 error: function(xhr) {
-                    var error_msg;
-                    if (xhr.responseText) {
-                        var parsed_resp = JSON.parse(xhr.responseText);
-                        error_msg = parsed_resp.error_msg || parsed_resp.detail;
-                    } else {
-                        error_msg = gettext("Failed. Please check the network.");
-                    }
+                    var error_msg = Common.prepareAjaxErrorMsg(xhr);
                     $('#simplemodal-data').html('<p class="error">' + error_msg + '</p>');
                 }
             });
@@ -436,13 +420,7 @@ define([
                         Common.feedback(msg, 'success');
                     },
                     error: function(xhr) {
-                        var error_msg;
-                        if (xhr.responseText) {
-                            var parsed_resp = JSON.parse(xhr.responseText);
-                            error_msg = parsed_resp.error_msg || parsed_resp.detail;
-                        } else {
-                            error_msg = gettext("Failed. Please check the network.");
-                        }
+                        var error_msg = Common.prepareAjaxErrorMsg(xhr);
                         $error.html(error_msg).show();
                         Common.enableButton($submit);
                     }

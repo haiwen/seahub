@@ -156,13 +156,8 @@ define([
                 },
                 error: function (xhr, textStatus, errorThrown) {
                     _this.$loadingTip.hide();
-                    var err_msg;
-                    if (xhr.responseText) {
-                        err_msg = JSON.parse(xhr.responseText).error;
-                    } else {
-                        err_msg = gettext('Please check the network.');
-                    }
-                    _this.$error.html(err_msg).show();
+                    var error_msg = Common.prepareAjaxErrorMsg(xhr);
+                    _this.$error.html(error_msg).show();
                 }
             });
 

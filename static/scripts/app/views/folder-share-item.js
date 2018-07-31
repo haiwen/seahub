@@ -180,7 +180,7 @@ define([
                 success: function () {
                     _this.remove();
                 },
-                error: function (xhr) {
+                error: function(xhr) {
                     var err_msg;
                     if (xhr.responseText) {
                         err_msg = gettext("Delete failed");

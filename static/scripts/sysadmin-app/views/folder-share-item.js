@@ -81,18 +81,11 @@ define([
                     _this.render();
                 },
                 error: function(xhr) {
-                    var err_msg;
-                    if (xhr.responseText) {
-                        var parsed_resp = JSON.parse(xhr.responseText);
-                        err_msg = parsed_resp.error||parsed_resp.error_msg;
-                        err_msg = Common.HTMLescape(err_msg);
-                    } else {
-                        err_msg = gettext("Failed. Please check the network.");
-                    }
+                    var error_msg = Common.prepareAjaxErrorMsg(xhr);
                     if (item_data.for_user) {
-                        $('#dir-user-share .error').html(err_msg).removeClass('hide');
+                        $('#dir-user-share .error').html(error_msg).removeClass('hide');
                     } else {
-                        $('#dir-group-share .error').html(err_msg).removeClass('hide');
+                        $('#dir-group-share .error').html(error_msg).removeClass('hide');
                     }
                 }
             });
@@ -130,18 +123,11 @@ define([
                     _this.remove();
                 },
                 error: function (xhr) {
-                    var err_msg;
-                    if (xhr.responseText) {
-                        var parsed_resp = JSON.parse(xhr.responseText);
-                        err_msg = parsed_resp.error||parsed_resp.error_msg;
-                        err_msg = Common.HTMLescape(err_msg);
-                    } else {
-                        err_msg = gettext("Failed. Please check the network.");
-                    }
+                    var error_msg = Common.prepareAjaxErrorMsg(xhr);
                     if (item_data.for_user) {
-                        $('#dir-user-share .error').html(err_msg).removeClass('hide');
+                        $('#dir-user-share .error').html(error_msg).removeClass('hide');
                     } else {
-                        $('#dir-group-share .error').html(err_msg).removeClass('hide');
+                        $('#dir-group-share .error').html(error_msg).removeClass('hide');
                     }
                 }
             });

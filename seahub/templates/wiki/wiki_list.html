@@ -87,16 +87,7 @@ $.ajax({
         }
     },
     error: function(xhr) {
-        var error_msg;
-        if (xhr.responseText) {
-            try {
-                error_msg = JSON.parse(xhr.responseText).error_msg;
-            } catch(e) {
-                error_msg = "{% trans "Error" %}";
-            }
-        } else {
-            error_msg = "{% trans "Please check the network." %}";
-        }
+        var error_msg = prepareAjaxErrorMsg(xhr);
         $('.wiki-list-error').html(error_msg).show();
     },
     complete: function() {
@@ -149,16 +140,7 @@ $('#new-wiki-form').on('submit', function () {
             }
         },
         error: function(xhr) {
-            var error_msg;
-            if (xhr.responseText) {
-                try {
-                    error_msg = JSON.parse(xhr.responseText).error_msg;
-                } catch(e) {
-                    error_msg = "{% trans "Error" %}";
-                }
-            } else {
-                error_msg = "{% trans "Please check the network." %}";
-            }
+            var error_msg = prepareAjaxErrorMsg(xhr);
             $error.html(error_msg).show();
             enable($submitBtn);
         }
@@ -259,19 +241,7 @@ var wiki = {
                 $el.remove();
                 feedback("{% trans "Successfully deleted 1 item." %}", 'success');
             },
-            error: function(xhr) {
-                var error_msg;
-                if (xhr.responseText) {
-                    try {
-                        error_msg = JSON.parse(xhr.responseText).error_msg;
-                    } catch(e) {
-                        error_msg = "{% trans "Error" %}";
-                    }
-                } else {
-                    error_msg = "{% trans "Please check the network." %}";
-                }
-                feedback(error_msg, 'error');
-            }
+            error: ajaxErrorHandler
         });
     },
 
@@ -289,19 +259,7 @@ var wiki = {
                 $el.replaceWith(wiki.render(data));
                 feedback("{% trans "Successfully edited the permission." %}", 'success');
             },
-            error: function(xhr) {
-                var error_msg;
-                if (xhr.responseText) {
-                    try {
-                        error_msg = JSON.parse(xhr.responseText).error_msg;
-                    } catch(e) {
-                        error_msg = "{% trans "Error" %}";
-                    }
-                } else {
-                    error_msg = "{% trans "Please check the network." %}";
-                }
-                feedback(error_msg, 'error');
-            }
+            error: ajaxErrorHandler
         });
     },
 

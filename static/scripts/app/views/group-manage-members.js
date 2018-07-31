@@ -109,17 +109,8 @@ define([
                     _this.$loadingTip.hide();
                 },
                 error: function(collection, response, opts) {
+                    var err_msg = Common.prepareCollectionFetchErrorMsg(collection, response, opts);
                     _this.$loadingTip.hide();
-                    var err_msg;
-                    if (response.responseText) {
-                        if (response['status'] == 401 || response['status'] == 403) {
-                            err_msg = gettext("Permission error");
-                        } else {
-                            err_msg = gettext("Error");
-                        }
-                    } else {
-                        err_msg = gettext('Please check the network.');
-                    }
                     _this.$error.html(err_msg).show();
                 }
             });
@@ -142,13 +133,8 @@ define([
                         $input.val(null).trigger('change');
                     },
                     error: function(collection, response, options) {
-                        var err_msg;
-                        if (response.responseText) {
-                            err_msg = response.responseJSON.error_msg;
-                        } else {
-                            err_msg = gettext('Please check the network.');
-                        }
-                        _this.$error.html(err_msg).show();
+                        var error_msg = Common.prepareAjaxErrorMsg(response);
+                        _this.$error.html(error_msg).show();
                     }
                 });
             } else {
@@ -176,13 +162,8 @@ define([
                         }
                     },
                     error: function(xhr) {
-                        var err_msg;
-                        if (xhr.responseText) {
-                            err_msg = gettext('Error');
-                        } else {
-                            err_msg = gettext("Failed. Please check the network.");
-                        }
-                        _this.$error.html(err_msg).show();
+                        var error_msg = Common.prepareAjaxErrorMsg(xhr);
+                        _this.$error.html(error_msg).show();
                     }
                 });
             }
