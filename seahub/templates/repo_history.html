@@ -6,8 +6,6 @@
 {% block sub_title %}{% trans "History" %} - {% endblock %}
 
 {% block extra_style %}
-<link rel="stylesheet" type="text/css" href="{% static "css/select2-3.5.2.css" %}" />
-<link rel="stylesheet" type="text/css" href="{% static "css/select2.custom.css" %}" />
 <style type="text/css">
     .go-back { top:-3px; }
 </style>
@@ -107,7 +105,7 @@
 {% if show_label and user_perm == 'rw' %}
 <form id="label-edit-form" action="" class="hide">
     <h3 id="dialogTitle">{% trans "Edit labels" %}</h3>
-    <input type="hidden" name="labels" /><br />
+    <select name="labels"></select><br />
     <p class="error hide"></p>
     <button type="submit" class="submit">{% trans "Submit" %}</button>
 </form>
@@ -116,7 +114,7 @@
 {% endblock %}
 
 {% block extra_script %}
-<script type="text/javascript" src="{% static "scripts/lib/select2-3.5.2.js" %}"></script>
+<script type="text/javascript" src="{% static "scripts/lib/select2.min.js" %}"></script>
 <script type="text/javascript">
     {% include 'snippets/list_commit_detail.html' %}
     $('.view-snapshot').each(function() {
@@ -131,19 +129,20 @@ $('.label-edit-icon').on('click', function() {
         var label = $(item).text();
         s2_tags.push({
             'id': label,
-            'text': label
+            'text': label,
+            'selected': true
         });
     });
 
     var $form = $('#label-edit-form');
     $form.data('tr', $tr).modal({focus: false});
     $('#simplemodal-container').css({'width':'auto', 'height':'auto'});
-    $('[name="labels"]')
-        .select2({
-            width: '280px',
-            tags: []
-        })
-        .select2('data', s2_tags);
+    $('[name="labels"]').select2({
+        language: i18n_select2,
+        multiple: true,
+        width: '280px',
+        tags: s2_tags
+    });
 });
 $('#label-edit-form').on('submit', function() {
     var $form = $(this);
@@ -151,7 +150,7 @@ $('#label-edit-form').on('submit', function() {
     var $error = $('.error', $form);
     var $submit = $('[type="submit"]', $form);
     var $tr = $form.data('tr');
-    var tags = $input.select2('val');
+    var tags = $input.val();
 
     disable($submit);
     $.ajax({
