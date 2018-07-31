@@ -159,12 +159,9 @@ $('#add-user-form').on('submit', function() {
         success: function(data) {
             location.reload(true);
         },
-        error: function(jqXHR, textStatus, errorThrown) {
-            if (jqXHR.responseText) {
-                apply_form_error(form_id, JSON.parse(jqXHR.responseText).error_msg);
-            } else {
-                apply_form_error(form_id, "{% trans "Failed. Please check the network." %}");
-            }
+        error: function(xhr, textStatus, errorThrown) {
+            var error_msg = prepareAjaxErrorMsg(xhr);
+            apply_form_error(form_id, error_msg);
             enable(submit_btn);
         }
     });
@@ -189,9 +186,7 @@ $('.remove-user-btn').on('click', function() {
                 _this.closest('tr').remove();
                 feedback("{% trans "Successfully deleted 1 item." %}", 'success');
             },
-            error: function(xhr, textStatus, errorThrown) {
-                ajaxErrorHandler(xhr, textStatus, errorThrown);
-            },
+            error: ajaxErrorHandler,
             complete: function() {
                 $.modal.close();
             }

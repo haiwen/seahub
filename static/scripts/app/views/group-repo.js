@@ -159,12 +159,7 @@ define([
                         _this.model.set({'name': data.name}); // it will trigger 'change' event
                     },
                     error: function(xhr) {
-                        var err_msg;
-                        if (xhr.responseText) {
-                            err_msg = JSON.parse(xhr.responseText).error||JSON.parse(xhr.responseText).error_msg;
-                        } else {
-                            err_msg = gettext("Failed. Please check the network.");
-                        }
+                        var error_msg = Common.prepareAjaxErrorMsg(xhr);
                         Common.feedback(err_msg, 'error');
                         Common.enableButton(submit_btn);
                     }
@@ -292,13 +287,8 @@ define([
                     Common.feedback(msg, 'success', Common.SUCCESS_TIMOUT);
                 },
                 error: function(model, response) {
-                    var err;
-                    if (response.responseText) {
-                        err = JSON.parse(response.responseText).error_msg;
-                    } else {
-                        err = gettext("Failed. Please check the network.");
-                    }
-                    Common.feedback(err, 'error');
+                    var error_msg = Common.prepareAjaxErrorMsg(response);
+                    Common.feedback(error_msg, 'error');
                 }
             });
 

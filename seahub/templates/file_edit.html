@@ -352,13 +352,7 @@ var mdEditor = editormd('md-editor', {
                     });
                     FileTree.renderTree($('#repos-dirs').data('site_root', '{{SITE_ROOT}}'), $form, repos);  // there is at least 1 repo
                 },
-                error: function(xhr) {
-                    if (xhr.responseText) {
-                        feedback(JSON.parse(xhr.responseText).error||JSON.parse(xhr.responseText).error_msg, 'error');
-                    } else {
-                        feedback("{% trans "Please check the network." %}", 'error');
-                    }
-                }
+                error: ajaxErrorHandler
             });
 
             $form.on('submit', function() {
@@ -482,7 +476,7 @@ function editSubmit() {
         },
         error: function(xhr, textStatus, errorThrown) {
             if (xhr.responseText) {
-                var resp = JSON.parse(xhr.responseText);
+                var resp = HTMLescape(JSON.parse(xhr.responseText));
                 feedback(resp['error'], 'error');
                 if (resp['op'] == 'decrypt') {
                     $('#repo-decrypt-form').modal();
@@ -536,13 +530,8 @@ $('#repo-decrypt-form').on('submit', function() {
             }
         },
         error: function(xhr) {
-            var err = '';
-            if (xhr.responseText) {
-                err = JSON.parse(xhr.responseText).error_msg;
-            } else {
-                err = "{% trans "Failed. Please check the network." %}";
-            }
-            $error.html(err).removeClass('hide');
+            var error_msg = prepareAjaxErrorMsg(xhr);
+            $error.html(error_msg).removeClass('hide');
             enable($submitBtn);
         }
     });

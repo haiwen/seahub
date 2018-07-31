@@ -385,15 +385,7 @@ $("#disable-two-factor-auth").on('click', function(){
         success:function(data){
             location.reload(true);
         },
-        error: function(xhr, textStatus, errorThrown) {
-            var err_msg;
-            if (xhr.responseText) {
-                err_msg = JSON.parse(xhr.responseText).error_msg;
-            } else {
-                err_msg = "{% trans "Failed. Please check the network." %}";
-            }
-            feedback(err_msg, 'error');
-        }
+        error: ajaxErrorHandler
     });
 });
 
@@ -425,12 +417,7 @@ $('#set-name-form').on('submit', function() {
             $.modal.close();
         },
         error: function(xhr, textStatus, errorThrown) {
-            var err_msg;
-            if (xhr.responseText) {
-                err_msg = JSON.parse(xhr.responseText).error_msg;
-            } else {
-                err_msg = "{% trans "Failed. Please check the network." %}";
-            }
+            var err_msg = prepareAjaxErrorMsg(xhr);
             $error.html(err_msg).show();
             enable($submitBtn);
         }
@@ -463,12 +450,7 @@ $('#set-loginid-form').on('submit', function() {
             $.modal.close();
         },
         error: function(xhr, textStatus, errorThrown) {
-            var err_msg;
-            if (xhr.responseText) {
-                err_msg = JSON.parse(xhr.responseText).error_msg;
-            } else {
-                err_msg = "{% trans "Failed. Please check the network." %}";
-            }
+            var err_msg = prepareAjaxErrorMsg(xhr);
             $error.html(err_msg).show();
             enable($submitBtn);
         }
@@ -502,12 +484,7 @@ $('#set-contact-email-form').on('submit', function() {
             $.modal.close();
         },
         error: function(xhr, textStatus, errorThrown) {
-            var err_msg;
-            if (xhr.responseText) {
-                err_msg = JSON.parse(xhr.responseText).error_msg;
-            } else {
-                err_msg = "{% trans "Failed. Please check the network." %}";
-            }
+            var err_msg = prepareAjaxErrorMsg(xhr);
             $error.html(err_msg).show();
             enable($submitBtn);
         }
@@ -539,12 +516,7 @@ $('#set-reference-id-form').on('submit', function() {
             $.modal.close();
         },
         error: function(xhr, textStatus, errorThrown) {
-            var err_msg;
-            if (xhr.responseText) {
-                err_msg = JSON.parse(xhr.responseText).error_msg;
-            } else {
-                err_msg = "{% trans "Failed. Please check the network." %}";
-            }
+            var err_msg = prepareAjaxErrorMsg(xhr);
             $error.html(err_msg).show();
             enable($submitBtn);
         }
@@ -595,11 +567,8 @@ $('#set-quota-form').on('submit', function() {
             $.modal.close();
         },
         error: function(xhr, textStatus, errorThrown) {
-            if (xhr.responseText) {
-                apply_form_error(form_id, JSON.parse(xhr.responseText).error_msg);
-            } else {
-                apply_form_error(form_id, "{% trans "Failed. Please check the network." %}");
-            }
+            var err_msg = prepareAjaxErrorMsg(xhr);
+            apply_form_error(form_id, err_msg);
             enable($submitBtn);
         }
     });

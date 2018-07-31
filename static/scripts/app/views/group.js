@@ -183,12 +183,7 @@ define([
                     }
                 },
                 error: function(xhr) {
-                    var err_msg;
-                    if (xhr.responseText) {
-                        err_msg = JSON.parse(xhr.responseText).error_msg;
-                    } else {
-                        err_msg = gettext("Please check the network.");
-                    }
+                    var err_msg = Common.prepareAjaxErrorMsg(xhr);
                     _this.$toolbar.addClass('hide');
                     _this.$path.empty();
                     _this.$toolbar2.empty();
@@ -208,16 +203,7 @@ define([
                 success: function(collection, response, opts) {
                 },
                 error: function(collection, response, opts) {
-                    var err_msg;
-                    if (response.responseText) {
-                        if (response['status'] == 401 || response['status'] == 403) {
-                            err_msg = gettext("Permission error");
-                        } else {
-                            err_msg = gettext("Error");
-                        }
-                    } else {
-                        err_msg = gettext('Please check the network.');
-                    }
+                    var err_msg = Common.prepareCollectionFetchErrorMsg(collection, response, opts);
                     _this.$error.html(err_msg).show();
                 },
                 complete: function() {

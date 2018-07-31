@@ -134,19 +134,10 @@ define([
                 cache: false,
                 reset: true,
                 error: function(collection, response, opts) {
-                    _this.$loadingTip.hide();
                     var $error = _this.$('.error');
-                    var err_msg;
-                    if (response.responseText) {
-                        if (response['status'] == 401 || response['status'] == 403) {
-                            err_msg = gettext("Permission error");
-                        } else {
-                            err_msg = gettext("Error");
-                        }
-                    } else {
-                        err_msg = gettext('Please check the network.');
-                    }
+                    var err_msg = Common.prepareCollectionFetchErrorMsg(collection, response, opts);
                     $error.html(err_msg).show();
+                    _this.$loadingTip.hide();
                 }
             });
         },

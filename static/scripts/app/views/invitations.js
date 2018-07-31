@@ -119,14 +119,8 @@ define([
                         $.modal.close();
                     },
                     error: function(xhr) {
-                        var err_msg;
-                        if (xhr.responseText) {
-                            err_msg = xhr.responseJSON.error_msg||xhr.responseJSON.detail;
-                        } else {
-                            err_msg = gettext('Please check the network.');
-                        }
-                        $error.html(err_msg).show();
-
+                        var error_msg = Common.prepareAjaxErrorMsg(xhr);
+                        $error.html(error_msg).show();
                         Common.enableButton($submitBtn);
                     },
                     complete: function() {
@@ -183,16 +177,7 @@ define([
                 cache: false,
                 reset: true,
                 error: function(collection, response, opts) {
-                    var err_msg;
-                    if (response.responseText) {
-                        if (response['status'] == 401 || response['status'] == 403) {
-                            err_msg = gettext("Permission error");
-                        } else {
-                            err_msg = JSON.parse(response.responseText).error_msg;
-                        }
-                    } else {
-                        err_msg = gettext("Failed. Please check the network.");
-                    }
+                    var err_msg = Common.prepareCollectionFetchErrorMsg(collection, response, opts);
                     _this.$error.html(err_msg).show();
                 },
                 complete: function() {
