@@ -29,7 +29,7 @@ class FileUUIDMapManager(models.Manager):
         """
         uuid = self.get_fileuuidmap_by_path(repo_id, parent_path, filename, is_dir)
         if not uuid:
-            uuid = self.model(repo_id=repo_id, parent_path=parent_path, 
+            uuid = self.model(repo_id=repo_id, parent_path=parent_path,
                               filename=filename, is_dir=is_dir)
             uuid.save(using=self._db)
         return uuid

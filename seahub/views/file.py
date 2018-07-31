@@ -374,7 +374,7 @@ def view_lib_file_via_smart_link(request, dirent_uuid, dirent_name):
     if not is_dir:
         redirect_to = reverse('view_lib_file', args=[repo_id, dirent_path])
     else:
-        redirect_to = '/#common/lib/%s/%s' % (repo_id, dirent_path.strip('/'))
+        redirect_to = '%s#common/lib/%s/%s' % (settings.SITE_ROOT, repo_id, dirent_path.strip('/'))
 
     return HttpResponseRedirect(redirect_to)
 
