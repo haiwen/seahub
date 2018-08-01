@@ -1749,7 +1749,7 @@ button.sf-dropdown-toggle:focus {
 }
 .select2-container--default .select2-search--inline .select2-search__field {
     padding:0 5px;
-    box-sizing:content-box;
+    min-width: 2em; /* make sure there is enough space */
 }
 .select2-results__option .avatar {
     margin-right:10px;
