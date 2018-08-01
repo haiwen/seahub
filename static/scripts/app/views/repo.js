@@ -36,7 +36,9 @@ define([
             'click .js-popup-share-link-admin': 'popupShareLinkAdmin',
             'click .js-popup-folder-perm-admin': 'popupFolderPermAdmin',
             'click .js-repo-details': 'viewDetails',
-            'click .js-add-label': 'addLabel'
+            'click .js-add-label': 'addLabel',
+            'click .mobile-menu-control': 'showMobileMenu',
+            'click .mobile-menu-mask': 'closeMobileMenu'
         },
 
         initialize: function(options) {
@@ -68,6 +70,7 @@ define([
             this.dropdown = new DropdownView($.extend({
                 el: this.$('.sf-dropdown')
             }, dropdownOptions));
+            this.mobileMenu = this.$(".mobile-menu-container");
             return this;
         },
 
@@ -86,6 +89,7 @@ define([
         },
 
         del: function() {
+            this.hideMobileMenu();
             var _this = this;
             var repo_name = this.model.get('name');
             var popupTitle = gettext("Delete Library");
@@ -115,6 +119,7 @@ define([
         },
 
         share: function() {
+            this.hideMobileMenu();
             var options = {
                 'is_repo_owner': true,
                 'is_virtual': this.model.get('virtual'),
@@ -134,6 +139,7 @@ define([
         },
 
         rename: function() {
+            this.hideMobileMenu();
             var repo_name = this.model.get('name');
 
             var form = $(this.renameTemplate({
@@ -222,6 +228,7 @@ define([
         },
 
         transfer: function() {
+            this.hideMobileMenu();
             var _this = this;
             this.togglePopup(); // Close the popup
 
@@ -280,6 +287,7 @@ define([
         },
 
         popupHistorySetting: function() {
+            this.hideMobileMenu();
             var options = {
                 'repo_name': this.model.get('name'),
                 'repo_id': this.model.get('id'),
@@ -291,6 +299,7 @@ define([
         },
 
         popupShareLinkAdmin: function() {
+            this.hideMobileMenu();
             var options = {
                 'repo_name': this.model.get('name'),
                 'repo_id': this.model.get('id')
@@ -301,6 +310,7 @@ define([
         },
 
         popupFolderPermAdmin: function() {
+            this.hideMobileMenu();
             var options = {
                 'repo_name': this.model.get('name'),
                 'repo_id': this.model.get('id')
@@ -321,6 +331,7 @@ define([
         },
 
         viewDetails: function() {
+            this.hideMobileMenu();
             var obj = this.model.toJSON();
             var icon_size = Common.isHiDPI() ? 48 : 24;
             var data = $.extend({}, obj, {
@@ -429,6 +440,26 @@ define([
                 return false;
             });
 
+            return false;
+        },
+
+        showMobileMenu: function(event) {
+            var mobileMenu = this.mobileMenu.length ? this.mobileMenu : null;
+            if (mobileMenu) {
+                mobileMenu.slideDown('fast');
+            }
+            return false;
+        },
+
+        hideMobileMenu: function() {
+            var mobileMenu = this.mobileMenu.length ? this.mobileMenu : null;
+            if (mobileMenu) {
+                mobileMenu.slideUp('fast');
+            }
+        },
+
+        closeMobileMenu: function() {
+            this.hideMobileMenu();
             return false;
         }
 

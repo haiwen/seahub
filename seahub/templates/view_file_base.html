@@ -3,7 +3,9 @@
 
 
 {% block sub_title %}{{filename}} - {% endblock %}
-{% block viewport %}{% endblock %}
+{% block viewport %}
+<meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no" />
+{% endblock %}
 
 {% block extra_style %}
 <link rel="stylesheet" type="text/css" href="{{ MEDIA_URL }}css/file_view_extra.css" />
@@ -56,41 +58,7 @@
             </div>
         </div>
 
-        <div class="sf-btn-group file-view-op">
-            <a class="sf-btn-group-btn sf-btn-group-btn-first sf-btn-link op-icon sf2-icon-folder" href="{{ SITE_ROOT }}#common/lib/{{ repo.id }}/{{ parent_dir|strip_slash }}" title="{% trans "Open parent folder" %}"></a>
-
-            {% if can_lock_unlock_file %}
-                {% if not file_locked %}
-                    <button id="lock-file" class="sf-btn-group-btn op-icon sf2-icon-lock" title="{% trans "Lock" %}"></button>
-                    <button id="unlock-file" class="sf-btn-group-btn op-icon sf2-icon-unlock hide" title="{% trans "Unlock" %}"></button>
-                {% elif locked_by_me %}
-                    <button id="unlock-file" class="sf-btn-group-btn op-icon sf2-icon-unlock" title="{% trans "Unlock" %}"></button>
-                    <button id="lock-file" class="sf-btn-group-btn op-icon sf2-icon-lock hide" title="{% trans "Lock" %}"></button>
-                {% endif %}
-            {% endif %}
-
-            {% if not repo.encrypted %}
-            {% if request.user.permissions.can_generate_share_link %}
-            <button id="share" class="sf-btn-group-btn op-icon sf2-icon-share" data-link="{{ file_shared_link }}" data-token="{{ fileshare.token }}" title="{% trans "Share" %}"></button>
-            {% endif %}
-            {% endif %}
-
-            {% if file_perm == 'rw' %}
-            <a class="sf-btn-group-btn sf-btn-link op-icon sf2-icon-clock" id="history" href="{% url 'file_revisions' repo.id %}?p={{ path|urlencode }}" title="{% trans "History" %}"></a>
-            {% endif %}
-
-            {% if request.user.is_authenticated and can_edit_file %}
-                {% block edit_file %}
-                {% endblock %}
-            {% endif %}
-
-            {% if enable_file_comment %}
-            <a class="sf-btn-group-btn sf-btn-link op-icon sf2-icon-download" href="?dl=1" id="download" title="{% trans "Download"%}"></a>
-            <button id="discuss" class="sf-btn-group-btn sf-btn-group-btn-last op-icon sf2-icon-msgs" title="{% trans "Comment" %}"></button>
-            {% else %}
-            <a class="sf-btn-group-btn sf-btn-group-btn-last sf-btn-link op-icon sf2-icon-download" href="?dl=1" id="download" title="{% trans "Download"%}"></a>
-            {% endif %}
-
+        <div id="file-view-op" class="sf-btn-group file-view-op">
         </div>
 
     </div>
@@ -104,7 +72,7 @@
             {% endif %}
             </div>
           {% else %}
-              {% block file_view %}{% endblock %}
+            {% block file_view %}{% endblock %}
           {% endif %}
         </div>
         <div id="file-discussions" class="comments-panel" style="display:none;"></div>
@@ -159,6 +127,91 @@
 </li>
 </script>
 
+<script type="text/template" id="editor-tools-tmpl">
+    <a class="sf-btn-group-btn sf-btn-group-btn-first sf-btn-link op-icon sf2-icon-folder" href="{{ SITE_ROOT }}#common/lib/{{ repo.id }}/{{ parent_dir|strip_slash }}" title="{% trans "Open parent folder" %}"></a>
+
+    {% if can_lock_unlock_file %}
+    {% if not file_locked %}
+    <button id="lock-file" class="sf-btn-group-btn op-icon sf2-icon-lock" title="{% trans "Lock" %}"></button>
+    <button id="unlock-file" class="sf-btn-group-btn op-icon sf2-icon-unlock hide" title="{% trans "Unlock" %}"></button>
+    {% elif locked_by_me %}
+    <button id="unlock-file" class="sf-btn-group-btn op-icon sf2-icon-unlock" title="{% trans "Unlock" %}"></button>
+    <button id="lock-file" class="sf-btn-group-btn op-icon sf2-icon-lock hide" title="{% trans "Lock" %}"></button>
+    {% endif %}
+    {% endif %}
+
+    {% if not repo.encrypted %}
+    {% if request.user.permissions.can_generate_share_link %}
+    <button id="share" class="sf-btn-group-btn op-icon sf2-icon-share" data-link="{{ file_shared_link }}" data-token="{{ fileshare.token }}" title="{% trans "Share" %}"></button>
+    {% endif %}
+    {% endif %}
+
+    {% if file_perm == 'rw' %}
+    <a class="sf-btn-group-btn sf-btn-link op-icon sf2-icon-clock" id="history" href="{% url 'file_revisions' repo.id %}?p={{ path|urlencode }}" title="{% trans "History" %}"></a>
+    {% endif %}
+
+    {% if request.user.is_authenticated and can_edit_file %}
+    {% block edit_file %}
+    {% endblock %}
+    {% endif %}
+
+    {% if enable_file_comment %}
+    <a class="sf-btn-group-btn sf-btn-link op-icon sf2-icon-download" href="?dl=1" id="download" title="{% trans "Download"%}"></a>
+    <button id="discuss" class="sf-btn-group-btn sf-btn-group-btn-last op-icon sf2-icon-msgs" title="{% trans "Comment" %}"></button>
+    {% else %}
+    <a class="sf-btn-group-btn sf-btn-group-btn-last sf-btn-link op-icon sf2-icon-download" href="?dl=1" id="download" title="{% trans "Download"%}"></a>
+    {% endif %}
+
+</script>
+
+<script type="text/template" id="mobile-editor-tools-tmpl">
+    <a class="sf2-icon-more sf2-mobile-menu-toggle"></a>
+    <div class="sf-dropdown-menu sf2-mobile-menu">
+        <ul>
+            <li>
+                <a  id="openParent" class="op openfolder" href="{{ SITE_ROOT }}#common/lib/{{ repo.id }}/{{ parent_dir|strip_slash }}" title="{% trans "Open parent folder" %}">{% trans "Open parent folder" %}</a>
+            </li>
+
+            {% if can_lock_unlock_file %}
+            {% if not file_locked %}
+            <li id="lock-file">
+                <a class="op lock-file" title="{% trans "Lock" %}">{% trans "Lock" %}</a>
+            </li>
+            <li id="unlock-file" class="hide">
+                <a class="op unlock-file" title="{% trans "Unlock" %}">{% trans "Unlock" %}</a>
+            </li>
+            {% elif locked_by_me %}
+            <li id="unlock-file">
+                <a class="op unlock-file" title="{% trans "Unlock" %}">{% trans "Unlock" %}</a>
+            </li>
+            <li id="lock-file" class="hide">
+                <a class="op lock-file" title="{% trans "Lock" %}">{% trans "Lock" %}</a>
+            </li>
+            {% endif %}
+            {% endif %}
+
+            {% if not repo.encrypted %}
+            {% if request.user.permissions.can_generate_share_link %}
+            <li>
+                <a id="share" class="op share" data-link="{{ file_shared_link }}" data-token="{{ fileshare.token }}" title="{% trans "Share" %}">{% trans "Share" %}</a>
+            </li>
+            {% endif %}
+            {% endif %}
+
+            {% if file_perm == 'rw' %}
+            <li>
+                <a id="history" class="op history" href="{% url 'file_revisions' repo.id %}?p={{ path|urlencode }}" title="{% trans "History" %}">{% trans "History" %}</a>
+            </li>
+            {% endif %}
+
+            <li>
+                <a id="download" class="op download" href="?dl=1" title="{% trans "Download"%}">{% trans "Download"%}</a>
+            </li>
+        </ul>
+        <div>
+</script>
+
+
 {% endblock %}
 
 {% block extra_script %}
@@ -178,22 +231,6 @@ $(function() {
 
 // share link
 {% include "snippets/shared_link_js.html" %}
-$('#share').on('click', function() {
-    var op = $(this),
-        name = "{{filename|escapejs}}",
-        path = "{{path|escapejs}}",
-        aj_data = {
-            'repo_id': "{{ repo.id }}",
-            'path': path
-        },
-        type = 'f',
-        cur_path = path.substr(0, path.length - name.length);
-
-    showSharePopup(op, name, aj_data, type, cur_path);
-
-    return false;
-});
-
 
 // star file
 $('#file-star').on('click', function() {
@@ -234,26 +271,6 @@ $('#file-star').on('click', function() {
 
     return false;
 });
-
-{% if can_lock_unlock_file %}
-// lock/unlock file
-$('#lock-file, #unlock-file').on('click', function() {
-    var op = $(this).attr('id') == 'lock-file' ? 'lock' : 'unlock',
-        path = '{{path|escapejs}}';
-    $.ajax({
-        url: '{% url 'api-v2.1-file-view' repo.id %}' + '?p=' + encodeURIComponent(path),
-        type: 'PUT',
-        dataType: 'json',
-        cache: false,
-        beforeSend: prepareCSRFToken,
-        data: {'operation': op},
-        success: function() {
-            $('#lock-file, #unlock-file, .file-locked-icon').toggleClass('hide');
-        },
-        error: ajaxErrorHandler
-    });
-});
-{% endif %}
 
 // set 'side toolbar' position
 function setToolbarPos() {
@@ -538,20 +555,129 @@ var fileDiscussions = {
 };
 // init
 fileDiscussions.init();
-
-$('#discuss').on('click', function() {
-    if (fileDiscussions.$el.is(':visible')) {
-        fileDiscussions.hide();
-    } else {
-        fileDiscussions.show();
-    }
-});
 $(document).on('keydown', function(e) {
     // ESCAPE key pressed
     if (e.which == 27) {
         fileDiscussions.hide();
     }
 });
+
+var DropDownMenu = {
+    $el: $("#file-view-op"),
+    $mobileTmp: _.template($("#mobile-editor-tools-tmpl").html()),
+    $deviceTmp: _.template($("#editor-tools-tmpl").html()),
+
+    init: function() {
+        var _this = this;
+        this.render();
+        window.onresize = function(){
+            _this.render();
+        }
+    },
+
+    render: function() {
+        var _this = this;
+        var template = $(window).width() > 992 ? this.$deviceTmp : this.$mobileTmp;
+        this.$el.html(template);
+
+        //bind click event for the menu item;
+        {% if can_lock_unlock_file %}
+        // lock/unlock file
+        $('#lock-file, #unlock-file').on('click', function(event) {
+            var eventSource = this;
+            _this.clickToggleLock(eventSource);
+        })
+        {% endif %}
+
+        $('#share').on('click', function() {
+            var eventSource = $(this);
+            _this.clickToShare(eventSource);
+        });
+        
+        $('#discuss').on('click', function() {
+            _this.clickToCommet();
+        });
+        
+        //if mobile : bind the popmenu event
+        if ($(".sf2-mobile-menu-toggle").length) {
+            $(".sf2-mobile-menu-toggle").on('click',function(){
+                _this.clickToShowPopMenu();
+                return false;
+            })
+            $(document).on('click', function(e){
+                var target = e.target || event.srcElement;
+                var isDisplay = $('.sf2-mobile-menu').css('display') === "block" ? true : false;
+                if (!isDisplay) {
+                    return true;
+                }
+
+                if (!$('.sf2-mobile-menu').is(target) &&
+                    !$('.sf2-mobile-menu').find('*').is(target)) {
+                    $('.sf2-mobile-menu').hide();
+                }
+                return true;
+            });
+            $("#download").on("click", function(){
+                _this.clickToClosePopMenu();
+            })
+        }
+    },
+
+    clickToggleLock: function(eventSource) {
+        this.clickToClosePopMenu();
+        var op = $(eventSource).attr('id') == 'lock-file' ? 'lock' : 'unlock',
+            path = '{{path|escapejs}}';
+        $.ajax({
+            url: '{% url 'api-v2.1-file-view' repo.id %}' + '?p=' + encodeURIComponent(path),
+            type: 'PUT',
+            dataType: 'json',
+            cache: false,
+            beforeSend: prepareCSRFToken,
+            data: {'operation': op},
+            success: function() {
+                $('#lock-file, #unlock-file, .file-locked-icon').toggleClass('hide');
+            },
+            error: ajaxErrorHandler
+        });
+    },
+
+    clickToShare: function(eventSource) {
+        this.clickToClosePopMenu();
+        var op = $(eventSource),
+            name = "{{filename|escapejs}}",
+            path = "{{path|escapejs}}",
+            aj_data = {
+                'repo_id': "{{ repo.id }}",
+                'path': path
+            },
+            type = 'f',
+            cur_path = path.substr(0, path.length - name.length);
+
+        showSharePopup(op, name, aj_data, type, cur_path);
+
+        return false;
+    },
+
+    clickToCommet: function() {
+        if (fileDiscussions.$el.is(':visible')) {
+            fileDiscussions.hide();
+        } else {
+            fileDiscussions.show();
+        }
+    },
+
+    clickToClosePopMenu: function() {
+        $(".sf2-mobile-menu-mask").hide();
+        $(".sf2-mobile-menu").hide();
+    },
+    
+    clickToShowPopMenu: function() {
+        $(".sf2-mobile-menu-mask").show();
+        $(".sf2-mobile-menu").show();
+    }
+}
+
+DropDownMenu.init();
 
 // for 'go back'
 var $history = $('#history');

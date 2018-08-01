@@ -141,25 +141,28 @@
     </td>
     <td class="repo-op-td">
         <div class="op-container">
-            <div class="sf-dropdown sf-dropdown-inline">
-                <a href="#" class="sf2-icon-caret-down more-op-icon op-icon sf-dropdown-toggle" title="{% trans "More Operations" %}" aria-label="{% trans "More Operations" %}"></a>
-                <ul class="hidden-op repo-hidden-op hide sf-dropdown-menu">
-                    <li><a href="#" class="repo-share-btn op">{% trans "Share" %}</a></li>
-                    <li><a href="#" class="repo-delete-btn op">{% trans "Delete" %}</a></li>
-                    <li><a class="op js-repo-rename" href="#">{% trans "Rename" %}</a></li>
-                    <li><a class="op js-repo-transfer" href="#">{% trans "Transfer" %}</a></li>
-                    <li><a class="op js-popup-history-setting" href="#">{% trans "History Setting" %}</a></li>
-                    <% if (encrypted) { %>
-                    <li><a class="op js-repo-change-password" href="#">{% trans "Change Password" %}</a></li>
-                    <% } %>
-                    <% if (!encrypted && (can_generate_share_link || can_generate_upload_link)) { %>
-                    <li><a class="op js-popup-share-link-admin" href="#">{% trans "Share Links" %}</a></li>
-                    <% } %>
-                    <% if (app.pageOptions.folder_perm_enabled) { %>
-                    <li><a class="op js-popup-folder-perm-admin" href="#">{% trans "Folder Permission" %}</a></li>
-                    <% } %>
-                    <li><a class="op js-repo-details" href="#">{% trans "Details" %}</a></li>
-                </ul>
+            <a href="#" class="mobile-menu-control sf2-icon-caret-down more-op-icon op-icon sf-dropdown-toggle" title="{% trans "More Operations" %}" aria-label="{% trans "More Operations" %}"></a>
+            <div class="mobile-menu-container" style="display:none">
+                <div class="mobile-menu-mask"></div>
+                <div class="mobile-menu-content">
+                    <ul>
+                        <li><a href="#" class="repo-share-btn op">{% trans "Share" %}</a></li>
+                        <li><a href="#" class="repo-delete-btn op">{% trans "Delete" %}</a></li>
+                        <li><a class="op js-repo-rename" href="#">{% trans "Rename" %}</a></li>
+                        <li><a class="op js-repo-transfer" href="#">{% trans "Transfer" %}</a></li>
+                        <li><a class="op js-popup-history-setting" href="#">{% trans "History Setting" %}</a></li>
+                        <% if (encrypted) { %>
+                        <li><a class="op js-repo-change-password" href="#">{% trans "Change Password" %}</a></li>
+                        <% } %>
+                        <% if (!encrypted && (can_generate_share_link || can_generate_upload_link)) { %>
+                        <li><a class="op js-popup-share-link-admin" href="#">{% trans "Share Links" %}</a></li>
+                        <% } %>
+                        <% if (app.pageOptions.folder_perm_enabled) { %>
+                        <li><a class="op js-popup-folder-perm-admin" href="#">{% trans "Folder Permission" %}</a></li>
+                        <% } %>
+                        <li><a class="op js-repo-details" href="#">{% trans "Details" %}</a></li>
+                    </ul>
+                </div>
             </div>
         </div>
     </td>
@@ -853,60 +856,60 @@
     </td>
     <td class="dirent-op">
         <div class="op-container">
-            <div class="sf-dropdown sf-dropdown-inline">
-                <a href="#" class="more-op-icon sf2-icon-caret-down op-icon sf-dropdown-toggle" title="{% trans "More Operations"%}" aria-label="{% trans "More Operations" %}"></a>
-                <div class="hide sf-dropdown-menu">
-                    <ul>
-                    <li><a class="op download" href="<%= download_url %>">{% trans "Download" %}</a></li>
-                    <% if (!repo_encrypted && can_generate_share_link) { %>
-                    <li><a class="op share" href="#">{% trans "Share" %}</a></li>
-                    <% } %>
-                    <% if (dirent.perm == 'rw') { %>
-                    <% if (!dirent.is_locked || (dirent.is_locked && dirent.locked_by_me)) { %>
-                    <li><a class="op delete" href="#">{% trans "Delete" %}</a></li>
-                    <li><a class="op rename" href="#">{% trans "Rename" %}</a></li>
-                    <li><a class="op mv" href="#">{% trans "Move" %}</a></li>
-                    <% } %>
-                    <li><a class="op cp" href="#">{% trans "Copy" %}</a></li>
-                        <% if (is_pro) { %>
-                        <% if (dirent.is_locked) { %>
-                            <% if (dirent.locked_by_me) { %>
-                            <li><a class="op unlock-file" href="#">{% trans "Unlock" %}</a></li>
-                            <% } %>
-                        <% } else { %>
-                        <li><a class="op lock-file" href="#">{% trans "Lock" %}</a></li>
+            <a href="#" class="mobile-menu-control more-op-icon sf2-icon-caret-down op-icon sf-dropdown-toggle" title="{% trans "More Operations"%}" aria-label="{% trans "More Operations" %}"></a>
+            <div class="mobile-menu-container" style="display:none">
+                <div class="mobile-menu-mask"></div>
+                <div class="mobile-menu-content">
+                <ul>
+                <li><a class="op download download-close-menu" href="<%= download_url %>">{% trans "Download" %}</a></li>
+                <% if (!repo_encrypted && can_generate_share_link) { %>
+                <li><a class="op share" href="#">{% trans "Share" %}</a></li>
+                <% } %>
+                <% if (dirent.perm == 'rw') { %>
+                <% if (!dirent.is_locked || (dirent.is_locked && dirent.locked_by_me)) { %>
+                <li><a class="op delete" href="#">{% trans "Delete" %}</a></li>
+                <li><a class="op rename" href="#">{% trans "Rename" %}</a></li>
+                <li><a class="op mv" href="#">{% trans "Move" %}</a></li>
+                <% } %>
+                <li><a class="op cp" href="#">{% trans "Copy" %}</a></li>
+                    <% if (is_pro) { %>
+                    <% if (dirent.is_locked) { %>
+                        <% if (dirent.locked_by_me) { %>
+                        <li><a class="op unlock-file" href="#">{% trans "Unlock" %}</a></li>
                         <% } %>
-                        <% } %>
+                    <% } else { %>
+                    <li><a class="op lock-file" href="#">{% trans "Lock" %}</a></li>
                     <% } %>
+                    <% } %>
+                <% } %>
 
-                    <% if (dirent.perm == 'r') { %>
-                        <% if (!repo_encrypted) { %>
-                        <li><a class="op cp" href="#">{% trans "Copy" %}</a></li>
+                <% if (dirent.perm == 'r') { %>
+                    <% if (!repo_encrypted) { %>
+                    <li><a class="op cp" href="#">{% trans "Copy" %}</a></li>
+                    <% } %>
+                <% } %>
+                </ul>
+                <!-- <div class="menu-inner-divider"></div> -->
+                <ul>
+                <% if (dirent.perm == 'rw') { %>
+                    <% if (app.pageOptions.enable_file_comment) { %>
+                    <li><a class="op file-comment" href="#">{% trans "Comment" %}</a><li>
+                    <% } %>
+                    <li><a class="op file-history" href="{{ SITE_ROOT }}repo/file_revisions/<%= repo_id %>/?p=<% print(encodeURIComponent(dirent_path)); %>">{% trans "History" %}</a></li>
+                    <% if (is_pro) { %>
+                        <% if (file_audit_enabled) { %>
+                    <li><a class="op" href="{{ SITE_ROOT }}repo/file-access/<%= repo_id %>/?p=<% print(encodeURIComponent(dirent_path)); %>" target="_blank">{% trans "Access Log" %}</a></li>
                         <% } %>
                     <% } %>
-                    </ul>
-                    <div class="menu-inner-divider"></div>
-                    <ul>
-                    <% if (dirent.perm == 'rw') { %>
-                        <% if (app.pageOptions.enable_file_comment) { %>
-                        <li><a class="op file-comment" href="#">{% trans "Comment" %}</a><li>
-                        <% } %>
-                        <li><a class="op file-history" href="{{ SITE_ROOT }}repo/file_revisions/<%= repo_id %>/?p=<% print(encodeURIComponent(dirent_path)); %>">{% trans "History" %}</a></li>
-                        <% if (is_pro) { %>
-                            <% if (file_audit_enabled) { %>
-                        <li><a class="op" href="{{ SITE_ROOT }}repo/file-access/<%= repo_id %>/?p=<% print(encodeURIComponent(dirent_path)); %>" target="_blank">{% trans "Access Log" %}</a></li>
-                            <% } %>
-                        <% } %>
-                        <li><a class="op view-details" href="#">{% trans "Details" %}</a></li>
-                    <% } else if (dirent.perm == 'r') { %>
-                        <% if (app.pageOptions.enable_file_comment) { %>
-                        <li><a class="op file-comment" href="#">{% trans "Comment" %}</a><li>
-                        <% } %>
-                        <li><a class="op file-history" href="{{ SITE_ROOT }}repo/file_revisions/<%= repo_id %>/?p=<% print(encodeURIComponent(dirent_path)); %>">{% trans "History" %}</a></li>
-                        <li><a class="op view-details" href="#">{% trans "Details" %}</a></li>
+                    <li><a class="op view-details" href="#">{% trans "Details" %}</a></li>
+                <% } else if (dirent.perm == 'r') { %>
+                    <% if (app.pageOptions.enable_file_comment) { %>
+                    <li><a class="op file-comment" href="#">{% trans "Comment" %}</a><li>
                     <% } %>
-                    </ul>
-                </div>
+                    <li><a class="op file-history" href="{{ SITE_ROOT }}repo/file_revisions/<%= repo_id %>/?p=<% print(encodeURIComponent(dirent_path)); %>">{% trans "History" %}</a></li>
+                    <li><a class="op view-details" href="#">{% trans "Details" %}</a></li>
+                <% } %>
+                </ul>
             </div>
         </div>
     </td>

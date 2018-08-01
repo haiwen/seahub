@@ -1678,6 +1678,95 @@ button.sf-dropdown-toggle:focus {
     text-decoration:none;
     color:#fff;
 }
+
+/* mobile flie-menu */
+.mobile-menu-mask {
+    position: fixed;
+    width: 100%;
+    height: 100%;
+    top: 0;
+    left: 0;
+    z-index: 99;
+    background-color: #000;
+    opacity: 0.1;
+}
+
+.mobile-menu-content {
+    position: fixed;
+    width: 100%;
+    left: 0;
+    bottom: 0;
+    z-index: 100;
+    background-color: #fff;
+}
+
+.mobile-menu-content ul {
+    border-top: solid 1px #eee;
+}
+
+.mobile-menu-content ul li {
+    line-height: 40px;
+    text-align: center;
+}
+
+.mobile-menu-content ul li:hover{
+    background-color: #eb8205;
+}
+
+.mobile-menu-content a {
+    display: inline-block;
+    width: 100%;
+    height: 100%;
+    color: #000;
+}
+
+/*mobiel editor-menu and responsed */
+@media (max-width: 991.98px) {
+    #file-enc-cont {
+        width: 100%;
+        display: none;
+    }
+    .CodeMirror.CodeMirror-wrap{
+        width: 100%;
+        margin-top: -20px;
+    }
+
+    .sf2-mobile-menu-toggle {
+        font-size: 22px;
+        line-height: 1;
+        color: #999;
+        margin-top: 8px;
+    }
+
+    .sf2-mobile-menu-toggle:hover {
+        text-decoration: none;
+        color:#999;
+    }
+
+    .sf2-mobile-menu {
+        position: absolute;
+        display: none;
+        top: 50px;
+        right: 10px;
+        background:#fff;
+        z-index: 20;
+    }
+
+    .sf2-mobile-menu ul li  a {
+        min-width: 10rem;
+        padding: 0.5rem 0.75rem;
+    }
+
+    #file-view {
+        width: 100% !important;
+        border-right: none !important;
+    }
+
+    #pdf {
+        width: 95% !important;
+    }
+}
+
 /**** discussions/comments ****/
 .msg {
     padding:5px 10px;
@@ -2979,6 +3068,11 @@ button.sf-dropdown-toggle:focus {
     background:#fff;
     text-align:center;
 }
+@media (max-width:991.98px) {
+    #file-view-tip {
+        width: 80%;
+    }
+}
 #docu-view {
     font-size:14px;/*override .ace_editor*/
     line-height:1.6em;
@@ -3230,6 +3324,27 @@ button.sf-dropdown-toggle:focus {
     margin: auto;
     width: 500px;
     height: 30px;
+}
+@media (max-width: 991.98px){
+    .video-container {
+        margin: 0 auto;
+        width: 80%;
+        height: 80%;
+    }
+    .sf-video-dimensions {
+        width: 100%;
+        height: 100%;
+    }
+    .audio-container {
+        width: 350px;
+        max-width: 500px;
+    }
+    .mejs-container {
+        width: 100% !important;
+    }
+    .mejs-time-total {
+        width: 60%
+    }
 }
 
 /* wiki page */
