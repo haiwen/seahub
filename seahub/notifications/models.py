@@ -698,7 +698,7 @@ class UserNotification(models.Model):
 
         msg = _(u"User <a href='%(user_profile)s'>%(group_staff)s</a> has added you to group <a href='%(href)s'>%(group_name)s</a>") % {
             'user_profile': reverse('user_profile', args=[group_staff]),
-            'group_staff': group_staff,
+            'group_staff': escape(email2nickname(group_staff)),
             'href': HASH_URLS['GROUP_INFO'] % {'group_id': group_id},
             'group_name': escape(group.group_name)}
         return msg
