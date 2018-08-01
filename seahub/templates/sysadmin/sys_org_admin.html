@@ -23,10 +23,6 @@
     <h3>{% trans "Add organization" %}</h3>
     <label for="id_name">{% trans "Name" %}</label><br />
     <input type="text" name="name" id="id_name" class="input" /><br />
-
-    <label for="id_url">{% trans "Url Prefix" %}</label><br />
-    <input type="text" name="url" id="id_url" class="input" /><br />
-
     <label for="id_owner">{% trans "Owner" %}</label><span class="icon-question-sign" title="{% trans "Owner can use admin panel in an organization, must be a new account." %}" style="color:#666; margin-left:3px;"></span><br />
     <input type="text" name="owner" id="id_owner" class="input" /><br />
     <label for="id_password1">{% trans "Password" %}</label><br />
@@ -69,17 +65,12 @@ $('#add-org-form').on('submit', function() {
         form_id = form.attr('id'),
         submit_btn = form.find('[type="submit"]'),
         name = $.trim(form.children('[name="name"]').val()),
-        url_prefix = $.trim(form.children('[name="url"]').val()),
         owner = $.trim(form.children('[name="owner"]').val()),
         pwd1 = $.trim(form.children('[name="password1"]').val()),
         pwd2 = $.trim(form.children('[name="password2"]').val());
 
     if (!name) {
         apply_form_error(form_id, "{% trans "Name can not be blank"%}");
-        return false;
-    }
-    if (!url_prefix) {
-        apply_form_error(form_id, "{% trans "Url can not be blank"%}");
         return false;
     }
     if (!owner) {
@@ -109,7 +100,6 @@ $('#add-org-form').on('submit', function() {
         data: {
             'org_name': name,
             'name': owner,
-            'url_prefix': url_prefix,
             'email': owner,
             'password1': pwd1,
             'password2': pwd2
