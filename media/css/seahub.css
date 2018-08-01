@@ -1762,7 +1762,7 @@ button.sf-dropdown-toggle:focus {
     }
 
     #pdf {
-        width: 95%;
+        width: 95% !important;
     }
 }
 
@@ -3059,6 +3059,11 @@ button.sf-dropdown-toggle:focus {
     background:#fff;
     text-align:center;
 }
+@media (max-width:991.98px) {
+    #file-view-tip {
+        width: 80%;
+    }
+}
 #docu-view {
     font-size:14px;/*override .ace_editor*/
     line-height:1.6em;
@@ -3310,6 +3315,27 @@ button.sf-dropdown-toggle:focus {
     margin: auto;
     width: 500px;
     height: 30px;
+}
+@media (max-width: 991.98px){
+    .video-container {
+        margin: 0 auto;
+        width: 80%;
+        height: 80%;
+    }
+    .sf-video-dimensions {
+        width: 100%;
+        height: 100%;
+    }
+    .audio-container {
+        width: 350px;
+        max-width: 500px;
+    }
+    .mejs-container {
+        width: 100% !important;
+    }
+    .mejs-time-total {
+        width: 60%
+    }
 }
 
 /* wiki page */
