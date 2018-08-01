@@ -552,9 +552,10 @@ define([
 
         setFolderPerm: function() {
             this.hideMobileMenu();
+            var obj_name = this.model.get('obj_name');
             var options = {
-                'obj_name': this.model.get('obj_name'),
-                'dir_path': this.dir.path,
+                'obj_name': obj_name,
+                'dir_path': Common.pathJoin([this.dir.path, obj_name]),
                 'repo_id': this.dir.repo_id,
                 'is_group_owned_repo': this.dir.user_can_set_folder_perm ? true : false
             };

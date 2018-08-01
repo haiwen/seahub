@@ -18,11 +18,9 @@ define([
         initialize: function(options) {
             this.repo_id = options.repo_id;
             this.obj_name = options.obj_name;
-            this.dir_path = options.dir_path;
+            this.path = options.dir_path;
             this.is_group_owned_repo = options.is_group_owned_repo;
             this.group_id = options.group_id;
-            this.path = this.dir_path == '/' ? '/' :
-                Common.pathJoin([this.dir_path, this.obj_name]);
 
             this.render();
 
