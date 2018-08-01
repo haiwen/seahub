@@ -54,7 +54,7 @@ from seahub.views.modules import MOD_PERSONAL_WIKI, enable_mod_for_user, \
 import seahub.settings as settings
 from seahub.settings import AVATAR_FILE_STORAGE, \
     ENABLE_SUB_LIBRARY, ENABLE_FOLDER_PERM, ENABLE_REPO_SNAPSHOT_LABEL, \
-    UNREAD_NOTIFICATIONS_REQUEST_INTERVAL
+    UNREAD_NOTIFICATIONS_REQUEST_INTERVAL, ENABLE_USER_CLEAN_TRASH
 from seahub.constants import HASH_URLS
 
 LIBRARY_TEMPLATES = getattr(settings, 'LIBRARY_TEMPLATES', {})
@@ -271,7 +271,7 @@ def render_recycle_root(request, repo_id, referer):
     is_repo_owner = True if repo_owner == username else False
 
     enable_clean = False
-    if is_repo_owner:
+    if is_repo_owner and config.ENABLE_USER_CLEAN_TRASH:
         enable_clean = True
 
     return render(request, 'repo_dir_recycle_view.html', {
