@@ -10,6 +10,18 @@ from fabric.colors import red, green
 def make(default=True, lang='en'):
     """Update source language.
     """
+    # check branch name
+    with open('.git/HEAD') as f:
+        b1 = f.readline()
+
+    with open('../seahub-extra/.git/HEAD') as f:
+        b2 = f.readline()
+
+    if b1 != b2:
+        print 'Error: inconsistent Git branch names.'
+        return
+
+
     # add strings in 'organization'
     os.symlink('../../seahub-extra/seahub_extra/organizations', 'seahub/organizations')
 

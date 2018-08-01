@@ -14,7 +14,6 @@ from seahub.api2.utils import api_error
 from seahub.api2.authentication import TokenAuthentication
 from seahub.api2.throttling import UserRateThrottle
 from seahub.profile.models import Profile
-from seahub.base.accounts import User
 from seahub.utils import is_org_context, is_valid_username, send_perm_audit_msg
 from seahub.base.templatetags.seahub_tags import email2nickname, email2contact_email
 from seahub.share.models import ExtraSharePermission, ExtraGroupsSharePermission
@@ -43,8 +42,8 @@ class SharedRepos(APIView):
             if is_org_context(request):
                 org_id = request.user.org.org_id
                 shared_repos += seafile_api.get_org_share_out_repo_list(org_id, username, -1, -1)
-                shared_repos += seaserv.seafserv_threaded_rpc.get_org_group_repos_by_owner(org_id, username)
-                shared_repos += seaserv.seafserv_threaded_rpc.list_org_inner_pub_repos_by_owner(org_id, username)
+                shared_repos += seafile_api.get_org_group_repos_by_owner(org_id, username)
+                shared_repos += seafile_api.list_org_inner_pub_repos_by_owner(org_id, username)
             else:
                 shared_repos += seafile_api.get_share_out_repo_list(username, -1, -1)
                 shared_repos += seafile_api.get_group_repos_by_owner(username)
@@ -73,13 +72,6 @@ class SharedRepos(APIView):
             result['modifier_contact_email'] = email2contact_email(repo.last_modifier)
 
             if repo.share_type == 'personal':
-                try:
-                    User.objects.get(email=repo.user)
-                except User.DoesNotExist:
-                    seafile_api.remove_share(repo.repo_id,
-                            username, repo.user)
-                    continue
-
                 result['user_name'] = email2nickname(repo.user)
                 result['user_email'] = repo.user
                 result['contact_email'] = Profile.objects.get_contact_email_by_user(repo.user)
@@ -87,17 +79,8 @@ class SharedRepos(APIView):
 
             if repo.share_type == 'group':
                 group = ccnet_api.get_group(repo.group_id)
-                if not group:
-                    if is_org_context(request):
-                        seafile_api.del_org_group_repo(repo.repo_id,
-                                org_id, repo.group_id)
-                    else:
-                        seafile_api.unset_group_repo(repo.repo_id,
-                                repo.group_id, username)
-                    continue
-
                 result['group_id'] = repo.group_id
-                result['group_name'] = group.group_name
+                result['group_name'] = group.group_name if group else ''
                 gids.append(repo.group_id)
 
             returned_result.append(result)

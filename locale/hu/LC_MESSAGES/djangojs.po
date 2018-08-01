@@ -10,8 +10,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: seahub\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2018-06-15 14:46+0800\n"
-"PO-Revision-Date: 2018-06-15 06:35+0000\n"
+"POT-Creation-Date: 2018-07-20 11:07+0800\n"
+"PO-Revision-Date: 2018-07-20 02:52+0000\n"
 "Last-Translator: zheng xie <xiez1989@gmail.com>\n"
 "Language-Team: Hungarian (http://www.transifex.com/haiwen/seahub/language/hu/)\n"
 "MIME-Version: 1.0\n"
@@ -21,23 +21,23 @@ msgstr ""
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 
 #: static/scripts/app/models/deleted-repo.js:19
-#: static/scripts/app/models/repo.js:59 static/scripts/common.js:332
+#: static/scripts/app/models/repo.js:59 static/scripts/common.js:333
 msgid "Encrypted library"
 msgstr "Titkosított kötet"
 
 #: static/scripts/app/models/deleted-repo.js:21
-#: static/scripts/app/models/repo.js:61 static/scripts/common.js:336
+#: static/scripts/app/models/repo.js:61 static/scripts/common.js:337
 #: static/scripts/sysadmin-app/models/trash-repo.js:14
 msgid "Read-Write library"
 msgstr "Írható-olvasható kötet"
 
-#: static/scripts/app/models/dirent.js:113 static/scripts/app/views/dir.js:676
-#: static/scripts/app/views/dir.js:746
+#: static/scripts/app/models/dirent.js:113 static/scripts/app/views/dir.js:681
+#: static/scripts/app/views/dir.js:751
 #: static/scripts/app/views/fileupload.js:392
 #: static/scripts/app/views/fileupload.js:406
 #: static/scripts/app/views/fileupload.js:418
 #: static/scripts/app/views/fileupload.js:430
-#: static/scripts/app/views/group.js:63 static/scripts/common.js:610
+#: static/scripts/app/views/group.js:63 static/scripts/common.js:611
 msgid "Just now"
 msgstr "Éppen most"
 
@@ -47,8 +47,8 @@ msgstr "Név szükséges"
 
 #: static/scripts/app/models/repo.js:37
 #: static/scripts/app/views/dialogs/dirent-rename.js:65
-#: static/scripts/app/views/dir.js:661 static/scripts/app/views/dir.js:721
-#: static/scripts/app/views/dirent.js:492
+#: static/scripts/app/views/dir.js:666 static/scripts/app/views/dir.js:726
+#: static/scripts/app/views/dirent.js:501
 #: static/scripts/app/views/group-repo.js:133
 #: static/scripts/app/views/repo.js:181
 msgid "Name should not include '/'."
@@ -70,7 +70,7 @@ msgstr "A jelszó túl rövid"
 msgid "Passwords don't match"
 msgstr "Nem egyeznek a megadott jelszavak."
 
-#: static/scripts/app/models/repo.js:63 static/scripts/common.js:334
+#: static/scripts/app/models/repo.js:63 static/scripts/common.js:335
 msgid "Read-Only library"
 msgstr "Csak olvasható kötet"
 
@@ -87,8 +87,8 @@ msgstr "Csak olvaható"
 #: static/scripts/app/views/account.js:58
 #: static/scripts/app/views/dialogs/repo-folder-perm-admin.js:135
 #: static/scripts/app/views/dialogs/repo-share-link-admin.js:97
-#: static/scripts/app/views/dir.js:471 static/scripts/app/views/dir.js:505
-#: static/scripts/app/views/dirent.js:295
+#: static/scripts/app/views/dir.js:476 static/scripts/app/views/dir.js:510
+#: static/scripts/app/views/dirent.js:301
 #: static/scripts/app/views/file-comments.js:120
 #: static/scripts/app/views/group-discussions.js:119
 #: static/scripts/app/views/group-discussions.js:199
@@ -112,7 +112,7 @@ msgstr "Csak olvaható"
 #: static/scripts/app/views/share-admin-share-links.js:147
 #: static/scripts/app/views/share-admin-upload-links.js:61
 #: static/scripts/app/views/share.js:225 static/scripts/app/views/share.js:531
-#: static/scripts/app/views/share.js:680 static/scripts/app/views/share.js:853
+#: static/scripts/app/views/share.js:680 static/scripts/app/views/share.js:847
 #: static/scripts/sysadmin-app/views/address-book-group.js:143
 #: static/scripts/sysadmin-app/views/address-book-group.js:215
 #: static/scripts/sysadmin-app/views/address-book-group.js:269
@@ -168,14 +168,14 @@ msgstr "Törölt könyvtárak"
 #: static/scripts/app/views/dialogs/repo-folder-perm-admin.js:303
 #: static/scripts/app/views/dialogs/repo-history-settings.js:83
 #: static/scripts/app/views/dialogs/repo-history-settings.js:142
-#: static/scripts/app/views/dir.js:1327 static/scripts/app/views/dir.js:1361
-#: static/scripts/app/views/dir.js:1430
+#: static/scripts/app/views/dir.js:1332 static/scripts/app/views/dir.js:1366
+#: static/scripts/app/views/dir.js:1435
 #: static/scripts/app/views/dirent-details.js:160
 #: static/scripts/app/views/dirent-grid.js:354
 #: static/scripts/app/views/dirent-grid.js:395
-#: static/scripts/app/views/dirent.js:510
-#: static/scripts/app/views/dirent.js:640
-#: static/scripts/app/views/dirent.js:681
+#: static/scripts/app/views/dirent.js:519
+#: static/scripts/app/views/dirent.js:649
+#: static/scripts/app/views/dirent.js:690
 #: static/scripts/app/views/file-comment.js:52
 #: static/scripts/app/views/file-comments.js:163
 #: static/scripts/app/views/folder-perm.js:266
@@ -198,9 +198,9 @@ msgstr "Törölt könyvtárak"
 #: static/scripts/app/views/repo-folder-perm-item.js:147
 #: static/scripts/app/views/repo.js:206 static/scripts/app/views/repo.js:281
 #: static/scripts/app/views/repo.js:398 static/scripts/app/views/repo.js:440
-#: static/scripts/app/views/share.js:448 static/scripts/app/views/share.js:950
-#: static/scripts/app/views/share.js:1043 static/scripts/common.js:431
-#: static/scripts/common.js:520
+#: static/scripts/app/views/share.js:448 static/scripts/app/views/share.js:944
+#: static/scripts/app/views/share.js:1037 static/scripts/common.js:432
+#: static/scripts/common.js:521
 #: static/scripts/sysadmin-app/views/address-book-group-item.js:104
 #: static/scripts/sysadmin-app/views/address-book-group.js:314
 #: static/scripts/sysadmin-app/views/address-book-group.js:339
@@ -279,17 +279,17 @@ msgstr "Sikertelen."
 
 #: static/scripts/app/views/dialogs/dirent-mvcp.js:133
 #: static/scripts/app/views/dialogs/dirent-mvcp.js:164
-#: static/scripts/app/views/dir.js:1421
+#: static/scripts/app/views/dir.js:1426
 msgid "Canceled."
 msgstr "Megszakítva."
 
 #: static/scripts/app/views/dialogs/dirent-mvcp.js:196
-#: static/scripts/app/views/dir.js:1166
+#: static/scripts/app/views/dir.js:1171
 msgid "Invalid destination path"
 msgstr "Érvénytelen cél útvonal"
 
 #: static/scripts/app/views/dialogs/dirent-mvcp.js:215
-#: static/scripts/app/views/dirent.js:286
+#: static/scripts/app/views/dirent.js:292
 msgid "Successfully moved %(name)s"
 msgstr "%(name)s sikeresen áthelyezve"
 
@@ -306,8 +306,8 @@ msgid "Rename File"
 msgstr "Fájl átnevezése"
 
 #: static/scripts/app/views/dialogs/dirent-rename.js:59
-#: static/scripts/app/views/dir.js:656 static/scripts/app/views/dir.js:716
-#: static/scripts/app/views/dirent.js:486
+#: static/scripts/app/views/dir.js:661 static/scripts/app/views/dir.js:721
+#: static/scripts/app/views/dirent.js:495
 #: static/scripts/app/views/group-repo.js:127
 #: static/scripts/app/views/groups.js:127
 #: static/scripts/app/views/invitations.js:65
@@ -320,6 +320,10 @@ msgstr "Fájl átnevezése"
 #: static/scripts/sysadmin-app/views/group-members.js:51
 msgid "It is required."
 msgstr "Szükséges."
+
+#: static/scripts/app/views/dialogs/dirent-smart-link.js:50
+msgid "Smart link copied to clipboard"
+msgstr ""
 
 #: static/scripts/app/views/dialogs/repo-change-password.js:26
 msgid "Change Password of Library {placeholder}"
@@ -389,7 +393,7 @@ msgstr "Csak 1 elemet választhat ki"
 #: static/scripts/app/views/share-admin-share-links.js:142
 #: static/scripts/app/views/share-admin-upload-links.js:56
 #: static/scripts/app/views/share.js:220 static/scripts/app/views/share.js:526
-#: static/scripts/app/views/share.js:675 static/scripts/app/views/share.js:848
+#: static/scripts/app/views/share.js:675 static/scripts/app/views/share.js:842
 #: static/scripts/sysadmin-app/views/address-book-group.js:309
 #: static/scripts/sysadmin-app/views/address-book-group.js:334
 #: static/scripts/sysadmin-app/views/address-book.js:124
@@ -467,132 +471,132 @@ msgstr "<a href=\"%url%\" target=\"_blank\">A kép</a>et nem lehet betölteni."
 msgid "Password is required."
 msgstr "Jelszó szükséges."
 
-#: static/scripts/app/views/dir.js:727
+#: static/scripts/app/views/dir.js:732
 msgid "Only an extension there, please input a name."
 msgstr "Csak a kiterjesztés van, kérem adja meg a nevet."
 
-#: static/scripts/app/views/dir.js:765
+#: static/scripts/app/views/dir.js:770
 msgid "New File"
 msgstr "Új fájl"
 
-#: static/scripts/app/views/dir.js:773
+#: static/scripts/app/views/dir.js:778
 msgid "New Markdown File"
 msgstr "Új Markdown fájl"
 
-#: static/scripts/app/views/dir.js:781
+#: static/scripts/app/views/dir.js:786
 msgid "New Excel File"
 msgstr "Új Excel fájl"
 
-#: static/scripts/app/views/dir.js:789
+#: static/scripts/app/views/dir.js:794
 msgid "New PowerPoint File"
 msgstr "Új PowerPoint fájl"
 
-#: static/scripts/app/views/dir.js:797
+#: static/scripts/app/views/dir.js:802
 msgid "New Word File"
 msgstr "Új Word fájl"
 
-#: static/scripts/app/views/dir.js:1029 static/scripts/app/views/dir.js:1171
+#: static/scripts/app/views/dir.js:1034 static/scripts/app/views/dir.js:1176
 msgid "Processing..."
 msgstr "Feldolgozás..."
 
-#: static/scripts/app/views/dir.js:1066
+#: static/scripts/app/views/dir.js:1071
 msgid "Successfully deleted %(name)s."
 msgstr "%(name)s törlése sikeres."
 
-#: static/scripts/app/views/dir.js:1068
+#: static/scripts/app/views/dir.js:1073
 msgid "Successfully deleted %(name)s and 1 other item."
 msgstr "%(name)s és még 1 másik elem törölve."
 
-#: static/scripts/app/views/dir.js:1070
+#: static/scripts/app/views/dir.js:1075
 msgid "Successfully deleted %(name)s and %(amount)s other items."
 msgstr "%(name)s és még %(amount)s másik elem törölve."
 
-#: static/scripts/app/views/dir.js:1079
+#: static/scripts/app/views/dir.js:1084
 msgid "Failed to delete %(name)s."
 msgstr "Törlés meghiúsult: %(name)s."
 
-#: static/scripts/app/views/dir.js:1081
+#: static/scripts/app/views/dir.js:1086
 msgid "Failed to delete %(name)s and 1 other item."
 msgstr "%(name)s és még 1 elem törlése sikertelen."
 
-#: static/scripts/app/views/dir.js:1083
+#: static/scripts/app/views/dir.js:1088
 msgid "Failed to delete %(name)s and %(amount)s other items."
 msgstr "%(name)s és még %(amount)s másik elem törlése sikertelen."
 
-#: static/scripts/app/views/dir.js:1096
+#: static/scripts/app/views/dir.js:1101
 msgid "Delete Items"
 msgstr "Elemek törlése"
 
-#: static/scripts/app/views/dir.js:1097
+#: static/scripts/app/views/dir.js:1102
 msgid "Are you sure you want to delete these selected items?"
 msgstr "Biztos, hogy törli ezeket az elemeket?"
 
-#: static/scripts/app/views/dir.js:1111
+#: static/scripts/app/views/dir.js:1116
 msgid "Move selected item(s) to:"
 msgstr "Kiválasztott elem(ek) mozgatása ide: "
 
-#: static/scripts/app/views/dir.js:1111
+#: static/scripts/app/views/dir.js:1116
 msgid "Copy selected item(s) to:"
 msgstr "Kiválasztott elem(ek) másolása ide:"
 
-#: static/scripts/app/views/dir.js:1215 static/scripts/app/views/dir.js:1382
+#: static/scripts/app/views/dir.js:1220 static/scripts/app/views/dir.js:1387
 msgid "Successfully moved %(name)s."
 msgstr "%(name)s sikeresen átmozgatva."
 
-#: static/scripts/app/views/dir.js:1217 static/scripts/app/views/dir.js:1384
+#: static/scripts/app/views/dir.js:1222 static/scripts/app/views/dir.js:1389
 msgid "Successfully moved %(name)s and 1 other item."
 msgstr "%(name)s áthelyezése és még 1 másik elemé sikeres."
 
-#: static/scripts/app/views/dir.js:1219 static/scripts/app/views/dir.js:1386
+#: static/scripts/app/views/dir.js:1224 static/scripts/app/views/dir.js:1391
 msgid "Successfully moved %(name)s and %(amount)s other items."
 msgstr "%(name)s áthelyezése és még %(amount)s másik elemé sikeres."
 
-#: static/scripts/app/views/dir.js:1224 static/scripts/app/views/dir.js:1390
+#: static/scripts/app/views/dir.js:1229 static/scripts/app/views/dir.js:1395
 msgid "Successfully copied %(name)s."
 msgstr "%(name)s másolása sikeres."
 
-#: static/scripts/app/views/dir.js:1226 static/scripts/app/views/dir.js:1392
+#: static/scripts/app/views/dir.js:1231 static/scripts/app/views/dir.js:1397
 msgid "Successfully copied %(name)s and 1 other item."
 msgstr "%(name)s másolása és még 1 másik elemé sikeres."
 
-#: static/scripts/app/views/dir.js:1228 static/scripts/app/views/dir.js:1394
+#: static/scripts/app/views/dir.js:1233 static/scripts/app/views/dir.js:1399
 msgid "Successfully copied %(name)s and %(amount)s other items."
 msgstr "%(name)s másolása és még %(amount)s másik elemé sikeres."
 
-#: static/scripts/app/views/dir.js:1239
+#: static/scripts/app/views/dir.js:1244
 msgid "Internal error. Failed to move %(name)s and %(amount)s other item(s)."
 msgstr "Belső hiba. %(name)s mozgatása és még %(amount)s másik elemé sikertelen."
 
-#: static/scripts/app/views/dir.js:1241
+#: static/scripts/app/views/dir.js:1246
 msgid "Internal error. Failed to move %(name)s."
 msgstr "Belső hiba. %(name)s mozgatása sikertelen."
 
-#: static/scripts/app/views/dir.js:1245
+#: static/scripts/app/views/dir.js:1250
 msgid "Internal error. Failed to copy %(name)s and %(amount)s other item(s)."
 msgstr "Belső hiba. %(name)s másolása és még %(amount)s másik elemé sikertelen."
 
-#: static/scripts/app/views/dir.js:1247
+#: static/scripts/app/views/dir.js:1252
 msgid "Internal error. Failed to copy %(name)s."
 msgstr "Belső hiba. %(name)s másolása sikertelen."
 
-#: static/scripts/app/views/dir.js:1289
+#: static/scripts/app/views/dir.js:1294
 msgid "Moving file %(index)s of %(total)s"
 msgstr "Fájlok mozgatása: %(index)s / %(total)s"
 
-#: static/scripts/app/views/dir.js:1289
+#: static/scripts/app/views/dir.js:1294
 msgid "Copying file %(index)s of %(total)s"
 msgstr "Fájlok másolása: %(index)s / %(total)s"
 
-#: static/scripts/app/views/dir.js:1315
+#: static/scripts/app/views/dir.js:1320
 msgid "Failed to move %(name)s"
 msgstr "%(name)s mozgatása sikertelen"
 
-#: static/scripts/app/views/dir.js:1315
+#: static/scripts/app/views/dir.js:1320
 msgid "Failed to copy %(name)s"
 msgstr "%(name)s másolása sikertelen"
 
-#: static/scripts/app/views/dirent-details.js:95 static/scripts/common.js:661
-#: static/scripts/common.js:732
+#: static/scripts/app/views/dirent-details.js:95 static/scripts/common.js:662
+#: static/scripts/common.js:733
 msgid "No matches"
 msgstr "Nincs találat"
 
@@ -601,12 +605,12 @@ msgid "Tag should not include ','."
 msgstr "A Tag nem tartalmazhaz ',' karaktert."
 
 #: static/scripts/app/views/dirent-grid.js:59
-#: static/scripts/app/views/dirent.js:77
+#: static/scripts/app/views/dirent.js:78
 msgid "locked by {placeholder}"
 msgstr "zárolta: {placeholder}"
 
 #: static/scripts/app/views/dirent-grid.js:186
-#: static/scripts/app/views/dirent.js:397
+#: static/scripts/app/views/dirent.js:403
 msgid "Successfully deleted %(name)s"
 msgstr "%(name)s törlése sikeres"
 
@@ -653,7 +657,7 @@ msgstr "Üres fájl feltöltés"
 #: static/scripts/app/views/share-admin-share-links.js:144
 #: static/scripts/app/views/share-admin-upload-links.js:58
 #: static/scripts/app/views/share.js:222 static/scripts/app/views/share.js:528
-#: static/scripts/app/views/share.js:677 static/scripts/app/views/share.js:850
+#: static/scripts/app/views/share.js:677 static/scripts/app/views/share.js:844
 #: static/scripts/sysadmin-app/views/address-book-group-item.js:128
 #: static/scripts/sysadmin-app/views/address-book-group-item.js:135
 msgid "Error"
@@ -709,7 +713,7 @@ msgid "Set {placeholder}'s permission"
 msgstr "{placeholder} jogosultság beállítása"
 
 #: static/scripts/app/views/folder-perm.js:134
-#: static/scripts/app/views/share.js:833
+#: static/scripts/app/views/share.js:827
 msgid "Select groups"
 msgstr "Csoportok kiválasztása"
 
@@ -728,7 +732,7 @@ msgstr "{placeholder} Tagok"
 #: static/scripts/app/views/group-repo.js:60
 #: static/scripts/sysadmin-app/views/address-book-group-library.js:44
 msgid "Successfully deleted library {placeholder}"
-msgstr ""
+msgstr "{placeholder} törölve"
 
 #: static/scripts/app/views/group-repo.js:291
 #: static/scripts/app/views/organization-repo.js:50
@@ -902,43 +906,43 @@ msgstr "Sikeres"
 msgid "Successfully unstared {placeholder}"
 msgstr "{placeholder} sikeresen törölve a kedvencekből"
 
-#: static/scripts/common.js:652
+#: static/scripts/common.js:653
 #: static/scripts/sysadmin-app/views/address-book-group.js:165
 #: static/scripts/sysadmin-app/views/group-members.js:41
 msgid "Search users or enter emails and press Enter"
 msgstr "Felhasználónév vagy email cím szerinti keresés, üssön Entert"
 
-#: static/scripts/common.js:660 static/scripts/common.js:731
+#: static/scripts/common.js:661 static/scripts/common.js:732
 msgid "Please enter 1 or more character"
 msgstr "Kérem adjon meg még 1 vagy több karaktert"
 
-#: static/scripts/common.js:662 static/scripts/common.js:733
+#: static/scripts/common.js:663 static/scripts/common.js:734
 msgid "Searching..."
 msgstr "Keresés..."
 
-#: static/scripts/common.js:663 static/scripts/common.js:734
+#: static/scripts/common.js:664 static/scripts/common.js:735
 msgid "Loading failed"
 msgstr "Betöltés nem sikerült"
 
-#: static/scripts/common.js:723
+#: static/scripts/common.js:724
 msgid "Search groups"
 msgstr "Csoportok keresése"
 
-#: static/scripts/common.js:1058
+#: static/scripts/common.js:1059
 msgid "Packaging..."
 msgstr "Csomagolás"
 
 #: static/scripts/sysadmin-app/views/address-book-group-item.js:32
 msgid "Delete Department"
-msgstr ""
+msgstr "Osztály törlése"
 
 #: static/scripts/sysadmin-app/views/address-book-group-item.js:80
 msgid "Invalid quota."
-msgstr ""
+msgstr "Érvénytelen kvóta"
 
 #: static/scripts/sysadmin-app/views/address-book-group.js:99
 msgid "New Sub-department"
-msgstr ""
+msgstr "Új alosztály"
 
 #: static/scripts/sysadmin-app/views/address-book-group.js:111
 #: static/scripts/sysadmin-app/views/address-book.js:64
@@ -949,7 +953,7 @@ msgstr "Név kötelező."
 
 #: static/scripts/sysadmin-app/views/address-book.js:49
 msgid "New Department"
-msgstr ""
+msgstr "Új osztály"
 
 #: static/scripts/sysadmin-app/views/admin-operation-log.js:40
 msgid "Create Library"

@@ -16,6 +16,14 @@ let dirPath = '/';
 const updateUrl = `${siteRoot}api2/repos/${repoID}/update-link/?p=${dirPath}`;
 const uploadUrl = `${siteRoot}api2/repos/${repoID}/upload-link/?p=${dirPath}&from=web`;
 
+function handleFetchErrors(response) {
+  if (!response.ok) {
+    // response 4xx/5xx will be caught, and rejected in the promise chain
+    throw Error(response.statusText);
+  }
+  return response;
+}
+
 function updateFile(uploadLink, filePath, fileName, content) {
   var formData = new FormData();
   formData.append("target_file", filePath);
@@ -25,8 +33,7 @@ function updateFile(uploadLink, filePath, fileName, content) {
   return fetch(uploadLink, {
     method: "POST",
     body: formData,
-    mode: 'no-cors',
-  });
+  }).then(handleFetchErrors);
 }
 
 function getImageFileNameWithTimestamp() {
