@@ -89,16 +89,11 @@ define([
                     _this.render();
                 },
                 error: function(xhr) {
-                    var err;
-                    if (xhr.responseText) {
-                        err = JSON.parse(xhr.responseText).error;
-                    } else {
-                        err = gettext("Failed. Please check the network.");
-                    }
+                    var error_msg = Common.prepareAjaxErrorMsg(xhr);
                     if (for_user) {
-                        $('#user-folder-perm .error').html(err).removeClass('hide');
+                        $('#user-folder-perm .error').html(error_msg).removeClass('hide');
                     } else {
-                        $('#group-folder-perm .error').html(err).removeClass('hide');
+                        $('#group-folder-perm .error').html(error_msg).removeClass('hide');
                     }
                 }
             });
@@ -140,16 +135,11 @@ define([
                     _this.remove();
                 },
                 error: function(xhr) {
-                    var err;
-                    if (xhr.responseText) {
-                        err = JSON.parse(xhr.responseText).error;
-                    } else {
-                        err = gettext("Failed. Please check the network.");
-                    }
+                    var error_msg = Common.prepareAjaxErrorMsg(xhr);
                     if (for_user) {
-                        $('#user-folder-perm .error').html(err).removeClass('hide');
+                        $('#user-folder-perm .error').html(error_msg).removeClass('hide');
                     } else {
-                        $('#group-folder-perm .error').html(err).removeClass('hide');
+                        $('#group-folder-perm .error').html(error_msg).removeClass('hide');
                     }
                 }
             });

@@ -70,16 +70,15 @@ define([
             $('[name="email"]', $form).select2($.extend(
                 Common.contactInputOptionsForSelect2(), {
                 width: '300px',
-                maximumSelectionSize: 1,
-                placeholder: gettext("Search user or enter email and press Enter"), // to override 'placeholder' returned by `Common.conta...`
-                formatSelectionTooBig: gettext("You cannot select any more choices")
+                maximumSelectionLength: 1,
+                placeholder: gettext("Search user or enter email and press Enter")
             }));
 
             $form.on('submit', function() {
-                var email = $.trim($('[name="email"]', $(this)).val());
+                var email = $('[name="email"]', $(this)).val(); // []
                 var $submitBtn = $('[type="submit"]', $(this));
 
-                if (!email) {
+                if (!email.length) {
                     return false;
                 }
                 if (email == cur_owner) {
@@ -93,7 +92,7 @@ define([
                     dataType: 'json',
                     beforeSend: Common.prepareCSRFToken,
                     data: {
-                        'new_owner': email
+                        'new_owner': email[0]
                     },
                     success: function() {
                         $.modal.close();
@@ -101,12 +100,7 @@ define([
                         Common.feedback(gettext("Successfully transferred the group."), 'success');
                     },
                     error: function(xhr) {
-                        var error_msg;
-                        if (xhr.responseText) {
-                            error_msg = JSON.parse(xhr.responseText).error_msg;
-                        } else {
-                            error_msg = gettext("Failed. Please check the network.");
-                        }
+                        var error_msg = Common.prepareAjaxErrorMsg(xhr);
                         $('.error', $form).html(error_msg).show();
                         Common.enableButton($submitBtn);
                     }

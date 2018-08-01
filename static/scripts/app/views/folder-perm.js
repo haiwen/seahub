@@ -120,18 +120,37 @@ define([
                     'group_id': this.group_id
                 });
             }
-            $('[name="email"]', this.$add_user_perm).select2(
-                    Common.contactInputOptionsForSelect2({'url': url}));
+            $('[name="email"]', this.$add_user_perm).select2($.extend({
+                'width': '100%'
+            }, Common.contactInputOptionsForSelect2({'url': url})));
+        },
+
+        events: {
+            'click #group-folder-perm-tab': 'clickGroupFolderPermTab',
+
+            'click #add-user-folder-perm .submit': 'addFolderPerm',
+            'click #add-group-folder-perm .submit': 'addFolderPerm'
+        },
+
+        clickGroupFolderPermTab: function() {
+            var _this = this;
 
             // use select2 to 'group' input in 'add group perm'
             var groups;
             var prepareGroupSelector = function(groups) {
-                var g_opts = '';
+                var group_list = [];
                 for (var i = 0, len = groups.length; i < len; i++) {
-                    g_opts += '<option value="' + groups[i].id + '" data-index="' + i + '">' + groups[i].name + '</option>';
+                    group_list.push({
+                        id: groups[i].id,
+                        text: groups[i].name
+                    });
                 }
-                $('[name="group"]', _this.$add_group_perm).html(g_opts).select2({
+                $('[name="group"]', _this.$add_group_perm).select2({
+                    language: Common.i18nForSelect2(),
+                    width: '100%',
+                    multiple: true,
                     placeholder: gettext("Select groups"),
+                    data: group_list,
                     escapeMarkup: function(m) { return m; }
                 });
             };
@@ -159,16 +178,12 @@ define([
             }
         },
 
-        events: {
-            'click #add-user-folder-perm .submit': 'addFolderPerm',
-            'click #add-group-folder-perm .submit': 'addFolderPerm'
-        },
-
         addFolderPerm: function(e) {
-            var $form, $error, url, post_data, extended_data;
+            var $form, $input, $error, url, perm, post_data, extended_data;
 
             if ($(e.currentTarget).closest('tr').attr('id') == 'add-user-folder-perm') {
                 $form = this.$add_user_perm;
+                $input = $('[name="email"]', $form);
                 $error = $('#user-folder-perm .error');
 
                 url = Common.getUrl({
@@ -177,17 +192,17 @@ define([
                         'repo_user_folder_perm',
                     repo_id: this.repo_id
                 });
-                var emails_group_ids_input = $('[name="email"]', $form),
-                    emails = emails_group_ids_input.val(),
-                    perm = $('[name="permission"]', $form).val();
 
-                if (!emails || !perm) {
+                var emails = $input.val(); // []
+                perm = $('[name="permission"]', $form).val();
+
+                if (!emails.length || !perm) {
                     return false;
                 }
 
                 post_data = {
                     'folder_path': this.path,
-                    'user_email': emails.split(','),
+                    'user_email': emails,
                     'permission': perm
                 };
 
@@ -198,6 +213,7 @@ define([
 
             } else {
                 $form = this.$add_group_perm;
+                $input = $('[name="group"]', $form);
                 $error = $('#group-folder-perm .error');
 
                 url = Common.getUrl({
@@ -207,17 +223,16 @@ define([
                     repo_id: this.repo_id
                 });
 
-                var emails_group_ids_input = $('[name="group"]', $form),
-                    group_ids = emails_group_ids_input.val().join(','),
-                    perm = $('[name="permission"]', $form).val();
+                var group_ids = $input.val();
+                perm = $('[name="permission"]', $form).val();
 
-                if (!group_ids || !perm) {
+                if (!group_ids.length || !perm) {
                     return false;
                 }
 
                 post_data = {
                     'folder_path': this.path,
-                    'group_id': group_ids.split(','),
+                    'group_id': group_ids,
                     'permission': perm
                 };
 
@@ -247,7 +262,7 @@ define([
                             $form.closest('tr').after(perm_item.el);
                         });
 
-                        emails_group_ids_input.select2("val", "");
+                        $input.val(null).trigger('change');
                         $error.addClass('hide');
                     }
                     if (data.failed.length > 0) {
@@ -259,13 +274,8 @@ define([
                     }
                 },
                 error: function(xhr) {
-                    var error_msg;
-                    if (xhr.responseText) {
-                        error_msg = JSON.parse(xhr.responseText).error_msg;
-                    } else {
-                        error_msg = gettext("Failed. Please check the network.");
-                    }
-                    $error.html(error_msg).removeClass('hide');
+                    var error_msg = Common.prepareAjaxErrorMsg(xhr);
+                    $error.html(error_msg).show();
                 }
             });
         }

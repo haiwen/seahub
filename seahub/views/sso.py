@@ -36,4 +36,9 @@ def sso(request):
         return HttpResponseRedirect(reverse('oauth_login'))
 
 def shib_login(request):
-    return sso(request)
+    if REDIRECT_FIELD_NAME in request.GET:
+        next_page = request.GET[REDIRECT_FIELD_NAME]
+        next_param = '?%s=' % REDIRECT_FIELD_NAME + urlquote(next_page)
+        return HttpResponseRedirect(reverse('sso') + next_param)
+    else:
+        return HttpResponseRedirect(reverse('sso'))

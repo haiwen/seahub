@@ -103,19 +103,19 @@ define([
             $('[name="email"]', $form).select2($.extend(
                 Common.contactInputOptionsForSelect2(), {
                 width: '300px',
-                maximumSelectionSize: 1,
-                placeholder: gettext("Search user or enter email and press Enter"), // to override 'placeholder' returned by `Common.conta...`
-                formatSelectionTooBig: gettext("You cannot select any more choices")
+                maximumSelectionLength: 1,
+                placeholder: gettext("Search user or enter email and press Enter")
             }));
 
             $form.on('submit', function() {
-                var email = $.trim($('[name="email"]', $(this)).val());
-                if (!email) {
+                var email = $('[name="email"]', $(this)).val(); // []
+                if (!email.length) {
                     return false;
                 }
                 if (email == _this.model.get('owner')) {
                     return false;
                 }
+                email = email[0];
 
                 var url = Common.getUrl({'name': 'admin-library','repo_id': _this.model.get('id')});
                 var $submitBtn = $('[type="submit"]', $(this));
@@ -135,12 +135,7 @@ define([
                         Common.feedback(gettext("Successfully transferred the library."), 'success');
                     },
                     error: function(xhr) {
-                        var error_msg;
-                        if (xhr.responseText) {
-                            error_msg = JSON.parse(xhr.responseText).error_msg;
-                        } else {
-                            error_msg = gettext("Failed. Please check the network.");
-                        }
+                        var error_msg = Common.prepareAjaxErrorMsg(xhr);
                         $('.error', $form).html(error_msg).show();
                         Common.enableButton($submitBtn);
                     }

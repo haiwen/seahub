@@ -132,16 +132,7 @@ function showCurrentPage() {
             $('#wiki-page').show(); 
         },
         error: function(xhr) {
-            var error_msg;
-            if (xhr.responseText) {
-                try {
-                    error_msg = JSON.parse(xhr.responseText).error_msg;
-                } catch(e) {
-                    error_msg = "{% trans "Error" %}";
-                }
-            } else {
-                error_msg = "{% trans "Please check the network." %}";
-            }
+            var error_msg = prepareAjaxErrorMsg(xhr);
             $error.html(error_msg).show();
         },
         complete: function() {
@@ -197,16 +188,7 @@ var isHiDPI = function() {
             $list.html($(str)).show();
         },
         error: function(xhr) {
-            var error_msg;
-            if (xhr.responseText) {
-                try {
-                    error_msg = JSON.parse(xhr.responseText).error_msg;
-                } catch(e) {
-                    error_msg = "{% trans "Error" %}";
-                }
-            } else {
-                error_msg = "{% trans "Please check the network." %}";
-            }
+            var error_msg = prepareAjaxErrorMsg(xhr);
             $error.html(error_msg).show();
         },
         complete: function() {
@@ -248,16 +230,7 @@ $('#page-create-form').on('submit', function() {
                 '&from=wikis_wiki_page_new&wiki_slug={{wiki.slug}}';
         },
         error: function(xhr) {
-            var error_msg;
-            if (xhr.responseText) {
-                try {
-                    error_msg = JSON.parse(xhr.responseText).error_msg;
-                } catch(e) {
-                    error_msg = "{% trans "Error" %}";
-                }
-            } else {
-                error_msg = "{% trans "Please check the network." %}";
-            }
+            var error_msg = prepareAjaxErrorMsg(xhr);
             $error.html(error_msg).show();
             enable($submit);
         }
@@ -282,19 +255,7 @@ $('#delete-page').on('click', function() {
                 // go back to wiki 'home' page.
                 location.href = "{% url 'wiki:slug' wiki.slug %}";
             },
-            error: function(xhr) {
-                var error_msg;
-                if (xhr.responseText) {
-                    try {
-                        error_msg = JSON.parse(xhr.responseText).error_msg;
-                    } catch(e) {
-                        error_msg = "{% trans "Error" %}";
-                    }
-                } else {
-                    error_msg = "{% trans "Please check the network." %}";
-                }
-                feedback(error_msg, 'error');
-            }
+            error: ajaxErrorHandler
         });
     };
 	showConfirm(title, content, yesCallback);	

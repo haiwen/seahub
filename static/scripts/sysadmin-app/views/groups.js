@@ -58,20 +58,18 @@ define([
                 _this = this;
 
             $form.modal();
-            $('#simplemodal-container').css({'height':'auto'});
+            $('#simplemodal-container').css({'width':'auto', 'height':'auto'});
 
             $('[name="group_owner"]', $form).select2($.extend(
                 Common.contactInputOptionsForSelect2(), {
-                width: '268px',
-                containerCss: {'margin-bottom': '5px'},
-                maximumSelectionSize: 1,
-                placeholder: gettext("Search user or enter email and press Enter"), // to override 'placeholder' returned by `Common.conta...`
-                formatSelectionTooBig: gettext("You cannot select any more choices")
+                width: '100%',
+                maximumSelectionLength: 1,
+                placeholder: gettext("Search user or enter email and press Enter")
             }));
 
             $form.on('submit', function() {
                 var group_name = $.trim($('[name="group_name"]', $form).val());
-                var group_owner = $.trim($('[name="group_owner"]', $form).val());
+                var group_owner = $('[name="group_owner"]', $form).val();
                 var $error = $('.error', $form);
                 var $submitBtn = $('[type="submit"]', $form);
 
@@ -83,7 +81,10 @@ define([
                 $error.hide();
                 Common.disableButton($submitBtn);
 
-                groups.create({'group_name': group_name, 'group_owner': group_owner}, {
+                groups.create({
+                    'group_name': group_name,
+                    'group_owner': group_owner[0]
+                }, {
                     prepend: true,
                     wait: true,
                     success: function() {
@@ -93,12 +94,7 @@ define([
                         Common.closeModal();
                     },
                     error: function(collection, response, options) {
-                        var err_msg;
-                        if (response.responseText) {
-                            err_msg = response.responseJSON.error_msg;
-                        } else {
-                            err_msg = gettext('Please check the network.');
-                        }
+                        var err_msg = Common.prepareCollectionFetchErrorMsg(collection, response, opts);
                         $error.html(err_msg).show();
                         Common.enableButton($submitBtn);
                     }
@@ -157,16 +153,7 @@ define([
                 cache: false,
                 reset: true,
                 error: function(collection, response, opts) {
-                    var err_msg;
-                    if (response.responseText) {
-                        if (response['status'] == 401 || response['status'] == 403) {
-                            err_msg = gettext("Permission error");
-                        } else {
-                            err_msg = JSON.parse(response.responseText).error_msg;
-                        }
-                    } else {
-                        err_msg = gettext("Failed. Please check the network.");
-                    }
+                    var err_msg = Common.prepareCollectionFetchErrorMsg(collection, response, opts);
                     _this.$error.html(err_msg).show();
                 },
                 complete:function() {

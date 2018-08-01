@@ -284,12 +284,9 @@ $('.web-input-setting-form, .web-textarea-setting-form').on('submit', function()
             $cancel_btn.hide();
             feedback("{% trans "Success" %}", 'success');
         },
-        error: function(jqXHR, textStatus, errorThrown) {
-            if (jqXHR.responseText) {
-                $error.html(JSON.parse(jqXHR.responseText).error).show();
-            } else {
-                $error.html("{% trans "Failed. Please check the network." %}").show();
-            }
+        error: function(xhr, textStatus, errorThrown) {
+            var error_msg = prepareAjaxErrorMsg(xhr);
+            $error.html(error_msg).show();
             enable($sb_btn);
         }
     });

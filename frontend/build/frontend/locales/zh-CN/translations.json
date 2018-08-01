@@ -19,7 +19,6 @@
   "insert_table": "添加表格",
   "save": "保存",
   "more": "更多",
-  "edit": "编辑",
   "invalid_url": "无效链接",
   "enter_the_url_of_the_image": "请输入图片的链接",
   "enter_the_url_of_the_link": "请输入链接地址",
@@ -37,7 +36,11 @@
   "left": "左对齐",
   "right": "右对齐",
   "file_saved": "保存文件成功",
+  "star": "添加星标",
+  "unstar": "移除星标",
   "file_failed_to_save": "保存文件失败",
+  "back_to_parent_directory": "返回上级目录",
+  "edit": "编辑",
   "userHelp": {
     "title": "键盘快捷键",
     "userHelpData":[

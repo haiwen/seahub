@@ -6,10 +6,11 @@ define([
     'file-tree',
     'app/views/share',
     'app/views/dialogs/dirent-mvcp',
+    "app/views/dialogs/dirent-smart-link",
     'app/views/folder-perm',
     'app/views/widgets/hl-item-view',
     'app/views/widgets/dropdown'
-], function($, _, Backbone, Common, FileTree, ShareView, DirentMvcpDialog,
+], function($, _, Backbone, Common, FileTree, ShareView, DirentMvcpDialog, DirentSmartLinkDialog,
     FolderPermView, HLItemView, DropdownView) {
     'use strict';
 
@@ -94,7 +95,7 @@ define([
             'click .file-star': 'starFile',
             'click .dirent-name': 'visitDirent',
             'click .img-name-link': 'viewImageWithPopup',
-
+            'click .dirent-smart-link': 'getSmartLink',
             // mv by 'drag & drop'
             'dragstart': 'itemDragstart',
             'dragover': 'itemDragover',
@@ -114,6 +115,11 @@ define([
             'click .view-details': 'viewDetails',
             'click .file-comment': 'viewFileComments',
             'click .open-via-client': 'open_via_client'
+        },
+
+        getSmartLink: function() {
+            new DirentSmartLinkDialog({dir: this.dir, attributes: this.model.attributes});
+            return false;
         },
 
         _hideMenu: function() {
@@ -289,11 +295,7 @@ define([
                     dir.remove(cid);
                 },
                 error: function(xhr) {
-                    if (xhr.responseText) {
-                        Common.feedback(JSON.parse(xhr.responseText).error||JSON.parse(xhr.responseText).error_msg, 'error');
-                    } else {
-                        Common.feedback(gettext("Please check the network."), 'error');
-                    }
+                    Common.ajaxErrorHandler(xhr);
                 }
             });
         },
@@ -421,12 +423,14 @@ define([
 
             var $name = this.$('.dirent-name'),
                 $op = this.$('.dirent-op'),
-                $td = $name.closest('td');
+                $td = $name.closest('td'),
+                $smart_link = this.$('.dirent-smart-link');
             $td.attr('colspan', 2).css({
                 'width': $name.width() + $op.outerWidth(),
                 'height': $name.height()
             }).append(form);
             $op.hide();
+            $smart_link.hide();
             $name.hide();
 
             this.$el.attr('draggable', false);
@@ -468,6 +472,7 @@ define([
                 form.remove();
                 $op.show();
                 $name.show();
+                $smart_link.removeAttr('style');
                 $td.attr('colspan', 1).css({
                     'width': $name.width()
                 });
@@ -503,13 +508,8 @@ define([
                 Common.disableButton(submit_btn);
 
                 var after_op_error = function(xhr) {
-                    var err_msg;
-                    if (xhr.responseText) {
-                        err_msg = JSON.parse(xhr.responseText).error_msg;
-                    } else {
-                        err_msg = gettext("Failed. Please check the network.");
-                    }
-                    Common.feedback(err_msg, 'error');
+                    var error_msg = Common.prepareAjaxErrorMsg(xhr); 
+                    Common.feedback(error_msg, 'error');
                     Common.enableButton(submit_btn);
                 };
                 _this.model.rename({
@@ -632,13 +632,7 @@ define([
                             detailsView.updateTags(data);
                         },
                         error: function(xhr) {
-                            var error_msg;
-                            if (xhr.responseText) {
-                                var parsed_resp = JSON.parse(xhr.responseText);
-                                error_msg = parsed_resp.error_msg || parsed_resp.detail;
-                            } else {
-                                error_msg = gettext("Failed. Please check the network.");
-                            }
+                            var error_msg = Common.prepareAjaxErrorMsg(xhr);
                             detailsView.updateTags({'error_msg': error_msg});
                         }
                     });
@@ -673,13 +667,7 @@ define([
                         }
                     },
                     error: function(xhr) {
-                        var error_msg;
-                        if (xhr.responseText) {
-                            var parsed_resp = JSON.parse(xhr.responseText);
-                            error_msg = parsed_resp.error_msg || parsed_resp.detail;
-                        } else {
-                            error_msg = gettext("Failed. Please check the network.");
-                        }
+                        var error_msg = Common.prepareAjaxErrorMsg(xhr);
                         detailsView.update({'error_msg': error_msg});
                     }
                 });

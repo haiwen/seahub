@@ -39,7 +39,7 @@ class DeviceValidationForm(forms.Form):
     token = forms.IntegerField(label=_("Token"), min_value=1, max_value=int('9' * totp_digits()))
 
     error_messages = {
-        'invalid_token': _('Entered token is not valid.'),
+        'invalid_token': 'Entered token is not valid.',
     }
 
     def __init__(self, device, **args):
@@ -63,7 +63,7 @@ class TOTPDeviceForm(forms.Form):
     token = forms.IntegerField(label=_("Token"), min_value=0, max_value=int('9' * totp_digits()))
 
     error_messages = {
-        'invalid_token': _('Entered token is not valid.'),
+        'invalid_token': 'Entered token is not valid.',
     }
 
     def __init__(self, key, user, metadata=None, **kwargs):
@@ -147,7 +147,7 @@ class BaseOTPAuthenticationForm(Form):
         if token:
             user.otp_device = self._verify_token(user, token)
         if user.otp_device is None:
-            raise forms.ValidationError(_('Please enter your OTP token'))
+            raise forms.ValidationError('Please enter your OTP token')
 
     def _verify_token(self, user, token):
         device = self.device_model.objects.device_for_user(user.username)
@@ -236,7 +236,7 @@ class OTPAuthenticationFormMixin(object):
             self._update_form(user)
 
             if error is None:
-                error = forms.ValidationError(_('Please enter your OTP token'))
+                error = forms.ValidationError('Please enter your OTP token')
 
             raise error
 
@@ -261,12 +261,12 @@ class OTPAuthenticationFormMixin(object):
         try:
             challenge = device.generate_challenge() if (device is not None) else None
         except Exception as e:
-            error = forms.ValidationError(_('Error generating challenge: {0}'.format(e)))
+            error = forms.ValidationError('Error generating challenge: {0}'.format(e))
         else:
             if challenge is None:
-                error = forms.ValidationError(_('The selected OTP device is not interactive'))
+                error = forms.ValidationError('The selected OTP device is not interactive')
             else:
-                error = forms.ValidationError(_('OTP Challenge: {0}').format(challenge))
+                error = forms.ValidationError('OTP Challenge: {0}'.format(challenge))
 
         return error
 

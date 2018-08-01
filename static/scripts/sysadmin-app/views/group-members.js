@@ -36,18 +36,16 @@ define([
 
             $('[name="email"]', $form).select2($.extend(
                 Common.contactInputOptionsForSelect2(), {
-                width: '275px',
-                containerCss: {'margin-bottom': '5px'},
-                placeholder: gettext("Search users or enter emails and press Enter")
+                width: '280px'
             }));
 
             $form.on('submit', function() {
                 var group_id = _this.groupMemberCollection.group_id;
-                var emails = $.trim($('[name="email"]', $form).val());
+                var emails = $('[name="email"]', $form).val();
                 var $error = $('.error', $form);
                 var $submitBtn = $('[type="submit"]', $form);
 
-                if (!emails) {
+                if (!emails.length) {
                     $error.html(gettext("It is required.")).show();
                     return false;
                 }
@@ -64,7 +62,7 @@ define([
                     dataType: 'json',
                     beforeSend: Common.prepareCSRFToken,
                     traditional: true,
-                    data: {'email': emails.split(',')},
+                    data: {'email': emails},
                     success: function(data) {
                         if (data.success.length > 0) {
                             _this.groupMemberCollection.add(data.success, {prepend: true});
@@ -82,14 +80,9 @@ define([
                         }
 
                     },
-                    error: function(jqXHR, textStatus, errorThrown){
-                        var err_msg;
-                        if (jqXHR.responseText) {
-                            err_msg = jqXHR.responseJSON.error_msg;
-                        } else {
-                            err_msg = gettext('Please check the network.');
-                        }
-                        $error.html(err_msg).show();
+                    error: function(xhr, textStatus, errorThrown){
+                        var error_msg = Common.prepareAjaxErrorMsg(xhr);
+                        $error.html(error_msg).show();
                         Common.enableButton($submitBtn);
                     }
                 });
@@ -140,16 +133,7 @@ define([
                 cache: false,
                 reset: true,
                 error: function(collection, response, opts) {
-                    var err_msg;
-                    if (response.responseText) {
-                        if (response['status'] == 401 || response['status'] == 403) {
-                            err_msg = gettext("Permission error");
-                        } else {
-                            err_msg = JSON.parse(response.responseText).error_msg;
-                        }
-                    } else {
-                        err_msg = gettext("Failed. Please check the network.");
-                    }
+                    var err_msg = Common.prepareCollectionFetchErrorMsg(collection, response, opts);
                     Common.feedback(err_msg, 'error');
                 }
             });

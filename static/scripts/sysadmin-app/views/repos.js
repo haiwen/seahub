@@ -52,16 +52,14 @@ define([
 
             $('[name="library_owner"]', $form).select2($.extend(
                 Common.contactInputOptionsForSelect2(), {
-                width: '268px',
-                containerCss: {'margin-bottom': '5px'},
-                maximumSelectionSize: 1,
-                placeholder: gettext("Search user or enter email and press Enter"), // to override 'placeholder' returned by `Common.conta...`
-                formatSelectionTooBig: gettext("You cannot select any more choices")
+                width: '100%',
+                maximumSelectionLength: 1,
+                placeholder: gettext("Search user or enter email and press Enter")
             }));
 
             $form.on('submit', function() {
                 var library_name = $.trim($('[name="library_name"]', $form).val());
-                var library_owner = $.trim($('[name="library_owner"]', $form).val());
+                var library_owner = $('[name="library_owner"]', $form).val();
                 var $error = $('.error', $form);
                 var $submitBtn = $('[type="submit"]', $form);
 
@@ -73,7 +71,10 @@ define([
                 $error.hide();
                 Common.disableButton($submitBtn);
 
-                repos.create({'name': library_name, 'owner': library_owner}, {
+                repos.create({
+                    'name': library_name,
+                    'owner': library_owner[0]
+                }, {
                     prepend: true,
                     wait: true,
                     success: function() {
@@ -83,13 +84,8 @@ define([
                         Common.closeModal();
                     },
                     error: function(collection, response, options) {
-                        var err_msg;
-                        if (response.responseText) {
-                            err_msg = response.responseJSON.error_msg;
-                        } else {
-                            err_msg = gettext('Please check the network.');
-                        }
-                        $error.html(err_msg).show();
+                        var error_msg = Common.prepareAjaxErrorMsg(response);
+                        $error.html(error_msg).show();
                         Common.enableButton($submitBtn);
                     }
                 });
@@ -152,16 +148,7 @@ define([
                 cache: false,
                 reset: true,
                 error: function(collection, response, opts) {
-                    var err_msg;
-                    if (response.responseText) {
-                        if (response['status'] == 401 || response['status'] == 403) {
-                            err_msg = gettext("Permission error");
-                        } else {
-                            err_msg = JSON.parse(response.responseText).error_msg;
-                        }
-                    } else {
-                        err_msg = gettext("Failed. Please check the network.");
-                    }
+                    var err_msg = Common.prepareCollectionFetchErrorMsg(collection, response, opts);
                     Common.feedback(err_msg, 'error');
                 },
                 complete:function() {

@@ -199,13 +199,8 @@ define([
                     _this.model.set({ 'name': new_name }); // it will trigger 'change' event
                 };
                 var after_op_error = function(xhr) {
-                    var err_msg;
-                    if (xhr.responseText) {
-                        err_msg = JSON.parse(xhr.responseText).error||JSON.parse(xhr.responseText).error_msg;
-                    } else {
-                        err_msg = gettext("Failed. Please check the network.");
-                    }
-                    Common.feedback(err_msg, 'error');
+                    var error_msg = Common.prepareAjaxErrorMsg(xhr);
+                    Common.feedback(error_msg, 'error');
                     Common.enableButton(submit_btn);
                 };
 
@@ -241,14 +236,13 @@ define([
             $('[name="email"]', $form).select2($.extend(
                 Common.contactInputOptionsForSelect2(), {
                 width: '280px',
-                maximumSelectionSize: 1,
-                placeholder: gettext("Search user or enter email and press Enter"), // to override 'placeholder' returned by `Common.conta...`
-                formatSelectionTooBig: gettext("You cannot select any more choices")
+                maximumSelectionLength: 1,
+                placeholder: gettext("Search user or enter email and press Enter")
             }));
 
             $form.on('submit', function() {
-                var email = $.trim($('[name="email"]', $(this)).val());
-                if (!email) {
+                var email = $('[name="email"]', $(this)).val(); // []
+                if (!email.length) {
                     return false;
                 }
                 if (email == _this.model.get('owner')) {
@@ -266,7 +260,7 @@ define([
                     dataType: 'json',
                     beforeSend: Common.prepareCSRFToken,
                     data: {
-                        'owner': email
+                        'owner': email[0]
                     },
                     success: function() {
                         $.modal.close();
@@ -274,12 +268,7 @@ define([
                         Common.feedback(gettext("Successfully transferred the library."), 'success');
                     },
                     error: function(xhr) {
-                        var error_msg;
-                        if (xhr.responseText) {
-                            error_msg = JSON.parse(xhr.responseText).error_msg;
-                        } else {
-                            error_msg = gettext("Failed. Please check the network.");
-                        }
+                        var error_msg = Common.prepareAjaxErrorMsg(xhr);
                         $('.error', $form).html(error_msg).show();
                         Common.enableButton($submitBtn);
                     }
@@ -387,27 +376,26 @@ define([
                         });
                     }
                     $('#simplemodal-data').html($form);
-                    $('[name="labels"]', $form).select2({tags: s2_data});
+                    $('[name="labels"]', $form).select2({
+                        language: Common.i18nForSelect2(),
+                        width: '100%',
+                        multiple: true,
+                        tags: s2_data
+                    });
                 },
                 error: function(xhr) {
-                    var error_msg;
-                    if (xhr.responseText) {
-                        var parsed_resp = JSON.parse(xhr.responseText);
-                        error_msg = parsed_resp.error_msg || parsed_resp.detail;
-                    } else {
-                        error_msg = gettext("Failed. Please check the network.");
-                    }
+                    var error_msg = Common.prepareAjaxErrorMsg(xhr);
                     $('#simplemodal-data').html('<p class="error">' + error_msg + '</p>');
                 }
             });
 
             $form.on('submit', function() {
                 var $input = $('[name="labels"]', $form);
-                var labels = $input.select2('val');
+                var labels = $input.val();
                 var $error = $('.error', $form);
                 var $submit = $('[type="submit"]', $form);
 
-                if (labels.length == 0) {
+                if (!labels.length) {
                     $error.html(gettext("It is required.")).show();
                     return false;
                 }
@@ -432,13 +420,7 @@ define([
                         Common.feedback(msg, 'success');
                     },
                     error: function(xhr) {
-                        var error_msg;
-                        if (xhr.responseText) {
-                            var parsed_resp = JSON.parse(xhr.responseText);
-                            error_msg = parsed_resp.error_msg || parsed_resp.detail;
-                        } else {
-                            error_msg = gettext("Failed. Please check the network.");
-                        }
+                        var error_msg = Common.prepareAjaxErrorMsg(xhr);
                         $error.html(error_msg).show();
                         Common.enableButton($submit);
                     }

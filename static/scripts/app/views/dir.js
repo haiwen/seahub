@@ -448,7 +448,12 @@ define([
                         'p': dir.path,
                         'thumbnail_size': thumbnail_size
                     },
-                    success: function() {
+                    success: function(collection, response, opts) {
+
+                        if (response.next_url) {
+                            window.open(response.next_url, '_self')
+                        }
+
                         _this.dir.user_can_set_folder_perm = false;
                         _this.is_address_book_group_admin = false;
                         if (_this.contextOptions &&
@@ -465,7 +470,7 @@ define([
                                 _this._showLibDecryptDialog();
                                 return;
                             } else {
-                                err_msg = response.responseJSON.error;
+                                err_msg = Common.HTMLescape(response.responseJSON.error);
                             }
                         } else {
                             err_msg = gettext('Please check the network.');
@@ -498,13 +503,8 @@ define([
                         _this.reset();
                     },
                     error: function(xhr) {
-                        var err_msg;
-                        if (xhr.responseText) {
-                            err_msg = JSON.parse(xhr.responseText).error_msg;
-                        } else {
-                            err_msg = gettext("Please check the network.");
-                        }
-                        _this.$error.html(err_msg).show();
+                        var error_msg = Common.prepareAjaxErrorMsg(xhr);
+                        _this.$error.html(error_msg).show();
                     }
                 });
             },
@@ -1320,13 +1320,8 @@ define([
                                             }
                                         },
                                         error: function(xhr, textStatus, errorThrown) {
-                                            var error;
-                                            if (xhr.responseText) {
-                                                error = JSON.parse(xhr.responseText).error;
-                                            } else {
-                                                error = gettext("Failed. Please check the network.");
-                                            }
-                                            cancel_btn.after('<p class="error">' + error + '</p>');
+                                            var error_msg = Common.prepareAjaxErrorMsg(xhr);
+                                            cancel_btn.after('<p class="error">' + error_msg + '</p>');
                                             end();
                                         }
                                     });
@@ -1354,16 +1349,11 @@ define([
                                 data: post_data,
                                 success: after_op_success,
                                 error: function(xhr) {
-                                    var err;
-                                    if (xhr.responseText) {
-                                        err = JSON.parse(xhr.responseText).error||JSON.parse(xhr.responseText).error_msg;
-                                    } else {
-                                        err = gettext("Failed. Please check the network.");
-                                    }
+                                    var error_msg = Common.prepareAjaxErrorMsg(xhr);
                                     if (form.is(':visible')) {
-                                        $('.error', form).html(err).show();
+                                        $('.error', form).html(error_msg).show();
                                     } else {
-                                        cancel_btn.after('<p class="error">' + err + '</p>');
+                                        cancel_btn.after('<p class="error">' + error_msg + '</p>');
                                         cancel_btn.hide();
                                     }
                                 }
@@ -1423,13 +1413,8 @@ define([
                                     end();
                                 },
                                 error: function(xhr, textStatus, errorThrown) {
-                                    var error;
-                                    if (xhr.responseText) {
-                                        error = JSON.parse(xhr.responseText).error;
-                                    } else {
-                                        error = gettext("Failed. Please check the network.");
-                                    }
-                                    other_info.html(error).removeClass('hide');
+                                    var error_msg = Common.prepareAjaxErrorMsg(xhr);
+                                    other_info.html(error_msg).removeClass('hide');
                                     Common.enableButton(cancel_btn);
                                 }
                             });

@@ -108,18 +108,9 @@ define([
                 success: function() {
                 },
                 error: function(collection, response, opts) {
-                    _this.$loadingTip.hide();
-                    var err_msg;
-                    if (response.responseText) {
-                        if (response['status'] == 401 || response['status'] == 403) {
-                            err_msg = gettext("Permission error");
-                        } else {
-                            err_msg = JSON.parse(response.responseText).error_msg;
-                        }
-                    } else {
-                        err_msg = gettext('Please check the network.');
-                    }
+                    var err_msg = Common.prepareCollectionFetchErrorMsg(collection, response, opts);
                     _this.$conError.html(err_msg).show();
+                    _this.$loadingTip.hide();
                 }
             });
         },
@@ -156,12 +147,7 @@ define([
                     _this.scrollConToBottom();
                 },
                 error: function(xhr) {
-                    var err_msg;
-                    if (xhr.responseText) {
-                        err_msg = JSON.parse(xhr.responseText).error_msg;
-                    } else {
-                        err_msg = gettext("Failed. Please check the network.");
-                    }
+                    var err_msg = Common.prepareAjaxErrorMsg(xhr);
                     $formError.html(err_msg).show();
                 },
                 complete: function() {

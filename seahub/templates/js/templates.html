@@ -79,7 +79,7 @@
 <script type="text/template" id="add-lib-label-form-tmpl">
 <form action="" method="">
     <h3 id="dialogTitle">{% trans "Label current state" %}</h3>
-    <input type="hidden" name="labels" class="w100" />
+    <select name="labels"></select>
     <p class="error hide"></p>
     <button type="submit" class="submit">{% trans "Submit" %}</button>
 </form>
@@ -293,7 +293,7 @@
     <td><%= size_formatted %></td>
     <td><%= mtime_relative %></td>
     <% if (show_repo_owner) { %>
-    <td><span title="<%- owner %>"><%- owner_name %></span></td>
+    <td><span title="<%- owner_name %>"><%- owner_name %></span></td>
     <% } %>
 </script>
 <script type="text/template" id="group-repo-mobile-tmpl">
@@ -304,7 +304,7 @@
         <span class="repo-name-span">
             <a href="#group/<%= group_id %>/lib/<%= id %>" class="normal"><%- name %></a><br />
             <% if (show_repo_owner) { %>
-            <span class="repo-meta-info" title="<%- owner %>"><%- owner_name %></span>
+            <span class="repo-meta-info" title="<%- owner_name %>"><%- owner_name %></span>
             <% } %>
             <span class="repo-meta-info"><%= size_formatted %></span>
             <span class="repo-meta-info"><%= mtime_relative %></span>
@@ -313,12 +313,17 @@
     <td class="repo-op-td">
         <% if (app.pageOptions.is_pro) { %>
             <% if (parent_group_id == 0) { %>
-                <% if (is_repo_owner || is_admin) { %>
-                    <a href="#" class="sf2-icon-share sf2-x repo-share-btn op-icon" title="{% trans "Share" %}" aria-label="{% trans "Share" %}"></a>
-                <% } %>
-                <% if (is_staff || is_repo_owner || is_admin) { %>
-                    <a href="#" class="sf2-icon-x3 sf2-x cancel-share op-icon" title="{% trans "Unshare" %}" aria-label="{% trans "Unshare" %}"></a>
-                <% } %>
+            <div class="sf-dropdown sf-dropdown-inline">
+                <a href="#" class="sf2-icon-caret-down more-op-icon op-icon sf-dropdown-toggle" title="{% trans "More Operations" %}" aria-label="{% trans "More Operations" %}"></a>
+                <ul class="hidden-op repo-hidden-op hide sf-dropdown-menu">
+                    <% if (is_repo_owner || is_admin) { %>
+                    <li><a href="#" class="op repo-share-btn">{% trans "Share" %}</a></li>
+                    <% } %>
+                    <% if (is_staff || is_repo_owner || is_admin) { %>
+                    <li><a href="#" class="op cancel-share">{% trans "Unshare" %}</a></li>
+                    <% } %>
+                </ul>
+            </div>
 
             <% } else { %>
                 <% if (is_staff) { %>
@@ -342,12 +347,18 @@
             <% } %>
 
         <% } else { %>
-            <% if (is_repo_owner) { %>
-                <a href="#" class="sf2-icon-share sf2-x repo-share-btn op-icon" title="{% trans "Share" %}" aria-label="{% trans "Share" %}"></a>
-            <% } %>
-            <% if (is_staff || is_repo_owner) { %>
-                <a href="#" class="sf2-icon-x3 sf2-x cancel-share op-icon" title="{% trans "Unshare" %}" aria-label="{% trans "Unshare" %}"></a>
-            <% } %>
+            <div class="sf-dropdown sf-dropdown-inline">
+                <a href="#" class="sf2-icon-caret-down more-op-icon op-icon sf-dropdown-toggle" title="{% trans "More Operations" %}" aria-label="{% trans "More Operations" %}"></a>
+                <ul class="hidden-op repo-hidden-op hide sf-dropdown-menu">
+                    <% if (is_repo_owner) { %>
+                    <li><a href="#" class="op repo-share-btn">{% trans "Share" %}</a></li>
+                    <% } %>
+                    <% if (is_staff || is_repo_owner) { %>
+                    <li><a href="#" class="op cancel-share">{% trans "Unshare" %}</a></li>
+                    <% } %>
+                </ul>
+            </div>
+
         <% } %>
     </td>
 </script>
@@ -553,6 +564,7 @@
     <td class="dirent-icon"><img src="<%= icon_url %>" width="24" alt="" /></td>
     <td>
         <span class="dirent-name"><a href="<%= url %>" class="dir-link normal"><%- dirent.obj_name %></a></span>
+        <span class="dirent-smart-link sf2-icon-link" title="{% trans 'Internal link' %}"></span>
     </td>
     <td class="dirent-op">
         <div class="op-container">
@@ -622,6 +634,7 @@
     <td>
         <span class="dirent-name">
         <a href="<%= url %>" class="dir-link normal"><%- dirent.obj_name %></a>
+        <span class="dirent-smart-link sf2-icon-link" title="{% trans 'Internal link' %}"></span>
         <br />
         <% if (dirent.last_modified) { %>
         <span class="dirent-meta-info"><%= dirent.last_update %></span>
@@ -707,6 +720,7 @@
             <a class="normal" href="<%= url %>" target="_blank"><%- dirent.obj_name %></a>
             <% } %>
         </span>
+        <span class="dirent-smart-link sf2-icon-link" title="{% trans 'Internal link' %}"></span>
     </td>
     <td class="dirent-op">
         <div class="op-container">
@@ -821,8 +835,10 @@
         <span class="dirent-name">
             <% if (dirent.is_img) { %>
             <a class="normal img-name-link" href="<%= url %>" target="_blank"><%- dirent.obj_name %></a>
+            <span class="dirent-smart-link sf2-icon-link" title= "{% trans 'Internal link' %}"></span>
             <% } else { %>
             <a class="normal" href="<%= url %>" target="_blank"><%- dirent.obj_name %></a>
+            <span class="dirent-smart-link sf2-icon-link" title= "{% trans 'Internal link' %}"></span>
             <br />
             <% } %>
             <span class="dirent-meta-info"><%= dirent.file_size %></span>
@@ -1073,7 +1089,7 @@
                         <span class="loading-icon"></span>
                         <ul class="cur-tags hide ovhd"></ul>
                         <span class="sf2-icon-edit tags-edit-icon op-icon hide" title="{% trans "Edit" %}"></span>
-                        <input type="hidden" class="w100 hide tags-input" />
+                        <select class="tags-input hide"></select>
                         <button class="submit tags-submit-btn hide">{% trans "Submit" %}</button>
                         <p class="error hide"></p>
                     </td>
@@ -1119,7 +1135,7 @@
                         <span class="loading-icon"></span>
                         <ul class="cur-tags hide ovhd"></ul>
                         <span class="sf2-icon-edit tags-edit-icon op-icon hide" title="{% trans "Edit" %}"></span>
-                        <input type="hidden" class="w100 hide tags-input" />
+                        <select class="tags-input hide"></select>
                         <button class="submit tags-submit-btn hide">{% trans "Submit" %}</button>
                         <p class="error hide"></p>
                     </td>
@@ -1144,8 +1160,8 @@
                 <% } %>
 
                 <% if (enable_dir_private_share) { %> {# dir private share #}
-            <li class="tab"><a href="#dir-user-share" class="a">{% trans "Share to user" %}</a></li>
-            <li class="tab"><a href="#dir-group-share" class="a">{% trans "Share to group" %}</a></li>
+            <li class="tab" id="dir-user-share-tab"><a href="#dir-user-share" class="a">{% trans "Share to user" %}</a></li>
+            <li class="tab" id="dir-group-share-tab"><a href="#dir-group-share" class="a">{% trans "Share to group" %}</a></li>
                 <% } %>
             <% } %>
         </ul>
@@ -1289,7 +1305,7 @@
                     <tbody>
                     <tr id="add-dir-user-share-item">
                         <td>
-                            <input type="hidden" name="emails" class="w100" />
+                            <select name="emails"></select>
                         </td>
                         <td>
                             <select name="permission" class="share-permission-select w100">
@@ -1325,7 +1341,7 @@
                     <tbody>
                     <tr id="add-dir-group-share-item">
                         <td>
-                            <select name="groups" class="w100" multiple="multiple"></select>
+                            <select name="groups"></select>
                         </td>
                         <td>
                             <select name="permission" class="share-permission-select w100">
@@ -1361,7 +1377,7 @@
     </td>
     <td><%= size_formatted %></td>
     <td><%= mtime_relative %></td>
-    <td><span title="<%- owner %>"><%- owner_nickname %></span></td>
+    <td><span title="<%- owner_nickname %>"><%- owner_nickname %></span></td>
 </script>
 <script type="text/template" id="shared-repo-mobile-tmpl">
     <td>
@@ -1666,7 +1682,7 @@
     <div id="folder-perm-tabs" class="nav-con-tabs">
         <ul class="nav-con-tabs-nav">
             <li class="tab"><a href="#user-folder-perm" class="a">{% trans "User Permission" %}</a></li>
-            <li class="tab"><a href="#group-folder-perm" class="a">{% trans "Group Permission" %}</a></li>
+            <li class="tab" id="group-folder-perm-tab"><a href="#group-folder-perm" class="a">{% trans "Group Permission" %}</a></li>
         </ul>
         <div class="nav-con-tabs-content">
             <div id="user-folder-perm" class="tabs-panel">
@@ -1681,7 +1697,7 @@
                     <tbody>
                     <tr id="add-user-folder-perm">
                         <td>
-                            <input type="hidden" name="email" class="w100" />
+                            <select name="email"></select>
                         </td>
                         <td>
                             <select name="permission" class="folder-perm-select w100">
@@ -1707,7 +1723,7 @@
                     <tbody>
                     <tr id="add-group-folder-perm">
                         <td>
-                            <select name="group" class="w100" multiple="multiple"></select>
+                            <select name="group"></select>
                         </td>
                         <td>
                             <select name="permission" class="folder-perm-select w100">
@@ -1992,7 +2008,6 @@
                 <span class="group-admin-txt">{% trans "admin" %}</span>
             <% } %>
         </p>
-        <p class="txt-item ellipsis" title="<%- contact_email %>"><%- contact_email %></p>
     </div>
 </script>
 
@@ -2067,7 +2082,7 @@
 <script type="text/template" id="group-transfer-form-tmpl">
 <form method="post" action="">
     <h3 id="dialogTitle">{% trans "Transfer Group To" %}</h3>
-    <input type="hidden" name="email" /><br />
+    <select name="email"></select><br />
     <p class="error hide"></p>
     <input type="submit" value="{% trans "Submit" %}" />
 </form>
@@ -2085,7 +2100,7 @@
 <script type="text/template" id="group-manage-members-tmpl">
 <h3 id="dialogTitle"><%= title %></h3>
 <form method="post" action="" id="add-group-members-form">
-    <input type="hidden" name="user_name" />
+    <select name="user_name"></select>
     <input type="submit" value="{% trans "Add" %}" class="submit" />
 </form>
 {% if enable_guest_invitation and user.permissions.can_invite_guest %}
@@ -2100,16 +2115,14 @@
             <% if (is_owner) { %>
             <tr>
                 <th width="5%"></th>
-                <th width="25%">{% trans "Name" %}</th>
-                <th width="35%">{% trans "Email" %}</th>
+                <th width="60%">{% trans "Name" %}</th>
                 <th width="25%">{% trans "Role" %}</th>
                 <th width="10%"><!--Operations--></th>
             </tr>
             <% } else { %>
             <tr>
                 <th width="5%"></th>
-                <th width="30%">{% trans "Name" %}</th>
-                <th width="55%">{% trans "Email" %}</th>
+                <th width="85%">{% trans "Name" %}</th>
                 <th width="10%"><!--Operations--></th>
             </tr>
             <% } %>
@@ -2128,7 +2141,6 @@
 <td>
     <a href="{{ SITE_ROOT }}profile/<% print(encodeURIComponent(email)); %>/"><%- name %></a>
 </td>
-<td><%- contact_email %></td>
 
 <% if (is_owner) { %>
     <% if (username == email) { %>
@@ -2242,7 +2254,7 @@
 <script type="text/template" id="repo-transfer-form-tmpl">
 <form method="post" action="" id="repo-transfer-form">
     <h3 id="dialogTitle"><%= title %></h3>
-    <input type="hidden" name="email" /><br />
+    <select name="email"></select><br />
     <p class="error hide"></p>
     <input type="submit" value="{% trans "Submit" %}" />
 </form>
@@ -2253,7 +2265,7 @@
     <div id="repo-folder-perm" class="nav-con-tabs js-tabs">
         <ul class="nav-con-tabs-nav">
             <li class="tab"><a href="#js-repo-user-folder-perm" class="a">{% trans "User Permission" %}</a></li>
-            <li class="tab"><a href="#js-repo-group-folder-perm" class="a">{% trans "Group Permission" %}</a></li>
+            <li class="tab" id="repo-group-folder-perm-tab"><a href="#js-repo-group-folder-perm" class="a">{% trans "Group Permission" %}</a></li>
         </ul>
 
         <div class="nav-con-tabs-content">
@@ -2270,7 +2282,9 @@
                     </thead>
                     <tbody>
                         <tr>
-                            <td><input name="emails" type="hidden" class="w100" /></td>
+                            <td>
+                                <select name="emails"></select>
+                            </td>
                             <td>
                                 <div class="pos-rel">
                                     <input type="text" name="folder_path" class="repo-folder-perm-folder-path" />
@@ -2315,7 +2329,7 @@
                     <tbody>
                         <tr>
                             <td>
-                                <select name="groups" class="w100" multiple="multiple"></select>
+                                <select name="groups"></select>
                             </td>
                             <td>
                                 <div class="pos-rel">
@@ -2397,8 +2411,7 @@
         <div class="item ovhd">
             {% avatar request.user 36 %}
             <div class="txt">
-                <%- app.pageOptions.name %><br />
-                <%- app.pageOptions.contact_email %>
+                <%- app.pageOptions.name %>
             </div>
         </div>
         <div class="loading-icon loading-tip"></div>
@@ -2785,4 +2798,26 @@
     </div>
     <div class="msg-content"><%= content_marked %></div>
 </div>
+</script>
+<script type="text/template" id="smart-link-tmpl">
+    <div class="smart-link-container">
+        <h3 id="dialogTitle">{% trans "Internal link" %}</h3>
+        <p class="smart-link-help">
+            <span>
+                {% trans "An internal link is a link to a file or folder that can be accessed by users with read permission to the file or folder. The link will still point to the file or folder after the file or folder be renamed or moved." %}
+            </span>
+        </p>
+        <div class="smart-link-wraper">
+            <div class="smart-link-loading"></div>
+            <a target="_blank" class="smart-link-href" href=""></a>
+        </div>
+        <div class="smart-link-operation">
+            <button class="smart-link-copy">{% trans "Copy" %}</button>
+            <button class="smart-link-close">{% trans "Close" %}</button>
+        </div>
+        <!-- used to copy text to clipBoard-->
+        <div class="input-copy-wrapper">
+            <input class="copy-input" type="text">
+        </div>
+    </div>
 </script>

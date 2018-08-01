@@ -188,13 +188,8 @@ form.fileupload({
 
             },
             error: function(xhr) {
-                var error_msg;
-                if (xhr.responseJSON) {
-                    error_msg = xhr.responseJSON.error;
-                } else {
-                    error_msg = "{% trans "Error" %}";
-                }
                 data.abort();
+                var error_msg = prepareAjaxErrorMsg(xhr);
                 $('.fileupload-buttonbar .error').html(error_msg).show();
             }
         });

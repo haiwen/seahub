@@ -7,21 +7,18 @@ $('.repo-transfer-btn').on('click', function(){
         repo_name = btn_ct.attr('data-name'),
         form = $('#repo-transfer-form');
 
-    form.modal({appendTo:'#main'});
+    form.modal({focus: false});
     $('#simplemodal-container').css({'width':'auto', 'height':'auto'});
 
     var detail = $('.detail', form);
     detail.html(detail.html().replace('%(lib_name)s', '<span class="op-target">' + HTMLescape(repo_name) + '</span>'));
 
     $('[name="email"]', form).select2($.extend({
+        language: i18n_select2,
+        multiple: true, // to keep the same UI with the others
         width: '268px',
-        maximumSelectionSize: 1,
-        placeholder: "{% trans "Search user or enter email and press Enter" %}",
-        formatInputTooShort: "{% trans "Please enter 1 or more character" %}",
-        formatNoMatches: "{% trans "No matches" %}",
-        formatSearching: "{% trans "Searching..." %}",
-        formatAjaxError: "{% trans "Loading failed" %}",
-        formatSelectionTooBig: "{% trans "You cannot select any more choices" %}"
+        maximumSelectionLength: 1,
+        placeholder: "{% trans "Search user or enter email and press Enter" %}"
     }, userInputOPtionsForSelect2('{% url 'search-user' %}')));
 
     $('input[name="repo_id"]', form).val(repo_id);
@@ -33,17 +30,17 @@ $('#repo-transfer-form').on('submit', function() {
     var form = $(this),
         form_id = form.attr('id'),
         repo_id = $('[name="repo_id"]', form).val(),
-        email = $.trim(form.children('[name="email"]').val());
+        email = $('[name="email"]', form).val(); // []
     var $tr = form.data('tr');
 
-    if (!email) {
+    if (!email.length) {
         return false;
     }
 
     $.ajax({
         url: '{{SITE_ROOT}}api/v2.1/admin/libraries/' + encodeURIComponent(repo_id) + '/',
-        data: {'owner': email},
         type: 'PUT',
+        data: {'owner': email[0]},
         cache: false,
         beforeSend: prepareCSRFToken,
         dataType: 'json',
@@ -51,9 +48,7 @@ $('#repo-transfer-form').on('submit', function() {
             $tr.remove();
             feedback("{% trans "Successfully transfered 1 item." %}", 'success');
         },
-        error: function(xhr, textStatus, errorThrown) {
-            ajaxErrorHandler(xhr, textStatus, errorThrown);
-        },
+        error: ajaxErrorHandler,
         complete: function() {
             $.modal.close();
         }
@@ -82,9 +77,7 @@ $('.repo-delete-btn').on('click', function() {
                 $tr.remove();
                 feedback("{% trans "Successfully deleted 1 item." %}", 'success');
             },
-            error: function(xhr, textStatus, errorThrown) {
-                ajaxErrorHandler(xhr, textStatus, errorThrown);
-            },
+            error: ajaxErrorHandler,
             complete: function() {
                 $.modal.close();
             }

@@ -83,13 +83,8 @@ define([
                     _this.remove();
                 },
                 error: function(xhr) {
-                    var err_msg;
-                    if (xhr.responseText) {
-                        err_msg = JSON.parse(response.responseText).error_msg;
-                    } else {
-                        err_msg = gettext('Please check the network.');
-                    }
-                    _this.data.$error.html(err_msg).show();
+                    var error_msg = Common.prepareAjaxErrorMsg(xhr);
+                    _this.data.$error.html(error_msg).show();
                 }
             });
 

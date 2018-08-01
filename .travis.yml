@@ -1,20 +1,44 @@
 language: python
+
+env:
+  - CCNET_CONF_DIR=/tmp/ccnet SEAFILE_CONF_DIR=/tmp/seafile-data
+
+# install & start seafile-server CE v6.3, install phantomjs & nginx
 before_install:
   # build/init/start ccnet-server/seafile-server
-  - git clone --depth=1 --branch=master git://github.com/haiwen/seafile-test-deploy /tmp/seafile-test-deploy
+  - git clone --depth=1 --branch=6.3 git://github.com/haiwen/seafile-test-deploy /tmp/seafile-test-deploy
   - cd /tmp/seafile-test-deploy && ./bootstrap.sh && cd -
   # install phantomjs
   - ./tests/install-deps.sh
-script:
-  - ./tests/seahubtests.sh init && ./tests/seahubtests.sh runserver && ./tests/seahubtests.sh test
-env:
-  - CCNET_CONF_DIR=/tmp/ccnet SEAFILE_CONF_DIR=/tmp/seafile-data
+
+# install seahub requirements
 install:
-  - pip install -r requirements.txt --allow-all-external --allow-unverified Djblets --allow-unverified PIL
+  - pip install -r requirements.txt --allow-all-external --allow-unverified PIL
   - pip install -r test-requirements.txt
+
+# int & start seahub server
+before_scipt:
+  - ./tests/seahubtests.sh init && ./tests/seahubtests.sh runserver
+
+# run seahub tests
+script:
+  - ./tests/seahubtests.sh test
+
+after_success: true
+
+after_failure: true
+
+after_script: true
+
 notifications:
   email: false
   slack:
     rooms:
       secure: TAfn5FZpRfzjGnHl2oiF1bF9FVg3L+ObK6gkNmdAY08xgdd8fHFOHrlD1WzrYSom3eT2OZ/5YPzrKAwbuWcMqTWc7NxjBCEDwfRu7F0DVBX/tUCd4f8H4B0LhaVpF3kNpApRV8UhIi1+2z9slP0O1BerDDn5AaTOx9YfcAFs/w8=
     on_success: always
+
+branches:
+  only: 
+    - master
+    - 6.3
+    - 6.2

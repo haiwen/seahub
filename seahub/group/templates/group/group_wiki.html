@@ -178,11 +178,9 @@ $('#wiki-create-form').on('submit', function () {
         success: function(data) {
             location.href = data['href'];
         },
-        error: function(data, textStatus, jqXHR) {
-            var errors = JSON.parse(data.responseText);
-            $.each(errors, function(index, value) {
-                apply_form_error(form_id, value);
-            });
+        error: function(xhr, textStatus, errorThrown) {
+            var error_msg = prepareAjaxErrorMsg(xhr);
+            apply_form_error(form_id, error_msg);
             enable(submit_btn);
         }
     });
