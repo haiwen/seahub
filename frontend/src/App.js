@@ -18,7 +18,7 @@ const userInfo = window.app.userInfo;
 // init seafileAPI
 let seafileAPI = new SeafileAPI();
 let xcsrfHeaders = cookie.load('csrftoken');
-seafileAPI.initForSeahubUsage({ xcsrfHeaders });
+seafileAPI.initForSeahubUsage({ siteRoot, xcsrfHeaders });
 
 function getImageFileNameWithTimestamp() {
   var d = Date.now();
