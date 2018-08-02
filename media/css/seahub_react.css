@@ -630,3 +630,51 @@ a.op-icon:focus {
     font-size: 0.875rem;
     padding:1px 30px 1px 5px;
 }
+
+
+
+.wiki-page-ops {
+    position:fixed;
+    top:10px;
+}
+@media (min-width: 768px) {
+    .wiki-page-ops:before {
+        content:'';
+        border-left:1px solid #ddd;
+        position:absolute;
+        top:3px;
+        left:-16px;
+        bottom:3px;
+    }
+}
+
+.sf-btn-link:hover {
+    cursor:pointer;
+    background:#fff;
+    color:#333;
+    text-decoration:none;
+}
+
+.sf-btn-link,
+select {
+    padding:5px 6px;
+    background:-webkit-linear-gradient(top, #fafafb, #eeeeee);
+    background:-moz-linear-gradient(top, #fafafb, #eeeeee);
+    background:linear-gradient(top, #fafafb, #eeeeee);
+    border: 1px solid #c5c5c5;
+    border-radius: 2px;
+}
+
+.sf-btn-link {
+    display:inline-block;
+    color:#333;
+    line-height:19px;
+    text-decoration:none;
+    font-weight:normal;
+}
+
+.btn-white {
+    height:29px;
+    background:#fff;
+    line-height:17px;
+}

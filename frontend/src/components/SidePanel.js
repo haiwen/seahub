@@ -1,14 +1,6 @@
 import React, { Component } from 'react';
-import 'whatwg-fetch';
 import TreeView from './tree-view/tree-view';
-
-const siteRoot = window.app.config.siteRoot;
-const logoPath =  window.app.config.logoPath;
-const mediaUrl = window.app.config.mediaUrl;
-const siteTitle = window.app.config.siteTitle;
-const logoWidth = window.app.config.logoWidth;
-const logoHeight = window.app.config.logoHeight;
-const slug = window.wiki.config.slug;
+import { siteRoot, logoPath, mediaUrl, siteTitle, logoWidth, logoHeight } from './constance';
 
 class SidePanel extends Component {
   closeSide = () => {

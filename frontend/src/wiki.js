@@ -3,6 +3,9 @@ import ReactDOM from 'react-dom';
 import SidePanel from './components/SidePanel';
 import MainPanel from './components/MainPanel';
 import moment from 'moment';
+import cookie from 'react-cookies';
+import { SeafileAPI } from 'seafile-js';
+import { slug, repoID, serviceUrl, initialFilePath, siteRoot } from './components/constance';
 import './assets/css/fa-solid.css';
 import './assets/css/fa-regular.css';
 import './assets/css/fontawesome.css';
@@ -10,20 +13,15 @@ import './css/initial-style.css';
 import './css/side-panel.css';
 import './css/wiki.css';
 
-const slug = window.wiki.config.slug;
-const repoID = window.wiki.config.repoId;
-const siteRoot = window.app.config.siteRoot;
-const serviceUrl = window.wiki.config.serviceUrl;
-const initialFilePath = window.wiki.config.initial_file_path;
-const dirPath = '/';
+// init seafileAPI
+let seafileAPI = new SeafileAPI();
+let xcsrfHeaders = cookie.load('csrftoken');
+seafileAPI.initForSeahubUsage({ siteRoot, xcsrfHeaders });
 
 class EditorUtilities {
   getFiles() {
-    const dirUrl = siteRoot + 'api/v2.1/wikis/' + slug + '/pages/dir/';
-    return fetch(dirUrl, {credentials: 'same-origin'})
-      .then(res => res.json())
-      .then(items => {
-        const files = items.dir_file_list.map(item => {
+    return seafileAPI.listWikiDir(slug).then(items => {
+        const files = items.data.dir_file_list.map(item => {
           return {
             name: item.name,
             type: item.type === 'dir' ? 'dir' : 'file',
@@ -65,12 +63,10 @@ class Wiki extends Component {
     }
   }
 
-
   isInternalMarkdownLink(url) {
     var re = new RegExp(serviceUrl + '/lib/' + repoID + '/file' + '.*\.md');
     return re.test(url);
   }
-
 
   getPathFromInternalMarkdownLink(url) {
     var re = new RegExp(serviceUrl + '/lib/' + repoID + '/file' + "(.*\.md)");
@@ -94,28 +90,23 @@ class Wiki extends Component {
   }
 
   loadFile(filePath) {
-    this.setState({
-      fileName: this.fileNameFromPath(filePath),
-      filePath: filePath
-    });
-    const path = encodeURIComponent(filePath);
-    const url = siteRoot + 'api/v2.1/wikis/' + slug + '/content/' + '?p=' + filePath;
-    fetch(url, {credentials: 'same-origin'})
-      .then(res => res.json())
+    seafileAPI.getWikiFileContent(slug, filePath)
       .then(res => {
         this.setState({
-          content: res.content,
-          latestContributor: res.latest_contributor,
-          lastModified:moment.unix(res.last_modified).fromNow(),
+          content: res.data.content,
+          latestContributor: res.data.latest_contributor,
+          lastModified: moment.unix(res.data.last_modified).fromNow(),
+          fileName: this.fileNameFromPath(filePath),
+          filePath: filePath
         })
       })
 
-    let fileUrl = '/wikis/' + slug + filePath;
-    window.history.pushState({urlPath: fileUrl, filePath: filePath}, filePath, fileUrl);
+      let fileUrl = '/wikis/' + slug + filePath;
+      window.history.pushState({urlPath: fileUrl, filePath: filePath}, filePath, fileUrl);
   }
 
   onpopstate = (event) => {
-      this.loadFile(event.state.filePath);
+    this.loadFile(event.state.filePath);
   }
 
   onMenuClick = () => {
@@ -147,6 +138,7 @@ class Wiki extends Component {
           onMenuClick={this.onMenuClick}
           latestContributor={this.state.latestContributor}
           lastModified={this.state.lastModified}
+          seafileAPI={seafileAPI}
         />
       </div>
     )

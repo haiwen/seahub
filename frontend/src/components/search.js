@@ -1,7 +1,5 @@
 import React, { Component } from 'react';
-
-const repoID = window.wiki.config.repoId;
-const siteRoot = window.app.config.siteRoot;
+import { repoID, siteRoot } from './constance';
 
 class Search extends Component {
   render() {

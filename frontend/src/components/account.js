@@ -1,17 +1,9 @@
 import React, { Component } from 'react';
 import ReactDOM from 'react-dom';
-import MarkdownViewer from './markdown-viewer';
+import cookie from 'react-cookies';
+import { keyCodes, bytesToSize } from './utils';
+import { siteRoot, avatarInfo } from './constance';
 
-const siteRoot = window.app.config.siteRoot;
-const avatarInfo = window.app.config.avatarInfo;
-
-const keyCodes = {
-  esc:   27,
-  space: 32,
-  tab:   9,
-  up:    38,
-  down:  40
-};
 
 class Account extends Component {
   constructor(props) {
@@ -78,30 +70,16 @@ class Account extends Component {
   }
 
   getAccountInfo = () => {
-    const urll = siteRoot + 'api2/account/info/';
-    fetch(urll, {
-      credentials: 'same-origin',
-      })
-      .then(resp => resp.json())
-      .then(resp => {
+    this.props.seafileAPI.getAccountInfo().then(resp => {
         this.setState({
-          userName: resp.name,
-          contactEmail: resp.email,
-          usageRate: resp.space_usage,
-          quotaUsage: this.bytesToSize(resp.usage),
-          quotaTotal: this.bytesToSize(resp.total),
-          isStaff: resp.is_staff
+          userName: resp.data.name,
+          contactEmail: resp.data.email,
+          usageRate: resp.data.space_usage,
+          quotaUsage: bytesToSize(resp.data.usage),
+          quotaTotal: bytesToSize(resp.data.total),
+          isStaff: resp.data.is_staff
         })
       })
-  }
-
-  bytesToSize = (bytes) => {
-    if(bytes < 0) return '--'
-    const sizes = ['bytes', 'KB', 'MB', 'GB', 'TB', 'PB']
-    if (bytes === 0) return bytes + sizes[0]
-    const i = parseInt(Math.floor(Math.log(bytes) / Math.log(1000)), 10)
-    if (i === 0) return bytes + ' ' + sizes[i]
-    return (bytes / (1000 ** i)).toFixed(1) + ' ' + sizes[i]
   }
 
   renderMenu = () => {
@@ -116,7 +94,7 @@ class Account extends Component {
     return (
       <div id="account">
         <a id="my-info" onClick={this.onClickAccount} className="account-toggle no-deco d-none d-md-block" aria-label="View profile and more">
-         <span  dangerouslySetInnerHTML = {{ __html:avatarInfo }}></span> <span className="icon-caret-down vam"></span>
+         <span dangerouslySetInnerHTML = {{ __html:avatarInfo }}></span> <span className="icon-caret-down vam"></span>
         </a>
         <span className="account-toggle sf2-icon-more mobile-icon d-md-none" aria-label="View profile and more" onClick={this.onClickAccount}></span>
         <div id="user-info-popup" className={`account-popup sf-popover ${this.state.showInfo? '':'hide'}`}>
@@ -139,7 +117,7 @@ class Account extends Component {
            </div>
            <a href={siteRoot + 'profile/'} className="item">Settings</a>
            {this.renderMenu()}
-           <a href={siteRoot + 'accounts/logout/'} className="item" id="logout">Log out</a>
+           <a href={siteRoot + 'accounts/logout/'} className="item">Log out</a>
          </div>
         </div>
       </div>
