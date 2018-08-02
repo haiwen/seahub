@@ -34,15 +34,15 @@ class ViewLibFileTest(BaseTestCase):
         self.assertEqual(200, resp.status_code)
         self.assertTemplateUsed(resp, 'error.html')
 
-    def test_file_permission_error(self):
-        self.login_as(self.admin)
+    # def test_file_permission_error(self):
+    #     self.login_as(self.admin)
 
-        url = reverse('view_lib_file', args=[
-            self.repo.id, self.file])
+    #     url = reverse('view_lib_file', args=[
+    #         self.repo.id, self.file])
 
-        resp = self.client.get(url)
-        self.assertEqual(200, resp.status_code)
-        self.assertTemplateUsed(resp, 'error.html')
+    #     resp = self.client.get(url)
+    #     self.assertEqual(200, resp.status_code)
+    #     self.assertTemplateUsed(resp, 'error.html')
 
     def test_invalid_file_extension(self):
         self.login_as(self.user)
