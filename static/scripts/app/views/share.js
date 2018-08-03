@@ -149,16 +149,6 @@ define([
         },
 
         clickGroupShareTab: function() {
-            if (!this.show_group_selector || this.group_tab_clicked) {
-                return;
-            }
-
-            this.group_tab_clicked = true;
-
-            var $loadingTip = this.$('.loading-tip').show();
-            var $panel = this.$('#dir-group-share');
-            var $table = $('table', $panel);
-
             var $add_item = $('#add-dir-group-share-item');
             var prepareGroupsSelector = function(groups) {
                 var group_list = [];
@@ -168,9 +158,6 @@ define([
                         text: groups[i].name
                     });
                 }
-
-                $loadingTip.hide();
-                $table.show();
                 $('[name="groups"]', $add_item).select2({
                     language: Common.i18nForSelect2(),
                     width: '100%',
@@ -815,8 +802,6 @@ define([
                 };
             }
 
-            this.show_group_selector = false;
-
             $.ajax({
                 url: url,
                 data: data,
@@ -833,8 +818,7 @@ define([
                         });
                         $add_item.after(new_item.el);
                     });
-
-                    _this.show_group_selector = true;
+                    $table.removeClass('hide');
                 },
                 error: function(xhr, textStatus, errorThrown) {
                     var err_msg = Common.prepareAjaxErrorMsg(xhr);
