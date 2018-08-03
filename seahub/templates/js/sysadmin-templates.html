@@ -400,7 +400,7 @@
         <input type="text" name="library_name" value="" class="input" id="library-name" /><br />
         <label for="library-owner">{% trans "Owner" %}</label>
         <span class="tip">{% trans "(If left blank, owner will be admin)" %}</span><br />
-        <select name="library_owner" id="library-owner"></select><br />
+        <input type="hidden" name="library_owner" value="" id="library-owner" />
         <p class="error hide"></p>
         <input type="submit" class="submit" value="{% trans "Submit" %}" />
     </form>
@@ -614,7 +614,7 @@
 <script type="text/template" id="library-transfer-form-tmpl">
     <form method="" action="" id="repo-transfer-form">
         <h3><%= title %></h3>
-        <select name="email"></select><br />
+        <input type="hidden" name="email" /><br />
         <p class="error hide"></p>
         <input type="submit" value="{% trans "Submit" %}" />
     </form>
@@ -685,7 +685,7 @@
         <input type="text" name="group_name" value="" class="input" id="group-name" /><br />
         <label for="group-owner">{% trans "Owner" %}</label>
         <span class="tip">{% trans "(If left blank, owner will be admin)" %}</span><br />
-        <select name="group_owner" id="group-owner"></select><br />
+        <input type="hidden" name="group_owner" value="" id="group-owner" />
         <p class="error hide"></p>
         <input type="submit" class="submit" value="{% trans "Submit" %}" />
     </form>
@@ -718,7 +718,7 @@
 <script type="text/template" id="group-transfer-form-tmpl">
     <form method="" action="" id="group-transfer-form">
         <h3><%= title %></h3>
-        <select name="email"></select><br />
+        <input type="hidden" name="email" /><br />
         <p class="error hide"></p>
         <input type="submit" value="{% trans "Submit" %}" />
     </form>
@@ -787,7 +787,7 @@
 <div id="share-tabs" class="nav-con-tabs">
     <ul class="nav-con-tabs-nav">
         <li class="tab"><a href="#dir-user-share" class="a">{% trans "Share to user" %}</a></li>
-        <li class="tab" id="dir-group-share-tab"><a href="#dir-group-share" class="a">{% trans "Share to group" %}</a></li>
+        <li class="tab"><a href="#dir-group-share" class="a">{% trans "Share to group" %}</a></li>
     </ul>
 
     <div class="nav-con-tabs-content">
@@ -804,7 +804,7 @@
                 <tbody>
                 <tr id="add-dir-user-share-item">
                     <td>
-                        <select name="emails"></select>
+                        <input type="hidden" name="emails" class="w100" />
                     </td>
                     <td>
                         <select name="permission" class="share-permission-select w100">
@@ -834,7 +834,7 @@
                 <tbody>
                 <tr id="add-dir-group-share-item">
                     <td>
-                        <select name="groups"></select>
+                        <input type="groups" name="groups" class="w100" />
                     </td>
                     <td>
                         <select name="permission" class="share-permission-select w100">
@@ -881,7 +881,7 @@
     <form id="add-group-member-form" action="" method="post" class="hide">{% csrf_token %}
         <h3 id="dialogTitle">{% trans "Add Member" %}</h3>
         <label for="email">{% trans "Email" %}</label><br />
-        <select name="email" id="email"></select><br />
+        <input type="text" name="email" value="" id="email" /><br />
         <p class="error hide"></p>
         <input type="submit" class="submit" value="{% trans "Submit" %}" />
     </form>

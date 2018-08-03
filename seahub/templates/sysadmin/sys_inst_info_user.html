@@ -2,6 +2,11 @@
 {% load i18n seahub_tags %}
 {% load staticfiles %}
 
+{% block extra_style %}
+<link rel="stylesheet" type="text/css" href="{% static "css/select2-3.5.2.css" %}" />
+<link rel="stylesheet" type="text/css" href="{% static "css/select2.custom.css" %}" />
+{% endblock %}
+
 {% block right_panel %}
 <div class="tabnav">
     <ul class="tabnav-tabs">
@@ -16,7 +21,7 @@
 <form id="add-member-form" action="" method="" class="hide">
     <h3>{% trans "Add Members" %}</h3>
     <label>{% trans "Email" %}</label><br />
-    <select name="emails"></select><br />
+    <input type="hidden" name="emails" /><br />
     <p class="error hide"></p>
     <button type="submit" class="submit">{% trans "Submit" %}</button>
 </form>
@@ -66,7 +71,7 @@
 {% endblock %}
 
 {% block extra_script %}{{ block.super }}
-<script type="text/javascript" src= "{% static "scripts/lib/select2.min.js" %}"></script>
+<script type="text/javascript" src= "{% static "scripts/lib/select2-3.5.2.js" %}"></script>
 
 <script type="text/javascript">
 addConfirmTo($('.js-toggle-admin'), {
@@ -134,17 +139,19 @@ $('#add-member-btn').on('click', function(){
     $('#simplemodal-container').css({'width':'auto', 'height':'auto'});
 
     $('[name="emails"]', $form).select2($.extend({
-        language: i18n_select2,
-        multiple: true,
         width: '280px',
-        placeholder: "{% trans "Search users or enter emails and press Enter" %}"
+        placeholder: "{% trans "Search user or enter email and press Enter" %}",
+        formatInputTooShort: "{% trans "Please enter 1 or more character" %}",
+        formatNoMatches: "{% trans "No matches" %}",
+        formatSearching: "{% trans "Searching..." %}",
+        formatAjaxError: "{% trans "Loading failed" %}"
     }, userInputOPtionsForSelect2('{% url 'search-user' %}')));
 });
 $('#add-member-form').on('submit', function(){
     var $form = $(this);
     var $error = $('.error', $form);
     var $submit = $('[type="submit"]', $form);
-    var emails = $('[name="emails"]', $form).val();
+    var emails = $('[name="emails"]', $form).select2('val');
 
     if (!emails.length) {
         $error.html("{% trans "It is required." %}").show();

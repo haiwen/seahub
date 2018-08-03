@@ -79,7 +79,7 @@
 <script type="text/template" id="add-lib-label-form-tmpl">
 <form action="" method="">
     <h3 id="dialogTitle">{% trans "Label current state" %}</h3>
-    <select name="labels"></select>
+    <input type="hidden" name="labels" class="w100" />
     <p class="error hide"></p>
     <button type="submit" class="submit">{% trans "Submit" %}</button>
 </form>
@@ -1092,7 +1092,7 @@
                         <span class="loading-icon"></span>
                         <ul class="cur-tags hide ovhd"></ul>
                         <span class="sf2-icon-edit tags-edit-icon op-icon hide" title="{% trans "Edit" %}"></span>
-                        <select class="tags-input hide"></select>
+                        <input type="hidden" class="w100 hide tags-input" />
                         <button class="submit tags-submit-btn hide">{% trans "Submit" %}</button>
                         <p class="error hide"></p>
                     </td>
@@ -1138,7 +1138,7 @@
                         <span class="loading-icon"></span>
                         <ul class="cur-tags hide ovhd"></ul>
                         <span class="sf2-icon-edit tags-edit-icon op-icon hide" title="{% trans "Edit" %}"></span>
-                        <select class="tags-input hide"></select>
+                        <input type="hidden" class="w100 hide tags-input" />
                         <button class="submit tags-submit-btn hide">{% trans "Submit" %}</button>
                         <p class="error hide"></p>
                     </td>
@@ -1163,8 +1163,8 @@
                 <% } %>
 
                 <% if (enable_dir_private_share) { %> {# dir private share #}
-            <li class="tab" id="dir-user-share-tab"><a href="#dir-user-share" class="a">{% trans "Share to user" %}</a></li>
-            <li class="tab" id="dir-group-share-tab"><a href="#dir-group-share" class="a">{% trans "Share to group" %}</a></li>
+            <li class="tab"><a href="#dir-user-share" class="a">{% trans "Share to user" %}</a></li>
+            <li class="tab"><a href="#dir-group-share" class="a">{% trans "Share to group" %}</a></li>
                 <% } %>
             <% } %>
         </ul>
@@ -1308,7 +1308,7 @@
                     <tbody>
                     <tr id="add-dir-user-share-item">
                         <td>
-                            <select name="emails"></select>
+                            <input type="hidden" name="emails" class="w100" />
                         </td>
                         <td>
                             <select name="permission" class="share-permission-select w100">
@@ -1344,7 +1344,7 @@
                     <tbody>
                     <tr id="add-dir-group-share-item">
                         <td>
-                            <select name="groups"></select>
+                            <select name="groups" class="w100" multiple="multiple"></select>
                         </td>
                         <td>
                             <select name="permission" class="share-permission-select w100">
@@ -1685,7 +1685,7 @@
     <div id="folder-perm-tabs" class="nav-con-tabs">
         <ul class="nav-con-tabs-nav">
             <li class="tab"><a href="#user-folder-perm" class="a">{% trans "User Permission" %}</a></li>
-            <li class="tab" id="group-folder-perm-tab"><a href="#group-folder-perm" class="a">{% trans "Group Permission" %}</a></li>
+            <li class="tab"><a href="#group-folder-perm" class="a">{% trans "Group Permission" %}</a></li>
         </ul>
         <div class="nav-con-tabs-content">
             <div id="user-folder-perm" class="tabs-panel">
@@ -1700,7 +1700,7 @@
                     <tbody>
                     <tr id="add-user-folder-perm">
                         <td>
-                            <select name="email"></select>
+                            <input type="hidden" name="email" class="w100" />
                         </td>
                         <td>
                             <select name="permission" class="folder-perm-select w100">
@@ -1726,7 +1726,7 @@
                     <tbody>
                     <tr id="add-group-folder-perm">
                         <td>
-                            <select name="group"></select>
+                            <select name="group" class="w100" multiple="multiple"></select>
                         </td>
                         <td>
                             <select name="permission" class="folder-perm-select w100">
@@ -2085,7 +2085,7 @@
 <script type="text/template" id="group-transfer-form-tmpl">
 <form method="post" action="">
     <h3 id="dialogTitle">{% trans "Transfer Group To" %}</h3>
-    <select name="email"></select><br />
+    <input type="hidden" name="email" /><br />
     <p class="error hide"></p>
     <input type="submit" value="{% trans "Submit" %}" />
 </form>
@@ -2103,7 +2103,7 @@
 <script type="text/template" id="group-manage-members-tmpl">
 <h3 id="dialogTitle"><%= title %></h3>
 <form method="post" action="" id="add-group-members-form">
-    <select name="user_name"></select>
+    <input type="hidden" name="user_name" />
     <input type="submit" value="{% trans "Add" %}" class="submit" />
 </form>
 {% if enable_guest_invitation and user.permissions.can_invite_guest %}
@@ -2257,7 +2257,7 @@
 <script type="text/template" id="repo-transfer-form-tmpl">
 <form method="post" action="" id="repo-transfer-form">
     <h3 id="dialogTitle"><%= title %></h3>
-    <select name="email"></select><br />
+    <input type="hidden" name="email" /><br />
     <p class="error hide"></p>
     <input type="submit" value="{% trans "Submit" %}" />
 </form>
@@ -2268,7 +2268,7 @@
     <div id="repo-folder-perm" class="nav-con-tabs js-tabs">
         <ul class="nav-con-tabs-nav">
             <li class="tab"><a href="#js-repo-user-folder-perm" class="a">{% trans "User Permission" %}</a></li>
-            <li class="tab" id="repo-group-folder-perm-tab"><a href="#js-repo-group-folder-perm" class="a">{% trans "Group Permission" %}</a></li>
+            <li class="tab"><a href="#js-repo-group-folder-perm" class="a">{% trans "Group Permission" %}</a></li>
         </ul>
 
         <div class="nav-con-tabs-content">
@@ -2285,9 +2285,7 @@
                     </thead>
                     <tbody>
                         <tr>
-                            <td>
-                                <select name="emails"></select>
-                            </td>
+                            <td><input name="emails" type="hidden" class="w100" /></td>
                             <td>
                                 <div class="pos-rel">
                                     <input type="text" name="folder_path" class="repo-folder-perm-folder-path" />
@@ -2332,7 +2330,7 @@
                     <tbody>
                         <tr>
                             <td>
-                                <select name="groups"></select>
+                                <select name="groups" class="w100" multiple="multiple"></select>
                             </td>
                             <td>
                                 <div class="pos-rel">

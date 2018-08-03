@@ -103,19 +103,19 @@ define([
             $('[name="email"]', $form).select2($.extend(
                 Common.contactInputOptionsForSelect2(), {
                 width: '300px',
-                maximumSelectionLength: 1,
-                placeholder: gettext("Search user or enter email and press Enter")
+                maximumSelectionSize: 1,
+                placeholder: gettext("Search user or enter email and press Enter"), // to override 'placeholder' returned by `Common.conta...`
+                formatSelectionTooBig: gettext("You cannot select any more choices")
             }));
 
             $form.on('submit', function() {
-                var email = $('[name="email"]', $(this)).val(); // []
-                if (!email.length) {
+                var email = $.trim($('[name="email"]', $(this)).val());
+                if (!email) {
                     return false;
                 }
                 if (email == _this.model.get('owner')) {
                     return false;
                 }
-                email = email[0];
 
                 var url = Common.getUrl({'name': 'admin-library','repo_id': _this.model.get('id')});
                 var $submitBtn = $('[type="submit"]', $(this));

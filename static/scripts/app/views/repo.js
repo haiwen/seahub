@@ -243,13 +243,14 @@ define([
             $('[name="email"]', $form).select2($.extend(
                 Common.contactInputOptionsForSelect2(), {
                 width: '280px',
-                maximumSelectionLength: 1,
-                placeholder: gettext("Search user or enter email and press Enter")
+                maximumSelectionSize: 1,
+                placeholder: gettext("Search user or enter email and press Enter"), // to override 'placeholder' returned by `Common.conta...`
+                formatSelectionTooBig: gettext("You cannot select any more choices")
             }));
 
             $form.on('submit', function() {
-                var email = $('[name="email"]', $(this)).val(); // []
-                if (!email.length) {
+                var email = $.trim($('[name="email"]', $(this)).val());
+                if (!email) {
                     return false;
                 }
                 if (email == _this.model.get('owner')) {
@@ -267,7 +268,7 @@ define([
                     dataType: 'json',
                     beforeSend: Common.prepareCSRFToken,
                     data: {
-                        'owner': email[0]
+                        'owner': email
                     },
                     success: function() {
                         $.modal.close();
@@ -387,12 +388,7 @@ define([
                         });
                     }
                     $('#simplemodal-data').html($form);
-                    $('[name="labels"]', $form).select2({
-                        language: Common.i18nForSelect2(),
-                        width: '100%',
-                        multiple: true,
-                        tags: s2_data
-                    });
+                    $('[name="labels"]', $form).select2({tags: s2_data});
                 },
                 error: function(xhr) {
                     var error_msg = Common.prepareAjaxErrorMsg(xhr);
@@ -402,11 +398,11 @@ define([
 
             $form.on('submit', function() {
                 var $input = $('[name="labels"]', $form);
-                var labels = $input.val();
+                var labels = $input.select2('val');
                 var $error = $('.error', $form);
                 var $submit = $('[type="submit"]', $form);
 
-                if (!labels.length) {
+                if (labels.length == 0) {
                     $error.html(gettext("It is required.")).show();
                     return false;
                 }

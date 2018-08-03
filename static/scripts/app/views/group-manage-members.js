@@ -130,7 +130,7 @@ define([
                     validate: true,
                     prepend: true,
                     success: function() {
-                        $input.val(null).trigger('change');
+                        $input.select2('val', '');
                     },
                     error: function(collection, response, options) {
                         var error_msg = Common.prepareAjaxErrorMsg(response);
@@ -148,7 +148,7 @@ define([
                     beforeSend: Common.prepareCSRFToken,
                     data: {'emails': input_val},
                     success: function(data) { // data: {success, failed}
-                        $input.val(null).trigger('change');
+                        $input.select2('val', '');
 
                         if (data.success.length > 0) {
                             _this.collection.add(data.success, {prepend: true});

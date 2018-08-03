@@ -49,18 +49,8 @@ define([
         },
 
         events: {
-            'click #dir-group-share-tab': 'clickDirGroupShareTab',
-
             'click #add-dir-user-share-item .submit': 'dirUserShare',
             'click #add-dir-group-share-item .submit': 'dirGroupShare'
-        },
-
-        clickDirGroupShareTab: function() {
-            var $dir_group_share_panel = this.$('#dir-group-share');
-
-            $('[name="groups"]', $dir_group_share_panel).select2($.extend({
-                'width': '100%'
-            }, Common.groupInputOptionsForSelect2()));
         },
 
         dirUserSharePanelInit: function() {
@@ -71,7 +61,7 @@ define([
             var repo_id = this.repo_id;
 
             $('[name="emails"]', $dir_user_share_panel).select2($.extend({
-                width: '100%'
+                //width: '292px' // the container will copy class 'w100' from the original element to get width
             }, Common.contactInputOptionsForSelect2()));
 
             Common.ajaxGet({
@@ -108,6 +98,10 @@ define([
             var $add_item = this.$('#add-dir-group-share-item');
             var repo_id = this.repo_id;
 
+            $('[name="groups"]', $dir_group_share_panel).select2($.extend({
+                //width: '292px' // the container will copy class 'w100' from the original element to get width
+            }, Common.groupInputOptionsForSelect2()));
+
             Common.ajaxGet({
                 'get_url': Common.getUrl({name: 'admin_shares'}),
                 'data': {
@@ -139,12 +133,12 @@ define([
             var $user_share_item = this.$('#add-dir-user-share-item');
 
             var $emails_input = $('[name="emails"]', $user_share_item),
-                emails = $emails_input.val(); // []
+                emails = $emails_input.val(); // string
 
             var $perm = $('[name="permission"]', $user_share_item),
                 perm = $perm.val();
 
-            if (!emails.length || !perm) {
+            if (!emails || !perm) {
                 return false;
             }
 
@@ -162,7 +156,7 @@ define([
                 data: {
                     'repo_id': repo_id,
                     'share_type': 'user',
-                    'share_to': emails,
+                    'share_to': emails.split(','),
                     'permission': perm
                 },
                 success: function(data) {
@@ -180,7 +174,7 @@ define([
                             });
                             $user_share_item.after(new_item.el);
                         });
-                        $emails_input.val(null).trigger('change');
+                        $emails_input.select2("val", "");
                         $('option', $perm).prop('selected', false);
                         $('[value="rw"]', $perm).prop('selected', true);
                         $error.addClass('hide');
@@ -207,12 +201,12 @@ define([
             var $group_share_item= this.$('#add-dir-group-share-item');
 
             var $groups_input = $('[name="groups"]', $group_share_item),
-                groups = $groups_input.val(); // []
+                groups = $groups_input.val(); // string
 
             var $perm = $('[name="permission"]', $group_share_item),
                 perm = $perm.val();
 
-            if (!groups.length || !perm) {
+            if (!groups || !perm) {
                 return false;
             }
 
@@ -231,7 +225,7 @@ define([
                 data: {
                     'repo_id': repo_id,
                     'share_type': 'group',
-                    'share_to': groups,
+                    'share_to': groups.split(','),
                     'permission': perm
                 },
                 success: function(data) {
@@ -249,7 +243,7 @@ define([
                             });
                             $group_share_item.after(new_item.el);
                         });
-                        $groups_input.val(null).trigger('change');
+                        $groups_input.select2("val", "");
                         $('option', $perm).prop('selected', false);
                         $('[value="rw"]', $perm).prop('selected', true);
                         $error.addClass('hide');
@@ -271,6 +265,7 @@ define([
                 }
             });
         }
+
     });
 
     return SharePopupView;

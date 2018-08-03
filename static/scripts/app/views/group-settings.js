@@ -146,13 +146,14 @@ define([
             $('[name="email"]', $form).select2($.extend(
                 Common.contactInputOptionsForSelect2(), {
                 width: '268px',
-                maximumSelectionLength: 1,
-                placeholder: gettext("Search user or enter email and press Enter")
+                maximumSelectionSize: 1,
+                placeholder: gettext("Search user or enter email and press Enter"), // to override 'placeholder' returned by `Common.conta...`
+                formatSelectionTooBig: gettext("You cannot select any more choices")
             }));
 
             $form.on('submit', function() {
-                var email = $('[name="email"]', $(this)).val(); // []
-                if (!email.length) {
+                var email = $.trim($('[name="email"]', $(this)).val());
+                if (!email) {
                     return false;
                 }
                 if (email == _this.groupView.group.owner) {
@@ -170,7 +171,7 @@ define([
                     dataType: 'json',
                     beforeSend: Common.prepareCSRFToken,
                     data: {
-                        'owner': email[0]
+                        'owner': email
                     },
                     success: function(data) {
                         _this.groupView.group = data;

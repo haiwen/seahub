@@ -43,7 +43,7 @@ require.config({
         'js.cookie': 'lib/js.cookie',
         simplemodal: 'lib/jquery.simplemodal', // TODO: it uses deprecated methods in jquery 3
         jstree: 'lib/jstree.min', // TODO: it uses deprecated methods in jquery 3
-        select2: 'lib/select2.min',
+        select2: 'lib/select2-3.5.2', // TODO
         moment: 'lib/moment-with-locales.min',
         marked: 'lib/marked.min',
 
@@ -659,44 +659,6 @@ define([
             }
         },
 
-        i18nForSelect2: function() {
-            return {
-                errorLoading: function() {
-                    return gettext("Loading failed");
-                },
-                inputTooLong: function(e) { // not used in seahub
-                    var t = e.input.length - e.maximum,
-                    n = "Please delete " + t + " character";
-                    return t != 1 && (n += "s"), n
-                },
-                inputTooShort: function(e) {
-                    /*
-                       var t = e.minimum - e.input.length,
-                       n = "Please enter " + t + " or more characters";
-                       return n
-                       */
-                    return gettext("Please enter 1 or more character");
-                },
-                loadingMore: function() { // not used in seahub
-                    return "Loading more results…"
-                },
-                maximumSelected: function(e) {
-                    /*
-                       var t = "You can only select " + e.maximum + " item";
-                       return e.maximum != 1 && (t += "s"), t
-                       */
-                    return gettext("You cannot select any more choices");
-                },
-                noResults: function() {
-                    //return "No results found"
-                    return gettext("No matches");
-                },
-                searching: function() {
-                    return gettext("Searching...");
-                }
-            };
-        },
-
         contactInputOptionsForSelect2: function(options) {
             var _this = this;
 
@@ -708,23 +670,18 @@ define([
             }
 
             return {
-                language: _this.i18nForSelect2(),
-
-                multiple: true,
                 placeholder: gettext("Search users or enter emails and press Enter"),
 
                 // with 'tags', the user can directly enter, not just select
-                tags: true,
-                tokenSeparators: [',', ' '],
-                createTag: function(params) {
-                    var term = $.trim(params.term);
-                    return {
-                        'id': term,
-                        'text': term
-                    };
-                },
+                // tags need `<input type="hidden" />`, not `<select>`
+                tags: [],
 
                 minimumInputLength: 1, // input at least 1 character
+
+                formatInputTooShort: gettext("Please enter 1 or more character"),
+                formatNoMatches: gettext("No matches"),
+                formatSearching: gettext("Searching..."),
+                formatAjaxError: gettext("Loading failed"),
 
                 ajax: {
                     url: url,
@@ -733,10 +690,10 @@ define([
                     cache: true,
                     data: function(params) {
                         return {
-                            q: params.term
+                            q: params
                         };
                     },
-                    processResults: function(data) {
+                    results: function(data) {
                         var user_list = [], users = data['users'] || data;
 
                         for (var i = 0, len = users.length; i < len; i++) {
@@ -758,17 +715,23 @@ define([
                 },
 
                 // format items shown in the drop-down menu
-                templateResult: function(item) {
+                formatResult: function(item) {
                     if (item.avatar_url) {
-                        return '<img src="' + item.avatar_url + '" width="32" height="32" class="avatar vam"><span class="text ellipsis vam">' + _this.HTMLescape(item.name) + '<br />' + _this.HTMLescape(item.contact_email) + '</span>';
+                        return '<img src="' + item.avatar_url + '" width="32" height="32" class="avatar"><span class="text ellipsis">' + _this.HTMLescape(item.name) + '<br />' + _this.HTMLescape(item.contact_email) + '</span>';
                     } else {
                         return; // if no match, show nothing
                     }
                 },
 
                 // format selected item shown in the input
-                templateSelection: function(item) {
+                formatSelection: function(item) {
                     return _this.HTMLescape(item.name || item.id); // if no name, show the email, i.e., when directly input, show the email
+                },
+
+                createSearchChoice: function(term) {
+                    return {
+                        'id': $.trim(term)
+                    };
                 },
 
                 escapeMarkup: function(m) { return m; }
@@ -778,12 +741,18 @@ define([
         groupInputOptionsForSelect2: function() {
             var _this = this;
             return {
-                language: _this.i18nForSelect2(),
-
-                multiple: true,
                 placeholder: gettext("Search groups"),
 
+                // with 'tags', the user can directly enter, not just select
+                // tags need `<input type="hidden" />`, not `<select>`
+                tags: [],
+
                 minimumInputLength: 1, // input at least 1 character
+
+                formatInputTooShort: gettext("Please enter 1 or more character"),
+                formatNoMatches: gettext("No matches"),
+                formatSearching: gettext("Searching..."),
+                formatAjaxError: gettext("Loading failed"),
 
                 ajax: {
                     url: _this.getUrl({name: 'search_group'}),
@@ -792,10 +761,10 @@ define([
                     cache: true,
                     data: function(params) {
                         return {
-                            q: params.term
+                            q: params
                         };
                     },
-                    processResults: function(data) {
+                    results: function(data) {
                         var group_list = [], groups = data;
 
                         for (var i = 0, len = groups.length; i < len; i++) {
@@ -813,7 +782,7 @@ define([
                 },
 
                 // format items shown in the drop-down menu
-                templateResult: function(item) {
+                formatResult: function(item) {
                     if (item.name) {
                         return '<span class="text ellipsis">' + _this.HTMLescape(item.name) + '</span>';
                     } else {
@@ -822,7 +791,7 @@ define([
                 },
 
                 // format selected item shown in the input
-                templateSelection: function(item) {
+                formatSelection: function(item) {
                     return _this.HTMLescape(item.name);
                 },
 

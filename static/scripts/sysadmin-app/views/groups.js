@@ -58,18 +58,20 @@ define([
                 _this = this;
 
             $form.modal();
-            $('#simplemodal-container').css({'width':'auto', 'height':'auto'});
+            $('#simplemodal-container').css({'height':'auto'});
 
             $('[name="group_owner"]', $form).select2($.extend(
                 Common.contactInputOptionsForSelect2(), {
-                width: '100%',
-                maximumSelectionLength: 1,
-                placeholder: gettext("Search user or enter email and press Enter")
+                width: '268px',
+                containerCss: {'margin-bottom': '5px'},
+                maximumSelectionSize: 1,
+                placeholder: gettext("Search user or enter email and press Enter"), // to override 'placeholder' returned by `Common.conta...`
+                formatSelectionTooBig: gettext("You cannot select any more choices")
             }));
 
             $form.on('submit', function() {
                 var group_name = $.trim($('[name="group_name"]', $form).val());
-                var group_owner = $('[name="group_owner"]', $form).val();
+                var group_owner = $.trim($('[name="group_owner"]', $form).val());
                 var $error = $('.error', $form);
                 var $submitBtn = $('[type="submit"]', $form);
 
@@ -81,10 +83,7 @@ define([
                 $error.hide();
                 Common.disableButton($submitBtn);
 
-                groups.create({
-                    'group_name': group_name,
-                    'group_owner': group_owner[0]
-                }, {
+                groups.create({'group_name': group_name, 'group_owner': group_owner}, {
                     prepend: true,
                     wait: true,
                     success: function() {

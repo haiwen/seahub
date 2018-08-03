@@ -1,6 +1,13 @@
 {% extends "sysadmin/base.html" %}
 {% load i18n avatar_tags seahub_tags staticfiles %}
 
+
+{% block extra_style %}
+<link rel="stylesheet" type="text/css" href="{% static "css/select2-3.5.2.css" %}" />
+<link rel="stylesheet" type="text/css" href="{% static "css/select2.custom.css" %}" />
+{% endblock %}
+
+
 {% block right_panel %}
 
 <p class="path-bar">
@@ -329,7 +336,7 @@
 
 {% block extra_script %}
 <script type="text/javascript" src="{% static "scripts/lib/jquery-ui.min.js" %}"></script> {# for tabs #}
-<script type="text/javascript" src="{% static "scripts/lib/select2.min.js" %}"></script>
+<script type="text/javascript" src="{% static "scripts/lib/select2-3.5.2.js" %}"></script>
 <script type="text/javascript">
 $('#tabs').tabs({cookie:{expires:1}});
 

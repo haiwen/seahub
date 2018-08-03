@@ -120,37 +120,18 @@ define([
                     'group_id': this.group_id
                 });
             }
-            $('[name="email"]', this.$add_user_perm).select2($.extend({
-                'width': '100%'
-            }, Common.contactInputOptionsForSelect2({'url': url})));
-        },
-
-        events: {
-            'click #group-folder-perm-tab': 'clickGroupFolderPermTab',
-
-            'click #add-user-folder-perm .submit': 'addFolderPerm',
-            'click #add-group-folder-perm .submit': 'addFolderPerm'
-        },
-
-        clickGroupFolderPermTab: function() {
-            var _this = this;
+            $('[name="email"]', this.$add_user_perm).select2(
+                    Common.contactInputOptionsForSelect2({'url': url}));
 
             // use select2 to 'group' input in 'add group perm'
             var groups;
             var prepareGroupSelector = function(groups) {
-                var group_list = [];
+                var g_opts = '';
                 for (var i = 0, len = groups.length; i < len; i++) {
-                    group_list.push({
-                        id: groups[i].id,
-                        text: groups[i].name
-                    });
+                    g_opts += '<option value="' + groups[i].id + '" data-index="' + i + '">' + groups[i].name + '</option>';
                 }
-                $('[name="group"]', _this.$add_group_perm).select2({
-                    language: Common.i18nForSelect2(),
-                    width: '100%',
-                    multiple: true,
+                $('[name="group"]', _this.$add_group_perm).html(g_opts).select2({
                     placeholder: gettext("Select groups"),
-                    data: group_list,
                     escapeMarkup: function(m) { return m; }
                 });
             };
@@ -178,12 +159,16 @@ define([
             }
         },
 
+        events: {
+            'click #add-user-folder-perm .submit': 'addFolderPerm',
+            'click #add-group-folder-perm .submit': 'addFolderPerm'
+        },
+
         addFolderPerm: function(e) {
-            var $form, $input, $error, url, perm, post_data, extended_data;
+            var $form, $error, url, post_data, extended_data;
 
             if ($(e.currentTarget).closest('tr').attr('id') == 'add-user-folder-perm') {
                 $form = this.$add_user_perm;
-                $input = $('[name="email"]', $form);
                 $error = $('#user-folder-perm .error');
 
                 url = Common.getUrl({
@@ -192,17 +177,17 @@ define([
                         'repo_user_folder_perm',
                     repo_id: this.repo_id
                 });
+                var emails_group_ids_input = $('[name="email"]', $form),
+                    emails = emails_group_ids_input.val(),
+                    perm = $('[name="permission"]', $form).val();
 
-                var emails = $input.val(); // []
-                perm = $('[name="permission"]', $form).val();
-
-                if (!emails.length || !perm) {
+                if (!emails || !perm) {
                     return false;
                 }
 
                 post_data = {
                     'folder_path': this.path,
-                    'user_email': emails,
+                    'user_email': emails.split(','),
                     'permission': perm
                 };
 
@@ -213,7 +198,6 @@ define([
 
             } else {
                 $form = this.$add_group_perm;
-                $input = $('[name="group"]', $form);
                 $error = $('#group-folder-perm .error');
 
                 url = Common.getUrl({
@@ -223,16 +207,17 @@ define([
                     repo_id: this.repo_id
                 });
 
-                var group_ids = $input.val();
-                perm = $('[name="permission"]', $form).val();
+                var emails_group_ids_input = $('[name="group"]', $form),
+                    group_ids = emails_group_ids_input.val().join(','),
+                    perm = $('[name="permission"]', $form).val();
 
-                if (!group_ids.length || !perm) {
+                if (!group_ids || !perm) {
                     return false;
                 }
 
                 post_data = {
                     'folder_path': this.path,
-                    'group_id': group_ids,
+                    'group_id': group_ids.split(','),
                     'permission': perm
                 };
 
@@ -262,7 +247,7 @@ define([
                             $form.closest('tr').after(perm_item.el);
                         });
 
-                        $input.val(null).trigger('change');
+                        emails_group_ids_input.select2("val", "");
                         $error.addClass('hide');
                     }
                     if (data.failed.length > 0) {

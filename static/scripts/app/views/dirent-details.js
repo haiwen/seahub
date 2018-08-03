@@ -70,8 +70,7 @@ define([
                     str += '<li class="cur-tag fleft">' + Common.HTMLescape(tags[i].name) + '</li>';
                     s2_tags.push({
                         'id': tags[i].name,
-                        'text': tags[i].name,
-                        'selected': true
+                        'text': tags[i].name
                     });
                 }
                 this.s2_tags = s2_tags;
@@ -84,19 +83,18 @@ define([
             this.$('.cur-tags, .tags-edit-icon').hide();
             this.$('.tags-submit-btn').show();
 
-            var $input = this.$('.tags-input');
-            // Select2 has been initialized
-            if ($input.hasClass("select2-hidden-accessible")) {
-                this.$('.select2-container').show();
-                $input.val(this.s2_tags2).trigger('change'); // s2_tags2
+            var $input = this.$('input.tags-input');
+            var $s2_container = this.$('.tags-input.select2-container');
+            if ($s2_container.length) {
+                $input.select2('data', this.s2_tags);
+                $s2_container.show();
             } else {
                 $input.show()
                 .select2({
-                    language: Common.i18nForSelect2(),
-                    width: '100%',
-                    multiple: true,
-                    tags: this.s2_tags
-                });
+                    tags: [],
+                    formatNoMatches: gettext("No matches")
+                })
+                .select2('data', this.s2_tags);
             }
             return false;
         },
@@ -104,7 +102,7 @@ define([
         submitTags: function() {
             var _this = this;
             var $input = this.$('.tags-input');
-            var tags = $input.val();
+            var tags = $input.select2('val');
             var $submit = this.$('.tags-submit-btn');
             var $error = this.$('.tags-container .error');
             var error_msg;
@@ -141,14 +139,15 @@ define([
                     var s2_tags = [];
                     for (var i = 0, len = tags.length; i < len; i++) {
                         str += '<li class="cur-tag fleft">' + Common.HTMLescape(tags[i].name) + '</li>';
-                        s2_tags.push(tags[i].name);
+                        s2_tags.push({
+                            'id': tags[i].name,
+                            'text': tags[i].name
+                        });
                     }
-                    _this.s2_tags2 = s2_tags; // s2_tags2
+                    _this.s2_tags = s2_tags;
 
-                    $input.hide();
+                    _this.$('.tags-input').hide();
                     $submit.hide();
-                    _this.$('.select2-container').hide();
-
                     _this.$('.cur-tags').html(str).show();
                     _this.$('.tags-edit-icon').show();
                 },

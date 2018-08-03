@@ -70,15 +70,16 @@ define([
             $('[name="email"]', $form).select2($.extend(
                 Common.contactInputOptionsForSelect2(), {
                 width: '300px',
-                maximumSelectionLength: 1,
-                placeholder: gettext("Search user or enter email and press Enter")
+                maximumSelectionSize: 1,
+                placeholder: gettext("Search user or enter email and press Enter"), // to override 'placeholder' returned by `Common.conta...`
+                formatSelectionTooBig: gettext("You cannot select any more choices")
             }));
 
             $form.on('submit', function() {
-                var email = $('[name="email"]', $(this)).val(); // []
+                var email = $.trim($('[name="email"]', $(this)).val());
                 var $submitBtn = $('[type="submit"]', $(this));
 
-                if (!email.length) {
+                if (!email) {
                     return false;
                 }
                 if (email == cur_owner) {
@@ -92,7 +93,7 @@ define([
                     dataType: 'json',
                     beforeSend: Common.prepareCSRFToken,
                     data: {
-                        'new_owner': email[0]
+                        'new_owner': email
                     },
                     success: function() {
                         $.modal.close();

@@ -98,9 +98,21 @@ define([
 
             if (collection.perm_type == 'user') {
                 $('[name="emails"]', $panel).select2($.extend(
-                Common.contactInputOptionsForSelect2(), {
-                    'width': '100%'
-                }));
+                    Common.contactInputOptionsForSelect2(), {
+                        placeholder: gettext("Search user or enter email and press Enter") // to override 'placeholder' returned by `Common.conta...`
+                    }));
+            } else {
+                var groups = app.pageOptions.joined_groups_exclude_address_book || [];
+                var g_opts = '';
+                for (var i = 0, len = groups.length; i < len; i++) {
+                    g_opts += '<option value="' + groups[i].id + '" data-index="' + i + '">' + groups[i].name + '</option>';
+                }
+                $('[name="groups"]', $panel).html(g_opts).select2({
+                    placeholder: gettext("Select a group"),
+                    maximumSelectionSize: 1,
+                    formatSelectionTooBig: gettext("You can only select 1 item"),
+                    escapeMarkup: function(m) { return m; }
+                });
             }
 
             // show existing items
@@ -135,33 +147,12 @@ define([
         },
 
         events: {
-            'click #repo-group-folder-perm-tab': 'clickGroupPermTab',
-
             'click .js-add-folder': 'showFolderSelectForm',
             'click .js-folder-select-submit': 'addFolder',
             'click .js-folder-select-cancel': 'cancelFolderSelect',
 
             'click .js-user-perm-add-submit': 'addPerm',
             'click .js-group-perm-add-submit': 'addPerm'
-        },
-
-        clickGroupPermTab: function() {
-            var groups = app.pageOptions.joined_groups_exclude_address_book || [];
-            var group_list = [];
-            for (var i = 0, len = groups.length; i < len; i++) {
-                group_list.push({
-                    id: groups[i].id,
-                    text: groups[i].name
-                });
-            }
-            $('[name="groups"]', this.$groupPermPanel).select2({
-                language: Common.i18nForSelect2(),
-                width: '100%',
-                multiple: true,
-                data: group_list,
-                placeholder: gettext("Select groups"),
-                escapeMarkup: function(m) { return m; }
-            });
         },
 
         showFolderSelectForm: function(e) {
@@ -225,36 +216,29 @@ define([
             if ($submit.hasClass('js-user-perm-add-submit')) {
                 for_user = true;
                 $panel = this.$userPermPanel;
-                $email_or_group = $('[name="emails"]', $panel);
+                url = Common.getUrl({name: 'repo_user_folder_perm', repo_id: this.repo_id});
 
-                url = Common.getUrl({
-                    name: 'repo_user_folder_perm',
-                    repo_id: this.repo_id
-                });
-
-                var emails = $email_or_group.val(); // []
-                if (!emails.length) {
+                var $email_or_group = $('[name="emails"]', $panel);
+                var email = $email_or_group.val();
+                if (!email) {
                     return false;
                 }
 
-                post_data = {'user_email': emails};
+                post_data = {'user_email': email.split(',')};
+
 
             } else {
                 for_user = false;
                 $panel = this.$groupPermPanel;
-                $email_or_group = $('[name="groups"]', $panel);
+                url = Common.getUrl({name: 'repo_group_folder_perm', repo_id: this.repo_id});
 
-                url = Common.getUrl({
-                    name: 'repo_group_folder_perm',
-                    repo_id: this.repo_id
-                });
-
-                var groups = $email_or_group.val();
-                if (!groups.length) {
+                var $email_or_group = $('[name="groups"]', $panel);
+                var group_val = $email_or_group.val().join(',');
+                if (!group_val) {
                     return false;
                 }
 
-                post_data = {'group_id': groups};
+                post_data = {'group_id': group_val.split(',')};
             }
 
             var $path = $('[name="folder_path"]', $panel);
@@ -266,10 +250,7 @@ define([
                 return false;
             }
 
-            $.extend(post_data, {
-                'folder_path': path,
-                'permission': perm
-            });
+            $.extend(post_data, {'folder_path': path, 'permission': perm});
 
             var $error = $('.error', $panel);
             Common.disableButton($submit);
@@ -286,16 +267,12 @@ define([
                         $(data.success).each(function(index, item) {
                             var encoded_path = Common.encodePath(item.folder_path);
                             var perm_item = new ItemView({
-                                item_data: $.extend(item, {
-                                    'for_user': for_user,
-                                    'show_folder_path': true,
-                                    'encoded_path': encoded_path
-                                })
+                                item_data: $.extend(item, {'for_user': for_user, 'show_folder_path': true, 'encoded_path': encoded_path})
                             });
-                            $path.closest('tr').after(perm_item.el);
+                            $('[name="folder_path"]', $panel).closest('tr').after(perm_item.el);
                         });
 
-                        $email_or_group.val(null).trigger('change');
+                        $email_or_group.select2('val', '');
                         $path.val('');
                         $('option', $perm).prop('selected', false);
                         $('[value="rw"]', $perm).prop('selected', true);
