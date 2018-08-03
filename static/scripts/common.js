@@ -759,12 +759,6 @@ define([
 
                 // format items shown in the drop-down menu
                 templateResult: function(item) {
-                    // show 'searching' tip
-                    // item: {disabled: true, loading: true, text: "Searching..."}
-                    if (item.loading) {
-                        return item.text;
-                    }
-
                     if (item.avatar_url) {
                         return '<img src="' + item.avatar_url + '" width="32" height="32" class="avatar vam"><span class="text ellipsis vam">' + _this.HTMLescape(item.name) + '<br />' + _this.HTMLescape(item.contact_email) + '</span>';
                     } else {
