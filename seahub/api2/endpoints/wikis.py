@@ -196,6 +196,7 @@ class WikiView(APIView):
 
         if edit_repo(wiki.repo_id, wiki_name, '', username):
             wiki.slug = wiki_name
+            wiki.name = wiki_name
             wiki.save()
         else:
             return api_error(status.HTTP_500_INTERNAL_SERVER_ERROR,
