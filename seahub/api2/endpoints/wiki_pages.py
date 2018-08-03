@@ -265,7 +265,7 @@ class WikiPageContentView(APIView):
             error_msg = 'Permission denied.'
             return api_error(status.HTTP_403_FORBIDDEN, error_msg)
         
-        if wiki.permission != 'public':
+        if request.user.username:
             parent_dir = os.path.dirname(path)
             permission = check_folder_permission(request, wiki.repo_id, parent_dir)
         else:
