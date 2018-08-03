@@ -13,7 +13,7 @@ class MainPanel extends Component {
   onEditClick = (e) => {
     // const w=window.open('about:blank')
     e.preventDefault();
-    window.location.href= serviceUrl + '/lib/' + repoID + '/file' + this.props.filePath;
+    window.location.href= serviceUrl + '/lib/' + repoID + '/file' + this.props.filePath + '?mode=edit';
   }
 
   render() {
@@ -32,7 +32,7 @@ class MainPanel extends Component {
       <div className="main-panel o-hidden">
         <div className="main-panel-top panel-top">
           <span className="sf2-icon-menu side-nav-toggle hidden-md-up d-md-none" title="Side Nav Menu" onClick={this.onMenuClick}></span>
-           <div className="wiki-page-ops">
+           <div className={`wiki-page-ops ${this.props.permission ? '' : 'hide'}`}>
               <a className="sf-btn-link btn-white" onClick={this.onEditClick}>Edit Page</a>
            </div>
           <div className="common-toolbar">

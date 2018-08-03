@@ -46,6 +46,7 @@ class Wiki extends Component {
       filePath: '',
       latestContributor: '',
       lastModified: '',
+      permission: ''
     };
     window.onpopstate = this.onpopstate;
   }
@@ -96,6 +97,7 @@ class Wiki extends Component {
           content: res.data.content,
           latestContributor: res.data.latest_contributor,
           lastModified: moment.unix(res.data.last_modified).fromNow(),
+          permission: res.data.permission,
           fileName: this.fileNameFromPath(filePath),
           filePath: filePath
         })
@@ -139,6 +141,7 @@ class Wiki extends Component {
           latestContributor={this.state.latestContributor}
           lastModified={this.state.lastModified}
           seafileAPI={seafileAPI}
+          permission={this.state.permission}
         />
       </div>
     )

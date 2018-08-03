@@ -2,14 +2,14 @@ import React from 'react';
 import SeafileEditor from '@seafile/seafile-editor';
 import 'whatwg-fetch';
 import { SeafileAPI } from 'seafile-js';
-import cookie from 'react-cookies'
+import cookie from 'react-cookies';
 let repoID = window.app.pageOptions.repoID;
 let filePath = window.app.pageOptions.filePath;
 let fileName = window.app.pageOptions.fileName;
 let siteRoot = window.app.config.siteRoot;
 let domain = window.app.pageOptions.domain;
 let protocol = window.app.pageOptions.protocol;
-
+let mode = window.app.pageOptions.mode;
 let dirPath = '/';
 
 const serviceUrl = window.app.config.serviceUrl;
@@ -179,6 +179,7 @@ class App extends React.Component {
           editorUtilities={editorUtilities}
           userInfo={this.state.collabServer ? userInfo : null}
           collabServer={this.state.collabServer}
+          mode={mode}
         />
       );
     }   

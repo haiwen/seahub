@@ -14,6 +14,7 @@ from seaserv import seafile_api, get_file_id_by_path
 from pysearpc import SearpcError
 from django.utils.translation import ugettext as _
 
+from seahub.views import check_folder_permission
 from seahub.views.file import send_file_access_msg
 from seahub.api2.views import get_dir_file_recursively
 from seahub.api2.authentication import TokenAuthentication
@@ -252,6 +253,7 @@ class WikiPageContentView(APIView):
     def get(self, request, slug):
         """Get content of a wiki
         """
+        path = request.GET.get('p', '/')
         try:
             wiki = Wiki.objects.get(slug=slug)
         except Wiki.DoesNotExist:
@@ -263,6 +265,9 @@ class WikiPageContentView(APIView):
             error_msg = 'Permission denied.'
             return api_error(status.HTTP_403_FORBIDDEN, error_msg)
 
+        parent_dir = os.path.dirname(path)
+        permission = check_folder_permission(request, wiki.repo_id, parent_dir)
+
         try:
             repo = seafile_api.get_repo(wiki.repo_id)
             if not repo:
@@ -271,9 +276,6 @@ class WikiPageContentView(APIView):
         except SearpcError:
             error_msg = _("Internal Server Error")
             return api_error(status.HTTP_500_INTERNAL_SERVER_ERROR, error_msg)
-
-        path = request.GET.get('p', '/')
-
 
         file_id = None
         try:
@@ -314,4 +316,5 @@ class WikiPageContentView(APIView):
             "content": content,
             "latest_contributor": email2nickname(latest_contributor),
             "last_modified": last_modified,
+            "permission": permission,
             })
