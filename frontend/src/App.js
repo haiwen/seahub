@@ -114,6 +114,18 @@ class EditorUtilities {
       return files;
     })
   }
+
+  getFileHistory() {
+    return (
+      seafileAPI.getFileHistory(repoID, filePath)
+    )
+  }
+
+  getFileInfo() {
+    return (
+      seafileAPI.getFileInfo(repoID, filePath)
+    )
+  }
 }
 
 
@@ -134,6 +146,8 @@ class App extends React.Component {
           mtime: null,
           size: 0,
           starred: false,
+          permission: '',
+          lastModifier: '',
         },
         collabServer: seafileCollabServer ? seafileCollabServer : null,
       };
@@ -142,13 +156,17 @@ class App extends React.Component {
   componentDidMount() {
 
     seafileAPI.getFileInfo(repoID, filePath).then((res) => {
-      let { mtime, size, starred } = res.data;
+      let { mtime, size, starred, permission, last_modifier_name } = res.data;
+      let lastModifier = last_modifier_name
+
       this.setState((prevState, props) => ({
         fileInfo: {
           ...prevState.fileInfo,
           mtime,
           size,
-          starred
+          starred,
+          permission,
+          lastModifier
         }
       }));
 
