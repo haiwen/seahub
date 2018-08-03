@@ -53,7 +53,7 @@ define([
                 }).modal({focus:false});
             }
 
-            this.$("#share-tabs").tabs();
+            this.$("#share-tabs").tabs({});
 
             if (!this.repo_encrypted && app.pageOptions.can_generate_share_link) {
                 this.downloadLinkPanelInit();
@@ -690,13 +690,6 @@ define([
                         $add_item.after(new_item.el);
                     });
                     $table.removeClass('hide');
-
-                    // 'share to user' is the first tab.
-                    if ($panel.is(':visible')) {
-                        $('[name="emails"]', $add_item).select2($.extend({
-                            'width': '100%'
-                        }, Common.contactInputOptionsForSelect2()));
-                    }
                 },
                 error: function(xhr, textStatus, errorThrown) {
                     var err_msg = Common.prepareAjaxErrorMsg(xhr);
