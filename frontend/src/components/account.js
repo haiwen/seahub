@@ -18,6 +18,7 @@ class Account extends Component {
       usageRate: '',
     }
   }
+
   componentDidMount(){
     this.getAccountInfo();
   }

@@ -264,9 +264,12 @@ class WikiPageContentView(APIView):
         if not wiki.has_read_perm(request.user):
             error_msg = 'Permission denied.'
             return api_error(status.HTTP_403_FORBIDDEN, error_msg)
-
-        parent_dir = os.path.dirname(path)
-        permission = check_folder_permission(request, wiki.repo_id, parent_dir)
+        
+        if wiki.permission != 'public':
+            parent_dir = os.path.dirname(path)
+            permission = check_folder_permission(request, wiki.repo_id, parent_dir)
+        else:
+            permission = 'r'
 
         try:
             repo = seafile_api.get_repo(wiki.repo_id)
