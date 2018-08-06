@@ -16,6 +16,7 @@ class Account extends Component {
       quotaTotal: '',
       isStaff: false,
       usageRate: '',
+      avatarURL: '',
     }
   }
 
@@ -78,7 +79,8 @@ class Account extends Component {
           usageRate: resp.data.space_usage,
           quotaUsage: bytesToSize(resp.data.usage),
           quotaTotal: bytesToSize(resp.data.total),
-          isStaff: resp.data.is_staff
+          isStaff: resp.data.is_staff,
+          avatarURL: resp.data.avatar_url
         })
       })
   }
@@ -95,14 +97,18 @@ class Account extends Component {
     return (
       <div id="account">
         <a id="my-info" onClick={this.onClickAccount} className="account-toggle no-deco d-none d-md-block" aria-label="View profile and more">
-         <span dangerouslySetInnerHTML = {{ __html:avatarInfo }}></span> <span className="icon-caret-down vam"></span>
+         <span>
+          <img src={this.state.avatarURL} width="36" height="36" className="avatar" />
+         </span> <span className="icon-caret-down vam"></span>
         </a>
         <span className="account-toggle sf2-icon-more mobile-icon d-md-none" aria-label="View profile and more" onClick={this.onClickAccount}></span>
         <div id="user-info-popup" className={`account-popup sf-popover ${this.state.showInfo? '':'hide'}`}>
          <div className="outer-caret up-outer-caret"><div className="inner-caret"></div></div>
          <div className="sf-popover-con">
            <div className="item o-hidden">
-             <span  dangerouslySetInnerHTML = {{ __html:avatarInfo }}></span>
+             <span>
+              <img src={this.state.avatarURL} width="36" height="36" className="avatar" />
+             </span>
              <div className="txt">
               {this.state.userName} <br/>
               {this.state.contactEmail}

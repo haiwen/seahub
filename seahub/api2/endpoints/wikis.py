@@ -189,13 +189,16 @@ class WikiView(APIView):
             msg = _('Name can only contain letters, numbers, blank, hyphen or underscore.')
             return api_error(status.HTTP_400_BAD_REQUEST, msg)
 
-        wiki_exist = Wiki.objects.filter(slug=wiki_name)
+        wiki_slug = slugfy_wiki_name(wiki_name)
+
+        wiki_exist = Wiki.objects.filter(slug=wiki_slug)
         if wiki_exist.exists():
             msg = _('%s is taken by others, please try another name.') % wiki_name
             return api_error(status.HTTP_400_BAD_REQUEST, msg)
 
+
         if edit_repo(wiki.repo_id, wiki_name, '', username):
-            wiki.slug = wiki_name
+            wiki.slug = wiki_slug
             wiki.name = wiki_name
             wiki.save()
         else:
