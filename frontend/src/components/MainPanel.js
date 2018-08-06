@@ -34,7 +34,7 @@ class MainPanel extends Component {
         <div className="main-panel-top panel-top">
           <span className="sf2-icon-menu side-nav-toggle hidden-md-up d-md-none" title="Side Nav Menu" onClick={this.onMenuClick}></span>
            <div className={`wiki-page-ops ${this.props.permission === 'rw' ? '' : 'hide'}`}>
-              <a className="sf-btn-link btn-white" onClick={this.onEditClick}>Edit Page</a>
+              <a className="btn btn-secondary btn-topbar" onClick={this.onEditClick}>Edit Page</a>
            </div>
           <div className="common-toolbar">
             <Search />
