@@ -9,7 +9,7 @@ import { slug, repoID, serviceUrl, initialFilePath, siteRoot } from './component
 import './assets/css/fa-solid.css';
 import './assets/css/fa-regular.css';
 import './assets/css/fontawesome.css';
-import './css/initial-style.css';
+import 'seafile-ui';
 import './css/side-panel.css';
 import './css/wiki.css';
 

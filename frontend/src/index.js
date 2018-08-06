@@ -7,7 +7,7 @@ import i18n from './i18n';
 import './assets/css/fa-solid.css';
 import './assets/css/fa-regular.css';
 import './assets/css/fontawesome.css';
-import './assets/css/seafile-ui.css';
+import 'seafile-ui';
 import './index.css';
 
 let lang = window.app.pageOptions.lang

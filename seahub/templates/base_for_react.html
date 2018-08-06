@@ -11,9 +11,9 @@
 {% endblock %}
 <meta http-equiv="x-ua-compatible" content="ie=edge" />
 <link rel="shortcut icon" href="{{ MEDIA_URL }}{{ favicon_path }}" />
-<link rel="stylesheet" type="text/css" href="{% static "css/seafile-ui.css" %}" />
-<link rel="stylesheet" type="text/css" href="{{ MEDIA_URL }}css/seahub_react.css?t=1398068110" />
 {% block extra_style %}{% endblock %}
+<link rel="stylesheet" type="text/css" href="{{ MEDIA_URL }}css/seahub_react.css?t=1398068110" />
+{% if branding_css != '' %}<link rel="stylesheet" type="text/css" href="{{ MEDIA_URL }}{{ branding_css }}" />{% endif %}
 {% if enable_branding_css %}<link rel="stylesheet" type="text/css" href="{% url 'custom_css' %}" />{% endif %}
 </head>
 
@@ -29,7 +29,6 @@
             logoHeight: '{{ logo_height }}',
             siteTitle: '{{ site_title }}',
             siteRoot: '{{ SITE_ROOT }}',
-            avatarInfo: '{% avatar request.user 36 %}'
          }
      };
 </script>

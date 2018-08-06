@@ -42,6 +42,7 @@
     "remark-rehype": "^3.0.0",
     "remark-slug": "^5.0.0",
     "seafile-js": "^0.2.4",
+    "seafile-ui": "^0.1.4",
     "sw-precache-webpack-plugin": "0.11.4",
     "unified": "^6.1.6",
     "url-loader": "0.6.2",
