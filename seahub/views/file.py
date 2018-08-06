@@ -563,6 +563,8 @@ def view_lib_file(request, repo_id, path):
         return_dict['file_enc'] = file_enc
         return_dict['encoding'] = encoding
         return_dict['file_encoding_list'] = file_encoding_list
+        
+        mode = request.GET.get('mode', '')
 
         if filetype == MARKDOWN:
             return_dict['protocol'] = request.is_secure() and 'https' or 'http'
@@ -571,6 +573,7 @@ def view_lib_file(request, repo_id, path):
             return_dict['serviceUrl'] = get_service_url().rstrip('/')
             return_dict['language_code'] = get_language()
             return_dict['seafile_collab_server'] = SEAFILE_COLLAB_SERVER
+            return_dict['mode'] = 'edit' if mode else 'viewer' 
         else:
             return_dict['file_content'] = file_content
 

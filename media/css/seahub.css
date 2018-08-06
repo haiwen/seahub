@@ -4359,3 +4359,14 @@ img.thumbnail {
     display:inline-block;
     margin-top:4px;
 }
+
+/* wiki list style */
+.wiki-hl {background-color: #f8f8f8;}
+.wiki-vs {visibility: visible;}
+.wiki-dropdown-menu {
+    margin-left: -80px;
+}
+.wiki-list input {
+    width: 200px;
+}
+

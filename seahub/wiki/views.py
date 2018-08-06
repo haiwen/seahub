@@ -1,16 +1,20 @@
 # Copyright (c) 2012-2016 Seafile Ltd.
 import logging
 import urllib2
+import posixpath
 
 import seaserv
 from django.core.urlresolvers import reverse
 from django.http import Http404, HttpResponseRedirect
-from django.shortcuts import render, get_object_or_404
+from django.shortcuts import render, get_object_or_404, redirect
+from django.utils.translation import ugettext as _
 
 from seahub.auth.decorators import login_required
 from seahub.base.decorators import user_mods_check
 from seahub.wiki.models import Wiki
 from seahub.views import check_folder_permission
+from seahub.utils import get_service_url, get_file_type_and_ext, render_permission_error
+from seahub.utils.file_types import *
 
 # Get an instance of a logger
 logger = logging.getLogger(__name__)
@@ -35,17 +39,26 @@ def wiki_list(request):
     })
 
 
-def slug(request, slug, page_name="home"):
+def slug(request, slug, file_path="home.md"):
     """Show wiki page.
     """
     # get wiki object or 404
     wiki = get_object_or_404(Wiki, slug=slug)
+    file_path = "/" + file_path
 
     # perm check
-    if not wiki.has_read_perm(request.user):
-        raise Http404
-
     req_user = request.user.username
+    if not req_user and not wiki.has_read_perm(request.user):
+        return redirect('auth_login')
+    else:
+        if not wiki.has_read_perm(request.user):
+            return render_permission_error(request, _(u'Unable to view wiki'))
+
+    file_type, ext = get_file_type_and_ext(posixpath.basename(file_path))
+    if file_type == IMAGE:
+        file_url = reverse('view_lib_file', args=[wiki.repo_id, file_path])
+        return HttpResponseRedirect(file_url + "?raw=1")
+
     if not req_user:
         user_can_write = False
     elif req_user == wiki.username or check_folder_permission(
@@ -56,12 +69,13 @@ def slug(request, slug, page_name="home"):
 
     return render(request, "wiki/wiki.html", {
         "wiki": wiki,
-        "page_name": page_name,
+        "page_name": file_path,
         "user_can_write": user_can_write,
-        "path": '/' + page_name + '.md',
+        "file_path": file_path,
         "repo_id": wiki.repo_id,
         "search_repo_id": wiki.repo_id,
         "search_wiki": True,
+        "service_url": get_service_url().rstrip('/')
     })
 
 

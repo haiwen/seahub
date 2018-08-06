@@ -7,7 +7,7 @@ from rest_framework.authentication import SessionAuthentication
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 from rest_framework.views import APIView
-from seaserv import seafile_api
+from seaserv import seafile_api, edit_repo
 from pysearpc import SearpcError
 from django.core.urlresolvers import reverse
 from django.db import IntegrityError
@@ -19,7 +19,7 @@ from seahub.api2.authentication import TokenAuthentication
 from seahub.api2.throttling import UserRateThrottle
 from seahub.api2.utils import api_error
 from seahub.wiki.models import Wiki, DuplicateWikiNameError
-from seahub.wiki.utils import is_valid_wiki_name
+from seahub.wiki.utils import is_valid_wiki_name, slugfy_wiki_name
 from seahub.utils import is_org_context, get_user_repos
 
 logger = logging.getLogger(__name__)
@@ -165,3 +165,44 @@ class WikiView(APIView):
         wiki.save()
         return Response(wiki.to_dict())
 
+    def post(self, request, slug):
+        """Rename a Wiki
+        """
+        username = request.user.username
+
+        try:
+            wiki = Wiki.objects.get(slug=slug)
+        except Wiki.DoesNotExist:
+            error_msg = _("Wiki not found.")
+            return api_error(status.HTTP_404_NOT_FOUND, error_msg)
+
+        if wiki.username != username:
+            error_msg = _("Permission denied.")
+            return api_error(status.HTTP_403_FORBIDDEN, error_msg)
+
+        wiki_name = request.POST.get('wiki_name', '')
+        if not wiki_name:
+            error_msg = _('Name is required.')
+            return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
+
+        if not is_valid_wiki_name(wiki_name):
+            msg = _('Name can only contain letters, numbers, blank, hyphen or underscore.')
+            return api_error(status.HTTP_400_BAD_REQUEST, msg)
+
+        wiki_slug = slugfy_wiki_name(wiki_name)
+
+        wiki_exist = Wiki.objects.filter(slug=wiki_slug)
+        if wiki_exist.exists():
+            msg = _('%s is taken by others, please try another name.') % wiki_name
+            return api_error(status.HTTP_400_BAD_REQUEST, msg)
+
+
+        if edit_repo(wiki.repo_id, wiki_name, '', username):
+            wiki.slug = wiki_slug
+            wiki.name = wiki_name
+            wiki.save()
+        else:
+            return api_error(status.HTTP_500_INTERNAL_SERVER_ERROR,
+                             "Unable to rename wiki")
+
+        return Response(wiki.to_dict())

@@ -2,14 +2,14 @@ import React from 'react';
 import SeafileEditor from '@seafile/seafile-editor';
 import 'whatwg-fetch';
 import { SeafileAPI } from 'seafile-js';
-import cookie from 'react-cookies'
+import cookie from 'react-cookies';
 let repoID = window.app.pageOptions.repoID;
 let filePath = window.app.pageOptions.filePath;
 let fileName = window.app.pageOptions.fileName;
 let siteRoot = window.app.config.siteRoot;
 let domain = window.app.pageOptions.domain;
 let protocol = window.app.pageOptions.protocol;
-
+let mode = window.app.pageOptions.mode;
 let dirPath = '/';
 
 const serviceUrl = window.app.config.serviceUrl;
@@ -18,7 +18,7 @@ const userInfo = window.app.userInfo;
 // init seafileAPI
 let seafileAPI = new SeafileAPI();
 let xcsrfHeaders = cookie.load('csrftoken');
-seafileAPI.initForSeahubUsage({ xcsrfHeaders });
+seafileAPI.initForSeahubUsage({ siteRoot, xcsrfHeaders });
 
 function getImageFileNameWithTimestamp() {
   var d = Date.now();
@@ -114,6 +114,18 @@ class EditorUtilities {
       return files;
     })
   }
+
+  getFileHistory() {
+    return (
+      seafileAPI.getFileHistory(repoID, filePath)
+    )
+  }
+
+  getFileInfo() {
+    return (
+      seafileAPI.getFileInfo(repoID, filePath)
+    )
+  }
 }
 
 
@@ -134,6 +146,8 @@ class App extends React.Component {
           mtime: null,
           size: 0,
           starred: false,
+          permission: '',
+          lastModifier: '',
         },
         collabServer: seafileCollabServer ? seafileCollabServer : null,
       };
@@ -142,13 +156,17 @@ class App extends React.Component {
   componentDidMount() {
 
     seafileAPI.getFileInfo(repoID, filePath).then((res) => {
-      let { mtime, size, starred } = res.data;
+      let { mtime, size, starred, permission, last_modifier_name } = res.data;
+      let lastModifier = last_modifier_name
+
       this.setState((prevState, props) => ({
         fileInfo: {
           ...prevState.fileInfo,
           mtime,
           size,
-          starred
+          starred,
+          permission,
+          lastModifier
         }
       }));
 
@@ -179,6 +197,7 @@ class App extends React.Component {
           editorUtilities={editorUtilities}
           userInfo={this.state.collabServer ? userInfo : null}
           collabServer={this.state.collabServer}
+          mode={mode}
         />
       );
     }   

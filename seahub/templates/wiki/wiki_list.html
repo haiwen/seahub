@@ -14,13 +14,13 @@
     <span class="loading-icon loading-tip"></span>
     <table class="wiki-list hide">
         <thead>
-            <tr>
-                <td width="30%">{% trans "Name" %}</td>
-                <td width="20%">{% trans "Permission" %}</td>
-                <td width="20%">{% trans "Owner" %}</td>
-                <td width="20%">{% trans "Last Update" %}</td>
-                <td width="10%"><!-- operation --></td>
-            </tr>
+        <tr>
+            <td width="30%">{% trans "Name" %}</td>
+            <td width="20%">{% trans "Permission" %}</td>
+            <td width="20%">{% trans "Owner" %}</td>
+            <td width="20%">{% trans "Last Update" %}</td>
+            <td width="10%"><!-- operation --></td>
+        </tr>
         </thead>
         <tbody></tbody>
     </table>
@@ -46,7 +46,11 @@
 
     <script type="text/script" id="wiki-tmpl">
         <tr data-slug="<%= slug %>">
-            <td><a href="<%= link %>"><%- name %></a></td>
+            <td>
+                <span class="wiki-name">
+                    <a href="<%= link %>"><%- name %></a>
+                <span>
+            </td>
             <td>
                 <span class="cur-perm"><%= permission_text %></span>
                 <a href="#" title="{% trans "Edit" %}" class="perm-edit-icon sf2-icon-edit op-icon vh"></a>
@@ -58,11 +62,24 @@
             </td>
             <td><a href="<%= owner_profile_url %>"><%- owner_nickname %></a></td>
             <td title="<%= update_time %>"><%= update_time_from_now %></td>
-            <td>
-                <span class="delete-wiki sf2-icon-delete op-icon vh" title="{% trans "Delete" %}"></span>
+            <td class="wiki-op">
+                <div class="sf-dropdown">
+                    <a class="wiki-dropdown-toggle sf2-icon-more op-icon vh" title="{% trans "More Operations" %}" aria-label="{% trans "More Operations" %}"></a>
+                    <ul class="sf-dropdown-menu wiki-dropdown-menu hide hidden-op">
+                        <li><a class="rename-wiki op">{% trans "Rename" %}</a></li>
+                        <li><a class="delete-wiki op">{% trans "Delete" %}</a></li>
+                    </ul>
+                </div>
             </td>
         </tr>
     </script>
+<script type="text/template" id="wiki-rename-form-tmpl">
+    <form id="rename-form" class="inline-rename-form" action="" method="post">
+        <input type="text" name="newname" value="<%- wiki_name %>" class="input vam" maxlength="{{max_file_name}}" />
+        <button type="submit" class="submit sf2-icon-tick tick-green vam" title="{% trans "Submit" %}"></button>
+        <button type="button" class="cancel sf2-icon-x2 vam" title="{% trans "Cancel" %}"></button>
+    </form>
+</script>
 {% endblock %}
 
 {% block extra_script %}{{block.super}}
@@ -87,7 +104,16 @@ $.ajax({
         }
     },
     error: function(xhr) {
-        var error_msg = prepareAjaxErrorMsg(xhr);
+        var error_msg;
+        if (xhr.responseText) {
+            try {
+                error_msg = JSON.parse(xhr.responseText).error_msg;
+            } catch(e) {
+                error_msg = "{% trans "Error" %}";
+            }
+        } else {
+            error_msg = "{% trans "Please check the network." %}";
+        }
         $('.wiki-list-error').html(error_msg).show();
     },
     complete: function() {
@@ -140,56 +166,22 @@ $('#new-wiki-form').on('submit', function () {
             }
         },
         error: function(xhr) {
-            var error_msg = prepareAjaxErrorMsg(xhr);
+            var error_msg;
+            if (xhr.responseText) {
+                try {
+                    error_msg = JSON.parse(xhr.responseText).error_msg;
+                } catch(e) {
+                    error_msg = "{% trans "Error" %}";
+                }
+            } else {
+                error_msg = "{% trans "Please check the network." %}";
+            }
             $error.html(error_msg).show();
             enable($submitBtn);
         }
     });
 
     return false;
-});
-
-$('table')
-.on('click', '.delete-wiki', function(e) { // delete a wiki
-    var $el = $(this).closest('tr');
-    var slug = $el.attr('data-slug');
-    var title = "{% trans "Delete Wiki" %}",
-        content = "{% trans "Are you sure you want to delete this wiki?" %}";
-    var yesCallback = function(e) {
-        wiki.del({
-            $el: $el,
-            slug: slug
-        });
-        $.modal.close();
-    };
-    showConfirm(title, content, yesCallback);
-})
-.on('click', '.perm-edit-icon', function(e) { // edit perm of a wiki
-    var $el = $(this).closest('tr');
-
-    $('.cur-perm, .perm-edit-icon', $el).hide();
-    $('.perm-select', $el).show();
-
-    return false;
-})
-.on('change', '.perm-select', function(e) {
-    var perm = $(this).val();
-    var $el = $(this).closest('tr');
-    var slug = $el.attr('data-slug');
-
-    wiki.editPerm({
-        $el: $el,
-        slug: slug,
-        perm: perm
-    });
-});
-var $wikiList = $('.wiki-list');
-$(document).on('click', function(e) {
-    var target = e.target || event.srcElement;
-    if (!$('.perm-edit-icon, .perm-select', $wikiList).is(target)) {
-        $('.cur-perm, .perm-edit-icon', $wikiList).show();
-        $('.perm-select', $wikiList).hide();
-    }
 });
 
 var wiki = {
@@ -241,7 +233,19 @@ var wiki = {
                 $el.remove();
                 feedback("{% trans "Successfully deleted 1 item." %}", 'success');
             },
-            error: ajaxErrorHandler
+            error: function(xhr) {
+                var error_msg;
+                if (xhr.responseText) {
+                    try {
+                        error_msg = JSON.parse(xhr.responseText).error_msg;
+                    } catch(e) {
+                        error_msg = "{% trans "Error" %}";
+                    }
+                } else {
+                    error_msg = "{% trans "Please check the network." %}";
+                }
+                feedback(error_msg, 'error');
+            }
         });
     },
 
@@ -259,7 +263,19 @@ var wiki = {
                 $el.replaceWith(wiki.render(data));
                 feedback("{% trans "Successfully edited the permission." %}", 'success');
             },
-            error: ajaxErrorHandler
+            error: function(xhr) {
+                var error_msg;
+                if (xhr.responseText) {
+                    try {
+                        error_msg = JSON.parse(xhr.responseText).error_msg;
+                    } catch(e) {
+                        error_msg = "{% trans "Error" %}";
+                    }
+                } else {
+                    error_msg = "{% trans "Please check the network." %}";
+                }
+                feedback(error_msg, 'error');
+            }
         });
     },
 
@@ -286,6 +302,228 @@ var wiki = {
     }
 };
 wiki.init();
+
+var wikiListController = {
+
+    $wikiList: $('.wiki-list'),
+
+    renameTemplate : _.template($('#wiki-rename-form-tmpl').html()),
+
+    init: function() {
+        //init dom event
+        var _this = this;
+        var $wikiList = this.$wikiList;
+        $wikiList.on('click', '.wiki-dropdown-toggle', $.proxy(_this.showWikiMenu, _this));
+        $wikiList.on('click', '.delete-wiki', $.proxy(_this.deleteCurrentWiki, _this));
+        $wikiList.on('click', '.rename-wiki', $.proxy(_this.showRenameTmpl, _this));
+        $wikiList.on('click', '.perm-edit-icon', $.proxy(_this.showPremSelection, _this));
+        $wikiList.on('change', '.perm-select', $.proxy(_this.changePermSelected, _this));
+
+        //handle menu event;
+        $(document).on('click', function(event){
+            var view = _this.$wikiMenu;
+            var target = event.target || event.srcElement;
+
+            if (!view) {
+                return true;
+            }
+            if (!view.is(target) &&
+                !view.find('*').is(target)) {
+                _this.hideWikiMenu();
+            }
+            return true;
+        })
+        //handle perm event
+        $(document).on('click', function(e) {
+            var target = e.target || event.srcElement;
+            if (!$('.perm-edit-icon, .perm-select', $wikiList).is(target)) {
+                $('.cur-perm, .perm-edit-icon', $wikiList).show();
+                $('.perm-select', $wikiList).hide();
+            }
+        });
+    },
+
+    showOwnerInfo: function(){},
+
+    showPremSelection: function(event) {
+        var target = event.target || event.srcElement;
+        var $el = $(target).closest('tr');
+
+        $('.cur-perm, .perm-edit-icon', $el).hide();
+        $('.perm-select', $el).show();
+
+        return false;
+    },
+
+    changePermSelected: function(event) {
+        var target = event.target || event.srcElement;
+        var perm = $(target).val();
+        var $el = $(target).closest('tr');
+        var slug = $el.attr('data-slug');
+
+        wiki.editPerm({
+            $el: $el,
+            slug: slug,
+            perm: perm
+        });
+    },
+
+    showWikiMenu: function(event) {
+        var target = event.target || event.srcElement;
+        var $wikiMenu = $(target).parent().find('.sf-dropdown-menu');
+        var $tr = $(target).closest('tr');
+        if (this.$wikiMenu) {
+            if ($wikiMenu.length && $wikiMenu.is(this.$wikiMenu)) {
+                return false;
+            }else{
+                this.hideWikiMenu();
+            }
+        }
+        this.$wikiMenu = $wikiMenu;
+        this.$tr = $tr;
+        this.$wikiMenu.removeClass('hide');
+        this.$tr.addClass('wiki-hl');
+        this.$tr.find('.op, .op-icon').addClass('wiki-vs');
+        return false;
+    },
+
+    hideWikiMenu: function() {
+        this.$wikiMenu.addClass('hide');
+        this.$tr.removeClass('wiki-hl');
+        this.$tr.find('.op, .op-icon').removeClass('wiki-vs');
+        this.$wikiMenu = null;
+        this.$tr = null;
+    },
+
+    deleteCurrentWiki: function(event) {
+        this.hideWikiMenu();
+        var target = event.target || event.srcElement;
+        var $el = $(target).closest('tr');
+        var slug = $el.attr('data-slug');
+        var title = "{% trans "Delete Wiki" %}",
+            content = "{% trans "Are you sure you want to delete this wiki?" %}";
+        var yesCallback = function(e) {
+            wiki.del({
+                $el: $el,
+                slug: slug
+            });
+            $.modal.close();
+        };
+        showConfirm(title, content, yesCallback);
+        return false;
+    },
+
+    showRenameTmpl: function(event) {
+        var target = event.target || event.srcElement;
+        var $tr = $(target).closest('tr');
+        var slug = $tr.attr('data-slug');
+        var wikiName = $tr.find('.wiki-name a').text();
+
+        var form = $(this.renameTemplate({
+            wiki_name: wikiName
+        }));
+
+        var $name = $tr.find('.wiki-name');
+        var $op   = $tr.find('wiki-op');
+
+        var $td   = $name.closest('td');
+        $td.attr('colsepan', 2).css({
+            'width': $name.width() + $op.outerWidth(),
+            'height': $name.height()
+        }).append(form);
+
+        $op.hide();
+        $name.hide();
+
+        var $input = $('[name="newname"]', form);
+        var dot_index = wikiName.lastIndexOf('.');
+        if (dot_index != -1) {
+            $input.trigger('focus');
+            $input[0].setSelectionRange(0, dot_index);
+        } else {
+            $input.trigger('select');
+        }
+
+        //todos op select event
+
+        var cancelRename = function() {
+            form.remove();
+            $op.show();
+            $name.show();
+            $td.attr('colspan', 1).css({
+                'width': $name.width()
+            })
+
+            return false;
+        }
+
+        var after_op_success = function(data) {
+            $tr.attr('data-slug', data.slug)
+            $tr.find('.wiki-name a').text(data.name);
+            $tr.find('.wiki-name a').attr('href', data.link);
+            cancelRename();
+        }
+
+        $('.cancel', form).on('click', cancelRename);
+
+        form.on('submit', function() {
+            var new_name = $.trim($('[name=newname]', form).val());
+            var err_msg;
+
+            if(!new_name){
+                err_msg = "{% trans "It is required." %}";
+                feedback(err_msg, 'error');
+                return false;
+            }
+
+            if (new_name.indexOf('/') != -1) {
+                err_msg = "{% trans "Name should not include '/'." %}";
+                feedback(err_msg, 'error');
+                return false;
+            }
+
+            if (new_name == wikiName) {
+                cancelRename();
+                return false;
+            }
+
+            var submit_btn = $('[type="submit"]', form);
+            disable(submit_btn);
+
+            var after_op_error = function(xhr) {
+                var err_msg;
+                if (xhr.responseText) {
+                    err_msg = JSON.parse(xhr.responseText).error_msg;
+                } else {
+                    err_msg =  "{% trans "Failed. Please check the network." %}";
+                }
+                feedback(err_msg, 'error');
+                enable(submit_btn);
+            };
+            //call ajax  rename the model info
+            var post_data = {"wiki_name" : new_name};
+            $.ajax({
+                url: '{{SITE_ROOT}}api/v2.1/wikis/' + encodeURIComponent(slug) + '/',
+                type: 'POST',
+                dataType: 'json',
+                beforeSend: prepareCSRFToken,
+                data: post_data,
+                success: function(data) {
+                    after_op_success(data);
+                },
+                err: function(xhr){
+                    after_op_error(xhr);
+                }
+            })
+            return false;
+        })
+        this.hideWikiMenu();
+        return false;
+    },
+
+}
+
+wikiListController.init();
 
 </script>
 {% endblock %}
