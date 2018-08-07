@@ -47,9 +47,71 @@
 .wiki-main .cur-view-path::after {
   display:none;
 }
-.wiki-main .cur-view-main-con {
+.wiki-main .cur-view-content-container {
   padding-left: 40px;
   padding-right: 40px;
+  display: flex;
+  overflow: auto;
+}
+
+.wiki-main .cur-view-content {
+  padding-right: 40px;
+  flex: 1;
+}
+
+.wiki-main .cur-view-content-outline {
+  position: sticky;
+  width: 240px;
+  padding: 0 18px;
+  top: 0;
+}
+.wiki-main .outline-nav-body {
+  position: relative;
+  top: 0;
+}
+
+@media (max-width: 991.98px) {
+  .wiki-main .cur-view-content-container {
+    padding-right: 40px;
+  }
+  .wiki-main .cur-view-content {
+    padding-right: 0;
+  }
+  .wiki-main .cur-view-content-outline {
+    display: none;
+  }
+}
+
+.wiki-main .wiki-viewer-outline {
+  padding: 0;
+  list-style: none;
+  border-left: solid 1px #eee;
+}
+.textindent-2 {
+  text-indent: 18px;
+}
+
+.wiki-main .wiki-outline-item {
+  padding: 3px 15px;
+  font-size: 14px;
+}
+
+.wiki-outline-item a{
+  color: #444;
+  text-decoration: none;
+}
+
+.wiki-outline-item a:hover {
+  color: #eb8205;
+  text-decoration: underline;
+}
+
+.wiki-outline-item-active { 
+  border-left: 1px solid #eb8205;
+}
+
+.wiki-outline-item-active a {
+  color: #eb8205 !important;
 }
 
 .wiki-page-ops {
