@@ -71,7 +71,9 @@
 
 {% include 'js/common-templates.html' %}
 {% include 'js/sysadmin-templates.html' %}
-{% include "js/lib-op-popups.html" %}
+{% include 'js/admin-common-templates.html' %} {# for sys admin & org admin #}
+{% include 'js/lib-op-popups.html' %}
+
 <script type="text/javascript">
 var app = {
     config: {

@@ -30,12 +30,23 @@ define([
             var popupTitle = gettext("Delete Library");
             var popupContent = gettext("Are you sure you want to delete %s ?").replace('%s', '<span class="op-target ellipsis ellipsis-op-target" title="' + Common.HTMLescape(repo_name) + '">' + Common.HTMLescape(repo_name) + '</span>');
             var yesCallback = function() {
+                var url_options = {
+                    group_id: _this.group_id,
+                    repo_id: _this.model.get('repo_id')
+                };
+                if (app.pageOptions.org_id) { // org admin
+                    $.extend(url_options, {
+                        name: 'org-admin-group-owned-library',
+                        org_id: app.pageOptions.org_id
+                    });
+                } else {
+                    $.extend(url_options, {
+                        name: 'admin-group-owned-library'
+                    });
+                }
+
                 $.ajax({
-                    url: Common.getUrl({
-                        'name': 'admin-group-owned-library',
-                        'group_id': _this.group_id,
-                        'repo_id': _this.model.get('repo_id')
-                    }),
+                    url: Common.getUrl(url_options),
                     type: 'DELETE',
                     beforeSend: Common.prepareCSRFToken,
                     dataType: 'json',

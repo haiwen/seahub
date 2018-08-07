@@ -3,13 +3,15 @@ define([
     'underscore',
     'backbone',
     'common',
+    'select2',
     'sysadmin-app/views/address-book-group-item',
     'sysadmin-app/views/group-member',
     'sysadmin-app/views/address-book-group-library',
     'sysadmin-app/collection/address-book-group',
     'sysadmin-app/collection/group-repos'
-], function($, _, Backbone, Common, GroupItemView, MemberItemView,
-    LibItemView, GroupCollection, GroupRepoCollection) {
+], function($, _, Backbone, Common, Select2,
+    GroupItemView, MemberItemView, LibItemView,
+    GroupCollection, GroupRepoCollection) {
     'use strict';
 
     var view = Backbone.View.extend({
@@ -107,18 +109,28 @@ define([
                 var $error = $('.error', $form);
                 var $submitBtn = $('[type="submit"]', $form);
 
+
                 if (!group_name) {
                     $error.html(gettext("Name is required.")).show();
                     return false;
                 }
 
+                var url_options;
+                if (app.pageOptions.org_id) { // org admin
+                    url_options = {
+                        name: 'org-admin-address-book-groups',
+                        org_id: app.pageOptions.org_id
+                    };
+                } else {
+                    url_options = {
+                        name: 'admin-address-book-groups'
+                    };
+                }
+
                 $error.hide();
                 Common.disableButton($submitBtn);
-
                 $.ajax({
-                    url: Common.getUrl({
-                        'name': 'admin-address-book-groups'
-                    }),
+                    url: Common.getUrl(url_options),
                     type: 'POST',
                     cache: false,
                     data: {
@@ -170,14 +182,25 @@ define([
                     return false;
                 }
 
+                var url_options;
+                if (app.pageOptions.org_id) { // org admin
+                    url_options = {
+                        name: 'org-admin-group-members',
+                        org_id: app.pageOptions.org_id,
+                        group_id: _this.options.group_id
+                    };
+                } else {
+                    url_options = {
+                        name: 'admin-group-members',
+                        group_id: _this.options.group_id
+                    };
+                }
+
                 $error.hide();
                 Common.disableButton($submitBtn);
 
                 $.ajax({
-                    url: Common.getUrl({
-                        'name': 'admin-group-members',
-                        'group_id': _this.options.group_id
-                    }),
+                    url: Common.getUrl(url_options),
                     type: 'POST',
                     dataType: 'json',
                     data: {'email': emails.split(',')},
@@ -233,11 +256,22 @@ define([
                 $error.hide();
                 Common.disableButton($submitBtn);
 
+                var url_options = { 
+                    group_id: _this.options.group_id
+                };
+                if (app.pageOptions.org_id) { // org admin
+                    $.extend(url_options, {
+                        name: 'org-admin-group-owned-libraries',
+                        org_id: app.pageOptions.org_id
+                    });
+                } else {
+                    $.extend(url_options, {
+                        name: 'admin-group-owned-libraries'
+                    });
+                }
+
                 $.ajax({
-                    url: Common.getUrl({
-                        'name': 'admin-group-owned-libraries',
-                        'group_id': _this.options.group_id
-                    }),
+                    url: Common.getUrl(url_options),
                     type: 'POST',
                     dataType: 'json',
                     data: {'repo_name': name},
@@ -321,7 +355,10 @@ define([
         },
 
         addLibrary: function(item, collection, options) {
-            var view = new LibItemView({model: item, group_id: this.options.group_id});
+            var view = new LibItemView({
+                model: item,
+                group_id: this.options.group_id
+            });
             if (options.prepend) {
                 this.$libsTableBody.prepend(view.render().el);
             } else {
