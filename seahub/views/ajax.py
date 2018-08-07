@@ -1100,7 +1100,7 @@ def space_and_traffic(request):
     org = ccnet_api.get_orgs_by_user(username)
     if not org:
         space_quota = seafile_api.get_user_quota(username)
-      # space_usage = seafile_api.get_user_self_usage(username)
+        space_usage = seafile_api.get_user_self_usage(username)
     else:
         org_id = org[0].org_id
         space_quota = seafile_api.get_org_user_quota(org_id, username)
@@ -1143,7 +1143,7 @@ def space_and_traffic(request):
     ctx = {
         "org": org,
         "space_quota": space_quota,
-       # "space_usage": space_usage,
+        "space_usage": space_usage,
         "rates": rates,
         "SHOW_TRAFFIC": SHOW_TRAFFIC,
         "TRAFFIC_STATS_ENABLED": TRAFFIC_STATS_ENABLED,

@@ -1,5 +1,4 @@
 # Copyright (c) 2012-2016 Seafile Ltd.
-
 import hashlib
 import logging
 from datetime import datetime
