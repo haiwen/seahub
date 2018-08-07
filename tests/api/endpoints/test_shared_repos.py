@@ -29,12 +29,9 @@ class SharedReposTest(BaseTestCase):
                 self.repo.id, 'rw')
 
     def setUp(self):
-
         self.repo_id = self.repo.id
         self.group_id = self.group.id
-
         self.user_name = self.user.username
-
         self.admin_name = self.admin.username
         self.url = reverse('api-v2.1-shared-repos')
 
