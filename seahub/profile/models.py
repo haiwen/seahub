@@ -93,6 +93,15 @@ class ProfileManager(models.Manager):
             return super(ProfileManager, self).get(login_id=login_id).user
         except Profile.DoesNotExist:
             return None
+   
+    def get_username_contact_email(self, contact_email):
+	if not contact_email:
+	    return None	
+	
+	try:
+	    return super(ProfileManager, self).get(contact_email=contact_email).user
+        except Profile.DoesNotExist:
+            return None
 
     def get_user_language(self, username):
         """Get user's language from profile. Return default language code if

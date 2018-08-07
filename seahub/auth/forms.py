@@ -47,6 +47,13 @@ class AuthenticationForm(forms.Form):
             return login
         else:
             return username
+   
+    def get_contact_email_by_login(self, login):
+	contact_email = Profile.objects.get_username_contact_email(login)
+	if contact_email is None:
+            return login
+        else:
+            return contact_email
 
     def get_primary_id_by_username(self, username):
         """Get user's primary id in case the username is changed.
@@ -57,13 +64,13 @@ class AuthenticationForm(forms.Form):
     def clean_login(self):
         return self.cleaned_data['login'].strip()
 
-    def clean(self):
+    def clean(self): 
         login = self.cleaned_data.get('login')
         password = self.cleaned_data.get('password')
 
         # convert login id to username
         username = self.get_username_by_login(login)
-
+        username = self.get_contact_email_by_login(username)
         username = self.get_primary_id_by_username(username)
         if username and password:
             self.user_cache = authenticate(username=username,
