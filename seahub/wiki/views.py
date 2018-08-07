@@ -48,11 +48,12 @@ def slug(request, slug, file_path="home.md"):
 
     # perm check
     req_user = request.user.username
-    if not req_user and not wiki.has_read_perm(request.user):
+
+    if not req_user:
         return redirect('auth_login')
-    else:
-        if not wiki.has_read_perm(request.user):
-            return render_permission_error(request, _(u'Unable to view wiki'))
+
+    if not wiki.check_access_wiki(request):
+        return render_permission_error(request, _(u'Unable to view wiki'))
 
     file_type, ext = get_file_type_and_ext(posixpath.basename(file_path))
     if file_type == IMAGE:
