@@ -97,8 +97,12 @@
 }
 
 .wiki-outline-item a{
+  display: block;
   color: #444;
   text-decoration: none;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 
 .wiki-outline-item a:hover {
