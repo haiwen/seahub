@@ -3,9 +3,9 @@ import React from 'react';
 class OutlineItem extends React.Component {
 
   render() {
-    var item = this.props.item;
-    var activeIndex = parseInt(this.props.activeIndex);
-    var clazz = 'wiki-outline-item ' + item.clazz;
+    let item = this.props.item;
+    let activeIndex = parseInt(this.props.activeIndex);
+    let clazz = 'wiki-outline-item ' + item.clazz;
     clazz += item.key === activeIndex ? ' wiki-outline-item-active' : '';
     return (
       <li className={clazz} data-index={item.key}>
@@ -21,7 +21,8 @@ class Outline extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      activeIndex : 0
+      activeIndex : 0,
+      scrollTop: 0,
     }
   }
 
@@ -43,22 +44,24 @@ class Outline extends React.Component {
         let direction = item.key > _this.state.activeIndex ? "down" : "up";
         let outlineContainer = this.refs.outlineContainer;
         let currentTop = outlineContainer.style.top ? parseInt(outlineContainer.style.top) : 0;
-
+        let scrollTop = 0; 
         if (item.key > 20 && direction === "down") {
-          outlineContainer.style.top = currentTop - 27 + "px";
+          scrollTop = currentTop - 27 + "px";
         } else if (currentTop < 0 && direction === "up") {
-          outlineContainer.style.top = currentTop + 27 + "px";
+          scrollTop = currentTop + 27 + "px";
         }
         _this.setState({
-          activeIndex : item.key
+          activeIndex : item.key,
+          scrollTop: scrollTop
         })
       }
     })
   }
   
   render() {
+    let style = {top: this.state.scrollTop};
     return (
-      <ul className="wiki-viewer-outline" ref="outlineContainer">
+      <ul className="wiki-viewer-outline" ref="outlineContainer" style={style}>
         {this.props.navItems.map(item => {
           return (
             <OutlineItem 
