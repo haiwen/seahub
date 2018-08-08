@@ -601,7 +601,12 @@ var DropDownMenu = {
         //if mobile : bind the popmenu event
         if ($(".sf2-mobile-menu-toggle").length) {
             $(".sf2-mobile-menu-toggle").on('click',function(){
-                _this.clickToShowPopMenu();
+                var isDisplay = $('.sf2-mobile-menu').css('display') === "block" ? true : false;
+                if (isDisplay) {
+                    _this.clickToClosePopMenu();
+                } else {
+                    _this.clickToShowPopMenu();
+                }
                 return false;
             })
             $(document).on('click', function(e){
@@ -667,12 +672,10 @@ var DropDownMenu = {
     },
 
     clickToClosePopMenu: function() {
-        $(".sf2-mobile-menu-mask").hide();
         $(".sf2-mobile-menu").hide();
     },
     
     clickToShowPopMenu: function() {
-        $(".sf2-mobile-menu-mask").show();
         $(".sf2-mobile-menu").show();
     }
 }
