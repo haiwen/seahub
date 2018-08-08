@@ -54,6 +54,12 @@ function start_seahub() {
     sleep 5
 }
 
+function make_dist() {
+    echo "Making dist files ..."
+
+    make dist
+}
+
 function check_phantom_js() {
     if ! which phantomjs >/dev/null; then
         echo "Please install phantojs first:"
@@ -71,7 +77,7 @@ function run_tests() {
     rvalue=$?
     if [[ ${TRAVIS} != "" ]]; then
         # On travis-ci, dump seahub logs when test finished
-        for logfile in /tmp/seahub*.log; do
+        for logfile in /tmp/ccnet/*.log /tmp/seafile-data/*.log /tmp/seahub*.log; do
             echo -e "\nLog file $logfile:\n"
             cat "${logfile}"
             echo
@@ -86,6 +92,9 @@ case $1 in
         ;;
     "runserver")
         start_seahub
+        ;;
+    "dist")
+        make_dist
         ;;
     "test")
         shift

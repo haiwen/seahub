@@ -35,6 +35,15 @@ class SharedReposTest(BaseTestCase):
         self.admin_name = self.admin.username
         self.url = reverse('api-v2.1-shared-repos')
 
+        # make sure this user has not sharing any repos
+        for x in seafile_api.get_share_out_repo_list(self.user_name, -1, -1):
+            seafile_api.remove_share(x.repo_id, self.user_name, x.user)
+        assert len(seafile_api.get_share_out_repo_list(self.user_name, -1, -1)) == 0
+
+        for x in seafile_api.get_group_repos_by_owner(self.user_name):
+            seafile_api.unset_group_repo(x.repo_id, x.group_id, self.user_name)
+        assert len(seafile_api.get_group_repos_by_user(self.user_name)) == 0
+
     def tearDown(self):
         seafile_api.remove_share(self.repo_id, self.user_name, self.admin_name)
         seafile_api.unset_group_repo(self.repo_id, self.group_id, self.user_name)
@@ -52,18 +61,22 @@ class SharedReposTest(BaseTestCase):
         p.save()
 
         self.login_as(self.user)
-        resp = self.client.get(self.url)
+        resp = self.client.get(self.url + '?share_type=personal')
         self.assertEqual(200, resp.status_code)
         json_resp = json.loads(resp.content)
 
-        assert json_resp[0]['share_type'] == 'personal'
-        assert json_resp[0]['repo_id'] == self.repo_id
-        assert json_resp[0]['user_email'] == self.admin_name
-        assert json_resp[0]['user_name'] == nickname
-        assert json_resp[0]['contact_email'] == contact_email
-        assert len(json_resp[0]['modifier_email']) > 0
-        assert len(json_resp[0]['modifier_name']) > 0
-        assert len(json_resp[0]['modifier_contact_email']) > 0
+        assert 'personal' in [x['share_type'] for x in json_resp]
+        for r in json_resp:
+            if r['share_type'] != 'personal':
+                continue
+
+            assert r['repo_id'] == self.repo_id
+            assert r['user_email'] == self.admin_name
+            assert r['user_name'] == nickname
+            assert r['contact_email'] == contact_email
+            assert len(r['modifier_email']) > 0
+            assert len(r['modifier_name']) > 0
+            assert len(r['modifier_contact_email']) > 0
 
     def test_can_get_when_share_to_group(self):
         self.share_repo_to_group()
@@ -73,9 +86,13 @@ class SharedReposTest(BaseTestCase):
         self.assertEqual(200, resp.status_code)
         json_resp = json.loads(resp.content)
 
-        assert json_resp[0]['share_type'] == 'group'
-        assert json_resp[0]['repo_id'] == self.repo_id
-        assert json_resp[0]['group_id'] == self.group_id
+        assert 'group' in [x['share_type'] for x in json_resp]
+        for r in json_resp:
+            if r['share_type'] != 'group':
+                continue
+
+            assert r['repo_id'] == self.repo_id
+            assert r['group_id'] == self.group_id
 
     @pytest.mark.skipif(TRAVIS, reason="") # pylint: disable=E1101
     def test_can_get_when_share_to_org_group(self):
@@ -85,6 +102,7 @@ class SharedReposTest(BaseTestCase):
         resp = self.client.get(self.url)
         self.assertEqual(200, resp.status_code)
         json_resp = json.loads(resp.content)
+        assert len(json_resp) == 1
 
         assert json_resp[0]['share_type'] == 'group'
         assert json_resp[0]['repo_id'] == self.org_repo.id
@@ -94,11 +112,11 @@ class SharedReposTest(BaseTestCase):
         self.share_repo_to_public()
 
         self.login_as(self.user)
-        resp = self.client.get(self.url)
+        resp = self.client.get(self.url + '?share_type=public')
         self.assertEqual(200, resp.status_code)
         json_resp = json.loads(resp.content)
 
-        assert json_resp[0]['share_type'] == 'public'
+        assert 'public' in [x['share_type'] for x in json_resp]
 
     def test_get_with_invalid_repo_permission(self):
 
