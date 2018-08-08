@@ -1,6 +1,6 @@
 import React from 'react';
 
-class OutlineItem extends React.Component {
+class WikiOutlineItem extends React.Component {
 
   render() {
     let item = this.props.item;
@@ -16,7 +16,7 @@ class OutlineItem extends React.Component {
 
 }
 
-class Outline extends React.Component {
+class WikiOutline extends React.Component {
 
   constructor(props) {
     super(props);
@@ -64,7 +64,7 @@ class Outline extends React.Component {
       <ul className="wiki-viewer-outline" ref="outlineContainer" style={style}>
         {this.props.navItems.map(item => {
           return (
-            <OutlineItem 
+            <WikiOutlineItem 
               key={item.key} 
               item={item} 
               activeIndex={this.state.activeIndex}
@@ -77,4 +77,4 @@ class Outline extends React.Component {
   }
 }
 
-export default Outline;
+export default WikiOutline;

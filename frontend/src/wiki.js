@@ -108,7 +108,7 @@ class Wiki extends Component {
   }
 
   onpopstate = (event) => {
-    if(event.state && event.state.filePath){
+    if (event.state && event.state.filePath) {
       this.loadFile(event.state.filePath);
     }
   }

@@ -4,7 +4,7 @@ import MarkdownViewer from './markdown-viewer';
 import Account from './account';
 import { repoID, serviceUrl, slug, siteRoot } from './constance';
 import { processorGetAST } from '@seafile/seafile-editor/src/lib/seafile-markdown2html';
-import Outline from './outline';
+import WikiOutline from './wiki-outline';
 
 
 
@@ -40,7 +40,7 @@ class MainPanel extends Component {
       }
       if (top > item.offsetTop - 100) {
         currentId = '#' + item.getAttribute('id');
-      }else{
+      } else {
         return false;
       }
     })
@@ -132,7 +132,7 @@ class MainPanel extends Component {
                 <p id="wiki-page-last-modified">Last modified by {this.props.latestContributor}, <span>{this.props.lastModified}</span></p>
             </div>
             <div className="cur-view-content-outline">
-                <Outline 
+                <WikiOutline 
                   navItems={this.state.navItems} 
                   handleNavItemClick={this.handleNavItemClick}
                   activeId={this.state.activeId}
