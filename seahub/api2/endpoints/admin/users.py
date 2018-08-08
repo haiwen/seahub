@@ -122,7 +122,7 @@ def get_user_info(email):
     info['department'] = d_profile.department if d_profile else ''
 
     info['quota_total'] = seafile_api.get_user_quota(email)
-    info['quota_usage'] = seafile_api.get_user_self_usage(email) 
+    info['quota_usage'] = seafile_api.get_user_self_usage(email)
 
     info['create_time'] = timestamp_to_isoformat_timestr(user.ctime)
 

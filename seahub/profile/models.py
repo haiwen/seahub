@@ -94,7 +94,7 @@ class ProfileManager(models.Manager):
         except Profile.DoesNotExist:
             return None
    
-    def get_username_contact_email(self, contact_email):
+    def get_username_by_contact_email(self, contact_email):
         """Convert a user's contact_email to username(login email).
         """
 	if not contact_email:
