@@ -102,17 +102,43 @@ define([
                         placeholder: gettext("Search user or enter email and press Enter") // to override 'placeholder' returned by `Common.conta...`
                     }));
             } else {
-                var groups = app.pageOptions.joined_groups_exclude_address_book || [];
-                var g_opts = '';
-                for (var i = 0, len = groups.length; i < len; i++) {
-                    g_opts += '<option value="' + groups[i].id + '" data-index="' + i + '">' + groups[i].name + '</option>';
-                }
-                $('[name="groups"]', $panel).html(g_opts).select2({
-                    placeholder: gettext("Select a group"),
-                    maximumSelectionSize: 1,
-                    formatSelectionTooBig: gettext("You can only select 1 item"),
-                    escapeMarkup: function(m) { return m; }
+                var groups = [];
+
+                $.ajax({
+                    url: Common.getUrl({
+                        name: app.pageOptions.enable_share_to_all_groups ? 'shareable_groups' : 'groups'
+                    }),
+                    type: 'GET',
+                    dataType: 'json',
+                    cache: false,
+                    success: function(data) {
+                        for (var i = 0, len = data.length; i < len; i++) {
+                            groups.push({
+                                'id': data[i].id,
+                                'name': data[i].name
+                            });
+                        }
+                        groups.sort(function(a, b) {
+                            return Common.compareTwoWord(a.name, b.name);
+                        });
+                    },
+                    error: function(xhr, textStatus, errorThrown) {
+                        // do nothing
+                    },
+                    complete: function() {
+                        var g_opts = '';
+                        for (var i = 0, len = groups.length; i < len; i++) {
+                            g_opts += '<option value="' + groups[i].id + '" data-index="' + i + '">' + groups[i].name + '</option>';
+                        }
+                        $('[name="groups"]', $panel).html(g_opts).select2({
+                            placeholder: gettext("Select a group"),
+                            maximumSelectionSize: 1,
+                            formatSelectionTooBig: gettext("You can only select 1 item"),
+                            escapeMarkup: function(m) { return m; }
+                        });
+                    }
                 });
+
             }
 
             // show existing items
