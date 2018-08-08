@@ -5,8 +5,8 @@ class OutlineItem extends React.Component {
   render() {
     var item = this.props.item;
     var activeIndex = parseInt(this.props.activeIndex);
-    var clazz = "wiki-outline-item " + item.clazz;
-    clazz += item.key === activeIndex ? " wiki-outline-item-active" : "";
+    var clazz = 'wiki-outline-item ' + item.clazz;
+    clazz += item.key === activeIndex ? ' wiki-outline-item-active' : '';
     return (
       <li className={clazz} data-index={item.key}>
         <a href={item.id} title={item.text} onClick={this.props.handleNavItemClick}>{item.text}</a>
@@ -23,10 +23,9 @@ class Outline extends React.Component {
     this.state = {
       activeIndex : 0
     }
-    this.handleNavItemClick = this.handleNavItemClick.bind(this);
   }
 
-  handleNavItemClick(event) {
+  handleNavItemClick = (event) => {
     var currentIndex = event.target.parentNode.getAttribute("data-index");
     if (currentIndex !== this.state.activeIndex) {
       this.setState({
@@ -60,12 +59,12 @@ class Outline extends React.Component {
   render() {
     return (
       <ul className="wiki-viewer-outline" ref="outlineContainer">
-        {this.props.navItems.map( item => {
+        {this.props.navItems.map(item => {
           return (
             <OutlineItem 
               key={item.key} 
               item={item} 
-              activeIndex = {this.state.activeIndex}
+              activeIndex={this.state.activeIndex}
               handleNavItemClick={this.handleNavItemClick}
             />
           )

@@ -14,9 +14,8 @@ class MainPanel extends Component {
     super(props);
     this.state = {
       navItems: [],
-      activeId: ""
+      activeId: ''
     }
-    this.scrollHandler = this.scrollHandler.bind(this);
   }
 
   onMenuClick = () => {
@@ -29,14 +28,14 @@ class MainPanel extends Component {
     window.location.href= serviceUrl + '/lib/' + repoID + '/file' + this.props.filePath + '?mode=edit';
   }
 
-  scrollHandler(event) {
+  scrollHandler = (event) => {
     var target = event.target || event.srcElement;
     var markdownContainer = this.refs.markdownContainer;
     var headingList = markdownContainer.querySelectorAll('[id^="user-content"]');
     var top = target.scrollTop;
     var currentId = '';
     headingList.forEach(item => {
-      if (item.tagName === "H1") {
+      if (item.tagName === 'H1') {
         return false;
       }
       if (top > item.offsetTop - 100) {
@@ -52,25 +51,25 @@ class MainPanel extends Component {
     }
   }
 
-  formateNodeTree(nodeTree) {
+  formatNodeTree(nodeTree) {
     var navItems = [];
     var headingList = nodeTree.children.filter(node => {
-      return (node.type === "heading" && (node.depth === 2 || node.depth === 3));
+      return (node.type === 'heading' && (node.depth === 2 || node.depth === 3));
     });
     for (let i = 0; i < headingList.length; i++) {
       navItems[i] = {};
-      navItems[i].id  = "#user-content-" + headingList[i].data.id
+      navItems[i].id = '#user-content-' + headingList[i].data.id
       navItems[i].key = i;
       navItems[i].clazz = '';
       for (let child of headingList[i].children) {
-        if (child.type === "text") {
+        if (child.type === 'text') {
           navItems[i].text = child.value;
           break;
         }
       }
 
       if (headingList[i].depth === 3) {
-        navItems[i].clazz = "textindent-2";
+        navItems[i].clazz = 'textindent-2';
       }
     }
     return navItems;
@@ -81,7 +80,7 @@ class MainPanel extends Component {
     var content = nextProps.content;
     processorGetAST.run(processorGetAST.parse(content)).then((nodeTree) => {
       if (nodeTree && nodeTree.children && nodeTree.children.length) {
-        var navItems = _this.formateNodeTree(nodeTree);
+        var navItems = _this.formatNodeTree(nodeTree);
         var currentId = navItems[0].id;
         _this.setState({
           navItems: navItems,
@@ -134,9 +133,9 @@ class MainPanel extends Component {
             </div>
             <div className="cur-view-content-outline">
                 <Outline 
-                  navItems = {this.state.navItems} 
+                  navItems={this.state.navItems} 
                   handleNavItemClick={this.handleNavItemClick}
-                  activeId = {this.state.activeId}
+                  activeId={this.state.activeId}
                 />
             </div>
           </div>
