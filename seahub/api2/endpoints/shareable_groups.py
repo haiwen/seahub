@@ -53,7 +53,6 @@ class ShareableGroups(APIView):
         except ValueError:
             avatar_size = GROUP_AVATAR_DEFAULT_SIZE
 
-        result = [get_group_info(request, g.id, avatar_size)
-                for g in groups if g.parent_group_id == 0]
+        result = [get_group_info(request, g.id, avatar_size) for g in groups]
 
         return Response(result)

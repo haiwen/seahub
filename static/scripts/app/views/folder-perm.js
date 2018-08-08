@@ -122,7 +122,7 @@ define([
                     Common.contactInputOptionsForSelect2({'url': url}));
 
             // use select2 to 'group' input in 'add group perm'
-            var groups;
+            var groups, groups_url;
             var prepareGroupSelector = function(groups) {
                 var g_opts = '';
                 for (var i = 0, len = groups.length; i < len; i++) {
@@ -133,28 +133,26 @@ define([
                     escapeMarkup: function(m) { return m; }
                 });
             };
+
             if (this.is_group_owned_repo) {
-                $.ajax({
-                    url: Common.getUrl({
-                        'name': 'address_book_sub_groups',
-                        'group_id': this.group_id
-                    }),
-                    cache: false,
-                    dataType: 'json',
-                    success: function(data) {
-                        groups = data;
-                    },
-                    error: function(xhr) {
-                        groups = [];
-                    },
-                    complete: function() {
-                        prepareGroupSelector(groups);
-                    }
-                });
+                groups_url = Common.getUrl({'name': 'address_book_sub_groups', 'group_id': this.group_id});
             } else {
-                groups = app.pageOptions.joined_groups_exclude_address_book || [];
-                prepareGroupSelector(groups);
+                groups_url = Common.getUrl({name: app.pageOptions.enable_share_to_all_groups ? 'shareable_groups' : 'groups'});
             }
+            $.ajax({
+                url: groups_url,
+                cache: false,
+                dataType: 'json',
+                success: function(data) {
+                    groups = data;
+                },
+                error: function(xhr) {
+                    groups = [];
+                },
+                complete: function() {
+                    prepareGroupSelector(groups);
+                }
+            });
         },
 
         events: {
