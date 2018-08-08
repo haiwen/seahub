@@ -5,8 +5,9 @@ class WikiOutlineItem extends React.Component {
   render() {
     let item = this.props.item;
     let activeIndex = parseInt(this.props.activeIndex);
-    let clazz = 'wiki-outline-item ' + item.clazz;
-    clazz += item.key === activeIndex ? ' wiki-outline-item-active' : '';
+    let levelClass  = item.depth === 3 ? " textindent-2" : '';
+    let activeClass = item.key === activeIndex ? ' wiki-outline-item-active' : '';
+    let clazz = "wiki-outline-item"+ levelClass + activeClass;
     return (
       <li className={clazz} data-index={item.key}>
         <a href={item.id} title={item.text} onClick={this.props.handleNavItemClick}>{item.text}</a>

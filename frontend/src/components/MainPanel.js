@@ -33,17 +33,20 @@ class MainPanel extends Component {
     var markdownContainer = this.refs.markdownContainer;
     var headingList = markdownContainer.querySelectorAll('[id^="user-content"]');
     var top = target.scrollTop;
+    var defaultOffset = markdownContainer.offsetTop;
     var currentId = '';
-    headingList.forEach(item => {
-      if (item.tagName === 'H1') {
-        return false;
+    for (let i = 0; i < headingList.length; i++) {
+      let heading = headingList[i];
+      if (heading.tagName === 'H1') {
+        continue;
       }
-      if (top > item.offsetTop - 100) {
-        currentId = '#' + item.getAttribute('id');
+      if (top > heading.offsetTop - defaultOffset) {
+        currentId = '#' + heading.getAttribute('id');
       } else {
-        return false;
+        break;
       }
-    })
+    }
+
     if (currentId !== this.state.activeId) {
       this.setState({
         activeId: currentId
@@ -61,15 +64,12 @@ class MainPanel extends Component {
       navItems[i].id = '#user-content-' + headingList[i].data.id
       navItems[i].key = i;
       navItems[i].clazz = '';
+      navItems[i].depth = headingList[i].depth;
       for (let child of headingList[i].children) {
         if (child.type === 'text') {
           navItems[i].text = child.value;
           break;
         }
-      }
-
-      if (headingList[i].depth === 3) {
-        navItems[i].clazz = 'textindent-2';
       }
     }
     return navItems;
@@ -81,7 +81,7 @@ class MainPanel extends Component {
     processorGetAST.run(processorGetAST.parse(content)).then((nodeTree) => {
       if (nodeTree && nodeTree.children && nodeTree.children.length) {
         var navItems = _this.formatNodeTree(nodeTree);
-        var currentId = navItems[0].id;
+        var currentId = navItems.length > 0 ? navItems[0].id : 0;
         _this.setState({
           navItems: navItems,
           activeId: currentId
