@@ -14,10 +14,9 @@ class MainPanel extends Component {
     super(props);
     this.state = {
       navItems: [],
-      activeIndex: 0
+      activeId: ""
     }
     this.scrollHandler = this.scrollHandler.bind(this);
-    this.handleNavItemClick = this.handleNavItemClick.bind(this);
   }
 
   onMenuClick = () => {
@@ -31,14 +30,13 @@ class MainPanel extends Component {
   }
 
   scrollHandler(event) {
-    var _this  = this;
     var target = event.target || event.srcElement;
     var markdownContainer = this.refs.markdownContainer;
     var headingList = markdownContainer.querySelectorAll('[id^="user-content"]');
     var top = target.scrollTop;
     var currentId = '';
-    headingList.forEach(function(item){
-      if (item.tagName === "H1") {  //delete h1 tag;
+    headingList.forEach(item => {
+      if (item.tagName === "H1") {
         return false;
       }
       if (top > item.offsetTop - 100) {
@@ -47,47 +45,11 @@ class MainPanel extends Component {
         return false;
       }
     })
-    var outlineContainer = this.refs.outlineContainer;
-    var items = outlineContainer.querySelectorAll('.wiki-outline-item');
-    var lastActive = outlineContainer.querySelector('.wiki-outline-item-active');
-    if (lastActive && lastActive.querySelector('a').getAttribute('href') !== currentId) {
-      items.forEach(function(item){
-        if (item.querySelector('a').getAttribute('href') === currentId) {
-          var index = item.getAttribute('data-index');
-          _this.setState({
-            activeIndex: index
-          })
-
-          //handle scroll effect
-          var scrollContainer = outlineContainer.parentNode;
-          var lastIndex = scrollContainer.getAttribute('data-lastindex');
-          var currentIndex = item.getAttribute('data-index');
-          
-          var direction = "down";
-          if (lastIndex) {
-            direction = currentIndex > lastIndex ? "down" : "up";
-          }
-          scrollContainer.setAttribute('data-lastindex', currentIndex);
-
-          if (direction === "down" && item.offsetTop > 540) {
-            if (!scrollContainer.style.top) {
-              scrollContainer.style.top = 0;
-            }
-            scrollContainer.style.top = (parseInt(scrollContainer.style.top) - 27) + "px";
-          } else if (direction === "up" && parseInt(scrollContainer.style.top) < 0) {
-            scrollContainer.style.top = (parseInt(scrollContainer.style.top) + 27) + "px";
-          }
-        }
+    if (currentId !== this.state.activeId) {
+      this.setState({
+        activeId: currentId
       })
     }
-  }
-
-  handleNavItemClick(event) {
-    var target = event.target;
-    var activeIndex = target.parentNode.getAttribute('data-index');
-    this.setState({
-      activeIndex: activeIndex
-    })
   }
 
   formateNodeTree(nodeTree) {
@@ -97,10 +59,9 @@ class MainPanel extends Component {
     });
     for (let i = 0; i < headingList.length; i++) {
       navItems[i] = {};
-      navItems[i].id  = "user-content-" + headingList[i].data.id
+      navItems[i].id  = "#user-content-" + headingList[i].data.id
       navItems[i].key = i;
       navItems[i].clazz = '';
-      navItems[i].active = false;
       for (let child of headingList[i].children) {
         if (child.type === "text") {
           navItems[i].text = child.value;
@@ -121,9 +82,10 @@ class MainPanel extends Component {
     processorGetAST.run(processorGetAST.parse(content)).then((nodeTree) => {
       if (nodeTree && nodeTree.children && nodeTree.children.length) {
         var navItems = _this.formateNodeTree(nodeTree);
+        var currentId = navItems[0].id;
         _this.setState({
           navItems: navItems,
-          activeIndex: 0
+          activeId: currentId
         })
       }
     });
@@ -171,13 +133,11 @@ class MainPanel extends Component {
                 <p id="wiki-page-last-modified">Last modified by {this.props.latestContributor}, <span>{this.props.lastModified}</span></p>
             </div>
             <div className="cur-view-content-outline">
-              <div className="outline-nav-body" ref="outlineContainer">
                 <Outline 
                   navItems = {this.state.navItems} 
                   handleNavItemClick={this.handleNavItemClick}
-                  activeIndex = {this.state.activeIndex}
+                  activeId = {this.state.activeId}
                 />
-              </div>
             </div>
           </div>
         </div>

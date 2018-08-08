@@ -65,10 +65,6 @@
   padding: 0 18px;
   top: 0;
 }
-.wiki-main .outline-nav-body {
-  position: relative;
-  top: 0;
-}
 
 @media (max-width: 991.98px) {
   .wiki-main .cur-view-content-container {
@@ -83,6 +79,8 @@
 }
 
 .wiki-main .wiki-viewer-outline {
+  position: relative;
+  top: 0;
   padding: 0;
   list-style: none;
   border-left: solid 1px #eee;
