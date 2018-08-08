@@ -140,6 +140,7 @@ define([
                 // Links
                 case 'send_shared_download_link': return siteRoot + 'share/link/send/';
                 case 'send_shared_upload_link': return siteRoot + 'share/upload_link/send/';
+                case 'smart_link': return siteRoot + 'api/v2.1/smart-link/';
 
                 // Group
                 case 'groups': return siteRoot + 'api/v2.1/groups/';
@@ -423,13 +424,38 @@ define([
             $("#simplemodal-container").css({'height':'auto'});
         },
 
-        ajaxErrorHandler: function(xhr, textStatus, errorThrown) {
+        prepareAjaxErrorMsg: function(xhr) {
+            var error_msg;
             if (xhr.responseText) {
                 var parsed_resp = JSON.parse(xhr.responseText);
-                this.feedback(parsed_resp.error||parsed_resp.error_msg||parsed_resp.detail, 'error');
+                // use `HTMLescape` for msgs which contain variable like 'path'
+                error_msg = this.HTMLescape(parsed_resp.error ||
+                        parsed_resp.error_msg || parsed_resp.detail);
             } else {
-                this.feedback(gettext("Failed. Please check the network."), 'error');
+                error_msg = gettext("Failed. Please check the network.");
             }
+            return error_msg;
+        },
+
+        ajaxErrorHandler: function(xhr, textStatus, errorThrown) {
+            var error_msg = this.prepareAjaxErrorMsg(xhr);
+            this.feedback(error_msg, 'error');
+        },
+
+        prepareCollectionFetchErrorMsg: function(collection, response, opts) {
+            var err_msg;
+            if (response.responseText) {
+                if (response['status'] == 401 || response['status'] == 403) {
+                    err_msg = gettext("Permission error");
+                } else {
+                    //err_msg = gettext("Error");
+                    err_msg = this.HTMLescape(JSON.parse(response.responseText).error_msg);
+                }
+            } else {
+                err_msg = gettext('Please check the network.');
+            }
+
+            return err_msg;
         },
 
         enableButton: function(btn) {
@@ -513,13 +539,8 @@ define([
                 after_op_error = params.after_op_error;
             } else {
                 after_op_error = function(xhr, textStatus, errorThrown) {
-                    var err;
-                    if (xhr.responseText) {
-                        err = JSON.parse(xhr.responseText).error||JSON.parse(xhr.responseText).error_msg;
-                    } else {
-                        err = gettext("Failed. Please check the network.");
-                    }
-                    _this.showFormError(form_id, err);
+                    var error_msg = _this.prepareAjaxErrorMsg(xhr);
+                    _this.showFormError(form_id, error_msg);
                     _this.enableButton(submit_btn);
                 };
             }

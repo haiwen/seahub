@@ -67,7 +67,7 @@ from seahub.utils import gen_file_get_url, gen_token, gen_file_upload_url, \
     gen_file_share_link, gen_dir_share_link, is_org_context, gen_shared_link, \
     get_org_user_events, calculate_repos_last_modify, send_perm_audit_msg, \
     gen_shared_upload_link, convert_cmmt_desc_link, is_valid_dirent_name, \
-    is_org_repo_creation_allowed, \
+    is_org_repo_creation_allowed, normalize_file_path, \
     get_no_duplicate_obj_name, normalize_dir_path
 
 from seahub.utils.file_revisions import get_file_revisions_after_renamed
@@ -81,7 +81,8 @@ from seahub.utils.file_types import DOCUMENT
 from seahub.utils.file_size import get_file_size_unit
 from seahub.utils.file_op import check_file_lock
 from seahub.utils.timeutils import utc_to_local, \
-        datetime_to_isoformat_timestr, datetime_to_timestamp
+        datetime_to_isoformat_timestr, datetime_to_timestamp, \
+        timestamp_to_isoformat_timestr
 from seahub.views import is_registered_user, check_folder_permission, \
     create_default_library, list_inner_pub_repos
 from seahub.views.file import get_file_view_path_and_perm, send_file_access_msg
@@ -283,7 +284,7 @@ class Accounts(APIView):
 class AccountInfo(APIView):
     """ Show account info.
     """
-    authentication_classes = (TokenAuthentication, )
+    authentication_classes = (TokenAuthentication, SessionAuthentication)
     permission_classes = (IsAuthenticated,)
     throttle_classes = (UserRateThrottle, )
 
@@ -301,6 +302,14 @@ class AccountInfo(APIView):
             quota_total = seafile_api.get_user_quota(email)
             quota_usage = seafile_api.get_user_self_usage(email)
 
+        if quota_total > 0:
+            info['space_usage'] = str(float(quota_usage) / quota_total * 100) + '%'
+        else:                       # no space quota set in config
+            info['space_usage'] = '0%'
+
+        url, _, _ = api_avatar_url(email, int(72))
+
+        info['avatar_url'] = request.build_absolute_uri(url)
         info['email'] = email
         info['name'] = email2nickname(email)
         info['total'] = quota_total
@@ -309,6 +318,7 @@ class AccountInfo(APIView):
         info['department'] = d_p.department if d_p else ""
         info['contact_email'] = p.contact_email if p else ""
         info['institution'] = p.institution if p and p.institution else ""
+        info['is_staff'] = request.user.is_staff
 
         return Response(info)
 
@@ -607,6 +617,8 @@ class Repos(APIView):
             filter_by[f] = True
 
         email = request.user.username
+        owner_name = email2nickname(email)
+        owner_contact_email = email2contact_email(email)
 
         # Use dict to reduce memcache fetch cost in large for-loop.
         contact_email_dict = {}
@@ -643,6 +655,8 @@ class Repos(APIView):
                     "type": "repo",
                     "id": r.id,
                     "owner": email,
+                    "owner_name": owner_name,
+                    "owner_contact_email": owner_contact_email,
                     "name": r.name,
                     "mtime": r.last_modify,
                     "modifier_email": r.last_modifier,
@@ -696,6 +710,8 @@ class Repos(APIView):
                     "type": "srepo",
                     "id": r.repo_id,
                     "owner": r.user,
+                    "owner_name": nickname_dict.get(r.user, ''),
+                    "owner_contact_email": contact_email_dict.get(r.user, ''),
                     "name": r.repo_name,
                     "owner_nickname": nickname_dict.get(r.user, ''),
                     "mtime": r.last_modify,
@@ -731,8 +747,9 @@ class Repos(APIView):
             group_repos.sort(lambda x, y: cmp(y.last_modify, x.last_modify))
 
             # Reduce memcache fetch ops.
+            share_from_set = set([x.user for x in group_repos])
             modifiers_set = set([x.last_modifier for x in group_repos])
-            for e in modifiers_set:
+            for e in modifiers_set | share_from_set:
                 if e not in contact_email_dict:
                     contact_email_dict[e] = email2contact_email(e)
                 if e not in nickname_dict:
@@ -759,6 +776,9 @@ class Repos(APIView):
                     "root": '',
                     "head_commit_id": r.head_cmmt_id,
                     "version": r.version,
+                    "share_from": r.user,
+                    "share_from_name": nickname_dict.get(r.user, ''),
+                    "share_from_contact_email": contact_email_dict.get(r.user, ''),
                 }
                 repos_json.append(repo)
 
@@ -766,8 +786,9 @@ class Repos(APIView):
             public_repos = list_inner_pub_repos(request)
 
             # Reduce memcache fetch ops.
+            share_from_set = set([x.user for x in public_repos])
             modifiers_set = set([x.last_modifier for x in public_repos])
-            for e in modifiers_set:
+            for e in modifiers_set | share_from_set:
                 if e not in contact_email_dict:
                     contact_email_dict[e] = email2contact_email(e)
                 if e not in nickname_dict:
@@ -792,6 +813,8 @@ class Repos(APIView):
                     "encrypted": r.encrypted,
                     "permission": r.permission,
                     "share_from": r.user,
+                    "share_from_name": nickname_dict.get(r.user, ''),
+                    "share_from_contact_email": contact_email_dict.get(r.user, ''),
                     "share_type": r.share_type,
                     "root": '',
                     "head_commit_id": r.head_cmmt_id,
@@ -2845,73 +2868,90 @@ class FileView(APIView):
 class FileDetailView(APIView):
     authentication_classes = (TokenAuthentication, SessionAuthentication)
     permission_classes = (IsAuthenticated,)
-    throttle_classes = (UserRateThrottle, )
+    throttle_classes = (UserRateThrottle,)
 
     def get(self, request, repo_id, format=None):
-        repo = seafile_api.get_repo(repo_id)
-        if repo is None:
-            return api_error(status.HTTP_400_BAD_REQUEST, 'Library not found.')
 
+        # argument check
         path = request.GET.get('p', None)
-        if path is None:
-            return api_error(status.HTTP_400_BAD_REQUEST, 'Path is missing.')
+        if not path:
+            error_msg = 'p invalid.'
+            return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
+
+        path = normalize_file_path(path)
+
+        # resource check
+        repo = seafile_api.get_repo(repo_id)
+        if not repo:
+            error_msg = 'Library %s not found.' % repo_id
+            return api_error(status.HTTP_404_NOT_FOUND, error_msg)
 
         commit_id = request.GET.get('commit_id', None)
-        if commit_id:
-            try:
-                obj_id = seafserv_threaded_rpc.get_file_id_by_commit_and_path(
-                    repo.id, commit_id, path)
-            except SearpcError as e:
-                logger.error(e)
-                return api_error(status.HTTP_500_INTERNAL_SERVER_ERROR,
-                                 'Failed to get file id.')
-        else:
-            try:
+        try:
+            if commit_id:
+                obj_id = seafile_api.get_file_id_by_commit_and_path(repo_id,
+                        commit_id, path)
+            else:
                 obj_id = seafile_api.get_file_id_by_path(repo_id, path)
-            except SearpcError as e:
-                logger.error(e)
-                return api_error(status.HTTP_500_INTERNAL_SERVER_ERROR,
-                                 'Failed to get file id.')
+        except Exception as e:
+            logger.error(e)
+            error_msg = 'Internal Server Error'
+            return api_error(status.HTTP_500_INTERNAL_SERVER_ERROR, error_msg)
 
         if not obj_id:
-            return api_error(status.HTTP_404_NOT_FOUND, 'File not found.')
+            error_msg = 'File %s not found.' % path
+            return api_error(status.HTTP_404_NOT_FOUND, error_msg)
+
+        # permission check
+        parent_dir = os.path.dirname(path)
+        permission = check_folder_permission(request, repo_id, parent_dir)
+        if not permission:
+            error_msg = 'Permission denied.'
+            return api_error(status.HTTP_403_FORBIDDEN, error_msg)
+
+        # get real path for sub repo
+        if repo.is_virtual:
+            real_path = posixpath.join(repo.origin_path, path.lstrip('/'))
+            real_repo_id = repo.origin_repo_id
+        else:
+            real_path = path
+            real_repo_id = repo_id
+
+        entry = {}
+        entry["type"] = "file"
+        entry["id"] = obj_id
+        entry["name"] = os.path.basename(path)
+        entry["permission"] = permission
 
         # fetch file contributors and latest contributor
         try:
             # get real path for sub repo
-            real_path = repo.origin_path + path if repo.origin_path else path
-            dirent = seafile_api.get_dirent_by_path(repo.store_id, real_path)
-            if dirent:
-                latest_contributor, last_modified = dirent.modifier, dirent.mtime
-            else:
-                latest_contributor, last_modified = None, 0
-        except SearpcError as e:
+            dirent = seafile_api.get_dirent_by_path(real_repo_id, real_path)
+        except Exception as e:
             logger.error(e)
-            latest_contributor, last_modified = None, 0
+            dirent = None
 
-        entry = {}
-        try:
-            entry["size"] = get_file_size(repo.store_id, repo.version, obj_id)
-        except Exception, e:
-            entry["size"] = 0
+        last_modified = dirent.mtime if dirent else ''
+        latest_contributor = dirent.modifier if dirent else ''
 
-        entry["type"] = "file"
-        entry["name"] = os.path.basename(path)
-        entry["id"] = obj_id
         entry["mtime"] = last_modified
-
-        try:
-            UserStarredFiles.objects.get(repo_id=repo_id, path=path)
-            entry["starred"] = True
-        except UserStarredFiles.DoesNotExist:
-            entry["starred"] = False
-
+        entry["last_modified"] = timestamp_to_isoformat_timestr(last_modified)
         entry["last_modifier_email"] = latest_contributor
         entry["last_modifier_name"] = email2nickname(latest_contributor)
         entry["last_modifier_contact_email"] = email2contact_email(latest_contributor)
 
-        return HttpResponse(json.dumps(entry), status=200,
-                            content_type=json_content_type)
+        try:
+            entry["size"] = get_file_size(real_repo_id, repo.version, obj_id)
+        except Exception as e:
+            logger.error(e)
+            entry["size"] = 0
+
+        starred_files = UserStarredFiles.objects.filter(repo_id=repo_id,
+                path=path)
+        entry["starred"] = True if len(starred_files) > 0 else False
+
+        return Response(entry)
+
 
 class FileRevert(APIView):
     authentication_classes = (TokenAuthentication, SessionAuthentication)
@@ -4512,7 +4552,7 @@ class GroupRepo(APIView):
                             content_type=json_content_type)
 
 class UserAvatarView(APIView):
-    authentication_classes = (TokenAuthentication, )
+    authentication_classes = (TokenAuthentication, SessionAuthentication)
     permission_classes = (IsAuthenticated,)
     throttle_classes = (UserRateThrottle, )
 

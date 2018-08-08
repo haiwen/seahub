@@ -87,13 +87,8 @@ define([
                     Common.feedback(gettext("Successfully changed library password."), 'success');
                 },
                 error: function(xhr) {
-                    var err_msg;
-                    if (xhr.responseText) {
-                        err_msg = JSON.parse(xhr.responseText).error_msg;
-                    } else {
-                        err_msg = gettext("Failed. Please check the network.");
-                    }
-                    $error.html(err_msg).show();
+                    var error_msg = Common.prepareAjaxErrorMsg(xhr);
+                    $error.html(error_msg).show();
                     Common.enableButton($submitBtn);
                 }
             });

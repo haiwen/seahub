@@ -5,4 +5,9 @@
     box-shadow: 0 0 6px #ccc;
     margin: auto;
     min-height: 500px;
-};
+}
+@media (max-width: 991.98px){
+    #spreadsheet-container iframe {
+        width: 100%;
+    }
+}

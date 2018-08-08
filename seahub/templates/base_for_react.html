@@ -1,0 +1,37 @@
+{% load seahub_tags avatar_tags group_avatar_tags i18n staticfiles %}
+
+<!DOCTYPE html>
+<html lang="{{ LANGUAGE_CODE }}">
+<head>
+<title>{% block sub_title %}{% endblock %}{{ site_title }}</title>
+<meta http-equiv="Content-type" content="text/html; charset=utf-8" />
+<meta name="keywords" content="{% trans "File Collaboration Team Organization" %}" />
+{% block viewport %}
+<meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no" />
+{% endblock %}
+<meta http-equiv="x-ua-compatible" content="ie=edge" />
+<link rel="shortcut icon" href="{{ MEDIA_URL }}{{ favicon_path }}" />
+{% block extra_style %}{% endblock %}
+<link rel="stylesheet" type="text/css" href="{{ MEDIA_URL }}css/seahub_react.css?t=1398068110" />
+{% if branding_css != '' %}<link rel="stylesheet" type="text/css" href="{{ MEDIA_URL }}{{ branding_css }}" />{% endif %}
+{% if enable_branding_css %}<link rel="stylesheet" type="text/css" href="{% url 'custom_css' %}" />{% endif %}
+</head>
+
+<body>
+    <div id="wrapper" class="{{ LANGUAGE_CODE }}"></div>
+
+<script type="text/javascript">
+    window.app = {
+        config: {
+            mediaUrl: '{{ MEDIA_URL }}',
+            logoPath: '{{ logo_path }}',
+            logoWidth: '{{ logo_width }}',
+            logoHeight: '{{ logo_height }}',
+            siteTitle: '{{ site_title }}',
+            siteRoot: '{{ SITE_ROOT }}',
+         }
+     };
+</script>
+{% block extra_script %}{% endblock %}
+</body>
+</html>

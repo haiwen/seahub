@@ -108,16 +108,7 @@ define([
                 },
                 error: function(collection, response, opts) {
                     _this.$loadingTip.hide();
-                    var err_msg;
-                    if (response.responseText) {
-                        if (response['status'] == 401 || response['status'] == 403) {
-                            err_msg = gettext("Permission error");
-                        } else {
-                            err_msg = gettext("Error");
-                        }
-                    } else {
-                        err_msg = gettext('Please check the network.');
-                    }
+                    var err_msg = Common.prepareCollectionFetchErrorMsg(collection, response, opts);
                     _this.$error.html(err_msg).show();
                 }
             });
@@ -188,16 +179,7 @@ define([
                     _this.$con.scrollTop(sumHeight - 50); // 50: keep at least 50px gap from the top
                 },
                 error: function(collection, response, opts) {
-                    var err_msg;
-                    if (response.responseText) {
-                        if (response['status'] == 401 || response['status'] == 403) {
-                            err_msg = gettext("Permission error");
-                        } else {
-                            err_msg = gettext("Error");
-                        }
-                    } else {
-                        err_msg = gettext('Please check the network.');
-                    }
+                    var err_msg = Common.prepareCollectionFetchErrorMsg(collection, response, opts);
                     _this.$error.html(err_msg).show();
                 },
                 complete: function() {
@@ -235,12 +217,7 @@ define([
                     }
                 },
                 error: function(collection, response, options) {
-                    var err_msg;
-                    if (response.responseText) {
-                        err_msg = response.responseJSON.error_msg;
-                    } else {
-                        err_msg = gettext('Please check the network.');
-                    }
+                    var err_msg = Common.prepareCollectionFetchErrorMsg(collection, response, opts);
                     _this.$error.html(err_msg).show();
                 }
             });

@@ -1641,6 +1641,7 @@ a.sf-popover-item {
 }
 .user-item .txt-item {
     margin:0;
+    line-height: 32px;
 }
 /**** sf-dropdown ******/
 .sf-dropdown {
@@ -1677,6 +1678,95 @@ button.sf-dropdown-toggle:focus {
     text-decoration:none;
     color:#fff;
 }
+
+/* mobile flie-menu */
+.mobile-menu-mask {
+    position: fixed;
+    width: 100%;
+    height: 100%;
+    top: 0;
+    left: 0;
+    z-index: 99;
+    background-color: #000;
+    opacity: 0.1;
+}
+
+.mobile-menu-content {
+    position: fixed;
+    width: 100%;
+    left: 0;
+    bottom: 0;
+    z-index: 100;
+    background-color: #fff;
+}
+
+.mobile-menu-content ul {
+    border-top: solid 1px #eee;
+}
+
+.mobile-menu-content ul li {
+    line-height: 40px;
+    text-align: center;
+}
+
+.mobile-menu-content ul li:hover{
+    background-color: #eb8205;
+}
+
+.mobile-menu-content a {
+    display: inline-block;
+    width: 100%;
+    height: 100%;
+    color: #000;
+}
+
+/*mobiel editor-menu and responsed */
+@media (max-width: 991.98px) {
+    #file-enc-cont {
+        width: 100%;
+        display: none;
+    }
+    .CodeMirror.CodeMirror-wrap{
+        width: 100%;
+        margin-top: -20px;
+    }
+
+    .sf2-mobile-menu-toggle {
+        font-size: 22px;
+        line-height: 1;
+        color: #999;
+        margin-top: 8px;
+    }
+
+    .sf2-mobile-menu-toggle:hover {
+        text-decoration: none;
+        color:#999;
+    }
+
+    .sf2-mobile-menu {
+        position: absolute;
+        display: none;
+        top: 50px;
+        right: 10px;
+        background:#fff;
+        z-index: 20;
+    }
+
+    .sf2-mobile-menu ul li  a {
+        min-width: 10rem;
+        padding: 0.5rem 0.75rem;
+    }
+
+    #file-view {
+        width: 100% !important;
+        border-right: none !important;
+    }
+
+    #pdf {
+        width: 95% !important;
+    }
+}
+
 /**** discussions/comments ****/
 .msg {
     padding:5px 10px;
@@ -2112,6 +2202,10 @@ button.sf-dropdown-toggle:focus {
 }
 .account-popup .txt {
     margin-left:45px;
+    line-height: 36px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
 }
 .account-popup {
     right:0;
@@ -2460,13 +2554,71 @@ button.sf-dropdown-toggle:focus {
     text-align:center;
 }
 .repo-file-list .dirent-name {
-    display:inline-block;
+    display: inline;
+    vertical-align: middle;
 }
+.repo-file-list .dirent-smart-link {
+    display: none;
+    margin-left: 4px;
+    color: #aaa;
+    cursor: pointer;
+}
+.hl .dirent-smart-link {
+    display: inline;
+    vertical-align: middle;
+}
+.smart-link-container {
+    width: 400px;
+    box-sizing: border-box;
+    overflow: hidden;
+    padding:10px 20px;
+    position: relative;
+}
+.smart-link-help {
+    color: #bbb;
+    word-break: break-all;
+    word-wrap: break-word;
+}
+.smart-link-wraper {
+    width: 100%;
+    margin-bottom: 15px;
+    word-break: break-all;
+}
+.smart-link-wraper .smart-link-href {
+    display: none;
+}
+.input-copy-wrapper {
+    position: absolute;
+    left:-99999px;
+    top: 100px;
+}
+.smart-link-loading {
+    border: 2px solid #eee;
+    border-left: 2px solid #aaa;
+    border-radius: 50%;
+    display: block;
+    height: 20px;
+    width: 20px;
+    margin: 0 auto;
+    animation: loading 0.9s infinite linear;
+}
+.smart-link-operation {
+    display: none;
+}
+.smart-link-close {
+    margin-left: 5px;
+}
+
 @media (max-width:767px) {
     .repo-file-list .dirent-name,
     .repo-file-list .img-name-link {
         display:block;
     }
+    .repo-file-list .dirent-name a,
+    .repo-file-list .img-name-link a {
+        vertical-align: middle;
+    }
+
 }
 .repo-file-list .file-locked-icon {
     position:absolute;
@@ -2516,7 +2668,7 @@ button.sf-dropdown-toggle:focus {
     padding:10px 20px;
 }
 @media (max-width:579px) {
-    .file-choose-form {
+    .file-choose-form,.smart-link-container {
         padding:0;
         width:280px;
     }
@@ -2917,6 +3069,11 @@ button.sf-dropdown-toggle:focus {
     background:#fff;
     text-align:center;
 }
+@media (max-width:991.98px) {
+    #file-view-tip {
+        width: 80%;
+    }
+}
 #docu-view {
     font-size:14px;/*override .ace_editor*/
     line-height:1.6em;
@@ -3168,6 +3325,27 @@ button.sf-dropdown-toggle:focus {
     margin: auto;
     width: 500px;
     height: 30px;
+}
+@media (max-width: 991.98px){
+    .video-container {
+        margin: 0 auto;
+        width: 80%;
+        height: 80%;
+    }
+    .sf-video-dimensions {
+        width: 100%;
+        height: 100%;
+    }
+    .audio-container {
+        width: 350px;
+        max-width: 500px;
+    }
+    .mejs-container {
+        width: 100% !important;
+    }
+    .mejs-time-total {
+        width: 60%
+    }
 }
 
 /* wiki page */
@@ -4181,3 +4359,14 @@ img.thumbnail {
     display:inline-block;
     margin-top:4px;
 }
+
+/* wiki list style */
+.wiki-hl {background-color: #f8f8f8;}
+.wiki-vs {visibility: visible;}
+.wiki-dropdown-menu {
+    margin-left: -80px;
+}
+.wiki-list input {
+    width: 200px;
+}
+

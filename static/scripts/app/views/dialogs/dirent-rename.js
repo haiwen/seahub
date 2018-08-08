@@ -89,13 +89,8 @@ define([
                     }
                 },
                 error: function(xhr, textStatus, errorThrown) {
-                    var err;
-                    if (xhr.responseText) {
-                        err = JSON.parse(xhr.responseText).error;
-                    } else {
-                        err = gettext("Failed. Please check the network.");
-                    }
-                    _this.$error.html(err).removeClass('hide');
+                    var error_msg = Common.prepareAjaxErrorMsg(xhr);
+                    _this.$error.html(error_msg).removeClass('hide');
                     Common.enableButton($submit_btn);
                 }
             });

@@ -287,6 +287,9 @@ class DirSharedItemsEndpoint(APIView):
         if seafile_api.get_dir_id_by_path(repo.id, path) is None:
             return api_error(status.HTTP_404_NOT_FOUND, 'Folder %s not found.' % path)
 
+        if repo.encrypted and path != '/':
+            return api_error(status.HTTP_400_BAD_REQUEST, 'Folder invalid.')
+
         share_type = request.data.get('share_type')
         if share_type != 'user' and share_type != 'group':
             return api_error(status.HTTP_400_BAD_REQUEST, 'share_type invalid.')

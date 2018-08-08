@@ -27,7 +27,6 @@
 }
 .article p {
   margin:0.8em 0;
-  white-space:pre-wrap;
 }
 .article ul {
   list-style-type:disc;
@@ -62,14 +61,14 @@
 
 .article pre {
   font-size:13px;
-  padding:5px 10px;
-  background:#f8f8f8;
-  border:1px solid #ddd;
+  padding:16px;
+  background:#f5f7fa;
   border-radius:3px;
   -moz-border-radius:3px;
   -webkit-border-radius:3px;
   margin:1em 0;
   white-space: pre-wrap;
+  line-height: 1.45;
 }
 
 .article .code p {

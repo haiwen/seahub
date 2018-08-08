@@ -174,18 +174,17 @@ class BatchAddUserTest(BaseTestCase):
         self.new_users = []
         self.excel_file = os.path.join(os.getcwd(), 'tests/seahub/views/sysadmin/batch_add_user.xlsx')
         data_list = []
-        data_list.append(['email', 'password', 'username', 'department', 'role', 'quota'])
+        data_list.append(['email', 'password', 'username', 'role', 'quota'])
         for i in xrange(20):
             username = "username@test" + str(i) +".com"
             password = "password"
             name = "name_test" + str(i)
-            department = "department_test" + str(i)
             if i < 10:
                 role = "guest"
             else:
                 role = "default"
             quota = "999"
-            data_list.append([username, password, name, department, role, quota])
+            data_list.append([username, password, name, role, quota])
             self.new_users.append(username)
         wb = real_write_xls('test', data_list[0], data_list[1:])
         wb.save(self.excel_file)
@@ -318,7 +317,6 @@ class BatchAddUserHelpTest(BaseTestCase):
             assert r[0].value == 'test' + str(i) + '@example.com'
             assert r[1].value == '123456'
             assert r[2].value == 'test' + str(i)
-            assert r[3].value == 'department' + str(i)
-            assert r[4].value == 'default'
-            assert r[5].value == '1000'
+            assert r[3].value == 'default'
+            assert r[4].value == '1000'
             i += 1

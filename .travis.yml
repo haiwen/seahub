@@ -1,20 +1,50 @@
 language: python
+
+env:
+  global:
+    - CCNET_CONF_DIR=/tmp/ccnet SEAFILE_CONF_DIR=/tmp/seafile-data
+    - secure: "AFqKit45l2758+TrH/l0SFN6k5lc9ALmZGPBGbGeYSzSGZ4+Cx7tHyQwgZgiitf9BzVci1ClaIMfNxp8BG6ECDAMXcbMyAksItG2aM/x//YT59ljgrwnNeZFfwh8LWuZslboxXx/Pfrv9QSX0c6dcTyEfKFLVKW1U2bn4MxdF+A="
+
+
+# install & start seafile-server CE v6.3, install phantomjs & nginx
 before_install:
   # build/init/start ccnet-server/seafile-server
-  - git clone --depth=1 --branch=master git://github.com/haiwen/seafile-test-deploy /tmp/seafile-test-deploy
+  - git clone --depth=1 --branch=6.3 git://github.com/haiwen/seafile-test-deploy /tmp/seafile-test-deploy
   - cd /tmp/seafile-test-deploy && ./bootstrap.sh && cd -
   # install phantomjs
   - ./tests/install-deps.sh
+  - npm install -g requirejs
+  - openssl aes-256-cbc -K $encrypted_bdef00a70236_key -iv $encrypted_bdef00a70236_iv -in .travis/travis_deploy_key.enc -out travis_deploy_key -d && mv travis_deploy_key ~/.ssh/id_rsa && chmod 600 ~/.ssh/id_rsa
+
+# install seahub requirements
+install:
+  - pip install -r requirements.txt --allow-all-external --allow-unverified PIL
+  - pip install -r test-requirements.txt
+
+before_scipt: true
+
+# int & start seahub server, run seahub tests
 script:
   - ./tests/seahubtests.sh init && ./tests/seahubtests.sh runserver && ./tests/seahubtests.sh test
-env:
-  - CCNET_CONF_DIR=/tmp/ccnet SEAFILE_CONF_DIR=/tmp/seafile-data
-install:
-  - pip install -r requirements.txt --allow-all-external --allow-unverified Djblets --allow-unverified PIL
-  - pip install -r test-requirements.txt
+
+after_success:
+  - ./tests/seahubtests.sh dist
+  - .travis/dist_and_push.sh
+
+after_failure: true
+
+after_script: true
+
 notifications:
   email: false
   slack:
     rooms:
       secure: TAfn5FZpRfzjGnHl2oiF1bF9FVg3L+ObK6gkNmdAY08xgdd8fHFOHrlD1WzrYSom3eT2OZ/5YPzrKAwbuWcMqTWc7NxjBCEDwfRu7F0DVBX/tUCd4f8H4B0LhaVpF3kNpApRV8UhIi1+2z9slP0O1BerDDn5AaTOx9YfcAFs/w8=
     on_success: always
+
+branches:
+  only: 
+    - master
+    - 6.3
+    - 6.2
+    - 6.3-fix_test

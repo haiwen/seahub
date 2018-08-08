@@ -178,12 +178,7 @@ $('#label-edit-form').on('submit', function() {
             feedback("{% trans "Successfully edited labels." %}", 'success');
         },
         error: function(xhr) {
-            var error_msg;
-            if (xhr.responseText) {
-                error_msg = JSON.parse(xhr.responseText).error_msg;
-            } else {
-                error_msg = "{% trans "Failed. Please check the network." %}";
-            }
+            var error_msg = prepareAjaxErrorMsg(xhr);
             $error.html(error_msg).show();
             enable($submit);
         }

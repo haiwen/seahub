@@ -135,12 +135,7 @@ define([
                         Common.feedback(gettext("Successfully transferred the library."), 'success');
                     },
                     error: function(xhr) {
-                        var error_msg;
-                        if (xhr.responseText) {
-                            error_msg = JSON.parse(xhr.responseText).error_msg;
-                        } else {
-                            error_msg = gettext("Failed. Please check the network.");
-                        }
+                        var error_msg = Common.prepareAjaxErrorMsg(xhr);
                         $('.error', $form).html(error_msg).show();
                         Common.enableButton($submitBtn);
                     }

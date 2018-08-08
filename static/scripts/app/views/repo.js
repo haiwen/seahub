@@ -36,7 +36,9 @@ define([
             'click .js-popup-share-link-admin': 'popupShareLinkAdmin',
             'click .js-popup-folder-perm-admin': 'popupFolderPermAdmin',
             'click .js-repo-details': 'viewDetails',
-            'click .js-add-label': 'addLabel'
+            'click .js-add-label': 'addLabel',
+            'click .mobile-menu-control': 'showMobileMenu',
+            'click .mobile-menu-mask': 'closeMobileMenu'
         },
 
         initialize: function(options) {
@@ -68,6 +70,7 @@ define([
             this.dropdown = new DropdownView($.extend({
                 el: this.$('.sf-dropdown')
             }, dropdownOptions));
+            this.mobileMenu = this.$(".mobile-menu-container");
             return this;
         },
 
@@ -86,6 +89,7 @@ define([
         },
 
         del: function() {
+            this.hideMobileMenu();
             var _this = this;
             var repo_name = this.model.get('name');
             var popupTitle = gettext("Delete Library");
@@ -115,6 +119,7 @@ define([
         },
 
         share: function() {
+            this.hideMobileMenu();
             var options = {
                 'is_repo_owner': true,
                 'is_virtual': this.model.get('virtual'),
@@ -134,6 +139,7 @@ define([
         },
 
         rename: function() {
+            this.hideMobileMenu();
             var repo_name = this.model.get('name');
 
             var form = $(this.renameTemplate({
@@ -199,13 +205,8 @@ define([
                     _this.model.set({ 'name': new_name }); // it will trigger 'change' event
                 };
                 var after_op_error = function(xhr) {
-                    var err_msg;
-                    if (xhr.responseText) {
-                        err_msg = JSON.parse(xhr.responseText).error||JSON.parse(xhr.responseText).error_msg;
-                    } else {
-                        err_msg = gettext("Failed. Please check the network.");
-                    }
-                    Common.feedback(err_msg, 'error');
+                    var error_msg = Common.prepareAjaxErrorMsg(xhr);
+                    Common.feedback(error_msg, 'error');
                     Common.enableButton(submit_btn);
                 };
 
@@ -227,6 +228,7 @@ define([
         },
 
         transfer: function() {
+            this.hideMobileMenu();
             var _this = this;
             this.togglePopup(); // Close the popup
 
@@ -274,12 +276,7 @@ define([
                         Common.feedback(gettext("Successfully transferred the library."), 'success');
                     },
                     error: function(xhr) {
-                        var error_msg;
-                        if (xhr.responseText) {
-                            error_msg = JSON.parse(xhr.responseText).error_msg;
-                        } else {
-                            error_msg = gettext("Failed. Please check the network.");
-                        }
+                        var error_msg = Common.prepareAjaxErrorMsg(xhr);
                         $('.error', $form).html(error_msg).show();
                         Common.enableButton($submitBtn);
                     }
@@ -291,6 +288,7 @@ define([
         },
 
         popupHistorySetting: function() {
+            this.hideMobileMenu();
             var options = {
                 'repo_name': this.model.get('name'),
                 'repo_id': this.model.get('id'),
@@ -302,6 +300,7 @@ define([
         },
 
         popupShareLinkAdmin: function() {
+            this.hideMobileMenu();
             var options = {
                 'repo_name': this.model.get('name'),
                 'repo_id': this.model.get('id')
@@ -312,6 +311,7 @@ define([
         },
 
         popupFolderPermAdmin: function() {
+            this.hideMobileMenu();
             var options = {
                 'repo_name': this.model.get('name'),
                 'repo_id': this.model.get('id')
@@ -332,6 +332,7 @@ define([
         },
 
         viewDetails: function() {
+            this.hideMobileMenu();
             var obj = this.model.toJSON();
             var icon_size = Common.isHiDPI() ? 48 : 24;
             var data = $.extend({}, obj, {
@@ -390,13 +391,7 @@ define([
                     $('[name="labels"]', $form).select2({tags: s2_data});
                 },
                 error: function(xhr) {
-                    var error_msg;
-                    if (xhr.responseText) {
-                        var parsed_resp = JSON.parse(xhr.responseText);
-                        error_msg = parsed_resp.error_msg || parsed_resp.detail;
-                    } else {
-                        error_msg = gettext("Failed. Please check the network.");
-                    }
+                    var error_msg = Common.prepareAjaxErrorMsg(xhr);
                     $('#simplemodal-data').html('<p class="error">' + error_msg + '</p>');
                 }
             });
@@ -432,13 +427,7 @@ define([
                         Common.feedback(msg, 'success');
                     },
                     error: function(xhr) {
-                        var error_msg;
-                        if (xhr.responseText) {
-                            var parsed_resp = JSON.parse(xhr.responseText);
-                            error_msg = parsed_resp.error_msg || parsed_resp.detail;
-                        } else {
-                            error_msg = gettext("Failed. Please check the network.");
-                        }
+                        var error_msg = Common.prepareAjaxErrorMsg(xhr);
                         $error.html(error_msg).show();
                         Common.enableButton($submit);
                     }
@@ -447,6 +436,26 @@ define([
                 return false;
             });
 
+            return false;
+        },
+
+        showMobileMenu: function(event) {
+            var mobileMenu = this.mobileMenu.length ? this.mobileMenu : null;
+            if (mobileMenu) {
+                mobileMenu.slideDown('fast');
+            }
+            return false;
+        },
+
+        hideMobileMenu: function() {
+            var mobileMenu = this.mobileMenu.length ? this.mobileMenu : null;
+            if (mobileMenu) {
+                mobileMenu.slideUp('fast');
+            }
+        },
+
+        closeMobileMenu: function() {
+            this.hideMobileMenu();
             return false;
         }
 

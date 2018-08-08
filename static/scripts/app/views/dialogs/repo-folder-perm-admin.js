@@ -123,18 +123,9 @@ define([
                     $loadingTip.hide();
                 },
                 error: function(collection, response, opts) {
-                    $loadingTip.hide();
-                    var err_msg;
-                    if (response.responseText) {
-                        if (response['status'] == 401 || response['status'] == 403) {
-                            err_msg = gettext("Permission error");
-                        } else {
-                            err_msg = JSON.parse(response.responseText).error_msg;
-                        }
-                    } else {
-                        err_msg = gettext('Please check the network.');
-                    }
+                    var err_msg = Common.prepareCollectionFetchErrorMsg(collection, response, opts);
                     $error.html(err_msg).show();
+                    $loadingTip.hide();
                 }
             });
         },
@@ -296,12 +287,7 @@ define([
                     }
                 },
                 error: function(xhr) {
-                    var error_msg;
-                    if (xhr.responseText) {
-                        error_msg = JSON.parse(xhr.responseText).error_msg;
-                    } else {
-                        error_msg = gettext("Failed. Please check the network.");
-                    }
+                    var error_msg = Common.prepareAjaxErrorMsg(xhr);
                     $error.html(error_msg).removeClass('hide');
                 },
                 complete: function() {

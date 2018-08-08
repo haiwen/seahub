@@ -136,12 +136,21 @@
 <script type="text/javascript" src="{{ MEDIA_URL }}js/jq.min.js"></script>
 <script type="text/javascript" src="{{ MEDIA_URL }}js/base.js"></script>
 <script type="text/javascript">
-function ajaxErrorHandler(xhr, textStatus, errorThrown) {
+function prepareAjaxErrorMsg(xhr) {
+    var error_msg;
     if (xhr.responseText) {
-        feedback(JSON.parse(xhr.responseText).error||JSON.parse(xhr.responseText).error_msg, 'error');
+        var parsed_resp = JSON.parse(xhr.responseText);
+        // use `HTMLescape` for msgs which contain variable like 'path'
+        error_msg = HTMLescape(parsed_resp.error ||
+                parsed_resp.error_msg || parsed_resp.detail);
     } else {
-        feedback("{% trans "Failed. Please check the network." %}", 'error');
+        error_msg = gettext("Failed. Please check the network.");
     }
+    return error_msg;
+}
+function ajaxErrorHandler(xhr, textStatus, errorThrown) {
+    var error_msg = prepareAjaxErrorMsg(xhr);
+    feedback(error_msg, 'error');
 }
 {% if request.user.is_authenticated %}
 {% if request.cur_note %}

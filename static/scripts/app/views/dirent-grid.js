@@ -262,9 +262,10 @@ define([
         },
 
         setFolderPerm: function() {
+            var obj_name = this.model.get('obj_name');
             var options = {
-                'obj_name': this.model.get('obj_name'),
-                'dir_path': this.dir.path,
+                'obj_name': obj_name,
+                'dir_path': Common.pathJoin([this.dir.path, obj_name]),
                 'repo_id': this.dir.repo_id,
                 'is_group_owned_repo': this.dir.user_can_set_folder_perm ? true : false
             };
@@ -346,13 +347,7 @@ define([
                             detailsView.updateTags(data);
                         },
                         error: function(xhr) {
-                            var error_msg;
-                            if (xhr.responseText) {
-                                var parsed_resp = JSON.parse(xhr.responseText);
-                                error_msg = parsed_resp.error_msg || parsed_resp.detail;
-                            } else {
-                                error_msg = gettext("Failed. Please check the network.");
-                            }
+                            var error_msg = Common.prepareAjaxErrorMsg(xhr);
                             detailsView.updateTags({'error_msg': error_msg});
                         }
                     });
@@ -387,13 +382,7 @@ define([
                         }
                     },
                     error: function(xhr) {
-                        var error_msg;
-                        if (xhr.responseText) {
-                            var parsed_resp = JSON.parse(xhr.responseText);
-                            error_msg = parsed_resp.error_msg || parsed_resp.detail;
-                        } else {
-                            error_msg = gettext("Failed. Please check the network.");
-                        }
+                        var error_msg = Common.prepareAjaxErrorMsg(xhr);
                         detailsView.update({'error_msg': error_msg});
                     }
                 });

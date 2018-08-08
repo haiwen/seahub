@@ -87,13 +87,8 @@ define([
                     $(window).trigger('resize');
                 },
                 after_op_error: function(xhr) {
-                    var err_msg;
-                    if (xhr.responseText) {
-                        err_msg = JSON.parse(xhr.responseText).error;
-                    } else {
-                        err_msg = gettext("Failed. Please check the network.");
-                    }
-                    _this.$el.html('<p class="error">' + err_msg + '</p>');
+                    var error_msg = Common.prepareAjaxErrorMsg(xhr);
+                    _this.$el.html('<p class="error">' + error_msg + '</p>');
                     setTimeout(function() { $.modal.close(); }, 2500);
                 }
             });

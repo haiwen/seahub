@@ -1,5 +1,5 @@
 {% load render_bundle from webpack_loader %}
-{% load static %}
+{% load static seahub_tags %}
 <!DOCTYPE html>
 <html>
     <head>
@@ -15,6 +15,8 @@
               config: {
                   mediaUrl: '{{ MEDIA_URL }}',
                   siteRoot: '{{ SITE_ROOT }}',
+                  serviceUrl: '{{ serviceUrl }}',
+                  seafileCollabServer: '{{ seafile_collab_server}}',
               },
               pageOptions: {
                   repoID: '{{ repo.id }}',
@@ -23,7 +25,13 @@
                   domain: '{{ domain }}',
                   protocol: '{{ protocol }}',
                   lang: '{{ language_code }}',
-              }
+                  mode: '{{ mode }}',
+              },
+             userInfo: {
+               username: '{{ user.username }}',
+               name: '{{ user.username|email2nickname|escapejs }}',
+               contact_email: '{{ user.username|email2contact_email }}',
+             }
           }
          </script>
          {% render_bundle 'main' %}

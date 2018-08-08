@@ -137,14 +137,9 @@ define([
                         }
                     },
                     error: function(xhr, textStatus, errorThrown) {
-                        var error;
-                        if (xhr.responseText) {
-                            error = JSON.parse(xhr.responseText).error;
-                        } else {
-                            error = gettext("Failed. Please check the network.");
-                        }
+                        var error_msg = Common.prepareAjaxErrorMsg(xhr);
                         details.addClass('vh')
-                        other_info.html(error).removeClass('hide');
+                        other_info.html(error_msg).removeClass('hide');
                         cancel_btn.addClass('hide');
                         setTimeout(function () { $.modal.close(); }, 1000);
                     }
@@ -166,13 +161,8 @@ define([
                         setTimeout(function () {$.modal.close();}, 1000);
                     },
                     error: function(xhr, textStatus, errorThrown) {
-                        var error;
-                        if (xhr.responseText) {
-                            error = JSON.parse(xhr.responseText).error;
-                        } else {
-                            error = gettext("Failed. Please check the network.");
-                        }
-                        other_info.html(error).removeClass('hide');
+                        var error_msg = Common.prepareAjaxErrorMsg(xhr);
+                        other_info.html(error_msg).removeClass('hide');
                         Common.enableButton(cancel_btn);
                     }
                 });

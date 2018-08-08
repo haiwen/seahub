@@ -18,11 +18,9 @@ define([
         initialize: function(options) {
             this.repo_id = options.repo_id;
             this.obj_name = options.obj_name;
-            this.dir_path = options.dir_path;
+            this.path = options.dir_path;
             this.is_group_owned_repo = options.is_group_owned_repo;
             this.group_id = options.group_id;
-            this.path = this.dir_path == '/' ? '/' :
-                Common.pathJoin([this.dir_path, this.obj_name]);
 
             this.render();
 
@@ -259,13 +257,8 @@ define([
                     }
                 },
                 error: function(xhr) {
-                    var error_msg;
-                    if (xhr.responseText) {
-                        error_msg = JSON.parse(xhr.responseText).error_msg;
-                    } else {
-                        error_msg = gettext("Failed. Please check the network.");
-                    }
-                    $error.html(error_msg).removeClass('hide');
+                    var error_msg = Common.prepareAjaxErrorMsg(xhr);
+                    $error.html(error_msg).show();
                 }
             });
         }

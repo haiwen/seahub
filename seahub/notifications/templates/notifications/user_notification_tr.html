@@ -37,6 +37,9 @@
                 {% elif notice.is_guest_invitation_accepted_msg %}
                 <p class="brief">{{ notice.format_guest_invitation_accepted_msg|safe }}</p>
 
+                {% elif notice.is_add_user_to_group %}
+                <p class="brief">{{ notice.format_add_user_to_group|safe }}</p>
+
                 {% endif %}
             </td>
             <td>{{ notice.timestamp|translate_seahub_time }}</td>

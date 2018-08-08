@@ -6,10 +6,11 @@ define([
     'file-tree',
     'app/views/share',
     'app/views/dialogs/dirent-mvcp',
+    "app/views/dialogs/dirent-smart-link",
     'app/views/folder-perm',
     'app/views/widgets/hl-item-view',
     'app/views/widgets/dropdown'
-], function($, _, Backbone, Common, FileTree, ShareView, DirentMvcpDialog,
+], function($, _, Backbone, Common, FileTree, ShareView, DirentMvcpDialog, DirentSmartLinkDialog,
     FolderPermView, HLItemView, DropdownView) {
     'use strict';
 
@@ -79,7 +80,7 @@ define([
                 el: this.$('.sf-dropdown'),
                 right: '0'
             });
-
+            this.mobileMenu = this.$(".mobile-menu-container");
             // for image files
             this.$('.img-name-link').magnificPopup(this.dirView.magnificPopupOptions);
 
@@ -94,7 +95,7 @@ define([
             'click .file-star': 'starFile',
             'click .dirent-name': 'visitDirent',
             'click .img-name-link': 'viewImageWithPopup',
-
+            'click .dirent-smart-link': 'getSmartLink',
             // mv by 'drag & drop'
             'dragstart': 'itemDragstart',
             'dragover': 'itemDragover',
@@ -113,7 +114,15 @@ define([
             'click .unlock-file': 'unlockFile',
             'click .view-details': 'viewDetails',
             'click .file-comment': 'viewFileComments',
-            'click .open-via-client': 'open_via_client'
+            'click .open-via-client': 'open_via_client',
+            'click .mobile-menu-control': 'showMobileMenu',
+            'click .mobile-menu-mask': 'closeMobileMenu',
+            'click .download-close-menu': 'hideMobileMenu'
+        },
+
+        getSmartLink: function() {
+            new DirentSmartLinkDialog({dir: this.dir, attributes: this.model.attributes});
+            return false;
         },
 
         _hideMenu: function() {
@@ -289,11 +298,7 @@ define([
                     dir.remove(cid);
                 },
                 error: function(xhr) {
-                    if (xhr.responseText) {
-                        Common.feedback(JSON.parse(xhr.responseText).error||JSON.parse(xhr.responseText).error_msg, 'error');
-                    } else {
-                        Common.feedback(gettext("Please check the network."), 'error');
-                    }
+                    Common.ajaxErrorHandler(xhr);
                 }
             });
         },
@@ -352,6 +357,7 @@ define([
             if ($(window).width() < 768 &&
                 !this.model.get('is_img')) { // dir or non image file
                 location.href = this.$('.dirent-name a').attr('href');
+                return false;
             }
         },
 
@@ -361,6 +367,7 @@ define([
         },
 
         share: function() {
+            this.hideMobileMenu();
             var dir = this.dir,
                 obj_name = this.model.get('obj_name'),
                 dirent_path = Common.pathJoin([dir.path, obj_name]);
@@ -386,6 +393,7 @@ define([
         },
 
         del: function() {
+            this.hideMobileMenu();
             var _this = this;
             if (this.model.get('is_img')) {
                 var index = $('.img-name-link', this.dirView.$table).index(this.$('.img-name-link'));
@@ -412,6 +420,7 @@ define([
         },
 
         rename: function() {
+            this.hideMobileMenu();
             var _this = this;
             var dirent_name = this.model.get('obj_name');
 
@@ -421,12 +430,14 @@ define([
 
             var $name = this.$('.dirent-name'),
                 $op = this.$('.dirent-op'),
-                $td = $name.closest('td');
+                $td = $name.closest('td'),
+                $smart_link = this.$('.dirent-smart-link');
             $td.attr('colspan', 2).css({
                 'width': $name.width() + $op.outerWidth(),
                 'height': $name.height()
             }).append(form);
             $op.hide();
+            $smart_link.hide();
             $name.hide();
 
             this.$el.attr('draggable', false);
@@ -468,6 +479,7 @@ define([
                 form.remove();
                 $op.show();
                 $name.show();
+                $smart_link.removeAttr('style');
                 $td.attr('colspan', 1).css({
                     'width': $name.width()
                 });
@@ -503,13 +515,8 @@ define([
                 Common.disableButton(submit_btn);
 
                 var after_op_error = function(xhr) {
-                    var err_msg;
-                    if (xhr.responseText) {
-                        err_msg = JSON.parse(xhr.responseText).error_msg;
-                    } else {
-                        err_msg = gettext("Failed. Please check the network.");
-                    }
-                    Common.feedback(err_msg, 'error');
+                    var error_msg = Common.prepareAjaxErrorMsg(xhr); 
+                    Common.feedback(error_msg, 'error');
                     Common.enableButton(submit_btn);
                 };
                 _this.model.rename({
@@ -523,6 +530,7 @@ define([
         },
 
         mvcp: function(e) {
+            this.hideMobileMenu();
             var op_type = $(e.currentTarget).hasClass('mv') ? 'mv' : 'cp';
             var options = {
                 'dir': this.dir,
@@ -543,9 +551,11 @@ define([
         },
 
         setFolderPerm: function() {
+            this.hideMobileMenu();
+            var obj_name = this.model.get('obj_name');
             var options = {
-                'obj_name': this.model.get('obj_name'),
-                'dir_path': this.dir.path,
+                'obj_name': obj_name,
+                'dir_path': Common.pathJoin([this.dir.path, obj_name]),
                 'repo_id': this.dir.repo_id,
                 'is_group_owned_repo': this.dir.user_can_set_folder_perm ? true : false
             };
@@ -558,6 +568,7 @@ define([
         },
 
         lockFile: function() {
+            this.hideMobileMenu();
             var _this = this;
             this._hideMenu();
             this.model.lockFile({
@@ -572,6 +583,7 @@ define([
         },
 
         unlockFile: function() {
+            this.hideMobileMenu();
             var _this = this;
             this._hideMenu();
             this.model.unlockFile({
@@ -586,6 +598,7 @@ define([
         },
 
         viewDetails: function() {
+            this.hideMobileMenu();
             if (this.dirView.fileCommentsView.$el.is(':visible')) {
                 this.dirView.fileCommentsView.hide();
             }
@@ -632,13 +645,7 @@ define([
                             detailsView.updateTags(data);
                         },
                         error: function(xhr) {
-                            var error_msg;
-                            if (xhr.responseText) {
-                                var parsed_resp = JSON.parse(xhr.responseText);
-                                error_msg = parsed_resp.error_msg || parsed_resp.detail;
-                            } else {
-                                error_msg = gettext("Failed. Please check the network.");
-                            }
+                            var error_msg = Common.prepareAjaxErrorMsg(xhr);
                             detailsView.updateTags({'error_msg': error_msg});
                         }
                     });
@@ -673,13 +680,7 @@ define([
                         }
                     },
                     error: function(xhr) {
-                        var error_msg;
-                        if (xhr.responseText) {
-                            var parsed_resp = JSON.parse(xhr.responseText);
-                            error_msg = parsed_resp.error_msg || parsed_resp.detail;
-                        } else {
-                            error_msg = gettext("Failed. Please check the network.");
-                        }
+                        var error_msg = Common.prepareAjaxErrorMsg(xhr);
                         detailsView.update({'error_msg': error_msg});
                     }
                 });
@@ -690,6 +691,7 @@ define([
         },
 
         viewFileComments: function() {
+            this.hideMobileMenu();
             if (this.dirView.direntDetailsView.$el.is(':visible')) {
                 this.dirView.direntDetailsView.hide();
             }
@@ -708,8 +710,29 @@ define([
         },
 
         open_via_client: function() {
+            this.hideMobileMenu();
             this._hideMenu();
             return true;
+        },
+
+        showMobileMenu: function(event) {
+            var mobileMenu = this.mobileMenu.length ? this.mobileMenu : null;
+            if (mobileMenu) {
+                mobileMenu.slideDown('fast');
+            }
+            return false;
+        },
+
+        hideMobileMenu: function() {
+            var mobileMenu = this.mobileMenu.length ? this.mobileMenu : null;
+            if (mobileMenu) {
+                mobileMenu.slideUp('fast');
+            }
+        },
+
+        closeMobileMenu: function() {
+            this.hideMobileMenu();
+            return false;
         }
 
     });

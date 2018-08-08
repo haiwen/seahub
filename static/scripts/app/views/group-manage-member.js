@@ -72,13 +72,8 @@ define([
                     });
                 },
                 error: function(xhr) {
-                    var err_msg;
-                    if (xhr.responseText) {
-                        err_msg = JSON.parse(xhr.responseText).error_msg;
-                    } else {
-                        err_msg = gettext("Failed. Please check the network.");
-                    }
-                    _this.$errorContainer.html(err_msg).show();
+                    var error_msg = Common.prepareAjaxErrorMsg(xhr);
+                    _this.$errorContainer.html(error_msg).show();
                 }
             });
         },
@@ -98,13 +93,8 @@ define([
                     _this.remove();
                 },
                 error: function(xhr) {
-                    var err_msg;
-                    if (xhr.responseText) {
-                        err_msg = JSON.parse(xhr.responseText).error_msg;
-                    } else {
-                        err_msg = gettext("Failed. Please check the network.");
-                    }
-                    _this.$errorContainer.html(err_msg).show();
+                    var error_msg = Common.prepareAjaxErrorMsg(xhr);
+                    _this.$errorContainer.html(error_msg).show();
                 }
             });
         }

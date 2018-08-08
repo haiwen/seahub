@@ -171,12 +171,7 @@ $('#add-member-form').on('submit', function(){
             location.reload(true);
         },
         error: function(xhr, textStatus, errorThrown) {
-            var error_msg;
-            if (xhr.responseText) {
-                error_msg = JSON.parse(xhr.responseText).error;
-            } else {
-                error_msg = "{% trans "Failed. Please check the network." %}";
-            }
+            var error_msg = prepareAjaxErrorMsg(xhr);
             $error.html(error_msg).show();
             enable($submit);
         }

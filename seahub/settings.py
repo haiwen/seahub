@@ -90,7 +90,7 @@ WEBPACK_LOADER = {
     }
 }
 
-STATICFILES_STORAGE = 'django.contrib.staticfiles.storage.CachedStaticFilesStorage'
+STATICFILES_STORAGE = 'django.contrib.staticfiles.storage.ManifestStaticFilesStorage'
 
 # StaticI18N config
 STATICI18N_ROOT = '%s/static/scripts' % PROJECT_ROOT
@@ -591,6 +591,7 @@ LOGIN_REMEMBER_DAYS = 7
 SEAFILE_VERSION = '6.2.0'
 
 # Compress static files(css, js)
+COMPRESS_ENABLED = False
 COMPRESS_URL = MEDIA_URL
 COMPRESS_ROOT = MEDIA_ROOT
 COMPRESS_DEBUG_TOGGLE = 'nocompress'
@@ -668,6 +669,12 @@ SEND_EMAIL_ON_RESETTING_USER_PASSWD = True # Whether to send email when a system
 ##########################
 
 ENABLE_SUB_LIBRARY = True
+
+##########################
+# Settings for frontend  #
+##########################
+
+SEAFILE_COLLAB_SERVER = ''
 
 ############################
 # Settings for Seahub Priv #

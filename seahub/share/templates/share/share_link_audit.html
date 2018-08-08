@@ -63,13 +63,8 @@ $('#get-code').on('click', function() {
             feedback('{% trans "A verification code has been sent to the email." %}', 'success');
         },
         error: function(xhr) {
-            var err_msg = '';
-            if (xhr.responseText) {
-                err_msg = JSON.parse(xhr.responseText).error;
-            } else {
-                err_msg = "{% trans "Failed. Please check the network." %}";
-            }
-            $('.error', $this.closest('form')).html(err_msg).removeClass('hide');
+            var error_msg = prepareAjaxErrorMsg(xhr);
+            $('.error', $this.closest('form')).html(error_msg).removeClass('hide');
         }
     });
 });

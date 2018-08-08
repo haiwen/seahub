@@ -48,16 +48,7 @@ define([
                     _this.reset();
                 },
                 error: function(model, response, options) {
-                    var err_msg;
-                    if (response.responseText) {
-                        if (response['status'] == 401 || response['status'] == 403) {
-                            err_msg = gettext("Permission error");
-                        } else {
-                            err_msg = JSON.parse(response.responseText).error_msg;
-                        }
-                    } else {
-                        err_msg = gettext("Failed. Please check the network.");
-                    }
+                    var err_msg = Common.prepareCollectionFetchErrorMsg(collection, response, opts);
                     Common.feedback(err_msg, 'error');
                 }
             });

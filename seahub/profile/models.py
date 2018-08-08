@@ -80,8 +80,8 @@ class ProfileManager(models.Manager):
         p = self.get_profile_by_user(username)
         if p and p.contact_email:
             return p.contact_email
-        else:
-            return username
+
+        return username
 
     def get_username_by_login_id(self, login_id):
         """Convert a user's login id to username(login email).

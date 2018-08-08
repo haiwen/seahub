@@ -233,11 +233,8 @@ $('.shared-dir-zip, .download-dir').on('click', function (e) {
                 }
             },
             error: function(xhr) {
-                if (xhr.responseText) {
-                    feedback(JSON.parse(xhr.responseText).error_msg, 'error');
-                } else {
-                    feedback("{% trans "Failed. Please check the network." %}", 'error');
-                }
+                var error_msg = prepareAjaxErrorMsg(xhr);
+                feedback(error_msg, 'error');
                 clearInterval(interval);
             }
         });
@@ -276,13 +273,7 @@ $('.shared-dir-zip, .download-dir').on('click', function (e) {
             queryZipProgress();
             interval = setInterval(queryZipProgress, 1000);
         },
-        error: function(xhr) {
-            if (xhr.responseText) {
-                feedback(JSON.parse(xhr.responseText).error_msg, 'error');
-            } else {
-                feedback("{% trans "Failed. Please check the network." %}", 'error');
-            }
-        }
+        error: ajaxErrorHandler
     });
 
     return false;

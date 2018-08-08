@@ -51,9 +51,7 @@ $('#repo-transfer-form').on('submit', function() {
             $tr.remove();
             feedback("{% trans "Successfully transfered 1 item." %}", 'success');
         },
-        error: function(xhr, textStatus, errorThrown) {
-            ajaxErrorHandler(xhr, textStatus, errorThrown);
-        },
+        error: ajaxErrorHandler,
         complete: function() {
             $.modal.close();
         }
@@ -82,9 +80,7 @@ $('.repo-delete-btn').on('click', function() {
                 $tr.remove();
                 feedback("{% trans "Successfully deleted 1 item." %}", 'success');
             },
-            error: function(xhr, textStatus, errorThrown) {
-                ajaxErrorHandler(xhr, textStatus, errorThrown);
-            },
+            error: ajaxErrorHandler,
             complete: function() {
                 $.modal.close();
             }

@@ -12,13 +12,14 @@ from seahub.views.sso import *
 from seahub.views.file import view_history_file, view_trash_file,\
     view_snapshot_file, file_edit, view_shared_file, view_file_via_shared_dir,\
     text_diff, view_raw_file, view_raw_shared_file, \
-    download_file, view_lib_file, file_access
+    download_file, view_lib_file, file_access, view_lib_file_via_smart_link
 from seahub.views.repo import repo_history_view, view_shared_dir, \
     view_shared_upload_link
 from notifications.views import notification_list
 from seahub.views.wiki import personal_wiki, personal_wiki_pages, \
     personal_wiki_create, personal_wiki_page_new, personal_wiki_page_edit, \
     personal_wiki_page_delete, personal_wiki_use_lib
+from seahub.api2.endpoints.smart_link import SmartLink, SmartLinkToken
 from seahub.api2.endpoints.groups import Groups, Group
 from seahub.api2.endpoints.all_groups import AllGroups
 from seahub.api2.endpoints.shareable_groups import ShareableGroups
@@ -65,8 +66,8 @@ from seahub.api2.endpoints.user_enabled_modules import UserEnabledModulesView
 from seahub.api2.endpoints.repo_file_uploaded_bytes import RepoFileUploadedBytesView
 from seahub.api2.endpoints.user_avatar import UserAvatarView
 from seahub.api2.endpoints.wikis import WikisView, WikiView
-from seahub.api2.endpoints.wiki_pages import WikiPageView, WikiPagesView
 from seahub.api2.endpoints.activities import ActivitiesView
+from seahub.api2.endpoints.wiki_pages import WikiPageView, WikiPagesView, WikiPagesDirView, WikiPageContentView
 from seahub.api2.endpoints.revision_tag import TaggedItemsView, TagNamesView
 from seahub.api2.endpoints.user import User
 
@@ -154,6 +155,7 @@ urlpatterns = [
     ### lib (replace the old `repo` urls) ###
     # url(r'^lib/(?P<repo_id>[-0-9a-f]{36})/dir/(?P<path>.*)$', view_lib_dir, name='view_lib_dir'),
     url(r'^lib/(?P<repo_id>[-0-9a-f]{36})/file(?P<path>.*)$', view_lib_file, name='view_lib_file'),
+    url(r'^smart-link/(?P<dirent_uuid>[-0-9a-f]{36})/(?P<dirent_name>.*)$', view_lib_file_via_smart_link, name="view_lib_file_via_smart_link"),
     url(r'^#common/lib/(?P<repo_id>[-0-9a-f]{36})/(?P<path>.*)$', fake_view, name='view_common_lib_dir'),
     url(r'^#group/(?P<group_id>\d+)/$', fake_view, name='group_info'),
     url(r'^#group/(?P<group_id>\d+)/members/$', fake_view, name='group_members'),
@@ -209,6 +211,10 @@ urlpatterns = [
 
     ## user
     url(r'^api/v2.1/user/$', User.as_view(), name="api-v2.1-user"),
+
+    ## user::smart-link
+    url(r'^api/v2.1/smart-link/$', SmartLink.as_view(), name="api-v2.1-smart-link"),
+    url(r'^api/v2.1/smart-links/(?P<token>[-0-9a-f]{36})/$', SmartLinkToken.as_view(), name="api-v2.1-smart-links-token"),
 
     ## user::groups
     url(r'^api/v2.1/all-groups/$', AllGroups.as_view(), name='api-v2.1-all-groups'),
@@ -301,6 +307,8 @@ urlpatterns = [
     url(r'^api/v2.1/wikis/$', WikisView.as_view(), name='api-v2.1-wikis'),
     url(r'^api/v2.1/wikis/(?P<slug>[^/]+)/$', WikiView.as_view(), name='api-v2.1-wiki'),
     url(r'^api/v2.1/wikis/(?P<slug>[^/]+)/pages/$', WikiPagesView.as_view(), name='api-v2.1-wiki-pages'),
+    url(r'^api/v2.1/wikis/(?P<slug>[^/]+)/dir/$', WikiPagesDirView.as_view(), name='api-v2.1-wiki-pages-dir'),
+    url(r'^api/v2.1/wikis/(?P<slug>[^/]+)/content/$', WikiPageContentView.as_view(), name='api-v2.1-wiki-pages-content'),
     url(r'^api/v2.1/wikis/(?P<slug>[^/]+)/pages/(?P<page_name>[^/]+)/$', WikiPageView.as_view(), name='api-v2.1-wiki-page'),
 
     ## user::activities

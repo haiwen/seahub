@@ -69,11 +69,8 @@ $('#set-quota-form').on('submit', function() {
             location.reload(true);
         },
         error: function(xhr, textStatus, errorThrown) {
-            if (xhr.responseText) {
-                apply_form_error(form_id, JSON.parse(xhr.responseText).error);
-            } else {
-                apply_form_error(form_id, "{% trans "Failed. Please check the network." %}");
-            }
+            var error_msg = prepareAjaxErrorMsg(xhr);
+            apply_form_error(form_id, error_msg);
             enable(sb_btn);
         }
     });

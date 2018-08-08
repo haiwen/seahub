@@ -127,12 +127,7 @@ define([
                         app.ui.sideNavView.updateGroups();
                     },
                     error: function(xhr) {
-                        var error_msg;
-                        if (xhr.responseText) {
-                            error_msg = JSON.parse(xhr.responseText).error_msg;
-                        } else {
-                            error_msg = gettext("Failed. Please check the network.");
-                        }
+                        var error_msg = Common.prepareAjaxErrorMsg(xhr);
                         $('.error', $form).html(error_msg).show();
                         Common.enableButton($submitBtn);
                     }
@@ -184,12 +179,7 @@ define([
                         $.modal.close();
                     },
                     error: function(xhr) {
-                        var error_msg;
-                        if (xhr.responseText) {
-                            error_msg = JSON.parse(xhr.responseText).error_msg;
-                        } else {
-                            error_msg = gettext("Failed. Please check the network.");
-                        }
+                        var error_msg = Common.prepareAjaxErrorMsg(xhr);
                         $('.error', $form).html(error_msg).show();
                         Common.enableButton($submitBtn);
                     }
@@ -228,12 +218,7 @@ define([
                     });
                 },
                 error: function(xhr) {
-                    var error_msg;
-                    if (xhr.responseText) {
-                        error_msg = JSON.parse(xhr.responseText).error_msg;
-                    } else {
-                        error_msg = gettext("Failed. Please check the network.");
-                    }
+                    var error_msg = Common.prepareAjaxErrorMsg(xhr);
                     Common.feedback(error_msg, 'error');
                     _this.hide();
                 }
@@ -285,12 +270,7 @@ define([
                         }
                     },
                     error: function(xhr) {
-                        var error_msg;
-                        if (xhr.responseText) {
-                            error_msg = JSON.parse(xhr.responseText).error;
-                        } else {
-                            error_msg = gettext("Failed. Please check the network.");
-                        }
+                        var error_msg = Common.prepareAjaxErrorMsg(xhr);
                         $error.html(error_msg).removeClass('hide');
                         Common.enableButton($submitBtn);
                     }
@@ -325,12 +305,7 @@ define([
                         app.router.navigate('groups/', {trigger: true});
                     },
                     error: function(xhr) {
-                        var error_msg;
-                        if (xhr.responseText) {
-                            error_msg = JSON.parse(xhr.responseText).error_msg;
-                        } else {
-                            error_msg = gettext("Failed. Please check the network.");
-                        }
+                        var error_msg = Common.prepareAjaxErrorMsg(xhr);
                         Common.feedback(error_msg, 'error');
                     },
                     complete: function() {
@@ -360,12 +335,7 @@ define([
                         app.router.navigate('groups/', {trigger: true});
                     },
                     error: function(xhr) {
-                        var err_msg;
-                        if (xhr.responseText) {
-                            err_msg = JSON.parse(xhr.responseText).error_msg;
-                        } else {
-                            err_msg = gettext("Failed. Please check the network.");
-                        }
+                        var error_msg = Common.prepareAjaxErrorMsg(xhr);
                         Common.feedback(error_msg, 'error');
                     },
                     complete: function() {

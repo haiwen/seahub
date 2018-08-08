@@ -87,13 +87,8 @@ define([
                 success: function() {
                 },
                 error: function(model, response) {
-                    var err;
-                    if (response.responseText) {
-                        err = JSON.parse(response.responseText).error_msg;
-                    } else {
-                        err = gettext("Failed. Please check the network.");
-                    }
-                    Common.feedback(err, 'error');
+                    var error_msg = Common.prepareAjaxErrorMsg(response);
+                    Common.feedback(error_msg, 'error');
                 }
             });
             return false;

@@ -54,6 +54,14 @@ def get_group_owned_repo_info(request, repo_id):
     repo_owner = get_repo_owner(request, repo_id)
     repo_info['owner'] = repo_owner
 
+    try:
+        group_id = get_group_id_by_repo_owner(repo_owner)
+        group = ccnet_api.get_group(int(group_id))
+        repo_info['group_name'] = group.group_name
+    except Exception as e:
+        logger.error(e)
+        repo_info['group_name'] = ''
+
     return repo_info
 
 class GroupOwnedLibraries(APIView):
