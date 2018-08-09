@@ -143,9 +143,9 @@
             <% if (is_pro) { %>
                 {% trans "Professional Edition" %}
                 <% if (with_license) { %>
-                    {% trans "licensed to" %} <%- license_to %>,
-                    <% if (license_mode == 'lifetime') { %>
-                        {% trans "upgrade service expired in" %} <%- license_expiration %>
+                    {% if LANGUAGE_CODE == 'zh-cn' %}永久授权给{% else %}{% trans "licensed to" %}{% endif %} <%- license_to %>,
+                    <% if (license_mode == 'life-time') { %>
+                        {% if LANGUAGE_CODE == 'zh-cn' %}技术支持服务至{% else %}{% trans "upgrade service expired in" %}{% endif %} <%- license_expiration %> {% if LANGUAGE_CODE == 'zh-cn' %}到期{% endif %}
                     <% } else { %>
                         {% trans "expires on" %} <%- license_expiration %>
                     <% } %>
