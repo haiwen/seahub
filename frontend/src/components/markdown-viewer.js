@@ -47,7 +47,8 @@ class MarkdownViewer extends React.Component {
     renderingContent: true,
     renderingOutline: true,
     html: '',
-    outlineTreeRoot: null
+    outlineTreeRoot: null,
+    loading: true
   }
 
   scrollToNode(node) {
@@ -69,6 +70,9 @@ class MarkdownViewer extends React.Component {
 
   componentWillReceiveProps(nextProps) {
     this.setContent(nextProps.markdownContent);
+    this.setState({
+      loading: false
+    })
   }
 
   componentDidMount() {
@@ -85,12 +89,18 @@ class MarkdownViewer extends React.Component {
 
 
   render() {
-    return (
-      <MarkdownViewerContent
-        renderingContent={this.state.renderingContent} html={this.state.html}
-        onLinkClick={this.props.onLinkClick}
-      />
-    )
+    if (this.state.loading) {
+      return (
+        <span className="loading-icon loading-tip"></span>
+      )
+    } else {
+      return (
+        <MarkdownViewerContent
+          renderingContent={this.state.renderingContent} html={this.state.html}
+          onLinkClick={this.props.onLinkClick}
+        />
+      )
+    }
   }
 }
 

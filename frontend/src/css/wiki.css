@@ -55,8 +55,9 @@
 }
 
 .wiki-main .cur-view-content {
-  padding-right: 40px;
   flex: 1;
+  width: calc(100% - 200px);
+  padding-right: 40px;
 }
 
 .wiki-main .cur-view-content-outline {

@@ -65,14 +65,16 @@ class MainPanel extends Component {
       navItems[i].key = i;
       navItems[i].clazz = '';
       navItems[i].depth = headingList[i].depth;
-      for (let child of headingList[i].children) {
-        if (child.type === 'text') {
-          navItems[i].text = child.value;
-          break;
-        }
-      }
+      navItems[i].text = this.getHeadigTextValue(headingList[i]);
     }
     return navItems;
+  }
+
+  getHeadigTextValue(heading) {
+    while (heading.children) {
+      heading = heading.children[0];
+    }
+    return heading.value;
   }
 
   componentWillReceiveProps(nextProps) {
