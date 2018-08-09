@@ -35,7 +35,7 @@ define([
             var enable_dir_private_share = false;
             if (!this.is_virtual &&
                 (this.is_repo_owner || this.is_admin ||
-                (this.is_address_book_group_admin && this.dirent_path == '/'))) {
+                this.is_address_book_group_admin)) {
                 enable_dir_private_share = true;
             }
             this.enable_dir_private_share = enable_dir_private_share;

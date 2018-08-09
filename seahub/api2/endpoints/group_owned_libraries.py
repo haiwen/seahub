@@ -1307,7 +1307,7 @@ class GroupOwnedLibraryGroupShare(APIView):
             seafile_api.unset_group_repo(repo_id, to_group_id, username)
         else:
             seafile_api.unshare_subdir_for_group(
-                    repo_id, path, repo_owner, group_id)
+                    repo_id, path, repo_owner, to_group_id)
 
         permission = check_group_share_out_permission(repo_id, path, group_id, False)
         send_perm_audit_msg('delete-repo-perm', username, group_id,

@@ -384,6 +384,13 @@ define([
             };
             if (app.pageOptions.is_pro) {
                 options.is_admin = dir.is_admin;
+
+                if (this.dirView.is_address_book_group_admin) {
+                    $.extend(options, {
+                        is_address_book_group_admin: true,
+                        parent_group_id: this.dirView.parent_group_id
+                    });
+                }
             }
 
             new ShareView(options);
