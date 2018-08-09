@@ -40,10 +40,20 @@ class AuthTokenSerializer(serializers.Serializer):
     # These fields may be needed in the future
     client_version = serializers.CharField(required=False, default='')
     platform_version = serializers.CharField(required=False, default='')
-
     def __init__(self, *a, **kw):
         super(AuthTokenSerializer, self).__init__(*a, **kw)
         self.two_factor_auth_failed = False
+
+    def convert_api_login(self, login_str):
+        login_id = Profile.objects.get_username_by_login_id(login_str)
+        if login_id is None:
+            contact_email = Profile.objects.get_username_by_contact_email(login_str)
+            if contact_email is None:
+                return login_str
+            else:
+                return contact_email
+        else:
+            return login_id
 
     def validate(self, attrs):
         login_id = attrs.get('username')
@@ -65,10 +75,7 @@ class AuthTokenSerializer(serializers.Serializer):
         else:
             raise serializers.ValidationError('invalid params')
 
-        username = Profile.objects.get_username_by_login_id(login_id)
-        if username is None:
-            username = login_id
-
+        username = self.convert_api_login(login_id)
         p_id = ccnet_api.get_primary_id(username)
         if p_id is not None:
             username = p_id
