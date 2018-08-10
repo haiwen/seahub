@@ -73,6 +73,7 @@ img[src=""] {
   padding-left: 40px;
   padding-right: 40px;
   display: flex;
+  flex: 1;
   overflow: auto;
 }
 
