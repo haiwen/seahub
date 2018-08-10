@@ -1,5 +1,11 @@
 language: python
 
+cache:
+  directories:
+    - $HOME/.cache/pip
+before_cache:
+  - rm -f $HOME/.cache/pip/log/debug.log
+
 env:
   global:
     - CCNET_CONF_DIR=/tmp/ccnet SEAFILE_CONF_DIR=/tmp/seafile-data
@@ -29,10 +35,10 @@ script:
 
 after_success:
   # notify seafile-docs to rebuild if current branch(6.3) is updated
-  - test $TRAVIS_PULL_REQUEST != "false" && test $TRAVIS_BRANCH = "6.3" && .travis/rebuild-branches.sh
+  - test $TRAVIS_PULL_REQUEST = "false" && test $TRAVIS_BRANCH = "6.3" && .travis/rebuild-branches.sh
 
   # making dist assets if current branch(master/6.3/6.2) is updated
-  - test $TRAVIS_PULL_REQUEST != "false" && .travis/dist_and_push.sh
+  - test $TRAVIS_PULL_REQUEST = "false" && .travis/dist_and_push.sh
 
 after_failure: true
 
