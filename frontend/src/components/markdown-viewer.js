@@ -51,7 +51,7 @@ class MarkdownViewer extends React.Component {
     outlineTreeRoot: null,
     navItems: [],
     activeId: 0,
-    isLoading: true,
+    isLoading: true
   }
 
   scrollToNode(node) {

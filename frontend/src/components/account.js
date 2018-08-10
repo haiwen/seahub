@@ -98,11 +98,10 @@ class Account extends Component {
       return (
         <img src={this.state.avatarURL} width="36" height="36" className="avatar" />
       )
-    } else {
-      return (
-        <img src="" width="36" height="36" className="avatar" />
-      )
     }
+    return (
+      <img src="" width="36" height="36" className="avatar" />
+    )
   }
 
   render() {

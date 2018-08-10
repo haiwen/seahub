@@ -94,13 +94,13 @@ img[src=""] {
 }
 
 @media (max-width: 991.98px) {
-  .cur-view-content-container {
+  .cur-view-container .markdown-container {
     padding-right: 40px;
   }
-  .cur-view-content-container .markdown-content {
+  .cur-view-container .markdown-content {
     padding-right: 0;
   }
-  .cur-view-content-container .markdown-outline {
+  .cur-view-container .markdown-outline {
     display: none;
   }
 }
