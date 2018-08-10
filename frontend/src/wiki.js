@@ -108,7 +108,9 @@ class Wiki extends Component {
   }
 
   onpopstate = (event) => {
-    this.loadFile(event.state.filePath);
+    if (event.state && event.state.filePath) {
+      this.loadFile(event.state.filePath);
+    }
   }
 
   onMenuClick = () => {

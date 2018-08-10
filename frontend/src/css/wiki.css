@@ -47,9 +47,100 @@
 .wiki-main .cur-view-path::after {
   display:none;
 }
-.wiki-main .cur-view-main-con {
+
+img[src=""] {
+  opacity: 0;
+}
+
+.wiki-main-panel {
+  flex: 1 0 80%;
+  display:flex;
+  flex-direction:column;
+}
+
+.wiki-side-panel {
+  flex: 0 0 20%;
+  display:flex;
+  flex-direction:column;
+  overflow:hidden;
+}
+
+.cur-view-container {
+  display: flex;
+}
+
+.cur-view-container .markdown-container {
   padding-left: 40px;
   padding-right: 40px;
+  display: flex;
+  overflow: auto;
+}
+
+.cur-view-container .markdown-content {
+  flex: 1;
+  width: calc(100% - 200px);
+  padding-right: 40px;
+}
+
+.cur-view-container .markdown-outline {
+  position: sticky;
+  width: 200px;
+  padding: 0 18px;
+  top: 0;
+}
+
+.wiki-hide {
+  display: none !important;
+}
+
+@media (max-width: 991.98px) {
+  .cur-view-container .markdown-container {
+    padding-right: 40px;
+  }
+  .cur-view-container .markdown-content {
+    padding-right: 0;
+  }
+  .cur-view-container .markdown-outline {
+    display: none;
+  }
+}
+
+.wiki-main .wiki-viewer-outline {
+  position: relative;
+  top: 0;
+  padding: 0;
+  list-style: none;
+  border-left: solid 1px #eee;
+}
+.textindent-2 {
+  text-indent: 18px;
+}
+
+.wiki-main .wiki-outline-item {
+  padding: 3px 15px;
+  font-size: 14px;
+}
+
+.wiki-outline-item a {
+  display: block;
+  color: #444;
+  text-decoration: none;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.wiki-outline-item a:hover {
+  color: #eb8205;
+  text-decoration: underline;
+}
+
+.wiki-outline-item-active { 
+  border-left: 1px solid #eb8205;
+}
+
+.wiki-outline-item-active a {
+  color: #eb8205 !important;
 }
 
 .wiki-page-ops {
