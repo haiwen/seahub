@@ -103,9 +103,8 @@ class MarkdownViewer extends React.Component {
     processor.process(this.props.markdownContent, function(err, file) {
       that.setState({
         html: String(file),
-        renderingContent: false
+        renderingContent: false,
       });
-
     });
   }
 
@@ -121,7 +120,12 @@ class MarkdownViewer extends React.Component {
           activeId: currentId,
           isLoading: false
         })
+      } else {
+        _this.setState({
+          isLoading: false
+        })
       }
+
     });
   }
 
