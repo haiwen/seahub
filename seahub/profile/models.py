@@ -94,6 +94,32 @@ class ProfileManager(models.Manager):
         except Profile.DoesNotExist:
             return None
 
+    def get_username_by_contact_email(self, contact_email):
+        """Convert a user's contact_email to username(login email).
+        """
+        if not contact_email:
+            return None
+
+        try:
+            return super(ProfileManager, self).get(contact_email=contact_email).user
+        except Profile.DoesNotExist:
+            return None
+
+    def convert_login_str_to_username(self, login_str):
+        """
+        Convert login id or contact email to username(login email).
+        Use login_str if both login id and contact email are not set.
+        """
+        username = self.get_username_by_login_id(login_str)
+        if username is None:
+            username = self.get_username_by_contact_email(login_str)
+            if username is None:
+                return login_str
+            else:
+                return username
+        else:
+            return username
+
     def get_user_language(self, username):
         """Get user's language from profile. Return default language code if
         user has no preferred language.
