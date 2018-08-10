@@ -35,7 +35,6 @@ define([
                 return Common.compareTwoWord(a.name, b.name);
             });
             var group_id = this.model.get('id'),
-                parent_group_id = this.model.get('parent_group_id'),
                 is_staff = $.inArray(app.pageOptions.username, this.model.get('admins')) != -1 ? true : false,
                 repoDetailsView = this.repoDetailsView,
                 $listContainer = this.$('tbody');
@@ -45,7 +44,6 @@ define([
                 var view = new GroupRepoView({
                     model: new GroupRepo(item, {collection: groupRepos}),
                     group_id: group_id,
-                    parent_group_id: parent_group_id,
                     is_staff: is_staff,
                     repoDetailsView: repoDetailsView,
                     show_repo_owner: false // don't show 'Owner'

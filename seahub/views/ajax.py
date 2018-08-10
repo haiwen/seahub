@@ -328,6 +328,7 @@ def list_lib_dir(request, repo_id):
     else:
         repo_owner = seafile_api.get_repo_owner(repo.id)
 
+    result["repo_owner"] = repo_owner
     result["is_repo_owner"] = False
     result["has_been_shared_out"] = False
     result["is_admin"] = is_repo_admin(username, repo_id)
