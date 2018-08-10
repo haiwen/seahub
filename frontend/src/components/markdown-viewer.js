@@ -69,7 +69,7 @@ class MarkdownViewer extends React.Component {
 
   componentWillReceiveProps(nextProps) {
     this.setContent(nextProps.markdownContent);
-    if(this.props.isLoading){
+    if (this.props.isLoading) {
       this.props.onLoadComplete(true);
     }
   }
