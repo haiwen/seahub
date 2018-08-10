@@ -15,8 +15,7 @@
     <table class="wiki-list hide">
         <thead>
         <tr>
-            <td width="30%">{% trans "Name" %}</td>
-            <td width="20%">{% trans "Permission" %}</td>
+            <td width="50%">{% trans "Name" %}</td>
             <td width="20%">{% trans "Owner" %}</td>
             <td width="20%">{% trans "Last Update" %}</td>
             <td width="10%"><!-- operation --></td>
@@ -34,12 +33,6 @@
         <h3 id="dialogTitle">{% trans "New Wiki" %}</h3>
         <label for="wiki-name">{% trans "Name" %}</label><br/>
         <input type="text" name="name" value="" maxlength="{{max_file_name}}" class="input" id="wiki-name" /><br />
-        <label for="wiki-permission">{% trans "Permission" %}</label><br/>
-        <select name="permission" id="wiki-permission" class="w100">
-            <option value="private" selected="selected">{% trans "private" %}</option>
-            <option value="login-user">{% trans "logged-in users" %}</option>
-            <option value="public">{% trans "public" %}</option>
-        </select><br />
         <p class="error hide"></p>
         <button type="submit" class="submit">{% trans "Submit" %}</button>
     </form>
@@ -50,15 +43,6 @@
                 <span class="wiki-name">
                     <a href="<%= link %>"><%- name %></a>
                 <span>
-            </td>
-            <td>
-                <span class="cur-perm"><%= permission_text %></span>
-                <a href="#" title="{% trans "Edit" %}" class="perm-edit-icon sf2-icon-edit op-icon vh"></a>
-                <select class="perm-select select-white hide">
-                    <option value="private" <% if (permission == 'private') { %>selected="selected"<% } %>>{% trans "private" %}</option>
-                    <option value="login-user" <% if (permission == 'login-user') { %>selected="selected"<% } %>>{% trans "logged-in users" %}</option>
-                    <option value="public" <% if (permission == 'public') { %>selected="selected"<% } %>>{% trans "public" %}</option>
-                </select>
             </td>
             <td><a href="<%= owner_profile_url %>"><%- owner_nickname %></a></td>
             <td title="<%= update_time %>"><%= update_time_from_now %></td>
@@ -130,8 +114,7 @@ $('#new-wiki').on('click', function() {
 $('#new-wiki-form').on('submit', function () {
     var $form = $(this),
         $error = $('.error', $form),
-        name = $('[name="name"]', $form).val(),
-        permission = $('[name="permission"]', $form).val();
+        name = $('[name="name"]', $form).val();
     var $table = $('table'),
         $tbody = $('tbody'),
         $emptyTips = $('.empty-tips');
@@ -152,7 +135,6 @@ $('#new-wiki-form').on('submit', function () {
         beforeSend: prepareCSRFToken,
         data: {
             'name': name,
-            'permission': permission
         },
         success: function(data) {
             $.modal.close();
@@ -193,13 +175,6 @@ var wiki = {
     tmpl: _.template($('#wiki-tmpl').html()),
 
     render: function(obj) {
-        var getPermText = function(data) {
-            switch(data) {
-                case 'private': return "{% trans "private" %}";
-                case 'login-user': return "{% trans "logged-in users" %}";
-                case 'public': return "{% trans "public" %}";
-            }
-        };
 
         var update_time, update_time_from_now;
         if (obj.updated_at) {
@@ -212,7 +187,6 @@ var wiki = {
         }
 
         var data = $.extend({}, obj, {
-            'permission_text': getPermText(obj.permission),
             'owner_profile_url': '{{SITE_ROOT}}profile/' + encodeURIComponent(obj.owner) + '/',
             'update_time': update_time,
             'update_time_from_now': update_time_from_now
@@ -232,36 +206,6 @@ var wiki = {
             success: function(data) {
                 $el.remove();
                 feedback("{% trans "Successfully deleted 1 item." %}", 'success');
-            },
-            error: function(xhr) {
-                var error_msg;
-                if (xhr.responseText) {
-                    try {
-                        error_msg = JSON.parse(xhr.responseText).error_msg;
-                    } catch(e) {
-                        error_msg = "{% trans "Error" %}";
-                    }
-                } else {
-                    error_msg = "{% trans "Please check the network." %}";
-                }
-                feedback(error_msg, 'error');
-            }
-        });
-    },
-
-    editPerm: function(options) {
-        var slug = options.slug,
-            perm = options.perm,
-            $el = options.$el;
-        $.ajax({
-            url: '{{SITE_ROOT}}api/v2.1/wikis/' + encodeURIComponent(slug) + '/',
-            type: 'PUT',
-            cache: false,
-            data: {'permission': perm},
-            beforeSend: prepareCSRFToken,
-            success: function(data) {
-                $el.replaceWith(wiki.render(data));
-                feedback("{% trans "Successfully edited the permission." %}", 'success');
             },
             error: function(xhr) {
                 var error_msg;
@@ -316,8 +260,6 @@ var wikiListController = {
         $wikiList.on('click', '.wiki-dropdown-toggle', $.proxy(_this.showWikiMenu, _this));
         $wikiList.on('click', '.delete-wiki', $.proxy(_this.deleteCurrentWiki, _this));
         $wikiList.on('click', '.rename-wiki', $.proxy(_this.showRenameTmpl, _this));
-        $wikiList.on('click', '.perm-edit-icon', $.proxy(_this.showPremSelection, _this));
-        $wikiList.on('change', '.perm-select', $.proxy(_this.changePermSelected, _this));
 
         //handle menu event;
         $(document).on('click', function(event){
@@ -333,40 +275,9 @@ var wikiListController = {
             }
             return true;
         })
-        //handle perm event
-        $(document).on('click', function(e) {
-            var target = e.target || event.srcElement;
-            if (!$('.perm-edit-icon, .perm-select', $wikiList).is(target)) {
-                $('.cur-perm, .perm-edit-icon', $wikiList).show();
-                $('.perm-select', $wikiList).hide();
-            }
-        });
     },
 
     showOwnerInfo: function(){},
-
-    showPremSelection: function(event) {
-        var target = event.target || event.srcElement;
-        var $el = $(target).closest('tr');
-
-        $('.cur-perm, .perm-edit-icon', $el).hide();
-        $('.perm-select', $el).show();
-
-        return false;
-    },
-
-    changePermSelected: function(event) {
-        var target = event.target || event.srcElement;
-        var perm = $(target).val();
-        var $el = $(target).closest('tr');
-        var slug = $el.attr('data-slug');
-
-        wiki.editPerm({
-            $el: $el,
-            slug: slug,
-            perm: perm
-        });
-    },
 
     showWikiMenu: function(event) {
         var target = event.target || event.srcElement;

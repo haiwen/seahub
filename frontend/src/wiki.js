@@ -103,7 +103,7 @@ class Wiki extends Component {
         })
       })
 
-      let fileUrl = '/wikis/' + slug + filePath;
+      let fileUrl =  siteRoot + 'wikis/' + slug + filePath;
       window.history.pushState({urlPath: fileUrl, filePath: filePath}, filePath, fileUrl);
   }
 
