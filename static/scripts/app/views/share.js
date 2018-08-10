@@ -677,42 +677,11 @@ define([
             return item_data;
         },
 
-        // for common repo
         prepareAvailableGroups: function(options) {
             var groups = [];
             $.ajax({
                 url: Common.getUrl({
-                    name: app.pageOptions.enable_share_to_all_groups ? 'shareable_groups' : 'groups'
-                }),
-                type: 'GET',
-                dataType: 'json',
-                cache: false,
-                success: function(data){
-                    for (var i = 0, len = data.length; i < len; i++) {
-                        groups.push({
-                            'id': data[i].id,
-                            'name': data[i].name
-                        });
-                    }
-                    groups.sort(function(a, b) {
-                        return Common.compareTwoWord(a.name, b.name);
-                    });
-                },
-                error: function(xhr, textStatus, errorThrown) {
-                    // do nothing
-                },
-                complete: function() {
-                    options.callback(groups);
-                }
-            });
-        },
-
-        // for group owned repo
-        prepareAvailableGroupsForGroupOwnedRepo: function(options) {
-            var groups = [];
-            $.ajax({
-                url: Common.getUrl({
-                    name: 'all_groups'
+                    name: 'shareable_groups'
                 }),
                 type: 'GET',
                 dataType: 'json',
@@ -796,11 +765,7 @@ define([
                         });
                         $table.removeClass('hide');
                     };
-                    if (_this.is_group_owned_repo) {
-                        _this.prepareAvailableGroupsForGroupOwnedRepo({'callback': prepareGroupsSelector});
-                    } else {
-                        _this.prepareAvailableGroups({'callback': prepareGroupsSelector});
-                    }
+                    _this.prepareAvailableGroups({'callback': prepareGroupsSelector});
                 },
                 error: function(xhr, textStatus, errorThrown) {
                     var err_msg = Common.prepareAjaxErrorMsg(xhr);
