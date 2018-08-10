@@ -1,10 +1,5 @@
 #!/bin/sh
 
-# seafile-docs branch rebuild is triggered only if the 6.3 branch status is successful
-if [ $TRAVIS_BRANCH != "6.3" ]; then
-    exit
-fi;
-
 body='{
 "request": {
 "branch":"seafile-docs"
