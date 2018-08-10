@@ -136,16 +136,14 @@ class MarkdownViewer extends React.Component {
       navItems[i].key = i;
       navItems[i].clazz = '';
       navItems[i].depth = headingList[i].depth;
-      navItems[i].text = this.getHeadigTextValue(headingList[i]);
+      for (let child of headingList[i].children) {
+        if (child.type === "text") {
+          navItems[i].text = child.value;
+          break;
+        }
+      }
     }
     return navItems;
-  }
-
-  getHeadigTextValue(heading) {
-    while (heading.children) {
-      heading = heading.children[0];
-    }
-    return heading.value;
   }
 
   render() {

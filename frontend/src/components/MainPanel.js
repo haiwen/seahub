@@ -54,6 +54,7 @@ class MainPanel extends Component {
             <MarkdownViewer
               markdownContent={this.props.content}
               latestContributor={this.props.latestContributor}
+              lastModified = {this.props.lastModified}
               onLinkClick={this.props.onLinkClick}
             />
           </div>
