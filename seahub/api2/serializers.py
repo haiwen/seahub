@@ -45,17 +45,6 @@ class AuthTokenSerializer(serializers.Serializer):
         super(AuthTokenSerializer, self).__init__(*a, **kw)
         self.two_factor_auth_failed = False
 
-    def convert_login_str_to_username(self, login_str):
-        login_id = Profile.objects.get_username_by_login_id(login_str)
-        if login_id is None:
-            contact_email = Profile.objects.get_username_by_contact_email(login_str)
-            if contact_email is None:
-                return login_str
-            else:
-                return contact_email
-        else:
-            return login_id
-
     def validate(self, attrs):
         login_id = attrs.get('username')
         password = attrs.get('password')
@@ -76,7 +65,9 @@ class AuthTokenSerializer(serializers.Serializer):
         else:
             raise serializers.ValidationError('invalid params')
 
-        username = self.convert_login_str_to_username(login_id)
+        # convert login id or contact email to username if any
+        username = Profile.objects.convert_login_str_to_username(login_id)
+
         p_id = ccnet_api.get_primary_id(username)
         if p_id is not None:
             username = p_id

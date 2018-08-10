@@ -37,20 +37,6 @@ class AuthenticationForm(forms.Form):
         self.user_cache = None
         super(AuthenticationForm, self).__init__(*args, **kwargs)
 
-    def convert_login_str_to_username(self, login_str):
-        """
-        Use login_id to login, if not, go to contact_email and if not, login with an account
-        """
-        login_id = Profile.objects.get_username_by_login_id(login_str)
-        if login_id is None:
-            contact_email = Profile.objects.get_username_by_contact_email(login_str)
-            if contact_email is None:
-               return login_str
-            else:
-               return contact_email
-        else:
-            return login_id
-
     def get_primary_id_by_username(self, username):
         """Get user's primary id in case the username is changed.
         """
@@ -63,8 +49,10 @@ class AuthenticationForm(forms.Form):
     def clean(self):
         login = self.cleaned_data.get('login')
         password = self.cleaned_data.get('password')
-        # convert login id to username
-        username = self.convert_login_str_to_username(login)
+
+        # convert login id or contact email to username if any
+        username = Profile.objects.convert_login_str_to_username(login)
+
         username = self.get_primary_id_by_username(username)
         if username and password:
             self.user_cache = authenticate(username=username,
