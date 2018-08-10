@@ -11,7 +11,6 @@ from seahub.utils import get_site_scheme_and_netloc
 from seahub.utils.timeutils import (timestamp_to_isoformat_timestr,
                                     datetime_to_isoformat_timestr)
 
-
 class WikiDoesNotExist(Exception):
     pass
 
@@ -133,6 +132,16 @@ class Wiki(models.Model):
             return True if user.is_authenticated() else False
         else:                   # private
             return True if user.username == self.username else False
+
+    def check_access_wiki(self, request):
+        from seahub.views import check_folder_permission
+
+        if request.user.is_authenticated() and check_folder_permission(
+                request, self.repo_id, '/') is not None:
+            return True
+        else:
+            return False
+
 
     def to_dict(self):
         return {

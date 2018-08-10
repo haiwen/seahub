@@ -86,19 +86,13 @@ class WikisView(APIView):
             msg = _('Name can only contain letters, numbers, blank, hyphen or underscore.')
             return api_error(status.HTTP_400_BAD_REQUEST, msg)
 
-        permission = request.POST.get('permission', '').lower()
-        if permission not in [x[0] for x in Wiki.PERM_CHOICES]:
-            msg = 'Permission invalid'
-            return api_error(status.HTTP_400_BAD_REQUEST, msg)
-
         org_id = -1
         if is_org_context(request):
             org_id = request.user.org.org_id
 
         username = request.user.username
         try:
-            wiki = Wiki.objects.add(name, username, permission=permission,
-                                    org_id=org_id)
+            wiki = Wiki.objects.add(name, username, org_id=org_id)
         except DuplicateWikiNameError:
             msg = _('%s is taken by others, please try another name.') % name
             return api_error(status.HTTP_400_BAD_REQUEST, msg)
