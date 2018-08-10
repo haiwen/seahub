@@ -60,6 +60,10 @@
   padding-right: 40px;
 }
 
+.wiki-hide {
+  display: none !important;
+}
+
 .wiki-main .cur-view-content-outline {
   position: sticky;
   width: 240px;

@@ -14,7 +14,8 @@ class MainPanel extends Component {
     super(props);
     this.state = {
       navItems: [],
-      activeId: ''
+      activeId: '',
+      isLoading: true,
     }
   }
 
@@ -92,6 +93,14 @@ class MainPanel extends Component {
     });
   }
 
+  onLoadComplete = (flag) => {
+    if (flag) {
+      this.setState({
+        isLoading: false
+      })
+    }
+  }
+
   render() {
     var filePathList = this.props.filePath.split('/');
     var pathElem = filePathList.map((item, index) => {
@@ -126,14 +135,17 @@ class MainPanel extends Component {
             </div>
           </div>
           <div className="cur-view-content-container" onScroll={this.scrollHandler}>
-            <div className="cur-view-content" ref="markdownContainer">
+            <span className={`loading-icon loading-tip ${this.state.isLoading ? "" : "wiki-hide"}`}></span>
+            <div className={`cur-view-content ${this.state.isLoading ? "hide" : ""}`} ref="markdownContainer">
                 <MarkdownViewer
                   markdownContent={this.props.content}
                   onLinkClick={this.props.onLinkClick}
+                  isLoading = {this.state.isLoading}
+                  onLoadComplete={this.onLoadComplete}
                 />
                 <p id="wiki-page-last-modified">Last modified by {this.props.latestContributor}, <span>{this.props.lastModified}</span></p>
             </div>
-            <div className="cur-view-content-outline">
+            <div className={`cur-view-content-outline ${this.state.isLoading ? "hide" : ""}`}>
                 <WikiOutline 
                   navItems={this.state.navItems} 
                   handleNavItemClick={this.handleNavItemClick}
