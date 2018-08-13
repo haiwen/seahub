@@ -151,7 +151,7 @@ class MarkdownViewer extends React.Component {
   }
 
   render() {
-    if (this.state.isLoading) {
+    if (this.state.isLoading || this.props.isFileChanged) {
       return (
         <span className="loading-icon loading-tip"></span>
       )

@@ -46,7 +46,8 @@ class Wiki extends Component {
       filePath: '',
       latestContributor: '',
       lastModified: '',
-      permission: ''
+      permission: '',
+      isFileChanged: false
     };
     window.onpopstate = this.onpopstate;
   }
@@ -91,6 +92,9 @@ class Wiki extends Component {
   }
 
   loadFile(filePath) {
+    this.setState({
+      isFileChanged: true
+    })
     seafileAPI.getWikiFileContent(slug, filePath)
       .then(res => {
         this.setState({
@@ -99,7 +103,8 @@ class Wiki extends Component {
           lastModified: moment.unix(res.data.last_modified).fromNow(),
           permission: res.data.permission,
           fileName: this.fileNameFromPath(filePath),
-          filePath: filePath
+          filePath: filePath,
+          isFileChanged: false
         })
       })
 
@@ -144,6 +149,7 @@ class Wiki extends Component {
           lastModified={this.state.lastModified}
           seafileAPI={seafileAPI}
           permission={this.state.permission}
+          isFileChanged={this.state.isFileChanged}
         />
       </div>
     )

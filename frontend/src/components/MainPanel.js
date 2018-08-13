@@ -56,6 +56,7 @@ class MainPanel extends Component {
               latestContributor={this.props.latestContributor}
               lastModified = {this.props.lastModified}
               onLinkClick={this.props.onLinkClick}
+              isFileChanged={this.props.isFileChanged}
             />
           </div>
         </div>
