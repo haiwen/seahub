@@ -45,6 +45,8 @@ define([
 
             this.ownedRepos = new GroupOwnedRepos();
             this.listenTo(this.ownedRepos, 'add', this.addOne);
+            // for adding the first owned repo when there is no repos in the group.
+            this.listenTo(this.ownedRepos, 'reset', this.resetOwnedRepos);
 
             this.settingsView = new GroupSettingsView({groupView: this});
             this.membersView = new GroupMembersView({groupView: this});
@@ -90,23 +92,27 @@ define([
             this.$tableHead.html(tmpl());
         },
 
-        reset: function() {
-            if (this.repos.length) {
+        reset: function(options) {
+            var repos = options.repos || this.repos;
+            if (repos.length) {
                 this.$emptyTip.hide();
                 this.renderThead();
                 this.$tableBody.empty();
 
                 // sort
                 Common.updateSortIconByMode({'context': this.$el});
-                Common.sortLibs({'libs': this.repos});
+                Common.sortLibs({'libs': repos});
 
-                this.repos.each(this.addOne, this);
+                repos.each(this.addOne, this);
                 this.$table.show();
             } else {
                 this.showEmptyTip();
                 this.$table.hide();
             }
+        },
 
+        resetOwnedRepos: function() {
+            this.reset({repos: this.ownedRepos});
         },
 
         showEmptyTip: function() {
