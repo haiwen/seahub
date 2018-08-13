@@ -4,10 +4,10 @@ define([
     'backbone',
     'common',
     'app/views/share',
-    'app/views/folder-perm',
+    'app/views/dialogs/repo-folder-perm-admin',
     'app/views/widgets/hl-item-view',
     'app/views/widgets/dropdown'
-], function($, _, Backbone, Common, ShareView, FolderPermView,
+], function($, _, Backbone, Common, ShareView, RepoFolderPerm,
     HLItemView, DropdownView) {
     'use strict';
 
@@ -70,14 +70,13 @@ define([
 
         setRepoPerm: function() {
             var options = {
-                'obj_name': this.model.get('name'),
-                'dir_path': '/',
-                'repo_id': this.model.get('id'),
                 'is_group_owned_repo': true,
-                'group_id': this.group_id
+                'repo_name': this.model.get('name'),
+                'repo_id': this.model.get('id')
             };
+            new RepoFolderPerm(options);
+
             this._hideMenu();
-            new FolderPermView(options);
             return false;
         },
 
