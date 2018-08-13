@@ -67,7 +67,6 @@ define([
             var view = new GroupRepoView({
                 model: repo,
                 group_id: this.group_id,
-                parent_group_id: this.group.parent_group_id,
                 show_repo_owner: true,
                 repoDetailsView: this.repoDetailsView,
                 is_staff: this.repos.is_staff

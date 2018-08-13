@@ -21,7 +21,7 @@ define([
 
             // for group owned repo
             this.is_address_book_group_admin = options.is_address_book_group_admin;
-            this.parent_group_id = options.parent_group_id;
+            this.is_group_owned_repo = options.is_group_owned_repo;
 
             this.is_virtual = options.is_virtual;
             this.user_perm = options.user_perm;
@@ -82,7 +82,7 @@ define([
             var show_admin_perm_option = false;
             if (app.pageOptions.is_pro &&
                 this.dirent_path == '/' && // only for repo
-                !this.parent_group_id) { // not for group owned repo
+                !this.is_group_owned_repo) {
                 show_admin_perm_option = true;
             }
 
@@ -575,13 +575,13 @@ define([
             var item_data = {
                 'for_user': true
             };
-            if (this.parent_group_id) { // group owned repo
+            if (this.is_group_owned_repo) {
                 // [{permission: "rw", user_name: "llj", user_email: "llj@1.com", user_contact_email: "llj@1.com"}]
                 $.extend(item_data, {
                     "user_email": item.user_email,
                     "user_name": item.user_name,
                     "permission": item.permission,
-                    'parent_group_id': this.parent_group_id
+                    'is_group_owned_repo': this.is_group_owned_repo
                 });
             } else {
                 $.extend(item_data, {
@@ -606,7 +606,7 @@ define([
             var repo_id = this.repo_id,
                 path = this.dirent_path;
             var url, data;
-            if (this.parent_group_id) {
+            if (this.is_group_owned_repo) {
                 url = Common.getUrl({
                     name: 'group_owned_repo_user_share',
                     repo_id: repo_id
@@ -658,12 +658,12 @@ define([
             var item_data = {
                 'for_user': false
             };
-            if (this.parent_group_id) { // address book group
+            if (this.is_group_owned_repo) {
                 $.extend(item_data, {
                     "group_id": item.group_id,
                     "group_name": item.group_name,
                     "permission": item.permission,
-                    "parent_group_id": this.parent_group_id
+                    "is_group_owned_repo": this.is_group_owned_repo
                 });
             } else {
                 $.extend(item_data, {
@@ -749,7 +749,7 @@ define([
             var repo_id = this.repo_id,
                 path = this.dirent_path;
 
-            if (this.parent_group_id) { // group owned repo
+            if (this.is_group_owned_repo) {
                 url = Common.getUrl({
                     name: 'group_owned_repo_group_share',
                     repo_id: repo_id
@@ -796,7 +796,7 @@ define([
                         });
                         $table.removeClass('hide');
                     };
-                    if (_this.parent_group_id) { // group owned repo
+                    if (_this.is_group_owned_repo) {
                         _this.prepareAvailableGroupsForGroupOwnedRepo({'callback': prepareGroupsSelector});
                     } else {
                         _this.prepareAvailableGroups({'callback': prepareGroupsSelector});
@@ -837,7 +837,7 @@ define([
             var $submitBtn = $('[type="submit"]', $form);
 
             var url, method, data;
-            if (this.parent_group_id) { // group owned repo
+            if (this.is_group_owned_repo) {
                 url = Common.getUrl({
                     name: 'group_owned_repo_user_share',
                     repo_id: repo_id
@@ -925,7 +925,7 @@ define([
             var $submitBtn = $('[type="submit"]', $form);
 
             var url, method, data;
-            if (this.parent_group_id) {
+            if (this.is_group_owned_repo) {
                 url = Common.getUrl({
                     name: 'group_owned_repo_group_share',
                     repo_id: repo_id

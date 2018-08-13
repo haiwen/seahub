@@ -388,7 +388,7 @@ define([
                 if (this.dirView.is_address_book_group_admin) {
                     $.extend(options, {
                         is_address_book_group_admin: true,
-                        parent_group_id: this.dirView.parent_group_id
+                        is_group_owned_repo: this.dirView.is_group_owned_repo
                     });
                 }
             }

@@ -455,9 +455,12 @@ define([
                         }
 
                         _this.dir.user_can_set_folder_perm = false;
-                        _this.is_address_book_group_admin = false;
+                        _this.is_address_book_group_admin = false; // department admin
+                        _this.is_group_owned_repo = false;
                         if (_this.contextOptions &&
-                            _this.contextOptions.group_id) { // the repo is in a group
+                            _this.contextOptions.group_id && // the repo is in a group
+                            dir.repo_owner.indexOf('@seafile_group') != -1) { // It's a group owned repo
+                            _this.is_group_owned_repo = true;
                             _this.getGroupInfo();
                         } else {
                             _this.reset();
@@ -483,22 +486,24 @@ define([
                 });
             },
 
+            // get department(group) info
             getGroupInfo: function() {
                 var _this = this;
+
+                var repo_owner = this.dir.repo_owner; // e.g: 4@seafile_group
+                var group_id = repo_owner.substring(0, repo_owner.indexOf('@'));
                 $.ajax({
                     url: Common.getUrl({
                         'name': 'group',
-                        'group_id': this.contextOptions.group_id
+                        'group_id': group_id
                     }),
                     cache: false,
                     dataType: 'json',
                     success: function(data) {
-                        if (data.parent_group_id != 0 && // address book group
-                            $.inArray(app.pageOptions.username, data.admins) != -1) { // user is group admin
+                        if ($.inArray(app.pageOptions.username, data.admins) != -1) { // user is group admin
                             _this.dir.user_can_set_folder_perm = true;
 
                             _this.is_address_book_group_admin = true;
-                            _this.parent_group_id = data.parent_group_id;
                         }
                         _this.reset();
                     },
@@ -868,7 +873,7 @@ define([
                     if (this.is_address_book_group_admin) {
                         $.extend(options, {
                             is_address_book_group_admin: true,
-                            parent_group_id: this.parent_group_id
+                            is_group_owned_repo: this.is_group_owned_repo
                         });
                     }
                 }
