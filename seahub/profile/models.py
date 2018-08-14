@@ -5,6 +5,7 @@ from django.conf import settings
 from django.db import models
 from django.core.cache import cache
 from django.dispatch import receiver
+from django.core.exceptions import MultipleObjectsReturned
 
 from seahub.base.fields import LowerCaseCharField
 from seahub.profile.settings import EMAIL_ID_CACHE_PREFIX, EMAIL_ID_CACHE_TIMEOUT
@@ -103,6 +104,10 @@ class ProfileManager(models.Manager):
         try:
             return super(ProfileManager, self).get(contact_email=contact_email).user
         except Profile.DoesNotExist:
+            return None
+        except MultipleObjectsReturned as e:
+            logger.warn('Failed to get username by contact email: %s' % contact_email)
+            logger.warn(e)
             return None
 
     def convert_login_str_to_username(self, login_str):

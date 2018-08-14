@@ -6,6 +6,17 @@ class ProfileManagerTest(BaseTestCase):
     def setUp(self):
         pass
 
+    def test_get_username_by_contact_email(self):
+        assert Profile.objects.get_username_by_contact_email('a@a.com') is None
+
+        user1 = self.user.username
+        Profile.objects.add_or_update(user1, contact_email='a@a.com')
+        assert Profile.objects.get_username_by_contact_email('a@a.com') == user1
+
+        user2 = self.admin.username
+        Profile.objects.add_or_update(user2, contact_email='a@a.com')
+        assert Profile.objects.get_username_by_contact_email('a@a.com') is None
+
     def test_convert_login_str_to_username(self):
         s = Profile.objects
         assert s.convert_login_str_to_username('a@a.com') == 'a@a.com'
