@@ -117,12 +117,9 @@ class Account extends Component {
          <div className="outer-caret up-outer-caret"><div className="inner-caret"></div></div>
          <div className="sf-popover-con">
            <div className="item o-hidden">
-             <span>
-               {this.renderAvatar()}
-             </span>
+             {this.renderAvatar()}
              <div className="txt">
-              {this.state.userName} <br/>
-              {this.state.contactEmail}
+              {this.state.userName}
              </div>
            </div>
            <div id="space-traffic">
