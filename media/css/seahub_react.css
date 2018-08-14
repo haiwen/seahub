@@ -352,6 +352,11 @@ a:hover { color:#eb8205; }
 
 .account-popup .txt {
     margin-left:45px;
+    line-height: 36px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+
 }
 
 .account-popup {
