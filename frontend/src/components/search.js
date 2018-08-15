@@ -85,6 +85,7 @@ class Search extends Component {
           resultItems: [],
           isResultGetted: true
         })
+        _this.source = null;
         return;
       }
 
@@ -93,10 +94,8 @@ class Search extends Component {
         resultItems: items,
         isResultGetted: true
       })
-    }).catch(res => {
-      console.log(res);
+      _this.source = null;
     })
-
   }
 
   cancelRequest() {
