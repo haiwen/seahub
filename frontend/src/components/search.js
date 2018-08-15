@@ -1,12 +1,6 @@
 import React, { Component } from 'react';
-import { repoID, siteRoot } from './constance';
+import { repoID } from './constance';
 import SearchResultItem from './SearchResultItem';
-import cookie from 'react-cookies';
-import { SeafileAPI } from 'seafile-js';
-
-let seafileAPI = new SeafileAPI();
-let xcsrfHeaders = cookie.load('csrftoken');
-seafileAPI.initForSeahubUsage({ siteRoot, xcsrfHeaders });
 
 class Search extends Component {
 
@@ -14,13 +8,16 @@ class Search extends Component {
     super(props);
     this.state = {
       width: 'default',
+      value: '',
       resultItems: [],
       isMaskShow: false,
       isResultShow: false,
       isResultGetted: false,
     };
     this.inputValue = '';
-    this.repoid = '';
+    let { repoid } = { repoID };
+    this.repoid = repoid;
+    this.source = null; // used to cancle request;
   }
 
   onFocusHandler = () => {
@@ -34,12 +31,10 @@ class Search extends Component {
     this.resetToDefault();
   }
 
-  onKeyUpHandler = () => {
+  onChangeHandler = (event) => {
     let _this = this;
-    let newValue = this.refs.searchInput.value;
-    if (!this.repoid) {
-      this.repoid = this.refs.searchInput.getAttribute('data-repoid');
-    }
+    this.setState({value: event.target.value});
+    let newValue = event.target.value;
     if (this.inputValue === newValue.trim()) {
       return false;
     }
@@ -69,13 +64,22 @@ class Search extends Component {
   }
 
   getSearchResult(queryData) {
-    var _this = this;
+    
+    if(this.source){
+      this.cancelRequest();
+    }
     this.setState({
       isResultShow: true,
       isResultGetted: false
     })
-    
-    seafileAPI.getSearchedFiles(queryData).then(res => {
+
+    this.source = this.props.seafileAPI.getSource();
+    this.sendRequest(queryData, this.source.token);
+  }
+
+  sendRequest(queryData, cancelToken) {
+    var _this = this;
+    this.props.seafileAPI.getSearchedFiles(queryData,cancelToken).then(res => {
       if (!res.data.total) {
         _this.setState({
           resultItems: [],
@@ -89,7 +93,14 @@ class Search extends Component {
         resultItems: items,
         isResultGetted: true
       })
+    }).catch(res => {
+      console.log(res);
     })
+
+  }
+
+  cancelRequest() {
+    this.source.cancel("prev request is cancled");
   }
 
   getValueLength(str) {
@@ -132,9 +143,9 @@ class Search extends Component {
   resetToDefault() {
     this.inputValue = null;
     this.repoid = null;
-    this.refs.searchInput.value = '';
     this.setState({
       width: '',
+      value: '',
       isMaskShow: false,
       isResultShow: false,
       isResultGetted: false,
@@ -181,15 +192,14 @@ class Search extends Component {
         <div className="search-container">
           <div className="search-input-container">
             <input 
-              ref="searchInput"
               type="text" 
               className="search-input" 
               name="query"
               placeholder="Search files in this wiki"
               style={style}
-              data-repoid={repoID}
+              value={this.state.value}
               onFocus={this.onFocusHandler}
-              onKeyUp={this.onKeyUpHandler}
+              onChange={this.onChangeHandler}
               autoComplete="off"
             />
             <a className="search-icon icon-search"></a>

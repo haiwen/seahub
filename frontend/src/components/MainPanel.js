@@ -3,7 +3,6 @@ import Search from './search';
 import MarkdownViewer from './markdown-viewer';
 import Account from './account';
 import { repoID, serviceUrl, slug, siteRoot } from './constance';
-import { processorGetAST } from '@seafile/seafile-editor/src/lib/seafile-markdown2html';
 
 class MainPanel extends Component {
 
@@ -37,7 +36,7 @@ class MainPanel extends Component {
               <a className="btn btn-secondary btn-topbar" onClick={this.onEditClick}>Edit Page</a>
            </div>
           <div className="common-toolbar">
-            <Search />
+            <Search seafileAPI={this.props.seafileAPI}/>
             <Account seafileAPI={this.props.seafileAPI} />
           </div>
         </div>
@@ -56,7 +55,7 @@ class MainPanel extends Component {
               latestContributor={this.props.latestContributor}
               lastModified = {this.props.lastModified}
               onLinkClick={this.props.onLinkClick}
-              isFileChanged={this.props.isFileChanged}
+              isFileLoading={this.props.isFileLoading}
             />
           </div>
         </div>
