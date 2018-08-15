@@ -10,9 +10,9 @@ class SearchResultItem extends React.Component {
     let item = this.props.item;
     return (
       <li className="search-result-item" onClick={this.onClickHandler}>
-          <a className="wiki-content wiki-name">{item.name}</a>
-          <a ref="itemlink" className="wiki-content wiki-link" href={item.link}>{item.link_content}</a>
-          <p className="wiki-content highlight-content">{item.content}</p>
+          <a className="item-content item-name">{item.name}</a>
+          <a className="item-content item-link" ref="itemlink"  href={item.link}>{item.link_content}</a>
+          <p className="item-content item-text">{item.content}</p>
       </li>
     )
   }

@@ -165,7 +165,7 @@ class Search extends Component {
     }
     if (!this.state.resultItems.length) {
       return (
-        <div className="search-result-none">你检索的内容不存在</div>
+        <div className="search-result-none">No results matching.</div>
       )
     }
     return (
