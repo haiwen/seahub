@@ -97,6 +97,7 @@ class TreeNodeView extends React.Component {
           {icon}
           </span>
           <span type={type} draggable="true" onDragStart={this.onDragStart}>{node.name}</span>
+          <span className={'op-more float-right'}><i onClick={this.onContextMenu} className="fas fa-ellipsis-v"></i></span>
         </div>
         {node.isExpanded ? this.renderChildren() : null}
       </div>
@@ -128,6 +129,12 @@ class TreeNodeView extends React.Component {
   onDragStart = e => {
     const { node } = this.props;
     this.props.treeView.onDragStart(e, node);
+  }
+
+  onContextMenu = e => {
+    e.preventDefault();
+    const { node } = this.props;
+    this.props.treeView.onContextMenu(e, node);
   }
 
 }

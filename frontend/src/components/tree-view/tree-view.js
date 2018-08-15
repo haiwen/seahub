@@ -1,6 +1,10 @@
 import React from 'react';
 import TreeNodeView from './tree-node-view';
 import Tree from './tree';
+import Delete from '../delete-dialog';
+import AddFile from '../add-file-dialog';
+import AddFolder from '../add-dir-dialog';
+import Rename from '../rename-dialog';
 
 class TreeView extends React.PureComponent {
 
@@ -20,6 +24,14 @@ class TreeView extends React.PureComponent {
     isShowImagePreview: false,
     imagePreviewLoading: false,
     imageSrc: '',
+    showAddFile: false,
+    showAddFolder: false,
+    showRename: false,
+    showContextMenu: false,
+    showDelete: false,
+    fileName: '',
+    fileParentPath: '',
+    type: ''
   }
 
   showImagePreview = (e, node) => {
@@ -60,7 +72,7 @@ class TreeView extends React.PureComponent {
     });
   }
 
-  componentDidMount() {
+  getFiles = () => {
     this.props.editorUtilities.getFiles().then((files) => {
       // construct the tree object
       var rootObj = {
@@ -71,7 +83,7 @@ class TreeView extends React.PureComponent {
       var treeData = new Tree();
       treeData.parseFromList(rootObj, files);
       this.setState({
-        tree: treeData
+        tree: treeData,
       })
     }, () => {
       console.log("failed to load files");
@@ -79,6 +91,10 @@ class TreeView extends React.PureComponent {
         loadingFailed: true
       })
     })
+  }
+
+  componentDidMount() {
+    this.getFiles()
   }
 
 
@@ -101,6 +117,31 @@ class TreeView extends React.PureComponent {
             <img src={this.state.imageSrc} onLoad={this.imageLoaded} alt=""/>
           </div>
         }
+         { this.state.showContextMenu &&
+           <div style={this.state.imagePreviewPosition} className={'contextmenu'}>
+             <div className={'contextmenu-item item'} onClick={this.toggleDelete}>Delete</div>
+             <div className={'contextmenu-item item'} onClick={this.toggleAddFile}>New File</div>
+             <div className={'contextmenu-item item'} onClick={this.toggleAddFolder}>New Folder</div>
+             <div className={'contextmenu-item item'} onClick={this.toggleRename}>Rename</div>
+           </div>
+         }
+         <Delete isOpen={this.state.showDelete}
+                 handleSubmit={this.onDelete}
+                 toggleCancel={this.deleteCancel} />
+
+        <AddFile isOpen={this.state.showAddFile}
+                 toggleCancel={this.addFileCancel} 
+                 onSetFilePath={this.onAddFile} />
+
+        <AddFolder isOpen={this.state.showAddFolder}
+                 toggleCancel={this.addFolderCancel} 
+                 onSetFolderPath={this.onAddFolder} />
+
+        <Rename isOpen={this.state.showRename}
+                type={this.state.type}
+                preName={this.state.fileName}
+                onRename={this.onRename} 
+                toggleCancel={this.renameCancel} />
       </div>
     );
   }
@@ -138,6 +179,142 @@ class TreeView extends React.PureComponent {
     this.props.onClick(e, node);
   }
 
+  onContextMenu = (e, node) => {
+    this.setState({
+      showContextMenu: !this.state.showContextMenu,
+      fileName: node.name,
+      type: node.type,
+      fileParentPath: node.parent_path 
+    })
+  }
+
+  toggleDelete = () => {
+    this.setState({
+      showContextMenu: !this.state.showContextMenu,
+      showDelete: !this.state.showDelete,
+    })
+  }
+
+  onDelete = () => {
+    let filePath = '/';
+    if (this.state.fileParentPath === '/') {
+      filePath = this.state.fileParentPath + this.state.fileName
+    } else {
+      filePath = this.state.fileParentPath + '/' + this.state.fileName
+    }
+
+    if (this.state.type === 'file') {
+      this.props.editorUtilities.deleteFile(filePath).then(res => {
+        this.setState({
+          showDelete: !this.state.showDelete 
+        })
+
+        this.getFiles()
+      })
+    } 
+
+    if (this.state.type === 'dir') {
+      this.props.editorUtilities.deleteDir(filePath).then(res => {
+        this.setState({
+          showDelete: !this.state.showDelete 
+        })
+
+        this.getFiles()
+      })
+    }
+  }
+
+  deleteCancel = () => {
+    this.setState({
+      showDelete: !this.state.showDelete,
+    })
+  }
+
+  toggleAddFile = () => {
+    this.setState({
+      showAddFile: !this.state.showAddFile,
+      showContextMenu: !this.state.showContextMenu
+    })
+  }
+
+  onAddFile = (filePath) => {
+    this.props.editorUtilities.createFile(filePath).then(res => {
+      this.setState({
+        showAddFile: !this.state.showAddFile
+      })
+      this.getFiles()
+    })
+  }
+
+  addFileCancel = () => {
+    this.setState({
+      showAddFile: !this.state.showAddFile,
+    })
+  }
+
+  toggleAddFolder = () => {
+    this.setState({
+      showAddFolder: !this.state.showAddFolder,
+      showContextMenu: !this.state.showContextMenu
+    })
+  }
+
+  onAddFolder = (dirPath) => {
+    this.props.editorUtilities.createDir(dirPath).then(res => {
+      this.setState({
+        showAddFolder: !this.state.showAddFolder
+      })
+      this.getFiles()
+    })
+  }
+
+  addFolderCancel = () => {
+    this.setState({
+      showAddFolder: !this.state.showAddFolder,
+    })
+  }
+
+
+  toggleRename = () => {
+    this.setState({
+      showRename: !this.state.showRename,
+      showContextMenu: !this.state.showContextMenu
+    }) 
+  }
+
+  onRename = (newName) => {
+
+    let filePath = '/'
+    if (this.state.fileParentPath === '/') {
+      filePath = this.state.fileParentPath + this.state.fileName
+    } else {
+      filePath = this.state.fileParentPath + '/' + this.state.fileName
+    }
+
+    if (this.state.type === 'file') {
+      this.props.editorUtilities.renameFile(filePath, newName).then(res => {
+        this.setState({
+          showRename: !this.state.showRename
+        })
+        this.getFiles()
+      })
+    }
+
+    if (this.state.type === 'dir') {
+      this.props.editorUtilities.renameDir(filePath, newName).then(res => {
+        this.setState({
+          showRename: !this.state.showRename
+        });
+        this.getFiles();
+      })
+    }
+  }
+
+  renameCancel = () => {
+    this.setState({
+      showRename: !this.state.showRename
+    })
+  }
 }
 
 export default TreeView;
