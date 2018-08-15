@@ -505,11 +505,11 @@ define([
 
                             _this.is_address_book_group_admin = true;
                         }
-                        _this.reset();
                     },
                     error: function(xhr) {
-                        var error_msg = Common.prepareAjaxErrorMsg(xhr);
-                        _this.$error.html(error_msg).show();
+                    },
+                    complete: function() {
+                        _this.reset();
                     }
                 });
             },
