@@ -457,6 +457,20 @@ class Search(APIView):
             repo_id_map, repo_type_map = get_search_repos_map(search_repo,
                     username, org_id, shared_from, not_shared_from)
 
+            permission_parameter = request.GET.get('permission', None)
+            if permission_parameter:
+                permission_parameter = permission_parameter.lower()
+                if permission_parameter not in ('r', 'rw'):
+                    error_msg = "permission should be 'r' or 'rw'."
+                    return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
+
+            if permission_parameter:
+                for key, value in repo_id_map.items():
+                    if not hasattr(value, 'permission'):
+                        continue
+                    if value.permission != permission_parameter:
+                        del repo_id_map[key]
+
         obj_desc = {
             'obj_type': obj_type,
             'suffixes': suffixes
