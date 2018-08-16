@@ -111,7 +111,10 @@ define([
         },
 
         resetOwnedRepos: function() {
-            this.reset({repos: this.ownedRepos});
+            // no repos in the group
+            if (this.repos.length == 0) {
+                this.reset({repos: this.ownedRepos});
+            }
         },
 
         showEmptyTip: function() {
