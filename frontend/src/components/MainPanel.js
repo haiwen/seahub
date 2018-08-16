@@ -36,7 +36,7 @@ class MainPanel extends Component {
               <a className="btn btn-secondary btn-topbar" onClick={this.onEditClick}>Edit Page</a>
            </div>
           <div className="common-toolbar">
-            <Search seafileAPI={this.props.seafileAPI}/>
+            <Search seafileAPI={this.props.seafileAPI} onSearchedClick={this.props.onSearchedClick}/>
             <Account seafileAPI={this.props.seafileAPI} />
           </div>
         </div>

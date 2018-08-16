@@ -15,8 +15,6 @@ class Search extends Component {
       isResultGetted: false,
     };
     this.inputValue = '';
-    let { repoid } = { repoID };
-    this.repoid = repoid;
     this.source = null; // used to cancle request;
   }
 
@@ -28,6 +26,10 @@ class Search extends Component {
   }
 
   onCloseHandler = () => {
+    this.resetToDefault();
+  }
+
+  onItemClickHandler = () => {
     this.resetToDefault();
   }
 
@@ -50,7 +52,7 @@ class Search extends Component {
 
     let queryData = {
       q: newValue,
-      search_repo: this.repoid,
+      search_repo: repoID,
       search_ftypes: 'custom',
       ftype: 'Markdown',
       input_fexts: 'md'
@@ -79,7 +81,7 @@ class Search extends Component {
 
   sendRequest(queryData, cancelToken) {
     var _this = this;
-    this.props.seafileAPI.getSearchedFiles(queryData,cancelToken).then(res => {
+    this.props.seafileAPI.searchFiles(queryData,cancelToken).then(res => {
       if (!res.data.total) {
         _this.setState({
           resultItems: [],
@@ -95,6 +97,8 @@ class Search extends Component {
         isResultGetted: true
       })
       _this.source = null;
+    }).catch(res => {
+      console.log(res);
     })
   }
 
@@ -122,17 +126,11 @@ class Search extends Component {
   formatResultItems(data) {
     let items = [];
     let length = data.length > 5 ? 5 : data.length;
-    let pathname = decodeURI(window.location.pathname);
-    let prefix =  '';
     for (let i = 0; i < length; i++) {
       items[i] = {};
       items[i]['index'] = [i];
       items[i]['name'] = data[i].name;
-      if (!prefix) {
-        let repo_name = data[i].repo_name;
-        prefix = pathname.substring(0, pathname.lastIndexOf(repo_name) + repo_name.length);
-      }
-      items[i]['link'] = prefix + data[i].fullpath;
+      items[i]['link'] = data[i].fullpath;
       items[i]['link_content'] = decodeURI(data[i].fullpath).substring(1);
       items[i]['content'] = data[i].content_highlight;
     }
@@ -141,7 +139,6 @@ class Search extends Component {
 
   resetToDefault() {
     this.inputValue = null;
-    this.repoid = null;
     this.setState({
       width: '',
       value: '',
@@ -174,7 +171,8 @@ class Search extends Component {
             <SearchResultItem
               key={item.index}
               item={item}
-              onLinkClick={_this.onLinkClick}
+              onSearchedClick={_this.props.onSearchedClick}
+              onItemClickHandler={_this.onItemClickHandler}
             />
           )
         })}

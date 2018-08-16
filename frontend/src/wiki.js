@@ -12,6 +12,7 @@ import './assets/css/fontawesome.css';
 import 'seafile-ui';
 import './css/side-panel.css';
 import './css/wiki.css';
+import './css/search.css';
 
 // init seafileAPI
 let seafileAPI = new SeafileAPI();
@@ -85,6 +86,12 @@ class Wiki extends Component {
     }
   }
 
+  onSearchedClick = (path) => {
+    if (path) {
+      this.loadFile(path);
+    }
+  }
+
   onFileClick = (e, node) => {
     if (node.isMarkdown()) {
       this.loadFile(node.path);
@@ -145,6 +152,7 @@ class Wiki extends Component {
           filePath={this.state.filePath}
           onLinkClick={this.onLinkClick}
           onMenuClick={this.onMenuClick}
+          onSearchedClick={this.onSearchedClick}
           latestContributor={this.state.latestContributor}
           lastModified={this.state.lastModified}
           seafileAPI={seafileAPI}
