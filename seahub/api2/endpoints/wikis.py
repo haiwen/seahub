@@ -21,6 +21,7 @@ from seahub.api2.utils import api_error
 from seahub.wiki.models import Wiki, DuplicateWikiNameError
 from seahub.wiki.utils import is_valid_wiki_name, slugfy_wiki_name
 from seahub.utils import is_org_context, get_user_repos
+from seahub.views import check_folder_permission
 
 logger = logging.getLogger(__name__)
 
@@ -76,8 +77,10 @@ class WikisView(APIView):
     def post(self, request, format=None):
         """Add a new wiki.
         """
-        result = {}
-        content_type = 'application/json; charset=utf-8'
+        create_type = request.POST.get('create_type', '')
+        if not create_type:
+            return api_error(status.HTTP_400_BAD_REQUEST, _('Create type is required.'))
+
         name = request.POST.get('name', '')
         if not name:
             return api_error(status.HTTP_400_BAD_REQUEST, _('Name is required.'))
@@ -86,31 +89,62 @@ class WikisView(APIView):
             msg = _('Name can only contain letters, numbers, blank, hyphen or underscore.')
             return api_error(status.HTTP_400_BAD_REQUEST, msg)
 
+        username = request.user.username
+
         org_id = -1
         if is_org_context(request):
             org_id = request.user.org.org_id
 
-        username = request.user.username
-        try:
-            wiki = Wiki.objects.add(name, username, org_id=org_id)
-        except DuplicateWikiNameError:
-            msg = _('%s is taken by others, please try another name.') % name
-            return api_error(status.HTTP_400_BAD_REQUEST, msg)
-        except IntegrityError:
-            msg = 'Internal Server Error'
-            return api_error(status.HTTP_500_INTERNAL_SERVER_ERROR, msg)
+        if create_type == 'no_lib':
+            try:
+                wiki = Wiki.objects.add(name, username, org_id=org_id)
+            except DuplicateWikiNameError:
+                msg = _('%s is taken by others, please try another name.') % name
+                return api_error(status.HTTP_400_BAD_REQUEST, msg)
+            except IntegrityError:
+                msg = 'Internal Server Error'
+                return api_error(status.HTTP_500_INTERNAL_SERVER_ERROR, msg)
 
-        # create home page
-        page_name = "home.md"
-        try:
-            seafile_api.post_empty_file(wiki.repo_id, '/',
-                                        page_name, request.user.username)
-        except SearpcError as e:
-            logger.error(e)
-            msg = 'Internal Server Error'
-            return api_error(status.HTTP_500_INTERNAL_SERVER_ERROR, msg)
+            # create home page
+            page_name = "home.md"
+            try:
+                seafile_api.post_empty_file(wiki.repo_id, '/',
+                                            page_name, request.user.username)
+            except SearpcError as e:
+                logger.error(e)
+                msg = 'Internal Server Error'
+                return api_error(status.HTTP_500_INTERNAL_SERVER_ERROR, msg)
 
-        return Response(wiki.to_dict())
+            return Response(wiki.to_dict())
+
+        if create_type == 'use_lib':
+            repo_id = request.POST.get('repo_id', '')
+            if not repo_id:
+                return api_error(status.HTTP_400_BAD_REQUEST, _('Repo id is required.'))
+
+            repo = seafile_api.get_repo(repo_id)
+
+            if check_folder_permission(request, repo_id, '/') != 'rw':
+                error_msg = _('Permission denied.')
+                return api_error(status.HTTP_403_FORBIDDEN, error_msg)
+            try:
+                wiki = Wiki.objects.add(wiki_name=repo.repo_name, username=username, 
+                        repo_id=repo.repo_id, org_id=org_id)
+            except DuplicateWikiNameError:
+                msg = _('%s is taken by others, please try another name.') % repo.repo_name
+                return api_error(status.HTTP_400_BAD_REQUEST, msg)
+            except IntegrityError:
+                msg = 'Internal Server Error'
+                return api_error(status.HTTP_500_INTERNAL_SERVER_ERROR, msg)
+
+            # create home page if not exist
+            page_name = "home.md"
+            if not seafile_api.get_file_id_by_path(repo_id, "/" + page_name):
+                if not seafile_api.post_empty_file(repo_id, "/", page_name, username):
+                    msg = 'Internal Server Error'
+                    return api_error(status.HTTP_500_INTERNAL_SERVER_ERROR, msg)
+
+            return Response(wiki.to_dict()) 
 
 
 class WikiView(APIView):
@@ -189,7 +223,6 @@ class WikiView(APIView):
         if wiki_exist.exists():
             msg = _('%s is taken by others, please try another name.') % wiki_name
             return api_error(status.HTTP_400_BAD_REQUEST, msg)
-
 
         if edit_repo(wiki.repo_id, wiki_name, '', username):
             wiki.slug = wiki_slug
