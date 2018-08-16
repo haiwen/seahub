@@ -17,7 +17,9 @@ from seahub.api2.utils import api_error
 from seahub.api2.throttling import UserRateThrottle
 from seahub.api2.permissions import IsProVersion
 from seahub.api2.authentication import TokenAuthentication
-from seahub.api2.endpoints.utils import api_check_group, is_org_user
+from seahub.api2.endpoints.utils import (
+    api_check_group, is_org_user, add_org_context
+)
 
 from seahub.base.templatetags.seahub_tags import email2nickname, \
         email2contact_email
@@ -26,9 +28,10 @@ from seahub.signals import repo_created
 from seahub.group.utils import is_group_admin
 from seahub.utils import is_valid_dirent_name, is_org_context, \
         is_pro_version, normalize_dir_path, is_valid_username, \
-        send_perm_audit_msg
+        send_perm_audit_msg, is_valid_org_id
 from seahub.utils.repo import get_library_storages, get_repo_owner
 from seahub.utils.timeutils import timestamp_to_isoformat_timestr
+from seahub.utils.rpc import SeafileAPI
 from seahub.share.signals import share_repo_to_user_successful, share_repo_to_group_successful
 from seahub.share.utils import share_dir_to_user, share_dir_to_group, update_user_dir_permission, \
         check_user_share_out_permission, update_group_dir_permission, \
@@ -70,7 +73,8 @@ class GroupOwnedLibraries(APIView):
     throttle_classes = (UserRateThrottle,)
 
     @api_check_group
-    def post(self, request, group_id):
+    @add_org_context
+    def post(self, request, group_id, org_id):
         """ Add a group owned library.
 
         Permission checking:
@@ -110,12 +114,6 @@ class GroupOwnedLibraries(APIView):
             error_msg = 'No group quota.'
             return api_error(status.HTTP_403_FORBIDDEN, error_msg)
 
-        if is_org_context(request):
-            # request called by org admin
-            org_id = request.user.org.org_id
-        else:
-            org_id = -1
-
         # create group owned repo
         group_id = int(group_id)
         if is_pro_version() and ENABLE_STORAGE_CLASSES:
@@ -133,19 +131,11 @@ class GroupOwnedLibraries(APIView):
                         password, permission, storage_id)
             else:
                 # STORAGE_CLASS_MAPPING_POLICY == 'REPO_ID_MAPPING'
-                if org_id > 0:
-                    repo_id = seafile_api.org_add_group_owned_repo(
-                        org_id, group_id, repo_name, password, permission)
-                else:
-                    repo_id = seafile_api.add_group_owned_repo(
-                        group_id, repo_name, password, permission)
+                repo_id = SeafileAPI.add_group_owned_repo(
+                    group_id, repo_name, password, permission, org_id=org_id)
         else:
-            if org_id > 0:
-                repo_id = seafile_api.org_add_group_owned_repo(
-                    org_id, group_id, repo_name, password, permission)
-            else:
-                repo_id = seafile_api.add_group_owned_repo(
-                    group_id, repo_name, password, permission)
+            repo_id = SeafileAPI.add_group_owned_repo(
+                group_id, repo_name, password, permission, org_id=org_id)
 
         # for activities
         username = request.user.username
@@ -176,7 +166,6 @@ class GroupOwnedLibrary(APIView):
         Permission checking:
         1. is group admin;
         """
-
         # argument check
         new_repo_name = request.data.get('name', '')
         if not new_repo_name:
@@ -214,7 +203,8 @@ class GroupOwnedLibrary(APIView):
         return Response(repo_info)
 
     @api_check_group
-    def delete(self, request, group_id, repo_id):
+    @add_org_context
+    def delete(self, request, group_id, repo_id, org_id):
         """ Delete a group owned library.
 
         Permission checking:
@@ -233,12 +223,7 @@ class GroupOwnedLibrary(APIView):
             return api_error(status.HTTP_403_FORBIDDEN, error_msg)
 
         try:
-            if is_org_context(request):
-                # request called by org admin
-                org_id = request.user.org.org_id
-                seafile_api.org_delete_group_owned_repo(org_id, group_id, repo_id)
-            else:
-                seafile_api.delete_group_owned_repo(group_id, repo_id)
+            SeafileAPI.delete_group_owned_repo(group_id, repo_id, org_id)
         except Exception as e:
             logger.error(e)
             error_msg = 'Internal Server Error'
@@ -816,24 +801,11 @@ class GroupOwnedLibraryUserShare(APIView):
     permission_classes = (IsAuthenticated, IsProVersion)
     throttle_classes = (UserRateThrottle,)
 
-    def list_user_shared_items(self, request, repo_id, path):
+    @add_org_context
+    def list_user_shared_items(self, request, repo_id, path, org_id):
         repo_owner = get_repo_owner(request, repo_id)
-
-        if is_org_context(request):
-            org_id = request.user.org.org_id
-            if path == '/':
-                share_items = seafile_api.list_org_repo_shared_to(
-                    org_id, repo_owner, repo_id)
-            else:
-                share_items = seafile_api.get_org_shared_users_for_subdir(
-                    org_id, repo_id, path, repo_owner)
-        else:
-            if path == '/':
-                share_items = seafile_api.list_repo_shared_to(
-                    repo_owner, repo_id)
-            else:
-                share_items = seafile_api.get_shared_users_for_subdir(
-                    repo_id, path, repo_owner)
+        share_items = SeafileAPI.get_shared_users_by_repo_path(
+            repo_id, repo_owner, path=path, org_id=org_id)
 
         ret = []
         for item in share_items:
@@ -890,7 +862,8 @@ class GroupOwnedLibraryUserShare(APIView):
         result = self.list_user_shared_items(request, repo_id, path)
         return Response(result)
 
-    def post(self, request, repo_id):
+    @add_org_context
+    def post(self, request, repo_id, org_id):
         """ Share repo to users.
 
         Permission checking:
@@ -957,11 +930,8 @@ class GroupOwnedLibraryUserShare(APIView):
                     })
                 continue
 
-            org_id = None
-            if is_org_context(request):
-                org_id = request.user.org.org_id
-
-                if not is_org_user(to_user, int(org_id)):
+            if is_valid_org_id(org_id):
+                if not is_org_user(to_user, org_id):
                     org_name = request.user.org.org_name
                     error_msg = 'User %s is not member of organization %s.' \
                                 % (to_user, org_name)
@@ -999,7 +969,8 @@ class GroupOwnedLibraryUserShare(APIView):
 
         return Response(result)
 
-    def put(self, request, repo_id):
+    @add_org_context
+    def put(self, request, repo_id, org_id):
         """ Update repo user share permission.
 
         Permission checking:
@@ -1050,16 +1021,13 @@ class GroupOwnedLibraryUserShare(APIView):
             error_msg = 'Permission denied.'
             return api_error(status.HTTP_403_FORBIDDEN, error_msg)
 
-        if is_org_context(request):
-            org_id = request.user.org.org_id
-        else:
-            org_id = None
         update_user_dir_permission(repo_id, path, repo_owner, to_user, permission, org_id)
 
         send_perm_audit_msg('modify-repo-perm', username, to_user, repo_id, path, permission)
         return Response({'success': True})
 
-    def delete(self, request, repo_id, format=None):
+    @add_org_context
+    def delete(self, request, repo_id, org_id, format=None):
         """ Delete repo user share permission.
 
         Permission checking:
@@ -1081,20 +1049,8 @@ class GroupOwnedLibraryUserShare(APIView):
             return api_error(status.HTTP_403_FORBIDDEN, error_msg)
 
         path = request.data.get('path', '/')
-
-        if is_org_context(request):
-            org_id = request.user.org.org_id
-            if path == '/':
-                seafile_api.org_remove_share(org_id, repo_id, repo_owner, to_user)
-            else:
-                seafile_api.org_unshare_subdir_for_user(
-                    org_id, repo_id, path, repo_owner, to_user)
-        else:
-            if path == '/':
-                seafile_api.remove_share(repo_id, repo_owner, to_user)
-            else:
-                seafile_api.unshare_subdir_for_user(
-                    repo_id, path, repo_owner, to_user)
+        SeafileAPI.delete_shared_user_by_repo_path(
+            repo_id, repo_owner, to_user, path, org_id=org_id)
 
         permission = check_user_share_out_permission(repo_id, path, to_user, is_org_context(request))
         send_perm_audit_msg('delete-repo-perm', username, to_user,
@@ -1109,24 +1065,11 @@ class GroupOwnedLibraryGroupShare(APIView):
     permission_classes = (IsAuthenticated, IsProVersion)
     throttle_classes = (UserRateThrottle,)
 
-    def list_group_shared_items(self, request, repo_id, path):
+    @add_org_context
+    def list_group_shared_items(self, request, repo_id, path, org_id):
         repo_owner = get_repo_owner(request, repo_id)
-
-        if is_org_context(request):
-            org_id = request.user.org.org_id
-            if path == '/':
-                share_items = seafile_api.list_org_repo_shared_group_by_user(
-                    org_id, repo_owner, repo_id)
-            else:
-                share_items = seafile_api.get_org_shared_groups_for_subdir(
-                    org_id, repo_id, path, repo_owner)
-        else:
-            if path == '/':
-                share_items = seafile_api.list_repo_shared_group_by_user(
-                    repo_owner, repo_id)
-            else:
-                share_items = seafile_api.get_shared_groups_for_subdir(
-                    repo_id, path, repo_owner)
+        share_items = SeafileAPI.get_shared_groups_by_repo_path(
+            repo_id, repo_owner, path, org_id)
 
         ret = []
         for item in share_items:
@@ -1135,19 +1078,8 @@ class GroupOwnedLibraryGroupShare(APIView):
             group = ccnet_api.get_group(group_id)
 
             if not group:
-                if is_org_context(request):
-                    if path == '/':
-                        seafile_api.del_org_group_repo(repo_id, org_id, group_id)
-                    else:
-                        seafile_api.org_unshare_subdir_for_group(
-                                org_id, repo_id, path, repo_owner, group_id)
-                else:
-                    if path == '/':
-                        seafile_api.unset_group_repo(repo_id, group_id,
-                                                     repo_owner)
-                    else:
-                        seafile_api.unshare_subdir_for_group(
-                            repo_id, path, repo_owner, group_id)
+                SeafileAPI.delete_shared_group_by_repo_path(
+                    repo_id, repo_owner, group_id, path, org_id)
                 continue
 
             ret.append({
@@ -1201,7 +1133,8 @@ class GroupOwnedLibraryGroupShare(APIView):
         result = self.list_group_shared_items(request, repo_id, path)
         return Response([item for item in result if item['group_id'] != group_id])
 
-    def post(self, request, repo_id, format=None):
+    @add_org_context
+    def post(self, request, repo_id, org_id, format=None):
         """ Share repo to group.
 
         Permission checking:
@@ -1240,11 +1173,6 @@ class GroupOwnedLibraryGroupShare(APIView):
         result = {}
         result['failed'] = []
         result['success'] = []
-
-        if is_org_context(request):
-            org_id = request.user.org.org_id
-        else:
-            org_id = None
 
         group_ids = request.data.getlist('group_id')
         for gid in group_ids:
@@ -1286,7 +1214,8 @@ class GroupOwnedLibraryGroupShare(APIView):
 
         return Response(result)
 
-    def put(self, request, repo_id, format=None):
+    @add_org_context
+    def put(self, request, repo_id, org_id, format=None):
         """ Update repo group share permission.
 
         Permission checking:
@@ -1337,11 +1266,6 @@ class GroupOwnedLibraryGroupShare(APIView):
             error_msg = 'Permission denied.'
             return api_error(status.HTTP_403_FORBIDDEN, error_msg)
 
-        if is_org_context(request):
-            org_id = request.user.org.org_id
-        else:
-            org_id = None
-
         update_group_dir_permission(
             repo_id, path, repo_owner, to_group_id, permission, org_id)
 
@@ -1350,7 +1274,8 @@ class GroupOwnedLibraryGroupShare(APIView):
 
         return Response({'success': True})
 
-    def delete(self, request, repo_id, format=None):
+    @add_org_context
+    def delete(self, request, repo_id, org_id, format=None):
         """ Delete repo group share permission.
 
         Permission checking:
@@ -1379,19 +1304,8 @@ class GroupOwnedLibraryGroupShare(APIView):
 
         path = request.data.get('path', '/')
 
-        if is_org_context(request):
-            org_id = request.user.org.org_id
-            if path == '/':
-                seafile_api.del_org_group_repo(repo_id, org_id, group_id)
-            else:
-                seafile_api.org_unshare_subdir_for_group(
-                    org_id, repo_id, path, repo_owner, group_id)
-        else:
-            if path == '/':
-                seafile_api.unset_group_repo(repo_id, to_group_id, username)
-            else:
-                seafile_api.unshare_subdir_for_group(
-                    repo_id, path, repo_owner, to_group_id)
+        SeafileAPI.delete_shared_group_by_repo_path(
+            repo_id, repo_owner, to_group_id, path, org_id)
 
         permission = check_group_share_out_permission(
             repo_id, path, group_id, is_org_context(request))

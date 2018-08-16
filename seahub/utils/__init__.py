@@ -1373,3 +1373,9 @@ def get_folder_permission_recursively(username, repo_id, path):
     else:
         return seafile_api.check_permission_by_path(
                 repo_id, path, username)
+
+def is_valid_org_id(org_id):
+    if org_id and org_id > 0:
+        return True
+    else:
+        return False

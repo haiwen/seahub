@@ -11,10 +11,9 @@ from seaserv import ccnet_api
 from pysearpc import SearpcError
 
 from seahub.api2.utils import api_error
-from seahub.utils import is_pro_version
 from seahub.base.templatetags.seahub_tags import email2nickname, \
         email2contact_email
-from seahub.utils import get_log_events_by_time
+from seahub.utils import get_log_events_by_time, is_pro_version, is_org_context
 
 try:
     from seahub.settings import MULTI_TENANCY
@@ -41,6 +40,16 @@ def api_check_group(func):
             return api_error(status.HTTP_404_NOT_FOUND, error_msg)
 
         return func(view, request, group_id, *args, **kwargs)
+
+    return _decorated
+
+def add_org_context(func):
+    def _decorated(view, request, *args, **kwargs):
+        if is_org_context(request):
+            org_id = request.user.org.org_id
+        else:
+            org_id = None
+        return func(view, request, org_id=org_id, *args, **kwargs)
 
     return _decorated
 
