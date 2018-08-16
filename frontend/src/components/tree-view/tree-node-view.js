@@ -12,6 +12,14 @@ function sortByType(a, b) {
 
 class TreeNodeView extends React.Component {
 
+  constructor(props) {
+    super(props);
+    this.state = {
+      isMenuBtnShow: false,
+      isNodeItemfreeze: false,
+    }
+  }
+
   renderCollapse = () => {
     const { node } = this.props;
 
@@ -85,19 +93,22 @@ class TreeNodeView extends React.Component {
     }
 
     return (
-      <div  type={type}
-        className="tree-node"
-        style={styles}
-      >
-        <div onMouseLeave={this.onMouseLeave} onMouseEnter={this.onMouseEnter}
+      <div type={type} className="tree-node" style={styles}>
+        <div 
+          onMouseLeave={this.onMouseLeave} 
+          onMouseEnter={this.onMouseEnter}
           onClick={this.onClick}
-          type={type} className={`tree-node-inner text-nowrap ${node.name === '/'? 'hide': ''}`}>
-          {this.renderCollapse()}
-          <span type={type} className="tree-node-icon">
-          {icon}
-          </span>
-          <span type={type} draggable="true" onDragStart={this.onDragStart}>{node.name}</span>
-          <span className={'op-more float-right'}><i onClick={this.onContextMenu} className="fas fa-ellipsis-v"></i></span>
+          type={type} 
+          className={`tree-node-inner text-nowrap ${node.name === '/'? 'hide': ''}`}
+        >
+          <div className="tree-node-text" type={type} draggable="true" onDragStart={this.onDragStart}>{node.name}</div>
+          <div className="left-icon">
+            {this.renderCollapse()}
+            <i type={type} className="tree-node-icon">{icon}</i>
+          </div>
+          <div className="right-icon" onClick={this.onContextMenu}>
+            <i className="fas fa-ellipsis-v"></i>
+          </div>
         </div>
         {node.isExpanded ? this.renderChildren() : null}
       </div>
@@ -132,7 +143,7 @@ class TreeNodeView extends React.Component {
   }
 
   onContextMenu = e => {
-    e.preventDefault();
+    e.stopPropagation();
     const { node } = this.props;
     this.props.treeView.onContextMenu(e, node);
   }

@@ -726,3 +726,40 @@ select {
     background:#fff;
     line-height:17px;
 }
+
+/**** sf-dropdown ******/
+.sf-dropdown {
+    position:relative;
+}
+.sf-dropdown-inline {
+    display:inline-block;
+}
+button.sf-dropdown-toggle:focus {
+    background-color:#ddd !important;
+    outline:none;
+}
+.sf-dropdown-menu {
+    position:absolute;
+    background:#fff;
+    padding:6px 1px;
+    margin:2px 0 0;
+    border:1px solid rgba(34,36,38,.15);
+    border-radius:3px;
+    box-shadow:0 2px 3px 0 rgba(34,36,38,.15);
+    z-index:10;
+    list-style: none;
+}
+.sf-dropdown-menu li a,
+.sf-dropdown-menu a {
+    display:block;
+    padding:4px 12px;
+    min-width:130px;
+    white-space:nowrap;
+    color:#444;
+    font-weight:normal;
+}
+.sf-dropdown-menu a:hover {
+    background:#feaa7c;
+    text-decoration:none;
+    color:#fff;
+}
