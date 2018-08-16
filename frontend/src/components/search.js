@@ -29,8 +29,9 @@ class Search extends Component {
     this.resetToDefault();
   }
 
-  onItemClickHandler = () => {
+  onItemClickHandler = (path) => {
     this.resetToDefault();
+    this.props.onSearchedClick(path);
   }
 
   onChangeHandler = (event) => {
@@ -171,7 +172,6 @@ class Search extends Component {
             <SearchResultItem
               key={item.index}
               item={item}
-              onSearchedClick={_this.props.onSearchedClick}
               onItemClickHandler={_this.onItemClickHandler}
             />
           )
