@@ -50,8 +50,7 @@ class MarkdownViewer extends React.Component {
     html: '',
     outlineTreeRoot: null,
     navItems: [],
-    activeId: 0,
-    isLoading: true
+    activeId: 0
   }
 
   scrollToNode(node) {
@@ -117,15 +116,9 @@ class MarkdownViewer extends React.Component {
         var currentId = navItems.length > 0 ? navItems[0].id : 0;
         _this.setState({
           navItems: navItems,
-          activeId: currentId,
-          isLoading: false
-        })
-      } else {
-        _this.setState({
-          isLoading: false
+          activeId: currentId
         })
       }
-
     });
   }
 
@@ -151,7 +144,7 @@ class MarkdownViewer extends React.Component {
   }
 
   render() {
-    if (this.state.isLoading) {
+    if (this.props.isFileLoading) {
       return (
         <span className="loading-icon loading-tip"></span>
       )
