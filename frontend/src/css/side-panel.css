@@ -106,10 +106,6 @@
   height: 24px;
 }
 
-.tree-node-inner div{
-  display: inline-block;
-}
-
 .tree-node-inner .tree-node-text {
   padding-left: 1.2rem;
   width: calc(100% - 1.5rem);
@@ -145,18 +141,21 @@
 
 .tree-node-inner .right-icon {
   position: absolute;
-  display:flex;
-  justify-content:center;
-  align-items:center;
   top: 0;
   right: 0;
   width: 1.5rem;
-  color: #888;  
-  z-index: 2;
+  color: #888;   
+  z-index: 2;  
   font-size: 0.8125rem;
+  text-align: center;
 }
 
 .tree-node-inner .right-icon i {
-  font-size: 18px;
+  vertical-align: middle;
+  font-size: 15px;
   line-height: 1.625 !important;
+}
+
+.dropdown-menu {
+  min-width: 8rem;
 }

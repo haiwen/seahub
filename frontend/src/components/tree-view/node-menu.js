@@ -37,8 +37,8 @@ class NodeMenu extends React.Component {
   }
 
   onDelete = () => {
-    this.props.onDeleteNode();
     this.setState({showDelete: !this.state.showDelete});
+    this.props.onDeleteNode();
   }
 
   deleteCancel = () => {
@@ -46,8 +46,8 @@ class NodeMenu extends React.Component {
   }
 
   onAddFile = (filePath) => {
-    this.props.onAddFileNode(filePath);
     this.setState({showAddFile: !this.state.showAddFile});
+    this.props.onAddFileNode(filePath);
   }
 
   addFileCancel = () => {
@@ -55,8 +55,8 @@ class NodeMenu extends React.Component {
   }
 
   onAddFolder = (dirPath) => {
-    this.props.onAddFolderNode(dirPath);
     this.setState({showAddFolder: !this.state.showAddFolder});
+    this.props.onAddFolderNode(dirPath);
   }
 
   addFolderCancel = () => {
@@ -64,48 +64,71 @@ class NodeMenu extends React.Component {
   }
 
   onRename = (newName) => {
-    this.props.onRenameNode(newName);
     this.setState({showRename: !this.state.showRename});
+    this.props.onRenameNode(newName);
   }
 
   renameCancel = () => {
     this.setState({showRename: !this.state.showRename});
   }
 
-  render() {
-    let left = this.props.left;
-    let top = this.props.top;
-    let style = {position: "fixed",left: left, top: top};
-    return (
-      <div className={`node-menu-module ${this.props.isShowMenu ? "" : "hide"}`} style={style}>
-        <ul className="sf-dropdown-menu">
-          <li className="op" onClick={this.toggleDelete}><a>Delete</a></li>
-          <li className="op" onClick={this.toggleAddFile}><a>New File</a></li>
-          <li className="op" onClick={this.toggleAddFolder}><a>New Folder</a></li>
-          <li className="op" onClick={this.toggleRename}><a>Rename</a></li>
+  renderNodeMenu() {
+    var style = null;
+    if (this.props.isShowMenu) {
+      style = {position: "fixed",left: this.props.left, top: this.props.top, display: 'block'};
+    }
+    if (this.props.currentNode.type === "dir") {
+      return (
+        <ul className="dropdown-menu" style={style}>
+          <li className="dropdown-item" onClick={this.toggleAddFolder}>New Folder</li>
+          <li className="dropdown-item" onClick={this.toggleAddFile}>New File</li>
+          <li className="dropdown-item" onClick={this.toggleRename}>Rename</li>
+          <li className="dropdown-item" onClick={this.toggleDelete}>Delete</li>
         </ul>
+      )
+    }
+
+    return (
+      <ul className="dropdown-menu" style={style}>
+          <li className="dropdown-item" onClick={this.toggleRename}>Rename</li>
+          <li className="dropdown-item" onClick={this.toggleDelete}>Delete</li>
+      </ul>
+    )
+    
+  }
+
+  render() {
+    if (!this.props.currentNode) {
+      return (<div className="node-menu-module"></div>)
+    }
+    return (
+      <div className="node-menu-module">
+        {this.renderNodeMenu()}
         <Delete 
-          isOpen={this.state.showDelete} 
+          isOpen={this.state.showDelete}
+          currentNode={this.props.currentNode}
+          isCurrentFile={this.props.isCurrentFile}
           handleSubmit={this.onDelete}
-          toggleCancel={this.deleteCancel} 
+          toggleCancel={this.deleteCancel}
         />
 
         <AddFile 
           isOpen={this.state.showAddFile}
+          currentNode={this.props.currentNode}
           onSetFilePath={this.onAddFile}
           toggleCancel={this.addFileCancel}  
         />
 
         <AddFolder 
           isOpen={this.state.showAddFolder}
+          currentNode={this.props.currentNode}
           onSetFolderPath={this.onAddFolder}
           toggleCancel={this.addFolderCancel} 
         />
 
         <Rename 
           isOpen={this.state.showRename}
-          type={this.props.type}
-          preName={this.props.fileName}
+          currentNode={this.props.currentNode}
           onRename={this.onRename} 
           toggleCancel={this.renameCancel} 
         />

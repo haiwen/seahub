@@ -26,6 +26,7 @@ class SidePanel extends Component {
             <TreeView
               editorUtilities={this.props.editorUtilities}
               onClick={this.onFileClick}
+              permission={this.props.permission}
             />
           </div>
         </div>

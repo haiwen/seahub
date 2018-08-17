@@ -6,133 +6,17 @@ import NodeMenu from './node-menu';
 
 class TreeView extends React.PureComponent {
 
-  static defaultProps = {
-    paddingLeft: 20
-  };
-
-  imagePreviewTimeout = null
-
-  state = {
-    tree: new Tree(),
-    loadingFailed: false,
-    imagePreviewPosition: {
-      left: 10+'px',
-      top: 10+'px'
-    },
-    isShowImagePreview: false,
-    imagePreviewLoading: false,
-    imageSrc: '',
-    isShowMenu: false,
-    fileName: '',
-    filePath: '',
-    type: '',
-    menu_left: 0,
-    menu_top: 0,
-    isNodeItemFrezee: false
-  }
-
-  showImagePreview = (e, node) => {
-    e.persist();
-
-    let type = e.target.getAttribute('type');
-    if (type === 'image') {
-      this.imagePreviewTimeout = setTimeout(() => {
-        let X = e.clientX + 20;
-        let Y = e.clientY - 55;
-        if (e.view.innerHeight < e.clientY + 150) {
-          Y = e.clientY - 219;
-        }
-        this.setState({
-          isShowImagePreview: true,
-          imagePreviewLoading: true,
-          imageSrc: this.props.editorUtilities.getFileURL(node),
-          imagePreviewPosition: {
-            left: X + 'px',
-            top: Y + 'px'
-          }
-        });
-      }, 1000)
-    }
-  }
-
-  hideImagePreview = (e) => {
-    clearTimeout(this.imagePreviewTimeout);
-    this.setState({
-      isShowImagePreview: false,
-      imagePreviewLoading: false,
-    });
-  }
-
-  imageLoaded = () => {
-    this.setState({
-      imagePreviewLoading: false,
-    });
-  }
-
-  getFiles = () => {
-    this.props.editorUtilities.getFiles().then((files) => {
-      // construct the tree object
-      var rootObj = {
-        name: '/',
-        type: 'dir',
-        isExpanded: true
-      }
-      var treeData = new Tree();
-      treeData.parseFromList(rootObj, files);
-      this.setState({
-        tree: treeData,
-      })
-    }, () => {
-      console.log("failed to load files");
-      this.setState({
-        loadingFailed: true
-      })
-    })
-  }
-
-  componentDidMount() {
-    this.getFiles();
-    document.addEventListener('click', this.onHideContextMenu);
-  }
-
-  componentWillUnmount() {
-    document.removeEventListener('click', this.onHideContextMenu);
-  }
-
-  render() {
-    const tree = this.state.tree;
-    if (!tree.root) {
-      return <div>Loading...</div>
-    }
-
-    return (
-      <div className="tree-view tree">
-        <TreeNodeView
-          node={tree.root}
-          paddingLeft={20}
-          treeView={this}
-          isNodeItemFrezee={this.state.isNodeItemFrezee}
-        />
-        { this.state.isShowImagePreview &&
-          <div style={this.state.imagePreviewPosition} className={'image-view'}>
-            { this.state.imagePreviewLoading && <i className={'rotate fa fa-spinner'}/> }
-            <img src={this.state.imageSrc} onLoad={this.imageLoaded} alt=""/>
-          </div>
-        }
-        <NodeMenu
-          left={this.state.menu_left}
-          top={this.state.menu_top}
-          isShowMenu={this.state.isShowMenu}
-          curFileType={this.state.type}
-          curFileName={this.state.fileName}
-          onHideContextMenu={this.onHideContextMenu}
-          onDeleteNode={this.onDeleteNode}
-          onAddFileNode={this.onAddFileNode}
-          onAddFolderNode={this.onAddFolderNode}
-          onRenameNode={this.onRenameNode}
-        />
-      </div>
-    );
+  constructor(props) {
+    super(props);
+    this.state =  {
+      tree: new Tree(),
+      loadingFailed: false,
+      isShowMenu: false,
+      menu_left: 0,
+      menu_top: 0,
+      isNodeItemFrezee: false,
+      currentNode: null
+    };
   }
 
   change = (tree) => {
@@ -171,13 +55,11 @@ class TreeView extends React.PureComponent {
   onShowContextMenu = (e, node) => {
     e.nativeEvent.stopImmediatePropagation();
     this.setState({
-      type: node.type,
-      fileName: node.name,
-      filePath: node.path,
       isShowMenu: !this.state.isShowMenu,
-      menu_left: e.clientX + 5,
-      menu_top: e.clientY + 5,
-      isNodeItemFrezee: true
+      menu_left: e.clientX - 8*16,
+      menu_top: e.clientY + 10,
+      isNodeItemFrezee: true,
+      currentNode: node
     })
   }
 
@@ -190,16 +72,17 @@ class TreeView extends React.PureComponent {
   }
 
   onDeleteNode = () => {
-    let filePath = this.state.filePath;
-    if (this.state.type === 'file') {
+    let filePath = this.state.currentNode.path;
+    let type = this.state.currentNode.type;
+    if (type === 'file') {
       this.props.editorUtilities.deleteFile(filePath).then(res => {
-        this.getFiles()
+        this.getFiles();
       })
     } 
 
-    if (this.state.type === 'dir') {
+    if (type === 'dir') {
       this.props.editorUtilities.deleteDir(filePath).then(res => {
-        this.getFiles()
+        this.getFiles();
       })
     }
   }
@@ -217,18 +100,121 @@ class TreeView extends React.PureComponent {
   }
 
   onRenameNode = (newName) => {
-    let filePath = this.state.filePath;
-    if (this.state.type === 'file') {
+    var node = this.state.currentNode;
+    let type = node.type;
+    let filePath = node.path;
+    if (type === 'file') {
       this.props.editorUtilities.renameFile(filePath, newName).then(res => {
         this.getFiles()
+        if (this.isModifyCurrentFile()) {
+          node.name = newName;
+          this.props.onClick(null, node);
+        }
       })
     }
 
-    if (this.state.type === 'dir') {
+    if (type === 'dir') {
       this.props.editorUtilities.renameDir(filePath, newName).then(res => {
         this.getFiles();
+        if (this.isModifyContainsCurrentFile()) {
+          let currentNode = this.state.currentNode;
+          let nodePath = encodeURI(currentNode.path);
+          let pathname = window.location.pathname;
+          let start =  pathname.indexOf(nodePath);
+          let node = currentNode.getNodeByPath(decodeURI(pathname.slice(start)));
+          if(node){
+            currentNode.name = newName;
+            this.props.onClick(null, node);
+          }
+        }
       })
     }
+  }
+
+  isModifyCurrentFile() {
+    let name = this.state.currentNode.name;
+    let pathname = window.location.pathname;
+    let currentName = pathname.slice(pathname.lastIndexOf("/") + 1);
+    return name === currentName;
+  }
+
+  isModifyContainsCurrentFile() {
+    let pathname = window.location.pathname;
+    let nodePath = this.state.currentNode.path;
+    if (pathname.indexOf(nodePath)) {
+      return true;
+    }
+    return false;
+  }
+
+  getFiles = () => {
+    this.props.editorUtilities.getFiles().then((files) => {
+      // construct the tree object
+      var rootObj = {
+        name: '/',
+        type: 'dir',
+        isExpanded: true
+      }
+      var treeData = new Tree();
+      treeData.parseFromList(rootObj, files);
+      this.setState({
+        tree: treeData,
+      })
+    }, () => {
+      console.log("failed to load files");
+      this.setState({
+        loadingFailed: true
+      })
+    })
+  }
+
+  componentDidMount() {
+    this.getFiles();
+    document.addEventListener('click', this.onHideContextMenu);
+  }
+
+  componentWillUnmount() {
+    document.removeEventListener('click', this.onHideContextMenu);
+  }
+
+  render() {
+    const tree = this.state.tree;
+    if (!tree.root) {
+      return <div>Loading...</div>
+    }
+
+    let isCurrentFile = false;
+    if (this.state.currentNode) {
+      if (this.state.currentNode.type === "dir") {
+        isCurrentFile = this.isModifyContainsCurrentFile(); 
+      } else {
+        isCurrentFile = this.isModifyCurrentFile();
+      }
+    }
+
+    return (
+      <div className="tree-view tree">
+        <TreeNodeView
+          node={tree.root}
+          paddingLeft={20}
+          treeView={this}
+          isNodeItemFrezee={this.state.isNodeItemFrezee}
+          permission={this.props.permission}
+        />
+        <NodeMenu
+          left={this.state.menu_left}
+          top={this.state.menu_top}
+          isShowMenu={this.state.isShowMenu}
+          currentNode={this.state.currentNode}
+          onHideContextMenu={this.onHideContextMenu}
+          onDeleteNode={this.onDeleteNode}
+          onAddFileNode={this.onAddFileNode}
+          onAddFolderNode={this.onAddFolderNode}
+          onRenameNode={this.onRenameNode}
+          isCurrentFile={isCurrentFile}
+        />
+      </div>
+    );
   }
 
 }

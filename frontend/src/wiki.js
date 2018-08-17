@@ -170,6 +170,7 @@ class Wiki extends Component {
           closeSideBar={this.state.closeSideBar}
           onCloseSide ={this.onCloseSide}
           editorUtilities={editorUtilities}
+          permission={this.state.permission}
         />
         <MainPanel
           content={this.state.content}

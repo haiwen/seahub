@@ -100,6 +100,33 @@ class Node {
     return this.type == "dir";
   }
 
+  getleafPaths() {
+    let paths = new Map();
+    function getleafPath(node){
+      if (node.hasChildren()) {
+        let children = node.children;
+        children.forEach(child => {
+          if (child.hasChildren()) {
+            getleafPath(child);
+          } else {
+            let path = child.path;
+            paths.set(path,child);
+          }
+        });
+      }
+    }
+    getleafPath(this);
+    return paths;
+  }
+
+  getNodeByPath(path) {
+    let paths = this.getleafPaths();
+    if (paths.has(path)) {
+      return paths.get(path);
+    }
+    return null;
+  }
+
   /**
    * Return a JSON representation of the node.
    *

@@ -19,13 +19,13 @@ class TreeNodeView extends React.Component {
     }
   }
 
-  componentDidMount() {
-    document.addEventListener('click', this.hideMenuIcon);
-  }
+   componentDidMount() {
+     document.addEventListener('click', this.hideMenuIcon);
+   }
 
-  componentWillUnmount() {
-    document.removeEventListener('click', this.hideMenuIcon);
-  }
+   componentWillUnmount() {
+     document.removeEventListener('click', this.hideMenuIcon);
+   }
 
   renderCollapse = () => {
     const { node } = this.props;
@@ -66,6 +66,7 @@ class TreeNodeView extends React.Component {
                 paddingLeft={this.props.paddingLeft}
                 treeView={this.props.treeView}
                 isNodeItemFrezee={this.props.isNodeItemFrezee}
+                permission={this.props.permission}
               />
             );
           })}
@@ -74,6 +75,17 @@ class TreeNodeView extends React.Component {
     }
 
     return null;
+  }
+
+  renderMenuController() {
+    if (this.props.permission === "rw") {
+      return (
+        <div className="right-icon" onClick={this.onContextMenu}>
+          <i className={`fas fa-ellipsis-v ${this.state.isMenuIconShow ? "" : "hide"}`}></i>
+        </div>
+      )
+    }
+    return;
   }
 
   render() {
@@ -114,9 +126,7 @@ class TreeNodeView extends React.Component {
             {this.renderCollapse()}
             <i type={type} className="tree-node-icon">{icon}</i>
           </div>
-          <div className="right-icon" onClick={this.onContextMenu}>
-            <i className={`fas fa-ellipsis-v ${this.state.isMenuIconShow ? "" : "hide"}`}></i>
-          </div>
+          {this.renderMenuController()}
         </div>
         {node.isExpanded ? this.renderChildren() : null}
       </div>
@@ -129,8 +139,6 @@ class TreeNodeView extends React.Component {
   }
 
   onMouseEnter = e => {
-    let { node } = this.props;
-    this.props.treeView.showImagePreview(e, node);
     if (!this.props.isNodeItemFrezee) {
       this.setState({
         isMenuIconShow: true
@@ -139,7 +147,6 @@ class TreeNodeView extends React.Component {
   }
 
   onMouseLeave = e => {
-    this.props.treeView.hideImagePreview(e);
     if (!this.props.isNodeItemFrezee) {
       this.setState({
         isMenuIconShow: false

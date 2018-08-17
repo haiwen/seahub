@@ -28,11 +28,13 @@ class Rename extends React.Component {
   }
 
   render() {
+    let type = this.props.currentNode.type;
+    let preName = this.props.currentNode.name;
     return (
       <Modal isOpen={this.props.isOpen} toggle={this.toggle}>
-        <ModalHeader toggle={this.toggle}>{this.props.type === 'file' ? 'Rename File' : 'Rename Folder' }</ModalHeader>
+        <ModalHeader toggle={this.toggle}>{type === 'file' ? 'Rename File' : 'Rename Folder' }</ModalHeader>
         <ModalBody>
-          <p>{this.props.type === 'file' ? "Enter the new file name.": 'Enter the new folder name.'}</p>
+          <p>{type === 'file' ? "Enter the new file name.": 'Enter the new folder name.'}</p>
           <Input placeholder={this.props.preName} value={this.state.newName} onChange={this.handleChange} />
         </ModalBody>
         <ModalFooter>
