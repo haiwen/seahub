@@ -499,7 +499,7 @@
 
 <script type="text/template" id="trash-libraries-tmpl">
     <span class="loading-icon loading-tip"></span>
-    <p class="tip hide">{% trans "Tip: libraries deleted 30 days ago will be cleaned automatically."%}</p>
+    <p class="tip hide">{% blocktrans %}Tip: libraries deleted {{ trash_repos_expire_days }} days ago will be cleaned automatically.{% endblocktrans %}</p>
     <table class="hide">
         <thead>
             <tr>
