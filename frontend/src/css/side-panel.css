@@ -151,11 +151,12 @@
   top: 0;
   right: 0;
   width: 1.5rem;
-  color: #aaa;  
+  color: #888;  
   z-index: 2;
   font-size: 0.8125rem;
 }
 
 .tree-node-inner .right-icon i {
+  font-size: 18px;
   line-height: 1.625 !important;
 }
