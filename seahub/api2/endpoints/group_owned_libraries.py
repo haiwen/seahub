@@ -39,6 +39,13 @@ from seahub.settings import ENABLE_STORAGE_CLASSES, STORAGE_CLASS_MAPPING_POLICY
 
 logger = logging.getLogger(__name__)
 
+def get_group_id_by_repo_owner(repo_owner):
+
+    if not repo_owner:
+        return -1
+
+    return int(repo_owner.split('@')[0])
+
 def get_group_owned_repo_info(request, repo_id):
 
     repo = seafile_api.get_repo(repo_id)
@@ -55,9 +62,9 @@ def get_group_owned_repo_info(request, repo_id):
     repo_info['owner'] = repo_owner
 
     try:
-        group_id = get_group_id_by_repo_owner(repo_owner)
-        group = ccnet_api.get_group(int(group_id))
-        repo_info['group_name'] = group.group_name
+        library_group_id = get_group_id_by_repo_owner(repo_owner)
+        group = ccnet_api.get_group(int(library_group_id))
+        repo_info['group_name'] = group.group_name if group else ''
     except Exception as e:
         logger.error(e)
         repo_info['group_name'] = ''
@@ -229,10 +236,6 @@ class GroupOwnedLibrary(APIView):
         return Response({'success': True})
 
 
-def get_group_id_by_repo_owner(repo_owner):
-
-    return int(repo_owner.split('@')[0])
-
 class GroupOwnedLibraryUserFolderPermission(APIView):
     authentication_classes = (TokenAuthentication, SessionAuthentication)
     permission_classes = (IsAuthenticated, IsProVersion)
@@ -264,14 +267,14 @@ class GroupOwnedLibraryUserFolderPermission(APIView):
             return api_error(status.HTTP_404_NOT_FOUND, error_msg)
 
         repo_owner = get_repo_owner(request, repo_id)
-        group_id = get_group_id_by_repo_owner(repo_owner)
-        if not ccnet_api.get_group(group_id):
-            error_msg = 'Group %s not found.' % group_id
+        library_group_id = get_group_id_by_repo_owner(repo_owner)
+        if not ccnet_api.get_group(library_group_id):
+            error_msg = 'Group %s not found.' % library_group_id
             return api_error(status.HTTP_404_NOT_FOUND, error_msg)
 
         # permission check
         username = request.user.username
-        if not is_group_admin(group_id, username):
+        if not is_group_admin(library_group_id, username):
             error_msg = 'Permission denied.'
             return api_error(status.HTTP_403_FORBIDDEN, error_msg)
 
@@ -324,14 +327,14 @@ class GroupOwnedLibraryUserFolderPermission(APIView):
             return api_error(status.HTTP_404_NOT_FOUND, error_msg)
 
         repo_owner = get_repo_owner(request, repo_id)
-        group_id = get_group_id_by_repo_owner(repo_owner)
-        if not ccnet_api.get_group(group_id):
-            error_msg = 'Group %s not found.' % group_id
+        library_group_id = get_group_id_by_repo_owner(repo_owner)
+        if not ccnet_api.get_group(library_group_id):
+            error_msg = 'Group %s not found.' % library_group_id
             return api_error(status.HTTP_404_NOT_FOUND, error_msg)
 
         # permission check
         username = request.user.username
-        if not is_group_admin(group_id, username):
+        if not is_group_admin(library_group_id, username):
             error_msg = 'Permission denied.'
             return api_error(status.HTTP_403_FORBIDDEN, error_msg)
 
@@ -417,9 +420,9 @@ class GroupOwnedLibraryUserFolderPermission(APIView):
             return api_error(status.HTTP_404_NOT_FOUND, error_msg)
 
         repo_owner = get_repo_owner(request, repo_id)
-        group_id = get_group_id_by_repo_owner(repo_owner)
-        if not ccnet_api.get_group(group_id):
-            error_msg = 'Group %s not found.' % group_id
+        library_group_id = get_group_id_by_repo_owner(repo_owner)
+        if not ccnet_api.get_group(library_group_id):
+            error_msg = 'Group %s not found.' % library_group_id
             return api_error(status.HTTP_404_NOT_FOUND, error_msg)
 
         try:
@@ -435,7 +438,7 @@ class GroupOwnedLibraryUserFolderPermission(APIView):
 
         # permission check
         username = request.user.username
-        if not is_group_admin(group_id, username):
+        if not is_group_admin(library_group_id, username):
             error_msg = 'Permission denied.'
             return api_error(status.HTTP_403_FORBIDDEN, error_msg)
 
@@ -476,14 +479,14 @@ class GroupOwnedLibraryUserFolderPermission(APIView):
             return api_error(status.HTTP_404_NOT_FOUND, error_msg)
 
         repo_owner = get_repo_owner(request, repo_id)
-        group_id = get_group_id_by_repo_owner(repo_owner)
-        if not ccnet_api.get_group(group_id):
-            error_msg = 'Group %s not found.' % group_id
+        library_group_id = get_group_id_by_repo_owner(repo_owner)
+        if not ccnet_api.get_group(library_group_id):
+            error_msg = 'Group %s not found.' % library_group_id
             return api_error(status.HTTP_404_NOT_FOUND, error_msg)
 
         # permission check
         username = request.user.username
-        if not is_group_admin(group_id, username):
+        if not is_group_admin(library_group_id, username):
             error_msg = 'Permission denied.'
             return api_error(status.HTTP_403_FORBIDDEN, error_msg)
 
@@ -536,14 +539,14 @@ class GroupOwnedLibraryGroupFolderPermission(APIView):
             return api_error(status.HTTP_404_NOT_FOUND, error_msg)
 
         repo_owner = get_repo_owner(request, repo_id)
-        group_id = get_group_id_by_repo_owner(repo_owner)
-        if not ccnet_api.get_group(group_id):
-            error_msg = 'Group %s not found.' % group_id
+        library_group_id = get_group_id_by_repo_owner(repo_owner)
+        if not ccnet_api.get_group(library_group_id):
+            error_msg = 'Group %s not found.' % library_group_id
             return api_error(status.HTTP_404_NOT_FOUND, error_msg)
 
         # permission check
         username = request.user.username
-        if not is_group_admin(group_id, username):
+        if not is_group_admin(library_group_id, username):
             error_msg = 'Permission denied.'
             return api_error(status.HTTP_403_FORBIDDEN, error_msg)
 
@@ -597,14 +600,14 @@ class GroupOwnedLibraryGroupFolderPermission(APIView):
             return api_error(status.HTTP_404_NOT_FOUND, error_msg)
 
         repo_owner = get_repo_owner(request, repo_id)
-        group_id = get_group_id_by_repo_owner(repo_owner)
-        if not ccnet_api.get_group(group_id):
-            error_msg = 'Group %s not found.' % group_id
+        library_group_id = get_group_id_by_repo_owner(repo_owner)
+        if not ccnet_api.get_group(library_group_id):
+            error_msg = 'Group %s not found.' % library_group_id
             return api_error(status.HTTP_404_NOT_FOUND, error_msg)
 
         # permission check
         username = request.user.username
-        if not is_group_admin(group_id, username):
+        if not is_group_admin(library_group_id, username):
             error_msg = 'Permission denied.'
             return api_error(status.HTTP_403_FORBIDDEN, error_msg)
 
@@ -702,7 +705,7 @@ class GroupOwnedLibraryGroupFolderPermission(APIView):
         repo_owner = get_repo_owner(request, repo_id)
         library_group_id = get_group_id_by_repo_owner(repo_owner)
         if not ccnet_api.get_group(library_group_id):
-            error_msg = 'Group %s not found.' % group_id
+            error_msg = 'Group %s not found.' % library_group_id
             return api_error(status.HTTP_404_NOT_FOUND, error_msg)
 
         permission = seafile_api.get_folder_group_perm(repo_id, path, group_id)
@@ -766,7 +769,7 @@ class GroupOwnedLibraryGroupFolderPermission(APIView):
         repo_owner = get_repo_owner(request, repo_id)
         library_group_id = get_group_id_by_repo_owner(repo_owner)
         if not ccnet_api.get_group(library_group_id):
-            error_msg = 'Group %s not found.' % group_id
+            error_msg = 'Group %s not found.' % library_group_id
             return api_error(status.HTTP_404_NOT_FOUND, error_msg)
 
         # permission check
@@ -844,9 +847,9 @@ class GroupOwnedLibraryUserShare(APIView):
             return api_error(status.HTTP_404_NOT_FOUND, error_msg)
 
         repo_owner = get_repo_owner(request, repo_id)
-        group_id = get_group_id_by_repo_owner(repo_owner)
-        if not ccnet_api.get_group(group_id):
-            error_msg = 'Group %s not found.' % group_id
+        library_group_id = get_group_id_by_repo_owner(repo_owner)
+        if not ccnet_api.get_group(library_group_id):
+            error_msg = 'Group %s not found.' % library_group_id
             return api_error(status.HTTP_404_NOT_FOUND, error_msg)
 
         path = request.GET.get('path', '/')
@@ -856,7 +859,7 @@ class GroupOwnedLibraryUserShare(APIView):
 
         # permission check
         username = request.user.username
-        if not is_group_admin(group_id, username):
+        if not is_group_admin(library_group_id, username):
             error_msg = 'Permission denied.'
             return api_error(status.HTTP_403_FORBIDDEN, error_msg)
 
@@ -883,9 +886,9 @@ class GroupOwnedLibraryUserShare(APIView):
             return api_error(status.HTTP_404_NOT_FOUND, error_msg)
 
         repo_owner = get_repo_owner(request, repo_id)
-        group_id = get_group_id_by_repo_owner(repo_owner)
-        if not ccnet_api.get_group(group_id):
-            error_msg = 'Group %s not found.' % group_id
+        library_group_id = get_group_id_by_repo_owner(repo_owner)
+        if not ccnet_api.get_group(library_group_id):
+            error_msg = 'Group %s not found.' % library_group_id
             return api_error(status.HTTP_404_NOT_FOUND, error_msg)
 
         path = request.data.get('path', '/')
@@ -895,7 +898,7 @@ class GroupOwnedLibraryUserShare(APIView):
 
         # permission check
         username = request.user.username
-        if not is_group_admin(group_id, username):
+        if not is_group_admin(library_group_id, username):
             error_msg = 'Permission denied.'
             return api_error(status.HTTP_403_FORBIDDEN, error_msg)
 
@@ -995,9 +998,9 @@ class GroupOwnedLibraryUserShare(APIView):
             return api_error(status.HTTP_404_NOT_FOUND, error_msg)
 
         repo_owner = get_repo_owner(request, repo_id)
-        group_id = get_group_id_by_repo_owner(repo_owner)
-        if not ccnet_api.get_group(group_id):
-            error_msg = 'Group %s not found.' % group_id
+        library_group_id = get_group_id_by_repo_owner(repo_owner)
+        if not ccnet_api.get_group(library_group_id):
+            error_msg = 'Group %s not found.' % library_group_id
             return api_error(status.HTTP_404_NOT_FOUND, error_msg)
 
         path = request.data.get('path', '/')
@@ -1013,7 +1016,7 @@ class GroupOwnedLibraryUserShare(APIView):
 
         # permission check
         username = request.user.username
-        if not is_group_admin(group_id, username):
+        if not is_group_admin(library_group_id, username):
             error_msg = 'Permission denied.'
             return api_error(status.HTTP_403_FORBIDDEN, error_msg)
 
@@ -1036,9 +1039,9 @@ class GroupOwnedLibraryUserShare(APIView):
 
         # permission check
         repo_owner = get_repo_owner(request, repo_id)
-        group_id = get_group_id_by_repo_owner(repo_owner)
+        library_group_id = get_group_id_by_repo_owner(repo_owner)
         username = request.user.username
-        if not is_group_admin(group_id, username):
+        if not is_group_admin(library_group_id, username):
             error_msg = 'Permission denied.'
             return api_error(status.HTTP_403_FORBIDDEN, error_msg)
 
@@ -1118,9 +1121,9 @@ class GroupOwnedLibraryGroupShare(APIView):
             return api_error(status.HTTP_404_NOT_FOUND, error_msg)
 
         repo_owner = get_repo_owner(request, repo_id)
-        group_id = get_group_id_by_repo_owner(repo_owner)
-        if not ccnet_api.get_group(group_id):
-            error_msg = 'Group %s not found.' % group_id
+        library_group_id = get_group_id_by_repo_owner(repo_owner)
+        if not ccnet_api.get_group(library_group_id):
+            error_msg = 'Group %s not found.' % library_group_id
             return api_error(status.HTTP_404_NOT_FOUND, error_msg)
 
         path = request.GET.get('path', '/')
@@ -1130,12 +1133,12 @@ class GroupOwnedLibraryGroupShare(APIView):
 
         # permission check
         username = request.user.username
-        if not is_group_admin(group_id, username):
+        if not is_group_admin(library_group_id, username):
             error_msg = 'Permission denied.'
             return api_error(status.HTTP_403_FORBIDDEN, error_msg)
 
         result = self.list_group_shared_items(request, repo_id, path)
-        return Response([item for item in result if item['group_id'] != group_id])
+        return Response([item for item in result if item['group_id'] != library_group_id])
 
     def post(self, request, repo_id, format=None):
         """ Share repo to group.
@@ -1157,9 +1160,9 @@ class GroupOwnedLibraryGroupShare(APIView):
             return api_error(status.HTTP_404_NOT_FOUND, error_msg)
 
         repo_owner = get_repo_owner(request, repo_id)
-        group_id = get_group_id_by_repo_owner(repo_owner)
-        if not ccnet_api.get_group(group_id):
-            error_msg = 'Group %s not found.' % group_id
+        library_group_id = get_group_id_by_repo_owner(repo_owner)
+        if not ccnet_api.get_group(library_group_id):
+            error_msg = 'Group %s not found.' % library_group_id
             return api_error(status.HTTP_404_NOT_FOUND, error_msg)
 
         path = request.data.get('path', '/')
@@ -1169,7 +1172,7 @@ class GroupOwnedLibraryGroupShare(APIView):
 
         # permission check
         username = request.user.username
-        if not is_group_admin(group_id, username):
+        if not is_group_admin(library_group_id, username):
             error_msg = 'Permission denied.'
             return api_error(status.HTTP_403_FORBIDDEN, error_msg)
 
@@ -1225,13 +1228,13 @@ class GroupOwnedLibraryGroupShare(APIView):
         """
 
         # parameter check
-        to_group_id = request.data.get('group_id', None)
-        if not to_group_id:
+        group_id = request.data.get('group_id', None)
+        if not group_id:
             error_msg = 'group_id invalid.'
             return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
 
         try:
-            to_group_id = int(to_group_id)
+            group_id = int(group_id)
         except ValueError:
             error_msg = 'group_id invalid.'
             return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
@@ -1248,13 +1251,13 @@ class GroupOwnedLibraryGroupShare(APIView):
             return api_error(status.HTTP_404_NOT_FOUND, error_msg)
 
         repo_owner = get_repo_owner(request, repo_id)
-        group_id = get_group_id_by_repo_owner(repo_owner)
-        if not ccnet_api.get_group(group_id):
-            error_msg = 'Group %s not found.' % group_id
+        library_group_id = get_group_id_by_repo_owner(repo_owner)
+        if not ccnet_api.get_group(library_group_id):
+            error_msg = 'Group %s not found.' % library_group_id
             return api_error(status.HTTP_404_NOT_FOUND, error_msg)
 
-        if not ccnet_api.get_group(to_group_id):
-            error_msg = 'Group %s not found.' % to_group_id
+        if not ccnet_api.get_group(group_id):
+            error_msg = 'Group %s not found.' % group_id
             return api_error(status.HTTP_404_NOT_FOUND, error_msg)
 
         path = request.data.get('path', '/')
@@ -1264,14 +1267,14 @@ class GroupOwnedLibraryGroupShare(APIView):
 
         # permission check
         username = request.user.username
-        if not is_group_admin(group_id, username):
+        if not is_group_admin(library_group_id, username):
             error_msg = 'Permission denied.'
             return api_error(status.HTTP_403_FORBIDDEN, error_msg)
 
         update_group_dir_permission(repo_id, path,
-                repo_owner, to_group_id, permission, None)
+                repo_owner, group_id, permission, None)
         send_perm_audit_msg('modify-repo-perm',
-                username, to_group_id, repo_id, path, permission)
+                username, group_id, repo_id, path, permission)
 
         return Response({'success': True})
 
@@ -1283,13 +1286,13 @@ class GroupOwnedLibraryGroupShare(APIView):
         """
 
         # parameter check
-        to_group_id = request.data.get('group_id', None)
-        if not to_group_id:
+        group_id = request.data.get('group_id', None)
+        if not group_id:
             error_msg = 'group_id invalid.'
             return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
 
         try:
-            to_group_id = int(to_group_id)
+            group_id = int(group_id)
         except ValueError:
             error_msg = 'group_id invalid.'
             return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
@@ -1297,17 +1300,17 @@ class GroupOwnedLibraryGroupShare(APIView):
         # permission check
         username = request.user.username
         repo_owner = get_repo_owner(request, repo_id)
-        group_id = get_group_id_by_repo_owner(repo_owner)
-        if not is_group_admin(group_id, username):
+        library_group_id = get_group_id_by_repo_owner(repo_owner)
+        if not is_group_admin(library_group_id, username):
             error_msg = 'Permission denied.'
             return api_error(status.HTTP_403_FORBIDDEN, error_msg)
 
         path = request.data.get('path', '/')
         if path == '/':
-            seafile_api.unset_group_repo(repo_id, to_group_id, username)
+            seafile_api.unset_group_repo(repo_id, group_id, username)
         else:
             seafile_api.unshare_subdir_for_group(
-                    repo_id, path, repo_owner, to_group_id)
+                    repo_id, path, repo_owner, group_id)
 
         permission = check_group_share_out_permission(repo_id, path, group_id, False)
         send_perm_audit_msg('delete-repo-perm', username, group_id,
