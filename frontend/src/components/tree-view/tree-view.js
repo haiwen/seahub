@@ -125,7 +125,7 @@ class TreeView extends React.PureComponent {
           isShowMenu={this.state.isShowMenu}
           curFileType={this.state.type}
           curFileName={this.state.fileName}
-          onContextMenu={this.onHideContenxtMenu}
+          onHideContextMenu={this.onHideContextMenu}
           onDeleteNode={this.onDeleteNode}
           onAddFileNode={this.onAddFileNode}
           onAddFolderNode={this.onAddFolderNode}
