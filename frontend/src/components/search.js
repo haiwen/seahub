@@ -13,6 +13,7 @@ class Search extends Component {
       isMaskShow: false,
       isResultShow: false,
       isResultGetted: false,
+      isCloseShow: false
     };
     this.inputValue = '';
     this.source = null; // used to cancle request;
@@ -21,7 +22,8 @@ class Search extends Component {
   onFocusHandler = () => {
     this.setState({
       width: '30rem',
-      isMaskShow: true
+      isMaskShow: true,
+      isCloseShow: true
     })
   }
 
@@ -43,7 +45,7 @@ class Search extends Component {
     }
     this.inputValue = newValue.trim();
 
-    if (this.inputValue === '') {
+    if (this.inputValue === '' || _this.getValueLength(this.inputValue) < 3) {
       this.setState({
         isResultShow: false,
         isResultGetted: false
@@ -104,7 +106,7 @@ class Search extends Component {
   }
 
   cancelRequest() {
-    this.source.cancel("prev request is cancled");
+    this.source.cancel("prev request is cancelled");
   }
 
   getValueLength(str) {
@@ -144,6 +146,7 @@ class Search extends Component {
       width: '',
       value: '',
       isMaskShow: false,
+      isCloseShow: false,
       isResultShow: false,
       isResultGetted: false,
       resultItems: []
@@ -200,7 +203,7 @@ class Search extends Component {
               autoComplete="off"
             />
             <a className="search-icon icon-search"></a>
-            <a className="search-icon sf2-icon-x3" onClick={this.onCloseHandler}></a>
+            <a className={`search-icon sf2-icon-x3 ${this.state.isCloseShow ? "" : "hide"}`} onClick={this.onCloseHandler}></a>
           </div>
           <div className="search-result-container">
             {this.renderSearchResult()}

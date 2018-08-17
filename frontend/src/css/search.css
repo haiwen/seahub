@@ -30,6 +30,7 @@
   display: flex;
   justify-content:center;
   align-items:center;
+  color: #999 !important;
 }
 
 .icon-search{
@@ -67,6 +68,7 @@
   margin-top: 0.5rem;
   border-left: 2px solid #fff;
   cursor: pointer;
+  font-size: 0.8125rem;
 }
 
 .search-result-container .search-result-item:hover {
@@ -86,4 +88,10 @@
 }
 .search-result-item .item-link {
   color: #888;
+}
+.search-result-item .item-text {
+  margin: 0;
+}
+.search-result-item .item-text b {
+  font-weight: bold;
 }
