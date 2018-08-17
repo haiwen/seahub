@@ -15,9 +15,16 @@ class TreeNodeView extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      isMenuBtnShow: false,
-      isNodeItemfreeze: false,
+      isMenuIconShow: false
     }
+  }
+
+  componentDidMount() {
+    document.addEventListener('click', this.hideMenuIcon);
+  }
+
+  componentWillUnmount() {
+    document.removeEventListener('click', this.hideMenuIcon);
   }
 
   renderCollapse = () => {
@@ -58,6 +65,7 @@ class TreeNodeView extends React.Component {
                 key={child.path}
                 paddingLeft={this.props.paddingLeft}
                 treeView={this.props.treeView}
+                isNodeItemFrezee={this.props.isNodeItemFrezee}
               />
             );
           })}
@@ -107,7 +115,7 @@ class TreeNodeView extends React.Component {
             <i type={type} className="tree-node-icon">{icon}</i>
           </div>
           <div className="right-icon" onClick={this.onContextMenu}>
-            <i className="fas fa-ellipsis-v"></i>
+            <i className={`fas fa-ellipsis-v ${this.state.isMenuIconShow ? "" : "hide"}`}></i>
           </div>
         </div>
         {node.isExpanded ? this.renderChildren() : null}
@@ -123,10 +131,20 @@ class TreeNodeView extends React.Component {
   onMouseEnter = e => {
     let { node } = this.props;
     this.props.treeView.showImagePreview(e, node);
+    if (!this.props.isNodeItemFrezee) {
+      this.setState({
+        isMenuIconShow: true
+      })
+    }
   }
 
   onMouseLeave = e => {
     this.props.treeView.hideImagePreview(e);
+    if (!this.props.isNodeItemFrezee) {
+      this.setState({
+        isMenuIconShow: false
+      })
+    }
   }
 
   handleCollapse = e => {
@@ -145,7 +163,13 @@ class TreeNodeView extends React.Component {
   onContextMenu = e => {
     e.stopPropagation();
     const { node } = this.props;
-    this.props.treeView.onContextMenu(e, node);
+    this.props.treeView.onShowContextMenu(e, node);
+  }
+
+  hideMenuIcon = () => {
+    this.setState({
+      isMenuIconShow: false
+    });
   }
 
 }

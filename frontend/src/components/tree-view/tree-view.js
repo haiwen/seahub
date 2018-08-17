@@ -26,8 +26,9 @@ class TreeView extends React.PureComponent {
     fileName: '',
     filePath: '',
     type: '',
-    left: 0,
-    right: 0,
+    menu_left: 0,
+    menu_top: 0,
+    isNodeItemFrezee: false
   }
 
   showImagePreview = (e, node) => {
@@ -89,21 +90,14 @@ class TreeView extends React.PureComponent {
     })
   }
 
-  hideContextMenu = () => {
-    this.setState({
-      isShowMenu : false
-    })
-  }
-
   componentDidMount() {
     this.getFiles();
-    document.addEventListener('click', this.hideContextMenu);
+    document.addEventListener('click', this.onHideContextMenu);
   }
 
   componentWillUnmount() {
-    document.removeEventListener('click', this.hideContextMenu);
+    document.removeEventListener('click', this.onHideContextMenu);
   }
-
 
   render() {
     const tree = this.state.tree;
@@ -113,10 +107,11 @@ class TreeView extends React.PureComponent {
 
     return (
       <div className="tree-view tree">
-          <TreeNodeView
-           node={tree.root}
-           paddingLeft={20}
-           treeView={this}
+        <TreeNodeView
+          node={tree.root}
+          paddingLeft={20}
+          treeView={this}
+          isNodeItemFrezee={this.state.isNodeItemFrezee}
         />
         { this.state.isShowImagePreview &&
           <div style={this.state.imagePreviewPosition} className={'image-view'}>
@@ -125,12 +120,12 @@ class TreeView extends React.PureComponent {
           </div>
         }
         <NodeMenu
-          left={this.state.left}
-          top={this.state.top}
+          left={this.state.menu_left}
+          top={this.state.menu_top}
           isShowMenu={this.state.isShowMenu}
           curFileType={this.state.type}
           curFileName={this.state.fileName}
-          onContextMenu={this.onContextMenu}
+          onContextMenu={this.onHideContenxtMenu}
           onDeleteNode={this.onDeleteNode}
           onAddFileNode={this.onAddFileNode}
           onAddFolderNode={this.onAddFolderNode}
@@ -173,22 +168,26 @@ class TreeView extends React.PureComponent {
     this.props.onClick(e, node);
   }
 
-  onContextMenu = (e, node) => {
-    if (!node) {
-      this.setState({isShowMenu: false}); //just close node menu;
-      return;
-    }
+  onShowContextMenu = (e, node) => {
     e.nativeEvent.stopImmediatePropagation();
     this.setState({
       type: node.type,
       fileName: node.name,
       filePath: node.path,
       isShowMenu: !this.state.isShowMenu,
-      left: e.clientX + 5,
-      top: e.clientY + 5
+      menu_left: e.clientX + 5,
+      menu_top: e.clientY + 5,
+      isNodeItemFrezee: true
     })
   }
 
+  onHideContextMenu = () => {
+    //just close node menu;
+    this.setState({
+      isShowMenu: false,
+      isNodeItemFrezee: false
+    }); 
+  }
 
   onDeleteNode = () => {
     let filePath = this.state.filePath;

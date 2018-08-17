@@ -18,22 +18,22 @@ class NodeMenu extends React.Component {
 
   toggleDelete = () => {
     this.setState({showDelete: !this.state.showDelete});
-    this.props.onContextMenu();
+    this.props.onHideContextMenu();
   }
 
   toggleAddFile = () => {
     this.setState({showAddFile: !this.state.showAddFile});
-    this.props.onContextMenu();
+    this.props.onHideContextMenu();
   }
 
   toggleAddFolder = () => {
     this.setState({showAddFolder: !this.state.showAddFolder});
-    this.props.onContextMenu();
+    this.props.onHideContextMenu();
   }
 
   toggleRename = () => {
     this.setState({showRename: !this.state.showRename});
-    this.props.onContextMenu();
+    this.props.onHideContextMenu();
   }
 
   onDelete = () => {
