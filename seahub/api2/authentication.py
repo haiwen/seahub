@@ -10,6 +10,9 @@ from seahub.base.accounts import User
 from seahub.api2.models import Token, TokenV2
 from seahub.api2.utils import get_client_ip
 from seahub.utils import within_time_range
+
+from django.utils import timezone
+from datetime import timedelta
 try:
     from seahub.settings import MULTI_TENANCY
 except ImportError:
@@ -45,7 +48,6 @@ class TokenAuthentication(BaseAuthentication):
     * key -- The string identifying the token
     * user -- The user to which the token belongs
     """
-
     def authenticate(self, request):
         auth = request.META.get('HTTP_AUTHORIZATION', '').split()
         if not auth or auth[0].lower() != 'token':
@@ -70,6 +72,10 @@ class TokenAuthentication(BaseAuthentication):
             token = Token.objects.get(key=key)
         except Token.DoesNotExist:
             raise AuthenticationFailed('Invalid token')
+        # expired token
+        if timezone.now() > (token.created + timedelta(hours=168)):
+            Token.objects.filter(key=key).delete()
+            raise AuthenticationFailed('token has expired')
 
         try:
             user = User.objects.get(email=token.user)
@@ -134,3 +140,4 @@ class TokenAuthentication(BaseAuthentication):
                     logger.exception('error when save token v2:')
 
             return (user, token)
+
