@@ -28,11 +28,13 @@ define([
             this.$table = this.$('table');
             this.$tableBody = $('tbody', this.$table);
             this.$loadingTip = this.$('.loading-tip');
+            this.$error = this.$('.error');
         },
 
         initPage: function() {
             this.$table.hide();
             this.$tableBody.empty();
+            this.$error.hide();
             this.$loadingTip.show();
         },
 
@@ -42,14 +44,12 @@ define([
 
             this.systemRepo.fetch({
                 url: Common.getUrl({name: 'admin-system-library'}),
-                cache: false, // for IE
-                reset: true,
+                cache: false,
                 success: function(model, response, options) {
                     _this.reset();
                 },
                 error: function(model, response, options) {
-                    var err_msg = Common.prepareCollectionFetchErrorMsg(collection, response, opts);
-                    Common.feedback(err_msg, 'error');
+                    _this.$error.html(gettext("Error")).show();
                 }
             });
         },
@@ -65,6 +65,7 @@ define([
 
         reset: function() {
             this.$loadingTip.hide();
+            this.$error.hide();
             this.$tableBody.html(this.itemTemplate(this.systemRepo.toJSON()));
             this.$table.show();
         }

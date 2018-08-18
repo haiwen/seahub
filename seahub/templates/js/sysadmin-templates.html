@@ -477,6 +477,7 @@
 </script>
 
 <script type="text/template" id="system-library-tmpl">
+    <span class="loading-icon loading-tip"></span>
     <table class="hide">
         <thead>
             <tr>
@@ -488,13 +489,15 @@
         <tbody>
         </tbody>
     </table>
-    <span class="loading-icon loading-tip"></span>
+    <p class="error hide"></p>
 </script>
 
 <script type="text/template" id="system-library-item-tmpl">
+<tr>
     <td><a href="#libs/<%= id %>/"><%- name %></a></td>
     <td style="font-size:11px;"><%= id %></td>
     <td><%= description %></td>
+</tr>
 </script>
 
 <script type="text/template" id="trash-libraries-tmpl">
