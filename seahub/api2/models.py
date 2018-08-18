@@ -19,6 +19,7 @@ class Token(models.Model):
     key = models.CharField(max_length=40, primary_key=True)
     user = LowerCaseCharField(max_length=255, unique=True)
     created = models.DateTimeField(auto_now_add=True)
+
     def save(self, *args, **kwargs):
         if not self.key:
             self.key = self.generate_key()

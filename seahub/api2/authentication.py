@@ -47,6 +47,7 @@ class TokenAuthentication(BaseAuthentication):
     * key -- The string identifying the token
     * user -- The user to which the token belongs
     """
+
     def authenticate(self, request):
         auth = request.META.get('HTTP_AUTHORIZATION', '').split()
         if not auth or auth[0].lower() != 'token':
