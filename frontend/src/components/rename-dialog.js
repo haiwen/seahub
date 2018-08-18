@@ -7,10 +7,7 @@ class Rename extends React.Component {
     this.state = {
       newName: '',
     };
-
-    this.handleChange = this.handleChange.bind(this);
-    this.handleSubmit = this.handleSubmit.bind(this);
-    this.toggle = this.toggle.bind(this);
+    this.newInput = React.createRef();
   }
   
   handleChange(e) {
@@ -21,14 +18,28 @@ class Rename extends React.Component {
 
   handleSubmit() {
     this.props.onRename(this.state.newName);
-  } 
+  }
 
   toggle() {
     this.props.toggleCancel();
   }
 
+  componentWillMount() {
+    this.setState({
+      newName: this.props.currentNode.name
+    })
+  }
+
   componentDidMount() {
     this.changeState(this.props.currentNode);
+    this.newInput.focus();
+    let type = this.props.currentNode.type;
+    if (type === "file") {
+      var endIndex = this.props.currentNode.name.lastIndexOf(".md");
+      this.newInput.setSelectionRange(0, endIndex, "forward");
+    } else {
+      this.newInput.setSelectionRange(0, -1);
+    }
   }
 
   componentWillReceiveProps(nextProps) {
@@ -36,22 +47,18 @@ class Rename extends React.Component {
   }
 
   changeState(currentNode) {
-    if (currentNode.type === "file") {
-      this.setState({newName: '.md'});
-    } else{
-      this.setState({newName: ""});
-    }
+    this.setState({newName: currentNode.name});
   }
 
   render() {
     let type = this.props.currentNode.type;
     let preName = this.props.currentNode.name;
     return (
-      <Modal isOpen={this.props.isOpen} toggle={this.toggle}>
+      <Modal isOpen={true} toggle={this.toggle}>
         <ModalHeader toggle={this.toggle}>{type === 'file' ? 'Rename File' : 'Rename Folder' }</ModalHeader>
         <ModalBody>
           <p>{type === 'file' ? "Enter the new file name:": 'Enter the new folder name:'}</p>
-          <Input placeholder="newName" value={this.state.newName} onChange={this.handleChange} />
+          <Input innerRef={input => {this.newInput = input}} placeholder="newName" value={this.state.newName} onChange={this.handleChange} />
         </ModalBody>
         <ModalFooter>
           <Button color="primary" onClick={this.handleSubmit}>Submit</Button>{' '}

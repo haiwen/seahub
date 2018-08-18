@@ -1,5 +1,5 @@
 import React from 'react';
-import { Button, Modal, ModalHeader, Input, ModalBody, ModalFooter, Form, FormGroup, Label, Col } from 'reactstrap';
+import { Button, Modal, ModalHeader, Input, ModalBody, ModalFooter, Form, FormGroup, Label, Col, FormText } from 'reactstrap';
 
 class CreateFileForder extends React.Component {
   constructor(props) {
@@ -7,7 +7,8 @@ class CreateFileForder extends React.Component {
     this.state = {
       parentPath: '',
       childName: ''
-    }
+    };
+    this.newInput = React.createRef()
   }
 
   handleChange = (e) => {
@@ -36,10 +37,23 @@ class CreateFileForder extends React.Component {
   }
 
   componentDidMount() {
+    this.changeState(this.props.isFile);
+    this.newInput.focus();
+  }
+
+  componentWillReceiveProps(nextProps) {
     this.setState({
       parentPath: this.props.currentNode.path + "/"
-    })
-    this.changeState(this.props.isFile);
+    });
+    this.changeState(nextProps.isFile);
+  }
+
+  changeState(isFile) {
+    if (isFile) {
+      this.setState({childName: '.md'});
+    } else{
+      this.setState({childName: ""});
+    }
   }
 
   componentWillReceiveProps(nextProps) {
@@ -57,20 +71,18 @@ class CreateFileForder extends React.Component {
 
   render() {
     return (
-      <Modal isOpen={this.props.isOpen} toggle={this.toggle}>
+      <Modal isOpen={true} toggle={this.toggle}>
         <ModalHeader toggle={this.toggle}>{this.props.isFile ? 'Add a new File' : 'Add a new Folder'}</ModalHeader>
         <ModalBody>
           <Form>
             <FormGroup row>
               <Label for="filePath" sm={2}>ParentPath: </Label>
-              <Col sm={10}> 
-                <Input readOnly id="filePath" value={this.state.parentPath} />
-              </Col>
+              <Col sm={10} className="parent-path"><FormText>{this.state.parentPath}</FormText></Col>
             </FormGroup>
             <FormGroup row>
               <Label for="fileName" sm={2}>Name: </Label>
-              <Col sm={10}> 
-                <Input id="fileName" placeholder="newName" value={this.state.childName} onChange={this.handleChange}/>
+              <Col sm={10}>
+                <Input innerRef={input => {this.newInput = input}} id="fileName" placeholder="newName" />
               </Col>
             </FormGroup>
           </Form>

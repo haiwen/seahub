@@ -121,28 +121,30 @@ class NodeMenu extends React.Component {
     return (
       <div className="node-menu-module">
         {this.renderNodeMenu()}
+        {this.showDelete &&
         <Delete 
-          isOpen={this.state.showDelete}
           currentNode={this.props.currentNode}
-          isCurrentFile={this.props.isCurrentFile}
           handleSubmit={this.onDelete}
           toggleCancel={this.deleteCancel}
         />
-
+        }
+        {this.state.showAddFileFolder && 
         <CreateFlieFolder 
-          isOpen={this.state.showAddFileFolder}
           isFile={this.state.isFile}
           currentNode={this.props.currentNode}
           onSetFolderPath={this.onAddFolder}
           toggleCancel={this.addFolderCancel} 
         />
-
+        }
+        {this.state.showRename &&
         <Rename 
-          isOpen={this.state.showRename}
           currentNode={this.props.currentNode}
           onRename={this.onRename} 
           toggleCancel={this.renameCancel} 
         />
+        }
+
+        
       </div>
     )
   }

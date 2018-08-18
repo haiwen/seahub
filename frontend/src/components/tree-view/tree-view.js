@@ -72,8 +72,9 @@ class TreeView extends React.PureComponent {
   }
 
   onDeleteNode = () => {
-    let filePath = this.state.currentNode.path;
-    let type = this.state.currentNode.type;
+    var currentNode = this.state.currentNode;
+    let filePath = currentNode.path;
+    let type = currentNode.type;
     if (type === 'file') {
       this.props.editorUtilities.deleteFile(filePath).then(res => {
         this.getFiles();
@@ -84,6 +85,19 @@ class TreeView extends React.PureComponent {
       this.props.editorUtilities.deleteDir(filePath).then(res => {
         this.getFiles();
       })
+    }
+
+    let isCurrentFile = false;
+    if (this.state.currentNode.type === "dir") {
+      isCurrentFile = this.isModifyContainsCurrentFile(); 
+    } else {
+      isCurrentFile = this.isModifyCurrentFile();
+    }
+
+    if (isCurrentFile) {
+      let root = this.state.tree.root;
+      let homeNode = root.getNodeByPath(decodeURI("/home.md"));
+      this.props.onClick(null, homeNode);
     }
   }
 
@@ -183,15 +197,6 @@ class TreeView extends React.PureComponent {
       return <div>Loading...</div>
     }
 
-    let isCurrentFile = false;
-    if (this.state.currentNode) {
-      if (this.state.currentNode.type === "dir") {
-        isCurrentFile = this.isModifyContainsCurrentFile(); 
-      } else {
-        isCurrentFile = this.isModifyCurrentFile();
-      }
-    }
-
     return (
       <div className="tree-view tree">
         <TreeNodeView
@@ -211,7 +216,6 @@ class TreeView extends React.PureComponent {
           onAddFileNode={this.onAddFileNode}
           onAddFolderNode={this.onAddFolderNode}
           onRenameNode={this.onRenameNode}
-          isCurrentFile={isCurrentFile}
         />
       </div>
     );

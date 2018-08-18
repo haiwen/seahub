@@ -159,3 +159,21 @@
 .dropdown-menu {
   min-width: 8rem;
 }
+
+.form-group {
+  display: flex;
+}
+
+.parent-path {
+  position: relative;
+}
+
+.parent-path .form-text {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  margin-top: 0;
+  margin-left: 0.25rem;
+  font-size: 0.9375rem;
+}
+
