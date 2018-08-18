@@ -233,7 +233,6 @@ class ObtainAuthToken(APIView):
                         status=status.HTTP_400_BAD_REQUEST,
                         headers=headers)
 
-
 ########## Accounts
 class Accounts(APIView):
     """List all accounts.

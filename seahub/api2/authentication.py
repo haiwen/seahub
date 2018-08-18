@@ -10,7 +10,6 @@ from seahub.base.accounts import User
 from seahub.api2.models import Token, TokenV2
 from seahub.api2.utils import get_client_ip
 from seahub.utils import within_time_range
-
 from django.utils import timezone
 from datetime import timedelta
 try:
@@ -140,4 +139,3 @@ class TokenAuthentication(BaseAuthentication):
                     logger.exception('error when save token v2:')
 
             return (user, token)
-

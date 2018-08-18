@@ -31,7 +31,6 @@ class Token(models.Model):
     def __unicode__(self):
         return self.key
 
-
 class TokenV2Manager(models.Manager):
 
     def get_devices(self, platform, start, end):
@@ -127,7 +126,6 @@ class TokenV2Manager(models.Manager):
             return
         token.wiped_at = datetime.datetime.now()
         token.save()
-
 
 class TokenV2(models.Model):
     """
