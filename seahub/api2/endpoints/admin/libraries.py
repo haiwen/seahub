@@ -56,7 +56,7 @@ def get_repo_info(repo):
     result['file_count'] = repo.file_count
 
     if '@seafile_group' in owner:
-        group_id = get_group_id_by_repo_owner(repo_owner)
+        group_id = get_group_id_by_repo_owner(owner)
         result['group_name'] = group_id_to_name(group_id)
 
     return result

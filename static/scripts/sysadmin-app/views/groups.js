@@ -93,8 +93,8 @@ define([
                         Common.closeModal();
                     },
                     error: function(collection, response, options) {
-                        var err_msg = Common.prepareCollectionFetchErrorMsg(collection, response, opts);
-                        $error.html(err_msg).show();
+                        var error_msg = Common.prepareAjaxErrorMsg(response);
+                        $error.html(error_msg).show();
                         Common.enableButton($submitBtn);
                     }
                 });

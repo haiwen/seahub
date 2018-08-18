@@ -217,8 +217,8 @@ define([
                     }
                 },
                 error: function(collection, response, options) {
-                    var err_msg = Common.prepareCollectionFetchErrorMsg(collection, response, opts);
-                    _this.$error.html(err_msg).show();
+                    var error_msg = Common.prepareAjaxErrorMsg(response);
+                    _this.$error.html(error_msg).show();
                 }
             });
 

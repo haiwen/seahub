@@ -81,9 +81,9 @@ define([
                         repos.reset(repos.models);
                     }
                 },
-                error: function(xhr, textStatus, errorThrown) {
-                    // TODO: handle error gracefully
-                    Common.feedback('Error', 'error', Common.ERROR_TIMEOUT);
+                error: function(collection, response, options) {
+                    var error_msg = Common.prepareAjaxErrorMsg(response);
+                    Common.feedback(error_msg, 'error', Common.ERROR_TIMEOUT);
                 },
                 complete: function() {
                     Common.closeModal();
