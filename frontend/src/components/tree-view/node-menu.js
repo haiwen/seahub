@@ -10,9 +10,9 @@ class NodeMenu extends React.Component {
     super(props);
     this.state = {
       showDelete: false,
-      showAddFile: false,
-      showAddFolder: false,
-      showRename: false
+      showAddFileFolder: false,
+      showRename: false,
+      isFile: false
     };
   }
 
@@ -21,13 +21,18 @@ class NodeMenu extends React.Component {
     this.props.onHideContextMenu();
   }
 
-  toggleAddFile = () => {
-    this.setState({showAddFile: !this.state.showAddFile});
-    this.props.onHideContextMenu();
-  }
-
-  toggleAddFolder = () => {
-    this.setState({showAddFolder: !this.state.showAddFolder});
+  toggleAddFileFolder = (ev, flag) => {
+    if(flag){
+      this.setState({
+        showAddFileFolder: !this.state.showAddFileFolder,
+        isFile: true
+      });
+    } else {
+      this.setState({
+        showAddFileFolder: !this.state.showAddFileFolder,
+        isFile: false
+      })
+    }
     this.props.onHideContextMenu();
   }
 
@@ -46,21 +51,33 @@ class NodeMenu extends React.Component {
   }
 
   onAddFile = (filePath) => {
-    this.setState({showAddFile: !this.state.showAddFile});
+    this.setState({
+      showAddFileFolder: !this.state.showAddFileFolder,
+      isFile: false
+    });
     this.props.onAddFileNode(filePath);
   }
 
   addFileCancel = () => {
-    this.setState({showAddFile: !this.state.showAddFile});
+    this.setState({
+      showAddFileFolder: !this.state.showAddFileFolder,
+      isFile: false
+    });
   }
 
   onAddFolder = (dirPath) => {
-    this.setState({showAddFolder: !this.state.showAddFolder});
+    this.setState({
+      showAddFileFolder: !this.state.showAddFileFolder,
+      isFile: false
+    });
     this.props.onAddFolderNode(dirPath);
   }
 
   addFolderCancel = () => {
-    this.setState({showAddFolder: !this.state.showAddFolder});
+    this.setState({
+      showAddFileFolder: !this.state.showAddFileFolder,
+      isFile: false
+    });
   }
 
   onRename = (newName) => {
@@ -80,8 +97,8 @@ class NodeMenu extends React.Component {
     if (this.props.currentNode.type === "dir") {
       return (
         <ul className="dropdown-menu" style={style}>
-          <li className="dropdown-item" onClick={this.toggleAddFolder}>New Folder</li>
-          <li className="dropdown-item" onClick={this.toggleAddFile}>New File</li>
+          <li className="dropdown-item" onClick={this.toggleAddFileFolder}>New Folder</li>
+          <li className="dropdown-item" onClick={(ev,flag) => this.toggleAddFileFolder(ev,true)}>New File</li>
           <li className="dropdown-item" onClick={this.toggleRename}>Rename</li>
           <li className="dropdown-item" onClick={this.toggleDelete}>Delete</li>
         </ul>
@@ -112,15 +129,9 @@ class NodeMenu extends React.Component {
           toggleCancel={this.deleteCancel}
         />
 
-        <AddFile 
-          isOpen={this.state.showAddFile}
-          currentNode={this.props.currentNode}
-          onSetFilePath={this.onAddFile}
-          toggleCancel={this.addFileCancel}  
-        />
-
-        <AddFolder 
-          isOpen={this.state.showAddFolder}
+        <CreateFlieFolder 
+          isOpen={this.state.showAddFileFolder}
+          isFile={this.state.isFile}
           currentNode={this.props.currentNode}
           onSetFolderPath={this.onAddFolder}
           toggleCancel={this.addFolderCancel} 

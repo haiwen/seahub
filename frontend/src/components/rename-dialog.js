@@ -27,6 +27,22 @@ class Rename extends React.Component {
     this.props.toggleCancel();
   }
 
+  componentDidMount() {
+    this.changeState(this.props.currentNode);
+  }
+
+  componentWillReceiveProps(nextProps) {
+    this.changeState(nextProps.currentNode);
+  }
+
+  changeState(currentNode) {
+    if (currentNode.type === "file") {
+      this.setState({newName: '.md'});
+    } else{
+      this.setState({newName: ""});
+    }
+  }
+
   render() {
     let type = this.props.currentNode.type;
     let preName = this.props.currentNode.name;
@@ -34,8 +50,8 @@ class Rename extends React.Component {
       <Modal isOpen={this.props.isOpen} toggle={this.toggle}>
         <ModalHeader toggle={this.toggle}>{type === 'file' ? 'Rename File' : 'Rename Folder' }</ModalHeader>
         <ModalBody>
-          <p>{type === 'file' ? "Enter the new file name.": 'Enter the new folder name.'}</p>
-          <Input placeholder={this.props.preName} value={this.state.newName} onChange={this.handleChange} />
+          <p>{type === 'file' ? "Enter the new file name:": 'Enter the new folder name:'}</p>
+          <Input placeholder="newName" value={this.state.newName} onChange={this.handleChange} />
         </ModalBody>
         <ModalFooter>
           <Button color="primary" onClick={this.handleSubmit}>Submit</Button>{' '}
