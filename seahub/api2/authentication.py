@@ -12,6 +12,7 @@ from seahub.api2.utils import get_client_ip
 from seahub.utils import within_time_range
 from django.utils import timezone
 from datetime import timedelta
+from seahub.settings import API_TOKEN_AGE
 try:
     from seahub.settings import MULTI_TENANCY
 except ImportError:
@@ -72,10 +73,11 @@ class TokenAuthentication(BaseAuthentication):
             token = Token.objects.get(key=key)
         except Token.DoesNotExist:
             raise AuthenticationFailed('Invalid token')
-        # expired token
-        if timezone.now() > (token.created + timedelta(hours=168)):
-            Token.objects.filter(key=key).delete()
-            raise AuthenticationFailed('token has expired')
+        # expired token API_TOKEN_AGE
+        if API_TOKEN_AGE:
+            if timezone.now() > (token.created + timedelta(seconds=604800)):
+                Token.objects.filter(key=key).delete()
+                raise AuthenticationFailed('token has expired')
 
         try:
             user = User.objects.get(email=token.user)

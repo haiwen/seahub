@@ -133,7 +133,8 @@ SITE_ROOT = '/'
 
 # Python dotted path to the WSGI application used by Django's runserver.
 WSGI_APPLICATION = 'seahub.wsgi.application'
-
+# api token expiration time.
+API_TOKEN_AGE = 7 * 24 * 60 * 60
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
