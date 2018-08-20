@@ -549,6 +549,7 @@ if getattr(settings, 'ENABLE_SYSADMIN_EXTRA', False):
 
 if getattr(settings, 'MULTI_TENANCY', False):
     urlpatterns += [
+        url(r'^api/v2.1/org/', include('seahub_extra.organizations.api_urls')),
         url(r'^org/', include('seahub_extra.organizations.urls')),
     ]
 

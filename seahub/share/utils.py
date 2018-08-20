@@ -1,6 +1,7 @@
 from seahub.group.utils import is_group_member
 from seahub.constants import PERMISSION_ADMIN, PERMISSION_READ_WRITE
 from seahub.share.models import ExtraSharePermission, ExtraGroupsSharePermission
+from seahub.utils import is_valid_org_id
 
 import seaserv
 from seaserv import seafile_api
@@ -24,7 +25,7 @@ def share_dir_to_user(repo, path, owner, share_from, share_to, permission, org_i
         extra_share_permission = permission
         permission = PERMISSION_READ_WRITE
 
-    if org_id:
+    if is_valid_org_id(org_id):
         if path == '/':
             seaserv.seafserv_threaded_rpc.org_add_share(org_id, repo.repo_id, 
                                                         owner, share_to, 
@@ -50,7 +51,7 @@ def share_dir_to_group(repo, path, owner, share_from, gid, permission, org_id=No
         extra_share_permission = permission
         permission = PERMISSION_READ_WRITE
 
-    if org_id:
+    if is_valid_org_id(org_id):
         if path == '/':
             seafile_api.add_org_group_repo(repo.repo_id, org_id, gid, 
                                            owner, permission)
@@ -78,7 +79,7 @@ def update_user_dir_permission(repo_id, path, owner, share_to, permission, org_i
         extra_share_permission = permission
         permission = PERMISSION_READ_WRITE
 
-    if org_id:
+    if is_valid_org_id(org_id):
         if path == '/':
             seafile_api.org_set_share_permission(
                 org_id, repo_id, owner, share_to, permission)
@@ -105,7 +106,7 @@ def update_group_dir_permission(repo_id, path, owner, gid, permission, org_id=No
         extra_share_permission = permission
         permission = PERMISSION_READ_WRITE
 
-    if org_id:
+    if is_valid_org_id(org_id):
         if path == '/':
             seaserv.seafserv_threaded_rpc.set_org_group_repo_permission(
                     org_id, gid, repo_id, permission)
@@ -174,7 +175,7 @@ def check_group_share_in_permission(repo_id, group_id, is_org=False):
     return extra_permission if extra_permission else repo.permission
 
 def has_shared_to_user(repo_id, path, username, org_id=None):
-    if org_id:
+    if is_valid_org_id(org_id):
         # when calling seafile API to share authority related functions, change the uesrname to repo owner.
         repo_owner = seafile_api.get_org_repo_owner(repo_id)
         if path == '/':
@@ -196,7 +197,7 @@ def has_shared_to_user(repo_id, path, username, org_id=None):
     return username in [item.user for item in share_items]
 
 def has_shared_to_group(repo_id, path, gid, org_id=None):
-    if org_id:
+    if is_valid_org_id(org_id):
         # when calling seafile API to share authority related functions, change the uesrname to repo owner.
         repo_owner = seafile_api.get_org_repo_owner(repo_id)
         if path == '/':
