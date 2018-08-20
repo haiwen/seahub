@@ -56,7 +56,7 @@ class AdminAddressBookGroups(APIView):
             org_id = request.user.org.org_id
             groups = ccnet_api.get_org_top_groups(org_id)
         else:
-            groups = ccnet_api.get_top_groups()
+            groups = ccnet_api.get_top_groups(including_org=False)
         for group in groups:
             return_results.append(address_book_group_to_dict(group))
 
