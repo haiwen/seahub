@@ -1,0 +1,7 @@
+{% extends "base_for_react.html" %}
+{% load render_bundle from webpack_loader %}
+
+{% block extra_script %}
+{% render_bundle 'dashboard' %}
+{% endblock %}
+

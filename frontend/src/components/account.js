@@ -2,7 +2,8 @@ import React, { Component } from 'react';
 import ReactDOM from 'react-dom';
 import cookie from 'react-cookies';
 import { keyCodes, bytesToSize } from './utils';
-import { siteRoot, avatarInfo } from './constance';
+
+const siteRoot = window.app.config.siteRoot;
 
 
 class Account extends Component {
