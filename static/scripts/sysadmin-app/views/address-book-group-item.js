@@ -29,14 +29,25 @@ define([
         deleteGroup: function() {
             var _this = this;
             var group_name = this.model.get('name');
+            var url_options = {
+                'group_id': _this.model.get('id')
+            };
+            if (app.pageOptions.org_id) { // org admin
+                $.extend(url_options, {
+                    'name':'org-admin-address-book-group',
+                    'org_id': app.pageOptions.org_id
+                });
+            } else {
+                $.extend(url_options, {
+                    'name':'admin-address-book-group'
+                });
+            }
+
             var popupTitle = gettext("Delete Department");
             var popupContent = gettext("Are you sure you want to delete %s ?").replace('%s', '<span class="op-target ellipsis ellipsis-op-target" title="' + Common.HTMLescape(group_name) + '">' + Common.HTMLescape(group_name) + '</span>');
             var yesCallback = function() {
                 $.ajax({
-                    url: Common.getUrl({
-                        'name':'admin-address-book-group',
-                        'group_id': _this.model.get('id')
-                    }),
+                    url: Common.getUrl(url_options),
                     type: 'DELETE',
                     cache: false,
                     beforeSend: Common.prepareCSRFToken,
@@ -81,12 +92,23 @@ define([
                     return false;
                 }
 
-                Common.disableButton($submitBtn);
-                $.ajax({
-                    url: Common.getUrl({
+                var url_options;
+                if (app.pageOptions.org_id) { // org admin
+                    url_options = {
+                        'name':'org-admin-group',
+                        'org_id': app.pageOptions.org_id,
+                        'group_id': model.get('id')
+                    };
+                } else {
+                    url_options = {
                         'name':'admin-group',
                         'group_id': model.get('id')
-                    }),
+                    };
+                }
+
+                Common.disableButton($submitBtn);
+                $.ajax({
+                    url: Common.getUrl(url_options),
                     type: 'PUT',
                     cache: false,
                     beforeSend: Common.prepareCSRFToken,

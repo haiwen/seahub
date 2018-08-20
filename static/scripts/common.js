@@ -200,7 +200,7 @@ define([
                 case 'admin-group-owned-libraries': return siteRoot + 'api/v2.1/admin/groups/' + options.group_id + '/group-owned-libraries/';
                 case 'admin-group-owned-library': return siteRoot + 'api/v2.1/admin/groups/' + options.group_id + '/group-owned-libraries/' + options.repo_id + '/';
                 case 'admin-group-members': return siteRoot + 'api/v2.1/admin/groups/' + options.group_id + '/members/';
-                case 'admin-group-member': return siteRoot + 'api/v2.1/admin/groups/' + options.group_id + '/members/' + options.email+ '/';
+                case 'admin-group-member': return siteRoot + 'api/v2.1/admin/groups/' + options.group_id + '/members/' + encodeURIComponent(options.email) + '/';
                 case 'admin-system-library': return siteRoot + 'api/v2.1/admin/system-library/';
                 case 'admin-system-library-upload-link': return siteRoot + 'api/v2.1/admin/system-library/upload-link/';
                 case 'admin-trash-libraries': return siteRoot + 'api/v2.1/admin/trash-libraries/';
@@ -212,6 +212,16 @@ define([
 
                 case 'admin-address-book-groups': return siteRoot + 'api/v2.1/admin/address-book/groups/';
                 case 'admin-address-book-group': return siteRoot + 'api/v2.1/admin/address-book/groups/' + options.group_id + '/';
+
+                // org admin
+                case 'org-admin-address-book-groups': return siteRoot + 'api/v2.1/org/' + options.org_id + '/admin/address-book/groups/';
+                case 'org-admin-address-book-group': return siteRoot + 'api/v2.1/org/' + options.org_id + '/admin/address-book/groups/' + options.group_id + '/';
+                case 'org-admin-group': return siteRoot + 'api/v2.1/org/' + options.org_id + '/admin/groups/' + options.group_id + '/';
+                case 'org-admin-group-members': return siteRoot + 'api/v2.1/org/' + options.org_id + '/admin/groups/' + options.group_id + '/members/';
+                case 'org-admin-group-member': return siteRoot + 'api/v2.1/org/' + options.org_id + '/admin/groups/' + options.group_id + '/members/' + encodeURIComponent(options.email) + '/';
+                case 'org-admin-group-libraries': return siteRoot + 'api/v2.1/org/' + options.org_id + '/admin/groups/' + options.group_id + '/libraries/';
+                case 'org-admin-group-owned-libraries': return siteRoot + 'api/v2.1/org/' + options.org_id + '/admin/groups/' + options.group_id + '/group-owned-libraries/';
+                case 'org-admin-group-owned-library': return siteRoot + 'api/v2.1/org/' + options.org_id + '/admin/groups/' + options.group_id + '/group-owned-libraries/' + options.repo_id + '/';
 
                 case 'license': return siteRoot + 'api/v2.1/admin/license/';
             }
@@ -359,14 +369,13 @@ define([
             $yesBtn.on('click', yesCallback);
         },
 
-        confirm_with_extra_option_template: _.template($('#confirm-dialog-with-extra-option-tmpl').html()),
-
         showConfirmWithExtraOption: function(title, content, extraOption, yesCallback) {
             var $popup = $("#confirm-popup");
             var $cont = $('#confirm-con');
             var $yesBtn = $('#confirm-yes');
 
-            var html = this.confirm_with_extra_option_template({
+            var confirm_with_extra_option_template = _.template($('#confirm-dialog-with-extra-option-tmpl').html());
+            var html = confirm_with_extra_option_template({
                 'is_pro': app.pageOptions.is_pro,
                 'title': title,
                 'content': content,
