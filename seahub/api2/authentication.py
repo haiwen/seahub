@@ -13,7 +13,6 @@ from seahub.utils import within_time_range
 from django.utils import timezone
 from datetime import timedelta
 from seahub.settings import API_TOKEN_AGE
-
 try:
     from seahub.settings import MULTI_TENANCY
 except ImportError:
@@ -74,6 +73,7 @@ class TokenAuthentication(BaseAuthentication):
             token = Token.objects.get(key=key)
         except Token.DoesNotExist:
             raise AuthenticationFailed('Invalid token')
+
         # expried time token
         if API_TOKEN_AGE:
             if API_TOKEN_AGE == -1:
