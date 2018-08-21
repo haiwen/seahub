@@ -1,0 +1,3821 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta http-equiv="content-type" content="text/html; charset=utf-8">
+  <meta name="robots" content="NONE,NOARCHIVE">
+  <title>AssertionError at /api2/auth-token/</title>
+  <style type="text/css">
+    html * { padding:0; margin:0; }
+    body * { padding:10px 20px; }
+    body * * { padding:0; }
+    body { font:small sans-serif; }
+    body>div { border-bottom:1px solid #ddd; }
+    h1 { font-weight:normal; }
+    h2 { margin-bottom:.8em; }
+    h2 span { font-size:80%; color:#666; font-weight:normal; }
+    h3 { margin:1em 0 .5em 0; }
+    h4 { margin:0 0 .5em 0; font-weight: normal; }
+    code, pre { font-size: 100%; white-space: pre-wrap; }
+    table { border:1px solid #ccc; border-collapse: collapse; width:100%; background:white; }
+    tbody td, tbody th { vertical-align:top; padding:2px 3px; }
+    thead th {
+      padding:1px 6px 1px 3px; background:#fefefe; text-align:left;
+      font-weight:normal; font-size:11px; border:1px solid #ddd;
+    }
+    tbody th { width:12em; text-align:right; color:#666; padding-right:.5em; }
+    table.vars { margin:5px 0 2px 40px; }
+    table.vars td, table.req td { font-family:monospace; }
+    table td.code { width:100%; }
+    table td.code pre { overflow:hidden; }
+    table.source th { color:#666; }
+    table.source td { font-family:monospace; white-space:pre; border-bottom:1px solid #eee; }
+    ul.traceback { list-style-type:none; color: #222; }
+    ul.traceback li.frame { padding-bottom:1em; color:#666; }
+    ul.traceback li.user { background-color:#e0e0e0; color:#000 }
+    div.context { padding:10px 0; overflow:hidden; }
+    div.context ol { padding-left:30px; margin:0 10px; list-style-position: inside; }
+    div.context ol li { font-family:monospace; white-space:pre; color:#777; cursor:pointer; padding-left: 2px; }
+    div.context ol li pre { display:inline; }
+    div.context ol.context-line li { color:#505050; background-color:#dfdfdf; padding: 3px 2px; }
+    div.context ol.context-line li span { position:absolute; right:32px; }
+    .user div.context ol.context-line li { background-color:#bbb; color:#000; }
+    .user div.context ol li { color:#666; }
+    div.commands { margin-left: 40px; }
+    div.commands a { color:#555; text-decoration:none; }
+    .user div.commands a { color: black; }
+    #summary { background: #ffc; }
+    #summary h2 { font-weight: normal; color: #666; }
+    #explanation { background:#eee; }
+    #template, #template-not-exist { background:#f6f6f6; }
+    #template-not-exist ul { margin: 0 0 10px 20px; }
+    #template-not-exist .postmortem-section { margin-bottom: 3px; }
+    #unicode-hint { background:#eee; }
+    #traceback { background:#eee; }
+    #requestinfo { background:#f6f6f6; padding-left:120px; }
+    #summary table { border:none; background:transparent; }
+    #requestinfo h2, #requestinfo h3 { position:relative; margin-left:-100px; }
+    #requestinfo h3 { margin-bottom:-1em; }
+    .error { background: #ffc; }
+    .specific { color:#cc3300; font-weight:bold; }
+    h2 span.commands { font-size:.7em;}
+    span.commands a:link {color:#5E5694;}
+    pre.exception_value { font-family: sans-serif; color: #666; font-size: 1.5em; margin: 10px 0 10px 0; }
+    .append-bottom { margin-bottom: 10px; }
+  </style>
+  
+  <script type="text/javascript">
+  //<!--
+    function getElementsByClassName(oElm, strTagName, strClassName){
+        // Written by Jonathan Snook, http://www.snook.ca/jon; Add-ons by Robert Nyman, http://www.robertnyman.com
+        var arrElements = (strTagName == "*" && document.all)? document.all :
+        oElm.getElementsByTagName(strTagName);
+        var arrReturnElements = new Array();
+        strClassName = strClassName.replace(/\-/g, "\\-");
+        var oRegExp = new RegExp("(^|\\s)" + strClassName + "(\\s|$)");
+        var oElement;
+        for(var i=0; i<arrElements.length; i++){
+            oElement = arrElements[i];
+            if(oRegExp.test(oElement.className)){
+                arrReturnElements.push(oElement);
+            }
+        }
+        return (arrReturnElements)
+    }
+    function hideAll(elems) {
+      for (var e = 0; e < elems.length; e++) {
+        elems[e].style.display = 'none';
+      }
+    }
+    window.onload = function() {
+      hideAll(getElementsByClassName(document, 'table', 'vars'));
+      hideAll(getElementsByClassName(document, 'ol', 'pre-context'));
+      hideAll(getElementsByClassName(document, 'ol', 'post-context'));
+      hideAll(getElementsByClassName(document, 'div', 'pastebin'));
+    }
+    function toggle() {
+      for (var i = 0; i < arguments.length; i++) {
+        var e = document.getElementById(arguments[i]);
+        if (e) {
+          e.style.display = e.style.display == 'none' ? 'block': 'none';
+        }
+      }
+      return false;
+    }
+    function varToggle(link, id) {
+      toggle('v' + id);
+      var s = link.getElementsByTagName('span')[0];
+      var uarr = String.fromCharCode(0x25b6);
+      var darr = String.fromCharCode(0x25bc);
+      s.textContent = s.textContent == uarr ? darr : uarr;
+      return false;
+    }
+    function switchPastebinFriendly(link) {
+      s1 = "Switch to copy-and-paste view";
+      s2 = "Switch back to interactive view";
+      link.textContent = link.textContent.trim() == s1 ? s2: s1;
+      toggle('browserTraceback', 'pastebinTraceback');
+      return false;
+    }
+    //-->
+  </script>
+  
+</head>
+<body>
+<div id="summary">
+  <h1>AssertionError at /api2/auth-token/</h1>
+  <pre class="exception_value">No exception message supplied</pre>
+  <table class="meta">
+
+    <tr>
+      <th>Request Method:</th>
+      <td>POST</td>
+    </tr>
+    <tr>
+      <th>Request URL:</th>
+      <td>http://192.168.1.177:8000/api2/auth-token/</td>
+    </tr>
+
+    <tr>
+      <th>Django Version:</th>
+      <td>1.11.11</td>
+    </tr>
+
+    <tr>
+      <th>Exception Type:</th>
+      <td>AssertionError</td>
+    </tr>
+
+
+
+    <tr>
+      <th>Exception Location:</th>
+      <td>/home/gpd/dev/seahub/seahub/api2/serializers.py in validate, line 50</td>
+    </tr>
+
+    <tr>
+      <th>Python Executable:</th>
+      <td>/usr/bin/python</td>
+    </tr>
+    <tr>
+      <th>Python Version:</th>
+      <td>2.7.12</td>
+    </tr>
+    <tr>
+      <th>Python Path:</th>
+      <td><pre>[&#39;/usr/local/lib/python2.7/dist-packages&#39;,
+ &#39;/home/gpd/dev/seahub/thirdpart&#39;,
+ &#39;/home/gpd/dev/seahub&#39;,
+ &#39;/usr/lib/python2.7&#39;,
+ &#39;/usr/lib/python2.7/plat-x86_64-linux-gnu&#39;,
+ &#39;/usr/lib/python2.7/lib-tk&#39;,
+ &#39;/usr/lib/python2.7/lib-old&#39;,
+ &#39;/usr/lib/python2.7/lib-dynload&#39;,
+ &#39;/usr/lib/python2.7/dist-packages&#39;,
+ &#39;/home/gpd/dev/seahub/seahub/api2/endpoints/../../../../../conf&#39;,
+ &#39;/home/gpd/dev/seahub/seahub/api2/endpoints/../../../../../conf&#39;]</pre></td>
+    </tr>
+    <tr>
+      <th>Server time:</th>
+      <td>Wed, 8 Aug 2018 05:39:19 +0000</td>
+    </tr>
+  </table>
+</div>
+
+
+
+
+<div id="traceback">
+  <h2>Traceback <span class="commands"><a href="#" onclick="return switchPastebinFriendly(this);">
+    Switch to copy-and-paste view</a></span>
+  </h2>
+  <div id="browserTraceback">
+    <ul class="traceback">
+      
+        
+        <li class="frame django">
+          <code>/usr/local/lib/python2.7/dist-packages/django/core/handlers/exception.py</code> in <code>inner</code>
+
+          
+            <div class="context" id="c140451919427344">
+              
+                <ol start="34" class="pre-context" id="pre140451919427344">
+                
+                  <li onclick="toggle('pre140451919427344', 'post140451919427344')"><pre>    This decorator is automatically applied to all middleware to ensure that</pre></li>
+                
+                  <li onclick="toggle('pre140451919427344', 'post140451919427344')"><pre>    no middleware leaks an exception and that the next middleware in the stack</pre></li>
+                
+                  <li onclick="toggle('pre140451919427344', 'post140451919427344')"><pre>    can rely on getting a response instead of an exception.</pre></li>
+                
+                  <li onclick="toggle('pre140451919427344', 'post140451919427344')"><pre>    &quot;&quot;&quot;</pre></li>
+                
+                  <li onclick="toggle('pre140451919427344', 'post140451919427344')"><pre>    @wraps(get_response, assigned=available_attrs(get_response))</pre></li>
+                
+                  <li onclick="toggle('pre140451919427344', 'post140451919427344')"><pre>    def inner(request):</pre></li>
+                
+                  <li onclick="toggle('pre140451919427344', 'post140451919427344')"><pre>        try:</pre></li>
+                
+                </ol>
+              
+              <ol start="41" class="context-line">
+                <li onclick="toggle('pre140451919427344', 'post140451919427344')"><pre>
+            response = get_response(request)</pre> <span>...</span></li></ol>
+              
+                <ol start='42' class="post-context" id="post140451919427344">
+                  
+                  <li onclick="toggle('pre140451919427344', 'post140451919427344')"><pre>        except Exception as exc:</pre></li>
+                  
+                  <li onclick="toggle('pre140451919427344', 'post140451919427344')"><pre>            response = response_for_exception(request, exc)</pre></li>
+                  
+                  <li onclick="toggle('pre140451919427344', 'post140451919427344')"><pre>        return response</pre></li>
+                  
+                  <li onclick="toggle('pre140451919427344', 'post140451919427344')"><pre>    return inner</pre></li>
+                  
+                  <li onclick="toggle('pre140451919427344', 'post140451919427344')"><pre></pre></li>
+                  
+                  <li onclick="toggle('pre140451919427344', 'post140451919427344')"><pre></pre></li>
+                  
+              </ol>
+              
+            </div>
+          
+
+          
+            <div class="commands">
+                
+                    <a href="#" onclick="return varToggle(this, '140451919427344')"><span>&#x25b6;</span> Local vars</a>
+                
+            </div>
+            <table class="vars" id="v140451919427344">
+              <thead>
+                <tr>
+                  <th>Variable</th>
+                  <th>Value</th>
+                </tr>
+              </thead>
+              <tbody>
+                
+                  <tr>
+                    <td>exc</td>
+                    <td class="code"><pre>AssertionError()</pre></td>
+                  </tr>
+                
+                  <tr>
+                    <td>get_response</td>
+                    <td class="code"><pre>&lt;bound method WSGIHandler._legacy_get_response of &lt;django.core.handlers.wsgi.WSGIHandler object at 0x7fbd8b3f1d50&gt;&gt;</pre></td>
+                  </tr>
+                
+                  <tr>
+                    <td>request</td>
+                    <td class="code"><pre>&lt;WSGIRequest: POST &#39;/api2/auth-token/&#39;&gt;</pre></td>
+                  </tr>
+                
+              </tbody>
+            </table>
+          
+        </li>
+      
+        
+        <li class="frame django">
+          <code>/usr/local/lib/python2.7/dist-packages/django/core/handlers/base.py</code> in <code>_legacy_get_response</code>
+
+          
+            <div class="context" id="c140451919427272">
+              
+                <ol start="242" class="pre-context" id="pre140451919427272">
+                
+                  <li onclick="toggle('pre140451919427272', 'post140451919427272')"><pre>        # Apply request middleware</pre></li>
+                
+                  <li onclick="toggle('pre140451919427272', 'post140451919427272')"><pre>        for middleware_method in self._request_middleware:</pre></li>
+                
+                  <li onclick="toggle('pre140451919427272', 'post140451919427272')"><pre>            response = middleware_method(request)</pre></li>
+                
+                  <li onclick="toggle('pre140451919427272', 'post140451919427272')"><pre>            if response:</pre></li>
+                
+                  <li onclick="toggle('pre140451919427272', 'post140451919427272')"><pre>                break</pre></li>
+                
+                  <li onclick="toggle('pre140451919427272', 'post140451919427272')"><pre></pre></li>
+                
+                  <li onclick="toggle('pre140451919427272', 'post140451919427272')"><pre>        if response is None:</pre></li>
+                
+                </ol>
+              
+              <ol start="249" class="context-line">
+                <li onclick="toggle('pre140451919427272', 'post140451919427272')"><pre>
+            response = self._get_response(request)</pre> <span>...</span></li></ol>
+              
+                <ol start='250' class="post-context" id="post140451919427272">
+                  
+                  <li onclick="toggle('pre140451919427272', 'post140451919427272')"><pre>        return response</pre></li>
+                  
+              </ol>
+              
+            </div>
+          
+
+          
+            <div class="commands">
+                
+                    <a href="#" onclick="return varToggle(this, '140451919427272')"><span>&#x25b6;</span> Local vars</a>
+                
+            </div>
+            <table class="vars" id="v140451919427272">
+              <thead>
+                <tr>
+                  <th>Variable</th>
+                  <th>Value</th>
+                </tr>
+              </thead>
+              <tbody>
+                
+                  <tr>
+                    <td>middleware_method</td>
+                    <td class="code"><pre>&lt;bound method LimitIpMiddleware.process_request of &lt;seahub.trusted_ip.middleware.LimitIpMiddleware object at 0x7fbd83700b10&gt;&gt;</pre></td>
+                  </tr>
+                
+                  <tr>
+                    <td>request</td>
+                    <td class="code"><pre>&lt;WSGIRequest: POST &#39;/api2/auth-token/&#39;&gt;</pre></td>
+                  </tr>
+                
+                  <tr>
+                    <td>response</td>
+                    <td class="code"><pre>None</pre></td>
+                  </tr>
+                
+                  <tr>
+                    <td>self</td>
+                    <td class="code"><pre>&lt;django.core.handlers.wsgi.WSGIHandler object at 0x7fbd8b3f1d50&gt;</pre></td>
+                  </tr>
+                
+              </tbody>
+            </table>
+          
+        </li>
+      
+        
+        <li class="frame django">
+          <code>/usr/local/lib/python2.7/dist-packages/django/core/handlers/base.py</code> in <code>_get_response</code>
+
+          
+            <div class="context" id="c140451919427200">
+              
+                <ol start="180" class="pre-context" id="pre140451919427200">
+                
+                  <li onclick="toggle('pre140451919427200', 'post140451919427200')"><pre>                break</pre></li>
+                
+                  <li onclick="toggle('pre140451919427200', 'post140451919427200')"><pre></pre></li>
+                
+                  <li onclick="toggle('pre140451919427200', 'post140451919427200')"><pre>        if response is None:</pre></li>
+                
+                  <li onclick="toggle('pre140451919427200', 'post140451919427200')"><pre>            wrapped_callback = self.make_view_atomic(callback)</pre></li>
+                
+                  <li onclick="toggle('pre140451919427200', 'post140451919427200')"><pre>            try:</pre></li>
+                
+                  <li onclick="toggle('pre140451919427200', 'post140451919427200')"><pre>                response = wrapped_callback(request, *callback_args, **callback_kwargs)</pre></li>
+                
+                  <li onclick="toggle('pre140451919427200', 'post140451919427200')"><pre>            except Exception as e:</pre></li>
+                
+                </ol>
+              
+              <ol start="187" class="context-line">
+                <li onclick="toggle('pre140451919427200', 'post140451919427200')"><pre>
+                response = self.process_exception_by_middleware(e, request)</pre> <span>...</span></li></ol>
+              
+                <ol start='188' class="post-context" id="post140451919427200">
+                  
+                  <li onclick="toggle('pre140451919427200', 'post140451919427200')"><pre></pre></li>
+                  
+                  <li onclick="toggle('pre140451919427200', 'post140451919427200')"><pre>        # Complain if the view returned None (a common error).</pre></li>
+                  
+                  <li onclick="toggle('pre140451919427200', 'post140451919427200')"><pre>        if response is None:</pre></li>
+                  
+                  <li onclick="toggle('pre140451919427200', 'post140451919427200')"><pre>            if isinstance(callback, types.FunctionType):    # FBV</pre></li>
+                  
+                  <li onclick="toggle('pre140451919427200', 'post140451919427200')"><pre>                view_name = callback.__name__</pre></li>
+                  
+                  <li onclick="toggle('pre140451919427200', 'post140451919427200')"><pre>            else:                                           # CBV</pre></li>
+                  
+              </ol>
+              
+            </div>
+          
+
+          
+            <div class="commands">
+                
+                    <a href="#" onclick="return varToggle(this, '140451919427200')"><span>&#x25b6;</span> Local vars</a>
+                
+            </div>
+            <table class="vars" id="v140451919427200">
+              <thead>
+                <tr>
+                  <th>Variable</th>
+                  <th>Value</th>
+                </tr>
+              </thead>
+              <tbody>
+                
+                  <tr>
+                    <td>callback</td>
+                    <td class="code"><pre>&lt;function ObtainAuthToken at 0x7fbd880719b0&gt;</pre></td>
+                  </tr>
+                
+                  <tr>
+                    <td>callback_args</td>
+                    <td class="code"><pre>()</pre></td>
+                  </tr>
+                
+                  <tr>
+                    <td>callback_kwargs</td>
+                    <td class="code"><pre>{}</pre></td>
+                  </tr>
+                
+                  <tr>
+                    <td>e</td>
+                    <td class="code"><pre>AssertionError()</pre></td>
+                  </tr>
+                
+                  <tr>
+                    <td>middleware_method</td>
+                    <td class="code"><pre>&lt;bound method CheckPasswordHash.process_view of &lt;seahub.password_session.middleware.CheckPasswordHash object at 0x7fbd837003d0&gt;&gt;</pre></td>
+                  </tr>
+                
+                  <tr>
+                    <td>request</td>
+                    <td class="code"><pre>&lt;WSGIRequest: POST &#39;/api2/auth-token/&#39;&gt;</pre></td>
+                  </tr>
+                
+                  <tr>
+                    <td>resolver</td>
+                    <td class="code"><pre>&lt;RegexURLResolver &#39;seahub.utils.rooturl&#39; (None:None) ^/&gt;</pre></td>
+                  </tr>
+                
+                  <tr>
+                    <td>resolver_match</td>
+                    <td class="code"><pre>ResolverMatch(func=seahub.api2.views.ObtainAuthToken, args=(), kwargs={}, url_name=None, app_names=[], namespaces=[])</pre></td>
+                  </tr>
+                
+                  <tr>
+                    <td>response</td>
+                    <td class="code"><pre>None</pre></td>
+                  </tr>
+                
+                  <tr>
+                    <td>self</td>
+                    <td class="code"><pre>&lt;django.core.handlers.wsgi.WSGIHandler object at 0x7fbd8b3f1d50&gt;</pre></td>
+                  </tr>
+                
+                  <tr>
+                    <td>wrapped_callback</td>
+                    <td class="code"><pre>&lt;function ObtainAuthToken at 0x7fbd880719b0&gt;</pre></td>
+                  </tr>
+                
+              </tbody>
+            </table>
+          
+        </li>
+      
+        
+        <li class="frame django">
+          <code>/usr/local/lib/python2.7/dist-packages/django/core/handlers/base.py</code> in <code>_get_response</code>
+
+          
+            <div class="context" id="c140451919427128">
+              
+                <ol start="178" class="pre-context" id="pre140451919427128">
+                
+                  <li onclick="toggle('pre140451919427128', 'post140451919427128')"><pre>            response = middleware_method(request, callback, callback_args, callback_kwargs)</pre></li>
+                
+                  <li onclick="toggle('pre140451919427128', 'post140451919427128')"><pre>            if response:</pre></li>
+                
+                  <li onclick="toggle('pre140451919427128', 'post140451919427128')"><pre>                break</pre></li>
+                
+                  <li onclick="toggle('pre140451919427128', 'post140451919427128')"><pre></pre></li>
+                
+                  <li onclick="toggle('pre140451919427128', 'post140451919427128')"><pre>        if response is None:</pre></li>
+                
+                  <li onclick="toggle('pre140451919427128', 'post140451919427128')"><pre>            wrapped_callback = self.make_view_atomic(callback)</pre></li>
+                
+                  <li onclick="toggle('pre140451919427128', 'post140451919427128')"><pre>            try:</pre></li>
+                
+                </ol>
+              
+              <ol start="185" class="context-line">
+                <li onclick="toggle('pre140451919427128', 'post140451919427128')"><pre>
+                response = wrapped_callback(request, *callback_args, **callback_kwargs)</pre> <span>...</span></li></ol>
+              
+                <ol start='186' class="post-context" id="post140451919427128">
+                  
+                  <li onclick="toggle('pre140451919427128', 'post140451919427128')"><pre>            except Exception as e:</pre></li>
+                  
+                  <li onclick="toggle('pre140451919427128', 'post140451919427128')"><pre>                response = self.process_exception_by_middleware(e, request)</pre></li>
+                  
+                  <li onclick="toggle('pre140451919427128', 'post140451919427128')"><pre></pre></li>
+                  
+                  <li onclick="toggle('pre140451919427128', 'post140451919427128')"><pre>        # Complain if the view returned None (a common error).</pre></li>
+                  
+                  <li onclick="toggle('pre140451919427128', 'post140451919427128')"><pre>        if response is None:</pre></li>
+                  
+                  <li onclick="toggle('pre140451919427128', 'post140451919427128')"><pre>            if isinstance(callback, types.FunctionType):    # FBV</pre></li>
+                  
+              </ol>
+              
+            </div>
+          
+
+          
+            <div class="commands">
+                
+                    <a href="#" onclick="return varToggle(this, '140451919427128')"><span>&#x25b6;</span> Local vars</a>
+                
+            </div>
+            <table class="vars" id="v140451919427128">
+              <thead>
+                <tr>
+                  <th>Variable</th>
+                  <th>Value</th>
+                </tr>
+              </thead>
+              <tbody>
+                
+                  <tr>
+                    <td>callback</td>
+                    <td class="code"><pre>&lt;function ObtainAuthToken at 0x7fbd880719b0&gt;</pre></td>
+                  </tr>
+                
+                  <tr>
+                    <td>callback_args</td>
+                    <td class="code"><pre>()</pre></td>
+                  </tr>
+                
+                  <tr>
+                    <td>callback_kwargs</td>
+                    <td class="code"><pre>{}</pre></td>
+                  </tr>
+                
+                  <tr>
+                    <td>e</td>
+                    <td class="code"><pre>AssertionError()</pre></td>
+                  </tr>
+                
+                  <tr>
+                    <td>middleware_method</td>
+                    <td class="code"><pre>&lt;bound method CheckPasswordHash.process_view of &lt;seahub.password_session.middleware.CheckPasswordHash object at 0x7fbd837003d0&gt;&gt;</pre></td>
+                  </tr>
+                
+                  <tr>
+                    <td>request</td>
+                    <td class="code"><pre>&lt;WSGIRequest: POST &#39;/api2/auth-token/&#39;&gt;</pre></td>
+                  </tr>
+                
+                  <tr>
+                    <td>resolver</td>
+                    <td class="code"><pre>&lt;RegexURLResolver &#39;seahub.utils.rooturl&#39; (None:None) ^/&gt;</pre></td>
+                  </tr>
+                
+                  <tr>
+                    <td>resolver_match</td>
+                    <td class="code"><pre>ResolverMatch(func=seahub.api2.views.ObtainAuthToken, args=(), kwargs={}, url_name=None, app_names=[], namespaces=[])</pre></td>
+                  </tr>
+                
+                  <tr>
+                    <td>response</td>
+                    <td class="code"><pre>None</pre></td>
+                  </tr>
+                
+                  <tr>
+                    <td>self</td>
+                    <td class="code"><pre>&lt;django.core.handlers.wsgi.WSGIHandler object at 0x7fbd8b3f1d50&gt;</pre></td>
+                  </tr>
+                
+                  <tr>
+                    <td>wrapped_callback</td>
+                    <td class="code"><pre>&lt;function ObtainAuthToken at 0x7fbd880719b0&gt;</pre></td>
+                  </tr>
+                
+              </tbody>
+            </table>
+          
+        </li>
+      
+        
+        <li class="frame django">
+          <code>/usr/local/lib/python2.7/dist-packages/django/views/decorators/csrf.py</code> in <code>wrapped_view</code>
+
+          
+            <div class="context" id="c140451919427056">
+              
+                <ol start="51" class="pre-context" id="pre140451919427056">
+                
+                  <li onclick="toggle('pre140451919427056', 'post140451919427056')"><pre>    &quot;&quot;&quot;</pre></li>
+                
+                  <li onclick="toggle('pre140451919427056', 'post140451919427056')"><pre>    Marks a view function as being exempt from the CSRF view protection.</pre></li>
+                
+                  <li onclick="toggle('pre140451919427056', 'post140451919427056')"><pre>    &quot;&quot;&quot;</pre></li>
+                
+                  <li onclick="toggle('pre140451919427056', 'post140451919427056')"><pre>    # We could just do view_func.csrf_exempt = True, but decorators</pre></li>
+                
+                  <li onclick="toggle('pre140451919427056', 'post140451919427056')"><pre>    # are nicer if they don&#39;t have side-effects, so we return a new</pre></li>
+                
+                  <li onclick="toggle('pre140451919427056', 'post140451919427056')"><pre>    # function.</pre></li>
+                
+                  <li onclick="toggle('pre140451919427056', 'post140451919427056')"><pre>    def wrapped_view(*args, **kwargs):</pre></li>
+                
+                </ol>
+              
+              <ol start="58" class="context-line">
+                <li onclick="toggle('pre140451919427056', 'post140451919427056')"><pre>
+        return view_func(*args, **kwargs)</pre> <span>...</span></li></ol>
+              
+                <ol start='59' class="post-context" id="post140451919427056">
+                  
+                  <li onclick="toggle('pre140451919427056', 'post140451919427056')"><pre>    wrapped_view.csrf_exempt = True</pre></li>
+                  
+                  <li onclick="toggle('pre140451919427056', 'post140451919427056')"><pre>    return wraps(view_func, assigned=available_attrs(view_func))(wrapped_view)</pre></li>
+                  
+              </ol>
+              
+            </div>
+          
+
+          
+            <div class="commands">
+                
+                    <a href="#" onclick="return varToggle(this, '140451919427056')"><span>&#x25b6;</span> Local vars</a>
+                
+            </div>
+            <table class="vars" id="v140451919427056">
+              <thead>
+                <tr>
+                  <th>Variable</th>
+                  <th>Value</th>
+                </tr>
+              </thead>
+              <tbody>
+                
+                  <tr>
+                    <td>args</td>
+                    <td class="code"><pre>(&lt;WSGIRequest: POST &#39;/api2/auth-token/&#39;&gt;,)</pre></td>
+                  </tr>
+                
+                  <tr>
+                    <td>kwargs</td>
+                    <td class="code"><pre>{}</pre></td>
+                  </tr>
+                
+                  <tr>
+                    <td>view_func</td>
+                    <td class="code"><pre>&lt;function ObtainAuthToken at 0x7fbd88071938&gt;</pre></td>
+                  </tr>
+                
+              </tbody>
+            </table>
+          
+        </li>
+      
+        
+        <li class="frame django">
+          <code>/usr/local/lib/python2.7/dist-packages/django/views/generic/base.py</code> in <code>view</code>
+
+          
+            <div class="context" id="c140451919426696">
+              
+                <ol start="61" class="pre-context" id="pre140451919426696">
+                
+                  <li onclick="toggle('pre140451919426696', 'post140451919426696')"><pre>        def view(request, *args, **kwargs):</pre></li>
+                
+                  <li onclick="toggle('pre140451919426696', 'post140451919426696')"><pre>            self = cls(**initkwargs)</pre></li>
+                
+                  <li onclick="toggle('pre140451919426696', 'post140451919426696')"><pre>            if hasattr(self, &#39;get&#39;) and not hasattr(self, &#39;head&#39;):</pre></li>
+                
+                  <li onclick="toggle('pre140451919426696', 'post140451919426696')"><pre>                self.head = self.get</pre></li>
+                
+                  <li onclick="toggle('pre140451919426696', 'post140451919426696')"><pre>            self.request = request</pre></li>
+                
+                  <li onclick="toggle('pre140451919426696', 'post140451919426696')"><pre>            self.args = args</pre></li>
+                
+                  <li onclick="toggle('pre140451919426696', 'post140451919426696')"><pre>            self.kwargs = kwargs</pre></li>
+                
+                </ol>
+              
+              <ol start="68" class="context-line">
+                <li onclick="toggle('pre140451919426696', 'post140451919426696')"><pre>
+            return self.dispatch(request, *args, **kwargs)</pre> <span>...</span></li></ol>
+              
+                <ol start='69' class="post-context" id="post140451919426696">
+                  
+                  <li onclick="toggle('pre140451919426696', 'post140451919426696')"><pre>        view.view_class = cls</pre></li>
+                  
+                  <li onclick="toggle('pre140451919426696', 'post140451919426696')"><pre>        view.view_initkwargs = initkwargs</pre></li>
+                  
+                  <li onclick="toggle('pre140451919426696', 'post140451919426696')"><pre></pre></li>
+                  
+                  <li onclick="toggle('pre140451919426696', 'post140451919426696')"><pre>        # take name and docstring from class</pre></li>
+                  
+                  <li onclick="toggle('pre140451919426696', 'post140451919426696')"><pre>        update_wrapper(view, cls, updated=())</pre></li>
+                  
+                  <li onclick="toggle('pre140451919426696', 'post140451919426696')"><pre></pre></li>
+                  
+              </ol>
+              
+            </div>
+          
+
+          
+            <div class="commands">
+                
+                    <a href="#" onclick="return varToggle(this, '140451919426696')"><span>&#x25b6;</span> Local vars</a>
+                
+            </div>
+            <table class="vars" id="v140451919426696">
+              <thead>
+                <tr>
+                  <th>Variable</th>
+                  <th>Value</th>
+                </tr>
+              </thead>
+              <tbody>
+                
+                  <tr>
+                    <td>args</td>
+                    <td class="code"><pre>()</pre></td>
+                  </tr>
+                
+                  <tr>
+                    <td>cls</td>
+                    <td class="code"><pre>&lt;class &#39;seahub.api2.views.ObtainAuthToken&#39;&gt;</pre></td>
+                  </tr>
+                
+                  <tr>
+                    <td>initkwargs</td>
+                    <td class="code"><pre>{}</pre></td>
+                  </tr>
+                
+                  <tr>
+                    <td>kwargs</td>
+                    <td class="code"><pre>{}</pre></td>
+                  </tr>
+                
+                  <tr>
+                    <td>request</td>
+                    <td class="code"><pre>&lt;WSGIRequest: POST &#39;/api2/auth-token/&#39;&gt;</pre></td>
+                  </tr>
+                
+                  <tr>
+                    <td>self</td>
+                    <td class="code"><pre>&lt;seahub.api2.views.ObtainAuthToken object at 0x7fbd834a3810&gt;</pre></td>
+                  </tr>
+                
+              </tbody>
+            </table>
+          
+        </li>
+      
+        
+        <li class="frame user">
+          <code>/home/gpd/dev/seahub/seahub/api2/base.py</code> in <code>dispatch</code>
+
+          
+            <div class="context" id="c140451919426768">
+              
+                <ol start="16" class="pre-context" id="pre140451919426768">
+                
+                  <li onclick="toggle('pre140451919426768', 'post140451919426768')"><pre>        self._seafile_exc = None</pre></li>
+                
+                  <li onclick="toggle('pre140451919426768', 'post140451919426768')"><pre></pre></li>
+                
+                  <li onclick="toggle('pre140451919426768', 'post140451919426768')"><pre>    def handle_exception(self, exc):</pre></li>
+                
+                  <li onclick="toggle('pre140451919426768', 'post140451919426768')"><pre>        self._seafile_exc = exc</pre></li>
+                
+                  <li onclick="toggle('pre140451919426768', 'post140451919426768')"><pre>        return super(APIView, self).handle_exception(exc)</pre></li>
+                
+                  <li onclick="toggle('pre140451919426768', 'post140451919426768')"><pre></pre></li>
+                
+                  <li onclick="toggle('pre140451919426768', 'post140451919426768')"><pre>    def dispatch(self, *a, **kw):</pre></li>
+                
+                </ol>
+              
+              <ol start="23" class="context-line">
+                <li onclick="toggle('pre140451919426768', 'post140451919426768')"><pre>
+        response = super(APIView, self).dispatch(*a, **kw)</pre> <span>...</span></li></ol>
+              
+                <ol start='24' class="post-context" id="post140451919426768">
+                  
+                  <li onclick="toggle('pre140451919426768', 'post140451919426768')"><pre>        if self._seafile_exc and isinstance(self._seafile_exc, DeviceRemoteWipedException):</pre></li>
+                  
+                  <li onclick="toggle('pre140451919426768', 'post140451919426768')"><pre>            response[&#39;X-Seafile-Wiped&#39;] = &#39;true&#39;</pre></li>
+                  
+                  <li onclick="toggle('pre140451919426768', 'post140451919426768')"><pre>        return response</pre></li>
+                  
+              </ol>
+              
+            </div>
+          
+
+          
+            <div class="commands">
+                
+                    <a href="#" onclick="return varToggle(this, '140451919426768')"><span>&#x25b6;</span> Local vars</a>
+                
+            </div>
+            <table class="vars" id="v140451919426768">
+              <thead>
+                <tr>
+                  <th>Variable</th>
+                  <th>Value</th>
+                </tr>
+              </thead>
+              <tbody>
+                
+                  <tr>
+                    <td>a</td>
+                    <td class="code"><pre>(&lt;WSGIRequest: POST &#39;/api2/auth-token/&#39;&gt;,)</pre></td>
+                  </tr>
+                
+                  <tr>
+                    <td>kw</td>
+                    <td class="code"><pre>{}</pre></td>
+                  </tr>
+                
+                  <tr>
+                    <td>self</td>
+                    <td class="code"><pre>&lt;seahub.api2.views.ObtainAuthToken object at 0x7fbd834a3810&gt;</pre></td>
+                  </tr>
+                
+              </tbody>
+            </table>
+          
+        </li>
+      
+        
+        <li class="frame user">
+          <code>/usr/local/lib/python2.7/dist-packages/rest_framework/views.py</code> in <code>dispatch</code>
+
+          
+            <div class="context" id="c140451919426840">
+              
+                <ol start="459" class="pre-context" id="pre140451919426840">
+                
+                  <li onclick="toggle('pre140451919426840', 'post140451919426840')"><pre>                                  self.http_method_not_allowed)</pre></li>
+                
+                  <li onclick="toggle('pre140451919426840', 'post140451919426840')"><pre>            else:</pre></li>
+                
+                  <li onclick="toggle('pre140451919426840', 'post140451919426840')"><pre>                handler = self.http_method_not_allowed</pre></li>
+                
+                  <li onclick="toggle('pre140451919426840', 'post140451919426840')"><pre></pre></li>
+                
+                  <li onclick="toggle('pre140451919426840', 'post140451919426840')"><pre>            response = handler(request, *args, **kwargs)</pre></li>
+                
+                  <li onclick="toggle('pre140451919426840', 'post140451919426840')"><pre></pre></li>
+                
+                  <li onclick="toggle('pre140451919426840', 'post140451919426840')"><pre>        except Exception as exc:</pre></li>
+                
+                </ol>
+              
+              <ol start="466" class="context-line">
+                <li onclick="toggle('pre140451919426840', 'post140451919426840')"><pre>
+            response = self.handle_exception(exc)</pre> <span>...</span></li></ol>
+              
+                <ol start='467' class="post-context" id="post140451919426840">
+                  
+                  <li onclick="toggle('pre140451919426840', 'post140451919426840')"><pre></pre></li>
+                  
+                  <li onclick="toggle('pre140451919426840', 'post140451919426840')"><pre>        self.response = self.finalize_response(request, response, *args, **kwargs)</pre></li>
+                  
+                  <li onclick="toggle('pre140451919426840', 'post140451919426840')"><pre>        return self.response</pre></li>
+                  
+                  <li onclick="toggle('pre140451919426840', 'post140451919426840')"><pre></pre></li>
+                  
+                  <li onclick="toggle('pre140451919426840', 'post140451919426840')"><pre>    def options(self, request, *args, **kwargs):</pre></li>
+                  
+                  <li onclick="toggle('pre140451919426840', 'post140451919426840')"><pre>        &quot;&quot;&quot;</pre></li>
+                  
+              </ol>
+              
+            </div>
+          
+
+          
+            <div class="commands">
+                
+                    <a href="#" onclick="return varToggle(this, '140451919426840')"><span>&#x25b6;</span> Local vars</a>
+                
+            </div>
+            <table class="vars" id="v140451919426840">
+              <thead>
+                <tr>
+                  <th>Variable</th>
+                  <th>Value</th>
+                </tr>
+              </thead>
+              <tbody>
+                
+                  <tr>
+                    <td>args</td>
+                    <td class="code"><pre>()</pre></td>
+                  </tr>
+                
+                  <tr>
+                    <td>exc</td>
+                    <td class="code"><pre>AssertionError()</pre></td>
+                  </tr>
+                
+                  <tr>
+                    <td>handler</td>
+                    <td class="code"><pre>&lt;bound method ObtainAuthToken.post of &lt;seahub.api2.views.ObtainAuthToken object at 0x7fbd834a3810&gt;&gt;</pre></td>
+                  </tr>
+                
+                  <tr>
+                    <td>kwargs</td>
+                    <td class="code"><pre>{}</pre></td>
+                  </tr>
+                
+                  <tr>
+                    <td>request</td>
+                    <td class="code"><pre>&lt;rest_framework.request.Request object at 0x7fbd834a35d0&gt;</pre></td>
+                  </tr>
+                
+                  <tr>
+                    <td>self</td>
+                    <td class="code"><pre>&lt;seahub.api2.views.ObtainAuthToken object at 0x7fbd834a3810&gt;</pre></td>
+                  </tr>
+                
+              </tbody>
+            </table>
+          
+        </li>
+      
+        
+        <li class="frame user">
+          <code>/home/gpd/dev/seahub/seahub/api2/base.py</code> in <code>handle_exception</code>
+
+          
+            <div class="context" id="c140451919426912">
+              
+                <ol start="13" class="pre-context" id="pre140451919426912">
+                
+                  <li onclick="toggle('pre140451919426912', 'post140451919426912')"><pre>    &quot;&quot;&quot;</pre></li>
+                
+                  <li onclick="toggle('pre140451919426912', 'post140451919426912')"><pre>    def __init__(self, *a, **kw):</pre></li>
+                
+                  <li onclick="toggle('pre140451919426912', 'post140451919426912')"><pre>        super(APIView, self).__init__(*a, **kw)</pre></li>
+                
+                  <li onclick="toggle('pre140451919426912', 'post140451919426912')"><pre>        self._seafile_exc = None</pre></li>
+                
+                  <li onclick="toggle('pre140451919426912', 'post140451919426912')"><pre></pre></li>
+                
+                  <li onclick="toggle('pre140451919426912', 'post140451919426912')"><pre>    def handle_exception(self, exc):</pre></li>
+                
+                  <li onclick="toggle('pre140451919426912', 'post140451919426912')"><pre>        self._seafile_exc = exc</pre></li>
+                
+                </ol>
+              
+              <ol start="20" class="context-line">
+                <li onclick="toggle('pre140451919426912', 'post140451919426912')"><pre>
+        return super(APIView, self).handle_exception(exc)</pre> <span>...</span></li></ol>
+              
+                <ol start='21' class="post-context" id="post140451919426912">
+                  
+                  <li onclick="toggle('pre140451919426912', 'post140451919426912')"><pre></pre></li>
+                  
+                  <li onclick="toggle('pre140451919426912', 'post140451919426912')"><pre>    def dispatch(self, *a, **kw):</pre></li>
+                  
+                  <li onclick="toggle('pre140451919426912', 'post140451919426912')"><pre>        response = super(APIView, self).dispatch(*a, **kw)</pre></li>
+                  
+                  <li onclick="toggle('pre140451919426912', 'post140451919426912')"><pre>        if self._seafile_exc and isinstance(self._seafile_exc, DeviceRemoteWipedException):</pre></li>
+                  
+                  <li onclick="toggle('pre140451919426912', 'post140451919426912')"><pre>            response[&#39;X-Seafile-Wiped&#39;] = &#39;true&#39;</pre></li>
+                  
+                  <li onclick="toggle('pre140451919426912', 'post140451919426912')"><pre>        return response</pre></li>
+                  
+              </ol>
+              
+            </div>
+          
+
+          
+            <div class="commands">
+                
+                    <a href="#" onclick="return varToggle(this, '140451919426912')"><span>&#x25b6;</span> Local vars</a>
+                
+            </div>
+            <table class="vars" id="v140451919426912">
+              <thead>
+                <tr>
+                  <th>Variable</th>
+                  <th>Value</th>
+                </tr>
+              </thead>
+              <tbody>
+                
+                  <tr>
+                    <td>exc</td>
+                    <td class="code"><pre>AssertionError()</pre></td>
+                  </tr>
+                
+                  <tr>
+                    <td>self</td>
+                    <td class="code"><pre>&lt;seahub.api2.views.ObtainAuthToken object at 0x7fbd834a3810&gt;</pre></td>
+                  </tr>
+                
+              </tbody>
+            </table>
+          
+        </li>
+      
+        
+        <li class="frame user">
+          <code>/usr/local/lib/python2.7/dist-packages/rest_framework/views.py</code> in <code>dispatch</code>
+
+          
+            <div class="context" id="c140451919426984">
+              
+                <ol start="456" class="pre-context" id="pre140451919426984">
+                
+                  <li onclick="toggle('pre140451919426984', 'post140451919426984')"><pre>            # Get the appropriate handler method</pre></li>
+                
+                  <li onclick="toggle('pre140451919426984', 'post140451919426984')"><pre>            if request.method.lower() in self.http_method_names:</pre></li>
+                
+                  <li onclick="toggle('pre140451919426984', 'post140451919426984')"><pre>                handler = getattr(self, request.method.lower(),</pre></li>
+                
+                  <li onclick="toggle('pre140451919426984', 'post140451919426984')"><pre>                                  self.http_method_not_allowed)</pre></li>
+                
+                  <li onclick="toggle('pre140451919426984', 'post140451919426984')"><pre>            else:</pre></li>
+                
+                  <li onclick="toggle('pre140451919426984', 'post140451919426984')"><pre>                handler = self.http_method_not_allowed</pre></li>
+                
+                  <li onclick="toggle('pre140451919426984', 'post140451919426984')"><pre></pre></li>
+                
+                </ol>
+              
+              <ol start="463" class="context-line">
+                <li onclick="toggle('pre140451919426984', 'post140451919426984')"><pre>
+            response = handler(request, *args, **kwargs)</pre> <span>...</span></li></ol>
+              
+                <ol start='464' class="post-context" id="post140451919426984">
+                  
+                  <li onclick="toggle('pre140451919426984', 'post140451919426984')"><pre></pre></li>
+                  
+                  <li onclick="toggle('pre140451919426984', 'post140451919426984')"><pre>        except Exception as exc:</pre></li>
+                  
+                  <li onclick="toggle('pre140451919426984', 'post140451919426984')"><pre>            response = self.handle_exception(exc)</pre></li>
+                  
+                  <li onclick="toggle('pre140451919426984', 'post140451919426984')"><pre></pre></li>
+                  
+                  <li onclick="toggle('pre140451919426984', 'post140451919426984')"><pre>        self.response = self.finalize_response(request, response, *args, **kwargs)</pre></li>
+                  
+                  <li onclick="toggle('pre140451919426984', 'post140451919426984')"><pre>        return self.response</pre></li>
+                  
+              </ol>
+              
+            </div>
+          
+
+          
+            <div class="commands">
+                
+                    <a href="#" onclick="return varToggle(this, '140451919426984')"><span>&#x25b6;</span> Local vars</a>
+                
+            </div>
+            <table class="vars" id="v140451919426984">
+              <thead>
+                <tr>
+                  <th>Variable</th>
+                  <th>Value</th>
+                </tr>
+              </thead>
+              <tbody>
+                
+                  <tr>
+                    <td>args</td>
+                    <td class="code"><pre>()</pre></td>
+                  </tr>
+                
+                  <tr>
+                    <td>exc</td>
+                    <td class="code"><pre>AssertionError()</pre></td>
+                  </tr>
+                
+                  <tr>
+                    <td>handler</td>
+                    <td class="code"><pre>&lt;bound method ObtainAuthToken.post of &lt;seahub.api2.views.ObtainAuthToken object at 0x7fbd834a3810&gt;&gt;</pre></td>
+                  </tr>
+                
+                  <tr>
+                    <td>kwargs</td>
+                    <td class="code"><pre>{}</pre></td>
+                  </tr>
+                
+                  <tr>
+                    <td>request</td>
+                    <td class="code"><pre>&lt;rest_framework.request.Request object at 0x7fbd834a35d0&gt;</pre></td>
+                  </tr>
+                
+                  <tr>
+                    <td>self</td>
+                    <td class="code"><pre>&lt;seahub.api2.views.ObtainAuthToken object at 0x7fbd834a3810&gt;</pre></td>
+                  </tr>
+                
+              </tbody>
+            </table>
+          
+        </li>
+      
+        
+        <li class="frame user">
+          <code>/home/gpd/dev/seahub/seahub/api2/views.py</code> in <code>post</code>
+
+          
+            <div class="context" id="c140451919426624">
+              
+                <ol start="182" class="pre-context" id="pre140451919426624">
+                
+                  <li onclick="toggle('pre140451919426624', 'post140451919426624')"><pre>    parser_classes = (parsers.FormParser, parsers.MultiPartParser, parsers.JSONParser,)</pre></li>
+                
+                  <li onclick="toggle('pre140451919426624', 'post140451919426624')"><pre>    renderer_classes = (renderers.JSONRenderer,)</pre></li>
+                
+                  <li onclick="toggle('pre140451919426624', 'post140451919426624')"><pre></pre></li>
+                
+                  <li onclick="toggle('pre140451919426624', 'post140451919426624')"><pre>    def post(self, request):</pre></li>
+                
+                  <li onclick="toggle('pre140451919426624', 'post140451919426624')"><pre>        headers = {}</pre></li>
+                
+                  <li onclick="toggle('pre140451919426624', 'post140451919426624')"><pre>        context = { &#39;request&#39;: request }</pre></li>
+                
+                  <li onclick="toggle('pre140451919426624', 'post140451919426624')"><pre>        serializer = AuthTokenSerializer(data=request.data, context=context)</pre></li>
+                
+                </ol>
+              
+              <ol start="189" class="context-line">
+                <li onclick="toggle('pre140451919426624', 'post140451919426624')"><pre>
+        if serializer.is_valid():</pre> <span>...</span></li></ol>
+              
+                <ol start='190' class="post-context" id="post140451919426624">
+                  
+                  <li onclick="toggle('pre140451919426624', 'post140451919426624')"><pre>            key = serializer.validated_data</pre></li>
+                  
+                  <li onclick="toggle('pre140451919426624', 'post140451919426624')"><pre></pre></li>
+                  
+                  <li onclick="toggle('pre140451919426624', 'post140451919426624')"><pre>            trust_dev = False</pre></li>
+                  
+                  <li onclick="toggle('pre140451919426624', 'post140451919426624')"><pre>            try:</pre></li>
+                  
+                  <li onclick="toggle('pre140451919426624', 'post140451919426624')"><pre>                trust_dev_header = int(request.META.get(&#39;HTTP_X_SEAFILE_2FA_TRUST_DEVICE&#39;, &#39;&#39;))</pre></li>
+                  
+                  <li onclick="toggle('pre140451919426624', 'post140451919426624')"><pre>                trust_dev = True if trust_dev_header == 1 else False</pre></li>
+                  
+              </ol>
+              
+            </div>
+          
+
+          
+            <div class="commands">
+                
+                    <a href="#" onclick="return varToggle(this, '140451919426624')"><span>&#x25b6;</span> Local vars</a>
+                
+            </div>
+            <table class="vars" id="v140451919426624">
+              <thead>
+                <tr>
+                  <th>Variable</th>
+                  <th>Value</th>
+                </tr>
+              </thead>
+              <tbody>
+                
+                  <tr>
+                    <td>context</td>
+                    <td class="code"><pre>{&#39;request&#39;: &lt;rest_framework.request.Request object at 0x7fbd834a35d0&gt;}</pre></td>
+                  </tr>
+                
+                  <tr>
+                    <td>headers</td>
+                    <td class="code"><pre>{}</pre></td>
+                  </tr>
+                
+                  <tr>
+                    <td>request</td>
+                    <td class="code"><pre>&lt;rest_framework.request.Request object at 0x7fbd834a35d0&gt;</pre></td>
+                  </tr>
+                
+                  <tr>
+                    <td>self</td>
+                    <td class="code"><pre>&lt;seahub.api2.views.ObtainAuthToken object at 0x7fbd834a3810&gt;</pre></td>
+                  </tr>
+                
+                  <tr>
+                    <td>serializer</td>
+                    <td class="code"><pre>AuthTokenSerializer(context={&#39;request&#39;: &lt;rest_framework.request.Request object&gt;}, data=&lt;QueryDict: {u&#39;username&#39;: [u&#39;369318816@qq.come&#39;], u&#39;password&#39;: [u&#39;56267&#39;]}&gt;):
+    username = CharField()
+    password = CharField()
+    platform = CharField(required=False)
+    device_id = CharField(required=False)
+    device_name = CharField(required=False)
+    client_version = CharField(default=&#39;&#39;, required=False)
+    platform_version = CharField(default=&#39;&#39;, required=False)</pre></td>
+                  </tr>
+                
+              </tbody>
+            </table>
+          
+        </li>
+      
+        
+        <li class="frame user">
+          <code>/usr/local/lib/python2.7/dist-packages/rest_framework/serializers.py</code> in <code>is_valid</code>
+
+          
+            <div class="context" id="c140451919426552">
+              
+                <ol start="206" class="pre-context" id="pre140451919426552">
+                
+                  <li onclick="toggle('pre140451919426552', 'post140451919426552')"><pre>        assert hasattr(self, &#39;initial_data&#39;), (</pre></li>
+                
+                  <li onclick="toggle('pre140451919426552', 'post140451919426552')"><pre>            &#39;Cannot call `.is_valid()` as no `data=` keyword argument was &#39;</pre></li>
+                
+                  <li onclick="toggle('pre140451919426552', 'post140451919426552')"><pre>            &#39;passed when instantiating the serializer instance.&#39;</pre></li>
+                
+                  <li onclick="toggle('pre140451919426552', 'post140451919426552')"><pre>        )</pre></li>
+                
+                  <li onclick="toggle('pre140451919426552', 'post140451919426552')"><pre></pre></li>
+                
+                  <li onclick="toggle('pre140451919426552', 'post140451919426552')"><pre>        if not hasattr(self, &#39;_validated_data&#39;):</pre></li>
+                
+                  <li onclick="toggle('pre140451919426552', 'post140451919426552')"><pre>            try:</pre></li>
+                
+                </ol>
+              
+              <ol start="213" class="context-line">
+                <li onclick="toggle('pre140451919426552', 'post140451919426552')"><pre>
+                self._validated_data = self.run_validation(self.initial_data)</pre> <span>...</span></li></ol>
+              
+                <ol start='214' class="post-context" id="post140451919426552">
+                  
+                  <li onclick="toggle('pre140451919426552', 'post140451919426552')"><pre>            except ValidationError as exc:</pre></li>
+                  
+                  <li onclick="toggle('pre140451919426552', 'post140451919426552')"><pre>                self._validated_data = {}</pre></li>
+                  
+                  <li onclick="toggle('pre140451919426552', 'post140451919426552')"><pre>                self._errors = exc.detail</pre></li>
+                  
+                  <li onclick="toggle('pre140451919426552', 'post140451919426552')"><pre>            else:</pre></li>
+                  
+                  <li onclick="toggle('pre140451919426552', 'post140451919426552')"><pre>                self._errors = {}</pre></li>
+                  
+                  <li onclick="toggle('pre140451919426552', 'post140451919426552')"><pre></pre></li>
+                  
+              </ol>
+              
+            </div>
+          
+
+          
+            <div class="commands">
+                
+                    <a href="#" onclick="return varToggle(this, '140451919426552')"><span>&#x25b6;</span> Local vars</a>
+                
+            </div>
+            <table class="vars" id="v140451919426552">
+              <thead>
+                <tr>
+                  <th>Variable</th>
+                  <th>Value</th>
+                </tr>
+              </thead>
+              <tbody>
+                
+                  <tr>
+                    <td>raise_exception</td>
+                    <td class="code"><pre>False</pre></td>
+                  </tr>
+                
+                  <tr>
+                    <td>self</td>
+                    <td class="code"><pre>AuthTokenSerializer(context={&#39;request&#39;: &lt;rest_framework.request.Request object&gt;}, data=&lt;QueryDict: {u&#39;username&#39;: [u&#39;369318816@qq.come&#39;], u&#39;password&#39;: [u&#39;56267&#39;]}&gt;):
+    username = CharField()
+    password = CharField()
+    platform = CharField(required=False)
+    device_id = CharField(required=False)
+    device_name = CharField(required=False)
+    client_version = CharField(default=&#39;&#39;, required=False)
+    platform_version = CharField(default=&#39;&#39;, required=False)</pre></td>
+                  </tr>
+                
+              </tbody>
+            </table>
+          
+        </li>
+      
+        
+        <li class="frame user">
+          <code>/usr/local/lib/python2.7/dist-packages/rest_framework/serializers.py</code> in <code>run_validation</code>
+
+          
+            <div class="context" id="c140451919426480">
+              
+                <ol start="403" class="pre-context" id="pre140451919426480">
+                
+                  <li onclick="toggle('pre140451919426480', 'post140451919426480')"><pre>        (is_empty_value, data) = self.validate_empty_values(data)</pre></li>
+                
+                  <li onclick="toggle('pre140451919426480', 'post140451919426480')"><pre>        if is_empty_value:</pre></li>
+                
+                  <li onclick="toggle('pre140451919426480', 'post140451919426480')"><pre>            return data</pre></li>
+                
+                  <li onclick="toggle('pre140451919426480', 'post140451919426480')"><pre></pre></li>
+                
+                  <li onclick="toggle('pre140451919426480', 'post140451919426480')"><pre>        value = self.to_internal_value(data)</pre></li>
+                
+                  <li onclick="toggle('pre140451919426480', 'post140451919426480')"><pre>        try:</pre></li>
+                
+                  <li onclick="toggle('pre140451919426480', 'post140451919426480')"><pre>            self.run_validators(value)</pre></li>
+                
+                </ol>
+              
+              <ol start="410" class="context-line">
+                <li onclick="toggle('pre140451919426480', 'post140451919426480')"><pre>
+            value = self.validate(value)</pre> <span>...</span></li></ol>
+              
+                <ol start='411' class="post-context" id="post140451919426480">
+                  
+                  <li onclick="toggle('pre140451919426480', 'post140451919426480')"><pre>            assert value is not None, &#39;.validate() should return the validated data&#39;</pre></li>
+                  
+                  <li onclick="toggle('pre140451919426480', 'post140451919426480')"><pre>        except (ValidationError, DjangoValidationError) as exc:</pre></li>
+                  
+                  <li onclick="toggle('pre140451919426480', 'post140451919426480')"><pre>            raise ValidationError(detail=get_validation_error_detail(exc))</pre></li>
+                  
+                  <li onclick="toggle('pre140451919426480', 'post140451919426480')"><pre></pre></li>
+                  
+                  <li onclick="toggle('pre140451919426480', 'post140451919426480')"><pre>        return value</pre></li>
+                  
+                  <li onclick="toggle('pre140451919426480', 'post140451919426480')"><pre></pre></li>
+                  
+              </ol>
+              
+            </div>
+          
+
+          
+            <div class="commands">
+                
+                    <a href="#" onclick="return varToggle(this, '140451919426480')"><span>&#x25b6;</span> Local vars</a>
+                
+            </div>
+            <table class="vars" id="v140451919426480">
+              <thead>
+                <tr>
+                  <th>Variable</th>
+                  <th>Value</th>
+                </tr>
+              </thead>
+              <tbody>
+                
+                  <tr>
+                    <td>data</td>
+                    <td class="code"><pre>&lt;QueryDict: {u&#39;username&#39;: [u&#39;369318816@qq.come&#39;], u&#39;password&#39;: [u&#39;56267&#39;]}&gt;</pre></td>
+                  </tr>
+                
+                  <tr>
+                    <td>is_empty_value</td>
+                    <td class="code"><pre>False</pre></td>
+                  </tr>
+                
+                  <tr>
+                    <td>self</td>
+                    <td class="code"><pre>AuthTokenSerializer(context={&#39;request&#39;: &lt;rest_framework.request.Request object&gt;}, data=&lt;QueryDict: {u&#39;username&#39;: [u&#39;369318816@qq.come&#39;], u&#39;password&#39;: [u&#39;56267&#39;]}&gt;):
+    username = CharField()
+    password = CharField()
+    platform = CharField(required=False)
+    device_id = CharField(required=False)
+    device_name = CharField(required=False)
+    client_version = CharField(default=&#39;&#39;, required=False)
+    platform_version = CharField(default=&#39;&#39;, required=False)</pre></td>
+                  </tr>
+                
+                  <tr>
+                    <td>value</td>
+                    <td class="code"><pre>OrderedDict([(u&#39;username&#39;, u&#39;369318816@qq.come&#39;), (u&#39;password&#39;, u&#39;56267&#39;), (u&#39;client_version&#39;, &#39;&#39;), (u&#39;platform_version&#39;, &#39;&#39;)])</pre></td>
+                  </tr>
+                
+              </tbody>
+            </table>
+          
+        </li>
+      
+        
+        <li class="frame user">
+          <code>/home/gpd/dev/seahub/seahub/api2/serializers.py</code> in <code>validate</code>
+
+          
+            <div class="context" id="c140451919426408">
+              
+                <ol start="43" class="pre-context" id="pre140451919426408">
+                
+                  <li onclick="toggle('pre140451919426408', 'post140451919426408')"><pre></pre></li>
+                
+                  <li onclick="toggle('pre140451919426408', 'post140451919426408')"><pre>    def __init__(self, *a, **kw):</pre></li>
+                
+                  <li onclick="toggle('pre140451919426408', 'post140451919426408')"><pre>        super(AuthTokenSerializer, self).__init__(*a, **kw)</pre></li>
+                
+                  <li onclick="toggle('pre140451919426408', 'post140451919426408')"><pre>        self.two_factor_auth_failed = False</pre></li>
+                
+                  <li onclick="toggle('pre140451919426408', 'post140451919426408')"><pre></pre></li>
+                
+                  <li onclick="toggle('pre140451919426408', 'post140451919426408')"><pre>    def validate(self, attrs):</pre></li>
+                
+                  <li onclick="toggle('pre140451919426408', 'post140451919426408')"><pre>        login_id = attrs.get(&#39;username&#39;)</pre></li>
+                
+                </ol>
+              
+              <ol start="50" class="context-line">
+                <li onclick="toggle('pre140451919426408', 'post140451919426408')"><pre>
+	assert False </pre> <span>...</span></li></ol>
+              
+                <ol start='51' class="post-context" id="post140451919426408">
+                  
+                  <li onclick="toggle('pre140451919426408', 'post140451919426408')"><pre>        password = attrs.get(&#39;password&#39;)</pre></li>
+                  
+                  <li onclick="toggle('pre140451919426408', 'post140451919426408')"><pre></pre></li>
+                  
+                  <li onclick="toggle('pre140451919426408', 'post140451919426408')"><pre>        platform = attrs.get(&#39;platform&#39;, None)</pre></li>
+                  
+                  <li onclick="toggle('pre140451919426408', 'post140451919426408')"><pre>        device_id = attrs.get(&#39;device_id&#39;, None)</pre></li>
+                  
+                  <li onclick="toggle('pre140451919426408', 'post140451919426408')"><pre>        device_name = attrs.get(&#39;device_name&#39;, None)</pre></li>
+                  
+                  <li onclick="toggle('pre140451919426408', 'post140451919426408')"><pre>        client_version = attrs.get(&#39;client_version&#39;, None)</pre></li>
+                  
+              </ol>
+              
+            </div>
+          
+
+          
+            <div class="commands">
+                
+                    <a href="#" onclick="return varToggle(this, '140451919426408')"><span>&#x25b6;</span> Local vars</a>
+                
+            </div>
+            <table class="vars" id="v140451919426408">
+              <thead>
+                <tr>
+                  <th>Variable</th>
+                  <th>Value</th>
+                </tr>
+              </thead>
+              <tbody>
+                
+                  <tr>
+                    <td>attrs</td>
+                    <td class="code"><pre>OrderedDict([(u&#39;username&#39;, u&#39;369318816@qq.come&#39;), (u&#39;password&#39;, u&#39;56267&#39;), (u&#39;client_version&#39;, &#39;&#39;), (u&#39;platform_version&#39;, &#39;&#39;)])</pre></td>
+                  </tr>
+                
+                  <tr>
+                    <td>login_id</td>
+                    <td class="code"><pre>u&#39;369318816@qq.come&#39;</pre></td>
+                  </tr>
+                
+                  <tr>
+                    <td>self</td>
+                    <td class="code"><pre>AuthTokenSerializer(context={&#39;request&#39;: &lt;rest_framework.request.Request object&gt;}, data=&lt;QueryDict: {u&#39;username&#39;: [u&#39;369318816@qq.come&#39;], u&#39;password&#39;: [u&#39;56267&#39;]}&gt;):
+    username = CharField()
+    password = CharField()
+    platform = CharField(required=False)
+    device_id = CharField(required=False)
+    device_name = CharField(required=False)
+    client_version = CharField(default=&#39;&#39;, required=False)
+    platform_version = CharField(default=&#39;&#39;, required=False)</pre></td>
+                  </tr>
+                
+              </tbody>
+            </table>
+          
+        </li>
+      
+    </ul>
+  </div>
+  <form action="http://dpaste.com/" name="pasteform" id="pasteform" method="post">
+
+  <div id="pastebinTraceback" class="pastebin">
+    <input type="hidden" name="language" value="PythonConsole">
+    <input type="hidden" name="title"
+      value="AssertionError at /api2/auth-token/">
+    <input type="hidden" name="source" value="Django Dpaste Agent">
+    <input type="hidden" name="poster" value="Django">
+    <textarea name="content" id="traceback_area" cols="140" rows="25">
+Environment:
+
+
+Request Method: POST
+Request URL: http://192.168.1.177:8000/api2/auth-token/
+
+Django Version: 1.11.11
+Python Version: 2.7.12
+Installed Applications:
+(&#39;django.contrib.contenttypes&#39;,
+ &#39;django.contrib.sessions&#39;,
+ &#39;django.contrib.messages&#39;,
+ &#39;django.contrib.staticfiles&#39;,
+ &#39;seahub.base&#39;,
+ &#39;django.contrib.auth&#39;,
+ &#39;registration&#39;,
+ &#39;captcha&#39;,
+ &#39;compressor&#39;,
+ &#39;statici18n&#39;,
+ &#39;constance&#39;,
+ &#39;constance.backends.database&#39;,
+ &#39;post_office&#39;,
+ &#39;termsandconditions&#39;,
+ &#39;webpack_loader&#39;,
+ &#39;seahub.api2&#39;,
+ &#39;seahub.avatar&#39;,
+ &#39;seahub.contacts&#39;,
+ &#39;seahub.institutions&#39;,
+ &#39;seahub.invitations&#39;,
+ &#39;seahub.wiki&#39;,
+ &#39;seahub.group&#39;,
+ &#39;seahub.notifications&#39;,
+ &#39;seahub.options&#39;,
+ &#39;seahub.onlyoffice&#39;,
+ &#39;seahub.profile&#39;,
+ &#39;seahub.share&#39;,
+ &#39;seahub.help&#39;,
+ &#39;seahub.thumbnail&#39;,
+ &#39;seahub.password_session&#39;,
+ &#39;seahub.admin_log&#39;,
+ &#39;seahub.wopi&#39;,
+ &#39;seahub.tags&#39;,
+ &#39;seahub.revision_tag&#39;,
+ &#39;seahub.two_factor&#39;,
+ &#39;seahub.role_permissions&#39;,
+ &#39;seahub.trusted_ip&#39;)
+Installed Middleware:
+(&#39;django.contrib.sessions.middleware.SessionMiddleware&#39;,
+ &#39;django.middleware.locale.LocaleMiddleware&#39;,
+ &#39;django.middleware.common.CommonMiddleware&#39;,
+ &#39;django.middleware.csrf.CsrfViewMiddleware&#39;,
+ &#39;django.contrib.messages.middleware.MessageMiddleware&#39;,
+ &#39;seahub.auth.middleware.AuthenticationMiddleware&#39;,
+ &#39;seahub.base.middleware.BaseMiddleware&#39;,
+ &#39;seahub.base.middleware.InfobarMiddleware&#39;,
+ &#39;seahub.password_session.middleware.CheckPasswordHash&#39;,
+ &#39;seahub.base.middleware.ForcePasswdChangeMiddleware&#39;,
+ &#39;seahub.base.middleware.UserPermissionMiddleware&#39;,
+ &#39;termsandconditions.middleware.TermsAndConditionsRedirectMiddleware&#39;,
+ &#39;seahub.two_factor.middleware.OTPMiddleware&#39;,
+ &#39;seahub.trusted_ip.middleware.LimitIpMiddleware&#39;)
+
+
+
+Traceback:
+
+File "/usr/local/lib/python2.7/dist-packages/django/core/handlers/exception.py" in inner
+  41.             response = get_response(request)
+
+File "/usr/local/lib/python2.7/dist-packages/django/core/handlers/base.py" in _legacy_get_response
+  249.             response = self._get_response(request)
+
+File "/usr/local/lib/python2.7/dist-packages/django/core/handlers/base.py" in _get_response
+  187.                 response = self.process_exception_by_middleware(e, request)
+
+File "/usr/local/lib/python2.7/dist-packages/django/core/handlers/base.py" in _get_response
+  185.                 response = wrapped_callback(request, *callback_args, **callback_kwargs)
+
+File "/usr/local/lib/python2.7/dist-packages/django/views/decorators/csrf.py" in wrapped_view
+  58.         return view_func(*args, **kwargs)
+
+File "/usr/local/lib/python2.7/dist-packages/django/views/generic/base.py" in view
+  68.             return self.dispatch(request, *args, **kwargs)
+
+File "/home/gpd/dev/seahub/seahub/api2/base.py" in dispatch
+  23.         response = super(APIView, self).dispatch(*a, **kw)
+
+File "/usr/local/lib/python2.7/dist-packages/rest_framework/views.py" in dispatch
+  466.             response = self.handle_exception(exc)
+
+File "/home/gpd/dev/seahub/seahub/api2/base.py" in handle_exception
+  20.         return super(APIView, self).handle_exception(exc)
+
+File "/usr/local/lib/python2.7/dist-packages/rest_framework/views.py" in dispatch
+  463.             response = handler(request, *args, **kwargs)
+
+File "/home/gpd/dev/seahub/seahub/api2/views.py" in post
+  189.         if serializer.is_valid():
+
+File "/usr/local/lib/python2.7/dist-packages/rest_framework/serializers.py" in is_valid
+  213.                 self._validated_data = self.run_validation(self.initial_data)
+
+File "/usr/local/lib/python2.7/dist-packages/rest_framework/serializers.py" in run_validation
+  410.             value = self.validate(value)
+
+File "/home/gpd/dev/seahub/seahub/api2/serializers.py" in validate
+  50. 	assert False 
+
+Exception Type: AssertionError at /api2/auth-token/
+Exception Value: 
+</textarea>
+  <br><br>
+  <input type="submit" value="Share this traceback on a public website">
+  </div>
+</form>
+</div>
+
+
+
+<div id="requestinfo">
+  <h2>Request information</h2>
+
+
+  
+    <h3 id="user-info">USER</h3>
+    <p>AnonymousUser</p>
+  
+
+  <h3 id="get-info">GET</h3>
+  
+    <p>No GET data</p>
+  
+
+  <h3 id="post-info">POST</h3>
+  
+    <p>No POST data</p>
+  
+  <h3 id="files-info">FILES</h3>
+  
+    <p>No FILES data</p>
+  
+
+
+  <h3 id="cookie-info">COOKIES</h3>
+  
+    <p>No cookie data</p>
+  
+
+  <h3 id="meta-info">META</h3>
+  <table class="req">
+    <thead>
+      <tr>
+        <th>Variable</th>
+        <th>Value</th>
+      </tr>
+    </thead>
+    <tbody>
+      
+        <tr>
+          <td>CCNET_CONF_DIR</td>
+          <td class="code"><pre>&#39;/home/gpd/dev/seafile-server/tests/conf&#39;</pre></td>
+        </tr>
+      
+        <tr>
+          <td>CONTENT_LENGTH</td>
+          <td class="code"><pre>&#39;41&#39;</pre></td>
+        </tr>
+      
+        <tr>
+          <td>CONTENT_TYPE</td>
+          <td class="code"><pre>&#39;application/x-www-form-urlencoded&#39;</pre></td>
+        </tr>
+      
+        <tr>
+          <td>DJANGO_SETTINGS_MODULE</td>
+          <td class="code"><pre>&#39;seahub.settings&#39;</pre></td>
+        </tr>
+      
+        <tr>
+          <td>GATEWAY_INTERFACE</td>
+          <td class="code"><pre>&#39;CGI/1.1&#39;</pre></td>
+        </tr>
+      
+        <tr>
+          <td>HOME</td>
+          <td class="code"><pre>&#39;/home/gpd&#39;</pre></td>
+        </tr>
+      
+        <tr>
+          <td>HTTP_ACCEPT</td>
+          <td class="code"><pre>&#39;*/*&#39;</pre></td>
+        </tr>
+      
+        <tr>
+          <td>HTTP_HOST</td>
+          <td class="code"><pre>&#39;192.168.1.177:8000&#39;</pre></td>
+        </tr>
+      
+        <tr>
+          <td>HTTP_USER_AGENT</td>
+          <td class="code"><pre>&#39;curl/7.47.0&#39;</pre></td>
+        </tr>
+      
+        <tr>
+          <td>LANG</td>
+          <td class="code"><pre>&#39;zh_CN.UTF-8&#39;</pre></td>
+        </tr>
+      
+        <tr>
+          <td>LANGUAGE</td>
+          <td class="code"><pre>&#39;zh_CN:en&#39;</pre></td>
+        </tr>
+      
+        <tr>
+          <td>LC_ADDRESS</td>
+          <td class="code"><pre>&#39;zh_CN.UTF-8&#39;</pre></td>
+        </tr>
+      
+        <tr>
+          <td>LC_CTYPE</td>
+          <td class="code"><pre>&#39;zh_CN.UTF-8&#39;</pre></td>
+        </tr>
+      
+        <tr>
+          <td>LC_IDENTIFICATION</td>
+          <td class="code"><pre>&#39;zh_CN.UTF-8&#39;</pre></td>
+        </tr>
+      
+        <tr>
+          <td>LC_MEASUREMENT</td>
+          <td class="code"><pre>&#39;zh_CN.UTF-8&#39;</pre></td>
+        </tr>
+      
+        <tr>
+          <td>LC_MONETARY</td>
+          <td class="code"><pre>&#39;zh_CN.UTF-8&#39;</pre></td>
+        </tr>
+      
+        <tr>
+          <td>LC_NAME</td>
+          <td class="code"><pre>&#39;zh_CN.UTF-8&#39;</pre></td>
+        </tr>
+      
+        <tr>
+          <td>LC_NUMERIC</td>
+          <td class="code"><pre>&#39;zh_CN.UTF-8&#39;</pre></td>
+        </tr>
+      
+        <tr>
+          <td>LC_PAPER</td>
+          <td class="code"><pre>&#39;zh_CN.UTF-8&#39;</pre></td>
+        </tr>
+      
+        <tr>
+          <td>LC_TELEPHONE</td>
+          <td class="code"><pre>&#39;zh_CN.UTF-8&#39;</pre></td>
+        </tr>
+      
+        <tr>
+          <td>LC_TIME</td>
+          <td class="code"><pre>&#39;zh_CN.UTF-8&#39;</pre></td>
+        </tr>
+      
+        <tr>
+          <td>LESSCLOSE</td>
+          <td class="code"><pre>&#39;/usr/bin/lesspipe %s %s&#39;</pre></td>
+        </tr>
+      
+        <tr>
+          <td>LESSOPEN</td>
+          <td class="code"><pre>&#39;| /usr/bin/lesspipe %s&#39;</pre></td>
+        </tr>
+      
+        <tr>
+          <td>LOGNAME</td>
+          <td class="code"><pre>&#39;gpd&#39;</pre></td>
+        </tr>
+      
+        <tr>
+          <td>LS_COLORS</td>
+          <td class="code"><pre>&#39;rs=0:di=01;34:ln=01;36:mh=00:pi=40;33:so=01;35:do=01;35:bd=40;33;01:cd=40;33;01:or=40;31;01:mi=00:su=37;41:sg=30;43:ca=30;41:tw=30;42:ow=34;42:st=37;44:ex=01;32:*.tar=01;31:*.tgz=01;31:*.arc=01;31:*.arj=01;31:*.taz=01;31:*.lha=01;31:*.lz4=01;31:*.lzh=01;31:*.lzma=01;31:*.tlz=01;31:*.txz=01;31:*.tzo=01;31:*.t7z=01;31:*.zip=01;31:*.z=01;31:*.Z=01;31:*.dz=01;31:*.gz=01;31:*.lrz=01;31:*.lz=01;31:*.lzo=01;31:*.xz=01;31:*.bz2=01;31:*.bz=01;31:*.tbz=01;31:*.tbz2=01;31:*.tz=01;31:*.deb=01;31:*.rpm=01;31:*.jar=01;31:*.war=01;31:*.ear=01;31:*.sar=01;31:*.rar=01;31:*.alz=01;31:*.ace=01;31:*.zoo=01;31:*.cpio=01;31:*.7z=01;31:*.rz=01;31:*.cab=01;31:*.jpg=01;35:*.jpeg=01;35:*.gif=01;35:*.bmp=01;35:*.pbm=01;35:*.pgm=01;35:*.ppm=01;35:*.tga=01;35:*.xbm=01;35:*.xpm=01;35:*.tif=01;35:*.tiff=01;35:*.png=01;35:*.svg=01;35:*.svgz=01;35:*.mng=01;35:*.pcx=01;35:*.mov=01;35:*.mpg=01;35:*.mpeg=01;35:*.m2v=01;35:*.mkv=01;35:*.webm=01;35:*.ogm=01;35:*.mp4=01;35:*.m4v=01;35:*.mp4v=01;35:*.vob=01;35:*.qt=01;35:*.nuv=01;35:*.wmv=01;35:*.asf=01;35:*.rm=01;35:*.rmvb=01;35:*.flc=01;35:*.avi=01;35:*.fli=01;35:*.flv=01;35:*.gl=01;35:*.dl=01;35:*.xcf=01;35:*.xwd=01;35:*.yuv=01;35:*.cgm=01;35:*.emf=01;35:*.ogv=01;35:*.ogx=01;35:*.aac=00;36:*.au=00;36:*.flac=00;36:*.m4a=00;36:*.mid=00;36:*.midi=00;36:*.mka=00;36:*.mp3=00;36:*.mpc=00;36:*.ogg=00;36:*.ra=00;36:*.wav=00;36:*.oga=00;36:*.opus=00;36:*.spx=00;36:*.xspf=00;36:&#39;</pre></td>
+        </tr>
+      
+        <tr>
+          <td>MAIL</td>
+          <td class="code"><pre>&#39;/var/mail/gpd&#39;</pre></td>
+        </tr>
+      
+        <tr>
+          <td>OLDPWD</td>
+          <td class="code"><pre>&#39;/home/gpd&#39;</pre></td>
+        </tr>
+      
+        <tr>
+          <td>PAPERSIZE</td>
+          <td class="code"><pre>&#39;a4&#39;</pre></td>
+        </tr>
+      
+        <tr>
+          <td>PATH</td>
+          <td class="code"><pre>&#39;/home/gpd/bin:/home/gpd/.local/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/usr/games:/usr/local/games:/snap/bin&#39;</pre></td>
+        </tr>
+      
+        <tr>
+          <td>PATH_INFO</td>
+          <td class="code"><pre>u&#39;/api2/auth-token/&#39;</pre></td>
+        </tr>
+      
+        <tr>
+          <td>PWD</td>
+          <td class="code"><pre>&#39;/home/gpd/dev/seahub&#39;</pre></td>
+        </tr>
+      
+        <tr>
+          <td>PYTHONPATH</td>
+          <td class="code"><pre>&#39;/usr/local/lib/python2.7/dist-packages:thirdpart:/usr/local/lib/python2.7/dist-packages:thirdpart:/usr/local/lib/python2.7/dist-packages:thirdpart:&#39;</pre></td>
+        </tr>
+      
+        <tr>
+          <td>QT_QPA_PLATFORMTHEME</td>
+          <td class="code"><pre>&#39;appmenu-qt5&#39;</pre></td>
+        </tr>
+      
+        <tr>
+          <td>QUERY_STRING</td>
+          <td class="code"><pre>&#39;&#39;</pre></td>
+        </tr>
+      
+        <tr>
+          <td>REMOTE_ADDR</td>
+          <td class="code"><pre>&#39;192.168.1.177&#39;</pre></td>
+        </tr>
+      
+        <tr>
+          <td>REMOTE_HOST</td>
+          <td class="code"><pre>&#39;&#39;</pre></td>
+        </tr>
+      
+        <tr>
+          <td>REQUEST_METHOD</td>
+          <td class="code"><pre>&#39;POST&#39;</pre></td>
+        </tr>
+      
+        <tr>
+          <td>RUN_MAIN</td>
+          <td class="code"><pre>&#39;true&#39;</pre></td>
+        </tr>
+      
+        <tr>
+          <td>SCRIPT_NAME</td>
+          <td class="code"><pre>u&#39;&#39;</pre></td>
+        </tr>
+      
+        <tr>
+          <td>SEAFILE_CONF_DIR</td>
+          <td class="code"><pre>&#39;/home/gpd/dev/seafile-server/tests/conf/seafile-data&#39;</pre></td>
+        </tr>
+      
+        <tr>
+          <td>SERVER_NAME</td>
+          <td class="code"><pre>&#39;gpd-VirtualBox&#39;</pre></td>
+        </tr>
+      
+        <tr>
+          <td>SERVER_PORT</td>
+          <td class="code"><pre>&#39;8000&#39;</pre></td>
+        </tr>
+      
+        <tr>
+          <td>SERVER_PROTOCOL</td>
+          <td class="code"><pre>&#39;HTTP/1.1&#39;</pre></td>
+        </tr>
+      
+        <tr>
+          <td>SERVER_SOFTWARE</td>
+          <td class="code"><pre>&#39;WSGIServer/0.1 Python/2.7.12&#39;</pre></td>
+        </tr>
+      
+        <tr>
+          <td>SHELL</td>
+          <td class="code"><pre>&#39;/bin/bash&#39;</pre></td>
+        </tr>
+      
+        <tr>
+          <td>SHLVL</td>
+          <td class="code"><pre>&#39;1&#39;</pre></td>
+        </tr>
+      
+        <tr>
+          <td>SSH_CLIENT</td>
+          <td class="code"><pre>&#39;192.168.1.8 65242 22&#39;</pre></td>
+        </tr>
+      
+        <tr>
+          <td>SSH_CONNECTION</td>
+          <td class="code"><pre>&#39;192.168.1.8 65242 192.168.1.177 22&#39;</pre></td>
+        </tr>
+      
+        <tr>
+          <td>SSH_TTY</td>
+          <td class="code"><pre>&#39;/dev/pts/21&#39;</pre></td>
+        </tr>
+      
+        <tr>
+          <td>TERM</td>
+          <td class="code"><pre>&#39;xterm-256color&#39;</pre></td>
+        </tr>
+      
+        <tr>
+          <td>TZ</td>
+          <td class="code"><pre>&#39;UTC&#39;</pre></td>
+        </tr>
+      
+        <tr>
+          <td>USER</td>
+          <td class="code"><pre>&#39;gpd&#39;</pre></td>
+        </tr>
+      
+        <tr>
+          <td>XDG_RUNTIME_DIR</td>
+          <td class="code"><pre>&#39;/run/user/1000&#39;</pre></td>
+        </tr>
+      
+        <tr>
+          <td>XDG_SESSION_ID</td>
+          <td class="code"><pre>&#39;4&#39;</pre></td>
+        </tr>
+      
+        <tr>
+          <td>_</td>
+          <td class="code"><pre>&#39;/usr/bin/python&#39;</pre></td>
+        </tr>
+      
+        <tr>
+          <td>wsgi.errors</td>
+          <td class="code"><pre>&lt;open file &#39;&lt;stderr&gt;&#39;, mode &#39;w&#39; at 0x7fbd903941e0&gt;</pre></td>
+        </tr>
+      
+        <tr>
+          <td>wsgi.file_wrapper</td>
+          <td class="code"><pre>&#39;&#39;</pre></td>
+        </tr>
+      
+        <tr>
+          <td>wsgi.input</td>
+          <td class="code"><pre>&lt;socket._fileobject object at 0x7fbd837018d0&gt;</pre></td>
+        </tr>
+      
+        <tr>
+          <td>wsgi.multiprocess</td>
+          <td class="code"><pre>False</pre></td>
+        </tr>
+      
+        <tr>
+          <td>wsgi.multithread</td>
+          <td class="code"><pre>True</pre></td>
+        </tr>
+      
+        <tr>
+          <td>wsgi.run_once</td>
+          <td class="code"><pre>False</pre></td>
+        </tr>
+      
+        <tr>
+          <td>wsgi.url_scheme</td>
+          <td class="code"><pre>&#39;http&#39;</pre></td>
+        </tr>
+      
+        <tr>
+          <td>wsgi.version</td>
+          <td class="code"><pre>(1, 0)</pre></td>
+        </tr>
+      
+    </tbody>
+  </table>
+
+
+  <h3 id="settings-info">Settings</h3>
+  <h4>Using settings module <code>seahub.settings</code></h4>
+  <table class="req">
+    <thead>
+      <tr>
+        <th>Setting</th>
+        <th>Value</th>
+      </tr>
+    </thead>
+    <tbody>
+      
+        <tr>
+          <td>ABSOLUTE_URL_OVERRIDES</td>
+          <td class="code"><pre>{}</pre></td>
+        </tr>
+      
+        <tr>
+          <td>ACCOUNT_ACTIVATION_DAYS</td>
+          <td class="code"><pre>7</pre></td>
+        </tr>
+      
+        <tr>
+          <td>ACTIVATE_AFTER_FIRST_LOGIN</td>
+          <td class="code"><pre>False</pre></td>
+        </tr>
+      
+        <tr>
+          <td>ACTIVATE_AFTER_REGISTRATION</td>
+          <td class="code"><pre>True</pre></td>
+        </tr>
+      
+        <tr>
+          <td>ADD_REPLY_TO_HEADER</td>
+          <td class="code"><pre>False</pre></td>
+        </tr>
+      
+        <tr>
+          <td>ADMINS</td>
+          <td class="code"><pre>()</pre></td>
+        </tr>
+      
+        <tr>
+          <td>ALLOWED_HOSTS</td>
+          <td class="code"><pre>[&#39;*&#39;]</pre></td>
+        </tr>
+      
+        <tr>
+          <td>APPEND_SLASH</td>
+          <td class="code"><pre>True</pre></td>
+        </tr>
+      
+        <tr>
+          <td>AUTHENTICATION_BACKENDS</td>
+          <td class="code"><pre>(&#39;seahub.base.accounts.AuthBackend&#39;,
+ &#39;seahub.oauth.backends.OauthRemoteUserBackend&#39;)</pre></td>
+        </tr>
+      
+        <tr>
+          <td>AUTH_PASSWORD_VALIDATORS</td>
+          <td class="code"><pre>u&#39;********************&#39;</pre></td>
+        </tr>
+      
+        <tr>
+          <td>AUTH_USER_MODEL</td>
+          <td class="code"><pre>u&#39;auth.User&#39;</pre></td>
+        </tr>
+      
+        <tr>
+          <td>AUTO_GENERATE_AVATAR_SIZES</td>
+          <td class="code"><pre>(16, 20, 24, 28, 32, 36, 40, 42, 48, 60, 64, 72, 80, 84, 96, 128, 160)</pre></td>
+        </tr>
+      
+        <tr>
+          <td>AUTO_GENERATE_GROUP_AVATAR_SIZES</td>
+          <td class="code"><pre>(20, 24, 32, 36, 48, 56)</pre></td>
+        </tr>
+      
+        <tr>
+          <td>AVATAR_ALLOWED_FILE_EXTS</td>
+          <td class="code"><pre>(&#39;.jpg&#39;, &#39;.png&#39;, &#39;.jpeg&#39;, &#39;.gif&#39;)</pre></td>
+        </tr>
+      
+        <tr>
+          <td>AVATAR_CACHE_TIMEOUT</td>
+          <td class="code"><pre>1209600</pre></td>
+        </tr>
+      
+        <tr>
+          <td>AVATAR_DEFAULT_NON_REGISTERED_URL</td>
+          <td class="code"><pre>&#39;/avatars/default-non-register.jpg&#39;</pre></td>
+        </tr>
+      
+        <tr>
+          <td>AVATAR_DEFAULT_URL</td>
+          <td class="code"><pre>&#39;/avatars/default.png&#39;</pre></td>
+        </tr>
+      
+        <tr>
+          <td>AVATAR_FILE_STORAGE</td>
+          <td class="code"><pre>&#39;&#39;</pre></td>
+        </tr>
+      
+        <tr>
+          <td>AVATAR_GRAVATAR_BACKUP</td>
+          <td class="code"><pre>False</pre></td>
+        </tr>
+      
+        <tr>
+          <td>AVATAR_HASH_FILENAMES</td>
+          <td class="code"><pre>True</pre></td>
+        </tr>
+      
+        <tr>
+          <td>AVATAR_HASH_USERDIRNAMES</td>
+          <td class="code"><pre>True</pre></td>
+        </tr>
+      
+        <tr>
+          <td>AVATAR_MAX_AVATARS_PER_USER</td>
+          <td class="code"><pre>1</pre></td>
+        </tr>
+      
+        <tr>
+          <td>AVATAR_STORAGE_DIR</td>
+          <td class="code"><pre>&#39;avatars&#39;</pre></td>
+        </tr>
+      
+        <tr>
+          <td>BRANDING_CSS</td>
+          <td class="code"><pre>&#39;&#39;</pre></td>
+        </tr>
+      
+        <tr>
+          <td>CACHES</td>
+          <td class="code"><pre>{&#39;default&#39;: {&#39;BACKEND&#39;: &#39;django.core.cache.backends.filebased.FileBasedCache&#39;,
+             &#39;LOCATION&#39;: &#39;/tmp/seahub_cache&#39;,
+             &#39;OPTIONS&#39;: {&#39;MAX_ENTRIES&#39;: 1000000}},
+ &#39;django.core.cache.backends.locmem.LocMemCache&#39;: {&#39;BACKEND&#39;: &#39;django.core.cache.backends.locmem.LocMemCache&#39;}}</pre></td>
+        </tr>
+      
+        <tr>
+          <td>CACHE_DIR</td>
+          <td class="code"><pre>&#39;/tmp&#39;</pre></td>
+        </tr>
+      
+        <tr>
+          <td>CACHE_MIDDLEWARE_ALIAS</td>
+          <td class="code"><pre>u&#39;default&#39;</pre></td>
+        </tr>
+      
+        <tr>
+          <td>CACHE_MIDDLEWARE_KEY_PREFIX</td>
+          <td class="code"><pre>u&#39;********************&#39;</pre></td>
+        </tr>
+      
+        <tr>
+          <td>CACHE_MIDDLEWARE_SECONDS</td>
+          <td class="code"><pre>600</pre></td>
+        </tr>
+      
+        <tr>
+          <td>CAPTCHA_IMAGE_SIZE</td>
+          <td class="code"><pre>(90, 42)</pre></td>
+        </tr>
+      
+        <tr>
+          <td>CLOUD_DEMO_USER</td>
+          <td class="code"><pre>&#39;demo@seafile.com&#39;</pre></td>
+        </tr>
+      
+        <tr>
+          <td>CLOUD_MODE</td>
+          <td class="code"><pre>False</pre></td>
+        </tr>
+      
+        <tr>
+          <td>COMPRESS_CACHEABLE_PRECOMPILERS</td>
+          <td class="code"><pre>()</pre></td>
+        </tr>
+      
+        <tr>
+          <td>COMPRESS_CACHE_BACKEND</td>
+          <td class="code"><pre>u&#39;default&#39;</pre></td>
+        </tr>
+      
+        <tr>
+          <td>COMPRESS_CACHE_KEY_FUNCTION</td>
+          <td class="code"><pre>u&#39;********************&#39;</pre></td>
+        </tr>
+      
+        <tr>
+          <td>COMPRESS_CLEAN_CSS_ARGUMENTS</td>
+          <td class="code"><pre>u&#39;&#39;</pre></td>
+        </tr>
+      
+        <tr>
+          <td>COMPRESS_CLEAN_CSS_BINARY</td>
+          <td class="code"><pre>u&#39;cleancss&#39;</pre></td>
+        </tr>
+      
+        <tr>
+          <td>COMPRESS_CLOSURE_COMPILER_ARGUMENTS</td>
+          <td class="code"><pre>u&#39;&#39;</pre></td>
+        </tr>
+      
+        <tr>
+          <td>COMPRESS_CLOSURE_COMPILER_BINARY</td>
+          <td class="code"><pre>u&#39;java -jar compiler.jar&#39;</pre></td>
+        </tr>
+      
+        <tr>
+          <td>COMPRESS_CSS_COMPRESSOR</td>
+          <td class="code"><pre>u&#39;compressor.css.CssCompressor&#39;</pre></td>
+        </tr>
+      
+        <tr>
+          <td>COMPRESS_CSS_FILTERS</td>
+          <td class="code"><pre>[&#39;compressor.filters.css_default.CssAbsoluteFilter&#39;,
+ &#39;compressor.filters.cssmin.CSSMinFilter&#39;]</pre></td>
+        </tr>
+      
+        <tr>
+          <td>COMPRESS_CSS_HASHING_METHOD</td>
+          <td class="code"><pre>&#39;content&#39;</pre></td>
+        </tr>
+      
+        <tr>
+          <td>COMPRESS_DATA_URI_MAX_SIZE</td>
+          <td class="code"><pre>1024</pre></td>
+        </tr>
+      
+        <tr>
+          <td>COMPRESS_DEBUG_TOGGLE</td>
+          <td class="code"><pre>&#39;nocompress&#39;</pre></td>
+        </tr>
+      
+        <tr>
+          <td>COMPRESS_ENABLED</td>
+          <td class="code"><pre>False</pre></td>
+        </tr>
+      
+        <tr>
+          <td>COMPRESS_JINJA2_GET_ENVIRONMENT</td>
+          <td class="code"><pre>&lt;function JINJA2_GET_ENVIRONMENT at 0x7fbd8a7c3938&gt;</pre></td>
+        </tr>
+      
+        <tr>
+          <td>COMPRESS_JS_COMPRESSOR</td>
+          <td class="code"><pre>u&#39;compressor.js.JsCompressor&#39;</pre></td>
+        </tr>
+      
+        <tr>
+          <td>COMPRESS_JS_FILTERS</td>
+          <td class="code"><pre>[u&#39;compressor.filters.jsmin.JSMinFilter&#39;]</pre></td>
+        </tr>
+      
+        <tr>
+          <td>COMPRESS_MINT_DELAY</td>
+          <td class="code"><pre>30</pre></td>
+        </tr>
+      
+        <tr>
+          <td>COMPRESS_MTIME_DELAY</td>
+          <td class="code"><pre>10</pre></td>
+        </tr>
+      
+        <tr>
+          <td>COMPRESS_OFFLINE</td>
+          <td class="code"><pre>False</pre></td>
+        </tr>
+      
+        <tr>
+          <td>COMPRESS_OFFLINE_CONTEXT</td>
+          <td class="code"><pre>{u&#39;STATIC_URL&#39;: &#39;/media/assets/&#39;}</pre></td>
+        </tr>
+      
+        <tr>
+          <td>COMPRESS_OFFLINE_MANIFEST</td>
+          <td class="code"><pre>u&#39;manifest.json&#39;</pre></td>
+        </tr>
+      
+        <tr>
+          <td>COMPRESS_OFFLINE_TIMEOUT</td>
+          <td class="code"><pre>31536000</pre></td>
+        </tr>
+      
+        <tr>
+          <td>COMPRESS_OUTPUT_DIR</td>
+          <td class="code"><pre>u&#39;CACHE&#39;</pre></td>
+        </tr>
+      
+        <tr>
+          <td>COMPRESS_PARSER</td>
+          <td class="code"><pre>u&#39;compressor.parser.AutoSelectParser&#39;</pre></td>
+        </tr>
+      
+        <tr>
+          <td>COMPRESS_PRECOMPILERS</td>
+          <td class="code"><pre>()</pre></td>
+        </tr>
+      
+        <tr>
+          <td>COMPRESS_REBUILD_TIMEOUT</td>
+          <td class="code"><pre>2592000</pre></td>
+        </tr>
+      
+        <tr>
+          <td>COMPRESS_ROOT</td>
+          <td class="code"><pre>&#39;/home/gpd/dev/seahub/media&#39;</pre></td>
+        </tr>
+      
+        <tr>
+          <td>COMPRESS_STORAGE</td>
+          <td class="code"><pre>u&#39;compressor.storage.CompressorFileStorage&#39;</pre></td>
+        </tr>
+      
+        <tr>
+          <td>COMPRESS_TEMPLATE_FILTER_CONTEXT</td>
+          <td class="code"><pre>{u&#39;STATIC_URL&#39;: &#39;/media/assets/&#39;}</pre></td>
+        </tr>
+      
+        <tr>
+          <td>COMPRESS_URL</td>
+          <td class="code"><pre>&#39;/media/&#39;</pre></td>
+        </tr>
+      
+        <tr>
+          <td>COMPRESS_URL_PLACEHOLDER</td>
+          <td class="code"><pre>u&#39;/__compressor_url_placeholder__/&#39;</pre></td>
+        </tr>
+      
+        <tr>
+          <td>COMPRESS_VERBOSE</td>
+          <td class="code"><pre>False</pre></td>
+        </tr>
+      
+        <tr>
+          <td>COMPRESS_YUGLIFY_BINARY</td>
+          <td class="code"><pre>u&#39;yuglify&#39;</pre></td>
+        </tr>
+      
+        <tr>
+          <td>COMPRESS_YUGLIFY_CSS_ARGUMENTS</td>
+          <td class="code"><pre>u&#39;--terminal&#39;</pre></td>
+        </tr>
+      
+        <tr>
+          <td>COMPRESS_YUGLIFY_JS_ARGUMENTS</td>
+          <td class="code"><pre>u&#39;--terminal&#39;</pre></td>
+        </tr>
+      
+        <tr>
+          <td>COMPRESS_YUI_BINARY</td>
+          <td class="code"><pre>u&#39;java -jar yuicompressor.jar&#39;</pre></td>
+        </tr>
+      
+        <tr>
+          <td>COMPRESS_YUI_CSS_ARGUMENTS</td>
+          <td class="code"><pre>u&#39;&#39;</pre></td>
+        </tr>
+      
+        <tr>
+          <td>COMPRESS_YUI_JS_ARGUMENTS</td>
+          <td class="code"><pre>u&#39;&#39;</pre></td>
+        </tr>
+      
+        <tr>
+          <td>CONSTANCE_BACKEND</td>
+          <td class="code"><pre>&#39;constance.backends.database.DatabaseBackend&#39;</pre></td>
+        </tr>
+      
+        <tr>
+          <td>CONSTANCE_CONFIG</td>
+          <td class="code"><pre>{&#39;ACTIVATE_AFTER_REGISTRATION&#39;: (True, &#39;&#39;),
+ &#39;CUSTOM_CSS&#39;: (&#39;&#39;, &#39;&#39;),
+ &#39;DISABLE_SYNC_WITH_ANY_FOLDER&#39;: (False, &#39;&#39;),
+ &#39;ENABLE_BRANDING_CSS&#39;: (False, &#39;&#39;),
+ &#39;ENABLE_ENCRYPTED_LIBRARY&#39;: (True, &#39;&#39;),
+ &#39;ENABLE_REPO_HISTORY_SETTING&#39;: (True, &#39;&#39;),
+ &#39;ENABLE_SHARE_TO_ALL_GROUPS&#39;: (False, &#39;&#39;),
+ &#39;ENABLE_SIGNUP&#39;: (False, &#39;&#39;),
+ &#39;ENABLE_TERMS_AND_CONDITIONS&#39;: (False, &#39;&#39;),
+ &#39;ENABLE_TWO_FACTOR_AUTH&#39;: (False, &#39;&#39;),
+ &#39;ENABLE_USER_CREATE_ORG_REPO&#39;: (True, &#39;&#39;),
+ &#39;FILE_SERVER_ROOT&#39;: (&#39;http://127.0.0.1:8082&#39;, &#39;&#39;),
+ &#39;FORCE_PASSWORD_CHANGE&#39;: u&#39;********************&#39;,
+ &#39;FREEZE_USER_ON_LOGIN_FAILED&#39;: (False, &#39;&#39;),
+ &#39;LOGIN_ATTEMPT_LIMIT&#39;: (5, &#39;&#39;),
+ &#39;LOGIN_REMEMBER_DAYS&#39;: (7, &#39;&#39;),
+ &#39;REGISTRATION_SEND_MAIL&#39;: (False, &#39;&#39;),
+ &#39;REPO_PASSWORD_MIN_LENGTH&#39;: u&#39;********************&#39;,
+ &#39;SERVICE_URL&#39;: (&#39;http://127.0.0.1&#39;, &#39;&#39;),
+ &#39;SHARE_LINK_PASSWORD_MIN_LENGTH&#39;: u&#39;********************&#39;,
+ &#39;SHARE_LINK_TOKEN_LENGTH&#39;: u&#39;********************&#39;,
+ &#39;SITE_NAME&#39;: (&#39;Seafile&#39;, &#39;&#39;),
+ &#39;SITE_TITLE&#39;: (&#39;Private Seafile&#39;, &#39;&#39;),
+ &#39;TEXT_PREVIEW_EXT&#39;: (&#39;ac, am, bat, c, cc, cmake, cpp, cs, css, diff, el, h, html, htm, java, js, json, less, make, org, php, pl, properties, py, rb, scala, script, sh, sql, txt, text, tex, vi, vim, xhtml, xml, log, csv, groovy, rst, patch, go&#39;,
+                      &#39;&#39;),
+ &#39;USER_PASSWORD_MIN_LENGTH&#39;: u&#39;********************&#39;,
+ &#39;USER_PASSWORD_STRENGTH_LEVEL&#39;: u&#39;********************&#39;,
+ &#39;USER_STRONG_PASSWORD_REQUIRED&#39;: u&#39;********************&#39;}</pre></td>
+        </tr>
+      
+        <tr>
+          <td>CONSTANCE_DATABASE_CACHE_BACKEND</td>
+          <td class="code"><pre>&#39;default&#39;</pre></td>
+        </tr>
+      
+        <tr>
+          <td>CONSTANCE_ENABLED</td>
+          <td class="code"><pre>True</pre></td>
+        </tr>
+      
+        <tr>
+          <td>CSRF_COOKIE_AGE</td>
+          <td class="code"><pre>31449600</pre></td>
+        </tr>
+      
+        <tr>
+          <td>CSRF_COOKIE_DOMAIN</td>
+          <td class="code"><pre>None</pre></td>
+        </tr>
+      
+        <tr>
+          <td>CSRF_COOKIE_HTTPONLY</td>
+          <td class="code"><pre>False</pre></td>
+        </tr>
+      
+        <tr>
+          <td>CSRF_COOKIE_NAME</td>
+          <td class="code"><pre>u&#39;csrftoken&#39;</pre></td>
+        </tr>
+      
+        <tr>
+          <td>CSRF_COOKIE_PATH</td>
+          <td class="code"><pre>u&#39;/&#39;</pre></td>
+        </tr>
+      
+        <tr>
+          <td>CSRF_COOKIE_SECURE</td>
+          <td class="code"><pre>False</pre></td>
+        </tr>
+      
+        <tr>
+          <td>CSRF_FAILURE_VIEW</td>
+          <td class="code"><pre>u&#39;django.views.csrf.csrf_failure&#39;</pre></td>
+        </tr>
+      
+        <tr>
+          <td>CSRF_HEADER_NAME</td>
+          <td class="code"><pre>u&#39;HTTP_X_CSRFTOKEN&#39;</pre></td>
+        </tr>
+      
+        <tr>
+          <td>CSRF_TRUSTED_ORIGINS</td>
+          <td class="code"><pre>[]</pre></td>
+        </tr>
+      
+        <tr>
+          <td>CSRF_USE_SESSIONS</td>
+          <td class="code"><pre>False</pre></td>
+        </tr>
+      
+        <tr>
+          <td>CUSTOM_FAVICON_PATH</td>
+          <td class="code"><pre>&#39;custom/favicon.ico&#39;</pre></td>
+        </tr>
+      
+        <tr>
+          <td>CUSTOM_LOGO_PATH</td>
+          <td class="code"><pre>&#39;custom/mylogo.png&#39;</pre></td>
+        </tr>
+      
+        <tr>
+          <td>DATABASES</td>
+          <td class="code"><pre>{&#39;default&#39;: {&#39;ATOMIC_REQUESTS&#39;: False,
+             &#39;AUTOCOMMIT&#39;: True,
+             &#39;CONN_MAX_AGE&#39;: 0,
+             &#39;ENGINE&#39;: &#39;django.db.backends.sqlite3&#39;,
+             &#39;HOST&#39;: &#39;&#39;,
+             &#39;NAME&#39;: &#39;/home/gpd/dev/seahub/seahub/../seahub/seahub.db&#39;,
+             &#39;OPTIONS&#39;: {},
+             &#39;PASSWORD&#39;: u&#39;********************&#39;,
+             &#39;PORT&#39;: &#39;&#39;,
+             &#39;TEST&#39;: {&#39;CHARSET&#39;: None,
+                      &#39;COLLATION&#39;: None,
+                      &#39;MIRROR&#39;: None,
+                      &#39;NAME&#39;: None},
+             &#39;TIME_ZONE&#39;: None,
+             &#39;USER&#39;: &#39;&#39;}}</pre></td>
+        </tr>
+      
+        <tr>
+          <td>DATABASE_ROUTERS</td>
+          <td class="code"><pre>[]</pre></td>
+        </tr>
+      
+        <tr>
+          <td>DATA_UPLOAD_MAX_MEMORY_SIZE</td>
+          <td class="code"><pre>2621440</pre></td>
+        </tr>
+      
+        <tr>
+          <td>DATA_UPLOAD_MAX_NUMBER_FIELDS</td>
+          <td class="code"><pre>1000</pre></td>
+        </tr>
+      
+        <tr>
+          <td>DATETIME_FORMAT</td>
+          <td class="code"><pre>u&#39;N j, Y, P&#39;</pre></td>
+        </tr>
+      
+        <tr>
+          <td>DATETIME_INPUT_FORMATS</td>
+          <td class="code"><pre>[u&#39;%Y-%m-%d %H:%M:%S&#39;,
+ u&#39;%Y-%m-%d %H:%M:%S.%f&#39;,
+ u&#39;%Y-%m-%d %H:%M&#39;,
+ u&#39;%Y-%m-%d&#39;,
+ u&#39;%m/%d/%Y %H:%M:%S&#39;,
+ u&#39;%m/%d/%Y %H:%M:%S.%f&#39;,
+ u&#39;%m/%d/%Y %H:%M&#39;,
+ u&#39;%m/%d/%Y&#39;,
+ u&#39;%m/%d/%y %H:%M:%S&#39;,
+ u&#39;%m/%d/%y %H:%M:%S.%f&#39;,
+ u&#39;%m/%d/%y %H:%M&#39;,
+ u&#39;%m/%d/%y&#39;]</pre></td>
+        </tr>
+      
+        <tr>
+          <td>DATE_FORMAT</td>
+          <td class="code"><pre>u&#39;N j, Y&#39;</pre></td>
+        </tr>
+      
+        <tr>
+          <td>DATE_INPUT_FORMATS</td>
+          <td class="code"><pre>[u&#39;%Y-%m-%d&#39;,
+ u&#39;%m/%d/%Y&#39;,
+ u&#39;%m/%d/%y&#39;,
+ u&#39;%b %d %Y&#39;,
+ u&#39;%b %d, %Y&#39;,
+ u&#39;%d %b %Y&#39;,
+ u&#39;%d %b, %Y&#39;,
+ u&#39;%B %d %Y&#39;,
+ u&#39;%B %d, %Y&#39;,
+ u&#39;%d %B %Y&#39;,
+ u&#39;%d %B, %Y&#39;]</pre></td>
+        </tr>
+      
+        <tr>
+          <td>DEBUG</td>
+          <td class="code"><pre>True</pre></td>
+        </tr>
+      
+        <tr>
+          <td>DEBUG_PROPAGATE_EXCEPTIONS</td>
+          <td class="code"><pre>False</pre></td>
+        </tr>
+      
+        <tr>
+          <td>DECIMAL_SEPARATOR</td>
+          <td class="code"><pre>u&#39;.&#39;</pre></td>
+        </tr>
+      
+        <tr>
+          <td>DEFAULT_CHARSET</td>
+          <td class="code"><pre>u&#39;utf-8&#39;</pre></td>
+        </tr>
+      
+        <tr>
+          <td>DEFAULT_CONTENT_TYPE</td>
+          <td class="code"><pre>u&#39;text/html&#39;</pre></td>
+        </tr>
+      
+        <tr>
+          <td>DEFAULT_EXCEPTION_REPORTER_FILTER</td>
+          <td class="code"><pre>u&#39;django.views.debug.SafeExceptionReporterFilter&#39;</pre></td>
+        </tr>
+      
+        <tr>
+          <td>DEFAULT_FILE_STORAGE</td>
+          <td class="code"><pre>u&#39;django.core.files.storage.FileSystemStorage&#39;</pre></td>
+        </tr>
+      
+        <tr>
+          <td>DEFAULT_FROM_EMAIL</td>
+          <td class="code"><pre>u&#39;webmaster@localhost&#39;</pre></td>
+        </tr>
+      
+        <tr>
+          <td>DEFAULT_INDEX_TABLESPACE</td>
+          <td class="code"><pre>u&#39;&#39;</pre></td>
+        </tr>
+      
+        <tr>
+          <td>DEFAULT_TABLESPACE</td>
+          <td class="code"><pre>u&#39;&#39;</pre></td>
+        </tr>
+      
+        <tr>
+          <td>DISABLE_SYNC_WITH_ANY_FOLDER</td>
+          <td class="code"><pre>False</pre></td>
+        </tr>
+      
+        <tr>
+          <td>DISALLOWED_USER_AGENTS</td>
+          <td class="code"><pre>[]</pre></td>
+        </tr>
+      
+        <tr>
+          <td>EMAIL_BACKEND</td>
+          <td class="code"><pre>u&#39;django.core.mail.backends.smtp.EmailBackend&#39;</pre></td>
+        </tr>
+      
+        <tr>
+          <td>EMAIL_HOST</td>
+          <td class="code"><pre>u&#39;localhost&#39;</pre></td>
+        </tr>
+      
+        <tr>
+          <td>EMAIL_HOST_PASSWORD</td>
+          <td class="code"><pre>u&#39;********************&#39;</pre></td>
+        </tr>
+      
+        <tr>
+          <td>EMAIL_HOST_USER</td>
+          <td class="code"><pre>u&#39;&#39;</pre></td>
+        </tr>
+      
+        <tr>
+          <td>EMAIL_PORT</td>
+          <td class="code"><pre>25</pre></td>
+        </tr>
+      
+        <tr>
+          <td>EMAIL_SSL_CERTFILE</td>
+          <td class="code"><pre>None</pre></td>
+        </tr>
+      
+        <tr>
+          <td>EMAIL_SSL_KEYFILE</td>
+          <td class="code"><pre>u&#39;********************&#39;</pre></td>
+        </tr>
+      
+        <tr>
+          <td>EMAIL_SUBJECT_PREFIX</td>
+          <td class="code"><pre>u&#39;[Django] &#39;</pre></td>
+        </tr>
+      
+        <tr>
+          <td>EMAIL_TIMEOUT</td>
+          <td class="code"><pre>None</pre></td>
+        </tr>
+      
+        <tr>
+          <td>EMAIL_USE_LOCALTIME</td>
+          <td class="code"><pre>False</pre></td>
+        </tr>
+      
+        <tr>
+          <td>EMAIL_USE_SSL</td>
+          <td class="code"><pre>False</pre></td>
+        </tr>
+      
+        <tr>
+          <td>EMAIL_USE_TLS</td>
+          <td class="code"><pre>False</pre></td>
+        </tr>
+      
+        <tr>
+          <td>ENABLE_ADDRESSBOOK_OPT_IN</td>
+          <td class="code"><pre>False</pre></td>
+        </tr>
+      
+        <tr>
+          <td>ENABLE_BRANDING_CSS</td>
+          <td class="code"><pre>False</pre></td>
+        </tr>
+      
+        <tr>
+          <td>ENABLE_CHANGE_PASSWORD</td>
+          <td class="code"><pre>u&#39;********************&#39;</pre></td>
+        </tr>
+      
+        <tr>
+          <td>ENABLE_DEMO_USER</td>
+          <td class="code"><pre>False</pre></td>
+        </tr>
+      
+        <tr>
+          <td>ENABLE_ENCRYPTED_LIBRARY</td>
+          <td class="code"><pre>True</pre></td>
+        </tr>
+      
+        <tr>
+          <td>ENABLE_FILE_COMMENT</td>
+          <td class="code"><pre>True</pre></td>
+        </tr>
+      
+        <tr>
+          <td>ENABLE_FOLDER_PERM</td>
+          <td class="code"><pre>False</pre></td>
+        </tr>
+      
+        <tr>
+          <td>ENABLE_GLOBAL_ADDRESSBOOK</td>
+          <td class="code"><pre>True</pre></td>
+        </tr>
+      
+        <tr>
+          <td>ENABLE_GROUP_DISCUSSION</td>
+          <td class="code"><pre>True</pre></td>
+        </tr>
+      
+        <tr>
+          <td>ENABLE_GUEST_INVITATION</td>
+          <td class="code"><pre>False</pre></td>
+        </tr>
+      
+        <tr>
+          <td>ENABLE_LIMIT_IPADDRESS</td>
+          <td class="code"><pre>False</pre></td>
+        </tr>
+      
+        <tr>
+          <td>ENABLE_MAKE_GROUP_PUBLIC</td>
+          <td class="code"><pre>False</pre></td>
+        </tr>
+      
+        <tr>
+          <td>ENABLE_OAUTH</td>
+          <td class="code"><pre>False</pre></td>
+        </tr>
+      
+        <tr>
+          <td>ENABLE_REPO_HISTORY_SETTING</td>
+          <td class="code"><pre>True</pre></td>
+        </tr>
+      
+        <tr>
+          <td>ENABLE_REPO_SNAPSHOT_LABEL</td>
+          <td class="code"><pre>False</pre></td>
+        </tr>
+      
+        <tr>
+          <td>ENABLE_RESET_ENCRYPTED_REPO_PASSWORD</td>
+          <td class="code"><pre>u&#39;********************&#39;</pre></td>
+        </tr>
+      
+        <tr>
+          <td>ENABLE_RESUMABLE_FILEUPLOAD</td>
+          <td class="code"><pre>False</pre></td>
+        </tr>
+      
+        <tr>
+          <td>ENABLE_SEARCH_FROM_LDAP_DIRECTLY</td>
+          <td class="code"><pre>False</pre></td>
+        </tr>
+      
+        <tr>
+          <td>ENABLE_SETTINGS_VIA_WEB</td>
+          <td class="code"><pre>True</pre></td>
+        </tr>
+      
+        <tr>
+          <td>ENABLE_SHARE_LINK_AUDIT</td>
+          <td class="code"><pre>False</pre></td>
+        </tr>
+      
+        <tr>
+          <td>ENABLE_SHARE_TO_ALL_GROUPS</td>
+          <td class="code"><pre>False</pre></td>
+        </tr>
+      
+        <tr>
+          <td>ENABLE_SIGNUP</td>
+          <td class="code"><pre>False</pre></td>
+        </tr>
+      
+        <tr>
+          <td>ENABLE_STORAGE_CLASSES</td>
+          <td class="code"><pre>False</pre></td>
+        </tr>
+      
+        <tr>
+          <td>ENABLE_SUB_LIBRARY</td>
+          <td class="code"><pre>True</pre></td>
+        </tr>
+      
+        <tr>
+          <td>ENABLE_SUDO_MODE</td>
+          <td class="code"><pre>True</pre></td>
+        </tr>
+      
+        <tr>
+          <td>ENABLE_SYS_ADMIN_VIEW_REPO</td>
+          <td class="code"><pre>False</pre></td>
+        </tr>
+      
+        <tr>
+          <td>ENABLE_TERMS_AND_CONDITIONS</td>
+          <td class="code"><pre>False</pre></td>
+        </tr>
+      
+        <tr>
+          <td>ENABLE_THUMBNAIL</td>
+          <td class="code"><pre>True</pre></td>
+        </tr>
+      
+        <tr>
+          <td>ENABLE_TWO_FACTOR_AUTH</td>
+          <td class="code"><pre>False</pre></td>
+        </tr>
+      
+        <tr>
+          <td>ENABLE_UPLOAD_FOLDER</td>
+          <td class="code"><pre>True</pre></td>
+        </tr>
+      
+        <tr>
+          <td>ENABLE_UPLOAD_LINK_VIRUS_CHECK</td>
+          <td class="code"><pre>False</pre></td>
+        </tr>
+      
+        <tr>
+          <td>ENABLE_USER_CREATE_ORG_REPO</td>
+          <td class="code"><pre>True</pre></td>
+        </tr>
+      
+        <tr>
+          <td>ENABLE_VIDEO_THUMBNAIL</td>
+          <td class="code"><pre>False</pre></td>
+        </tr>
+      
+        <tr>
+          <td>ENABLE_WIKI</td>
+          <td class="code"><pre>False</pre></td>
+        </tr>
+      
+        <tr>
+          <td>FAVICON_PATH</td>
+          <td class="code"><pre>&#39;img/favicon.ico&#39;</pre></td>
+        </tr>
+      
+        <tr>
+          <td>FILE_CHARSET</td>
+          <td class="code"><pre>u&#39;utf-8&#39;</pre></td>
+        </tr>
+      
+        <tr>
+          <td>FILE_ENCODING_LIST</td>
+          <td class="code"><pre>[&#39;auto&#39;, &#39;utf-8&#39;, &#39;gbk&#39;, &#39;ISO-8859-1&#39;, &#39;ISO-8859-5&#39;]</pre></td>
+        </tr>
+      
+        <tr>
+          <td>FILE_ENCODING_TRY_LIST</td>
+          <td class="code"><pre>[&#39;utf-8&#39;, &#39;gbk&#39;]</pre></td>
+        </tr>
+      
+        <tr>
+          <td>FILE_LOCK_EXPIRATION_DAYS</td>
+          <td class="code"><pre>0</pre></td>
+        </tr>
+      
+        <tr>
+          <td>FILE_PREVIEW_MAX_SIZE</td>
+          <td class="code"><pre>31457280</pre></td>
+        </tr>
+      
+        <tr>
+          <td>FILE_SERVER_PORT</td>
+          <td class="code"><pre>&#39;8082&#39;</pre></td>
+        </tr>
+      
+        <tr>
+          <td>FILE_SERVER_ROOT</td>
+          <td class="code"><pre>&#39;http://127.0.0.1:8082&#39;</pre></td>
+        </tr>
+      
+        <tr>
+          <td>FILE_UPLOAD_DIRECTORY_PERMISSIONS</td>
+          <td class="code"><pre>None</pre></td>
+        </tr>
+      
+        <tr>
+          <td>FILE_UPLOAD_HANDLERS</td>
+          <td class="code"><pre>[u&#39;django.core.files.uploadhandler.MemoryFileUploadHandler&#39;,
+ u&#39;django.core.files.uploadhandler.TemporaryFileUploadHandler&#39;]</pre></td>
+        </tr>
+      
+        <tr>
+          <td>FILE_UPLOAD_MAX_MEMORY_SIZE</td>
+          <td class="code"><pre>2621440</pre></td>
+        </tr>
+      
+        <tr>
+          <td>FILE_UPLOAD_PERMISSIONS</td>
+          <td class="code"><pre>None</pre></td>
+        </tr>
+      
+        <tr>
+          <td>FILE_UPLOAD_TEMP_DIR</td>
+          <td class="code"><pre>None</pre></td>
+        </tr>
+      
+        <tr>
+          <td>FIRST_DAY_OF_WEEK</td>
+          <td class="code"><pre>0</pre></td>
+        </tr>
+      
+        <tr>
+          <td>FIXTURE_DIRS</td>
+          <td class="code"><pre>[]</pre></td>
+        </tr>
+      
+        <tr>
+          <td>FORCE_PASSWORD_CHANGE</td>
+          <td class="code"><pre>u&#39;********************&#39;</pre></td>
+        </tr>
+      
+        <tr>
+          <td>FORCE_SCRIPT_NAME</td>
+          <td class="code"><pre>None</pre></td>
+        </tr>
+      
+        <tr>
+          <td>FORMAT_MODULE_PATH</td>
+          <td class="code"><pre>None</pre></td>
+        </tr>
+      
+        <tr>
+          <td>FORM_RENDERER</td>
+          <td class="code"><pre>u&#39;django.forms.renderers.DjangoTemplates&#39;</pre></td>
+        </tr>
+      
+        <tr>
+          <td>FREEZE_USER_ON_LOGIN_FAILED</td>
+          <td class="code"><pre>False</pre></td>
+        </tr>
+      
+        <tr>
+          <td>GET_FILE_HISTORY_TIMEOUT</td>
+          <td class="code"><pre>600</pre></td>
+        </tr>
+      
+        <tr>
+          <td>GROUP_AVATAR_DEFAULT_URL</td>
+          <td class="code"><pre>&#39;avatars/groups/default.png&#39;</pre></td>
+        </tr>
+      
+        <tr>
+          <td>GROUP_AVATAR_STORAGE_DIR</td>
+          <td class="code"><pre>&#39;avatars/groups&#39;</pre></td>
+        </tr>
+      
+        <tr>
+          <td>HIGHLIGHT_KEYWORD</td>
+          <td class="code"><pre>u&#39;********************&#39;</pre></td>
+        </tr>
+      
+        <tr>
+          <td>IGNORABLE_404_URLS</td>
+          <td class="code"><pre>[]</pre></td>
+        </tr>
+      
+        <tr>
+          <td>INIT_PASSWD</td>
+          <td class="code"><pre>u&#39;********************&#39;</pre></td>
+        </tr>
+      
+        <tr>
+          <td>INNER_FILE_SERVER_ROOT</td>
+          <td class="code"><pre>&#39;http://127.0.0.1:8082&#39;</pre></td>
+        </tr>
+      
+        <tr>
+          <td>INSTALLED_APPS</td>
+          <td class="code"><pre>(&#39;django.contrib.contenttypes&#39;,
+ &#39;django.contrib.sessions&#39;,
+ &#39;django.contrib.messages&#39;,
+ &#39;django.contrib.staticfiles&#39;,
+ &#39;seahub.base&#39;,
+ &#39;django.contrib.auth&#39;,
+ &#39;registration&#39;,
+ &#39;captcha&#39;,
+ &#39;compressor&#39;,
+ &#39;statici18n&#39;,
+ &#39;constance&#39;,
+ &#39;constance.backends.database&#39;,
+ &#39;post_office&#39;,
+ &#39;termsandconditions&#39;,
+ &#39;webpack_loader&#39;,
+ &#39;seahub.api2&#39;,
+ &#39;seahub.avatar&#39;,
+ &#39;seahub.contacts&#39;,
+ &#39;seahub.institutions&#39;,
+ &#39;seahub.invitations&#39;,
+ &#39;seahub.wiki&#39;,
+ &#39;seahub.group&#39;,
+ &#39;seahub.notifications&#39;,
+ &#39;seahub.options&#39;,
+ &#39;seahub.onlyoffice&#39;,
+ &#39;seahub.profile&#39;,
+ &#39;seahub.share&#39;,
+ &#39;seahub.help&#39;,
+ &#39;seahub.thumbnail&#39;,
+ &#39;seahub.password_session&#39;,
+ &#39;seahub.admin_log&#39;,
+ &#39;seahub.wopi&#39;,
+ &#39;seahub.tags&#39;,
+ &#39;seahub.revision_tag&#39;,
+ &#39;seahub.two_factor&#39;,
+ &#39;seahub.role_permissions&#39;,
+ &#39;seahub.trusted_ip&#39;)</pre></td>
+        </tr>
+      
+        <tr>
+          <td>INTERNAL_IPS</td>
+          <td class="code"><pre>[]</pre></td>
+        </tr>
+      
+        <tr>
+          <td>INVITATION_ACCEPTER_BLACKLIST</td>
+          <td class="code"><pre>[]</pre></td>
+        </tr>
+      
+        <tr>
+          <td>LANGUAGES</td>
+          <td class="code"><pre>((&#39;ca&#39;, u&#39;Catal\xe0&#39;),
+ (&#39;cs&#39;, u&#39;\u010ce\u0161tina&#39;),
+ (&#39;de&#39;, &#39;Deutsch&#39;),
+ (&#39;en&#39;, &#39;English&#39;),
+ (&#39;es&#39;, &#39;Espa\xc3\xb1ol&#39;),
+ (&#39;es-ar&#39;, &#39;Espa\xc3\xb1ol de Argentina&#39;),
+ (&#39;es-mx&#39;, &#39;Espa\xc3\xb1ol de M\xc3\xa9xico&#39;),
+ (&#39;fr&#39;, &#39;Fran\xc3\xa7ais&#39;),
+ (&#39;it&#39;, &#39;Italiano&#39;),
+ (&#39;is&#39;, &#39;\xc3\x8dslenska&#39;),
+ (&#39;lv&#39;, &#39;Latvian&#39;),
+ (&#39;hu&#39;, &#39;Magyar&#39;),
+ (&#39;nl&#39;, &#39;Nederlands&#39;),
+ (&#39;pl&#39;, &#39;Polski&#39;),
+ (&#39;pt-br&#39;, &#39;Portuguese, Brazil&#39;),
+ (&#39;ru&#39;, &#39;\xd0\xa0\xd1\x83\xd1\x81\xd1\x81\xd0\xba\xd0\xb8\xd0\xb9&#39;),
+ (&#39;sl&#39;, &#39;Slovenian&#39;),
+ (&#39;fi&#39;, &#39;Suomi&#39;),
+ (&#39;sv&#39;, &#39;Svenska&#39;),
+ (&#39;vi&#39;, &#39;Ti\xe1\xba\xbfng Vi\xe1\xbb\x87t&#39;),
+ (&#39;tr&#39;, &#39;T\xc3\xbcrk\xc3\xa7e&#39;),
+ (&#39;uk&#39;,
+  &#39;\xd1\x83\xd0\xba\xd1\x80\xd0\xb0\xd1\x97\xd0\xbd\xd1\x81\xd1\x8c\xd0\xba\xd0\xb0 \xd0\xbc\xd0\xbe\xd0\xb2\xd0\xb0&#39;),
+ (&#39;he&#39;, &#39;\xd7\xa2\xd7\x91\xd7\xa8\xd7\x99\xd7\xaa&#39;),
+ (&#39;ar&#39;, &#39;\xd8\xa7\xd9\x84\xd8\xb9\xd8\xb1\xd8\xa8\xd9\x8a\xd8\xa9&#39;),
+ (&#39;el&#39;, &#39;\xce\xb5\xce\xbb\xce\xbb\xce\xb7\xce\xbd\xce\xb9\xce\xba\xce\xac&#39;),
+ (&#39;th&#39;, &#39;\xe0\xb9\x84\xe0\xb8\x97\xe0\xb8\xa2&#39;),
+ (&#39;ko&#39;, &#39;\xed\x95\x9c\xea\xb5\xad\xec\x96\xb4&#39;),
+ (&#39;ja&#39;, &#39;\xe6\x97\xa5\xe6\x9c\xac\xe8\xaa\x9e&#39;),
+ (&#39;zh-cn&#39;, &#39;\xe7\xae\x80\xe4\xbd\x93\xe4\xb8\xad\xe6\x96\x87&#39;),
+ (&#39;zh-tw&#39;, &#39;\xe7\xb9\x81\xe9\xab\x94\xe4\xb8\xad\xe6\x96\x87&#39;))</pre></td>
+        </tr>
+      
+        <tr>
+          <td>LANGUAGES_BIDI</td>
+          <td class="code"><pre>[u&#39;he&#39;, u&#39;ar&#39;, u&#39;fa&#39;, u&#39;ur&#39;]</pre></td>
+        </tr>
+      
+        <tr>
+          <td>LANGUAGE_CODE</td>
+          <td class="code"><pre>&#39;en&#39;</pre></td>
+        </tr>
+      
+        <tr>
+          <td>LANGUAGE_COOKIE_AGE</td>
+          <td class="code"><pre>None</pre></td>
+        </tr>
+      
+        <tr>
+          <td>LANGUAGE_COOKIE_DOMAIN</td>
+          <td class="code"><pre>None</pre></td>
+        </tr>
+      
+        <tr>
+          <td>LANGUAGE_COOKIE_NAME</td>
+          <td class="code"><pre>u&#39;django_language&#39;</pre></td>
+        </tr>
+      
+        <tr>
+          <td>LANGUAGE_COOKIE_PATH</td>
+          <td class="code"><pre>u&#39;/&#39;</pre></td>
+        </tr>
+      
+        <tr>
+          <td>LICENSE_PATH</td>
+          <td class="code"><pre>&#39;/home/gpd/dev/seahub/seahub/../../../seafile-license.txt&#39;</pre></td>
+        </tr>
+      
+        <tr>
+          <td>LOCALE_PATHS</td>
+          <td class="code"><pre>(&#39;/home/gpd/dev/seahub/seahub/../locale&#39;,
+ &#39;/home/gpd/dev/seahub/seahub/../seahub/trusted_ip/locale&#39;)</pre></td>
+        </tr>
+      
+        <tr>
+          <td>LOGGING</td>
+          <td class="code"><pre>{&#39;disable_existing_loggers&#39;: False,
+ &#39;filters&#39;: {&#39;require_debug_false&#39;: {&#39;()&#39;: &#39;django.utils.log.RequireDebugFalse&#39;},
+             &#39;require_debug_true&#39;: {&#39;()&#39;: &#39;django.utils.log.RequireDebugTrue&#39;}},
+ &#39;formatters&#39;: {&#39;standard&#39;: {&#39;format&#39;: &#39;%(asctime)s [%(levelname)s] %(name)s:%(lineno)s %(funcName)s %(message)s&#39;}},
+ &#39;handlers&#39;: {&#39;console&#39;: {&#39;class&#39;: &#39;logging.StreamHandler&#39;,
+                          &#39;filters&#39;: [&#39;require_debug_true&#39;],
+                          &#39;formatter&#39;: &#39;standard&#39;,
+                          &#39;level&#39;: &#39;DEBUG&#39;},
+              &#39;default&#39;: {&#39;backupCount&#39;: 5,
+                          &#39;class&#39;: &#39;logging.handlers.RotatingFileHandler&#39;,
+                          &#39;filename&#39;: &#39;/tmp/seahub.log&#39;,
+                          &#39;formatter&#39;: &#39;standard&#39;,
+                          &#39;level&#39;: &#39;INFO&#39;,
+                          &#39;maxBytes&#39;: 104857600},
+              &#39;mail_admins&#39;: {&#39;class&#39;: &#39;django.utils.log.AdminEmailHandler&#39;,
+                              &#39;filters&#39;: [&#39;require_debug_false&#39;],
+                              &#39;level&#39;: &#39;ERROR&#39;}},
+ &#39;loggers&#39;: {&#39;&#39;: {&#39;handlers&#39;: [&#39;default&#39;],
+                  &#39;level&#39;: &#39;INFO&#39;,
+                  &#39;propagate&#39;: True},
+             &#39;django.request&#39;: {&#39;handlers&#39;: [&#39;default&#39;, &#39;mail_admins&#39;],
+                                &#39;level&#39;: &#39;INFO&#39;,
+                                &#39;propagate&#39;: False},
+             &#39;py.warnings&#39;: {&#39;handlers&#39;: [&#39;console&#39;],
+                             &#39;level&#39;: &#39;INFO&#39;,
+                             &#39;propagate&#39;: False}},
+ &#39;version&#39;: 1}</pre></td>
+        </tr>
+      
+        <tr>
+          <td>LOGGING_CONFIG</td>
+          <td class="code"><pre>u&#39;logging.config.dictConfig&#39;</pre></td>
+        </tr>
+      
+        <tr>
+          <td>LOGIN_ATTEMPT_LIMIT</td>
+          <td class="code"><pre>5</pre></td>
+        </tr>
+      
+        <tr>
+          <td>LOGIN_ATTEMPT_TIMEOUT</td>
+          <td class="code"><pre>900</pre></td>
+        </tr>
+      
+        <tr>
+          <td>LOGIN_BG_IMAGE_PATH</td>
+          <td class="code"><pre>&#39;img/login-bg.jpg&#39;</pre></td>
+        </tr>
+      
+        <tr>
+          <td>LOGIN_REDIRECT_URL</td>
+          <td class="code"><pre>&#39;/profile/&#39;</pre></td>
+        </tr>
+      
+        <tr>
+          <td>LOGIN_REMEMBER_DAYS</td>
+          <td class="code"><pre>7</pre></td>
+        </tr>
+      
+        <tr>
+          <td>LOGIN_URL</td>
+          <td class="code"><pre>&#39;/accounts/login/&#39;</pre></td>
+        </tr>
+      
+        <tr>
+          <td>LOGOUT_REDIRECT_URL</td>
+          <td class="code"><pre>None</pre></td>
+        </tr>
+      
+        <tr>
+          <td>LOGOUT_URL</td>
+          <td class="code"><pre>&#39;/accounts/logout/&#39;</pre></td>
+        </tr>
+      
+        <tr>
+          <td>LOGO_HEIGHT</td>
+          <td class="code"><pre>32</pre></td>
+        </tr>
+      
+        <tr>
+          <td>LOGO_PATH</td>
+          <td class="code"><pre>&#39;img/seafile-logo.png&#39;</pre></td>
+        </tr>
+      
+        <tr>
+          <td>LOGO_WIDTH</td>
+          <td class="code"><pre>128</pre></td>
+        </tr>
+      
+        <tr>
+          <td>LOG_DIR</td>
+          <td class="code"><pre>&#39;/tmp&#39;</pre></td>
+        </tr>
+      
+        <tr>
+          <td>MANAGERS</td>
+          <td class="code"><pre>()</pre></td>
+        </tr>
+      
+        <tr>
+          <td>MAX_FILE_NAME</td>
+          <td class="code"><pre>255</pre></td>
+        </tr>
+      
+        <tr>
+          <td>MAX_NUMBER_OF_FILES_FOR_FILEUPLOAD</td>
+          <td class="code"><pre>1000</pre></td>
+        </tr>
+      
+        <tr>
+          <td>MAX_PATH</td>
+          <td class="code"><pre>4096</pre></td>
+        </tr>
+      
+        <tr>
+          <td>MAX_UPLOAD_FILE_NAME_LEN</td>
+          <td class="code"><pre>255</pre></td>
+        </tr>
+      
+        <tr>
+          <td>MEDIA_ROOT</td>
+          <td class="code"><pre>&#39;/home/gpd/dev/seahub/seahub/../media/&#39;</pre></td>
+        </tr>
+      
+        <tr>
+          <td>MEDIA_URL</td>
+          <td class="code"><pre>&#39;/media/&#39;</pre></td>
+        </tr>
+      
+        <tr>
+          <td>MESSAGE_STORAGE</td>
+          <td class="code"><pre>u&#39;django.contrib.messages.storage.fallback.FallbackStorage&#39;</pre></td>
+        </tr>
+      
+        <tr>
+          <td>MIDDLEWARE</td>
+          <td class="code"><pre>None</pre></td>
+        </tr>
+      
+        <tr>
+          <td>MIDDLEWARE_CLASSES</td>
+          <td class="code"><pre>(&#39;django.contrib.sessions.middleware.SessionMiddleware&#39;,
+ &#39;django.middleware.locale.LocaleMiddleware&#39;,
+ &#39;django.middleware.common.CommonMiddleware&#39;,
+ &#39;django.middleware.csrf.CsrfViewMiddleware&#39;,
+ &#39;django.contrib.messages.middleware.MessageMiddleware&#39;,
+ &#39;seahub.auth.middleware.AuthenticationMiddleware&#39;,
+ &#39;seahub.base.middleware.BaseMiddleware&#39;,
+ &#39;seahub.base.middleware.InfobarMiddleware&#39;,
+ &#39;seahub.password_session.middleware.CheckPasswordHash&#39;,
+ &#39;seahub.base.middleware.ForcePasswdChangeMiddleware&#39;,
+ &#39;seahub.base.middleware.UserPermissionMiddleware&#39;,
+ &#39;termsandconditions.middleware.TermsAndConditionsRedirectMiddleware&#39;,
+ &#39;seahub.two_factor.middleware.OTPMiddleware&#39;,
+ &#39;seahub.trusted_ip.middleware.LimitIpMiddleware&#39;)</pre></td>
+        </tr>
+      
+        <tr>
+          <td>MIGRATION_MODULES</td>
+          <td class="code"><pre>{}</pre></td>
+        </tr>
+      
+        <tr>
+          <td>MONTH_DAY_FORMAT</td>
+          <td class="code"><pre>u&#39;F j&#39;</pre></td>
+        </tr>
+      
+        <tr>
+          <td>NOTIFY_ADMIN_AFTER_REGISTRATION</td>
+          <td class="code"><pre>False</pre></td>
+        </tr>
+      
+        <tr>
+          <td>NUMBER_GROUPING</td>
+          <td class="code"><pre>0</pre></td>
+        </tr>
+      
+        <tr>
+          <td>OFFICE_PREVIEW_MAX_SIZE</td>
+          <td class="code"><pre>2097152</pre></td>
+        </tr>
+      
+        <tr>
+          <td>OFFICE_TEMPLATE_ROOT</td>
+          <td class="code"><pre>&#39;/home/gpd/dev/seahub/seahub/../media/office-template&#39;</pre></td>
+        </tr>
+      
+        <tr>
+          <td>OTP_LOGIN_URL</td>
+          <td class="code"><pre>&#39;/profile/two_factor_authentication/setup/&#39;</pre></td>
+        </tr>
+      
+        <tr>
+          <td>PASSWORD_HASHERS</td>
+          <td class="code"><pre>u&#39;********************&#39;</pre></td>
+        </tr>
+      
+        <tr>
+          <td>PASSWORD_RESET_TIMEOUT_DAYS</td>
+          <td class="code"><pre>u&#39;********************&#39;</pre></td>
+        </tr>
+      
+        <tr>
+          <td>PREPEND_WWW</td>
+          <td class="code"><pre>False</pre></td>
+        </tr>
+      
+        <tr>
+          <td>PROJECT_ROOT</td>
+          <td class="code"><pre>&#39;/home/gpd/dev/seahub/seahub/..&#39;</pre></td>
+        </tr>
+      
+        <tr>
+          <td>REGISTRATION_SEND_MAIL</td>
+          <td class="code"><pre>False</pre></td>
+        </tr>
+      
+        <tr>
+          <td>REPLACE_FROM_EMAIL</td>
+          <td class="code"><pre>False</pre></td>
+        </tr>
+      
+        <tr>
+          <td>REPO_PASSWORD_MIN_LENGTH</td>
+          <td class="code"><pre>u&#39;********************&#39;</pre></td>
+        </tr>
+      
+        <tr>
+          <td>REQUIRE_DETAIL_ON_REGISTRATION</td>
+          <td class="code"><pre>False</pre></td>
+        </tr>
+      
+        <tr>
+          <td>REST_FRAMEWORK</td>
+          <td class="code"><pre>{&#39;DEFAULT_THROTTLE_RATES&#39;: {&#39;anon&#39;: &#39;60/minute&#39;,
+                            &#39;ping&#39;: &#39;3000/minute&#39;,
+                            &#39;user&#39;: &#39;3000/minute&#39;},
+ &#39;UNICODE_JSON&#39;: False}</pre></td>
+        </tr>
+      
+        <tr>
+          <td>REST_FRAMEWORK_THROTTING_WHITELIST</td>
+          <td class="code"><pre>[]</pre></td>
+        </tr>
+      
+        <tr>
+          <td>ROOT_URLCONF</td>
+          <td class="code"><pre>&#39;seahub.utils.rooturl&#39;</pre></td>
+        </tr>
+      
+        <tr>
+          <td>SEAFILE_COLLAB_SERVER</td>
+          <td class="code"><pre>&#39;&#39;</pre></td>
+        </tr>
+      
+        <tr>
+          <td>SEAFILE_VERSION</td>
+          <td class="code"><pre>&#39;6.2.0&#39;</pre></td>
+        </tr>
+      
+        <tr>
+          <td>SEAHUB_DATA_ROOT</td>
+          <td class="code"><pre>&#39;/home/gpd/dev/seahub/seahub/../../../seahub-data&#39;</pre></td>
+        </tr>
+      
+        <tr>
+          <td>SECRET_KEY</td>
+          <td class="code"><pre>u&#39;********************&#39;</pre></td>
+        </tr>
+      
+        <tr>
+          <td>SECURE_BROWSER_XSS_FILTER</td>
+          <td class="code"><pre>False</pre></td>
+        </tr>
+      
+        <tr>
+          <td>SECURE_CONTENT_TYPE_NOSNIFF</td>
+          <td class="code"><pre>False</pre></td>
+        </tr>
+      
+        <tr>
+          <td>SECURE_HSTS_INCLUDE_SUBDOMAINS</td>
+          <td class="code"><pre>False</pre></td>
+        </tr>
+      
+        <tr>
+          <td>SECURE_HSTS_PRELOAD</td>
+          <td class="code"><pre>False</pre></td>
+        </tr>
+      
+        <tr>
+          <td>SECURE_HSTS_SECONDS</td>
+          <td class="code"><pre>0</pre></td>
+        </tr>
+      
+        <tr>
+          <td>SECURE_PROXY_SSL_HEADER</td>
+          <td class="code"><pre>None</pre></td>
+        </tr>
+      
+        <tr>
+          <td>SECURE_REDIRECT_EXEMPT</td>
+          <td class="code"><pre>[]</pre></td>
+        </tr>
+      
+        <tr>
+          <td>SECURE_SSL_HOST</td>
+          <td class="code"><pre>None</pre></td>
+        </tr>
+      
+        <tr>
+          <td>SECURE_SSL_REDIRECT</td>
+          <td class="code"><pre>False</pre></td>
+        </tr>
+      
+        <tr>
+          <td>SEND_EMAIL_ON_ADDING_SYSTEM_MEMBER</td>
+          <td class="code"><pre>True</pre></td>
+        </tr>
+      
+        <tr>
+          <td>SEND_EMAIL_ON_RESETTING_USER_PASSWD</td>
+          <td class="code"><pre>u&#39;********************&#39;</pre></td>
+        </tr>
+      
+        <tr>
+          <td>SERVER_EMAIL</td>
+          <td class="code"><pre>u&#39;root@localhost&#39;</pre></td>
+        </tr>
+      
+        <tr>
+          <td>SERVE_STATIC</td>
+          <td class="code"><pre>True</pre></td>
+        </tr>
+      
+        <tr>
+          <td>SERVICE_URL</td>
+          <td class="code"><pre>&#39;http://127.0.0.1&#39;</pre></td>
+        </tr>
+      
+        <tr>
+          <td>SESSION_CACHE_ALIAS</td>
+          <td class="code"><pre>u&#39;default&#39;</pre></td>
+        </tr>
+      
+        <tr>
+          <td>SESSION_COOKIE_AGE</td>
+          <td class="code"><pre>86400</pre></td>
+        </tr>
+      
+        <tr>
+          <td>SESSION_COOKIE_DOMAIN</td>
+          <td class="code"><pre>None</pre></td>
+        </tr>
+      
+        <tr>
+          <td>SESSION_COOKIE_HTTPONLY</td>
+          <td class="code"><pre>True</pre></td>
+        </tr>
+      
+        <tr>
+          <td>SESSION_COOKIE_NAME</td>
+          <td class="code"><pre>u&#39;sessionid&#39;</pre></td>
+        </tr>
+      
+        <tr>
+          <td>SESSION_COOKIE_PATH</td>
+          <td class="code"><pre>u&#39;/&#39;</pre></td>
+        </tr>
+      
+        <tr>
+          <td>SESSION_COOKIE_SECURE</td>
+          <td class="code"><pre>False</pre></td>
+        </tr>
+      
+        <tr>
+          <td>SESSION_ENGINE</td>
+          <td class="code"><pre>u&#39;django.contrib.sessions.backends.db&#39;</pre></td>
+        </tr>
+      
+        <tr>
+          <td>SESSION_EXPIRE_AT_BROWSER_CLOSE</td>
+          <td class="code"><pre>False</pre></td>
+        </tr>
+      
+        <tr>
+          <td>SESSION_FILE_PATH</td>
+          <td class="code"><pre>None</pre></td>
+        </tr>
+      
+        <tr>
+          <td>SESSION_SAVE_EVERY_REQUEST</td>
+          <td class="code"><pre>False</pre></td>
+        </tr>
+      
+        <tr>
+          <td>SESSION_SERIALIZER</td>
+          <td class="code"><pre>u&#39;django.contrib.sessions.serializers.JSONSerializer&#39;</pre></td>
+        </tr>
+      
+        <tr>
+          <td>SETTINGS_MODULE</td>
+          <td class="code"><pre>&#39;seahub.settings&#39;</pre></td>
+        </tr>
+      
+        <tr>
+          <td>SHARE_LINK_AUDIT_CODE_TIMEOUT</td>
+          <td class="code"><pre>3600</pre></td>
+        </tr>
+      
+        <tr>
+          <td>SHARE_LINK_EMAIL_LANGUAGE</td>
+          <td class="code"><pre>&#39;&#39;</pre></td>
+        </tr>
+      
+        <tr>
+          <td>SHARE_LINK_PASSWORD_MIN_LENGTH</td>
+          <td class="code"><pre>u&#39;********************&#39;</pre></td>
+        </tr>
+      
+        <tr>
+          <td>SHARE_LINK_TOKEN_LENGTH</td>
+          <td class="code"><pre>u&#39;********************&#39;</pre></td>
+        </tr>
+      
+        <tr>
+          <td>SHORT_DATETIME_FORMAT</td>
+          <td class="code"><pre>u&#39;m/d/Y P&#39;</pre></td>
+        </tr>
+      
+        <tr>
+          <td>SHORT_DATE_FORMAT</td>
+          <td class="code"><pre>u&#39;m/d/Y&#39;</pre></td>
+        </tr>
+      
+        <tr>
+          <td>SHOW_LOGOUT_ICON</td>
+          <td class="code"><pre>False</pre></td>
+        </tr>
+      
+        <tr>
+          <td>SHOW_REPO_DOWNLOAD_BUTTON</td>
+          <td class="code"><pre>False</pre></td>
+        </tr>
+      
+        <tr>
+          <td>SHOW_TRAFFIC</td>
+          <td class="code"><pre>True</pre></td>
+        </tr>
+      
+        <tr>
+          <td>SIGNING_BACKEND</td>
+          <td class="code"><pre>u&#39;django.core.signing.TimestampSigner&#39;</pre></td>
+        </tr>
+      
+        <tr>
+          <td>SILENCED_SYSTEM_CHECKS</td>
+          <td class="code"><pre>[]</pre></td>
+        </tr>
+      
+        <tr>
+          <td>SITE_ID</td>
+          <td class="code"><pre>1</pre></td>
+        </tr>
+      
+        <tr>
+          <td>SITE_NAME</td>
+          <td class="code"><pre>&#39;Seafile&#39;</pre></td>
+        </tr>
+      
+        <tr>
+          <td>SITE_ROOT</td>
+          <td class="code"><pre>&#39;/&#39;</pre></td>
+        </tr>
+      
+        <tr>
+          <td>SITE_ROOT_URLCONF</td>
+          <td class="code"><pre>&#39;seahub.urls&#39;</pre></td>
+        </tr>
+      
+        <tr>
+          <td>SITE_TITLE</td>
+          <td class="code"><pre>&#39;Private Seafile&#39;</pre></td>
+        </tr>
+      
+        <tr>
+          <td>STATICFILES_DIRS</td>
+          <td class="code"><pre>(&#39;/home/gpd/dev/seahub/seahub/../static&#39;,
+ &#39;/home/gpd/dev/seahub/seahub/../frontend/build&#39;)</pre></td>
+        </tr>
+      
+        <tr>
+          <td>STATICFILES_FINDERS</td>
+          <td class="code"><pre>(&#39;django.contrib.staticfiles.finders.FileSystemFinder&#39;,
+ &#39;django.contrib.staticfiles.finders.AppDirectoriesFinder&#39;,
+ &#39;compressor.finders.CompressorFinder&#39;)</pre></td>
+        </tr>
+      
+        <tr>
+          <td>STATICFILES_STORAGE</td>
+          <td class="code"><pre>&#39;django.contrib.staticfiles.storage.ManifestStaticFilesStorage&#39;</pre></td>
+        </tr>
+      
+        <tr>
+          <td>STATICI18N_DOMAIN</td>
+          <td class="code"><pre>&#39;djangojs&#39;</pre></td>
+        </tr>
+      
+        <tr>
+          <td>STATICI18N_FILENAME_FUNCTION</td>
+          <td class="code"><pre>&#39;statici18n.utils.default_filename&#39;</pre></td>
+        </tr>
+      
+        <tr>
+          <td>STATICI18N_OUTPUT_DIR</td>
+          <td class="code"><pre>&#39;i18n&#39;</pre></td>
+        </tr>
+      
+        <tr>
+          <td>STATICI18N_PACKAGES</td>
+          <td class="code"><pre>&#39;django.conf&#39;</pre></td>
+        </tr>
+      
+        <tr>
+          <td>STATICI18N_ROOT</td>
+          <td class="code"><pre>&#39;/home/gpd/dev/seahub/seahub/../static/scripts&#39;</pre></td>
+        </tr>
+      
+        <tr>
+          <td>STATIC_ROOT</td>
+          <td class="code"><pre>&#39;/home/gpd/dev/seahub/seahub/../media//assets/&#39;</pre></td>
+        </tr>
+      
+        <tr>
+          <td>STATIC_URL</td>
+          <td class="code"><pre>&#39;/media/assets/&#39;</pre></td>
+        </tr>
+      
+        <tr>
+          <td>STORAGE_CLASS_MAPPING_POLICY</td>
+          <td class="code"><pre>&#39;USER_SELECT&#39;</pre></td>
+        </tr>
+      
+        <tr>
+          <td>TEMPLATES</td>
+          <td class="code"><pre>[{&#39;APP_DIRS&#39;: True,
+  &#39;BACKEND&#39;: &#39;django.template.backends.django.DjangoTemplates&#39;,
+  &#39;DIRS&#39;: [&#39;/home/gpd/dev/seahub/seahub/../../../seahub-data/custom/templates&#39;,
+           &#39;/home/gpd/dev/seahub/seahub/../seahub/templates&#39;],
+  &#39;OPTIONS&#39;: {&#39;context_processors&#39;: [&#39;django.template.context_processors.i18n&#39;,
+                                     &#39;django.template.context_processors.media&#39;,
+                                     &#39;django.template.context_processors.static&#39;,
+                                     &#39;django.template.context_processors.request&#39;,
+                                     &#39;django.contrib.messages.context_processors.messages&#39;,
+                                     &#39;seahub.auth.context_processors.auth&#39;,
+                                     &#39;seahub.base.context_processors.base&#39;,
+                                     &#39;seahub.base.context_processors.debug&#39;]}}]</pre></td>
+        </tr>
+      
+        <tr>
+          <td>TEST_NON_SERIALIZED_APPS</td>
+          <td class="code"><pre>[]</pre></td>
+        </tr>
+      
+        <tr>
+          <td>TEST_RUNNER</td>
+          <td class="code"><pre>u&#39;django.test.runner.DiscoverRunner&#39;</pre></td>
+        </tr>
+      
+        <tr>
+          <td>TEXT_PREVIEW_EXT</td>
+          <td class="code"><pre>&#39;ac, am, bat, c, cc, cmake, cpp, cs, css, diff, el, h, html, htm, java, js, json, less, make, org, php, pl, properties, py, rb, scala, script, sh, sql, txt, text, tex, vi, vim, xhtml, xml, log, csv, groovy, rst, patch, go&#39;</pre></td>
+        </tr>
+      
+        <tr>
+          <td>THOUSAND_SEPARATOR</td>
+          <td class="code"><pre>u&#39;,&#39;</pre></td>
+        </tr>
+      
+        <tr>
+          <td>THUMBNAIL_DEFAULT_SIZE</td>
+          <td class="code"><pre>48</pre></td>
+        </tr>
+      
+        <tr>
+          <td>THUMBNAIL_EXTENSION</td>
+          <td class="code"><pre>&#39;png&#39;</pre></td>
+        </tr>
+      
+        <tr>
+          <td>THUMBNAIL_IMAGE_ORIGINAL_SIZE_LIMIT</td>
+          <td class="code"><pre>256</pre></td>
+        </tr>
+      
+        <tr>
+          <td>THUMBNAIL_IMAGE_SIZE_LIMIT</td>
+          <td class="code"><pre>30</pre></td>
+        </tr>
+      
+        <tr>
+          <td>THUMBNAIL_ROOT</td>
+          <td class="code"><pre>&#39;/home/gpd/dev/seahub/seahub/../seahub/thumbnail/thumb&#39;</pre></td>
+        </tr>
+      
+        <tr>
+          <td>THUMBNAIL_SIZE_FOR_GRID</td>
+          <td class="code"><pre>192</pre></td>
+        </tr>
+      
+        <tr>
+          <td>THUMBNAIL_SIZE_FOR_ORIGINAL</td>
+          <td class="code"><pre>1024</pre></td>
+        </tr>
+      
+        <tr>
+          <td>THUMBNAIL_VIDEO_FRAME_TIME</td>
+          <td class="code"><pre>5</pre></td>
+        </tr>
+      
+        <tr>
+          <td>TIME_FORMAT</td>
+          <td class="code"><pre>u&#39;P&#39;</pre></td>
+        </tr>
+      
+        <tr>
+          <td>TIME_INPUT_FORMATS</td>
+          <td class="code"><pre>[u&#39;%H:%M:%S&#39;, u&#39;%H:%M:%S.%f&#39;, u&#39;%H:%M&#39;]</pre></td>
+        </tr>
+      
+        <tr>
+          <td>TIME_ZONE</td>
+          <td class="code"><pre>&#39;UTC&#39;</pre></td>
+        </tr>
+      
+        <tr>
+          <td>TRUSTED_IP_LIST</td>
+          <td class="code"><pre>[&#39;127.0.0.1&#39;]</pre></td>
+        </tr>
+      
+        <tr>
+          <td>TWO_FACTOR_DEVICE_REMEMBER_DAYS</td>
+          <td class="code"><pre>90</pre></td>
+        </tr>
+      
+        <tr>
+          <td>UNREAD_NOTIFICATIONS_REQUEST_INTERVAL</td>
+          <td class="code"><pre>180</pre></td>
+        </tr>
+      
+        <tr>
+          <td>USER_PASSWORD_MIN_LENGTH</td>
+          <td class="code"><pre>u&#39;********************&#39;</pre></td>
+        </tr>
+      
+        <tr>
+          <td>USER_PASSWORD_STRENGTH_LEVEL</td>
+          <td class="code"><pre>u&#39;********************&#39;</pre></td>
+        </tr>
+      
+        <tr>
+          <td>USER_STRONG_PASSWORD_REQUIRED</td>
+          <td class="code"><pre>u&#39;********************&#39;</pre></td>
+        </tr>
+      
+        <tr>
+          <td>USE_ETAGS</td>
+          <td class="code"><pre>False</pre></td>
+        </tr>
+      
+        <tr>
+          <td>USE_I18N</td>
+          <td class="code"><pre>True</pre></td>
+        </tr>
+      
+        <tr>
+          <td>USE_L10N</td>
+          <td class="code"><pre>True</pre></td>
+        </tr>
+      
+        <tr>
+          <td>USE_THOUSAND_SEPARATOR</td>
+          <td class="code"><pre>False</pre></td>
+        </tr>
+      
+        <tr>
+          <td>USE_TZ</td>
+          <td class="code"><pre>False</pre></td>
+        </tr>
+      
+        <tr>
+          <td>USE_X_FORWARDED_HOST</td>
+          <td class="code"><pre>False</pre></td>
+        </tr>
+      
+        <tr>
+          <td>USE_X_FORWARDED_PORT</td>
+          <td class="code"><pre>False</pre></td>
+        </tr>
+      
+        <tr>
+          <td>WEBPACK_LOADER</td>
+          <td class="code"><pre>{&#39;DEFAULT&#39;: {&#39;BUNDLE_DIR_NAME&#39;: &#39;frontend/&#39;,
+             &#39;STATS_FILE&#39;: &#39;/home/gpd/dev/seahub/seahub/../frontend/webpack-stats.pro.json&#39;}}</pre></td>
+        </tr>
+      
+        <tr>
+          <td>WSGI_APPLICATION</td>
+          <td class="code"><pre>&#39;seahub.wsgi.application&#39;</pre></td>
+        </tr>
+      
+        <tr>
+          <td>X_FRAME_OPTIONS</td>
+          <td class="code"><pre>u&#39;SAMEORIGIN&#39;</pre></td>
+        </tr>
+      
+        <tr>
+          <td>YEAR_MONTH_FORMAT</td>
+          <td class="code"><pre>u&#39;F Y&#39;</pre></td>
+        </tr>
+      
+    </tbody>
+  </table>
+
+</div>
+
+  <div id="explanation">
+    <p>
+      You're seeing this error because you have <code>DEBUG = True</code> in your
+      Django settings file. Change that to <code>False</code>, and Django will
+      display a standard page generated by the handler for this status code.
+    </p>
+  </div>
+
+</body>
+</html>
