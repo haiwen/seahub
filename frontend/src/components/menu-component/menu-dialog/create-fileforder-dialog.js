@@ -33,6 +33,10 @@ class CreateFileForder extends React.Component {
       this.props.addFolderCancel();
     }
   }
+  
+  componentWillMount() {
+    this.changeState(this.props.isFile);
+  }
 
   componentDidMount() {
     if (this.props.currentNode.path === "/") {
@@ -40,7 +44,6 @@ class CreateFileForder extends React.Component {
     } else {
       this.setState({parentPath: this.props.currentNode.path + "/"});
     }
-    this.changeState(this.props.isFile);
     this.newInput.focus();
     this.newInput.setSelectionRange(0,0);
   }
@@ -85,7 +88,7 @@ class CreateFileForder extends React.Component {
           </Form>
         </ModalBody>
         <ModalFooter>
-          <Button color="primary" onClick={this.handleSubmit}>{"submit"}</Button>{' '}
+          <Button color="primary" onClick={this.handleSubmit}>{"submit"}</Button>
           <Button color="secondary" onClick={this.toggle}>{"cancel"}</Button>
         </ModalFooter>
       </Modal>

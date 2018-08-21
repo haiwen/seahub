@@ -132,7 +132,7 @@ class NodeMenu extends React.Component {
     return (
       <div className="node-menu-module">
         {this.renderNodeMenu()}
-        {this.showDelete &&
+        {this.state.showDelete &&
         <Delete 
           currentNode={this.props.currentNode}
           handleSubmit={this.onDelete}
@@ -143,8 +143,10 @@ class NodeMenu extends React.Component {
         <CreateFlieFolder 
           isFile={this.state.isFile}
           currentNode={this.props.currentNode}
-          onSetFolderPath={this.onAddFolder}
-          toggleCancel={this.addFolderCancel} 
+          onAddFolder={this.onAddFolder}
+          addFolderCancel={this.addFolderCancel}
+          onAddFile={this.onAddFile}
+          addFileCancel={this.addFileCancel}
         />
         }
         {this.state.showRename &&

@@ -3,9 +3,8 @@ import { Button, Modal, ModalHeader, ModalBody, ModalFooter } from 'reactstrap';
 
 class Delete extends React.Component {
 
-  constructor(props) {
-    super(props);
-    this.toggle = this.toggle.bind(this);
+  toggle = () => {
+    this.props.toggleCancel();
   }
   
   render() {

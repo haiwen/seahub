@@ -10,17 +10,17 @@ class Rename extends React.Component {
     this.newInput = React.createRef();
   }
   
-  handleChange(e) {
+  handleChange = (e) => {
     this.setState({
       newName: e.target.value, 
     }); 
   }
 
-  handleSubmit() {
+  handleSubmit = () => {
     this.props.onRename(this.state.newName);
   }
 
-  toggle() {
+  toggle = () => {
     this.props.toggleCancel();
   }
 
@@ -61,7 +61,7 @@ class Rename extends React.Component {
           <Input innerRef={input => {this.newInput = input}} placeholder="newName" value={this.state.newName} onChange={this.handleChange} />
         </ModalBody>
         <ModalFooter>
-          <Button color="primary" onClick={this.handleSubmit}>Submit</Button>{' '}
+          <Button color="primary" onClick={this.handleSubmit}>Submit</Button>
           <Button color="secondary" onClick={this.toggle}>Cancel</Button>
         </ModalFooter>
       </Modal>
