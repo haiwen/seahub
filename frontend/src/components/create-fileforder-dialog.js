@@ -18,9 +18,8 @@ class CreateFileForder extends React.Component {
   }
 
   handleSubmit = () => {
-    let type = this.props.currentNode.type;
     let path = this.state.parentPath + this.state.childName
-    if (type === "file") {
+    if (this.props.isFile) {
       this.props.onAddFile(path);
     } else {
       this.props.onAddFolder(path);
@@ -28,8 +27,7 @@ class CreateFileForder extends React.Component {
   } 
 
   toggle = () => {
-    let type = this.props.currentNode.type;
-    if (type === "file") {
+    if (this.props.isFile) {
       this.props.addFileCancel();
     } else {
       this.props.addFolderCancel();
@@ -39,13 +37,7 @@ class CreateFileForder extends React.Component {
   componentDidMount() {
     this.changeState(this.props.isFile);
     this.newInput.focus();
-  }
-
-  componentWillReceiveProps(nextProps) {
-    this.setState({
-      parentPath: this.props.currentNode.path + "/"
-    });
-    this.changeState(nextProps.isFile);
+    this.newInput.setSelectionRange(0,0);
   }
 
   changeState(isFile) {
