@@ -137,7 +137,6 @@ WSGI_APPLICATION = 'seahub.wsgi.application'
 # api token expiration time.
 #API_TOKEN_AGE = -1
 API_TOKEN_AGE = 7 * 24 * 60 * 60
-
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
