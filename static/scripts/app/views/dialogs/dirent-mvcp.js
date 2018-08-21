@@ -179,10 +179,12 @@ define([
                 dst_path = $('[name="dst_path"]', this.$form).val();
 
             if (!$.trim(dst_repo) || !$.trim(dst_path)) {
-                $('.error', form).removeClass('hide');
+                this.$error.removeClass('hide');
                 return false;
             }
-            if (dst_repo == repo_id && (dst_path == path || (obj_type == 'dir' && dst_path == path + obj_name + '/'))) {
+            if (dst_repo == repo_id && (
+                (dst_path == path && this.op_type == 'mv') ||
+                (obj_type == 'dir' && dst_path == path + obj_name + '/'))) {
                 this.$error.html(gettext("Invalid destination path")).removeClass('hide');
                 return false;
             }
@@ -207,6 +209,10 @@ define([
                 } else {
                     msg = gettext("Successfully copied %(name)s")
                         .replace('%(name)s', obj_name);
+
+                    if (dst_repo == repo_id && dst_path == path) {
+                        _this.dirView.renderDir();
+                    }
                 }
 
                 if (!data['task_id']) { // no progress

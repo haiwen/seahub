@@ -1167,7 +1167,8 @@ define([
                         $('.error', form).removeClass('hide');
                         return false;
                     }
-                    if (dst_repo == dirents.repo_id && dst_path == cur_path) {
+                    if (dst_repo == dirents.repo_id &&
+                        (op == 'mv' && dst_path == cur_path)) {
                         $('.error', form).html(gettext("Invalid destination path")).removeClass('hide');
                         return false;
                     }
@@ -1231,6 +1232,11 @@ define([
                                             msg_s = gettext("Successfully copied %(name)s and 1 other item.");
                                         } else {
                                             msg_s = gettext("Successfully copied %(name)s and %(amount)s other items.");
+                                        }
+
+                                        // show the added items
+                                        if (dst_path == cur_path) {
+                                            _this.renderDir();
                                         }
                                     }
 
