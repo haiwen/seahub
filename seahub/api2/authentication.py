@@ -75,10 +75,12 @@ class TokenAuthentication(BaseAuthentication):
             raise AuthenticationFailed('Invalid token')
 
         # expired token API_TOKEN_AGE
-        if API_TOKEN_AGE == 7 * 24 * 60 * 60:
-            if timezone.now() > (token.created + timedelta(seconds = API_TOKEN_AGE)):
-                Token.objects.filter(key=key).delete()
-                raise AuthenticationFailed('token has expired')
+        if API_TOKEN_AGE:
+            if API_TOKEN_AGE == -1:
+                pass
+            elif timezone.now() >= (token.created + timedelta(seconds = API_TOKEN_AGE)):
+                 Token.objects.filter(key=key).delete()
+                 raise AuthenticationFailed('token has expired')
         try:
             user = User.objects.get(email=token.user)
         except User.DoesNotExist:
