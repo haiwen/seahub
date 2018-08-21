@@ -1,8 +1,7 @@
 import React from 'react'
-import Delete from '../delete-dialog';
-import AddFile from '../add-file-dialog';
-import AddFolder from '../add-dir-dialog';
-import Rename from '../rename-dialog';
+import Delete from './menu-dialog/delete-dialog';
+import CreateFlieFolder from './menu-dialog/create-fileforder-dialog';
+import Rename from './menu-dialog/rename-dialog';
 
 class NodeMenu extends React.Component {
 
@@ -90,9 +89,10 @@ class NodeMenu extends React.Component {
   }
 
   renderNodeMenu() {
-    var style = null;
+    let style = null;
+    let position = this.props.menuPosition;
     if (this.props.isShowMenu) {
-      style = {position: "fixed",left: this.props.left, top: this.props.top, display: 'block'};
+      style = {position: "fixed",left: position.left, top: position.top, display: 'block'};
     }
     if (this.props.currentNode.type === "dir") {
       return (
@@ -143,8 +143,6 @@ class NodeMenu extends React.Component {
           toggleCancel={this.renameCancel} 
         />
         }
-
-        
       </div>
     )
   }

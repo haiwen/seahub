@@ -1,14 +1,184 @@
 import React, { Component } from 'react';
 import TreeView from './tree-view/tree-view';
 import { siteRoot, logoPath, mediaUrl, siteTitle, logoWidth, logoHeight } from './constance';
+import Tree from './tree-view/tree';
+import Node from './tree-view/node'
+import NodeMenu from './menu-component/node-menu';
 
 class SidePanel extends Component {
+
+  constructor(props) {
+    super(props);
+    this.state = {
+      tree_data: new Tree(),
+      currentNode: null,
+      isNodeItemFrezee: false,
+      isShowMenu: false,
+      menuPosition: {
+        left: 0,
+        top: 0
+      },
+      isLoadFailed: false
+    }
+  }
+
   closeSide = () => {
     this.props.onCloseSide();
   }
 
-  onFileClick = (e, node) => {
+  onNodeClick = (e, node) => {
+    this.setState({
+      currentNode: node
+    })
     this.props.onFileClick(e, node)
+  }
+
+  onShowContextMenu = (e, node) => {
+    let left = e.clientX - 8*16;
+    let top  = e.clientY + 10;
+    let position = Object.assign({},this.state.menuPosition, {left: left, top: top});
+    this.setState({
+      isShowMenu: !this.state.isShowMenu,
+      currentNode: node,
+      menuPosition: position,
+      isNodeItemFrezee: !this.state.isNodeItemFrezee
+    })
+  }
+
+  onHideContextMenu = () => {
+    this.setState({
+      isShowMenu: false,
+      isNodeItemFrezee: false
+    })
+  }
+
+  onAddFolderNode = (dirPath) => {
+    this.props.editorUtilities.createDir(dirPath).then(res => {
+      this.initializeTreeData()
+    })
+  }
+
+  onAddFileNode = (filePath) => {
+    this.props.editorUtilities.createFile(filePath).then(res => {
+      this.initializeTreeData()
+    })
+  }
+
+  onRenameNode = (newName) => {
+    var node = this.state.currentNode;
+    let type = node.type;
+    let filePath = node.path;
+    if (type === 'file') {
+      this.props.editorUtilities.renameFile(filePath, newName).then(res => {
+        this.initializeTreeData()
+        if (this.isModifyCurrentFile()) {
+          node.name = newName;
+          this.props.onClick(null, node);
+        }
+      })
+    }
+
+    if (type === 'dir') {
+      this.props.editorUtilities.renameDir(filePath, newName).then(res => {
+        this.initializeTreeData();
+        if (this.isModifyContainsCurrentFile()) {
+          let currentNode = this.state.currentNode;
+          let nodePath = encodeURI(currentNode.path);
+          let pathname = window.location.pathname;
+          let start =  pathname.indexOf(nodePath);
+          let node = currentNode.getNodeByPath(decodeURI(pathname.slice(start)));
+          if(node){
+            currentNode.name = newName;
+            this.props.onClick(null, node);
+          }
+        }
+      })
+    }
+  }
+
+  onDeleteNode = () => {
+    var currentNode = this.state.currentNode;
+    let filePath = currentNode.path;
+    let type = currentNode.type;
+    if (type === 'file') {
+      this.props.editorUtilities.deleteFile(filePath).then(res => {
+        this.initializeTreeData();
+      })
+    } 
+
+    if (type === 'dir') {
+      this.props.editorUtilities.deleteDir(filePath).then(res => {
+        this.initializeTreeData();
+      })
+    }
+
+    let isCurrentFile = false;
+    if (this.state.currentNode.type === "dir") {
+      isCurrentFile = this.isModifyContainsCurrentFile(); 
+    } else {
+      isCurrentFile = this.isModifyCurrentFile();
+    }
+
+    if (isCurrentFile) {
+      let homeNode = this.getHomeNode();
+      this.props.onClick(null, homeNode);
+    }
+  }
+
+  isModifyCurrentFile() {
+    let name = this.state.currentNode.name;
+    let pathname = window.location.pathname;
+    let currentName = pathname.slice(pathname.lastIndexOf("/") + 1);
+    return name === currentName;
+  }
+
+  isModifyContainsCurrentFile() {
+    let pathname = window.location.pathname;
+    let nodePath = this.state.currentNode.path;
+    if (pathname.indexOf(nodePath)) {
+      return true;
+    }
+    return false;
+  }
+
+  initializeTreeData() {
+    this.props.editorUtilities.getFiles().then((files) => {
+      // construct the tree object
+      var rootObj = {
+        name: '/',
+        type: 'dir',
+        isExpanded: true
+      }
+      var treeData = new Tree();
+      treeData.parseFromList(rootObj, files);
+      let homeNode = this.getHomeNode(treeData);
+      this.setState({
+        tree_data: treeData,
+        currentNode: homeNode
+      })
+    }, () => {
+      console.log("failed to load files");
+      this.setState({
+        isLoadFailed: true
+      })
+    })
+  }
+
+  getHomeNode(treeData) {
+    let root = treeData.root;
+    let homeNode = root.getNodeByPath(decodeURI("/home.md"));
+    return homeNode;
+  }
+
+  componentDidMount() {
+    //init treeview data
+    this.initializeTreeData();
+
+    document.addEventListener('click', this.onHideContextMenu);
+  }
+
+  componentWillUnmount() {
+    document.removeEventListener('click', this.onHideContextMenu);
   }
 
   render() {
@@ -23,10 +193,25 @@ class SidePanel extends Component {
         <div id="side-nav" className="wiki-side-nav" role="navigation">
           <h3 className="wiki-pages-heading">Pages</h3>
           <div className="wiki-pages-container">
+            {this.state.tree_data && 
             <TreeView
-              editorUtilities={this.props.editorUtilities}
-              onClick={this.onFileClick}
               permission={this.props.permission}
+              treeData={this.state.tree_data}
+              currentNode={this.state.currentNode}
+              isNodeItemFrezee={this.state.isNodeItemFrezee}
+              onNodeClick={this.onNodeClick}
+              onShowContextMenu={this.onShowContextMenu}
+            />
+            }
+            <NodeMenu 
+              isShowMenu={this.state.isShowMenu}
+              menuPosition={this.state.menuPosition}
+              currentNode={this.state.currentNode}
+              onHideContextMenu={this.onHideContextMenu}
+              onDeleteNode={this.onDeleteNode}
+              onAddFileNode={this.onAddFileNode}
+              onAddFolderNode={this.onAddFolderNode}
+              onRenameNode={this.onRenameNode}
             />
           </div>
         </div>
