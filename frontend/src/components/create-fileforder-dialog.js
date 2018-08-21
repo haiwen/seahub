@@ -64,17 +64,17 @@ class CreateFileForder extends React.Component {
   render() {
     return (
       <Modal isOpen={true} toggle={this.toggle}>
-        <ModalHeader toggle={this.toggle}>{this.props.isFile ? 'Add a new File' : 'Add a new Folder'}</ModalHeader>
+        <ModalHeader toggle={this.toggle}>{this.props.isFile ? 'New File' : 'New Folder'}</ModalHeader>
         <ModalBody>
           <Form>
             <FormGroup row>
-              <Label for="filePath" sm={2}>ParentPath: </Label>
-              <Col sm={10} className="parent-path"><FormText>{this.state.parentPath}</FormText></Col>
+              <Label for="filePath" sm={3}>Parent path: </Label>
+              <Col sm={9} className="parent-path"><FormText>{this.state.parentPath}</FormText></Col>
             </FormGroup>
             <FormGroup row>
-              <Label for="fileName" sm={2}>Name: </Label>
-              <Col sm={10}>
-                <Input innerRef={input => {this.newInput = input}} id="fileName" placeholder="newName" />
+              <Label for="fileName" sm={3}>Name: </Label>
+              <Col sm={9}>
+                <Input innerRef={input => {this.newInput = input}} id="fileName" placeholder="newName" value={this.state.childName} onChange={this.handleChange}/>
               </Col>
             </FormGroup>
           </Form>
