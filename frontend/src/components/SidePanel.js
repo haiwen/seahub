@@ -4,6 +4,7 @@ import { siteRoot, logoPath, mediaUrl, siteTitle, logoWidth, logoHeight } from '
 import Tree from './tree-view/tree';
 import Node from './tree-view/node'
 import NodeMenu from './menu-component/node-menu';
+import MenuControl from './menu-component/node-menu-control';
 
 class SidePanel extends Component {
 
@@ -18,12 +19,25 @@ class SidePanel extends Component {
         left: 0,
         top: 0
       },
-      isLoadFailed: false
+      isLoadFailed: false,
+      isMenuIconShow: false
     }
   }
 
   closeSide = () => {
     this.props.onCloseSide();
+  }
+
+  onMouseEnter = () => {
+    this.setState({
+      isMenuIconShow: true
+    })
+  }
+
+  onMouseLeave = () => {
+    this.setState({
+      isMenuIconShow: false
+    })
   }
 
   onNodeClick = (e, node) => {
@@ -41,7 +55,20 @@ class SidePanel extends Component {
       isShowMenu: !this.state.isShowMenu,
       currentNode: node,
       menuPosition: position,
-      isNodeItemFrezee: !this.state.isNodeItemFrezee
+      isNodeItemFrezee: true
+    })
+  }
+
+  onHeadingMenuClick = (e) => {
+    e.nativeEvent.stopImmediatePropagation();
+    let node = this.state.tree_data.root;
+    let left = e.clientX - 8*16;
+    let top  = e.clientY + 10;
+    let position = Object.assign({},this.state.menuPosition, {left: left, top: top});
+    this.setState({
+      isShowMenu: !this.state.isShowMenu,
+      currentNode: node,
+      menuPosition: position
     })
   }
 
@@ -73,7 +100,7 @@ class SidePanel extends Component {
         this.initializeTreeData()
         if (this.isModifyCurrentFile()) {
           node.name = newName;
-          this.props.onClick(null, node);
+          this.props.onFileClick(null, node);
         }
       })
     }
@@ -89,7 +116,7 @@ class SidePanel extends Component {
           let node = currentNode.getNodeByPath(decodeURI(pathname.slice(start)));
           if(node){
             currentNode.name = newName;
-            this.props.onClick(null, node);
+            this.props.onFileClick(null, node);
           }
         }
       })
@@ -121,7 +148,7 @@ class SidePanel extends Component {
 
     if (isCurrentFile) {
       let homeNode = this.getHomeNode();
-      this.props.onClick(null, homeNode);
+      this.props.onFileClick(null, homeNode);
     }
   }
 
@@ -165,7 +192,12 @@ class SidePanel extends Component {
   }
 
   getHomeNode(treeData) {
-    let root = treeData.root;
+    let root = null;
+    if (treeData) {
+      root = treeData.root;
+    } else {
+      root = this.state.tree_data.root;
+    }
     let homeNode = root.getNodeByPath(decodeURI("/home.md"));
     return homeNode;
   }
@@ -191,7 +223,19 @@ class SidePanel extends Component {
           <a title="Close" aria-label="Close" onClick={this.closeSide} className="sf2-icon-x1 sf-popover-close side-panel-close op-icon d-md-none "></a>
         </div>
         <div id="side-nav" className="wiki-side-nav" role="navigation">
-          <h3 className="wiki-pages-heading">Pages</h3>
+          <h3 
+            className="wiki-pages-heading" 
+            onMouseEnter={this.onMouseEnter} 
+            onMouseLeave={this.onMouseLeave}
+          >
+            Pages
+            <div className="heading-icon">
+              <MenuControl 
+                isShow={this.state.isMenuIconShow}
+                onClick={this.onHeadingMenuClick}
+              />
+            </div>
+          </h3>
           <div className="wiki-pages-container">
             {this.state.tree_data && 
             <TreeView

@@ -94,7 +94,18 @@ class NodeMenu extends React.Component {
     if (this.props.isShowMenu) {
       style = {position: "fixed",left: position.left, top: position.top, display: 'block'};
     }
+
     if (this.props.currentNode.type === "dir") {
+
+      if (this.props.currentNode.name === "/") {
+        return (
+          <ul className="dropdown-menu" style={style}>
+            <li className="dropdown-item" onClick={this.toggleAddFileFolder}>New Folder</li>
+            <li className="dropdown-item" onClick={(ev,flag) => this.toggleAddFileFolder(ev,true)}>New File</li>
+          </ul>
+        )
+      }
+      
       return (
         <ul className="dropdown-menu" style={style}>
           <li className="dropdown-item" onClick={this.toggleAddFileFolder}>New Folder</li>

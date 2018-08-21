@@ -21,7 +21,7 @@ class TreeNodeView extends React.Component {
   }
 
   onClick = (e) => {
-    e.nativeEvent.stopImmediatePropagation();
+    // e.nativeEvent.stopImmediatePropagation();
     let { node } = this.props;
     this.props.treeView.onNodeClick(e, node);
   }
