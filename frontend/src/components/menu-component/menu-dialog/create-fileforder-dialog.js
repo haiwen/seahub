@@ -73,7 +73,7 @@ class CreateFileForder extends React.Component {
         <ModalBody>
           <Form>
             <FormGroup row>
-              <Label for="filePath" sm={3}>Parent path: </Label>
+              <Label sm={3}>Parent path: </Label>
               <Col sm={9} className="parent-path"><FormText>{this.state.parentPath}</FormText></Col>
             </FormGroup>
             <FormGroup row>
