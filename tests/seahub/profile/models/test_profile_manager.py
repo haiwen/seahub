@@ -6,6 +6,30 @@ class ProfileManagerTest(BaseTestCase):
     def setUp(self):
         pass
 
+    def test_get_username_by_contact_email(self):
+        assert Profile.objects.get_username_by_contact_email('a@a.com') is None
+
+        user1 = self.user.username
+        Profile.objects.add_or_update(user1, contact_email='a@a.com')
+        assert Profile.objects.get_username_by_contact_email('a@a.com') == user1
+
+        user2 = self.admin.username
+        Profile.objects.add_or_update(user2, contact_email='a@a.com')
+        assert Profile.objects.get_username_by_contact_email('a@a.com') is None
+
+    def test_convert_login_str_to_username(self):
+        s = Profile.objects
+        assert s.convert_login_str_to_username('a@a.com') == 'a@a.com'
+
+        Profile.objects.add_or_update(username='a@a.com', login_id='aaa')
+        assert s.convert_login_str_to_username('a@a.com') == 'a@a.com'
+        assert s.convert_login_str_to_username('aaa') == 'a@a.com'
+
+        Profile.objects.add_or_update(username='a@a.com', contact_email='a+1@a.com')
+        assert s.convert_login_str_to_username('a@a.com') == 'a@a.com'
+        assert s.convert_login_str_to_username('aaa') == 'a@a.com'
+        assert s.convert_login_str_to_username('a+1@a.com') == 'a@a.com'
+
     def test_get_contact_email_by_user(self):
         # no profile for user, contact email should be username
         username = self.user.username

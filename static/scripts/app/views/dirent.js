@@ -384,6 +384,13 @@ define([
             };
             if (app.pageOptions.is_pro) {
                 options.is_admin = dir.is_admin;
+
+                if (this.dirView.is_address_book_group_admin) {
+                    $.extend(options, {
+                        is_address_book_group_admin: true,
+                        is_group_owned_repo: this.dirView.is_group_owned_repo
+                    });
+                }
             }
 
             new ShareView(options);

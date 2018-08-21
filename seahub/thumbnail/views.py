@@ -71,9 +71,12 @@ def latest_entry(request, repo_id, size, path):
             last_modified_time = os.path.getmtime(thumbnail_file)
             # convert float to datatime obj
             return datetime.datetime.fromtimestamp(last_modified_time)
-        except Exception as e:
+        except os.error:
             # no thumbnail file exists
-            logger.error(e)
+            return None
+        except Exception as e:
+            # catch all other errors
+            logger.error(e, exc_info=True)
             return None
     else:
         return None

@@ -435,11 +435,14 @@ define([
             })
             .bind('fileuploadfail', function(e, data) { // 'fail'
                 var file = data.files[0];
-                if (!file.error &&
-                    data.jqXHR &&
-                    data.jqXHR.responseJSON &&
-                    data.jqXHR.responseJSON.error) {
-                    file.error = data.jqXHR.responseJSON.error;
+                if (!file.error && data.jqXHR) {
+                    if (!data.jqXHR.responseJSON) { // undefined
+                        file.error = gettext("Network error");
+                    }
+                    if (data.jqXHR.responseJSON &&
+                        data.jqXHR.responseJSON.error) {
+                        file.error = data.jqXHR.responseJSON.error;
+                    }
                 }
             })
             // after tpl has rendered

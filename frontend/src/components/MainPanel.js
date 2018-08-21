@@ -4,9 +4,8 @@ import MarkdownViewer from './markdown-viewer';
 import Account from './account';
 import { repoID, serviceUrl, slug, siteRoot } from './constance';
 
-
-
 class MainPanel extends Component {
+
   onMenuClick = () => {
     this.props.onMenuClick();
   }
@@ -30,14 +29,14 @@ class MainPanel extends Component {
     });
 
     return (
-      <div className="main-panel o-hidden">
+      <div className="wiki-main-panel o-hidden">
         <div className="main-panel-top panel-top">
           <span className="sf2-icon-menu side-nav-toggle hidden-md-up d-md-none" title="Side Nav Menu" onClick={this.onMenuClick}></span>
            <div className={`wiki-page-ops ${this.props.permission === 'rw' ? '' : 'hide'}`}>
               <a className="btn btn-secondary btn-topbar" onClick={this.onEditClick}>Edit Page</a>
            </div>
           <div className="common-toolbar">
-            <Search />
+            <Search seafileAPI={this.props.seafileAPI} onSearchedClick={this.props.onSearchedClick}/>
             <Account seafileAPI={this.props.seafileAPI} />
           </div>
         </div>
@@ -50,12 +49,14 @@ class MainPanel extends Component {
               {pathElem}
             </div>
           </div>
-          <div className="cur-view-main-con">
+          <div className="cur-view-container">
             <MarkdownViewer
               markdownContent={this.props.content}
+              latestContributor={this.props.latestContributor}
+              lastModified = {this.props.lastModified}
               onLinkClick={this.props.onLinkClick}
+              isFileLoading={this.props.isFileLoading}
             />
-            <p id="wiki-page-last-modified">Last modified by {this.props.latestContributor}, <span>{this.props.lastModified}</span></p>
           </div>
         </div>
     </div>

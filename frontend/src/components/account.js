@@ -93,6 +93,17 @@ class Account extends Component {
     }
   }
 
+  renderAvatar = () => {
+    if (this.state.avatarURL) {
+      return (
+        <img src={this.state.avatarURL} width="36" height="36" className="avatar" />
+      )
+    }
+    return (
+      <img src="" width="36" height="36" className="avatar" />
+    )
+  }
+
   render() {
     return (
       <div id="account">
@@ -106,12 +117,9 @@ class Account extends Component {
          <div className="outer-caret up-outer-caret"><div className="inner-caret"></div></div>
          <div className="sf-popover-con">
            <div className="item o-hidden">
-             <span>
-              <img src={this.state.avatarURL} width="36" height="36" className="avatar" />
-             </span>
+             {this.renderAvatar()}
              <div className="txt">
-              {this.state.userName} <br/>
-              {this.state.contactEmail}
+              {this.state.userName}
              </div>
            </div>
            <div id="space-traffic">

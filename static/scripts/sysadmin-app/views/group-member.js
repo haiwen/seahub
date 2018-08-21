@@ -24,6 +24,23 @@ define([
             HLItemView.prototype.initialize.call(this);
             this.listenTo(this.model, 'change', this.render);
 
+            var url_options = {
+                'group_id': this.model.get('group_id'),
+                'email': this.model.get('email')
+            };
+            if (app.pageOptions.org_id) { // org admin
+                $.extend(url_options, {
+                    'name': 'org-admin-group-member',
+                    'org_id': app.pageOptions.org_id
+                });
+            } else {
+                $.extend(url_options, {
+                    'name': 'admin-group-member'
+                });
+            }
+            this.url_options = url_options;
+
+
             var _this = this;
             $(document).on('click', function(e) {
                 var target = e.target || event.srcElement;
@@ -45,12 +62,9 @@ define([
             // '0': member, '1': admin
             var val = this.$('[name="role"]').val();
             var is_admin = val == 1 ? true : false;
+
             $.ajax({
-                url: Common.getUrl({
-                    'name': 'admin-group-member',
-                    'group_id': _this.model.get('group_id'),
-                    'email': _this.model.get('email')
-                }),
+                url: Common.getUrl(this.url_options),
                 type: 'put',
                 dataType: 'json',
                 beforeSend: Common.prepareCSRFToken,
@@ -77,11 +91,7 @@ define([
             var popupContent = gettext("Are you sure you want to delete %s ?").replace('%s', '<span class="op-target ellipsis ellipsis-op-target" title="' + Common.HTMLescape(email) + '">' + Common.HTMLescape(email) + '</span>');
             var yesCallback = function() {
                 $.ajax({
-                    url: Common.getUrl({
-                        'name': 'admin-group-member',
-                        'group_id': _this.model.get('group_id'),
-                        'email': email
-                    }),
+                    url: Common.getUrl(_this.url_options),
                     type: 'DELETE',
                     beforeSend: Common.prepareCSRFToken,
                     dataType: 'json',

@@ -112,14 +112,8 @@ define([
 
             // use select2 to 'user' input in 'add user perm'
             var url;
-            if (this.is_group_owned_repo) {
-                url = Common.getUrl({
-                    'name': 'address_book_group_search_members',
-                    'group_id': this.group_id
-                });
-            }
             $('[name="email"]', this.$add_user_perm).select2(
-                    Common.contactInputOptionsForSelect2({'url': url}));
+                    Common.contactInputOptionsForSelect2());
 
             // use select2 to 'group' input in 'add group perm'
             var groups;
@@ -133,28 +127,23 @@ define([
                     escapeMarkup: function(m) { return m; }
                 });
             };
-            if (this.is_group_owned_repo) {
-                $.ajax({
-                    url: Common.getUrl({
-                        'name': 'address_book_sub_groups',
-                        'group_id': this.group_id
-                    }),
-                    cache: false,
-                    dataType: 'json',
-                    success: function(data) {
-                        groups = data;
-                    },
-                    error: function(xhr) {
-                        groups = [];
-                    },
-                    complete: function() {
-                        prepareGroupSelector(groups);
-                    }
-                });
-            } else {
-                groups = app.pageOptions.joined_groups_exclude_address_book || [];
-                prepareGroupSelector(groups);
-            }
+
+            $.ajax({
+                url: Common.getUrl({
+                    name: 'shareable_groups'
+                }),
+                cache: false,
+                dataType: 'json',
+                success: function(data) {
+                    groups = data;
+                },
+                error: function(xhr) {
+                    groups = [];
+                },
+                complete: function() {
+                    prepareGroupSelector(groups);
+                }
+            });
         },
 
         events: {

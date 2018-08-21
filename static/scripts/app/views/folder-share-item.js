@@ -24,7 +24,7 @@ define([
             this.show_admin = false;
             if (app.pageOptions.is_pro &&
                 this.path == '/' &&
-                !this.item_data.parent_group_id) { // not for group owned repo
+                !this.item_data.is_group_owned_repo) { // not for group owned repo
                 this.show_admin = true;
             }
 
@@ -65,7 +65,7 @@ define([
             var perm = $(e.currentTarget).val();
             var item_data = this.item_data;
             var url, method, data;
-            if (item_data.parent_group_id) { // group owned repo
+            if (item_data.is_group_owned_repo) { // group owned repo
                 if (item_data.for_user) {
                     url = Common.getUrl({
                         name: 'group_owned_repo_user_share',
@@ -140,7 +140,7 @@ define([
             var item_data = this.item_data;
             var url, data = {};
 
-            if (item_data.parent_group_id) { // group owned repo
+            if (item_data.is_group_owned_repo) { // group owned repo
                 if (item_data.for_user) {
                     url = Common.getUrl({
                         name: 'group_owned_repo_user_share',

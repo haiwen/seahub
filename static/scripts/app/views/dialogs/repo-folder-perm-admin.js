@@ -8,7 +8,8 @@ define([
     'app/collections/repo-user-folder-perm',
     'app/collections/repo-group-folder-perm',
     'app/views/repo-folder-perm-item'
-], function($, _, Backbone, Common, jQueryUI, FileTree, UserFolderPerm, GroupFolderPerm, ItemView) {
+], function($, _, Backbone, Common, jQueryUI, FileTree,
+    UserFolderPerm, GroupFolderPerm, ItemView) {
     'use strict';
 
     var View = Backbone.View.extend({
@@ -19,6 +20,7 @@ define([
         initialize: function(options) {
             this.repo_name = options.repo_name;
             this.repo_id = options.repo_id;
+            this.is_group_owned_repo = options.is_group_owned_repo;
 
             this.render();
             this.$('.op-target').css({'max-width':280}); // for long repo name
@@ -44,11 +46,17 @@ define([
             }
             this.$('.js-tabs').tabs();
 
-            this.userPerm = new UserFolderPerm({repo_id: this.repo_id});
+            this.userPerm = new UserFolderPerm({
+                is_group_owned_repo: this.is_group_owned_repo,
+                repo_id: this.repo_id
+            });
             this.userPerm.perm_type = 'user';
             this.$userPermPanel = this.$('#js-repo-user-folder-perm .js-folder-perm-content');
 
-            this.groupPerm = new GroupFolderPerm({repo_id: this.repo_id});
+            this.groupPerm = new GroupFolderPerm({
+                is_group_owned_repo: this.is_group_owned_repo,
+                repo_id: this.repo_id
+            });
             this.groupPerm.perm_type = 'group';
             this.$groupPermPanel = this.$('#js-repo-group-folder-perm .js-folder-perm-content');
 
@@ -102,17 +110,42 @@ define([
                         placeholder: gettext("Search user or enter email and press Enter") // to override 'placeholder' returned by `Common.conta...`
                     }));
             } else {
-                var groups = app.pageOptions.joined_groups_exclude_address_book || [];
-                var g_opts = '';
-                for (var i = 0, len = groups.length; i < len; i++) {
-                    g_opts += '<option value="' + groups[i].id + '" data-index="' + i + '">' + groups[i].name + '</option>';
-                }
-                $('[name="groups"]', $panel).html(g_opts).select2({
-                    placeholder: gettext("Select a group"),
-                    maximumSelectionSize: 1,
-                    formatSelectionTooBig: gettext("You can only select 1 item"),
-                    escapeMarkup: function(m) { return m; }
+                var groups = [];
+                $.ajax({
+                    url: Common.getUrl({
+                        name: 'shareable_groups'
+                    }),
+                    type: 'GET',
+                    dataType: 'json',
+                    cache: false,
+                    success: function(data) {
+                        for (var i = 0, len = data.length; i < len; i++) {
+                            groups.push({
+                                'id': data[i].id,
+                                'name': data[i].name
+                            });
+                        }
+                        groups.sort(function(a, b) {
+                            return Common.compareTwoWord(a.name, b.name);
+                        });
+                    },
+                    error: function(xhr, textStatus, errorThrown) {
+                        // do nothing
+                    },
+                    complete: function() {
+                        var g_opts = '';
+                        for (var i = 0, len = groups.length; i < len; i++) {
+                            g_opts += '<option value="' + groups[i].id + '" data-index="' + i + '">' + groups[i].name + '</option>';
+                        }
+                        $('[name="groups"]', $panel).html(g_opts).select2({
+                            placeholder: gettext("Select a group"),
+                            maximumSelectionSize: 1,
+                            formatSelectionTooBig: gettext("You can only select 1 item"),
+                            escapeMarkup: function(m) { return m; }
+                        });
+                    }
                 });
+
             }
 
             // show existing items
@@ -136,7 +169,12 @@ define([
             var for_user = perm_type == 'user' ? true : false;
             var encoded_path = Common.encodePath(model.get('folder_path'));
             var view = new ItemView({
-                item_data: $.extend(model.toJSON(), {'for_user': for_user, 'show_folder_path': true, 'encoded_path': encoded_path})
+                item_data: $.extend(model.toJSON(), {
+                    'for_user': for_user,
+                    'show_folder_path': true,
+                    'encoded_path': encoded_path,
+                    'is_group_owned_repo': this.is_group_owned_repo
+                })
             });
 
             if (options.prepend) {
@@ -216,7 +254,12 @@ define([
             if ($submit.hasClass('js-user-perm-add-submit')) {
                 for_user = true;
                 $panel = this.$userPermPanel;
-                url = Common.getUrl({name: 'repo_user_folder_perm', repo_id: this.repo_id});
+                url = Common.getUrl({
+                    name: this.is_group_owned_repo ?
+                        'group-owned-library-user-folder-permission' :
+                        'repo_user_folder_perm',
+                    repo_id: this.repo_id
+                });
 
                 var $email_or_group = $('[name="emails"]', $panel);
                 var email = $email_or_group.val();
@@ -230,7 +273,12 @@ define([
             } else {
                 for_user = false;
                 $panel = this.$groupPermPanel;
-                url = Common.getUrl({name: 'repo_group_folder_perm', repo_id: this.repo_id});
+                url = Common.getUrl({
+                    name: this.is_group_owned_repo ?
+                        'group-owned-library-group-folder-permission' :
+                        'repo_group_folder_perm',
+                    repo_id: this.repo_id
+                });
 
                 var $email_or_group = $('[name="groups"]', $panel);
                 var group_val = $email_or_group.val().join(',');
@@ -255,6 +303,7 @@ define([
             var $error = $('.error', $panel);
             Common.disableButton($submit);
 
+            var is_group_owned_repo = this.is_group_owned_repo;
             $.ajax({
                 url: url,
                 dataType: 'json',
@@ -267,7 +316,12 @@ define([
                         $(data.success).each(function(index, item) {
                             var encoded_path = Common.encodePath(item.folder_path);
                             var perm_item = new ItemView({
-                                item_data: $.extend(item, {'for_user': for_user, 'show_folder_path': true, 'encoded_path': encoded_path})
+                                item_data: $.extend(item, {
+                                    'for_user': for_user,
+                                    'show_folder_path': true,
+                                    'encoded_path': encoded_path,
+                                    'is_group_owned_repo': is_group_owned_repo
+                                })
                             });
                             $('[name="folder_path"]', $panel).closest('tr').after(perm_item.el);
                         });

@@ -13,6 +13,9 @@
         },
         {
             name: "sysadmin-main"
+        },
+        {
+            name: "orgadmin-main"
         }
     ]
 })

@@ -12,6 +12,7 @@ import './assets/css/fontawesome.css';
 import 'seafile-ui';
 import './css/side-panel.css';
 import './css/wiki.css';
+import './css/search.css';
 
 // init seafileAPI
 let seafileAPI = new SeafileAPI();
@@ -46,7 +47,8 @@ class Wiki extends Component {
       filePath: '',
       latestContributor: '',
       lastModified: '',
-      permission: ''
+      permission: '',
+      isFileLoading: false
     };
     window.onpopstate = this.onpopstate;
   }
@@ -84,6 +86,12 @@ class Wiki extends Component {
     }
   }
 
+  onSearchedClick = (path) => {
+    if (path) {
+      this.loadFile(path);
+    }
+  }
+
   onFileClick = (e, node) => {
     if (node.isMarkdown()) {
       this.loadFile(node.path);
@@ -91,6 +99,9 @@ class Wiki extends Component {
   }
 
   loadFile(filePath) {
+    this.setState({
+      isFileLoading: true
+    })
     seafileAPI.getWikiFileContent(slug, filePath)
       .then(res => {
         this.setState({
@@ -99,16 +110,19 @@ class Wiki extends Component {
           lastModified: moment.unix(res.data.last_modified).fromNow(),
           permission: res.data.permission,
           fileName: this.fileNameFromPath(filePath),
-          filePath: filePath
+          filePath: filePath,
+          isFileLoading: false
         })
       })
 
-      let fileUrl = '/wikis/' + slug + filePath;
+      let fileUrl =  siteRoot + 'wikis/' + slug + filePath;
       window.history.pushState({urlPath: fileUrl, filePath: filePath}, filePath, fileUrl);
   }
 
   onpopstate = (event) => {
-    this.loadFile(event.state.filePath);
+    if (event.state && event.state.filePath) {
+      this.loadFile(event.state.filePath);
+    }
   }
 
   onMenuClick = () => {
@@ -138,10 +152,12 @@ class Wiki extends Component {
           filePath={this.state.filePath}
           onLinkClick={this.onLinkClick}
           onMenuClick={this.onMenuClick}
+          onSearchedClick={this.onSearchedClick}
           latestContributor={this.state.latestContributor}
           lastModified={this.state.lastModified}
           seafileAPI={seafileAPI}
           permission={this.state.permission}
+          isFileLoading={this.state.isFileLoading}
         />
       </div>
     )

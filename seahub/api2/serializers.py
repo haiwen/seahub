@@ -65,9 +65,8 @@ class AuthTokenSerializer(serializers.Serializer):
         else:
             raise serializers.ValidationError('invalid params')
 
-        username = Profile.objects.get_username_by_login_id(login_id)
-        if username is None:
-            username = login_id
+        # convert login id or contact email to username if any
+        username = Profile.objects.convert_login_str_to_username(login_id)
 
         p_id = ccnet_api.get_primary_id(username)
         if p_id is not None:

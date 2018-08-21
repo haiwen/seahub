@@ -21,7 +21,20 @@ define([
         },
 
         url: function () {
-            return Common.getUrl({name: 'admin-group-libraries', group_id: this.group_id});
+            var url_options = {
+                group_id: this.group_id
+            };
+            if (app.pageOptions.org_id) { // org admin
+                $.extend(url_options, {
+                    name: 'org-admin-group-libraries',
+                    org_id: app.pageOptions.org_id
+                });
+            } else {
+                $.extend(url_options, {
+                    name: 'admin-group-libraries'
+                });
+            }
+            return Common.getUrl(url_options);
         }
     });
 

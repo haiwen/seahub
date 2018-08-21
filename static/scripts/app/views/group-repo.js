@@ -4,10 +4,10 @@ define([
     'backbone',
     'common',
     'app/views/share',
-    'app/views/folder-perm',
+    'app/views/dialogs/repo-folder-perm-admin',
     'app/views/widgets/hl-item-view',
     'app/views/widgets/dropdown'
-], function($, _, Backbone, Common, ShareView, FolderPermView,
+], function($, _, Backbone, Common, ShareView, RepoFolderPerm,
     HLItemView, DropdownView) {
     'use strict';
 
@@ -35,7 +35,6 @@ define([
             HLItemView.prototype.initialize.call(this);
             
             this.group_id = options.group_id;
-            this.parent_group_id = options.parent_group_id;
             this.is_staff = options.is_staff;
             this.show_repo_owner = options.show_repo_owner;
             this.repoDetailsView = options.repoDetailsView;
@@ -71,14 +70,13 @@ define([
 
         setRepoPerm: function() {
             var options = {
-                'obj_name': this.model.get('name'),
-                'dir_path': '/',
-                'repo_id': this.model.get('id'),
                 'is_group_owned_repo': true,
-                'group_id': this.group_id
+                'repo_name': this.model.get('name'),
+                'repo_id': this.model.get('id')
             };
+            new RepoFolderPerm(options);
+
             this._hideMenu();
-            new FolderPermView(options);
             return false;
         },
 
@@ -204,7 +202,7 @@ define([
 
         clickItem: function(e) {
             var target =  e.target || event.srcElement;
-            if (this.parent_group_id != 0 && // only for address book group repo
+            if (this.model.get('owner') == this.group_id + '@seafile_group' &&
                 this.$('td').is(target) &&
                 this.repoDetailsView.$el.is(':visible')) {
                 this.viewDetails();
@@ -216,19 +214,21 @@ define([
             var icon_size = Common.isHiDPI() ? 48 : 24;
             var icon_url = this.model.getIconUrl(icon_size);
             var tmpl = $(window).width() >= 768 ? this.template : this.mobileTemplate;
-            var owner_name;
+            var owner_name,
+                is_group_owned_repo = false;
             if (obj.owner.indexOf('@seafile_group') == -1) {
                 // 'owner_nickname' for '#group/id/'
                 // 'owner_name' for '#groups'
-                owner_name =  this.model.get('owner_nickname') || this.model.get('owner_name');
+                owner_name = this.model.get('owner_nickname') || this.model.get('owner_name');
             } else {
                 // owner: "18@seafile_group"
                 // It's a group owned repo
                 owner_name = obj.group_name;
+                is_group_owned_repo = true;
             }
             $.extend(obj, {
                 group_id: this.group_id,
-                parent_group_id: this.parent_group_id,
+                is_group_owned_repo: is_group_owned_repo,
                 is_staff: this.is_staff,
                 // for '#groups' (no 'share_from_me')
                 is_repo_owner: app.pageOptions.username == this.model.get('owner'),
@@ -265,11 +265,12 @@ define([
             if (app.pageOptions.is_pro) {
                 options.is_admin = this.model.get('is_admin'); // 'is_admin': repo is shared to the group with 'admin' perm
 
-                // private share group owned repo
-                if (this.parent_group_id && this.is_staff) {
+                // private share group owned repo (which belongs to this group)
+                if (this.is_staff &&
+                    this.model.get('owner') == this.group_id + '@seafile_group') {
                     $.extend(options, {
                         'is_address_book_group_admin': true,
-                        'parent_group_id': this.parent_group_id
+                        'is_group_owned_repo': true
                     });
                 }
             }
