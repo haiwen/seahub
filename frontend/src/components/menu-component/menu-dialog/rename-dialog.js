@@ -1,5 +1,6 @@
 import React from 'react';
 import { Button, Modal, ModalHeader, Input, ModalBody, ModalFooter } from 'reactstrap';
+const gettext = window.gettext;
 
 class Rename extends React.Component {
   constructor(props) {
@@ -55,14 +56,14 @@ class Rename extends React.Component {
     let preName = this.props.currentNode.name;
     return (
       <Modal isOpen={true} toggle={this.toggle}>
-        <ModalHeader toggle={this.toggle}>{type === 'file' ? 'Rename File' : 'Rename Folder' }</ModalHeader>
+        <ModalHeader toggle={this.toggle}>{type === 'file' ? gettext("Rename File") : gettext("Rename Folder") }</ModalHeader>
         <ModalBody>
-          <p>{type === 'file' ? "Enter the new file name:": 'Enter the new folder name:'}</p>
+          <p>{type === 'file' ? gettext("Enter the new file name:"): gettext("Enter the new folder name:")}</p>
           <Input innerRef={input => {this.newInput = input}} placeholder="newName" value={this.state.newName} onChange={this.handleChange} />
         </ModalBody>
         <ModalFooter>
-          <Button color="primary" onClick={this.handleSubmit}>Submit</Button>
-          <Button color="secondary" onClick={this.toggle}>Cancel</Button>
+          <Button color="primary" onClick={this.handleSubmit}>{gettext("Submit")}</Button>
+          <Button color="secondary" onClick={this.toggle}>{gettext("Cancel")}</Button>
         </ModalFooter>
       </Modal>
     )

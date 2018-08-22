@@ -3,6 +3,8 @@ import Delete from './menu-dialog/delete-dialog';
 import CreateFlieFolder from './menu-dialog/create-fileforder-dialog';
 import Rename from './menu-dialog/rename-dialog';
 
+const gettext = window.gettext;
+
 class NodeMenu extends React.Component {
 
   constructor(props) {
@@ -100,26 +102,26 @@ class NodeMenu extends React.Component {
       if (this.props.currentNode.name === "/") {
         return (
           <ul className="dropdown-menu" style={style}>
-            <li className="dropdown-item" onClick={this.toggleAddFileFolder}>New Folder</li>
-            <li className="dropdown-item" onClick={(ev,flag) => this.toggleAddFileFolder(ev,true)}>New File</li>
+            <li className="dropdown-item" onClick={this.toggleAddFileFolder}>{gettext("New Folder")}</li>
+            <li className="dropdown-item" onClick={(ev,flag) => this.toggleAddFileFolder(ev,true)}>{gettext("New File")}</li>
           </ul>
         )
       }
       
       return (
         <ul className="dropdown-menu" style={style}>
-          <li className="dropdown-item" onClick={this.toggleAddFileFolder}>New Folder</li>
-          <li className="dropdown-item" onClick={(ev,flag) => this.toggleAddFileFolder(ev,true)}>New File</li>
-          <li className="dropdown-item" onClick={this.toggleRename}>Rename</li>
-          <li className="dropdown-item" onClick={this.toggleDelete}>Delete</li>
+          <li className="dropdown-item" onClick={this.toggleAddFileFolder}>{gettext("New Folder")}</li>
+          <li className="dropdown-item" onClick={(ev,flag) => this.toggleAddFileFolder(ev,true)}>{gettext("New File")}</li>
+          <li className="dropdown-item" onClick={this.toggleRename}>{gettext("Rename")}</li>
+          <li className="dropdown-item" onClick={this.toggleDelete}>{gettext("Delete")}</li>
         </ul>
       )
     }
 
     return (
       <ul className="dropdown-menu" style={style}>
-          <li className="dropdown-item" onClick={this.toggleRename}>Rename</li>
-          <li className="dropdown-item" onClick={this.toggleDelete}>Delete</li>
+          <li className="dropdown-item" onClick={this.toggleRename}>{gettext("Rename")}</li>
+          <li className="dropdown-item" onClick={this.toggleDelete}>{gettext("Delete")}</li>
       </ul>
     )
     

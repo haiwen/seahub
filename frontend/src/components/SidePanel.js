@@ -5,6 +5,7 @@ import Tree from './tree-view/tree';
 import Node from './tree-view/node'
 import NodeMenu from './menu-component/node-menu';
 import MenuControl from './menu-component/node-menu-control';
+const gettext = window.gettext;
 
 class SidePanel extends Component {
 
@@ -228,7 +229,7 @@ class SidePanel extends Component {
             onMouseEnter={this.onMouseEnter} 
             onMouseLeave={this.onMouseLeave}
           >
-            Pages
+            {gettext("Pages")}
             <div className="heading-icon">
               <MenuControl 
                 isShow={this.state.isMenuIconShow}

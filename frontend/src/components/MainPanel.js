@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import Search from './search';
 import MarkdownViewer from './markdown-viewer';
 import Account from './account';
-import { repoID, serviceUrl, slug, siteRoot } from './constance';
+import { gettext, repoID, serviceUrl, slug, siteRoot } from './constance';
 
 class MainPanel extends Component {
 
@@ -33,7 +33,7 @@ class MainPanel extends Component {
         <div className="main-panel-top panel-top">
           <span className="sf2-icon-menu side-nav-toggle hidden-md-up d-md-none" title="Side Nav Menu" onClick={this.onMenuClick}></span>
            <div className={`wiki-page-ops ${this.props.permission === 'rw' ? '' : 'hide'}`}>
-              <a className="btn btn-secondary btn-topbar" onClick={this.onEditClick}>Edit Page</a>
+              <a className="btn btn-secondary btn-topbar" onClick={this.onEditClick}>{gettext("Edit Page")}</a>
            </div>
           <div className="common-toolbar">
             <Search seafileAPI={this.props.seafileAPI} onSearchedClick={this.props.onSearchedClick}/>
@@ -43,7 +43,7 @@ class MainPanel extends Component {
         <div className="cur-view-main">
           <div className="cur-view-path">
             <div className="path-containter">
-              <a href={siteRoot + 'wikis/'} className="normal">Wikis</a>
+              <a href={siteRoot + 'wikis/'} className="normal">{gettext("Wikis")}</a>
               <span className="path-split">/</span>
               <a href={siteRoot + 'wikis/' + slug} className="normal">{slug}</a>
               {pathElem}

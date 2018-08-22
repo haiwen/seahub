@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import ReactDOM from 'react-dom';
 import cookie from 'react-cookies';
 import { keyCodes, bytesToSize } from './utils';
-import { siteRoot, avatarInfo } from './constance';
+import { siteRoot, avatarInfo, gettext } from './constance';
 
 
 class Account extends Component {
@@ -88,7 +88,7 @@ class Account extends Component {
   renderMenu = () => {
     if(this.state.isStaff){
       return (
-        <a href={siteRoot + 'sys/useradmin/'} title="System Admin" className="item">System Admin</a>
+        <a href={siteRoot + 'sys/useradmin/'} title={gettext("System Admin")} className="item">{gettext("System Admin")}</a>
       )
     }
   }
@@ -124,15 +124,15 @@ class Account extends Component {
            </div>
            <div id="space-traffic">
              <div className="item">
-               <p>Used: {this.state.quotaUsage} / {this.state.quotaTotal}</p>
+               <p>{gettext("Used")}: {this.state.quotaUsage} / {this.state.quotaTotal}</p>
                <div id="quota-bar">
                 <span id="quota-usage" className="usage" style={{width: this.state.usageRate}}></span>
                </div>
              </div>
            </div>
-           <a href={siteRoot + 'profile/'} className="item">Settings</a>
+           <a href={siteRoot + 'profile/'} className="item">{gettext("Settings")}</a>
            {this.renderMenu()}
-           <a href={siteRoot + 'accounts/logout/'} className="item">Log out</a>
+           <a href={siteRoot + 'accounts/logout/'} className="item">{gettext("Log out")}</a>
          </div>
         </div>
       </div>
