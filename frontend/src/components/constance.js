@@ -1,4 +1,5 @@
 export const dirPath = '/';
+export const gettext = window.gettext;
 
 export const siteRoot = window.app.config.siteRoot;
 export const avatarInfo = window.app.config.avatarInfo;
