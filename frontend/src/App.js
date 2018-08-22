@@ -126,6 +126,23 @@ class EditorUtilities {
       seafileAPI.getFileInfo(repoID, filePath)
     )
   }
+
+  getInternalLink() {
+      return seafileAPI.getInternalLink(repoID, filePath)
+  }
+
+  getShareLink() {
+    return seafileAPI.getShareLink(repoID, filePath);
+  }
+
+  createShareLink (repoID, filePath, userPassword, userValidDays) {
+      return seafileAPI.createShareLink(repoID, filePath, userPassword, userValidDays);
+  }
+
+  deleteShareLink(token){
+      return seafileAPI.deleteShareLink(token)
+  }
+
 }
 
 
