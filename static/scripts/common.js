@@ -454,10 +454,13 @@ define([
         prepareCollectionFetchErrorMsg: function(collection, response, opts) {
             var err_msg;
             if (response.responseText) {
-                if (response['status'] == 401 || response['status'] == 403) {
+                if (response['status'] == 401) {
                     err_msg = gettext("Permission error");
+                } else if (response['status'] == 403) {
+                    err_msg = gettext("Permission error");
+                    location.href = app.config.loginUrl + '?next='
+                        + encodeURIComponent(location.pathname + location.hash);
                 } else {
-                    //err_msg = gettext("Error");
                     err_msg = this.HTMLescape(JSON.parse(response.responseText).error_msg);
                 }
             } else {
