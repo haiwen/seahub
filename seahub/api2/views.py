@@ -2252,10 +2252,6 @@ class OpCopyView(APIView):
             return api_error(status.HTTP_400_BAD_REQUEST,
                              'Missing argument.')
 
-        if repo_id == dst_repo and parent_dir == dst_dir:
-            return api_error(status.HTTP_400_BAD_REQUEST,
-                             'The destination directory is the same as the source.')
-
         # src resource check
         repo = get_repo(repo_id)
         if not repo:
@@ -2712,9 +2708,6 @@ class FileView(APIView):
 
             if not (dst_repo_id and dst_dir):
                 return api_error(status.HTTP_400_BAD_REQUEST, 'Missing arguments.')
-
-            if src_repo_id == dst_repo_id and src_dir == dst_dir:
-                return Response('success', status=status.HTTP_200_OK)
 
             # check src folder permission
             if check_folder_permission(request, repo_id, src_dir) is None:

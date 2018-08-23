@@ -76,10 +76,6 @@ class CopyMoveTaskView(APIView):
             error_msg = 'dirent_type invalid.'
             return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
 
-        if src_repo_id == dst_repo_id and src_parent_dir == dst_parent_dir:
-            error_msg = _('Invalid destination path')
-            return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
-
         if len(dst_parent_dir + src_dirent_name) > MAX_PATH:
             error_msg = _('Destination path is too long.')
             return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
@@ -88,6 +84,11 @@ class CopyMoveTaskView(APIView):
         if operation not in ('move', 'copy'):
             error_msg = "operation can only be 'move' or 'copy'."
             return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
+
+        if operation == 'move':
+            if src_repo_id == dst_repo_id and src_parent_dir == dst_parent_dir:
+                error_msg = _('Invalid destination path')
+                return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
 
         dirent_type = dirent_type.lower()
         if dirent_type not in ('file', 'dir'):
