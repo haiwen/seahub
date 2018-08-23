@@ -1328,14 +1328,6 @@ def within_time_range(d1, d2, maxdiff_seconds):
     diff = (delta.microseconds + (delta.seconds + delta.days*24*3600) * 1e6) / 1e6
     return diff < maxdiff_seconds
 
-def is_org_repo_creation_allowed(request):
-    """Whether or not allow a user create  organization library.
-    """
-    if request.user.is_staff:
-        return True
-    else:
-        return config.ENABLE_USER_CREATE_ORG_REPO
-
 def get_system_admins():
     db_users = seaserv.get_emailusers('DB', -1, -1)
     ldpa_imported_users = seaserv.get_emailusers('LDAPImport', -1, -1)

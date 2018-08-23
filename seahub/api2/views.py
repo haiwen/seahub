@@ -67,8 +67,7 @@ from seahub.utils import gen_file_get_url, gen_token, gen_file_upload_url, \
     gen_file_share_link, gen_dir_share_link, is_org_context, gen_shared_link, \
     get_org_user_events, calculate_repos_last_modify, send_perm_audit_msg, \
     gen_shared_upload_link, convert_cmmt_desc_link, is_valid_dirent_name, \
-    is_org_repo_creation_allowed, normalize_file_path, \
-    get_no_duplicate_obj_name, normalize_dir_path
+    normalize_file_path, get_no_duplicate_obj_name, normalize_dir_path
 
 from seahub.utils.file_revisions import get_file_revisions_after_renamed
 from seahub.utils.devices import do_unlink_device
@@ -998,7 +997,7 @@ class PubRepos(APIView):
 
     def post(self, request, format=None):
         # Create public repo
-        if not request.user.permissions.can_add_repo():
+        if not request.user.permissions.can_add_public_repo():
             return api_error(status.HTTP_403_FORBIDDEN,
                              'You do not have permission to create library.')
 
@@ -1029,8 +1028,7 @@ class PubRepos(APIView):
             repo_id = seafile_api.create_org_repo(repo_name, repo_desc,
                                                   username, passwd, org_id)
             repo = seafile_api.get_repo(repo_id)
-            seaserv.seafserv_threaded_rpc.set_org_inner_pub_repo(
-                org_id, repo.id, permission)
+            seafile_api.set_org_inner_pub_repo(org_id, repo.id, permission)
         else:
             if is_pro_version() and ENABLE_STORAGE_CLASSES:
 
@@ -1055,6 +1053,13 @@ class PubRepos(APIView):
 
             repo = seafile_api.get_repo(repo_id)
             seafile_api.add_inner_pub_repo(repo.id, permission)
+
+        try:
+            send_perm_audit_msg('add-repo-perm',
+                    username, 'all', repo_id, '/', permission)
+        except Exception as e:
+            logger.error(e)
+
 
         library_template = request.data.get("library_template", '')
         repo_created.send(sender=None,
@@ -3940,42 +3945,50 @@ class SharedRepo(APIView):
         """
         Share a repo to users/groups/public.
         """
-        username = request.user.username
 
-        if is_org_context(request):
-            repo_owner = seafile_api.get_org_repo_owner(repo_id)
-        else:
-            repo_owner = seafile_api.get_repo_owner(repo_id)
-
-        if username != repo_owner:
-            return api_error(status.HTTP_403_FORBIDDEN,
-                             'You do not have permission to share library.')
-
+        # argument check
         share_type = request.GET.get('share_type')
-        user = request.GET.get('user')
-        users = request.GET.get('users')
-        group_id = request.GET.get('group_id')
         permission = request.GET.get('permission')
 
-        if permission != 'rw' and permission != "r":
-            return api_error(status.HTTP_400_BAD_REQUEST,
-                             'Permission need to be rw or r.')
+        if permission not in ('r', 'rw'):
+            error_msg = 'permission invalid.'
+            return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
+
+        if share_type not in ('personal', 'group', 'public'):
+            error_msg = 'share_type invalid.'
+            return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
+
+        # recourse check
+        repo = seafile_api.get_repo(repo_id)
+        if not repo:
+            error_msg = 'Library %s not found.' % repo_id
+            return api_error(status.HTTP_404_NOT_FOUND, error_msg)
+
+        # permission check
+        username = request.user.username
+        repo_owner = get_repo_owner(request, repo_id)
+        if username != repo_owner:
+            error_msg = 'Permission denied.'
+            return api_error(status.HTTP_403_FORBIDDEN, error_msg)
 
         if share_type == 'personal':
-            from_email = seafile_api.get_repo_owner(repo_id)
-            shared_users = []
-            invalid_users = []
-            notexistent_users = []
-            notsharable_errors = []
 
+            user = request.GET.get('user')
+            users = request.GET.get('users')
+            if not user and not users:
+                return api_error(status.HTTP_400_BAD_REQUEST,
+                                 'User or users (comma separated are mandatory) are not provided')
             usernames = []
             if user:
                 usernames += user.split(",")
             if users:
                 usernames += users.split(",")
-            if not user and not users:
-                return api_error(status.HTTP_400_BAD_REQUEST,
-                                 'User or users (comma separated are mandatory) are not provided')
+
+            shared_users = []
+            invalid_users = []
+            notexistent_users = []
+            notsharable_errors = []
+
             for u in usernames:
                 if not u:
                     continue
@@ -3989,17 +4002,23 @@ class SharedRepo(APIView):
                     continue
 
                 try:
-                    seafile_api.share_repo(repo_id, from_email, u, permission)
+                    seafile_api.share_repo(repo_id, username, u, permission)
                     shared_users.append(u)
                 except SearpcError, e:
                     logger.error(e)
                     notsharable_errors.append(e)
 
+                try:
+                    send_perm_audit_msg('add-repo-perm',
+                            username, u, repo_id, '/', permission)
+                except Exception as e:
+                    logger.error(e)
+
             if invalid_users or notexistent_users or notsharable_errors:
                 # removing already created share
                 for s_user in shared_users:
                     try:
-                        remove_share(repo_id, from_email, s_user)
+                        remove_share(repo_id, username, s_user)
                     except SearpcError, e:
                         # ignoring this error, go to next unsharing
                         continue
@@ -4015,53 +4034,56 @@ class SharedRepo(APIView):
                 return api_error(status.HTTP_500_INTERNAL_SERVER_ERROR,
                                  'Internal error occurs, sharing rolled back')
 
-        elif share_type == 'group':
+        if share_type == 'group':
+
+            group_id = request.GET.get('group_id')
+            if not group_id:
+                error_msg = 'group_id invalid.'
+                return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
+
             try:
                 group_id = int(group_id)
             except ValueError:
                 return api_error(status.HTTP_400_BAD_REQUEST,
                                  'Group ID must be integer.')
 
-            from_email = seafile_api.get_repo_owner(repo_id)
             group = get_group(group_id)
             if not group:
                 return api_error(status.HTTP_400_BAD_REQUEST,
                                  'Group does not exist .')
             try:
-                seafile_api.set_group_repo(repo_id, int(group_id),
-                                           from_email, permission)
+                seafile_api.set_group_repo(repo_id,
+                        group_id, username, permission)
             except SearpcError, e:
                 return api_error(status.HTTP_500_INTERNAL_SERVER_ERROR,
                                  "Searpc Error: " + e.msg)
+            try:
+                send_perm_audit_msg('add-repo-perm',
+                        username, group_id, repo_id, '/', permission)
+            except Exception as e:
+                logger.error(e)
 
-        elif share_type == 'public':
-            if not CLOUD_MODE:
-                if not is_org_repo_creation_allowed(request):
-                    return api_error(status.HTTP_403_FORBIDDEN,
-                                     'Failed to share library to public: permission denied.')
-
-                try:
-                    seafile_api.add_inner_pub_repo(repo_id, permission)
-                except SearpcError, e:
-                    logger.error(e)
-                    return api_error(status.HTTP_500_INTERNAL_SERVER_ERROR,
-                                     'Failed to share library to public.')
-            else:
+        if share_type == 'public':
+            try:
                 if is_org_context(request):
                     org_id = request.user.org.org_id
-                    try:
-                        seaserv.seafserv_threaded_rpc.set_org_inner_pub_repo(org_id, repo_id, permission)
-                        send_perm_audit_msg('add-repo-perm', username, 'all', repo_id, '/', permission)
-                    except SearpcError, e:
-                        logger.error(e)
-                        return api_error(status.HTTP_500_INTERNAL_SERVER_ERROR,
-                                         'Failed to share library to public.')
+                    seafile_api.set_org_inner_pub_repo(org_id, repo_id, permission)
                 else:
-                    return api_error(status.HTTP_403_FORBIDDEN,
-                                     'Failed to share library to public.')
-        else:
-            return api_error(status.HTTP_400_BAD_REQUEST,
-                    'Share type can only be personal or group or public.')
+                    if not request.user.permissions.can_add_public_repo():
+                        error_msg = 'Permission denied.'
+                        return api_error(status.HTTP_403_FORBIDDEN, error_msg)
+
+                    seafile_api.add_inner_pub_repo(repo_id, permission)
+            except Exception as e:
+                logger.error(e)
+                error_msg = 'Internal Server Error'
+                return api_error(status.HTTP_500_INTERNAL_SERVER_ERROR, error_msg)
+
+            try:
+                send_perm_audit_msg('add-repo-perm',
+                        username, 'all', repo_id, '/', permission)
+            except Exception as e:
+                logger.error(e)
 
         return Response('success', status=status.HTTP_200_OK)
 
