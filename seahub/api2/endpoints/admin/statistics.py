@@ -11,7 +11,7 @@ from django.utils import timezone
 
 from seahub.utils import get_file_ops_stats_by_day, \
         get_total_storage_stats_by_day, get_user_activity_stats_by_day, \
-        is_pro_version, EVENTS_ENABLED
+        is_pro_version, EVENTS_ENABLED, get_system_traffic_by_day
 from seahub.utils.timeutils import datetime_to_isoformat_timestr
 
 from seahub.api2.authentication import TokenAuthentication
@@ -129,7 +129,35 @@ class ActiveUsersView(APIView):
         return Response(sorted(res_data, key=lambda x: x['datetime']))
 
 
-def get_init_data(start_time, end_time):
+class SystemTrafficView(APIView):
+    authentication_classes = (TokenAuthentication, SessionAuthentication)
+    throttle_classes = (UserRateThrottle,)
+    permission_classes = (IsAdminUser,)
+
+    @check_parameter
+    def get(self, request, start_time, end_time):
+        op_type_list = ['web-file-upload', 'web-file-download',
+                        'sync-file-download', 'sync-file-upload',
+                        'link-file-upload', 'link-file-download']
+        init_count = [0] * 6
+        init_data = get_init_data(start_time, end_time,
+                                  dict(zip(op_type_list, init_count)))
+
+        for e in get_system_traffic_by_day(start_time, end_time,
+                                           get_time_offset()):
+            dt, op_type, count = e
+            init_data[dt].update({op_type: count})
+
+        res_data = []
+        for k, v in init_data.items():
+            res = {'datetime': datetime_to_isoformat_timestr(k)}
+            res.update(v)
+            res_data.append(res)
+
+        return Response(sorted(res_data, key=lambda x: x['datetime']))
+
+
+def get_init_data(start_time, end_time, init_data=0):
     res = {}
     start_time = start_time.replace(hour=0).replace(minute=0).replace(second=0)
     end_time = end_time.replace(hour=0).replace(minute=0).replace(second=0)
@@ -138,7 +166,10 @@ def get_init_data(start_time, end_time):
     for offset in range(date_length):
         offset = offset * 24
         dt = start_time + datetime.timedelta(hours=offset)
-        res[dt] = 0
+        if isinstance(init_data, dict):
+            res[dt] = init_data.copy()
+        else:
+            res[dt] = init_data
     return res
 
 def get_time_offset():

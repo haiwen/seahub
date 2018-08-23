@@ -911,16 +911,9 @@ def _download_file_from_share_link(request, fileshare):
         return HttpResponseRedirect(next)
 
     send_file_access_msg(request, repo, real_path, 'share-link')
-    try:
-        file_size = seafile_api.get_file_size(repo.store_id, repo.version,
-                                              obj_id)
-        send_message('seahub.stats', 'file-download\t%s\t%s\t%s\t%s' %
-                     (repo.id, shared_by, obj_id, file_size))
-    except Exception as e:
-        logger.error('Error when sending file-download message: %s' % str(e))
 
     dl_token = seafile_api.get_fileserver_access_token(repo.id,
-            obj_id, 'download', username, use_onetime=False)
+            obj_id, 'download-link', username, use_onetime=False)
 
     if not dl_token:
         messages.error(request, _(u'Unable to download file.'))
@@ -1000,7 +993,10 @@ def view_shared_file(request, fileshare):
             next = request.META.get('HTTP_REFERER', settings.SITE_ROOT)
             return HttpResponseRedirect(next)
 
-        # view raw shared file, directly show/download file depends on browsers
+        send_file_access_msg(request, repo, path, 'share-link')
+
+        # view raw shared file, directly show/download file depends on
+        # browsers
         return HttpResponseRedirect(raw_path)
 
     # preview file
@@ -1547,14 +1543,19 @@ def view_raw_file(request, repo_id, file_path):
     return HttpResponseRedirect(raw_path)
 
 def send_file_access_msg(request, repo, path, access_from):
-    """Send file downlaod msg.
+    """Send file downlaod msg for audit.
 
     Arguments:
     - `request`:
     - `repo`:
     - `obj_id`:
-    - `access_from`: web or api
+    - `access_from`: web or api or share-link
     """
+    access_from = access_from.lower()
+    if access_from not in ['web', 'api', 'share-link']:
+        logger.warn('Invalid access_from in file access msg: %s' % access_from)
+        return
+
     username = request.user.username
 
     ip = get_remote_ip(request)
@@ -1565,7 +1566,7 @@ def send_file_access_msg(request, repo, path, access_from):
     msg_utf8 = msg.encode('utf-8')
 
     try:
-        send_message('seahub.stats', msg_utf8)
+        send_message('seahub.audit', msg_utf8)
     except Exception as e:
         logger.error("Error when sending file-download-%s message: %s" %
                      (access_from, str(e)))
