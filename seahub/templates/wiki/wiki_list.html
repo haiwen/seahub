@@ -464,7 +464,7 @@ var NewWikiController = {
     clickToNewWikiByOwnlib: function(event) {
         var _this = this;
         $.ajax({
-            url: "/api2/repos/?type=mine",
+            url: "{{SITE_ROOT}}api2/repos/?type=mine",
             cache: false,
             dataType: 'json',
             success: function(data) {
