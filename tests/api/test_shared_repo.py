@@ -1,16 +1,15 @@
-import json
 import pytest
 pytestmark = pytest.mark.django_db
 
 from seahub.test_utils import BaseTestCase
-from seaserv import seafile_api, ccnet_threaded_rpc
+from seaserv import seafile_api
 
 
 class SharedRepoTest(BaseTestCase):
     def setUp(self):
         from constance import config
         self.config = config
-        
+
         self.repo_id = self.create_repo(name='test-admin-repo', desc='',
                                         username=self.admin.username,
                                         passwd=None)
@@ -57,8 +56,6 @@ class SharedRepoTest(BaseTestCase):
 
         resp = self.client.put(self.shared_repo_url % self.repo.id)
         self.assertEqual(403, resp.status_code)
-        json_resp = json.loads(resp.content)
-        assert json_resp['error_msg'] == 'Failed to share library to public: permission denied.'
 
     def test_admin_can_unshare_public_repo(self):
         seafile_api.add_inner_pub_repo(self.repo_id, "r")

@@ -41,14 +41,14 @@ class LibrariesTest(BaseTestCase):
 
         resp = self.client.get(self.url)
         self.assertEqual(200, resp.status_code)
-        assert resp.context['can_add_pub_repo'] is True
+        assert resp.context['can_add_public_repo'] is True
 
         self.config.ENABLE_USER_CREATE_ORG_REPO = 0
         assert bool(self.config.ENABLE_USER_CREATE_ORG_REPO) is False
 
         resp = self.client.get(self.url)
         self.assertEqual(200, resp.status_code)
-        assert resp.context['can_add_pub_repo'] is False
+        assert resp.context['can_add_public_repo'] is False
 
         # logout
         self.logout()
@@ -61,14 +61,14 @@ class LibrariesTest(BaseTestCase):
 
         resp = self.client.get(self.url)
         self.assertEqual(200, resp.status_code)
-        assert resp.context['can_add_pub_repo'] is True
+        assert resp.context['can_add_public_repo'] is True
 
         self.config.ENABLE_USER_CREATE_ORG_REPO = 0
         assert bool(self.config.ENABLE_USER_CREATE_ORG_REPO) is False
 
         resp = self.client.get(self.url)
         self.assertEqual(200, resp.status_code)
-        assert resp.context['can_add_pub_repo'] is True
+        assert resp.context['can_add_public_repo'] is True
 
     def test_get_user_joined_groups(self):
         self.login_as(self.user)

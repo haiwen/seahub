@@ -43,7 +43,7 @@ from seahub.utils import render_permission_error, render_error, \
     get_user_repos, EMPTY_SHA1, gen_file_get_url, \
     new_merge_with_no_conflict, get_max_upload_file_size, \
     is_pro_version, FILE_AUDIT_ENABLED, is_valid_dirent_name, \
-    is_org_repo_creation_allowed, is_windows_operating_system
+    is_windows_operating_system
 from seahub.utils.star import get_dir_starred_files
 from seahub.utils.repo import get_library_storages
 from seahub.utils.file_op import check_file_lock
@@ -689,7 +689,6 @@ def libraries(request):
         create_default_library(request)
 
     folder_perm_enabled = True if is_pro_version() and ENABLE_FOLDER_PERM else False
-    can_add_pub_repo = True if is_org_repo_creation_allowed(request) else False
 
     if request.cloud_mode and request.user.org is not None:
         org_id = request.user.org.org_id
@@ -725,7 +724,7 @@ def libraries(request):
             'folder_perm_enabled': folder_perm_enabled,
             'is_pro': True if is_pro_version() else False,
             'file_audit_enabled': FILE_AUDIT_ENABLED,
-            'can_add_pub_repo': can_add_pub_repo,
+            'can_add_public_repo': request.user.permissions.can_add_public_repo(),
             'joined_groups': joined_groups,
             'joined_groups_exclude_address_book': joined_groups_exclude_address_book,
             'storages': get_library_storages(request),

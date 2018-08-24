@@ -147,6 +147,21 @@ class UserPermissions(object):
 
         return get_enabled_role_permissions_by_role(self.user.role)['can_view_org']
 
+    def can_add_public_repo(self):
+        """ Check if user can create public repo or share existed repo to public.
+
+        Used when MULTI_TENANCY feature is NOT enabled.
+        """
+
+        if CLOUD_MODE:
+            return False
+        elif self.user.is_staff:
+            return True
+        elif get_enabled_role_permissions_by_role(self.user.role)['can_add_public_repo']:
+            return True
+        else:
+            return bool(config.ENABLE_USER_CREATE_ORG_REPO)
+
     def can_drag_drop_folder_to_sync(self):
         return get_enabled_role_permissions_by_role(self.user.role)['can_drag_drop_folder_to_sync']
 
