@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2018-08-24 17:04+0800\n"
+"POT-Creation-Date: 2018-08-24 17:30+0800\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -210,7 +210,7 @@ msgstr ""
 #: seahub/thumbnail/views.py:51 seahub/thumbnail/views.py:166
 #: seahub/views/__init__.py:778 seahub/views/ajax.py:209
 #: seahub/views/ajax.py:239 seahub/views/ajax.py:245 seahub/views/ajax.py:924
-#: seahub/views/wiki.py:201
+#: seahub/views/wiki.py:201 seahub/wiki/views.py:56
 msgid "Permission denied."
 msgstr ""
 
@@ -268,8 +268,8 @@ msgstr ""
 #: seahub/templates/view_shared_upload_link.html:82
 #: seahub/templates/wiki/wiki_list.html:143
 #: seahub/templates/wiki/wiki_list.html:202
-#: seahub/templates/wiki/wiki_list.html:485
-#: seahub/templates/wiki/wiki_list.html:564
+#: seahub/templates/wiki/wiki_list.html:483
+#: seahub/templates/wiki/wiki_list.html:562
 msgid "Error"
 msgstr ""
 
@@ -387,7 +387,7 @@ msgstr ""
 #: seahub/api2/endpoints/wikis.py:220
 #: seahub/group/templates/group/group_wiki.html:158
 #: seahub/templates/wiki/personal_wiki.html:153
-#: seahub/templates/wiki/wiki_list.html:533
+#: seahub/templates/wiki/wiki_list.html:531
 msgid "Name is required."
 msgstr ""
 
@@ -7419,8 +7419,8 @@ msgstr ""
 
 #: seahub/templates/wiki/wiki_list.html:146
 #: seahub/templates/wiki/wiki_list.html:205
-#: seahub/templates/wiki/wiki_list.html:488
-#: seahub/templates/wiki/wiki_list.html:567
+#: seahub/templates/wiki/wiki_list.html:486
+#: seahub/templates/wiki/wiki_list.html:565
 msgid "Please check the network."
 msgstr ""
 
@@ -7430,10 +7430,6 @@ msgstr ""
 
 #: seahub/templates/wiki/wiki_list.html:301
 msgid "Are you sure you want to delete this wiki?"
-msgstr ""
-
-#: seahub/templates/wiki/wiki_list.html:476
-msgid "No existing library to choose."
 msgstr ""
 
 #: seahub/thumbnail/views.py:45 seahub/thumbnail/views.py:172
@@ -7949,8 +7945,4 @@ msgstr ""
 
 #: seahub/views/wiki.py:160
 msgid "You do not have permission to create wiki"
-msgstr ""
-
-#: seahub/wiki/views.py:56
-msgid "Unable to view wiki"
 msgstr ""
