@@ -46,8 +46,8 @@
                 <thead>
                     <tr>
                         <th width="3%"><!--select--></th>
-                        <th width="6%"><!--icon--></th>
-                        <th width="35%">{% trans "Name" %}</th>
+                        <th width="4%"><!--icon--></th>
+                        <th width="38%">{% trans "Name" %}</th>
                         <th width="25%">{% trans "Last Update" %}</th>
                     </tr>
                 </thead>
@@ -101,9 +101,9 @@
         <td><input type="radio" name="repo" class="vam" value="<%= repo.id%>"/></td>
         <td>
         <% if (repo.encrypted) { %>
-        <img src="{{ MEDIA_URL }}img/lib/48/lib-encrypted.png" width="24" title="{% trans "Encrypted" %}" alt="{% trans "Encrypted" %}" />
+        <img src="{{ MEDIA_URL }}img/lib/48/lib-encrypted.png" width="24" />
         <% } else { %>
-        <img src="{{ MEDIA_URL }}img/lib/48/lib.png" width="24" title="{% trans "Read-Write" %}" alt="{% trans "Read-Write" %}" />
+        <img src="{{ MEDIA_URL }}img/lib/48/lib.png" width="24" />
         <% } %>
         </td>
         <td class="repo-name"><%= repo.name %></td>
