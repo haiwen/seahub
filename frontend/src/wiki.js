@@ -127,7 +127,8 @@ class Wiki extends Component {
     this.setState({
       isFileLoading: true
     })
-    seafileAPI.getWikiFileContent(slug, filePath)
+    const time = new Date().getTime()
+    seafileAPI.getWikiFileContent(slug, filePath, time)
       .then(res => {
         this.setState({
           content: res.data.content,
