@@ -9,7 +9,8 @@
 {% block right_panel %}
     <div class="hd d-flex">
         <h3>{% trans "Wikis" %}</h3>
-        <button class="btn-white" id="new-wiki">{% trans "New Wiki" %}</button>
+        <div class="add-wiki-container">
+        </div>
     </div>
     <span class="loading-icon loading-tip"></span>
     <table class="wiki-list hide">
@@ -33,6 +34,26 @@
         <h3 id="dialogTitle">{% trans "New Wiki" %}</h3>
         <label for="wiki-name">{% trans "Name" %}</label><br/>
         <input type="text" name="name" value="" maxlength="{{max_file_name}}" class="input" id="wiki-name" /><br />
+        <p class="error hide"></p>
+        <button type="submit" class="submit">{% trans "Submit" %}</button>
+    </form>
+
+    <form id="new-wiki-by-existing-form" action="" method="post" class="hide">{% csrf_token %}
+        <h3 id="dialogTitle">{% trans "Choose a library as wiki" %}</h3>
+        <span class="loading-icon loading-tip"></span>
+        <div class="repo-container">
+            <table class="repo-list">
+                <thead>
+                    <tr>
+                        <th width="3%"><!--select--></th>
+                        <th width="6%"><!--icon--></th>
+                        <th width="35%">{% trans "Name" %}</th>
+                        <th width="25%">{% trans "Last Update" %}</th>
+                    </tr>
+                </thead>
+                <tbody></tbody>
+            </table>
+        </div>
         <p class="error hide"></p>
         <button type="submit" class="submit">{% trans "Submit" %}</button>
     </form>
@@ -64,6 +85,32 @@
         <button type="button" class="cancel sf2-icon-x2 vam" title="{% trans "Cancel" %}"></button>
     </form>
 </script>
+<script type="text/template" id="wiki-add-wiki-tmpl">
+<button class="btn-white sf-dropdown-toggle hidden-sm-down add-wiki"><span aria-hidden="true" class="icon-plus-square add vam"></span><span class="vam">{% trans "Add Wiki"%}</span></button>
+<span aria-label="{% trans "Add Wiki" %}" class="hidden-md-up sf-dropdown-toggle sf2-icon-plus2 mobile-icon"></span>
+<ul class="sf-dropdown-menu wiki-dropdown-menu hide">
+    <li><a class="op new-wiki-by-build" href="#">{% trans "New Wiki" %}</a></li>
+    <li><a class="op new-wiki-by-own" href="#">{% trans "Choose a library as wiki" %}</a></li>
+</ul>
+</script>
+<script type="text/template" id="wiki-choose-wiki-tmpl">
+<% var repos = obj %>
+<% for (var i = 0; i< repos.length; i++) {%>
+    <% var repo = repos[i] %>
+    <tr>
+        <td><input type="radio" name="repo" class="vam" value="<%= repo.id%>"/></td>
+        <td>
+        <% if (repo.encrypted) { %>
+        <img src="{{ MEDIA_URL }}img/lib/48/lib-encrypted.png" width="24" title="{% trans "Encrypted" %}" alt="{% trans "Encrypted" %}" />
+        <% } else { %>
+        <img src="{{ MEDIA_URL }}img/lib/48/lib.png" width="24" title="{% trans "Read-Write" %}" alt="{% trans "Read-Write" %}" />
+        <% } %>
+        </td>
+        <td class="repo-name"><%= repo.name %></td>
+        <td><%= repo.mtime_relative %></td>
+    </tr>
+<% }%>
+</script>
 {% endblock %}
 
 {% block extra_script %}{{block.super}}
@@ -77,7 +124,7 @@ $.ajax({
     dataType: 'json',
     success: function(data) {
         var list = data.data;
-        var $tbody = $('tbody');
+        var $tbody = $('.wiki-list tbody');
         if (list.length) {
             $(list).each(function(index, item) {
                 $tbody.append(wiki.render(item));
@@ -103,67 +150,6 @@ $.ajax({
     complete: function() {
         $('#right-panel .loading-tip').hide();
     }
-});
-
-// create new wiki
-$('#new-wiki').on('click', function() {
-    $('#new-wiki-form').modal();
-    $('#simplemodal-container').css({'width':'auto', 'height':'auto'});
-});
-
-$('#new-wiki-form').on('submit', function () {
-    var $form = $(this),
-        $error = $('.error', $form),
-        name = $('[name="name"]', $form).val();
-    var $table = $('table'),
-        $tbody = $('tbody'),
-        $emptyTips = $('.empty-tips');
-
-    if (!$.trim(name)) {
-        $error.html("{% trans "Name is required." %}").show();
-        return false;
-    }
-
-    var $submitBtn = $('[type="submit"]', $form);
-    disable($submitBtn);
-
-    $.ajax({
-        url: '{% url 'api-v2.1-wikis' %}',
-        type: 'POST',
-        dataType: 'json',
-        cache: false,
-        beforeSend: prepareCSRFToken,
-        data: {
-            'name': name,
-        },
-        success: function(data) {
-            $.modal.close();
-            var $wiki = wiki.render(data);
-            if ($emptyTips.is(':visible')) {
-                $tbody.append($wiki);
-                $emptyTips.hide();
-                $table.show();
-            } else {
-                $tbody.prepend($wiki);
-            }
-        },
-        error: function(xhr) {
-            var error_msg;
-            if (xhr.responseText) {
-                try {
-                    error_msg = JSON.parse(xhr.responseText).error_msg;
-                } catch(e) {
-                    error_msg = "{% trans "Error" %}";
-                }
-            } else {
-                error_msg = "{% trans "Please check the network." %}";
-            }
-            $error.html(error_msg).show();
-            enable($submitBtn);
-        }
-    });
-
-    return false;
 });
 
 var wiki = {
@@ -435,6 +421,177 @@ var wikiListController = {
 }
 
 wikiListController.init();
+
+var NewWikiController = {
+    el: $('.add-wiki-container'),
+    chooseEl: $('#new-wiki-by-existing-form tbody'),
+
+    addWikiTmpl: _.template($('#wiki-add-wiki-tmpl').html()),
+    chooseWikiTmpl: _.template($('#wiki-choose-wiki-tmpl').html()),
+
+    init: function() {
+        var _this = this;
+        this.el.append(this.addWikiTmpl);
+
+        $('.add-wiki').on('click', $.proxy(_this.showWikiMenu, _this));
+
+        $('.new-wiki-by-build').on('click', $.proxy(_this.clickToNewWiki, _this));
+        $('.new-wiki-by-own').on('click', $.proxy(_this.clickToNewWikiByOwnlib, _this));
+
+        $('#new-wiki-form').on('submit', $.proxy(_this.handlerDriectNewWikiEvent, _this));
+        $('#new-wiki-by-existing-form').on('submit', $.proxy(_this.handlerDependentNewWikiEvent, _this));
+
+        $(document).on("click", function(event) {
+            var view = _this.newWikiMenu;
+            var target = event.target || event.srcElement;
+
+            if (!view) {
+                return true;
+            }
+            if (!view.is(target) &&
+                !view.find('*').is(target)) {
+                _this.hideWikiMenu();
+            }
+            return true;
+        });
+    },
+
+    clickToNewWiki: function() {
+        $('#new-wiki-form').modal();
+        $('#simplemodal-container').css({'width':'auto', 'height':'auto'})
+    },
+
+    clickToNewWikiByOwnlib: function(event) {
+        var _this = this;
+        $.ajax({
+            url: "/api2/repos/?type=mine",
+            cache: false,
+            dataType: 'json',
+            success: function(data) {
+                if (data && data.length) {
+                    _this.chooseEl.append($(_this.chooseWikiTmpl(data)));
+                    $('#new-wiki-by-existing-form').modal();
+                    $('#simplemodal-container').css({'width':'auto', 'height':'auto'})
+                } else {
+                    _this.chooseEl.html("{% trans "No exist lib to choose." %}");
+                }
+            },
+            error: function(xhr) {
+                var error_msg;
+                if (xhr.responseText) {
+                    try {
+                        error_msg = JSON.parse(xhr.responseText).error_msg;
+                    } catch(e) {
+                        error_msg = "{% trans "Error" %}";
+                    }
+                } else {
+                    error_msg = "{% trans "Please check the network." %}";
+                }
+                 _this.chooseEl.html(error_msg);
+            },
+            complete: function() {
+                $('#new-wiki-by-existing-form .loading-tip').hide();
+            }
+        });
+        },
+
+    handlerDriectNewWikiEvent(event) {
+        var $form = $(event.target);
+        var name = $('[name="name"]', $form).val();
+        var params = {
+            create_type: 'no_lib',
+            repo_id: '',
+            name: name
+        }
+        this.updateWikiList($form, params);
+        
+        return false;
+    },
+
+    handlerDependentNewWikiEvent: function(event) {
+        var $form = $(event.target);
+        var radio = $("input:radio:checked", $form);
+        var repo_id = $("input:radio:checked", $form).val();
+        var name = radio.closest('tr').find(".repo-name").text();
+        var params = {
+            create_type: 'use_lib',
+            repo_id: repo_id,
+            name: name,
+        }
+        this.updateWikiList($form,params);
+        return false;
+    },
+
+    updateWikiList: function($container, ajaxData){
+        var $form = $container,
+            $error = $('.error', $form);
+        var $table = $('.wiki-list'),
+            $tbody = $('tbody', $table),
+            $emptyTips = $('.empty-tips');
+
+        if (!$.trim(ajaxData.name)) {
+            $error.html("{% trans "Name is required." %}").show();
+            return false;
+        }
+
+        var $submitBtn = $('[type="submit"]', $form);
+        disable($submitBtn);
+
+        $.ajax({
+            url: '{% url 'api-v2.1-wikis' %}',
+            type: 'POST',
+            dataType: 'json',
+            cache: false,
+            beforeSend: prepareCSRFToken,
+            data: ajaxData,
+            success: function(data) {
+                $.modal.close();
+                var $wiki = wiki.render(data);
+                if ($emptyTips.is(':visible')) {
+                    $tbody.append($wiki);
+                    $emptyTips.hide();
+                    $table.show();
+                } else {
+                    $tbody.prepend($wiki);
+                }
+            },
+            error: function(xhr) {
+                var error_msg;
+                if (xhr.responseText) {
+                    try {
+                        error_msg = JSON.parse(xhr.responseText).error_msg;
+                    } catch(e) {
+                        error_msg = "{% trans "Error" %}";
+                    }
+                } else {
+                    error_msg = "{% trans "Please check the network." %}";
+                }
+                $error.html(error_msg).show();
+                enable($submitBtn);
+            }
+        });
+    },
+
+    hideWikiMenu: function() {
+        this.newWikiMenu.hide();
+        this.newWikiMenu = null;
+    },
+
+    showWikiMenu: function(event) {
+        var container = $(event.target).closest('.add-wiki-container');
+        var newWikiMenu = container.find('.sf-dropdown-menu');
+        if (this.newWikiMenu) {
+            this.newWikiMenu.hide();
+            this.newWikiMenu = null;
+            return false;
+        }
+        newWikiMenu.show();
+        this.newWikiMenu = newWikiMenu;
+        return false;
+    }
+}
+
+NewWikiController.init();
 
 </script>
 {% endblock %}
