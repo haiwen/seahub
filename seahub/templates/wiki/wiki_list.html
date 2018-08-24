@@ -472,8 +472,6 @@ var NewWikiController = {
                     _this.chooseEl.append($(_this.chooseWikiTmpl(data)));
                     $('#new-wiki-by-existing-form').modal();
                     $('#simplemodal-container').css({'width':'auto', 'height':'auto'})
-                } else {
-                    _this.chooseEl.html("{% trans "No existing library to choose." %}");
                 }
             },
             error: function(xhr) {
