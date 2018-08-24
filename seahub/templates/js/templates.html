@@ -485,7 +485,7 @@
     </div>
     <% } %>
 
-    <% if (!encrypted && (app.pageOptions.can_generate_share_link || app.pageOptions.can_generate_upload_link || is_repo_owner)) { %>
+    <% if (!encrypted && (app.pageOptions.can_generate_share_link || app.pageOptions.can_generate_upload_link || is_repo_owner || is_admin)) { %>
     <button class="btn-white hidden-sm-down" id="share-cur-dir">{% trans "Share" %}</button>
     <span class="sf2-icon-share hidden-md-up mobile-icon" id="share-cur-dir" aria-label="{% trans "Share" %}"></span>
     <% } %>
@@ -582,7 +582,7 @@
 
                 <a class="op-icon download sf2-icon-download sf2-x vh download-dir" href="#" title="{% trans "Download" %}" aria-label="{% trans "Download" %}"></a>
 
-                <% if (!repo_encrypted && (can_generate_share_link || can_generate_upload_link || is_repo_owner)) { %>
+                <% if (!repo_encrypted && (can_generate_share_link || can_generate_upload_link || is_repo_owner || is_admin)) { %>
                     <a href="#" class="op-icon share sf2-icon-share sf2-x vh" title="{% trans "Share" %}" aria-label="{% trans "Share" %}"></a>
                 <% } %>
                 <% if (dirent.perm == 'rw') { %>
@@ -658,7 +658,7 @@
                 <div class="hide sf-dropdown-menu">
                     <ul>
                         <li><a class="op download download-dir" href="#">{% trans "Download" %}</a></li>
-                        <% if (!repo_encrypted && (can_generate_share_link || can_generate_upload_link || is_repo_owner)) { %>
+                        <% if (!repo_encrypted && (can_generate_share_link || can_generate_upload_link || is_repo_owner || is_admin)) { %>
                         <li><a href="#" class="op share">{% trans "Share" %}</a></li>
                         <% } %>
                         <% if (dirent.perm == 'rw') { %>
@@ -1016,7 +1016,7 @@
         <ul>
             <li><a class="op download-dir" href="#">{% trans "Download" %}</a></li>
 
-            <% if (!repo_encrypted && (can_generate_share_link || can_generate_upload_link || is_repo_owner)) { %>
+            <% if (!repo_encrypted && (can_generate_share_link || can_generate_upload_link || is_repo_owner || is_admin)) { %>
             <li><a class="op share" href="#">{% trans "Share" %}</a></li>
             <% } %>
 

@@ -66,6 +66,7 @@ define([
                 category: dir.category,
                 repo_id: dir.repo_id,
                 is_repo_owner: dir.is_repo_owner,
+                is_admin: dir.is_admin,
                 repo_encrypted: dir.encrypted,
 
                 can_set_folder_perm: can_set_folder_perm,

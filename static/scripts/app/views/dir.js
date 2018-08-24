@@ -558,6 +558,7 @@ define([
                     path: dir.path,
                     repo_id: dir.repo_id,
                     is_repo_owner: dir.is_repo_owner,
+                    is_admin: dir.is_admin,
                     site_root: app.pageOptions.site_root
                 };
 
