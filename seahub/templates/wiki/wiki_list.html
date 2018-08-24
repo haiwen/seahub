@@ -39,7 +39,7 @@
     </form>
 
     <form id="new-wiki-by-existing-form" action="" method="post" class="hide">{% csrf_token %}
-        <h3 id="dialogTitle">{% trans "Choose a library as wiki" %}</h3>
+        <h3 id="dialogTitle">{% trans "Create Wiki from a library" %}</h3>
         <span class="loading-icon loading-tip"></span>
         <div class="repo-container">
             <table class="repo-list">
@@ -90,7 +90,7 @@
 <span aria-label="{% trans "Add Wiki" %}" class="hidden-md-up sf-dropdown-toggle sf2-icon-plus2 mobile-icon"></span>
 <ul class="sf-dropdown-menu wiki-dropdown-menu hide">
     <li><a class="op new-wiki-by-build" href="#">{% trans "New Wiki" %}</a></li>
-    <li><a class="op new-wiki-by-own" href="#">{% trans "Choose a library as wiki" %}</a></li>
+    <li><a class="op new-wiki-by-own" href="#">{% trans "Choose a library as Wiki" %}</a></li>
 </ul>
 </script>
 <script type="text/template" id="wiki-choose-wiki-tmpl">
@@ -473,7 +473,7 @@ var NewWikiController = {
                     $('#new-wiki-by-existing-form').modal();
                     $('#simplemodal-container').css({'width':'auto', 'height':'auto'})
                 } else {
-                    _this.chooseEl.html("{% trans "No exist lib to choose." %}");
+                    _this.chooseEl.html("{% trans "No existing library to choose." %}");
                 }
             },
             error: function(xhr) {
