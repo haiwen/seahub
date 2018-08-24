@@ -120,6 +120,7 @@ define([
                 category: dir.category,
                 repo_id: dir.repo_id,
                 is_repo_owner: dir.is_repo_owner,
+                is_admin: dir.is_admin,
                 can_set_folder_perm: can_set_folder_perm,
                 can_generate_share_link: app.pageOptions.can_generate_share_link,
                 can_generate_upload_link: app.pageOptions.can_generate_upload_link,
