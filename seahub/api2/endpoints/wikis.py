@@ -77,13 +77,15 @@ class WikisView(APIView):
     def post(self, request, format=None):
         """Add a new wiki.
         """
-        create_type = request.POST.get('create_type', '')
-        if not create_type:
-            return api_error(status.HTTP_400_BAD_REQUEST, _('Create type is required.'))
+        use_exist_repo = request.POST.get('use_exist_repo', '')
+        if not use_exist_repo:
+            msg = 'Use exist repo is invalid'
+            return api_error(status.HTTP_400_BAD_REQUEST, msg)
 
         name = request.POST.get('name', '')
         if not name:
-            return api_error(status.HTTP_400_BAD_REQUEST, _('Name is required.'))
+            msg = 'Name is invalid'
+            return api_error(status.HTTP_400_BAD_REQUEST, msg)
 
         if not is_valid_wiki_name(name):
             msg = _('Name can only contain letters, numbers, blank, hyphen or underscore.')
@@ -95,7 +97,7 @@ class WikisView(APIView):
         if is_org_context(request):
             org_id = request.user.org.org_id
 
-        if create_type == 'no_lib':
+        if use_exist_repo == 'false':
             try:
                 wiki = Wiki.objects.add(name, username, org_id=org_id)
             except DuplicateWikiNameError:
@@ -117,10 +119,11 @@ class WikisView(APIView):
 
             return Response(wiki.to_dict())
 
-        if create_type == 'use_lib':
+        if use_exist_repo == 'true':
             repo_id = request.POST.get('repo_id', '')
             if not repo_id:
-                return api_error(status.HTTP_400_BAD_REQUEST, _('Repo id is required.'))
+                msg = 'Repo id is invalid.'
+                return api_error(status.HTTP_400_BAD_REQUEST, msg)
 
             repo = seafile_api.get_repo(repo_id)
 

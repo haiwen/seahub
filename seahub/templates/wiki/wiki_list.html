@@ -499,7 +499,7 @@ var NewWikiController = {
         var $form = $(event.target);
         var name = $('[name="name"]', $form).val();
         var params = {
-            create_type: 'no_lib',
+            use_exist_repo: false,
             repo_id: '',
             name: name
         }
@@ -514,7 +514,7 @@ var NewWikiController = {
         var repo_id = $("input:radio:checked", $form).val();
         var name = radio.closest('tr').find(".repo-name").text();
         var params = {
-            create_type: 'use_lib',
+            use_exist_repo: true,
             repo_id: repo_id,
             name: name,
         }
