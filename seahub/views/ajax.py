@@ -678,12 +678,6 @@ def dirents_copy_move_common():
                     return HttpResponse(json.dumps(result), status=400,
                                         content_type=content_type)
 
-            # when dst is the same as src
-            if repo_id == dst_repo_id and parent_dir == dst_path:
-                result['error'] = _('Invalid destination path')
-                return HttpResponse(json.dumps(result), status=400,
-                                    content_type=content_type)
-
             # check whether user has write permission to dest repo
             if check_folder_permission(request, dst_repo_id, dst_path) != 'rw':
                 result['error'] = _('Permission denied')
@@ -754,6 +748,12 @@ def mv_dirents(request, src_repo_id, src_path, dst_repo_id, dst_path,
     failed = []
     allowed_files = []
     allowed_dirs = []
+
+    # when dst is the same as src
+    if src_repo_id == dst_repo_id and src_path == dst_path:
+        result['error'] = _('Invalid destination path')
+        return HttpResponse(json.dumps(result), status=400,
+                            content_type=content_type)
 
     locked_files = get_locked_files_by_dir(request, src_repo_id, src_path)
 

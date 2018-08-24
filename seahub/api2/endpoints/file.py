@@ -405,11 +405,6 @@ class FileView(APIView):
                 error_msg = 'Permission denied.'
                 return api_error(status.HTTP_403_FORBIDDEN, error_msg)
 
-            # copy file
-            if src_repo_id == dst_repo_id and src_dir == dst_dir:
-                file_info = self.get_file_info(username, repo_id, path)
-                return Response(file_info)
-
             filename = os.path.basename(path)
             new_file_name = check_filename_with_rename(dst_repo_id, dst_dir, filename)
             try:

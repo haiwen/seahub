@@ -89,12 +89,22 @@ if (wdHeight > elHeight) {
 $('#lang').css({'margin-left': $('#sign-up').outerWidth() + 10});
 $el.removeClass('vh');
 
-$('#lang-context-selector').css({
-    'top': '-' + ($('#lang').offset().top - 5) + 'px',
-    'right': 0
-});
-$('#lang-context-selector .sf-popover-con').css({
-    'max-height': $('#lang').offset().top - 10
+$('#lang-context').on('click', function() {
+    var langTop = $('#lang').offset().top;
+    var langSelectorTop;
+    var langSelectorHeight = $('#lang-context-selector .sf-popover-con').outerHeight();
+    if (langSelectorHeight > langTop) {
+        langSelectorTop = '-' + (langTop - 5) + 'px';
+    } else {
+        langSelectorTop = '-' + (langSelectorHeight + 5) + 'px';
+    }
+    $('#lang-context-selector').css({
+        'top': langSelectorTop,
+        'right': 0
+    });
+    $('#lang-context-selector .sf-popover-con').css({
+        'max-height': $('#lang').offset().top - 10
+    });
 });
 
 $('[name="login"]').trigger('focus');

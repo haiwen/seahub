@@ -1,6 +1,6 @@
 -r requirements.txt
 
-fabric
+fabric==1.14.0
 transifex-client
 mysqlclient==1.3.12
 
