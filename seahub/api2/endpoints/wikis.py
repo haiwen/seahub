@@ -140,9 +140,13 @@ class WikisView(APIView):
             # create home page if not exist
             page_name = "home.md"
             if not seafile_api.get_file_id_by_path(repo_id, "/" + page_name):
-                if not seafile_api.post_empty_file(repo_id, "/", page_name, username):
+                try:
+                    seafile_api.post_empty_file(repo_id, '/', page_name, username)
+                except SearpcError as e:
+                    logger.error(e)
                     msg = 'Internal Server Error'
                     return api_error(status.HTTP_500_INTERNAL_SERVER_ERROR, msg)
+
 
             return Response(wiki.to_dict()) 
 
