@@ -141,25 +141,24 @@
     {% endif %}
 
     {% if not repo.encrypted %}
-    {% if request.user.permissions.can_generate_share_link %}
+    {% if can_share_file %}
     <button id="share" class="sf-btn-group-btn op-icon sf2-icon-share" data-link="{{ file_shared_link }}" data-token="{{ fileshare.token }}" title="{% trans "Share" %}"></button>
     {% endif %}
     {% endif %}
 
-    {% if file_perm == 'rw' %}
     <a class="sf-btn-group-btn sf-btn-link op-icon sf2-icon-clock" id="history" href="{% url 'file_revisions' repo.id %}?p={{ path|urlencode }}" title="{% trans "History" %}"></a>
-    {% endif %}
 
     {% if request.user.is_authenticated and can_edit_file %}
     {% block edit_file %}
     {% endblock %}
     {% endif %}
 
-    {% if enable_file_comment %}
+    {% if can_download_file %}
     <a class="sf-btn-group-btn sf-btn-link op-icon sf2-icon-download" href="?dl=1" id="download" title="{% trans "Download"%}"></a>
-    <button id="discuss" class="sf-btn-group-btn sf-btn-group-btn-last op-icon sf2-icon-msgs" title="{% trans "Comment" %}"></button>
-    {% else %}
-    <a class="sf-btn-group-btn sf-btn-group-btn-last sf-btn-link op-icon sf2-icon-download" href="?dl=1" id="download" title="{% trans "Download"%}"></a>
+    {% endif %}
+
+    {% if enable_file_comment %}
+    <button id="discuss" class="sf-btn-group-btn op-icon sf2-icon-msgs" title="{% trans "Comment" %}"></button>
     {% endif %}
 
 </script>
@@ -191,22 +190,22 @@
             {% endif %}
 
             {% if not repo.encrypted %}
-            {% if request.user.permissions.can_generate_share_link %}
+            {% if can_share_file %}
             <li>
                 <a id="share" class="op share" data-link="{{ file_shared_link }}" data-token="{{ fileshare.token }}" title="{% trans "Share" %}">{% trans "Share" %}</a>
             </li>
             {% endif %}
             {% endif %}
 
-            {% if file_perm == 'rw' %}
             <li>
                 <a id="history" class="op history" href="{% url 'file_revisions' repo.id %}?p={{ path|urlencode }}" title="{% trans "History" %}">{% trans "History" %}</a>
             </li>
-            {% endif %}
 
+            {% if can_download_file %}
             <li>
                 <a id="download" class="op download" href="?dl=1" title="{% trans "Download"%}">{% trans "Download"%}</a>
             </li>
+            {% endif %}
         </ul>
         <div>
 </script>
@@ -223,11 +222,14 @@
 <script type="text/javascript" src="{{ MEDIA_URL }}js/findAndReplaceDOMText.js"></script>
 {% endif %}
 <script type="text/javascript">
+
+{% if can_download_file %}
 // download
 $(function() {
     var dld_url = $('#download').attr('href');
     $('#file-view-tip').append('<a href="' + dld_url + '" class="sf-btn-link big-btn-link">' + "{% trans "Download" %}" + '</a>');
 });
+{% endif %}
 
 // share link
 {% include "snippets/shared_link_js.html" %}
@@ -579,6 +581,7 @@ var DropDownMenu = {
         var _this = this;
         var template = $(window).width() > 992 ? this.$deviceTmp : this.$mobileTmp;
         this.$el.html(template);
+        $('.sf-btn-group-btn:last', this.$el).addClass('sf-btn-group-btn-last');
 
         //bind click event for the menu item;
         {% if can_lock_unlock_file %}
