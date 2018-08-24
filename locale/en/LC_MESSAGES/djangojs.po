@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2018-08-22 15:42+0800\n"
+"POT-Creation-Date: 2018-08-24 17:04+0800\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -141,7 +141,7 @@ msgstr ""
 #: static/scripts/app/views/fileupload.js:406
 #: static/scripts/app/views/fileupload.js:418
 #: static/scripts/app/views/fileupload.js:430
-#: static/scripts/app/views/group.js:65 static/scripts/common.js:640
+#: static/scripts/app/views/group.js:65 static/scripts/common.js:643
 msgid "Just now"
 msgstr ""
 
@@ -271,21 +271,21 @@ msgstr ""
 
 #: static/scripts/app/views/dialogs/dirent-mvcp.js:133
 #: static/scripts/app/views/dialogs/dirent-mvcp.js:159
-#: static/scripts/app/views/dir.js:1416
+#: static/scripts/app/views/dir.js:1422
 msgid "Canceled."
 msgstr ""
 
-#: static/scripts/app/views/dialogs/dirent-mvcp.js:186
-#: static/scripts/app/views/dir.js:1171
+#: static/scripts/app/views/dialogs/dirent-mvcp.js:188
+#: static/scripts/app/views/dir.js:1172
 msgid "Invalid destination path"
 msgstr ""
 
-#: static/scripts/app/views/dialogs/dirent-mvcp.js:205
+#: static/scripts/app/views/dialogs/dirent-mvcp.js:207
 #: static/scripts/app/views/dirent.js:295
 msgid "Successfully moved %(name)s"
 msgstr ""
 
-#: static/scripts/app/views/dialogs/dirent-mvcp.js:208
+#: static/scripts/app/views/dialogs/dirent-mvcp.js:210
 msgid "Successfully copied %(name)s"
 msgstr ""
 
@@ -415,7 +415,7 @@ msgid "Password is required."
 msgstr ""
 
 #: static/scripts/app/views/dir.js:479
-#: static/scripts/app/views/notifications.js:63 static/scripts/common.js:464
+#: static/scripts/app/views/notifications.js:63 static/scripts/common.js:467
 msgid "Please check the network."
 msgstr ""
 
@@ -439,7 +439,7 @@ msgstr ""
 msgid "New Word File"
 msgstr ""
 
-#: static/scripts/app/views/dir.js:1034 static/scripts/app/views/dir.js:1176
+#: static/scripts/app/views/dir.js:1034 static/scripts/app/views/dir.js:1177
 msgid "Processing..."
 msgstr ""
 
@@ -483,64 +483,64 @@ msgstr ""
 msgid "Copy selected item(s) to:"
 msgstr ""
 
-#: static/scripts/app/views/dir.js:1220 static/scripts/app/views/dir.js:1377
+#: static/scripts/app/views/dir.js:1221 static/scripts/app/views/dir.js:1383
 msgid "Successfully moved %(name)s."
 msgstr ""
 
-#: static/scripts/app/views/dir.js:1222 static/scripts/app/views/dir.js:1379
+#: static/scripts/app/views/dir.js:1223 static/scripts/app/views/dir.js:1385
 msgid "Successfully moved %(name)s and 1 other item."
 msgstr ""
 
-#: static/scripts/app/views/dir.js:1224 static/scripts/app/views/dir.js:1381
+#: static/scripts/app/views/dir.js:1225 static/scripts/app/views/dir.js:1387
 msgid "Successfully moved %(name)s and %(amount)s other items."
 msgstr ""
 
-#: static/scripts/app/views/dir.js:1229 static/scripts/app/views/dir.js:1385
+#: static/scripts/app/views/dir.js:1230 static/scripts/app/views/dir.js:1391
 msgid "Successfully copied %(name)s."
 msgstr ""
 
-#: static/scripts/app/views/dir.js:1231 static/scripts/app/views/dir.js:1387
+#: static/scripts/app/views/dir.js:1232 static/scripts/app/views/dir.js:1393
 msgid "Successfully copied %(name)s and 1 other item."
 msgstr ""
 
-#: static/scripts/app/views/dir.js:1233 static/scripts/app/views/dir.js:1389
+#: static/scripts/app/views/dir.js:1234 static/scripts/app/views/dir.js:1395
 msgid "Successfully copied %(name)s and %(amount)s other items."
 msgstr ""
 
-#: static/scripts/app/views/dir.js:1244
+#: static/scripts/app/views/dir.js:1250
 msgid "Internal error. Failed to move %(name)s and %(amount)s other item(s)."
 msgstr ""
 
-#: static/scripts/app/views/dir.js:1246
+#: static/scripts/app/views/dir.js:1252
 msgid "Internal error. Failed to move %(name)s."
 msgstr ""
 
-#: static/scripts/app/views/dir.js:1250
+#: static/scripts/app/views/dir.js:1256
 msgid "Internal error. Failed to copy %(name)s and %(amount)s other item(s)."
 msgstr ""
 
-#: static/scripts/app/views/dir.js:1252
+#: static/scripts/app/views/dir.js:1258
 msgid "Internal error. Failed to copy %(name)s."
 msgstr ""
 
-#: static/scripts/app/views/dir.js:1294
+#: static/scripts/app/views/dir.js:1300
 msgid "Moving file %(index)s of %(total)s"
 msgstr ""
 
-#: static/scripts/app/views/dir.js:1294
+#: static/scripts/app/views/dir.js:1300
 msgid "Copying file %(index)s of %(total)s"
 msgstr ""
 
-#: static/scripts/app/views/dir.js:1320
+#: static/scripts/app/views/dir.js:1326
 msgid "Failed to move %(name)s"
 msgstr ""
 
-#: static/scripts/app/views/dir.js:1320
+#: static/scripts/app/views/dir.js:1326
 msgid "Failed to copy %(name)s"
 msgstr ""
 
-#: static/scripts/app/views/dirent-details.js:95 static/scripts/common.js:691
-#: static/scripts/common.js:762
+#: static/scripts/app/views/dirent-details.js:95 static/scripts/common.js:694
+#: static/scripts/common.js:765
 msgid "No matches"
 msgstr ""
 
@@ -836,34 +836,34 @@ msgstr ""
 msgid "Successfully unstared {placeholder}"
 msgstr ""
 
-#: static/scripts/common.js:458
+#: static/scripts/common.js:458 static/scripts/common.js:460
 #: static/scripts/sysadmin-app/views/dashboard.js:79
 msgid "Permission error"
 msgstr ""
 
-#: static/scripts/common.js:682
+#: static/scripts/common.js:685
 #: static/scripts/sysadmin-app/views/address-book-group.js:172
 #: static/scripts/sysadmin-app/views/group-members.js:41
 msgid "Search users or enter emails and press Enter"
 msgstr ""
 
-#: static/scripts/common.js:690 static/scripts/common.js:761
+#: static/scripts/common.js:693 static/scripts/common.js:764
 msgid "Please enter 1 or more character"
 msgstr ""
 
-#: static/scripts/common.js:692 static/scripts/common.js:763
+#: static/scripts/common.js:695 static/scripts/common.js:766
 msgid "Searching..."
 msgstr ""
 
-#: static/scripts/common.js:693 static/scripts/common.js:764
+#: static/scripts/common.js:696 static/scripts/common.js:767
 msgid "Loading failed"
 msgstr ""
 
-#: static/scripts/common.js:753
+#: static/scripts/common.js:756
 msgid "Search groups"
 msgstr ""
 
-#: static/scripts/common.js:1088
+#: static/scripts/common.js:1091
 msgid "Packaging..."
 msgstr ""
 
