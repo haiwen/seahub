@@ -12,8 +12,8 @@
     <ul class="tabnav-tabs fleft">
         <li class="tabnav-tab"><a href="{% url 'sys_statistic_file' %}">{% trans "File" %}</a></li>
         <li class="tabnav-tab"><a href="{% url 'sys_statistic_storage' %}">{% trans "Storage" %}</a></li>
-        <li class="tabnav-tab tabnav-tab-cur"><a href="{% url 'sys_statistic_user' %}">{% trans "Users" %}</a></li>
-        <li class="tabnav-tab"><a href="{% url 'sys_statistic_traffic' %}">{% trans "Traffic" %}</a></li>
+        <li class="tabnav-tab"><a href="{% url 'sys_statistic_user' %}">{% trans "Users" %}</a></li>
+        <li class="tabnav-tab tabnav-tab-cur"><a href="{% url 'sys_statistic_traffic' %}">{% trans "Traffic" %}</a></li>
         {% if traffic_stats_enabled %}
         <li class="tabnav-tab"><a href="{{ SITE_ROOT }}sys/trafficadmin/">{% trans "Traffic" %}</a></li>
         {% endif %}
@@ -83,7 +83,7 @@ var chart;
 
 function getStatistic(options) {
     $.ajax({
-        url: '{% url 'api-v2.1-admin-statistics-active-users' %}',
+        url: '{% url 'api-v2.1-admin-statistics-system-traffic' %}',
         cache: false,
         data: options,
         dataType: 'json',
@@ -144,8 +144,9 @@ function getStatisticByTimeRange(range) {
 
 // render chart
 function renderChart(data, group_by) {
-    var labels =  [],
-        count = [];
+    var labels = [],
+        upload = [],
+        download = [];
 
     var item;
     var datetime_ms, datetime_str;
@@ -163,7 +164,15 @@ function renderChart(data, group_by) {
             labels.push(datetime_str.substr(0, 10));
         }
 
-        count.push(item.count);
+        upload.push(
+            item['link-file-upload'] +
+            item['sync-file-upload'] +
+            item['web-file-upload']);
+
+        download.push(
+            item['link-file-download'] +
+            item['sync-file-download'] +
+            item['web-file-download']);
     }
 
     var config = {
@@ -172,10 +181,16 @@ function renderChart(data, group_by) {
             labels: labels,
             datasets: [
                 {
-                    label: "{% trans "Active Users" %}",
-                    data: count,
+                    label: "{% trans "Upload" context "upload traffic" %}",
+                    data: upload,
                     borderColor: '#fd913a',
                     backgroundColor: '#fd913a'
+                },
+                {
+                    label: "{% trans "Download" context "download traffic" %}",
+                    data: download,
+                    borderColor: '#57cd6b',
+                    backgroundColor: '#57cd6b'
                 }
             ]
         }, // 'data' ends here
@@ -183,8 +198,7 @@ function renderChart(data, group_by) {
             title: {
                 display: true,
                 fontSize: 14,
-                padding: 20,
-                text: "{% trans "Active Users" %}"
+                text: "{% trans "Traffic" %}"
             },
             elements: {
                 line: {
@@ -194,7 +208,6 @@ function renderChart(data, group_by) {
                 }
             },
             legend: {
-                display: false,
                 labels: {
                     usePointStyle: true
                 }
@@ -208,7 +221,10 @@ function renderChart(data, group_by) {
                 yAxes: [{
                     ticks: {
                         beginAtZero: true,
-                        suggestedMax: 10
+						suggestedMax: 10*1000*1000,
+                        callback: function(value, index, values) {
+                            return quotaSizeFormat(value);
+                        }
                     }
                 }]
             }
@@ -228,6 +244,7 @@ getStatisticByTimeRange('7d');
 
 // click btns
 $rangeBtns = $('.system-statistic-time-range button');
+
 $('#7-days').on('click', function() {
     getStatisticByTimeRange('7d');
     $rangeBtns.removeClass('sf-btn-group-btn-cur');

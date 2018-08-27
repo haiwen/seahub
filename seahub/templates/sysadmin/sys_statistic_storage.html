@@ -13,6 +13,7 @@
         <li class="tabnav-tab"><a href="{% url 'sys_statistic_file' %}">{% trans "File" %}</a></li>
         <li class="tabnav-tab tabnav-tab-cur"><a href="{% url 'sys_statistic_storage' %}">{% trans "Storage" %}</a></li>
         <li class="tabnav-tab"><a href="{% url 'sys_statistic_user' %}">{% trans "Users" %}</a></li>
+        <li class="tabnav-tab"><a href="{% url 'sys_statistic_traffic' %}">{% trans "Traffic" %}</a></li>
         {% if traffic_stats_enabled %}
         <li class="tabnav-tab"><a href="{{ SITE_ROOT }}sys/trafficadmin/">{% trans "Traffic" %}</a></li>
         {% endif %}
@@ -207,8 +208,9 @@ function renderChart(data, group_by) {
                 yAxes: [{
                     ticks: {
                         beginAtZero: true,
+                        suggestedMax: 10*1000*1000,
                         callback: function(value, index, values) {
-                            return quotaSizeFormat(value, 2);
+                            return quotaSizeFormat(value);
                         }
                     }
                 }]
