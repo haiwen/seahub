@@ -61,7 +61,8 @@ class WikisViewTest(BaseTestCase):
 
         resp = self.client.post(self.url, {
             'name': 'test wiki',
-            'permission': 'private',
+            'repo_id': '',
+            'use_exist_repo': 'false',
         })
         self.assertEqual(200, resp.status_code)
 
