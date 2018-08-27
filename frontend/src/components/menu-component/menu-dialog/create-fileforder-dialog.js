@@ -27,6 +27,12 @@ class CreateFileForder extends React.Component {
     }
   } 
 
+  handleKeyPress = (e) => {
+    if (e.key === 'Enter') {
+      this.handleSubmit();
+    }
+  }
+
   toggle = () => {
     if (this.props.isFile) {
       this.props.addFileCancel();
@@ -83,7 +89,7 @@ class CreateFileForder extends React.Component {
             <FormGroup row>
               <Label for="fileName" sm={3}>{gettext("Name")}: </Label>
               <Col sm={9}>
-                <Input innerRef={input => {this.newInput = input}} id="fileName" placeholder={gettext("newName")} value={this.state.childName} onChange={this.handleChange}/>
+                <Input onKeyPress={this.handleKeyPress} innerRef={input => {this.newInput = input}} id="fileName" placeholder={gettext("newName")} value={this.state.childName} onChange={this.handleChange}/>
               </Col>
             </FormGroup>
           </Form>
