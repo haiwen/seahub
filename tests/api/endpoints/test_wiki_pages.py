@@ -28,14 +28,14 @@ class WikiPagesViewTest(BaseTestCase):
         self.assertEqual(200, resp.status_code)
         assert len(json_resp['data']) == 2
 
-    def test_can_list_public_wiki_pages(self):
-        self.wiki.permission = 'public'
-        self.wiki.save()
+    #def test_can_list_public_wiki_pages(self):
+    #    self.wiki.permission = 'public'
+    #    self.wiki.save()
 
-        resp = self.client.get(self.url)
-        json_resp = json.loads(resp.content)
-        self.assertEqual(200, resp.status_code)
-        assert len(json_resp['data']) == 2
+    #    resp = self.client.get(self.url)
+    #    json_resp = json.loads(resp.content)
+    #    self.assertEqual(200, resp.status_code)
+    #    assert len(json_resp['data']) == 2
 
     def test_can_add_page(self):
         self.login_as(self.user)
@@ -84,12 +84,12 @@ class WikiPageViewTest(BaseTestCase):
         assert json_resp['content'] == '2018'
         assert json_resp['meta']['name'] == 'home'
 
-    def test_can_get_public_page(self):
-        self.wiki.permission = 'public'
-        self.wiki.save()
+    #def test_can_get_public_page(self):
+    #    self.wiki.permission = 'public'
+    #    self.wiki.save()
 
-        resp = self.client.get(self.url)
-        self.assertEqual(200, resp.status_code)
+    #    resp = self.client.get(self.url)
+    #    self.assertEqual(200, resp.status_code)
 
     def test_can_delete_page(self):
         self.login_as(self.user)

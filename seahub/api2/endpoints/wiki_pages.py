@@ -32,7 +32,7 @@ HTTP_520_OPERATION_FAILED = 520
 
 class WikiPagesView(APIView):
     authentication_classes = (TokenAuthentication, SessionAuthentication)
-    permission_classes = (IsAuthenticatedOrReadOnly, )
+    permission_classes = (IsAuthenticated, )
     throttle_classes = (UserRateThrottle, )
 
     def get(self, request, slug):
@@ -125,7 +125,7 @@ class WikiPagesView(APIView):
 
 class WikiPageView(APIView):
     authentication_classes = (TokenAuthentication, SessionAuthentication)
-    permission_classes = (IsAuthenticatedOrReadOnly, )
+    permission_classes = (IsAuthenticated, )
     throttle_classes = (UserRateThrottle, )
 
     def get(self, request, slug, page_name="home"):
@@ -207,7 +207,7 @@ class WikiPageView(APIView):
 
 class WikiPagesDirView(APIView):
     authentication_classes = (TokenAuthentication, SessionAuthentication)
-    permission_classes = (IsAuthenticatedOrReadOnly, )
+    permission_classes = (IsAuthenticated, )
     throttle_classes = (UserRateThrottle, )
 
     def get(self, request, slug):
@@ -247,7 +247,7 @@ class WikiPagesDirView(APIView):
 
 class WikiPageContentView(APIView):
     authentication_classes = (TokenAuthentication, SessionAuthentication)
-    permission_classes = (IsAuthenticatedOrReadOnly, )
+    permission_classes = (IsAuthenticated, )
     throttle_classes = (UserRateThrottle, )
 
     def get(self, request, slug):
