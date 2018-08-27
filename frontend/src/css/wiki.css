@@ -64,6 +64,7 @@ img[src=""] {
   flex: 1 0 80%;
   display:flex;
   flex-direction:column;
+  min-height: 0;
 }
 
 .wiki-side-panel {
@@ -72,9 +73,13 @@ img[src=""] {
   flex-direction:column;
   overflow:hidden;
 }
+.cur-view-main {
+  min-height: 0;
+}
 
 .cur-view-container {
   display: flex;
+  min-height: 0;
 }
 
 .cur-view-container .markdown-container {
@@ -83,10 +88,11 @@ img[src=""] {
   display: flex;
   flex: 1;
   overflow: auto;
+  min-height: 0;
 }
 
 .cur-view-container .markdown-content {
-  flex: 1;
+  flex: 1; 
   width: calc(100% - 200px);
   padding-right: 40px;
 }

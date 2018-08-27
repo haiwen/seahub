@@ -3,10 +3,10 @@ import React from 'react';
 class WikiOutlineItem extends React.Component {
 
   handleNavItemClick = () => {
-    var index = this.props.item.key;
-    this.props.handleNavItemClick(index)
+    var activeId = this.props.item.id;
+    this.props.handleNavItemClick(activeId)
   }
-
+  
   render() {
     let item = this.props.item;
     let activeIndex = parseInt(this.props.activeIndex);
@@ -32,14 +32,6 @@ class WikiOutline extends React.Component {
     }
   }
 
-  handleNavItemClick = (index) => {
-    if (index !== this.state.activeIndex) {
-      this.setState({
-        activeIndex : index
-      })
-    }
-  }
-
   componentWillReceiveProps(nextProps) {
     let _this = this;
     let activeId = nextProps.activeId;
@@ -52,11 +44,10 @@ class WikiOutline extends React.Component {
         let direction = item.key > _this.state.activeIndex ? "down" : "up";
         let currentTop = parseInt(_this.state.scrollTop);
         let scrollTop = 0; 
-        if (item.key > 20 && direction === "down") {
-          scrollTop = currentTop - 27 + "px";
-        } else if (currentTop < 0 && direction === "up") {
-          scrollTop = currentTop + 27 + "px";
-        }
+        if ((item.key > 20 && direction === "down") || 
+          (currentTop < 0 && direction === "up")) {
+          scrollTop = - (item.key - 20)*27 + "px";
+        } 
         _this.setState({
           activeIndex : item.key,
           scrollTop: scrollTop
@@ -79,7 +70,7 @@ class WikiOutline extends React.Component {
               key={item.key} 
               item={item} 
               activeIndex={this.state.activeIndex}
-              handleNavItemClick={this.handleNavItemClick}
+              handleNavItemClick={this.props.handleNavItemClick}
             />
           )
         })}
