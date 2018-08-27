@@ -110,11 +110,11 @@ class ShareLinkZipTaskView(APIView):
             'is_windows': is_windows
         }
 
-        username = request.user.username
         try:
             zip_token = seafile_api.get_fileserver_access_token(
                 repo_id, json.dumps(fake_obj_id), 'download-dir-link',
-                username, use_onetime=settings.FILESERVER_TOKEN_ONCE_ONLY)
+                fileshare.username, use_onetime=settings.FILESERVER_TOKEN_ONCE_ONLY
+            )
         except Exception as e:
             logger.error(e)
             error_msg = 'Internal Server Error'
