@@ -44,7 +44,7 @@ def check_parameter(func):
             error_msg = "End time %s invalid" % end_time
             return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
 
-        return func(view, request, start_time, end_time)
+        return func(view, request, start_time, end_time, *args, **kwargs)
     return _decorated
 
 

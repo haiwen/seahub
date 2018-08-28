@@ -718,6 +718,11 @@ if EVENTS_CONFIG_FILE:
             res = seafevents.get_system_traffic_by_day(session, start, end, offset, op_type)
         return res
 
+    def get_org_traffic_by_day(org_id, start, end, offset, op_type='all'):
+        with _get_seafevents_session() as session:
+            res = seafevents.get_org_traffic_by_day(session, org_id, start, end, offset, op_type)
+        return res
+
     def get_file_update_events(email, org_id, repo_id, start, limit):
         """Return file update events list. (If no file update, return 'None')
 
@@ -778,6 +783,8 @@ else:
     def get_total_storage_stats_by_day():
         pass
     def get_system_traffic_by_day():
+        pass
+    def get_org_traffic_by_day():
         pass
     def get_file_update_events():
         pass
