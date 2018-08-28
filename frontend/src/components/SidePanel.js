@@ -202,7 +202,7 @@ class SidePanel extends Component {
     let pathname = window.location.pathname;
     let nodePath = this.state.currentNode.path;
     
-    if (pathname.indexOf(encodeURI(nodePath))) {
+    if (pathname.indexOf(encodeURI(nodePath)) > -1) {
       return true;
     }
     return false;
