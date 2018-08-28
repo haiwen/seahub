@@ -92,7 +92,7 @@ class Wiki extends Component {
   }
 
   isInternalMarkdownLink(url) {
-    var re = new RegExp(serviceUrl + '/lib/' + repoID + '/file' + '.*\.md');
+    var re = new RegExp(serviceUrl + '/lib/' + repoID + '/file' + '.*\.md$');
     return re.test(url);
   }
 
@@ -108,6 +108,8 @@ class Wiki extends Component {
     if (this.isInternalMarkdownLink(url)) {
       let path = this.getPathFromInternalMarkdownLink(url);
       this.loadFile(path);
+    } else {
+      window.location.href = url;
     }
   }
 
