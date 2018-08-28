@@ -139,6 +139,10 @@ class MarkdownViewer extends React.Component {
           navItems: navItems,
           activeId: currentId
         })
+      }else {
+        _this.setState({
+          navItems: []
+        })
       }
     });
   }
