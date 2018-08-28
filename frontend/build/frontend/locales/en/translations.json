@@ -60,6 +60,7 @@
   "the_two_passwords_do_not_match_please_enter_again": "The two passwords do not match. Please enter again.",
   "the_expiration_days_should_be_greater_than_0": "The expiration days should be greater than 0",
   "password_is_too_short": "Password is too short",
+  "return_to_wiki_page": "Return to Wiki Page",
   "userHelp": {
     "title":"Keyboard shortcuts",
     "userHelpData":[
