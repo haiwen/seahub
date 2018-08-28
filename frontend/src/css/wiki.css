@@ -92,13 +92,13 @@ img[src=""] {
 }
 
 .cur-view-container .markdown-content {
-  width: calc(100% - 200px);
+  width: calc(100% - 160px);
   padding-right: 40px;
 }
 
 .cur-view-container .markdown-outline {
   position: fixed;
-  padding: 0 18px;
+  padding-right: 18px;
   top: 97px;
   right: 0;
   width: 200px;
