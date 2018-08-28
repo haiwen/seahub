@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import TreeView from './tree-view/tree-view';
 import { siteRoot, logoPath, mediaUrl, siteTitle, logoWidth, logoHeight } from './constance';
 import Tree from './tree-view/tree';
-import Node from './tree-view/node'
+import { Node } from './tree-view/node'
 import NodeMenu from './menu-component/node-menu';
 import MenuControl from './menu-component/node-menu-control';
 const gettext = window.gettext;
@@ -82,13 +82,40 @@ class SidePanel extends Component {
 
   onAddFolderNode = (dirPath) => {
     this.props.editorUtilities.createDir(dirPath).then(res => {
-      this.initializeTreeData()
+      let tree = this.state.tree_data.copy();
+      let index = dirPath.lastIndexOf("/");
+      let name = dirPath.substring(index+1);
+      let parentPath = dirPath.substring(0, index);
+      if (!parentPath) {
+        parentPath = "/";
+      }
+      let node = new Node({name : name, type: "dir", isExpanded: false, children: []});
+      let parentNode = tree.getNodeByPath(parentPath);
+      tree.addChildToNode(parentNode, node);
+      tree.setOneNodeToActived({node});
+      this.setState({
+        tree_data: tree
+      })
+
     })
   }
 
   onAddFileNode = (filePath) => {
     this.props.editorUtilities.createFile(filePath).then(res => {
-      this.initializeTreeData()
+      let tree = this.state.tree_data.copy();
+      let index = filePath.lastIndexOf("/");
+      let name = filePath.substring(index+1);
+      let parentPath = filePath.substring(0, index);
+      if (!parentPath) {
+        parentPath = "/";
+      }
+      let node = new Node({name : name, type: "file", isExpanded: false, children: []});
+      let parentNode = tree.getNodeByPath(parentPath);
+      tree.addChildToNode(parentNode, node);
+      tree.setOneNodeToActived({node});
+      this.setState({
+        tree_data: tree
+      })
     })
   }
 
@@ -98,17 +125,16 @@ class SidePanel extends Component {
     let filePath = node.path;
     if (type === 'file') {
       this.props.editorUtilities.renameFile(filePath, newName).then(res => {
-        this.initializeTreeData()
         if (this.isModifyCurrentFile()) {
           node.name = newName;
           this.props.onFileClick(null, node);
+          this.changeActivedNode({node});
         }
       })
     }
 
     if (type === 'dir') {
       this.props.editorUtilities.renameDir(filePath, newName).then(res => {
-        this.initializeTreeData();
         if (this.isModifyContainsCurrentFile()) {
           let currentNode = this.state.currentNode;
           let nodePath = encodeURI(currentNode.path);
@@ -118,6 +144,7 @@ class SidePanel extends Component {
           if(node){
             currentNode.name = newName;
             this.props.onFileClick(null, node);
+            this.changeActivedNode({node})
           }
         }
       })
@@ -129,15 +156,11 @@ class SidePanel extends Component {
     let filePath = currentNode.path;
     let type = currentNode.type;
     if (type === 'file') {
-      this.props.editorUtilities.deleteFile(filePath).then(res => {
-        this.initializeTreeData();
-      })
+      this.props.editorUtilities.deleteFile(filePath);
     } 
 
     if (type === 'dir') {
-      this.props.editorUtilities.deleteDir(filePath).then(res => {
-        this.initializeTreeData();
-      })
+      this.props.editorUtilities.deleteDir(filePath);
     }
 
     let isCurrentFile = false;
@@ -147,23 +170,39 @@ class SidePanel extends Component {
       isCurrentFile = this.isModifyCurrentFile();
     }
 
+    let tree = this.state.tree_data.copy();
+    tree.removeNodeFromTree(currentNode);
+
     if (isCurrentFile) {
       let homeNode = this.getHomeNode();
       this.props.onFileClick(null, homeNode);
+      tree.setNoneNodeActived();
+      this.setState({tree_data: tree})
+    } else {
+      this.setState({tree_data: tree})
     }
+  }
+
+  changeActivedNode(node) {
+    let tree = this.state.tree_data.copy();
+    tree.setOneNodeToActived(node);
+    this.setState({
+      tree_data: tree
+    })
   }
 
   isModifyCurrentFile() {
     let name = this.state.currentNode.name;
     let pathname = window.location.pathname;
     let currentName = pathname.slice(pathname.lastIndexOf("/") + 1);
-    return name === currentName;
+    return encodeURI(name) === currentName;
   }
 
   isModifyContainsCurrentFile() {
     let pathname = window.location.pathname;
     let nodePath = this.state.currentNode.path;
-    if (pathname.indexOf(nodePath)) {
+    
+    if (pathname.indexOf(encodeURI(nodePath)) > -1) {
       return true;
     }
     return false;
