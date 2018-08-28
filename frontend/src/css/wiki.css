@@ -92,16 +92,17 @@ img[src=""] {
 }
 
 .cur-view-container .markdown-content {
-  flex: 1; 
   width: calc(100% - 200px);
   padding-right: 40px;
 }
 
 .cur-view-container .markdown-outline {
-  position: sticky;
-  width: 200px;
+  position: fixed;
   padding: 0 18px;
-  top: 0;
+  top: 97px;
+  right: 0;
+  width: 200px;
+  overflow: hidden;
 }
 
 .wiki-hide {
@@ -113,6 +114,7 @@ img[src=""] {
     padding-right: 40px;
   }
   .cur-view-container .markdown-content {
+    width: 100%;
     padding-right: 0;
   }
   .cur-view-container .markdown-outline {
