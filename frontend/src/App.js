@@ -89,16 +89,26 @@ class EditorUtilities {
 
   getFileURL(fileNode) {
     var url;
-    if (fileNode.isImage()) {
-      url = protocol + '://' + domain + siteRoot + "lib/" + repoID + "/file" + encodeURIComponent(fileNode.path()) + "?raw=1";
+    if (fileNode.type === 'file') {
+      if (fileNode.isImage()) {
+        url = serviceUrl + "/lib/" + repoID + "/file" + encodeURIComponent(fileNode.path()) + "?raw=1";
+      } else {
+        url = serviceUrl + "/lib/" + repoID + "/file" + encodeURIComponent(fileNode.path());
+      }
     } else {
-      url = protocol + '://' + domain + siteRoot + "lib/" + repoID + "/file" + encodeURIComponent(fileNode.path());
+      url = serviceUrl + "/#common/lib/" + repoID + "/" + encodeURIComponent(fileNode.path());
     }
     return url;
   }
   
   isInternalFileLink(url) {
     var re = new RegExp(this.serviceUrl + "/lib/[0-9a-f-]{36}/file.*");
+    return re.test(url);
+  }
+
+  
+  isInternalDirLink(url) {
+    var re = new RegExp(serviceUrl + "/#[a-z\-]*?/lib/" + "[0-9a-f\-]{36}/.*");
     return re.test(url);
   }
 
