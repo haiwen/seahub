@@ -44,10 +44,15 @@ class WikiOutline extends React.Component {
         let direction = item.key > _this.state.activeIndex ? "down" : "up";
         let currentTop = parseInt(_this.state.scrollTop);
         let scrollTop = 0; 
-        if ((item.key > 20 && direction === "down") || 
-          (currentTop < 0 && direction === "up")) {
+        if (item.key > 20 && direction === "down") {
           scrollTop = - (item.key - 20)*27 + "px";
         } 
+        if (currentTop < 0 && direction === "up") {
+          scrollTop = - (item.key - 20)*27 + "px";
+          if (parseInt(scrollTop) > 27) { // handle scroll quickly;
+            scrollTop = 0;
+          }  
+        }
         _this.setState({
           activeIndex : item.key,
           scrollTop: scrollTop
