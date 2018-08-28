@@ -142,8 +142,9 @@ class Wiki extends Component {
         })
       })
 
-      let fileUrl = serviceUrl + '/wikis/' + slug + filePath;
-      window.history.pushState({urlPath: fileUrl, filePath: filePath}, filePath, fileUrl);
+     const hash = window.location.hash;
+     let fileUrl = serviceUrl + '/wikis/' + slug + filePath + hash;
+     window.history.pushState({urlPath: fileUrl, filePath: filePath}, filePath, fileUrl);
   }
 
   onpopstate = (event) => {

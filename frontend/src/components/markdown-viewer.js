@@ -44,19 +44,15 @@ class MarkdownViewerContent extends React.Component {
 
 class MarkdownViewer extends React.Component {
 
-  state = {
-    renderingContent: true,
-    renderingOutline: true,
-    html: '',
-    outlineTreeRoot: null,
-    navItems: [],
-    activeId: 0
-  }
-
-  scrollToNode(node) {
-    let url = new URL(window.location.href);
-    url.set('hash', 'user-content-' + node.data.id);
-    window.location.href = url.toString();
+  constructor(props) {
+    super(props);
+    this.state = {
+      renderingContent: true,
+      html: '',
+      navItems: [],
+      activeId: 0,
+    };
+    this.activeIdFromOutLine = null;
   }
 
   scrollHandler = (event) => {
@@ -93,6 +89,14 @@ class MarkdownViewer extends React.Component {
         html: String(file),
         renderingContent: false
       });
+
+      setTimeout(() => { 
+        // reset the href to jump to the section
+        var url = new URL(window.location.href);
+        if (url.hash) { 
+          window.location.href = window.location.href;
+        }
+      }, 100);
     })
   }
 
