@@ -464,12 +464,17 @@ var NewWikiController = {
     clickToNewWikiByOwnlib: function(event) {
         var _this = this;
         $.ajax({
-            url: "{{SITE_ROOT}}api2/repos/?type=mine",
+            url: "{{SITE_ROOT}}api2/repos/",
             cache: false,
             dataType: 'json',
             success: function(data) {
-                if (data && data.length) {
-                    _this.chooseEl.append($(_this.chooseWikiTmpl(data)));
+                var repos = data.filter(function(i) {
+                    return i['encrypted'] !== true;
+                    }        
+                ) 
+                
+                if (repos && repos.length) {
+                    _this.chooseEl.append($(_this.chooseWikiTmpl(repos)));
                     $('#new-wiki-by-existing-form').modal();
                     $('#simplemodal-container').css({'width':'auto', 'height':'auto'})
                 }
