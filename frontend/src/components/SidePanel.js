@@ -120,32 +120,44 @@ class SidePanel extends Component {
   }
 
   onRenameNode = (newName) => {
-    var node = this.state.currentNode;
+    let tree = this.state.tree_data.copy();
+    let node = this.state.currentNode;
     let type = node.type;
     let filePath = node.path;
     if (type === 'file') {
       this.props.editorUtilities.renameFile(filePath, newName).then(res => {
         if (this.isModifyCurrentFile()) {
-          node.name = newName;
+          node.name = newName;  //repair current node
+          tree.updateNodeParamValue(node, "name", newName);
           this.props.onFileClick(null, node);
-          this.changeActivedNode({node});
+          tree.setOneNodeToActived(node);
+          this.setState({tree_data: tree});
+        } else {
+          tree.updateNodeParamValue(node, "name", newName);
+          this.setState({tree_data: tree});
         }
       })
     }
 
     if (type === 'dir') {
       this.props.editorUtilities.renameDir(filePath, newName).then(res => {
+        let tree = this.state.tree_data.copy();
+        let node = this.state.currentNode;
         if (this.isModifyContainsCurrentFile()) {
-          let currentNode = this.state.currentNode;
-          let nodePath = encodeURI(currentNode.path);
+          let nodePath = encodeURI(node.path);
           let pathname = window.location.pathname;
           let start =  pathname.indexOf(nodePath);
-          let node = currentNode.getNodeByPath(decodeURI(pathname.slice(start)));
-          if(node){
-            currentNode.name = newName;
-            this.props.onFileClick(null, node);
-            this.changeActivedNode({node})
+          let findNode = node.getNodeByPath(decodeURI(pathname.slice(start)));
+          if(findNode){
+            tree.updateNodeParamValue(node, "name", newName);
+
+            this.props.onFileClick(null, findNode);
+            tree.setOneNodeToActived(findNode);
+            this.setState({tree_data: tree});
           }
+        } else {
+          tree.updateNodeParamValue(node, "name", newName);
+          this.setState({tree_data: tree});
         }
       })
     }
