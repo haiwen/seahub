@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
-import SideNavFooter from './SideNavFooter';
-import MainSideNavMenu from './MainSideNavMenu';
+import SideNavFooter from '../../components/SideNavFooter';
+import MainSideNavMenu from '../../components/MainSideNavMenu';
 
 const siteRoot = window.app.config.siteRoot;
 const serverRoot = window.app.config.serverRoot;

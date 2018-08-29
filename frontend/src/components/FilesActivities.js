@@ -58,19 +58,19 @@ class TableBody extends Component {
       if (item.obj_type == 'repo') {
         switch(item.op_type) {
           case 'create':
-            op = gettext("Created a library");
+            op = gettext("Created library");
             details = <td>{libLink}</td>;
             break;
           case 'rename':
-            op = gettext("Renamed a library");
+            op = gettext("Renamed library");
             details = <td>{item.old_repo_name} => {libLink}</td>;
             break;
           case 'delete':
-            op = gettext("Deleted a library");
+            op = gettext("Deleted library");
             details = <td>{item.repo_name}</td>;
             break;
           case 'recover':
-            op = gettext("Restored a library");
+            op = gettext("Restored library");
             details = <td>{libLink}</td>;
             break;
           case 'clean-up-trash':
@@ -87,28 +87,28 @@ class TableBody extends Component {
         let fileLink = <a href={fileURL}>{item.name}</a>;
         switch(item.op_type) {
           case 'create':
-            op = gettext("Created a file");
+            op = gettext("Created file");
             details = <td>{fileLink}<br />{smallLibLink}</td>;
             break;
           case 'delete':
-            op = gettext("Deleted a file");
+            op = gettext("Deleted file");
             details = <td>{item.name}<br />{smallLibLink}</td>;
             break;
           case 'recover':
-            op = gettext("Restored a file");
+            op = gettext("Restored file");
             details = <td>{fileLink}<br />{smallLibLink}</td>;
             break;
           case 'rename':
-            op = gettext("Renamed a file");
+            op = gettext("Renamed file");
             details = <td>{item.old_name} => {fileLink}<br />{smallLibLink}</td>;
             break;
           case 'move':
             let filePathLink = <a href={fileURL}>{item.path}</a>;
-            op = gettext("Moved a file");
+            op = gettext("Moved file");
             details = <td>{item.old_path} => {filePathLink}<br />{smallLibLink}</td>;
             break;
           case 'edit': // update
-            op = gettext("Updated a file");
+            op = gettext("Updated file");
             details = <td>{fileLink}<br />{smallLibLink}</td>;
             break;
         }
@@ -117,24 +117,24 @@ class TableBody extends Component {
         let dirLink = <a href={dirURL}>{item.name}</a>;
         switch(item.op_type) {
           case 'create':
-            op = gettext("Created a folder");
+            op = gettext("Created folder");
             details = <td>{dirLink}<br />{smallLibLink}</td>;
             break;
           case 'delete':
-            op = gettext("Deleted a folder");
+            op = gettext("Deleted folder");
             details = <td>{item.name}<br />{smallLibLink}</td>;
             break;
           case 'recover':
-            op = gettext("Restored a folder");
+            op = gettext("Restored folder");
             details = <td>{dirLink}<br />{smallLibLink}</td>;
             break;
           case 'rename':
-            op = gettext("Renamed a folder");
+            op = gettext("Renamed folder");
             details = <td>{item.old_name} => {dirLink}<br />{smallLibLink}</td>;
             break;
           case 'move':
             let dirPathLink = <a href={dirURL}>{item.path}</a>;
-            op = gettext("Moved a folder");
+            op = gettext("Moved folder");
             details = <td>{item.old_path} => {dirPathLink}<br />{smallLibLink}</td>;
             break;
         }

@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
-import FilesActivities from './FilesActivities';
-import Account from './account';
-import Notification from './Notification';
+import FilesActivities from '../../components/FilesActivities';
+import Account from '../../components/account';
+import Notification from '../../components/Notification';
 
 const siteRoot = window.app.config.siteRoot;
 const serverRoot = window.app.config.serverRoot;
@@ -35,7 +35,7 @@ class MainPanel extends Component {
           {children}
         </div>
       </div>
-      <FilesActivities  seafileAPI={this.props.seafileAPI} />
+      <FilesActivities seafileAPI={this.props.seafileAPI} />
     </div>
     )
   }
