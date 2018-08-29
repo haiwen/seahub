@@ -23,7 +23,6 @@ class About extends React.Component {
       <div>
         <a href="#" className="item" onClick={this.toggle}>About</a>
         <Modal isOpen={this.state.modal} toggle={this.toggle} className={this.props.className}>
-          <ModalHeader toggle={this.toggle}>About</ModalHeader>
           <ModalBody>
              <div className="about-content">
                <p><img src="/media/img/seafile-logo.png" title="Private Seafile" alt="logo" width="128" height="32" /></p>

@@ -261,6 +261,7 @@ a:hover { color:#eb8205; }
     padding:12px 20px 16px;
     background:#f8f8f8;
     border-top:1px solid #eee;
+    border-right: 1px solid #eee;
 }
 .side-nav-footer .item {
     color:#666;
@@ -572,6 +573,14 @@ a.op-icon:focus {
     color:#999;
     margin-right:15px;
 }
+.side-panel-slide {
+    transition: all .3s ease-in-out;
+}
+  
+.side-panel-slide-up {
+    transition: all .3s ease-in-out;
+    height: 0;
+}
 #group-nav .sharp,
 #share-admin-nav .sharp {
     display:inline-block;
@@ -614,13 +623,33 @@ a.op-icon:focus {
     text-decoration:none;
 }
 
+.user-select {
+    -moz-user-select:none;
+    -webkit-user-select:none;
+    -ms-user-select:none;
+    -khtml-user-select:none;
+    user-select: none;
+}
+
 .common-toolbar {
     margin-left:auto;
     display:flex;
 }
 #notifications {
     position:relative;
-    margin:3px 0 0 25px;
+    width: 32px;
+}
+#notifications .no-deco {
+    position: relative;
+    display: block;
+    width: 100%;
+    height: 100%;
+}
+#notifications .sf2-icon-bell {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%,-50%);
 }
 @media (max-width: 390px) {
     #notifications {
@@ -760,7 +789,7 @@ ul { list-style:none; }
 }
 #notice-popover {
     top:38px;
-    right:-16px;
+    right:-12px;
 }
 #notice-popover .outer-caret {
     right:18px;
@@ -797,6 +826,12 @@ ul { list-style:none; }
     padding:7px 0;
     text-align:center;
     color:#a4a4a4;
+}
+
+#notice-popover .sf-popover-close {
+    position: absolute;
+    right: 10px;
+    top: 5px;
 }
 
 
