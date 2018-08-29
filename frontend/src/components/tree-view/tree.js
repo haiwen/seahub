@@ -88,6 +88,15 @@ class Tree {
     return findNode;
   }
 
+  updateNodeParamValue(node, param, value) {
+    let findNode = this.getNodeByPath(node.path);
+    if (findNode[param]) {
+      findNode[param] = value;
+      return true;
+    }
+    return false;
+  }
+
   traverseDF(callback) {
     let stack = [];
     let found = false;
