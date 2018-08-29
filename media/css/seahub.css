@@ -4332,6 +4332,9 @@ img.thumbnail {
 .date-custom-form .submit {
     margin-left:5px;
 }
+.traffic-chart {
+    margin:0 0 20px;
+}
 
 /* system info */
 .license-file-upload {

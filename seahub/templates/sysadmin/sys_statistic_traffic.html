@@ -14,9 +14,11 @@
         <li class="tabnav-tab"><a href="{% url 'sys_statistic_storage' %}">{% trans "Storage" %}</a></li>
         <li class="tabnav-tab"><a href="{% url 'sys_statistic_user' %}">{% trans "Users" %}</a></li>
         <li class="tabnav-tab tabnav-tab-cur"><a href="{% url 'sys_statistic_traffic' %}">{% trans "Traffic" %}</a></li>
+        {% comment %}
         {% if traffic_stats_enabled %}
         <li class="tabnav-tab"><a href="{{ SITE_ROOT }}sys/trafficadmin/">{% trans "Traffic" %}</a></li>
         {% endif %}
+        {% endcomment %}
     </ul>
 </div>
 
@@ -38,7 +40,18 @@
 
 <div id="statistic-chart">
     <span class="loading-icon loading-tip"></span>
-    <canvas class="hide"></canvas>
+    <div> {# `<div>` is needed for `<canvas>`, as the plugin requires. #}
+        <canvas class="traffic-chart total-traffic-chart hide"></canvas>
+    </div>
+    <div>
+        <canvas class="traffic-chart web-traffic-chart hide"></canvas>
+    </div>
+    <div>
+        <canvas class="traffic-chart link-traffic-chart hide"></canvas>
+    </div>
+    <div>
+        <canvas class="traffic-chart sync-traffic-chart hide"></canvas>
+    </div>
     <p class="error hide"></p>
 </div>
 {% endblock %}
@@ -76,12 +89,11 @@ function getTimeStr(time) { // time: in milliseconds
 };
 
 var $chart = $('#statistic-chart');
-var $loading = $('.loading-icon', $chart);
-var $error = $('.error', $chart);
-var $canvas = $('canvas', $chart);
-var chart;
-
 function getStatistic(options) {
+    var $loading = $('.loading-icon', $chart);
+    var $error = $('.error', $chart);
+    var $canvas = $('.traffic-chart', $chart);
+
     $.ajax({
         url: '{% url 'api-v2.1-admin-statistics-system-traffic' %}',
         cache: false,
@@ -143,10 +155,26 @@ function getStatisticByTimeRange(range) {
 }
 
 // render chart
+var totalTrafficChart,
+    linkTrafficChart,
+    syncTrafficChart,
+    webTrafficChart;
+
+var $totalTrafficCanvas = $('.total-traffic-chart', $chart),
+    $linkTrafficCanvas = $('.link-traffic-chart', $chart),
+    $syncTrafficCanvas = $('.sync-traffic-chart', $chart),
+    $webTrafficCanvas = $('.web-traffic-chart', $chart);
+
 function renderChart(data, group_by) {
-    var labels = [],
-        upload = [],
-        download = [];
+    var labels = [];
+    var total_upload = [],
+        total_download = [],
+        link_upload = [],
+        link_download = [],
+        sync_upload = [],
+        sync_download = [],
+        web_upload = [],
+        web_download = [];
 
     var item;
     var datetime_ms, datetime_str;
@@ -164,78 +192,135 @@ function renderChart(data, group_by) {
             labels.push(datetime_str.substr(0, 10));
         }
 
-        upload.push(
+        total_upload.push(
             item['link-file-upload'] +
             item['sync-file-upload'] +
             item['web-file-upload']);
 
-        download.push(
+        total_download.push(
             item['link-file-download'] +
             item['sync-file-download'] +
             item['web-file-download']);
+
+        link_upload.push(item['link-file-upload']);
+        link_download.push(item['link-file-download']);
+        sync_upload.push(item['sync-file-upload']);
+        sync_download.push(item['sync-file-download']);
+        web_upload.push(item['web-file-upload']);
+        web_download.push(item['web-file-download']);
     }
 
-    var config = {
-        type: 'line',
-        data: {
-            labels: labels,
-            datasets: [
-                {
-                    label: "{% trans "Upload" context "upload traffic" %}",
-                    data: upload,
-                    borderColor: '#fd913a',
-                    backgroundColor: '#fd913a'
-                },
-                {
-                    label: "{% trans "Download" context "download traffic" %}",
-                    data: download,
-                    borderColor: '#57cd6b',
-                    backgroundColor: '#57cd6b'
-                }
-            ]
-        }, // 'data' ends here
-        options: {
-            title: {
-                display: true,
-                fontSize: 14,
-                text: "{% trans "Traffic" %}"
-            },
-            elements: {
-                line: {
-                    fill: false,
-                    tension: 0, // disable bezier curves, i.e, draw straight lines
-                    borderWidth: 2
-                }
-            },
-            legend: {
-                labels: {
-                    usePointStyle: true
-                }
-            },
-            layout: {
-                padding: {
-                    right: 100
-                }
-            },
-            scales: {
-                yAxes: [{
-                    ticks: {
-                        beginAtZero: true,
-						suggestedMax: 10*1000*1000,
-                        callback: function(value, index, values) {
-                            return quotaSizeFormat(value);
-                        }
+    var getConfig = function(options) {
+        return config = {
+            type: 'line',
+            data: {
+                labels: labels,
+                datasets: [
+                    {
+                        label: "{% trans "Upload" context "upload traffic" %}",
+                        data: options.data.upload,
+                        borderColor: '#fd913a',
+                        backgroundColor: '#fd913a'
+                    },
+                    {
+                        label: "{% trans "Download" context "download traffic" %}",
+                        data: options.data.download,
+                        borderColor: '#57cd6b',
+                        backgroundColor: '#57cd6b'
                     }
-                }]
+                ]
+            }, // 'data' ends here
+            options: {
+                title: {
+                    display: true,
+                    fontSize: 14,
+                    text: options.title
+                },
+                elements: {
+                    line: {
+                        fill: false,
+                        tension: 0, // disable bezier curves, i.e, draw straight lines
+                        borderWidth: 2
+                    }
+                },
+                legend: {
+                    labels: {
+                        usePointStyle: true
+                    }
+                },
+                layout: {
+                    padding: {
+                        right: 100
+                    }
+                },
+                scales: {
+                    yAxes: [{
+                        ticks: {
+                            beginAtZero: true,
+                            suggestedMax: 10*1000*1000, // 10 MB
+                            callback: function(value, index, values) {
+                                return quotaSizeFormat(value);
+                            }
+                        }
+                    }]
+                }
             }
+        };
+    };
+
+    var totalTrafficChartOptions = {
+        title: "{% trans "Total Traffic" %}",
+        data: {
+            upload: total_upload,
+            download: total_download
+        }
+    };
+    var linkTrafficChartOptions = {
+        title: "{% trans "Share Link Traffic" %}",
+        data: {
+            upload: link_upload,
+            download: link_download
+        }
+    };
+    var syncTrafficChartOptions = {
+        title: "{% trans "Sync Traffic" %}",
+        data: {
+            upload: sync_upload,
+            download: sync_download
+        }
+    };
+    var webTrafficChartOptions = {
+        title: "{% trans "Web Traffic" %}",
+        data: {
+            upload: web_upload,
+            download: web_download
         }
     };
 
-    if (chart) { // chart instance already exists
-        chart.destroy();
-        chart = new Chart($canvas, config);
+    if (totalTrafficChart) { // chart instance already exists
+        totalTrafficChart.destroy();
+        linkTrafficChart.destroy();
+        syncTrafficChart.destroy();
+        webTrafficChart.destroy();
+
+        totalTrafficChart = new Chart($totalTrafficCanvas,
+            getConfig(totalTrafficChartOptions));
+        linkTrafficChart = new Chart($linkTrafficCanvas,
+            getConfig(linkTrafficChartOptions));
+        syncTrafficChart = new Chart($syncTrafficCanvas,
+            getConfig(syncTrafficChartOptions));
+        webTrafficChart = new Chart($webTrafficCanvas,
+            getConfig(webTrafficChartOptions));
+
     } else {
-        chart = new Chart($canvas, config);
+        totalTrafficChart = new Chart($totalTrafficCanvas,
+            getConfig(totalTrafficChartOptions));
+        linkTrafficChart = new Chart($linkTrafficCanvas,
+            getConfig(linkTrafficChartOptions));
+        syncTrafficChart = new Chart($syncTrafficCanvas,
+            getConfig(syncTrafficChartOptions));
+        webTrafficChart = new Chart($webTrafficCanvas,
+            getConfig(webTrafficChartOptions));
     }
 }
 
