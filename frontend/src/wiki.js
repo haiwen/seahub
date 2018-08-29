@@ -122,6 +122,10 @@ class Wiki extends Component {
   onFileClick = (e, node) => {
     if (node.isMarkdown()) {
       this.loadFile(node.path);
+    } else {
+      const w=window.open('about:blank');
+      const url = serviceUrl + '/lib/' + repoID + '/file' + node.path;
+      w.location.href = url;
     }
   }
 
