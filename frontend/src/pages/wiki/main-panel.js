@@ -1,8 +1,8 @@
 import React, { Component } from 'react';
-import Search from './search';
-import MarkdownViewer from './markdown-viewer';
-import Account from './account';
-import { gettext, repoID, serviceUrl, slug, siteRoot } from './constance';
+import Search from '../../components/search';
+import MarkdownViewer from '../../components/markdown-viewer';
+import Account from '../../components/account';
+import { gettext, repoID, serviceUrl, slug, siteRoot } from '../../components/constance';
 
 class MainPanel extends Component {
 
