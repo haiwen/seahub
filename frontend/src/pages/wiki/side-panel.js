@@ -1,10 +1,10 @@
 import React, { Component } from 'react';
-import TreeView from './tree-view/tree-view';
-import { siteRoot, logoPath, mediaUrl, siteTitle, logoWidth, logoHeight } from './constance';
-import Tree from './tree-view/tree';
-import Node from './tree-view/node'
-import NodeMenu from './menu-component/node-menu';
-import MenuControl from './menu-component/node-menu-control';
+import TreeView from '../../components/tree-view/tree-view';
+import { siteRoot, logoPath, mediaUrl, siteTitle, logoWidth, logoHeight } from '../../components/constance';
+import Tree from '../../components/tree-view/tree';
+import Node from '../../components/tree-view/node'
+import NodeMenu from '../../components/menu-component/node-menu';
+import MenuControl from '../../components/menu-component/node-menu-control';
 const gettext = window.gettext;
 
 class SidePanel extends Component {

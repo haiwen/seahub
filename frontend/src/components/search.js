@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { gettext, repoID } from './constance';
-import SearchResultItem from './SearchResultItem';
+import SearchResultItem from './search-result-item';
 
 class Search extends Component {
 
