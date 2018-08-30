@@ -278,6 +278,8 @@ app["pageOptions"] = {
     is_staff: {% if request.user.is_staff %} true {% else %} false {% endif %},
     repo_password_min_length: {{ repo_password_min_length }},
     share_link_password_min_length: {{ share_link_password_min_length }},
+    share_link_expire_days_min: {{ share_link_expire_days_min }},
+    share_link_expire_days_max: {{ share_link_expire_days_max }},
     guide_enabled: {% if guide_enabled %} true {% else %} false {% endif %},
     enable_wiki: {% if enable_wiki %} true {% else %} false {% endif %},
     enable_upload_folder: {% if enable_upload_folder %} true {% else %} false {% endif %},
@@ -299,7 +301,10 @@ app["pageOptions"] = {
     enable_share_to_all_groups: {% if enable_share_to_all_groups %} true {% else %} false {% endif %},
     cur_note: {% if request.cur_note %} {'id': '{{ request.cur_note.id }}'} {% else %} null {% endif %},
     enable_group_discussion: {% if enable_group_discussion %} true {% else %} false {% endif %},
-    enable_file_comment: {% if enable_file_comment %} true {% else %} false {% endif %}
+    enable_file_comment: {% if enable_file_comment %} true {% else %} false {% endif %},
+    enable_office_web_app: {% if enable_office_web_app %} true {% else %} false {% endif %},
+    enable_onlyoffice: {% if enable_onlyoffice %} true {% else %} false {% endif %}
+
 };
 app.ui = {
     currentDropdown: null,

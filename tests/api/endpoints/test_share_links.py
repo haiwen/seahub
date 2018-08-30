@@ -122,7 +122,7 @@ class ShareLinksTest(BaseTestCase):
 
         json_str = json.dumps({'path': self.file_path, 'repo_id': self.repo_id,
                                'permissions': {
-                                   'can_preview': True,
+                                   'can_edit': False,
                                    'can_download': True
                                }})
         resp = self.client.post(self.url, json_str,
@@ -137,7 +137,7 @@ class ShareLinksTest(BaseTestCase):
         assert json_resp['token'] in json_resp['link']
         assert 'f' in json_resp['link']
 
-        assert json_resp['permissions']['can_preview'] is True
+        assert json_resp['permissions']['can_edit'] is False
         assert json_resp['permissions']['can_download'] is True
 
         self._remove_share_link(json_resp['token'])
@@ -147,8 +147,8 @@ class ShareLinksTest(BaseTestCase):
 
         json_str = json.dumps({'path': self.file_path, 'repo_id': self.repo_id,
                                'permissions': {
-                                   'can_previewxxx': True,
-                                   'can_downloadyyy': False
+                                   'can_editrrr': False,
+                                   'can_downloadrrr': True
                                }})
         resp = self.client.post(self.url, json_str,
                                 content_type="application/json")
@@ -162,7 +162,7 @@ class ShareLinksTest(BaseTestCase):
         assert json_resp['token'] in json_resp['link']
         assert 'f' in json_resp['link']
 
-        assert json_resp['permissions']['can_preview'] is True
+        assert json_resp['permissions']['can_edit'] is False
         assert json_resp['permissions']['can_download'] is True
 
         self._remove_share_link(json_resp['token'])
@@ -172,7 +172,7 @@ class ShareLinksTest(BaseTestCase):
 
         json_str = json.dumps({'path': self.file_path, 'repo_id': self.repo_id,
                                'permissions': {
-                                   'can_preview': True,
+                                   'can_edit': False,
                                    'can_download': False
                                }})
         resp = self.client.post(self.url, json_str,
@@ -187,7 +187,7 @@ class ShareLinksTest(BaseTestCase):
         assert json_resp['token'] in json_resp['link']
         assert 'f' in json_resp['link']
 
-        assert json_resp['permissions']['can_preview'] is True
+        assert json_resp['permissions']['can_edit'] is False
         assert json_resp['permissions']['can_download'] is False
 
         self._remove_share_link(json_resp['token'])
