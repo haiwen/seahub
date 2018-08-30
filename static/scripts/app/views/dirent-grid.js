@@ -120,6 +120,7 @@ define([
                 category: dir.category,
                 repo_id: dir.repo_id,
                 is_repo_owner: dir.is_repo_owner,
+                is_admin: dir.is_admin,
                 can_set_folder_perm: can_set_folder_perm,
                 can_generate_share_link: app.pageOptions.can_generate_share_link,
                 can_generate_upload_link: app.pageOptions.can_generate_upload_link,
@@ -232,6 +233,7 @@ define([
         mvcp: function(e) {
             var op_type = $(e.currentTarget).hasClass('mv') ? 'mv' : 'cp';
             var options = {
+                'dirView': this.dirView,
                 'dir': this.dir,
                 'dirent': this.model,
                 'op_type': op_type
@@ -240,7 +242,6 @@ define([
             if (this.model.get('is_img') && op_type == 'mv') {
                 var index = $('.img-grid-item', this.dirView.$gridViewContainer).index(this.$el);
                 $.extend(options, {
-                    'dirView': this.dirView,
                     'imgIndex': index
                 });
             }

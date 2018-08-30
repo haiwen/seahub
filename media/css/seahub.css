@@ -3363,7 +3363,7 @@ button.sf-dropdown-toggle:focus {
     color:#333;
     font-weight:normal;
 }
-#new-wiki {
+.add-wiki-container {
     margin-left:auto;
 }
 .wiki-page-ops {
@@ -4364,9 +4364,13 @@ img.thumbnail {
 .wiki-hl {background-color: #f8f8f8;}
 .wiki-vs {visibility: visible;}
 .wiki-dropdown-menu {
-    margin-left: -80px;
+    margin-left: -5rem;
 }
 .wiki-list input {
-    width: 200px;
+    width: 15rem;
 }
 
+#new-wiki-by-existing-form .repo-container {
+    max-height: 20rem;
+    overflow-y: auto;
+}

@@ -193,13 +193,18 @@ class SharedRepo(APIView):
                     group_id, repo_id, '/', permission)
 
         if share_type == 'public':
+
             try:
                 if is_org_context(request):
                     org_id = request.user.org.org_id
-                    seaserv.seafserv_threaded_rpc.set_org_inner_pub_repo(
-                            org_id, repo_id, permission)
+                    seafile_api.set_org_inner_pub_repo(org_id, repo_id, permission)
                 else:
+                    if not request.user.permissions.can_add_public_repo():
+                        error_msg = 'Permission denied.'
+                        return api_error(status.HTTP_403_FORBIDDEN, error_msg)
+
                     seafile_api.add_inner_pub_repo(repo_id, permission)
+
             except Exception as e:
                 logger.error(e)
                 error_msg = 'Internal Server Error'

@@ -33,6 +33,31 @@ class EditorUtilities {
         return files;
       })
   }
+
+  createFile(filePath) {
+    return seafileAPI.createFile(repoID, filePath)
+  }
+
+  deleteFile(filePath) {
+    return seafileAPI.deleteFile(repoID, filePath)
+  }
+
+  renameFile(filePath, newFileName) {
+    return seafileAPI.renameFile(repoID, filePath, newFileName)
+  }
+
+  createDir(dirPath) {
+    return seafileAPI.createDir(repoID, dirPath)
+  }
+
+  deleteDir(dirPath) {
+    return seafileAPI.deleteDir(repoID, dirPath)
+  }
+
+  renameDir(dirPath, newDirName) {
+    return seafileAPI.renameDir(repoID, dirPath, newDirName)
+  }
+
 }
 
 const editorUtilities = new EditorUtilities();
@@ -115,7 +140,7 @@ class Wiki extends Component {
         })
       })
 
-      let fileUrl =  siteRoot + 'wikis/' + slug + filePath;
+      let fileUrl = serviceUrl + '/wikis/' + slug + filePath;
       window.history.pushState({urlPath: fileUrl, filePath: filePath}, filePath, fileUrl);
   }
 
@@ -145,6 +170,7 @@ class Wiki extends Component {
           closeSideBar={this.state.closeSideBar}
           onCloseSide ={this.onCloseSide}
           editorUtilities={editorUtilities}
+          permission={this.state.permission}
         />
         <MainPanel
           content={this.state.content}

@@ -66,6 +66,7 @@ define([
                 category: dir.category,
                 repo_id: dir.repo_id,
                 is_repo_owner: dir.is_repo_owner,
+                is_admin: dir.is_admin,
                 repo_encrypted: dir.encrypted,
 
                 can_set_folder_perm: can_set_folder_perm,
@@ -540,6 +541,7 @@ define([
             this.hideMobileMenu();
             var op_type = $(e.currentTarget).hasClass('mv') ? 'mv' : 'cp';
             var options = {
+                'dirView': this.dirView,
                 'dir': this.dir,
                 'dirent': this.model,
                 'op_type': op_type
@@ -547,7 +549,6 @@ define([
             if (this.model.get('is_img') && op_type == 'mv') {
                 var index = $('.img-name-link', this.dirView.$table).index(this.$('.img-name-link'));
                 $.extend(options, {
-                    'dirView': this.dirView,
                     'imgIndex': index
                 });
             }

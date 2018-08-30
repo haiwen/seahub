@@ -97,6 +97,12 @@ def sysadmin(request):
 
     folder_perm_enabled = True if is_pro_version() and settings.ENABLE_FOLDER_PERM else False
 
+    try:
+        expire_days = seafile_api.get_server_config_int('library_trash', 'expire_days')
+    except Exception as e:
+        logger.error(e)
+        expire_days = -1
+
     return render(request, 'sysadmin/sysadmin_backbone.html', {
             'enable_sys_admin_view_repo': ENABLE_SYS_ADMIN_VIEW_REPO,
             'enable_upload_folder': settings.ENABLE_UPLOAD_FOLDER,
@@ -112,6 +118,7 @@ def sysadmin(request):
             'is_pro': True if is_pro_version() else False,
             'file_audit_enabled': FILE_AUDIT_ENABLED,
             'enable_limit_ipaddress': ENABLE_LIMIT_IPADDRESS,
+            'trash_repos_expire_days': expire_days if expire_days > 0 else 30,
             })
 
 @login_required

@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { repoID } from './constance';
+import { gettext, repoID } from './constance';
 import SearchResultItem from './SearchResultItem';
 
 class Search extends Component {
@@ -195,7 +195,7 @@ class Search extends Component {
               type="text" 
               className="search-input" 
               name="query"
-              placeholder="Search files in this wiki"
+              placeholder={gettext("Search files in this wiki")}
               style={style}
               value={this.state.value}
               onFocus={this.onFocusHandler}

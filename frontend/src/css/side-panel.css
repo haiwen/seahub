@@ -1,38 +1,8 @@
-/*tree view */
-.tree-node:not([type = 'dir']):hover {
-  background-color: rgb(255,239,178);
-}
-
-.tree-node {
-  min-width: -moz-max-content;
-  min-width: -webkit-max-content;
-  min-width: max-content;
-}
-
-.tree-node-inner {
-  position: relative;
-  padding-left: 12px;
-}
-
 /*
   the main reason to icon can not be align is that .folder has a real width it take the place
    of .tree-node-inner causing tree-node-icon not aligned , use absolute can make sure .tree-node-icon
    is always at the far left of .tree-node-inner
 */
-.folder-toggle-icon {
-  position: absolute;
-  left: 0;
-  line-height: 1.5;
-}
-
-.tree-node-icon {
-  margin-right: 0.4rem;
-  margin-left: 0.1rem;
-  display: inline-block;
-  width: 1rem;
-  text-align: center;
-}
-
 .side-panel {
   user-select: none;
   height:100%;
@@ -119,7 +89,89 @@
 .outline-h3:hover {
   color: #eb8205;
 }
+
+/*tree view */
+.tree-node:not([type = 'dir']):hover {
+  background-color: rgb(255,239,178);
+}
+
 .tree-view {
   padding-left: 10px;
   line-height: 1.5;
 }
+
+.tree-node-inner {
+  position: relative;
+  padding-left: 12px;
+  height: 24px;
+}
+
+.tree-node-inner .tree-node-text {
+  padding-left: 1.2rem;
+  width: calc(100% - 1.5rem);
+  font-size: 15px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.tree-node-inner .left-icon {
+  position: absolute;
+  display:flex;
+  justify-content:center;
+  align-items:center;
+  top: 0;
+  left: 0;
+  padding-left: 0.7rem;
+}
+
+.folder-toggle-icon {
+  position: absolute;
+  left: 0;
+  line-height: 1.5;
+}
+
+.tree-node-icon {
+  margin-right: 0.4rem;
+  margin-left: 0.1rem;
+  display: inline-block;
+  width: 1rem;
+  text-align: center;
+}
+
+.tree-node-inner .right-icon {
+  position: absolute;
+  top: 0;
+  right: 0;
+  width: 1.5rem;
+  color: #888;   
+  z-index: 2;  
+  font-size: 0.8125rem;
+  text-align: center;
+}
+
+.tree-node-inner .right-icon i {
+  width: 100%;
+  height: 100%;
+  vertical-align: middle;
+  font-size: 0.8125rem;
+  line-height: 1.625 !important;
+}
+
+.dropdown-menu {
+  min-width: 8rem;
+}
+
+.parent-path {
+  position: relative;
+}
+
+.parent-path .form-text {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  margin-top: 0;
+  margin-left: 0.25rem;
+  font-size: 0.9375rem;
+}
+
