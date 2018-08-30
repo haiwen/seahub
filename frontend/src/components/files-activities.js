@@ -4,7 +4,7 @@ const gettext = window.gettext;
 const siteRoot = window.app.config.siteRoot;
 const per_page = 25; // default
 
-class FilesActivitiesContent extends Component {
+class FileActivitiesContent extends Component {
 
   render() {
     const {loading, error_msg, events} = this.props.data;
@@ -233,7 +233,7 @@ class FilesActivities extends Component {
           <h3>{gettext("Activities")}</h3>
         </div>
         <div className="cur-view-main-con" onScroll={this.handleScroll}>
-          <FilesActivitiesContent data={this.state} />
+          <FileActivitiesContent data={this.state} />
         </div>
       </div>
     );

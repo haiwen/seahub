@@ -1,19 +1,5 @@
 import React, { Component } from 'react';
-import FilesActivities from '../../components/FilesActivities';
-import Account from '../../components/account';
-import Notification from '../../components/Notification';
-
-const siteRoot = window.app.config.siteRoot;
-const serverRoot = window.app.config.serverRoot;
-const logoPath =  window.app.config.logoPath;
-const mediaUrl = window.app.config.mediaUrl;
-const siteTitle = window.app.config.siteTitle;
-const logoWidth = window.app.config.logoWidth;
-const logoHeight = window.app.config.logoHeight;
-let userName = window.app.config.userName;
-let contactEmail = window.app.config.contactEmail;
-let avatarInfo = window.app.config.avatarInfo;
-
+import FilesActivities from '../../components/files-activities';
 
 class MainPanel extends Component {
   constructor(props) {
