@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import SideNavFooter from '../../components/SideNavFooter';
-import MainSideNavMenu from '../../components/MainSideNavMenu';
+import MainSideNav from '../../components/main-side-nav';
 
 const siteRoot = window.app.config.siteRoot;
 const serverRoot = window.app.config.serverRoot;
@@ -21,7 +21,7 @@ class SidePanel extends Component {
           </a>
           <a href="#" title="Close" aria-label="Close" onClick={this.props.toggleClose} className="sf2-icon-x1 sf-popover-close side-panel-close op-icon d-md-none "></a>
         </div>
-        <MainSideNavMenu  seafileAPI={this.props.seafileAPI}/>
+        <MainSideNav  seafileAPI={this.props.seafileAPI}/>
         <SideNavFooter />
       </div>
       )

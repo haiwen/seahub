@@ -7,7 +7,7 @@ const siteTitle = window.app.config.siteTitle;
 const logoWidth = window.app.config.logoWidth;
 const logoHeight = window.app.config.logoHeight;
 
-class  MainSideNavMenu extends React.Component {
+class  MainSideNav extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
@@ -128,4 +128,4 @@ class  MainSideNavMenu extends React.Component {
   }
 }
 
-export default MainSideNavMenu;
+export default MainSideNav;

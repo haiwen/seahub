@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import ReactDOM from 'react-dom';
-import SidePanel from './pages/dashboard/side_panel';
-import MainPanel from './pages/dashboard/main_panel';
+import SidePanel from './pages/dashboard/side-panel';
+import MainPanel from './pages/dashboard/main-panel';
 
 import Account from './components/account';
 import Notification from './components/Notification';
