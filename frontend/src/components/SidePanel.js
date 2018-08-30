@@ -23,6 +23,7 @@ class SidePanel extends Component {
       isLoadFailed: false,
       isMenuIconShow: false
     }
+    this.searchedPath = null;
   }
 
   closeSide = () => {
@@ -127,10 +128,10 @@ class SidePanel extends Component {
     if (type === 'file') {
       this.props.editorUtilities.renameFile(filePath, newName).then(res => {
         if (this.isModifyCurrentFile()) {
-          node.name = newName;  //repair current node
           tree.updateNodeParamValue(node, "name", newName);
+          node.name = newName;  //repair current node
           this.props.onFileClick(null, node);
-          tree.setOneNodeToActived(node);
+          tree.setOneNodeToActived({node});
           this.setState({tree_data: tree});
         } else {
           tree.updateNodeParamValue(node, "name", newName);
@@ -140,23 +141,24 @@ class SidePanel extends Component {
     }
 
     if (type === 'dir') {
+      let _this = this;
       this.props.editorUtilities.renameDir(filePath, newName).then(res => {
         let tree = this.state.tree_data.copy();
-        let node = this.state.currentNode;
+        let currentNode = this.state.currentNode;
         if (this.isModifyContainsCurrentFile()) {
-          let nodePath = encodeURI(node.path);
-          let pathname = window.location.pathname;
-          let start =  pathname.indexOf(nodePath);
-          let findNode = node.getNodeByPath(decodeURI(pathname.slice(start)));
-          if(findNode){
-            tree.updateNodeParamValue(node, "name", newName);
-
-            this.props.onFileClick(null, findNode);
-            tree.setOneNodeToActived(findNode);
+          let nodePath = currentNode.path;
+          let filePath = _this.props.currentFileNode.path;
+          let start =  filePath.indexOf(nodePath);
+          let node = currentNode.getNodeByPath(filePath.slice(start));
+          if (node) {
+            tree.updateNodeParamValue(currentNode, "name", newName);
+            currentNode.name = newName;
+            this.props.onFileClick(null, node);
+            tree.setOneNodeToActived({node});
             this.setState({tree_data: tree});
           }
         } else {
-          tree.updateNodeParamValue(node, "name", newName);
+          tree.updateNodeParamValue(currentNode, "name", newName);
           this.setState({tree_data: tree});
         }
       })
@@ -195,26 +197,17 @@ class SidePanel extends Component {
     }
   }
 
-  changeActivedNode(node) {
-    let tree = this.state.tree_data.copy();
-    tree.setOneNodeToActived(node);
-    this.setState({
-      tree_data: tree
-    })
-  }
-
   isModifyCurrentFile() {
-    let name = this.state.currentNode.name;
-    let pathname = window.location.pathname;
-    let currentName = pathname.slice(pathname.lastIndexOf("/") + 1);
-    return encodeURI(name) === currentName;
+    let nodeName = this.state.currentNode.name;
+    let fileName = this.props.currentFileNode.name;
+    return nodeName === fileName;
   }
 
   isModifyContainsCurrentFile() {
-    let pathname = window.location.pathname;
+    let filePath = this.props.currentFileNode.path;
     let nodePath = this.state.currentNode.path;
     
-    if (pathname.indexOf(encodeURI(nodePath)) > -1) {
+    if (filePath.indexOf(nodePath) > -1) {
       return true;
     }
     return false;
@@ -259,6 +252,20 @@ class SidePanel extends Component {
     this.initializeTreeData();
 
     document.addEventListener('click', this.onHideContextMenu);
+  }
+
+  componentWillReceiveProps(nextProps) {
+    let path = nextProps.searchedPath; //handle search module
+    if (path !== this.searchedPath) {
+      let node = this.state.tree_data.getNodeByPath(path);
+      this.searchedPath = path;
+      this.props.onFileClick(null, node);
+      let tree = this.state.tree_data.copy();
+      tree.setOneNodeToActived({node});
+      this.setState({
+        tree_data: tree
+      })
+    }
   }
 
   componentWillUnmount() {
