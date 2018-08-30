@@ -4,7 +4,7 @@ import SidePanel from './pages/dashboard/side-panel';
 import MainPanel from './pages/dashboard/main-panel';
 
 import Account from './components/account';
-import Notification from './components/Notification';
+import Notification from './components/notification';
 
 import { SeafileAPI } from './seafile-api';
 import cookie from 'react-cookies';

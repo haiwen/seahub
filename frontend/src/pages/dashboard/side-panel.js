@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import SideNavFooter from '../../components/SideNavFooter';
+import SideNavFooter from '../../components/side-nav-footer';
 import MainSideNav from '../../components/main-side-nav';
 
 const siteRoot = window.app.config.siteRoot;
