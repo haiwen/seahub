@@ -686,4 +686,8 @@ DropDownMenu.init();
 var $history = $('#history');
 $history.attr('href', $history.attr('href') + '&referer=' + encodeURIComponent(location.href));
 </script>
+{% if enable_watermark %}
+<script type="text/javascript" src="{{ MEDIA_URL }}js/watermark.js"></script>
+<script type="text/javascript">{% include "snippets/add_watermark.html" %}</script>
+{% endif %}
 {% endblock %}

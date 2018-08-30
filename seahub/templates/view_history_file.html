@@ -40,4 +40,8 @@ $(function() {
 
 {% include "snippets/file_content_js.html" %}
 </script>
+{% if enable_watermark %}
+<script type="text/javascript" src="{{ MEDIA_URL }}js/watermark.js"></script>
+<script type="text/javascript">{% include "snippets/add_watermark.html" %}</script>
+{% endif %}
 {% endblock %}
