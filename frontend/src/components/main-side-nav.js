@@ -54,7 +54,7 @@ class  MainSideNav extends React.Component {
         </li>
         {this.state.groupItems.map(item => {
           return (
-            <li> 
+            <li key={item.id}> 
               <a href={siteRoot + '#group/' + item.id + '/'}>
               <span className="sharp" aria-hidden="true">#</span>{item.name}</a>
             </li>
@@ -92,7 +92,7 @@ class  MainSideNav extends React.Component {
     return (
       <div id="side-nav" className="home-side-nav">
         <div className="side-nav-con">
-          <h3 className="hd">Files</h3>
+          <h3 className="sf-heading">Files</h3>
           <ul className="side-tabnav-tabs">
             <li className="tab"><a href={siteRoot + '#my-libs'} className="ellipsis" title="My Libraries"><span className="sf2-icon-user" aria-hidden="true"></span>My Libraries</a></li>
             <li className="tab"><a href={serverRoot + siteRoot + '#shared-libs/'} className="ellipsis" title="Shared with me"><span className="sf2-icon-share" aria-hidden="true"></span>Shared with me</a></li>
@@ -104,7 +104,7 @@ class  MainSideNav extends React.Component {
           </ul>
 
           <div className="hd w-100 o-hidden">
-            <h3 className="float-left">Tools</h3>
+            <h3 className="float-left sf-heading">Tools</h3>
           </div>
           <ul className="side-tabnav-tabs">
             <li className="tab"><a href={siteRoot + '#starred/'}><span className="sf2-icon-star" aria-hidden="true"></span>Favorites</a></li>

@@ -1,0 +1,9 @@
+.activity-table a {
+  color: #333;
+}
+.activity-op {
+  color: #707070;
+  background: #f0f0f0;
+  padding: 4px;
+  border-radius: 4px;
+}

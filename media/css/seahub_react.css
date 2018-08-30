@@ -79,7 +79,10 @@ a:hover { color:#eb8205; }
 .left-zero {
     left: 0px !important;
 }
-
+ul,ol,li {
+    padding:0;
+    margin:0;
+}
 
 /* common elements */
 
@@ -657,6 +660,13 @@ a.op-icon:focus {
     }
 }
 
+.sf-heading {
+    font-size: 1rem;
+    color: #322;
+    font-weight: normal;
+    line-height: 1.5;
+}
+
 
 /* about dialog */
 .about-content {
@@ -708,8 +718,6 @@ a.op-icon:focus {
     padding:1px 30px 1px 5px;
 }
 
-
-
 .wiki-page-ops {
     position:fixed;
     top:10px;
@@ -755,21 +763,6 @@ select {
     background:#fff;
     line-height:17px;
 }
-
-h1, h2, h3, h4, h5, h6 {
-    line-height:1.5; /* overwrite bootstrap */
-}
-
-h3 { font-size:16px; color:#322; font-weight:normal;  }
-
-ul, li{
-    padding:0;
-    margin:0;
-}
-
-ul { list-style:none; }
-
-
 
 #notifications .sf2-icon-bell {
     font-size:24px;
@@ -871,22 +864,4 @@ ul { list-style:none; }
     display:flex;
     flex-direction:column;
     overflow:hidden; /* for ff */
-}
-
-/******* tags **********/
-html, body {
-    height:100%;
-    overflow:hidden;
-}
-body,
-ul,ol,li,dl,dt,dd,
-pre,blockquote,
-form,input,textarea,select,button,img {
-    padding:0;
-    margin:0;
-}
-body, input, textarea, button, select {
-    font: 13px/1.5 Arial, Helvetica, sans-serif;
-    color: #333;
-    word-wrap:break-word;
 }

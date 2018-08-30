@@ -15,14 +15,14 @@ class FileActivitiesContent extends Component {
     } else {
       return ( 
         <React.Fragment>
-          <table className="table table-hover table-vcenter">
+          <table className="table table-hover table-vcenter activity-table">
             <thead>
               <tr>
                 <th width="8%">{/* avatar */}</th>
-                <th width="15%">{gettext("User")}</th>
-                <th width="35%">{gettext("Operation")}</th>
-                <th width="27%">{gettext("File")} / {gettext("Library")}</th>
-                <th width="15%">{gettext("Time")}</th>
+                <th width="10%">{gettext("User")}</th>
+                <th width="25%">{gettext("Operation")}</th>
+                <th width="37%">{gettext("File")} / {gettext("Library")}</th>
+                <th width="20%">{gettext("Time")}</th>
               </tr>
             </thead>
             <TableBody items={events.items} />
@@ -53,7 +53,7 @@ class TableBody extends Component {
 
       let libURL = `${siteRoot}#common/lib/${item.repo_id}`;
       let libLink = <a href={libURL}>{item.repo_name}</a>;
-      let smallLibLink = <a className="small" href={libURL}>{item.repo_name}</a>;
+      let smallLibLink = <a className="small text-secondary" href={libURL}>{item.repo_name}</a>;
 
       if (item.obj_type == 'repo') {
         switch(item.op_type) {
@@ -148,9 +148,9 @@ class TableBody extends Component {
           <td>
             <a href={userProfileURL}>{item.author_name}</a>
           </td>
-          <td>{op}</td>
+          <td><span className="activity-op">{op}</span></td>
           {details}
-          <td dangerouslySetInnerHTML={{__html:item.time_relative}}></td>
+          <td className="text-secondary" dangerouslySetInnerHTML={{__html:item.time_relative}}></td>
         </tr>
       );
     }, this);
@@ -230,7 +230,7 @@ class FilesActivities extends Component {
     return (
       <div className="main-panel-main" id="activities">
         <div className="cur-view-path">
-          <h3>{gettext("Activities")}</h3>
+          <h3 className="sf-heading">{gettext("Activities")}</h3>
         </div>
         <div className="cur-view-main-con" onScroll={this.handleScroll}>
           <FileActivitiesContent data={this.state} />

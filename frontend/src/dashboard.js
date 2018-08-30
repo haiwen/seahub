@@ -10,6 +10,7 @@ import { SeafileAPI } from './seafile-api';
 import cookie from 'react-cookies';
 
 import 'seafile-ui';
+import './css/dashboard.css';
 
 const siteRoot = window.app.config.siteRoot;
 
