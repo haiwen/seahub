@@ -53,6 +53,7 @@ class TreeView extends React.PureComponent {
           node={this.props.treeData.root}
           isNodeItemFrezee={this.props.isNodeItemFrezee}
           permission={this.props.permission}
+          currentFileNode={this.props.currentFileNode}
           onShowContextMenu={this.props.onShowContextMenu}
         />
       </div>
