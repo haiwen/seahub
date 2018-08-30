@@ -307,6 +307,10 @@ REPO_PASSWORD_MIN_LENGTH = 8
 # token length for the share link
 SHARE_LINK_TOKEN_LENGTH = 20
 
+# min/max expire days for a share link
+SHARE_LINK_EXPIRE_DAYS_MIN = 0 # 0 means no limit
+SHARE_LINK_EXPIRE_DAYS_MAX = 0 # 0 means no limit
+
 # mininum length for the password of a share link
 SHARE_LINK_PASSWORD_MIN_LENGTH = 8
 
@@ -316,7 +320,7 @@ ENABLE_SHARE_LINK_AUDIT = False
 # share link audit code timeout
 SHARE_LINK_AUDIT_CODE_TIMEOUT = 60 * 60
 
-# enable or disable limit ip 
+# enable or disable limit ip
 ENABLE_LIMIT_IPADDRESS = False
 TRUSTED_IP_LIST = ['127.0.0.1']
 

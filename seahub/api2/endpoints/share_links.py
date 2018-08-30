@@ -26,6 +26,9 @@ from seahub.utils import gen_shared_link, is_org_context
 from seahub.views import check_folder_permission
 from seahub.utils.timeutils import datetime_to_isoformat_timestr
 
+from seahub.settings import SHARE_LINK_EXPIRE_DAYS_MAX, \
+        SHARE_LINK_EXPIRE_DAYS_MIN
+
 logger = logging.getLogger(__name__)
 
 
@@ -109,16 +112,25 @@ class ShareLinks(APIView):
         else:
             perm_dict = None
 
-        can_preview = True
         can_download = True
-        if perm_dict is not None:
-            can_preview = perm_dict.get('can_preview', True)
-            can_download = perm_dict.get('can_download', True)
+        can_edit = False
 
-        if can_preview and can_download:
+        if perm_dict is not None:
+            can_download = perm_dict.get('can_download', True)
+            can_edit = perm_dict.get('can_edit', False)
+
+        if not can_edit and can_download:
             perm = FileShare.PERM_VIEW_DL
-        if can_preview and not can_download:
+
+        if not can_edit and not can_download:
             perm = FileShare.PERM_VIEW_ONLY
+
+        if can_edit and can_download:
+            perm = FileShare.PERM_EDIT_DL
+
+        if can_edit and not can_download:
+            perm = FileShare.PERM_EDIT_ONLY
+
         return perm
 
     def get(self, request):
@@ -212,6 +224,18 @@ class ShareLinks(APIView):
             expire_days = int(request.data.get('expire_days', 0))
         except ValueError:
             expire_days = 0
+
+        if SHARE_LINK_EXPIRE_DAYS_MIN > 0:
+            if expire_days < SHARE_LINK_EXPIRE_DAYS_MIN:
+                error_msg = _('Expire days should be greater or equal to %s' %
+                        SHARE_LINK_EXPIRE_DAYS_MIN)
+                return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
+
+        if SHARE_LINK_EXPIRE_DAYS_MAX > 0:
+            if expire_days > SHARE_LINK_EXPIRE_DAYS_MAX:
+                error_msg = _('Expire days should be less than or equal to %s' %
+                        SHARE_LINK_EXPIRE_DAYS_MAX)
+                return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
 
         if expire_days <= 0:
             expire_date = None

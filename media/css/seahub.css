@@ -3895,6 +3895,24 @@ button.sf-dropdown-toggle:focus {
 #download-link-operations dt {
     margin: 0;
 }
+.shared-link-copy-icon {
+    padding: 3px;
+    font-size: 16px;
+    color: #999;
+}
+.shared-link-copy-icon:hover {
+    cursor: pointer; 
+    color: #333;
+}
+.share-link-perm-msgs {
+    display: inline-block;
+    margin-left:10px;
+}
+.share-link-perm-msgs li {
+    line-height: 30px;
+    height: 30px;
+}
+
 /* shared upload link */
 #upload-link-panel {
     width:600px;

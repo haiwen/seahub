@@ -288,9 +288,15 @@ class FileShare(models.Model):
     """
     PERM_VIEW_DL = 'view_download'
     PERM_VIEW_ONLY = 'view_only'
+
+    PERM_EDIT_DL = 'edit_download'
+    PERM_EDIT_ONLY = 'edit_only'
+
     PERMISSION_CHOICES = (
-        (PERM_VIEW_DL, 'View and download'),
-        (PERM_VIEW_ONLY, 'Disable download'),
+        (PERM_VIEW_DL, 'Preview only and can download'),
+        (PERM_VIEW_ONLY, 'Preview only and disable download'),
+        (PERM_EDIT_DL, 'Edit and can download'),
+        (PERM_EDIT_ONLY, 'Edit and disable download'),
     )
 
     username = LowerCaseCharField(max_length=255, db_index=True)
@@ -336,10 +342,16 @@ class FileShare(models.Model):
     def get_permissions(self):
         perm_dict = {}
         if self.permission == FileShare.PERM_VIEW_DL:
-            perm_dict['can_preview'] = True
+            perm_dict['can_edit'] = False
             perm_dict['can_download'] = True
         elif self.permission == FileShare.PERM_VIEW_ONLY:
-            perm_dict['can_preview'] = True
+            perm_dict['can_edit'] = False
+            perm_dict['can_download'] = False
+        elif self.permission == FileShare.PERM_EDIT_DL:
+            perm_dict['can_edit'] = True
+            perm_dict['can_download'] = True
+        elif self.permission == FileShare.PERM_EDIT_ONLY:
+            perm_dict['can_edit'] = True
             perm_dict['can_download'] = False
         else:
             assert False
