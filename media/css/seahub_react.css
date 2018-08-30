@@ -623,7 +623,7 @@ a.op-icon:focus {
     text-decoration:none;
 }
 
-.user-select {
+.user-select-none {
     -moz-user-select:none;
     -webkit-user-select:none;
     -ms-user-select:none;
