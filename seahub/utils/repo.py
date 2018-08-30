@@ -7,6 +7,7 @@ from seaserv import seafile_api, ccnet_api
 
 from seahub.utils import EMPTY_SHA1, is_org_context, is_pro_version
 from seahub.base.models import RepoSecretKey
+from seahub.base.templatetags.seahub_tags import email2nickname
 
 from seahub.settings import ENABLE_STORAGE_CLASSES, \
         STORAGE_CLASS_MAPPING_POLICY, ENABLE_FOLDER_PERM
@@ -226,6 +227,18 @@ def add_encrypted_repo_secret_key_to_database(repo_id, password):
             RepoSecretKey.objects.add_secret_key(repo_id, secret_key)
     except Exception as e:
         logger.error(e)
+
+
+def is_group_repo_staff(repo_id, username):
+    is_staff = False
+
+    group_repo_owner = seafile_api.get_repo_owner(repo_id)
+
+    if '@seafile_group' in group_repo_owner:
+        group_id = email2nickname(group_repo_owner)
+        is_staff = seaserv.check_group_staff(group_id, username)
+
+    return is_staff
 
 # TODO
 from seahub.share.utils import is_repo_admin

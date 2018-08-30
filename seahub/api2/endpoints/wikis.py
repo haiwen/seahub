@@ -21,6 +21,7 @@ from seahub.api2.utils import api_error
 from seahub.wiki.models import Wiki, DuplicateWikiNameError
 from seahub.wiki.utils import is_valid_wiki_name, slugfy_wiki_name
 from seahub.utils import is_org_context, get_user_repos
+from seahub.utils.repo import is_group_repo_staff
 from seahub.views import check_folder_permission
 from seahub.share.utils import is_repo_admin
 
@@ -131,13 +132,18 @@ class WikisView(APIView):
                 error_msg = 'Library %s not found.' % repo_id
                 return api_error(status.HTTP_404_NOT_FOUND, error_msg)
 
-            is_owner = seafile_api.is_repo_owner(username, repo_id)
-            is_admin = is_repo_admin(username, repo_id) 
+            # repo owner
+            is_repo_owner = seafile_api.is_repo_owner(username, repo_id)
 
-            if not is_owner:
-                if not is_admin:
-                    error_msg = _('Permission denied.')
-                    return api_error(status.HTTP_403_FORBIDDEN, error_msg)
+            if not is_repo_owner:
+                repo_admin = is_repo_admin(username, repo_id)
+
+                if not repo_admin:
+                    is_group_repo_admin = is_group_repo_staff(repo_id, username)
+
+                    if not is_group_repo_admin:
+                        error_msg = _('Permission denied.')
+                        return api_error(status.HTTP_403_FORBIDDEN, error_msg)
 
             try:
                 wiki = Wiki.objects.add(wiki_name=repo.repo_name, username=username, 

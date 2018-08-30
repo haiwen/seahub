@@ -473,8 +473,19 @@ var NewWikiController = {
                     }        
                 ) 
                 
-                if (repos && repos.length) {
-                    _this.chooseEl.append($(_this.chooseWikiTmpl(repos)));
+                var seenNames = {};
+
+                var array = repos.filter(function(currentObject) {
+                    if (currentObject.id in seenNames) {
+                        return false;
+                    } else {
+                        seenNames[currentObject.id] = true;
+                        return true;
+                    }
+                });
+
+                if (array && array.length) {
+                    _this.chooseEl.append($(_this.chooseWikiTmpl(array)));
                     $('#new-wiki-by-existing-form').modal();
                     $('#simplemodal-container').css({'width':'auto', 'height':'auto'})
                 }
