@@ -108,6 +108,7 @@ def base(request):
         'multi_institution': getattr(dj_settings, 'MULTI_INSTITUTION', False),
         'search_repo_id': search_repo_id,
         'SITE_ROOT': SITE_ROOT,
+        'CSRF_COOKIE_NAME': dj_settings.CSRF_COOKIE_NAME,
         'constance_enabled': dj_settings.CONSTANCE_ENABLED,
         'FILE_SERVER_ROOT': file_server_root,
         'LOGIN_URL': dj_settings.LOGIN_URL,

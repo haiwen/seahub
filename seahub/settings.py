@@ -130,6 +130,7 @@ MIDDLEWARE_CLASSES = (
 SITE_ROOT_URLCONF = 'seahub.urls'
 ROOT_URLCONF = 'seahub.utils.rooturl'
 SITE_ROOT = '/'
+CSRF_COOKIE_NAME = 'sfcsrftoken'
 
 # Python dotted path to the WSGI application used by Django's runserver.
 WSGI_APPLICATION = 'seahub.wsgi.application'
