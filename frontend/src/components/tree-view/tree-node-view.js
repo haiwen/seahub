@@ -116,6 +116,7 @@ class TreeNodeView extends React.Component {
                 treeView={this.props.treeView}
                 isNodeItemFrezee={this.props.isNodeItemFrezee}
                 permission={this.props.permission}
+                currentFileNode={this.props.currentFileNode}
               />
             );
           })}
@@ -173,9 +174,14 @@ class TreeNodeView extends React.Component {
     const styles = {};
     let node = this.props.node;
     let { type, icon } = this.getNodeTypeAndIcon();
+    let hlClass = "";
+    if (node.path === this.props.currentFileNode.path) {
+      hlClass = "tree-node-hight-light";
+    }
+    let customClass = "tree-node " + hlClass;
 
     return (
-      <div type={type} className="tree-node" style={styles}>
+      <div type={type} className={customClass} style={styles}>
         <div 
           onMouseLeave={this.onMouseLeave} 
           onMouseEnter={this.onMouseEnter}

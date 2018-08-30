@@ -299,6 +299,7 @@ class SidePanel extends Component {
             {this.state.tree_data && 
             <TreeView
               permission={this.props.permission}
+              currentFileNode={this.props.currentFileNode}
               treeData={this.state.tree_data}
               currentNode={this.state.currentNode}
               isNodeItemFrezee={this.state.isNodeItemFrezee}
