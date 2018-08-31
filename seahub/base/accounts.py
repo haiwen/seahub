@@ -38,6 +38,8 @@ except ImportError:
 
 logger = logging.getLogger(__name__)
 
+ANONYMOUS_EMAIL = 'Anonymous'
+
 UNUSABLE_PASSWORD = '!' # This will never be a valid hash
 
 class UserManager(object):
