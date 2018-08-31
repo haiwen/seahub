@@ -67,9 +67,7 @@
         <div id="file-view" class="flex-1 ov-auto {% block file_view_extra_class %}{% endblock %}">
           {% if err %}
             <div id="file-view-tip">
-            {% if err != 'invalid extension' %}
-                <p class="error">{{ err }}</p>
-            {% endif %}
+            <p class="error">{{ err }}</p>
             </div>
           {% else %}
             {% block file_view %}{% endblock %}
