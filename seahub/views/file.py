@@ -198,7 +198,8 @@ def repo_file_get(raw_path, file_enc):
     return err, file_content, encoding
 
 
-def get_file_view_path_and_perm(request, repo_id, obj_id, path, use_onetime=True):
+def get_file_view_path_and_perm(request, repo_id, obj_id, path,
+                                use_onetime=settings.FILESERVER_TOKEN_ONCE_ONLY):
     """ Get path and the permission to view file.
 
     Returns:
@@ -442,8 +443,9 @@ def view_lib_file(request, repo_id, path):
     raw = request.GET.get('raw', '0') == '1'
     if dl or raw:
         operation = 'download' if dl else 'view'
-        token = seafile_api.get_fileserver_access_token(repo_id,
-                file_id, operation, username, use_onetime=True)
+        token = seafile_api.get_fileserver_access_token(
+            repo_id, file_id, operation, username,
+            use_onetime=settings.FILESERVER_TOKEN_ONCE_ONLY)
 
         if not token:
             return render_permission_error(request, _(u'Unable to view file'))

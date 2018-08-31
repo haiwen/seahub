@@ -9,6 +9,7 @@ from rest_framework.permissions import IsAdminUser
 from rest_framework.response import Response
 from rest_framework.views import APIView
 from rest_framework import status
+from django.conf import settings
 from django.template.defaultfilters import filesizeformat
 
 from seaserv import seafile_api
@@ -186,8 +187,9 @@ class AdminLibraryDirent(APIView):
         username = request.user.username
         if is_file and request.GET.get('dl', '0') == '1':
 
-            token = seafile_api.get_fileserver_access_token(repo_id,
-                    dirent.obj_id, 'download', username, use_onetime=True)
+            token = seafile_api.get_fileserver_access_token(
+                repo_id, dirent.obj_id, 'download', username,
+                use_onetime=settings.FILESERVER_TOKEN_ONCE_ONLY)
 
             if not token:
                 error_msg = 'Internal Server Error'

@@ -658,10 +658,12 @@ ENABLE_FOLDER_PERM = False
 ENABLE_GUEST_INVITATION = False
 INVITATION_ACCEPTER_BLACKLIST = []
 
-#####################
-# Sudo Mode #
-#####################
+########################
+# Security Enhancements #
+########################
+
 ENABLE_SUDO_MODE = True
+FILESERVER_TOKEN_ONCE_ONLY = True
 
 #################
 # Email sending #

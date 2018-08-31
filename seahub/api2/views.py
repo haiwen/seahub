@@ -1981,7 +1981,8 @@ def get_shared_link(request, repo_id, path):
                                            settings.SITE_ROOT, token)
     return file_shared_link
 
-def get_repo_file(request, repo_id, file_id, file_name, op, use_onetime=True):
+def get_repo_file(request, repo_id, file_id, file_name, op,
+                  use_onetime=dj_settings.FILESERVER_TOKEN_ONCE_ONLY):
     if op == 'download':
         token = seafile_api.get_fileserver_access_token(repo_id,
                 file_id, op, request.user.username, use_onetime)
