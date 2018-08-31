@@ -35,10 +35,10 @@ def make(default=True, lang='en'):
     _inplace_change('locale/%s/LC_MESSAGES/django.po' % lang, '%%s', '%s')
     _inplace_change('locale/%s/LC_MESSAGES/django.po' % lang, '%%(', '%(')
 
-    local('django-admin.py makemessages -l %s -d djangojs  -i "thirdpart" -i "node_modules" -i "media" -i "static/scripts/dist" -i "static/scripts/lib" -i "tests" -i "tools" -i "tagging" -i "static/scripts/i18n" --verbosity 2' % lang)
+    makejs(lang)
 
 @task
-def makejs(default=True, lang='en'):
+def makejs(lang='en'):
 
     local('django-admin.py makemessages -l %s -d djangojs  -i "thirdpart" -i "node_modules" -i "media" -i "static/scripts/dist" -i "static/scripts/lib" -i "tests" -i "tools" -i "tagging" -i "static/scripts/i18n" -i "frontend/build" -i "frontend/config" -i "frontend/scripts" --verbosity 2' % lang)
 
