@@ -56,7 +56,7 @@ class ViewLibFileTest(BaseTestCase):
         resp = self.client.get(url)
         self.assertEqual(200, resp.status_code)
         self.assertTemplateUsed(resp, 'view_file_base.html')
-        assert resp.context['err'] == 'invalid extension'
+        assert resp.context['err'] == 'Online view is not applicable to this file format'
 
     @patch('seahub.views.file.FILE_PREVIEW_MAX_SIZE', -1)
     def test_file_size_exceeds_limit(self):
