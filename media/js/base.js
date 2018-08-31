@@ -53,12 +53,25 @@ $('.search-form').on('submit', function() {
 });
 
 $('table').on('mouseenter', 'tr:gt(0)', function() {
+    if (app.ui.currentDropDown || app.ui.freezeItemHightlight) {
+        return;
+    }
+    
+    app.ui.currentHightlightedItem = this;
     $(this).addClass('hl').find('.op-icon, .op').removeClass('vh');
 })
 .on('mouseleave', 'tr:gt(0)', function() {
+    if (app.ui.currentDropDown || app.ui.freezeItemHightlight) {
+        return;
+    }
+    app.ui.currentHightlightedItem = null;
     $(this).removeClass('hl').find('.op-icon, .op').addClass('vh');
 })
 .on('focus', 'tr:gt(0) *', function(e) {
+    if (app.ui.currentDropDown || app.ui.freezeItemHightlight) {
+        return true;
+    }
+
     $('tr.hl').removeClass('hl').find('.op-icon, .op').addClass('vh');
 
     var $tr = $(e.target).closest('tr');

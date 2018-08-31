@@ -13,7 +13,7 @@
         </div>
     </div>
     <span class="loading-icon loading-tip"></span>
-    <table class="wiki-list hide">
+    <table class="wiki-list hide user-select-no">
         <thead>
         <tr>
             <td width="50%">{% trans "Name" %}</td>
@@ -271,25 +271,25 @@ var wikiListController = {
         var $tr = $(target).closest('tr');
         if (this.$wikiMenu) {
             if ($wikiMenu.length && $wikiMenu.is(this.$wikiMenu)) {
+                app.ui.currentDropDown = false;
+                this.$wikiMenu.addClass('hide');
+                this.$wikiMenu = null;
                 return false;
             }else{
                 this.hideWikiMenu();
             }
         }
         this.$wikiMenu = $wikiMenu;
-        this.$tr = $tr;
+        app.ui.currentDropDown = true;
         this.$wikiMenu.removeClass('hide');
-        this.$tr.addClass('wiki-hl');
-        this.$tr.find('.op, .op-icon').addClass('wiki-vs');
         return false;
     },
 
     hideWikiMenu: function() {
+        app.ui.currentDropDown = false;
         this.$wikiMenu.addClass('hide');
-        this.$tr.removeClass('wiki-hl');
-        this.$tr.find('.op, .op-icon').removeClass('wiki-vs');
+        this.$wikiMenu.closest('tr').removeClass('hl').find('.op-icon, .op').addClass('vh'); 
         this.$wikiMenu = null;
-        this.$tr = null;
     },
 
     deleteCurrentWiki: function(event) {
@@ -344,6 +344,7 @@ var wikiListController = {
         //todos op select event
 
         var cancelRename = function() {
+            app.ui.freezeItemHightlight = false;
             form.remove();
             $op.show();
             $name.show();
@@ -355,6 +356,7 @@ var wikiListController = {
         }
 
         var after_op_success = function(data) {
+            app.ui.freezeItemHightlight = false;
             $tr.attr('data-slug', data.slug)
             $tr.find('.wiki-name a').text(data.name);
             $tr.find('.wiki-name a').attr('href', data.link);
@@ -415,6 +417,7 @@ var wikiListController = {
             return false;
         })
         this.hideWikiMenu();
+        app.ui.freezeItemHightlight = true;
         return false;
     },
 

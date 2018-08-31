@@ -4379,13 +4379,21 @@ img.thumbnail {
 }
 
 /* wiki list style */
-.wiki-hl {background-color: #f8f8f8;}
-.wiki-vs {visibility: visible;}
 .wiki-dropdown-menu {
     margin-left: -5rem;
 }
+
 .wiki-list input {
     width: 15rem;
+}
+
+.user-select-no {
+    -webkit-touch-callout: none;
+    -webkit-user-select: none;
+    -khtml-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
 }
 
 #new-wiki-by-existing-form .repo-container {
