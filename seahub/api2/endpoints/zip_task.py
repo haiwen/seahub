@@ -9,6 +9,7 @@ from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 from rest_framework.views import APIView
 from rest_framework import status
+from django.conf import settings
 from django.utils.translation import ugettext as _
 
 from seahub.api2.throttling import UserRateThrottle
@@ -129,7 +130,9 @@ class ZipTaskView(APIView):
         username = request.user.username
         try:
             zip_token = seafile_api.get_fileserver_access_token(
-                    repo_id, json.dumps(fake_obj_id), download_type, username)
+                repo_id, json.dumps(fake_obj_id), download_type, username,
+                use_onetime=settings.FILESERVER_TOKEN_ONCE_ONLY
+            )
         except Exception as e:
             logger.error(e)
             error_msg = 'Internal Server Error'
