@@ -38,6 +38,11 @@
 
 <iframe id="office_frame" name="office_frame" class="hide" allowfullscreen ></iframe>
 
+<script type="text/javascript">
+var SEAFILE_GLOBAL = {
+    csrfCookieName: '{{ CSRF_COOKIE_NAME }}'
+};
+</script>
 <script type="text/javascript" src="{% static "scripts/lib/jquery.min.js" %}"></script>
 <script type="text/javascript" src="{{ MEDIA_URL }}js/jq.min.js"></script>
 <script type="text/javascript" src="{{ MEDIA_URL }}js/base.js"></script>
@@ -45,6 +50,7 @@
     document.getElementById('office_form').submit();
     document.getElementById('office_frame').className = '';
 
+    {% if can_edit %}
     var interval;
     var refreshLock = function() {
         $.ajax({
@@ -69,6 +75,11 @@
         });
     };
     interval = setInterval(refreshLock, 60 * 1000);
+    {% endif %}
 </script>
+{% if enable_watermark %}
+<script type="text/javascript" src="{{ MEDIA_URL }}js/watermark.js"></script>
+<script type="text/javascript">{% include "snippets/add_watermark.html" %}</script>
+{% endif %}
 </body>
 </html>

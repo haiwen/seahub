@@ -21,7 +21,7 @@ from seahub.role_permissions.models import AdminRole
 from seahub.role_permissions.utils import get_enabled_role_permissions_by_role, \
         get_enabled_admin_role_permissions_by_role
 from seahub.utils import is_user_password_strong, get_site_name, \
-    clear_token, get_system_admins, is_pro_version
+    clear_token, get_system_admins, is_pro_version, IS_EMAIL_CONFIGURED
 from seahub.utils.mail import send_html_email_with_dj_template, MAIL_PRIORITY
 from seahub.utils.licenseparse import user_number_over_limit
 from seahub.share.models import ExtraSharePermission
@@ -37,6 +37,8 @@ except ImportError:
     MULTI_TENANCY = False
 
 logger = logging.getLogger(__name__)
+
+ANONYMOUS_EMAIL = 'Anonymous'
 
 UNUSABLE_PASSWORD = '!' # This will never be a valid hash
 
@@ -186,6 +188,10 @@ class UserPermissions(object):
         return get_enabled_role_permissions_by_role(self.user.role).get('role_quota', '')
 
     def can_send_share_link_mail(self):
+
+        if not IS_EMAIL_CONFIGURED:
+            return False
+
         return get_enabled_role_permissions_by_role(self.user.role).get('can_send_share_link_mail', True)
 
     def storage_ids(self):

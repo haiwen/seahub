@@ -44,13 +44,17 @@ class MarkdownViewerContent extends React.Component {
 
 class MarkdownViewer extends React.Component {
 
-  state = {
-    renderingContent: true,
-    renderingOutline: true,
-    html: '',
-    outlineTreeRoot: null,
-    navItems: [],
-    activeId: 0
+  constructor(props) {
+    super(props);
+    this.state = {
+      renderingContent: true,
+      renderingOutline: true,
+      html: '',
+      outlineTreeRoot: null,
+      navItems: [],
+      activeId: 0
+    };
+    this.activeIdFromOutLine = null;
   }
 
   scrollToNode(node) {
@@ -60,22 +64,27 @@ class MarkdownViewer extends React.Component {
   }
 
   scrollHandler = (event) => {
-    var target = event.target || event.srcElement;
-    var markdownContainer = this.refs.markdownContainer;
-    var headingList = markdownContainer.querySelectorAll('[id^="user-content"]');
-    var top = target.scrollTop;
-    var defaultOffset = markdownContainer.offsetTop;
     var currentId = '';
-    for (let i = 0; i < headingList.length; i++) {
-      let heading = headingList[i];
-      if (heading.tagName === 'H1') {
-        continue;
+    if (!this.activeIdFromOutLine) {
+      var target = event.target || event.srcElement;
+      var markdownContainer = this.refs.markdownContainer;
+      var headingList = markdownContainer.querySelectorAll('[id^="user-content"]');
+      var top = target.scrollTop;
+      var defaultOffset = markdownContainer.offsetTop;
+      for (let i = 0; i < headingList.length; i++) {
+        let heading = headingList[i];
+        if (heading.tagName === 'H1') {
+          continue;
+        }
+        if (top > heading.offsetTop - defaultOffset) {
+          currentId = '#' + heading.getAttribute('id');
+        } else {
+          break;
+        }
       }
-      if (top > heading.offsetTop - defaultOffset) {
-        currentId = '#' + heading.getAttribute('id');
-      } else {
-        break;
-      }
+    } else {
+      currentId = this.activeIdFromOutLine;
+      this.activeIdFromOutLine = null;
     }
 
     if (currentId !== this.state.activeId) {
@@ -83,6 +92,10 @@ class MarkdownViewer extends React.Component {
         activeId: currentId
       })
     }
+  }
+
+  handleNavItemClick = (activeId) => {
+    this.activeIdFromOutLine = activeId;
   }
 
   setContent(markdownContent) {
@@ -93,6 +106,14 @@ class MarkdownViewer extends React.Component {
         html: String(file),
         renderingContent: false
       });
+
+      setTimeout(() => { 
+        // reset the href to jump to the section
+        var url = new URL(window.location.href);
+        if (url.hash) { 
+          window.location.href = window.location.href;
+        }
+      }, 100);
     })
   }
 
@@ -117,6 +138,10 @@ class MarkdownViewer extends React.Component {
         _this.setState({
           navItems: navItems,
           activeId: currentId
+        })
+      }else {
+        _this.setState({
+          navItems: []
         })
       }
     });

@@ -21,6 +21,12 @@ class Rename extends React.Component {
     this.props.onRename(this.state.newName);
   }
 
+  handleKeyPress = (e) => {
+    if (e.key === 'Enter') {
+      this.handleSubmit()
+    } 
+  }
+
   toggle = () => {
     this.props.toggleCancel();
   }
@@ -59,7 +65,7 @@ class Rename extends React.Component {
         <ModalHeader toggle={this.toggle}>{type === 'file' ? gettext("Rename File") : gettext("Rename Folder") }</ModalHeader>
         <ModalBody>
           <p>{type === 'file' ? gettext("Enter the new file name:"): gettext("Enter the new folder name:")}</p>
-          <Input innerRef={input => {this.newInput = input}} placeholder="newName" value={this.state.newName} onChange={this.handleChange} />
+          <Input onKeyPress={this.handleKeyPress} innerRef={input => {this.newInput = input}} placeholder="newName" value={this.state.newName} onChange={this.handleChange} />
         </ModalBody>
         <ModalFooter>
           <Button color="primary" onClick={this.handleSubmit}>{gettext("Submit")}</Button>

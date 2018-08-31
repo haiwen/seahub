@@ -18,18 +18,14 @@ from django.core.cache import cache
 from pysearpc import SearpcError
 from seaserv import seafile_api
 
-from seahub.base.accounts import User
+from seahub.base.accounts import User, ANONYMOUS_EMAIL
 from seahub.utils import gen_inner_file_get_url, \
-    gen_inner_file_upload_url, get_file_type_and_ext, is_pro_version
-from seahub.utils.file_op import check_file_lock, if_locked_by_online_office
+    gen_inner_file_upload_url, is_pro_version
 from seahub.base.templatetags.seahub_tags import email2nickname
 
 from seahub.settings import SITE_ROOT
 
-from .utils import get_file_info_by_token
-
-from .settings import ENABLE_OFFICE_WEB_APP_EDIT, \
-        OFFICE_WEB_APP_EDIT_FILE_EXTENSION
+from seahub.wopi.utils import get_file_info_by_token
 
 logger = logging.getLogger(__name__)
 json_content_type = 'application/json; charset=utf-8'
@@ -37,8 +33,12 @@ json_content_type = 'application/json; charset=utf-8'
 WOPI_LOCK_EXPIRATION = 30 * 60
 
 def generate_file_lock_key_value(request):
+
     token = request.GET.get('access_token', None)
-    request_user, repo_id, file_path = get_file_info_by_token(token)
+
+    info_dict = get_file_info_by_token(token)
+    repo_id = info_dict['repo_id']
+    file_path= info_dict['file_path']
 
     repo = seafile_api.get_repo(repo_id)
     if repo.is_virtual:
@@ -84,7 +84,11 @@ def access_token_check(func):
             return HttpResponse(json.dumps({}), status=401,
                                 content_type=json_content_type)
 
-        request_user, repo_id, file_path = get_file_info_by_token(token)
+        info_dict = get_file_info_by_token(token)
+        request_user = info_dict['request_user']
+        repo_id = info_dict['repo_id']
+        file_path= info_dict['file_path']
+        obj_id = info_dict['obj_id']
 
         if not request_user or not repo_id or not file_path:
             logger.error('File info invalid, user: %s, repo_id: %s, path: %s.' \
@@ -92,12 +96,13 @@ def access_token_check(func):
             return HttpResponse(json.dumps({}), status=404,
                                 content_type=json_content_type)
 
-        try:
-            User.objects.get(email=request_user)
-        except User.DoesNotExist:
-            logger.error('User %s not found.' % request_user)
-            return HttpResponse(json.dumps({}), status=404,
-                                content_type=json_content_type)
+        if request_user != ANONYMOUS_EMAIL:
+            try:
+                User.objects.get(email=request_user)
+            except User.DoesNotExist:
+                logger.error('User %s not found.' % request_user)
+                return HttpResponse(json.dumps({}), status=404,
+                                    content_type=json_content_type)
 
         repo = seafile_api.get_repo(repo_id)
         if not repo:
@@ -105,7 +110,10 @@ def access_token_check(func):
             return HttpResponse(json.dumps({}), status=404,
                                 content_type=json_content_type)
 
-        obj_id = seafile_api.get_file_id_by_path(repo_id, file_path)
+        if not obj_id:
+            # if not cache file obj_id, then get it from seafile_api
+            obj_id = seafile_api.get_file_id_by_path(repo_id, file_path)
+
         if not obj_id:
             logger.error('File %s not found.' % file_path)
             return HttpResponse(json.dumps({}), status=404,
@@ -124,14 +132,24 @@ class WOPIFilesView(APIView):
         """
 
         token = request.GET.get('access_token', None)
-        request_user, repo_id, file_path = get_file_info_by_token(token)
+
+        info_dict = get_file_info_by_token(token)
+        request_user = info_dict['request_user']
+        repo_id = info_dict['repo_id']
+        file_path= info_dict['file_path']
+        obj_id = info_dict['obj_id']
+        can_edit = info_dict['can_edit']
+        can_download = info_dict['can_download']
+
         repo = seafile_api.get_repo(repo_id)
-        obj_id = seafile_api.get_file_id_by_path(repo_id, file_path)
+
+        if not obj_id:
+            # if not cache file obj_id, then get it from seafile_api
+            obj_id = seafile_api.get_file_id_by_path(repo_id, file_path)
 
         try:
             file_size = seafile_api.get_file_size(repo.store_id,
-                                                  repo.version,
-                                                  obj_id)
+                    repo.version, obj_id)
         except SearpcError as e:
             logger.error(e)
             return HttpResponse(json.dumps({}), status=500,
@@ -161,47 +179,32 @@ class WOPIFilesView(APIView):
                                 content_type=json_content_type)
 
         # optional
-        result['UserFriendlyName'] = email2nickname(request_user)
+        if request_user != ANONYMOUS_EMAIL:
+            result['UserFriendlyName'] = email2nickname(request_user)
+            result['IsAnonymousUser'] = False
+        else:
+            result['IsAnonymousUser'] = True
+
         absolute_uri = request.build_absolute_uri('/')
         result['PostMessageOrigin'] = urlparse.urljoin(absolute_uri, SITE_ROOT).strip('/')
-        result['HidePrintOption'] = False
-        result['HideSaveOption'] = False
-        result['HideExportOption'] = False
+        result['HideSaveOption'] = True
+        result['HideExportOption'] = True
         result['EnableOwnerTermination'] = True
         result['SupportsLocks'] = True
         result['SupportsGetLock'] = True
-        result['SupportsUpdate'] = True
 
-        filename = os.path.basename(file_path)
-        filetype, fileext = get_file_type_and_ext(filename)
+        result['DisablePrint'] = True if not can_download else False
+        result['HidePrintOption'] = True if not can_download else False
 
-        try:
-            is_locked, locked_by_me = check_file_lock(repo_id,
-                    file_path, request_user)
-        except Exception as e:
-            logger.error(e)
-            return HttpResponse(json.dumps({}),
-                    status=500, content_type=json_content_type)
-
-        locked_by_online_office = if_locked_by_online_office(repo_id, file_path)
-
-        perm = seafile_api.check_permission_by_path(repo_id,
-                file_path, request_user)
-
-        if ENABLE_OFFICE_WEB_APP_EDIT and not repo.encrypted and \
-                perm == 'rw' and fileext in OFFICE_WEB_APP_EDIT_FILE_EXTENSION and \
-                ((not is_locked) or (is_locked and locked_by_me) or \
-                (is_locked and locked_by_online_office)):
-            result['UserCanWrite'] = True
+        result['SupportsUpdate'] = True if can_edit else False
+        result['UserCanWrite'] = True if can_edit else False
+        result['ReadOnly'] = True if not can_edit else False
 
         return HttpResponse(json.dumps(result), status=200,
                             content_type=json_content_type)
 
     @access_token_check
     def post(self, request, file_id, format=None):
-
-        token = request.GET.get('access_token', None)
-        request_user, repo_id, file_path = get_file_info_by_token(token)
 
         response_409 = HttpResponse(json.dumps({}),
                 status=409, content_type=json_content_type)
@@ -309,8 +312,14 @@ class WOPIFilesContentsView(APIView):
         """
 
         token = request.GET.get('access_token', None)
-        request_user, repo_id, file_path = get_file_info_by_token(token=token)
-        obj_id = seafile_api.get_file_id_by_path(repo_id, file_path)
+        info_dict = get_file_info_by_token(token)
+        repo_id = info_dict['repo_id']
+        file_path= info_dict['file_path']
+        obj_id = info_dict['obj_id']
+
+        if not obj_id:
+            # if not cache file obj_id, then get it from seafile_api
+            obj_id = seafile_api.get_file_id_by_path(repo_id, file_path)
 
         file_name = os.path.basename(file_path)
         try:
@@ -340,7 +349,10 @@ class WOPIFilesContentsView(APIView):
     def post(self, request, file_id, format=None):
 
         token = request.GET.get('access_token', None)
-        request_user, repo_id, file_path = get_file_info_by_token(token=token)
+        info_dict = get_file_info_by_token(token)
+        request_user = info_dict['request_user']
+        repo_id = info_dict['repo_id']
+        file_path= info_dict['file_path']
 
         try:
             file_obj = request.read()

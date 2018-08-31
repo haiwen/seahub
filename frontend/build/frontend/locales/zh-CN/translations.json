@@ -61,6 +61,7 @@
   "the_two_passwords_do_not_match_please_enter_again": "两次输入密码不一致，请再次输入",
   "the_expiration_time_should_be_greater_than_0": "过期时间应该大于0天",
   "the_password_is_too_short": "密码太短",
+  "return_to_wiki_page": "返回维基页面",
   "userHelp": {
     "title": "键盘快捷键",
     "userHelpData":[

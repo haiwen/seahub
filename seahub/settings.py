@@ -130,6 +130,7 @@ MIDDLEWARE_CLASSES = (
 SITE_ROOT_URLCONF = 'seahub.urls'
 ROOT_URLCONF = 'seahub.utils.rooturl'
 SITE_ROOT = '/'
+CSRF_COOKIE_NAME = 'sfcsrftoken'
 
 # Python dotted path to the WSGI application used by Django's runserver.
 WSGI_APPLICATION = 'seahub.wsgi.application'
@@ -263,6 +264,7 @@ AUTHENTICATION_BACKENDS = (
 )
 
 ENABLE_OAUTH = False
+ENABLE_WATERMARK = False
 
 LOGIN_REDIRECT_URL = '/profile/'
 LOGIN_URL = '/accounts/login/'
@@ -307,6 +309,10 @@ REPO_PASSWORD_MIN_LENGTH = 8
 # token length for the share link
 SHARE_LINK_TOKEN_LENGTH = 20
 
+# min/max expire days for a share link
+SHARE_LINK_EXPIRE_DAYS_MIN = 0 # 0 means no limit
+SHARE_LINK_EXPIRE_DAYS_MAX = 0 # 0 means no limit
+
 # mininum length for the password of a share link
 SHARE_LINK_PASSWORD_MIN_LENGTH = 8
 
@@ -316,7 +322,7 @@ ENABLE_SHARE_LINK_AUDIT = False
 # share link audit code timeout
 SHARE_LINK_AUDIT_CODE_TIMEOUT = 60 * 60
 
-# enable or disable limit ip 
+# enable or disable limit ip
 ENABLE_LIMIT_IPADDRESS = False
 TRUSTED_IP_LIST = ['127.0.0.1']
 
@@ -652,10 +658,12 @@ ENABLE_FOLDER_PERM = False
 ENABLE_GUEST_INVITATION = False
 INVITATION_ACCEPTER_BLACKLIST = []
 
-#####################
-# Sudo Mode #
-#####################
+########################
+# Security Enhancements #
+########################
+
 ENABLE_SUDO_MODE = True
+FILESERVER_TOKEN_ONCE_ONLY = True
 
 #################
 # Email sending #

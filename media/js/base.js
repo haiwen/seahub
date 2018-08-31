@@ -103,7 +103,7 @@ function addConfirmTo(op_ele, popup) {
                 $('<form>', {
                     "method": 'POST',
                     "action": $(this).data('url'),
-                    "html": '<input name="csrfmiddlewaretoken" value="' + getCookie('csrftoken') + '" type="hidden">'
+                    "html": '<input name="csrfmiddlewaretoken" value="' + getCookie(SEAFILE_GLOBAL.csrfCookieName) + '" type="hidden">'
                 }).appendTo(document.body).trigger('submit');
             } else { // default
                 location.href = $(this).data('url');
@@ -130,7 +130,7 @@ function addFormPost(op_ele) {
         $('<form>', {
             "method": 'POST',
             "action": $(this).data('url'),
-            "html": '<input name="csrfmiddlewaretoken" value="' + getCookie('csrftoken') + '" type="hidden">'
+            "html": '<input name="csrfmiddlewaretoken" value="' + getCookie(SEAFILE_GLOBAL.csrfCookieName) + '" type="hidden">'
         }).appendTo(document.body).trigger('submit');
         return false;
     });
@@ -223,7 +223,7 @@ function getCookie(name) {
 function prepareCSRFToken(xhr, settings) {
     if (!(/^http:.*/.test(settings.url) || /^https:.*/.test(settings.url))) {
         // Only send the token to relative URLs i.e. locally.
-        xhr.setRequestHeader("X-CSRFToken", getCookie('csrftoken'));
+        xhr.setRequestHeader("X-CSRFToken", getCookie(SEAFILE_GLOBAL.csrfCookieName));
     }
 }
 

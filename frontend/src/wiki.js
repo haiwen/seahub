@@ -92,7 +92,7 @@ class Wiki extends Component {
   }
 
   isInternalMarkdownLink(url) {
-    var re = new RegExp(serviceUrl + '/lib/' + repoID + '/file' + '.*\.md');
+    var re = new RegExp(serviceUrl + '/lib/' + repoID + '/file' + '.*\.md$');
     return re.test(url);
   }
 
@@ -108,6 +108,8 @@ class Wiki extends Component {
     if (this.isInternalMarkdownLink(url)) {
       let path = this.getPathFromInternalMarkdownLink(url);
       this.loadFile(path);
+    } else {
+      window.location.href = url;
     }
   }
 
@@ -120,6 +122,10 @@ class Wiki extends Component {
   onFileClick = (e, node) => {
     if (node.isMarkdown()) {
       this.loadFile(node.path);
+    } else {
+      const w=window.open('about:blank');
+      const url = serviceUrl + '/lib/' + repoID + '/file' + node.path;
+      w.location.href = url;
     }
   }
 
@@ -140,8 +146,9 @@ class Wiki extends Component {
         })
       })
 
-      let fileUrl = serviceUrl + '/wikis/' + slug + filePath;
-      window.history.pushState({urlPath: fileUrl, filePath: filePath}, filePath, fileUrl);
+     const hash = window.location.hash;
+     let fileUrl = serviceUrl + '/wikis/' + slug + filePath + hash;
+     window.history.pushState({urlPath: fileUrl, filePath: filePath}, filePath, fileUrl);
   }
 
   onpopstate = (event) => {

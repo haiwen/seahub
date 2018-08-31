@@ -86,6 +86,20 @@ define([
                 show_admin_perm_option = true;
             }
 
+            // show 'can edit' perm option for download link or not
+            var show_link_edit_perm_option = false;
+            var file_ext = '';
+            if (!this.is_dir && this.obj_name.lastIndexOf('.') != -1) {
+                file_ext = this.obj_name.substr(this.obj_name.lastIndexOf('.') + 1)
+                    .toLowerCase();
+            }
+            if (app.pageOptions.is_pro &&
+                (app.pageOptions.enable_office_web_app ||
+                 app.pageOptions.enable_onlyoffice) &&
+                (file_ext == 'docx' || file_ext == 'xlsx' || file_ext == 'pptx')) {
+                show_link_edit_perm_option = true;
+            }
+
             this.$el.html(this.template({
                 title: gettext("Share {placeholder}")
                     .replace('{placeholder}', '<span class="op-target ellipsis ellipsis-op-target" title="' + Common.HTMLescape(this.obj_name) + '">' + Common.HTMLescape(this.obj_name) + '</span>'),
@@ -94,6 +108,8 @@ define([
 
                 enable_dir_private_share: this.enable_dir_private_share,
                 show_admin_perm_option: show_admin_perm_option,
+
+                show_link_edit_perm_option: show_link_edit_perm_option,
 
                 user_perm: this.user_perm,
                 repo_id: this.repo_id,
@@ -119,8 +135,11 @@ define([
             'keydown #generate-download-link-form .generate-random-password': 'generateRandomDownloadPassword',
             'click #generate-download-link-form .show-or-hide-password': 'showOrHideDownloadPassword',
             'keydown #generate-download-link-form .show-or-hide-password': 'showOrHideDownloadPassword',
+            'click .shared-link-copy-icon': 'copySharedLink',
+            'change .share-link-perm-select': 'linkPermissionChanged',
 
             // upload link
+            'click #dir-upload-link-tab': 'clickUploadLinkTab',
             'submit #generate-upload-link-form': 'generateUploadLink',
             'click #send-upload-link': 'showUploadLinkSendForm',
             'submit #send-upload-link-form': 'sendUploadLink',
@@ -152,9 +171,9 @@ define([
                 d_link = link + '?dl=1'; // direct download link
             var $link = this.$('#download-link'),
                 $dLink = this.$('#direct-dl-link');
-            var $span = $('span', $link),
+            var $span = $('.link-placeholder', $link),
                 $input = $('input', $link),
-                $dSpan = $('span', $dLink),
+                $dSpan = $('.link-placeholder', $dLink),
                 $dInput = $('input', $dLink);
 
             this.download_link = link; // for 'link send'
@@ -170,6 +189,7 @@ define([
 
             if (link_data.is_expired) {
                 this.$('#send-download-link').addClass('hide');
+                this.$('#download-link-operations .shared-link-copy-icon').addClass('hide');
                 this.$('#download-link, #direct-dl-link').append(' <span class="error">(' + gettext('Expired') + ')</span>');
             }
             this.$('#download-link-operations').removeClass('hide');
@@ -186,9 +206,21 @@ define([
             this.upload_link_token = link_data.token;
 
             var $link = this.$('#upload-link'),
+                $span = $('.link-placeholder', $link),
                 $input = $('input', $link);
-            $input.val(link).attr({'size': link.length}).show();
+            $span.html(link);
             this.$('#upload-link-operations').removeClass('hide');
+            $input.val(link).css({'width': $span.width() + 2}).show();
+            $span.hide();
+        },
+
+        // for panelInit: get right width for the link
+        clickUploadLinkTab: function() {
+            var $link = this.$('#upload-link'),
+                $span = $('.link-placeholder', $link),
+                $input = $('input', $link);
+            $input.css({'width': $span.show().width() + 2}).show();
+            $span.hide();
         },
 
         downloadLinkPanelInit: function() {
@@ -211,7 +243,7 @@ define([
                         _this.renderDownloadLink(link_data);
                     } else {
                         _this.$('#generate-download-link-form').removeClass('hide');
-                    }
+                     }
                 },
                 error: function(xhr, textStatus, errorThrown) {
                     var err_msg = Common.prepareAjaxErrorMsg(xhr);
@@ -274,15 +306,7 @@ define([
                 form_id = form.attr('id'),
                 use_passwd_checkbox = $('[name="use_passwd"]', form),
                 use_passwd = use_passwd_checkbox.prop('checked');
-            if (link_type == 'download') {
-                var set_expiration_checkbox = $('[name="set_expiration"]', form),
-                    set_expiration = set_expiration_checkbox.prop('checked');
 
-                if (app.pageOptions.is_pro) {
-                    var $preview_only = $('[name="preview_only"]', form);
-                    var preview_only = $preview_only.prop('checked');
-                }
-            }
             var post_data = {};
 
             if (use_passwd) {
@@ -309,25 +333,52 @@ define([
                 post_data["password"] = passwd;
             }
 
-            if (link_type == 'download' && set_expiration) {
-                var expire_days_input = $('[name="expire_days"]', form),
-                    expire_days = $.trim(expire_days_input.val());
-                if (!expire_days) {
-                    Common.showFormError(form_id, gettext("Please enter days."));
-                    return false;
-                }
-                if (Math.floor(expire_days) != expire_days || !$.isNumeric(expire_days)) {
-                    Common.showFormError(form_id, gettext("Please enter valid days"));
-                    return false;
-                };
-                post_data["expire_days"] = expire_days;
-            }
+            if (link_type == 'download') {
 
-            if (link_type == 'download' && preview_only) {
-                post_data["permissions"] = JSON.stringify({
-                    "can_preview": true,
-                    "can_download": false
-                });
+                // expiration
+                var set_expiration_checkbox = $('[name="set_expiration"]', form),
+                    set_expiration = set_expiration_checkbox.prop('checked');
+                if (set_expiration) {
+                    var expire_days_input = $('[name="expire_days"]', form),
+                        expire_days = $.trim(expire_days_input.val());
+                    if (!expire_days) {
+                        Common.showFormError(form_id, gettext("Please enter days."));
+                        return false;
+                    }
+                    if (Math.floor(expire_days) != expire_days || !$.isNumeric(expire_days)) {
+                        Common.showFormError(form_id, gettext("Please enter valid days"));
+                        return false;
+                    };
+                    post_data["expire_days"] = expire_days;
+                }
+
+                // link permission
+                if (app.pageOptions.is_pro) {
+                    var linkPerm = $('.share-link-perm-select', form).val();
+                    var linkPermDetails;
+
+                    switch(linkPerm) {
+                        case 'preview_only':
+                            linkPermDetails = {
+                                "can_edit": false,
+                                "can_download": false
+                            };
+                            break;
+                        case 'preview_download':
+                            linkPermDetails = {
+                                "can_edit": false,
+                                "can_download": true
+                            };
+                            break;
+                        case 'edit_download':
+                            linkPermDetails = {
+                                "can_edit": true,
+                                "can_download": true
+                            };
+                            break;
+                    }
+                    post_data["permissions"] = JSON.stringify(linkPermDetails);
+                }
             }
 
             $('.error', form).addClass('hide').html('');
@@ -352,19 +403,27 @@ define([
                     passwd_input.val('');
                     passwd_again_input.val('');
                 }
-                if (link_type == 'download' && set_expiration) {
-                    set_expiration_checkbox.prop('checked', false)
-                        .parent().removeClass('checkbox-checked')
-                        // hide 'day' input
-                        .end().closest('.checkbox-label').next().addClass('hide');
-                    expire_days_input.val('');
-                }
-
-                if (link_type == 'download' && preview_only) {
-                    $preview_only.prop('checked', false);
-                }
 
                 if (link_type == 'download') {
+                    // restore 'expiration'
+                    if (set_expiration) {
+                        if (app.pageOptions.share_link_expire_days_min > 0 ||
+                            app.pageOptions.share_link_expire_days_max > 0) {
+                            // do nothing
+                        } else {
+                            set_expiration_checkbox.prop('checked', false)
+                                .parent().removeClass('checkbox-checked')
+                                // hide 'day' input
+                                .end().closest('.checkbox-label').next().addClass('hide');
+                        }
+                        expire_days_input.val('');
+                    }
+
+                    // restore 'permission'
+                    $('.share-link-perm-select', form).get(0).selectedIndex = 0;
+                    $('.share-link-perm-msgs li', form).addClass('hide');
+                    $('.share-link-perm-msgs li:eq(0)', form).removeClass('hide');
+
                     _this.renderDownloadLink(data);
                 } else {
                     _this.renderUploadLink(data);
@@ -387,6 +446,23 @@ define([
                 post_url: Common.getUrl({name: 'share_admin_share_links'})
             });
             return false;
+        },
+
+        copySharedLink: function(e) {
+            var $el = $(e.currentTarget);
+            $el.prev('.shared-link').select();
+            document.execCommand('copy');
+            $.modal.close();
+            Common.feedback(gettext("Share link is copied to the clipboard."), 'success');
+        },
+
+        linkPermissionChanged: function(e) {
+            var $select = $(e.currentTarget);
+            var $msgs = $select.next('.share-link-perm-msgs');
+            var index = $select[0].selectedIndex;
+
+            $('li', $msgs).addClass('hide');
+            $('li:eq(' + index + ')', $msgs).removeClass('hide');
         },
 
         showDownloadLinkSendForm: function() {

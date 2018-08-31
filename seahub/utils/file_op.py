@@ -6,7 +6,6 @@ from seaserv import seafile_api
 from pysearpc import SearpcError
 
 from seahub.utils import is_pro_version
-from seahub.settings import ENABLE_FOLDER_PERM
 
 # Get an instance of a logger
 logger = logging.getLogger(__name__)
@@ -25,7 +24,7 @@ def check_file_lock(repo_id, file_path, username):
     Return (is_locked, locked_by_me)
     """
 
-    if not is_pro_version() or not ENABLE_FOLDER_PERM:
+    if not is_pro_version():
         return (False, False)
 
     return_value = seafile_api.check_file_lock(repo_id,

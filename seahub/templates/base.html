@@ -128,7 +128,11 @@
             <button class="simplemodal-close">{% trans "No" %}</button>
         </div>
 </div><!-- wrapper -->
-
+<script type="text/javascript">
+var SEAFILE_GLOBAL = {
+    csrfCookieName: '{{ CSRF_COOKIE_NAME }}'
+};
+</script>
 <script type="text/javascript" src="{% static "scripts/lib/jquery.min.js" %}" id="jquery"></script>{# 'id="jquery"' is for pdf file view with pdf2html #}
 <script type="text/javascript" src="{% static "scripts/lib/jquery.simplemodal.js" %}"></script>
 <script type="text/javascript" src="{% static "scripts/lib/jstree.min.js" %}"></script>

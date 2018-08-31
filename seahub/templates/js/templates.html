@@ -1166,7 +1166,7 @@
             <% } %>
             <% if (is_dir) { %>
                 <% if (user_perm == 'rw' && !repo_encrypted && can_generate_upload_link) { %>
-            <li class="tab"><a href="#dir-upload-link-share" class="a">{% trans "Upload Link" %}</a></li>
+            <li class="tab" id="dir-upload-link-tab"><a href="#dir-upload-link-share" class="a">{% trans "Upload Link" %}</a></li>
                 <% } %>
 
                 <% if (enable_dir_private_share) { %> {# dir private share #}
@@ -1197,6 +1197,26 @@
                         <input type="password" name="password_again" class="input" id="passwd-again" />
                     </div>
 
+                    {% if share_link_expire_days_min > 0 or share_link_expire_days_max > 0 %}
+                    <label class="checkbox-label">
+                        <input type="checkbox" checked="checked" disabled="disabled" name="set_expiration" class="vam" />
+                        <span class="checkbox-option vam">{% trans "Add auto expiration"%}</span>
+                    </label>
+                    <div>
+                        <label for="expire-days">
+                            {% trans "Days" %}
+                            {% if share_link_expire_days_min > 0 and share_link_expire_days_max > 0 %}
+                            ({{ share_link_expire_days_min }} - {{ share_link_expire_days_max }})
+                            {% elif share_link_expire_days_min > 0 %}
+                            {% blocktrans %}(Greater than or equal to {{share_link_expire_days_min}}){% endblocktrans %}
+                            {% elif share_link_expire_days_max > 0 %}
+                            {% blocktrans %}(Less than or equal to {{share_link_expire_days_max}}){% endblocktrans %}
+                            {% endif %}
+                        </label><br />
+                        <input type="text" name="expire_days" class="input" id="expire-days" />
+                    </div>
+
+                    {% else %}
                     <label class="checkbox-label">
                         <input type="checkbox" name="set_expiration" class="vam" />
                         <span class="checkbox-option vam">{% trans "Add auto expiration"%}</span>
@@ -1205,29 +1225,45 @@
                         <label for="expire-days">{% trans "Days" %}</label><br />
                         <input type="text" name="expire_days" class="input" id="expire-days" />
                     </div>
+                    {% endif %}
 
                     <% if (app.pageOptions.is_pro) { %>
-                    <label class="checkbox-label">
-                        <input type="checkbox" name="preview_only" class="vam" />
-                        <span class="checkbox-option vam">{% trans "Online preview only" %}</span>
-                    </label>
+                    <label>{% trans "Permission"%}</label>
+                    <div>
+                        <select name="permission" class="share-permission-select share-link-perm-select">
+                            <option value="preview_download">{% trans "Can download" %}</option>
+                            <option value="preview_only">{% trans "Preview only" %}</option>
+                            <% if (show_link_edit_perm_option) { %>
+                            <option value="edit_download">{% trans "Can Edit" %}</option>
+                            <% } %>
+                        </select>
+                        <ul class="share-link-perm-msgs">
+                            <li class="">{% trans "User can view and download file." %}</li>
+                            <li class="hide">{% trans "User can only view file." %}</li>
+                            <% if (show_link_edit_perm_option) { %>
+                            <li class="hide">{% trans "User can edit and download file." %}</li>
+                            <% } %>
+                        </ul>
+                    </div>
                     <% } %>
 
                     <p class="error hide"></p>
-                    <input type="submit" value="{% trans 'Generate'%}" />
+                    <input type="submit" value="{% trans "Generate" %}" />
                 </form>
                 <div id="download-link-operations" class="hide">
                     <dl>
                         <dt>{% trans "Link: " %}</dt>
                         <dd id="download-link">
-                            <span></span>
+                            <span class="link-placeholder"></span>
                             <input type="text" readonly="readonly" value="" class="shared-link hide" />
+                            <span class="shared-link-copy-icon icon-copy" title="{% trans "Copy" %}"></span>
                         </dd>
                         <% if (!is_dir) { %>
                         <dt>{% trans "Direct Download Link: " %}</dt>
                         <dd id="direct-dl-link">
-                            <span></span>
+                            <span class="link-placeholder"></span>
                             <input type="text" readonly="readonly" value="" class="shared-link hide" />
+                            <span class="shared-link-copy-icon icon-copy" title="{% trans "Copy" %}"></span>
                         </dd>
                         <% } %>
                     </dl>
@@ -1276,7 +1312,9 @@
                     <dl>
                         <dt>{% trans "Upload Link: " %}</dt>
                         <dd id="upload-link">
+                            <span class="link-placeholder"></span>
                             <input type="text" readonly="readonly" value="" class="shared-link hide" />
+                            <span class="shared-link-copy-icon icon-copy" title="{% trans "Copy" %}"></span>
                         </dd>
                     </dl>
                     {% if user.permissions.can_send_share_link_mail %}

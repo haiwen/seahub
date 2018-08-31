@@ -15,6 +15,11 @@ html, body { padding:0; margin:0; height:100%; }
 <div id="placeholder"></div>
 
 {% get_current_language as LANGUAGE_CODE %}
+<script type="text/javascript">
+var SEAFILE_GLOBAL = {
+    csrfCookieName: '{{ CSRF_COOKIE_NAME }}'
+};
+</script>
 <script type="text/javascript" src="{% static "scripts/lib/jquery.min.js" %}"></script>
 <script type="text/javascript" src="{{ MEDIA_URL }}js/jq.min.js"></script>
 <script type="text/javascript" src="{{ MEDIA_URL }}js/base.js"></script>
@@ -28,9 +33,9 @@ html, body { padding:0; margin:0; height:100%; }
             "title": "{{ doc_title|escapejs }}",
             "url": "{{ doc_url }}",
             "permissions": {
-                "download": true,
+                "download": {% if can_download %}true{% else %}false{% endif %},
                 "edit": {% if can_edit %}true{% else %}false{% endif %},
-                "print": true,
+                "print": {% if can_download %}true{% else %}false{% endif %},
                 "review": true
             }
         },
@@ -46,6 +51,7 @@ html, body { padding:0; margin:0; height:100%; }
     };
     var docEditor = new DocsAPI.DocEditor("placeholder", config);
 
+    {% if can_edit %}
     var interval;
     var refreshLock = function() {
         $.ajax({
@@ -70,6 +76,11 @@ html, body { padding:0; margin:0; height:100%; }
         });
     };
     interval = setInterval(refreshLock, 60 * 1000);
+    {% endif %}
 </script>
+{% if enable_watermark %}
+<script type="text/javascript" src="{{ MEDIA_URL }}js/watermark.js"></script>
+<script type="text/javascript">{% include "snippets/add_watermark.html" %}</script>
+{% endif %}
 </body>
 </html>

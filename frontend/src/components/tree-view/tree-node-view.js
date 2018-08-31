@@ -100,8 +100,6 @@ class TreeNodeView extends React.Component {
         paddingLeft: this.props.paddingLeft
       };
       var l = node.children.sort(sortByType);
-      l = l.filter((node) => { return node.type == "dir" || node.isMarkdown(); })
-
       /*
         the `key` property is needed. Otherwise there is a warning in the console
       */

@@ -93,7 +93,7 @@ if HAS_OFFICE_CONVERTER:
 import seahub.settings as settings
 from seahub.settings import THUMBNAIL_EXTENSION, THUMBNAIL_ROOT, \
     FILE_LOCK_EXPIRATION_DAYS, ENABLE_STORAGE_CLASSES, \
-    ENABLE_THUMBNAIL, ENABLE_FOLDER_PERM, STORAGE_CLASS_MAPPING_POLICY, \
+    ENABLE_THUMBNAIL, STORAGE_CLASS_MAPPING_POLICY, \
     ENABLE_RESET_ENCRYPTED_REPO_PASSWORD
 try:
     from seahub.settings import CLOUD_MODE
@@ -1982,7 +1982,8 @@ def get_shared_link(request, repo_id, path):
                                            settings.SITE_ROOT, token)
     return file_shared_link
 
-def get_repo_file(request, repo_id, file_id, file_name, op, use_onetime=True):
+def get_repo_file(request, repo_id, file_id, file_name, op,
+                  use_onetime=dj_settings.FILESERVER_TOKEN_ONCE_ONLY):
     if op == 'download':
         token = seafile_api.get_fileserver_access_token(repo_id,
                 file_id, op, request.user.username, use_onetime)
@@ -2489,7 +2490,8 @@ class OwaFileView(APIView):
 
         # get wopi dict
         username = request.user.username
-        wopi_dict = get_wopi_dict(username, repo_id, path, action, request.LANGUAGE_CODE)
+        wopi_dict = get_wopi_dict(username, repo_id, path,
+                action_name=action, language_code=request.LANGUAGE_CODE)
 
         # send stats message
         send_file_access_msg(request, repo, path, 'api')
