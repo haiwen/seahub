@@ -17,7 +17,7 @@ const seafileCollabServer = window.app.config.seafileCollabServer;
 const userInfo = window.app.userInfo;
 // init seafileAPI
 let seafileAPI = new SeafileAPI();
-let xcsrfHeaders = cookie.load('csrftoken');
+let xcsrfHeaders = cookie.load('sfcsrftoken');
 seafileAPI.initForSeahubUsage({ siteRoot, xcsrfHeaders });
 
 function getImageFileNameWithTimestamp() {

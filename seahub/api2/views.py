@@ -766,6 +766,7 @@ class Repos(APIView):
                     "group_name": r.group_name,
                     "owner": r.group_name,
                     "mtime": r.last_modify,
+                    "mtime_relative": translate_seahub_time(r.last_modify),
                     "modifier_email": r.last_modifier,
                     "modifier_name": nickname_dict.get(r.last_modifier, ''),
                     "modifier_contact_email": contact_email_dict.get(r.last_modifier, ''),

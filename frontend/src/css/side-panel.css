@@ -158,6 +158,10 @@
   line-height: 1.625 !important;
 }
 
+.tree-node-hight-light {
+  background-color: rgb(255,239,178);
+}
+
 .dropdown-menu {
   min-width: 8rem;
 }

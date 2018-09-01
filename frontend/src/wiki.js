@@ -16,7 +16,7 @@ import './css/search.css';
 
 // init seafileAPI
 let seafileAPI = new SeafileAPI();
-let xcsrfHeaders = cookie.load('csrftoken');
+let xcsrfHeaders = cookie.load('sfcsrftoken');
 seafileAPI.initForSeahubUsage({ siteRoot, xcsrfHeaders });
 
 class EditorUtilities {
@@ -73,7 +73,8 @@ class Wiki extends Component {
       latestContributor: '',
       lastModified: '',
       permission: '',
-      isFileLoading: false
+      isFileLoading: false,
+      searchedPath: null,
     };
     window.onpopstate = this.onpopstate;
   }
@@ -114,8 +115,8 @@ class Wiki extends Component {
   }
 
   onSearchedClick = (path) => {
-    if (path) {
-      this.loadFile(path);
+    if (this.state.currentFilePath !== path) {
+      this.setState({searchedPath : path});
     }
   }
 
@@ -130,9 +131,7 @@ class Wiki extends Component {
   }
 
   loadFile(filePath) {
-    this.setState({
-      isFileLoading: true
-    })
+    this.setState({isFileLoading: true});
     seafileAPI.getWikiFileContent(slug, filePath)
       .then(res => {
         this.setState({
@@ -142,7 +141,7 @@ class Wiki extends Component {
           permission: res.data.permission,
           fileName: this.fileNameFromPath(filePath),
           filePath: filePath,
-          isFileLoading: false
+          isFileLoading: false,
         })
       })
 
@@ -178,6 +177,8 @@ class Wiki extends Component {
           onCloseSide ={this.onCloseSide}
           editorUtilities={editorUtilities}
           permission={this.state.permission}
+          currentFilePath={this.state.filePath}
+          searchedPath={this.state.searchedPath}
         />
         <MainPanel
           content={this.state.content}
