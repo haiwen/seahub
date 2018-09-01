@@ -3889,6 +3889,9 @@ button.sf-dropdown-toggle:focus {
 }
 
 /* share popup */
+#share-popup .link-option-content {
+    margin-left: 18px;
+}
 #download-link-operations dl {
     margin-top:0;
 }
@@ -3904,13 +3907,11 @@ button.sf-dropdown-toggle:focus {
     cursor: pointer; 
     color: #333;
 }
-.share-link-perm-msgs {
-    display: inline-block;
-    margin-left:10px;
+#share-popup .share-link-perm-select {
+    height:25px;
 }
-.share-link-perm-msgs li {
-    line-height: 30px;
-    height: 30px;
+.share-link-perm-msgs {
+    margin:2px 0 10px;
 }
 
 /* shared upload link */
