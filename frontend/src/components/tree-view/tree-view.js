@@ -1,5 +1,6 @@
 import React from 'react';
 import TreeNodeView from './tree-node-view';
+import editorUtilities from '../../utils/editor-utilties'
 
 class TreeView extends React.PureComponent {
 
@@ -23,7 +24,7 @@ class TreeView extends React.PureComponent {
   }
 
   onDragStart = (e, node) => {
-    const url = this.props.editorUtilities.getFileURL(node);
+    const url = editorUtilities.getFileURL(node);
     e.dataTransfer.setData("text/uri-list", url);
     e.dataTransfer.setData("text/plain", url);
   }

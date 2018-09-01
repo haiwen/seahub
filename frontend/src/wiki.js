@@ -3,9 +3,8 @@ import ReactDOM from 'react-dom';
 import SidePanel from './components/side-panel';
 import MainPanel from './components/main-panel';
 import moment from 'moment';
-import cookie from 'react-cookies';
-import { SeafileAPI } from 'seafile-js';
-import { slug, repoID, serviceUrl, initialFilePath, siteRoot } from './components/constance';
+import { slug, repoID, serviceUrl, initialFilePath } from './components/constance';
+import editorUtilities from './utils/editor-utilties';
 import './assets/css/fa-solid.css';
 import './assets/css/fa-regular.css';
 import './assets/css/fontawesome.css';
@@ -13,54 +12,6 @@ import 'seafile-ui';
 import './css/side-panel.css';
 import './css/wiki.css';
 import './css/search.css';
-
-// init seafileAPI
-let seafileAPI = new SeafileAPI();
-let xcsrfHeaders = cookie.load('sfcsrftoken');
-seafileAPI.initForSeahubUsage({ siteRoot, xcsrfHeaders });
-
-class EditorUtilities {
-  getFiles() {
-    return seafileAPI.listWikiDir(slug).then(items => {
-        const files = items.data.dir_file_list.map(item => {
-          return {
-            name: item.name,
-            type: item.type === 'dir' ? 'dir' : 'file',
-            isExpanded: item.type === 'dir' ? true : false,
-            parent_path: item.parent_dir,
-          }
-        })
-        return files;
-      })
-  }
-
-  createFile(filePath) {
-    return seafileAPI.createFile(repoID, filePath)
-  }
-
-  deleteFile(filePath) {
-    return seafileAPI.deleteFile(repoID, filePath)
-  }
-
-  renameFile(filePath, newFileName) {
-    return seafileAPI.renameFile(repoID, filePath, newFileName)
-  }
-
-  createDir(dirPath) {
-    return seafileAPI.createDir(repoID, dirPath)
-  }
-
-  deleteDir(dirPath) {
-    return seafileAPI.deleteDir(repoID, dirPath)
-  }
-
-  renameDir(dirPath, newDirName) {
-    return seafileAPI.renameDir(repoID, dirPath, newDirName)
-  }
-
-}
-
-const editorUtilities = new EditorUtilities();
 
 class Wiki extends Component {
   constructor(props) {
@@ -132,7 +83,7 @@ class Wiki extends Component {
 
   loadFile(filePath) {
     this.setState({isFileLoading: true});
-    seafileAPI.getWikiFileContent(slug, filePath)
+    editorUtilities.getWikiFileContent(slug, filePath)
       .then(res => {
         this.setState({
           content: res.data.content,
@@ -175,7 +126,6 @@ class Wiki extends Component {
           onFileClick={this.onFileClick}
           closeSideBar={this.state.closeSideBar}
           onCloseSide ={this.onCloseSide}
-          editorUtilities={editorUtilities}
           permission={this.state.permission}
           currentFilePath={this.state.filePath}
           searchedPath={this.state.searchedPath}
@@ -189,7 +139,6 @@ class Wiki extends Component {
           onSearchedClick={this.onSearchedClick}
           latestContributor={this.state.latestContributor}
           lastModified={this.state.lastModified}
-          seafileAPI={seafileAPI}
           permission={this.state.permission}
           isFileLoading={this.state.isFileLoading}
         />

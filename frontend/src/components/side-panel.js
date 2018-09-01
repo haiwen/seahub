@@ -1,10 +1,12 @@
 import React, { Component } from 'react';
 import TreeView from './tree-view/tree-view';
 import { siteRoot, logoPath, mediaUrl, siteTitle, logoWidth, logoHeight } from './constance';
+import editorUtilities from '../utils/editor-utilties';
 import Tree from './tree-view/tree';
 import { Node } from './tree-view/node'
 import NodeMenu from './menu-component/node-menu';
 import MenuControl from './menu-component/node-menu-control';
+
 const gettext = window.gettext;
 
 class SidePanel extends Component {
@@ -82,7 +84,7 @@ class SidePanel extends Component {
   }
 
   onAddFolderNode = (dirPath) => {
-    this.props.editorUtilities.createDir(dirPath).then(res => {
+    editorUtilities.createDir(dirPath).then(res => {
       let tree = this.state.tree_data.copy();
       let index = dirPath.lastIndexOf("/");
       let name = dirPath.substring(index+1);
@@ -102,7 +104,7 @@ class SidePanel extends Component {
   }
 
   onAddFileNode = (filePath) => {
-    this.props.editorUtilities.createFile(filePath).then(res => {
+    editorUtilities.createFile(filePath).then(res => {
       let tree = this.state.tree_data.copy();
       let index = filePath.lastIndexOf("/");
       let name = filePath.substring(index+1);
@@ -126,7 +128,7 @@ class SidePanel extends Component {
     let type = node.type;
     let filePath = node.path;
     if (type === 'file') {
-      this.props.editorUtilities.renameFile(filePath, newName).then(res => {
+      editorUtilities.renameFile(filePath, newName).then(res => {
         if (this.isModifyCurrentFile()) {
           tree.updateNodeParamValue(node, "name", newName);
           node.name = newName;  //repair current node
@@ -142,7 +144,7 @@ class SidePanel extends Component {
 
     if (type === 'dir') {
       let _this = this;
-      this.props.editorUtilities.renameDir(filePath, newName).then(res => {
+      editorUtilities.renameDir(filePath, newName).then(res => {
         let tree = this.state.tree_data.copy();
         let currentNode = this.state.currentNode;
         if (this.isModifyContainsCurrentFile()) {
@@ -170,11 +172,11 @@ class SidePanel extends Component {
     let filePath = currentNode.path;
     let type = currentNode.type;
     if (type === 'file') {
-      this.props.editorUtilities.deleteFile(filePath);
+      editorUtilities.deleteFile(filePath);
     } 
 
     if (type === 'dir') {
-      this.props.editorUtilities.deleteDir(filePath);
+      editorUtilities.deleteDir(filePath);
     }
 
     let isCurrentFile = false;
@@ -216,7 +218,7 @@ class SidePanel extends Component {
   }
 
   initializeTreeData() {
-    this.props.editorUtilities.getFiles().then((files) => {
+    editorUtilities.getFiles().then((files) => {
       // construct the tree object
       var rootObj = {
         name: '/',

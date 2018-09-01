@@ -36,8 +36,8 @@ class MainPanel extends Component {
               <a className="btn btn-secondary btn-topbar" onClick={this.onEditClick}>{gettext("Edit Page")}</a>
            </div>
           <div className="common-toolbar">
-            <Search seafileAPI={this.props.seafileAPI} onSearchedClick={this.props.onSearchedClick}/>
-            <Account seafileAPI={this.props.seafileAPI} />
+            <Search  onSearchedClick={this.props.onSearchedClick}/>
+            <Account />
           </div>
         </div>
         <div className="cur-view-main">
