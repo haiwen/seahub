@@ -147,7 +147,7 @@ class SidePanel extends Component {
         let currentNode = this.state.currentNode;
         if (this.isModifyContainsCurrentFile()) {
           let nodePath = currentNode.path;
-          let filePath = _this.props.currentFileNode.path;
+          let filePath = _this.props.currentFilePath;
           let start =  filePath.indexOf(nodePath);
           let node = currentNode.getNodeByPath(filePath.slice(start));
           if (node) {
@@ -199,12 +199,14 @@ class SidePanel extends Component {
 
   isModifyCurrentFile() {
     let nodeName = this.state.currentNode.name;
-    let fileName = this.props.currentFileNode.name;
+    let filePath = this.props.currentFilePath;
+    let index    = filePath.lastIndexOf("/");
+    let fileName = filePath.slice(index+1);
     return nodeName === fileName;
   }
 
   isModifyContainsCurrentFile() {
-    let filePath = this.props.currentFileNode.path;
+    let filePath = this.props.currentFilePath;
     let nodePath = this.state.currentNode.path;
     
     if (filePath.indexOf(nodePath) > -1) {
@@ -250,7 +252,6 @@ class SidePanel extends Component {
   componentDidMount() {
     //init treeview data
     this.initializeTreeData();
-
     document.addEventListener('click', this.onHideContextMenu);
   }
 
@@ -299,7 +300,7 @@ class SidePanel extends Component {
             {this.state.tree_data && 
             <TreeView
               permission={this.props.permission}
-              currentFileNode={this.props.currentFileNode}
+              currentFilePath={this.props.currentFilePath}
               treeData={this.state.tree_data}
               currentNode={this.state.currentNode}
               isNodeItemFrezee={this.state.isNodeItemFrezee}
