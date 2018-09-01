@@ -26,11 +26,11 @@ from seahub.api2.utils import to_python_boolean
 logger = logging.getLogger(__name__)
 
 
-def gen_smart_link(dirent_uuid, dirent_name):
+def gen_smart_link(dirent_uuid):
 
     service_url = get_service_url()
     service_url = service_url.rstrip('/')
-    return '%s/smart-link/%s/%s' % (service_url, dirent_uuid, dirent_name)
+    return '%s/smart-link/%s/' % (service_url, dirent_uuid)
 
 
 class SmartLink(APIView):
@@ -110,11 +110,12 @@ class SmartLink(APIView):
             return api_error(status.HTTP_500_INTERNAL_SERVER_ERROR, error_msg)
 
         dirent_uuid = uuid_map.uuid
-        smart_link = gen_smart_link(dirent_uuid, dirent_name)
+        smart_link = gen_smart_link(dirent_uuid)
 
         result = {}
         result['smart_link'] = smart_link
         result['smart_link_token'] = dirent_uuid
+        result['name'] = dirent_name
 
         return Response(result)
 
