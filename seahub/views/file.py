@@ -956,6 +956,13 @@ def view_shared_file(request, fileshare):
     if not seafile_api.check_permission_by_path(repo_id, '/', shared_by):
         return render_error(request, _(u'Permission denied'))
 
+    # get share link permission
+    can_download = fileshare.get_permissions()['can_download']
+    can_edit = fileshare.get_permissions()['can_edit']
+
+    if can_edit and not request.user.is_authenticated():
+        return render_error(request, _(u'Permission denied'))
+
     # Increase file shared link view_cnt, this operation should be atomic
     fileshare.view_cnt = F('view_cnt') + 1
     fileshare.save()
@@ -966,7 +973,7 @@ def view_shared_file(request, fileshare):
 
     # download shared file
     if request.GET.get('dl', '') == '1':
-        if fileshare.get_permissions()['can_download'] is False:
+        if can_download is False:
             raise Http404
 
         return _download_file_from_share_link(request, fileshare)
@@ -982,7 +989,7 @@ def view_shared_file(request, fileshare):
     raw_path = gen_file_get_url(access_token, filename)
 
     if request.GET.get('raw', '') == '1':
-        if fileshare.get_permissions()['can_download'] is False:
+        if can_download is False:
             raise Http404
 
         # check whether owner's traffic over the limit
@@ -1005,9 +1012,6 @@ def view_shared_file(request, fileshare):
             username = ANONYMOUS_EMAIL
         else:
             username = request.user.username
-
-        can_download = fileshare.get_permissions()['can_download']
-        can_edit = fileshare.get_permissions()['can_edit']
 
         if ENABLE_OFFICE_WEB_APP and fileext in OFFICE_WEB_APP_FILE_EXTENSION:
 
