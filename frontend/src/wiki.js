@@ -74,14 +74,13 @@ class Wiki extends Component {
       lastModified: '',
       permission: '',
       isFileLoading: false,
-      currentFileNode: null,
       searchedPath: null,
     };
     window.onpopstate = this.onpopstate;
   }
 
   componentDidMount() {
-    this.loadFile({path: initialFilePath});
+    this.loadFile(initialFilePath);
   }
 
   fileNameFromPath(filePath) {
@@ -116,14 +115,14 @@ class Wiki extends Component {
   }
 
   onSearchedClick = (path) => {
-    if (this.state.currentFileNode.path !== path) {
+    if (this.state.currentFilePath !== path) {
       this.setState({searchedPath : path});
     }
   }
 
   onFileClick = (e, node) => {
     if (node.isMarkdown()) {
-      this.loadFile(node);
+      this.loadFile(node.path);
     } else {
       const w=window.open('about:blank');
       const url = serviceUrl + '/lib/' + repoID + '/file' + node.path;
@@ -131,13 +130,7 @@ class Wiki extends Component {
     }
   }
 
-  loadFile(node) {
-    let filePath = "";
-    if (node.path) {
-      filePath = node.path;
-    } else {
-      filePath = node;
-    }
+  loadFile(filePath) {
     this.setState({isFileLoading: true});
     seafileAPI.getWikiFileContent(slug, filePath)
       .then(res => {
@@ -149,7 +142,6 @@ class Wiki extends Component {
           fileName: this.fileNameFromPath(filePath),
           filePath: filePath,
           isFileLoading: false,
-          currentFileNode: node
         })
       })
 
@@ -185,7 +177,7 @@ class Wiki extends Component {
           onCloseSide ={this.onCloseSide}
           editorUtilities={editorUtilities}
           permission={this.state.permission}
-          currentFileNode={this.state.currentFileNode}
+          currentFilePath={this.state.filePath}
           searchedPath={this.state.searchedPath}
         />
         <MainPanel
