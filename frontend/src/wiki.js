@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import ReactDOM from 'react-dom';
-import SidePanel from './components/SidePanel';
-import MainPanel from './components/MainPanel';
+import SidePanel from './components/side-panel';
+import MainPanel from './components/main-panel';
 import moment from 'moment';
 import cookie from 'react-cookies';
 import { SeafileAPI } from 'seafile-js';
