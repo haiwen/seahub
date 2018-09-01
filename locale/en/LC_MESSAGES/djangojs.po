@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2018-08-31 13:21+0800\n"
+"POT-Creation-Date: 2018-09-01 16:22+0800\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -25,7 +25,7 @@ msgstr ""
 msgid "Wikis"
 msgstr ""
 
-#: frontend/src/components/SidePanel.js:271
+#: frontend/src/components/SidePanel.js:291
 msgid "Pages"
 msgstr ""
 
@@ -152,25 +152,25 @@ msgstr ""
 #: static/scripts/app/models/repo.js:37
 #: static/scripts/app/views/dialogs/dirent-rename.js:65
 #: static/scripts/app/views/dir.js:667 static/scripts/app/views/dir.js:727
-#: static/scripts/app/views/dirent.js:512
+#: static/scripts/app/views/dirent.js:514
 #: static/scripts/app/views/group-repo.js:131
 #: static/scripts/app/views/repo.js:187
 msgid "Name should not include '/'."
 msgstr ""
 
-#: static/scripts/app/models/repo.js:41 static/scripts/app/views/share.js:318
+#: static/scripts/app/models/repo.js:41 static/scripts/app/views/share.js:324
 msgid "Please enter password"
 msgstr ""
 
-#: static/scripts/app/models/repo.js:42 static/scripts/app/views/share.js:326
+#: static/scripts/app/models/repo.js:42 static/scripts/app/views/share.js:332
 msgid "Please enter the password again"
 msgstr ""
 
-#: static/scripts/app/models/repo.js:44 static/scripts/app/views/share.js:322
+#: static/scripts/app/models/repo.js:44 static/scripts/app/views/share.js:328
 msgid "Password is too short"
 msgstr ""
 
-#: static/scripts/app/models/repo.js:46 static/scripts/app/views/share.js:330
+#: static/scripts/app/models/repo.js:46 static/scripts/app/views/share.js:336
 msgid "Passwords don't match"
 msgstr ""
 
@@ -291,7 +291,7 @@ msgstr ""
 
 #: static/scripts/app/views/dialogs/dirent-rename.js:59
 #: static/scripts/app/views/dir.js:662 static/scripts/app/views/dir.js:722
-#: static/scripts/app/views/dirent.js:506
+#: static/scripts/app/views/dirent.js:508
 #: static/scripts/app/views/group-repo.js:125
 #: static/scripts/app/views/groups.js:118
 #: static/scripts/app/views/invitations.js:65
@@ -554,7 +554,7 @@ msgid "locked by {placeholder}"
 msgstr ""
 
 #: static/scripts/app/views/dirent-grid.js:187
-#: static/scripts/app/views/dirent.js:413
+#: static/scripts/app/views/dirent.js:415
 msgid "Successfully deleted %(name)s"
 msgstr ""
 
@@ -637,7 +637,7 @@ msgid "Set {placeholder}'s permission"
 msgstr ""
 
 #: static/scripts/app/views/folder-perm.js:126
-#: static/scripts/app/views/share.js:839
+#: static/scripts/app/views/share.js:845
 msgid "Select groups"
 msgstr ""
 
@@ -785,45 +785,45 @@ msgstr ""
 msgid "Successfully deleted 1 item"
 msgstr ""
 
-#: static/scripts/app/views/share.js:104
+#: static/scripts/app/views/share.js:109
 #: static/scripts/sysadmin-app/views/share.js:42
 msgid "Share {placeholder}"
 msgstr ""
 
-#: static/scripts/app/views/share.js:193
+#: static/scripts/app/views/share.js:199
 msgid "Expired"
 msgstr ""
 
-#: static/scripts/app/views/share.js:271 static/scripts/app/views/share.js:272
-#: static/scripts/app/views/share.js:293 static/scripts/app/views/share.js:294
+#: static/scripts/app/views/share.js:277 static/scripts/app/views/share.js:278
+#: static/scripts/app/views/share.js:299 static/scripts/app/views/share.js:300
 msgid "Hide"
 msgstr ""
 
-#: static/scripts/app/views/share.js:289 static/scripts/app/views/share.js:290
+#: static/scripts/app/views/share.js:295 static/scripts/app/views/share.js:296
 msgid "Show"
 msgstr ""
 
-#: static/scripts/app/views/share.js:345
+#: static/scripts/app/views/share.js:351
 msgid "Please enter days."
 msgstr ""
 
-#: static/scripts/app/views/share.js:349
+#: static/scripts/app/views/share.js:355
 msgid "Please enter valid days"
 msgstr ""
 
-#: static/scripts/app/views/share.js:456
+#: static/scripts/app/views/share.js:462
 msgid "Share link is copied to the clipboard."
 msgstr ""
 
-#: static/scripts/app/views/share.js:482
+#: static/scripts/app/views/share.js:488
 msgid "Please input at least an email."
 msgstr ""
 
-#: static/scripts/app/views/share.js:499
+#: static/scripts/app/views/share.js:505
 msgid "Successfully sent to {placeholder}"
 msgstr ""
 
-#: static/scripts/app/views/share.js:503
+#: static/scripts/app/views/share.js:509
 msgid "Failed to send to {placeholder}"
 msgstr ""
 
