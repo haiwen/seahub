@@ -132,7 +132,12 @@ class Wiki extends Component {
   }
 
   loadFile(node) {
-    let filePath = node.path;
+    let filePath = "";
+    if (node.path) {
+      filePath = node.path;
+    } else {
+      filePath = node;
+    }
     this.setState({isFileLoading: true});
     seafileAPI.getWikiFileContent(slug, filePath)
       .then(res => {
