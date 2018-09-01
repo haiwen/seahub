@@ -13,8 +13,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: seahub\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2018-09-01 16:22+0800\n"
-"PO-Revision-Date: 2018-09-01 08:23+0000\n"
+"POT-Creation-Date: 2018-09-01 17:24+0800\n"
+"PO-Revision-Date: 2018-09-01 09:24+0000\n"
 "Last-Translator: zheng xie <xiez1989@gmail.com>\n"
 "Language-Team: Greek (http://www.transifex.com/haiwen/seahub/language/el/)\n"
 "MIME-Version: 1.0\n"
@@ -6006,6 +6006,18 @@ msgstr ""
 
 #: seahub/templates/priv/ali.html:6
 msgid "Preview-on-Cloud"
+msgstr ""
+
+#: seahub/templates/priv/ali.html:7
+msgid "Co-Owner"
+msgstr ""
+
+#: seahub/templates/priv/ali.html:8
+msgid "Edit-on-Cloud"
+msgstr ""
+
+#: seahub/templates/priv/ali.html:9
+msgid "View-on-Cloud"
 msgstr ""
 
 #: seahub/templates/priv/seaf-docs.html:5
