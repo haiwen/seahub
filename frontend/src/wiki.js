@@ -16,7 +16,7 @@ import './css/search.css';
 
 // init seafileAPI
 let seafileAPI = new SeafileAPI();
-let xcsrfHeaders = cookie.load('csrftoken');
+let xcsrfHeaders = cookie.load('sfcsrftoken');
 seafileAPI.initForSeahubUsage({ siteRoot, xcsrfHeaders });
 
 class EditorUtilities {
