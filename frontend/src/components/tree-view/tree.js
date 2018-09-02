@@ -3,7 +3,7 @@ import Node from './node';
 class Tree {
   
   constructor() {
-    this.root  = null;
+    this.root = null;
   }
 
   clone() {
