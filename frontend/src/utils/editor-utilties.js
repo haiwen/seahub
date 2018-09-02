@@ -50,12 +50,12 @@ class EditorUtilities {
     return seafileAPI.getWikiFileContent(slug, filePath);
   }
 
-  getSources() {
-    return seafileAPI.getSources();
+  getSource() {
+    return seafileAPI.getSource();
   }
 
   searchFiles(queryData,cancelToken) {
-    return seafileAPI.getWikiFileContent(queryData,cancelToken);
+    return seafileAPI.searchFiles(queryData,cancelToken);
   }
 
   getAccountInfo() {

@@ -17,7 +17,7 @@ class TreeView extends React.PureComponent {
 
     // copy the tree to make PureComponent work
     this.setState({
-      tree: tree.copy()
+      tree: tree.clone()
     });
 
     this.change(tree);

@@ -1,85 +1,75 @@
-
-
 class Node {
 
-  static create(attrs = {}) {
-
-  }
-
-  /**
-   * Create a `Node` from a JSON `object`.
-   *
-   * @param {Object} object
-   * @return {Node}
-   */
-  static fromJSON(object) {
-    const {
-      name,
-      type,
-      isExpanded = true,
-      children = [],
-    } = object;
+  static deserializefromJson(object) {
+    const { id, name, type, username, slug, link, permission, created_at, updated_at, isExpanded = true, children = []} = object;
 
     const node = new Node({
+      id,
       name,
       type,
+      username,
+      slug,
+      link,
+      permission,
+      created_at,
+      updated_at,
       isExpanded,
       children: children.map(Node.fromJSON),
     });
 
     return node;
   }
-
-
-  constructor({ name, type, isExpanded, children }) {
+  
+  constructor({id, name, type, username, slug, link, permission, created_at, updated_at, isExpanded, children}) {
+    this.id = id;
     this.name = name;
     this.type = type;
-    this.children = children ? children : [];
+    this.username = username;
+    this.slug = slug;
+    this.link = link;
+    this.permission = permission;
+    this.created_at = created_at;
+    this.updated_at = updated_at;
     this.isExpanded = isExpanded !== undefined ? isExpanded : true;
+    this.children = children ? children : [];
+    this.parent = null;
+  }
+  
+  clone() {
+    var n = new Node({
+      id: this.id,
+      name: this.name,
+      type: this.type,
+      username: this.username,
+      slug: this.slug,
+      permission: this.permission,
+      created_at: this.created_at,
+      updated_at: this.updated_at,
+      isExpanded: this.isExpanded
+    });
+    n.children = this.children.map(child => { 
+      var newChild = child.clone(); 
+      newChild.parent = n; 
+      return newChild; 
+    });
+    return n;
   }
 
   get path() {
     if (!this.parent) {
       return this.name;
     } else {
-      var p = this.parent.path;
-      if (p === "/")
-        return p + this.name;
-      else
-        return p + "/" + this.name;
+      let p = this.parent.path;
+      return p === "/" ? (p + this.name) : (p + "/" + this.name);
     }
-  }
-
-  copy() {
-    var n = new Node({
-      name: this.name,
-      type: this.type,
-      isExpanded: this.isExpanded
-    });
-    n.children = this.children.map(child => { var newChild = child.copy(); newChild.parent = n; return newChild; });
-    return n;
-  }
-
-  isRoot() {
-    return this.parent === undefined;
   }
 
   hasChildren() {
     return this.children.length > 0;
   }
 
-  isImage() {
-    let index = this.name.lastIndexOf(".");
-    if (index == -1) {
-      return false;
-    } else {
-      let type = this.name.substring(index).toLowerCase();
-      if (type == ".png" || type == ".jpg") {
-        return true;
-      } else {
-        return false;
-      }
-    }
+  isRoot() {
+    return this.parent === undefined;
   }
 
   isMarkdown() {
@@ -100,47 +90,35 @@ class Node {
     return this.type == "dir";
   }
 
-  getleafPaths() {
-    let paths = new Map();
-    function getleafPath(node){
-      if (node.hasChildren()) {
-        let children = node.children;
-        children.forEach(child => {
-          if (child.hasChildren()) {
-            getleafPath(child);
-          } else {
-            let path = child.path;
-            paths.set(path,child);
-          }
-        });
+  isImage() {
+    let index = this.name.lastIndexOf(".");
+    if (index == -1) {
+      return false;
+    } else {
+      let type = this.name.substring(index).toLowerCase();
+      if (type == ".png" || type == ".jpg") {
+        return true;
+      } else {
+        return false;
       }
     }
-    getleafPath(this);
-    return paths;
   }
 
-  getNodeByPath(path) {
-    let paths = this.getleafPaths();
-    if (paths.has(path)) {
-      return paths.get(path);
-    }
-    return null;
-  }
-
-  /**
-   * Return a JSON representation of the node.
-   *
-   * @return {Object}
-   */
-  toJSON() {
+  serializeToJson() {
     var children = []
     if (this.hasChildren()) {
       children = this.children.map(m => m.toJSON());
     }
 
     const object = {
+      id: this.id,
       name: this.name,
       type: this.type,
+      username: this.username,
+      slug: this.slug,
+      permission: this.permission,
+      created_at: this.created_at,
+      updated_at: this.updated_at,
       isExpanded: this.isExpanded,
       children: children
     }
@@ -150,5 +128,4 @@ class Node {
 
 }
 
-
-export { Node }
+export default Node;

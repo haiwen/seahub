@@ -3,7 +3,7 @@ import TreeView from './tree-view/tree-view';
 import { siteRoot, logoPath, mediaUrl, siteTitle, logoWidth, logoHeight } from './constance';
 import editorUtilities from '../utils/editor-utilties';
 import Tree from './tree-view/tree';
-import { Node } from './tree-view/node'
+import Node from './tree-view/node'
 import NodeMenu from './menu-component/node-menu';
 import MenuControl from './menu-component/node-menu-control';
 
@@ -85,17 +85,28 @@ class SidePanel extends Component {
 
   onAddFolderNode = (dirPath) => {
     editorUtilities.createDir(dirPath).then(res => {
-      let tree = this.state.tree_data.copy();
+      let tree = this.state.tree_data.clone();
       let index = dirPath.lastIndexOf("/");
       let name = dirPath.substring(index+1);
       let parentPath = dirPath.substring(0, index);
       if (!parentPath) {
         parentPath = "/";
       }
-      let node = new Node({name : name, type: "dir", isExpanded: false, children: []});
+      let node = new Node({
+        id: '',
+        name : name,
+        username: '',
+        slug: '',
+        permission: '',
+        created_at: '',
+        updated_at: '',
+        type: "dir", 
+        isExpanded: false, 
+        children: []
+      });
       let parentNode = tree.getNodeByPath(parentPath);
-      tree.addChildToNode(parentNode, node);
-      tree.setOneNodeToActived({node});
+      tree.addNodeToParent(node, parentNode);
+      tree.setNodeToActivated(node);
       this.setState({
         tree_data: tree
       })
@@ -105,17 +116,28 @@ class SidePanel extends Component {
 
   onAddFileNode = (filePath) => {
     editorUtilities.createFile(filePath).then(res => {
-      let tree = this.state.tree_data.copy();
+      let tree = this.state.tree_data.clone();
       let index = filePath.lastIndexOf("/");
       let name = filePath.substring(index+1);
       let parentPath = filePath.substring(0, index);
       if (!parentPath) {
         parentPath = "/";
       }
-      let node = new Node({name : name, type: "file", isExpanded: false, children: []});
+      let node = new Node({
+        id: '',
+        name : name,
+        username: '',
+        slug: '',
+        permission: '',
+        created_at: '',
+        updated_at: '',
+        type: "file", 
+        isExpanded: false, 
+        children: []
+      });
       let parentNode = tree.getNodeByPath(parentPath);
-      tree.addChildToNode(parentNode, node);
-      tree.setOneNodeToActived({node});
+      tree.addNodeToParent(node, parentNode);
+      tree.setNodeToActivated(node);
       this.setState({
         tree_data: tree
       })
@@ -123,20 +145,20 @@ class SidePanel extends Component {
   }
 
   onRenameNode = (newName) => {
-    let tree = this.state.tree_data.copy();
+    let tree = this.state.tree_data.clone();
     let node = this.state.currentNode;
     let type = node.type;
     let filePath = node.path;
     if (type === 'file') {
       editorUtilities.renameFile(filePath, newName).then(res => {
         if (this.isModifyCurrentFile()) {
-          tree.updateNodeParamValue(node, "name", newName);
+          tree.updateNodeParam(node, "name", newName);
           node.name = newName;  //repair current node
           this.props.onFileClick(null, node);
-          tree.setOneNodeToActived({node});
+          tree.setNodeToActivated(node);
           this.setState({tree_data: tree});
         } else {
-          tree.updateNodeParamValue(node, "name", newName);
+          tree.updateNodeParam(node, "name", newName);
           this.setState({tree_data: tree});
         }
       })
@@ -145,22 +167,21 @@ class SidePanel extends Component {
     if (type === 'dir') {
       let _this = this;
       editorUtilities.renameDir(filePath, newName).then(res => {
-        let tree = this.state.tree_data.copy();
         let currentNode = this.state.currentNode;
         if (this.isModifyContainsCurrentFile()) {
           let nodePath = currentNode.path;
           let filePath = _this.props.currentFilePath;
           let start =  filePath.indexOf(nodePath);
-          let node = currentNode.getNodeByPath(filePath.slice(start));
+          let node = this.state.tree_data.getNodeByPath(filePath.slice(start));
           if (node) {
-            tree.updateNodeParamValue(currentNode, "name", newName);
+            tree.updateNodeParam(currentNode, "name", newName);
             currentNode.name = newName;
             this.props.onFileClick(null, node);
-            tree.setOneNodeToActived({node});
+            tree.setNodeToActivated(node);
             this.setState({tree_data: tree});
           }
         } else {
-          tree.updateNodeParamValue(currentNode, "name", newName);
+          tree.updateNodeParam(currentNode, "name", newName);
           this.setState({tree_data: tree});
         }
       })
@@ -186,13 +207,13 @@ class SidePanel extends Component {
       isCurrentFile = this.isModifyCurrentFile();
     }
 
-    let tree = this.state.tree_data.copy();
-    tree.removeNodeFromTree(currentNode);
+    let tree = this.state.tree_data.clone();
+    tree.deleteNode(currentNode);
 
     if (isCurrentFile) {
       let homeNode = this.getHomeNode();
       this.props.onFileClick(null, homeNode);
-      tree.setNoneNodeActived();
+      tree.setTreeToUnActivated();
       this.setState({tree_data: tree})
     } else {
       this.setState({tree_data: tree})
@@ -220,13 +241,8 @@ class SidePanel extends Component {
   initializeTreeData() {
     editorUtilities.getFiles().then((files) => {
       // construct the tree object
-      var rootObj = {
-        name: '/',
-        type: 'dir',
-        isExpanded: true
-      }
       var treeData = new Tree();
-      treeData.parseFromList(rootObj, files);
+      treeData.parseListToTree(files);
       let homeNode = this.getHomeNode(treeData);
       this.setState({
         tree_data: treeData,
@@ -241,13 +257,7 @@ class SidePanel extends Component {
   }
 
   getHomeNode(treeData) {
-    let root = null;
-    if (treeData) {
-      root = treeData.root;
-    } else {
-      root = this.state.tree_data.root;
-    }
-    let homeNode = root.getNodeByPath(decodeURI("/home.md"));
+    let homeNode = this.state.tree_data.getNodeByPath("/home.md");
     return homeNode;
   }
 
@@ -263,8 +273,8 @@ class SidePanel extends Component {
       let node = this.state.tree_data.getNodeByPath(path);
       this.searchedPath = path;
       this.props.onFileClick(null, node);
-      let tree = this.state.tree_data.copy();
-      tree.setOneNodeToActived({node});
+      let tree = this.state.tree_data.clone();
+      tree.setNodeToActivated(node);
       this.setState({
         tree_data: tree
       })
