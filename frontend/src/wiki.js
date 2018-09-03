@@ -28,7 +28,7 @@ class Wiki extends Component {
       permission: '',
       isFileLoading: false,
       changedNode: null,
-      isMainNavBarClick: false
+      isViewFileState: true
     };
     window.onpopstate = this.onpopstate;
   }
@@ -96,15 +96,14 @@ class Wiki extends Component {
   
   onSearchedClick = (path) => {
     if (this.state.currentFilePath !== path) {
-      this.initMainPanelData(path);
-      let node = this.state.tree_data.getNodeByPath(path);
+      this.initMainPanelData(path); 
+
       let tree = this.state.tree_data.clone();
+      let node = tree.getNodeByPath(path);
       tree.setNodeToActivated(node);
-      this.setState({
-        tree_data: tree,
-        changedNode: node,
-        isMainNavBarClick: false
-      })
+
+      let path = node.path; //node is file
+      this.enterViewFileState(tree, node, path);
     }
   }
 
@@ -113,12 +112,9 @@ class Wiki extends Component {
     let node = tree.getNodeByPath(nodePath);
     tree.setNodeToActivated(node);
 
-    this.setState({
-      tree_data: tree,
-      changedNode: node,
-      filePath: node.path,
-      isMainNavBarClick: true
-    });
+    this.exitViewFileState(tree, node);
+
+    // update location url
     let fileUrl = serviceUrl + '/wikis/' + slug + node.path;
     window.history.pushState({urlPath: fileUrl, filePath: node.path},node.path, fileUrl);
   }
@@ -126,26 +122,11 @@ class Wiki extends Component {
   onMainNodeClick = (node) => {
     let tree = this.state.tree_data.clone();
     tree.setNodeToActivated(node);
-
     if (node.isMarkdown()) {
-      this.setState({
-        tree_data: tree,
-        changedNode: node,
-        filePath: node.path,
-        isMainNavBarClick: false,
-      });
-
       this.initMainPanelData(node.path);
+      this.enterViewFileState(tree, node, node.path);
     } else if (node.isDir()){
-      this.setState({
-        tree_data: tree,
-        changedNode: node,
-        filePath: node.path,
-        isMainNavBarClick: true,
-      });
-
-      let fileUrl = serviceUrl + '/wikis/' + slug + node.path;
-      window.history.pushState({urlPath: fileUrl, filePath: node.path}, node.path, fileUrl);
+      this.exitViewFileState(tree, node);
     } else {
       const w=window.open('about:blank');
       const url = serviceUrl + '/lib/' + repoID + '/file' + node.path;
@@ -155,10 +136,9 @@ class Wiki extends Component {
 
   onNodeClick = (e, node) => {
     if (node instanceof Node && node.isMarkdown()){
+      let tree = this.state.tree_data.clone();
       this.initMainPanelData(node.path);
-      this.setState({
-        isMainNavBarClick: false
-      })
+      this.enterViewFileState(tree, node, node.path);
     } else {
       const w=window.open('about:blank');
       const url = serviceUrl + '/lib/' + repoID + '/file' + node.path;
@@ -190,14 +170,15 @@ class Wiki extends Component {
       let node = this.buildNewNode(name, "dir");
       let parentNode = tree.getNodeByPath(parentPath);
       tree.addNodeToParent(node, parentNode);
-      if (!this.state.isMainNavBarClick) {
+      if (this.state.isViewFileState) {
         tree.setNodeToActivated(node);
+        this.setState({
+          tree_data: tree,
+          changedNode: node
+        })
+      } else {
+        this.exitViewFileState(tree, parentNode);
       }
-      this.setState({
-        tree_data: tree,
-        changedNode: node
-      })
-
     })
   }
 
@@ -213,13 +194,15 @@ class Wiki extends Component {
       let node = this.buildNewNode(name, "file");
       let parentNode = tree.getNodeByPath(parentPath);
       tree.addNodeToParent(node, parentNode);
-      if (!this.state.isMainNavBarClick) {
+      if (this.state.isViewFileState) {
         tree.setNodeToActivated(node);
+        this.setState({
+          tree_data: tree,
+          changedNode: node
+        })
+      } else {
+        this.exitViewFileState(tree, parentNode);
       }
-      this.setState({
-        tree_data: tree,
-        changedNode: node
-      })
     })
   }
 
@@ -233,8 +216,8 @@ class Wiki extends Component {
         tree.updateNodeParam(node, "last_update_time", moment.unix(date).fromNow());
         node.name = newName;
         node.last_update_time = moment.unix(date).fromNow();
-        if (this.isModifyCurrentFile(node)) {
-          if (!this.state.isMainNavBarClick) {
+        if (this.state.isViewFileState) {
+          if (this.isModifyCurrentFile(node)) {
             tree.setNodeToActivated(node);
             this.setState({
               tree_data: tree,
@@ -250,11 +233,11 @@ class Wiki extends Component {
       })
     } else if (node.isDir()) {
       editorUtilities.renameDir(filePath, newName).then(res => {
-        if (this.isModifyContainsCurrentFile(node)) {
-          let filePath = this.state.filePath;
-          let currentFileNode = tree.getNodeByPath(filePath);
-          tree.updateNodeParam(node, "name", newName);
-          if (!this.state.isMainNavBarClick) {
+        let filePath = this.state.filePath;
+        let currentFileNode = tree.getNodeByPath(filePath);
+        tree.updateNodeParam(node, "name", newName);
+        if (this.state.isViewFileState) {
+          if (this.isModifyContainsCurrentFile(node)) {
             tree.setNodeToActivated(currentFileNode);
             this.setState({
               tree_data: tree,
@@ -265,8 +248,12 @@ class Wiki extends Component {
             this.setState({tree_data: tree});
           }
         } else {
-          tree.updateNodeParam(node, "name", newName);
-          this.setState({tree_data: tree});
+          if (this.isModifyContainsCurrentFile(node)) {
+            tree.setNodeToActivated(currentFileNode);
+            this.exitViewFileState(tree, currentFileNode);
+          } else {
+            this.setState({tree_data: tree});
+          }
         }
       })
     }
@@ -290,19 +277,50 @@ class Wiki extends Component {
     }
 
     let tree = this.state.tree_data.clone();
-    tree.deleteNode(node);
-
-    if (isCurrentFile) {
-      let homeNode = this.getHomeNode(tree);
-      tree.setNodeToActivated(homeNode);
-      this.setState({
-        tree_data: tree,
-        changedNode: homeNode
-      })
-      this.initMainPanelData(homeNode.path);
+    
+    if (this.state.isViewFileState) {
+      if (isCurrentFile) {
+        let homeNode = this.getHomeNode(tree);
+        tree.setNodeToActivated(homeNode);
+        this.setState({
+          tree_data: tree,
+          changedNode: homeNode
+        })
+        this.initMainPanelData(homeNode.path);
+      } else {
+        this.setState({tree_data: tree})
+      }
     } else {
-      this.setState({tree_data: tree})
+      let parentNode = tree.getNodeByPath(this.state.filePath);
+      let isChild = tree.isNodeChild(parentNode, node);
+      if (isChild) {
+        this.exitViewFileState(tree, parentNode);
+      } else {
+        this.setState({tree_data: tree});
+      }
     }
+    tree.deleteNode(node);
+  }
+
+  
+  enterViewFileState(newTree, newNode, newPath) {
+    this.setState({
+      tree_data: newTree,
+      changedNode: newNode,
+      filePath: newPath,
+      isViewFileState: true
+    });
+  }
+  
+  exitViewFileState(newTree, newNode) {
+    this.setState({
+      tree_data: newTree,
+      changedNode: newNode,
+      filePath: newNode.path,
+      isViewFileState: false
+    });
+    let fileUrl = serviceUrl + '/wikis/' + slug + newNode.path;
+    window.history.pushState({urlPath: fileUrl, filePath: newNode.path}, newNode.path, fileUrl);
   }
 
   getFileNameByPath(path) {
@@ -348,11 +366,11 @@ class Wiki extends Component {
 
   isMarkdownFile(filePath) {
     let index = filePath.lastIndexOf(".");
-    if (index == -1) {
+    if (index === -1) {
       return false;
     } else {
       let type = filePath.substring(index).toLowerCase();
-      if (type == ".md" || type == ".markdown") {
+      if (type === ".md" || type === ".markdown") {
         return true;
       } else {
         return false;
@@ -394,7 +412,7 @@ class Wiki extends Component {
           latestContributor={this.state.latestContributor}
           lastModified={this.state.lastModified}
           permission={this.state.permission}
-          isMainNavBarClick={this.state.isMainNavBarClick}
+          isViewFileState={this.state.isViewFileState}
           changedNode={this.state.changedNode}
           isFileLoading={this.state.isFileLoading}
           onLinkClick={this.onLinkClick}

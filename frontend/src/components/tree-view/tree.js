@@ -127,6 +127,18 @@ class Tree {
     return findNode;
   }
 
+  isNodeChild(parentNode, node) {
+    let isChild = false;
+    while(node.parent){
+      if(node.parent.path === parentNode.path){
+        isChild = true;
+        break;
+      }
+      node = node.parent;
+    }
+    return isChild;
+  }
+
 
   traverseDF(callback) {
     let stack = [];

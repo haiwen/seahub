@@ -63,14 +63,14 @@ class MainPanel extends Component {
             </div>
           </div>
           <div className="cur-view-container">
-            { !this.props.isMainNavBarClick && <MarkdownViewer
+            { this.props.isViewFileState && <MarkdownViewer
               markdownContent={this.props.content}
               latestContributor={this.props.latestContributor}
               lastModified = {this.props.lastModified}
               onLinkClick={this.props.onLinkClick}
               isFileLoading={this.props.isFileLoading}
             />}
-            { this.props.isMainNavBarClick && 
+            { !this.props.isViewFileState && 
               <TreeDocView 
                 node={this.props.changedNode}
                 onMainNodeClick={this.props.onMainNodeClick}
