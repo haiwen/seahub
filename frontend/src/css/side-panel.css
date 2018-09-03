@@ -164,6 +164,10 @@
   background-color: #feac74 !important;
 }
 
+.tree-node-hight-light i {
+  color:#fff;
+}
+
 .dropdown-menu {
   min-width: 8rem;
 }
