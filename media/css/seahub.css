@@ -481,6 +481,11 @@ table img { vertical-align:middle; }
     border-radius:2px;
     margin-bottom:5px;
 }
+input.short-input {
+    width:50px;
+    height:18px;
+    margin:0;
+}
 .textarea { height:70px; }
 .repo-meta-info,
 .dirent-meta-info {
@@ -1461,11 +1466,8 @@ textarea:-moz-placeholder {/* for FF */
     margin:8px 0 4px;
 }
 #simplemodal-container .radio-item,
-#simplemodal-container .checkbox-option {
-    font-weight:normal;
-}
-#simplemodal-container .radio-item,
 #simplemodal-container .checkbox-label {
+    font-weight:normal;
     margin:4px 0;
 }
 .simplemodal-close {
@@ -3892,6 +3894,12 @@ button.sf-dropdown-toggle:focus {
 #share-popup .link-option-content {
     margin-left: 18px;
 }
+#share-popup .radio-item {
+    margin:1px 0;
+}
+#share-popup .gen-link-btn {
+    margin:18px 0 0;
+}
 #download-link-operations dl {
     margin-top:0;
 }
@@ -3906,12 +3914,6 @@ button.sf-dropdown-toggle:focus {
 .shared-link-copy-icon:hover {
     cursor: pointer; 
     color: #333;
-}
-#share-popup .share-link-perm-select {
-    height:25px;
-}
-.share-link-perm-msgs {
-    margin:2px 0 10px;
 }
 
 /* shared upload link */
