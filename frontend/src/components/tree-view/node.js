@@ -1,35 +1,25 @@
 class Node {
 
   static deserializefromJson(object) {
-    const { id, name, type, username, slug, link, permission, created_at, updated_at, isExpanded = true, children = []} = object;
+    const {name, type, size, last_update_time, isExpanded = true, children = []} = object;
 
     const node = new Node({
-      id,
       name,
       type,
-      username,
-      slug,
-      link,
-      permission,
-      created_at,
-      updated_at,
+      size,
+      last_update_time,
       isExpanded,
-      children: children.map(Node.fromJSON),
+      children: children.map(item => Node.deserializefromJson(item)),
     });
 
     return node;
   }
   
-  constructor({id, name, type, username, slug, link, permission, created_at, updated_at, isExpanded, children}) {
-    this.id = id;
+  constructor({name, type, size, last_update_time, isExpanded, children}) {
     this.name = name;
     this.type = type;
-    this.username = username;
-    this.slug = slug;
-    this.link = link;
-    this.permission = permission;
-    this.created_at = created_at;
-    this.updated_at = updated_at;
+    this.size = size;
+    this.last_update_time = last_update_time;
     this.isExpanded = isExpanded !== undefined ? isExpanded : true;
     this.children = children ? children : [];
     this.parent = null;
@@ -37,14 +27,10 @@ class Node {
   
   clone() {
     var n = new Node({
-      id: this.id,
       name: this.name,
       type: this.type,
-      username: this.username,
-      slug: this.slug,
-      permission: this.permission,
-      created_at: this.created_at,
-      updated_at: this.updated_at,
+      size: this.size,
+      last_update_time: this.last_update_time,
       isExpanded: this.isExpanded
     });
     n.children = this.children.map(child => { 
@@ -111,14 +97,10 @@ class Node {
     }
 
     const object = {
-      id: this.id,
       name: this.name,
       type: this.type,
-      username: this.username,
-      slug: this.slug,
-      permission: this.permission,
-      created_at: this.created_at,
-      updated_at: this.updated_at,
+      size: this.size,
+      last_update_time: this.last_update_time,
       isExpanded: this.isExpanded,
       children: children
     }

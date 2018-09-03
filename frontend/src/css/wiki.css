@@ -199,3 +199,12 @@ img[src=""] {
 .wiki-md-viewer-rendered-content.article h1 {
   margin-top: 0;
 }
+
+.custom-link {
+  color: #eb8205 !important;
+  cursor: pointer;
+}
+
+.custom-link:hover {
+  text-decoration: underline !important;
+}

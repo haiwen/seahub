@@ -1,8 +1,9 @@
 import React, { Component } from 'react';
-import Search from './search';
-import MarkdownViewer from './markdown-viewer';
-import Account from './account';
 import { gettext, repoID, serviceUrl, slug, siteRoot } from './constance';
+import Search from './search';
+import Account from './account';
+import MarkdownViewer from './markdown-viewer';
+import TreeDocView from './tree-doc-view/tree-doc-view';
 
 class MainPanel extends Component {
 
@@ -16,14 +17,26 @@ class MainPanel extends Component {
     window.location.href= serviceUrl + '/lib/' + repoID + '/file' + this.props.filePath + '?mode=edit';
   }
 
+  onMainNavBarClick = (e) => {
+    this.props.onMainNavBarClick(e.target.dataset.path);
+  }
+
   render() {
-    var filePathList = this.props.filePath.split('/');
-    var pathElem = filePathList.map((item, index) => {
-      if (item == "") {
+
+    let filePathList = this.props.filePath.split('/');
+    let nodePath = "";
+    let pathElem = filePathList.map((item, index) => {
+      if (item === "") {
         return;
-      } else {
+      } 
+      if (index === (filePathList.length - 1)) {
         return (
           <span key={index}><span className="path-split">/</span>{item}</span>
+        )
+      } else {
+        nodePath += "/" + item;
+        return (
+          <a key={index} className="custom-link" data-path={nodePath} onClick={this.onMainNavBarClick}><span className="path-split">/</span>{item}</a>
         )
       }
     });
@@ -50,13 +63,20 @@ class MainPanel extends Component {
             </div>
           </div>
           <div className="cur-view-container">
-            <MarkdownViewer
+            { !this.props.isMainNavBarClick && <MarkdownViewer
               markdownContent={this.props.content}
               latestContributor={this.props.latestContributor}
               lastModified = {this.props.lastModified}
               onLinkClick={this.props.onLinkClick}
               isFileLoading={this.props.isFileLoading}
-            />
+            />}
+            { this.props.isMainNavBarClick && 
+              <TreeDocView 
+                node={this.props.changedNode}
+                onMainNodeClick={this.props.onMainNodeClick}
+              >
+              </TreeDocView>
+            }
           </div>
         </div>
     </div>

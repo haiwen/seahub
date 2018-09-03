@@ -1,4 +1,5 @@
 import Node from './node';
+import moment from 'moment';
 
 class Tree {
   
@@ -157,14 +158,10 @@ class Tree {
 
   parseModelToTree(model) {
     var node = new Node({
-      id: model.id,
       name: model.name,
       type: model.type,
-      username: model.username,
-      slug: model.slug,
-      permission: model.permission,
-      created_at: model.created_at,
-      updated_at: model.updated_at,
+      size: model.size,
+      last_update_time: moment.unix(model.last_update_time).fromNow(),
       isExpanded: false
     });
     if (model.children instanceof Array) {
@@ -189,14 +186,10 @@ class Tree {
     let treeNodeList = [];
     for (let nodeObj of nodeList) {
       let node = new Node({
-        id: nodeObj.id,
         name: nodeObj.name,
         type: nodeObj.type,
-        username: nodeObj.username,
-        slug: nodeObj.slug,
-        permission: nodeObj.permission,
-        created_at: nodeObj.created_at,
-        updated_at: nodeObj.updated_at,
+        size: nodeObj.size,
+        last_update_time: moment.unix(nodeObj.last_update_time).fromNow(),
         isExpanded: false
       });
       node.parent_path = nodeObj.parent_path;
@@ -219,14 +212,10 @@ class Tree {
 
   parseNodeToTree(node) {
     var node = new Node({
-      id: node.id,
       name: node.name,
       type: node.type,
-      username: node.username,
-      slug: node.slug,
-      permission: node.permission,
-      created_at: node.created_at,
-      updated_at: node.updated_at,
+      size: node.size,
+      last_update_time: moment.unix(node.last_update_time).fromNow(),
       isExpanded: false
     });
     if (node.children instanceof Array) {

@@ -9,13 +9,15 @@ seafileAPI.initForSeahubUsage({ siteRoot, xcsrfHeaders });
 class EditorUtilities {
   
   getFiles() {
-    return seafileAPI.listWikiDir(slug).then(items => {
+    return seafileAPI.listWikiDir(slug, "/").then(items => {
         const files = items.data.dir_file_list.map(item => {
           return {
             name: item.name,
             type: item.type === 'dir' ? 'dir' : 'file',
             isExpanded: item.type === 'dir' ? true : false,
             parent_path: item.parent_dir,
+            last_update_time: item.last_update_time,
+            size: item.size
           }
         })
         return files;

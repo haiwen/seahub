@@ -22,13 +22,13 @@ class Wiki extends Component {
       content: '',
       tree_data: new Tree(),
       closeSideBar: false,
-      fileName: '',
       filePath: '',
       latestContributor: '',
       lastModified: '',
       permission: '',
       isFileLoading: false,
-      changedNode: null
+      changedNode: null,
+      isMainNavBarClick: false
     };
     window.onpopstate = this.onpopstate;
   }
@@ -39,6 +39,9 @@ class Wiki extends Component {
   }
 
   initMainPanelData(filePath) {
+    if (!this.isMarkdownFile(filePath)) {
+      filePath = "/home.md";
+    }
     this.setState({isFileLoading: true});
     editorUtilities.getWikiFileContent(slug, filePath)
       .then(res => {
@@ -47,9 +50,8 @@ class Wiki extends Component {
           latestContributor: res.data.latest_contributor,
           lastModified: moment.unix(res.data.last_modified).fromNow(),
           permission: res.data.permission,
-          fileName: this.getFileNameByPath(filePath),
           filePath: filePath,
-          isFileLoading: false,
+          isFileLoading: false
         })
       })
 
@@ -100,14 +102,63 @@ class Wiki extends Component {
       tree.setNodeToActivated(node);
       this.setState({
         tree_data: tree,
-        changedNode: node
+        changedNode: node,
+        isMainNavBarClick: false
       })
+    }
+  }
+
+  onMainNavBarClick = (nodePath) => {
+    let tree = this.state.tree_data.clone();
+    let node = tree.getNodeByPath(nodePath);
+    tree.setNodeToActivated(node);
+
+    this.setState({
+      tree_data: tree,
+      changedNode: node,
+      filePath: node.path,
+      isMainNavBarClick: true
+    });
+    let fileUrl = serviceUrl + '/wikis/' + slug + node.path;
+    window.history.pushState({urlPath: fileUrl, filePath: node.path},node.path, fileUrl);
+  }
+
+  onMainNodeClick = (node) => {
+    let tree = this.state.tree_data.clone();
+    tree.setNodeToActivated(node);
+
+    if (node.isMarkdown()) {
+      this.setState({
+        tree_data: tree,
+        changedNode: node,
+        filePath: node.path,
+        isMainNavBarClick: false,
+      });
+
+      this.initMainPanelData(node.path);
+    } else if (node.isDir()){
+      this.setState({
+        tree_data: tree,
+        changedNode: node,
+        filePath: node.path,
+        isMainNavBarClick: true,
+      });
+
+      let fileUrl = serviceUrl + '/wikis/' + slug + node.path;
+      window.history.pushState({urlPath: fileUrl, filePath: node.path}, node.path, fileUrl);
+    } else {
+      const w=window.open('about:blank');
+      const url = serviceUrl + '/lib/' + repoID + '/file' + node.path;
+      w.location.href = url;
     }
   }
 
   onNodeClick = (e, node) => {
     if (node instanceof Node && node.isMarkdown()){
       this.initMainPanelData(node.path);
+      this.setState({
+        isMainNavBarClick: false
+      })
     } else {
       const w=window.open('about:blank');
       const url = serviceUrl + '/lib/' + repoID + '/file' + node.path;
@@ -255,14 +306,10 @@ class Wiki extends Component {
 
   buildNewNode(name, type) {
     let node = new Node({
-      id: '',
         name : name,
-        username: '',
-        slug: '',
-        permission: '',
-        created_at: '',
-        updated_at: '',
         type: type, 
+        size: '',
+        last_update_time: '',
         isExpanded: false, 
         children: []
     });
@@ -271,7 +318,7 @@ class Wiki extends Component {
 
   isModifyCurrentFile(node) {
     let nodeName = node.name;
-    let fileName = this.state.fileName;
+    let fileName = this.getFileNameByPath(this.state.filePath);
     return nodeName === fileName;
   }
 
@@ -283,6 +330,20 @@ class Wiki extends Component {
       return true;
     }
     return false;
+  }
+
+  isMarkdownFile(filePath) {
+    let index = filePath.lastIndexOf(".");
+    if (index == -1) {
+      return false;
+    } else {
+      let type = filePath.substring(index).toLowerCase();
+      if (type == ".md" || type == ".markdown") {
+        return true;
+      } else {
+        return false;
+      }
+    }
   }
 
   isInternalMarkdownLink(url) {
@@ -315,15 +376,18 @@ class Wiki extends Component {
         />
         <MainPanel
           content={this.state.content}
-          fileName={this.state.fileName}
           filePath={this.state.filePath}
-          onLinkClick={this.onLinkClick}
-          onMenuClick={this.onMenuClick}
-          onSearchedClick={this.onSearchedClick}
           latestContributor={this.state.latestContributor}
           lastModified={this.state.lastModified}
           permission={this.state.permission}
+          isMainNavBarClick={this.state.isMainNavBarClick}
+          changedNode={this.state.changedNode}
           isFileLoading={this.state.isFileLoading}
+          onLinkClick={this.onLinkClick}
+          onMenuClick={this.onMenuClick}
+          onSearchedClick={this.onSearchedClick}
+          onMainNavBarClick={this.onMainNavBarClick}
+          onMainNodeClick={this.onMainNodeClick}
         />
       </div>
     )

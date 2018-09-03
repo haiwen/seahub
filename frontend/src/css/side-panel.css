@@ -104,6 +104,7 @@
   position: relative;
   padding-left: 12px;
   height: 24px;
+  cursor: pointer;
 }
 
 .tree-node-inner .tree-node-text {
@@ -159,6 +160,7 @@
 }
 
 .tree-node-hight-light {
+  color: #fff;
   background-color: #feac74 !important;
 }
 
