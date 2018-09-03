@@ -96,6 +96,7 @@ urlpatterns = [
     url(r'^avatars/group/(?P<group_id>\d+)/resized/(?P<size>[0-9]+)/$', GroupAvatarView.as_view()),
 
     url(r'^groups/$', Groups.as_view()),
+    url(r'^groups/(?P<group_id>\d+)/settings/$', GroupShared.as_view()),
     url(r'^groups/(?P<group_id>\d+)/$', Groups.as_view()),
     url(r'^groups/(?P<group_id>\d+)/members/$', GroupMembers.as_view()),
     url(r'^groups/(?P<group_id>\d+)/repos/$', GroupRepos.as_view(), name="api2-grouprepos"),

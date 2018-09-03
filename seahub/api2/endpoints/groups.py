@@ -32,6 +32,7 @@ from seahub.views.modules import is_wiki_mod_enabled_for_group, \
 from seahub.share.models import ExtraGroupsSharePermission
 
 from .utils import api_check_group
+from seahub.options.models import GroupOptions
 
 logger = logging.getLogger(__name__)
 
@@ -244,8 +245,8 @@ class Group(APIView):
                 error_msg = 'Internal Server Error'
                 return api_error(status.HTTP_500_INTERNAL_SERVER_ERROR, error_msg)
 
-        new_owner = request.data.get('owner', None)
         # transfer a group
+        new_owner = request.data.get('owner', None)
         if new_owner:
             try:
                 # only group owner can transfer a group

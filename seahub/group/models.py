@@ -39,3 +39,4 @@ class PublicGroup(models.Model):
     To record a public group
     """
     group_id = models.IntegerField(db_index=True)
+

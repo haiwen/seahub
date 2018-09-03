@@ -35,6 +35,9 @@ from seahub.share.signals import share_repo_to_user_successful, share_repo_to_gr
 from seahub.constants import PERMISSION_READ, PERMISSION_READ_WRITE, \
         PERMISSION_ADMIN
 
+from seahub.options import models
+from seahub.group.utils import validate_group_name, check_group_name_conflict, \
+    is_group_member, is_group_admin, is_group_owner, is_group_admin_or_owner
 
 logger = logging.getLogger(__name__)
 json_content_type = 'application/json; charset=utf-8'

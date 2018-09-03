@@ -56,7 +56,7 @@ from seahub.group.utils import BadGroupNameError, ConflictGroupNameError, \
     validate_group_name, is_group_member, group_id_to_name
 from seahub.thumbnail.utils import generate_thumbnail
 from seahub.notifications.models import UserNotification
-from seahub.options.models import UserOptions
+from seahub.options.models import UserOptions, GroupOptions
 from seahub.profile.models import Profile, DetailedProfile
 from seahub.signals import (repo_created, repo_deleted)
 from seahub.share.models import FileShare, OrgFileShare, UploadLinkShare
@@ -131,6 +131,9 @@ from seaserv import seafserv_threaded_rpc, \
     create_org, ccnet_api, send_message
 
 from constance import config
+from seahub.options import models
+from seahub.group.utils import validate_group_name, check_group_name_conflict, \
+    is_group_member, is_group_admin, is_group_owner, is_group_admin_or_owner
 
 logger = logging.getLogger(__name__)
 json_content_type = 'application/json; charset=utf-8'
@@ -4305,11 +4308,48 @@ class Groups(APIView):
             return api_error(status.HTTP_400_BAD_REQUEST,
                              "Operation can only be rename.")
 
-class GroupMembers(APIView):
+class GroupShared(APIView):
     authentication_classes = (TokenAuthentication, SessionAuthentication)
     permission_classes = (IsAuthenticated,)
     throttle_classes = (UserRateThrottle,)
 
+    def put(self, request, group_id, format=None):
+        """
+        group_shared
+        """
+        try:
+            group_id_int = int(group_id)
+        except ValueError:
+            return api_error(status.HTTP_400_BAD_REQUEST, 'Invalid group ID')
+
+        username = request.user.username
+        if not is_group_admin_or_owner(group_id, username):
+            error_msg = 'Permission denied.'
+            return api_error(status.HTTP_403_FORBIDDEN, error_msg)
+
+        group = get_group(group_id_int)
+        if not group:
+            return api_error(status.HTTP_404_NOT_FOUND, 'Group not found')
+
+        if not is_group_staff(group, request.user):
+            return api_error(status.HTTP_403_FORBIDDEN, 'Only administrators can add group members')
+        options_key = request.data.get('shared_repo', None)
+	if not options_key:
+            return api_error(status.HTTP_400_BAD_REQUEST, 'Request name error')
+
+        shared_repo = request.data.get('shared_repo', None)
+        if shared_repo == '1' or shared_repo == '0':
+            gpd =  models.GroupOptions.objects.filter(group_id=group_id, option_key='shared_repo').first()
+            if not gpd:
+                models.GroupOptions.objects.create(group_id=group_id, option_key='shared_repo', option_val=shared_repo)
+            else:
+                gpd.option_val=shared_repo
+                gpd.save()
+            return HttpResponse(json.dumps({'success': True}), status=200, content_type="application/json")
+        else:
+            return api_error(status.HTTP_400_BAD_REQUEST, 'input 0 or 1')
+
+class GroupMembers(APIView):
     def put(self, request, group_id, format=None):
         """
         Add group members.

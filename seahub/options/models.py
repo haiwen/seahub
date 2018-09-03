@@ -224,3 +224,9 @@ class UserOptions(models.Model):
     option_val = models.CharField(max_length=50)
 
     objects = UserOptionsManager()
+
+
+class GroupOptions(models.Model):
+    group_id = models.IntegerField(db_index=True)
+    option_key = models.CharField(max_length=50)
+    option_val = models.CharField(max_length=50)
