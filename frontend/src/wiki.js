@@ -190,7 +190,9 @@ class Wiki extends Component {
       let node = this.buildNewNode(name, "dir");
       let parentNode = tree.getNodeByPath(parentPath);
       tree.addNodeToParent(node, parentNode);
-      tree.setNodeToActivated(node);
+      if (!this.state.isMainNavBarClick) {
+        tree.setNodeToActivated(node);
+      }
       this.setState({
         tree_data: tree,
         changedNode: node
@@ -211,7 +213,9 @@ class Wiki extends Component {
       let node = this.buildNewNode(name, "file");
       let parentNode = tree.getNodeByPath(parentPath);
       tree.addNodeToParent(node, parentNode);
-      tree.setNodeToActivated(node);
+      if (!this.state.isMainNavBarClick) {
+        tree.setNodeToActivated(node);
+      }
       this.setState({
         tree_data: tree,
         changedNode: node
@@ -224,18 +228,23 @@ class Wiki extends Component {
     let filePath = node.path;
     if (node.isMarkdown()) {
       editorUtilities.renameFile(filePath, newName).then(res => {
+        let date = new Date().getTime()/1000;
+        tree.updateNodeParam(node, "name", newName);
+        tree.updateNodeParam(node, "last_update_time", moment.unix(date).fromNow());
+        node.name = newName;
+        node.last_update_time = moment.unix(date).fromNow();
         if (this.isModifyCurrentFile(node)) {
-          tree.updateNodeParam(node, "name", newName);
-          
-          node.name = newName;
-          tree.setNodeToActivated(node);
-          this.setState({
-            tree_data: tree,
-            changedNode: node
-          });
-          this.initMainPanelData(node.path);
+          if (!this.state.isMainNavBarClick) {
+            tree.setNodeToActivated(node);
+            this.setState({
+              tree_data: tree,
+              changedNode: node
+            });
+            this.initMainPanelData(node.path);
+          } else {
+            this.setState({tree_data: tree});
+          }
         } else {
-          tree.updateNodeParam(node, "name", newName);
           this.setState({tree_data: tree});
         }
       })
@@ -245,12 +254,16 @@ class Wiki extends Component {
           let filePath = this.state.filePath;
           let currentFileNode = tree.getNodeByPath(filePath);
           tree.updateNodeParam(node, "name", newName);
-          tree.setNodeToActivated(currentFileNode);
-          this.setState({
-            tree_data: tree,
-            changedNode: currentFileNode
-          });
-          this.initMainPanelData(currentFileNode.path);
+          if (!this.state.isMainNavBarClick) {
+            tree.setNodeToActivated(currentFileNode);
+            this.setState({
+              tree_data: tree,
+              changedNode: currentFileNode
+            });
+            this.initMainPanelData(currentFileNode.path);
+          } else {
+            this.setState({tree_data: tree});
+          }
         } else {
           tree.updateNodeParam(node, "name", newName);
           this.setState({tree_data: tree});
@@ -305,11 +318,12 @@ class Wiki extends Component {
   }
 
   buildNewNode(name, type) {
+    let date = new Date().getTime()/1000;
     let node = new Node({
         name : name,
         type: type, 
-        size: '',
-        last_update_time: '',
+        size: '0',
+        last_update_time: moment.unix(date).fromNow(),
         isExpanded: false, 
         children: []
     });
