@@ -69,12 +69,6 @@ class TreeNodeView extends React.Component {
     document.addEventListener('click', this.hideMenuIcon);
   }
 
-  componentWillReceiveProps(nextProps) {
-    if (nextProps.node.path === nextProps.currentFilePath) {
-      this.setState({isMenuIconShow: true});
-    }
-  }
-
   componentWillUnmount() {
     document.removeEventListener('click', this.hideMenuIcon);
   }
@@ -131,10 +125,11 @@ class TreeNodeView extends React.Component {
 
   renderMenuController() {
     if (this.props.permission === "rw") {
+      let isShow = (this.props.node.path === this.props.currentFilePath);
       return (
         <div className="right-icon">
           <MenuControl 
-            isShow={this.state.isMenuIconShow}
+            isShow={this.state.isMenuIconShow || isShow}
             onClick={this.onMenuControlClick}
           />
         </div>
@@ -177,19 +172,18 @@ class TreeNodeView extends React.Component {
     let node = this.props.node;
     let { type, icon } = this.getNodeTypeAndIcon();
     let hlClass = "";
-    if (!node.isDir() && node.path === this.props.currentFilePath) {
+    if (node.path === this.props.currentFilePath) {
       hlClass = "tree-node-hight-light";
     }
-    let customClass = "tree-node " + hlClass;
 
     return (
-      <div type={type} className={customClass} style={styles}>
+      <div type={type} className="tree-node" style={styles}>
         <div 
           onMouseLeave={this.onMouseLeave} 
           onMouseEnter={this.onMouseEnter}
           onClick={this.onClick}
           type={type} 
-          className={`tree-node-inner text-nowrap ${node.name === '/'? 'hide': ''}`}
+          className={`tree-node-inner text-nowrap ${hlClass} ${node.name === '/'? 'hide': ''}`}
         >
           <div className="tree-node-text" type={type} draggable="true" onDragStart={this.onDragStart}>{node.name}</div>
           <div className="left-icon">

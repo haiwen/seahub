@@ -102,15 +102,14 @@
 
 .tree-node-inner {
   position: relative;
-  padding-left: 12px;
   height: 26px;
   cursor: pointer;
   line-height: 1.625;
 }
 
 .tree-node-inner .tree-node-text {
-  padding-left: 1.5rem;
-  width: calc(100% - 1.5rem);
+  padding-left: 2.8rem;
+  width: calc(100% - 2.8rem);
   font-size: 15px;
   white-space: nowrap;
   overflow: hidden;
@@ -124,7 +123,7 @@
   align-items:center;
   top: 0;
   left: 0;
-  padding-left: 1rem;
+  padding-left: 1.5rem;
 }
 
 .folder-toggle-icon {
@@ -132,16 +131,15 @@
   left: 0;
   color: #c0c0c0;
   line-height: 1.625;
-  width: 1rem;
+  width: 1.5rem;
   display: flex;
   align-content: center;
   justify-content: center;
 }
 
 .tree-node-icon {
-  margin-right: 0.4rem;
   display: inline-block;
-  width: 0.5rem;
+  width: 1rem;
   text-align: center;
   color: #b0b0b0;
 }
@@ -150,6 +148,7 @@
   position: absolute;
   top: 0;
   right: 0;
+  bottom: 0;
   width: 1.5rem;
   color: #888;   
   z-index: 2;  
@@ -162,7 +161,7 @@
   height: 100%;
   vertical-align: middle;
   font-size: 0.8125rem;
-  line-height: 1.625 !important;
+  line-height: 1.625rem !important;
 }
 
 .tree-node-hight-light {
