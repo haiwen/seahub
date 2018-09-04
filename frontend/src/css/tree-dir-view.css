@@ -1,0 +1,50 @@
+.doc-view-container {
+  width: 100%;
+  height: 100%;
+  margin: 10px 16px;
+}
+
+.doc-view-header .row,
+.doc-view-body .row {
+  margin: 0;
+}
+
+.doc-view-body {
+  width: 100%;
+  height: 100%;
+}
+
+.doc-view-body tr:hover{
+  background-color: #f8f8f8;
+}
+
+.doc-view-header tr .dirent-icon,
+.doc-view-body tr .dirent-icon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.doc-view-container td {
+  color: #333;
+  font-size: 14px;
+  word-break: break-all;
+}
+
+.doc-view-container th {
+  text-align: left;
+  font-weight: normal;
+  color: #9c9c9c;
+}
+
+.doc-view-container th, td {
+  padding-top: 5px;
+  padding-bottom: 5px;
+  border-bottom: 1px solid #eee;
+}
+.doc-view-container .img-placeholder,
+.doc-view-container tr img {
+  display: block;
+  width: 24px;
+  height: 24px;
+}

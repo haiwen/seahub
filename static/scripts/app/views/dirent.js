@@ -305,6 +305,7 @@ define([
         },
 
         downloadDir: function() {
+            this.hideMobileMenu();
             var dir = this.dirView.dir;
             var obj_name = this.model.get('obj_name');
             Common.zipDownload(dir.repo_id, dir.path, obj_name);
@@ -371,9 +372,11 @@ define([
             this.hideMobileMenu();
             var dir = this.dir,
                 obj_name = this.model.get('obj_name'),
+                can_preview = this.model.get('can_preview'),
                 dirent_path = Common.pathJoin([dir.path, obj_name]);
 
             var options = {
+                'can_preview': can_preview,
                 'is_repo_owner': dir.is_repo_owner,
                 'is_virtual': dir.is_virtual,
                 'user_perm': this.model.get('perm'),

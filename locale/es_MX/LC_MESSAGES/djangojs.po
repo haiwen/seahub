@@ -10,8 +10,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: seahub\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2018-08-31 13:21+0800\n"
-"PO-Revision-Date: 2018-08-31 05:20+0000\n"
+"POT-Creation-Date: 2018-09-04 15:05+0800\n"
+"PO-Revision-Date: 2018-09-04 06:58+0000\n"
 "Last-Translator: zheng xie <xiez1989@gmail.com>\n"
 "Language-Team: Spanish (Mexico) (http://www.transifex.com/haiwen/seahub/language/es_MX/)\n"
 "MIME-Version: 1.0\n"
@@ -28,7 +28,7 @@ msgstr "Editar Página"
 msgid "Wikis"
 msgstr "Wikis"
 
-#: frontend/src/components/SidePanel.js:271
+#: frontend/src/components/SidePanel.js:291
 msgid "Pages"
 msgstr "Páginas"
 
@@ -127,6 +127,62 @@ msgstr "Renombrar"
 msgid "Search files in this wiki"
 msgstr "Buscar archivos en el wiki"
 
+#: seahub/templates/priv/ali.js:8
+msgid "Preview-Edit-on-Cloud library"
+msgstr ""
+
+#: seahub/templates/priv/ali.js:9
+msgid "Preview-on-Cloud library"
+msgstr ""
+
+#: seahub/templates/priv/ali.js:10
+msgid "Admin access"
+msgstr ""
+
+#: seahub/templates/priv/ali.js:12
+msgid "Read-Write folder"
+msgstr ""
+
+#: seahub/templates/priv/ali.js:13
+msgid "Read-Only folder"
+msgstr ""
+
+#: seahub/templates/priv/ali.js:14
+msgid "Preview-Edit-on-Cloud folder"
+msgstr ""
+
+#: seahub/templates/priv/ali.js:15
+msgid "Preview-on-Cloud folder"
+msgstr ""
+
+#: seahub/templates/priv/ali.js:17
+msgid "Preview-Edit-on-Cloud"
+msgstr ""
+
+#: seahub/templates/priv/ali.js:18
+msgid "Preview-on-Cloud"
+msgstr ""
+
+#: seahub/templates/priv/ali.js:21
+msgid "Read-Write-Sync"
+msgstr ""
+
+#: seahub/templates/priv/ali.js:22
+msgid "Read-Only-Sync"
+msgstr ""
+
+#: seahub/templates/priv/ali.js:23
+msgid "Co-Owner"
+msgstr ""
+
+#: seahub/templates/priv/ali.js:24
+msgid "Edit-on-Cloud"
+msgstr ""
+
+#: seahub/templates/priv/ali.js:25
+msgid "View-on-Cloud"
+msgstr ""
+
 #: static/scripts/app/models/deleted-repo.js:19
 #: static/scripts/app/models/repo.js:59 static/scripts/common.js:343
 msgid "Encrypted library"
@@ -155,25 +211,25 @@ msgstr "Nombre requerido"
 #: static/scripts/app/models/repo.js:37
 #: static/scripts/app/views/dialogs/dirent-rename.js:65
 #: static/scripts/app/views/dir.js:667 static/scripts/app/views/dir.js:727
-#: static/scripts/app/views/dirent.js:512
+#: static/scripts/app/views/dirent.js:514
 #: static/scripts/app/views/group-repo.js:131
 #: static/scripts/app/views/repo.js:187
 msgid "Name should not include '/'."
 msgstr "El nombre no debe contener ' / '."
 
-#: static/scripts/app/models/repo.js:41 static/scripts/app/views/share.js:318
+#: static/scripts/app/models/repo.js:41 static/scripts/app/views/share.js:334
 msgid "Please enter password"
 msgstr "Ingresa una contraseña"
 
-#: static/scripts/app/models/repo.js:42 static/scripts/app/views/share.js:326
+#: static/scripts/app/models/repo.js:42 static/scripts/app/views/share.js:342
 msgid "Please enter the password again"
 msgstr "Ingresa la contraseña nuevamente"
 
-#: static/scripts/app/models/repo.js:44 static/scripts/app/views/share.js:322
+#: static/scripts/app/models/repo.js:44 static/scripts/app/views/share.js:338
 msgid "Password is too short"
 msgstr "Contraseña demasiado corta"
 
-#: static/scripts/app/models/repo.js:46 static/scripts/app/views/share.js:330
+#: static/scripts/app/models/repo.js:46 static/scripts/app/views/share.js:346
 msgid "Passwords don't match"
 msgstr "Las contraseñas no coinciden"
 
@@ -294,7 +350,7 @@ msgstr "Copiado con éxito %(name)s"
 
 #: static/scripts/app/views/dialogs/dirent-rename.js:59
 #: static/scripts/app/views/dir.js:662 static/scripts/app/views/dir.js:722
-#: static/scripts/app/views/dirent.js:506
+#: static/scripts/app/views/dirent.js:508
 #: static/scripts/app/views/group-repo.js:125
 #: static/scripts/app/views/groups.js:118
 #: static/scripts/app/views/invitations.js:65
@@ -557,7 +613,7 @@ msgid "locked by {placeholder}"
 msgstr "bloqueado por {placeholder}"
 
 #: static/scripts/app/views/dirent-grid.js:187
-#: static/scripts/app/views/dirent.js:413
+#: static/scripts/app/views/dirent.js:415
 msgid "Successfully deleted %(name)s"
 msgstr "Eliminados con éxito %(name)s"
 
@@ -640,7 +696,7 @@ msgid "Set {placeholder}'s permission"
 msgstr "Establecer permiso de  {placeholder}"
 
 #: static/scripts/app/views/folder-perm.js:126
-#: static/scripts/app/views/share.js:839
+#: static/scripts/app/views/share.js:842
 msgid "Select groups"
 msgstr "Seleccionar grupos"
 
@@ -789,45 +845,45 @@ msgstr "Permiso modificado con éxito"
 msgid "Successfully deleted 1 item"
 msgstr "1 ítem eliminado con éxito"
 
-#: static/scripts/app/views/share.js:104
+#: static/scripts/app/views/share.js:109
 #: static/scripts/sysadmin-app/views/share.js:42
 msgid "Share {placeholder}"
 msgstr "Compartir {placeholder}"
 
-#: static/scripts/app/views/share.js:193
+#: static/scripts/app/views/share.js:209
 msgid "Expired"
 msgstr "Expirado"
 
-#: static/scripts/app/views/share.js:271 static/scripts/app/views/share.js:272
-#: static/scripts/app/views/share.js:293 static/scripts/app/views/share.js:294
+#: static/scripts/app/views/share.js:287 static/scripts/app/views/share.js:288
+#: static/scripts/app/views/share.js:309 static/scripts/app/views/share.js:310
 msgid "Hide"
 msgstr "Ocultar"
 
-#: static/scripts/app/views/share.js:289 static/scripts/app/views/share.js:290
+#: static/scripts/app/views/share.js:305 static/scripts/app/views/share.js:306
 msgid "Show"
 msgstr "Mostrar"
 
-#: static/scripts/app/views/share.js:345
+#: static/scripts/app/views/share.js:361
 msgid "Please enter days."
 msgstr "Por favor ingrese días."
 
-#: static/scripts/app/views/share.js:349
+#: static/scripts/app/views/share.js:365
 msgid "Please enter valid days"
 msgstr "Ingresa cantidad válida de días"
 
-#: static/scripts/app/views/share.js:456
+#: static/scripts/app/views/share.js:468
 msgid "Share link is copied to the clipboard."
 msgstr ""
 
-#: static/scripts/app/views/share.js:482
+#: static/scripts/app/views/share.js:485
 msgid "Please input at least an email."
 msgstr "Ingresa al menos un correo."
 
-#: static/scripts/app/views/share.js:499
+#: static/scripts/app/views/share.js:502
 msgid "Successfully sent to {placeholder}"
 msgstr "Enviado con éxito a  {placeholder}"
 
-#: static/scripts/app/views/share.js:503
+#: static/scripts/app/views/share.js:506
 msgid "Failed to send to {placeholder}"
 msgstr "Fallo al enviar a  {placeholder}"
 

@@ -239,6 +239,8 @@ def get_wiki_dirs_by_path(repo_id, path, all_dirs):
 
         entry["parent_dir"] = path
         entry["name"] = dirent.obj_name
+        entry["size"] = dirent.size
+        entry["last_update_time"] = dirent.mtime
 
         all_dirs.append(entry)
 

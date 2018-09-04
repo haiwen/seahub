@@ -44,10 +44,7 @@ class TreeNodeView extends React.Component {
 
   handleCollapse = (e) => {
     e.stopPropagation();
-    const { node } = this.props;
-    if (this.props.treeView.toggleCollapse) {
-      this.props.treeView.toggleCollapse(node);
-    }
+    this.props.onDirCollapse(e, this.props.node);
   }
 
   onDragStart = (e) => {
@@ -69,12 +66,12 @@ class TreeNodeView extends React.Component {
   }
 
   componentDidMount() {
-     document.addEventListener('click', this.hideMenuIcon);
-   }
+    document.addEventListener('click', this.hideMenuIcon);
+  }
 
-   componentWillUnmount() {
-     document.removeEventListener('click', this.hideMenuIcon);
-   }
+  componentWillUnmount() {
+    document.removeEventListener('click', this.hideMenuIcon);
+  }
 
   renderCollapse = () => {
     const { node } = this.props;
@@ -115,6 +112,7 @@ class TreeNodeView extends React.Component {
                 isNodeItemFrezee={this.props.isNodeItemFrezee}
                 permission={this.props.permission}
                 currentFilePath={this.props.currentFilePath}
+                onDirCollapse={this.props.onDirCollapse}
               />
             );
           })}
@@ -127,10 +125,11 @@ class TreeNodeView extends React.Component {
 
   renderMenuController() {
     if (this.props.permission === "rw") {
+      let isShow = (this.props.node.path === this.props.currentFilePath);
       return (
         <div className="right-icon">
           <MenuControl 
-            isShow={this.state.isMenuIconShow}
+            isShow={this.state.isMenuIconShow || isShow}
             onClick={this.onMenuControlClick}
           />
         </div>
@@ -176,16 +175,15 @@ class TreeNodeView extends React.Component {
     if (node.path === this.props.currentFilePath) {
       hlClass = "tree-node-hight-light";
     }
-    let customClass = "tree-node " + hlClass;
 
     return (
-      <div type={type} className={customClass} style={styles}>
+      <div type={type} className="tree-node" style={styles}>
         <div 
           onMouseLeave={this.onMouseLeave} 
           onMouseEnter={this.onMouseEnter}
           onClick={this.onClick}
           type={type} 
-          className={`tree-node-inner text-nowrap ${node.name === '/'? 'hide': ''}`}
+          className={`tree-node-inner text-nowrap ${hlClass} ${node.name === '/'? 'hide': ''}`}
         >
           <div className="tree-node-text" type={type} draggable="true" onDragStart={this.onDragStart}>{node.name}</div>
           <div className="left-icon">

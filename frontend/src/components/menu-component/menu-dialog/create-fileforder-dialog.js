@@ -55,14 +55,6 @@ class CreateFileForder extends React.Component {
     this.newInput.setSelectionRange(0,0);
   }
 
-  changeState(isFile) {
-    if (isFile) {
-      this.setState({childName: '.md'});
-    } else{
-      this.setState({childName: ""});
-    }
-  }
-
   componentWillReceiveProps(nextProps) {
     this.changeState(nextProps.isFile);
   }

@@ -219,6 +219,11 @@ class WikiPagesDirView(APIView):
             error_msg = "Wiki not found."
             return api_error(status.HTTP_404_NOT_FOUND, error_msg)
 
+        path = request.GET.get("p", '')
+        if not path:
+            error_msg = "Folder not found."
+            return api_error(status.HTTP_404_NOT_FOUND, error_msg)
+
         # perm check
         if not wiki.check_access_wiki(request):
             error_msg = "Permission denied"
@@ -233,12 +238,12 @@ class WikiPagesDirView(APIView):
             error_msg = "Internal Server Error"
             return api_error(status.HTTP_500_INTERNAL_SERVER_ERROR, error_msg)
 
-        dir_id = seafile_api.get_dir_id_by_path(repo.repo_id, '/')
+        dir_id = seafile_api.get_dir_id_by_path(repo.repo_id, path)
         if not dir_id:
-            error_msg = 'Folder %s not found.' % '/'
+            error_msg = 'Folder %s not found.' % path
             return api_error(status.HTTP_404_NOT_FOUND, error_msg)
 
-        all_dirs = get_wiki_dirs_by_path(repo.repo_id, '/', [])
+        all_dirs = get_wiki_dirs_by_path(repo.repo_id, path, [])
 
         return Response({
             "dir_file_list": all_dirs

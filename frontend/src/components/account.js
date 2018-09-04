@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import ReactDOM from 'react-dom';
-import cookie from 'react-cookies';
 import { keyCodes, bytesToSize } from './utils';
+import editorUtilities from '../utils/editor-utilties';
 
 const siteRoot = window.app.config.siteRoot;
 const gettext = window.gettext;
@@ -73,7 +73,7 @@ class Account extends Component {
   }
 
   getAccountInfo = () => {
-    this.props.seafileAPI.getAccountInfo().then(resp => {
+    editorUtilities.getAccountInfo().then(resp => {
         this.setState({
           userName: resp.data.name,
           contactEmail: resp.data.email,
