@@ -305,6 +305,7 @@ define([
         },
 
         downloadDir: function() {
+            this.hideMobileMenu();
             var dir = this.dirView.dir;
             var obj_name = this.model.get('obj_name');
             Common.zipDownload(dir.repo_id, dir.path, obj_name);
