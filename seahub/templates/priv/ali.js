@@ -5,10 +5,9 @@
     var title;
 
     // 7.0-share_perm
-    title = gettext("Read-Write library");
-    title = gettext("Read-Only library");
     title = gettext("Preview-Edit-on-Cloud library");
     title = gettext("Preview-on-Cloud library");
+    title = gettext("Admin access");
 
     title = gettext("Read-Write folder");
     title = gettext("Read-Only folder");
@@ -26,3 +25,6 @@
     title = gettext("View-on-Cloud");
     </script>
 </head>
+<body>
+</body>
+</html>
