@@ -233,8 +233,8 @@ class Wiki extends Component {
       })
     } else if (node.isDir()) {
       editorUtilities.renameDir(filePath, newName).then(res => {
-        let filePath = this.state.filePath;
-        let currentFileNode = tree.getNodeByPath(filePath);
+        let currentFilePath = this.state.filePath;
+        let currentFileNode = tree.getNodeByPath(currentFilePath);
         tree.updateNodeParam(node, "name", newName);
         if (this.state.isViewFileState) {
           if (this.isModifyContainsCurrentFile(node)) {
@@ -248,7 +248,7 @@ class Wiki extends Component {
             this.setState({tree_data: tree});
           }
         } else {
-          if (this.isModifyContainsCurrentFile(node)) {
+          if (node.path.indexOf(currentFilePath) > -1) {
             tree.setNodeToActivated(currentFileNode);
             this.exitViewFileState(tree, currentFileNode);
           } else {
