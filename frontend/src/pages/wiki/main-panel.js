@@ -1,8 +1,9 @@
 import React, { Component } from 'react';
-import Search from '../../components/search';
-import MarkdownViewer from '../../components/markdown-viewer';
-import Account from '../../components/account';
 import { gettext, repoID, serviceUrl, slug, siteRoot } from '../../components/constance';
+import Search from '../../components/search';
+import Account from '../../components/account';
+import MarkdownViewer from '../../components/markdown-viewer';
+import TreeDirView from '../../components/tree-dir-view/tree-dir-view';
 
 class MainPanel extends Component {
 
@@ -16,14 +17,26 @@ class MainPanel extends Component {
     window.location.href= serviceUrl + '/lib/' + repoID + '/file' + this.props.filePath + '?mode=edit';
   }
 
+  onMainNavBarClick = (e) => {
+    this.props.onMainNavBarClick(e.target.dataset.path);
+  }
+
   render() {
-    var filePathList = this.props.filePath.split('/');
-    var pathElem = filePathList.map((item, index) => {
-      if (item == "") {
+
+    let filePathList = this.props.filePath.split('/');
+    let nodePath = "";
+    let pathElem = filePathList.map((item, index) => {
+      if (item === "") {
         return;
-      } else {
+      } 
+      if (index === (filePathList.length - 1)) {
         return (
           <span key={index}><span className="path-split">/</span>{item}</span>
+        )
+      } else {
+        nodePath += "/" + item;
+        return (
+          <a key={index} className="custom-link" data-path={nodePath} onClick={this.onMainNavBarClick}><span className="path-split">/</span>{item}</a>
         )
       }
     });
@@ -36,8 +49,8 @@ class MainPanel extends Component {
               <a className="btn btn-secondary btn-topbar" onClick={this.onEditClick}>{gettext("Edit Page")}</a>
            </div>
           <div className="common-toolbar">
-            <Search seafileAPI={this.props.seafileAPI} onSearchedClick={this.props.onSearchedClick}/>
-            <Account seafileAPI={this.props.seafileAPI} />
+            <Search  onSearchedClick={this.props.onSearchedClick}/>
+            <Account />
           </div>
         </div>
         <div className="cur-view-main">
@@ -50,13 +63,20 @@ class MainPanel extends Component {
             </div>
           </div>
           <div className="cur-view-container">
-            <MarkdownViewer
+            { this.props.isViewFileState && <MarkdownViewer
               markdownContent={this.props.content}
               latestContributor={this.props.latestContributor}
               lastModified = {this.props.lastModified}
               onLinkClick={this.props.onLinkClick}
               isFileLoading={this.props.isFileLoading}
-            />
+            />}
+            { !this.props.isViewFileState && 
+              <TreeDirView 
+                node={this.props.changedNode}
+                onMainNodeClick={this.props.onMainNodeClick}
+              >
+              </TreeDirView>
+            }
           </div>
         </div>
     </div>

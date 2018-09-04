@@ -1,10 +1,9 @@
 import React, { Component } from 'react';
 import TreeView from '../../components/tree-view/tree-view';
 import { siteRoot, logoPath, mediaUrl, siteTitle, logoWidth, logoHeight } from '../../components/constance';
-import Tree from '../../components/tree-view/tree';
-import Node from '../../components/tree-view/node'
 import NodeMenu from '../../components/menu-component/node-menu';
 import MenuControl from '../../components/menu-component/node-menu-control';
+
 const gettext = window.gettext;
 
 class SidePanel extends Component {
@@ -12,7 +11,6 @@ class SidePanel extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      tree_data: new Tree(),
       currentNode: null,
       isNodeItemFrezee: false,
       isShowMenu: false,
@@ -43,10 +41,8 @@ class SidePanel extends Component {
   }
 
   onNodeClick = (e, node) => {
-    this.setState({
-      currentNode: node
-    })
-    this.props.onFileClick(e, node)
+    this.setState({currentNode: node})
+    this.props.onNodeClick(e, node)
   }
 
   onShowContextMenu = (e, node) => {
@@ -63,7 +59,7 @@ class SidePanel extends Component {
 
   onHeadingMenuClick = (e) => {
     e.nativeEvent.stopImmediatePropagation();
-    let node = this.state.tree_data.root;
+    let node = this.props.treeData.root;
     let left = e.clientX - 8*16;
     let top  = e.clientY + 10;
     let position = Object.assign({},this.state.menuPosition, {left: left, top: top});
@@ -82,191 +78,31 @@ class SidePanel extends Component {
   }
 
   onAddFolderNode = (dirPath) => {
-    this.props.editorUtilities.createDir(dirPath).then(res => {
-      let tree = this.state.tree_data.copy();
-      let index = dirPath.lastIndexOf("/");
-      let name = dirPath.substring(index+1);
-      let parentPath = dirPath.substring(0, index);
-      if (!parentPath) {
-        parentPath = "/";
-      }
-      let node = new Node({name : name, type: "dir", isExpanded: false, children: []});
-      let parentNode = tree.getNodeByPath(parentPath);
-      tree.addChildToNode(parentNode, node);
-      tree.setOneNodeToActived({node});
-      this.setState({
-        tree_data: tree
-      })
-
-    })
+    this.props.onAddFolderNode(dirPath);
   }
 
   onAddFileNode = (filePath) => {
-    this.props.editorUtilities.createFile(filePath).then(res => {
-      let tree = this.state.tree_data.copy();
-      let index = filePath.lastIndexOf("/");
-      let name = filePath.substring(index+1);
-      let parentPath = filePath.substring(0, index);
-      if (!parentPath) {
-        parentPath = "/";
-      }
-      let node = new Node({name : name, type: "file", isExpanded: false, children: []});
-      let parentNode = tree.getNodeByPath(parentPath);
-      tree.addChildToNode(parentNode, node);
-      tree.setOneNodeToActived({node});
-      this.setState({
-        tree_data: tree
-      })
-    })
+    this.props.onAddFileNode(filePath);
   }
-
+  
   onRenameNode = (newName) => {
-    let tree = this.state.tree_data.copy();
     let node = this.state.currentNode;
-    let type = node.type;
-    let filePath = node.path;
-    if (type === 'file') {
-      this.props.editorUtilities.renameFile(filePath, newName).then(res => {
-        if (this.isModifyCurrentFile()) {
-          tree.updateNodeParamValue(node, "name", newName);
-          node.name = newName;  //repair current node
-          this.props.onFileClick(null, node);
-          tree.setOneNodeToActived({node});
-          this.setState({tree_data: tree});
-        } else {
-          tree.updateNodeParamValue(node, "name", newName);
-          this.setState({tree_data: tree});
-        }
-      })
-    }
-
-    if (type === 'dir') {
-      let _this = this;
-      this.props.editorUtilities.renameDir(filePath, newName).then(res => {
-        let tree = this.state.tree_data.copy();
-        let currentNode = this.state.currentNode;
-        if (this.isModifyContainsCurrentFile()) {
-          let nodePath = currentNode.path;
-          let filePath = _this.props.currentFilePath;
-          let start =  filePath.indexOf(nodePath);
-          let node = currentNode.getNodeByPath(filePath.slice(start));
-          if (node) {
-            tree.updateNodeParamValue(currentNode, "name", newName);
-            currentNode.name = newName;
-            this.props.onFileClick(null, node);
-            tree.setOneNodeToActived({node});
-            this.setState({tree_data: tree});
-          }
-        } else {
-          tree.updateNodeParamValue(currentNode, "name", newName);
-          this.setState({tree_data: tree});
-        }
-      })
-    }
+    this.props.onRenameNode(node, newName)
   }
-
+  
   onDeleteNode = () => {
-    var currentNode = this.state.currentNode;
-    let filePath = currentNode.path;
-    let type = currentNode.type;
-    if (type === 'file') {
-      this.props.editorUtilities.deleteFile(filePath);
-    } 
-
-    if (type === 'dir') {
-      this.props.editorUtilities.deleteDir(filePath);
-    }
-
-    let isCurrentFile = false;
-    if (this.state.currentNode.type === "dir") {
-      isCurrentFile = this.isModifyContainsCurrentFile(); 
-    } else {
-      isCurrentFile = this.isModifyCurrentFile();
-    }
-
-    let tree = this.state.tree_data.copy();
-    tree.removeNodeFromTree(currentNode);
-
-    if (isCurrentFile) {
-      let homeNode = this.getHomeNode();
-      this.props.onFileClick(null, homeNode);
-      tree.setNoneNodeActived();
-      this.setState({tree_data: tree})
-    } else {
-      this.setState({tree_data: tree})
-    }
-  }
-
-  isModifyCurrentFile() {
-    let nodeName = this.state.currentNode.name;
-    let filePath = this.props.currentFilePath;
-    let index    = filePath.lastIndexOf("/");
-    let fileName = filePath.slice(index+1);
-    return nodeName === fileName;
-  }
-
-  isModifyContainsCurrentFile() {
-    let filePath = this.props.currentFilePath;
-    let nodePath = this.state.currentNode.path;
-    
-    if (filePath.indexOf(nodePath) > -1) {
-      return true;
-    }
-    return false;
-  }
-
-  initializeTreeData() {
-    this.props.editorUtilities.getFiles().then((files) => {
-      // construct the tree object
-      var rootObj = {
-        name: '/',
-        type: 'dir',
-        isExpanded: true
-      }
-      var treeData = new Tree();
-      treeData.parseFromList(rootObj, files);
-      let homeNode = this.getHomeNode(treeData);
-      this.setState({
-        tree_data: treeData,
-        currentNode: homeNode
-      })
-    }, () => {
-      console.log("failed to load files");
-      this.setState({
-        isLoadFailed: true
-      })
-    })
-  }
-
-  getHomeNode(treeData) {
-    let root = null;
-    if (treeData) {
-      root = treeData.root;
-    } else {
-      root = this.state.tree_data.root;
-    }
-    let homeNode = root.getNodeByPath(decodeURI("/home.md"));
-    return homeNode;
+    let node = this.state.currentNode;
+    this.props.onDeleteNode(node);
   }
 
   componentDidMount() {
-    //init treeview data
-    this.initializeTreeData();
     document.addEventListener('click', this.onHideContextMenu);
   }
 
   componentWillReceiveProps(nextProps) {
-    let path = nextProps.searchedPath; //handle search module
-    if (path !== this.searchedPath) {
-      let node = this.state.tree_data.getNodeByPath(path);
-      this.searchedPath = path;
-      this.props.onFileClick(null, node);
-      let tree = this.state.tree_data.copy();
-      tree.setOneNodeToActived({node});
-      this.setState({
-        tree_data: tree
-      })
-    }
+    this.setState({
+      currentNode: nextProps.changedNode
+    })
   }
 
   componentWillUnmount() {
@@ -297,15 +133,16 @@ class SidePanel extends Component {
             </div>
           </h3>
           <div className="wiki-pages-container">
-            {this.state.tree_data && 
+            {this.props.treeData && 
             <TreeView
               permission={this.props.permission}
               currentFilePath={this.props.currentFilePath}
-              treeData={this.state.tree_data}
+              treeData={this.props.treeData}
               currentNode={this.state.currentNode}
               isNodeItemFrezee={this.state.isNodeItemFrezee}
               onNodeClick={this.onNodeClick}
               onShowContextMenu={this.onShowContextMenu}
+              onDirCollapse={this.props.onDirCollapse}
             />
             }
             <NodeMenu 
