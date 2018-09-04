@@ -1,8 +1,8 @@
 import React, { Component } from 'react';
-import TreeView from './tree-view/tree-view';
-import { siteRoot, logoPath, mediaUrl, siteTitle, logoWidth, logoHeight } from './constance';
-import NodeMenu from './menu-component/node-menu';
-import MenuControl from './menu-component/node-menu-control';
+import TreeView from '../../components/tree-view/tree-view';
+import { siteRoot, logoPath, mediaUrl, siteTitle, logoWidth, logoHeight } from '../../components/constance';
+import NodeMenu from '../../components/menu-component/node-menu';
+import MenuControl from '../../components/menu-component/node-menu-control';
 
 const gettext = window.gettext;
 

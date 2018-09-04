@@ -3,8 +3,8 @@ import ReactDOM from 'react-dom';
 import moment from 'moment';
 import { slug, repoID, serviceUrl, initialFilePath } from './components/constance';
 import editorUtilities from './utils/editor-utilties';
-import SidePanel from './components/side-panel';
-import MainPanel from './components/main-panel';
+import SidePanel from './pages/wiki/side-panel';
+import MainPanel from './pages/wiki/main-panel';
 import Node from './components/tree-view/node'
 import Tree from './components/tree-view/tree'
 import 'seafile-ui';
@@ -244,14 +244,16 @@ class Wiki extends Component {
       })
     } else if (node.isDir()) {
       editorUtilities.renameDir(filePath, newName).then(res => {
+
         let currentFilePath = this.state.filePath;// the sequence is must right
         let currentFileNode = tree.getNodeByPath(currentFilePath);
-        
+        let isPathEqual = (node.path === currentFilePath);
         let date = new Date().getTime()/1000;
         tree.updateNodeParam(node, "name", newName);
         node.name = newName;  // just synchronization node data && tree data;
         tree.updateNodeParam(node, "last_update_time", moment.unix(date).fromNow());
         node.last_update_time = moment.unix(date).fromNow();
+
         if (this.state.isViewFileState) {
           if (this.isModifyContainsCurrentFile(node)) {
             tree.setNodeToActivated(currentFileNode);
@@ -264,7 +266,7 @@ class Wiki extends Component {
             this.setState({tree_data: tree});
           }
         } else {
-          if (node.path.indexOf(currentFilePath) > -1) {
+          if (isPathEqual || node.path.indexOf(currentFilePath) > -1) {
             tree.setNodeToActivated(currentFileNode);
             this.exitViewFileState(tree, currentFileNode);
           } else {
