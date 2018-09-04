@@ -129,6 +129,7 @@ define([
 
         events: {
             'click [type="checkbox"]': 'clickCheckbox',
+            'click .link-expiration-checkbox': 'clickExpirationCheckbox',
             'click .shared-link': 'clickToSelect',
 
             // download link
@@ -142,7 +143,6 @@ define([
             'click #generate-download-link-form .show-or-hide-password': 'showOrHideDownloadPassword',
             'keydown #generate-download-link-form .show-or-hide-password': 'showOrHideDownloadPassword',
             'click .shared-link-copy-icon': 'copySharedLink',
-            'change .share-link-perm-select': 'linkPermissionChanged',
 
             // upload link
             'click #dir-upload-link-tab': 'clickUploadLinkTab',
@@ -164,8 +164,18 @@ define([
 
         clickCheckbox: function(e) {
             var $el = $(e.currentTarget);
-            // for link options such as 'password', 'expire'
-            $el.closest('.checkbox-label').next('div').toggleClass('hide');
+            // for link options such as 'password'
+            $el.closest('.checkbox-label').next('.link-option-content').toggleClass('hide');
+        },
+
+        clickExpirationCheckbox: function(e) {
+            var $el = $(e.currentTarget);
+            var $input = $el.closest('.checkbox-label').find('[name="expire_days"]');
+            if ($el.prop('checked')) {
+                $input.prop('disabled', false).removeClass('input-disabled');
+            } else {
+                $input.prop('disabled', true).addClass('input-disabled');
+            }
         },
 
         clickToSelect: function(e) {
@@ -360,7 +370,7 @@ define([
 
                 // link permission
                 if (app.pageOptions.is_pro) {
-                    var linkPerm = $('.share-link-perm-select', form).val();
+                    var linkPerm = $('[name="permission"]:checked', form).val();
                     var linkPermDetails;
 
                     switch(linkPerm) {
@@ -417,18 +427,14 @@ define([
                             app.pageOptions.share_link_expire_days_max > 0) {
                             // do nothing
                         } else {
-                            set_expiration_checkbox.prop('checked', false)
-                                .parent().removeClass('checkbox-checked')
-                                // hide 'day' input
-                                .end().closest('.checkbox-label').next().addClass('hide');
+                            set_expiration_checkbox.prop('checked', false);
+                            expire_days_input.prop('disabled', true).addClass('input-disabled');
                         }
                         expire_days_input.val('');
                     }
 
                     // restore 'permission'
-                    $('.share-link-perm-select', form).get(0).selectedIndex = 0;
-                    $('.share-link-perm-msgs li', form).addClass('hide');
-                    $('.share-link-perm-msgs li:eq(0)', form).removeClass('hide');
+                    $('[name="permission"]:eq(0)', form).prop('checked', true);
 
                     _this.renderDownloadLink(data);
                 } else {
@@ -460,15 +466,6 @@ define([
             document.execCommand('copy');
             $.modal.close();
             Common.feedback(gettext("Share link is copied to the clipboard."), 'success');
-        },
-
-        linkPermissionChanged: function(e) {
-            var $select = $(e.currentTarget);
-            var $msgs = $select.next('.share-link-perm-msgs');
-            var index = $select[0].selectedIndex;
-
-            $('li', $msgs).addClass('hide');
-            $('li:eq(' + index + ')', $msgs).removeClass('hide');
         },
 
         showDownloadLinkSendForm: function() {

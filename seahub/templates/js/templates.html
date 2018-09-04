@@ -1201,58 +1201,59 @@
                     <label class="checkbox-label">
                         <input type="checkbox" checked="checked" disabled="disabled" name="set_expiration" class="vam" />
                         <span class="checkbox-option vam">{% trans "Add auto expiration"%}</span>
+                        <div class="link-option-content inline-block vam">
+                            <input type="text" name="expire_days" class="input short-input" id="expire-days" />
+                            <span>{% trans "days" %}</span>
+                            <span>
+                                {% if share_link_expire_days_min > 0 and share_link_expire_days_max > 0 %}
+                                {% blocktrans %}({{ share_link_expire_days_min }} - {{ share_link_expire_days_max }} days){% endblocktrans %}
+                                {% elif share_link_expire_days_min > 0 %}
+                                {% blocktrans %}(Greater than or equal to {{share_link_expire_days_min}} days){% endblocktrans %}
+                                {% elif share_link_expire_days_max > 0 %}
+                                {% blocktrans %}(Less than or equal to {{share_link_expire_days_max}} days){% endblocktrans %}
+                                {% endif %}
+                            </span>
+                        </div>
                     </label>
-                    <div class="link-option-content">
-                        <label for="expire-days">
-                            {% trans "Days" %}
-                            {% if share_link_expire_days_min > 0 and share_link_expire_days_max > 0 %}
-                            ({{ share_link_expire_days_min }} - {{ share_link_expire_days_max }})
-                            {% elif share_link_expire_days_min > 0 %}
-                            {% blocktrans %}(Greater than or equal to {{share_link_expire_days_min}}){% endblocktrans %}
-                            {% elif share_link_expire_days_max > 0 %}
-                            {% blocktrans %}(Less than or equal to {{share_link_expire_days_max}}){% endblocktrans %}
-                            {% endif %}
-                        </label><br />
-                        <input type="text" name="expire_days" class="input" id="expire-days" />
-                    </div>
 
                     {% else %}
                     <label class="checkbox-label">
-                        <input type="checkbox" name="set_expiration" class="vam" />
+                        <input type="checkbox" name="set_expiration" class="vam link-expiration-checkbox" />
                         <span class="checkbox-option vam">{% trans "Add auto expiration"%}</span>
+                        <div class="link-option-content inline-block vam">
+                            <input type="text" name="expire_days" class="input short-input input-disabled" disabled="disabled" />
+                            <span>{% trans "days" %}</span>
+                        </div>
                     </label>
-                    <div class="hide link-option-content">
-                        <label for="expire-days">{% trans "Days" %}</label><br />
-                        <input type="text" name="expire_days" class="input" id="expire-days" />
-                    </div>
                     {% endif %}
 
                     <% if (app.pageOptions.is_pro) { %>
-                    <label>{% trans "Permission"%}</label>
-                    <div>
-                        <select name="permission" class="share-permission-select share-link-perm-select">
-                            <option value="preview_download">{% trans "Preview and download" %}</option>
-                            <% if (show_link_preview_only_perm_option) { %>
-                            <option value="preview_only">{% trans "Preview only" %}</option>
-                            <% } %>
-                            <% if (show_link_edit_perm_option) { %>
-                            <option value="edit_download">{% trans "Edit on cloud and download" %}</option>
-                            <% } %>
-                        </select>
-                        <ul class="share-link-perm-msgs tip">
-                            <li class="">{% trans "Anyone can preview and download file with this link" %}</li>
-                            <% if (show_link_preview_only_perm_option) { %>
-                            <li class="hide">{% trans "Anyone can preview file content on cloud with this link" %}</li>
-                            <% } %>
-                            <% if (show_link_edit_perm_option) { %>
-                            <li class="hide">{% trans "Any logged in user can edit file on cloud and download it" %}</li>
-                            <% } %>
-                        </ul>
+                    <label class="checkbox-label">
+                        <input type="checkbox" checked="checked" disabled="disabled" name="set_permission" class="vam" />
+                        <span class="checkbox-option vam">{% trans "Set permission" %}</span>
+                    </label>
+                    <div class="link-option-content">
+                        <label class="radio-item">
+                            <input type="radio" name="permission" value="preview_download" checked="checked" class="vam" />
+                            <span class="vam">{% trans "Preview and download" %}</span>
+                        </label><br />
+                        <% if (show_link_preview_only_perm_option) { %>
+                        <label class="radio-item">
+                            <input type="radio" name="permission" value="preview_only" class="vam" />
+                            <span class="vam">{% trans "Preview only" %}</span>
+                        </label><br />
+                        <% } %>
+                        <% if (show_link_edit_perm_option) { %>
+                        <label class="radio-item">
+                            <input type="radio" name="permission" value="edit_download" class="vam" />
+                            <span class="vam">{% trans "Edit on cloud and download" %}</span>
+                        </label>
+                        <% } %>
                     </div>
                     <% } %>
 
                     <p class="error hide"></p>
-                    <input type="submit" value="{% trans "Generate" %}" />
+                    <input type="submit" value="{% trans "Generate" %}" class="gen-link-btn" />
                 </form>
                 <div id="download-link-operations" class="hide">
                     <dl>
@@ -1310,7 +1311,7 @@
                         <input type="password" name="password_again" class="input" id="u-passwd-again" />
                     </div>
                     <p class="error hide"></p>
-                    <input type="submit" value="{% trans 'Generate'%}" />
+                    <input type="submit" value="{% trans "Generate" %}" class="gen-link-btn" />
                 </form>
                 <div id="upload-link-operations" class="hide">
                     <dl>
