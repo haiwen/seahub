@@ -44,10 +44,7 @@ class TreeNodeView extends React.Component {
 
   handleCollapse = (e) => {
     e.stopPropagation();
-    const { node } = this.props;
-    if (this.props.treeView.toggleCollapse) {
-      this.props.treeView.toggleCollapse(node);
-    }
+    this.props.onDirCollapse(e, this.props.node);
   }
 
   onDragStart = (e) => {
@@ -121,6 +118,7 @@ class TreeNodeView extends React.Component {
                 isNodeItemFrezee={this.props.isNodeItemFrezee}
                 permission={this.props.permission}
                 currentFilePath={this.props.currentFilePath}
+                onDirCollapse={this.props.onDirCollapse}
               />
             );
           })}

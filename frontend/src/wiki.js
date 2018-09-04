@@ -149,6 +149,13 @@ class Wiki extends Component {
     }
   }
 
+  onDirCollapse = (e, node) => {
+    let tree = this.state.tree_data.clone();
+    let findNode = tree.getNodeByPath(node.path);
+    findNode.isExpanded = !findNode.isExpanded;
+    this.setState({tree_data: tree});
+  }
+
   onMenuClick = () => {
     this.setState({
       closeSideBar: !this.state.closeSideBar,
@@ -414,6 +421,7 @@ class Wiki extends Component {
           onAddFileNode={this.onAddFileNode}
           onRenameNode={this.onRenameNode}
           onDeleteNode={this.onDeleteNode}
+          onDirCollapse={this.onDirCollapse}
         />
         <MainPanel
           content={this.state.content}

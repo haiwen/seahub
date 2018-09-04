@@ -11,16 +11,8 @@ class TreeView extends React.PureComponent {
     */
   }
 
-  toggleCollapse = (node) => {
-    const tree = this.props.treeData;
-    node.isExpanded = !node.isExpanded;
-
-    // copy the tree to make PureComponent work
-    this.setState({
-      tree: tree.clone()
-    });
-
-    this.change(tree);
+  toggleCollapse = (e, node) => {
+    this.props.onDirCollapse(e, node);
   }
 
   onDragStart = (e, node) => {
@@ -52,6 +44,7 @@ class TreeView extends React.PureComponent {
           permission={this.props.permission}
           currentFilePath={this.props.currentFilePath}
           onShowContextMenu={this.props.onShowContextMenu}
+          onDirCollapse={this.props.onDirCollapse}
         />
       </div>
     );

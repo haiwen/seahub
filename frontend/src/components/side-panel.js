@@ -142,6 +142,7 @@ class SidePanel extends Component {
               isNodeItemFrezee={this.state.isNodeItemFrezee}
               onNodeClick={this.onNodeClick}
               onShowContextMenu={this.onShowContextMenu}
+              onDirCollapse={this.props.onDirCollapse}
             />
             }
             <NodeMenu 
