@@ -3,7 +3,7 @@ import { gettext, repoID, serviceUrl, slug, siteRoot } from './constance';
 import Search from './search';
 import Account from './account';
 import MarkdownViewer from './markdown-viewer';
-import TreeDocView from './tree-doc-view/tree-doc-view';
+import TreeDirView from './tree-dir-view/tree-dir-view';
 
 class MainPanel extends Component {
 
@@ -71,11 +71,11 @@ class MainPanel extends Component {
               isFileLoading={this.props.isFileLoading}
             />}
             { !this.props.isViewFileState && 
-              <TreeDocView 
+              <TreeDirView 
                 node={this.props.changedNode}
                 onMainNodeClick={this.props.onMainNodeClick}
               >
-              </TreeDocView>
+              </TreeDirView>
             }
           </div>
         </div>

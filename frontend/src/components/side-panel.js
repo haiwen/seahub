@@ -41,9 +41,7 @@ class SidePanel extends Component {
   }
 
   onNodeClick = (e, node) => {
-    this.setState({
-      currentNode: node
-    })
+    this.setState({currentNode: node})
     this.props.onNodeClick(e, node)
   }
 

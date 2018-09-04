@@ -69,12 +69,18 @@ class TreeNodeView extends React.Component {
   }
 
   componentDidMount() {
-     document.addEventListener('click', this.hideMenuIcon);
-   }
+    document.addEventListener('click', this.hideMenuIcon);
+  }
 
-   componentWillUnmount() {
-     document.removeEventListener('click', this.hideMenuIcon);
-   }
+  componentWillReceiveProps(nextProps) {
+    if (nextProps.node.path === nextProps.currentFilePath) {
+      this.setState({isMenuIconShow: true});
+    }
+  }
+
+  componentWillUnmount() {
+    document.removeEventListener('click', this.hideMenuIcon);
+  }
 
   renderCollapse = () => {
     const { node } = this.props;

@@ -49,5 +49,6 @@ tags
 frontend/config/webpack.config.dev.js
 frontend/webpack-stats.dev.json
 frontend/node_modules
+frontend/package-lock.json
 
 /.idea

@@ -30,10 +30,6 @@ class TreeView extends React.PureComponent {
   }
 
   onNodeClick = (e, node) => {
-    if (node.isDir()) {
-      this.toggleCollapse(node);
-      return;
-    }
     this.props.onNodeClick(e, node);
   }
 
@@ -49,7 +45,7 @@ class TreeView extends React.PureComponent {
     return (
       <div className="tree-view tree">
         <TreeNodeView
-          paddingLeft={20}
+          paddingLeft={12}
           treeView={this}
           node={this.props.treeData.root}
           isNodeItemFrezee={this.props.isNodeItemFrezee}

@@ -139,6 +139,9 @@ class Wiki extends Component {
       let tree = this.state.tree_data.clone();
       this.initMainPanelData(node.path);
       this.enterViewFileState(tree, node, node.path);
+    } else if(node instanceof Node && node.isDir()){
+      let tree = this.state.tree_data.clone();
+      this.exitViewFileState(tree, node);
     } else {
       const w=window.open('about:blank');
       const url = serviceUrl + '/lib/' + repoID + '/file' + node.path;
@@ -213,8 +216,9 @@ class Wiki extends Component {
       editorUtilities.renameFile(filePath, newName).then(res => {
         let date = new Date().getTime()/1000;
         tree.updateNodeParam(node, "name", newName);
-        tree.updateNodeParam(node, "last_update_time", moment.unix(date).fromNow());
         node.name = newName;
+        tree.updateNodeParam(node, "last_update_time", moment.unix(date).fromNow());
+
         node.last_update_time = moment.unix(date).fromNow();
         if (this.state.isViewFileState) {
           if (this.isModifyCurrentFile(node)) {
@@ -233,9 +237,14 @@ class Wiki extends Component {
       })
     } else if (node.isDir()) {
       editorUtilities.renameDir(filePath, newName).then(res => {
-        let currentFilePath = this.state.filePath;
+        let currentFilePath = this.state.filePath;// the sequence is must right
         let currentFileNode = tree.getNodeByPath(currentFilePath);
+        
+        let date = new Date().getTime()/1000;
         tree.updateNodeParam(node, "name", newName);
+        node.name = newName;  // just synchronization node data && tree data;
+        tree.updateNodeParam(node, "last_update_time", moment.unix(date).fromNow());
+        node.last_update_time = moment.unix(date).fromNow();
         if (this.state.isViewFileState) {
           if (this.isModifyContainsCurrentFile(node)) {
             tree.setNodeToActivated(currentFileNode);

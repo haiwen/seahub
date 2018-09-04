@@ -20,7 +20,9 @@
 
 .doc-view-header tr .dirent-icon,
 .doc-view-body tr .dirent-icon {
-  text-align: center;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
 .doc-view-container td {
