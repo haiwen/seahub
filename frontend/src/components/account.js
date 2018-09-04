@@ -1,8 +1,8 @@
 import React, { Component } from 'react';
 import ReactDOM from 'react-dom';
-import cookie from 'react-cookies';
 import { keyCodes, bytesToSize } from './utils';
 import { siteRoot, avatarInfo, gettext } from './constance';
+import editorUtilities from '../utils/editor-utilties';
 
 
 class Account extends Component {
@@ -72,7 +72,7 @@ class Account extends Component {
   }
 
   getAccountInfo = () => {
-    this.props.seafileAPI.getAccountInfo().then(resp => {
+    editorUtilities.getAccountInfo().then(resp => {
         this.setState({
           userName: resp.data.name,
           contactEmail: resp.data.email,

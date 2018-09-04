@@ -1,85 +1,61 @@
-
-
 class Node {
 
-  static create(attrs = {}) {
-
-  }
-
-  /**
-   * Create a `Node` from a JSON `object`.
-   *
-   * @param {Object} object
-   * @return {Node}
-   */
-  static fromJSON(object) {
-    const {
-      name,
-      type,
-      isExpanded = true,
-      children = [],
-    } = object;
+  static deserializefromJson(object) {
+    const {name, type, size, last_update_time, isExpanded = true, children = []} = object;
 
     const node = new Node({
       name,
       type,
+      size,
+      last_update_time,
       isExpanded,
-      children: children.map(Node.fromJSON),
+      children: children.map(item => Node.deserializefromJson(item)),
     });
 
     return node;
   }
-
-
-  constructor({ name, type, isExpanded, children }) {
+  
+  constructor({name, type, size, last_update_time, isExpanded, children}) {
     this.name = name;
     this.type = type;
-    this.children = children ? children : [];
+    this.size = size;
+    this.last_update_time = last_update_time;
     this.isExpanded = isExpanded !== undefined ? isExpanded : true;
+    this.children = children ? children : [];
+    this.parent = null;
+  }
+  
+  clone() {
+    var n = new Node({
+      name: this.name,
+      type: this.type,
+      size: this.size,
+      last_update_time: this.last_update_time,
+      isExpanded: this.isExpanded
+    });
+    n.children = this.children.map(child => { 
+      var newChild = child.clone(); 
+      newChild.parent = n; 
+      return newChild; 
+    });
+    return n;
   }
 
   get path() {
     if (!this.parent) {
       return this.name;
     } else {
-      var p = this.parent.path;
-      if (p === "/")
-        return p + this.name;
-      else
-        return p + "/" + this.name;
+      let p = this.parent.path;
+      return p === "/" ? (p + this.name) : (p + "/" + this.name);
     }
-  }
-
-  copy() {
-    var n = new Node({
-      name: this.name,
-      type: this.type,
-      isExpanded: this.isExpanded
-    });
-    n.children = this.children.map(child => { var newChild = child.copy(); newChild.parent = n; return newChild; });
-    return n;
-  }
-
-  isRoot() {
-    return this.parent === undefined;
   }
 
   hasChildren() {
     return this.children.length > 0;
   }
 
-  isImage() {
-    let index = this.name.lastIndexOf(".");
-    if (index == -1) {
-      return false;
-    } else {
-      let type = this.name.substring(index).toLowerCase();
-      if (type == ".png" || type == ".jpg") {
-        return true;
-      } else {
-        return false;
-      }
-    }
+  isRoot() {
+    return this.parent === undefined;
   }
 
   isMarkdown() {
@@ -100,39 +76,21 @@ class Node {
     return this.type == "dir";
   }
 
-  getleafPaths() {
-    let paths = new Map();
-    function getleafPath(node){
-      if (node.hasChildren()) {
-        let children = node.children;
-        children.forEach(child => {
-          if (child.hasChildren()) {
-            getleafPath(child);
-          } else {
-            let path = child.path;
-            paths.set(path,child);
-          }
-        });
+  isImage() {
+    let index = this.name.lastIndexOf(".");
+    if (index == -1) {
+      return false;
+    } else {
+      let type = this.name.substring(index).toLowerCase();
+      if (type == ".png" || type == ".jpg") {
+        return true;
+      } else {
+        return false;
       }
     }
-    getleafPath(this);
-    return paths;
   }
 
-  getNodeByPath(path) {
-    let paths = this.getleafPaths();
-    if (paths.has(path)) {
-      return paths.get(path);
-    }
-    return null;
-  }
-
-  /**
-   * Return a JSON representation of the node.
-   *
-   * @return {Object}
-   */
-  toJSON() {
+  serializeToJson() {
     var children = []
     if (this.hasChildren()) {
       children = this.children.map(m => m.toJSON());
@@ -141,6 +99,8 @@ class Node {
     const object = {
       name: this.name,
       type: this.type,
+      size: this.size,
+      last_update_time: this.last_update_time,
       isExpanded: this.isExpanded,
       children: children
     }
@@ -150,5 +110,4 @@ class Node {
 
 }
 
-
-export { Node }
+export default Node;

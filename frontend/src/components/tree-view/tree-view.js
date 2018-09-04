@@ -1,5 +1,6 @@
 import React from 'react';
 import TreeNodeView from './tree-node-view';
+import editorUtilities from '../../utils/editor-utilties'
 
 class TreeView extends React.PureComponent {
 
@@ -10,29 +11,17 @@ class TreeView extends React.PureComponent {
     */
   }
 
-  toggleCollapse = (node) => {
-    const tree = this.props.treeData;
-    node.isExpanded = !node.isExpanded;
-
-    // copy the tree to make PureComponent work
-    this.setState({
-      tree: tree.copy()
-    });
-
-    this.change(tree);
+  toggleCollapse = (e, node) => {
+    this.props.onDirCollapse(e, node);
   }
 
   onDragStart = (e, node) => {
-    const url = this.props.editorUtilities.getFileURL(node);
+    const url = editorUtilities.getFileURL(node);
     e.dataTransfer.setData("text/uri-list", url);
     e.dataTransfer.setData("text/plain", url);
   }
 
   onNodeClick = (e, node) => {
-    if (node.isDir()) {
-      this.toggleCollapse(node);
-      return;
-    }
     this.props.onNodeClick(e, node);
   }
 
@@ -48,13 +37,14 @@ class TreeView extends React.PureComponent {
     return (
       <div className="tree-view tree">
         <TreeNodeView
-          paddingLeft={20}
+          paddingLeft={12}
           treeView={this}
           node={this.props.treeData.root}
           isNodeItemFrezee={this.props.isNodeItemFrezee}
           permission={this.props.permission}
           currentFilePath={this.props.currentFilePath}
           onShowContextMenu={this.props.onShowContextMenu}
+          onDirCollapse={this.props.onDirCollapse}
         />
       </div>
     );

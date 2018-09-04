@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import { gettext, repoID } from './constance';
-import SearchResultItem from './SearchResultItem';
+import SearchResultItem from './search-result-item';
+import editorUtilities from '../utils/editor-utilties';
 
 class Search extends Component {
 
@@ -78,13 +79,13 @@ class Search extends Component {
       isResultGetted: false
     })
 
-    this.source = this.props.seafileAPI.getSource();
+    this.source = editorUtilities.getSource();
     this.sendRequest(queryData, this.source.token);
   }
 
   sendRequest(queryData, cancelToken) {
     var _this = this;
-    this.props.seafileAPI.searchFiles(queryData,cancelToken).then(res => {
+    editorUtilities.searchFiles(queryData,cancelToken).then(res => {
       if (!res.data.total) {
         _this.setState({
           resultItems: [],
