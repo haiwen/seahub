@@ -1,9 +1,9 @@
 import React, { Component } from 'react';
-import { gettext, repoID, serviceUrl, slug, siteRoot } from './constance';
-import Search from './search';
-import Account from './account';
-import MarkdownViewer from './markdown-viewer';
-import TreeDirView from './tree-dir-view/tree-dir-view';
+import { gettext, repoID, serviceUrl, slug, siteRoot } from '../../components/constance';
+import Search from '../../components/search';
+import Account from '../../components/account';
+import MarkdownViewer from '../../components/markdown-viewer';
+import TreeDirView from '../../components/tree-dir-view/tree-dir-view';
 
 class MainPanel extends Component {
 
