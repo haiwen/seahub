@@ -34,14 +34,45 @@ class Wiki extends Component {
   }
 
   componentDidMount() {
-    this.initSidePanelData();
-    this.initMainPanelData(initialFilePath);
+    this.initWikiData(initialFilePath);
+  }
+
+  initWikiData(filePath){
+    this.setState({isFileLoading: true});
+    editorUtilities.getFiles().then((files) => {
+      // construct the tree object
+      var treeData = new Tree();
+      treeData.parseListToTree(files);
+
+      let node = treeData.getNodeByPath(filePath);
+      if (node.isDir()) {
+        this.exitViewFileState(treeData, node);
+        this.setState({isFileLoading: false});
+      } else {
+        editorUtilities.getWikiFileContent(slug, filePath).then(res => {
+          this.setState({
+            tree_data: treeData,
+            content: res.data.content,
+            latestContributor: res.data.latest_contributor,
+            lastModified: moment.unix(res.data.last_modified).fromNow(),
+            permission: res.data.permission,
+            filePath: filePath,
+            isFileLoading: false
+          })
+        });
+        const hash = window.location.hash;
+        let fileUrl = serviceUrl + '/wikis/' + slug + filePath + hash;
+        window.history.pushState({urlPath: fileUrl, filePath: filePath}, filePath, fileUrl);
+      }
+    }, () => {
+      console.log("failed to load files");
+      this.setState({
+        isLoadFailed: true
+      })
+    })
   }
 
   initMainPanelData(filePath) {
-    if (!this.isMarkdownFile(filePath)) {
-      filePath = "/home.md";
-    }
     this.setState({isFileLoading: true});
     editorUtilities.getWikiFileContent(slug, filePath)
       .then(res => {
@@ -58,24 +89,6 @@ class Wiki extends Component {
      const hash = window.location.hash;
      let fileUrl = serviceUrl + '/wikis/' + slug + filePath + hash;
      window.history.pushState({urlPath: fileUrl, filePath: filePath}, filePath, fileUrl);
-  }
-
-  initSidePanelData() {
-    editorUtilities.getFiles().then((files) => {
-      // construct the tree object
-      var treeData = new Tree();
-      treeData.parseListToTree(files);
-      let homeNode = this.getHomeNode(treeData);
-      this.setState({
-        tree_data: treeData,
-        changedNode: homeNode
-      });
-    }, () => {
-      console.log("failed to load files");
-      this.setState({
-        isLoadFailed: true
-      })
-    })
   }
 
   onLinkClick = (event) => {
