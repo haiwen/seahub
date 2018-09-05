@@ -58,7 +58,12 @@ module.exports = {
      require.resolve('./polyfills'),
      require.resolve('react-dev-utils/webpackHotDevClient'),
      paths.appSrc + "/wiki.js",
-   ]
+   ],
+    fileHistory: [
+      require.resolve('./polyfills'),
+      require.resolve('react-dev-utils/webpackHotDevClient'),
+      paths.appSrc + '/fileHistory.js',
+    ],    
   },
 
   output: {
