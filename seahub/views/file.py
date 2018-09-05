@@ -347,7 +347,9 @@ def can_preview_file(file_name, file_size, repo=None):
         else:
             return (True, None)
     else:
-        return (False, _(u'Online view is not applicable to this file format'))
+        # TODO: may need a better way instead of return string, and compare
+        # that string in templates
+        return (False, "invalid extension")
 
 def send_file_access_msg_when_preview(request, repo, path, access_from):
     """ send file access msg when user preview file from web
@@ -693,7 +695,7 @@ def view_lib_file(request, repo_id, path):
                 return_dict['err'] = _(u'Error when prepare OnlyOffice file preview page.')
 
         if not HAS_OFFICE_CONVERTER:
-            return_dict['err'] = _(u'Online view is not applicable to this file format')
+            return_dict['err'] = "invalid extension"
             return render(request, 'view_file_base.html', return_dict)
 
         if file_size > OFFICE_PREVIEW_MAX_SIZE:
@@ -710,7 +712,7 @@ def view_lib_file(request, repo_id, path):
         # render file preview page
         return render(request, template, return_dict)
     else:
-        return_dict['err'] = _(u'Online view is not applicable to this file format')
+        return_dict['err'] = "invalid extension"
         return render(request, 'view_file_base.html', return_dict)
 
 def view_history_file_common(request, repo_id, ret_dict):
