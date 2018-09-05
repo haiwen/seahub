@@ -2,7 +2,7 @@
 
 watermark.load({
     {% if request.user.username %}
-    watermark_txt: "{{request.user.username|email2nickname|escapejs}}",
+    watermark_txt: "{{site_name}} {{request.user.username|email2nickname|escapejs}}",
     {% else %}
     watermark_txt: "{% trans "Anonymous User" %}",
     {% endif %}
