@@ -45,6 +45,7 @@ class Wiki extends Component {
       treeData.parseListToTree(files);
 
       let node = treeData.getNodeByPath(filePath);
+      treeData.setNodeToActivated(node);
       if (node.isDir()) {
         this.exitViewFileState(treeData, node);
         this.setState({isFileLoading: false});

@@ -12,10 +12,6 @@ class CreateFileForder extends React.Component {
     this.newInput = React.createRef()
   }
 
-  onModalClick = (e) => {
-    e.nativeEvent.stopImmediatePropagation();
-  }
-
   handleChange = (e) => {
     this.setState({
       childName: e.target.value, 
@@ -74,7 +70,7 @@ class CreateFileForder extends React.Component {
 
   render() {
     return (
-      <Modal isOpen={true} toggle={this.toggle} onClick={this.onModalClick}>
+      <Modal isOpen={true} toggle={this.toggle}>
         <ModalHeader toggle={this.toggle}>{this.props.isFile ? gettext("New File") : gettext("New Folder")}</ModalHeader>
         <ModalBody>
           <Form>

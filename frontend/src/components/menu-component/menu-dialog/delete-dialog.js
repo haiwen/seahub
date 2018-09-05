@@ -5,10 +5,6 @@ const gettext = window.gettext;
 
 class Delete extends React.Component {
 
-  onModalClick = (e) => {
-    e.nativeEvent.stopImmediatePropagation();
-  }
-
   toggle = () => {
     this.props.toggleCancel();
   }
@@ -16,7 +12,7 @@ class Delete extends React.Component {
   render() {
     let name = this.props.currentNode.name;
     return (
-      <Modal isOpen={true} toggle={this.toggle} onClick={this.onModalClick}>
+      <Modal isOpen={true} toggle={this.toggle}>
         <ModalHeader toggle={this.toggle}>{gettext("Delete")}</ModalHeader>
         <ModalBody>
           <p>{gettext("Are you sure to delete")}{' '}<b>{name}</b> ?</p>

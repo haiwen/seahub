@@ -71,6 +71,9 @@ class SidePanel extends Component {
   }
 
   onHideContextMenu = () => {
+    if (!this.state.isShowMenu) {
+      return;
+    }
     this.setState({
       isShowMenu: false,
       isNodeItemFrezee: false
