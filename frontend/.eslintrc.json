@@ -1,0 +1,57 @@
+{
+  "env": {
+    "browser": true,
+    "es6": true
+  },
+  "extends": [
+    // "plugin:react/recommended",
+    "react-app",
+    "eslint:recommended"
+  ],
+  "parser": "babel-eslint",
+  "parserOptions": {
+    "ecmaFeatures": {
+      "experimentalObjectRestSpread": true,
+      "jsx": true
+    },
+    "sourceType": "module"
+  },
+  "plugins": [
+    "react"
+  ],
+  "rules": {
+    "indent": [
+      "warn",
+      2
+    ],
+    "linebreak-style": [
+      "warn",
+      "unix"
+    ],
+    "quotes": [
+      "warn",
+      "single"
+    ],
+    "semi": [
+      "warn",
+      "always"
+    ],
+
+
+    // overwride error to warning
+    "no-case-declarations": "warn",
+    "no-cond-assign": "warn",
+    "no-redeclare": "warn",
+    "no-unreachable": "warn",
+    "no-class-assign": "warn",
+    "no-unused-vars": "warn",
+    "no-irregular-whitespace": "warn",
+    "no-console": "warn",
+    "no-useless-escape": "warn",
+
+    "react/jsx-indent": ["warn", 2],
+    "react/prop-types": "warn",
+    "react/display-name": "warn"
+
+  }
+}
