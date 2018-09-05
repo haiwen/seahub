@@ -118,6 +118,7 @@ def base(request):
         'enable_terms_and_conditions': config.ENABLE_TERMS_AND_CONDITIONS,
         'show_logout_icon': SHOW_LOGOUT_ICON,
         'is_pro': True if is_pro_version() else False,
+        'enable_repo_wiki_mode': dj_settings.ENABLE_REPO_WIKI_MODE,
     }
 
     if request.user.is_staff:

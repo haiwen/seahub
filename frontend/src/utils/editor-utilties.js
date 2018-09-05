@@ -1,6 +1,7 @@
 import { slug, repoID, siteRoot } from '../components/constance';
 import { SeafileAPI } from 'seafile-js';
 import cookie from 'react-cookies';
+import { bytesToSize } from '../components/utils'
 
 let seafileAPI = new SeafileAPI();
 let xcsrfHeaders = cookie.load('sfcsrftoken');
@@ -17,12 +18,30 @@ class EditorUtilities {
             isExpanded: item.type === 'dir' ? true : false,
             parent_path: item.parent_dir,
             last_update_time: item.last_update_time,
-            size: item.size
+            size: bytesToSize(item.size)
           }
         })
         return files;
       })
   }
+
+  listRepoDir() {
+    return seafileAPI.listDir(repoID, "/",{recursive: true}).then(items => {
+        const files = items.data.map(item => {
+          return {
+            name: item.name,
+            type: item.type === 'dir' ? 'dir' : 'file',
+            isExpanded: item.type === 'dir' ? true : false,
+            parent_path: item.parent_dir,
+            last_update_time: item.mtime,
+            size: item.size ? bytesToSize(item.size) : '0 bytes'
+          }
+        })
+
+        return files;
+      })
+  }
+
 
   createFile(filePath) {
     return seafileAPI.createFile(repoID, filePath)
@@ -69,3 +88,4 @@ class EditorUtilities {
 const editorUtilities = new EditorUtilities();
 
 export default editorUtilities;
+export { seafileAPI };
