@@ -266,7 +266,7 @@ class Wiki extends Component {
 
         let currentFilePath = this.state.filePath;
         let currentFileNode = tree.getNodeByPath(currentFilePath);
-        let cloneNode = node.clone();
+        let nodePath = node.path;
 
         tree.updateNodeParam(node, "name", newName);
         node.name = newName;
@@ -275,7 +275,7 @@ class Wiki extends Component {
         node.last_update_time = moment.unix(date).fromNow();
 
         if (this.state.isViewFileState) {
-          if (this.isModifyContainsCurrentFile(cloneNode)) {
+          if (currentFilePath.indexOf(nodePath) > -1) {
             tree.setNodeToActivated(currentFileNode);
             this.setState({
               tree_data: tree,
@@ -286,7 +286,10 @@ class Wiki extends Component {
             this.setState({tree_data: tree});
           }
         } else {
-          if (this.isModifyContainsCurrentFile(cloneNode)) {
+          if (nodePath === currentFilePath) { // old node
+            tree.setNodeToActivated(node);
+            this.exitViewFileState(tree, node);
+          } else if (node.path.indexOf(currentFilePath) > -1) { // new node
             tree.setNodeToActivated(currentFileNode);
             this.exitViewFileState(tree, currentFileNode);
           } else {

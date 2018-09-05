@@ -3,6 +3,9 @@ import TreeView from '../../components/tree-view/tree-view';
 import { siteRoot, logoPath, mediaUrl, siteTitle, logoWidth, logoHeight } from '../../components/constance';
 import NodeMenu from '../../components/menu-component/node-menu';
 import MenuControl from '../../components/menu-component/node-menu-control';
+import Delete from '../../components/menu-component/menu-dialog/delete-dialog';
+import Rename from '../../components/menu-component/menu-dialog/rename-dialog';
+import CreateFlieFolder from '../../components/menu-component/menu-dialog/create-fileforder-dialog';
 
 const gettext = window.gettext;
 
@@ -19,7 +22,11 @@ class SidePanel extends Component {
         top: 0
       },
       isLoadFailed: false,
-      isMenuIconShow: false
+      isMenuIconShow: false,
+      showDelete: false,
+      showAddFileFolder: false,
+      showRename: false,
+      isFile: false
     }
     this.searchedPath = null;
   }
@@ -80,20 +87,43 @@ class SidePanel extends Component {
     })
   }
 
-  onAddFolderNode = (dirPath) => {
-    this.props.onAddFolderNode(dirPath);
+  toggleAddFileFolder = (flag) => {
+    let isFile = flag === true ? true : false;
+    this.setState({
+      showAddFileFolder: !this.state.showAddFileFolder,
+      isFile: isFile
+    });
+    this.onHideContextMenu();
+  }
+  
+  toggleRename = () => {
+    this.setState({showRename: !this.state.showRename});
+    this.onHideContextMenu();
+  }
+  
+  toggleDelete = () => {
+    this.setState({showDelete: !this.state.showDelete});
+    this.onHideContextMenu();
   }
 
+  onAddFolderNode = (dirPath) => {
+    this.setState({showAddFileFolder: !this.state.showAddFileFolder});
+    this.props.onAddFolderNode(dirPath);
+  }
+  
   onAddFileNode = (filePath) => {
+    this.setState({showAddFileFolder: !this.state.showAddFileFolder});
     this.props.onAddFileNode(filePath);
   }
   
   onRenameNode = (newName) => {
+    this.setState({showRename: !this.state.showRename})
     let node = this.state.currentNode;
     this.props.onRenameNode(node, newName)
   }
   
   onDeleteNode = () => {
+    this.setState({showDelete: !this.state.showDelete})
     let node = this.state.currentNode;
     this.props.onDeleteNode(node);
   }
@@ -110,6 +140,22 @@ class SidePanel extends Component {
 
   componentWillUnmount() {
     document.removeEventListener('click', this.onHideContextMenu);
+  }
+
+  addFolderCancel = () => {
+    this.setState({showAddFileFolder: !this.state.showAddFileFolder});
+  }
+
+  addFileCancel = () => {
+    this.setState({showAddFileFolder: !this.state.showAddFileFolder});
+  }
+
+  deleteCancel = () => {
+    this.setState({showDelete: !this.state.showDelete})
+  }
+
+  renameCancel = () => {
+    this.setState({showRename: !this.state.showRename})
   }
 
   render() {
@@ -147,16 +193,39 @@ class SidePanel extends Component {
               onDirCollapse={this.props.onDirCollapse}
             />
             }
+            {this.state.isShowMenu && 
             <NodeMenu 
-              isShowMenu={this.state.isShowMenu}
               menuPosition={this.state.menuPosition}
               currentNode={this.state.currentNode}
-              onHideContextMenu={this.onHideContextMenu}
-              onDeleteNode={this.onDeleteNode}
-              onAddFileNode={this.onAddFileNode}
-              onAddFolderNode={this.onAddFolderNode}
-              onRenameNode={this.onRenameNode}
+              toggleAddFileFolder={this.toggleAddFileFolder}
+              toggleRename={this.toggleRename}
+              toggleDelete={this.toggleDelete}
             />
+            }
+            {this.state.showDelete &&
+            <Delete 
+              currentNode={this.state.currentNode}
+              handleSubmit={this.onDeleteNode}
+              toggleCancel={this.deleteCancel}
+            />
+            }
+            {this.state.showAddFileFolder && 
+            <CreateFlieFolder 
+              isFile={this.state.isFile}
+              currentNode={this.state.currentNode}
+              onAddFolder={this.onAddFolderNode}
+              addFolderCancel={this.addFolderCancel}
+              onAddFile={this.onAddFileNode}
+              addFileCancel={this.addFileCancel}
+            />
+            }
+            {this.state.showRename &&
+            <Rename 
+              currentNode={this.state.currentNode}
+              onRename={this.onRenameNode} 
+              toggleCancel={this.renameCancel} 
+            />
+            }
           </div>
         </div>
       </div>
