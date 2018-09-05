@@ -135,7 +135,6 @@ class SidePanel extends Component {
           <div className="wiki-pages-container">
             {this.props.treeData && 
             <TreeView
-              permission={this.props.permission}
               currentFilePath={this.props.currentFilePath}
               treeData={this.props.treeData}
               currentNode={this.state.currentNode}

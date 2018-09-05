@@ -10,6 +10,10 @@ class Rename extends React.Component {
     };
     this.newInput = React.createRef();
   }
+
+  onModalClick = (e) => {
+    e.nativeEvent.stopImmediatePropagation();
+  }
   
   handleChange = (e) => {
     this.setState({
@@ -59,9 +63,8 @@ class Rename extends React.Component {
 
   render() {
     let type = this.props.currentNode.type;
-    let preName = this.props.currentNode.name;
     return (
-      <Modal isOpen={true} toggle={this.toggle}>
+      <Modal isOpen={true} toggle={this.toggle} onClick={this.onModalClick}>
         <ModalHeader toggle={this.toggle}>{type === 'file' ? gettext("Rename File") : gettext("Rename Folder") }</ModalHeader>
         <ModalBody>
           <p>{type === 'file' ? gettext("Enter the new file name:"): gettext("Enter the new folder name:")}</p>

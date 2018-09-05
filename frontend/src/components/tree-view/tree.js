@@ -1,5 +1,6 @@
 import Node from './node';
 import moment from 'moment';
+import { bytesToSize } from '../utils';
 
 class Tree {
   
@@ -172,7 +173,7 @@ class Tree {
     var node = new Node({
       name: model.name,
       type: model.type,
-      size: model.size,
+      size: bytesToSize(model.size),
       last_update_time: moment.unix(model.last_update_time).fromNow(),
       isExpanded: false
     });
@@ -200,7 +201,7 @@ class Tree {
       let node = new Node({
         name: nodeObj.name,
         type: nodeObj.type,
-        size: nodeObj.size,
+        size: bytesToSize(nodeObj.size),
         last_update_time: moment.unix(nodeObj.last_update_time).fromNow(),
         isExpanded: false
       });
@@ -226,7 +227,7 @@ class Tree {
     var node = new Node({
       name: node.name,
       type: node.type,
-      size: node.size,
+      size: bytesToSize(node.size),
       last_update_time: moment.unix(node.last_update_time).fromNow(),
       isExpanded: false
     });
