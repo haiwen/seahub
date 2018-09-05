@@ -13,3 +13,4 @@ export const slug = window.wiki.config.slug;
 export const repoID = window.wiki.config.repoId;
 export const serviceUrl = window.wiki.config.serviceUrl;
 export const initialFilePath = window.wiki.config.initial_file_path;
+export const permission = window.wiki.config.permission

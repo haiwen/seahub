@@ -45,10 +45,12 @@ class Wiki extends Component {
       treeData.parseListToTree(files);
 
       let node = treeData.getNodeByPath(filePath);
+      treeData.setNodeToActivated(node);
       if (node.isDir()) {
         this.exitViewFileState(treeData, node);
         this.setState({isFileLoading: false});
       } else {
+        treeData.setNodeToActivated(node);
         editorUtilities.getWikiFileContent(slug, filePath).then(res => {
           this.setState({
             tree_data: treeData,
@@ -72,7 +74,7 @@ class Wiki extends Component {
     })
   }
 
-  initMainPanelData(filePath) {
+  initMainPanelData(filePath){
     this.setState({isFileLoading: true});
     editorUtilities.getWikiFileContent(slug, filePath)
       .then(res => {
@@ -114,9 +116,7 @@ class Wiki extends Component {
       let tree = this.state.tree_data.clone();
       let node = tree.getNodeByPath(path);
       tree.setNodeToActivated(node);
-
-      let path = node.path; //node is file
-      this.enterViewFileState(tree, node, path);
+      this.enterViewFileState(tree, node, node.path);
     }
   }
 
@@ -234,14 +234,16 @@ class Wiki extends Component {
     let filePath = node.path;
     if (node.isMarkdown()) {
       editorUtilities.renameFile(filePath, newName).then(res => {
-        let date = new Date().getTime()/1000;
+        let cloneNode = node.clone();
+
         tree.updateNodeParam(node, "name", newName);
         node.name = newName;
+        let date = new Date().getTime()/1000;
         tree.updateNodeParam(node, "last_update_time", moment.unix(date).fromNow());
-
         node.last_update_time = moment.unix(date).fromNow();
+
         if (this.state.isViewFileState) {
-          if (this.isModifyCurrentFile(node)) {
+          if (this.isModifyCurrentFile(cloneNode)) {
             tree.setNodeToActivated(node);
             this.setState({
               tree_data: tree,
@@ -252,23 +254,28 @@ class Wiki extends Component {
             this.setState({tree_data: tree});
           }
         } else {
-          this.setState({tree_data: tree});
+          let parentNode = tree.findNodeParentFromTree(node);
+          this.setState({
+            tree_data: tree,
+            changedNode: parentNode
+          });
         }
       })
     } else if (node.isDir()) {
       editorUtilities.renameDir(filePath, newName).then(res => {
 
-        let currentFilePath = this.state.filePath;// the sequence is must right
+        let currentFilePath = this.state.filePath;
         let currentFileNode = tree.getNodeByPath(currentFilePath);
-        let isPathEqual = (node.path === currentFilePath);
-        let date = new Date().getTime()/1000;
+        let nodePath = node.path;
+
         tree.updateNodeParam(node, "name", newName);
-        node.name = newName;  // just synchronization node data && tree data;
+        node.name = newName;
+        let date = new Date().getTime()/1000;
         tree.updateNodeParam(node, "last_update_time", moment.unix(date).fromNow());
         node.last_update_time = moment.unix(date).fromNow();
 
         if (this.state.isViewFileState) {
-          if (this.isModifyContainsCurrentFile(node)) {
+          if (currentFilePath.indexOf(nodePath) > -1) {
             tree.setNodeToActivated(currentFileNode);
             this.setState({
               tree_data: tree,
@@ -279,7 +286,10 @@ class Wiki extends Component {
             this.setState({tree_data: tree});
           }
         } else {
-          if (isPathEqual || node.path.indexOf(currentFilePath) > -1) {
+          if (nodePath === currentFilePath) { // old node
+            tree.setNodeToActivated(node);
+            this.exitViewFileState(tree, node);
+          } else if (node.path.indexOf(currentFilePath) > -1) { // new node
             tree.setNodeToActivated(currentFileNode);
             this.exitViewFileState(tree, currentFileNode);
           } else {
@@ -429,7 +439,6 @@ class Wiki extends Component {
           closeSideBar={this.state.closeSideBar}
           onCloseSide ={this.onCloseSide}
           treeData={this.state.tree_data}
-          permission={this.state.permission}
           currentFilePath={this.state.filePath}
           changedNode={this.state.changedNode}
           onAddFolderNode={this.onAddFolderNode}
