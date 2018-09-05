@@ -69,6 +69,8 @@
             <div id="file-view-tip">
             {% if err != 'invalid extension' %}
                 <p class="error">{{ err }}</p>
+            {% else %}
+                <p>{% trans "Online view is not applicable to this file format" %}</p>
             {% endif %}
             </div>
           {% else %}
