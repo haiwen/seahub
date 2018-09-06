@@ -1616,11 +1616,6 @@
     <% } %>
 </script>
 <script type="text/template" id="group-toolbar2-tmpl">
-    <% if (app.pageOptions.enable_wiki) { %>
-    <% if (wiki_enabled) { %>
-        <a href="{{SITE_ROOT}}group/<%= id %>/wiki/" class="sf2-icon-wiki2 op-icon group-top-op-icon" title="{% trans "Wiki" %}" id="group-wiki-icon"></a>
-    <% } %>
-    <% } %>
     <a href="#" class="sf2-icon-cog1 op-icon group-top-op-icon" title="{% trans "Settings" %}" id="group-settings-icon" aria-label="{% trans "Settings" %}"></a>
     <a href="#" class="sf2-icon-user2 op-icon group-top-op-icon" title="{% trans "Members" %}" id="group-members-icon" aria-label="{% trans "Members" %}"></a>
     <% if (app.pageOptions.enable_group_discussion) { %>
@@ -2086,13 +2081,6 @@
     <ul class="group-setting-list">
         <li><a href="#" class="group-setting-item sf-popover-item" data-op="rename">{% trans "Rename" %}</a></li>
         <li><a href="#" class="group-setting-item sf-popover-item" data-op="transfer">{% trans "Transfer" %}</a></li>
-        <% if (app.pageOptions.enable_wiki) { %>
-        <% if (!wiki_enabled) { %>
-        <li><a href="#" class="group-setting-item sf-popover-item" data-op="add-wiki">{% trans "Add Wiki" %}</a></li>
-        <% } else { %>
-        <li><a href="#" class="group-setting-item sf-popover-item" data-op="remove-wiki">{% trans "Remove Wiki" %}</a></li>
-        <% } %>
-        <% } %>
     </ul>
     <ul class="group-setting-list">
         <li><a href="#" class="group-setting-item sf-popover-item" data-op="import-members">{% trans "Import Members" %}</a></li>
@@ -2104,13 +2092,6 @@
 <% } else if (is_admin) { %>
     <ul class="group-setting-list">
         <li><a href="#" class="group-setting-item sf-popover-item" data-op="rename">{% trans "Rename" %}</a></li>
-        <% if (app.pageOptions.enable_wiki) { %>
-        <% if (!wiki_enabled) { %>
-        <li><a href="#" class="group-setting-item sf-popover-item" data-op="add-wiki">{% trans "Add Wiki" %}</a></li>
-        <% } else { %>
-        <li><a href="#" class="group-setting-item sf-popover-item" data-op="remove-wiki">{% trans "Remove Wiki" %}</a></li>
-        <% } %>
-        <% } %>
     </ul>
     <ul class="last-group-setting-list">
         <li><a href="#" class="group-setting-item sf-popover-item" data-op="import-members">{% trans "Import Members" %}</a></li>
