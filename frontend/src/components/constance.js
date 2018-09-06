@@ -8,7 +8,7 @@ export const mediaUrl = window.app.config.mediaUrl;
 export const siteTitle = window.app.config.siteTitle;
 export const logoWidth = window.app.config.logoWidth;
 export const logoHeight = window.app.config.logoHeight;
-export const isPro = window.app.config.isPro;
+export const isPro = window.app.config.isPro === "True";
 
 export const slug = window.wiki.config.slug;
 export const repoID = window.wiki.config.repoId;
