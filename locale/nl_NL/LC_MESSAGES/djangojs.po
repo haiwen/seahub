@@ -12,9 +12,9 @@ msgid ""
 msgstr ""
 "Project-Id-Version: seahub\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2018-09-06 15:47+0800\n"
-"PO-Revision-Date: 2018-09-06 07:45+0000\n"
-"Last-Translator: zheng xie <xiez1989@gmail.com>\n"
+"POT-Creation-Date: 2018-09-06 16:33+0800\n"
+"PO-Revision-Date: 2018-09-06 08:03+0000\n"
+"Last-Translator: Tony den Haan <tony@dhits.nl>\n"
 "Language-Team: Dutch (Netherlands) (http://www.transifex.com/haiwen/seahub/language/nl_NL/)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -24,19 +24,19 @@ msgstr ""
 
 #: frontend/src/components/account.js:91
 msgid "System Admin"
-msgstr ""
+msgstr "Systeembeheerder"
 
 #: frontend/src/components/account.js:127
 msgid "Used"
-msgstr ""
+msgstr "Gebruikt"
 
 #: frontend/src/components/account.js:133
 msgid "Settings"
-msgstr ""
+msgstr "Instellingen"
 
 #: frontend/src/components/account.js:135
 msgid "Log out"
-msgstr ""
+msgstr "Uitloggen"
 
 #: frontend/src/components/menu-component/menu-dialog/create-fileforder-dialog.js:74
 #: frontend/src/components/menu-component/node-menu.js:29
@@ -49,12 +49,12 @@ msgstr "Nieuw bestand"
 #: frontend/src/components/menu-component/node-menu.js:28
 #: frontend/src/components/menu-component/node-menu.js:36
 msgid "New Folder"
-msgstr ""
+msgstr "Nieuwe map"
 
 #: frontend/src/components/menu-component/menu-dialog/create-fileforder-dialog.js:82
 #: frontend/src/components/tree-dir-view/tree-dir-view.js:16
 msgid "Name"
-msgstr ""
+msgstr "Naam"
 
 #: frontend/src/components/menu-component/menu-dialog/create-fileforder-dialog.js:84
 msgid "newName"
@@ -63,7 +63,7 @@ msgstr ""
 #: frontend/src/components/menu-component/menu-dialog/create-fileforder-dialog.js:90
 #: frontend/src/components/menu-component/menu-dialog/rename-dialog.js:70
 msgid "Submit"
-msgstr ""
+msgstr "Verzenden"
 
 #: frontend/src/components/menu-component/menu-dialog/create-fileforder-dialog.js:91
 #: frontend/src/components/menu-component/menu-dialog/rename-dialog.js:71
@@ -112,23 +112,23 @@ msgstr ""
 #: frontend/src/components/menu-component/node-menu.js:38
 #: frontend/src/components/menu-component/node-menu.js:46
 msgid "Rename"
-msgstr ""
+msgstr "Hernoem"
 
 #: frontend/src/components/search.js:199
 msgid "Search files in this wiki"
-msgstr ""
+msgstr "Zoek bestanden in deze wiki"
 
 #: frontend/src/components/tree-dir-view/tree-dir-view.js:17
 msgid "Size"
-msgstr ""
+msgstr "Grootte"
 
 #: frontend/src/components/tree-dir-view/tree-dir-view.js:18
 msgid "Last Update"
-msgstr ""
+msgstr "Laatste wijziging"
 
 #: frontend/src/pages/wiki/main-panel.js:49
 msgid "Edit Page"
-msgstr ""
+msgstr "Pagina aanpassen"
 
 #: frontend/src/pages/wiki/main-panel.js:59
 msgid "Wikis"
@@ -136,7 +136,7 @@ msgstr ""
 
 #: frontend/src/pages/wiki/side-panel.js:176
 msgid "Pages"
-msgstr ""
+msgstr "Pagina's"
 
 #: seahub/templates/priv/ali.js:8
 msgid "Preview-Edit-on-Cloud library"
@@ -1040,12 +1040,12 @@ msgstr ""
 
 #: static/scripts/sysadmin-app/views/group-repo.js:28
 msgid "Unshare Library"
-msgstr ""
+msgstr "Delen ongedaan maken"
 
 #: static/scripts/sysadmin-app/views/group-repo.js:29
 #, javascript-format
 msgid "Are you sure you want to unshare %s ?"
-msgstr ""
+msgstr "Weet u zeker dat u wilt stoppen met het delen van %s ? "
 
 #: static/scripts/sysadmin-app/views/group-repo.js:42
 msgid "Successfully unshared library {placeholder}"

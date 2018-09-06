@@ -13,9 +13,9 @@ msgid ""
 msgstr ""
 "Project-Id-Version: seahub\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2018-09-06 15:47+0800\n"
-"PO-Revision-Date: 2018-09-06 07:49+0000\n"
-"Last-Translator: imwhatiam <imwhatiam123@gmail.com>\n"
+"POT-Creation-Date: 2018-09-06 16:33+0800\n"
+"PO-Revision-Date: 2018-09-06 08:35+0000\n"
+"Last-Translator: zheng xie <xiez1989@gmail.com>\n"
 "Language-Team: Ukrainian (http://www.transifex.com/haiwen/seahub/language/uk/)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -1533,7 +1533,7 @@ msgstr "Видалити контакт"
 #: seahub/templates/sysadmin/userinfo.html:587
 #, python-format
 msgid "Are you sure you want to delete %s ?"
-msgstr ""
+msgstr "Ви впевнені, що хочете видалити %s ?"
 
 #: seahub/contacts/templates/contacts/contact_list.html:123
 msgid "You cannot add yourself."
@@ -1854,6 +1854,8 @@ msgstr "Будь ласка, клікніть та оберіть бібліот
 #: seahub/templates/view_shared_upload_link.html:86
 #: seahub/templates/wiki/personal_wiki.html:59
 #: seahub/templates/wiki/wiki_list.html:85
+#: seahub/two_factor/templates/two_factor/_wizard_actions.html:4
+#: seahub/two_factor/templates/two_factor/profile/disable.html:12
 msgid "Cancel"
 msgstr "Скасувати"
 
@@ -2500,7 +2502,7 @@ msgstr ""
 #: seahub/institutions/templates/institutions/user_info.html:23
 #: seahub/templates/sysadmin/userinfo.html:32
 msgid "Avatar"
-msgstr ""
+msgstr "Аватар"
 
 #: seahub/institutions/templates/institutions/user_info.html:30
 #: seahub/organizations/templates/organizations/userinfo.html:28
@@ -3214,7 +3216,7 @@ msgstr ""
 #: seahub/organizations/templates/organizations/org_admin_group_info.html:86
 #, python-format
 msgid "Really want to delete %(lib_name)s ?"
-msgstr ""
+msgstr "Дійсно хочете видалити %(lib_name)s ?"
 
 #: seahub/organizations/templates/organizations/org_admin_group_info.html:138
 #: seahub/templates/sysadmin/repoadmin_js.html:81
@@ -3303,7 +3305,7 @@ msgstr "Користувач"
 #: seahub/templates/sysadmin/sys_invitations_admin.html:18
 #: seahub/templates/sysadmin/userinfo.html:266
 msgid "Type"
-msgstr ""
+msgstr "Тип"
 
 #: seahub/organizations/templates/organizations/org_file_audit.html:19
 #: seahub/templates/file_access.html:26
@@ -3495,7 +3497,7 @@ msgstr ""
 
 #: seahub/organizations/templates/organizations/org_publink_admin.html:6
 msgid "All Public Links"
-msgstr ""
+msgstr "Всі публічні посилання"
 
 #: seahub/organizations/templates/organizations/org_publink_admin.html:14
 #: seahub/templates/sysadmin/sys_link_search.html:25
@@ -3588,7 +3590,7 @@ msgstr "Перенос бібліотеки"
 #: seahub/templates/sysadmin/repo_transfer_form.html:4
 #, python-format
 msgid "Transfer %(lib_name)s to:"
-msgstr ""
+msgstr "Перенесення %(lib_name)s до:"
 
 #: seahub/organizations/templates/organizations/org_repo_search.html:7
 #: seahub/templates/js/sysadmin-templates.html:391
@@ -3622,7 +3624,7 @@ msgstr "E-mail не може бути порожнім"
 #: seahub/templates/sysadmin/repoadmin_js.html:70
 #: seahub/templates/sysadmin/sys_org_info_library.html:60
 msgid "Delete Library"
-msgstr ""
+msgstr "Видалити бібліотеку"
 
 #: seahub/organizations/templates/organizations/org_repoadmin_table.html:24
 #: seahub/templates/js/sysadmin-templates.html:446
@@ -3647,7 +3649,7 @@ msgstr "Додати користувача"
 #: seahub/templates/sysadmin/sys_org_info_user.html:68
 #: seahub/templates/sysadmin/sys_useradmin.html:46
 msgid "Name(optional)"
-msgstr ""
+msgstr "Ім'я (необов'язково)"
 
 #: seahub/organizations/templates/organizations/org_user_admin.html:32
 #: seahub/organizations/templates/organizations/org_user_admin.html:62
@@ -3750,7 +3752,7 @@ msgstr "Відкликати Адміністратора"
 #: seahub/templates/sysadmin/useradmin_js.html:14
 #, python-format
 msgid "Are you sure you want to revoke the admin permission of %s ?"
-msgstr ""
+msgstr "Ви впевнені, що хочете відкликати права адміністратора %s ?"
 
 #: seahub/organizations/templates/organizations/org_useradmin_js.html:9
 #: seahub/organizations/templates/organizations/user_search.html:42
@@ -3769,7 +3771,7 @@ msgstr "Змінити пароль"
 #: seahub/templates/sysadmin/useradmin_js.html:9
 #, python-format
 msgid "Are you sure you want to reset the password of %s ?"
-msgstr ""
+msgstr "Ви впевнені, що хочете скинути пароль %s ?"
 
 #: seahub/organizations/templates/organizations/org_users_table.html:41
 #: seahub/templates/sysadmin/sys_org_info_user.html:52
@@ -3780,7 +3782,7 @@ msgstr "Змінити пароль"
 #: seahub/organizations/templates/organizations/pubgrp.html:24
 #: seahub/templates/libraries.html:104
 msgid "You are not in any groups"
-msgstr ""
+msgstr "Вас немає ні в одній групі"
 
 #: seahub/organizations/templates/organizations/pubgrp.html:25
 #: seahub/templates/libraries.html:106
@@ -3891,6 +3893,7 @@ msgstr "Назад"
 #: seahub/templates/sysadmin/sys_trafficadmin.html:42
 #: seahub/templates/sysadmin/sys_upload_link_admin.html:47
 #: seahub/templates/sysadmin/useradmin_paginator.html:7
+#: seahub/two_factor/templates/two_factor/_wizard_actions.html:5
 msgid "Next"
 msgstr "Вперед"
 
@@ -3908,16 +3911,16 @@ msgstr "На сторінку: "
 #: seahub/templates/sysadmin/sys_inst_info_user.html:57
 #: seahub/templates/sysadmin/sys_inst_search_user.html:43
 msgid "Set Admin"
-msgstr ""
+msgstr "Призначити адміністратора"
 
 #: seahub/organizations/templates/organizations/user_search.html:51
 #, python-format
 msgid "Are you sure you want to set %s as admin?"
-msgstr ""
+msgstr "Ви впевнені, що хочете надати %s права адміністратора?"
 
 #: seahub/organizations/templates/organizations/userinfo.html:17
 msgid "Back to user list"
-msgstr ""
+msgstr "Назад до переліку користувачів"
 
 #: seahub/organizations/templates/organizations/userinfo.html:24
 #: seahub/templates/sysadmin/userinfo.html:39
@@ -4054,6 +4057,7 @@ msgstr "Мова"
 #: seahub/profile/templates/profile/set_profile.html:23
 #: seahub/profile/templates/profile/set_profile.html:110
 #: seahub/templates/sysadmin/userinfo.html:112
+#: seahub/two_factor/templates/two_factor/core/login.html:7
 msgid "Two-Factor Authentication"
 msgstr ""
 
@@ -4128,6 +4132,7 @@ msgstr ""
 #: seahub/profile/templates/profile/set_profile.html:114
 #: seahub/templates/sysadmin/userinfo.html:116
 #: seahub/templates/sysadmin/userinfo.html:118
+#: seahub/two_factor/templates/two_factor/profile/disable.html:6
 msgid "Disable Two-Factor Authentication"
 msgstr ""
 
@@ -4157,6 +4162,7 @@ msgid ""
 msgstr ""
 
 #: seahub/profile/templates/profile/set_profile.html:128
+#: seahub/two_factor/templates/two_factor/core/setup.html:6
 msgid "Enable Two-Factor Authentication"
 msgstr ""
 
@@ -4431,7 +4437,7 @@ msgstr "Пароль буде зберігатися на сервері про�
 
 #: seahub/templates/file_edit.html:140
 msgid "Choose a file"
-msgstr ""
+msgstr "Вибрати файл"
 
 #: seahub/templates/file_edit.html:148
 msgid "Please choose a file."
@@ -4752,11 +4758,11 @@ msgstr ""
 #: seahub/templates/i18n.html:8
 #: seahub/templates/snippets/file_share_popup.html:29
 msgid "Days"
-msgstr ""
+msgstr "Днів"
 
 #: seahub/templates/i18n.html:9 seahub/templates/sysadmin/userinfo.html:25
 msgid "Shared Links"
-msgstr ""
+msgstr "Посилання спільного доступу"
 
 #: seahub/templates/i18n.html:10
 msgid "View and manage all the shared links in this library."
@@ -4777,7 +4783,7 @@ msgstr ""
 #: seahub/templates/js/sysadmin-templates.html:621
 #: seahub/templates/js/sysadmin-templates.html:653
 msgid "Created At"
-msgstr ""
+msgstr "Створено на"
 
 #: seahub/templates/js/admin-common-templates.html:81
 #: seahub/templates/js/admin-common-templates.html:108
@@ -4803,7 +4809,7 @@ msgstr ""
 #: seahub/templates/js/admin-common-templates.html:135
 #: seahub/templates/js/sysadmin-templates.html:918
 msgid "No members"
-msgstr ""
+msgstr "Не учасники"
 
 #: seahub/templates/js/admin-common-templates.html:154
 #: seahub/templates/js/sysadmin-templates.html:373
@@ -5212,7 +5218,7 @@ msgstr ""
 
 #: seahub/templates/js/sysadmin-templates.html:938
 msgid "Operation"
-msgstr ""
+msgstr "Операція"
 
 #: seahub/templates/js/sysadmin-templates.html:939
 #: seahub/templates/view_file_text.html:16
@@ -5229,7 +5235,7 @@ msgstr ""
 
 #: seahub/templates/js/sysadmin-templates.html:1002
 msgid "Failed"
-msgstr ""
+msgstr "Невдало"
 
 #: seahub/templates/js/templates.html:9 seahub/templates/libraries.html:41
 msgid "Deleted Libraries"
@@ -5495,7 +5501,7 @@ msgstr ""
 #: seahub/templates/js/templates.html:807
 #: seahub/templates/js/templates.html:859
 msgid "Fetch failed"
-msgstr ""
+msgstr "Fetch failed"
 
 #: seahub/templates/js/templates.html:1086
 #: seahub/templates/js/templates.html:1132
@@ -5510,7 +5516,7 @@ msgstr ""
 #: seahub/templates/js/templates.html:1165
 #: seahub/templates/snippets/file_share_popup.html:6
 msgid "Share Link"
-msgstr ""
+msgstr "Загальнодоступні посилання"
 
 #: seahub/templates/js/templates.html:1169
 msgid "Upload Link"
@@ -5753,7 +5759,7 @@ msgstr "Формат файлу: user@mail.com"
 #: seahub/templates/sysadmin/sys_inst_admin.html:12
 #: seahub/templates/sysadmin/sys_terms_admin.html:9
 msgid "Add"
-msgstr ""
+msgstr "Додати"
 
 #: seahub/templates/js/templates.html:2226
 #: seahub/templates/js/templates.html:2635
@@ -5766,7 +5772,7 @@ msgstr "З правом запису"
 #: seahub/templates/js/templates.html:2238
 #: seahub/templates/js/templates.html:2257
 msgid "Created By"
-msgstr ""
+msgstr "Розроблено"
 
 #: seahub/templates/js/templates.html:2240
 #: seahub/templates/js/templates.html:2259
@@ -5963,7 +5969,7 @@ msgstr "Ваш клієнт   (Desktop/Android/iOS) буде наведено н
 
 #: seahub/templates/nav_footer.html:2
 msgid "Help"
-msgstr ""
+msgstr "Допомога"
 
 #: seahub/templates/nav_footer.html:3
 msgid "About"
@@ -5976,7 +5982,7 @@ msgstr ""
 
 #: seahub/templates/nav_footer.html:7
 msgid "Clients"
-msgstr ""
+msgstr "Клієнти"
 
 #: seahub/templates/nav_footer.html:11
 msgid "Server Version: "
@@ -5984,7 +5990,7 @@ msgstr "Версія серверу: "
 
 #: seahub/templates/nav_footer.html:11
 msgid "Seafile"
-msgstr ""
+msgstr "Seafile"
 
 #: seahub/templates/nav_footer.html:12
 msgid "About Us"
@@ -6067,7 +6073,7 @@ msgstr "Пам’ятати мене %(remember_days)s діб"
 
 #: seahub/templates/registration/login.html:60
 msgid "Forgot password?"
-msgstr ""
+msgstr "Забули пароль?"
 
 #: seahub/templates/registration/login.html:66
 msgid "Single Sign-On"
@@ -6379,7 +6385,7 @@ msgstr "автовизначення"
 #: seahub/templates/snippets/file_share_popup.html:3
 #, python-format
 msgid "Share %(name)s"
-msgstr ""
+msgstr "Share %(name)s"
 
 #: seahub/templates/snippets/file_share_popup.html:36
 msgid "Online preview only"
@@ -6503,11 +6509,11 @@ msgstr ""
 
 #: seahub/templates/snippets/shared_link_js.html:157
 msgid "Please enter days"
-msgstr ""
+msgstr "Будь-ласка, введіть кількість днів"
 
 #: seahub/templates/snippets/shared_link_js.html:163
 msgid "Please enter valid days"
-msgstr ""
+msgstr "Будь ласка, введіть кількість дійсних днів"
 
 #: seahub/templates/snippets/space_and_traffic.html:3
 msgid "Used:"
@@ -6752,7 +6758,7 @@ msgstr ""
 
 #: seahub/templates/sysadmin/settings.html:176
 msgid "Sync"
-msgstr ""
+msgstr "Синхронізація"
 
 #: seahub/templates/sysadmin/settings.html:179
 msgid ""
@@ -6823,7 +6829,7 @@ msgstr ""
 #: seahub/templates/sysadmin/sys_inst_info_user.html:17
 #: seahub/templates/sysadmin/sys_inst_info_user.html:22
 msgid "Add Members"
-msgstr ""
+msgstr "Додати учасників"
 
 #: seahub/templates/sysadmin/sys_invitations_admin.html:9
 msgid "All Invitations"
@@ -6865,6 +6871,9 @@ msgstr ""
 #: seahub/templates/sysadmin/sys_link_search.html:22
 #: seahub/templates/sysadmin/sys_publink_admin.html:28
 #: seahub/templates/sysadmin/sys_upload_link_admin.html:22
+#: seahub/two_factor/forms.py:39 seahub/two_factor/forms.py:63
+#: seahub/two_factor/forms.py:167 seahub/two_factor/forms.py:173
+#: seahub/two_factor/forms.py:294
 msgid "Token"
 msgstr ""
 
@@ -6998,12 +7007,12 @@ msgstr ""
 #: seahub/templates/sysadmin/sys_statistic_file.html:184
 msgctxt "files added"
 msgid "Added"
-msgstr ""
+msgstr "Додано"
 
 #: seahub/templates/sysadmin/sys_statistic_file.html:190
 msgctxt "files deleted"
 msgid "Deleted"
-msgstr ""
+msgstr "Видалено"
 
 #: seahub/templates/sysadmin/sys_statistic_file.html:201
 msgid "File Operations"
@@ -7238,7 +7247,7 @@ msgstr ""
 #: seahub/templates/sysadmin/useradmin_table.html:93
 msgctxt "System Administrator"
 msgid "System Admin"
-msgstr ""
+msgstr "Системний адміністратор"
 
 #: seahub/templates/sysadmin/useradmin_table.html:83
 #: seahub/templates/sysadmin/useradmin_table.html:94
@@ -7517,6 +7526,96 @@ msgstr ""
 
 #: seahub/thumbnail/views.py:154
 msgid "Invalid token."
+msgstr ""
+
+#: seahub/two_factor/templates/two_factor/core/backup_tokens.html:6
+msgid "Backup Tokens"
+msgstr ""
+
+#: seahub/two_factor/templates/two_factor/core/backup_tokens.html:8
+msgid ""
+"Backup tokens can be used when your primary and backup\n"
+"      phone numbers aren't available. The backup tokens below can be used\n"
+"      for login verification. If you've used up all your backup tokens, you\n"
+"      can generate a new set of backup tokens. Only the backup tokens shown\n"
+"      below will be valid."
+msgstr ""
+
+#: seahub/two_factor/templates/two_factor/core/backup_tokens.html:20
+msgid "Print these tokens and keep them somewhere safe."
+msgstr ""
+
+#: seahub/two_factor/templates/two_factor/core/backup_tokens.html:22
+msgid "You don't have any backup codes yet."
+msgstr ""
+
+#: seahub/two_factor/templates/two_factor/core/backup_tokens.html:26
+msgid "Back to Profile"
+msgstr ""
+
+#: seahub/two_factor/templates/two_factor/core/backup_tokens.html:27
+msgid "Generate Tokens"
+msgstr ""
+
+#: seahub/two_factor/templates/two_factor/core/login.html:19
+msgid ""
+"Open the two-factor authentication app on your device to view your "
+"authentication token and verify your identify."
+msgstr ""
+
+#: seahub/two_factor/templates/two_factor/core/login.html:22
+msgid "Authentication token"
+msgstr ""
+
+#: seahub/two_factor/templates/two_factor/core/login.html:27
+#, python-format
+msgid "Remember this computer for %(remember_days)s days"
+msgstr ""
+
+#: seahub/two_factor/templates/two_factor/core/login.html:31
+#: seahub/two_factor/templates/two_factor/core/login.html:50
+msgid "Incorrect code"
+msgstr ""
+
+#: seahub/two_factor/templates/two_factor/core/login.html:35
+#: seahub/two_factor/templates/two_factor/core/login.html:55
+msgid "Verify"
+msgstr ""
+
+#: seahub/two_factor/templates/two_factor/core/login.html:40
+msgid "Don't have your phone?"
+msgstr ""
+
+#: seahub/two_factor/templates/two_factor/core/login.html:41
+msgid "Enter a two-factor backup code"
+msgstr ""
+
+#: seahub/two_factor/templates/two_factor/core/login.html:47
+msgid "Backup code"
+msgstr ""
+
+#: seahub/two_factor/templates/two_factor/core/login.html:54
+msgid ""
+"You can enter one of your backup codes in case you lost access to your "
+"mobile device."
+msgstr ""
+
+#: seahub/two_factor/templates/two_factor/core/setup.html:16
+msgid ""
+"To start using a token generator, please use your\n"
+"        smartphone to scan the QR code below. For example, use Google\n"
+"        Authenticator. Then, enter the token generated by the app.\n"
+"        "
+msgstr ""
+
+#: seahub/two_factor/templates/two_factor/profile/disable.html:8
+msgid ""
+"You are about to disable two-factor authentication. This\n"
+"    compromises your account security, are you sure?"
+msgstr ""
+
+#: seahub/two_factor/templates/two_factor/profile/disable.html:11
+msgid "Disable"
 msgstr ""
 
 #: seahub/utils/__init__.py:128

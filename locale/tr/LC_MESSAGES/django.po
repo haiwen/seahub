@@ -10,9 +10,9 @@ msgid ""
 msgstr ""
 "Project-Id-Version: seahub\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2018-09-06 15:47+0800\n"
-"PO-Revision-Date: 2018-09-06 07:49+0000\n"
-"Last-Translator: imwhatiam <imwhatiam123@gmail.com>\n"
+"POT-Creation-Date: 2018-09-06 16:33+0800\n"
+"PO-Revision-Date: 2018-09-06 08:35+0000\n"
+"Last-Translator: zheng xie <xiez1989@gmail.com>\n"
 "Language-Team: Turkish (http://www.transifex.com/haiwen/seahub/language/tr/)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -1520,7 +1520,7 @@ msgstr "Kişiyi sil"
 #: seahub/templates/sysadmin/userinfo.html:587
 #, python-format
 msgid "Are you sure you want to delete %s ?"
-msgstr ""
+msgstr "%s'i silmek istediğinize emin misiniz?"
 
 #: seahub/contacts/templates/contacts/contact_list.html:123
 msgid "You cannot add yourself."
@@ -1841,6 +1841,8 @@ msgstr "Lütfen tıklayın ve bir kütüphane seçin"
 #: seahub/templates/view_shared_upload_link.html:86
 #: seahub/templates/wiki/personal_wiki.html:59
 #: seahub/templates/wiki/wiki_list.html:85
+#: seahub/two_factor/templates/two_factor/_wizard_actions.html:4
+#: seahub/two_factor/templates/two_factor/profile/disable.html:12
 msgid "Cancel"
 msgstr "İptal"
 
@@ -2487,7 +2489,7 @@ msgstr "Sahip olunan kütüphaneler"
 #: seahub/institutions/templates/institutions/user_info.html:23
 #: seahub/templates/sysadmin/userinfo.html:32
 msgid "Avatar"
-msgstr ""
+msgstr "Avatar"
 
 #: seahub/institutions/templates/institutions/user_info.html:30
 #: seahub/organizations/templates/organizations/userinfo.html:28
@@ -2638,7 +2640,7 @@ msgstr ""
 #: seahub/institutions/templates/institutions/user_info.html:146
 #: seahub/templates/sysadmin/sys_inst_info_base.html:55
 msgid "Space Quota can't be empty"
-msgstr ""
+msgstr "Kota Alanı boş bırakılamaz"
 
 #: seahub/institutions/templates/institutions/useradmin.html:19
 #: seahub/institutions/templates/institutions/useradmin_search.html:22
@@ -3155,7 +3157,7 @@ msgstr ""
 
 #: seahub/organizations/templates/organizations/org_admin_group_info.html:13
 msgid "Group Info"
-msgstr ""
+msgstr "Grup Bilgisi"
 
 #: seahub/organizations/templates/organizations/org_admin_group_info.html:19
 #: seahub/organizations/templates/organizations/org_group_admin.html:12
@@ -3199,7 +3201,7 @@ msgstr "yönetici"
 #: seahub/organizations/templates/organizations/org_admin_group_info.html:86
 #, python-format
 msgid "Really want to delete %(lib_name)s ?"
-msgstr ""
+msgstr "%(lib_name)s dosyalarının silinmesini gerçekten istiyor musunuz?"
 
 #: seahub/organizations/templates/organizations/org_admin_group_info.html:138
 #: seahub/templates/sysadmin/repoadmin_js.html:81
@@ -3480,7 +3482,7 @@ msgstr ""
 
 #: seahub/organizations/templates/organizations/org_publink_admin.html:6
 msgid "All Public Links"
-msgstr ""
+msgstr "Tüm Genel Linkler"
 
 #: seahub/organizations/templates/organizations/org_publink_admin.html:14
 #: seahub/templates/sysadmin/sys_link_search.html:25
@@ -3573,7 +3575,7 @@ msgstr "Kütüphaneyi transfer et"
 #: seahub/templates/sysadmin/repo_transfer_form.html:4
 #, python-format
 msgid "Transfer %(lib_name)s to:"
-msgstr ""
+msgstr "%(lib_name)s dosyasını şuna transfer et:"
 
 #: seahub/organizations/templates/organizations/org_repo_search.html:7
 #: seahub/templates/js/sysadmin-templates.html:391
@@ -3632,7 +3634,7 @@ msgstr "Kullanıcı ekle"
 #: seahub/templates/sysadmin/sys_org_info_user.html:68
 #: seahub/templates/sysadmin/sys_useradmin.html:46
 msgid "Name(optional)"
-msgstr ""
+msgstr "İsim (isteğe bağlı)"
 
 #: seahub/organizations/templates/organizations/org_user_admin.html:32
 #: seahub/organizations/templates/organizations/org_user_admin.html:62
@@ -3735,7 +3737,7 @@ msgstr "Yöneticiyi İptal et"
 #: seahub/templates/sysadmin/useradmin_js.html:14
 #, python-format
 msgid "Are you sure you want to revoke the admin permission of %s ?"
-msgstr ""
+msgstr "%s'in yönetici iznini iptal etmek istediğinize emin misiniz?"
 
 #: seahub/organizations/templates/organizations/org_useradmin_js.html:9
 #: seahub/organizations/templates/organizations/user_search.html:42
@@ -3754,7 +3756,7 @@ msgstr "Şifre Sıfırla"
 #: seahub/templates/sysadmin/useradmin_js.html:9
 #, python-format
 msgid "Are you sure you want to reset the password of %s ?"
-msgstr ""
+msgstr "%s'nın şifresini sıfırlamak istediğinize emin misiniz?"
 
 #: seahub/organizations/templates/organizations/org_users_table.html:41
 #: seahub/templates/sysadmin/sys_org_info_user.html:52
@@ -3765,7 +3767,7 @@ msgstr "Şifreyi Sıfırla"
 #: seahub/organizations/templates/organizations/pubgrp.html:24
 #: seahub/templates/libraries.html:104
 msgid "You are not in any groups"
-msgstr ""
+msgstr "Hiç bir grupta değilsiniz."
 
 #: seahub/organizations/templates/organizations/pubgrp.html:25
 #: seahub/templates/libraries.html:106
@@ -3876,6 +3878,7 @@ msgstr "Önceki"
 #: seahub/templates/sysadmin/sys_trafficadmin.html:42
 #: seahub/templates/sysadmin/sys_upload_link_admin.html:47
 #: seahub/templates/sysadmin/useradmin_paginator.html:7
+#: seahub/two_factor/templates/two_factor/_wizard_actions.html:5
 msgid "Next"
 msgstr "Sonraki"
 
@@ -3893,16 +3896,16 @@ msgstr "Her bir sayfa:"
 #: seahub/templates/sysadmin/sys_inst_info_user.html:57
 #: seahub/templates/sysadmin/sys_inst_search_user.html:43
 msgid "Set Admin"
-msgstr ""
+msgstr "Yönetici Oluştur"
 
 #: seahub/organizations/templates/organizations/user_search.html:51
 #, python-format
 msgid "Are you sure you want to set %s as admin?"
-msgstr ""
+msgstr "%s'i yönetici olarak oluşturmak istediğinize emin misiniz?"
 
 #: seahub/organizations/templates/organizations/userinfo.html:17
 msgid "Back to user list"
-msgstr ""
+msgstr "Kullanıcı listesine geri dön"
 
 #: seahub/organizations/templates/organizations/userinfo.html:24
 #: seahub/templates/sysadmin/userinfo.html:39
@@ -4039,6 +4042,7 @@ msgstr "Dil"
 #: seahub/profile/templates/profile/set_profile.html:23
 #: seahub/profile/templates/profile/set_profile.html:110
 #: seahub/templates/sysadmin/userinfo.html:112
+#: seahub/two_factor/templates/two_factor/core/login.html:7
 msgid "Two-Factor Authentication"
 msgstr ""
 
@@ -4113,6 +4117,7 @@ msgstr ""
 #: seahub/profile/templates/profile/set_profile.html:114
 #: seahub/templates/sysadmin/userinfo.html:116
 #: seahub/templates/sysadmin/userinfo.html:118
+#: seahub/two_factor/templates/two_factor/profile/disable.html:6
 msgid "Disable Two-Factor Authentication"
 msgstr ""
 
@@ -4140,6 +4145,7 @@ msgid ""
 msgstr ""
 
 #: seahub/profile/templates/profile/set_profile.html:128
+#: seahub/two_factor/templates/two_factor/core/setup.html:6
 msgid "Enable Two-Factor Authentication"
 msgstr ""
 
@@ -4414,7 +4420,7 @@ msgstr "Şifre sadece 1 saat sunucuda tutulacaktır."
 
 #: seahub/templates/file_edit.html:140
 msgid "Choose a file"
-msgstr ""
+msgstr "Dosya seçin"
 
 #: seahub/templates/file_edit.html:148
 msgid "Please choose a file."
@@ -4760,7 +4766,7 @@ msgstr ""
 #: seahub/templates/js/sysadmin-templates.html:621
 #: seahub/templates/js/sysadmin-templates.html:653
 msgid "Created At"
-msgstr ""
+msgstr "Oluşturuldu"
 
 #: seahub/templates/js/admin-common-templates.html:81
 #: seahub/templates/js/admin-common-templates.html:108
@@ -5195,7 +5201,7 @@ msgstr ""
 
 #: seahub/templates/js/sysadmin-templates.html:938
 msgid "Operation"
-msgstr ""
+msgstr "İşlem"
 
 #: seahub/templates/js/sysadmin-templates.html:939
 #: seahub/templates/view_file_text.html:16
@@ -5212,7 +5218,7 @@ msgstr ""
 
 #: seahub/templates/js/sysadmin-templates.html:1002
 msgid "Failed"
-msgstr ""
+msgstr "Başarısız"
 
 #: seahub/templates/js/templates.html:9 seahub/templates/libraries.html:41
 msgid "Deleted Libraries"
@@ -5736,7 +5742,7 @@ msgstr ""
 #: seahub/templates/sysadmin/sys_inst_admin.html:12
 #: seahub/templates/sysadmin/sys_terms_admin.html:9
 msgid "Add"
-msgstr ""
+msgstr "Ekle"
 
 #: seahub/templates/js/templates.html:2226
 #: seahub/templates/js/templates.html:2635
@@ -5946,7 +5952,7 @@ msgstr "İstemcileriniz (Masaüstü/Android/İOS) burada listelenecek."
 
 #: seahub/templates/nav_footer.html:2
 msgid "Help"
-msgstr ""
+msgstr "Yardım"
 
 #: seahub/templates/nav_footer.html:3
 msgid "About"
@@ -5967,11 +5973,11 @@ msgstr "Sunucu Versiyonu:"
 
 #: seahub/templates/nav_footer.html:11
 msgid "Seafile"
-msgstr ""
+msgstr "Seafile"
 
 #: seahub/templates/nav_footer.html:12
 msgid "About Us"
-msgstr ""
+msgstr "Hakkımızda"
 
 #: seahub/templates/priv/ali.html:7
 msgid "Preview-Edit-on-Cloud"
@@ -6362,7 +6368,7 @@ msgstr "otomatik algıla"
 #: seahub/templates/snippets/file_share_popup.html:3
 #, python-format
 msgid "Share %(name)s"
-msgstr ""
+msgstr "Paylaş %(name)s"
 
 #: seahub/templates/snippets/file_share_popup.html:36
 msgid "Online preview only"
@@ -6806,7 +6812,7 @@ msgstr ""
 #: seahub/templates/sysadmin/sys_inst_info_user.html:17
 #: seahub/templates/sysadmin/sys_inst_info_user.html:22
 msgid "Add Members"
-msgstr ""
+msgstr "Üye Ekle"
 
 #: seahub/templates/sysadmin/sys_invitations_admin.html:9
 msgid "All Invitations"
@@ -6848,6 +6854,9 @@ msgstr ""
 #: seahub/templates/sysadmin/sys_link_search.html:22
 #: seahub/templates/sysadmin/sys_publink_admin.html:28
 #: seahub/templates/sysadmin/sys_upload_link_admin.html:22
+#: seahub/two_factor/forms.py:39 seahub/two_factor/forms.py:63
+#: seahub/two_factor/forms.py:167 seahub/two_factor/forms.py:173
+#: seahub/two_factor/forms.py:294
 msgid "Token"
 msgstr ""
 
@@ -6879,7 +6888,7 @@ msgstr "Deneme Sürümünü Kaldır"
 #: seahub/templates/sysadmin/sys_org_admin.html:122
 #, python-format
 msgid "Are you sure you want to remove trial for %s ?"
-msgstr ""
+msgstr "%s için deneme sürümünü kaldırmak istediğinize emin misiniz ?"
 
 #: seahub/templates/sysadmin/sys_org_info_base.html:15
 msgid "Back to organization list"
@@ -6981,12 +6990,12 @@ msgstr ""
 #: seahub/templates/sysadmin/sys_statistic_file.html:184
 msgctxt "files added"
 msgid "Added"
-msgstr ""
+msgstr "Eklendi"
 
 #: seahub/templates/sysadmin/sys_statistic_file.html:190
 msgctxt "files deleted"
 msgid "Deleted"
-msgstr ""
+msgstr "Silindi"
 
 #: seahub/templates/sysadmin/sys_statistic_file.html:201
 msgid "File Operations"
@@ -7221,7 +7230,7 @@ msgstr ""
 #: seahub/templates/sysadmin/useradmin_table.html:93
 msgctxt "System Administrator"
 msgid "System Admin"
-msgstr ""
+msgstr "Sistem Yöneticisi"
 
 #: seahub/templates/sysadmin/useradmin_table.html:83
 #: seahub/templates/sysadmin/useradmin_table.html:94
@@ -7501,6 +7510,96 @@ msgstr "Küçük resim oluşturulamadı."
 #: seahub/thumbnail/views.py:154
 msgid "Invalid token."
 msgstr "Geçersiz jeton"
+
+#: seahub/two_factor/templates/two_factor/core/backup_tokens.html:6
+msgid "Backup Tokens"
+msgstr ""
+
+#: seahub/two_factor/templates/two_factor/core/backup_tokens.html:8
+msgid ""
+"Backup tokens can be used when your primary and backup\n"
+"      phone numbers aren't available. The backup tokens below can be used\n"
+"      for login verification. If you've used up all your backup tokens, you\n"
+"      can generate a new set of backup tokens. Only the backup tokens shown\n"
+"      below will be valid."
+msgstr ""
+
+#: seahub/two_factor/templates/two_factor/core/backup_tokens.html:20
+msgid "Print these tokens and keep them somewhere safe."
+msgstr ""
+
+#: seahub/two_factor/templates/two_factor/core/backup_tokens.html:22
+msgid "You don't have any backup codes yet."
+msgstr ""
+
+#: seahub/two_factor/templates/two_factor/core/backup_tokens.html:26
+msgid "Back to Profile"
+msgstr ""
+
+#: seahub/two_factor/templates/two_factor/core/backup_tokens.html:27
+msgid "Generate Tokens"
+msgstr ""
+
+#: seahub/two_factor/templates/two_factor/core/login.html:19
+msgid ""
+"Open the two-factor authentication app on your device to view your "
+"authentication token and verify your identify."
+msgstr ""
+
+#: seahub/two_factor/templates/two_factor/core/login.html:22
+msgid "Authentication token"
+msgstr ""
+
+#: seahub/two_factor/templates/two_factor/core/login.html:27
+#, python-format
+msgid "Remember this computer for %(remember_days)s days"
+msgstr ""
+
+#: seahub/two_factor/templates/two_factor/core/login.html:31
+#: seahub/two_factor/templates/two_factor/core/login.html:50
+msgid "Incorrect code"
+msgstr ""
+
+#: seahub/two_factor/templates/two_factor/core/login.html:35
+#: seahub/two_factor/templates/two_factor/core/login.html:55
+msgid "Verify"
+msgstr ""
+
+#: seahub/two_factor/templates/two_factor/core/login.html:40
+msgid "Don't have your phone?"
+msgstr ""
+
+#: seahub/two_factor/templates/two_factor/core/login.html:41
+msgid "Enter a two-factor backup code"
+msgstr ""
+
+#: seahub/two_factor/templates/two_factor/core/login.html:47
+msgid "Backup code"
+msgstr ""
+
+#: seahub/two_factor/templates/two_factor/core/login.html:54
+msgid ""
+"You can enter one of your backup codes in case you lost access to your "
+"mobile device."
+msgstr ""
+
+#: seahub/two_factor/templates/two_factor/core/setup.html:16
+msgid ""
+"To start using a token generator, please use your\n"
+"        smartphone to scan the QR code below. For example, use Google\n"
+"        Authenticator. Then, enter the token generated by the app.\n"
+"        "
+msgstr ""
+
+#: seahub/two_factor/templates/two_factor/profile/disable.html:8
+msgid ""
+"You are about to disable two-factor authentication. This\n"
+"    compromises your account security, are you sure?"
+msgstr ""
+
+#: seahub/two_factor/templates/two_factor/profile/disable.html:11
+msgid "Disable"
+msgstr ""
 
 #: seahub/utils/__init__.py:128
 msgid "permission error"

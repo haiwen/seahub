@@ -10,9 +10,9 @@ msgid ""
 msgstr ""
 "Project-Id-Version: seahub\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2018-09-06 15:47+0800\n"
-"PO-Revision-Date: 2018-09-06 07:49+0000\n"
-"Last-Translator: imwhatiam <imwhatiam123@gmail.com>\n"
+"POT-Creation-Date: 2018-09-06 16:33+0800\n"
+"PO-Revision-Date: 2018-09-06 08:35+0000\n"
+"Last-Translator: zheng xie <xiez1989@gmail.com>\n"
 "Language-Team: Korean (http://www.transifex.com/haiwen/seahub/language/ko/)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -1515,7 +1515,7 @@ msgstr "연락처 삭제"
 #: seahub/templates/sysadmin/userinfo.html:587
 #, python-format
 msgid "Are you sure you want to delete %s ?"
-msgstr ""
+msgstr "정말로 %s을(를) 삭제할까요?"
 
 #: seahub/contacts/templates/contacts/contact_list.html:123
 msgid "You cannot add yourself."
@@ -1836,6 +1836,8 @@ msgstr "라이브러리를 클릭하고 선택해주세요."
 #: seahub/templates/view_shared_upload_link.html:86
 #: seahub/templates/wiki/personal_wiki.html:59
 #: seahub/templates/wiki/wiki_list.html:85
+#: seahub/two_factor/templates/two_factor/_wizard_actions.html:4
+#: seahub/two_factor/templates/two_factor/profile/disable.html:12
 msgid "Cancel"
 msgstr "취소"
 
@@ -3149,7 +3151,7 @@ msgstr ""
 
 #: seahub/organizations/templates/organizations/org_admin_group_info.html:13
 msgid "Group Info"
-msgstr ""
+msgstr "그룹 정보"
 
 #: seahub/organizations/templates/organizations/org_admin_group_info.html:19
 #: seahub/organizations/templates/organizations/org_group_admin.html:12
@@ -3193,7 +3195,7 @@ msgstr "관리자"
 #: seahub/organizations/templates/organizations/org_admin_group_info.html:86
 #, python-format
 msgid "Really want to delete %(lib_name)s ?"
-msgstr ""
+msgstr "%(lib_name)s을(를) 정말로 삭제할까요?"
 
 #: seahub/organizations/templates/organizations/org_admin_group_info.html:138
 #: seahub/templates/sysadmin/repoadmin_js.html:81
@@ -3474,7 +3476,7 @@ msgstr "동작"
 
 #: seahub/organizations/templates/organizations/org_publink_admin.html:6
 msgid "All Public Links"
-msgstr ""
+msgstr "모든 공개 링크"
 
 #: seahub/organizations/templates/organizations/org_publink_admin.html:14
 #: seahub/templates/sysadmin/sys_link_search.html:25
@@ -3567,7 +3569,7 @@ msgstr "라이브러리 이전"
 #: seahub/templates/sysadmin/repo_transfer_form.html:4
 #, python-format
 msgid "Transfer %(lib_name)s to:"
-msgstr ""
+msgstr "%(lib_name)s 라이브러리를 다음에게 보내기:"
 
 #: seahub/organizations/templates/organizations/org_repo_search.html:7
 #: seahub/templates/js/sysadmin-templates.html:391
@@ -3729,7 +3731,7 @@ msgstr "관리자 해임"
 #: seahub/templates/sysadmin/useradmin_js.html:14
 #, python-format
 msgid "Are you sure you want to revoke the admin permission of %s ?"
-msgstr ""
+msgstr "정말로 %s의 관리자 권한을 취소할까요?"
 
 #: seahub/organizations/templates/organizations/org_useradmin_js.html:9
 #: seahub/organizations/templates/organizations/user_search.html:42
@@ -3748,7 +3750,7 @@ msgstr "암호 재설정"
 #: seahub/templates/sysadmin/useradmin_js.html:9
 #, python-format
 msgid "Are you sure you want to reset the password of %s ?"
-msgstr ""
+msgstr "정말로 %s의 암호를 다시 설정할까요?"
 
 #: seahub/organizations/templates/organizations/org_users_table.html:41
 #: seahub/templates/sysadmin/sys_org_info_user.html:52
@@ -3759,7 +3761,7 @@ msgstr "암호재설정"
 #: seahub/organizations/templates/organizations/pubgrp.html:24
 #: seahub/templates/libraries.html:104
 msgid "You are not in any groups"
-msgstr ""
+msgstr "어떤 그룹에도 속하지 않았습니다"
 
 #: seahub/organizations/templates/organizations/pubgrp.html:25
 #: seahub/templates/libraries.html:106
@@ -3870,6 +3872,7 @@ msgstr "이전"
 #: seahub/templates/sysadmin/sys_trafficadmin.html:42
 #: seahub/templates/sysadmin/sys_upload_link_admin.html:47
 #: seahub/templates/sysadmin/useradmin_paginator.html:7
+#: seahub/two_factor/templates/two_factor/_wizard_actions.html:5
 msgid "Next"
 msgstr "다음"
 
@@ -3892,11 +3895,11 @@ msgstr "관리자 임명"
 #: seahub/organizations/templates/organizations/user_search.html:51
 #, python-format
 msgid "Are you sure you want to set %s as admin?"
-msgstr ""
+msgstr "정말로 %s 사용자를 관리자로 설정할까요?"
 
 #: seahub/organizations/templates/organizations/userinfo.html:17
 msgid "Back to user list"
-msgstr ""
+msgstr "사용자 목록으로 복귀"
 
 #: seahub/organizations/templates/organizations/userinfo.html:24
 #: seahub/templates/sysadmin/userinfo.html:39
@@ -4033,6 +4036,7 @@ msgstr "언어"
 #: seahub/profile/templates/profile/set_profile.html:23
 #: seahub/profile/templates/profile/set_profile.html:110
 #: seahub/templates/sysadmin/userinfo.html:112
+#: seahub/two_factor/templates/two_factor/core/login.html:7
 msgid "Two-Factor Authentication"
 msgstr "이중 인증"
 
@@ -4107,6 +4111,7 @@ msgstr "활성화함"
 #: seahub/profile/templates/profile/set_profile.html:114
 #: seahub/templates/sysadmin/userinfo.html:116
 #: seahub/templates/sysadmin/userinfo.html:118
+#: seahub/two_factor/templates/two_factor/profile/disable.html:6
 msgid "Disable Two-Factor Authentication"
 msgstr "이중 인증 비활성화"
 
@@ -4133,6 +4138,7 @@ msgid ""
 msgstr "이중 인증 방식을 계정에 활성화하지 않았습니다. 계정 보안을 개손하려면 이중 인증을 활성화하세요."
 
 #: seahub/profile/templates/profile/set_profile.html:128
+#: seahub/two_factor/templates/two_factor/core/setup.html:6
 msgid "Enable Two-Factor Authentication"
 msgstr "이중 인증 활성화"
 
@@ -5205,7 +5211,7 @@ msgstr ""
 
 #: seahub/templates/js/sysadmin-templates.html:1002
 msgid "Failed"
-msgstr ""
+msgstr "실패"
 
 #: seahub/templates/js/templates.html:9 seahub/templates/libraries.html:41
 msgid "Deleted Libraries"
@@ -5939,7 +5945,7 @@ msgstr "사용하는 클라이언트(데스크탑/안드로이드/iOS)가 여기
 
 #: seahub/templates/nav_footer.html:2
 msgid "Help"
-msgstr ""
+msgstr "도움말"
 
 #: seahub/templates/nav_footer.html:3
 msgid "About"
@@ -5952,7 +5958,7 @@ msgstr ""
 
 #: seahub/templates/nav_footer.html:7
 msgid "Clients"
-msgstr ""
+msgstr "클라이언트"
 
 #: seahub/templates/nav_footer.html:11
 msgid "Server Version: "
@@ -5960,11 +5966,11 @@ msgstr "서버 버전: "
 
 #: seahub/templates/nav_footer.html:11
 msgid "Seafile"
-msgstr ""
+msgstr "Seafile"
 
 #: seahub/templates/nav_footer.html:12
 msgid "About Us"
-msgstr ""
+msgstr "정보"
 
 #: seahub/templates/priv/ali.html:7
 msgid "Preview-Edit-on-Cloud"
@@ -6030,7 +6036,7 @@ msgstr "로그인"
 
 #: seahub/templates/registration/login.html:36
 msgid "Refresh"
-msgstr ""
+msgstr "새로 고침"
 
 #: seahub/templates/registration/login.html:50
 msgid "Incorrect email or password"
@@ -6355,7 +6361,7 @@ msgstr "자동 인식"
 #: seahub/templates/snippets/file_share_popup.html:3
 #, python-format
 msgid "Share %(name)s"
-msgstr ""
+msgstr "%(name)s 공유"
 
 #: seahub/templates/snippets/file_share_popup.html:36
 msgid "Online preview only"
@@ -6799,7 +6805,7 @@ msgstr ""
 #: seahub/templates/sysadmin/sys_inst_info_user.html:17
 #: seahub/templates/sysadmin/sys_inst_info_user.html:22
 msgid "Add Members"
-msgstr ""
+msgstr "구성원 추가"
 
 #: seahub/templates/sysadmin/sys_invitations_admin.html:9
 msgid "All Invitations"
@@ -6841,6 +6847,9 @@ msgstr ""
 #: seahub/templates/sysadmin/sys_link_search.html:22
 #: seahub/templates/sysadmin/sys_publink_admin.html:28
 #: seahub/templates/sysadmin/sys_upload_link_admin.html:22
+#: seahub/two_factor/forms.py:39 seahub/two_factor/forms.py:63
+#: seahub/two_factor/forms.py:167 seahub/two_factor/forms.py:173
+#: seahub/two_factor/forms.py:294
 msgid "Token"
 msgstr ""
 
@@ -6872,7 +6881,7 @@ msgstr "시험판 제거"
 #: seahub/templates/sysadmin/sys_org_admin.html:122
 #, python-format
 msgid "Are you sure you want to remove trial for %s ?"
-msgstr ""
+msgstr "정말로 %s용 시험판을 제거할까요?"
 
 #: seahub/templates/sysadmin/sys_org_info_base.html:15
 msgid "Back to organization list"
@@ -6974,12 +6983,12 @@ msgstr ""
 #: seahub/templates/sysadmin/sys_statistic_file.html:184
 msgctxt "files added"
 msgid "Added"
-msgstr ""
+msgstr "추가함"
 
 #: seahub/templates/sysadmin/sys_statistic_file.html:190
 msgctxt "files deleted"
 msgid "Deleted"
-msgstr ""
+msgstr "삭제함"
 
 #: seahub/templates/sysadmin/sys_statistic_file.html:201
 msgid "File Operations"
@@ -7214,7 +7223,7 @@ msgstr ""
 #: seahub/templates/sysadmin/useradmin_table.html:93
 msgctxt "System Administrator"
 msgid "System Admin"
-msgstr ""
+msgstr "시스템 관리자"
 
 #: seahub/templates/sysadmin/useradmin_table.html:83
 #: seahub/templates/sysadmin/useradmin_table.html:94
@@ -7494,6 +7503,96 @@ msgstr "미리보기를 만드는데 실패했습니다."
 #: seahub/thumbnail/views.py:154
 msgid "Invalid token."
 msgstr "잘못된 토큰"
+
+#: seahub/two_factor/templates/two_factor/core/backup_tokens.html:6
+msgid "Backup Tokens"
+msgstr ""
+
+#: seahub/two_factor/templates/two_factor/core/backup_tokens.html:8
+msgid ""
+"Backup tokens can be used when your primary and backup\n"
+"      phone numbers aren't available. The backup tokens below can be used\n"
+"      for login verification. If you've used up all your backup tokens, you\n"
+"      can generate a new set of backup tokens. Only the backup tokens shown\n"
+"      below will be valid."
+msgstr ""
+
+#: seahub/two_factor/templates/two_factor/core/backup_tokens.html:20
+msgid "Print these tokens and keep them somewhere safe."
+msgstr ""
+
+#: seahub/two_factor/templates/two_factor/core/backup_tokens.html:22
+msgid "You don't have any backup codes yet."
+msgstr ""
+
+#: seahub/two_factor/templates/two_factor/core/backup_tokens.html:26
+msgid "Back to Profile"
+msgstr ""
+
+#: seahub/two_factor/templates/two_factor/core/backup_tokens.html:27
+msgid "Generate Tokens"
+msgstr ""
+
+#: seahub/two_factor/templates/two_factor/core/login.html:19
+msgid ""
+"Open the two-factor authentication app on your device to view your "
+"authentication token and verify your identify."
+msgstr ""
+
+#: seahub/two_factor/templates/two_factor/core/login.html:22
+msgid "Authentication token"
+msgstr ""
+
+#: seahub/two_factor/templates/two_factor/core/login.html:27
+#, python-format
+msgid "Remember this computer for %(remember_days)s days"
+msgstr ""
+
+#: seahub/two_factor/templates/two_factor/core/login.html:31
+#: seahub/two_factor/templates/two_factor/core/login.html:50
+msgid "Incorrect code"
+msgstr ""
+
+#: seahub/two_factor/templates/two_factor/core/login.html:35
+#: seahub/two_factor/templates/two_factor/core/login.html:55
+msgid "Verify"
+msgstr ""
+
+#: seahub/two_factor/templates/two_factor/core/login.html:40
+msgid "Don't have your phone?"
+msgstr ""
+
+#: seahub/two_factor/templates/two_factor/core/login.html:41
+msgid "Enter a two-factor backup code"
+msgstr ""
+
+#: seahub/two_factor/templates/two_factor/core/login.html:47
+msgid "Backup code"
+msgstr ""
+
+#: seahub/two_factor/templates/two_factor/core/login.html:54
+msgid ""
+"You can enter one of your backup codes in case you lost access to your "
+"mobile device."
+msgstr ""
+
+#: seahub/two_factor/templates/two_factor/core/setup.html:16
+msgid ""
+"To start using a token generator, please use your\n"
+"        smartphone to scan the QR code below. For example, use Google\n"
+"        Authenticator. Then, enter the token generated by the app.\n"
+"        "
+msgstr ""
+
+#: seahub/two_factor/templates/two_factor/profile/disable.html:8
+msgid ""
+"You are about to disable two-factor authentication. This\n"
+"    compromises your account security, are you sure?"
+msgstr ""
+
+#: seahub/two_factor/templates/two_factor/profile/disable.html:11
+msgid "Disable"
+msgstr ""
 
 #: seahub/utils/__init__.py:128
 msgid "permission error"

@@ -14,8 +14,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: seahub\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2018-09-06 15:47+0800\n"
-"PO-Revision-Date: 2018-09-06 07:45+0000\n"
+"POT-Creation-Date: 2018-09-06 16:33+0800\n"
+"PO-Revision-Date: 2018-09-06 08:03+0000\n"
 "Last-Translator: zheng xie <xiez1989@gmail.com>\n"
 "Language-Team: French (http://www.transifex.com/haiwen/seahub/language/fr/)\n"
 "MIME-Version: 1.0\n"
@@ -122,11 +122,11 @@ msgstr "Rechercher des fichiers dans ce Wiki"
 
 #: frontend/src/components/tree-dir-view/tree-dir-view.js:17
 msgid "Size"
-msgstr ""
+msgstr "Taille"
 
 #: frontend/src/components/tree-dir-view/tree-dir-view.js:18
 msgid "Last Update"
-msgstr ""
+msgstr "Mise à jour"
 
 #: frontend/src/pages/wiki/main-panel.js:49
 msgid "Edit Page"

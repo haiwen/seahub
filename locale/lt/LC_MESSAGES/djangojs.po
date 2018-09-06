@@ -7,9 +7,9 @@ msgid ""
 msgstr ""
 "Project-Id-Version: seahub\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2018-09-06 15:47+0800\n"
-"PO-Revision-Date: 2018-09-06 07:45+0000\n"
-"Last-Translator: zheng xie <xiez1989@gmail.com>\n"
+"POT-Creation-Date: 2018-09-06 16:33+0800\n"
+"PO-Revision-Date: 2018-09-06 08:03+0000\n"
+"Last-Translator: Audronis G. <audroniui@gmail.com>\n"
 "Language-Team: Lithuanian (http://www.transifex.com/haiwen/seahub/language/lt/)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -27,7 +27,7 @@ msgstr ""
 
 #: frontend/src/components/account.js:133
 msgid "Settings"
-msgstr ""
+msgstr "Nustatymai"
 
 #: frontend/src/components/account.js:135
 msgid "Log out"
@@ -49,7 +49,7 @@ msgstr ""
 #: frontend/src/components/menu-component/menu-dialog/create-fileforder-dialog.js:82
 #: frontend/src/components/tree-dir-view/tree-dir-view.js:16
 msgid "Name"
-msgstr ""
+msgstr "Vardas"
 
 #: frontend/src/components/menu-component/menu-dialog/create-fileforder-dialog.js:84
 msgid "newName"
@@ -58,13 +58,13 @@ msgstr ""
 #: frontend/src/components/menu-component/menu-dialog/create-fileforder-dialog.js:90
 #: frontend/src/components/menu-component/menu-dialog/rename-dialog.js:70
 msgid "Submit"
-msgstr ""
+msgstr "Pateikti"
 
 #: frontend/src/components/menu-component/menu-dialog/create-fileforder-dialog.js:91
 #: frontend/src/components/menu-component/menu-dialog/rename-dialog.js:71
 #: static/scripts/app/views/fileupload.js:21
 msgid "Cancel"
-msgstr ""
+msgstr "Atšaukti"
 
 #: frontend/src/components/menu-component/menu-dialog/delete-dialog.js:16
 #: frontend/src/components/menu-component/node-menu.js:39
@@ -72,7 +72,7 @@ msgstr ""
 #: static/scripts/app/views/fileupload.js:22
 #: static/scripts/sysadmin-app/views/device-trusted-ipaddress.js:27
 msgid "Delete"
-msgstr ""
+msgstr "Ištrinti"
 
 #: frontend/src/components/menu-component/menu-dialog/delete-dialog.js:18
 msgid "Are you sure to delete"
@@ -111,19 +111,19 @@ msgstr ""
 
 #: frontend/src/components/search.js:199
 msgid "Search files in this wiki"
-msgstr ""
+msgstr "Ieškoti bylų šioje wiki"
 
 #: frontend/src/components/tree-dir-view/tree-dir-view.js:17
 msgid "Size"
-msgstr ""
+msgstr "Dydis"
 
 #: frontend/src/components/tree-dir-view/tree-dir-view.js:18
 msgid "Last Update"
-msgstr ""
+msgstr "Paskutinis atnaujinimas"
 
 #: frontend/src/pages/wiki/main-panel.js:49
 msgid "Edit Page"
-msgstr ""
+msgstr "Redaguoti puslapį"
 
 #: frontend/src/pages/wiki/main-panel.js:59
 msgid "Wikis"
@@ -131,7 +131,7 @@ msgstr ""
 
 #: frontend/src/pages/wiki/side-panel.js:176
 msgid "Pages"
-msgstr ""
+msgstr "Puslapiai"
 
 #: seahub/templates/priv/ali.js:8
 msgid "Preview-Edit-on-Cloud library"
@@ -208,11 +208,11 @@ msgstr ""
 #: static/scripts/app/views/fileupload.js:430
 #: static/scripts/app/views/group.js:65 static/scripts/common.js:643
 msgid "Just now"
-msgstr ""
+msgstr "Ką tik"
 
 #: static/scripts/app/models/repo.js:34
 msgid "Name is required"
-msgstr ""
+msgstr "Vardas privalomas"
 
 #: static/scripts/app/models/repo.js:37
 #: static/scripts/app/views/dialogs/dirent-rename.js:65
@@ -221,7 +221,7 @@ msgstr ""
 #: static/scripts/app/views/group-repo.js:131
 #: static/scripts/app/views/repo.js:187
 msgid "Name should not include '/'."
-msgstr ""
+msgstr "Vardas negali turėti '/'."
 
 #: static/scripts/app/models/repo.js:41 static/scripts/app/views/share.js:334
 msgid "Please enter password"
@@ -233,7 +233,7 @@ msgstr ""
 
 #: static/scripts/app/models/repo.js:44 static/scripts/app/views/share.js:338
 msgid "Password is too short"
-msgstr ""
+msgstr "Slaptažodis per trumpas"
 
 #: static/scripts/app/models/repo.js:46 static/scripts/app/views/share.js:346
 msgid "Passwords don't match"
@@ -246,12 +246,12 @@ msgstr ""
 #: static/scripts/app/models/share-admin-folder.js:25
 #: static/scripts/app/models/share-admin-repo.js:22
 msgid "Read-Write"
-msgstr ""
+msgstr "Skaityti-Rašyti"
 
 #: static/scripts/app/models/share-admin-folder.js:27
 #: static/scripts/app/models/share-admin-repo.js:24
 msgid "Read-Only"
-msgstr ""
+msgstr "Tik-Skaityti"
 
 #: static/scripts/app/views/activity-item.js:25
 msgid "Removed all items from trash."
@@ -343,7 +343,7 @@ msgstr ""
 #: static/scripts/app/views/dialogs/dirent-mvcp.js:188
 #: static/scripts/app/views/dir.js:1173
 msgid "Invalid destination path"
-msgstr ""
+msgstr "Neteisingas paskirties maršrutas"
 
 #: static/scripts/app/views/dialogs/dirent-mvcp.js:207
 #: static/scripts/app/views/dirent.js:296
@@ -368,7 +368,7 @@ msgstr ""
 #: static/scripts/sysadmin-app/views/dir.js:82
 #: static/scripts/sysadmin-app/views/group-members.js:51
 msgid "It is required."
-msgstr ""
+msgstr "Privaloma."
 
 #: static/scripts/app/views/dialogs/dirent-smart-link.js:50
 msgid "Internal link copied to clipboard"
@@ -477,7 +477,7 @@ msgstr ""
 
 #: static/scripts/app/views/dir.js:409
 msgid "Password is required."
-msgstr ""
+msgstr "Slaptažodis privalomas."
 
 #: static/scripts/app/views/dir.js:479
 #: static/scripts/app/views/notifications.js:63 static/scripts/common.js:467
@@ -655,7 +655,7 @@ msgstr ""
 #: static/scripts/sysadmin-app/views/address-book-group-item.js:152
 #: static/scripts/sysadmin-app/views/system-repo.js:52
 msgid "Error"
-msgstr ""
+msgstr "Klaida"
 
 #: static/scripts/app/views/fileupload.js:18
 msgid "uploaded"
@@ -691,7 +691,7 @@ msgstr ""
 
 #: static/scripts/app/views/fileupload.js:305
 msgid "File is locked"
-msgstr ""
+msgstr "Byla užblokuota"
 
 #: static/scripts/app/views/fileupload.js:440
 msgid "Network error"
@@ -715,7 +715,7 @@ msgstr ""
 #: static/scripts/common.js:444
 #: static/scripts/sysadmin-app/views/dashboard.js:84
 msgid "Failed. Please check the network."
-msgstr ""
+msgstr "Nepavyko. Patikrinkite tinklą."
 
 #: static/scripts/app/views/folder-share-item.js:186
 msgid "Delete failed"
@@ -799,7 +799,7 @@ msgstr ""
 
 #: static/scripts/app/views/notifications.js:63
 msgid "Refresh"
-msgstr ""
+msgstr "Atnaujinti"
 
 #: static/scripts/app/views/repo.js:95
 #: static/scripts/sysadmin-app/views/address-book-group-library.js:30
@@ -818,7 +818,7 @@ msgstr ""
 #: static/scripts/sysadmin-app/views/repo.js:66
 #, javascript-format
 msgid "Are you sure you want to delete %s ?"
-msgstr ""
+msgstr "Ar tikrai norite ištrinti %s ?"
 
 #: static/scripts/app/views/repo.js:106
 #: static/scripts/sysadmin-app/views/repo.js:79
@@ -863,7 +863,7 @@ msgstr ""
 #: static/scripts/app/views/share.js:287 static/scripts/app/views/share.js:288
 #: static/scripts/app/views/share.js:309 static/scripts/app/views/share.js:310
 msgid "Hide"
-msgstr ""
+msgstr "Slėpti"
 
 #: static/scripts/app/views/share.js:305 static/scripts/app/views/share.js:306
 msgid "Show"
@@ -900,7 +900,7 @@ msgstr ""
 #: static/scripts/sysadmin-app/views/trash-repo.js:71
 #: static/scripts/sysadmin-app/views/trash-repos.js:64
 msgid "Success"
-msgstr ""
+msgstr "Sėkmingai"
 
 #: static/scripts/app/views/starred-file-item.js:69
 msgid "Successfully unstared {placeholder}"
@@ -954,7 +954,7 @@ msgstr ""
 #: static/scripts/sysadmin-app/views/groups.js:79
 #: static/scripts/sysadmin-app/views/repos.js:69
 msgid "Name is required."
-msgstr ""
+msgstr "Vardas privalomas."
 
 #: static/scripts/sysadmin-app/views/address-book.js:49
 msgid "New Department"
@@ -1015,7 +1015,7 @@ msgstr ""
 
 #: static/scripts/sysadmin-app/views/admin-operation-log.js:94
 msgid "Delete User"
-msgstr ""
+msgstr "Ištrinti vartotoją"
 
 #: static/scripts/sysadmin-app/views/admin-operation-log.js:95
 msgid "Deleted user {user}"
@@ -1070,7 +1070,7 @@ msgstr ""
 
 #: static/scripts/sysadmin-app/views/trash-repo.js:58
 msgid "Restore Library"
-msgstr ""
+msgstr "Atkurti biblioteką"
 
 #: static/scripts/sysadmin-app/views/trash-repo.js:59
 #, javascript-format

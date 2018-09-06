@@ -8,9 +8,9 @@ msgid ""
 msgstr ""
 "Project-Id-Version: seahub\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2018-09-06 15:47+0800\n"
-"PO-Revision-Date: 2018-09-06 07:45+0000\n"
-"Last-Translator: zheng xie <xiez1989@gmail.com>\n"
+"POT-Creation-Date: 2018-09-06 16:33+0800\n"
+"PO-Revision-Date: 2018-09-06 08:03+0000\n"
+"Last-Translator: fotex <dawidmyszczyszyn@gmail.com>\n"
 "Language-Team: Polish (http://www.transifex.com/haiwen/seahub/language/pl/)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -20,19 +20,19 @@ msgstr ""
 
 #: frontend/src/components/account.js:91
 msgid "System Admin"
-msgstr ""
+msgstr "Administrator systemu"
 
 #: frontend/src/components/account.js:127
 msgid "Used"
-msgstr ""
+msgstr "Wykorzystane"
 
 #: frontend/src/components/account.js:133
 msgid "Settings"
-msgstr ""
+msgstr "Ustawienia"
 
 #: frontend/src/components/account.js:135
 msgid "Log out"
-msgstr ""
+msgstr "Wyloguj się"
 
 #: frontend/src/components/menu-component/menu-dialog/create-fileforder-dialog.js:74
 #: frontend/src/components/menu-component/node-menu.js:29
@@ -45,12 +45,12 @@ msgstr "Nowy plik"
 #: frontend/src/components/menu-component/node-menu.js:28
 #: frontend/src/components/menu-component/node-menu.js:36
 msgid "New Folder"
-msgstr ""
+msgstr "Nowy folder"
 
 #: frontend/src/components/menu-component/menu-dialog/create-fileforder-dialog.js:82
 #: frontend/src/components/tree-dir-view/tree-dir-view.js:16
 msgid "Name"
-msgstr ""
+msgstr "Nazwa"
 
 #: frontend/src/components/menu-component/menu-dialog/create-fileforder-dialog.js:84
 msgid "newName"
@@ -59,7 +59,7 @@ msgstr ""
 #: frontend/src/components/menu-component/menu-dialog/create-fileforder-dialog.js:90
 #: frontend/src/components/menu-component/menu-dialog/rename-dialog.js:70
 msgid "Submit"
-msgstr ""
+msgstr "Wyślij"
 
 #: frontend/src/components/menu-component/menu-dialog/create-fileforder-dialog.js:91
 #: frontend/src/components/menu-component/menu-dialog/rename-dialog.js:71
@@ -108,23 +108,23 @@ msgstr ""
 #: frontend/src/components/menu-component/node-menu.js:38
 #: frontend/src/components/menu-component/node-menu.js:46
 msgid "Rename"
-msgstr ""
+msgstr "Zmień nazwę"
 
 #: frontend/src/components/search.js:199
 msgid "Search files in this wiki"
-msgstr ""
+msgstr "Przeszukaj pliki w tej Wiki"
 
 #: frontend/src/components/tree-dir-view/tree-dir-view.js:17
 msgid "Size"
-msgstr ""
+msgstr "Rozmiar"
 
 #: frontend/src/components/tree-dir-view/tree-dir-view.js:18
 msgid "Last Update"
-msgstr ""
+msgstr "Ostatnia aktualizacja"
 
 #: frontend/src/pages/wiki/main-panel.js:49
 msgid "Edit Page"
-msgstr ""
+msgstr "Edytuj stronę"
 
 #: frontend/src/pages/wiki/main-panel.js:59
 msgid "Wikis"
@@ -132,7 +132,7 @@ msgstr ""
 
 #: frontend/src/pages/wiki/side-panel.js:176
 msgid "Pages"
-msgstr ""
+msgstr "Strony"
 
 #: seahub/templates/priv/ali.js:8
 msgid "Preview-Edit-on-Cloud library"

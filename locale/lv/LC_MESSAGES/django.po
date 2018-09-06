@@ -8,9 +8,9 @@ msgid ""
 msgstr ""
 "Project-Id-Version: seahub\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2018-09-06 15:47+0800\n"
-"PO-Revision-Date: 2018-09-06 07:49+0000\n"
-"Last-Translator: imwhatiam <imwhatiam123@gmail.com>\n"
+"POT-Creation-Date: 2018-09-06 16:33+0800\n"
+"PO-Revision-Date: 2018-09-06 08:35+0000\n"
+"Last-Translator: Qubit Bit\n"
 "Language-Team: Latvian (http://www.transifex.com/haiwen/seahub/language/lv/)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -1523,7 +1523,7 @@ msgstr "Dzēst kontaktu"
 #: seahub/templates/sysadmin/userinfo.html:587
 #, python-format
 msgid "Are you sure you want to delete %s ?"
-msgstr ""
+msgstr "Vai tiešām vēlaties dzēst %s ?"
 
 #: seahub/contacts/templates/contacts/contact_list.html:123
 msgid "You cannot add yourself."
@@ -1844,6 +1844,8 @@ msgstr "Lūdzu, noklikšķiniet uz un izvēlieties bibliotēku."
 #: seahub/templates/view_shared_upload_link.html:86
 #: seahub/templates/wiki/personal_wiki.html:59
 #: seahub/templates/wiki/wiki_list.html:85
+#: seahub/two_factor/templates/two_factor/_wizard_actions.html:4
+#: seahub/two_factor/templates/two_factor/profile/disable.html:12
 msgid "Cancel"
 msgstr "Atcelt"
 
@@ -2641,7 +2643,7 @@ msgstr "Šis lietotājs nav izveidots vai pievienots nevienai grupai"
 #: seahub/institutions/templates/institutions/user_info.html:146
 #: seahub/templates/sysadmin/sys_inst_info_base.html:55
 msgid "Space Quota can't be empty"
-msgstr ""
+msgstr "Kvotu lauks nevar būt tukšs"
 
 #: seahub/institutions/templates/institutions/useradmin.html:19
 #: seahub/institutions/templates/institutions/useradmin_search.html:22
@@ -3159,7 +3161,7 @@ msgstr ""
 
 #: seahub/organizations/templates/organizations/org_admin_group_info.html:13
 msgid "Group Info"
-msgstr ""
+msgstr "Grupas info"
 
 #: seahub/organizations/templates/organizations/org_admin_group_info.html:19
 #: seahub/organizations/templates/organizations/org_group_admin.html:12
@@ -3203,7 +3205,7 @@ msgstr "Administrators"
 #: seahub/organizations/templates/organizations/org_admin_group_info.html:86
 #, python-format
 msgid "Really want to delete %(lib_name)s ?"
-msgstr ""
+msgstr "Vai tiešām vēlaties dzēst %(lib_name)s ?"
 
 #: seahub/organizations/templates/organizations/org_admin_group_info.html:138
 #: seahub/templates/sysadmin/repoadmin_js.html:81
@@ -3211,7 +3213,7 @@ msgstr ""
 #: seahub/templates/sysadmin/sys_org_info_user.html:187
 #: seahub/templates/wiki/wiki_list.html:194
 msgid "Successfully deleted 1 item."
-msgstr ""
+msgstr "Veiksmīgi izdzēsts 1 objekts"
 
 #: seahub/organizations/templates/organizations/org_admin_sidebar.html:24
 #: seahub/templates/js/admin-common-templates.html:70
@@ -3484,7 +3486,7 @@ msgstr "Darbības"
 
 #: seahub/organizations/templates/organizations/org_publink_admin.html:6
 msgid "All Public Links"
-msgstr ""
+msgstr "Visas publiskās saites"
 
 #: seahub/organizations/templates/organizations/org_publink_admin.html:14
 #: seahub/templates/sysadmin/sys_link_search.html:25
@@ -3577,7 +3579,7 @@ msgstr "Pārsūtīt bibliotēku"
 #: seahub/templates/sysadmin/repo_transfer_form.html:4
 #, python-format
 msgid "Transfer %(lib_name)s to:"
-msgstr ""
+msgstr "Pārsūtīt %(lib_name)s uz:"
 
 #: seahub/organizations/templates/organizations/org_repo_search.html:7
 #: seahub/templates/js/sysadmin-templates.html:391
@@ -3739,7 +3741,7 @@ msgstr "Anulēt administratoru"
 #: seahub/templates/sysadmin/useradmin_js.html:14
 #, python-format
 msgid "Are you sure you want to revoke the admin permission of %s ?"
-msgstr ""
+msgstr "Vai tiešām vēlaties atcelt administratora tiesības uz %s ?"
 
 #: seahub/organizations/templates/organizations/org_useradmin_js.html:9
 #: seahub/organizations/templates/organizations/user_search.html:42
@@ -3758,7 +3760,7 @@ msgstr "Paroles maiņa"
 #: seahub/templates/sysadmin/useradmin_js.html:9
 #, python-format
 msgid "Are you sure you want to reset the password of %s ?"
-msgstr ""
+msgstr "Vai tiešām vēlaties atiestatīt paroli %s ?"
 
 #: seahub/organizations/templates/organizations/org_users_table.html:41
 #: seahub/templates/sysadmin/sys_org_info_user.html:52
@@ -3769,7 +3771,7 @@ msgstr "Atstatīt"
 #: seahub/organizations/templates/organizations/pubgrp.html:24
 #: seahub/templates/libraries.html:104
 msgid "You are not in any groups"
-msgstr ""
+msgstr "Neesat ne vienā grupā"
 
 #: seahub/organizations/templates/organizations/pubgrp.html:25
 #: seahub/templates/libraries.html:106
@@ -3880,6 +3882,7 @@ msgstr "Iepriekšējais"
 #: seahub/templates/sysadmin/sys_trafficadmin.html:42
 #: seahub/templates/sysadmin/sys_upload_link_admin.html:47
 #: seahub/templates/sysadmin/useradmin_paginator.html:7
+#: seahub/two_factor/templates/two_factor/_wizard_actions.html:5
 msgid "Next"
 msgstr "Nākamais"
 
@@ -3902,11 +3905,11 @@ msgstr "Iestatīt administratoru"
 #: seahub/organizations/templates/organizations/user_search.html:51
 #, python-format
 msgid "Are you sure you want to set %s as admin?"
-msgstr ""
+msgstr "Vai tiešām vēlaties iestatīt %s, kā administratoru?"
 
 #: seahub/organizations/templates/organizations/userinfo.html:17
 msgid "Back to user list"
-msgstr ""
+msgstr "Atpakaļ uz lietotāja sarakstu"
 
 #: seahub/organizations/templates/organizations/userinfo.html:24
 #: seahub/templates/sysadmin/userinfo.html:39
@@ -4043,6 +4046,7 @@ msgstr "Valoda"
 #: seahub/profile/templates/profile/set_profile.html:23
 #: seahub/profile/templates/profile/set_profile.html:110
 #: seahub/templates/sysadmin/userinfo.html:112
+#: seahub/two_factor/templates/two_factor/core/login.html:7
 msgid "Two-Factor Authentication"
 msgstr "Divfaktoru autentifikācija"
 
@@ -4117,6 +4121,7 @@ msgstr "aktivizēt"
 #: seahub/profile/templates/profile/set_profile.html:114
 #: seahub/templates/sysadmin/userinfo.html:116
 #: seahub/templates/sysadmin/userinfo.html:118
+#: seahub/two_factor/templates/two_factor/profile/disable.html:6
 msgid "Disable Two-Factor Authentication"
 msgstr "Atspējot divfaktoru autentifikācija"
 
@@ -4145,6 +4150,7 @@ msgid ""
 msgstr ""
 
 #: seahub/profile/templates/profile/set_profile.html:128
+#: seahub/two_factor/templates/two_factor/core/setup.html:6
 msgid "Enable Two-Factor Authentication"
 msgstr "Aktivizēt divfaktoru autentifikācija"
 
@@ -4419,7 +4425,7 @@ msgstr "Parole tiks glabāta uz servera tikai 1 stundu."
 
 #: seahub/templates/file_edit.html:140
 msgid "Choose a file"
-msgstr ""
+msgstr "Izvēlēties datni"
 
 #: seahub/templates/file_edit.html:148
 msgid "Please choose a file."
@@ -5200,7 +5206,7 @@ msgstr ""
 
 #: seahub/templates/js/sysadmin-templates.html:938
 msgid "Operation"
-msgstr ""
+msgstr "Darbības"
 
 #: seahub/templates/js/sysadmin-templates.html:939
 #: seahub/templates/view_file_text.html:16
@@ -5217,7 +5223,7 @@ msgstr ""
 
 #: seahub/templates/js/sysadmin-templates.html:1002
 msgid "Failed"
-msgstr ""
+msgstr "Neizdevās"
 
 #: seahub/templates/js/templates.html:9 seahub/templates/libraries.html:41
 msgid "Deleted Libraries"
@@ -5371,11 +5377,11 @@ msgstr ""
 
 #: seahub/templates/js/templates.html:480
 msgid "New Excel File"
-msgstr ""
+msgstr "Jauna Excel datne"
 
 #: seahub/templates/js/templates.html:481
 msgid "New PowerPoint File"
-msgstr ""
+msgstr "Jauna PowerPoint datne"
 
 #: seahub/templates/js/templates.html:482
 msgid "New Word File"
@@ -6367,7 +6373,7 @@ msgstr "noteikt automātiski"
 #: seahub/templates/snippets/file_share_popup.html:3
 #, python-format
 msgid "Share %(name)s"
-msgstr ""
+msgstr "Sniegt pieeju %(name)s"
 
 #: seahub/templates/snippets/file_share_popup.html:36
 msgid "Online preview only"
@@ -6811,7 +6817,7 @@ msgstr ""
 #: seahub/templates/sysadmin/sys_inst_info_user.html:17
 #: seahub/templates/sysadmin/sys_inst_info_user.html:22
 msgid "Add Members"
-msgstr ""
+msgstr "Pievienot dalībniekus"
 
 #: seahub/templates/sysadmin/sys_invitations_admin.html:9
 msgid "All Invitations"
@@ -6853,6 +6859,9 @@ msgstr ""
 #: seahub/templates/sysadmin/sys_link_search.html:22
 #: seahub/templates/sysadmin/sys_publink_admin.html:28
 #: seahub/templates/sysadmin/sys_upload_link_admin.html:22
+#: seahub/two_factor/forms.py:39 seahub/two_factor/forms.py:63
+#: seahub/two_factor/forms.py:167 seahub/two_factor/forms.py:173
+#: seahub/two_factor/forms.py:294
 msgid "Token"
 msgstr ""
 
@@ -7226,7 +7235,7 @@ msgstr ""
 #: seahub/templates/sysadmin/useradmin_table.html:93
 msgctxt "System Administrator"
 msgid "System Admin"
-msgstr ""
+msgstr "Administratora logs"
 
 #: seahub/templates/sysadmin/useradmin_table.html:83
 #: seahub/templates/sysadmin/useradmin_table.html:94
@@ -7506,6 +7515,96 @@ msgstr "Neizdevās izveidot sīktēlu."
 #: seahub/thumbnail/views.py:154
 msgid "Invalid token."
 msgstr "Nederīgs marķieris"
+
+#: seahub/two_factor/templates/two_factor/core/backup_tokens.html:6
+msgid "Backup Tokens"
+msgstr ""
+
+#: seahub/two_factor/templates/two_factor/core/backup_tokens.html:8
+msgid ""
+"Backup tokens can be used when your primary and backup\n"
+"      phone numbers aren't available. The backup tokens below can be used\n"
+"      for login verification. If you've used up all your backup tokens, you\n"
+"      can generate a new set of backup tokens. Only the backup tokens shown\n"
+"      below will be valid."
+msgstr ""
+
+#: seahub/two_factor/templates/two_factor/core/backup_tokens.html:20
+msgid "Print these tokens and keep them somewhere safe."
+msgstr ""
+
+#: seahub/two_factor/templates/two_factor/core/backup_tokens.html:22
+msgid "You don't have any backup codes yet."
+msgstr ""
+
+#: seahub/two_factor/templates/two_factor/core/backup_tokens.html:26
+msgid "Back to Profile"
+msgstr ""
+
+#: seahub/two_factor/templates/two_factor/core/backup_tokens.html:27
+msgid "Generate Tokens"
+msgstr ""
+
+#: seahub/two_factor/templates/two_factor/core/login.html:19
+msgid ""
+"Open the two-factor authentication app on your device to view your "
+"authentication token and verify your identify."
+msgstr ""
+
+#: seahub/two_factor/templates/two_factor/core/login.html:22
+msgid "Authentication token"
+msgstr ""
+
+#: seahub/two_factor/templates/two_factor/core/login.html:27
+#, python-format
+msgid "Remember this computer for %(remember_days)s days"
+msgstr ""
+
+#: seahub/two_factor/templates/two_factor/core/login.html:31
+#: seahub/two_factor/templates/two_factor/core/login.html:50
+msgid "Incorrect code"
+msgstr ""
+
+#: seahub/two_factor/templates/two_factor/core/login.html:35
+#: seahub/two_factor/templates/two_factor/core/login.html:55
+msgid "Verify"
+msgstr "Pārbaudīt"
+
+#: seahub/two_factor/templates/two_factor/core/login.html:40
+msgid "Don't have your phone?"
+msgstr ""
+
+#: seahub/two_factor/templates/two_factor/core/login.html:41
+msgid "Enter a two-factor backup code"
+msgstr ""
+
+#: seahub/two_factor/templates/two_factor/core/login.html:47
+msgid "Backup code"
+msgstr ""
+
+#: seahub/two_factor/templates/two_factor/core/login.html:54
+msgid ""
+"You can enter one of your backup codes in case you lost access to your "
+"mobile device."
+msgstr ""
+
+#: seahub/two_factor/templates/two_factor/core/setup.html:16
+msgid ""
+"To start using a token generator, please use your\n"
+"        smartphone to scan the QR code below. For example, use Google\n"
+"        Authenticator. Then, enter the token generated by the app.\n"
+"        "
+msgstr ""
+
+#: seahub/two_factor/templates/two_factor/profile/disable.html:8
+msgid ""
+"You are about to disable two-factor authentication. This\n"
+"    compromises your account security, are you sure?"
+msgstr ""
+
+#: seahub/two_factor/templates/two_factor/profile/disable.html:11
+msgid "Disable"
+msgstr ""
 
 #: seahub/utils/__init__.py:128
 msgid "permission error"

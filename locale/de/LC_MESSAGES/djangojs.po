@@ -23,9 +23,9 @@ msgid ""
 msgstr ""
 "Project-Id-Version: seahub\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2018-09-06 15:47+0800\n"
-"PO-Revision-Date: 2018-09-06 07:45+0000\n"
-"Last-Translator: zheng xie <xiez1989@gmail.com>\n"
+"POT-Creation-Date: 2018-09-06 16:33+0800\n"
+"PO-Revision-Date: 2018-09-06 08:03+0000\n"
+"Last-Translator: Andreas Vollmer | HU Berlin <andreas.vollmer@cms.hu-berlin.de>\n"
 "Language-Team: German (http://www.transifex.com/haiwen/seahub/language/de/)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -131,11 +131,11 @@ msgstr "Wiki-Dateien suchen"
 
 #: frontend/src/components/tree-dir-view/tree-dir-view.js:17
 msgid "Size"
-msgstr ""
+msgstr "Größe"
 
 #: frontend/src/components/tree-dir-view/tree-dir-view.js:18
 msgid "Last Update"
-msgstr ""
+msgstr "Letzte Änderung"
 
 #: frontend/src/pages/wiki/main-panel.js:49
 msgid "Edit Page"
@@ -179,11 +179,11 @@ msgstr ""
 
 #: seahub/templates/priv/ali.js:17
 msgid "Preview-Edit-on-Cloud"
-msgstr ""
+msgstr "Vorschau von Bearbeiten in der Cloud"
 
 #: seahub/templates/priv/ali.js:18
 msgid "Preview-on-Cloud"
-msgstr ""
+msgstr "Vorschau in der Cloud"
 
 #: seahub/templates/priv/ali.js:21
 msgid "Read-Write-Sync"
@@ -195,15 +195,15 @@ msgstr ""
 
 #: seahub/templates/priv/ali.js:23
 msgid "Co-Owner"
-msgstr ""
+msgstr "Mit-Eigentümer/in"
 
 #: seahub/templates/priv/ali.js:24
 msgid "Edit-on-Cloud"
-msgstr ""
+msgstr "Online bearbeiten"
 
 #: seahub/templates/priv/ali.js:25
 msgid "View-on-Cloud"
-msgstr ""
+msgstr "Vorschau"
 
 #: static/scripts/app/models/deleted-repo.js:19
 #: static/scripts/app/models/repo.js:59 static/scripts/common.js:343

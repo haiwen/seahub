@@ -8,9 +8,9 @@ msgid ""
 msgstr ""
 "Project-Id-Version: seahub\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2018-09-06 15:47+0800\n"
-"PO-Revision-Date: 2018-09-06 07:45+0000\n"
-"Last-Translator: zheng xie <xiez1989@gmail.com>\n"
+"POT-Creation-Date: 2018-09-06 16:33+0800\n"
+"PO-Revision-Date: 2018-09-06 08:03+0000\n"
+"Last-Translator: Amr Mothana <amrusud@gmail.com>\n"
 "Language-Team: Arabic (http://www.transifex.com/haiwen/seahub/language/ar/)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -20,7 +20,7 @@ msgstr ""
 
 #: frontend/src/components/account.js:91
 msgid "System Admin"
-msgstr ""
+msgstr "مدير النظام"
 
 #: frontend/src/components/account.js:127
 msgid "Used"
@@ -28,29 +28,29 @@ msgstr ""
 
 #: frontend/src/components/account.js:133
 msgid "Settings"
-msgstr ""
+msgstr "إعدادات"
 
 #: frontend/src/components/account.js:135
 msgid "Log out"
-msgstr ""
+msgstr "تسجيل خروج"
 
 #: frontend/src/components/menu-component/menu-dialog/create-fileforder-dialog.js:74
 #: frontend/src/components/menu-component/node-menu.js:29
 #: frontend/src/components/menu-component/node-menu.js:37
 #: static/scripts/app/views/dir.js:771
 msgid "New File"
-msgstr ""
+msgstr "ملف جديد"
 
 #: frontend/src/components/menu-component/menu-dialog/create-fileforder-dialog.js:74
 #: frontend/src/components/menu-component/node-menu.js:28
 #: frontend/src/components/menu-component/node-menu.js:36
 msgid "New Folder"
-msgstr ""
+msgstr "مجلد جديد"
 
 #: frontend/src/components/menu-component/menu-dialog/create-fileforder-dialog.js:82
 #: frontend/src/components/tree-dir-view/tree-dir-view.js:16
 msgid "Name"
-msgstr ""
+msgstr "الاسم"
 
 #: frontend/src/components/menu-component/menu-dialog/create-fileforder-dialog.js:84
 msgid "newName"
@@ -59,7 +59,7 @@ msgstr ""
 #: frontend/src/components/menu-component/menu-dialog/create-fileforder-dialog.js:90
 #: frontend/src/components/menu-component/menu-dialog/rename-dialog.js:70
 msgid "Submit"
-msgstr ""
+msgstr "تقديم"
 
 #: frontend/src/components/menu-component/menu-dialog/create-fileforder-dialog.js:91
 #: frontend/src/components/menu-component/menu-dialog/rename-dialog.js:71
@@ -108,23 +108,23 @@ msgstr ""
 #: frontend/src/components/menu-component/node-menu.js:38
 #: frontend/src/components/menu-component/node-menu.js:46
 msgid "Rename"
-msgstr ""
+msgstr "تعديل اسم"
 
 #: frontend/src/components/search.js:199
 msgid "Search files in this wiki"
-msgstr ""
+msgstr "بحث عن ملفات في هذه ال wiki"
 
 #: frontend/src/components/tree-dir-view/tree-dir-view.js:17
 msgid "Size"
-msgstr ""
+msgstr "الحجم"
 
 #: frontend/src/components/tree-dir-view/tree-dir-view.js:18
 msgid "Last Update"
-msgstr ""
+msgstr "آخر تحديث"
 
 #: frontend/src/pages/wiki/main-panel.js:49
 msgid "Edit Page"
-msgstr ""
+msgstr "تحرير صفحة"
 
 #: frontend/src/pages/wiki/main-panel.js:59
 msgid "Wikis"
@@ -132,7 +132,7 @@ msgstr ""
 
 #: frontend/src/pages/wiki/side-panel.js:176
 msgid "Pages"
-msgstr ""
+msgstr "صفحات"
 
 #: seahub/templates/priv/ali.js:8
 msgid "Preview-Edit-on-Cloud library"
@@ -222,7 +222,7 @@ msgstr "الاسم مطلوب"
 #: static/scripts/app/views/group-repo.js:131
 #: static/scripts/app/views/repo.js:187
 msgid "Name should not include '/'."
-msgstr ""
+msgstr "الاسم لا يجب ان يحتوي على '/'."
 
 #: static/scripts/app/models/repo.js:41 static/scripts/app/views/share.js:334
 msgid "Please enter password"
@@ -975,7 +975,7 @@ msgstr ""
 
 #: static/scripts/sysadmin-app/views/admin-operation-log.js:57
 msgid "Transfer Library"
-msgstr ""
+msgstr "تحويل مكتبة"
 
 #: static/scripts/sysadmin-app/views/admin-operation-log.js:58
 msgid "Transferred library {library_name} from {user_from} to {user_to}"
@@ -1016,7 +1016,7 @@ msgstr ""
 
 #: static/scripts/sysadmin-app/views/admin-operation-log.js:94
 msgid "Delete User"
-msgstr ""
+msgstr "حذف مستخدم"
 
 #: static/scripts/sysadmin-app/views/admin-operation-log.js:95
 msgid "Deleted user {user}"

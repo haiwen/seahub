@@ -8,9 +8,9 @@ msgid ""
 msgstr ""
 "Project-Id-Version: seahub\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2018-09-06 15:47+0800\n"
-"PO-Revision-Date: 2018-09-06 07:45+0000\n"
-"Last-Translator: zheng xie <xiez1989@gmail.com>\n"
+"POT-Creation-Date: 2018-09-06 16:33+0800\n"
+"PO-Revision-Date: 2018-09-06 08:03+0000\n"
+"Last-Translator: Qubit Bit\n"
 "Language-Team: Latvian (http://www.transifex.com/haiwen/seahub/language/lv/)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -20,19 +20,19 @@ msgstr ""
 
 #: frontend/src/components/account.js:91
 msgid "System Admin"
-msgstr ""
+msgstr "Administratora logs"
 
 #: frontend/src/components/account.js:127
 msgid "Used"
-msgstr ""
+msgstr "Lietots"
 
 #: frontend/src/components/account.js:133
 msgid "Settings"
-msgstr ""
+msgstr "Iestatījumi"
 
 #: frontend/src/components/account.js:135
 msgid "Log out"
-msgstr ""
+msgstr "Iziet"
 
 #: frontend/src/components/menu-component/menu-dialog/create-fileforder-dialog.js:74
 #: frontend/src/components/menu-component/node-menu.js:29
@@ -45,12 +45,12 @@ msgstr "Jauna datne"
 #: frontend/src/components/menu-component/node-menu.js:28
 #: frontend/src/components/menu-component/node-menu.js:36
 msgid "New Folder"
-msgstr ""
+msgstr "Jauna mape"
 
 #: frontend/src/components/menu-component/menu-dialog/create-fileforder-dialog.js:82
 #: frontend/src/components/tree-dir-view/tree-dir-view.js:16
 msgid "Name"
-msgstr ""
+msgstr "Vārds"
 
 #: frontend/src/components/menu-component/menu-dialog/create-fileforder-dialog.js:84
 msgid "newName"
@@ -59,7 +59,7 @@ msgstr ""
 #: frontend/src/components/menu-component/menu-dialog/create-fileforder-dialog.js:90
 #: frontend/src/components/menu-component/menu-dialog/rename-dialog.js:70
 msgid "Submit"
-msgstr ""
+msgstr "Pielietot"
 
 #: frontend/src/components/menu-component/menu-dialog/create-fileforder-dialog.js:91
 #: frontend/src/components/menu-component/menu-dialog/rename-dialog.js:71
@@ -108,23 +108,23 @@ msgstr ""
 #: frontend/src/components/menu-component/node-menu.js:38
 #: frontend/src/components/menu-component/node-menu.js:46
 msgid "Rename"
-msgstr ""
+msgstr "Pārsaukt"
 
 #: frontend/src/components/search.js:199
 msgid "Search files in this wiki"
-msgstr ""
+msgstr "Mekklēt datnes wiki"
 
 #: frontend/src/components/tree-dir-view/tree-dir-view.js:17
 msgid "Size"
-msgstr ""
+msgstr "Izmērs "
 
 #: frontend/src/components/tree-dir-view/tree-dir-view.js:18
 msgid "Last Update"
-msgstr ""
+msgstr "Atjaunots"
 
 #: frontend/src/pages/wiki/main-panel.js:49
 msgid "Edit Page"
-msgstr ""
+msgstr "Rediģēt lapu"
 
 #: frontend/src/pages/wiki/main-panel.js:59
 msgid "Wikis"
@@ -132,7 +132,7 @@ msgstr ""
 
 #: frontend/src/pages/wiki/side-panel.js:176
 msgid "Pages"
-msgstr ""
+msgstr "Lapas"
 
 #: seahub/templates/priv/ali.js:8
 msgid "Preview-Edit-on-Cloud library"
@@ -955,7 +955,7 @@ msgstr ""
 #: static/scripts/sysadmin-app/views/groups.js:79
 #: static/scripts/sysadmin-app/views/repos.js:69
 msgid "Name is required."
-msgstr ""
+msgstr "Nepieciešams nosaukums."
 
 #: static/scripts/sysadmin-app/views/address-book.js:49
 msgid "New Department"
@@ -975,7 +975,7 @@ msgstr ""
 
 #: static/scripts/sysadmin-app/views/admin-operation-log.js:57
 msgid "Transfer Library"
-msgstr ""
+msgstr "Pārsūtīt bibliotēku"
 
 #: static/scripts/sysadmin-app/views/admin-operation-log.js:58
 msgid "Transferred library {library_name} from {user_from} to {user_to}"
@@ -1028,7 +1028,7 @@ msgstr "Veiksmīgi iztīrītas visas kļūdas."
 
 #: static/scripts/sysadmin-app/views/group-member.js:90
 msgid "Delete Member"
-msgstr ""
+msgstr "Dzēst dalībnieku"
 
 #: static/scripts/sysadmin-app/views/group-member.js:100
 msgid "Successfully deleted member {placeholder}"
@@ -1036,12 +1036,12 @@ msgstr ""
 
 #: static/scripts/sysadmin-app/views/group-repo.js:28
 msgid "Unshare Library"
-msgstr ""
+msgstr "Atcelt koplietošanu bibliotēkai"
 
 #: static/scripts/sysadmin-app/views/group-repo.js:29
 #, javascript-format
 msgid "Are you sure you want to unshare %s ?"
-msgstr ""
+msgstr "Vai tiešām vēlaties atcelt koplietošanu %s ?"
 
 #: static/scripts/sysadmin-app/views/group-repo.js:42
 msgid "Successfully unshared library {placeholder}"

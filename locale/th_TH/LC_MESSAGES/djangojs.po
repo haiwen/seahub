@@ -7,9 +7,9 @@ msgid ""
 msgstr ""
 "Project-Id-Version: seahub\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2018-09-06 15:47+0800\n"
-"PO-Revision-Date: 2018-09-06 07:45+0000\n"
-"Last-Translator: zheng xie <xiez1989@gmail.com>\n"
+"POT-Creation-Date: 2018-09-06 16:33+0800\n"
+"PO-Revision-Date: 2018-09-06 08:03+0000\n"
+"Last-Translator: Manop Kalong <manop.ka@rd.go.th>\n"
 "Language-Team: Thai (Thailand) (http://www.transifex.com/haiwen/seahub/language/th_TH/)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -19,26 +19,26 @@ msgstr ""
 
 #: frontend/src/components/account.js:91
 msgid "System Admin"
-msgstr ""
+msgstr "ส่วนผู้ดูแลระบบ"
 
 #: frontend/src/components/account.js:127
 msgid "Used"
-msgstr ""
+msgstr "ใช้ไป"
 
 #: frontend/src/components/account.js:133
 msgid "Settings"
-msgstr ""
+msgstr "ตั้งค่า"
 
 #: frontend/src/components/account.js:135
 msgid "Log out"
-msgstr ""
+msgstr "ออกจากระบบ"
 
 #: frontend/src/components/menu-component/menu-dialog/create-fileforder-dialog.js:74
 #: frontend/src/components/menu-component/node-menu.js:29
 #: frontend/src/components/menu-component/node-menu.js:37
 #: static/scripts/app/views/dir.js:771
 msgid "New File"
-msgstr ""
+msgstr "ไฟล์ใหม่"
 
 #: frontend/src/components/menu-component/menu-dialog/create-fileforder-dialog.js:74
 #: frontend/src/components/menu-component/node-menu.js:28
@@ -49,7 +49,7 @@ msgstr ""
 #: frontend/src/components/menu-component/menu-dialog/create-fileforder-dialog.js:82
 #: frontend/src/components/tree-dir-view/tree-dir-view.js:16
 msgid "Name"
-msgstr ""
+msgstr "ชื่อ"
 
 #: frontend/src/components/menu-component/menu-dialog/create-fileforder-dialog.js:84
 msgid "newName"
@@ -58,13 +58,13 @@ msgstr ""
 #: frontend/src/components/menu-component/menu-dialog/create-fileforder-dialog.js:90
 #: frontend/src/components/menu-component/menu-dialog/rename-dialog.js:70
 msgid "Submit"
-msgstr ""
+msgstr "ส่ง"
 
 #: frontend/src/components/menu-component/menu-dialog/create-fileforder-dialog.js:91
 #: frontend/src/components/menu-component/menu-dialog/rename-dialog.js:71
 #: static/scripts/app/views/fileupload.js:21
 msgid "Cancel"
-msgstr ""
+msgstr "ยกเลิก"
 
 #: frontend/src/components/menu-component/menu-dialog/delete-dialog.js:16
 #: frontend/src/components/menu-component/node-menu.js:39
@@ -72,7 +72,7 @@ msgstr ""
 #: static/scripts/app/views/fileupload.js:22
 #: static/scripts/sysadmin-app/views/device-trusted-ipaddress.js:27
 msgid "Delete"
-msgstr ""
+msgstr "ลบ"
 
 #: frontend/src/components/menu-component/menu-dialog/delete-dialog.js:18
 msgid "Are you sure to delete"
@@ -89,7 +89,7 @@ msgstr ""
 #: frontend/src/components/menu-component/menu-dialog/rename-dialog.js:64
 #: static/scripts/app/views/dialogs/dirent-rename.js:39
 msgid "Rename File"
-msgstr ""
+msgstr "เปลี่ยนชื่อไฟล์"
 
 #: frontend/src/components/menu-component/menu-dialog/rename-dialog.js:64
 #: static/scripts/app/views/dialogs/dirent-rename.js:39
@@ -107,23 +107,23 @@ msgstr ""
 #: frontend/src/components/menu-component/node-menu.js:38
 #: frontend/src/components/menu-component/node-menu.js:46
 msgid "Rename"
-msgstr ""
+msgstr "เปลี่ยนชื่อ"
 
 #: frontend/src/components/search.js:199
 msgid "Search files in this wiki"
-msgstr ""
+msgstr "ค้นหาไฟล์ใน wiki นี้"
 
 #: frontend/src/components/tree-dir-view/tree-dir-view.js:17
 msgid "Size"
-msgstr ""
+msgstr "ขนาด"
 
 #: frontend/src/components/tree-dir-view/tree-dir-view.js:18
 msgid "Last Update"
-msgstr ""
+msgstr "ปรับปรุงล่าสุด"
 
 #: frontend/src/pages/wiki/main-panel.js:49
 msgid "Edit Page"
-msgstr ""
+msgstr "แก้ไขหน้าเพจ"
 
 #: frontend/src/pages/wiki/main-panel.js:59
 msgid "Wikis"
@@ -131,7 +131,7 @@ msgstr ""
 
 #: frontend/src/pages/wiki/side-panel.js:176
 msgid "Pages"
-msgstr ""
+msgstr "เพจ"
 
 #: seahub/templates/priv/ali.js:8
 msgid "Preview-Edit-on-Cloud library"
@@ -208,11 +208,11 @@ msgstr ""
 #: static/scripts/app/views/fileupload.js:430
 #: static/scripts/app/views/group.js:65 static/scripts/common.js:643
 msgid "Just now"
-msgstr ""
+msgstr "เดี๋ยวนี้"
 
 #: static/scripts/app/models/repo.js:34
 msgid "Name is required"
-msgstr ""
+msgstr "ชื่อ จำเป็น"
 
 #: static/scripts/app/models/repo.js:37
 #: static/scripts/app/views/dialogs/dirent-rename.js:65
@@ -225,19 +225,19 @@ msgstr ""
 
 #: static/scripts/app/models/repo.js:41 static/scripts/app/views/share.js:334
 msgid "Please enter password"
-msgstr ""
+msgstr "โปรดกรอกรหัสผ่าน"
 
 #: static/scripts/app/models/repo.js:42 static/scripts/app/views/share.js:342
 msgid "Please enter the password again"
-msgstr ""
+msgstr "โปรดกรอกรหัสผ่านอีกครั้ง"
 
 #: static/scripts/app/models/repo.js:44 static/scripts/app/views/share.js:338
 msgid "Password is too short"
-msgstr ""
+msgstr "รหัสผ่านสั้นเกินไป"
 
 #: static/scripts/app/models/repo.js:46 static/scripts/app/views/share.js:346
 msgid "Passwords don't match"
-msgstr ""
+msgstr "รหัสผ่านไม่ตรงกัน"
 
 #: static/scripts/app/models/repo.js:63 static/scripts/common.js:345
 msgid "Read-Only library"
@@ -246,12 +246,12 @@ msgstr ""
 #: static/scripts/app/models/share-admin-folder.js:25
 #: static/scripts/app/models/share-admin-repo.js:22
 msgid "Read-Write"
-msgstr ""
+msgstr "อ่าน-เขียน"
 
 #: static/scripts/app/models/share-admin-folder.js:27
 #: static/scripts/app/models/share-admin-repo.js:24
 msgid "Read-Only"
-msgstr ""
+msgstr "อ่านอย่างเดียว"
 
 #: static/scripts/app/views/activity-item.js:25
 msgid "Removed all items from trash."
@@ -267,27 +267,27 @@ msgstr ""
 
 #: static/scripts/app/views/details.js:47
 msgid "New files"
-msgstr ""
+msgstr "ไฟล์ใหม่"
 
 #: static/scripts/app/views/details.js:53
 msgid "Deleted files"
-msgstr ""
+msgstr "ลบไฟล์แล้ว"
 
 #: static/scripts/app/views/details.js:59
 msgid "Renamed or Moved files"
-msgstr ""
+msgstr "เปลี่ยนชื่อหรือย้ายไฟล์"
 
 #: static/scripts/app/views/details.js:65
 msgid "Modified files"
-msgstr ""
+msgstr "ปรับปรุงไฟล์แล้ว"
 
 #: static/scripts/app/views/details.js:71
 msgid "New directories"
-msgstr ""
+msgstr "ไดเร็กทอรี่ใหม่"
 
 #: static/scripts/app/views/details.js:77
 msgid "Deleted directories"
-msgstr ""
+msgstr "ลบไดเร็กทอรี่แล้ว"
 
 #: static/scripts/app/views/device.js:42
 #: static/scripts/sysadmin-app/views/device.js:42
@@ -328,22 +328,22 @@ msgstr ""
 
 #: static/scripts/app/views/dialogs/dirent-mvcp.js:118
 msgid "Saving..."
-msgstr ""
+msgstr "กำลังบันทึก..."
 
 #: static/scripts/app/views/dialogs/dirent-mvcp.js:133
 msgid "Failed."
-msgstr ""
+msgstr "ผิดพลาด"
 
 #: static/scripts/app/views/dialogs/dirent-mvcp.js:133
 #: static/scripts/app/views/dialogs/dirent-mvcp.js:159
 #: static/scripts/app/views/dir.js:1423
 msgid "Canceled."
-msgstr ""
+msgstr "ยกเลิกแล้ว"
 
 #: static/scripts/app/views/dialogs/dirent-mvcp.js:188
 #: static/scripts/app/views/dir.js:1173
 msgid "Invalid destination path"
-msgstr ""
+msgstr "พาธปลายทางไม่ถูกต้อง"
 
 #: static/scripts/app/views/dialogs/dirent-mvcp.js:207
 #: static/scripts/app/views/dirent.js:296
@@ -368,7 +368,7 @@ msgstr ""
 #: static/scripts/sysadmin-app/views/dir.js:82
 #: static/scripts/sysadmin-app/views/group-members.js:51
 msgid "It is required."
-msgstr ""
+msgstr "มันจำเป็น"
 
 #: static/scripts/app/views/dialogs/dirent-smart-link.js:50
 msgid "Internal link copied to clipboard"
@@ -380,7 +380,7 @@ msgstr ""
 
 #: static/scripts/app/views/dialogs/repo-change-password.js:50
 msgid "Please enter the old password"
-msgstr ""
+msgstr "โปรดกรอกรหัสผ่านเก่า"
 
 #: static/scripts/app/views/dialogs/repo-change-password.js:54
 msgid "Please enter a new password"
@@ -388,15 +388,15 @@ msgstr ""
 
 #: static/scripts/app/views/dialogs/repo-change-password.js:58
 msgid "New password is too short"
-msgstr ""
+msgstr "รหัสผ่านใหม่สั้นเกินไป"
 
 #: static/scripts/app/views/dialogs/repo-change-password.js:62
 msgid "Please enter the new password again"
-msgstr ""
+msgstr "โปรดกรอกรหัสผ่านใหม่อีกครั้ง"
 
 #: static/scripts/app/views/dialogs/repo-change-password.js:66
 msgid "New passwords don't match"
-msgstr ""
+msgstr "รหัสผ่านใหม่ไม่ตรงกัน"
 
 #: static/scripts/app/views/dialogs/repo-change-password.js:87
 msgid "Successfully changed library password."
@@ -426,7 +426,7 @@ msgstr ""
 
 #: static/scripts/app/views/dialogs/repo-folder-perm-admin.js:222
 msgid "Please click and choose a directory."
-msgstr ""
+msgstr "โปรดกดและเลือกไดเรกทอรี่"
 
 #: static/scripts/app/views/dialogs/repo-history-settings.js:36
 msgid "{placeholder} History Setting"
@@ -448,7 +448,7 @@ msgstr ""
 #: static/scripts/app/views/dir.js:59
 #: static/scripts/app/views/starred-file.js:107
 msgid "Loading..."
-msgstr ""
+msgstr "กำลังโหลด..."
 
 #: static/scripts/app/views/dir.js:62
 #: static/scripts/app/views/starred-file.js:110
@@ -477,16 +477,16 @@ msgstr ""
 
 #: static/scripts/app/views/dir.js:409
 msgid "Password is required."
-msgstr ""
+msgstr "รหัสผ่านจำเป็น"
 
 #: static/scripts/app/views/dir.js:479
 #: static/scripts/app/views/notifications.js:63 static/scripts/common.js:467
 msgid "Please check the network."
-msgstr ""
+msgstr "โปรดตรวจสอบเครือข่าย"
 
 #: static/scripts/app/views/dir.js:733
 msgid "Only an extension there, please input a name."
-msgstr ""
+msgstr "เฉพาะส่วนขยายเหล่านั้น, โปรดใส่ชื่อ "
 
 #: static/scripts/app/views/dir.js:779
 msgid "New Markdown File"
@@ -506,11 +506,11 @@ msgstr ""
 
 #: static/scripts/app/views/dir.js:1035 static/scripts/app/views/dir.js:1178
 msgid "Processing..."
-msgstr ""
+msgstr "ประมวลผล..."
 
 #: static/scripts/app/views/dir.js:1072
 msgid "Successfully deleted %(name)s."
-msgstr ""
+msgstr "ลบ %(name)s สำเร็จ"
 
 #: static/scripts/app/views/dir.js:1074
 msgid "Successfully deleted %(name)s and 1 other item."
@@ -518,7 +518,7 @@ msgstr ""
 
 #: static/scripts/app/views/dir.js:1076
 msgid "Successfully deleted %(name)s and %(amount)s other items."
-msgstr ""
+msgstr "ลบ %(name)s และ %(amount)s ไอเท็มอื่นๆ สำเร็จ"
 
 #: static/scripts/app/views/dir.js:1085
 msgid "Failed to delete %(name)s."
@@ -534,11 +534,11 @@ msgstr ""
 
 #: static/scripts/app/views/dir.js:1102
 msgid "Delete Items"
-msgstr ""
+msgstr "ลบไอเทม"
 
 #: static/scripts/app/views/dir.js:1103
 msgid "Are you sure you want to delete these selected items?"
-msgstr ""
+msgstr "คุณแน่ใจว่าต้องการลบไอเทมที่เลืกเหล่านี้?"
 
 #: static/scripts/app/views/dir.js:1117
 msgid "Move selected item(s) to:"
@@ -550,7 +550,7 @@ msgstr ""
 
 #: static/scripts/app/views/dir.js:1222 static/scripts/app/views/dir.js:1384
 msgid "Successfully moved %(name)s."
-msgstr ""
+msgstr "ย้าย %(name)s สำเร็จ"
 
 #: static/scripts/app/views/dir.js:1224 static/scripts/app/views/dir.js:1386
 msgid "Successfully moved %(name)s and 1 other item."
@@ -558,11 +558,11 @@ msgstr ""
 
 #: static/scripts/app/views/dir.js:1226 static/scripts/app/views/dir.js:1388
 msgid "Successfully moved %(name)s and %(amount)s other items."
-msgstr ""
+msgstr "ย้าย %(name)s และ %(amount)s ไอเท็มอื่นๆสำเร็จ"
 
 #: static/scripts/app/views/dir.js:1231 static/scripts/app/views/dir.js:1392
 msgid "Successfully copied %(name)s."
-msgstr ""
+msgstr "คัดลอก %(name)s สำเร็จ"
 
 #: static/scripts/app/views/dir.js:1233 static/scripts/app/views/dir.js:1394
 msgid "Successfully copied %(name)s and 1 other item."
@@ -570,7 +570,7 @@ msgstr ""
 
 #: static/scripts/app/views/dir.js:1235 static/scripts/app/views/dir.js:1396
 msgid "Successfully copied %(name)s and %(amount)s other items."
-msgstr ""
+msgstr "คัดลอก %(name)s and %(amount)s ไอเท็มอื่นๆ สำเร็จ"
 
 #: static/scripts/app/views/dir.js:1251
 msgid "Internal error. Failed to move %(name)s and %(amount)s other item(s)."
@@ -578,7 +578,7 @@ msgstr ""
 
 #: static/scripts/app/views/dir.js:1253
 msgid "Internal error. Failed to move %(name)s."
-msgstr ""
+msgstr "Internal error ย้าย %(name)s ผิดพลาด"
 
 #: static/scripts/app/views/dir.js:1257
 msgid "Internal error. Failed to copy %(name)s and %(amount)s other item(s)."
@@ -586,7 +586,7 @@ msgstr ""
 
 #: static/scripts/app/views/dir.js:1259
 msgid "Internal error. Failed to copy %(name)s."
-msgstr ""
+msgstr "Internal error คัดลอก %(name)s ผิดพลาด"
 
 #: static/scripts/app/views/dir.js:1301
 msgid "Moving file %(index)s of %(total)s"
@@ -621,19 +621,19 @@ msgstr ""
 #: static/scripts/app/views/dirent-grid.js:187
 #: static/scripts/app/views/dirent.js:416
 msgid "Successfully deleted %(name)s"
-msgstr ""
+msgstr "ลบ %(name)s สำเร็จ"
 
 #: static/scripts/app/views/fileupload.js:10
 msgid "File is too big"
-msgstr ""
+msgstr "ไฟล์ขนาดใหญ่เกินไป"
 
 #: static/scripts/app/views/fileupload.js:11
 msgid "File is too small"
-msgstr ""
+msgstr "ไฟล์ขนาดเล็กเกินไป"
 
 #: static/scripts/app/views/fileupload.js:12
 msgid "Filetype not allowed"
-msgstr ""
+msgstr "ประเภทไฟล์ไม่อนุญาต"
 
 #: static/scripts/app/views/fileupload.js:13
 msgid "Maximum number of files exceeded"
@@ -641,11 +641,11 @@ msgstr ""
 
 #: static/scripts/app/views/fileupload.js:14
 msgid "Uploaded bytes exceed file size"
-msgstr ""
+msgstr "ขนาดไบต์ที่อัพโหลดเกินขนาดไฟล์"
 
 #: static/scripts/app/views/fileupload.js:15
 msgid "Empty file upload result"
-msgstr ""
+msgstr "ผลการอัพโหลดไฟล์ว่าง"
 
 #: static/scripts/app/views/fileupload.js:17
 #: static/scripts/app/views/fileupload.js:225
@@ -655,7 +655,7 @@ msgstr ""
 #: static/scripts/sysadmin-app/views/address-book-group-item.js:152
 #: static/scripts/sysadmin-app/views/system-repo.js:52
 msgid "Error"
-msgstr ""
+msgstr "ผิดพลาด"
 
 #: static/scripts/app/views/fileupload.js:18
 msgid "uploaded"
@@ -667,7 +667,7 @@ msgstr ""
 
 #: static/scripts/app/views/fileupload.js:20
 msgid "Start"
-msgstr ""
+msgstr "เริ่ม"
 
 #: static/scripts/app/views/fileupload.js:46
 msgid "File Uploading..."
@@ -715,7 +715,7 @@ msgstr ""
 #: static/scripts/common.js:444
 #: static/scripts/sysadmin-app/views/dashboard.js:84
 msgid "Failed. Please check the network."
-msgstr ""
+msgstr "ผิดพลาด. โปรดตรวจสอบเครือข่าย"
 
 #: static/scripts/app/views/folder-share-item.js:186
 msgid "Delete failed"
@@ -752,7 +752,7 @@ msgstr ""
 
 #: static/scripts/app/views/group-settings.js:238
 msgid "Please choose a CSV file"
-msgstr ""
+msgstr "โปรดเลือกไฟล์ CSV "
 
 #: static/scripts/app/views/group-settings.js:269
 msgid "Successfully imported."
@@ -760,19 +760,19 @@ msgstr ""
 
 #: static/scripts/app/views/group-settings.js:292
 msgid "Dismiss Group"
-msgstr ""
+msgstr "ละทิ้งกลุ่ม"
 
 #: static/scripts/app/views/group-settings.js:293
 msgid "Really want to dismiss this group?"
-msgstr ""
+msgstr "ต้องการละทิ้งกลุ่มจริงหรือ?"
 
 #: static/scripts/app/views/group-settings.js:321
 msgid "Quit Group"
-msgstr ""
+msgstr "ออกจากกลุ่ม"
 
 #: static/scripts/app/views/group-settings.js:322
 msgid "Are you sure you want to quit this group?"
-msgstr ""
+msgstr "คุณแน่ใจคุณต้องการออกจากกลุ่ม ?"
 
 #: static/scripts/app/views/invitation.js:37
 #: static/scripts/sysadmin-app/views/address-book-group-item.js:57
@@ -818,7 +818,7 @@ msgstr ""
 #: static/scripts/sysadmin-app/views/repo.js:66
 #, javascript-format
 msgid "Are you sure you want to delete %s ?"
-msgstr ""
+msgstr "คุณแน่ใจว่าต้องการลบ %s ?"
 
 #: static/scripts/app/views/repo.js:106
 #: static/scripts/sysadmin-app/views/repo.js:79
@@ -883,7 +883,7 @@ msgstr ""
 
 #: static/scripts/app/views/share.js:485
 msgid "Please input at least an email."
-msgstr ""
+msgstr "โปรดป้อนอย่างน้อยหนึ่งอีเมลล์"
 
 #: static/scripts/app/views/share.js:502
 msgid "Successfully sent to {placeholder}"
@@ -954,7 +954,7 @@ msgstr ""
 #: static/scripts/sysadmin-app/views/groups.js:79
 #: static/scripts/sysadmin-app/views/repos.js:69
 msgid "Name is required."
-msgstr ""
+msgstr "ชื่อ จำเป็น"
 
 #: static/scripts/sysadmin-app/views/address-book.js:49
 msgid "New Department"
@@ -974,7 +974,7 @@ msgstr ""
 
 #: static/scripts/sysadmin-app/views/admin-operation-log.js:57
 msgid "Transfer Library"
-msgstr ""
+msgstr "คลังแฟ้มข้อมูลถ่ายโอน"
 
 #: static/scripts/sysadmin-app/views/admin-operation-log.js:58
 msgid "Transferred library {library_name} from {user_from} to {user_to}"
@@ -999,7 +999,7 @@ msgstr ""
 #: static/scripts/sysadmin-app/views/admin-operation-log.js:82
 #: static/scripts/sysadmin-app/views/group.js:30
 msgid "Delete Group"
-msgstr ""
+msgstr "ลบกลุ่ม"
 
 #: static/scripts/sysadmin-app/views/admin-operation-log.js:83
 msgid "Deleted group {group_name}"
@@ -1015,7 +1015,7 @@ msgstr ""
 
 #: static/scripts/sysadmin-app/views/admin-operation-log.js:94
 msgid "Delete User"
-msgstr ""
+msgstr "ลบผู้ใช้"
 
 #: static/scripts/sysadmin-app/views/admin-operation-log.js:95
 msgid "Deleted user {user}"
@@ -1027,7 +1027,7 @@ msgstr ""
 
 #: static/scripts/sysadmin-app/views/group-member.js:90
 msgid "Delete Member"
-msgstr ""
+msgstr "ลบสมาชิก"
 
 #: static/scripts/sysadmin-app/views/group-member.js:100
 msgid "Successfully deleted member {placeholder}"
@@ -1035,12 +1035,12 @@ msgstr ""
 
 #: static/scripts/sysadmin-app/views/group-repo.js:28
 msgid "Unshare Library"
-msgstr ""
+msgstr "ยกเลิกแบ่งปันคลังแฟ้มข้อมูล"
 
 #: static/scripts/sysadmin-app/views/group-repo.js:29
 #, javascript-format
 msgid "Are you sure you want to unshare %s ?"
-msgstr ""
+msgstr "คุณแน่ใจหรือไม่ที่ต้องการยกเลิกแบ่งปัน  %s ?"
 
 #: static/scripts/sysadmin-app/views/group-repo.js:42
 msgid "Successfully unshared library {placeholder}"
@@ -1070,7 +1070,7 @@ msgstr ""
 
 #: static/scripts/sysadmin-app/views/trash-repo.js:58
 msgid "Restore Library"
-msgstr ""
+msgstr "กู้คืนคลังแฟ้มข้อมูล"
 
 #: static/scripts/sysadmin-app/views/trash-repo.js:59
 #, javascript-format

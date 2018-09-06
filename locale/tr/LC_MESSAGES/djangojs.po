@@ -7,9 +7,9 @@ msgid ""
 msgstr ""
 "Project-Id-Version: seahub\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2018-09-06 15:47+0800\n"
-"PO-Revision-Date: 2018-09-06 07:45+0000\n"
-"Last-Translator: zheng xie <xiez1989@gmail.com>\n"
+"POT-Creation-Date: 2018-09-06 16:33+0800\n"
+"PO-Revision-Date: 2018-09-06 08:03+0000\n"
+"Last-Translator: Evrim Güner <evrim.guner@veriyum.net.tr>\n"
 "Language-Team: Turkish (http://www.transifex.com/haiwen/seahub/language/tr/)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -19,37 +19,37 @@ msgstr ""
 
 #: frontend/src/components/account.js:91
 msgid "System Admin"
-msgstr ""
+msgstr "Sistem Yöneticisi"
 
 #: frontend/src/components/account.js:127
 msgid "Used"
-msgstr ""
+msgstr "Kullanılan"
 
 #: frontend/src/components/account.js:133
 msgid "Settings"
-msgstr ""
+msgstr "Ayarlar"
 
 #: frontend/src/components/account.js:135
 msgid "Log out"
-msgstr ""
+msgstr "Çıkış yap"
 
 #: frontend/src/components/menu-component/menu-dialog/create-fileforder-dialog.js:74
 #: frontend/src/components/menu-component/node-menu.js:29
 #: frontend/src/components/menu-component/node-menu.js:37
 #: static/scripts/app/views/dir.js:771
 msgid "New File"
-msgstr ""
+msgstr "Yeni Dosya"
 
 #: frontend/src/components/menu-component/menu-dialog/create-fileforder-dialog.js:74
 #: frontend/src/components/menu-component/node-menu.js:28
 #: frontend/src/components/menu-component/node-menu.js:36
 msgid "New Folder"
-msgstr ""
+msgstr "Yeni Klasör"
 
 #: frontend/src/components/menu-component/menu-dialog/create-fileforder-dialog.js:82
 #: frontend/src/components/tree-dir-view/tree-dir-view.js:16
 msgid "Name"
-msgstr ""
+msgstr "İsim"
 
 #: frontend/src/components/menu-component/menu-dialog/create-fileforder-dialog.js:84
 msgid "newName"
@@ -58,13 +58,13 @@ msgstr ""
 #: frontend/src/components/menu-component/menu-dialog/create-fileforder-dialog.js:90
 #: frontend/src/components/menu-component/menu-dialog/rename-dialog.js:70
 msgid "Submit"
-msgstr ""
+msgstr "Gönder"
 
 #: frontend/src/components/menu-component/menu-dialog/create-fileforder-dialog.js:91
 #: frontend/src/components/menu-component/menu-dialog/rename-dialog.js:71
 #: static/scripts/app/views/fileupload.js:21
 msgid "Cancel"
-msgstr ""
+msgstr "İptal"
 
 #: frontend/src/components/menu-component/menu-dialog/delete-dialog.js:16
 #: frontend/src/components/menu-component/node-menu.js:39
@@ -72,7 +72,7 @@ msgstr ""
 #: static/scripts/app/views/fileupload.js:22
 #: static/scripts/sysadmin-app/views/device-trusted-ipaddress.js:27
 msgid "Delete"
-msgstr ""
+msgstr "Sil"
 
 #: frontend/src/components/menu-component/menu-dialog/delete-dialog.js:18
 msgid "Are you sure to delete"
@@ -89,7 +89,7 @@ msgstr ""
 #: frontend/src/components/menu-component/menu-dialog/rename-dialog.js:64
 #: static/scripts/app/views/dialogs/dirent-rename.js:39
 msgid "Rename File"
-msgstr ""
+msgstr "Dosyayı yeniden adlandır"
 
 #: frontend/src/components/menu-component/menu-dialog/rename-dialog.js:64
 #: static/scripts/app/views/dialogs/dirent-rename.js:39
@@ -107,23 +107,23 @@ msgstr ""
 #: frontend/src/components/menu-component/node-menu.js:38
 #: frontend/src/components/menu-component/node-menu.js:46
 msgid "Rename"
-msgstr ""
+msgstr "Yeniden Adlandır"
 
 #: frontend/src/components/search.js:199
 msgid "Search files in this wiki"
-msgstr ""
+msgstr "Dosyaları bu wikide ara"
 
 #: frontend/src/components/tree-dir-view/tree-dir-view.js:17
 msgid "Size"
-msgstr ""
+msgstr "Boyut"
 
 #: frontend/src/components/tree-dir-view/tree-dir-view.js:18
 msgid "Last Update"
-msgstr ""
+msgstr "En son Güncelleme"
 
 #: frontend/src/pages/wiki/main-panel.js:49
 msgid "Edit Page"
-msgstr ""
+msgstr "Sayfayı Düzenle"
 
 #: frontend/src/pages/wiki/main-panel.js:59
 msgid "Wikis"
@@ -131,7 +131,7 @@ msgstr ""
 
 #: frontend/src/pages/wiki/side-panel.js:176
 msgid "Pages"
-msgstr ""
+msgstr "Sayfalar"
 
 #: seahub/templates/priv/ali.js:8
 msgid "Preview-Edit-on-Cloud library"
@@ -208,11 +208,11 @@ msgstr ""
 #: static/scripts/app/views/fileupload.js:430
 #: static/scripts/app/views/group.js:65 static/scripts/common.js:643
 msgid "Just now"
-msgstr ""
+msgstr "Şu anda"
 
 #: static/scripts/app/models/repo.js:34
 msgid "Name is required"
-msgstr ""
+msgstr "İsim gerekli"
 
 #: static/scripts/app/models/repo.js:37
 #: static/scripts/app/views/dialogs/dirent-rename.js:65
@@ -225,19 +225,19 @@ msgstr ""
 
 #: static/scripts/app/models/repo.js:41 static/scripts/app/views/share.js:334
 msgid "Please enter password"
-msgstr ""
+msgstr "Lütfen şifre giriniz"
 
 #: static/scripts/app/models/repo.js:42 static/scripts/app/views/share.js:342
 msgid "Please enter the password again"
-msgstr ""
+msgstr "Lütfen şifreyi tekrar giriniz."
 
 #: static/scripts/app/models/repo.js:44 static/scripts/app/views/share.js:338
 msgid "Password is too short"
-msgstr ""
+msgstr "Şifre çok kısa"
 
 #: static/scripts/app/models/repo.js:46 static/scripts/app/views/share.js:346
 msgid "Passwords don't match"
-msgstr ""
+msgstr "Şifreler eşleşmiyor."
 
 #: static/scripts/app/models/repo.js:63 static/scripts/common.js:345
 msgid "Read-Only library"
@@ -246,12 +246,12 @@ msgstr ""
 #: static/scripts/app/models/share-admin-folder.js:25
 #: static/scripts/app/models/share-admin-repo.js:22
 msgid "Read-Write"
-msgstr ""
+msgstr "Okuma-Yazma"
 
 #: static/scripts/app/models/share-admin-folder.js:27
 #: static/scripts/app/models/share-admin-repo.js:24
 msgid "Read-Only"
-msgstr ""
+msgstr "Salt okunur"
 
 #: static/scripts/app/views/activity-item.js:25
 msgid "Removed all items from trash."
@@ -267,27 +267,27 @@ msgstr ""
 
 #: static/scripts/app/views/details.js:47
 msgid "New files"
-msgstr ""
+msgstr "Yeni Dosyalar"
 
 #: static/scripts/app/views/details.js:53
 msgid "Deleted files"
-msgstr ""
+msgstr "Silinmiş Dosyalar"
 
 #: static/scripts/app/views/details.js:59
 msgid "Renamed or Moved files"
-msgstr ""
+msgstr "Yeniden Adlandırılmış ya da Taşınmış Dosyalar"
 
 #: static/scripts/app/views/details.js:65
 msgid "Modified files"
-msgstr ""
+msgstr "Değiştirilmiş dosyalar"
 
 #: static/scripts/app/views/details.js:71
 msgid "New directories"
-msgstr ""
+msgstr "Yeni dizinler"
 
 #: static/scripts/app/views/details.js:77
 msgid "Deleted directories"
-msgstr ""
+msgstr "Silinmiş dizinler"
 
 #: static/scripts/app/views/device.js:42
 #: static/scripts/sysadmin-app/views/device.js:42
@@ -320,39 +320,39 @@ msgstr ""
 
 #: static/scripts/app/views/dialogs/dirent-mvcp.js:102
 msgid "Moving %(name)s"
-msgstr ""
+msgstr "%(name)s taşınıyor."
 
 #: static/scripts/app/views/dialogs/dirent-mvcp.js:102
 msgid "Copying %(name)s"
-msgstr ""
+msgstr "%(name)s kopyalanıyor."
 
 #: static/scripts/app/views/dialogs/dirent-mvcp.js:118
 msgid "Saving..."
-msgstr ""
+msgstr "Kaydediliyor..."
 
 #: static/scripts/app/views/dialogs/dirent-mvcp.js:133
 msgid "Failed."
-msgstr ""
+msgstr "Başarısız."
 
 #: static/scripts/app/views/dialogs/dirent-mvcp.js:133
 #: static/scripts/app/views/dialogs/dirent-mvcp.js:159
 #: static/scripts/app/views/dir.js:1423
 msgid "Canceled."
-msgstr ""
+msgstr "İptal edildi."
 
 #: static/scripts/app/views/dialogs/dirent-mvcp.js:188
 #: static/scripts/app/views/dir.js:1173
 msgid "Invalid destination path"
-msgstr ""
+msgstr "Geçersiz hedef yolu"
 
 #: static/scripts/app/views/dialogs/dirent-mvcp.js:207
 #: static/scripts/app/views/dirent.js:296
 msgid "Successfully moved %(name)s"
-msgstr ""
+msgstr "%(name)s başarıyla taşındı"
 
 #: static/scripts/app/views/dialogs/dirent-mvcp.js:210
 msgid "Successfully copied %(name)s"
-msgstr ""
+msgstr "%(name)s başarıyla kopyalandı"
 
 #: static/scripts/app/views/dialogs/dirent-rename.js:59
 #: static/scripts/app/views/dir.js:662 static/scripts/app/views/dir.js:722
@@ -368,7 +368,7 @@ msgstr ""
 #: static/scripts/sysadmin-app/views/dir.js:82
 #: static/scripts/sysadmin-app/views/group-members.js:51
 msgid "It is required."
-msgstr ""
+msgstr "Gerekli."
 
 #: static/scripts/app/views/dialogs/dirent-smart-link.js:50
 msgid "Internal link copied to clipboard"
@@ -380,7 +380,7 @@ msgstr ""
 
 #: static/scripts/app/views/dialogs/repo-change-password.js:50
 msgid "Please enter the old password"
-msgstr ""
+msgstr "Lütfen eski şifreyi giriniz"
 
 #: static/scripts/app/views/dialogs/repo-change-password.js:54
 msgid "Please enter a new password"
@@ -388,15 +388,15 @@ msgstr ""
 
 #: static/scripts/app/views/dialogs/repo-change-password.js:58
 msgid "New password is too short"
-msgstr ""
+msgstr "Yeni şifre çok kısa"
 
 #: static/scripts/app/views/dialogs/repo-change-password.js:62
 msgid "Please enter the new password again"
-msgstr ""
+msgstr "Lütfen yeni şifreyi tekrar giriniz"
 
 #: static/scripts/app/views/dialogs/repo-change-password.js:66
 msgid "New passwords don't match"
-msgstr ""
+msgstr "Yeni şifreler eşleşmiyor"
 
 #: static/scripts/app/views/dialogs/repo-change-password.js:87
 msgid "Successfully changed library password."
@@ -426,7 +426,7 @@ msgstr ""
 
 #: static/scripts/app/views/dialogs/repo-folder-perm-admin.js:222
 msgid "Please click and choose a directory."
-msgstr ""
+msgstr "Lütfen tıklayın ve bir dizin seçin."
 
 #: static/scripts/app/views/dialogs/repo-history-settings.js:36
 msgid "{placeholder} History Setting"
@@ -443,22 +443,22 @@ msgstr ""
 #: static/scripts/app/views/dir.js:58
 #: static/scripts/app/views/starred-file.js:106
 msgid "Close (Esc)"
-msgstr ""
+msgstr "Kapat (Esc)"
 
 #: static/scripts/app/views/dir.js:59
 #: static/scripts/app/views/starred-file.js:107
 msgid "Loading..."
-msgstr ""
+msgstr "Yükleniyor..."
 
 #: static/scripts/app/views/dir.js:62
 #: static/scripts/app/views/starred-file.js:110
 msgid "Previous (Left arrow key)"
-msgstr ""
+msgstr "Önceki (Sol ok tuşu)"
 
 #: static/scripts/app/views/dir.js:63
 #: static/scripts/app/views/starred-file.js:111
 msgid "Next (Right arrow key)"
-msgstr ""
+msgstr "Sonraki (Sağ ok tuşu)"
 
 #: static/scripts/app/views/dir.js:64
 #: static/scripts/app/views/starred-file.js:112
@@ -468,7 +468,7 @@ msgstr ""
 #: static/scripts/app/views/dir.js:69
 #: static/scripts/app/views/starred-file.js:118
 msgid "Open in New Tab"
-msgstr ""
+msgstr "Yeni bir Sekmede Aç"
 
 #: static/scripts/app/views/dir.js:72
 #: static/scripts/app/views/starred-file.js:121
@@ -477,16 +477,16 @@ msgstr ""
 
 #: static/scripts/app/views/dir.js:409
 msgid "Password is required."
-msgstr ""
+msgstr "Şifre gerekli."
 
 #: static/scripts/app/views/dir.js:479
 #: static/scripts/app/views/notifications.js:63 static/scripts/common.js:467
 msgid "Please check the network."
-msgstr ""
+msgstr "Lütfen ağı kontrol edin."
 
 #: static/scripts/app/views/dir.js:733
 msgid "Only an extension there, please input a name."
-msgstr ""
+msgstr "Sadece uzantı var, lütfen bir isim giriniz."
 
 #: static/scripts/app/views/dir.js:779
 msgid "New Markdown File"
@@ -506,11 +506,11 @@ msgstr ""
 
 #: static/scripts/app/views/dir.js:1035 static/scripts/app/views/dir.js:1178
 msgid "Processing..."
-msgstr ""
+msgstr "İşleniyor..."
 
 #: static/scripts/app/views/dir.js:1072
 msgid "Successfully deleted %(name)s."
-msgstr ""
+msgstr "%(name)s başarıyla silindi."
 
 #: static/scripts/app/views/dir.js:1074
 msgid "Successfully deleted %(name)s and 1 other item."
@@ -518,7 +518,7 @@ msgstr ""
 
 #: static/scripts/app/views/dir.js:1076
 msgid "Successfully deleted %(name)s and %(amount)s other items."
-msgstr ""
+msgstr " %(name)s ve %(amount)s başka öğe başarıyla silindi."
 
 #: static/scripts/app/views/dir.js:1085
 msgid "Failed to delete %(name)s."
@@ -534,11 +534,11 @@ msgstr ""
 
 #: static/scripts/app/views/dir.js:1102
 msgid "Delete Items"
-msgstr ""
+msgstr "Öğeleri sil"
 
 #: static/scripts/app/views/dir.js:1103
 msgid "Are you sure you want to delete these selected items?"
-msgstr ""
+msgstr "Seçili öğeleri silmek istediğinize emin misiniz?"
 
 #: static/scripts/app/views/dir.js:1117
 msgid "Move selected item(s) to:"
@@ -550,27 +550,27 @@ msgstr ""
 
 #: static/scripts/app/views/dir.js:1222 static/scripts/app/views/dir.js:1384
 msgid "Successfully moved %(name)s."
-msgstr ""
+msgstr "%(name)s başarıyla taşındı."
 
 #: static/scripts/app/views/dir.js:1224 static/scripts/app/views/dir.js:1386
 msgid "Successfully moved %(name)s and 1 other item."
-msgstr ""
+msgstr "%(name)s ve 1 diğer öğe başarıyla taşındı."
 
 #: static/scripts/app/views/dir.js:1226 static/scripts/app/views/dir.js:1388
 msgid "Successfully moved %(name)s and %(amount)s other items."
-msgstr ""
+msgstr "%(name)s ve %(amount)s başka öğe başarıyla taşındı."
 
 #: static/scripts/app/views/dir.js:1231 static/scripts/app/views/dir.js:1392
 msgid "Successfully copied %(name)s."
-msgstr ""
+msgstr "%(name)s başarıyla kopyalandı."
 
 #: static/scripts/app/views/dir.js:1233 static/scripts/app/views/dir.js:1394
 msgid "Successfully copied %(name)s and 1 other item."
-msgstr ""
+msgstr "%(name)s ve 1 diğer öğe başarıyla kopyalandı."
 
 #: static/scripts/app/views/dir.js:1235 static/scripts/app/views/dir.js:1396
 msgid "Successfully copied %(name)s and %(amount)s other items."
-msgstr ""
+msgstr "%(name)s ve %(amount)s başka öğe başarıyla kopyalandı."
 
 #: static/scripts/app/views/dir.js:1251
 msgid "Internal error. Failed to move %(name)s and %(amount)s other item(s)."
@@ -578,7 +578,7 @@ msgstr ""
 
 #: static/scripts/app/views/dir.js:1253
 msgid "Internal error. Failed to move %(name)s."
-msgstr ""
+msgstr "İç hata. %(name)s taşıma başarısız."
 
 #: static/scripts/app/views/dir.js:1257
 msgid "Internal error. Failed to copy %(name)s and %(amount)s other item(s)."
@@ -586,15 +586,15 @@ msgstr ""
 
 #: static/scripts/app/views/dir.js:1259
 msgid "Internal error. Failed to copy %(name)s."
-msgstr ""
+msgstr "İç hata. %(name)s kopyalama başarısız."
 
 #: static/scripts/app/views/dir.js:1301
 msgid "Moving file %(index)s of %(total)s"
-msgstr ""
+msgstr "%(total)s içinden %(index)s dosyası taşınıyor."
 
 #: static/scripts/app/views/dir.js:1301
 msgid "Copying file %(index)s of %(total)s"
-msgstr ""
+msgstr "%(total)s içinden %(index)s dosyası kopyalanıyor"
 
 #: static/scripts/app/views/dir.js:1327
 msgid "Failed to move %(name)s"
@@ -621,19 +621,19 @@ msgstr ""
 #: static/scripts/app/views/dirent-grid.js:187
 #: static/scripts/app/views/dirent.js:416
 msgid "Successfully deleted %(name)s"
-msgstr ""
+msgstr "%(name)s başarıyla tamamlandı."
 
 #: static/scripts/app/views/fileupload.js:10
 msgid "File is too big"
-msgstr ""
+msgstr "Dosya çok büyük"
 
 #: static/scripts/app/views/fileupload.js:11
 msgid "File is too small"
-msgstr ""
+msgstr "Dosya çok küçük"
 
 #: static/scripts/app/views/fileupload.js:12
 msgid "Filetype not allowed"
-msgstr ""
+msgstr "Dosya tipine izin verilmiyor."
 
 #: static/scripts/app/views/fileupload.js:13
 msgid "Maximum number of files exceeded"
@@ -641,11 +641,11 @@ msgstr ""
 
 #: static/scripts/app/views/fileupload.js:14
 msgid "Uploaded bytes exceed file size"
-msgstr ""
+msgstr "Yüklenen baytlar dosya boyutunu aşıyor."
 
 #: static/scripts/app/views/fileupload.js:15
 msgid "Empty file upload result"
-msgstr ""
+msgstr "Boş dosya yükleme sonucu"
 
 #: static/scripts/app/views/fileupload.js:17
 #: static/scripts/app/views/fileupload.js:225
@@ -655,35 +655,35 @@ msgstr ""
 #: static/scripts/sysadmin-app/views/address-book-group-item.js:152
 #: static/scripts/sysadmin-app/views/system-repo.js:52
 msgid "Error"
-msgstr ""
+msgstr "Hata"
 
 #: static/scripts/app/views/fileupload.js:18
 msgid "uploaded"
-msgstr ""
+msgstr "yüklendi"
 
 #: static/scripts/app/views/fileupload.js:19
 msgid "canceled"
-msgstr ""
+msgstr "iptal edildi"
 
 #: static/scripts/app/views/fileupload.js:20
 msgid "Start"
-msgstr ""
+msgstr "Başla"
 
 #: static/scripts/app/views/fileupload.js:46
 msgid "File Uploading..."
-msgstr ""
+msgstr "Dosyayı Yüklüyor..."
 
 #: static/scripts/app/views/fileupload.js:47
 msgid "File Upload complete"
-msgstr ""
+msgstr "Dosya Yükleme tamamlandı"
 
 #: static/scripts/app/views/fileupload.js:48
 msgid "File Upload canceled"
-msgstr ""
+msgstr "Dosya Yükleme iptal edildi"
 
 #: static/scripts/app/views/fileupload.js:49
 msgid "File Upload failed"
-msgstr ""
+msgstr "Dosya Yükleme Başarısız"
 
 #: static/scripts/app/views/fileupload.js:279
 msgid "Replace file {filename}?"
@@ -691,7 +691,7 @@ msgstr ""
 
 #: static/scripts/app/views/fileupload.js:305
 msgid "File is locked"
-msgstr ""
+msgstr "Dosya kilitli"
 
 #: static/scripts/app/views/fileupload.js:440
 msgid "Network error"
@@ -704,7 +704,7 @@ msgstr ""
 #: static/scripts/app/views/folder-perm.js:126
 #: static/scripts/app/views/share.js:842
 msgid "Select groups"
-msgstr ""
+msgstr "Grup seçin"
 
 #: static/scripts/app/views/folder-share-item.js:125
 msgid "Edit failed"
@@ -715,7 +715,7 @@ msgstr ""
 #: static/scripts/common.js:444
 #: static/scripts/sysadmin-app/views/dashboard.js:84
 msgid "Failed. Please check the network."
-msgstr ""
+msgstr "Başarısız oldu. Lütfen ağı kontrol edin."
 
 #: static/scripts/app/views/folder-share-item.js:186
 msgid "Delete failed"
@@ -752,7 +752,7 @@ msgstr ""
 
 #: static/scripts/app/views/group-settings.js:238
 msgid "Please choose a CSV file"
-msgstr ""
+msgstr "Lütfen bir CVS dosyası seçiniz"
 
 #: static/scripts/app/views/group-settings.js:269
 msgid "Successfully imported."
@@ -760,19 +760,19 @@ msgstr ""
 
 #: static/scripts/app/views/group-settings.js:292
 msgid "Dismiss Group"
-msgstr ""
+msgstr "Grubu Sonlandır"
 
 #: static/scripts/app/views/group-settings.js:293
 msgid "Really want to dismiss this group?"
-msgstr ""
+msgstr "Bu grubu sonlandırmayı gerçekten istiyor musunuz?"
 
 #: static/scripts/app/views/group-settings.js:321
 msgid "Quit Group"
-msgstr ""
+msgstr "Gruptan Çık"
 
 #: static/scripts/app/views/group-settings.js:322
 msgid "Are you sure you want to quit this group?"
-msgstr ""
+msgstr "Gruptan çıkmak istediğinize emin misiniz?"
 
 #: static/scripts/app/views/invitation.js:37
 #: static/scripts/sysadmin-app/views/address-book-group-item.js:57
@@ -807,7 +807,7 @@ msgstr ""
 #: static/scripts/sysadmin-app/views/repo.js:65
 #: static/scripts/sysadmin-app/views/trash-repo.js:28
 msgid "Delete Library"
-msgstr ""
+msgstr "Kütüphaneyi Sil"
 
 #: static/scripts/app/views/repo.js:96
 #: static/scripts/sysadmin-app/views/address-book-group-item.js:47
@@ -818,7 +818,7 @@ msgstr ""
 #: static/scripts/sysadmin-app/views/repo.js:66
 #, javascript-format
 msgid "Are you sure you want to delete %s ?"
-msgstr ""
+msgstr "%s'i silmek istediğinize emin misiniz?"
 
 #: static/scripts/app/views/repo.js:106
 #: static/scripts/sysadmin-app/views/repo.js:79
@@ -867,7 +867,7 @@ msgstr ""
 
 #: static/scripts/app/views/share.js:305 static/scripts/app/views/share.js:306
 msgid "Show"
-msgstr ""
+msgstr "Göster"
 
 #: static/scripts/app/views/share.js:361
 msgid "Please enter days."
@@ -875,7 +875,7 @@ msgstr ""
 
 #: static/scripts/app/views/share.js:365
 msgid "Please enter valid days"
-msgstr ""
+msgstr "Lütfen geçerli günler girin"
 
 #: static/scripts/app/views/share.js:468
 msgid "Share link is copied to the clipboard."
@@ -883,15 +883,15 @@ msgstr ""
 
 #: static/scripts/app/views/share.js:485
 msgid "Please input at least an email."
-msgstr ""
+msgstr "Lütfen en az bir eposta girişi yapın"
 
 #: static/scripts/app/views/share.js:502
 msgid "Successfully sent to {placeholder}"
-msgstr ""
+msgstr "{placeholder}'a gönderildi"
 
 #: static/scripts/app/views/share.js:506
 msgid "Failed to send to {placeholder}"
-msgstr ""
+msgstr "{placeholder}'a gönderilemedi"
 
 #: static/scripts/app/views/shared-repo.js:46
 #: static/scripts/sysadmin-app/views/dirent.js:49
@@ -900,7 +900,7 @@ msgstr ""
 #: static/scripts/sysadmin-app/views/trash-repo.js:71
 #: static/scripts/sysadmin-app/views/trash-repos.js:64
 msgid "Success"
-msgstr ""
+msgstr "Başarılı"
 
 #: static/scripts/app/views/starred-file-item.js:69
 msgid "Successfully unstared {placeholder}"
@@ -954,7 +954,7 @@ msgstr ""
 #: static/scripts/sysadmin-app/views/groups.js:79
 #: static/scripts/sysadmin-app/views/repos.js:69
 msgid "Name is required."
-msgstr ""
+msgstr "İsim gerekli."
 
 #: static/scripts/sysadmin-app/views/address-book.js:49
 msgid "New Department"
@@ -974,7 +974,7 @@ msgstr ""
 
 #: static/scripts/sysadmin-app/views/admin-operation-log.js:57
 msgid "Transfer Library"
-msgstr ""
+msgstr "Kütüphaneyi transfer et"
 
 #: static/scripts/sysadmin-app/views/admin-operation-log.js:58
 msgid "Transferred library {library_name} from {user_from} to {user_to}"
@@ -999,7 +999,7 @@ msgstr ""
 #: static/scripts/sysadmin-app/views/admin-operation-log.js:82
 #: static/scripts/sysadmin-app/views/group.js:30
 msgid "Delete Group"
-msgstr ""
+msgstr "Grubu Sil"
 
 #: static/scripts/sysadmin-app/views/admin-operation-log.js:83
 msgid "Deleted group {group_name}"
@@ -1015,7 +1015,7 @@ msgstr ""
 
 #: static/scripts/sysadmin-app/views/admin-operation-log.js:94
 msgid "Delete User"
-msgstr ""
+msgstr "Kullanıcıyı sil"
 
 #: static/scripts/sysadmin-app/views/admin-operation-log.js:95
 msgid "Deleted user {user}"
@@ -1027,7 +1027,7 @@ msgstr ""
 
 #: static/scripts/sysadmin-app/views/group-member.js:90
 msgid "Delete Member"
-msgstr ""
+msgstr "Üyeyi Sil"
 
 #: static/scripts/sysadmin-app/views/group-member.js:100
 msgid "Successfully deleted member {placeholder}"
@@ -1035,12 +1035,12 @@ msgstr ""
 
 #: static/scripts/sysadmin-app/views/group-repo.js:28
 msgid "Unshare Library"
-msgstr ""
+msgstr "Kütüphane paylaşımını kaldır"
 
 #: static/scripts/sysadmin-app/views/group-repo.js:29
 #, javascript-format
 msgid "Are you sure you want to unshare %s ?"
-msgstr ""
+msgstr "%s paylaşımını kaldırmak istediğinize emin misiniz?"
 
 #: static/scripts/sysadmin-app/views/group-repo.js:42
 msgid "Successfully unshared library {placeholder}"
@@ -1056,31 +1056,31 @@ msgstr ""
 
 #: static/scripts/sysadmin-app/views/search-trash-repos.js:46
 msgid "Delete Library By Owner"
-msgstr ""
+msgstr "Sahibine göre kütüphane sil"
 
 #: static/scripts/sysadmin-app/views/search-trash-repos.js:47
 #, javascript-format
 msgid "Are you sure you want to delete all %s's libraries?"
-msgstr ""
+msgstr "%s'e ait tüm kütüphaneleri silmek istediğinize emin misiniz?"
 
 #: static/scripts/sysadmin-app/views/trash-repo.js:29
 #, javascript-format
 msgid "Are you sure you want to delete %s completely?"
-msgstr ""
+msgstr "%s'i tamamen silmek istediğinize emin misiniz?"
 
 #: static/scripts/sysadmin-app/views/trash-repo.js:58
 msgid "Restore Library"
-msgstr ""
+msgstr "Kütüphaneyi Geri Yükle"
 
 #: static/scripts/sysadmin-app/views/trash-repo.js:59
 #, javascript-format
 msgid "Are you sure you want to restore %s?"
-msgstr ""
+msgstr "%s'i yeniden yüklemek istediğinize emin misiniz?"
 
 #: static/scripts/sysadmin-app/views/trash-repos.js:49
 msgid "Clear Trash"
-msgstr ""
+msgstr "Çöp Tenekesini Boşalt"
 
 #: static/scripts/sysadmin-app/views/trash-repos.js:50
 msgid "Are you sure you want to clear trash?"
-msgstr ""
+msgstr "Çöp tenekesini boşaltmak istediğinize emin misiniz?"

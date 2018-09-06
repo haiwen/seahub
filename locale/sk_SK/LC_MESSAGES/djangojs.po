@@ -7,9 +7,9 @@ msgid ""
 msgstr ""
 "Project-Id-Version: seahub\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2018-09-06 15:47+0800\n"
-"PO-Revision-Date: 2018-09-06 07:45+0000\n"
-"Last-Translator: zheng xie <xiez1989@gmail.com>\n"
+"POT-Creation-Date: 2018-09-06 16:33+0800\n"
+"PO-Revision-Date: 2018-09-06 08:03+0000\n"
+"Last-Translator: Peter Hudec <peter.hudec@cnc.sk>\n"
 "Language-Team: Slovak (Slovakia) (http://www.transifex.com/haiwen/seahub/language/sk_SK/)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -49,7 +49,7 @@ msgstr ""
 #: frontend/src/components/menu-component/menu-dialog/create-fileforder-dialog.js:82
 #: frontend/src/components/tree-dir-view/tree-dir-view.js:16
 msgid "Name"
-msgstr ""
+msgstr "Meno"
 
 #: frontend/src/components/menu-component/menu-dialog/create-fileforder-dialog.js:84
 msgid "newName"
@@ -64,7 +64,7 @@ msgstr ""
 #: frontend/src/components/menu-component/menu-dialog/rename-dialog.js:71
 #: static/scripts/app/views/fileupload.js:21
 msgid "Cancel"
-msgstr ""
+msgstr "Zrušiť"
 
 #: frontend/src/components/menu-component/menu-dialog/delete-dialog.js:16
 #: frontend/src/components/menu-component/node-menu.js:39
@@ -72,7 +72,7 @@ msgstr ""
 #: static/scripts/app/views/fileupload.js:22
 #: static/scripts/sysadmin-app/views/device-trusted-ipaddress.js:27
 msgid "Delete"
-msgstr ""
+msgstr "Zmazať"
 
 #: frontend/src/components/menu-component/menu-dialog/delete-dialog.js:18
 msgid "Are you sure to delete"
@@ -119,7 +119,7 @@ msgstr ""
 
 #: frontend/src/components/tree-dir-view/tree-dir-view.js:18
 msgid "Last Update"
-msgstr ""
+msgstr "Posledná zmena"
 
 #: frontend/src/pages/wiki/main-panel.js:49
 msgid "Edit Page"
@@ -237,7 +237,7 @@ msgstr ""
 
 #: static/scripts/app/models/repo.js:46 static/scripts/app/views/share.js:346
 msgid "Passwords don't match"
-msgstr ""
+msgstr "Heslá nie sú rovnaké"
 
 #: static/scripts/app/models/repo.js:63 static/scripts/common.js:345
 msgid "Read-Only library"
@@ -246,12 +246,12 @@ msgstr ""
 #: static/scripts/app/models/share-admin-folder.js:25
 #: static/scripts/app/models/share-admin-repo.js:22
 msgid "Read-Write"
-msgstr ""
+msgstr "Čítanie-Zápis"
 
 #: static/scripts/app/models/share-admin-folder.js:27
 #: static/scripts/app/models/share-admin-repo.js:24
 msgid "Read-Only"
-msgstr ""
+msgstr "Iba čítanie"
 
 #: static/scripts/app/views/activity-item.js:25
 msgid "Removed all items from trash."
@@ -448,7 +448,7 @@ msgstr ""
 #: static/scripts/app/views/dir.js:59
 #: static/scripts/app/views/starred-file.js:107
 msgid "Loading..."
-msgstr ""
+msgstr "Nahrávam..."
 
 #: static/scripts/app/views/dir.js:62
 #: static/scripts/app/views/starred-file.js:110
@@ -482,7 +482,7 @@ msgstr ""
 #: static/scripts/app/views/dir.js:479
 #: static/scripts/app/views/notifications.js:63 static/scripts/common.js:467
 msgid "Please check the network."
-msgstr ""
+msgstr "Prosím skontrolujte pripojenie k sieti."
 
 #: static/scripts/app/views/dir.js:733
 msgid "Only an extension there, please input a name."
@@ -715,7 +715,7 @@ msgstr ""
 #: static/scripts/common.js:444
 #: static/scripts/sysadmin-app/views/dashboard.js:84
 msgid "Failed. Please check the network."
-msgstr ""
+msgstr "Chyba. Prosím skontrolujte pripojenie k sieti."
 
 #: static/scripts/app/views/folder-share-item.js:186
 msgid "Delete failed"
@@ -954,7 +954,7 @@ msgstr ""
 #: static/scripts/sysadmin-app/views/groups.js:79
 #: static/scripts/sysadmin-app/views/repos.js:69
 msgid "Name is required."
-msgstr ""
+msgstr "Meno je povinné."
 
 #: static/scripts/sysadmin-app/views/address-book.js:49
 msgid "New Department"
@@ -999,7 +999,7 @@ msgstr ""
 #: static/scripts/sysadmin-app/views/admin-operation-log.js:82
 #: static/scripts/sysadmin-app/views/group.js:30
 msgid "Delete Group"
-msgstr ""
+msgstr "Zmazať skupinu"
 
 #: static/scripts/sysadmin-app/views/admin-operation-log.js:83
 msgid "Deleted group {group_name}"
@@ -1070,7 +1070,7 @@ msgstr ""
 
 #: static/scripts/sysadmin-app/views/trash-repo.js:58
 msgid "Restore Library"
-msgstr ""
+msgstr "Obnoviť knižnicu"
 
 #: static/scripts/sysadmin-app/views/trash-repo.js:59
 #, javascript-format

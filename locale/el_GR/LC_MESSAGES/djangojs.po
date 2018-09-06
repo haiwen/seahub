@@ -7,9 +7,9 @@ msgid ""
 msgstr ""
 "Project-Id-Version: seahub\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2018-09-06 15:47+0800\n"
-"PO-Revision-Date: 2018-09-06 07:45+0000\n"
-"Last-Translator: zheng xie <xiez1989@gmail.com>\n"
+"POT-Creation-Date: 2018-09-06 16:33+0800\n"
+"PO-Revision-Date: 2018-09-06 08:03+0000\n"
+"Last-Translator: nikolaosp <nikolaosp@gmail.com>\n"
 "Language-Team: Greek (Greece) (http://www.transifex.com/haiwen/seahub/language/el_GR/)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -27,7 +27,7 @@ msgstr ""
 
 #: frontend/src/components/account.js:133
 msgid "Settings"
-msgstr ""
+msgstr "Ρυθμίσεις"
 
 #: frontend/src/components/account.js:135
 msgid "Log out"
@@ -49,7 +49,7 @@ msgstr ""
 #: frontend/src/components/menu-component/menu-dialog/create-fileforder-dialog.js:82
 #: frontend/src/components/tree-dir-view/tree-dir-view.js:16
 msgid "Name"
-msgstr ""
+msgstr "Όνομα"
 
 #: frontend/src/components/menu-component/menu-dialog/create-fileforder-dialog.js:84
 msgid "newName"
@@ -58,13 +58,13 @@ msgstr ""
 #: frontend/src/components/menu-component/menu-dialog/create-fileforder-dialog.js:90
 #: frontend/src/components/menu-component/menu-dialog/rename-dialog.js:70
 msgid "Submit"
-msgstr ""
+msgstr "Υποβολή"
 
 #: frontend/src/components/menu-component/menu-dialog/create-fileforder-dialog.js:91
 #: frontend/src/components/menu-component/menu-dialog/rename-dialog.js:71
 #: static/scripts/app/views/fileupload.js:21
 msgid "Cancel"
-msgstr ""
+msgstr "Ακύρωση"
 
 #: frontend/src/components/menu-component/menu-dialog/delete-dialog.js:16
 #: frontend/src/components/menu-component/node-menu.js:39
@@ -72,7 +72,7 @@ msgstr ""
 #: static/scripts/app/views/fileupload.js:22
 #: static/scripts/sysadmin-app/views/device-trusted-ipaddress.js:27
 msgid "Delete"
-msgstr ""
+msgstr "Διαγραφή"
 
 #: frontend/src/components/menu-component/menu-dialog/delete-dialog.js:18
 msgid "Are you sure to delete"
@@ -107,7 +107,7 @@ msgstr ""
 #: frontend/src/components/menu-component/node-menu.js:38
 #: frontend/src/components/menu-component/node-menu.js:46
 msgid "Rename"
-msgstr ""
+msgstr "Μετονομασία"
 
 #: frontend/src/components/search.js:199
 msgid "Search files in this wiki"
@@ -115,15 +115,15 @@ msgstr ""
 
 #: frontend/src/components/tree-dir-view/tree-dir-view.js:17
 msgid "Size"
-msgstr ""
+msgstr "Μέγεθος"
 
 #: frontend/src/components/tree-dir-view/tree-dir-view.js:18
 msgid "Last Update"
-msgstr ""
+msgstr "Τελευταία τροποποίηση"
 
 #: frontend/src/pages/wiki/main-panel.js:49
 msgid "Edit Page"
-msgstr ""
+msgstr "Τροποποίηση σελίδας"
 
 #: frontend/src/pages/wiki/main-panel.js:59
 msgid "Wikis"
@@ -131,7 +131,7 @@ msgstr ""
 
 #: frontend/src/pages/wiki/side-panel.js:176
 msgid "Pages"
-msgstr ""
+msgstr "Σελίδες"
 
 #: seahub/templates/priv/ali.js:8
 msgid "Preview-Edit-on-Cloud library"
@@ -208,7 +208,7 @@ msgstr ""
 #: static/scripts/app/views/fileupload.js:430
 #: static/scripts/app/views/group.js:65 static/scripts/common.js:643
 msgid "Just now"
-msgstr ""
+msgstr "Μόλις τώρα"
 
 #: static/scripts/app/models/repo.js:34
 msgid "Name is required"
@@ -246,12 +246,12 @@ msgstr ""
 #: static/scripts/app/models/share-admin-folder.js:25
 #: static/scripts/app/models/share-admin-repo.js:22
 msgid "Read-Write"
-msgstr ""
+msgstr "Ανάγνωση-Γραφή"
 
 #: static/scripts/app/models/share-admin-folder.js:27
 #: static/scripts/app/models/share-admin-repo.js:24
 msgid "Read-Only"
-msgstr ""
+msgstr "Μόνο Ανάγνωση"
 
 #: static/scripts/app/views/activity-item.js:25
 msgid "Removed all items from trash."
@@ -332,7 +332,7 @@ msgstr ""
 
 #: static/scripts/app/views/dialogs/dirent-mvcp.js:133
 msgid "Failed."
-msgstr ""
+msgstr "Απέτυχε."
 
 #: static/scripts/app/views/dialogs/dirent-mvcp.js:133
 #: static/scripts/app/views/dialogs/dirent-mvcp.js:159
@@ -448,7 +448,7 @@ msgstr ""
 #: static/scripts/app/views/dir.js:59
 #: static/scripts/app/views/starred-file.js:107
 msgid "Loading..."
-msgstr ""
+msgstr "Φορτώνει"
 
 #: static/scripts/app/views/dir.js:62
 #: static/scripts/app/views/starred-file.js:110
@@ -482,7 +482,7 @@ msgstr ""
 #: static/scripts/app/views/dir.js:479
 #: static/scripts/app/views/notifications.js:63 static/scripts/common.js:467
 msgid "Please check the network."
-msgstr ""
+msgstr "Παρακαλώ ελέγξτε τη σύνδεση με το δίκτυο."
 
 #: static/scripts/app/views/dir.js:733
 msgid "Only an extension there, please input a name."
@@ -715,7 +715,7 @@ msgstr ""
 #: static/scripts/common.js:444
 #: static/scripts/sysadmin-app/views/dashboard.js:84
 msgid "Failed. Please check the network."
-msgstr ""
+msgstr "Απέτυχε. Παρακαλώ ελέγξτε τη σύνδεσή σας στο δίκτυο."
 
 #: static/scripts/app/views/folder-share-item.js:186
 msgid "Delete failed"
@@ -760,19 +760,19 @@ msgstr ""
 
 #: static/scripts/app/views/group-settings.js:292
 msgid "Dismiss Group"
-msgstr ""
+msgstr "Απόρριψη ομάδας"
 
 #: static/scripts/app/views/group-settings.js:293
 msgid "Really want to dismiss this group?"
-msgstr ""
+msgstr "Πραγματικά θέλετε να απορρίψετε αυτή την ομάδα;"
 
 #: static/scripts/app/views/group-settings.js:321
 msgid "Quit Group"
-msgstr ""
+msgstr "Αποχώρηση από ομάδα"
 
 #: static/scripts/app/views/group-settings.js:322
 msgid "Are you sure you want to quit this group?"
-msgstr ""
+msgstr "Είστε σίγουροι πως θέλετε να αποχωρήσετε από αυτή την ομάδα;"
 
 #: static/scripts/app/views/invitation.js:37
 #: static/scripts/sysadmin-app/views/address-book-group-item.js:57
@@ -818,7 +818,7 @@ msgstr ""
 #: static/scripts/sysadmin-app/views/repo.js:66
 #, javascript-format
 msgid "Are you sure you want to delete %s ?"
-msgstr ""
+msgstr "Είστε σίγουροι πως θέλετε να διαγράψετε τον/την %s ?"
 
 #: static/scripts/app/views/repo.js:106
 #: static/scripts/sysadmin-app/views/repo.js:79
@@ -954,7 +954,7 @@ msgstr ""
 #: static/scripts/sysadmin-app/views/groups.js:79
 #: static/scripts/sysadmin-app/views/repos.js:69
 msgid "Name is required."
-msgstr ""
+msgstr "Το όνομα είναι απαραίτητο."
 
 #: static/scripts/sysadmin-app/views/address-book.js:49
 msgid "New Department"
@@ -1027,7 +1027,7 @@ msgstr ""
 
 #: static/scripts/sysadmin-app/views/group-member.js:90
 msgid "Delete Member"
-msgstr ""
+msgstr "Διαγραφή μέλους"
 
 #: static/scripts/sysadmin-app/views/group-member.js:100
 msgid "Successfully deleted member {placeholder}"

@@ -7,9 +7,9 @@ msgid ""
 msgstr ""
 "Project-Id-Version: seahub\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2018-09-06 15:47+0800\n"
-"PO-Revision-Date: 2018-09-06 07:45+0000\n"
-"Last-Translator: zheng xie <xiez1989@gmail.com>\n"
+"POT-Creation-Date: 2018-09-06 16:33+0800\n"
+"PO-Revision-Date: 2018-09-06 08:03+0000\n"
+"Last-Translator: IMAMO <info@imamo.si>\n"
 "Language-Team: Slovenian (Slovenia) (http://www.transifex.com/haiwen/seahub/language/sl_SI/)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -19,37 +19,37 @@ msgstr ""
 
 #: frontend/src/components/account.js:91
 msgid "System Admin"
-msgstr ""
+msgstr "Sistemski admin"
 
 #: frontend/src/components/account.js:127
 msgid "Used"
-msgstr ""
+msgstr "Porabljeno"
 
 #: frontend/src/components/account.js:133
 msgid "Settings"
-msgstr ""
+msgstr "Nastavitve"
 
 #: frontend/src/components/account.js:135
 msgid "Log out"
-msgstr ""
+msgstr "Odjava"
 
 #: frontend/src/components/menu-component/menu-dialog/create-fileforder-dialog.js:74
 #: frontend/src/components/menu-component/node-menu.js:29
 #: frontend/src/components/menu-component/node-menu.js:37
 #: static/scripts/app/views/dir.js:771
 msgid "New File"
-msgstr ""
+msgstr "Nova datoteka"
 
 #: frontend/src/components/menu-component/menu-dialog/create-fileforder-dialog.js:74
 #: frontend/src/components/menu-component/node-menu.js:28
 #: frontend/src/components/menu-component/node-menu.js:36
 msgid "New Folder"
-msgstr ""
+msgstr "Nova mapa"
 
 #: frontend/src/components/menu-component/menu-dialog/create-fileforder-dialog.js:82
 #: frontend/src/components/tree-dir-view/tree-dir-view.js:16
 msgid "Name"
-msgstr ""
+msgstr "Ime"
 
 #: frontend/src/components/menu-component/menu-dialog/create-fileforder-dialog.js:84
 msgid "newName"
@@ -58,13 +58,13 @@ msgstr ""
 #: frontend/src/components/menu-component/menu-dialog/create-fileforder-dialog.js:90
 #: frontend/src/components/menu-component/menu-dialog/rename-dialog.js:70
 msgid "Submit"
-msgstr ""
+msgstr "Potrdi"
 
 #: frontend/src/components/menu-component/menu-dialog/create-fileforder-dialog.js:91
 #: frontend/src/components/menu-component/menu-dialog/rename-dialog.js:71
 #: static/scripts/app/views/fileupload.js:21
 msgid "Cancel"
-msgstr ""
+msgstr "Prekliči"
 
 #: frontend/src/components/menu-component/menu-dialog/delete-dialog.js:16
 #: frontend/src/components/menu-component/node-menu.js:39
@@ -72,7 +72,7 @@ msgstr ""
 #: static/scripts/app/views/fileupload.js:22
 #: static/scripts/sysadmin-app/views/device-trusted-ipaddress.js:27
 msgid "Delete"
-msgstr ""
+msgstr "Izbriši"
 
 #: frontend/src/components/menu-component/menu-dialog/delete-dialog.js:18
 msgid "Are you sure to delete"
@@ -89,7 +89,7 @@ msgstr ""
 #: frontend/src/components/menu-component/menu-dialog/rename-dialog.js:64
 #: static/scripts/app/views/dialogs/dirent-rename.js:39
 msgid "Rename File"
-msgstr ""
+msgstr "Preimenuj datoteko"
 
 #: frontend/src/components/menu-component/menu-dialog/rename-dialog.js:64
 #: static/scripts/app/views/dialogs/dirent-rename.js:39
@@ -107,23 +107,23 @@ msgstr ""
 #: frontend/src/components/menu-component/node-menu.js:38
 #: frontend/src/components/menu-component/node-menu.js:46
 msgid "Rename"
-msgstr ""
+msgstr "Preimenuj"
 
 #: frontend/src/components/search.js:199
 msgid "Search files in this wiki"
-msgstr ""
+msgstr "Iskanje datotek v tem Wiki"
 
 #: frontend/src/components/tree-dir-view/tree-dir-view.js:17
 msgid "Size"
-msgstr ""
+msgstr "Velikost"
 
 #: frontend/src/components/tree-dir-view/tree-dir-view.js:18
 msgid "Last Update"
-msgstr ""
+msgstr "Posodobljeno"
 
 #: frontend/src/pages/wiki/main-panel.js:49
 msgid "Edit Page"
-msgstr ""
+msgstr "Uredi stran"
 
 #: frontend/src/pages/wiki/main-panel.js:59
 msgid "Wikis"
@@ -131,7 +131,7 @@ msgstr ""
 
 #: frontend/src/pages/wiki/side-panel.js:176
 msgid "Pages"
-msgstr ""
+msgstr "Strani"
 
 #: seahub/templates/priv/ali.js:8
 msgid "Preview-Edit-on-Cloud library"
@@ -212,7 +212,7 @@ msgstr "Ravnokar"
 
 #: static/scripts/app/models/repo.js:34
 msgid "Name is required"
-msgstr ""
+msgstr "Naziv je zahtevan"
 
 #: static/scripts/app/models/repo.js:37
 #: static/scripts/app/views/dialogs/dirent-rename.js:65
@@ -225,19 +225,19 @@ msgstr ""
 
 #: static/scripts/app/models/repo.js:41 static/scripts/app/views/share.js:334
 msgid "Please enter password"
-msgstr ""
+msgstr "Prosimo vnesite geslo"
 
 #: static/scripts/app/models/repo.js:42 static/scripts/app/views/share.js:342
 msgid "Please enter the password again"
-msgstr ""
+msgstr "Prosimo ponovno vnesite geslo"
 
 #: static/scripts/app/models/repo.js:44 static/scripts/app/views/share.js:338
 msgid "Password is too short"
-msgstr ""
+msgstr "Geslo je prekratko"
 
 #: static/scripts/app/models/repo.js:46 static/scripts/app/views/share.js:346
 msgid "Passwords don't match"
-msgstr ""
+msgstr "Gesli se ne ujemata"
 
 #: static/scripts/app/models/repo.js:63 static/scripts/common.js:345
 msgid "Read-Only library"
@@ -246,12 +246,12 @@ msgstr ""
 #: static/scripts/app/models/share-admin-folder.js:25
 #: static/scripts/app/models/share-admin-repo.js:22
 msgid "Read-Write"
-msgstr ""
+msgstr "Branje-pisanje"
 
 #: static/scripts/app/models/share-admin-folder.js:27
 #: static/scripts/app/models/share-admin-repo.js:24
 msgid "Read-Only"
-msgstr ""
+msgstr "Samo branje"
 
 #: static/scripts/app/views/activity-item.js:25
 msgid "Removed all items from trash."
@@ -267,27 +267,27 @@ msgstr ""
 
 #: static/scripts/app/views/details.js:47
 msgid "New files"
-msgstr ""
+msgstr "Nove datoteke"
 
 #: static/scripts/app/views/details.js:53
 msgid "Deleted files"
-msgstr ""
+msgstr "Izbrisane datoteke"
 
 #: static/scripts/app/views/details.js:59
 msgid "Renamed or Moved files"
-msgstr ""
+msgstr "Preimenovane ali premaknjene datoteke"
 
 #: static/scripts/app/views/details.js:65
 msgid "Modified files"
-msgstr ""
+msgstr "Spremenjene datoteke"
 
 #: static/scripts/app/views/details.js:71
 msgid "New directories"
-msgstr ""
+msgstr "Nove mape"
 
 #: static/scripts/app/views/details.js:77
 msgid "Deleted directories"
-msgstr ""
+msgstr "Izbrisane mape"
 
 #: static/scripts/app/views/device.js:42
 #: static/scripts/sysadmin-app/views/device.js:42
@@ -320,15 +320,15 @@ msgstr ""
 
 #: static/scripts/app/views/dialogs/dirent-mvcp.js:102
 msgid "Moving %(name)s"
-msgstr ""
+msgstr "Premikanje %(name)s"
 
 #: static/scripts/app/views/dialogs/dirent-mvcp.js:102
 msgid "Copying %(name)s"
-msgstr ""
+msgstr "Kopiranje %(name)s"
 
 #: static/scripts/app/views/dialogs/dirent-mvcp.js:118
 msgid "Saving..."
-msgstr ""
+msgstr "Shranjujem…."
 
 #: static/scripts/app/views/dialogs/dirent-mvcp.js:133
 msgid "Failed."
@@ -338,21 +338,21 @@ msgstr "Neuspešno."
 #: static/scripts/app/views/dialogs/dirent-mvcp.js:159
 #: static/scripts/app/views/dir.js:1423
 msgid "Canceled."
-msgstr ""
+msgstr "Preklicano."
 
 #: static/scripts/app/views/dialogs/dirent-mvcp.js:188
 #: static/scripts/app/views/dir.js:1173
 msgid "Invalid destination path"
-msgstr ""
+msgstr "Neveljavna končna pot"
 
 #: static/scripts/app/views/dialogs/dirent-mvcp.js:207
 #: static/scripts/app/views/dirent.js:296
 msgid "Successfully moved %(name)s"
-msgstr ""
+msgstr "Uspešen premik %(name)s"
 
 #: static/scripts/app/views/dialogs/dirent-mvcp.js:210
 msgid "Successfully copied %(name)s"
-msgstr ""
+msgstr "Uspešno kopiranje %(name)s"
 
 #: static/scripts/app/views/dialogs/dirent-rename.js:59
 #: static/scripts/app/views/dir.js:662 static/scripts/app/views/dir.js:722
@@ -368,7 +368,7 @@ msgstr ""
 #: static/scripts/sysadmin-app/views/dir.js:82
 #: static/scripts/sysadmin-app/views/group-members.js:51
 msgid "It is required."
-msgstr ""
+msgstr "Je zahtevano."
 
 #: static/scripts/app/views/dialogs/dirent-smart-link.js:50
 msgid "Internal link copied to clipboard"
@@ -380,7 +380,7 @@ msgstr ""
 
 #: static/scripts/app/views/dialogs/repo-change-password.js:50
 msgid "Please enter the old password"
-msgstr ""
+msgstr "Prosimo vnesite novo geslo"
 
 #: static/scripts/app/views/dialogs/repo-change-password.js:54
 msgid "Please enter a new password"
@@ -388,15 +388,15 @@ msgstr ""
 
 #: static/scripts/app/views/dialogs/repo-change-password.js:58
 msgid "New password is too short"
-msgstr ""
+msgstr "Novo geslo je prekratko"
 
 #: static/scripts/app/views/dialogs/repo-change-password.js:62
 msgid "Please enter the new password again"
-msgstr ""
+msgstr "Prosimo vnesite ponovno novo geslo"
 
 #: static/scripts/app/views/dialogs/repo-change-password.js:66
 msgid "New passwords don't match"
-msgstr ""
+msgstr "Novi gesli se ne ujemata"
 
 #: static/scripts/app/views/dialogs/repo-change-password.js:87
 msgid "Successfully changed library password."
@@ -426,7 +426,7 @@ msgstr ""
 
 #: static/scripts/app/views/dialogs/repo-folder-perm-admin.js:222
 msgid "Please click and choose a directory."
-msgstr ""
+msgstr "Prosimo kliknite in izberite mapo."
 
 #: static/scripts/app/views/dialogs/repo-history-settings.js:36
 msgid "{placeholder} History Setting"
@@ -448,7 +448,7 @@ msgstr "Zapri (Esc)"
 #: static/scripts/app/views/dir.js:59
 #: static/scripts/app/views/starred-file.js:107
 msgid "Loading..."
-msgstr ""
+msgstr "Nalagam..."
 
 #: static/scripts/app/views/dir.js:62
 #: static/scripts/app/views/starred-file.js:110
@@ -477,7 +477,7 @@ msgstr ""
 
 #: static/scripts/app/views/dir.js:409
 msgid "Password is required."
-msgstr ""
+msgstr "Geslo je zahtevano"
 
 #: static/scripts/app/views/dir.js:479
 #: static/scripts/app/views/notifications.js:63 static/scripts/common.js:467
@@ -486,7 +486,7 @@ msgstr "Prosimo, preverite povezavo."
 
 #: static/scripts/app/views/dir.js:733
 msgid "Only an extension there, please input a name."
-msgstr ""
+msgstr "Je samo končnica, prosimo vnesite še naziv."
 
 #: static/scripts/app/views/dir.js:779
 msgid "New Markdown File"
@@ -506,11 +506,11 @@ msgstr ""
 
 #: static/scripts/app/views/dir.js:1035 static/scripts/app/views/dir.js:1178
 msgid "Processing..."
-msgstr ""
+msgstr "Obdelujem…."
 
 #: static/scripts/app/views/dir.js:1072
 msgid "Successfully deleted %(name)s."
-msgstr ""
+msgstr "Uspešno ostranjena %(name)s."
 
 #: static/scripts/app/views/dir.js:1074
 msgid "Successfully deleted %(name)s and 1 other item."
@@ -518,7 +518,7 @@ msgstr ""
 
 #: static/scripts/app/views/dir.js:1076
 msgid "Successfully deleted %(name)s and %(amount)s other items."
-msgstr ""
+msgstr "Uspešno odstranjeno %(name)s in %(amount)s ostalih datotek."
 
 #: static/scripts/app/views/dir.js:1085
 msgid "Failed to delete %(name)s."
@@ -534,11 +534,11 @@ msgstr ""
 
 #: static/scripts/app/views/dir.js:1102
 msgid "Delete Items"
-msgstr ""
+msgstr "Izbriši predmete"
 
 #: static/scripts/app/views/dir.js:1103
 msgid "Are you sure you want to delete these selected items?"
-msgstr ""
+msgstr "Ali ste prepričani da želite izbrisati izbrano?"
 
 #: static/scripts/app/views/dir.js:1117
 msgid "Move selected item(s) to:"
@@ -550,27 +550,27 @@ msgstr ""
 
 #: static/scripts/app/views/dir.js:1222 static/scripts/app/views/dir.js:1384
 msgid "Successfully moved %(name)s."
-msgstr ""
+msgstr "Uspešno prestavljeno %(name)s."
 
 #: static/scripts/app/views/dir.js:1224 static/scripts/app/views/dir.js:1386
 msgid "Successfully moved %(name)s and 1 other item."
-msgstr ""
+msgstr "Uspešno prestavljeno %(name)s in 1 druga datoteka."
 
 #: static/scripts/app/views/dir.js:1226 static/scripts/app/views/dir.js:1388
 msgid "Successfully moved %(name)s and %(amount)s other items."
-msgstr ""
+msgstr "Supešno prestavljeno %(name)s in %(amount)s ostalih datotek."
 
 #: static/scripts/app/views/dir.js:1231 static/scripts/app/views/dir.js:1392
 msgid "Successfully copied %(name)s."
-msgstr ""
+msgstr "Uspešno kopirano %(name)s."
 
 #: static/scripts/app/views/dir.js:1233 static/scripts/app/views/dir.js:1394
 msgid "Successfully copied %(name)s and 1 other item."
-msgstr ""
+msgstr "Uspešno kopirana %(name)s in 1 dodatna datoteka."
 
 #: static/scripts/app/views/dir.js:1235 static/scripts/app/views/dir.js:1396
 msgid "Successfully copied %(name)s and %(amount)s other items."
-msgstr ""
+msgstr "Uspešno kopirana %(name)s in %(amount)s ostalih datotek."
 
 #: static/scripts/app/views/dir.js:1251
 msgid "Internal error. Failed to move %(name)s and %(amount)s other item(s)."
@@ -578,7 +578,7 @@ msgstr ""
 
 #: static/scripts/app/views/dir.js:1253
 msgid "Internal error. Failed to move %(name)s."
-msgstr ""
+msgstr "Notranja napaka. Spodletelo premikanje %(name)s."
 
 #: static/scripts/app/views/dir.js:1257
 msgid "Internal error. Failed to copy %(name)s and %(amount)s other item(s)."
@@ -586,15 +586,15 @@ msgstr ""
 
 #: static/scripts/app/views/dir.js:1259
 msgid "Internal error. Failed to copy %(name)s."
-msgstr ""
+msgstr "Notranja napaka. Spodletelo kopiranje %(name)s."
 
 #: static/scripts/app/views/dir.js:1301
 msgid "Moving file %(index)s of %(total)s"
-msgstr ""
+msgstr "Premik datoteke %(index)s od %(total)s"
 
 #: static/scripts/app/views/dir.js:1301
 msgid "Copying file %(index)s of %(total)s"
-msgstr ""
+msgstr "Kopiranje datoteke %(index)s od %(total)s"
 
 #: static/scripts/app/views/dir.js:1327
 msgid "Failed to move %(name)s"
@@ -621,19 +621,19 @@ msgstr ""
 #: static/scripts/app/views/dirent-grid.js:187
 #: static/scripts/app/views/dirent.js:416
 msgid "Successfully deleted %(name)s"
-msgstr ""
+msgstr "Uspešno odstranjena %(name)s"
 
 #: static/scripts/app/views/fileupload.js:10
 msgid "File is too big"
-msgstr ""
+msgstr "Datoteka je prevelika"
 
 #: static/scripts/app/views/fileupload.js:11
 msgid "File is too small"
-msgstr ""
+msgstr "Datoteka je premajhna"
 
 #: static/scripts/app/views/fileupload.js:12
 msgid "Filetype not allowed"
-msgstr ""
+msgstr "Vrsta datoteke ni dovoljena"
 
 #: static/scripts/app/views/fileupload.js:13
 msgid "Maximum number of files exceeded"
@@ -641,11 +641,11 @@ msgstr ""
 
 #: static/scripts/app/views/fileupload.js:14
 msgid "Uploaded bytes exceed file size"
-msgstr ""
+msgstr "Prekoračena velikost naloženih bitov."
 
 #: static/scripts/app/views/fileupload.js:15
 msgid "Empty file upload result"
-msgstr ""
+msgstr "Rezultat nalaganja prazne datoteke"
 
 #: static/scripts/app/views/fileupload.js:17
 #: static/scripts/app/views/fileupload.js:225
@@ -655,7 +655,7 @@ msgstr ""
 #: static/scripts/sysadmin-app/views/address-book-group-item.js:152
 #: static/scripts/sysadmin-app/views/system-repo.js:52
 msgid "Error"
-msgstr ""
+msgstr "Napaka"
 
 #: static/scripts/app/views/fileupload.js:18
 msgid "uploaded"
@@ -667,7 +667,7 @@ msgstr "preklicano"
 
 #: static/scripts/app/views/fileupload.js:20
 msgid "Start"
-msgstr ""
+msgstr "Začetek"
 
 #: static/scripts/app/views/fileupload.js:46
 msgid "File Uploading..."
@@ -752,7 +752,7 @@ msgstr ""
 
 #: static/scripts/app/views/group-settings.js:238
 msgid "Please choose a CSV file"
-msgstr ""
+msgstr "Prosim, izberi CSV datoteko"
 
 #: static/scripts/app/views/group-settings.js:269
 msgid "Successfully imported."
@@ -760,19 +760,19 @@ msgstr ""
 
 #: static/scripts/app/views/group-settings.js:292
 msgid "Dismiss Group"
-msgstr ""
+msgstr "Prekliči skupino"
 
 #: static/scripts/app/views/group-settings.js:293
 msgid "Really want to dismiss this group?"
-msgstr ""
+msgstr "Ali res želiš preklicati skupino?"
 
 #: static/scripts/app/views/group-settings.js:321
 msgid "Quit Group"
-msgstr ""
+msgstr "Zaključi skupino"
 
 #: static/scripts/app/views/group-settings.js:322
 msgid "Are you sure you want to quit this group?"
-msgstr ""
+msgstr "Ali si prepričan/a, da želiš ukiniti to skupino?"
 
 #: static/scripts/app/views/invitation.js:37
 #: static/scripts/sysadmin-app/views/address-book-group-item.js:57
@@ -807,7 +807,7 @@ msgstr ""
 #: static/scripts/sysadmin-app/views/repo.js:65
 #: static/scripts/sysadmin-app/views/trash-repo.js:28
 msgid "Delete Library"
-msgstr ""
+msgstr "Izbriši knjižnico"
 
 #: static/scripts/app/views/repo.js:96
 #: static/scripts/sysadmin-app/views/address-book-group-item.js:47
@@ -818,12 +818,12 @@ msgstr ""
 #: static/scripts/sysadmin-app/views/repo.js:66
 #, javascript-format
 msgid "Are you sure you want to delete %s ?"
-msgstr ""
+msgstr "Ali si prepričan/a, da želiš odstraniti %s ?"
 
 #: static/scripts/app/views/repo.js:106
 #: static/scripts/sysadmin-app/views/repo.js:79
 msgid "Successfully deleted."
-msgstr ""
+msgstr "Uspešen izbris."
 
 #: static/scripts/app/views/repo.js:237
 #: static/scripts/sysadmin-app/views/repo.js:97
@@ -883,7 +883,7 @@ msgstr ""
 
 #: static/scripts/app/views/share.js:485
 msgid "Please input at least an email."
-msgstr ""
+msgstr "Prismo vnesite najmanj en email."
 
 #: static/scripts/app/views/share.js:502
 msgid "Successfully sent to {placeholder}"
@@ -954,7 +954,7 @@ msgstr ""
 #: static/scripts/sysadmin-app/views/groups.js:79
 #: static/scripts/sysadmin-app/views/repos.js:69
 msgid "Name is required."
-msgstr ""
+msgstr "Ime je zahtevano."
 
 #: static/scripts/sysadmin-app/views/address-book.js:49
 msgid "New Department"
@@ -974,7 +974,7 @@ msgstr ""
 
 #: static/scripts/sysadmin-app/views/admin-operation-log.js:57
 msgid "Transfer Library"
-msgstr ""
+msgstr "Prenos knjižnice"
 
 #: static/scripts/sysadmin-app/views/admin-operation-log.js:58
 msgid "Transferred library {library_name} from {user_from} to {user_to}"
@@ -999,7 +999,7 @@ msgstr ""
 #: static/scripts/sysadmin-app/views/admin-operation-log.js:82
 #: static/scripts/sysadmin-app/views/group.js:30
 msgid "Delete Group"
-msgstr ""
+msgstr "Odstranitev skupine"
 
 #: static/scripts/sysadmin-app/views/admin-operation-log.js:83
 msgid "Deleted group {group_name}"
@@ -1015,7 +1015,7 @@ msgstr ""
 
 #: static/scripts/sysadmin-app/views/admin-operation-log.js:94
 msgid "Delete User"
-msgstr ""
+msgstr "Izbriši uporabnika"
 
 #: static/scripts/sysadmin-app/views/admin-operation-log.js:95
 msgid "Deleted user {user}"
@@ -1027,7 +1027,7 @@ msgstr ""
 
 #: static/scripts/sysadmin-app/views/group-member.js:90
 msgid "Delete Member"
-msgstr ""
+msgstr "Izbriši člana"
 
 #: static/scripts/sysadmin-app/views/group-member.js:100
 msgid "Successfully deleted member {placeholder}"
@@ -1035,12 +1035,12 @@ msgstr ""
 
 #: static/scripts/sysadmin-app/views/group-repo.js:28
 msgid "Unshare Library"
-msgstr ""
+msgstr "Odstrani knjižnico iz deljenja"
 
 #: static/scripts/sysadmin-app/views/group-repo.js:29
 #, javascript-format
 msgid "Are you sure you want to unshare %s ?"
-msgstr ""
+msgstr "Ali ste prepričani da želite odstraniti deljenje za %s ?"
 
 #: static/scripts/sysadmin-app/views/group-repo.js:42
 msgid "Successfully unshared library {placeholder}"
@@ -1061,26 +1061,26 @@ msgstr ""
 #: static/scripts/sysadmin-app/views/search-trash-repos.js:47
 #, javascript-format
 msgid "Are you sure you want to delete all %s's libraries?"
-msgstr ""
+msgstr "Ali ste prepričani, da želite izbrisati vse knjižnice uporabnika %s?"
 
 #: static/scripts/sysadmin-app/views/trash-repo.js:29
 #, javascript-format
 msgid "Are you sure you want to delete %s completely?"
-msgstr ""
+msgstr "Ali ste prepričani, da želite povsem izbrisati %s?"
 
 #: static/scripts/sysadmin-app/views/trash-repo.js:58
 msgid "Restore Library"
-msgstr ""
+msgstr "Obnovi knjižnico"
 
 #: static/scripts/sysadmin-app/views/trash-repo.js:59
 #, javascript-format
 msgid "Are you sure you want to restore %s?"
-msgstr ""
+msgstr "Ali ste prepričani, da želite obnoviti %s?"
 
 #: static/scripts/sysadmin-app/views/trash-repos.js:49
 msgid "Clear Trash"
-msgstr ""
+msgstr "Sprazni koš"
 
 #: static/scripts/sysadmin-app/views/trash-repos.js:50
 msgid "Are you sure you want to clear trash?"
-msgstr ""
+msgstr "Ali ste prepričani, da želite sprazniti smeti?"
