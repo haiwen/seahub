@@ -411,7 +411,11 @@ class DirSharedItemsEndpoint(APIView):
                         'error_msg': 'group_id %s invalid.' % gid
                         })
                     continue
-
+                gpd = models.GroupOptions.objects.filter(group_id=gid, option_key='shared_repo').first()
+                if not int(gpd.option_val):
+                    if not is_group_admin_or_owner(gid, username):
+                        error_msg = 'Permission denied.'
+                        return api_error(status.HTTP_403_FORBIDDEN, error_msg)
                 group = ccnet_api.get_group(gid)
                 if not group:
                     result['failed'].append({
