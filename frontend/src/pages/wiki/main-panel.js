@@ -1,9 +1,10 @@
 import React, { Component } from 'react';
-import { gettext, repoID, serviceUrl, slug, siteRoot } from '../../components/constance';
+import { gettext, repoID, serviceUrl, slug, siteRoot, isPro } from '../../components/constance';
 import Search from '../../components/search';
 import Account from '../../components/account';
 import MarkdownViewer from '../../components/markdown-viewer';
 import TreeDirView from '../../components/tree-dir-view/tree-dir-view';
+
 
 class MainPanel extends Component {
 
@@ -49,7 +50,7 @@ class MainPanel extends Component {
               <a className="btn btn-secondary btn-topbar" onClick={this.onEditClick}>{gettext("Edit Page")}</a>
            </div>
           <div className="common-toolbar">
-            <Search  onSearchedClick={this.props.onSearchedClick}/>
+            {isPro && <Search  onSearchedClick={this.props.onSearchedClick}/>}
             <Account />
           </div>
         </div>
