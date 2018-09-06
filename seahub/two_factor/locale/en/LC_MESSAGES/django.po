@@ -1,0 +1,232 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the PACKAGE package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: PACKAGE VERSION\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2018-09-06 15:47+0800\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"Language: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+
+#: seahub/two_factor/forms.py:18 seahub/two_factor/models/phone.py:33
+msgid "Method"
+msgstr ""
+
+#: seahub/two_factor/forms.py:29
+msgid "Phone Number"
+msgstr ""
+
+#: seahub/two_factor/forms.py:39 seahub/two_factor/forms.py:63
+#: seahub/two_factor/forms.py:167 seahub/two_factor/forms.py:173
+#: seahub/two_factor/forms.py:294
+msgid "Token"
+msgstr ""
+
+#: seahub/two_factor/models/base.py:23 seahub/two_factor/models/phone.py:18
+msgid "Phone Call"
+msgstr ""
+
+#: seahub/two_factor/models/base.py:25 seahub/two_factor/models/phone.py:19
+msgid "Text Message"
+msgstr ""
+
+#: seahub/two_factor/models/base.py:29
+msgid "Token generator"
+msgstr ""
+
+#: seahub/two_factor/templates/two_factor/_wizard_actions.html:4
+#: seahub/two_factor/templates/two_factor/profile/disable.html:12
+msgid "Cancel"
+msgstr ""
+
+#: seahub/two_factor/templates/two_factor/_wizard_actions.html:5
+msgid "Next"
+msgstr ""
+
+#: seahub/two_factor/templates/two_factor/core/backup_tokens.html:6
+msgid "Backup Tokens"
+msgstr ""
+
+#: seahub/two_factor/templates/two_factor/core/backup_tokens.html:8
+msgid ""
+"Backup tokens can be used when your primary and backup\n"
+"      phone numbers aren't available. The backup tokens below can be used\n"
+"      for login verification. If you've used up all your backup tokens, you\n"
+"      can generate a new set of backup tokens. Only the backup tokens shown\n"
+"      below will be valid."
+msgstr ""
+
+#: seahub/two_factor/templates/two_factor/core/backup_tokens.html:20
+msgid "Print these tokens and keep them somewhere safe."
+msgstr ""
+
+#: seahub/two_factor/templates/two_factor/core/backup_tokens.html:22
+msgid "You don't have any backup codes yet."
+msgstr ""
+
+#: seahub/two_factor/templates/two_factor/core/backup_tokens.html:26
+#: seahub/two_factor/templates/two_factor/core/setup_complete.html:12
+#: seahub/two_factor/templates/two_factor/core/setup_complete.html:19
+msgid "Back to Profile"
+msgstr ""
+
+#: seahub/two_factor/templates/two_factor/core/backup_tokens.html:27
+msgid "Generate Tokens"
+msgstr ""
+
+#: seahub/two_factor/templates/two_factor/core/login.html:7
+msgid "Two-Factor Authentication"
+msgstr ""
+
+#: seahub/two_factor/templates/two_factor/core/login.html:13
+msgid ""
+"We are calling your phone right now, please enter the\n"
+"            digits you hear."
+msgstr ""
+
+#: seahub/two_factor/templates/two_factor/core/login.html:16
+msgid ""
+"We sent you a text message, please enter the tokens we\n"
+"            sent."
+msgstr ""
+
+#: seahub/two_factor/templates/two_factor/core/login.html:19
+msgid ""
+"Open the two-factor authentication app on your device to view your "
+"authentication token and verify your identify."
+msgstr ""
+
+#: seahub/two_factor/templates/two_factor/core/login.html:22
+msgid "Authentication token"
+msgstr ""
+
+#: seahub/two_factor/templates/two_factor/core/login.html:27
+#, python-format
+msgid "Remember this computer for %(remember_days)s days"
+msgstr ""
+
+#: seahub/two_factor/templates/two_factor/core/login.html:31
+#: seahub/two_factor/templates/two_factor/core/login.html:50
+msgid "Incorrect code"
+msgstr ""
+
+#: seahub/two_factor/templates/two_factor/core/login.html:35
+#: seahub/two_factor/templates/two_factor/core/login.html:55
+msgid "Verify"
+msgstr ""
+
+#: seahub/two_factor/templates/two_factor/core/login.html:40
+msgid "Don't have your phone?"
+msgstr ""
+
+#: seahub/two_factor/templates/two_factor/core/login.html:41
+msgid "Enter a two-factor backup code"
+msgstr ""
+
+#: seahub/two_factor/templates/two_factor/core/login.html:47
+msgid "Backup code"
+msgstr ""
+
+#: seahub/two_factor/templates/two_factor/core/login.html:54
+msgid ""
+"You can enter one of your backup codes in case you lost access to your "
+"mobile device."
+msgstr ""
+
+#: seahub/two_factor/templates/two_factor/core/setup.html:6
+#: seahub/two_factor/templates/two_factor/core/setup_complete.html:5
+msgid "Enable Two-Factor Authentication"
+msgstr ""
+
+#: seahub/two_factor/templates/two_factor/core/setup.html:9
+msgid ""
+"You are about to take your account security to the\n"
+"        next level. Follow the steps in this wizard to enable two-factor\n"
+"        authentication."
+msgstr ""
+
+#: seahub/two_factor/templates/two_factor/core/setup.html:13
+msgid ""
+"Please select which authentication method you would\n"
+"        like to use."
+msgstr ""
+
+#: seahub/two_factor/templates/two_factor/core/setup.html:16
+msgid ""
+"To start using a token generator, please use your\n"
+"        smartphone to scan the QR code below. For example, use Google\n"
+"        Authenticator. Then, enter the token generated by the app.\n"
+"        "
+msgstr ""
+
+#: seahub/two_factor/templates/two_factor/core/setup.html:22
+msgid ""
+"Please enter the phone number you wish to receive the\n"
+"      text messages on. This number will be validated in the next step.\n"
+"      "
+msgstr ""
+
+#: seahub/two_factor/templates/two_factor/core/setup.html:26
+msgid ""
+"Please enter the phone number you wish to be called on.\n"
+"      This number will be validated in the next step. "
+msgstr ""
+
+#: seahub/two_factor/templates/two_factor/core/setup.html:31
+msgid ""
+"We are calling your phone right now, please enter the\n"
+"          digits you hear."
+msgstr ""
+
+#: seahub/two_factor/templates/two_factor/core/setup.html:34
+msgid ""
+"We sent you a text message, please enter the tokens we\n"
+"          sent."
+msgstr ""
+
+#: seahub/two_factor/templates/two_factor/core/setup.html:45
+msgid ""
+"To identify and verify your YubiKey, please insert a\n"
+"      token in the field below. Your YubiKey will be linked to your\n"
+"      account."
+msgstr ""
+
+#: seahub/two_factor/templates/two_factor/core/setup_complete.html:7
+msgid ""
+"Congratulations, you've successfully enabled two-factor\n"
+"      authentication."
+msgstr ""
+
+#: seahub/two_factor/templates/two_factor/core/setup_complete.html:14
+msgid ""
+"However, it might happen that you don't have access to\n"
+"      your primary token device. To enable account recovery, add a phone \n"
+"      number."
+msgstr ""
+
+#: seahub/two_factor/templates/two_factor/core/setup_complete.html:21
+msgid "Add Phone Number"
+msgstr ""
+
+#: seahub/two_factor/templates/two_factor/profile/disable.html:6
+msgid "Disable Two-Factor Authentication"
+msgstr ""
+
+#: seahub/two_factor/templates/two_factor/profile/disable.html:8
+msgid ""
+"You are about to disable two-factor authentication. This\n"
+"    compromises your account security, are you sure?"
+msgstr ""
+
+#: seahub/two_factor/templates/two_factor/profile/disable.html:11
+msgid "Disable"
+msgstr ""

@@ -10,8 +10,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: seahub\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2018-09-04 15:05+0800\n"
-"PO-Revision-Date: 2018-09-04 06:58+0000\n"
+"POT-Creation-Date: 2018-09-06 15:47+0800\n"
+"PO-Revision-Date: 2018-09-06 07:45+0000\n"
 "Last-Translator: zheng xie <xiez1989@gmail.com>\n"
 "Language-Team: Russian (http://www.transifex.com/haiwen/seahub/language/ru/)\n"
 "MIME-Version: 1.0\n"
@@ -19,18 +19,6 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Language: ru\n"
 "Plural-Forms: nplurals=4; plural=(n%10==1 && n%100!=11 ? 0 : n%10>=2 && n%10<=4 && (n%100<12 || n%100>14) ? 1 : n%10==0 || (n%10>=5 && n%10<=9) || (n%100>=11 && n%100<=14)? 2 : 3);\n"
-
-#: frontend/src/components/MainPanel.js:36
-msgid "Edit Page"
-msgstr "Редактировать страницу"
-
-#: frontend/src/components/MainPanel.js:46
-msgid "Wikis"
-msgstr "Wiki"
-
-#: frontend/src/components/SidePanel.js:291
-msgid "Pages"
-msgstr "Страницы"
 
 #: frontend/src/components/account.js:91
 msgid "System Admin"
@@ -48,41 +36,42 @@ msgstr "Настройки"
 msgid "Log out"
 msgstr "Выход"
 
-#: frontend/src/components/menu-component/menu-dialog/create-fileforder-dialog.js:82
-#: frontend/src/components/menu-component/node-menu.js:106
-#: frontend/src/components/menu-component/node-menu.js:114
+#: frontend/src/components/menu-component/menu-dialog/create-fileforder-dialog.js:74
+#: frontend/src/components/menu-component/node-menu.js:29
+#: frontend/src/components/menu-component/node-menu.js:37
 #: static/scripts/app/views/dir.js:771
 msgid "New File"
 msgstr "Новый файл"
 
-#: frontend/src/components/menu-component/menu-dialog/create-fileforder-dialog.js:82
-#: frontend/src/components/menu-component/node-menu.js:105
-#: frontend/src/components/menu-component/node-menu.js:113
+#: frontend/src/components/menu-component/menu-dialog/create-fileforder-dialog.js:74
+#: frontend/src/components/menu-component/node-menu.js:28
+#: frontend/src/components/menu-component/node-menu.js:36
 msgid "New Folder"
 msgstr "Новая папка"
 
-#: frontend/src/components/menu-component/menu-dialog/create-fileforder-dialog.js:90
+#: frontend/src/components/menu-component/menu-dialog/create-fileforder-dialog.js:82
+#: frontend/src/components/tree-dir-view/tree-dir-view.js:16
 msgid "Name"
 msgstr "Имя"
 
-#: frontend/src/components/menu-component/menu-dialog/create-fileforder-dialog.js:92
+#: frontend/src/components/menu-component/menu-dialog/create-fileforder-dialog.js:84
 msgid "newName"
 msgstr "Новое имя"
 
-#: frontend/src/components/menu-component/menu-dialog/create-fileforder-dialog.js:98
-#: frontend/src/components/menu-component/menu-dialog/rename-dialog.js:71
+#: frontend/src/components/menu-component/menu-dialog/create-fileforder-dialog.js:90
+#: frontend/src/components/menu-component/menu-dialog/rename-dialog.js:70
 msgid "Submit"
 msgstr "Отправить"
 
-#: frontend/src/components/menu-component/menu-dialog/create-fileforder-dialog.js:99
-#: frontend/src/components/menu-component/menu-dialog/rename-dialog.js:72
+#: frontend/src/components/menu-component/menu-dialog/create-fileforder-dialog.js:91
+#: frontend/src/components/menu-component/menu-dialog/rename-dialog.js:71
 #: static/scripts/app/views/fileupload.js:21
 msgid "Cancel"
 msgstr "Отменить"
 
 #: frontend/src/components/menu-component/menu-dialog/delete-dialog.js:16
-#: frontend/src/components/menu-component/node-menu.js:116
-#: frontend/src/components/menu-component/node-menu.js:124
+#: frontend/src/components/menu-component/node-menu.js:39
+#: frontend/src/components/menu-component/node-menu.js:47
 #: static/scripts/app/views/fileupload.js:22
 #: static/scripts/sysadmin-app/views/device-trusted-ipaddress.js:27
 msgid "Delete"
@@ -100,88 +89,108 @@ msgstr "ДА"
 msgid "NO"
 msgstr "НЕТ"
 
-#: frontend/src/components/menu-component/menu-dialog/rename-dialog.js:65
+#: frontend/src/components/menu-component/menu-dialog/rename-dialog.js:64
 #: static/scripts/app/views/dialogs/dirent-rename.js:39
 msgid "Rename File"
 msgstr "Переименовать файл"
 
-#: frontend/src/components/menu-component/menu-dialog/rename-dialog.js:65
+#: frontend/src/components/menu-component/menu-dialog/rename-dialog.js:64
 #: static/scripts/app/views/dialogs/dirent-rename.js:39
 msgid "Rename Folder"
 msgstr "Переименовать папку"
 
-#: frontend/src/components/menu-component/menu-dialog/rename-dialog.js:67
+#: frontend/src/components/menu-component/menu-dialog/rename-dialog.js:66
 msgid "Enter the new file name:"
 msgstr "Введите новое имя файла:"
 
-#: frontend/src/components/menu-component/menu-dialog/rename-dialog.js:67
+#: frontend/src/components/menu-component/menu-dialog/rename-dialog.js:66
 msgid "Enter the new folder name:"
 msgstr "Введите новое имя папки:"
 
-#: frontend/src/components/menu-component/node-menu.js:115
-#: frontend/src/components/menu-component/node-menu.js:123
+#: frontend/src/components/menu-component/node-menu.js:38
+#: frontend/src/components/menu-component/node-menu.js:46
 msgid "Rename"
 msgstr "Переименовать"
 
-#: frontend/src/components/search.js:198
+#: frontend/src/components/search.js:199
 msgid "Search files in this wiki"
 msgstr "Поиск файлов в wiki"
 
+#: frontend/src/components/tree-dir-view/tree-dir-view.js:17
+msgid "Size"
+msgstr ""
+
+#: frontend/src/components/tree-dir-view/tree-dir-view.js:18
+msgid "Last Update"
+msgstr ""
+
+#: frontend/src/pages/wiki/main-panel.js:49
+msgid "Edit Page"
+msgstr "Редактировать страницу"
+
+#: frontend/src/pages/wiki/main-panel.js:59
+msgid "Wikis"
+msgstr "Wiki"
+
+#: frontend/src/pages/wiki/side-panel.js:176
+msgid "Pages"
+msgstr "Страницы"
+
 #: seahub/templates/priv/ali.js:8
 msgid "Preview-Edit-on-Cloud library"
-msgstr ""
+msgstr "Предпросмотр и изменение библиотеки в облаке"
 
 #: seahub/templates/priv/ali.js:9
 msgid "Preview-on-Cloud library"
-msgstr ""
+msgstr "Предпросмотр библиотеки в облаке"
 
 #: seahub/templates/priv/ali.js:10
 msgid "Admin access"
-msgstr ""
+msgstr "Доступ администратора"
 
 #: seahub/templates/priv/ali.js:12
 msgid "Read-Write folder"
-msgstr ""
+msgstr "Чтение и запись папки"
 
 #: seahub/templates/priv/ali.js:13
 msgid "Read-Only folder"
-msgstr ""
+msgstr "Только чтение папки"
 
 #: seahub/templates/priv/ali.js:14
 msgid "Preview-Edit-on-Cloud folder"
-msgstr ""
+msgstr "Предпросмотр и изменение папки в облаке"
 
 #: seahub/templates/priv/ali.js:15
 msgid "Preview-on-Cloud folder"
-msgstr ""
+msgstr "Предпросмотр папки в облаке"
 
 #: seahub/templates/priv/ali.js:17
 msgid "Preview-Edit-on-Cloud"
-msgstr ""
+msgstr "Предпросмотр и изменение в облаке"
 
 #: seahub/templates/priv/ali.js:18
 msgid "Preview-on-Cloud"
-msgstr ""
+msgstr "Предпросмотр в облаке"
 
 #: seahub/templates/priv/ali.js:21
 msgid "Read-Write-Sync"
-msgstr ""
+msgstr "Чтение, запись и синхронизация"
 
 #: seahub/templates/priv/ali.js:22
 msgid "Read-Only-Sync"
-msgstr ""
+msgstr "Чтение и только синхронизация"
 
 #: seahub/templates/priv/ali.js:23
 msgid "Co-Owner"
-msgstr ""
+msgstr "Совладелец"
 
 #: seahub/templates/priv/ali.js:24
 msgid "Edit-on-Cloud"
-msgstr ""
+msgstr "Изменение в облаке"
 
 #: seahub/templates/priv/ali.js:25
 msgid "View-on-Cloud"
-msgstr ""
+msgstr "Просмотр в облаке"
 
 #: static/scripts/app/models/deleted-repo.js:19
 #: static/scripts/app/models/repo.js:59 static/scripts/common.js:343
@@ -211,7 +220,7 @@ msgstr "Имя обязательно"
 #: static/scripts/app/models/repo.js:37
 #: static/scripts/app/views/dialogs/dirent-rename.js:65
 #: static/scripts/app/views/dir.js:667 static/scripts/app/views/dir.js:727
-#: static/scripts/app/views/dirent.js:514
+#: static/scripts/app/views/dirent.js:515
 #: static/scripts/app/views/group-repo.js:131
 #: static/scripts/app/views/repo.js:187
 msgid "Name should not include '/'."
@@ -350,7 +359,7 @@ msgstr "Успешно скопировано %(name)s"
 
 #: static/scripts/app/views/dialogs/dirent-rename.js:59
 #: static/scripts/app/views/dir.js:662 static/scripts/app/views/dir.js:722
-#: static/scripts/app/views/dirent.js:508
+#: static/scripts/app/views/dirent.js:509
 #: static/scripts/app/views/group-repo.js:125
 #: static/scripts/app/views/groups.js:118
 #: static/scripts/app/views/invitations.js:65
@@ -613,7 +622,7 @@ msgid "locked by {placeholder}"
 msgstr "заблокирован {placeholder}"
 
 #: static/scripts/app/views/dirent-grid.js:187
-#: static/scripts/app/views/dirent.js:415
+#: static/scripts/app/views/dirent.js:416
 msgid "Successfully deleted %(name)s"
 msgstr "Успешно удалено %(name)s"
 
