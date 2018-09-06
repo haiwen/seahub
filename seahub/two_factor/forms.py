@@ -15,7 +15,7 @@ from .utils import totp_digits
 
 
 class MethodForm(forms.Form):
-    method = forms.ChoiceField(label=_("Method"),
+    method = forms.ChoiceField(label="Method",
                                initial='generator',
                                widget=forms.RadioSelect)
 
@@ -26,7 +26,7 @@ class MethodForm(forms.Form):
 
 class PhoneNumberForm(ModelForm):
     # Cannot use PhoneNumberField, as it produces a PhoneNumber object, which cannot be serialized.
-    number = forms.CharField(label=_("Phone Number")
+    number = forms.CharField(label="Phone Number"
                              #validators=[validate_international_phonenumber]
     )
 
