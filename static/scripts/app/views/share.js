@@ -30,7 +30,6 @@ define([
             this.dirent_path = options.dirent_path;
             this.obj_name = options.obj_name;
             this.is_dir = options.is_dir;
-            this.can_preview = options.can_preview;
 
             // share to user/group
             var enable_dir_private_share = false;
@@ -89,20 +88,16 @@ define([
 
             // show 'can edit' perm option for download link or not
             var show_link_edit_perm_option = false;
-            var show_link_preview_only_perm_option = true;
             var file_ext = '';
             if (!this.is_dir && this.obj_name.lastIndexOf('.') != -1) {
                 file_ext = this.obj_name.substr(this.obj_name.lastIndexOf('.') + 1)
                     .toLowerCase();
             }
-            if (this.user_perm == 'rw' && !this.is_dir &&
+            if (app.pageOptions.is_pro &&
                 (app.pageOptions.enable_office_web_app ||
                  app.pageOptions.enable_onlyoffice) &&
                 (file_ext == 'docx' || file_ext == 'xlsx' || file_ext == 'pptx')) {
                 show_link_edit_perm_option = true;
-            }
-            if (!this.is_dir && !this.can_preview) {
-                show_link_preview_only_perm_option = false;
             }
 
             this.$el.html(this.template({
@@ -115,7 +110,6 @@ define([
                 show_admin_perm_option: show_admin_perm_option,
 
                 show_link_edit_perm_option: show_link_edit_perm_option,
-                show_link_preview_only_perm_option: show_link_preview_only_perm_option,
 
                 user_perm: this.user_perm,
                 repo_id: this.repo_id,

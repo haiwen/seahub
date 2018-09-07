@@ -34,7 +34,6 @@ from seahub.share.models import UploadLinkShare, ExtraSharePermission, ExtraGrou
 from seahub.signals import upload_file_successful
 from seahub.views import get_unencry_rw_repos_by_user, \
     get_diff, check_folder_permission
-from seahub.views.file import can_preview_file
 from seahub.group.utils import is_group_member, is_group_admin_or_owner, \
     get_group_member_info
 import seahub.settings as settings
@@ -322,9 +321,6 @@ def list_lib_dir(request, repo_id):
             if fpath in starred_files:
                 dirent.starred = True
 
-            can_preview, err_msg = can_preview_file(dirent.obj_name, file_size, repo)
-            dirent.can_preview = can_preview
-
             file_list.append(dirent)
 
     if is_org_context(request):
@@ -394,7 +390,6 @@ def list_lib_dir(request, repo_id):
         f_['file_size'] = filesizeformat(f.file_size)
         f_['obj_id'] = f.obj_id
         f_['perm'] = f.permission # perm for file in current dir
-        f_['can_preview'] = f.can_preview # if user can preview current file
 
         if not repo.encrypted and ENABLE_THUMBNAIL:
             # used for providing a way to determine

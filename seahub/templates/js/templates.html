@@ -1165,7 +1165,7 @@
     <div id="share-tabs" class="nav-con-tabs">
         <ul class="nav-con-tabs-nav">
             <% if (!repo_encrypted && can_generate_share_link) { %>
-            <li class="tab"><a href="#download-link-share" class="a">{% trans "Share Link" %}</a></li>
+            <li class="tab"><a href="#download-link-share" class="a">{% trans "Download Link" %}</a></li>
             <% } %>
             <% if (is_dir) { %>
                 <% if (user_perm == 'rw' && !repo_encrypted && can_generate_upload_link) { %>
@@ -2223,7 +2223,7 @@
     <div id="repo-shared-links" class="nav-con-tabs js-tabs">
         <ul class="nav-con-tabs-nav">
             <% if (can_generate_share_link) { %>
-            <li class="tab"><a href="#js-download-links" class="a">{% trans "Share Links" %}</a></li>
+            <li class="tab"><a href="#js-download-links" class="a">{% trans "Download Links" %}</a></li>
             <% } %>
             <% if (can_generate_upload_link) { %>
             <li class="tab"><a href="#js-upload-links" class="a">{% trans "Upload Links" %}</a></li>
@@ -2631,7 +2631,7 @@
 <div class="cur-view-path ovhd">
     <ul class="tab-tabs-nav fleft">
         <li class="tab ui-state-active">
-            <a href="#share-admin-share-links/" class="a">{% trans "Share Links" %}</a>
+            <a href="#share-admin-share-links/" class="a">{% trans "Download Links" %}</a>
         </li>
         <% if (app.pageOptions.can_generate_upload_link) { %>
         <li class="tab">
@@ -2669,7 +2669,7 @@
     <ul class="tab-tabs-nav fleft">
         <% if (app.pageOptions.can_generate_share_link) { %>
         <li class="tab">
-            <a href="#share-admin-share-links/" class="a">{% trans "Share Links" %}</a>
+            <a href="#share-admin-share-links/" class="a">{% trans "Download Links" %}</a>
         </li>
         <% } %>
         <li class="tab ui-state-active">

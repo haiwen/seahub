@@ -330,13 +330,6 @@ def can_preview_file(file_name, file_size, repo=None):
 
     file_type, file_ext = get_file_type_and_ext(file_name)
 
-
-    if ENABLE_OFFICE_WEB_APP and file_ext in OFFICE_WEB_APP_FILE_EXTENSION:
-        return (True, None)
-
-    if ENABLE_ONLYOFFICE and file_ext in ONLYOFFICE_FILE_EXTENSION:
-        return (True, None)
-
     if repo and repo.encrypted and (file_type in (DOCUMENT, SPREADSHEET)):
         return (False, _(u'The library is encrypted, can not open file online.'))
 
