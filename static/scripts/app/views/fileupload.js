@@ -1,6 +1,7 @@
 define([
     'common',
     'backbone',
+    'jquery.iframe-transport', // for IE 9
     'jquery.fileupload-ui'
 ], function(Common, Backbone, FileUpload) {
 
@@ -342,7 +343,8 @@ define([
                 }
                 var path = dirents.path;
                 path = path == '/' ? path : path + '/';
-                if (data.formData.parent_dir != path) {
+                var parent_dir = popup.fileupload('option','formData').parent_dir;
+                if (parent_dir != path) {
                     return;
                 }
                 if (!file_path) {
@@ -479,7 +481,7 @@ define([
             popup.fileupload(
                 'option',
                 'redirect',
-                window.location.href.replace(/\/repo\/[-a-z0-9]{36}\/.*/, app.config.mediaUrl + 'cors/result.html?%s')
+                location.protocol + '//' + location.host + app.config.mediaUrl + 'cors/result.html?%s'
             );
 
         },
