@@ -445,7 +445,10 @@
     <div id="basic-upload" class="inline-block">
         <button class="basic-upload-btn btn-white hidden-sm-down">{% trans "Upload" %}</button>
         <span class="basic-upload-btn sf2-icon-upload mobile-icon hidden-md-up" aria-label="{% trans "Upload" %}"></span>
-        <input id="basic-upload-input" class="hide" type="file" name="file" multiple />
+        <!--[if lt IE 10]>
+        <input class="basic-upload-input" type="file" name="file" multiple />
+        <![endif]-->
+        <input class="basic-upload-input hide" type="file" name="file" multiple />
     </div>
     <% if (app.pageOptions.enable_upload_folder) { %>
     <div id="advanced-upload" class="sf-dropdown sf-dropdown-inline">
