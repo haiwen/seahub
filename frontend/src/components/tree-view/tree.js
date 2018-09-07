@@ -116,7 +116,7 @@ class Tree {
     return false;
   }
 
-  setTreeToInactivate() {
+  resetTreeState() {
     function cb(treeNode) {
       treeNode.isExpanded = false;
       return false;
