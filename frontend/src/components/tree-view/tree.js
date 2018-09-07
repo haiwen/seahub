@@ -2,6 +2,9 @@ import Node from './node';
 import moment from 'moment';
 import { bytesToSize } from '../utils';
 
+const lang = window.app.config.lang;
+moment.locale(lang)
+
 class Tree {
   
   constructor() {
