@@ -34,6 +34,7 @@ from seahub.utils import (is_org_context, is_valid_username,
 from seahub.share.signals import share_repo_to_user_successful, share_repo_to_group_successful
 from seahub.constants import PERMISSION_READ, PERMISSION_READ_WRITE, \
         PERMISSION_ADMIN
+
 from seahub.group.utils import is_group_admin_or_owner
 from seahub.options.models import GroupOptions
 
