@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2018-09-06 15:47+0800\n"
+"POT-Creation-Date: 2018-09-07 10:41+0800\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -31,6 +31,10 @@ msgstr ""
 
 #: frontend/src/components/account.js:135
 msgid "Log out"
+msgstr ""
+
+#: frontend/src/components/markdown-viewer.js:186
+msgid "Last modified by"
 msgstr ""
 
 #: frontend/src/components/menu-component/menu-dialog/create-fileforder-dialog.js:74
@@ -121,11 +125,11 @@ msgstr ""
 msgid "Last Update"
 msgstr ""
 
-#: frontend/src/pages/wiki/main-panel.js:49
+#: frontend/src/pages/wiki/main-panel.js:50
 msgid "Edit Page"
 msgstr ""
 
-#: frontend/src/pages/wiki/main-panel.js:59
+#: frontend/src/pages/wiki/main-panel.js:60
 msgid "Wikis"
 msgstr ""
 

@@ -13,9 +13,9 @@ msgid ""
 msgstr ""
 "Project-Id-Version: seahub\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2018-09-06 16:33+0800\n"
-"PO-Revision-Date: 2018-09-06 08:35+0000\n"
-"Last-Translator: zheng xie <xiez1989@gmail.com>\n"
+"POT-Creation-Date: 2018-09-06 15:47+0800\n"
+"PO-Revision-Date: 2018-09-07 02:44+0000\n"
+"Last-Translator: C_Q <helloworld.c@outlook.com>\n"
 "Language-Team: Greek (http://www.transifex.com/haiwen/seahub/language/el/)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -1844,8 +1844,6 @@ msgstr "Παρακαλώ κάντε κλικ και επιλέγξτε μια β
 #: seahub/templates/view_shared_upload_link.html:86
 #: seahub/templates/wiki/personal_wiki.html:59
 #: seahub/templates/wiki/wiki_list.html:85
-#: seahub/two_factor/templates/two_factor/_wizard_actions.html:4
-#: seahub/two_factor/templates/two_factor/profile/disable.html:12
 msgid "Cancel"
 msgstr "Ακύρωση"
 
@@ -3881,7 +3879,6 @@ msgstr "Προηγούμενο"
 #: seahub/templates/sysadmin/sys_trafficadmin.html:42
 #: seahub/templates/sysadmin/sys_upload_link_admin.html:47
 #: seahub/templates/sysadmin/useradmin_paginator.html:7
-#: seahub/two_factor/templates/two_factor/_wizard_actions.html:5
 msgid "Next"
 msgstr "Επόμενο"
 
@@ -4045,7 +4042,6 @@ msgstr "Γλώσσα"
 #: seahub/profile/templates/profile/set_profile.html:23
 #: seahub/profile/templates/profile/set_profile.html:110
 #: seahub/templates/sysadmin/userinfo.html:112
-#: seahub/two_factor/templates/two_factor/core/login.html:7
 msgid "Two-Factor Authentication"
 msgstr "Πιστοποίηση δυο παραγόντων"
 
@@ -4120,7 +4116,6 @@ msgstr ""
 #: seahub/profile/templates/profile/set_profile.html:114
 #: seahub/templates/sysadmin/userinfo.html:116
 #: seahub/templates/sysadmin/userinfo.html:118
-#: seahub/two_factor/templates/two_factor/profile/disable.html:6
 msgid "Disable Two-Factor Authentication"
 msgstr ""
 
@@ -4148,7 +4143,6 @@ msgid ""
 msgstr ""
 
 #: seahub/profile/templates/profile/set_profile.html:128
-#: seahub/two_factor/templates/two_factor/core/setup.html:6
 msgid "Enable Two-Factor Authentication"
 msgstr ""
 
@@ -6857,9 +6851,6 @@ msgstr ""
 #: seahub/templates/sysadmin/sys_link_search.html:22
 #: seahub/templates/sysadmin/sys_publink_admin.html:28
 #: seahub/templates/sysadmin/sys_upload_link_admin.html:22
-#: seahub/two_factor/forms.py:39 seahub/two_factor/forms.py:63
-#: seahub/two_factor/forms.py:167 seahub/two_factor/forms.py:173
-#: seahub/two_factor/forms.py:294
 msgid "Token"
 msgstr ""
 
@@ -7512,96 +7503,6 @@ msgstr ""
 
 #: seahub/thumbnail/views.py:154
 msgid "Invalid token."
-msgstr ""
-
-#: seahub/two_factor/templates/two_factor/core/backup_tokens.html:6
-msgid "Backup Tokens"
-msgstr ""
-
-#: seahub/two_factor/templates/two_factor/core/backup_tokens.html:8
-msgid ""
-"Backup tokens can be used when your primary and backup\n"
-"      phone numbers aren't available. The backup tokens below can be used\n"
-"      for login verification. If you've used up all your backup tokens, you\n"
-"      can generate a new set of backup tokens. Only the backup tokens shown\n"
-"      below will be valid."
-msgstr ""
-
-#: seahub/two_factor/templates/two_factor/core/backup_tokens.html:20
-msgid "Print these tokens and keep them somewhere safe."
-msgstr ""
-
-#: seahub/two_factor/templates/two_factor/core/backup_tokens.html:22
-msgid "You don't have any backup codes yet."
-msgstr ""
-
-#: seahub/two_factor/templates/two_factor/core/backup_tokens.html:26
-msgid "Back to Profile"
-msgstr ""
-
-#: seahub/two_factor/templates/two_factor/core/backup_tokens.html:27
-msgid "Generate Tokens"
-msgstr ""
-
-#: seahub/two_factor/templates/two_factor/core/login.html:19
-msgid ""
-"Open the two-factor authentication app on your device to view your "
-"authentication token and verify your identify."
-msgstr ""
-
-#: seahub/two_factor/templates/two_factor/core/login.html:22
-msgid "Authentication token"
-msgstr ""
-
-#: seahub/two_factor/templates/two_factor/core/login.html:27
-#, python-format
-msgid "Remember this computer for %(remember_days)s days"
-msgstr ""
-
-#: seahub/two_factor/templates/two_factor/core/login.html:31
-#: seahub/two_factor/templates/two_factor/core/login.html:50
-msgid "Incorrect code"
-msgstr ""
-
-#: seahub/two_factor/templates/two_factor/core/login.html:35
-#: seahub/two_factor/templates/two_factor/core/login.html:55
-msgid "Verify"
-msgstr ""
-
-#: seahub/two_factor/templates/two_factor/core/login.html:40
-msgid "Don't have your phone?"
-msgstr ""
-
-#: seahub/two_factor/templates/two_factor/core/login.html:41
-msgid "Enter a two-factor backup code"
-msgstr ""
-
-#: seahub/two_factor/templates/two_factor/core/login.html:47
-msgid "Backup code"
-msgstr ""
-
-#: seahub/two_factor/templates/two_factor/core/login.html:54
-msgid ""
-"You can enter one of your backup codes in case you lost access to your "
-"mobile device."
-msgstr ""
-
-#: seahub/two_factor/templates/two_factor/core/setup.html:16
-msgid ""
-"To start using a token generator, please use your\n"
-"        smartphone to scan the QR code below. For example, use Google\n"
-"        Authenticator. Then, enter the token generated by the app.\n"
-"        "
-msgstr ""
-
-#: seahub/two_factor/templates/two_factor/profile/disable.html:8
-msgid ""
-"You are about to disable two-factor authentication. This\n"
-"    compromises your account security, are you sure?"
-msgstr ""
-
-#: seahub/two_factor/templates/two_factor/profile/disable.html:11
-msgid "Disable"
 msgstr ""
 
 #: seahub/utils/__init__.py:128

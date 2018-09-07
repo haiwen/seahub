@@ -7,9 +7,9 @@ msgid ""
 msgstr ""
 "Project-Id-Version: seahub\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2018-09-06 16:33+0800\n"
-"PO-Revision-Date: 2018-09-06 08:03+0000\n"
-"Last-Translator: ldphuong <ldphuong@gmail.com>\n"
+"POT-Creation-Date: 2018-09-07 10:41+0800\n"
+"PO-Revision-Date: 2018-09-07 02:45+0000\n"
+"Last-Translator: C_Q <helloworld.c@outlook.com>\n"
 "Language-Team: Vietnamese (http://www.transifex.com/haiwen/seahub/language/vi/)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -32,6 +32,10 @@ msgstr "Cài đặt"
 #: frontend/src/components/account.js:135
 msgid "Log out"
 msgstr "Đăng xuất"
+
+#: frontend/src/components/markdown-viewer.js:186
+msgid "Last modified by"
+msgstr ""
 
 #: frontend/src/components/menu-component/menu-dialog/create-fileforder-dialog.js:74
 #: frontend/src/components/menu-component/node-menu.js:29
@@ -121,11 +125,11 @@ msgstr "Dung lượng"
 msgid "Last Update"
 msgstr "Cập nhật"
 
-#: frontend/src/pages/wiki/main-panel.js:49
+#: frontend/src/pages/wiki/main-panel.js:50
 msgid "Edit Page"
 msgstr "Chỉnh sửa trang"
 
-#: frontend/src/pages/wiki/main-panel.js:59
+#: frontend/src/pages/wiki/main-panel.js:60
 msgid "Wikis"
 msgstr ""
 

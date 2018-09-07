@@ -12,9 +12,9 @@ msgid ""
 msgstr ""
 "Project-Id-Version: seahub\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2018-09-06 16:33+0800\n"
-"PO-Revision-Date: 2018-09-06 08:35+0000\n"
-"Last-Translator: Teppo Sarjonen <teppo.sarjonen@gmail.com>\n"
+"POT-Creation-Date: 2018-09-06 15:47+0800\n"
+"PO-Revision-Date: 2018-09-07 02:44+0000\n"
+"Last-Translator: C_Q <helloworld.c@outlook.com>\n"
 "Language-Team: Finnish (http://www.transifex.com/haiwen/seahub/language/fi/)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -1843,8 +1843,6 @@ msgstr "Klikkaa ja valitse kirjasto. "
 #: seahub/templates/view_shared_upload_link.html:86
 #: seahub/templates/wiki/personal_wiki.html:59
 #: seahub/templates/wiki/wiki_list.html:85
-#: seahub/two_factor/templates/two_factor/_wizard_actions.html:4
-#: seahub/two_factor/templates/two_factor/profile/disable.html:12
 msgid "Cancel"
 msgstr "Peruuta"
 
@@ -3880,7 +3878,6 @@ msgstr "Jälkimmäinen"
 #: seahub/templates/sysadmin/sys_trafficadmin.html:42
 #: seahub/templates/sysadmin/sys_upload_link_admin.html:47
 #: seahub/templates/sysadmin/useradmin_paginator.html:7
-#: seahub/two_factor/templates/two_factor/_wizard_actions.html:5
 msgid "Next"
 msgstr "Seuraava"
 
@@ -4044,7 +4041,6 @@ msgstr "Kieli"
 #: seahub/profile/templates/profile/set_profile.html:23
 #: seahub/profile/templates/profile/set_profile.html:110
 #: seahub/templates/sysadmin/userinfo.html:112
-#: seahub/two_factor/templates/two_factor/core/login.html:7
 msgid "Two-Factor Authentication"
 msgstr "Kaksisuuntainen tunnistautuminen"
 
@@ -4119,7 +4115,6 @@ msgstr "käytössä"
 #: seahub/profile/templates/profile/set_profile.html:114
 #: seahub/templates/sysadmin/userinfo.html:116
 #: seahub/templates/sysadmin/userinfo.html:118
-#: seahub/two_factor/templates/two_factor/profile/disable.html:6
 msgid "Disable Two-Factor Authentication"
 msgstr "Poista kaksisuuntainen tunnistautuminen käytöstä"
 
@@ -4147,7 +4142,6 @@ msgid ""
 msgstr "Kaksitasoinen todennus ei ole käytössä tilissäsi. Ota kaksitasoinen tunnistus käyttöön suojataksesi paremmin tilisi."
 
 #: seahub/profile/templates/profile/set_profile.html:128
-#: seahub/two_factor/templates/two_factor/core/setup.html:6
 msgid "Enable Two-Factor Authentication"
 msgstr "Ota käyttöön Kaksisuuntainen Tunnistautuminen"
 
@@ -6856,9 +6850,6 @@ msgstr "Vinkki:syötä vähintään 3 merkkiä."
 #: seahub/templates/sysadmin/sys_link_search.html:22
 #: seahub/templates/sysadmin/sys_publink_admin.html:28
 #: seahub/templates/sysadmin/sys_upload_link_admin.html:22
-#: seahub/two_factor/forms.py:39 seahub/two_factor/forms.py:63
-#: seahub/two_factor/forms.py:167 seahub/two_factor/forms.py:173
-#: seahub/two_factor/forms.py:294
 msgid "Token"
 msgstr "Varmenne"
 
@@ -7512,96 +7503,6 @@ msgstr "Esikatselukuvan luonti epäonnistui."
 #: seahub/thumbnail/views.py:154
 msgid "Invalid token."
 msgstr "Virheellinen tunniste."
-
-#: seahub/two_factor/templates/two_factor/core/backup_tokens.html:6
-msgid "Backup Tokens"
-msgstr "Varmuuskopioi Varmenteet"
-
-#: seahub/two_factor/templates/two_factor/core/backup_tokens.html:8
-msgid ""
-"Backup tokens can be used when your primary and backup\n"
-"      phone numbers aren't available. The backup tokens below can be used\n"
-"      for login verification. If you've used up all your backup tokens, you\n"
-"      can generate a new set of backup tokens. Only the backup tokens shown\n"
-"      below will be valid."
-msgstr "Vara varmenteita voi käyttää kun pääasiallinen ja vara\n puhelinnumeri eivät ole käytettävissä. vara varmenteita voi \nsilloin käyttää kirjautumisen vahvistamiseen. Jos olet käyttänyt kaikki vara varmenteet, voit\nluoda uuden joukon varavarmenteita. Vain alapuolella listatut\n vara varmenteet ovat voimassa.  "
-
-#: seahub/two_factor/templates/two_factor/core/backup_tokens.html:20
-msgid "Print these tokens and keep them somewhere safe."
-msgstr "Tulosta nämä varmenteet ja säilytä ne jossain turvassa."
-
-#: seahub/two_factor/templates/two_factor/core/backup_tokens.html:22
-msgid "You don't have any backup codes yet."
-msgstr "Sinulla ei ole vielä varakoodeja."
-
-#: seahub/two_factor/templates/two_factor/core/backup_tokens.html:26
-msgid "Back to Profile"
-msgstr "Takaisin Profiiliin"
-
-#: seahub/two_factor/templates/two_factor/core/backup_tokens.html:27
-msgid "Generate Tokens"
-msgstr "Luo Varmenteita"
-
-#: seahub/two_factor/templates/two_factor/core/login.html:19
-msgid ""
-"Open the two-factor authentication app on your device to view your "
-"authentication token and verify your identify."
-msgstr "Avaa kaksitasoinen autentikointi -sovellus laitteellasi, jotta voit katsoa todennusvarmenteen ja vahvistaa identiteettisi."
-
-#: seahub/two_factor/templates/two_factor/core/login.html:22
-msgid "Authentication token"
-msgstr "Todennusvarmenne"
-
-#: seahub/two_factor/templates/two_factor/core/login.html:27
-#, python-format
-msgid "Remember this computer for %(remember_days)s days"
-msgstr "Muista tämä tietokone %(remember_days)s päivää"
-
-#: seahub/two_factor/templates/two_factor/core/login.html:31
-#: seahub/two_factor/templates/two_factor/core/login.html:50
-msgid "Incorrect code"
-msgstr "Väärä koodi"
-
-#: seahub/two_factor/templates/two_factor/core/login.html:35
-#: seahub/two_factor/templates/two_factor/core/login.html:55
-msgid "Verify"
-msgstr "Vahvista"
-
-#: seahub/two_factor/templates/two_factor/core/login.html:40
-msgid "Don't have your phone?"
-msgstr "Eikö sinulla ole puhelinta?"
-
-#: seahub/two_factor/templates/two_factor/core/login.html:41
-msgid "Enter a two-factor backup code"
-msgstr "Syötä kaksitasoinen varakoodi"
-
-#: seahub/two_factor/templates/two_factor/core/login.html:47
-msgid "Backup code"
-msgstr "Varmuuskopioi koodi"
-
-#: seahub/two_factor/templates/two_factor/core/login.html:54
-msgid ""
-"You can enter one of your backup codes in case you lost access to your "
-"mobile device."
-msgstr "Voit syöttää yhden varakoodeistasi, jos menetät pääsyn mobiililaitteeseesi."
-
-#: seahub/two_factor/templates/two_factor/core/setup.html:16
-msgid ""
-"To start using a token generator, please use your\n"
-"        smartphone to scan the QR code below. For example, use Google\n"
-"        Authenticator. Then, enter the token generated by the app.\n"
-"        "
-msgstr "Aloita varmenne generaattorin käyttäminen, ole hyvä ja käytä älypuhelinta alla olevan QR-koodin skannauksessa. Käytä esimerkiksi\n Google Authenticator sovellusta. Sitten syötä\n sovelluksen luoma varmenne."
-
-#: seahub/two_factor/templates/two_factor/profile/disable.html:8
-msgid ""
-"You are about to disable two-factor authentication. This\n"
-"    compromises your account security, are you sure?"
-msgstr "Olet poistamassa kaksitasoisen todennuksen käytöstä. Tämä vaarantaa tilisi turvallisuuden, oletko varma?"
-
-#: seahub/two_factor/templates/two_factor/profile/disable.html:11
-msgid "Disable"
-msgstr "Poista käytöstä"
 
 #: seahub/utils/__init__.py:128
 msgid "permission error"
