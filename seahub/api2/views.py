@@ -4308,7 +4308,7 @@ class Groups(APIView):
             return api_error(status.HTTP_400_BAD_REQUEST,
                              "Operation can only be rename.")
 
-class GroupShared(APIView):
+class GroupSettings(APIView):
     authentication_classes = (TokenAuthentication, SessionAuthentication)
     permission_classes = (IsAuthenticated,)
     throttle_classes = (UserRateThrottle,)
@@ -4334,17 +4334,17 @@ class GroupShared(APIView):
         if not is_group_staff(group, request.user):
             return api_error(status.HTTP_403_FORBIDDEN, 'Only administrators can add group members')
         options_key = request.data.get('shared_repo', None)
-	if not options_key:
+        if not options_key:
             return api_error(status.HTTP_400_BAD_REQUEST, 'Request name error')
 
         shared_repo = request.data.get('shared_repo', None)
         if shared_repo == '1' or shared_repo == '0':
-            gpd =  models.GroupOptions.objects.filter(group_id=group_id, option_key='shared_repo').first()
-            if not gpd:
+            switch_data = models.GroupOptions.objects.filter(group_id=group_id, option_key='shared_repo').first()
+            if not switch_data:
                 models.GroupOptions.objects.create(group_id=group_id, option_key='shared_repo', option_val=shared_repo)
             else:
-                gpd.option_val=shared_repo
-                gpd.save()
+                switch_data.option_val=shared_repo
+                switch_data.save()
             return HttpResponse(json.dumps({'success': True}), status=200, content_type="application/json")
         else:
             return api_error(status.HTTP_400_BAD_REQUEST, 'input 0 or 1')

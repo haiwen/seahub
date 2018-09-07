@@ -412,8 +412,10 @@ class DirSharedItemsEndpoint(APIView):
                         })
                     continue
 
-                gpd = models.GroupOptions.objects.filter(group_id=gid, option_key='shared_repo').first()
-                if not int(gpd.option_val):
+                switch_data = models.GroupOptions.objects.filter(group_id=gid, option_key='shared_repo').first()
+                if switch_data is None:
+                    pass
+                elif not int(switch_data.option_val):
                     if not is_group_admin_or_owner(gid, username):
                         error_msg = 'Permission denied.'
                         return api_error(status.HTTP_403_FORBIDDEN, error_msg)
