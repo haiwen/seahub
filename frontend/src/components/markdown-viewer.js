@@ -6,6 +6,8 @@ import WikiOutline from './wiki-outline';
 
 var URL = require('url-parse');
 
+const gettext = window.gettext;
+
 require('@seafile/seafile-editor/src/lib/code-hight-package');
 
 const contentClass = "wiki-md-viewer-rendered-content";
@@ -181,7 +183,7 @@ class MarkdownViewer extends React.Component {
             renderingContent={this.state.renderingContent} html={this.state.html}
             onLinkClick={this.props.onLinkClick}
           />
-          <p id="wiki-page-last-modified">Last modified by {this.props.latestContributor}, <span>{this.props.lastModified}</span></p>
+          <p id="wiki-page-last-modified">{gettext("Last modified by")} {this.props.latestContributor}, <span>{this.props.lastModified}</span></p>
         </div>
         <div className="markdown-outline">
             <WikiOutline 
