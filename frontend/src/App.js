@@ -96,7 +96,7 @@ class EditorUtilities {
         url = serviceUrl + "/lib/" + repoID + "/file" + encodeURIComponent(fileNode.path());
       }
     } else {
-      url = serviceUrl + "/#common/lib/" + repoID + "/" + encodeURIComponent(fileNode.path());
+      url = serviceUrl + "/#common/lib/" + repoID + encodeURIComponent(fileNode.path());
     }
     return url;
   }
@@ -108,7 +108,7 @@ class EditorUtilities {
 
   
   isInternalDirLink(url) {
-    var re = new RegExp(serviceUrl + "/#[a-z\-]*?/lib/" + "[0-9a-f\-]{36}/.*");
+    var re = new RegExp(serviceUrl + "/#[a-z\-]*?/lib/" + "[0-9a-f\-]{36}.*");
     return re.test(url);
   }
 

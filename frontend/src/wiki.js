@@ -98,6 +98,9 @@ class Wiki extends Component {
     if (this.isInternalMarkdownLink(url)) {
       let path = this.getPathFromInternalMarkdownLink(url);
       this.initMainPanelData(path);
+    } else if (this.isInternalDirLink(url)) {
+      let path = this.getPathFromInternalDirLink(url);
+      this.initWikiData(path);
     } else {
       window.location.href = url;
     }
@@ -424,10 +427,31 @@ class Wiki extends Component {
     return re.test(url);
   }
 
+  isInternalDirLink(url) {
+    var re = new RegExp(serviceUrl + '/#[a-z\-]*?/lib/' + repoID + '/.*');
+    return re.test(url);
+  }
+
   getPathFromInternalMarkdownLink(url) {
     var re = new RegExp(serviceUrl + '/lib/' + repoID + '/file' + "(.*\.md)");
     var array = re.exec(url);
     var path = decodeURIComponent(array[1]);
+    return path;
+  }
+
+  getPathFromInternalDirLink(url) {
+    var re = new RegExp(serviceUrl + '/#[a-z\-]*?/lib/' + repoID + "(/.*)");
+    var array = re.exec(url);
+    var path = decodeURIComponent(array[1]);
+
+    var dirPath = path.substring(1);
+    var re = new RegExp("(^/.*)");
+    if (re.test(dirPath)) {
+      path = dirPath;
+    } else {
+      path = '/' + dirPath
+    }
+
     return path;
   }
 
