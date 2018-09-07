@@ -34,10 +34,8 @@ from seahub.utils import (is_org_context, is_valid_username,
 from seahub.share.signals import share_repo_to_user_successful, share_repo_to_group_successful
 from seahub.constants import PERMISSION_READ, PERMISSION_READ_WRITE, \
         PERMISSION_ADMIN
-
-from seahub.options import models
-from seahub.group.utils import validate_group_name, check_group_name_conflict, \
-    is_group_member, is_group_admin, is_group_owner, is_group_admin_or_owner
+from seahub.group.utils import is_group_admin_or_owner
+from seahub.options.models import GroupOptions
 
 logger = logging.getLogger(__name__)
 json_content_type = 'application/json; charset=utf-8'
@@ -412,13 +410,15 @@ class DirSharedItemsEndpoint(APIView):
                         })
                     continue
 
-                switch_data = models.GroupOptions.objects.filter(group_id=gid, option_key='shared_repo').first()
-                if switch_data is None:
+                switch_data = GroupOptions.objects.filter(group_id=gid, option_key='shared_repo').first()
+                if switch_data == None:
                     pass
+
                 elif not int(switch_data.option_val):
                     if not is_group_admin_or_owner(gid, username):
                         error_msg = 'Permission denied.'
                         return api_error(status.HTTP_403_FORBIDDEN, error_msg)
+
                 group = ccnet_api.get_group(gid)
                 if not group:
                     result['failed'].append({

@@ -131,8 +131,7 @@ from seaserv import seafserv_threaded_rpc, \
     create_org, ccnet_api, send_message
 
 from constance import config
-from seahub.group.utils import validate_group_name, check_group_name_conflict, \
-    is_group_member, is_group_admin, is_group_owner, is_group_admin_or_owner
+from seahub.group.utils import is_group_admin_or_owner
 
 logger = logging.getLogger(__name__)
 json_content_type = 'application/json; charset=utf-8'
@@ -4314,9 +4313,8 @@ class GroupSettings(APIView):
 
     def put(self, request, group_id, format=None):
         """
-        group_shared
+        Database shares access to group switch Settings
         """
-        group_id = group_id
         username = request.user.username
         if not is_group_admin_or_owner(group_id, username):
             error_msg = 'Permission denied.'
@@ -4328,6 +4326,7 @@ class GroupSettings(APIView):
 
         if not is_group_staff(group, request.user):
             return api_error(status.HTTP_403_FORBIDDEN, 'Only administrators can add group members')
+
         options_key = request.data.get('shared_repo', None)
         if not options_key:
             return api_error(status.HTTP_400_BAD_REQUEST, 'Request name error')
@@ -4341,6 +4340,7 @@ class GroupSettings(APIView):
                 switch_data.option_val=shared_repo
                 switch_data.save()
             return HttpResponse(json.dumps({'success': True}), status=200, content_type="application/json")
+
         else:
             return api_error(status.HTTP_400_BAD_REQUEST, 'input 0 or 1')
 
