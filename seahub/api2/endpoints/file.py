@@ -22,6 +22,7 @@ from seahub.utils import check_filename_with_rename, is_pro_version, \
 from seahub.utils.timeutils import timestamp_to_isoformat_timestr
 from seahub.views import check_folder_permission
 from seahub.utils.file_op import check_file_lock, if_locked_by_online_office
+from seahub.views.file import can_preview_file
 
 from seahub.settings import MAX_UPLOAD_FILE_NAME_LEN, \
     FILE_LOCK_EXPIRATION_DAYS, OFFICE_TEMPLATE_ROOT
@@ -52,6 +53,10 @@ class FileView(APIView):
             logger.error(e)
             is_locked = False
 
+        repo = seafile_api.get_repo(repo_id)
+        can_preview, err_msg = can_preview_file(file_obj.obj_name,
+                file_obj.size, repo)
+
         file_info = {
             'type': 'file',
             'repo_id': repo_id,
@@ -61,6 +66,7 @@ class FileView(APIView):
             'size': file_obj.size,
             'mtime': timestamp_to_isoformat_timestr(file_obj.mtime),
             'is_locked': is_locked,
+            'can_preview': can_preview,
         }
 
         return file_info
