@@ -131,7 +131,6 @@ from seaserv import seafserv_threaded_rpc, \
     create_org, ccnet_api, send_message
 
 from constance import config
-from seahub.options import models
 from seahub.group.utils import validate_group_name, check_group_name_conflict, \
     is_group_member, is_group_admin, is_group_owner, is_group_admin_or_owner
 
@@ -4317,17 +4316,13 @@ class GroupSettings(APIView):
         """
         group_shared
         """
-        try:
-            group_id_int = int(group_id)
-        except ValueError:
-            return api_error(status.HTTP_400_BAD_REQUEST, 'Invalid group ID')
-
+        group_id = group_id
         username = request.user.username
         if not is_group_admin_or_owner(group_id, username):
             error_msg = 'Permission denied.'
             return api_error(status.HTTP_403_FORBIDDEN, error_msg)
 
-        group = get_group(group_id_int)
+        group = get_group(group_id)
         if not group:
             return api_error(status.HTTP_404_NOT_FOUND, 'Group not found')
 
@@ -4339,9 +4334,9 @@ class GroupSettings(APIView):
 
         shared_repo = request.data.get('shared_repo', None)
         if shared_repo == '1' or shared_repo == '0':
-            switch_data = models.GroupOptions.objects.filter(group_id=group_id, option_key='shared_repo').first()
+            switch_data = GroupOptions.objects.filter(group_id=group_id, option_key='shared_repo').first()
             if not switch_data:
-                models.GroupOptions.objects.create(group_id=group_id, option_key='shared_repo', option_val=shared_repo)
+                GroupOptions.objects.create(group_id=group_id, option_key='shared_repo', option_val=shared_repo)
             else:
                 switch_data.option_val=shared_repo
                 switch_data.save()
