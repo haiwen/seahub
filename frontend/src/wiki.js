@@ -154,6 +154,13 @@ class Wiki extends Component {
       this.enterViewFileState(tree, node, node.path);
     } else if(node instanceof Node && node.isDir()){
       let tree = this.state.tree_data.clone();
+      if (this.state.filePath === node.path) {
+        if (node.isExpanded) {
+          tree.setTreeToUnActivated();
+        } else {
+          tree.setNodeToActivated(node);
+        }
+      }
       this.exitViewFileState(tree, node);
     } else {
       const w=window.open('about:blank');
