@@ -412,13 +412,11 @@ class DirSharedItemsEndpoint(APIView):
                     continue
 
                 switch_data = GroupOptions.objects.filter(group_id=gid, option_key='shared_repo').first()
-                if switch_data == None:
-                    pass
-
-                elif not int(switch_data.option_val):
-                    if not is_group_admin_or_owner(gid, username):
-                        error_msg = 'Permission denied.'
-                        return api_error(status.HTTP_403_FORBIDDEN, error_msg)
+                if switch_data is not None:
+                    if int(switch_data.option_val) == 0 and \
+                        not is_group_admin_or_owner(gid, username):
+                            error_msg = 'Permission denied.'
+                            return api_error(status.HTTP_403_FORBIDDEN, error_msg)
 
                 group = ccnet_api.get_group(gid)
                 if not group:
