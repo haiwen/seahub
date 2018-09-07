@@ -37,6 +37,7 @@ from seaserv import get_repo, send_message, get_commits, \
     seafserv_threaded_rpc
 from pysearpc import SearpcError
 
+from seahub.auth import REDIRECT_FIELD_NAME
 from seahub.tags.models import FileUUIDMap
 from seahub.wopi.utils import get_wopi_dict
 from seahub.onlyoffice.utils import get_onlyoffice_dict
@@ -963,7 +964,10 @@ def view_shared_file(request, fileshare):
     can_edit = fileshare.get_permissions()['can_edit']
 
     if can_edit and not request.user.is_authenticated():
-        return render_error(request, _(u'Permission denied'))
+        login_url = settings.LOGIN_URL
+        path = urlquote(request.get_full_path())
+        tup = login_url, REDIRECT_FIELD_NAME, path
+        return HttpResponseRedirect('%s?%s=%s' % tup)
 
     # Increase file shared link view_cnt, this operation should be atomic
     fileshare.view_cnt = F('view_cnt') + 1
