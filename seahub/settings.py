@@ -266,7 +266,7 @@ AUTHENTICATION_BACKENDS = (
 ENABLE_OAUTH = False
 ENABLE_WATERMARK = False
 
-# show_claen
+# allow user to clean library trash
 ENABLE_USER_CLEAN_TRASH = True
 
 LOGIN_REDIRECT_URL = '/profile/'
