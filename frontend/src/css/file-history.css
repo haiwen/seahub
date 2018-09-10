@@ -1,0 +1,95 @@
+.history-heading {
+  height: 2rem;
+  line-height: 2rem;
+}
+
+.go-back {
+  font-size: 25px;
+  padding-right: 5px;
+  color:#ccc;
+}
+
+.go-back:hover {
+  color:#ff9933;
+  text-decoration: none;
+}
+
+.doc-name {
+  font-size: 25px;
+}
+
+.panel-heading {
+  position: relative;
+  padding: .5rem 0rem;
+  width: 100%;
+  border-bottom: 1px solid #e8e8e8;
+  font-size: 1rem;
+  font-weight: normal;
+  line-height: 1.5;
+  height: 40px;
+  text-align: center;
+}
+
+.history .history-body {
+  flex: 1;
+  display: flex;
+  min-height: 0;
+}
+
+.history-list-container {
+  flex: 1; 
+  flex-direction: column;
+  overflow: auto;
+}
+
+.history-list-container .history-list-item {
+  margin-top: 0.5rem;
+  padding: 0 0.8rem;
+  display: flex;
+  flex: 1;
+}
+
+.history-list-item .history-info {
+  flex: 1;
+  padding: 0 0.5rem;
+}
+
+.history-list-item .history-operation {
+  width: 1.5rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.history-info .time {
+  color: #000;
+}
+
+.history-info .owner {
+  margin-top: 0.25rem;
+  color: #888;
+  display: flex;
+  align-items: center;
+}
+
+.owner .squire-icon {
+  width: 0.5rem;
+  height: 0.5rem;
+  background-color: #549b5a;
+  margin-right: 0.25rem;
+}
+
+.history-body .dropdown-menu {
+  min-width: 8rem;
+}
+
+.history-body .dropdown-menu a {
+  text-decoration: none;
+  color: #6e7687;
+}
+
+.history-viewer-contanier {
+  flex: 1;
+  overflow: auto;
+}
+
