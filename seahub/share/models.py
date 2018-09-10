@@ -14,6 +14,7 @@ from seahub.base.fields import LowerCaseCharField
 from seahub.utils import normalize_file_path, normalize_dir_path, gen_token,\
     get_service_url
 from seahub.constants import PERMISSION_READ, PERMISSION_ADMIN
+from seahub.utils import is_valid_org_id
 
 # Get an instance of a logger
 logger = logging.getLogger(__name__)
@@ -84,7 +85,8 @@ def check_share_link_common(request, sharelink, is_upload_link=False):
 
 class FileShareManager(models.Manager):
     def _add_file_share(self, username, repo_id, path, s_type,
-                        password=None, expire_date=None, permission='view_download'):
+                        password=None, expire_date=None,
+                        permission='view_download', org_id=None):
         if password is not None:
             password_enc = make_password(password)
         else:
@@ -96,6 +98,10 @@ class FileShareManager(models.Manager):
             s_type=s_type, password=password_enc, expire_date=expire_date,
             permission=permission)
         fs.save()
+
+        if is_valid_org_id(org_id):
+            OrgFileShare.objects.set_org_file_share(org_id, fs)
+
         return fs
 
     def _get_file_share_by_path(self, username, repo_id, path):
@@ -124,12 +130,13 @@ class FileShareManager(models.Manager):
 
     ########## public methods ##########
     def create_file_link(self, username, repo_id, path, password=None,
-                         expire_date=None, permission='view_download'):
+                         expire_date=None, permission='view_download',
+                         org_id=None):
         """Create download link for file.
         """
         path = normalize_file_path(path)
         return self._add_file_share(username, repo_id, path, 'f', password,
-                                    expire_date, permission)
+                                    expire_date, permission, org_id)
 
     def get_file_link_by_path(self, username, repo_id, path):
         path = normalize_file_path(path)
@@ -139,12 +146,13 @@ class FileShareManager(models.Manager):
         return self._get_valid_file_share_by_token(token)
 
     def create_dir_link(self, username, repo_id, path, password=None,
-                        expire_date=None, permission='view_download'):
+                        expire_date=None, permission='view_download',
+                        org_id=None):
         """Create download link for directory.
         """
         path = normalize_dir_path(path)
         return self._add_file_share(username, repo_id, path, 'd', password,
-                                    expire_date, permission)
+                                    expire_date, permission, org_id)
 
     def get_dir_link_by_path(self, username, repo_id, path):
         path = normalize_dir_path(path)
