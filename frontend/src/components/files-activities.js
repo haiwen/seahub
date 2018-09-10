@@ -175,7 +175,7 @@ class FilesActivities extends Component {
 
   componentDidMount() {
     const pageNum = 1 
-    this.props.seafileAPI.getActivities(pageNum)
+    this.props.seafileAPI.listActivities(pageNum)
     .then(res => {
       // not logged in
       if (res.status == 403) {

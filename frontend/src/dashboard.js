@@ -6,7 +6,7 @@ import MainPanel from './pages/dashboard/main-panel';
 import Account from './components/account';
 import Notification from './components/notification';
 
-import { SeafileAPI } from './seafile-api';
+import { SeafileAPI } from 'seafile-js';
 import cookie from 'react-cookies';
 
 import 'seafile-ui';
@@ -15,7 +15,7 @@ import './css/dashboard.css';
 const siteRoot = window.app.config.siteRoot;
 
 let seafileAPI = new SeafileAPI();
-let xcsrfHeaders = cookie.load('csrftoken');
+let xcsrfHeaders = cookie.load('sfcsrftoken');
 seafileAPI.initForSeahubUsage({ siteRoot, xcsrfHeaders });
 
 class DashBoard extends Component {
