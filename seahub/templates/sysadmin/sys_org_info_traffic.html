@@ -1,32 +1,16 @@
-{% extends "sysadmin/base.html" %}
+{% extends "sysadmin/sys_org_info_base.html" %}
 {% load seahub_tags i18n staticfiles %}
 
 {% block extra_style %}
 <link rel="stylesheet" type="text/css" href="{{MEDIA_URL}}css/jquery-ui.datepicker.min.css" />
 {% endblock %}
 
-{% block cur_statistic %}tab-cur{% endblock %}
-
 {% block right_panel %}
-<div class="tabnav ovhd">
-    <ul class="tabnav-tabs fleft">
-        <li class="tabnav-tab"><a href="{% url 'sys_statistic_file' %}">{% trans "File" %}</a></li>
-        <li class="tabnav-tab"><a href="{% url 'sys_statistic_storage' %}">{% trans "Storage" %}</a></li>
-        <li class="tabnav-tab"><a href="{% url 'sys_statistic_user' %}">{% trans "Users" %}</a></li>
-        <li class="tabnav-tab tabnav-tab-cur"><a href="{% url 'sys_statistic_traffic' %}">{% trans "Traffic" %}</a></li>
-    </ul>
+<div class="tabnav">
+    {% with cur_tab='traffic' %}
+    {% include 'sysadmin/snippets/sys_org_info_nav.html' %}
+    {% endwith %}
 </div>
-
-{% if traffic_stats_enabled %}
-<ul class="traffic-tab-nav">
-    <li class="tab tab-cur">
-        <a href="{% url 'sys_statistic_traffic' %}" class="a">{% trans "System" %}</a>
-    </li>
-    <li class="tab">
-        <a href="{{ SITE_ROOT }}sys/trafficadmin/" class="a">{% trans "Share Link" %}</a>
-    </li>
-</ul>
-{% endif %}
 
 <div class="system-statistic-time-range ovhd">
     <div class="sf-btn-group fleft">
@@ -66,6 +50,7 @@
 <script type="text/javascript" src="{{MEDIA_URL}}js/Chart.bundle.min.js"></script>
 <script type="text/javascript" src="{% static "scripts/lib/jquery-ui.min.js" %}"></script>
 <script type="text/javascript">
+{% include 'sysadmin/sys_org_set_quota_js.html' %}
 
 // date picker for date-custom
 $.datepicker.setDefaults({
@@ -101,7 +86,7 @@ function getStatistic(options) {
     var $canvas = $('.traffic-chart', $chart);
 
     $.ajax({
-        url: '{% url 'api-v2.1-admin-statistics-system-traffic' %}',
+        url: '{% url 'api-v2.1-admin-org-stats-traffic' org.org_id %}',
         cache: false,
         data: options,
         dataType: 'json',
@@ -261,10 +246,10 @@ function renderChart(data, group_by) {
                 },
                 tooltips: {
                     callbacks: {
-                        label: function(tooltipItem, data) {
-                            return data.datasets[tooltipItem.datasetIndex].label + ': '
-                                + quotaSizeFormat(tooltipItem.yLabel);
-                        }
+						label: function(tooltipItem, data) {
+							return data.datasets[tooltipItem.datasetIndex].label + ': '
+								+ quotaSizeFormat(tooltipItem.yLabel);
+						}
                     }
                 },
                 scales: {

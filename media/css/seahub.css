@@ -4335,6 +4335,25 @@ img.thumbnail {
 .traffic-chart {
     margin:0 0 20px;
 }
+.traffic-tab-nav {
+    margin:10px 0 16px;
+}
+.traffic-tab-nav .tab {
+    display:inline-block;
+    margin-right:.7em;
+}
+.traffic-tab-nav .a {
+    color:#8a948f;
+    font-weight:normal;
+    padding:.3em 0;
+    border-bottom:2px solid transparent;
+}
+.traffic-tab-nav .tab-cur .a,
+.traffic-tab-nav .tab .a:hover {
+    color:#eb8205;
+    text-decoration:none;
+    border-bottom-color:#eb8205;
+}
 
 /* system info */
 .license-file-upload {

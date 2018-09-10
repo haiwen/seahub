@@ -457,6 +457,7 @@ urlpatterns = [
     url(r'^sys/orgadmin/(?P<org_id>\d+)/user/$', sys_org_info_user, name='sys_org_info_user'),
     url(r'^sys/orgadmin/(?P<org_id>\d+)/group/$', sys_org_info_group, name='sys_org_info_group'),
     url(r'^sys/orgadmin/(?P<org_id>\d+)/library/$', sys_org_info_library, name='sys_org_info_library'),
+    url(r'^sys/orgadmin/(?P<org_id>\d+)/traffic/$', sys_org_info_traffic, name='sys_org_info_traffic'),
     url(r'^sys/orgadmin/(?P<org_id>\d+)/setting/$', sys_org_info_setting, name='sys_org_info_setting'),
     url(r'^sys/instadmin/$', sys_inst_admin, name='sys_inst_admin'),
     url(r'^sys/instadmin/(?P<inst_id>\d+)/remove/$', sys_inst_remove, name='sys_inst_remove'),
