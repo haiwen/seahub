@@ -64,6 +64,21 @@ class EditorUtilities {
     return seafileAPI.getAccountInfo();
   }
 
+  getFileDownloadLink(repoID, filePath) {
+    return seafileAPI.getFileDownloadLink(repoID, filePath);
+  }
+
+  getFileContent(repoID, filePath) {
+    return seafileAPI.getFileContent(repoID, filePath);
+  }
+
+  getFileHistoryRecord(repo_id, path, page, per_page) {
+    return seafileAPI.getFileHistoryRecord(repo_id, path, page, per_page);
+  }
+  
+  revertFile(repo_id, path, commit_id) {
+    return seafileAPI.revertFile(repo_id, path, commit_id);
+  }
 }
 
 const editorUtilities = new EditorUtilities();

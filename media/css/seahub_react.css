@@ -58,6 +58,7 @@
 .icon-caret-down:before           { content: "\f0d7"; }
 .icon-caret-left:before           { content: "\f0d9"; }
 .icon-search:before               { content: "\f002"; }
+.icon-chevron-left:before         { content: "\f053"; }
 
 /* common class and element style*/
 a { color:#eb8205; }
