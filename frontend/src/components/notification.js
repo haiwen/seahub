@@ -1,6 +1,7 @@
 import React from 'react';
 
 const gettext = window.gettext;
+
 class Notification extends React.Component {
   constructor(props) {
     super(props);
@@ -14,20 +15,27 @@ class Notification extends React.Component {
     this.setState({
       showNotice: !this.state.showNotice
     })
+
     if (!this.state.showNotice) {
       this.loadNotices()
+    }
+
+    if (this.state.showNotice) {
+      this.props.seafileAPI.updateNotifications()
     }
   }
 
   loadNotices = () => {
-    this.props.seafileAPI.getPopupNotices().then(res => {
+    this.props.seafileAPI.listPopupNotices().then(res => {
       this.setState({
         notice_html: res.data.notice_html
       })
-    }) 
+    })
   }
 
   render() {
+    const { notice_html } = this.state;
+
     return (
       <div id="notifications">
         <a href="#" onClick={this.onClick} className="no-deco" id="notice-icon" title="Notifications" aria-label="Notifications">
@@ -41,7 +49,8 @@ class Notification extends React.Component {
             <a href="#" onClick={this.onClick} title={gettext('Close')} aria-label={gettext('Close')} className="sf-popover-close js-close sf2-icon-x1 op-icon float-right"></a>
           </div>
           <div className="sf-popover-con">
-            <ul className="notice-list" dangerouslySetInnerHTML={{__html: this.state.notice_html}}></ul>
+              <ul className="notice-list" dangerouslySetInnerHTML={{__html: notice_html}}>
+              </ul>
             <a href="/notification/list/" className="view-all">{gettext('See All Notifications')}</a>
           </div>
         </div>
