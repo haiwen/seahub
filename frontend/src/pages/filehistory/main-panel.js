@@ -1,5 +1,6 @@
 import React from 'react';
 import Prism from 'prismjs';
+import "../../css/initial-style.css";
 require('@seafile/seafile-editor/src/lib/code-hight-package');
 
 const contentClass = "markdown-viewer-render-content";

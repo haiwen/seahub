@@ -11,7 +11,6 @@ class HistoryListView extends React.Component {
     if (isBottom) {
       this.props.reloadMore();
     }
-
   }
 
   render() {
@@ -24,7 +23,9 @@ class HistoryListView extends React.Component {
               item={item}
               isFirstItem={index === 0}
               isItemFrezeed={this.props.isItemFrezeed}
+              currentItem={this.props.currentItem}
               onMenuControlClick={this.props.onMenuControlClick}
+              onHistoryItemClick={this.props.onHistoryItemClick}
             />
           );
         })}

@@ -1,6 +1,15 @@
+#wrapper {
+  background-color: #fafaf9;
+  border-radius: 10px;
+}
+
+.history, .markdown-viewer-render-content {
+  background-color: #fff;
+}
+
 .history-heading {
-  height: 2rem;
-  line-height: 2rem;
+  height: 3.1875rem;
+  line-height: 3.1875rem;
 }
 
 .go-back {
@@ -26,7 +35,7 @@
   font-size: 1rem;
   font-weight: normal;
   line-height: 1.5;
-  height: 40px;
+  height: 36px;
   text-align: center;
 }
 
@@ -47,6 +56,19 @@
   padding: 0 0.8rem;
   display: flex;
   flex: 1;
+}
+
+.history-list-container .history-list-item:hover {
+  background-color: #eee;
+}
+
+.high-light {
+  color: #fff;
+  background-color: #feac74 !important;
+}
+
+.high-light i {
+  color: #fff;
 }
 
 .history-list-item .history-info {
@@ -91,5 +113,10 @@
 .history-viewer-contanier {
   flex: 1;
   overflow: auto;
+}
+
+.markdown-viewer-render-content {
+  margin: 20px 40px;
+  border: 1px solid #e6e6dd;
 }
 
