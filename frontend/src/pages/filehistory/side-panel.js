@@ -1,12 +1,8 @@
 import React from 'react';
+import { PER_PAGE, filePath, fileName } from '../../components/constance';
 import editUtilties from '../../utils/editor-utilties';
 import HistoryListView from '../../components/history-list-view/history-list-view';
 import HistoryListMenu from '../../components/history-list-view/history-list-menu';
-
-const PER_PAGE = 25;
-const REPO_ID = window.fileHistory.pageOptions.repoID;
-const FILE_PATH = window.fileHistory.pageOptions.filePath;
-const FILE_NAME = window.fileHistory.pageOptions.fileName;
 
 class SidePanel extends React.Component {
 
@@ -28,14 +24,18 @@ class SidePanel extends React.Component {
   }
 
   componentDidMount() {
-    editUtilties.getFileHistoryRecord(REPO_ID, FILE_PATH, 1, PER_PAGE).then(res => {
-      this.initResultState(res.data);
-    });
+    this.refershFileList();
     document.addEventListener('click', this.onHideContextMenu);
   }
 
   componentWillUnmount() {
     document.removeEventListener('click', this.onHideContextMenu);
+  }
+
+  refershFileList() {
+    editUtilties.getFileHistoryRecord(filePath, 1, PER_PAGE).then(res => {
+      this.initResultState(res.data);
+    });
   }
 
   initResultState(result) {
@@ -53,7 +53,7 @@ class SidePanel extends React.Component {
   }
 
   updateResultState(result) {
-    if (result.data.length > 0) {
+    if (result.data.length) {
       this.setState({
         historyInfo: [...this.state.historyInfo, ...result.data],
         page: result.page,
@@ -89,19 +89,17 @@ class SidePanel extends React.Component {
     this.setState({
       currentPage: currentPage,
     });
-    editUtilties.getFileHistoryRecord(REPO_ID, FILE_PATH, currentPage, PER_PAGE).then(res => {
+    editUtilties.getFileHistoryRecord(filePath, currentPage, PER_PAGE).then(res => {
       this.updateResultState(res.data);
     });
   }
 
   onRestoreFile = () => {
     this.onHideContextMenu();
-    let commit_id = this.state.currentItem.commit_id;
-    editUtilties.revertFile(REPO_ID, FILE_PATH, commit_id).then(res => {
+    let commitId = this.state.currentItem.commit_id;
+    editUtilties.revertFile(filePath, commitId).then(res => {
       if (res.data.success) {
-        editUtilties.getFileHistoryRecord(REPO_ID, FILE_PATH, 1, PER_PAGE).then(res => {
-          this.initResultState(res.data);
-        });
+        this.refershFileList();
       }
     })
   }
@@ -123,7 +121,7 @@ class SidePanel extends React.Component {
             <a href="javascript:window.history.back()" className="go-back" title="Back">
               <span className="icon-chevron-left"></span>
             </a>
-            <span className="doc-name">{FILE_NAME}</span>
+            <span className="doc-name">{fileName}</span>
           </div>
         </div>
         <div className="side-panel-center history">
