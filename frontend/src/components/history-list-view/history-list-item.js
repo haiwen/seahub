@@ -35,6 +35,9 @@ class HistoryListItem extends React.Component {
   }
 
   onItemClick = () => {
+    if (this.props.item.commit_id === this.props.currentItem.commit_id) {
+      return;
+    }
     this.setState({isShowOperationIcon: false});  //restore to default state
     this.props.onHistoryItemClick(this.props.item);
   }

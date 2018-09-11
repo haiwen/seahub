@@ -1,4 +1,3 @@
-
 export const dirPath = '/';
 export const gettext = window.gettext;
 
