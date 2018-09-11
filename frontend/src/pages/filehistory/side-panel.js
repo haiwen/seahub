@@ -1,8 +1,13 @@
 import React from 'react';
-import { PER_PAGE, filePath, fileName } from '../../components/constance';
+import PropTypes from 'prop-types';
+import { gettext, PER_PAGE, filePath, fileName } from '../../components/constance';
 import editUtilties from '../../utils/editor-utilties';
 import HistoryListView from '../../components/history-list-view/history-list-view';
 import HistoryListMenu from '../../components/history-list-view/history-list-menu';
+
+const propTypes = {
+  onHistoryItemClick: PropTypes.func.isRequired
+};
 
 class SidePanel extends React.Component {
 
@@ -17,10 +22,10 @@ class SidePanel extends React.Component {
       fileOwner: '',
       isListMenuShow: false,
       isFirstItem: false,
-      currentItem: '',
+      currentItem: null,
       menuPosition: {top: '', left: ''},
       isItemFrezeed: false
-    }
+    };
   }
 
   componentDidMount() {
@@ -48,7 +53,7 @@ class SidePanel extends React.Component {
         isError: false,
         fileOwner: result.data[0].creator_email,
         currentItem: result.data[0],
-      })
+      });
     }
   }
 
@@ -61,7 +66,7 @@ class SidePanel extends React.Component {
         isLoading: false,
         isError: false,
         fileOwner: result.data[0].creator_email
-      })
+      });
     }
   }
 
@@ -74,14 +79,14 @@ class SidePanel extends React.Component {
       isListMenuShow: !this.state.isListMenuShow,
       menuPosition: {top: top, left: left},
       isItemFrezeed: !this.state.isItemFrezeed,
-    })
+    });
   }
 
   onHideContextMenu = (e) => {
     this.setState({
       isListMenuShow: false,
       isItemFrezeed: false
-    })
+    });
   }
 
   reloadMore = () => {
@@ -101,7 +106,7 @@ class SidePanel extends React.Component {
       if (res.data.success) {
         this.refershFileList();
       }
-    })
+    });
   }
 
   onDownloadFile = () => {
@@ -125,7 +130,7 @@ class SidePanel extends React.Component {
           </div>
         </div>
         <div className="side-panel-center history">
-          <div className="panel-heading history-heading">版本历史记录</div>
+          <div className="panel-heading history-heading">{gettext('History Versions')}</div>
           <div className="history-body">
             {this.state.isloading && <div className="loading history-loading"></div>}
             {this.state.historyInfo &&
@@ -152,5 +157,7 @@ class SidePanel extends React.Component {
     );
   }
 }
+
+SidePanel.propTypes = propTypes;
 
 export default SidePanel;

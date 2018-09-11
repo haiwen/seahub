@@ -1,13 +1,23 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 import HisotyListItem from './history-list-item';
+
+const propTypes = {
+  isItemFrezeed: PropTypes.bool.isRequired,
+  historyList: PropTypes.array.isRequired,
+  currentItem: PropTypes.object,
+  reloadMore: PropTypes.func.isRequired,
+  onMenuControlClick: PropTypes.func.isRequired,
+  onHistoryItemClick: PropTypes.func.isRequired,
+};
 
 class HistoryListView extends React.Component {
 
   onScrollHandler = (event) => {
-    const clientHeight = event.target.clientHeight
-    const scrollHeight = event.target.scrollHeight
-    const scrollTop    = event.target.scrollTop
-    const isBottom = (clientHeight + scrollTop === scrollHeight)
+    const clientHeight = event.target.clientHeight;
+    const scrollHeight = event.target.scrollHeight;
+    const scrollTop    = event.target.scrollTop;
+    const isBottom = (clientHeight + scrollTop === scrollHeight);
     if (isBottom) {
       this.props.reloadMore();
     }
@@ -33,5 +43,7 @@ class HistoryListView extends React.Component {
     );
   }
 }
+
+HistoryListView.propTypes = propTypes;
 
 export default HistoryListView;
