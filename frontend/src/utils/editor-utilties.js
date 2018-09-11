@@ -1,4 +1,4 @@
-import { slug, repoID, siteRoot } from '../components/constance';
+import { slug, repoID, siteRoot, historyRepoID } from '../components/constance';
 import { SeafileAPI } from 'seafile-js';
 import cookie from 'react-cookies';
 
@@ -64,20 +64,21 @@ class EditorUtilities {
     return seafileAPI.getAccountInfo();
   }
 
-  getFileDownloadLink(repoID, filePath) {
-    return seafileAPI.getFileDownloadLink(repoID, filePath);
+  // file history
+  getFileDownloadLink(filePath) {
+    return seafileAPI.getFileDownloadLink(historyRepoID, filePath);
   }
 
-  getFileContent(repoID, filePath) {
-    return seafileAPI.getFileContent(repoID, filePath);
+  getFileContent(filePath) {
+    return seafileAPI.getFileContent(filePath);
   }
 
-  getFileHistoryRecord(repo_id, path, page, per_page) {
-    return seafileAPI.getFileHistoryRecord(repo_id, path, page, per_page);
+  getFileHistoryRecord(filePath, page, per_page) {
+    return seafileAPI.getFileHistoryRecord(historyRepoID, filePath, page, per_page);
   }
   
-  revertFile(repo_id, path, commit_id) {
-    return seafileAPI.revertFile(repo_id, path, commit_id);
+  revertFile(filePath, commitID) {
+    return seafileAPI.revertFile(historyRepoID, filePath, commitID);
   }
 }
 

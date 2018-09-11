@@ -24,8 +24,8 @@ class HistoryListItem extends React.Component {
     }
   }
 
-  onClick = () => {
-    this.setState({isShowOperationIcon: false});
+  onItemClick = () => {
+    this.setState({isShowOperationIcon: false});  //restore to default state
     this.props.onHistoryItemClick(this.props.item);
   }
 
@@ -46,7 +46,7 @@ class HistoryListItem extends React.Component {
         className={`history-list-item ${isHigtlightItem ? 'high-light' : ''}`} 
         onMouseEnter={this.onMouseEnter} 
         onMouseLeave={this.onMouseLeave}
-        onClick={this.onClick}
+        onClick={this.onItemClick}
       >
         <div className="history-info">
           <div className="time">{time}</div>
