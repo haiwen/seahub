@@ -1,9 +1,15 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 import Prism from 'prismjs';
-import "../../css/initial-style.css";
+import '../../css/initial-style.css';
 require('@seafile/seafile-editor/src/lib/code-hight-package');
 
-const contentClass = "markdown-viewer-render-content";
+const contentClass = 'markdown-viewer-render-content';
+const propTypes = {
+  renderingContent: PropTypes.bool.isRequired,
+  content: PropTypes.string.isRequired,
+};
+
 class MainPanel extends React.Component {
 
   componentDidMount() {
@@ -18,19 +24,21 @@ class MainPanel extends React.Component {
         </div>
         <div className="main-panel-center history-viewer-contanier">
           <div className="content-viewer">
-          { 
-            this.props.renderingContent ? 
-            (<div className={contentClass + " article"}>Loading...</div>) : 
-            (<div 
-              className={contentClass + " article"}
-              dangerouslySetInnerHTML={{ __html: this.props.content }}
-            />)
-          }
+            { 
+              this.props.renderingContent ? 
+                (<div className={contentClass + ' article'}>Loading...</div>) : 
+                (<div 
+                  className={contentClass + ' article'}
+                  dangerouslySetInnerHTML={{ __html: this.props.content }}
+                />)
+            }
           </div>
         </div>
       </div>
     );
   }
 }
+
+MainPanel.propTypes = propTypes;
 
 export default MainPanel;

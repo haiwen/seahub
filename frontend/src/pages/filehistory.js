@@ -9,7 +9,7 @@ import '../assets/css/fa-solid.css';
 import '../assets/css/fa-regular.css';
 import '../assets/css/fontawesome.css';
 import '../css/layout.css';
-import '../css/file-history.css'
+import '../css/file-history.css';
 
 class FileHistory extends React.Component {
 
@@ -19,7 +19,7 @@ class FileHistory extends React.Component {
       content: '',
       renderingContent: true,
       fileOwner: '',
-    }
+    };
   }
 
   componentDidMount() {
@@ -32,10 +32,10 @@ class FileHistory extends React.Component {
           _this.setState({
             renderingContent: false,
             content: String(file)
-          })
-        })
-      })
-    })
+          });
+        });
+      });
+    });
   }
 
   onHistoryItemClick = (item) => {

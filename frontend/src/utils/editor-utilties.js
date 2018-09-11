@@ -9,19 +9,19 @@ seafileAPI.initForSeahubUsage({ siteRoot, xcsrfHeaders });
 class EditorUtilities {
   
   getFiles() {
-    return seafileAPI.listWikiDir(slug, "/").then(items => {
-        const files = items.data.dir_file_list.map(item => {
-          return {
-            name: item.name,
-            type: item.type === 'dir' ? 'dir' : 'file',
-            isExpanded: item.type === 'dir' ? true : false,
-            parent_path: item.parent_dir,
-            last_update_time: item.last_update_time,
-            size: item.size
-          }
-        })
-        return files;
-      })
+    return seafileAPI.listWikiDir(slug, '/').then(items => {
+      const files = items.data.dir_file_list.map(item => {
+        return {
+          name: item.name,
+          type: item.type === 'dir' ? 'dir' : 'file',
+          isExpanded: item.type === 'dir' ? true : false,
+          parent_path: item.parent_dir,
+          last_update_time: item.last_update_time,
+          size: item.size
+        };
+      });
+      return files;
+    });
   }
 
   listRepoDir() {
@@ -43,27 +43,27 @@ class EditorUtilities {
 
 
   createFile(filePath) {
-    return seafileAPI.createFile(repoID, filePath)
+    return seafileAPI.createFile(repoID, filePath);
   }
 
   deleteFile(filePath) {
-    return seafileAPI.deleteFile(repoID, filePath)
+    return seafileAPI.deleteFile(repoID, filePath);
   }
 
   renameFile(filePath, newFileName) {
-    return seafileAPI.renameFile(repoID, filePath, newFileName)
+    return seafileAPI.renameFile(repoID, filePath, newFileName);
   }
 
   createDir(dirPath) {
-    return seafileAPI.createDir(repoID, dirPath)
+    return seafileAPI.createDir(repoID, dirPath);
   }
 
   deleteDir(dirPath) {
-    return seafileAPI.deleteDir(repoID, dirPath)
+    return seafileAPI.deleteDir(repoID, dirPath);
   }
 
   renameDir(dirPath, newDirName) {
-    return seafileAPI.renameDir(repoID, dirPath, newDirName)
+    return seafileAPI.renameDir(repoID, dirPath, newDirName);
   }
 
   getWikiFileContent(slug, filePath) {

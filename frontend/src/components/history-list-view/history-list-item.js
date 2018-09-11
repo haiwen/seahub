@@ -1,15 +1,25 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 import moment from 'moment';
 import NodeMenuControl from '../menu-component/node-menu-control';
 
 moment.locale(window.app.config.lang);
+const propTypes = {
+  isItemFrezeed: PropTypes.bool.isRequired,
+  isFirstItem: PropTypes.bool.isRequired,
+  item: PropTypes.object.isRequired,
+  currentItem: PropTypes.object.isRequired,
+  onMenuControlClick: PropTypes.func.isRequired,
+  onHistoryItemClick: PropTypes.func.isRequired,
+};
+
 class HistoryListItem extends React.Component {
 
   constructor(props) {
     super(props);
     this.state = {
       isShowOperationIcon: false
-    }
+    };
   }
 
   onMouseEnter = () => {
@@ -65,5 +75,7 @@ class HistoryListItem extends React.Component {
     );
   }
 }
+
+HistoryListItem.propTypes = propTypes;
 
 export default HistoryListItem;
