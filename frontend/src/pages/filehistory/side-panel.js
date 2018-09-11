@@ -2,6 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { gettext, PER_PAGE, filePath, fileName } from '../../components/constance';
 import editUtilties from '../../utils/editor-utilties';
+import Loading from '../../components/loading';
 import HistoryListView from '../../components/history-list-view/history-list-view';
 import HistoryListMenu from '../../components/history-list-view/history-list-menu';
 
@@ -17,7 +18,7 @@ class SidePanel extends React.Component {
       historyInfo: '',
       currentPage: 1,
       hasMore: false,
-      isLoading: false,
+      isLoading: true,
       isError: false,
       fileOwner: '',
       isListMenuShow: false,
@@ -104,6 +105,7 @@ class SidePanel extends React.Component {
     let commitId = this.state.currentItem.commit_id;
     editUtilties.revertFile(filePath, commitId).then(res => {
       if (res.data.success) {
+        this.setState({isLoading: true})
         this.refershFileList();
       }
     });
@@ -132,7 +134,7 @@ class SidePanel extends React.Component {
         <div className="side-panel-center history">
           <div className="panel-heading history-heading">{gettext('History Versions')}</div>
           <div className="history-body">
-            {this.state.isloading && <div className="loading history-loading"></div>}
+            {this.state.isLoading && <Loading />}
             {this.state.historyInfo &&
               <HistoryListView 
                 historyList={this.state.historyInfo}

@@ -1,6 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import Prism from 'prismjs';
+import Loading from '../../components/loading';
 import '../../css/initial-style.css';
 require('@seafile/seafile-editor/src/lib/code-hight-package');
 
@@ -26,7 +27,7 @@ class MainPanel extends React.Component {
           <div className="content-viewer">
             { 
               this.props.renderingContent ? 
-                (<div className={contentClass + ' article'}>Loading...</div>) : 
+                (<div className={contentClass + ' article'}><Loading /></div>) : 
                 (<div 
                   className={contentClass + ' article'}
                   dangerouslySetInnerHTML={{ __html: this.props.content }}
