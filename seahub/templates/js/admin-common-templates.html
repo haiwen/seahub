@@ -20,14 +20,7 @@
 
 <script type="text/template" id="group-member-item-tmpl">
     <td><img src="<%= avatar_url %>" alt="" width="20" class="avatar" /></td>
-    <td><%- name %></td>
-    <td>
-        <% if (app.pageOptions.org_id) { %>
-        <a href="{{ SITE_ROOT }}org/useradmin/info/<% print(encodeURIComponent(email)); %>/"><%- email %></a>
-        <% } else { %>
-        <a href="{{ SITE_ROOT }}useradmin/info/<% print(encodeURIComponent(email)); %>/"><%- email %></a>
-        <% } %>
-    </td>
+    <td><a href="<%= user_info_url %>"><%- name %></a></td>
     <td>
         <% if (role == 'Owner') { %>
         <span class="cur-role">{% trans "Owner" %}</span>
@@ -123,9 +116,8 @@
             <thead>
                 <tr>
                     <th width="5%"></th>
-                    <th width="25%">{% trans "Name" %}</th>
-                    <th width="35%">{% trans "Email" %}</th>
-                    <th width="25%">{% trans "Role" %}</th>
+                    <th width="50%">{% trans "Name" %}</th>
+                    <th width="35%">{% trans "Role" %}</th>
                     <th width="10%"><!--Operations--></th>
                 </tr>
             </thead>

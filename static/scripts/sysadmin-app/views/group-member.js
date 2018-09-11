@@ -113,7 +113,21 @@ define([
         },
 
         render: function() {
-            this.$el.html(this.template(this.model.toJSON()));
+            var data = this.model.toJSON();
+
+            // get user info url
+            var email = this.model.get('email');
+            var url = app.config.siteRoot;
+            if (app.pageOptions.org_id) {
+                url += 'org/useradmin/info/' + encodeURIComponent(email);
+            } else {
+                url += 'useradmin/info/' + encodeURIComponent(email);
+            }
+
+            $.extend(data, {
+                'user_info_url': url
+            });
+            this.$el.html(this.template(data));
             return this;
         }
 
