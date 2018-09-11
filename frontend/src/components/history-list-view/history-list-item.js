@@ -24,6 +24,11 @@ class HistoryListItem extends React.Component {
     }
   }
 
+  onClick = () => {
+    this.setState({isShowOperationIcon: false});
+    this.props.onHistoryItemClick(this.props.item);
+  }
+
   onMenuControlClick = (e) => {
     e.nativeEvent.stopImmediatePropagation();
     this.props.onMenuControlClick(e, this.props.item , this.props.isFirstItem);
@@ -32,8 +37,17 @@ class HistoryListItem extends React.Component {
   render() {
     let item = this.props.item;
     let time = moment(item.ctime).format('MMMDo Ah:mm');
+    let isHigtlightItem = false;
+    if (this.props.item && this.props.currentItem) {
+      isHigtlightItem = this.props.item.commit_id === this.props.currentItem.commit_id;
+    }
     return (
-      <li className="history-list-item" onMouseEnter={this.onMouseEnter} onMouseLeave={this.onMouseLeave}>
+      <li 
+        className={`history-list-item ${isHigtlightItem ? 'high-light' : ''}`} 
+        onMouseEnter={this.onMouseEnter} 
+        onMouseLeave={this.onMouseLeave}
+        onClick={this.onClick}
+      >
         <div className="history-info">
           <div className="time">{time}</div>
           <div className="owner">
@@ -43,7 +57,7 @@ class HistoryListItem extends React.Component {
         </div>
         <div className="history-operation">
           <NodeMenuControl
-            isShow={this.state.isShowOperationIcon}
+            isShow={this.state.isShowOperationIcon || isHigtlightItem}
             onClick={this.onMenuControlClick}
           />
         </div>

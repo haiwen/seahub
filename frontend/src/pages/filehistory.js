@@ -41,11 +41,16 @@ class FileHistory extends React.Component {
     })
   }
 
+  onHistoryItemClick = (item) => {
+    //todos;
+  }
+
   render() {
     return(
       <div id="main" className="history-main">
         <SidePanel 
           fileOwner={this.state.fileOwner}
+          onHistoryItemClick={this.onHistoryItemClick}
         />
         <MainPanel 
           content={this.state.content}

@@ -46,7 +46,8 @@ class SidePanel extends React.Component {
         hasMore: result.total_count === PER_PAGE,
         isLoading: false,
         isError: false,
-        fileOwner: result.data[0].creator_email
+        fileOwner: result.data[0].creator_email,
+        currentItem: result.data[0],
       })
     }
   }
@@ -94,6 +95,7 @@ class SidePanel extends React.Component {
   }
 
   onRestoreFile = () => {
+    this.onHideContextMenu();
     let commit_id = this.state.currentItem.commit_id;
     editUtilties.revertFile(REPO_ID, FILE_PATH, commit_id).then(res => {
       if (res.data.success) {
@@ -105,7 +107,12 @@ class SidePanel extends React.Component {
   }
 
   onDownloadFile = () => {
-    this.setState()
+    this.onHideContextMenu();
+  }
+
+  onHistoryItemClick =(item) => {
+    this.setState({currentItem: item});
+    this.props.onHistoryItemClick(item);
   }
 
   render() {
@@ -129,6 +136,8 @@ class SidePanel extends React.Component {
                 onMenuControlClick={this.onShowContenxtMenu}
                 isItemFrezeed={this.state.isItemFrezeed}
                 reloadMore={this.reloadMore}
+                currentItem={this.state.currentItem}
+                onHistoryItemClick={this.onHistoryItemClick}
               />
             }
             <HistoryListMenu
