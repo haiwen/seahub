@@ -72,7 +72,7 @@ class Wiki extends Component {
           });
         })
 
-        let fileUrl = serviceUrl + '/wiki/lib/' + repoID + '/?p=' + encodeURIComponent(filePath);
+        let fileUrl = serviceUrl + '/wiki/lib/' + repoID + filePath;
         window.history.pushState({urlPath: fileUrl, filePath: filePath}, filePath, fileUrl);
       }
     }, () => {
@@ -108,7 +108,7 @@ class Wiki extends Component {
     })
 
 
-     let fileUrl = serviceUrl + '/wiki/lib/' + repoID + '/?p=' + encodeURIComponent(filePath);
+     let fileUrl = serviceUrl + '/wiki/lib/' + repoID + filePath;
      window.history.pushState({urlPath: fileUrl, filePath: filePath}, filePath, fileUrl);
   }
 
@@ -149,7 +149,7 @@ class Wiki extends Component {
     this.exitViewFileState(tree, node);
 
     // update location url
-    let fileUrl = serviceUrl + '/wiki/lib/' + repoID + '/?p=' + encodeURIComponent(node.path);
+    let fileUrl = serviceUrl + '/wiki/lib/' + repoID + node.path;
     window.history.pushState({urlPath: fileUrl, filePath: node.path},node.path, fileUrl);
   }
 
@@ -370,7 +370,7 @@ class Wiki extends Component {
       filePath: newNode.path,
       isViewFileState: false
     });
-    let fileUrl = serviceUrl + '/wiki/lib/' + repoID + '/?p=' + encodeURIComponent(newNode.path);
+    let fileUrl = serviceUrl + '/wiki/lib/' + repoID + newNode.path;
     window.history.pushState({urlPath: fileUrl, filePath: newNode.path}, newNode.path, fileUrl);
   }
 

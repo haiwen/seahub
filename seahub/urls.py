@@ -14,7 +14,7 @@ from seahub.views.file import view_history_file, view_trash_file,\
     text_diff, view_raw_file, view_raw_shared_file, \
     download_file, view_lib_file, file_access, view_lib_file_via_smart_link
 from seahub.views.repo import repo_history_view, view_shared_dir, \
-    view_shared_upload_link, view_lib_via_wiki
+    view_shared_upload_link, view_lib_as_wiki
 from notifications.views import notification_list
 from seahub.views.wiki import personal_wiki, personal_wiki_pages, \
     personal_wiki_create, personal_wiki_page_new, personal_wiki_page_edit, \
@@ -155,7 +155,7 @@ urlpatterns = [
     ### lib (replace the old `repo` urls) ###
     # url(r'^lib/(?P<repo_id>[-0-9a-f]{36})/dir/(?P<path>.*)$', view_lib_dir, name='view_lib_dir'),
     url(r'^lib/(?P<repo_id>[-0-9a-f]{36})/file(?P<path>.*)$', view_lib_file, name='view_lib_file'),
-    url(r'^wiki/lib/(?P<repo_id>[-0-9a-f]{36})/$', view_lib_via_wiki, name='view_lib_via_wiki'),
+    url(r'^wiki/lib/(?P<repo_id>[-0-9a-f]{36})/(?P<path>.*)$', view_lib_as_wiki, name='view_lib_as_wiki'),
     url(r'^smart-link/(?P<dirent_uuid>[-0-9a-f]{36})/(?P<dirent_name>.*)$', view_lib_file_via_smart_link, name="view_lib_file_via_smart_link"),
     url(r'^#common/lib/(?P<repo_id>[-0-9a-f]{36})/(?P<path>.*)$', fake_view, name='view_common_lib_dir'),
     url(r'^#group/(?P<group_id>\d+)/$', fake_view, name='group_info'),

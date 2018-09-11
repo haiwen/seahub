@@ -153,8 +153,10 @@ def repo_history_view(request, repo_id):
             })
 
 @login_required
-def view_lib_via_wiki(request, repo_id):
-    path = request.GET.get('p', '')
+def view_lib_as_wiki(request, repo_id, path):
+
+    if not path.startswith('/'):
+        path = '/' + path
 
     repo = seafile_api.get_repo(repo_id)
 
@@ -162,7 +164,7 @@ def view_lib_via_wiki(request, repo_id):
     if user_perm is None:
         return render_error(request, _(u'Permission denied'))
 
-    return render(request, 'view_repo_wiki.html', {
+    return render(request, 'view_lib_as_wiki.html', {
         'repo_id': repo_id,
         'service_url': get_service_url().rstrip('/'),
         'file_path': path,

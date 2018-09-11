@@ -48,10 +48,11 @@ class MainPanel extends Component {
         <div className="main-panel-top panel-top">
           <span className="sf2-icon-menu side-nav-toggle hidden-md-up d-md-none" title="Side Nav Menu" onClick={this.onMenuClick}></span>
            <div className={`wiki-page-ops ${this.props.permission === 'rw' ? '' : 'hide'}`}>
-              <a className="btn btn-secondary btn-topbar" onClick={this.onEditClick}>{gettext("Edit Page")}</a>
+              <a className="btn btn-secondary btn-topbar" onClick={this.onEditClick}>{gettext("Edit")}</a>
            </div>
           <div className="common-toolbar">
-            <Search  onSearchedClick={this.props.onSearchedClick}/>
+            <Search  onSearchedClick={this.props.onSearchedClick}
+                     placeholder={gettext("Search files in this library")}/>
             <Account />
           </div>
         </div>
@@ -60,7 +61,7 @@ class MainPanel extends Component {
             <div className="path-containter">
               <a href={siteRoot + '#my-libs/'} className="normal">{gettext("Libraries")}</a>
               <span className="path-split">/</span>
-              <a href={siteRoot + 'wiki/lib/' + repoID + '/?p=%2F'} className="normal">{slug}</a>
+              <a href={siteRoot + 'wiki/lib/' + repoID + '/'} className="normal">{slug}</a>
               {pathElem}
             </div>
           </div>

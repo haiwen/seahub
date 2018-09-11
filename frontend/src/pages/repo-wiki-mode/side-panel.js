@@ -124,7 +124,7 @@ class SidePanel extends Component {
             onMouseEnter={this.onMouseEnter} 
             onMouseLeave={this.onMouseLeave}
           >
-            {gettext("Pages")}
+            {gettext("Files")}
             <div className="heading-icon">
               <MenuControl 
                 isShow={this.state.isMenuIconShow}
