@@ -32,6 +32,8 @@
 .sf2-icon-wrench:before { content:"\e001"; }
 .sf2-icon-bell:before { content:"\e003"; }
 .sf2-icon-x3:before { content:"\e035"; }
+.sf2-icon-grid-view:before { content:"\e025"; }
+.sf2-icon-list-view:before { content:"\e026"; }
 
 
 /****** icon-xx ********/

@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import cookie from 'react-cookies';
 import ReactDOM from 'react-dom';
 import SidePanel from './pages/repo-wiki-mode/side-panel';
 import MainPanel from './pages/repo-wiki-mode/main-panel';
@@ -110,6 +111,22 @@ class Wiki extends Component {
 
      let fileUrl = serviceUrl + '/wiki/lib/' + repoID + filePath;
      window.history.pushState({urlPath: fileUrl, filePath: filePath}, filePath, fileUrl);
+  }
+
+  switchViewMode = (mode) => {
+    let dirPath;
+    let tree = this.state.tree_data
+    let node = tree.getNodeByPath(this.state.filePath)
+    if (node.isDir()) {
+      dirPath = this.state.filePath
+    } else {
+      const index = this.state.filePath.lastIndexOf('/');
+      dirPath = this.state.filePath.substring(0, index);
+    }
+
+    cookie.save("view_mode", mode, { path: '/' })
+
+    window.location.href = "/#common/lib/" + repoID + dirPath;
   }
 
   onLinkClick = (event) => {
@@ -472,6 +489,7 @@ class Wiki extends Component {
           onSearchedClick={this.onSearchedClick}
           onMainNavBarClick={this.onMainNavBarClick}
           onMainNodeClick={this.onMainNodeClick}
+          switchViewMode={this.switchViewMode}
         />
       </div>
     )

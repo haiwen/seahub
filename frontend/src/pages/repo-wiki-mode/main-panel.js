@@ -23,6 +23,11 @@ class MainPanel extends Component {
     this.props.onMainNavBarClick(e.target.dataset.path);
   }
 
+  switchViewMode = (e) => {
+    e.preventDefault();  
+    this.props.switchViewMode(e.target.id);
+  }
+
   render() {
 
     let filePathList = this.props.filePath.split('/');
@@ -47,9 +52,13 @@ class MainPanel extends Component {
       <div className="wiki-main-panel o-hidden">
         <div className="main-panel-top panel-top">
           <span className="sf2-icon-menu side-nav-toggle hidden-md-up d-md-none" title="Side Nav Menu" onClick={this.onMenuClick}></span>
-           <div className={`wiki-page-ops ${this.props.permission === 'rw' ? '' : 'hide'}`}>
-              <a className="btn btn-secondary btn-topbar" onClick={this.onEditClick}>{gettext("Edit")}</a>
-           </div>
+           <div className="wiki-page-ops">
+              { this.props.permission === 'rw' && 
+                <a className="btn btn-secondary btn-topbar" title="Edit File" onClick={this.onEditClick}>{gettext("Edit")}</a>
+              }
+              <a className="btn btn-secondary btn-topbar sf2-icon-list-view" id='list' title={gettext("List")} onClick={this.switchViewMode}></a>
+              <a className="btn btn-secondary btn-topbar sf2-icon-grid-view" id='grid' title={gettext("Grid")} onClick={this.switchViewMode}></a>
+          </div>
           <div className="common-toolbar">
             <Search  onSearchedClick={this.props.onSearchedClick}
                      placeholder={gettext("Search files in this library")}/>
