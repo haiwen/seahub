@@ -30,7 +30,7 @@ class HistoryListMenu extends React.Component {
     }
     
     if (!this.props.currentItem) {
-      return "";
+      return '';
     }
 
     let objID = this.props.currentItem.rev_file_id;
