@@ -1,5 +1,3 @@
-let slug, repoID, serviceUrl, initialFilePath;
-
 export const dirPath = '/';
 export const gettext = window.gettext;
 

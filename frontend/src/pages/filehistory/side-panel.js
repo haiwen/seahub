@@ -30,14 +30,16 @@ class SidePanel extends React.Component {
   }
 
   componentDidMount() {
-    this.refershFileList();
-    document.addEventListener('click', this.onHideContextMenu);
+    editUtilties.getFileHistoryRecord(filePath, 1, PER_PAGE).then(res => {
+      this.initResultState(res.data);
+      document.addEventListener('click', this.onHideContextMenu);
+    });
   }
-
+  
   componentWillUnmount() {
     document.removeEventListener('click', this.onHideContextMenu);
   }
-
+  
   refershFileList() {
     editUtilties.getFileHistoryRecord(filePath, 1, PER_PAGE).then(res => {
       this.initResultState(res.data);
