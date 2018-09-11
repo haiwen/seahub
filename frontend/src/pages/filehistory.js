@@ -1,6 +1,7 @@
 import React from 'react';
 import editUtilties from '../utils/editor-utilties';
 import { filePath } from '../components/constance';
+import URLDecorator from '../utils/url-decorator';
 import { processor } from '@seafile/seafile-editor/src/lib/seafile-markdown2html';
 import SidePanel from './filehistory/side-panel';
 import MainPanel from './filehistory/main-panel';
@@ -39,7 +40,19 @@ class FileHistory extends React.Component {
   }
 
   onHistoryItemClick = (item) => {
-    //todos;
+    let _this = this;
+    let objID = item.rev_file_id;
+    let downLoadURL = URLDecorator.getUrl({type: 'download_historic_file', filePath: filePath, objID: objID});
+    this.setState({renderingContent: true});
+    editUtilties.getFileContent(downLoadURL).then((res) => {
+      let content = res.data;
+      processor.process(content, function(err, file) {
+        _this.setState({
+          renderingContent: false,
+          content: String(file)
+        });
+      });
+    });
   }
 
   render() {
