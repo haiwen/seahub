@@ -27,6 +27,7 @@ class SidePanel extends React.Component {
       menuPosition: {top: '', left: ''},
       isItemFrezeed: false
     };
+    this.isReloadingData = false;
   }
 
   componentDidMount() {
@@ -50,8 +51,8 @@ class SidePanel extends React.Component {
     if (result.data.length) {
       this.setState({
         historyInfo: result.data,
-        page: result.page,
-        hasMore: result.total_count === PER_PAGE,
+        currentPage: result.page,
+        hasMore: result.total_count > (PER_PAGE * this.state.currentPage),
         isLoading: false,
         isError: false,
         fileOwner: result.data[0].creator_email,
@@ -64,8 +65,8 @@ class SidePanel extends React.Component {
     if (result.data.length) {
       this.setState({
         historyInfo: [...this.state.historyInfo, ...result.data],
-        page: result.page,
-        hasMore: result.total_count === PER_PAGE,
+        currentPage: result.page,
+        hasMore: result.total_count > (PER_PAGE * this.state.currentPage),
         isLoading: false,
         isError: false,
         fileOwner: result.data[0].creator_email
@@ -93,13 +94,15 @@ class SidePanel extends React.Component {
   }
 
   reloadMore = () => {
-    let currentPage = this.state.currentPage + 1;
-    this.setState({
-      currentPage: currentPage,
-    });
-    editUtilties.getFileHistoryRecord(filePath, currentPage, PER_PAGE).then(res => {
-      this.updateResultState(res.data);
-    });
+    if (!this.isReloadingData) {
+      this.isReloadingData = true;
+      let currentPage = this.state.currentPage + 1
+      this.setState({currentPage: currentPage});
+      editUtilties.getFileHistoryRecord(filePath, currentPage, PER_PAGE).then(res => {
+        this.updateResultState(res.data);
+        this.isReloadingData = false;
+      });
+    }
   }
 
   onRestoreFile = () => {
@@ -139,6 +142,7 @@ class SidePanel extends React.Component {
             {this.state.isLoading && <Loading />}
             {this.state.historyInfo &&
               <HistoryListView 
+                hasMore={this.state.hasMore}
                 historyList={this.state.historyInfo}
                 onMenuControlClick={this.onShowContenxtMenu}
                 isItemFrezeed={this.state.isItemFrezeed}
