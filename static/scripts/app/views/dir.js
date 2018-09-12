@@ -748,6 +748,7 @@ define([
                             'file_icon': 'file.png',
                             'starred': false,
                             'perm': 'rw',
+                            'can_preview': data.can_preview,
                             'last_modified': new Date().getTime() / 1000,
                             'last_update': gettext("Just now")
                         }, {silent: true});
