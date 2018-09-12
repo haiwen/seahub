@@ -1086,66 +1086,6 @@ def view_shared_file(request, fileshare):
             'enable_watermark': ENABLE_WATERMARK,
             })
 
-def view_raw_shared_file(request, token, obj_id, file_name):
-    """Returns raw content of a shared file.
-
-    Arguments:
-    - `request`:
-    - `token`:
-    - `obj_id`:
-    - `file_name`:
-    """
-    fileshare = FileShare.objects.get_valid_file_link_by_token(token)
-    if fileshare is None:
-        raise Http404
-
-    password_check_passed, err_msg = check_share_link_common(request, fileshare)
-    if not password_check_passed:
-        d = {'token': token, 'err_msg': err_msg}
-        if fileshare.is_file_share_link():
-            d['view_name'] = 'view_shared_file'
-        else:
-            d['view_name'] = 'view_shared_dir'
-
-        return render(request, 'share_access_validation.html', d)
-
-    repo_id = fileshare.repo_id
-    repo = get_repo(repo_id)
-    if not repo:
-        raise Http404
-
-    # Normalize file path based on file or dir share link
-    req_path = request.GET.get('p', '').rstrip('/')
-    if req_path:
-        file_path = posixpath.join(fileshare.path, req_path.lstrip('/'))
-    else:
-        if fileshare.is_file_share_link():
-            file_path = fileshare.path.rstrip('/')
-        else:
-            file_path = fileshare.path.rstrip('/') + '/' + file_name
-
-    real_obj_id = seafile_api.get_file_id_by_path(repo_id, file_path)
-    if not real_obj_id:
-        raise Http404
-
-    if real_obj_id != obj_id:   # perm check
-        raise Http404
-
-    if not seafile_api.check_permission_by_path(repo_id, '/',
-            fileshare.username):
-        return render_error(request, _(u'Permission denied'))
-
-    filename = os.path.basename(file_path)
-    username = request.user.username
-    token = seafile_api.get_fileserver_access_token(repo_id,
-            real_obj_id, 'view', username, use_onetime=False)
-
-    if not token:
-        raise Http404
-
-    outer_url = gen_file_get_url(token, filename)
-    return HttpResponseRedirect(outer_url)
-
 @share_link_audit
 def view_file_via_shared_dir(request, fileshare):
     token = fileshare.token
