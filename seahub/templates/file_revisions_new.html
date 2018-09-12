@@ -1,0 +1,40 @@
+{% extends 'base_wide_page.html' %}
+
+{% load seahub_tags avatar_tags i18n staticfiles %}
+{% load render_bundle from webpack_loader %}
+
+{% block sub_title %}{% trans "History" %} - {% endblock %}
+
+{% block extra_style %}
+<style type="text/css">
+    .go-back { top:-3px; }
+</style>
+{% endblock %}
+
+{% block wide_page_content %}
+<div id="root"></div>
+{% endblock %}
+
+{% block extra_script %}
+         <script type="text/javascript">
+           window.app = {
+              config: {
+                  mediaUrl: '{{ MEDIA_URL }}',
+                  siteRoot: '{{ SITE_ROOT }}',
+                  lang: '{{ LANGUAGE_CODE }}',
+              },
+              pageOptions: {
+                  repoID: '{{ repo.id }}',
+                  repoName: '{{ repo.name }}',
+                  filePath: '{{ path|escapejs }}',
+                  fileName: '{{ u_filename|escapejs }}',
+                  domain: '{{ domain }}',
+                  protocol: '{{ protocol }}',
+              }
+          }
+         </script>
+         <script src="{{ STATIC_URL }}scripts/i18n/{{ LANGUAGE_CODE }}/djangojs.js"></script>
+
+         {% render_bundle 'fileHistory' %}
+
+{% endblock %}
