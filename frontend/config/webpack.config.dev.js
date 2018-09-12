@@ -59,11 +59,21 @@ module.exports = {
      require.resolve('react-dev-utils/webpackHotDevClient'),
      paths.appSrc + "/wiki.js",
    ],
-    fileHistory: [
-      require.resolve('./polyfills'),
-      require.resolve('react-dev-utils/webpackHotDevClient'),
-      paths.appSrc + '/fileHistory.js',
-    ],    
+   dashboard: [
+     require.resolve('./polyfills'),
+     require.resolve('react-dev-utils/webpackHotDevClient'),
+     paths.appSrc + "/dashboard.js",
+   ],
+   repoview: [
+     require.resolve('./polyfills'),
+     require.resolve('react-dev-utils/webpackHotDevClient'),
+     paths.appSrc + "/repo-wiki-mode.js",
+   ],
+   fileHistory: [
+     require.resolve('./polyfills'),
+     require.resolve('react-dev-utils/webpackHotDevClient'),
+     paths.appSrc + "/file-history.js",
+   ]
   },
 
   output: {
@@ -267,7 +277,7 @@ module.exports = {
     // solution that requires the user to opt into importing specific locales.
     // https://github.com/jmblog/how-to-optimize-momentjs-with-webpack
     // You can remove this if you don't use Moment.js:
-    new webpack.IgnorePlugin(/^\.\/locale$/, /moment$/),
+    //new webpack.IgnorePlugin(/^\.\/locale$/, /moment$/),
 
     new BundleTracker({filename: './webpack-stats.dev.json'}),
   ],

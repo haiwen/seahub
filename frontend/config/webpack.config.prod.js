@@ -61,6 +61,8 @@ module.exports = {
     main: [require.resolve('./polyfills'), paths.appIndexJs],
     wiki: [require.resolve('./polyfills'), paths.appSrc + "/wiki.js"],
     repoview: [require.resolve('./polyfills'), paths.appSrc + "/repo-wiki-mode.js"],
+    dashboard: [require.resolve('./polyfills'), paths.appSrc + "/dashboard.js"],
+    fileHistory: [require.resolve('./polyfills'), paths.appSrc + "/file-history.js"],
   },
 
   output: {
