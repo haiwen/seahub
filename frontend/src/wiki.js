@@ -45,12 +45,12 @@ class Wiki extends Component {
       treeData.parseListToTree(files);
 
       let node = treeData.getNodeByPath(filePath);
-      treeData.setNodeToActivated(node);
+      treeData.expandNode(node);
       if (node.isDir()) {
         this.exitViewFileState(treeData, node);
         this.setState({isFileLoading: false});
       } else {
-        treeData.setNodeToActivated(node);
+        treeData.expandNode(node);
         editorUtilities.getWikiFileContent(slug, filePath).then(res => {
           this.setState({
             tree_data: treeData,
@@ -118,7 +118,7 @@ class Wiki extends Component {
 
       let tree = this.state.tree_data.clone();
       let node = tree.getNodeByPath(path);
-      tree.setNodeToActivated(node);
+      tree.expandNode(node);
       this.enterViewFileState(tree, node, node.path);
     }
   }
@@ -126,7 +126,7 @@ class Wiki extends Component {
   onMainNavBarClick = (nodePath) => {
     let tree = this.state.tree_data.clone();
     let node = tree.getNodeByPath(nodePath);
-    tree.setNodeToActivated(node);
+    tree.expandNode(node);
 
     this.exitViewFileState(tree, node);
 
@@ -137,7 +137,7 @@ class Wiki extends Component {
 
   onMainNodeClick = (node) => {
     let tree = this.state.tree_data.clone();
-    tree.setNodeToActivated(node);
+    tree.expandNode(node);
     if (node.isMarkdown()) {
       this.initMainPanelData(node.path);
       this.enterViewFileState(tree, node, node.path);
@@ -157,6 +157,13 @@ class Wiki extends Component {
       this.enterViewFileState(tree, node, node.path);
     } else if(node instanceof Node && node.isDir()){
       let tree = this.state.tree_data.clone();
+      if (this.state.filePath === node.path) {
+        if (node.isExpanded) {
+          tree.collapseNode(node);
+        } else {
+          tree.expandNode(node);
+        }
+      }
       this.exitViewFileState(tree, node);
     } else {
       const w=window.open('about:blank');
@@ -197,7 +204,7 @@ class Wiki extends Component {
       let parentNode = tree.getNodeByPath(parentPath);
       tree.addNodeToParent(node, parentNode);
       if (this.state.isViewFileState) {
-        tree.setNodeToActivated(node);
+        tree.expandNode(node);
         this.setState({
           tree_data: tree,
           changedNode: node
@@ -221,7 +228,7 @@ class Wiki extends Component {
       let parentNode = tree.getNodeByPath(parentPath);
       tree.addNodeToParent(node, parentNode);
       if (this.state.isViewFileState) {
-        tree.setNodeToActivated(node);
+        tree.expandNode(node);
         this.setState({
           tree_data: tree,
           changedNode: node
@@ -247,7 +254,7 @@ class Wiki extends Component {
 
         if (this.state.isViewFileState) {
           if (this.isModifyCurrentFile(cloneNode)) {
-            tree.setNodeToActivated(node);
+            tree.expandNode(node);
             this.setState({
               tree_data: tree,
               changedNode: node
@@ -279,7 +286,7 @@ class Wiki extends Component {
 
         if (this.state.isViewFileState) {
           if (currentFilePath.indexOf(nodePath) > -1) {
-            tree.setNodeToActivated(currentFileNode);
+            tree.expandNode(currentFileNode);
             this.setState({
               tree_data: tree,
               changedNode: currentFileNode
@@ -290,10 +297,10 @@ class Wiki extends Component {
           }
         } else {
           if (nodePath === currentFilePath) { // old node
-            tree.setNodeToActivated(node);
+            tree.expandNode(node);
             this.exitViewFileState(tree, node);
           } else if (node.path.indexOf(currentFilePath) > -1) { // new node
-            tree.setNodeToActivated(currentFileNode);
+            tree.expandNode(currentFileNode);
             this.exitViewFileState(tree, currentFileNode);
           } else {
             this.setState({tree_data: tree});
@@ -325,7 +332,7 @@ class Wiki extends Component {
     if (this.state.isViewFileState) {
       if (isCurrentFile) {
         let homeNode = this.getHomeNode(tree);
-        tree.setNodeToActivated(homeNode);
+        tree.expandNode(homeNode);
         this.setState({
           tree_data: tree,
           changedNode: homeNode

@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-
+import { serviceUrl } from '../constance';
 class TreeDirList extends React.Component {
 
   constructor(props) {
@@ -18,7 +18,7 @@ class TreeDirList extends React.Component {
     return (
       <tr className='row' onMouseEnter={this.onMouseEnter} onMouseLeave={this.onMouseLeave}>
         <td className="dirent-icon" style={{width: "5%"}}>
-          <img src={node.type === "dir" ? "/media/img/folder-192.png" : "/media/img/file/192/txt.png"}></img>
+          <img src={node.type === "dir" ? serviceUrl + "/media/img/folder-192.png" : serviceUrl + "/media/img/file/192/txt.png"}></img>
         </td>
         <td style={{width: "60%"}}>
           <a className="custom-link" onClick={this.onMainNodeClick}>{node.name}</a>

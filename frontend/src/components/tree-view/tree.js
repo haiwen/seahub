@@ -94,8 +94,7 @@ class Tree {
     return findNode;
   }
 
-  setNodeToActivated(node) {
-    this.setTreeToUnActivated();
+  expandNode(node) {
     let treeNode = this.findNodeFromTree(node);
     if (treeNode) {
       treeNode.isExpanded = true;
@@ -108,7 +107,16 @@ class Tree {
     return false;
   }
 
-  setTreeToUnActivated() {
+  collapseNode(node) {
+    let treeNode = this.findNodeFromTree(node);
+    if (treeNode) {
+      treeNode.isExpanded = false;
+      return true;
+    }
+    return false;
+  }
+
+  resetTreeState() {
     function cb(treeNode) {
       treeNode.isExpanded = false;
       return false;

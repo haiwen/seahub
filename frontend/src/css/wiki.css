@@ -71,6 +71,7 @@ img[src=""] {
 .cur-view-container {
   display: flex;
   min-height: 0;
+  overflow: auto;
 }
 
 .cur-view-container .markdown-container {
