@@ -1,11 +1,9 @@
 import React, { Component } from 'react';
-import { gettext, repoID, serviceUrl, slug, siteRoot } from '../../components/constance';
+import { gettext, repoID, serviceUrl, slug, siteRoot, isPro } from '../../components/constance';
 import Search from '../../components/search';
 import Account from '../../components/account';
 import MarkdownViewer from '../../components/markdown-viewer';
 import TreeDirView from '../../components/tree-dir-view/tree-dir-view';
-
-// const repoName = window.repo.config.repo_name
 
 class MainPanel extends Component {
 
@@ -60,15 +58,17 @@ class MainPanel extends Component {
               <a className="btn btn-secondary btn-topbar sf2-icon-grid-view" id='grid' title={gettext("Grid")} onClick={this.switchViewMode}></a>
           </div>
           <div className="common-toolbar">
-            <Search  onSearchedClick={this.props.onSearchedClick}
-                     placeholder={gettext("Search files in this library")}/>
+            {isPro && <Search  onSearchedClick={this.props.onSearchedClick}
+                               placeholder={gettext("Search files in this wiki")}
+                      />
+            }
             <Account />
           </div>
         </div>
         <div className="cur-view-main">
           <div className="cur-view-path">
             <div className="path-containter">
-              <a href={siteRoot + '#my-libs/'} className="normal">{gettext("Libraries")}</a>
+              <a href={siteRoot + '#common/'} className="normal">{gettext("Libraries")}</a>
               <span className="path-split">/</span>
               <a href={siteRoot + 'wiki/lib/' + repoID + '/'} className="normal">{slug}</a>
               {pathElem}
