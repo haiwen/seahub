@@ -126,7 +126,7 @@ class Wiki extends Component {
 
     cookie.save("view_mode", mode, { path: '/' })
 
-    window.location.href = "/#common/lib/" + repoID + dirPath;
+    window.location.href = serviceUrl + "/#common/lib/" + repoID + dirPath;
   }
 
   onLinkClick = (event) => {
