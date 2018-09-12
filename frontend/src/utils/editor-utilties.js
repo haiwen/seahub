@@ -1,7 +1,6 @@
 import { slug, repoID, siteRoot } from '../components/constance';
 import { SeafileAPI } from 'seafile-js';
 import cookie from 'react-cookies';
-import { bytesToSize } from '../components/utils'
 
 let seafileAPI = new SeafileAPI();
 let xcsrfHeaders = cookie.load('sfcsrftoken');
@@ -18,7 +17,7 @@ class EditorUtilities {
             isExpanded: item.type === 'dir' ? true : false,
             parent_path: item.parent_dir,
             last_update_time: item.last_update_time,
-            size: bytesToSize(item.size)
+            size: item.size
           }
         })
         return files;
@@ -34,7 +33,7 @@ class EditorUtilities {
             isExpanded: item.type === 'dir' ? true : false,
             parent_path: item.parent_dir,
             last_update_time: item.mtime,
-            size: item.size ? bytesToSize(item.size) : '0 bytes'
+            size: item.size
           }
         })
 
