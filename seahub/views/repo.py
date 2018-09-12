@@ -164,11 +164,17 @@ def view_lib_as_wiki(request, repo_id, path):
     if user_perm is None:
         return render_error(request, _(u'Permission denied'))
 
+    if user_perm == 'rw':
+        user_can_write = True
+    else:
+        user_can_write = False
+
     return render(request, 'view_lib_as_wiki.html', {
         'repo_id': repo_id,
         'service_url': get_service_url().rstrip('/'),
         'file_path': path,
-        'repo_name': repo.name
+        'repo_name': repo.name,
+        'permission': user_can_write
         })
 
 ########## shared dir/uploadlink
