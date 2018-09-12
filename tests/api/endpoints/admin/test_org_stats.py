@@ -10,6 +10,9 @@ except ImportError:
 
 class AdminOrgStatsTrafficTest(BaseTestCase):
     def test_get(self):
+        if not LOCAL_PRO_DEV_ENV:
+            return
+
         self.login_as(self.admin)
 
         url = reverse('api-v2.1-admin-org-stats-traffic', args=[1])

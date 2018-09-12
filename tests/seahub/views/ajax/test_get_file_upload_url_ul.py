@@ -28,7 +28,7 @@ class GetFileUploadUrlULTest(BaseTestCase):
         resp = self.client.get(self.url, HTTP_X_REQUESTED_WITH='XMLHttpRequest')
         mock_get_fileserver_access_token.assert_called_with(
             self.repo.id, '{"anonymous_user": "%s"}' % self.user.username,
-            'upload', '', use_onetime=False)
+            'upload-link', '', use_onetime=False)
         json_resp = json.loads(resp.content)
         assert 'test_token' in json_resp['url']
 
@@ -40,7 +40,7 @@ class GetFileUploadUrlULTest(BaseTestCase):
         resp = self.client.get(self.url, HTTP_X_REQUESTED_WITH='XMLHttpRequest')
         mock_get_fileserver_access_token.assert_called_with(
             self.repo.id, '{"anonymous_user": ""}',
-            'upload', '', use_onetime=False)
+            'upload-link', '', use_onetime=False)
         json_resp = json.loads(resp.content)
         assert 'test_token' in json_resp['url']
 
@@ -55,7 +55,7 @@ class GetFileUploadUrlULTest(BaseTestCase):
         resp = self.client.get(self.url, HTTP_X_REQUESTED_WITH='XMLHttpRequest')
         mock_get_fileserver_access_token.assert_called_with(
             self.repo.id, '{"anonymous_user": "anonymous@email.com"}',
-            'upload', '', use_onetime=False)
+            'upload-link', '', use_onetime=False)
         json_resp = json.loads(resp.content)
         assert 'test_token' in json_resp['url']
 
@@ -70,6 +70,6 @@ class GetFileUploadUrlULTest(BaseTestCase):
         resp = self.client.get(self.url, HTTP_X_REQUESTED_WITH='XMLHttpRequest')
         mock_get_fileserver_access_token.assert_called_with(
             self.repo.id, '{"anonymous_user": ""}',
-            'upload', '', use_onetime=False, check_virus=True)
+            'upload-link', '', use_onetime=False, check_virus=True)
         json_resp = json.loads(resp.content)
         assert 'test_token' in json_resp['url']
