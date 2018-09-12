@@ -1,4 +1,3 @@
-let slug, repoID, serviceUrl, initialFilePath;
 
 export const dirPath = '/';
 export const gettext = window.gettext;
@@ -10,12 +9,10 @@ export const mediaUrl = window.app.config.mediaUrl;
 export const siteTitle = window.app.config.siteTitle;
 export const logoWidth = window.app.config.logoWidth;
 export const logoHeight = window.app.config.logoHeight;
+export const isPro = window.app.config.isPro === "True";
 
-if (window.wiki) {
-  slug = window.wiki.config.slug;
-  repoID = window.wiki.config.repoId;
-  serviceUrl = window.wiki.config.serviceUrl;
-  initialFilePath = window.wiki.config.initial_file_path;
-}
-
-export { slug, repoID, serviceUrl, initialFilePath }
+export const slug = window.wiki ? window.wiki.config.slug : '';
+export const repoID = window.wiki ? window.wiki.config.repoId : '';
+export const serviceUrl = window.wiki ? window.wiki.config.serviceUrl : '';
+export const initialFilePath = window.wiki ? window.wiki.config.initial_file_path : '';
+export const permission = window.wiki ? window.wiki.config.permission : '';

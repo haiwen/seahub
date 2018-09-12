@@ -8,9 +8,9 @@ msgid ""
 msgstr ""
 "Project-Id-Version: seahub\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2018-09-04 15:05+0800\n"
-"PO-Revision-Date: 2018-09-04 06:58+0000\n"
-"Last-Translator: zheng xie <xiez1989@gmail.com>\n"
+"POT-Creation-Date: 2018-09-07 10:41+0800\n"
+"PO-Revision-Date: 2018-09-07 02:45+0000\n"
+"Last-Translator: C_Q <helloworld.c@outlook.com>\n"
 "Language-Team: Icelandic (http://www.transifex.com/haiwen/seahub/language/is/)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -18,69 +18,62 @@ msgstr ""
 "Language: is\n"
 "Plural-Forms: nplurals=2; plural=(n % 10 != 1 || n % 100 == 11);\n"
 
-#: frontend/src/components/MainPanel.js:36
-msgid "Edit Page"
-msgstr ""
-
-#: frontend/src/components/MainPanel.js:46
-msgid "Wikis"
-msgstr ""
-
-#: frontend/src/components/SidePanel.js:291
-msgid "Pages"
-msgstr ""
-
 #: frontend/src/components/account.js:91
 msgid "System Admin"
-msgstr ""
+msgstr "Kerfisstjórnun"
 
 #: frontend/src/components/account.js:127
 msgid "Used"
-msgstr ""
+msgstr "Notað"
 
 #: frontend/src/components/account.js:133
 msgid "Settings"
-msgstr ""
+msgstr "Stillingar"
 
 #: frontend/src/components/account.js:135
 msgid "Log out"
+msgstr "Útskrá"
+
+#: frontend/src/components/markdown-viewer.js:186
+msgid "Last modified by"
 msgstr ""
 
-#: frontend/src/components/menu-component/menu-dialog/create-fileforder-dialog.js:82
-#: frontend/src/components/menu-component/node-menu.js:106
-#: frontend/src/components/menu-component/node-menu.js:114
+#: frontend/src/components/menu-component/menu-dialog/create-fileforder-dialog.js:74
+#: frontend/src/components/menu-component/node-menu.js:29
+#: frontend/src/components/menu-component/node-menu.js:37
 #: static/scripts/app/views/dir.js:771
 msgid "New File"
-msgstr ""
+msgstr "Ný Skrá"
+
+#: frontend/src/components/menu-component/menu-dialog/create-fileforder-dialog.js:74
+#: frontend/src/components/menu-component/node-menu.js:28
+#: frontend/src/components/menu-component/node-menu.js:36
+msgid "New Folder"
+msgstr "Ný Mappa"
 
 #: frontend/src/components/menu-component/menu-dialog/create-fileforder-dialog.js:82
-#: frontend/src/components/menu-component/node-menu.js:105
-#: frontend/src/components/menu-component/node-menu.js:113
-msgid "New Folder"
-msgstr ""
-
-#: frontend/src/components/menu-component/menu-dialog/create-fileforder-dialog.js:90
+#: frontend/src/components/tree-dir-view/tree-dir-view.js:16
 msgid "Name"
-msgstr ""
+msgstr "Nafn"
 
-#: frontend/src/components/menu-component/menu-dialog/create-fileforder-dialog.js:92
+#: frontend/src/components/menu-component/menu-dialog/create-fileforder-dialog.js:84
 msgid "newName"
 msgstr ""
 
-#: frontend/src/components/menu-component/menu-dialog/create-fileforder-dialog.js:98
-#: frontend/src/components/menu-component/menu-dialog/rename-dialog.js:71
+#: frontend/src/components/menu-component/menu-dialog/create-fileforder-dialog.js:90
+#: frontend/src/components/menu-component/menu-dialog/rename-dialog.js:70
 msgid "Submit"
-msgstr ""
+msgstr "Samþykkja"
 
-#: frontend/src/components/menu-component/menu-dialog/create-fileforder-dialog.js:99
-#: frontend/src/components/menu-component/menu-dialog/rename-dialog.js:72
+#: frontend/src/components/menu-component/menu-dialog/create-fileforder-dialog.js:91
+#: frontend/src/components/menu-component/menu-dialog/rename-dialog.js:71
 #: static/scripts/app/views/fileupload.js:21
 msgid "Cancel"
 msgstr "Hætta við"
 
 #: frontend/src/components/menu-component/menu-dialog/delete-dialog.js:16
-#: frontend/src/components/menu-component/node-menu.js:116
-#: frontend/src/components/menu-component/node-menu.js:124
+#: frontend/src/components/menu-component/node-menu.js:39
+#: frontend/src/components/menu-component/node-menu.js:47
 #: static/scripts/app/views/fileupload.js:22
 #: static/scripts/sysadmin-app/views/device-trusted-ipaddress.js:27
 msgid "Delete"
@@ -98,32 +91,52 @@ msgstr ""
 msgid "NO"
 msgstr ""
 
-#: frontend/src/components/menu-component/menu-dialog/rename-dialog.js:65
+#: frontend/src/components/menu-component/menu-dialog/rename-dialog.js:64
 #: static/scripts/app/views/dialogs/dirent-rename.js:39
 msgid "Rename File"
 msgstr "Endurnefna Skrá"
 
-#: frontend/src/components/menu-component/menu-dialog/rename-dialog.js:65
+#: frontend/src/components/menu-component/menu-dialog/rename-dialog.js:64
 #: static/scripts/app/views/dialogs/dirent-rename.js:39
 msgid "Rename Folder"
 msgstr "Endurnefna Möppu"
 
-#: frontend/src/components/menu-component/menu-dialog/rename-dialog.js:67
+#: frontend/src/components/menu-component/menu-dialog/rename-dialog.js:66
 msgid "Enter the new file name:"
 msgstr ""
 
-#: frontend/src/components/menu-component/menu-dialog/rename-dialog.js:67
+#: frontend/src/components/menu-component/menu-dialog/rename-dialog.js:66
 msgid "Enter the new folder name:"
 msgstr ""
 
-#: frontend/src/components/menu-component/node-menu.js:115
-#: frontend/src/components/menu-component/node-menu.js:123
+#: frontend/src/components/menu-component/node-menu.js:38
+#: frontend/src/components/menu-component/node-menu.js:46
 msgid "Rename"
+msgstr "Skipta um nafn"
+
+#: frontend/src/components/search.js:199
+msgid "Search files in this wiki"
+msgstr "Leita að skrám í þessu wiki"
+
+#: frontend/src/components/tree-dir-view/tree-dir-view.js:17
+msgid "Size"
+msgstr "Stærð"
+
+#: frontend/src/components/tree-dir-view/tree-dir-view.js:18
+msgid "Last Update"
+msgstr "Síðasta Uppfærsla"
+
+#: frontend/src/pages/wiki/main-panel.js:50
+msgid "Edit Page"
+msgstr "Breyta Síðu"
+
+#: frontend/src/pages/wiki/main-panel.js:60
+msgid "Wikis"
 msgstr ""
 
-#: frontend/src/components/search.js:198
-msgid "Search files in this wiki"
-msgstr ""
+#: frontend/src/pages/wiki/side-panel.js:176
+msgid "Pages"
+msgstr "Síður"
 
 #: seahub/templates/priv/ali.js:8
 msgid "Preview-Edit-on-Cloud library"
@@ -209,7 +222,7 @@ msgstr "Nafn er skilyrði"
 #: static/scripts/app/models/repo.js:37
 #: static/scripts/app/views/dialogs/dirent-rename.js:65
 #: static/scripts/app/views/dir.js:667 static/scripts/app/views/dir.js:727
-#: static/scripts/app/views/dirent.js:514
+#: static/scripts/app/views/dirent.js:515
 #: static/scripts/app/views/group-repo.js:131
 #: static/scripts/app/views/repo.js:187
 msgid "Name should not include '/'."
@@ -238,12 +251,12 @@ msgstr "Aðeins-Lesa safn"
 #: static/scripts/app/models/share-admin-folder.js:25
 #: static/scripts/app/models/share-admin-repo.js:22
 msgid "Read-Write"
-msgstr ""
+msgstr "Lesa-Skrifa"
 
 #: static/scripts/app/models/share-admin-folder.js:27
 #: static/scripts/app/models/share-admin-repo.js:24
 msgid "Read-Only"
-msgstr ""
+msgstr "Aðeins-Lesa"
 
 #: static/scripts/app/views/activity-item.js:25
 msgid "Removed all items from trash."
@@ -348,7 +361,7 @@ msgstr "Tókst að afrita %(name)s"
 
 #: static/scripts/app/views/dialogs/dirent-rename.js:59
 #: static/scripts/app/views/dir.js:662 static/scripts/app/views/dir.js:722
-#: static/scripts/app/views/dirent.js:508
+#: static/scripts/app/views/dirent.js:509
 #: static/scripts/app/views/group-repo.js:125
 #: static/scripts/app/views/groups.js:118
 #: static/scripts/app/views/invitations.js:65
@@ -611,7 +624,7 @@ msgid "locked by {placeholder}"
 msgstr "læst af {placeholder}"
 
 #: static/scripts/app/views/dirent-grid.js:187
-#: static/scripts/app/views/dirent.js:415
+#: static/scripts/app/views/dirent.js:416
 msgid "Successfully deleted %(name)s"
 msgstr "Giftursamlega eyddi %(name)s"
 
@@ -799,7 +812,7 @@ msgstr ""
 #: static/scripts/sysadmin-app/views/repo.js:65
 #: static/scripts/sysadmin-app/views/trash-repo.js:28
 msgid "Delete Library"
-msgstr ""
+msgstr "Eyða Safni"
 
 #: static/scripts/app/views/repo.js:96
 #: static/scripts/sysadmin-app/views/address-book-group-item.js:47
@@ -810,12 +823,12 @@ msgstr ""
 #: static/scripts/sysadmin-app/views/repo.js:66
 #, javascript-format
 msgid "Are you sure you want to delete %s ?"
-msgstr ""
+msgstr "Ertu viss um að þú viljir eyða %s ?"
 
 #: static/scripts/app/views/repo.js:106
 #: static/scripts/sysadmin-app/views/repo.js:79
 msgid "Successfully deleted."
-msgstr ""
+msgstr "Giftursamlega eytt"
 
 #: static/scripts/app/views/repo.js:237
 #: static/scripts/sysadmin-app/views/repo.js:97
@@ -946,7 +959,7 @@ msgstr ""
 #: static/scripts/sysadmin-app/views/groups.js:79
 #: static/scripts/sysadmin-app/views/repos.js:69
 msgid "Name is required."
-msgstr ""
+msgstr "Nafn er áskilið"
 
 #: static/scripts/sysadmin-app/views/address-book.js:49
 msgid "New Department"
@@ -966,7 +979,7 @@ msgstr ""
 
 #: static/scripts/sysadmin-app/views/admin-operation-log.js:57
 msgid "Transfer Library"
-msgstr ""
+msgstr "Færa safn"
 
 #: static/scripts/sysadmin-app/views/admin-operation-log.js:58
 msgid "Transferred library {library_name} from {user_from} to {user_to}"
@@ -991,7 +1004,7 @@ msgstr ""
 #: static/scripts/sysadmin-app/views/admin-operation-log.js:82
 #: static/scripts/sysadmin-app/views/group.js:30
 msgid "Delete Group"
-msgstr ""
+msgstr "Eyða Hópi"
 
 #: static/scripts/sysadmin-app/views/admin-operation-log.js:83
 msgid "Deleted group {group_name}"
@@ -1007,7 +1020,7 @@ msgstr ""
 
 #: static/scripts/sysadmin-app/views/admin-operation-log.js:94
 msgid "Delete User"
-msgstr ""
+msgstr "Eyða Notanda"
 
 #: static/scripts/sysadmin-app/views/admin-operation-log.js:95
 msgid "Deleted user {user}"
@@ -1019,7 +1032,7 @@ msgstr ""
 
 #: static/scripts/sysadmin-app/views/group-member.js:90
 msgid "Delete Member"
-msgstr ""
+msgstr "Eyða Félaga"
 
 #: static/scripts/sysadmin-app/views/group-member.js:100
 msgid "Successfully deleted member {placeholder}"
@@ -1027,12 +1040,12 @@ msgstr ""
 
 #: static/scripts/sysadmin-app/views/group-repo.js:28
 msgid "Unshare Library"
-msgstr ""
+msgstr "Hætta deilingu Safns"
 
 #: static/scripts/sysadmin-app/views/group-repo.js:29
 #, javascript-format
 msgid "Are you sure you want to unshare %s ?"
-msgstr ""
+msgstr "Ertu viss um að þú viljir taka deilingu af %s ?"
 
 #: static/scripts/sysadmin-app/views/group-repo.js:42
 msgid "Successfully unshared library {placeholder}"
@@ -1048,31 +1061,31 @@ msgstr ""
 
 #: static/scripts/sysadmin-app/views/search-trash-repos.js:46
 msgid "Delete Library By Owner"
-msgstr ""
+msgstr "Eyða Safni Eftir Eiganda"
 
 #: static/scripts/sysadmin-app/views/search-trash-repos.js:47
 #, javascript-format
 msgid "Are you sure you want to delete all %s's libraries?"
-msgstr ""
+msgstr "Ertu viss um að þú viljir eyða öllum söfnum sem %s á?"
 
 #: static/scripts/sysadmin-app/views/trash-repo.js:29
 #, javascript-format
 msgid "Are you sure you want to delete %s completely?"
-msgstr ""
+msgstr "Ertu viss um að þú viljir eyða %s algjörlega?"
 
 #: static/scripts/sysadmin-app/views/trash-repo.js:58
 msgid "Restore Library"
-msgstr ""
+msgstr "Endurvekja Safn"
 
 #: static/scripts/sysadmin-app/views/trash-repo.js:59
 #, javascript-format
 msgid "Are you sure you want to restore %s?"
-msgstr ""
+msgstr "Ertu viss um að þú viljir endurheimta %s?"
 
 #: static/scripts/sysadmin-app/views/trash-repos.js:49
 msgid "Clear Trash"
-msgstr ""
+msgstr "Tæma Ruslið"
 
 #: static/scripts/sysadmin-app/views/trash-repos.js:50
 msgid "Are you sure you want to clear trash?"
-msgstr ""
+msgstr "Ertu viss um að þú viljir tæma ruslið?"

@@ -22,7 +22,7 @@ var SEAFILE_GLOBAL = {
 </script>
 <script type="text/javascript" src="{% static "scripts/lib/jquery.min.js" %}"></script>
 <script type="text/javascript" src="{{ MEDIA_URL }}js/jq.min.js"></script>
-<script type="text/javascript" src="{{ MEDIA_URL }}js/base.js"></script>
+<script type="text/javascript" src="{{ MEDIA_URL }}js/base.js?t=1536127546642"></script>
 <script type="text/javascript" src="{{ ONLYOFFICE_APIJS_URL }}"></script>
 <script type="text/javascript">
     var config = {
@@ -44,6 +44,9 @@ var SEAFILE_GLOBAL = {
             "callbackUrl": "{{ callback_url }}",
             "lang": "{{ LANGUAGE_CODE }}",
             "mode": {% if can_edit %}"edit"{% else %}"view"{% endif %},
+            "customization": {
+                "forcesave": {% if onlyoffice_force_save %}true{% else %}false{% endif %},
+            },
             "user": {
                 "name": "{{ username|email2nickname|escapejs }}"
             }

@@ -309,7 +309,7 @@ define([
                 var $popup = this.fileUploadView.$el;
 
                 if (app.pageOptions.enable_upload_folder) {
-                    if ('webkitdirectory' in $('#basic-upload-input')[0]) {
+                    if ('webkitdirectory' in $('.basic-upload-input')[0]) {
                         this.$("#basic-upload").remove();
                         this.$("#advanced-upload").show();
                         this.upload_dropdown = new DropdownView({
@@ -326,13 +326,13 @@ define([
                         $popup.fileupload(
                             'option',
                             'fileInput',
-                            this.$('#basic-upload-input'));
+                            this.$('.basic-upload-input:eq(0)'));
                     }
                 } else {
                     $popup.fileupload(
                         'option',
                         'fileInput',
-                        this.$('#basic-upload-input'));
+                        this.$('.basic-upload-input:eq(0)'));
                 }
             },
 
@@ -629,7 +629,7 @@ define([
             },
 
             uploadFile: function() {
-                this.$('#basic-upload-input').trigger('click');
+                this.$('.basic-upload-input').trigger('click');
             },
 
             advancedUploadFile: function() {

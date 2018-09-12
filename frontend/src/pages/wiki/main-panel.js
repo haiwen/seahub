@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { gettext, repoID, serviceUrl, slug, siteRoot } from '../../components/constance';
+import { gettext, repoID, serviceUrl, slug, siteRoot, isPro } from '../../components/constance';
 import Search from '../../components/search';
 import Account from '../../components/account';
 import MarkdownViewer from '../../components/markdown-viewer';
@@ -49,9 +49,10 @@ class MainPanel extends Component {
               <a className="btn btn-secondary btn-topbar" onClick={this.onEditClick}>{gettext("Edit Page")}</a>
            </div>
           <div className="common-toolbar">
-            <Search  onSearchedClick={this.props.onSearchedClick}
-                     placeholder={gettext("Search files in this wiki")}
-                    />
+            {isPro && <Search  onSearchedClick={this.props.onSearchedClick}
+                               placeholder={gettext("Search files in this wiki")}
+                      />
+            }
             <Account />
           </div>
         </div>

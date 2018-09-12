@@ -480,8 +480,11 @@ def gen_file_get_url(token, filename):
     """
     return '%s/files/%s/%s' % (get_fileserver_root(), token, urlquote(filename))
 
-def gen_file_upload_url(token, op):
-    return '%s/%s/%s' % (get_fileserver_root(), op, token)
+def gen_file_upload_url(token, op, replace=False):
+    url = '%s/%s/%s' % (get_fileserver_root(), op, token)
+    if replace is True:
+        url += '?replace=1'
+    return url
 
 def gen_dir_zip_download_url(token):
     """

@@ -6,12 +6,12 @@
     <h2 class="hd">{% trans "Enable Two-Factor Authentication" %}</h2>
     <div class="con">
   {% if wizard.steps.current == 'welcome' %}
-    <p>{% blocktrans %}You are about to take your account security to the
+    <p>You are about to take your account security to the
         next level. Follow the steps in this wizard to enable two-factor
-        authentication.{% endblocktrans %}</p>
+        authentication.</p>
   {% elif wizard.steps.current == 'method' %}
-    <p>{% blocktrans %}Please select which authentication method you would
-        like to use.{% endblocktrans %}</p>
+    <p>Please select which authentication method you would
+        like to use.</p>
   {% elif wizard.steps.current == 'generator' %}
     <p>{% blocktrans %}To start using a token generator, please use your
         smartphone to scan the QR code below. For example, use Google
@@ -19,20 +19,20 @@
         {% endblocktrans %}</p>
     <img src="{{ QR_URL }}" alt="QR Code" />
   {% elif wizard.steps.current == 'sms' %}
-    <p>{% blocktrans %}Please enter the phone number you wish to receive the
+    <p>Please enter the phone number you wish to receive the
       text messages on. This number will be validated in the next step.
-      {% endblocktrans %}</p>
+      </p>
   {% elif wizard.steps.current == 'call' %}
-    <p>{% blocktrans %}Please enter the phone number you wish to be called on.
-      This number will be validated in the next step. {% endblocktrans %}</p>
+    <p>Please enter the phone number you wish to be called on.
+      This number will be validated in the next step. </p>
   {% elif wizard.steps.current == 'validation' %}
     {% if challenge_succeeded %}
       {% if device.method == 'call' %}
-        <p>{% blocktrans %}We are calling your phone right now, please enter the
-          digits you hear.{% endblocktrans %}</p>
+        <p>We are calling your phone right now, please enter the
+          digits you hear.</p>
       {% elif device.method == 'sms' %}
-        <p>{% blocktrans %}We sent you a text message, please enter the tokens we
-          sent.{% endblocktrans %}</p>
+        <p>We sent you a text message, please enter the tokens we
+          sent.</p>
       {% endif %}
     {% else %}
       <p class="alert alert-warning" role="alert">We've
@@ -42,9 +42,9 @@
         persists, contact the site administrator.</p>
     {% endif %}
   {% elif wizard.steps.current == 'yubikey' %}
-    <p>{% blocktrans %}To identify and verify your YubiKey, please insert a
+    <p>To identify and verify your YubiKey, please insert a
       token in the field below. Your YubiKey will be linked to your
-      account.{% endblocktrans %}</p>
+      account.</p>
   {% endif %}
 
   <form action="" method="post">{% csrf_token %}

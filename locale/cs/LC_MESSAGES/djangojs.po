@@ -10,27 +10,15 @@ msgid ""
 msgstr ""
 "Project-Id-Version: seahub\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2018-09-04 15:05+0800\n"
-"PO-Revision-Date: 2018-09-04 06:58+0000\n"
-"Last-Translator: zheng xie <xiez1989@gmail.com>\n"
+"POT-Creation-Date: 2018-09-07 10:41+0800\n"
+"PO-Revision-Date: 2018-09-07 02:44+0000\n"
+"Last-Translator: C_Q <helloworld.c@outlook.com>\n"
 "Language-Team: Czech (http://www.transifex.com/haiwen/seahub/language/cs/)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Language: cs\n"
 "Plural-Forms: nplurals=4; plural=(n == 1 && n % 1 == 0) ? 0 : (n >= 2 && n <= 4 && n % 1 == 0) ? 1: (n % 1 != 0 ) ? 2 : 3;\n"
-
-#: frontend/src/components/MainPanel.js:36
-msgid "Edit Page"
-msgstr "Upravit stránku"
-
-#: frontend/src/components/MainPanel.js:46
-msgid "Wikis"
-msgstr "Wiki stránky"
-
-#: frontend/src/components/SidePanel.js:291
-msgid "Pages"
-msgstr "Stránky"
 
 #: frontend/src/components/account.js:91
 msgid "System Admin"
@@ -48,41 +36,46 @@ msgstr "Nastavení"
 msgid "Log out"
 msgstr "Odhlástit"
 
-#: frontend/src/components/menu-component/menu-dialog/create-fileforder-dialog.js:82
-#: frontend/src/components/menu-component/node-menu.js:106
-#: frontend/src/components/menu-component/node-menu.js:114
+#: frontend/src/components/markdown-viewer.js:186
+msgid "Last modified by"
+msgstr ""
+
+#: frontend/src/components/menu-component/menu-dialog/create-fileforder-dialog.js:74
+#: frontend/src/components/menu-component/node-menu.js:29
+#: frontend/src/components/menu-component/node-menu.js:37
 #: static/scripts/app/views/dir.js:771
 msgid "New File"
 msgstr "Nový soubor"
 
-#: frontend/src/components/menu-component/menu-dialog/create-fileforder-dialog.js:82
-#: frontend/src/components/menu-component/node-menu.js:105
-#: frontend/src/components/menu-component/node-menu.js:113
+#: frontend/src/components/menu-component/menu-dialog/create-fileforder-dialog.js:74
+#: frontend/src/components/menu-component/node-menu.js:28
+#: frontend/src/components/menu-component/node-menu.js:36
 msgid "New Folder"
 msgstr "Nová složka"
 
-#: frontend/src/components/menu-component/menu-dialog/create-fileforder-dialog.js:90
+#: frontend/src/components/menu-component/menu-dialog/create-fileforder-dialog.js:82
+#: frontend/src/components/tree-dir-view/tree-dir-view.js:16
 msgid "Name"
 msgstr "Název"
 
-#: frontend/src/components/menu-component/menu-dialog/create-fileforder-dialog.js:92
+#: frontend/src/components/menu-component/menu-dialog/create-fileforder-dialog.js:84
 msgid "newName"
 msgstr "Zadejte název"
 
-#: frontend/src/components/menu-component/menu-dialog/create-fileforder-dialog.js:98
-#: frontend/src/components/menu-component/menu-dialog/rename-dialog.js:71
+#: frontend/src/components/menu-component/menu-dialog/create-fileforder-dialog.js:90
+#: frontend/src/components/menu-component/menu-dialog/rename-dialog.js:70
 msgid "Submit"
 msgstr "Odeslat"
 
-#: frontend/src/components/menu-component/menu-dialog/create-fileforder-dialog.js:99
-#: frontend/src/components/menu-component/menu-dialog/rename-dialog.js:72
+#: frontend/src/components/menu-component/menu-dialog/create-fileforder-dialog.js:91
+#: frontend/src/components/menu-component/menu-dialog/rename-dialog.js:71
 #: static/scripts/app/views/fileupload.js:21
 msgid "Cancel"
 msgstr "Zrišit"
 
 #: frontend/src/components/menu-component/menu-dialog/delete-dialog.js:16
-#: frontend/src/components/menu-component/node-menu.js:116
-#: frontend/src/components/menu-component/node-menu.js:124
+#: frontend/src/components/menu-component/node-menu.js:39
+#: frontend/src/components/menu-component/node-menu.js:47
 #: static/scripts/app/views/fileupload.js:22
 #: static/scripts/sysadmin-app/views/device-trusted-ipaddress.js:27
 msgid "Delete"
@@ -100,88 +93,108 @@ msgstr "ANO"
 msgid "NO"
 msgstr "NE"
 
-#: frontend/src/components/menu-component/menu-dialog/rename-dialog.js:65
+#: frontend/src/components/menu-component/menu-dialog/rename-dialog.js:64
 #: static/scripts/app/views/dialogs/dirent-rename.js:39
 msgid "Rename File"
 msgstr "Přejmenovat soubor"
 
-#: frontend/src/components/menu-component/menu-dialog/rename-dialog.js:65
+#: frontend/src/components/menu-component/menu-dialog/rename-dialog.js:64
 #: static/scripts/app/views/dialogs/dirent-rename.js:39
 msgid "Rename Folder"
 msgstr "Přejmenovat adresář"
 
-#: frontend/src/components/menu-component/menu-dialog/rename-dialog.js:67
+#: frontend/src/components/menu-component/menu-dialog/rename-dialog.js:66
 msgid "Enter the new file name:"
 msgstr "Zadejte název nového souboru:"
 
-#: frontend/src/components/menu-component/menu-dialog/rename-dialog.js:67
+#: frontend/src/components/menu-component/menu-dialog/rename-dialog.js:66
 msgid "Enter the new folder name:"
 msgstr "Zadejte název nové složky:"
 
-#: frontend/src/components/menu-component/node-menu.js:115
-#: frontend/src/components/menu-component/node-menu.js:123
+#: frontend/src/components/menu-component/node-menu.js:38
+#: frontend/src/components/menu-component/node-menu.js:46
 msgid "Rename"
 msgstr "Přejmenovat"
 
-#: frontend/src/components/search.js:198
+#: frontend/src/components/search.js:199
 msgid "Search files in this wiki"
 msgstr "Vyhledat soubory v této wiki"
 
+#: frontend/src/components/tree-dir-view/tree-dir-view.js:17
+msgid "Size"
+msgstr "Velikost"
+
+#: frontend/src/components/tree-dir-view/tree-dir-view.js:18
+msgid "Last Update"
+msgstr "Poslední aktualizace"
+
+#: frontend/src/pages/wiki/main-panel.js:50
+msgid "Edit Page"
+msgstr "Upravit stránku"
+
+#: frontend/src/pages/wiki/main-panel.js:60
+msgid "Wikis"
+msgstr "Wiki stránky"
+
+#: frontend/src/pages/wiki/side-panel.js:176
+msgid "Pages"
+msgstr "Stránky"
+
 #: seahub/templates/priv/ali.js:8
 msgid "Preview-Edit-on-Cloud library"
-msgstr ""
+msgstr "Zobrazit/Upravit knihovnu v cloudu"
 
 #: seahub/templates/priv/ali.js:9
 msgid "Preview-on-Cloud library"
-msgstr ""
+msgstr "Zobrazit knihovnu v cloudu"
 
 #: seahub/templates/priv/ali.js:10
 msgid "Admin access"
-msgstr ""
+msgstr "Přistup administrátora"
 
 #: seahub/templates/priv/ali.js:12
 msgid "Read-Write folder"
-msgstr ""
+msgstr "Číst/Upravovat složku"
 
 #: seahub/templates/priv/ali.js:13
 msgid "Read-Only folder"
-msgstr ""
+msgstr "Číst složku"
 
 #: seahub/templates/priv/ali.js:14
 msgid "Preview-Edit-on-Cloud folder"
-msgstr ""
+msgstr "Zobrazit/Upravovat složku v cloudu"
 
 #: seahub/templates/priv/ali.js:15
 msgid "Preview-on-Cloud folder"
-msgstr ""
+msgstr "Zobrazit složku v cloudu"
 
 #: seahub/templates/priv/ali.js:17
 msgid "Preview-Edit-on-Cloud"
-msgstr ""
+msgstr "Zobrazit/Upravit v cloudu"
 
 #: seahub/templates/priv/ali.js:18
 msgid "Preview-on-Cloud"
-msgstr ""
+msgstr "Zobrazit v cloudu"
 
 #: seahub/templates/priv/ali.js:21
 msgid "Read-Write-Sync"
-msgstr ""
+msgstr "Číst/Upravit/Synchronizovat"
 
 #: seahub/templates/priv/ali.js:22
 msgid "Read-Only-Sync"
-msgstr ""
+msgstr "Číst/Synchronizovat"
 
 #: seahub/templates/priv/ali.js:23
 msgid "Co-Owner"
-msgstr ""
+msgstr "Spolumajitel"
 
 #: seahub/templates/priv/ali.js:24
 msgid "Edit-on-Cloud"
-msgstr ""
+msgstr "Upravit v cloudu"
 
 #: seahub/templates/priv/ali.js:25
 msgid "View-on-Cloud"
-msgstr ""
+msgstr "Zobrazit v cloudu"
 
 #: static/scripts/app/models/deleted-repo.js:19
 #: static/scripts/app/models/repo.js:59 static/scripts/common.js:343
@@ -211,7 +224,7 @@ msgstr "Jméno je povinné."
 #: static/scripts/app/models/repo.js:37
 #: static/scripts/app/views/dialogs/dirent-rename.js:65
 #: static/scripts/app/views/dir.js:667 static/scripts/app/views/dir.js:727
-#: static/scripts/app/views/dirent.js:514
+#: static/scripts/app/views/dirent.js:515
 #: static/scripts/app/views/group-repo.js:131
 #: static/scripts/app/views/repo.js:187
 msgid "Name should not include '/'."
@@ -350,7 +363,7 @@ msgstr "Úspěšně zkopírováno %(name)s"
 
 #: static/scripts/app/views/dialogs/dirent-rename.js:59
 #: static/scripts/app/views/dir.js:662 static/scripts/app/views/dir.js:722
-#: static/scripts/app/views/dirent.js:508
+#: static/scripts/app/views/dirent.js:509
 #: static/scripts/app/views/group-repo.js:125
 #: static/scripts/app/views/groups.js:118
 #: static/scripts/app/views/invitations.js:65
@@ -613,7 +626,7 @@ msgid "locked by {placeholder}"
 msgstr "uzamčeno {placeholder}"
 
 #: static/scripts/app/views/dirent-grid.js:187
-#: static/scripts/app/views/dirent.js:415
+#: static/scripts/app/views/dirent.js:416
 msgid "Successfully deleted %(name)s"
 msgstr "Úspěšně smazáno %(name)s"
 

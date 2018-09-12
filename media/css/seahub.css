@@ -4346,6 +4346,18 @@ img.thumbnail {
     max-width:215px;
 }
 /* dir view */
+#basic-upload { /* for IE 9 */
+    position: relative;
+}
+.basic-upload-input { /* for IE 9 */
+    position: absolute;
+    top: 0;
+    right: 0;
+    margin: 0;
+    height: 100%;
+    opacity: 0;
+    cursor: pointer;
+}
 #dir-view-path {
     display:flex;
     justify-content:space-between;

@@ -10,11 +10,11 @@
         {% if wizard.steps.current == 'token' %}
 
         {% if device.method == 'call' %}
-        <p>{% blocktrans %}We are calling your phone right now, please enter the
-            digits you hear.{% endblocktrans %}</p>
+        <p>We are calling your phone right now, please enter the
+            digits you hear.</p>
         {% elif device.method == 'sms' %}
-        <p>{% blocktrans %}We sent you a text message, please enter the tokens we
-            sent.{% endblocktrans %}</p>
+        <p>We sent you a text message, please enter the tokens we
+            sent.</p>
         {% else %}
         <p>{% trans "Open the two-factor authentication app on your device to view your authentication token and verify your identify." %}</p>
         {% endif %}

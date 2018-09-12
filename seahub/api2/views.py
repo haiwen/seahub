@@ -32,7 +32,7 @@ from django.utils.translation import ugettext as _
 from .throttling import ScopedRateThrottle, AnonRateThrottle, UserRateThrottle
 from .authentication import TokenAuthentication
 from .serializers import AuthTokenSerializer
-from .utils import get_diff_details, \
+from .utils import get_diff_details, to_python_boolean, \
     api_error, get_file_size, prepare_starred_files, \
     get_groups, api_group_check, get_timestamp, json_response, is_seafile_pro
 
@@ -1634,10 +1634,13 @@ class UploadLinkView(APIView):
         if not token:
             error_msg = 'Internal Server Error'
             return api_error(status.HTTP_500_INTERNAL_SERVER_ERROR, error_msg)
-
         req_from = request.GET.get('from', 'api')
         if req_from == 'api':
-            url = gen_file_upload_url(token, 'upload-api')
+            try:
+                replace = to_python_boolean(request.GET.get('replace', '0'))
+            except ValueError:
+                replace = False
+            url = gen_file_upload_url(token, 'upload-api', replace)
         elif req_from == 'web':
             url = gen_file_upload_url(token, 'upload-aj')
         else:

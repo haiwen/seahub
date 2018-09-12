@@ -34,14 +34,47 @@ class Wiki extends Component {
   }
 
   componentDidMount() {
-    this.initSidePanelData();
-    this.initMainPanelData(initialFilePath);
+    this.initWikiData(initialFilePath);
   }
 
-  initMainPanelData(filePath) {
-    if (!this.isMarkdownFile(filePath)) {
-      filePath = "/home.md";
-    }
+  initWikiData(filePath){
+    this.setState({isFileLoading: true});
+    editorUtilities.getFiles().then((files) => {
+      // construct the tree object
+      var treeData = new Tree();
+      treeData.parseListToTree(files);
+
+      let node = treeData.getNodeByPath(filePath);
+      treeData.expandNode(node);
+      if (node.isDir()) {
+        this.exitViewFileState(treeData, node);
+        this.setState({isFileLoading: false});
+      } else {
+        treeData.expandNode(node);
+        editorUtilities.getWikiFileContent(slug, filePath).then(res => {
+          this.setState({
+            tree_data: treeData,
+            content: res.data.content,
+            latestContributor: res.data.latest_contributor,
+            lastModified: moment.unix(res.data.last_modified).fromNow(),
+            permission: res.data.permission,
+            filePath: filePath,
+            isFileLoading: false
+          })
+        });
+        const hash = window.location.hash;
+        let fileUrl = serviceUrl + '/wikis/' + slug + filePath + hash;
+        window.history.pushState({urlPath: fileUrl, filePath: filePath}, filePath, fileUrl);
+      }
+    }, () => {
+      console.log("failed to load files");
+      this.setState({
+        isLoadFailed: true
+      })
+    })
+  }
+
+  initMainPanelData(filePath){
     this.setState({isFileLoading: true});
     editorUtilities.getWikiFileContent(slug, filePath)
       .then(res => {
@@ -60,29 +93,14 @@ class Wiki extends Component {
      window.history.pushState({urlPath: fileUrl, filePath: filePath}, filePath, fileUrl);
   }
 
-  initSidePanelData() {
-    editorUtilities.getFiles().then((files) => {
-      // construct the tree object
-      var treeData = new Tree();
-      treeData.parseListToTree(files);
-      let homeNode = this.getHomeNode(treeData);
-      this.setState({
-        tree_data: treeData,
-        changedNode: homeNode
-      });
-    }, () => {
-      console.log("failed to load files");
-      this.setState({
-        isLoadFailed: true
-      })
-    })
-  }
-
   onLinkClick = (event) => {
     const url = event.target.href;
     if (this.isInternalMarkdownLink(url)) {
       let path = this.getPathFromInternalMarkdownLink(url);
       this.initMainPanelData(path);
+    } else if (this.isInternalDirLink(url)) {
+      let path = this.getPathFromInternalDirLink(url);
+      this.initWikiData(path);
     } else {
       window.location.href = url;
     }
@@ -100,17 +118,15 @@ class Wiki extends Component {
 
       let tree = this.state.tree_data.clone();
       let node = tree.getNodeByPath(path);
-      tree.setNodeToActivated(node);
-
-      let path = node.path; //node is file
-      this.enterViewFileState(tree, node, path);
+      tree.expandNode(node);
+      this.enterViewFileState(tree, node, node.path);
     }
   }
 
   onMainNavBarClick = (nodePath) => {
     let tree = this.state.tree_data.clone();
     let node = tree.getNodeByPath(nodePath);
-    tree.setNodeToActivated(node);
+    tree.expandNode(node);
 
     this.exitViewFileState(tree, node);
 
@@ -121,7 +137,7 @@ class Wiki extends Component {
 
   onMainNodeClick = (node) => {
     let tree = this.state.tree_data.clone();
-    tree.setNodeToActivated(node);
+    tree.expandNode(node);
     if (node.isMarkdown()) {
       this.initMainPanelData(node.path);
       this.enterViewFileState(tree, node, node.path);
@@ -141,6 +157,13 @@ class Wiki extends Component {
       this.enterViewFileState(tree, node, node.path);
     } else if(node instanceof Node && node.isDir()){
       let tree = this.state.tree_data.clone();
+      if (this.state.filePath === node.path) {
+        if (node.isExpanded) {
+          tree.collapseNode(node);
+        } else {
+          tree.expandNode(node);
+        }
+      }
       this.exitViewFileState(tree, node);
     } else {
       const w=window.open('about:blank');
@@ -181,7 +204,7 @@ class Wiki extends Component {
       let parentNode = tree.getNodeByPath(parentPath);
       tree.addNodeToParent(node, parentNode);
       if (this.state.isViewFileState) {
-        tree.setNodeToActivated(node);
+        tree.expandNode(node);
         this.setState({
           tree_data: tree,
           changedNode: node
@@ -205,7 +228,7 @@ class Wiki extends Component {
       let parentNode = tree.getNodeByPath(parentPath);
       tree.addNodeToParent(node, parentNode);
       if (this.state.isViewFileState) {
-        tree.setNodeToActivated(node);
+        tree.expandNode(node);
         this.setState({
           tree_data: tree,
           changedNode: node
@@ -221,15 +244,17 @@ class Wiki extends Component {
     let filePath = node.path;
     if (node.isMarkdown()) {
       editorUtilities.renameFile(filePath, newName).then(res => {
-        let date = new Date().getTime()/1000;
+        let cloneNode = node.clone();
+
         tree.updateNodeParam(node, "name", newName);
         node.name = newName;
+        let date = new Date().getTime()/1000;
         tree.updateNodeParam(node, "last_update_time", moment.unix(date).fromNow());
-
         node.last_update_time = moment.unix(date).fromNow();
+
         if (this.state.isViewFileState) {
-          if (this.isModifyCurrentFile(node)) {
-            tree.setNodeToActivated(node);
+          if (this.isModifyCurrentFile(cloneNode)) {
+            tree.expandNode(node);
             this.setState({
               tree_data: tree,
               changedNode: node
@@ -239,22 +264,29 @@ class Wiki extends Component {
             this.setState({tree_data: tree});
           }
         } else {
-          this.setState({tree_data: tree});
+          let parentNode = tree.findNodeParentFromTree(node);
+          this.setState({
+            tree_data: tree,
+            changedNode: parentNode
+          });
         }
       })
     } else if (node.isDir()) {
       editorUtilities.renameDir(filePath, newName).then(res => {
-        let currentFilePath = this.state.filePath;// the sequence is must right
+
+        let currentFilePath = this.state.filePath;
         let currentFileNode = tree.getNodeByPath(currentFilePath);
-        
-        let date = new Date().getTime()/1000;
+        let nodePath = node.path;
+
         tree.updateNodeParam(node, "name", newName);
-        node.name = newName;  // just synchronization node data && tree data;
+        node.name = newName;
+        let date = new Date().getTime()/1000;
         tree.updateNodeParam(node, "last_update_time", moment.unix(date).fromNow());
         node.last_update_time = moment.unix(date).fromNow();
+
         if (this.state.isViewFileState) {
-          if (this.isModifyContainsCurrentFile(node)) {
-            tree.setNodeToActivated(currentFileNode);
+          if (currentFilePath.indexOf(nodePath) > -1) {
+            tree.expandNode(currentFileNode);
             this.setState({
               tree_data: tree,
               changedNode: currentFileNode
@@ -264,8 +296,11 @@ class Wiki extends Component {
             this.setState({tree_data: tree});
           }
         } else {
-          if (node.path.indexOf(currentFilePath) > -1) {
-            tree.setNodeToActivated(currentFileNode);
+          if (nodePath === currentFilePath) { // old node
+            tree.expandNode(node);
+            this.exitViewFileState(tree, node);
+          } else if (node.path.indexOf(currentFilePath) > -1) { // new node
+            tree.expandNode(currentFileNode);
             this.exitViewFileState(tree, currentFileNode);
           } else {
             this.setState({tree_data: tree});
@@ -297,7 +332,7 @@ class Wiki extends Component {
     if (this.state.isViewFileState) {
       if (isCurrentFile) {
         let homeNode = this.getHomeNode(tree);
-        tree.setNodeToActivated(homeNode);
+        tree.expandNode(homeNode);
         this.setState({
           tree_data: tree,
           changedNode: homeNode
@@ -399,10 +434,31 @@ class Wiki extends Component {
     return re.test(url);
   }
 
+  isInternalDirLink(url) {
+    var re = new RegExp(serviceUrl + '/#[a-z\-]*?/lib/' + repoID + '/.*');
+    return re.test(url);
+  }
+
   getPathFromInternalMarkdownLink(url) {
     var re = new RegExp(serviceUrl + '/lib/' + repoID + '/file' + "(.*\.md)");
     var array = re.exec(url);
     var path = decodeURIComponent(array[1]);
+    return path;
+  }
+
+  getPathFromInternalDirLink(url) {
+    var re = new RegExp(serviceUrl + '/#[a-z\-]*?/lib/' + repoID + "(/.*)");
+    var array = re.exec(url);
+    var path = decodeURIComponent(array[1]);
+
+    var dirPath = path.substring(1);
+    var re = new RegExp("(^/.*)");
+    if (re.test(dirPath)) {
+      path = dirPath;
+    } else {
+      path = '/' + dirPath
+    }
+
     return path;
   }
 
@@ -414,7 +470,6 @@ class Wiki extends Component {
           closeSideBar={this.state.closeSideBar}
           onCloseSide ={this.onCloseSide}
           treeData={this.state.tree_data}
-          permission={this.state.permission}
           currentFilePath={this.state.filePath}
           changedNode={this.state.changedNode}
           onAddFolderNode={this.onAddFolderNode}

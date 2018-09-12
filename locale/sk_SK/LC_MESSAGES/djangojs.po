@@ -7,27 +7,15 @@ msgid ""
 msgstr ""
 "Project-Id-Version: seahub\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2018-09-04 15:05+0800\n"
-"PO-Revision-Date: 2018-09-04 06:58+0000\n"
-"Last-Translator: zheng xie <xiez1989@gmail.com>\n"
+"POT-Creation-Date: 2018-09-07 10:41+0800\n"
+"PO-Revision-Date: 2018-09-07 02:45+0000\n"
+"Last-Translator: C_Q <helloworld.c@outlook.com>\n"
 "Language-Team: Slovak (Slovakia) (http://www.transifex.com/haiwen/seahub/language/sk_SK/)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Language: sk_SK\n"
 "Plural-Forms: nplurals=4; plural=(n % 1 == 0 && n == 1 ? 0 : n % 1 == 0 && n >= 2 && n <= 4 ? 1 : n % 1 != 0 ? 2: 3);\n"
-
-#: frontend/src/components/MainPanel.js:36
-msgid "Edit Page"
-msgstr ""
-
-#: frontend/src/components/MainPanel.js:46
-msgid "Wikis"
-msgstr ""
-
-#: frontend/src/components/SidePanel.js:291
-msgid "Pages"
-msgstr ""
 
 #: frontend/src/components/account.js:91
 msgid "System Admin"
@@ -45,45 +33,50 @@ msgstr ""
 msgid "Log out"
 msgstr ""
 
-#: frontend/src/components/menu-component/menu-dialog/create-fileforder-dialog.js:82
-#: frontend/src/components/menu-component/node-menu.js:106
-#: frontend/src/components/menu-component/node-menu.js:114
+#: frontend/src/components/markdown-viewer.js:186
+msgid "Last modified by"
+msgstr ""
+
+#: frontend/src/components/menu-component/menu-dialog/create-fileforder-dialog.js:74
+#: frontend/src/components/menu-component/node-menu.js:29
+#: frontend/src/components/menu-component/node-menu.js:37
 #: static/scripts/app/views/dir.js:771
 msgid "New File"
 msgstr ""
 
-#: frontend/src/components/menu-component/menu-dialog/create-fileforder-dialog.js:82
-#: frontend/src/components/menu-component/node-menu.js:105
-#: frontend/src/components/menu-component/node-menu.js:113
+#: frontend/src/components/menu-component/menu-dialog/create-fileforder-dialog.js:74
+#: frontend/src/components/menu-component/node-menu.js:28
+#: frontend/src/components/menu-component/node-menu.js:36
 msgid "New Folder"
 msgstr ""
 
-#: frontend/src/components/menu-component/menu-dialog/create-fileforder-dialog.js:90
+#: frontend/src/components/menu-component/menu-dialog/create-fileforder-dialog.js:82
+#: frontend/src/components/tree-dir-view/tree-dir-view.js:16
 msgid "Name"
-msgstr ""
+msgstr "Meno"
 
-#: frontend/src/components/menu-component/menu-dialog/create-fileforder-dialog.js:92
+#: frontend/src/components/menu-component/menu-dialog/create-fileforder-dialog.js:84
 msgid "newName"
 msgstr ""
 
-#: frontend/src/components/menu-component/menu-dialog/create-fileforder-dialog.js:98
-#: frontend/src/components/menu-component/menu-dialog/rename-dialog.js:71
+#: frontend/src/components/menu-component/menu-dialog/create-fileforder-dialog.js:90
+#: frontend/src/components/menu-component/menu-dialog/rename-dialog.js:70
 msgid "Submit"
 msgstr ""
 
-#: frontend/src/components/menu-component/menu-dialog/create-fileforder-dialog.js:99
-#: frontend/src/components/menu-component/menu-dialog/rename-dialog.js:72
+#: frontend/src/components/menu-component/menu-dialog/create-fileforder-dialog.js:91
+#: frontend/src/components/menu-component/menu-dialog/rename-dialog.js:71
 #: static/scripts/app/views/fileupload.js:21
 msgid "Cancel"
-msgstr ""
+msgstr "Zrušiť"
 
 #: frontend/src/components/menu-component/menu-dialog/delete-dialog.js:16
-#: frontend/src/components/menu-component/node-menu.js:116
-#: frontend/src/components/menu-component/node-menu.js:124
+#: frontend/src/components/menu-component/node-menu.js:39
+#: frontend/src/components/menu-component/node-menu.js:47
 #: static/scripts/app/views/fileupload.js:22
 #: static/scripts/sysadmin-app/views/device-trusted-ipaddress.js:27
 msgid "Delete"
-msgstr ""
+msgstr "Zmazať"
 
 #: frontend/src/components/menu-component/menu-dialog/delete-dialog.js:18
 msgid "Are you sure to delete"
@@ -97,31 +90,51 @@ msgstr ""
 msgid "NO"
 msgstr ""
 
-#: frontend/src/components/menu-component/menu-dialog/rename-dialog.js:65
+#: frontend/src/components/menu-component/menu-dialog/rename-dialog.js:64
 #: static/scripts/app/views/dialogs/dirent-rename.js:39
 msgid "Rename File"
 msgstr ""
 
-#: frontend/src/components/menu-component/menu-dialog/rename-dialog.js:65
+#: frontend/src/components/menu-component/menu-dialog/rename-dialog.js:64
 #: static/scripts/app/views/dialogs/dirent-rename.js:39
 msgid "Rename Folder"
 msgstr ""
 
-#: frontend/src/components/menu-component/menu-dialog/rename-dialog.js:67
+#: frontend/src/components/menu-component/menu-dialog/rename-dialog.js:66
 msgid "Enter the new file name:"
 msgstr ""
 
-#: frontend/src/components/menu-component/menu-dialog/rename-dialog.js:67
+#: frontend/src/components/menu-component/menu-dialog/rename-dialog.js:66
 msgid "Enter the new folder name:"
 msgstr ""
 
-#: frontend/src/components/menu-component/node-menu.js:115
-#: frontend/src/components/menu-component/node-menu.js:123
+#: frontend/src/components/menu-component/node-menu.js:38
+#: frontend/src/components/menu-component/node-menu.js:46
 msgid "Rename"
 msgstr ""
 
-#: frontend/src/components/search.js:198
+#: frontend/src/components/search.js:199
 msgid "Search files in this wiki"
+msgstr ""
+
+#: frontend/src/components/tree-dir-view/tree-dir-view.js:17
+msgid "Size"
+msgstr ""
+
+#: frontend/src/components/tree-dir-view/tree-dir-view.js:18
+msgid "Last Update"
+msgstr "Posledná zmena"
+
+#: frontend/src/pages/wiki/main-panel.js:50
+msgid "Edit Page"
+msgstr ""
+
+#: frontend/src/pages/wiki/main-panel.js:60
+msgid "Wikis"
+msgstr ""
+
+#: frontend/src/pages/wiki/side-panel.js:176
+msgid "Pages"
 msgstr ""
 
 #: seahub/templates/priv/ali.js:8
@@ -208,7 +221,7 @@ msgstr ""
 #: static/scripts/app/models/repo.js:37
 #: static/scripts/app/views/dialogs/dirent-rename.js:65
 #: static/scripts/app/views/dir.js:667 static/scripts/app/views/dir.js:727
-#: static/scripts/app/views/dirent.js:514
+#: static/scripts/app/views/dirent.js:515
 #: static/scripts/app/views/group-repo.js:131
 #: static/scripts/app/views/repo.js:187
 msgid "Name should not include '/'."
@@ -228,7 +241,7 @@ msgstr ""
 
 #: static/scripts/app/models/repo.js:46 static/scripts/app/views/share.js:346
 msgid "Passwords don't match"
-msgstr ""
+msgstr "Heslá nie sú rovnaké"
 
 #: static/scripts/app/models/repo.js:63 static/scripts/common.js:345
 msgid "Read-Only library"
@@ -237,12 +250,12 @@ msgstr ""
 #: static/scripts/app/models/share-admin-folder.js:25
 #: static/scripts/app/models/share-admin-repo.js:22
 msgid "Read-Write"
-msgstr ""
+msgstr "Čítanie-Zápis"
 
 #: static/scripts/app/models/share-admin-folder.js:27
 #: static/scripts/app/models/share-admin-repo.js:24
 msgid "Read-Only"
-msgstr ""
+msgstr "Iba čítanie"
 
 #: static/scripts/app/views/activity-item.js:25
 msgid "Removed all items from trash."
@@ -347,7 +360,7 @@ msgstr ""
 
 #: static/scripts/app/views/dialogs/dirent-rename.js:59
 #: static/scripts/app/views/dir.js:662 static/scripts/app/views/dir.js:722
-#: static/scripts/app/views/dirent.js:508
+#: static/scripts/app/views/dirent.js:509
 #: static/scripts/app/views/group-repo.js:125
 #: static/scripts/app/views/groups.js:118
 #: static/scripts/app/views/invitations.js:65
@@ -439,7 +452,7 @@ msgstr ""
 #: static/scripts/app/views/dir.js:59
 #: static/scripts/app/views/starred-file.js:107
 msgid "Loading..."
-msgstr ""
+msgstr "Nahrávam..."
 
 #: static/scripts/app/views/dir.js:62
 #: static/scripts/app/views/starred-file.js:110
@@ -473,7 +486,7 @@ msgstr ""
 #: static/scripts/app/views/dir.js:479
 #: static/scripts/app/views/notifications.js:63 static/scripts/common.js:467
 msgid "Please check the network."
-msgstr ""
+msgstr "Prosím skontrolujte pripojenie k sieti."
 
 #: static/scripts/app/views/dir.js:733
 msgid "Only an extension there, please input a name."
@@ -610,7 +623,7 @@ msgid "locked by {placeholder}"
 msgstr ""
 
 #: static/scripts/app/views/dirent-grid.js:187
-#: static/scripts/app/views/dirent.js:415
+#: static/scripts/app/views/dirent.js:416
 msgid "Successfully deleted %(name)s"
 msgstr ""
 
@@ -706,7 +719,7 @@ msgstr ""
 #: static/scripts/common.js:444
 #: static/scripts/sysadmin-app/views/dashboard.js:84
 msgid "Failed. Please check the network."
-msgstr ""
+msgstr "Chyba. Prosím skontrolujte pripojenie k sieti."
 
 #: static/scripts/app/views/folder-share-item.js:186
 msgid "Delete failed"
@@ -945,7 +958,7 @@ msgstr ""
 #: static/scripts/sysadmin-app/views/groups.js:79
 #: static/scripts/sysadmin-app/views/repos.js:69
 msgid "Name is required."
-msgstr ""
+msgstr "Meno je povinné."
 
 #: static/scripts/sysadmin-app/views/address-book.js:49
 msgid "New Department"
@@ -990,7 +1003,7 @@ msgstr ""
 #: static/scripts/sysadmin-app/views/admin-operation-log.js:82
 #: static/scripts/sysadmin-app/views/group.js:30
 msgid "Delete Group"
-msgstr ""
+msgstr "Zmazať skupinu"
 
 #: static/scripts/sysadmin-app/views/admin-operation-log.js:83
 msgid "Deleted group {group_name}"
@@ -1061,7 +1074,7 @@ msgstr ""
 
 #: static/scripts/sysadmin-app/views/trash-repo.js:58
 msgid "Restore Library"
-msgstr ""
+msgstr "Obnoviť knižnicu"
 
 #: static/scripts/sysadmin-app/views/trash-repo.js:59
 #, javascript-format

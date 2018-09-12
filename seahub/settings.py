@@ -266,6 +266,9 @@ AUTHENTICATION_BACKENDS = (
 ENABLE_OAUTH = False
 ENABLE_WATERMARK = False
 
+# allow user to clean library trash
+ENABLE_USER_CLEAN_TRASH = True
+
 LOGIN_REDIRECT_URL = '/profile/'
 LOGIN_URL = '/accounts/login/'
 LOGOUT_URL = '/accounts/logout/'
@@ -821,4 +824,5 @@ CONSTANCE_CONFIG = {
     'CUSTOM_CSS': ('', ''),
 
     'ENABLE_TERMS_AND_CONDITIONS': (ENABLE_TERMS_AND_CONDITIONS, ''),
+    'ENABLE_USER_CLEAN_TRASH': (ENABLE_USER_CLEAN_TRASH, ''),
 }

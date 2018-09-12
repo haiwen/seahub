@@ -335,7 +335,8 @@ module.exports = {
     // solution that requires the user to opt into importing specific locales.
     // https://github.com/jmblog/how-to-optimize-momentjs-with-webpack
     // You can remove this if you don't use Moment.js:
-    new webpack.IgnorePlugin(/^\.\/locale$/, /moment$/),
+    new webpack.ContextReplacementPlugin(/moment[\/\\]locale$/, /zh-cn|zh-tw|en|cs|nl_NL|fi|fr|de|hu|it|ko|lv|pl|ru|es|es_MX|sv/),
+    //new webpack.IgnorePlugin(/^\.\/locale$/, /moment$/),
 
     new BundleTracker({filename: './webpack-stats.pro.json'}),
   ],

@@ -37,6 +37,7 @@ from seaserv import get_repo, send_message, get_commits, \
     seafserv_threaded_rpc
 from pysearpc import SearpcError
 
+from seahub.auth import REDIRECT_FIELD_NAME
 from seahub.tags.models import FileUUIDMap
 from seahub.wopi.utils import get_wopi_dict
 from seahub.onlyoffice.utils import get_onlyoffice_dict
@@ -347,7 +348,9 @@ def can_preview_file(file_name, file_size, repo=None):
         else:
             return (True, None)
     else:
-        return (False, _(u'Online view is not applicable to this file format'))
+        # TODO: may need a better way instead of return string, and compare
+        # that string in templates
+        return (False, "invalid extension")
 
 def send_file_access_msg_when_preview(request, repo, path, access_from):
     """ send file access msg when user preview file from web
@@ -693,7 +696,7 @@ def view_lib_file(request, repo_id, path):
                 return_dict['err'] = _(u'Error when prepare OnlyOffice file preview page.')
 
         if not HAS_OFFICE_CONVERTER:
-            return_dict['err'] = _(u'Online view is not applicable to this file format')
+            return_dict['err'] = "invalid extension"
             return render(request, 'view_file_base.html', return_dict)
 
         if file_size > OFFICE_PREVIEW_MAX_SIZE:
@@ -710,7 +713,7 @@ def view_lib_file(request, repo_id, path):
         # render file preview page
         return render(request, template, return_dict)
     else:
-        return_dict['err'] = _(u'Online view is not applicable to this file format')
+        return_dict['err'] = "invalid extension"
         return render(request, 'view_file_base.html', return_dict)
 
 def view_history_file_common(request, repo_id, ret_dict):
@@ -961,7 +964,10 @@ def view_shared_file(request, fileshare):
     can_edit = fileshare.get_permissions()['can_edit']
 
     if can_edit and not request.user.is_authenticated():
-        return render_error(request, _(u'Permission denied'))
+        login_url = settings.LOGIN_URL
+        path = urlquote(request.get_full_path())
+        tup = login_url, REDIRECT_FIELD_NAME, path
+        return HttpResponseRedirect('%s?%s=%s' % tup)
 
     # Increase file shared link view_cnt, this operation should be atomic
     fileshare.view_cnt = F('view_cnt') + 1

@@ -59,7 +59,6 @@ class Rename extends React.Component {
 
   render() {
     let type = this.props.currentNode.type;
-    let preName = this.props.currentNode.name;
     return (
       <Modal isOpen={true} toggle={this.toggle}>
         <ModalHeader toggle={this.toggle}>{type === 'file' ? gettext("Rename File") : gettext("Rename Folder") }</ModalHeader>

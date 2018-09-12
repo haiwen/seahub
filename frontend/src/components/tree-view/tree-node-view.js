@@ -1,5 +1,6 @@
 import React from 'react';
-import MenuControl from '../menu-component/node-menu-control'
+import MenuControl from '../menu-component/node-menu-control';
+import { permission } from '../constance';
 
 function sortByType(a, b) {
   if (a.type == "dir" && b.type != "dir") {
@@ -110,7 +111,6 @@ class TreeNodeView extends React.Component {
                 paddingLeft={this.props.paddingLeft}
                 treeView={this.props.treeView}
                 isNodeItemFrezee={this.props.isNodeItemFrezee}
-                permission={this.props.permission}
                 currentFilePath={this.props.currentFilePath}
                 onDirCollapse={this.props.onDirCollapse}
               />
@@ -124,7 +124,7 @@ class TreeNodeView extends React.Component {
   }
 
   renderMenuController() {
-    if (this.props.permission === "rw") {
+    if (permission === "True") {
       let isShow = (this.props.node.path === this.props.currentFilePath);
       return (
         <div className="right-icon">

@@ -10,9 +10,9 @@ msgid ""
 msgstr ""
 "Project-Id-Version: seahub\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2018-09-04 15:05+0800\n"
-"PO-Revision-Date: 2018-09-04 06:58+0000\n"
-"Last-Translator: zheng xie <xiez1989@gmail.com>\n"
+"POT-Creation-Date: 2018-09-07 10:41+0800\n"
+"PO-Revision-Date: 2018-09-07 02:45+0000\n"
+"Last-Translator: C_Q <helloworld.c@outlook.com>\n"
 "Language-Team: Swedish (http://www.transifex.com/haiwen/seahub/language/sv/)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -20,69 +20,62 @@ msgstr ""
 "Language: sv\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 
-#: frontend/src/components/MainPanel.js:36
-msgid "Edit Page"
-msgstr ""
-
-#: frontend/src/components/MainPanel.js:46
-msgid "Wikis"
-msgstr ""
-
-#: frontend/src/components/SidePanel.js:291
-msgid "Pages"
-msgstr ""
-
 #: frontend/src/components/account.js:91
 msgid "System Admin"
-msgstr ""
+msgstr "Systemadmin"
 
 #: frontend/src/components/account.js:127
 msgid "Used"
-msgstr ""
+msgstr "Använt"
 
 #: frontend/src/components/account.js:133
 msgid "Settings"
-msgstr ""
+msgstr "Inställningar"
 
 #: frontend/src/components/account.js:135
 msgid "Log out"
+msgstr "Logga ut"
+
+#: frontend/src/components/markdown-viewer.js:186
+msgid "Last modified by"
 msgstr ""
 
-#: frontend/src/components/menu-component/menu-dialog/create-fileforder-dialog.js:82
-#: frontend/src/components/menu-component/node-menu.js:106
-#: frontend/src/components/menu-component/node-menu.js:114
+#: frontend/src/components/menu-component/menu-dialog/create-fileforder-dialog.js:74
+#: frontend/src/components/menu-component/node-menu.js:29
+#: frontend/src/components/menu-component/node-menu.js:37
 #: static/scripts/app/views/dir.js:771
 msgid "New File"
 msgstr "Ny fil"
 
-#: frontend/src/components/menu-component/menu-dialog/create-fileforder-dialog.js:82
-#: frontend/src/components/menu-component/node-menu.js:105
-#: frontend/src/components/menu-component/node-menu.js:113
+#: frontend/src/components/menu-component/menu-dialog/create-fileforder-dialog.js:74
+#: frontend/src/components/menu-component/node-menu.js:28
+#: frontend/src/components/menu-component/node-menu.js:36
 msgid "New Folder"
-msgstr ""
+msgstr "Ny Katalog"
 
-#: frontend/src/components/menu-component/menu-dialog/create-fileforder-dialog.js:90
+#: frontend/src/components/menu-component/menu-dialog/create-fileforder-dialog.js:82
+#: frontend/src/components/tree-dir-view/tree-dir-view.js:16
 msgid "Name"
-msgstr ""
+msgstr "Namn"
 
-#: frontend/src/components/menu-component/menu-dialog/create-fileforder-dialog.js:92
+#: frontend/src/components/menu-component/menu-dialog/create-fileforder-dialog.js:84
 msgid "newName"
 msgstr ""
 
-#: frontend/src/components/menu-component/menu-dialog/create-fileforder-dialog.js:98
-#: frontend/src/components/menu-component/menu-dialog/rename-dialog.js:71
+#: frontend/src/components/menu-component/menu-dialog/create-fileforder-dialog.js:90
+#: frontend/src/components/menu-component/menu-dialog/rename-dialog.js:70
 msgid "Submit"
-msgstr ""
+msgstr "OK"
 
-#: frontend/src/components/menu-component/menu-dialog/create-fileforder-dialog.js:99
-#: frontend/src/components/menu-component/menu-dialog/rename-dialog.js:72
+#: frontend/src/components/menu-component/menu-dialog/create-fileforder-dialog.js:91
+#: frontend/src/components/menu-component/menu-dialog/rename-dialog.js:71
 #: static/scripts/app/views/fileupload.js:21
 msgid "Cancel"
 msgstr "Avbryt"
 
 #: frontend/src/components/menu-component/menu-dialog/delete-dialog.js:16
-#: frontend/src/components/menu-component/node-menu.js:116
-#: frontend/src/components/menu-component/node-menu.js:124
+#: frontend/src/components/menu-component/node-menu.js:39
+#: frontend/src/components/menu-component/node-menu.js:47
 #: static/scripts/app/views/fileupload.js:22
 #: static/scripts/sysadmin-app/views/device-trusted-ipaddress.js:27
 msgid "Delete"
@@ -100,32 +93,52 @@ msgstr ""
 msgid "NO"
 msgstr ""
 
-#: frontend/src/components/menu-component/menu-dialog/rename-dialog.js:65
+#: frontend/src/components/menu-component/menu-dialog/rename-dialog.js:64
 #: static/scripts/app/views/dialogs/dirent-rename.js:39
 msgid "Rename File"
 msgstr "Döp om fil"
 
-#: frontend/src/components/menu-component/menu-dialog/rename-dialog.js:65
+#: frontend/src/components/menu-component/menu-dialog/rename-dialog.js:64
 #: static/scripts/app/views/dialogs/dirent-rename.js:39
 msgid "Rename Folder"
 msgstr "Döp om mapp"
 
-#: frontend/src/components/menu-component/menu-dialog/rename-dialog.js:67
+#: frontend/src/components/menu-component/menu-dialog/rename-dialog.js:66
 msgid "Enter the new file name:"
 msgstr ""
 
-#: frontend/src/components/menu-component/menu-dialog/rename-dialog.js:67
+#: frontend/src/components/menu-component/menu-dialog/rename-dialog.js:66
 msgid "Enter the new folder name:"
 msgstr ""
 
-#: frontend/src/components/menu-component/node-menu.js:115
-#: frontend/src/components/menu-component/node-menu.js:123
+#: frontend/src/components/menu-component/node-menu.js:38
+#: frontend/src/components/menu-component/node-menu.js:46
 msgid "Rename"
-msgstr ""
+msgstr "Döp om"
 
-#: frontend/src/components/search.js:198
+#: frontend/src/components/search.js:199
 msgid "Search files in this wiki"
-msgstr ""
+msgstr "Sök i alla filer i denna wiki"
+
+#: frontend/src/components/tree-dir-view/tree-dir-view.js:17
+msgid "Size"
+msgstr "Storlek"
+
+#: frontend/src/components/tree-dir-view/tree-dir-view.js:18
+msgid "Last Update"
+msgstr "Senaste uppdatering"
+
+#: frontend/src/pages/wiki/main-panel.js:50
+msgid "Edit Page"
+msgstr "Skapa sida"
+
+#: frontend/src/pages/wiki/main-panel.js:60
+msgid "Wikis"
+msgstr "Wikis"
+
+#: frontend/src/pages/wiki/side-panel.js:176
+msgid "Pages"
+msgstr "Sidor"
 
 #: seahub/templates/priv/ali.js:8
 msgid "Preview-Edit-on-Cloud library"
@@ -211,7 +224,7 @@ msgstr "Namn krävs"
 #: static/scripts/app/models/repo.js:37
 #: static/scripts/app/views/dialogs/dirent-rename.js:65
 #: static/scripts/app/views/dir.js:667 static/scripts/app/views/dir.js:727
-#: static/scripts/app/views/dirent.js:514
+#: static/scripts/app/views/dirent.js:515
 #: static/scripts/app/views/group-repo.js:131
 #: static/scripts/app/views/repo.js:187
 msgid "Name should not include '/'."
@@ -350,7 +363,7 @@ msgstr "Lyckades kopiera %(name)s"
 
 #: static/scripts/app/views/dialogs/dirent-rename.js:59
 #: static/scripts/app/views/dir.js:662 static/scripts/app/views/dir.js:722
-#: static/scripts/app/views/dirent.js:508
+#: static/scripts/app/views/dirent.js:509
 #: static/scripts/app/views/group-repo.js:125
 #: static/scripts/app/views/groups.js:118
 #: static/scripts/app/views/invitations.js:65
@@ -613,7 +626,7 @@ msgid "locked by {placeholder}"
 msgstr "låst av {placeholder}"
 
 #: static/scripts/app/views/dirent-grid.js:187
-#: static/scripts/app/views/dirent.js:415
+#: static/scripts/app/views/dirent.js:416
 msgid "Successfully deleted %(name)s"
 msgstr "Lyckades ta bort %(name)s"
 

@@ -277,23 +277,20 @@ class ShareLinks(APIView):
             return api_error(status.HTTP_403_FORBIDDEN, error_msg)
 
         username = request.user.username
+        org_id = request.user.org.org_id if is_org_context(request) else None
         if s_type == 'f':
             fs = FileShare.objects.get_file_link_by_path(username, repo_id, path)
             if not fs:
                 fs = FileShare.objects.create_file_link(username, repo_id, path,
                                                         password, expire_date,
-                                                        permission=perm)
+                                                        permission=perm, org_id=org_id)
 
         elif s_type == 'd':
             fs = FileShare.objects.get_dir_link_by_path(username, repo_id, path)
             if not fs:
                 fs = FileShare.objects.create_dir_link(username, repo_id, path,
                                                        password, expire_date,
-                                                       permission=perm)
-
-        if is_org_context(request):
-            org_id = request.user.org.org_id
-            OrgFileShare.objects.set_org_file_share(org_id, fs)
+                                                       permission=perm, org_id=org_id)
 
         link_info = get_share_link_info(fs)
         return Response(link_info)
