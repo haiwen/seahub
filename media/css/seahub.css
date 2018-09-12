@@ -200,10 +200,10 @@
 .sf2-icon-x3:before { content: "\e035"; }
 
 /******* tags **********/
-/* html, body { */
-/*     height:100%; */
-/*     overflow:hidden; */
-/* } */
+html, body {
+    height:100%;
+    overflow:hidden;
+}
 body,
 ul,ol,li,dl,dt,dd,
 pre,blockquote,
