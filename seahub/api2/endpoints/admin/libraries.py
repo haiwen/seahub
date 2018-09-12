@@ -8,8 +8,7 @@ from rest_framework.views import APIView
 from rest_framework import status
 from django.template.defaultfilters import filesizeformat
 from django.utils.translation import ugettext as _
-import seaserv
-from seaserv import ccnet_api, seafile_api, seafserv_threaded_rpc
+from seaserv import ccnet_api, seafile_api
 
 from seahub.api2.authentication import TokenAuthentication
 from seahub.api2.throttling import UserRateThrottle
@@ -22,6 +21,7 @@ from seahub.admin_log.models import REPO_CREATE, REPO_DELETE, REPO_TRANSFER
 from seahub.share.models import FileShare, UploadLinkShare
 from seahub.base.templatetags.seahub_tags import email2nickname, email2contact_email
 from seahub.group.utils import is_group_member, group_id_to_name
+from seahub.utils.repo import get_related_users_by_repo
 
 from seahub.api2.endpoints.group_owned_libraries import get_group_id_by_repo_owner
 
@@ -246,8 +246,16 @@ class AdminLibrary(APIView):
             repo_owner = seafile_api.get_org_repo_owner(repo_id)
 
         try:
-            related_usernames = seaserv.get_related_users_by_repo(repo_id)
             seafile_api.remove_repo(repo_id)
+
+            try:
+                org_id = seafile_api.get_org_id_by_repo_id(repo_id)
+                related_usernames = get_related_users_by_repo(repo_id,
+                        org_id if org_id > 0 else None)
+            except Exception as e:
+                logger.error(e)
+                org_id = -1
+                related_usernames = []
 
             # send signal for seafevents
             repo_deleted.send(sender=None, org_id=-1, operator=request.user.username,
@@ -299,7 +307,7 @@ class AdminLibrary(APIView):
 
         if MULTI_TENANCY:
             try:
-                if seafserv_threaded_rpc.get_org_id_by_repo_id(repo_id) > 0:
+                if seafile_api.get_org_id_by_repo_id(repo_id) > 0:
                     error_msg = 'Can not transfer organization library.'
                     return api_error(status.HTTP_403_FORBIDDEN, error_msg)
 

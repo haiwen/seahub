@@ -25,7 +25,7 @@ from django.utils.http import urlquote
 import seaserv
 from seaserv import ccnet_threaded_rpc, seafserv_threaded_rpc, \
     seafile_api, get_group, get_group_members, ccnet_api, \
-    get_related_users_by_repo, get_related_users_by_org_repo
+    get_related_users_by_org_repo
 from pysearpc import SearpcError
 
 from seahub.base.accounts import User
@@ -61,6 +61,7 @@ from seahub.utils.ms_excel import write_xls
 from seahub.utils.user_permissions import get_basic_user_roles, \
         get_user_role, get_basic_admin_roles
 from seahub.utils.auth import get_login_bg_image_path
+from seahub.utils.repo import get_related_users_by_repo, get_repo_owner
 from seahub.views import get_system_default_repo_id
 from seahub.forms import SetUserQuotaForm, AddUserForm, BatchAddUserForm, \
     TermsAndConditionsForm
@@ -140,6 +141,13 @@ def sys_statistic_storage(request):
 def sys_statistic_user(request):
 
     return render(request, 'sysadmin/sys_statistic_user.html', {
+            })
+
+@login_required
+@sys_staff_required
+def sys_statistic_traffic(request):
+
+    return render(request, 'sysadmin/sys_statistic_traffic.html', {
             })
 
 def can_view_sys_admin_repo(repo):
@@ -1492,6 +1500,20 @@ def sys_org_info_library(request, org_id):
 
 @login_required
 @sys_staff_required
+def sys_org_info_traffic(request, org_id):
+
+    org_id = int(org_id)
+
+    if not ccnet_api.get_org_by_id(org_id):
+        raise Http404
+
+    org_basic_info = sys_get_org_base_info(org_id)
+
+    return render(request, 'sysadmin/sys_org_info_traffic.html',
+           org_basic_info)
+
+@login_required
+@sys_staff_required
 def sys_org_info_setting(request, org_id):
 
     org_id = int(org_id)
@@ -1748,14 +1770,15 @@ def sys_repo_delete(request, repo_id):
     else:
         repo_name = ''
 
-    if MULTI_TENANCY:
-        org_id = seafserv_threaded_rpc.get_org_id_by_repo_id(repo_id)
-        usernames = get_related_users_by_org_repo(org_id, repo_id)
-        repo_owner = seafile_api.get_org_repo_owner(repo_id)
-    else:
+    repo_owner = get_repo_owner(request, repo_id)
+    try:
+        org_id = seafile_api.get_org_id_by_repo_id(repo_id)
+        usernames = get_related_users_by_repo(repo_id,
+                org_id if org_id > 0 else None)
+    except Exception as e:
+        logger.error(e)
         org_id = -1
-        usernames = get_related_users_by_repo(repo_id)
-        repo_owner = seafile_api.get_repo_owner(repo_id)
+        usernames = []
 
     seafile_api.remove_repo(repo_id)
     repo_deleted.send(sender=None, org_id=org_id, operator=request.user.username,

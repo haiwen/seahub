@@ -78,7 +78,9 @@ from seahub.api2.endpoints.admin.file_audit import FileAudit
 from seahub.api2.endpoints.admin.file_update import FileUpdate
 from seahub.api2.endpoints.admin.perm_audit import PermAudit
 from seahub.api2.endpoints.admin.sysinfo import SysInfo
-from seahub.api2.endpoints.admin.statistics import FileOperationsView, TotalStorageView, ActiveUsersView
+from seahub.api2.endpoints.admin.statistics import (
+    FileOperationsView, TotalStorageView, ActiveUsersView, SystemTrafficView
+)
 from seahub.api2.endpoints.admin.devices import AdminDevices
 from seahub.api2.endpoints.admin.device_errors import AdminDeviceErrors
 from seahub.api2.endpoints.admin.users import AdminUsers, AdminUser
@@ -102,6 +104,7 @@ from seahub.api2.endpoints.admin.users_batch import AdminUsersBatch
 from seahub.api2.endpoints.admin.operation_logs import AdminOperationLogs
 from seahub.api2.endpoints.admin.organizations import AdminOrganization
 from seahub.api2.endpoints.admin.org_users import AdminOrgUsers, AdminOrgUser
+from seahub.api2.endpoints.admin.org_stats import AdminOrgStatsTraffic
 from seahub.api2.endpoints.admin.logo import AdminLogo
 from seahub.api2.endpoints.admin.favicon import AdminFavicon
 from seahub.api2.endpoints.admin.license import AdminLicense
@@ -327,6 +330,7 @@ urlpatterns = [
     url(r'^api/v2.1/admin/statistics/file-operations/$', FileOperationsView.as_view(), name='api-v2.1-admin-statistics-file-operations'),
     url(r'^api/v2.1/admin/statistics/total-storage/$', TotalStorageView.as_view(), name='api-v2.1-admin-statistics-total-storage'),
     url(r'^api/v2.1/admin/statistics/active-users/$', ActiveUsersView.as_view(), name='api-v2.1-admin-statistics-active-users'),
+    url(r'^api/v2.1/admin/statistics/system-traffic/$', SystemTrafficView.as_view(), name='api-v2.1-admin-statistics-system-traffic'),
 
     ## admin::users
     url(r'^api/v2.1/admin/users/$', AdminUsers.as_view(), name='api-v2.1-admin-users'),
@@ -400,6 +404,7 @@ urlpatterns = [
     url(r'^api/v2.1/admin/organizations/(?P<org_id>\d+)/$', AdminOrganization.as_view(), name='api-v2.1-admin-organization'),
     url(r'^api/v2.1/admin/organizations/(?P<org_id>\d+)/users/$', AdminOrgUsers.as_view(), name='api-v2.1-admin-org-users'),
     url(r'^api/v2.1/admin/organizations/(?P<org_id>\d+)/users/(?P<email>[^/]+)/$', AdminOrgUser.as_view(), name='api-v2.1-admin-org-user'),
+    url(r'^api/v2.1/admin/organizations/(?P<org_id>\d+)/statistics/traffic/$', AdminOrgStatsTraffic.as_view(), name='api-v2.1-admin-org-stats-traffic'),
 
     ## admin::logo
     url(r'^api/v2.1/admin/logo/$', AdminLogo.as_view(), name='api-v2.1-admin-logo'),
@@ -435,6 +440,7 @@ urlpatterns = [
     url(r'^sys/statistic/file/$', sys_statistic_file, name='sys_statistic_file'),
     url(r'^sys/statistic/storage/$', sys_statistic_storage, name='sys_statistic_storage'),
     url(r'^sys/statistic/user/$', sys_statistic_user, name='sys_statistic_user'),
+    url(r'^sys/statistic/traffic/$', sys_statistic_traffic, name='sys_statistic_traffic'),
     url(r'^sysadmin/#all-libs/$', fake_view, name='sys_repo_admin'),
     url(r'^sysadmin/#libs/(?P<repo_id>[-0-9a-f]{36})/$', fake_view, name='sys_admin_repo'),
     url(r'^sysadmin/#system-lib/$', fake_view, name='sys_list_system'),
@@ -458,6 +464,7 @@ urlpatterns = [
     url(r'^sys/orgadmin/(?P<org_id>\d+)/user/$', sys_org_info_user, name='sys_org_info_user'),
     url(r'^sys/orgadmin/(?P<org_id>\d+)/group/$', sys_org_info_group, name='sys_org_info_group'),
     url(r'^sys/orgadmin/(?P<org_id>\d+)/library/$', sys_org_info_library, name='sys_org_info_library'),
+    url(r'^sys/orgadmin/(?P<org_id>\d+)/traffic/$', sys_org_info_traffic, name='sys_org_info_traffic'),
     url(r'^sys/orgadmin/(?P<org_id>\d+)/setting/$', sys_org_info_setting, name='sys_org_info_setting'),
     url(r'^sys/instadmin/$', sys_inst_admin, name='sys_inst_admin'),
     url(r'^sys/instadmin/(?P<inst_id>\d+)/remove/$', sys_inst_remove, name='sys_inst_remove'),

@@ -100,12 +100,6 @@ class ShareLinkZipTaskView(APIView):
             error_msg = _('Unable to download directory "%s": size is too large.') % dir_name
             return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
 
-        try:
-            seaserv.send_message('seahub.stats', 'dir-download\t%s\t%s\t%s\t%s' %
-                                 (repo_id, fileshare.username, dir_id, dir_size))
-        except Exception as e:
-            logger.error(e)
-
         is_windows = 0
         if is_windows_operating_system(request):
             is_windows = 1
@@ -116,11 +110,11 @@ class ShareLinkZipTaskView(APIView):
             'is_windows': is_windows
         }
 
-        username = request.user.username
         try:
             zip_token = seafile_api.get_fileserver_access_token(
-                repo_id, json.dumps(fake_obj_id), 'download-dir', username,
-                use_onetime=settings.FILESERVER_TOKEN_ONCE_ONLY)
+                repo_id, json.dumps(fake_obj_id), 'download-dir-link',
+                fileshare.username, use_onetime=settings.FILESERVER_TOKEN_ONCE_ONLY
+            )
         except Exception as e:
             logger.error(e)
             error_msg = 'Internal Server Error'
