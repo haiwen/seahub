@@ -25,9 +25,9 @@ class SidePanel extends React.Component {
       isFirstItem: false,
       currentItem: null,
       menuPosition: {top: '', left: ''},
-      isItemFrezeed: false
+      isItemFrezeed: false,
+      isReloadingData: false,
     };
-    this.isReloadingData = false;
   }
 
   componentDidMount() {
@@ -94,13 +94,17 @@ class SidePanel extends React.Component {
   }
 
   reloadMore = () => {
-    if (!this.isReloadingData) {
-      this.isReloadingData = true;
-      let currentPage = this.state.currentPage + 1
-      this.setState({currentPage: currentPage});
+    if (!this.state.isReloadingData) {
+      let currentPage = this.state.currentPage + 1;
+      this.setState({
+        currentPage: currentPage,
+        isReloadingData: true,
+      });
       editUtilties.getFileHistoryRecord(filePath, currentPage, PER_PAGE).then(res => {
         this.updateResultState(res.data);
-        this.isReloadingData = false;
+        this.setState({
+          isReloadingData: false
+        })
       });
     }
   }
@@ -143,6 +147,7 @@ class SidePanel extends React.Component {
             {this.state.historyInfo &&
               <HistoryListView 
                 hasMore={this.state.hasMore}
+                isReloadingData={this.state.isReloadingData}
                 historyList={this.state.historyInfo}
                 onMenuControlClick={this.onShowContenxtMenu}
                 isItemFrezeed={this.state.isItemFrezeed}
