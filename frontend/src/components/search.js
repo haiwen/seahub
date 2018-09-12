@@ -196,7 +196,7 @@ class Search extends Component {
               type="text" 
               className="search-input" 
               name="query"
-              placeholder={gettext("Search files in this wiki")}
+              placeholder={this.props.placeholder}
               style={style}
               value={this.state.value}
               onFocus={this.onFocusHandler}

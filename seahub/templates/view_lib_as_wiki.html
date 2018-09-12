@@ -1,0 +1,20 @@
+{% extends "base_for_react.html" %}
+{% load render_bundle from webpack_loader %}
+{% block extra_style %}
+{% render_bundle 'repoview' 'css' %}
+{% endblock %}
+
+{% block extra_script %}
+<script type="text/javascript">
+    window.wiki = {
+        config: {
+            repoId: "{{ repo_id }}",
+            serviceUrl: "{{ service_url}}",
+            initial_file_path: "{{ file_path }}",
+            slug: "{{ repo_name }}"
+        }
+    };
+</script>
+
+{% render_bundle 'repoview' 'js' %}
+{% endblock %}

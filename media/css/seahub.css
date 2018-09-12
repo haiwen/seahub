@@ -4167,6 +4167,7 @@ img.thumbnail {
 .switch-mode {
     margin-left:15px;
 }
+.wiki-view-icon-btn,
 .grid-view-icon-btn,
 .list-view-icon-btn {
     display:inline-block;
@@ -4179,6 +4180,7 @@ img.thumbnail {
     cursor:pointer;
     border-radius:0;
 }
+
 .grid-view-icon-btn.active,
 .list-view-icon-btn.active {
     color:#fff;

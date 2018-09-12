@@ -24,7 +24,7 @@ from seahub.views import gen_path_link, get_repo_dirents, \
 
 from seahub.utils import  gen_dir_share_link, \
     gen_shared_upload_link, user_traffic_over_limit, render_error, \
-    get_file_type_and_ext
+    get_file_type_and_ext, get_service_url
 from seahub.settings import ENABLE_UPLOAD_FOLDER, \
     ENABLE_RESUMABLE_FILEUPLOAD, ENABLE_THUMBNAIL, \
     THUMBNAIL_ROOT, THUMBNAIL_DEFAULT_SIZE, THUMBNAIL_SIZE_FOR_GRID, \
@@ -151,6 +151,25 @@ def repo_history_view(request, repo_id):
             'zipped': zipped,
             'referer': referer,
             })
+
+@login_required
+def view_lib_as_wiki(request, repo_id, path):
+
+    if not path.startswith('/'):
+        path = '/' + path
+
+    repo = seafile_api.get_repo(repo_id)
+
+    user_perm = check_folder_permission(request, repo.id, '/')
+    if user_perm is None:
+        return render_error(request, _(u'Permission denied'))
+
+    return render(request, 'view_lib_as_wiki.html', {
+        'repo_id': repo_id,
+        'service_url': get_service_url().rstrip('/'),
+        'file_path': path,
+        'repo_name': repo.name
+        })
 
 ########## shared dir/uploadlink
 @share_link_audit

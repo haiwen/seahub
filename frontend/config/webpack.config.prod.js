@@ -60,6 +60,7 @@ module.exports = {
   entry: {
     main: [require.resolve('./polyfills'), paths.appIndexJs],
     wiki: [require.resolve('./polyfills'), paths.appSrc + "/wiki.js"],
+    repoview: [require.resolve('./polyfills'), paths.appSrc + "/repo-wiki-mode.js"],
   },
 
   output: {

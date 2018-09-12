@@ -707,6 +707,9 @@ ENABLE_WIKI = False
 # Enable 'repo snapshot label' feature
 ENABLE_REPO_SNAPSHOT_LABEL = False
 
+#  Repo wiki mode
+ENABLE_REPO_WIKI_MODE = True
+
 #####################
 # External settings #
 #####################

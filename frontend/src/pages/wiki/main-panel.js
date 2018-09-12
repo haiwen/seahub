@@ -49,7 +49,9 @@ class MainPanel extends Component {
               <a className="btn btn-secondary btn-topbar" onClick={this.onEditClick}>{gettext("Edit Page")}</a>
            </div>
           <div className="common-toolbar">
-            <Search  onSearchedClick={this.props.onSearchedClick}/>
+            <Search  onSearchedClick={this.props.onSearchedClick}
+                     placeholder={gettext("Search files in this wiki")}
+                    />
             <Account />
           </div>
         </div>
