@@ -17,7 +17,7 @@ class HistoryListView extends React.Component {
     const clientHeight = event.target.clientHeight;
     const scrollHeight = event.target.scrollHeight;
     const scrollTop    = event.target.scrollTop;
-    const isBottom = (clientHeight + scrollTop === scrollHeight);
+    const isBottom = (clientHeight + scrollTop >= scrollHeight);
     if (isBottom) {
       this.props.reloadMore();
     }

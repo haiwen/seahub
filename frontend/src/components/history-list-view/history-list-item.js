@@ -56,7 +56,7 @@ class HistoryListItem extends React.Component {
     }
     return (
       <li 
-        className={`history-list-item ${isHigtlightItem ? 'high-light' : ''}`} 
+        className={`history-list-item ${isHigtlightItem ? 'item-active' : ''}`} 
         onMouseEnter={this.onMouseEnter} 
         onMouseLeave={this.onMouseLeave}
         onClick={this.onItemClick}

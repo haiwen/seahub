@@ -47,12 +47,12 @@
   background-color: #eee;
 }
 
-.high-light {
+.item-active {
   color: #fff;
   background-color: #feac74 !important;
 }
 
-.high-light i {
+.item-active i {
   color: #fff;
 }
 
