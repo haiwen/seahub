@@ -1,6 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import HisotyListItem from './history-list-item';
+import Loading from '../loading';
 
 const propTypes = {
   hasMore: PropTypes.bool.isRequired,
@@ -41,6 +42,7 @@ class HistoryListView extends React.Component {
             />
           );
         })}
+        {this.props.isReloadingData && <li><Loading /></li>}
       </ul>
     );
   }
