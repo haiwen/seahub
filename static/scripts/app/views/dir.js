@@ -1440,7 +1440,9 @@ define([
                 var $el = this.$('.cur-view-main-con')[0];
                 if (this.dir.dirent_more &&
                     $el.scrollTop > 0 &&
-                    $el.clientHeight + $el.scrollTop == $el.scrollHeight) { // scroll to the bottom
+                    // scroll to the bottom
+                    // '+1': for scrollTop On systems using display scaling
+                    $el.clientHeight + $el.scrollTop + 1 >= $el.scrollHeight) {
                     this.render_dirents_slice(this.dir.last_start, this.dir.limit);
                     this.getThumbnail();
                 }
