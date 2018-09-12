@@ -1,4 +1,4 @@
-#wrapper {
+.history-main {
   background-color: #fafaf9;
   border-radius: 10px;
 }
@@ -10,21 +10,6 @@
 .history-heading {
   height: 3.1875rem;
   line-height: 3.1875rem;
-}
-
-.go-back {
-  font-size: 25px;
-  padding-right: 0.75rem;
-  color:#ccc;
-}
-
-.go-back:hover {
-  color:#ff9933;
-  text-decoration: none;
-}
-
-.doc-name {
-  font-size: 25px;
 }
 
 .panel-heading {

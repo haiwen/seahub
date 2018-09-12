@@ -868,3 +868,19 @@ select {
     flex-direction:column;
     overflow:hidden; /* for ff */
 }
+
+/* for go-back */
+.go-back {
+    font-size: 25px;
+    padding-right: 0.75rem;
+    color:#ccc;
+}
+
+.go-back:hover {
+    color:#ff9933;
+    text-decoration: none;
+}
+
+.doc-name {
+    font-size: 25px;
+}
