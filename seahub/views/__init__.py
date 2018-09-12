@@ -796,7 +796,7 @@ def file_revisions(request, repo_id):
 
     u_filename = os.path.basename(path)
 
-    filetype = get_file_type_and_ext(u_filename)[0].lower()
+    filetype, file_ext = [x.lower() for x in get_file_type_and_ext(u_filename)]
     if filetype == 'text' or filetype == 'markdown':
         can_compare = True
     else:
@@ -825,6 +825,28 @@ def file_revisions(request, repo_id):
 
     # for 'go back'
     referer = request.GET.get('referer', '')
+
+    # Whether use new file revisions page which read file history from db.
+    if request.GET.get('_new', None) is not None:
+        if request.GET.get('_new') == '0':
+            use_new_page = False
+        else:
+            use_new_page = True
+    else:
+        new_file_history_suffix = ['txt', 'md'] # TODO: read from seafevents
+        use_new_page = True if file_ext in new_file_history_suffix else False
+
+    if use_new_page:
+        return render(request, 'file_revisions_new.html', {
+            'repo': repo,
+            'path': path,
+            'u_filename': u_filename,
+            'zipped': zipped,
+            'is_owner': is_owner,
+            'can_compare': can_compare,
+            'can_revert_file': can_revert_file,
+            'referer': referer,
+        })
 
     return render(request, 'file_revisions.html', {
         'repo': repo,
