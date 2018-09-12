@@ -104,7 +104,7 @@ class SidePanel extends React.Component {
         this.updateResultState(res.data);
         this.setState({
           isReloadingData: false
-        })
+        });
       });
     }
   }
@@ -114,7 +114,7 @@ class SidePanel extends React.Component {
     let commitId = this.state.currentItem.commit_id;
     editUtilties.revertFile(filePath, commitId).then(res => {
       if (res.data.success) {
-        this.setState({isLoading: true})
+        this.setState({isLoading: true});
         this.refershFileList();
       }
     });
@@ -137,7 +137,7 @@ class SidePanel extends React.Component {
             <a href="javascript:window.history.back()" className="go-back" title="Back">
               <span className="icon-chevron-left"></span>
             </a>
-            <span className="doc-name">{fileName}</span>
+            <span className="history-doc-name">{fileName}</span>
           </div>
         </div>
         <div className="side-panel-center history">

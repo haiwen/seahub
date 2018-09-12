@@ -1,16 +1,17 @@
 import React from 'react';
-import editUtilties from '../utils/editor-utilties';
-import { filePath } from '../components/constance';
-import URLDecorator from '../utils/url-decorator';
+import ReactDOM from 'react-dom';
+import editUtilties from './utils/editor-utilties';
+import { filePath } from './components/constance';
+import URLDecorator from './utils/url-decorator';
 import { processor } from '@seafile/seafile-editor/src/lib/seafile-markdown2html';
-import SidePanel from './file-history/side-panel';
-import MainPanel from './file-history/main-panel';
+import SidePanel from './pages/file-history/side-panel';
+import MainPanel from './pages/file-history/main-panel';
 import 'seafile-ui';
-import '../assets/css/fa-solid.css';
-import '../assets/css/fa-regular.css';
-import '../assets/css/fontawesome.css';
-import '../css/layout.css';
-import '../css/file-history.css';
+import './assets/css/fa-solid.css';
+import './assets/css/fa-regular.css';
+import './assets/css/fontawesome.css';
+import './css/layout.css';
+import './css/file-history.css';
 
 class FileHistory extends React.Component {
 
@@ -71,4 +72,7 @@ class FileHistory extends React.Component {
   }
 }
 
-export default FileHistory;
+ReactDOM.render (
+  <FileHistory />,
+  document.getElementById('wrapper')
+);

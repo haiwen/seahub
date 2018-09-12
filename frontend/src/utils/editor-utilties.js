@@ -25,22 +25,21 @@ class EditorUtilities {
   }
 
   listRepoDir() {
-    return seafileAPI.listDir(repoID, "/",{recursive: true}).then(items => {
-        const files = items.data.map(item => {
-          return {
-            name: item.name,
-            type: item.type === 'dir' ? 'dir' : 'file',
-            isExpanded: item.type === 'dir' ? true : false,
-            parent_path: item.parent_dir,
-            last_update_time: item.mtime,
-            size: item.size
-          }
-        })
+    return seafileAPI.listDir(repoID, '/',{recursive: true}).then(items => {
+      const files = items.data.map(item => {
+        return {
+          name: item.name,
+          type: item.type === 'dir' ? 'dir' : 'file',
+          isExpanded: item.type === 'dir' ? true : false,
+          parent_path: item.parent_dir,
+          last_update_time: item.mtime,
+          size: item.size
+        };
+      });
 
-        return files;
-      })
+      return files;
+    });
   }
-
 
   createFile(filePath) {
     return seafileAPI.createFile(repoID, filePath);

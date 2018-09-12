@@ -5,6 +5,7 @@ import Loading from '../loading';
 
 const propTypes = {
   hasMore: PropTypes.bool.isRequired,
+  isReloadingData: PropTypes.bool.isRequired,
   isItemFrezeed: PropTypes.bool.isRequired,
   historyList: PropTypes.array.isRequired,
   currentItem: PropTypes.object,
