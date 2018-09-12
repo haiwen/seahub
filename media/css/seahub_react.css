@@ -60,6 +60,7 @@
 .icon-caret-down:before           { content: "\f0d7"; }
 .icon-caret-left:before           { content: "\f0d9"; }
 .icon-search:before               { content: "\f002"; }
+.icon-chevron-left:before         { content: "\f053"; }
 
 /* common class and element style*/
 a { color:#eb8205; }
@@ -866,4 +867,16 @@ select {
     display:flex;
     flex-direction:column;
     overflow:hidden; /* for ff */
+}
+
+/* for go-back */
+.go-back {
+    font-size: 25px;
+    padding-right: 0.75rem;
+    color:#ccc;
+}
+
+.go-back:hover {
+    color:#ff9933;
+    text-decoration: none;
 }
