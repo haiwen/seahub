@@ -1,20 +1,15 @@
-{% extends "sysadmin/base.html" %}
+{% extends "sysadmin/sys_org_info_base.html" %}
 {% load seahub_tags i18n staticfiles %}
 
 {% block extra_style %}
 <link rel="stylesheet" type="text/css" href="{{MEDIA_URL}}css/jquery-ui.datepicker.min.css" />
 {% endblock %}
 
-{% block cur_statistic %}tab-cur{% endblock %}
-
 {% block right_panel %}
-<div class="tabnav ovhd">
-    <ul class="tabnav-tabs fleft">
-        <li class="tabnav-tab"><a href="{% url 'sys_statistic_file' %}">{% trans "File" %}</a></li>
-        <li class="tabnav-tab"><a href="{% url 'sys_statistic_storage' %}">{% trans "Storage" %}</a></li>
-        <li class="tabnav-tab tabnav-tab-cur"><a href="{% url 'sys_statistic_user' %}">{% trans "Users" %}</a></li>
-        <li class="tabnav-tab"><a href="{% url 'sys_statistic_traffic' %}">{% trans "Traffic" %}</a></li>
-    </ul>
+<div class="tabnav">
+    {% with cur_tab='traffic' %}
+    {% include 'sysadmin/snippets/sys_org_info_nav.html' %}
+    {% endwith %}
 </div>
 
 <div class="system-statistic-time-range ovhd">
@@ -35,7 +30,18 @@
 
 <div id="statistic-chart">
     <span class="loading-icon loading-tip"></span>
-    <canvas class="hide"></canvas>
+    <div> {# `<div>` is needed for `<canvas>`, as the plugin requires. #}
+        <canvas class="traffic-chart total-traffic-chart hide"></canvas>
+    </div>
+    <div>
+        <canvas class="traffic-chart web-traffic-chart hide"></canvas>
+    </div>
+    <div>
+        <canvas class="traffic-chart link-traffic-chart hide"></canvas>
+    </div>
+    <div>
+        <canvas class="traffic-chart sync-traffic-chart hide"></canvas>
+    </div>
     <p class="error hide"></p>
 </div>
 {% endblock %}
@@ -44,6 +50,7 @@
 <script type="text/javascript" src="{{MEDIA_URL}}js/Chart.bundle.min.js"></script>
 <script type="text/javascript" src="{% static "scripts/lib/jquery-ui.min.js" %}"></script>
 <script type="text/javascript">
+{% include 'sysadmin/sys_org_set_quota_js.html' %}
 
 // date picker for date-custom
 $.datepicker.setDefaults({
@@ -73,14 +80,13 @@ function getTimeStr(time) { // time: in milliseconds
 };
 
 var $chart = $('#statistic-chart');
-var $loading = $('.loading-icon', $chart);
-var $error = $('.error', $chart);
-var $canvas = $('canvas', $chart);
-var chart;
-
 function getStatistic(options) {
+    var $loading = $('.loading-icon', $chart);
+    var $error = $('.error', $chart);
+    var $canvas = $('.traffic-chart', $chart);
+
     $.ajax({
-        url: '{% url 'api-v2.1-admin-statistics-active-users' %}',
+        url: '{% url 'api-v2.1-admin-org-stats-traffic' org.org_id %}',
         cache: false,
         data: options,
         dataType: 'json',
@@ -140,9 +146,26 @@ function getStatisticByTimeRange(range) {
 }
 
 // render chart
+var totalTrafficChart,
+    linkTrafficChart,
+    syncTrafficChart,
+    webTrafficChart;
+
+var $totalTrafficCanvas = $('.total-traffic-chart', $chart),
+    $linkTrafficCanvas = $('.link-traffic-chart', $chart),
+    $syncTrafficCanvas = $('.sync-traffic-chart', $chart),
+    $webTrafficCanvas = $('.web-traffic-chart', $chart);
+
 function renderChart(data, group_by) {
-    var labels =  [],
-        count = [];
+    var labels = [];
+    var total_upload = [],
+        total_download = [],
+        link_upload = [],
+        link_download = [],
+        sync_upload = [],
+        sync_download = [],
+        web_upload = [],
+        web_download = [];
 
     var item;
     var datetime_ms, datetime_str;
@@ -160,63 +183,143 @@ function renderChart(data, group_by) {
             labels.push(datetime_str.substr(0, 10));
         }
 
-        count.push(item.count);
+        total_upload.push(
+            item['link-file-upload'] +
+            item['sync-file-upload'] +
+            item['web-file-upload']);
+
+        total_download.push(
+            item['link-file-download'] +
+            item['sync-file-download'] +
+            item['web-file-download']);
+
+        link_upload.push(item['link-file-upload']);
+        link_download.push(item['link-file-download']);
+        sync_upload.push(item['sync-file-upload']);
+        sync_download.push(item['sync-file-download']);
+        web_upload.push(item['web-file-upload']);
+        web_download.push(item['web-file-download']);
     }
 
-    var config = {
-        type: 'line',
-        data: {
-            labels: labels,
-            datasets: [
-                {
-                    label: "{% trans "Active Users" %}",
-                    data: count,
-                    borderColor: '#fd913a',
-                    backgroundColor: '#fd913a'
-                }
-            ]
-        }, // 'data' ends here
-        options: {
-            title: {
-                display: true,
-                fontSize: 14,
-                padding: 20,
-                text: "{% trans "Active Users" %}"
-            },
-            elements: {
-                line: {
-                    fill: false,
-                    tension: 0, // disable bezier curves, i.e, draw straight lines
-                    borderWidth: 2
-                }
-            },
-            legend: {
-                display: false,
-                labels: {
-                    usePointStyle: true
-                }
-            },
-            layout: {
-                padding: {
-                    right: 100
-                }
-            },
-            scales: {
-                yAxes: [{
-                    ticks: {
-                        beginAtZero: true,
-                        suggestedMax: 10
+    var getConfig = function(options) {
+        return config = {
+            type: 'line',
+            data: {
+                labels: labels,
+                datasets: [
+                    {
+                        label: "{% trans "Upload" context "upload traffic" %}",
+                        data: options.data.upload,
+                        borderColor: '#fd913a',
+                        backgroundColor: '#fd913a'
+                    },
+                    {
+                        label: "{% trans "Download" context "download traffic" %}",
+                        data: options.data.download,
+                        borderColor: '#57cd6b',
+                        backgroundColor: '#57cd6b'
                     }
-                }]
+                ]
+            }, // 'data' ends here
+            options: {
+                title: {
+                    display: true,
+                    fontSize: 14,
+                    text: options.title
+                },
+                elements: {
+                    line: {
+                        fill: false,
+                        tension: 0, // disable bezier curves, i.e, draw straight lines
+                        borderWidth: 2
+                    }
+                },
+                legend: {
+                    labels: {
+                        usePointStyle: true
+                    }
+                },
+                layout: {
+                    padding: {
+                        right: 100
+                    }
+                },
+                tooltips: {
+                    callbacks: {
+						label: function(tooltipItem, data) {
+							return data.datasets[tooltipItem.datasetIndex].label + ': '
+								+ quotaSizeFormat(tooltipItem.yLabel);
+						}
+                    }
+                },
+                scales: {
+                    yAxes: [{
+                        ticks: {
+                            beginAtZero: true,
+                            suggestedMax: 10*1000*1000, // 10 MB
+                            callback: function(value, index, values) {
+                                return quotaSizeFormat(value);
+                            }
+                        }
+                    }]
+                }
             }
+        };
+    };
+
+    var totalTrafficChartOptions = {
+        title: "{% trans "Total Traffic" %}",
+        data: {
+            upload: total_upload,
+            download: total_download
+        }
+    };
+    var linkTrafficChartOptions = {
+        title: "{% trans "Share Link Traffic" %}",
+        data: {
+            upload: link_upload,
+            download: link_download
+        }
+    };
+    var syncTrafficChartOptions = {
+        title: "{% trans "Sync Traffic" %}",
+        data: {
+            upload: sync_upload,
+            download: sync_download
+        }
+    };
+    var webTrafficChartOptions = {
+        title: "{% trans "Web Traffic" %}",
+        data: {
+            upload: web_upload,
+            download: web_download
         }
     };
 
-    if (chart) { // chart instance already exists
-        chart.destroy();
-        chart = new Chart($canvas, config);
+    if (totalTrafficChart) { // chart instance already exists
+        totalTrafficChart.destroy();
+        linkTrafficChart.destroy();
+        syncTrafficChart.destroy();
+        webTrafficChart.destroy();
+
+        totalTrafficChart = new Chart($totalTrafficCanvas,
+            getConfig(totalTrafficChartOptions));
+        linkTrafficChart = new Chart($linkTrafficCanvas,
+            getConfig(linkTrafficChartOptions));
+        syncTrafficChart = new Chart($syncTrafficCanvas,
+            getConfig(syncTrafficChartOptions));
+        webTrafficChart = new Chart($webTrafficCanvas,
+            getConfig(webTrafficChartOptions));
+
     } else {
-        chart = new Chart($canvas, config);
+        totalTrafficChart = new Chart($totalTrafficCanvas,
+            getConfig(totalTrafficChartOptions));
+        linkTrafficChart = new Chart($linkTrafficCanvas,
+            getConfig(linkTrafficChartOptions));
+        syncTrafficChart = new Chart($syncTrafficCanvas,
+            getConfig(syncTrafficChartOptions));
+        webTrafficChart = new Chart($webTrafficCanvas,
+            getConfig(webTrafficChartOptions));
     }
 }
 
@@ -225,6 +328,7 @@ getStatisticByTimeRange('7d');
 
 // click btns
 $rangeBtns = $('.system-statistic-time-range button');
+
 $('#7-days').on('click', function() {
     getStatisticByTimeRange('7d');
     $rangeBtns.removeClass('sf-btn-group-btn-cur');

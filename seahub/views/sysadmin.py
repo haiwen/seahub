@@ -143,6 +143,13 @@ def sys_statistic_user(request):
     return render(request, 'sysadmin/sys_statistic_user.html', {
             })
 
+@login_required
+@sys_staff_required
+def sys_statistic_traffic(request):
+
+    return render(request, 'sysadmin/sys_statistic_traffic.html', {
+            })
+
 def can_view_sys_admin_repo(repo):
     default_repo_id = get_system_default_repo_id()
     is_default_repo = True if repo.id == default_repo_id else False
@@ -1489,6 +1496,20 @@ def sys_org_info_library(request, org_id):
 
     org_basic_info["org_repos"] = org_repos
     return render(request, 'sysadmin/sys_org_info_library.html',
+           org_basic_info)
+
+@login_required
+@sys_staff_required
+def sys_org_info_traffic(request, org_id):
+
+    org_id = int(org_id)
+
+    if not ccnet_api.get_org_by_id(org_id):
+        raise Http404
+
+    org_basic_info = sys_get_org_base_info(org_id)
+
+    return render(request, 'sysadmin/sys_org_info_traffic.html',
            org_basic_info)
 
 @login_required

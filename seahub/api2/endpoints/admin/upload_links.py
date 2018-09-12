@@ -119,7 +119,7 @@ class AdminUploadLinkUpload(APIView):
             return api_error(status.HTTP_404_NOT_FOUND, error_msg)
 
         upload_token = seafile_api.get_fileserver_access_token(repo_id,
-                obj_id, 'upload', uploadlink.username, use_onetime=False)
+                obj_id, 'upload-link', uploadlink.username, use_onetime=False)
 
         if not upload_token:
             error_msg = 'Internal Server Error'

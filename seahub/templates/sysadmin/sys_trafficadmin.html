@@ -10,9 +10,20 @@
         <li class="tabnav-tab"><a href="{% url 'sys_statistic_file' %}">{% trans "File" %}</a></li>
         <li class="tabnav-tab"><a href="{% url 'sys_statistic_storage' %}">{% trans "Storage" %}</a></li>
         <li class="tabnav-tab"><a href="{% url 'sys_statistic_user' %}">{% trans "Users" %}</a></li>
-        <li class="tabnav-tab tabnav-tab-cur"><a href="{{ SITE_ROOT }}sys/trafficadmin/">{% trans "Traffic" %}</a></li>
+        <li class="tabnav-tab tabnav-tab-cur"><a href="{% url 'sys_statistic_traffic' %}">{% trans "Traffic" %}</a></li>
     </ul>
 </div>
+
+{% if traffic_stats_enabled %}
+<ul class="traffic-tab-nav">
+    <li class="tab">
+        <a href="{% url 'sys_statistic_traffic' %}" class="a">{% trans "System" %}</a>
+    </li>
+    <li class="tab tab-cur">
+        <a href="{{ SITE_ROOT }}sys/trafficadmin/" class="a">{% trans "Share Link" %}</a>
+    </li>
+</ul>
+{% endif %}
 
 <p class="tip">{% trans "Tip: the traffic only includes the traffic used by sharing links." %}</p>
 

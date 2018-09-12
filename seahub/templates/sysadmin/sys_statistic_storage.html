@@ -13,9 +13,7 @@
         <li class="tabnav-tab"><a href="{% url 'sys_statistic_file' %}">{% trans "File" %}</a></li>
         <li class="tabnav-tab tabnav-tab-cur"><a href="{% url 'sys_statistic_storage' %}">{% trans "Storage" %}</a></li>
         <li class="tabnav-tab"><a href="{% url 'sys_statistic_user' %}">{% trans "Users" %}</a></li>
-        {% if traffic_stats_enabled %}
-        <li class="tabnav-tab"><a href="{{ SITE_ROOT }}sys/trafficadmin/">{% trans "Traffic" %}</a></li>
-        {% endif %}
+        <li class="tabnav-tab"><a href="{% url 'sys_statistic_traffic' %}">{% trans "Traffic" %}</a></li>
     </ul>
 </div>
 
@@ -203,12 +201,21 @@ function renderChart(data, group_by) {
                     right: 100
                 }
             },
+            tooltips: {
+                callbacks: {
+                    label: function(tooltipItem, data) {
+                        return data.datasets[tooltipItem.datasetIndex].label + ': '
+                            + quotaSizeFormat(tooltipItem.yLabel);
+                    }
+                }
+            },
             scales: {
                 yAxes: [{
                     ticks: {
                         beginAtZero: true,
+                        suggestedMax: 10*1000*1000,
                         callback: function(value, index, values) {
-                            return quotaSizeFormat(value, 2);
+                            return quotaSizeFormat(value);
                         }
                     }
                 }]

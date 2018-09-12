@@ -1198,7 +1198,7 @@ def get_file_upload_url_ul(request, token):
 
     username = request.user.username or request.session.get('anonymous_email') or ''
 
-    args = [repo_id, json.dumps({'anonymous_user': username}), 'upload', '']
+    args = [repo_id, json.dumps({'anonymous_user': username}), 'upload-link', '']
     kwargs = {
         'use_onetime': False,
     }

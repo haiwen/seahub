@@ -263,7 +263,7 @@ class UploadLinkUpload(APIView):
             return api_error(status.HTTP_403_FORBIDDEN, error_msg)
 
         token = seafile_api.get_fileserver_access_token(repo_id,
-                dir_id, 'upload', uls.username, use_onetime=False)
+                dir_id, 'upload-link', uls.username, use_onetime=False)
 
         if not token:
             error_msg = 'Internal Server Error'

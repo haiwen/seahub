@@ -1,0 +1,8 @@
+{% load i18n %}
+<ul class="tabnav-tabs">
+    <li class="tabnav-tab {% if cur_tab == 'user' %}tabnav-tab-cur{% endif %}"><a href="{% url 'sys_org_info_user' org.org_id %}">{% trans "Members" %}</a></li>
+    <li class="tabnav-tab {% if cur_tab == 'group' %}tabnav-tab-cur{% endif %}"><a href="{% url 'sys_org_info_group' org.org_id %}">{% trans "Groups" %}</a></li>
+    <li class="tabnav-tab {% if cur_tab == 'library' %}tabnav-tab-cur{% endif %}"><a href="{% url 'sys_org_info_library' org.org_id %}">{% trans "Libraries" %}</a></li>
+    <li class="tabnav-tab {% if cur_tab == 'traffic' %}tabnav-tab-cur{% endif %}"><a href="{% url 'sys_org_info_traffic' org.org_id %}">{% trans "Traffic" %}</a></li>
+    <li class="tabnav-tab {% if cur_tab == 'setting' %}tabnav-tab-cur{% endif %}"><a href="{% url 'sys_org_info_setting' org.org_id %}">{% trans "Settings" %}</a></li>
+</ul>

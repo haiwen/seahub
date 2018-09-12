@@ -716,6 +716,16 @@ if EVENTS_CONFIG_FILE:
             res = seafevents.get_total_storage_stats_by_day(session, start, end, offset)
         return res
 
+    def get_system_traffic_by_day(start, end, offset, op_type='all'):
+        with _get_seafevents_session() as session:
+            res = seafevents.get_system_traffic_by_day(session, start, end, offset, op_type)
+        return res
+
+    def get_org_traffic_by_day(org_id, start, end, offset, op_type='all'):
+        with _get_seafevents_session() as session:
+            res = seafevents.get_org_traffic_by_day(session, org_id, start, end, offset, op_type)
+        return res
+
     def get_file_update_events(email, org_id, repo_id, start, limit):
         """Return file update events list. (If no file update, return 'None')
 
@@ -774,6 +784,10 @@ else:
     def get_file_ops_stats_by_day():
         pass
     def get_total_storage_stats_by_day():
+        pass
+    def get_system_traffic_by_day():
+        pass
+    def get_org_traffic_by_day():
         pass
     def get_file_update_events():
         pass
@@ -1310,7 +1324,7 @@ def send_perm_audit_msg(etype, from_user, to, repo_id, path, perm):
     msg_utf8 = msg.encode('utf-8')
 
     try:
-        seaserv.send_message('seahub.stats', msg_utf8)
+        seaserv.send_message('seahub.audit', msg_utf8)
     except Exception as e:
         logger.error("Error when sending perm-audit-%s message: %s" %
                      (etype, str(e)))
