@@ -110,6 +110,7 @@ define([
             'click .rename': 'rename',
             'click .mv': 'mvcp',
             'click .cp': 'mvcp',
+            'click .new-draft': 'newDraft',
             'click .set-folder-permission': 'setFolderPerm',
             'click .lock-file': 'lockFile',
             'click .unlock-file': 'unlockFile',
@@ -605,6 +606,34 @@ define([
                     Common.ajaxErrorHandler(xhr);
                 }
             });
+            return false;
+        },
+
+        newDraft: function() {
+            var repoID = this.dir.repo_id;
+            var filePath = Common.pathJoin([this.dir.path, this.model.get('obj_name')]);
+            var data = {
+                repo_id: repoID,
+                file_path: filePath
+            };
+            $.ajax({
+                url: Common.getUrl({name: 'new-draft'}),
+                dataType: 'json',
+                data: data,
+                cache: false,
+                type: 'POST',
+                beforeSend: Common.prepareCSRFToken,
+                success: function(res) {
+                    var msg = gettext("New Success.");
+                    Common.feedback(msg, 'success');
+                },
+                error: function() {
+                    var err_msg = gettext("The draft is already exist.");
+                    Common.feedback(err_msg, 'error');
+                }
+            });
+            this.hideMobileMenu();
+            this._hideMenu();
             return false;
         },
 

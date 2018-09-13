@@ -8,7 +8,6 @@ import Notification from './components/notification';
 
 import { SeafileAPI } from 'seafile-js';
 import cookie from 'react-cookies';
-
 import 'seafile-ui';
 import './assets/css/fa-solid.css';
 import './assets/css/fa-regular.css';
