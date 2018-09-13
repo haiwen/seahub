@@ -10,6 +10,9 @@ import { SeafileAPI } from 'seafile-js';
 import cookie from 'react-cookies';
 
 import 'seafile-ui';
+import './assets/css/fa-solid.css';
+import './assets/css/fa-regular.css';
+import './assets/css/fontawesome.css';
 import './css/dashboard.css';
 
 const siteRoot = window.app.config.siteRoot;

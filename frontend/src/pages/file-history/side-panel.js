@@ -135,7 +135,7 @@ class SidePanel extends React.Component {
         <div className="side-panel-north">
           <div className="history-heading">
             <a href="javascript:window.history.back()" className="go-back" title="Back">
-              <span className="icon-chevron-left"></span>
+              <span className="fas fa-chevron-left"></span>
             </a>
             <span className="history-doc-name">{fileName}</span>
           </div>

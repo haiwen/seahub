@@ -35,33 +35,6 @@
 .sf2-icon-grid-view:before { content:"\e025"; }
 .sf2-icon-list-view:before { content:"\e026"; }
 
-
-/****** icon-xx ********/
-/* Font Awesome 3.2.1 by Dave Gandy - http://fortawesome.github.com/Font-Awesome */
-@font-face {
-    font-family: 'FontAwesome';
-    src: url('font/fontawesome-webfont.eot?v=3.0.1');
-    src: url('font/fontawesome-webfont.eot?#iefix&v=3.0.1') format('embedded-opentype'),
-    url('font/fontawesome-webfont.woff?v=3.0.1') format('woff'),
-    url('font/fontawesome-webfont.ttf?v=3.0.1') format('truetype');
-    font-weight: normal;
-    font-style: normal;
-}
-[class^="icon-"],
-[class*=" icon-"] {
-    font-family: FontAwesome;
-    font-weight: normal;
-    font-style: normal;
-    text-decoration: inherit;
-    -webkit-font-smoothing: antialiased;
-    vertical-align: baseline;
-    speak: none;
-}
-.icon-caret-down:before           { content: "\f0d7"; }
-.icon-caret-left:before           { content: "\f0d9"; }
-.icon-search:before               { content: "\f002"; }
-.icon-chevron-left:before         { content: "\f053"; }
-
 /* common class and element style*/
 a { color:#eb8205; }
 a:hover { color:#eb8205; }
@@ -574,6 +547,14 @@ a.op-icon:focus {
     line-height:1;
     color:#999;
 }
+
+.side-tabnav-tabs .tab .fas {
+    height: 24px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
 .side-nav-toggle {
     font-size:1.5rem;
     color:#999;

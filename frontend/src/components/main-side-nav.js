@@ -98,7 +98,7 @@ class  MainSideNav extends React.Component {
             <li className="tab"><a href={serverRoot + siteRoot + '#shared-libs/'} className="ellipsis" title="Shared with me"><span className="sf2-icon-share" aria-hidden="true"></span>Shared with me</a></li>
             <li className="tab"><a href={serverRoot + siteRoot + '#org/'} className="ellipsis" title="Shared with all"><span className="sf2-icon-organization" aria-hidden="true"></span>Shared with all</a></li>
             <li className="tab" id="group-nav">
-              <a className="ellipsis user-select-no" title="Shared with groups" onClick={this.grpsExtend}><span className={`toggle-icon float-right ${this.state.groupsExtended ?'icon-caret-down':'icon-caret-left'}`} aria-hidden="true"></span><span className="sf2-icon-group" aria-hidden="true"></span>Shared with groups</a>
+              <a className="ellipsis user-select-no" title="Shared with groups" onClick={this.grpsExtend}><span className={`toggle-icon float-right fas ${this.state.groupsExtended ?'fa-caret-down':'icon-caret-left'}`} aria-hidden="true"></span><span className="sf2-icon-group" aria-hidden="true"></span>Shared with groups</a>
               {this.renderSharedGroups()}
             </li>
           </ul>
@@ -111,7 +111,7 @@ class  MainSideNav extends React.Component {
             <li className="tab"><a href={siteRoot + 'dashboard'}><span className="sf2-icon-clock" aria-hidden="true"></span>Acitivities</a></li>
             <li className="tab"><a href={siteRoot + '#devices/'} className="ellipsis" title="Linked Devices"><span className="sf2-icon-monitor" aria-hidden="true"></span>Linked Devices</a></li>
             <li className="tab" id="share-admin-nav">
-              <a className="ellipsis user-select-no" title="Share Admin" onClick={this.shExtend}><span className={`toggle-icon float-right ${this.state.sharedExtended ? 'icon-caret-down':'icon-caret-left'}`} aria-hidden="true"></span><span aria-hidden="true" className="sf2-icon-wrench"></span>Share Admin</a>
+              <a className="ellipsis user-select-no" title="Share Admin" onClick={this.shExtend}><span className={`toggle-icon float-right fas ${this.state.sharedExtended ? 'fa-caret-down':'fa-caret-left'}`} aria-hidden="true"></span><span aria-hidden="true" className="sf2-icon-wrench"></span>Share Admin</a>
               {this.renderSharedAdmin()}
             </li>
           </ul>

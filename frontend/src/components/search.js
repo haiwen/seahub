@@ -203,7 +203,7 @@ class Search extends Component {
               onChange={this.onChangeHandler}
               autoComplete="off"
             />
-            <a className="search-icon icon-search"></a>
+            <a className="search-icon fas fa-search"></a>
             <a className={`search-icon sf2-icon-x3 ${this.state.isCloseShow ? "" : "hide"}`} onClick={this.onCloseHandler}></a>
           </div>
           <div className="search-result-container">
