@@ -37,7 +37,6 @@ from seaserv import get_repo, send_message, get_commits, \
     seafserv_threaded_rpc
 from pysearpc import SearpcError
 
-from seahub.auth import REDIRECT_FIELD_NAME
 from seahub.tags.models import FileUUIDMap
 from seahub.wopi.utils import get_wopi_dict
 from seahub.onlyoffice.utils import get_onlyoffice_dict
@@ -55,7 +54,7 @@ from seahub.utils import render_error, is_org_context, \
     user_traffic_over_limit, get_file_audit_events_by_path, \
     generate_file_audit_event_type, FILE_AUDIT_ENABLED, \
     get_conf_text_ext, HAS_OFFICE_CONVERTER, FILEEXT_TYPE_MAP, \
-    normalize_file_path, get_service_url
+    normalize_file_path, get_service_url, redirect_to_login
 
 from seahub.utils.ip import get_remote_ip
 from seahub.utils.timeutils import utc_to_local
@@ -81,7 +80,8 @@ if HAS_OFFICE_CONVERTER:
 
 import seahub.settings as settings
 from seahub.settings import FILE_ENCODING_LIST, FILE_PREVIEW_MAX_SIZE, \
-    FILE_ENCODING_TRY_LIST, MEDIA_URL, SEAFILE_COLLAB_SERVER, ENABLE_WATERMARK
+    FILE_ENCODING_TRY_LIST, MEDIA_URL, SEAFILE_COLLAB_SERVER, ENABLE_WATERMARK, \
+    SHARE_LINK_LOGIN_REQUIRED
 
 try:
     from seahub.settings import ENABLE_OFFICE_WEB_APP
@@ -935,6 +935,15 @@ def view_shared_file(request, fileshare):
     Download share file if `dl` in request param.
     View raw share file if `raw` in request param.
     """
+
+    # get share link permission
+    can_download = fileshare.get_permissions()['can_download']
+    can_edit = fileshare.get_permissions()['can_edit']
+
+    if not request.user.is_authenticated():
+        if SHARE_LINK_LOGIN_REQUIRED or can_edit:
+            return redirect_to_login(request)
+
     token = fileshare.token
 
     # check if share link is encrypted
@@ -958,16 +967,6 @@ def view_shared_file(request, fileshare):
     shared_by = fileshare.username
     if not seafile_api.check_permission_by_path(repo_id, '/', shared_by):
         return render_error(request, _(u'Permission denied'))
-
-    # get share link permission
-    can_download = fileshare.get_permissions()['can_download']
-    can_edit = fileshare.get_permissions()['can_edit']
-
-    if can_edit and not request.user.is_authenticated():
-        login_url = settings.LOGIN_URL
-        path = urlquote(request.get_full_path())
-        tup = login_url, REDIRECT_FIELD_NAME, path
-        return HttpResponseRedirect('%s?%s=%s' % tup)
 
     # Increase file shared link view_cnt, this operation should be atomic
     fileshare.view_cnt = F('view_cnt') + 1
@@ -1088,6 +1087,12 @@ def view_shared_file(request, fileshare):
 
 @share_link_audit
 def view_file_via_shared_dir(request, fileshare):
+
+    # no edit permission for folder share link
+    if not request.user.is_authenticated() \
+            and SHARE_LINK_LOGIN_REQUIRED:
+        return redirect_to_login(request)
+
     token = fileshare.token
 
     # argument check
