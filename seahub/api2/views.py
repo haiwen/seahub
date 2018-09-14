@@ -1404,9 +1404,15 @@ class DownloadRepo(APIView):
             error_msg = 'Library %s not found.' % repo_id
             return api_error(status.HTTP_404_NOT_FOUND, error_msg)
 
-        if not check_folder_permission(request, repo_id, '/'):
+        perm = check_folder_permission(request, repo_id, '/')
+        if not perm:
             return api_error(status.HTTP_403_FORBIDDEN,
                     'You do not have permission to access this library.')
+
+        username = request.user.username
+        if not seafile_api.is_repo_syncable(repo_id, username, perm):
+            return api_error(status.HTTP_403_FORBIDDEN,
+                             'unsyncable share permission')
 
         return repo_download_info(request, repo_id)
 
@@ -4825,27 +4831,14 @@ class RepoTokensView(APIView):
         if any([not _REPO_ID_PATTERN.match(repo_id) for repo_id in repos_id]):
             return api_error(status.HTTP_400_BAD_REQUEST, "Libraries ids are invalid")
 
-        username = request.user.username
         tokens = {}
         for repo_id in repos_id:
             repo = seafile_api.get_repo(repo_id)
             if not repo:
                 continue
 
-            perm = check_folder_permission(request, repo.id, '/')
-            if not perm:
-                res = {
-                    'reason': 'no permission',
-                    'unsyncable_path': '/'
-                }
-                return Response(res, status=status.HTTP_403_FORBIDDEN)
-
-            if not seafile_api.is_repo_syncable(repo_id, username, perm):
-                res = {
-                    'reason': 'unsyncable share permission',
-                    'unsyncable_path': '/'
-                }
-                return Response(res, status=status.HTTP_403_FORBIDDEN)
+            if not check_folder_permission(request, repo.id, '/'):
+                continue
 
             tokens[repo_id] = seafile_api.generate_repo_token(repo_id, request.user.username)
 
