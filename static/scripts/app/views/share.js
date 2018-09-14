@@ -30,7 +30,6 @@ define([
             this.dirent_path = options.dirent_path;
             this.obj_name = options.obj_name;
             this.is_dir = options.is_dir;
-            this.can_preview = options.can_preview;
 
             // share to user/group
             var enable_dir_private_share = false;
@@ -87,24 +86,6 @@ define([
                 show_admin_perm_option = true;
             }
 
-            // show 'can edit' perm option for download link or not
-            var show_link_edit_perm_option = false;
-            var show_link_preview_only_perm_option = true;
-            var file_ext = '';
-            if (!this.is_dir && this.obj_name.lastIndexOf('.') != -1) {
-                file_ext = this.obj_name.substr(this.obj_name.lastIndexOf('.') + 1)
-                    .toLowerCase();
-            }
-            if (this.user_perm == 'rw' && !this.is_dir &&
-                (app.pageOptions.enable_office_web_app ||
-                 app.pageOptions.enable_onlyoffice) &&
-                (file_ext == 'docx' || file_ext == 'xlsx' || file_ext == 'pptx')) {
-                show_link_edit_perm_option = true;
-            }
-            if (!this.is_dir && !this.can_preview) {
-                show_link_preview_only_perm_option = false;
-            }
-
             this.$el.html(this.template({
                 title: gettext("Share {placeholder}")
                     .replace('{placeholder}', '<span class="op-target ellipsis ellipsis-op-target" title="' + Common.HTMLescape(this.obj_name) + '">' + Common.HTMLescape(this.obj_name) + '</span>'),
@@ -113,10 +94,6 @@ define([
 
                 enable_dir_private_share: this.enable_dir_private_share,
                 show_admin_perm_option: show_admin_perm_option,
-
-                show_link_edit_perm_option: show_link_edit_perm_option,
-                show_link_preview_only_perm_option: show_link_preview_only_perm_option,
-
                 user_perm: this.user_perm,
                 repo_id: this.repo_id,
                 repo_encrypted: this.repo_encrypted,
@@ -269,6 +246,33 @@ define([
                     $loadingTip.hide();
                 }
             });
+
+            if (!this.is_dir) {
+                // check if can preview/edit file
+                $.ajax({
+                    url: Common.getUrl({name: 'get_file_info', repo_id: this.repo_id}),
+                    data: {
+                        'p': this.dirent_path
+                    },
+                    cache: false,
+                    dataType: 'json',
+                    success: function(data) {
+                        // show 'can preview/edit' perm option for download link or not
+                        if (data.can_preview) {
+                            _this.$('#file-share-link-preview-only-radio').removeClass('hide');
+                        }
+
+                        var file_ext = '';
+                        if (_this.obj_name.lastIndexOf('.') != -1) {
+                            file_ext = _this.obj_name.substr(_this.obj_name.lastIndexOf('.') + 1)
+                                .toLowerCase();
+                        }
+                        if ((file_ext == 'docx' || file_ext == 'xlsx' || file_ext == 'pptx') && data.can_edit) {
+                            _this.$('#file-share-link-edit-download-radio').removeClass('hide');
+                        }
+                    }
+                });
+            }
         },
 
         generateRandomPassword: function(e, form) {

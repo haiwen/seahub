@@ -77,6 +77,7 @@ define([
                 case 'list_lib_dir': return siteRoot + 'ajax/lib/' + options.repo_id + '/dir/';
                 case 'del_dir': return siteRoot + 'api/v2.1/repos/' + options.repo_id + '/dir/';
                 case 'del_file': return siteRoot + 'api/v2.1/repos/' + options.repo_id + '/file/';
+                case 'get_file_info': return siteRoot + 'api/v2.1/repos/' + options.repo_id + '/file/';
                 case 'download_dir_zip_url': return fileServerRoot + 'zip/' + options.zip_token;
                 case 'zip_task': return siteRoot + 'api/v2.1/repos/' + options.repo_id + '/zip-task/';
                 case 'query_zip_progress': return siteRoot + 'api/v2.1/query-zip-progress/';

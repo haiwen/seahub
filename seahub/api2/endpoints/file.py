@@ -22,6 +22,7 @@ from seahub.utils import check_filename_with_rename, is_pro_version, \
 from seahub.utils.timeutils import timestamp_to_isoformat_timestr
 from seahub.views import check_folder_permission
 from seahub.utils.file_op import check_file_lock, if_locked_by_online_office
+from seahub.views.file import can_preview_file, can_edit_file
 
 from seahub.settings import MAX_UPLOAD_FILE_NAME_LEN, \
     FILE_LOCK_EXPIRATION_DAYS, OFFICE_TEMPLATE_ROOT
@@ -44,7 +45,13 @@ class FileView(APIView):
 
     def get_file_info(self, username, repo_id, file_path):
 
+        repo = seafile_api.get_repo(repo_id)
         file_obj = seafile_api.get_dirent_by_path(repo_id, file_path)
+        file_name = file_obj.obj_name
+        file_size = file_obj.size
+
+        can_preview, error_msg = can_preview_file(file_name, file_size, repo)
+        can_edit, error_msg  = can_edit_file(file_name, file_size, repo)
 
         try:
             is_locked, locked_by_me = check_file_lock(repo_id, file_path, username)
@@ -56,11 +63,13 @@ class FileView(APIView):
             'type': 'file',
             'repo_id': repo_id,
             'parent_dir': os.path.dirname(file_path),
-            'obj_name': file_obj.obj_name,
+            'obj_name': file_name,
             'obj_id': file_obj.obj_id,
-            'size': file_obj.size,
+            'size': file_size,
             'mtime': timestamp_to_isoformat_timestr(file_obj.mtime),
             'is_locked': is_locked,
+            'can_preview': can_preview,
+            'can_edit': can_edit,
         }
 
         return file_info

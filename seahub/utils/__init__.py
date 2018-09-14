@@ -1019,6 +1019,7 @@ if EVENTS_CONFIG_FILE:
 
     HAS_OFFICE_CONVERTER = check_office_converter_enabled()
 
+OFFICE_PREVIEW_MAX_SIZE = 2 * 1024 * 1024
 if HAS_OFFICE_CONVERTER:
 
     OFFICE_HTML_DIR = get_office_converter_html_dir()

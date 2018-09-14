@@ -201,12 +201,10 @@ define([
 
         share: function() {
             var dir = this.dir,
-                can_preview = this.model.get('can_preview'),
                 obj_name = this.model.get('obj_name'),
                 dirent_path = this.model.getPath();
 
             var options = {
-                'can_preview': can_preview,
                 'is_repo_owner': dir.is_repo_owner,
                 'is_virtual': dir.is_virtual,
                 'user_perm': this.model.get('perm'),
