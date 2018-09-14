@@ -79,8 +79,8 @@ class Draft(TimestampedModel):
 
     objects = DraftManager()
 
-    class Meta:
-        unique_together = (('username', 'draft_repo_id'), )
+    # class Meta:
+    #     unique_together = (('username', 'draft_repo_id'), )
 
     def delete(self):
         seafile_api.del_file(self.draft_repo_id, '/',
