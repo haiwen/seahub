@@ -20,13 +20,9 @@ define([
         },
 
         getIconTitle: function() {
-            var icon_title = ''; 
-            if (this.get('share_permission') == "rw") {
-                icon_title = gettext("Read-Write");
-            } else {
-                icon_title = gettext("Read-Only");
-            }   
-            return icon_title;
+            return Common.getFolderIconTitle({
+                'permission': this.get('share_permission')
+            });
         }   
 
     });

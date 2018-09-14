@@ -6,7 +6,9 @@ DEFAULT_USER = 'default'
 # Guest user have limited operations, can not create group and library.
 GUEST_USER = 'guest'
 
-# Permissions
+# Repo/folder permissions
+PERMISSION_PREVIEW = 'preview'  # preview only on the web, can not be downloaded
+PERMISSION_PREVIEW_EDIT = 'cloud-edit'  # preview only with edit on the web
 PERMISSION_READ = 'r'
 PERMISSION_READ_WRITE = 'rw'
 PERMISSION_ADMIN = 'admin'

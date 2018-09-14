@@ -343,15 +343,50 @@ define([
             return app.config.mediaUrl + 'img/lib/' + icon_size + '/' + icon_name;
         },
 
-        getLibIconTitle: function(is_encrypted, is_readonly) {
-            if (is_encrypted) {
-                return gettext("Encrypted library");
-            } else if (is_readonly) {
-                return gettext("Read-Only library");
+        getLibIconTitle: function(options) {
+            var title;
+            if (options.encrypted) {
+                title = gettext("Encrypted library");
+            } else if (options.is_admin) { // shared with 'admin' permission
+                title = gettext("Admin access");
             } else {
-                return gettext("Read-Write library");
+                switch(options.permission) {
+                    case 'rw':
+                        title = gettext("Read-Write library");
+                        break;
+                    case 'r':
+                        title = gettext("Read-Only library");
+                        break;
+                    case 'cloud-edit':
+                        title = gettext("Preview-Edit-on-Cloud library");
+                        break;
+                    case 'preview':
+                        title = gettext("Preview-on-Cloud library");
+                        break;
+                }
             }
+            return title;
         },
+
+        getFolderIconTitle: function(options) {
+            var title;
+            switch(options.permission) {
+                case 'rw':
+                    title = gettext("Read-Write folder");
+                    break;
+                case 'r':
+                    title = gettext("Read-Only folder");
+                    break;
+                case 'cloud-edit':
+                    title = gettext("Preview-Edit-on-Cloud folder");
+                    break;
+                case 'preview':
+                    title = gettext("Preview-on-Cloud folder");
+                    break;
+            }
+            return title;
+        },
+
 
         isHiDPI: function() {
             var pixelRatio = window.devicePixelRatio ? window.devicePixelRatio : 1;

@@ -18,7 +18,7 @@ from seahub.api2.endpoints.utils import api_check_group
 from seahub.signals import repo_created
 from seahub.utils import is_valid_dirent_name, is_org_context, \
         is_pro_version
-from seahub.utils.repo import get_library_storages, get_repo_owner
+from seahub.utils.repo import get_library_storages, get_repo_owner, get_available_repo_perms
 from seahub.utils.timeutils import timestamp_to_isoformat_timestr
 from seahub.share.signals import share_repo_to_group_successful
 from seahub.constants import PERMISSION_READ, PERMISSION_READ_WRITE
@@ -64,7 +64,7 @@ class AdminGroupOwnedLibraries(APIView):
         password = request.data.get("password", None)
 
         permission = request.data.get('permission', PERMISSION_READ_WRITE)
-        if permission not in [PERMISSION_READ, PERMISSION_READ_WRITE]:
+        if permission not in get_available_repo_perms():
             error_msg = 'permission invalid.'
             return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
 

@@ -15,9 +15,10 @@ define([
         },
 
         getIconTitle: function() {
-            var is_encrypted = this.get('encrypted');
-            var is_readonly = this.get('permission') == "r" ? true : false;
-            return Common.getLibIconTitle(is_encrypted, is_readonly);
+            return Common.getLibIconTitle({
+                'encrypted': this.get('encrypted'),
+                'permission': this.get('permission')
+            });
         }
     });
 

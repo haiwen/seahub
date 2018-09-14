@@ -25,6 +25,7 @@ from seahub.share.models import FileShare, OrgFileShare
 from seahub.utils import gen_shared_link, is_org_context
 from seahub.views import check_folder_permission
 from seahub.utils.timeutils import datetime_to_isoformat_timestr
+from seahub.utils.repo import parse_repo_perm
 
 from seahub.settings import SHARE_LINK_EXPIRE_DAYS_MAX, \
         SHARE_LINK_EXPIRE_DAYS_MIN
@@ -270,9 +271,8 @@ class ShareLinks(APIView):
                 error_msg = 'path %s not found.' % path
 
             return api_error(status.HTTP_404_NOT_FOUND, error_msg)
-
-        # permission check
-        if not check_folder_permission(request, repo_id, path):
+       
+        if parse_repo_perm(check_folder_permission(request, repo_id, path)).can_download is False:
             error_msg = 'Permission denied.'
             return api_error(status.HTTP_403_FORBIDDEN, error_msg)
 

@@ -21,7 +21,7 @@ from seahub.group.utils import is_group_member, is_group_admin
 from seahub.utils import is_org_context, is_valid_dirent_name, \
         send_perm_audit_msg
 from seahub.utils.timeutils import timestamp_to_isoformat_timestr
-from seahub.utils.repo import get_repo_owner
+from seahub.utils.repo import get_repo_owner, get_available_repo_perms
 from seahub.share.models import ExtraGroupsSharePermission
 from seahub.share.signals import share_repo_to_group_successful
 from seahub.share.utils import is_repo_admin, check_group_share_in_permission, \
@@ -119,7 +119,7 @@ class GroupLibraries(APIView):
             return api_error(status.HTTP_403_FORBIDDEN, error_msg)
 
         permission = request.data.get('permission', PERMISSION_READ)
-        if permission not in [PERMISSION_READ, PERMISSION_READ_WRITE, PERMISSION_ADMIN]:
+        if permission not in get_available_repo_perms():
             error_msg = 'permission invalid.'
             return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
 

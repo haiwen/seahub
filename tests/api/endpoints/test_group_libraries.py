@@ -8,7 +8,9 @@ from tests.common.utils import randstring
 
 from seahub.test_utils import BaseTestCase
 from seahub.share.models import ExtraGroupsSharePermission
-from seahub.constants import PERMISSION_ADMIN
+from seahub.constants import (
+    PERMISSION_ADMIN, PERMISSION_PREVIEW, PERMISSION_PREVIEW_EDIT)
+
 
 class GroupLibrariesTest(BaseTestCase):
 
@@ -75,6 +77,27 @@ class GroupLibrariesTest(BaseTestCase):
 
         group_repos = seafile_api.get_repos_by_group(self.group_id)
         assert len(group_repos) == 1
+
+    def test_can_create_with_perms(self):
+        group_repos = seafile_api.get_repos_by_group(self.group_id)
+        assert len(group_repos) == 0
+
+        self.login_as(self.user)
+
+        for perm in [PERMISSION_PREVIEW, PERMISSION_PREVIEW_EDIT]:
+            repo_name = randstring(6)
+            resp = self.client.post(self.group_libraries_url, {
+                'repo_name': repo_name,
+                'permission': perm
+            })
+            self.assertEqual(200, resp.status_code)
+
+            json_resp = json.loads(resp.content)
+            assert json_resp['repo_name'] == repo_name
+            assert json_resp['permission'] == perm
+
+        group_repos = seafile_api.get_repos_by_group(self.group_id)
+        assert len(group_repos) == 2
 
     def test_create_with_login_user_is_not_group_member(self):
 

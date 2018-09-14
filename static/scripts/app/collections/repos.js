@@ -15,7 +15,6 @@ define([
         },
 
         initialize: function(options) {
-            //console.log('init RepoCollection');
             if (options) {
                 this.type = options.type ? options.type : 'mine';
             }

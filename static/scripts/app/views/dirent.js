@@ -55,6 +55,23 @@ define([
                 can_set_folder_perm = true;
             }
 
+            // show 'share' or not
+            var can_share_dir = false;
+            var can_share_file = false;
+            var perm = this.model.get('perm');
+            if (!dir.repo_encrypted &&
+                (app.pageOptions.can_generate_share_link ||
+                app.pageOptions.can_generate_upload_link ||
+                (dir.is_repo_owner || dir.is_admin)) &&
+                (perm == 'rw' || perm == 'r')) {
+                can_share_dir = true;
+            }
+            if (!dir.repo_encrypted &&
+                app.pageOptions.can_generate_share_link &&
+                (perm == 'rw' || perm == 'r')) {
+                can_share_file = true;
+            }
+
             this.$el.html(template({
                 dirent: this.model.attributes,
                 dirent_path: dirent_path,
@@ -66,10 +83,12 @@ define([
                 category: dir.category,
                 repo_id: dir.repo_id,
                 is_repo_owner: dir.is_repo_owner,
-                is_admin: dir.is_admin,
                 repo_encrypted: dir.encrypted,
 
                 can_set_folder_perm: can_set_folder_perm,
+
+                can_share_dir: can_share_dir,
+                can_share_file: can_share_file,
 
                 can_generate_share_link: app.pageOptions.can_generate_share_link,
                 can_generate_upload_link: app.pageOptions.can_generate_upload_link,

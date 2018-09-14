@@ -48,7 +48,7 @@ from seahub.utils.star import get_dir_starred_files
 from seahub.utils.file_types import IMAGE, VIDEO, XMIND
 from seahub.utils.file_op import check_file_lock, ONLINE_OFFICE_LOCK_OWNER
 from seahub.utils.repo import get_locked_files_by_dir, get_repo_owner, \
-        repo_has_been_shared_out
+        repo_has_been_shared_out, parse_repo_perm
 from seahub.utils.error_msg import file_type_error_msg, file_size_error_msg
 from seahub.base.accounts import User
 from seahub.thumbnail.utils import get_thumbnail_src
@@ -829,7 +829,8 @@ def cp_dirents(request, src_repo_id, src_path, dst_repo_id, dst_path, obj_file_n
     content_type = 'application/json; charset=utf-8'
     username = request.user.username
 
-    if check_folder_permission(request, src_repo_id, src_path) is None:
+    if parse_repo_perm(check_folder_permission(
+            request, src_repo_id, src_path)).can_copy is False:
         error_msg = _(u'You do not have permission to copy files/folders in this directory')
         result['error'] = error_msg
         return HttpResponse(json.dumps(result), status=403, content_type=content_type)

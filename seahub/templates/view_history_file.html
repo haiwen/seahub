@@ -20,7 +20,9 @@
             {% endblock %}
         </div>
 
+        {% if can_download_file %}
         <a class="file-view-op sf-btn-link fright" href="{% url 'download_file' repo.id obj_id%}?file_name={{ file_name|urlencode }}&p={{path|urlencode}}" id="download">{% trans "Download"%}</a>
+        {% endif %}
     </div>
 
     {% include 'snippets/file_content_html.html' %}
@@ -29,10 +31,12 @@
 {% block extra_script %}
 {% include "snippets/file_view_js.html" %}
 <script type="text/javascript">
+{% if can_download_file %}
 $(function() {
     var dld_url = $('#download').attr('href');
     $('#file-view-tip').append('<a href="' + dld_url + '" class="sf-btn-link big-btn-link">' + "{% trans "Download" %}" + '</a>');
 });
+{% endif %}
 
 {% if filetype == 'Image' and not err %}
     $('#image-view').attr('src', '{{ raw_path|escapejs }}');
