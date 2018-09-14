@@ -332,19 +332,19 @@ def can_preview_file(file_name, file_size, repo):
         if not HAS_OFFICE_CONVERTER and \
                 not ENABLE_OFFICE_WEB_APP and \
                 not ENABLE_ONLYOFFICE:
-            error_msg = "invalid extension"
+            error_msg = "File preview unsupported"
             return False, error_msg
 
         # priority of view office file is:
         # OOS > OnlyOffice > Seafile integrated
         if ENABLE_OFFICE_WEB_APP:
             if fileext not in OFFICE_WEB_APP_FILE_EXTENSION:
-                error_msg = "invalid extension"
+                error_msg = "File preview unsupported"
                 return False, error_msg
 
         elif ENABLE_ONLYOFFICE:
             if fileext not in ONLYOFFICE_FILE_EXTENSION:
-                error_msg = "invalid extension"
+                error_msg = "File preview unsupported"
                 return False, error_msg
 
         else:
@@ -356,7 +356,7 @@ def can_preview_file(file_name, file_size, repo):
     else:
         # NOT depends on Seafile settings
         if filetype not in (VIDEO, AUDIO, PDF, SVG):
-            error_msg = "invalid extension"
+            error_msg = "File preview unsupported"
             return False, error_msg
 
     return True, ''
@@ -729,7 +729,7 @@ def view_lib_file(request, repo_id, path):
                 return_dict['err'] = _(u'Error when prepare OnlyOffice file preview page.')
 
         if not HAS_OFFICE_CONVERTER:
-            return_dict['err'] = "invalid extension"
+            return_dict['err'] = "File preview unsupported"
             return render(request, 'view_file_base.html', return_dict)
 
         if file_size > OFFICE_PREVIEW_MAX_SIZE:
@@ -746,7 +746,7 @@ def view_lib_file(request, repo_id, path):
         # render file preview page
         return render(request, template, return_dict)
     else:
-        return_dict['err'] = "invalid extension"
+        return_dict['err'] = "File preview unsupported"
         return render(request, 'view_file_base.html', return_dict)
 
 def view_history_file_common(request, repo_id, ret_dict):
