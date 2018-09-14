@@ -49,7 +49,8 @@ class HistoryListItem extends React.Component {
 
   render() {
     let item = this.props.item;
-    let time = moment(item.ctime).format('MMMDo Ah:mm');
+    let offset = moment.parseZone(item.ctime).utcOffset();
+    let time = moment(item.ctime).add(offset,'m').format('MMMDo Ah:mm');
     let isHigtlightItem = false;
     if (this.props.item && this.props.currentItem) {
       isHigtlightItem = this.props.item.commit_id === this.props.currentItem.commit_id;
