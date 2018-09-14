@@ -3,7 +3,7 @@ import ReactDOM from 'react-dom';
 import { keyCodes, bytesToSize } from './utils';
 import editorUtilities from '../utils/editor-utilties';
 
-import {siteRoot, gettext } from './constance';
+import {siteRoot, gettext } from './constants';
 
 class Account extends Component {
   constructor(props) {

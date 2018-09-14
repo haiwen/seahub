@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { gettext, repoID, serviceUrl, slug, siteRoot, isPro } from '../../components/constance';
+import { gettext, repoID, serviceUrl, slug, siteRoot, isPro } from '../../components/constants';
 import Search from '../../components/search';
 import Account from '../../components/account';
 import Notification from '../../components/notification';
@@ -60,7 +60,7 @@ class MainPanel extends Component {
           </div>
           <div className="common-toolbar">
             {isPro && <Search  onSearchedClick={this.props.onSearchedClick}
-                               placeholder={gettext("Search files in this wiki")}
+                               placeholder={gettext("Search files in this library")}
                       />
             }
             <Notification />

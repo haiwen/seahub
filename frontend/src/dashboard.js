@@ -12,7 +12,7 @@ import './assets/css/fa-regular.css';
 import './assets/css/fontawesome.css';
 import './css/dashboard.css';
 
-import { siteRoot } from './components/constance';
+import { siteRoot } from './components/constants';
 
 
 class DashBoard extends Component {

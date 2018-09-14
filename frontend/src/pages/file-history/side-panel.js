@@ -1,6 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { gettext, PER_PAGE, filePath, fileName } from '../../components/constance';
+import { gettext, PER_PAGE, filePath, fileName } from '../../components/constants';
 import editUtilties from '../../utils/editor-utilties';
 import Loading from '../../components/loading';
 import HistoryListView from '../../components/history-list-view/history-list-view';

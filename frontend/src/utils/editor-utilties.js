@@ -1,4 +1,4 @@
-import { slug, repoID, siteRoot, historyRepoID } from '../components/constance';
+import { slug, repoID, siteRoot, historyRepoID } from '../components/constants';
 import { SeafileAPI } from 'seafile-js';
 import cookie from 'react-cookies';
 

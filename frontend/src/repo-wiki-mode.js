@@ -4,7 +4,7 @@ import ReactDOM from 'react-dom';
 import SidePanel from './pages/repo-wiki-mode/side-panel';
 import MainPanel from './pages/repo-wiki-mode/main-panel';
 import moment from 'moment';
-import { slug, repoID, serviceUrl, initialFilePath } from './components/constance';
+import { slug, repoID, serviceUrl, initialFilePath } from './components/constants';
 import editorUtilities from './utils/editor-utilties';
 import { seafileAPI } from './utils/editor-utilties';
 import Node from './components/tree-view/node'

@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { serviceUrl } from '../constance';
+import { serviceUrl } from '../constants';
 class TreeDirList extends React.Component {
 
   constructor(props) {

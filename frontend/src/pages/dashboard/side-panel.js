@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import SideNavFooter from '../../components/side-nav-footer';
 import MainSideNav from '../../components/main-side-nav';
 
-import { siteRoot, logoPath, mediaUrl, siteTitle, logoWidth, logoHeight } from '../../components/constance';
+import { siteRoot, logoPath, mediaUrl, siteTitle, logoWidth, logoHeight } from '../../components/constants';
 
 class SidePanel extends Component {
 

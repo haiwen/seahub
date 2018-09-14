@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { gettext, repoID, serviceUrl, slug, siteRoot, isPro } from '../../components/constance';
+import { gettext, repoID, serviceUrl, slug, siteRoot, isPro } from '../../components/constants';
 import Search from '../../components/search';
 import Account from '../../components/account';
 import Notification from '../../components/notification';
