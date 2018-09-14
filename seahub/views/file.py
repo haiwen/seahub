@@ -53,8 +53,9 @@ from seahub.utils import render_error, is_org_context, \
     mkstemp, EMPTY_SHA1, HtmlDiff, gen_inner_file_get_url, \
     user_traffic_over_limit, get_file_audit_events_by_path, \
     generate_file_audit_event_type, FILE_AUDIT_ENABLED, \
-    get_conf_text_ext, HAS_OFFICE_CONVERTER, OFFICE_PREVIEW_MAX_SIZE, \
-    normalize_file_path, get_service_url, redirect_to_login
+    get_conf_text_ext, HAS_OFFICE_CONVERTER, FILEEXT_TYPE_MAP, \
+    normalize_file_path, get_service_url, redirect_to_login, \
+    OFFICE_PREVIEW_MAX_SIZE
 
 from seahub.utils.ip import get_remote_ip
 from seahub.utils.timeutils import utc_to_local
@@ -355,7 +356,7 @@ def can_preview_file(file_name, file_size, repo):
                 return False, error_msg
     else:
         # NOT depends on Seafile settings
-        if filetype not in (VIDEO, AUDIO, PDF, SVG):
+        if filetype not in FILEEXT_TYPE_MAP:
             error_msg = "File preview unsupported"
             return False, error_msg
 
