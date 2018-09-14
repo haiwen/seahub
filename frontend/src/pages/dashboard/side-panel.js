@@ -2,13 +2,7 @@ import React, { Component } from 'react';
 import SideNavFooter from '../../components/side-nav-footer';
 import MainSideNav from '../../components/main-side-nav';
 
-const siteRoot = window.app.config.siteRoot;
-const serverRoot = window.app.config.serverRoot;
-const logoPath =  window.app.config.logoPath;
-const mediaUrl = window.app.config.mediaUrl;
-const siteTitle = window.app.config.siteTitle;
-const logoWidth = window.app.config.logoWidth;
-const logoHeight = window.app.config.logoHeight;
+import { siteRoot, logoPath, mediaUrl, siteTitle, logoWidth, logoHeight } from '../../components/constance';
 
 class SidePanel extends Component {
 
@@ -21,7 +15,7 @@ class SidePanel extends Component {
           </a>
           <a href="#" title="Close" aria-label="Close" onClick={this.props.toggleClose} className="sf2-icon-x1 sf-popover-close side-panel-close op-icon d-md-none "></a>
         </div>
-        <MainSideNav  seafileAPI={this.props.seafileAPI}/>
+        <MainSideNav  />
         <SideNavFooter />
       </div>
       )

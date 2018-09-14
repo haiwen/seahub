@@ -5,7 +5,6 @@ import Account from '../../components/account';
 import Notification from '../../components/notification';
 import MarkdownViewer from '../../components/markdown-viewer';
 import TreeDirView from '../../components/tree-dir-view/tree-dir-view';
-import { seafileAPI } from '../../utils/editor-utilties';
 
 class MainPanel extends Component {
 
@@ -64,8 +63,8 @@ class MainPanel extends Component {
                                placeholder={gettext("Search files in this wiki")}
                       />
             }
-            <Notification seafileAPI={seafileAPI} />
-            <Account seafileAPI={seafileAPI} />
+            <Notification />
+            <Account  />
           </div>
         </div>
         <div className="cur-view-main">

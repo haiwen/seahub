@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
+import { seafileAPI } from '../utils/editor-utilties';
+import { gettext, siteRoot } from './constance';
 
-const gettext = window.gettext;
-const siteRoot = window.app.config.siteRoot;
 const per_page = 25; // default
 
 class FileActivitiesContent extends Component {
@@ -175,7 +175,7 @@ class FilesActivities extends Component {
 
   componentDidMount() {
     const pageNum = 1 
-    this.props.seafileAPI.listActivities(pageNum)
+    seafileAPI.listActivities(pageNum)
     .then(res => {
       // not logged in
       if (res.status == 403) {
@@ -199,7 +199,7 @@ class FilesActivities extends Component {
 
   getMore() {
     const pageNum = this.state.events.page + 1;
-    this.props.seafileAPI.listActivities(pageNum)
+    seafileAPI.listActivities(pageNum)
     .then(res => {
       this.setState(function(prevState, props) {
         let events = prevState.events;

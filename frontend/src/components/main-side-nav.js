@@ -1,5 +1,6 @@
 import React from 'react';
-const siteRoot = window.app.config.siteRoot;
+import { siteRoot } from './constance';
+import { seafileAPI } from '../utils/editor-utilties';
 
 class  MainSideNav extends React.Component {
   constructor(props) {
@@ -31,7 +32,7 @@ class  MainSideNav extends React.Component {
 
   loadGroups = () => {
     let _this = this;
-    this.props.seafileAPI.listGroups().then(res =>{
+    seafileAPI.listGroups().then(res =>{
       let data   = res.data.groups;
       this.groupsHeight = (data.length + 1) * _this.listHeight;
       _this.setState({

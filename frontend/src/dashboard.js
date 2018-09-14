@@ -2,11 +2,9 @@ import React, { Component } from 'react';
 import ReactDOM from 'react-dom';
 import SidePanel from './pages/dashboard/side-panel';
 import MainPanel from './pages/dashboard/main-panel';
-
 import Account from './components/account';
 import Notification from './components/notification';
 
-import { SeafileAPI } from 'seafile-js';
 import cookie from 'react-cookies';
 import 'seafile-ui';
 import './assets/css/fa-solid.css';
@@ -14,11 +12,8 @@ import './assets/css/fa-regular.css';
 import './assets/css/fontawesome.css';
 import './css/dashboard.css';
 
-const siteRoot = window.app.config.siteRoot;
+import { siteRoot } from './components/constance';
 
-let seafileAPI = new SeafileAPI();
-let xcsrfHeaders = cookie.load('sfcsrftoken');
-seafileAPI.initForSeahubUsage({ siteRoot, xcsrfHeaders });
 
 class DashBoard extends Component {
 
@@ -38,10 +33,10 @@ class DashBoard extends Component {
   render() {
     return (
       <div id="main">
-          <SidePanel isOpen={this.state.isOpen} toggleClose={this.isOpen} seafileAPI={seafileAPI}/>
-          <MainPanel isOpen={this.isOpen} seafileAPI={seafileAPI} >
-            <Notification seafileAPI={seafileAPI} />
-            <Account seafileAPI={seafileAPI}/>
+          <SidePanel isOpen={this.state.isOpen} toggleClose={this.isOpen} />
+          <MainPanel isOpen={this.isOpen}>
+            <Notification  />
+            <Account />
           </MainPanel>
       </div>
     )

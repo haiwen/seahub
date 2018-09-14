@@ -4,7 +4,6 @@ import Prism from 'prismjs';
 import Loading from '../../components/loading';
 import Account from '../../components/account';
 import Notification from '../../components/notification';
-import { seafileAPI } from '../../utils/editor-utilties';
 import '../../css/initial-style.css';
 require('@seafile/seafile-editor/src/lib/code-hight-package');
 
@@ -25,8 +24,8 @@ class MainPanel extends React.Component {
       <div className="main-panel viewer">
         <div className="main-panel-north">
           <div className="history-heading">
-            <Notification seafileAPI={seafileAPI} />
-            <Account seafileAPI={seafileAPI}/>
+            <Notification />
+            <Account />
           </div>
         </div>
         <div className="main-panel-center history-viewer-contanier">

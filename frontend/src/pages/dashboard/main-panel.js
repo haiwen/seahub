@@ -21,7 +21,7 @@ class MainPanel extends Component {
           {children}
         </div>
       </div>
-      <FilesActivities seafileAPI={this.props.seafileAPI} />
+      <FilesActivities />
     </div>
     )
   }
