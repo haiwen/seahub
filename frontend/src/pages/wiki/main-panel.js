@@ -2,8 +2,10 @@ import React, { Component } from 'react';
 import { gettext, repoID, serviceUrl, slug, siteRoot, isPro } from '../../components/constance';
 import Search from '../../components/search';
 import Account from '../../components/account';
+import Notification from '../../components/notification';
 import MarkdownViewer from '../../components/markdown-viewer';
 import TreeDirView from '../../components/tree-dir-view/tree-dir-view';
+import { seafileAPI } from '../../utils/editor-utilties';
 
 class MainPanel extends Component {
 
@@ -53,7 +55,8 @@ class MainPanel extends Component {
                                placeholder={gettext("Search files in this wiki")}
                       />
             }
-            <Account />
+            <Notification seafileAPI={seafileAPI} />
+            <Account seafileAPI={seafileAPI}/>
           </div>
         </div>
         <div className="cur-view-main">
