@@ -30,6 +30,7 @@ from seahub.base.templatetags.seahub_tags import email2nickname, \
 from seahub.views.modules import is_wiki_mod_enabled_for_group, \
     enable_mod_for_group, disable_mod_for_group, MOD_GROUP_WIKI
 from seahub.share.models import ExtraGroupsSharePermission
+
 from seahub.options.models import GroupOptions, KEY_GROUP_SHARED
 from .utils import api_check_group
 
