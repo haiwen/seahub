@@ -199,7 +199,7 @@ class FilesActivities extends Component {
 
   getMore() {
     const pageNum = this.state.events.page + 1;
-    this.props.seafileAPI.getActivities(pageNum)
+    this.props.seafileAPI.listActivities(pageNum)
     .then(res => {
       this.setState(function(prevState, props) {
         let events = prevState.events;
