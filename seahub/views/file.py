@@ -53,7 +53,7 @@ from seahub.utils import render_error, is_org_context, \
     mkstemp, EMPTY_SHA1, HtmlDiff, gen_inner_file_get_url, \
     user_traffic_over_limit, get_file_audit_events_by_path, \
     generate_file_audit_event_type, FILE_AUDIT_ENABLED, \
-    get_conf_text_ext, HAS_OFFICE_CONVERTER, FILEEXT_TYPE_MAP, \
+    get_conf_text_ext, HAS_OFFICE_CONVERTER, OFFICE_PREVIEW_MAX_SIZE, \
     normalize_file_path, get_service_url, redirect_to_login
 
 from seahub.utils.ip import get_remote_ip
@@ -75,7 +75,7 @@ from seahub.constants import HASH_URLS
 if HAS_OFFICE_CONVERTER:
     from seahub.utils import (
         query_office_convert_status, add_office_convert_task,
-        prepare_converted_html, OFFICE_PREVIEW_MAX_SIZE, get_office_converted_page
+        prepare_converted_html, get_office_converted_page
     )
 
 import seahub.settings as settings
@@ -105,11 +105,18 @@ except ImportError:
 
 try:
     from seahub.settings import ENABLE_ONLYOFFICE
-    from seahub.onlyoffice.settings import ONLYOFFICE_FILE_EXTENSION, \
-            ONLYOFFICE_EDIT_FILE_EXTENSION
 except ImportError:
     ENABLE_ONLYOFFICE = False
 
+try:
+    from seahub.onlyoffice.settings import ONLYOFFICE_FILE_EXTENSION
+except ImportError:
+    ONLYOFFICE_FILE_EXTENSION = ()
+
+try:
+    from seahub.onlyoffice.settings import ONLYOFFICE_EDIT_FILE_EXTENSION
+except ImportError:
+    ONLYOFFICE_EDIT_FILE_EXTENSION = ()
 
 # Get an instance of a logger
 logger = logging.getLogger(__name__)
@@ -301,49 +308,82 @@ def convert_md_link(file_content, repo_id, username):
 
     return re.sub(r'\[\[(.+?)\]\]|(`.+?`)', repl, file_content)
 
-def file_size_exceeds_preview_limit(file_size, file_type):
-    """Check whether file size exceeds the preview limit base on different
-    type of file.
+def can_preview_file(file_name, file_size, repo):
+    """Check whether Seafile supports view file.
+    Returns (True, None) if Yes, otherwise (False, error_msg).
     """
-    if file_type in (DOCUMENT, ) and HAS_OFFICE_CONVERTER:
-        if file_size > OFFICE_PREVIEW_MAX_SIZE:
-            err = _(u'File size surpasses %s, can not be opened online.') % \
-                filesizeformat(OFFICE_PREVIEW_MAX_SIZE)
-            return True, err
-        else:
-            return False, ''
-    elif file_type in (VIDEO, AUDIO):
-            return False, ''
-    else:
-        if file_size > FILE_PREVIEW_MAX_SIZE:
-            err = _(u'File size surpasses %s, can not be opened online.') % \
-                filesizeformat(FILE_PREVIEW_MAX_SIZE)
-            return True, err
-        else:
-            return False, ''
 
-def can_preview_file(file_name, file_size, repo=None):
-    """Check whether a file can be viewed online.
-    Returns (True, None) if file can be viewed online, otherwise
-    (False, erro_msg).
+    filetype, fileext = get_file_type_and_ext(file_name)
+
+    # Seafile defines 9 kinds of filetype:
+    # TEXT, MARKDOWN, IMAGE, DOCUMENT, SPREADSHEET, VIDEO, AUDIO, PDF, SVG
+    if filetype in (TEXT, MARKDOWN, IMAGE) or fileext in get_conf_text_ext():
+        if file_size > FILE_PREVIEW_MAX_SIZE:
+            error_msg = _(u'File size surpasses %s, can not be opened online.') % \
+                filesizeformat(FILE_PREVIEW_MAX_SIZE)
+            return False, error_msg
+
+    elif filetype in (DOCUMENT, SPREADSHEET):
+
+        if repo.encrypted:
+            error_msg = _(u'The library is encrypted, can not open file online.')
+            return False, error_msg
+
+        if not HAS_OFFICE_CONVERTER and \
+                not ENABLE_OFFICE_WEB_APP and \
+                not ENABLE_ONLYOFFICE:
+            error_msg = "invalid extension"
+            return False, error_msg
+
+        # priority of view office file is:
+        # OOS > OnlyOffice > Seafile integrated
+        if ENABLE_OFFICE_WEB_APP:
+            if fileext not in OFFICE_WEB_APP_FILE_EXTENSION:
+                error_msg = "invalid extension"
+                return False, error_msg
+
+        elif ENABLE_ONLYOFFICE:
+            if fileext not in ONLYOFFICE_FILE_EXTENSION:
+                error_msg = "invalid extension"
+                return False, error_msg
+
+        else:
+            # HAS_OFFICE_CONVERTER
+            if file_size > OFFICE_PREVIEW_MAX_SIZE:
+                error_msg = _(u'File size surpasses %s, can not be opened online.') % \
+                        filesizeformat(OFFICE_PREVIEW_MAX_SIZE)
+                return False, error_msg
+    else:
+        # NOT depends on Seafile settings
+        if filetype not in (VIDEO, AUDIO, PDF, SVG):
+            error_msg = "invalid extension"
+            return False, error_msg
+
+    return True, ''
+
+def can_edit_file(file_name, file_size, repo):
+    """Check whether Seafile supports edit file.
+    Returns (True, None) if Yes, otherwise (False, error_msg).
     """
+
+    can_preview, err_msg = can_preview_file(file_name, file_size, repo)
+    if not can_preview:
+        return False, err_msg
 
     file_type, file_ext = get_file_type_and_ext(file_name)
 
-    if repo and repo.encrypted and (file_type in (DOCUMENT, SPREADSHEET)):
-        return (False, _(u'The library is encrypted, can not open file online.'))
+    if file_type in (TEXT, MARKDOWN) or file_ext in get_conf_text_ext():
+        return True, ''
 
-    if file_ext in FILEEXT_TYPE_MAP or file_ext in get_conf_text_ext():  # check file extension
-        exceeds_limit, err_msg = file_size_exceeds_preview_limit(file_size,
-                                                                 file_type)
-        if exceeds_limit:
-            return (False, err_msg)
-        else:
-            return (True, None)
-    else:
-        # TODO: may need a better way instead of return string, and compare
-        # that string in templates
-        return (False, "invalid extension")
+    if file_type in (DOCUMENT, SPREADSHEET):
+        if ENABLE_OFFICE_WEB_APP_EDIT and \
+                file_ext in OFFICE_WEB_APP_EDIT_FILE_EXTENSION:
+            return True, ''
+
+        if ENABLE_ONLYOFFICE and file_ext in ONLYOFFICE_EDIT_FILE_EXTENSION:
+            return True, ''
+
+    return False, 'File edit unsupported'
 
 def send_file_access_msg_when_preview(request, repo, path, access_from):
     """ send file access msg when user preview file from web
@@ -877,7 +917,6 @@ def _download_file_from_share_link(request, fileshare):
     next = request.META.get('HTTP_REFERER', settings.SITE_ROOT)
 
     username = request.user.username
-    shared_by = fileshare.username
     repo = get_repo(fileshare.repo_id)
     if not repo:
         raise Http404
