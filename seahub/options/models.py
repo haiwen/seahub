@@ -226,6 +226,13 @@ class UserOptions(models.Model):
     objects = UserOptionsManager()
 
 
+KEY_GROUP_SHARED = "shared_repo"
+# 1 Everyone can share
+VAL_GROUP_SHARED_ALL = "1"
+# 0 Administrators and group onwer can share
+VAL_GROUP_SHARED_PERMISSION = "0"
+
+
 class GroupOptions(models.Model):
     group_id = models.IntegerField(db_index=True)
     option_key = models.CharField(max_length=50)

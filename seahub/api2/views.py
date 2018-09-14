@@ -132,6 +132,8 @@ from seaserv import seafserv_threaded_rpc, \
 
 from constance import config
 from seahub.group.utils import is_group_admin_or_owner
+from seahub.options.models import GroupOptions, KEY_GROUP_SHARED, \
+        VAL_GROUP_SHARED_ALL, VAL_GROUP_SHARED_PERMISSION
 
 logger = logging.getLogger(__name__)
 json_content_type = 'application/json; charset=utf-8'
@@ -4177,7 +4179,6 @@ class Groups(APIView):
         else:
             groups_json = []
             joined_groups = get_personal_groups_by_user(request.user.username)
-
             for g in joined_groups:
 
                 if limit <= 0:
@@ -4189,10 +4190,11 @@ class Groups(APIView):
                     "creator": g.creator_name,
                     "ctime": g.timestamp,
                     "avatar": grp_avatar(g.id, int(size)),
+                    "settings": g.GroupOptions.objects.filter(option_val).first(),
                 }
                 groups_json.append(group)
                 limit = limit - 1
-
+                print group
             return Response(groups_json)
 
     def put(self, request, format=None):
@@ -4327,15 +4329,15 @@ class GroupSettings(APIView):
         if not is_group_staff(group, request.user):
             return api_error(status.HTTP_403_FORBIDDEN, 'Only administrators can add group members')
 
-        options_key = request.data.get('shared_repo', None)
+        options_key = request.data.get(KEY_GROUP_SHARED, None)
         if not options_key:
             return api_error(status.HTTP_400_BAD_REQUEST, 'Request name error')
 
-        shared_repo = request.data.get('shared_repo', None)
-        if shared_repo == '1' or shared_repo == '0':
-            switch_data = GroupOptions.objects.filter(group_id=group_id, option_key='shared_repo').first()
+        shared_repo = request.data.get(KEY_GROUP_SHARED, None)
+        if shared_repo == VAL_GROUP_SHARED_ALL or shared_repo == VAL_GROUP_SHARED_PERMISSION:
+            switch_data = GroupOptions.objects.filter(group_id=group_id, option_key=KEY_GROUP_SHARED).first()
             if not switch_data:
-                GroupOptions.objects.create(group_id=group_id, option_key='shared_repo', option_val=shared_repo)
+                GroupOptions.objects.create(group_id=group_id, option_key=KEY_GROUP_SHARED, option_val=shared_repo)
             else:
                 switch_data.option_val=shared_repo
                 switch_data.save()

@@ -30,7 +30,7 @@ from seahub.base.templatetags.seahub_tags import email2nickname, \
 from seahub.views.modules import is_wiki_mod_enabled_for_group, \
     enable_mod_for_group, disable_mod_for_group, MOD_GROUP_WIKI
 from seahub.share.models import ExtraGroupsSharePermission
-
+from seahub.options.models import GroupOptions, KEY_GROUP_SHARED
 from .utils import api_check_group
 
 logger = logging.getLogger(__name__)
@@ -54,6 +54,7 @@ def get_group_info(request, group_id, avatar_size=GROUP_AVATAR_DEFAULT_SIZE):
         avatar_url = get_default_group_avatar_url()
 
     isoformat_timestr = timestamp_to_isoformat_timestr(group.timestamp)
+    setting_val = GroupOptions.objects.filter(group_id=group_id, option_key=KEY_GROUP_SHARED).first()
     group_info = {
         "id": group.id,
         "parent_group_id": group.parent_group_id,
@@ -62,9 +63,9 @@ def get_group_info(request, group_id, avatar_size=GROUP_AVATAR_DEFAULT_SIZE):
         "created_at": isoformat_timestr,
         "avatar_url": request.build_absolute_uri(avatar_url),
         "admins": get_group_admins(group.id),
-        "wiki_enabled": is_wiki_mod_enabled_for_group(group_id)
+        "wiki_enabled": is_wiki_mod_enabled_for_group(group_id),
+        "setting": setting_val.option_val
     }
-
     return group_info
 
 
@@ -130,7 +131,8 @@ class Groups(APIView):
                         "permission": r.permission,
                         "owner": r.user,
                         "owner_name": email2nickname(r.user),
-                        "is_admin": (r.id, g.id) in admin_info
+                        "is_admin": (r.id, g.id) in admin_info,
+
                     }
                     repos.append(repo)
 

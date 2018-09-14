@@ -36,7 +36,8 @@ from seahub.constants import PERMISSION_READ, PERMISSION_READ_WRITE, \
         PERMISSION_ADMIN
 
 from seahub.group.utils import is_group_admin_or_owner
-from seahub.options.models import GroupOptions
+from seahub.options.models import GroupOptions, KEY_GROUP_SHARED, \
+        VAL_GROUP_SHARED_PERMISSION, VAL_GROUP_SHARED_PERMISSION
 
 logger = logging.getLogger(__name__)
 json_content_type = 'application/json; charset=utf-8'
@@ -411,9 +412,9 @@ class DirSharedItemsEndpoint(APIView):
                         })
                     continue
 
-                switch_data = GroupOptions.objects.filter(group_id=gid, option_key='shared_repo').first()
+                switch_data = GroupOptions.objects.filter(group_id=gid, option_key=KEY_GROUP_SHARED).first()
                 if switch_data is not None:
-                    if int(switch_data.option_val) == 0 and \
+                    if switch_data.option_val == VAL_GROUP_SHARED_PERMISSION and \
                         not is_group_admin_or_owner(gid, username):
                             error_msg = 'Permission denied.'
                             return api_error(status.HTTP_403_FORBIDDEN, error_msg)

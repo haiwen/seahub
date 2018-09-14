@@ -28,7 +28,8 @@ define([
         events: {
             'mouseenter .group-setting-item': 'highlightItem',
             'mouseleave .group-setting-item': 'rmHighlightItem',
-            'click .group-setting-item': 'manageGroup'
+            'click .group-setting-item': 'manageGroup',
+            'click .testswitch-checkbox': 'groupSettingHandler'
         },
 
         render: function() {
@@ -344,9 +345,35 @@ define([
                 });
             };
             Common.showConfirm(title, content, yesCallback);
-        }
+        },
 
+        groupSettingHandler: function(e) {
+            var _this = this;
+	    var $testswitch_checkbox = $(e.target);
+            var shared_repo = $testswitch_checkbox.is(':checked') ? '0' : '1';
+            $.ajax({
+                url: Common.getUrl({
+                  'name': 'group_settings',
+		  'group_id': _this.groupView.group.id
+		}),
+                type: 'put',
+                dataType: 'json',
+                beforeSend: Common.prepareCSRFToken,
+                data: {
+                  shared_repo: shared_repo 
+		},
+                success: function() {
+		 console.log('666');
+                },
+                error: function(xhr) {
+
+		}
+	    })
+	}
     });
 
     return View;
 });
+
+
+

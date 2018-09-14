@@ -4370,3 +4370,9 @@ img.thumbnail {
     width: 200px;
 }
 
+/* gpd shared settings checkbox */
+.testswitch-checkbox {
+margin-left:5px;
+}
+
+

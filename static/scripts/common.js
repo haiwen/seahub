@@ -161,6 +161,7 @@ define([
                 case 'address_book_group_search_members': return siteRoot + 'api/v2.1/address-book/groups/' + options.group_id + '/search-member/';
                 case 'group_discussions': return siteRoot + 'api2/groups/' + options.group_id + '/discussions/';
                 case 'group_discussion': return siteRoot + 'api2/groups/' + options.group_id + '/discussions/' + options.discussion_id + '/';
+                case 'group_settings': return siteRoot + 'api2/groups/' + options.group_id + '/settings/';
 
                 // thumbnail
                 case 'thumbnail_create': return siteRoot + 'thumbnail/' + options.repo_id + '/create/';
