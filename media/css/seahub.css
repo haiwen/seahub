@@ -3053,11 +3053,22 @@ button.sf-dropdown-toggle:focus {
     padding:0;
 }
 #file-view-tip {
-    height:130px;
+    min-height:130px;
     padding:30px 10px 10px;
     width:950px;
     background:#fff;
     text-align:center;
+}
+#file-view-tip .open-via-client { /* for the text link */
+    display:block;
+    margin-top:25px;
+    color:#333;
+    font-weight:normal;
+    text-decoration:underline;
+}
+#file-view-op .open-via-client { /* for the button */
+    padding-top:6px;
+    padding-bottom:4px;
 }
 @media (max-width:991.98px) {
     #file-view-tip {
