@@ -112,7 +112,8 @@ class Wiki extends Component {
     }
   }
   
-  onSearchedClick = (path) => {
+  onSearchedClick = (item) => {
+    let path = item.path;
     if (this.state.currentFilePath !== path) {
       this.initMainPanelData(path); 
 

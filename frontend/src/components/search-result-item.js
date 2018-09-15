@@ -4,7 +4,7 @@ class SearchResultItem extends React.Component {
 
   onClickHandler = () => {
     var item = this.props.item;
-    this.props.onItemClickHandler(item.link);
+    this.props.onItemClickHandler(item);
   }
 
   render() {
