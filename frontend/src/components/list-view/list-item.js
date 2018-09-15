@@ -7,7 +7,6 @@ import moment from 'moment';
 moment.locale(lang);
 const propTypes = {
   isItemFreezed: PropTypes.bool.isRequired,
-  onDraftEditClick: PropTypes.func.isRequired,
   onMenuToggleClick: PropTypes.func.isRequired,
 }
 class ListItem extends React.Component {
