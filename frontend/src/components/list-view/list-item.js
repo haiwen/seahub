@@ -1,6 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { siteRoot, lang } from '../constance';
+import { siteRoot, lang } from '../constants';
 import NodeMenuControl from '../menu-component/node-menu-control';
 import moment from 'moment';
 

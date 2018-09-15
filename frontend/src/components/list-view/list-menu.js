@@ -1,6 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { gettext } from '../constance';
+import { gettext } from '../constants';
 
 const propTypes = {
   isMenuShow: PropTypes.bool.isRequired,
