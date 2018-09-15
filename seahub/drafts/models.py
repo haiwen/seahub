@@ -103,11 +103,11 @@ class Draft(TimestampedModel):
         if file_id != self.origin_file_version:
             raise DraftFileConflict
 
-        # copy draft file content to origin file and delete draft file
-        seafile_api.copy_file(
+        # move draft file to origin file
+        seafile_api.move_file(
             self.draft_repo_id, '/', self.draft_file_path.lstrip('/'),
             self.origin_repo_id, self.origin_file_uuid.parent_path,
-            self.origin_file_uuid.filename,
+            self.origin_file_uuid.filename, replace=1,
             username=self.username, need_progress=0, synchronous=1
         )
 
