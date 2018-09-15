@@ -97,9 +97,21 @@ class EditorUtilities {
   revertFile(filePath, commitID) {
     return seafileAPI.revertFile(historyRepoID, filePath, commitID);
   }
+
+  listDrafts() {
+    return seafileAPI.listDrafts();
+  }
+
+  deleteDraft(id) {
+    return seafileAPI.deleteDraft(id);
+  }
+
+  publishDraft(id) {
+    return seafileAPI.publishDraft(id);
+  }
 }
 
 const editorUtilities = new EditorUtilities();
 
 export default editorUtilities;
-export { seafileAPI };
+export { seafileAPI }; 

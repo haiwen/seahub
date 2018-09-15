@@ -114,6 +114,11 @@ class  MainSideNav extends React.Component {
               <a className="ellipsis user-select-no" title="Share Admin" onClick={this.shExtend}><span className={`toggle-icon float-right fas ${this.state.sharedExtended ? 'fa-caret-down':'fa-caret-left'}`} aria-hidden="true"></span><span aria-hidden="true" className="sf2-icon-wrench"></span>Share Admin</a>
               {this.renderSharedAdmin()}
             </li>
+            <li className="tab">
+              <a href={siteRoot + 'drafts/'}>
+                <span className="sf2-icon-star" aria-hidden="true"></span>Drafts
+              </a>
+            </li>
           </ul>
         </div>
       </div>
