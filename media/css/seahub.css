@@ -212,7 +212,8 @@ form,input,textarea,select,button,img {
     margin:0;
 }
 body, input, textarea, button, select {
-    font: 13px/1.5 Arial, Helvetica, sans-serif;
+    font-size: 13px;
+    line-height: 1.5;
     color: #333;
     word-wrap:break-word;
 }
@@ -1290,7 +1291,7 @@ textarea:-moz-placeholder {/* for FF */
 }
 .new-narrow-panel .con {
     padding:30px 0 60px;
-    width:268px; 
+    width:268px;
     margin:0 auto;
 }
 .new-narrow-panel .input {
@@ -3912,7 +3913,7 @@ button.sf-dropdown-toggle:focus {
     color: #999;
 }
 .shared-link-copy-icon:hover {
-    cursor: pointer; 
+    cursor: pointer;
     color: #333;
 }
 
