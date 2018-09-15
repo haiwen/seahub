@@ -1,6 +1,6 @@
 import React from 'react';
 import { siteRoot } from './constants';
-import { seafileAPI } from '../utils/editor-utilties';
+import { seafileAPI } from '../utils/seafile-api';
 
 class  MainSideNav extends React.Component {
   constructor(props) {

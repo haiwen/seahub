@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { seafileAPI } from '../utils/editor-utilties';
+import { seafileAPI } from '../utils/seafile-api';
 import { gettext, siteRoot } from './constants';
 
 const per_page = 25; // default
