@@ -15,16 +15,13 @@
  * popover
  * op-icon
  * path
- * paginator
- * tabnav
+ * account
+ * quota
  * side-tabnav
- * (...)
- * messages
- * text-panel
+ * about-dialog
+ * notifications
  * sf-popover
- * user-item
- * sf-dropdown
- * discussions/comments
+ * go-back
  * Container
  * Container ......... common container styles
  *
@@ -89,6 +86,13 @@ a:hover { color:#eb8205; }
 ul,ol,li {
     padding:0;
     margin:0;
+}
+
+.sf-heading {
+    font-size: 1rem;
+    color: #322;
+    font-weight: normal;
+    line-height: 1.5;
 }
 
 /* UI Widget */
@@ -180,27 +184,6 @@ ul,ol,li {
 .loading-tip {
     display:block;
     margin:1em auto;
-}
-
-
-/** popover **/
-.sf-popover {
-    width:240px;
-    background:#fff;
-    border:1px solid #c9c9c9;
-    border-radius:3px;
-    box-shadow:0 0 4px #ccc;
-    position:absolute;
-    z-index: 20;
-}
-.sf-popover-con {
-    padding:0 10px;
-    overflow:auto;
-}
-.sf-popover-close {
-    font-size:16px;
-    color:#b9b9b9;
-    margin:4px 0 0;
 }
 
 /** op-icon **/
@@ -344,7 +327,6 @@ ul,ol,li {
     }
 }
 
-
 a.op-icon:focus {
     outline:none;
     text-decoration:none;
@@ -353,8 +335,6 @@ a.op-icon:focus {
     color:#888;
     text-decoration:none;
 }
-
-
 
 /**** side-tabnav ****/
 .side-textnav .hd,
@@ -572,14 +552,6 @@ a.op-icon:focus {
     }
 }
 
-.sf-heading {
-    font-size: 1rem;
-    color: #322;
-    font-weight: normal;
-    line-height: 1.5;
-}
-
-
 /* about dialog */
 .about-content {
     min-width: 280px;
@@ -587,21 +559,7 @@ a.op-icon:focus {
     text-align: center;
 }
 
-.wiki-page-ops {
-    position:fixed;
-    top:10px;
-}
-@media (min-width: 768px) {
-    .wiki-page-ops:before {
-        content:'';
-        border-left:1px solid #ddd;
-        position:absolute;
-        top:3px;
-        left:-16px;
-        bottom:3px;
-    }
-}
-
+/* notifications */
 #notifications .sf2-icon-bell {
     font-size:24px;
     line-height:1;
