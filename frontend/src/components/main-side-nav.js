@@ -116,7 +116,7 @@ class  MainSideNav extends React.Component {
             </li>
             <li className="tab">
               <a href={siteRoot + 'drafts/'}>
-                <span className="sf2-icon-star" aria-hidden="true"></span>Drafts
+                <span className="sf2-icon-edit" aria-hidden="true"></span>Drafts
               </a>
             </li>
           </ul>

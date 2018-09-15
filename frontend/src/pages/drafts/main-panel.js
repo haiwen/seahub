@@ -87,7 +87,7 @@ class MainPanel extends React.Component {
                   onMenuToggleClick={this.onMenuToggleClick}
                 /> :
                 <div className="message empty-tip">
-                  <h2>There is no draft file existing</h2>
+                  <h2>{gettext('There is no draft file existing')}</h2>
                 </div>
               }
             </div>

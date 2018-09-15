@@ -1,6 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { serviceUrl, lang } from '../constance';
+import { siteRoot, lang } from '../constance';
 import NodeMenuControl from '../menu-component/node-menu-control';
 import moment from 'moment';
 
@@ -47,7 +47,7 @@ class ListItem extends React.Component {
     let draft = this.props.draft;
     let filePath = draft.draft_file_path;
     let repoID = draft.draft_repo_id;
-    window.location.href= serviceUrl + '/lib/' + repoID + '/file' + filePath + '?mode=edit';
+    window.location.href= siteRoot + 'lib/' + repoID + '/file' + filePath + '?mode=edit';
   }
 
   getFileName(filePath) {
@@ -62,7 +62,7 @@ class ListItem extends React.Component {
     localTime = moment(localTime).fromNow();
     return (
       <tr className={this.state.highlight} onMouseEnter={this.onMouseEnter} onMouseLeave={this.onMouseLeave}>
-        <td className="icon" style={{width: "4%"}}><img src={serviceUrl + "/media/img/file/192/txt.png"} /></td>
+        <td className="icon" style={{width: "4%"}}><img src={siteRoot + "media/img/file/192/txt.png"} /></td>
         <td className="name a-simulate" style={{width: "46%"}} onClick={this.onDraftEditClick}>{fileName}</td>
         <td className="owner" style={{width: "20%"}}>{draft.owner}</td>
         <td className="update" style={{width: "20%"}}>{localTime}</td>
