@@ -587,49 +587,6 @@ a.op-icon:focus {
     text-align: center;
 }
 
-/* search */
-.search-input {
-    margin:0;
-    border:1px solid #ddd;
-    border-radius:3px;
-}
-.search-form .search-submit { /* the icon submit */
-    position:absolute;
-    right:1px;
-    top:1px;
-    width:30px;
-    height:23px;
-    padding:0;
-    border:0;
-    margin:0;
-}
-.search-form .icon-search {
-    font-size:16px;
-    color:#aaa;
-}
-.search-form .icon-caret-down {
-    color:#bbb;
-    cursor:pointer;
-    line-height:24px;
-}
-.top-search-link {
-    margin-top:5px;
-}
-.top-search-link .icon-search {
-    font-size:19px;
-    line-height:1;
-    color:#999;
-}
-#top-search-form {
-    position:relative;
-    margin-top:3px;
-}
-#top-search-form .search-input {
-    width:190px;
-    font-size: 0.875rem;
-    padding:1px 30px 1px 5px;
-}
-
 .wiki-page-ops {
     position:fixed;
     top:10px;
@@ -643,37 +600,6 @@ a.op-icon:focus {
         left:-16px;
         bottom:3px;
     }
-}
-
-.sf-btn-link:hover {
-    cursor:pointer;
-    background:#fff;
-    color:#333;
-    text-decoration:none;
-}
-
-.sf-btn-link,
-select {
-    padding:5px 6px;
-    background:-webkit-linear-gradient(top, #fafafb, #eeeeee);
-    background:-moz-linear-gradient(top, #fafafb, #eeeeee);
-    background:linear-gradient(top, #fafafb, #eeeeee);
-    border: 1px solid #c5c5c5;
-    border-radius: 2px;
-}
-
-.sf-btn-link {
-    display:inline-block;
-    color:#333;
-    line-height:19px;
-    text-decoration:none;
-    font-weight:normal;
-}
-
-.btn-white {
-    height:29px;
-    background:#fff;
-    line-height:17px;
 }
 
 #notifications .sf2-icon-bell {
