@@ -224,6 +224,9 @@ define([
                 case 'org-admin-group-owned-library': return siteRoot + 'api/v2.1/org/' + options.org_id + '/admin/groups/' + options.group_id + '/group-owned-libraries/' + options.repo_id + '/';
 
                 case 'license': return siteRoot + 'api/v2.1/admin/license/';
+
+                //drafts
+                case 'new-draft': return siteRoot + 'api/v2.1/drafts/';
             }
         },
 

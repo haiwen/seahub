@@ -34,6 +34,7 @@
 .sf2-icon-x3:before { content:"\e035"; }
 .sf2-icon-grid-view:before { content:"\e025"; }
 .sf2-icon-list-view:before { content:"\e026"; }
+.sf2-icon-edit:before { content:"\e018"; }
 
 /* common class and element style*/
 a { color:#eb8205; }

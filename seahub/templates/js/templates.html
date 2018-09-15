@@ -770,6 +770,7 @@
                             <li><a class="op lock-file" href="#">{% trans "Lock" %}</a></li>
                             <% } %>
                         <% } %>
+                        <li><a class="op new-draft" href="#">{% trans "New Draft" %}</a></li>
                     </ul>
                     <div class="menu-inner-divider"></div>
                     <ul>
@@ -901,6 +902,7 @@
                     <li><a class="op cp" href="#">{% trans "Copy" %}</a></li>
                     <% } %>
                 <% } %>
+                <li><a class="op new-draft" href="#">{% trans "New Draft" %}</a></li>
                 </ul>
                 <!-- <div class="menu-inner-divider"></div> -->
                 <ul>
@@ -1576,6 +1578,9 @@
                 </li>
                 <% } %>
             </ul>
+        </li>
+        <li class="tab<% if (cur_tab == 'drafts') { %> tab-cur<% } %>">
+            <a href="{{ SITE_ROOT }}drafts/" class="ellipsis" title="{% trans "Drafts" %}"><span aria-hidden="true" class="sf2-icon-edit"></span>{% trans "Drafts" %}</a>
         </li>
     </ul>
     </div>
