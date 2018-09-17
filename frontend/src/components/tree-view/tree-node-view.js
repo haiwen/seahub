@@ -124,7 +124,7 @@ class TreeNodeView extends React.Component {
   }
 
   renderMenuController() {
-    if (permission === "True") {
+    if (permission) {
       let isShow = (this.props.node.path === this.props.currentFilePath);
       return (
         <div className="right-icon">

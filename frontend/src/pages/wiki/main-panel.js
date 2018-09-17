@@ -67,7 +67,7 @@ class MainPanel extends Component {
               {pathElem}
             </div>
           </div>
-          <div className="cur-view-container">
+          <div className="cur-view-container table-container">
             { this.props.isViewFileState && <MarkdownViewer
               markdownContent={this.props.content}
               latestContributor={this.props.latestContributor}

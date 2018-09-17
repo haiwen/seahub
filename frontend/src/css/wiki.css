@@ -41,7 +41,6 @@
 
 .wiki-main .cur-view-path {
   border-bottom: 1px solid #e8e8e8;
-  margin-bottom: 8px;
 }
 .wiki-main .cur-view-path::after {
   display:none;
