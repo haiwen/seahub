@@ -46,8 +46,10 @@ define([
                 var view_mode = Cookies.get('view_mode');
                 if (view_mode == 'grid') {
                     this.view_mode = 'grid';
-                } else {
+                } else if (view_mode == 'list'){
                     this.view_mode = 'list';
+                } else {
+                    this.view_mode = 'wiki';
                 }
 
                 this.contextOptions = {};
@@ -616,6 +618,7 @@ define([
                 'click #share-cur-dir': 'share',
                 'click #js-switch-grid-view': 'switchToGridView',
                 'click #js-switch-list-view': 'switchToListView',
+                'click #js-switch-wiki-view': 'switchdToWikiView',
 
                 'click #mv-dirents': 'mv',
                 'click #cp-dirents': 'cp',
@@ -888,6 +891,7 @@ define([
                     this.view_mode = 'grid';
                     Cookies.set('view_mode', 'grid');
                     this.$('.list-view-icon-btn').removeClass('active');
+                    this.$('.wiki-view-icon-btn').removeClass('active');
                     this.$('.grid-view-icon-btn').addClass('active');
                     this.renderDir();
                 }
@@ -900,8 +904,27 @@ define([
                     this.view_mode = 'list';
                     Cookies.set('view_mode', 'list');
                     this.$('.grid-view-icon-btn').removeClass('active');
+                    this.$('.wiki-view-icon-btn').removeClass('active');
                     this.$('.list-view-icon-btn').addClass('active');
                     this.renderDir();
+                }
+            },
+
+            switchdToWikiView: function() {
+                if (this.view_mode == 'wiki') {
+                    return;
+                } else {
+                    this.view_mode = 'wiki';
+                    Cookies.set('view_mode', 'wiki');
+                    this.$('.grid-view-icon-btn').removeClass('active');
+                    this.$('.list-view-icon-btn').removeClass('active');
+                    this.$('.wiki-view-icon-btn').addClass('active');
+                    var siteRoot = app.pageOptions.site_root;
+                    var repoId = this.dir.repo_id;
+                    var path = this.dir.path; 
+                    var url = siteRoot + 'wiki/lib/' + repoId + path;
+                    
+                    window.location = url;
                 }
             },
 

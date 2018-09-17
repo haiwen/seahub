@@ -162,7 +162,6 @@
 .sf2-icon-organization:before { content:"\e010"; }
 .sf2-icon-share:before { content:"\e011"; }
 .sf2-icon-star:before { content:"\e012"; }
-.sf2-icon-wiki:before { content:"\e013"; }
 .sf2-icon-history:before { content:"\e014"; }
 .sf2-icon-cog1:before { content:"\e015"; }
 .sf2-icon-trash:before { content:"\e016"; }
@@ -183,6 +182,7 @@
 .sf2-icon-wiki2:before { content:"\e024"; }
 .sf2-icon-grid-view:before { content:"\e025"; }
 .sf2-icon-list-view:before { content:"\e026"; }
+.sf2-icon-wiki-view:before { content:"\e013"; }
 .sf2-icon-plus:before { content: "\e027"; }
 .sf2-icon-copy:before { content: "\e028"; }
 .sf2-icon-move:before { content: "\e029"; }
@@ -4167,6 +4167,7 @@ img.thumbnail {
 /* view mode */
 .switch-mode {
     margin-left:15px;
+    font-size: 0;
 }
 .wiki-view-icon-btn,
 .grid-view-icon-btn,
@@ -4176,12 +4177,18 @@ img.thumbnail {
     height:29px;
     background:#fff;
     border:1px solid #ccc;
+    border-right:none;
     font-size:18px;
     color:#aaa;
     cursor:pointer;
     border-radius:0;
 }
 
+.wiki-view-icon-btn {
+    border:1px solid #ccc;
+}
+
+.wiki-view-icon-btn.active,
 .grid-view-icon-btn.active,
 .list-view-icon-btn.active {
     color:#fff;
