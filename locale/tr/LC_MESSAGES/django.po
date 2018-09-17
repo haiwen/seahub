@@ -10,9 +10,9 @@ msgid ""
 msgstr ""
 "Project-Id-Version: seahub\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2018-09-06 15:47+0800\n"
-"PO-Revision-Date: 2018-09-07 02:44+0000\n"
-"Last-Translator: C_Q <helloworld.c@outlook.com>\n"
+"POT-Creation-Date: 2018-09-17 12:05+0800\n"
+"PO-Revision-Date: 2018-09-17 04:07+0000\n"
+"Last-Translator: Evrim Güner <evrim.guner@veriyum.net.tr>\n"
 "Language-Team: Turkish (http://www.transifex.com/haiwen/seahub/language/tr/)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -58,7 +58,7 @@ msgid "Space quota is too low (minimum value is 0)"
 msgstr "Alan kotası çok düşük (minimum değer 0' dır)"
 
 #: seahub/api2/endpoints/admin/account.py:259 seahub/institutions/views.py:213
-#: seahub/organizations/views.py:928 seahub/views/sysadmin.py:780
+#: seahub/organizations/views.py:928 seahub/views/sysadmin.py:788
 #, python-format
 msgid "Failed to set quota: maximum quota is %d MB"
 msgstr "Kota oluşturulamadı: maksimum kota %d MB"
@@ -82,8 +82,8 @@ msgstr ""
 
 #: seahub/api2/endpoints/admin/default_library.py:31
 #: seahub/api2/endpoints/admin/default_library.py:32
-#: seahub/views/__init__.py:640 seahub/views/__init__.py:641
-#: seahub/views/__init__.py:646 seahub/views/__init__.py:647
+#: seahub/views/__init__.py:639 seahub/views/__init__.py:640
+#: seahub/views/__init__.py:645 seahub/views/__init__.py:646
 msgid "My Library"
 msgstr "Kütüphanem"
 
@@ -105,7 +105,7 @@ msgstr "Bu isimde zaten bir grup var."
 msgid "User %s is already group owner."
 msgstr ""
 
-#: seahub/api2/endpoints/admin/libraries.py:226 seahub/views/sysadmin.py:1742
+#: seahub/api2/endpoints/admin/libraries.py:226 seahub/views/sysadmin.py:1764
 msgid "System library can not be deleted."
 msgstr "Sistem kütüphanesi silinemez."
 
@@ -141,31 +141,31 @@ msgid "Destination path is too long."
 msgstr "Hedef yol çok uzun."
 
 #: seahub/api2/endpoints/copy_move_task.py:90
-#: seahub/api2/endpoints/move_folder_merge.py:125 seahub/views/ajax.py:759
+#: seahub/api2/endpoints/move_folder_merge.py:125 seahub/views/ajax.py:754
 msgid "Invalid destination path"
 msgstr "Geçersiz hedef yolu"
 
 #: seahub/api2/endpoints/copy_move_task.py:150
 #: seahub/api2/endpoints/move_folder_merge.py:172
 #: seahub/api2/endpoints/repos_batch.py:491 seahub/api2/views.py:1592
-#: seahub/api2/views.py:1628 seahub/api2/views.py:1672
-#: seahub/api2/views.py:1716 seahub/api2/views.py:1761
-#: seahub/api2/views.py:1809 seahub/api2/views.py:2207
-#: seahub/api2/views.py:2321 seahub/templates/js/templates.html:467
-#: seahub/views/ajax.py:735 seahub/views/ajax.py:819 seahub/views/ajax.py:889
+#: seahub/api2/views.py:1628 seahub/api2/views.py:1675
+#: seahub/api2/views.py:1719 seahub/api2/views.py:1764
+#: seahub/api2/views.py:1812 seahub/api2/views.py:2210
+#: seahub/api2/views.py:2324 seahub/templates/js/templates.html:470
+#: seahub/views/ajax.py:730 seahub/views/ajax.py:814 seahub/views/ajax.py:884
 msgid "Out of quota."
 msgstr ""
 
-#: seahub/api2/endpoints/copy_move_task.py:165 seahub/views/ajax.py:782
+#: seahub/api2/endpoints/copy_move_task.py:165 seahub/views/ajax.py:777
 #, python-format
 msgid "Can not move directory %(src)s to its subdirectory %(des)s"
 msgstr "%(src)s dizini alt dizinine %(des)s taşınamıyor."
 
 #: seahub/api2/endpoints/copy_move_task.py:180
-#: seahub/api2/endpoints/file.py:260 seahub/api2/endpoints/file.py:336
-#: seahub/api2/endpoints/file.py:443 seahub/api2/endpoints/file.py:520
-#: seahub/api2/endpoints/file.py:616 seahub/views/ajax.py:501
-#: seahub/views/ajax.py:572 seahub/views/file.py:1352
+#: seahub/api2/endpoints/file.py:269 seahub/api2/endpoints/file.py:345
+#: seahub/api2/endpoints/file.py:452 seahub/api2/endpoints/file.py:529
+#: seahub/api2/endpoints/file.py:625 seahub/views/ajax.py:496
+#: seahub/views/ajax.py:567 seahub/views/file.py:1330
 msgid "File is locked"
 msgstr "Dosya kilitli"
 
@@ -185,11 +185,11 @@ msgstr ""
 msgid "User %s not found."
 msgstr ""
 
-#: seahub/api2/endpoints/file.py:535 seahub/api2/endpoints/file.py:556
+#: seahub/api2/endpoints/file.py:544 seahub/api2/endpoints/file.py:565
 msgid "File is not locked."
 msgstr ""
 
-#: seahub/api2/endpoints/file.py:568
+#: seahub/api2/endpoints/file.py:577
 msgid "You can not refresh this file's lock."
 msgstr ""
 
@@ -200,9 +200,9 @@ msgstr ""
 #: seahub/api2/endpoints/wiki_pages.py:193
 #: seahub/api2/endpoints/wiki_pages.py:203
 #: seahub/api2/endpoints/wiki_pages.py:285 seahub/group/views.py:366
-#: seahub/views/__init__.py:952 seahub/views/ajax.py:1212
-#: seahub/views/ajax.py:1216 seahub/views/file.py:1349
-#: seahub/views/sysadmin.py:1951 seahub/views/wiki.py:134
+#: seahub/views/__init__.py:951 seahub/views/ajax.py:1207
+#: seahub/views/ajax.py:1211 seahub/views/file.py:1327
+#: seahub/views/sysadmin.py:1974 seahub/views/wiki.py:134
 msgid "Internal Server Error"
 msgstr "İç Sunucu Hatası"
 
@@ -211,8 +211,8 @@ msgstr "İç Sunucu Hatası"
 #: seahub/api2/endpoints/wiki_pages.py:184 seahub/api2/endpoints/wikis.py:145
 #: seahub/api2/endpoints/wikis.py:230 seahub/group/views.py:453
 #: seahub/thumbnail/views.py:51 seahub/thumbnail/views.py:166
-#: seahub/views/__init__.py:787 seahub/views/ajax.py:210
-#: seahub/views/ajax.py:240 seahub/views/ajax.py:246 seahub/views/ajax.py:929
+#: seahub/views/__init__.py:786 seahub/views/ajax.py:209
+#: seahub/views/ajax.py:239 seahub/views/ajax.py:245 seahub/views/ajax.py:924
 #: seahub/views/wiki.py:201 seahub/wiki/views.py:56
 msgid "Permission denied."
 msgstr "İzin reddedildi."
@@ -225,14 +225,14 @@ msgid "Tag can only contain letters, numbers, dot, hyphen or underscore."
 msgstr ""
 
 #: seahub/api2/endpoints/group_members.py:93
-#: seahub/api2/endpoints/group_members.py:289 seahub/views/ajax.py:1404
+#: seahub/api2/endpoints/group_members.py:289 seahub/views/ajax.py:1399
 #, python-format
 msgid "User %s is already a group member."
 msgstr ""
 
 #: seahub/api2/endpoints/group_members.py:99
 #: seahub/api2/endpoints/group_members.py:298 seahub/api2/views.py:1455
-#: seahub/views/ajax.py:1413
+#: seahub/views/ajax.py:1408
 #, python-format
 msgid "User %s not found in organization."
 msgstr ""
@@ -261,9 +261,11 @@ msgstr ""
 
 #: seahub/api2/endpoints/query_copy_move_progress.py:47
 #: seahub/templates/js/sysadmin-templates.html:289
-#: seahub/templates/sysadmin/sys_statistic_file.html:96
-#: seahub/templates/sysadmin/sys_statistic_storage.html:96
-#: seahub/templates/sysadmin/sys_statistic_user.html:96
+#: seahub/templates/sysadmin/sys_org_info_traffic.html:100
+#: seahub/templates/sysadmin/sys_statistic_file.html:94
+#: seahub/templates/sysadmin/sys_statistic_storage.html:94
+#: seahub/templates/sysadmin/sys_statistic_traffic.html:115
+#: seahub/templates/sysadmin/sys_statistic_user.html:94
 #: seahub/templates/sysadmin/useradmin_js.html:269
 #: seahub/templates/sysadmin/useradmin_table.html:111
 #: seahub/templates/sysadmin/userinfo.html:105
@@ -276,16 +278,16 @@ msgstr ""
 msgid "Error"
 msgstr "Hata"
 
-#: seahub/api2/endpoints/repo_set_password.py:67 seahub/api2/views.py:3491
+#: seahub/api2/endpoints/repo_set_password.py:67 seahub/api2/views.py:3494
 msgid "Wrong password"
 msgstr "Hatalı şifre"
 
-#: seahub/api2/endpoints/repo_set_password.py:70 seahub/api2/views.py:3494
-#: seahub/views/ajax.py:730 seahub/views/sysadmin.py:2130
+#: seahub/api2/endpoints/repo_set_password.py:70 seahub/api2/views.py:3497
+#: seahub/views/ajax.py:725 seahub/views/sysadmin.py:2154
 msgid "Internal server error"
 msgstr "İç sunucu hatası"
 
-#: seahub/api2/endpoints/repo_set_password.py:73 seahub/api2/views.py:3497
+#: seahub/api2/endpoints/repo_set_password.py:73 seahub/api2/views.py:3500
 msgid "Decrypt library error"
 msgstr "Kütüphane şifresi açma hatası"
 
@@ -330,7 +332,7 @@ msgid "An upload link is shared to you on %s"
 msgstr "%s'de sizinle bir bağlantı yüklemesi paylaşıldı"
 
 #: seahub/api2/endpoints/share_link_zip_task.py:100
-#: seahub/views/__init__.py:936
+#: seahub/views/__init__.py:935
 #, python-format
 msgid "Unable to download directory \"%s\": size is too large."
 msgstr "\"%s\" dizni indirilemiyor: Boyut çok büyük."
@@ -426,17 +428,17 @@ msgstr ""
 #: seahub/templates/file_edit.html:129
 #: seahub/templates/js/lib-op-popups.html:109
 #: seahub/templates/js/templates.html:58
-#: seahub/templates/js/templates.html:1190
-#: seahub/templates/js/templates.html:1304
+#: seahub/templates/js/templates.html:1193
+#: seahub/templates/js/templates.html:1303
 #: seahub/templates/registration/login.html:32
 #: seahub/templates/registration/registration_form.html:24
 #: seahub/templates/snippets/file_share_popup.html:18
 #: seahub/templates/sysadmin/settings.html:105
 #: seahub/templates/sysadmin/sudo_mode.html:10
 #: seahub/templates/sysadmin/sys_org_admin.html:28
-#: seahub/templates/sysadmin/sys_org_info_user.html:71
+#: seahub/templates/sysadmin/sys_org_info_user.html:68
 #: seahub/templates/sysadmin/sys_useradmin.html:59
-#: seahub/views/sysadmin.py:1909
+#: seahub/views/sysadmin.py:1932
 msgid "Password"
 msgstr "Şifre"
 
@@ -602,7 +604,7 @@ msgid "This value must be of length 40"
 msgstr "Bu değerin uzunluğu 40 olmalıdır."
 
 #: seahub/base/accounts.py:720 seahub/forms.py:30
-#: seahub/views/sysadmin.py:1962
+#: seahub/views/sysadmin.py:1985
 msgid "The number of users exceeds the limit."
 msgstr ""
 
@@ -614,9 +616,9 @@ msgstr "Geçerli bir eposta adresi girin."
 msgid "Invalid user id."
 msgstr "Geçersiz kullanıcı kimliği."
 
-#: seahub/base/accounts.py:785 seahub/templates/js/templates.html:557
-#: seahub/templates/js/templates.html:1871
-#: seahub/templates/js/templates.html:1908
+#: seahub/base/accounts.py:785 seahub/templates/js/templates.html:560
+#: seahub/templates/js/templates.html:1870
+#: seahub/templates/js/templates.html:1907
 msgid "name"
 msgstr "isim"
 
@@ -655,26 +657,24 @@ msgstr "Geçerli bir eposta adresi girin."
 #: seahub/organizations/templates/organizations/user_search.html:10
 #: seahub/organizations/templates/organizations/userinfo.html:21
 #: seahub/share/templates/share/share_link_audit.html:9
-#: seahub/templates/js/admin-common-templates.html:60
-#: seahub/templates/js/admin-common-templates.html:127
-#: seahub/templates/js/sysadmin-templates.html:909
-#: seahub/templates/js/sysadmin-templates.html:937
-#: seahub/templates/js/sysadmin-templates.html:977
-#: seahub/templates/js/templates.html:2751
-#: seahub/templates/js/templates.html:2784
+#: seahub/templates/js/admin-common-templates.html:53
+#: seahub/templates/js/sysadmin-templates.html:936
+#: seahub/templates/js/sysadmin-templates.html:976
+#: seahub/templates/js/templates.html:2750
+#: seahub/templates/js/templates.html:2783
 #: seahub/templates/registration/registration_form.html:22
 #: seahub/templates/sysadmin/sys_inst_info_admins.html:15
 #: seahub/templates/sysadmin/sys_inst_info_user.html:23
 #: seahub/templates/sysadmin/sys_inst_info_user.html:31
 #: seahub/templates/sysadmin/sys_inst_search_user.html:8
 #: seahub/templates/sysadmin/sys_inst_search_user.html:17
-#: seahub/templates/sysadmin/sys_org_info_user.html:19
-#: seahub/templates/sysadmin/sys_org_info_user.html:65
+#: seahub/templates/sysadmin/sys_org_info_user.html:16
+#: seahub/templates/sysadmin/sys_org_info_user.html:62
 #: seahub/templates/sysadmin/sys_useradmin.html:43
 #: seahub/templates/sysadmin/sys_useradmin_ldap.html:26
 #: seahub/templates/sysadmin/user_search.html:10
-#: seahub/templates/sysadmin/userinfo.html:35 seahub/views/sysadmin.py:331
-#: seahub/views/sysadmin.py:335 seahub/views/sysadmin.py:1909
+#: seahub/templates/sysadmin/userinfo.html:35 seahub/views/sysadmin.py:339
+#: seahub/views/sysadmin.py:343 seahub/views/sysadmin.py:1932
 msgid "Email"
 msgstr "Eposta"
 
@@ -699,12 +699,12 @@ msgstr "Eposta"
 #: seahub/organizations/templates/organizations/pubrepo.html:16
 #: seahub/organizations/templates/organizations/userinfo.html:69
 #: seahub/organizations/templates/organizations/userinfo.html:101
-#: seahub/templates/js/admin-common-templates.html:79
-#: seahub/templates/js/admin-common-templates.html:106
-#: seahub/templates/js/admin-common-templates.html:126
-#: seahub/templates/js/admin-common-templates.html:146
-#: seahub/templates/js/admin-common-templates.html:181
-#: seahub/templates/js/admin-common-templates.html:218
+#: seahub/templates/js/admin-common-templates.html:72
+#: seahub/templates/js/admin-common-templates.html:99
+#: seahub/templates/js/admin-common-templates.html:119
+#: seahub/templates/js/admin-common-templates.html:138
+#: seahub/templates/js/admin-common-templates.html:173
+#: seahub/templates/js/admin-common-templates.html:210
 #: seahub/templates/js/lib-op-popups.html:6
 #: seahub/templates/js/lib-op-popups.html:17
 #: seahub/templates/js/sysadmin-templates.html:358
@@ -722,22 +722,22 @@ msgstr "Eposta"
 #: seahub/templates/js/sysadmin-templates.html:908
 #: seahub/templates/js/templates.html:17 seahub/templates/js/templates.html:72
 #: seahub/templates/js/templates.html:246
-#: seahub/templates/js/templates.html:542
-#: seahub/templates/js/templates.html:1854
-#: seahub/templates/js/templates.html:1880
-#: seahub/templates/js/templates.html:1888
-#: seahub/templates/js/templates.html:1896
-#: seahub/templates/js/templates.html:1922
-#: seahub/templates/js/templates.html:2018
-#: seahub/templates/js/templates.html:2037
-#: seahub/templates/js/templates.html:2152
-#: seahub/templates/js/templates.html:2159
-#: seahub/templates/js/templates.html:2237
-#: seahub/templates/js/templates.html:2256
-#: seahub/templates/js/templates.html:2489
-#: seahub/templates/js/templates.html:2610
-#: seahub/templates/js/templates.html:2646
-#: seahub/templates/js/templates.html:2683
+#: seahub/templates/js/templates.html:545
+#: seahub/templates/js/templates.html:1853
+#: seahub/templates/js/templates.html:1879
+#: seahub/templates/js/templates.html:1887
+#: seahub/templates/js/templates.html:1895
+#: seahub/templates/js/templates.html:1921
+#: seahub/templates/js/templates.html:2017
+#: seahub/templates/js/templates.html:2036
+#: seahub/templates/js/templates.html:2151
+#: seahub/templates/js/templates.html:2158
+#: seahub/templates/js/templates.html:2236
+#: seahub/templates/js/templates.html:2255
+#: seahub/templates/js/templates.html:2488
+#: seahub/templates/js/templates.html:2609
+#: seahub/templates/js/templates.html:2645
+#: seahub/templates/js/templates.html:2682
 #: seahub/templates/registration/registration_form.html:18
 #: seahub/templates/repo_dir_recycle_view.html:44
 #: seahub/templates/repo_history_view.html:58
@@ -746,8 +746,8 @@ msgstr "Eposta"
 #: seahub/templates/sysadmin/sys_inst_admin.html:27
 #: seahub/templates/sysadmin/sys_link_search.html:21
 #: seahub/templates/sysadmin/sys_org_admin.html:24
-#: seahub/templates/sysadmin/sys_org_info_group.html:18
-#: seahub/templates/sysadmin/sys_org_info_library.html:19
+#: seahub/templates/sysadmin/sys_org_info_group.html:15
+#: seahub/templates/sysadmin/sys_org_info_library.html:15
 #: seahub/templates/sysadmin/sys_org_search.html:10
 #: seahub/templates/sysadmin/sys_publink_admin.html:27
 #: seahub/templates/sysadmin/sys_terms_admin.html:16
@@ -765,9 +765,9 @@ msgstr "Eposta"
 #: seahub/templates/wiki/personal_wiki_pages.html:28
 #: seahub/templates/wiki/wiki_list.html:19
 #: seahub/templates/wiki/wiki_list.html:35
-#: seahub/templates/wiki/wiki_list.html:50 seahub/views/sysadmin.py:331
-#: seahub/views/sysadmin.py:335 seahub/views/sysadmin.py:1184
-#: seahub/views/sysadmin.py:1909
+#: seahub/templates/wiki/wiki_list.html:50 seahub/views/sysadmin.py:339
+#: seahub/views/sysadmin.py:343 seahub/views/sysadmin.py:1192
+#: seahub/views/sysadmin.py:1932
 msgid "Name"
 msgstr "İsim"
 
@@ -778,8 +778,8 @@ msgstr "İsim"
 #: seahub/organizations/templates/organizations/org_users_table.html:4
 #: seahub/templates/sysadmin/useradmin_table.html:6
 #: seahub/templates/sysadmin/useradmin_table.html:10
-#: seahub/templates/sysadmin/userinfo.html:67 seahub/views/sysadmin.py:331
-#: seahub/views/sysadmin.py:335
+#: seahub/templates/sysadmin/userinfo.html:67 seahub/views/sysadmin.py:339
+#: seahub/views/sysadmin.py:343
 msgid "Contact Email"
 msgstr ""
 
@@ -789,40 +789,40 @@ msgstr ""
 #: seahub/institutions/templates/institutions/useradmin_search.html:20
 #: seahub/organizations/templates/organizations/org_users_table.html:5
 #: seahub/profile/templates/profile/set_profile.html:112
-#: seahub/templates/js/sysadmin-templates.html:979
+#: seahub/templates/js/sysadmin-templates.html:978
 #: seahub/templates/sysadmin/sys_inst_info_admins.html:16
 #: seahub/templates/sysadmin/sys_inst_info_user.html:32
 #: seahub/templates/sysadmin/sys_inst_search_user.html:18
-#: seahub/templates/sysadmin/sys_org_info_user.html:20
+#: seahub/templates/sysadmin/sys_org_info_user.html:17
 #: seahub/templates/sysadmin/useradmin_table.html:7
 #: seahub/templates/sysadmin/useradmin_table.html:11
-#: seahub/templates/sysadmin/userinfo.html:115 seahub/views/sysadmin.py:331
-#: seahub/views/sysadmin.py:335
+#: seahub/templates/sysadmin/userinfo.html:115 seahub/views/sysadmin.py:339
+#: seahub/views/sysadmin.py:343
 msgid "Status"
 msgstr "Durum"
 
 #: seahub/base/management/commands/export_users.py:43
 #: seahub/institutions/templates/institutions/user_info.html:106
-#: seahub/templates/js/admin-common-templates.html:128
-#: seahub/templates/js/sysadmin-templates.html:910
-#: seahub/templates/js/templates.html:2153
+#: seahub/templates/js/admin-common-templates.html:120
+#: seahub/templates/js/sysadmin-templates.html:909
+#: seahub/templates/js/templates.html:2152
 #: seahub/templates/sysadmin/sys_useradmin.html:50
 #: seahub/templates/sysadmin/useradmin_table.html:8
-#: seahub/templates/sysadmin/userinfo.html:312 seahub/views/sysadmin.py:331
-#: seahub/views/sysadmin.py:1910
+#: seahub/templates/sysadmin/userinfo.html:312 seahub/views/sysadmin.py:339
+#: seahub/views/sysadmin.py:1933
 msgid "Role"
 msgstr "Rol"
 
 #: seahub/base/management/commands/export_users.py:44
 #: seahub/base/management/commands/export_users.py:48
-#: seahub/views/sysadmin.py:332 seahub/views/sysadmin.py:336
+#: seahub/views/sysadmin.py:340 seahub/views/sysadmin.py:344
 msgid "Space Usage"
 msgstr ""
 
 #: seahub/base/management/commands/export_users.py:44
 #: seahub/base/management/commands/export_users.py:48
-#: seahub/views/sysadmin.py:332 seahub/views/sysadmin.py:336
-#: seahub/views/sysadmin.py:1910
+#: seahub/views/sysadmin.py:340 seahub/views/sysadmin.py:344
+#: seahub/views/sysadmin.py:1933
 msgid "Space Quota"
 msgstr ""
 
@@ -833,17 +833,17 @@ msgstr ""
 #: seahub/organizations/templates/organizations/org_publink_admin.html:13
 #: seahub/templates/sysadmin/sys_inst_admin.html:28
 #: seahub/templates/sysadmin/sys_link_search.html:24
-#: seahub/templates/sysadmin/sys_org_info_group.html:20
+#: seahub/templates/sysadmin/sys_org_info_group.html:17
 #: seahub/templates/sysadmin/sys_publink_admin.html:30
 #: seahub/templates/sysadmin/sys_upload_link_admin.html:24
-#: seahub/templates/sysadmin/userinfo.html:313 seahub/views/sysadmin.py:333
-#: seahub/views/sysadmin.py:337 seahub/views/sysadmin.py:1184
+#: seahub/templates/sysadmin/userinfo.html:313 seahub/views/sysadmin.py:341
+#: seahub/views/sysadmin.py:345 seahub/views/sysadmin.py:1192
 msgid "Create At"
 msgstr "Oluşturuldu"
 
 #: seahub/base/management/commands/export_users.py:45
 #: seahub/base/management/commands/export_users.py:49
-#: seahub/views/sysadmin.py:333 seahub/views/sysadmin.py:337
+#: seahub/views/sysadmin.py:341 seahub/views/sysadmin.py:345
 msgid "Last Login"
 msgstr "En son giriş"
 
@@ -854,9 +854,9 @@ msgstr "En son giriş"
 #: seahub/organizations/templates/organizations/org_user_admin.html:15
 #: seahub/organizations/templates/organizations/org_useradmin_admins.html:15
 #: seahub/templates/base.html:75 seahub/templates/base.html:78
-#: seahub/templates/js/admin-common-templates.html:35
+#: seahub/templates/js/admin-common-templates.html:28
+#: seahub/templates/js/admin-common-templates.html:32
 #: seahub/templates/js/admin-common-templates.html:39
-#: seahub/templates/js/admin-common-templates.html:46
 #: seahub/templates/js/orgadmin-templates.html:5
 #: seahub/templates/js/sysadmin-templates.html:725
 #: seahub/templates/js/sysadmin-templates.html:741
@@ -864,22 +864,22 @@ msgstr "En son giriş"
 #: seahub/templates/js/sysadmin-templates.html:750
 #: seahub/templates/js/sysadmin-templates.html:798
 #: seahub/templates/js/sysadmin-templates.html:828
-#: seahub/templates/js/templates.html:1368
-#: seahub/templates/js/templates.html:1404
-#: seahub/templates/js/templates.html:1685
-#: seahub/templates/js/templates.html:1701
-#: seahub/templates/js/templates.html:1706
-#: seahub/templates/js/templates.html:1710
-#: seahub/templates/js/templates.html:2185
-#: seahub/templates/js/templates.html:2189
-#: seahub/templates/js/templates.html:2196
-#: seahub/templates/js/templates.html:2457
-#: seahub/templates/js/templates.html:2460
-#: seahub/templates/js/templates.html:2519
-#: seahub/templates/js/templates.html:2524
-#: seahub/templates/js/templates.html:2533
-#: seahub/templates/js/templates.html:2541 seahub/views/sysadmin.py:333
-#: seahub/views/sysadmin.py:337 seahub/views/sysadmin.py:728
+#: seahub/templates/js/templates.html:1367
+#: seahub/templates/js/templates.html:1403
+#: seahub/templates/js/templates.html:1684
+#: seahub/templates/js/templates.html:1700
+#: seahub/templates/js/templates.html:1705
+#: seahub/templates/js/templates.html:1709
+#: seahub/templates/js/templates.html:2184
+#: seahub/templates/js/templates.html:2188
+#: seahub/templates/js/templates.html:2195
+#: seahub/templates/js/templates.html:2456
+#: seahub/templates/js/templates.html:2459
+#: seahub/templates/js/templates.html:2518
+#: seahub/templates/js/templates.html:2523
+#: seahub/templates/js/templates.html:2532
+#: seahub/templates/js/templates.html:2540 seahub/views/sysadmin.py:341
+#: seahub/views/sysadmin.py:345 seahub/views/sysadmin.py:736
 msgid "Admin"
 msgstr "Yönetici"
 
@@ -890,7 +890,7 @@ msgstr "Yönetici"
 #: seahub/templates/sysadmin/sys_useradmin_admins.html:18
 #: seahub/templates/sysadmin/sys_useradmin_ldap.html:17
 #: seahub/templates/sysadmin/sys_useradmin_paid.html:17
-#: seahub/views/sysadmin.py:333 seahub/views/sysadmin.py:337
+#: seahub/views/sysadmin.py:341 seahub/views/sysadmin.py:345
 msgid "LDAP(imported)"
 msgstr "LDAP(alınan)"
 
@@ -903,11 +903,11 @@ msgstr "LDAP(alınan)"
 #: seahub/templates/sysadmin/sys_inst_info_admins.html:28
 #: seahub/templates/sysadmin/sys_inst_info_user.html:44
 #: seahub/templates/sysadmin/sys_inst_search_user.html:30
-#: seahub/templates/sysadmin/sys_org_info_user.html:32
-#: seahub/templates/sysadmin/sys_org_info_user.html:39
+#: seahub/templates/sysadmin/sys_org_info_user.html:29
+#: seahub/templates/sysadmin/sys_org_info_user.html:36
 #: seahub/templates/sysadmin/useradmin_table.html:44
 #: seahub/templates/sysadmin/useradmin_table.html:51
-#: seahub/views/sysadmin.py:391
+#: seahub/views/sysadmin.py:399
 msgid "Active"
 msgstr "Aktif"
 
@@ -920,11 +920,11 @@ msgstr "Aktif"
 #: seahub/templates/sysadmin/sys_inst_info_admins.html:30
 #: seahub/templates/sysadmin/sys_inst_info_user.html:46
 #: seahub/templates/sysadmin/sys_inst_search_user.html:32
-#: seahub/templates/sysadmin/sys_org_info_user.html:34
-#: seahub/templates/sysadmin/sys_org_info_user.html:40
+#: seahub/templates/sysadmin/sys_org_info_user.html:31
+#: seahub/templates/sysadmin/sys_org_info_user.html:37
 #: seahub/templates/sysadmin/useradmin_table.html:46
 #: seahub/templates/sysadmin/useradmin_table.html:52
-#: seahub/views/sysadmin.py:393
+#: seahub/views/sysadmin.py:401
 msgid "Inactive"
 msgstr "İnaktif"
 
@@ -934,7 +934,7 @@ msgstr "İnaktif"
 #: seahub/organizations/templates/organizations/org_admin_group_info.html:87
 #: seahub/templates/base.html:127 seahub/templates/base_for_backbone.html:96
 #: seahub/templates/sysadmin/sysadmin_backbone.html:65
-#: seahub/views/sysadmin.py:399 seahub/views/sysadmin.py:400
+#: seahub/views/sysadmin.py:407 seahub/views/sysadmin.py:408
 msgid "Yes"
 msgstr "Evet"
 
@@ -943,7 +943,7 @@ msgstr "Evet"
 #: seahub/templates/sysadmin/sys_useradmin.html:53
 #: seahub/templates/sysadmin/useradmin_table.html:60
 #: seahub/templates/sysadmin/useradmin_table.html:70
-#: seahub/views/sysadmin.py:405
+#: seahub/views/sysadmin.py:413
 msgid "Guest"
 msgstr "Misafir"
 
@@ -953,7 +953,7 @@ msgstr "Misafir"
 #: seahub/templates/sysadmin/sys_useradmin.html:52
 #: seahub/templates/sysadmin/useradmin_table.html:62
 #: seahub/templates/sysadmin/useradmin_table.html:69
-#: seahub/views/sysadmin.py:407 seahub/views/sysadmin.py:411
+#: seahub/views/sysadmin.py:415 seahub/views/sysadmin.py:419
 msgid "Default"
 msgstr "Varsayılan"
 
@@ -1019,7 +1019,7 @@ msgid "Recovered deleted directory"
 msgstr "Silinmiş dizin kurtarıldı."
 
 #: seahub/base/templatetags/seahub_tags.py:159
-#: seahub/base/templatetags/seahub_tags.py:230 seahub/views/ajax.py:1271
+#: seahub/base/templatetags/seahub_tags.py:230 seahub/views/ajax.py:1266
 msgid "Changed library name or description"
 msgstr "Değiştirilmiş kütüphane adı ya da açıklaması"
 
@@ -1030,7 +1030,7 @@ msgstr "Seafile sistemi tarafından oto birleştirme"
 
 #: seahub/base/templatetags/seahub_tags.py:163
 #: seahub/base/templatetags/seahub_tags.py:234
-#: seahub/templates/js/templates.html:1973
+#: seahub/templates/js/templates.html:1972
 msgid "Created library"
 msgstr "Oluşturulmuş kütüphane"
 
@@ -1087,31 +1087,31 @@ msgstr[1] ""
 #: seahub/templates/js/sysadmin-templates.html:795
 #: seahub/templates/js/sysadmin-templates.html:825
 #: seahub/templates/js/templates.html:47
-#: seahub/templates/js/templates.html:1365
-#: seahub/templates/js/templates.html:1401
-#: seahub/templates/js/templates.html:1688
-#: seahub/templates/js/templates.html:1699
-#: seahub/templates/js/templates.html:1704
-#: seahub/templates/js/templates.html:1708
-#: seahub/templates/js/templates.html:1715
-#: seahub/templates/js/templates.html:1718
-#: seahub/templates/js/templates.html:1752
-#: seahub/templates/js/templates.html:1778
-#: seahub/templates/js/templates.html:1937
-#: seahub/templates/js/templates.html:1944
-#: seahub/templates/js/templates.html:2328
-#: seahub/templates/js/templates.html:2374
-#: seahub/templates/js/templates.html:2522
-#: seahub/templates/js/templates.html:2528
-#: seahub/templates/js/templates.html:2531
-#: seahub/templates/js/templates.html:2539
-#: seahub/templates/js/templates.html:2547
-#: seahub/templates/js/templates.html:2550
-#: seahub/templates/js/templates.html:2557
-#: seahub/templates/js/templates.html:2580
-#: seahub/templates/js/templates.html:2583
-#: seahub/templates/js/templates.html:2590
-#: seahub/templates/sysadmin/sys_org_info_library.html:29
+#: seahub/templates/js/templates.html:1364
+#: seahub/templates/js/templates.html:1400
+#: seahub/templates/js/templates.html:1687
+#: seahub/templates/js/templates.html:1698
+#: seahub/templates/js/templates.html:1703
+#: seahub/templates/js/templates.html:1707
+#: seahub/templates/js/templates.html:1714
+#: seahub/templates/js/templates.html:1717
+#: seahub/templates/js/templates.html:1751
+#: seahub/templates/js/templates.html:1777
+#: seahub/templates/js/templates.html:1936
+#: seahub/templates/js/templates.html:1943
+#: seahub/templates/js/templates.html:2327
+#: seahub/templates/js/templates.html:2373
+#: seahub/templates/js/templates.html:2521
+#: seahub/templates/js/templates.html:2527
+#: seahub/templates/js/templates.html:2530
+#: seahub/templates/js/templates.html:2538
+#: seahub/templates/js/templates.html:2546
+#: seahub/templates/js/templates.html:2549
+#: seahub/templates/js/templates.html:2556
+#: seahub/templates/js/templates.html:2579
+#: seahub/templates/js/templates.html:2582
+#: seahub/templates/js/templates.html:2589
+#: seahub/templates/sysadmin/sys_org_info_library.html:25
 #: seahub/templates/sysadmin/userinfo.html:188
 #: seahub/templates/sysadmin/userinfo.html:239
 msgid "Read-Write"
@@ -1131,29 +1131,29 @@ msgstr "Okuma-Yazma"
 #: seahub/templates/js/sysadmin-templates.html:796
 #: seahub/templates/js/sysadmin-templates.html:826
 #: seahub/templates/js/templates.html:48
-#: seahub/templates/js/templates.html:1366
-#: seahub/templates/js/templates.html:1402
-#: seahub/templates/js/templates.html:1690
-#: seahub/templates/js/templates.html:1700
-#: seahub/templates/js/templates.html:1705
-#: seahub/templates/js/templates.html:1709
-#: seahub/templates/js/templates.html:1716
-#: seahub/templates/js/templates.html:1719
-#: seahub/templates/js/templates.html:1753
-#: seahub/templates/js/templates.html:1779
-#: seahub/templates/js/templates.html:1945
-#: seahub/templates/js/templates.html:2329
-#: seahub/templates/js/templates.html:2375
-#: seahub/templates/js/templates.html:2523
-#: seahub/templates/js/templates.html:2532
-#: seahub/templates/js/templates.html:2536
-#: seahub/templates/js/templates.html:2540
-#: seahub/templates/js/templates.html:2551
-#: seahub/templates/js/templates.html:2554
-#: seahub/templates/js/templates.html:2558
-#: seahub/templates/js/templates.html:2584
-#: seahub/templates/js/templates.html:2587
-#: seahub/templates/js/templates.html:2591
+#: seahub/templates/js/templates.html:1365
+#: seahub/templates/js/templates.html:1401
+#: seahub/templates/js/templates.html:1689
+#: seahub/templates/js/templates.html:1699
+#: seahub/templates/js/templates.html:1704
+#: seahub/templates/js/templates.html:1708
+#: seahub/templates/js/templates.html:1715
+#: seahub/templates/js/templates.html:1718
+#: seahub/templates/js/templates.html:1752
+#: seahub/templates/js/templates.html:1778
+#: seahub/templates/js/templates.html:1944
+#: seahub/templates/js/templates.html:2328
+#: seahub/templates/js/templates.html:2374
+#: seahub/templates/js/templates.html:2522
+#: seahub/templates/js/templates.html:2531
+#: seahub/templates/js/templates.html:2535
+#: seahub/templates/js/templates.html:2539
+#: seahub/templates/js/templates.html:2550
+#: seahub/templates/js/templates.html:2553
+#: seahub/templates/js/templates.html:2557
+#: seahub/templates/js/templates.html:2583
+#: seahub/templates/js/templates.html:2586
+#: seahub/templates/js/templates.html:2590
 #: seahub/templates/sysadmin/userinfo.html:237
 msgid "Read-Only"
 msgstr "Salt okunur"
@@ -1238,9 +1238,9 @@ msgstr "Not"
 #: seahub/templates/sysadmin/sys_inst_info_admins.html:19
 #: seahub/templates/sysadmin/sys_inst_info_user.html:35
 #: seahub/templates/sysadmin/sys_inst_search_user.html:21
-#: seahub/templates/sysadmin/sys_org_info_group.html:21
-#: seahub/templates/sysadmin/sys_org_info_library.html:22
-#: seahub/templates/sysadmin/sys_org_info_user.html:23
+#: seahub/templates/sysadmin/sys_org_info_group.html:18
+#: seahub/templates/sysadmin/sys_org_info_library.html:18
+#: seahub/templates/sysadmin/sys_org_info_user.html:20
 #: seahub/templates/sysadmin/sys_virus_scan_records.html:14
 #: seahub/templates/sysadmin/userinfo.html:180
 #: seahub/templates/sysadmin/userinfo.html:268
@@ -1253,23 +1253,23 @@ msgstr "İşlemler"
 #: seahub/group/templates/group/group_wiki.html:21
 #: seahub/institutions/templates/institutions/useradmin.html:37
 #: seahub/organizations/templates/organizations/org_users_table.html:24
+#: seahub/templates/js/admin-common-templates.html:29
 #: seahub/templates/js/admin-common-templates.html:36
-#: seahub/templates/js/admin-common-templates.html:43
 #: seahub/templates/js/sysadmin-templates.html:734
-#: seahub/templates/js/templates.html:1101
-#: seahub/templates/js/templates.html:1147
-#: seahub/templates/js/templates.html:1694
-#: seahub/templates/js/templates.html:2186
-#: seahub/templates/js/templates.html:2193
-#: seahub/templates/js/templates.html:2520
-#: seahub/templates/js/templates.html:2529
-#: seahub/templates/js/templates.html:2537
-#: seahub/templates/js/templates.html:2548
-#: seahub/templates/js/templates.html:2555
-#: seahub/templates/js/templates.html:2581
-#: seahub/templates/js/templates.html:2588
+#: seahub/templates/js/templates.html:1104
+#: seahub/templates/js/templates.html:1150
+#: seahub/templates/js/templates.html:1693
+#: seahub/templates/js/templates.html:2185
+#: seahub/templates/js/templates.html:2192
+#: seahub/templates/js/templates.html:2519
+#: seahub/templates/js/templates.html:2528
+#: seahub/templates/js/templates.html:2536
+#: seahub/templates/js/templates.html:2547
+#: seahub/templates/js/templates.html:2554
+#: seahub/templates/js/templates.html:2580
+#: seahub/templates/js/templates.html:2587
 #: seahub/templates/repo_history.html:81
-#: seahub/templates/sysadmin/sys_org_info_user.html:36
+#: seahub/templates/sysadmin/sys_org_info_user.html:33
 #: seahub/templates/sysadmin/useradmin_table.html:48
 #: seahub/templates/sysadmin/useradmin_table.html:66
 #: seahub/templates/sysadmin/useradmin_table.html:89
@@ -1293,9 +1293,9 @@ msgstr "Düzenle"
 #: seahub/organizations/templates/organizations/userinfo.html:86
 #: seahub/profile/templates/profile/set_profile.html:137
 #: seahub/profile/templates/profile/set_profile.html:139
-#: seahub/templates/js/admin-common-templates.html:52
-#: seahub/templates/js/admin-common-templates.html:175
-#: seahub/templates/js/admin-common-templates.html:212
+#: seahub/templates/js/admin-common-templates.html:45
+#: seahub/templates/js/admin-common-templates.html:167
+#: seahub/templates/js/admin-common-templates.html:204
 #: seahub/templates/js/sysadmin-templates.html:445
 #: seahub/templates/js/sysadmin-templates.html:523
 #: seahub/templates/js/sysadmin-templates.html:588
@@ -1307,25 +1307,25 @@ msgstr "Düzenle"
 #: seahub/templates/js/templates.html:340
 #: seahub/templates/js/templates.html:427
 #: seahub/templates/js/templates.html:428
-#: seahub/templates/js/templates.html:589
-#: seahub/templates/js/templates.html:666
-#: seahub/templates/js/templates.html:744
-#: seahub/templates/js/templates.html:877
-#: seahub/templates/js/templates.html:963
-#: seahub/templates/js/templates.html:1024
-#: seahub/templates/js/templates.html:1278
-#: seahub/templates/js/templates.html:1328
-#: seahub/templates/js/templates.html:1725
-#: seahub/templates/js/templates.html:2071
-#: seahub/templates/js/templates.html:2207
-#: seahub/templates/js/templates.html:2212
-#: seahub/templates/js/templates.html:2827
+#: seahub/templates/js/templates.html:592
+#: seahub/templates/js/templates.html:669
+#: seahub/templates/js/templates.html:747
+#: seahub/templates/js/templates.html:880
+#: seahub/templates/js/templates.html:966
+#: seahub/templates/js/templates.html:1027
+#: seahub/templates/js/templates.html:1277
+#: seahub/templates/js/templates.html:1327
+#: seahub/templates/js/templates.html:1724
+#: seahub/templates/js/templates.html:2070
+#: seahub/templates/js/templates.html:2206
+#: seahub/templates/js/templates.html:2211
+#: seahub/templates/js/templates.html:2826
 #: seahub/templates/snippets/file_share_popup.html:46
 #: seahub/templates/sysadmin/org_admin_table.html:25
 #: seahub/templates/sysadmin/sys_invitations_admin.html:49
-#: seahub/templates/sysadmin/sys_org_info_group.html:28
-#: seahub/templates/sysadmin/sys_org_info_library.html:42
-#: seahub/templates/sysadmin/sys_org_info_user.html:51
+#: seahub/templates/sysadmin/sys_org_info_group.html:25
+#: seahub/templates/sysadmin/sys_org_info_library.html:38
+#: seahub/templates/sysadmin/sys_org_info_user.html:48
 #: seahub/templates/sysadmin/sys_terms_admin.html:40
 #: seahub/templates/sysadmin/sys_virus_scan_records.html:23
 #: seahub/templates/sysadmin/useradmin_table.html:142
@@ -1377,10 +1377,10 @@ msgstr "Not (isteğe bağlı)"
 #: seahub/templates/file_edit.html:100 seahub/templates/file_edit.html:133
 #: seahub/templates/file_edit.html:149 seahub/templates/file_edit.html:418
 #: seahub/templates/home_base.html:102
-#: seahub/templates/js/admin-common-templates.html:63
-#: seahub/templates/js/admin-common-templates.html:184
-#: seahub/templates/js/admin-common-templates.html:196
-#: seahub/templates/js/admin-common-templates.html:221
+#: seahub/templates/js/admin-common-templates.html:56
+#: seahub/templates/js/admin-common-templates.html:176
+#: seahub/templates/js/admin-common-templates.html:188
+#: seahub/templates/js/admin-common-templates.html:213
 #: seahub/templates/js/common-templates.html:29
 #: seahub/templates/js/lib-op-popups.html:9
 #: seahub/templates/js/lib-op-popups.html:20
@@ -1400,29 +1400,29 @@ msgstr "Not (isteğe bağlı)"
 #: seahub/templates/js/templates.html:65 seahub/templates/js/templates.html:75
 #: seahub/templates/js/templates.html:84
 #: seahub/templates/js/templates.html:249
-#: seahub/templates/js/templates.html:1103
-#: seahub/templates/js/templates.html:1149
-#: seahub/templates/js/templates.html:1285
-#: seahub/templates/js/templates.html:1335
-#: seahub/templates/js/templates.html:1372
-#: seahub/templates/js/templates.html:1408
-#: seahub/templates/js/templates.html:1600
-#: seahub/templates/js/templates.html:1643
-#: seahub/templates/js/templates.html:1756
-#: seahub/templates/js/templates.html:1782
-#: seahub/templates/js/templates.html:1927
-#: seahub/templates/js/templates.html:2009
-#: seahub/templates/js/templates.html:2112
-#: seahub/templates/js/templates.html:2121
-#: seahub/templates/js/templates.html:2129
-#: seahub/templates/js/templates.html:2293
-#: seahub/templates/js/templates.html:2333
-#: seahub/templates/js/templates.html:2346
-#: seahub/templates/js/templates.html:2379
-#: seahub/templates/js/templates.html:2392
-#: seahub/templates/js/templates.html:2410
-#: seahub/templates/js/templates.html:2787
-#: seahub/templates/js/templates.html:2813
+#: seahub/templates/js/templates.html:1106
+#: seahub/templates/js/templates.html:1152
+#: seahub/templates/js/templates.html:1284
+#: seahub/templates/js/templates.html:1334
+#: seahub/templates/js/templates.html:1371
+#: seahub/templates/js/templates.html:1407
+#: seahub/templates/js/templates.html:1599
+#: seahub/templates/js/templates.html:1642
+#: seahub/templates/js/templates.html:1755
+#: seahub/templates/js/templates.html:1781
+#: seahub/templates/js/templates.html:1926
+#: seahub/templates/js/templates.html:2008
+#: seahub/templates/js/templates.html:2111
+#: seahub/templates/js/templates.html:2120
+#: seahub/templates/js/templates.html:2128
+#: seahub/templates/js/templates.html:2292
+#: seahub/templates/js/templates.html:2332
+#: seahub/templates/js/templates.html:2345
+#: seahub/templates/js/templates.html:2378
+#: seahub/templates/js/templates.html:2391
+#: seahub/templates/js/templates.html:2409
+#: seahub/templates/js/templates.html:2786
+#: seahub/templates/js/templates.html:2812
 #: seahub/templates/registration/password_change_form.html:24
 #: seahub/templates/registration/password_reset_confirm.html:19
 #: seahub/templates/registration/password_reset_form.html:13
@@ -1444,13 +1444,15 @@ msgstr "Not (isteğe bağlı)"
 #: seahub/templates/sysadmin/sys_link_search.html:13
 #: seahub/templates/sysadmin/sys_org_admin.html:34
 #: seahub/templates/sysadmin/sys_org_info_base.html:38
-#: seahub/templates/sysadmin/sys_org_info_setting.html:20
-#: seahub/templates/sysadmin/sys_org_info_setting.html:29
-#: seahub/templates/sysadmin/sys_org_info_user.html:80
+#: seahub/templates/sysadmin/sys_org_info_setting.html:17
+#: seahub/templates/sysadmin/sys_org_info_setting.html:26
+#: seahub/templates/sysadmin/sys_org_info_traffic.html:26
+#: seahub/templates/sysadmin/sys_org_info_user.html:77
 #: seahub/templates/sysadmin/sys_org_search.html:12
-#: seahub/templates/sysadmin/sys_statistic_file.html:33
-#: seahub/templates/sysadmin/sys_statistic_storage.html:33
-#: seahub/templates/sysadmin/sys_statistic_user.html:33
+#: seahub/templates/sysadmin/sys_statistic_file.html:31
+#: seahub/templates/sysadmin/sys_statistic_storage.html:31
+#: seahub/templates/sysadmin/sys_statistic_traffic.html:42
+#: seahub/templates/sysadmin/sys_statistic_user.html:31
 #: seahub/templates/sysadmin/sys_terms_admin.html:71
 #: seahub/templates/sysadmin/sys_user_admin_ldap_imported.html:61
 #: seahub/templates/sysadmin/sys_useradmin.html:68
@@ -1511,9 +1513,9 @@ msgstr "Kişiyi sil"
 #: seahub/templates/sysadmin/repoadmin_js.html:71
 #: seahub/templates/sysadmin/sys_inst_admin.html:67
 #: seahub/templates/sysadmin/sys_org_admin.html:59
-#: seahub/templates/sysadmin/sys_org_info_group.html:44
-#: seahub/templates/sysadmin/sys_org_info_library.html:61
-#: seahub/templates/sysadmin/sys_org_info_user.html:176
+#: seahub/templates/sysadmin/sys_org_info_group.html:41
+#: seahub/templates/sysadmin/sys_org_info_library.html:57
+#: seahub/templates/sysadmin/sys_org_info_user.html:173
 #: seahub/templates/sysadmin/sys_org_search.html:28
 #: seahub/templates/sysadmin/sys_terms_admin.html:140
 #: seahub/templates/sysadmin/useradmin_js.html:4
@@ -1586,11 +1588,11 @@ msgstr "Açıklama çok uzun (en fazla 100 karakter)"
 msgid "Name %s is not valid"
 msgstr "%s ismi geçerli değil."
 
-#: seahub/forms.py:97 seahub/views/ajax.py:463 seahub/views/ajax.py:675
-#: seahub/views/ajax.py:1012 seahub/views/ajax.py:1016
-#: seahub/views/ajax.py:1020 seahub/views/ajax.py:1031
-#: seahub/views/ajax.py:1258 seahub/views/file.py:1854
-#: seahub/views/sysadmin.py:1612 seahub/views/sysadmin.py:1630
+#: seahub/forms.py:97 seahub/views/ajax.py:458 seahub/views/ajax.py:670
+#: seahub/views/ajax.py:1007 seahub/views/ajax.py:1011
+#: seahub/views/ajax.py:1015 seahub/views/ajax.py:1026
+#: seahub/views/ajax.py:1253 seahub/views/file.py:1837
+#: seahub/views/sysadmin.py:1634 seahub/views/sysadmin.py:1652
 msgid "Argument missing"
 msgstr "Bağımsız değişken eksik"
 
@@ -1652,7 +1654,7 @@ msgid "Permission error: only group staff can add member"
 msgstr "İzin hatası: sadece grup kadrosu üye ekleyebilir."
 
 #: seahub/group/error_msg.py:17 seahub/group/error_msg.py:23
-#: seahub/views/file.py:412
+#: seahub/views/file.py:447
 msgid "Group does not exist"
 msgstr "Grup yok"
 
@@ -1719,13 +1721,13 @@ msgstr ""
 #: seahub/templates/js/orgadmin-templates.html:4
 #: seahub/templates/js/sysadmin-templates.html:4
 #: seahub/templates/js/templates.html:177
-#: seahub/templates/js/templates.html:1058
-#: seahub/templates/js/templates.html:1628
-#: seahub/templates/js/templates.html:1651
-#: seahub/templates/js/templates.html:1660
-#: seahub/templates/js/templates.html:2429
-#: seahub/templates/js/templates.html:2795
-#: seahub/templates/js/templates.html:2848
+#: seahub/templates/js/templates.html:1061
+#: seahub/templates/js/templates.html:1627
+#: seahub/templates/js/templates.html:1650
+#: seahub/templates/js/templates.html:1659
+#: seahub/templates/js/templates.html:2428
+#: seahub/templates/js/templates.html:2794
+#: seahub/templates/js/templates.html:2847
 #: seahub/templates/sysadmin/base.html:14
 #: seahub/templates/sysadmin/sysadmin_backbone.html:31
 #: seahub/templates/view_file_base.html:93
@@ -1826,10 +1828,10 @@ msgstr "Lütfen tıklayın ve bir kütüphane seçin"
 #: seahub/templates/js/lib-op-popups.html:77
 #: seahub/templates/js/lib-op-popups.html:122
 #: seahub/templates/js/lib-op-popups.html:130
-#: seahub/templates/js/templates.html:1286
-#: seahub/templates/js/templates.html:1336
-#: seahub/templates/js/templates.html:2347
-#: seahub/templates/js/templates.html:2393
+#: seahub/templates/js/templates.html:1285
+#: seahub/templates/js/templates.html:1335
+#: seahub/templates/js/templates.html:2346
+#: seahub/templates/js/templates.html:2392
 #: seahub/templates/repo_dir_recycle_view.html:75
 #: seahub/templates/shared_file_view.html:75
 #: seahub/templates/snippets/file_share_popup.html:58
@@ -1910,13 +1912,13 @@ msgid "Description is required."
 msgstr "Açıklama Gerekli."
 
 #: seahub/group/views.py:126 seahub/share/views.py:228
-#: seahub/views/__init__.py:546 seahub/views/ajax.py:165
-#: seahub/views/ajax.py:481 seahub/views/ajax.py:488 seahub/views/ajax.py:551
-#: seahub/views/ajax.py:558 seahub/views/ajax.py:688 seahub/views/ajax.py:1196
-#: seahub/views/ajax.py:1238 seahub/views/file.py:959 seahub/views/file.py:966
-#: seahub/views/file.py:1132 seahub/views/file.py:1183
-#: seahub/views/file.py:1343 seahub/views/file.py:1863
-#: seahub/views/repo.py:110 seahub/views/repo.py:187 seahub/views/repo.py:284
+#: seahub/views/__init__.py:545 seahub/views/ajax.py:164
+#: seahub/views/ajax.py:476 seahub/views/ajax.py:483 seahub/views/ajax.py:546
+#: seahub/views/ajax.py:553 seahub/views/ajax.py:683 seahub/views/ajax.py:1191
+#: seahub/views/ajax.py:1233 seahub/views/file.py:995
+#: seahub/views/file.py:1161 seahub/views/file.py:1321
+#: seahub/views/file.py:1846 seahub/views/repo.py:110 seahub/views/repo.py:193
+#: seahub/views/repo.py:290
 msgid "Permission denied"
 msgstr "İzin reddedildi"
 
@@ -2388,6 +2390,7 @@ msgstr ""
 #: seahub/templates/sysadmin/base.html:51
 #: seahub/templates/sysadmin/sys_statistic_file.html:15
 #: seahub/templates/sysadmin/sys_statistic_storage.html:15
+#: seahub/templates/sysadmin/sys_statistic_traffic.html:15
 #: seahub/templates/sysadmin/sys_statistic_user.html:15
 #: seahub/templates/sysadmin/sys_trafficadmin.html:12
 msgid "Users"
@@ -2420,18 +2423,15 @@ msgstr "Bilgi"
 #: seahub/organizations/templates/organizations/org_admin_sidebar.html:15
 #: seahub/organizations/templates/organizations/pubrepo.html:9
 #: seahub/templates/home_base.html:62
-#: seahub/templates/js/admin-common-templates.html:139
+#: seahub/templates/js/admin-common-templates.html:131
 #: seahub/templates/js/orgadmin-templates.html:11
 #: seahub/templates/js/sysadmin-templates.html:34
 #: seahub/templates/js/sysadmin-templates.html:167
 #: seahub/templates/js/sysadmin-templates.html:850
-#: seahub/templates/js/templates.html:1557
-#: seahub/templates/js/templates.html:2481 seahub/templates/libraries.html:5
+#: seahub/templates/js/templates.html:1556
+#: seahub/templates/js/templates.html:2480 seahub/templates/libraries.html:5
 #: seahub/templates/sysadmin/base.html:45
-#: seahub/templates/sysadmin/sys_org_info_group.html:10
-#: seahub/templates/sysadmin/sys_org_info_library.html:10
-#: seahub/templates/sysadmin/sys_org_info_setting.html:10
-#: seahub/templates/sysadmin/sys_org_info_user.html:9
+#: seahub/templates/sysadmin/snippets/sys_org_info_nav.html:5
 msgid "Libraries"
 msgstr "Kütüphaneler"
 
@@ -2458,14 +2458,11 @@ msgstr ""
 #: seahub/templates/js/sysadmin-templates.html:198
 #: seahub/templates/js/sysadmin-templates.html:609
 #: seahub/templates/js/sysadmin-templates.html:844
-#: seahub/templates/js/templates.html:512
-#: seahub/templates/js/templates.html:1611
+#: seahub/templates/js/templates.html:515
+#: seahub/templates/js/templates.html:1610
 #: seahub/templates/sysadmin/base.html:57
 #: seahub/templates/sysadmin/settings.html:97
-#: seahub/templates/sysadmin/sys_org_info_group.html:9
-#: seahub/templates/sysadmin/sys_org_info_library.html:9
-#: seahub/templates/sysadmin/sys_org_info_setting.html:9
-#: seahub/templates/sysadmin/sys_org_info_user.html:8
+#: seahub/templates/sysadmin/snippets/sys_org_info_nav.html:4
 #: seahub/templates/sysadmin/userinfo.html:26
 msgid "Groups"
 msgstr "Gruplar"
@@ -2521,7 +2518,7 @@ msgstr "Telefon"
 #: seahub/templates/sysadmin/sys_inst_info_user.html:33
 #: seahub/templates/sysadmin/sys_inst_search_user.html:19
 #: seahub/templates/sysadmin/sys_org_info_base.html:25
-#: seahub/templates/sysadmin/sys_org_info_user.html:21
+#: seahub/templates/sysadmin/sys_org_info_user.html:18
 msgid "Space Used"
 msgstr "Kullanılmış Alan"
 
@@ -2542,19 +2539,19 @@ msgstr ""
 #: seahub/organizations/templates/organizations/userinfo.html:70
 #: seahub/organizations/templates/organizations/userinfo.html:103
 #: seahub/templates/file_revisions.html:41
-#: seahub/templates/js/admin-common-templates.html:147
+#: seahub/templates/js/admin-common-templates.html:139
 #: seahub/templates/js/sysadmin-templates.html:540
 #: seahub/templates/js/sysadmin-templates.html:871
 #: seahub/templates/js/templates.html:199
-#: seahub/templates/js/templates.html:544
-#: seahub/templates/js/templates.html:1082
-#: seahub/templates/js/templates.html:1127
-#: seahub/templates/js/templates.html:1857
-#: seahub/templates/js/templates.html:1861
-#: seahub/templates/js/templates.html:1898
-#: seahub/templates/js/templates.html:2020
-#: seahub/templates/js/templates.html:2239
-#: seahub/templates/js/templates.html:2258
+#: seahub/templates/js/templates.html:547
+#: seahub/templates/js/templates.html:1085
+#: seahub/templates/js/templates.html:1130
+#: seahub/templates/js/templates.html:1856
+#: seahub/templates/js/templates.html:1860
+#: seahub/templates/js/templates.html:1897
+#: seahub/templates/js/templates.html:2019
+#: seahub/templates/js/templates.html:2238
+#: seahub/templates/js/templates.html:2257
 #: seahub/templates/repo_dir_recycle_view.html:46
 #: seahub/templates/repo_history_view.html:59
 #: seahub/templates/sysadmin/userinfo.html:178
@@ -2570,15 +2567,15 @@ msgstr "Boyut"
 #: seahub/organizations/templates/organizations/userinfo.html:104
 #: seahub/templates/js/sysadmin-templates.html:541
 #: seahub/templates/js/templates.html:203
-#: seahub/templates/js/templates.html:545
-#: seahub/templates/js/templates.html:1091
-#: seahub/templates/js/templates.html:1137
-#: seahub/templates/js/templates.html:1797
-#: seahub/templates/js/templates.html:1859
-#: seahub/templates/js/templates.html:1862
-#: seahub/templates/js/templates.html:1899
-#: seahub/templates/js/templates.html:1923
-#: seahub/templates/js/templates.html:2021
+#: seahub/templates/js/templates.html:548
+#: seahub/templates/js/templates.html:1094
+#: seahub/templates/js/templates.html:1140
+#: seahub/templates/js/templates.html:1796
+#: seahub/templates/js/templates.html:1858
+#: seahub/templates/js/templates.html:1861
+#: seahub/templates/js/templates.html:1898
+#: seahub/templates/js/templates.html:1922
+#: seahub/templates/js/templates.html:2020
 #: seahub/templates/sysadmin/userinfo.html:179
 #: seahub/templates/sysadmin/userinfo.html:229
 #: seahub/templates/view_shared_dir.html:52
@@ -2593,8 +2590,8 @@ msgstr "En son Güncelleme"
 #: seahub/organizations/templates/organizations/pubrepo.html:26
 #: seahub/organizations/templates/organizations/userinfo.html:78
 #: seahub/organizations/templates/organizations/userinfo.html:110
-#: seahub/templates/js/templates.html:1935
-#: seahub/templates/sysadmin/sys_org_info_library.html:27
+#: seahub/templates/js/templates.html:1934
+#: seahub/templates/sysadmin/sys_org_info_library.html:23
 #: seahub/templates/sysadmin/userinfo.html:186
 #: seahub/templates/sysadmin/userinfo.html:235
 msgid "Encrypted"
@@ -2615,8 +2612,8 @@ msgstr "Şifreli"
 #: seahub/organizations/templates/organizations/userinfo.html:110
 #: seahub/organizations/templates/organizations/userinfo.html:112
 #: seahub/organizations/templates/organizations/userinfo.html:114
-#: seahub/templates/sysadmin/sys_org_info_library.html:27
-#: seahub/templates/sysadmin/sys_org_info_library.html:29
+#: seahub/templates/sysadmin/sys_org_info_library.html:23
+#: seahub/templates/sysadmin/sys_org_info_library.html:25
 #: seahub/templates/sysadmin/userinfo.html:186
 #: seahub/templates/sysadmin/userinfo.html:188
 #: seahub/templates/sysadmin/userinfo.html:235
@@ -2646,7 +2643,7 @@ msgstr "Kota Alanı boş bırakılamaz"
 #: seahub/templates/sysadmin/sys_inst_info_admins.html:18
 #: seahub/templates/sysadmin/sys_inst_info_user.html:34
 #: seahub/templates/sysadmin/sys_inst_search_user.html:20
-#: seahub/templates/sysadmin/sys_org_info_user.html:22
+#: seahub/templates/sysadmin/sys_org_info_user.html:19
 #: seahub/templates/sysadmin/sys_useradmin_ldap.html:28
 #: seahub/templates/sysadmin/useradmin_table.html:16
 #: seahub/templates/sysadmin/useradmin_table.html:20
@@ -2672,7 +2669,7 @@ msgstr "Boş"
 #: seahub/organizations/templates/organizations/org_useradmin_admins.html:44
 #: seahub/organizations/templates/organizations/user_search.html:24
 #: seahub/templates/sysadmin/sys_inst_info_user.html:68
-#: seahub/templates/sysadmin/sys_org_info_user.html:60
+#: seahub/templates/sysadmin/sys_org_info_user.html:57
 #: seahub/templates/sysadmin/sys_user_admin_ldap_imported.html:48
 #: seahub/templates/sysadmin/sys_useradmin.html:87
 #: seahub/templates/sysadmin/sys_useradmin_admins.html:54
@@ -2685,7 +2682,7 @@ msgstr "Aktive ediyor...,lütfen bekleyin"
 #: seahub/institutions/templates/institutions/useradmin_search.html:71
 #: seahub/organizations/templates/organizations/org_useradmin_js.html:3
 #: seahub/organizations/templates/organizations/user_search.html:38
-#: seahub/templates/sysadmin/sys_org_info_user.html:175
+#: seahub/templates/sysadmin/sys_org_info_user.html:172
 #: seahub/templates/sysadmin/useradmin_js.html:3
 #: seahub/templates/sysadmin/useradmin_js.html:179
 msgid "Delete User"
@@ -2713,7 +2710,7 @@ msgstr "Düzenleme başarılı ama eposta gönderilemedi, lütfen eposta yapıla
 #: seahub/organizations/templates/organizations/org_useradmin_js.html:45
 #: seahub/organizations/templates/organizations/user_search.html:89
 #: seahub/templates/sysadmin/sys_inst_info_user.html:111
-#: seahub/templates/sysadmin/sys_org_info_user.html:231
+#: seahub/templates/sysadmin/sys_org_info_user.html:228
 #: seahub/templates/sysadmin/sys_useradmin_admins.html:114
 #: seahub/templates/sysadmin/useradmin_js.html:65
 msgid "Edit succeeded"
@@ -2723,7 +2720,7 @@ msgstr "Düzenleme başarılı"
 #: seahub/organizations/templates/organizations/org_useradmin_js.html:54
 #: seahub/organizations/templates/organizations/user_search.html:98
 #: seahub/templates/sysadmin/sys_inst_info_user.html:119
-#: seahub/templates/sysadmin/sys_org_info_user.html:238
+#: seahub/templates/sysadmin/sys_org_info_user.html:235
 #: seahub/templates/sysadmin/sys_useradmin_admins.html:121
 #: seahub/templates/sysadmin/useradmin_js.html:73
 msgid "Edit failed."
@@ -2752,7 +2749,7 @@ msgstr "Sonuç"
 #: seahub/organizations/templates/organizations/org_publink_admin.html:12
 #: seahub/organizations/templates/organizations/org_repo_search.html:13
 #: seahub/organizations/templates/organizations/org_repoadmin_table.html:8
-#: seahub/templates/js/admin-common-templates.html:33
+#: seahub/templates/js/admin-common-templates.html:26
 #: seahub/templates/js/sysadmin-templates.html:361
 #: seahub/templates/js/sysadmin-templates.html:382
 #: seahub/templates/js/sysadmin-templates.html:396
@@ -2761,35 +2758,35 @@ msgstr "Sonuç"
 #: seahub/templates/js/sysadmin-templates.html:620
 #: seahub/templates/js/sysadmin-templates.html:652
 #: seahub/templates/js/sysadmin-templates.html:670
-#: seahub/templates/js/templates.html:1900
+#: seahub/templates/js/templates.html:1899
 #: seahub/templates/sysadmin/sys_link_search.html:23
 #: seahub/templates/sysadmin/sys_org_admin.html:26
-#: seahub/templates/sysadmin/sys_org_info_library.html:21
+#: seahub/templates/sysadmin/sys_org_info_library.html:17
 #: seahub/templates/sysadmin/sys_publink_admin.html:29
 #: seahub/templates/sysadmin/sys_upload_link_admin.html:23
 #: seahub/templates/sysadmin/sys_virus_scan_records.html:12
-#: seahub/templates/wiki/wiki_list.html:20 seahub/views/sysadmin.py:726
+#: seahub/templates/wiki/wiki_list.html:20 seahub/views/sysadmin.py:734
 msgid "Owner"
 msgstr "Sahip"
 
 #: seahub/institutions/views.py:166
+#: seahub/templates/js/admin-common-templates.html:31
+#: seahub/templates/js/admin-common-templates.html:35
 #: seahub/templates/js/admin-common-templates.html:38
-#: seahub/templates/js/admin-common-templates.html:42
-#: seahub/templates/js/admin-common-templates.html:45
-#: seahub/templates/js/templates.html:2188
-#: seahub/templates/js/templates.html:2192
-#: seahub/templates/js/templates.html:2195 seahub/views/sysadmin.py:730
+#: seahub/templates/js/templates.html:2187
+#: seahub/templates/js/templates.html:2191
+#: seahub/templates/js/templates.html:2194 seahub/views/sysadmin.py:738
 msgid "Member"
 msgstr ""
 
 #: seahub/institutions/views.py:195 seahub/organizations/views.py:481
-#: seahub/views/sysadmin.py:835
+#: seahub/views/sysadmin.py:843
 #, python-format
 msgid "Successfully deleted %s"
 msgstr "%s silindi"
 
 #: seahub/institutions/views.py:197 seahub/organizations/views.py:462
-#: seahub/views/sysadmin.py:845
+#: seahub/views/sysadmin.py:853
 msgid "Failed to delete: the user does not exist"
 msgstr "Silinemedi: kullanıcı yok"
 
@@ -2830,7 +2827,7 @@ msgstr ""
 
 #: seahub/invitations/templates/invitations/token_view.html:26
 #: seahub/notifications/templates/notifications/notification_list.html:59
-#: seahub/templates/sysadmin/settings.html:263
+#: seahub/templates/sysadmin/settings.html:268
 #: seahub/templates/sysadmin/sys_inst_info_user.html:157
 #: seahub/templates/sysadmin/useradmin_js.html:248
 #: seahub/templates/sysadmin/userinfo.html:542
@@ -2854,8 +2851,8 @@ msgstr "%s -'de yeni bildirim"
 #: seahub/notifications/models.py:552 seahub/notifications/models.py:609
 #: seahub/notifications/models.py:641 seahub/notifications/models.py:659
 #: seahub/notifications/models.py:689 seahub/notifications/models.py:711
-#: seahub/notifications/models.py:737 seahub/utils/__init__.py:142
-#: seahub/utils/__init__.py:1146
+#: seahub/notifications/models.py:737 seahub/utils/__init__.py:143
+#: seahub/utils/__init__.py:1165
 msgid "Internal error"
 msgstr "İç hata"
 
@@ -2940,8 +2937,8 @@ msgstr "Mesaj"
 #: seahub/organizations/templates/organizations/pubgrp.html:17
 #: seahub/templates/file_revisions.html:39
 #: seahub/templates/js/sysadmin-templates.html:290
-#: seahub/templates/js/sysadmin-templates.html:940
-#: seahub/templates/js/sysadmin-templates.html:980
+#: seahub/templates/js/sysadmin-templates.html:939
+#: seahub/templates/js/sysadmin-templates.html:979
 #: seahub/templates/repo_history.html:33 seahub/templates/repo_history.html:40
 msgid "Time"
 msgstr "Zaman"
@@ -3161,23 +3158,20 @@ msgstr "Grup Bilgisi"
 #: seahub/organizations/templates/organizations/org_group_admin.html:12
 #: seahub/organizations/templates/organizations/pubgrp.html:16
 #: seahub/templates/sysadmin/org_admin_table.html:5
-#: seahub/templates/sysadmin/sys_org_info_group.html:19
+#: seahub/templates/sysadmin/sys_org_info_group.html:16
 #: seahub/templates/sysadmin/sys_org_search.html:11
-#: seahub/views/sysadmin.py:1184
+#: seahub/views/sysadmin.py:1192
 msgid "Creator"
 msgstr "Oluşturan"
 
 #: seahub/organizations/templates/organizations/org_admin_group_info.html:30
-#: seahub/templates/js/admin-common-templates.html:119
+#: seahub/templates/js/admin-common-templates.html:112
 #: seahub/templates/js/sysadmin-templates.html:853
-#: seahub/templates/js/templates.html:1620
-#: seahub/templates/js/templates.html:1661
+#: seahub/templates/js/templates.html:1619
+#: seahub/templates/js/templates.html:1660
+#: seahub/templates/sysadmin/snippets/sys_org_info_nav.html:3
 #: seahub/templates/sysadmin/sys_inst_info_admins.html:7
 #: seahub/templates/sysadmin/sys_inst_info_user.html:13
-#: seahub/templates/sysadmin/sys_org_info_group.html:8
-#: seahub/templates/sysadmin/sys_org_info_library.html:8
-#: seahub/templates/sysadmin/sys_org_info_setting.html:8
-#: seahub/templates/sysadmin/sys_org_info_user.html:7
 msgid "Members"
 msgstr "Üyeler"
 
@@ -3192,7 +3186,7 @@ msgid "No library is shared to this group"
 msgstr "Bu grupla paylaşılan bir kütüphane yok"
 
 #: seahub/organizations/templates/organizations/org_admin_group_info.html:76
-#: seahub/templates/js/templates.html:2056
+#: seahub/templates/js/templates.html:2055
 msgid "admin"
 msgstr "yönetici"
 
@@ -3204,14 +3198,14 @@ msgstr "%(lib_name)s dosyalarının silinmesini gerçekten istiyor musunuz?"
 #: seahub/organizations/templates/organizations/org_admin_group_info.html:138
 #: seahub/templates/sysadmin/repoadmin_js.html:81
 #: seahub/templates/sysadmin/sys_link_search.html:66
-#: seahub/templates/sysadmin/sys_org_info_user.html:187
+#: seahub/templates/sysadmin/sys_org_info_user.html:184
 #: seahub/templates/wiki/wiki_list.html:194
 msgid "Successfully deleted 1 item."
 msgstr ""
 
 #: seahub/organizations/templates/organizations/org_admin_sidebar.html:24
-#: seahub/templates/js/admin-common-templates.html:70
-#: seahub/templates/js/admin-common-templates.html:159
+#: seahub/templates/js/admin-common-templates.html:63
+#: seahub/templates/js/admin-common-templates.html:151
 #: seahub/templates/js/orgadmin-templates.html:21
 #: seahub/templates/js/sysadmin-templates.html:52
 #: seahub/templates/sysadmin/base.html:63
@@ -3223,8 +3217,8 @@ msgstr ""
 #: seahub/templates/home_base.html:70 seahub/templates/home_base.html:74
 #: seahub/templates/js/orgadmin-templates.html:24
 #: seahub/templates/js/sysadmin-templates.html:76
-#: seahub/templates/js/templates.html:1565
-#: seahub/templates/js/templates.html:1569
+#: seahub/templates/js/templates.html:1564
+#: seahub/templates/js/templates.html:1568
 #: seahub/templates/sysadmin/base.html:87
 msgid "Links"
 msgstr "Bağlantılar"
@@ -3254,18 +3248,18 @@ msgstr ""
 #: seahub/organizations/templates/organizations/org_perm_audit.html:22
 #: seahub/templates/js/sysadmin-templates.html:784
 #: seahub/templates/js/sysadmin-templates.html:814
-#: seahub/templates/js/templates.html:604
-#: seahub/templates/js/templates.html:680
-#: seahub/templates/js/templates.html:1039
-#: seahub/templates/js/templates.html:1354
-#: seahub/templates/js/templates.html:1390
-#: seahub/templates/js/templates.html:1741
-#: seahub/templates/js/templates.html:1767
-#: seahub/templates/js/templates.html:1924
-#: seahub/templates/js/templates.html:2313
-#: seahub/templates/js/templates.html:2357
-#: seahub/templates/js/templates.html:2491
-#: seahub/templates/js/templates.html:2612
+#: seahub/templates/js/templates.html:607
+#: seahub/templates/js/templates.html:683
+#: seahub/templates/js/templates.html:1042
+#: seahub/templates/js/templates.html:1353
+#: seahub/templates/js/templates.html:1389
+#: seahub/templates/js/templates.html:1740
+#: seahub/templates/js/templates.html:1766
+#: seahub/templates/js/templates.html:1923
+#: seahub/templates/js/templates.html:2312
+#: seahub/templates/js/templates.html:2356
+#: seahub/templates/js/templates.html:2490
+#: seahub/templates/js/templates.html:2611
 msgid "Permission"
 msgstr "İzin"
 
@@ -3275,11 +3269,11 @@ msgstr "İzin"
 #: seahub/templates/js/sysadmin-templates.html:230
 #: seahub/templates/js/sysadmin-templates.html:285
 #: seahub/templates/js/sysadmin-templates.html:783
-#: seahub/templates/js/templates.html:1353
-#: seahub/templates/js/templates.html:1740
-#: seahub/templates/js/templates.html:2311
+#: seahub/templates/js/templates.html:1352
+#: seahub/templates/js/templates.html:1739
+#: seahub/templates/js/templates.html:2310
 #: seahub/templates/sysadmin/settings.html:60
-#: seahub/templates/sysadmin/sys_trafficadmin.html:26
+#: seahub/templates/sysadmin/sys_trafficadmin.html:37
 msgid "User"
 msgstr "Kullanıcı"
 
@@ -3294,7 +3288,7 @@ msgstr "Tip"
 #: seahub/templates/file_access.html:26
 #: seahub/templates/js/sysadmin-templates.html:233
 #: seahub/templates/js/sysadmin-templates.html:287
-#: seahub/templates/js/sysadmin-templates.html:978
+#: seahub/templates/js/sysadmin-templates.html:977
 #: seahub/templates/libraries.html:186
 msgid "IP"
 msgstr "IP"
@@ -3311,20 +3305,21 @@ msgstr ""
 #: seahub/organizations/templates/organizations/org_perm_audit.html:19
 #: seahub/templates/file_edit.html:128
 #: seahub/templates/js/sysadmin-templates.html:288
-#: seahub/templates/js/templates.html:1796
-#: seahub/templates/js/templates.html:2647
-#: seahub/templates/js/templates.html:2684
+#: seahub/templates/js/templates.html:1795
+#: seahub/templates/js/templates.html:2646
+#: seahub/templates/js/templates.html:2683
 #: seahub/templates/sysadmin/settings.html:137
 #: seahub/templates/sysadmin/sys_virus_scan_records.html:11
 msgid "Library"
 msgstr "Kütüphane"
 
 #: seahub/organizations/templates/organizations/org_file_audit.html:22
-#: seahub/templates/file_edit.html:407 seahub/templates/js/templates.html:2277
+#: seahub/templates/file_edit.html:407 seahub/templates/js/templates.html:2276
 #: seahub/templates/repo_history_view.html:74
 #: seahub/templates/snippets/repo_dir_trash_tr.html:21
 #: seahub/templates/sysadmin/sys_statistic_file.html:13
 #: seahub/templates/sysadmin/sys_statistic_storage.html:13
+#: seahub/templates/sysadmin/sys_statistic_traffic.html:13
 #: seahub/templates/sysadmin/sys_statistic_user.html:13
 #: seahub/templates/sysadmin/sys_trafficadmin.html:10
 #: seahub/templates/sysadmin/userinfo.html:274
@@ -3360,25 +3355,25 @@ msgstr ""
 #: seahub/templates/js/templates.html:163
 #: seahub/templates/js/templates.html:280
 #: seahub/templates/js/templates.html:345
-#: seahub/templates/js/templates.html:606
-#: seahub/templates/js/templates.html:621
-#: seahub/templates/js/templates.html:682
-#: seahub/templates/js/templates.html:684
-#: seahub/templates/js/templates.html:777
-#: seahub/templates/js/templates.html:796
-#: seahub/templates/js/templates.html:911
-#: seahub/templates/js/templates.html:917
-#: seahub/templates/js/templates.html:994
-#: seahub/templates/js/templates.html:1001
-#: seahub/templates/js/templates.html:1041
-#: seahub/templates/js/templates.html:1043
-#: seahub/templates/js/templates.html:1965
+#: seahub/templates/js/templates.html:609
+#: seahub/templates/js/templates.html:624
+#: seahub/templates/js/templates.html:685
+#: seahub/templates/js/templates.html:687
+#: seahub/templates/js/templates.html:780
+#: seahub/templates/js/templates.html:799
+#: seahub/templates/js/templates.html:914
+#: seahub/templates/js/templates.html:920
+#: seahub/templates/js/templates.html:997
+#: seahub/templates/js/templates.html:1004
+#: seahub/templates/js/templates.html:1044
+#: seahub/templates/js/templates.html:1046
+#: seahub/templates/js/templates.html:1964
 #: seahub/templates/repo_history.html:53
 msgid "Details"
 msgstr "Ayrıntılar"
 
 #: seahub/organizations/templates/organizations/org_file_update.html:97
-#: seahub/templates/js/templates.html:1991
+#: seahub/templates/js/templates.html:1990
 #: seahub/templates/snippets/list_commit_detail.html:10
 msgid "Modification Details"
 msgstr "Değiştirme Ayrıntıları"
@@ -3419,21 +3414,21 @@ msgid "Unknown error."
 msgstr "Bilinmeyen hata."
 
 #: seahub/organizations/templates/organizations/org_group_admin.html:6
-#: seahub/templates/home_base.html:26 seahub/templates/js/templates.html:1478
-#: seahub/templates/js/templates.html:1500
+#: seahub/templates/home_base.html:26 seahub/templates/js/templates.html:1477
+#: seahub/templates/js/templates.html:1499
 msgid "All Groups"
 msgstr "Tüm Gruplar"
 
 #: seahub/organizations/templates/organizations/org_group_admin.html:44
-#: seahub/templates/sysadmin/sys_org_info_group.html:43
+#: seahub/templates/sysadmin/sys_org_info_group.html:40
 #: seahub/templates/sysadmin/userinfo.html:586
 msgid "Delete Group"
 msgstr "Grubu Sil"
 
 #: seahub/organizations/templates/organizations/org_manage.html:13
 #: seahub/organizations/templates/organizations/org_manage.html:22
-#: seahub/templates/sysadmin/sys_statistic_user.html:174
-#: seahub/templates/sysadmin/sys_statistic_user.html:186
+#: seahub/templates/sysadmin/sys_statistic_user.html:172
+#: seahub/templates/sysadmin/sys_statistic_user.html:184
 msgid "Active Users"
 msgstr ""
 
@@ -3455,26 +3450,26 @@ msgid "Share From"
 msgstr "Buradan Paylaş"
 
 #: seahub/organizations/templates/organizations/org_perm_audit.html:18
-#: seahub/templates/js/templates.html:2490
-#: seahub/templates/js/templates.html:2611
+#: seahub/templates/js/templates.html:2489
+#: seahub/templates/js/templates.html:2610
 msgid "Share To"
 msgstr "Şununla paylaş"
 
 #: seahub/organizations/templates/organizations/org_perm_audit.html:20
-#: seahub/templates/js/templates.html:2312
-#: seahub/templates/js/templates.html:2356
+#: seahub/templates/js/templates.html:2311
+#: seahub/templates/js/templates.html:2355
 msgid "Folder"
 msgstr "Klasör"
 
 #: seahub/organizations/templates/organizations/org_perm_audit.html:21
-#: seahub/templates/js/templates.html:543
-#: seahub/templates/js/templates.html:560
-#: seahub/templates/js/templates.html:1855
-#: seahub/templates/js/templates.html:1873
-#: seahub/templates/js/templates.html:1882
-#: seahub/templates/js/templates.html:1889
-#: seahub/templates/js/templates.html:1897
-#: seahub/templates/js/templates.html:1911
+#: seahub/templates/js/templates.html:546
+#: seahub/templates/js/templates.html:563
+#: seahub/templates/js/templates.html:1854
+#: seahub/templates/js/templates.html:1872
+#: seahub/templates/js/templates.html:1881
+#: seahub/templates/js/templates.html:1888
+#: seahub/templates/js/templates.html:1896
+#: seahub/templates/js/templates.html:1910
 msgid "Actions"
 msgstr ""
 
@@ -3489,10 +3484,10 @@ msgid "Count"
 msgstr "Say"
 
 #: seahub/organizations/templates/organizations/org_publink_admin.html:23
-#: seahub/templates/js/templates.html:2284
-#: seahub/templates/js/templates.html:2716
-#: seahub/templates/js/templates.html:2727
-#: seahub/templates/js/templates.html:2777
+#: seahub/templates/js/templates.html:2283
+#: seahub/templates/js/templates.html:2715
+#: seahub/templates/js/templates.html:2726
+#: seahub/templates/js/templates.html:2776
 #: seahub/templates/sysadmin/sys_inst_admin.html:36
 #: seahub/templates/sysadmin/sys_link_search.html:36
 #: seahub/templates/sysadmin/sys_publink_admin.html:42
@@ -3536,7 +3531,7 @@ msgstr ""
 #: seahub/templates/sysadmin/sudo_mode.html:4
 #: seahub/templates/sysadmin/sudo_mode.html:18
 #: seahub/templates/sysadmin/sys_org_admin.html:30
-#: seahub/templates/sysadmin/sys_org_info_user.html:77
+#: seahub/templates/sysadmin/sys_org_info_user.html:74
 #: seahub/templates/sysadmin/sys_useradmin.html:65
 msgid "Confirm Password"
 msgstr "Şifreyi Onayla"
@@ -3597,7 +3592,7 @@ msgstr "Sonuç yok"
 #: seahub/organizations/templates/organizations/org_repoadmin_js.html:21
 #: seahub/organizations/templates/organizations/org_user_admin.html:91
 #: seahub/templates/registration/registration_form.html:87
-#: seahub/templates/sysadmin/sys_org_info_user.html:129
+#: seahub/templates/sysadmin/sys_org_info_user.html:126
 #: seahub/templates/sysadmin/sys_useradmin.html:146
 msgid "Email cannot be blank"
 msgstr "Eposta boş bırakılamaz"
@@ -3605,7 +3600,7 @@ msgstr "Eposta boş bırakılamaz"
 #: seahub/organizations/templates/organizations/org_repoadmin_js.html:29
 #: seahub/organizations/templates/organizations/userinfo.html:178
 #: seahub/templates/sysadmin/repoadmin_js.html:70
-#: seahub/templates/sysadmin/sys_org_info_library.html:60
+#: seahub/templates/sysadmin/sys_org_info_library.html:56
 msgid "Delete Library"
 msgstr "Kütüphaneyi Sil"
 
@@ -3614,49 +3609,49 @@ msgstr "Kütüphaneyi Sil"
 #: seahub/templates/js/sysadmin-templates.html:697
 #: seahub/templates/js/templates.html:101
 #: seahub/templates/js/templates.html:152
-#: seahub/templates/js/templates.html:2083
+#: seahub/templates/js/templates.html:2082
 #: seahub/templates/sysadmin/userinfo.html:208
 msgid "Transfer"
 msgstr "Transfer"
 
 #: seahub/organizations/templates/organizations/org_user_admin.html:18
 #: seahub/organizations/templates/organizations/org_user_admin.html:23
-#: seahub/templates/sysadmin/sys_org_info_user.html:13
-#: seahub/templates/sysadmin/sys_org_info_user.html:64
+#: seahub/templates/sysadmin/sys_org_info_user.html:10
+#: seahub/templates/sysadmin/sys_org_info_user.html:61
 #: seahub/templates/sysadmin/sys_useradmin.html:29
 #: seahub/templates/sysadmin/sys_useradmin.html:42
 msgid "Add user"
 msgstr "Kullanıcı ekle"
 
 #: seahub/organizations/templates/organizations/org_user_admin.html:26
-#: seahub/templates/sysadmin/sys_org_info_user.html:68
+#: seahub/templates/sysadmin/sys_org_info_user.html:65
 #: seahub/templates/sysadmin/sys_useradmin.html:46
 msgid "Name(optional)"
 msgstr "İsim (isteğe bağlı)"
 
 #: seahub/organizations/templates/organizations/org_user_admin.html:32
 #: seahub/organizations/templates/organizations/org_user_admin.html:62
-#: seahub/templates/js/templates.html:1193
-#: seahub/templates/js/templates.html:1307
-#: seahub/templates/sysadmin/sys_org_info_user.html:74
-#: seahub/templates/sysadmin/sys_org_info_user.html:98
+#: seahub/templates/js/templates.html:1196
+#: seahub/templates/js/templates.html:1306
+#: seahub/templates/sysadmin/sys_org_info_user.html:71
+#: seahub/templates/sysadmin/sys_org_info_user.html:95
 #: seahub/templates/sysadmin/sys_useradmin.html:62
 #: seahub/templates/sysadmin/sys_useradmin.html:115
 msgid "Show"
 msgstr "Göster"
 
 #: seahub/organizations/templates/organizations/org_user_admin.html:33
-#: seahub/templates/js/templates.html:1194
-#: seahub/templates/js/templates.html:1308
-#: seahub/templates/sysadmin/sys_org_info_user.html:75
+#: seahub/templates/js/templates.html:1197
+#: seahub/templates/js/templates.html:1307
+#: seahub/templates/sysadmin/sys_org_info_user.html:72
 #: seahub/templates/sysadmin/sys_useradmin.html:63
 msgid "Generate a random password"
 msgstr "Rastgele bir şifre oluştur"
 
 #: seahub/organizations/templates/organizations/org_user_admin.html:65
 #: seahub/organizations/templates/organizations/org_user_admin.html:78
-#: seahub/templates/sysadmin/sys_org_info_user.html:101
-#: seahub/templates/sysadmin/sys_org_info_user.html:115
+#: seahub/templates/sysadmin/sys_org_info_user.html:98
+#: seahub/templates/sysadmin/sys_org_info_user.html:112
 #: seahub/templates/sysadmin/sys_useradmin.html:118
 #: seahub/templates/sysadmin/sys_useradmin.html:131
 msgid "Hide"
@@ -3667,7 +3662,7 @@ msgstr ""
 #: seahub/templates/registration/password_change_form.html:66
 #: seahub/templates/registration/registration_form.html:91
 #: seahub/templates/sysadmin/sudo_mode.html:35
-#: seahub/templates/sysadmin/sys_org_info_user.html:133
+#: seahub/templates/sysadmin/sys_org_info_user.html:130
 #: seahub/templates/sysadmin/sys_useradmin.html:150
 msgid "Password cannot be blank"
 msgstr "Şifre boş bırakılamaz"
@@ -3678,14 +3673,14 @@ msgstr "Şifre boş bırakılamaz"
 #: seahub/templates/snippets/repo_create_js.html:54
 #: seahub/templates/snippets/shared_link_js.html:144
 #: seahub/templates/sysadmin/sys_org_admin.html:85
-#: seahub/templates/sysadmin/sys_org_info_user.html:137
+#: seahub/templates/sysadmin/sys_org_info_user.html:134
 #: seahub/templates/sysadmin/sys_useradmin.html:154
 msgid "Please enter the password again"
 msgstr "Lütfen şifreyi tekrar giriniz."
 
 #: seahub/organizations/templates/organizations/org_user_admin.html:103
 #: seahub/templates/sysadmin/sys_org_admin.html:89
-#: seahub/templates/sysadmin/sys_org_info_user.html:141
+#: seahub/templates/sysadmin/sys_org_info_user.html:138
 #: seahub/templates/sysadmin/sys_useradmin.html:158
 msgid "Passwords do not match"
 msgstr "Şifreler eşleşmiyor"
@@ -3706,9 +3701,9 @@ msgid "Enter"
 msgstr "Giriş"
 
 #: seahub/organizations/templates/organizations/org_useradmin_admins.html:29
-#: seahub/templates/js/templates.html:1281
-#: seahub/templates/js/templates.html:1331
-#: seahub/templates/js/templates.html:2785
+#: seahub/templates/js/templates.html:1280
+#: seahub/templates/js/templates.html:1330
+#: seahub/templates/js/templates.html:2784
 #: seahub/templates/snippets/file_share_popup.html:50
 #: seahub/templates/sysadmin/sys_useradmin_admins.html:39
 msgid "Emails, separated by ','"
@@ -3743,21 +3738,21 @@ msgstr "%s'in yönetici iznini iptal etmek istediğinize emin misiniz?"
 #: seahub/templates/registration/password_reset_done.html:4
 #: seahub/templates/registration/password_reset_form.html:4
 #: seahub/templates/registration/password_reset_form.html:7
-#: seahub/templates/sysadmin/sys_org_info_user.html:200
+#: seahub/templates/sysadmin/sys_org_info_user.html:197
 #: seahub/templates/sysadmin/useradmin_js.html:8
 msgid "Password Reset"
 msgstr "Şifre Sıfırla"
 
 #: seahub/organizations/templates/organizations/org_useradmin_js.html:10
 #: seahub/organizations/templates/organizations/user_search.html:43
-#: seahub/templates/sysadmin/sys_org_info_user.html:201
+#: seahub/templates/sysadmin/sys_org_info_user.html:198
 #: seahub/templates/sysadmin/useradmin_js.html:9
 #, python-format
 msgid "Are you sure you want to reset the password of %s ?"
 msgstr "%s'nın şifresini sıfırlamak istediğinize emin misiniz?"
 
 #: seahub/organizations/templates/organizations/org_users_table.html:41
-#: seahub/templates/sysadmin/sys_org_info_user.html:52
+#: seahub/templates/sysadmin/sys_org_info_user.html:49
 #: seahub/templates/sysadmin/useradmin_table.html:145
 msgid "ResetPwd"
 msgstr "Şifreyi Sıfırla"
@@ -3775,14 +3770,14 @@ msgid ""
 msgstr ""
 
 #: seahub/organizations/templates/organizations/pubrepo.html:10
-#: seahub/templates/js/admin-common-templates.html:140
-#: seahub/templates/js/admin-common-templates.html:217
+#: seahub/templates/js/admin-common-templates.html:132
+#: seahub/templates/js/admin-common-templates.html:209
 #: seahub/templates/js/sysadmin-templates.html:347
 #: seahub/templates/js/sysadmin-templates.html:379
 #: seahub/templates/js/templates.html:4 seahub/templates/js/templates.html:5
 #: seahub/templates/js/templates.html:16
+#: seahub/templates/js/templates.html:1605
 #: seahub/templates/js/templates.html:1606
-#: seahub/templates/js/templates.html:1607
 msgid "New Library"
 msgstr "Yeni Kütüphane"
 
@@ -3793,12 +3788,12 @@ msgstr "Yeni Kütüphane"
 #: seahub/templates/js/templates.html:430
 #: seahub/templates/js/templates.html:437
 #: seahub/templates/js/templates.html:438
-#: seahub/templates/js/templates.html:583
-#: seahub/templates/js/templates.html:661
-#: seahub/templates/js/templates.html:738
-#: seahub/templates/js/templates.html:871
-#: seahub/templates/js/templates.html:957
-#: seahub/templates/js/templates.html:1017
+#: seahub/templates/js/templates.html:586
+#: seahub/templates/js/templates.html:664
+#: seahub/templates/js/templates.html:741
+#: seahub/templates/js/templates.html:874
+#: seahub/templates/js/templates.html:960
+#: seahub/templates/js/templates.html:1020
 #: seahub/templates/repo_history_view.html:79
 #: seahub/templates/shared_file_view.html:54
 #: seahub/templates/shared_file_view.html:86
@@ -3828,8 +3823,8 @@ msgstr "İndir"
 #: seahub/templates/js/templates.html:367
 #: seahub/templates/js/templates.html:396
 #: seahub/templates/js/templates.html:415
-#: seahub/templates/js/templates.html:2564
-#: seahub/templates/js/templates.html:2596
+#: seahub/templates/js/templates.html:2563
+#: seahub/templates/js/templates.html:2595
 msgid "Unshare"
 msgstr "Paylaşma"
 
@@ -3851,12 +3846,12 @@ msgstr ""
 #: seahub/templates/js/sysadmin-templates.html:369
 #: seahub/templates/js/sysadmin-templates.html:501
 #: seahub/templates/js/sysadmin-templates.html:629
-#: seahub/templates/js/sysadmin-templates.html:947
-#: seahub/templates/js/sysadmin-templates.html:987
+#: seahub/templates/js/sysadmin-templates.html:946
+#: seahub/templates/js/sysadmin-templates.html:986
 #: seahub/templates/repo_history.html:100
 #: seahub/templates/snippets/admin_paginator.html:4
 #: seahub/templates/sysadmin/sys_publink_admin.html:50
-#: seahub/templates/sysadmin/sys_trafficadmin.html:39
+#: seahub/templates/sysadmin/sys_trafficadmin.html:50
 #: seahub/templates/sysadmin/sys_upload_link_admin.html:44
 #: seahub/templates/sysadmin/useradmin_paginator.html:4
 msgid "Previous"
@@ -3868,12 +3863,12 @@ msgstr "Önceki"
 #: seahub/templates/js/sysadmin-templates.html:370
 #: seahub/templates/js/sysadmin-templates.html:502
 #: seahub/templates/js/sysadmin-templates.html:630
-#: seahub/templates/js/sysadmin-templates.html:948
-#: seahub/templates/js/sysadmin-templates.html:988
+#: seahub/templates/js/sysadmin-templates.html:947
+#: seahub/templates/js/sysadmin-templates.html:987
 #: seahub/templates/repo_history.html:103
 #: seahub/templates/snippets/admin_paginator.html:7
 #: seahub/templates/sysadmin/sys_publink_admin.html:53
-#: seahub/templates/sysadmin/sys_trafficadmin.html:42
+#: seahub/templates/sysadmin/sys_trafficadmin.html:53
 #: seahub/templates/sysadmin/sys_upload_link_admin.html:47
 #: seahub/templates/sysadmin/useradmin_paginator.html:7
 msgid "Next"
@@ -3883,7 +3878,7 @@ msgstr "Sonraki"
 #: seahub/templates/file_access.html:63
 #: seahub/templates/snippets/admin_paginator.html:12
 #: seahub/templates/sysadmin/sys_publink_admin.html:58
-#: seahub/templates/sysadmin/sys_trafficadmin.html:47
+#: seahub/templates/sysadmin/sys_trafficadmin.html:58
 #: seahub/templates/sysadmin/sys_upload_link_admin.html:52
 #: seahub/templates/sysadmin/useradmin_paginator.html:12
 msgid "Per page: "
@@ -3918,7 +3913,7 @@ msgid "Space Used / Quota"
 msgstr ""
 
 #: seahub/organizations/templates/organizations/userinfo.html:46
-#: seahub/templates/js/admin-common-templates.html:189
+#: seahub/templates/js/admin-common-templates.html:181
 #: seahub/templates/sysadmin/sys_user_admin_ldap_imported.html:28
 #: seahub/templates/sysadmin/sys_useradmin.html:33
 #: seahub/templates/sysadmin/sys_useradmin_admins.html:27
@@ -3946,37 +3941,37 @@ msgstr "Paylaşılan Kütüphaneler"
 msgid "Quota can not be empty"
 msgstr "Kota boş olamaz."
 
-#: seahub/organizations/views.py:394 seahub/views/sysadmin.py:1116
+#: seahub/organizations/views.py:394 seahub/views/sysadmin.py:1124
 #, python-format
 msgid "Fail to add user %s."
 msgstr "Kullanıcı %s eklenemedi."
 
-#: seahub/organizations/views.py:404 seahub/views/sysadmin.py:1146
-#: seahub/views/sysadmin.py:1159
+#: seahub/organizations/views.py:404 seahub/views/sysadmin.py:1154
+#: seahub/views/sysadmin.py:1167
 #, python-format
 msgid "Successfully added user %s."
 msgstr "Kullanıcı %s eklendi."
 
-#: seahub/organizations/views.py:516 seahub/views/sysadmin.py:1052
+#: seahub/organizations/views.py:516 seahub/views/sysadmin.py:1060
 #, python-format
 msgid ""
 "Successfully reset password to %(passwd)s, an email has been sent to "
 "%(user)s."
 msgstr "%(passwd)s sıfırlandı, %(user)s kullanıcılarına eposta gönderildi."
 
-#: seahub/organizations/views.py:521 seahub/views/sysadmin.py:1057
+#: seahub/organizations/views.py:521 seahub/views/sysadmin.py:1065
 #, python-format
 msgid ""
 "Successfully reset password to %(passwd)s, but failed to send email to "
 "%(user)s, please check your email configuration."
 msgstr "%(passwd)s sıfırlandı,  ancak %(user)s kullanıcılarına eposta gönderilemedi, lütfen eposta yapılandırmanızı kontrol edin."
 
-#: seahub/organizations/views.py:525 seahub/views/sysadmin.py:1061
+#: seahub/organizations/views.py:525 seahub/views/sysadmin.py:1069
 #, python-format
 msgid "Successfully reset password to %(passwd)s for user %(user)s."
 msgstr "Kullanıcı %(user)s için şifre %(passwd)s'e sıfırlandı."
 
-#: seahub/organizations/views.py:528 seahub/views/sysadmin.py:1064
+#: seahub/organizations/views.py:528 seahub/views/sysadmin.py:1072
 #, python-format
 msgid ""
 "Successfully reset password to %(passwd)s for user %(user)s. But email "
@@ -3985,16 +3980,16 @@ msgid ""
 msgstr "Kullanıcı %(user)s için parola %(passwd)s'ya sıfırlandı. Ama eposta bildirimi gönderilemedi, çünkü eposta servis yapılandırılması doğru değil."
 
 #: seahub/organizations/views.py:552 seahub/organizations/views.py:1032
-#: seahub/views/sysadmin.py:1894
+#: seahub/views/sysadmin.py:1917
 #, python-format
 msgid "Successfully set %s as admin."
 msgstr "%s yönetici olarak oluşturuldu."
 
-#: seahub/organizations/views.py:566 seahub/views/sysadmin.py:897
+#: seahub/organizations/views.py:566 seahub/views/sysadmin.py:905
 msgid "Failed to revoke admin: the user does not exist"
 msgstr "Yönetici iptal edilemedi: kullanıcı yok"
 
-#: seahub/organizations/views.py:575 seahub/views/sysadmin.py:895
+#: seahub/organizations/views.py:575 seahub/views/sysadmin.py:903
 #, python-format
 msgid "Successfully revoke the admin permission of %s"
 msgstr "%s için yönetici izni iptal edildi."
@@ -4005,12 +4000,12 @@ msgid "Successfully transfered 1 item."
 msgstr ""
 
 #: seahub/organizations/views.py:722 seahub/organizations/views.py:999
-#: seahub/views/sysadmin.py:1365 seahub/views/sysadmin.py:1765
-#: seahub/views/sysadmin.py:1860
+#: seahub/views/sysadmin.py:1373 seahub/views/sysadmin.py:1788
+#: seahub/views/sysadmin.py:1883
 msgid "Successfully deleted."
 msgstr ""
 
-#: seahub/organizations/views.py:1034 seahub/views/sysadmin.py:1896
+#: seahub/organizations/views.py:1034 seahub/views/sysadmin.py:1919
 #, python-format
 msgid "Failed to set %s as admin: user does not exist."
 msgstr "%s yönetici olarak oluşturulamadı: kullanıcı yok"
@@ -4020,15 +4015,12 @@ msgstr "%s yönetici olarak oluşturulamadı: kullanıcı yok"
 #: seahub/templates/base.html:69
 #: seahub/templates/js/admin-common-templates.html:15
 #: seahub/templates/js/sysadmin-templates.html:28
-#: seahub/templates/js/templates.html:1619
-#: seahub/templates/js/templates.html:1652
-#: seahub/templates/js/templates.html:2452
+#: seahub/templates/js/templates.html:1618
+#: seahub/templates/js/templates.html:1651
+#: seahub/templates/js/templates.html:2451
 #: seahub/templates/sysadmin/base.html:39
 #: seahub/templates/sysadmin/settings.html:6
-#: seahub/templates/sysadmin/sys_org_info_group.html:11
-#: seahub/templates/sysadmin/sys_org_info_library.html:11
-#: seahub/templates/sysadmin/sys_org_info_setting.html:11
-#: seahub/templates/sysadmin/sys_org_info_user.html:10
+#: seahub/templates/sysadmin/snippets/sys_org_info_nav.html:7
 msgid "Settings"
 msgstr "Ayarlar"
 
@@ -4164,11 +4156,11 @@ msgid "Really want to delete your account?"
 msgstr "Hesabınızı silmeyi gerçekten istiyor musunuz?"
 
 #: seahub/profile/templates/profile/set_profile.html:229
-#: seahub/templates/js/sysadmin-templates.html:1000
-#: seahub/templates/sysadmin/settings.html:238
-#: seahub/templates/sysadmin/settings.html:285 seahub/views/sysadmin.py:1332
-#: seahub/views/sysadmin.py:1389 seahub/views/sysadmin.py:2191
-#: seahub/views/sysadmin.py:2273 seahub/views/sysadmin.py:2444
+#: seahub/templates/js/sysadmin-templates.html:999
+#: seahub/templates/sysadmin/settings.html:243
+#: seahub/templates/sysadmin/settings.html:290 seahub/views/sysadmin.py:1340
+#: seahub/views/sysadmin.py:1397 seahub/views/sysadmin.py:2215
+#: seahub/views/sysadmin.py:2297 seahub/views/sysadmin.py:2468
 msgid "Success"
 msgstr "Başarılı"
 
@@ -4209,11 +4201,11 @@ msgstr "Eposta gerekli"
 msgid "Email is not longer than 512 characters"
 msgstr "Eposta 512 karakterden uzun değil"
 
-#: seahub/share/models.py:75
+#: seahub/share/models.py:76
 msgid "Password can't be empty"
 msgstr "Şifre boş bırakılamaz"
 
-#: seahub/share/models.py:82
+#: seahub/share/models.py:83
 msgid "Please enter a correct password."
 msgstr "Lüfen doğru bir şifre giriniz."
 
@@ -4261,9 +4253,9 @@ msgid ""
 msgstr "Paylaşımlı bağlantı yükleme gönderimi başarısız oldu. Eposta servisi doğru yapılandırılmadı, lütfen yönetici ile iletişim kurunuz."
 
 #: seahub/share/views.py:332 seahub/thumbnail/views.py:39
-#: seahub/thumbnail/views.py:161 seahub/views/ajax.py:267
-#: seahub/views/ajax.py:456 seahub/views/ajax.py:533 seahub/views/ajax.py:597
-#: seahub/views/ajax.py:663 seahub/views/ajax.py:922 seahub/views/ajax.py:1229
+#: seahub/thumbnail/views.py:161 seahub/views/ajax.py:266
+#: seahub/views/ajax.py:451 seahub/views/ajax.py:528 seahub/views/ajax.py:592
+#: seahub/views/ajax.py:658 seahub/views/ajax.py:917 seahub/views/ajax.py:1224
 msgid "Library does not exist."
 msgstr "Kütüphane yok."
 
@@ -4296,19 +4288,19 @@ msgid "Sorry, but the requested page could not be found."
 msgstr "Üzgünüm, ama istediğiniz sayfa bulunamadı."
 
 #: seahub/templates/base.html:72 seahub/templates/js/sysadmin-templates.html:5
-#: seahub/templates/js/templates.html:2454
+#: seahub/templates/js/templates.html:2453
 #: seahub/templates/sysadmin/base.html:16
 msgid "System Admin"
 msgstr "Sistem Yöneticisi"
 
-#: seahub/templates/base.html:75 seahub/templates/js/templates.html:2457
+#: seahub/templates/base.html:75 seahub/templates/js/templates.html:2456
 msgid "Organization Admin"
 msgstr ""
 
 #: seahub/templates/base.html:81 seahub/templates/base_for_backbone.html:77
 #: seahub/templates/finish_payment.html:5
 #: seahub/templates/js/admin-common-templates.html:17
-#: seahub/templates/js/templates.html:2462
+#: seahub/templates/js/templates.html:2461
 msgid "Log out"
 msgstr "Çıkış yap"
 
@@ -4320,7 +4312,7 @@ msgstr "IE'nin bu sürümünü artık desteklememekteyiz. Lütfen versiyon 10 ya
 
 #: seahub/templates/base_for_backbone.html:70
 #: seahub/templates/js/sysadmin-templates.html:70
-#: seahub/templates/js/templates.html:2430
+#: seahub/templates/js/templates.html:2429
 #: seahub/templates/sysadmin/base.html:81
 msgid "Notifications"
 msgstr "Bildirimler"
@@ -4371,9 +4363,9 @@ msgid "Please enter the password."
 msgstr "Lütfen şifreyi giriniz."
 
 #: seahub/templates/file_access.html:4 seahub/templates/file_access.html:7
-#: seahub/templates/js/templates.html:775
-#: seahub/templates/js/templates.html:908
-#: seahub/templates/js/templates.html:992
+#: seahub/templates/js/templates.html:778
+#: seahub/templates/js/templates.html:911
+#: seahub/templates/js/templates.html:995
 msgid "Access Log"
 msgstr ""
 
@@ -4557,13 +4549,13 @@ msgid "Password is required."
 msgstr "Şifre gerekli."
 
 #: seahub/templates/file_revisions.html:6
-#: seahub/templates/js/templates.html:503
-#: seahub/templates/js/templates.html:773
-#: seahub/templates/js/templates.html:795
-#: seahub/templates/js/templates.html:905
-#: seahub/templates/js/templates.html:916
-#: seahub/templates/js/templates.html:990
-#: seahub/templates/js/templates.html:1000
+#: seahub/templates/js/templates.html:506
+#: seahub/templates/js/templates.html:776
+#: seahub/templates/js/templates.html:798
+#: seahub/templates/js/templates.html:908
+#: seahub/templates/js/templates.html:919
+#: seahub/templates/js/templates.html:993
+#: seahub/templates/js/templates.html:1003
 #: seahub/templates/repo_history.html:6
 #: seahub/templates/view_file_base.html:152
 #: seahub/templates/view_file_base.html:205
@@ -4612,8 +4604,8 @@ msgid "Restore"
 msgstr "Eski durumuna getir"
 
 #: seahub/templates/file_revisions.html:89
-#: seahub/templates/js/templates.html:2715
-#: seahub/templates/js/templates.html:2726
+#: seahub/templates/js/templates.html:2714
+#: seahub/templates/js/templates.html:2725
 msgid "View"
 msgstr "Görüntüle"
 
@@ -4638,81 +4630,81 @@ msgstr "Plan"
 #: seahub/templates/home_base.html:11
 #: seahub/templates/js/sysadmin-templates.html:167
 #: seahub/templates/js/templates.html:195
-#: seahub/templates/js/templates.html:1123
-#: seahub/templates/js/templates.html:1456
+#: seahub/templates/js/templates.html:1126
+#: seahub/templates/js/templates.html:1455
 msgid "Files"
 msgstr "Dosyalar"
 
-#: seahub/templates/home_base.html:14 seahub/templates/js/templates.html:518
-#: seahub/templates/js/templates.html:520
-#: seahub/templates/js/templates.html:1460 seahub/templates/libraries.html:19
+#: seahub/templates/home_base.html:14 seahub/templates/js/templates.html:521
+#: seahub/templates/js/templates.html:523
+#: seahub/templates/js/templates.html:1459 seahub/templates/libraries.html:19
 #: seahub/templates/libraries.html:39
 msgid "My Libraries"
 msgstr ""
 
-#: seahub/templates/home_base.html:16 seahub/templates/js/templates.html:520
-#: seahub/templates/js/templates.html:1465 seahub/templates/libraries.html:60
+#: seahub/templates/home_base.html:16 seahub/templates/js/templates.html:523
+#: seahub/templates/js/templates.html:1464 seahub/templates/libraries.html:60
 msgid "Shared with me"
 msgstr ""
 
-#: seahub/templates/home_base.html:18 seahub/templates/js/templates.html:516
-#: seahub/templates/js/templates.html:1470 seahub/templates/libraries.html:79
+#: seahub/templates/home_base.html:18 seahub/templates/js/templates.html:519
+#: seahub/templates/js/templates.html:1469 seahub/templates/libraries.html:79
 msgid "Shared with all"
 msgstr ""
 
-#: seahub/templates/home_base.html:23 seahub/templates/js/templates.html:1476
-#: seahub/templates/js/templates.html:1493
-#: seahub/templates/js/templates.html:1496
+#: seahub/templates/home_base.html:23 seahub/templates/js/templates.html:1475
+#: seahub/templates/js/templates.html:1492
+#: seahub/templates/js/templates.html:1495
 msgid "Shared with groups"
 msgstr ""
 
-#: seahub/templates/home_base.html:38 seahub/templates/js/templates.html:1513
+#: seahub/templates/home_base.html:38 seahub/templates/js/templates.html:1512
 msgid "Tools"
 msgstr ""
 
-#: seahub/templates/home_base.html:41 seahub/templates/js/templates.html:1522
+#: seahub/templates/home_base.html:41 seahub/templates/js/templates.html:1521
 #: seahub/templates/libraries.html:150
 msgid "Favorites"
 msgstr ""
 
-#: seahub/templates/home_base.html:43 seahub/templates/js/templates.html:1526
+#: seahub/templates/home_base.html:43 seahub/templates/js/templates.html:1525
 #: seahub/templates/libraries.html:167
 msgid "Activities"
 msgstr "Etkinlikler"
 
-#: seahub/templates/home_base.html:47 seahub/templates/js/templates.html:1534
+#: seahub/templates/home_base.html:47 seahub/templates/js/templates.html:1533
 #: seahub/templates/wiki/wiki_list.html:5
 #: seahub/templates/wiki/wiki_list.html:11
 msgid "Wikis"
 msgstr ""
 
-#: seahub/templates/home_base.html:50 seahub/templates/js/templates.html:1540
+#: seahub/templates/home_base.html:50 seahub/templates/js/templates.html:1539
 #: seahub/templates/libraries.html:178
 msgid "Linked Devices"
 msgstr ""
 
-#: seahub/templates/home_base.html:53 seahub/templates/js/templates.html:1379
-#: seahub/templates/js/templates.html:1544
-#: seahub/templates/js/templates.html:2143
+#: seahub/templates/home_base.html:53 seahub/templates/js/templates.html:1378
+#: seahub/templates/js/templates.html:1543
+#: seahub/templates/js/templates.html:2142
+#: seahub/templates/js/templates.html:2738
 #: seahub/templates/js/templates.html:2739
-#: seahub/templates/js/templates.html:2740
-#: seahub/templates/js/templates.html:2744
-#: seahub/templates/js/templates.html:2783
+#: seahub/templates/js/templates.html:2743
+#: seahub/templates/js/templates.html:2782
 msgid "Invite People"
 msgstr ""
 
-#: seahub/templates/home_base.html:58 seahub/templates/js/templates.html:1549
+#: seahub/templates/home_base.html:58 seahub/templates/js/templates.html:1548
 msgid "Share Admin"
 msgstr "Paylaşma Yöneticisi"
 
-#: seahub/templates/home_base.html:65 seahub/templates/js/templates.html:1119
-#: seahub/templates/js/templates.html:1560
-#: seahub/templates/js/templates.html:2602
+#: seahub/templates/home_base.html:65 seahub/templates/js/templates.html:1122
+#: seahub/templates/js/templates.html:1559
+#: seahub/templates/js/templates.html:2601
 msgid "Folders"
 msgstr "Klasörler"
 
-#: seahub/templates/home_base.html:89 seahub/templates/js/templates.html:1516
-#: seahub/templates/js/templates.html:1583
+#: seahub/templates/home_base.html:89 seahub/templates/js/templates.html:1515
+#: seahub/templates/js/templates.html:1582
 msgid "Enable Modules"
 msgstr "Modülleri etkinleştir"
 
@@ -4722,12 +4714,12 @@ msgstr "Modülleri etkinleştir"
 msgid "Personal Wiki"
 msgstr "Kişisel Wiki"
 
-#: seahub/templates/i18n.html:6 seahub/templates/js/templates.html:460
+#: seahub/templates/i18n.html:6 seahub/templates/js/templates.html:463
 msgid "Upload Folder"
 msgstr "Klasör yükle"
 
-#: seahub/templates/i18n.html:7 seahub/templates/js/templates.html:1203
-#: seahub/templates/js/templates.html:1222
+#: seahub/templates/i18n.html:7 seahub/templates/js/templates.html:1206
+#: seahub/templates/js/templates.html:1225
 #: seahub/templates/snippets/file_share_popup.html:26
 msgid "Add auto expiration"
 msgstr "Otomatik sona erme ekle"
@@ -4745,70 +4737,70 @@ msgstr "Paylaşılan bağlantılar"
 msgid "View and manage all the shared links in this library."
 msgstr "Bu kütüphanedeki tüm paylaşılan bağlantıları görüntüle ve yönet."
 
-#: seahub/templates/js/admin-common-templates.html:59
-#: seahub/templates/js/admin-common-templates.html:120
+#: seahub/templates/js/admin-common-templates.html:52
+#: seahub/templates/js/admin-common-templates.html:113
 #: seahub/templates/js/sysadmin-templates.html:858
 msgid "Add Member"
 msgstr ""
 
-#: seahub/templates/js/admin-common-templates.html:72
+#: seahub/templates/js/admin-common-templates.html:65
 msgid "New Department"
 msgstr ""
 
-#: seahub/templates/js/admin-common-templates.html:80
-#: seahub/templates/js/admin-common-templates.html:107
+#: seahub/templates/js/admin-common-templates.html:73
+#: seahub/templates/js/admin-common-templates.html:100
 #: seahub/templates/js/sysadmin-templates.html:621
 #: seahub/templates/js/sysadmin-templates.html:653
 msgid "Created At"
 msgstr "Oluşturuldu"
 
-#: seahub/templates/js/admin-common-templates.html:81
-#: seahub/templates/js/admin-common-templates.html:108
+#: seahub/templates/js/admin-common-templates.html:74
+#: seahub/templates/js/admin-common-templates.html:101
 msgid "Quota"
 msgstr ""
 
-#: seahub/templates/js/admin-common-templates.html:89
+#: seahub/templates/js/admin-common-templates.html:82
 msgid "No departments"
 msgstr ""
 
-#: seahub/templates/js/admin-common-templates.html:100
+#: seahub/templates/js/admin-common-templates.html:93
 msgid "Sub-departments"
 msgstr ""
 
-#: seahub/templates/js/admin-common-templates.html:101
+#: seahub/templates/js/admin-common-templates.html:94
 msgid "New Sub-department"
 msgstr ""
 
-#: seahub/templates/js/admin-common-templates.html:115
+#: seahub/templates/js/admin-common-templates.html:108
 msgid "No sub-departments"
 msgstr ""
 
-#: seahub/templates/js/admin-common-templates.html:135
-#: seahub/templates/js/sysadmin-templates.html:918
+#: seahub/templates/js/admin-common-templates.html:127
+#: seahub/templates/js/sysadmin-templates.html:917
 msgid "No members"
 msgstr ""
 
-#: seahub/templates/js/admin-common-templates.html:154
+#: seahub/templates/js/admin-common-templates.html:146
 #: seahub/templates/js/sysadmin-templates.html:373
 #: seahub/templates/js/sysadmin-templates.html:417
 #: seahub/templates/js/sysadmin-templates.html:880
-#: seahub/templates/js/templates.html:2027
-#: seahub/templates/js/templates.html:2044 seahub/templates/libraries.html:137
+#: seahub/templates/js/templates.html:2026
+#: seahub/templates/js/templates.html:2043 seahub/templates/libraries.html:137
 #: seahub/templates/libraries.html:140
 msgid "No libraries"
 msgstr ""
 
-#: seahub/templates/js/admin-common-templates.html:172
+#: seahub/templates/js/admin-common-templates.html:164
 #: seahub/templates/sysadmin/useradmin_table.html:114
 #: seahub/templates/sysadmin/userinfo.html:108
 msgid "Edit Quota"
 msgstr ""
 
-#: seahub/templates/js/admin-common-templates.html:192
+#: seahub/templates/js/admin-common-templates.html:184
 msgid "An integer that is greater than 0 or equal to -2."
 msgstr ""
 
-#: seahub/templates/js/admin-common-templates.html:193
+#: seahub/templates/js/admin-common-templates.html:185
 msgid "Tip: -2 means no limit."
 msgstr ""
 
@@ -4829,14 +4821,14 @@ msgid "Only keep a period of history:"
 msgstr "Sadece bu dönemdeki geçmişi sakla:"
 
 #: seahub/templates/js/common-templates.html:24
-#: seahub/templates/js/templates.html:1206
-#: seahub/templates/js/templates.html:1225
+#: seahub/templates/js/templates.html:1209
+#: seahub/templates/js/templates.html:1228
 msgid "days"
 msgstr "gün"
 
 #: seahub/templates/js/lib-op-popups.html:5
 #: seahub/templates/js/sysadmin-templates.html:576
-#: seahub/templates/js/templates.html:474
+#: seahub/templates/js/templates.html:477
 msgid "New Folder"
 msgstr "Yeni Klasör"
 
@@ -5022,7 +5014,7 @@ msgid "No connected devices"
 msgstr ""
 
 #: seahub/templates/js/sysadmin-templates.html:259
-#: seahub/templates/js/templates.html:2421
+#: seahub/templates/js/templates.html:2420
 msgid "Unlink"
 msgstr "Bağlantıyı kaldır"
 
@@ -5044,12 +5036,14 @@ msgstr ""
 
 #: seahub/templates/js/sysadmin-templates.html:337
 #: seahub/templates/js/sysadmin-templates.html:553
+#: seahub/templates/sysadmin/sys_statistic_traffic.html:23
+#: seahub/templates/sysadmin/sys_trafficadmin.html:20
 msgid "System"
 msgstr "Sistem"
 
 #: seahub/templates/js/sysadmin-templates.html:340
-#: seahub/templates/js/templates.html:501
-#: seahub/templates/js/templates.html:506
+#: seahub/templates/js/templates.html:504
+#: seahub/templates/js/templates.html:509
 #: seahub/templates/view_trash_file.html:6
 msgid "Trash"
 msgstr "Çöp Kutusu"
@@ -5072,12 +5066,12 @@ msgstr ""
 #: seahub/templates/js/templates.html:337
 #: seahub/templates/js/templates.html:350
 #: seahub/templates/js/templates.html:361
-#: seahub/templates/js/templates.html:594
-#: seahub/templates/js/templates.html:616
-#: seahub/templates/js/templates.html:656
-#: seahub/templates/js/templates.html:750
-#: seahub/templates/js/templates.html:787
-#: seahub/templates/js/templates.html:866
+#: seahub/templates/js/templates.html:597
+#: seahub/templates/js/templates.html:619
+#: seahub/templates/js/templates.html:659
+#: seahub/templates/js/templates.html:753
+#: seahub/templates/js/templates.html:790
+#: seahub/templates/js/templates.html:869
 #: seahub/templates/wiki/wiki_list.html:72
 msgid "More Operations"
 msgstr "Daha fazla işlem"
@@ -5091,16 +5085,16 @@ msgstr "Daha fazla işlem"
 #: seahub/templates/js/templates.html:325
 #: seahub/templates/js/templates.html:339
 #: seahub/templates/js/templates.html:364
-#: seahub/templates/js/templates.html:489
-#: seahub/templates/js/templates.html:490
-#: seahub/templates/js/templates.html:586
-#: seahub/templates/js/templates.html:663
-#: seahub/templates/js/templates.html:740
-#: seahub/templates/js/templates.html:873
-#: seahub/templates/js/templates.html:959
-#: seahub/templates/js/templates.html:1020
-#: seahub/templates/js/templates.html:1427
-#: seahub/templates/js/templates.html:1447
+#: seahub/templates/js/templates.html:492
+#: seahub/templates/js/templates.html:493
+#: seahub/templates/js/templates.html:589
+#: seahub/templates/js/templates.html:666
+#: seahub/templates/js/templates.html:743
+#: seahub/templates/js/templates.html:876
+#: seahub/templates/js/templates.html:962
+#: seahub/templates/js/templates.html:1023
+#: seahub/templates/js/templates.html:1426
+#: seahub/templates/js/templates.html:1446
 #: seahub/templates/view_file_base.html:147
 #: seahub/templates/view_file_base.html:198
 msgid "Share"
@@ -5120,8 +5114,8 @@ msgid ""
 msgstr ""
 
 #: seahub/templates/js/sysadmin-templates.html:493
-#: seahub/templates/js/templates.html:1881
-#: seahub/templates/js/templates.html:1888
+#: seahub/templates/js/templates.html:1880
+#: seahub/templates/js/templates.html:1887
 msgid "Deleted Time"
 msgstr "Silinme Zamanı"
 
@@ -5132,9 +5126,9 @@ msgstr "Henüz hiç kütüphane silinmedi"
 #: seahub/templates/js/sysadmin-templates.html:573
 #: seahub/templates/js/templates.html:446
 #: seahub/templates/js/templates.html:447
-#: seahub/templates/js/templates.html:452
-#: seahub/templates/js/templates.html:453
-#: seahub/templates/js/templates.html:467
+#: seahub/templates/js/templates.html:455
+#: seahub/templates/js/templates.html:456
+#: seahub/templates/js/templates.html:470
 #: seahub/templates/sysadmin/userinfo.html:291
 msgid "Upload"
 msgstr "Yükle"
@@ -5167,50 +5161,50 @@ msgid "Tip: you can search by keyword in name."
 msgstr ""
 
 #: seahub/templates/js/sysadmin-templates.html:773
-#: seahub/templates/js/templates.html:1173
+#: seahub/templates/js/templates.html:1176
 msgid "Share to user"
 msgstr "Kullanıcı ile Paylaş"
 
 #: seahub/templates/js/sysadmin-templates.html:774
-#: seahub/templates/js/templates.html:1174
+#: seahub/templates/js/templates.html:1177
 msgid "Share to group"
 msgstr "Grupla Paylaş"
 
 #: seahub/templates/js/sysadmin-templates.html:813
-#: seahub/templates/js/templates.html:1389
-#: seahub/templates/js/templates.html:1766
-#: seahub/templates/js/templates.html:2355
+#: seahub/templates/js/templates.html:1388
+#: seahub/templates/js/templates.html:1765
+#: seahub/templates/js/templates.html:2354
 msgid "Group"
 msgstr "Grup"
 
-#: seahub/templates/js/sysadmin-templates.html:926
-#: seahub/templates/js/sysadmin-templates.html:966
+#: seahub/templates/js/sysadmin-templates.html:925
+#: seahub/templates/js/sysadmin-templates.html:965
 msgid "Admin Operation Logs"
 msgstr ""
 
-#: seahub/templates/js/sysadmin-templates.html:929
-#: seahub/templates/js/sysadmin-templates.html:969
+#: seahub/templates/js/sysadmin-templates.html:928
+#: seahub/templates/js/sysadmin-templates.html:968
 msgid "Admin Login Logs"
 msgstr ""
 
-#: seahub/templates/js/sysadmin-templates.html:938
+#: seahub/templates/js/sysadmin-templates.html:937
 msgid "Operation"
 msgstr "İşlem"
 
-#: seahub/templates/js/sysadmin-templates.html:939
+#: seahub/templates/js/sysadmin-templates.html:938
 #: seahub/templates/view_file_text.html:16
 msgid "Detail"
 msgstr "Detay"
 
-#: seahub/templates/js/sysadmin-templates.html:951
+#: seahub/templates/js/sysadmin-templates.html:950
 msgid "No Admin Operation Logs"
 msgstr ""
 
-#: seahub/templates/js/sysadmin-templates.html:991
+#: seahub/templates/js/sysadmin-templates.html:990
 msgid "No Admin Login Logs"
 msgstr ""
 
-#: seahub/templates/js/sysadmin-templates.html:1002
+#: seahub/templates/js/sysadmin-templates.html:1001
 msgid "Failed"
 msgstr "Başarısız"
 
@@ -5223,7 +5217,7 @@ msgid "Template"
 msgstr ""
 
 #: seahub/templates/js/templates.html:30
-#: seahub/templates/js/templates.html:1858
+#: seahub/templates/js/templates.html:1857
 msgid "Storage backend"
 msgstr ""
 
@@ -5236,14 +5230,14 @@ msgid "Encrypt"
 msgstr "Şifrele"
 
 #: seahub/templates/js/templates.html:58
-#: seahub/templates/js/templates.html:2405
+#: seahub/templates/js/templates.html:2404
 #, python-format
 msgid "(at least %(repo_password_min_length)s characters)"
 msgstr "(en az %(repo_password_min_length)s karakter)"
 
 #: seahub/templates/js/templates.html:60
-#: seahub/templates/js/templates.html:1196
-#: seahub/templates/js/templates.html:1310
+#: seahub/templates/js/templates.html:1199
+#: seahub/templates/js/templates.html:1309
 #: seahub/templates/snippets/file_share_popup.html:20
 msgid "Password again"
 msgstr "Şifre tekrar"
@@ -5261,14 +5255,14 @@ msgstr ""
 #: seahub/templates/js/templates.html:151
 #: seahub/templates/js/templates.html:276
 #: seahub/templates/js/templates.html:341
-#: seahub/templates/js/templates.html:597
-#: seahub/templates/js/templates.html:667
-#: seahub/templates/js/templates.html:754
-#: seahub/templates/js/templates.html:878
-#: seahub/templates/js/templates.html:964
-#: seahub/templates/js/templates.html:1025
-#: seahub/templates/js/templates.html:2082
-#: seahub/templates/js/templates.html:2094
+#: seahub/templates/js/templates.html:600
+#: seahub/templates/js/templates.html:670
+#: seahub/templates/js/templates.html:757
+#: seahub/templates/js/templates.html:881
+#: seahub/templates/js/templates.html:967
+#: seahub/templates/js/templates.html:1028
+#: seahub/templates/js/templates.html:2081
+#: seahub/templates/js/templates.html:2093
 #: seahub/templates/wiki/wiki_list.html:74
 msgid "Rename"
 msgstr "Yeniden Adlandır"
@@ -5280,9 +5274,9 @@ msgstr "Şifreyi Değiştir"
 
 #: seahub/templates/js/templates.html:107
 #: seahub/templates/js/templates.html:158
-#: seahub/templates/js/templates.html:2223
-#: seahub/templates/js/templates.html:2631
-#: seahub/templates/js/templates.html:2669
+#: seahub/templates/js/templates.html:2222
+#: seahub/templates/js/templates.html:2630
+#: seahub/templates/js/templates.html:2668
 #: seahub/templates/sysadmin/sys_publink_admin.html:16
 #: seahub/templates/sysadmin/sys_upload_link_admin.html:10
 msgid "Share Links"
@@ -5315,12 +5309,12 @@ msgstr "Yeni bir kütüphane oluştur"
 
 #: seahub/templates/js/templates.html:423
 #: seahub/templates/js/templates.html:424
-#: seahub/templates/js/templates.html:598
-#: seahub/templates/js/templates.html:668
-#: seahub/templates/js/templates.html:755
-#: seahub/templates/js/templates.html:879
-#: seahub/templates/js/templates.html:965
-#: seahub/templates/js/templates.html:1026
+#: seahub/templates/js/templates.html:601
+#: seahub/templates/js/templates.html:671
+#: seahub/templates/js/templates.html:758
+#: seahub/templates/js/templates.html:882
+#: seahub/templates/js/templates.html:968
+#: seahub/templates/js/templates.html:1029
 msgid "Move"
 msgstr "Taşı"
 
@@ -5328,126 +5322,126 @@ msgstr "Taşı"
 #: seahub/templates/js/templates.html:426
 #: seahub/templates/js/templates.html:435
 #: seahub/templates/js/templates.html:436
-#: seahub/templates/js/templates.html:599
-#: seahub/templates/js/templates.html:619
-#: seahub/templates/js/templates.html:669
-#: seahub/templates/js/templates.html:673
-#: seahub/templates/js/templates.html:757
-#: seahub/templates/js/templates.html:790
-#: seahub/templates/js/templates.html:881
-#: seahub/templates/js/templates.html:895
-#: seahub/templates/js/templates.html:967
-#: seahub/templates/js/templates.html:979
-#: seahub/templates/js/templates.html:1027
+#: seahub/templates/js/templates.html:602
+#: seahub/templates/js/templates.html:622
+#: seahub/templates/js/templates.html:672
+#: seahub/templates/js/templates.html:676
+#: seahub/templates/js/templates.html:760
+#: seahub/templates/js/templates.html:793
+#: seahub/templates/js/templates.html:884
+#: seahub/templates/js/templates.html:898
+#: seahub/templates/js/templates.html:970
+#: seahub/templates/js/templates.html:982
 #: seahub/templates/js/templates.html:1030
-#: seahub/templates/js/templates.html:1264
-#: seahub/templates/js/templates.html:1271
-#: seahub/templates/js/templates.html:1322
-#: seahub/templates/js/templates.html:2847
+#: seahub/templates/js/templates.html:1033
+#: seahub/templates/js/templates.html:1263
+#: seahub/templates/js/templates.html:1270
+#: seahub/templates/js/templates.html:1321
+#: seahub/templates/js/templates.html:2846
 msgid "Copy"
 msgstr "Kopyala"
 
-#: seahub/templates/js/templates.html:456
+#: seahub/templates/js/templates.html:459
 msgid "Upload Files"
 msgstr "Dosyaları yükle"
 
-#: seahub/templates/js/templates.html:470
-#: seahub/templates/js/templates.html:471
+#: seahub/templates/js/templates.html:473
+#: seahub/templates/js/templates.html:474
 msgid "New"
 msgstr ""
 
-#: seahub/templates/js/templates.html:475
+#: seahub/templates/js/templates.html:478
 msgid "New File"
 msgstr "Yeni Dosya"
 
-#: seahub/templates/js/templates.html:479
+#: seahub/templates/js/templates.html:482
 msgid "New Markdown File"
 msgstr ""
 
-#: seahub/templates/js/templates.html:480
+#: seahub/templates/js/templates.html:483
 msgid "New Excel File"
 msgstr ""
 
-#: seahub/templates/js/templates.html:481
+#: seahub/templates/js/templates.html:484
 msgid "New PowerPoint File"
 msgstr ""
 
-#: seahub/templates/js/templates.html:482
+#: seahub/templates/js/templates.html:485
 msgid "New Word File"
 msgstr ""
 
-#: seahub/templates/js/templates.html:495
+#: seahub/templates/js/templates.html:498
 #: seahub/templates/view_shared_dir.html:27
 #: seahub/templates/view_shared_dir.html:29
 #: seahub/templates/view_shared_dir.html:31
 msgid "List"
 msgstr ""
 
-#: seahub/templates/js/templates.html:495
+#: seahub/templates/js/templates.html:498
 msgid "list view"
 msgstr ""
 
-#: seahub/templates/js/templates.html:495
+#: seahub/templates/js/templates.html:498
 #: seahub/templates/view_shared_dir.html:33
 #: seahub/templates/view_shared_dir.html:35
 #: seahub/templates/view_shared_dir.html:37
 msgid "Grid"
 msgstr ""
 
-#: seahub/templates/js/templates.html:495
+#: seahub/templates/js/templates.html:498
 msgid "grid view"
 msgstr ""
 
-#: seahub/templates/js/templates.html:556
-#: seahub/templates/js/templates.html:1870
-#: seahub/templates/js/templates.html:1907
+#: seahub/templates/js/templates.html:559
+#: seahub/templates/js/templates.html:1869
+#: seahub/templates/js/templates.html:1906
 msgid "Sort:"
 msgstr ""
 
-#: seahub/templates/js/templates.html:558
-#: seahub/templates/js/templates.html:1872
-#: seahub/templates/js/templates.html:1909
+#: seahub/templates/js/templates.html:561
+#: seahub/templates/js/templates.html:1871
+#: seahub/templates/js/templates.html:1908
 msgid "last update"
 msgstr ""
 
-#: seahub/templates/js/templates.html:577
-#: seahub/templates/js/templates.html:647
-#: seahub/templates/js/templates.html:733
-#: seahub/templates/js/templates.html:848
+#: seahub/templates/js/templates.html:580
+#: seahub/templates/js/templates.html:650
+#: seahub/templates/js/templates.html:736
 #: seahub/templates/js/templates.html:851
-#: seahub/templates/js/templates.html:2836
+#: seahub/templates/js/templates.html:854
+#: seahub/templates/js/templates.html:2835
 msgid "Internal link"
 msgstr ""
 
-#: seahub/templates/js/templates.html:610
-#: seahub/templates/js/templates.html:781
-#: seahub/templates/js/templates.html:1008
-#: seahub/templates/js/templates.html:1050
+#: seahub/templates/js/templates.html:613
+#: seahub/templates/js/templates.html:784
+#: seahub/templates/js/templates.html:1011
+#: seahub/templates/js/templates.html:1053
 msgid "Open via Client"
 msgstr "Client üzerinden aç"
 
-#: seahub/templates/js/templates.html:703
-#: seahub/templates/js/templates.html:822
+#: seahub/templates/js/templates.html:706
+#: seahub/templates/js/templates.html:825
 #: seahub/templates/view_file_base.html:41
 msgid "starred"
 msgstr "yıldızlı"
 
-#: seahub/templates/js/templates.html:705
-#: seahub/templates/js/templates.html:824
+#: seahub/templates/js/templates.html:708
+#: seahub/templates/js/templates.html:827
 #: seahub/templates/view_file_base.html:43
 msgid "unstarred"
 msgstr "Yıldızı kaldırılmış"
 
-#: seahub/templates/js/templates.html:721
-#: seahub/templates/js/templates.html:840
-#: seahub/templates/js/templates.html:935
+#: seahub/templates/js/templates.html:724
+#: seahub/templates/js/templates.html:843
+#: seahub/templates/js/templates.html:938
 #: seahub/templates/view_file_base.html:47
 msgid "locked"
 msgstr "kilitli"
 
-#: seahub/templates/js/templates.html:761
-#: seahub/templates/js/templates.html:885
-#: seahub/templates/js/templates.html:971
+#: seahub/templates/js/templates.html:764
+#: seahub/templates/js/templates.html:888
+#: seahub/templates/js/templates.html:974
 #: seahub/templates/view_file_base.html:138
 #: seahub/templates/view_file_base.html:140
 #: seahub/templates/view_file_base.html:183
@@ -5455,9 +5449,9 @@ msgstr "kilitli"
 msgid "Unlock"
 msgstr "Kilidi Aç"
 
-#: seahub/templates/js/templates.html:764
-#: seahub/templates/js/templates.html:888
-#: seahub/templates/js/templates.html:974
+#: seahub/templates/js/templates.html:767
+#: seahub/templates/js/templates.html:891
+#: seahub/templates/js/templates.html:977
 #: seahub/templates/view_file_base.html:137
 #: seahub/templates/view_file_base.html:141
 #: seahub/templates/view_file_base.html:180
@@ -5465,77 +5459,79 @@ msgstr "Kilidi Aç"
 msgid "Lock"
 msgstr "Kilitle"
 
-#: seahub/templates/js/templates.html:771
-#: seahub/templates/js/templates.html:793
-#: seahub/templates/js/templates.html:903
-#: seahub/templates/js/templates.html:914
-#: seahub/templates/js/templates.html:988
-#: seahub/templates/js/templates.html:998
+#: seahub/templates/js/templates.html:774
+#: seahub/templates/js/templates.html:796
+#: seahub/templates/js/templates.html:906
+#: seahub/templates/js/templates.html:917
+#: seahub/templates/js/templates.html:991
+#: seahub/templates/js/templates.html:1001
 #: seahub/templates/view_file_base.html:162
 msgid "Comment"
 msgstr ""
 
-#: seahub/templates/js/templates.html:807
-#: seahub/templates/js/templates.html:859
+#: seahub/templates/js/templates.html:810
+#: seahub/templates/js/templates.html:862
 msgid "Fetch failed"
 msgstr "Getirilemedi"
 
-#: seahub/templates/js/templates.html:1086
-#: seahub/templates/js/templates.html:1132
+#: seahub/templates/js/templates.html:1089
+#: seahub/templates/js/templates.html:1135
 msgid "Location"
 msgstr ""
 
-#: seahub/templates/js/templates.html:1097
-#: seahub/templates/js/templates.html:1143
+#: seahub/templates/js/templates.html:1100
+#: seahub/templates/js/templates.html:1146
 msgid "Tags"
 msgstr ""
 
-#: seahub/templates/js/templates.html:1165
+#: seahub/templates/js/templates.html:1168
 #: seahub/templates/snippets/file_share_popup.html:6
+#: seahub/templates/sysadmin/sys_statistic_traffic.html:26
+#: seahub/templates/sysadmin/sys_trafficadmin.html:23
 msgid "Share Link"
 msgstr ""
 
-#: seahub/templates/js/templates.html:1169
+#: seahub/templates/js/templates.html:1172
 msgid "Upload Link"
 msgstr "Bağlantıyı Yükle"
 
-#: seahub/templates/js/templates.html:1187
-#: seahub/templates/js/templates.html:1301
+#: seahub/templates/js/templates.html:1190
+#: seahub/templates/js/templates.html:1300
 #: seahub/templates/snippets/file_share_popup.html:15
 msgid "Add password protection"
 msgstr "Şifre koruma ekle"
 
-#: seahub/templates/js/templates.html:1190
-#: seahub/templates/js/templates.html:1304
+#: seahub/templates/js/templates.html:1193
+#: seahub/templates/js/templates.html:1303
 #: seahub/templates/snippets/file_share_popup.html:18
 #, python-format
 msgid "(at least %(share_link_password_min_length)s characters)"
 msgstr ""
 
-#: seahub/templates/js/templates.html:1209
+#: seahub/templates/js/templates.html:1212
 #, python-format
 msgid "(%(share_link_expire_days_min)s - %(share_link_expire_days_max)s days)"
 msgstr ""
 
-#: seahub/templates/js/templates.html:1211
+#: seahub/templates/js/templates.html:1214
 #, python-format
 msgid "(Greater than or equal to %(share_link_expire_days_min)s days)"
 msgstr ""
 
-#: seahub/templates/js/templates.html:1213
+#: seahub/templates/js/templates.html:1216
 #, python-format
 msgid "(Less than or equal to %(share_link_expire_days_max)s days)"
 msgstr ""
 
-#: seahub/templates/js/templates.html:1233
+#: seahub/templates/js/templates.html:1236
 msgid "Set permission"
 msgstr ""
 
-#: seahub/templates/js/templates.html:1238
+#: seahub/templates/js/templates.html:1241
 msgid "Preview and download"
 msgstr ""
 
-#: seahub/templates/js/templates.html:1243
+#: seahub/templates/js/templates.html:1245
 msgid "Preview only"
 msgstr ""
 
@@ -5543,328 +5539,328 @@ msgstr ""
 msgid "Edit on cloud and download"
 msgstr ""
 
-#: seahub/templates/js/templates.html:1256
-#: seahub/templates/js/templates.html:1314
+#: seahub/templates/js/templates.html:1255
+#: seahub/templates/js/templates.html:1313
 #: seahub/templates/snippets/file_share_popup.html:42
 msgid "Generate"
 msgstr "Oluştur"
 
-#: seahub/templates/js/templates.html:1260
+#: seahub/templates/js/templates.html:1259
 #: seahub/templates/snippets/file_share_popup.html:44
 msgid "Link: "
 msgstr "Bağlantı:"
 
-#: seahub/templates/js/templates.html:1267
+#: seahub/templates/js/templates.html:1266
 msgid "Direct Download Link: "
 msgstr "Doğrudan İndirme Linki:"
 
-#: seahub/templates/js/templates.html:1276
-#: seahub/templates/js/templates.html:1326
+#: seahub/templates/js/templates.html:1275
+#: seahub/templates/js/templates.html:1325
 #: seahub/templates/snippets/file_share_popup.html:45
 msgid "Send"
 msgstr "Gönder"
 
-#: seahub/templates/js/templates.html:1280
-#: seahub/templates/js/templates.html:1330
+#: seahub/templates/js/templates.html:1279
+#: seahub/templates/js/templates.html:1329
 #: seahub/templates/snippets/file_share_popup.html:49
 msgid "Send to:"
 msgstr "Şuna gönder:"
 
-#: seahub/templates/js/templates.html:1282
-#: seahub/templates/js/templates.html:1332
+#: seahub/templates/js/templates.html:1281
+#: seahub/templates/js/templates.html:1331
 #: seahub/templates/snippets/file_share_popup.html:54
 msgid "Message (optional):"
 msgstr "Mesaj (isteğe bağlı):"
 
-#: seahub/templates/js/templates.html:1287
-#: seahub/templates/js/templates.html:1337
+#: seahub/templates/js/templates.html:1286
+#: seahub/templates/js/templates.html:1336
 #: seahub/templates/snippets/file_share_popup.html:59
 msgid "Sending..."
 msgstr "Gönderiyor..."
 
-#: seahub/templates/js/templates.html:1297
+#: seahub/templates/js/templates.html:1296
 msgid ""
 "You can share the generated link to others and then they can upload files to"
 " this directory via the link."
 msgstr "Oluşturduğunuz bağlantıyı diğerleriyle paylaşabilirsiniz. Paylaştığınız kişiler bağlantı üzerinden bu dizine dosya yükleyebilirler. "
 
-#: seahub/templates/js/templates.html:1318
+#: seahub/templates/js/templates.html:1317
 msgid "Upload Link: "
 msgstr "Bağlantı Yükle:"
 
-#: seahub/templates/js/templates.html:1429
-#: seahub/templates/js/templates.html:1449
+#: seahub/templates/js/templates.html:1428
+#: seahub/templates/js/templates.html:1448
 msgid "Leave Share"
 msgstr "Paylaşımdan Ayrıl"
 
-#: seahub/templates/js/templates.html:1594
+#: seahub/templates/js/templates.html:1593
 msgid "Wiki"
 msgstr "Wiki"
 
-#: seahub/templates/js/templates.html:1615
+#: seahub/templates/js/templates.html:1614
 msgid "This is a special group representing a department."
 msgstr ""
 
-#: seahub/templates/js/templates.html:1622
+#: seahub/templates/js/templates.html:1621
 msgid "Discussion"
 msgstr "Tartışma"
 
-#: seahub/templates/js/templates.html:1629
+#: seahub/templates/js/templates.html:1628
 msgid "Discussions"
 msgstr ""
 
-#: seahub/templates/js/templates.html:1633
+#: seahub/templates/js/templates.html:1632
 msgid "More..."
 msgstr ""
 
-#: seahub/templates/js/templates.html:1635
+#: seahub/templates/js/templates.html:1634
 msgid "No discussion in this group yet."
 msgstr ""
 
-#: seahub/templates/js/templates.html:1642
+#: seahub/templates/js/templates.html:1641
 msgid "Add a discussion..."
 msgstr "Bir tartışma ekle"
 
-#: seahub/templates/js/templates.html:1732
-#: seahub/templates/js/templates.html:2301
+#: seahub/templates/js/templates.html:1731
+#: seahub/templates/js/templates.html:2300
 msgid "User Permission"
 msgstr "Kullanıcı İzni"
 
-#: seahub/templates/js/templates.html:1733
-#: seahub/templates/js/templates.html:2302
+#: seahub/templates/js/templates.html:1732
+#: seahub/templates/js/templates.html:2301
 msgid "Group Permission"
 msgstr "Gruop İzni"
 
-#: seahub/templates/js/templates.html:1795
-#: seahub/templates/js/templates.html:1801
+#: seahub/templates/js/templates.html:1794
+#: seahub/templates/js/templates.html:1800
 msgid "File Name"
 msgstr "Dosya İsmi"
 
-#: seahub/templates/js/templates.html:1811
-#: seahub/templates/js/templates.html:1832
+#: seahub/templates/js/templates.html:1810
+#: seahub/templates/js/templates.html:1831
 msgid "icon"
 msgstr "simge"
 
-#: seahub/templates/js/templates.html:1824
-#: seahub/templates/js/templates.html:1846
+#: seahub/templates/js/templates.html:1823
+#: seahub/templates/js/templates.html:1845
 msgid "Unstar"
 msgstr "Yıldızı kaldır"
 
-#: seahub/templates/js/templates.html:1853
-#: seahub/templates/js/templates.html:1868
-#: seahub/templates/js/templates.html:1879
-#: seahub/templates/js/templates.html:1887
-#: seahub/templates/js/templates.html:1895
-#: seahub/templates/js/templates.html:1905
+#: seahub/templates/js/templates.html:1852
+#: seahub/templates/js/templates.html:1867
+#: seahub/templates/js/templates.html:1878
+#: seahub/templates/js/templates.html:1886
+#: seahub/templates/js/templates.html:1894
+#: seahub/templates/js/templates.html:1904
 msgid "Library Type"
 msgstr ""
 
-#: seahub/templates/js/templates.html:1916
+#: seahub/templates/js/templates.html:1915
 msgid "Select libraries to share"
 msgstr "Paylaşmak için kütüphane seçin"
 
-#: seahub/templates/js/templates.html:1977
+#: seahub/templates/js/templates.html:1976
 msgid "Deleted library"
 msgstr ""
 
-#: seahub/templates/js/templates.html:2005
+#: seahub/templates/js/templates.html:2004
 #: seahub/templates/snippets/search_form.html:6
 msgid "Search files in this wiki"
 msgstr "Dosyaları bu wikide ara"
 
-#: seahub/templates/js/templates.html:2005
+#: seahub/templates/js/templates.html:2004
 #: seahub/templates/snippets/search_form.html:6
 msgid "Search files in this library"
 msgstr "Dosyaları bu kütüphanede ara"
 
-#: seahub/templates/js/templates.html:2007
+#: seahub/templates/js/templates.html:2006
 #: seahub/templates/snippets/search_form.html:9
 #: seahub/templates/snippets/search_form.html:15
 msgid "Search Files"
 msgstr "Dosya Ara"
 
-#: seahub/templates/js/templates.html:2009
+#: seahub/templates/js/templates.html:2008
 #: seahub/templates/snippets/search_form.html:11
 msgid "advanced"
 msgstr "gelişmiş"
 
-#: seahub/templates/js/templates.html:2054
+#: seahub/templates/js/templates.html:2053
 msgid "owner"
 msgstr ""
 
-#: seahub/templates/js/templates.html:2069
-#: seahub/templates/js/templates.html:2825
+#: seahub/templates/js/templates.html:2068
+#: seahub/templates/js/templates.html:2824
 #: seahub/templates/view_file_base.html:121
 msgid "Reply"
 msgstr "Yanıtla"
 
-#: seahub/templates/js/templates.html:2086
-#: seahub/templates/js/templates.html:2097
+#: seahub/templates/js/templates.html:2085
+#: seahub/templates/js/templates.html:2096
 msgid "Import Members"
 msgstr ""
 
-#: seahub/templates/js/templates.html:2087
-#: seahub/templates/js/templates.html:2098
+#: seahub/templates/js/templates.html:2086
+#: seahub/templates/js/templates.html:2097
 msgid "Manage Members"
 msgstr ""
 
-#: seahub/templates/js/templates.html:2090
+#: seahub/templates/js/templates.html:2089
 msgid "Dismiss"
 msgstr "Sonlandır"
 
-#: seahub/templates/js/templates.html:2102
+#: seahub/templates/js/templates.html:2101
 msgid "Leave group"
 msgstr "Gruptan çık"
 
-#: seahub/templates/js/templates.html:2109
+#: seahub/templates/js/templates.html:2108
 msgid "Rename Group To"
 msgstr "Grubu yeniden adlandır"
 
-#: seahub/templates/js/templates.html:2118
+#: seahub/templates/js/templates.html:2117
 msgid "Transfer Group To"
 msgstr "Grubu transfer et"
 
-#: seahub/templates/js/templates.html:2126
+#: seahub/templates/js/templates.html:2125
 msgid "Import group members from a CSV file"
 msgstr ""
 
-#: seahub/templates/js/templates.html:2128
+#: seahub/templates/js/templates.html:2127
 msgid "File format: user@mail.com"
 msgstr ""
 
-#: seahub/templates/js/templates.html:2138
+#: seahub/templates/js/templates.html:2137
 #: seahub/templates/sysadmin/sys_inst_admin.html:12
 #: seahub/templates/sysadmin/sys_terms_admin.html:9
 msgid "Add"
 msgstr "Ekle"
 
-#: seahub/templates/js/templates.html:2226
-#: seahub/templates/js/templates.html:2635
-#: seahub/templates/js/templates.html:2673
+#: seahub/templates/js/templates.html:2225
+#: seahub/templates/js/templates.html:2634
+#: seahub/templates/js/templates.html:2672
 #: seahub/templates/sysadmin/sys_publink_admin.html:19
 #: seahub/templates/sysadmin/sys_upload_link_admin.html:13
 msgid "Upload Links"
 msgstr "Bağlantıları Yükle"
 
-#: seahub/templates/js/templates.html:2238
-#: seahub/templates/js/templates.html:2257
+#: seahub/templates/js/templates.html:2237
+#: seahub/templates/js/templates.html:2256
 msgid "Created By"
 msgstr "Oluşturan"
 
-#: seahub/templates/js/templates.html:2240
-#: seahub/templates/js/templates.html:2259
-#: seahub/templates/js/templates.html:2648
-#: seahub/templates/js/templates.html:2685
+#: seahub/templates/js/templates.html:2239
+#: seahub/templates/js/templates.html:2258
+#: seahub/templates/js/templates.html:2647
+#: seahub/templates/js/templates.html:2684
 #: seahub/templates/sysadmin/sys_upload_link_admin.html:25
 #: seahub/templates/sysadmin/userinfo.html:267
 msgid "Visits"
 msgstr "Ziyaretler"
 
-#: seahub/templates/js/templates.html:2274
+#: seahub/templates/js/templates.html:2273
 #: seahub/templates/sysadmin/userinfo.html:278
 #: seahub/templates/sysadmin/userinfo.html:288
 #: seahub/templates/view_shared_dir.html:60
 msgid "Directory icon"
 msgstr "Dizin simgesi"
 
-#: seahub/templates/js/templates.html:2323
-#: seahub/templates/js/templates.html:2342
-#: seahub/templates/js/templates.html:2369
-#: seahub/templates/js/templates.html:2388
+#: seahub/templates/js/templates.html:2322
+#: seahub/templates/js/templates.html:2341
+#: seahub/templates/js/templates.html:2368
+#: seahub/templates/js/templates.html:2387
 msgid "Select a folder"
 msgstr "Bir klasör seçin"
 
-#: seahub/templates/js/templates.html:2403
+#: seahub/templates/js/templates.html:2402
 msgid "Old Password"
 msgstr "Eski Şifre"
 
-#: seahub/templates/js/templates.html:2405
+#: seahub/templates/js/templates.html:2404
 #: seahub/templates/registration/password_change_form.html:18
 msgid "New Password"
 msgstr "Yeni Şifre"
 
-#: seahub/templates/js/templates.html:2407
+#: seahub/templates/js/templates.html:2406
 msgid "New Password Again"
 msgstr "Yeni Şİfre Tekrar"
 
-#: seahub/templates/js/templates.html:2436
+#: seahub/templates/js/templates.html:2435
 msgid "See All Notifications"
 msgstr "Tüm Bildirimleri Gör"
 
-#: seahub/templates/js/templates.html:2499
+#: seahub/templates/js/templates.html:2498
 msgid "You have not shared any libraries"
 msgstr ""
 
-#: seahub/templates/js/templates.html:2500
+#: seahub/templates/js/templates.html:2499
 msgid ""
 "You can share libraries with your friends and colleagues by clicking the "
 "share icon of your own libraries in your home page or creating a new library"
 " in groups you are in."
 msgstr ""
 
-#: seahub/templates/js/templates.html:2514
-#: seahub/templates/js/templates.html:2576
+#: seahub/templates/js/templates.html:2513
+#: seahub/templates/js/templates.html:2575
 msgid "all members"
 msgstr "tüm üyeler"
 
-#: seahub/templates/js/templates.html:2620
+#: seahub/templates/js/templates.html:2619
 msgid "You have not shared any folders"
 msgstr ""
 
-#: seahub/templates/js/templates.html:2621
+#: seahub/templates/js/templates.html:2620
 msgid ""
 "You can share a single folder with a registered user if you don't want to "
 "share a whole library."
 msgstr "Kayıtlı bir kullanıcı ile tüm kütüphaneyi paylaşmak istemiyorsanız, tek bir klasör paylaşabilirsiniz."
 
-#: seahub/templates/js/templates.html:2649
-#: seahub/templates/js/templates.html:2753
+#: seahub/templates/js/templates.html:2648
+#: seahub/templates/js/templates.html:2752
 msgid "Expiration"
 msgstr "Zaman aşımı"
 
-#: seahub/templates/js/templates.html:2657
+#: seahub/templates/js/templates.html:2656
 msgid "You don't have any download links"
 msgstr ""
 
-#: seahub/templates/js/templates.html:2658
+#: seahub/templates/js/templates.html:2657
 msgid ""
 "You can generate a download link for a folder or a file. Anyone who receives"
 " this link can view the folder or the file online."
 msgstr ""
 
-#: seahub/templates/js/templates.html:2693
+#: seahub/templates/js/templates.html:2692
 msgid "You don't have any upload links"
 msgstr ""
 
-#: seahub/templates/js/templates.html:2694
+#: seahub/templates/js/templates.html:2693
 msgid ""
 "You can generate an upload link from any folder. Anyone who receives this "
 "link can upload files to this folder."
 msgstr ""
 
-#: seahub/templates/js/templates.html:2752
+#: seahub/templates/js/templates.html:2751
 msgid "Invite Time"
 msgstr ""
 
-#: seahub/templates/js/templates.html:2754
+#: seahub/templates/js/templates.html:2753
 msgid "Accepted"
 msgstr ""
 
-#: seahub/templates/js/templates.html:2762
+#: seahub/templates/js/templates.html:2761
 msgid "You have not invited any people."
 msgstr ""
 
-#: seahub/templates/js/templates.html:2804
+#: seahub/templates/js/templates.html:2803
 #: seahub/templates/view_file_base.html:99
 msgid "No comment yet."
 msgstr ""
 
-#: seahub/templates/js/templates.html:2811
+#: seahub/templates/js/templates.html:2810
 #: seahub/templates/view_file_base.html:106
 msgid "Add a comment..."
 msgstr ""
 
-#: seahub/templates/js/templates.html:2839
+#: seahub/templates/js/templates.html:2838
 msgid ""
 "An internal link is a link to a file or folder that can be accessed by users"
 " with read permission to the file or folder."
@@ -5953,7 +5949,7 @@ msgid "About"
 msgstr ""
 
 #: seahub/templates/nav_footer.html:5
-#: seahub/templates/sysadmin/settings.html:183
+#: seahub/templates/sysadmin/settings.html:188
 msgid "Terms"
 msgstr ""
 
@@ -6349,6 +6345,11 @@ msgstr "Şuna da basabilirsiniz ←"
 msgid "you can also press → "
 msgstr "şuna da basabilirsiniz →"
 
+#: seahub/templates/snippets/file_content_html.html:52
+#: seahub/templates/view_file_base.html:73
+msgid "Online view is not applicable to this file format"
+msgstr ""
+
 #: seahub/templates/snippets/file_encoding.html:5
 #: seahub/templates/view_file_text.html:29
 msgid "Encoding:"
@@ -6719,35 +6720,48 @@ msgid ""
 "add organization libraries."
 msgstr ""
 
-#: seahub/templates/sysadmin/settings.html:168
+#: seahub/templates/sysadmin/settings.html:169
+msgid "Allow user to clean library trash"
+msgstr ""
+
+#: seahub/templates/sysadmin/settings.html:173
 msgid "Online Preview"
 msgstr ""
 
-#: seahub/templates/sysadmin/settings.html:171
+#: seahub/templates/sysadmin/settings.html:176
 msgid "text file extensions"
 msgstr ""
 
-#: seahub/templates/sysadmin/settings.html:172
+#: seahub/templates/sysadmin/settings.html:177
 msgid ""
 "Extensions of text files that can be online previewed, each suffix is "
 "separated by a comma."
 msgstr ""
 
-#: seahub/templates/sysadmin/settings.html:176
+#: seahub/templates/sysadmin/settings.html:181
 msgid "Sync"
 msgstr ""
 
-#: seahub/templates/sysadmin/settings.html:179
+#: seahub/templates/sysadmin/settings.html:184
 msgid ""
 "If turn on, the desktop clients will not be able to sync a folder outside "
 "the default Seafile folder."
 msgstr ""
 
-#: seahub/templates/sysadmin/settings.html:186
+#: seahub/templates/sysadmin/settings.html:191
 msgid ""
 "Enable system admin to add Terms and Conditions, and all users will have to "
 "accept the terms."
 msgstr ""
+
+#: seahub/templates/sysadmin/snippets/sys_org_info_nav.html:6
+#: seahub/templates/sysadmin/sys_statistic_file.html:16
+#: seahub/templates/sysadmin/sys_statistic_storage.html:16
+#: seahub/templates/sysadmin/sys_statistic_traffic.html:16
+#: seahub/templates/sysadmin/sys_statistic_user.html:16
+#: seahub/templates/sysadmin/sys_trafficadmin.html:13
+msgid "Traffic"
+msgstr "Trafik"
 
 #: seahub/templates/sysadmin/sudo_mode.html:8
 msgid "Confirm password to continue"
@@ -6899,39 +6913,119 @@ msgstr "Organizasyon hafıza limiti oluştur"
 msgid "An integer that is greater than or equal to 0."
 msgstr ""
 
-#: seahub/templates/sysadmin/sys_org_info_group.html:34
+#: seahub/templates/sysadmin/sys_org_info_group.html:31
 msgid "This organization doesn't have any groups"
 msgstr "Bu organizasyonun grubu yok"
 
-#: seahub/templates/sysadmin/sys_org_info_library.html:50
+#: seahub/templates/sysadmin/sys_org_info_library.html:46
 msgid "This organization doesn't have any libraries"
 msgstr "Bu organizasyonun kütüphanesi yok"
 
-#: seahub/templates/sysadmin/sys_org_info_setting.html:16
+#: seahub/templates/sysadmin/sys_org_info_setting.html:13
 msgid "Rename Organization"
 msgstr "Organizasyonu yeniden adlandır"
 
-#: seahub/templates/sysadmin/sys_org_info_setting.html:18
+#: seahub/templates/sysadmin/sys_org_info_setting.html:15
 msgid "New Name"
 msgstr "Yeni İsim"
 
-#: seahub/templates/sysadmin/sys_org_info_setting.html:24
+#: seahub/templates/sysadmin/sys_org_info_setting.html:21
 msgid "Limit Organization User Number"
 msgstr "Organizasyon kullanıcı sayısını sınırla"
 
-#: seahub/templates/sysadmin/sys_org_info_setting.html:26
+#: seahub/templates/sysadmin/sys_org_info_setting.html:23
 msgid "Max User Number"
 msgstr "Maksimum Kullanıcı Sayısı"
 
-#: seahub/templates/sysadmin/sys_org_info_setting.html:52
-#: seahub/views/sysadmin.py:1383
+#: seahub/templates/sysadmin/sys_org_info_setting.html:49
+#: seahub/views/sysadmin.py:1391
 msgid "Input should be a number"
 msgstr "Girdi bir rakam olmalı"
 
-#: seahub/templates/sysadmin/sys_org_info_setting.html:55
-#: seahub/views/sysadmin.py:1393
+#: seahub/templates/sysadmin/sys_org_info_setting.html:52
+#: seahub/views/sysadmin.py:1401
 msgid "Input number should be greater than 0"
 msgstr "Girdi numarası 0'dan büyük olmalı"
+
+#: seahub/templates/sysadmin/sys_org_info_traffic.html:17
+#: seahub/templates/sysadmin/sys_statistic_file.html:22
+#: seahub/templates/sysadmin/sys_statistic_storage.html:22
+#: seahub/templates/sysadmin/sys_statistic_traffic.html:33
+#: seahub/templates/sysadmin/sys_statistic_user.html:22
+msgid "7 Days"
+msgstr ""
+
+#: seahub/templates/sysadmin/sys_org_info_traffic.html:18
+#: seahub/templates/sysadmin/sys_statistic_file.html:23
+#: seahub/templates/sysadmin/sys_statistic_storage.html:23
+#: seahub/templates/sysadmin/sys_statistic_traffic.html:34
+#: seahub/templates/sysadmin/sys_statistic_user.html:23
+msgid "30 Days"
+msgstr ""
+
+#: seahub/templates/sysadmin/sys_org_info_traffic.html:19
+#: seahub/templates/sysadmin/sys_statistic_file.html:24
+#: seahub/templates/sysadmin/sys_statistic_storage.html:24
+#: seahub/templates/sysadmin/sys_statistic_traffic.html:35
+#: seahub/templates/sysadmin/sys_statistic_user.html:24
+msgid "1 Year"
+msgstr ""
+
+#: seahub/templates/sysadmin/sys_org_info_traffic.html:211
+#: seahub/templates/sysadmin/sys_statistic_traffic.html:226
+msgctxt "upload traffic"
+msgid "Upload"
+msgstr "Yükle"
+
+#: seahub/templates/sysadmin/sys_org_info_traffic.html:217
+#: seahub/templates/sysadmin/sys_statistic_traffic.html:232
+msgctxt "download traffic"
+msgid "Download"
+msgstr "İndir"
+
+#: seahub/templates/sysadmin/sys_org_info_traffic.html:271
+#: seahub/templates/sysadmin/sys_statistic_traffic.html:286
+msgid "Total Traffic"
+msgstr ""
+
+#: seahub/templates/sysadmin/sys_org_info_traffic.html:278
+#: seahub/templates/sysadmin/sys_statistic_traffic.html:293
+msgid "Share Link Traffic"
+msgstr ""
+
+#: seahub/templates/sysadmin/sys_org_info_traffic.html:285
+#: seahub/templates/sysadmin/sys_statistic_traffic.html:300
+msgid "Sync Traffic"
+msgstr ""
+
+#: seahub/templates/sysadmin/sys_org_info_traffic.html:292
+#: seahub/templates/sysadmin/sys_statistic_traffic.html:307
+msgid "Web Traffic"
+msgstr ""
+
+#: seahub/templates/sysadmin/sys_org_info_traffic.html:365
+#: seahub/templates/sysadmin/sys_statistic_file.html:276
+#: seahub/templates/sysadmin/sys_statistic_storage.html:273
+#: seahub/templates/sysadmin/sys_statistic_traffic.html:380
+#: seahub/templates/sysadmin/sys_statistic_user.html:261
+msgid "Invalid start date, should be yyyy-mm-dd"
+msgstr ""
+
+#: seahub/templates/sysadmin/sys_org_info_traffic.html:369
+#: seahub/templates/sysadmin/sys_statistic_file.html:280
+#: seahub/templates/sysadmin/sys_statistic_storage.html:277
+#: seahub/templates/sysadmin/sys_statistic_traffic.html:384
+#: seahub/templates/sysadmin/sys_statistic_user.html:265
+msgid "Invalid end date, should be yyyy-mm-dd"
+msgstr ""
+
+#: seahub/templates/sysadmin/sys_org_info_traffic.html:374
+#: seahub/templates/sysadmin/sys_statistic_file.html:285
+#: seahub/templates/sysadmin/sys_statistic_storage.html:282
+#: seahub/templates/sysadmin/sys_statistic_traffic.html:389
+#: seahub/templates/sysadmin/sys_statistic_user.html:270
+msgid "Start date should be earlier than end date."
+msgstr ""
 
 #: seahub/templates/sysadmin/sys_org_search.html:9
 msgid "Tip: you can search by keyword in name or creator or both."
@@ -6943,75 +7037,33 @@ msgstr ""
 
 #: seahub/templates/sysadmin/sys_statistic_file.html:14
 #: seahub/templates/sysadmin/sys_statistic_storage.html:14
+#: seahub/templates/sysadmin/sys_statistic_traffic.html:14
 #: seahub/templates/sysadmin/sys_statistic_user.html:14
 #: seahub/templates/sysadmin/sys_trafficadmin.html:11
 msgid "Storage"
 msgstr ""
 
-#: seahub/templates/sysadmin/sys_statistic_file.html:17
-#: seahub/templates/sysadmin/sys_statistic_storage.html:17
-#: seahub/templates/sysadmin/sys_statistic_user.html:17
-#: seahub/templates/sysadmin/sys_trafficadmin.html:13
-msgid "Traffic"
-msgstr "Trafik"
-
-#: seahub/templates/sysadmin/sys_statistic_file.html:24
-#: seahub/templates/sysadmin/sys_statistic_storage.html:24
-#: seahub/templates/sysadmin/sys_statistic_user.html:24
-msgid "7 Days"
-msgstr ""
-
-#: seahub/templates/sysadmin/sys_statistic_file.html:25
-#: seahub/templates/sysadmin/sys_statistic_storage.html:25
-#: seahub/templates/sysadmin/sys_statistic_user.html:25
-msgid "30 Days"
-msgstr ""
-
-#: seahub/templates/sysadmin/sys_statistic_file.html:26
-#: seahub/templates/sysadmin/sys_statistic_storage.html:26
-#: seahub/templates/sysadmin/sys_statistic_user.html:26
-msgid "1 Year"
-msgstr ""
-
-#: seahub/templates/sysadmin/sys_statistic_file.html:178
+#: seahub/templates/sysadmin/sys_statistic_file.html:176
 msgctxt "files visited"
 msgid "Visited"
 msgstr ""
 
-#: seahub/templates/sysadmin/sys_statistic_file.html:184
+#: seahub/templates/sysadmin/sys_statistic_file.html:182
 msgctxt "files added"
 msgid "Added"
 msgstr "Eklendi"
 
-#: seahub/templates/sysadmin/sys_statistic_file.html:190
+#: seahub/templates/sysadmin/sys_statistic_file.html:188
 msgctxt "files deleted"
 msgid "Deleted"
 msgstr "Silindi"
 
-#: seahub/templates/sysadmin/sys_statistic_file.html:201
+#: seahub/templates/sysadmin/sys_statistic_file.html:199
 msgid "File Operations"
 msgstr ""
 
-#: seahub/templates/sysadmin/sys_statistic_file.html:278
-#: seahub/templates/sysadmin/sys_statistic_storage.html:266
-#: seahub/templates/sysadmin/sys_statistic_user.html:263
-msgid "Invalid start date, should be yyyy-mm-dd"
-msgstr ""
-
-#: seahub/templates/sysadmin/sys_statistic_file.html:282
-#: seahub/templates/sysadmin/sys_statistic_storage.html:270
-#: seahub/templates/sysadmin/sys_statistic_user.html:267
-msgid "Invalid end date, should be yyyy-mm-dd"
-msgstr ""
-
-#: seahub/templates/sysadmin/sys_statistic_file.html:287
-#: seahub/templates/sysadmin/sys_statistic_storage.html:275
-#: seahub/templates/sysadmin/sys_statistic_user.html:272
-msgid "Start date should be earlier than end date."
-msgstr ""
-
-#: seahub/templates/sysadmin/sys_statistic_storage.html:174
-#: seahub/templates/sysadmin/sys_statistic_storage.html:186
+#: seahub/templates/sysadmin/sys_statistic_storage.html:172
+#: seahub/templates/sysadmin/sys_statistic_storage.html:184
 msgid "Total storage"
 msgstr ""
 
@@ -7049,15 +7101,15 @@ msgstr ""
 msgid "Update Terms and Conditions"
 msgstr ""
 
-#: seahub/templates/sysadmin/sys_trafficadmin.html:17
+#: seahub/templates/sysadmin/sys_trafficadmin.html:28
 msgid "Tip: the traffic only includes the traffic used by sharing links."
 msgstr ""
 
-#: seahub/templates/sysadmin/sys_trafficadmin.html:20
+#: seahub/templates/sysadmin/sys_trafficadmin.html:31
 msgid "Month:"
 msgstr "Ay:"
 
-#: seahub/templates/sysadmin/sys_trafficadmin.html:27
+#: seahub/templates/sysadmin/sys_trafficadmin.html:38
 msgid "Total Usage"
 msgstr "Toplam Kullanım"
 
@@ -7114,7 +7166,7 @@ msgid "Download an example file"
 msgstr ""
 
 #: seahub/templates/sysadmin/sys_useradmin.html:77
-#: seahub/views/sysadmin.py:1943 seahub/views/sysadmin.py:2024
+#: seahub/views/sysadmin.py:1966 seahub/views/sysadmin.py:2047
 msgid "Please choose a .xlsx file."
 msgstr ""
 
@@ -7299,10 +7351,6 @@ msgstr "Üzgünüz, bu kullanıcı henüz kayıtlı değil."
 #: seahub/templates/view_file_text.html:16
 msgid "updated this file"
 msgstr "Güncelleştirilmiş dosya"
-
-#: seahub/templates/view_file_base.html:73
-msgid "Online view is not applicable to this file format"
-msgstr ""
 
 #: seahub/templates/view_file_base.html:87
 msgid "Back to top"
@@ -7490,7 +7538,7 @@ msgid "Are you sure you want to delete this wiki?"
 msgstr ""
 
 #: seahub/thumbnail/views.py:45 seahub/thumbnail/views.py:172
-#: seahub/views/__init__.py:578 seahub/views/file.py:1366
+#: seahub/views/__init__.py:577 seahub/views/file.py:1344
 msgid "Invalid arguments."
 msgstr "Geçersiz argüman"
 
@@ -7502,316 +7550,316 @@ msgstr "Küçük resim oluşturulamadı."
 msgid "Invalid token."
 msgstr "Geçersiz jeton"
 
-#: seahub/utils/__init__.py:128
+#: seahub/utils/__init__.py:129
 msgid "permission error"
 msgstr "izin hatası"
 
-#: seahub/views/__init__.py:405 seahub/views/__init__.py:421
+#: seahub/views/__init__.py:404 seahub/views/__init__.py:420
 msgid "Unable to view recycle page"
 msgstr "Geri dönüşüm sayfası görüntülenemiyor"
 
-#: seahub/views/__init__.py:457
+#: seahub/views/__init__.py:456
 msgid "Unable to view library modification"
 msgstr "Kütüphane değiştirimini görüntüleyemiyor."
 
-#: seahub/views/__init__.py:537 seahub/views/__init__.py:580
-#: seahub/views/__init__.py:782 seahub/views/__init__.py:908
-#: seahub/views/ajax.py:1191 seahub/views/file.py:1849
+#: seahub/views/__init__.py:536 seahub/views/__init__.py:579
+#: seahub/views/__init__.py:781 seahub/views/__init__.py:907
+#: seahub/views/ajax.py:1186 seahub/views/file.py:1832
 msgid "Library does not exist"
 msgstr "Kütüphane yok"
 
-#: seahub/views/__init__.py:571
+#: seahub/views/__init__.py:570
 msgid "Please specify history ID"
 msgstr "Lütfen geçmiş kimliği belirtin"
 
-#: seahub/views/__init__.py:575
+#: seahub/views/__init__.py:574
 msgid "Successfully restored the library."
 msgstr ""
 
-#: seahub/views/__init__.py:582
+#: seahub/views/__init__.py:581
 msgid "History you specified does not exist"
 msgstr "Belirttiğiniz geçmiş yok"
 
-#: seahub/views/__init__.py:584
+#: seahub/views/__init__.py:583
 msgid "Unknown error"
 msgstr "Bilinmeyen hata"
 
-#: seahub/views/__init__.py:915 seahub/views/repo.py:191
+#: seahub/views/__init__.py:914 seahub/views/repo.py:197
 #, python-format
 msgid "\"%s\" does not exist."
 msgstr "\"%s\" mevcut değil."
 
-#: seahub/views/__init__.py:933 seahub/views/file.py:1332
+#: seahub/views/__init__.py:932 seahub/views/file.py:1310
 msgid "Internal Error"
 msgstr "iç hata"
 
-#: seahub/views/__init__.py:955
+#: seahub/views/__init__.py:954
 #, python-format
 msgid "Unable to download \"%s\""
 msgstr "\"%s\" indirilemedi."
 
-#: seahub/views/__init__.py:1077
+#: seahub/views/__init__.py:1076
 msgid "Successfully enable \"Personal Wiki\"."
 msgstr "\"Personal Wiki\" etkinleştirildi."
 
-#: seahub/views/__init__.py:1082
+#: seahub/views/__init__.py:1081
 msgid "Successfully disable \"Personal Wiki\"."
 msgstr "\"Personal Wiki\" devre dışı bırakıldı."
 
-#: seahub/views/ajax.py:86
+#: seahub/views/ajax.py:85
 msgid "You don't have permission to access the library."
 msgstr "Kütüphaneye erişim izniniz yok."
 
-#: seahub/views/ajax.py:94
+#: seahub/views/ajax.py:93
 msgid "No path."
 msgstr "Yol yok."
 
-#: seahub/views/ajax.py:159
+#: seahub/views/ajax.py:158
 msgid "The group doesn't exist"
 msgstr "Grup yok."
 
-#: seahub/views/ajax.py:288 seahub/views/ajax.py:942 seahub/views/ajax.py:1252
+#: seahub/views/ajax.py:287 seahub/views/ajax.py:937 seahub/views/ajax.py:1247
 msgid "Library is encrypted."
 msgstr "Kütüphane şifreli."
 
-#: seahub/views/ajax.py:294 seahub/views/ajax.py:948
+#: seahub/views/ajax.py:293 seahub/views/ajax.py:943
 msgid "Error: no head commit id"
 msgstr "Hata: head commit id yok"
 
-#: seahub/views/ajax.py:541 seahub/views/ajax.py:605
+#: seahub/views/ajax.py:536 seahub/views/ajax.py:600
 msgid "Argument missing."
 msgstr "Değişken eksik."
 
-#: seahub/views/ajax.py:583
+#: seahub/views/ajax.py:578
 #, python-format
 msgid "Internal error. Failed to delete %s."
 msgstr "İç hata. %s silinemedi."
 
-#: seahub/views/ajax.py:682
+#: seahub/views/ajax.py:677
 #, python-format
 msgid "Destination path is too long for %s."
 msgstr "Hedef yol %s için çok uzun."
 
-#: seahub/views/ajax.py:853
+#: seahub/views/ajax.py:848
 msgid "You do not have permission to copy files/folders in this directory"
 msgstr ""
 
-#: seahub/views/ajax.py:860
+#: seahub/views/ajax.py:855
 #, python-format
 msgid "Can not copy directory %(src)s to its subdirectory %(des)s"
 msgstr "Dizin %(src)s alt dizinine %(des)s kopyalanamıyor."
 
-#: seahub/views/ajax.py:982
+#: seahub/views/ajax.py:977
 msgid "Failed to get file block list"
 msgstr "Dosya blok listesini alamadı."
 
-#: seahub/views/ajax.py:991
+#: seahub/views/ajax.py:986
 msgid "FileServer access token invalid."
 msgstr ""
 
-#: seahub/views/ajax.py:1025
+#: seahub/views/ajax.py:1020
 msgid "Wrong repo id"
 msgstr "Yanlış repo id"
 
-#: seahub/views/ajax.py:1036 seahub/views/ajax.py:1179
+#: seahub/views/ajax.py:1031 seahub/views/ajax.py:1174
 msgid "Bad upload link token."
 msgstr "Kötü bağlantı yükleme jetonu."
 
-#: seahub/views/ajax.py:1042 seahub/views/file.py:406 seahub/views/file.py:437
-#: seahub/views/file.py:954 seahub/views/file.py:1178
-#: seahub/views/file.py:1858
+#: seahub/views/ajax.py:1037 seahub/views/file.py:441 seahub/views/file.py:472
+#: seahub/views/file.py:990 seahub/views/file.py:1156
+#: seahub/views/file.py:1841
 msgid "File does not exist"
 msgstr "Dosya yok."
 
-#: seahub/views/ajax.py:1186
+#: seahub/views/ajax.py:1181
 msgid "Bad repo id in upload link."
 msgstr "Bağlantı yüklemede kötü repo id."
 
-#: seahub/views/ajax.py:1274
+#: seahub/views/ajax.py:1269
 msgid "No conflict in the merge."
 msgstr "Dosya birleştirmede uyuşmazlık yok."
 
-#: seahub/views/file.py:162
+#: seahub/views/file.py:171
 msgid "HTTPError: failed to open file online"
 msgstr "HTTP Hatası: Dosya çevrimiçi açılamadı."
 
-#: seahub/views/file.py:166
+#: seahub/views/file.py:175
 msgid "URLError: failed to open file online"
 msgstr "URL Hatası: Dosya çevrimiçi açılamadı."
 
-#: seahub/views/file.py:173 seahub/views/file.py:1384
+#: seahub/views/file.py:182 seahub/views/file.py:1362
 msgid "The encoding you chose is not proper."
 msgstr "Seçtiğiniz kodlama uygun değil."
 
-#: seahub/views/file.py:190 seahub/views/file.py:193
+#: seahub/views/file.py:199 seahub/views/file.py:202
 msgid "Unknown file encoding"
 msgstr "Bilinmeyen dosya kodlama"
 
-#: seahub/views/file.py:309 seahub/views/file.py:318 seahub/views/file.py:551
-#: seahub/views/file.py:603 seahub/views/file.py:702
+#: seahub/views/file.py:323 seahub/views/file.py:354 seahub/views/file.py:586
+#: seahub/views/file.py:638 seahub/views/file.py:737
 #, python-format
 msgid "File size surpasses %s, can not be opened online."
 msgstr "Dosya boyutu %s i aşıyor, online açılamaz."
 
-#: seahub/views/file.py:340 seahub/views/file.py:636
+#: seahub/views/file.py:330 seahub/views/file.py:671
 msgid "The library is encrypted, can not open file online."
 msgstr ""
 
-#: seahub/views/file.py:393 seahub/views/file.py:415 seahub/views/file.py:420
-#: seahub/views/file.py:458 seahub/views/file.py:815 seahub/views/file.py:837
-#: seahub/views/file.py:862 seahub/views/file.py:988 seahub/views/file.py:1203
-#: seahub/views/file.py:1457
+#: seahub/views/file.py:428 seahub/views/file.py:450 seahub/views/file.py:455
+#: seahub/views/file.py:493 seahub/views/file.py:850 seahub/views/file.py:872
+#: seahub/views/file.py:897 seahub/views/file.py:1017
+#: seahub/views/file.py:1181 seahub/views/file.py:1435
 msgid "Unable to view file"
 msgstr "Dosya görüntülenemiyor."
 
-#: seahub/views/file.py:668 seahub/views/file.py:769 seahub/views/file.py:1028
-#: seahub/views/file.py:1240
+#: seahub/views/file.py:703 seahub/views/file.py:804 seahub/views/file.py:1060
+#: seahub/views/file.py:1218
 msgid "Error when prepare Office Online file preview page."
 msgstr ""
 
-#: seahub/views/file.py:695 seahub/views/file.py:779 seahub/views/file.py:1039
-#: seahub/views/file.py:1251
+#: seahub/views/file.py:730 seahub/views/file.py:814 seahub/views/file.py:1071
+#: seahub/views/file.py:1229
 msgid "Error when prepare OnlyOffice file preview page."
 msgstr ""
 
-#: seahub/views/file.py:896
+#: seahub/views/file.py:930
 msgid "Unable to download file, invalid file path"
 msgstr "Dosya indirilemedi, geçersiz dosya yolu"
 
-#: seahub/views/file.py:905
+#: seahub/views/file.py:939
 msgid "Unable to download file, wrong file path"
 msgstr "Dosya indirilemedi, hatalı dosya yolu"
 
-#: seahub/views/file.py:910
+#: seahub/views/file.py:944
 msgid "Unable to download file, share link traffic is used up."
 msgstr "Dosya indirilemedi, link paylaşma trafiği tükendi."
 
-#: seahub/views/file.py:926
+#: seahub/views/file.py:953
 msgid "Unable to download file."
 msgstr ""
 
-#: seahub/views/file.py:999 seahub/views/file.py:1214
+#: seahub/views/file.py:1028 seahub/views/file.py:1192
 msgid "Unable to view raw file, share link traffic is used up."
 msgstr ""
 
-#: seahub/views/file.py:1356
+#: seahub/views/file.py:1334
 msgid "The library does not exist."
 msgstr "Kütüphane yok."
 
-#: seahub/views/file.py:1360
+#: seahub/views/file.py:1338
 msgid "The library is encrypted."
 msgstr "Kütüphane şifreli."
 
-#: seahub/views/file.py:1445
+#: seahub/views/file.py:1423
 msgid "Unable to edit file"
 msgstr "Dosya düzenlenemiyor."
 
-#: seahub/views/file.py:1451
+#: seahub/views/file.py:1429
 msgid "The file does not exist."
 msgstr "Dosya yok."
 
-#: seahub/views/file.py:1483
+#: seahub/views/file.py:1461
 msgid "Edit online is not offered for this type of file."
 msgstr "Bu tip dosyalar için çevrimiçi düzenleme sunulmuyor."
 
-#: seahub/views/file.py:1600 seahub/views/file.py:1605
+#: seahub/views/file.py:1583 seahub/views/file.py:1588
 msgid "Unable to download file"
 msgstr "Dosya indirilemiyor."
 
-#: seahub/views/sysadmin.py:322 seahub/views/sysadmin.py:428
-#: seahub/views/sysadmin.py:1181 seahub/views/sysadmin.py:1193
-#: seahub/views/sysadmin.py:1921
+#: seahub/views/sysadmin.py:330 seahub/views/sysadmin.py:436
+#: seahub/views/sysadmin.py:1189 seahub/views/sysadmin.py:1201
+#: seahub/views/sysadmin.py:1944
 msgid "Failed to export Excel"
 msgstr ""
 
-#: seahub/views/sysadmin.py:786 seahub/views/sysadmin.py:812
+#: seahub/views/sysadmin.py:794 seahub/views/sysadmin.py:820
 msgid "Failed to set quota: internal server error"
 msgstr "Kota oluşturulamadı: iç sunucu hatası"
 
-#: seahub/views/sysadmin.py:831
+#: seahub/views/sysadmin.py:839
 msgid "Failed to delete: the user is an organization creator"
 msgstr "Silinemedi: kullanıcı bir organizasyon oluşturucusudur."
 
-#: seahub/views/sysadmin.py:866
+#: seahub/views/sysadmin.py:874
 #, python-format
 msgid "Successfully remove trial for: %s"
 msgstr "%s için deneme sürümü başarıyla kaldırıldı."
 
-#: seahub/views/sysadmin.py:944
+#: seahub/views/sysadmin.py:952
 #, python-format
 msgid "Your account on %s is activated"
 msgstr "%s deki hesabınız etkinleştirildi."
 
-#: seahub/views/sysadmin.py:1027
+#: seahub/views/sysadmin.py:1035
 #, python-format
 msgid "Password has been reset on %s"
 msgstr "%s deki şifre sıfırlandı."
 
-#: seahub/views/sysadmin.py:1067
+#: seahub/views/sysadmin.py:1075
 msgid "Failed to reset password: user does not exist"
 msgstr "Şifre sıfırlanamadı: kullanıcı yok."
 
-#: seahub/views/sysadmin.py:1083 seahub/views/sysadmin.py:2009
+#: seahub/views/sysadmin.py:1091 seahub/views/sysadmin.py:2032
 #, python-format
 msgid "You are invited to join %s"
 msgstr "%s'e katılmaya davet edildiniz."
 
-#: seahub/views/sysadmin.py:1141 seahub/views/sysadmin.py:1154
+#: seahub/views/sysadmin.py:1149 seahub/views/sysadmin.py:1162
 #, python-format
 msgid "Successfully added user %s. An email notification has been sent."
 msgstr "Kullanıcı %s başarıyla eklendi. Bildirim epostası gönderildi."
 
-#: seahub/views/sysadmin.py:1144 seahub/views/sysadmin.py:1157
+#: seahub/views/sysadmin.py:1152 seahub/views/sysadmin.py:1165
 #, python-format
 msgid ""
 "Successfully added user %s. An error accurs when sending email notification,"
 " please check your email configuration."
 msgstr "Kullanıcı %s başarıyla eklendi. Eposta bildirimi gönderilirken hata oluşuyor, lütfen eposta yapılandırmanızı kontrol edin."
 
-#: seahub/views/sysadmin.py:1161
+#: seahub/views/sysadmin.py:1169
 #, python-format
 msgid ""
 "Successfully added user %s. But email notification can not be sent, because "
 "Email service is not properly configured."
 msgstr "Kullanıcı %s başarıyla eklendi. Ancak eposta servis yapılandırması doğru olmadığından bildirim epostası gönderilemedi."
 
-#: seahub/views/sysadmin.py:1335
+#: seahub/views/sysadmin.py:1343
 msgid "Failed to rename organization"
 msgstr "Organizasyon yeniden adlandırılamadı"
 
-#: seahub/views/sysadmin.py:1863
+#: seahub/views/sysadmin.py:1886
 msgid "Failed to delete, please try again later."
 msgstr ""
 
-#: seahub/views/sysadmin.py:1909 seahub/views/sysadmin.py:1910
+#: seahub/views/sysadmin.py:1932 seahub/views/sysadmin.py:1933
 msgid "Optional"
 msgstr ""
 
-#: seahub/views/sysadmin.py:2022
+#: seahub/views/sysadmin.py:2045
 msgid "Import succeeded"
 msgstr "İçe aktarıldı"
 
-#: seahub/views/sysadmin.py:2105
+#: seahub/views/sysadmin.py:2129
 msgid "Invalid setting"
 msgstr ""
 
-#: seahub/views/sysadmin.py:2112 seahub/views/sysadmin.py:2116
-#: seahub/views/sysadmin.py:2121
+#: seahub/views/sysadmin.py:2136 seahub/views/sysadmin.py:2140
+#: seahub/views/sysadmin.py:2145
 msgid "Invalid value"
 msgstr ""
 
-#: seahub/views/sysadmin.py:2249
+#: seahub/views/sysadmin.py:2273
 #, python-format
 msgid ""
 "Failed to add %s to the institution: user already belongs to an institution"
 msgstr ""
 
-#: seahub/views/sysadmin.py:2254
+#: seahub/views/sysadmin.py:2278
 #, python-format
 msgid "Successfully added %s to the institution."
 msgstr ""
 
-#: seahub/views/sysadmin.py:2577
+#: seahub/views/sysadmin.py:2601
 msgid "Successfully deleted 1 item"
 msgstr ""
 
