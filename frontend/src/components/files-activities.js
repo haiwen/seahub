@@ -7,7 +7,7 @@ const per_page = 25; // default
 class FileActivitiesContent extends Component {
 
   render() {
-    const {loading, error_msg, events} = this.props.data;
+    let {loading, error_msg, items, has_more} = this.props.data;
     if (loading) {
       return <span className="loading-icon loading-tip"></span>;
     } else if (error_msg) {
@@ -25,10 +25,10 @@ class FileActivitiesContent extends Component {
                 <th width="20%">{gettext("Time")}</th>
               </tr>
             </thead>
-            <TableBody items={events.items} />
+            <TableBody items={items} />
           </table>
-          {events.has_more ? <span className="loading-icon loading-tip"></span> : ''}
-          {events.error_msg ? <p className="error text-center">{events.error_msg}</p> : ''}
+          {has_more ? <span className="loading-icon loading-tip"></span> : ''}
+          {error_msg ? <p className="error text-center">{error_msg}</p> : ''}
         </React.Fragment>
       ); 
     }
@@ -167,7 +167,10 @@ class FilesActivities extends Component {
     this.state = {
       loading: true,
       error_msg: '',
-      events: {}
+      events: {},
+      items: [],
+      page: 1,
+      has_more: false
     };
 
     this.handleScroll = this.handleScroll.bind(this);
@@ -187,41 +190,42 @@ class FilesActivities extends Component {
         // {"events":[...]}
         this.setState({
           loading: false,
-          events: {
-            page: 1,
-            items: res.data.events,
-            has_more: res.data.events.length == per_page ? true : false
-          }
+          items: res.data.events,
+          has_more: res.data.events.length == '0' ? false : true
         });
       }
     });
   }
 
   getMore() {
-    const pageNum = this.state.events.page + 1;
+    const pageNum = this.state.page + 1;
+    this.setState({
+      page: pageNum
+    })
     seafileAPI.listActivities(pageNum)
-    .then(res => {
-      this.setState(function(prevState, props) {
-        let events = prevState.events;
-        if (res.status == 403) { // log out
-          events.error_msg = gettext("Permission denied");
-          events.has_more = false;
+      .then(res => {
+        if (res.status == 403) {
+          this.setState({
+            loading: false,
+            error_msg: gettext("Permission denied")
+          });
+        } else {
+          // {"events":[...]}
+          this.setState({
+            loading: false,
+            items: [...this.state.items, ...res.data.events],
+            has_more: res.data.events.length == '0' ? false : true 
+          });
         }
-        if (res.ok) {
-          events.page += 1;
-          events.items = events.items.concat(res.data.events);
-          events.has_more = res.data.events.length == per_page ? true : false;
-        }
-        return {events: events};
       });
-    });
   }
 
-  handleScroll(e) {
-    let $el = e.target;
-    if (this.state.events.has_more &&
-      $el.scrollTop > 0 &&
-      $el.clientHeight + $el.scrollTop == $el.scrollHeight) { // scroll to the bottom
+  handleScroll(event) {
+    const clientHeight = event.target.clientHeight;
+    const scrollHeight = event.target.scrollHeight;
+    const scrollTop    = event.target.scrollTop;
+    const isBottom = (clientHeight + scrollTop + 1 >= scrollHeight);
+    if (this.state.has_more && isBottom) { // scroll to the bottom
       this.getMore();
     }
   }
