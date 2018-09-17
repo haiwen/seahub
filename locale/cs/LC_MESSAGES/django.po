@@ -12,8 +12,8 @@ msgstr ""
 "Project-Id-Version: seahub\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2018-09-17 12:05+0800\n"
-"PO-Revision-Date: 2018-09-17 04:07+0000\n"
-"Last-Translator: Tomáš Kubalík <tkubalik@ifrog.cz>\n"
+"PO-Revision-Date: 2018-09-17 06:24+0000\n"
+"Last-Translator: Tomáš Holan <mail@tomasholan.eu>\n"
 "Language-Team: Czech (http://www.transifex.com/haiwen/seahub/language/cs/)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -6737,7 +6737,7 @@ msgstr "Povolit uživatelům přidávat knihovny organizace. V opačném přípa
 
 #: seahub/templates/sysadmin/settings.html:169
 msgid "Allow user to clean library trash"
-msgstr ""
+msgstr "Povolit uživateli vyprázdnit koš knihovny"
 
 #: seahub/templates/sysadmin/settings.html:173
 msgid "Online Preview"
@@ -7001,22 +7001,22 @@ msgstr "Stáhnout"
 #: seahub/templates/sysadmin/sys_org_info_traffic.html:271
 #: seahub/templates/sysadmin/sys_statistic_traffic.html:286
 msgid "Total Traffic"
-msgstr ""
+msgstr "Celkový provoz"
 
 #: seahub/templates/sysadmin/sys_org_info_traffic.html:278
 #: seahub/templates/sysadmin/sys_statistic_traffic.html:293
 msgid "Share Link Traffic"
-msgstr ""
+msgstr "Provoz sdílecího odkazu"
 
 #: seahub/templates/sysadmin/sys_org_info_traffic.html:285
 #: seahub/templates/sysadmin/sys_statistic_traffic.html:300
 msgid "Sync Traffic"
-msgstr ""
+msgstr "Provoz synchronizace"
 
 #: seahub/templates/sysadmin/sys_org_info_traffic.html:292
 #: seahub/templates/sysadmin/sys_statistic_traffic.html:307
 msgid "Web Traffic"
-msgstr ""
+msgstr "Provoz webu"
 
 #: seahub/templates/sysadmin/sys_org_info_traffic.html:365
 #: seahub/templates/sysadmin/sys_statistic_file.html:276
