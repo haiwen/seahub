@@ -41,7 +41,7 @@ html,body {
     <span>{% trans "Deleted Libraries" %}</span>
 </div>
 <div class="cur-view-main-con">
-    <p class="tip">{% trans "Tip: libraries deleted 30 days ago will be cleaned automatically."%}</p>
+    <p class="tip">{% blocktrans %}Tip: libraries deleted {{ trash_repos_expire_days }} days ago will be cleaned automatically.{% endblocktrans %}</p>
     <table class="my-deleted-repos-table hide">
         <thead></thead>
         <tbody></tbody>
