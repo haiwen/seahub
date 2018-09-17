@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { gettext, repoID, serviceUrl, slug, siteRoot, isPro } from '../../components/constants';
-import Search from '../../components/search';
+import Search from '../../components/search/search';
 import Account from '../../components/account';
 import Notification from '../../components/notification';
 import MarkdownViewer from '../../components/markdown-viewer';
@@ -47,7 +47,7 @@ class MainPanel extends Component {
         <div className="main-panel-top panel-top">
           <span className="sf2-icon-menu side-nav-toggle hidden-md-up d-md-none" title="Side Nav Menu" onClick={this.onMenuClick}></span>
            <div className={`wiki-page-ops ${this.props.permission === 'rw' ? '' : 'hide'}`}>
-              <a className="btn btn-secondary btn-topbar" onClick={this.onEditClick}>{gettext("Edit Page")}</a>
+              <a className="btn btn-secondary sf-toobar-btn-edit" onClick={this.onEditClick}>{gettext("Edit Page")}</a>
            </div>
           <div className="common-toolbar">
             {isPro && <Search  onSearchedClick={this.props.onSearchedClick}

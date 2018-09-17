@@ -13,32 +13,17 @@
   z-index: 2;
 }
 
-.search-input-container {
-  position: relative;
-}
-
-.search-input {
-  padding: 0 2rem;
-  height: 2rem;
-}
-
-.search-icon {
-  position: absolute;
-  top: 0;
-  width: 2rem;
-  height: 2rem;
+.search-container .fas {
   display: flex;
-  justify-content:center;
-  align-items:center;
-  color: #999 !important;
 }
 
-.icon-search{
-  left: 0;
+.search-container .sf2-icon-x3 {
+  cursor: pointer;
+  pointer-events: all;
 }
 
-.sf2-icon-x3{
-  right: 0;
+.form-control {
+  height: 1.875rem;
 }
 
 .search-result-container {

@@ -218,3 +218,10 @@ img[src=""] {
   outline: none;
   user-select: none;
 }
+
+.sf-toobar-btn-edit {
+  margin-right: 0.5rem;
+  padding: 0.25rem 0.5rem;
+  font-weight: normal;
+  border: 1px solid #ccc;
+}

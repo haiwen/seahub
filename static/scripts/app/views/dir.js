@@ -144,8 +144,22 @@ define([
 
                 this.dir.setPath(category, repo_id, path);
                 this.dir.dirent_more = false;
+                // goto wiki
+                if ( this.view_mode === "wiki") {
+                    this.$('.grid-view-icon-btn').removeClass('active');
+                    this.$('.list-view-icon-btn').removeClass('active');
+                    this.$('.wiki-view-icon-btn').addClass('active');
+                    var siteRoot = app.pageOptions.site_root;
+                    var repoId = this.dir.repo_id;
+                    var path = this.dir.path; 
+                    var url = siteRoot + 'wiki/lib/' + repoId + path;
+                    
+                    window.location = url;
+                    return;
+                }
 
                 this.renderDir();
+
             },
 
             // public function

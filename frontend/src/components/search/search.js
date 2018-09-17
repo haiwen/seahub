@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { gettext, repoID } from './constants';
 import SearchResultItem from './search-result-item';
-import editorUtilities from '../utils/editor-utilties';
+import editorUtilities from '../../utils/editor-utilties';
 
 class Search extends Component {
 
@@ -192,10 +192,11 @@ class Search extends Component {
       <div className="search">
         <div className={`search-mask ${this.state.isMaskShow ? "" : "hide"}`} onClick={this.onCloseHandler}></div>
         <div className="search-container">
-          <div className="search-input-container">
+          <div className="input-icon">
+            <i className="input-icon-addon fas fa-search"></i>
             <input 
               type="text" 
-              className="search-input" 
+              className="form-control" 
               name="query"
               placeholder={this.props.placeholder}
               style={style}
@@ -204,8 +205,7 @@ class Search extends Component {
               onChange={this.onChangeHandler}
               autoComplete="off"
             />
-            <a className="search-icon fas fa-search"></a>
-            <a className={`search-icon sf2-icon-x3 ${this.state.isCloseShow ? "" : "hide"}`} onClick={this.onCloseHandler}></a>
+            <i className={`input-icon-addon sf2-icon-x3 ${this.state.isCloseShow ? "" : "hide"}`} onClick={this.onCloseHandler}></i>
           </div>
           <div className="search-result-container">
             {this.renderSearchResult()}
