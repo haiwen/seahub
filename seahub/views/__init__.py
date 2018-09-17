@@ -710,6 +710,12 @@ def libraries(request):
     joined_groups_exclude_address_book = [item for item in joined_groups if
             item.parent_group_id == 0]
 
+    try:
+        expire_days = seafile_api.get_server_config_int('library_trash', 'expire_days')
+    except Exception as e:
+        logger.error(e)
+        expire_days = -1
+
     return render(request, 'libraries.html', {
             "allow_public_share": allow_public_share,
             "guide_enabled": guide_enabled,
@@ -742,6 +748,7 @@ def libraries(request):
             'share_link_expire_days_max': SHARE_LINK_EXPIRE_DAYS_MAX,
             'enable_office_web_app': ENABLE_OFFICE_WEB_APP,
             'enable_onlyoffice': ENABLE_ONLYOFFICE,
+            'trash_repos_expire_days': expire_days if expire_days > 0 else 30,
             })
 
 @login_required
