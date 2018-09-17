@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { gettext, repoID, serviceUrl, slug, siteRoot, isPro } from '../../components/constants';
+import { gettext, repoID, serviceUrl, slug, siteRoot, isPro, permission } from '../../components/constants';
 import Search from '../../components/search';
 import Account from '../../components/account';
 import Notification from '../../components/notification';
@@ -52,7 +52,7 @@ class MainPanel extends Component {
         <div className="main-panel-top panel-top">
           <span className="sf2-icon-menu side-nav-toggle hidden-md-up d-md-none" title="Side Nav Menu" onClick={this.onMenuClick}></span>
            <div className="wiki-page-ops">
-              { this.props.permission === 'rw' && 
+              { permission && 
                 <a className="btn btn-secondary btn-topbar" title="Edit File" onClick={this.onEditClick}>{gettext("Edit")}</a>
               }
               <a className="btn btn-secondary btn-topbar sf2-icon-list-view" id='list' title={gettext("List")} onClick={this.switchViewMode}></a>
