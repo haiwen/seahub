@@ -41,6 +41,8 @@
 
 .wiki-main .cur-view-path {
   border-bottom: 1px solid #e8e8e8;
+  display: flex;
+  justify-content: space-between;
 }
 .wiki-main .cur-view-path::after {
   display:none;
@@ -204,6 +206,13 @@ img[src=""] {
   border-radius: 0;
 }
 
+.sf-toobar-btn-edit {
+  margin-right: 0.5rem;
+  padding: 0.25rem 0.5rem;
+  font-weight: normal;
+  border: 1px solid #ccc;
+}
+
 .sf-toolbar-btn:hover {
   color: #fff !important;
   background: #ccc;
@@ -214,4 +223,22 @@ img[src=""] {
   border-color: #66afe9;
   outline: none;
   box-shadow: none;
+}
+
+.page-tool-container {
+  list-style: none;
+}
+
+.page-tool-container .tool-item {
+  display: inline-block;
+  text-align: center;
+  margin-left: 1rem;
+  font-size: 21px;
+  color:#8a8a8a;
+  font-size:22px;
+}
+
+.page-tool-container .tool-item:hover {
+  color:#eb8205;
+  text-decoration:none;
 }
