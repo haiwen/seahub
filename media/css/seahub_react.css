@@ -98,13 +98,6 @@ ul,ol,li {
 
 /* UI Widget */
 
-/**** topbar button ****/
-.btn-topbar {
-  padding: 0.25rem 0.5rem;
-  line-height: 1.6;
-  font-weight: normal;
-}
-
 /**** caret ****/
 .outer-caret,
 .inner-caret {

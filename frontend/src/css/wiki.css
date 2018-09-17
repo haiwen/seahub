@@ -191,11 +191,30 @@ img[src=""] {
   margin-top: 0;
 }
 
-.custom-link {
-  color: #eb8205 !important;
+.sf-toolbar-btn {
+  padding: 0;
+  min-width: 32px;
+  line-height: 27px;
+  font-weight: normal;
+  font-size: 18px;
+  background: #fff;
+  border: 1px solid #ccc;
+  color: #aaa;
   cursor: pointer;
+  border-radius: 0;
 }
 
-.custom-link:hover {
-  text-decoration: underline !important;
+.sf-toolbar-btn:hover {
+  color: #aaa;
+  background-color: #fff;
+  border: 1px solid #ccc;
+}
+
+.sf-toolbar-btn:focus {
+  color:#fff;
+  background:#ccc;
+  cursor: pointer;
+  box-shadow: none;
+  outline: none;
+  user-select: none;
 }

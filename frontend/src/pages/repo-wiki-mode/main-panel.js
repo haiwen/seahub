@@ -51,12 +51,12 @@ class MainPanel extends Component {
       <div className="wiki-main-panel o-hidden">
         <div className="main-panel-top panel-top">
           <span className="sf2-icon-menu side-nav-toggle hidden-md-up d-md-none" title="Side Nav Menu" onClick={this.onMenuClick}></span>
-           <div className="wiki-page-ops">
-              { permission && 
-                <a className="btn btn-secondary btn-topbar" title="Edit File" onClick={this.onEditClick}>{gettext("Edit")}</a>
+           <div className="wiki-page-ops btn-group">
+              { this.props.permission === 'rw' && 
+                <button className="btn btn-secondary sf-toolbar-btn" title="Edit File" onClick={this.onEditClick}>{gettext("Edit")}</button>
               }
-              <a className="btn btn-secondary btn-topbar sf2-icon-list-view" id='list' title={gettext("List")} onClick={this.switchViewMode}></a>
-              <a className="btn btn-secondary btn-topbar sf2-icon-grid-view" id='grid' title={gettext("Grid")} onClick={this.switchViewMode}></a>
+              <button className="btn btn-secondary sf-toolbar-btn sf2-icon-list-view" id='list' title={gettext("List")} onClick={this.switchViewMode}></button>
+              <button className="btn btn-secondary sf-toolbar-btn sf2-icon-grid-view" id='grid' title={gettext("Grid")} onClick={this.switchViewMode}></button>
           </div>
           <div className="common-toolbar">
             {isPro && <Search  onSearchedClick={this.props.onSearchedClick}
@@ -76,7 +76,7 @@ class MainPanel extends Component {
               {pathElem}
             </div>
           </div>
-          <div className="cur-view-container">
+          <div className="cur-view-container table-container">
             { this.props.isViewFileState && <MarkdownViewer
               markdownContent={this.props.content}
               latestContributor={this.props.latestContributor}
