@@ -1857,7 +1857,7 @@ button.sf-dropdown-toggle:focus {
 }
 /**** custom magnificPopup ****/
 .mfp-bottom-bar {
-    position:relative;
+    position:relative; 
 }
 .mfp-title {
     min-width:230px;
@@ -4178,15 +4178,15 @@ img.thumbnail {
     height:29px;
     background:#fff;
     border:1px solid #ccc;
-    border-right:none;
     font-size:18px;
     color:#aaa;
     cursor:pointer;
     border-radius:0;
+    margin-left: -1px;
 }
 
-.wiki-view-icon-btn {
-    border:1px solid #ccc;
+.list-view-icon-btn {
+    margin-left: 0;
 }
 
 .wiki-view-icon-btn.active,
@@ -4195,6 +4195,13 @@ img.thumbnail {
     color:#fff;
     background:#ccc;
     cursor:default;
+}
+
+.view-btn:hover,
+.view-btn:focus,
+.view-btn:active {
+    position: relative;
+    z-index: 1;
 }
 /* grid view */
 .grid-item {

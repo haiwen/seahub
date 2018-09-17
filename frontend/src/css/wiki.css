@@ -199,29 +199,19 @@ img[src=""] {
   font-size: 18px;
   background: #fff;
   border: 1px solid #ccc;
-  color: #aaa;
+  color: #aaa !important;
   cursor: pointer;
   border-radius: 0;
 }
 
 .sf-toolbar-btn:hover {
-  color: #aaa;
-  background-color: #fff;
-  border: 1px solid #ccc;
+  color: #fff !important;
+  background: #ccc;
+  cursor: default;
 }
 
 .sf-toolbar-btn:focus {
-  color:#fff;
-  background:#ccc;
-  cursor: pointer;
-  box-shadow: none;
+  border-color: #66afe9;
   outline: none;
-  user-select: none;
-}
-
-.sf-toobar-btn-edit {
-  margin-right: 0.5rem;
-  padding: 0.25rem 0.5rem;
-  font-weight: normal;
-  border: 1px solid #ccc;
+  box-shadow: none;
 }

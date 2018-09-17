@@ -53,10 +53,10 @@ class MainPanel extends Component {
           <span className="sf2-icon-menu side-nav-toggle hidden-md-up d-md-none" title="Side Nav Menu" onClick={this.onMenuClick}></span>
            <div className="wiki-page-ops btn-group">
               { this.props.permission === 'rw' && 
-                <button className="btn btn-secondary sf-toobar-btn-edit" title="Edit File" onClick={this.onEditClick}>{gettext("Edit")}</button>
+                <button className="btn sf-toobar-btn-edit" title="Edit File" onClick={this.onEditClick}>{gettext("Edit")}</button>
               }
-              <button className="btn btn-secondary sf-toolbar-btn sf2-icon-list-view" id='list' title={gettext("List")} onClick={this.switchViewMode}></button>
-              <button className="btn btn-secondary sf-toolbar-btn sf2-icon-grid-view" id='grid' title={gettext("Grid")} onClick={this.switchViewMode}></button>
+              <button className="btn sf-toolbar-btn sf2-icon-list-view" id='list' title={gettext("List")} onClick={this.switchViewMode}></button>
+              <button className="btn sf-toolbar-btn sf2-icon-grid-view" id='grid' title={gettext("Grid")} onClick={this.switchViewMode}></button>
           </div>
           <div className="common-toolbar">
             {isPro && <Search  onSearchedClick={this.props.onSearchedClick}
