@@ -229,19 +229,19 @@ img[src=""] {
   list-style: none;
 }
 
-.path-toolbar-container .tool-item {
+.path-toolbar-container .toolbar-item {
   display: inline-block;
   text-align: center;
   margin-left: 0.75rem;
 }
 
-.path-toolbar-container .tool-item a {
+.path-toolbar-container .toolbar-item a {
   color:#8a8a8a;
   font-size:22px;
 }
 
 
-.path-toolbar-container .tool-item a:hover {
+.path-toolbar-container .toolbar-item a:hover {
   color:#eb8205;
   text-decoration:none;
 }
