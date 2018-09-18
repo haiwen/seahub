@@ -1,5 +1,5 @@
 import React from 'react';
-
+import { seafileAPI } from '../utils/seafile-api';
 const gettext = window.gettext;
 
 class Notification extends React.Component {
@@ -21,12 +21,12 @@ class Notification extends React.Component {
     }
 
     if (this.state.showNotice) {
-      this.props.seafileAPI.updateNotifications()
+      seafileAPI.updateNotifications()
     }
   }
 
   loadNotices = () => {
-    this.props.seafileAPI.listPopupNotices().then(res => {
+    seafileAPI.listPopupNotices().then(res => {
       this.setState({
         notice_html: res.data.notice_html
       })

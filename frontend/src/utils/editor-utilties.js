@@ -1,10 +1,5 @@
-import { slug, repoID, siteRoot, historyRepoID } from '../components/constance';
-import { SeafileAPI } from 'seafile-js';
-import cookie from 'react-cookies';
-
-let seafileAPI = new SeafileAPI();
-let xcsrfHeaders = cookie.load('sfcsrftoken');
-seafileAPI.initForSeahubUsage({ siteRoot, xcsrfHeaders });
+import { slug, repoID, siteRoot, historyRepoID } from '../components/constants';
+import { seafileAPI } from './seafile-api';
 
 class EditorUtilities {
   
@@ -114,4 +109,3 @@ class EditorUtilities {
 const editorUtilities = new EditorUtilities();
 
 export default editorUtilities;
-export { seafileAPI }; 

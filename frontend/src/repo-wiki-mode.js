@@ -1,12 +1,12 @@
 import React, { Component } from 'react';
-import cookie from 'react-cookies';
 import ReactDOM from 'react-dom';
 import SidePanel from './pages/repo-wiki-mode/side-panel';
 import MainPanel from './pages/repo-wiki-mode/main-panel';
 import moment from 'moment';
-import { slug, repoID, serviceUrl, initialFilePath } from './components/constance';
+import { slug, repoID, serviceUrl, initialFilePath } from './components/constants';
 import editorUtilities from './utils/editor-utilties';
-import { seafileAPI } from './utils/editor-utilties';
+import { seafileAPI } from './utils/seafile-api';
+import cookie from 'react-cookies';
 import Node from './components/tree-view/node'
 import Tree from './components/tree-view/tree'
 import 'seafile-ui';
@@ -149,7 +149,8 @@ class Wiki extends Component {
     }
   }
   
-  onSearchedClick = (path) => {
+  onSearchedClick = (item) => {
+    let path = item.path;
     if (this.state.currentFilePath !== path) {
       this.initMainPanelData(path); 
 

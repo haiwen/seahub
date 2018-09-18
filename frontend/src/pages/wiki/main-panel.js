@@ -1,7 +1,8 @@
 import React, { Component } from 'react';
-import { gettext, repoID, serviceUrl, slug, siteRoot, isPro } from '../../components/constance';
+import { gettext, repoID, serviceUrl, slug, siteRoot, isPro } from '../../components/constants';
 import Search from '../../components/search';
 import Account from '../../components/account';
+import Notification from '../../components/notification';
 import MarkdownViewer from '../../components/markdown-viewer';
 import TreeDirView from '../../components/tree-dir-view/tree-dir-view';
 
@@ -53,6 +54,7 @@ class MainPanel extends Component {
                                placeholder={gettext("Search files in this wiki")}
                       />
             }
+            <Notification />
             <Account />
           </div>
         </div>

@@ -2,6 +2,8 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import Prism from 'prismjs';
 import Loading from '../../components/loading';
+import Account from '../../components/account';
+import Notification from '../../components/notification';
 import '../../css/initial-style.css';
 require('@seafile/seafile-editor/src/lib/code-hight-package');
 
@@ -21,7 +23,10 @@ class MainPanel extends React.Component {
     return (
       <div className="main-panel viewer">
         <div className="main-panel-north">
-          <div className="history-heading"></div>
+          <div className="history-heading">
+            <Notification />
+            <Account />
+          </div>
         </div>
         <div className="main-panel-center history-viewer-contanier">
           <div className="content-viewer">

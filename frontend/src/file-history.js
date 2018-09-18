@@ -1,7 +1,7 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import editUtilties from './utils/editor-utilties';
-import { filePath } from './components/constance';
+import { filePath } from './components/constants';
 import URLDecorator from './utils/url-decorator';
 import { processor } from '@seafile/seafile-editor/src/lib/seafile-markdown2html';
 import SidePanel from './pages/file-history/side-panel';

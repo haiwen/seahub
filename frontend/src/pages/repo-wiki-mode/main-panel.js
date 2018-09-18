@@ -1,7 +1,8 @@
 import React, { Component } from 'react';
-import { gettext, repoID, serviceUrl, slug, siteRoot, isPro } from '../../components/constance';
+import { gettext, repoID, serviceUrl, slug, siteRoot, isPro, permission } from '../../components/constants';
 import Search from '../../components/search';
 import Account from '../../components/account';
+import Notification from '../../components/notification';
 import MarkdownViewer from '../../components/markdown-viewer';
 import TreeDirView from '../../components/tree-dir-view/tree-dir-view';
 
@@ -51,7 +52,7 @@ class MainPanel extends Component {
         <div className="main-panel-top panel-top">
           <span className="sf2-icon-menu side-nav-toggle hidden-md-up d-md-none" title="Side Nav Menu" onClick={this.onMenuClick}></span>
            <div className="wiki-page-ops">
-              { this.props.permission === 'rw' && 
+              { permission && 
                 <a className="btn btn-secondary btn-topbar" title="Edit File" onClick={this.onEditClick}>{gettext("Edit")}</a>
               }
               <a className="btn btn-secondary btn-topbar sf2-icon-list-view" id='list' title={gettext("List")} onClick={this.switchViewMode}></a>
@@ -59,10 +60,11 @@ class MainPanel extends Component {
           </div>
           <div className="common-toolbar">
             {isPro && <Search  onSearchedClick={this.props.onSearchedClick}
-                               placeholder={gettext("Search files in this wiki")}
+                               placeholder={gettext("Search files in this library")}
                       />
             }
-            <Account />
+            <Notification />
+            <Account  />
           </div>
         </div>
         <div className="cur-view-main">

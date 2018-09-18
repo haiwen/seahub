@@ -1,6 +1,6 @@
 import React from 'react';
-const siteRoot = window.app.config.siteRoot;
-const serverRoot = window.app.config.serverRoot;
+import { siteRoot } from './constants';
+import { seafileAPI } from '../utils/seafile-api';
 
 class  MainSideNav extends React.Component {
   constructor(props) {
@@ -32,7 +32,7 @@ class  MainSideNav extends React.Component {
 
   loadGroups = () => {
     let _this = this;
-    this.props.seafileAPI.listGroups().then(res =>{
+    seafileAPI.listGroups().then(res =>{
       let data   = res.data.groups;
       this.groupsHeight = (data.length + 1) * _this.listHeight;
       _this.setState({
@@ -94,9 +94,9 @@ class  MainSideNav extends React.Component {
         <div className="side-nav-con">
           <h3 className="sf-heading">Files</h3>
           <ul className="side-tabnav-tabs">
-            <li className="tab"><a href={siteRoot + '#my-libs'} className="ellipsis" title="My Libraries"><span className="sf2-icon-user" aria-hidden="true"></span>My Libraries</a></li>
-            <li className="tab"><a href={serverRoot + siteRoot + '#shared-libs/'} className="ellipsis" title="Shared with me"><span className="sf2-icon-share" aria-hidden="true"></span>Shared with me</a></li>
-            <li className="tab"><a href={serverRoot + siteRoot + '#org/'} className="ellipsis" title="Shared with all"><span className="sf2-icon-organization" aria-hidden="true"></span>Shared with all</a></li>
+            <li className="tab"><a href={ siteRoot + '#my-libs' } className="ellipsis" title="My Libraries"><span className="sf2-icon-user" aria-hidden="true"></span>My Libraries</a></li>
+            <li className="tab"><a href={ siteRoot + '#shared-libs/'} className="ellipsis" title="Shared with me"><span className="sf2-icon-share" aria-hidden="true"></span>Shared with me</a></li>
+            <li className="tab"><a href={ siteRoot + '#org/' } className="ellipsis" title="Shared with all"><span className="sf2-icon-organization" aria-hidden="true"></span>Shared with all</a></li>
             <li className="tab" id="group-nav">
               <a className="ellipsis user-select-no" title="Shared with groups" onClick={this.grpsExtend}><span className={`toggle-icon float-right fas ${this.state.groupsExtended ?'fa-caret-down':'icon-caret-left'}`} aria-hidden="true"></span><span className="sf2-icon-group" aria-hidden="true"></span>Shared with groups</a>
               {this.renderSharedGroups()}

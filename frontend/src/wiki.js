@@ -3,7 +3,7 @@ import ReactDOM from 'react-dom';
 import SidePanel from './pages/wiki/side-panel';
 import MainPanel from './pages/wiki/main-panel';
 import moment from 'moment';
-import { slug, repoID, serviceUrl, initialFilePath } from './components/constance';
+import { slug, repoID, serviceUrl, initialFilePath } from './components/constants';
 import editorUtilities from './utils/editor-utilties';
 import Node from './components/tree-view/node'
 import Tree from './components/tree-view/tree'
@@ -112,7 +112,8 @@ class Wiki extends Component {
     }
   }
   
-  onSearchedClick = (path) => {
+  onSearchedClick = (item) => {
+    let path = item.path;
     if (this.state.currentFilePath !== path) {
       this.initMainPanelData(path); 
 

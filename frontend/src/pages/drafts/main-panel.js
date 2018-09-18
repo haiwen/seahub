@@ -1,6 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { gettext } from '../../components/constance';
+import { gettext } from '../../components/constants';
 import Loading from '../../components/loading';
 import Account from '../../components/account';
 import { seafileAPI } from '../../utils/editor-utilties';

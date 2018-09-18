@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { gettext, repoID } from './constance';
+import { gettext, repoID } from './constants';
 import SearchResultItem from './search-result-item';
 import editorUtilities from '../utils/editor-utilties';
 
@@ -32,9 +32,9 @@ class Search extends Component {
     this.resetToDefault();
   }
 
-  onItemClickHandler = (path) => {
+  onItemClickHandler = (item) => {
     this.resetToDefault();
-    this.props.onSearchedClick(path);
+    this.props.onSearchedClick(item);
   }
 
   onChangeHandler = (event) => {
@@ -56,10 +56,10 @@ class Search extends Component {
 
     let queryData = {
       q: newValue,
-      search_repo: repoID,
-      search_ftypes: 'custom',
-      ftype: 'Markdown',
-      input_fexts: 'md'
+      search_repo: repoID ? repoID : 'all',
+      search_ftypes: repoID ? 'custom' : 'all',
+      ftype: repoID ? 'Markdown' : '',
+      input_fexts: repoID ? 'md' : ''
     }
 
     if (this.timer) {
@@ -134,7 +134,8 @@ class Search extends Component {
       items[i] = {};
       items[i]['index'] = [i];
       items[i]['name'] = data[i].name;
-      items[i]['link'] = data[i].fullpath;
+      items[i]['path'] = data[i].fullpath;
+      items[i]['repo_id'] = data[i].repo_id;
       items[i]['link_content'] = decodeURI(data[i].fullpath).substring(1);
       items[i]['content'] = data[i].content_highlight;
     }
