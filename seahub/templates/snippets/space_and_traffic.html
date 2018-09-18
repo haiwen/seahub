@@ -13,10 +13,6 @@
     {% endif %}
 </div>
 
-{% if SHOW_TRAFFIC and TRAFFIC_STATS_ENABLED %}
-<div class="item" id="traffic-stat">{% trans "Traffic this month:" %} {{ traffic_stat|filesizeformat }}</div>
-{% endif %}
-
 {% if ENABLE_PAYMENT %}
 <a class="item" href="{{ payment_url }}">{% trans "Payment" %}</a>
 {% endif %}

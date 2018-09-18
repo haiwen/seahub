@@ -14,7 +14,6 @@
     </ul>
 </div>
 
-{% if traffic_stats_enabled %}
 <ul class="traffic-tab-nav">
     <li class="tab">
         <a href="{% url 'sys_statistic_traffic' %}" class="a">{% trans "System" %}</a>
@@ -23,7 +22,6 @@
         <a href="{{ SITE_ROOT }}sys/trafficadmin/" class="a">{% trans "Share Link" %}</a>
     </li>
 </ul>
-{% endif %}
 
 <p class="tip">{% trans "Tip: the traffic only includes the traffic used by sharing links." %}</p>
 
@@ -35,12 +33,28 @@
 <table>
     <tr>
         <th>{% trans "User" %}</th>
-        <th>{% trans "Total Usage" %}</th>
+        <th>sync-file-upload</th>
+        <th>sync-file-download</th>
+        <th>web-file-upload</th>
+        <th>web-file-download</th>
+        <th>link-file-upload</th>
+        <th>link-file-download</th>
     </tr>
     {% for info in traffic_info_list %}
     <tr>
-        <td><a href="{% url 'user_info' info.email %}">{{ info.email }}</a></td>
-        <td>{{ info.total |filesizeformat }}</td>
+        {% if info.user %}
+        <td><a href="{% url 'user_info' info.user %}">{{ info.user }}</a></td>
+        {% elif info.org_id > 0 %}
+        <td><a href="{% url 'sys_org_info_user' info.org_id %}">{{ info.org_id }}</a></td>
+        {% else%}
+        <td>--</td>
+        {% endif %}
+        <td>{{ info.sync_file_upload|filesizeformat }}</td>
+        <td>{{ info.sync_file_download|filesizeformat }}</td>
+        <td>{{ info.web_file_upload|filesizeformat }}</td>
+        <td>{{ info.web_file_download|filesizeformat }}</td>
+        <td>{{ info.link_file_upload|filesizeformat }}</td>
+        <td>{{ info.link_file_download|filesizeformat }}</td>
     </tr>
     {% endfor %}
 </table>
