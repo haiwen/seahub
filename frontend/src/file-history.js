@@ -12,6 +12,7 @@ import './assets/css/fa-regular.css';
 import './assets/css/fontawesome.css';
 import './css/layout.css';
 import './css/file-history.css';
+import './css/toolbar.css';
 
 class FileHistory extends React.Component {
 

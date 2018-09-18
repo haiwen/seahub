@@ -72,8 +72,10 @@ class MainPanel extends React.Component {
     return (
       <div className="main-panel">
         <div className="main-panel-north flex-right">
+          <div className="common-toolbar">
           <Notification seafileAPI={seafileAPI}/>
           <Account />
+          </div>
         </div>
         <div className="main-panel-center">
           <div className="panel-heading text-left">{gettext('Drafts')}</div>

@@ -23,7 +23,7 @@ class MainPanel extends React.Component {
     return (
       <div className="main-panel viewer">
         <div className="main-panel-north">
-          <div className="history-heading">
+          <div className="common-toolbar">
             <Notification />
             <Account />
           </div>

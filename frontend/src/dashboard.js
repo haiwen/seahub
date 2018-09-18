@@ -12,6 +12,7 @@ import './assets/css/fa-solid.css';
 import './assets/css/fa-regular.css';
 import './assets/css/fontawesome.css';
 import './css/dashboard.css';
+import './css/toolbar.css';
 import './css/search.css';
 
 
