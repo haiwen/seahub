@@ -13,6 +13,7 @@ import './assets/css/fa-regular.css';
 import './assets/css/fontawesome.css';
 import './css/side-panel.css';
 import './css/wiki.css';
+import './css/toolbar.css';
 import './css/search.css';
 
 class Wiki extends Component {

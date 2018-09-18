@@ -194,7 +194,6 @@ ul,ol,li {
 /** Account info **/
 #account {
     position:relative;
-    margin-left:32px;
 }
 
 #my-info {
@@ -507,10 +506,6 @@ a.op-icon:focus {
     user-select: none;
 }
 
-.common-toolbar {
-    margin-left:auto;
-    display:flex;
-}
 #notifications {
     position:relative;
     width: 32px;

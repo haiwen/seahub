@@ -56,29 +56,6 @@
 }
 /* end path navigation */
 
-/* begin path toolbar  */
-.path-toolbar-container {
-  list-style: none;
-}
-
-.path-toolbar-container .toolbar-item {
-  display: inline-block;
-  text-align: center;
-  margin-left: 0.75rem;
-}
-
-.path-toolbar-container .toolbar-item a {
-  color:#8a8a8a;
-  font-size:22px;
-}
-
-
-.path-toolbar-container .toolbar-item a:hover {
-  color:#eb8205;
-  text-decoration:none;
-}
-/* end path toolbar */
-
 /* begin main table list style */
 
 .table-container {

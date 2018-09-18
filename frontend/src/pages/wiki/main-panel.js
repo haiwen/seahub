@@ -53,14 +53,17 @@ class MainPanel extends Component {
     return (
       <div className="wiki-main-panel o-hidden">
         <div className="main-panel-top panel-top">
-          <span className="sf2-icon-menu side-nav-toggle hidden-md-up d-md-none" title="Side Nav Menu" onClick={this.onMenuClick}></span>
-           <div className={`wiki-page-ops ${this.props.permission === 'rw' ? '' : 'hide'}`}>
-              <a className="btn btn-secondary sf-toobar-btn-edit" onClick={this.onEditClick}>{gettext("Edit Page")}</a>
-           </div>
+          <div className="cur-view-toolbar">
+            <span className="sf2-icon-menu side-nav-toggle hidden-md-up d-md-none" title="Side Nav Menu" onClick={this.onMenuClick}></span>
+            { 
+              this.props.permission === 'rw' && 
+              <button className="btn sf-toolbar-btn sf-single-tool" title="Edit File" onClick={this.onEditClick}>{gettext("Edit Page")}</button>
+            }
+          </div>
           <div className="common-toolbar">
-            {isPro && <Search  onSearchedClick={this.props.onSearchedClick}
-                               placeholder={gettext("Search files in this wiki")}
-                      />
+            {
+              isPro && 
+              <Search  onSearchedClick={this.props.onSearchedClick} placeholder={gettext("Search files in this wiki")}/>
             }
             <Notification />
             <Account />

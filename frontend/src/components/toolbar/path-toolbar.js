@@ -9,7 +9,7 @@ function PathToolbar() {
     trashUrl = siteRoot + 'repo/recycle/' + repoID + '/?referer=' + encodeURIComponent(location.href);
     historyUrl = siteRoot + 'repo/history/' + repoID + '/?referer=' + encodeURIComponent(location.href);
     return (
-      <ul className="path-toolbar-container">
+      <ul className="path-toolbar">
         <li className="toolbar-item"><a className="op-link sf2-icon-trash" href={trashUrl} title={gettext('Trash')} aria-label={gettext('Trash')}></a></li>
         <li className="toolbar-item"><a className="op-link sf2-icon-history" href={historyUrl} title={gettext('History')} aria-label={gettext('History')}></a></li>
       </ul>
@@ -17,7 +17,7 @@ function PathToolbar() {
   } else if (permission) {
     trashUrl = siteRoot + 'dir/recycle/' + repoID + '/?dir_path=' + encodeURIComponent(initialFilePath);
     return (
-      <ul className="path-toolbar-container">
+      <ul className="path-toolbar">
         <li className="toolbar-item"><a className="op-link sf2-icon-trash" href={trashUrl} title={gettext('Trash')} aria-label={gettext('Trash')}></a></li>
       </ul>
     );

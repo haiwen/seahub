@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { gettext, repoID, serviceUrl, slug, siteRoot, isPro, permission } from '../../components/constants';
+import { gettext, repoID, serviceUrl, slug, siteRoot, isPro } from '../../components/constants';
 import Search from '../../components/search/search';
 import Account from '../../components/account';
 import Notification from '../../components/notification';
@@ -59,18 +59,23 @@ class MainPanel extends Component {
     return (
       <div className="wiki-main-panel o-hidden">
         <div className="main-panel-top panel-top">
-          <span className="sf2-icon-menu side-nav-toggle hidden-md-up d-md-none" title="Side Nav Menu" onClick={this.onMenuClick}></span>
-           <div className="wiki-page-ops btn-group">
-              { this.props.permission === 'rw' && 
-                <button className="btn sf-toobar-btn-edit" title="Edit File" onClick={this.onEditClick}>{gettext("Edit")}</button>
-              }
-              <button className="btn sf-toolbar-btn sf2-icon-list-view" id='list' title={gettext("List")} onClick={this.switchViewMode}></button>
-              <button className="btn sf-toolbar-btn sf2-icon-grid-view" id='grid' title={gettext("Grid")} onClick={this.switchViewMode}></button>
+          <div className="cur-view-toolbar">
+            <span className="sf2-icon-menu side-nav-toggle hidden-md-up d-md-none" title="Side Nav Menu" onClick={this.onMenuClick}></span>
+            <div>
+            { 
+              this.props.permission === 'rw' && 
+              <button className="btn sf-toolbar-btn sf-single-tool" title="Edit File" onClick={this.onEditClick}>{gettext("Edit")}</button>
+            }
+            </div>
+            <div className="btn-group">
+              <button className="btn sf-toolbar-btn sf-group-tool sf2-icon-list-view" id='list' title={gettext("List")} onClick={this.switchViewMode}></button>
+              <button className="btn sf-toolbar-btn sf-group-tool sf2-icon-grid-view" id='grid' title={gettext("Grid")} onClick={this.switchViewMode}></button>
+            </div>
           </div>
           <div className="common-toolbar">
-            {isPro && <Search  onSearchedClick={this.props.onSearchedClick}
-                               placeholder={gettext("Search files in this library")}
-                      />
+            {
+              isPro && 
+              <Search onSearchedClick={this.props.onSearchedClick} placeholder={gettext("Search files in this library")} />
             }
             <Notification />
             <Account  />

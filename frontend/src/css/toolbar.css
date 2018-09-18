@@ -1,0 +1,81 @@
+
+/* begin current-module-toobar */
+.cur-view-toolbar {
+  display: flex;
+  flex: 1;
+}
+
+.sf-toolbar-btn {
+  padding: 0;
+  height: 29px;
+  min-width: 2rem;
+  color: #aaa;
+  background-color: #fff;
+  border: 1px solid #ccc;
+  line-height: 29px;
+  font-size: 18px;
+  border-radius: 2px;
+}
+
+.sf-single-tool {
+  padding: 0 0.25rem;
+  margin-right: 0.25rem;
+  min-width: 55px;
+  font-size: 13px;
+  font-weight: normal;
+  color: #333;
+}
+
+.sf-group-tool {
+  border-radius: 0;
+}
+
+
+.sf-group-tool:hover {
+  color: #fff;
+  background: #ccc;
+  cursor: default;
+}
+
+.sf-single-tool:focus,
+.sf-group-tool:focus {
+  border-color: #66afe9;
+  outline: none;
+  box-shadow: none;
+}
+
+/* end current-module-toobar */
+
+/* begin common-toolbar */
+.common-toolbar {
+  display: flex;
+  margin-left: auto;
+}
+
+.common-toolbar div{
+  margin-left: .5rem;
+}
+/* end common-toolbar */
+
+/* begin path toolbar  */
+.path-toolbar {
+  list-style: none;
+}
+
+.path-toolbar .toolbar-item {
+  display: inline-block;
+  text-align: center;
+  margin-left: 0.75rem;
+}
+
+.path-toolbar .toolbar-item a {
+  color:#8a8a8a;
+  font-size:22px;
+}
+
+
+.path-toolbar .toolbar-item a:hover {
+  color:#eb8205;
+  text-decoration:none;
+}
+/* end path toolbar */
