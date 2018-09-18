@@ -129,3 +129,15 @@ class Draft(TimestampedModel):
             'created_at': datetime_to_isoformat_timestr(self.created_at),
             'updated_at': datetime_to_isoformat_timestr(self.updated_at),
         }
+
+
+###### signal handlers
+from django.dispatch import receiver
+from seahub.signals import repo_deleted
+
+@receiver(repo_deleted)
+def remove_drafts(sender, **kwargs):
+    repo_owner = kwargs['repo_owner']
+    repo_id = kwargs['repo_id']
+
+    Draft.objects.filter(username=repo_owner, draft_repo_id=repo_id).delete()
