@@ -3,7 +3,7 @@ import ReactDOM from 'react-dom';
 import SidePanel from './pages/dashboard/side-panel';
 import MainPanel from './pages/dashboard/main-panel';
 import Account from './components/account';
-import Search from './components/search';
+import Search from './components/search/search';
 import Notification from './components/notification';
 import cookie from 'react-cookies';
 import { isPro, gettext, siteRoot } from './components/constants';

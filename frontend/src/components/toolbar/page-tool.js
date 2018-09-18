@@ -1,5 +1,5 @@
 import React from 'react';
-import {gettext, repoID, permission, siteRoot, initialFilePath} from '../constance';
+import {gettext, repoID, permission, siteRoot, initialFilePath} from '../constants';
 
 function PageTool() {
 
