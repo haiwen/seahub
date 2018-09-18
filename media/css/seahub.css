@@ -2068,6 +2068,9 @@ button.sf-dropdown-toggle:focus {
     background:#fff;
     line-height:17px;
 }
+.btn-white {
+    height: 30px;
+}
 .cur-view-toolbar .btn-white {
     min-width: 55px;
 }
