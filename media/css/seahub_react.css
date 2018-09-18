@@ -61,6 +61,7 @@
 .sf2-icon-close:before { content:"\e035"; }
 .sf2-icon-grid-view:before { content:"\e025"; }
 .sf2-icon-list-view:before { content:"\e026"; }
+.sf2-icon-wiki-view:before { content:"\e013"; }
 .sf2-icon-edit:before { content:"\e018"; }
 .sf2-icon-history:before { content:"\e014"; }
 .sf2-icon-trash:before { content:"\e016"; }

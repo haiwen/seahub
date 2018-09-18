@@ -38,14 +38,13 @@
   border: 1px solid #ccc;
   line-height: 29px;
   font-size: 18px;
+  border-radius: 0 !important;
 }
 
-/* .top-toolbar-btn:focus,
-.sf-view-mode-change-btn:focus {
-  border-color: #66afe9;
-  outline: none;
-  box-shadow: none;
-} */
+.sf-view-mode-change-btn.current-mode {
+  background-color: #ccc !important;
+  color: #fff !important;
+}
 
 /* end current-module-toobar */
 

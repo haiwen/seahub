@@ -9,6 +9,13 @@ import TreeDirView from '../../components/tree-dir-view/tree-dir-view';
 
 class MainPanel extends Component {
 
+  constructor(props) {
+    super(props);
+    this.state = {
+      isWikiMode: true
+    }
+  }
+
   onMenuClick = () => {
     this.props.onMenuClick();
   }
@@ -25,6 +32,10 @@ class MainPanel extends Component {
 
   switchViewMode = (e) => {
     e.preventDefault();  
+    if (e.target.id === 'wiki') {
+      return;
+    }
+    this.setState({isWikiMode: false});
     this.props.switchViewMode(e.target.id);
   }
 
@@ -70,6 +81,7 @@ class MainPanel extends Component {
             <div className="btn-group">
               <button className="btn btn-secondary btn-icon sf-view-mode-change-btn sf2-icon-list-view" id='list' title={gettext("List")} onClick={this.switchViewMode}></button>
               <button className="btn btn-secondary btn-icon sf-view-mode-change-btn sf2-icon-grid-view" id='grid' title={gettext("Grid")} onClick={this.switchViewMode}></button>
+              <button className={`btn btn-secondary btn-icon sf-view-mode-change-btn sf2-icon-wiki-view ${this.state.isWikiMode ? 'current-mode' : ''}`} id='wiki' title={gettext("wiki")} onClick={this.switchViewMode}></button>
             </div>
           </div>
           <div className="common-toolbar">
