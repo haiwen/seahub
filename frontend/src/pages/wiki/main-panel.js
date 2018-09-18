@@ -57,7 +57,7 @@ class MainPanel extends Component {
             <span className="sf2-icon-menu side-nav-toggle hidden-md-up d-md-none" title="Side Nav Menu" onClick={this.onMenuClick}></span>
             { 
               this.props.permission === 'rw' && 
-              <button className="btn sf-toolbar-btn sf-single-tool" title="Edit File" onClick={this.onEditClick}>{gettext("Edit Page")}</button>
+              <button className="btn top-toolbar-btn" title="Edit File" onClick={this.onEditClick}>{gettext("Edit Page")}</button>
             }
           </div>
           <div className="common-toolbar">

@@ -64,12 +64,12 @@ class MainPanel extends Component {
             <div>
             { 
               this.props.permission === 'rw' && 
-              <button className="btn sf-toolbar-btn sf-single-tool" title="Edit File" onClick={this.onEditClick}>{gettext("Edit")}</button>
+              <button className="btn top-toolbar-btn" title="Edit File" onClick={this.onEditClick}>{gettext("Edit")}</button>
             }
             </div>
             <div className="btn-group">
-              <button className="btn sf-toolbar-btn sf-group-tool sf2-icon-list-view" id='list' title={gettext("List")} onClick={this.switchViewMode}></button>
-              <button className="btn sf-toolbar-btn sf-group-tool sf2-icon-grid-view" id='grid' title={gettext("Grid")} onClick={this.switchViewMode}></button>
+              <button className="btn sf-view-mode-change-btn sf2-icon-list-view" id='list' title={gettext("List")} onClick={this.switchViewMode}></button>
+              <button className="btn sf-view-mode-change-btn sf2-icon-grid-view" id='grid' title={gettext("Grid")} onClick={this.switchViewMode}></button>
             </div>
           </div>
           <div className="common-toolbar">

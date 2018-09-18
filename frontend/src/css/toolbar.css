@@ -1,11 +1,36 @@
 
 /* begin current-module-toobar */
 .cur-view-toolbar {
+  position: relative;
   display: flex;
   flex: 1;
 }
 
-.sf-toolbar-btn {
+.cur-view-toolbar:before {
+  position: absolute;
+  top: 3px;
+  bottom: 3px;
+  left: -16px;
+  border-left: 1px solid #ddd;
+  content: '';
+}
+
+.top-toolbar-btn {
+  padding: 0 0.25rem;
+  margin-right: 0.25rem;
+  height: 29px;
+  min-width: 2rem;
+  min-width: 55px;
+  background-color: #fff;
+  line-height: 29px;
+  font-weight: normal;
+  font-size: 13px;
+  color: #333;
+  border: 1px solid #ccc;
+  border-radius: 2px;
+}
+
+.sf-view-mode-change-btn {
   padding: 0;
   height: 29px;
   min-width: 2rem;
@@ -14,31 +39,17 @@
   border: 1px solid #ccc;
   line-height: 29px;
   font-size: 18px;
-  border-radius: 2px;
-}
-
-.sf-single-tool {
-  padding: 0 0.25rem;
-  margin-right: 0.25rem;
-  min-width: 55px;
-  font-size: 13px;
-  font-weight: normal;
-  color: #333;
-}
-
-.sf-group-tool {
-  border-radius: 0;
 }
 
 
-.sf-group-tool:hover {
+.sf-view-mode-change-btn:hover {
   color: #fff;
   background: #ccc;
   cursor: default;
 }
 
-.sf-single-tool:focus,
-.sf-group-tool:focus {
+.top-toolbar-btn:focus,
+.sf-view-mode-change-btn:focus {
   border-color: #66afe9;
   outline: none;
   box-shadow: none;
