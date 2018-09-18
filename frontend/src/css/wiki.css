@@ -232,13 +232,16 @@ img[src=""] {
 .page-tool-container .tool-item {
   display: inline-block;
   text-align: center;
-  margin-left: 1rem;
-  font-size: 21px;
+  margin-left: 0.75rem;
+}
+
+.page-tool-container .tool-item a {
   color:#8a8a8a;
   font-size:22px;
 }
 
-.page-tool-container .tool-item:hover {
+
+.page-tool-container .tool-item a:hover {
   color:#eb8205;
   text-decoration:none;
 }
