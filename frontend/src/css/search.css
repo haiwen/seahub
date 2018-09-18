@@ -20,6 +20,7 @@
 .search-container .sf2-icon-x3 {
   cursor: pointer;
   pointer-events: all;
+  font-style: normal;
 }
 
 .form-control {
