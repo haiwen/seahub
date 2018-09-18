@@ -1,7 +1,7 @@
 import React from 'react';
 import { gettext, repoID, permission, siteRoot, initialFilePath } from '../constants';
 
-function PathToolBar() {
+function PathToolbar() {
 
   let trashUrl = '';
   let historyUrl = '';
@@ -26,4 +26,4 @@ function PathToolBar() {
 
 }
 
-export default PathToolBar;
+export default PathToolbar;

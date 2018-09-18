@@ -32,6 +32,53 @@
 .flex-right {
   justify-content: flex-end;
 }
+
+/* begin path navigation */
+.path-containter { /* for the real path */
+  font-size:16px;
+  word-break: break-all;
+}
+
+.path-split {
+  display: inline-block;
+  padding: 0 5px;
+  color: #818a91;
+}
+
+.path-link {
+  color: #eb8205 !important;
+  text-decoration: none;
+}
+
+.path-link:hover {
+  cursor: pointer;
+  text-decoration: underline !important;
+}
+/* end path navigation */
+
+/* begin path toolbar  */
+.path-toolbar-container {
+  list-style: none;
+}
+
+.path-toolbar-container .toolbar-item {
+  display: inline-block;
+  text-align: center;
+  margin-left: 0.75rem;
+}
+
+.path-toolbar-container .toolbar-item a {
+  color:#8a8a8a;
+  font-size:22px;
+}
+
+
+.path-toolbar-container .toolbar-item a:hover {
+  color:#eb8205;
+  text-decoration:none;
+}
+/* end path toolbar */
+
 /* begin main table list style */
 
 .table-container {

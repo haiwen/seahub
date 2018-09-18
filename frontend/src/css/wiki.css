@@ -224,24 +224,3 @@ img[src=""] {
   outline: none;
   box-shadow: none;
 }
-
-.path-toolbar-container {
-  list-style: none;
-}
-
-.path-toolbar-container .toolbar-item {
-  display: inline-block;
-  text-align: center;
-  margin-left: 0.75rem;
-}
-
-.path-toolbar-container .toolbar-item a {
-  color:#8a8a8a;
-  font-size:22px;
-}
-
-
-.path-toolbar-container .toolbar-item a:hover {
-  color:#eb8205;
-  text-decoration:none;
-}

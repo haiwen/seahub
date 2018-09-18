@@ -3,7 +3,7 @@ import { gettext, repoID, serviceUrl, slug, siteRoot, isPro, permission } from '
 import Search from '../../components/search/search';
 import Account from '../../components/account';
 import Notification from '../../components/notification';
-import PathToolBar from '../../components/toolbar/path-toolbar';
+import PathToolbar from '../../components/toolbar/path-toolbar';
 import MarkdownViewer from '../../components/markdown-viewer';
 import TreeDirView from '../../components/tree-dir-view/tree-dir-view';
 
@@ -43,7 +43,15 @@ class MainPanel extends Component {
       } else {
         nodePath += "/" + item;
         return (
-          <a key={index} className="a-simulate" data-path={nodePath} onClick={this.onMainNavBarClick}><span className="path-split">/</span>{item}</a>
+          <span key={index} >
+            <span className="path-split">/</span>
+            <a 
+              className="path-link" 
+              data-path={nodePath} 
+              onClick={this.onMainNavBarClick}>
+              {item}
+            </a>
+          </span>
         )
       }
     });
@@ -76,7 +84,7 @@ class MainPanel extends Component {
               <a href={siteRoot + 'wiki/lib/' + repoID + '/'} className="normal">{slug}</a>
               {pathElem}
             </div>
-            <PathToolBar />
+            <PathToolbar />
           </div>
           <div className="cur-view-container table-container">
             { this.props.isViewFileState && <MarkdownViewer

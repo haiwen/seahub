@@ -14,7 +14,6 @@
  * loading
  * popover
  * op-icon
- * path
  * account
  * quota
  * side-tabnav
@@ -191,20 +190,6 @@ ul,ol,li {
     margin-right:3px;
     vertical-align:middle;
 }
-
-
-/**** path ****/
-.path-containter { /* for the real path */
-    font-size:16px;
-    word-break: break-all;
-}
-.path-split {
-    display:inline-block;
-    padding:0 5px;
-    color:#818a91;
-}
-
-/* specific elements */
 
 /** Account info **/
 #account {
