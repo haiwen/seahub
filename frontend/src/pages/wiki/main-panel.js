@@ -37,7 +37,7 @@ class MainPanel extends Component {
       } else {
         nodePath += "/" + item;
         return (
-          <a key={index} className="custom-link" data-path={nodePath} onClick={this.onMainNavBarClick}><span className="path-split">/</span>{item}</a>
+          <a key={index} className="a-simulate" data-path={nodePath} onClick={this.onMainNavBarClick}><span className="path-split">/</span>{item}</a>
         )
       }
     });
