@@ -193,10 +193,10 @@ class Search extends Component {
         <div className={`search-mask ${this.state.isMaskShow ? "" : "hide"}`} onClick={this.onCloseHandler}></div>
         <div className="search-container">
           <div className="input-icon">
-            <i className="input-icon-addon fas fa-search"></i>
+            <i className="search-icon-left input-icon-addon fas fa-search"></i>
             <input 
               type="text" 
-              className="form-control" 
+              className="form-control search-input" 
               name="query"
               placeholder={this.props.placeholder}
               style={style}
@@ -205,7 +205,7 @@ class Search extends Component {
               onChange={this.onChangeHandler}
               autoComplete="off"
             />
-            <i className={`input-icon-addon sf2-icon-x3 ${this.state.isCloseShow ? "" : "hide"}`} onClick={this.onCloseHandler}></i>
+            <i className={`search-icon-right input-icon-addon sf2-icon-close ${this.state.isCloseShow ? "" : "hide"}`} onClick={this.onCloseHandler}></i>
           </div>
           <div className="search-result-container">
             {this.renderSearchResult()}

@@ -3,7 +3,7 @@ import { gettext, repoID, serviceUrl, slug, siteRoot, isPro, permission } from '
 import Search from '../../components/search/search';
 import Account from '../../components/account';
 import Notification from '../../components/notification';
-import PageTool from '../../components/toolbar/page-tool';
+import PathToolBar from '../../components/toolbar/path-toolbar';
 import MarkdownViewer from '../../components/markdown-viewer';
 import TreeDirView from '../../components/tree-dir-view/tree-dir-view';
 
@@ -76,7 +76,7 @@ class MainPanel extends Component {
               <a href={siteRoot + 'wiki/lib/' + repoID + '/'} className="normal">{slug}</a>
               {pathElem}
             </div>
-            <PageTool />
+            <PathToolBar />
           </div>
           <div className="cur-view-container table-container">
             { this.props.isViewFileState && <MarkdownViewer

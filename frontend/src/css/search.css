@@ -13,17 +13,17 @@
   z-index: 2;
 }
 
-.search-container .fas {
+.search-container .search-icon-left {
   display: flex;
 }
 
-.search-container .sf2-icon-x3 {
+.search-container .search-icon-right {
   cursor: pointer;
   pointer-events: all;
   font-style: normal;
 }
 
-.form-control {
+.search-input {
   height: 1.875rem;
 }
 
