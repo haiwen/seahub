@@ -143,7 +143,7 @@ class TableBody extends Component {
       return (
         <tr key={index}>
           <td className="text-center">
-            <img src={item.avatar_url} alt="" width="24" className="avatar" />
+            <img src={item.avatar_url} alt="" width="36px" height="36px" className="avatar" />
           </td>
           <td>
             <a href={userProfileURL}>{item.author_name}</a>
@@ -175,7 +175,7 @@ class FilesActivities extends Component {
 
   componentDidMount() {
     const pageNum = 1 
-    this.props.seafileAPI.listActivities(pageNum)
+    this.props.seafileAPI.listActivities(pageNum, 72)
     .then(res => {
       // not logged in
       if (res.status == 403) {
