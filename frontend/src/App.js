@@ -153,6 +153,9 @@ class EditorUtilities {
       return seafileAPI.deleteShareLink(token)
   }
 
+  getDraftKey() {
+      return (this.repoID + this.filePath);
+    }
 }
 
 
