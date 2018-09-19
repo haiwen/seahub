@@ -14,7 +14,8 @@
   "unordered_list": "无序列表",
   "check_list_item": "任务列表",
   "insert_image": "插入图片",
-  "code": "代码块",
+  "code": "代码行",
+  "code_block": "代码块",
   "insert_link": "添加链接",
   "insert_table": "添加表格",
   "save": "保存",
@@ -51,7 +52,7 @@
   "automatic_password_generation": "自动生成密码",
   "days": "天数",
   "add_automatic_expiration": "增加自动过期",
-  "please_input_your_password_again": "请再次输入密码",
+  "please_input_password_again": "请再次输入密码",
   "show_hide_password": "显示/隐藏密码",
   "password_at_least_8_characters": "密码（至少8个字符）",
   "share": "分享",
@@ -62,6 +63,16 @@
   "the_expiration_time_should_be_greater_than_0": "过期时间应该大于0天",
   "the_password_is_too_short": "密码太短",
   "return_to_wiki_page": "返回维基页面",
+  "insert_network_image": "插入网络图片",
+  "upload_local_image": "上传本地图片",
+  "return_to_wiki_page": "返回维基页面",
+  "add_link": "加入链接",
+  "link_title": "链接标题",
+  "local_draft": "本地草稿",
+  "use_draft": "使用草稿",
+  "delete_draft": "删除草稿",
+  "you_have_an_unsaved_draft_do_you_like_to_use_it": "有未保存的草稿，使用草稿吗？",
+  "local_draft_saved": "本地草稿已保存",
   "userHelp": {
     "title": "键盘快捷键",
     "userHelpData":[
@@ -69,9 +80,9 @@
         "shortcutType":"块级操作",
         "shortcutData" :{
           "块级引用": [">", "space"],
-          "一级标题":["# / *", "space"],
-          "二级标题":["## / **", "space"],
-          "三级标题":["### / ***", "space"],
+          "一级标题":["#", "space"],
+          "二级标题":["##", "space"],
+          "三级标题":["###", "space"],
           "列表":["* / + / -", "space"],
           "有序列表":["1.", "space"]
         }

@@ -2,19 +2,20 @@
   "bold": "Bold",
   "italic": "Italic",
   "inline_code": "Code",
-  "header_one": "Header1",
-  "header_two": "Header2",
-  "header_three": "Header3",
-  "header_four": "Header4",
-  "header_five": "Header5",
-  "header_six": "Header6",
+  "header_one": "Heading 1",
+  "header_two": "Heading 2",
+  "header_three": "Heading 3",
+  "header_four": "Heading 4",
+  "header_five": "Heading 5",
+  "header_six": "Heading 6",
   "paragraph": "Paragraph",
   "quote": "Quote",
   "ordered_list": "Ordered List",
   "unordered_list": "Unordered List",
   "check_list_item": "Check List Item",
   "insert_image": "Insert Image",
-  "code": "Code Block",
+  "code": "Inline Code",
+  "code_block": "Code Block",
   "insert_link": "Insert Link",
   "insert_table": "Insert Table",
   "save": "Save",
@@ -27,7 +28,7 @@
   "switch_to_plain_text_editor": "Switch to Plain Text Editor",
   "switch_to_rich_text_editor": "Switch to Rich Text Editor",
   "switch_to_viewer": "Switch to Markdown Viewer",
-  "help": "help",
+  "help": "Help",
   "remove_table": "Remove Table",
   "column": "Column",
   "row": "Row",
@@ -61,6 +62,16 @@
   "the_expiration_days_should_be_greater_than_0": "The expiration days should be greater than 0",
   "password_is_too_short": "Password is too short",
   "return_to_wiki_page": "Return to Wiki Page",
+  "insert_network_image": "Insert network image",
+  "upload_local_image": "Upload local image",
+  "return_to_wiki_page": "Return to Wiki Page",
+  "add_link": "Add link",
+  "link_title": "Link title",
+  "local_draft": "Local draft",
+  "use_draft": "Use draft",
+  "delete_draft": "Delete draft",
+  "you_have_an_unsaved_draft_do_you_like_to_use_it": "You have an unsaved draft. Do you like to use it?",
+  "local_draft_saved": "Local draft saved",
   "userHelp": {
     "title":"Keyboard shortcuts",
     "userHelpData":[
@@ -68,9 +79,9 @@
     "shortcutType":"Block shortcuts",
     "shortcutData" :{
       "Blockquote": [">", "space"],
-      "Header1":["# / *", "space"],
-      "Header2":["## / **", "space"],
-      "Header3":["### / ***", "space"],
+      "Heading 1":["#", "space"],
+      "Heading 2":["##", "space"],
+      "Heading 3":["###", "space"],
       "List":["* / + / -", "space"],
       "Ordered list":["1.", "space"]
     }
@@ -88,13 +99,13 @@
   {
     "shortcutType":"Save shortcuts",
     "shortcutData" :{
-      "Save file": [["Ctrl", "Cmd"], "S"]
+      "Save file": [["Ctrl", "Cmd"], "s"]
     }
   },
   {
     "shortcutType":"Image shortcuts",
     "shortcutData" :{
-      "Upload Screenshot": [["Ctrl", "Cmd"], "V"],
+      "Paste screenshot": [["Ctrl", "Cmd"], "v"],
       "Drag image from anywhere to upload it":[]
     }
   }
