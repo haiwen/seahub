@@ -38,13 +38,13 @@ class Drafts extends Component {
   deleteDraft = (draft) => {
     editUtilties.deleteDraft(draft.id).then(res => {
       this.initDraftList();
-    })
+    });
   }
 
   publishDraft = (draft) => {
     editUtilties.publishDraft(draft.id).then(res => {
       this.initDraftList();
-    })
+    });
   }
 
   render() {

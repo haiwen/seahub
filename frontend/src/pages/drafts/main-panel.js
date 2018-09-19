@@ -2,14 +2,16 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { gettext } from '../../components/constants';
 import Loading from '../../components/loading';
-import Account from '../../components/account';
-import { seafileAPI } from '../../utils/editor-utilties';
-import Notification from '../../components/notification';
+import Account from '../../components/common/account';
+import Notification from '../../components/common/notification';
 import ListView from '../../components/list-view/list-view';
 import ListMenu from '../../components/list-view/list-menu';
 
 const propTypes = {
+  isLoadingDraft: PropTypes.bool.isRequired,
   draftList: PropTypes.array.isRequired,
+  publishDraft: PropTypes.func.isRequired,
+  deleteDraft: PropTypes.func.isRequired
 };
 
 class MainPanel extends React.Component {
@@ -73,8 +75,8 @@ class MainPanel extends React.Component {
       <div className="main-panel">
         <div className="main-panel-north flex-right">
           <div className="common-toolbar">
-          <Notification seafileAPI={seafileAPI}/>
-          <Account />
+            <Notification />
+            <Account />
           </div>
         </div>
         <div className="main-panel-center">

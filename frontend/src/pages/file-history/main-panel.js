@@ -2,8 +2,8 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import Prism from 'prismjs';
 import Loading from '../../components/loading';
-import Account from '../../components/account';
-import Notification from '../../components/notification';
+import Account from '../../components/common/account';
+import Notification from '../../components/common/notification';
 import '../../css/initial-style.css';
 require('@seafile/seafile-editor/src/lib/code-hight-package');
 
