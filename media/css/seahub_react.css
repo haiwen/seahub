@@ -371,6 +371,7 @@ a.op-icon:focus {
     padding:12px 20px 16px;
     background:#f8f8f8;
     border-top:1px solid #eee;
+    font-size: 13px;
 }
 .side-nav-footer .item {
     color:#666;
@@ -696,22 +697,7 @@ a.op-icon:focus {
 .side-panel-close {
     margin:10px 0 0 auto;
 }
-.side-nav-footer {
-    display:flex;
-    flex-shrink:0;
-    padding:12px 20px 16px;
-    background:#f8f8f8;
-    border-top:1px solid #eee;
-    border-right: 1px solid #eee;
-}
-.side-nav-footer .item {
-    color:#666;
-    font-weight: normal;
-    margin-right:10px;
-}
-.side-nav-footer .last-item {
-    margin-left:auto;
-}
+
 .cur-view-main {
     flex:1 1 auto;
     display:flex;

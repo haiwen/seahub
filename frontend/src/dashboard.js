@@ -1,8 +1,8 @@
 import React, { Component } from 'react';
 import ReactDOM from 'react-dom';
-import SidePanel from './pages/dashboard/side-panel';
-import MainPanel from './pages/dashboard/main-panel';
 import { siteRoot } from './components/constants';
+import SidePanel from './components/side-panel';
+import MainPanel from './pages/dashboard/main-panel';
 import 'seafile-ui';
 import './assets/css/fa-solid.css';
 import './assets/css/fa-regular.css';
@@ -20,6 +20,7 @@ class DashBoard extends Component {
     this.state = {
       isOpen: false
     };
+    this.currentTab = 'dashboard';
   }
 
   isOpen = () => {
@@ -40,7 +41,7 @@ class DashBoard extends Component {
   render() {
     return (
       <div id="main">
-        <SidePanel isOpen={this.state.isOpen} toggleClose={this.isOpen} />
+        <SidePanel isOpen={this.state.isOpen} toggleClose={this.isOpen} currentTab={this.currentTab}/>
         <MainPanel isOpen={this.isOpen}></MainPanel>
       </div>
     );

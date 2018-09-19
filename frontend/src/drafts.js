@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import ReactDOM from 'react-dom';
 import editUtilties from './utils/editor-utilties';
-import SidePanel from './pages/drafts/side-panel';
+import SidePanel from './components/side-panel';
 import MainPanel from './pages/drafts/main-panel';
 
 import 'seafile-ui';
@@ -21,6 +21,7 @@ class Drafts extends Component {
       draftList: [],
       isLoadingDraft: true,
     };
+    this.currentTab = "draft";
   }
 
   componentDidMount() {
@@ -51,7 +52,7 @@ class Drafts extends Component {
   render() {
     return (
       <div id="main">
-        <SidePanel></SidePanel>
+        <SidePanel currentTab={this.currentTab}></SidePanel>
         <MainPanel 
           isLoadingDraft={this.state.isLoadingDraft}
           draftList={this.state.draftList}

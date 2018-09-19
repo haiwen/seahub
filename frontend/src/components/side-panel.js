@@ -1,7 +1,7 @@
 import React from 'react';
-import Logo from '../../components/logo';
-import MainSideNav from '../../components/main-side-nav';
-import SideNavFooter from '../../components/side-nav-footer';
+import Logo from './logo';
+import MainSideNav from './main-side-nav';
+import SideNavFooter from './side-nav-footer';
 
 
 class SidePanel extends React.Component {
@@ -17,7 +17,7 @@ class SidePanel extends React.Component {
           <Logo onCloseSidePanel={this.onCloseSidePanel}/>
         </div>
         <div className="side-panel-center">
-          <MainSideNav />
+          <MainSideNav currentTab={this.props.currentTab}/>
         </div>
         <div className="side-panel-footer">
           <SideNavFooter />

@@ -69,7 +69,7 @@ class MainPanel extends React.Component {
     this.props.deleteDraft(this.state.currentDraft);
   }
 
-  onSelectedClicik = () => {
+  onSearchedClick = () => {
     //todos;
   }
   
@@ -77,7 +77,7 @@ class MainPanel extends React.Component {
     return (
       <div className="main-panel">
         <div className="main-panel-north flex-right">
-          <CommonToolbar onSelectedClicik={this.onSelectedClicik}/>
+          <CommonToolbar onSearchedClick={this.onSearchedClick}/>
         </div>
         <div className="main-panel-center">
           <div className="panel-heading text-left">{gettext('Drafts')}</div>
