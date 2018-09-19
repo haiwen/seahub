@@ -849,8 +849,10 @@ def cp_dirents(request, src_repo_id, src_path, dst_repo_id, dst_path, obj_file_n
         result['error'] = error_msg
         return HttpResponse(json.dumps(result), status=403, content_type=content_type)
 
+    dst_path = normalize_dir_path(dst_path)
     for obj_name in obj_dir_names:
         src_dir = posixpath.join(src_path, obj_name)
+        src_dir = normalize_dir_path(src_dir)
         if dst_path.startswith(src_dir):
             error_msg = _(u'Can not copy directory %(src)s to its subdirectory %(des)s') \
                 % {'src': escape(src_dir), 'des': escape(dst_path)}
