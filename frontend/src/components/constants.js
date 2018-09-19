@@ -16,8 +16,7 @@ export const slug = window.wiki ? window.wiki.config.slug : '';
 export const repoID = window.wiki ? window.wiki.config.repoId : '';
 export const serviceUrl = window.wiki ? window.wiki.config.serviceUrl : '';
 export const initialFilePath = window.wiki ? window.wiki.config.initial_file_path : '';
-export const permission = window.wiki ? window.wiki.config.permission : '';
-
+export const permission = window.wiki ? window.wiki.config.permission === 'True' : '';
 
 // file history
 export const PER_PAGE = 25;

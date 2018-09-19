@@ -14,7 +14,6 @@
  * loading
  * popover
  * op-icon
- * path
  * account
  * quota
  * side-tabnav
@@ -59,10 +58,13 @@
 .sf2-icon-monitor:before { content:"\e007"; }
 .sf2-icon-wrench:before { content:"\e001"; }
 .sf2-icon-bell:before { content:"\e003"; }
-.sf2-icon-x3:before { content:"\e035"; }
+.sf2-icon-close:before { content:"\e035"; }
 .sf2-icon-grid-view:before { content:"\e025"; }
 .sf2-icon-list-view:before { content:"\e026"; }
+.sf2-icon-wiki-view:before { content:"\e013"; }
 .sf2-icon-edit:before { content:"\e018"; }
+.sf2-icon-history:before { content:"\e014"; }
+.sf2-icon-trash:before { content:"\e016"; }
 
 /* common class and element style*/
 a { color:#eb8205; }
@@ -97,13 +99,6 @@ ul,ol,li {
 }
 
 /* UI Widget */
-
-/**** topbar button ****/
-.btn-topbar {
-  padding: 0.25rem 0.5rem;
-  line-height: 1.6;
-  font-weight: normal;
-}
 
 /**** caret ****/
 .outer-caret,
@@ -197,24 +192,9 @@ ul,ol,li {
     vertical-align:middle;
 }
 
-
-/**** path ****/
-.path-containter { /* for the real path */
-    font-size:16px;
-    word-break: break-all;
-}
-.path-split {
-    display:inline-block;
-    padding:0 5px;
-    color:#818a91;
-}
-
-/* specific elements */
-
 /** Account info **/
 #account {
     position:relative;
-    margin-left:32px;
 }
 
 #my-info {
@@ -527,10 +507,6 @@ a.op-icon:focus {
     user-select: none;
 }
 
-.common-toolbar {
-    margin-left:auto;
-    display:flex;
-}
 #notifications {
     position:relative;
     width: 32px;

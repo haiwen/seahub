@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { gettext, repoID, serviceUrl, slug, siteRoot, isPro } from '../../components/constants';
-import Search from '../../components/search';
+import Search from '../../components/search/search';
 import Account from '../../components/account';
 import Notification from '../../components/notification';
 import MarkdownViewer from '../../components/markdown-viewer';
@@ -37,7 +37,15 @@ class MainPanel extends Component {
       } else {
         nodePath += "/" + item;
         return (
-          <a key={index} className="custom-link" data-path={nodePath} onClick={this.onMainNavBarClick}><span className="path-split">/</span>{item}</a>
+          <span key={index} >
+            <span className="path-split">/</span>
+            <a 
+              className="path-link" 
+              data-path={nodePath} 
+              onClick={this.onMainNavBarClick}>
+              {item}
+            </a>
+          </span>
         )
       }
     });
@@ -45,14 +53,17 @@ class MainPanel extends Component {
     return (
       <div className="wiki-main-panel o-hidden">
         <div className="main-panel-top panel-top">
-          <span className="sf2-icon-menu side-nav-toggle hidden-md-up d-md-none" title="Side Nav Menu" onClick={this.onMenuClick}></span>
-           <div className={`wiki-page-ops ${this.props.permission === 'rw' ? '' : 'hide'}`}>
-              <a className="btn btn-secondary btn-topbar" onClick={this.onEditClick}>{gettext("Edit Page")}</a>
-           </div>
+          <div className="cur-view-toolbar">
+            <span className="sf2-icon-menu side-nav-toggle hidden-md-up d-md-none" title="Side Nav Menu" onClick={this.onMenuClick}></span>
+            { 
+              this.props.permission === 'rw' && 
+              <button className="btn btn-secondary top-toolbar-btn" title="Edit File" onClick={this.onEditClick}>{gettext("Edit Page")}</button>
+            }
+          </div>
           <div className="common-toolbar">
-            {isPro && <Search  onSearchedClick={this.props.onSearchedClick}
-                               placeholder={gettext("Search files in this wiki")}
-                      />
+            {
+              isPro && 
+              <Search  onSearchedClick={this.props.onSearchedClick} placeholder={gettext("Search files in this wiki")}/>
             }
             <Notification />
             <Account />
@@ -67,7 +78,7 @@ class MainPanel extends Component {
               {pathElem}
             </div>
           </div>
-          <div className="cur-view-container">
+          <div className="cur-view-container table-container">
             { this.props.isViewFileState && <MarkdownViewer
               markdownContent={this.props.content}
               latestContributor={this.props.latestContributor}

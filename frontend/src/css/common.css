@@ -32,6 +32,30 @@
 .flex-right {
   justify-content: flex-end;
 }
+
+/* begin path navigation */
+.path-containter { /* for the real path */
+  font-size:16px;
+  word-break: break-all;
+}
+
+.path-split {
+  display: inline-block;
+  padding: 0 5px;
+  color: #818a91;
+}
+
+.path-link {
+  color: #eb8205 !important;
+  text-decoration: none;
+}
+
+.path-link:hover {
+  cursor: pointer;
+  text-decoration: underline !important;
+}
+/* end path navigation */
+
 /* begin main table list style */
 
 .table-container {
@@ -47,6 +71,8 @@
 .table-container table th {
   text-align: left;
   font-weight: normal;
+  font-size: 13px;
+  line-height: 1.6;
   color: #9c9c9c;
 }
 
@@ -57,15 +83,26 @@
 }
 
 .table-container table th, .table-container table td {
-  padding-top: 5px;
-  padding-bottom: 5px;
+  padding: 5px 3px;
   border-bottom: 1px solid #eee;
 }
 
-.table-container table tr img {
+.table-container table th {
+  padding-top: 1rem;
+}
+
+.table-container table .icon {
+  position: relative;
+}
+
+.table-container table .icon img {
+  position: absolute;
   display: block;
   width: 24px;
   height: 24px;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
 }
 /* specific handler */
 .table-container table .menu-toggle {

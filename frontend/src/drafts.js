@@ -10,6 +10,7 @@ import './assets/css/fa-regular.css';
 import './assets/css/fontawesome.css';
 import './css/layout.css';
 import './css/common.css';
+import './css/toolbar.css';
 
 class Drafts extends Component {
 

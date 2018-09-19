@@ -13,32 +13,18 @@
   z-index: 2;
 }
 
-.search-input-container {
-  position: relative;
+.search-container .search-icon-left {
+  display: flex;
+}
+
+.search-container .search-icon-right {
+  cursor: pointer;
+  pointer-events: all;
+  font-style: normal;
 }
 
 .search-input {
-  padding: 0 2rem;
-  height: 2rem;
-}
-
-.search-icon {
-  position: absolute;
-  top: 0;
-  width: 2rem;
-  height: 2rem;
-  display: flex;
-  justify-content:center;
-  align-items:center;
-  color: #999 !important;
-}
-
-.icon-search{
-  left: 0;
-}
-
-.sf2-icon-x3{
-  right: 0;
+  height: 1.875rem;
 }
 
 .search-result-container {

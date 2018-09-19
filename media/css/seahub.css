@@ -162,7 +162,6 @@
 .sf2-icon-organization:before { content:"\e010"; }
 .sf2-icon-share:before { content:"\e011"; }
 .sf2-icon-star:before { content:"\e012"; }
-.sf2-icon-wiki:before { content:"\e013"; }
 .sf2-icon-history:before { content:"\e014"; }
 .sf2-icon-cog1:before { content:"\e015"; }
 .sf2-icon-trash:before { content:"\e016"; }
@@ -180,9 +179,11 @@
 .sf2-icon-msgs2:before { content:"\e021"; }
 /*.sf2-icon-group-settings:before { content:"\e022"; }*/
 .sf2-icon-comment:before { content:"\e023"; }
+.sf2-icon-wiki:before { content:"\e013"; }
 .sf2-icon-wiki2:before { content:"\e024"; }
 .sf2-icon-grid-view:before { content:"\e025"; }
 .sf2-icon-list-view:before { content:"\e026"; }
+.sf2-icon-wiki-view:before { content:"\e013"; }
 .sf2-icon-plus:before { content: "\e027"; }
 .sf2-icon-copy:before { content: "\e028"; }
 .sf2-icon-move:before { content: "\e029"; }
@@ -1856,7 +1857,7 @@ button.sf-dropdown-toggle:focus {
 }
 /**** custom magnificPopup ****/
 .mfp-bottom-bar {
-    position:relative;
+    position:relative; 
 }
 .mfp-title {
     min-width:230px;
@@ -2066,6 +2067,9 @@ button.sf-dropdown-toggle:focus {
     height:29px;
     background:#fff;
     line-height:17px;
+}
+.btn-white {
+    height: 30px;
 }
 .cur-view-toolbar .btn-white {
     min-width: 55px;
@@ -4167,6 +4171,7 @@ img.thumbnail {
 /* view mode */
 .switch-mode {
     margin-left:15px;
+    font-size: 0;
 }
 .wiki-view-icon-btn,
 .grid-view-icon-btn,
@@ -4180,13 +4185,26 @@ img.thumbnail {
     color:#aaa;
     cursor:pointer;
     border-radius:0;
+    margin-left: -1px;
 }
 
+.list-view-icon-btn {
+    margin-left: 0;
+}
+
+.wiki-view-icon-btn.active,
 .grid-view-icon-btn.active,
 .list-view-icon-btn.active {
     color:#fff;
     background:#ccc;
     cursor:default;
+}
+
+.view-btn:hover,
+.view-btn:focus,
+.view-btn:active {
+    position: relative;
+    z-index: 1;
 }
 /* grid view */
 .grid-item {

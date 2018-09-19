@@ -3,18 +3,19 @@ import ReactDOM from 'react-dom';
 import SidePanel from './pages/repo-wiki-mode/side-panel';
 import MainPanel from './pages/repo-wiki-mode/main-panel';
 import moment from 'moment';
-import { slug, repoID, serviceUrl, initialFilePath } from './components/constants';
+import { repoID, serviceUrl, initialFilePath } from './components/constants';
 import editorUtilities from './utils/editor-utilties';
 import { seafileAPI } from './utils/seafile-api';
+import Node from './components/tree-view/node';
+import Tree from './components/tree-view/tree';
 import cookie from 'react-cookies';
-import Node from './components/tree-view/node'
-import Tree from './components/tree-view/tree'
 import 'seafile-ui';
 import './assets/css/fa-solid.css';
 import './assets/css/fa-regular.css';
 import './assets/css/fontawesome.css';
 import './css/side-panel.css';
 import './css/wiki.css';
+import './css/toolbar.css';
 import './css/search.css';
 
 class Wiki extends Component {
@@ -62,7 +63,7 @@ class Wiki extends Component {
             permission: permission,
             filePath: filePath,
             isFileLoading: false
-          })
+          });
 
           seafileAPI.getFileDownloadLink(repoID, filePath).then((res) => {
             const downLoadUrl = res.data;
@@ -70,20 +71,20 @@ class Wiki extends Component {
               this.setState({
                 content: res.data,
                 isFileLoading: false
-              })
-            })
+              });
+            });
           });
-        })
+        });
 
         let fileUrl = serviceUrl + '/wiki/lib/' + repoID + filePath;
         window.history.pushState({urlPath: fileUrl, filePath: filePath}, filePath, fileUrl);
       }
     }, () => {
-      console.log("failed to load files");
+      console.log('failed to load files');
       this.setState({
         isLoadFailed: true
-      })
-    })
+      });
+    });
   }
 
   initMainPanelData(filePath) {
@@ -97,7 +98,7 @@ class Wiki extends Component {
         lastModified: moment.unix(mtime).fromNow(),
         permission: permission,
         filePath: filePath,
-      })
+      });
 
       seafileAPI.getFileDownloadLink(repoID, filePath).then((res) => {
         const downLoadUrl = res.data;
@@ -105,29 +106,29 @@ class Wiki extends Component {
           this.setState({
             content: res.data,
             isFileLoading: false
-          })
+          });
         });
-      })
-    })
+      });
+    });
 
-     let fileUrl = serviceUrl + '/wiki/lib/' + repoID + filePath;
-     window.history.pushState({urlPath: fileUrl, filePath: filePath}, filePath, fileUrl);
+    let fileUrl = serviceUrl + '/wiki/lib/' + repoID + filePath;
+    window.history.pushState({urlPath: fileUrl, filePath: filePath}, filePath, fileUrl);
   }
 
   switchViewMode = (mode) => {
     let dirPath;
-    let tree = this.state.tree_data
-    let node = tree.getNodeByPath(this.state.filePath)
+    let tree = this.state.tree_data;
+    let node = tree.getNodeByPath(this.state.filePath);
     if (node.isDir()) {
-      dirPath = this.state.filePath
+      dirPath = this.state.filePath;
     } else {
       const index = this.state.filePath.lastIndexOf('/');
       dirPath = this.state.filePath.substring(0, index);
     }
 
-    cookie.save("view_mode", mode, { path: '/' })
+    cookie.save('view_mode', mode, { path: '/' });
 
-    window.location.href = serviceUrl + "/#common/lib/" + repoID + dirPath;
+    window.location.href = serviceUrl + '/#common/lib/' + repoID + dirPath;
   }
 
   onLinkClick = (event) => {
@@ -220,25 +221,25 @@ class Wiki extends Component {
   onMenuClick = () => {
     this.setState({
       closeSideBar: !this.state.closeSideBar,
-    })
+    });
   }
 
   onCloseSide = () => {
     this.setState({
       closeSideBar: !this.state.closeSideBar,
-    })
+    });
   }
 
   onAddFolderNode = (dirPath) => {
     editorUtilities.createDir(dirPath).then(res => {
       let tree = this.state.tree_data.clone();
       let name = this.getFileNameByPath(dirPath);
-      let index = dirPath.lastIndexOf("/");
+      let index = dirPath.lastIndexOf('/');
       let parentPath = dirPath.substring(0, index);
       if (!parentPath) {
-        parentPath = "/";
+        parentPath = '/';
       }
-      let node = this.buildNewNode(name, "dir");
+      let node = this.buildNewNode(name, 'dir');
       let parentNode = tree.getNodeByPath(parentPath);
       tree.addNodeToParent(node, parentNode);
       if (this.state.isViewFileState) {
@@ -246,23 +247,23 @@ class Wiki extends Component {
         this.setState({
           tree_data: tree,
           changedNode: node
-        })
+        });
       } else {
         this.exitViewFileState(tree, parentNode);
       }
-    })
+    });
   }
 
   onAddFileNode = (filePath) => {
     editorUtilities.createFile(filePath).then(res => {
       let tree = this.state.tree_data.clone();
       let name = this.getFileNameByPath(filePath);
-      let index = filePath.lastIndexOf("/");
+      let index = filePath.lastIndexOf('/');
       let parentPath = filePath.substring(0, index);
       if (!parentPath) {
-        parentPath = "/";
+        parentPath = '/';
       }
-      let node = this.buildNewNode(name, "file");
+      let node = this.buildNewNode(name, 'file');
       let parentNode = tree.getNodeByPath(parentPath);
       tree.addNodeToParent(node, parentNode);
       if (this.state.isViewFileState) {
@@ -270,11 +271,11 @@ class Wiki extends Component {
         this.setState({
           tree_data: tree,
           changedNode: node
-        })
+        });
       } else {
         this.exitViewFileState(tree, parentNode);
       }
-    })
+    });
   }
 
   onRenameNode = (node, newName) => {
@@ -284,10 +285,10 @@ class Wiki extends Component {
       editorUtilities.renameFile(filePath, newName).then(res => {
         let cloneNode = node.clone();
 
-        tree.updateNodeParam(node, "name", newName);
+        tree.updateNodeParam(node, 'name', newName);
         node.name = newName;
         let date = new Date().getTime()/1000;
-        tree.updateNodeParam(node, "last_update_time", moment.unix(date).fromNow());
+        tree.updateNodeParam(node, 'last_update_time', moment.unix(date).fromNow());
         node.last_update_time = moment.unix(date).fromNow();
 
         if (this.state.isViewFileState) {
@@ -308,7 +309,7 @@ class Wiki extends Component {
             changedNode: parentNode
           });
         }
-      })
+      });
     } else if (node.isDir()) {
       editorUtilities.renameDir(filePath, newName).then(res => {
 
@@ -316,10 +317,10 @@ class Wiki extends Component {
         let currentFileNode = tree.getNodeByPath(currentFilePath);
         let nodePath = node.path;
 
-        tree.updateNodeParam(node, "name", newName);
+        tree.updateNodeParam(node, 'name', newName);
         node.name = newName;
         let date = new Date().getTime()/1000;
-        tree.updateNodeParam(node, "last_update_time", moment.unix(date).fromNow());
+        tree.updateNodeParam(node, 'last_update_time', moment.unix(date).fromNow());
         node.last_update_time = moment.unix(date).fromNow();
 
         if (this.state.isViewFileState) {
@@ -344,7 +345,7 @@ class Wiki extends Component {
             this.setState({tree_data: tree});
           }
         }
-      })
+      });
     }
   }
 
@@ -374,10 +375,10 @@ class Wiki extends Component {
         this.setState({
           tree_data: tree,
           changedNode: homeNode
-        })
+        });
         this.initMainPanelData(homeNode.path);
       } else {
-        this.setState({tree_data: tree})
+        this.setState({tree_data: tree});
       }
     } else {
       let parentNode = tree.getNodeByPath(this.state.filePath);
@@ -413,26 +414,26 @@ class Wiki extends Component {
   }
 
   getFileNameByPath(path) {
-    let index = path.lastIndexOf("/");
+    let index = path.lastIndexOf('/');
     if (index === -1) {
-      return "";
+      return '';
     }
     return path.slice(index+1);
   }
 
   getHomeNode(treeData) {
-    return treeData.getNodeByPath("/home.md");
+    return treeData.getNodeByPath('/home.md');
   }
 
   buildNewNode(name, type) {
     let date = new Date().getTime()/1000;
     let node = new Node({
-        name : name,
-        type: type, 
-        size: '0',
-        last_update_time: moment.unix(date).fromNow(),
-        isExpanded: false, 
-        children: []
+      name : name,
+      type: type, 
+      size: '0',
+      last_update_time: moment.unix(date).fromNow(),
+      isExpanded: false, 
+      children: []
     });
     return node;
   }
@@ -454,12 +455,12 @@ class Wiki extends Component {
   }
 
   isMarkdownFile(filePath) {
-    let index = filePath.lastIndexOf(".");
+    let index = filePath.lastIndexOf('.');
     if (index === -1) {
       return false;
     } else {
       let type = filePath.substring(index).toLowerCase();
-      if (type === ".md" || type === ".markdown") {
+      if (type === '.md' || type === '.markdown') {
         return true;
       } else {
         return false;
@@ -478,23 +479,23 @@ class Wiki extends Component {
   }
 
   getPathFromInternalMarkdownLink(url) {
-    var re = new RegExp(serviceUrl + '/lib/' + repoID + '/file' + "(.*\.md)");
+    var re = new RegExp(serviceUrl + '/lib/' + repoID + '/file' + '(.*\.md)');
     var array = re.exec(url);
     var path = decodeURIComponent(array[1]);
     return path;
   }
 
   getPathFromInternalDirLink(url) {
-    var re = new RegExp(serviceUrl + '/#[a-z\-]*?/lib/' + repoID + "(/.*)");
+    var re = new RegExp(serviceUrl + '/#[a-z\-]*?/lib/' + repoID + '(/.*)');
     var array = re.exec(url);
     var path = decodeURIComponent(array[1]);
 
     var dirPath = path.substring(1);
-    var re = new RegExp("(^/.*)");
+    re = new RegExp('(^/.*)');
     if (re.test(dirPath)) {
       path = dirPath;
     } else {
-      path = '/' + dirPath
+      path = '/' + dirPath;
     }
 
     return path;

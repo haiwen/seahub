@@ -41,7 +41,8 @@
 
 .wiki-main .cur-view-path {
   border-bottom: 1px solid #e8e8e8;
-  margin-bottom: 8px;
+  display: flex;
+  justify-content: space-between;
 }
 .wiki-main .cur-view-path::after {
   display:none;
@@ -190,13 +191,4 @@ img[src=""] {
 
 .wiki-md-viewer-rendered-content.article h1 {
   margin-top: 0;
-}
-
-.custom-link {
-  color: #eb8205 !important;
-  cursor: pointer;
-}
-
-.custom-link:hover {
-  text-decoration: underline !important;
 }

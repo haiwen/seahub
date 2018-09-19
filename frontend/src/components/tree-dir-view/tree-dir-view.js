@@ -1,6 +1,6 @@
 import React, { Component } from "react";
 import TreeDirList from './tree-dir-list'
-import "../../css/tree-dir-view.css";
+import "../../css/common.css";
 const gettext = window.gettext;
 
 class TreeDirView extends React.Component {
@@ -9,16 +9,16 @@ class TreeDirView extends React.Component {
     let children = node.hasChildren() ? node.children : null;
 
     return (
-      <table className="doc-view-container">
-        <thead className="doc-view-header">
-          <tr className="row">
-            <th style={{width: "5%"}}></th>
+      <table>
+        <thead>
+          <tr>
+            <th style={{width: "4%"}}></th>
             <th style={{width: "60%"}}>{gettext('Name')}</th>
-            <th style={{width: "15%"}}>{gettext('Size')}</th>
+            <th style={{width: "16%"}}>{gettext('Size')}</th>
             <th style={{width: "20%"}}>{gettext('Last Update')}</th>
           </tr>
         </thead>
-        <tbody className="doc-view-body">
+        <tbody>
           {children && children.map((node, index) => {
             return (
               <TreeDirList key={index} node={node} onMainNodeClick={this.props.onMainNodeClick}></TreeDirList>

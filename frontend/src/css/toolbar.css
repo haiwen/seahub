@@ -1,0 +1,83 @@
+
+/* begin current-module-toobar */
+.cur-view-toolbar {
+  position: relative;
+  display: flex;
+  flex: 1;
+}
+
+.cur-view-toolbar:before {
+  position: absolute;
+  top: 3px;
+  bottom: 3px;
+  left: -16px;
+  border-left: 1px solid #ddd;
+  content: '';
+}
+
+.top-toolbar-btn {
+  padding: 0 0.25rem;
+  margin-right: 0.25rem;
+  height: 30px;
+  min-width: 55px;
+  background-color: #fff !important;
+  line-height: 29px;
+  font-weight: normal;
+  font-size: 13px;
+  color: #333;
+  border: 1px solid #ccc;
+  border-radius: 2px;
+}
+
+.sf-view-mode-change-btn {
+  padding: 0;
+  height: 30px;
+  min-width: 2rem;
+  color: #aaa;
+  background-color: #fff !important;
+  border: 1px solid #ccc;
+  line-height: 29px;
+  font-size: 18px;
+  border-radius: 0 !important;
+}
+
+.sf-view-mode-change-btn.current-mode {
+  background-color: #ccc !important;
+  color: #fff !important;
+}
+
+/* end current-module-toobar */
+
+/* begin common-toolbar */
+.common-toolbar {
+  display: flex;
+  margin-left: auto;
+}
+
+.common-toolbar div{
+  margin-left: .5rem;
+}
+/* end common-toolbar */
+
+/* begin path toolbar  */
+.path-toolbar {
+  list-style: none;
+}
+
+.path-toolbar .toolbar-item {
+  display: inline-block;
+  text-align: center;
+  margin-left: 0.75rem;
+}
+
+.path-toolbar .toolbar-item a {
+  color:#8a8a8a;
+  font-size:22px;
+}
+
+
+.path-toolbar .toolbar-item a:hover {
+  color:#eb8205;
+  text-decoration:none;
+}
+/* end path toolbar */
