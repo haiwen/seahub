@@ -28,7 +28,7 @@ from seahub.api2.endpoints.group_libraries import GroupLibraries, GroupLibrary
 from seahub.api2.endpoints.group_owned_libraries import GroupOwnedLibraries, \
         GroupOwnedLibrary, GroupOwnedLibraryUserFolderPermission, \
         GroupOwnedLibraryGroupFolderPermission, GroupOwnedLibraryUserShare, \
-        GroupOwnedLibraryGroupShare
+        GroupOwnedLibraryGroupShare, GroupOwnedLibraryUserShareInLibrary
 from seahub.api2.endpoints.address_book.groups import AddressBookGroupsSubGroups
 from seahub.api2.endpoints.address_book.members import AddressBookGroupsSearchMember
 
@@ -238,6 +238,7 @@ urlpatterns = [
     url(r'^api/v2.1/group-owned-libraries/(?P<repo_id>[-0-9a-f]{36})/group-folder-permission/$', GroupOwnedLibraryGroupFolderPermission.as_view(), name='api-v2.1-group-owned-library-group-folder-permission'),
     url(r'^api/v2.1/group-owned-libraries/(?P<repo_id>[-0-9a-f]{36})/user-share/$', GroupOwnedLibraryUserShare.as_view(), name='api-v2.1-group-owned-library-user-share'),
     url(r'^api/v2.1/group-owned-libraries/(?P<repo_id>[-0-9a-f]{36})/group-share/$', GroupOwnedLibraryGroupShare.as_view(), name='api-v2.1-group-owned-library-group-share'),
+    url(r'^api/v2.1/group-owned-libraries/user-share-in-libraries/(?P<repo_id>[-0-9-a-f]{36})/$', GroupOwnedLibraryUserShareInLibrary.as_view(), name='api-v2.1-group-owned-library-user-share-in-library'),
 
     ## user::shared-folders
     url(r'^api/v2.1/shared-folders/$', SharedFolders.as_view(), name='api-v2.1-shared-folders'),
