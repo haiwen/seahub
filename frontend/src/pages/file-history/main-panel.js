@@ -2,8 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import Prism from 'prismjs';
 import Loading from '../../components/loading';
-import Account from '../../components/common/account';
-import Notification from '../../components/common/notification';
+import CommonToolbar from '../../components/toolbar/common-toolbar';
 import '../../css/initial-style.css';
 require('@seafile/seafile-editor/src/lib/code-hight-package');
 
@@ -19,14 +18,15 @@ class MainPanel extends React.Component {
     Prism.highlightAll();
   }
 
+  onSelectedClick = () => {
+    //todos;
+  }
+
   render() {
     return (
       <div className="main-panel viewer">
         <div className="main-panel-north">
-          <div className="common-toolbar">
-            <Notification />
-            <Account />
-          </div>
+          <CommonToolbar onSelectedClick={this.onSelectedClick} />
         </div>
         <div className="main-panel-center history-viewer-contanier">
           <div className="content-viewer">

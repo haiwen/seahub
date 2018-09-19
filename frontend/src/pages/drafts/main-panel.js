@@ -1,9 +1,8 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { gettext } from '../../components/constants';
+import CommonToolbar from '../../components/toolbar/common-toolbar';
 import Loading from '../../components/loading';
-import Account from '../../components/common/account';
-import Notification from '../../components/common/notification';
 import ListView from '../../components/list-view/list-view';
 import ListMenu from '../../components/list-view/list-menu';
 
@@ -69,15 +68,16 @@ class MainPanel extends React.Component {
   onDeleteHandler = () => {
     this.props.deleteDraft(this.state.currentDraft);
   }
+
+  onSelectedClicik = () => {
+    //todos;
+  }
   
   render() {
     return (
       <div className="main-panel">
         <div className="main-panel-north flex-right">
-          <div className="common-toolbar">
-            <Notification />
-            <Account />
-          </div>
+          <CommonToolbar onSelectedClicik={this.onSelectedClicik}/>
         </div>
         <div className="main-panel-center">
           <div className="panel-heading text-left">{gettext('Drafts')}</div>

@@ -68,7 +68,7 @@ class MainPanel extends Component {
     return (
       <div className="wiki-main-panel o-hidden">
         <div className="main-panel-top panel-top">
-          <div className="cur-view-toolbar">
+          <div className="cur-view-toolbar border-left-show">
             <span className="sf2-icon-menu side-nav-toggle hidden-md-up d-md-none" title="Side Nav Menu" onClick={this.onMenuClick}></span>
             <div>
             { 

@@ -19,11 +19,15 @@ class MainPanel extends Component {
   render() {
     return (
       <div className="main-panel o-hidden">
-        <div className="main-panel-top panel-top">
-        <span className="sf2-icon-menu side-nav-toggle hidden-md-up d-md-none" title="Side Nav Menu" onClick={this.onMenuClick}></span>
-        <CommonToolbar onSearchedClick={this.onSearchedClick}/>
-      </div>
-      <FilesActivities />
+        <div className="main-panel-north">
+          <div className="cur-view-toolbar">
+            <span className="sf2-icon-menu side-nav-toggle hidden-md-up d-md-none" title="Side Nav Menu" onClick={this.onMenuClick}></span>
+          </div>
+          <CommonToolbar onSearchedClick={this.onSearchedClick}/>
+        </div>
+        <div className="main-panel-center">
+          <FilesActivities />
+        </div>
     </div>
     )
   }

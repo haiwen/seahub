@@ -6,7 +6,7 @@
   flex: 1;
 }
 
-.cur-view-toolbar:before {
+.border-left-show:before {
   position: absolute;
   top: 3px;
   bottom: 3px;

@@ -1,13 +1,11 @@
 import React, { Component } from 'react';
 import TreeView from '../../components/tree-view/tree-view';
-import { siteRoot, logoPath, mediaUrl, siteTitle, logoWidth, logoHeight } from '../../components/constants';
+import { gettext, siteRoot, logoPath, mediaUrl, siteTitle, logoWidth, logoHeight } from '../../components/constants';
 import NodeMenu from '../../components/menu-component/node-menu';
 import MenuControl from '../../components/menu-component/node-menu-control';
 import Delete from '../../components/menu-component/menu-dialog/delete-dialog';
 import Rename from '../../components/menu-component/menu-dialog/rename-dialog';
 import CreateFlieFolder from '../../components/menu-component/menu-dialog/create-fileforder-dialog';
-
-const gettext = window.gettext;
 
 class SidePanel extends Component {
 

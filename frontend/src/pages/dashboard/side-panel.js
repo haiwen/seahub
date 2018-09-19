@@ -1,24 +1,30 @@
-import React, { Component } from 'react';
-import SideNavFooter from '../../components/side-nav-footer';
+import React from 'react';
+import Logo from '../../components/logo';
 import MainSideNav from '../../components/main-side-nav';
+import SideNavFooter from '../../components/side-nav-footer';
 
-import { siteRoot, logoPath, mediaUrl, siteTitle, logoWidth, logoHeight } from '../../components/constants';
 
-class SidePanel extends Component {
+class SidePanel extends React.Component {
+
+  onCloseSidePanel = () => {
+    //todos;
+  }
 
   render() {
     return (
-      <div className={`side-panel ${this.props.isOpen ? "left-zero": ""}`}>
-        <div className="side-panel-top panel-top">
-          <a href={siteRoot} id="logo">
-            <img src={mediaUrl + logoPath} title={siteTitle} alt="logo" width={logoWidth} height={logoHeight} />
-          </a>
-          <a href="#" title="Close" aria-label="Close" onClick={this.props.toggleClose} className="sf2-icon-x1 sf-popover-close side-panel-close op-icon d-md-none "></a>
+      <div className="side-panel">
+        <div className="side-panel-north">
+          <Logo onCloseSidePanel={this.onCloseSidePanel}/>
         </div>
-        <MainSideNav  />
-        <SideNavFooter />
+        <div className="side-panel-center">
+          <MainSideNav />
+        </div>
+        <div className="side-panel-footer">
+          <SideNavFooter />
+        </div>
       </div>
-      )
+    );
   }
 }
+
 export default SidePanel;
