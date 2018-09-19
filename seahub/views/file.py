@@ -44,7 +44,7 @@ from seahub.auth.decorators import login_required
 from seahub.base.decorators import repo_passwd_set_required
 from seahub.base.accounts import ANONYMOUS_EMAIL
 from seahub.share.models import FileShare, check_share_link_common
-from seahub.share.decorators import share_link_audit
+from seahub.share.decorators import share_link_audit, share_link_login_required
 from seahub.wiki.utils import get_wiki_dirent
 from seahub.wiki.models import WikiDoesNotExist, WikiPageMissing
 from seahub.utils import render_error, is_org_context, \
@@ -54,8 +54,7 @@ from seahub.utils import render_error, is_org_context, \
     user_traffic_over_limit, get_file_audit_events_by_path, \
     generate_file_audit_event_type, FILE_AUDIT_ENABLED, \
     get_conf_text_ext, HAS_OFFICE_CONVERTER, PREVIEW_FILEEXT, \
-    normalize_file_path, get_service_url, redirect_to_login, \
-    OFFICE_PREVIEW_MAX_SIZE
+    normalize_file_path, get_service_url, OFFICE_PREVIEW_MAX_SIZE
 
 from seahub.utils.ip import get_remote_ip
 from seahub.utils.timeutils import utc_to_local
@@ -81,8 +80,7 @@ if HAS_OFFICE_CONVERTER:
 
 import seahub.settings as settings
 from seahub.settings import FILE_ENCODING_LIST, FILE_PREVIEW_MAX_SIZE, \
-    FILE_ENCODING_TRY_LIST, MEDIA_URL, SEAFILE_COLLAB_SERVER, ENABLE_WATERMARK, \
-    SHARE_LINK_LOGIN_REQUIRED
+    FILE_ENCODING_TRY_LIST, MEDIA_URL, SEAFILE_COLLAB_SERVER, ENABLE_WATERMARK
 
 try:
     from seahub.settings import ENABLE_OFFICE_WEB_APP
@@ -955,20 +953,13 @@ def _download_file_from_share_link(request, fileshare):
     return HttpResponseRedirect(gen_file_get_url(dl_token, filename))
 
 @share_link_audit
+@share_link_login_required
 def view_shared_file(request, fileshare):
     """
     View file via shared link.
     Download share file if `dl` in request param.
     View raw share file if `raw` in request param.
     """
-
-    # get share link permission
-    can_download = fileshare.get_permissions()['can_download']
-    can_edit = fileshare.get_permissions()['can_edit']
-
-    if not request.user.is_authenticated():
-        if SHARE_LINK_LOGIN_REQUIRED or can_edit:
-            return redirect_to_login(request)
 
     token = fileshare.token
 
@@ -1001,6 +992,10 @@ def view_shared_file(request, fileshare):
     # send statistic messages
     file_size = seafile_api.get_file_size(repo.store_id, repo.version, obj_id)
     send_file_access_msg(request, repo, path, 'share-link')
+
+    # get share link permission
+    can_download = fileshare.get_permissions()['can_download']
+    can_edit = fileshare.get_permissions()['can_edit']
 
     # download shared file
     if request.GET.get('dl', '') == '1':
@@ -1115,12 +1110,8 @@ def view_shared_file(request, fileshare):
             })
 
 @share_link_audit
+@share_link_login_required
 def view_file_via_shared_dir(request, fileshare):
-
-    # no edit permission for folder share link
-    if not request.user.is_authenticated() \
-            and SHARE_LINK_LOGIN_REQUIRED:
-        return redirect_to_login(request)
 
     token = fileshare.token
 
