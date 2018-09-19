@@ -21,7 +21,7 @@ class Drafts extends Component {
       draftList: [],
       isLoadingDraft: true,
     };
-    this.currentTab = "draft";
+    this.currentTab = 'drafts';
   }
 
   componentDidMount() {
