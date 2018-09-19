@@ -21,8 +21,11 @@ define([
             'click .rm-invitation': 'removeInvitation'
         },
 
-        removeInvitation: function() {
+        removeInvitation: function(e) {
             var _this = this;
+
+            var $el = $(e.currentTarget);
+            $el.hide(); // hide the icon to avoid being clicked repeatedly
 
             $.ajax({
                 url: Common.getUrl({
@@ -37,6 +40,7 @@ define([
                     Common.feedback(gettext("Successfully deleted 1 item."), 'success');
                 },
                 error: function(xhr) {
+                    $el.show();
                     Common.ajaxErrorHandler(xhr);
                 }
             });
