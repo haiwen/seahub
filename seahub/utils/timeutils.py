@@ -5,8 +5,12 @@ import datetime
 from django.conf import settings
 from django.utils import six
 from django.utils import timezone
+from django.utils.timezone import get_current_timezone
 
 logger = logging.getLogger(__name__)
+
+# https://docs.djangoproject.com/en/1.11/ref/utils/#django.utils.timezone.get_current_timezone
+current_timezone = get_current_timezone()
 
 def dt(value):
     """Convert 32/64 bits timestamp to datetime object.
@@ -38,7 +42,6 @@ def utc_to_local(dt):
     local = timezone.make_naive(utc, tz)
     return local
 
-pytz_obj = pytz.timezone(settings.TIME_ZONE)
 def timestamp_to_isoformat_timestr(timestamp):
     try:
         min_ts = -(1 << 31)
@@ -49,16 +52,32 @@ def timestamp_to_isoformat_timestr(timestamp):
             dt_obj = datetime.datetime.fromtimestamp(timestamp/1000000)
 
         dt_obj = dt_obj.replace(microsecond=0)
-        isoformat_timestr = pytz_obj.localize(dt_obj).isoformat()
+        isoformat_timestr = current_timezone.localize(dt_obj).isoformat()
         return isoformat_timestr
     except Exception as e:
         logger.error(e)
         return ''
 
+# https://pypi.org/project/pytz/
 def datetime_to_isoformat_timestr(datetime):
     try:
+        # This library only supports two ways of building a localized time.
+        # The first is to use the localize() method provided by the pytz library.
+        # This is used to localize a naive datetime (datetime with no timezone information):
         datetime = datetime.replace(microsecond=0)
-        isoformat_timestr = pytz_obj.localize(datetime).isoformat()
+        isoformat_timestr = current_timezone.localize(datetime).isoformat()
+        return isoformat_timestr
+    except Exception as e:
+        logger.error(e)
+        return ''
+
+def utc_datetime_to_isoformat_timestr(utc_datetime):
+    try:
+        # The second way of building a localized time is by converting an existing
+        # localized time using the standard astimezone() method:
+        utc_datetime = utc_datetime.replace(microsecond=0)
+        utc_datetime = pytz.utc.localize(utc_datetime)
+        isoformat_timestr = utc_datetime.astimezone(current_timezone).isoformat()
         return isoformat_timestr
     except Exception as e:
         logger.error(e)
