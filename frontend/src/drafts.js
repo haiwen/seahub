@@ -2,7 +2,8 @@ import React, { Component } from 'react';
 import ReactDOM from 'react-dom';
 import editUtilties from './utils/editor-utilties';
 import SidePanel from './components/side-panel';
-import MainPanel from './pages/drafts/main-panel';
+import MainPanel from './components/main-panel';
+import DraftView from './pages/drafts/draft-view';
 
 import 'seafile-ui';
 import './assets/css/fa-solid.css';
@@ -50,15 +51,17 @@ class Drafts extends Component {
   }
 
   render() {
+    const draftView = 
+      <DraftView 
+        isLoadingDraft={this.state.isLoadingDraft}
+        draftList={this.state.draftList}
+        deleteDraft={this.deleteDraft}
+        publishDraft={this.publishDraft}
+      />;
     return (
       <div id="main">
         <SidePanel currentTab={this.currentTab}></SidePanel>
-        <MainPanel 
-          isLoadingDraft={this.state.isLoadingDraft}
-          draftList={this.state.draftList}
-          deleteDraft={this.deleteDraft}
-          publishDraft={this.publishDraft}
-        />
+        <MainPanel childModule={draftView} />
       </div>
     );
   }

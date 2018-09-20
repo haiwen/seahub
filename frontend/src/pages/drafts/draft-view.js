@@ -1,7 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { gettext } from '../../components/constants';
-import CommonToolbar from '../../components/toolbar/common-toolbar';
 import Loading from '../../components/loading';
 import ListView from '../../components/list-view/list-view';
 import ListMenu from '../../components/list-view/list-menu';
@@ -13,7 +12,7 @@ const propTypes = {
   deleteDraft: PropTypes.func.isRequired
 };
 
-class MainPanel extends React.Component {
+class DraftView extends React.Component {
   
   constructor(props) {
     super(props);
@@ -75,12 +74,9 @@ class MainPanel extends React.Component {
   
   render() {
     return (
-      <div className="main-panel">
-        <div className="main-panel-north flex-right">
-          <CommonToolbar onSearchedClick={this.onSearchedClick}/>
-        </div>
-        <div className="main-panel-center">
-          <div className="panel-heading text-left">{gettext('Drafts')}</div>
+      <div className="cur-view-container">
+        <div className="cur-view-path panel-heading text-left">{gettext('Drafts')}</div>
+        <div className="cur-view-content" style={{padding: 0}}>
           {this.props.isLoadingDraft ?
             <Loading /> :
             <div className="table-container">
@@ -112,6 +108,6 @@ class MainPanel extends React.Component {
   }
 }
 
-MainPanel.propTypes = propTypes;
+DraftView.propTypes = propTypes;
 
-export default MainPanel;
+export default DraftView;

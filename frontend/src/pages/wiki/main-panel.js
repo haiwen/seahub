@@ -60,7 +60,7 @@ class MainPanel extends Component {
           </div>
           <CommonToolbar onSearchedClick={this.props.onSearchedClick} />
         </div>
-        <div className="cur-view-main">
+        <div className="cur-view-container">
           <div className="cur-view-path">
             <div className="path-containter">
               <a href={siteRoot + 'wikis/'} className="normal">{gettext("Wikis")}</a>
@@ -69,14 +69,16 @@ class MainPanel extends Component {
               {pathElem}
             </div>
           </div>
-          <div className="cur-view-container table-container">
-            { this.props.isViewFileState && <MarkdownViewer
-              markdownContent={this.props.content}
-              latestContributor={this.props.latestContributor}
-              lastModified = {this.props.lastModified}
-              onLinkClick={this.props.onLinkClick}
-              isFileLoading={this.props.isFileLoading}
-            />}
+          <div className="cur-view-content">
+            { this.props.isViewFileState && 
+              <MarkdownViewer
+                markdownContent={this.props.content}
+                latestContributor={this.props.latestContributor}
+                lastModified = {this.props.lastModified}
+                onLinkClick={this.props.onLinkClick}
+                isFileLoading={this.props.isFileLoading}
+              />
+            }
             { !this.props.isViewFileState && 
               <TreeDirView 
                 node={this.props.changedNode}

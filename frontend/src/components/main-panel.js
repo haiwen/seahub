@@ -1,6 +1,5 @@
 import React, { Component } from 'react';
-import CommonToolbar from '../../components/toolbar/common-toolbar';
-import FilesActivities from '../../components/files-activities';
+import CommonToolbar from './toolbar/common-toolbar';
 
 class MainPanel extends Component {
   constructor(props) {
@@ -26,7 +25,7 @@ class MainPanel extends Component {
           <CommonToolbar onSearchedClick={this.onSearchedClick}/>
         </div>
         <div className="main-panel-center">
-          <FilesActivities />
+          {this.props.childModule}
         </div>
     </div>
     )

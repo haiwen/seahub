@@ -68,7 +68,7 @@
 
 .table-container {
   flex: 1;
-  padding: 10px 1rem;
+  padding: 10px 16px 20px;
   overflow: auto;
 }
 

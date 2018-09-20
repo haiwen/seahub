@@ -2,7 +2,8 @@ import React, { Component } from 'react';
 import ReactDOM from 'react-dom';
 import { siteRoot } from './components/constants';
 import SidePanel from './components/side-panel';
-import MainPanel from './pages/dashboard/main-panel';
+import MainPanel from './components/main-panel';
+import FilesActivities from './pages/dashboard/files-activities';
 import 'seafile-ui';
 import './assets/css/fa-solid.css';
 import './assets/css/fa-regular.css';
@@ -42,7 +43,7 @@ class DashBoard extends Component {
     return (
       <div id="main">
         <SidePanel isOpen={this.state.isOpen} toggleClose={this.isOpen} currentTab={this.currentTab}/>
-        <MainPanel isOpen={this.isOpen}></MainPanel>
+        <MainPanel isOpen={this.state.isOpen} childModule={<FilesActivities />}/>
       </div>
     );
   }
