@@ -47,22 +47,30 @@ DEFAULT_ENABLED_ROLE_PERMISSIONS = {
     },
 }
 
-_default_role_perms = DEFAULT_ENABLED_ROLE_PERMISSIONS.copy()
+role_permissions = DEFAULT_ENABLED_ROLE_PERMISSIONS.copy()
 
 try:
-    _default_role_perms.update(settings.ENABLED_ROLE_PERMISSIONS)  # merge outter dict
+    role_permissions.update(settings.ENABLED_ROLE_PERMISSIONS)  # merge outter dict
 except AttributeError:
     pass  # ignore error if ENABLED_ROLE_PERMISSONS is not set in settings.py
 
 def get_enabled_role_permissions():
-    for role, perms in _default_role_perms.iteritems():
+    permissions = {}
+    for role, perms in role_permissions.iteritems():
+        default_permissions = DEFAULT_ENABLED_ROLE_PERMISSIONS[DEFAULT_USER]
         # check role permission syntax
         for k in perms.keys():
-            if k not in DEFAULT_ENABLED_ROLE_PERMISSIONS[DEFAULT_USER].keys():
+            if k not in default_permissions.keys():
                 logger.warn('"%s" is not valid permission, please review the ENABLED_ROLE_PERMISSIONS setting.' % k)
-                assert False, '"%s" is not valid permission, please review the ENABLED_ROLE_PERMISSIONS setting.' % k
 
-    return _default_role_perms
+        all_false_permission = {}
+        for permission in default_permissions.keys():
+            all_false_permission[permission] = False
+
+        all_false_permission.update(perms)
+        permissions[role] = all_false_permission
+
+    return permissions
 
 ENABLED_ROLE_PERMISSIONS = get_enabled_role_permissions()
 
@@ -107,16 +115,16 @@ DEFAULT_ENABLED_ADMIN_ROLE_PERMISSIONS = {
     },
 }
 
-_default_admin_role_permissions = DEFAULT_ENABLED_ADMIN_ROLE_PERMISSIONS.copy()
+admin_role_permissions = DEFAULT_ENABLED_ADMIN_ROLE_PERMISSIONS.copy()
 
 try:
-    _default_admin_role_permissions.update(settings.ENABLED_ADMIN_ROLE_PERMISSIONS)  # merge outter dict
+    admin_role_permissions.update(settings.ENABLED_ADMIN_ROLE_PERMISSIONS)  # merge outter dict
 except AttributeError:
     pass  # ignore error if ENABLED_ADMIN_ROLE_PERMISSIONS is not set in settings.py
 
 def get_enabled_admin_role_permissions():
     permissions = {}
-    for role, perms in _default_admin_role_permissions.iteritems():
+    for role, perms in admin_role_permissions.iteritems():
         # check admin role permission syntax
         default_admin_permissions = DEFAULT_ENABLED_ADMIN_ROLE_PERMISSIONS[DEFAULT_ADMIN]
         for k in perms.keys():
