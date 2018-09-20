@@ -4,7 +4,6 @@ import os
 import posixpath
 import logging
 
-from django.core.urlresolvers import reverse
 from django.db.models import F
 from django.http import Http404, HttpResponseRedirect
 from django.shortcuts import render
@@ -16,7 +15,7 @@ from seaserv import seafile_api
 
 from seahub.auth.decorators import login_required
 from seahub.options.models import UserOptions, CryptoOptionNotSetError
-from seahub.share.decorators import share_link_audit
+from seahub.share.decorators import share_link_audit, share_link_login_required
 from seahub.share.models import FileShare, UploadLinkShare, \
     check_share_link_common
 from seahub.views import gen_path_link, get_repo_dirents, \
@@ -24,11 +23,11 @@ from seahub.views import gen_path_link, get_repo_dirents, \
 
 from seahub.utils import  gen_dir_share_link, \
     gen_shared_upload_link, user_traffic_over_limit, render_error, \
-    get_file_type_and_ext, redirect_to_login
+    get_file_type_and_ext
 from seahub.settings import ENABLE_UPLOAD_FOLDER, \
     ENABLE_RESUMABLE_FILEUPLOAD, ENABLE_THUMBNAIL, \
     THUMBNAIL_ROOT, THUMBNAIL_DEFAULT_SIZE, THUMBNAIL_SIZE_FOR_GRID, \
-    MAX_NUMBER_OF_FILES_FOR_FILEUPLOAD, SHARE_LINK_LOGIN_REQUIRED
+    MAX_NUMBER_OF_FILES_FOR_FILEUPLOAD
 from seahub.utils.file_types import IMAGE, VIDEO
 from seahub.thumbnail.utils import get_share_link_thumbnail_src
 from seahub.constants import HASH_URLS
@@ -154,12 +153,8 @@ def repo_history_view(request, repo_id):
 
 ########## shared dir/uploadlink
 @share_link_audit
+@share_link_login_required
 def view_shared_dir(request, fileshare):
-
-    # no edit permission for folder share link
-    if not request.user.is_authenticated() \
-            and SHARE_LINK_LOGIN_REQUIRED:
-        return redirect_to_login(request)
 
     token = fileshare.token
 
