@@ -1,8 +1,6 @@
 import React, { Component } from 'react';
 import { gettext, repoID, serviceUrl, slug, siteRoot, isPro } from '../../components/constants';
-import Search from '../../components/search/search';
-import Account from '../../components/account';
-import Notification from '../../components/notification';
+import CommonToolbar from '../../components/toolbar/common-toolbar';
 import PathToolbar from '../../components/toolbar/path-toolbar';
 import MarkdownViewer from '../../components/markdown-viewer';
 import TreeDirView from '../../components/tree-dir-view/tree-dir-view';
@@ -70,7 +68,7 @@ class MainPanel extends Component {
     return (
       <div className="wiki-main-panel o-hidden">
         <div className="main-panel-top panel-top">
-          <div className="cur-view-toolbar">
+          <div className="cur-view-toolbar border-left-show">
             <span className="sf2-icon-menu side-nav-toggle hidden-md-up d-md-none" title="Side Nav Menu" onClick={this.onMenuClick}></span>
             <div>
             { 
@@ -84,14 +82,7 @@ class MainPanel extends Component {
               <button className={`btn btn-secondary btn-icon sf-view-mode-change-btn sf2-icon-wiki-view ${this.state.isWikiMode ? 'current-mode' : ''}`} id='wiki' title={gettext("wiki")} onClick={this.switchViewMode}></button>
             </div>
           </div>
-          <div className="common-toolbar">
-            {
-              isPro && 
-              <Search onSearchedClick={this.props.onSearchedClick} placeholder={gettext("Search files in this library")} />
-            }
-            <Notification />
-            <Account  />
-          </div>
+          <CommonToolbar onSearchedClick={this.props.onSearchedClick} />
         </div>
         <div className="cur-view-main">
           <div className="cur-view-path">

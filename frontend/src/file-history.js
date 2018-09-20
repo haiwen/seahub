@@ -13,6 +13,7 @@ import './assets/css/fontawesome.css';
 import './css/layout.css';
 import './css/file-history.css';
 import './css/toolbar.css';
+import './css/search.css';
 
 class FileHistory extends React.Component {
 

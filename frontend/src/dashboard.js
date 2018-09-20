@@ -1,16 +1,13 @@
 import React, { Component } from 'react';
 import ReactDOM from 'react-dom';
-import SidePanel from './pages/dashboard/side-panel';
+import { siteRoot } from './components/constants';
+import SidePanel from './components/side-panel';
 import MainPanel from './pages/dashboard/main-panel';
-import Account from './components/account';
-import Search from './components/search/search';
-import Notification from './components/notification';
-import cookie from 'react-cookies';
-import { isPro, gettext, siteRoot } from './components/constants';
 import 'seafile-ui';
 import './assets/css/fa-solid.css';
 import './assets/css/fa-regular.css';
 import './assets/css/fontawesome.css';
+import './css/layout.css'
 import './css/dashboard.css';
 import './css/toolbar.css';
 import './css/search.css';
@@ -22,13 +19,14 @@ class DashBoard extends Component {
     super(props);
     this.state = {
       isOpen: false
-    }
+    };
+    this.currentTab = 'dashboard';
   }
 
   isOpen = () => {
     this.setState({
       isOpen: !this.state.isOpen,
-    })
+    });
   }
 	
   onSearchedClick = (item) => { 
@@ -43,17 +41,10 @@ class DashBoard extends Component {
   render() {
     return (
       <div id="main">
-          <SidePanel isOpen={this.state.isOpen} toggleClose={this.isOpen} />
-          <MainPanel isOpen={this.isOpen}>
-            {isPro && <Search  onSearchedClick={this.onSearchedClick} 
-                               placeholder={gettext("Search files")}
-                      />
-            }
-            <Notification  />
-            <Account />
-          </MainPanel>
+        <SidePanel isOpen={this.state.isOpen} toggleClose={this.isOpen} currentTab={this.currentTab}/>
+        <MainPanel isOpen={this.isOpen}></MainPanel>
       </div>
-    )
+    );
   }
 }
 

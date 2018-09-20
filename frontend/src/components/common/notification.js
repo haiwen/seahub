@@ -1,5 +1,5 @@
 import React from 'react';
-import { seafileAPI } from '../utils/seafile-api';
+import { seafileAPI } from '../../utils/seafile-api';
 const gettext = window.gettext;
 
 class Notification extends React.Component {

@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import CommonToolbar from '../../components/toolbar/common-toolbar';
 import FilesActivities from '../../components/files-activities';
 
 class MainPanel extends Component {
@@ -9,19 +10,24 @@ class MainPanel extends Component {
   onMenuClick = () => {
     this.props.isOpen();
   }
+  
+  onSearchedClick = () => {
+    //todos;
+  }
 
 
   render() {
-    const { children } = this.props
     return (
       <div className="main-panel o-hidden">
-        <div className="main-panel-top panel-top">
-        <span className="sf2-icon-menu side-nav-toggle hidden-md-up d-md-none" title="Side Nav Menu" onClick={this.onMenuClick}></span>
-        <div className="common-toolbar">
-          {children}
+        <div className="main-panel-north">
+          <div className="cur-view-toolbar">
+            <span className="sf2-icon-menu side-nav-toggle hidden-md-up d-md-none" title="Side Nav Menu" onClick={this.onMenuClick}></span>
+          </div>
+          <CommonToolbar onSearchedClick={this.onSearchedClick}/>
         </div>
-      </div>
-      <FilesActivities />
+        <div className="main-panel-center">
+          <FilesActivities />
+        </div>
     </div>
     )
   }

@@ -1,3 +1,11 @@
+/* begin top logo */
+.top-logo {
+  display: flex;
+  justify-content: space-between;
+  flex: 1;
+}
+
+/* end top logo */
 .panel-heading {
   position: relative;
   padding: .5rem 1rem;

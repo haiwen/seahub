@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import ReactDOM from 'react-dom';
 import editUtilties from './utils/editor-utilties';
-import SidePanel from './pages/drafts/side-panel';
+import SidePanel from './components/side-panel';
 import MainPanel from './pages/drafts/main-panel';
 
 import 'seafile-ui';
@@ -11,6 +11,7 @@ import './assets/css/fontawesome.css';
 import './css/layout.css';
 import './css/common.css';
 import './css/toolbar.css';
+import './css/search.css';
 
 class Drafts extends Component {
 
@@ -20,6 +21,7 @@ class Drafts extends Component {
       draftList: [],
       isLoadingDraft: true,
     };
+    this.currentTab = 'drafts';
   }
 
   componentDidMount() {
@@ -38,19 +40,19 @@ class Drafts extends Component {
   deleteDraft = (draft) => {
     editUtilties.deleteDraft(draft.id).then(res => {
       this.initDraftList();
-    })
+    });
   }
 
   publishDraft = (draft) => {
     editUtilties.publishDraft(draft.id).then(res => {
       this.initDraftList();
-    })
+    });
   }
 
   render() {
     return (
       <div id="main">
-        <SidePanel></SidePanel>
+        <SidePanel currentTab={this.currentTab}></SidePanel>
         <MainPanel 
           isLoadingDraft={this.state.isLoadingDraft}
           draftList={this.state.draftList}
