@@ -190,6 +190,8 @@ def sys_statistic_traffic(request):
 
     return render(request,
         'sysadmin/sys_trafficadmin.html', {
+            'type': req_type,
+            'order_by': order_by,
             'traffic_info_list': traffic_info_list[:per_page],
             'month': month,
             'current_page': current_page,

@@ -19,10 +19,13 @@
 
 <ul class="traffic-tab-nav">
     <li class="tab tab-cur">
-        <a href="{% url 'sys_statistic_traffic' %}" class="a">{% trans "System" %}</a>
+        <a href="{% url 'sys_statistic_traffic' %}" class="a">{% trans "System" context "system traffic" %}</a>
     </li>
     <li class="tab">
-        <a href="{{ SITE_ROOT }}sys/trafficadmin/" class="a">{% trans "Share Link" %}</a>
+        <a href="?type=user" class="a">{% trans "Users" context "user traffic" %}</a>
+    </li>
+    <li class="tab">
+        <a href="?type=org" class="a">{% trans "Organizations" context "organization traffic" %}</a>
     </li>
 </ul>
 
