@@ -15,7 +15,7 @@ from seahub.api2.authentication import TokenAuthentication
 from seahub.api2.utils import api_error
 from seahub.api2.endpoints.utils import generate_links_header_for_paginator
 from seahub.utils import get_file_history, get_site_scheme_and_netloc
-from seahub.utils.timeutils import datetime_to_isoformat_timestr, timestamp_to_isoformat_timestr
+from seahub.utils.timeutils import utc_datetime_to_isoformat_timestr, timestamp_to_isoformat_timestr
 from seahub.utils.file_revisions import get_file_revisions_within_limit
 from seahub.views import check_folder_permission
 from seahub.avatar.templatetags.avatar_tags import api_avatar_url
@@ -36,7 +36,7 @@ def get_new_file_history_info(ent, avatar_size):
     info['creator_name'] = email2nickname(creator_name)
     info['creator_contact_email'] = email2contact_email(creator_name)
     info['op_type'] = ent.op_type
-    info['ctime'] = datetime_to_isoformat_timestr(ent.timestamp)
+    info['ctime'] = utc_datetime_to_isoformat_timestr(ent.timestamp)
     info['commit_id'] = ent.commit_id
     info['size'] = ent.size
     info['rev_file_id'] = ent.file_id
