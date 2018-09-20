@@ -1554,6 +1554,10 @@
         </li>
         {% endif %}
 
+        <li class="tab<% if (cur_tab == 'drafts') { %> tab-cur<% } %>">
+            <a href="{{ SITE_ROOT }}drafts/" class="ellipsis" title="{% trans "Drafts" %}"><span aria-hidden="true" class="sf2-icon-draft"></span>{% trans "Drafts" %}</a>
+        </li>
+
         <li class="tab" id="share-admin-nav">
             <a href="#" class="ellipsis" title="{% trans "Share Admin" %}"><span class="toggle-icon <% if (show_share_admin) { %> icon-caret-down <% } else { %> icon-caret-left <% } %> fright" aria-hidden="true"></span><span aria-hidden="true" class="sf2-icon-wrench"></span>{% trans "Share Admin" %}</a>
             <% if (show_share_admin) { %>
@@ -1579,9 +1583,6 @@
                 </li>
                 <% } %>
             </ul>
-        </li>
-        <li class="tab<% if (cur_tab == 'drafts') { %> tab-cur<% } %>">
-            <a href="{{ SITE_ROOT }}drafts/" class="ellipsis" title="{% trans "Drafts" %}"><span aria-hidden="true" class="sf2-icon-edit"></span>{% trans "Drafts" %}</a>
         </li>
     </ul>
     </div>

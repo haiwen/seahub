@@ -77,23 +77,20 @@ class DraftView extends React.Component {
       <div className="cur-view-container">
         <div className="cur-view-path panel-heading text-left">{gettext('Drafts')}</div>
         <div className="cur-view-content" style={{padding: 0}}>
-          {this.props.isLoadingDraft ?
-            <Loading /> :
-            <div className="table-container">
-              {this.props.draftList.length ? 
-                <ListView
-                  draftList={this.props.draftList} 
-                  isItemFreezed={this.state.isItemFreezed}
-                  onMenuToggleClick={this.onMenuToggleClick}
-                /> :
-                <div className="message empty-tip">
-                  <h2>{gettext('There is no draft file existing')}</h2>
-                </div>
-              }
+          {this.props.isLoadingDraft && <Loading /> }
+          {!this.props.isLoadingDraft && this.props.draftList.length &&
+            <ListView
+            draftList={this.props.draftList} 
+            isItemFreezed={this.state.isItemFreezed}
+            onMenuToggleClick={this.onMenuToggleClick}
+          />
+          }
+          {!this.props.isLoadingDraft && !this.props.draftList.length &&
+            <div className="message empty-tip">
+              <h2>{gettext('There is no draft file existing')}</h2>
             </div>
           }
-          {
-            this.state.isMenuShow && 
+          {this.state.isMenuShow && 
             <ListMenu 
               isMenuShow={this.state.isMenuShow} 
               currentDraft={this.state.currentDraft} 

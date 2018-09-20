@@ -167,6 +167,7 @@
 .sf2-icon-trash:before { content:"\e016"; }
 .sf2-icon-security:before { content:"\e017"; }
 .sf2-icon-edit:before { content:"\e018"; }
+.sf2-icon-draft:before { content:"\e018"; }
 .sf2-icon-edit2:before { content:"\e018"; } /* for some reason */
 .sf2-icon-eye:before { content:"\e019"; }
 .sf2-icon-caret-down:before { content:"\e01a"; }
