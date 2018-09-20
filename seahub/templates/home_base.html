@@ -53,6 +53,7 @@
                 <a href="{{ SITE_ROOT }}#invitations/"><span aria-hidden="true" class="sf2-icon-invite"></span>{% trans "Invite People" %}</a>
             </li>
             {% endif %}
+            <li class="tab"><a href="{{ SITE_ROOT }}drafts/"><span class="sf2-icon-edit2" aria-hidden="true"></span>{% trans "Drafts" %}</a></li>
 
             <li class="tab" id="share-admin-nav">
                 <a href="#" class="ellipsis" title="{% trans "Share Admin" %}"><span class="toggle-icon icon-caret-left fright" aria-hidden="true"></span><span aria-hidden="true" class="sf2-icon-wrench"></span>{% trans "Share Admin" %}</a>
@@ -76,7 +77,6 @@
                     {% endif %}
                 </ul>
             </li>
-            <li class="tab"><a href="{{ SITE_ROOT }}drafts/"><span class="sf2-icon-edit2" aria-hidden="true"></span>{% trans "Drafts" %}</a></li>
         </ul>
         {% endblock %}
     </div>

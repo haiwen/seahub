@@ -134,7 +134,7 @@ class  MainSideNav extends React.Component {
               </a>
             </li>
             <li className="tab" id="group-nav">
-              <a className="ellipsis user-select-no" title={gettext('Shared with groups')} onClick={this.grpsExtend}>
+              <a href="#" className="ellipsis user-select-no" title={gettext('Shared with groups')} onClick={this.grpsExtend}>
                 <span className={`toggle-icon float-right fas ${this.state.groupsExtended ?'fa-caret-down':'fa-caret-left'}`} aria-hidden="true"></span>
                 <span className="sf2-icon-group" aria-hidden="true"></span>
                 {gettext('Shared with groups')}
@@ -170,7 +170,7 @@ class  MainSideNav extends React.Component {
               </a>
             </li>
             <li className="tab" id="share-admin-nav">
-              <a className="ellipsis user-select-no" title={gettext('Share Admin')} onClick={this.shExtend}>
+              <a href="#" className="ellipsis user-select-no" title={gettext('Share Admin')} onClick={this.shExtend}>
                 <span className={`toggle-icon float-right fas ${this.state.sharedExtended ? 'fa-caret-down':'fa-caret-left'}`} aria-hidden="true"></span>
                 <span aria-hidden="true" className="sf2-icon-wrench"></span>
                 {gettext('Share Admin')}
