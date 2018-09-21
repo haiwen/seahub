@@ -1,7 +1,7 @@
 {% load avatar_tags i18n %}
 
 <script type="text/template" id="my-repos-toolbar-tmpl">
-    <button class="repo-create btn-white hidden-sm-down"><span aria-hidden="true" class="icon-plus-square add vam"></span><span class="vam">{% trans "New Library" %}</span></button>
+    <button class="repo-create btn-white hidden-sm-down repo-create-btn"><span aria-hidden="true" class="icon-plus-square add vam"></span><span class="vam">{% trans "New Library" %}</span></button>
     <span aria-label="{% trans "New Library" %}" class="hidden-md-up repo-create sf2-icon-plus2 mobile-icon"></span>
     <div id="my-libs-more-op" class="sf-dropdown sf-dropdown-inline hidden-sm-down">
         <button class="sf-dropdown-toggle btn-white more-op-btn-white">{% trans "More" %}</button>
@@ -1554,6 +1554,10 @@
         </li>
         {% endif %}
 
+        <li class="tab<% if (cur_tab == 'drafts') { %> tab-cur<% } %>">
+            <a href="{{ SITE_ROOT }}drafts/" class="ellipsis" title="{% trans "Drafts" %}"><span aria-hidden="true" class="sf2-icon-draft"></span>{% trans "Drafts" %}</a>
+        </li>
+
         <li class="tab" id="share-admin-nav">
             <a href="#" class="ellipsis" title="{% trans "Share Admin" %}"><span class="toggle-icon <% if (show_share_admin) { %> icon-caret-down <% } else { %> icon-caret-left <% } %> fright" aria-hidden="true"></span><span aria-hidden="true" class="sf2-icon-wrench"></span>{% trans "Share Admin" %}</a>
             <% if (show_share_admin) { %>
@@ -1579,9 +1583,6 @@
                 </li>
                 <% } %>
             </ul>
-        </li>
-        <li class="tab<% if (cur_tab == 'drafts') { %> tab-cur<% } %>">
-            <a href="{{ SITE_ROOT }}drafts/" class="ellipsis" title="{% trans "Drafts" %}"><span aria-hidden="true" class="sf2-icon-edit"></span>{% trans "Drafts" %}</a>
         </li>
     </ul>
     </div>

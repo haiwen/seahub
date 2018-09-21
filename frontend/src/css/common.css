@@ -68,7 +68,7 @@
 
 .table-container {
   flex: 1;
-  padding: 10px 1rem;
+  padding: 10px 16px 20px;
   overflow: auto;
 }
 
@@ -115,6 +115,7 @@
 /* specific handler */
 .table-container table .menu-toggle {
   text-align: center;
+  cursor: pointer;
 }
 
 .tr-highlight {
@@ -127,10 +128,15 @@
 .dropdown-menu {
   min-width: 8rem;
 }
+
+.dropdown-item {
+  cursor: pointer;
+}
 /* end dropdown-menu style */
 
 /* begin tip */
 .empty-tip {
+  margin: auto 1rem;
   padding: 30px 40px;
   background-color: #FAFAFA;
   border: solid 1px #DDD;

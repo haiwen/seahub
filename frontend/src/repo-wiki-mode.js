@@ -13,6 +13,7 @@ import 'seafile-ui';
 import './assets/css/fa-solid.css';
 import './assets/css/fa-regular.css';
 import './assets/css/fontawesome.css';
+import './css/layout.css';
 import './css/side-panel.css';
 import './css/wiki.css';
 import './css/toolbar.css';

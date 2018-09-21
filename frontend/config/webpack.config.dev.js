@@ -34,7 +34,7 @@ module.exports = {
   // This means they will be the "root" imports that are included in JS bundle.
   // The first two entry points enable "hot" CSS and auto-refreshes for JS.
   entry: {
-    main: [
+    markdownEditor: [
       // We ship a few polyfills by default:
       require.resolve('./polyfills'),
       // Include an alternative client for WebpackDevServer. A client's job is to
@@ -59,11 +59,6 @@ module.exports = {
      require.resolve('react-dev-utils/webpackHotDevClient'),
      paths.appSrc + "/wiki.js",
    ],
-   dashboard: [
-     require.resolve('./polyfills'),
-     require.resolve('react-dev-utils/webpackHotDevClient'),
-     paths.appSrc + "/dashboard.js",
-   ],
    repoview: [
      require.resolve('./polyfills'),
      require.resolve('react-dev-utils/webpackHotDevClient'),
@@ -74,11 +69,11 @@ module.exports = {
      require.resolve('react-dev-utils/webpackHotDevClient'),
      paths.appSrc + "/file-history.js",
    ],
-   drafts: [
+   app: [
     require.resolve('./polyfills'),
     require.resolve('react-dev-utils/webpackHotDevClient'),
-    paths.appSrc + "/drafts.js",
-  ]
+    paths.appSrc + "/app.js",
+   ]
   },
 
   output: {

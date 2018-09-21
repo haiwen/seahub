@@ -205,7 +205,7 @@ class Search extends Component {
               onChange={this.onChangeHandler}
               autoComplete="off"
             />
-            <i className={`search-icon-right input-icon-addon sf2-icon-close ${this.state.isCloseShow ? "" : "hide"}`} onClick={this.onCloseHandler}></i>
+            <i className={`search-icon-right input-icon-addon fas fa-times ${this.state.isCloseShow ? "" : "hide"}`} onClick={this.onCloseHandler}></i>
           </div>
           <div className="search-result-container">
             {this.renderSearchResult()}

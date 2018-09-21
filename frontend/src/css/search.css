@@ -13,11 +13,12 @@
   z-index: 2;
 }
 
-.search-container .search-icon-left {
+.search-icon-left {
   display: flex;
 }
 
-.search-container .search-icon-right {
+.search-icon-right {
+  display: flex;
   cursor: pointer;
   pointer-events: all;
   font-style: normal;

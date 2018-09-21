@@ -167,6 +167,7 @@
 .sf2-icon-trash:before { content:"\e016"; }
 .sf2-icon-security:before { content:"\e017"; }
 .sf2-icon-edit:before { content:"\e018"; }
+.sf2-icon-draft:before { content:"\e018"; }
 .sf2-icon-edit2:before { content:"\e018"; } /* for some reason */
 .sf2-icon-eye:before { content:"\e019"; }
 .sf2-icon-caret-down:before { content:"\e01a"; }
@@ -1913,7 +1914,8 @@ button.sf-dropdown-toggle:focus {
     flex-direction:column;
 }
 .panel-top {
-    padding:.5rem 1rem .25rem;
+    padding:.6rem 1rem .25rem;
+    height: 49px;
     background:#f4f4f7;
     border-bottom: 1px solid #e8e8e8;
     display:flex;
@@ -1930,6 +1932,10 @@ button.sf-dropdown-toggle:focus {
 @media (min-width: 768px) {
     .cur-view-toolbar {
         position:relative; /* for the ':before' */
+        display: flex;
+    }
+    .repo-create-btn {
+        margin-right: 4px;
     }
     .cur-view-toolbar:before {
         content:'';
@@ -2118,8 +2124,19 @@ button.sf-dropdown-toggle:focus {
 
 #notifications {
     position:relative;
-    margin:5px 0 0 25px;
+    width: 32px;
+    height: 32px;
+    margin-left: 8px;
 }
+
+#notifications a {
+    width: 100%;
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
 @media (max-width: 390px) {
     #notifications {
         margin-left:8px;
@@ -2183,7 +2200,7 @@ button.sf-dropdown-toggle:focus {
 }
 #account {
     position:relative;
-    margin-left:32px;
+    margin-left: 8px;
 }
 #account .avatar {
     vertical-align:middle;

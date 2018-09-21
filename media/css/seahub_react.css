@@ -124,7 +124,7 @@ ul,ol,li {
 .up-outer-caret .inner-caret {
     border-bottom-color:#fff;
     top:1px;
-    left:-10px;
+    left:-18px;
 }
 .up-outer-caret {
     position:absolute;
@@ -356,7 +356,6 @@ a.op-icon:focus {
     flex-direction:column;
     justify-content:space-between; /* make .side-nav-footer on the bottom */
     overflow:hidden; /* for ff */
-    border-right:1px solid #eee;
 }
 .side-nav-con {
     overflow:hidden;

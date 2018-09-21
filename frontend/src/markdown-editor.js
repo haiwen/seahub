@@ -162,7 +162,7 @@ class EditorUtilities {
 
 const editorUtilities = new EditorUtilities();
 
-class App extends React.Component {
+class MarkdownEditor extends React.Component {
   constructor(props) {
       super(props);
       this.state = {
@@ -233,4 +233,4 @@ class App extends React.Component {
     }   
   }
 }
-export default App;
+export default MarkdownEditor;

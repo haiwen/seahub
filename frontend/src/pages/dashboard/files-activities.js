@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
-import { seafileAPI } from '../utils/seafile-api';
-import { gettext, siteRoot } from './constants';
+import { seafileAPI } from '../../utils/seafile-api';
+import { gettext, siteRoot } from '../../components/constants';
 
 const per_page = 25; // default
 
@@ -233,11 +233,11 @@ class FilesActivities extends Component {
 
   render() {
     return (
-      <div className="main-panel-main" id="activities">
+      <div className="cur-view-container" id="activities">
         <div className="cur-view-path">
           <h3 className="sf-heading">{gettext("Activities")}</h3>
         </div>
-        <div className="cur-view-main-con" onScroll={this.handleScroll}>
+        <div className="cur-view-content" onScroll={this.handleScroll}>
           <FileActivitiesContent data={this.state} />
         </div>
       </div>
