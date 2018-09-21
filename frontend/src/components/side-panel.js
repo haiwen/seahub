@@ -6,15 +6,11 @@ import SideNavFooter from './side-nav-footer';
 
 class SidePanel extends React.Component {
 
-  onCloseSidePanel = () => {
-    //todos;
-  }
-
   render() {
     return (
-      <div className="side-panel">
+      <div className={`side-panel ${this.props.isSidePanelClosed ? '' : 'left-zero'}`}>
         <div className="side-panel-north">
-          <Logo onCloseSidePanel={this.onCloseSidePanel}/>
+          <Logo onCloseSidePanel={this.props.onCloseSidePanel}/>
         </div>
         <div className="side-panel-center">
           <MainSideNav currentTab={this.props.currentTab}/>

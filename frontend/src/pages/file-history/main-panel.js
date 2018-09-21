@@ -18,7 +18,7 @@ class MainPanel extends React.Component {
     Prism.highlightAll();
   }
 
-  onSelectedClick = () => {
+  onSearchedClick = () => {
     //todos;
   }
 
@@ -26,7 +26,7 @@ class MainPanel extends React.Component {
     return (
       <div className="main-panel viewer">
         <div className="main-panel-north">
-          <CommonToolbar onSelectedClick={this.onSelectedClick} />
+          <CommonToolbar onSearchedClick={this.onSearchedClick} />
         </div>
         <div className="main-panel-center history-viewer-contanier">
           <div className="content-viewer">
