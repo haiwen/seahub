@@ -258,8 +258,8 @@ define([
                     dataType: 'json',
                     success: function(data) {
                         // show 'can preview/edit' perm option for download link or not
-                        if (data.can_preview) {
-                            _this.$('#file-share-link-preview-only-radio').removeClass('hide');
+                        if (!data.can_preview) {
+                            _this.$('#share-link-preview-only-radio').addClass('hide');
                         }
 
                         var file_ext = '';
@@ -268,7 +268,7 @@ define([
                                 .toLowerCase();
                         }
                         if ((file_ext == 'docx' || file_ext == 'xlsx' || file_ext == 'pptx') && data.can_edit) {
-                            _this.$('#file-share-link-edit-download-radio').removeClass('hide');
+                            _this.$('#share-link-edit-download-radio').removeClass('hide');
                         }
                     }
                 });
