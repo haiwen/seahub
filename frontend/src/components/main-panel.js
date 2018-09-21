@@ -25,7 +25,7 @@ class MainPanel extends Component {
           <CommonToolbar onSearchedClick={this.onSearchedClick}/>
         </div>
         <div className="main-panel-center">
-          {this.props.childModule}
+          {this.props.children}
         </div>
     </div>
     )

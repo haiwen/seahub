@@ -1,22 +1,18 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { gettext } from '../../components/constants';
+import editUtilties from '../../utils/editor-utilties';
 import Loading from '../../components/loading';
 import ListView from '../../components/list-view/list-view';
 import ListMenu from '../../components/list-view/list-menu';
-
-const propTypes = {
-  isLoadingDraft: PropTypes.bool.isRequired,
-  draftList: PropTypes.array.isRequired,
-  publishDraft: PropTypes.func.isRequired,
-  deleteDraft: PropTypes.func.isRequired
-};
 
 class DraftView extends React.Component {
   
   constructor(props) {
     super(props);
     this.state = {
+      draftList: [],
+      isLoadingDraft: true,
       isMenuShow: false,
       menuPosition: {top:'', left: ''},
       currentDraft: null,
@@ -25,11 +21,36 @@ class DraftView extends React.Component {
   }
 
   componentDidMount() {
+    this.initDraftList();
     document.addEventListener('click', this.onHideContextMenu);
   }
 
   componentWillUnmount() {
     document.removeEventListener('click', this.onHideContextMenu);
+  }
+
+  initDraftList() {
+    this.setState({isLoadingDraft: true});
+    editUtilties.listDrafts().then(res => {
+      this.setState({
+        draftList: res.data.data,
+        isLoadingDraft: false,
+      });
+    });
+  }
+
+  onDeleteHandler = () => {
+    let draft = this.state.currentDraft;
+    editUtilties.deleteDraft(draft.id).then(res => {
+      this.initDraftList();
+    });
+  }
+
+  onPublishHandler = () => {
+    let draft = this.state.currentDraft;
+    editUtilties.publishDraft(draft.id).then(res => {
+      this.initDraftList();
+    });
   }
 
   onMenuToggleClick = (e, draft) => {
@@ -59,33 +80,21 @@ class DraftView extends React.Component {
       isItemFreezed: false
     });
   }
-
-  onPublishHandler = () => {
-    this.props.publishDraft(this.state.currentDraft);
-  }
-
-  onDeleteHandler = () => {
-    this.props.deleteDraft(this.state.currentDraft);
-  }
-
-  onSearchedClick = () => {
-    //todos;
-  }
   
   render() {
     return (
       <div className="cur-view-container">
         <div className="cur-view-path panel-heading text-left">{gettext('Drafts')}</div>
         <div className="cur-view-content" style={{padding: 0}}>
-          {this.props.isLoadingDraft && <Loading /> }
-          {!this.props.isLoadingDraft && this.props.draftList.length &&
+          {this.state.isLoadingDraft && <Loading /> }
+          {(!this.state.isLoadingDraft && this.state.draftList.length !==0) &&
             <ListView
-            draftList={this.props.draftList} 
-            isItemFreezed={this.state.isItemFreezed}
-            onMenuToggleClick={this.onMenuToggleClick}
-          />
+              draftList={this.state.draftList} 
+              isItemFreezed={this.state.isItemFreezed}
+              onMenuToggleClick={this.onMenuToggleClick}
+            />
           }
-          {!this.props.isLoadingDraft && !this.props.draftList.length &&
+          {(!this.state.isLoadingDraft && this.state.draftList.length === 0) &&
             <div className="message empty-tip">
               <h2>{gettext('There is no draft file existing')}</h2>
             </div>
@@ -104,7 +113,5 @@ class DraftView extends React.Component {
     );
   }
 }
-
-DraftView.propTypes = propTypes;
 
 export default DraftView;

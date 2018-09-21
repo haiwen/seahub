@@ -1,4 +1,5 @@
 import React from 'react';
+import { Link } from '@reach/router';
 import { gettext, siteRoot } from './constants';
 import { seafileAPI } from '../utils/seafile-api';
 
@@ -152,10 +153,10 @@ class  MainSideNav extends React.Component {
               </a>
             </li>
             <li className={`tab ${this.state.currentTab === 'dashboard' ? 'tab-cur' : ''}`}>
-              <a href={siteRoot + 'dashboard'} title={gettext('Acitivities')} onClick={() => this.tabItemClick('dashboard')}>
+              <Link to='/dashboard' title={gettext('Acitivities')} onClick={() => this.tabItemClick('dashboard')}>
                 <span className="sf2-icon-clock" aria-hidden="true"></span>
                 {gettext('Acitivities')}
-              </a>
+              </Link>
             </li>
             <li className={`tab ${this.state.currentTab === 'devices' ? 'tab-cur' : ''}`}>
               <a href={siteRoot + '#devices/'} className="ellipsis" title={gettext('Linked Devices')} onClick={() => this.tabItemClick('devices')}>
@@ -164,10 +165,10 @@ class  MainSideNav extends React.Component {
               </a>
             </li>
             <li className={`tab ${this.state.currentTab === 'drafts' ? 'tab-cur' : ''}`} onClick={() => this.tabItemClick('drafts')}>
-              <a href={siteRoot + 'drafts/'} title={gettext('Drafts')}>
+              <Link to='/drafts' title={gettext('Drafts')}>
                 <span className="sf2-icon-edit" aria-hidden="true"></span>
                 {gettext('Drafts')}
-              </a>
+              </Link>
             </li>
             <li className="tab" id="share-admin-nav">
               <a href="#" className="ellipsis user-select-no" title={gettext('Share Admin')} onClick={this.shExtend}>

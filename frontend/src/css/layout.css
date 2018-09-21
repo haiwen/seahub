@@ -106,3 +106,7 @@
   margin-bottom:.5em;
   border-radius:2px;
 }
+
+[role=group] {
+  display: flex;
+}
