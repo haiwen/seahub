@@ -6,14 +6,16 @@ import Notification from '../common/notification';
 import Account from '../common/account';
 
 const propTypes = {
-  onSearchedClick: PropTypes.func.isRequired
+  onSearchedClick: PropTypes.func.isRequired,
+  searchPlaceholder: PropTypes.string
 };
 
 class  CommonToolbar extends React.Component {
   render() {
+    let placeholder = this.props.searchPlaceholder ? this.props.searchPlaceholder : "Search files";
     return (
       <div className="common-toolbar">
-        {isPro && <Search onSearchedClick={this.props.onSearchedClick} placeholder={gettext("Search files in this libiary")}/>}
+        {isPro && <Search onSearchedClick={this.props.onSearchedClick} placeholder={gettext(placeholder)}/>}
         <Notification  />
         <Account />
       </div>

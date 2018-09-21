@@ -80,7 +80,7 @@ class MainPanel extends Component {
               <button className={`btn btn-secondary btn-icon sf-view-mode-change-btn sf2-icon-wiki-view ${this.state.isWikiMode ? 'current-mode' : ''}`} id='wiki' title={gettext("wiki")} onClick={this.switchViewMode}></button>
             </div>
           </div>
-          <CommonToolbar onSearchedClick={this.props.onSearchedClick} />
+          <CommonToolbar onSearchedClick={this.props.onSearchedClick} searchPlaceholder={'Search files in this library'}/>
         </div>
         <div className="cur-view-container">
           <div className="cur-view-path">
