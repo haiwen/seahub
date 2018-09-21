@@ -12,10 +12,9 @@ const propTypes = {
 
 class  CommonToolbar extends React.Component {
   render() {
-    let placeholder = this.props.searchPlaceholder ? this.props.searchPlaceholder : "Search files";
     return (
       <div className="common-toolbar">
-        {isPro && <Search onSearchedClick={this.props.onSearchedClick} placeholder={gettext(placeholder)}/>}
+        {isPro && <Search onSearchedClick={this.props.onSearchedClick} placeholder={gettext(this.props.searchPlaceholder)}/>}
         <Notification  />
         <Account />
       </div>
