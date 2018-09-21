@@ -2203,8 +2203,6 @@ button.sf-dropdown-toggle:focus {
     margin-left: 8px;
 }
 #account .avatar {
-    width: 32px;
-    height: 32px;
     vertical-align:middle;
     border-radius:1000px;
 }
