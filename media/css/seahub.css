@@ -1934,8 +1934,8 @@ button.sf-dropdown-toggle:focus {
         position:relative; /* for the ':before' */
         display: flex;
     }
-    .cur-view-toolbar button {
-        margin-left: 8px;
+    .repo-create-btn {
+        margin-right: 4px;
     }
     .cur-view-toolbar:before {
         content:'';
