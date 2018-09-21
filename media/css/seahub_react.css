@@ -124,7 +124,7 @@ ul,ol,li {
 .up-outer-caret .inner-caret {
     border-bottom-color:#fff;
     top:1px;
-    left:-18px;
+    left:-10px;
 }
 .up-outer-caret {
     position:absolute;
@@ -540,6 +540,12 @@ a.op-icon:focus {
 }
 
 /* notifications */
+#notifications .title {
+    line-height: 1.5;
+    font-size: 1rem;
+    color: #322;
+    font-weight: normal;
+}
 #notifications .sf2-icon-bell {
     font-size:24px;
     line-height:1;
@@ -583,11 +589,16 @@ a.op-icon:focus {
 }
 #notice-popover .brief {
     margin-left:40px;
+    margin-bottom: 1rem;
+    font-size: 0.8125rem;
+    line-height: 1.5rem;
 }
 #notice-popover .time {
+    margin:0;
     color:#999;
     text-align:right;
-    margin:0;
+    font-size: 0.8125rem;
+    line-height: 1.5rem;
     clear:both;
 }
 #notice-popover .view-all {

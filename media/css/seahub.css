@@ -2129,8 +2129,7 @@ button.sf-dropdown-toggle:focus {
     margin-left: 8px;
 }
 
-#notifications a {
-    width: 100%;
+#notifications #notice-icon {
     height: 100%;
     display: flex;
     align-items: center;
