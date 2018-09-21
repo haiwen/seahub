@@ -128,6 +128,7 @@ define([
 
                 case 'group-owned-library-user-folder-permission': return siteRoot + 'api/v2.1/group-owned-libraries/' + options.repo_id + '/user-folder-permission/';
                 case 'group-owned-library-group-folder-permission': return siteRoot + 'api/v2.1/group-owned-libraries/' + options.repo_id + '/group-folder-permission/';
+                case 'group-owned-library-user-share-in-library': return siteRoot + 'api/v2.1/group-owned-libraries/user-share-in-libraries/' + options.repo_id + '/';
 
                 // Share admin
                 case 'share_admin_repos': return siteRoot + 'api/v2.1/shared-repos/';

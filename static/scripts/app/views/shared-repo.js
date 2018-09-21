@@ -52,9 +52,21 @@ define([
                     }
                 };
 
+            var url,
+                repo_id = this.model.get('id'),
+                owner = this.model.get('owner');
+            if (owner.indexOf('@seafile_group') == -1) {
+                url = Common.getUrl({name: 'beshared_repo', repo_id: repo_id})
+                    + "?share_type=personal&from=" + encodeURIComponent(owner);
+            } else {
+                url = Common.getUrl({
+                    name: 'group-owned-library-user-share-in-library',
+                    repo_id: repo_id
+                });
+            }
+
             $.ajax({
-                url: Common.getUrl({name: 'beshared_repo', repo_id: this.model.get('id')})
-                    + "?share_type=personal&from=" + encodeURIComponent(this.model.get('owner')),
+                url: url,
                 type: 'DELETE',
                 beforeSend: Common.prepareCSRFToken,
                 dataType: 'json',
@@ -69,9 +81,15 @@ define([
             var icon_size = Common.isHiDPI() ? 48 : 24;
             var icon_url = this.model.getIconUrl(icon_size);
             var tmpl = $(window).width() >= 768 ? this.template : this.mobileTemplate;
+
+            var owner_name_shown = obj.owner_name;
+            if (obj.owner.indexOf('@seafile_group') != -1) {
+                owner_name_shown = obj.group_name;
+            }
             _.extend(obj, {
                 'icon_url': icon_url,
-                'icon_title': this.model.getIconTitle()
+                'icon_title': this.model.getIconTitle(),
+                'owner_name_shown': owner_name_shown
             });
             this.$el.html(tmpl(obj));
             return this;
