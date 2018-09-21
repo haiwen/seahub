@@ -14,7 +14,8 @@ class TreeDirView extends React.Component {
           <thead>
             <tr>
               <th style={{width: "4%"}}></th>
-              <th style={{width: "60%"}}>{gettext('Name')}</th>
+              <th style={{width: "4%"}}></th>
+              <th style={{width: "56%"}}>{gettext('Name')}</th>
               <th style={{width: "16%"}}>{gettext('Size')}</th>
               <th style={{width: "20%"}}>{gettext('Last Update')}</th>
             </tr>
