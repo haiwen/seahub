@@ -1914,7 +1914,8 @@ button.sf-dropdown-toggle:focus {
     flex-direction:column;
 }
 .panel-top {
-    padding:.5rem 1rem .25rem;
+    padding:.6rem 1rem .25rem;
+    height: 49px;
     background:#f4f4f7;
     border-bottom: 1px solid #e8e8e8;
     display:flex;
@@ -1931,6 +1932,10 @@ button.sf-dropdown-toggle:focus {
 @media (min-width: 768px) {
     .cur-view-toolbar {
         position:relative; /* for the ':before' */
+        display: flex;
+    }
+    .cur-view-toolbar button {
+        margin-left: 8px;
     }
     .cur-view-toolbar:before {
         content:'';

@@ -356,7 +356,6 @@ a.op-icon:focus {
     flex-direction:column;
     justify-content:space-between; /* make .side-nav-footer on the bottom */
     overflow:hidden; /* for ff */
-    border-right:1px solid #eee;
 }
 .side-nav-con {
     overflow:hidden;
