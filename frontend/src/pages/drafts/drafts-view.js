@@ -1,12 +1,11 @@
 import React from 'react';
-import PropTypes from 'prop-types';
 import { gettext } from '../../components/constants';
 import editUtilties from '../../utils/editor-utilties';
 import Loading from '../../components/loading';
 import ListView from '../../components/list-view/list-view';
 import ListMenu from '../../components/list-view/list-menu';
 
-class DraftView extends React.Component {
+class DraftsView extends React.Component {
   
   constructor(props) {
     super(props);
@@ -114,4 +113,4 @@ class DraftView extends React.Component {
   }
 }
 
-export default DraftView;
+export default DraftsView;

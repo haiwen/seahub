@@ -3,7 +3,7 @@ import ReactDOM from 'react-dom';
 import { Router } from '@reach/router'
 import SidePanel from './components/side-panel';
 import MainPanel from './components/main-panel';
-import DraftView from './pages/drafts/draft-view';
+import DraftsView from './pages/drafts/drafts-view';
 import FilesActivities from './pages/dashboard/files-activities';
 
 import 'seafile-ui';
@@ -35,7 +35,7 @@ class App extends Component {
         <MainPanel path='/'>
           <Router>
             <FilesActivities path='dashboard' />
-            <DraftView path='drafts' />
+            <DraftsView path='drafts' />
           </Router>
         </MainPanel>
       </div>
