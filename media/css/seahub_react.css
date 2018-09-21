@@ -445,9 +445,12 @@ a.op-icon:focus {
 }
 
 .side-nav-toggle {
+    margin-right:0.9375rem;
+    height: 1.875rem;
+    line-height: 1.875rem;
     font-size:1.5rem;
     color:#999;
-    margin-right:15px;
+    cursor: pointer;
 }
 .side-panel-slide {
     transition: all .3s ease-in-out;

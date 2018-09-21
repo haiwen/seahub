@@ -49,10 +49,10 @@ class MainPanel extends Component {
     });
 
     return (
-      <div className="wiki-main-panel o-hidden">
+      <div className="main-panel wiki-main-panel o-hidden">
         <div className="main-panel-top panel-top">
           <div className="cur-view-toolbar border-left-show">
-            <span className="sf2-icon-menu side-nav-toggle hidden-md-up d-md-none" title="Side Nav Menu" onClick={this.onMenuClick}></span>
+            <span className="sf2-icon-menu hidden-md-up d-md-none side-nav-toggle" title="Side Nav Menu" onClick={this.onMenuClick}></span>
             { 
               this.props.permission === 'rw' && 
               <button className="btn btn-secondary top-toolbar-btn" title="Edit File" onClick={this.onEditClick}>{gettext("Edit Page")}</button>
