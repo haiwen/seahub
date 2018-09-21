@@ -13,7 +13,7 @@ class  CommonToolbar extends React.Component {
   render() {
     return (
       <div className="common-toolbar">
-        {isPro && <Search onSearchedClick={this.props.onSearchedClick} placeholder={gettext("Search files")}/>}
+        {isPro && <Search onSearchedClick={this.props.onSearchedClick} placeholder={gettext("Search files in this libiary")}/>}
         <Notification  />
         <Account />
       </div>
