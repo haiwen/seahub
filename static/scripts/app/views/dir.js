@@ -46,10 +46,10 @@ define([
                 var view_mode = Cookies.get('view_mode');
                 if (view_mode == 'grid') {
                     this.view_mode = 'grid';
-                } else if (view_mode == 'list'){
-                    this.view_mode = 'list';
-                } else {
+                } else if (view_mode == 'wiki'){
                     this.view_mode = 'wiki';
+                } else {
+                    this.view_mode = 'list';
                 }
 
                 this.contextOptions = {};
