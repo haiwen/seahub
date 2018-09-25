@@ -31,7 +31,7 @@ class SidePanel extends React.Component {
   }
 
   componentDidMount() {
-    editUtilties.getFileHistoryRecord(filePath, 1, PER_PAGE).then(res => {
+    editUtilties.listFileHistoryRecords(filePath, 1, PER_PAGE).then(res => {
       this.initResultState(res.data);
       document.addEventListener('click', this.onHideContextMenu);
     });
@@ -42,7 +42,7 @@ class SidePanel extends React.Component {
   }
   
   refershFileList() {
-    editUtilties.getFileHistoryRecord(filePath, 1, PER_PAGE).then(res => {
+    editUtilties.listFileHistoryRecords(filePath, 1, PER_PAGE).then(res => {
       this.initResultState(res.data);
     });
   }
@@ -100,7 +100,7 @@ class SidePanel extends React.Component {
         currentPage: currentPage,
         isReloadingData: true,
       });
-      editUtilties.getFileHistoryRecord(filePath, currentPage, PER_PAGE).then(res => {
+      editUtilties.listFileHistoryRecords(filePath, currentPage, PER_PAGE).then(res => {
         this.updateResultState(res.data);
         this.setState({
           isReloadingData: false

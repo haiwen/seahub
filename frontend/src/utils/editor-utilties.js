@@ -85,8 +85,8 @@ class EditorUtilities {
     return seafileAPI.getFileContent(filePath);
   }
 
-  getFileHistoryRecord(filePath, page, per_page) {
-    return seafileAPI.getFileHistoryRecord(historyRepoID, filePath, page, per_page);
+  listFileHistoryRecords(filePath, page, per_page) {
+    return seafileAPI.listFileHistoryRecords(historyRepoID, filePath, page, per_page);
   }
   
   revertFile(filePath, commitID) {

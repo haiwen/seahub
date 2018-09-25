@@ -1,7 +1,8 @@
 import React, { Component } from 'react';
-import { gettext, repoID } from '../constants';
+import { gettext, repoID, serviceUrl } from '../constants';
 import SearchResultItem from './search-result-item';
 import editorUtilities from '../../utils/editor-utilties';
+import More from '../more';
 
 class Search extends Component {
 
@@ -155,6 +156,22 @@ class Search extends Component {
     })
   }
 
+  onShowMore = () => {
+    let newValue = this.state.value;
+    let queryData = {
+      q: newValue,
+      search_repo: repoID ? repoID : 'all',
+      search_ftypes: repoID ? 'custom' : 'all',
+      ftype: repoID ? 'Markdown' : '',
+      input_fexts: repoID ? 'md' : ''
+    };
+    let params = '';
+    for (let key in queryData) {
+      params += key + '=' + queryData[key] + '&';
+    }
+    window.location = serviceUrl + '/search/?' + params.slice(0, params.length - 1);
+  }
+
   renderSearchResult() {
     var _this = this;
     if (!this.state.isResultShow) {
@@ -170,6 +187,7 @@ class Search extends Component {
         <div className="search-result-none">No results matching.</div>
       )
     }
+    let isShowMore = this.state.resultItems.length >= 5 ? true : false;
     return (
       <ul className="search-result-list">
         {this.state.resultItems.map(item => {
@@ -181,6 +199,7 @@ class Search extends Component {
             />
           )
         })}
+        {isShowMore && <More onShowMore={this.onShowMore}/>}
       </ul>
     )
   }
