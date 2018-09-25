@@ -148,3 +148,25 @@
   text-align: center;
 }
 /* end tip */
+
+/* begin more component */
+.list-show-more {
+  padding: 0.25rem 0.75rem;
+  line-height: 2rem;
+  text-align: center;
+  color: #eb8205;
+  cursor: pointer;
+}
+.list-show-more:hover {
+  background-color: #eee;
+}
+
+.list-show-more .more-message {
+  font-size: 1.25rem;
+}
+
+.list-show-more .more-icon {
+  padding-left: 0.5rem;
+  font-size: 0.8125rem;
+}
+/* end more component */

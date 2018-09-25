@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import { gettext, repoID } from '../constants';
 import SearchResultItem from './search-result-item';
 import editorUtilities from '../../utils/editor-utilties';
+import More from '../more';
 
 class Search extends Component {
 
@@ -155,6 +156,11 @@ class Search extends Component {
     })
   }
 
+  clickToShowMore = () => {
+    //todos;
+    alert('111');
+  }
+
   renderSearchResult() {
     var _this = this;
     if (!this.state.isResultShow) {
@@ -170,6 +176,7 @@ class Search extends Component {
         <div className="search-result-none">No results matching.</div>
       )
     }
+    let isShowMore = this.state.resultItems.length >= 5 ? true : false;
     return (
       <ul className="search-result-list">
         {this.state.resultItems.map(item => {
@@ -181,6 +188,7 @@ class Search extends Component {
             />
           )
         })}
+        {isShowMore && <More clickToShowMore={this.clickToShowMore}/>}
       </ul>
     )
   }
