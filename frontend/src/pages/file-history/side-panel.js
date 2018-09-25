@@ -124,9 +124,9 @@ class SidePanel extends React.Component {
     this.onHideContextMenu();
   }
 
-  onHistoryItemClick =(item) => {
+  onHistoryItemClick =(item, preCommitID) => {
     this.setState({currentItem: item});
-    this.props.onHistoryItemClick(item);
+    this.props.onHistoryItemClick(item, preCommitID);
   }
 
   render() {
@@ -154,6 +154,7 @@ class SidePanel extends React.Component {
                 reloadMore={this.reloadMore}
                 currentItem={this.state.currentItem}
                 onHistoryItemClick={this.onHistoryItemClick}
+                setDiffContent={this.props.setDiffContent}
               />
             }
             <HistoryListMenu

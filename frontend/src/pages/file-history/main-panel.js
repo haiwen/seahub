@@ -3,7 +3,9 @@ import PropTypes from 'prop-types';
 import Prism from 'prismjs';
 import Loading from '../../components/loading';
 import CommonToolbar from '../../components/toolbar/common-toolbar';
+import DiffViewer from '@seafile/seafile-editor/dist/diff-viewer/diff-viewer'
 import '../../css/initial-style.css';
+
 require('@seafile/seafile-editor/src/lib/code-hight-package');
 
 const contentClass = 'markdown-viewer-render-content';
@@ -33,10 +35,7 @@ class MainPanel extends React.Component {
             { 
               this.props.renderingContent ? 
                 (<div className={contentClass + ' article'}><Loading /></div>) : 
-                (<div 
-                  className={contentClass + ' article'}
-                  dangerouslySetInnerHTML={{ __html: this.props.content }}
-                />)
+                (<div className={contentClass + ' article'}><DiffViewer markdownContent={this.props.markdownContent} markdownContent1={this.props.markdownContentOld}/></div>)
             }
           </div>
         </div>
