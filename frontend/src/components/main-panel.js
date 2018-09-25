@@ -2,14 +2,7 @@ import React, { Component } from 'react';
 import CommonToolbar from './toolbar/common-toolbar';
 
 class MainPanel extends Component {
-  constructor(props) {
-    super(props);
-  }
 
-  onMenuClick = () => {
-    this.props.isOpen();
-  }
-  
   onSearchedClick = () => {
     //todos;
   }
@@ -20,9 +13,9 @@ class MainPanel extends Component {
       <div className="main-panel o-hidden">
         <div className="main-panel-north">
           <div className="cur-view-toolbar">
-            <span className="sf2-icon-menu side-nav-toggle hidden-md-up d-md-none" title="Side Nav Menu" onClick={this.onMenuClick}></span>
+            <span className="sf2-icon-menu side-nav-toggle hidden-md-up d-md-none" title="Side Nav Menu" onClick={this.props.onShowSidePanel}></span>
           </div>
-          <CommonToolbar onSearchedClick={this.onSearchedClick}/>
+          <CommonToolbar onSearchedClick={this.onSearchedClick} searchPlaceholder={'Search Files'}/>
         </div>
         <div className="main-panel-center">
           {this.props.children}

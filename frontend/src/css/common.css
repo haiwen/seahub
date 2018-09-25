@@ -10,11 +10,10 @@
   position: relative;
   padding: .5rem 1rem;
   width: 100%;
-  border-bottom: 1px solid #e8e8e8;
+  height: 2.5rem;
   font-size: 1rem;
   font-weight: normal;
   line-height: 1.5;
-  height: 36px;
   text-align: center;
 }
 

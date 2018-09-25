@@ -54,7 +54,7 @@
   margin-left: auto;
 }
 
-.common-toolbar div{
+.common-toolbar > div{
   margin-left: .5rem;
 }
 /* end common-toolbar */

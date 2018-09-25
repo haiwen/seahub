@@ -21,7 +21,20 @@ class App extends Component {
     super(props);
     this.state = {
       isOpen: false,
+      isSidePanelClosed: false,
     };
+  }
+
+  onCloseSidePanel = () => {
+    this.setState({
+      isSidePanelClosed: !this.state.isSidePanelClosed
+    });
+  }
+
+  onShowSidePanel = () => {
+    this.setState({
+      isSidePanelClosed: !this.state.isSidePanelClosed
+    });
   }
 
   render() {
@@ -30,9 +43,9 @@ class App extends Component {
     
     return (
       <div id="main">
-        <SidePanel isOpen={this.state.isOpen} toggleClose={this.isOpen} currentTab={currentTab} />
+        <SidePanel isSidePanelClosed={this.state.isSidePanelClosed} onCloseSidePanel={this.onCloseSidePanel} currentTab={currentTab} />
 
-        <MainPanel path='/'>
+        <MainPanel path='/' onShowSidePanel={this.onShowSidePanel}>
           <Router>
             <FilesActivities path='dashboard' />
             <DraftsView path='drafts' />
