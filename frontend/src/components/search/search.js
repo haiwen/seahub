@@ -156,7 +156,7 @@ class Search extends Component {
     })
   }
 
-  clickToShowMore = () => {
+  onShowMore = () => {
     let newValue = this.state.value;
     let queryData = {
       q: newValue,
@@ -199,7 +199,7 @@ class Search extends Component {
             />
           )
         })}
-        {isShowMore && <More clickToShowMore={this.clickToShowMore}/>}
+        {isShowMore && <More onShowMore={this.onShowMore}/>}
       </ul>
     )
   }
