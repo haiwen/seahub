@@ -162,11 +162,8 @@
 }
 
 .list-show-more .more-message {
-  font-size: 1.25rem;
-}
-
-.list-show-more .more-icon {
-  padding-left: 0.5rem;
-  font-size: 0.8125rem;
+  font-size: 0.875rem;
+  color: #888;
+  text-decoration: underline;
 }
 /* end more component */

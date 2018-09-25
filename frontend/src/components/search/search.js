@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { gettext, repoID } from '../constants';
+import { gettext, repoID, serviceUrl } from '../constants';
 import SearchResultItem from './search-result-item';
 import editorUtilities from '../../utils/editor-utilties';
 import More from '../more';
@@ -157,8 +157,19 @@ class Search extends Component {
   }
 
   clickToShowMore = () => {
-    //todos;
-    alert('111');
+    let newValue = this.state.value;
+    let queryData = {
+      q: newValue,
+      search_repo: repoID ? repoID : 'all',
+      search_ftypes: repoID ? 'custom' : 'all',
+      ftype: repoID ? 'Markdown' : '',
+      input_fexts: repoID ? 'md' : ''
+    };
+    let params = '';
+    for (let key in queryData) {
+      params += key + '=' + queryData[key] + '&';
+    }
+    window.location = serviceUrl + '/search/?' + params.slice(0, params.length - 1);
   }
 
   renderSearchResult() {

@@ -11,7 +11,6 @@ class More extends React.Component {
     return (
       <li className="list-show-more" onClick={this.props.clickToShowMore}>
         <span className="more-message">show more</span>
-        <i className="more-icon fas fa-chevron-down"></i>
       </li>
     )
   }
