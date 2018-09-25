@@ -90,7 +90,7 @@ class MainPanel extends Component {
               <a href={siteRoot + 'wiki/lib/' + repoID + '/'} className="normal">{slug}</a>
               {pathElem}
             </div>
-            <PathToolbar />
+            <PathToolbar filePath={this.props.filePath}/>
           </div>
           <div className="cur-view-content">
             { this.props.isViewFileState && 
