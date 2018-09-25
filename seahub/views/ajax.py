@@ -12,7 +12,6 @@ import StringIO
 from django.core.urlresolvers import reverse
 from django.http import HttpResponse, Http404
 from django.template.loader import render_to_string
-from django.shortcuts import render
 from django.utils.http import urlquote
 from django.utils.html import escape
 from django.utils.translation import ugettext as _
@@ -21,7 +20,7 @@ from django.template.defaultfilters import filesizeformat
 
 import seaserv
 from seaserv import seafile_api, is_passwd_set, ccnet_api, \
-    seafserv_threaded_rpc, ccnet_threaded_rpc
+    seafserv_threaded_rpc
 from pysearpc import SearpcError
 
 from seahub.auth.decorators import login_required_ajax
@@ -30,7 +29,7 @@ from seahub.forms import RepoRenameDirentForm
 from seahub.options.models import UserOptions, CryptoOptionNotSetError
 from seahub.notifications.models import UserNotification
 from seahub.notifications.views import add_notice_from_info
-from seahub.share.models import UploadLinkShare, ExtraSharePermission, ExtraGroupsSharePermission
+from seahub.share.models import UploadLinkShare
 from seahub.signals import upload_file_successful
 from seahub.views import get_unencry_rw_repos_by_user, \
     get_diff, check_folder_permission
@@ -42,8 +41,7 @@ from seahub.settings import ENABLE_THUMBNAIL, THUMBNAIL_ROOT, \
 from seahub.utils import check_filename_with_rename, EMPTY_SHA1, \
     gen_block_get_url, TRAFFIC_STATS_ENABLED, get_user_traffic_stat,\
     new_merge_with_no_conflict, get_commit_before_new_merge, \
-    get_repo_last_modify, gen_file_upload_url, is_org_context, \
-    get_file_type_and_ext, is_pro_version, normalize_dir_path, \
+    gen_file_upload_url, is_org_context, is_pro_version, normalize_dir_path, \
     FILEEXT_TYPE_MAP
 from seahub.utils.star import get_dir_starred_files
 from seahub.utils.file_types import IMAGE, VIDEO
@@ -55,7 +53,7 @@ from seahub.thumbnail.utils import get_thumbnail_src
 from seahub.share.utils import is_repo_admin
 from seahub.base.templatetags.seahub_tags import translate_seahub_time, \
     email2nickname, tsstr_sec
-from seahub.constants import PERMISSION_ADMIN
+from seahub.constants import PERMISSION_READ_WRITE
 from seahub.constants import HASH_URLS
 
 # Get an instance of a logger
@@ -425,7 +423,7 @@ def list_lib_dir(request, repo_id):
                 f_['locked_by_me'] = True
 
             if f.lock_owner == ONLINE_OFFICE_LOCK_OWNER and \
-                    repo_owner == username:
+                    user_perm == PERMISSION_READ_WRITE:
                 f_['locked_by_me'] = True
 
         dirent_list.append(f_)
