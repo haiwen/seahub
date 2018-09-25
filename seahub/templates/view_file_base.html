@@ -67,11 +67,18 @@
         <div id="file-view" class="flex-1 ov-auto {% block file_view_extra_class %}{% endblock %}">
           {% if err %}
             <div id="file-view-tip">
-            {% if err != 'File preview unsupported' %}
+                {% if err != 'File preview unsupported' %}
                 <p class="error">{{ err }}</p>
-            {% else %}
+                {% else %}
                 <p>{% trans "Online view is not applicable to this file format" %}</p>
-            {% endif %}
+                {% endif %}
+                <a href="?dl=1" class="sf-btn-link big-btn-link">{% trans "Download" %}</a>
+                {% if file_perm == 'rw' %}
+                {% if filetype == 'Document' or filetype == 'SpreadSheet' %}
+                <a class="open-via-client" href="seafile://openfile?repo_id={{repo.id}}&path={{path|urlencode}}">{% trans "Open via Client" %}</a>
+                <p class="tip">{% trans "Please install the desktop client to open file via client." %}</p>
+                {% endif %}
+                {% endif %}
             </div>
           {% else %}
             {% block file_view %}{% endblock %}
@@ -131,6 +138,12 @@
 
 <script type="text/template" id="editor-tools-tmpl">
     <a class="sf-btn-group-btn sf-btn-group-btn-first sf-btn-link op-icon sf2-icon-folder" href="{{ SITE_ROOT }}#common/lib/{{ repo.id }}/{{ parent_dir|strip_slash }}" title="{% trans "Open parent folder" %}"></a>
+
+    {% if not err and file_perm == 'rw' %}
+    {% if filetype == 'Document' or filetype == 'SpreadSheet' %}
+    <a class="sf-btn-group-btn sf-btn-link op-icon sf2-icon-monitor open-via-client" href="seafile://openfile?repo_id={{repo.id}}&path={{path|urlencode}}" title="{% trans "Open via Client" %}"></a>
+    {% endif %}
+    {% endif %}
 
     {% if can_lock_unlock_file %}
     {% if not file_locked %}
@@ -225,12 +238,6 @@
 <script type="text/javascript" src="{{ MEDIA_URL }}js/findAndReplaceDOMText.js"></script>
 {% endif %}
 <script type="text/javascript">
-// download
-$(function() {
-    var dld_url = $('#download').attr('href');
-    $('#file-view-tip').append('<a href="' + dld_url + '" class="sf-btn-link big-btn-link">' + "{% trans "Download" %}" + '</a>');
-});
-
 // share link
 {% include "snippets/shared_link_js.html" %}
 
