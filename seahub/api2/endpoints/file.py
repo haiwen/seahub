@@ -23,6 +23,7 @@ from seahub.utils.timeutils import timestamp_to_isoformat_timestr
 from seahub.views import check_folder_permission
 from seahub.utils.file_op import check_file_lock, if_locked_by_online_office
 from seahub.views.file import can_preview_file, can_edit_file
+from seahub.constants import PERMISSION_READ_WRITE
 
 from seahub.settings import MAX_UPLOAD_FILE_NAME_LEN, \
     FILE_LOCK_EXPIRATION_DAYS, OFFICE_TEMPLATE_ROOT
@@ -165,7 +166,7 @@ class FileView(APIView):
                 return api_error(status.HTTP_404_NOT_FOUND, error_msg)
 
             # permission check
-            if check_folder_permission(request, repo_id, parent_dir) != 'rw':
+            if check_folder_permission(request, repo_id, parent_dir) != PERMISSION_READ_WRITE:
                 error_msg = 'Permission denied.'
                 return api_error(status.HTTP_403_FORBIDDEN, error_msg)
 
@@ -253,7 +254,7 @@ class FileView(APIView):
                 return api_error(status.HTTP_404_NOT_FOUND, error_msg)
 
             # permission check
-            if check_folder_permission(request, repo_id, parent_dir) != 'rw':
+            if check_folder_permission(request, repo_id, parent_dir) != PERMISSION_READ_WRITE:
                 error_msg = 'Permission denied.'
                 return api_error(status.HTTP_403_FORBIDDEN, error_msg)
 
@@ -324,12 +325,12 @@ class FileView(APIView):
             # permission check for source file
             src_repo_id = repo_id
             src_dir = os.path.dirname(path)
-            if check_folder_permission(request, src_repo_id, src_dir) != 'rw':
+            if check_folder_permission(request, src_repo_id, src_dir) != PERMISSION_READ_WRITE:
                 error_msg = 'Permission denied.'
                 return api_error(status.HTTP_403_FORBIDDEN, error_msg)
 
             # permission check for dst dir
-            if check_folder_permission(request, dst_repo_id, dst_dir) != 'rw':
+            if check_folder_permission(request, dst_repo_id, dst_dir) != PERMISSION_READ_WRITE:
                 error_msg = 'Permission denied.'
                 return api_error(status.HTTP_403_FORBIDDEN, error_msg)
 
@@ -410,7 +411,7 @@ class FileView(APIView):
                 return api_error(status.HTTP_403_FORBIDDEN, error_msg)
 
             # permission check for dst dir
-            if check_folder_permission(request, dst_repo_id, dst_dir) != 'rw':
+            if check_folder_permission(request, dst_repo_id, dst_dir) != PERMISSION_READ_WRITE:
                 error_msg = 'Permission denied.'
                 return api_error(status.HTTP_403_FORBIDDEN, error_msg)
 
@@ -436,7 +437,7 @@ class FileView(APIView):
 
             if seafile_api.get_file_id_by_path(repo_id, path):
                 # file exists in repo
-                if check_folder_permission(request, repo_id, parent_dir) != 'rw':
+                if check_folder_permission(request, repo_id, parent_dir) != PERMISSION_READ_WRITE:
                     error_msg = 'Permission denied.'
                     return api_error(status.HTTP_403_FORBIDDEN, error_msg)
 
@@ -454,7 +455,7 @@ class FileView(APIView):
 
             else:
                 # file NOT exists in repo
-                if check_folder_permission(request, repo_id, '/') != 'rw':
+                if check_folder_permission(request, repo_id, '/') != PERMISSION_READ_WRITE:
                     error_msg = 'Permission denied.'
                     return api_error(status.HTTP_403_FORBIDDEN, error_msg)
 
@@ -508,7 +509,7 @@ class FileView(APIView):
 
         # permission check
         parent_dir = os.path.dirname(path)
-        if check_folder_permission(request, repo_id, parent_dir) != 'rw':
+        if check_folder_permission(request, repo_id, parent_dir) != PERMISSION_READ_WRITE:
             error_msg = 'Permission denied.'
             return api_error(status.HTTP_403_FORBIDDEN, error_msg)
 
@@ -544,10 +545,7 @@ class FileView(APIView):
                 error_msg = _("File is not locked.")
                 return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
 
-            # file can only be locked by normal user or OnlineOffice
-            is_repo_owner = seafile_api.is_repo_owner(username, repo_id)
-            if locked_by_me or \
-                    (locked_by_online_office and is_repo_owner):
+            if locked_by_me or locked_by_online_office:
                 # unlock file
                 try:
                     seafile_api.unlock_file(repo_id, path)
@@ -609,7 +607,7 @@ class FileView(APIView):
         parent_dir = os.path.dirname(path)
 
         username = request.user.username
-        if check_folder_permission(request, repo_id, parent_dir) != 'rw':
+        if check_folder_permission(request, repo_id, parent_dir) != PERMISSION_READ_WRITE:
             error_msg = 'Permission denied.'
             return api_error(status.HTTP_403_FORBIDDEN, error_msg)
 
