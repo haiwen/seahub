@@ -184,7 +184,6 @@ urlpatterns = [
     url(r'^download_client_program/$', TemplateView.as_view(template_name="download.html"), name="download_client"),
     url(r'^choose_register/$', choose_register, name="choose_register"),
     url(r'^dashboard/$', TemplateView.as_view(template_name="react_app.html"), name="app"),
-    url(r'^drafts/$', TemplateView.as_view(template_name="react_app.html"), name="app"),
 
     ### Ajax ###
     url(r'^ajax/repo/(?P<repo_id>[-0-9a-f]{36})/dirents/$', get_dirents, name="get_dirents"),
@@ -440,6 +439,7 @@ urlpatterns = [
     url(r'^invite/', include('seahub.invitations.urls', app_name='invitations', namespace='invitations')),
     url(r'^terms/', include('termsandconditions.urls')),
     url(r'^wikis/', include('seahub.wiki.urls', app_name='wiki', namespace='wiki')),
+    url(r'^drafts/', include('seahub.drafts.urls', app_name='drafts', namespace='drafts')),
 
     ## admin::address book
     url(r'^api/v2.1/admin/address-book/groups/$', AdminAddressBookGroups.as_view(), name='api-v2.1-admin-address-book-groups'),
