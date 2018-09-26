@@ -39,7 +39,7 @@ class HistoryListItem extends React.Component {
       return;
     }
     this.setState({isShowOperationIcon: false});  //restore to default state
-    this.props.onHistoryItemClick(this.props.item);
+    this.props.onHistoryItemClick(this.props.item, this.props.preCommitID);
   }
 
   onMenuControlClick = (e) => {

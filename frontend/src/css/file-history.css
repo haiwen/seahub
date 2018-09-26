@@ -5,6 +5,7 @@
 
 .history, .markdown-viewer-render-content {
   background-color: #fff;
+  word-break: break-word;
 }
 
 .history-heading {

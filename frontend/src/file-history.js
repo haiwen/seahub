@@ -6,6 +6,7 @@ import URLDecorator from './utils/url-decorator';
 import { processor } from '@seafile/seafile-editor/src/lib/seafile-markdown2html';
 import SidePanel from './pages/file-history/side-panel';
 import MainPanel from './pages/file-history/main-panel';
+import axios from 'axios';
 import 'seafile-ui';
 import './assets/css/fa-solid.css';
 import './assets/css/fa-regular.css';
@@ -23,39 +24,33 @@ class FileHistory extends React.Component {
       content: '',
       renderingContent: true,
       fileOwner: '',
+      markdownContent: '',
+      markdownContentOld: ''
     };
   }
 
-  componentDidMount() {
-    let _this = this;
-    editUtilties.getFileDownloadLink(filePath).then(res => {
-      const downLoadUrl = res.data;
-      editUtilties.getFileContent(downLoadUrl).then((res) => {
-        let content = res.data;
-        processor.process(content, function(err, file) {
-          _this.setState({
-            renderingContent: false,
-            content: String(file)
-          });
-        });
-      });
+
+  setDiffContent = (markdownContent, markdownContentOld)=> {
+    this.setState({
+      renderingContent: false,
+      markdownContent: markdownContent,
+      markdownContentOld: markdownContentOld
     });
   }
 
-  onHistoryItemClick = (item) => {
+
+  onHistoryItemClick = (item, preCommitID)=> {
     let _this = this;
     let objID = item.rev_file_id;
     let downLoadURL = URLDecorator.getUrl({type: 'download_historic_file', filePath: filePath, objID: objID});
+    let downLoadURL1 = URLDecorator.getUrl({type: 'download_historic_file', filePath: filePath, objID: preCommitID});
     this.setState({renderingContent: true});
-    editUtilties.getFileContent(downLoadURL).then((res) => {
-      let content = res.data;
-      processor.process(content, function(err, file) {
-        _this.setState({
-          renderingContent: false,
-          content: String(file)
-        });
-      });
-    });
+    axios.all([
+      editUtilties.getFileContent(downLoadURL),
+      editUtilties.getFileContent(downLoadURL1)
+    ]).then(axios.spread((res1, res2) => {
+      this.setDiffContent(res1.data, res2.data);
+    }));
   }
 
   render() {
@@ -64,11 +59,14 @@ class FileHistory extends React.Component {
         <SidePanel 
           fileOwner={this.state.fileOwner}
           onHistoryItemClick={this.onHistoryItemClick}
+          setDiffContent={this.setDiffContent}
         />
         <MainPanel 
-          content={this.state.content}
+          markdownContent={this.state.markdownContent}
+          markdownContentOld={this.state.markdownContentOld}
           renderingContent={this.state.renderingContent}
         />
+
       </div>
     );
   }
