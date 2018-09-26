@@ -186,7 +186,6 @@ urlpatterns = [
 
     ### React ###
     url(r'^dashboard/$', TemplateView.as_view(template_name="react_app.html"), name="dashboard"),
-    url(r'^drafts/$', TemplateView.as_view(template_name="react_app.html"), name="drafts"),
     url(r'^starred/$', TemplateView.as_view(template_name="react_app.html"), name="starred"),
 
     ### Ajax ###
@@ -443,6 +442,7 @@ urlpatterns = [
     url(r'^invite/', include('seahub.invitations.urls', app_name='invitations', namespace='invitations')),
     url(r'^terms/', include('termsandconditions.urls')),
     url(r'^wikis/', include('seahub.wiki.urls', app_name='wiki', namespace='wiki')),
+    url(r'^drafts/', include('seahub.drafts.urls', app_name='drafts', namespace='drafts')),
 
     ## admin::address book
     url(r'^api/v2.1/admin/address-book/groups/$', AdminAddressBookGroups.as_view(), name='api-v2.1-admin-address-book-groups'),
