@@ -1,6 +1,7 @@
 # Copyright (c) 2012-2016 Seafile Ltd.
 import json
 import logging
+import posixpath
 
 from rest_framework import status
 from rest_framework.authentication import SessionAuthentication
@@ -76,6 +77,38 @@ class DraftView(APIView):
     authentication_classes = (TokenAuthentication, SessionAuthentication)
     permission_classes = (IsAuthenticated, )
     throttle_classes = (UserRateThrottle, )
+
+    def get(self, request, pk, format=None):
+        """Get reviewed draft content
+        """
+        try:
+            d = Draft.objects.get(pk=pk)
+        except Draft.DoesNotExist:
+            return api_error(status.HTTP_404_NOT_FOUND,
+                             'Draft %s not found.' % pk)
+
+        if not hasattr(d, 'draftreview'):
+            return api_error(status.HTTP_404_NOT_FOUND,
+                             'Draft %s review not found' % pk)
+
+        # check perm
+        uuid = d.origin_file_uuid
+        file_path = posixpath.join(uuid.parent_path, uuid.filename)
+
+        if request.user.username:
+            permission = check_folder_permission(request, d.origin_repo_id, file_path)
+
+        if permission is None:
+            return api_error(status.HTTP_403_FORBIDDEN,
+                             'Permission denied.')
+        result = {}
+        result['permission'] = permission
+        result['draft_repo_id'] = d.draft_repo_id
+        result['draft_file_path'] = d.draft_file_path
+        result['draft_origin_file_path'] = file_path
+        result['draft_origin_repo_id'] = d.origin_repo_id
+
+        return Response(result)
 
     def put(self, request, pk, format=None):
         """Publish a draft.

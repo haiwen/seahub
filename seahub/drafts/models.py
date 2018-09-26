@@ -131,6 +131,31 @@ class Draft(TimestampedModel):
         }
 
 
+class DraftReviewExist(Exception):
+    pass
+
+
+class DraftReviewManager(models.Manager):
+    def add(self, draft):
+
+        has_review = hasattr(draft, 'draftreview')
+        if has_review:
+            raise DraftReviewExist
+
+        draft_review = self.model(status=True,
+                                  draft=draft)
+        draft_review.save(using=self._db)
+
+        return draft_review
+
+
+class DraftReview(TimestampedModel):
+    status = models.BooleanField(default=False)
+    draft = models.OneToOneField(Draft, on_delete=models.CASCADE, primary_key=True)
+
+    objects = DraftReviewManager()
+
+
 ###### signal handlers
 from django.dispatch import receiver
 from seahub.signals import repo_deleted

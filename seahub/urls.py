@@ -67,6 +67,7 @@ from seahub.api2.endpoints.repo_file_uploaded_bytes import RepoFileUploadedBytes
 from seahub.api2.endpoints.user_avatar import UserAvatarView
 from seahub.api2.endpoints.wikis import WikisView, WikiView
 from seahub.api2.endpoints.drafts import DraftsView, DraftView
+from seahub.api2.endpoints.draft_reviews import DraftReviewsView
 from seahub.api2.endpoints.activities import ActivitiesView
 from seahub.api2.endpoints.wiki_pages import WikiPageView, WikiPagesView, WikiPagesDirView, WikiPageContentView
 from seahub.api2.endpoints.revision_tag import TaggedItemsView, TagNamesView
@@ -322,6 +323,10 @@ urlpatterns = [
     ## user::drafts
     url(r'^api/v2.1/drafts/$', DraftsView.as_view(), name='api-v2.1-drafts'),
     url(r'^api/v2.1/drafts/(?P<pk>\d+)/$', DraftView.as_view(), name='api-v2.1-draft'),
+
+
+    ## user::reviews
+    url(r'^api/v2.1/reviews/$', DraftReviewsView.as_view(), name='api-v2.1-draft-reviews'),
 
     ## user::activities
     url(r'^api/v2.1/activities/$', ActivitiesView.as_view(), name='api-v2.1-acitvity'),
