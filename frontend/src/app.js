@@ -41,17 +41,17 @@ class App extends Component {
   render() {
     let  href = window.location.href.split('/');
     let currentTab = href[href.length - 2];
-    
+
     return (
       <div id="main">
         <SidePanel isSidePanelClosed={this.state.isSidePanelClosed} onCloseSidePanel={this.onCloseSidePanel} currentTab={currentTab} />
 
-        <MainPanel path={siteRoot} onShowSidePanel={this.onShowSidePanel}>
-          <Router>
+        <Router>
+          <MainPanel path={siteRoot} onShowSidePanel={this.onShowSidePanel}>
             <FilesActivities path='dashboard' />
             <DraftsView path='drafts' />
-          </Router>
-        </MainPanel>
+          </MainPanel>
+        </Router>
       </div>
     );
   }
