@@ -2998,7 +2998,7 @@ class FileRevert(APIView):
 
 
 class FileRevision(APIView):
-    authentication_classes = (TokenAuthentication, )
+    authentication_classes = (TokenAuthentication, SessionAuthentication)
     permission_classes = (IsAuthenticated,)
     throttle_classes = (UserRateThrottle, )
 
