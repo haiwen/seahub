@@ -2,5 +2,15 @@
 {% load render_bundle from webpack_loader %}
 
 {% block extra_script %}
+<script type="text/javascript">
+    window.draftReview = {
+        config: {
+            id: '{{ id }}',
+            draftRepoID: '{{ draft_repo_id }}',
+            draftFilePath: '{{ draft_file_path }}',
+         }
+     };
+</script>
+
 {% render_bundle 'draftReview' %}
 {% endblock %}
