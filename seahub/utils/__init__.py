@@ -1201,7 +1201,7 @@ def user_traffic_over_limit(username):
     traffic_limit = int(PLAN[plan]['share_link_traffic']) * 1024 * 1024 * 1024
 
     try:
-        stat = get_user_traffic_stat(username)
+        stat = seafevents_api.get_user_traffic_by_month(username, datetime.now())
     except Exception as e:
         logger = logging.getLogger(__name__)
         logger.error('Failed to get user traffic stat: %s' % username,
@@ -1211,7 +1211,7 @@ def user_traffic_over_limit(username):
     if stat is None:            # No traffic record yet
         return False
 
-    month_traffic = stat['file_view'] + stat['file_download'] + stat['dir_download']
+    month_traffic = stat['link_file_upload'] + stat['link_file_download']
     return True if month_traffic >= traffic_limit else False
 
 def is_user_password_strong(password):
