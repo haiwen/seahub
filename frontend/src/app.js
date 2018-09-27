@@ -46,12 +46,12 @@ class App extends Component {
       <div id="main">
         <SidePanel isSidePanelClosed={this.state.isSidePanelClosed} onCloseSidePanel={this.onCloseSidePanel} currentTab={currentTab} />
 
-        <Router>
-          <MainPanel path={siteRoot} onShowSidePanel={this.onShowSidePanel}>
-            <FilesActivities path='dashboard' />
-            <DraftsView path='drafts' />
-          </MainPanel>
-        </Router>
+        <MainPanel onShowSidePanel={this.onShowSidePanel}>
+          <Router>
+            <FilesActivities path={siteRoot + 'dashboard'} />
+            <DraftsView path={siteRoot + 'drafts'} />
+          </Router>
+        </MainPanel>
       </div>
     );
   }
