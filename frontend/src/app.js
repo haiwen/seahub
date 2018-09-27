@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import ReactDOM from 'react-dom';
 import { Router } from '@reach/router'
+import { siteRoot } from './components/constants';
 import SidePanel from './components/side-panel';
 import MainPanel from './components/main-panel';
 import DraftsView from './pages/drafts/drafts-view';
@@ -40,15 +41,15 @@ class App extends Component {
   render() {
     let  href = window.location.href.split('/');
     let currentTab = href[href.length - 2];
-    
+
     return (
       <div id="main">
         <SidePanel isSidePanelClosed={this.state.isSidePanelClosed} onCloseSidePanel={this.onCloseSidePanel} currentTab={currentTab} />
 
-        <MainPanel path='/' onShowSidePanel={this.onShowSidePanel}>
+        <MainPanel onShowSidePanel={this.onShowSidePanel}>
           <Router>
-            <FilesActivities path='dashboard' />
-            <DraftsView path='drafts' />
+            <FilesActivities path={siteRoot + 'dashboard'} />
+            <DraftsView path={siteRoot + 'drafts'} />
           </Router>
         </MainPanel>
       </div>

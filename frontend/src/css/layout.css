@@ -111,4 +111,5 @@
 
 [role=group] {
   display: flex;
+  flex: 1;
 }
