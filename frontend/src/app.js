@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import ReactDOM from 'react-dom';
 import { Router } from '@reach/router'
+import { siteRoot } from './components/constants';
 import SidePanel from './components/side-panel';
 import MainPanel from './components/main-panel';
 import DraftsView from './pages/drafts/drafts-view';
@@ -45,7 +46,7 @@ class App extends Component {
       <div id="main">
         <SidePanel isSidePanelClosed={this.state.isSidePanelClosed} onCloseSidePanel={this.onCloseSidePanel} currentTab={currentTab} />
 
-        <MainPanel path='/' onShowSidePanel={this.onShowSidePanel}>
+        <MainPanel path={siteRoot} onShowSidePanel={this.onShowSidePanel}>
           <Router>
             <FilesActivities path='dashboard' />
             <DraftsView path='drafts' />
