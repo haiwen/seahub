@@ -4,6 +4,7 @@ from django.core.urlresolvers import reverse
 from django.test import override_settings
 
 from seahub.share.models import UploadLinkShare
+from seahub.utils import EMPTY_SHA1
 from seahub.test_utils import BaseTestCase
 
 
@@ -27,8 +28,8 @@ class GetFileUploadUrlULTest(BaseTestCase):
         self.login_as(self.user)
         resp = self.client.get(self.url, HTTP_X_REQUESTED_WITH='XMLHttpRequest')
         mock_get_fileserver_access_token.assert_called_with(
-            self.repo.id, '{"anonymous_user": "%s"}' % self.user.username,
-            'upload-link', '', use_onetime=False)
+            self.repo.id, EMPTY_SHA1,
+            'upload-link', self.user.username, use_onetime=False)
         json_resp = json.loads(resp.content)
         assert 'test_token' in json_resp['url']
 
@@ -39,8 +40,8 @@ class GetFileUploadUrlULTest(BaseTestCase):
 
         resp = self.client.get(self.url, HTTP_X_REQUESTED_WITH='XMLHttpRequest')
         mock_get_fileserver_access_token.assert_called_with(
-            self.repo.id, '{"anonymous_user": ""}',
-            'upload-link', '', use_onetime=False)
+            self.repo.id, EMPTY_SHA1,
+            'upload-link', self.user.username, use_onetime=False)
         json_resp = json.loads(resp.content)
         assert 'test_token' in json_resp['url']
 
@@ -54,8 +55,8 @@ class GetFileUploadUrlULTest(BaseTestCase):
         session.save()
         resp = self.client.get(self.url, HTTP_X_REQUESTED_WITH='XMLHttpRequest')
         mock_get_fileserver_access_token.assert_called_with(
-            self.repo.id, '{"anonymous_user": "anonymous@email.com"}',
-            'upload-link', '', use_onetime=False)
+            self.repo.id, EMPTY_SHA1,
+            'upload-link', self.user.username, use_onetime=False)
         json_resp = json.loads(resp.content)
         assert 'test_token' in json_resp['url']
 
@@ -69,7 +70,7 @@ class GetFileUploadUrlULTest(BaseTestCase):
 
         resp = self.client.get(self.url, HTTP_X_REQUESTED_WITH='XMLHttpRequest')
         mock_get_fileserver_access_token.assert_called_with(
-            self.repo.id, '{"anonymous_user": ""}',
-            'upload-link', '', use_onetime=False, check_virus=True)
+            self.repo.id, EMPTY_SHA1,
+            'upload-link', self.user.username, use_onetime=False, check_virus=True)
         json_resp = json.loads(resp.content)
         assert 'test_token' in json_resp['url']

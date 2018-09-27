@@ -171,11 +171,6 @@ class AdminLibraryTest(BaseTestCase):
 
         self.login_as(self.admin)
 
-        # invalid new owner
-        data = 'invalid_new_owner=%s' % self.admin_name
-        resp = self.client.put(self.library_url, data, 'application/x-www-form-urlencoded')
-        self.assertEqual(400, resp.status_code)
-
         # new owner not exist
         data = 'owner=invalid@email.com'
         resp = self.client.put(self.library_url, data, 'application/x-www-form-urlencoded')
