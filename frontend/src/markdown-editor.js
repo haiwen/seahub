@@ -154,8 +154,22 @@ class EditorUtilities {
   }
 
   getDraftKey() {
-      return (this.repoID + this.filePath);
+      return (repoID + filePath);
     }
+
+  getFileContent(url) {
+    return seafileAPI.getFileContent(url);
+  }
+
+  listFileHistoryRecords(page, perPage) {
+    return (
+      seafileAPI.listFileHistoryRecords(repoID, filePath, page, perPage)
+    )
+  }
+
+  getFileHistoryVersion(commitID) {
+    return seafileAPI.getFileRevision(repoID, commitID, filePath);
+  }
 }
 
 
@@ -227,6 +241,7 @@ class MarkdownEditor extends React.Component {
           editorUtilities={editorUtilities}
           userInfo={this.state.collabServer ? userInfo : null}
           collabServer={this.state.collabServer}
+					showFileHistory={true}
           mode={mode}
         />
       );

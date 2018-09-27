@@ -58,12 +58,11 @@ module.exports = {
   devtool: shouldUseSourceMap ? 'source-map' : false,
   // In production, we only want to load the polyfills and the app code.
   entry: {
-    main: [require.resolve('./polyfills'), paths.appIndexJs],
+    markdownEditor: [require.resolve('./polyfills'), paths.appIndexJs],
     wiki: [require.resolve('./polyfills'), paths.appSrc + "/wiki.js"],
     repoview: [require.resolve('./polyfills'), paths.appSrc + "/repo-wiki-mode.js"],
-    dashboard: [require.resolve('./polyfills'), paths.appSrc + "/dashboard.js"],
     fileHistory: [require.resolve('./polyfills'), paths.appSrc + "/file-history.js"],
-    drafts: [require.resolve('./polyfills'), paths.appSrc + "/drafts.js"],
+    app: [require.resolve('./polyfills'), paths.appSrc + "/app.js"],
   },
 
   output: {
