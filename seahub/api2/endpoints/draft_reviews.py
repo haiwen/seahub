@@ -20,8 +20,7 @@ class DraftReviewsView(APIView):
     def post(self, request, format=None):
         """Create a draft review
         """
-        draft_id = request.POST.get('draft_id', '')
-
+        draft_id = request.data.get('draft_id', '')
         try:
             d = Draft.objects.get(pk=draft_id)
         except Draft.DoesNotExist:

@@ -52,6 +52,19 @@ class DraftsView extends React.Component {
     });
   }
 
+  onReviewHandler = () => {
+    let draft = this.state.currentDraft;
+
+    editUtilties.createDraftReview(draft.id).then(res => {
+      window.location.href = '/drafts/review/' + draft.id;
+    })
+    .catch((error) => { 
+      if (error.response.status == '409') {
+        window.location.href = '/drafts/review/' + draft.id;
+      }    
+    });
+  }
+
   onMenuToggleClick = (e, draft) => {
     if (this.state.isMenuShow) {
       this.onHideContextMenu();
@@ -106,6 +119,7 @@ class DraftsView extends React.Component {
               menuPosition={this.state.menuPosition} 
               onPublishHandler={this.onPublishHandler}
               onDeleteHandler={this.onDeleteHandler}
+              onReviewHandler={this.onReviewHandler}
             />
           }
         </div>

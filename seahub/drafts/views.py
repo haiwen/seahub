@@ -11,5 +11,5 @@ def drafts(request):
 
 
 @login_required
-def review(request, pk, file_name):
+def review(request, pk):
     return render(request, "draft_review.html")

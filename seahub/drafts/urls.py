@@ -5,5 +5,5 @@ from .views import review, drafts
 
 urlpatterns = [
     url(r'^$', drafts, name='drafts'),
-    url(r'^review/(?P<pk>\d+)/(?P<file_name>.*)/$', review, name='review'),
+    url(r'^review/(?P<pk>\d+)/$', review, name='review'),
 ]
