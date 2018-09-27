@@ -945,7 +945,7 @@ def _download_file_from_share_link(request, fileshare):
     send_file_access_msg(request, repo, real_path, 'share-link')
 
     dl_token = seafile_api.get_fileserver_access_token(repo.id,
-            obj_id, 'download-link', username, use_onetime=False)
+            obj_id, 'download-link', fileshare.username, use_onetime=False)
 
     if not dl_token:
         messages.error(request, _(u'Unable to download file.'))
