@@ -78,7 +78,8 @@ from seahub.api2.endpoints.admin.file_update import FileUpdate
 from seahub.api2.endpoints.admin.perm_audit import PermAudit
 from seahub.api2.endpoints.admin.sysinfo import SysInfo
 from seahub.api2.endpoints.admin.statistics import (
-    FileOperationsView, TotalStorageView, ActiveUsersView, SystemTrafficView
+    FileOperationsView, TotalStorageView, ActiveUsersView, SystemTrafficView, \
+    SystemUsersTrafficExcelView
 )
 from seahub.api2.endpoints.admin.devices import AdminDevices
 from seahub.api2.endpoints.admin.device_errors import AdminDeviceErrors
@@ -324,7 +325,7 @@ urlpatterns = [
     url(r'^api/v2.1/admin/statistics/total-storage/$', TotalStorageView.as_view(), name='api-v2.1-admin-statistics-total-storage'),
     url(r'^api/v2.1/admin/statistics/active-users/$', ActiveUsersView.as_view(), name='api-v2.1-admin-statistics-active-users'),
     url(r'^api/v2.1/admin/statistics/system-traffic/$', SystemTrafficView.as_view(), name='api-v2.1-admin-statistics-system-traffic'),
-
+    url(r'^api/v2.1/admin/statistics/system-users-traffic/excel/$', SystemUsersTrafficExcelView.as_view(), name='api-v2.1-admin-statistics-system-users-traffic-excel'),
     ## admin::users
     url(r'^api/v2.1/admin/users/$', AdminUsers.as_view(), name='api-v2.1-admin-users'),
     # [^...] Matches any single character not in brackets
@@ -434,6 +435,8 @@ urlpatterns = [
     url(r'^sys/statistic/storage/$', sys_statistic_storage, name='sys_statistic_storage'),
     url(r'^sys/statistic/user/$', sys_statistic_user, name='sys_statistic_user'),
     url(r'^sys/statistic/traffic/$', sys_statistic_traffic, name='sys_statistic_traffic'),
+    url(r'^sys/statistic/reports/$', sys_statistic_reports, name='sys_statistic_reports'),
+
     url(r'^sysadmin/#all-libs/$', fake_view, name='sys_repo_admin'),
     url(r'^sysadmin/#libs/(?P<repo_id>[-0-9a-f]{36})/$', fake_view, name='sys_admin_repo'),
     url(r'^sysadmin/#system-lib/$', fake_view, name='sys_list_system'),

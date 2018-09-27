@@ -1,0 +1,71 @@
+{% extends "sysadmin/base.html" %}
+{% load seahub_tags i18n staticfiles %}
+
+{% block extra_style %}
+<link rel="stylesheet" type="text/css" href="{{MEDIA_URL}}css/jquery-ui.datepicker.min.css" />
+{% endblock %}
+
+{% block cur_statistic %}tab-cur{% endblock %}
+
+{% block right_panel %}
+<div class="tabnav ovhd">
+    <ul class="tabnav-tabs fleft">
+        <li class="tabnav-tab"><a href="{% url 'sys_statistic_file' %}">{% trans "File" %}</a></li>
+        <li class="tabnav-tab"><a href="{% url 'sys_statistic_storage' %}">{% trans "Storage" %}</a></li>
+        <li class="tabnav-tab"><a href="{% url 'sys_statistic_user' %}">{% trans "Users" %}</a></li>
+        <li class="tabnav-tab"><a href="{% url 'sys_statistic_traffic' %}">{% trans "Traffic" %}</a></li>
+        <li class="tabnav-tab tabnav-tab-cur"><a href="{% url 'sys_statistic_reports' %}">{% trans "Reports" %}</a></li>
+    </ul>
+</div>
+
+<div class="system-statistic-time-range ovhd">
+    <h3>{% trans "Get a detailed user traffic report of a month." %}</h3>
+    <form action="" class="fleft date-custom-form">
+        <input type="text" name="month" class="input" placeholder="yyyy-mm" />
+        <button type="submit" class="submit">{% trans "Create Report" %}</button>
+        <span class="error hide"></span>
+    </form>
+</div>
+
+{% endblock %}
+
+{% block extra_script %}
+<script type="text/javascript" src="{% static "scripts/lib/jquery-ui.min.js" %}"></script>
+<script type="text/javascript">
+
+// date picker for date-custom
+$.datepicker.setDefaults({
+    changeMonth: true,
+    changeYear: true,
+    hideIfNoPrevNext: true,
+    maxDate: 0, // today (The maximum selectable date)
+    dateFormat: 'yy-mm'
+});
+$('.date-custom-form .input').datepicker();
+
+// custom time range
+$('.date-custom-form').on('submit', function() {
+    var $form = $(this);
+    var $month= $('[name="month"]', $form);
+    var $error = $('.error', $form);
+
+    var month = $month.val();
+
+    if (!month) {
+        $error.html("{% trans "Month is required." %}").removeClass('hide');
+        return false;
+    }
+
+    // 'date' can be picked from datepicker, also directly input
+    var date_pattern = /^([012]\d{3})\-(0[1-9]|1[012])$/;
+    if (!date_pattern.test(month)) {
+        $error.html("{% trans "Invalid month, should be yyyy-mm" %}").removeClass('hide');
+        return false;
+    }
+
+    $error.addClass('hide');
+    location.href = "{% url 'api-v2.1-admin-statistics-system-users-traffic-excel' %}" + "?month=" + month;
+    return false;
+});
+</script>
+{% endblock %}

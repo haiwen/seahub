@@ -40,6 +40,8 @@ try:
     from seahub.settings import EVENTS_CONFIG_FILE
 except ImportError:
     EVENTS_CONFIG_FILE = None
+from seafevents import seafevents_api
+seafevents_api.init(EVENTS_CONFIG_FILE)
 try:
     from seahub.settings import EMAIL_HOST
     IS_EMAIL_CONFIGURED = True
@@ -646,7 +648,7 @@ if EVENTS_CONFIG_FILE:
         15th events.
         """
         return _get_events(username, start, count)
-   
+
     def get_user_activity_stats_by_day(start, end, offset):
         """
         """
@@ -722,6 +724,11 @@ if EVENTS_CONFIG_FILE:
             res = seafevents.get_system_traffic_by_day(session, start, end, offset, op_type)
         return res
 
+    def get_all_users_traffic_by_month(datetime, start=-1, limit=-1):
+
+        res = seafevents_api.get_all_users_traffic_by_month(datetime, start, limit)
+        return res
+
     def get_org_traffic_by_day(org_id, start, end, offset, op_type='all'):
         with _get_seafevents_session() as session:
             res = seafevents.get_org_traffic_by_day(session, org_id, start, end, offset, op_type)
@@ -787,6 +794,8 @@ else:
     def get_total_storage_stats_by_day():
         pass
     def get_system_traffic_by_day():
+        pass
+    def get_all_users_traffic_by_month():
         pass
     def get_org_traffic_by_day():
         pass
