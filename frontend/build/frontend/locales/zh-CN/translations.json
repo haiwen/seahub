@@ -14,7 +14,7 @@
   "unordered_list": "无序列表",
   "check_list_item": "任务列表",
   "insert_image": "插入图片",
-  "code": "代码行",
+  "code": "行内代码",
   "code_block": "代码块",
   "insert_link": "添加链接",
   "insert_table": "添加表格",
@@ -65,7 +65,6 @@
   "return_to_wiki_page": "返回维基页面",
   "insert_network_image": "插入网络图片",
   "upload_local_image": "上传本地图片",
-  "return_to_wiki_page": "返回维基页面",
   "add_link": "加入链接",
   "link_title": "链接标题",
   "local_draft": "本地草稿",
@@ -73,6 +72,9 @@
   "delete_draft": "删除草稿",
   "you_have_an_unsaved_draft_do_you_like_to_use_it": "有未保存的草稿，使用草稿吗？",
   "local_draft_saved": "本地草稿已保存",
+  "file_history": "文件历史",
+  "history_version": "历史版本",
+  "back_to_viewer": "返回查看页面",
   "userHelp": {
     "title": "键盘快捷键",
     "userHelpData":[
@@ -93,7 +95,7 @@
           "加粗": ["**bold** / __bold__", "space"],
           "斜体":["*italic* / _italic_", "space"],
           "斜体加粗":["***italic*** / ___italic___", "space"],
-          "行级代码":["`code`", "space"]
+          "行内代码":["`code`", "space"]
         }
       },
       {
