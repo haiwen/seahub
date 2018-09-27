@@ -186,6 +186,10 @@ class Tree {
       type: model.type,
       size: bytesToSize(model.size),
       last_update_time: moment.unix(model.last_update_time).fromNow(),
+      permission: model.permission,
+      is_locked: model.is_locked,
+      locked_by_me: model.locked_by_me,
+      parent_path: model.parent_path,
       isExpanded: false
     });
     if (model.children instanceof Array) {
@@ -214,6 +218,10 @@ class Tree {
         type: nodeObj.type,
         size: bytesToSize(nodeObj.size),
         last_update_time: moment.unix(nodeObj.last_update_time).fromNow(),
+        permission: nodeObj.permission,
+        is_locked: nodeObj.is_locked,
+        locked_by_me: nodeObj.locked_by_me,
+        parent_path: nodeObj.parent_path,
         isExpanded: false
       });
       node.parent_path = nodeObj.parent_path;
@@ -240,6 +248,10 @@ class Tree {
       type: node.type,
       size: bytesToSize(node.size),
       last_update_time: moment.unix(node.last_update_time).fromNow(),
+      permission: node.permission,
+      is_locked: node.is_locked,
+      locked_by_me: node.locked_by_me,
+      parent_path: node.parent_path,
       isExpanded: false
     });
     if (node.children instanceof Array) {

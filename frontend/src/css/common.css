@@ -131,6 +131,12 @@
 .dropdown-item {
   cursor: pointer;
 }
+
+.dropdown-item.menu-inner-divider {
+  margin: 0.25rem 0;
+  border-bottom: 1px solid #ddd;
+}
+
 /* end dropdown-menu style */
 
 /* begin tip */
@@ -172,3 +178,39 @@
   text-decoration: underline;
 }
 /* end more component */
+
+/* begin operation menu */
+.operation {
+  display: flex;
+}
+
+.operation .operation-group {
+  list-style: none;
+}
+
+.operation-group .operation-group-item {
+  display: inline-block;
+  color: #f89a68;
+  margin-right: 0.5rem;
+}
+
+.operation-group-item i {
+  font-style: normal;
+  font-size: 1.25rem;
+  line-height: 1;
+  cursor: pointer;
+  vertical-align: middle;
+}
+.operation-group-item i:hover {
+  text-decoration: underline;
+}
+
+.operation-group-item .sf-dropdown-toggle {
+  font-size: 0.85rem;
+  color: #888;
+}
+
+.operation-group-item .sf-dropdown-toggle:hover {
+  text-decoration: none;
+}
+/* end operaton menu */

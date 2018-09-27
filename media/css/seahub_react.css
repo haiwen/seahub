@@ -65,6 +65,9 @@
 .sf2-icon-edit:before { content:"\e018"; }
 .sf2-icon-history:before { content:"\e014"; }
 .sf2-icon-trash:before { content:"\e016"; }
+.sf2-icon-download:before { content:"\e008"; }
+.sf2-icon-delete:before { content:"\e006"; }
+.sf2-icon-caret-down:before { content:"\e01a"; }
 
 /* common class and element style*/
 a { color:#eb8205; }

@@ -12,6 +12,9 @@ class EditorUtilities {
           isExpanded: item.type === 'dir' ? true : false,
           parent_path: item.parent_dir,
           last_update_time: item.last_update_time,
+          permission: item.permission,
+          is_locked: item.is_locked !== undefined ?  item.is_locked : false,
+          locked_by_me : item.locked_by_me !== undefined ? item.locked_by_me : false,
           size: item.size
         };
       });
@@ -28,6 +31,9 @@ class EditorUtilities {
           isExpanded: item.type === 'dir' ? true : false,
           parent_path: item.parent_dir,
           last_update_time: item.mtime,
+          permission: item.permission,
+          is_locked: item.is_locked !== undefined ?  item.is_locked : false,
+          locked_by_me : item.locked_by_me !== undefined ? item.locked_by_me : false,
           size: item.size
         };
       });
@@ -104,6 +110,19 @@ class EditorUtilities {
   publishDraft(id) {
     return seafileAPI.publishDraft(id);
   }
+
+  zipDownload(parent_dir, dirents) {
+    return seafileAPI.zipDownload(repoID, parent_dir, dirents);
+  }
+
+  queryZipProgress(zip_token) {
+    return seafileAPI.queryZipProgress(zip_token);
+  }
+
+  cancelZipTask(zip_token) {
+    return seafileAPI.cancelZipTask(zip_token)
+  }
+
 }
 
 const editorUtilities = new EditorUtilities();
