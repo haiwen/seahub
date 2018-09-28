@@ -47,3 +47,28 @@ class DraftReviewsView(APIView):
             return api_error(status.HTTP_409_CONFLICT, 'Draft review already exists.')
 
         return Response(status.HTTP_200_OK)
+
+class DraftReviewView(APIView):
+    authentication_classes = (TokenAuthentication, SessionAuthentication)
+    permission_classes = (IsAuthenticated, )
+    throttle_classes = (UserRateThrottle, )
+
+    def put(self, request, pk, format=None):
+        """close a review
+        """
+
+        st = request.data.get('status', '')
+        if st != 'closed':
+            return api_error(status.HTTP_400_BAD_REQUEST,
+                             'Status %s invalid.')
+
+        try:
+            review = DraftReview.objects.get(pk=pk)
+        except DraftReview.DoesNotExist:
+            return api_error(status.HTTP_404_NOT_FOUND,
+                             'Review %s not found' % pk)
+
+        review.status = 'closed'
+        review.save()
+
+        return Response(status.HTTP_200_OK)
