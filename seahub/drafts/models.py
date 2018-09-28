@@ -165,7 +165,7 @@ class DraftReview(TimestampedModel):
             'id': self.pk,
             'creator': self.creator,
             'status': self.status,
-            'creator_nickname': email2nickname(self.creator),
+            'creator_name': email2nickname(self.creator),
             'draft_id': self.pk,
             'draft_origin_repo_id': self.draft_id.origin_repo_id,
             'draft_origin_file_path': file_path,
