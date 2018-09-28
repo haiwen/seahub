@@ -24,6 +24,15 @@ class TreeDirList extends React.Component {
     }
   }
 
+  onMouseOver = () => {
+    if (!this.state.isItemFreezed) {
+      this.setState({
+        highlight: 'tr-highlight',
+        isOperationShow: true,
+      });
+    }
+  }
+
   onMouseLeave = () => {
     if (!this.state.isItemFreezed) {
       this.setState({
@@ -42,20 +51,18 @@ class TreeDirList extends React.Component {
     let position = Object.assign({},this.state.menuPosition, {left: left, top: top});
     this.setState({
       isItemMenuShow: !this.state.isItemMenuShow,
-      isItemFreezed: !this.state.isItemFreezed,
+      isItemFreezed: !this.state.isItemMenuShow,
       menuPosition: position
     })
   }
 
   onItemMenuHide = (e) => {
-    if (e.target.classList.contains('operation-group-item')) {
-      this.setState({
-        isItemMenuShow: false,
-        isItemFreezed: false,
-        isOperationShow: false,
-        highlight: ''
-      })
-    }
+    this.setState({
+      isItemMenuShow: false,
+      isItemFreezed: false,
+      isOperationShow: false,
+      highlight: ''
+    });
   }
 
   onMainNodeClick = () => {
@@ -69,7 +76,7 @@ class TreeDirList extends React.Component {
   render() {
     let node = this.props.node;
     return (
-      <tr className={this.state.highlight} onMouseEnter={this.onMouseEnter} onMouseLeave={this.onMouseLeave}>
+      <tr className={this.state.highlight} onMouseEnter={this.onMouseEnter} onMouseLeave={this.onMouseLeave} onMouseOver={this.onMouseOver}>
         <td className="icon">
           <img src={node.type === "dir" ? serviceUrl + "/media/img/folder-192.png" : serviceUrl + "/media/img/file/192/txt.png"}></img>
         </td>
