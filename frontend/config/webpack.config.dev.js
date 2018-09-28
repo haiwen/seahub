@@ -15,7 +15,7 @@ const BundleTracker = require('webpack-bundle-tracker');
 
 // Webpack uses `publicPath` to determine where the app is being served from.
 // In development, we always serve from the root. This makes config easier.
-const publicPath = 'http://127.0.0.1:3000/assets/bundles/';
+const publicPath = 'http://192.168.49.130:3000/assets/bundles/';
 // `publicUrl` is just like `publicPath`, but we will provide it to our app
 // as %PUBLIC_URL% in `index.html` and `process.env.PUBLIC_URL` in JavaScript.
 // Omit trailing slash as %PUBLIC_PATH%/xyz looks better than %PUBLIC_PATH%xyz.
@@ -70,9 +70,14 @@ module.exports = {
      paths.appSrc + "/file-history.js",
    ],
    app: [
-    require.resolve('./polyfills'),
-    require.resolve('react-dev-utils/webpackHotDevClient'),
-    paths.appSrc + "/app.js",
+     require.resolve('./polyfills'),
+     require.resolve('react-dev-utils/webpackHotDevClient'),
+     paths.appSrc + "/app.js",
+   ],
+   draftReview: [
+     require.resolve('./polyfills'),
+     require.resolve('react-dev-utils/webpackHotDevClient'),
+     paths.appSrc + "/draft-review.js",
    ]
   },
 
@@ -279,7 +284,7 @@ module.exports = {
     // You can remove this if you don't use Moment.js:
     //new webpack.IgnorePlugin(/^\.\/locale$/, /moment$/),
 
-    new BundleTracker({filename: './webpack-stats.dev.json'}),
+    new BundleTracker({filename: './webpack-stats.pro.json'}),
   ],
   // Some libraries import Node modules but don't use them in the browser.
   // Tell Webpack to provide empty mocks for them so importing them works.

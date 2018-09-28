@@ -119,6 +119,9 @@ class EditorUtilities {
     return seafileAPI.cancelZipTask(zip_token);
   }
 
+  createDraftReview(id) {
+    return seafileAPI.createDraftReview(id);
+  }
 }
 
 const editorUtilities = new EditorUtilities();

@@ -28,8 +28,13 @@ def review(request, pk):
     if permission is None:
         return render_permission_error(request, _(u'Permission denied.'))
 
+    draft_file_name = d.draft_file_path.lstrip('/')
+
     return render(request, "draft_review.html", {
         "id": pk,
         "draft_repo_id": d.draft_repo_id,
-        "draft_file_path": d.draft_file_path
+        "draft_file_path": d.draft_file_path,
+        "draft_origin_repo_id": d.origin_repo_id,
+        "draft_origin_file_path": file_path,
+        "draft_file_name": draft_file_name
         })

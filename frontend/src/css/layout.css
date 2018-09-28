@@ -113,3 +113,23 @@
   display: flex;
   flex: 1;
 }
+
+.draft-viewer-topbar {
+ padding: 10px;
+ background-color: #fff;
+  border-bottom: 1px solid #e5e5e5;
+  box-shadow: 0 3px 2px -2px rgba(200,200,200,.15);
+  flex-shrink:0;
+  align-items: center;
+}
+
+.topbar-file-info {
+  display: inline-block;
+  margin-left: 8px;
+}
+
+.topbar-file-info .file-title {
+  font-size: 1.2rem;
+  font-weight: bold;
+}
+
