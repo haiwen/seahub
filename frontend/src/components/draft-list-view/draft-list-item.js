@@ -9,7 +9,7 @@ const propTypes = {
   isItemFreezed: PropTypes.bool.isRequired,
   onMenuToggleClick: PropTypes.func.isRequired,
 }
-class ListItem extends React.Component {
+class DraftListItem extends React.Component {
 
   constructor(props) {
     super(props);
@@ -77,6 +77,6 @@ class ListItem extends React.Component {
   }
 }
 
-ListItem.propTypes = propTypes;
+DraftListItem.propTypes = propTypes;
 
-export default ListItem;
+export default DraftListItem;
