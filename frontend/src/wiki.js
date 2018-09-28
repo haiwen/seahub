@@ -493,6 +493,8 @@ class Wiki extends Component {
           onSearchedClick={this.onSearchedClick}
           onMainNavBarClick={this.onMainNavBarClick}
           onMainNodeClick={this.onMainNodeClick}
+          onDeleteNode={this.onDeleteNode}
+          onRenameNode={this.onRenameNode}
         />
       </div>
     );

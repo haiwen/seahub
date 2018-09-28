@@ -13,17 +13,17 @@ class OperationGroup extends React.Component {
   }
 
   onDownload = (e) => {
-    e.stopPropagation();
     e.nativeEvent.stopImmediatePropagation();
     this.props.onDownload();
   }
 
-  onShare = () => {
+  onShare = (e) => {
     //todos::
   }
 
-  onDelete = () => {
-
+  onDelete = (e) => {
+    e.nativeEvent.stopImmediatePropagation(); //for document event
+    this.props.onDelete();
   }
 
   onRename = () => {

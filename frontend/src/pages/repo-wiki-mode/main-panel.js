@@ -106,6 +106,8 @@ class MainPanel extends Component {
               <TreeDirView 
                 node={this.props.changedNode}
                 onMainNodeClick={this.props.onMainNodeClick}
+                onDeleteItem={this.props.onDeleteNode}
+                onRenameItem={this.props.onRenameNode}
               >
               </TreeDirView>
             }

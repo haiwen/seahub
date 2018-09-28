@@ -73,6 +73,10 @@ class TreeDirList extends React.Component {
     this.props.onDownload(this.props.node);
   }
 
+  onDelete = () => {
+    this.props.onDelete(this.props.node);
+  }
+
   render() {
     let node = this.props.node;
     return (
@@ -91,6 +95,7 @@ class TreeDirList extends React.Component {
               onItemMenuShow={this.onItemMenuShow}
               onItemMenuHide={this.onItemMenuHide}
               onDownload={this.onDownload}
+              onDelete={this.onDelete}
             />
           }
         </td>

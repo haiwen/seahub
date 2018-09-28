@@ -532,9 +532,11 @@ class Wiki extends Component {
           onMainNavBarClick={this.onMainNavBarClick}
           onMainNodeClick={this.onMainNodeClick}
           switchViewMode={this.switchViewMode}
+          onDeleteNode={this.onDeleteNode}
+          onRenameNode={this.onRenameNode}
         />
       </div>
-    )
+    );
   }
 }
 

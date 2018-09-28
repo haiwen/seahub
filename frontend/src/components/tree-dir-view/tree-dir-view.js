@@ -88,6 +88,7 @@ class TreeDirView extends React.Component {
                   node={node} 
                   onMainNodeClick={this.props.onMainNodeClick}
                   onDownload={this.onDownload}
+                  onDelete={this.props.onDeleteItem}
                 />
               )
             })}
