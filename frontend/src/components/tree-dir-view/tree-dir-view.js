@@ -2,7 +2,7 @@ import React from "react";
 import { gettext, repoID } from '../constants';
 import editorUtilities from '../../utils/editor-utilties';
 import URLDecorator from '../../utils/url-decorator';
-import DownloadDialog from '../dialog/download-dialog';
+import ZipDownloadDialog from '../dialog/zip-download-dialog';
 import TreeDirList from './tree-dir-list'
 import "../../css/common.css";
 
@@ -23,9 +23,8 @@ class TreeDirView extends React.Component {
       this.setState({isProgressDialogShow: true, progress: '0%'});
       editorUtilities.zipDownload(item.parent_path, item.name).then(res => {
         this.zip_token = res.data['zip_token'];
-        //获取进度
-        this.addDownLoadAnimation();
-        this.interval = setInterval(this.addDownLoadAnimation, 1000);
+        this.addDownloadAnimation();
+        this.interval = setInterval(this.addDownloadAnimation, 1000);
       });
     } else {
       let url = URLDecorator.getUrl({type:'download_file_url', repoID: repoID, filePath: item.path});
@@ -33,7 +32,7 @@ class TreeDirView extends React.Component {
     }
   }
 
-  addDownLoadAnimation = () => {
+  addDownloadAnimation = () => {
     let _this = this;
     let token = this.zip_token;
     editorUtilities.queryZipProgress(token).then(res => {
@@ -96,7 +95,7 @@ class TreeDirView extends React.Component {
         </table>
         {
           this.state.isProgressDialogShow && 
-          <DownloadDialog progress={this.state.progress} onCancleDownload={this.onCancelDownload}/>
+          <ZipDownloadDialog progress={this.state.progress} onCancleDownload={this.onCancelDownload}/>
         }
       </div>
     )

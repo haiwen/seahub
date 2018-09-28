@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { serviceUrl } from '../constants';
-import OperationGroup from '../list-operation/operation-group';
+import OperationGroup from '../dirent-item-operation/operation-group';
 
 class TreeDirList extends React.Component {
 

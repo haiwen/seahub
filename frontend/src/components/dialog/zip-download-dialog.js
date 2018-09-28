@@ -1,7 +1,7 @@
 import React from 'react'
 import { Modal, ModalHeader, ModalBody } from 'reactstrap';
 
-class DownloadDialog extends React.Component {
+class ZipDownloadDialog extends React.Component {
 
   toggle = () => {
     this.props.onCancelDownload();
@@ -19,4 +19,4 @@ class DownloadDialog extends React.Component {
   }
 }
 
-export default DownloadDialog;
+export default ZipDownloadDialog;
