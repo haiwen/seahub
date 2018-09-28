@@ -55,7 +55,7 @@ class TreeDirView extends React.Component {
     });
   }
 
-  onCancleDownload = () => {
+  onCancelDownload = () => {
     let zip_token = this.zip_token;
     editorUtilities.cancelZipTask(zip_token).then(res => {
       this.setState({
@@ -96,7 +96,7 @@ class TreeDirView extends React.Component {
         </table>
         {
           this.state.isProgressDialogShow && 
-          <DownloadDialog progress={this.state.progress} onCancleDownload={this.onCancleDownload}/>
+          <DownloadDialog progress={this.state.progress} onCancleDownload={this.onCancelDownload}/>
         }
       </div>
     )

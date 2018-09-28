@@ -1,10 +1,10 @@
 import React from 'react'
 import { Modal, ModalHeader, ModalBody } from 'reactstrap';
 
-class DownLoadDialog extends React.Component {
+class DownloadDialog extends React.Component {
 
   toggle = () => {
-    this.props.onCancleDownload();
+    this.props.onCancelDownload();
   }
 
   render() {
@@ -19,4 +19,4 @@ class DownLoadDialog extends React.Component {
   }
 }
 
-export default DownLoadDialog;
+export default DownloadDialog;
