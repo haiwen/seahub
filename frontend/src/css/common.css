@@ -99,14 +99,12 @@
 }
 
 .table-container table .icon {
-  display: flex;
-  align-items: center;
-  justify-content: center;
+  text-align: center;
 }
 
 .table-container table .icon img {
-  width: 24px;
-  height: 24px;
+  width: 1.5rem;
+  height: 1.5rem;
 }
 /* specific handler */
 .table-container table .menu-toggle {
