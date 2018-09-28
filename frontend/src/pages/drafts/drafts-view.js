@@ -1,5 +1,5 @@
 import React from 'react';
-import { gettext } from '../../utils/constants';
+import { siteRoot, gettext } from '../../utils/constants';
 import editUtilties from '../../utils/editor-utilties';
 import Toast from '../../components/toast/';
 import Loading from '../../components/loading';
@@ -63,11 +63,11 @@ class DraftsView extends React.Component {
     let draft = this.state.currentDraft;
 
     editUtilties.createDraftReview(draft.id).then(res => {
-      window.location.href = '/drafts/review/' + draft.id;
+      window.location.href = siteRoot + 'drafts/review/' + draft.id;
     })
     .catch((error) => { 
       if (error.response.status == '409') {
-        window.location.href = '/drafts/review/' + draft.id;
+        window.location.href = siteRoot + 'drafts/review/' + draft.id;
       }    
     });
   }
