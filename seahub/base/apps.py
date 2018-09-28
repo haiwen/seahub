@@ -9,15 +9,6 @@ class BaseConfig(AppConfig):
     def ready(self):
         super(BaseConfig, self).ready()
 
-        # check memcache is available
-        cache.set('test_cache', 'worked')
-        if cache.get('test_cache') != 'worked':
-            print '''
-Warning: Cache is not working, please check memcached is running if you are using
-memcached backend, otherwise, please check permission of cache directory on your
-file system.
-            '''
-
         # check table `base_filecomment` is ok
         from seahub.base.models import FileComment
         try:
