@@ -17,6 +17,15 @@ class DraftReviewsView(APIView):
     permission_classes = (IsAuthenticated, )
     throttle_classes = (UserRateThrottle, )
 
+    def get(self, request, format=None):
+        """List all user draft review
+        """
+        username = request.user.username
+        data = [x.to_dict() for x in DraftReview.objects.filter(creator=username)]
+
+        return Response({'data': data})
+
+
     def post(self, request, format=None):
         """Create a draft review
         """
@@ -33,7 +42,7 @@ class DraftReviewsView(APIView):
                              'Permission denied.')
 
         try:
-            DraftReview.objects.add(draft=d)
+            DraftReview.objects.add(creator=d.username, draft=d)
         except (DraftReviewExist):
             return api_error(status.HTTP_409_CONFLICT, 'Draft review already exists.')
 

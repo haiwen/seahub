@@ -136,13 +136,14 @@ class DraftReviewExist(Exception):
 
 
 class DraftReviewManager(models.Manager):
-    def add(self, draft):
+    def add(self, creator, draft):
 
         has_review = hasattr(draft, 'draftreview')
         if has_review:
             raise DraftReviewExist
 
-        draft_review = self.model(status=True,
+        draft_review = self.model(creator=creator,
+                                  status='open',
                                   draft=draft)
         draft_review.save(using=self._db)
 
@@ -150,10 +151,30 @@ class DraftReviewManager(models.Manager):
 
 
 class DraftReview(TimestampedModel):
-    status = models.BooleanField(default=False)
-    draft = models.OneToOneField(Draft, on_delete=models.CASCADE, primary_key=True)
+    creator = LowerCaseCharField(max_length=255, db_index=True)
+    status = models.CharField(max_length=20)
+    draft_id = models.OneToOneField(Draft, on_delete=models.CASCADE)
 
     objects = DraftReviewManager()
+
+    def to_dict(self):
+        uuid = self.draft_id.origin_file_uuid
+        file_path = posixpath.join(uuid.parent_path, uuid.filename) # TODO: refactor uuid
+
+        return {
+            'id': self.pk,
+            'creator': self.creator,
+            'status': self.status,
+            'creator_nickname': email2nickname(self.creator),
+            'draft_id': self.pk,
+            'draft_origin_repo_id': self.draft_id.origin_repo_id,
+            'draft_origin_file_path': file_path,
+            'draft_origin_file_version': self.draft_id.origin_file_version,
+            'draft_repo_id': self.draft_id.draft_repo_id,
+            'draft_file_path': self.draft_id.draft_file_path,
+            'created_at': datetime_to_isoformat_timestr(self.created_at),
+            'updated_at': datetime_to_isoformat_timestr(self.updated_at),
+        }
 
 
 ###### signal handlers
