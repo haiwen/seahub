@@ -99,17 +99,14 @@
 }
 
 .table-container table .icon {
-  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
 .table-container table .icon img {
-  position: absolute;
-  display: block;
   width: 24px;
   height: 24px;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
 }
 /* specific handler */
 .table-container table .menu-toggle {
