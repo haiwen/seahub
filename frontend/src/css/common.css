@@ -145,8 +145,13 @@
 }
 
 .empty-tip h2 {
+  font-size: 1.25rem;
   text-align: center;
+  color: #222;
+  font-weight: bold;
+
 }
+
 /* end tip */
 
 /* begin more component */

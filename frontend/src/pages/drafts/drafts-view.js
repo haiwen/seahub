@@ -95,7 +95,8 @@ class DraftsView extends React.Component {
           }
           {(!this.state.isLoadingDraft && this.state.draftList.length === 0) &&
             <div className="message empty-tip">
-              <h2>{gettext('There is no draft file existing')}</h2>
+              <h2>{gettext('No draft yet')}</h2>
+              <p>{gettext('Draft is a way to let you collaborate with others on files. You can create a draft from a file, edit the draft and then ask for a review. The original file will be updated only after the draft be reviewed.')}</p>
             </div>
           }
           {this.state.isMenuShow && 
