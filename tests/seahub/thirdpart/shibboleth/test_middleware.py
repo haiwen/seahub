@@ -29,7 +29,7 @@ class ShibbolethRemoteUserMiddlewareTest(BaseTestCase):
         self.middleware = ShibbolethRemoteUserMiddleware()
         self.factory = RequestFactory()
         # Create an instance of a GET request.
-        self.request = self.factory.get('/foo/')
+        self.request = self.factory.get('/sso/')
 
         self.request.user = self.user
         self.request.user.is_authenticated = lambda: False

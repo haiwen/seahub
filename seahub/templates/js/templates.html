@@ -1246,18 +1246,14 @@
                             <input type="radio" name="permission" value="preview_download" checked="checked" class="vam" />
                             <span class="vam">{% trans "Preview and download" %}</span>
                         </label><br />
-                        <% if (show_link_preview_only_perm_option) { %>
-                        <label class="radio-item">
+                        <label id="share-link-preview-only-radio" class="radio-item">
                             <input type="radio" name="permission" value="preview_only" class="vam" />
                             <span class="vam">{% trans "Preview only" %}</span>
                         </label><br />
-                        <% } %>
-                        <% if (show_link_edit_perm_option) { %>
-                        <label class="radio-item">
+                        <label id="share-link-edit-download-radio" class="radio-item hide">
                             <input type="radio" name="permission" value="edit_download" class="vam" />
                             <span class="vam">{% trans "Edit on cloud and download" %}</span>
                         </label>
-                        <% } %>
                     </div>
                     <% } %>
 
@@ -1439,7 +1435,7 @@
     </td>
     <td><%= size_formatted %></td>
     <td><%= mtime_relative %></td>
-    <td><span title="<%- owner_nickname %>"><%- owner_nickname %></span></td>
+    <td><span title="<%- owner_name_shown %>"><%- owner_name_shown %></span></td>
 </script>
 <script type="text/template" id="shared-repo-mobile-tmpl">
     <td>
@@ -1447,7 +1443,7 @@
     </td>
     <td>
         <a href="#shared-libs/lib/<%= id %>" class="normal"><%- name %></a><br />
-        <span class="repo-meta-info" title="<%- owner %>"><%- owner_nickname %></span>
+        <span class="repo-meta-info" title="<%- owner_name_shown %>"><%- owner_name_shown %></span>
         <span class="repo-meta-info"><%= size_formatted %></span>
         <span class="repo-meta-info"><%= mtime_relative %></span>
     </td>

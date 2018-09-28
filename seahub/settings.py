@@ -313,6 +313,9 @@ REPO_PASSWORD_MIN_LENGTH = 8
 # token length for the share link
 SHARE_LINK_TOKEN_LENGTH = 20
 
+# if limit only authenticated user can view preview share link
+SHARE_LINK_LOGIN_REQUIRED = False
+
 # min/max expire days for a share link
 SHARE_LINK_EXPIRE_DAYS_MIN = 0 # 0 means no limit
 SHARE_LINK_EXPIRE_DAYS_MAX = 0 # 0 means no limit
@@ -378,7 +381,6 @@ ENABLE_FILE_COMMENT = True
 
 # File preview
 FILE_PREVIEW_MAX_SIZE = 30 * 1024 * 1024
-OFFICE_PREVIEW_MAX_SIZE = 2 * 1024 * 1024
 FILE_ENCODING_LIST = ['auto', 'utf-8', 'gbk', 'ISO-8859-1', 'ISO-8859-5']
 FILE_ENCODING_TRY_LIST = ['utf-8', 'gbk']
 HIGHLIGHT_KEYWORD = False # If True, highlight the keywords in the file when the visit is via clicking a link in 'search result' page.

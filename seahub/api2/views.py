@@ -704,6 +704,11 @@ class Repos(APIView):
                 if q and q.lower() not in r.name.lower():
                     continue
 
+                library_group_name = ''
+                if '@seafile_group' in r.user:
+                    library_group_id = get_group_id_by_repo_owner(r.user)
+                    library_group_name= group_id_to_name(library_group_id)
+
                 r.password_need = is_passwd_set(r.repo_id, email)
                 repo = {
                     "type": "srepo",
@@ -726,6 +731,7 @@ class Repos(APIView):
                     "root": '',
                     "head_commit_id": r.head_cmmt_id,
                     "version": r.version,
+                    "group_name": library_group_name,
                 }
 
                 if r.repo_id in repos_with_admin_share_to:

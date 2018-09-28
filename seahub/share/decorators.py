@@ -5,7 +5,7 @@ from django.http import Http404
 from django.shortcuts import render
 
 from seahub.share.models import FileShare, UploadLinkShare
-from seahub.utils import normalize_cache_key, is_pro_version
+from seahub.utils import normalize_cache_key, is_pro_version, redirect_to_login
 
 def share_link_audit(func):
     def _decorated(request, token, *args, **kwargs):
@@ -54,5 +54,16 @@ def share_link_audit(func):
                 })
         else:
             assert False, 'TODO'
+
+    return _decorated
+
+def share_link_login_required(func):
+
+    def _decorated(request, *args, **kwargs):
+        if not request.user.is_authenticated() \
+                and settings.SHARE_LINK_LOGIN_REQUIRED:
+            return redirect_to_login(request)
+        else:
+            return func(request, *args, **kwargs)
 
     return _decorated

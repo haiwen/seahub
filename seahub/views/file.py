@@ -37,7 +37,6 @@ from seaserv import get_repo, send_message, get_commits, \
     seafserv_threaded_rpc
 from pysearpc import SearpcError
 
-from seahub.auth import REDIRECT_FIELD_NAME
 from seahub.tags.models import FileUUIDMap
 from seahub.wopi.utils import get_wopi_dict
 from seahub.onlyoffice.utils import get_onlyoffice_dict
@@ -45,7 +44,7 @@ from seahub.auth.decorators import login_required
 from seahub.base.decorators import repo_passwd_set_required
 from seahub.base.accounts import ANONYMOUS_EMAIL
 from seahub.share.models import FileShare, check_share_link_common
-from seahub.share.decorators import share_link_audit
+from seahub.share.decorators import share_link_audit, share_link_login_required
 from seahub.wiki.utils import get_wiki_dirent
 from seahub.wiki.models import WikiDoesNotExist, WikiPageMissing
 from seahub.utils import render_error, is_org_context, \
@@ -54,8 +53,8 @@ from seahub.utils import render_error, is_org_context, \
     mkstemp, EMPTY_SHA1, HtmlDiff, gen_inner_file_get_url, \
     user_traffic_over_limit, get_file_audit_events_by_path, \
     generate_file_audit_event_type, FILE_AUDIT_ENABLED, \
-    get_conf_text_ext, HAS_OFFICE_CONVERTER, FILEEXT_TYPE_MAP, \
-    normalize_file_path, get_service_url
+    get_conf_text_ext, HAS_OFFICE_CONVERTER, PREVIEW_FILEEXT, \
+    normalize_file_path, get_service_url, OFFICE_PREVIEW_MAX_SIZE
 
 from seahub.utils.ip import get_remote_ip
 from seahub.utils.timeutils import utc_to_local
@@ -76,7 +75,7 @@ from seahub.constants import HASH_URLS
 if HAS_OFFICE_CONVERTER:
     from seahub.utils import (
         query_office_convert_status, add_office_convert_task,
-        prepare_converted_html, OFFICE_PREVIEW_MAX_SIZE, get_office_converted_page
+        prepare_converted_html, get_office_converted_page
     )
 
 import seahub.settings as settings
@@ -105,11 +104,18 @@ except ImportError:
 
 try:
     from seahub.settings import ENABLE_ONLYOFFICE
-    from seahub.onlyoffice.settings import ONLYOFFICE_FILE_EXTENSION, \
-            ONLYOFFICE_EDIT_FILE_EXTENSION
 except ImportError:
     ENABLE_ONLYOFFICE = False
 
+try:
+    from seahub.onlyoffice.settings import ONLYOFFICE_FILE_EXTENSION
+except ImportError:
+    ONLYOFFICE_FILE_EXTENSION = ()
+
+try:
+    from seahub.onlyoffice.settings import ONLYOFFICE_EDIT_FILE_EXTENSION
+except ImportError:
+    ONLYOFFICE_EDIT_FILE_EXTENSION = ()
 
 # Get an instance of a logger
 logger = logging.getLogger(__name__)
@@ -301,56 +307,82 @@ def convert_md_link(file_content, repo_id, username):
 
     return re.sub(r'\[\[(.+?)\]\]|(`.+?`)', repl, file_content)
 
-def file_size_exceeds_preview_limit(file_size, file_type):
-    """Check whether file size exceeds the preview limit base on different
-    type of file.
+def can_preview_file(file_name, file_size, repo):
+    """Check whether Seafile supports view file.
+    Returns (True, None) if Yes, otherwise (False, error_msg).
     """
-    if file_type in (DOCUMENT, ) and HAS_OFFICE_CONVERTER:
-        if file_size > OFFICE_PREVIEW_MAX_SIZE:
-            err = _(u'File size surpasses %s, can not be opened online.') % \
-                filesizeformat(OFFICE_PREVIEW_MAX_SIZE)
-            return True, err
-        else:
-            return False, ''
-    elif file_type in (VIDEO, AUDIO):
-            return False, ''
-    else:
-        if file_size > FILE_PREVIEW_MAX_SIZE:
-            err = _(u'File size surpasses %s, can not be opened online.') % \
-                filesizeformat(FILE_PREVIEW_MAX_SIZE)
-            return True, err
-        else:
-            return False, ''
 
-def can_preview_file(file_name, file_size, repo=None):
-    """Check whether a file can be viewed online.
-    Returns (True, None) if file can be viewed online, otherwise
-    (False, erro_msg).
+    filetype, fileext = get_file_type_and_ext(file_name)
+
+    # Seafile defines 9 kinds of filetype:
+    # TEXT, MARKDOWN, IMAGE, DOCUMENT, SPREADSHEET, VIDEO, AUDIO, PDF, SVG
+    if filetype in (TEXT, MARKDOWN, IMAGE) or fileext in get_conf_text_ext():
+        if file_size > FILE_PREVIEW_MAX_SIZE:
+            error_msg = _(u'File size surpasses %s, can not be opened online.') % \
+                filesizeformat(FILE_PREVIEW_MAX_SIZE)
+            return False, error_msg
+
+    elif filetype in (DOCUMENT, SPREADSHEET):
+
+        if repo.encrypted:
+            error_msg = _(u'The library is encrypted, can not open file online.')
+            return False, error_msg
+
+        if not HAS_OFFICE_CONVERTER and \
+                not ENABLE_OFFICE_WEB_APP and \
+                not ENABLE_ONLYOFFICE:
+            error_msg = "File preview unsupported"
+            return False, error_msg
+
+        # priority of view office file is:
+        # OOS > OnlyOffice > Seafile integrated
+        if ENABLE_OFFICE_WEB_APP:
+            if fileext not in OFFICE_WEB_APP_FILE_EXTENSION:
+                error_msg = "File preview unsupported"
+                return False, error_msg
+
+        elif ENABLE_ONLYOFFICE:
+            if fileext not in ONLYOFFICE_FILE_EXTENSION:
+                error_msg = "File preview unsupported"
+                return False, error_msg
+
+        else:
+            # HAS_OFFICE_CONVERTER
+            if file_size > OFFICE_PREVIEW_MAX_SIZE:
+                error_msg = _(u'File size surpasses %s, can not be opened online.') % \
+                        filesizeformat(OFFICE_PREVIEW_MAX_SIZE)
+                return False, error_msg
+    else:
+        # NOT depends on Seafile settings
+        if filetype not in PREVIEW_FILEEXT.keys():
+            error_msg = "File preview unsupported"
+            return False, error_msg
+
+    return True, ''
+
+def can_edit_file(file_name, file_size, repo):
+    """Check whether Seafile supports edit file.
+    Returns (True, None) if Yes, otherwise (False, error_msg).
     """
+
+    can_preview, err_msg = can_preview_file(file_name, file_size, repo)
+    if not can_preview:
+        return False, err_msg
 
     file_type, file_ext = get_file_type_and_ext(file_name)
 
+    if file_type in (TEXT, MARKDOWN) or file_ext in get_conf_text_ext():
+        return True, ''
 
-    if ENABLE_OFFICE_WEB_APP and file_ext in OFFICE_WEB_APP_FILE_EXTENSION:
-        return (True, None)
+    if file_type in (DOCUMENT, SPREADSHEET):
+        if ENABLE_OFFICE_WEB_APP_EDIT and \
+                file_ext in OFFICE_WEB_APP_EDIT_FILE_EXTENSION:
+            return True, ''
 
-    if ENABLE_ONLYOFFICE and file_ext in ONLYOFFICE_FILE_EXTENSION:
-        return (True, None)
+        if ENABLE_ONLYOFFICE and file_ext in ONLYOFFICE_EDIT_FILE_EXTENSION:
+            return True, ''
 
-    if repo and repo.encrypted and (file_type in (DOCUMENT, SPREADSHEET)):
-        return (False, _(u'The library is encrypted, can not open file online.'))
-
-    if file_ext in FILEEXT_TYPE_MAP or file_ext in get_conf_text_ext():  # check file extension
-        exceeds_limit, err_msg = file_size_exceeds_preview_limit(file_size,
-                                                                 file_type)
-        if exceeds_limit:
-            return (False, err_msg)
-        else:
-            return (True, None)
-    else:
-        # TODO: may need a better way instead of return string, and compare
-        # that string in templates
-        return (False, "invalid extension")
+    return False, 'File edit unsupported'
 
 def send_file_access_msg_when_preview(request, repo, path, access_from):
     """ send file access msg when user preview file from web
@@ -696,7 +728,7 @@ def view_lib_file(request, repo_id, path):
                 return_dict['err'] = _(u'Error when prepare OnlyOffice file preview page.')
 
         if not HAS_OFFICE_CONVERTER:
-            return_dict['err'] = "invalid extension"
+            return_dict['err'] = "File preview unsupported"
             return render(request, 'view_file_base.html', return_dict)
 
         if file_size > OFFICE_PREVIEW_MAX_SIZE:
@@ -713,7 +745,7 @@ def view_lib_file(request, repo_id, path):
         # render file preview page
         return render(request, template, return_dict)
     else:
-        return_dict['err'] = "invalid extension"
+        return_dict['err'] = "File preview unsupported"
         return render(request, 'view_file_base.html', return_dict)
 
 def view_history_file_common(request, repo_id, ret_dict):
@@ -884,7 +916,6 @@ def _download_file_from_share_link(request, fileshare):
     next = request.META.get('HTTP_REFERER', settings.SITE_ROOT)
 
     username = request.user.username
-    shared_by = fileshare.username
     repo = get_repo(fileshare.repo_id)
     if not repo:
         raise Http404
@@ -914,7 +945,7 @@ def _download_file_from_share_link(request, fileshare):
     send_file_access_msg(request, repo, real_path, 'share-link')
 
     dl_token = seafile_api.get_fileserver_access_token(repo.id,
-            obj_id, 'download-link', username, use_onetime=False)
+            obj_id, 'download-link', fileshare.username, use_onetime=False)
 
     if not dl_token:
         messages.error(request, _(u'Unable to download file.'))
@@ -922,12 +953,14 @@ def _download_file_from_share_link(request, fileshare):
     return HttpResponseRedirect(gen_file_get_url(dl_token, filename))
 
 @share_link_audit
+@share_link_login_required
 def view_shared_file(request, fileshare):
     """
     View file via shared link.
     Download share file if `dl` in request param.
     View raw share file if `raw` in request param.
     """
+
     token = fileshare.token
 
     # check if share link is encrypted
@@ -952,16 +985,6 @@ def view_shared_file(request, fileshare):
     if not seafile_api.check_permission_by_path(repo_id, '/', shared_by):
         return render_error(request, _(u'Permission denied'))
 
-    # get share link permission
-    can_download = fileshare.get_permissions()['can_download']
-    can_edit = fileshare.get_permissions()['can_edit']
-
-    if can_edit and not request.user.is_authenticated():
-        login_url = settings.LOGIN_URL
-        path = urlquote(request.get_full_path())
-        tup = login_url, REDIRECT_FIELD_NAME, path
-        return HttpResponseRedirect('%s?%s=%s' % tup)
-
     # Increase file shared link view_cnt, this operation should be atomic
     fileshare.view_cnt = F('view_cnt') + 1
     fileshare.save()
@@ -969,6 +992,10 @@ def view_shared_file(request, fileshare):
     # send statistic messages
     file_size = seafile_api.get_file_size(repo.store_id, repo.version, obj_id)
     send_file_access_msg(request, repo, path, 'share-link')
+
+    # get share link permission
+    can_download = fileshare.get_permissions()['can_download']
+    can_edit = fileshare.get_permissions()['can_edit']
 
     # download shared file
     if request.GET.get('dl', '') == '1':
@@ -1082,68 +1109,10 @@ def view_shared_file(request, fileshare):
             'enable_watermark': ENABLE_WATERMARK,
             })
 
-def view_raw_shared_file(request, token, obj_id, file_name):
-    """Returns raw content of a shared file.
-
-    Arguments:
-    - `request`:
-    - `token`:
-    - `obj_id`:
-    - `file_name`:
-    """
-    fileshare = FileShare.objects.get_valid_file_link_by_token(token)
-    if fileshare is None:
-        raise Http404
-
-    password_check_passed, err_msg = check_share_link_common(request, fileshare)
-    if not password_check_passed:
-        d = {'token': token, 'err_msg': err_msg}
-        if fileshare.is_file_share_link():
-            d['view_name'] = 'view_shared_file'
-        else:
-            d['view_name'] = 'view_shared_dir'
-
-        return render(request, 'share_access_validation.html', d)
-
-    repo_id = fileshare.repo_id
-    repo = get_repo(repo_id)
-    if not repo:
-        raise Http404
-
-    # Normalize file path based on file or dir share link
-    req_path = request.GET.get('p', '').rstrip('/')
-    if req_path:
-        file_path = posixpath.join(fileshare.path, req_path.lstrip('/'))
-    else:
-        if fileshare.is_file_share_link():
-            file_path = fileshare.path.rstrip('/')
-        else:
-            file_path = fileshare.path.rstrip('/') + '/' + file_name
-
-    real_obj_id = seafile_api.get_file_id_by_path(repo_id, file_path)
-    if not real_obj_id:
-        raise Http404
-
-    if real_obj_id != obj_id:   # perm check
-        raise Http404
-
-    if not seafile_api.check_permission_by_path(repo_id, '/',
-            fileshare.username):
-        return render_error(request, _(u'Permission denied'))
-
-    filename = os.path.basename(file_path)
-    username = request.user.username
-    token = seafile_api.get_fileserver_access_token(repo_id,
-            real_obj_id, 'view', username, use_onetime=False)
-
-    if not token:
-        raise Http404
-
-    outer_url = gen_file_get_url(token, filename)
-    return HttpResponseRedirect(outer_url)
-
 @share_link_audit
+@share_link_login_required
 def view_file_via_shared_dir(request, fileshare):
+
     token = fileshare.token
 
     # argument check

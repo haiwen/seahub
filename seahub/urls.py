@@ -11,8 +11,8 @@ from seahub.views.sso import *
 
 from seahub.views.file import view_history_file, view_trash_file,\
     view_snapshot_file, file_edit, view_shared_file, view_file_via_shared_dir,\
-    text_diff, view_raw_file, view_raw_shared_file, \
-    download_file, view_lib_file, file_access, view_lib_file_via_smart_link
+    text_diff, view_raw_file, download_file, view_lib_file, \
+    file_access, view_lib_file_via_smart_link
 from seahub.views.repo import repo_history_view, view_shared_dir, \
     view_shared_upload_link, view_lib_as_wiki
 from notifications.views import notification_list
@@ -28,7 +28,7 @@ from seahub.api2.endpoints.group_libraries import GroupLibraries, GroupLibrary
 from seahub.api2.endpoints.group_owned_libraries import GroupOwnedLibraries, \
         GroupOwnedLibrary, GroupOwnedLibraryUserFolderPermission, \
         GroupOwnedLibraryGroupFolderPermission, GroupOwnedLibraryUserShare, \
-        GroupOwnedLibraryGroupShare
+        GroupOwnedLibraryGroupShare, GroupOwnedLibraryUserShareInLibrary
 from seahub.api2.endpoints.address_book.groups import AddressBookGroupsSubGroups
 from seahub.api2.endpoints.address_book.members import AddressBookGroupsSearchMember
 
@@ -170,7 +170,6 @@ urlpatterns = [
 
     ### share/upload link ###
     url(r'^f/(?P<token>[a-f0-9]+)/$', view_shared_file, name='view_shared_file'),
-    url(r'^f/(?P<token>[a-f0-9]+)/raw/(?P<obj_id>[0-9a-f]{40})/(?P<file_name>.*)', view_raw_shared_file, name='view_raw_shared_file'),
     url(r'^d/(?P<token>[a-f0-9]+)/$', view_shared_dir, name='view_shared_dir'),
     url(r'^d/(?P<token>[a-f0-9]+)/files/$', view_file_via_shared_dir, name='view_file_via_shared_dir'),
     url(r'^u/d/(?P<token>[a-f0-9]+)/$', view_shared_upload_link, name='view_shared_upload_link'),
@@ -244,6 +243,7 @@ urlpatterns = [
     url(r'^api/v2.1/group-owned-libraries/(?P<repo_id>[-0-9a-f]{36})/group-folder-permission/$', GroupOwnedLibraryGroupFolderPermission.as_view(), name='api-v2.1-group-owned-library-group-folder-permission'),
     url(r'^api/v2.1/group-owned-libraries/(?P<repo_id>[-0-9a-f]{36})/user-share/$', GroupOwnedLibraryUserShare.as_view(), name='api-v2.1-group-owned-library-user-share'),
     url(r'^api/v2.1/group-owned-libraries/(?P<repo_id>[-0-9a-f]{36})/group-share/$', GroupOwnedLibraryGroupShare.as_view(), name='api-v2.1-group-owned-library-group-share'),
+    url(r'^api/v2.1/group-owned-libraries/user-share-in-libraries/(?P<repo_id>[-0-9-a-f]{36})/$', GroupOwnedLibraryUserShareInLibrary.as_view(), name='api-v2.1-group-owned-library-user-share-in-library'),
 
     ## user::shared-folders
     url(r'^api/v2.1/shared-folders/$', SharedFolders.as_view(), name='api-v2.1-shared-folders'),

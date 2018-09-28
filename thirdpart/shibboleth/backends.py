@@ -51,6 +51,9 @@ class ShibbolethRemoteUserBackend(RemoteUserBackend):
                     email=username, is_active=self.activate_after_creation)
                 if user and self.activate_after_creation is False:
                     notify_admins_on_activate_request(user.email)
+                    # Do not send follwing registration finished email (if any)
+                    # which will cause confusion.
+                    return user
                 if user and settings.NOTIFY_ADMIN_AFTER_REGISTRATION is True:
                     notify_admins_on_register_complete(user.email)
             else:

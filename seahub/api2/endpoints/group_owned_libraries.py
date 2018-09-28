@@ -35,8 +35,9 @@ from seahub.utils.rpc import SeafileAPI
 from seahub.share.signals import share_repo_to_user_successful, share_repo_to_group_successful
 from seahub.share.utils import share_dir_to_user, share_dir_to_group, update_user_dir_permission, \
         check_user_share_out_permission, update_group_dir_permission, \
-        check_group_share_out_permission
+        check_group_share_out_permission, check_user_share_in_permission
 from seahub.constants import PERMISSION_READ, PERMISSION_READ_WRITE
+from seahub.views import check_folder_permission
 
 from seahub.settings import ENABLE_STORAGE_CLASSES, STORAGE_CLASS_MAPPING_POLICY
 
@@ -1311,5 +1312,45 @@ class GroupOwnedLibraryGroupShare(APIView):
             repo_id, path, group_id, is_org_context(request))
         send_perm_audit_msg('delete-repo-perm', username, group_id,
                             repo_id, path, permission)
+
+        return Response({'success': True})
+
+
+class GroupOwnedLibraryUserShareInLibrary(APIView):
+
+    authentication_classes = (TokenAuthentication, SessionAuthentication)
+    permission_classes = (IsAuthenticated, IsProVersion)
+    throttle_classes = (UserRateThrottle,)
+
+    @add_org_context
+    def delete(self, request, repo_id, org_id, format=None):
+        """ User delete a repo shared to him/her.
+        """
+        repo = seafile_api.get_repo(repo_id)
+        if not repo:
+            error_msg = 'Library %s not found.' % repo_id
+            return api_error(status.HTTP_404_NOT_FOUND, error_msg)
+
+        if not check_folder_permission(request, repo_id, '/'):
+            error_msg = 'Permission denied.'
+            return api_error(status.HTTP_403_FORBIDDEN, error_msg)
+
+        username = request.user.username
+        repo_owner = get_repo_owner(request, repo_id)
+        try:
+            if org_id:
+                is_org = True
+                seafile_api.org_remove_share(org_id, repo_id, repo_owner, username)
+            else:
+                is_org = False
+                seafile_api.remove_share(repo_id, repo_owner, username)
+        except Exception as e:
+            logger.error(e)
+            error_msg = 'Internal Server Error'
+            return api_error(status.HTTP_500_INTERNAL_SERVER_ERROR, error_msg)
+
+        permission = check_user_share_in_permission(repo_id, username, is_org)
+        send_perm_audit_msg('delete-repo-perm', repo_owner, username,
+                repo_id, '/', permission)
 
         return Response({'success': True})

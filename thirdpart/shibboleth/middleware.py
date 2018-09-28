@@ -31,6 +31,9 @@ class ShibbolethRemoteUserMiddleware(RemoteUserMiddleware):
         super(ShibbolethRemoteUserMiddleware, self).__init__(*a, **kw)
 
     def process_request(self, request):
+        if request.path.rstrip('/') != settings.SITE_ROOT + 'sso':
+            return
+
         # AuthenticationMiddleware is required so that request.user exists.
         if not hasattr(request, 'user'):
             raise ImproperlyConfigured(

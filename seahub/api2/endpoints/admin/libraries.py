@@ -279,7 +279,7 @@ class AdminLibrary(APIView):
         return Response({'success': True})
 
     def put(self, request, repo_id, format=None):
-        """ transfer a library
+        """ transfer a library, rename a library
 
         Permission checking:
         1. only admin can perform this action.
@@ -289,100 +289,113 @@ class AdminLibrary(APIView):
             error_msg = 'Library %s not found.' % repo_id
             return api_error(status.HTTP_404_NOT_FOUND, error_msg)
 
-        new_owner = request.data.get('owner', None)
-        if not new_owner:
-            error_msg = 'owner invalid.'
-            return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
-
-        try:
-            new_owner_obj = User.objects.get(email=new_owner)
-        except User.DoesNotExist:
-            error_msg = 'User %s not found.' % new_owner
-            return api_error(status.HTTP_404_NOT_FOUND, error_msg)
-
-        if not new_owner_obj.permissions.can_add_repo():
-            error_msg = 'Transfer failed: role of %s is %s, can not add library.' % \
-                    (new_owner, new_owner_obj.role)
-            return api_error(status.HTTP_403_FORBIDDEN, error_msg)
-
-        if MULTI_TENANCY:
+        new_repo_name = request.data.get('name', None)
+        if new_repo_name:
             try:
-                if seafile_api.get_org_id_by_repo_id(repo_id) > 0:
-                    error_msg = 'Can not transfer organization library.'
-                    return api_error(status.HTTP_403_FORBIDDEN, error_msg)
-
-                if ccnet_api.get_orgs_by_user(new_owner):
-                    error_msg = 'Can not transfer library to organization user %s' % new_owner
-                    return api_error(status.HTTP_403_FORBIDDEN, error_msg)
+                res = seafile_api.edit_repo(repo_id, new_repo_name, '', None)
             except Exception as e:
                 logger.error(e)
                 error_msg = 'Internal Server Error'
                 return api_error(status.HTTP_500_INTERNAL_SERVER_ERROR, error_msg)
 
-        repo_owner = seafile_api.get_repo_owner(repo_id)
+            if res == -1:
+                e = 'Admin rename failed: ID of library is %s, edit_repo api called failed.' % \
+                        repo_id
+                logger.error(e)
+                error_msg = 'Internal Server Error'
+                return api_error(status.HTTP_500_INTERNAL_SERVER_ERROR, error_msg)
 
-        # get repo shared to user/group list
-        shared_users = seafile_api.list_repo_shared_to(
-                repo_owner, repo_id)
-        shared_groups = seafile_api.list_repo_shared_group_by_user(
-                repo_owner, repo_id)
+        new_owner = request.data.get('owner', None)
+        if new_owner:
+            try:
+                new_owner_obj = User.objects.get(email=new_owner)
+            except User.DoesNotExist:
+                error_msg = 'User %s not found.' % new_owner
+                return api_error(status.HTTP_404_NOT_FOUND, error_msg)
 
-        # get all pub repos
-        pub_repos = []
-        if not request.cloud_mode:
-            pub_repos = seafile_api.list_inner_pub_repos_by_owner(repo_owner)
+            if not new_owner_obj.permissions.can_add_repo():
+                error_msg = 'Transfer failed: role of %s is %s, can not add library.' % \
+                        (new_owner, new_owner_obj.role)
+                return api_error(status.HTTP_403_FORBIDDEN, error_msg)
 
-        # transfer repo
-        seafile_api.set_repo_owner(repo_id, new_owner)
+            if MULTI_TENANCY:
+                try:
+                    if seafile_api.get_org_id_by_repo_id(repo_id) > 0:
+                        error_msg = 'Can not transfer organization library.'
+                        return api_error(status.HTTP_403_FORBIDDEN, error_msg)
 
-        # reshare repo to user
-        for shared_user in shared_users:
-            shared_username = shared_user.user
+                    if ccnet_api.get_orgs_by_user(new_owner):
+                        error_msg = 'Can not transfer library to organization user %s' % new_owner
+                        return api_error(status.HTTP_403_FORBIDDEN, error_msg)
+                except Exception as e:
+                    logger.error(e)
+                    error_msg = 'Internal Server Error'
+                    return api_error(status.HTTP_500_INTERNAL_SERVER_ERROR, error_msg)
 
-            if new_owner == shared_username:
-                continue
+            repo_owner = seafile_api.get_repo_owner(repo_id)
 
-            seafile_api.share_repo(repo_id, new_owner,
-                    shared_username, shared_user.perm)
+            # get repo shared to user/group list
+            shared_users = seafile_api.list_repo_shared_to(
+                    repo_owner, repo_id)
+            shared_groups = seafile_api.list_repo_shared_group_by_user(
+                    repo_owner, repo_id)
 
-        # reshare repo to group
-        for shared_group in shared_groups:
-            shared_group_id = shared_group.group_id
+            # get all pub repos
+            pub_repos = []
+            if not request.cloud_mode:
+                pub_repos = seafile_api.list_inner_pub_repos_by_owner(repo_owner)
 
-            if not is_group_member(shared_group_id, new_owner):
-                continue
+            # transfer repo
+            seafile_api.set_repo_owner(repo_id, new_owner)
 
-            seafile_api.set_group_repo(repo_id, shared_group_id,
-                    new_owner, shared_group.perm)
+            # reshare repo to user
+            for shared_user in shared_users:
+                shared_username = shared_user.user
 
-        # reshare repo to links
-        try:
-            UploadLinkShare.objects.filter(username=repo_owner, repo_id=repo_id).update(username=new_owner)
-            FileShare.objects.filter(username=repo_owner, repo_id=repo_id).update(username=new_owner)
-        except Exception as e:
-            logger.error(e)
-            error_msg = 'Internal Server Error'
-            return api_error(status.HTTP_500_INTERNAL_SERVER_ERROR, error_msg)
+                if new_owner == shared_username:
+                    continue
 
-        # check if current repo is pub-repo
-        # if YES, reshare current repo to public
-        for pub_repo in pub_repos:
-            if repo_id != pub_repo.id:
-                continue
+                seafile_api.share_repo(repo_id, new_owner,
+                        shared_username, shared_user.perm)
 
-            seafile_api.add_inner_pub_repo(repo_id, pub_repo.permission)
+            # reshare repo to group
+            for shared_group in shared_groups:
+                shared_group_id = shared_group.group_id
 
-            break
+                if not is_group_member(shared_group_id, new_owner):
+                    continue
 
-        # send admin operation log signal
-        admin_op_detail = {
-            "id": repo_id,
-            "name": repo.name,
-            "from": repo_owner,
-            "to": new_owner,
-        }
-        admin_operation.send(sender=None, admin_name=request.user.username,
-                operation=REPO_TRANSFER, detail=admin_op_detail)
+                seafile_api.set_group_repo(repo_id, shared_group_id,
+                        new_owner, shared_group.perm)
+
+            # reshare repo to links
+            try:
+                UploadLinkShare.objects.filter(username=repo_owner, repo_id=repo_id).update(username=new_owner)
+                FileShare.objects.filter(username=repo_owner, repo_id=repo_id).update(username=new_owner)
+            except Exception as e:
+                logger.error(e)
+                error_msg = 'Internal Server Error'
+                return api_error(status.HTTP_500_INTERNAL_SERVER_ERROR, error_msg)
+
+            # check if current repo is pub-repo
+            # if YES, reshare current repo to public
+            for pub_repo in pub_repos:
+                if repo_id != pub_repo.id:
+                    continue
+
+                seafile_api.add_inner_pub_repo(repo_id, pub_repo.permission)
+
+                break
+
+            # send admin operation log signal
+            admin_op_detail = {
+                "id": repo_id,
+                "name": repo.name,
+                "from": repo_owner,
+                "to": new_owner,
+            }
+            admin_operation.send(sender=None, admin_name=request.user.username,
+                    operation=REPO_TRANSFER, detail=admin_op_detail)
 
         repo = seafile_api.get_repo(repo_id)
         repo_info = get_repo_info(repo)

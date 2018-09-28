@@ -77,6 +77,7 @@ define([
                 case 'list_lib_dir': return siteRoot + 'ajax/lib/' + options.repo_id + '/dir/';
                 case 'del_dir': return siteRoot + 'api/v2.1/repos/' + options.repo_id + '/dir/';
                 case 'del_file': return siteRoot + 'api/v2.1/repos/' + options.repo_id + '/file/';
+                case 'get_file_info': return siteRoot + 'api/v2.1/repos/' + options.repo_id + '/file/';
                 case 'download_dir_zip_url': return fileServerRoot + 'zip/' + options.zip_token;
                 case 'zip_task': return siteRoot + 'api/v2.1/repos/' + options.repo_id + '/zip-task/';
                 case 'query_zip_progress': return siteRoot + 'api/v2.1/query-zip-progress/';
@@ -127,6 +128,7 @@ define([
 
                 case 'group-owned-library-user-folder-permission': return siteRoot + 'api/v2.1/group-owned-libraries/' + options.repo_id + '/user-folder-permission/';
                 case 'group-owned-library-group-folder-permission': return siteRoot + 'api/v2.1/group-owned-libraries/' + options.repo_id + '/group-folder-permission/';
+                case 'group-owned-library-user-share-in-library': return siteRoot + 'api/v2.1/group-owned-libraries/user-share-in-libraries/' + options.repo_id + '/';
 
                 // Share admin
                 case 'share_admin_repos': return siteRoot + 'api/v2.1/shared-repos/';

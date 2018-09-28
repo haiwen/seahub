@@ -31,6 +31,7 @@ from django.utils.http import urlquote
 from django.utils.html import escape
 from django.views.static import serve as django_static_serve
 
+from seahub.auth import REDIRECT_FIELD_NAME
 from seahub.api2.models import Token, TokenV2
 import seahub.settings
 from seahub.settings import SITE_NAME, MEDIA_URL, LOGO_PATH, \
@@ -954,7 +955,7 @@ def redirect_to_login(request):
     from django.conf import settings
     login_url = settings.LOGIN_URL
     path = urlquote(request.get_full_path())
-    tup = login_url, redirect_field_name, path
+    tup = login_url, REDIRECT_FIELD_NAME, path
     return HttpResponseRedirect('%s?%s=%s' % tup)
 
 def mkstemp():
@@ -1052,6 +1053,7 @@ if EVENTS_CONFIG_FILE:
 
     HAS_OFFICE_CONVERTER = check_office_converter_enabled()
 
+OFFICE_PREVIEW_MAX_SIZE = 2 * 1024 * 1024
 if HAS_OFFICE_CONVERTER:
 
     OFFICE_HTML_DIR = get_office_converter_html_dir()

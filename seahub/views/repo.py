@@ -4,7 +4,6 @@ import os
 import posixpath
 import logging
 
-from django.core.urlresolvers import reverse
 from django.db.models import F
 from django.http import Http404, HttpResponseRedirect
 from django.shortcuts import render
@@ -16,7 +15,7 @@ from seaserv import seafile_api
 
 from seahub.auth.decorators import login_required
 from seahub.options.models import UserOptions, CryptoOptionNotSetError
-from seahub.share.decorators import share_link_audit
+from seahub.share.decorators import share_link_audit, share_link_login_required
 from seahub.share.models import FileShare, UploadLinkShare, \
     check_share_link_common
 from seahub.views import gen_path_link, get_repo_dirents, \
@@ -179,7 +178,9 @@ def view_lib_as_wiki(request, repo_id, path):
 
 ########## shared dir/uploadlink
 @share_link_audit
+@share_link_login_required
 def view_shared_dir(request, fileshare):
+
     token = fileshare.token
 
     password_check_passed, err_msg = check_share_link_common(request, fileshare)

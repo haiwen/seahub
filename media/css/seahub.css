@@ -2674,18 +2674,6 @@ button.sf-dropdown-toggle:focus {
     display:inline;
     margin-right:5px;
 }
-.audit-item .audit-select-hidden {
-    position:absolute;
-    background:#fff;
-    padding:6px 1px;
-    border:1px solid #eee;
-    border-radius:5px;
-    z-index:10;
-}
-.audit-select-hidden li a {
-    display:block;
-    padding:0 12px;
-}
 .file-choose-form {
     width:500px;
     padding:10px 20px;
@@ -3086,11 +3074,22 @@ button.sf-dropdown-toggle:focus {
     padding:0;
 }
 #file-view-tip {
-    height:130px;
+    min-height:130px;
     padding:30px 10px 10px;
     width:950px;
     background:#fff;
     text-align:center;
+}
+#file-view-tip .open-via-client { /* for the text link */
+    display:block;
+    margin-top:25px;
+    color:#333;
+    font-weight:normal;
+    text-decoration:underline;
+}
+#file-view-op .open-via-client { /* for the button */
+    padding-top:6px;
+    padding-bottom:4px;
 }
 @media (max-width:991.98px) {
     #file-view-tip {
@@ -3789,25 +3788,21 @@ button.sf-dropdown-toggle:focus {
 }
 
 /* file audit*/
-.audit-show-select {
-    font-weight: normal;
-    font-size: 13px;
-    padding-right: 2px;
-}
-#audit-unselect-op div {
-    display: inline-block;
-    height: 20px;
-    border: 1px solid #ccc;
+.audit-unselect-item {
+    display:inline-block;
+    border:1px solid #ccc;
+    border-radius:2px;
+    padding:1px 8px;
     background: #f2f2f2;
     cursor: pointer;
+    font-size:14px;
 }
-#audit-unselect-op span {
-    margin-right: 5px;
+.audit-unselect-item:hover {
+    border-color:#a9a9a9;
 }
-#audit-unselect-op a {
-    margin: 0 8px;
-    text-decoration: none;
-    font-size: 14px;
+.audit-select-user,
+.audit-select-repo {
+    font-size:13px;
 }
 /* multi repo operation */
 .repo-op .op-link {
