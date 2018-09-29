@@ -630,7 +630,7 @@ define([
                     window.location.href= siteRoot + 'lib/' + repoID + '/file' + filePath + '?mode=edit';
                 },
                 error: function() {
-                    var err_msg = gettext("The draft is already exists.");
+                    var err_msg = gettext("The draft already exists.");
                     Common.feedback(err_msg, 'error');
                 }
             });
