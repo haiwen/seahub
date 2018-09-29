@@ -3,7 +3,6 @@ import ReactDOM from 'react-dom';
 import editUtilties from './utils/editor-utilties';
 import { filePath } from './components/constants';
 import URLDecorator from './utils/url-decorator';
-import { processor } from '@seafile/seafile-editor/src/lib/seafile-markdown2html';
 import SidePanel from './pages/file-history/side-panel';
 import MainPanel from './pages/file-history/main-panel';
 import axios from 'axios';

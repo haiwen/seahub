@@ -9,7 +9,7 @@ const propTypes = {
   onPublishHandler: PropTypes.func.isRequired
 };
 
-class ListMenu extends React.Component {
+class DraftListMenu extends React.Component {
 
   render() {
     let style = '';
@@ -28,6 +28,6 @@ class ListMenu extends React.Component {
   }
 }
 
-ListMenu.propTypes = propTypes;
+DraftListMenu.propTypes = propTypes;
 
-export default ListMenu;
+export default DraftListMenu;

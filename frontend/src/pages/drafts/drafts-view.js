@@ -2,8 +2,8 @@ import React from 'react';
 import { gettext } from '../../components/constants';
 import editUtilties from '../../utils/editor-utilties';
 import Loading from '../../components/loading';
-import ListView from '../../components/list-view/list-view';
-import ListMenu from '../../components/list-view/list-menu';
+import DraftListView from '../../components/draft-list-view/draft-list-view';
+import DraftListMenu from '../../components/draft-list-view/draft-list-menu';
 
 class DraftsView extends React.Component {
   
@@ -87,7 +87,7 @@ class DraftsView extends React.Component {
         <div className="cur-view-content" style={{padding: 0}}>
           {this.state.isLoadingDraft && <Loading /> }
           {(!this.state.isLoadingDraft && this.state.draftList.length !==0) &&
-            <ListView
+            <DraftListView
               draftList={this.state.draftList} 
               isItemFreezed={this.state.isItemFreezed}
               onMenuToggleClick={this.onMenuToggleClick}
@@ -95,11 +95,12 @@ class DraftsView extends React.Component {
           }
           {(!this.state.isLoadingDraft && this.state.draftList.length === 0) &&
             <div className="message empty-tip">
-              <h2>{gettext('There is no draft file existing')}</h2>
+              <h2>{gettext('No draft yet')}</h2>
+              <p>{gettext('Draft is a way to let you collaborate with others on files. You can create a draft from a file, edit the draft and then ask for a review. The original file will be updated only after the draft be reviewed.')}</p>
             </div>
           }
           {this.state.isMenuShow && 
-            <ListMenu 
+            <DraftListMenu 
               isMenuShow={this.state.isMenuShow} 
               currentDraft={this.state.currentDraft} 
               menuPosition={this.state.menuPosition} 
