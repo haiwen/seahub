@@ -144,7 +144,7 @@ class DraftReviewManager(models.Manager):
 
         draft_review = self.model(creator=creator,
                                   status='open',
-                                  draft=draft)
+                                  draft_id=draft)
         draft_review.save(using=self._db)
 
         return draft_review
@@ -166,7 +166,7 @@ class DraftReview(TimestampedModel):
             'creator': self.creator,
             'status': self.status,
             'creator_name': email2nickname(self.creator),
-            'draft_id': self.pk,
+            'draft_id': self.draft_id_id,
             'draft_origin_repo_id': self.draft_id.origin_repo_id,
             'draft_origin_file_path': file_path,
             'draft_origin_file_version': self.draft_id.origin_file_version,

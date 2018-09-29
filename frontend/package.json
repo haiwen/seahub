@@ -6,6 +6,7 @@
     "@reach/router": "^1.2.0",
     "@seafile/seafile-editor": "^0.1.26",
     "autoprefixer": "7.1.6",
+    "classnames": "^2.2.6",
     "css-loader": "0.28.7",
     "dotenv": "4.0.0",
     "dotenv-expand": "4.2.0",
