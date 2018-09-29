@@ -12,10 +12,10 @@ const propTypes = {
 class DraftListMenu extends React.Component {
 
   render() {
-    let style = '';
+    let style = {};
     let {isMenuShow, menuPosition} = this.props;
     if (isMenuShow) {
-      style = {position: 'fixed', top: menuPosition.top, left: menuPosition.left, display: 'block'}
+      style = {position: 'fixed', top: menuPosition.top, left: menuPosition.left, display: 'block'};
     }
     return (
       <div>

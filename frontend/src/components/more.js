@@ -13,7 +13,7 @@ class More extends React.Component {
       <li className="list-show-more" onClick={this.props.onShowMore}>
         <span className="more-message">{gettext('show more')}</span>
       </li>
-    )
+    );
   }
 }
 

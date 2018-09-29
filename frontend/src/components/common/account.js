@@ -17,7 +17,7 @@ class Account extends Component {
       isStaff: false,
       usageRate: '',
       avatarURL: '',
-    }
+    };
   }
 
   componentDidMount(){
@@ -62,34 +62,34 @@ class Account extends Component {
 
     this.setState({
       showInfo: !this.state.showInfo,
-    })
+    });
   }
 
   onClickAccount = () => {
-     this.setState({
-       showInfo: !this.state.showInfo,
-     })
+    this.setState({
+      showInfo: !this.state.showInfo,
+    });
   }
 
   getAccountInfo = () => {
     editorUtilities.getAccountInfo().then(resp => {
-        this.setState({
-          userName: resp.data.name,
-          contactEmail: resp.data.email,
-          usageRate: resp.data.space_usage,
-          quotaUsage: bytesToSize(resp.data.usage),
-          quotaTotal: bytesToSize(resp.data.total),
-          isStaff: resp.data.is_staff,
-          avatarURL: resp.data.avatar_url
-        })
-      })
+      this.setState({
+        userName: resp.data.name,
+        contactEmail: resp.data.email,
+        usageRate: resp.data.space_usage,
+        quotaUsage: bytesToSize(resp.data.usage),
+        quotaTotal: bytesToSize(resp.data.total),
+        isStaff: resp.data.is_staff,
+        avatarURL: resp.data.avatar_url
+      });
+    });
   }
 
   renderMenu = () => {
     if(this.state.isStaff){
       return (
-        <a href={siteRoot + 'sys/useradmin/'} title={gettext("System Admin")} className="item">{gettext("System Admin")}</a>
-      )
+        <a href={siteRoot + 'sys/useradmin/'} title={gettext('System Admin')} className="item">{gettext('System Admin')}</a>
+      );
     }
   }
 
@@ -97,46 +97,43 @@ class Account extends Component {
     if (this.state.avatarURL) {
       return (
         <img src={this.state.avatarURL} width="36" height="36" className="avatar" />
-      )
+      );
     }
     return (
       <img src="" width="36" height="36" className="avatar" />
-    )
+    );
   }
 
   render() {
     return (
       <div id="account">
         <a id="my-info" onClick={this.onClickAccount} className="account-toggle no-deco d-none d-md-block" aria-label="View profile and more">
-         <span>
-          <img src={this.state.avatarURL} width="36" height="36" className="avatar" />
-         </span> <span className="fas fa-caret-down vam"></span>
+          <span><img src={this.state.avatarURL} width="36" height="36" className="avatar" /></span>
+          <span className="fas fa-caret-down vam"></span>
         </a>
         <span className="account-toggle sf2-icon-more mobile-icon d-md-none" aria-label="View profile and more" onClick={this.onClickAccount}></span>
         <div id="user-info-popup" className={`account-popup sf-popover ${this.state.showInfo? '':'hide'}`}>
-         <div className="outer-caret up-outer-caret"><div className="inner-caret"></div></div>
-         <div className="sf-popover-con">
-           <div className="item o-hidden">
-             {this.renderAvatar()}
-             <div className="txt">
-              {this.state.userName}
-             </div>
-           </div>
-           <div id="space-traffic">
-             <div className="item">
-               <p>{gettext("Used")}: {this.state.quotaUsage} / {this.state.quotaTotal}</p>
-               <div id="quota-bar">
-                <span id="quota-usage" className="usage" style={{width: this.state.usageRate}}></span>
-               </div>
-             </div>
-           </div>
-           <a href={siteRoot + 'profile/'} className="item">{gettext("Settings")}</a>
-           {this.renderMenu()}
-           <a href={siteRoot + 'accounts/logout/'} className="item">{gettext("Log out")}</a>
-         </div>
+          <div className="outer-caret up-outer-caret">
+            <div className="inner-caret"></div>
+          </div>
+          <div className="sf-popover-con">
+            <div className="item o-hidden">
+              {this.renderAvatar()}
+              <div className="txt">{this.state.userName}</div>
+            </div>
+            <div id="space-traffic">
+              <div className="item">
+                <p>{gettext('Used')}: {this.state.quotaUsage} / {this.state.quotaTotal}</p>
+                <div id="quota-bar"><span id="quota-usage" className="usage" style={{width: this.state.usageRate}}></span></div>
+              </div>
+            </div>
+            <a href={siteRoot + 'profile/'} className="item">{gettext('Settings')}</a>
+            {this.renderMenu()}
+            <a href={siteRoot + 'accounts/logout/'} className="item">{gettext('Log out')}</a>
+          </div>
         </div>
       </div>
-    )
+    );
   }
 }
 

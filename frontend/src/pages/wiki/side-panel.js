@@ -25,7 +25,7 @@ class SidePanel extends Component {
       showAddFileFolder: false,
       showRename: false,
       isFile: false
-    }
+    };
     this.searchedPath = null;
   }
 
@@ -36,18 +36,18 @@ class SidePanel extends Component {
   onMouseEnter = () => {
     this.setState({
       isMenuIconShow: true
-    })
+    });
   }
 
   onMouseLeave = () => {
     this.setState({
       isMenuIconShow: false
-    })
+    });
   }
 
   onNodeClick = (e, node) => {
-    this.setState({currentNode: node})
-    this.props.onNodeClick(e, node)
+    this.setState({currentNode: node});
+    this.props.onNodeClick(e, node);
   }
 
   onShowContextMenu = (e, node) => {
@@ -59,7 +59,7 @@ class SidePanel extends Component {
       currentNode: node,
       menuPosition: position,
       isNodeItemFrezee: true
-    })
+    });
   }
 
   onHeadingMenuClick = (e) => {
@@ -72,7 +72,7 @@ class SidePanel extends Component {
       isShowMenu: !this.state.isShowMenu,
       currentNode: node,
       menuPosition: position
-    })
+    });
   }
 
   onHideContextMenu = () => {
@@ -82,7 +82,7 @@ class SidePanel extends Component {
     this.setState({
       isShowMenu: false,
       isNodeItemFrezee: false
-    })
+    });
   }
 
   toggleAddFileFolder = (flag) => {
@@ -115,13 +115,13 @@ class SidePanel extends Component {
   }
   
   onRenameNode = (newName) => {
-    this.setState({showRename: !this.state.showRename})
+    this.setState({showRename: !this.state.showRename});
     let node = this.state.currentNode;
-    this.props.onRenameNode(node, newName)
+    this.props.onRenameNode(node, newName);
   }
   
   onDeleteNode = () => {
-    this.setState({showDelete: !this.state.showDelete})
+    this.setState({showDelete: !this.state.showDelete});
     let node = this.state.currentNode;
     this.props.onDeleteNode(node);
   }
@@ -133,7 +133,7 @@ class SidePanel extends Component {
   componentWillReceiveProps(nextProps) {
     this.setState({
       currentNode: nextProps.changedNode
-    })
+    });
   }
 
   componentWillUnmount() {
@@ -149,16 +149,16 @@ class SidePanel extends Component {
   }
 
   deleteCancel = () => {
-    this.setState({showDelete: !this.state.showDelete})
+    this.setState({showDelete: !this.state.showDelete});
   }
 
   renameCancel = () => {
-    this.setState({showRename: !this.state.showRename})
+    this.setState({showRename: !this.state.showRename});
   }
 
   render() {
     return (
-      <div className={`side-panel wiki-side-panel ${this.props.closeSideBar ? "": "left-zero"}`}>
+      <div className={`side-panel wiki-side-panel ${this.props.closeSideBar ? '': 'left-zero'}`}>
         <div className="side-panel-top panel-top">
           <a href={siteRoot} id="logo">
             <img src={mediaUrl + logoPath} title={siteTitle} alt="logo" width={logoWidth} height={logoHeight} />
@@ -171,7 +171,7 @@ class SidePanel extends Component {
             onMouseEnter={this.onMouseEnter} 
             onMouseLeave={this.onMouseLeave}
           >
-            {gettext("Pages")}
+            {gettext('Pages')}
             <div className="heading-icon">
               <MenuControl 
                 isShow={this.state.isMenuIconShow}
@@ -227,7 +227,7 @@ class SidePanel extends Component {
           </div>
         </div>
       </div>
-    )
+    );
   }
 }
 export default SidePanel;

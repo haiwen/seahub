@@ -1,6 +1,6 @@
 import React from 'react';
+import { gettext } from '../../constants';
 import { Button, Modal, ModalHeader, Input, ModalBody, ModalFooter } from 'reactstrap';
-const gettext = window.gettext;
 
 class Rename extends React.Component {
   constructor(props) {
@@ -23,7 +23,7 @@ class Rename extends React.Component {
 
   handleKeyPress = (e) => {
     if (e.key === 'Enter') {
-      this.handleSubmit()
+      this.handleSubmit();
     } 
   }
 
@@ -34,16 +34,16 @@ class Rename extends React.Component {
   componentWillMount() {
     this.setState({
       newName: this.props.currentNode.name
-    })
+    });
   }
 
   componentDidMount() {
     this.changeState(this.props.currentNode);
     this.newInput.focus();
     let type = this.props.currentNode.type;
-    if (type === "file") {
-      var endIndex = this.props.currentNode.name.lastIndexOf(".md");
-      this.newInput.setSelectionRange(0, endIndex, "forward");
+    if (type === 'file') {
+      var endIndex = this.props.currentNode.name.lastIndexOf('.md');
+      this.newInput.setSelectionRange(0, endIndex, 'forward');
     } else {
       this.newInput.setSelectionRange(0, -1);
     }
@@ -61,17 +61,17 @@ class Rename extends React.Component {
     let type = this.props.currentNode.type;
     return (
       <Modal isOpen={true} toggle={this.toggle}>
-        <ModalHeader toggle={this.toggle}>{type === 'file' ? gettext("Rename File") : gettext("Rename Folder") }</ModalHeader>
+        <ModalHeader toggle={this.toggle}>{type === 'file' ? gettext('Rename File') : gettext('Rename Folder') }</ModalHeader>
         <ModalBody>
-          <p>{type === 'file' ? gettext("Enter the new file name:"): gettext("Enter the new folder name:")}</p>
-          <Input onKeyPress={this.handleKeyPress} innerRef={input => {this.newInput = input}} placeholder="newName" value={this.state.newName} onChange={this.handleChange} />
+          <p>{type === 'file' ? gettext('Enter the new file name:'): gettext('Enter the new folder name:')}</p>
+          <Input onKeyPress={this.handleKeyPress} innerRef={input => {this.newInput = input;}} placeholder="newName" value={this.state.newName} onChange={this.handleChange} />
         </ModalBody>
         <ModalFooter>
-          <Button color="primary" onClick={this.handleSubmit}>{gettext("Submit")}</Button>
-          <Button color="secondary" onClick={this.toggle}>{gettext("Cancel")}</Button>
+          <Button color="primary" onClick={this.handleSubmit}>{gettext('Submit')}</Button>
+          <Button color="secondary" onClick={this.toggle}>{gettext('Cancel')}</Button>
         </ModalFooter>
       </Modal>
-    )
+    );
   }
 }
 

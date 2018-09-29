@@ -12,6 +12,8 @@ const contentClass = 'markdown-viewer-render-content';
 const propTypes = {
   renderingContent: PropTypes.bool.isRequired,
   content: PropTypes.string.isRequired,
+  markdownContent: PropTypes.string.isRequired,
+  markdownContentOld: PropTypes.string.isRequired,
 };
 
 class MainPanel extends React.Component {

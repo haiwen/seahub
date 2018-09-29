@@ -8,7 +8,8 @@ moment.locale(lang);
 const propTypes = {
   isItemFreezed: PropTypes.bool.isRequired,
   onMenuToggleClick: PropTypes.func.isRequired,
-}
+};
+
 class DraftListItem extends React.Component {
 
   constructor(props) {
@@ -51,7 +52,7 @@ class DraftListItem extends React.Component {
   }
 
   getFileName(filePath) {
-    let lastIndex = filePath.lastIndexOf("/");
+    let lastIndex = filePath.lastIndexOf('/');
     return filePath.slice(lastIndex+1);
   }
 
@@ -62,7 +63,7 @@ class DraftListItem extends React.Component {
     localTime = moment(localTime).fromNow();
     return (
       <tr className={this.state.highlight} onMouseEnter={this.onMouseEnter} onMouseLeave={this.onMouseLeave}>
-        <td className="icon"><img src={siteRoot + "media/img/file/192/txt.png"} /></td>
+        <td className="icon"><img src={siteRoot + 'media/img/file/192/txt.png'} /></td>
         <td className="name a-simulate" onClick={this.onDraftEditClick}>{fileName}</td>
         <td className="owner">{draft.owner}</td>
         <td className="update">{localTime}</td>

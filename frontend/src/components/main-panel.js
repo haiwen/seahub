@@ -7,7 +7,6 @@ class MainPanel extends Component {
     //todos;
   }
 
-
   render() {
     return (
       <div className="main-panel o-hidden">
@@ -20,8 +19,8 @@ class MainPanel extends Component {
         <div className="main-panel-center">
           {this.props.children}
         </div>
-    </div>
-    )
+      </div>
+    );
   }
 }
 

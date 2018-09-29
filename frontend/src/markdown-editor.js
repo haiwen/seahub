@@ -22,7 +22,7 @@ seafileAPI.initForSeahubUsage({ siteRoot, xcsrfHeaders });
 
 function getImageFileNameWithTimestamp() {
   var d = Date.now();
-  return "image-" + d.toString() + ".png";
+  return 'image-' + d.toString() + '.png';
 }
 
 class EditorUtilities {
@@ -37,26 +37,26 @@ class EditorUtilities {
     return (
       seafileAPI.getUpdateLink(repoID, dirPath).then((res) => {
         const uploadLink = res.data;
-        return seafileAPI.updateFile(uploadLink, filePath, fileName, content)
+        return seafileAPI.updateFile(uploadLink, filePath, fileName, content);
       })
-    )
+    );
   }
 
   unStarFile () {
     return (
       seafileAPI.unStarFile(repoID, this.filePath)
-    )
+    );
   }
 
   starFile() {
     return (
       seafileAPI.starFile(this.repoID, this.filePath)
-    )
+    );
   }
 
   getParentDectionaryUrl() {
     let parentPath = this.filePath.substring(0, this.filePath.lastIndexOf('/'));
-    return this.serviceUrl + "/#common/lib/" + this.repoID + parentPath;
+    return this.serviceUrl + '/#common/lib/' + this.repoID + parentPath;
   }
   
   _getImageURL(fileName) {
@@ -68,47 +68,47 @@ class EditorUtilities {
     return (
       seafileAPI.getUploadLink(repoID, dirPath).then((res) => {
         let uploadLinkComponent = res.data;
-        const uploadLink = uploadLinkComponent + "?ret-json=1";
+        const uploadLink = uploadLinkComponent + '?ret-json=1';
         const name = getImageFileNameWithTimestamp();
         const blob = imageFile.slice(0, -1, 'image/png');
         const newFile = new File([blob], name, {type: 'image/png'});
         const formData = new FormData();
-        formData.append("parent_dir", "/");
-        formData.append("relative_path", "images");
-        formData.append("file", newFile);
-        return {uploadLink, formData}
+        formData.append('parent_dir', '/');
+        formData.append('relative_path', 'images');
+        formData.append('file', newFile);
+        return {uploadLink, formData};
       }).then(({ uploadLink, formData}) => {
-        return seafileAPI.uploadImage(uploadLink, formData)
+        return seafileAPI.uploadImage(uploadLink, formData);
       }).then ((res) => {
         let resArr = res.data[0];
         let filename = resArr.name;
         return this._getImageURL(filename);
       })
-    )
+    );
   }
 
   getFileURL(fileNode) {
     var url;
     if (fileNode.type === 'file') {
       if (fileNode.isImage()) {
-        url = serviceUrl + "/lib/" + repoID + "/file" + encodeURIComponent(fileNode.path()) + "?raw=1";
+        url = serviceUrl + '/lib/' + repoID + '/file' + encodeURIComponent(fileNode.path()) + '?raw=1';
       } else {
-        url = serviceUrl + "/lib/" + repoID + "/file" + encodeURIComponent(fileNode.path());
+        url = serviceUrl + '/lib/' + repoID + '/file' + encodeURIComponent(fileNode.path());
       }
     } else {
-      url = serviceUrl + "/#common/lib/" + repoID + encodeURIComponent(fileNode.path());
+      url = serviceUrl + '/#common/lib/' + repoID + encodeURIComponent(fileNode.path());
     }
     return url;
   }
   
   isInternalFileLink(url) {
-    var re = new RegExp(this.serviceUrl + "/lib/[0-9a-f-]{36}/file.*");
+    var re = new RegExp(this.serviceUrl + '/lib/[0-9a-f-]{36}/file.*');
     return re.test(url);
   }
 
   
   isInternalDirLink(url) {
-    var re = new RegExp(serviceUrl + "/#[a-z\-]*?/lib/" + "[0-9a-f\-]{36}.*");
+    var re = new RegExp(serviceUrl + '/#[a-z\-]*?/lib/' + '[0-9a-f\-]{36}.*');
     return re.test(url);
   }
 
@@ -119,26 +119,26 @@ class EditorUtilities {
           name: item.name,
           type: item.type === 'dir' ? 'dir' : 'file',
           parent_path: item.parent_dir
-        }
-      })
+        };
+      });
       return files;
-    })
+    });
   }
 
   getFileHistory() {
     return (
       seafileAPI.getFileHistory(repoID, filePath)
-    )
+    );
   }
 
   getFileInfo() {
     return (
       seafileAPI.getFileInfo(repoID, filePath)
-    )
+    );
   }
 
   getInternalLink() {
-      return seafileAPI.getInternalLink(repoID, filePath)
+    return seafileAPI.getInternalLink(repoID, filePath);
   }
 
   getShareLink() {
@@ -146,16 +146,16 @@ class EditorUtilities {
   }
 
   createShareLink (repoID, filePath, userPassword, userValidDays) {
-      return seafileAPI.createShareLink(repoID, filePath, userPassword, userValidDays);
+    return seafileAPI.createShareLink(repoID, filePath, userPassword, userValidDays);
   }
 
   deleteShareLink(token){
-      return seafileAPI.deleteShareLink(token)
+    return seafileAPI.deleteShareLink(token);
   }
 
   getDraftKey() {
-      return (repoID + filePath);
-    }
+    return (repoID + filePath);
+  }
 
   getFileContent(url) {
     return seafileAPI.getFileContent(url);
@@ -164,7 +164,7 @@ class EditorUtilities {
   listFileHistoryRecords(page, perPage) {
     return (
       seafileAPI.listFileHistoryRecords(repoID, filePath, page, perPage)
-    )
+    );
   }
 
   getFileHistoryVersion(commitID) {
@@ -178,30 +178,30 @@ const editorUtilities = new EditorUtilities();
 
 class MarkdownEditor extends React.Component {
   constructor(props) {
-      super(props);
-      this.state = {
-        markdownContent: "",
-        loading: true,
-        mode: "editor",
-        fileInfo: {
-          repoID: repoID,
-          name: fileName,
-          path: filePath,
-          mtime: null,
-          size: 0,
-          starred: false,
-          permission: '',
-          lastModifier: '',
-        },
-        collabServer: seafileCollabServer ? seafileCollabServer : null,
-      };
-    }
+    super(props);
+    this.state = {
+      markdownContent: '',
+      loading: true,
+      mode: 'editor',
+      fileInfo: {
+        repoID: repoID,
+        name: fileName,
+        path: filePath,
+        mtime: null,
+        size: 0,
+        starred: false,
+        permission: '',
+        lastModifier: '',
+      },
+      collabServer: seafileCollabServer ? seafileCollabServer : null,
+    };
+  }
 
   componentDidMount() {
 
     seafileAPI.getFileInfo(repoID, filePath).then((res) => {
       let { mtime, size, starred, permission, last_modifier_name } = res.data;
-      let lastModifier = last_modifier_name
+      let lastModifier = last_modifier_name;
 
       this.setState((prevState, props) => ({
         fileInfo: {
@@ -220,10 +220,10 @@ class MarkdownEditor extends React.Component {
           this.setState({
             markdownContent: res.data,
             loading: false
-          })
-        })
+          });
+        });
       });
-    })
+    });
   }
 
   render() {
@@ -232,8 +232,8 @@ class MarkdownEditor extends React.Component {
         <div className="empty-loading-page">
           <div className="lds-ripple page-centered"><div></div><div></div></div>
         </div>
-      )
-    } else if (this.state.mode === "editor") {
+      );
+    } else if (this.state.mode === 'editor') {
       return (
         <SeafileEditor
           fileInfo={this.state.fileInfo}
@@ -241,11 +241,12 @@ class MarkdownEditor extends React.Component {
           editorUtilities={editorUtilities}
           userInfo={this.state.collabServer ? userInfo : null}
           collabServer={this.state.collabServer}
-					showFileHistory={true}
+          showFileHistory={true}
           mode={mode}
         />
       );
     }   
   }
 }
+
 export default MarkdownEditor;

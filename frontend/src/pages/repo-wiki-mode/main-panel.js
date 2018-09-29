@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { gettext, repoID, serviceUrl, slug, siteRoot, isPro } from '../../components/constants';
+import { gettext, repoID, serviceUrl, slug, siteRoot } from '../../components/constants';
 import CommonToolbar from '../../components/toolbar/common-toolbar';
 import PathToolbar from '../../components/toolbar/path-toolbar';
 import MarkdownViewer from '../../components/markdown-viewer';
@@ -30,7 +30,7 @@ class MainPanel extends Component {
   }
 
   switchViewMode = (e) => {
-    e.preventDefault();  
+    e.preventDefault();
     if (e.target.id === 'wiki') {
       return;
     }
@@ -41,17 +41,17 @@ class MainPanel extends Component {
   render() {
 
     let filePathList = this.props.filePath.split('/');
-    let nodePath = "";
+    let nodePath = '';
     let pathElem = filePathList.map((item, index) => {
-      if (item === "") {
+      if (item === '') {
         return;
       } 
       if (index === (filePathList.length - 1)) {
         return (
           <span key={index}><span className="path-split">/</span>{item}</span>
-        )
+        );
       } else {
-        nodePath += "/" + item;
+        nodePath += '/' + item;
         return (
           <span key={index} >
             <span className="path-split">/</span>
@@ -62,7 +62,7 @@ class MainPanel extends Component {
               {item}
             </a>
           </span>
-        )
+        );
       }
     });
 
@@ -73,12 +73,12 @@ class MainPanel extends Component {
             <span className="sf2-icon-menu hidden-md-up d-md-none side-nav-toggle" title={gettext('Side Nav Menu')} onClick={this.onMenuClick}></span>
             { 
               this.props.permission === 'rw' && 
-              <button className="btn btn-secondary top-toolbar-btn" title={gettext('Edit File')} onClick={this.onEditClick}>{gettext("Edit")}</button>
+              <button className="btn btn-secondary top-toolbar-btn" title={gettext('Edit File')} onClick={this.onEditClick}>{gettext('Edit')}</button>
             }
             <div className="btn-group">
-              <button className="btn btn-secondary btn-icon sf-view-mode-change-btn sf2-icon-list-view" id='list' title={gettext("List")} onClick={this.switchViewMode}></button>
-              <button className="btn btn-secondary btn-icon sf-view-mode-change-btn sf2-icon-grid-view" id='grid' title={gettext("Grid")} onClick={this.switchViewMode}></button>
-              <button className={`btn btn-secondary btn-icon sf-view-mode-change-btn sf2-icon-wiki-view ${this.state.isWikiMode ? 'current-mode' : ''}`} id='wiki' title={gettext("wiki")} onClick={this.switchViewMode}></button>
+              <button className="btn btn-secondary btn-icon sf-view-mode-change-btn sf2-icon-list-view" id='list' title={gettext('List')} onClick={this.switchViewMode}></button>
+              <button className="btn btn-secondary btn-icon sf-view-mode-change-btn sf2-icon-grid-view" id='grid' title={gettext('Grid')} onClick={this.switchViewMode}></button>
+              <button className={`btn btn-secondary btn-icon sf-view-mode-change-btn sf2-icon-wiki-view ${this.state.isWikiMode ? 'current-mode' : ''}`} id='wiki' title={gettext('wiki')} onClick={this.switchViewMode}></button>
             </div>
           </div>
           <CommonToolbar onSearchedClick={this.props.onSearchedClick} searchPlaceholder={'Search files in this library'}/>
@@ -86,7 +86,7 @@ class MainPanel extends Component {
         <div className="cur-view-container">
           <div className="cur-view-path">
             <div className="path-containter">
-              <a href={siteRoot + '#common/'} className="normal">{gettext("Libraries")}</a>
+              <a href={siteRoot + '#common/'} className="normal">{gettext('Libraries')}</a>
               <span className="path-split">/</span>
               <a href={siteRoot + 'wiki/lib/' + repoID + '/'} className="normal">{slug}</a>
               {pathElem}
@@ -115,8 +115,8 @@ class MainPanel extends Component {
             }
           </div>
         </div>
-    </div>
-    )
+      </div>
+    );
   }
 }
 

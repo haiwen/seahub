@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { gettext, repoID, serviceUrl, slug, siteRoot, isPro } from '../../components/constants';
+import { gettext, repoID, serviceUrl, slug, siteRoot } from '../../components/constants';
 import CommonToolbar from '../../components/toolbar/common-toolbar';
 import MarkdownViewer from '../../components/markdown-viewer';
 import TreeDirView from '../../components/tree-dir-view/tree-dir-view';
@@ -9,7 +9,7 @@ class MainPanel extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      needOperationGroupo: false
+      needOperationGroup: false
     };
   }
 
@@ -30,17 +30,17 @@ class MainPanel extends Component {
   render() {
 
     let filePathList = this.props.filePath.split('/');
-    let nodePath = "";
+    let nodePath = '';
     let pathElem = filePathList.map((item, index) => {
-      if (item === "") {
+      if (item === '') {
         return;
       } 
       if (index === (filePathList.length - 1)) {
         return (
           <span key={index}><span className="path-split">/</span>{item}</span>
-        )
+        );
       } else {
-        nodePath += "/" + item;
+        nodePath += '/' + item;
         return (
           <span key={index} >
             <span className="path-split">/</span>
@@ -51,7 +51,7 @@ class MainPanel extends Component {
               {item}
             </a>
           </span>
-        )
+        );
       }
     });
 
@@ -62,7 +62,7 @@ class MainPanel extends Component {
             <span className="sf2-icon-menu hidden-md-up d-md-none side-nav-toggle" title="Side Nav Menu" onClick={this.onMenuClick}></span>
             { 
               this.props.permission === 'rw' && 
-              <button className="btn btn-secondary top-toolbar-btn" title="Edit File" onClick={this.onEditClick}>{gettext("Edit Page")}</button>
+              <button className="btn btn-secondary top-toolbar-btn" title="Edit File" onClick={this.onEditClick}>{gettext('Edit Page')}</button>
             }
           </div>
           <CommonToolbar onSearchedClick={this.props.onSearchedClick} searchPlaceholder={'Search files in this library'}/>
@@ -70,7 +70,7 @@ class MainPanel extends Component {
         <div className="cur-view-container">
           <div className="cur-view-path">
             <div className="path-containter">
-              <a href={siteRoot + 'wikis/'} className="normal">{gettext("Wikis")}</a>
+              <a href={siteRoot + 'wikis/'} className="normal">{gettext('Wikis')}</a>
               <span className="path-split">/</span>
               <a href={siteRoot + 'wikis/' + slug} className="normal">{slug}</a>
               {pathElem}
@@ -89,7 +89,7 @@ class MainPanel extends Component {
             { !this.props.isViewFileState && 
               <TreeDirView 
                 node={this.props.changedNode}
-                needOperationGroupo={this.state.needOperationGroupo}
+                needOperationGroup={this.state.needOperationGroup}
                 onMainNodeClick={this.props.onMainNodeClick}
                 onDeleteItem={this.props.onDeleteNode}
                 onRenameItem={this.props.onRenameNode}
@@ -98,8 +98,8 @@ class MainPanel extends Component {
             }
           </div>
         </div>
-    </div>
-    )
+      </div>
+    );
   }
 }
 

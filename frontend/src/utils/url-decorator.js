@@ -14,7 +14,7 @@ class URLDecorator {
       url = fileServerRoot + 'zip/' + options.token;
       break;
     case 'download_file_url':
-      url = siteRoot + 'lib/' + options.repoID + "/file" + encodePath(options.filePath) + "?dl=1";
+      url = siteRoot + 'lib/' + options.repoID + '/file' + encodePath(options.filePath) + '?dl=1';
       break;
     default:
       url = '';

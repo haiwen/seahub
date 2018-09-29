@@ -1,6 +1,5 @@
 import React from 'react';
 import { processor, processorGetAST } from '@seafile/seafile-editor/src/lib/seafile-markdown2html';
-import TreeView from './tree-view/tree-view';
 import Prism from 'prismjs';
 import WikiOutline from './wiki-outline';
 

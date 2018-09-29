@@ -52,7 +52,7 @@ class Node {
       return this.name;
     } else {
       let p = this.parent.path;
-      return p === "/" ? (p + this.name) : (p + "/" + this.name);
+      return p === '/' ? (p + this.name) : (p + '/' + this.name);
     }
   }
 
@@ -65,12 +65,12 @@ class Node {
   }
 
   isMarkdown() {
-    let index = this.name.lastIndexOf(".");
+    let index = this.name.lastIndexOf('.');
     if (index == -1) {
       return false;
     } else {
       let type = this.name.substring(index).toLowerCase();
-      if (type == ".md" || type == ".markdown") {
+      if (type == '.md' || type == '.markdown') {
         return true;
       } else {
         return false;
@@ -79,16 +79,16 @@ class Node {
   }
 
   isDir() {
-    return this.type == "dir";
+    return this.type == 'dir';
   }
 
   isImage() {
-    let index = this.name.lastIndexOf(".");
+    let index = this.name.lastIndexOf('.');
     if (index == -1) {
       return false;
     } else {
       let type = this.name.substring(index).toLowerCase();
-      if (type == ".png" || type == ".jpg") {
+      if (type == '.png' || type == '.jpg') {
         return true;
       } else {
         return false;
@@ -97,7 +97,7 @@ class Node {
   }
 
   serializeToJson() {
-    var children = []
+    var children = [];
     if (this.hasChildren()) {
       children = this.children.map(m => m.toJSON());
     }
@@ -111,9 +111,9 @@ class Node {
       parent_path: this.parent_path,
       isExpanded: this.isExpanded,
       children: children
-    }
+    };
 
-    return object
+    return object;
   }
 
 }
