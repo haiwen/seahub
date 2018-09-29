@@ -846,7 +846,7 @@ a.op-icon:focus {
 .operations {
     display: flex;
 }
-.operation .operation-group {
+.operations .operation-group {
     list-style: none;
 }
 .operation-group .operation-group-item {
