@@ -12,7 +12,8 @@ class TreeDirView extends React.Component {
     super(props);
     this.state = {
       isProgressDialogShow: false,
-      progress: '0%'
+      progress: '0%',
+      isItemFreezed: false
     };
     this.zip_token = null;
     this.interval = null;
@@ -63,6 +64,18 @@ class TreeDirView extends React.Component {
     })
   }
 
+  onItemMenuShow = () => {
+    this.setState({
+      isItemFreezed: true,
+    })
+  }
+
+  onItemMenuHide = () => {
+    this.setState({
+      isItemFreezed: false,
+    });
+  }
+
   render() {
     let node = this.props.node;
     let children = node.hasChildren() ? node.children : null;
@@ -85,7 +98,10 @@ class TreeDirView extends React.Component {
                 <TreeDirList 
                   key={index} 
                   node={node} 
+                  isItemFreezed={this.state.isItemFreezed}
                   onMainNodeClick={this.props.onMainNodeClick}
+                  onItemMenuShow={this.onItemMenuShow}
+                  onItemMenuHide={this.onItemMenuHide}
                   onDownload={this.onDownload}
                   onDelete={this.props.onDeleteItem}
                 />

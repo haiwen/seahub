@@ -1,7 +1,7 @@
 class Node {
 
   static deserializefromJson(object) {
-    const {name, type, size, last_update_time, permission, is_locked, locked_by_me, parent_path, isExpanded = true, children = []} = object;
+    const {name, type, size, last_update_time, permission, parent_path, isExpanded = true, children = []} = object;
 
     const node = new Node({
       name,
@@ -9,8 +9,6 @@ class Node {
       size,
       last_update_time,
       permission,
-      is_locked,
-      locked_by_me,
       parent_path,
       isExpanded,
       children: children.map(item => Node.deserializefromJson(item)),
@@ -19,14 +17,12 @@ class Node {
     return node;
   }
   
-  constructor({name, type, size, last_update_time, permission, is_locked, locked_by_me, parent_path, isExpanded, children}) {
+  constructor({name, type, size, last_update_time, permission, parent_path, isExpanded, children}) {
     this.name = name;
     this.type = type;
     this.size = size;
     this.last_update_time = last_update_time;
     this.permission = permission;
-    this.is_locked = is_locked;
-    this.locked_by_me = locked_by_me;
     this.parent_path = parent_path;
     this.isExpanded = isExpanded !== undefined ? isExpanded : true;
     this.children = children ? children : [];
@@ -40,8 +36,6 @@ class Node {
       size: this.size,
       last_update_time: this.last_update_time,
       permission: this.permission,
-      is_locked: this.is_locked,
-      locked_by_me: this.locked_by_me,
       parent_path: this.parent_path,
       isExpanded: this.isExpanded
     });
@@ -114,8 +108,6 @@ class Node {
       size: this.size,
       last_update_time: this.last_update_time,
       permission: this.permission,
-      is_locked: this.is_locked,
-      locked_by_me: this.locked_by_me,
       parent_path: this.parent_path,
       isExpanded: this.isExpanded,
       children: children

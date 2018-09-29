@@ -7,62 +7,48 @@ class TreeDirList extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      highlight: '',
+      highlight: false,
       isOperationShow: false,
-      isItemFreezed: false,
-      isItemMenuShow: false,
-      menuPosition: {top: '', left: ''}
     };
   }
 
   onMouseEnter = () => {
-    if (!this.state.isItemFreezed) {
+    if (!this.props.isItemFreezed) {
       this.setState({
-        highlight: 'tr-highlight',
+        highlight: true,
         isOperationShow: true,
       });
     }
   }
 
   onMouseOver = () => {
-    if (!this.state.isItemFreezed) {
+    if (!this.props.isItemFreezed) {
       this.setState({
-        highlight: 'tr-highlight',
+        highlight: true,
         isOperationShow: true,
       });
     }
   }
 
   onMouseLeave = () => {
-    if (!this.state.isItemFreezed) {
+    if (!this.props.isItemFreezed) {
       this.setState({
-        highlight: '',
+        highlight: false,
         isOperationShow: false
       });
     }
   }
 
-  onItemMenuShow = (e) => {
-    e.stopPropagation();
-    e.nativeEvent.stopImmediatePropagation();
-
-    let left = e.clientX - 8*16;
-    let top  = e.clientY + 15;
-    let position = Object.assign({},this.state.menuPosition, {left: left, top: top});
-    this.setState({
-      isItemMenuShow: !this.state.isItemMenuShow,
-      isItemFreezed: !this.state.isItemMenuShow,
-      menuPosition: position
-    })
+  onItemMenuShow = () => {
+    this.props.onItemMenuShow();
   }
 
-  onItemMenuHide = (e) => {
+  onItemMenuHide = () => {
     this.setState({
-      isItemMenuShow: false,
-      isItemFreezed: false,
       isOperationShow: false,
       highlight: ''
     });
+    this.props.onItemMenuHide();
   }
 
   onMainNodeClick = () => {
@@ -80,7 +66,7 @@ class TreeDirList extends React.Component {
   render() {
     let node = this.props.node;
     return (
-      <tr className={this.state.highlight} onMouseEnter={this.onMouseEnter} onMouseLeave={this.onMouseLeave} onMouseOver={this.onMouseOver}>
+      <tr className={this.state.highlight ? "tr-highlight" : ''} onMouseEnter={this.onMouseEnter} onMouseLeave={this.onMouseLeave} onMouseOver={this.onMouseOver}>
         <td className="icon">
           <img src={node.type === "dir" ? serviceUrl + "/media/img/folder-192.png" : serviceUrl + "/media/img/file/192/txt.png"}></img>
         </td>
@@ -90,8 +76,6 @@ class TreeDirList extends React.Component {
             this.state.isOperationShow && 
             <OperationGroup 
               item={node} 
-              isItemMenuShow={this.state.isItemMenuShow}
-              menuPosition={this.state.menuPosition}
               onItemMenuShow={this.onItemMenuShow}
               onItemMenuHide={this.onItemMenuHide}
               onDownload={this.onDownload}

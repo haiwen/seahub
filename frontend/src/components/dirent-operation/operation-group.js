@@ -4,12 +4,20 @@ import OperationMenu from './operation-menu';
 
 class OperationGroup extends React.Component {
 
+  constructor(props) {
+    super(props);
+    this.state = {
+      isItemMenuShow: false,
+      menuPosition: {top: 0, left: 0 },
+    }
+  }
+
   componentDidMount() {
-    document.addEventListener('click', this.props.onItemMenuHide);
+    document.addEventListener('click', this.onItemMenuHide);
   }
   
   componentWillUnmount() {
-    document.removeEventListener('click', this.props.onItemMenuHide);
+    document.removeEventListener('click', this.onItemMenuHide);
   }
 
   onDownload = (e) => {
@@ -24,6 +32,31 @@ class OperationGroup extends React.Component {
   onDelete = (e) => {
     e.nativeEvent.stopImmediatePropagation(); //for document event
     this.props.onDelete();
+  }
+
+  onItemMenuShow = (e) => {
+    if (!this.state.isItemMenuShow) {
+      e.stopPropagation();
+      e.nativeEvent.stopImmediatePropagation();
+  
+      let left = e.clientX - 8*16;
+      let top  = e.clientY + 15;
+      let position = Object.assign({},this.state.menuPosition, {left: left, top: top});
+      this.setState({
+        menuPosition: position,
+        isItemMenuShow: true,
+      });
+      this.props.onItemMenuShow();
+    } else {
+      this.onItemMenuHide();
+    }
+  }
+
+  onItemMenuHide = () => {
+    this.setState({
+      isItemMenuShow: false,
+    });
+    this.props.onItemMenuHide();
   }
 
   onRename = () => {
@@ -48,14 +81,14 @@ class OperationGroup extends React.Component {
             <i className="sf2-icon-delete" title={gettext('Delete')} onClick={this.onDelete}></i>
           </li>
           <li className="operation-group-item">
-            <i className="sf2-icon-caret-down sf-dropdown-toggle" title={gettext('More Operation')} onClick={this.props.onItemMenuShow}></i>
+            <i className="sf2-icon-caret-down sf-dropdown-toggle" title={gettext('More Operation')} onClick={this.onItemMenuShow}></i>
           </li>
         </ul>
         {
-          this.props.isItemMenuShow && 
+          this.state.isItemMenuShow && 
           <OperationMenu 
             currentItem={this.props.item}
-            menuPosition={this.props.menuPosition}
+            menuPosition={this.state.menuPosition}
             onRename={this.onRename}
             onCopy={this.onCopy}
           />
