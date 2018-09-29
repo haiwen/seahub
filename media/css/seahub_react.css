@@ -843,7 +843,7 @@ a.op-icon:focus {
 /* end more component */
 
 /* begin operation menu */
-.operation {
+.operations {
     display: flex;
 }
 .operation .operation-group {
