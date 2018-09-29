@@ -6,6 +6,13 @@ import TreeDirView from '../../components/tree-dir-view/tree-dir-view';
 
 class MainPanel extends Component {
 
+  constructor(props) {
+    super(props);
+    this.state = {
+      needOperationGroupo: false
+    };
+  }
+
   onMenuClick = () => {
     this.props.onMenuClick();
   }
@@ -82,7 +89,10 @@ class MainPanel extends Component {
             { !this.props.isViewFileState && 
               <TreeDirView 
                 node={this.props.changedNode}
+                needOperationGroupo={this.state.needOperationGroupo}
                 onMainNodeClick={this.props.onMainNodeClick}
+                onDeleteItem={this.props.onDeleteNode}
+                onRenameItem={this.props.onRenameNode}
               >
               </TreeDirView>
             }

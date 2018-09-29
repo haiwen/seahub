@@ -62,11 +62,11 @@ class DraftListItem extends React.Component {
     localTime = moment(localTime).fromNow();
     return (
       <tr className={this.state.highlight} onMouseEnter={this.onMouseEnter} onMouseLeave={this.onMouseLeave}>
-        <td className="icon" style={{width: "4%"}}><img src={siteRoot + "media/img/file/192/txt.png"} /></td>
-        <td className="name a-simulate" style={{width: "46%"}} onClick={this.onDraftEditClick}>{fileName}</td>
-        <td className="owner" style={{width: "20%"}}>{draft.owner}</td>
-        <td className="update" style={{width: "20%"}}>{localTime}</td>
-        <td className="menu-toggle" style={{width: "10%"}}>
+        <td className="icon"><img src={siteRoot + "media/img/file/192/txt.png"} /></td>
+        <td className="name a-simulate" onClick={this.onDraftEditClick}>{fileName}</td>
+        <td className="owner">{draft.owner}</td>
+        <td className="update">{localTime}</td>
+        <td className="menu-toggle">
           <NodeMenuControl
             isShow={this.state.isMenuControlShow}
             onClick={this.onMenuToggleClick}

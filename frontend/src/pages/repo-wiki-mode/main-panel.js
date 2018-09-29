@@ -10,8 +10,9 @@ class MainPanel extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      isWikiMode: true
-    }
+      isWikiMode: true,
+      needOperationGroup: true,
+    };
   }
 
   onMenuClick = () => {
@@ -90,7 +91,7 @@ class MainPanel extends Component {
               <a href={siteRoot + 'wiki/lib/' + repoID + '/'} className="normal">{slug}</a>
               {pathElem}
             </div>
-            <PathToolbar />
+            <PathToolbar filePath={this.props.filePath}/>
           </div>
           <div className="cur-view-content">
             { this.props.isViewFileState && 
@@ -106,6 +107,9 @@ class MainPanel extends Component {
               <TreeDirView 
                 node={this.props.changedNode}
                 onMainNodeClick={this.props.onMainNodeClick}
+                onDeleteItem={this.props.onDeleteNode}
+                onRenameItem={this.props.onRenameNode}
+                needOperationGroup={this.state.needOperationGroup}
               >
               </TreeDirView>
             }

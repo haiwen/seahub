@@ -1,41 +1,93 @@
 import React, { Component } from 'react';
 import { serviceUrl } from '../constants';
+import OperationGroup from '../dirent-operation/operation-group';
+
 class TreeDirList extends React.Component {
 
   constructor(props) {
     super(props);
     this.state = {
-      isMourseEnter: false,
-      highlight: '',
-    }
+      highlight: false,
+      isOperationShow: false,
+    };
   }
 
   onMouseEnter = () => {
-    this.setState({
-      highlight: 'tr-highlight'
-    });
+    if (!this.props.isItemFreezed) {
+      this.setState({
+        highlight: true,
+        isOperationShow: true,
+      });
+    }
+  }
+
+  onMouseOver = () => {
+    if (!this.props.isItemFreezed) {
+      this.setState({
+        highlight: true,
+        isOperationShow: true,
+      });
+    }
   }
 
   onMouseLeave = () => {
+    if (!this.props.isItemFreezed) {
+      this.setState({
+        highlight: false,
+        isOperationShow: false
+      });
+    }
+  }
+
+  onItemMenuShow = () => {
+    this.props.onItemMenuShow();
+  }
+
+  onItemMenuHide = () => {
     this.setState({
-      highlight: '',
+      isOperationShow: false,
+      highlight: ''
     });
+    this.props.onItemMenuHide();
   }
 
   onMainNodeClick = () => {
     this.props.onMainNodeClick(this.props.node);
   }
 
+  onDownload = () => {
+    this.props.onDownload(this.props.node);
+  }
+
+  onDelete = () => {
+    this.props.onDelete(this.props.node);
+  }
+
   render() {
     let node = this.props.node;
     return (
-      <tr className={this.state.highlight} onMouseEnter={this.onMouseEnter} onMouseLeave={this.onMouseLeave}>
-        <td className="icon" style={{width: "4%"}}>
+      <tr className={this.state.highlight ? "tr-highlight" : ''} onMouseEnter={this.onMouseEnter} onMouseLeave={this.onMouseLeave} onMouseOver={this.onMouseOver}>
+        <td className="icon">
           <img src={node.type === "dir" ? serviceUrl + "/media/img/folder-192.png" : serviceUrl + "/media/img/file/192/txt.png"}></img>
         </td>
-        <td className="name a-simulate" style={{width: "60%"}} onClick={this.onMainNodeClick}>{node.name}</td>
-        <td style={{width: "16%"}}>{node.size}</td>
-        <td style={{width: "20%"}} title={node.last_update_time}>{node.last_update_time}</td>
+        <td className="name a-simulate" onClick={this.onMainNodeClick}>{node.name}</td>
+        {
+          this.props.needOperationGroup &&
+          <td>
+            {
+              this.state.isOperationShow && 
+              <OperationGroup 
+                item={node} 
+                onItemMenuShow={this.onItemMenuShow}
+                onItemMenuHide={this.onItemMenuHide}
+                onDownload={this.onDownload}
+                onDelete={this.onDelete}
+              />
+            }
+          </td>
+        }
+        <td>{node.size}</td>
+        <td title={node.last_update_time}>{node.last_update_time}</td>
       </tr>
     )
   }

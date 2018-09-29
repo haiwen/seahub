@@ -18,3 +18,12 @@ export function bytesToSize(bytes) {
   if (i === 0) return bytes + ' ' + sizes[i];
   return (bytes / (1000 ** i)).toFixed(1) + ' ' + sizes[i];
 }
+
+export function encodePath(path) {
+  let path_arr = path.split('/');
+  let path_arr_ = [];
+  for (let i = 0, len = path_arr.length; i < len; i++) {
+    path_arr_.push(encodeURIComponent(path_arr[i]));
+  }
+  return path_arr_.join('/');
+}

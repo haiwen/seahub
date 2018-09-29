@@ -352,13 +352,12 @@ class Wiki extends Component {
 
   onDeleteNode = (node) => {
     let filePath = node.path;
-    if (node.isMarkdown()) {
-      editorUtilities.deleteFile(filePath);
-    } else if (node.isDir()) {
+    if (node.isDir()) {
       editorUtilities.deleteDir(filePath);
     } else {
-      return false;
+      editorUtilities.deleteFile(filePath);
     }
+    
 
     let isCurrentFile = false;
     if (node.isDir()) {
@@ -533,9 +532,11 @@ class Wiki extends Component {
           onMainNavBarClick={this.onMainNavBarClick}
           onMainNodeClick={this.onMainNodeClick}
           switchViewMode={this.switchViewMode}
+          onDeleteNode={this.onDeleteNode}
+          onRenameNode={this.onRenameNode}
         />
       </div>
-    )
+    );
   }
 }
 

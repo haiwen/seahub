@@ -10,6 +10,7 @@ export const logoWidth = window.app.config.logoWidth;
 export const logoHeight = window.app.config.logoHeight;
 export const isPro = window.app.config.isPro === "True";
 export const lang = window.app.config.lang;
+export const fileServerRoot = window.app.config.fileServerRoot;
 
 // wiki
 export const slug = window.wiki ? window.wiki.config.slug : '';

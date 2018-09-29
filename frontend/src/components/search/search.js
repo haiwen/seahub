@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { gettext, repoID, serviceUrl } from '../constants';
+import { gettext, repoID, siteRoot } from '../constants';
 import SearchResultItem from './search-result-item';
 import editorUtilities from '../../utils/editor-utilties';
 import More from '../more';
@@ -169,7 +169,7 @@ class Search extends Component {
     for (let key in queryData) {
       params += key + '=' + queryData[key] + '&';
     }
-    window.location = serviceUrl + '/search/?' + params.slice(0, params.length - 1);
+    window.location = siteRoot + '/search/?' + params.slice(0, params.length - 1);
   }
 
   renderSearchResult() {
