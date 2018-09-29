@@ -69,7 +69,7 @@ class OperationGroup extends React.Component {
 
   render() {
     return (
-      <div className="operation">
+      <div className="operations">
         <ul className="operation-group">
           <li className="operation-group-item">
             <i className="sf2-icon-download" title={gettext('Download')} onClick={this.onDownload}></i>
