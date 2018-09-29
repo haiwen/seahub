@@ -117,8 +117,13 @@ class Draft(TimestampedModel):
         uuid = self.origin_file_uuid
         file_path = posixpath.join(uuid.parent_path, uuid.filename) # TODO: refactor uuid
 
+        review_id = ''
+        if hasattr(self, 'draftreview'):
+            review_id = self.draftreview.id
+
         return {
             'id': self.pk,
+            'review_id': review_id,
             'owner': self.username,
             'owner_nickname': email2nickname(self.username),
             'origin_repo_id': self.origin_repo_id,

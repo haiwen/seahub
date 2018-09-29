@@ -48,27 +48,44 @@ class DraftReviewsView(APIView):
 
         return Response(status.HTTP_200_OK)
 
+
 class DraftReviewView(APIView):
     authentication_classes = (TokenAuthentication, SessionAuthentication)
     permission_classes = (IsAuthenticated, )
     throttle_classes = (UserRateThrottle, )
 
     def put(self, request, pk, format=None):
-        """close a review
+        """update review status 
         """
 
         st = request.data.get('status', '')
-        if st != 'closed':
+        if not st:
             return api_error(status.HTTP_400_BAD_REQUEST,
                              'Status %s invalid.')
 
         try:
-            review = DraftReview.objects.get(pk=pk)
+            r = DraftReview.objects.get(pk=pk)
         except DraftReview.DoesNotExist:
             return api_error(status.HTTP_404_NOT_FOUND,
                              'Review %s not found' % pk)
 
-        review.status = 'closed'
-        review.save()
+        r.status = st
+        r.save()
+
+        if st == 'finish':
+
+            try:
+                d = Draft.objects.get(pk=r.draft_id_id)
+            except Draft.DoesNotExist:
+                return api_error(status.HTTP_404_NOT_FOUND,
+                                 'Draft %s not found.' % pk)
+
+            try:
+                d.publish()
+                return Response(status.HTTP_200_OK)
+            except (DraftFileConflict, IntegrityError):
+                return api_error(status.HTTP_409_CONFLICT,
+                             'There is a conflict between the draft and the original file')
+
 
         return Response(status.HTTP_200_OK)

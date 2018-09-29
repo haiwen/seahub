@@ -54,7 +54,8 @@ export const filePath = window.fileHistory ? window.fileHistory.pageOptions.file
 export const fileName = window.fileHistory ? window.fileHistory.pageOptions.fileName : '';
 
 // Draft review
-export const draftID = window.draftReview ? window.draftReview.config.id : '';
+export const draftID = window.draftReview ? window.draftReview.config.draftID : '';
+export const reviewID = window.draftReview ? window.draftReview.config.reviewID : '';
 export const draftRepoID = window.draftReview ? window.draftReview.config.draftRepoID: '';
 export const draftFilePath = window.draftReview ? window.draftReview.config.draftFilePath: '';
 export const draftOriginFilePath = window.draftReview ? window.draftReview.config.draftOriginFilePath: '';

@@ -46,7 +46,7 @@ class ListItem extends React.Component {
   onReviewsClick = () => {
     let item = this.props.item;
     let filePath = item.draft_file_path;
-    let itemID = item.draft_id;
+    let itemID = item.id;
     window.location.href= siteRoot + 'drafts/review/' + itemID;
   }
 
