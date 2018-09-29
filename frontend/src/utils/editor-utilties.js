@@ -122,6 +122,11 @@ class EditorUtilities {
   createDraftReview(id) {
     return seafileAPI.createDraftReview(id);
   }
+
+  listReviews() {
+    return seafileAPI.listReviews();
+  }
+
 }
 
 const editorUtilities = new EditorUtilities();
