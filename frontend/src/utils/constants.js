@@ -34,3 +34,4 @@ export const draftFilePath = window.draftReview ? window.draftReview.config.draf
 export const draftOriginFilePath = window.draftReview ? window.draftReview.config.draftOriginFilePath: '';
 export const draftOriginRepoID = window.draftReview ? window.draftReview.config.draftOriginRepoID: '';
 export const draftFileName = window.draftReview ? window.draftReview.config.draftFileName: '';
+export const reviewID = window.draftReview ? window.draftReview.config.reviewID : '';

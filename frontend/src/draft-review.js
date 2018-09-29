@@ -1,7 +1,7 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import Prism from 'prismjs';
-import { draftID, draftRepoID, draftFilePath, draftOriginFilePath, draftOriginRepoID, draftFileName } from './components/constants'; 
+import { gettext, draftID, reviewID, draftRepoID, draftFilePath, draftOriginFilePath, draftOriginRepoID, draftFileName } from './components/constants'; 
 import { seafileAPI } from './utils/seafile-api';
 import axios from 'axios';
 import Account from './components/common/account';
@@ -45,6 +45,14 @@ class DraftReview extends React.Component {
       }));
   }
 
+  onCloseReview = () => {
+    seafileAPI.updateReviewStatus(reviewID, 'closed');
+  }
+
+  onPublishReview = () => {
+    seafileAPI.updateReviewStatus(reviewID, 'finish');
+  }
+
   render() {
     return(
       <div>
@@ -53,6 +61,10 @@ class DraftReview extends React.Component {
             <div className="file-title">
               <span className="file-name">{draftFileName}</span>
             </div>
+          </div>
+          <div className="cur-view-toolbar">
+            <button className="btn btn-secondary top-toolbar-btn" title={gettext('Close Review')} onClick={this.onCloseReview}>{gettext("Close")}</button>
+            <button className="btn btn-secondary top-toolbar-btn" title={gettext('Publish Review')} onClick={this.onPublishReview}>{gettext("Publish")}</button>
           </div>
           <Account />
         </div>
