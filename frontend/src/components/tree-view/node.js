@@ -1,9 +1,10 @@
 class Node {
 
   static deserializefromJson(object) {
-    const {name, type, size, last_update_time, isExpanded = true, children = []} = object;
+    const {starred, name, type, size, last_update_time, isExpanded = true, children = []} = object;
 
     const node = new Node({
+      starred,
       name,
       type,
       size,
@@ -15,7 +16,8 @@ class Node {
     return node;
   }
   
-  constructor({name, type, size, last_update_time, isExpanded, children}) {
+  constructor({starred, name, type, size, last_update_time, isExpanded, children}) {
+    this.starred = starred;
     this.name = name;
     this.type = type;
     this.size = size;
@@ -27,6 +29,7 @@ class Node {
   
   clone() {
     var n = new Node({
+      starred: this.starred,
       name: this.name,
       type: this.type,
       size: this.size,
@@ -72,6 +75,10 @@ class Node {
     }
   }
 
+  isStarred() {
+    return this.starred;
+  }
+
   isDir() {
     return this.type == "dir";
   }
@@ -97,6 +104,7 @@ class Node {
     }
 
     const object = {
+      starred: this.starred,
       name: this.name,
       type: this.type,
       size: this.size,

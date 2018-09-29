@@ -106,6 +106,7 @@ class MainPanel extends Component {
               <TreeDirView 
                 node={this.props.changedNode}
                 onMainNodeClick={this.props.onMainNodeClick}
+                onStarredClick={this.props.onStarredClick}
               >
               </TreeDirView>
             }

@@ -19,6 +19,7 @@ from seahub.views import check_folder_permission
 from seahub.utils import check_filename_with_rename, is_valid_dirent_name, \
         normalize_dir_path
 from seahub.utils.timeutils import timestamp_to_isoformat_timestr
+from seahub.utils.star import get_dir_starred_files
 
 from seaserv import seafile_api
 from pysearpc import SearpcError
@@ -96,6 +97,14 @@ class DirView(APIView):
             result = []
             username = request.user.username
             dir_file_list = get_dir_file_recursively(username, repo_id, path, [])
+            starred_files = get_dir_starred_files(username, repo_id, path)
+            for dir_dict in dir_file_list:
+                if dir_dict["type"] == 'file':
+                    file_starred = False
+                    fpath = posixpath.join(dir_dict["parent_dir"], dir_dict["name"])
+                    if fpath in starred_files:
+                        file_starred = True
+                    dir_dict["starred"] = file_starred
             if request_type == 'f':
                 for item in dir_file_list:
                     if item['type'] == 'file':

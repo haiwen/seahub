@@ -182,6 +182,7 @@ class Tree {
 
   parseModelToTree(model) {
     var node = new Node({
+      starred: model.starred,
       name: model.name,
       type: model.type,
       size: bytesToSize(model.size),
@@ -210,6 +211,7 @@ class Tree {
     let treeNodeList = [];
     for (let nodeObj of nodeList) {
       let node = new Node({
+        starred: nodeObj.starred,
         name: nodeObj.name,
         type: nodeObj.type,
         size: bytesToSize(nodeObj.size),
@@ -236,6 +238,7 @@ class Tree {
 
   parseNodeToTree(node) {
     var node = new Node({
+      starred: node.starred,
       name: node.name,
       type: node.type,
       size: bytesToSize(node.size),

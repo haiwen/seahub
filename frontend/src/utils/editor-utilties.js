@@ -23,6 +23,7 @@ class EditorUtilities {
     return seafileAPI.listDir(repoID, '/',{recursive: true}).then(items => {
       const files = items.data.map(item => {
         return {
+          starred: item.starred,
           name: item.name,
           type: item.type === 'dir' ? 'dir' : 'file',
           isExpanded: item.type === 'dir' ? true : false,
@@ -34,6 +35,14 @@ class EditorUtilities {
 
       return files;
     });
+  }
+
+  starFile(filePath) {
+    return seafileAPI.starFile(repoID, filePath);
+  }
+
+  unStarFile(filePath) {
+    return seafileAPI.unStarFile(repoID, filePath);
   }
 
   createFile(filePath) {

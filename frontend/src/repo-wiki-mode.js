@@ -132,6 +132,31 @@ class Wiki extends Component {
     window.location.href = serviceUrl + '/#common/lib/' + repoID + dirPath;
   }
 
+  onStarredClick = (node) => {
+    let filePath = node.path;
+    if (node.isStarred()) {
+      editorUtilities.unStarFile(filePath).then(res => {
+        let tree = this.state.tree_data.clone();
+        let node = tree.getNodeByPath(filePath);
+        node.starred = false;
+        let newChangeNode = tree.getNodeByPath(this.state.changedNode.path);
+        this.setState({
+          changedNode: newChangeNode
+        })
+      })
+    }else {
+      editorUtilities.starFile(filePath).then(res => {
+        let tree = this.state.tree_data.clone();
+        let node = tree.getNodeByPath(filePath);
+        node.starred = true;
+        let newChangeNode = tree.getNodeByPath(this.state.changedNode.path);
+        this.setState({
+          changedNode: newChangeNode
+        })
+      })
+    }
+  }
+
   onLinkClick = (event) => {
     const url = event.target.href;
     if (this.isInternalMarkdownLink(url)) {
@@ -429,6 +454,7 @@ class Wiki extends Component {
   buildNewNode(name, type) {
     let date = new Date().getTime()/1000;
     let node = new Node({
+      starred: false,
       name : name,
       type: type, 
       size: '0',
@@ -533,6 +559,7 @@ class Wiki extends Component {
           onMainNavBarClick={this.onMainNavBarClick}
           onMainNodeClick={this.onMainNodeClick}
           switchViewMode={this.switchViewMode}
+          onStarredClick={this.onStarredClick}
         />
       </div>
     )
