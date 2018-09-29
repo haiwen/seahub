@@ -624,15 +624,13 @@ define([
                 type: 'POST',
                 beforeSend: Common.prepareCSRFToken,
                 success: function(res) {
-                    var msg = gettext("New Success.");
-                    Common.feedback(msg, 'success');
                     var siteRoot = window.app.config.siteRoot;
                     var repoID = res.draft_repo_id;
                     var filePath = res.draft_file_path;
                     window.location.href= siteRoot + 'lib/' + repoID + '/file' + filePath + '?mode=edit';
                 },
                 error: function() {
-                    var err_msg = gettext("The draft is already exist.");
+                    var err_msg = gettext("The draft is already exists.");
                     Common.feedback(err_msg, 'error');
                 }
             });
