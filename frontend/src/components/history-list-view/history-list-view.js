@@ -16,6 +16,7 @@ const propTypes = {
   reloadMore: PropTypes.func.isRequired,
   onMenuControlClick: PropTypes.func.isRequired,
   onHistoryItemClick: PropTypes.func.isRequired,
+  setDiffContent: PropTypes.func.isRequired,
 };
 
 class HistoryListView extends React.Component {

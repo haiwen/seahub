@@ -1,4 +1,4 @@
-import { slug, repoID, siteRoot, historyRepoID } from '../components/constants';
+import { slug, repoID, historyRepoID } from '../components/constants';
 import { seafileAPI } from './seafile-api';
 
 class EditorUtilities {
@@ -116,7 +116,7 @@ class EditorUtilities {
   }
 
   cancelZipTask(zip_token) {
-    return seafileAPI.cancelZipTask(zip_token)
+    return seafileAPI.cancelZipTask(zip_token);
   }
 
 }

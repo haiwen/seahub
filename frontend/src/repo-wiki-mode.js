@@ -55,7 +55,7 @@ class Wiki extends Component {
         this.setState({isFileLoading: false});
       } else {
         seafileAPI.getFileInfo(repoID, filePath).then((res) => {
-          let { mtime, size, starred, permission, last_modifier_name } = res.data;
+          let { mtime, permission, last_modifier_name } = res.data;
 
           this.setState({
             tree_data: treeData,
@@ -81,7 +81,9 @@ class Wiki extends Component {
         window.history.pushState({urlPath: fileUrl, filePath: filePath}, filePath, fileUrl);
       }
     }, () => {
+      /* eslint-disable */
       console.log('failed to load files');
+      /* eslint-enable */
       this.setState({
         isLoadFailed: true
       });
@@ -92,7 +94,7 @@ class Wiki extends Component {
     this.setState({isFileLoading: true});
 
     seafileAPI.getFileInfo(repoID, filePath).then((res) => {
-      let { mtime, size, starred, permission, last_modifier_name } = res.data;
+      let { mtime, permission, last_modifier_name } = res.data;
 
       this.setState({
         latestContributor: last_modifier_name,
@@ -543,4 +545,4 @@ class Wiki extends Component {
 ReactDOM.render (
   <Wiki />,
   document.getElementById('wrapper')
-)
+);

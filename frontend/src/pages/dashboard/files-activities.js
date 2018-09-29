@@ -2,8 +2,6 @@ import React, { Component } from 'react';
 import { seafileAPI } from '../../utils/seafile-api';
 import { gettext, siteRoot } from '../../components/constants';
 
-const per_page = 25; // default
-
 class FileActivitiesContent extends Component {
 
   render() {
@@ -19,10 +17,10 @@ class FileActivitiesContent extends Component {
             <thead>
               <tr>
                 <th width="8%">{/* avatar */}</th>
-                <th width="10%">{gettext("User")}</th>
-                <th width="25%">{gettext("Operation")}</th>
-                <th width="37%">{gettext("File")} / {gettext("Library")}</th>
-                <th width="20%">{gettext("Time")}</th>
+                <th width="10%">{gettext('User')}</th>
+                <th width="25%">{gettext('Operation')}</th>
+                <th width="37%">{gettext('File')} / {gettext('Library')}</th>
+                <th width="20%">{gettext('Time')}</th>
               </tr>
             </thead>
             <TableBody items={items} />
@@ -202,13 +200,13 @@ class FilesActivities extends Component {
     const pageNum = this.state.page + 1;
     this.setState({
       page: pageNum
-    })
+    });
     seafileAPI.listActivities(pageNum)
       .then(res => {
         if (res.status == 403) {
           this.setState({
             loading: false,
-            error_msg: gettext("Permission denied")
+            error_msg: gettext('Permission denied')
           });
         } else {
           // {"events":[...]}
@@ -235,7 +233,7 @@ class FilesActivities extends Component {
     return (
       <div className="cur-view-container" id="activities">
         <div className="cur-view-path">
-          <h3 className="sf-heading">{gettext("Activities")}</h3>
+          <h3 className="sf-heading">{gettext('Activities')}</h3>
         </div>
         <div className="cur-view-content" onScroll={this.handleScroll}>
           <FileActivitiesContent data={this.state} />

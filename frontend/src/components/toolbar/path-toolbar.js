@@ -40,7 +40,7 @@ class PathToolbar extends React.Component {
         <ul className="path-toolbar">
           <li className="toolbar-item"><a className="op-link sf2-icon-history" href={historyUrl} title={gettext('History')} aria-label={gettext('History')}></a></li>
         </ul>
-      )
+      );
     }
     return '';
   }

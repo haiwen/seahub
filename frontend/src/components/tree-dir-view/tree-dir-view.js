@@ -1,10 +1,17 @@
-import React from "react";
+import React from 'react';
+import PropTypes from 'prop-types';
 import { gettext, repoID } from '../constants';
 import editorUtilities from '../../utils/editor-utilties';
 import URLDecorator from '../../utils/url-decorator';
 import ZipDownloadDialog from '../dialog/zip-download-dialog';
-import TreeDirList from './tree-dir-list'
-import "../../css/common.css";
+import TreeDirList from './tree-dir-list';
+
+const propTypes = {
+  needOperationGroup: PropTypes.bool.isRequired,
+  node: PropTypes.object.isRequired,
+  onMainNodeClick: PropTypes.func.isRequired,
+  onDeleteItem: PropTypes.func.isRequired,
+}
 
 class TreeDirView extends React.Component {
 
@@ -61,13 +68,13 @@ class TreeDirView extends React.Component {
       this.setState({
         isProgressDialogShow: false,
       });
-    })
+    });
   }
 
   onItemMenuShow = () => {
     this.setState({
       isItemFreezed: true,
-    })
+    });
   }
 
   onItemMenuHide = () => {
@@ -84,21 +91,20 @@ class TreeDirView extends React.Component {
       <div className="table-container">
         <table>
           <thead>
-            {
-              this.props.needOperationGroup ? 
+            {this.props.needOperationGroup ? 
               <tr>
-                <th style={{width: "4%"}}></th>
-                <th style={{width: "46%"}}>{gettext('Name')}</th>
-                <th style={{width: "20%"}}></th>
-                <th style={{width: "15%"}}>{gettext('Size')}</th>
-                <th style={{width: "15%"}}>{gettext('Last Update')}</th>
+                <th style={{width: '4%'}}></th>
+                <th style={{width: '46%'}}>{gettext('Name')}</th>
+                <th style={{width: '20%'}}></th>
+                <th style={{width: '15%'}}>{gettext('Size')}</th>
+                <th style={{width: '15%'}}>{gettext('Last Update')}</th>
               </tr>
               :
               <tr>
-                <th style={{width: "4%"}}></th>
-                <th style={{width: "66%"}}>{gettext('Name')}</th>
-                <th style={{width: "15%"}}>{gettext('Size')}</th>
-                <th style={{width: "15%"}}>{gettext('Last Update')}</th>
+                <th style={{width: '4%'}}></th>
+                <th style={{width: '66%'}}>{gettext('Name')}</th>
+                <th style={{width: '15%'}}>{gettext('Size')}</th>
+                <th style={{width: '15%'}}>{gettext('Last Update')}</th>
               </tr>
             }
           </thead>
@@ -116,7 +122,7 @@ class TreeDirView extends React.Component {
                   onDelete={this.props.onDeleteItem}
                   needOperationGroup={this.props.needOperationGroup}
                 />
-              )
+              );
             })}
           </tbody>
         </table>
@@ -125,8 +131,10 @@ class TreeDirView extends React.Component {
           <ZipDownloadDialog progress={this.state.progress} onCancleDownload={this.onCancelDownload}/>
         }
       </div>
-    )
+    );
   }
 }
+
+TreeDirView.propTypes = propTypes;
 
 export default TreeDirView;

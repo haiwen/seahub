@@ -39,7 +39,6 @@ class FileHistory extends React.Component {
 
 
   onHistoryItemClick = (item, preCommitID)=> {
-    let _this = this;
     let objID = item.rev_file_id;
     let downLoadURL = URLDecorator.getUrl({type: 'download_historic_file', filePath: filePath, objID: objID});
     let downLoadURL1 = URLDecorator.getUrl({type: 'download_historic_file', filePath: filePath, objID: preCommitID});

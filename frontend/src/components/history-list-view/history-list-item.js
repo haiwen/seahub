@@ -7,6 +7,7 @@ moment.locale(window.app.config.lang);
 const propTypes = {
   isItemFrezeed: PropTypes.bool.isRequired,
   isFirstItem: PropTypes.bool.isRequired,
+  preCommitID: PropTypes.string.isRequired,
   item: PropTypes.object.isRequired,
   currentItem: PropTypes.object.isRequired,
   onMenuControlClick: PropTypes.func.isRequired,

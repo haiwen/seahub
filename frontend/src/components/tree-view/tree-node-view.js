@@ -3,9 +3,9 @@ import MenuControl from '../menu-component/node-menu-control';
 import { permission } from '../constants';
 
 function sortByType(a, b) {
-  if (a.type == "dir" && b.type != "dir") {
+  if (a.type == 'dir' && b.type != 'dir') {
     return -1;
-  } else if (a.type != "dir" && b.type == "dir") {
+  } else if (a.type != 'dir' && b.type == 'dir') {
     return 1;
   } else {
     return a.name.localeCompare(b.name);
@@ -18,7 +18,7 @@ class TreeNodeView extends React.Component {
     super(props);
     this.state = {
       isMenuIconShow: false
-    }
+    };
   }
 
   onClick = (e) => {
@@ -31,7 +31,7 @@ class TreeNodeView extends React.Component {
     if (!this.props.isNodeItemFrezee) {
       this.setState({
         isMenuIconShow: true
-      })
+      });
     }
   }
 
@@ -39,7 +39,7 @@ class TreeNodeView extends React.Component {
     if (!this.props.isNodeItemFrezee) {
       this.setState({
         isMenuIconShow: false
-      })
+      });
     }
   }
 
@@ -133,7 +133,7 @@ class TreeNodeView extends React.Component {
             onClick={this.onMenuControlClick}
           />
         </div>
-      )
+      );
     }
     return;
   }
@@ -146,13 +146,13 @@ class TreeNodeView extends React.Component {
       icon = <i className="far fa-folder"/>;
       type = 'dir';
     } else {
-      let index = node.name.lastIndexOf(".");
+      let index = node.name.lastIndexOf('.');
       if (index ===  -1) {
         icon = <i className="far fa-file"/>;
         type = 'file';
       } else {
         type = node.name.substring(index).toLowerCase();
-        if (type === ".png" || type === ".jpg") {
+        if (type === '.png' || type === '.jpg') {
           icon = <i className="far fa-image"/>;
           type = 'image';
         } else {
@@ -163,17 +163,15 @@ class TreeNodeView extends React.Component {
     }
 
     return { type, icon };
-
-
   }
 
   render() {
     const styles = {};
     let node = this.props.node;
     let { type, icon } = this.getNodeTypeAndIcon();
-    let hlClass = "";
+    let hlClass = '';
     if (node.path === this.props.currentFilePath) {
-      hlClass = "tree-node-hight-light";
+      hlClass = 'tree-node-hight-light';
     }
 
     return (

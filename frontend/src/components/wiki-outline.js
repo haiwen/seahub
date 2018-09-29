@@ -1,4 +1,11 @@
 import React from 'react';
+import PropTypes from 'prop-types';
+
+const itemPropTypes = {
+  activeIndex: PropTypes.number.isRequired,
+  item: PropTypes.object.isRequired,
+  handleNavItemClick: PropTypes.func.isRequired,
+};
 
 class WikiOutlineItem extends React.Component {
 
@@ -17,9 +24,16 @@ class WikiOutlineItem extends React.Component {
       <li className={clazz} data-index={item.key} onClick={this.handleNavItemClick}>
         <a href={item.id} title={item.text}>{item.text}</a>
       </li>
-    )
+    );
   }
 
+}
+
+WikiOutlineItem.propTypes = itemPropTypes;
+
+const outlinePropTypes = {
+  navItems: PropTypes.array.isRequired,
+  handleNavItemClick: PropTypes.func.isRequired,
 }
 
 class WikiOutline extends React.Component {
@@ -78,5 +92,7 @@ class WikiOutline extends React.Component {
     )
   }
 }
+
+WikiOutline.propTypes = outlinePropTypes;
 
 export default WikiOutline;

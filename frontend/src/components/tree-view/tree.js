@@ -3,7 +3,7 @@ import moment from 'moment';
 import { bytesToSize } from '../utils';
 
 const lang = window.app.config.lang;
-moment.locale(lang)
+moment.locale(lang);
 
 class Tree {
   
@@ -201,7 +201,7 @@ class Tree {
   parseListToTree(nodeList) {
     
     function getNodePath(parentPath, nodeName) {
-      return parentPath === "/" ? (parentPath + nodeName) : (parentPath + "/" + nodeName);
+      return parentPath === '/' ? (parentPath + nodeName) : (parentPath + '/' + nodeName);
     }
 
     let root = new Node({name: '/', type: 'dir', isExpanded: true});
@@ -230,7 +230,9 @@ class Tree {
     for (let node of treeNodeList) {
       let p = map.get(node.parent_path);
       if (p === undefined) {
-        console.log("warning: node " + node.parent_path + " not exist");
+        /* eslint-disable */
+        console.log('warning: node ' + node.parent_path + ' not exist');
+        /* eslint-enable */
       } else {
         this.addNodeToParent(node, p);
       }
@@ -239,7 +241,7 @@ class Tree {
   }
 
   parseNodeToTree(node) {
-    var node = new Node({
+    var newNode = new Node({
       name: node.name,
       type: node.type,
       size: bytesToSize(node.size),
@@ -250,10 +252,10 @@ class Tree {
     });
     if (node.children instanceof Array) {
       for (let child of node.children) {
-        this.addNodeToParent(this.parseNodeToTree(child), node);
+        this.addNodeToParent(this.parseNodeToTree(child), newNode);
       }
     }
-    return node;
+    return newNode;
   }
 
 }

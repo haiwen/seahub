@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { gettext, repoID, siteRoot } from '../constants';
+import { repoID, siteRoot } from '../constants';
 import SearchResultItem from './search-result-item';
 import editorUtilities from '../../utils/editor-utilties';
 import More from '../more';
@@ -26,7 +26,7 @@ class Search extends Component {
       width: '30rem',
       isMaskShow: true,
       isCloseShow: true
-    })
+    });
   }
 
   onCloseHandler = () => {
@@ -51,7 +51,7 @@ class Search extends Component {
       this.setState({
         isResultShow: false,
         isResultGetted: false
-      })
+      });
       return false;
     }
 
@@ -61,7 +61,7 @@ class Search extends Component {
       search_ftypes: repoID ? 'custom' : 'all',
       ftype: repoID ? 'Markdown' : '',
       input_fexts: repoID ? 'md' : ''
-    }
+    };
 
     if (this.timer) {
       clearTimeout(this.timer);
@@ -78,7 +78,7 @@ class Search extends Component {
     this.setState({
       isResultShow: true,
       isResultGetted: false
-    })
+    });
 
     this.source = editorUtilities.getSource();
     this.sendRequest(queryData, this.source.token);
@@ -91,7 +91,7 @@ class Search extends Component {
         _this.setState({
           resultItems: [],
           isResultGetted: true
-        })
+        });
         _this.source = null;
         return;
       }
@@ -100,15 +100,17 @@ class Search extends Component {
       _this.setState({
         resultItems: items,
         isResultGetted: true
-      })
+      });
       _this.source = null;
     }).catch(res => {
+      /* eslint-disable */
       console.log(res);
-    })
+      /* eslint-enable */
+    });
   }
 
   cancelRequest() {
-    this.source.cancel("prev request is cancelled");
+    this.source.cancel('prev request is cancelled');
   }
 
   getValueLength(str) {
@@ -153,7 +155,7 @@ class Search extends Component {
       isResultShow: false,
       isResultGetted: false,
       resultItems: []
-    })
+    });
   }
 
   onShowMore = () => {
@@ -180,12 +182,12 @@ class Search extends Component {
     if (!this.state.isResultGetted || this.getValueLength(this.inputValue) < 3) {
       return (
         <span className="loading-icon loading-tip"></span>
-      )
+      );
     }
     if (!this.state.resultItems.length) {
       return (
         <div className="search-result-none">No results matching.</div>
-      )
+      );
     }
     let isShowMore = this.state.resultItems.length >= 5 ? true : false;
     return (
@@ -197,11 +199,11 @@ class Search extends Component {
               item={item}
               onItemClickHandler={_this.onItemClickHandler}
             />
-          )
+          );
         })}
         {isShowMore && <More onShowMore={this.onShowMore}/>}
       </ul>
-    )
+    );
   }
 
   render() {
@@ -209,7 +211,7 @@ class Search extends Component {
     let style = {'width': width};
     return (
       <div className="search">
-        <div className={`search-mask ${this.state.isMaskShow ? "" : "hide"}`} onClick={this.onCloseHandler}></div>
+        <div className={`search-mask ${this.state.isMaskShow ? '' : 'hide'}`} onClick={this.onCloseHandler}></div>
         <div className="search-container">
           <div className="input-icon">
             <i className="search-icon-left input-icon-addon fas fa-search"></i>
@@ -231,7 +233,7 @@ class Search extends Component {
           </div>
         </div>
       </div>
-    )
+    );
   }
 }
 

@@ -1,4 +1,4 @@
-import React from 'react'
+import React from 'react';
 import { Modal, ModalHeader, ModalBody } from 'reactstrap';
 
 class ZipDownloadDialog extends React.Component {
@@ -15,7 +15,7 @@ class ZipDownloadDialog extends React.Component {
           <div>{this.props.progress}</div>
         </ModalBody>
       </Modal>
-    )
+    );
   }
 }
 

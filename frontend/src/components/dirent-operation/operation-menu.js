@@ -1,5 +1,11 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 import { gettext } from '../constants';
+
+const propTypes = {
+  currentItem: PropTypes.object.isRequired,
+  menuPosition: PropTypes.object.isRequired, 
+};
 
 class OperationMenu extends React.Component {
 
@@ -31,12 +37,11 @@ class OperationMenu extends React.Component {
             <span className="user-select-none" title={gettext('Details')} aria-label={gettext('Details')}>{gettext('Details')}</span>
           </li>
           <li className="dropdown-item menu-inner-divider"></li>
-
           <li className="dropdown-item operation-menu-item">
             <span className="user-select-none" title={gettext('Open via Client')} aria-label={gettext('Open via Client')}>{gettext('Open via Client')}</span>
           </li>
         </ul>
-      )
+      );
     }
 
     if (this.props.currentItem.permission === 'r') {
@@ -49,7 +54,7 @@ class OperationMenu extends React.Component {
             <span className="user-select-none" title={gettext('Details')} aria-label={gettext('Details')}>{gettext('Details')}</span>
           </li>
         </ul>
-      )
+      );
     }
 
   }
@@ -79,7 +84,6 @@ class OperationMenu extends React.Component {
             <span className="user-select-none" title={gettext('New Draft')} aria-label={gettext('New Draft')}>{gettext('New Draft')}</span>
           </li>
           <li className="dropdown-item menu-inner-divider"></li>
-
           <li className="dropdown-item operation-menu-item">
             <span className="user-select-none" title={gettext('Comment')} aria-label={gettext('Comment')}>{gettext('Comment')}</span>
           </li>
@@ -98,7 +102,7 @@ class OperationMenu extends React.Component {
             <span className="user-select-none" title={gettext('Open via Client')} aria-label={gettext('Open via Client')}>{gettext('Open via Client')}</span>
           </li>
         </ul>
-      )
+      );
     }
 
     if (this.props.currentItem.permission === "r") {
@@ -117,7 +121,7 @@ class OperationMenu extends React.Component {
             <span className="user-select-none" title={gettext('Details')} aria-label={gettext('Details')}>{gettext('Details')}</span>
           </li>
         </ul>
-      )
+      );
     }
 
   }
@@ -138,5 +142,7 @@ class OperationMenu extends React.Component {
     return menu;
   }
 }
+
+OperationMenu.propTypes = propTypes;
 
 export default OperationMenu;
