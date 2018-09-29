@@ -10,8 +10,9 @@ class MainPanel extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      isWikiMode: true
-    }
+      isWikiMode: true,
+      needOperationGroup: true,
+    };
   }
 
   onMenuClick = () => {
@@ -108,6 +109,7 @@ class MainPanel extends Component {
                 onMainNodeClick={this.props.onMainNodeClick}
                 onDeleteItem={this.props.onDeleteNode}
                 onRenameItem={this.props.onRenameNode}
+                needOperationGroup={this.state.needOperationGroup}
               >
               </TreeDirView>
             }

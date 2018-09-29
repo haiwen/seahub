@@ -71,18 +71,21 @@ class TreeDirList extends React.Component {
           <img src={node.type === "dir" ? serviceUrl + "/media/img/folder-192.png" : serviceUrl + "/media/img/file/192/txt.png"}></img>
         </td>
         <td className="name a-simulate" onClick={this.onMainNodeClick}>{node.name}</td>
-        <td>
-          {
-            this.state.isOperationShow && 
-            <OperationGroup 
-              item={node} 
-              onItemMenuShow={this.onItemMenuShow}
-              onItemMenuHide={this.onItemMenuHide}
-              onDownload={this.onDownload}
-              onDelete={this.onDelete}
-            />
-          }
-        </td>
+        {
+          this.props.needOperationGroup &&
+          <td>
+            {
+              this.state.isOperationShow && 
+              <OperationGroup 
+                item={node} 
+                onItemMenuShow={this.onItemMenuShow}
+                onItemMenuHide={this.onItemMenuHide}
+                onDownload={this.onDownload}
+                onDelete={this.onDelete}
+              />
+            }
+          </td>
+        }
         <td>{node.size}</td>
         <td title={node.last_update_time}>{node.last_update_time}</td>
       </tr>

@@ -52,15 +52,6 @@ class OperationMenu extends React.Component {
       )
     }
 
-    if (!this.props.currentItem.permission) {
-      return (
-        <ul className="dropdown-menu operation-menu" style={style}>
-          <li className="dropdown-item operation-menu-item">
-            <span className="user-select-none">{gettext('the permission is not return')}</span>
-          </li>
-        </ul>
-      )
-    }
   }
 
   renderDirentFileMenu() {
@@ -129,15 +120,6 @@ class OperationMenu extends React.Component {
       )
     }
 
-    if (!this.props.currentItem.permission) {
-      return (
-        <ul className="dropdown-menu operation-menu" style={style}>
-          <li className="dropdown-item operation-menu-item">
-            <span className="user-select-none">{gettext('the permission is not return')}</span>
-          </li>
-        </ul>
-      )
-    }
   }
 
   render() {

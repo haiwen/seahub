@@ -84,13 +84,23 @@ class TreeDirView extends React.Component {
       <div className="table-container">
         <table>
           <thead>
-            <tr>
-              <th style={{width: "4%"}}></th>
-              <th style={{width: "46%"}}>{gettext('Name')}</th>
-              <th style={{width: "20%"}}></th>
-              <th style={{width: "15%"}}>{gettext('Size')}</th>
-              <th style={{width: "15%"}}>{gettext('Last Update')}</th>
-            </tr>
+            {
+              this.props.needOperationGroup ? 
+              <tr>
+                <th style={{width: "4%"}}></th>
+                <th style={{width: "46%"}}>{gettext('Name')}</th>
+                <th style={{width: "20%"}}></th>
+                <th style={{width: "15%"}}>{gettext('Size')}</th>
+                <th style={{width: "15%"}}>{gettext('Last Update')}</th>
+              </tr>
+              :
+              <tr>
+                <th style={{width: "4%"}}></th>
+                <th style={{width: "66%"}}>{gettext('Name')}</th>
+                <th style={{width: "15%"}}>{gettext('Size')}</th>
+                <th style={{width: "15%"}}>{gettext('Last Update')}</th>
+              </tr>
+            }
           </thead>
           <tbody>
             {children && children.map((node, index) => {
@@ -104,6 +114,7 @@ class TreeDirView extends React.Component {
                   onItemMenuHide={this.onItemMenuHide}
                   onDownload={this.onDownload}
                   onDelete={this.props.onDeleteItem}
+                  needOperationGroup={this.props.needOperationGroup}
                 />
               )
             })}
