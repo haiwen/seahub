@@ -25,3 +25,39 @@ export const historyRepoID = window.fileHistory ? window.fileHistory.pageOptions
 export const repoName = window.fileHistory ? window.fileHistory.pageOptions.repoName : '';
 export const filePath = window.fileHistory ? window.fileHistory.pageOptions.filePath : '';
 export const fileName = window.fileHistory ? window.fileHistory.pageOptions.fileName : '';
+=======
+export const dirPath = '/';
+export const gettext = window.gettext;
+
+export const siteRoot = window.app.config.siteRoot;
+export const avatarInfo = window.app.config.avatarInfo;
+export const logoPath =  window.app.config.logoPath;
+export const mediaUrl = window.app.config.mediaUrl;
+export const siteTitle = window.app.config.siteTitle;
+export const logoWidth = window.app.config.logoWidth;
+export const logoHeight = window.app.config.logoHeight;
+export const isPro = window.app.config.isPro === "True";
+export const lang = window.app.config.lang;
+
+// wiki
+export const slug = window.wiki ? window.wiki.config.slug : '';
+export const repoID = window.wiki ? window.wiki.config.repoId : '';
+export const serviceUrl = window.wiki ? window.wiki.config.serviceUrl : '';
+export const initialFilePath = window.wiki ? window.wiki.config.initial_file_path : '';
+export const permission = window.wiki ? window.wiki.config.permission === 'True' : '';
+
+// file history
+export const PER_PAGE = 25;
+export const historyRepoID = window.fileHistory ? window.fileHistory.pageOptions.repoID : '';
+export const repoName = window.fileHistory ? window.fileHistory.pageOptions.repoName : '';
+export const filePath = window.fileHistory ? window.fileHistory.pageOptions.filePath : '';
+export const fileName = window.fileHistory ? window.fileHistory.pageOptions.fileName : '';
+
+// Draft review
+export const draftID = window.draftReview ? window.draftReview.config.draftID : '';
+export const reviewID = window.draftReview ? window.draftReview.config.reviewID : '';
+export const draftRepoID = window.draftReview ? window.draftReview.config.draftRepoID: '';
+export const draftFilePath = window.draftReview ? window.draftReview.config.draftFilePath: '';
+export const draftOriginFilePath = window.draftReview ? window.draftReview.config.draftOriginFilePath: '';
+export const draftOriginRepoID = window.draftReview ? window.draftReview.config.draftOriginRepoID: '';
+export const draftFileName = window.draftReview ? window.draftReview.config.draftFileName: '';

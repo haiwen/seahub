@@ -51,6 +51,7 @@ class DraftManager(models.Manager):
         draft_file_name = get_draft_file_name(repo.id, file_path)
         draft_file_path = '/' + draft_file_name
 
+        # TODO 
         if seafile_api.get_file_id_by_path(draft_repo_id, draft_file_path):
             raise DraftFileExist
 
@@ -117,8 +118,13 @@ class Draft(TimestampedModel):
         uuid = self.origin_file_uuid
         file_path = posixpath.join(uuid.parent_path, uuid.filename) # TODO: refactor uuid
 
+        review_id = ''
+        if hasattr(self, 'draftreview'):
+            review_id = self.draftreview.id
+
         return {
             'id': self.pk,
+            'review_id': review_id,
             'owner': self.username,
             'owner_nickname': email2nickname(self.username),
             'origin_repo_id': self.origin_repo_id,
@@ -126,6 +132,52 @@ class Draft(TimestampedModel):
             'origin_file_version': self.origin_file_version,
             'draft_repo_id': self.draft_repo_id,
             'draft_file_path': self.draft_file_path,
+            'created_at': datetime_to_isoformat_timestr(self.created_at),
+            'updated_at': datetime_to_isoformat_timestr(self.updated_at),
+        }
+
+
+class DraftReviewExist(Exception):
+    pass
+
+
+class DraftReviewManager(models.Manager):
+    def add(self, creator, draft):
+
+        has_review = hasattr(draft, 'draftreview')
+        if has_review:
+            raise DraftReviewExist
+
+        draft_review = self.model(creator=creator,
+                                  status='open',
+                                  draft_id=draft)
+        draft_review.save(using=self._db)
+
+        return draft_review
+
+
+class DraftReview(TimestampedModel):
+    creator = LowerCaseCharField(max_length=255, db_index=True)
+    status = models.CharField(max_length=20)
+    draft_id = models.OneToOneField(Draft, on_delete=models.CASCADE)
+
+    objects = DraftReviewManager()
+
+    def to_dict(self):
+        uuid = self.draft_id.origin_file_uuid
+        file_path = posixpath.join(uuid.parent_path, uuid.filename) # TODO: refactor uuid
+
+        return {
+            'id': self.pk,
+            'creator': self.creator,
+            'status': self.status,
+            'creator_name': email2nickname(self.creator),
+            'draft_id': self.draft_id_id,
+            'draft_origin_repo_id': self.draft_id.origin_repo_id,
+            'draft_origin_file_path': file_path,
+            'draft_origin_file_version': self.draft_id.origin_file_version,
+            'draft_repo_id': self.draft_id.draft_repo_id,
+            'draft_file_path': self.draft_id.draft_file_path,
             'created_at': datetime_to_isoformat_timestr(self.created_at),
             'updated_at': datetime_to_isoformat_timestr(self.updated_at),
         }

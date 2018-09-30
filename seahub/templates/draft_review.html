@@ -1,0 +1,20 @@
+{% extends "base_for_react.html" %}
+{% load render_bundle from webpack_loader %}
+
+{% block extra_script %}
+<script type="text/javascript">
+    window.draftReview = {
+        config: {
+            draftID: '{{ draft_id }}',
+            reviewID: '{{ review_id }}',
+            draftRepoID: '{{ draft_repo_id }}',
+            draftFilePath: '{{ draft_file_path }}',
+            draftOriginFilePath: '{{ draft_origin_file_path }}',
+            draftOriginRepoID: '{{ draft_origin_repo_id }}',
+            draftFileName: '{{ draft_file_name }}',
+         }
+     };
+</script>
+
+{% render_bundle 'draftReview' %}
+{% endblock %}
