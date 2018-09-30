@@ -5,12 +5,15 @@ from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 from rest_framework.views import APIView
 
+from django.db import IntegrityError
 
 from seahub.api2.authentication import TokenAuthentication
 from seahub.api2.throttling import UserRateThrottle
 from seahub.api2.utils import api_error
 
-from seahub.drafts.models import Draft, DraftReview, DraftReviewExist
+from seahub.drafts.models import Draft, DraftReview, DraftReviewExist, \
+        DraftFileConflict
+
 
 class DraftReviewsView(APIView):
     authentication_classes = (TokenAuthentication, SessionAuthentication)
@@ -72,6 +75,8 @@ class DraftReviewView(APIView):
             r.status = st
             r.save()
 
+            return Response(status.HTTP_200_OK)
+
         if st == 'finish':
 
             try:
@@ -80,11 +85,12 @@ class DraftReviewView(APIView):
                 return api_error(status.HTTP_404_NOT_FOUND,
                                  'Draft %s not found.' % pk)
 
+            result = r.to_dict()
+
             try:
                 d.publish()
             except (DraftFileConflict, IntegrityError):
                 return api_error(status.HTTP_409_CONFLICT,
                              'There is a conflict between the draft and the original file')
 
-
-        return Response(d.to_dict())
+            return Response(result)

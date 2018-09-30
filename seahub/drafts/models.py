@@ -51,6 +51,7 @@ class DraftManager(models.Manager):
         draft_file_name = get_draft_file_name(repo.id, file_path)
         draft_file_path = '/' + draft_file_name
 
+        # TODO 
         if seafile_api.get_file_id_by_path(draft_repo_id, draft_file_path):
             raise DraftFileExist
 

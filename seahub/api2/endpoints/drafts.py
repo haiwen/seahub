@@ -91,10 +91,6 @@ class DraftView(APIView):
             return api_error(status.HTTP_404_NOT_FOUND,
                              'Draft %s not found.' % pk)
 
-        if not hasattr(d, 'draftreview'):
-            return api_error(status.HTTP_404_NOT_FOUND,
-                             'Draft %s review not found' % pk)
-
         # check perm
         uuid = d.origin_file_uuid
         file_path = posixpath.join(uuid.parent_path, uuid.filename)
