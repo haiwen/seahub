@@ -53,7 +53,7 @@ class DraftReview extends React.Component {
 
   onPublishReview = () => {
     seafileAPI.updateReviewStatus(reviewID, 'finish').then(res => {
-     window.location.href = siteRoot + 'lib/' + res.data.origin_repo_id + '/file' + res.data.origin_file_path;
+     window.location.href = siteRoot + 'lib/' + res.data.draft_origin_repo_id + '/file' + res.data.draft_origin_file_path;
     })
   }
 
