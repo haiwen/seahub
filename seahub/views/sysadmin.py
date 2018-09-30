@@ -46,10 +46,10 @@ from seahub.role_permissions.utils import get_available_roles, \
 from seahub.role_permissions.models import AdminRole
 from seahub.two_factor.models import default_device
 from seahub.utils import IS_EMAIL_CONFIGURED, string2list, is_valid_username, \
-    is_pro_version, send_html_email, get_user_traffic_list, get_server_id, \
-    handle_virus_record, get_virus_record_by_id, \
+    is_pro_version, send_html_email, \
+    get_server_id, handle_virus_record, get_virus_record_by_id, \
     get_virus_record, FILE_AUDIT_ENABLED, get_max_upload_file_size, \
-    get_site_name
+    get_site_name, seafevents_api
 from seahub.utils.ip import get_remote_ip
 from seahub.utils.file_size import get_file_size_unit
 from seahub.utils.ldap import get_ldap_info
@@ -146,9 +146,60 @@ def sys_statistic_user(request):
 @login_required
 @sys_staff_required
 def sys_statistic_traffic(request):
+    req_type = request.GET.get('type', None)
+    if not req_type:
+        return render(request, 'sysadmin/sys_statistic_traffic.html', {})
 
-    return render(request, 'sysadmin/sys_statistic_traffic.html', {
-            })
+    try:
+        current_page = int(request.GET.get('page', '1'))
+        per_page = int(request.GET.get('per_page', '100'))
+    except ValueError:
+        current_page = 1
+        per_page = 100
+
+    month = request.GET.get('month', timezone.now().strftime('%Y%m'))
+    try:
+        month_dt = datetime.datetime.strptime(month, '%Y%m')
+    except ValueError:
+        month_dt = timezone.now()
+
+    start = per_page * (current_page - 1)
+    limit = per_page + 1
+
+    order_by = request.GET.get('order_by', '')
+    filters = [
+        'user', 'org_id',
+        'sync_file_upload', 'sync_file_download',
+        'web_file_upload', 'web_file_download',
+        'link_file_upload', 'link_file_download',
+    ]
+    if order_by not in filters and \
+       order_by not in map(lambda x: x + '_desc', filters):
+        order_by = 'link_file_download_desc'
+
+    if req_type == 'user':
+        traffic_info_list = seafevents_api.get_all_users_traffic_by_month(
+            month_dt, start, limit, order_by)
+    else:
+        traffic_info_list = seafevents_api.get_all_orgs_traffic_by_month(
+            month_dt, start, limit, order_by)
+        for e in traffic_info_list:
+            e['org_name'] = ccnet_api.get_org_by_id(e['org_id']).org_name
+
+    page_next = len(traffic_info_list) == limit
+
+    return render(request,
+        'sysadmin/sys_trafficadmin.html', {
+            'type': req_type,
+            'order_by': order_by,
+            'traffic_info_list': traffic_info_list[:per_page],
+            'month': month,
+            'current_page': current_page,
+            'prev_page': current_page-1,
+            'next_page': current_page+1,
+            'per_page': per_page,
+            'page_next': page_next,
+        })
 
 def can_view_sys_admin_repo(repo):
     default_repo_id = get_system_default_repo_id()
@@ -1787,42 +1838,6 @@ def sys_repo_delete(request, repo_id):
 
     messages.success(request, _(u'Successfully deleted.'))
     return HttpResponseRedirect(next)
-
-@login_required
-@sys_staff_required
-def sys_traffic_admin(request):
-    """List all users from database.
-    """
-    try:
-        current_page = int(request.GET.get('page', '1'))
-        per_page = int(request.GET.get('per_page', '25'))
-    except ValueError:
-        current_page = 1
-        per_page = 25
-
-    month = request.GET.get('month', '')
-    if not re.match(r'[\d]{6}', month):
-        month = datetime.datetime.now().strftime('%Y%m')
-
-    start = per_page * (current_page -1)
-    limit = per_page + 1
-    traffic_info_list = get_user_traffic_list(month, start, limit)
-
-    page_next = len(traffic_info_list) == limit
-
-    for info in traffic_info_list:
-        info['total'] = info['file_view'] + info['file_download'] + info['dir_download']
-
-    return render(request, 
-        'sysadmin/sys_trafficadmin.html', {
-            'traffic_info_list': traffic_info_list,
-            'month': month,
-            'current_page': current_page,
-            'prev_page': current_page-1,
-            'next_page': current_page+1,
-            'per_page': per_page,
-            'page_next': page_next,
-        })
 
 @login_required
 @sys_staff_required

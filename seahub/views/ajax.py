@@ -14,6 +14,7 @@ from django.http import HttpResponse, Http404
 from django.template.loader import render_to_string
 from django.utils.http import urlquote
 from django.utils.html import escape
+from django.utils.timezone import now
 from django.utils.translation import ugettext as _
 from django.conf import settings as dj_settings
 from django.template.defaultfilters import filesizeformat
@@ -39,7 +40,7 @@ import seahub.settings as settings
 from seahub.settings import ENABLE_THUMBNAIL, THUMBNAIL_ROOT, \
     THUMBNAIL_DEFAULT_SIZE, SHOW_TRAFFIC, MEDIA_URL, ENABLE_VIDEO_THUMBNAIL
 from seahub.utils import check_filename_with_rename, EMPTY_SHA1, \
-    gen_block_get_url, TRAFFIC_STATS_ENABLED, get_user_traffic_stat,\
+    gen_block_get_url, \
     new_merge_with_no_conflict, get_commit_before_new_merge, \
     gen_file_upload_url, is_org_context, is_pro_version, normalize_dir_path, \
     FILEEXT_TYPE_MAP
@@ -1113,19 +1114,6 @@ def space_and_traffic(request):
     else:                       # no space quota set in config
         rates['space_usage'] = '0%'
 
-    # traffic calculation
-    traffic_stat = 0
-    if TRAFFIC_STATS_ENABLED:
-        # User's network traffic stat in this month
-        try:
-            stat = get_user_traffic_stat(username)
-        except Exception as e:
-            logger.error(e)
-            stat = None
-
-        if stat:
-            traffic_stat = stat['file_view'] + stat['file_download'] + stat['dir_download']
-
     # payment url, TODO: need to remove from here.
     payment_url = ''
     ENABLE_PAYMENT = getattr(settings, 'ENABLE_PAYMENT', False)
@@ -1147,8 +1135,6 @@ def space_and_traffic(request):
         "space_usage": space_usage,
         "rates": rates,
         "SHOW_TRAFFIC": SHOW_TRAFFIC,
-        "TRAFFIC_STATS_ENABLED": TRAFFIC_STATS_ENABLED,
-        "traffic_stat": traffic_stat,
         "ENABLE_PAYMENT": ENABLE_PAYMENT,
         "payment_url": payment_url,
         "user": request.user

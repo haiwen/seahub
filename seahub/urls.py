@@ -593,12 +593,6 @@ if HAS_OFFICE_CONVERTER:
                 office_convert_get_page, {'cluster_internal': True}),
         ]
 
-if TRAFFIC_STATS_ENABLED:
-    from seahub.views.sysadmin import sys_traffic_admin
-    urlpatterns += [
-        url(r'^sys/trafficadmin/$', sys_traffic_admin, name='sys_trafficadmin'),
-    ]
-
 if getattr(settings, 'ENABLE_ADFS_LOGIN', False):
     from seahub_extra.adfs_auth.views import assertion_consumer_service, \
         auth_complete
