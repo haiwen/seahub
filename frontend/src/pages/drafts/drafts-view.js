@@ -73,11 +73,11 @@ class DraftsView extends React.Component {
     let draft = this.state.currentDraft;
 
     editUtilties.createDraftReview(draft.id).then(res => {
-      window.location.href = siteRoot + 'drafts/review/' + draft.review_id;
+      window.location.href = siteRoot + 'drafts/review/' + res.data.id;
     })
     .catch((error) => { 
       if (error.response.status == '409') {
-        window.location.href = siteRoot + 'drafts/review/' + draft.review_id;
+        console.log('error')
       }    
     });
   }

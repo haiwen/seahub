@@ -42,11 +42,11 @@ class DraftReviewsView(APIView):
                              'Permission denied.')
 
         try:
-            DraftReview.objects.add(creator=d.username, draft=d)
+            d_r = DraftReview.objects.add(creator=d.username, draft=d)
         except (DraftReviewExist):
             return api_error(status.HTTP_409_CONFLICT, 'Draft review already exists.')
 
-        return Response(status.HTTP_200_OK)
+        return Response(d_r.to_dict())
 
 
 class DraftReviewView(APIView):
@@ -68,9 +68,9 @@ class DraftReviewView(APIView):
         except DraftReview.DoesNotExist:
             return api_error(status.HTTP_404_NOT_FOUND,
                              'Review %s not found' % pk)
-
-        r.status = st
-        r.save()
+        if st == 'closed':
+            r.status = st
+            r.save()
 
         if st == 'finish':
 
@@ -82,10 +82,9 @@ class DraftReviewView(APIView):
 
             try:
                 d.publish()
-                return Response(status.HTTP_200_OK)
             except (DraftFileConflict, IntegrityError):
                 return api_error(status.HTTP_409_CONFLICT,
                              'There is a conflict between the draft and the original file')
 
 
-        return Response(status.HTTP_200_OK)
+        return Response(d.to_dict())
