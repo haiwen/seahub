@@ -1,7 +1,9 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import Prism from 'prismjs';
-import { gettext, draftID, reviewID, draftRepoID, draftFilePath, draftOriginFilePath, draftOriginRepoID, draftFileName } from './components/constants'; 
+import { siteRoot, gettext, draftID, reviewID, draftRepoID, 
+          draftFilePath, draftOriginFilePath, draftOriginRepoID, draftFileName 
+        } from './components/constants'; 
 import { seafileAPI } from './utils/seafile-api';
 import axios from 'axios';
 import Account from './components/common/account';
@@ -50,7 +52,9 @@ class DraftReview extends React.Component {
   }
 
   onPublishReview = () => {
-    seafileAPI.updateReviewStatus(reviewID, 'finish');
+    seafileAPI.updateReviewStatus(reviewID, 'finish').then(res => {
+     window.location.href = siteRoot + 'lib/' + res.data.origin_repo_id + '/file' + res.data.origin_file_path;
+    })
   }
 
   render() {
