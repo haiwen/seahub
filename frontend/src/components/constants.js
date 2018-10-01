@@ -2,6 +2,7 @@ export const dirPath = '/';
 export const gettext = window.gettext;
 
 export const siteRoot = window.app.config.siteRoot;
+export const loginUrl = window.app.config.loginUrl;
 export const avatarInfo = window.app.config.avatarInfo;
 export const logoPath =  window.app.config.logoPath;
 export const mediaUrl = window.app.config.mediaUrl;
