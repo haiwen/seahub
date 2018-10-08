@@ -50,6 +50,7 @@
     -webkit-font-smoothing: antialiased;
 }
 
+.sf2-icon-delete:before { content:"\e006"; }
 .sf2-icon-menu:before { content: "\e031"; }
 .sf2-icon-more:before { content: "\e032"; }
 .sf2-icon-x1:before { content:"\e01d"; }
@@ -80,6 +81,7 @@ a:hover { color:#eb8205; }
 .flex-auto { flex:auto; }
 .flex-1 { flex:1; }
 .hide { display:none; }
+.error { color:red; }
 .no-deco,
 .no-deco:hover,
 .no-deco:focus {

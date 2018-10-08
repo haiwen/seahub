@@ -6,6 +6,7 @@ import SidePanel from './components/side-panel';
 import MainPanel from './components/main-panel';
 import DraftsView from './pages/drafts/drafts-view';
 import FilesActivities from './pages/dashboard/files-activities';
+import Starred from './pages/starred/starred';
 
 import 'seafile-ui';
 import './assets/css/fa-solid.css';
@@ -38,7 +39,7 @@ class App extends Component {
   }
 
   render() {
-    let  href = window.location.href.split('/');
+    let href = window.location.href.split('/');
     let currentTab = href[href.length - 2];
 
     return (
@@ -49,6 +50,7 @@ class App extends Component {
           <Router>
             <FilesActivities path={siteRoot + 'dashboard'} />
             <DraftsView path={siteRoot + 'drafts'} />
+            <Starred path={siteRoot + 'starred'} />
           </Router>
         </MainPanel>
       </div>

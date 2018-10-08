@@ -182,8 +182,11 @@ urlpatterns = [
     url(r'^modules/toggle/$', toggle_modules, name="toggle_modules"),
     url(r'^download_client_program/$', TemplateView.as_view(template_name="download.html"), name="download_client"),
     url(r'^choose_register/$', choose_register, name="choose_register"),
-    url(r'^dashboard/$', TemplateView.as_view(template_name="react_app.html"), name="app"),
-    url(r'^drafts/$', TemplateView.as_view(template_name="react_app.html"), name="app"),
+
+    ### React ###
+    url(r'^dashboard/$', TemplateView.as_view(template_name="react_app.html"), name="dashboard"),
+    url(r'^drafts/$', TemplateView.as_view(template_name="react_app.html"), name="drafts"),
+    url(r'^starred/$', TemplateView.as_view(template_name="react_app.html"), name="starred"),
 
     ### Ajax ###
     url(r'^ajax/repo/(?P<repo_id>[-0-9a-f]{36})/dirents/$', get_dirents, name="get_dirents"),
