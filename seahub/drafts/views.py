@@ -37,8 +37,6 @@ def review(request, pk):
 
     draft_file_name = d.draft_file_path.lstrip('/')
 
-    print d_r.publish_file_version
-
     return render(request, "draft_review.html", {
         "review_id": pk,
         "draft_id": d.id,
