@@ -23,7 +23,7 @@ class NoticeContainer extends React.Component {
       }
     }
 
-    return () => this.removeNotice(notice.key);
+    return () => { this.removeNotice(notice.key); };
   }
 
   removeNotice = (key) => {

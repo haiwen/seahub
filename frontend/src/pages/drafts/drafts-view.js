@@ -43,9 +43,9 @@ class DraftsView extends React.Component {
     let draft = this.state.currentDraft;
     editUtilties.deleteDraft(draft.id).then(res => {
       this.initDraftList();
-      Toast.success(gettext("Delete draft file suceeded."));
+      Toast.success(gettext("Delete draft succeeded."));
     }).catch(() => {
-      Toast.error(gettext('Delete draft file failed.'));
+      Toast.error(gettext('Delete draft failed.'));
     });
   }
 
@@ -53,9 +53,9 @@ class DraftsView extends React.Component {
     let draft = this.state.currentDraft;
     editUtilties.publishDraft(draft.id).then(res => {
       this.initDraftList();
-      Toast.success(gettext("Publish draft file suceeded."));
+      Toast.success(gettext("Publish draft succeeded."));
     }).catch(() => {
-      Toast.error(gettext('Publish draft file failed.'));
+      Toast.error(gettext('Publish draft failed.'));
     });
   }
 
