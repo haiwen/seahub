@@ -7,9 +7,8 @@ import moment from 'moment';
 moment.locale(lang);
 const propTypes = {
   isItemFreezed: PropTypes.bool.isRequired,
-  onMenuToggleClick: PropTypes.func.isRequired,
 }
-class ReviewsListItem extends React.Component {
+class ReviewListItem extends React.Component {
 
   constructor(props) {
     super(props);
@@ -64,6 +63,6 @@ class ReviewsListItem extends React.Component {
   }
 }
 
-ReviewsListItem.propTypes = propTypes;
+ReviewListItem.propTypes = propTypes;
 
-export default ReviewsListItem;
+export default ReviewListItem;

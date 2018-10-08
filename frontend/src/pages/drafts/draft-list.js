@@ -6,9 +6,8 @@ import Loading from '../../components/loading';
 import DraftListView from '../../components/draft-list-view/draft-list-view';
 import DraftListMenu from '../../components/draft-list-view/draft-list-menu';
 
-import ReviewsListView from '../../components/reviews-list-view/reviews-list-view';
 
-class DraftsListView extends React.Component {
+class DraftList extends React.Component {
   
   constructor(props) {
     super(props);
@@ -128,4 +127,4 @@ class DraftsListView extends React.Component {
   }
 }
 
-export default DraftsListView;
+export default DraftList;

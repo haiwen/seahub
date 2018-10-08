@@ -1,12 +1,11 @@
 import React from 'react';
-import classNames from 'classnames';
 import { siteRoot, gettext } from '../../components/constants';
 import editUtilties from '../../utils/editor-utilties';
 import Loading from '../../components/loading';
 
-import ReviewsListView from '../../components/reviews-list-view/reviews-list-view';
+import ReviewListView from '../../components/review-list-view/review-list-view';
 
-class DraftsReviewsListView extends React.Component {
+class ReviewList extends React.Component {
   
   constructor(props) {
     super(props);
@@ -18,10 +17,10 @@ class DraftsReviewsListView extends React.Component {
   }
 
   componentDidMount() {
-    this.initReviewsList();
+    this.initReviewList();
   }
 
-  initReviewsList() {
+  initReviewList() {
     this.setState({isLoadingReviews: true});
     editUtilties.listReviews().then(res => {
       this.setState({
@@ -36,7 +35,7 @@ class DraftsReviewsListView extends React.Component {
       <div className="cur-view-content" style={{padding: 0}}>
        {this.state.isLoadingReviews && <Loading /> }
        {(!this.state.isLoadingReviews && this.state.reviewsList.length !==0) &&
-         <ReviewsListView
+         <ReviewList
            itemsList={this.state.reviewsList} 
            isItemFreezed={this.state.isItemFreezed}
          />
@@ -51,4 +50,4 @@ class DraftsReviewsListView extends React.Component {
   }
 }
 
-export default DraftsReviewsListView;
+export default ReviewList;
