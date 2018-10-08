@@ -1,12 +1,11 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { gettext } from '../constants';
-import ListItem from './list-item';
+import ReviewsListItem from './reviews-list-item';
 
 const propTypes = {
   isItemFreezed: PropTypes.bool.isRequired,
   itemsList: PropTypes.array.isRequired,
-  onMenuToggleClick: PropTypes.func.isRequired,
 };
 
 class ReviewsListView extends React.Component {
@@ -28,7 +27,7 @@ class ReviewsListView extends React.Component {
           <tbody>
             { items && items.map((item) => {
               return (
-                <ListItem 
+                <ReviewsListItem 
                   key={item.id} 
                   item={item} 
                   onMenuToggleClick={this.props.onMenuToggleClick} 

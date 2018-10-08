@@ -2,7 +2,9 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import Prism from 'prismjs';
 import { siteRoot, gettext, draftID, reviewID, draftRepoID, 
-          draftFilePath, draftOriginFilePath, draftOriginRepoID, draftFileName 
+         draftFilePath, draftOriginFilePath, draftOriginRepoID, 
+         draftFileName, opStatus, publishFileVersion, fileServerRoot,
+         originFileVersion
         } from './components/constants'; 
 import { seafileAPI } from './utils/seafile-api';
 import axios from 'axios';
@@ -27,34 +29,55 @@ class DraftReview extends React.Component {
     this.state = {
       draftContent: '',
       draftOriginContent: '',
+      review_status: opStatus == 'open' ? true : false
     };
   }
 
   componentDidMount() {
-    axios.all([
-      seafileAPI.getDraft(draftID),
-      seafileAPI.getFileDownloadLink(draftOriginRepoID, draftOriginFilePath)
-    ]).then(axios.spread((res1, res2) => {
+    if (publishFileVersion == 'None') {
+     axios.all([
+       seafileAPI.getDraft(draftID),
+       seafileAPI.getFileDownloadLink(draftOriginRepoID, draftOriginFilePath)
+      ]).then(axios.spread((res1, res2) => {
+        axios.all([
+          seafileAPI.getFileContent(res1.data.links),
+          seafileAPI.getFileContent(res2.data)
+        ]).then(axios.spread((draftContent, draftOriginContent) => {
+            this.setState({
+              draftContent: draftContent.data,
+              draftOriginContent: draftOriginContent.data
+            }); 
+          }));
+      }));
+    } else {
+      let dl0 = siteRoot + 'repo/' + draftOriginRepoID + '/' + publishFileVersion + '/download?' + 'p=' + draftOriginFilePath; 
+      let dl = siteRoot + 'repo/' + draftOriginRepoID + '/' + originFileVersion + '/download?' + 'p=' + draftOriginFilePath; 
       axios.all([
-        seafileAPI.getFileContent(res1.data.links),
-        seafileAPI.getFileContent(res2.data)
+        seafileAPI.getFileContent(dl0),
+        seafileAPI.getFileContent(dl)
       ]).then(axios.spread((draftContent, draftOriginContent) => {
           this.setState({
             draftContent: draftContent.data,
             draftOriginContent: draftOriginContent.data
           }); 
         }));
-      }));
+    }
   }
 
   onCloseReview = () => {
-    seafileAPI.updateReviewStatus(reviewID, 'closed');
+    seafileAPI.updateReviewStatus(reviewID, 'closed').then(res => {
+      this.setState({
+        review_status: false
+      })
+    });
   }
 
   onPublishReview = () => {
     seafileAPI.updateReviewStatus(reviewID, 'finish').then(res => {
-     window.location.href = siteRoot + 'lib/' + res.data.draft_origin_repo_id + '/file' + res.data.draft_origin_file_path;
-    })
+      this.setState({
+        review_status: false
+      })
+    });
   }
 
   render() {
@@ -66,10 +89,12 @@ class DraftReview extends React.Component {
               <span className="file-name">{draftFileName}</span>
             </div>
           </div>
-          <div className="cur-view-toolbar">
-            <button className="btn btn-secondary top-toolbar-btn" title={gettext('Close Review')} onClick={this.onCloseReview}>{gettext("Close")}</button>
-            <button className="btn btn-secondary top-toolbar-btn" title={gettext('Publish Review')} onClick={this.onPublishReview}>{gettext("Publish")}</button>
-          </div>
+          { this.state.review_status && 
+            <div className="cur-view-toolbar">
+              <button className="btn btn-secondary top-toolbar-btn" title={gettext('Close Review')} onClick={this.onCloseReview}>{gettext("Close")}</button>
+              <button className="btn btn-secondary top-toolbar-btn" title={gettext('Publish Review')} onClick={this.onPublishReview}>{gettext("Publish")}</button>
+            </div>
+          }
           <Account />
         </div>
         <div id="main" className="main-panel viewer">

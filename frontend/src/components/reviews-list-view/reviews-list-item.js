@@ -9,12 +9,11 @@ const propTypes = {
   isItemFreezed: PropTypes.bool.isRequired,
   onMenuToggleClick: PropTypes.func.isRequired,
 }
-class ListItem extends React.Component {
+class ReviewsListItem extends React.Component {
 
   constructor(props) {
     super(props);
     this.state = {
-      isMenuControlShow: false,
       highlight: '',
     };
   }
@@ -22,7 +21,6 @@ class ListItem extends React.Component {
   onMouseEnter = () => {
     if (!this.props.isItemFreezed) {
       this.setState({
-        isMenuControlShow: true,
         highlight: 'tr-highlight'
       });
     }
@@ -31,16 +29,9 @@ class ListItem extends React.Component {
   onMouseLeave = () => {
     if (!this.props.isItemFreezed) {
       this.setState({
-        isMenuControlShow: false,
         highlight: ''
       });
     }
-  }
-
-  onMenuToggleClick = (e) => {
-    e.nativeEvent.stopImmediatePropagation();
-    let item = this.props.item;
-    this.props.onMenuToggleClick(e, item);
   }
 
   onReviewsClick = () => {
@@ -60,17 +51,19 @@ class ListItem extends React.Component {
     let fileName = this.getFileName(item.draft_file_path);
     let localTime = moment.utc(item.updated_at).toDate();
     localTime = moment(localTime).fromNow();
+
     return (
       <tr className={this.state.highlight} onMouseEnter={this.onMouseEnter} onMouseLeave={this.onMouseLeave}>
         <td className="icon" style={{width: "4%"}}><img src={siteRoot + "media/img/file/192/txt.png"} /></td>
         <td className="name a-simulate" style={{width: "46%"}} onClick={this.onReviewsClick}>{fileName}</td>
         <td className="status" style={{width: "20%"}}>{item.status}</td>
         <td className="update" style={{width: "20%"}}>{localTime}</td>
+        <td className="menu-toggle"></td>
       </tr>
     );
   }
 }
 
-ListItem.propTypes = propTypes;
+ReviewsListItem.propTypes = propTypes;
 
-export default ListItem;
+export default ReviewsListItem;

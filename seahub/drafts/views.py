@@ -15,11 +15,17 @@ def drafts(request):
 
 
 @login_required
+def reviews(request):
+    return render(request, "react_app.html")
+
+
+@login_required
 def review(request, pk):
     d_r = get_object_or_404(DraftReview, pk=pk)
 
     d = d_r.draft_id
-    #check perm
+
+    # check perm
     uuid = d.origin_file_uuid
     file_path = posixpath.join(uuid.parent_path, uuid.filename)
 
@@ -31,6 +37,8 @@ def review(request, pk):
 
     draft_file_name = d.draft_file_path.lstrip('/')
 
+    print d_r.publish_file_version
+
     return render(request, "draft_review.html", {
         "review_id": pk,
         "draft_id": d.id,
@@ -38,5 +46,8 @@ def review(request, pk):
         "draft_file_path": d.draft_file_path,
         "draft_origin_repo_id": d.origin_repo_id,
         "draft_origin_file_path": file_path,
-        "draft_file_name": draft_file_name
+        "draft_file_name": draft_file_name,
+        "origin_file_version": d.origin_file_version,
+        "publish_file_version": d_r.publish_file_version,
+        "status": d_r.status
         })
