@@ -32,6 +32,12 @@ class FileCommentsView(APIView):
     def get(self, request, repo_id, format=None):
         """List all comments of a file.
         """
+        resolved = request.GET.get('resolved', 'false')
+        if not resolved:
+            return api_error(status.HTTP_400_BAD_REQUEST, 'Miss resolved.')
+
+        comment_resolved = False if resolved == 'false' else True
+
         path = request.GET.get('p', '/').rstrip('/')
         if not path:
             return api_error(status.HTTP_400_BAD_REQUEST, 'Wrong path.')
@@ -53,9 +59,10 @@ class FileCommentsView(APIView):
         comments = []
         for o in FileComment.objects.get_by_file_path(repo_id, path)[start: end]:
             comment = o.to_dict()
-            comment.update(user_to_dict(o.author, request=request,
+            if o.resolved == comment_resolved:
+                comment.update(user_to_dict(o.author, request=request,
                                         avatar_size=avatar_size))
-            comments.append(comment)
+                comments.append(comment)
 
         result = {'comments': comments, 'total_count': total_count}
         resp = Response(result)
