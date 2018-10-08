@@ -112,8 +112,6 @@ class Draft(TimestampedModel):
             username=self.username, need_progress=0, synchronous=1
         )
 
-        self.delete()
-
     def to_dict(self):
         uuid = self.origin_file_uuid
         file_path = posixpath.join(uuid.parent_path, uuid.filename) # TODO: refactor uuid
@@ -159,6 +157,7 @@ class DraftReviewManager(models.Manager):
 class DraftReview(TimestampedModel):
     creator = LowerCaseCharField(max_length=255, db_index=True)
     status = models.CharField(max_length=20)
+    publish_file_version = models.CharField(max_length=100, null=True)
     draft_id = models.OneToOneField(Draft, on_delete=models.CASCADE)
 
     objects = DraftReviewManager()
