@@ -99,6 +99,7 @@ class FileComment(models.Model):
     created_at = models.DateTimeField(default=timezone.now)
     updated_at = models.DateTimeField(default=timezone.now)
     objects = FileCommentManager()
+    resolved = models.BooleanField(default=False)
 
     @classmethod
     def normalize_path(self, path):
@@ -113,6 +114,7 @@ class FileComment(models.Model):
             'item_name': o.uuid.filename,
             'comment': o.comment,
             'created_at': datetime_to_isoformat_timestr(o.created_at),
+            'resolved': o.resolved
         }
 
 
