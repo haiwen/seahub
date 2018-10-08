@@ -1,15 +1,15 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
-import Notification from './notification';
+import NoticeContainer from './notice-container';
 import './toast.css';
 
-function createNotification() {
+function createNotieContainer() {
   const div = document.createElement('div')
   document.body.appendChild(div)
-  const notification = ReactDOM.render(<Notification />, div)
+  const noticeContainer = ReactDOM.render(<NoticeContainer />, div)
   return {
       addNotice(notice) {
-          return notification.addNotice(notice)
+          return noticeContainer.addNotice(notice)
       },
       destroy() {
           ReactDOM.unmountComponentAtNode(div)
@@ -18,10 +18,10 @@ function createNotification() {
   }
 }
 
-let notification
+let noticeContainer
 const notice = (type, content, duration = 2000, onClose) => {
-  if (!notification) notification = createNotification()
-  return notification.addNotice({ type, content, duration, onClose })
+  if (!noticeContainer) noticeContainer = createNotieContainer()
+  return noticeContainer.addNotice({ type, content, duration, onClose })
 }
 
 export default {

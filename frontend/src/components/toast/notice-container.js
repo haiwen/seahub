@@ -2,7 +2,7 @@ import React from 'react';
 import { CSSTransition, TransitionGroup } from 'react-transition-group';
 import Notice from './notice';
 
-class Notification extends React.Component {
+class NoticeContainer extends React.Component {
 
   constructor(props) {
     super(props);
@@ -67,4 +67,4 @@ class Notification extends React.Component {
 
 }
 
-export default Notification;
+export default NoticeContainer;
