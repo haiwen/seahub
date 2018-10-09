@@ -1,6 +1,7 @@
 import React from 'react';
 import { siteRoot, gettext } from '../../utils/constants';
 import editUtilties from '../../utils/editor-utilties';
+import Toast from '../../components/toast';
 import Loading from '../../components/loading';
 import DraftListView from '../../components/draft-list-view/draft-list-view';
 import DraftListMenu from '../../components/draft-list-view/draft-list-menu';
@@ -43,6 +44,9 @@ class DraftContent extends React.Component {
     let draft = this.state.currentDraft;
     editUtilties.deleteDraft(draft.id).then(res => {
       this.initDraftList();
+      Toast.success('Delete draft succeeded.');
+    }).catch(() => {
+      Toast.error('Delete draft failed.');
     });
   }
 
@@ -50,6 +54,9 @@ class DraftContent extends React.Component {
     let draft = this.state.currentDraft;
     editUtilties.publishDraft(draft.id).then(res => {
       this.initDraftList();
+      Toast.success('Publish draft succeeded.');
+    }).catch(() => {
+      Toast.error('Publish draft failed.');
     });
   }
 
@@ -61,7 +68,7 @@ class DraftContent extends React.Component {
     })
     .catch((error) => { 
       if (error.response.status == '409') {
-        console.log('error')
+        Toast.error("The draft review is existing.");
       }    
     });
   }

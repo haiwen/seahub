@@ -6,6 +6,7 @@ import { seafileAPI } from './utils/seafile-api';
 import axios from 'axios';
 import DiffViewer from '@seafile/seafile-editor/dist/diff-viewer/diff-viewer';
 import Loading from './components/loading';
+import Toast from './components/toast';
 
 import 'seafile-ui';
 import './assets/css/fa-solid.css';
@@ -63,13 +64,19 @@ class DraftReview extends React.Component {
 
   onCloseReview = () => {
     seafileAPI.updateReviewStatus(reviewID, 'closed').then(res => {
-      this.setState({reviewStatus: false})
+      this.setState({reviewStatus: false});
+      Toast.success('Review close succeeded.')
+    }).catch(() => {
+      Toast.error('Review close failed.')
     });
   }
 
   onPublishReview = () => {
     seafileAPI.updateReviewStatus(reviewID, 'finished').then(res => {
-      this.setState({reviewStatus: false})
+      this.setState({reviewStatus: false});
+      Toast.success('Review publish succeeded.')
+    }).catch(() => {
+      Toast.error('Review publish failed.')
     });
   }
 
