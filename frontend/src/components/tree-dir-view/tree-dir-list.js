@@ -1,5 +1,5 @@
 import React from 'react';
-import { serviceUrl } from '../constants';
+import { serviceUrl } from '../../utils/constants';
 import OperationGroup from '../dirent-operation/operation-group';
 
 class TreeDirList extends React.Component {

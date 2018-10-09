@@ -1,6 +1,6 @@
 import React from 'react';
 import MenuControl from '../menu-component/node-menu-control';
-import { permission } from '../constants';
+import { permission } from '../../utils/constants';
 
 function sortByType(a, b) {
   if (a.type == 'dir' && b.type != 'dir') {

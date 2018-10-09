@@ -1,9 +1,8 @@
 import React, { Component } from 'react';
 import ReactDOM from 'react-dom';
-import { keyCodes, bytesToSize } from '../utils';
+import { Utils } from '../../utils/utils';
 import editorUtilities from '../../utils/editor-utilties';
-
-import { siteRoot, gettext } from '../constants';
+import { siteRoot, gettext } from '../../utils/constants';
 
 class Account extends Component {
   constructor(props) {
@@ -53,10 +52,10 @@ class Account extends Component {
   }
 
   handleDocumentClick = (e) => {
-    if (e && (e.which === 3 || (e.type === 'keyup' && e.which !== keyCodes.tab))) return;
+    if (e && (e.which === 3 || (e.type === 'keyup' && e.which !== Utils.keyCodes.tab))) return;
     const container = this.getContainer();
 
-    if (container.contains(e.target) && container !== e.target && (e.type !== 'keyup' || e.which === keyCodes.tab)) {
+    if (container.contains(e.target) && container !== e.target && (e.type !== 'keyup' || e.which === Utils.keyCodes.tab)) {
       return;
     }
 
@@ -77,8 +76,8 @@ class Account extends Component {
         userName: resp.data.name,
         contactEmail: resp.data.email,
         usageRate: resp.data.space_usage,
-        quotaUsage: bytesToSize(resp.data.usage),
-        quotaTotal: bytesToSize(resp.data.total),
+        quotaUsage: Utils.bytesToSize(resp.data.usage),
+        quotaTotal: Utils.bytesToSize(resp.data.total),
         isStaff: resp.data.is_staff,
         avatarURL: resp.data.avatar_url
       });

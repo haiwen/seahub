@@ -1,7 +1,7 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import editUtilties from './utils/editor-utilties';
-import { filePath } from './components/constants';
+import { filePath } from './utils/constants';
 import URLDecorator from './utils/url-decorator';
 import SidePanel from './pages/file-history/side-panel';
 import MainPanel from './pages/file-history/main-panel';

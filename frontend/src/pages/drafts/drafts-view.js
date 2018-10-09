@@ -1,5 +1,5 @@
 import React from 'react';
-import { gettext } from '../../components/constants';
+import { gettext } from '../../utils/constants';
 import editUtilties from '../../utils/editor-utilties';
 import Toast from '../../components/toast/';
 import Loading from '../../components/loading';

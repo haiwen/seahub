@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { seafileAPI } from '../../utils/seafile-api';
-import { gettext, siteRoot } from '../../components/constants';
+import { gettext, siteRoot } from '../../utils/constants';
 
 class FileActivitiesContent extends Component {
 

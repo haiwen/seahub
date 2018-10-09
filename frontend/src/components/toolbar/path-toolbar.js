@@ -1,6 +1,6 @@
 import React from 'react';
-import { gettext, repoID, slug, permission, siteRoot } from '../constants';
-import { encodePath } from '../utils';
+import { gettext, repoID, slug, permission, siteRoot } from '../../utils/constants';
+import { Utils } from '../../utils/utils';
 import PropTypes from 'prop-types';
 
 const propTypes = {
@@ -35,7 +35,7 @@ class PathToolbar extends React.Component {
         </ul>
       );
     } else if (permission) {
-      historyUrl = siteRoot + 'repo/file_revisions/' + repoID + '/?p=' + encodePath(this.props.filePath) + '&referer=' + encodeURIComponent(location.href);
+      historyUrl = siteRoot + 'repo/file_revisions/' + repoID + '/?p=' + Utils.encodePath(this.props.filePath) + '&referer=' + encodeURIComponent(location.href);
       return (
         <ul className="path-toolbar">
           <li className="toolbar-item"><a className="op-link sf2-icon-history" href={historyUrl} title={gettext('History')} aria-label={gettext('History')}></a></li>

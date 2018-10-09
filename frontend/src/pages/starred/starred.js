@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { seafileAPI } from '../../utils/seafile-api';
-import { common } from '../../utils/common';
-import { gettext, siteRoot, loginUrl } from '../../components/constants';
+import { Utils } from '../../utils/utils';
+import { gettext, siteRoot, loginUrl } from '../../utils/constants';
 
 class Content extends Component {
 
@@ -60,7 +60,7 @@ class TableBody extends Component {
   getThumbnails() {
     let items = this.state.items.filter((item) => {
       const name = item.file_name;
-      return common.imageCheck(name) || common.videoCheck(name);
+      return Utils.imageCheck(name) || Utils.videoCheck(name);
     });
     if (items.length == 0) {
       return ;
@@ -95,11 +95,11 @@ class TableBody extends Component {
   render() {
 
     let listFilesActivities = this.state.items.map(function(item, index) {
-      let fileIconSize = common.isHiDPI() ? 48 : 24;
+      let fileIconSize = Utils.isHiDPI() ? 48 : 24;
 
-      item.file_icon_url = common.getFileIconUrl(item.file_name, fileIconSize);
-      item.is_img = common.imageCheck(item.file_name);
-      item.encoded_path = common.encodePath(item.path);
+      item.file_icon_url = Utils.getFileIconUrl(item.file_name, fileIconSize);
+      item.is_img = Utils.imageCheck(item.file_name);
+      item.encoded_path = Utils.encodePath(item.path);
 
       item.thumbnail_url = item.encoded_thumbnail_src ? `${siteRoot}${item.encoded_thumbnail_src}` : '';
       item.file_view_url = `${siteRoot}lib/${item.repo_id}/file${item.encoded_path}`;

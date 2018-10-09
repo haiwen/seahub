@@ -1,6 +1,6 @@
 import React from 'react';
 import PropsType from 'prop-types';
-import { siteRoot, mediaUrl, logoPath, logoWidth, logoHeight, siteTitle } from './constants'; 
+import { siteRoot, mediaUrl, logoPath, logoWidth, logoHeight, siteTitle } from '../utils/constants'; 
 
 const propsType = {
   onCloseSidePanel: PropsType.func.isRequired,

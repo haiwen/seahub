@@ -1,6 +1,6 @@
 import Node from './node';
 import moment from 'moment';
-import { bytesToSize } from '../utils';
+import { Utils } from '../../utils/utils';
 
 const lang = window.app.config.lang;
 moment.locale(lang);
@@ -184,7 +184,7 @@ class Tree {
     var node = new Node({
       name: model.name,
       type: model.type,
-      size: bytesToSize(model.size),
+      size: Utils.bytesToSize(model.size),
       last_update_time: moment.unix(model.last_update_time).fromNow(),
       permission: model.permission,
       parent_path: model.parent_path,
@@ -214,7 +214,7 @@ class Tree {
       let node = new Node({
         name: nodeObj.name,
         type: nodeObj.type,
-        size: bytesToSize(nodeObj.size),
+        size: Utils.bytesToSize(nodeObj.size),
         last_update_time: moment.unix(nodeObj.last_update_time).fromNow(),
         permission: nodeObj.permission,
         parent_path: nodeObj.parent_path,
@@ -244,7 +244,7 @@ class Tree {
     var newNode = new Node({
       name: node.name,
       type: node.type,
-      size: bytesToSize(node.size),
+      size: Utils.bytesToSize(node.size),
       last_update_time: moment.unix(node.last_update_time).fromNow(),
       permission: node.permission,
       parent_path: node.parent_path,
