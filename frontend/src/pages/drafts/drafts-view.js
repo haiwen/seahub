@@ -1,6 +1,7 @@
 import React from 'react';
 import { gettext } from '../../components/constants';
 import editUtilties from '../../utils/editor-utilties';
+import Toast from '../../components/toast/';
 import Loading from '../../components/loading';
 import DraftListView from '../../components/draft-list-view/draft-list-view';
 import DraftListMenu from '../../components/draft-list-view/draft-list-menu';
@@ -42,6 +43,9 @@ class DraftsView extends React.Component {
     let draft = this.state.currentDraft;
     editUtilties.deleteDraft(draft.id).then(res => {
       this.initDraftList();
+      Toast.success(gettext('Delete draft succeeded.'));
+    }).catch(() => {
+      Toast.error(gettext('Delete draft failed.'));
     });
   }
 
@@ -49,6 +53,9 @@ class DraftsView extends React.Component {
     let draft = this.state.currentDraft;
     editUtilties.publishDraft(draft.id).then(res => {
       this.initDraftList();
+      Toast.success(gettext('Publish draft succeeded.'));
+    }).catch(() => {
+      Toast.error(gettext('Publish draft failed.'));
     });
   }
 
