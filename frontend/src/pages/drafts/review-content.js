@@ -2,10 +2,9 @@ import React from 'react';
 import { siteRoot, gettext } from '../../components/constants';
 import editUtilties from '../../utils/editor-utilties';
 import Loading from '../../components/loading';
-
 import ReviewListView from '../../components/review-list-view/review-list-view';
 
-class ReviewList extends React.Component {
+class ReviewContent extends React.Component {
   
   constructor(props) {
     super(props);
@@ -50,4 +49,4 @@ class ReviewList extends React.Component {
   }
 }
 
-export default ReviewList;
+export default ReviewContent;

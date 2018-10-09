@@ -5,8 +5,8 @@ import { siteRoot } from './utils/constants';
 import SidePanel from './components/side-panel';
 import MainPanel from './components/main-panel';
 import DraftsView from './pages/drafts/drafts-view';
-import DraftList from './pages/drafts/draft-list';
-import ReviewList from './pages/drafts/review-list';
+import DraftContent from './pages/drafts/draft-content';
+import ReviewContent from './pages/drafts/review-content';
 import FilesActivities from './pages/dashboard/files-activities';
 import Starred from './pages/starred/starred';
 
@@ -52,8 +52,8 @@ class App extends Component {
           <Router>
             <FilesActivities path={siteRoot + 'dashboard'} />
             <DraftsView path={siteRoot + 'drafts'}  currentTab={currentTab}>
-              <DraftList path='/' />
-              <ReviewList path='reviews' />
+              <DraftContent path='/' />
+              <ReviewContent path='reviews' />
             </DraftsView>
             <Starred path={siteRoot + 'starred'} />
           </Router>
