@@ -884,6 +884,7 @@ a.op-icon:focus {
 
 .cur-view-path .tab-tabs-nav {
     font-size:15px;
+    list-style: none;
 }
 .tab-tabs-nav .tab {
     float:left;
@@ -908,8 +909,4 @@ a.op-icon:focus {
     color:#eb8205;
     text-decoration:none;
     border-bottom-color:#eb8205;
-}
-
-ul {
-    list-style:none;
 }
