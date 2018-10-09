@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { gettext, repoID, serviceUrl, slug, siteRoot } from '../../components/constants';
+import { gettext, repoID, serviceUrl, slug, siteRoot } from '../../utils/constants';
 import CommonToolbar from '../../components/toolbar/common-toolbar';
 import MarkdownViewer from '../../components/markdown-viewer';
 import TreeDirView from '../../components/tree-dir-view/tree-dir-view';

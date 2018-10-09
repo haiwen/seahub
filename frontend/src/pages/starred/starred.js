@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { seafileAPI } from '../../utils/seafile-api';
 import { Utils } from '../../utils/utils';
-import { gettext, siteRoot, loginUrl } from '../../components/constants';
+import { gettext, siteRoot, loginUrl } from '../../utils/constants';
 
 class Content extends Component {
 

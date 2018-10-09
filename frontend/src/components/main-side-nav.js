@@ -1,6 +1,6 @@
 import React from 'react';
 import { Link } from '@reach/router';
-import { gettext, siteRoot } from './constants';
+import { gettext, siteRoot } from '../utils/constants';
 import { seafileAPI } from '../utils/seafile-api';
 
 class MainSideNav extends React.Component {

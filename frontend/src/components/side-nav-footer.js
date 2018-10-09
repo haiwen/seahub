@@ -1,6 +1,6 @@
 import React from 'react';
-import { gettext, siteRoot } from './constants';
 import { Modal, ModalBody } from 'reactstrap';
+import { gettext, siteRoot } from '../utils/constants';
 
 class About extends React.Component {
   constructor(props) {

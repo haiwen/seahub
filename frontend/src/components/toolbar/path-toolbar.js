@@ -1,5 +1,5 @@
 import React from 'react';
-import { gettext, repoID, slug, permission, siteRoot } from '../constants';
+import { gettext, repoID, slug, permission, siteRoot } from '../../utils/constants';
 import { Utils } from '../../utils/utils';
 import PropTypes from 'prop-types';
 

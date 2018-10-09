@@ -1,6 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { gettext, repoID } from '../constants';
+import { gettext, repoID } from '../../utils/constants';
 import editorUtilities from '../../utils/editor-utilties';
 import URLDecorator from '../../utils/url-decorator';
 import ZipDownloadDialog from '../dialog/zip-download-dialog';

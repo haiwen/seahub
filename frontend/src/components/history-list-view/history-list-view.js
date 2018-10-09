@@ -5,7 +5,7 @@ import Loading from '../loading';
 import axios from 'axios';
 import editUtilties from '../../utils/editor-utilties';
 import URLDecorator from '../../utils/url-decorator';
-import { filePath } from '../constants';
+import { filePath } from '../../utils/constants';
 
 const propTypes = {
   hasMore: PropTypes.bool.isRequired,

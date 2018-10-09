@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { repoID, siteRoot } from '../constants';
+import { repoID, siteRoot } from '../../utils/constants';
 import SearchResultItem from './search-result-item';
 import editorUtilities from '../../utils/editor-utilties';
 import More from '../more';

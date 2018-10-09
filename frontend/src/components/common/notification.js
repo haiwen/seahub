@@ -1,6 +1,6 @@
 import React from 'react';
 import { seafileAPI } from '../../utils/seafile-api';
-const gettext = window.gettext;
+import { gettext } from '../../utils/constants';
 
 class Notification extends React.Component {
   constructor(props) {

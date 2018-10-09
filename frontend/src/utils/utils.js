@@ -1,4 +1,4 @@
-import { mediaUrl } from '../components/constants';
+import { mediaUrl } from './constants';
 
 export const Utils = {
 

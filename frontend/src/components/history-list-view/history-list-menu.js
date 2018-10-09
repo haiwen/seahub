@@ -1,6 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { gettext, filePath } from '../constants';
+import { gettext, filePath } from '../../utils/constants';
 import URLDecorator from '../../utils/url-decorator';
 
 const propTypes = {

@@ -1,4 +1,4 @@
-import {siteRoot, historyRepoID, fileServerRoot } from '../components/constants';
+import {siteRoot, historyRepoID, fileServerRoot } from './constants';
 import { Utils } from './utils';
 class URLDecorator {
 

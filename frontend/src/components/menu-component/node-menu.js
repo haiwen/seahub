@@ -1,5 +1,5 @@
 import React from 'react';
-import { gettext } from '../constants';
+import { gettext } from '../../utils/constants';
 
 class NodeMenu extends React.Component {
   

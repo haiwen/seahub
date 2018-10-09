@@ -2,8 +2,7 @@ import React, { Component } from 'react';
 import ReactDOM from 'react-dom';
 import { Utils } from '../../utils/utils';
 import editorUtilities from '../../utils/editor-utilties';
-
-import { siteRoot, gettext } from '../constants';
+import { siteRoot, gettext } from '../../utils/constants';
 
 class Account extends Component {
   constructor(props) {
