@@ -11,7 +11,7 @@ require('@seafile/seafile-editor/src/lib/code-hight-package');
 const contentClass = 'markdown-viewer-render-content';
 const propTypes = {
   renderingContent: PropTypes.bool.isRequired,
-  content: PropTypes.string.isRequired,
+  content: PropTypes.string,
   markdownContent: PropTypes.string.isRequired,
   markdownContentOld: PropTypes.string.isRequired,
 };
