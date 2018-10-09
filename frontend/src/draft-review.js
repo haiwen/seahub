@@ -29,7 +29,7 @@ class DraftReview extends React.Component {
     this.state = {
       draftContent: '',
       draftOriginContent: '',
-      review_status: opStatus == 'open' ? true : false
+      reviewStatus: opStatus == 'open' ? true : false
     };
   }
 
@@ -67,7 +67,7 @@ class DraftReview extends React.Component {
   onCloseReview = () => {
     seafileAPI.updateReviewStatus(reviewID, 'closed').then(res => {
       this.setState({
-        review_status: false
+        reviewStatus: false
       })
     });
   }
@@ -75,7 +75,7 @@ class DraftReview extends React.Component {
   onPublishReview = () => {
     seafileAPI.updateReviewStatus(reviewID, 'finished').then(res => {
       this.setState({
-        review_status: false
+        reviewStatus: false
       })
     });
   }
@@ -89,7 +89,7 @@ class DraftReview extends React.Component {
               <span className="file-name">{draftFileName}</span>
             </div>
           </div>
-          { this.state.review_status && 
+          { this.state.reviewStatus && 
             <div className="cur-view-toolbar">
               <button className="btn btn-secondary top-toolbar-btn" title={gettext('Close Review')} onClick={this.onCloseReview}>{gettext("Close")}</button>
               <button className="btn btn-secondary top-toolbar-btn" title={gettext('Publish Review')} onClick={this.onPublishReview}>{gettext("Publish")}</button>
