@@ -13,14 +13,13 @@ class NoticeContainer extends React.Component {
   addNotice = (notice) => {
     const { notices } = this.state;
     notice.key = this.getNoticeKey();
-    if (notices.every(item => item.key !== notice.key)) {
-      notices.push(notice);
-      this.setState({notices});
-      if (notice.duration > 0 ) {
-        setTimeout( () => {
-          this.removeNotice(notice.key);
-        }, notice.duration);
-      }
+    notices.push(notice);
+    this.setState({notices});
+
+    if (notice.duration > 0) {
+      setTimeout(() => {
+        this.removeNotice(notice.key);
+      }, notice.duration);
     }
   }
 
@@ -41,7 +40,7 @@ class NoticeContainer extends React.Component {
 
   getNoticeKey = () => {
     const { notices } = this.state;
-    return `notice-${new Date().getTime()}-${notices.length}`
+    return `notice-${new Date().getTime()}-${notices.length}`;
   }
 
   render() {

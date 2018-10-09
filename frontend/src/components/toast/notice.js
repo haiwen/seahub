@@ -13,7 +13,7 @@ class Notice extends React.Component {
       <div className="toast-notice">
         <span className={`alert alert-${type}`}>{content}</span>
       </div>
-    )
+    );
   }
 }
 
