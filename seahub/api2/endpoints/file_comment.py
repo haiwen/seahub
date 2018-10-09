@@ -11,7 +11,7 @@ from seaserv import seafile_api
 from seahub.api2.authentication import TokenAuthentication
 from seahub.api2.permissions import IsRepoAccessible
 from seahub.api2.throttling import UserRateThrottle
-from seahub.api2.utils import api_error, user_to_dict
+from seahub.api2.utils import api_error, user_to_dict, to_python_boolean
 from seahub.avatar.settings import AVATAR_DEFAULT_SIZE
 from seahub.base.models import FileComment
 
@@ -66,26 +66,32 @@ class FileCommentView(APIView):
         this op
         1.Change resolved of comment
         """
+        # argument check
+        resolved = request.POST.get('resolved')
+        if not resolved:
+            error_msg = 'Miss resolved.'
+            return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
+
+        comment_resolved = to_python_boolean(resolved)
+        if comment_resolved not in (True, False):
+            error_msg = 'resolved invalid.'
+            return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
+
+        # resource check
         try:
             o = FileComment.objects.get(id=comment_id)
         except FileComment.DoesNotExist:
-            return api_error(status.HTTP_400_BAD_REQUEST, 'Wrong comment_id')
+            error_msg = 'FileComment %s not found.' % comment_id
+            return api_error(status.HTTP_404_NOT_FOUND, error_msg)
 
+        # permission check
         username = request.user.username
         if username != o.author and not seafile_api.is_repo_owner(username, repo_id):
-            return api_error(status.HTTP_403_FORBIDDEN, 'Permission denied.')
+            error_msg = 'Permission denied.'
+            return api_error(status.HTTP_403_FORBIDDEN, error_msg)
 
-        comment_resolved = request.POST.get('resolved')
-        if not comment_resolved:
-            return api_error(status.HTTP_400_BAD_REQUEST, 'resolved is missing.')
-        if comment_resolved == 'true':
-            o.resolved = True
-            o.save()
-        elif comment_resolved == 'false':
-            o.resolved = False
-            o.save()
-        else:
-            return api_error(status.HTTP_400_BAD_REQUEST, 'resolved invalid')
+        o.resolved = comment_resolved
+        o.save()
 
         try:
             avatar_size = int(request.GET.get('avatar_size', AVATAR_DEFAULT_SIZE))

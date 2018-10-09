@@ -14,7 +14,7 @@ from django.core.urlresolvers import reverse
 from seahub.api2.authentication import TokenAuthentication
 from seahub.api2.permissions import IsRepoAccessible
 from seahub.api2.throttling import UserRateThrottle
-from seahub.api2.utils import api_error, user_to_dict
+from seahub.api2.utils import api_error, user_to_dict, to_python_boolean
 from seahub.avatar.settings import AVATAR_DEFAULT_SIZE
 from seahub.base.models import FileComment
 from seahub.utils.repo import get_repo_owner
@@ -32,16 +32,6 @@ class FileCommentsView(APIView):
     def get(self, request, repo_id, format=None):
         """List all comments of a file.
         """
-        com_resolved = request.GET.get('resolved')
-        if com_resolved is None:
-            comment_resolved = None
-        elif com_resolved == 'true':
-            comment_resolved = True
-        elif com_resolved == 'false':
-            comment_resolved = False
-        else:
-            return api_error(status.HTTP_400_BAD_REQUEST, 'resolved invalid.')
-
         path = request.GET.get('p', '/').rstrip('/')
         if not path:
             return api_error(status.HTTP_400_BAD_REQUEST, 'Wrong path.')
@@ -61,15 +51,20 @@ class FileCommentsView(APIView):
 
         total_count = FileComment.objects.get_by_file_path(repo_id, path).count()
         comments = []
-        if comment_resolved is None:
+
+        resolved = request.GET.get('resolved', None)
+        if not resolved:
             obj = FileComment.objects.get_by_file_path(repo_id, path)[start: end]
-        else:
+        if resolved:
+            comment_resolved = to_python_boolean(resolved)
             obj = FileComment.objects.get_by_file_path(repo_id, path).filter(resolved=comment_resolved)[start: end]
-        
+            if comment_resolved not in (True, False):
+                error_msg = 'resolved invalid.'
+                return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
+
         for o in obj:
             comment = o.to_dict()
-            comment.update(user_to_dict(o.author, request=request,
-                                        avatar_size=avatar_size))
+            comment.update(user_to_dict(o.author, request=request, avatar_size=avatar_size))
             comments.append(comment)
 
         result = {'comments': comments, 'total_count': total_count}
