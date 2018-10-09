@@ -200,7 +200,7 @@ class SystemUsersTrafficExcelView(APIView):
             return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
 
         try:
-            month_obj = datetime.datetime.strptime(month, "%Y-%m")
+            month_obj = datetime.datetime.strptime(month, "%Y%m")
         except:
             error_msg = "Month %s invalid" % month
             return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
