@@ -1,7 +1,7 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import Prism from 'prismjs';
-import { siteRoot, gettext, draftID, reviewID, draftOriginFilePath, draftOriginRepoID, draftFileName, opStatus, publishFileVersion, originFileVersion } from './components/constants'; 
+import { siteRoot, gettext, draftID, reviewID, draftOriginFilePath, draftOriginRepoID, draftFileName, opStatus, publishFileVersion, originFileVersion } from './utils/constants'; 
 import { seafileAPI } from './utils/seafile-api';
 import axios from 'axios';
 import DiffViewer from '@seafile/seafile-editor/dist/diff-viewer/diff-viewer';

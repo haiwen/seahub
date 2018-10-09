@@ -1,6 +1,5 @@
 import React from 'react';
-import classNames from 'classnames';
-import { siteRoot, gettext } from '../../components/constants';
+import { siteRoot, gettext } from '../../utils/constants';
 import editUtilties from '../../utils/editor-utilties';
 import Loading from '../../components/loading';
 import DraftListView from '../../components/draft-list-view/draft-list-view';

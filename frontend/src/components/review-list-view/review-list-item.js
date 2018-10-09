@@ -1,7 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { siteRoot, lang } from '../constants';
-import NodeMenuControl from '../menu-component/node-menu-control';
+import { siteRoot, lang } from '../../utils/constants';
 import moment from 'moment';
 
 moment.locale(lang);

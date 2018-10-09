@@ -1,6 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { gettext } from '../constants';
+import { gettext } from '../../utils/constants';
 import ReviewListItem from './review-list-item';
 
 const propTypes = {
