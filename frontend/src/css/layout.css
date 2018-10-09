@@ -114,7 +114,7 @@
 }
 
 .header {
-  padding: 0.9125rem;
+  padding: 0.625rem;
   display: flex;
   flex-shrink:0;
   align-items: center;
@@ -124,17 +124,29 @@
   box-shadow: 0 3px 2px -2px rgba(200,200,200,.15);
 }
 
-.header .info-item {
-  display: inline-block;
-}
-
 .header .cur-file-info {
+  display: flex;
   margin-left: 0.5rem;
-  max-height: 2.9375rem;
 }
 
-
-.header .cur-file-info .file-info {
+.header .info-item {
+  display: flex;
   font-size: 1.2rem;
   font-weight: bold;
+  margin-right: 0.5rem;
+  align-items: center;
+  justify-content: center;
+}
+
+.header .file-feature {
+  width: 2.9375rem;
+  height: 2.9375rem;
+  font-size: 1.8rem;
+  background-color: #fbcb09;
+  color: #fff;
+}
+
+
+.header .file-operation-btn {
+  margin-right: 0.25rem;
 }

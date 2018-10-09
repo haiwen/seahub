@@ -7,7 +7,7 @@ import DraftListView from '../../components/draft-list-view/draft-list-view';
 import DraftListMenu from '../../components/draft-list-view/draft-list-menu';
 
 
-class DraftList extends React.Component {
+class DraftContent extends React.Component {
   
   constructor(props) {
     super(props);
@@ -127,4 +127,4 @@ class DraftList extends React.Component {
   }
 }
 
-export default DraftList;
+export default DraftContent;

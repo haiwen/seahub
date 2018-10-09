@@ -37,7 +37,7 @@ class ReviewListItem extends React.Component {
     let item = this.props.item;
     let filePath = item.draft_file_path;
     let itemID = item.id;
-    window.location.href= siteRoot + 'drafts/review/' + itemID;
+    window.open(siteRoot + 'drafts/review/' + itemID);
   }
 
   getFileName(filePath) {

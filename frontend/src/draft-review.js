@@ -78,21 +78,18 @@ class DraftReview extends React.Component {
       <div className="wrapper">
         <div id="header" className="header">
           <div className="cur-file-info">
-            <div className="info-item">
-              <a href="javascript:window.history.back()" className="go-back" title="Back">
-                <span className="fas fa-chevron-left"></span>
-              </a>
+            <div className="info-item file-feature">
+              <span className="fas fa-code-merge"></span>
             </div>
             <div className="info-item file-info">
               <span className="file-name">{draftFileName}</span>
             </div>
-            <div className="info-item author-info"></div>
           </div>
           {
             this.state.reviewStatus && 
             <div className="cur-file-operation">
-              <button className="btn btn-secondary top-toolbar-btn" title={gettext('Close Review')} onClick={this.onCloseReview}>{gettext("Close")}</button>
-              <button className="btn btn-secondary top-toolbar-btn" title={gettext('Publish Review')} onClick={this.onPublishReview}>{gettext("Publish")}</button>
+              <button className="btn btn-secondary file-operation-btn" title={gettext('Close Review')} onClick={this.onCloseReview}>{gettext("Close")}</button>
+              <button className="btn btn-secondary file-operation-btn" title={gettext('Publish Review')} onClick={this.onPublishReview}>{gettext("Publish")}</button>
             </div>
           }
         </div>
