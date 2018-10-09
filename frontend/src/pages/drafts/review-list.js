@@ -35,7 +35,7 @@ class ReviewList extends React.Component {
       <div className="cur-view-content" style={{padding: 0}}>
        {this.state.isLoadingReviews && <Loading /> }
        {(!this.state.isLoadingReviews && this.state.reviewsList.length !==0) &&
-         <ReviewList
+         <ReviewListView
            itemsList={this.state.reviewsList} 
            isItemFreezed={this.state.isItemFreezed}
          />
