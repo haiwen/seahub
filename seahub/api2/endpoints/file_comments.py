@@ -14,7 +14,7 @@ from django.core.urlresolvers import reverse
 from seahub.api2.authentication import TokenAuthentication
 from seahub.api2.permissions import IsRepoAccessible
 from seahub.api2.throttling import UserRateThrottle
-from seahub.api2.utils import api_error, user_to_dict
+from seahub.api2.utils import api_error, user_to_dict, to_python_boolean
 from seahub.avatar.settings import AVATAR_DEFAULT_SIZE
 from seahub.base.models import FileComment
 from seahub.utils.repo import get_repo_owner
@@ -36,6 +36,11 @@ class FileCommentsView(APIView):
         if not path:
             return api_error(status.HTTP_400_BAD_REQUEST, 'Wrong path.')
 
+        resolved = request.GET.get('resolved', None)
+        if resolved not in ('true', 'false', None):
+            error_msg = 'resolved invalid.'
+            return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
+
         try:
             avatar_size = int(request.GET.get('avatar_size',
                                               AVATAR_DEFAULT_SIZE))
@@ -51,10 +56,16 @@ class FileCommentsView(APIView):
 
         total_count = FileComment.objects.get_by_file_path(repo_id, path).count()
         comments = []
-        for o in FileComment.objects.get_by_file_path(repo_id, path)[start: end]:
-            comment = o.to_dict()
-            comment.update(user_to_dict(o.author, request=request,
-                                        avatar_size=avatar_size))
+
+        if resolved is None:
+            file_comments = FileComment.objects.get_by_file_path(repo_id, path)[start: end]
+        else:
+            comment_resolved = to_python_boolean(resolved)
+            file_comments = FileComment.objects.get_by_file_path(repo_id, path).filter(resolved=comment_resolved)[start: end]
+
+        for file_comment in file_comments:
+            comment = file_comment.to_dict()
+            comment.update(user_to_dict(file_comment.author, request=request, avatar_size=avatar_size))
             comments.append(comment)
 
         result = {'comments': comments, 'total_count': total_count}
