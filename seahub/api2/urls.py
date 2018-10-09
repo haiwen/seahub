@@ -59,6 +59,7 @@ urlpatterns = [
     url(r'^repos/(?P<repo_id>[-0-9-a-f]{36})/file/comments/$', FileCommentsView.as_view(), name='api2-file-comments'),
     url(r'^repos/(?P<repo_id>[-0-9-a-f]{36})/file/comments/counts/$', FileCommentsCounts.as_view(), name='api2-file-comments-counts'),
     url(r'^repos/(?P<repo_id>[-0-9-a-f]{36})/file/comments/(?P<pk>\d+)/$', FileCommentView.as_view(), name='api2-file-comment'),
+    url(r'^repos/(?P<repo_id>[-0-9-a-f]{36})/file/comment/(?P<comment_id>\d+)/$', FileCommentView.as_view(), name='api2-file-comment'),
     url(r'^repos/(?P<repo_id>[-0-9-a-f]{36})/file/detail/$', FileDetailView.as_view()),
     url(r'^repos/(?P<repo_id>[-0-9-a-f]{36})/file/history/$', FileHistory.as_view()),
     url(r'^repos/(?P<repo_id>[-0-9-a-f]{36})/file/revision/$', FileRevision.as_view()),

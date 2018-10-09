@@ -60,3 +60,40 @@ class FileCommentView(APIView):
         o.delete()
 
         return Response(status=204)
+
+    def put(self, request, repo_id, comment_id, format=None):
+        """Update a comment, only comment author or repo owner can perform
+        this op
+        1.Change resolved of comment
+        """
+        try:
+            o = FileComment.objects.get(id=comment_id)
+        except FileComment.DoesNotExist:
+            return api_error(status.HTTP_400_BAD_REQUEST, 'Wrong comment_id')
+
+        username = request.user.username
+        if username != o.author and not seafile_api.is_repo_owner(username, repo_id):
+            return api_error(status.HTTP_403_FORBIDDEN, 'Permission denied.')
+
+        comment_resolved = request.POST.get('resolved')
+        if not comment_resolved:
+            return api_error(status.HTTP_400_BAD_REQUEST, 'resolved is missing.')
+        if comment_resolved == 'true':
+            o.resolved = True
+            o.save()
+        elif comment_resolved == 'false':
+            o.resolved = False
+            o.save()
+        else:
+            return api_error(status.HTTP_400_BAD_REQUEST, 'resolved invalid')
+
+        try:
+            avatar_size = int(request.GET.get('avatar_size', AVATAR_DEFAULT_SIZE))
+        except ValueError:
+            avatar_size = AVATAR_DEFAULT_SIZE
+
+        comment = o.to_dict()
+        comment.update(user_to_dict(o.author, request=request, avatar_size=avatar_size))
+
+        return Response(comment)
+
