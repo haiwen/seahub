@@ -44,7 +44,7 @@ from seahub.avatar.templatetags.avatar_tags import api_avatar_url, avatar
 from seahub.avatar.templatetags.group_avatar_tags import api_grp_avatar_url, \
         grp_avatar
 from seahub.base.accounts import User
-from seahub.base.models import UserStarredFiles, DeviceToken, RepoSecretKey
+from seahub.base.models import UserStarredFiles, DeviceToken, RepoSecretKey, FileComment
 from seahub.share.models import ExtraSharePermission, ExtraGroupsSharePermission
 from seahub.share.utils import is_repo_admin, check_group_share_in_permission
 from seahub.base.templatetags.seahub_tags import email2nickname, \
@@ -2959,6 +2959,9 @@ class FileDetailView(APIView):
         starred_files = UserStarredFiles.objects.filter(repo_id=repo_id,
                 path=path)
         entry["starred"] = True if len(starred_files) > 0 else False
+        file_comments = FileComment.objects.get_by_file_path(repo_id, path)
+        comment_total = file_comments.count()
+        entry["comment_total"] = comment_total
 
         return Response(entry)
 

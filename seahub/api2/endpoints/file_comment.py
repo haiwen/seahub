@@ -11,9 +11,11 @@ from seaserv import seafile_api
 from seahub.api2.authentication import TokenAuthentication
 from seahub.api2.permissions import IsRepoAccessible
 from seahub.api2.throttling import UserRateThrottle
-from seahub.api2.utils import api_error, user_to_dict
+from seahub.api2.utils import api_error, user_to_dict, to_python_boolean
 from seahub.avatar.settings import AVATAR_DEFAULT_SIZE
 from seahub.base.models import FileComment
+from seahub.utils.repo import is_repo_owner
+from seahub.views import check_folder_permission
 
 logger = logging.getLogger(__name__)
 
@@ -23,40 +25,85 @@ class FileCommentView(APIView):
     permission_classes = (IsAuthenticated, IsRepoAccessible)
     throttle_classes = (UserRateThrottle, )
 
-    def get(self, request, repo_id, pk, format=None):
+    def get(self, request, repo_id, comment_id, format=None):
         """Get a comment.
         """
         try:
-            o = FileComment.objects.get(pk=pk)
+            file_comment = FileComment.objects.get(pk=comment_id)
         except FileComment.DoesNotExist:
             return api_error(status.HTTP_400_BAD_REQUEST, 'Wrong comment id')
 
+        # permission check
+        if check_folder_permission(request, repo_id, '/') is None:
+            return api_error(status.HTTP_403_FORBIDDEN, 'Permission denied.')
         try:
             avatar_size = int(request.GET.get('avatar_size',
                                               AVATAR_DEFAULT_SIZE))
         except ValueError:
             avatar_size = AVATAR_DEFAULT_SIZE
 
-        comment = o.to_dict()
-        comment.update(user_to_dict(o.author, request=request,
+        comment = file_comment.to_dict()
+        comment.update(user_to_dict(file_comment.author, request=request,
                                     avatar_size=avatar_size))
 
         return Response(comment)
 
-    def delete(self, request, repo_id, pk, format=None):
+    def delete(self, request, repo_id, comment_id, format=None):
         """Delete a comment, only comment author or repo owner can perform
         this op.
         """
         try:
-            o = FileComment.objects.get(pk=pk)
+            file_comment = FileComment.objects.get(pk=comment_id)
         except FileComment.DoesNotExist:
             return api_error(status.HTTP_400_BAD_REQUEST, 'Wrong comment id')
 
         username = request.user.username
-        if username != o.author and \
-           not seafile_api.is_repo_owner(username, repo_id):
+        if username != file_comment.author and not is_repo_owner(request, repo_id, username):
             return api_error(status.HTTP_403_FORBIDDEN, 'Permission denied.')
 
-        o.delete()
+        file_comment.delete()
 
         return Response(status=204)
+
+    def put(self, request, repo_id, comment_id, format=None):
+        """Update a comment, only comment author or repo owner can perform
+        this op
+        1.Change resolved of comment
+        """
+        # argument check
+        resolved = request.data.get('resolved')
+        if resolved not in ('true', 'false'):
+            error_msg = 'resolved invalid.'
+            return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
+
+        comment_resolved = to_python_boolean(resolved)
+
+        # resource check
+        try:
+            file_comment = FileComment.objects.get(pk=comment_id)
+        except FileComment.DoesNotExist:
+            error_msg = 'FileComment %s not found.' % comment_id
+            return api_error(status.HTTP_404_NOT_FOUND, error_msg)
+
+        # permission check
+        username = request.user.username
+        if username != file_comment.author and not is_repo_owner(request, repo_id, username):
+            error_msg = 'Permission denied.'
+            return api_error(status.HTTP_403_FORBIDDEN, error_msg)
+
+        try:
+            file_comment.resolved = comment_resolved
+            file_comment.save()
+        except Exception as e:
+            logger.error(e)
+            return api_error(status.HTTP_500_INTERNAL_SERVER_ERROR, 'Internal error.')
+
+        try:
+            avatar_size = int(request.GET.get('avatar_size', AVATAR_DEFAULT_SIZE))
+        except ValueError:
+            avatar_size = AVATAR_DEFAULT_SIZE
+
+        comment = file_comment.to_dict()
+        comment.update(user_to_dict(file_comment.author, request=request, avatar_size=avatar_size))
+
+        return Response(comment)
