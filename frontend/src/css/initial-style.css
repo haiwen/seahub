@@ -142,3 +142,14 @@
 .article hr.active {
   border-top: 1px solid #eb8205;
 }
+
+.content-container {
+  background-color: #fafaf9;
+  border-radius: 10px;
+}
+
+.markdown-viewer-render-content {
+  margin: 20px 40px;
+  background-color: #fff;
+  border: 1px solid #e6e6dd;
+}

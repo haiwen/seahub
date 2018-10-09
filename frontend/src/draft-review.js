@@ -1,27 +1,21 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import Prism from 'prismjs';
-import { siteRoot, gettext, draftID, reviewID,
-         draftOriginFilePath, draftOriginRepoID, 
-         draftFileName, opStatus, publishFileVersion,
-         originFileVersion
-        } from './components/constants'; 
+import { siteRoot, gettext, draftID, reviewID, draftOriginFilePath, draftOriginRepoID, draftFileName, opStatus, publishFileVersion, originFileVersion } from './components/constants'; 
 import { seafileAPI } from './utils/seafile-api';
 import axios from 'axios';
-import Account from './components/common/account';
-import DiffViewer from '@seafile/seafile-editor/dist/diff-viewer/diff-viewer'; 
-import './css/initial-style.css';
+import DiffViewer from '@seafile/seafile-editor/dist/diff-viewer/diff-viewer';
+import Loading from './components/loading';
 
 import 'seafile-ui';
 import './assets/css/fa-solid.css';
 import './assets/css/fa-regular.css';
 import './assets/css/fontawesome.css';
 import './css/layout.css';
-import './css/file-history.css';
+import './css/initial-style.css';
 import './css/toolbar.css';
 
 require('@seafile/seafile-editor/src/lib/code-hight-package');
-
 
 class DraftReview extends React.Component {
   constructor(props) {
@@ -29,7 +23,8 @@ class DraftReview extends React.Component {
     this.state = {
       draftContent: '',
       draftOriginContent: '',
-      reviewStatus: opStatus == 'open' ? true : false
+      reviewStatus: opStatus == 'open' ? true : false,
+      isLoading: true,
     };
   }
 
@@ -43,11 +38,12 @@ class DraftReview extends React.Component {
           seafileAPI.getFileContent(res1.data.links),
           seafileAPI.getFileContent(res2.data)
         ]).then(axios.spread((draftContent, draftOriginContent) => {
-            this.setState({
-              draftContent: draftContent.data,
-              draftOriginContent: draftOriginContent.data
-            }); 
-          }));
+          this.setState({
+            draftContent: draftContent.data,
+            draftOriginContent: draftOriginContent.data,
+            isLoading: false
+          }); 
+        }));
       }));
     } else {
       let dl0 = siteRoot + 'repo/' + draftOriginRepoID + '/' + publishFileVersion + '/download?' + 'p=' + draftOriginFilePath; 
@@ -56,53 +52,59 @@ class DraftReview extends React.Component {
         seafileAPI.getFileContent(dl0),
         seafileAPI.getFileContent(dl)
       ]).then(axios.spread((draftContent, draftOriginContent) => {
-          this.setState({
-            draftContent: draftContent.data,
-            draftOriginContent: draftOriginContent.data
-          }); 
-        }));
+        this.setState({
+          draftContent: draftContent.data,
+          draftOriginContent: draftOriginContent.data,
+          isLoading: false,
+        }); 
+      }));
     }
   }
 
   onCloseReview = () => {
     seafileAPI.updateReviewStatus(reviewID, 'closed').then(res => {
-      this.setState({
-        reviewStatus: false
-      })
+      this.setState({reviewStatus: false})
     });
   }
 
   onPublishReview = () => {
     seafileAPI.updateReviewStatus(reviewID, 'finished').then(res => {
-      this.setState({
-        reviewStatus: false
-      })
+      this.setState({reviewStatus: false})
     });
   }
 
   render() {
     return(
-      <div>
-        <div id="header" className="draft-viewer-topbar d-flex justify-content-between">
-          <div className="topbar-file-info">
-            <div className="file-title">
+      <div className="wrapper">
+        <div id="header" className="header">
+          <div className="cur-file-info">
+            <div className="info-item">
+              <a href="javascript:window.history.back()" className="go-back" title="Back">
+                <span className="fas fa-chevron-left"></span>
+              </a>
+            </div>
+            <div className="info-item file-info">
               <span className="file-name">{draftFileName}</span>
             </div>
+            <div className="info-item author-info"></div>
           </div>
-          { this.state.reviewStatus && 
-            <div className="cur-view-toolbar">
+          {
+            this.state.reviewStatus && 
+            <div className="cur-file-operation">
               <button className="btn btn-secondary top-toolbar-btn" title={gettext('Close Review')} onClick={this.onCloseReview}>{gettext("Close")}</button>
               <button className="btn btn-secondary top-toolbar-btn" title={gettext('Publish Review')} onClick={this.onPublishReview}>{gettext("Publish")}</button>
             </div>
           }
-          <Account />
         </div>
-        <div id="main" className="main-panel viewer">
-          <div className="main-panel-center history-viewer-contanier">
-            <div className="content-viewer">
+        <div id="main" className="main">
+          <div className="cur-view-container content-container">
+            <div className="cur-view-content">
               <div className="markdown-viewer-render-content article">
-                <DiffViewer markdownContent={this.state.draftContent} 
-                            markdownContent1={this.state.draftOriginContent} />
+                { 
+                  this.state.isLoading ? 
+                  <Loading /> :
+                  <DiffViewer markdownContent={this.state.draftContent} markdownContent1={this.state.draftOriginContent} />
+                }
               </div>
             </div>
           </div>
