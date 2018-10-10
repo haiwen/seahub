@@ -49,7 +49,7 @@ def get_onlyoffice_dict(username, repo_id, file_path,
         document_type = 'text'
 
     doc_info = json.dumps({'repo_id': repo_id, 'file_path': file_path, 'username': username})
-    doc_key = hashlib.md5(force_bytes(origin_repo_id + origin_file_path + file_id)).hexdigest()[:20]
+    doc_key = hashlib.md5(force_bytes(origin_repo_id + origin_file_path)).hexdigest()[:20]
     cache.set("ONLYOFFICE_%s" % doc_key, doc_info, None)
 
     file_name = os.path.basename(file_path.rstrip('/'))
