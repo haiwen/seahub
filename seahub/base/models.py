@@ -55,21 +55,21 @@ class FileDiscuss(models.Model):
 
 
 class FileCommentManager(models.Manager):
-    def add(self, repo_id, parent_path, item_name, author, comment):
+    def add(self, repo_id, parent_path, item_name, author, comment, detail):
         fileuuidmap = FileUUIDMap.objects.get_or_create_fileuuidmap(repo_id, 
                                                                     parent_path, 
                                                                     item_name, 
                                                                     False)
-        c = self.model(uuid=fileuuidmap, author=author, comment=comment)
+        c = self.model(uuid=fileuuidmap, author=author, comment=comment, detail=detail)
         c.save(using=self._db)
         return c
 
-    def add_by_file_path(self, repo_id, file_path, author, comment):
+    def add_by_file_path(self, repo_id, file_path, author, comment, detail):
         file_path = self.model.normalize_path(file_path)
         parent_path = os.path.dirname(file_path)
         item_name = os.path.basename(file_path)
 
-        return self.add(repo_id, parent_path, item_name, author, comment)
+        return self.add(repo_id, parent_path, item_name, author, comment, detail)
 
     def get_by_file_path(self, repo_id, file_path):
         parent_path = os.path.dirname(file_path)
@@ -100,6 +100,7 @@ class FileComment(models.Model):
     updated_at = models.DateTimeField(default=timezone.now)
     objects = FileCommentManager()
     resolved = models.BooleanField(default=False)
+    detail = models.TextField()
 
     @classmethod
     def normalize_path(self, path):
@@ -115,6 +116,7 @@ class FileComment(models.Model):
             'comment': o.comment,
             'created_at': datetime_to_isoformat_timestr(o.created_at),
             'resolved': o.resolved,
+            'detail': o.detail,
         }
 
 

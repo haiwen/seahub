@@ -20,6 +20,7 @@ from seahub.base.models import FileComment
 from seahub.utils.repo import get_repo_owner
 from seahub.signals import comment_file_successful
 from seahub.api2.endpoints.utils import generate_links_header_for_paginator
+from seahub.views import check_folder_permission
 
 logger = logging.getLogger(__name__)
 
@@ -40,6 +41,10 @@ class FileCommentsView(APIView):
         if resolved not in ('true', 'false', None):
             error_msg = 'resolved invalid.'
             return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
+
+        # permission check
+        if check_folder_permission(request, repo_id, '/') is None:
+            return api_error(status.HTTP_403_FORBIDDEN, 'Permission denied.')
 
         try:
             avatar_size = int(request.GET.get('avatar_size',
@@ -79,9 +84,14 @@ class FileCommentsView(APIView):
     def post(self, request, repo_id, format=None):
         """Post a comments of a file.
         """
+        # argument check
         path = request.GET.get('p', '/').rstrip('/')
         if not path:
             return api_error(status.HTTP_400_BAD_REQUEST, 'Wrong path.')
+
+        comment = request.data.get('comment', '')
+        if not comment:
+            return api_error(status.HTTP_400_BAD_REQUEST, 'Comment can not be empty.')
 
         try:
             avatar_size = int(request.GET.get('avatar_size',
@@ -89,23 +99,24 @@ class FileCommentsView(APIView):
         except ValueError:
             avatar_size = AVATAR_DEFAULT_SIZE
 
+        # resource check
         try:
-            obj_id = seafile_api.get_file_id_by_path(repo_id,
-                                                     path)
+            file_id = seafile_api.get_file_id_by_path(repo_id, path)
         except SearpcError as e:
             logger.error(e)
             return api_error(status.HTTP_500_INTERNAL_SERVER_ERROR,
                              'Internal error.')
-        if not obj_id:
+        if not file_id:
             return api_error(status.HTTP_404_NOT_FOUND, 'File not found.')
 
-        comment = request.data.get('comment', '')
-        if not comment:
-            return api_error(status.HTTP_400_BAD_REQUEST, 'Comment can not be empty.')
+        # permission check
+        if check_folder_permission(request, repo_id, '/') is None:
+            return api_error(status.HTTP_403_FORBIDDEN, 'Permission denied.')
 
+        detail = request.data.get('detail', '')
         username = request.user.username
-        o = FileComment.objects.add_by_file_path(
-            repo_id=repo_id, file_path=path, author=username, comment=comment)
+        file_comment = FileComment.objects.add_by_file_path(
+            repo_id=repo_id, file_path=path, author=username, comment=comment, detail=detail)
         repo = seafile_api.get_repo(repo_id)
         repo_owner = get_repo_owner(request, repo.id)
         comment_file_successful.send(sender=None,
@@ -115,7 +126,6 @@ class FileCommentsView(APIView):
                                      comment=comment,
                                      author=username)
 
-        comment = o.to_dict()
-        comment.update(user_to_dict(request.user.username, request=request,
-                                    avatar_size=avatar_size))
+        comment = file_comment.to_dict()
+        comment.update(user_to_dict(username, request=request, avatar_size=avatar_size))
         return Response(comment, status=201)
