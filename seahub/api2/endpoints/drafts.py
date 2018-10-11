@@ -103,6 +103,7 @@ class DraftView(APIView):
 
         try:
             d.publish()
+            d.delete()
             return Response(status.HTTP_200_OK)
         except (DraftFileConflict, IntegrityError):
             return api_error(status.HTTP_409_CONFLICT,

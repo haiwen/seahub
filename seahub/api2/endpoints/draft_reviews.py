@@ -71,6 +71,7 @@ class DraftReviewView(APIView):
         except DraftReview.DoesNotExist:
             return api_error(status.HTTP_404_NOT_FOUND,
                              'Review %s not found' % pk)
+
         r.status = st
         r.save()
 
@@ -91,6 +92,7 @@ class DraftReviewView(APIView):
             file_id = seafile_api.get_file_id_by_path(r.origin_repo_id, r.origin_file_path)
             r.publish_file_version = file_id
             r.save()
+            d.delete()
 
         result = r.to_dict()
 

@@ -116,7 +116,6 @@ class Draft(TimestampedModel):
             username=self.username, need_progress=0, synchronous=1
         )
 
-        self.delete()
 
     def to_dict(self):
         uuid = self.origin_file_uuid
@@ -177,7 +176,7 @@ class DraftReview(TimestampedModel):
     draft_file_path = models.CharField(max_length=1024)
     origin_file_version = models.CharField(max_length=100)
     publish_file_version = models.CharField(max_length=100, null=True)
-    draft_id = models.OneToOneField(Draft, blank=True, null=True, on_delete=models.SET_NULL)
+    draft_id = models.OneToOneField(Draft, null=True, on_delete=models.SET_NULL)
 
     objects = DraftReviewManager()
 
