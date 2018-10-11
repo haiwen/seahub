@@ -23,7 +23,7 @@ from seahub.api2.utils import api_error
 from seahub.wiki.models import Wiki, WikiPageMissing
 from seahub.wiki.utils import (clean_page_name, get_wiki_pages, get_inner_file_url,
                                get_wiki_dirent, get_wiki_page_object, get_wiki_dirs_by_path)
-from seahub.utils import gen_file_get_url
+from seahub.utils import gen_inner_file_get_url
 from seahub.base.templatetags.seahub_tags import email2contact_email, email2nickname
 
 logger = logging.getLogger(__name__)
@@ -159,7 +159,7 @@ class WikiPageView(APIView):
             error_msg = _("Page %s not found.") % page_name
             return api_error(status.HTTP_404_NOT_FOUND, error_msg)
 
-        url = get_inner_file_url(repo, wiki_dirent.obj_id, wiki_dirent.obj_name)
+        url = gen_inner_file_get_url(repo, wiki_dirent.obj_id, wiki_dirent.obj_name)
         file_response = urllib2.urlopen(url)
         content = file_response.read()
 
