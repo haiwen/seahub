@@ -16,9 +16,10 @@ from seaserv import seafile_api
 from pysearpc import SearpcError
 
 from seahub.utils.timeutils import timestamp_to_isoformat_timestr
+from seahub.utils.repo import get_repo_owner
 from seahub.views.sysadmin import can_view_sys_admin_repo
 from seahub.views.file import send_file_access_msg
-from seahub.utils import is_org_context, gen_file_get_url, \
+from seahub.utils import gen_file_get_url, \
     check_filename_with_rename, is_valid_dirent_name, \
     normalize_dir_path, normalize_file_path
 from seahub.views import get_system_default_repo_id
@@ -82,10 +83,7 @@ class AdminLibraryDirents(APIView):
             error_msg = 'Folder %s not found.' % parent_dir
             return api_error(status.HTTP_404_NOT_FOUND, error_msg)
 
-        if is_org_context(request):
-            repo_owner = seafile_api.get_org_repo_owner(repo_id)
-        else:
-            repo_owner = seafile_api.get_repo_owner(repo_id)
+        repo_owner = get_repo_owner(request, repo_id)
 
         try:
             dirs = seafile_api.list_dir_with_perm(repo_id,
