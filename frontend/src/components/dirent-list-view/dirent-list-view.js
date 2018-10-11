@@ -34,13 +34,18 @@ class DirentListView extends React.Component {
     this.setState({isItemFreezed: false});
   }
 
+  onItemClick = (dirent) => {
+    let direntPath = this.getDirentPath(dirent);
+    this.props.onItemClick(direntPath);
+  }
+
   onItemDelete = (dirent) => {
-    this.props.onItemDelete(dirent);
+    let direntPath = this.getDirentPath(dirent);
+    this.props.onItemDelete(direntPath);
   }
 
   onItemStarred = (dirent) => {
-    let path = this.props.filePath;
-    let filePath = path === '/' ? path + dirent.obj_name : path + '/' + dirent.obj_name;
+    let filePath = this.getDirentPath(dirent);
     if (dirent.starred) {
       seafileAPI.unStarFile(repoID, filePath).then(() => {
         this.props.updateViewList(this.props.filePath);
@@ -55,21 +60,18 @@ class DirentListView extends React.Component {
   onItemDownload = (dirent) => {
     if (dirent.is_dir) {
       this.setState({isProgressDialogShow: true, progress: '0%'});
+
       let index = dirent.p_dpath.lastIndexOf('/');
       let parent_dir = dirent.p_dpath.slice(0, index);
       parent_dir = parent_dir ? parent_dir : '/';
+      
       editorUtilities.zipDownload(parent_dir, dirent.obj_name).then(res => {
         this.zip_token = res.data['zip_token'];
         this.addDownloadAnimation();
         this.interval = setInterval(this.addDownloadAnimation, 1000);
       });
     } else {
-      let path = '';
-      if (this.state.filePath === '/') {
-        path = this.state.filePath + dirent.obj_name;
-      } else {
-        path = this.state.filePath + '/' + dirent.obj_name;
-      }
+      let path = this.getDirentPath(dirent);
       let url = URLDecorator.getUrl({type: 'download_file_url', repoID: repoID, filePath: path});
       location.href = url;
     }
@@ -106,6 +108,17 @@ class DirentListView extends React.Component {
     });
   }
 
+  getDirentPath = (dirent) => {
+    let path = '';
+    if (dirent.is_dir) {
+      path = dirent.p_dpath;
+    } else {
+      let filePath = this.props.filePath;
+      path = filePath === '/' ? filePath + dirent.obj_name : filePath + '/' + dirent.obj_name;
+    }
+    return path;
+  }
+
   render() {
     const { direntList, direntInfo } = this.props;
     return (
@@ -136,7 +149,7 @@ class DirentListView extends React.Component {
                     onItemDelete={this.onItemDelete}
                     onItemStarred={this.onItemStarred}
                     onItemDownload={this.onItemDownload}
-                    onItemClick={this.props.onItemClick}
+                    onItemClick={this.onItemClick}
                   />
                 );
               })

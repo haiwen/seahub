@@ -65,12 +65,7 @@ class MainPanel extends Component {
     window.location.href= serviceUrl + '/lib/' + repoID + '/file' + this.props.filePath + '?mode=edit';
   }
 
-  onItemStarred = (dirent) => {
-    
-  }
-
   render() {
-
     let filePathList = this.props.filePath.split('/');
     let nodePath = '';
     let pathElem = filePathList.map((item, index) => {
