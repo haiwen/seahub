@@ -1,7 +1,7 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import Prism from 'prismjs';
-import { siteRoot, gettext, draftID, reviewID, draftOriginFilePath, draftOriginRepoID, draftFileName, opStatus, publishFileVersion, originFileVersion } from './utils/constants'; 
+import { siteRoot, gettext, draftID, reviewID, draftOriginFilePath, draftFilePath, draftOriginRepoID, draftFileName, opStatus, publishFileVersion, originFileVersion } from './utils/constants'; 
 import { seafileAPI } from './utils/seafile-api';
 import axios from 'axios';
 import DiffViewer from '@seafile/seafile-editor/dist/diff-viewer/diff-viewer';
@@ -32,11 +32,11 @@ class DraftReview extends React.Component {
   componentDidMount() {
     if (publishFileVersion == 'None') {
      axios.all([
-       seafileAPI.getDraft(draftID),
+       seafileAPI.getFileDownloadLink(draftOriginRepoID, draftFilePath),
        seafileAPI.getFileDownloadLink(draftOriginRepoID, draftOriginFilePath)
       ]).then(axios.spread((res1, res2) => {
         axios.all([
-          seafileAPI.getFileContent(res1.data.links),
+          seafileAPI.getFileContent(res1.data),
           seafileAPI.getFileContent(res2.data)
         ]).then(axios.spread((draftContent, draftOriginContent) => {
           this.setState({

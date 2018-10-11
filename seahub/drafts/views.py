@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
+import os
 
-import posixpath
 from django.shortcuts import render, get_object_or_404
 from django.utils.translation import ugettext as _
 
@@ -23,29 +23,26 @@ def reviews(request):
 def review(request, pk):
     d_r = get_object_or_404(DraftReview, pk=pk)
 
-    d = d_r.draft_id
-
     # check perm
-    uuid = d.origin_file_uuid
-    file_path = posixpath.join(uuid.parent_path, uuid.filename)
+    file_path = d_r.origin_file_path
+    origin_repo_id = d_r.origin_repo_id
 
     if request.user.username:
-        permission = check_folder_permission(request, d.origin_repo_id, file_path)
+        permission = check_folder_permission(request, origin_repo_id, file_path)
 
     if permission is None:
         return render_permission_error(request, _(u'Permission denied.'))
 
-    draft_file_name = d.draft_file_path.lstrip('/')
+    draft_file_name = os.path.basename(d_r.draft_file_path)
 
     return render(request, "draft_review.html", {
         "review_id": pk,
-        "draft_id": d.id,
-        "draft_repo_id": d.draft_repo_id,
-        "draft_file_path": d.draft_file_path,
-        "draft_origin_repo_id": d.origin_repo_id,
-        "draft_origin_file_path": file_path,
+        "draft_repo_id": d_r.origin_repo_id,
+        "draft_origin_repo_id": d_r.origin_repo_id,
+        "draft_origin_file_path": d_r.origin_file_path,
+        "draft_file_path": d_r.draft_file_path,
         "draft_file_name": draft_file_name,
-        "origin_file_version": d.origin_file_version,
+        "origin_file_version": d_r.origin_file_version,
         "publish_file_version": d_r.publish_file_version,
         "status": d_r.status
         })

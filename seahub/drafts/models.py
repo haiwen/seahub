@@ -41,28 +41,27 @@ class DraftManager(models.Manager):
         if file_id is None:
             file_id = seafile_api.get_file_id_by_path(repo.id, file_path)
 
-        # create draft repo if any
-        draft_repo_id = self.get_user_draft_repo_id(username)
-        if draft_repo_id is None:
-            draft_repo_id = create_user_draft_repo(username)
+        # create drafts dir if any 
+        draft_dir_id = seafile_api.get_dir_id_by_path(repo.id, '/Drafts')
+        if draft_dir_id is None:
+            seafile_api.post_dir(repo.id, '/', 'Drafts', username)
 
         # check draft file does not exists and copy origin file content to
         # draft file
         draft_file_name = get_draft_file_name(repo.id, file_path)
-        draft_file_path = '/' + draft_file_name
+        draft_file_path = '/Drafts/' + draft_file_name
 
-        # TODO 
-        if seafile_api.get_file_id_by_path(draft_repo_id, draft_file_path):
+        if seafile_api.get_file_id_by_path(repo.id, draft_file_path):
             raise DraftFileExist
 
+        # copy file to draft dir
         seafile_api.copy_file(repo.id, file_uuid.parent_path, file_uuid.filename,
-                              draft_repo_id, '/', draft_file_name,
+                              repo.id, '/Drafts', draft_file_name,
                               username=username, need_progress=0, synchronous=1)
 
         draft = self.model(username=username,
                            origin_repo_id=repo.id, origin_file_uuid=file_uuid,
                            origin_file_version=file_id,
-                           draft_repo_id=draft_repo_id,
                            draft_file_path=draft_file_path)
         draft.save(using=self._db)
         return draft
@@ -75,8 +74,7 @@ class Draft(TimestampedModel):
     origin_repo_id = models.CharField(max_length=36)
     origin_file_uuid = models.ForeignKey(FileUUIDMap, on_delete=models.CASCADE)
     origin_file_version = models.CharField(max_length=100)
-    draft_repo_id = models.CharField(max_length=36)
-    draft_file_path = models.CharField(max_length=2048)
+    draft_file_path = models.CharField(max_length=1024)
 
     objects = DraftManager()
 
@@ -84,8 +82,9 @@ class Draft(TimestampedModel):
     #     unique_together = (('username', 'draft_repo_id'), )
 
     def delete(self):
-        seafile_api.del_file(self.draft_repo_id, '/',
-                             self.draft_file_path.lstrip('/'), self.username)
+        draft_file_name = os.path.basename(self.draft_file_path)
+        seafile_api.del_file(self.origin_repo_id, '/Drafts/',
+                             draft_file_name, self.username)
 
         super(Draft, self).delete()
 
@@ -95,7 +94,11 @@ class Draft(TimestampedModel):
         if not r_repo:
             raise DraftFileConflict
 
-        origin_file_path = self.origin_file_uuid.parent_path + self.origin_file_uuid.filename
+        if self.origin_file_uuid.parent_path == '/':
+            origin_file_path = self.origin_file_uuid.parent_path + self.origin_file_uuid.filename
+        else:
+            origin_file_path = self.origin_file_uuid.parent_path + '/' + self.origin_file_uuid.filename
+
         file_id = seafile_api.get_file_id_by_path(self.origin_repo_id,
                                                   origin_file_path)
         if not file_id:
@@ -104,13 +107,16 @@ class Draft(TimestampedModel):
         if file_id != self.origin_file_version:
             raise DraftFileConflict
 
+        draft_file_name = os.path.basename(self.draft_file_path)
         # move draft file to origin file
         seafile_api.move_file(
-            self.draft_repo_id, '/', self.draft_file_path.lstrip('/'),
+            self.origin_repo_id, '/Drafts', draft_file_name,
             self.origin_repo_id, self.origin_file_uuid.parent_path,
             self.origin_file_uuid.filename, replace=1,
             username=self.username, need_progress=0, synchronous=1
         )
+
+        self.delete()
 
     def to_dict(self):
         uuid = self.origin_file_uuid
@@ -119,16 +125,18 @@ class Draft(TimestampedModel):
         review_id = ''
         if hasattr(self, 'draftreview'):
             review_id = self.draftreview.id
+            review_status = self.draftreview.status
 
         return {
             'id': self.pk,
             'review_id': review_id,
+            'review_status': review_status,
             'owner': self.username,
             'owner_nickname': email2nickname(self.username),
             'origin_repo_id': self.origin_repo_id,
             'origin_file_path': file_path,
             'origin_file_version': self.origin_file_version,
-            'draft_repo_id': self.draft_repo_id,
+            'draft_repo_id': self.origin_repo_id,
             'draft_file_path': self.draft_file_path,
             'created_at': datetime_to_isoformat_timestr(self.created_at),
             'updated_at': datetime_to_isoformat_timestr(self.updated_at),
@@ -146,9 +154,16 @@ class DraftReviewManager(models.Manager):
         if has_review:
             raise DraftReviewExist
 
+        uuid = draft.origin_file_uuid
+        file_path = posixpath.join(uuid.parent_path, uuid.filename)
+
         draft_review = self.model(creator=creator,
                                   status='open',
-                                  draft_id=draft)
+                                  draft_id=draft,
+                                  origin_repo_id=draft.origin_repo_id,
+                                  origin_file_path=file_path,
+                                  draft_file_path=draft.draft_file_path,
+                                  origin_file_version=draft.origin_file_version)
         draft_review.save(using=self._db)
 
         return draft_review
@@ -157,14 +172,16 @@ class DraftReviewManager(models.Manager):
 class DraftReview(TimestampedModel):
     creator = LowerCaseCharField(max_length=255, db_index=True)
     status = models.CharField(max_length=20)
+    origin_repo_id = models.CharField(max_length=36)
+    origin_file_path = models.CharField(max_length=1024)
+    draft_file_path = models.CharField(max_length=1024)
+    origin_file_version = models.CharField(max_length=100)
     publish_file_version = models.CharField(max_length=100, null=True)
-    draft_id = models.OneToOneField(Draft, on_delete=models.CASCADE)
+    draft_id = models.OneToOneField(Draft, blank=True, null=True, on_delete=models.SET_NULL)
 
     objects = DraftReviewManager()
 
     def to_dict(self):
-        uuid = self.draft_id.origin_file_uuid
-        file_path = posixpath.join(uuid.parent_path, uuid.filename) # TODO: refactor uuid
 
         return {
             'id': self.pk,
@@ -172,11 +189,11 @@ class DraftReview(TimestampedModel):
             'status': self.status,
             'creator_name': email2nickname(self.creator),
             'draft_id': self.draft_id_id,
-            'draft_origin_repo_id': self.draft_id.origin_repo_id,
-            'draft_origin_file_path': file_path,
-            'draft_origin_file_version': self.draft_id.origin_file_version,
-            'draft_repo_id': self.draft_id.draft_repo_id,
-            'draft_file_path': self.draft_id.draft_file_path,
+            'draft_origin_repo_id': self.origin_repo_id,
+            'draft_origin_file_path': self.origin_file_path,
+            'draft_origin_file_version': self.origin_file_version,
+            'draft_repo_id': self.origin_repo_id,
+            'draft_file_path': self.draft_file_path,
             'created_at': datetime_to_isoformat_timestr(self.created_at),
             'updated_at': datetime_to_isoformat_timestr(self.updated_at),
         }

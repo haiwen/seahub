@@ -44,7 +44,6 @@ class DraftReviewsView(APIView):
         if d.username != request.user.username:
             return api_error(status.HTTP_403_FORBIDDEN,
                              'Permission denied.')
-
         try:
             d_r = DraftReview.objects.add(creator=d.username, draft=d)
         except (DraftReviewExist):
@@ -75,7 +74,7 @@ class DraftReviewView(APIView):
         r.status = st
         r.save()
 
-        if st == 'finish':
+        if st == 'finished':
 
             try:
                 d = Draft.objects.get(pk=r.draft_id_id)
@@ -89,9 +88,7 @@ class DraftReviewView(APIView):
                 return api_error(status.HTTP_409_CONFLICT,
                              'There is a conflict between the draft and the original file')
 
-            origin_file_path = d.origin_file_uuid.parent_path + d.origin_file_uuid.filename
-            file_id = seafile_api.get_file_id_by_path(d.origin_repo_id, origin_file_path)
-
+            file_id = seafile_api.get_file_id_by_path(r.origin_repo_id, r.origin_file_path)
             r.publish_file_version = file_id
             r.save()
 
