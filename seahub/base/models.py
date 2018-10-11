@@ -98,9 +98,10 @@ class FileComment(models.Model):
     comment = models.TextField()
     created_at = models.DateTimeField(default=timezone.now)
     updated_at = models.DateTimeField(default=timezone.now)
-    objects = FileCommentManager()
-    resolved = models.BooleanField(default=False)
+    resolved = models.BooleanField(default=False, db_index=True)
     detail = models.TextField()
+
+    objects = FileCommentManager()
 
     @classmethod
     def normalize_path(self, path):
