@@ -18,6 +18,7 @@ from seahub.utils import get_file_ops_stats_by_day, \
         get_all_users_traffic_by_month
 from seahub.utils.timeutils import datetime_to_isoformat_timestr
 from seahub.utils.ms_excel import write_xls
+from seahub.utils.file_size import get_file_size_unit, UNIT_MB
 
 from seahub.api2.authentication import TokenAuthentication
 from seahub.api2.throttling import UserRateThrottle
@@ -190,7 +191,8 @@ class SystemUsersTrafficExcelView(APIView):
 
     def byte_to_mb(self, byte):
 
-        return round(float(byte)/1000/1000, 2)
+        unit = get_file_size_unit(UNIT_MB)
+        return round(float(byte)/unit, 2)
 
     def get(self, request):
 
