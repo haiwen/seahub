@@ -1,0 +1,157 @@
+import React from 'react';
+import PropTypes from 'prop-types';
+import { gettext, repoID } from '../../utils/constants';
+import URLDecorator from '../../utils/url-decorator';
+import editorUtilities from '../../utils/editor-utilties';
+import { seafileAPI } from '../../utils/seafile-api';
+import DirentListItem from './dirent-list-item';
+import ZipDownloadDialog from '../dialog/zip-download-dialog';
+
+const propTypes = {
+  direntInfo: PropTypes.object,
+  direntList: PropTypes.array.isRequired,
+  onItemDelete: PropTypes.func.isRequired,
+  onItemClick: PropTypes.func.isRequired,
+  updateViewList: PropTypes.func.isRequired,
+};
+
+class DirentListView extends React.Component {
+
+  constructor(props) {
+    super(props);
+    this.state = {
+      isItemFreezed: false,
+      isProgressDialogShow: false,
+      progress: '0%',
+    };
+  }
+
+  onItemMenuShow = () => {
+    this.setState({isItemFreezed: true});
+  }
+  
+  onItemMenuHide = () => {
+    this.setState({isItemFreezed: false});
+  }
+
+  onItemDelete = (dirent) => {
+    this.props.onItemDelete(dirent);
+  }
+
+  onItemStarred = (dirent) => {
+    let path = this.props.filePath;
+    let filePath = path === '/' ? path + dirent.obj_name : path + '/' + dirent.obj_name;
+    if (dirent.starred) {
+      seafileAPI.unStarFile(repoID, filePath).then(() => {
+        this.props.updateViewList(this.props.filePath);
+      });
+    } else {
+      seafileAPI.starFile(repoID, filePath).then(() => {
+        this.props.updateViewList(this.props.filePath);
+      });
+    }
+  }
+
+  onItemDownload = (dirent) => {
+    if (dirent.is_dir) {
+      this.setState({isProgressDialogShow: true, progress: '0%'});
+      let index = dirent.p_dpath.lastIndexOf('/');
+      let parent_dir = dirent.p_dpath.slice(0, index);
+      parent_dir = parent_dir ? parent_dir : '/';
+      editorUtilities.zipDownload(parent_dir, dirent.obj_name).then(res => {
+        this.zip_token = res.data['zip_token'];
+        this.addDownloadAnimation();
+        this.interval = setInterval(this.addDownloadAnimation, 1000);
+      });
+    } else {
+      let path = '';
+      if (this.state.filePath === '/') {
+        path = this.state.filePath + dirent.obj_name;
+      } else {
+        path = this.state.filePath + '/' + dirent.obj_name;
+      }
+      let url = URLDecorator.getUrl({type: 'download_file_url', repoID: repoID, filePath: path});
+      location.href = url;
+    }
+  }
+
+  addDownloadAnimation = () => {
+    let _this = this;
+    let token = this.zip_token;
+    editorUtilities.queryZipProgress(token).then(res => {
+      let data = res.data;
+      let progress = data.total === 0 ? '100%' : (data.zipped / data.total * 100).toFixed(0) + '%';
+      this.setState({progress: progress});
+
+      if (data['total'] === data['zipped']) {
+        this.setState({
+          progress: '100%'
+        });
+        clearInterval(this.interval);
+        location.href = URLDecorator.getUrl({type: 'download_dir_zip_url', token: token});
+        setTimeout(function() {
+          _this.setState({isProgressDialogShow: false});
+        }, 500);
+      }
+
+    });
+  }
+
+  onCancelDownload = () => {
+    let zip_token = this.zip_token;
+    editorUtilities.cancelZipTask(zip_token).then(res => {
+      this.setState({
+        isProgressDialogShow: false,
+      });
+    });
+  }
+
+  render() {
+    const { direntList, direntInfo } = this.props;
+    return (
+      <div className="table-container">
+        <table>
+          <thead>
+            <tr>
+              <th width="3%" className="select"><input type="checkbox" className="vam" /></th>
+              <th width="3%"></th>
+              <th width="5%"></th>
+              <th width="45%">{gettext('Name')}</th>
+              <th width="20%"></th>
+              <th width="11%">{gettext('Size')}</th>
+              <th width="13%">{gettext('Last Update')}</th>
+            </tr>
+          </thead>
+          <tbody>
+            {
+              direntList.length !== 0 && direntList.map((dirent, index) => {
+                return (
+                  <DirentListItem
+                    key={index}
+                    dirent={dirent}
+                    direntInfo={direntInfo}
+                    isItemFreezed={this.state.isItemFreezed}
+                    onItemMenuShow={this.onItemMenuShow}
+                    onItemMenuHide={this.onItemMenuHide}
+                    onItemDelete={this.onItemDelete}
+                    onItemStarred={this.onItemStarred}
+                    onItemDownload={this.onItemDownload}
+                    onItemClick={this.props.onItemClick}
+                  />
+                );
+              })
+            }
+          </tbody>
+        </table>
+        {
+          this.state.isProgressDialogShow && 
+          <ZipDownloadDialog progress={this.state.progress} onCancelDownload={this.onCancelDownload}/>
+        }
+      </div>
+    );
+  }
+}
+
+DirentListView.propTypes = propTypes;
+
+export default DirentListView;

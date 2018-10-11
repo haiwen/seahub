@@ -1,9 +1,12 @@
 import React, { Component } from 'react';
 import { gettext, repoID, serviceUrl, slug, siteRoot } from '../../utils/constants';
+import { seafileAPI } from '../../utils/seafile-api';
 import CommonToolbar from '../../components/toolbar/common-toolbar';
 import PathToolbar from '../../components/toolbar/path-toolbar';
 import MarkdownViewer from '../../components/markdown-viewer';
-import TreeDirView from '../../components/tree-dir-view/tree-dir-view';
+import DirentListView from '../../components/dirent-list-view/dirent-list-view';
+import DirentInfo from '../../models/dirent-info';
+import Dirent from '../../models/dirent';
 
 class MainPanel extends Component {
 
@@ -11,18 +14,37 @@ class MainPanel extends Component {
     super(props);
     this.state = {
       isWikiMode: true,
-      needOperationGroup: true,
+      direntInfo: null,
+      direntList: []
     };
+  }
+
+  componentWillReceiveProps(nextProps) {
+    let node = nextProps.changedNode;
+    if (node && node.isDir()) {
+      let path = node.path;
+      this.updateViewList(path);
+    }
+  }
+
+  updateViewList = (filePath) => {
+    seafileAPI.listRepoDir(repoID, filePath, 48).then(res => {
+      let direntInfo = new DirentInfo(res.data);
+      let dirents = res.data.dirent_list;
+      let direntList = [];
+      dirents.forEach(item => {
+        let dirent = new Dirent(item);
+        direntList.push(dirent);
+      });
+      this.setState({
+        direntInfo: direntInfo,
+        direntList: direntList,
+      });
+    });
   }
 
   onMenuClick = () => {
     this.props.onMenuClick();
-  }
-
-  onEditClick = (e) => {
-    // const w=window.open('about:blank')
-    e.preventDefault();
-    window.location.href= serviceUrl + '/lib/' + repoID + '/file' + this.props.filePath + '?mode=edit';
   }
 
   onMainNavBarClick = (e) => {
@@ -36,6 +58,15 @@ class MainPanel extends Component {
     }
     this.setState({isWikiMode: false});
     this.props.switchViewMode(e.target.id);
+  }
+
+  onEditClick = (e) => {
+    e.preventDefault();
+    window.location.href= serviceUrl + '/lib/' + repoID + '/file' + this.props.filePath + '?mode=edit';
+  }
+
+  onItemStarred = (dirent) => {
+    
   }
 
   render() {
@@ -94,24 +125,22 @@ class MainPanel extends Component {
             <PathToolbar filePath={this.props.filePath}/>
           </div>
           <div className="cur-view-content">
-            { this.props.isViewFileState && 
+            { this.props.isViewFileState ?
               <MarkdownViewer
                 markdownContent={this.props.content}
                 latestContributor={this.props.latestContributor}
                 lastModified = {this.props.lastModified}
                 onLinkClick={this.props.onLinkClick}
                 isFileLoading={this.props.isFileLoading}
+              /> :
+              <DirentListView 
+                direntInfo={this.state.direntInfo}
+                direntList={this.state.direntList}
+                filePath={this.props.filePath}
+                onItemClick={this.props.onMainItemClick}
+                onItemDelete={this.props.onMainItemDelete}
+                updateViewList={this.updateViewList}
               />
-            }
-            { !this.props.isViewFileState && 
-              <TreeDirView 
-                node={this.props.changedNode}
-                onMainNodeClick={this.props.onMainNodeClick}
-                onDeleteItem={this.props.onDeleteNode}
-                onRenameItem={this.props.onRenameNode}
-                needOperationGroup={this.state.needOperationGroup}
-              >
-              </TreeDirView>
             }
           </div>
         </div>

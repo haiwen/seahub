@@ -1,6 +1,16 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 import { gettext } from '../../utils/constants';
 import OperationMenu from './operation-menu';
+
+const propTypes = {
+  dirent: PropTypes.object.isRequired,
+  direntInfo: PropTypes.object.isRequired,
+  onItemMenuShow: PropTypes.func.isRequired,
+  onItemMenuHide: PropTypes.func.isRequired,
+  onDelete: PropTypes.func.isRequired,
+  onDownload: PropTypes.func.isRequired,
+};
 
 class OperationGroup extends React.Component {
 
@@ -9,7 +19,7 @@ class OperationGroup extends React.Component {
     this.state = {
       isItemMenuShow: false,
       menuPosition: {top: 0, left: 0 },
-    }
+    };
   }
 
   componentDidMount() {
@@ -87,7 +97,8 @@ class OperationGroup extends React.Component {
         {
           this.state.isItemMenuShow && 
           <OperationMenu 
-            currentItem={this.props.item}
+            dirent={this.props.dirent}
+            direntInfo={this.props.direntInfo}
             menuPosition={this.state.menuPosition}
             onRename={this.onRename}
             onCopy={this.onCopy}
@@ -97,5 +108,7 @@ class OperationGroup extends React.Component {
     );
   }
 }
+
+OperationGroup.propTypes = propTypes;
 
 export default OperationGroup;

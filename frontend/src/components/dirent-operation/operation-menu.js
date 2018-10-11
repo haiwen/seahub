@@ -3,20 +3,22 @@ import PropTypes from 'prop-types';
 import { gettext } from '../../utils/constants';
 
 const propTypes = {
-  currentItem: PropTypes.object.isRequired,
+  dirent: PropTypes.object.isRequired,
+  direntInfo: PropTypes.object.isRequired,
   menuPosition: PropTypes.object.isRequired, 
 };
 
 class OperationMenu extends React.Component {
 
   getItemType() {
-    return this.props.currentItem.type;
+    let type = this.props.dirent.is_dir ? 'dir' : 'file';
+    return type;
   }
 
   renderDirentDirMenu() {
     let position = this.props.menuPosition;
     let style = {position: 'fixed', left: position.left, top: position.top, display: 'block'};
-    if (this.props.currentItem.permission === 'rw') {
+    if (this.props.dirent.perm === 'rw') {
       return (
         <ul className="dropdown-menu operation-menu" style={style}>
           <li className="dropdown-item operation-menu-item">
@@ -44,7 +46,7 @@ class OperationMenu extends React.Component {
       );
     }
 
-    if (this.props.currentItem.permission === 'r') {
+    if (this.props.dirent.perm === 'r') {
       return (
         <ul className="dropdown-menu operation-menu" style={style}>
           <li className="dropdown-item operation-menu-item">
@@ -62,7 +64,7 @@ class OperationMenu extends React.Component {
   renderDirentFileMenu() {
     let position = this.props.menuPosition;
     let style = {position: 'fixed', left: position.left, top: position.top, display: 'block'};
-    if (this.props.currentItem.permission === 'rw') {
+    if (this.props.dirent.perm === 'rw') {
       return (
         <ul className="dropdown-menu operation-menu" style={style}>
           <li className="dropdown-item operation-menu-item">
@@ -105,7 +107,7 @@ class OperationMenu extends React.Component {
       );
     }
 
-    if (this.props.currentItem.permission === "r") {
+    if (this.props.dirent.perm === 'r') {
       return (
         <ul className="dropdown-menu operation-menu" style={style}>
           <li className="dropdown-item operation-menu-item">
@@ -130,14 +132,14 @@ class OperationMenu extends React.Component {
     let type = this.getItemType();
     let menu = null;
     switch(type) {
-      case 'file':
-        menu = this.renderDirentFileMenu();
-        break;
-      case 'dir':
-        menu = this.renderDirentDirMenu();
-        break;
-      default:
-        break;
+    case 'file':
+      menu = this.renderDirentFileMenu();
+      break;
+    case 'dir':
+      menu = this.renderDirentDirMenu();
+      break;
+    default:
+      break;
     }
     return menu;
   }

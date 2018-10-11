@@ -54,31 +54,8 @@ class Wiki extends Component {
         this.exitViewFileState(treeData, node);
         this.setState({isFileLoading: false});
       } else {
-        seafileAPI.getFileInfo(repoID, filePath).then((res) => {
-          let { mtime, permission, last_modifier_name } = res.data;
-
-          this.setState({
-            tree_data: treeData,
-            latestContributor: last_modifier_name,
-            lastModified: moment.unix(mtime).fromNow(),
-            permission: permission,
-            filePath: filePath,
-            isFileLoading: false
-          });
-
-          seafileAPI.getFileDownloadLink(repoID, filePath).then((res) => {
-            const downLoadUrl = res.data;
-            seafileAPI.getFileContent(downLoadUrl).then((res) => {
-              this.setState({
-                content: res.data,
-                isFileLoading: false
-              });
-            });
-          });
-        });
-
-        let fileUrl = serviceUrl + '/wiki/lib/' + repoID + filePath;
-        window.history.pushState({urlPath: fileUrl, filePath: filePath}, filePath, fileUrl);
+        this.setState({tree_data: treeData});
+        this.initMainPanelData(filePath);
       }
     }, () => {
       /* eslint-disable */
@@ -177,8 +154,18 @@ class Wiki extends Component {
     window.history.pushState({urlPath: fileUrl, filePath: node.path},node.path, fileUrl);
   }
 
-  onMainNodeClick = (node) => {
+  onMainItemClick = (dirent) => {
+    //todos need optimized
+    let path = dirent.p_dpath;
+    if (!dirent.is_dir) {
+      if (this.state.filePath === '/') {
+        path = this.state.filePath + dirent.obj_name;
+      } else {
+        path = this.state.filePath + '/' + dirent.obj_name;
+      }
+    }
     let tree = this.state.tree_data.clone();
+    let node = tree.getNodeByPath(path);
     tree.expandNode(node);
     if (node.isMarkdown()) {
       this.initMainPanelData(node.path);
@@ -190,6 +177,24 @@ class Wiki extends Component {
       const url = serviceUrl + '/lib/' + repoID + '/file' + node.path;
       w.location.href = url;
     }
+  }
+
+  onMainItemDelete = (dirent) => {
+    let path = dirent.p_dpath;
+    if (!dirent.is_dir) {
+      if (this.state.filePath === '/') {
+        path = this.state.filePath + dirent.obj_name;
+      } else {
+        path = this.state.filePath + '/' + dirent.obj_name;
+      }
+    }
+    let node = this.state.tree_data.getNodeByPath(path);
+
+    this.onDeleteNode(node);
+  }
+
+  onMainItemRename = () => {
+    //todos:
   }
 
   onNodeClick = (e, node) => {
@@ -354,12 +359,6 @@ class Wiki extends Component {
 
   onDeleteNode = (node) => {
     let filePath = node.path;
-    if (node.isDir()) {
-      editorUtilities.deleteDir(filePath);
-    } else {
-      editorUtilities.deleteFile(filePath);
-    }
-    
 
     let isCurrentFile = false;
     if (node.isDir()) {
@@ -367,31 +366,66 @@ class Wiki extends Component {
     } else {
       isCurrentFile = this.isModifyCurrentFile(node);
     }
-
     let tree = this.state.tree_data.clone();
-    
-    if (this.state.isViewFileState) {
-      if (isCurrentFile) {
-        let homeNode = this.getHomeNode(tree);
-        tree.expandNode(homeNode);
-        this.setState({
-          tree_data: tree,
-          changedNode: homeNode
-        });
-        this.initMainPanelData(homeNode.path);
-      } else {
-        this.setState({tree_data: tree});
-      }
+
+    if (node.isDir()) {
+      editorUtilities.deleteDir(filePath).then(() => {
+        if (this.state.isViewFileState) {
+          tree.deleteNode(node);
+          if (isCurrentFile) {
+            let homeNode = this.getHomeNode(tree);
+            tree.expandNode(homeNode);
+            this.setState({
+              tree_data: tree,
+              changedNode: homeNode
+            });
+            this.initMainPanelData(homeNode.path);
+          } else {
+            this.setState({tree_data: tree});
+          }
+        } else {
+          let parentNode = tree.getNodeByPath(this.state.filePath);
+          let isChild = tree.isNodeChild(parentNode, node);
+
+          tree.deleteNode(node);
+          if (isChild) {
+            this.exitViewFileState(tree, parentNode);
+          } else {
+            this.setState({tree_data: tree});
+          }
+        }
+        
+      });
     } else {
-      let parentNode = tree.getNodeByPath(this.state.filePath);
-      let isChild = tree.isNodeChild(parentNode, node);
-      if (isChild) {
-        this.exitViewFileState(tree, parentNode);
-      } else {
-        this.setState({tree_data: tree});
-      }
+      editorUtilities.deleteFile(filePath).then(() => {
+        if (this.state.isViewFileState) {
+          tree.deleteNode(node);
+
+          if (isCurrentFile) {
+            let homeNode = this.getHomeNode(tree);
+            tree.expandNode(homeNode);
+            this.setState({
+              tree_data: tree,
+              changedNode: homeNode
+            });
+            this.initMainPanelData(homeNode.path);
+          } else {
+            this.setState({tree_data: tree});
+          }
+        } else {
+          let parentNode = tree.getNodeByPath(this.state.filePath);
+          let isChild = tree.isNodeChild(parentNode, node);
+
+          tree.deleteNode(node);
+          if (isChild) {
+            this.exitViewFileState(tree, parentNode);
+          } else {
+            this.setState({tree_data: tree});
+          }
+        }
+    
+      });
     }
-    tree.deleteNode(node);
   }
 
   
@@ -528,14 +562,13 @@ class Wiki extends Component {
           isViewFileState={this.state.isViewFileState}
           changedNode={this.state.changedNode}
           isFileLoading={this.state.isFileLoading}
+          switchViewMode={this.switchViewMode}
           onLinkClick={this.onLinkClick}
           onMenuClick={this.onMenuClick}
           onSearchedClick={this.onSearchedClick}
           onMainNavBarClick={this.onMainNavBarClick}
-          onMainNodeClick={this.onMainNodeClick}
-          switchViewMode={this.switchViewMode}
-          onDeleteNode={this.onDeleteNode}
-          onRenameNode={this.onRenameNode}
+          onMainItemClick={this.onMainItemClick}
+          onMainItemDelete={this.onMainItemDelete}
         />
       </div>
     );
