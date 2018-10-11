@@ -47,7 +47,7 @@ class DraftListItem extends React.Component {
   onDraftEditClick = () => {
     let draft = this.props.draft;
     let filePath = draft.draft_file_path;
-    let repoID = draft.draft_repo_id;
+    let repoID = draft.origin_repo_id;
     window.location.href= siteRoot + 'lib/' + repoID + '/file' + filePath + '?mode=edit';
   }
 

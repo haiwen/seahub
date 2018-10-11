@@ -122,7 +122,8 @@ class Draft(TimestampedModel):
         uuid = self.origin_file_uuid
         file_path = posixpath.join(uuid.parent_path, uuid.filename) # TODO: refactor uuid
 
-        review_id = ''
+        review_id = None
+        review_status = None
         if hasattr(self, 'draftreview'):
             review_id = self.draftreview.id
             review_status = self.draftreview.status
@@ -136,7 +137,6 @@ class Draft(TimestampedModel):
             'origin_repo_id': self.origin_repo_id,
             'origin_file_path': file_path,
             'origin_file_version': self.origin_file_version,
-            'draft_repo_id': self.origin_repo_id,
             'draft_file_path': self.draft_file_path,
             'created_at': datetime_to_isoformat_timestr(self.created_at),
             'updated_at': datetime_to_isoformat_timestr(self.updated_at),
@@ -188,11 +188,10 @@ class DraftReview(TimestampedModel):
             'creator': self.creator,
             'status': self.status,
             'creator_name': email2nickname(self.creator),
-            'draft_id': self.draft_id_id,
             'draft_origin_repo_id': self.origin_repo_id,
             'draft_origin_file_path': self.origin_file_path,
             'draft_origin_file_version': self.origin_file_version,
-            'draft_repo_id': self.origin_repo_id,
+            'draft_publish_file_version': self.publish_file_version,
             'draft_file_path': self.draft_file_path,
             'created_at': datetime_to_isoformat_timestr(self.created_at),
             'updated_at': datetime_to_isoformat_timestr(self.updated_at),
