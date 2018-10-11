@@ -69,14 +69,15 @@ class FileCommentView(APIView):
         """Update a comment, only comment author or repo owner can perform
         this op
         1.Change resolved of comment
+        2.Add comment_detail
         """
         # argument check
         resolved = request.data.get('resolved')
-        if resolved not in ('true', 'false'):
+        if resolved not in ('true', 'false', None):
             error_msg = 'resolved invalid.'
             return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
 
-        comment_resolved = to_python_boolean(resolved)
+        detail = request.data.get('detail')
 
         # resource check
         try:
@@ -91,12 +92,22 @@ class FileCommentView(APIView):
             error_msg = 'Permission denied.'
             return api_error(status.HTTP_403_FORBIDDEN, error_msg)
 
-        try:
-            file_comment.resolved = comment_resolved
-            file_comment.save()
-        except Exception as e:
-            logger.error(e)
-            return api_error(status.HTTP_500_INTERNAL_SERVER_ERROR, 'Internal error.')
+        if resolved is not None:
+            comment_resolved = to_python_boolean(resolved)
+            try:
+                file_comment.resolved = comment_resolved
+                file_comment.save()
+            except Exception as e:
+                logger.error(e)
+                return api_error(status.HTTP_500_INTERNAL_SERVER_ERROR, 'Internal error.')
+
+        if detail is not None:
+            try:
+                file_comment.detail = detail
+                file_comment.save()
+            except Exception as e:
+                logger.error(e)
+                return api_error(status.HTTP_500_INTERNAL_SERVER_ERROR, 'Internal error.')
 
         try:
             avatar_size = int(request.GET.get('avatar_size', AVATAR_DEFAULT_SIZE))
