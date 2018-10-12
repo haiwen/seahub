@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import PropTypes from 'prop-types';
 import { gettext, repoID, serviceUrl, slug, siteRoot } from '../../utils/constants';
 import { seafileAPI } from '../../utils/seafile-api';
 import CommonToolbar from '../../components/toolbar/common-toolbar';
@@ -7,6 +8,21 @@ import MarkdownViewer from '../../components/markdown-viewer';
 import DirentListView from '../../components/dirent-list-view/dirent-list-view';
 import DirentInfo from '../../models/dirent-info';
 import Dirent from '../../models/dirent';
+
+const propTypes = {
+  content: PropTypes.string,
+  lastModified: PropTypes.string,
+  latestContributor: PropTypes.string,
+  permission: PropTypes.string,
+  filePath: PropTypes.string.isRequired,
+  isFileLoading: PropTypes.bool.isRequired,
+  isViewFileState: PropTypes.bool.isRequired,
+  onMenuClick: PropTypes.func.isRequired,
+  onSearchedClick: PropTypes.func.isRequired,
+  onMainNavBarClick: PropTypes.func.isRequired,
+  onMainItemClick: PropTypes.func.isRequired,
+  onMainItemDelete: PropTypes.func.isRequired,
+}
 
 class MainPanel extends Component {
 
@@ -143,5 +159,7 @@ class MainPanel extends Component {
     );
   }
 }
+
+MainPanel.propTypes = propTypes;
 
 export default MainPanel;

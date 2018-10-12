@@ -9,6 +9,7 @@ import ZipDownloadDialog from '../dialog/zip-download-dialog';
 
 const propTypes = {
   direntInfo: PropTypes.object,
+  filePath: PropTypes.string.isRequired,
   direntList: PropTypes.array.isRequired,
   onItemDelete: PropTypes.func.isRequired,
   onItemClick: PropTypes.func.isRequired,

@@ -44,22 +44,26 @@ class OperationGroup extends React.Component {
     this.props.onDelete();
   }
 
-  onItemMenuShow = (e) => {
+  onItemMenuToggle = (e) => {
+    e.stopPropagation();
+    e.nativeEvent.stopImmediatePropagation();
+
     if (!this.state.isItemMenuShow) {
-      e.stopPropagation();
-      e.nativeEvent.stopImmediatePropagation();
-  
-      let left = e.clientX - 8*16;
-      let top  = e.clientY + 15;
-      let position = Object.assign({},this.state.menuPosition, {left: left, top: top});
-      this.setState({
-        menuPosition: position,
-        isItemMenuShow: true,
-      });
-      this.props.onItemMenuShow();
+      this.onItemMenuShow(e);
     } else {
       this.onItemMenuHide();
     }
+  }
+
+  onItemMenuShow = (e) => {
+    let left = e.clientX - 8*16;
+    let top  = e.clientY + 15;
+    let position = Object.assign({},this.state.menuPosition, {left: left, top: top});
+    this.setState({
+      menuPosition: position,
+      isItemMenuShow: true,
+    });
+    this.props.onItemMenuShow();
   }
 
   onItemMenuHide = () => {
@@ -91,7 +95,7 @@ class OperationGroup extends React.Component {
             <i className="sf2-icon-delete" title={gettext('Delete')} onClick={this.onDelete}></i>
           </li>
           <li className="operation-group-item">
-            <i className="sf2-icon-caret-down sf-dropdown-toggle" title={gettext('More Operation')} onClick={this.onItemMenuShow}></i>
+            <i className="sf2-icon-caret-down sf-dropdown-toggle" title={gettext('More Operation')} onClick={this.onItemMenuToggle}></i>
           </li>
         </ul>
         {

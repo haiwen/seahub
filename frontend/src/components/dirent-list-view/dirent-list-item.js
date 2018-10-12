@@ -1,6 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { serviceUrl } from '../../utils/constants';
+import { serviceUrl, gettext } from '../../utils/constants';
 import OperationGroup from '../dirent-operation/operation-group';
 
 const propTypes = {
@@ -8,6 +8,11 @@ const propTypes = {
   dirent: PropTypes.object.isRequired,
   direntInfo: PropTypes.object.isRequired,
   onItemClick: PropTypes.func.isRequired,
+  onItemMenuShow: PropTypes.func.isRequired,
+  onItemMenuHide: PropTypes.func.isRequired,
+  onItemDelete: PropTypes.func.isRequired,
+  onItemStarred: PropTypes.func.isRequired,
+  onItemDownload: PropTypes.func.isRequired,
 };
 
 class DirentListItem extends React.Component {
@@ -94,7 +99,7 @@ class DirentListItem extends React.Component {
           {dirent.starred !== undefined && dirent.starred && <i className="fas fa-star"></i>}
         </td>
         <td className="icon">
-          <img src={dirent.is_dir ? serviceUrl + '/media/img/folder-192.png' : serviceUrl + '/media/img/file/192/txt.png'}></img>
+          <img src={dirent.is_dir ? serviceUrl + '/media/img/folder-192.png' : serviceUrl + '/media/img/file/192/txt.png'} alt={gettext('file icon')}></img>
         </td>
         <td className="name a-simulate" onClick={this.onItemClick}>{dirent.obj_name}</td>
         <td className="operation">
