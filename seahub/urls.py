@@ -217,6 +217,7 @@ urlpatterns = [
 
     ## draw
     url(r'^draw/$', TemplateView.as_view(template_name="draw.html"), name="draw"),
+    url(r'^draw/preview/$', TemplateView.as_view(template_name="draw_preview.html"), name="draw_preview"),
 
     ### Apps ###
     url(r'^api2/', include('seahub.api2.urls')),
