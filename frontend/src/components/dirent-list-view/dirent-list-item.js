@@ -6,7 +6,7 @@ import OperationGroup from '../dirent-operation/operation-group';
 const propTypes = {
   isItemFreezed: PropTypes.bool.isRequired,
   dirent: PropTypes.object.isRequired,
-  direntInfo: PropTypes.object.isRequired,
+  dirInfo: PropTypes.object.isRequired,
   onItemClick: PropTypes.func.isRequired,
   onItemMenuShow: PropTypes.func.isRequired,
   onItemMenuHide: PropTypes.func.isRequired,
@@ -88,7 +88,7 @@ class DirentListItem extends React.Component {
   }
 
   render() {
-    let { dirent, direntInfo } = this.props;
+    let { dirent, dirInfo } = this.props;
     return (
       <tr className={this.state.highlight ? 'tr-highlight' : ''} onMouseEnter={this.onMouseEnter} onMouseOver={this.onMouseOver} onMouseLeave={this.onMouseLeave}>
         <td className="select">
@@ -107,7 +107,7 @@ class DirentListItem extends React.Component {
             this.state.isOperationShow && 
             <OperationGroup 
               dirent={dirent} 
-              direntInfo={direntInfo}
+              dirInfo={dirInfo}
               onItemMenuShow={this.onItemMenuShow}
               onItemMenuHide={this.onItemMenuHide}
               onDownload={this.onItemDownload}

@@ -1,4 +1,4 @@
-class DirentInfo {
+class DirInfo {
   constructor({ 
     repo_name, 
     user_perm, 
@@ -22,4 +22,4 @@ class DirentInfo {
   }
 }
 
-export default DirentInfo;
+export default DirInfo;

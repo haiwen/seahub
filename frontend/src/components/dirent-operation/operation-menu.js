@@ -4,7 +4,7 @@ import { gettext } from '../../utils/constants';
 
 const propTypes = {
   dirent: PropTypes.object.isRequired,
-  direntInfo: PropTypes.object.isRequired,
+  dirInfo: PropTypes.object.isRequired,
   menuPosition: PropTypes.object.isRequired, 
 };
 

@@ -8,7 +8,7 @@ import DirentListItem from './dirent-list-item';
 import ZipDownloadDialog from '../dialog/zip-download-dialog';
 
 const propTypes = {
-  direntInfo: PropTypes.object,
+  dirInfo: PropTypes.object,
   filePath: PropTypes.string.isRequired,
   direntList: PropTypes.array.isRequired,
   onItemDelete: PropTypes.func.isRequired,
@@ -121,7 +121,7 @@ class DirentListView extends React.Component {
   }
 
   render() {
-    const { direntList, direntInfo } = this.props;
+    const { direntList, dirInfo } = this.props;
     return (
       <div className="table-container">
         <table>
@@ -143,7 +143,7 @@ class DirentListView extends React.Component {
                   <DirentListItem
                     key={index}
                     dirent={dirent}
-                    direntInfo={direntInfo}
+                    dirInfo={dirInfo}
                     isItemFreezed={this.state.isItemFreezed}
                     onItemMenuShow={this.onItemMenuShow}
                     onItemMenuHide={this.onItemMenuHide}

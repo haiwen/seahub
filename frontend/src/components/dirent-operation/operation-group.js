@@ -5,7 +5,7 @@ import OperationMenu from './operation-menu';
 
 const propTypes = {
   dirent: PropTypes.object.isRequired,
-  direntInfo: PropTypes.object.isRequired,
+  dirInfo: PropTypes.object.isRequired,
   onItemMenuShow: PropTypes.func.isRequired,
   onItemMenuHide: PropTypes.func.isRequired,
   onDelete: PropTypes.func.isRequired,
@@ -102,7 +102,7 @@ class OperationGroup extends React.Component {
           this.state.isItemMenuShow && 
           <OperationMenu 
             dirent={this.props.dirent}
-            direntInfo={this.props.direntInfo}
+            dirInfo={this.props.dirInfo}
             menuPosition={this.state.menuPosition}
             onRename={this.onRename}
             onCopy={this.onCopy}
