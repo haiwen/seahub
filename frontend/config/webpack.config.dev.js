@@ -53,32 +53,37 @@ module.exports = {
       // We include the app code last so that if there is a runtime error during
       // initialization, it doesn't blow up the WebpackDevServer client, and
       // changing JS code would still trigger a refresh.
-   ],
-   wiki: [
-     require.resolve('./polyfills'),
-     require.resolve('react-dev-utils/webpackHotDevClient'),
-     paths.appSrc + "/wiki.js",
-   ],
-   repoview: [
-     require.resolve('./polyfills'),
-     require.resolve('react-dev-utils/webpackHotDevClient'),
-     paths.appSrc + "/repo-wiki-mode.js",
-   ],
-   fileHistory: [
-     require.resolve('./polyfills'),
-     require.resolve('react-dev-utils/webpackHotDevClient'),
-     paths.appSrc + "/file-history.js",
-   ],
-   app: [
-     require.resolve('./polyfills'),
-     require.resolve('react-dev-utils/webpackHotDevClient'),
-     paths.appSrc + "/app.js",
-   ],
-   draftReview: [
-     require.resolve('./polyfills'),
-     require.resolve('react-dev-utils/webpackHotDevClient'),
-     paths.appSrc + "/draft-review.js",
-   ]
+    ],
+    wiki: [
+      require.resolve('./polyfills'),
+      require.resolve('react-dev-utils/webpackHotDevClient'),
+      paths.appSrc + "/wiki.js",
+    ],
+    repoview: [
+      require.resolve('./polyfills'),
+      require.resolve('react-dev-utils/webpackHotDevClient'),
+      paths.appSrc + "/repo-wiki-mode.js",
+    ],
+    fileHistory: [
+      require.resolve('./polyfills'),
+      require.resolve('react-dev-utils/webpackHotDevClient'),
+      paths.appSrc + "/file-history.js",
+    ],
+    app: [
+      require.resolve('./polyfills'),
+      require.resolve('react-dev-utils/webpackHotDevClient'),
+      paths.appSrc + "/app.js",
+    ],
+    draftReview: [
+      require.resolve('./polyfills'),
+      require.resolve('react-dev-utils/webpackHotDevClient'),
+      paths.appSrc + "/draft-review.js",
+    ],
+    draw: [
+      require.resolve('./polyfills'),
+      require.resolve('react-dev-utils/webpackHotDevClient'),
+      paths.appSrc + "/draw.js",
+    ]
   },
 
   output: {

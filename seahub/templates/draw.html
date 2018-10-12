@@ -1,4 +1,5 @@
 {% load seahub_tags i18n staticfiles %}
+{% load render_bundle from webpack_loader %}
 
 <!DOCTYPE html>
 <html lang="{{ LANGUAGE_CODE }}">
@@ -60,6 +61,7 @@
 <script type="text/javascript" src="{{ MEDIA_URL }}grapheditor/js/Toolbar.js"></script>
 <script type="text/javascript" src="{{ MEDIA_URL }}grapheditor/js/Dialogs.js"></script>
 
+<script src="{{ STATIC_URL }}scripts/i18n/{{ LANGUAGE_CODE }}/djangojs.js"></script>
 </head>
 
 <body>
@@ -86,6 +88,8 @@
   window.IMAGE_PATH = '{{ MEDIA_URL }}grapheditor/images';
   window.STYLE_PATH = '{{ MEDIA_URL }}grapheditor/styles';
 </script>
+{% render_bundle 'draw' %}
+
 <script type="text/javascript">
   // Extends EditorUi to update I/O action states based on availability of backend
   (function()
@@ -129,13 +133,17 @@
       themes[Graph.prototype.defaultThemeName] = xhr[1].getDocumentElement();
 
       // Main
-      new EditorUi(new Editor(urlParams['chrome'] == '0', themes));
+      window.editor = new Editor(urlParams['chrome'] == '0', themes);
+      window.editorUi = new EditorUi(editor);
+      window.mxUtils = mxUtils;
+      loadFile(editorUi);
     }, function()
     {
       document.body.innerHTML = '<center style="margin-top:10%;">Error loading resource files. Please check browser console.</center>';
     });
   })();
 </script>
-<script src="{{ STATIC_URL }}scripts/i18n/{{ LANGUAGE_CODE }}/djangojs.js"></script>
+
+
 </body>
 </html>
