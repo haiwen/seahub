@@ -1,26 +1,9 @@
-import { seafileAPI } from './utils/seafile-api';
+import { seafileAPI } from '../utils/seafile-api';
 
 var mxRectangle = window.mxRectangle;
 var mxGraph = window.mxGraph;
 var mxCodec = window.mxCodec;
 var mxUtils = window.mxUtils;
-
-function loadFile(editorUi) {
-  return seafileAPI.getFileContent(window.app.config.rawPath).then((res) => {
-    var doc = window.mxUtils.parseXml(res.data);
-    //console.log(doc.documentElement);
-    editorUi.editor.setGraphXml(doc.documentElement);
-    editorUi.editor.setModified(false);
-    editorUi.editor.undoManager.clear();
-  });
-}
-
-function saveFile(content) {
-  return seafileAPI.getUpdateLink('3e1b6ebf-c564-4cd2-87e9-69070c260fb4', '/')
-  .then((res) => {
-    return seafileAPI.updateFile(res.data, '/my-draw.draw', 'my-draw.draw', content);
-  });
-}
 
 class DrawViewer {
 
@@ -162,6 +145,4 @@ class DrawViewer {
   }
 }
 
-window.loadFile = loadFile;
-window.saveFile = saveFile;
-window.DrawViewer = DrawViewer;
+export default DrawViewer;

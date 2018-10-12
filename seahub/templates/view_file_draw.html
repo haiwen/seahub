@@ -79,11 +79,13 @@
       isPro: '{{ is_pro }}',
       lang: '{{ LANGUAGE_CODE }}',
       rawPath: '{{ raw_path }}',
+      repoID: '{{ repo.id }}',
+      path: '{{ path }}',
+      parentDir: '{{ parent_dir }}',
+      filename: '{{ filename }}',
       fileServerRoot: '{{ FILE_SERVER_ROOT }}'
     }
   };
-
-  console.log(window.app.config)
 
   window.RESOURCES_PATH = '{{ MEDIA_URL }}grapheditor/resources';
   window.RESOURCE_BASE = '{{ MEDIA_URL }}grapheditor/resources/grapheditor';
