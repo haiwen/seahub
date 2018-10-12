@@ -24,7 +24,7 @@ class DraftReview extends React.Component {
     this.state = {
       draftContent: '',
       draftOriginContent: '',
-      reviewStatus: opStatus == 'open' ? true : false,
+      reviewStatus: opStatus,
       isLoading: true,
     };
   }
@@ -64,7 +64,7 @@ class DraftReview extends React.Component {
 
   onCloseReview = () => {
     seafileAPI.updateReviewStatus(reviewID, 'closed').then(res => {
-      this.setState({reviewStatus: false});
+      this.setState({reviewStatus: 'closed'});
       Toast.success('Review close succeeded.')
     }).catch(() => {
       Toast.error('Review close failed.')
@@ -83,21 +83,30 @@ class DraftReview extends React.Component {
   render() {
     return(
       <div className="wrapper">
-        <div id="header" className="header">
+        <div id="header" className="header review">
           <div className="cur-file-info">
             <div className="info-item file-feature">
               <span className="fas fa-code-merge"></span>
             </div>
             <div className="info-item file-info">
               <span className="file-name">{draftFileName}</span>
+              <span className="file-copywriting">{gettext('review')}</span>
             </div>
           </div>
           {
-            this.state.reviewStatus && 
+            this.state.reviewStatus === 'open' &&
             <div className="cur-file-operation">
               <button className="btn btn-secondary file-operation-btn" title={gettext('Close Review')} onClick={this.onCloseReview}>{gettext("Close")}</button>
-              <button className="btn btn-secondary file-operation-btn" title={gettext('Publish Review')} onClick={this.onPublishReview}>{gettext("Publish")}</button>
+              <button className="btn btn-success file-operation-btn" title={gettext('Publish Review')} onClick={this.onPublishReview}>{gettext("Publish")}</button>
             </div>
+          }
+          {
+            this.state.reviewStatus === 'finished' &&
+            <div className="prompt-message prompt-message-success">{gettext('finished')}</div>
+          }
+          {
+            this.state.reviewStatus === 'closed' && 
+            <div className="prompt-message prompt-message-success">{gettext('closed')}</div>
           }
         </div>
         <div id="main" className="main">

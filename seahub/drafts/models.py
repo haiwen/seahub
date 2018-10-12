@@ -181,6 +181,9 @@ class DraftReview(TimestampedModel):
     objects = DraftReviewManager()
 
     def to_dict(self):
+        r_repo = seafile_api.get_repo(self.origin_repo_id)
+        if not r_repo:
+            raise DraftFileConflict
 
         return {
             'id': self.pk,
@@ -188,6 +191,7 @@ class DraftReview(TimestampedModel):
             'status': self.status,
             'creator_name': email2nickname(self.creator),
             'draft_origin_repo_id': self.origin_repo_id,
+            'draft_origin_repo_name': r_repo.name,
             'draft_origin_file_path': self.origin_file_path,
             'draft_origin_file_version': self.origin_file_version,
             'draft_publish_file_version': self.publish_file_version,

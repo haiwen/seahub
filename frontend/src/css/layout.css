@@ -138,6 +138,13 @@
   justify-content: center;
 }
 
+.header .file-copywriting {
+  margin-left: 0.5rem;
+  font-size: 1rem;
+  font-weight: normal;
+  color: #999;
+}
+
 .header .file-feature {
   width: 2.9375rem;
   height: 2.9375rem;
@@ -146,7 +153,20 @@
   color: #fff;
 }
 
-
 .header .file-operation-btn {
   margin-right: 0.25rem;
+}
+
+.review {
+  padding: 0;
+}
+
+.review .cur-file-info {
+  margin: 0;
+}
+
+.review .file-feature {
+  width: 4.1875rem;
+  height: 4.1875rem;
+  font-size: 3rem;
 }
