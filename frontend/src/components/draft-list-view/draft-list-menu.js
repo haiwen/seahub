@@ -22,7 +22,7 @@ class DraftListMenu extends React.Component {
         <ul className="dropdown-menu" style={style}>
           <li className="dropdown-item" onClick={this.props.onDeleteHandler}>{gettext('Delete')}</li>
           <li className="dropdown-item" onClick={this.props.onPublishHandler}>{gettext('Publish')}</li>
-          <li className="dropdown-item" onClick={this.props.onReviewHandler}>{gettext('Review')}</li>
+          <li className="dropdown-item" onClick={this.props.onReviewHandler}>{gettext('Ask for review')}</li>
         </ul>
       </div>
     );

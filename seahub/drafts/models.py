@@ -121,6 +121,8 @@ class Draft(TimestampedModel):
         uuid = self.origin_file_uuid
         file_path = posixpath.join(uuid.parent_path, uuid.filename) # TODO: refactor uuid
 
+        repo = seafile_api.get_repo(self.origin_repo_id)
+
         review_id = None
         review_status = None
         if hasattr(self, 'draftreview'):
@@ -132,6 +134,7 @@ class Draft(TimestampedModel):
             'review_id': review_id,
             'review_status': review_status,
             'owner': self.username,
+            'repo_name': repo.name,
             'owner_nickname': email2nickname(self.username),
             'origin_repo_id': self.origin_repo_id,
             'origin_file_path': file_path,
