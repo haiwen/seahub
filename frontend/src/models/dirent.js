@@ -1,28 +1,21 @@
 class Dirent {
   constructor(json) {
-    this.perm = json.perm;
-    this.last_update = json.last_update;
-    this.last_modified = json.last_modified;
-    this.obj_name = json.obj_name;
-    this.p_dpath = json.p_dpath;
-    this.is_dir = json.is_dir ? json.is_dir : false;
-    if (json.is_file) {
-      this.is_file = json.is_file;
-      this.is_locked = json.is_locked;
-      this.obj_id = json.obj_id;
-      this.file_size = json.file_size;
+    this.id = json.id;
+    this.name = json.name;
+    this.type = json.type;
+    this.mtime = json.mtime;
+    this.permission = json.permission;
+    if (json.type === 'file') {
+      this.size = json.size;
       this.starred = json.starred;
-      this.lock_owner = json.lock_owner;
-      this.lock_owner_name = json.lock_owner_name; 
+      this.is_locked = json.is_locked;
+      this.lock_time = json.lock_time;
+      this.lock_owner= json.lock_owner;
+      this.locked_by_me = json.locked_by_me;
+      this.modifier_name = json.modifier_name;
+      this.modifier_email = json.modifier_email;
+      this.modifier_contact_email = json.modifier_contact_email;
     }
-    if (json.is_img) {
-      this.is_img = json.is_img;
-      this.encoded_thumbnail_src = json.encoded_thumbnail_src;
-    }
-  }
-
-  getPath() {
-    return this.p_dpath;
   }
 
 }

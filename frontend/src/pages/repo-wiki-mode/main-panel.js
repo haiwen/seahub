@@ -6,7 +6,6 @@ import CommonToolbar from '../../components/toolbar/common-toolbar';
 import PathToolbar from '../../components/toolbar/path-toolbar';
 import MarkdownViewer from '../../components/markdown-viewer';
 import DirentListView from '../../components/dirent-list-view/dirent-list-view';
-import DirInfo from '../../models/dir-info';
 import Dirent from '../../models/dirent';
 
 const propTypes = {
@@ -30,7 +29,6 @@ class MainPanel extends Component {
     super(props);
     this.state = {
       isWikiMode: true,
-      dirInfo: null,
       direntList: []
     };
   }
@@ -44,16 +42,13 @@ class MainPanel extends Component {
   }
 
   updateViewList = (filePath) => {
-    seafileAPI.listRepoDir(repoID, filePath, 48).then(res => {
-      let dirInfo = new DirInfo(res.data);
-      let dirents = res.data.dirent_list;
+    seafileAPI.listDir(repoID, filePath, 48).then(res => {
       let direntList = [];
-      dirents.forEach(item => {
+      res.data.forEach(item => {
         let dirent = new Dirent(item);
         direntList.push(dirent);
       });
       this.setState({
-        dirInfo: dirInfo,
         direntList: direntList,
       });
     });
@@ -145,7 +140,6 @@ class MainPanel extends Component {
                 isFileLoading={this.props.isFileLoading}
               /> :
               <DirentListView 
-                dirInfo={this.state.dirInfo}
                 direntList={this.state.direntList}
                 filePath={this.props.filePath}
                 onItemClick={this.props.onMainItemClick}

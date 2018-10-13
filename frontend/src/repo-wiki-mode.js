@@ -126,7 +126,14 @@ class Wiki extends Component {
 
   onpopstate = (event) => {
     if (event.state && event.state.filePath) {
-      this.initMainPanelData(event.state.filePath);
+      let path = event.state.filePath;
+      if (this.isMarkdownFile(path)) {
+        this.initMainPanelData(path);
+      } else {
+        let changedNode = this.state.tree_data.getNodeByPath(path);
+        this.exitViewFileState(this.state.tree_data, changedNode);
+      }
+
     }
   }
   

@@ -6,7 +6,6 @@ import OperationGroup from '../dirent-operation/operation-group';
 const propTypes = {
   isItemFreezed: PropTypes.bool.isRequired,
   dirent: PropTypes.object.isRequired,
-  dirInfo: PropTypes.object.isRequired,
   onItemClick: PropTypes.func.isRequired,
   onItemMenuShow: PropTypes.func.isRequired,
   onItemMenuHide: PropTypes.func.isRequired,
@@ -88,7 +87,7 @@ class DirentListItem extends React.Component {
   }
 
   render() {
-    let { dirent, dirInfo } = this.props;
+    let { dirent } = this.props;
     return (
       <tr className={this.state.highlight ? 'tr-highlight' : ''} onMouseEnter={this.onMouseEnter} onMouseOver={this.onMouseOver} onMouseLeave={this.onMouseLeave}>
         <td className="select">
@@ -99,15 +98,14 @@ class DirentListItem extends React.Component {
           {dirent.starred !== undefined && dirent.starred && <i className="fas fa-star"></i>}
         </td>
         <td className="icon">
-          <img src={dirent.is_dir ? serviceUrl + '/media/img/folder-192.png' : serviceUrl + '/media/img/file/192/txt.png'} alt={gettext('file icon')}></img>
+          <img src={dirent.type === 'dir' ? serviceUrl + '/media/img/folder-192.png' : serviceUrl + '/media/img/file/192/txt.png'} alt={gettext('file icon')}></img>
         </td>
-        <td className="name a-simulate" onClick={this.onItemClick}>{dirent.obj_name}</td>
+        <td className="name a-simulate" onClick={this.onItemClick}>{dirent.name}</td>
         <td className="operation">
           {
             this.state.isOperationShow && 
             <OperationGroup 
               dirent={dirent} 
-              dirInfo={dirInfo}
               onItemMenuShow={this.onItemMenuShow}
               onItemMenuHide={this.onItemMenuHide}
               onDownload={this.onItemDownload}
@@ -115,8 +113,8 @@ class DirentListItem extends React.Component {
             />
           }
         </td>
-        <td className="file-size">{dirent.file_size && dirent.file_size}</td>
-        <td className="last-update" dangerouslySetInnerHTML={{__html: dirent.last_update}}></td>
+        <td className="file-size">{dirent.size && dirent.size}</td>
+        <td className="last-update" dangerouslySetInnerHTML={{__html: dirent.mtime}}></td>
       </tr>
     );
   }

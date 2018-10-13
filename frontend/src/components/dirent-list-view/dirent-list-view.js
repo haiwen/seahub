@@ -8,7 +8,6 @@ import DirentListItem from './dirent-list-item';
 import ZipDownloadDialog from '../dialog/zip-download-dialog';
 
 const propTypes = {
-  dirInfo: PropTypes.object,
   filePath: PropTypes.string.isRequired,
   direntList: PropTypes.array.isRequired,
   onItemDelete: PropTypes.func.isRequired,
@@ -59,14 +58,9 @@ class DirentListView extends React.Component {
   }
 
   onItemDownload = (dirent) => {
-    if (dirent.is_dir) {
+    if (dirent.type === 'dir') {
       this.setState({isProgressDialogShow: true, progress: '0%'});
-
-      let index = dirent.p_dpath.lastIndexOf('/');
-      let parent_dir = dirent.p_dpath.slice(0, index);
-      parent_dir = parent_dir ? parent_dir : '/';
-      
-      editorUtilities.zipDownload(parent_dir, dirent.obj_name).then(res => {
+      editorUtilities.zipDownload(this.props.filePath, dirent.name).then(res => {
         this.zip_token = res.data['zip_token'];
         this.addDownloadAnimation();
         this.interval = setInterval(this.addDownloadAnimation, 1000);
@@ -110,18 +104,12 @@ class DirentListView extends React.Component {
   }
 
   getDirentPath = (dirent) => {
-    let path = '';
-    if (dirent.is_dir) {
-      path = dirent.p_dpath;
-    } else {
-      let filePath = this.props.filePath;
-      path = filePath === '/' ? filePath + dirent.obj_name : filePath + '/' + dirent.obj_name;
-    }
-    return path;
+    let path = this.props.filePath;
+    return path === '/' ? path + dirent.name : path + '/' + dirent.name;
   }
 
   render() {
-    const { direntList, dirInfo } = this.props;
+    const { direntList } = this.props;
     return (
       <div className="table-container">
         <table>
@@ -143,7 +131,6 @@ class DirentListView extends React.Component {
                   <DirentListItem
                     key={index}
                     dirent={dirent}
-                    dirInfo={dirInfo}
                     isItemFreezed={this.state.isItemFreezed}
                     onItemMenuShow={this.onItemMenuShow}
                     onItemMenuHide={this.onItemMenuHide}
