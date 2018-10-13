@@ -4,7 +4,7 @@ import Prism from 'prismjs';
 import { siteRoot, gettext, draftID, reviewID, draftOriginFilePath, draftFilePath, draftOriginRepoID, draftFileName, opStatus, publishFileVersion, originFileVersion } from './utils/constants'; 
 import { seafileAPI } from './utils/seafile-api';
 import axios from 'axios';
-import DiffViewer from '@seafile/seafile-editor/dist/diff-viewer/diff-viewer';
+import DiffViewer from '@seafile/seafile-editor/dist/viewer/diff-viewer';
 import Loading from './components/loading';
 import Toast from './components/toast';
 
@@ -16,7 +16,7 @@ import './css/layout.css';
 import './css/initial-style.css';
 import './css/toolbar.css';
 
-require('@seafile/seafile-editor/src/lib/code-hight-package');
+require('@seafile/seafile-editor/dist/editor/code-hight-package');
 
 class DraftReview extends React.Component {
   constructor(props) {
