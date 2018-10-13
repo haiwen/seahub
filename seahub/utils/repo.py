@@ -240,5 +240,31 @@ def is_group_repo_staff(repo_id, username):
 
     return is_staff
 
+def repo_has_been_shared_out(request, repo_id):
+
+    has_been_shared_out = False
+    username = request.user.username
+
+    if is_org_context(request):
+        org_id = request.user.org.org_id
+
+        is_inner_org_pub_repo = False
+        # check if current repo is pub-repo
+        org_pub_repos = seafile_api.list_org_inner_pub_repos_by_owner(
+                org_id, username)
+        for org_pub_repo in org_pub_repos:
+            if repo_id == org_pub_repo.id:
+                is_inner_org_pub_repo = True
+                break
+
+        if seafile_api.org_repo_has_been_shared(repo_id, including_groups=True) or is_inner_org_pub_repo:
+            has_been_shared_out = True
+    else:
+        if seafile_api.repo_has_been_shared(repo_id, including_groups=True) or \
+                (not request.cloud_mode and seafile_api.is_inner_pub_repo(repo_id)):
+            has_been_shared_out = True
+
+    return has_been_shared_out
+
 # TODO
 from seahub.share.utils import is_repo_admin

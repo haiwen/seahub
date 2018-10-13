@@ -13,7 +13,8 @@ from seahub.api2.utils import api_error
 
 from seahub.base.templatetags.seahub_tags import email2nickname, \
         email2contact_email
-from seahub.utils import is_org_context
+from seahub.utils.repo import get_repo_owner, is_repo_admin, \
+        repo_has_been_shared_out
 from seahub.views import check_folder_permission
 
 from seaserv import seafile_api
@@ -45,10 +46,14 @@ class RepoView(APIView):
             error_msg = 'Permission denied.'
             return api_error(status.HTTP_403_FORBIDDEN, error_msg)
 
-        if is_org_context(request):
-            repo_owner = seafile_api.get_org_repo_owner(repo_id)
-        else:
-            repo_owner = seafile_api.get_repo_owner(repo_id)
+        username = request.user.username
+        repo_owner = get_repo_owner(request, repo_id)
+
+        try:
+            has_been_shared_out = repo_has_been_shared_out(request, repo_id)
+        except Exception as e:
+            has_been_shared_out = False
+            logger.error(e)
 
         result = {
             "repo_id": repo.id,
@@ -62,6 +67,10 @@ class RepoView(APIView):
             "encrypted": repo.encrypted,
             "file_count": repo.file_count,
             "permission": permission,
+            "no_quota": True if seafile_api.check_quota(repo_id) < 0 else False,
+            "is_admin": is_repo_admin(username, repo_id),
+            "is_virtual": repo.is_virtual,
+            "has_been_shared_out": has_been_shared_out,
         }
 
         return Response(result)

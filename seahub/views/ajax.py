@@ -46,7 +46,8 @@ from seahub.utils import check_filename_with_rename, EMPTY_SHA1, \
 from seahub.utils.star import get_dir_starred_files
 from seahub.utils.file_types import IMAGE, VIDEO
 from seahub.utils.file_op import check_file_lock, ONLINE_OFFICE_LOCK_OWNER
-from seahub.utils.repo import get_locked_files_by_dir, get_repo_owner
+from seahub.utils.repo import get_locked_files_by_dir, get_repo_owner, \
+        repo_has_been_shared_out
 from seahub.utils.error_msg import file_type_error_msg, file_size_error_msg
 from seahub.base.accounts import User
 from seahub.thumbnail.utils import get_thumbnail_src
@@ -332,26 +333,8 @@ def list_lib_dir(request, repo_id):
     result["is_admin"] = is_repo_admin(username, repo_id)
     if repo_owner == username:
         result["is_repo_owner"] = True
-
         try:
-            if is_org_context(request):
-                org_id = request.user.org.org_id
-
-                is_inner_org_pub_repo = False
-                # check if current repo is pub-repo
-                org_pub_repos = seafile_api.list_org_inner_pub_repos_by_owner(
-                        org_id, username)
-                for org_pub_repo in org_pub_repos:
-                    if repo_id == org_pub_repo.id:
-                        is_inner_org_pub_repo = True
-                        break
-
-                if seafile_api.org_repo_has_been_shared(repo_id, including_groups=True) or is_inner_org_pub_repo:
-                    result["has_been_shared_out"] = True
-            else:
-                if seafile_api.repo_has_been_shared(repo_id, including_groups=True) or \
-                        (not request.cloud_mode and seafile_api.is_inner_pub_repo(repo_id)):
-                    result["has_been_shared_out"] = True
+            result["has_been_shared_out"] = repo_has_been_shared_out(request, repo_id)
         except Exception as e:
             logger.error(e)
 
