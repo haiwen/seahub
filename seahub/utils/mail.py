@@ -42,7 +42,7 @@ def send_html_email_with_dj_template(recipients, subject, dj_template,
     t = loader.get_template(dj_template)
     html_message = t.render(context)
 
-    mail.send(recipients, sender=sender, template=template, context=context,
+    return mail.send(recipients, sender=sender, template=template, context=context,
               subject=subject, message=message,
               html_message=html_message, headers=headers, priority=priority,
               backend=backend)
