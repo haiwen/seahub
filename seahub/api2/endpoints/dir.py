@@ -12,7 +12,7 @@ from rest_framework import status
 from seahub.api2.throttling import UserRateThrottle
 from seahub.api2.authentication import TokenAuthentication
 from seahub.api2.utils import api_error
-from seahub.api2.views import get_dir_file_recursively_with_starred, \
+from seahub.api2.views import get_dir_file_recursively, \
     get_dir_entrys_by_id
 
 from seahub.views import check_folder_permission
@@ -95,8 +95,7 @@ class DirView(APIView):
         if recursive == '1':
             result = []
             username = request.user.username
-            dir_file_list = get_dir_file_recursively_with_starred(username,
-                    repo_id, path, [])
+            dir_file_list = get_dir_file_recursively(username, repo_id, path, [])
             if request_type == 'f':
                 for item in dir_file_list:
                     if item['type'] == 'file':

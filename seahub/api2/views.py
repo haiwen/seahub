@@ -1885,21 +1885,6 @@ def get_dir_file_recursively(username, repo_id, path, all_dirs):
 
     return all_dirs
 
-def get_dir_file_recursively_with_starred(username, repo_id, path, all_dirs):
-
-    dir_file_list = get_dir_file_recursively(username,
-            repo_id, path, all_dirs)
-
-    starred_files = get_dir_starred_files(username, repo_id, path)
-    for dir_file in dir_file_list:
-        if dir_file['type'] == 'file':
-            file_path = posixpath.join(dir_file['parent_dir'], dir_file['name'])
-            dir_file['starred'] = False
-            if normalize_file_path(file_path) in starred_files:
-                dir_file['starred'] = True
-
-    return dir_file_list
-
 def get_dir_entrys_by_id(request, repo, path, dir_id, request_type=None):
     """ Get dirents in a dir
 
