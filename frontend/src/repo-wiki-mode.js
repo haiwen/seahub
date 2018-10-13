@@ -6,7 +6,6 @@ import moment from 'moment';
 import { repoID, serviceUrl, initialFilePath } from './utils/constants';
 import editorUtilities from './utils/editor-utilties';
 import { seafileAPI } from './utils/seafile-api';
-import { Utils } from './utils/utils';
 import Node from './components/tree-view/node';
 import Tree from './components/tree-view/tree';
 import cookie from 'react-cookies';
@@ -349,7 +348,6 @@ class Wiki extends Component {
 
   onDeleteNode = (node) => {
     let filePath = node.path;
-    filePath = Utils.encodePath(filePath);
     if (node.isDir()) {
       editorUtilities.deleteDir(filePath).then(() => {
         this.deleteNode(node);
