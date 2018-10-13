@@ -14,8 +14,7 @@ from seahub.utils import get_file_type_and_ext, gen_file_get_url, \
         get_site_scheme_and_netloc
 
 from seahub.settings import ENABLE_WATERMARK
-from seahub.onlyoffice.settings import ONLYOFFICE_APIJS_URL, \
-        ONLYOFFICE_FORCE_SAVE
+from seahub.onlyoffice.settings import ONLYOFFICE_APIJS_URL
 
 def get_onlyoffice_dict(username, repo_id, file_path,
         file_id='', can_edit=False, can_download=True):
@@ -72,7 +71,6 @@ def get_onlyoffice_dict(username, repo_id, file_path,
         'can_edit': can_edit,
         'can_download': can_download,
         'username': username,
-        'onlyoffice_force_save': ONLYOFFICE_FORCE_SAVE,
         'enable_watermark': ENABLE_WATERMARK and not can_edit,
     }
 
