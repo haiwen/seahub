@@ -64,7 +64,7 @@ class DraftContent extends React.Component {
     let draft = this.state.currentDraft;
 
     editUtilties.createDraftReview(draft.id).then(res => {
-      window.location.href = siteRoot + 'drafts/review/' + res.data.id;
+      window.open(siteRoot + 'drafts/review/' + res.data.id);
     })
     .catch((error) => { 
       if (error.response.status == '409') {
@@ -118,7 +118,7 @@ class DraftContent extends React.Component {
             <p>{gettext('Draft is a way to let you collaborate with others on files. You can create a draft from a file, edit the draft and then ask for a review. The original file will be updated only after the draft be reviewed.')}</p>
           </div>
         }
-        {this.state.isMenuShow && 
+        {this.state.isMenuShow &&
           <DraftListMenu 
             isMenuShow={this.state.isMenuShow} 
             currentDraft={this.state.currentDraft} 

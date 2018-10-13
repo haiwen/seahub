@@ -59,6 +59,12 @@ class DraftListItem extends React.Component {
     window.open(url)
   }
 
+  onReviewClick = () => {
+    let draft = this.props.draft;
+    let url = siteRoot + 'drafts/review/' + draft.review_id + '/';
+    window.open(url);
+  }
+
   getFileName(filePath) {
     let lastIndex = filePath.lastIndexOf('/');
     return filePath.slice(lastIndex+1);
@@ -74,12 +80,18 @@ class DraftListItem extends React.Component {
         <td className="icon"><img src={siteRoot + 'media/img/file/192/txt.png'} /></td>
         <td className="name a-simulate" onClick={this.onDraftEditClick}>{fileName}</td>
         <td className="library a-simulate" onClick={this.onLibraryClick}>{draft.repo_name}</td>
+        <td className="review">
+          { draft.review_id ? <span className="a-simulate" onClick={this.onReviewClick}>#{draft.review_id}</span> : <span>--</span> }
+        </td>
         <td className="update">{localTime}</td>
         <td className="menu-toggle">
-          <NodeMenuControl
-            isShow={this.state.isMenuControlShow}
-            onClick={this.onMenuToggleClick}
-          />
+          { 
+            this.props.draft.review_status !== 'open' &&
+            <NodeMenuControl
+              isShow={this.state.isMenuControlShow}
+              onClick={this.onMenuToggleClick}
+            />
+          }
         </td>
       </tr>
     );

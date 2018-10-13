@@ -882,39 +882,6 @@ a.op-icon:focus {
 }
 /* end operaton menu */
 
-/* begin prompt-message */
-.prompt-message {
-    position: relative;
-    padding: 0.75rem 1.25rem;
-    border: 1px solid transparent;
-    border-radius: 3px;
-}
-
-.prompt-message-info {
-    color: #24587e;
-    background-color: #daeefc;
-    border-color: #cbe7fb;
-}
-
-.prompt-message-success {
-    color: #316100;
-    background-color: #dff1cc;
-    border-color: #d2ecb8;
-}
-
-.prompt-message-error {
-    color: #6b1110;
-    background-color: #f5d2d2;
-    border-color: #f1c1c0;
-}
-
-.prompt-message-warning {
-    color: #7d6608;
-    background-color: #fcf3cf;
-    border-color: #fbeebc;
-}
-/* end prompt-message */
-
 .cur-view-path .tab-tabs-nav {
     font-size:15px;
     list-style: none;

@@ -13,19 +13,28 @@ class DraftListMenu extends React.Component {
 
   render() {
     let style = {};
-    let {isMenuShow, menuPosition} = this.props;
+    let {isMenuShow, menuPosition, currentDraft} = this.props;
     if (isMenuShow) {
       style = {position: 'fixed', top: menuPosition.top, left: menuPosition.left, display: 'block'};
     }
-    return (
-      <div>
+    if (currentDraft.review_status === null) {
+      return (
         <ul className="dropdown-menu" style={style}>
           <li className="dropdown-item" onClick={this.props.onDeleteHandler}>{gettext('Delete')}</li>
           <li className="dropdown-item" onClick={this.props.onPublishHandler}>{gettext('Publish')}</li>
           <li className="dropdown-item" onClick={this.props.onReviewHandler}>{gettext('Ask for review')}</li>
         </ul>
-      </div>
-    );
+      );
+    }
+
+    if (currentDraft.review_status === 'closed' ) {
+      return (
+        <ul className="dropdown-menu" style={style}>
+          <li className="dropdown-item" onClick={this.props.onDeleteHandler}>{gettext('Delete')}</li>
+          <li className="dropdown-item" onClick={this.props.onReviewHandler}>{gettext('Ask for review')}</li>
+        </ul>
+      );
+    }
   }
 }
 

@@ -73,7 +73,7 @@ class DraftReview extends React.Component {
 
   onPublishReview = () => {
     seafileAPI.updateReviewStatus(reviewID, 'finished').then(res => {
-      this.setState({reviewStatus: false});
+      this.setState({reviewStatus: 'finished'});
       Toast.success('Review publish succeeded.')
     }).catch(() => {
       Toast.error('Review publish failed.')
@@ -102,11 +102,11 @@ class DraftReview extends React.Component {
           }
           {
             this.state.reviewStatus === 'finished' &&
-            <div className="prompt-message prompt-message-success">{gettext('finished')}</div>
+            <div className="review-state review-state-finished">{gettext('Finished')}</div>
           }
           {
             this.state.reviewStatus === 'closed' && 
-            <div className="prompt-message prompt-message-success">{gettext('closed')}</div>
+            <div className="review-state review-state-closed">{gettext('Closed')}</div>
           }
         </div>
         <div id="main" className="main">
