@@ -164,8 +164,8 @@ class Wiki extends Component {
   onMainItemClick = (direntPath) => {
     let tree = this.state.tree_data.clone();
     let node = tree.getNodeByPath(direntPath);
-    tree.expandNode(node);
-
+    let parentNode = tree.findNodeParentFromTree(node);
+    tree.expandNode(parentNode);
     if (node.isMarkdown()) {
       this.initMainPanelData(node.path);
       this.enterViewFileState(tree, node, node.path);

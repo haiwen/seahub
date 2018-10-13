@@ -125,7 +125,11 @@ class MainPanel extends Component {
             <div className="path-containter">
               <a href={siteRoot + '#common/'} className="normal">{gettext('Libraries')}</a>
               <span className="path-split">/</span>
-              <a href={siteRoot + 'wiki/lib/' + repoID + '/'} className="normal">{slug}</a>
+              { 
+                this.props.filePath === '/' ?
+                <span>{slug}</span> :
+                <a className="path-link" data-path="/" onClick={this.onMainNavBarClick}>{slug}</a>
+              }
               {pathElem}
             </div>
             <PathToolbar filePath={this.props.filePath}/>
