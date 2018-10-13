@@ -54,31 +54,8 @@ class Wiki extends Component {
         this.exitViewFileState(treeData, node);
         this.setState({isFileLoading: false});
       } else {
-        seafileAPI.getFileInfo(repoID, filePath).then((res) => {
-          let { mtime, permission, last_modifier_name } = res.data;
-
-          this.setState({
-            tree_data: treeData,
-            latestContributor: last_modifier_name,
-            lastModified: moment.unix(mtime).fromNow(),
-            permission: permission,
-            filePath: filePath,
-            isFileLoading: false
-          });
-
-          seafileAPI.getFileDownloadLink(repoID, filePath).then((res) => {
-            const downLoadUrl = res.data;
-            seafileAPI.getFileContent(downLoadUrl).then((res) => {
-              this.setState({
-                content: res.data,
-                isFileLoading: false
-              });
-            });
-          });
-        });
-
-        let fileUrl = serviceUrl + '/wiki/lib/' + repoID + filePath;
-        window.history.pushState({urlPath: fileUrl, filePath: filePath}, filePath, fileUrl);
+        this.setState({tree_data: treeData});
+        this.initMainPanelData(filePath);
       }
     }, () => {
       /* eslint-disable */
@@ -149,7 +126,14 @@ class Wiki extends Component {
 
   onpopstate = (event) => {
     if (event.state && event.state.filePath) {
-      this.initMainPanelData(event.state.filePath);
+      let path = event.state.filePath;
+      if (this.isMarkdownFile(path)) {
+        this.initMainPanelData(path);
+      } else {
+        let changedNode = this.state.tree_data.getNodeByPath(path);
+        this.exitViewFileState(this.state.tree_data, changedNode);
+      }
+
     }
   }
   
@@ -177,9 +161,11 @@ class Wiki extends Component {
     window.history.pushState({urlPath: fileUrl, filePath: node.path},node.path, fileUrl);
   }
 
-  onMainNodeClick = (node) => {
+  onMainItemClick = (direntPath) => {
     let tree = this.state.tree_data.clone();
-    tree.expandNode(node);
+    let node = tree.getNodeByPath(direntPath);
+    let parentNode = tree.findNodeParentFromTree(node);
+    tree.expandNode(parentNode);
     if (node.isMarkdown()) {
       this.initMainPanelData(node.path);
       this.enterViewFileState(tree, node, node.path);
@@ -190,6 +176,15 @@ class Wiki extends Component {
       const url = serviceUrl + '/lib/' + repoID + '/file' + node.path;
       w.location.href = url;
     }
+  }
+
+  onMainItemDelete = (direntPath) => {
+    let node = this.state.tree_data.getNodeByPath(direntPath);
+    this.onDeleteNode(node);
+  }
+
+  onMainItemRename = () => {
+    //todos:
   }
 
   onNodeClick = (e, node) => {
@@ -315,7 +310,6 @@ class Wiki extends Component {
       });
     } else if (node.isDir()) {
       editorUtilities.renameDir(filePath, newName).then(res => {
-
         let currentFilePath = this.state.filePath;
         let currentFileNode = tree.getNodeByPath(currentFilePath);
         let nodePath = node.path;
@@ -355,11 +349,18 @@ class Wiki extends Component {
   onDeleteNode = (node) => {
     let filePath = node.path;
     if (node.isDir()) {
-      editorUtilities.deleteDir(filePath);
+      editorUtilities.deleteDir(filePath).then(() => {
+        this.deleteNode(node);
+      });
     } else {
-      editorUtilities.deleteFile(filePath);
+      editorUtilities.deleteFile(filePath).then(() => {
+        this.deleteNode(node);
+      });
     }
-    
+  }
+
+  deleteNode = (node) => {
+    let tree = this.state.tree_data.clone();
 
     let isCurrentFile = false;
     if (node.isDir()) {
@@ -368,9 +369,9 @@ class Wiki extends Component {
       isCurrentFile = this.isModifyCurrentFile(node);
     }
 
-    let tree = this.state.tree_data.clone();
-    
     if (this.state.isViewFileState) {
+      tree.deleteNode(node);
+
       if (isCurrentFile) {
         let homeNode = this.getHomeNode(tree);
         tree.expandNode(homeNode);
@@ -385,13 +386,14 @@ class Wiki extends Component {
     } else {
       let parentNode = tree.getNodeByPath(this.state.filePath);
       let isChild = tree.isNodeChild(parentNode, node);
+
+      tree.deleteNode(node);
       if (isChild) {
         this.exitViewFileState(tree, parentNode);
       } else {
         this.setState({tree_data: tree});
       }
     }
-    tree.deleteNode(node);
   }
 
   
@@ -528,14 +530,13 @@ class Wiki extends Component {
           isViewFileState={this.state.isViewFileState}
           changedNode={this.state.changedNode}
           isFileLoading={this.state.isFileLoading}
+          switchViewMode={this.switchViewMode}
           onLinkClick={this.onLinkClick}
           onMenuClick={this.onMenuClick}
           onSearchedClick={this.onSearchedClick}
           onMainNavBarClick={this.onMainNavBarClick}
-          onMainNodeClick={this.onMainNodeClick}
-          switchViewMode={this.switchViewMode}
-          onDeleteNode={this.onDeleteNode}
-          onRenameNode={this.onRenameNode}
+          onMainItemClick={this.onMainItemClick}
+          onMainItemDelete={this.onMainItemDelete}
         />
       </div>
     );

@@ -1,14 +1,11 @@
 # Copyright (c) 2012-2016 Seafile Ltd.
 # -*- coding: utf-8 -*-
 import logging
-import urllib2
 
 from django.db import IntegrityError
 
-from pysearpc import SearpcError
-from seaserv import seafile_api
-
 from seahub.base.models import UserStarredFiles
+from seahub.utils import normalize_file_path
 
 # Get an instance of a logger
 logger = logging.getLogger(__name__)
@@ -61,5 +58,5 @@ def get_dir_starred_files(email, repo_id, parent_dir, org_id=-1):
                                          repo_id=repo_id,
                                          path__startswith=parent_dir,
                                          org_id=org_id)
-    return [ f.path for f in starred_files ]
+    return [ normalize_file_path(f.path) for f in starred_files ]
 

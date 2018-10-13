@@ -777,9 +777,16 @@ a.op-icon:focus {
 .table-container table th {
     padding-top: 1rem;
 }
+.table-container table .select,
+.table-container table .star,
 .table-container table .icon {
     text-align: center;
 }
+
+.table-container table .star .empty {
+    color: #d0d0d0;
+}
+
 .table-container table .icon img {
     width: 1.5rem;
     height: 1.5rem;

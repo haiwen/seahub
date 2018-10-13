@@ -1,5 +1,11 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 import { Modal, ModalHeader, ModalBody } from 'reactstrap';
+
+const propTypes = {
+  onCancelDownload: PropTypes.func.isRequired,
+  progress: PropTypes.string.isRequired,
+};
 
 class ZipDownloadDialog extends React.Component {
 
@@ -18,5 +24,7 @@ class ZipDownloadDialog extends React.Component {
     );
   }
 }
+
+ZipDownloadDialog.propTypes = propTypes;
 
 export default ZipDownloadDialog;

@@ -1,22 +1,47 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { gettext } from '../../utils/constants';
+import { gettext, repoID } from '../../utils/constants';
+import { seafileAPI } from '../../utils/seafile-api';
+import Repo from '../../models/repo';
 
 const propTypes = {
-  currentItem: PropTypes.object.isRequired,
+  dirent: PropTypes.object.isRequired,
   menuPosition: PropTypes.object.isRequired, 
 };
 
 class OperationMenu extends React.Component {
 
+  constructor(props) {
+    super(props);
+    this.state = {
+      repo: null,
+      is_repo_owner: false,
+    };
+  }
+
+  componentDidMount() {
+    seafileAPI.getRepoInfo(repoID).then(res => {
+      let repo = new Repo(res.data);
+      seafileAPI.getAccountInfo().then(res => {
+        let user_email = res.data.email;
+        let is_repo_owner = repo.owner_email === user_email;
+        this.setState({
+          repo: repo,
+          is_repo_owner: is_repo_owner
+        });
+      })
+    });
+  }
+
   getItemType() {
-    return this.props.currentItem.type;
+    let type = this.props.dirent.is_dir ? 'dir' : 'file';
+    return type;
   }
 
   renderDirentDirMenu() {
     let position = this.props.menuPosition;
     let style = {position: 'fixed', left: position.left, top: position.top, display: 'block'};
-    if (this.props.currentItem.permission === 'rw') {
+    if (this.props.dirent.permission === 'rw') {
       return (
         <ul className="dropdown-menu operation-menu" style={style}>
           <li className="dropdown-item operation-menu-item">
@@ -44,7 +69,7 @@ class OperationMenu extends React.Component {
       );
     }
 
-    if (this.props.currentItem.permission === 'r') {
+    if (this.props.dirent.permission === 'r') {
       return (
         <ul className="dropdown-menu operation-menu" style={style}>
           <li className="dropdown-item operation-menu-item">
@@ -62,7 +87,7 @@ class OperationMenu extends React.Component {
   renderDirentFileMenu() {
     let position = this.props.menuPosition;
     let style = {position: 'fixed', left: position.left, top: position.top, display: 'block'};
-    if (this.props.currentItem.permission === 'rw') {
+    if (this.props.dirent.permission === 'rw') {
       return (
         <ul className="dropdown-menu operation-menu" style={style}>
           <li className="dropdown-item operation-menu-item">
@@ -105,7 +130,7 @@ class OperationMenu extends React.Component {
       );
     }
 
-    if (this.props.currentItem.permission === "r") {
+    if (this.props.dirent.permission === 'r') {
       return (
         <ul className="dropdown-menu operation-menu" style={style}>
           <li className="dropdown-item operation-menu-item">
@@ -130,14 +155,14 @@ class OperationMenu extends React.Component {
     let type = this.getItemType();
     let menu = null;
     switch(type) {
-      case 'file':
-        menu = this.renderDirentFileMenu();
-        break;
-      case 'dir':
-        menu = this.renderDirentDirMenu();
-        break;
-      default:
-        break;
+    case 'file':
+      menu = this.renderDirentFileMenu();
+      break;
+    case 'dir':
+      menu = this.renderDirentDirMenu();
+      break;
+    default:
+      break;
     }
     return menu;
   }

@@ -1,9 +1,27 @@
 import React, { Component } from 'react';
+import PropTypes from 'prop-types';
 import { gettext, repoID, serviceUrl, slug, siteRoot } from '../../utils/constants';
+import { seafileAPI } from '../../utils/seafile-api';
 import CommonToolbar from '../../components/toolbar/common-toolbar';
 import PathToolbar from '../../components/toolbar/path-toolbar';
 import MarkdownViewer from '../../components/markdown-viewer';
-import TreeDirView from '../../components/tree-dir-view/tree-dir-view';
+import DirentListView from '../../components/dirent-list-view/dirent-list-view';
+import Dirent from '../../models/dirent';
+
+const propTypes = {
+  content: PropTypes.string,
+  lastModified: PropTypes.string,
+  latestContributor: PropTypes.string,
+  permission: PropTypes.string,
+  filePath: PropTypes.string.isRequired,
+  isFileLoading: PropTypes.bool.isRequired,
+  isViewFileState: PropTypes.bool.isRequired,
+  onMenuClick: PropTypes.func.isRequired,
+  onSearchedClick: PropTypes.func.isRequired,
+  onMainNavBarClick: PropTypes.func.isRequired,
+  onMainItemClick: PropTypes.func.isRequired,
+  onMainItemDelete: PropTypes.func.isRequired,
+}
 
 class MainPanel extends Component {
 
@@ -11,18 +29,33 @@ class MainPanel extends Component {
     super(props);
     this.state = {
       isWikiMode: true,
-      needOperationGroup: true,
+      direntList: []
     };
+  }
+
+  componentWillReceiveProps(nextProps) {
+    let node = nextProps.changedNode;
+    if (node && node.isDir()) {
+      let path = node.path;
+      this.updateViewList(path);
+    }
+  }
+
+  updateViewList = (filePath) => {
+    seafileAPI.listDir(repoID, filePath, 48).then(res => {
+      let direntList = [];
+      res.data.forEach(item => {
+        let dirent = new Dirent(item);
+        direntList.push(dirent);
+      });
+      this.setState({
+        direntList: direntList,
+      });
+    });
   }
 
   onMenuClick = () => {
     this.props.onMenuClick();
-  }
-
-  onEditClick = (e) => {
-    // const w=window.open('about:blank')
-    e.preventDefault();
-    window.location.href= serviceUrl + '/lib/' + repoID + '/file' + this.props.filePath + '?mode=edit';
   }
 
   onMainNavBarClick = (e) => {
@@ -38,8 +71,12 @@ class MainPanel extends Component {
     this.props.switchViewMode(e.target.id);
   }
 
-  render() {
+  onEditClick = (e) => {
+    e.preventDefault();
+    window.location.href= serviceUrl + '/lib/' + repoID + '/file' + this.props.filePath + '?mode=edit';
+  }
 
+  render() {
     let filePathList = this.props.filePath.split('/');
     let nodePath = '';
     let pathElem = filePathList.map((item, index) => {
@@ -88,30 +125,31 @@ class MainPanel extends Component {
             <div className="path-containter">
               <a href={siteRoot + '#common/'} className="normal">{gettext('Libraries')}</a>
               <span className="path-split">/</span>
-              <a href={siteRoot + 'wiki/lib/' + repoID + '/'} className="normal">{slug}</a>
+              { 
+                this.props.filePath === '/' ?
+                <span>{slug}</span> :
+                <a className="path-link" data-path="/" onClick={this.onMainNavBarClick}>{slug}</a>
+              }
               {pathElem}
             </div>
             <PathToolbar filePath={this.props.filePath}/>
           </div>
           <div className="cur-view-content">
-            { this.props.isViewFileState && 
+            { this.props.isViewFileState ?
               <MarkdownViewer
                 markdownContent={this.props.content}
                 latestContributor={this.props.latestContributor}
                 lastModified = {this.props.lastModified}
                 onLinkClick={this.props.onLinkClick}
                 isFileLoading={this.props.isFileLoading}
+              /> :
+              <DirentListView 
+                direntList={this.state.direntList}
+                filePath={this.props.filePath}
+                onItemClick={this.props.onMainItemClick}
+                onItemDelete={this.props.onMainItemDelete}
+                updateViewList={this.updateViewList}
               />
-            }
-            { !this.props.isViewFileState && 
-              <TreeDirView 
-                node={this.props.changedNode}
-                onMainNodeClick={this.props.onMainNodeClick}
-                onDeleteItem={this.props.onDeleteNode}
-                onRenameItem={this.props.onRenameNode}
-                needOperationGroup={this.state.needOperationGroup}
-              >
-              </TreeDirView>
             }
           </div>
         </div>
@@ -119,5 +157,7 @@ class MainPanel extends Component {
     );
   }
 }
+
+MainPanel.propTypes = propTypes;
 
 export default MainPanel;
