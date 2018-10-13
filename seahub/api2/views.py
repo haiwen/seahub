@@ -75,7 +75,8 @@ from seahub.utils.repo import get_repo_owner, get_library_storages, \
         get_locked_files_by_dir, get_related_users_by_repo, \
         is_valid_repo_id_format, can_set_folder_perm_by_user, \
         add_encrypted_repo_secret_key_to_database
-from seahub.utils.star import star_file, unstar_file
+from seahub.utils.star import star_file, unstar_file, \
+        get_dir_starred_files
 from seahub.utils.file_types import DOCUMENT
 from seahub.utils.file_size import get_file_size_unit
 from seahub.utils.file_op import check_file_lock
@@ -1884,6 +1885,21 @@ def get_dir_file_recursively(username, repo_id, path, all_dirs):
 
     return all_dirs
 
+def get_dir_file_recursively_with_starred(username, repo_id, path, all_dirs):
+
+    dir_file_list = get_dir_file_recursively(username,
+            repo_id, path, all_dirs)
+
+    starred_files = get_dir_starred_files(username, repo_id, path)
+    for dir_file in dir_file_list:
+        if dir_file['type'] == 'file':
+            file_path = posixpath.join(dir_file['parent_dir'], dir_file['name'])
+            dir_file['starred'] = False
+            if normalize_file_path(file_path) in starred_files:
+                dir_file['starred'] = True
+
+    return dir_file_list
+
 def get_dir_entrys_by_id(request, repo, path, dir_id, request_type=None):
     """ Get dirents in a dir
 
@@ -1893,7 +1909,7 @@ def get_dir_entrys_by_id(request, repo, path, dir_id, request_type=None):
     """
     username = request.user.username
     try:
-        dirs = seafserv_threaded_rpc.list_dir_with_perm(repo.id, path, dir_id,
+        dirs = seafile_api.list_dir_with_perm(repo.id, path, dir_id,
                 username, -1, -1)
         dirs = dirs if dirs else []
     except SearpcError, e:
@@ -1945,9 +1961,15 @@ def get_dir_entrys_by_id(request, repo, path, dir_id, request_type=None):
         if e not in nickname_dict:
             nickname_dict[e] = email2nickname(e)
 
+    starred_files = get_dir_starred_files(username, repo.id, path)
     for e in file_list:
         e['modifier_contact_email'] = contact_email_dict.get(e['modifier_email'], '')
         e['modifier_name'] = nickname_dict.get(e['modifier_email'], '')
+
+        file_path = posixpath.join(path, e['name'])
+        e['starred'] = False
+        if normalize_file_path(file_path) in starred_files:
+            e['starred'] = True
 
     dir_list.sort(lambda x, y: cmp(x['name'].lower(), y['name'].lower()))
     file_list.sort(lambda x, y: cmp(x['name'].lower(), y['name'].lower()))
