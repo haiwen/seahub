@@ -81,7 +81,7 @@ class DraftListItem extends React.Component {
         <td className="name a-simulate" onClick={this.onDraftEditClick}>{fileName}</td>
         <td className="library a-simulate" onClick={this.onLibraryClick}>{draft.repo_name}</td>
         <td className="review">
-          { draft.review_id ? <span className="a-simulate" onClick={this.onReviewClick}>#{draft.review_id}</span> : <span>--</span> }
+          { draft.review_id && draft.review_status === 'open' ? <span className="a-simulate" onClick={this.onReviewClick}>#{draft.review_id}</span> : <span>--</span> }
         </td>
         <td className="update">{localTime}</td>
         <td className="menu-toggle">
