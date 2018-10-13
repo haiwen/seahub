@@ -15,13 +15,21 @@ class OperationMenu extends React.Component {
     super(props);
     this.state = {
       repo: null,
+      is_repo_owner: false,
     };
   }
 
   componentDidMount() {
     seafileAPI.getRepoInfo(repoID).then(res => {
       let repo = new Repo(res.data);
-      this.setState({repo: repo});
+      seafileAPI.getAccountInfo().then(res => {
+        let user_email = res.data.email;
+        let is_repo_owner = repo.owner_email === user_email;
+        this.setState({
+          repo: repo,
+          is_repo_owner: is_repo_owner
+        });
+      })
     });
   }
 
