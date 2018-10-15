@@ -73,6 +73,7 @@
 .sf2-icon-download:before { content:"\e008"; }
 .sf2-icon-delete:before { content:"\e006"; }
 .sf2-icon-caret-down:before { content:"\e01a"; }
+.sf2-icon-two-columns:before { content:"\e036"; }
 
 /* common class and element style*/
 a { color:#eb8205; }
@@ -234,9 +235,11 @@ justify-content: flex-end;
     color:#d6d6d6;
     cursor:pointer;
 }
+
 #account .avatar {
     vertical-align:middle;
     border-radius:1000px;
+    margin-right: 0.25rem;
 }
 
 @media (max-width:767px) {

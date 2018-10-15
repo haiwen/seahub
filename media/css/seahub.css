@@ -200,6 +200,7 @@
 .sf2-icon-plus2:before { content: "\e033"; }
 .sf2-icon-upload:before { content: "\e034"; }
 .sf2-icon-x3:before { content: "\e035"; }
+.sf2-icon-two-columns:before { content:"\e036"; }
 
 /******* tags **********/
 html, body {
@@ -4184,7 +4185,7 @@ img.thumbnail {
     margin-left:15px;
     font-size: 0;
 }
-.wiki-view-icon-btn,
+.two-columns-view-icon-btn,
 .grid-view-icon-btn,
 .list-view-icon-btn {
     display:inline-block;
@@ -4203,7 +4204,7 @@ img.thumbnail {
     margin-left: 0;
 }
 
-.wiki-view-icon-btn.active,
+.two-columns-view-icon-btn.active,
 .grid-view-icon-btn.active,
 .list-view-icon-btn.active {
     color:#fff;

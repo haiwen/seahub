@@ -147,13 +147,13 @@ class MainSideNav extends React.Component {
           <h3 className="sf-heading">Tools</h3>
           <ul className="side-tabnav-tabs">
             <li className={`tab ${this.state.currentTab === 'starred' ? 'tab-cur' : ''}`}>
-              <a href={siteRoot + 'starred/'} title={gettext('Favorites')} onClick={() => this.tabItemClick('favorites')}>
+              <Link to={siteRoot + 'starred/'} title={gettext('Favorites')} onClick={() => this.tabItemClick('favorites')}>
                 <span className="sf2-icon-star" aria-hidden="true"></span>
                 {gettext('Favorites')}
-              </a>
+              </Link>
             </li>
             <li className={`tab ${this.state.currentTab === 'dashboard' ? 'tab-cur' : ''}`}>
-              <Link to={siteRoot + 'dashboard'} title={gettext('Acitivities')} onClick={() => this.tabItemClick('dashboard')}>
+              <Link to={siteRoot + 'dashboard/'} title={gettext('Acitivities')} onClick={() => this.tabItemClick('dashboard')}>
                 <span className="sf2-icon-clock" aria-hidden="true"></span>
                 {gettext('Acitivities')}
               </Link>
@@ -165,7 +165,7 @@ class MainSideNav extends React.Component {
               </a>
             </li>
             <li className={`tab ${this.state.currentTab === 'drafts' ? 'tab-cur' : ''}`} onClick={() => this.tabItemClick('drafts')}>
-              <Link to={siteRoot + 'drafts'} title={gettext('Drafts')}>
+              <Link to={siteRoot + 'drafts/'} title={gettext('Drafts')}>
                 <span className="sf2-icon-edit" aria-hidden="true"></span>
                 {gettext('Drafts')}
               </Link>
