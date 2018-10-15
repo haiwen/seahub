@@ -1,5 +1,5 @@
 import React from 'react';
-import { processor, processorGetAST } from '@seafile/seafile-editor/src/lib/seafile-markdown2html';
+import { processor, processorGetAST } from '@seafile/seafile-editor/dist/utils/seafile-markdown2html';
 import Prism from 'prismjs';
 import WikiOutline from './wiki-outline';
 
@@ -7,7 +7,7 @@ var URL = require('url-parse');
 
 const gettext = window.gettext;
 
-require('@seafile/seafile-editor/src/lib/code-hight-package');
+require('@seafile/seafile-editor/dist/editor/code-hight-package');
 
 const contentClass = "wiki-md-viewer-rendered-content";
 

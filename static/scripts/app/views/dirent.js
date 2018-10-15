@@ -623,9 +623,10 @@ define([
                 beforeSend: Common.prepareCSRFToken,
                 success: function(res) {
                     var siteRoot = window.app.config.siteRoot;
-                    var repoID = res.draft_repo_id;
+                    var repoID = res.origin_repo_id;
                     var filePath = res.draft_file_path;
-                    window.location.href= siteRoot + 'lib/' + repoID + '/file' + filePath + '?mode=edit';
+                    var draftID = res.id;
+                    window.location.href= siteRoot + 'lib/' + repoID + '/file' + filePath + '?mode=edit&draft_id=' + draftID;
                 },
                 error: function() {
                     var err_msg = gettext("The draft already exists.");

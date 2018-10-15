@@ -10,6 +10,7 @@ let siteRoot = window.app.config.siteRoot;
 let domain = window.app.pageOptions.domain;
 let protocol = window.app.pageOptions.protocol;
 let mode = window.app.pageOptions.mode;
+let draftID = window.app.pageOptions.draftID;
 let dirPath = '/';
 
 const serviceUrl = window.app.config.serviceUrl;
@@ -24,6 +25,7 @@ function getImageFileNameWithTimestamp() {
   var d = Date.now();
   return 'image-' + d.toString() + '.png';
 }
+
 
 class EditorUtilities {
 
@@ -170,6 +172,14 @@ class EditorUtilities {
   getFileHistoryVersion(commitID) {
     return seafileAPI.getFileRevision(repoID, commitID, filePath);
   }
+
+  createDraftReview() {
+    return seafileAPI.createDraftReview(draftID)
+      .then(res => {
+        let url = serviceUrl + '/drafts/review/' + res.data.id;
+        return url;
+      })
+  }
 }
 
 
@@ -243,6 +253,7 @@ class MarkdownEditor extends React.Component {
           collabServer={this.state.collabServer}
           showFileHistory={true}
           mode={mode}
+          draftID={draftID}
         />
       );
     }   

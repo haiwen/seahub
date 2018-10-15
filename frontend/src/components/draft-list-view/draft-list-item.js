@@ -47,8 +47,22 @@ class DraftListItem extends React.Component {
   onDraftEditClick = () => {
     let draft = this.props.draft;
     let filePath = draft.draft_file_path;
-    let repoID = draft.draft_repo_id;
-    window.location.href= siteRoot + 'lib/' + repoID + '/file' + filePath + '?mode=edit';
+    let repoID = draft.origin_repo_id;
+    let url =  siteRoot + 'lib/' + repoID + '/file' + filePath + '?mode=edit&draft_id=' + draft.id;
+    window.open(url)
+  }
+
+  onLibraryClick = () => {
+    let draft = this.props.draft;
+    let repoID = draft.origin_repo_id;
+    let url =  siteRoot + '#common/lib/' + repoID;
+    window.open(url)
+  }
+
+  onReviewClick = () => {
+    let draft = this.props.draft;
+    let url = siteRoot + 'drafts/review/' + draft.review_id + '/';
+    window.open(url);
   }
 
   getFileName(filePath) {
@@ -65,13 +79,19 @@ class DraftListItem extends React.Component {
       <tr className={this.state.highlight} onMouseEnter={this.onMouseEnter} onMouseLeave={this.onMouseLeave}>
         <td className="icon"><img src={siteRoot + 'media/img/file/192/txt.png'} /></td>
         <td className="name a-simulate" onClick={this.onDraftEditClick}>{fileName}</td>
-        <td className="owner">{draft.owner}</td>
+        <td className="library a-simulate" onClick={this.onLibraryClick}>{draft.repo_name}</td>
+        <td className="review">
+          { draft.review_id && draft.review_status === 'open' ? <span className="a-simulate" onClick={this.onReviewClick}>#{draft.review_id}</span> : <span>--</span> }
+        </td>
         <td className="update">{localTime}</td>
         <td className="menu-toggle">
-          <NodeMenuControl
-            isShow={this.state.isMenuControlShow}
-            onClick={this.onMenuToggleClick}
-          />
+          { 
+            this.props.draft.review_status !== 'open' &&
+            <NodeMenuControl
+              isShow={this.state.isMenuControlShow}
+              onClick={this.onMenuToggleClick}
+            />
+          }
         </td>
       </tr>
     );

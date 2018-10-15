@@ -3,10 +3,10 @@ import PropTypes from 'prop-types';
 import Prism from 'prismjs';
 import Loading from '../../components/loading';
 import CommonToolbar from '../../components/toolbar/common-toolbar';
-import DiffViewer from '@seafile/seafile-editor/dist/diff-viewer/diff-viewer';
+import DiffViewer from '@seafile/seafile-editor/dist/viewer/diff-viewer';
 import '../../css/initial-style.css';
 
-require('@seafile/seafile-editor/src/lib/code-hight-package');
+require('@seafile/seafile-editor/dist/editor/code-hight-package');
 
 const contentClass = 'markdown-viewer-render-content';
 const propTypes = {

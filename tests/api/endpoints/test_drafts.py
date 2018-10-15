@@ -45,7 +45,7 @@ class DraftsViewTest(BaseTestCase):
             'file_path': self.file,
         })
 
-        self.assertEqual(409, resp.status_code)
+        self.assertEqual(200, resp.status_code)
 
 
 class DraftViewTest(BaseTestCase):

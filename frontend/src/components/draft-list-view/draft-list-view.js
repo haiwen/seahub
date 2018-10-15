@@ -20,8 +20,9 @@ class DraftListView extends React.Component {
             <tr>
               <th style={{width: '4%'}}>{/*img*/}</th>
               <th style={{width: '46%'}}>{gettext('Name')}</th>
-              <th style={{width: '20%'}}>{gettext('Owner')}</th>
-              <th style={{width: '20%'}}>{gettext('Last Update')}</th>
+              <th style={{width: '20%'}}>{gettext('Library')}</th>
+              <th style={{width: '10%'}}>{gettext('Review')}</th>
+              <th style={{width: '10%'}}>{gettext('Last Update')}</th>
               <th style={{width: '10%'}}></th>
             </tr>
           </thead>

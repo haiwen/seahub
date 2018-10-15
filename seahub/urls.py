@@ -67,6 +67,7 @@ from seahub.api2.endpoints.repo_file_uploaded_bytes import RepoFileUploadedBytes
 from seahub.api2.endpoints.user_avatar import UserAvatarView
 from seahub.api2.endpoints.wikis import WikisView, WikiView
 from seahub.api2.endpoints.drafts import DraftsView, DraftView
+from seahub.api2.endpoints.draft_reviews import DraftReviewsView, DraftReviewView
 from seahub.api2.endpoints.activities import ActivitiesView
 from seahub.api2.endpoints.wiki_pages import WikiPageView, WikiPagesView, WikiPagesDirView, WikiPageContentView
 from seahub.api2.endpoints.revision_tag import TaggedItemsView, TagNamesView
@@ -185,7 +186,6 @@ urlpatterns = [
 
     ### React ###
     url(r'^dashboard/$', TemplateView.as_view(template_name="react_app.html"), name="dashboard"),
-    url(r'^drafts/$', TemplateView.as_view(template_name="react_app.html"), name="drafts"),
     url(r'^starred/$', TemplateView.as_view(template_name="react_app.html"), name="starred"),
 
     ### Ajax ###
@@ -326,6 +326,11 @@ urlpatterns = [
     url(r'^api/v2.1/drafts/$', DraftsView.as_view(), name='api-v2.1-drafts'),
     url(r'^api/v2.1/drafts/(?P<pk>\d+)/$', DraftView.as_view(), name='api-v2.1-draft'),
 
+
+    ## user::reviews
+    url(r'^api/v2.1/reviews/$', DraftReviewsView.as_view(), name='api-v2.1-draft-reviews'),
+    url(r'^api/v2.1/review/(?P<pk>\d+)/$', DraftReviewView.as_view(), name='api-v2.1-draft-review'),
+
     ## user::activities
     url(r'^api/v2.1/activities/$', ActivitiesView.as_view(), name='api-v2.1-acitvity'),
 
@@ -438,6 +443,7 @@ urlpatterns = [
     url(r'^invite/', include('seahub.invitations.urls', app_name='invitations', namespace='invitations')),
     url(r'^terms/', include('termsandconditions.urls')),
     url(r'^wikis/', include('seahub.wiki.urls', app_name='wiki', namespace='wiki')),
+    url(r'^drafts/', include('seahub.drafts.urls', app_name='drafts', namespace='drafts')),
 
     ## admin::address book
     url(r'^api/v2.1/admin/address-book/groups/$', AdminAddressBookGroups.as_view(), name='api-v2.1-admin-address-book-groups'),

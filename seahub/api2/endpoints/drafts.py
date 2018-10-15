@@ -1,6 +1,8 @@
 # Copyright (c) 2012-2016 Seafile Ltd.
+import os
 import json
 import logging
+import posixpath
 
 from rest_framework import status
 from rest_framework.authentication import SessionAuthentication
@@ -22,8 +24,11 @@ from seahub.api2.utils import api_error
 from seahub.constants import PERMISSION_READ_WRITE
 from seahub.drafts.models import Draft, DraftFileExist, DraftFileConflict
 from seahub.views import check_folder_permission
+from seahub.utils import gen_file_get_url
 
 logger = logging.getLogger(__name__)
+
+HTTP_520_OPERATION_FAILED = 520
 
 
 class DraftsView(APIView):
@@ -65,7 +70,7 @@ class DraftsView(APIView):
         username = request.user.username
 
         try:
-            d = Draft.objects.add(username, repo, file_path, file_id, org_id=org_id)
+            d = Draft.objects.add(username, repo, file_path, file_id)
 
             return Response(d.to_dict())
         except (DraftFileExist, IntegrityError):
@@ -98,6 +103,7 @@ class DraftView(APIView):
 
         try:
             d.publish()
+            d.delete()
             return Response(status.HTTP_200_OK)
         except (DraftFileConflict, IntegrityError):
             return api_error(status.HTTP_409_CONFLICT,

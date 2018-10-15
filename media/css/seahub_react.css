@@ -27,7 +27,7 @@
  * empty-tip
  * more-btn
  * list-operation
- * 
+ * prompt-message
  */
 /****** sf2-icon-xx ********/
 @font-face {
@@ -73,6 +73,7 @@
 .sf2-icon-download:before { content:"\e008"; }
 .sf2-icon-delete:before { content:"\e006"; }
 .sf2-icon-caret-down:before { content:"\e01a"; }
+.sf2-icon-two-columns:before { content:"\e036"; }
 
 /* common class and element style*/
 a { color:#eb8205; }
@@ -234,9 +235,11 @@ justify-content: flex-end;
     color:#d6d6d6;
     cursor:pointer;
 }
+
 #account .avatar {
     vertical-align:middle;
     border-radius:1000px;
+    margin-right: 0.25rem;
 }
 
 @media (max-width:767px) {
@@ -881,3 +884,32 @@ a.op-icon:focus {
     text-decoration: none;
 }
 /* end operaton menu */
+
+.cur-view-path .tab-tabs-nav {
+    font-size:15px;
+    list-style: none;
+}
+.tab-tabs-nav .tab {
+    float:left;
+    border:0;
+    background:none;
+}
+.tab-tabs-nav .tab .a {
+    color:#8A948F;
+    font-weight:normal;
+    padding:.3em 0;
+    margin-right:0.6em;
+}
+.tab-tabs-nav .ui-state-active .a {
+    color:#DD4B39;
+    border-bottom:2px solid #DD4B39;
+}
+.tab-tabs-nav .tab .a:hover {
+    color:#DD4B39;
+}
+.cur-view-path .tab-tabs-nav .ui-state-active .a,
+.cur-view-path .tab-tabs-nav .a:hover {
+    color:#eb8205;
+    text-decoration:none;
+    border-bottom-color:#eb8205;
+}
