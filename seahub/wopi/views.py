@@ -363,8 +363,9 @@ class WOPIFilesContentsView(APIView):
             file_obj = request.read()
 
             # get file update url
+            fake_obj_id = {'online_office_update': True,}
             token = seafile_api.get_fileserver_access_token(repo_id,
-                    'dummy', 'update', request_user)
+                    json.dumps(fake_obj_id), 'update', request_user)
 
             if not token:
                 return HttpResponse(json.dumps({}), status=500,
