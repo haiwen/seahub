@@ -90,8 +90,10 @@ def onlyoffice_editor_callback(request):
         file_path = doc_info['file_path']
         username = doc_info['username']
 
+        fake_obj_id = {'online_office_update': True,}
         update_token = seafile_api.get_fileserver_access_token(repo_id,
-                'dummy', 'update', username)
+                json.dumps(fake_obj_id), 'update', username)
+
         if not update_token:
             logger.error('[OnlyOffice] No fileserver access token.')
             return HttpResponse('{"error": 0}')

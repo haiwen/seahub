@@ -89,7 +89,7 @@ class Invitation(models.Model):
         #                            context).rstrip()
         subject = _('%(user)s invited you to join %(site_name)s.') % {
             'user': self.inviter, 'site_name': get_site_name()}
-        send_html_email_with_dj_template(
+        return send_html_email_with_dj_template(
             email, dj_template='invitations/invitation_email.html',
             context=context,
             subject=subject,

@@ -1215,30 +1215,12 @@ if EVENTS_CONFIG_FILE:
 
     HAS_FILE_SEARCH = check_search_enabled()
 
-TRAFFIC_STATS_ENABLED = False
-if EVENTS_CONFIG_FILE and hasattr(seafevents, 'get_user_traffic_stat'):
-    TRAFFIC_STATS_ENABLED = True
-    def get_user_traffic_stat(username):
-        session = SeafEventsSession()
-        try:
-            stat = seafevents.get_user_traffic_stat(session, username)
-        finally:
-            session.close()
-        return stat
-
-    def get_user_traffic_list(month, start=0, limit=25):
-        session = SeafEventsSession()
-        try:
-            stat = seafevents.get_user_traffic_list(session, month, start, limit)
-        finally:
-            session.close()
-        return stat
-
+# init Seafevents API
+if EVENTS_CONFIG_FILE:
+    from seafevents import seafevents_api
+    seafevents_api.init(EVENTS_CONFIG_FILE)
 else:
-    def get_user_traffic_stat(username):
-        pass
-    def get_user_traffic_list():
-        pass
+    seafevents_api = None       # TODO
 
 def user_traffic_over_limit(username):
     """Return ``True`` if user traffic over the limit, otherwise ``False``.
@@ -1253,7 +1235,7 @@ def user_traffic_over_limit(username):
     traffic_limit = int(PLAN[plan]['share_link_traffic']) * 1024 * 1024 * 1024
 
     try:
-        stat = get_user_traffic_stat(username)
+        stat = seafevents_api.get_user_traffic_by_month(username, datetime.now())
     except Exception as e:
         logger = logging.getLogger(__name__)
         logger.error('Failed to get user traffic stat: %s' % username,
@@ -1263,7 +1245,7 @@ def user_traffic_over_limit(username):
     if stat is None:            # No traffic record yet
         return False
 
-    month_traffic = stat['file_view'] + stat['file_download'] + stat['dir_download']
+    month_traffic = stat['link_file_upload'] + stat['link_file_download']
     return True if month_traffic >= traffic_limit else False
 
 def is_user_password_strong(password):

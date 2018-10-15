@@ -14,35 +14,94 @@
     </ul>
 </div>
 
-{% if traffic_stats_enabled %}
 <ul class="traffic-tab-nav">
     <li class="tab">
         <a href="{% url 'sys_statistic_traffic' %}" class="a">{% trans "System" %}</a>
     </li>
-    <li class="tab tab-cur">
-        <a href="{{ SITE_ROOT }}sys/trafficadmin/" class="a">{% trans "Share Link" %}</a>
+    <li class="tab {% if type == 'user' %}tab-cur{% endif %}">
+        <a href="?type=user" class="a">{% trans "Users" %}</a>
+    </li>
+    <li class="tab {% if type == 'org' %}tab-cur{% endif %}">
+        <a href="?type=org" class="a">{% trans "Organizations" %}</a>
     </li>
 </ul>
-{% endif %}
 
-<p class="tip">{% trans "Tip: the traffic only includes the traffic used by sharing links." %}</p>
-
-<form action="{{ sys_traffic_admin }}" method="get" autocomplete="off" id="traffic-month-form">
+<form action="" method="get" autocomplete="off" id="traffic-month-form">
+    <input type="hidden" name="type" value="{{type}}" />
     <label for="month">{% trans "Month:" %}</label>
     <input type="text" name="month" maxlength="6" value="{{ month }}" class="input" />
 </form>
 
 <table>
-    <tr>
-        <th>{% trans "User" %}</th>
-        <th>{% trans "Total Usage" %}</th>
-    </tr>
-    {% for info in traffic_info_list %}
-    <tr>
-        <td><a href="{% url 'user_info' info.email %}">{{ info.email }}</a></td>
-        <td>{{ info.total |filesizeformat }}</td>
-    </tr>
-    {% endfor %}
+    <thead>
+        <tr>
+            <th width="16%">
+                {% if type == 'user' %}
+                {% trans "User" %}
+                {% else %}
+                {% trans "Organization" %}
+                {% endif %}
+            </th>
+            <th width="11%">
+                <a href="" class="table-sort-op">
+                    {% trans "Sync Upload" %}
+                    <span class="sort-icon hide"></span>
+                </a>
+            </th>
+            <th width="14%">
+                <a href="" class="table-sort-op">
+                    {% trans "Sync Download" %}
+                    <span class="sort-icon hide"></span>
+                </a>
+            </th>
+            <th width="11%">
+                <a href="" class="table-sort-op">
+                    {% trans "Web Upload" %}
+                    <span class="sort-icon hide"></span>
+                </a>
+            </th>
+            <th width="14%">
+                <a href="" class="table-sort-op">
+                    {% trans "Web Download" %}
+                    <span class="sort-icon hide"></span>
+                </a>
+            </th>
+            <th width="17%">
+                <a href="" class="table-sort-op">
+                    {% trans "Share link upload" %}
+                    <span class="sort-icon hide"></span>
+                </a>
+            </th>
+            <th width="17%">
+                <a href="" class="table-sort-op">
+                    {% trans "Share link download" %}
+                    <span class="sort-icon hide"></span>
+                </a>
+            </th>
+        </tr>
+    </thead>
+
+    <tbody>
+        {% for info in traffic_info_list %}
+        <tr>
+            <td>
+                {% if info.org_id > 0 %}
+                <a href="{% url 'sys_org_info_user' info.org_id %}">{{ info.org_name }}</a>
+                {% elif info.user %}
+                <a href="{% url 'user_info' info.user %}">{{ info.user|email2nickname }}</a>
+                {% else %}
+                --
+                {% endif %}
+            </td>
+            <td>{{ info.sync_file_upload|filesizeformat }}</td>
+            <td>{{ info.sync_file_download|filesizeformat }}</td>
+            <td>{{ info.web_file_upload|filesizeformat }}</td>
+            <td>{{ info.web_file_download|filesizeformat }}</td>
+            <td>{{ info.link_file_upload|filesizeformat }}</td>
+            <td>{{ info.link_file_download|filesizeformat }}</td>
+        </tr>
+        {% endfor %}
+    </tbody>
 </table>
 
 <div id="paginator">
@@ -77,8 +136,35 @@
 
 {% block extra_script %}
 <script type="text/javascript">
+var traffic_items = [
+    'sync_file_upload',
+    'sync_file_download',
+    'web_file_upload',
+    'web_file_download',
+    'link_file_upload',
+    'link_file_download'
+];
+$('.table-sort-op').each(function(index, item) {
+    var traffic_item = traffic_items[index];
+    var url = '?type={{type}}&month={{month}}&page={{current_page}}&per_page={{per_page}}';
+    var $icon = $('.sort-icon', $(item));
+
+    if ('{{order_by}}' == traffic_item + '_desc') {
+        $icon.addClass('icon-caret-down')
+            .removeClass('hide');
+        url += '&order_by=' + traffic_item;
+    } else if ('{{order_by}}' == traffic_item) {
+        $icon.addClass('icon-caret-up')
+            .removeClass('hide');
+        url += '&order_by=' + traffic_item + '_desc';
+    } else {
+        url += '&order_by=' + traffic_item + '_desc';
+    }
+    $(item).attr('href', url);
+});
+
 $('#paginator a').each(function (index, link) {
-    link.href = link.href + '&month={{ month }}';
+    link.href += '&type={{type}}&month={{month}}&order_by={{order_by}}';
 });
 </script>
 {% endblock %}

@@ -65,6 +65,7 @@ class SharedRepos(APIView):
             result = {}
             result['repo_id'] = repo.repo_id
             result['repo_name'] = repo.repo_name
+            result['encrypted'] = repo.encrypted
             result['share_type'] = repo.share_type
             result['share_permission'] = repo.permission
             result['modifier_email'] = repo.last_modifier

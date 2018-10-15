@@ -17,16 +17,17 @@
     </ul>
 </div>
 
-{% if traffic_stats_enabled %}
 <ul class="traffic-tab-nav">
     <li class="tab tab-cur">
         <a href="{% url 'sys_statistic_traffic' %}" class="a">{% trans "System" %}</a>
     </li>
     <li class="tab">
-        <a href="{{ SITE_ROOT }}sys/trafficadmin/" class="a">{% trans "Share Link" %}</a>
+        <a href="?type=user" class="a">{% trans "Users" %}</a>
+    </li>
+    <li class="tab">
+        <a href="?type=org" class="a">{% trans "Organizations" %}</a>
     </li>
 </ul>
-{% endif %}
 
 <div class="system-statistic-time-range ovhd">
     <div class="sf-btn-group fleft">

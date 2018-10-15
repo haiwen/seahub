@@ -23,7 +23,7 @@ from seahub.api2.utils import api_error
 from seahub.wiki.models import Wiki, WikiPageMissing
 from seahub.wiki.utils import (clean_page_name, get_wiki_pages, get_inner_file_url,
                                get_wiki_dirent, get_wiki_page_object, get_wiki_dirs_by_path)
-from seahub.utils import gen_file_get_url
+from seahub.utils import gen_inner_file_get_url
 from seahub.base.templatetags.seahub_tags import email2contact_email, email2nickname
 
 logger = logging.getLogger(__name__)
@@ -306,7 +306,7 @@ class WikiPageContentView(APIView):
             error_msg = 'Internal Server Error'
             return api_error(status.HTTP_500_INTERNAL_SERVER_ERROR, error_msg)
 
-        url = gen_file_get_url(token, file_name)
+        url = gen_inner_file_get_url(token, file_name)
         file_response = urllib2.urlopen(url)
         content = file_response.read()
         

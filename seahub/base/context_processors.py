@@ -29,8 +29,7 @@ try:
 except ImportError:
     SEACLOUD_MODE = False
 
-from seahub.utils import HAS_FILE_SEARCH, EVENTS_ENABLED, \
-        TRAFFIC_STATS_ENABLED, is_pro_version
+from seahub.utils import HAS_FILE_SEARCH, EVENTS_ENABLED, is_pro_version
 
 try:
     from seahub.settings import ENABLE_PUBFILE
@@ -102,7 +101,6 @@ def base(request):
         'share_link_password_min_length': config.SHARE_LINK_PASSWORD_MIN_LENGTH,
         'repo_password_min_length': config.REPO_PASSWORD_MIN_LENGTH,
         'events_enabled': EVENTS_ENABLED,
-        'traffic_stats_enabled': TRAFFIC_STATS_ENABLED,
         'sysadmin_extra_enabled': ENABLE_SYSADMIN_EXTRA,
         'multi_tenancy': MULTI_TENANCY,
         'multi_institution': getattr(dj_settings, 'MULTI_INSTITUTION', False),
