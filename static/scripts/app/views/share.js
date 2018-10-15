@@ -466,7 +466,16 @@ define([
 
         copySharedLink: function(e) {
             var $el = $(e.currentTarget);
-            $el.prev('.shared-link').select();
+            var targetDom = $el.prev('.shared-link');
+            if (navigator.userAgent.match(/(iPhone|iPod|iPad);?/i)) { //ios
+                window.getSelection().removeAllRanges();
+                var range = document.createRange();
+                range.selectNode(targetDom[0]);
+                window.getSelection().addRange(range); 
+            } else {
+                targetDom.select();
+                $el.prev('.shared-link').select();
+            }
             document.execCommand('copy');
             $.modal.close();
             Common.feedback(gettext("Share link is copied to the clipboard."), 'success');
