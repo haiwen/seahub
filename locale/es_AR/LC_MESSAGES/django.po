@@ -12,7 +12,7 @@ msgstr ""
 "Project-Id-Version: seahub\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2018-09-17 12:05+0800\n"
-"PO-Revision-Date: 2018-09-17 04:07+0000\n"
+"PO-Revision-Date: 2018-09-19 01:12+0000\n"
 "Last-Translator: Rodolfo Cossalter <rcoss@dm.uba.ar>\n"
 "Language-Team: Spanish (Argentina) (http://www.transifex.com/haiwen/seahub/language/es_AR/)\n"
 "MIME-Version: 1.0\n"
@@ -6723,7 +6723,7 @@ msgstr "Permitir al usuario crear bibliotecas de la organización. De otra maner
 
 #: seahub/templates/sysadmin/settings.html:169
 msgid "Allow user to clean library trash"
-msgstr ""
+msgstr "Permitir al usuario vaciar la papelera de la biblioteca"
 
 #: seahub/templates/sysadmin/settings.html:173
 msgid "Online Preview"
@@ -6987,22 +6987,22 @@ msgstr "Descargar"
 #: seahub/templates/sysadmin/sys_org_info_traffic.html:271
 #: seahub/templates/sysadmin/sys_statistic_traffic.html:286
 msgid "Total Traffic"
-msgstr ""
+msgstr "Tráfico total"
 
 #: seahub/templates/sysadmin/sys_org_info_traffic.html:278
 #: seahub/templates/sysadmin/sys_statistic_traffic.html:293
 msgid "Share Link Traffic"
-msgstr ""
+msgstr "Tráfico de enlaces compartidos"
 
 #: seahub/templates/sysadmin/sys_org_info_traffic.html:285
 #: seahub/templates/sysadmin/sys_statistic_traffic.html:300
 msgid "Sync Traffic"
-msgstr ""
+msgstr "Tráfico de sincronización"
 
 #: seahub/templates/sysadmin/sys_org_info_traffic.html:292
 #: seahub/templates/sysadmin/sys_statistic_traffic.html:307
 msgid "Web Traffic"
-msgstr ""
+msgstr "Tráfico Web"
 
 #: seahub/templates/sysadmin/sys_org_info_traffic.html:365
 #: seahub/templates/sysadmin/sys_statistic_file.html:276

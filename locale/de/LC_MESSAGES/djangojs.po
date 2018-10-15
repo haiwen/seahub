@@ -23,9 +23,9 @@ msgid ""
 msgstr ""
 "Project-Id-Version: seahub\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2018-09-07 10:41+0800\n"
-"PO-Revision-Date: 2018-09-07 02:44+0000\n"
-"Last-Translator: C_Q <helloworld.c@outlook.com>\n"
+"POT-Creation-Date: 2018-09-17 12:01+0800\n"
+"PO-Revision-Date: 2018-09-10 13:13+0000\n"
+"Last-Translator: Andreas Vollmer | HU Berlin <andreas.vollmer@cms.hu-berlin.de>\n"
 "Language-Team: German (http://www.transifex.com/haiwen/seahub/language/de/)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -51,7 +51,7 @@ msgstr "Abmelden"
 
 #: frontend/src/components/markdown-viewer.js:186
 msgid "Last modified by"
-msgstr ""
+msgstr "Zuletzt bearbeitet von"
 
 #: frontend/src/components/menu-component/menu-dialog/create-fileforder-dialog.js:74
 #: frontend/src/components/menu-component/node-menu.js:29
@@ -82,14 +82,14 @@ msgstr "Absenden"
 
 #: frontend/src/components/menu-component/menu-dialog/create-fileforder-dialog.js:91
 #: frontend/src/components/menu-component/menu-dialog/rename-dialog.js:71
-#: static/scripts/app/views/fileupload.js:21
+#: static/scripts/app/views/fileupload.js:22
 msgid "Cancel"
 msgstr "Abbrechen"
 
 #: frontend/src/components/menu-component/menu-dialog/delete-dialog.js:16
 #: frontend/src/components/menu-component/node-menu.js:39
 #: frontend/src/components/menu-component/node-menu.js:47
-#: static/scripts/app/views/fileupload.js:22
+#: static/scripts/app/views/fileupload.js:23
 #: static/scripts/sysadmin-app/views/device-trusted-ipaddress.js:27
 msgid "Delete"
 msgstr "Löschen"
@@ -155,11 +155,11 @@ msgstr "Seiten"
 
 #: seahub/templates/priv/ali.js:8
 msgid "Preview-Edit-on-Cloud library"
-msgstr ""
+msgstr "Vorschau-Bearbeiten-Bibliothek"
 
 #: seahub/templates/priv/ali.js:9
 msgid "Preview-on-Cloud library"
-msgstr ""
+msgstr "Vorschau-Bibliothek"
 
 #: seahub/templates/priv/ali.js:10
 msgid "Admin access"
@@ -167,35 +167,35 @@ msgstr "Zugang für Administration"
 
 #: seahub/templates/priv/ali.js:12
 msgid "Read-Write folder"
-msgstr ""
+msgstr "Lesen-Schreiben-Ordner"
 
 #: seahub/templates/priv/ali.js:13
 msgid "Read-Only folder"
-msgstr ""
+msgstr "Lesen-Ordner"
 
 #: seahub/templates/priv/ali.js:14
 msgid "Preview-Edit-on-Cloud folder"
-msgstr ""
+msgstr "Vorschau-Bearbeiten-Ordner"
 
 #: seahub/templates/priv/ali.js:15
 msgid "Preview-on-Cloud folder"
-msgstr ""
+msgstr "Vorschau-Ordner"
 
 #: seahub/templates/priv/ali.js:17
 msgid "Preview-Edit-on-Cloud"
-msgstr "Vorschau von Bearbeiten in der Cloud"
+msgstr "Vorschau und Bearbeiten online"
 
 #: seahub/templates/priv/ali.js:18
 msgid "Preview-on-Cloud"
-msgstr "Vorschau in der Cloud"
+msgstr "Vorschau online"
 
 #: seahub/templates/priv/ali.js:21
 msgid "Read-Write-Sync"
-msgstr ""
+msgstr "Synchronisieren: Lesen und Schreiben"
 
 #: seahub/templates/priv/ali.js:22
 msgid "Read-Only-Sync"
-msgstr ""
+msgstr "Synchronisieren: Nur Lesen"
 
 #: seahub/templates/priv/ali.js:23
 msgid "Co-Owner"
@@ -203,30 +203,30 @@ msgstr "Mit-Eigentümer/in"
 
 #: seahub/templates/priv/ali.js:24
 msgid "Edit-on-Cloud"
-msgstr "Online bearbeiten"
+msgstr "Bearbeiten online"
 
 #: seahub/templates/priv/ali.js:25
 msgid "View-on-Cloud"
-msgstr "Vorschau"
+msgstr "Vorschau online"
 
 #: static/scripts/app/models/deleted-repo.js:19
-#: static/scripts/app/models/repo.js:59 static/scripts/common.js:343
+#: static/scripts/app/models/repo.js:59 static/scripts/common.js:344
 msgid "Encrypted library"
 msgstr "Verschlüsselte Bibliothek"
 
 #: static/scripts/app/models/deleted-repo.js:21
-#: static/scripts/app/models/repo.js:61 static/scripts/common.js:347
+#: static/scripts/app/models/repo.js:61 static/scripts/common.js:348
 #: static/scripts/sysadmin-app/models/trash-repo.js:14
 msgid "Read-Write library"
 msgstr "Bibliothek mit Lese- und Schreibzugriff"
 
 #: static/scripts/app/models/dirent.js:113 static/scripts/app/views/dir.js:682
 #: static/scripts/app/views/dir.js:752
-#: static/scripts/app/views/fileupload.js:392
-#: static/scripts/app/views/fileupload.js:406
-#: static/scripts/app/views/fileupload.js:418
-#: static/scripts/app/views/fileupload.js:430
-#: static/scripts/app/views/group.js:65 static/scripts/common.js:643
+#: static/scripts/app/views/fileupload.js:394
+#: static/scripts/app/views/fileupload.js:408
+#: static/scripts/app/views/fileupload.js:420
+#: static/scripts/app/views/fileupload.js:432
+#: static/scripts/app/views/group.js:65 static/scripts/common.js:644
 msgid "Just now"
 msgstr "Gerade eben"
 
@@ -237,29 +237,29 @@ msgstr "Name erforderlich"
 #: static/scripts/app/models/repo.js:37
 #: static/scripts/app/views/dialogs/dirent-rename.js:65
 #: static/scripts/app/views/dir.js:667 static/scripts/app/views/dir.js:727
-#: static/scripts/app/views/dirent.js:515
+#: static/scripts/app/views/dirent.js:513
 #: static/scripts/app/views/group-repo.js:131
 #: static/scripts/app/views/repo.js:187
 msgid "Name should not include '/'."
 msgstr "Name darf kein '/' enthalten"
 
-#: static/scripts/app/models/repo.js:41 static/scripts/app/views/share.js:334
+#: static/scripts/app/models/repo.js:41 static/scripts/app/views/share.js:338
 msgid "Please enter password"
 msgstr "Bitte geben Sie ein Passwort ein"
 
-#: static/scripts/app/models/repo.js:42 static/scripts/app/views/share.js:342
+#: static/scripts/app/models/repo.js:42 static/scripts/app/views/share.js:346
 msgid "Please enter the password again"
 msgstr "Bitte geben Sie das Passwort erneut ein"
 
-#: static/scripts/app/models/repo.js:44 static/scripts/app/views/share.js:338
+#: static/scripts/app/models/repo.js:44 static/scripts/app/views/share.js:342
 msgid "Password is too short"
 msgstr "Passwort ist zu kurz"
 
-#: static/scripts/app/models/repo.js:46 static/scripts/app/views/share.js:346
+#: static/scripts/app/models/repo.js:46 static/scripts/app/views/share.js:350
 msgid "Passwords don't match"
 msgstr "Passwörter stimmen nicht überein"
 
-#: static/scripts/app/models/repo.js:63 static/scripts/common.js:345
+#: static/scripts/app/models/repo.js:63 static/scripts/common.js:346
 msgid "Read-Only library"
 msgstr "Bibliothek mit Lesezugriff"
 
@@ -376,7 +376,7 @@ msgstr "%(name)s ist kopiert"
 
 #: static/scripts/app/views/dialogs/dirent-rename.js:59
 #: static/scripts/app/views/dir.js:662 static/scripts/app/views/dir.js:722
-#: static/scripts/app/views/dirent.js:509
+#: static/scripts/app/views/dirent.js:507
 #: static/scripts/app/views/group-repo.js:125
 #: static/scripts/app/views/groups.js:118
 #: static/scripts/app/views/invitations.js:65
@@ -500,7 +500,7 @@ msgid "Password is required."
 msgstr "Passwort erforderlich."
 
 #: static/scripts/app/views/dir.js:479
-#: static/scripts/app/views/notifications.js:63 static/scripts/common.js:467
+#: static/scripts/app/views/notifications.js:63 static/scripts/common.js:468
 msgid "Please check the network."
 msgstr "Bitte überprüfen Sie die Netzwerkverbindung."
 
@@ -624,8 +624,8 @@ msgstr "Fehler beim Verschieben von %(name)s."
 msgid "Failed to copy %(name)s"
 msgstr "Fehler beim Kopieren von %(name)s."
 
-#: static/scripts/app/views/dirent-details.js:95 static/scripts/common.js:694
-#: static/scripts/common.js:765
+#: static/scripts/app/views/dirent-details.js:95 static/scripts/common.js:695
+#: static/scripts/common.js:766
 msgid "No matches"
 msgstr "Nichts gefunden"
 
@@ -639,37 +639,37 @@ msgid "locked by {placeholder}"
 msgstr "von {placeholder} gesperrt"
 
 #: static/scripts/app/views/dirent-grid.js:187
-#: static/scripts/app/views/dirent.js:416
+#: static/scripts/app/views/dirent.js:414
 msgid "Successfully deleted %(name)s"
 msgstr "%(name)s ist gelöscht."
 
-#: static/scripts/app/views/fileupload.js:10
+#: static/scripts/app/views/fileupload.js:11
 msgid "File is too big"
 msgstr "Datei ist zu groß"
 
-#: static/scripts/app/views/fileupload.js:11
+#: static/scripts/app/views/fileupload.js:12
 msgid "File is too small"
 msgstr "Datei ist zu klein"
 
-#: static/scripts/app/views/fileupload.js:12
+#: static/scripts/app/views/fileupload.js:13
 msgid "Filetype not allowed"
 msgstr "Dateityp is nicht erlaubt"
 
-#: static/scripts/app/views/fileupload.js:13
+#: static/scripts/app/views/fileupload.js:14
 msgid "Maximum number of files exceeded"
 msgstr "Maximale Anzahl von Dateien überschritten"
 
-#: static/scripts/app/views/fileupload.js:14
+#: static/scripts/app/views/fileupload.js:15
 msgid "Uploaded bytes exceed file size"
 msgstr "Hochgeladene Bytes überschreitet tatsächliche Dateigröße "
 
-#: static/scripts/app/views/fileupload.js:15
+#: static/scripts/app/views/fileupload.js:16
 msgid "Empty file upload result"
 msgstr "Leere Datei hochgeladen"
 
-#: static/scripts/app/views/fileupload.js:17
-#: static/scripts/app/views/fileupload.js:225
-#: static/scripts/app/views/fileupload.js:265
+#: static/scripts/app/views/fileupload.js:18
+#: static/scripts/app/views/fileupload.js:226
+#: static/scripts/app/views/fileupload.js:266
 #: static/scripts/app/views/repo-details.js:37
 #: static/scripts/sysadmin-app/views/address-book-group-item.js:145
 #: static/scripts/sysadmin-app/views/address-book-group-item.js:152
@@ -677,43 +677,43 @@ msgstr "Leere Datei hochgeladen"
 msgid "Error"
 msgstr "Fehler"
 
-#: static/scripts/app/views/fileupload.js:18
+#: static/scripts/app/views/fileupload.js:19
 msgid "uploaded"
 msgstr "hochgeladen"
 
-#: static/scripts/app/views/fileupload.js:19
+#: static/scripts/app/views/fileupload.js:20
 msgid "canceled"
 msgstr "abgebrochen"
 
-#: static/scripts/app/views/fileupload.js:20
+#: static/scripts/app/views/fileupload.js:21
 msgid "Start"
 msgstr "Start"
 
-#: static/scripts/app/views/fileupload.js:46
+#: static/scripts/app/views/fileupload.js:47
 msgid "File Uploading..."
 msgstr "Datei wird hochgeladen..."
 
-#: static/scripts/app/views/fileupload.js:47
+#: static/scripts/app/views/fileupload.js:48
 msgid "File Upload complete"
 msgstr "Upload erfolgreich"
 
-#: static/scripts/app/views/fileupload.js:48
+#: static/scripts/app/views/fileupload.js:49
 msgid "File Upload canceled"
 msgstr "Datei Upload abgebrochen"
 
-#: static/scripts/app/views/fileupload.js:49
+#: static/scripts/app/views/fileupload.js:50
 msgid "File Upload failed"
 msgstr "Datei-Upload fehlgeschlagen"
 
-#: static/scripts/app/views/fileupload.js:279
+#: static/scripts/app/views/fileupload.js:280
 msgid "Replace file {filename}?"
 msgstr "Datei {filename} austauschen?"
 
-#: static/scripts/app/views/fileupload.js:305
+#: static/scripts/app/views/fileupload.js:306
 msgid "File is locked"
 msgstr "Datei ist gesperrt"
 
-#: static/scripts/app/views/fileupload.js:440
+#: static/scripts/app/views/fileupload.js:442
 msgid "Network error"
 msgstr "Netzwerkfehler"
 
@@ -722,7 +722,7 @@ msgid "Set {placeholder}'s permission"
 msgstr "Rechte von {placeholder} festlegen"
 
 #: static/scripts/app/views/folder-perm.js:126
-#: static/scripts/app/views/share.js:842
+#: static/scripts/app/views/share.js:846
 msgid "Select groups"
 msgstr "Gruppen auswählen"
 
@@ -732,7 +732,7 @@ msgstr "Bearbeiten fehlgeschlagen"
 
 #: static/scripts/app/views/folder-share-item.js:127
 #: static/scripts/app/views/folder-share-item.js:188
-#: static/scripts/common.js:444
+#: static/scripts/common.js:445
 #: static/scripts/sysadmin-app/views/dashboard.js:84
 msgid "Failed. Please check the network."
 msgstr "Fehlgeschlagen. Bitte überprüfen Sie die Netzwerkverbindung."
@@ -871,45 +871,45 @@ msgstr "Rechte erfolgreich geändert"
 msgid "Successfully deleted 1 item"
 msgstr "1 Objekt erfolgreich gelöscht"
 
-#: static/scripts/app/views/share.js:109
+#: static/scripts/app/views/share.js:90
 #: static/scripts/sysadmin-app/views/share.js:42
 msgid "Share {placeholder}"
 msgstr "{placeholder} freigeben"
 
-#: static/scripts/app/views/share.js:209
+#: static/scripts/app/views/share.js:186
 msgid "Expired"
 msgstr "Abgelaufen"
 
-#: static/scripts/app/views/share.js:287 static/scripts/app/views/share.js:288
-#: static/scripts/app/views/share.js:309 static/scripts/app/views/share.js:310
+#: static/scripts/app/views/share.js:291 static/scripts/app/views/share.js:292
+#: static/scripts/app/views/share.js:313 static/scripts/app/views/share.js:314
 msgid "Hide"
 msgstr "Verbergen"
 
-#: static/scripts/app/views/share.js:305 static/scripts/app/views/share.js:306
+#: static/scripts/app/views/share.js:309 static/scripts/app/views/share.js:310
 msgid "Show"
 msgstr "Anzeigen"
 
-#: static/scripts/app/views/share.js:361
+#: static/scripts/app/views/share.js:365
 msgid "Please enter days."
 msgstr "Bitte geben Sie Tage ein"
 
-#: static/scripts/app/views/share.js:365
+#: static/scripts/app/views/share.js:369
 msgid "Please enter valid days"
 msgstr "Bitte geben Sie eine gültige Anzahl von Tagen ein"
 
-#: static/scripts/app/views/share.js:468
+#: static/scripts/app/views/share.js:472
 msgid "Share link is copied to the clipboard."
 msgstr "Der Freigabe-Link ist in die Zwischenablage kopiert."
 
-#: static/scripts/app/views/share.js:485
+#: static/scripts/app/views/share.js:489
 msgid "Please input at least an email."
 msgstr "Bitte geben Sie mindestens eine E-Mail-Adresse an."
 
-#: static/scripts/app/views/share.js:502
+#: static/scripts/app/views/share.js:506
 msgid "Successfully sent to {placeholder}"
 msgstr "Erfolgreich an {placeholder} gesendet."
 
-#: static/scripts/app/views/share.js:506
+#: static/scripts/app/views/share.js:510
 msgid "Failed to send to {placeholder}"
 msgstr "Senden an {placeholder} fehlgeschlagen"
 
@@ -926,34 +926,34 @@ msgstr "Erfolgreich ausgeführt"
 msgid "Successfully unstared {placeholder}"
 msgstr "{placeholder} ist nicht mehr als Favorit markiert."
 
-#: static/scripts/common.js:458 static/scripts/common.js:460
+#: static/scripts/common.js:459 static/scripts/common.js:461
 #: static/scripts/sysadmin-app/views/dashboard.js:79
 msgid "Permission error"
 msgstr "Berechtigungsfehler"
 
-#: static/scripts/common.js:685
+#: static/scripts/common.js:686
 #: static/scripts/sysadmin-app/views/address-book-group.js:172
 #: static/scripts/sysadmin-app/views/group-members.js:41
 msgid "Search users or enter emails and press Enter"
 msgstr "Name oder E-Mail-Adresse eingeben und Enter drücken"
 
-#: static/scripts/common.js:693 static/scripts/common.js:764
+#: static/scripts/common.js:694 static/scripts/common.js:765
 msgid "Please enter 1 or more character"
 msgstr "Bitte geben Sie mehr als 1 Zeichen ein"
 
-#: static/scripts/common.js:695 static/scripts/common.js:766
+#: static/scripts/common.js:696 static/scripts/common.js:767
 msgid "Searching..."
 msgstr "Suche …"
 
-#: static/scripts/common.js:696 static/scripts/common.js:767
+#: static/scripts/common.js:697 static/scripts/common.js:768
 msgid "Loading failed"
 msgstr "Laden fehlgeschlagen"
 
-#: static/scripts/common.js:756
+#: static/scripts/common.js:757
 msgid "Search groups"
 msgstr "Gruppen suchen"
 
-#: static/scripts/common.js:1091
+#: static/scripts/common.js:1092
 msgid "Packaging..."
 msgstr "Erzeuge ZIP-Archiv …"
 
