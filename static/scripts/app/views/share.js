@@ -474,7 +474,6 @@ define([
                 window.getSelection().addRange(range); 
             } else {
                 targetDom.select();
-                $el.prev('.shared-link').select();
             }
             document.execCommand('copy');
             $.modal.close();
