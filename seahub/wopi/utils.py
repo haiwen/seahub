@@ -30,7 +30,6 @@ from seahub.settings import ENABLE_WATERMARK
 
 logger = logging.getLogger(__name__)
 
-
 def generate_access_token_cache_key(token):
     """ Generate cache key for WOPI access token
     """
@@ -44,7 +43,12 @@ def get_file_info_by_token(token):
     """
 
     key = generate_access_token_cache_key(token)
-    return cache.get(key) if cache.get(key) else {}
+    value = cache.get(key)
+    if not value:
+        logger.error('No wopi cache value when first get %s' % key)
+        value = cache.get(key)
+
+    return value if value else None
 
 def generate_discovery_cache_key(name, ext):
     """ Generate cache key for office web app hosting discovery
@@ -200,7 +204,9 @@ def get_wopi_dict(request_user, repo_id, file_path,
     uid = uuid.uuid4()
     access_token = uid.hex
     key = generate_access_token_cache_key(access_token)
-    cache.set(key, user_repo_path_info, WOPI_ACCESS_TOKEN_EXPIRATION)
+    if not cache.set(key, user_repo_path_info, WOPI_ACCESS_TOKEN_EXPIRATION):
+        logger.error('Set wopi cache failed, key: %s' % key)
+        return None
 
     # access_token_ttl property tells office web app
     # when access token expires

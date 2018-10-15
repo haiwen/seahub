@@ -87,8 +87,6 @@
         <div id="file-discussions" class="comments-panel" style="display:none;"></div>
     </div>
 
-    {% include "snippets/file_share_popup.html" %}
-
     <div id="side-toolbar">
         <ul class="side-toolbar">
             <li class="item hide" id="back-to-top" title="{% trans "Back to top" %}"><img src="{{MEDIA_URL}}img/top.png" alt="{% trans "top" %}" /></li>
@@ -155,12 +153,6 @@
     {% endif %}
     {% endif %}
 
-    {% if not repo.encrypted %}
-    {% if request.user.permissions.can_generate_share_link %}
-    <button id="share" class="sf-btn-group-btn op-icon sf2-icon-share" data-link="{{ file_shared_link }}" data-token="{{ fileshare.token }}" title="{% trans "Share" %}"></button>
-    {% endif %}
-    {% endif %}
-
     {% if file_perm == 'rw' %}
     <a class="sf-btn-group-btn sf-btn-link op-icon sf2-icon-clock" id="history" href="{% url 'file_revisions' repo.id %}?p={{ path|urlencode }}" title="{% trans "History" %}"></a>
     {% endif %}
@@ -205,14 +197,6 @@
             {% endif %}
             {% endif %}
 
-            {% if not repo.encrypted %}
-            {% if request.user.permissions.can_generate_share_link %}
-            <li>
-                <a id="share" class="op share" data-link="{{ file_shared_link }}" data-token="{{ fileshare.token }}" title="{% trans "Share" %}">{% trans "Share" %}</a>
-            </li>
-            {% endif %}
-            {% endif %}
-
             {% if file_perm == 'rw' %}
             <li>
                 <a id="history" class="op history" href="{% url 'file_revisions' repo.id %}?p={{ path|urlencode }}" title="{% trans "History" %}">{% trans "History" %}</a>
@@ -230,7 +214,6 @@
 {% endblock %}
 
 {% block extra_script %}
-<script type="text/javascript" src="{% static "scripts/lib/jquery-ui.min.js" %}"></script> {# for 'tabs' used in share popup #}
 <script type="text/javascript" src="{% static "scripts/lib/underscore.js" %}"></script>
 <script type="text/javascript" src="{% static "scripts/lib/moment-with-locales.min.js" %}"></script>
 <script type="text/javascript" src="{% static "scripts/lib/marked.min.js" %}"></script>
@@ -238,9 +221,6 @@
 <script type="text/javascript" src="{{ MEDIA_URL }}js/findAndReplaceDOMText.js"></script>
 {% endif %}
 <script type="text/javascript">
-// share link
-{% include "snippets/shared_link_js.html" %}
-
 // star file
 $('#file-star').on('click', function() {
     var op_icon = $(this), url_base;
@@ -598,11 +578,6 @@ var DropDownMenu = {
         })
         {% endif %}
 
-        $('#share').on('click', function() {
-            var eventSource = $(this);
-            _this.clickToShare(eventSource);
-        });
-        
         $('#discuss').on('click', function() {
             _this.clickToCommet();
         });
@@ -653,23 +628,6 @@ var DropDownMenu = {
             },
             error: ajaxErrorHandler
         });
-    },
-
-    clickToShare: function(eventSource) {
-        this.clickToClosePopMenu();
-        var op = $(eventSource),
-            name = "{{filename|escapejs}}",
-            path = "{{path|escapejs}}",
-            aj_data = {
-                'repo_id': "{{ repo.id }}",
-                'path': path
-            },
-            type = 'f',
-            cur_path = path.substr(0, path.length - name.length);
-
-        showSharePopup(op, name, aj_data, type, cur_path);
-
-        return false;
     },
 
     clickToCommet: function() {

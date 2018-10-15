@@ -36,9 +36,15 @@ def get_sub_repo_abbrev_origin_path(repo_name, origin_path):
 
 def get_repo_owner(request, repo_id):
     if is_org_context(request):
-        return seafile_api.get_org_repo_owner(repo_id)
+        repo_owner = seafile_api.get_org_repo_owner(repo_id)
     else:
-        return seafile_api.get_repo_owner(repo_id)
+        # for admin panel
+        # administrator may get org repo's owner
+        repo_owner = seafile_api.get_repo_owner(repo_id)
+        if not repo_owner:
+            repo_owner = seafile_api.get_org_repo_owner(repo_id)
+
+    return repo_owner
 
 def is_repo_owner(request, repo_id, username):
     return username == get_repo_owner(request, repo_id)

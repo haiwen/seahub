@@ -6,6 +6,7 @@ from rest_framework.authentication import SessionAuthentication
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 from rest_framework.views import APIView
+from post_office.models import STATUS
 
 from seahub.api2.authentication import TokenAuthentication
 from seahub.api2.permissions import CanInviteGuest
@@ -69,9 +70,12 @@ class InvitationsView(APIView):
 
         i = Invitation.objects.add(inviter=request.user.username,
                                    accepter=accepter)
-        i.send_to(email=accepter)
-
-        return Response(i.to_dict(), status=201)
+        m = i.send_to(email=accepter)
+        if m.status == STATUS.sent:
+            return Response(i.to_dict(), status=201)
+        else:
+            return api_error(status.HTTP_500_INTERNAL_SERVER_ERROR,
+                             _('Internal Server Error'))
 
 
 class InvitationsBatchView(APIView):
@@ -132,7 +136,13 @@ class InvitationsBatchView(APIView):
             except User.DoesNotExist:
                 i = Invitation.objects.add(inviter=request.user.username,
                         accepter=accepter)
-                i.send_to(email=accepter)
-                result['success'].append(i.to_dict())
+                m = i.send_to(email=accepter)
+                if m.status == STATUS.sent:
+                    result['success'].append(i.to_dict())
+                else:
+                    result['failed'].append({
+                        'email': accepter,
+                        'error_msg': _('Internal Server Error'),
+                    })
 
         return Response(result)

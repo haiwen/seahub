@@ -5,9 +5,9 @@ six==1.11.0
 Pillow==4.3.0
 Django==1.11.15
 django-compressor==2.2
-django-post-office==3.0.4
+git+git://github.com/haiwen/django-post_office.git@2312cf240363721f737b5ac8eb86ab8cb255938f#egg=django-post_office
 django-statici18n==1.7.0
-djangorestframework==3.3.1
+djangorestframework==3.3.3
 git+git://github.com/haiwen/django-constance.git@8508ff29141732190faff51d5c2b5474da297732#egg=django-constance[database]
 openpyxl==2.3.0
 pytz==2015.7
