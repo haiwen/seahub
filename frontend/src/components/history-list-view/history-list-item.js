@@ -1,7 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import moment from 'moment';
-import NodeMenuControl from '../menu-component/node-menu-control';
+import MenuControl from '../menu-control';
 
 moment.locale(window.app.config.lang);
 const propTypes = {
@@ -70,7 +70,7 @@ class HistoryListItem extends React.Component {
           </div>
         </div>
         <div className="history-operation">
-          <NodeMenuControl
+          <MenuControl
             isShow={this.state.isShowOperationIcon || isHigtlightItem}
             onClick={this.onMenuControlClick}
           />

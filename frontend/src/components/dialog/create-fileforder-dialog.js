@@ -1,6 +1,6 @@
 import React from 'react';
-import { gettext } from '../../../utils/constants';
 import { Button, Modal, ModalHeader, Input, ModalBody, ModalFooter, Form, FormGroup, Label, Col, FormText } from 'reactstrap';
+import { gettext } from '../../utils/constants';
 
 class CreateFileForder extends React.Component {
   constructor(props) {

@@ -1,5 +1,5 @@
 import React from 'react';
-import MenuControl from '../menu-component/node-menu-control';
+import MenuControl from '../menu-control';
 import { permission } from '../../utils/constants';
 
 function sortByType(a, b) {

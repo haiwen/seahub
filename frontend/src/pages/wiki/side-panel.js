@@ -1,11 +1,11 @@
 import React, { Component } from 'react';
 import { gettext, siteRoot, logoPath, mediaUrl, siteTitle, logoWidth, logoHeight } from '../../utils/constants';
 import TreeView from '../../components/tree-view/tree-view';
-import NodeMenu from '../../components/menu-component/node-menu';
-import MenuControl from '../../components/menu-component/node-menu-control';
-import Delete from '../../components/menu-component/menu-dialog/delete-dialog';
-import Rename from '../../components/menu-component/menu-dialog/rename-dialog';
-import CreateFlieFolder from '../../components/menu-component/menu-dialog/create-fileforder-dialog';
+import NodeMenu from '../../components/tree-view/node-menu';
+import MenuControl from '../../components/menu-control';
+import Delete from '../../components/dialog/delete-dialog';
+import Rename from '../../components/dialog/rename-dialog';
+import CreateFlieFolder from '../../components/dialog/create-fileforder-dialog';
 
 class SidePanel extends Component {
 

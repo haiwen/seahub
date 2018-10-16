@@ -1,7 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { siteRoot, lang } from '../../utils/constants';
-import NodeMenuControl from '../menu-component/node-menu-control';
+import MenuControl from '../menu-control';
 import moment from 'moment';
 
 moment.locale(lang);
@@ -87,7 +87,7 @@ class DraftListItem extends React.Component {
         <td className="menu-toggle">
           { 
             this.props.draft.review_status !== 'open' &&
-            <NodeMenuControl
+            <MenuControl
               isShow={this.state.isMenuControlShow}
               onClick={this.onMenuToggleClick}
             />

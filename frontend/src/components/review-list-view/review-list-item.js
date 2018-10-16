@@ -1,7 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { siteRoot, lang } from '../../utils/constants';
 import moment from 'moment';
+import { siteRoot, lang } from '../../utils/constants';
 
 moment.locale(lang);
 const propTypes = {
