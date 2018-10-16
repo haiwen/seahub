@@ -15,7 +15,9 @@ class DrawViewer {
   loadFile() {
     seafileAPI.getFileContent(window.app.config.rawPath).then((res) => {
       var doc = mxUtils.parseXml(res.data);
+      /* eslint-disable */
       console.log(doc.documentElement);
+      /* eslint-enable */
       this.setGraphXml(doc.documentElement);
     });
   }

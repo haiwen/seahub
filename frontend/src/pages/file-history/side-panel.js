@@ -7,7 +7,8 @@ import HistoryListView from '../../components/history-list-view/history-list-vie
 import HistoryListMenu from '../../components/history-list-view/history-list-menu';
 
 const propTypes = {
-  onHistoryItemClick: PropTypes.func.isRequired
+  onHistoryItemClick: PropTypes.func.isRequired,
+  setDiffContent: PropTypes.func.isRequired,
 };
 
 class SidePanel extends React.Component {

@@ -11,15 +11,15 @@ class WikiOutlineItem extends React.Component {
 
   handleNavItemClick = () => {
     var activeId = this.props.item.id;
-    this.props.handleNavItemClick(activeId)
+    this.props.handleNavItemClick(activeId);
   }
   
   render() {
     let item = this.props.item;
     let activeIndex = parseInt(this.props.activeIndex);
-    let levelClass  = item.depth === 3 ? " textindent-2" : '';
+    let levelClass  = item.depth === 3 ? ' textindent-2' : '';
     let activeClass = item.key === activeIndex ? ' wiki-outline-item-active' : '';
-    let clazz = "wiki-outline-item"+ levelClass + activeClass;
+    let clazz = 'wiki-outline-item'+ levelClass + activeClass;
     return (
       <li className={clazz} data-index={item.key} onClick={this.handleNavItemClick}>
         <a href={item.id} title={item.text}>{item.text}</a>
@@ -33,8 +33,9 @@ WikiOutlineItem.propTypes = itemPropTypes;
 
 const outlinePropTypes = {
   navItems: PropTypes.array.isRequired,
+  activeId: PropTypes.number.isRequired,
   handleNavItemClick: PropTypes.func.isRequired,
-}
+};
 
 class WikiOutline extends React.Component {
 
@@ -43,7 +44,7 @@ class WikiOutline extends React.Component {
     this.state = {
       activeIndex : 0,
       scrollTop: 0,
-    }
+    };
   }
 
   componentWillReceiveProps(nextProps) {
@@ -57,7 +58,7 @@ class WikiOutline extends React.Component {
       if (item.id === activeId && item.key !== _this.state.activeIndex) {
         let scrollTop = 0; 
         if (item.key > 20) {
-          scrollTop = - (item.key - 20)*27 + "px";
+          scrollTop = - (item.key - 20)*27 + 'px';
           if (parseInt(scrollTop) > 0) { // handle scroll quickly;
             scrollTop = 0;
           }  
@@ -65,7 +66,7 @@ class WikiOutline extends React.Component {
         _this.setState({
           activeIndex : item.key,
           scrollTop: scrollTop
-        })
+        });
         flag = true;
       }
       if (flag) {
@@ -86,10 +87,10 @@ class WikiOutline extends React.Component {
               activeIndex={this.state.activeIndex}
               handleNavItemClick={this.props.handleNavItemClick}
             />
-          )
+          );
         })}
       </ul>
-    )
+    );
   }
 }
 

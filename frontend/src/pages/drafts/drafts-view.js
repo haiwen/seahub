@@ -1,6 +1,11 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 import { siteRoot, gettext } from '../../utils/constants';
 import { Link } from '@reach/router';
+
+const propTypes = {
+  currentTab: PropTypes.string.isRequired,
+};
 
 class DraftsView extends React.Component {
   
@@ -14,7 +19,7 @@ class DraftsView extends React.Component {
   tabItemClick = (param) => {
     this.setState({
       currentTab: param  
-    })
+    });
   }
   
   render() {
@@ -39,5 +44,7 @@ class DraftsView extends React.Component {
     );
   }
 }
+
+DraftsView.propTypes = propTypes;
 
 export default DraftsView;

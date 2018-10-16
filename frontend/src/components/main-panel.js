@@ -1,5 +1,11 @@
 import React, { Component } from 'react';
+import PropTypes from 'prop-types';
 import CommonToolbar from './toolbar/common-toolbar';
+
+const propTypes = {
+  children: PropTypes.object.isRequired,
+  onShowSidePanel: PropTypes.func.isRequired,
+};
 
 class MainPanel extends Component {
 
@@ -23,5 +29,7 @@ class MainPanel extends Component {
     );
   }
 }
+
+MainPanel.propTypes = propTypes;
 
 export default MainPanel;

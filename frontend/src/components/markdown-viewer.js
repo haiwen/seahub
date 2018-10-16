@@ -1,4 +1,5 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 import { processor, processorGetAST } from '@seafile/seafile-editor/dist/utils/seafile-markdown2html';
 import Prism from 'prismjs';
 import WikiOutline from './wiki-outline';
@@ -9,7 +10,13 @@ const gettext = window.gettext;
 
 require('@seafile/seafile-editor/dist/editor/code-hight-package');
 
-const contentClass = "wiki-md-viewer-rendered-content";
+const contentClass = 'wiki-md-viewer-rendered-content';
+
+const contentPropTypes = {
+  html: PropTypes.string,
+  renderingContent: PropTypes.bool.isRequired,
+  onLinkClick: PropTypes.func.isRequired
+};
 
 class MarkdownViewerContent extends React.Component {
 
@@ -20,7 +27,7 @@ class MarkdownViewerContent extends React.Component {
   componentDidUpdate () {
     Prism.highlightAll();
     var links = document.querySelectorAll(`.${contentClass} a`);
-    links.forEach((li) => {li.addEventListener("click", this.onLinkClick); });
+    links.forEach((li) => {li.addEventListener('click', this.onLinkClick); });
   }
 
   onLinkClick = (event) => {
@@ -32,16 +39,27 @@ class MarkdownViewerContent extends React.Component {
     return (
       <div>
         { this.props.renderingContent ? (
-          <div className={contentClass + " article"}>Loading...</div>
+          <div className={contentClass + ' article'}>Loading...</div>
         ) : (
           <div ref={(mdContent) => {this.mdContentRef = mdContent;} }
-            className={contentClass + " article"}
+            className={contentClass + ' article'}
             dangerouslySetInnerHTML={{ __html: this.props.html }}/>
         )}
       </div>
-      )
+    );
   }
 }
+
+MarkdownViewerContent.propTypes = contentPropTypes;
+
+
+const viewerPropTypes = {
+  isFileLoading: PropTypes.bool.isRequired,
+  lastModified: PropTypes.string,
+  latestContributor: PropTypes.string,
+  markdownContent: PropTypes.string,
+  onLinkClick: PropTypes.func.isRequired
+};
 
 class MarkdownViewer extends React.Component {
 
@@ -91,7 +109,7 @@ class MarkdownViewer extends React.Component {
     if (currentId !== this.state.activeId) {
       this.setState({
         activeId: currentId
-      })
+      });
     }
   }
 
@@ -115,7 +133,7 @@ class MarkdownViewer extends React.Component {
           window.location.href = window.location.href;
         }
       }, 100);
-    })
+    });
   }
 
   componentDidMount() {
@@ -139,11 +157,11 @@ class MarkdownViewer extends React.Component {
         _this.setState({
           navItems: navItems,
           activeId: currentId
-        })
+        });
       }else {
         _this.setState({
           navItems: []
-        })
+        });
       }
     });
   }
@@ -155,12 +173,12 @@ class MarkdownViewer extends React.Component {
     });
     for (let i = 0; i < headingList.length; i++) {
       navItems[i] = {};
-      navItems[i].id = '#user-content-' + headingList[i].data.id
+      navItems[i].id = '#user-content-' + headingList[i].data.id;
       navItems[i].key = i;
       navItems[i].clazz = '';
       navItems[i].depth = headingList[i].depth;
       for (let child of headingList[i].children) {
-        if (child.type === "text") {
+        if (child.type === 'text') {
           navItems[i].text = child.value;
           break;
         }
@@ -173,7 +191,7 @@ class MarkdownViewer extends React.Component {
     if (this.props.isFileLoading) {
       return (
         <span className="loading-icon loading-tip"></span>
-      )
+      );
     }
     return (
       <div className="markdown-container" onScroll={this.scrollHandler}>
@@ -182,18 +200,20 @@ class MarkdownViewer extends React.Component {
             renderingContent={this.state.renderingContent} html={this.state.html}
             onLinkClick={this.props.onLinkClick}
           />
-          <p id="wiki-page-last-modified">{gettext("Last modified by")} {this.props.latestContributor}, <span>{this.props.lastModified}</span></p>
+          <p id="wiki-page-last-modified">{gettext('Last modified by')} {this.props.latestContributor}, <span>{this.props.lastModified}</span></p>
         </div>
         <div className="markdown-outline">
-            <WikiOutline 
-              navItems={this.state.navItems} 
-              handleNavItemClick={this.handleNavItemClick}
-              activeId={this.state.activeId}
-            />
+          <WikiOutline 
+            navItems={this.state.navItems} 
+            handleNavItemClick={this.handleNavItemClick}
+            activeId={this.state.activeId}
+          />
         </div>
       </div>
-    )
+    );
   }
 }
+
+MarkdownViewer.propTypes = viewerPropTypes;
 
 export default MarkdownViewer;

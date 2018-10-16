@@ -1,8 +1,14 @@
 import React, { Component } from 'react';
+import PropTypes from 'prop-types';
 import { repoID, siteRoot } from '../../utils/constants';
 import SearchResultItem from './search-result-item';
 import editorUtilities from '../../utils/editor-utilties';
 import More from '../more';
+
+const propTypes = {
+  placeholder: PropTypes.string,
+  onSearchedClick: PropTypes.func.isRequired,
+};
 
 class Search extends Component {
 
@@ -236,5 +242,7 @@ class Search extends Component {
     );
   }
 }
+
+Search.propTypes = propTypes;
 
 export default Search;

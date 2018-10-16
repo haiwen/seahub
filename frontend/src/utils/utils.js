@@ -97,16 +97,16 @@ export const Utils = {
 
     var file_ext;
     if (filename.lastIndexOf('.') == -1) {
-      return mediaUrl + "img/file/" + size + "/"
+      return mediaUrl + 'img/file/' + size + '/'
         + this.FILEEXT_ICON_MAP['default'];
     } else {
       file_ext = filename.substr(filename.lastIndexOf('.') + 1).toLowerCase();
     }
 
     if (this.FILEEXT_ICON_MAP[file_ext]) {
-      return mediaUrl + "img/file/" + size + "/" + this.FILEEXT_ICON_MAP[file_ext];
+      return mediaUrl + 'img/file/' + size + '/' + this.FILEEXT_ICON_MAP[file_ext];
     } else {
-      return mediaUrl + "img/file/" + size + "/" + this.FILEEXT_ICON_MAP['default'];
+      return mediaUrl + 'img/file/' + size + '/' + this.FILEEXT_ICON_MAP['default'];
     }
   },
 
@@ -148,8 +148,8 @@ export const Utils = {
        }).join('/');
        */
 
-    var path_arr = path.split('/'),
-    path_arr_ = [];
+    var path_arr = path.split('/');
+    var path_arr_ = [];
     for (var i = 0, len = path_arr.length; i < len; i++) {
       path_arr_.push(encodeURIComponent(path_arr[i]));
     }

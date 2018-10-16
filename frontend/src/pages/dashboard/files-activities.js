@@ -1,6 +1,11 @@
 import React, { Component } from 'react';
+import PropTypes from 'prop-types';
 import { seafileAPI } from '../../utils/seafile-api';
 import { gettext, siteRoot } from '../../utils/constants';
+
+const contentPropTypes = {
+  data: PropTypes.object.isRequired,
+};
 
 class FileActivitiesContent extends Component {
 
@@ -32,6 +37,13 @@ class FileActivitiesContent extends Component {
     }
   }
 }
+
+FileActivitiesContent.propTypes = contentPropTypes;
+
+
+const tablePropTypes = {
+  items: PropTypes.array.isRequired,
+};
 
 class TableBody extends Component {
 
@@ -158,6 +170,8 @@ class TableBody extends Component {
     );
   }
 }
+
+TableBody.propTypes = tablePropTypes;
 
 class FilesActivities extends Component {
   constructor(props) {

@@ -1,6 +1,14 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 import { Button, Modal, ModalHeader, Input, ModalBody, ModalFooter, Form, FormGroup, Label, Col, FormText } from 'reactstrap';
 import { gettext } from '../../utils/constants';
+
+const propTypes = {
+  fileType: PropTypes.string,
+  parentPath: PropTypes.string.isRequired,
+  onAddFolder: PropTypes.func.isRequired,
+  addFolderCancel: PropTypes.func.isRequired,
+};
 
 class CreateForder extends React.Component {
   constructor(props) {
@@ -69,5 +77,7 @@ class CreateForder extends React.Component {
     );
   }
 }
+
+CreateForder.propTypes = propTypes;
 
 export default CreateForder;

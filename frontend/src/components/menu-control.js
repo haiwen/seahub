@@ -3,6 +3,7 @@ import PropTypes from 'prop-types';
 
 const propTypes = {
   isShow: PropTypes.bool.isRequired,
+  onClick: PropTypes.func.isRequired,
 };
 
 class MenuControl extends React.Component {

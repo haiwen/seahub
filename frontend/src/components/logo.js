@@ -1,9 +1,9 @@
 import React from 'react';
-import PropsType from 'prop-types';
+import PropTypes from 'prop-types';
 import { siteRoot, mediaUrl, logoPath, logoWidth, logoHeight, siteTitle } from '../utils/constants'; 
 
-const propsType = {
-  onCloseSidePanel: PropsType.func.isRequired,
+const propTypes = {
+  onCloseSidePanel: PropTypes.func.isRequired,
 };
 
 class Logo extends React.Component {
@@ -14,22 +14,22 @@ class Logo extends React.Component {
   
   render() {
     return (
-        <div className="top-logo">
-          <a href={siteRoot} id="logo">
-            <img src={mediaUrl + logoPath} height={logoHeight} width={logoWidth} title={siteTitle} alt="logo" />
-          </a>
-          <a 
-            className="sf2-icon-x1 sf-popover-close side-panel-close op-icon d-md-none"
-            onClick={this.closeSide} 
-            title="Close" 
-            aria-label="Close" 
-          >
-          </a>
-        </div>
+      <div className="top-logo">
+        <a href={siteRoot} id="logo">
+          <img src={mediaUrl + logoPath} height={logoHeight} width={logoWidth} title={siteTitle} alt="logo" />
+        </a>
+        <a 
+          className="sf2-icon-x1 sf-popover-close side-panel-close op-icon d-md-none"
+          onClick={this.closeSide} 
+          title="Close" 
+          aria-label="Close" 
+        >
+        </a>
+      </div>
     );
   }
 }
 
-Logo.propsType = propsType;
+Logo.propTypes = propTypes;
 
 export default Logo;
