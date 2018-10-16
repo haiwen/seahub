@@ -33,7 +33,10 @@ WikiOutlineItem.propTypes = itemPropTypes;
 
 const outlinePropTypes = {
   navItems: PropTypes.array.isRequired,
-  activeId: PropTypes.number.isRequired,
+  activeId: PropTypes.oneOfType([
+    PropTypes.string,
+    PropTypes.number
+  ]).isRequired,
   handleNavItemClick: PropTypes.func.isRequired,
 };
 

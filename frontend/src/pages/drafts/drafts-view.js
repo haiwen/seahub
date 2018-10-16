@@ -5,6 +5,10 @@ import { Link } from '@reach/router';
 
 const propTypes = {
   currentTab: PropTypes.string.isRequired,
+  children: PropTypes.oneOfType([
+    PropTypes.array,
+    PropTypes.object
+  ]).isRequired,
 };
 
 class DraftsView extends React.Component {
