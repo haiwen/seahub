@@ -638,7 +638,11 @@ def view_lib_file(request, repo_id, path):
 
     elif filetype == DRAW:
         return_dict['raw_path'] = raw_path
-        return render(request, template, return_dict)
+        if permission == 'r':
+            template = 'view_file_draw_read.html'
+            return render(request, template, return_dict)
+        else:
+            return render(request, template, return_dict)
 
     elif filetype == IMAGE:
         if file_size > FILE_PREVIEW_MAX_SIZE:

@@ -215,9 +215,6 @@ urlpatterns = [
     ## ajax lib
     url(r'^ajax/lib/(?P<repo_id>[-0-9a-f]{36})/dir/$', list_lib_dir, name="list_lib_dir"),
 
-    ## draw
-    url(r'^draw/preview/$', TemplateView.as_view(template_name="draw_preview.html"), name="draw_preview"),
-
     ### Apps ###
     url(r'^api2/', include('seahub.api2.urls')),
 

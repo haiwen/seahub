@@ -82,7 +82,7 @@ module.exports = {
     draw: [
       require.resolve('./polyfills'),
       require.resolve('react-dev-utils/webpackHotDevClient'),
-      paths.appSrc + "/draw.js",
+      paths.appSrc + "/draw/draw.js",
     ]
   },
 

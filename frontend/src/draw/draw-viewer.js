@@ -13,13 +13,10 @@ class DrawViewer {
   }
 
   loadFile() {
-    seafileAPI.getFileDownloadLink('3e1b6ebf-c564-4cd2-87e9-69070c260fb4', '/mx-graph-v2.xml')
-    .then((res) => {
-      return seafileAPI.getFileContent(res.data).then((res) => {
-        var doc = mxUtils.parseXml(res.data);
-        console.log(doc.documentElement);
-        this.setGraphXml(doc.documentElement);
-      });
+    seafileAPI.getFileContent(window.app.config.rawPath).then((res) => {
+      var doc = mxUtils.parseXml(res.data);
+      console.log(doc.documentElement);
+      this.setGraphXml(doc.documentElement);
     });
   }
 
