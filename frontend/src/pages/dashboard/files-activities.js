@@ -36,8 +36,8 @@ class FileActivitiesContent extends Component {
 class TableBody extends Component {
 
   encodePath(path) {
-    let path_arr = path.split('/'),
-    path_arr_ = []; 
+    let path_arr = path.split('/');
+    let path_arr_ = [];
     for (let i = 0, len = path_arr.length; i < len; i++) {
       path_arr_.push(encodeURIComponent(path_arr[i]));
     }     
@@ -55,86 +55,86 @@ class TableBody extends Component {
 
       if (item.obj_type == 'repo') {
         switch(item.op_type) {
-          case 'create':
-            op = gettext("Created library");
-            details = <td>{libLink}</td>;
-            break;
-          case 'rename':
-            op = gettext("Renamed library");
-            details = <td>{item.old_repo_name} => {libLink}</td>;
-            break;
-          case 'delete':
-            op = gettext("Deleted library");
-            details = <td>{item.repo_name}</td>;
-            break;
-          case 'recover':
-            op = gettext("Restored library");
-            details = <td>{libLink}</td>;
-            break;
-          case 'clean-up-trash':
-            if (item.days == 0) {
-              op = gettext("Removed all items from trash.");
-            } else {
-              op = gettext("Removed items older than {n} days from trash.").replace('{n}', item.days);
-            }
-            details = <td>{libLink}</td>;
-            break;
+        case 'create':
+          op = gettext('Created library');
+          details = <td>{libLink}</td>;
+          break;
+        case 'rename':
+          op = gettext('Renamed library');
+          details = <td>{item.old_repo_name} => {libLink}</td>;
+          break;
+        case 'delete':
+          op = gettext('Deleted library');
+          details = <td>{item.repo_name}</td>;
+          break;
+        case 'recover':
+          op = gettext('Restored library');
+          details = <td>{libLink}</td>;
+          break;
+        case 'clean-up-trash':
+          if (item.days == 0) {
+            op = gettext('Removed all items from trash.');
+          } else {
+            op = gettext('Removed items older than {n} days from trash.').replace('{n}', item.days);
+          }
+          details = <td>{libLink}</td>;
+          break;
         }
       } else if (item.obj_type == 'file') {
         let fileURL = `${siteRoot}lib/${item.repo_id}/file${this.encodePath(item.path)}`;
         let fileLink = <a href={fileURL}>{item.name}</a>;
         switch(item.op_type) {
-          case 'create':
-            op = gettext("Created file");
-            details = <td>{fileLink}<br />{smallLibLink}</td>;
-            break;
-          case 'delete':
-            op = gettext("Deleted file");
-            details = <td>{item.name}<br />{smallLibLink}</td>;
-            break;
-          case 'recover':
-            op = gettext("Restored file");
-            details = <td>{fileLink}<br />{smallLibLink}</td>;
-            break;
-          case 'rename':
-            op = gettext("Renamed file");
-            details = <td>{item.old_name} => {fileLink}<br />{smallLibLink}</td>;
-            break;
-          case 'move':
-            let filePathLink = <a href={fileURL}>{item.path}</a>;
-            op = gettext("Moved file");
-            details = <td>{item.old_path} => {filePathLink}<br />{smallLibLink}</td>;
-            break;
-          case 'edit': // update
-            op = gettext("Updated file");
-            details = <td>{fileLink}<br />{smallLibLink}</td>;
-            break;
+        case 'create':
+          op = gettext('Created file');
+          details = <td>{fileLink}<br />{smallLibLink}</td>;
+          break;
+        case 'delete':
+          op = gettext('Deleted file');
+          details = <td>{item.name}<br />{smallLibLink}</td>;
+          break;
+        case 'recover':
+          op = gettext('Restored file');
+          details = <td>{fileLink}<br />{smallLibLink}</td>;
+          break;
+        case 'rename':
+          op = gettext('Renamed file');
+          details = <td>{item.old_name} => {fileLink}<br />{smallLibLink}</td>;
+          break;
+        case 'move':
+          var filePathLink = <a href={fileURL}>{item.path}</a>;
+          op = gettext('Moved file');
+          details = <td>{item.old_path} => {filePathLink}<br />{smallLibLink}</td>;
+          break;
+        case 'edit': // update
+          op = gettext('Updated file');
+          details = <td>{fileLink}<br />{smallLibLink}</td>;
+          break;
         }
       } else { // dir
         let dirURL = `${siteRoot}#common/lib/${item.repo_id}${this.encodePath(item.path)}`;
         let dirLink = <a href={dirURL}>{item.name}</a>;
         switch(item.op_type) {
-          case 'create':
-            op = gettext("Created folder");
-            details = <td>{dirLink}<br />{smallLibLink}</td>;
-            break;
-          case 'delete':
-            op = gettext("Deleted folder");
-            details = <td>{item.name}<br />{smallLibLink}</td>;
-            break;
-          case 'recover':
-            op = gettext("Restored folder");
-            details = <td>{dirLink}<br />{smallLibLink}</td>;
-            break;
-          case 'rename':
-            op = gettext("Renamed folder");
-            details = <td>{item.old_name} => {dirLink}<br />{smallLibLink}</td>;
-            break;
-          case 'move':
-            let dirPathLink = <a href={dirURL}>{item.path}</a>;
-            op = gettext("Moved folder");
-            details = <td>{item.old_path} => {dirPathLink}<br />{smallLibLink}</td>;
-            break;
+        case 'create':
+          op = gettext('Created folder');
+          details = <td>{dirLink}<br />{smallLibLink}</td>;
+          break;
+        case 'delete':
+          op = gettext('Deleted folder');
+          details = <td>{item.name}<br />{smallLibLink}</td>;
+          break;
+        case 'recover':
+          op = gettext('Restored folder');
+          details = <td>{dirLink}<br />{smallLibLink}</td>;
+          break;
+        case 'rename':
+          op = gettext('Renamed folder');
+          details = <td>{item.old_name} => {dirLink}<br />{smallLibLink}</td>;
+          break;
+        case 'move':
+          var dirPathLink = <a href={dirURL}>{item.path}</a>;
+          op = gettext('Moved folder');
+          details = <td>{item.old_path} => {dirPathLink}<br />{smallLibLink}</td>;
+          break;
         }
       }
 
@@ -177,13 +177,12 @@ class FilesActivities extends Component {
   componentDidMount() {
     const pageNum = 1;
     const avatarSize = 72;
-    seafileAPI.listActivities(pageNum, avatarSize)
-    .then(res => {
+    seafileAPI.listActivities(pageNum, avatarSize).then(res => {
       // not logged in
       if (res.status == 403) {
         this.setState({
           loading: false,
-          error_msg: gettext("Permission denied")
+          error_msg: gettext('Permission denied')
         });
       } else {
         // {"events":[...]}

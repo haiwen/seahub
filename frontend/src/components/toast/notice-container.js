@@ -7,7 +7,7 @@ class NoticeContainer extends React.Component {
   constructor(props) {
     super(props);
     this.transitionTime = 300;
-    this.state = {notices: []}
+    this.state = {notices: []};
   }
 
   addNotice = (notice) => {

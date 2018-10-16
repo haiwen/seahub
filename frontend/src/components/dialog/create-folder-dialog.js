@@ -9,17 +9,17 @@ class CreateForder extends React.Component {
       parentPath: '',
       childName: ''
     };
-    this.newInput = React.createRef()
+    this.newInput = React.createRef();
   }
 
   handleChange = (e) => {
     this.setState({
       childName: e.target.value, 
-    }) 
+    });
   }
 
   handleSubmit = () => {
-    let path = this.state.parentPath + this.state.childName
+    let path = this.state.parentPath + this.state.childName;
     this.props.onAddFolder(path);
   } 
 
@@ -34,10 +34,10 @@ class CreateForder extends React.Component {
   }
 
   componentDidMount() {
-    if (this.props.parentPath === "/") {
+    if (this.props.parentPath === '/') {
       this.setState({parentPath: this.props.parentPath});
     } else {
-      this.setState({parentPath: this.props.parentPath + "/"});
+      this.setState({parentPath: this.props.parentPath + '/'});
     }
     this.newInput.focus();
     this.newInput.setSelectionRange(0,0);
@@ -46,7 +46,7 @@ class CreateForder extends React.Component {
   render() {
     return (
       <Modal isOpen={true} toggle={this.toggle}>
-        <ModalHeader toggle={this.toggle}>{gettext("New Folder")}</ModalHeader>
+        <ModalHeader toggle={this.toggle}>{gettext('New Folder')}</ModalHeader>
         <ModalBody>
           <Form>
             <FormGroup row>
@@ -54,19 +54,19 @@ class CreateForder extends React.Component {
               <Col sm={9} className="parent-path"><FormText>{this.state.parentPath}</FormText></Col>
             </FormGroup>
             <FormGroup row>
-              <Label for="fileName" sm={3}>{gettext("Name")}: </Label>
+              <Label for="fileName" sm={3}>{gettext('Name')}: </Label>
               <Col sm={9}>
-                <Input onKeyPress={this.handleKeyPress} innerRef={input => {this.newInput = input}} id="fileName" placeholder={gettext("newName")} value={this.state.childName} onChange={this.handleChange}/>
+                <Input onKeyPress={this.handleKeyPress} innerRef={input => {this.newInput = input;}} id="fileName" placeholder={gettext('newName')} value={this.state.childName} onChange={this.handleChange}/>
               </Col>
             </FormGroup>
           </Form>
         </ModalBody>
         <ModalFooter>
-          <Button color="primary" onClick={this.handleSubmit}>{gettext("Submit")}</Button>
-          <Button color="secondary" onClick={this.toggle}>{gettext("Cancel")}</Button>
+          <Button color="primary" onClick={this.handleSubmit}>{gettext('Submit')}</Button>
+          <Button color="secondary" onClick={this.toggle}>{gettext('Cancel')}</Button>
         </ModalFooter>
       </Modal>
-    )
+    );
   }
 }
 

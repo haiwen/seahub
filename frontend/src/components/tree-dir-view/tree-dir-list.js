@@ -1,6 +1,18 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 import { serviceUrl } from '../../utils/constants';
 import OperationGroup from '../dirent-operation/operation-group';
+
+const propTypes = {
+  isItemFreezed: PropTypes.bool.isRequired,
+  node: PropTypes.object.isRequired,
+  needOperationGroup: PropTypes.bool.isRequired,
+  onItemMenuHide: PropTypes.func.isRequired,
+  onItemMenuShow: PropTypes.func.isRequired,
+  onMainNodeClick: PropTypes.func.isRequired,
+  onDelete: PropTypes.func.isRequired,
+  onDownload: PropTypes.func.isRequired,
+};
 
 class TreeDirList extends React.Component {
 
@@ -68,7 +80,7 @@ class TreeDirList extends React.Component {
     return (
       <tr className={this.state.highlight ? 'tr-highlight' : ''} onMouseEnter={this.onMouseEnter} onMouseLeave={this.onMouseLeave} onMouseOver={this.onMouseOver}>
         <td className="icon">
-          <img src={node.type === 'dir' ? serviceUrl + '/media/img/folder-192.png' : serviceUrl + '/media/img/file/192/txt.png'}></img>
+          <img src={node.type === 'dir' ? serviceUrl + '/media/img/folder-192.png' : serviceUrl + '/media/img/file/192/txt.png'} alt='icon'></img>
         </td>
         <td className="name a-simulate" onClick={this.onMainNodeClick}>{node.name}</td>
         {
@@ -92,5 +104,7 @@ class TreeDirList extends React.Component {
     );
   }
 }
+
+TreeDirList.propTypes = propTypes;
 
 export default TreeDirList;

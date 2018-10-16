@@ -18,7 +18,7 @@ const propTypes = {
   filePath: PropTypes.string.isRequired,
   isFileLoading: PropTypes.bool.isRequired,
   isViewFileState: PropTypes.bool.isRequired,
-  changedNode: PropTypes.object.isRequired,
+  changedNode: PropTypes.object,
   onMenuClick: PropTypes.func.isRequired,
   onSearchedClick: PropTypes.func.isRequired,
   onMainNavBarClick: PropTypes.func.isRequired,
@@ -27,6 +27,7 @@ const propTypes = {
   onMainItemDelete: PropTypes.func.isRequired,
   onMainAddFile: PropTypes.func.isRequired,
   onMainAddFolder: PropTypes.func.isRequired,
+  switchViewMode: PropTypes.func.isRequired,
 };
 
 class MainPanel extends Component {

@@ -1,6 +1,16 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 import MenuControl from '../menu-control';
 import { permission } from '../../utils/constants';
+
+const propTypes = {
+  isNodeItemFrezee: PropTypes.bool.isRequired,
+  currentFilePath: PropTypes.string.isRequired,
+  paddingLeft: PropTypes.number.isRequired,
+  node: PropTypes.object.isRequired,
+  treeView: PropTypes.object.isRequired,
+  onDirCollapse: PropTypes.func.isRequired,
+};
 
 function sortByType(a, b) {
   if (a.type == 'dir' && b.type != 'dir') {
@@ -196,5 +206,7 @@ class TreeNodeView extends React.Component {
   }
 
 }
+
+TreeNodeView.propTypes = propTypes;
 
 export default TreeNodeView;
