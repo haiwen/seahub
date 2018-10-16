@@ -1,5 +1,5 @@
 
-/* begin current-module-toobar */
+/* begin toobar-container */
 .cur-view-toolbar {
   position: relative;
   display: flex;
@@ -15,7 +15,10 @@
   content: '';
 }
 
-.top-toolbar-btn {
+/* end toolbar-container */
+
+/* file-operation toolbar eg: edit, upload, new, share*/
+.operation-item  {
   padding: 0 0.25rem;
   margin-right: 0.25rem;
   height: 30px;
@@ -29,7 +32,10 @@
   border-radius: 2px;
 }
 
-.sf-view-mode-change-btn {
+/* end file-operation toolbar */
+
+/* begin view-mode toolbar */
+.sf-view-mode-btn {
   padding: 0;
   height: 30px;
   min-width: 2rem;
@@ -41,12 +47,11 @@
   border-radius: 0 !important;
 }
 
-.sf-view-mode-change-btn.current-mode {
+.sf-view-mode-btn.current-mode {
   background-color: #ccc !important;
   color: #fff !important;
 }
-
-/* end current-module-toobar */
+/* end view-mode toolbar */
 
 /* begin common-toolbar */
 .common-toolbar {
@@ -81,3 +86,4 @@
   text-decoration:none;
 }
 /* end path toolbar */
+

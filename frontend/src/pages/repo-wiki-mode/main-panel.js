@@ -29,8 +29,14 @@ class MainPanel extends Component {
     super(props);
     this.state = {
       isWikiMode: true,
-      direntList: []
+      direntList: [],
+      newMenuShow: false,
+      uploadMenuShow: false,
     };
+  }
+
+  componentDidMount() {
+    document.addEventListener('click', this.hideOperationMenu);
   }
 
   componentWillReceiveProps(nextProps) {
@@ -39,6 +45,10 @@ class MainPanel extends Component {
       let path = node.path;
       this.updateViewList(path);
     }
+  }
+
+  componentWillUnmount() {
+    document.removeEventListener('click', this.hideOperationMenu);
   }
 
   updateViewList = (filePath) => {
@@ -76,6 +86,52 @@ class MainPanel extends Component {
     window.location.href= serviceUrl + '/lib/' + repoID + '/file' + this.props.filePath + '?mode=edit';
   }
 
+  onUploadClick = (e) => {
+    this.toggleOperationMenu(e);
+    this.setState({
+      newMenuShow: false,
+      uploadMenuShow: !this.state.uploadMenuShow,
+    });
+  }
+
+  onNewClick = (e) => {
+    this.toggleOperationMenu(e);
+    this.setState({
+      newMenuShow: !this.state.newMenuShow,
+      uploadMenuShow: false,
+    });
+  }
+
+  onShareClick = () => {
+    alert('share btn clicked');
+  }
+
+  toggleOperationMenu = (e) => {
+    e.nativeEvent.stopImmediatePropagation();
+    let targetRect = e.target.getClientRects()[0];
+    let left = targetRect.x;
+    let top  = targetRect.y + targetRect.height;
+    let style = {position: 'fixed', display: 'block', left: left, top: top};
+    this.setState({
+      operationMenuStyle: style
+    });
+  }
+
+  hideOperationMenu = () => {
+    this.setState({
+      uploadMenuShow: false,
+      newMenuShow: false,
+    });
+  }
+
+  addFolder = () => {
+
+  }
+
+  addMarkdownFile = () => {
+
+  }
+
   render() {
     let filePathList = this.props.filePath.split('/');
     let nodePath = '';
@@ -108,14 +164,36 @@ class MainPanel extends Component {
         <div className="main-panel-top panel-top">
           <div className="cur-view-toolbar border-left-show">
             <span className="sf2-icon-menu hidden-md-up d-md-none side-nav-toggle" title={gettext('Side Nav Menu')} onClick={this.onMenuClick}></span>
-            { 
-              this.props.permission === 'rw' && 
-              <button className="btn btn-secondary top-toolbar-btn" title={gettext('Edit File')} onClick={this.onEditClick}>{gettext('Edit')}</button>
-            }
-            <div className="btn-group">
-              <button className="btn btn-secondary btn-icon sf-view-mode-change-btn sf2-icon-list-view" id='list' title={gettext('List')} onClick={this.switchViewMode}></button>
-              <button className="btn btn-secondary btn-icon sf-view-mode-change-btn sf2-icon-grid-view" id='grid' title={gettext('Grid')} onClick={this.switchViewMode}></button>
-              <button className={`btn btn-secondary btn-icon sf-view-mode-change-btn sf2-icon-two-columns ${this.state.isWikiMode ? 'current-mode' : ''}`} id='wiki' title={gettext('wiki')} onClick={this.switchViewMode}></button>
+            <div className="file-operation">
+              <div className="operation">
+                { 
+                  this.props.permission === 'rw' &&
+                  <button className="btn btn-secondary operation-item" title={gettext('Edit File')} onClick={this.onEditClick}>{gettext('Edit')}</button>
+                }
+                <button className="btn btn-secondary operation-item" title={gettext('Edit File')} onClick={this.onUploadClick}>{gettext('Upload')}</button>
+                <button className="btn btn-secondary operation-item" title={gettext('Edit File')} onClick={this.onNewClick}>{gettext('New')}</button>
+                <button className="btn btn-secondary operation-item" title={gettext('Edit File')} onClick={this.onShareClick}>{gettext('Share')}</button>
+              </div>
+              {
+                this.state.uploadMenuShow && 
+                <div className="menu dropdown-menu" style={this.state.operationMenuStyle}>
+                  <div className="dropdown-item">{gettext('Upload Files')}</div>
+                  <div className="dropdown-item">{gettext('Upload Folder')}</div>
+                </div>
+              }
+              {
+                this.state.newMenuShow &&
+                <div className="menu dropdown-menu" style={this.state.operationMenuStyle}>
+                    <div className="dropdown-item" onClick={this.addFolder}>{gettext('New Folder')}</div>
+                    <div className="dropdown-item" onClick={this.addFile}>{gettext('New File')}</div>
+                    <div className="dropdown-item" onClick={this.addMarkdownFile}>{gettext('New Markdown File')}</div>
+                </div>
+              }
+            </div>
+            <div className="view-mode btn-group">
+              <button className="btn btn-secondary btn-icon sf-view-mode-btn sf2-icon-list-view" id='list' title={gettext('List')} onClick={this.switchViewMode}></button>
+              <button className="btn btn-secondary btn-icon sf-view-mode-btn sf2-icon-grid-view" id='grid' title={gettext('Grid')} onClick={this.switchViewMode}></button>
+              <button className={`btn btn-secondary btn-icon sf-view-mode-btn sf2-icon-two-columns ${this.state.isWikiMode ? 'current-mode' : ''}`} id='wiki' title={gettext('wiki')} onClick={this.switchViewMode}></button>
             </div>
           </div>
           <CommonToolbar onSearchedClick={this.props.onSearchedClick} searchPlaceholder={'Search files in this library'}/>
