@@ -1,11 +1,12 @@
 import React, { Component } from 'react';
 import { gettext, siteRoot, logoPath, mediaUrl, siteTitle, logoWidth, logoHeight } from '../../utils/constants';
 import TreeView from '../../components/tree-view/tree-view';
-import NodeMenu from '../../components/menu-component/node-menu';
-import MenuControl from '../../components/menu-component/node-menu-control';
-import Delete from '../../components/menu-component/menu-dialog/delete-dialog';
-import Rename from '../../components/menu-component/menu-dialog/rename-dialog';
-import CreateFlieFolder from '../../components/menu-component/menu-dialog/create-fileforder-dialog';
+import NodeMenu from '../../components/tree-view/node-menu';
+import MenuControl from '../../components/menu-control';
+import Delete from '../../components/dialog/delete-dialog';
+import Rename from '../../components/dialog/rename-dialog';
+import CreateFolder from '../../components/dialog/create-folder-dialog';
+import CreateFile from '../../components/dialog/create-file-dialog';
 
 class SidePanel extends Component {
 
@@ -22,9 +23,9 @@ class SidePanel extends Component {
       isLoadFailed: false,
       isMenuIconShow: false,
       showDelete: false,
-      showAddFileFolder: false,
+      showFile: false,
+      showFolder: false,
       showRename: false,
-      isFile: false
     };
     this.searchedPath = null;
   }
@@ -85,12 +86,13 @@ class SidePanel extends Component {
     });
   }
 
-  toggleAddFileFolder = (flag) => {
-    let isFile = flag === true ? true : false;
-    this.setState({
-      showAddFileFolder: !this.state.showAddFileFolder,
-      isFile: isFile
-    });
+  toggleAddFile = () => {
+    this.setState({showFile: !this.state.showFile});
+    this.onHideContextMenu();
+  }
+
+  toggleAddFolder = () => {
+    this.setState({showFolder: !this.state.showFolder});
     this.onHideContextMenu();
   }
   
@@ -105,12 +107,12 @@ class SidePanel extends Component {
   }
 
   onAddFolderNode = (dirPath) => {
-    this.setState({showAddFileFolder: !this.state.showAddFileFolder});
+    this.setState({showFolder: !this.state.showFolder});
     this.props.onAddFolderNode(dirPath);
   }
   
   onAddFileNode = (filePath) => {
-    this.setState({showAddFileFolder: !this.state.showAddFileFolder});
+    this.setState({showFile: !this.state.showFile});
     this.props.onAddFileNode(filePath);
   }
   
@@ -141,11 +143,11 @@ class SidePanel extends Component {
   }
 
   addFolderCancel = () => {
-    this.setState({showAddFileFolder: !this.state.showAddFileFolder});
+    this.setState({showFolder: !this.state.showFolder});
   }
 
   addFileCancel = () => {
-    this.setState({showAddFileFolder: !this.state.showAddFileFolder});
+    this.setState({showFile: !this.state.showFile});
   }
 
   deleteCancel = () => {
@@ -195,7 +197,8 @@ class SidePanel extends Component {
             <NodeMenu 
               menuPosition={this.state.menuPosition}
               currentNode={this.state.currentNode}
-              toggleAddFileFolder={this.toggleAddFileFolder}
+              toggleAddFile={this.toggleAddFile}
+              toggleAddFolder={this.toggleAddFolder}
               toggleRename={this.toggleRename}
               toggleDelete={this.toggleDelete}
             />
@@ -207,14 +210,19 @@ class SidePanel extends Component {
               toggleCancel={this.deleteCancel}
             />
             }
-            {this.state.showAddFileFolder && 
-            <CreateFlieFolder 
-              isFile={this.state.isFile}
-              currentNode={this.state.currentNode}
-              onAddFolder={this.onAddFolderNode}
-              addFolderCancel={this.addFolderCancel}
+            {this.state.showFile && 
+            <CreateFile
+              fileType={'.md'}
+              parentPath={this.state.currentNode.path}
               onAddFile={this.onAddFileNode}
               addFileCancel={this.addFileCancel}
+            />
+            }
+            {this.state.showFolder &&
+            <CreateFolder 
+              parentPath={this.state.currentNode.path}
+              onAddFolder={this.onAddFolderNode}
+              addFolderCancel={this.addFolderCancel}
             />
             }
             {this.state.showRename &&

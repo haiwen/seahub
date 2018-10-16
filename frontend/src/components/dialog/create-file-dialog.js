@@ -1,13 +1,13 @@
 import React from 'react';
-import { gettext } from '../../../utils/constants';
 import { Button, Modal, ModalHeader, Input, ModalBody, ModalFooter, Form, FormGroup, Label, Col, FormText } from 'reactstrap';
+import { gettext } from '../../utils/constants';
 
-class CreateFileForder extends React.Component {
+class CreateFile extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
       parentPath: '',
-      childName: ''
+      childName: props.fileType,
     };
     this.newInput = React.createRef()
   }
@@ -20,11 +20,7 @@ class CreateFileForder extends React.Component {
 
   handleSubmit = () => {
     let path = this.state.parentPath + this.state.childName
-    if (this.props.isFile) {
-      this.props.onAddFile(path);
-    } else {
-      this.props.onAddFolder(path);
-    }
+    this.props.onAddFile(path);
   } 
 
   handleKeyPress = (e) => {
@@ -34,44 +30,23 @@ class CreateFileForder extends React.Component {
   }
 
   toggle = () => {
-    if (this.props.isFile) {
-      this.props.addFileCancel();
-    } else {
-      this.props.addFolderCancel();
-    }
-  }
-  
-  componentWillMount() {
-    this.changeState(this.props.isFile);
+    this.props.addFileCancel();
   }
 
   componentDidMount() {
-    if (this.props.currentNode.path === "/") {
-      this.setState({parentPath: this.props.currentNode.path});
+    if (this.props.parentPath === "/") {
+      this.setState({parentPath: this.props.parentPath});
     } else {
-      this.setState({parentPath: this.props.currentNode.path + "/"});
+      this.setState({parentPath: this.props.parentPath + "/"});
     }
     this.newInput.focus();
     this.newInput.setSelectionRange(0,0);
   }
 
-  componentWillReceiveProps(nextProps) {
-    this.changeState(nextProps.isFile);
-  }
-
-  changeState(isFile) {
-    if (isFile) {
-      this.setState({childName: '.md'});
-    } else{
-      this.setState({childName: ""});
-    }
-  }
-
-
   render() {
     return (
       <Modal isOpen={true} toggle={this.toggle}>
-        <ModalHeader toggle={this.toggle}>{this.props.isFile ? gettext("New File") : gettext("New Folder")}</ModalHeader>
+        <ModalHeader toggle={this.toggle}>{gettext("New File")}</ModalHeader>
         <ModalBody>
           <Form>
             <FormGroup row>
@@ -95,4 +70,4 @@ class CreateFileForder extends React.Component {
   }
 }
 
-export default CreateFileForder;
+export default CreateFile;

@@ -537,6 +537,8 @@ class Wiki extends Component {
           onMainNavBarClick={this.onMainNavBarClick}
           onMainItemClick={this.onMainItemClick}
           onMainItemDelete={this.onMainItemDelete}
+          onMainAddFile={this.onAddFileNode}
+          onMainAddFolder={this.onAddFolderNode}
         />
       </div>
     );

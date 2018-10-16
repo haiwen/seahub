@@ -1,5 +1,5 @@
 import React from 'react';
-import { gettext } from '../../../utils/constants';
+import { gettext } from '../../utils/constants';
 import { Button, Modal, ModalHeader, Input, ModalBody, ModalFooter } from 'reactstrap';
 
 class Rename extends React.Component {
