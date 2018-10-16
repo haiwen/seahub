@@ -2,11 +2,15 @@ import React from 'react';
 import { gettext } from '../../utils/constants';
 
 class NodeMenu extends React.Component {
-  
-  toggleAddFileFolder = (ev, flag) => {
-    this.props.toggleAddFileFolder(flag);
+
+  toggleAddFile = () => {
+    this.props.toggleAddFile();
   }
   
+  toggleAddFolder = () => {
+    this.props.toggleAddFolder();
+  }
+
   toggleRename = () => {
     this.props.toggleRename();
   }
@@ -23,16 +27,16 @@ class NodeMenu extends React.Component {
       if (this.props.currentNode.name === '/') {
         return (
           <ul className="dropdown-menu" style={style}>
-            <li className="dropdown-item" onClick={this.toggleAddFileFolder}>{gettext('New Folder')}</li>
-            <li className="dropdown-item" onClick={(ev,flag) => this.toggleAddFileFolder(ev,true)}>{gettext('New File')}</li>
+            <li className="dropdown-item" onClick={this.toggleAddFolder}>{gettext('New Folder')}</li>
+            <li className="dropdown-item" onClick={this.toggleAddFile}>{gettext('New File')}</li>
           </ul>
         );
       }
       
       return (
         <ul className="dropdown-menu" style={style}>
-          <li className="dropdown-item" onClick={this.toggleAddFileFolder}>{gettext('New Folder')}</li>
-          <li className="dropdown-item" onClick={(ev,flag) => this.toggleAddFileFolder(ev,true)}>{gettext('New File')}</li>
+          <li className="dropdown-item" onClick={this.toggleAddFolder}>{gettext('New Folder')}</li>
+          <li className="dropdown-item" onClick={this.toggleAddFile}>{gettext('New File')}</li>
           <li className="dropdown-item" onClick={this.toggleRename}>{gettext('Rename')}</li>
           <li className="dropdown-item" onClick={this.toggleDelete}>{gettext('Delete')}</li>
         </ul>

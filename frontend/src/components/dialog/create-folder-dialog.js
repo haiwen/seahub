@@ -2,7 +2,7 @@ import React from 'react';
 import { Button, Modal, ModalHeader, Input, ModalBody, ModalFooter, Form, FormGroup, Label, Col, FormText } from 'reactstrap';
 import { gettext } from '../../utils/constants';
 
-class CreateFileForder extends React.Component {
+class CreateForder extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
@@ -20,11 +20,7 @@ class CreateFileForder extends React.Component {
 
   handleSubmit = () => {
     let path = this.state.parentPath + this.state.childName
-    if (this.props.isFile) {
-      this.props.onAddFile(path);
-    } else {
-      this.props.onAddFolder(path);
-    }
+    this.props.onAddFolder(path);
   } 
 
   handleKeyPress = (e) => {
@@ -34,15 +30,7 @@ class CreateFileForder extends React.Component {
   }
 
   toggle = () => {
-    if (this.props.isFile) {
-      this.props.addFileCancel();
-    } else {
-      this.props.addFolderCancel();
-    }
-  }
-  
-  componentWillMount() {
-    this.changeState(this.props.isFile);
+    this.props.addFolderCancel();
   }
 
   componentDidMount() {
@@ -55,23 +43,10 @@ class CreateFileForder extends React.Component {
     this.newInput.setSelectionRange(0,0);
   }
 
-  componentWillReceiveProps(nextProps) {
-    this.changeState(nextProps.isFile);
-  }
-
-  changeState(isFile) {
-    if (isFile) {
-      this.setState({childName: '.md'});
-    } else{
-      this.setState({childName: ""});
-    }
-  }
-
-
   render() {
     return (
       <Modal isOpen={true} toggle={this.toggle}>
-        <ModalHeader toggle={this.toggle}>{this.props.isFile ? gettext("New File") : gettext("New Folder")}</ModalHeader>
+        <ModalHeader toggle={this.toggle}>{gettext("New Folder")}</ModalHeader>
         <ModalBody>
           <Form>
             <FormGroup row>
@@ -95,4 +70,4 @@ class CreateFileForder extends React.Component {
   }
 }
 
-export default CreateFileForder;
+export default CreateForder;
