@@ -207,18 +207,19 @@ class MainPanel extends Component {
               </div>
               {
                 this.state.uploadMenuShow && 
-                <div className="menu dropdown-menu" style={this.state.operationMenuStyle}>
-                  <div className="dropdown-item">{gettext('Upload Files')}</div>
-                  <div className="dropdown-item">{gettext('Upload Folder')}</div>
-                </div>
+                <ul className="menu dropdown-menu" style={this.state.operationMenuStyle}>
+                  <li className="dropdown-item">{gettext('Upload Files')}</li>
+                  <li className="dropdown-item">{gettext('Upload Folder')}</li>
+                </ul>
               }
               {
                 this.state.newMenuShow &&
-                <div className="menu dropdown-menu" style={this.state.operationMenuStyle}>
-                    <div className="dropdown-item" onClick={this.addFolder}>{gettext('New Folder')}</div>
-                    <div className="dropdown-item" onClick={this.addFile}>{gettext('New File')}</div>
-                    <div className="dropdown-item" onClick={this.addMarkdownFile}>{gettext('New Markdown File')}</div>
-                </div>
+                <ul className="menu dropdown-menu" style={this.state.operationMenuStyle}>
+                    <li className="dropdown-item" onClick={this.addFolder}>{gettext('New Folder')}</li>
+                    <li className="dropdown-item" onClick={this.addFile}>{gettext('New File')}</li>
+                    <li className="dropdown-item menu-inner-divider"></li>
+                    <li className="dropdown-item" onClick={this.addMarkdownFile}>{gettext('New Markdown File')}</li>
+                </ul>
               }
             </div>
             <div className="view-mode btn-group">
