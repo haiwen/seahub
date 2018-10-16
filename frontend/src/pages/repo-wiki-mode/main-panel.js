@@ -2,11 +2,13 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { gettext, repoID, serviceUrl, slug, siteRoot } from '../../utils/constants';
 import { seafileAPI } from '../../utils/seafile-api';
+import Dirent from '../../models/dirent';
 import CommonToolbar from '../../components/toolbar/common-toolbar';
 import PathToolbar from '../../components/toolbar/path-toolbar';
 import MarkdownViewer from '../../components/markdown-viewer';
 import DirentListView from '../../components/dirent-list-view/dirent-list-view';
-import Dirent from '../../models/dirent';
+import CreateFolder from '../../components/dialog/create-folder-dialog';
+import CreateFile from '../../components/dialog/create-file-dialog';
 
 const propTypes = {
   content: PropTypes.string,
@@ -32,6 +34,9 @@ class MainPanel extends Component {
       direntList: [],
       newMenuShow: false,
       uploadMenuShow: false,
+      showFileDialog: false,
+      showFolderDialog: false,
+      createFileType: '',
     };
   }
 
@@ -112,9 +117,7 @@ class MainPanel extends Component {
     let left = targetRect.x;
     let top  = targetRect.y + targetRect.height;
     let style = {position: 'fixed', display: 'block', left: left, top: top};
-    this.setState({
-      operationMenuStyle: style
-    });
+    this.setState({operationMenuStyle: style});
   }
 
   hideOperationMenu = () => {
@@ -125,11 +128,39 @@ class MainPanel extends Component {
   }
 
   addFolder = () => {
+    this.setState({showFolderDialog: !this.showFolderDialog});
+  }
 
+  addFile = () => {
+    this.setState({
+      showFileDialog: !this.showFileDialog,
+      createFileType: '',
+    });
   }
 
   addMarkdownFile = () => {
+    this.setState({
+      showFileDialog: !this.showFileDialog,
+      createFileType: '.md',
+    });
+  }
 
+  addFolderCancel = () => {
+    this.setState({showFolderDialog: !this.state.showFolderDialog});
+  }
+
+  addFileCancel = () => {
+    this.setState({showFileDialog: !this.state.showFileDialog});
+  }
+
+  onMainAddFile = (filePath) => {
+    this.setState({showFileDialog: !this.state.showFileDialog});
+    this.props.onMainAddFile(filePath);
+  }
+
+  onMainAddFolder = (dirPath) => {
+    this.setState({showFolderDialog: !this.state.showFolderDialog});
+    this.props.onMainAddFolder(dirPath);
   }
 
   render() {
@@ -231,6 +262,21 @@ class MainPanel extends Component {
             }
           </div>
         </div>
+        {this.state.showFileDialog && 
+          <CreateFile
+            fileType={this.state.createFileType}
+            parentPath={this.props.filePath}
+            addFileCancel={this.addFileCancel}
+            onAddFile={this.onMainAddFile}
+          />
+        }
+        {this.state.showFolderDialog &&
+          <CreateFolder 
+            parentPath={this.props.filePath}
+            addFolderCancel={this.addFolderCancel}
+            onAddFolder={this.onMainAddFolder}
+          />
+        }
       </div>
     );
   }

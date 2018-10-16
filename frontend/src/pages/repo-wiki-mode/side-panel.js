@@ -214,14 +214,14 @@ class SidePanel extends Component {
             {this.state.showFile && 
             <CreateFile
               fileType={'.md'}
-              currentNode={this.state.currentNode}
+              parentPath={this.state.currentNode.path}
               onAddFile={this.onAddFileNode}
               addFileCancel={this.addFileCancel}
             />
             }
             {this.state.showFolder &&
             <CreateFolder 
-              currentNode={this.state.currentNode}
+              parentPath={this.state.currentNode.path}
               onAddFolder={this.onAddFolderNode}
               addFolderCancel={this.addFolderCancel}
             />

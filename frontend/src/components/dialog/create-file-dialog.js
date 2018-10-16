@@ -34,10 +34,10 @@ class CreateFile extends React.Component {
   }
 
   componentDidMount() {
-    if (this.props.currentNode.path === "/") {
-      this.setState({parentPath: this.props.currentNode.path});
+    if (this.props.parentPath === "/") {
+      this.setState({parentPath: this.props.parentPath});
     } else {
-      this.setState({parentPath: this.props.currentNode.path + "/"});
+      this.setState({parentPath: this.props.parentPath + "/"});
     }
     this.newInput.focus();
     this.newInput.setSelectionRange(0,0);
