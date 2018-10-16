@@ -7,7 +7,7 @@ class CreateFile extends React.Component {
     super(props);
     this.state = {
       parentPath: '',
-      childName: '.md'
+      childName: props.fileType,
     };
     this.newInput = React.createRef()
   }
