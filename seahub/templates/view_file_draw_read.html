@@ -1,0 +1,130 @@
+{% load seahub_tags i18n staticfiles %}
+{% load render_bundle from webpack_loader %}
+
+<!DOCTYPE html>
+<html lang="{{ LANGUAGE_CODE }}">
+<head>
+<title>{{ site_title }}</title>
+<meta http-equiv="Content-type" content="text/html; charset=utf-8" />
+<meta name="keywords" content="{% trans "File Collaboration Team Organization" %}" />
+<meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no" />
+<meta http-equiv="x-ua-compatible" content="ie=edge" />
+<link rel="shortcut icon" href="{{ MEDIA_URL }}{{ favicon_path }}" />
+
+<script type="text/javascript">
+  // Parses URL parameters. Supported parameters are:
+  // - lang=xy: Specifies the language of the user interface.
+  // - touch=1: Enables a touch-style user interface.
+  // - storage=local: Enables HTML5 local storage.
+  // - chrome=0: Chromeless mode.
+  var urlParams = (function(url)
+  {
+    var result = new Object();
+    var idx = url.lastIndexOf('?');
+
+    if (idx > 0)
+    {
+      var params = url.substring(idx + 1).split('&');
+
+      for (var i = 0; i < params.length; i++)
+      {
+        idx = params[i].indexOf('=');
+
+        if (idx > 0)
+        {
+          result[params[i].substring(0, idx)] = params[i].substring(idx + 1);
+        }
+      }
+    }
+
+    return result;
+  })(window.location.href);
+
+  // Default resources are included in grapheditor resources
+  mxLoadResources = false;
+
+  window.RESOURCES_PATH = '{{ MEDIA_URL }}grapheditor/resources';
+  window.RESOURCE_BASE = '{{ MEDIA_URL }}grapheditor/resources/grapheditor';
+  window.STENCIL_PATH = '{{ MEDIA_URL }}grapheditor/stencils';
+  window.IMAGE_PATH = '{{ MEDIA_URL }}grapheditor/images';
+  window.STYLE_PATH = '{{ MEDIA_URL }}grapheditor/styles';
+</script>
+<script type="text/javascript" src="{{ MEDIA_URL }}grapheditor/js/Init.js"></script>
+<script type="text/javascript" src="{{ MEDIA_URL }}grapheditor/deflate/pako.min.js"></script>
+<script type="text/javascript" src="{{ MEDIA_URL }}grapheditor/deflate/base64.js"></script>
+<script type="text/javascript" src="{{ MEDIA_URL }}grapheditor/jscolor/jscolor.js"></script>
+<script type="text/javascript" src="{{ MEDIA_URL }}grapheditor/sanitizer/sanitizer.min.js"></script>
+<script type="text/javascript" src="{{ MEDIA_URL }}grapheditor/mxClient.js"></script>
+<script type="text/javascript" src="{{ MEDIA_URL }}grapheditor/js/Graph.js"></script>
+
+<script src="{{ STATIC_URL }}scripts/i18n/{{ LANGUAGE_CODE }}/djangojs.js"></script>
+
+
+<script type="text/javascript">
+	function main(container)
+	{
+		// Checks if the browser is supported
+		if (!mxClient.isBrowserSupported())
+		{
+			// Displays an error message if the browser is not supported.
+			mxUtils.error('Browser is not supported!', 200, false);
+		}
+		else
+		{
+			// Disables the built-in context menu
+			mxEvent.disableContextMenu(container);
+
+			// Creates the graph inside the given container
+			var graph = new Graph(container);
+
+			// Enables rubberband selection
+			new mxRubberband(graph);
+
+			// Gets the default parent for inserting new cells. This
+			// is normally the first child of the root (ie. layer 0).
+			var parent = graph.getDefaultParent();
+
+      window.graph = graph;
+      viewer = new window.DrawViewer(graph);
+      viewer.loadFile();
+		}
+	};
+</script>
+</head>
+
+<body onload="main(document.getElementById('graphContainer'))">
+
+  <div id="graphContainer"
+  	style="position:relative;overflow:hidden;width:800px;height:800px;cursor:default;">
+  </div>
+
+<script type="text/javascript">
+  window.app = {
+    config: {
+      mediaUrl: '{{ MEDIA_URL }}',
+      logoPath: '{{ logo_path }}',
+      logoWidth: '{{ logo_width }}',
+      logoHeight: '{{ logo_height }}',
+      siteTitle: '{{ site_title }}',
+      siteRoot: '{{ SITE_ROOT }}',
+      loginUrl: '{{ LOGIN_URL }}',
+      isPro: '{{ is_pro }}',
+      lang: '{{ LANGUAGE_CODE }}',
+      rawPath: '{{ raw_path }}',
+      repoID: '{{ repo.id }}',
+      path: '{{ path }}',
+      parentDir: '{{ parent_dir }}',
+      filename: '{{ filename }}',
+      fileServerRoot: '{{ FILE_SERVER_ROOT }}'
+    }
+  };
+
+  window.mxUtils = mxUtils;
+  window.mxGraph = mxGraph;
+  window.mxCodec = mxCodec;
+
+</script>
+{% render_bundle 'draw' %}
+
+</body>
+</html>
