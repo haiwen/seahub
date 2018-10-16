@@ -201,13 +201,34 @@ class DraftReview(TimestampedModel):
         }
 
 
-###### signal handlers
-from django.dispatch import receiver
-from seahub.signals import repo_deleted
+class ReviewCommentManager(models.Manager):
+    def add(self, comment, detail, author, review_id):
+        review_comment = self.model(author=author, comment=comment,
+                                    detail=detail, review_id=review_id)
+        review_comment.save(using=self._db)
 
-@receiver(repo_deleted)
-def remove_drafts(sender, **kwargs):
-    repo_owner = kwargs['repo_owner']
-    repo_id = kwargs['repo_id']
+        return review_comment
 
-    Draft.objects.filter(username=repo_owner, draft_repo_id=repo_id).delete()
+
+class ReviewComment(TimestampedModel):
+    """
+    Model used to record file comments.
+    """
+    author = LowerCaseCharField(max_length=255, db_index=True)
+    resolved = models.BooleanField(default=False, db_index=True)
+    review_id = models.ForeignKey('DraftReview', on_delete=models.CASCADE)
+    comment = models.TextField()
+    detail = models.TextField()
+
+    objects = ReviewCommentManager()
+
+    def to_dict(self):
+        return {
+            'id': self.pk,
+            'review_id': self.review_id_id,
+            'comment': self.comment,
+            'created_at': datetime_to_isoformat_timestr(self.created_at),
+            'updated_at': datetime_to_isoformat_timestr(self.updated_at),
+            'resolved': self.resolved,
+            'detail': self.detail,
+        }
