@@ -15,10 +15,10 @@ const devServerOptions = Object.assign({}, config.devServer, {
 console.log('Dev server options:', devServerOptions);
 
 const server = new WebpackDevServer(compiler, devServerOptions);
-server.listen(3000, '0.0.0.0', function (err, result) {
+server.listen(3001, '0.0.0.0', function (err, result) {
   if (err) {
     console.log(err)
   }
 
-  console.log('Listening at 0.0.0.0:3000')
+  console.log('Listening at 0.0.0.0:3001')
 })
