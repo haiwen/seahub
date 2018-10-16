@@ -8,6 +8,7 @@ moment.locale(lang);
 const propTypes = {
   isItemFreezed: PropTypes.bool.isRequired,
   onMenuToggleClick: PropTypes.func.isRequired,
+  draft: PropTypes.object.isRequired,
 };
 
 class DraftListItem extends React.Component {
@@ -49,14 +50,14 @@ class DraftListItem extends React.Component {
     let filePath = draft.draft_file_path;
     let repoID = draft.origin_repo_id;
     let url =  siteRoot + 'lib/' + repoID + '/file' + filePath + '?mode=edit&draft_id=' + draft.id;
-    window.open(url)
+    window.open(url);
   }
 
   onLibraryClick = () => {
     let draft = this.props.draft;
     let repoID = draft.origin_repo_id;
     let url =  siteRoot + '#common/lib/' + repoID;
-    window.open(url)
+    window.open(url);
   }
 
   onReviewClick = () => {
@@ -77,7 +78,7 @@ class DraftListItem extends React.Component {
     localTime = moment(localTime).fromNow();
     return (
       <tr className={this.state.highlight} onMouseEnter={this.onMouseEnter} onMouseLeave={this.onMouseLeave}>
-        <td className="icon"><img src={siteRoot + 'media/img/file/192/txt.png'} /></td>
+        <td className="icon"><img src={siteRoot + 'media/img/file/192/txt.png'} alt='icon' /></td>
         <td className="name a-simulate" onClick={this.onDraftEditClick}>{fileName}</td>
         <td className="library a-simulate" onClick={this.onLibraryClick}>{draft.repo_name}</td>
         <td className="review">

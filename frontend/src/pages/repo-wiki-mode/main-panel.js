@@ -18,12 +18,16 @@ const propTypes = {
   filePath: PropTypes.string.isRequired,
   isFileLoading: PropTypes.bool.isRequired,
   isViewFileState: PropTypes.bool.isRequired,
+  changedNode: PropTypes.object.isRequired,
   onMenuClick: PropTypes.func.isRequired,
   onSearchedClick: PropTypes.func.isRequired,
   onMainNavBarClick: PropTypes.func.isRequired,
+  onLinkClick: PropTypes.func.isRequired,
   onMainItemClick: PropTypes.func.isRequired,
   onMainItemDelete: PropTypes.func.isRequired,
-}
+  onMainAddFile: PropTypes.func.isRequired,
+  onMainAddFolder: PropTypes.func.isRequired,
+};
 
 class MainPanel extends Component {
 
@@ -215,10 +219,10 @@ class MainPanel extends Component {
               {
                 this.state.newMenuShow &&
                 <ul className="menu dropdown-menu" style={this.state.operationMenuStyle}>
-                    <li className="dropdown-item" onClick={this.addFolder}>{gettext('New Folder')}</li>
-                    <li className="dropdown-item" onClick={this.addFile}>{gettext('New File')}</li>
-                    <li className="dropdown-item menu-inner-divider"></li>
-                    <li className="dropdown-item" onClick={this.addMarkdownFile}>{gettext('New Markdown File')}</li>
+                  <li className="dropdown-item" onClick={this.addFolder}>{gettext('New Folder')}</li>
+                  <li className="dropdown-item" onClick={this.addFile}>{gettext('New File')}</li>
+                  <li className="dropdown-item menu-inner-divider"></li>
+                  <li className="dropdown-item" onClick={this.addMarkdownFile}>{gettext('New Markdown File')}</li>
                 </ul>
               }
             </div>
@@ -235,8 +239,7 @@ class MainPanel extends Component {
             <div className="path-containter">
               <a href={siteRoot + '#common/'} className="normal">{gettext('Libraries')}</a>
               <span className="path-split">/</span>
-              { 
-                this.props.filePath === '/' ?
+              {this.props.filePath === '/' ?
                 <span>{slug}</span> :
                 <a className="path-link" data-path="/" onClick={this.onMainNavBarClick}>{slug}</a>
               }

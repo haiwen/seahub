@@ -29,7 +29,7 @@ class OperationMenu extends React.Component {
           repo: repo,
           is_repo_owner: is_repo_owner
         });
-      })
+      });
     });
   }
 

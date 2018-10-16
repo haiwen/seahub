@@ -3,10 +3,12 @@ import PropTypes from 'prop-types';
 import { gettext } from '../../utils/constants';
 
 const propTypes = {
+  currentDraft: PropTypes.object.isRequired,
   isMenuShow: PropTypes.bool.isRequired,
   menuPosition: PropTypes.object.isRequired,
   onDeleteHandler: PropTypes.func.isRequired,
-  onPublishHandler: PropTypes.func.isRequired
+  onPublishHandler: PropTypes.func.isRequired,
+  onReviewHandler: PropTypes.func.isRequired,
 };
 
 class DraftListMenu extends React.Component {

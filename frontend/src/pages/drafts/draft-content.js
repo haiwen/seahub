@@ -65,10 +65,9 @@ class DraftContent extends React.Component {
 
     editUtilties.createDraftReview(draft.id).then(res => {
       window.open(siteRoot + 'drafts/review/' + res.data.id);
-    })
-    .catch((error) => { 
+    }).catch((error) => { 
       if (error.response.status == '409') {
-        Toast.error("The draft review is existing.");
+        Toast.error('The draft review is existing.');
       }    
     });
   }
@@ -129,7 +128,7 @@ class DraftContent extends React.Component {
           />
         }
       </div>
-     );
+    );
   }
 }
 

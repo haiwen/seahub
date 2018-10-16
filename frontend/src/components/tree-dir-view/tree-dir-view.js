@@ -11,7 +11,7 @@ const propTypes = {
   node: PropTypes.object.isRequired,
   onMainNodeClick: PropTypes.func.isRequired,
   onDeleteItem: PropTypes.func.isRequired,
-}
+};
 
 class TreeDirView extends React.Component {
 
