@@ -1,6 +1,13 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 import { gettext } from '../../utils/constants';
 import { Button, Modal, ModalHeader, Input, ModalBody, ModalFooter } from 'reactstrap';
+
+const propTypes = {
+  currentNode: PropTypes.object,
+  onRename: PropTypes.func.isRequired,
+  toggleCancel: PropTypes.func.isRequired,
+};
 
 class Rename extends React.Component {
   constructor(props) {
@@ -74,5 +81,7 @@ class Rename extends React.Component {
     );
   }
 }
+
+Rename.propTypes = propTypes;
 
 export default Rename;

@@ -1,8 +1,14 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 import Logo from './logo';
 import MainSideNav from './main-side-nav';
 import SideNavFooter from './side-nav-footer';
 
+const propTypes = {
+  isSidePanelClosed: PropTypes.bool.isRequired,
+  currentTab: PropTypes.string.isRequired,
+  onCloseSidePanel: PropTypes.func.isRequired,
+};
 
 class SidePanel extends React.Component {
 
@@ -22,5 +28,7 @@ class SidePanel extends React.Component {
     );
   }
 }
+
+SidePanel.propTypes = propTypes;
 
 export default SidePanel;

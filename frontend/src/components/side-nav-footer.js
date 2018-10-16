@@ -1,6 +1,11 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 import { Modal, ModalBody } from 'reactstrap';
 import { gettext, siteRoot } from '../utils/constants';
+
+const propTypes = {
+  className: PropTypes.string, 
+};
 
 class About extends React.Component {
   constructor(props) {
@@ -34,11 +39,13 @@ class About extends React.Component {
   }
 }
 
+About.propTypes = propTypes;
+
 class SideNavFooter extends React.Component {
   render() {
     return (
       <div className="side-nav-footer">
-        <a href={siteRoot + 'help/'} target="_blank" className="item">{gettext('Help')}</a>
+        <a href={siteRoot + 'help/'} target="_blank" rel="noopener noreferrer" className="item">{gettext('Help')}</a>
         <About />
         <a href={siteRoot + 'download_client_program/'} className="item last-item">
           <span aria-hidden="true" className="sf2-icon-monitor vam"></span>{' '}

@@ -10,7 +10,7 @@ import './assets/css/fontawesome.css';
 import 'seafile-ui';
 import './index.css';
 
-let lang = window.app.pageOptions.lang
+let lang = window.app.pageOptions.lang;
 
 ReactDOM.render(
   <I18nextProvider i18n={ i18n } initialLanguage={ lang } >

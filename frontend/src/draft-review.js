@@ -1,7 +1,9 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
+/* eslint-disable */
 import Prism from 'prismjs';
-import { siteRoot, gettext, draftID, reviewID, draftOriginFilePath, draftFilePath, draftOriginRepoID, draftFileName, opStatus, publishFileVersion, originFileVersion } from './utils/constants'; 
+/* eslint-enable */
+import { siteRoot, gettext, reviewID, draftOriginFilePath, draftFilePath, draftOriginRepoID, draftFileName, opStatus, publishFileVersion, originFileVersion } from './utils/constants'; 
 import { seafileAPI } from './utils/seafile-api';
 import axios from 'axios';
 import DiffViewer from '@seafile/seafile-editor/dist/viewer/diff-viewer';
@@ -31,9 +33,9 @@ class DraftReview extends React.Component {
 
   componentDidMount() {
     if (publishFileVersion == 'None') {
-     axios.all([
-       seafileAPI.getFileDownloadLink(draftOriginRepoID, draftFilePath),
-       seafileAPI.getFileDownloadLink(draftOriginRepoID, draftOriginFilePath)
+      axios.all([
+        seafileAPI.getFileDownloadLink(draftOriginRepoID, draftFilePath),
+        seafileAPI.getFileDownloadLink(draftOriginRepoID, draftOriginFilePath)
       ]).then(axios.spread((res1, res2) => {
         axios.all([
           seafileAPI.getFileContent(res1.data),
@@ -65,18 +67,18 @@ class DraftReview extends React.Component {
   onCloseReview = () => {
     seafileAPI.updateReviewStatus(reviewID, 'closed').then(res => {
       this.setState({reviewStatus: 'closed'});
-      Toast.success('Review close succeeded.')
+      Toast.success('Review close succeeded.');
     }).catch(() => {
-      Toast.error('Review close failed.')
+      Toast.error('Review close failed.');
     });
   }
 
   onPublishReview = () => {
     seafileAPI.updateReviewStatus(reviewID, 'finished').then(res => {
       this.setState({reviewStatus: 'finished'});
-      Toast.success('Review publish succeeded.')
+      Toast.success('Review publish succeeded.');
     }).catch(() => {
-      Toast.error('Review publish failed.')
+      Toast.error('Review publish failed.');
     });
   }
 
@@ -96,8 +98,8 @@ class DraftReview extends React.Component {
           {
             this.state.reviewStatus === 'open' &&
             <div className="cur-file-operation">
-              <button className="btn btn-secondary file-operation-btn" title={gettext('Close Review')} onClick={this.onCloseReview}>{gettext("Close")}</button>
-              <button className="btn btn-success file-operation-btn" title={gettext('Publish Review')} onClick={this.onPublishReview}>{gettext("Publish")}</button>
+              <button className="btn btn-secondary file-operation-btn" title={gettext('Close Review')} onClick={this.onCloseReview}>{gettext('Close')}</button>
+              <button className="btn btn-success file-operation-btn" title={gettext('Publish Review')} onClick={this.onPublishReview}>{gettext('Publish')}</button>
             </div>
           }
           {
@@ -113,8 +115,7 @@ class DraftReview extends React.Component {
           <div className="cur-view-container content-container">
             <div className="cur-view-content">
               <div className="markdown-viewer-render-content article">
-                { 
-                  this.state.isLoading ? 
+                {this.state.isLoading ? 
                   <Loading /> :
                   <DiffViewer markdownContent={this.state.draftContent} markdownContent1={this.state.draftOriginContent} />
                 }

@@ -13,10 +13,8 @@ function loadFile(editorUi) {
 }
 
 function saveFile(content) {
-  return seafileAPI.getUpdateLink(window.app.config.repoID, window.app.config.parentDir)
-  .then((res) => {
-    return seafileAPI.updateFile(res.data, window.app.config.path,
-      window.app.config.filename, content);
+  return seafileAPI.getUpdateLink(window.app.config.repoID, window.app.config.parentDir).then((res) => {
+    return seafileAPI.updateFile(res.data, window.app.config.path, window.app.config.filename, content);
   });
 }
 

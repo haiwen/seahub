@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import PropTypes from 'prop-types';
 import { gettext, siteRoot, logoPath, mediaUrl, siteTitle, logoWidth, logoHeight } from '../../utils/constants';
 import TreeView from '../../components/tree-view/tree-view';
 import NodeMenu from '../../components/tree-view/node-menu';
@@ -7,6 +8,20 @@ import Delete from '../../components/dialog/delete-dialog';
 import Rename from '../../components/dialog/rename-dialog';
 import CreateFolder from '../../components/dialog/create-folder-dialog';
 import CreateFile from '../../components/dialog/create-file-dialog';
+
+const propTypes = {
+  changedNode: PropTypes.object,
+  treeData: PropTypes.object.isRequired,
+  currentFilePath: PropTypes.string.isRequired,
+  closeSideBar: PropTypes.bool.isRequired,
+  onCloseSide: PropTypes.func.isRequired,
+  onDirCollapse: PropTypes.func.isRequired,
+  onNodeClick: PropTypes.func.isRequired,
+  onRenameNode: PropTypes.func.isRequired,
+  onDeleteNode: PropTypes.func.isRequired,
+  onAddFileNode: PropTypes.func.isRequired,
+  onAddFolderNode: PropTypes.func.isRequired,
+};
 
 class SidePanel extends Component {
 
@@ -239,4 +254,7 @@ class SidePanel extends Component {
     );
   }
 }
+
+SidePanel.propTypes = propTypes;
+
 export default SidePanel;

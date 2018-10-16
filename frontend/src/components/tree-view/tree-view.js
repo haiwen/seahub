@@ -1,6 +1,17 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 import TreeNodeView from './tree-node-view';
 import editorUtilities from '../../utils/editor-utilties';
+
+const propTypes = {
+  permission: PropTypes.string,
+  isNodeItemFrezee: PropTypes.bool.isRequired,
+  currentFilePath: PropTypes.string.isRequired,
+  treeData: PropTypes.object.isRequired,
+  onShowContextMenu: PropTypes.func.isRequired,
+  onNodeClick: PropTypes.func.isRequired,
+  onDirCollapse: PropTypes.func.isRequired,
+};
 
 class TreeView extends React.PureComponent {
 
@@ -31,7 +42,7 @@ class TreeView extends React.PureComponent {
 
   render() {
     if (!this.props.treeData.root) {
-      return <div>Loading...</div>
+      return <div>Loading...</div>;
     }
 
     return (
@@ -51,5 +62,7 @@ class TreeView extends React.PureComponent {
   }
 
 }
+
+TreeView.propTypes = propTypes;
 
 export default TreeView;

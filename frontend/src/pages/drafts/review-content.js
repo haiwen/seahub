@@ -32,18 +32,18 @@ class ReviewContent extends React.Component {
   render() {
     return (
       <div className="cur-view-content" style={{padding: 0}}>
-       {this.state.isLoadingReviews && <Loading /> }
-       {(!this.state.isLoadingReviews && this.state.reviewsList.length !==0) &&
-         <ReviewListView
-           itemsList={this.state.reviewsList} 
-           isItemFreezed={this.state.isItemFreezed}
-         />
-       }
-       {(!this.state.isLoadingReviews && this.state.reviewsList.length === 0) &&
-         <div className="message empty-tip">
-           <h2>{gettext('There is no Review file existing')}</h2>
-         </div>
-       }
+        {this.state.isLoadingReviews && <Loading /> }
+        {(!this.state.isLoadingReviews && this.state.reviewsList.length !==0) &&
+          <ReviewListView
+            itemsList={this.state.reviewsList} 
+            isItemFreezed={this.state.isItemFreezed}
+          />
+        }
+        {(!this.state.isLoadingReviews && this.state.reviewsList.length === 0) &&
+          <div className="message empty-tip">
+            <h2>{gettext('There is no Review file existing')}</h2>
+          </div>
+        }
       </div>
     );
   }

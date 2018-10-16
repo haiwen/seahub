@@ -1,5 +1,15 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 import { gettext } from '../../utils/constants';
+
+const propTypes = {
+  menuPosition: PropTypes.object.isRequired,
+  currentNode: PropTypes.object.isRequired,
+  toggleRename: PropTypes.func.isRequired,
+  toggleDelete: PropTypes.func.isRequired,
+  toggleAddFile: PropTypes.func.isRequired,
+  toggleAddFolder: PropTypes.func.isRequired,
+};
 
 class NodeMenu extends React.Component {
 
@@ -63,5 +73,7 @@ class NodeMenu extends React.Component {
     );
   }
 }
+
+NodeMenu.propTypes = propTypes;
 
 export default NodeMenu;

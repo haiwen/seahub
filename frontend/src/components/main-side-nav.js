@@ -1,7 +1,12 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 import { Link } from '@reach/router';
 import { gettext, siteRoot } from '../utils/constants';
 import { seafileAPI } from '../utils/seafile-api';
+
+const propTypes = {
+  currentTab: PropTypes.string.isRequired,
+};
 
 class MainSideNav extends React.Component {
   constructor(props) {
@@ -23,14 +28,14 @@ class MainSideNav extends React.Component {
   grpsExtend = () => {
     this.setState({
       groupsExtended: !this.state.groupsExtended,
-    })
+    });
     this.loadGroups();
   }
 
   shExtend = () => {
     this.setState({
       sharedExtended: !this.state.sharedExtended,
-    })
+    });
   }
 
   loadGroups = () => {
@@ -40,14 +45,14 @@ class MainSideNav extends React.Component {
       this.groupsHeight = (data.length + 1) * _this.listHeight;
       _this.setState({
         groupItems: data
-      })
-    })
+      });
+    });
   }
 
   tabItemClick = (param) => {
     this.setState({
       currentTab: param
-    })
+    });
   }
 
   renderSharedGroups() {
@@ -59,8 +64,8 @@ class MainSideNav extends React.Component {
       <ul className={`grp-list ${this.state.groupsExtended ? 'side-panel-slide' : 'side-panel-slide-up'}`} style={style}>
         <li className={this.state.currentTab === 'groups' ? 'tab-cur' : ''}> 
           <a href={siteRoot + '#groups/'} onClick={() => this.tabItemClick('groups')}>
-          <span className="sharp" aria-hidden="true">#</span>
-          All Groups
+            <span className="sharp" aria-hidden="true">#</span>
+            {gettext('All Groups')}
           </a>
         </li>
         {this.state.groupItems.map(item => {
@@ -71,10 +76,10 @@ class MainSideNav extends React.Component {
                 {item.name}
               </a>
             </li>
-          )
+          );
         })}
       </ul>
-    )
+    );
   }
 
   renderSharedAdmin() {
@@ -107,7 +112,7 @@ class MainSideNav extends React.Component {
           </a>
         </li>
       </ul>
-    )
+    );
   }
 
   render() {
@@ -129,13 +134,13 @@ class MainSideNav extends React.Component {
               </a>
             </li>
             <li className={`tab ${this.state.currentTab === 'org' ? 'tab-cur' : ''}`} onClick={() => this.tabItemClick('org')}>
-            <a href={ siteRoot + '#org/' } className="ellipsis" title={gettext('Shared with all')}>
-              <span className="sf2-icon-organization" aria-hidden="true"></span>
-              {gettext('Shared with all')}
+              <a href={ siteRoot + '#org/' } className="ellipsis" title={gettext('Shared with all')}>
+                <span className="sf2-icon-organization" aria-hidden="true"></span>
+                {gettext('Shared with all')}
               </a>
             </li>
             <li className="tab" id="group-nav">
-              <a href="#" className="ellipsis user-select-no" title={gettext('Shared with groups')} onClick={this.grpsExtend}>
+              <a className="ellipsis user-select-no" title={gettext('Shared with groups')} onClick={this.grpsExtend}>
                 <span className={`toggle-icon float-right fas ${this.state.groupsExtended ?'fa-caret-down':'fa-caret-left'}`} aria-hidden="true"></span>
                 <span className="sf2-icon-group" aria-hidden="true"></span>
                 {gettext('Shared with groups')}
@@ -171,7 +176,7 @@ class MainSideNav extends React.Component {
               </Link>
             </li>
             <li className="tab" id="share-admin-nav">
-              <a href="#" className="ellipsis user-select-no" title={gettext('Share Admin')} onClick={this.shExtend}>
+              <a className="ellipsis user-select-no" title={gettext('Share Admin')} onClick={this.shExtend}>
                 <span className={`toggle-icon float-right fas ${this.state.sharedExtended ? 'fa-caret-down':'fa-caret-left'}`} aria-hidden="true"></span>
                 <span aria-hidden="true" className="sf2-icon-wrench"></span>
                 {gettext('Share Admin')}
@@ -181,8 +186,10 @@ class MainSideNav extends React.Component {
           </ul>
         </div>
       </div>
-    )
+    );
   }
 }
+
+MainSideNav.propTypes = propTypes;
 
 export default MainSideNav;

@@ -174,11 +174,10 @@ class EditorUtilities {
   }
 
   createDraftReview() {
-    return seafileAPI.createDraftReview(draftID)
-      .then(res => {
-        let url = serviceUrl + '/drafts/review/' + res.data.id;
-        return url;
-      })
+    return seafileAPI.createDraftReview(draftID).then(res => {
+      let url = serviceUrl + '/drafts/review/' + res.data.id;
+      return url;
+    });
   }
 }
 
