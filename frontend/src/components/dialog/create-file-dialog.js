@@ -16,6 +16,7 @@ class CreateFile extends React.Component {
     this.state = {
       parentPath: '',
       childName: props.fileType,
+      isDraft: false,
     };
     this.newInput = React.createRef();
   }
@@ -28,12 +29,41 @@ class CreateFile extends React.Component {
 
   handleSubmit = () => {
     let path = this.state.parentPath + this.state.childName;
-    this.props.onAddFile(path);
+    let isDraft = this.state.isDraft;
+    this.props.onAddFile(path, isDraft);
   } 
 
   handleKeyPress = (e) => {
     if (e.key === 'Enter') {
       this.handleSubmit();
+    }
+  }
+
+  handleCheck = () => {
+    if (!this.state.isDraft && this.state.childName === '.md') {
+      this.setState({
+        isDraft: true,
+        childName: '(draft)' + this.state.childName 
+      })
+    } else if (!this.state.isDraft && this.state.childName !== '.md') { 
+      let pos = this.state.childName.lastIndexOf(".");
+      let fileName = this.state.childName.substring(0, pos); 
+      this.setState({
+        isDraft: true,
+        childName: fileName + '(draft)' + this.props.fileType
+      })
+    } else if (this.state.childName !== '(draft).md') { 
+      let pos = this.state.childName.lastIndexOf("(");
+      let fileName = this.state.childName.substring(0, pos); 
+      this.setState({
+        isDraft: false,
+        childName: fileName + this.props.fileType
+      })
+    } else {
+       this.setState({
+        isDraft: false,
+        childName: this.props.fileType
+      })
     }
   }
 
@@ -67,6 +97,13 @@ class CreateFile extends React.Component {
                 <Input onKeyPress={this.handleKeyPress} innerRef={input => {this.newInput = input;}} id="fileName" placeholder={gettext('newName')} value={this.state.childName} onChange={this.handleChange}/>
               </Col>
             </FormGroup>
+            <FormGroup row>
+              <Label sm={3} check />
+              <Col sm={9}>
+                <Input type="checkbox" onChange={this.handleCheck}/>{'  '}{gettext("This is a draft file.")}
+              </Col>
+            </FormGroup>
+
           </Form>
         </ModalBody>
         <ModalFooter>

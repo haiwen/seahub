@@ -38,8 +38,8 @@ class EditorUtilities {
     });
   }
 
-  createFile(filePath) {
-    return seafileAPI.createFile(repoID, filePath);
+  createFile(filePath, isDraft) {
+    return seafileAPI.createFile(repoID, filePath, isDraft);
   }
 
   deleteFile(filePath) {

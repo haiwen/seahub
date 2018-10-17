@@ -252,8 +252,8 @@ class Wiki extends Component {
     });
   }
 
-  onAddFileNode = (filePath) => {
-    editorUtilities.createFile(filePath).then(res => {
+  onAddFileNode = (filePath, isDraft) => {
+    editorUtilities.createFile(filePath, isDraft).then(res => {
       let tree = this.state.tree_data.clone();
       let name = this.getFileNameByPath(filePath);
       let index = filePath.lastIndexOf('/');
