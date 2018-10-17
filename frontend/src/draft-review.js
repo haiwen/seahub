@@ -3,12 +3,13 @@ import ReactDOM from 'react-dom';
 /* eslint-disable */
 import Prism from 'prismjs';
 /* eslint-enable */
-import { siteRoot, gettext, reviewID, draftOriginFilePath, draftFilePath, draftOriginRepoID, draftFileName, opStatus, publishFileVersion, originFileVersion } from './utils/constants'; 
+import { siteRoot, gettext, draftID, reviewID, draftOriginFilePath, draftFilePath, draftOriginRepoID, draftFileName, opStatus, publishFileVersion, originFileVersion } from './utils/constants';
 import { seafileAPI } from './utils/seafile-api';
 import axios from 'axios';
 import DiffViewer from '@seafile/seafile-editor/dist/viewer/diff-viewer';
 import Loading from './components/loading';
 import Toast from './components/toast';
+import CommentsList from './components/review-list-view/commonts-list';
 
 import 'seafile-ui';
 import './assets/css/fa-solid.css';
@@ -17,6 +18,8 @@ import './assets/css/fontawesome.css';
 import './css/layout.css';
 import './css/initial-style.css';
 import './css/toolbar.css';
+import './css/draft-review.css';
+
 
 require('@seafile/seafile-editor/dist/editor/code-hight-package');
 
@@ -28,6 +31,8 @@ class DraftReview extends React.Component {
       draftOriginContent: '',
       reviewStatus: opStatus,
       isLoading: true,
+      commentsNumber: null,
+      isShowComments: false,
     };
   }
 
@@ -45,12 +50,12 @@ class DraftReview extends React.Component {
             draftContent: draftContent.data,
             draftOriginContent: draftOriginContent.data,
             isLoading: false
-          }); 
+          });
         }));
       }));
     } else {
-      let dl0 = siteRoot + 'repo/' + draftOriginRepoID + '/' + publishFileVersion + '/download?' + 'p=' + draftOriginFilePath; 
-      let dl = siteRoot + 'repo/' + draftOriginRepoID + '/' + originFileVersion + '/download?' + 'p=' + draftOriginFilePath; 
+      let dl0 = siteRoot + 'repo/' + draftOriginRepoID + '/' + publishFileVersion + '/download?' + 'p=' + draftOriginFilePath;
+      let dl = siteRoot + 'repo/' + draftOriginRepoID + '/' + originFileVersion + '/download?' + 'p=' + draftOriginFilePath;
       axios.all([
         seafileAPI.getFileContent(dl0),
         seafileAPI.getFileContent(dl)
@@ -59,7 +64,7 @@ class DraftReview extends React.Component {
           draftContent: draftContent.data,
           draftOriginContent: draftOriginContent.data,
           isLoading: false,
-        }); 
+        });
       }));
     }
   }
@@ -82,6 +87,25 @@ class DraftReview extends React.Component {
     });
   }
 
+  toggleCommentList = () => {
+    this.setState({
+      isShowComments: !this.state.isShowComments
+    });
+  }
+
+  getCommentsNumber = () => {
+    seafileAPI.listReviewComments(reviewID).then((res) => {
+      let number = res.data.total_count;
+      this.setState({
+        commentsNumber: number,
+      });
+    });
+  }
+
+  componentWillMount() {
+    this.getCommentsNumber();
+  }
+
   render() {
     return(
       <div className="wrapper">
@@ -98,8 +122,18 @@ class DraftReview extends React.Component {
           {
             this.state.reviewStatus === 'open' &&
             <div className="cur-file-operation">
-              <button className="btn btn-secondary file-operation-btn" title={gettext('Close Review')} onClick={this.onCloseReview}>{gettext('Close')}</button>
-              <button className="btn btn-success file-operation-btn" title={gettext('Publish Review')} onClick={this.onPublishReview}>{gettext('Publish')}</button>
+              <button className="btn btn-secondary file-operation-btn" title={gettext('Close Review')} onClick={this.onCloseReview}>{gettext("Close")}</button>
+              <button className="btn btn-success file-operation-btn" title={gettext('Publish Review')} onClick={this.onPublishReview}>{gettext("Publish")}</button>
+              {this.state.commentsNumber > 0 ?
+                <button className="btn btn-primary common-list-btn"
+                  title={gettext('Comments')} onClick={this.toggleCommentList}>{gettext("Comments")}
+                  <span className="common-list-btn-number">{this.state.commentsNumber}</span>
+                </button>
+                :
+                <button className="btn btn-primary common-list-btn"
+                  title={gettext('Comments')} onClick={this.toggleCommentList}>
+                  {gettext("Comments")}</button>
+              }
             </div>
           }
           {
@@ -107,13 +141,13 @@ class DraftReview extends React.Component {
             <div className="review-state review-state-finished">{gettext('Finished')}</div>
           }
           {
-            this.state.reviewStatus === 'closed' && 
+            this.state.reviewStatus === 'closed' &&
             <div className="review-state review-state-closed">{gettext('Closed')}</div>
           }
         </div>
         <div id="main" className="main">
           <div className="cur-view-container content-container">
-            <div className="cur-view-content">
+            <div className={!this.state.isShowComments ? "cur-view-content" : "cur-view-content cur-view-content-commenton"}>
               <div className="markdown-viewer-render-content article">
                 {this.state.isLoading ? 
                   <Loading /> :
@@ -121,6 +155,13 @@ class DraftReview extends React.Component {
                 }
               </div>
             </div>
+            { this.state.isShowComments &&
+              <CommentsList
+                toggleCommentList={this.toggleCommentList}
+                commentsNumber={this.state.commentsNumber}
+                getCommentsNumber={this.getCommentsNumber}
+              />
+            }
           </div>
         </div>
       </div>
