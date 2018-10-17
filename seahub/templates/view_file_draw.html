@@ -130,6 +130,7 @@
 
   		var xml = mxUtils.getXml(this.editor.getGraphXml());
       window.saveFile(xml);
+      this.editor.setModified(false);
     }
 
     // Adds required resources (disables loading of fallback properties, this can only
