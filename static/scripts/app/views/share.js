@@ -184,6 +184,10 @@ define([
                 this.$('#send-download-link').addClass('hide');
                 this.$('#download-link-operations .shared-link-copy-icon').addClass('hide');
                 this.$('#download-link, #direct-dl-link').append(' <span class="error">(' + gettext('Expired') + ')</span>');
+            } else {
+                this.$('#send-download-link').removeClass('hide');
+                this.$('#download-link-operations .shared-link-copy-icon').removeClass('hide');
+                this.$('#download-link .error, #direct-dl-link .error').remove('');
             }
             this.$('#download-link-operations').removeClass('hide');
 
