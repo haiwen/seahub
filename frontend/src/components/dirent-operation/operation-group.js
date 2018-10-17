@@ -72,14 +72,6 @@ class OperationGroup extends React.Component {
     this.props.onItemMenuHide();
   }
 
-  onRename = () => {
-    //todos:
-  }
-
-  onCopy = () => {
-    //todos
-  }
-
   render() {
     return (
       <div className="operations">
@@ -102,8 +94,7 @@ class OperationGroup extends React.Component {
           <OperationMenu 
             dirent={this.props.dirent}
             menuPosition={this.state.menuPosition}
-            onRename={this.onRename}
-            onCopy={this.onCopy}
+            onMenuItemClick={this.props.onMenuItemClick}
           />
         }
       </div>

@@ -86,6 +86,49 @@ class DirentListItem extends React.Component {
     this.props.onItemDelete(this.props.dirent);
   }
 
+  onMenuItemClick = (operation) => {
+    switch(operation) {
+      case 'Rename': 
+        this.onRenameItem();
+        break;
+      case 'Move':
+        this.onMoveItem();
+        break;
+      case 'Copy':
+        this.onCopyItem();
+        break;
+      case 'Permission':
+        this.onPermissionItem();
+        break;
+      case 'Details':
+        this.onDetailsItem();
+        break;
+      case 'Unlock':
+        this.onUnlockItem();
+        break;
+      case 'Lock':
+        this.onLockItem();
+        break;
+      case 'New Draft':
+        this.onNewDraft();
+        break;
+      case 'Comment':
+        this.onComnentItem();
+        break;
+      case 'History':
+        this.onHistory();
+        break;
+      case 'Access Log':
+        this.onAccessLog();
+        break;
+      case 'Open via Client':
+        this.onOpenViaClient();
+        break;
+      default:
+        break;
+    }
+  }
+
   render() {
     let { dirent } = this.props;
     return (

@@ -1,8 +1,9 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { gettext, repoID } from '../../utils/constants';
 import { seafileAPI } from '../../utils/seafile-api';
+import { repoID, isPro, enableFileComment, fileAuditEnabled} from '../../utils/constants';
 import Repo from '../../models/repo';
+import OperationMenuItem from './operation-menu-item';
 
 const propTypes = {
   dirent: PropTypes.object.isRequired,
@@ -15,6 +16,7 @@ class OperationMenu extends React.Component {
     super(props);
     this.state = {
       repo: null,
+      menuList: [],
       is_repo_owner: false,
     };
   }
@@ -22,149 +24,96 @@ class OperationMenu extends React.Component {
   componentDidMount() {
     seafileAPI.getRepoInfo(repoID).then(res => {
       let repo = new Repo(res.data);
+      let menuList = this.calculateMenuList(repo);
+      //todos: user_can_set_folder_perm;;;  is_address_book_group_admin
       seafileAPI.getAccountInfo().then(res => {
         let user_email = res.data.email;
         let is_repo_owner = repo.owner_email === user_email;
         this.setState({
           repo: repo,
+          menuList: menuList,
           is_repo_owner: is_repo_owner
         });
       });
     });
   }
 
-  getItemType() {
-    let type = this.props.dirent.is_dir ? 'dir' : 'file';
-    return type;
+  calculateMenuList(repoInfo) {
+    let dirent = this.props.dirent;
+    let type = dirent.type;
+    let permission = dirent.permission;
+    if (type === 'dir' && permission === 'rw') {
+      let menuList = ['Rename', 'Move', 'Copy', 'Divider', 'Permission', 'Details', 'Divider', 'Open Via Client'];
+      return menuList;
+    }
+
+    if (type === 'dir' && permission === 'r') {
+      let menuList = repoInfo.encrypted ? ['Copy', 'Details'] : ['Details'];
+      return menuList;
+    }
+
+    if (type === 'file' && permission === 'rw') {
+      let menuList = [];
+      if (!dirent.is_locked || (dirent.is_locked && dirent.locked_by_me)) {
+        menuList.push('Reanme');
+        menuList.push('Move');
+      }
+      menuList.push('Copy');
+      if (isPro) {
+        if (dirent.is_locked && dirent.locked_by_me) {
+          menuList.push('Unlock');
+        } else {
+          menuList.push('Lock');
+        }
+      }
+      menuList.push('New Draft');
+      menuList.push('Divider');
+      if (enableFileComment) {
+        menuList.push('Comment');
+      }
+      menuList.push('History');
+      if (fileAuditEnabled) {
+        menuList.push('Access Log');
+      }
+      menuList.push('Details');
+      menuList.push('Divider');
+      menuList.push('Open via Client');
+      return menuList;
+    }
+
+    if (type === 'file' && permission === 'r') {
+      let menuList = [];
+      if (!repoInfo.encrypted) {
+        menuList.push('Copy');
+      }
+      if (enableFileComment) {
+        menuList.push('Comment');
+      }
+      menuList.push('History');
+      menuList.push('Details');
+      return menuList;
+    }
   }
 
-  renderDirentDirMenu() {
-    let position = this.props.menuPosition;
-    let style = {position: 'fixed', left: position.left, top: position.top, display: 'block'};
-    if (this.props.dirent.permission === 'rw') {
-      return (
-        <ul className="dropdown-menu operation-menu" style={style}>
-          <li className="dropdown-item operation-menu-item">
-            <span className="user-select-none" title={gettext('Rename')} aria-label={gettext('Rename')}>{gettext('Rename')}</span>
-          </li>
-          <li className="dropdown-item operation-menu-item">
-            <span className="user-select-none" title={gettext('Move')} aria-label={gettext('Move')}>{gettext('Move')}</span>
-          </li>
-          <li className="dropdown-item operation-menu-item">
-            <span className="user-select-none" title={gettext('Copy')} aria-label={gettext('Copy')}>{gettext('Copy')}</span>
-          </li>
-          <li className="dropdown-item menu-inner-divider"></li>
-
-          <li className="dropdown-item operation-menu-item">
-            <span className="user-select-none" title={gettext('Permission')} aria-label={gettext('Permission')}>{gettext('Permission')}</span>
-          </li>
-          <li className="dropdown-item operation-menu-item">
-            <span className="user-select-none" title={gettext('Details')} aria-label={gettext('Details')}>{gettext('Details')}</span>
-          </li>
-          <li className="dropdown-item menu-inner-divider"></li>
-          <li className="dropdown-item operation-menu-item">
-            <span className="user-select-none" title={gettext('Open via Client')} aria-label={gettext('Open via Client')}>{gettext('Open via Client')}</span>
-          </li>
-        </ul>
-      );
-    }
-
-    if (this.props.dirent.permission === 'r') {
-      return (
-        <ul className="dropdown-menu operation-menu" style={style}>
-          <li className="dropdown-item operation-menu-item">
-            <span className="user-select-none" title={gettext('Copy')} aria-label={gettext('Copy')}>{gettext('Copy')}</span>
-          </li>
-          <li className="dropdown-item operation-menu-item">
-            <span className="user-select-none" title={gettext('Details')} aria-label={gettext('Details')}>{gettext('Details')}</span>
-          </li>
-        </ul>
-      );
-    }
-
-  }
-
-  renderDirentFileMenu() {
-    let position = this.props.menuPosition;
-    let style = {position: 'fixed', left: position.left, top: position.top, display: 'block'};
-    if (this.props.dirent.permission === 'rw') {
-      return (
-        <ul className="dropdown-menu operation-menu" style={style}>
-          <li className="dropdown-item operation-menu-item">
-            <span className="user-select-none" title={gettext('Rename')} aria-label={gettext('Rename')}>{gettext('Rename')}</span>
-          </li>
-          <li className="dropdown-item operation-menu-item">
-            <span className="user-select-none" title={gettext('Move')} aria-label={gettext('Move')}>{gettext('Move')}</span>
-          </li>
-          <li className="dropdown-item operation-menu-item">
-            <span className="user-select-none" title={gettext('Copy')} aria-label={gettext('Copy')}>{gettext('Copy')}</span>
-          </li>
-          <li className="dropdown-item operation-menu-item">
-            <span className="user-select-none" title={gettext('Lock')} aria-label={gettext('Lock')}>{gettext('Lock')}</span>
-          </li>
-          <li className="dropdown-item operation-menu-item">
-            <span className="user-select-none" title={gettext('Unlock')} aria-label={gettext('Unlock')}>{gettext('Unlock')}</span>
-          </li>
-          <li className="dropdown-item operation-menu-item">
-            <span className="user-select-none" title={gettext('New Draft')} aria-label={gettext('New Draft')}>{gettext('New Draft')}</span>
-          </li>
-          <li className="dropdown-item menu-inner-divider"></li>
-          <li className="dropdown-item operation-menu-item">
-            <span className="user-select-none" title={gettext('Comment')} aria-label={gettext('Comment')}>{gettext('Comment')}</span>
-          </li>
-          <li className="dropdown-item operation-menu-item">
-            <span className="" title={gettext('History')} aria-label={gettext('History')}>{gettext('History')}</span>
-          </li>
-          <li className="dropdown-item operation-menu-item">
-            <span className="user-select-none" title={gettext('Access Log')} aria-label={gettext('Access Log')}>{gettext('Access Log')}</span>
-          </li>
-          <li className="dropdown-item operation-menu-item">
-            <span className="user-select-none" title={gettext('Details')} aria-label={gettext('Details')}>{gettext('Details')}</span>
-          </li>
-          <li className="dropdown-item menu-inner-divider"></li>
-
-          <li className="dropdown-item operation-menu-item">
-            <span className="user-select-none" title={gettext('Open via Client')} aria-label={gettext('Open via Client')}>{gettext('Open via Client')}</span>
-          </li>
-        </ul>
-      );
-    }
-
-    if (this.props.dirent.permission === 'r') {
-      return (
-        <ul className="dropdown-menu operation-menu" style={style}>
-          <li className="dropdown-item operation-menu-item">
-            <span className="user-select-none" title={gettext('Copy')} aria-label={gettext('Copy')}>{gettext('Copy')}</span>
-          </li>
-          <li className="dropdown-item operation-menu-item">
-            <span className="user-select-none" title={gettext('Comment')} aria-label={gettext('Comment')}>{gettext('Comment')}</span>
-          </li>
-          <li className="dropdown-item operation-menu-item">
-            <span className="user-select-none" title={gettext('History')} aria-label={gettext('History')}>{gettext('History')}</span>
-          </li>
-          <li className="dropdown-item operation-menu-item">
-            <span className="user-select-none" title={gettext('Details')} aria-label={gettext('Details')}>{gettext('Details')}</span>
-          </li>
-        </ul>
-      );
-    }
-
+  onMenuItemClick = (operation) => {
+    this.props.onMenuItemClick(operation);
   }
 
   render() {
-    let type = this.getItemType();
-    let menu = null;
-    switch(type) {
-    case 'file':
-      menu = this.renderDirentFileMenu();
-      break;
-    case 'dir':
-      menu = this.renderDirentDirMenu();
-      break;
-    default:
-      break;
+    let position = this.props.menuPosition;
+    let style = {position: 'fixed', left: position.left, top: position.top, display: 'block'};
+    if (this.state.menuList.length) {
+      return (
+        <ul className="dropdown-menu operation-menu" style={style}>
+          {this.state.menuList.map((item, index) => {
+            return (
+              <OperationMenuItem key={index} item={item} onItemClick={this.onMenuItemClick}/>
+            );
+          })}
+        </ul>
+      );
     }
-    return menu;
+    return '';
   }
 }
 
