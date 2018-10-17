@@ -17,6 +17,7 @@ from seahub.utils.repo import get_repo_owner
 from seahub.api2.endpoints.utils import generate_links_header_for_paginator
 from seahub.views import check_folder_permission
 from seahub.drafts.models import DraftReview, ReviewComment
+from seahub.drafts.signals import comment_review_successful
 
 logger = logging.getLogger(__name__)
 
@@ -110,9 +111,9 @@ class ReviewCommentsView(APIView):
         username = request.user.username
 
         review_comment = ReviewComment.objects.add(comment, detail, username, r)
-        repo = seafile_api.get_repo(r.origin_repo_id)
-        repo_owner = get_repo_owner(request, repo.id)
-        # TODO
+
+        # Send notification to review creator
+        comment_review_successful.send(sender=None, review=r, comment=comment, author=username)
 
         comment = review_comment.to_dict()
         comment.update(user_to_dict(username, request=request, avatar_size=avatar_size))
