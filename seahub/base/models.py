@@ -99,7 +99,7 @@ class FileComment(models.Model):
     created_at = models.DateTimeField(default=timezone.now)
     updated_at = models.DateTimeField(default=timezone.now)
     resolved = models.BooleanField(default=False, db_index=True)
-    detail = models.TextField()
+    detail = models.TextField(default='')
 
     objects = FileCommentManager()
 
