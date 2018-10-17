@@ -41,25 +41,26 @@ class DraftManager(models.Manager):
         if file_id is None:
             file_id = seafile_api.get_file_id_by_path(repo.id, file_path)
 
-        # create drafts dir if any 
-        draft_dir_id = seafile_api.get_dir_id_by_path(repo.id, '/Drafts')
-        if draft_dir_id is None:
-            seafile_api.post_dir(repo.id, '/', 'Drafts', username)
+        if file_id.count('0') != 40 or '(draft)' not in file_path:
+            # create drafts dir if any
+            draft_dir_id = seafile_api.get_dir_id_by_path(repo.id, '/Drafts')
+            if draft_dir_id is None:
+                seafile_api.post_dir(repo.id, '/', 'Drafts', username)
 
-        # check draft file does not exists and copy origin file content to
-        # draft file
-        draft_file_name = get_draft_file_name(repo.id, file_path)
-        draft_file_path = '/Drafts/' + draft_file_name
+            # check draft file does not exists and copy origin file content to
+            # draft file
+            draft_file_name = get_draft_file_name(repo.id, file_path)
+            file_path = '/Drafts/' + draft_file_name
 
-        # copy file to draft dir
-        seafile_api.copy_file(repo.id, file_uuid.parent_path, file_uuid.filename,
-                              repo.id, '/Drafts', draft_file_name,
-                              username=username, need_progress=0, synchronous=1)
+            # copy file to draft dir
+            seafile_api.copy_file(repo.id, file_uuid.parent_path, file_uuid.filename,
+                                  repo.id, '/Drafts', draft_file_name,
+                                  username=username, need_progress=0, synchronous=1)
 
         draft = self.model(username=username,
                            origin_repo_id=repo.id, origin_file_uuid=file_uuid,
                            origin_file_version=file_id,
-                           draft_file_path=draft_file_path)
+                           draft_file_path=file_path)
         draft.save(using=self._db)
         return draft
 
@@ -80,7 +81,8 @@ class Draft(TimestampedModel):
 
     def delete(self):
         draft_file_name = os.path.basename(self.draft_file_path)
-        seafile_api.del_file(self.origin_repo_id, '/Drafts/',
+        draft_file_path = os.path.dirname(self.draft_file_path)
+        seafile_api.del_file(self.origin_repo_id, draft_file_path,
                              draft_file_name, self.username)
 
         super(Draft, self).delete()
@@ -105,14 +107,22 @@ class Draft(TimestampedModel):
             raise DraftFileConflict
 
         draft_file_name = os.path.basename(self.draft_file_path)
+        draft_file_path = os.path.dirname(self.draft_file_path)
+
+        file_name = self.origin_file_uuid.filename
+
+        if draft_file_path != '/Drafts':
+            f = os.path.splitext(draft_file_name)[0][:-7]
+            file_type = os.path.splitext(draft_file_name)[-1]
+            file_name = f + file_type
+
         # move draft file to origin file
         seafile_api.move_file(
-            self.origin_repo_id, '/Drafts', draft_file_name,
+            self.origin_repo_id, draft_file_path, draft_file_name,
             self.origin_repo_id, self.origin_file_uuid.parent_path,
-            self.origin_file_uuid.filename, replace=1,
+            file_name, replace=1,
             username=self.username, need_progress=0, synchronous=1
         )
-
 
     def to_dict(self):
         uuid = self.origin_file_uuid

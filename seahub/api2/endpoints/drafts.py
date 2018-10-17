@@ -56,16 +56,16 @@ class DraftsView(APIView):
             error_msg = 'Library %s not found.' % repo_id
             return api_error(status.HTTP_404_NOT_FOUND, error_msg)
 
-        file_id = seafile_api.get_file_id_by_path(repo.id, file_path)
-        if not file_id:
-            return api_error(status.HTTP_404_NOT_FOUND,
-                             "File %s not found" % file_path)
-
         # perm check
         perm = check_folder_permission(request, repo.id, file_path)
         if perm != PERMISSION_READ_WRITE:
             error_msg = 'Permission denied.'
             return api_error(status.HTTP_403_FORBIDDEN, error_msg)
+
+        file_id = seafile_api.get_file_id_by_path(repo.id, file_path)
+        if not file_id:
+            return api_error(status.HTTP_404_NOT_FOUND,
+                             "File %s not found" % file_path)
 
         username = request.user.username
 
