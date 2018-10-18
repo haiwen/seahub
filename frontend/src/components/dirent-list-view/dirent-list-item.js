@@ -1,6 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { serviceUrl, gettext } from '../../utils/constants';
+import { serviceUrl, gettext, repoID } from '../../utils/constants';
+import { seafileAPI } from '../../utils/seafile-api';
 import OperationGroup from '../dirent-operation/operation-group';
 
 const propTypes = {
@@ -10,8 +11,8 @@ const propTypes = {
   onItemMenuShow: PropTypes.func.isRequired,
   onItemMenuHide: PropTypes.func.isRequired,
   onItemDelete: PropTypes.func.isRequired,
-  onItemStarred: PropTypes.func.isRequired,
   onItemDownload: PropTypes.func.isRequired,
+  updateViewList: PropTypes.func.isRequired,
 };
 
 class DirentListItem extends React.Component {
@@ -68,25 +69,37 @@ class DirentListItem extends React.Component {
   onItemSelected = () => {
     //todos;
   }
-
+  
   onItemStarred = () => {
-    this.props.onItemStarred(this.props.dirent);
+    let dirent = this.props.dirent;
+    let filePath = this.getDirentPath(dirent);
+    if (dirent.starred) {
+      seafileAPI.unStarFile(repoID, filePath).then(() => {
+        this.props.updateViewList(this.props.filePath);
+      });
+    } else {
+      seafileAPI.starFile(repoID, filePath).then(() => {
+        this.props.updateViewList(this.props.filePath);
+      });
+    }
   }
-
+  
   onItemClick = () => {
-    this.props.onItemClick(this.props.dirent);
+    let direntPath = this.getDirentPath(this.props.dirent);
+    this.props.onItemClick(direntPath);
   }
-
 
   onItemDownload = () => {
-    this.props.onItemDownload(this.props.dirent);
+    let direntPath = this.getDirentPath(this.props.dirent);
+    this.props.onItemDownload(this.props.dirent, direntPath);
   }
 
   onItemDelete = () => {
-    this.props.onItemDelete(this.props.dirent);
+    let direntPath = this.getDirentPath(this.props.dirent);
+    this.props.onItemDelete(direntPath);
   }
 
-  onMenuItemClick = (operation) => {
+  onItemMenuItemClick = (operation) => {
     switch(operation) {
       case 'Rename': 
         this.onRenameItem();
@@ -129,6 +142,59 @@ class DirentListItem extends React.Component {
     }
   }
 
+  onRenameItem = () => {
+
+  }
+  
+  onMoveItem = () => {
+
+  }
+
+  onCopyItem = () => {
+
+  }
+
+  onPermissionItem = () => {
+
+  }
+
+  onDetailsItem = () => {
+
+  }
+
+  onLockItem = () => {
+    
+  }
+
+  onUnlockItem = () => {
+
+  }
+
+  onNewDraft = () => {
+
+  }
+
+  onComnentItem = () => {
+
+  }
+
+  onHistory = () => {
+
+  }
+
+  onAccessLog = () => {
+
+  }
+
+  onOpenViaClient = () => {
+
+  }
+
+  getDirentPath = (dirent) => {
+    let path = this.props.filePath;
+    return path === '/' ? path + dirent.name : path + '/' + dirent.name;
+  }
+
   render() {
     let { dirent } = this.props;
     return (
@@ -153,6 +219,7 @@ class DirentListItem extends React.Component {
               onItemMenuHide={this.onItemMenuHide}
               onDownload={this.onItemDownload}
               onDelete={this.onItemDelete}
+              onMenuItemClick={this.props.onItemMenuItemClick}
             />
           }
         </td>

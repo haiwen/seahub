@@ -3,7 +3,6 @@ import PropTypes from 'prop-types';
 import { gettext, repoID } from '../../utils/constants';
 import URLDecorator from '../../utils/url-decorator';
 import editorUtilities from '../../utils/editor-utilties';
-import { seafileAPI } from '../../utils/seafile-api';
 import DirentListItem from './dirent-list-item';
 import ZipDownloadDialog from '../dialog/zip-download-dialog';
 
@@ -34,30 +33,7 @@ class DirentListView extends React.Component {
     this.setState({isItemFreezed: false});
   }
 
-  onItemClick = (dirent) => {
-    let direntPath = this.getDirentPath(dirent);
-    this.props.onItemClick(direntPath);
-  }
-
-  onItemDelete = (dirent) => {
-    let direntPath = this.getDirentPath(dirent);
-    this.props.onItemDelete(direntPath);
-  }
-
-  onItemStarred = (dirent) => {
-    let filePath = this.getDirentPath(dirent);
-    if (dirent.starred) {
-      seafileAPI.unStarFile(repoID, filePath).then(() => {
-        this.props.updateViewList(this.props.filePath);
-      });
-    } else {
-      seafileAPI.starFile(repoID, filePath).then(() => {
-        this.props.updateViewList(this.props.filePath);
-      });
-    }
-  }
-
-  onItemDownload = (dirent) => {
+  onItemDownload = (dirent, direntPath) => {
     if (dirent.type === 'dir') {
       this.setState({isProgressDialogShow: true, progress: '0%'});
       editorUtilities.zipDownload(this.props.filePath, dirent.name).then(res => {
@@ -66,8 +42,7 @@ class DirentListView extends React.Component {
         this.interval = setInterval(this.addDownloadAnimation, 1000);
       });
     } else {
-      let path = this.getDirentPath(dirent);
-      let url = URLDecorator.getUrl({type: 'download_file_url', repoID: repoID, filePath: path});
+      let url = URLDecorator.getUrl({type: 'download_file_url', repoID: repoID, filePath: direntPath});
       location.href = url;
     }
   }
@@ -103,11 +78,6 @@ class DirentListView extends React.Component {
     });
   }
 
-  getDirentPath = (dirent) => {
-    let path = this.props.filePath;
-    return path === '/' ? path + dirent.name : path + '/' + dirent.name;
-  }
-
   render() {
     const { direntList } = this.props;
     return (
@@ -131,13 +101,14 @@ class DirentListView extends React.Component {
                   <DirentListItem
                     key={index}
                     dirent={dirent}
+                    filePath={this.props.filePath}
+                    onItemClick={this.props.onItemClick}
+                    onItemDelete={this.props.onItemDelete}
+                    updateViewList={this.props.updateViewList}
                     isItemFreezed={this.state.isItemFreezed}
                     onItemMenuShow={this.onItemMenuShow}
                     onItemMenuHide={this.onItemMenuHide}
-                    onItemDelete={this.onItemDelete}
-                    onItemStarred={this.onItemStarred}
                     onItemDownload={this.onItemDownload}
-                    onItemClick={this.onItemClick}
                   />
                 );
               })

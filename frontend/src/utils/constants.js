@@ -18,7 +18,7 @@ export const canGenerateShareLink = window.app.pageOptions.canGenerateShareLink 
 export const canGenerateUploadLink = window.app.pageOptions.canGenerateUploadLink === 'True';
 export const fileAuditEnabled = window.app.pageOptions.fileAuditEnabled ? true : false;
 export const enableFileComment = window.app.pageOptions.enableFileComment ? true : false;
-
+export const folderPermEnabled = window.app.pageOptions.folderPermEnabled === 'True';
 // wiki
 export const slug = window.wiki ? window.wiki.config.slug : '';
 export const repoID = window.wiki ? window.wiki.config.repoId : '';
