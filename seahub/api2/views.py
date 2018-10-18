@@ -2648,6 +2648,42 @@ class DevicesView(APIView):
         return Response({'success': True})
 
 
+class FileMetaDataView(APIView):
+    authentication_classes = (TokenAuthentication, SessionAuthentication)
+    permission_classes = (IsAuthenticated, )
+    throttle_classes = (UserRateThrottle, )
+
+    def get(self, request, repo_id, format=None):
+        # file metadata
+        repo = get_repo(repo_id)
+        if not repo:
+            return api_error(status.HTTP_404_NOT_FOUND, 'Library not found.')
+
+        path = request.GET.get('p', None)
+        if not path:
+            return api_error(status.HTTP_400_BAD_REQUEST, 'Path is missing.')
+
+        parent_dir = os.path.dirname(path)
+        if check_folder_permission(request, repo_id, parent_dir) is None:
+            return api_error(status.HTTP_403_FORBIDDEN,
+                    'You do not have permission to access this file.')
+
+        file_id = None
+        try:
+            file_id = seafile_api.get_file_id_by_path(repo_id, path)
+        except SearpcError as e:
+            logger.error(e)
+            return api_error(HTTP_520_OPERATION_FAILED,
+                             "Failed to get file id by path.")
+
+        if not file_id:
+            return api_error(status.HTTP_404_NOT_FOUND, "File not found")
+
+        return Response({
+            'id': file_id,
+        })
+
+
 class FileView(APIView):
     """
     Support uniform interface for file related operations,
@@ -3313,6 +3349,37 @@ class FileSharedLinkView(APIView):
         return resp
 
 ########## Directory related
+class DirMetaDataView(APIView):
+    authentication_classes = (TokenAuthentication, SessionAuthentication)
+    permission_classes = (IsAuthenticated, )
+    throttle_classes = (UserRateThrottle, )
+
+    def get(self, request, repo_id, format=None):
+        # recource check
+        repo = seafile_api.get_repo(repo_id)
+        if not repo:
+            error_msg = 'Library %s not found.' % repo_id
+            return api_error(status.HTTP_404_NOT_FOUND, error_msg)
+
+        path = request.GET.get('p', '/')
+        path = normalize_dir_path(path)
+
+        dir_id = seafile_api.get_dir_id_by_path(repo_id, path)
+        if not dir_id:
+            error_msg = 'Folder %s not found.' % path
+            return api_error(status.HTTP_404_NOT_FOUND, error_msg)
+
+        # permission check
+        permission = check_folder_permission(request, repo_id, path)
+        if not permission:
+            error_msg = 'Permission denied.'
+            return api_error(status.HTTP_403_FORBIDDEN, error_msg)
+
+        return Response({
+            'id': dir_id,
+        })
+
+
 class DirView(APIView):
     """
     Support uniform interface for directory operations, including
