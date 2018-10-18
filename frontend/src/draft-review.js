@@ -3,13 +3,13 @@ import ReactDOM from 'react-dom';
 /* eslint-disable */
 import Prism from 'prismjs';
 /* eslint-enable */
-import { siteRoot, gettext, draftID, reviewID, draftOriginFilePath, draftFilePath, draftOriginRepoID, draftFileName, opStatus, publishFileVersion, originFileVersion } from './utils/constants';
+import { siteRoot, gettext, reviewID, draftOriginFilePath, draftFilePath, draftOriginRepoID, draftFileName, opStatus, publishFileVersion, originFileVersion } from './utils/constants';
 import { seafileAPI } from './utils/seafile-api';
 import axios from 'axios';
 import DiffViewer from '@seafile/seafile-editor/dist/viewer/diff-viewer';
 import Loading from './components/loading';
 import Toast from './components/toast';
-import CommentsList from './components/review-list-view/commonts-list';
+import ReviewComments from './components/review-list-view/review-comments';
 
 import 'seafile-ui';
 import './assets/css/fa-solid.css';
@@ -19,7 +19,6 @@ import './css/layout.css';
 import './css/initial-style.css';
 import './css/toolbar.css';
 import './css/draft-review.css';
-
 
 require('@seafile/seafile-editor/dist/editor/code-hight-package');
 
@@ -50,12 +49,12 @@ class DraftReview extends React.Component {
             draftContent: draftContent.data,
             draftOriginContent: draftOriginContent.data,
             isLoading: false
-          });
+          }); 
         }));
       }));
     } else {
-      let dl0 = siteRoot + 'repo/' + draftOriginRepoID + '/' + publishFileVersion + '/download?' + 'p=' + draftOriginFilePath;
-      let dl = siteRoot + 'repo/' + draftOriginRepoID + '/' + originFileVersion + '/download?' + 'p=' + draftOriginFilePath;
+      let dl0 = siteRoot + 'repo/' + draftOriginRepoID + '/' + publishFileVersion + '/download?' + 'p=' + draftOriginFilePath; 
+      let dl = siteRoot + 'repo/' + draftOriginRepoID + '/' + originFileVersion + '/download?' + 'p=' + draftOriginFilePath; 
       axios.all([
         seafileAPI.getFileContent(dl0),
         seafileAPI.getFileContent(dl)
@@ -64,7 +63,7 @@ class DraftReview extends React.Component {
           draftContent: draftContent.data,
           draftOriginContent: draftOriginContent.data,
           isLoading: false,
-        });
+        }); 
       }));
     }
   }
@@ -119,31 +118,31 @@ class DraftReview extends React.Component {
               <span className="file-copywriting">{gettext('review')}</span>
             </div>
           </div>
-          {
-            this.state.reviewStatus === 'open' &&
-            <div className="cur-file-operation">
-              <button className="btn btn-secondary file-operation-btn" title={gettext('Close Review')} onClick={this.onCloseReview}>{gettext("Close")}</button>
-              <button className="btn btn-success file-operation-btn" title={gettext('Publish Review')} onClick={this.onPublishReview}>{gettext("Publish")}</button>
-              {this.state.commentsNumber > 0 ?
-                <button className="btn btn-primary common-list-btn"
-                  title={gettext('Comments')} onClick={this.toggleCommentList}>{gettext("Comments")}
-                  <span className="common-list-btn-number">{this.state.commentsNumber}</span>
-                </button>
-                :
-                <button className="btn btn-primary common-list-btn"
-                  title={gettext('Comments')} onClick={this.toggleCommentList}>
-                  {gettext("Comments")}</button>
+          <div className="button-group">
+            <button className="btn btn-icon btn-secondary btn-active common-list-btn"
+              id="commentsNumber" type="button" data-active="false"
+              onMouseDown={this.toggleCommentList}>
+              <i className="fa fa-comments"></i>
+              { this.state.commentsNumber > 0 &&
+                <span>&nbsp;{this.state.commentsNumber}</span>
               }
-            </div>
-          }
-          {
-            this.state.reviewStatus === 'finished' &&
-            <div className="review-state review-state-finished">{gettext('Finished')}</div>
-          }
-          {
-            this.state.reviewStatus === 'closed' &&
-            <div className="review-state review-state-closed">{gettext('Closed')}</div>
-          }
+            </button>
+            {
+              this.state.reviewStatus === 'open' &&
+              <div className="cur-file-operation">
+                <button className="btn btn-secondary file-operation-btn" title={gettext('Close Review')} onClick={this.onCloseReview}>{gettext("Close")}</button>
+                <button className="btn btn-success file-operation-btn" title={gettext('Publish Review')} onClick={this.onPublishReview}>{gettext("Publish")}</button>
+              </div>
+            }
+            {
+              this.state.reviewStatus === 'finished' &&
+              <div className="review-state review-state-finished">{gettext('Finished')}</div>
+            }
+            {
+              this.state.reviewStatus === 'closed' && 
+              <div className="review-state review-state-closed">{gettext('Closed')}</div>
+            }
+          </div>
         </div>
         <div id="main" className="main">
           <div className="cur-view-container content-container">
@@ -156,7 +155,7 @@ class DraftReview extends React.Component {
               </div>
             </div>
             { this.state.isShowComments &&
-              <CommentsList
+              <ReviewComments
                 toggleCommentList={this.toggleCommentList}
                 commentsNumber={this.state.commentsNumber}
                 getCommentsNumber={this.getCommentsNumber}

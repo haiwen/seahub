@@ -1,4 +1,4 @@
-var unified = require('../lib/unified');
+var unified = require('unified');
 var markdown = require('remark-parse');
 var slug = require('remark-slug');
 var breaks = require('remark-breaks');
@@ -10,8 +10,6 @@ var toHTML = require('hast-util-to-html');
 var sanitize = require('hast-util-sanitize');
 var gh = require('hast-util-sanitize/lib/github');
 var deepmerge = require('deepmerge').default;
-// var github = require('hast-util-sanitize/lib/github');
-
 
 function stringify(config) {
   var settings = xtend(config, this.data('settings'));
@@ -35,14 +33,11 @@ function stringify(config) {
   this.Compiler = compiler;
 
   function compiler(tree) {
-    // use sanity to remove dangerous html, the default is
-    // GitHub style sanitation
     var hast = sanitize(tree, schema);
     return toHTML(hast, settings);
   }
 }
 
-// markdown -> mdast -> html AST -> html
 var processor = unified()
   .use(markdown, {commonmark: true})
   .use(breaks)

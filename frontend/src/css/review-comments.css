@@ -5,8 +5,7 @@
   flex-direction: column;
   flex: 0 0 auto;
   min-height: 18.5em;
-  z-index: 3;
-  width: 28em;
+  width: 30em;
 }
 .seafile-comment-title {
   border-bottom: 1px solid #e5e5e5;
@@ -34,13 +33,16 @@
   overflow-y: auto;
   margin-bottom: 0;
 }
+.seafile-comment .loading-icon {
+  margin-top: 20px;
+}
 .seafile-comment-list .comment-vacant {
   padding: 1em;
   text-align: center;
 }
 .seafile-comment-item {
   overflow-y: auto;
-  padding: 0.8em 1.5em;
+  padding: 15px 10px;
   overflow-y: hidden;
 }
 .seafile-comment-item .seafile-comment-info {
@@ -50,28 +52,26 @@
   justify-content: flex-start;
 }
 .seafile-comment-item .seafile-comment-info .reviewer-head {
-  width: 40px;
-  height: 40px;
-  display: inline-block;
-  border-radius: 20px;
+  margin-top: .3em;
 }
 .seafile-comment-item .seafile-comment-info .reviewer-info {
-  padding-left: .5em;
+  padding-left: 10px;
 }
 .seafile-comment-item .seafile-comment-info .review-time {
-  font-size: 10px;
+  font-size: .6em;
   color: #777;
 }
-.seafile-comment-item .seafile-comment-info .seafile-comment-resolved,
 .seafile-comment-item .seafile-comment-info .seafile-comment-dropdown {
   margin-left: auto;
-  height: 3em;
-  z-index: 4;
 }
-.seafile-comment-item .seafile-comment-info .seafile-comment-dropdown button {
+.seafile-comment-item .seafile-comment-info .seafile-comment-dropdown button,
+.seafile-comment-item .seafile-comment-info .seafile-comment-dropdown button:hover,
+.seafile-comment-item .seafile-comment-info .seafile-comment-dropdown button:focus
+ {
   border: none;
   box-shadow: none;
   background-color: #fff;
+  height: 100%;
 }
 .seafile-comment-item .seafile-comment-info.seafile-comment-dropdown .seafile-comment-dropdown-btn {
   color: #999;
@@ -79,11 +79,13 @@
 .seafile-comment-item .seafile-comment-info .seafile-comment-dropdown:hover .seafile-comment-dropdown-btn {
   color: #555;
 }
-.seafile-comment-item .seafile-comment-info .seafile-comment-dropdown button:hover,
-.seafile-comment-item .seafile-comment-info .seafile-comment-dropdown button:focus {
-  border: none;
-  box-shadow: none;
-  background-color: #eee;
+.seafile-comment-item .seafile-comment-content {
+  margin-left: 42px;
+}
+.seafile-comment-item .seafile-comment-content ol,
+.seafile-comment-item .seafile-comment-content ul,
+.seafile-comment-item .seafile-comment-content li {
+  margin-left: 10px;
 }
 .seafile-comment-item .seafile-comment-content table,
 .seafile-comment-item .seafile-comment-content th,
@@ -92,19 +94,14 @@
 }
 .seafile-comment-footer {
   background-color: #fafaf9;
-  padding: .5em .6em .5em .8em;
+  padding: 10px;
   border-top: 1px solid #e5e5e5;
   display: flex;
   justify-content: flex-start;
-}
-.seafile-comment-footer .user-header {
-  border-radius: 20px;
-  overflow: hidden;
-  width: 40px;
-  height: 40px;
+  min-height: 150px;
 }
 .seafile-comment-footer .seafile-add-comment {
-  margin-left: auto;
+  margin-left: 10px;
   overflow: hidden;
   width: 25em;
   display: flex;
@@ -114,22 +111,13 @@
   box-sizing: border-box;
   background-color: #fff;
   border: 1px solid #e6e6dd;
-  padding: .5em;
+  padding: 5px;
   width: 25em;
-  min-height: 3em;
+  min-height: 90px;
 }
 .seafile-comment-footer .seafile-add-comment .submit-comment {
-  margin-top: .3em;
-  width: 5em;
-  height: 3em;
-}
-@media (max-width: 991.8px) {
-  .seafile-comment {
-    display: none;
-  }
-}
-@media (min-width: 992px) {
-  .seafile-comment {
-    width: 28em;
-  }
+  margin-top: 5px;
+  width: 60px;
+  height: 28px;
+  min-height: 28px;
 }

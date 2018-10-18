@@ -4,11 +4,11 @@ import { Button, Input, Dropdown, DropdownToggle, DropdownMenu, DropdownItem } f
 import { seafileAPI } from '../../utils/seafile-api';
 import { draftID, reviewID, gettext } from '../../utils/constants';
 import moment from 'moment';
+import Loading from '../../components/loading.js';
 
-import '../../css/common-list.css';
+import '../../css/review-comments.css';
 
-
-class CommentsList extends React.Component {
+class ReviewComments extends React.Component {
 
   constructor(props) {
     super(props);
@@ -29,7 +29,6 @@ class CommentsList extends React.Component {
 
   getUserAvatar = () => {
     seafileAPI.getAccountInfo().then((res) => {
-      console.log(res.data);
       this.accountInfo = res.data;
       this.setState({
         userAvatar: res.data.avatar_url,
@@ -46,7 +45,7 @@ class CommentsList extends React.Component {
   submitComment = () => {
     let comment = this.refs.commentTextarea.value;
     if (comment.trim().length > 0) {
-      seafileAPI.postReviewComment(reviewID, comment.trim()).then((res) => {
+      seafileAPI.addReviewComment(reviewID, comment.trim()).then((res) => {
         this.listComments();
         this.props.getCommentsNumber();
       });
@@ -81,8 +80,16 @@ class CommentsList extends React.Component {
           </div>
           <div className={'seafile-comment-title-text'}>{gettext('Comments')}</div>
         </div>
+        { this.props.commentsNumber == 0 &&
+          <div className={"seafile-comment-list"}>
+            <div className="comment-vacant">{gettext('No comment yet.')}</div>
+          </div>
+        }
+        { (this.state.commentsList.length == 0 && this.props.commentsNumber > 0) &&
+          <div><Loading/></div>
+        }
         <ul className={"seafile-comment-list"}>
-          { this.props.commentsNumber > 0 ?
+          { (this.state.commentsList.length > 0 && this.props.commentsNumber > 0) &&
             this.state.commentsList.map((item, index = 0, arr) => {
               if (item.resolved) {
                 return
@@ -102,20 +109,19 @@ class CommentsList extends React.Component {
                 )
               }
             })
-          : <li className="comment-vacant">{gettext('no comment yet.')}</li>
           }
         </ul>
         <div className="seafile-comment-footer">
           <div className="user-header">
-            <img src={this.state.userAvatar}/>
+            <img className="avatar" src={this.state.userAvatar}/>
           </div>
           <div className="seafile-add-comment">
             <textarea className="add-comment-input" ref="commentTextarea"
-              placeholder={gettext('add a comment.')}
+              placeholder={gettext('Add a comment.')}
               clos="100" rows="3" warp="virtual"></textarea>
             <Button className="submit-comment" color="success"
               size="sm" onClick={this.submitComment}>
-              {gettext('submit')}</Button>
+              {gettext('Submit')}</Button>
           </div>
         </div>
       </div>
@@ -162,27 +168,26 @@ class CommentItem extends React.Component {
     return (
       <li className="seafile-comment-item" id={this.props.id}>
         <div className="seafile-comment-info">
-          <img className="reviewer-head" src={this.props.headUrl} />
+          <img className="avatar reviewer-head" src={this.props.headUrl} />
           <div className="reviewer-info">
             <div className="reviewer-name">{this.props.name}</div>
             <div className="review-time">{this.props.time}</div>
           </div>
-          { (this.props.user_email === this.props.accountInfo.email) ?
-              <Dropdown isOpen={this.state.dropdownOpen} size="sm"
-                className="seafile-comment-dropdown" toggle={this.toggleDropDownMenu}>
-                <DropdownToggle className="seafile-comment-dropdown-btn">
-                  <i className="fas fa-ellipsis-v"></i>
-                </DropdownToggle>
-                <DropdownMenu>
-                  <DropdownItem onClick={this.props.deleteComment}
-                    className="deleteComment" id={this.props.id}>{gettext('delete')}</DropdownItem>
-                </DropdownMenu>
-              </Dropdown>
-            :
-            <Button className="seafile-comment-resolved" id={this.props.id} color="secondary"
-              size="sm" onClick={this.props.resolveComment}>
-              {gettext('resolved')}</Button>
-          }
+          <Dropdown isOpen={this.state.dropdownOpen} size="sm"
+            className="seafile-comment-dropdown" toggle={this.toggleDropDownMenu}>
+            <DropdownToggle className="seafile-comment-dropdown-btn">
+              <i className="fas fa-ellipsis-v"></i>
+            </DropdownToggle>
+            <DropdownMenu>
+              {
+                (this.props.user_email === this.props.accountInfo.email) &&
+              <DropdownItem onClick={this.props.deleteComment}
+                className="delete-comment" id={this.props.id}>{gettext('Delete')}</DropdownItem>
+              }
+              <DropdownItem onClick={this.props.resolveComment}
+                className="seafile-comment-resolved" id={this.props.id}>{gettext('Mark as resolved')}</DropdownItem>
+            </DropdownMenu>
+          </Dropdown>
         </div>
         <div className="seafile-comment-content" dangerouslySetInnerHTML={{ __html: this.state.html }}></div>
       </li>
@@ -190,4 +195,4 @@ class CommentItem extends React.Component {
   }
 }
 
-export default CommentsList;
+export default ReviewComments;
