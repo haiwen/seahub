@@ -106,14 +106,7 @@ class MainPanel extends Component {
               />
             }
             { !this.props.isViewFileState && 
-              <TreeDirView 
-                node={this.props.changedNode}
-                needOperationGroup={this.state.needOperationGroup}
-                onMainNodeClick={this.props.onMainNodeClick}
-                onDeleteItem={this.props.onDeleteNode}
-                onRenameItem={this.props.onRenameNode}
-              >
-              </TreeDirView>
+              <TreeDirView node={this.props.changedNode} onMainNodeClick={this.props.onMainNodeClick} />
             }
           </div>
         </div>
