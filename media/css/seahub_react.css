@@ -74,6 +74,8 @@
 .sf2-icon-delete:before { content:"\e006"; }
 .sf2-icon-caret-down:before { content:"\e01a"; }
 .sf2-icon-two-columns:before { content:"\e036"; }
+.sf2-icon-confirm:before {content:"\e01e"}
+.sf2-icon-cancel:before {content:"\e01f"}
 
 /* common class and element style*/
 a { color:#eb8205; }
@@ -786,6 +788,32 @@ a.op-icon:focus {
     position: relative;
     text-align: center;
 }
+
+.table-container table .rename-container input {
+    box-sizing: content-box;
+    padding: 2px 3px;
+    width: 16.25rem;
+    height: 22px;
+    line-height: 19px;
+    border-radius: 2px;
+    word-wrap: break-word;
+    vertical-align: middle;
+    border: 1px solid #ccc;
+}
+
+.table-container table .rename-container button {
+    margin-left: 0.25rem;
+    padding: 5px 6px;
+    font-size: 1rem;
+    line-height: 1;
+    color: #666;
+    min-width: 0;
+}
+
+.table-container table .rename-container .confirm {
+    color: green;
+}
+
 
 .table-container table .star .empty {
     color: #d0d0d0;

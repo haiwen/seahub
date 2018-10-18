@@ -25,6 +25,7 @@ const propTypes = {
   onLinkClick: PropTypes.func.isRequired,
   onMainItemClick: PropTypes.func.isRequired,
   onMainItemDelete: PropTypes.func.isRequired,
+  onMainItemRename: PropTypes.func.isRequired,
   onMainAddFile: PropTypes.func.isRequired,
   onMainAddFolder: PropTypes.func.isRequired,
   switchViewMode: PropTypes.func.isRequired,
@@ -262,6 +263,7 @@ class MainPanel extends Component {
                 filePath={this.props.filePath}
                 onItemClick={this.props.onMainItemClick}
                 onItemDelete={this.props.onMainItemDelete}
+                onItemRename={this.props.onMainItemRename}
                 updateViewList={this.updateViewList}
               />
             }

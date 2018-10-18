@@ -10,6 +10,7 @@ const propTypes = {
   filePath: PropTypes.string.isRequired,
   direntList: PropTypes.array.isRequired,
   onItemDelete: PropTypes.func.isRequired,
+  onItemRename: PropTypes.func.isRequired,
   onItemClick: PropTypes.func.isRequired,
   updateViewList: PropTypes.func.isRequired,
 };
@@ -33,9 +34,8 @@ class DirentListView extends React.Component {
     this.setState({isItemFreezed: false});
   }
 
-  onRenameItem = (dirent) => {
-    dirent.isRenameing = true;
-    this.setState({isItemFreezed: true});
+  onRenameMenuItemClick = () => {
+    this.onFreezedItem();
   }
 
   onItemDownload = (dirent, direntPath) => {
@@ -108,13 +108,14 @@ class DirentListView extends React.Component {
                     dirent={dirent}
                     filePath={this.props.filePath}
                     onItemClick={this.props.onItemClick}
+                    onRenameMenuItemClick={this.onRenameMenuItemClick}
                     onItemDelete={this.props.onItemDelete}
+                    onItemRename={this.props.onItemRename}
                     updateViewList={this.props.updateViewList}
                     isItemFreezed={this.state.isItemFreezed}
                     onFreezedItem={this.onFreezedItem}
                     onUnfreezedItem={this.onUnfreezedItem}
                     onItemDownload={this.onItemDownload}
-                    onRenameItem={this.onRenameItem}
                   />
                 );
               })

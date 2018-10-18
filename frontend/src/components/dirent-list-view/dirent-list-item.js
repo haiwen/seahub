@@ -4,6 +4,7 @@ import { serviceUrl, gettext, repoID } from '../../utils/constants';
 import { seafileAPI } from '../../utils/seafile-api';
 import URLDecorator from '../../utils/url-decorator';
 import DirentMenu from './dirent-menu';
+import DirentRename from './dirent-rename';
 
 const propTypes = {
   isItemFreezed: PropTypes.bool.isRequired,
@@ -11,7 +12,9 @@ const propTypes = {
   onItemClick: PropTypes.func.isRequired,
   onFreezedItem: PropTypes.func.isRequired,
   onUnfreezedItem: PropTypes.func.isRequired,
+  onRenameMenuItemClick: PropTypes.func.isRequired,
   onItemDelete: PropTypes.func.isRequired,
+  onItemRename: PropTypes.func.isRequired,
   onItemDownload: PropTypes.func.isRequired,
   updateViewList: PropTypes.func.isRequired,
 };
@@ -90,7 +93,8 @@ class DirentListItem extends React.Component {
     this.setState({
       isOperationShow: false,
       highlight: '',
-      isItemMenuShow: false
+      isItemMenuShow: false,
+      isRenameing: false,
     });
     this.props.onUnfreezedItem();
   }
@@ -134,7 +138,7 @@ class DirentListItem extends React.Component {
   onItemMenuItemClick = (operation) => {
     switch(operation) {
       case 'Rename': 
-        this.onRenameItem();
+        this.onRenameMenuItemClick();
         break;
       case 'Move':
         this.onMoveItem();
@@ -174,12 +178,34 @@ class DirentListItem extends React.Component {
     }
   }
 
-  onRenameItem = () => {
+  onRenameMenuItemClick = () => {
     this.setState({
       isOperationShow: false,
-      isItemMenuShow: false
+      isItemMenuShow: false,
+      isRenameing: true,
     });
-    this.props.onRenameItem(this.props.dirent);
+    this.props.onRenameMenuItemClick(this.props.dirent);
+  }
+
+  onChange = (e) => {
+    let value = e.target.value;
+    this.setState({
+      dirent_name: value
+    });
+  }
+
+  onRenameConfirm = (newName) => {
+    //todos; 校验
+    let direntPath = this.getDirentPath(this.props.dirent);
+    this.props.onItemRename(direntPath, newName);
+    this.onRenameCancel();
+  }
+
+  onRenameCancel = () => {
+    this.setState({
+      isRenameing: false,
+    });
+    this.props.onUnfreezedItem();
   }
   
   onMoveItem = () => {
@@ -273,13 +299,9 @@ class DirentListItem extends React.Component {
           </div>
         </td>
         <td className="name a-simulate">
-          {!dirent.isRenameing && <span onClick={this.onItemClick}>{dirent.name}</span>}
-          {dirent.isRenameing && 
-            <div className="rename-conatiner">
-              <input></input>
-              <button>确定</button>
-              <button>取消</button>
-            </div>
+          {this.state.isRenameing ?
+            <DirentRename dirent={dirent} onRenameConfirm={this.onRenameConfirm} onRenameCancel={this.onRenameCancel}/> :
+            <span onClick={this.onItemClick}>{dirent.name}</span>
           }
         </td>
         <td className="operation">

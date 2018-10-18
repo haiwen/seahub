@@ -182,9 +182,10 @@ class Wiki extends Component {
     let node = this.state.tree_data.getNodeByPath(direntPath);
     this.onDeleteNode(node);
   }
-
-  onMainItemRename = () => {
-    //todos:
+  
+  onMainItemRename = (direntPath, newName) => {
+    let node = this.state.tree_data.getNodeByPath(direntPath);
+    this.onRenameNode(node, newName);
   }
 
   onNodeClick = (e, node) => {
@@ -537,6 +538,7 @@ class Wiki extends Component {
           onMainNavBarClick={this.onMainNavBarClick}
           onMainItemClick={this.onMainItemClick}
           onMainItemDelete={this.onMainItemDelete}
+          onMainItemRename={this.onMainItemRename}
           onMainAddFile={this.onAddFileNode}
           onMainAddFolder={this.onAddFolderNode}
         />
