@@ -59,7 +59,7 @@ from seahub.utils import render_error, is_org_context, \
 from seahub.utils.ip import get_remote_ip
 from seahub.utils.timeutils import utc_to_local
 from seahub.utils.file_types import (IMAGE, PDF, SVG,
-        DOCUMENT, SPREADSHEET, AUDIO, MARKDOWN, TEXT, VIDEO, DRAW)
+        DOCUMENT, SPREADSHEET, AUDIO, MARKDOWN, TEXT, VIDEO, DRAW, XMIND)
 from seahub.utils.star import is_file_starred
 from seahub.utils.http import json_response, \
         BadRequestException, RequestForbbiddenException
@@ -69,6 +69,8 @@ from seahub.views import check_folder_permission, \
         get_unencry_rw_repos_by_user
 from seahub.utils.repo import is_repo_owner
 from seahub.group.utils import is_group_member
+from seahub.thumbnail.utils import extract_xmind_image, get_thumbnail_src, \
+        XMIND_IMAGE_SIZE, THUMBNAIL_ROOT
 
 from seahub.constants import HASH_URLS
 
@@ -644,6 +646,22 @@ def view_lib_file(request, repo_id, path):
         else:
             return render(request, template, return_dict)
 
+    elif filetype == XMIND:
+
+        xmind_dir = os.path.join(THUMBNAIL_ROOT, str(XMIND_IMAGE_SIZE))
+        xmind_image = os.path.join(xmind_dir, file_id)
+        if not os.path.exists(xmind_image):
+            try:
+                extract_xmind_image(repo_id, path)
+                return_dict['xmind_image_src'] = get_thumbnail_src(repo_id,
+                        XMIND_IMAGE_SIZE, path)
+            except Exception as e:
+                logger.error(e)
+                error_msg = _(u'Unable to view file')
+                return_dict['err'] = error_msg
+
+        return render(request, 'view_file_image.html', return_dict)
+
     elif filetype == IMAGE:
         if file_size > FILE_PREVIEW_MAX_SIZE:
             error_msg = _(u'File size surpasses %s, can not be opened online.') % \
@@ -928,7 +946,6 @@ def _download_file_from_share_link(request, fileshare):
     """
     next = request.META.get('HTTP_REFERER', settings.SITE_ROOT)
 
-    username = request.user.username
     repo = get_repo(fileshare.repo_id)
     if not repo:
         raise Http404

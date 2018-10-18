@@ -714,7 +714,7 @@
     </td>
     <td class="dirent-icon">
         <div class="pos-rel">
-        <% if (dirent.is_img || dirent.is_video) { %>
+        <% if (dirent.is_img || dirent.is_xmind || dirent.is_video) { %>
             <% if (dirent.encoded_thumbnail_src) { %>
             <img class="thumbnail" src="{{ SITE_ROOT }}<%- dirent.encoded_thumbnail_src %>" alt="" />
             <% } else { %>
