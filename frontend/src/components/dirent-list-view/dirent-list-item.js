@@ -187,13 +187,6 @@ class DirentListItem extends React.Component {
     this.props.onRenameMenuItemClick(this.props.dirent);
   }
 
-  onChange = (e) => {
-    let value = e.target.value;
-    this.setState({
-      dirent_name: value
-    });
-  }
-
   onRenameConfirm = (newName) => {
     //todos; 校验
     let direntPath = this.getDirentPath(this.props.dirent);
