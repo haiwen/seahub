@@ -25,11 +25,11 @@ class DirentListView extends React.Component {
     };
   }
 
-  onItemMenuShow = () => {
+  onFreezedItem = () => {
     this.setState({isItemFreezed: true});
   }
   
-  onItemMenuHide = () => {
+  onUnfreezedItem = () => {
     this.setState({isItemFreezed: false});
   }
 
@@ -106,8 +106,8 @@ class DirentListView extends React.Component {
                     onItemDelete={this.props.onItemDelete}
                     updateViewList={this.props.updateViewList}
                     isItemFreezed={this.state.isItemFreezed}
-                    onItemMenuShow={this.onItemMenuShow}
-                    onItemMenuHide={this.onItemMenuHide}
+                    onFreezedItem={this.onFreezedItem}
+                    onUnfreezedItem={this.onUnfreezedItem}
                     onItemDownload={this.onItemDownload}
                   />
                 );

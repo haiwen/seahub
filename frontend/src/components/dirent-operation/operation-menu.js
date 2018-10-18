@@ -45,9 +45,9 @@ class OperationMenu extends React.Component {
     if (type === 'dir' && permission === 'rw') {
       let menuList = [];
       if (can_set_folder_perm) {
-        menuList = ['Rename', 'Move', 'Copy', 'Divider', 'Permission', 'Details', 'Divider', 'Open Via Client'];
+        menuList = ['Rename', 'Move', 'Copy', 'Divider', 'Permission', 'Details', 'Divider', 'Open via Client'];
       } else {
-        menuList = ['Rename', 'Move', 'Copy', 'Divider', 'Details', 'Divider', 'Open Via Client'];
+        menuList = ['Rename', 'Move', 'Copy', 'Divider', 'Details', 'Divider', 'Open via Client'];
       }
       return menuList;
     }
@@ -60,7 +60,7 @@ class OperationMenu extends React.Component {
     if (type === 'file' && permission === 'rw') {
       let menuList = [];
       if (!dirent.is_locked || (dirent.is_locked && dirent.locked_by_me)) {
-        menuList.push('Reanme');
+        menuList.push('Rename');
         menuList.push('Move');
       }
       menuList.push('Copy');

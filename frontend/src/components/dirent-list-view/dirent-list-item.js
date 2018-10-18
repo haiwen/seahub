@@ -2,14 +2,15 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { serviceUrl, gettext, repoID } from '../../utils/constants';
 import { seafileAPI } from '../../utils/seafile-api';
+import URLDecorator from '../../utils/url-decorator';
 import OperationGroup from '../dirent-operation/operation-group';
 
 const propTypes = {
   isItemFreezed: PropTypes.bool.isRequired,
   dirent: PropTypes.object.isRequired,
   onItemClick: PropTypes.func.isRequired,
-  onItemMenuShow: PropTypes.func.isRequired,
-  onItemMenuHide: PropTypes.func.isRequired,
+  onFreezedItem: PropTypes.func.isRequired,
+  onUnfreezedItem: PropTypes.func.isRequired,
   onItemDelete: PropTypes.func.isRequired,
   onItemDownload: PropTypes.func.isRequired,
   updateViewList: PropTypes.func.isRequired,
@@ -21,7 +22,7 @@ class DirentListItem extends React.Component {
     super(props);
     this.state = {
       isOperationShow: false,
-      highlight: false
+      highlight: false,
     };
   }
 
@@ -54,7 +55,7 @@ class DirentListItem extends React.Component {
   }
 
   onItemMenuShow = () => {
-    this.props.onItemMenuShow();
+    this.props.onFreezedItem();
   }
 
   onItemMenuHide = () => {
@@ -62,7 +63,7 @@ class DirentListItem extends React.Component {
       isOperationShow: false,
       highlight: ''
     });
-    this.props.onItemMenuHide();
+    this.props.onUnfreezedItem();
   }
 
   //buiness handler
@@ -143,7 +144,7 @@ class DirentListItem extends React.Component {
   }
 
   onRenameItem = () => {
-
+    
   }
   
   onMoveItem = () => {
@@ -163,15 +164,29 @@ class DirentListItem extends React.Component {
   }
 
   onLockItem = () => {
-    
+    let filePath = this.getDirentPath(this.props.dirent);
+    seafileAPI.lockFile(repoID, filePath).then(() => {
+      this.props.updateViewList(this.props.filePath);
+    });
   }
 
   onUnlockItem = () => {
-
+    let filePath = this.getDirentPath(this.props.dirent);
+    seafileAPI.unLockFile(repoID, filePath).then(() => {
+      this.props.updateViewList(this.props.filePath);
+    });
   }
 
   onNewDraft = () => {
-
+    let filePath = this.getDirentPath(this.props.dirent);
+    seafileAPI.newDraft(repoID,filePath).then(res => {
+      let draft_file_Path = res.data.draft_file_path;
+      let draftId = res.data.id;
+      let url = URLDecorator.getUrl({type: 'draft_view', repoID: repoID, filePath: draft_file_Path, draftId: draftId});
+      window.open(url);
+    }).catch(() => {
+      //todos;
+    })
   }
 
   onComnentItem = () => {
@@ -179,7 +194,10 @@ class DirentListItem extends React.Component {
   }
 
   onHistory = () => {
-
+    let filePath = this.getDirentPath(this.props.dirent);
+    let referer = location.href;
+    let url = URLDecorator.getUrl({type: 'file_revisions', repoID: repoID, filePath: filePath, referer: referer});
+    window.open(url);
   }
 
   onAccessLog = () => {
@@ -187,7 +205,9 @@ class DirentListItem extends React.Component {
   }
 
   onOpenViaClient = () => {
-
+    let filePath = this.getDirentPath(this.props.dirent);
+    let url = URLDecorator.getUrl({type: 'open_via_client', repoID: repoID, filePath: filePath});
+    location.href = url;
   }
 
   getDirentPath = (dirent) => {
@@ -207,9 +227,21 @@ class DirentListItem extends React.Component {
           {dirent.starred !== undefined && dirent.starred && <i className="fas fa-star"></i>}
         </td>
         <td className="icon">
-          <img src={dirent.type === 'dir' ? serviceUrl + '/media/img/folder-192.png' : serviceUrl + '/media/img/file/192/txt.png'} alt={gettext('file icon')}></img>
+          <div className="dir-icon">
+            <img src={dirent.type === 'dir' ? serviceUrl + '/media/img/folder-192.png' : serviceUrl + '/media/img/file/192/txt.png'} alt={gettext('file icon')}></img>
+            {dirent.is_locked && <img className="locked" src={serviceUrl + '/media/img/file-locked-32.png'} alt={gettext('locked')}></img>}
+          </div>
         </td>
-        <td className="name a-simulate" onClick={this.onItemClick}>{dirent.name}</td>
+        <td className="name a-simulate">
+          {!dirent.isRenameing && <span onClick={this.onItemClick}>{dirent.name}</span>}
+          {dirent.isRenameing && 
+            <div className="rename-conatiner">
+              <input></input>
+              <button>确定</button>
+              <button>取消</button>
+            </div>
+          }
+        </td>
         <td className="operation">
           {
             this.state.isOperationShow && 
@@ -219,7 +251,7 @@ class DirentListItem extends React.Component {
               onItemMenuHide={this.onItemMenuHide}
               onDownload={this.onItemDownload}
               onDelete={this.onItemDelete}
-              onMenuItemClick={this.props.onItemMenuItemClick}
+              onMenuItemClick={this.onItemMenuItemClick}
             />
           }
         </td>

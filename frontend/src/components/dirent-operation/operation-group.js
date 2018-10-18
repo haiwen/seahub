@@ -9,6 +9,7 @@ const propTypes = {
   onItemMenuHide: PropTypes.func.isRequired,
   onDelete: PropTypes.func.isRequired,
   onDownload: PropTypes.func.isRequired,
+  onMenuItemClick: PropTypes.func.isRequired,
 };
 
 class OperationGroup extends React.Component {

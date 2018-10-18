@@ -8,6 +8,7 @@ class Dirent {
     this.type = json.type;
     this.mtime = moment.unix(json.mtime).fromNow();
     this.permission = json.permission;
+    this.isRenameing = false;
     if (json.type === 'file') {
       this.size = Utils.bytesToSize(json.size);
       this.starred = json.starred;
