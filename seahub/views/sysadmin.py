@@ -184,7 +184,8 @@ def sys_statistic_traffic(request):
         traffic_info_list = seafevents_api.get_all_orgs_traffic_by_month(
             month_dt, start, limit, order_by)
         for e in traffic_info_list:
-            e['org_name'] = ccnet_api.get_org_by_id(e['org_id']).org_name
+            org = ccnet_api.get_org_by_id(e['org_id'])
+            e['org_name'] = org.org_name if org else '--'
 
     page_next = len(traffic_info_list) == limit
 
