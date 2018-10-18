@@ -33,6 +33,11 @@ class DirentListView extends React.Component {
     this.setState({isItemFreezed: false});
   }
 
+  onRenameItem = (dirent) => {
+    dirent.isRenameing = true;
+    this.setState({isItemFreezed: true});
+  }
+
   onItemDownload = (dirent, direntPath) => {
     if (dirent.type === 'dir') {
       this.setState({isProgressDialogShow: true, progress: '0%'});
@@ -109,6 +114,7 @@ class DirentListView extends React.Component {
                     onFreezedItem={this.onFreezedItem}
                     onUnfreezedItem={this.onUnfreezedItem}
                     onItemDownload={this.onItemDownload}
+                    onRenameItem={this.onRenameItem}
                   />
                 );
               })

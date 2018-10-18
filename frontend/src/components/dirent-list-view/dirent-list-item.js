@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import { serviceUrl, gettext, repoID } from '../../utils/constants';
 import { seafileAPI } from '../../utils/seafile-api';
 import URLDecorator from '../../utils/url-decorator';
-import OperationGroup from '../dirent-operation/operation-group';
+import DirentMenu from './dirent-menu';
 
 const propTypes = {
   isItemFreezed: PropTypes.bool.isRequired,
@@ -23,7 +23,17 @@ class DirentListItem extends React.Component {
     this.state = {
       isOperationShow: false,
       highlight: false,
+      isItemMenuShow: false,
+      menuPosition: {top: 0, left: 0 },
     };
+  }
+
+  componentDidMount() {
+    document.addEventListener('click', this.onItemMenuHide);
+  }
+  
+  componentWillUnmount() {
+    document.removeEventListener('click', this.onItemMenuHide);
   }
 
   //UI Interactive
@@ -54,14 +64,33 @@ class DirentListItem extends React.Component {
     }
   }
 
-  onItemMenuShow = () => {
+  onItemMenuToggle = (e) => {
+    e.stopPropagation();
+    e.nativeEvent.stopImmediatePropagation();
+
+    if (!this.state.isItemMenuShow) {
+      this.onItemMenuShow(e);
+    } else {
+      this.onItemMenuHide();
+    }
+  }
+
+  onItemMenuShow = (e) => {
+    let left = e.clientX - 8*16;
+    let top  = e.clientY + 15;
+    let position = Object.assign({},this.state.menuPosition, {left: left, top: top});
+    this.setState({
+      menuPosition: position,
+      isItemMenuShow: true,
+    });
     this.props.onFreezedItem();
   }
 
   onItemMenuHide = () => {
     this.setState({
       isOperationShow: false,
-      highlight: ''
+      highlight: '',
+      isItemMenuShow: false
     });
     this.props.onUnfreezedItem();
   }
@@ -90,12 +119,14 @@ class DirentListItem extends React.Component {
     this.props.onItemClick(direntPath);
   }
 
-  onItemDownload = () => {
+  onItemDownload = (e) => {
+    e.nativeEvent.stopImmediatePropagation();
     let direntPath = this.getDirentPath(this.props.dirent);
     this.props.onItemDownload(this.props.dirent, direntPath);
   }
 
-  onItemDelete = () => {
+  onItemDelete = (e) => {
+    e.nativeEvent.stopImmediatePropagation(); //for document event
     let direntPath = this.getDirentPath(this.props.dirent);
     this.props.onItemDelete(direntPath);
   }
@@ -144,7 +175,11 @@ class DirentListItem extends React.Component {
   }
 
   onRenameItem = () => {
-    
+    this.setState({
+      isOperationShow: false,
+      isItemMenuShow: false
+    });
+    this.props.onRenameItem(this.props.dirent);
   }
   
   onMoveItem = () => {
@@ -168,6 +203,7 @@ class DirentListItem extends React.Component {
     seafileAPI.lockFile(repoID, filePath).then(() => {
       this.props.updateViewList(this.props.filePath);
     });
+    this.onItemMenuHide();
   }
 
   onUnlockItem = () => {
@@ -175,6 +211,7 @@ class DirentListItem extends React.Component {
     seafileAPI.unLockFile(repoID, filePath).then(() => {
       this.props.updateViewList(this.props.filePath);
     });
+    this.onItemMenuHide();
   }
 
   onNewDraft = () => {
@@ -186,7 +223,8 @@ class DirentListItem extends React.Component {
       window.open(url);
     }).catch(() => {
       //todos;
-    })
+    });
+    this.onItemMenuHide();
   }
 
   onComnentItem = () => {
@@ -198,6 +236,7 @@ class DirentListItem extends React.Component {
     let referer = location.href;
     let url = URLDecorator.getUrl({type: 'file_revisions', repoID: repoID, filePath: filePath, referer: referer});
     window.open(url);
+    this.onItemMenuHide();
   }
 
   onAccessLog = () => {
@@ -208,6 +247,7 @@ class DirentListItem extends React.Component {
     let filePath = this.getDirentPath(this.props.dirent);
     let url = URLDecorator.getUrl({type: 'open_via_client', repoID: repoID, filePath: filePath});
     location.href = url;
+    this.onItemMenuHide();
   }
 
   getDirentPath = (dirent) => {
@@ -245,14 +285,30 @@ class DirentListItem extends React.Component {
         <td className="operation">
           {
             this.state.isOperationShow && 
-            <OperationGroup 
-              dirent={dirent} 
-              onItemMenuShow={this.onItemMenuShow}
-              onItemMenuHide={this.onItemMenuHide}
-              onDownload={this.onItemDownload}
-              onDelete={this.onItemDelete}
-              onMenuItemClick={this.onItemMenuItemClick}
-            />
+            <div className="operations">
+              <ul className="operation-group">
+                <li className="operation-group-item">
+                  <i className="sf2-icon-download" title={gettext('Download')} onClick={this.onItemDownload}></i>
+                </li>
+                <li className="operation-group-item">
+                  <i className="sf2-icon-share" title={gettext('Share')} onClick={this.onItemShare}></i>
+                </li>
+                <li className="operation-group-item">
+                  <i className="sf2-icon-delete" title={gettext('Delete')} onClick={this.onItemDelete}></i>
+                </li>
+                <li className="operation-group-item">
+                  <i className="sf2-icon-caret-down sf-dropdown-toggle" title={gettext('More Operation')} onClick={this.onItemMenuToggle}></i>
+                </li>
+              </ul>
+              {
+                this.state.isItemMenuShow && 
+                <DirentMenu 
+                  dirent={this.props.dirent}
+                  menuPosition={this.state.menuPosition}
+                  onMenuItemClick={this.onItemMenuItemClick}
+                />
+              }
+            </div>
           }
         </td>
         <td className="file-size">{dirent.size && dirent.size}</td>
