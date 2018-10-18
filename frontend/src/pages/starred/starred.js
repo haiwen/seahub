@@ -266,7 +266,7 @@ class Starred extends Component {
         <div className="cur-view-path">
           <h3 className="sf-heading">{gettext('Favorites')}</h3>
         </div>
-        <div className="cur-view-content">
+        <div className="cur-view-content" style={{padding: 0}}>
           <div className="table-container">
             <Content data={this.state} />
           </div>
