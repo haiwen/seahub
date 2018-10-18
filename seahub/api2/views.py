@@ -830,8 +830,12 @@ class Repos(APIView):
 
         utc_dt = datetime.datetime.utcnow()
         timestamp = utc_dt.strftime('%Y-%m-%d %H:%M:%S')
+        org_id = -1
+        if is_org_context(request):
+            org_id = request.user.org.org_id
+
         try:
-            send_message('seahub.stats', 'user-login\t%s\t%s' % (email, timestamp))
+            send_message('seahub.stats', 'user-login\t%s\t%s\t%s' % (email, timestamp, org_id))
         except Exception as e:
             logger.error('Error when sending user-login message: %s' % str(e))
         response = HttpResponse(json.dumps(repos_json), status=200,
