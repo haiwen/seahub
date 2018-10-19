@@ -223,7 +223,7 @@ class MainPanel extends Component {
                 <ul className="menu dropdown-menu" style={this.state.operationMenuStyle}>
                   <li className="dropdown-item" onClick={this.addFolder}>{gettext('New Folder')}</li>
                   <li className="dropdown-item" onClick={this.addFile}>{gettext('New File')}</li>
-                  <li className="dropdown-item menu-inner-divider"></li>
+                  <li className="dropdown-divider"></li>
                   <li className="dropdown-item" onClick={this.addMarkdownFile}>{gettext('New Markdown File')}</li>
                 </ul>
               }

@@ -24,7 +24,7 @@ class DirentMenuItem extends React.Component {
             <li className="dropdown-item operation-menu-item" data-type={operationName} onClick={this.onClick}>
               <span className="user-select-none" data-type={operationName} title={operationName} aria-label={operationName}>{operationName}</span>
             </li> :
-            <li className="dropdown-item menu-inner-divider"></li>
+            <li className="dropdown-divider"></li>
         }
       </Fragment>
     );
