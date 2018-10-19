@@ -100,7 +100,7 @@ class CreateFile extends React.Component {
             <FormGroup row>
               <Label sm={3} check />
               <Col sm={9}>
-                <Input type="checkbox" onChange={this.handleCheck}/>{'  '}{gettext("This is a draft file.")}
+                <Input type="checkbox" onChange={this.handleCheck}/>{'  '}{gettext("This is a draft.")}
               </Col>
             </FormGroup>
 
