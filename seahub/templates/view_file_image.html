@@ -32,7 +32,11 @@
         $(this).attr('src', '{{ raw_path|escapejs }}');
     })
 {% else %}
-    $('#image-view').attr('src', '{{ raw_path|escapejs }}');
+    {% if xmind_image_src %}
+        $('#image-view').attr('src', '{{ SITE_ROOT }}{{ xmind_image_src|escapejs }}');
+    {% else %}
+        $('#image-view').attr('src', '{{ raw_path|escapejs }}');
+    {% endif %}
 {% endif %}
 
 {% include 'snippets/image_file_view_js.html' %}

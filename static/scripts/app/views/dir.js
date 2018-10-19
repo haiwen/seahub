@@ -359,7 +359,7 @@ define([
 
                 var items = this.dir.filter(function(dirent) {
                     // 'dirent' is a model
-                    return (dirent.get('is_img') || dirent.get('is_video')) && !dirent.get('encoded_thumbnail_src');
+                    return (dirent.get('is_img') || dirent.get('is_xmind') || dirent.get('is_video')) && !dirent.get('encoded_thumbnail_src');
                 });
                 if (items.length == 0) {
                     return ;
