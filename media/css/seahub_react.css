@@ -805,6 +805,13 @@ a.op-icon:focus {
     border: 1px solid #ccc;
 }
 
+.table-container table .rename-container input:focus {
+    background-color: #fff;
+    border-color: #1991eb;
+    outline: 0;
+    box-shadow: 0 0 0 2px rgba(70, 127, 207, 0.25);
+}
+
 .table-container table .rename-container button {
     margin-left: 0.25rem;
     padding: 5px 6px;
