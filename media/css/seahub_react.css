@@ -789,6 +789,10 @@ a.op-icon:focus {
     text-align: center;
 }
 
+.table-container table .star {
+    cursor: pointer;
+}
+
 .table-container table .rename-container input {
     box-sizing: content-box;
     padding: 2px 3px;
@@ -855,6 +859,7 @@ a.op-icon:focus {
 }
 .dropdown-item.menu-inner-divider {
     margin: 0.25rem 0;
+    padding: 0;
     border-bottom: 1px solid #ddd;
 }
   
