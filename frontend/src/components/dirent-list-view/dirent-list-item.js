@@ -219,7 +219,7 @@ class DirentListItem extends React.Component {
 
   onLockItem = () => {
     let filePath = this.getDirentPath(this.props.dirent);
-    seafileAPI.lockFile(repoID, filePath).then(() => {
+    seafileAPI.lockfile(repoID, filePath).then(() => {
       this.props.updateViewList(this.props.filePath);
     });
     this.onItemMenuHide();
@@ -227,7 +227,7 @@ class DirentListItem extends React.Component {
 
   onUnlockItem = () => {
     let filePath = this.getDirentPath(this.props.dirent);
-    seafileAPI.unLockFile(repoID, filePath).then(() => {
+    seafileAPI.unlockfile(repoID, filePath).then(() => {
       this.props.updateViewList(this.props.filePath);
     });
     this.onItemMenuHide();
@@ -235,7 +235,7 @@ class DirentListItem extends React.Component {
 
   onNewDraft = () => {
     let filePath = this.getDirentPath(this.props.dirent);
-    seafileAPI.newDraft(repoID,filePath).then(res => {
+    seafileAPI.createDraft(repoID,filePath).then(res => {
       let draft_file_Path = res.data.draft_file_path;
       let draftId = res.data.id;
       let url = URLDecorator.getUrl({type: 'draft_view', repoID: repoID, filePath: draft_file_Path, draftId: draftId});
