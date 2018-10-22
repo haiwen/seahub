@@ -1,0 +1,10 @@
+{% load i18n %}
+<div class="tabnav ovhd">
+    <ul class="tabnav-tabs fleft">
+        <li class="tabnav-tab {% if cur_tab == 'file' %}tabnav-tab-cur{% endif %}"><a href="{% url 'sys_statistic_file' %}">{% trans "File" %}</a></li>
+        <li class="tabnav-tab {% if cur_tab == 'storage' %}tabnav-tab-cur{% endif %}"><a href="{% url 'sys_statistic_storage' %}">{% trans "Storage" %}</a></li>
+        <li class="tabnav-tab {% if cur_tab == 'user' %}tabnav-tab-cur{% endif %}"><a href="{% url 'sys_statistic_user' %}">{% trans "Users" %}</a></li>
+        <li class="tabnav-tab {% if cur_tab == 'traffic' %}tabnav-tab-cur{% endif %}"><a href="{% url 'sys_statistic_traffic' %}">{% trans "Traffic" %}</a></li>
+        <li class="tabnav-tab {% if cur_tab == 'report' %}tabnav-tab-cur{% endif %}"><a href="{% url 'sys_statistic_reports' %}">{% trans "Reports" %}</a></li>
+    </ul>
+</div>
