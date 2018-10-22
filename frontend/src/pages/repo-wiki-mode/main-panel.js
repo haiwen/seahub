@@ -63,7 +63,7 @@ class MainPanel extends Component {
   }
 
   updateViewList = (filePath) => {
-    seafileAPI.listDir(repoID, filePath, 48).then(res => {
+    seafileAPI.listDir(repoID, filePath).then(res => {
       let direntList = [];
       res.data.forEach(item => {
         let dirent = new Dirent(item);

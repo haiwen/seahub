@@ -3,7 +3,7 @@ import { Utils } from '../utils/utils';
 class Repo {
   constructor(object) {
     this.repo_id = object.repo_id;
-    this.repo_name = object.name;
+    this.repo_name = object.repo_name;
     this.permission = object.permission;
     this.size = Utils.bytesToSize(object.size);
     this.file_count = object.file_count;

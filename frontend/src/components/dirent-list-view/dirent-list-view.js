@@ -5,6 +5,7 @@ import URLDecorator from '../../utils/url-decorator';
 import editorUtilities from '../../utils/editor-utilties';
 import DirentListItem from './dirent-list-item';
 import ZipDownloadDialog from '../dialog/zip-download-dialog';
+import MoveDirentDialog from '../dialog/move-dirent-dialog';
 
 const propTypes = {
   filePath: PropTypes.string.isRequired,
@@ -20,9 +21,13 @@ class DirentListView extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
+      progress: '0%',
       isItemFreezed: false,
       isProgressDialogShow: false,
-      progress: '0%',
+      isMoveDialogShow: false,
+      isCopyDialogShow: false,
+      currentDirent: false,
+      direntPath: '',
     };
   }
 
@@ -36,6 +41,20 @@ class DirentListView extends React.Component {
 
   onRenameMenuItemClick = () => {
     this.onFreezedItem();
+  }
+
+  onMoveItem = (dirent, direntPath) => {
+    this.setState({
+      isMoveDialogShow: true,
+      currentDirent: dirent,
+      direntPath: direntPath
+    });
+  }
+
+  onCancelMove = () => {
+    this.setState({
+      isMoveDialogShow: false
+    });
   }
 
   onItemDownload = (dirent, direntPath) => {
@@ -116,15 +135,19 @@ class DirentListView extends React.Component {
                     onFreezedItem={this.onFreezedItem}
                     onUnfreezedItem={this.onUnfreezedItem}
                     onItemDownload={this.onItemDownload}
+                    onMoveItem={this.onMoveItem}
                   />
                 );
               })
             }
           </tbody>
         </table>
-        {
-          this.state.isProgressDialogShow && 
-          <ZipDownloadDialog progress={this.state.progress} onCancelDownload={this.onCancelDownload}/>
+        {this.state.isProgressDialogShow && 
+          <ZipDownloadDialog progress={this.state.progress} onCancelDownload={this.onCancelDownload}
+          />
+        }
+        {this.state.isMoveDialogShow &&
+          <MoveDirentDialog dirent={this.state.currentDirent} direntPath={this.state.direntPath} onCancelMove={this.onCancelMove} />
         }
       </div>
     );
