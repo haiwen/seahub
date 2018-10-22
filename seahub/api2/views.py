@@ -2802,7 +2802,7 @@ class FileView(APIView):
 
             if is_draft.lower() == 'true':
                 repo = seafile_api.get_repo(repo_id)
-                Draft.objects.add(username, repo, path)
+                Draft.objects.add(username, repo, path, file_exist=False)
 
             if request.GET.get('reloaddir', '').lower() == 'true':
                 return reloaddir(request, repo, parent_dir)

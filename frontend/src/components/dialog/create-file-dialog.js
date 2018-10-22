@@ -45,7 +45,8 @@ class CreateFile extends React.Component {
     })
 
     let pos = this.state.childName.lastIndexOf(".");
-
+    
+    //.md ===> (draft).md
     if (pos === 0) {
       this.setState({
         childName: '(draft)' + this.state.childName 
@@ -53,7 +54,7 @@ class CreateFile extends React.Component {
     } 
 
     if (pos > 0) {
-      if (this.state.isDraft) {
+      if (this.state.isDraft) { // demo(draft).md ===> demo.md
         let p = this.state.childName.substring(pos-7, pos);
         if (p === '(draft)') {
           let fileName = this.state.childName.substring(0, pos-7);
@@ -62,7 +63,7 @@ class CreateFile extends React.Component {
             childName: fileName + fileType 
           })
         }
-      } else {
+      } else {  // demo.md ===> demo(draft).md
           let fileName = this.state.childName.substring(0, pos);
           let fileType = this.state.childName.substring(pos);
           this.setState({

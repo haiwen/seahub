@@ -96,6 +96,7 @@ class DraftReviewView(APIView):
             draft_file_dir = os.path.dirname(file_path)
             if draft_file_dir != '/Drafts':
                 draft_file_name = os.path.basename(file_path)
+                # delete (draft) e.g. test(draft) ---> test
                 f = os.path.splitext(draft_file_name)[0][:-7]
                 file_type = os.path.splitext(draft_file_name)[-1]
                 file_name = f + file_type
