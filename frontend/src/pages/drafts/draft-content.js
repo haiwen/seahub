@@ -64,7 +64,8 @@ class DraftContent extends React.Component {
     let draft = this.state.currentDraft;
 
     editUtilties.createDraftReview(draft.id).then(res => {
-      window.open(siteRoot + 'drafts/review/' + res.data.id);
+      const w = window.open()
+      w.location = siteRoot + 'drafts/review/' + res.data.id;
     }).catch((error) => { 
       if (error.response.status == '409') {
         Toast.error('The draft review is existing.');
