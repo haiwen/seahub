@@ -2774,6 +2774,17 @@ class FileView(APIView):
                 return api_error(status.HTTP_403_FORBIDDEN,
                                  'You do not have permission to create file.')
 
+            if is_draft.lower() == 'true':
+                file_name = os.path.basename(path)
+                file_dir = os.path.dirname(path)
+
+                draft_type = os.path.splitext(file_name)[0][-7:]
+                file_type = os.path.splitext(file_name)[-1]
+
+                if draft_type != '(draft)':
+                    f = os.path.splitext(file_name)[0]
+                    path = file_dir + '/' + f + '(draft)' + file_type
+
             new_file_name = os.path.basename(path)
 
             if not seafile_api.is_valid_filename('fake_repo_id', new_file_name):
