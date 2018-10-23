@@ -41,24 +41,28 @@ class DialogRepoListView extends React.Component {
   }
 
   onDirentItemClick = (repo, filePath) => {
+    this.props.onDirentItemClick(repo, filePath);
     this.setState({
       seletedRepo: repo,
       moveToPath: filePath
     });
-    this.props.onDirentItemClick(repo, filePath);
   }
 
   onRepoItemClick = (repo) => {
+    this.props.onRepoItemClick(repo);
     this.setState({
       seletedRepo: repo,
       moveToPath: '',
     });
-    this.props.onRepoItemClick(repo);
   }
 
 
   render() {
-    let { currentRepo, repoList } = this.state;
+    let { currentRepo, seletedRepo, repoList } = this.state;
+    let isSelected = false;
+    if ( currentRepo && seletedRepo) {
+      isSelected = currentRepo.repo_name === seletedRepo.repo_name;
+    }
     return (
       <div className="dialog-content-container" style={{overflow: 'auto'}}>
         <div className="list-view">
@@ -70,8 +74,9 @@ class DialogRepoListView extends React.Component {
             {
               this.state.currentRepo && 
               <DialogRepoListItem 
-                repo={currentRepo} 
+                repo={currentRepo}
                 initToShow={true}
+                isSelected={isSelected}
                 onRepoItemClick={this.onRepoItemClick} 
                 onDirentItemClick={this.onDirentItemClick}
                 moveToPath={this.state.moveToPath} 
@@ -89,8 +94,9 @@ class DialogRepoListView extends React.Component {
               return (
                 <DialogRepoListItem 
                   key={index} 
-                  repo={repo} 
+                  repo={repo}
                   initToShow={false}
+                  isSelected={isSelected}
                   onRepoItemClick={this.onRepoItemClick} 
                   onDirentItemClick={this.onDirentItemClick}
                   moveToPath={this.state.moveToPath}

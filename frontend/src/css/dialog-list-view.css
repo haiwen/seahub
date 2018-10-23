@@ -1,8 +1,8 @@
 .dialog-content-container {
+  padding: 0.5rem;
   height: 20rem;
   border: 1px solid #eee;
   overflow: auto;
-  padding: 0.25rem;
   font-size: 1rem;
 }
 
@@ -48,6 +48,7 @@
 .dialog-list-item .item-info {
   display: inline-block;
   height: 1.5rem;
+  cursor: pointer;
 }
 
 .dialog-list-item .item-info:hover {

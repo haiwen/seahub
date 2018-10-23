@@ -16,6 +16,8 @@ const propTypes = {
   onItemDelete: PropTypes.func.isRequired,
   onItemRename: PropTypes.func.isRequired,
   onItemDownload: PropTypes.func.isRequired,
+  onDirentItemMove: PropTypes.func.isRequired,
+  onDirentItemCopy: PropTypes.func.isRequired,
   updateViewList: PropTypes.func.isRequired,
 };
 
@@ -141,10 +143,10 @@ class DirentListItem extends React.Component {
         this.onRenameMenuItemClick();
         break;
       case 'Move':
-        this.onMoveItem();
+        this.onDirentItemMove();
         break;
       case 'Copy':
-        this.onCopyItem();
+        this.onDirentItemCopy();
         break;
       case 'Permission':
         this.onPermissionItem();
@@ -201,13 +203,13 @@ class DirentListItem extends React.Component {
     this.props.onUnfreezedItem();
   }
   
-  onMoveItem = () => {
+  onDirentItemMove = () => {
     let direntPath = this.getDirentPath(this.props.dirent);
-    this.props.onMoveItem(this.props.dirent, direntPath);
+    this.props.onDirentItemMove(this.props.dirent, direntPath);
   }
 
-  onCopyItem = () => {
-
+  onDirentItemCopy = () => {
+    //todos;
   }
 
   onPermissionItem = () => {

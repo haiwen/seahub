@@ -13,6 +13,8 @@ const propTypes = {
   onItemDelete: PropTypes.func.isRequired,
   onItemRename: PropTypes.func.isRequired,
   onItemClick: PropTypes.func.isRequired,
+  onItemMove: PropTypes.func.isRequired,
+  onItemCopy: PropTypes.func.isRequired,
   updateViewList: PropTypes.func.isRequired,
 };
 
@@ -43,12 +45,24 @@ class DirentListView extends React.Component {
     this.onFreezedItem();
   }
 
-  onMoveItem = (dirent, direntPath) => {
+  onDirentItemMove = (dirent, direntPath) => {
     this.setState({
       isMoveDialogShow: true,
       currentDirent: dirent,
       direntPath: direntPath
     });
+  }
+
+  onDirentItemCopy = (dirent, direntPath) => {
+    //todos;
+  }
+
+  onItemMove = (repo, direntPath, moveToDirentPath) => {
+    this.props.onItemMove(repo, direntPath, moveToDirentPath);
+  }
+
+  onItemCopy = (repo, direntPath, copyToDirentPath) => {
+    //todos;
   }
 
   onCancelMove = () => {
@@ -135,7 +149,8 @@ class DirentListView extends React.Component {
                     onFreezedItem={this.onFreezedItem}
                     onUnfreezedItem={this.onUnfreezedItem}
                     onItemDownload={this.onItemDownload}
-                    onMoveItem={this.onMoveItem}
+                    onDirentItemMove={this.onDirentItemMove}
+                    onDirentItemCopy={this.onDirentItemCopy}
                   />
                 );
               })
@@ -147,7 +162,12 @@ class DirentListView extends React.Component {
           />
         }
         {this.state.isMoveDialogShow &&
-          <MoveDirentDialog dirent={this.state.currentDirent} direntPath={this.state.direntPath} onCancelMove={this.onCancelMove} />
+          <MoveDirentDialog 
+            dirent={this.state.currentDirent} 
+            direntPath={this.state.direntPath} 
+            onItemMove={this.props.onItemMove}
+            onCancelMove={this.onCancelMove} 
+          />
         }
       </div>
     );

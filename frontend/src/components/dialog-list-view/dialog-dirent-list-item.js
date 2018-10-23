@@ -7,7 +7,7 @@ import Dirent from '../../models/dirent';
 const propTypes = {
   filePath: PropTypes.string,
   repo: PropTypes.object.isRequired,
-  onItemClick: PropTypes.func.isRequired
+  onDirentItemClick: PropTypes.func.isRequired
 };
 
 class DialogDirentListItem extends React.Component {
@@ -27,7 +27,7 @@ class DialogDirentListItem extends React.Component {
   }
 
   onItemClick = () => {
-    this.props.onItemClick(this.state.filePath);
+    this.props.onDirentItemClick(this.state.filePath);
   }
 
   onToggleClick = () => {
@@ -68,6 +68,8 @@ class DialogDirentListItem extends React.Component {
               repo={this.props.repo}
               filePath={this.state.filePath}
               onItemClick={this.onItemClick}
+              moveToPath={this.props.moveToPath}
+              onDirentItemClick={this.props.onDirentItemClick}
             />
           );
         })}

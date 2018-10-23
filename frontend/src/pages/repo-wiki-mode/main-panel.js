@@ -26,6 +26,8 @@ const propTypes = {
   onMainItemClick: PropTypes.func.isRequired,
   onMainItemDelete: PropTypes.func.isRequired,
   onMainItemRename: PropTypes.func.isRequired,
+  onMainItemMove: PropTypes.func.isRequired,
+  onMainItemCopy: PropTypes.func.isRequired,
   onMainAddFile: PropTypes.func.isRequired,
   onMainAddFolder: PropTypes.func.isRequired,
   switchViewMode: PropTypes.func.isRequired,
@@ -264,6 +266,8 @@ class MainPanel extends Component {
                 onItemClick={this.props.onMainItemClick}
                 onItemDelete={this.props.onMainItemDelete}
                 onItemRename={this.props.onMainItemRename}
+                onItemMove={this.props.onMainItemMove}
+                onItemCopy={this.props.onMainItemCopy}
                 updateViewList={this.updateViewList}
               />
             }

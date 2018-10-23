@@ -188,6 +188,14 @@ class Wiki extends Component {
     this.onRenameNode(node, newName);
   }
 
+  onMainItemMove = (repo, direntPath, moveToDirentPath) => {
+
+  }
+
+  onMainItemCopy = (repo, direntPath, copyToDirentPath) => {
+
+  }
+
   onNodeClick = (e, node) => {
     if (node instanceof Node && node.isMarkdown()){
       let tree = this.state.tree_data.clone();
@@ -539,6 +547,8 @@ class Wiki extends Component {
           onMainItemClick={this.onMainItemClick}
           onMainItemDelete={this.onMainItemDelete}
           onMainItemRename={this.onMainItemRename}
+          onMainItemMove={this.onMainItemMove}
+          onMainItemCopy={this.onMainItemCopy}
           onMainAddFile={this.onAddFileNode}
           onMainAddFolder={this.onAddFolderNode}
         />

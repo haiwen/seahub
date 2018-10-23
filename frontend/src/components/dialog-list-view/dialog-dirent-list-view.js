@@ -7,7 +7,9 @@ import DialogDirentListItem from './dialog-dirent-list-item';
 const propTypes = {
   repo: PropTypes.object.isRequired,
   isShowChildren: PropTypes.bool.isRequired,
+  onDirentItemClick: PropTypes.func.isRequired
 };
+
 class DialogDirentListView extends React.Component {
 
   constructor(props) {
@@ -44,7 +46,7 @@ class DialogDirentListView extends React.Component {
               key={index} 
               repo={this.props.repo} 
               dirent={dirent} 
-              onItemClick={this.props.onItemClick}
+              onDirentItemClick={this.props.onDirentItemClick}
               moveToPath={this.props.moveToPath}
             />
           );
