@@ -52,9 +52,7 @@ class AdminLibraryHistoryLimit(APIView):
             return api_error(status.HTTP_404_NOT_FOUND, error_msg)
 
         # no settings for virtual repo
-        if repo.is_virtual or \
-            not config.ENABLE_REPO_HISTORY_SETTING:
-
+        if repo.is_virtual:
             error_msg = 'Permission denied.'
             return api_error(status.HTTP_403_FORBIDDEN, error_msg)
 
