@@ -106,10 +106,10 @@ class Draft(TimestampedModel):
 
         file_name = self.origin_file_uuid.filename
 
-        if file_id != self.origin_file_version and draft_file_path == '/Drafts':
+        if file_id != self.origin_file_version and self.draft_file_path != origin_file_path:
             raise DraftFileConflict
 
-        if draft_file_path != '/Drafts':
+        if self.draft_file_path == origin_file_path:
             f = os.path.splitext(draft_file_name)[0][:-7]
             file_type = os.path.splitext(draft_file_name)[-1]
             file_name = f + file_type
