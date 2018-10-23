@@ -20,7 +20,7 @@ class MoveDirent extends React.Component {
       repo: null,
       filePath: '',
       errMessage: '',
-    }
+    };
   }
 
   shouldComponentUpdate(nextProps, nextState) {
@@ -31,16 +31,11 @@ class MoveDirent extends React.Component {
   }
 
   handleSubmit = () => {
-    //todos: direntPath  and filePath
-    //direntPath !== filePath；
-    // filePath.length > direntPath , filePath.indexOf(direntPath) > -1;
     let { direntPath } = this.props;
     let { repo, filePath } = this.state; 
     let message = '';
 
-
     if (!repo || (repo.repo_id === repoID && filePath === '')) {
-      //mv file just in this repo;
       message = 'Invalid destination path';
       this.setState({errMessage: gettext(message)});
       return;

@@ -206,13 +206,13 @@ class Wiki extends Component {
         Toast.success(gettext('Moveing operation succeeded'));
       }).catch(() => {
         Toast.error(gettext('Moveing operation failed'));
-      })
+      });
     } else {
-        seafileAPI.moveDir(repoID, repo.repo_id, moveToDirentPath, dirPath, dirName).then(res => {
-          Toast.success(gettext('Moveing operation succeeded'));
-        }).catch(() => {
-          Toast.error(gettext('Moveing operation failed'));
-        })
+      seafileAPI.moveDir(repoID, repo.repo_id, moveToDirentPath, dirPath, dirName).then(res => {
+        Toast.success(gettext('Moveing operation succeeded'));
+      }).catch(() => {
+        Toast.error(gettext('Moveing operation failed'));
+      });
     }
   }
 
@@ -231,13 +231,13 @@ class Wiki extends Component {
         Toast.success(gettext('Copying operation succeeded'));
       }).catch(() => {
         Toast.error(gettext('Copying operation failed'));
-      })
+      });
     } else {
-        seafileAPI.copyDir(repoID, repo.repo_id, copyToDirentPath, dirPath, dirName).then(res => {
-          Toast.success(gettext('Copying operation succeeded'));
-        }).catch(() => {
-          Toast.error(gettext('Copying operation failed'));
-        })
+      seafileAPI.copyDir(repoID, repo.repo_id, copyToDirentPath, dirPath, dirName).then(res => {
+        Toast.success(gettext('Copying operation succeeded'));
+      }).catch(() => {
+        Toast.error(gettext('Copying operation failed'));
+      });
     }
   }
 

@@ -6,8 +6,10 @@ import Dirent from '../../models/dirent';
 
 const propTypes = {
   filePath: PropTypes.string,
+  moveToPath: PropTypes.string,
+  dirent: PropTypes.object.isRequired,
   repo: PropTypes.object.isRequired,
-  onDirentItemClick: PropTypes.func.isRequired
+  onDirentItemClick: PropTypes.func.isRequired,
 };
 
 class DialogDirentListItem extends React.Component {
@@ -74,7 +76,7 @@ class DialogDirentListItem extends React.Component {
           );
         })}
       </ul>
-    )
+    );
   }
 
   render() {
@@ -85,7 +87,7 @@ class DialogDirentListItem extends React.Component {
           <span className={`item-toggle fa ${this.state.isShowChildren ? 'fa-caret-down' : 'fa-caret-right'}`} onClick={this.onToggleClick}></span>
         }
         <span className={`item-info ${this.state.filePath === this.props.moveToPath ? 'item-active' : ''}`} onClick={this.onItemClick}>
-          <img src={serviceUrl + '/media/img/folder-192.png'}></img>
+          <img src={serviceUrl + '/media/img/folder-192.png'} alt="icon"></img>
           <span className="name">{this.props.dirent && this.props.dirent.name}</span>
         </span>
         {this.state.isShowChildren && this.renderChildren()}

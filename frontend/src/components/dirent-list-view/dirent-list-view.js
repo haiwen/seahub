@@ -186,7 +186,7 @@ class DirentListView extends React.Component {
             direntPath={this.state.direntPath} 
             onItemCopy={this.props.onItemCopy}
             onCancelCopy={this.onCancelCopy} 
-        />
+          />
         }
       </div>
     );

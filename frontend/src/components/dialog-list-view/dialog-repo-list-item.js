@@ -4,9 +4,12 @@ import { serviceUrl } from '../../utils/constants';
 import DialogDirentListView from './dialog-dirent-list-view';
 
 const propTypes = {
+  moveToPath: PropTypes.string,
   repo: PropTypes.object.isRequired,
   initToShow: PropTypes.bool.isRequired,
   isSelected: PropTypes.bool.isRequired,
+  onDirentItemClick: PropTypes.func.isRequired,
+  onRepoItemClick: PropTypes.func.isRequired,
 };
 
 class DialogRepoListItem extends React.Component {
@@ -36,7 +39,7 @@ class DialogRepoListItem extends React.Component {
       <li className="dialog-list-item">
         <span className={`item-toggle fa ${this.state.isShowChildren ? 'fa-caret-down' : 'fa-caret-right'}`} onClick={this.onToggleClick}></span>
         <span className={`item-info ${this.props.isSelected ? 'item-active' : ''}`} onClick={this.onRepoItemClick}>
-          <img src={serviceUrl + '/media/img/folder-192.png'}></img>
+          <img src={serviceUrl + '/media/img/folder-192.png'} alt='icon'></img>
           <span className="name">{this.props.repo.repo_name}</span>
         </span>
         {

@@ -1,10 +1,16 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 import { gettext, repoID } from '../../utils/constants';
 import { seafileAPI } from '../../utils/seafile-api';
 import DialogRepoListItem from './dialog-repo-list-item';
 import Repo from '../../models/repo';
 
 import '../../css/dialog-list-view.css';
+
+const propTypes = {
+  onDirentItemClick: PropTypes.func.isRequired,
+  onRepoItemClick: PropTypes.func.isRequired,
+};
 
 class DialogRepoListView extends React.Component {
 
@@ -109,5 +115,7 @@ class DialogRepoListView extends React.Component {
     );
   }
 }
+
+DialogRepoListView.propTypes = propTypes;
 
 export default DialogRepoListView;
