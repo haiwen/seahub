@@ -31,8 +31,12 @@
 
                 {% elif notice.is_group_join_request %}
                 <p class="brief">{{ notice.format_group_join_request|safe }}</p>
+
                 {% elif notice.is_file_comment_msg %}
                 <p class="brief">{{ notice.format_file_comment_msg|safe }}</p>
+
+                {% elif notice.is_review_comment_msg %}
+                <p class="brief">{{ notice.format_review_comment_msg|safe }}</p>
 
                 {% elif notice.is_guest_invitation_accepted_msg %}
                 <p class="brief">{{ notice.format_guest_invitation_accepted_msg|safe }}</p>

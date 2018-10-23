@@ -53,6 +53,7 @@ MSG_TYPE_REPO_SHARE = 'repo_share'
 MSG_TYPE_REPO_SHARE_TO_GROUP = 'repo_share_to_group'
 MSG_TYPE_USER_MESSAGE = 'user_message'
 MSG_TYPE_FILE_COMMENT = 'file_comment'
+MSG_TYPE_REVIEW_COMMENT = 'review_comment'
 MSG_TYPE_GUEST_INVITATION_ACCEPTED = 'guest_invitation_accepted'
 
 USER_NOTIFICATION_COUNT_CACHE_PREFIX = 'USER_NOTIFICATION_COUNT_'
@@ -89,6 +90,11 @@ def add_user_to_group_to_json(group_staff, group_id):
 def file_comment_msg_to_json(repo_id, file_path, author, comment):
     return json.dumps({'repo_id': repo_id,
                        'file_path': file_path,
+                       'author': author,
+                       'comment': comment})
+
+def review_comment_msg_to_json(review_id, author, comment):
+    return json.dumps({'review_id': review_id,
                        'author': author,
                        'comment': comment})
 
@@ -287,6 +293,11 @@ class UserNotificationManager(models.Manager):
         """
         return self._add_user_notification(to_user, MSG_TYPE_FILE_COMMENT, detail)
 
+    def add_review_comment_msg(self, to_user, detail):
+        """Notify ``to_user`` that review creator 
+        """
+        return self._add_user_notification(to_user, MSG_TYPE_REVIEW_COMMENT, detail)
+
     def add_guest_invitation_accepted_msg(self, to_user, detail):
         """Nofity ``to_user`` that a guest has accpeted an invitation.
         """
@@ -384,6 +395,9 @@ class UserNotification(models.Model):
 
     def is_file_comment_msg(self):
         return self.msg_type == MSG_TYPE_FILE_COMMENT
+
+    def is_review_comment_msg(self):
+        return self.msg_type == MSG_TYPE_REVIEW_COMMENT
 
     def is_guest_invitation_accepted_msg(self):
         return self.msg_type == MSG_TYPE_GUEST_INVITATION_ACCEPTED
@@ -729,6 +743,23 @@ class UserNotification(models.Model):
         }
         return msg
 
+    def format_review_comment_msg(self):
+        try:
+            d = json.loads(self.detail)
+        except Exception as e:
+            logger.error(e)
+            return _(u"Internal error")
+
+        review_id = d['review_id']
+        author = d['author']
+
+        msg = _("Review <a href='%(file_url)s'>%(review_id)s</a> has a new comment from user %(author)s") % {
+            'review_id': review_id,
+            'file_url': reverse('drafts:review', args=[review_id]),
+            'author': escape(email2nickname(author)),
+        }
+        return msg
+
     def format_guest_invitation_accepted_msg(self):
         try:
             d = json.loads(self.detail)
@@ -763,6 +794,7 @@ from seahub.group.signals import grpmsg_added, group_join_request, add_user_to_g
 from seahub.share.signals import share_repo_to_user_successful, \
     share_repo_to_group_successful
 from seahub.invitations.signals import accept_guest_invitation_successful
+from seahub.drafts.signals import comment_review_successful
 
 @receiver(upload_file_successful)
 def add_upload_file_msg_cb(sender, **kwargs):
@@ -866,6 +898,16 @@ def comment_file_successful_cb(sender, **kwargs):
     for u in notify_users:
         detail = file_comment_msg_to_json(repo.id, file_path, author, comment)
         UserNotification.objects.add_file_comment_msg(u, detail)
+
+@receiver(comment_review_successful)
+def comment_review_successful_cb(sender, **kwargs):
+    review = kwargs['review']
+    comment = kwargs['comment']
+    author = kwargs['author']
+
+    detail = review_comment_msg_to_json(review.id, author, comment)
+    UserNotification.objects.add_review_comment_msg(review.creator, detail)
+
 
 @receiver(accept_guest_invitation_successful)
 def accept_guest_invitation_successful_cb(sender, **kwargs):

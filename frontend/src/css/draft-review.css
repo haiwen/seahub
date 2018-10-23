@@ -1,0 +1,35 @@
+.header .button-group {
+  display: flex;
+}
+
+.header .common-list-btn {
+  margin-right: .25em;
+}
+
+.header .common-list-btn .common-list-btn-number {
+  margin-left: .5em;
+}
+
+.main .cur-view-container {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  box-sizing: border-box;
+  background-color: #fafaf9;
+}
+
+.main .cur-view-container .cur-view-content {
+  flex: auto;
+}
+
+.main .cur-view-container .cur-view-content-commenton {
+  overflow: auto;
+  margin-right: 30em;
+}
+
+.main .cur-view-container .seafile-comment {
+  position: absolute;
+  right: 0;
+  height: calc(100% - 4.5em);
+}
