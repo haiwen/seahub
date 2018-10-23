@@ -7,7 +7,6 @@ import DialogDirentListItem from './dialog-dirent-list-item';
 const propTypes = {
   moveToPath: PropTypes.string,
   repo: PropTypes.object.isRequired,
-  initToShow: PropTypes.bool.isRequired,
   isShowChildren: PropTypes.bool.isRequired,
   onDirentItemClick: PropTypes.func.isRequired
 };
@@ -18,7 +17,6 @@ class DialogDirentListView extends React.Component {
     super(props);
     this.state = {
       direntList: [],
-      isShowChildren: this.props.initToShow,
     };
   }
 

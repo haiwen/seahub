@@ -59,7 +59,9 @@ class MoveDirent extends React.Component {
       this.setState({errMessage: gettext(message)});
       return;
     }
-
+    if (filePath === '') {
+      filePath = '/';
+    }
     this.props.onItemMove(repo, direntPath, filePath);
     this.toggle();
   }

@@ -18,7 +18,7 @@ class DialogRepoListView extends React.Component {
     super(props);
     this.state = {
       currentRepo: null,
-      seletedRepo: null,
+      selectedRepo: null,
       repoList: [],
       showOtherLibrary: false,
       moveToPath: '',
@@ -34,7 +34,7 @@ class DialogRepoListView extends React.Component {
         });
         this.setState({
           currentRepo: repo,
-          seletedRepo: null,
+          selectedRepo: null,
           repoList: repoList
         });
       });
@@ -49,7 +49,7 @@ class DialogRepoListView extends React.Component {
   onDirentItemClick = (repo, filePath) => {
     this.props.onDirentItemClick(repo, filePath);
     this.setState({
-      seletedRepo: repo,
+      selectedRepo: repo,
       moveToPath: filePath
     });
   }
@@ -57,18 +57,14 @@ class DialogRepoListView extends React.Component {
   onRepoItemClick = (repo) => {
     this.props.onRepoItemClick(repo);
     this.setState({
-      seletedRepo: repo,
+      selectedRepo: repo,
       moveToPath: '',
     });
   }
 
 
   render() {
-    let { currentRepo, seletedRepo, repoList, moveToPath } = this.state;
-    let isSelected = false;
-    if ( currentRepo && seletedRepo && !moveToPath) {
-      isSelected = currentRepo.repo_name === seletedRepo.repo_name;
-    }
+    let { currentRepo, selectedRepo, repoList } = this.state;
     return (
       <div className="dialog-content-container" style={{overflow: 'auto'}}>
         <div className="list-view">
@@ -82,7 +78,7 @@ class DialogRepoListView extends React.Component {
               <DialogRepoListItem 
                 repo={currentRepo}
                 initToShow={true}
-                isSelected={isSelected}
+                selectedRepo={selectedRepo}
                 onRepoItemClick={this.onRepoItemClick} 
                 onDirentItemClick={this.onDirentItemClick}
                 moveToPath={this.state.moveToPath} 
@@ -102,7 +98,7 @@ class DialogRepoListView extends React.Component {
                   key={index} 
                   repo={repo}
                   initToShow={false}
-                  isSelected={isSelected}
+                  selectedRepo={selectedRepo}
                   onRepoItemClick={this.onRepoItemClick} 
                   onDirentItemClick={this.onDirentItemClick}
                   moveToPath={this.state.moveToPath}

@@ -60,6 +60,9 @@ class CopyDirent extends React.Component {
       return;
     }
 
+    if (filePath === '') {
+      filePath = '/';
+    }
     this.props.onItemCopy(repo, direntPath, filePath);
     this.toggle();
   }

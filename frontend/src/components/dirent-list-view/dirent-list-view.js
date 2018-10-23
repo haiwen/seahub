@@ -177,7 +177,7 @@ class DirentListView extends React.Component {
             dirent={this.state.currentDirent} 
             direntPath={this.state.direntPath} 
             onItemMove={this.props.onItemMove}
-            onCancelMove={this.onCancelMove} 
+            onCancelMove={this.onCancelMove}
           />
         }
         {this.state.isCopyDialogShow &&

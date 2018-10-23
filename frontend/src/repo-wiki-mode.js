@@ -208,7 +208,7 @@ class Wiki extends Component {
         Toast.error(gettext('Moveing operation failed'));
       });
     } else {
-      seafileAPI.moveDir(repoID, repo.repo_id, moveToDirentPath, dirPath, dirName).then(res => {
+      seafileAPI.moveDir(repoID, repo.repo_id, moveToDirentPath, dirPath, dirName).then(() => {
         Toast.success(gettext('Moveing operation succeeded'));
       }).catch(() => {
         Toast.error(gettext('Moveing operation failed'));

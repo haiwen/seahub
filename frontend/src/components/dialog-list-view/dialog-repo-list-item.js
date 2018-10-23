@@ -5,9 +5,9 @@ import DialogDirentListView from './dialog-dirent-list-view';
 
 const propTypes = {
   moveToPath: PropTypes.string,
+  selectedRepo: PropTypes.object,
   repo: PropTypes.object.isRequired,
   initToShow: PropTypes.bool.isRequired,
-  isSelected: PropTypes.bool.isRequired,
   onDirentItemClick: PropTypes.func.isRequired,
   onRepoItemClick: PropTypes.func.isRequired,
 };
@@ -35,10 +35,15 @@ class DialogRepoListItem extends React.Component {
   }
 
   render() {
+    let repoActive = false;
+    let isCurrentRepo = this.props.selectedRepo && (this.props.repo.repo_id === this.props.selectedRepo.repo_id);
+    if ( isCurrentRepo && !this.props.moveToPath) {
+      repoActive = true;
+    }
     return (
       <li className="dialog-list-item">
         <span className={`item-toggle fa ${this.state.isShowChildren ? 'fa-caret-down' : 'fa-caret-right'}`} onClick={this.onToggleClick}></span>
-        <span className={`item-info ${this.props.isSelected ? 'item-active' : ''}`} onClick={this.onRepoItemClick}>
+        <span className={`item-info ${repoActive ? 'item-active' : ''}`} onClick={this.onRepoItemClick}>
           <img src={serviceUrl + '/media/img/folder-192.png'} alt='icon'></img>
           <span className="name">{this.props.repo.repo_name}</span>
         </span>
