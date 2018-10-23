@@ -15,6 +15,8 @@ class ReviewComments extends React.Component {
     this.state = {
       commentsList: [],
       userAvatar: `${window.location.host}media/avatars/default.png`,
+      inResizing: false,
+      commentFooterHeight: 30,
     }
     this.accountInfo = {};
   }
@@ -66,20 +68,61 @@ class ReviewComments extends React.Component {
     });
   }
 
+  onResizeMouseUp = () => {
+    if (this.state.inResizing) {
+      this.setState({
+        inResizing: false
+      });
+    }
+  }
+
+  onResizeMouseDown = () => {
+    this.setState({
+      inResizing: true
+    })
+  };
+
+  onResizeMouseMove = (event) => {
+    let rate = (event.nativeEvent.clientY - 50 ) / this.refs.comment.clientHeight * 100;
+    if (rate > 80 || rate < 40 ) {
+      if (rate > 75) {
+        this.setState({
+          commentFooterHeight: 25
+        })
+      }
+      if (rate < 40) {
+        this.setState({
+          commentFooterHeight: 60
+        })
+      }
+      this.setState({
+        inResizing: false
+      })
+      return
+    }
+    this.setState({
+      commentFooterHeight: 100 - rate
+    })
+  };
+
   componentWillMount() {
     this.getUserAvatar();
     this.listComments();
   }
 
   render() {
+    const onResizeMove = this.state.inResizing ? this.onResizeMouseMove : null;
     return (
-      <div className="seafile-comment">
+      <div className={(this.state.inResizing || this.props.inResizing)?
+        'seafile-comment seafile-comment-resizing' : 'seafile-comment'}
+        onMouseMove={onResizeMove} onMouseUp={this.onResizeMouseUp} ref="comment">
         <div className="seafile-comment-title">
           <div onClick={this.props.toggleCommentList} className={'seafile-comment-title-close'}>
             <i className={'fa fa-times-circle'}/>
           </div>
           <div className={'seafile-comment-title-text'}>{gettext('Comments')}</div>
         </div>
+        <div style={{height:(100-this.state.commentFooterHeight)+'%'}}>
         { this.props.commentsNumber == 0 &&
           <div className={"seafile-comment-list"}>
             <div className="comment-vacant">{gettext('No comment yet.')}</div>
@@ -111,7 +154,9 @@ class ReviewComments extends React.Component {
             })
           }
         </ul>
-        <div className="seafile-comment-footer">
+        </div>
+        <div className="seafile-comment-footer" style={{height:this.state.commentFooterHeight+'%'}}>
+          <div className="seafile-comment-row-resize" onMouseDown={this.onResizeMouseDown}></div>
           <div className="user-header">
             <img className="avatar" src={this.state.userAvatar}/>
           </div>
@@ -168,7 +213,7 @@ class CommentItem extends React.Component {
     return (
       <li className="seafile-comment-item" id={this.props.id}>
         <div className="seafile-comment-info">
-          <img className="avatar reviewer-head" src={this.props.headUrl} />
+          <img className="avatar" src={this.props.headUrl} />
           <div className="reviewer-info">
             <div className="reviewer-name">{this.props.name}</div>
             <div className="review-time">{this.props.time}</div>

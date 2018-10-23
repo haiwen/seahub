@@ -32,6 +32,8 @@ class DraftReview extends React.Component {
       isLoading: true,
       commentsNumber: null,
       isShowComments: false,
+      inResizing: false,
+      commentWidth: 30,
     };
   }
 
@@ -101,11 +103,39 @@ class DraftReview extends React.Component {
     });
   }
 
+  onResizeMouseUp = () => {
+    if (this.state.inResizing) {
+      this.setState({
+        inResizing: false
+      });
+    }
+  }
+
+  onResizeMouseDown = () => {
+    this.setState({
+      inResizing: true
+    })
+  };
+
+  onResizeMouseMove = (e) => {
+    let rate = e.nativeEvent.clientX / this.refs.main.clientWidth * 100;
+    if (rate > 80 || rate < 40 ) {
+      this.setState({
+        inResizing: false
+      })
+      return
+    }
+    this.setState({
+      commentWidth: 100 - rate
+    })
+  };
+
   componentWillMount() {
     this.getCommentsNumber();
   }
 
   render() {
+    const onResizeMove = this.state.inResizing ? this.onResizeMouseMove : null;
     return(
       <div className="wrapper">
         <div id="header" className="header review">
@@ -144,9 +174,11 @@ class DraftReview extends React.Component {
             }
           </div>
         </div>
-        <div id="main" className="main">
-          <div className="cur-view-container content-container">
-            <div className={!this.state.isShowComments ? "cur-view-content" : "cur-view-content cur-view-content-commenton"}>
+        <div id="main" className="main" ref="main">
+          <div className="cur-view-container content-container"
+            onMouseMove={onResizeMove} onMouseUp={this.onResizeMouseUp} ref="comment">
+            <div style={{width:(100-this.state.commentWidth)+'%'}}
+              className={!this.state.isShowComments ? "cur-view-content" : "cur-view-content cur-view-content-commenton"} >
               <div className="markdown-viewer-render-content article">
                 {this.state.isLoading ? 
                   <Loading /> :
@@ -155,11 +187,15 @@ class DraftReview extends React.Component {
               </div>
             </div>
             { this.state.isShowComments &&
-              <ReviewComments
-                toggleCommentList={this.toggleCommentList}
-                commentsNumber={this.state.commentsNumber}
-                getCommentsNumber={this.getCommentsNumber}
-              />
+              <div className="cur-view-right-part" style={{width:(this.state.commentWidth)+'%'}}>
+                <div className="seafile-comment-resize" onMouseDown={this.onResizeMouseDown}></div>
+                <ReviewComments
+                  toggleCommentList={this.toggleCommentList}
+                  commentsNumber={this.state.commentsNumber}
+                  getCommentsNumber={this.getCommentsNumber}
+                  inResizing={this.state.inResizing}
+                />
+              </div>
             }
           </div>
         </div>

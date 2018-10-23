@@ -33,11 +33,13 @@ function stringify(config) {
   this.Compiler = compiler;
 
   function compiler(tree) {
+    // use sanity to remove dangerous html, the default is
     var hast = sanitize(tree, schema);
     return toHTML(hast, settings);
   }
 }
 
+// markdown -> mdast -> html AST -> html
 var processor = unified()
   .use(markdown, {commonmark: true})
   .use(breaks)
