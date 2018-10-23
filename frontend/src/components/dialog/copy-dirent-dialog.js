@@ -7,12 +7,12 @@ import DialogRepoListView from '../dialog-list-view/dialog-repo-list-view';
 const propTypes = {
   direntPath: PropTypes.string,
   dirent: PropTypes.object.isRequired,
-  onItemMove: PropTypes.func.isRequired,
-  onCancelMove: PropTypes.func.isRequired,
+  onItemCopy: PropTypes.func.isRequired,
+  onCancelCopy: PropTypes.func.isRequired,
 };
 
 // need dirent file Path；
-class MoveDirent extends React.Component {
+class CopyDirent extends React.Component {
 
   constructor(props) {
     super(props);
@@ -47,30 +47,30 @@ class MoveDirent extends React.Component {
     }
 
     if (filePath && direntPath === filePath) {
-      message = 'Moveing folder(file) is same as move to dirent';
+      message = 'Copying folder(file) is same as move to dirent';
       this.setState({errMessage: gettext(message)});
       return;
     }
 
     
     if (filePath && direntPath.length > filePath.length && direntPath.indexOf(filePath) > -1) {
-      message = 'Moveing folder(file) is just in this dirent';
+      message = 'Copying folder(file) is just in this dirent';
       this.setState({errMessage: gettext(message)});
       return;
     }
     
     if ( filePath && filePath.length > direntPath.length && filePath.indexOf(direntPath) > -1) {
-      message = 'Can not move directory ' + direntPath + ' to its subdirectory ' + filePath;
+      message = 'Can not copy directory ' + direntPath + ' to its subdirectory ' + filePath;
       this.setState({errMessage: gettext(message)});
       return;
     }
 
-    this.props.onItemMove(repo, direntPath, filePath);
+    this.props.onItemCopy(repo, direntPath, filePath);
     this.toggle();
   }
 
   toggle = () => {
-    this.props.onCancelMove();
+    this.props.onCancelCopy();
   }
 
   onDirentItemClick = (repo, filePath) => {
@@ -92,7 +92,7 @@ class MoveDirent extends React.Component {
   render() {
     return (
       <Modal isOpen={true} toggle={this.toggle}>
-        <ModalHeader toggle={this.toggle}>{gettext(`Move ${this.props.dirent.name} to`)}</ModalHeader>
+        <ModalHeader toggle={this.toggle}>{gettext(`Copy ${this.props.dirent.name} to`)}</ModalHeader>
         <ModalBody>
           <DialogRepoListView 
             onDirentItemClick={this.onDirentItemClick}
@@ -109,6 +109,6 @@ class MoveDirent extends React.Component {
   }
 }
 
-MoveDirent.propTypes = propTypes;
+CopyDirent.propTypes = propTypes;
 
-export default MoveDirent;
+export default CopyDirent;

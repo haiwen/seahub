@@ -1,14 +1,15 @@
 import React, { Component } from 'react';
 import ReactDOM from 'react-dom';
+import moment from 'moment';
+import cookie from 'react-cookies';
+import { gettext, repoID, serviceUrl, initialFilePath } from './utils/constants';
+import { seafileAPI } from './utils/seafile-api';
+import editorUtilities from './utils/editor-utilties';
 import SidePanel from './pages/repo-wiki-mode/side-panel';
 import MainPanel from './pages/repo-wiki-mode/main-panel';
-import moment from 'moment';
-import { repoID, serviceUrl, initialFilePath } from './utils/constants';
-import editorUtilities from './utils/editor-utilties';
-import { seafileAPI } from './utils/seafile-api';
 import Node from './components/tree-view/node';
 import Tree from './components/tree-view/tree';
-import cookie from 'react-cookies';
+import Toast from './components/toast';
 import 'seafile-ui';
 import './assets/css/fa-solid.css';
 import './assets/css/fa-regular.css';
@@ -189,11 +190,55 @@ class Wiki extends Component {
   }
 
   onMainItemMove = (repo, direntPath, moveToDirentPath) => {
+    let index   = direntPath.lastIndexOf('/');
+    let dirPath = direntPath.slice(0, index + 1);
+    let dirName = direntPath.slice(index + 1); 
+    if (repo.repo_id === repoID) {
+      seafileAPI.moveDir(repoID, repo.repo_id, moveToDirentPath, dirPath, dirName).then(() => {
+        let tree = this.state.tree_data.clone();
+        let moveNode = tree.getNodeByPath(direntPath);
+        let moveNodeParent = tree.findNodeParentFromTree(moveNode);
+        let moveToNode = tree.getNodeByPath(moveToDirentPath);
+        tree.addNodeToParent(moveNode, moveToNode);
+        tree.removeNodeFromParent(moveNode, moveNodeParent);
 
+        this.exitViewFileState(tree, moveNodeParent);
+        Toast.success(gettext('Moveing operation succeeded'));
+      }).catch(() => {
+        Toast.error(gettext('Moveing operation failed'));
+      })
+    } else {
+        seafileAPI.moveDir(repoID, repo.repo_id, moveToDirentPath, dirPath, dirName).then(res => {
+          Toast.success(gettext('Moveing operation succeeded'));
+        }).catch(() => {
+          Toast.error(gettext('Moveing operation failed'));
+        })
+    }
   }
 
   onMainItemCopy = (repo, direntPath, copyToDirentPath) => {
+    let index   = direntPath.lastIndexOf('/');
+    let dirPath = direntPath.slice(0, index + 1);
+    let dirName = direntPath.slice(index + 1); 
+    if (repo.repo_id === repoID) {
+      seafileAPI.copyDir(repoID, repo.repo_id, copyToDirentPath, dirPath, dirName).then(() => {
+        let tree = this.state.tree_data.clone();
+        let copyNode = tree.getNodeByPath(direntPath);
+        let copyToNode = tree.getNodeByPath(copyToDirentPath);
+        tree.addNodeToParent(copyNode, copyToNode);
 
+        this.exitViewFileState(tree, this.state.changedNode);
+        Toast.success(gettext('Copying operation succeeded'));
+      }).catch(() => {
+        Toast.error(gettext('Copying operation failed'));
+      })
+    } else {
+        seafileAPI.copyDir(repoID, repo.repo_id, copyToDirentPath, dirPath, dirName).then(res => {
+          Toast.success(gettext('Copying operation succeeded'));
+        }).catch(() => {
+          Toast.error(gettext('Copying operation failed'));
+        })
+    }
   }
 
   onNodeClick = (e, node) => {

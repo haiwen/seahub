@@ -6,6 +6,7 @@ import editorUtilities from '../../utils/editor-utilties';
 import DirentListItem from './dirent-list-item';
 import ZipDownloadDialog from '../dialog/zip-download-dialog';
 import MoveDirentDialog from '../dialog/move-dirent-dialog';
+import CopyDirentDialog from '../dialog/copy-dirent-dialog';
 
 const propTypes = {
   filePath: PropTypes.string.isRequired,
@@ -54,20 +55,30 @@ class DirentListView extends React.Component {
   }
 
   onDirentItemCopy = (dirent, direntPath) => {
-    //todos;
+    this.setState({
+      isCopyDialogShow: true,
+      currentDirent: dirent,
+      direntPath: direntPath
+    });
   }
 
   onItemMove = (repo, direntPath, moveToDirentPath) => {
     this.props.onItemMove(repo, direntPath, moveToDirentPath);
   }
-
-  onItemCopy = (repo, direntPath, copyToDirentPath) => {
-    //todos;
-  }
-
+  
   onCancelMove = () => {
     this.setState({
       isMoveDialogShow: false
+    });
+  }
+  
+  onItemCopy = (repo, direntPath, copyToDirentPath) => {
+    this.props.onItemCopy(repo, direntPath, copyToDirentPath);
+  }
+  
+  onCancelCopy = () => {
+    this.setState({
+      isCopyDialogShow: false
     });
   }
 
@@ -168,6 +179,14 @@ class DirentListView extends React.Component {
             onItemMove={this.props.onItemMove}
             onCancelMove={this.onCancelMove} 
           />
+        }
+        {this.state.isCopyDialogShow &&
+          <CopyDirentDialog 
+            dirent={this.state.currentDirent} 
+            direntPath={this.state.direntPath} 
+            onItemCopy={this.props.onItemCopy}
+            onCancelCopy={this.onCancelCopy} 
+        />
         }
       </div>
     );

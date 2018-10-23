@@ -28,7 +28,7 @@ class DialogRepoListView extends React.Component {
         });
         this.setState({
           currentRepo: repo,
-          seletedRepo: repo,
+          seletedRepo: null,
           repoList: repoList
         });
       });
@@ -58,9 +58,9 @@ class DialogRepoListView extends React.Component {
 
 
   render() {
-    let { currentRepo, seletedRepo, repoList } = this.state;
+    let { currentRepo, seletedRepo, repoList, moveToPath } = this.state;
     let isSelected = false;
-    if ( currentRepo && seletedRepo) {
+    if ( currentRepo && seletedRepo && !moveToPath) {
       isSelected = currentRepo.repo_name === seletedRepo.repo_name;
     }
     return (
