@@ -12,13 +12,18 @@ from django.utils import timezone
 from django.utils.translation import ugettext as _
 from django.http import HttpResponse
 
+from seaserv import ccnet_api
+
 from seahub.utils import get_file_ops_stats_by_day, \
         get_total_storage_stats_by_day, get_user_activity_stats_by_day, \
         is_pro_version, EVENTS_ENABLED, get_system_traffic_by_day, \
         get_all_users_traffic_by_month
 from seahub.utils.timeutils import datetime_to_isoformat_timestr
 from seahub.utils.ms_excel import write_xls
-from seahub.utils.file_size import get_file_size_unit, UNIT_MB
+from seahub.utils.file_size import byte_to_mb
+from seahub.views.sysadmin import _populate_user_quota_usage
+from seahub.base.templatetags.seahub_tags import email2nickname, \
+        email2contact_email
 
 from seahub.api2.authentication import TokenAuthentication
 from seahub.api2.throttling import UserRateThrottle
@@ -184,15 +189,11 @@ def get_time_offset():
     offset = pytz.timezone(timezone_name).localize(datetime.datetime.now()).strftime('%z')
     return offset[:3] + ':' + offset[3:]
 
+
 class SystemUsersTrafficExcelView(APIView):
     authentication_classes = (TokenAuthentication, SessionAuthentication)
     throttle_classes = (UserRateThrottle,)
     permission_classes = (IsAdminUser,)
-
-    def byte_to_mb(self, byte):
-
-        unit = get_file_size_unit(UNIT_MB)
-        return round(float(byte)/unit, 2)
 
     def get(self, request):
 
@@ -221,12 +222,12 @@ class SystemUsersTrafficExcelView(APIView):
                 _("Link Upload") + ('(MB)')]
 
         for data in res_data:
-            web_download = self.byte_to_mb(data['web_file_download'])
-            sync_download = self.byte_to_mb(data['sync_file_download'])
-            link_download = self.byte_to_mb(data['link_file_download'])
-            web_upload = self.byte_to_mb(data['web_file_upload'])
-            sync_upload = self.byte_to_mb(data['sync_file_upload'])
-            link_upload = self.byte_to_mb(data['link_file_upload'])
+            web_download = byte_to_mb(data['web_file_download'])
+            sync_download = byte_to_mb(data['sync_file_download'])
+            link_download = byte_to_mb(data['link_file_download'])
+            web_upload = byte_to_mb(data['web_file_upload'])
+            sync_upload = byte_to_mb(data['sync_file_upload'])
+            link_upload = byte_to_mb(data['link_file_upload'])
 
             row = [month, data['user'], web_download, sync_download, \
                     link_download, web_upload, sync_upload, link_upload]
@@ -237,6 +238,62 @@ class SystemUsersTrafficExcelView(APIView):
 
         try:
             wb = write_xls(excel_name, head, data_list)
+        except Exception as e:
+            logger.error(e)
+            error_msg = 'Internal Server Error'
+            return api_error(status.HTTP_500_INTERNAL_SERVER_ERROR, error_msg)
+
+        response = HttpResponse(content_type='application/ms-excel')
+        response['Content-Disposition'] = 'attachment; filename=%s.xlsx' % excel_name
+        wb.save(response)
+
+        return response
+
+
+class SystemUsersTrafficUsageExcelView(APIView):
+    authentication_classes = (TokenAuthentication, SessionAuthentication)
+    throttle_classes = (UserRateThrottle,)
+    permission_classes = (IsAdminUser,)
+
+    def get(self, request):
+
+        db_users = ccnet_api.get_emailusers('DB', -1, -1)
+        ldap_import_users = ccnet_api.get_emailusers('LDAPImport', -1, -1)
+        all_users = db_users + ldap_import_users
+
+        head = [_("Email"), _("Name"), _("Contact Email"),
+                _("Space Usage") + "(MB)", _("Space Quota") + "(MB)"]
+
+        # only operate 100 users for every `for` loop
+        looped = 0
+        limit = 100
+        data_list = []
+
+        while looped < len(all_users):
+
+            current_users = all_users[looped:looped+limit]
+
+            for user in current_users:
+
+                user_email = user.email
+                user_name = email2nickname(user_email)
+                user_contact_email = email2contact_email(user_email)
+
+                _populate_user_quota_usage(user)
+                space_usage_MB = byte_to_mb(user.space_usage)
+                space_quota_MB = byte_to_mb(user.space_quota)
+
+                row = [user_email, user_name, user_contact_email,
+                        space_usage_MB, space_quota_MB]
+
+                data_list.append(row)
+
+            # update `looped` value when `for` loop finished
+            looped += limit
+
+        excel_name = 'users'
+        try:
+            wb = write_xls('users', head, data_list)
         except Exception as e:
             logger.error(e)
             error_msg = 'Internal Server Error'

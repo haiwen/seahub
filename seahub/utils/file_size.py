@@ -1,5 +1,8 @@
 # Copyright (c) 2012-2016 Seafile Ltd.
 
+import logging
+logger = logging.getLogger(__name__)
+
 UNIT_KB = 'kb'
 UNIT_MB = 'mb'
 UNIT_GB = 'gb'
@@ -47,3 +50,15 @@ def get_quota_from_string(quota_str):
         return None
 
     return quota
+
+def byte_to_mb(byte):
+
+    if byte < 0:
+        return ''
+
+    try:
+        unit = get_file_size_unit(UNIT_MB)
+        return round(float(byte)/unit, 2)
+    except Exception as e:
+        logger.error(e)
+        return ''

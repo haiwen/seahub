@@ -19,6 +19,14 @@
     </form>
 </div>
 
+<div class="system-statistic-time-range ovhd">
+    <h3>{% trans "Get traffic usage of all users." %}</h3>
+    <form id="system-users-traffic-usage" action="">
+        <button type="submit" class="submit">{% trans "Create Report" %}</button>
+        <span class="error hide"></span>
+    </form>
+</div>
+
 {% endblock %}
 
 {% block extra_script %}
@@ -50,6 +58,14 @@ $('.date-custom-form').on('submit', function() {
     }
 
     $error.addClass('hide');
+});
+
+
+// custom time range
+$('#system-users-traffic-usage').on('submit', function() {
+    var $form = $(this);
+    location.href = "{% url 'api-v2.1-admin-statistics-system-users-traffic-usage-excel' %}";
+    return false;
 });
 </script>
 {% endblock %}
