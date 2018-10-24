@@ -9,6 +9,7 @@ import '../../css/dirent-detail.css';
 const propTypes = {
   dirent: PropTypes.object.isRequired,
   direntPath: PropTypes.string.isRequired,
+  onItemDetailsClose: PropTypes.func.isRequired,
 };
 
 class DirentDetail extends React.Component {
@@ -59,7 +60,7 @@ class DirentDetail extends React.Component {
     return (
       <div className="detail-container">
         <div className="detail-header">
-          <div className="detail-control sf2-icon-x1"></div>
+          <div className="detail-control sf2-icon-x1" onClick={this.props.onItemDetailsClose}></div>
           <div className="detail-title dirent-title">
             <img src={dirent.type === 'dir' ? serviceUrl + '/media/img/folder-192.png' : serviceUrl + '/media/img/file/192/txt.png'} alt="icon"></img>
             <span className="name">{dirent.name}</span>

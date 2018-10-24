@@ -33,6 +33,12 @@ class DirentRename extends React.Component {
     e.nativeEvent.stopImmediatePropagation();
   }
 
+  onKeyPress = (e) => {
+    if (e.key === 'Enter') {
+      this.onRenameConfirm(e);
+    }
+  }
+
   onRenameConfirm = (e) => {
     e.nativeEvent.stopImmediatePropagation();
     this.props.onRenameConfirm(this.state.name);

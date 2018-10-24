@@ -183,6 +183,10 @@ class MainPanel extends Component {
     });
   }
 
+  onItemDetailsClose = () => {
+    this.setState({isDirentDetailShow: false});
+  }
+
   render() {
     let filePathList = this.props.filePath.split('/');
     let nodePath = '';
@@ -292,6 +296,7 @@ class MainPanel extends Component {
               <DirentDetail 
                 dirent={this.state.currentDirent}
                 direntPath={this.state.currentFilePath}
+                onItemDetailsClose={this.onItemDetailsClose}
               />
             </div>
           }
