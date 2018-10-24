@@ -225,11 +225,13 @@ class DirentListItem extends React.Component {
   onDirentItemMove = () => {
     let direntPath = this.getDirentPath(this.props.dirent);
     this.props.onDirentItemMove(this.props.dirent, direntPath);
+    this.onItemMenuHide();
   }
 
   onDirentItemCopy = () => {
     let direntPath = this.getDirentPath(this.props.dirent);
     this.props.onDirentItemCopy(this.props.dirent, direntPath);
+    this.onItemMenuHide();
   }
 
   onPermissionItem = () => {
