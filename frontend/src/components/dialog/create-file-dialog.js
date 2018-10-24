@@ -16,6 +16,7 @@ class CreateFile extends React.Component {
     this.state = {
       parentPath: '',
       childName: props.fileType,
+      isDraft: false,
     };
     this.newInput = React.createRef();
   }
@@ -28,12 +29,62 @@ class CreateFile extends React.Component {
 
   handleSubmit = () => {
     let path = this.state.parentPath + this.state.childName;
-    this.props.onAddFile(path);
+    let isDraft = this.state.isDraft;
+    this.props.onAddFile(path, isDraft);
   } 
 
   handleKeyPress = (e) => {
     if (e.key === 'Enter') {
       this.handleSubmit();
+    }
+  }
+
+  handleCheck = () => {
+    let pos = this.state.childName.lastIndexOf(".");
+    
+    if (this.state.isDraft) {
+      // from draft to not draft
+      // case 1, normally, the file name is ended with `(draft)`, like `test(draft).md`
+      // case 2, the file name is not ended with `(draft)`, the user has deleted some characters, like `test(dra.md`
+      let p = this.state.childName.substring(pos-7, pos);
+      let fileName = this.state.childName.substring(0, pos-7);
+      let fileType = this.state.childName.substring(pos);
+      if (p === '(draft)') {
+        // remove `(draft)` from file name
+        this.setState({
+          childName: fileName + fileType, 
+          isDraft: !this.state.isDraft
+        })
+      } else {
+        // don't change file name
+        this.setState({
+          isDraft: !this.state.isDraft
+        })
+      }
+    }
+    
+    if (!this.state.isDraft) {
+      // from not draft to draft
+      // case 1, test.md  ===> test(draft).md
+      // case 2, .md ===> (draft).md
+      // case 3, no '.' in the file name, don't change the file name
+      if (pos > 0) {
+        let fileName = this.state.childName.substring(0, pos);
+        let fileType = this.state.childName.substring(pos);
+        this.setState({
+          childName: fileName + '(draft)' + fileType,
+          isDraft: !this.state.isDraft
+        })
+      } else if (pos === 0 ) {
+        this.setState({
+          childName: '(draft)' + this.state.childname, 
+          isDraft: !this.state.isdraft
+        })
+      } else {
+         this.setState({
+          isDraft: !this.state.isdraft
+        })
+      } 
     }
   }
 
@@ -67,6 +118,13 @@ class CreateFile extends React.Component {
                 <Input onKeyPress={this.handleKeyPress} innerRef={input => {this.newInput = input;}} id="fileName" placeholder={gettext('newName')} value={this.state.childName} onChange={this.handleChange}/>
               </Col>
             </FormGroup>
+            <FormGroup row>
+              <Label sm={3} check />
+              <Col sm={9}>
+                <Input type="checkbox" onChange={this.handleCheck}/>{'  '}{gettext("This is a draft.")}
+              </Col>
+            </FormGroup>
+
           </Form>
         </ModalBody>
         <ModalFooter>

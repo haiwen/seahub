@@ -58,6 +58,7 @@ from seahub.thumbnail.utils import generate_thumbnail
 from seahub.notifications.models import UserNotification
 from seahub.options.models import UserOptions
 from seahub.profile.models import Profile, DetailedProfile
+from seahub.drafts.models import Draft
 from seahub.signals import (repo_created, repo_deleted)
 from seahub.share.models import FileShare, OrgFileShare, UploadLinkShare
 from seahub.utils import gen_file_get_url, gen_token, gen_file_upload_url, \
@@ -2632,6 +2633,7 @@ class FileView(APIView):
         username = request.user.username
         parent_dir = os.path.dirname(path)
         operation = request.POST.get('operation', '')
+        is_draft = request.POST.get('is_draft', '')
 
         file_info = {}
         if operation.lower() == 'rename':
@@ -2772,6 +2774,17 @@ class FileView(APIView):
                 return api_error(status.HTTP_403_FORBIDDEN,
                                  'You do not have permission to create file.')
 
+            if is_draft.lower() == 'true':
+                file_name = os.path.basename(path)
+                file_dir = os.path.dirname(path)
+
+                draft_type = os.path.splitext(file_name)[0][-7:]
+                file_type = os.path.splitext(file_name)[-1]
+
+                if draft_type != '(draft)':
+                    f = os.path.splitext(file_name)[0]
+                    path = file_dir + '/' + f + '(draft)' + file_type
+
             new_file_name = os.path.basename(path)
 
             if not seafile_api.is_valid_filename('fake_repo_id', new_file_name):
@@ -2786,6 +2799,10 @@ class FileView(APIView):
             except SearpcError, e:
                 return api_error(HTTP_520_OPERATION_FAILED,
                                  'Failed to create file.')
+
+            if is_draft.lower() == 'true':
+                repo = seafile_api.get_repo(repo_id)
+                Draft.objects.add(username, repo, path, file_exist=False)
 
             if request.GET.get('reloaddir', '').lower() == 'true':
                 return reloaddir(request, repo, parent_dir)

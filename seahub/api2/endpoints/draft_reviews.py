@@ -1,4 +1,6 @@
 # Copyright (c) 2012-2016 Seafile Ltd.
+import os
+
 from rest_framework import status
 from rest_framework.authentication import SessionAuthentication
 from rest_framework.permissions import IsAuthenticated
@@ -89,7 +91,33 @@ class DraftReviewView(APIView):
                 return api_error(status.HTTP_409_CONFLICT,
                              'There is a conflict between the draft and the original file')
 
-            file_id = seafile_api.get_file_id_by_path(r.origin_repo_id, r.origin_file_path)
+            origin_file_path = r.origin_file_path
+
+            # if it is a new draft
+            # case1. '/path/test(draft).md' ---> '/path/test.md'
+            # case2. '/path/test(dra.md' ---> '/path/test(dra.md'
+            if d.draft_file_path == r.origin_file_path:
+                new_draft_dir = os.path.dirname(origin_file_path)
+                new_draft_name = os.path.basename(origin_file_path)
+
+                draft_flag = os.path.splitext(new_draft_name)[0][-7:]
+
+                # remove `(draft)` from file name
+                if draft_flag == '(draft)':
+                    f = os.path.splitext(new_draft_name)[0][:-7]
+                    file_type = os.path.splitext(new_draft_name)[-1]
+                    new_draft_name = f + file_type
+
+                if new_draft_dir == '/':
+                    origin_file_path = new_draft_dir + new_draft_name
+                else:
+                    origin_file_path = new_draft_dir + '/' + new_draft_name
+
+                r.draft_file_path = origin_file_path
+                r.origin_file_path = origin_file_path
+
+            # get draft published version
+            file_id = seafile_api.get_file_id_by_path(r.origin_repo_id, origin_file_path)
             r.publish_file_version = file_id
             r.save()
             d.delete()

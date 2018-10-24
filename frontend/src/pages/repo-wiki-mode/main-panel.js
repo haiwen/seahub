@@ -158,9 +158,9 @@ class MainPanel extends Component {
     this.setState({showFileDialog: !this.state.showFileDialog});
   }
 
-  onMainAddFile = (filePath) => {
+  onMainAddFile = (filePath, isDraft) => {
     this.setState({showFileDialog: !this.state.showFileDialog});
-    this.props.onMainAddFile(filePath);
+    this.props.onMainAddFile(filePath, isDraft);
   }
 
   onMainAddFolder = (dirPath) => {

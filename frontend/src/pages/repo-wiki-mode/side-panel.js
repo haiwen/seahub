@@ -127,9 +127,9 @@ class SidePanel extends Component {
     this.props.onAddFolderNode(dirPath);
   }
   
-  onAddFileNode = (filePath) => {
+  onAddFileNode = (filePath, isDraft) => {
     this.setState({showFile: !this.state.showFile});
-    this.props.onAddFileNode(filePath);
+    this.props.onAddFileNode(filePath, isDraft);
   }
   
   onRenameNode = (newName) => {
