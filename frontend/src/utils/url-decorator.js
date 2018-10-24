@@ -24,7 +24,7 @@ class URLDecorator {
       url = 'seafile://openfile?repo_id=' + options.repoID + '&path=' + Utils.encodePath(options.filePath);
       break;
     case 'draft_view':
-      url = siteRoot + 'lib/' + options.repoID + '/file' + options.filePath + '?mode=edit&draft_id=' + options.draftID + '&referer=' + Utils.encodePath(options.referer);
+      url = siteRoot + 'lib/' + options.repoID + '/file' + options.filePath + '?mode=edit&draft_id=' + options.draftId;
       break;
     default:
       url = '';

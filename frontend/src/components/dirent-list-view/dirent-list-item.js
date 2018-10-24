@@ -265,11 +265,11 @@ class DirentListItem extends React.Component {
     seafileAPI.createDraft(repoID,filePath).then(res => {
       let draft_file_Path = res.data.draft_file_path;
       let draftId = res.data.id;
-      let referer = location.href;
-      let url = URLDecorator.getUrl({type: 'draft_view', repoID: repoID, filePath: draft_file_Path, draftId: draftId, referer: referer});
-      window.open(url);
+      let url = URLDecorator.getUrl({type: 'draft_view', repoID: repoID, filePath: draft_file_Path, draftId: draftId});
+      let newWindow = window.open('draft');
+      newWindow.location.href = url;
     }).catch(() => {
-      //todos;
+      Toast.error('Create draft failed.');
     });
     this.onItemMenuHide();
   }
@@ -282,7 +282,7 @@ class DirentListItem extends React.Component {
     let filePath = this.getDirentPath(this.props.dirent);
     let referer = location.href;
     let url = URLDecorator.getUrl({type: 'file_revisions', repoID: repoID, filePath: filePath, referer: referer});
-    window.open(url);
+    location.href = url;
     this.onItemMenuHide();
   }
 
