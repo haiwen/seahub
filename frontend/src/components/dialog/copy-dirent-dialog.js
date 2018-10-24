@@ -2,7 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { Button, Modal, ModalHeader, ModalFooter, ModalBody, Alert } from 'reactstrap';
 import { gettext, repoID } from '../../utils/constants';
-import RepoListView from '../dirent-choose/repo-list-view';
+import RepoListView from '../file-chooser/repo-list-view';
 
 const propTypes = {
   direntPath: PropTypes.string,
