@@ -797,6 +797,8 @@ def user_info(request, email):
     reference_id = user.reference_id
     user_default_device = default_device(user) if has_two_factor_auth() else False
 
+    force_2fa = UserOptions.objects.is_force_2fa(user.username)
+
     return render(request, 
         'sysadmin/userinfo.html', {
             'owned_repos': owned_repos,
@@ -812,6 +814,7 @@ def user_info(request, email):
             'personal_groups': personal_groups,
             'two_factor_auth_enabled': has_two_factor_auth(),
             'default_device': user_default_device,
+            'force_2fa': force_2fa,
             'reference_id': reference_id if reference_id else '',
         })
 
