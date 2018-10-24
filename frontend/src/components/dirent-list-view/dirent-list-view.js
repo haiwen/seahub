@@ -16,6 +16,7 @@ const propTypes = {
   onItemClick: PropTypes.func.isRequired,
   onItemMove: PropTypes.func.isRequired,
   onItemCopy: PropTypes.func.isRequired,
+  onItemDetails: PropTypes.func.isRequired,
   updateViewList: PropTypes.func.isRequired,
 };
 
@@ -67,9 +68,7 @@ class DirentListView extends React.Component {
   }
   
   onCancelMove = () => {
-    this.setState({
-      isMoveDialogShow: false
-    });
+    this.setState({isMoveDialogShow: false});
   }
   
   onItemCopy = (repo, direntPath, copyToDirentPath) => {
@@ -77,9 +76,11 @@ class DirentListView extends React.Component {
   }
   
   onCancelCopy = () => {
-    this.setState({
-      isCopyDialogShow: false
-    });
+    this.setState({isCopyDialogShow: false});
+  }
+
+  onItemDetails = (dirent, direntPath) => {
+    this.props.onItemDetails(dirent, direntPath);
   }
 
   onItemDownload = (dirent, direntPath) => {
@@ -162,6 +163,7 @@ class DirentListView extends React.Component {
                     onItemDownload={this.onItemDownload}
                     onDirentItemMove={this.onDirentItemMove}
                     onDirentItemCopy={this.onDirentItemCopy}
+                    onItemDetails={this.onItemDetails}
                   />
                 );
               })

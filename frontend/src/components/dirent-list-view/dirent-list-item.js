@@ -7,6 +7,7 @@ import DirentMenu from './dirent-menu';
 import DirentRename from './dirent-rename';
 
 const propTypes = {
+  filePath: PropTypes.string.isRequired,
   isItemFreezed: PropTypes.bool.isRequired,
   dirent: PropTypes.object.isRequired,
   onItemClick: PropTypes.func.isRequired,
@@ -18,6 +19,7 @@ const propTypes = {
   onItemDownload: PropTypes.func.isRequired,
   onDirentItemMove: PropTypes.func.isRequired,
   onDirentItemCopy: PropTypes.func.isRequired,
+  onItemDetails: PropTypes.func.isRequired,
   updateViewList: PropTypes.func.isRequired,
 };
 
@@ -139,44 +141,44 @@ class DirentListItem extends React.Component {
 
   onItemMenuItemClick = (operation) => {
     switch(operation) {
-      case 'Rename': 
-        this.onRenameMenuItemClick();
-        break;
-      case 'Move':
-        this.onDirentItemMove();
-        break;
-      case 'Copy':
-        this.onDirentItemCopy();
-        break;
-      case 'Permission':
-        this.onPermissionItem();
-        break;
-      case 'Details':
-        this.onDetailsItem();
-        break;
-      case 'Unlock':
-        this.onUnlockItem();
-        break;
-      case 'Lock':
-        this.onLockItem();
-        break;
-      case 'New Draft':
-        this.onNewDraft();
-        break;
-      case 'Comment':
-        this.onComnentItem();
-        break;
-      case 'History':
-        this.onHistory();
-        break;
-      case 'Access Log':
-        this.onAccessLog();
-        break;
-      case 'Open via Client':
-        this.onOpenViaClient();
-        break;
-      default:
-        break;
+    case 'Rename': 
+      this.onRenameMenuItemClick();
+      break;
+    case 'Move':
+      this.onDirentItemMove();
+      break;
+    case 'Copy':
+      this.onDirentItemCopy();
+      break;
+    case 'Permission':
+      this.onPermissionItem();
+      break;
+    case 'Details':
+      this.onDetailsItem();
+      break;
+    case 'Unlock':
+      this.onUnlockItem();
+      break;
+    case 'Lock':
+      this.onLockItem();
+      break;
+    case 'New Draft':
+      this.onNewDraft();
+      break;
+    case 'Comment':
+      this.onComnentItem();
+      break;
+    case 'History':
+      this.onHistory();
+      break;
+    case 'Access Log':
+      this.onAccessLog();
+      break;
+    case 'Open via Client':
+      this.onOpenViaClient();
+      break;
+    default:
+      break;
     }
   }
 
@@ -218,7 +220,9 @@ class DirentListItem extends React.Component {
   }
 
   onDetailsItem = () => {
-
+    let direntPath = this.getDirentPath(this.props.dirent);
+    this.props.onItemDetails(this.props.dirent, direntPath);
+    this.onItemMenuHide();
   }
 
   onLockItem = () => {

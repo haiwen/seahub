@@ -29,7 +29,7 @@ class DialogRepoListView extends React.Component {
     seafileAPI.getRepoInfo(repoID).then(res => {
       let repo = new Repo(res.data);
       seafileAPI.listRepos().then(res => {
-        let repoList = res.data.filter(item => {
+        let repoList = res.data.repos.filter(item => {
           return item.repo_name !== repo.repo_name;
         });
         this.setState({

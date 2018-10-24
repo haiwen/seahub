@@ -7,6 +7,7 @@ import CommonToolbar from '../../components/toolbar/common-toolbar';
 import PathToolbar from '../../components/toolbar/path-toolbar';
 import MarkdownViewer from '../../components/markdown-viewer';
 import DirentListView from '../../components/dirent-list-view/dirent-list-view';
+import DirentDetail from '../../components/dirent-detail/dirent-details';
 import CreateFolder from '../../components/dialog/create-folder-dialog';
 import CreateFile from '../../components/dialog/create-file-dialog';
 
@@ -45,6 +46,9 @@ class MainPanel extends Component {
       showFileDialog: false,
       showFolderDialog: false,
       createFileType: '',
+      isDirentDetailShow: false,
+      currentDirent: null,
+      currentFilePath: '',
     };
   }
 
@@ -171,6 +175,14 @@ class MainPanel extends Component {
     this.props.onMainAddFolder(dirPath);
   }
 
+  onItemDetails = (dirent, direntPath) => {
+    this.setState({
+      currentDirent: dirent,
+      currentFilePath: direntPath,
+      isDirentDetailShow: true,
+    });
+  }
+
   render() {
     let filePathList = this.props.filePath.split('/');
     let nodePath = '';
@@ -238,40 +250,51 @@ class MainPanel extends Component {
           </div>
           <CommonToolbar onSearchedClick={this.props.onSearchedClick} searchPlaceholder={'Search files in this library'}/>
         </div>
-        <div className="cur-view-container">
-          <div className="cur-view-path">
-            <div className="path-containter">
-              <a href={siteRoot + '#common/'} className="normal">{gettext('Libraries')}</a>
-              <span className="path-split">/</span>
-              {this.props.filePath === '/' ?
-                <span>{slug}</span> :
-                <a className="path-link" data-path="/" onClick={this.onMainNavBarClick}>{slug}</a>
-              }
-              {pathElem}
+        <div className="main-panel-center flex-direction-row">
+          <div className="cur-view-container">
+            <div className="cur-view-path">
+              <div className="path-containter">
+                <a href={siteRoot + '#common/'} className="normal">{gettext('Libraries')}</a>
+                <span className="path-split">/</span>
+                {this.props.filePath === '/' ?
+                  <span>{slug}</span> :
+                  <a className="path-link" data-path="/" onClick={this.onMainNavBarClick}>{slug}</a>
+                }
+                {pathElem}
+              </div>
+              <PathToolbar filePath={this.props.filePath}/>
             </div>
-            <PathToolbar filePath={this.props.filePath}/>
+            <div className="cur-view-content">
+              { this.props.isViewFileState ?
+                <MarkdownViewer
+                  markdownContent={this.props.content}
+                  latestContributor={this.props.latestContributor}
+                  lastModified = {this.props.lastModified}
+                  onLinkClick={this.props.onLinkClick}
+                  isFileLoading={this.props.isFileLoading}
+                /> :
+                <DirentListView 
+                  direntList={this.state.direntList}
+                  filePath={this.props.filePath}
+                  onItemClick={this.props.onMainItemClick}
+                  onItemDelete={this.props.onMainItemDelete}
+                  onItemRename={this.props.onMainItemRename}
+                  onItemMove={this.props.onMainItemMove}
+                  onItemCopy={this.props.onMainItemCopy}
+                  onItemDetails={this.onItemDetails}
+                  updateViewList={this.updateViewList}
+                />
+              }
+            </div>
           </div>
-          <div className="cur-view-content">
-            { this.props.isViewFileState ?
-              <MarkdownViewer
-                markdownContent={this.props.content}
-                latestContributor={this.props.latestContributor}
-                lastModified = {this.props.lastModified}
-                onLinkClick={this.props.onLinkClick}
-                isFileLoading={this.props.isFileLoading}
-              /> :
-              <DirentListView 
-                direntList={this.state.direntList}
-                filePath={this.props.filePath}
-                onItemClick={this.props.onMainItemClick}
-                onItemDelete={this.props.onMainItemDelete}
-                onItemRename={this.props.onMainItemRename}
-                onItemMove={this.props.onMainItemMove}
-                onItemCopy={this.props.onMainItemCopy}
-                updateViewList={this.updateViewList}
+          { this.state.isDirentDetailShow &&
+            <div className="cur-view-detail">
+              <DirentDetail 
+                dirent={this.state.currentDirent}
+                direntPath={this.state.currentFilePath}
               />
-            }
-          </div>
+            </div>
+          }
         </div>
         {this.state.showFileDialog && 
           <CreateFile

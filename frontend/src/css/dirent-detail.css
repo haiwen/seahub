@@ -1,0 +1,84 @@
+.detail-container {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  border-left: 1px solid #e8e8e8;
+}
+
+.detail-header {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  line-height: 2.5rem;
+  background-color: #f9f9f9;
+  border-bottom: 1px solid #e8e8e8;
+}
+
+.detail-header .detail-control {
+  position: absolute;
+  font-size: 16px;
+  color: #b9b9b9;
+  left: 0.5rem;
+}
+
+.detail-header .detail-control:hover {
+  color: #888;
+}
+
+.detail-header .detail-title img{
+    width: 1.5rem;
+    height: 1.5rem;
+}
+
+.detail-header .detail-title .name {
+  font-size: 1rem;
+  color: #322;
+}
+
+.detail-body {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+}
+
+.dirent-info .img {
+  height: 10rem;
+  padding: 0.5rem 0;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.dirent-info .img img {
+  width: 6rem;
+  height: 6rem;
+}
+
+.dirent-table-container {
+  padding: 10px 20px;
+  display: flex;
+}
+
+.dirent-table-container table {
+  flex: 1;
+}
+
+.dirent-table-container th,
+.dirent-table-container td {
+  padding: 5px 3px;
+  border: none;
+}
+
+.dirent-table-container th {
+  font-size: 13px;
+  text-align: left;
+  font-weight: normal;
+  color: #9c9c9c;
+}
+
+.dirent-table-container td {
+  font-size: 14px;
+  color: #333;
+  word-break: break-all;
+}

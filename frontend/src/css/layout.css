@@ -108,6 +108,12 @@
   border-radius: 2px;
 }
 
+.cur-view-detail {
+  display: flex;
+  width: 20rem;
+}
+
+/* for reach/router */
 [role=group] {
   display: flex;
   flex: 1;
