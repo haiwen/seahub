@@ -104,7 +104,7 @@ class DraftReview extends React.Component {
   }
 
   onResizeMouseUp = () => {
-    if (this.state.inResizing) {
+    if(this.state.inResizing) {
       this.setState({
         inResizing: false
       });
@@ -114,20 +114,20 @@ class DraftReview extends React.Component {
   onResizeMouseDown = () => {
     this.setState({
       inResizing: true
-    })
+    });
   };
 
   onResizeMouseMove = (e) => {
-    let rate = e.nativeEvent.clientX / this.refs.main.clientWidth * 100;
-    if (rate > 80 || rate < 40 ) {
+    let rate = 100 - e.nativeEvent.clientX / this.refs.main.clientWidth * 100;
+    if(rate < 20 || rate > 60) {
       this.setState({
         inResizing: false
-      })
-      return
+      });
+      return null;
     }
     this.setState({
-      commentWidth: 100 - rate
-    })
+      commentWidth: rate
+    });
   };
 
   componentWillMount() {
@@ -160,8 +160,8 @@ class DraftReview extends React.Component {
             {
               this.state.reviewStatus === 'open' &&
               <div className="cur-file-operation">
-                <button className="btn btn-secondary file-operation-btn" title={gettext('Close Review')} onClick={this.onCloseReview}>{gettext("Close")}</button>
-                <button className="btn btn-success file-operation-btn" title={gettext('Publish Review')} onClick={this.onPublishReview}>{gettext("Publish")}</button>
+                <button className='btn btn-secondary file-operation-btn' title={gettext('Close Review')} onClick={this.onCloseReview}>{gettext('Close')}</button>
+                <button className='btn btn-success file-operation-btn' title={gettext('Publish Review')} onClick={this.onPublishReview}>{gettext('Publish')}</button>
               </div>
             }
             {
@@ -178,7 +178,7 @@ class DraftReview extends React.Component {
           <div className="cur-view-container content-container"
             onMouseMove={onResizeMove} onMouseUp={this.onResizeMouseUp} ref="comment">
             <div style={{width:(100-this.state.commentWidth)+'%'}}
-              className={!this.state.isShowComments ? "cur-view-content" : "cur-view-content cur-view-content-commenton"} >
+              className={!this.state.isShowComments ? 'cur-view-content' : 'cur-view-content cur-view-content-commenton'} >
               <div className="markdown-viewer-render-content article">
                 {this.state.isLoading ? 
                   <Loading /> :

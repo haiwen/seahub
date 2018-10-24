@@ -14,20 +14,20 @@ var deepmerge = require('deepmerge').default;
 function stringify(config) {
   var settings = xtend(config, this.data('settings'));
   var schema = deepmerge(gh, {
-    "attributes":{
-      "input": [
-        "type",
+    'attributes': {
+      'input': [
+        'type',
       ],
-      "li": [
-        "className"
+      'li': [
+        'className'
       ],
-      "code":[
-        "className",
+      'code': [
+        'className',
       ],
     },
-    "tagNames": [
-      "input",
-      "code"
+    'tagNames': [
+      'input',
+      'code'
     ]
   });
   this.Compiler = compiler;
@@ -51,6 +51,6 @@ var processor = unified()
 
 var processorGetAST = unified()
   .use(markdown, {commonmark: true})
-  .use(slug)
+  .use(slug);
 
 export { processor, processorGetAST };

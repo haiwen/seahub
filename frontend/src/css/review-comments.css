@@ -132,3 +132,11 @@
 .seafile-comment-footer .seafile-add-comment .submit-comment {
   height: 28px;
 }
+@media (max-width: 992px) {
+  .seafile-comment-footer {
+    min-height: 80px;
+  }
+  .seafile-comment-footer .seafile-add-comment .add-comment-input {
+    min-height: 30px;
+  }
+}
