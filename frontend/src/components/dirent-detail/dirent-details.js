@@ -1,9 +1,10 @@
 import React from 'react';
 import PropTypes from 'prop-types';
+import { seafileAPI } from '../../utils/seafile-api';
 import { serviceUrl, repoID } from '../../utils/constants';
 import DetailListView from './detail-list-view';
+import Repo from '../../models/repo';
 import '../../css/dirent-detail.css';
-import { seafileAPI } from '../../utils/seafile-api';
 
 const propTypes = {
   dirent: PropTypes.object.isRequired,
@@ -17,12 +18,18 @@ class DirentDetail extends React.Component {
     this.state = {
       direntType: '',
       direntDetail: '',
+      repo: null,
     };
   }
 
   componentDidMount() {
     let { dirent, direntPath } = this.props;
-    this.updateDetailView(dirent, direntPath);
+    seafileAPI.getRepoInfo(repoID).then(res => {
+      let repo = new Repo(res.data);
+      this.setState({repo: repo});
+      this.updateDetailView(dirent, direntPath);
+    })
+
   }
 
   componentWillReceiveProps(nextProps) {
@@ -64,8 +71,10 @@ class DirentDetail extends React.Component {
           </div>
           {this.state.direntDetail && 
             <DetailListView 
-              direntDetail={this.state.direntDetail} 
+              repo={this.state.repo}
+              direntPath={this.props.direntPath}
               direntType={this.state.direntType}
+              direntDetail={this.state.direntDetail} 
             />
           }
         </div>

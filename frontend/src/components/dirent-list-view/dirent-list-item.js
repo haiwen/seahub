@@ -3,6 +3,7 @@ import PropTypes from 'prop-types';
 import { serviceUrl, gettext, repoID } from '../../utils/constants';
 import { seafileAPI } from '../../utils/seafile-api';
 import URLDecorator from '../../utils/url-decorator';
+import Toast from '../toast';
 import DirentMenu from './dirent-menu';
 import DirentRename from './dirent-rename';
 
@@ -192,7 +193,23 @@ class DirentListItem extends React.Component {
   }
 
   onRenameConfirm = (newName) => {
-    //todos; 校验
+    if (newName === this.props.dirent.name) {
+      this.onRenameCancel();
+      return false;
+    }
+    
+    if (!newName) {
+      let errMessage = 'It is required.';
+      Toast.error(gettext(errMessage));
+      return false;
+    }
+    
+    if (newName.indexOf('/') > -1) {
+      let errMessage = 'Name should not include "/".';
+      Toast.error(gettext(errMessage));
+      return false;
+    }
+
     let direntPath = this.getDirentPath(this.props.dirent);
     this.props.onItemRename(direntPath, newName);
     this.onRenameCancel();
