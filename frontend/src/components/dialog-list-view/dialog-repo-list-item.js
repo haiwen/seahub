@@ -1,6 +1,5 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { serviceUrl } from '../../utils/constants';
 import DialogDirentListView from './dialog-dirent-list-view';
 
 const propTypes = {
@@ -44,7 +43,7 @@ class DialogRepoListItem extends React.Component {
       <li className="dialog-list-item">
         <span className={`item-toggle fa ${this.state.isShowChildren ? 'fa-caret-down' : 'fa-caret-right'}`} onClick={this.onToggleClick}></span>
         <span className={`item-info ${repoActive ? 'item-active' : ''}`} onClick={this.onRepoItemClick}>
-          <img src={serviceUrl + '/media/img/folder-192.png'} alt='icon'></img>
+          <span className="icon far fa-folder"></span>
           <span className="name">{this.props.repo.repo_name}</span>
         </span>
         {

@@ -15,6 +15,7 @@
   line-height: 1.5rem !important;
   text-align: center;
   cursor: pointer;
+  color: #c0c0c0;
 }
 
 .dialog-content-container .list-view {
@@ -42,7 +43,7 @@
 }
 
 .dialog-list-item .item-toggle {
-
+  
 }
 
 .dialog-list-item .item-info {
@@ -63,7 +64,8 @@
   box-shadow: inset 0 0 1px #999;
 }
 
-.dialog-list-item .item-info img {
+.dialog-list-item .item-info .icon {
+  color: #b0b0b0;
   width: 1.5rem;
   height: 1.5rem;
 }

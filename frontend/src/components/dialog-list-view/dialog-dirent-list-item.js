@@ -1,6 +1,5 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { serviceUrl } from '../../utils/constants';
 import { seafileAPI } from '../../utils/seafile-api';
 import Dirent from '../../models/dirent';
 
@@ -87,7 +86,7 @@ class DialogDirentListItem extends React.Component {
           <span className={`item-toggle fa ${this.state.isShowChildren ? 'fa-caret-down' : 'fa-caret-right'}`} onClick={this.onToggleClick}></span>
         }
         <span className={`item-info ${this.state.filePath === this.props.moveToPath ? 'item-active' : ''}`} onClick={this.onItemClick}>
-          <img src={serviceUrl + '/media/img/folder-192.png'} alt="icon"></img>
+          <span className="icon far fa-folder"></span>
           <span className="name">{this.props.dirent && this.props.dirent.name}</span>
         </span>
         {this.state.isShowChildren && this.renderChildren()}
