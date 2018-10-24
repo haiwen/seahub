@@ -1,6 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import DialogDirentListView from './dialog-dirent-list-view';
+import DirentListView from './dirent-list-view';
 
 const propTypes = {
   moveToPath: PropTypes.string,
@@ -11,7 +11,7 @@ const propTypes = {
   onRepoItemClick: PropTypes.func.isRequired,
 };
 
-class DialogRepoListItem extends React.Component {
+class RepoListItem extends React.Component {
 
   constructor(props) {
     super(props);
@@ -47,7 +47,7 @@ class DialogRepoListItem extends React.Component {
           <span className="name">{this.props.repo.repo_name}</span>
         </span>
         {
-          <DialogDirentListView 
+          <DirentListView 
             repo={this.props.repo} 
             isShowChildren={this.state.isShowChildren} 
             onDirentItemClick={this.onDirentItemClick}
@@ -59,6 +59,6 @@ class DialogRepoListItem extends React.Component {
   }
 }
 
-DialogRepoListItem.propTypes = propTypes;
+RepoListItem.propTypes = propTypes;
 
-export default DialogRepoListItem;
+export default RepoListItem;

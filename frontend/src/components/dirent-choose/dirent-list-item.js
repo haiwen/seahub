@@ -11,7 +11,7 @@ const propTypes = {
   onDirentItemClick: PropTypes.func.isRequired,
 };
 
-class DialogDirentListItem extends React.Component {
+class DirentListItem extends React.Component {
 
   constructor(props) {
     super(props);
@@ -63,7 +63,7 @@ class DialogDirentListItem extends React.Component {
       <ul className="list-view-content">
         {this.state.direntList.map((dirent, index) => {
           return (
-            <DialogDirentListItem 
+            <DirentListItem 
               key={index} 
               dirent={dirent}
               repo={this.props.repo}
@@ -95,6 +95,6 @@ class DialogDirentListItem extends React.Component {
   }
 }
 
-DialogDirentListItem.propTypes = propTypes;
+DirentListItem.propTypes = propTypes;
 
-export default DialogDirentListItem;
+export default DirentListItem;

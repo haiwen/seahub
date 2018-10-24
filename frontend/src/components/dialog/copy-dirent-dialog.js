@@ -2,7 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { Button, Modal, ModalHeader, ModalFooter, ModalBody, Alert } from 'reactstrap';
 import { gettext, repoID } from '../../utils/constants';
-import DialogRepoListView from '../dialog-list-view/dialog-repo-list-view';
+import RepoListView from '../dirent-choose/repo-list-view';
 
 const propTypes = {
   direntPath: PropTypes.string,
@@ -92,7 +92,7 @@ class CopyDirent extends React.Component {
       <Modal isOpen={true} toggle={this.toggle}>
         <ModalHeader toggle={this.toggle}>{gettext(`Copy ${this.props.dirent.name} to`)}</ModalHeader>
         <ModalBody>
-          <DialogRepoListView 
+          <RepoListView 
             onDirentItemClick={this.onDirentItemClick}
             onRepoItemClick={this.onRepoItemClick}
           />

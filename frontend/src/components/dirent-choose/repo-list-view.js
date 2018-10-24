@@ -2,7 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { gettext, repoID } from '../../utils/constants';
 import { seafileAPI } from '../../utils/seafile-api';
-import DialogRepoListItem from './dialog-repo-list-item';
+import RepoListItem from './repo-list-item';
 import Repo from '../../models/repo';
 
 import '../../css/dialog-list-view.css';
@@ -12,7 +12,7 @@ const propTypes = {
   onRepoItemClick: PropTypes.func.isRequired,
 };
 
-class DialogRepoListView extends React.Component {
+class RepoListView extends React.Component {
 
   constructor(props) {
     super(props);
@@ -85,7 +85,7 @@ class DialogRepoListView extends React.Component {
           <ul className="list-view-content dialog-list-item">
             {
               this.state.currentRepo && 
-              <DialogRepoListItem 
+              <RepoListItem 
                 repo={currentRepo}
                 initToShow={true}
                 selectedRepo={selectedRepo}
@@ -104,7 +104,7 @@ class DialogRepoListView extends React.Component {
           <ul className="list-view-content dialog-list-item">
             { this.state.showOtherRepo && repoList.map((repo, index) => {
               return (
-                <DialogRepoListItem 
+                <RepoListItem 
                   key={index} 
                   repo={repo}
                   initToShow={false}
@@ -122,6 +122,6 @@ class DialogRepoListView extends React.Component {
   }
 }
 
-DialogRepoListView.propTypes = propTypes;
+RepoListView.propTypes = propTypes;
 
-export default DialogRepoListView;
+export default RepoListView;

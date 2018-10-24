@@ -2,7 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { seafileAPI } from '../../utils/seafile-api';
 import Dirent from '../../models/dirent';
-import DialogDirentListItem from './dialog-dirent-list-item';
+import DirentListItem from './dirent-list-item';
 
 const propTypes = {
   moveToPath: PropTypes.string,
@@ -11,7 +11,7 @@ const propTypes = {
   onDirentItemClick: PropTypes.func.isRequired
 };
 
-class DialogDirentListView extends React.Component {
+class DirentListView extends React.Component {
 
   constructor(props) {
     super(props);
@@ -42,7 +42,7 @@ class DialogDirentListView extends React.Component {
       <ul className={`list-view-content ${this.props.isShowChildren ? '' : 'hide'}`}>
         { direntList.map((dirent, index) => {
           return (
-            <DialogDirentListItem 
+            <DirentListItem 
               key={index} 
               repo={this.props.repo} 
               dirent={dirent}
@@ -56,6 +56,6 @@ class DialogDirentListView extends React.Component {
   }
 }
 
-DialogDirentListView.propTypes = propTypes;
+DirentListView.propTypes = propTypes;
 
-export default DialogDirentListView;
+export default DirentListView;
