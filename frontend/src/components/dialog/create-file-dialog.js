@@ -40,36 +40,39 @@ class CreateFile extends React.Component {
   }
 
   handleCheck = () => {
-    this.setState({
-      isDraft: !this.state.isDraft
-    })
-
     let pos = this.state.childName.lastIndexOf(".");
     
-    //.md ===> (draft).md
-    if (pos === 0) {
-      this.setState({
-        childName: '(draft)' + this.state.childName 
-      })
-    } 
-
-    if (pos > 0) {
-      if (this.state.isDraft) { // demo(draft).md ===> demo.md
-        let p = this.state.childName.substring(pos-7, pos);
-        if (p === '(draft)') {
-          let fileName = this.state.childName.substring(0, pos-7);
-          let fileType = this.state.childName.substring(pos);
-          this.setState({
-            childName: fileName + fileType 
-          })
-        }
-      } else {  // demo.md ===> demo(draft).md
-          let fileName = this.state.childName.substring(0, pos);
-          let fileType = this.state.childName.substring(pos);
-          this.setState({
-            childName: fileName + '(draft)' + fileType 
-          })
+    // test(draft).md ===> test.md
+    if (this.state.isDraft) {
+      let p = this.state.childName.substring(pos-7, pos);
+      let fileName = this.state.childName.substring(0, pos-7);
+      let fileType = this.state.childName.substring(pos);
+      if (p === '(draft)') {
+        this.setState({
+          childName: fileName + fileType, 
+          isDraft: !this.state.isDraft
+        })
       }
+    }
+    
+    if (!this.state.isDraft) {
+      // test.md  ===> test(draft).md
+      if (pos > 0) {
+        let fileName = this.state.childName.substring(0, pos);
+        let fileType = this.state.childName.substring(pos);
+        this.setState({
+          childName: fileName + '(draft)' + fileType,
+          isDraft: !this.state.isDraft
+        })
+      }
+
+      // .md ===> (draft).md
+      if (pos === 0 ) {
+        this.setState({
+          childName: '(draft)' + this.state.childName, 
+          isDraft: !this.state.isDraft
+        })
+      } 
     }
   }
 
