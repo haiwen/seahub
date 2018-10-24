@@ -42,21 +42,32 @@ class CreateFile extends React.Component {
   handleCheck = () => {
     let pos = this.state.childName.lastIndexOf(".");
     
-    // test(draft).md ===> test.md
     if (this.state.isDraft) {
+      // from draft to not draft
+      // case 1, normally, the file name is ended with `(draft)`, like `test(draft).md`
+      // case 2, the file name is not ended with `(draft)`, the user has deleted some characters, like `test(dra.md`
       let p = this.state.childName.substring(pos-7, pos);
       let fileName = this.state.childName.substring(0, pos-7);
       let fileType = this.state.childName.substring(pos);
       if (p === '(draft)') {
+        // remove `(draft)` from file name
         this.setState({
           childName: fileName + fileType, 
+          isDraft: !this.state.isDraft
+        })
+      } else {
+        // don't change file name
+        this.setState({
           isDraft: !this.state.isDraft
         })
       }
     }
     
     if (!this.state.isDraft) {
-      // test.md  ===> test(draft).md
+      // from not draft to draft
+      // case 1, test.md  ===> test(draft).md
+      // case 2, .md ===> (draft).md
+      // case 3, no '.' in the file name, don't change the file name
       if (pos > 0) {
         let fileName = this.state.childName.substring(0, pos);
         let fileType = this.state.childName.substring(pos);
@@ -64,13 +75,14 @@ class CreateFile extends React.Component {
           childName: fileName + '(draft)' + fileType,
           isDraft: !this.state.isDraft
         })
-      }
-
-      // .md ===> (draft).md
-      if (pos === 0 ) {
+      } else if (pos === 0 ) {
         this.setState({
-          childName: '(draft)' + this.state.childName, 
-          isDraft: !this.state.isDraft
+          childName: '(draft)' + this.state.childname, 
+          isDraft: !this.state.isdraft
+        })
+      } else {
+         this.setState({
+          isDraft: !this.state.isdraft
         })
       } 
     }

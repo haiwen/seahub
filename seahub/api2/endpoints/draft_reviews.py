@@ -94,19 +94,24 @@ class DraftReviewView(APIView):
             origin_file_path = r.origin_file_path
 
             # if it is a new draft
-            # e.g. '/path/test(draft).md' ---> '/path/test.md'
+            # case1. '/path/test(draft).md' ---> '/path/test.md'
+            # case2. '/path/test(dra.md' ---> '/path/test(dra.md'
             if d.draft_file_path == r.origin_file_path:
                 new_draft_dir = os.path.dirname(origin_file_path)
                 new_draft_name = os.path.basename(origin_file_path)
-                # delete (draft) e.g. test(draft) ---> test
-                f = os.path.splitext(new_draft_name)[0][:-7]
-                file_type = os.path.splitext(new_draft_name)[-1]
-                file_name = f + file_type
+
+                draft_flag = os.path.splitext(new_draft_name)[0][-7:]
+
+                # remove `(draft)` from file name
+                if draft_flag == '(draft)':
+                    f = os.path.splitext(new_draft_name)[0][:-7]
+                    file_type = os.path.splitext(new_draft_name)[-1]
+                    new_draft_name = f + file_type
 
                 if new_draft_dir == '/':
-                    origin_file_path = new_draft_dir + file_name
+                    origin_file_path = new_draft_dir + new_draft_name
                 else:
-                    origin_file_path = new_draft_dir + '/' + file_name
+                    origin_file_path = new_draft_dir + '/' + new_draft_name
 
                 r.draft_file_path = origin_file_path
                 r.origin_file_path = origin_file_path
