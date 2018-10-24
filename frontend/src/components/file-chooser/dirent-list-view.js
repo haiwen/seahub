@@ -5,7 +5,7 @@ import Dirent from '../../models/dirent';
 import DirentListItem from './dirent-list-item';
 
 const propTypes = {
-  moveToPath: PropTypes.string,
+  selectedPath: PropTypes.string,
   repo: PropTypes.object.isRequired,
   isShowChildren: PropTypes.bool.isRequired,
   onDirentItemClick: PropTypes.func.isRequired
@@ -47,7 +47,7 @@ class DirentListView extends React.Component {
               repo={this.props.repo} 
               dirent={dirent}
               onDirentItemClick={this.props.onDirentItemClick}
-              moveToPath={this.props.moveToPath}
+              selectedPath={this.props.selectedPath}
             />
           );
         })}

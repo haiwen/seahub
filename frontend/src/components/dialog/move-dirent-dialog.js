@@ -2,7 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { Button, Modal, ModalHeader, ModalFooter, ModalBody, Alert } from 'reactstrap';
 import { gettext, repoID } from '../../utils/constants';
-import RepoListView from '../file-chooser/repo-list-view';
+import FileChooser from '../file-chooser/file-chooser';
 
 const propTypes = {
   direntPath: PropTypes.string,
@@ -33,30 +33,27 @@ class MoveDirent extends React.Component {
   handleSubmit = () => {
     let { direntPath } = this.props;
     let { repo, filePath } = this.state; 
-    let message = '';
+    let message = gettext('Invalid destination path');
 
     if (!repo || (repo.repo_id === repoID && filePath === '')) {
-      message = 'Invalid destination path';
-      this.setState({errMessage: gettext(message)});
+      this.setState({errMessage: message});
       return;
     }
-
+    
     if (filePath && direntPath === filePath) {
-      message = 'Moveing folder(file) is same as move to dirent';
-      this.setState({errMessage: gettext(message)});
+      this.setState({errMessage: message});
       return;
     }
-
+    
     
     if (filePath && direntPath.length > filePath.length && direntPath.indexOf(filePath) > -1) {
-      message = 'Moveing folder(file) is just in this dirent';
-      this.setState({errMessage: gettext(message)});
+      this.setState({errMessage: message});
       return;
     }
     
     if ( filePath && filePath.length > direntPath.length && filePath.indexOf(direntPath) > -1) {
-      message = 'Can not move directory ' + direntPath + ' to its subdirectory ' + filePath;
-      this.setState({errMessage: gettext(message)});
+      message = gettext('Can not move directory ') + direntPath + gettext(' to its subdirectory ') + filePath;
+      this.setState({errMessage: message});
       return;
     }
     if (filePath === '') {
@@ -89,9 +86,9 @@ class MoveDirent extends React.Component {
   render() {
     return (
       <Modal isOpen={true} toggle={this.toggle}>
-        <ModalHeader toggle={this.toggle}>{gettext(`Move ${this.props.dirent.name} to`)}</ModalHeader>
+        <ModalHeader toggle={this.toggle}>{gettext('Move ') + this.props.dirent.name + gettext(' to')}</ModalHeader>
         <ModalBody>
-          <RepoListView 
+          <FileChooser 
             onDirentItemClick={this.onDirentItemClick}
             onRepoItemClick={this.onRepoItemClick}
           />

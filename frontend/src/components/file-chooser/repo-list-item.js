@@ -3,10 +3,10 @@ import PropTypes from 'prop-types';
 import DirentListView from './dirent-list-view';
 
 const propTypes = {
-  moveToPath: PropTypes.string,
+  selectedPath: PropTypes.string,
   selectedRepo: PropTypes.object,
   repo: PropTypes.object.isRequired,
-  initToShow: PropTypes.bool.isRequired,
+  initToShowChildren: PropTypes.bool.isRequired,
   onDirentItemClick: PropTypes.func.isRequired,
   onRepoItemClick: PropTypes.func.isRequired,
 };
@@ -16,7 +16,7 @@ class RepoListItem extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      isShowChildren: this.props.initToShow,
+      isShowChildren: this.props.initToShowChildren,
     };
   }
 
@@ -36,11 +36,11 @@ class RepoListItem extends React.Component {
   render() {
     let repoActive = false;
     let isCurrentRepo = this.props.selectedRepo && (this.props.repo.repo_id === this.props.selectedRepo.repo_id);
-    if (isCurrentRepo && !this.props.moveToPath) {
+    if (isCurrentRepo && !this.props.selectedPath) {
       repoActive = true;
     }
     return (
-      <li className="dialog-list-item">
+      <li className="file-chooser-item">
         <span className={`item-toggle fa ${this.state.isShowChildren ? 'fa-caret-down' : 'fa-caret-right'}`} onClick={this.onToggleClick}></span>
         <span className={`item-info ${repoActive ? 'item-active' : ''}`} onClick={this.onRepoItemClick}>
           <span className="icon far fa-folder"></span>
@@ -51,7 +51,7 @@ class RepoListItem extends React.Component {
             repo={this.props.repo} 
             isShowChildren={this.state.isShowChildren} 
             onDirentItemClick={this.onDirentItemClick}
-            moveToPath={this.props.moveToPath}
+            selectedPath={this.props.selectedPath}
           />
         }
       </li>

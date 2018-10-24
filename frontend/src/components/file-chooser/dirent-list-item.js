@@ -5,7 +5,7 @@ import Dirent from '../../models/dirent';
 
 const propTypes = {
   filePath: PropTypes.string,
-  moveToPath: PropTypes.string,
+  selectedPath: PropTypes.string,
   dirent: PropTypes.object.isRequired,
   repo: PropTypes.object.isRequired,
   onDirentItemClick: PropTypes.func.isRequired,
@@ -69,7 +69,7 @@ class DirentListItem extends React.Component {
               repo={this.props.repo}
               filePath={this.state.filePath}
               onItemClick={this.onItemClick}
-              moveToPath={this.props.moveToPath}
+              selectedPath={this.props.selectedPath}
               onDirentItemClick={this.props.onDirentItemClick}
             />
           );
@@ -80,12 +80,12 @@ class DirentListItem extends React.Component {
 
   render() {
     return (
-      <li className="dialog-list-item">
+      <li className="file-chooser-item">
         {
           this.state.hasChildren &&
           <span className={`item-toggle fa ${this.state.isShowChildren ? 'fa-caret-down' : 'fa-caret-right'}`} onClick={this.onToggleClick}></span>
         }
-        <span className={`item-info ${this.state.filePath === this.props.moveToPath ? 'item-active' : ''}`} onClick={this.onItemClick}>
+        <span className={`item-info ${this.state.filePath === this.props.selectedPath ? 'item-active' : ''}`} onClick={this.onItemClick}>
           <span className="icon far fa-folder"></span>
           <span className="name">{this.props.dirent && this.props.dirent.name}</span>
         </span>
