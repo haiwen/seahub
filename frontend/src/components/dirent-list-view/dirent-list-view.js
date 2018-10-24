@@ -25,7 +25,7 @@ class DirentListView extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      progress: '0%',
+      progress: 0,
       isItemFreezed: false,
       isProgressDialogShow: false,
       isMoveDialogShow: false,
@@ -85,7 +85,7 @@ class DirentListView extends React.Component {
 
   onItemDownload = (dirent, direntPath) => {
     if (dirent.type === 'dir') {
-      this.setState({isProgressDialogShow: true, progress: '0%'});
+      this.setState({isProgressDialogShow: true, progress: 0});
       editorUtilities.zipDownload(this.props.filePath, dirent.name).then(res => {
         this.zip_token = res.data['zip_token'];
         this.addDownloadAnimation();
@@ -102,12 +102,12 @@ class DirentListView extends React.Component {
     let token = this.zip_token;
     editorUtilities.queryZipProgress(token).then(res => {
       let data = res.data;
-      let progress = data.total === 0 ? '100%' : (data.zipped / data.total * 100).toFixed(0) + '%';
-      this.setState({progress: progress});
+      let progress = data.total === 0 ? 100 : (data.zipped / data.total * 100).toFixed(0);
+      this.setState({progress: parseInt(progress)});
 
       if (data['total'] === data['zipped']) {
         this.setState({
-          progress: '100%'
+          progress: 100
         });
         clearInterval(this.interval);
         location.href = URLDecorator.getUrl({type: 'download_dir_zip_url', token: token});
