@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React, { Component, Fragment } from 'react';
 import PropTypes from 'prop-types';
 import { gettext, repoID, serviceUrl, slug, siteRoot } from '../../utils/constants';
 import { seafileAPI } from '../../utils/seafile-api';
@@ -221,13 +221,18 @@ class MainPanel extends Component {
             <span className="sf2-icon-menu hidden-md-up d-md-none side-nav-toggle" title={gettext('Side Nav Menu')} onClick={this.onMenuClick}></span>
             <div className="file-operation">
               <div className="operation">
-                { 
+                {
                   this.props.permission === 'rw' &&
                   <button className="btn btn-secondary operation-item" title={gettext('Edit File')} onClick={this.onEditClick}>{gettext('Edit')}</button>
                 }
-                <button className="btn btn-secondary operation-item" title={gettext('Edit File')} onClick={this.onUploadClick}>{gettext('Upload')}</button>
-                <button className="btn btn-secondary operation-item" title={gettext('Edit File')} onClick={this.onNewClick}>{gettext('New')}</button>
-                <button className="btn btn-secondary operation-item" title={gettext('Edit File')} onClick={this.onShareClick}>{gettext('Share')}</button>
+                {
+                  !this.props.isViewFileState &&
+                  <Fragment>
+                    <button className="btn btn-secondary operation-item" title={gettext('Edit File')} onClick={this.onUploadClick}>{gettext('Upload')}</button>
+                    <button className="btn btn-secondary operation-item" title={gettext('Edit File')} onClick={this.onNewClick}>{gettext('New')}</button>
+                    <button className="btn btn-secondary operation-item" title={gettext('Edit File')} onClick={this.onShareClick}>{gettext('Share')}</button>
+                  </Fragment>
+                }
               </div>
               {
                 this.state.uploadMenuShow && 
