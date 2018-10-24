@@ -36,7 +36,7 @@ class DialogRepoListItem extends React.Component {
   render() {
     let repoActive = false;
     let isCurrentRepo = this.props.selectedRepo && (this.props.repo.repo_id === this.props.selectedRepo.repo_id);
-    if ( isCurrentRepo && !this.props.moveToPath) {
+    if (isCurrentRepo && !this.props.moveToPath) {
       repoActive = true;
     }
     return (

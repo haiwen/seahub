@@ -29,8 +29,7 @@ class DirentDetail extends React.Component {
       let repo = new Repo(res.data);
       this.setState({repo: repo});
       this.updateDetailView(dirent, direntPath);
-    })
-
+    });
   }
 
   componentWillReceiveProps(nextProps) {

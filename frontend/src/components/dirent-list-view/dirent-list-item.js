@@ -265,7 +265,8 @@ class DirentListItem extends React.Component {
     seafileAPI.createDraft(repoID,filePath).then(res => {
       let draft_file_Path = res.data.draft_file_path;
       let draftId = res.data.id;
-      let url = URLDecorator.getUrl({type: 'draft_view', repoID: repoID, filePath: draft_file_Path, draftId: draftId});
+      let referer = location.href;
+      let url = URLDecorator.getUrl({type: 'draft_view', repoID: repoID, filePath: draft_file_Path, draftId: draftId, referer: referer});
       window.open(url);
     }).catch(() => {
       //todos;

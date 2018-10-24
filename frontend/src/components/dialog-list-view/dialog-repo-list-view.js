@@ -20,7 +20,7 @@ class DialogRepoListView extends React.Component {
       currentRepo: null,
       selectedRepo: null,
       repoList: [],
-      showOtherLibrary: false,
+      showOtherRepo: false,
       moveToPath: '',
     };
   }
@@ -52,8 +52,8 @@ class DialogRepoListView extends React.Component {
     });
   }
 
-  onOtherLibraryToggle = () => {
-    this.setState({showOtherLibrary: !this.state.showOtherLibrary});
+  onOtherRepoToggle = () => {
+    this.setState({showOtherRepo: !this.state.showOtherRepo});
   }
 
   onDirentItemClick = (repo, filePath) => {
@@ -98,11 +98,11 @@ class DialogRepoListView extends React.Component {
         </div>
         <div className="list-view">
           <div className="list-view-header">
-            <span className={`item-toggle fa ${this.state.showOtherLibrary ? 'fa-caret-down' : 'fa-caret-right'}`} onClick={this.onOtherLibraryToggle}></span>
+            <span className={`item-toggle fa ${this.state.showOtherRepo ? 'fa-caret-down' : 'fa-caret-right'}`} onClick={this.onOtherRepoToggle}></span>
             <span className="library">{gettext('Other Libraries')}</span>
           </div>
           <ul className="list-view-content dialog-list-item">
-            { this.state.showOtherLibrary && repoList.map((repo, index) => {
+            { this.state.showOtherRepo && repoList.map((repo, index) => {
               return (
                 <DialogRepoListItem 
                   key={index} 

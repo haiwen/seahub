@@ -204,9 +204,9 @@ class Wiki extends Component {
       tree.removeNodeFromParent(moveNode, moveNodeParent);
 
       this.exitViewFileState(tree, moveNodeParent);
-      Toast.success(gettext('Moveing operation succeeded'));
+      Toast.success(gettext('Move file succeeded./Move folder succeeded.'));
     }).catch(() => {
-      Toast.error(gettext('Moveing operation failed'));
+      Toast.error(gettext('Move file failed./Move folder failed.'));
     });
   }
 
@@ -223,9 +223,9 @@ class Wiki extends Component {
         this.exitViewFileState(tree, this.state.changedNode);
       }
       
-      Toast.success(gettext('Copying operation succeeded'));
+      Toast.success(gettext('Copy file succeeded./Copy folder succeeded.'));
     }).catch(() => {
-      Toast.error(gettext('Copying operation failed'));
+      Toast.error(gettext('Copy file failed./Copy folder failed.'));
     });
   }
 
