@@ -38,6 +38,9 @@
                 {% elif notice.is_review_comment_msg %}
                 <p class="brief">{{ notice.format_review_comment_msg|safe }}</p>
 
+                {% elif notice.is_request_reviewer_msg %}
+                <p class="brief">{{ notice.format_request_reviewer_msg|safe }}</p>
+
                 {% elif notice.is_guest_invitation_accepted_msg %}
                 <p class="brief">{{ notice.format_guest_invitation_accepted_msg|safe }}</p>
 
