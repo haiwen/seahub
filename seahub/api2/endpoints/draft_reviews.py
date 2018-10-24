@@ -91,22 +91,28 @@ class DraftReviewView(APIView):
                 return api_error(status.HTTP_409_CONFLICT,
                              'There is a conflict between the draft and the original file')
 
-            file_path = r.origin_file_path
+            origin_file_path = r.origin_file_path
 
-            draft_file_dir = os.path.dirname(file_path)
-            if draft_file_dir != '/Drafts':
-                draft_file_name = os.path.basename(file_path)
+            # if it is a new draft
+            # e.g. '/path/test(draft).md' ---> '/path/test.md'
+            if d.draft_file_path == r.origin_file_path:
+                new_draft_dir = os.path.dirname(origin_file_path)
+                new_draft_name = os.path.basename(origin_file_path)
                 # delete (draft) e.g. test(draft) ---> test
-                f = os.path.splitext(draft_file_name)[0][:-7]
-                file_type = os.path.splitext(draft_file_name)[-1]
+                f = os.path.splitext(new_draft_name)[0][:-7]
+                file_type = os.path.splitext(new_draft_name)[-1]
                 file_name = f + file_type
-                file_path = draft_file_dir + file_name
 
-                r.draft_file_path = file_path
-                r.origin_file_path = file_path
+                if new_draft_dir == '/':
+                    origin_file_path = new_draft_dir + file_name
+                else:
+                    origin_file_path = new_draft_dir + '/' + file_name
 
+                r.draft_file_path = origin_file_path
+                r.origin_file_path = origin_file_path
 
-            file_id = seafile_api.get_file_id_by_path(r.origin_repo_id, file_path)
+            # get draft published version
+            file_id = seafile_api.get_file_id_by_path(r.origin_repo_id, origin_file_path)
             r.publish_file_version = file_id
             r.save()
             d.delete()
