@@ -15,7 +15,7 @@ from seahub.api2.throttling import UserRateThrottle
 from seahub.api2.utils import api_error
 
 from seahub.drafts.models import Draft, DraftReview, DraftReviewExist, \
-        DraftFileConflict
+        DraftFileConflict, ReviewReviewer
 
 
 class DraftReviewsView(APIView):
@@ -28,9 +28,9 @@ class DraftReviewsView(APIView):
         """
         username = request.user.username
         data = [x.to_dict() for x in DraftReview.objects.filter(creator=username)]
+        data += [x.review_id.to_dict() for x in ReviewReviewer.objects.filter(reviewer=username)]
 
         return Response({'data': data})
-
 
     def post(self, request, format=None):
         """Create a draft review
