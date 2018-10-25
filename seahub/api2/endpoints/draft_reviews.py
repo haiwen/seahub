@@ -18,6 +18,7 @@ from seahub.views import check_folder_permission
 
 from seahub.drafts.models import Draft, DraftReview, DraftReviewExist, \
         DraftFileConflict, ReviewReviewer
+from seahub.drafts.signals import update_review_successful
 
 
 class DraftReviewsView(APIView):
@@ -77,8 +78,8 @@ class DraftReviewView(APIView):
                              'Review %s not found' % pk)
 
         perm = check_folder_permission(request, r.origin_repo_id, r.origin_file_path)
-        
-        # Review owner and 'rw' perm on the original file to close review 
+
+        # Review owner and 'rw' perm on the original file to close review
         if st == 'closed':
             if perm != PERMISSION_READ_WRITE or request.user.username != r.creator:
                 error_msg = 'Permission denied.'
@@ -86,7 +87,7 @@ class DraftReviewView(APIView):
 
             r.status = st
             r.save()
-        
+
         # Only 'rw' perm on original file can publish review
         if st == 'finished':
             if perm != PERMISSION_READ_WRITE:
@@ -136,6 +137,22 @@ class DraftReviewView(APIView):
             r.status = st
             r.save()
             d.delete()
+
+        reviewers = ReviewReviewer.objects.filter(review_id=r)
+        # send notice to other reviewers if has
+        if reviewers:
+            for i in reviewers:
+                #  If it is a reviewer operation, exclude it.
+                if i.reviewer == request.user.username:
+                    continue
+
+                update_review_successful.send(sender=None, from_user=request.user.username,
+                                              to_user=i.reviewer, review_id=r.id, status=st)
+
+        # send notice to review owner
+        if request.user.username != r.creator:
+            update_review_successful.send(sender=None, from_user=request.user.username,
+                                          to_user=r.creator, review_id=r.id, status=st)
 
         result = r.to_dict()
 

@@ -54,6 +54,7 @@ MSG_TYPE_REPO_SHARE_TO_GROUP = 'repo_share_to_group'
 MSG_TYPE_USER_MESSAGE = 'user_message'
 MSG_TYPE_FILE_COMMENT = 'file_comment'
 MSG_TYPE_REVIEW_COMMENT = 'review_comment'
+MSG_TYPE_UPDATE_REVIEW = 'update_review'
 MSG_TYPE_REQUEST_REVIEWER = 'request_reviewer'
 MSG_TYPE_GUEST_INVITATION_ACCEPTED = 'guest_invitation_accepted'
 
@@ -103,6 +104,12 @@ def request_reviewer_msg_to_json(review_id, from_user, to_user):
     return json.dumps({'review_id': review_id,
                        'from_user': from_user,
                        'to_user': to_user})
+
+def update_review_msg_to_json(review_id, from_user, to_user, status):
+    return json.dumps({'review_id': review_id,
+                       'from_user': from_user,
+                       'to_user': to_user,
+                       'status': status})
 
 def guest_invitation_accepted_msg_to_json(invitation_id):
     return json.dumps({'invitation_id': invitation_id})
@@ -309,6 +316,11 @@ class UserNotificationManager(models.Manager):
         """
         return self._add_user_notification(to_user, MSG_TYPE_REQUEST_REVIEWER, detail)
 
+    def add_update_review_msg(self, to_user, detail):
+        """Notify ``to_user`` that reviewer and owner 
+        """
+        return self._add_user_notification(to_user, MSG_TYPE_UPDATE_REVIEW, detail)
+
     def add_guest_invitation_accepted_msg(self, to_user, detail):
         """Nofity ``to_user`` that a guest has accpeted an invitation.
         """
@@ -412,6 +424,9 @@ class UserNotification(models.Model):
 
     def is_request_reviewer_msg(self):
         return self.msg_type == MSG_TYPE_REQUEST_REVIEWER
+
+    def is_update_review_msg(self):
+        return self.msg_type == MSG_TYPE_UPDATE_REVIEW
 
     def is_guest_invitation_accepted_msg(self):
         return self.msg_type == MSG_TYPE_GUEST_INVITATION_ACCEPTED
@@ -791,6 +806,31 @@ class UserNotification(models.Model):
         }
         return msg
 
+    def format_update_review_msg(self):
+        try:
+            d = json.loads(self.detail)
+        except Exception as e:
+            logger.error(e)
+            return _(u"Internal error")
+
+        review_id = d['review_id']
+        from_user = d['from_user']
+        status = d['status']
+
+        if status == 'closed':
+            msg = _("%(from_user)s has closed review <a href='%(file_url)s'>%(review_id)s</a>") % {
+                'review_id': review_id,
+                'file_url': reverse('drafts:review', args=[review_id]),
+                'from_user': escape(email2nickname(from_user))
+            }
+
+        if status == 'finished':
+            msg = _("%(from_user)s has published review <a href='%(file_url)s'>%(review_id)s</a>") % {
+                'review_id': review_id,
+                'file_url': reverse('drafts:review', args=[review_id]),
+                'from_user': escape(email2nickname(from_user))
+            }
+        return msg
 
     def format_guest_invitation_accepted_msg(self):
         try:
@@ -826,7 +866,8 @@ from seahub.group.signals import grpmsg_added, group_join_request, add_user_to_g
 from seahub.share.signals import share_repo_to_user_successful, \
     share_repo_to_group_successful
 from seahub.invitations.signals import accept_guest_invitation_successful
-from seahub.drafts.signals import comment_review_successful, request_reviewer_successful
+from seahub.drafts.signals import comment_review_successful, \
+        request_reviewer_successful, update_review_successful
 
 @receiver(upload_file_successful)
 def add_upload_file_msg_cb(sender, **kwargs):
@@ -949,6 +990,17 @@ def requeset_reviewer_successful_cb(sender, **kwargs):
     detail = request_reviewer_msg_to_json(review_id, from_user, to_user)
 
     UserNotification.objects.add_request_reviewer_msg(to_user, detail)
+
+@receiver(update_review_successful)
+def update_review_successful_cb(sender, **kwargs):
+    from_user = kwargs['from_user']
+    review_id = kwargs['review_id']
+    to_user = kwargs['to_user']
+    status = kwargs['status']
+
+    detail = update_review_msg_to_json(review_id, from_user, to_user, status)
+
+    UserNotification.objects.add_update_review_msg(to_user, detail)
 
 @receiver(accept_guest_invitation_successful)
 def accept_guest_invitation_successful_cb(sender, **kwargs):
