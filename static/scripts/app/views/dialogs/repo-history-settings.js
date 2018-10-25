@@ -14,6 +14,7 @@ define([
             this.repo_name = options.repo_name;
             this.repo_id = options.repo_id;
             this.url_name = options.url_name;
+            this.is_admin_panel = options.is_admin_panel;
 
             this.render();
             this.$('.op-target').css({'max-width':280}); // for long repo name
@@ -68,7 +69,7 @@ define([
                     }
                     _this.$radios.filter(':checked').trigger('focus');
 
-                    if (!app.pageOptions.enable_repo_history_setting) {
+                    if (!app.pageOptions.enable_repo_history_setting && !_this.is_admin_panel) {
                         _this.$('.history-settings-notice').removeClass('hide');
                         _this.$radios.prop('disabled', true);
                         _this.$days_input.prop('disabled', true).addClass('input-disabled');

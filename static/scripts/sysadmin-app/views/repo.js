@@ -43,6 +43,7 @@ define([
             var options = {
                 'repo_name': this.model.get('name'),
                 'repo_id': this.model.get('id'),
+                'is_admin_panel': true,
                 'url_name': 'admin-library-history-limit'
             };
             this.togglePopup(); // close the popup
