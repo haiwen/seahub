@@ -47,19 +47,25 @@ class AuthenticationForm(forms.Form):
         return self.cleaned_data['login'].strip()
 
     def clean(self):
-        login = self.cleaned_data.get('login')
+        username = self.cleaned_data.get('login')
         password = self.cleaned_data.get('password')
 
-        # convert login id or contact email to username if any
-        username = Profile.objects.convert_login_str_to_username(login)
-
-        username = self.get_primary_id_by_username(username)
         if username and password:
             self.user_cache = authenticate(username=username,
                                            password=password)
             if self.user_cache is None:
-                raise forms.ValidationError(_("Please enter a correct email/username and password. Note that both fields are case-sensitive."))
-            elif not self.user_cache.is_active:
+                """then try login id/contact email/primary id"""
+                # convert login id or contact email to username if any
+                username = Profile.objects.convert_login_str_to_username(username)
+                # convert username to primary id if any
+                username = self.get_primary_id_by_username(username)
+
+                self.user_cache = authenticate(username=username, password=password)
+                if self.user_cache is None:
+                    raise forms.ValidationError(_("Please enter a correct email/username and password. Note that both fields are case-sensitive."))
+
+            # user found for login string but inactive
+            if not self.user_cache.is_active:
                 if settings.ACTIVATE_AFTER_FIRST_LOGIN and \
                    not UserOptions.objects.is_user_logged_in(username):
                     """Activate user on first login."""
