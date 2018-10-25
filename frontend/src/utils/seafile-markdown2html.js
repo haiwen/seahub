@@ -14,30 +14,32 @@ var deepmerge = require('deepmerge').default;
 function stringify(config) {
   var settings = xtend(config, this.data('settings'));
   var schema = deepmerge(gh, {
-    "attributes":{
-      "input": [
-        "type",
+    'attributes': {
+      'input': [
+        'type',
       ],
-      "li": [
-        "className"
+      'li': [
+        'className'
       ],
-      "code":[
-        "className",
+      'code': [
+        'className',
       ],
     },
-    "tagNames": [
-      "input",
-      "code"
+    'tagNames': [
+      'input',
+      'code'
     ]
   });
   this.Compiler = compiler;
 
   function compiler(tree) {
+    // use sanity to remove dangerous html, the default is
     var hast = sanitize(tree, schema);
     return toHTML(hast, settings);
   }
 }
 
+// markdown -> mdast -> html AST -> html
 var processor = unified()
   .use(markdown, {commonmark: true})
   .use(breaks)
@@ -49,6 +51,6 @@ var processor = unified()
 
 var processorGetAST = unified()
   .use(markdown, {commonmark: true})
-  .use(slug)
+  .use(slug);
 
 export { processor, processorGetAST };
