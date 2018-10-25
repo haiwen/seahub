@@ -17,9 +17,9 @@ class Content extends Component {
         <thead>
           <tr>
             <th width="5%"></th>
-            <th width="40%">{gettext("File Name")}</th>
-            <th width="32%">{gettext("Library")}</th>
-            <th width="18%">{gettext("Last Update")}</th>
+            <th width="40%">{gettext('File Name')}</th>
+            <th width="32%">{gettext('Library')}</th>
+            <th width="18%">{gettext('Last Update')}</th>
             <th width="5%"></th>
           </tr>
         </thead>
@@ -28,7 +28,7 @@ class Content extends Component {
         <thead>
           <tr>
             <th width="5%"></th>
-            <th width="90%">{gettext("File Name")}</th>
+            <th width="90%">{gettext('File Name')}</th>
             <th width="5%"></th>
           </tr>
         </thead>
@@ -71,14 +71,11 @@ class TableBody extends Component {
     const _this = this;
     let getThumbnail = function(i) {
       const curItem = items[i];
-      seafileAPI.createThumbnail(curItem.repo_id, curItem.path, thumbnailSize).
-        then((res) => {
-          curItem.encoded_thumbnail_src = res.data.encoded_thumbnail_src;
-        })
-      .catch((error) => {
+      seafileAPI.createThumbnail(curItem.repo_id, curItem.path, thumbnailSize).then((res) => {
+        curItem.encoded_thumbnail_src = res.data.encoded_thumbnail_src;
+      }).catch((error) => {
         // do nothing
-      })
-      .then(() => {
+      }).then(() => {
         if (i < len - 1) {
           getThumbnail(++i);
         } else {
@@ -144,14 +141,12 @@ class Item extends Component {
     e.preventDefault();
 
     const data = this.props.data;
-    seafileAPI.unStarFile(data.repo_id, data.path)
-      .then((res) => {
-        this.setState({
-          unstarred: true
-        });
-        // TODO: show feedback msg
-      })
-    .catch((error) => {
+    seafileAPI.unStarFile(data.repo_id, data.path).then((res) => {
+      this.setState({
+        unstarred: true
+      });
+      // TODO: show feedback msg
+    }).catch((error) => {
       // TODO: show feedback msg
     });
   }
@@ -170,23 +165,23 @@ class Item extends Component {
     const desktopItem = (
       <tr onMouseOver={this.handleMouseOver} onMouseOut={this.handleMouseOut}>
         <td className="alc">
-        {
-          data.thumbnail_url ?
-            <img className="thumbnail" src={data.thumbnail_url} alt="" /> :
-            <img src={data.file_icon_url} alt={gettext("icon")} width="24" />
-        }
+          {
+            data.thumbnail_url ?
+              <img className="thumbnail" src={data.thumbnail_url} alt="" /> :
+              <img src={data.file_icon_url} alt={gettext('icon')} width="24" />
+          }
         </td>
         <td>
-        {
-          data.is_img ?
-            <a className="img-name-link normal" href={data.file_view_url} target="_blank" data-mfp-src={data.file_raw_url}>{data.file_name}</a> :
-            <a className="normal" href={data.file_view_url} target="_blank">{data.file_name}</a>
-        }
+          {
+            data.is_img ?
+              <a className="img-name-link normal" href={data.file_view_url} target="_blank" data-mfp-src={data.file_raw_url}>{data.file_name}</a> :
+              <a className="normal" href={data.file_view_url} target="_blank">{data.file_name}</a>
+          }
         </td>
         <td>{data.repo_name}</td>
         <td dangerouslySetInnerHTML={{__html:data.mtime_relative}}></td>
         <td>
-          <a href="#" className={opClasses} title={gettext("Unstar")} aria-label={gettext("Unstar")} onClick={this.handleClick}></a>
+          <a href="#" className={opClasses} title={gettext('Unstar')} aria-label={gettext('Unstar')} onClick={this.handleClick}></a>
         </td>
       </tr>
     );
@@ -194,24 +189,24 @@ class Item extends Component {
     const mobileItem = (
       <tr>
         <td className="alc">
-        {
-          data.thumbnail_url ?
-            <img className="thumbnail" src={data.thumbnail_url} alt="" /> :
-            <img src={data.file_icon_url} alt={gettext("icon")} width="24" />
-        }
+          {
+            data.thumbnail_url ?
+              <img className="thumbnail" src={data.thumbnail_url} alt="" /> :
+              <img src={data.file_icon_url} alt={gettext('icon')} width="24" />
+          }
         </td>
         <td>
-        {
-          data.is_img ?
-            <a className="img-name-link normal" href={data.file_view_url} target="_blank" data-mfp-src={data.file_raw_url}>{data.file_name}</a> :
-            <a className="normal" href={data.file_view_url} target="_blank">{data.file_name}</a>
-        }
-        <br />
-        <span className="dirent-meta-info">{data.repo_name}</span>
-        <span className="dirent-meta-info" dangerouslySetInnerHTML={{__html:data.mtime_relative}}></span>
+          {
+            data.is_img ?
+              <a className="img-name-link normal" href={data.file_view_url} target="_blank" data-mfp-src={data.file_raw_url}>{data.file_name}</a> :
+              <a className="normal" href={data.file_view_url} target="_blank">{data.file_name}</a>
+          }
+          <br />
+          <span className="dirent-meta-info">{data.repo_name}</span>
+          <span className="dirent-meta-info" dangerouslySetInnerHTML={{__html:data.mtime_relative}}></span>
         </td>
         <td>
-          <a href="#" className="sf2-icon-delete unstar op-icon" title={gettext("Unstar")} aria-label={gettext("Unstar")} onClick={this.handleClick}></a>
+          <a href="#" className="sf2-icon-delete unstar op-icon" title={gettext('Unstar')} aria-label={gettext('Unstar')} onClick={this.handleClick}></a>
         </td>
       </tr>
     );
@@ -235,33 +230,31 @@ class Starred extends Component {
   }
 
   componentDidMount() {
-    seafileAPI.listStarred()
-    .then((res) => {
-      // res: {data: Array(2), status: 200, statusText: "OK", headers: {…}, config: {…}, …}
+    seafileAPI.listStarred().then((res) => {
+      //res: {data: Array(2), status: 200, statusText: "OK", headers: {…}, config: {…}, …}
       this.setState({
         loading: false,
         items: res.data
       });
-    })
-    .catch((error) => {
+    }).catch((error) => {
       if (error.response) {
         if (error.response.status == 403) {
           this.setState({
             loading: false,
-            errorMsg: gettext("Permission denied")
+            errorMsg: gettext('Permission denied')
           });
           location.href = `${loginUrl}?next=${encodeURIComponent(location.href)}`;
         } else {
           this.setState({
             loading: false,
-            errorMsg: gettext("Error")
+            errorMsg: gettext('Error')
           });
         }
 
       } else {
         this.setState({
           loading: false,
-          errorMsg: gettext("Please check the network.")
+          errorMsg: gettext('Please check the network.')
         });
       }
     });
@@ -271,10 +264,12 @@ class Starred extends Component {
     return (
       <div className="cur-view-container" id="starred">
         <div className="cur-view-path">
-          <h3 className="sf-heading">{gettext("Favorites")}</h3>
+          <h3 className="sf-heading">{gettext('Favorites')}</h3>
         </div>
         <div className="cur-view-content">
-          <Content data={this.state} />
+          <div className="table-container">
+            <Content data={this.state} />
+          </div>
         </div>
       </div>
     );

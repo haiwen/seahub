@@ -17,8 +17,8 @@ class FileActivitiesContent extends Component {
       return <p className="error text-center">{error_msg}</p>;
     } else {
       return ( 
-        <React.Fragment>
-          <table className="table table-hover table-vcenter activity-table">
+        <div className="activity-table-container">
+          <table className="table table-hover table-vcenter">
             <thead>
               <tr>
                 <th width="8%">{/* avatar */}</th>
@@ -32,7 +32,7 @@ class FileActivitiesContent extends Component {
           </table>
           {has_more ? <span className="loading-icon loading-tip"></span> : ''}
           {error_msg ? <p className="error text-center">{error_msg}</p> : ''}
-        </React.Fragment>
+        </div>
       ); 
     }
   }

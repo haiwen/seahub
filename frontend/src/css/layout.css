@@ -72,6 +72,7 @@
   flex-direction: column;
   flex: 1 1 auto;
   overflow: hidden;
+  min-height: 0;
 }
 
 .cur-view-path {
@@ -94,9 +95,10 @@
 }
 
 .cur-view-content {
-  padding: 10px 16px 20px;
+  padding: 0;
   height: calc(100% - 40px);
   flex: 1;
+  min-height: 0;
   overflow: auto;
 }
 
