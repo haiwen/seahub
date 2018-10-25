@@ -73,18 +73,26 @@ class DraftReview extends React.Component {
   onCloseReview = () => {
     seafileAPI.updateReviewStatus(reviewID, 'closed').then(res => {
       this.setState({reviewStatus: 'closed'});
-      Toast.success('Review close succeeded.');
+      let msg_s = gettext('Successfully closed review %(reviewID)s.');
+      msg_s = msg_s.replace('%(reviewID)s', reviewID);
+      Toast.success(msg_s);
     }).catch(() => {
-      Toast.error('Review close failed.');
+      let msg_s = gettext('Failed to close review %(reviewID)s');
+      msg_s = msg_s.replace('%(reviewID)s', reviewID);
+      Toast.error(msg_s);
     });
   }
 
   onPublishReview = () => {
     seafileAPI.updateReviewStatus(reviewID, 'finished').then(res => {
       this.setState({reviewStatus: 'finished'});
-      Toast.success('Review publish succeeded.');
+      let msg_s = gettext('Successfully published review %(reviewID)s.');
+      msg_s = msg_s.replace('%(reviewID)s', reviewID);
+      Toast.success(msg_s);
     }).catch(() => {
-      Toast.error('Review publish failed.');
+      let msg_s = gettext('Failed to close review %(reviewID)s.')
+      msg_s = msg_s.replace('%(reviewID)s', reviewID);
+      Toast.error(msg_s);
     });
   }
 

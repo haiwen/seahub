@@ -44,9 +44,13 @@ class DraftContent extends React.Component {
     let draft = this.state.currentDraft;
     editUtilties.deleteDraft(draft.id).then(res => {
       this.initDraftList();
-      Toast.success('Delete draft succeeded.');
+      let msg_s = gettext('Successfully deleted draft %(draft)s.');
+      msg_s = msg_s.replace('%(draft)s', draft.id);
+      Toast.success(msg_s);
     }).catch(() => {
-      Toast.error('Delete draft failed.');
+      let msg_s = gettext('Failed to delete draft %(draft)s.');
+      msg_s = msg_s.replace('%(draft)s', draft.id);
+      Toast.error(msg_s);
     });
   }
 
@@ -54,9 +58,13 @@ class DraftContent extends React.Component {
     let draft = this.state.currentDraft;
     editUtilties.publishDraft(draft.id).then(res => {
       this.initDraftList();
-      Toast.success('Publish draft succeeded.');
+      let msg_s = gettext('Successfully published draft %(draft)s.');
+      msg_s = msg_s.replace('%(draft)s', draft.id);
+      Toast.success(msg_s);
     }).catch(() => {
-      Toast.error('Publish draft failed.');
+      let msg_s = gettext('Failed to publish draft %(draft)s.');
+      msg_s = msg_s.replace('%(draft)s', draft.id);
+      Toast.error(msg_s);
     });
   }
 
@@ -68,7 +76,7 @@ class DraftContent extends React.Component {
       w.location = siteRoot + 'drafts/review/' + res.data.id;
     }).catch((error) => { 
       if (error.response.status == '409') {
-        Toast.error('The draft review is existing.');
+        Toast.error(gettext('Review already exists.'));
       }    
     });
   }
