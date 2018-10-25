@@ -250,7 +250,7 @@ class SystemUsersTrafficExcelView(APIView):
         return response
 
 
-class SystemUsersTrafficUsageExcelView(APIView):
+class SystemUsersStorageExcelView(APIView):
     authentication_classes = (TokenAuthentication, SessionAuthentication)
     throttle_classes = (UserRateThrottle,)
     permission_classes = (IsAdminUser,)
@@ -291,7 +291,7 @@ class SystemUsersTrafficUsageExcelView(APIView):
             # update `looped` value when `for` loop finished
             looped += limit
 
-        excel_name = 'users'
+        excel_name = 'User Storage'
         try:
             wb = write_xls('users', head, data_list)
         except Exception as e:

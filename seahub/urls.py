@@ -79,7 +79,7 @@ from seahub.api2.endpoints.admin.perm_audit import PermAudit
 from seahub.api2.endpoints.admin.sysinfo import SysInfo
 from seahub.api2.endpoints.admin.statistics import (
     FileOperationsView, TotalStorageView, ActiveUsersView, SystemTrafficView, \
-    SystemUsersTrafficExcelView, SystemUsersTrafficUsageExcelView
+    SystemUsersTrafficExcelView, SystemUsersStorageExcelView
 )
 from seahub.api2.endpoints.admin.devices import AdminDevices
 from seahub.api2.endpoints.admin.device_errors import AdminDeviceErrors
@@ -326,7 +326,7 @@ urlpatterns = [
     url(r'^api/v2.1/admin/statistics/active-users/$', ActiveUsersView.as_view(), name='api-v2.1-admin-statistics-active-users'),
     url(r'^api/v2.1/admin/statistics/system-traffic/$', SystemTrafficView.as_view(), name='api-v2.1-admin-statistics-system-traffic'),
     url(r'^api/v2.1/admin/statistics/system-users-traffic/excel/$', SystemUsersTrafficExcelView.as_view(), name='api-v2.1-admin-statistics-system-users-traffic-excel'),
-    url(r'^api/v2.1/admin/statistics/system-users-traffic-usage/excel/$', SystemUsersTrafficUsageExcelView.as_view(), name='api-v2.1-admin-statistics-system-users-traffic-usage-excel'),
+    url(r'^api/v2.1/admin/statistics/system-user-storage/excel/$', SystemUsersStorageExcelView.as_view(), name='api-v2.1-admin-statistics-system-user-storage-excel'),
     ## admin::users
     url(r'^api/v2.1/admin/users/$', AdminUsers.as_view(), name='api-v2.1-admin-users'),
     # [^...] Matches any single character not in brackets
