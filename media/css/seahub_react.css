@@ -74,6 +74,8 @@
 .sf2-icon-delete:before { content:"\e006"; }
 .sf2-icon-caret-down:before { content:"\e01a"; }
 .sf2-icon-two-columns:before { content:"\e036"; }
+.sf2-icon-confirm:before {content:"\e01e"}
+.sf2-icon-cancel:before {content:"\e01f"}
 
 /* common class and element style*/
 a { color:#eb8205; }
@@ -109,26 +111,36 @@ ul,ol,li {
 }
 
 .text-left {
-text-align: left;
+    text-align: left;
 }
 
 .text-right {
-text-align: right;
+    text-align: right;
 }
 
 .a-simulate {
-color: #eb8205 !important;
-text-decoration: none;
-font-weight: normal;
-cursor: pointer;
+    color: #eb8205 !important;
+    text-decoration: none;
+    font-weight: normal;
+    cursor: pointer;
 }
 
 .a-simulate:hover {
-text-decoration: underline;
+    text-decoration: underline;
 }
 
 .flex-right {
-justify-content: flex-end;
+    justify-content: flex-end;
+}
+
+.flex-direction-row {
+    flex-direction: row;
+}
+
+.sf-font {
+    color: #eb8205 !important;
+    text-decoration: none;
+    font-weight: normal;
 }
 
 /* UI Widget */
@@ -783,8 +795,46 @@ a.op-icon:focus {
 .table-container table .select,
 .table-container table .star,
 .table-container table .icon {
+    position: relative;
     text-align: center;
 }
+
+.table-container table .star {
+    cursor: pointer;
+}
+
+.table-container table .rename-container input {
+    box-sizing: content-box;
+    padding: 2px 3px;
+    width: 16.25rem;
+    height: 22px;
+    line-height: 19px;
+    border-radius: 2px;
+    word-wrap: break-word;
+    vertical-align: middle;
+    border: 1px solid #ccc;
+}
+
+.table-container table .rename-container input:focus {
+    background-color: #fff;
+    border-color: #1991eb;
+    outline: 0;
+    box-shadow: 0 0 0 2px rgba(70, 127, 207, 0.25);
+}
+
+.table-container table .rename-container button {
+    margin-left: 0.25rem;
+    padding: 5px 6px;
+    font-size: 1rem;
+    line-height: 1;
+    color: #666;
+    min-width: 0;
+}
+
+.table-container table .rename-container .confirm {
+    color: green;
+}
+
 
 .table-container table .star .empty {
     color: #d0d0d0;
@@ -794,6 +844,19 @@ a.op-icon:focus {
     width: 1.5rem;
     height: 1.5rem;
 }
+
+.table-container table .dir-icon {
+    position: relative;
+}
+
+.table-container table .dir-icon .locked {
+    position: absolute;
+    width: 1rem;
+    height: 1rem;
+    top: 50%;
+    left: 50%;
+}
+
 .table-container table .menu-toggle {
     text-align: center;
     cursor: pointer;
@@ -810,10 +873,6 @@ a.op-icon:focus {
 }
 .dropdown-item {
     cursor: pointer;
-}
-.dropdown-item.menu-inner-divider {
-    margin: 0.25rem 0;
-    border-bottom: 1px solid #ddd;
 }
   
 /* end dropdown-menu style */

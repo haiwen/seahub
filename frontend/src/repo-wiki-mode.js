@@ -1,14 +1,15 @@
 import React, { Component } from 'react';
 import ReactDOM from 'react-dom';
+import moment from 'moment';
+import cookie from 'react-cookies';
+import { gettext, repoID, serviceUrl, initialFilePath } from './utils/constants';
+import { seafileAPI } from './utils/seafile-api';
+import editorUtilities from './utils/editor-utilties';
 import SidePanel from './pages/repo-wiki-mode/side-panel';
 import MainPanel from './pages/repo-wiki-mode/main-panel';
-import moment from 'moment';
-import { repoID, serviceUrl, initialFilePath } from './utils/constants';
-import editorUtilities from './utils/editor-utilties';
-import { seafileAPI } from './utils/seafile-api';
 import Node from './components/tree-view/node';
 import Tree from './components/tree-view/tree';
-import cookie from 'react-cookies';
+import Toast from './components/toast';
 import 'seafile-ui';
 import './assets/css/fa-solid.css';
 import './assets/css/fa-regular.css';
@@ -182,9 +183,58 @@ class Wiki extends Component {
     let node = this.state.tree_data.getNodeByPath(direntPath);
     this.onDeleteNode(node);
   }
+  
+  onMainItemRename = (direntPath, newName) => {
+    let node = this.state.tree_data.getNodeByPath(direntPath);
+    this.onRenameNode(node, newName);
+  }
 
-  onMainItemRename = () => {
-    //todos:
+  onMainItemMove = (repo, direntPath, moveToDirentPath) => {
+    let index   = direntPath.lastIndexOf('/');
+    let dirPath = direntPath.slice(0, index + 1);
+    let dirName = direntPath.slice(index + 1); 
+    seafileAPI.moveDir(repoID, repo.repo_id, moveToDirentPath, dirPath, dirName).then(() => {
+      let tree = this.state.tree_data.clone();
+      let moveNode = tree.getNodeByPath(direntPath);
+      let moveNodeParent = tree.findNodeParentFromTree(moveNode);
+      if (repoID === repo.repo_id) {
+        let moveToNode = tree.getNodeByPath(moveToDirentPath);
+        tree.addNodeToParent(moveNode, moveToNode);
+      }
+      tree.removeNodeFromParent(moveNode, moveNodeParent);
+
+      this.exitViewFileState(tree, moveNodeParent);
+      let message = gettext('Successfully moved %(name)s.');
+      message = message.replace('%(name)s', dirName);
+      Toast.success(message);
+    }).catch(() => {
+      let message = gettext('Failed to move %(name)s');
+      message = message.replace('%(name)s', dirName);
+      Toast.error(message);
+    });
+  }
+
+  onMainItemCopy = (repo, direntPath, copyToDirentPath) => {
+    let index   = direntPath.lastIndexOf('/');
+    let dirPath = direntPath.slice(0, index + 1);
+    let dirName = direntPath.slice(index + 1); 
+    seafileAPI.copyDir(repoID, repo.repo_id, copyToDirentPath, dirPath, dirName).then(() => {
+      if (repoID === repo.repo_id) {
+        let tree = this.state.tree_data.clone();
+        let copyNode = tree.getNodeByPath(direntPath);
+        let copyToNode = tree.getNodeByPath(copyToDirentPath);
+        tree.addNodeToParent(copyNode, copyToNode);
+        this.exitViewFileState(tree, this.state.changedNode);
+      }
+      
+      let message = gettext('Successfully copied %(name)s.');
+      message = message.replace('%(name)s', dirName);
+      Toast.success(message);
+    }).catch(() => {
+      let message = gettext('Failed to copy %(name)s');
+      message = message.replace('%(name)s', dirName);
+      Toast.error(message);
+    });
   }
 
   onNodeClick = (e, node) => {
@@ -537,6 +587,9 @@ class Wiki extends Component {
           onMainNavBarClick={this.onMainNavBarClick}
           onMainItemClick={this.onMainItemClick}
           onMainItemDelete={this.onMainItemDelete}
+          onMainItemRename={this.onMainItemRename}
+          onMainItemMove={this.onMainItemMove}
+          onMainItemCopy={this.onMainItemCopy}
           onMainAddFile={this.onAddFileNode}
           onMainAddFolder={this.onAddFolderNode}
         />

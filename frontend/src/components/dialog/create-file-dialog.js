@@ -40,7 +40,7 @@ class CreateFile extends React.Component {
   }
 
   handleCheck = () => {
-    let pos = this.state.childName.lastIndexOf(".");
+    let pos = this.state.childName.lastIndexOf('.');
     
     if (this.state.isDraft) {
       // from draft to not draft
@@ -54,12 +54,12 @@ class CreateFile extends React.Component {
         this.setState({
           childName: fileName + fileType, 
           isDraft: !this.state.isDraft
-        })
+        });
       } else {
         // don't change file name
         this.setState({
           isDraft: !this.state.isDraft
-        })
+        });
       }
     }
     
@@ -74,16 +74,16 @@ class CreateFile extends React.Component {
         this.setState({
           childName: fileName + '(draft)' + fileType,
           isDraft: !this.state.isDraft
-        })
+        });
       } else if (pos === 0 ) {
         this.setState({
           childName: '(draft)' + this.state.childname, 
           isDraft: !this.state.isdraft
-        })
+        });
       } else {
-         this.setState({
+        this.setState({
           isDraft: !this.state.isdraft
-        })
+        });
       } 
     }
   }
@@ -121,7 +121,7 @@ class CreateFile extends React.Component {
             <FormGroup row>
               <Label sm={3} check />
               <Col sm={9}>
-                <Input type="checkbox" onChange={this.handleCheck}/>{'  '}{gettext("This is a draft.")}
+                <Input type="checkbox" onChange={this.handleCheck}/>{'  '}{gettext('This is a draft.')}
               </Col>
             </FormGroup>
 

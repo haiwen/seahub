@@ -1,0 +1,70 @@
+.file-chooser-container {
+  padding: 0.5rem;
+  height: 20rem;
+  border: 1px solid #eee;
+  overflow: auto;
+  font-size: 1rem;
+}
+
+.item-toggle{
+  position: absolute;
+  height: 1.5rem;
+  width: 1.5rem;
+  left: 0;
+  top: 0;
+  line-height: 1.5rem !important;
+  text-align: center;
+  cursor: pointer;
+  color: #c0c0c0;
+}
+
+.file-chooser-container .list-view {
+  margin-top: 0.25rem;
+}
+
+.list-view-header {
+  position: relative;
+  padding-left: 1.5rem;
+}
+
+.list-view-header .name {
+  color: #eb8205;
+}
+
+.list-view-content {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.file-chooser-item {
+  position: relative;
+  padding-left: 1.5rem;
+}
+
+.file-chooser-item .item-info {
+  display: inline-block;
+  height: 1.5rem;
+  cursor: pointer;
+}
+
+.file-chooser-item .item-info:hover {
+  background: #e7f4f9;
+  border-radius: 2px;
+  box-shadow: inset 0 0 1px #999;
+}
+
+.file-chooser-item .item-active {
+  background: #beebff !important;
+  border-radius: 2px;
+  box-shadow: inset 0 0 1px #999;
+}
+
+.file-chooser-item .item-info .icon {
+  color: #b0b0b0;
+  width: 1.5rem;
+  height: 1.5rem;
+}
+
+
+

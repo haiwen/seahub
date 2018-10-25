@@ -1,17 +1,27 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { serviceUrl, gettext } from '../../utils/constants';
-import OperationGroup from '../dirent-operation/operation-group';
+import { serviceUrl, gettext, repoID } from '../../utils/constants';
+import { seafileAPI } from '../../utils/seafile-api';
+import URLDecorator from '../../utils/url-decorator';
+import Toast from '../toast';
+import DirentMenu from './dirent-menu';
+import DirentRename from './dirent-rename';
 
 const propTypes = {
+  filePath: PropTypes.string.isRequired,
   isItemFreezed: PropTypes.bool.isRequired,
   dirent: PropTypes.object.isRequired,
   onItemClick: PropTypes.func.isRequired,
-  onItemMenuShow: PropTypes.func.isRequired,
-  onItemMenuHide: PropTypes.func.isRequired,
+  onFreezedItem: PropTypes.func.isRequired,
+  onUnfreezedItem: PropTypes.func.isRequired,
+  onRenameMenuItemClick: PropTypes.func.isRequired,
   onItemDelete: PropTypes.func.isRequired,
-  onItemStarred: PropTypes.func.isRequired,
+  onItemRename: PropTypes.func.isRequired,
   onItemDownload: PropTypes.func.isRequired,
+  onDirentItemMove: PropTypes.func.isRequired,
+  onDirentItemCopy: PropTypes.func.isRequired,
+  onItemDetails: PropTypes.func.isRequired,
+  updateViewList: PropTypes.func.isRequired,
 };
 
 class DirentListItem extends React.Component {
@@ -20,8 +30,18 @@ class DirentListItem extends React.Component {
     super(props);
     this.state = {
       isOperationShow: false,
-      highlight: false
+      highlight: false,
+      isItemMenuShow: false,
+      menuPosition: {top: 0, left: 0 },
     };
+  }
+
+  componentDidMount() {
+    document.addEventListener('click', this.onItemMenuHide);
+  }
+  
+  componentWillUnmount() {
+    document.removeEventListener('click', this.onItemMenuHide);
   }
 
   //UI Interactive
@@ -52,38 +72,234 @@ class DirentListItem extends React.Component {
     }
   }
 
-  onItemMenuShow = () => {
-    this.props.onItemMenuShow();
+  onItemMenuToggle = (e) => {
+    e.stopPropagation();
+    e.nativeEvent.stopImmediatePropagation();
+
+    if (!this.state.isItemMenuShow) {
+      this.onItemMenuShow(e);
+    } else {
+      this.onItemMenuHide();
+    }
+  }
+
+  onItemMenuShow = (e) => {
+    let left = e.clientX - 8*16;
+    let top  = e.clientY + 15;
+    let position = Object.assign({},this.state.menuPosition, {left: left, top: top});
+    this.setState({
+      menuPosition: position,
+      isItemMenuShow: true,
+    });
+    this.props.onFreezedItem();
   }
 
   onItemMenuHide = () => {
     this.setState({
       isOperationShow: false,
-      highlight: ''
+      highlight: '',
+      isItemMenuShow: false,
+      isRenameing: false,
     });
-    this.props.onItemMenuHide();
+    this.props.onUnfreezedItem();
   }
 
   //buiness handler
   onItemSelected = () => {
     //todos;
   }
-
+  
   onItemStarred = () => {
-    this.props.onItemStarred(this.props.dirent);
+    let dirent = this.props.dirent;
+    let filePath = this.getDirentPath(dirent);
+    if (dirent.starred) {
+      seafileAPI.unStarFile(repoID, filePath).then(() => {
+        this.props.updateViewList(this.props.filePath);
+      });
+    } else {
+      seafileAPI.starFile(repoID, filePath).then(() => {
+        this.props.updateViewList(this.props.filePath);
+      });
+    }
   }
-
+  
   onItemClick = () => {
-    this.props.onItemClick(this.props.dirent);
+    let direntPath = this.getDirentPath(this.props.dirent);
+    this.props.onItemClick(direntPath);
   }
 
-
-  onItemDownload = () => {
-    this.props.onItemDownload(this.props.dirent);
+  onItemDownload = (e) => {
+    e.nativeEvent.stopImmediatePropagation();
+    let direntPath = this.getDirentPath(this.props.dirent);
+    this.props.onItemDownload(this.props.dirent, direntPath);
   }
 
-  onItemDelete = () => {
-    this.props.onItemDelete(this.props.dirent);
+  onItemDelete = (e) => {
+    e.nativeEvent.stopImmediatePropagation(); //for document event
+    let direntPath = this.getDirentPath(this.props.dirent);
+    this.props.onItemDelete(direntPath);
+  }
+
+  onItemMenuItemClick = (operation) => {
+    switch(operation) {
+    case 'Rename': 
+      this.onRenameMenuItemClick();
+      break;
+    case 'Move':
+      this.onDirentItemMove();
+      break;
+    case 'Copy':
+      this.onDirentItemCopy();
+      break;
+    case 'Permission':
+      this.onPermissionItem();
+      break;
+    case 'Details':
+      this.onDetailsItem();
+      break;
+    case 'Unlock':
+      this.onUnlockItem();
+      break;
+    case 'Lock':
+      this.onLockItem();
+      break;
+    case 'New Draft':
+      this.onNewDraft();
+      break;
+    case 'Comment':
+      this.onComnentItem();
+      break;
+    case 'History':
+      this.onHistory();
+      break;
+    case 'Access Log':
+      this.onAccessLog();
+      break;
+    case 'Open via Client':
+      this.onOpenViaClient();
+      break;
+    default:
+      break;
+    }
+  }
+
+  onRenameMenuItemClick = () => {
+    this.setState({
+      isOperationShow: false,
+      isItemMenuShow: false,
+      isRenameing: true,
+    });
+    this.props.onRenameMenuItemClick(this.props.dirent);
+  }
+
+  onRenameConfirm = (newName) => {
+    if (newName === this.props.dirent.name) {
+      this.onRenameCancel();
+      return false;
+    }
+    
+    if (!newName) {
+      let errMessage = 'It is required.';
+      Toast.error(gettext(errMessage));
+      return false;
+    }
+    
+    if (newName.indexOf('/') > -1) {
+      let errMessage = 'Name should not include "/".';
+      Toast.error(gettext(errMessage));
+      return false;
+    }
+
+    let direntPath = this.getDirentPath(this.props.dirent);
+    this.props.onItemRename(direntPath, newName);
+    this.onRenameCancel();
+  }
+
+  onRenameCancel = () => {
+    this.setState({
+      isRenameing: false,
+    });
+    this.props.onUnfreezedItem();
+  }
+  
+  onDirentItemMove = () => {
+    let direntPath = this.getDirentPath(this.props.dirent);
+    this.props.onDirentItemMove(this.props.dirent, direntPath);
+    this.onItemMenuHide();
+  }
+
+  onDirentItemCopy = () => {
+    let direntPath = this.getDirentPath(this.props.dirent);
+    this.props.onDirentItemCopy(this.props.dirent, direntPath);
+    this.onItemMenuHide();
+  }
+
+  onPermissionItem = () => {
+
+  }
+
+  onDetailsItem = () => {
+    let direntPath = this.getDirentPath(this.props.dirent);
+    this.props.onItemDetails(this.props.dirent, direntPath);
+    this.onItemMenuHide();
+  }
+
+  onLockItem = () => {
+    let filePath = this.getDirentPath(this.props.dirent);
+    seafileAPI.lockfile(repoID, filePath).then(() => {
+      this.props.updateViewList(this.props.filePath);
+    });
+    this.onItemMenuHide();
+  }
+
+  onUnlockItem = () => {
+    let filePath = this.getDirentPath(this.props.dirent);
+    seafileAPI.unlockfile(repoID, filePath).then(() => {
+      this.props.updateViewList(this.props.filePath);
+    });
+    this.onItemMenuHide();
+  }
+
+  onNewDraft = () => {
+    let filePath = this.getDirentPath(this.props.dirent);
+    seafileAPI.createDraft(repoID,filePath).then(res => {
+      let draft_file_Path = res.data.draft_file_path;
+      let draftId = res.data.id;
+      let url = URLDecorator.getUrl({type: 'draft_view', repoID: repoID, filePath: draft_file_Path, draftId: draftId});
+      let newWindow = window.open('draft');
+      newWindow.location.href = url;
+    }).catch(() => {
+      Toast.error('Create draft failed.');
+    });
+    this.onItemMenuHide();
+  }
+
+  onComnentItem = () => {
+
+  }
+
+  onHistory = () => {
+    let filePath = this.getDirentPath(this.props.dirent);
+    let referer = location.href;
+    let url = URLDecorator.getUrl({type: 'file_revisions', repoID: repoID, filePath: filePath, referer: referer});
+    location.href = url;
+    this.onItemMenuHide();
+  }
+
+  onAccessLog = () => {
+
+  }
+
+  onOpenViaClient = () => {
+    let filePath = this.getDirentPath(this.props.dirent);
+    let url = URLDecorator.getUrl({type: 'open_via_client', repoID: repoID, filePath: filePath});
+    location.href = url;
+    this.onItemMenuHide();
+  }
+
+  getDirentPath = (dirent) => {
+    let path = this.props.filePath;
+    return path === '/' ? path + dirent.name : path + '/' + dirent.name;
   }
 
   render() {
@@ -98,19 +314,44 @@ class DirentListItem extends React.Component {
           {dirent.starred !== undefined && dirent.starred && <i className="fas fa-star"></i>}
         </td>
         <td className="icon">
-          <img src={dirent.type === 'dir' ? serviceUrl + '/media/img/folder-192.png' : serviceUrl + '/media/img/file/192/txt.png'} alt={gettext('file icon')}></img>
+          <div className="dir-icon">
+            <img src={dirent.type === 'dir' ? serviceUrl + '/media/img/folder-192.png' : serviceUrl + '/media/img/file/192/txt.png'} alt={gettext('file icon')}></img>
+            {dirent.is_locked && <img className="locked" src={serviceUrl + '/media/img/file-locked-32.png'} alt={gettext('locked')}></img>}
+          </div>
         </td>
-        <td className="name a-simulate" onClick={this.onItemClick}>{dirent.name}</td>
+        <td className="name a-simulate">
+          {this.state.isRenameing ?
+            <DirentRename dirent={dirent} onRenameConfirm={this.onRenameConfirm} onRenameCancel={this.onRenameCancel}/> :
+            <span onClick={this.onItemClick}>{dirent.name}</span>
+          }
+        </td>
         <td className="operation">
           {
             this.state.isOperationShow && 
-            <OperationGroup 
-              dirent={dirent} 
-              onItemMenuShow={this.onItemMenuShow}
-              onItemMenuHide={this.onItemMenuHide}
-              onDownload={this.onItemDownload}
-              onDelete={this.onItemDelete}
-            />
+            <div className="operations">
+              <ul className="operation-group">
+                <li className="operation-group-item">
+                  <i className="sf2-icon-download" title={gettext('Download')} onClick={this.onItemDownload}></i>
+                </li>
+                <li className="operation-group-item">
+                  <i className="sf2-icon-share" title={gettext('Share')} onClick={this.onItemShare}></i>
+                </li>
+                <li className="operation-group-item">
+                  <i className="sf2-icon-delete" title={gettext('Delete')} onClick={this.onItemDelete}></i>
+                </li>
+                <li className="operation-group-item">
+                  <i className="sf2-icon-caret-down sf-dropdown-toggle" title={gettext('More Operation')} onClick={this.onItemMenuToggle}></i>
+                </li>
+              </ul>
+              {
+                this.state.isItemMenuShow && 
+                <DirentMenu 
+                  dirent={this.props.dirent}
+                  menuPosition={this.state.menuPosition}
+                  onMenuItemClick={this.onItemMenuItemClick}
+                />
+              }
+            </div>
           }
         </td>
         <td className="file-size">{dirent.size && dirent.size}</td>

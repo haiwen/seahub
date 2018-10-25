@@ -4,7 +4,7 @@ import { Modal, ModalHeader, ModalBody } from 'reactstrap';
 
 const propTypes = {
   onCancelDownload: PropTypes.func.isRequired,
-  progress: PropTypes.string.isRequired,
+  progress: PropTypes.number.isRequired,
 };
 
 class ZipDownloadDialog extends React.Component {
@@ -18,7 +18,7 @@ class ZipDownloadDialog extends React.Component {
       <Modal isOpen={true} toggle={this.toggle}>
         <ModalHeader toggle={this.toggle}></ModalHeader>
         <ModalBody>
-          <div>{this.props.progress}</div>
+          <div>{this.props.progress + '%'}</div>
         </ModalBody>
       </Modal>
     );

@@ -19,7 +19,7 @@
 
 /* file-operation toolbar eg: edit, upload, new, share*/
 .operation-item  {
-  padding: 0 0.25rem;
+  padding: 0 0.5rem;
   margin-right: 0.25rem;
   height: 30px;
   min-width: 55px;

@@ -64,7 +64,7 @@ class DraftContent extends React.Component {
     let draft = this.state.currentDraft;
 
     editUtilties.createDraftReview(draft.id).then(res => {
-      const w = window.open()
+      const w = window.open();
       w.location = siteRoot + 'drafts/review/' + res.data.id;
     }).catch((error) => { 
       if (error.response.status == '409') {
