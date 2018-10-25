@@ -137,6 +137,12 @@ ul,ol,li {
     flex-direction: row;
 }
 
+.sf-font {
+    color: #eb8205 !important;
+    text-decoration: none;
+    font-weight: normal;
+}
+
 /* UI Widget */
 
 /**** caret ****/
