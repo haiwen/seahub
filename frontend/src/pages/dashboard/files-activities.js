@@ -17,8 +17,8 @@ class FileActivitiesContent extends Component {
       return <p className="error text-center">{error_msg}</p>;
     } else {
       return ( 
-        <div style={{padding: '10px 16px 20px'}}>
-          <table className="table table-hover table-vcenter activity-table">
+        <div className="activity-table-container">
+          <table className="table table-hover table-vcenter">
             <thead>
               <tr>
                 <th width="8%">{/* avatar */}</th>

@@ -765,6 +765,12 @@ a.op-icon:focus {
 /* end path navigation */
 
 /* begin main table list style */
+.activity-table-container {
+    flex: 1;
+    padding: 10px 16px 20px;
+    overflow: auto;
+}
+
 .table-container {
     flex: 1;
     padding: 10px 16px 20px;
