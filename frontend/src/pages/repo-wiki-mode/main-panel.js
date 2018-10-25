@@ -49,6 +49,7 @@ class MainPanel extends Component {
       isDirentDetailShow: false,
       currentDirent: null,
       currentFilePath: '',
+      isDirentListLoading: true,
     };
   }
 
@@ -69,6 +70,7 @@ class MainPanel extends Component {
   }
 
   updateViewList = (filePath) => {
+    this.setState({isDirentListLoading: true});
     seafileAPI.listDir(repoID, filePath).then(res => {
       let direntList = [];
       res.data.forEach(item => {
@@ -77,6 +79,7 @@ class MainPanel extends Component {
       });
       this.setState({
         direntList: direntList,
+        isDirentListLoading: false,
       });
     });
   }
@@ -292,6 +295,7 @@ class MainPanel extends Component {
                   onItemCopy={this.props.onMainItemCopy}
                   onItemDetails={this.onItemDetails}
                   updateViewList={this.updateViewList}
+                  isDirentListLoading={this.state.isDirentListLoading}
                 />
               }
             </div>

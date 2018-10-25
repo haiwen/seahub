@@ -3,6 +3,7 @@ import PropTypes from 'prop-types';
 import { gettext, repoID } from '../../utils/constants';
 import URLDecorator from '../../utils/url-decorator';
 import editorUtilities from '../../utils/editor-utilties';
+import Loading from '../loading';
 import DirentListItem from './dirent-list-item';
 import ZipDownloadDialog from '../dialog/zip-download-dialog';
 import MoveDirentDialog from '../dialog/move-dirent-dialog';
@@ -18,6 +19,7 @@ const propTypes = {
   onItemCopy: PropTypes.func.isRequired,
   onItemDetails: PropTypes.func.isRequired,
   updateViewList: PropTypes.func.isRequired,
+  isDirentListLoading: PropTypes.bool.isRequired,
 };
 
 class DirentListView extends React.Component {
@@ -130,6 +132,11 @@ class DirentListView extends React.Component {
 
   render() {
     const { direntList } = this.props;
+
+    if (this.props.isDirentListLoading) {
+      return (<Loading />);
+    }
+
     return (
       <div className="table-container">
         <table>
