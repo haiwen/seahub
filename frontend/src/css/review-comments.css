@@ -31,7 +31,7 @@
   color: #888;
 }
 .seafile-comment-list {
-  padding-top: 50px;
+  padding-top: 45px;
   box-sizing: border-box;
   height: 100%;
   overflow-y: auto;
@@ -47,6 +47,9 @@
   overflow-y: auto;
   padding: 15px 10px;
   overflow-y: hidden;
+}
+.seafile-comment-item-resolved {
+  background-color: #ffeef0;
 }
 .seafile-comment-item .seafile-comment-info {
   display: flex;
