@@ -154,5 +154,12 @@ export const Utils = {
       path_arr_.push(encodeURIComponent(path_arr[i]));
     }
     return path_arr_.join('/');
-  }
+  },
+
+  HTMLescape: function(html) {
+    return document.createElement('div')
+        .appendChild(document.createTextNode(html))
+        .parentNode
+        .innerHTML;
+  },
 };

@@ -2,6 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { Button, Modal, ModalHeader, ModalFooter, ModalBody, Alert } from 'reactstrap';
 import { gettext, repoID } from '../../utils/constants';
+import { Utils } from '../../utils/utils';
 import FileChooser from '../file-chooser/file-chooser';
 
 const propTypes = {
@@ -87,7 +88,7 @@ class MoveDirent extends React.Component {
 
   render() {
     let title = gettext("Move {placeholder} to:");
-    title = title.replace('{placeholder}', '<span class="sf-font">' + this.props.dirent.name + '</span>');
+    title = title.replace('{placeholder}', '<span class="sf-font">' + Utils.HTMLescape(this.props.dirent.name) + '</span>');
     return (
       <Modal isOpen={true} toggle={this.toggle}>
         <ModalHeader toggle={this.toggle}><div dangerouslySetInnerHTML={{__html: title}}></div></ModalHeader>
