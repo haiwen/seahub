@@ -65,20 +65,23 @@ class AuthTokenSerializer(serializers.Serializer):
         else:
             raise serializers.ValidationError('invalid params')
 
-        # convert login id or contact email to username if any
-        username = Profile.objects.convert_login_str_to_username(login_id)
-
-        p_id = ccnet_api.get_primary_id(username)
-        if p_id is not None:
-            username = p_id
-
-        if username and password:
-            user = authenticate(username=username, password=password)
+        if login_id and password:
+            user = authenticate(username=login_id, password=password)
             if user:
                 if not user.is_active:
                     raise serializers.ValidationError('User account is disabled.')
             else:
-                raise serializers.ValidationError('Unable to login with provided credentials.')
+                """try login id/contact email/primary id"""
+                # convert login id or contact email to username if any
+                username = Profile.objects.convert_login_str_to_username(login_id)
+                # convert username to primary id if any
+                p_id = ccnet_api.get_primary_id(username)
+                if p_id is not None:
+                    username = p_id
+
+                user = authenticate(username=username, password=password)
+                if user is None:
+                    raise serializers.ValidationError('Unable to login with provided credentials.')
         else:
             raise serializers.ValidationError('Must include "username" and "password"')
 
@@ -98,10 +101,10 @@ class AuthTokenSerializer(serializers.Serializer):
             else:
                 logger.info('%s: unrecognized device' % login_id)
 
-            token = get_token_v2(self.context['request'], username, platform,
+            token = get_token_v2(self.context['request'], user.username, platform,
                     device_id, device_name, client_version, platform_version)
         else:
-            token = get_token_v1(username)
+            token = get_token_v1(user.username)
 
         return token.key
 
