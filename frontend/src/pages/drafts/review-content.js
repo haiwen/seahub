@@ -31,7 +31,7 @@ class ReviewContent extends React.Component {
   
   render() {
     return (
-      <div className="cur-view-content" style={{padding: 0}}>
+      <div className="cur-view-content">
         {this.state.isLoadingReviews && <Loading /> }
         {(!this.state.isLoadingReviews && this.state.reviewsList.length !==0) &&
           <ReviewListView

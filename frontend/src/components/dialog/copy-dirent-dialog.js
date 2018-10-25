@@ -53,7 +53,7 @@ class CopyDirent extends React.Component {
     }
     
     if ( filePath && filePath.length > direntPath.length && filePath.indexOf(direntPath) > -1) {
-      message = gettext('Can not copy directory %(src)s to its subdirectory %(des)s')
+      message = gettext('Can not copy directory %(src)s to its subdirectory %(des)s');
       message = message.replace('%(src)s', direntPath);
       message = message.replace('%(des)s', filePath);
       this.setState({errMessage: message});
@@ -88,7 +88,7 @@ class CopyDirent extends React.Component {
   }
 
   render() {
-    let title = gettext("Copy {placeholder} to:");
+    let title = gettext('Copy {placeholder} to:');
     title = title.replace('{placeholder}', '<span class="sf-font">' + Utils.HTMLescape(this.props.dirent.name) + '</span>');
     return (
       <Modal isOpen={true} toggle={this.toggle}>

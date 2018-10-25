@@ -103,7 +103,7 @@ class DraftContent extends React.Component {
   
   render() {
     return (
-      <div className="cur-view-content" style={{padding: 0}}>
+      <div className="cur-view-content">
         {this.state.isLoadingDraft && <Loading /> }
         {(!this.state.isLoadingDraft && this.state.draftList.length !==0) &&
           <DraftListView

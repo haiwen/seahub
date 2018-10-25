@@ -158,8 +158,8 @@ export const Utils = {
 
   HTMLescape: function(html) {
     return document.createElement('div')
-        .appendChild(document.createTextNode(html))
-        .parentNode
-        .innerHTML;
+      .appendChild(document.createTextNode(html))
+      .parentNode
+      .innerHTML;
   },
 };
