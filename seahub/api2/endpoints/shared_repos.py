@@ -15,9 +15,9 @@ from seahub.api2.authentication import TokenAuthentication
 from seahub.api2.throttling import UserRateThrottle
 from seahub.profile.models import Profile
 from seahub.utils import is_org_context, is_valid_username, send_perm_audit_msg
+from seahub.utils.repo import get_available_repo_perms
 from seahub.base.templatetags.seahub_tags import email2nickname, email2contact_email
 from seahub.share.models import ExtraSharePermission, ExtraGroupsSharePermission
-from seahub.constants import PERMISSION_READ, PERMISSION_READ_WRITE, PERMISSION_ADMIN
 from seahub.share.utils import update_user_dir_permission, update_group_dir_permission,\
         check_user_share_out_permission, check_group_share_out_permission
 
@@ -111,7 +111,7 @@ class SharedRepo(APIView):
 
         # argument check
         permission = request.data.get('permission', None)
-        if permission not in [PERMISSION_READ, PERMISSION_READ_WRITE, PERMISSION_ADMIN]:
+        if permission not in get_available_repo_perms():
             error_msg = 'permission invalid.'
             return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
 

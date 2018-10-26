@@ -19,10 +19,9 @@ from pysearpc import SearpcError
 from seaserv import seafile_api
 
 from seahub.base.accounts import User, ANONYMOUS_EMAIL
+from seahub.base.templatetags.seahub_tags import email2nickname
 from seahub.utils import gen_inner_file_get_url, \
     gen_inner_file_upload_url, is_pro_version
-from seahub.base.templatetags.seahub_tags import email2nickname
-
 from seahub.settings import SITE_ROOT
 
 from seahub.wopi.utils import get_file_info_by_token

@@ -18,7 +18,7 @@
 {% endblock %}
 
 {% block edit_file %}
-{% if file_perm == 'rw' and not err%}
+{% if not err %}
 <a class="sf-btn-group-btn sf-btn-link op-icon sf2-icon-edit" href="{{ SITE_ROOT }}repo/{{ repo.id }}/file/edit/?p={{ path|urlencode }}&file_enc={{file_enc}}" id="edit" title="{% trans "Edit" %}"></a>
 {% endif %}
 {% endblock %}

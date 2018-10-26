@@ -23,6 +23,7 @@ from seahub.share.signals import share_repo_to_user_successful, share_repo_to_gr
 from seahub.base.accounts import User
 from seahub.base.templatetags.seahub_tags import email2nickname
 from seahub.utils import is_valid_username, send_perm_audit_msg
+from seahub.utils.repo import get_available_repo_perms
 from seahub.constants import PERMISSION_READ, PERMISSION_READ_WRITE, \
         PERMISSION_ADMIN
 
@@ -157,9 +158,7 @@ class AdminShares(APIView):
 
         # argument check
         permission = request.data.get('permission', None)
-        if not permission or permission not in (PERMISSION_READ, 
-                                                PERMISSION_READ_WRITE,
-                                                PERMISSION_ADMIN):
+        if not permission or permission not in get_available_repo_perms():
             error_msg = 'permission invalid.'
             return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
 
@@ -306,9 +305,7 @@ class AdminShares(APIView):
 
         # argument check
         permission = request.data.get('permission', None)
-        if not permission or permission not in (PERMISSION_READ, 
-                                                PERMISSION_READ_WRITE,
-                                                PERMISSION_ADMIN):
+        if not permission or permission not in get_available_repo_perms():
             error_msg = 'permission invalid.'
             return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
 

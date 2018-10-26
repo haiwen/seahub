@@ -18,6 +18,7 @@ from seahub.views.file import send_file_access_msg
 from seahub.share.models import FileShare
 from seahub.utils import is_windows_operating_system, \
     is_pro_version
+from seahub.utils.repo import parse_repo_perm
 
 import seaserv
 from seaserv import seafile_api
@@ -85,8 +86,8 @@ class ShareLinkZipTaskView(APIView):
             error_msg = 'Folder %s not found.' % real_path
             return api_error(status.HTTP_404_NOT_FOUND, error_msg)
 
-        if not seafile_api.check_permission_by_path(repo_id, '/',
-                fileshare.username):
+        if parse_repo_perm(seafile_api.check_permission_by_path(
+                    repo_id, '/', fileshare.username)).can_download is False:
             error_msg = 'Permission denied.'
             return api_error(status.HTTP_403_FORBIDDEN, error_msg)
 

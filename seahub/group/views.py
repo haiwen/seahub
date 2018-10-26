@@ -16,6 +16,7 @@ from django.utils.http import urlquote
 from django.utils.translation import ugettext as _
 
 from seahub.auth.decorators import login_required, login_required_ajax
+from seahub.constants import PERMISSION_PREVIEW
 import seaserv
 from seaserv import ccnet_threaded_rpc, seafile_api, \
     get_group_repos, get_group, \
@@ -323,8 +324,8 @@ def group_wiki(request, group, page_name="home"):
         if is_registered_user(username):
             repo_perm = seafile_api.check_permission_by_path(repo.id, '/', username)
         else:
-            # when anonymous user visit public group wiki, set permission as 'r'
-            repo_perm = 'r'
+            # when anonymous user visit public group wiki, set permission as preview only
+            repo_perm = PERMISSION_PREVIEW
 
         wiki_index_exists = True
         index_pagename = 'index'
@@ -370,8 +371,8 @@ def group_wiki_pages(request, group):
     if is_registered_user(username):
         repo_perm = seafile_api.check_permission_by_path(repo.id, '/', username)
     else:
-        # when anonymous user visit public group wiki, set permission as 'r'
-        repo_perm = 'r'
+        # when anonymous user visit public group wiki, set permission as preview only
+        repo_perm = PERMISSION_PREVIEW
 
     mods_available = get_available_mods_by_group(group.id)
     mods_enabled = get_enabled_mods_by_group(group.id)

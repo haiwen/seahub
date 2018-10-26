@@ -29,7 +29,9 @@ from seahub.group.utils import is_group_admin
 from seahub.utils import is_valid_dirent_name, is_org_context, \
         is_pro_version, normalize_dir_path, is_valid_username, \
         send_perm_audit_msg, is_valid_org_id
-from seahub.utils.repo import get_library_storages, get_repo_owner
+from seahub.utils.repo import (
+    get_library_storages, get_repo_owner, get_available_repo_perms
+)
 from seahub.utils.timeutils import timestamp_to_isoformat_timestr
 from seahub.utils.rpc import SeafileAPI
 from seahub.share.signals import share_repo_to_user_successful, share_repo_to_group_successful
@@ -312,7 +314,7 @@ class GroupOwnedLibraryUserFolderPermission(APIView):
             return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
 
         perm = request.data.get('permission', None)
-        if not perm or perm not in [PERMISSION_READ, PERMISSION_READ_WRITE]:
+        if not perm or perm not in get_available_repo_perms():
             error_msg = 'permission invalid.'
             return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
 
@@ -405,7 +407,7 @@ class GroupOwnedLibraryUserFolderPermission(APIView):
             return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
 
         perm = request.data.get('permission', None)
-        if not perm or perm not in [PERMISSION_READ, PERMISSION_READ_WRITE]:
+        if not perm or perm not in get_available_repo_perms():
             error_msg = 'permission invalid.'
             return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
 
@@ -585,7 +587,7 @@ class GroupOwnedLibraryGroupFolderPermission(APIView):
             return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
 
         perm = request.data.get('permission', None)
-        if not perm or perm not in [PERMISSION_READ, PERMISSION_READ_WRITE]:
+        if not perm or perm not in get_available_repo_perms():
             error_msg = 'permission invalid.'
             return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
 
@@ -673,7 +675,7 @@ class GroupOwnedLibraryGroupFolderPermission(APIView):
             return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
 
         perm = request.data.get('permission', None)
-        if not perm or perm not in [PERMISSION_READ, PERMISSION_READ_WRITE]:
+        if not perm or perm not in get_available_repo_perms():
             error_msg = 'permission invalid.'
             return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
 

@@ -1,10 +1,15 @@
 # Copyright (c) 2012-2016 Seafile Ltd.
 # -*- coding: utf-8 -*-
 import logging
+from collections import namedtuple
 
 import seaserv
 from seaserv import seafile_api, ccnet_api
 
+from seahub.constants import (
+    PERMISSION_PREVIEW, PERMISSION_PREVIEW_EDIT,
+    PERMISSION_READ, PERMISSION_READ_WRITE, PERMISSION_ADMIN
+)
 from seahub.utils import EMPTY_SHA1, is_org_context, is_pro_version
 from seahub.base.models import RepoSecretKey
 from seahub.base.templatetags.seahub_tags import email2nickname
@@ -13,6 +18,38 @@ from seahub.settings import ENABLE_STORAGE_CLASSES, \
         STORAGE_CLASS_MAPPING_POLICY, ENABLE_FOLDER_PERM
 
 logger = logging.getLogger(__name__)
+
+def get_available_repo_perms():
+    perms = [PERMISSION_READ, PERMISSION_READ_WRITE, PERMISSION_ADMIN]
+    if is_pro_version():
+        perms += [PERMISSION_PREVIEW, PERMISSION_PREVIEW_EDIT]
+
+    return perms
+
+
+def parse_repo_perm(perm):
+    RP = namedtuple('RepoPerm', [
+        'can_download', 'can_upload',  # download/uplaod files/folders
+        'can_edit_on_web',             # edit files on web
+        'can_copy',                    # copy files/folders on web
+        'can_preview',                 # preview files on web
+    ])
+
+    RP.can_download = True if perm in [
+        PERMISSION_READ, PERMISSION_READ_WRITE, PERMISSION_ADMIN] else False
+    RP.can_upload = True if perm in [
+        PERMISSION_READ_WRITE, PERMISSION_ADMIN] else False
+    RP.can_edit_on_web = True if perm in [
+        PERMISSION_READ_WRITE, PERMISSION_ADMIN, PERMISSION_PREVIEW_EDIT
+    ] else False
+    RP.can_copy = True if perm in [
+        PERMISSION_READ, PERMISSION_READ_WRITE, PERMISSION_ADMIN,
+    ] else False
+    RP.can_preview = True if perm in [
+        PERMISSION_READ, PERMISSION_READ_WRITE, PERMISSION_ADMIN,
+        PERMISSION_PREVIEW, PERMISSION_PREVIEW_EDIT
+    ] else False
+    return RP
 
 def list_dir_by_path(cmmt, path):
     if cmmt.root_id == EMPTY_SHA1:

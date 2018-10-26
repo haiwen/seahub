@@ -13,6 +13,7 @@ from functools import wraps
 
 from django.core.paginator import EmptyPage, InvalidPage
 from django.http import HttpResponse
+from rest_framework.authentication import SessionAuthentication
 from rest_framework.response import Response
 from rest_framework import status, serializers
 from seaserv import seafile_api, get_personal_groups_by_user, \
@@ -435,3 +436,9 @@ def user_to_dict(email, request=None, avatar_size=AVATAR_DEFAULT_SIZE):
         'user_contact_email': d['contact_email'],
         'avatar_url': avatar_url,
     }
+
+def is_web_request(request):
+    if isinstance(request.successful_authenticator, SessionAuthentication):
+        return True
+    else:
+        return False

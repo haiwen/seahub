@@ -45,7 +45,7 @@ from seahub.utils import render_permission_error, render_error, \
     is_pro_version, FILE_AUDIT_ENABLED, is_valid_dirent_name, \
     is_windows_operating_system
 from seahub.utils.star import get_dir_starred_files
-from seahub.utils.repo import get_library_storages
+from seahub.utils.repo import get_library_storages, parse_repo_perm
 from seahub.utils.file_op import check_file_lock
 from seahub.utils.timeutils import utc_to_local
 from seahub.utils.auth import get_login_bg_image_path
@@ -825,8 +825,8 @@ def file_revisions(request, repo_id):
         logger.error(e)
         is_locked, locked_by_me = False, False
 
-    if seafile_api.check_permission_by_path(repo_id, path, username) != 'rw' or \
-        (is_locked and not locked_by_me):
+    repo_perm = seafile_api.check_permission_by_path(repo_id, path, username)
+    if repo_perm != 'rw' or (is_locked and not locked_by_me):
         can_revert_file = False
 
     # for 'go back'
@@ -862,6 +862,7 @@ def file_revisions(request, repo_id):
         'is_owner': is_owner,
         'can_compare': can_compare,
         'can_revert_file': can_revert_file,
+        'can_download_file': parse_repo_perm(repo_perm).can_download,
         'referer': referer,
         })
 
@@ -947,7 +948,8 @@ def repo_download_dir(request, repo_id):
     else:
         dirname = repo.name
 
-    allow_download = True if check_folder_permission(request, repo_id, '/') else False
+    allow_download = parse_repo_perm(check_folder_permission(
+        request, repo_id, '/')).can_download
 
     if allow_download:
 

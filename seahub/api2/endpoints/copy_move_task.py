@@ -17,7 +17,7 @@ from seahub.api2.views import HTTP_443_ABOVE_QUOTA
 
 from seahub.views import check_folder_permission
 from seahub.utils import check_filename_with_rename
-from seahub.utils.repo import get_repo_owner
+from seahub.utils.repo import get_repo_owner, parse_repo_perm
 from seahub.utils.file_op import check_file_lock
 from seahub.settings import MAX_PATH
 
@@ -193,7 +193,8 @@ class CopyMoveTaskView(APIView):
 
         if operation == 'copy':
             # permission check for src parent dir
-            if not check_folder_permission(request, src_repo_id, src_parent_dir):
+            if parse_repo_perm(check_folder_permission(
+                            request, src_repo_id, src_parent_dir)).can_copy is False:
                 error_msg = 'Permission denied.'
                 return api_error(status.HTTP_403_FORBIDDEN, error_msg)
 

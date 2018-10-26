@@ -19,6 +19,7 @@ from seahub.api2.utils import api_error
 from seahub.views import check_folder_permission
 from seahub.views.file import send_file_access_msg
 from seahub.utils import is_windows_operating_system
+from seahub.utils.repo import parse_repo_perm
 
 import seaserv
 from seaserv import seafile_api
@@ -68,7 +69,7 @@ class ZipTaskView(APIView):
             return api_error(status.HTTP_404_NOT_FOUND, error_msg)
 
         # permission check
-        if not check_folder_permission(request, repo_id, parent_dir):
+        if parse_repo_perm(check_folder_permission(request, repo_id, parent_dir)).can_download is False:
             error_msg = 'Permission denied.'
             return api_error(status.HTTP_403_FORBIDDEN, error_msg)
 

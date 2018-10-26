@@ -8,6 +8,7 @@ from seaserv import seafile_api
 
 from tests.common.utils import randstring
 
+from seahub.constants import PERMISSION_PREVIEW, PERMISSION_PREVIEW_EDIT
 from seahub.test_utils import BaseTestCase, TRAVIS
 
 
@@ -242,6 +243,24 @@ class DirSharedItemsTest(BaseTestCase):
         self.assertEqual(200, resp.status_code)
         json_resp = json.loads(resp.content)
         assert 'has been shared to' in json_resp['failed'][0]['error_msg']
+
+    def test_can_share_repo_to_groups_with_perms(self):
+        self.login_as(self.user)
+
+        grp1 = self.group
+        grp2 = self.create_group(group_name="test-grp2",
+                                 username=self.user.username)
+
+        for g, perm in [(grp1, PERMISSION_PREVIEW), (grp2, PERMISSION_PREVIEW_EDIT)]:
+            resp = self.client.put(
+                '/api2/repos/%s/dir/shared_items/?p=/' % (self.repo.id),
+                "share_type=group&&group_id=%d&permission=%s" % (g.id, perm),
+                'application/x-www-form-urlencoded',
+            )
+            self.assertEqual(200, resp.status_code)
+            json_resp = json.loads(resp.content)
+            assert len(json_resp['success']) == 1
+            assert json_resp['success'][0]['permission'] == perm
 
     @pytest.mark.skipif(TRAVIS, reason="") # pylint: disable=E1101
     def test_can_share_repo_to_org_groups(self):

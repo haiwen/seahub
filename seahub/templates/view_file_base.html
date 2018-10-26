@@ -162,11 +162,12 @@
     {% endblock %}
     {% endif %}
 
-    {% if enable_file_comment %}
+    {% if can_download_file %}
     <a class="sf-btn-group-btn sf-btn-link op-icon sf2-icon-download" href="?dl=1" id="download" title="{% trans "Download"%}"></a>
-    <button id="discuss" class="sf-btn-group-btn sf-btn-group-btn-last op-icon sf2-icon-msgs" title="{% trans "Comment" %}"></button>
-    {% else %}
-    <a class="sf-btn-group-btn sf-btn-group-btn-last sf-btn-link op-icon sf2-icon-download" href="?dl=1" id="download" title="{% trans "Download"%}"></a>
+    {% endif %}
+
+    {% if enable_file_comment %}
+    <button id="discuss" class="sf-btn-group-btn op-icon sf2-icon-msgs" title="{% trans "Comment" %}"></button>
     {% endif %}
 
 </script>
@@ -203,9 +204,11 @@
             </li>
             {% endif %}
 
+            {% if can_download_file %}
             <li>
                 <a id="download" class="op download" href="?dl=1" title="{% trans "Download"%}">{% trans "Download"%}</a>
             </li>
+            {% endif %}
         </ul>
         <div>
 </script>
@@ -568,6 +571,7 @@ var DropDownMenu = {
         var _this = this;
         var template = $(window).width() > 992 ? this.$deviceTmp : this.$mobileTmp;
         this.$el.html(template);
+        $('.sf-btn-group-btn:last', this.$el).addClass('sf-btn-group-btn-last');
 
         //bind click event for the menu item;
         {% if can_lock_unlock_file %}

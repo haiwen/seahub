@@ -17,14 +17,11 @@ define([
         },
 
         getIconTitle: function() {
-            var icon_title = '';
-            if (this.get('share_permission') == "rw") {
-                icon_title = gettext("Read-Write");
-            } else {
-                icon_title = gettext("Read-Only");
-            }
-
-            return icon_title;
+            return Common.getLibIconTitle({
+                'encrypted': this.get('encrypted'),
+                'is_admin': this.get('is_admin'),
+                'permission': this.get('share_permission')
+            });
         }
 
     });

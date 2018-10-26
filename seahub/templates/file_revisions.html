@@ -85,7 +85,9 @@
         <a href="#" class="op vh restore-file" data-commit_id="<%- commit_id %>" data-commit_path="<%- path %>">{% trans 'Restore' %}</a>
         <% } %>
         {% endif %}
+        {% if can_download_file %}
         <a href="<%- download_file_url %>" class="op vh">{% trans 'Download' %}</a>
+        {% endif %}
         <a href="<%- view_history_file_url %>" class="op vh" target="_blank">{% trans 'View' %}</a>
         {% if can_compare %}
         <a href="<%- diff_url %>" class="op vh text-diff">{% trans 'Diff' %}</a>

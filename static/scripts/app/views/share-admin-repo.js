@@ -110,11 +110,27 @@ define([
             var obj = this.model.toJSON(),
                 icon_size = Common.isHiDPI() ? 48 : 24,
                 icon_url = this.model.getIconUrl(icon_size),
-                share_type = this.model.get('share_type');
+                share_type = this.model.get('share_type'),
+                cur_perm_text;
 
             this.show_admin = false;
             if (app.pageOptions.is_pro && share_type != 'public') {
                 this.show_admin = true;
+            }
+
+            switch(obj.share_permission) {
+                case 'rw':
+                    cur_perm_text = gettext("Read-Write");
+                    break;
+                case 'r':
+                    cur_perm_text = gettext("Read-Only");
+                    break;
+                case 'cloud-edit':
+                    cur_perm_text = gettext("Preview-Edit-on-Cloud");
+                    break;
+                case 'preview':
+                    cur_perm_text = gettext("Preview-on-Cloud");
+                    break;
             }
 
             _.extend(obj, {
@@ -122,7 +138,8 @@ define([
                 'icon_title': this.model.getIconTitle(),
                 'url': this.model.getWebUrl(),
                 'name': this.model.get('repo_name'),
-                'show_admin': this.show_admin
+                'show_admin': this.show_admin,
+                'cur_perm_text': cur_perm_text
             });
 
             this.$el.html(this.template(obj));

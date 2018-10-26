@@ -101,13 +101,30 @@ define([
         render: function() {
             var obj = this.model.toJSON(),
                 icon_size = Common.isHiDPI() ? 96 : 24,
-                icon_url = this.model.getIconUrl(icon_size);
+                icon_url = this.model.getIconUrl(icon_size),
+                cur_perm_text;
+
+            switch(obj.share_permission) {
+                case 'rw':
+                    cur_perm_text = gettext("Read-Write");
+                    break;
+                case 'r':
+                    cur_perm_text = gettext("Read-Only");
+                    break;
+                case 'cloud-edit':
+                    cur_perm_text = gettext("Preview-Edit-on-Cloud");
+                    break;
+                case 'preview':
+                    cur_perm_text = gettext("Preview-on-Cloud");
+                    break;
+            }
 
             _.extend(obj, {
                 'icon_url': icon_url,
                 'icon_title': this.model.getIconTitle(),
                 'url': this.model.getWebUrl(),
-                'name': this.model.get('folder_name')
+                'name': this.model.get('folder_name'),
+                'cur_perm_text': cur_perm_text
             });
 
             this.$el.html(this.template(obj));
