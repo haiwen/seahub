@@ -3,7 +3,7 @@ import ReactDOM from 'react-dom';
 /* eslint-disable */
 import Prism from 'prismjs';
 /* eslint-enable */
-import { siteRoot, gettext, reviewID, draftOriginFilePath, draftFilePath, draftOriginRepoID, draftFileName, opStatus, publishFileVersion, originFileVersion } from './utils/constants';
+import { siteRoot, gettext, draftID, reviewID, draftOriginFilePath, draftFilePath, draftOriginRepoID, draftFileName, opStatus, publishFileVersion, originFileVersion } from './utils/constants';
 import { seafileAPI } from './utils/seafile-api';
 import axios from 'axios';
 import DiffViewer from '@seafile/seafile-editor/dist/viewer/diff-viewer';
@@ -140,6 +140,10 @@ class DraftReview extends React.Component {
     });
   };
 
+  onDraftPage = () => {
+    window.open(siteRoot + 'lib/' + draftOriginRepoID + '/file' + draftFilePath +'?mode=edit&draft_id=' + draftID);
+  }
+
   onDiff = () => {
     this.setState({
       isDiff: !this.state.isDiff,
@@ -165,6 +169,9 @@ class DraftReview extends React.Component {
             </div>
           </div>
           <div className="button-group">
+            {draftID == 'None' ? '':
+              <Button className='btn btn-secondary file-operation-btn' title={gettext('Draft Content')} onClick={this.onDraftPage}>{gettext('Draft Page')}</Button>
+            }
             {this.state.isDiff ?
               <Button className='btn btn-secondary file-operation-btn' title={gettext('Draft Content')} onClick={this.onDiff}>{gettext('Draft Content')}</Button> :
               <Button className='btn btn-secondary file-operation-btn' title={gettext('Diff Content')} onClick={this.onDiff}>{gettext('Diff Content')}</Button>

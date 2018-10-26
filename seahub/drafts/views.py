@@ -36,6 +36,7 @@ def review(request, pk):
     draft_file_name = os.path.basename(d_r.draft_file_path)
 
     return render(request, "draft_review.html", {
+        "draft_id": d_r.draft_id_id,
         "review_id": pk,
         "draft_repo_id": d_r.origin_repo_id,
         "draft_origin_repo_id": d_r.origin_repo_id,
