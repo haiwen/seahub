@@ -10,6 +10,7 @@ import DiffViewer from '@seafile/seafile-editor/dist/viewer/diff-viewer';
 import Loading from './components/loading';
 import Toast from './components/toast';
 import ReviewComments from './components/review-list-view/review-comments';
+import { Button } from 'reactstrap';
 
 import 'seafile-ui';
 import './assets/css/fa-solid.css';
@@ -34,6 +35,7 @@ class DraftReview extends React.Component {
       isShowComments: false,
       inResizing: false,
       commentWidth: 30,
+      isDiff: true,
     };
   }
 
@@ -138,6 +140,12 @@ class DraftReview extends React.Component {
     });
   };
 
+  onDiff = () => {
+    this.setState({
+      isDiff: !this.state.isDiff,
+    })
+  }
+
   componentWillMount() {
     this.getCommentsNumber();
   }
@@ -157,6 +165,10 @@ class DraftReview extends React.Component {
             </div>
           </div>
           <div className="button-group">
+            {this.state.isDiff ?
+              <Button className='btn btn-secondary file-operation-btn' title={gettext('Draft Content')} onClick={this.onDiff}>{gettext('Draft Content')}</Button> :
+              <Button className='btn btn-secondary file-operation-btn' title={gettext('Diff Content')} onClick={this.onDiff}>{gettext('Diff Content')}</Button>
+            }
             <button className="btn btn-icon btn-secondary btn-active common-list-btn"
               id="commentsNumber" type="button" data-active="false"
               onMouseDown={this.toggleCommentList}>
@@ -187,12 +199,19 @@ class DraftReview extends React.Component {
             onMouseMove={onResizeMove} onMouseUp={this.onResizeMouseUp} ref="comment">
             <div style={{width:(100-this.state.commentWidth)+'%'}}
               className={!this.state.isShowComments ? 'cur-view-content' : 'cur-view-content cur-view-content-commenton'} >
-              <div className="markdown-viewer-render-content article">
-                {this.state.isLoading ? 
-                  <Loading /> :
-                  <DiffViewer markdownContent={this.state.draftContent} markdownContent1={this.state.draftOriginContent} />
-                }
-              </div>
+              {this.state.isLoading ? 
+                <div className="markdown-viewer-render-content article">
+                  <Loading /> 
+                </div> 
+                :
+                <div className="markdown-viewer-render-content article">
+                  {this.state.isDiff ? 
+                    <DiffViewer markdownContent={this.state.draftContent} markdownContent1={this.state.draftOriginContent} />
+                    : 
+                    <DiffViewer markdownContent={this.state.draftContent} markdownContent1={this.state.draftContent} />
+                  }
+                </div>
+              }
             </div>
             { this.state.isShowComments &&
               <div className="cur-view-right-part" style={{width:(this.state.commentWidth)+'%'}}>
