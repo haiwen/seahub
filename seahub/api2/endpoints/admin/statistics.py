@@ -264,32 +264,21 @@ class SystemUserStorageExcelView(APIView):
         head = [_("Email"), _("Name"), _("Contact Email"),
                 _("Space Usage") + "(MB)", _("Space Quota") + "(MB)"]
 
-        # only operate 100 users for every `for` loop
-        looped = 0
-        limit = 100
         data_list = []
+        for user in all_users:
 
-        while looped < len(all_users):
+            user_email = user.email
+            user_name = email2nickname(user_email)
+            user_contact_email = email2contact_email(user_email)
 
-            current_users = all_users[looped:looped+limit]
+            _populate_user_quota_usage(user)
+            space_usage_MB = byte_to_mb(user.space_usage)
+            space_quota_MB = byte_to_mb(user.space_quota)
 
-            for user in current_users:
+            row = [user_email, user_name, user_contact_email,
+                    space_usage_MB, space_quota_MB]
 
-                user_email = user.email
-                user_name = email2nickname(user_email)
-                user_contact_email = email2contact_email(user_email)
-
-                _populate_user_quota_usage(user)
-                space_usage_MB = byte_to_mb(user.space_usage)
-                space_quota_MB = byte_to_mb(user.space_quota)
-
-                row = [user_email, user_name, user_contact_email,
-                        space_usage_MB, space_quota_MB]
-
-                data_list.append(row)
-
-            # update `looped` value when `for` loop finished
-            looped += limit
+            data_list.append(row)
 
         excel_name = 'User Storage'
         try:
