@@ -646,7 +646,7 @@ if EVENTS_CONFIG_FILE:
         15th events.
         """
         return _get_events(username, start, count)
-   
+
     def get_user_activity_stats_by_day(start, end, offset):
         """
         """

@@ -1,6 +1,7 @@
 # Copyright (c) 2012-2016 Seafile Ltd.
 import datetime
 import pytz
+import logging
 
 from rest_framework.authentication import SessionAuthentication
 from rest_framework.permissions import IsAdminUser
@@ -8,16 +9,27 @@ from rest_framework.response import Response
 from rest_framework.views import APIView
 from rest_framework import status
 from django.utils import timezone
+from django.utils.translation import ugettext as _
+from django.http import HttpResponse
+
+from seaserv import ccnet_api
 
 from seahub.utils import get_file_ops_stats_by_day, \
         get_total_storage_stats_by_day, get_user_activity_stats_by_day, \
-        is_pro_version, EVENTS_ENABLED, get_system_traffic_by_day
+        is_pro_version, EVENTS_ENABLED, get_system_traffic_by_day, \
+        seafevents_api
 from seahub.utils.timeutils import datetime_to_isoformat_timestr
+from seahub.utils.ms_excel import write_xls
+from seahub.utils.file_size import byte_to_mb
+from seahub.views.sysadmin import _populate_user_quota_usage
+from seahub.base.templatetags.seahub_tags import email2nickname, \
+        email2contact_email
 
 from seahub.api2.authentication import TokenAuthentication
 from seahub.api2.throttling import UserRateThrottle
 from seahub.api2.utils import api_error
 
+logger = logging.getLogger(__name__)
 
 def check_parameter(func):
     def _decorated(view, request, *args, **kwargs):
@@ -176,3 +188,108 @@ def get_time_offset():
     timezone_name = timezone.get_current_timezone_name()
     offset = pytz.timezone(timezone_name).localize(datetime.datetime.now()).strftime('%z')
     return offset[:3] + ':' + offset[3:]
+
+
+class SystemUserTrafficExcelView(APIView):
+    authentication_classes = (TokenAuthentication, SessionAuthentication)
+    throttle_classes = (UserRateThrottle,)
+    permission_classes = (IsAdminUser,)
+
+    def get(self, request):
+
+        month = request.GET.get("month", "")
+        if not month:
+            error_msg = "month invalid."
+            return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
+
+        try:
+            month_obj = datetime.datetime.strptime(month, "%Y%m")
+        except:
+            error_msg = "Month %s invalid" % month
+            return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
+
+        try:
+            res_data = seafevents_api.get_all_users_traffic_by_month(month_obj, -1, -1)
+        except Exception as e:
+            logger.error(e)
+            error_msg = 'Internal Server Error'
+            return api_error(status.HTTP_500_INTERNAL_SERVER_ERROR, error_msg)
+
+        data_list = []
+        head = [_("Time"), _("User"), _("Web Download") + ('(MB)'), \
+                _("Sync Download") + ('(MB)'), _("Link Download") + ('(MB)'), \
+                _("Web Upload") + ('(MB)'), _("Sync Upload") + ('(MB)'), \
+                _("Link Upload") + ('(MB)')]
+
+        for data in res_data:
+            web_download = byte_to_mb(data['web_file_download'])
+            sync_download = byte_to_mb(data['sync_file_download'])
+            link_download = byte_to_mb(data['link_file_download'])
+            web_upload = byte_to_mb(data['web_file_upload'])
+            sync_upload = byte_to_mb(data['sync_file_upload'])
+            link_upload = byte_to_mb(data['link_file_upload'])
+
+            row = [month, data['user'], web_download, sync_download, \
+                    link_download, web_upload, sync_upload, link_upload]
+
+            data_list.append(row)
+
+        excel_name = "User Traffic %s" % month
+
+        try:
+            wb = write_xls(excel_name, head, data_list)
+        except Exception as e:
+            logger.error(e)
+            error_msg = 'Internal Server Error'
+            return api_error(status.HTTP_500_INTERNAL_SERVER_ERROR, error_msg)
+
+        response = HttpResponse(content_type='application/ms-excel')
+        response['Content-Disposition'] = 'attachment; filename=%s.xlsx' % excel_name
+        wb.save(response)
+
+        return response
+
+
+class SystemUserStorageExcelView(APIView):
+    authentication_classes = (TokenAuthentication, SessionAuthentication)
+    throttle_classes = (UserRateThrottle,)
+    permission_classes = (IsAdminUser,)
+
+    def get(self, request):
+
+        db_users = ccnet_api.get_emailusers('DB', -1, -1)
+        ldap_import_users = ccnet_api.get_emailusers('LDAPImport', -1, -1)
+        all_users = db_users + ldap_import_users
+
+        head = [_("Email"), _("Name"), _("Contact Email"),
+                _("Space Usage") + "(MB)", _("Space Quota") + "(MB)"]
+
+        data_list = []
+        for user in all_users:
+
+            user_email = user.email
+            user_name = email2nickname(user_email)
+            user_contact_email = email2contact_email(user_email)
+
+            _populate_user_quota_usage(user)
+            space_usage_MB = byte_to_mb(user.space_usage)
+            space_quota_MB = byte_to_mb(user.space_quota)
+
+            row = [user_email, user_name, user_contact_email,
+                    space_usage_MB, space_quota_MB]
+
+            data_list.append(row)
+
+        excel_name = 'User Storage'
+        try:
+            wb = write_xls('users', head, data_list)
+        except Exception as e:
+            logger.error(e)
+            error_msg = 'Internal Server Error'
+            return api_error(status.HTTP_500_INTERNAL_SERVER_ERROR, error_msg)
+
+        response = HttpResponse(content_type='application/ms-excel')
+        response['Content-Disposition'] = 'attachment; filename=%s.xlsx' % excel_name
+        wb.save(response)
+
+        return response
