@@ -31,7 +31,7 @@
 </head>
 <body>
 
-<form id="office_form" name="office_form" target="office_frame" action="{{action_url}}" method="post">
+<form id="office_form" name="office_form" target="office_frame" action="{{action_url}}" method="post">{% csrf_token %}
     <input name="access_token" value="{{access_token}}" type="hidden"/>
     <input name="access_token_ttl" value="{{access_token_ttl}}" type="hidden"/>
 </form>
