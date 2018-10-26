@@ -293,7 +293,7 @@ urlpatterns = [
     url(r'^api/v2.1/repos/(?P<repo_id>[-0-9a-f]{36})/history/$', RepoHistory.as_view(), name='api-v2.1-repo-history'),
     url(r'^api/v2.1/repos/(?P<repo_id>[-0-9a-f]{36})/set-password/$', RepoSetPassword.as_view(), name="api-v2.1-repo-set-password"),
     url(r'^api/v2.1/repos/(?P<repo_id>[-0-9a-f]{36})/repo-tags/$', RepoTagsView.as_view(), name='api-v2.1-repo-tags'),
-    url(r'^api/v2.1/repos/(?P<repo_id>[-0-9a-f]{36})/repo-tag/$', RepoTagView.as_view(), name='api-v2.1-repo-tag'),
+    url(r'^api/v2.1/repos/(?P<repo_id>[-0-9a-f]{36})/repo-tag/(?P<tag_id>\d+)/$', RepoTagView.as_view(), name='api-v2.1-repo-tag'),
 
     ## user::download-dir-zip-task
     url(r'^api/v2.1/repos/(?P<repo_id>[-0-9a-f]{36})/zip-task/$', ZipTaskView.as_view(), name='api-v2.1-zip-task'),
