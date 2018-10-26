@@ -11,7 +11,7 @@
 
 <div class="report" id="monthly-user-traffic-report">
     <h4 class="report-heading">{% trans "Monthly User Traffic" %}</h4>
-    <form action="{% url 'api-v2.1-admin-statistics-system-users-traffic-excel' %}" class="date-custom-form report-month-custom-form">
+    <form action="{% url 'api-v2.1-admin-statistics-system-user-traffic-excel' %}" class="date-custom-form report-month-custom-form">
         <label for="month">{% trans "Month:" %}</label>
         <input type="text" name="month" value="" class="input" />
         <button type="submit" class="submit">{% trans "Create Report" %}</button>

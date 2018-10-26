@@ -17,7 +17,7 @@ from seaserv import ccnet_api
 from seahub.utils import get_file_ops_stats_by_day, \
         get_total_storage_stats_by_day, get_user_activity_stats_by_day, \
         is_pro_version, EVENTS_ENABLED, get_system_traffic_by_day, \
-        get_all_users_traffic_by_month
+        seafevents_api
 from seahub.utils.timeutils import datetime_to_isoformat_timestr
 from seahub.utils.ms_excel import write_xls
 from seahub.utils.file_size import byte_to_mb
@@ -190,7 +190,7 @@ def get_time_offset():
     return offset[:3] + ':' + offset[3:]
 
 
-class SystemUsersTrafficExcelView(APIView):
+class SystemUserTrafficExcelView(APIView):
     authentication_classes = (TokenAuthentication, SessionAuthentication)
     throttle_classes = (UserRateThrottle,)
     permission_classes = (IsAdminUser,)
@@ -209,7 +209,7 @@ class SystemUsersTrafficExcelView(APIView):
             return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
 
         try:
-            res_data = get_all_users_traffic_by_month(month_obj)
+            res_data = seafevents_api.get_all_users_traffic_by_month(month_obj, -1, -1)
         except Exception as e:
             logger.error(e)
             error_msg = 'Internal Server Error'
@@ -234,7 +234,7 @@ class SystemUsersTrafficExcelView(APIView):
 
             data_list.append(row)
 
-        excel_name = _("User Traffic %s" % month)
+        excel_name = "User Traffic %s" % month
 
         try:
             wb = write_xls(excel_name, head, data_list)
@@ -250,7 +250,7 @@ class SystemUsersTrafficExcelView(APIView):
         return response
 
 
-class SystemUsersStorageExcelView(APIView):
+class SystemUserStorageExcelView(APIView):
     authentication_classes = (TokenAuthentication, SessionAuthentication)
     throttle_classes = (UserRateThrottle,)
     permission_classes = (IsAdminUser,)
