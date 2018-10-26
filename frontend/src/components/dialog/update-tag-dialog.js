@@ -110,7 +110,7 @@ class UpdateTag extends React.Component {
             <label className="form-label">{gettext('Select a color:')}</label>
             <div className="row gutters-xs">
               {colorList.map((item, index)=>{
-                var className = "colorinput-color bg-" + item;
+                var className = 'colorinput-color bg-' + item;
                 return (
                   <div key={index} className="col-auto" onChange={this.selectNewcolor}>
                     <label className="colorinput">
