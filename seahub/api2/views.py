@@ -718,6 +718,7 @@ class Repos(APIView):
                     "owner_contact_email": contact_email_dict.get(r.user, ''),
                     "name": r.repo_name,
                     "owner_nickname": nickname_dict.get(r.user, ''),
+                    "owner_name": nickname_dict.get(r.user, ''),
                     "mtime": r.last_modify,
                     "mtime_relative": translate_seahub_time(r.last_modify),
                     "modifier_email": r.last_modifier,
@@ -990,6 +991,7 @@ class PubRepos(APIView):
                 "desc": r.repo_desc,
                 "owner": r.user,
                 "owner_nickname": email2nickname(r.user),
+                "owner_name": email2nickname(r.user),
                 "mtime": r.last_modified,
                 "mtime_relative": translate_seahub_time(r.last_modified),
                 "size": r.size,
@@ -1091,6 +1093,7 @@ class PubRepos(APIView):
             "permission": 'rw',  # Always have read-write permission to owned repo
             "owner": username,
             "owner_nickname": email2nickname(username),
+            "owner_name": email2nickname(username),
         }
 
         return Response(pub_repo, status=201)
@@ -4471,6 +4474,7 @@ class GroupRepos(APIView):
             "permission": permission,
             "owner": username,
             "owner_nickname": email2nickname(username),
+            "owner_name": email2nickname(username),
             "share_from_me": True,
             "modifier_email": repo.last_modifier,
             "modifier_contact_email": email2contact_email(repo.last_modifier),
@@ -4530,6 +4534,7 @@ class GroupRepos(APIView):
                 "permission": r.permission,
                 "owner": r.user,
                 "owner_nickname": nickname_dict.get(r.user, ''),
+                "owner_name": nickname_dict.get(r.user, ''),
                 "share_from_me": True if username == r.user else False,
                 "modifier_email": r.last_modifier,
                 "modifier_contact_email": contact_email_dict.get(r.last_modifier, ''),

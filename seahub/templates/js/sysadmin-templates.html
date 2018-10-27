@@ -249,7 +249,7 @@
 </script>
 
 <script type="text/template" id="device-item-tmpl">
-    <td><%- user %></td>
+    <td><%- user_name %></td>
     <td><%- platform %> / <%- client_version %></td>
     <td><%- device_name %></td>
     <td><%- last_login_ip %></td>
@@ -301,7 +301,7 @@
 
 <script type="text/template" id="device-error-item-tmpl">
     <td>
-        <a href="{{ SITE_ROOT }}useradmin/info/<%- email %>/"><%- email %></a>
+        <a href="{{ SITE_ROOT }}useradmin/info/<%- email %>/"><%- name %></a>
     </td>
     <td><%- device_name %> / <%- client_version %></td>
     <td><%- device_ip %>
@@ -435,7 +435,7 @@
     <td style="font-size:11px;"><%= id %></td>
     <td>
         <% if (owner.indexOf('@seafile_group') == -1) { %>
-        <a href="{{ SITE_ROOT }}useradmin/info/<% print(encodeURIComponent(owner)); %>/"><%- owner %></a>
+        <a href="{{ SITE_ROOT }}useradmin/info/<% print(encodeURIComponent(owner)); %>/"><%- owner_name %></a>
         <% } else { %>
         <a href="{{ SITE_ROOT }}sysadmin/#address-book/groups/<% print(owner_name); %>/"><%- group_name %></a>
         <% } %>
@@ -513,7 +513,7 @@
     <td><%- name %></td>
     <td>
         <% if (owner.indexOf('@seafile_group') == -1) { %>
-        <a href="{{ SITE_ROOT }}useradmin/info/<% print(encodeURIComponent(owner)); %>/"><%- owner %></a>
+        <a href="{{ SITE_ROOT }}useradmin/info/<% print(encodeURIComponent(owner)); %>/"><%- owner_name %></a>
         <% } else { %>
         <%- group_name %>
         <% } %>
@@ -685,7 +685,7 @@
     </td>
     <td>
         <% if (owner != 'system admin') { %>
-        <a href="{{ SITE_ROOT }}useradmin/info/<% print(encodeURIComponent(owner)); %>/"><%- owner %></a>
+        <a href="{{ SITE_ROOT }}useradmin/info/<% print(encodeURIComponent(owner)); %>/"><%- owner_name %></a>
         <% } else { %>
         --
         <% } %>
@@ -893,7 +893,7 @@
         <% } %>
     </td>
     <td><%- formatted_size %></td>
-    <td><a href="{{ SITE_ROOT }}useradmin/info/<% print(encodeURIComponent(shared_by)); %>/"><%- shared_by %></a></td>
+    <td><a href="{{ SITE_ROOT }}useradmin/info/<% print(encodeURIComponent(shared_by)); %>/"><%- shared_by_name %></a></td>
     <td>
         <a href="#" class="sf2-icon-delete sf2-x repo-unshare-btn op-icon vh" title="{% trans "Unshare" %}" aria-label="{% trans "Unshare" %}"></a>
     </td>
@@ -933,7 +933,7 @@
     <table class="hide">
         <thead>
             <tr>
-                <th width="20%">{% trans "Email" %}</th>
+                <th width="20%">{% trans "Name" %}</th>
                 <th width="15%">{% trans "Operation" %}</th>
                 <th width="50%">{% trans "Detail" %}</th>
                 <th width="15%">{% trans "Time" %}</th>
@@ -952,7 +952,7 @@
 </script>
 
 <script type="text/template" id="admin-log-item-tmpl">
-    <td><a href="<%= admin_user_url %>"><%- email %></a></td>
+    <td><a href="<%= admin_user_url %>"><%- name %></a></td>
     <td><%= op_title %></td>
     <td><%= op_details %></td>
     <td><time title="<%- time %>"><%- time_from_now %></time></td>
@@ -973,7 +973,7 @@
     <table class="hide">
         <thead>
             <tr>
-                <th width="35%">{% trans "Email" %}</th>
+                <th width="35%">{% trans "Name" %}</th>
                 <th width="25%">{% trans "IP" %}</th>
                 <th width="15%">{% trans "Status" %}</th>
                 <th width="25%">{% trans "Time" %}</th>
@@ -992,7 +992,7 @@
 </script>
 
 <script type="text/template" id="admin-login-log-item-tmpl">
-    <td><a href="<%= admin_user_url %>"><%- email %></a></td>
+    <td><a href="<%= admin_user_url %>"><%- name %></a></td>
     <td><%= login_ip %></td>
     <td>
     <% if (login_success) { %>

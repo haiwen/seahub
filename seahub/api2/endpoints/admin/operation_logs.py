@@ -16,6 +16,7 @@ from seahub.api2.utils import api_error
 from seahub.api2.throttling import UserRateThrottle
 from seahub.api2.authentication import TokenAuthentication
 from seahub.api2.endpoints.utils import generate_links_header_for_paginator
+from seahub.base.templatetags.seahub_tags import email2nickname
 
 logger = logging.getLogger(__name__)
 
@@ -23,6 +24,7 @@ def get_log_info(log_obj):
     isoformat_timestr = datetime_to_isoformat_timestr(log_obj.datetime)
     log_info = {
         "email": log_obj.email,
+        "name": email2nickname(log_obj.email),
         "operation": log_obj.operation,
         "detail": json.loads(log_obj.detail),
         "datetime": isoformat_timestr,

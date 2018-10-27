@@ -32,7 +32,7 @@
                 <td class="user">
                     {% avatar e.user 16 %}
                     {% if e.user %}
-                        <a href="{% url 'user_profile' e.user %}">{{ e.user }}</a>
+                        <a href="{% url 'user_profile' e.user %}">{{ e.user|email2nickname }}</a>
                     {% else %}
                         <span>{% trans "Anonymous User" %}</span>
                     {% endif %}

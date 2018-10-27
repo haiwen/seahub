@@ -29,7 +29,7 @@
     <tr>
         <td>{{ uploadlink.path }}</td>
         <td>{{ uploadlink.token }}</td>
-        <td><a href="{% url 'user_info' uploadlink.username %}">{{ uploadlink.username }}</a></td>
+        <td><a href="{% url 'user_info' uploadlink.username %}">{{ uploadlink.username|email2nickname }}</a></td>
         <td>{{ uploadlink.ctime|translate_seahub_time }} </td>
         <td>{{ uploadlink.view_cnt }}</td>
         <td>
