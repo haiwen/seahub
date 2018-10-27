@@ -156,7 +156,7 @@ define([
                         var err_str = '';
                         if (data.failed.length > 0) {
                             $(data.failed).each(function(index, item) {
-                                err_str += Common.HTMLescape(item.email) + ': ' + Common.HTMLescape(item.error_msg) + '<br />';
+                                err_str += Common.HTMLescape(item.email_name) + ': ' + Common.HTMLescape(item.error_msg) + '<br />';
                             });
                             _this.$error.html(err_str).show();
                         }

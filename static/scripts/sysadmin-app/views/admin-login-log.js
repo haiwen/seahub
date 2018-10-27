@@ -23,6 +23,7 @@ define([
         render: function() {
             var data = {
                     'email': this.model.get('email'),
+                    'name': this.model.get('name'),
                     'login_ip': this.model.get('login_ip'),
                     'login_success': this.model.get('login_success')
                 },

@@ -35,7 +35,7 @@
     <tr>
         <td>{{ publink.name }}</td>
         <td>{{ publink.token }}</td>
-        <td><a href="{% url 'user_info' publink.username %}">{{ publink.username }}</a></td>
+        <td><a href="{% url 'user_info' publink.username %}">{{ publink.username|email2nickname }}</a></td>
         <td>{{ publink.ctime|translate_seahub_time }} </td>
         <td>{{ publink.view_cnt }}</td>
         <td>

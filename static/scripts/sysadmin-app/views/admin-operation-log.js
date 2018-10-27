@@ -21,7 +21,9 @@ define([
         },
 
         render: function() {
-            var data = {'email': this.model.get('email')},
+            var data = {'email': this.model.get('email'),
+                        'name': this.model.get('name')
+                       },
                 created_at = Moment(this.model.get('datetime'));
 
             data['time'] = created_at.format('LLLL');
