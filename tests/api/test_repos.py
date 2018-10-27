@@ -123,6 +123,7 @@ class ReposApiTest(ApiTestBase):
     def test_fetch_repo_download_info(self):
         with self.get_tmp_repo() as repo:
             download_info_repo_url = urljoin(repo.repo_url, '/download-info/')
+            print download_info_repo_url
             info = self.get(download_info_repo_url).json()
             self.assertIsNotNone(info['relay_addr'])
             self.assertIsNotNone(info['token'])
