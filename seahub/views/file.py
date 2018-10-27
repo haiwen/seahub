@@ -71,6 +71,7 @@ from seahub.utils.repo import is_repo_owner
 from seahub.group.utils import is_group_member
 from seahub.thumbnail.utils import extract_xmind_image, get_thumbnail_src, \
         XMIND_IMAGE_SIZE, THUMBNAIL_ROOT
+from seahub.drafts.utils import is_draft
 
 from seahub.constants import HASH_URLS
 
@@ -613,6 +614,8 @@ def view_lib_file(request, repo_id, path):
         mode = request.GET.get('mode', '')
         draft_id = request.GET.get('draft_id', '')
 
+        draft, review_id = is_draft(repo.id, path)
+
         if filetype == MARKDOWN:
             return_dict['protocol'] = request.is_secure() and 'https' or 'http'
             return_dict['domain'] = get_current_site(request).domain
@@ -622,6 +625,8 @@ def view_lib_file(request, repo_id, path):
             return_dict['seafile_collab_server'] = SEAFILE_COLLAB_SERVER
             return_dict['mode'] = 'edit' if mode else 'viewer'
             return_dict['draft_id'] = draft_id
+            return_dict['review_id'] = review_id
+            return_dict['draft'] = draft
         else:
             return_dict['file_content'] = file_content
 
