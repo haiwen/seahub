@@ -1,6 +1,7 @@
 # Copyright (c) 2011-2016 Seafile Ltd.
 import os
 import sys
+
 from rest_framework.authentication import SessionAuthentication
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
@@ -9,9 +10,9 @@ from rest_framework.views import APIView
 from seaserv import ccnet_api
 
 from seahub.utils import is_org_context
+from seahub.utils.timeutils import timestamp_to_isoformat_timestr
 from seahub.api2.authentication import TokenAuthentication
 from seahub.api2.throttling import UserRateThrottle
-from seahub.api2.endpoints.groups import get_group_info
 from seahub.avatar.settings import GROUP_AVATAR_DEFAULT_SIZE
 
 from constance import config
@@ -30,6 +31,18 @@ class ShareableGroups(APIView):
     authentication_classes = (TokenAuthentication, SessionAuthentication)
     permission_classes = (IsAuthenticated,)
     throttle_classes = (UserRateThrottle, )
+
+    def _get_group_info(self, request, group, avatar_size):
+        isoformat_timestr = timestamp_to_isoformat_timestr(group.timestamp)
+        group_info = {
+            "id": group.id,
+            "parent_group_id": group.parent_group_id,
+            "name": group.group_name,
+            "owner": group.creator_name,
+            "created_at": isoformat_timestr,
+        }
+
+        return group_info
 
     def get(self, request):
         """ List groups that user can share a library to.
@@ -53,6 +66,6 @@ class ShareableGroups(APIView):
         except ValueError:
             avatar_size = GROUP_AVATAR_DEFAULT_SIZE
 
-        result = [get_group_info(request, g.id, avatar_size) for g in groups]
+        result = [self._get_group_info(request, group, avatar_size) for group in groups]
 
         return Response(result)
