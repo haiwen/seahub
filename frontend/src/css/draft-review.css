@@ -52,12 +52,15 @@
   z-index: 1;
 }
 
-.file-draft-link {
-  display: flex;
-  flex-direction: column;
+.cur-file-info .file-info {
+  display: block;
+  padding-top: 10px;
 }
-.file-draft-link .draft-link {
-  font-size: .7em;
+.file-info .draft-link {
+  font-size: .6em;
+  color: #1e1e1e;
+  text-decoration: underline;
+  display: block;
 }
 .seafile-toggle-diff {
   display: flex;

@@ -36,7 +36,7 @@ class DraftReview extends React.Component {
       inResizing: false,
       commentWidth: 30,
       isShowDiff: true,
-      showDiff: false,
+      showDiffTip: false,
     };
   }
 
@@ -147,14 +147,10 @@ class DraftReview extends React.Component {
     })
   }
 
-  toggleDiff = () => {
+  toggleDiffTip = () => {
     this.setState({
-      showDiff: !this.state.showDiff
+      showDiffTip: !this.state.showDiffTip
     });
-  }
-
-  toggleResolvedComment = () => {
-    console.log('test');
   }
 
   componentWillMount() {
@@ -172,11 +168,11 @@ class DraftReview extends React.Component {
               <span className="fas fa-code-merge"></span>
             </div>
             <div className="info-item file-info">
-              <div className="file-draft-link">
+              <React.Fragment>
                 <span className="file-name">{draftFileName}</span>
-                { draftID !== 'None' && <a href={draftLink} className="draft-link">{gettext('Draft Page')}</a>}
-              </div>
-              <span className="file-copywriting">{gettext('review')}</span>
+                <span className="file-copywriting">{gettext('review')}</span>
+              </React.Fragment>
+              { draftID !== 'None' && <a href={draftLink} className="draft-link">{gettext('View draft')}</a>}
             </div>
           </div>
           <div className="button-group">
@@ -185,9 +181,9 @@ class DraftReview extends React.Component {
                 <input type="checkbox" name="option" className="custom-switch-input" onClick={this.onSwitchShowDiff}/>
                 <span className="custom-switch-indicator"></span>
               </label>
-              <Tooltip placement="bottom" isOpen={this.state.showDiff}
-                target="toggle-diff" toggle={this.toggleDiff}>
-                {gettext('View draft')}</Tooltip>
+              <Tooltip placement="bottom" isOpen={this.state.showDiffTip}
+                target="toggle-diff" toggle={this.toggleDiffTip}>
+                {gettext('View diff')}</Tooltip>
             </div>
             <button className="btn btn-icon btn-secondary btn-active common-list-btn"
               id="commentsNumber" type="button" data-active="false"
