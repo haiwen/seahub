@@ -10,7 +10,7 @@ import DiffViewer from '@seafile/seafile-editor/dist/viewer/diff-viewer';
 import Loading from './components/loading';
 import Toast from './components/toast';
 import ReviewComments from './components/review-list-view/review-comments';
-import { Button } from 'reactstrap';
+import { Button, Tooltip } from 'reactstrap';
 
 import 'seafile-ui';
 import './assets/css/fa-solid.css';
@@ -36,6 +36,7 @@ class DraftReview extends React.Component {
       inResizing: false,
       commentWidth: 30,
       isDiff: true,
+      showDiff: false,
     };
   }
 
@@ -140,14 +141,20 @@ class DraftReview extends React.Component {
     });
   };
 
-  onDraftPage = () => {
-    window.open(siteRoot + 'lib/' + draftOriginRepoID + '/file' + draftFilePath);
-  }
-
   onDiff = () => {
     this.setState({
       isDiff: !this.state.isDiff,
     })
+  }
+
+  toggleDiff = () => {
+    this.setState({
+      showDiff: !this.state.showDiff
+    });
+  }
+
+  toggleResolvedComment = () => {
+    console.log('test');
   }
 
   componentWillMount() {
@@ -156,6 +163,7 @@ class DraftReview extends React.Component {
 
   render() {
     const onResizeMove = this.state.inResizing ? this.onResizeMouseMove : null;
+    const draftLink = `${siteRoot}lib/${draftOriginRepoID}/file${draftFilePath}`;
     return(
       <div className="wrapper">
         <div id="header" className="header review">
@@ -164,18 +172,23 @@ class DraftReview extends React.Component {
               <span className="fas fa-code-merge"></span>
             </div>
             <div className="info-item file-info">
-              <span className="file-name">{draftFileName}</span>
+              <div className="file-draft-link">
+                <span className="file-name">{draftFileName}</span>
+                { draftID !== 'None' && <a href={draftLink} className="draft-link">{gettext('Draft Page')}</a>}
+              </div>
               <span className="file-copywriting">{gettext('review')}</span>
             </div>
           </div>
           <div className="button-group">
-            {draftID == 'None' ? '':
-              <Button className='btn btn-secondary file-operation-btn' title={gettext('Draft Content')} onClick={this.onDraftPage}>{gettext('Draft Page')}</Button>
-            }
-            {this.state.isDiff ?
-              <Button className='btn btn-secondary file-operation-btn' title={gettext('Draft Content')} onClick={this.onDiff}>{gettext('Draft Content')}</Button> :
-              <Button className='btn btn-secondary file-operation-btn' title={gettext('Diff Content')} onClick={this.onDiff}>{gettext('Diff Content')}</Button>
-            }
+            <div className={'seafile-toggle-diff'}>
+              <label className="custom-switch" id="toggle-diff">
+                <input type="checkbox" name="option" className="custom-switch-input" onClick={this.onDiff}/>
+                <span className="custom-switch-indicator"></span>
+              </label>
+              <Tooltip placement="bottom" isOpen={this.state.showDiff}
+                target="toggle-diff" toggle={this.toggleDiff}>
+                {gettext('View draft')}</Tooltip>
+            </div>
             <button className="btn btn-icon btn-secondary btn-active common-list-btn"
               id="commentsNumber" type="button" data-active="false"
               onMouseDown={this.toggleCommentList}>

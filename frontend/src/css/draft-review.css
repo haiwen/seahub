@@ -52,6 +52,18 @@
   z-index: 1;
 }
 
+.file-draft-link {
+  display: flex;
+  flex-direction: column;
+}
+.file-draft-link .draft-link {
+  font-size: .7em;
+}
+.seafile-toggle-diff {
+  display: flex;
+  margin-right: 10px;
+}
+
 @media (max-width: 992px) {
   .main .cur-view-container .cur-view-content-commenton {
     width: 20% !important;
