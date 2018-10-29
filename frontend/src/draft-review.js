@@ -141,7 +141,7 @@ class DraftReview extends React.Component {
   };
 
   onDraftPage = () => {
-    window.open(siteRoot + 'lib/' + draftOriginRepoID + '/file' + draftFilePath +'?mode=edit&draft_id=' + draftID);
+    window.open(siteRoot + 'lib/' + draftOriginRepoID + '/file' + draftFilePath);
   }
 
   onDiff = () => {

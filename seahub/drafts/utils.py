@@ -35,19 +35,14 @@ def is_draft(repo_id, file_path):
     review_id = None
 
     file_path = normalize_file_path(file_path)
-    parent_path = os.path.dirname(file_path)
-    filename = os.path.basename(file_path)
-    file_uuid = FileUUIDMap.objects.get_fileuuidmap_by_path(
-            repo_id, parent_path, filename, is_dir=False)
 
     from .models import Draft
-    if file_uuid:
-        try:
-            draft = Draft.objects.get(origin_file_uuid=file_uuid)
-            is_draft = True
-            if hasattr(draft, 'draftreview'):
-                review_id = draft.draftreview.id
-        except Draft.DoesNotExist:
-            pass
+    try:
+        draft = Draft.objects.get(origin_repo_id=repo_id, draft_file_path=file_path)
+        is_draft = True
+        if hasattr(draft, 'draftreview'):
+            review_id = draft.draftreview.id
+    except Draft.DoesNotExist:
+        pass
 
     return is_draft, review_id
