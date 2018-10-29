@@ -159,7 +159,7 @@ class DraftReview extends React.Component {
 
   render() {
     const onResizeMove = this.state.inResizing ? this.onResizeMouseMove : null;
-    const draftLink = `${siteRoot}lib/${draftOriginRepoID}/file${draftFilePath}`;
+    const draftLink = siteRoot + 'lib/' + draftOriginRepoID + '/file' + draftFilePath;
     return(
       <div className="wrapper">
         <div id="header" className="header review">

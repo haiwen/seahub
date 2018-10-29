@@ -4,7 +4,6 @@ import os
 from seaserv import seafile_api
 
 from seahub.utils import normalize_file_path, check_filename_with_rename
-from seahub.tags.models import FileUUIDMap
 
 
 def create_user_draft_repo(username, org_id=-1):
@@ -29,11 +28,11 @@ def get_draft_file_name(repo_id, file_path):
     return new_file_name
 
 
-def is_draft(repo_id, file_path):
+def is_draft_file(repo_id, file_path):
 
     is_draft = False
     review_id = None
-    draft_id = ''
+    draft_id = None
 
     file_path = normalize_file_path(file_path)
 
