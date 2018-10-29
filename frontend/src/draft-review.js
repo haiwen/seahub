@@ -35,7 +35,7 @@ class DraftReview extends React.Component {
       isShowComments: false,
       inResizing: false,
       commentWidth: 30,
-      isDiff: true,
+      isShowDiff: true,
       showDiff: false,
     };
   }
@@ -141,9 +141,9 @@ class DraftReview extends React.Component {
     });
   };
 
-  onDiff = () => {
+  onSwitchShowDiff = () => {
     this.setState({
-      isDiff: !this.state.isDiff,
+      isShowDiff: !this.state.isShowDiff,
     })
   }
 
@@ -182,7 +182,7 @@ class DraftReview extends React.Component {
           <div className="button-group">
             <div className={'seafile-toggle-diff'}>
               <label className="custom-switch" id="toggle-diff">
-                <input type="checkbox" name="option" className="custom-switch-input" onClick={this.onDiff}/>
+                <input type="checkbox" name="option" className="custom-switch-input" onClick={this.onSwitchShowDiff}/>
                 <span className="custom-switch-indicator"></span>
               </label>
               <Tooltip placement="bottom" isOpen={this.state.showDiff}
@@ -225,7 +225,7 @@ class DraftReview extends React.Component {
                 </div> 
                 :
                 <div className="markdown-viewer-render-content article">
-                  {this.state.isDiff ? 
+                  {this.state.isShowDiff ? 
                     <DiffViewer markdownContent={this.state.draftContent} markdownContent1={this.state.draftOriginContent} />
                     : 
                     <DiffViewer markdownContent={this.state.draftContent} markdownContent1={this.state.draftContent} />

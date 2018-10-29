@@ -612,9 +612,8 @@ def view_lib_file(request, repo_id, path):
         return_dict['file_encoding_list'] = file_encoding_list
 
         mode = request.GET.get('mode', '')
-        draft_id = request.GET.get('draft_id', '')
 
-        draft, review_id = is_draft(repo.id, path)
+        draft, review_id, draft_id = is_draft(repo.id, path)
 
         if filetype == MARKDOWN:
             return_dict['protocol'] = request.is_secure() and 'https' or 'http'

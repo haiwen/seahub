@@ -33,6 +33,7 @@ def is_draft(repo_id, file_path):
 
     is_draft = False
     review_id = None
+    draft_id = ''
 
     file_path = normalize_file_path(file_path)
 
@@ -40,9 +41,10 @@ def is_draft(repo_id, file_path):
     try:
         draft = Draft.objects.get(origin_repo_id=repo_id, draft_file_path=file_path)
         is_draft = True
+        draft_id = draft.id
         if hasattr(draft, 'draftreview'):
             review_id = draft.draftreview.id
     except Draft.DoesNotExist:
         pass
 
-    return is_draft, review_id
+    return is_draft, review_id, draft_id
