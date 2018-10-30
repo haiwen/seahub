@@ -11,6 +11,9 @@ let domain = window.app.pageOptions.domain;
 let protocol = window.app.pageOptions.protocol;
 let mode = window.app.pageOptions.mode;
 let draftID = window.app.pageOptions.draftID;
+let reviewID = window.app.pageOptions.reviewID;
+let isDraft = window.app.pageOptions.isDraft;
+let userName = window.app.userInfo.username;
 let dirPath = '/';
 
 const serviceUrl = window.app.config.serviceUrl;
@@ -179,6 +182,34 @@ class EditorUtilities {
       return url;
     });
   }
+
+  goReviewPage() {
+    window.location.href = serviceUrl + '/drafts/review/' + reviewID
+  }
+
+  getCommentsNumber() {
+    return seafileAPI.getCommentsNumber(this.repoID, this.dirPath);
+  }
+
+  postComment(comment) {
+    return seafileAPI.postComment(this.repoID, this.filePath, comment);
+  }
+
+  listComments() {
+    return seafileAPI.listComments(this.repoID, this.filePath);
+  }
+
+  updateComment(commentID, resolved, detail) {
+    return seafileAPI.updateComment(this.repoID, commentID, resolved, detail);
+  }
+
+  deleteComment(commentID) {
+    return seafileAPI.deleteComment(this.repoID, commentID);
+  }
+ 
+  getUserAvatar(size) {
+    return seafileAPI.getUserAvatar(userName, size);
+  }
 }
 
 
@@ -253,6 +284,8 @@ class MarkdownEditor extends React.Component {
           showFileHistory={true}
           mode={mode}
           draftID={draftID}
+          reviewID={reviewID}
+          isDraft={isDraft}
         />
       );
     }   

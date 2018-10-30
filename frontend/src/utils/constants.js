@@ -39,6 +39,7 @@ export const draftOriginFilePath = window.draftReview ? window.draftReview.confi
 export const draftOriginRepoID = window.draftReview ? window.draftReview.config.draftOriginRepoID: '';
 export const draftFileName = window.draftReview ? window.draftReview.config.draftFileName: '';
 export const reviewID = window.draftReview ? window.draftReview.config.reviewID : '';
+export const draftID = window.draftReview ? window.draftReview.config.draftID : '';
 export const opStatus = window.draftReview ? window.draftReview.config.opStatus : '';
 export const publishFileVersion = window.draftReview ? window.draftReview.config.publishFileVersion : '';
 export const originFileVersion = window.draftReview ? window.draftReview.config.originFileVersion : '';

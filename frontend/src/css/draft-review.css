@@ -52,6 +52,21 @@
   z-index: 1;
 }
 
+.cur-file-info .file-info {
+  display: block;
+  padding-top: 10px;
+}
+.file-info .draft-link {
+  font-size: .6em;
+  color: #1e1e1e;
+  text-decoration: underline;
+  display: block;
+}
+.seafile-toggle-diff {
+  display: flex;
+  margin-right: 10px;
+}
+
 @media (max-width: 992px) {
   .main .cur-view-container .cur-view-content-commenton {
     width: 20% !important;
