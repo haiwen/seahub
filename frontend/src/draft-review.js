@@ -159,7 +159,7 @@ class DraftReview extends React.Component {
 
   render() {
     const onResizeMove = this.state.inResizing ? this.onResizeMouseMove : null;
-    const draftLink = siteRoot + 'lib/' + draftOriginRepoID + '/file' + draftFilePath;
+    const draftLink = siteRoot + 'lib/' + draftOriginRepoID + '/file' + draftFilePath + '?mode=edit';
     return(
       <div className="wrapper">
         <div id="header" className="header review">
@@ -172,13 +172,15 @@ class DraftReview extends React.Component {
                 <span className="file-name">{draftFileName}</span>
                 <span className="file-copywriting">{gettext('review')}</span>
               </React.Fragment>
-              { draftID !== 'None' && <a href={draftLink} className="draft-link">{gettext('View draft')}</a>}
+              { draftID !== 'None' && <a href={draftLink} className="draft-link">{gettext('Edit draft')}</a>}
             </div>
           </div>
           <div className="button-group">
             <div className={'seafile-toggle-diff'}>
               <label className="custom-switch" id="toggle-diff">
-                <input type="checkbox" name="option" className="custom-switch-input" onClick={this.onSwitchShowDiff}/>
+                <input type="checkbox" checked={this.state.isShowDiff ? 'checked' : ''}
+                  name="option" className="custom-switch-input"
+                  onClick={this.onSwitchShowDiff}/>
                 <span className="custom-switch-indicator"></span>
               </label>
               <Tooltip placement="bottom" isOpen={this.state.showDiffTip}
