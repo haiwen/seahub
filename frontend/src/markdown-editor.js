@@ -188,7 +188,7 @@ class EditorUtilities {
   }
 
   getCommentsNumber() {
-    return seafileAPI.getCommentsNumber(this.repoID, this.dirPath);
+    return seafileAPI.getCommentsNumber(this.repoID, dirPath);
   }
 
   postComment(comment) {
