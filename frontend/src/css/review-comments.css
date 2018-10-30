@@ -117,12 +117,14 @@
   bottom: 0;
   padding-top: 0;
   width: 100%;
+  position: relative;
 }
 .seafile-comment-footer .user-header {
   margin-top: 10px;
+  position: absolute;
 }
 .seafile-comment-footer .seafile-add-comment {
-  margin: 10px 10px 5px 10px;
+  margin: 10px 10px 5px 40px;
   height: 100%;
   width: 100%;
 }
