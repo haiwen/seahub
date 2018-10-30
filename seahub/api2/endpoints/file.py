@@ -18,16 +18,20 @@ from seahub.api2.utils import api_error
 
 from seahub.utils import check_filename_with_rename, is_pro_version, \
     gen_inner_file_upload_url, is_valid_dirent_name, normalize_file_path, \
-    normalize_dir_path
+    normalize_dir_path, get_file_type_and_ext
 from seahub.utils.timeutils import timestamp_to_isoformat_timestr
 from seahub.views import check_folder_permission
 from seahub.utils.file_op import check_file_lock, if_locked_by_online_office
 from seahub.views.file import can_preview_file, can_edit_file
 from seahub.constants import PERMISSION_READ_WRITE
 from seahub.utils.repo import parse_repo_perm
+from seahub.utils.file_types import MARKDOWN, TEXT
 
 from seahub.settings import MAX_UPLOAD_FILE_NAME_LEN, \
     FILE_LOCK_EXPIRATION_DAYS, OFFICE_TEMPLATE_ROOT
+
+from seahub.drafts.models import Draft, DraftReview
+from seahub.drafts.utils import is_draft_file
 
 from seaserv import seafile_api
 from pysearpc import SearpcError
@@ -283,6 +287,27 @@ class FileView(APIView):
                 return api_error(status.HTTP_500_INTERNAL_SERVER_ERROR, error_msg)
 
             new_file_path = posixpath.join(parent_dir, new_file_name)
+
+            # rename draft file
+            filetype, fileext = get_file_type_and_ext(new_file_name)
+            if filetype == MARKDOWN or filetype == TEXT:
+                is_draft, review_id, draft_id = is_draft_file(repo.id, path)
+                if is_draft:
+                    try:
+                        draft = Draft.objects.get(pk=draft_id)
+                        draft.draft_file_path = new_file_path
+                        draft.save()
+                    except Draft.DoesNotExist:
+                        pass
+
+                    if review_id is not None:
+                        try:
+                            review = DraftReview.objects.get(pk=review_id, draft_id=draft)
+                            review.draft_file_path = new_file_path
+                            review.save()
+                        except DraftReview.DoesNotExist:
+                            pass
+
             file_info = self.get_file_info(username, repo_id, new_file_path)
             return Response(file_info)
 

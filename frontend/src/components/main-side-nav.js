@@ -3,6 +3,7 @@ import PropTypes from 'prop-types';
 import { Link } from '@reach/router';
 import { gettext, siteRoot } from '../utils/constants';
 import { seafileAPI } from '../utils/seafile-api';
+import { Badge } from 'reactstrap';
 
 const propTypes = {
   currentTab: PropTypes.string.isRequired,
@@ -172,7 +173,7 @@ class MainSideNav extends React.Component {
             <li className={`tab ${this.state.currentTab === 'drafts' ? 'tab-cur' : ''}`} onClick={() => this.tabItemClick('drafts')}>
               <Link to={siteRoot + 'drafts/'} title={gettext('Drafts')}>
                 <span className="sf2-icon-edit" aria-hidden="true"></span>
-                {gettext('Drafts')}
+                {gettext('Drafts')}  {this.props.draftCounts === 0 ? '' : <Badge color="info" pill>{this.props.draftCounts}</Badge>}
               </Link>
             </li>
             <li className="tab" id="share-admin-nav">

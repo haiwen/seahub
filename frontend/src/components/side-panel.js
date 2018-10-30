@@ -19,7 +19,7 @@ class SidePanel extends React.Component {
           <Logo onCloseSidePanel={this.props.onCloseSidePanel}/>
         </div>
         <div className="side-panel-center">
-          <MainSideNav currentTab={this.props.currentTab}/>
+          <MainSideNav currentTab={this.props.currentTab} draftCounts={this.props.draftCounts}/>
         </div>
         <div className="side-panel-footer">
           <SideNavFooter />

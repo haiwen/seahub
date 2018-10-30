@@ -9,6 +9,7 @@ import DraftContent from './pages/drafts/draft-content';
 import ReviewContent from './pages/drafts/review-content';
 import FilesActivities from './pages/dashboard/files-activities';
 import Starred from './pages/starred/starred';
+import editUtilties from './utils/editor-utilties';
 
 import 'seafile-ui';
 import './assets/css/fa-solid.css';
@@ -25,7 +26,22 @@ class App extends Component {
     this.state = {
       isOpen: false,
       isSidePanelClosed: false,
+      draftCounts: 0,
+      draftList:[]
     };
+  }
+
+  componentDidMount() {
+    this.getDrafts()
+  }
+
+  getDrafts = () => {
+    editUtilties.listDrafts().then(res => {
+      this.setState({
+        draftCounts: res.data.draft_counts,
+        draftList: res.data.data 
+      })  
+    })
   }
 
   onCloseSidePanel = () => {
@@ -41,18 +57,19 @@ class App extends Component {
   }
 
   render() {
+
     let href = window.location.href.split('/');
     let currentTab = href[href.length - 2];
 
     return (
       <div id="main">
-        <SidePanel isSidePanelClosed={this.state.isSidePanelClosed} onCloseSidePanel={this.onCloseSidePanel} currentTab={currentTab} />
+        <SidePanel isSidePanelClosed={this.state.isSidePanelClosed} onCloseSidePanel={this.onCloseSidePanel} currentTab={currentTab} draftCounts={this.state.draftCounts} />
 
         <MainPanel onShowSidePanel={this.onShowSidePanel}>
           <Router>
             <FilesActivities path={siteRoot + 'dashboard'} />
             <DraftsView path={siteRoot + 'drafts'}  currentTab={currentTab}>
-              <DraftContent path='/' />
+              <DraftContent path='/' getDrafts={this.getDrafts} draftList={this.state.draftList}/>
               <ReviewContent path='reviews' />
             </DraftsView>
             <Starred path={siteRoot + 'starred'} />

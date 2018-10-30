@@ -13,6 +13,8 @@ let mode = window.app.pageOptions.mode;
 let draftID = window.app.pageOptions.draftID;
 let reviewID = window.app.pageOptions.reviewID;
 let isDraft = window.app.pageOptions.isDraft;
+let hasDraft = window.app.pageOptions.hasDraft;
+let draftFilePath = window.app.pageOptions.draftFilePath;
 let userName = window.app.userInfo.username;
 let dirPath = '/';
 
@@ -210,6 +212,10 @@ class EditorUtilities {
   getUserAvatar(size) {
     return seafileAPI.getUserAvatar(userName, size);
   }
+
+  goDraftPage() {
+    window.location.href = serviceUrl + '/lib/' + repoID + '/file' + draftFilePath + '?mode=edit'
+  }
 }
 
 
@@ -286,6 +292,7 @@ class MarkdownEditor extends React.Component {
           draftID={draftID}
           reviewID={reviewID}
           isDraft={isDraft}
+          hasDraft={hasDraft}
         />
       );
     }   
