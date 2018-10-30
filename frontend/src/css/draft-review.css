@@ -61,6 +61,7 @@
   color: #1e1e1e;
   text-decoration: underline;
   display: block;
+  font-weight: normal;
 }
 .seafile-toggle-diff {
   display: flex;

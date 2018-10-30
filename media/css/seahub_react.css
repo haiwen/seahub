@@ -980,9 +980,3 @@ a.op-icon:focus {
     overflow: auto;
 }
 /* end activity page */
-
-/* css to overwrite seahub-ui.css */
-.custom-switch-input:checked ~ .custom-switch-indicator {
-    background: #eb8205;
-    border: 1px solid #eb8205;
-}
