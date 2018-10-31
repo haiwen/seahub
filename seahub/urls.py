@@ -73,6 +73,7 @@ from seahub.api2.endpoints.wiki_pages import WikiPageView, WikiPagesView, WikiPa
 from seahub.api2.endpoints.revision_tag import TaggedItemsView, TagNamesView
 from seahub.api2.endpoints.user import User
 from seahub.api2.endpoints.repo_tags import RepoTagsView, RepoTagView
+from seahub.api2.endpoints.file_labels import FileLabelsView, FileLabelView
 
 # Admin
 from seahub.api2.endpoints.admin.revision_tag import AdminTaggedItemsView
@@ -294,6 +295,8 @@ urlpatterns = [
     url(r'^api/v2.1/repos/(?P<repo_id>[-0-9a-f]{36})/set-password/$', RepoSetPassword.as_view(), name="api-v2.1-repo-set-password"),
     url(r'^api/v2.1/repos/(?P<repo_id>[-0-9a-f]{36})/repo-tags/$', RepoTagsView.as_view(), name='api-v2.1-repo-tags'),
     url(r'^api/v2.1/repos/(?P<repo_id>[-0-9a-f]{36})/repo-tag/$', RepoTagView.as_view(), name='api-v2.1-repo-tag'),
+    url(r'^api/v2.1/repos/(?P<repo_id>[-0-9a-f]{36})/file-labels/$', FileLabelsView.as_view(), name='api-v2.1-file-labels'),
+    url(r'^api/v2.1/repos/(?P<repo_id>[-0-9a-f]{36})/file-label/(?P<file_tag_id>\d+)/$', FileLabelView.as_view(), name='api-v2.1-file-label'),
 
     ## user::download-dir-zip-task
     url(r'^api/v2.1/repos/(?P<repo_id>[-0-9a-f]{36})/zip-task/$', ZipTaskView.as_view(), name='api-v2.1-zip-task'),

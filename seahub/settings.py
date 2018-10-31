@@ -247,6 +247,7 @@ INSTALLED_APPS = (
     'seahub.role_permissions',
     'seahub.trusted_ip',
     'seahub.repo_tags',
+    'seahub.file_labels',
 )
 
 # Enable or disable multiple storage backends.
