@@ -11,6 +11,7 @@ import Loading from './components/loading';
 import Toast from './components/toast';
 import ReviewComments from './components/review-list-view/review-comments';
 import { Button, Tooltip } from 'reactstrap';
+import AddReviewerDialog from './components/dialog/add-reviewer-dialog.js';
 
 import 'seafile-ui';
 import './assets/css/fa-solid.css';
@@ -37,6 +38,7 @@ class DraftReview extends React.Component {
       commentWidth: 30,
       isShowDiff: true,
       showDiffTip: false,
+      showReviewerDialog: false,
     };
   }
 
@@ -153,6 +155,12 @@ class DraftReview extends React.Component {
     });
   }
 
+  toggleAddReviewerDialog = () => {
+    this.setState({
+      showReviewerDialog: !this.state.showReviewerDialog
+    })
+  }
+
   componentWillMount() {
     this.getCommentsNumber();
   }
@@ -187,6 +195,8 @@ class DraftReview extends React.Component {
                 target="toggle-diff" toggle={this.toggleDiffTip}>
                 {gettext('View diff')}</Tooltip>
             </div>
+            <button className="btn btn-primary add-reviewer-btn" onClick={this.toggleAddReviewerDialog}>
+              {gettext("Add reviewer")}</button>
             <button className="btn btn-icon btn-secondary btn-active common-list-btn"
               id="commentsNumber" type="button" data-active="false"
               onMouseDown={this.toggleCommentList}>
@@ -244,10 +254,19 @@ class DraftReview extends React.Component {
             }
           </div>
         </div>
+        { this.state.showReviewerDialog &&
+          <AddReviewerDialog
+            showReviewerDialog={this.state.showReviewerDialog}
+            toggleAddReviewerDialog={this.toggleAddReviewerDialog}
+            reviewID={reviewID}
+          />
+        }
       </div>
     );
   }
 }
+
+
 
 ReactDOM.render (
   <DraftReview />,
