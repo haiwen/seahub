@@ -142,7 +142,7 @@ class ReviewCommentView(APIView):
                             'Review comment %s not found' % comment_id)
 
         username = request.user.username
-        if username != (review_comment.author and r.creator):
+        if username != (review_comment.author or r.creator):
             return api_error(status.HTTP_403_FORBIDDEN, 'Permission denied.')
 
         review_comment.delete()
@@ -162,7 +162,7 @@ class ReviewCommentView(APIView):
             error_msg = 'resolved invalid.'
             return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
 
-        detail = request.data.get('detail')
+        detail = request.data.get('detail', '')
 
         # resource check
         try:
@@ -178,10 +178,8 @@ class ReviewCommentView(APIView):
             return api_error(status.HTTP_404_NOT_FOUND, error_msg)
 
         # permission check
-        username = request.user.username
-        if username != (review_comment.author and r.creator):
-            error_msg = 'Permission denied.'
-            return api_error(status.HTTP_403_FORBIDDEN, error_msg)
+        if check_folder_permission(request, r.origin_repo_id, '/') is None:
+            return api_error(status.HTTP_403_FORBIDDEN, 'Permission denied.')
 
         if resolved is not None:
             comment_resolved = to_python_boolean(resolved)
@@ -205,6 +203,7 @@ class ReviewCommentView(APIView):
         except ValueError:
             avatar_size = AVATAR_DEFAULT_SIZE
 
+        username = request.user.username
         comment = review_comment.to_dict()
         comment.update(user_to_dict(username, request=request, avatar_size=avatar_size))
 
