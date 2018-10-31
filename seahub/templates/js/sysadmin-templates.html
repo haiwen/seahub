@@ -441,8 +441,8 @@
         <% } %>
     </td>
     <td>
-        <% if (owner && owner.indexOf('@seafile_group') == -1) { %>
         <a href="#" class="sf2-icon-delete sf2-x repo-delete-btn op-icon vh" title="{% trans "Delete" %}" aria-label="{% trans "Delete" %}"></a>
+        <% if (owner && owner.indexOf('@seafile_group') == -1) { %>
         <a href="#" class="sf2-icon-move sf2-x repo-transfer-btn op-icon vh" title="{% trans "Transfer" %}" aria-label="{% trans "Transfer" %}"></a>
         <div class="sf-dropdown sf-dropdown-inline">
             <a href="#" class="sf2-icon-caret-down more-op-icon op-icon vh sf-dropdown-toggle" title="{% trans "More Operations" %}" aria-label="{% trans "More Operations" %}"></a>
