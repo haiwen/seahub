@@ -42,7 +42,12 @@ class DraftsView(APIView):
         username = request.user.username
         data = [x.to_dict() for x in Draft.objects.filter(username=username)]
 
-        return Response({'data': data})
+        draft_counts = len(data)
+
+        result = {}
+        result['data'] = data
+        result['draft_counts'] = draft_counts
+        return Response(result)
 
     @add_org_context
     def post(self, request, org_id, format=None):

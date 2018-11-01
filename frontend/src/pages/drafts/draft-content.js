@@ -12,7 +12,6 @@ class DraftContent extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      draftList: [],
       isLoadingDraft: true,
       isMenuShow: false,
       menuPosition: {top:'', left: ''},
@@ -32,11 +31,9 @@ class DraftContent extends React.Component {
 
   initDraftList() {
     this.setState({isLoadingDraft: true});
-    editUtilties.listDrafts().then(res => {
-      this.setState({
-        draftList: res.data.data,
-        isLoadingDraft: false,
-      });
+    this.props.getDrafts();
+    this.setState({
+      isLoadingDraft: false,
     });
   }
 
@@ -113,14 +110,14 @@ class DraftContent extends React.Component {
     return (
       <div className="cur-view-content">
         {this.state.isLoadingDraft && <Loading /> }
-        {(!this.state.isLoadingDraft && this.state.draftList.length !==0) &&
+        {(!this.state.isLoadingDraft && this.props.draftList.length !==0) &&
           <DraftListView
-            draftList={this.state.draftList} 
+            draftList={this.props.draftList} 
             isItemFreezed={this.state.isItemFreezed}
             onMenuToggleClick={this.onMenuToggleClick}
           />
         }
-        {(!this.state.isLoadingDraft && this.state.draftList.length === 0) &&
+        {(!this.state.isLoadingDraft && this.props.draftList.length === 0) &&
           <div className="message empty-tip">
             <h2>{gettext('No draft yet')}</h2>
             <p>{gettext('Draft is a way to let you collaborate with others on files. You can create a draft from a file, edit the draft and then ask for a review. The original file will be updated only after the draft be reviewed.')}</p>

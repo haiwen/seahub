@@ -35,6 +35,9 @@ class DraftManager(models.Manager):
         draft_file_name = get_draft_file_name(repo.id, file_path)
         draft_file_path = '/Drafts/' + draft_file_name
 
+        if seafile_api.get_file_id_by_path(repo.id, draft_file_path):
+            raise DraftFileExist
+
         # copy file to draft dir
         seafile_api.copy_file(repo.id, file_uuid.parent_path, file_uuid.filename,
                               repo.id, '/Drafts', draft_file_name,
