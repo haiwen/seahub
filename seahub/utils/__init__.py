@@ -1208,7 +1208,7 @@ def user_traffic_over_limit(username):
                      exc_info=True)
         return True
 
-    if stat is None:            # No traffic record yet
+    if not stat:            # No traffic record yet
         return False
 
     month_traffic = stat['link_file_upload'] + stat['link_file_download']
