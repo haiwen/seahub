@@ -8,7 +8,7 @@ const propTypes = {
   menuPosition: PropTypes.object.isRequired, 
   onMenuItemClick: PropTypes.func.isRequired,
   currentRepo: PropTypes.object.isRequired,
-  is_repo_owner: PropTypes.bool.isRequired,
+  isRepoOwner: PropTypes.bool.isRequired,
 };
 
 class DirentMenu extends React.Component {
@@ -31,10 +31,10 @@ class DirentMenu extends React.Component {
 
   calculateMenuList(repoInfo) {
     let dirent = this.props.dirent;
-    let is_repo_owner = this.props.is_repo_owner;
+    let isRepoOwner = this.props.isRepoOwner;
     let type = dirent.type;
     let permission = dirent.permission;
-    let can_set_folder_perm = folderPermEnabled  && ((is_repo_owner && repoInfo.has_been_shared_out) || repoInfo.is_admin);
+    let can_set_folder_perm = folderPermEnabled  && ((isRepoOwner && repoInfo.has_been_shared_out) || repoInfo.is_admin);
     if (type === 'dir' && permission === 'rw') {
       let menuList = [];
       if (can_set_folder_perm) {

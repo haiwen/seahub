@@ -52,7 +52,7 @@ class MainPanel extends Component {
       currentFilePath: '',
       isDirentListLoading: true,
       currentRepo: null,
-      is_repo_owner: false,
+      isRepoOwner: false,
     };
   }
 
@@ -311,7 +311,7 @@ class MainPanel extends Component {
                   updateViewList={this.updateViewList}
                   isDirentListLoading={this.state.isDirentListLoading}
                   currentRepo={this.state.currentRepo}
-                  is_repo_owner={this.state.is_repo_owner}
+                  isRepoOwner={this.state.isRepoOwner}
                 />
               }
             </div>

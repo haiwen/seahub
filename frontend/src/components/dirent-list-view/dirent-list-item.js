@@ -22,8 +22,8 @@ const propTypes = {
   onDirentItemCopy: PropTypes.func.isRequired,
   onItemDetails: PropTypes.func.isRequired,
   updateViewList: PropTypes.func.isRequired,
-  currentRepo: PropTypes.object.isRequired,
-  is_repo_owner: PropTypes.bool.isRequired,
+  currentRepo: PropTypes.object,
+  isRepoOwner: PropTypes.bool,
 };
 
 class DirentListItem extends React.Component {
@@ -329,17 +329,17 @@ class DirentListItem extends React.Component {
         </td>
         <td className="operation">
           {
-            this.state.isOperationShow && 
+            true && 
             <div className="operations">
               <ul className="operation-group">
                 <li className="operation-group-item">
-                  <i className="sf2-icon-download" title={gettext('Download')} onClick={this.onItemDownload}></i>
+                  <i className="sf2-icon-download download" title={gettext('Download')} onClick={this.onItemDownload}></i>
                 </li>
                 <li className="operation-group-item">
-                  <i className="sf2-icon-share" title={gettext('Share')} onClick={this.onItemShare}></i>
+                  <i className="sf2-icon-share share" title={gettext('Share')} onClick={this.onItemShare}></i>
                 </li>
                 <li className="operation-group-item">
-                  <i className="sf2-icon-delete" title={gettext('Delete')} onClick={this.onItemDelete}></i>
+                  <i className="sf2-icon-delete delete" title={gettext('Delete')} onClick={this.onItemDelete}></i>
                 </li>
                 <li className="operation-group-item">
                   <i className="sf2-icon-caret-down sf-dropdown-toggle" title={gettext('More Operation')} onClick={this.onItemMenuToggle}></i>
@@ -352,7 +352,7 @@ class DirentListItem extends React.Component {
                   menuPosition={this.state.menuPosition}
                   onMenuItemClick={this.onItemMenuItemClick}
                   currentRepo={this.props.currentRepo}
-                  is_repo_owner={this.props.is_repo_owner}
+                  isRepoOwner={this.props.isRepoOwner}
                 />
               }
             </div>
