@@ -16,8 +16,8 @@ class DirentMenuItem extends React.Component {
   }
 
   render() {
-    let operaton = this.props.item;
-    let operationMessage = gettext(operaton);
+    let operation = this.props.item;
+    let operationMessage = gettext(operation);
     return (
       <Fragment>
         {
