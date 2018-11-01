@@ -1,7 +1,8 @@
 from seahub.test_utils import BaseTestCase
 from seahub.options.models import (UserOptions, KEY_USER_GUIDE,
                                    VAL_USER_GUIDE_ON, VAL_USER_GUIDE_OFF,
-                                   KEY_DEFAULT_REPO)
+                                   KEY_DEFAULT_REPO,
+                                   KEY_FORCE_2FA, VAL_FORCE_2FA)
 
 class UserOptionsManagerTest(BaseTestCase):
     def test_is_user_guide_enabled(self):
@@ -51,3 +52,20 @@ class UserOptionsManagerTest(BaseTestCase):
         assert len(UserOptions.objects.filter(email=self.user.email, option_key=KEY_DEFAULT_REPO)) == 2
         assert UserOptions.objects.get_default_repo(self.user.email) is not None
         assert len(UserOptions.objects.filter(email=self.user.email, option_key=KEY_DEFAULT_REPO)) == 1
+
+    def test_force_2fa(self):
+        assert len(UserOptions.objects.filter(email=self.user.email,
+                                              option_key=KEY_FORCE_2FA)) == 0
+        assert UserOptions.objects.is_force_2fa(self.user.email) is False
+
+        UserOptions.objects.set_force_2fa(self.user.email)
+
+        assert len(UserOptions.objects.filter(email=self.user.email,
+                                              option_key=KEY_FORCE_2FA)) == 1
+        assert UserOptions.objects.is_force_2fa(self.user.email) is True
+
+        UserOptions.objects.unset_force_2fa(self.user.email)
+
+        assert len(UserOptions.objects.filter(email=self.user.email,
+                                              option_key=KEY_FORCE_2FA)) == 0
+        assert UserOptions.objects.is_force_2fa(self.user.email) is False

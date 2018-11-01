@@ -46,6 +46,6 @@ class ClientLoginTokenView(APIView):
         if has_two_factor_auth() and two_factor_auth_enabled(request.user):
             return {}
         randstr = gen_token(max_length=32)
-        token = ClientLoginToken(randstr, request.user.username)
+        token = ClientLoginToken(token=randstr, username=request.user.username)
         token.save()
         return {'token': randstr}

@@ -13,6 +13,7 @@ from seahub.utils import is_org_context
 from seahub.api2.authentication import TokenAuthentication
 from seahub.api2.throttling import UserRateThrottle
 from seahub.api2.utils import api_error
+from seahub.base.templatetags.seahub_tags import email2nickname
 
 logger = logging.getLogger(__name__)
 
@@ -22,6 +23,7 @@ def get_group_repo_info(repo):
     result['name'] = repo.repo_name
     result['size'] = repo.size
     result['shared_by'] = repo.user
+    result['shared_by_name'] = email2nickname(repo.user)
     result['permission'] = repo.permission
     result['group_id'] = repo.group_id
     result['encrypted'] = repo.encrypted

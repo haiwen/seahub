@@ -117,6 +117,14 @@
                 {% else %}
                 <button disabled="disabled" class="btn-disabled">{% trans "Disable Two-Factor Authentication" %}</button>
                 {% endif %}
+                <label class="checkbox-label">
+                    {% if force_2fa %}
+                    <input type="checkbox" name="force_2fa" class="vam" checked="checked" />
+                    {% else %}
+                    <input type="checkbox" name="force_2fa" class="vam" />
+                    {% endif %}
+                    <span class="vam">{% trans "Force Two-Factor Authentication" %}</span>
+                </label>
             </dd>
             {% endif %}
 
@@ -395,6 +403,21 @@ $("#disable-two-factor-auth").on('click', function(){
         error: ajaxErrorHandler
     });
 });
+$('[name="force_2fa"]').on('change', function() {
+    var checked = $(this).prop('checked');
+    $.ajax({
+        url: '{% url 'two-factor-auth-view' email %}',
+        type: 'PUT',
+        cache: false,
+        data: {'force_2fa': checked ? 1 : 0},
+        beforeSend: prepareCSRFToken,
+        success: function(data) {
+            feedback("{% trans "Success" %}", 'success');
+        },
+        error: ajaxErrorHandler
+    });
+});
+
 
 $('#set-name-form').on('submit', function() {
     var nickname = $.trim($('[name="nickname"]', $(this)).val());

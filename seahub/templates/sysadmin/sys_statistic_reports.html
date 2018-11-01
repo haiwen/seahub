@@ -1,0 +1,63 @@
+{% extends "sysadmin/base.html" %}
+{% load seahub_tags i18n staticfiles %}
+
+{% block cur_statistic %}tab-cur{% endblock %}
+
+{% block right_panel %}
+
+{% with cur_tab='report' %}
+{% include 'sysadmin/snippets/sys_statistic_nav.html' %}
+{% endwith %}
+
+<div class="report" id="monthly-user-traffic-report">
+    <h4 class="report-heading">{% trans "Monthly User Traffic" %}</h4>
+    <form action="{% url 'api-v2.1-admin-statistics-system-user-traffic-excel' %}" class="date-custom-form report-month-custom-form">
+        <label for="month">{% trans "Month:" %}</label>
+        <input type="text" name="month" value="" class="input" />
+        <button type="submit" class="submit">{% trans "Create Report" %}</button>
+        <p class="error hide"></p>
+    </form>
+</div>
+
+<div class="report" id="user-storage-report">
+    <h4 class="report-heading">{% trans "User Storage" %}</h4>
+    <form action="{% url 'api-v2.1-admin-statistics-system-user-storage-excel' %}">
+        <button type="submit">{% trans "Create Report" %}</button>
+    </form>
+</div>
+
+{% endblock %}
+
+{% block extra_script %}
+<script type="text/javascript">
+(function() {
+    // show current month as default
+    var d = new Date();
+    var year = d.getFullYear();
+    var month = d.getMonth() + 1;
+    $('#monthly-user-traffic-report [name="month"]').val(year + '' + month);
+})();
+
+$('.date-custom-form').on('submit', function() {
+    var $form = $(this);
+    var $month= $('[name="month"]', $form);
+    var $error = $('.error', $form);
+
+    var month = $month.val();
+
+    if (!month) {
+        $error.html("{% trans "It is required." %}").removeClass('hide');
+        return false;
+    }
+
+    var pattern = /^([012]\d{3})(0[1-9]|1[012])$/;
+    if (!pattern.test(month)) {
+        $error.html("{% trans "Invalid month, should be yyyymm." %}").removeClass('hide');
+        return false;
+    }
+
+    $error.addClass('hide');
+});
+
+</script>
+{% endblock %}

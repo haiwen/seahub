@@ -587,7 +587,8 @@ def repo_revert_history(request, repo_id):
 def fpath_to_link(repo_id, path, is_dir=False):
     """Translate file path of a repo to its view link"""
     if is_dir:
-        href = HASH_URLS["VIEW_COMMON_LIB_DIR"] % {'repo_id': repo_id, 'path': path.encode('utf-8').strip('/')}
+        href = HASH_URLS["VIEW_COMMON_LIB_DIR"] % {'repo_id': repo_id, 'path': path.strip('/')}
+        href = urlquote(href, safe='/#')
     else:
         if not path.startswith('/'):
             p = '/' + path

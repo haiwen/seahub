@@ -123,6 +123,7 @@ MIDDLEWARE_CLASSES = (
     'seahub.base.middleware.UserPermissionMiddleware',
     'termsandconditions.middleware.TermsAndConditionsRedirectMiddleware',
     'seahub.two_factor.middleware.OTPMiddleware',
+    'seahub.two_factor.middleware.ForceTwoFactorAuthMiddleware',
     'seahub.trusted_ip.middleware.LimitIpMiddleware',
 )
 

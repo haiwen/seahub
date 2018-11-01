@@ -4470,3 +4470,17 @@ img.thumbnail {
     max-height: 20rem;
     overflow-y: auto;
 }
+
+/* statistic report */
+.report {
+    margin:15px 0 20px;
+}
+.report-heading {
+    padding:3px 10px;
+    background:#f7f7f7;
+    border-radius:2px;
+    margin:0 0 15px;
+}
+.report-month-custom-form {
+    margin-left:10px;
+}

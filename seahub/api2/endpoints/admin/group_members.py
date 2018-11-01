@@ -12,6 +12,7 @@ from seaserv import seafile_api, ccnet_api
 from seahub.group.utils import get_group_member_info, is_group_member
 from seahub.avatar.settings import AVATAR_DEFAULT_SIZE
 from seahub.base.accounts import User
+from seahub.base.templatetags.seahub_tags import email2nickname
 
 from seahub.api2.authentication import TokenAuthentication
 from seahub.api2.throttling import UserRateThrottle
@@ -103,7 +104,7 @@ class AdminGroupMembers(APIView):
             if is_group_member(group_id, email, in_structure=False):
                 result['failed'].append({
                     'email': email,
-                    'error_msg': 'User %s is already a group member.' % email
+                    'error_msg': 'User %s is already a group member.' % email2nickname(email)
                     })
                 continue
 

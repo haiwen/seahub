@@ -1,9 +1,15 @@
 # Copyright (c) 2012-2016 Seafile Ltd.
 from __future__ import absolute_import, division, print_function, unicode_literals
+import re
 
 from constance import config
+from django.core.urlresolvers import reverse
+from django.http import HttpResponseRedirect
+
 from . import DEVICE_ID_SESSION_KEY
 from .models import Device
+from seahub.options.models import UserOptions
+from seahub.settings import SITE_ROOT
 
 
 class IsVerified(object):
@@ -53,3 +59,36 @@ class OTPMiddleware(object):
         user.otp_device = device
 
         return None
+
+
+class ForceTwoFactorAuthMiddleware(object):
+    def filter_request(self, request):
+        path = request.path
+        black_list = (r'^%s$' % SITE_ROOT, r'sys/.+', r'repo/.+', r'lib/', )
+
+        for patt in black_list:
+            if re.search(patt, path) is not None:
+                return True
+        return False
+
+    def process_request(self, request):
+        if not config.ENABLE_TWO_FACTOR_AUTH:
+            return None
+
+        user = getattr(request, 'user', None)
+        if user is None:
+            return None
+
+        if user.is_anonymous():
+            return None
+
+        if not self.filter_request(request):
+            return None
+
+        if not UserOptions.objects.is_force_2fa(user.username):
+            return None
+
+        if user.otp_device is not None:
+            return None
+
+        return HttpResponseRedirect(reverse('two_factor:setup'))

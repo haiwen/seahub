@@ -46,7 +46,7 @@ def check_group_name_conflict(request, new_group_name):
         if request.cloud_mode:
             checked_groups = seaserv.get_personal_groups_by_user(username)
         else:
-            checked_groups = ccnet_api.get_all_groups(-1, -1)
+            checked_groups = ccnet_api.search_groups(new_group_name, -1, -1)
 
     for g in checked_groups:
         if g.group_name == new_group_name:

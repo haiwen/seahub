@@ -184,7 +184,8 @@ def sys_statistic_traffic(request):
         traffic_info_list = seafevents_api.get_all_orgs_traffic_by_month(
             month_dt, start, limit, order_by)
         for e in traffic_info_list:
-            e['org_name'] = ccnet_api.get_org_by_id(e['org_id']).org_name
+            org = ccnet_api.get_org_by_id(e['org_id'])
+            e['org_name'] = org.org_name if org else '--'
 
     page_next = len(traffic_info_list) == limit
 
@@ -200,6 +201,13 @@ def sys_statistic_traffic(request):
             'per_page': per_page,
             'page_next': page_next,
         })
+
+@login_required
+@sys_staff_required
+def sys_statistic_reports(request):
+
+    return render(request, 'sysadmin/sys_statistic_reports.html', {
+            })
 
 def can_view_sys_admin_repo(repo):
     default_repo_id = get_system_default_repo_id()
@@ -796,6 +804,8 @@ def user_info(request, email):
     reference_id = user.reference_id
     user_default_device = default_device(user) if has_two_factor_auth() else False
 
+    force_2fa = UserOptions.objects.is_force_2fa(user.username)
+
     return render(request, 
         'sysadmin/userinfo.html', {
             'owned_repos': owned_repos,
@@ -811,6 +821,7 @@ def user_info(request, email):
             'personal_groups': personal_groups,
             'two_factor_auth_enabled': has_two_factor_auth(),
             'default_device': user_default_device,
+            'force_2fa': force_2fa,
             'reference_id': reference_id if reference_id else '',
         })
 

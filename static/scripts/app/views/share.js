@@ -184,6 +184,10 @@ define([
                 this.$('#send-download-link').addClass('hide');
                 this.$('#download-link-operations .shared-link-copy-icon').addClass('hide');
                 this.$('#download-link, #direct-dl-link').append(' <span class="error">(' + gettext('Expired') + ')</span>');
+            } else {
+                this.$('#send-download-link').removeClass('hide');
+                this.$('#download-link-operations .shared-link-copy-icon').removeClass('hide');
+                this.$('#download-link .error, #direct-dl-link .error').remove('');
             }
             this.$('#download-link-operations').removeClass('hide');
 
@@ -466,7 +470,15 @@ define([
 
         copySharedLink: function(e) {
             var $el = $(e.currentTarget);
-            $el.prev('.shared-link').select();
+            var targetDom = $el.prev('.shared-link');
+            if (navigator.userAgent.match(/(iPhone|iPod|iPad);?/i)) { //ios
+                window.getSelection().removeAllRanges();
+                var range = document.createRange();
+                range.selectNode(targetDom[0]);
+                window.getSelection().addRange(range); 
+            } else {
+                targetDom.select();
+            }
             document.execCommand('copy');
             $.modal.close();
             Common.feedback(gettext("Share link is copied to the clipboard."), 'success');

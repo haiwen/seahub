@@ -8,14 +8,10 @@
 {% block cur_statistic %}tab-cur{% endblock %}
 
 {% block right_panel %}
-<div class="tabnav ovhd">
-    <ul class="tabnav-tabs fleft">
-        <li class="tabnav-tab tabnav-tab-cur"><a href="{% url 'sys_statistic_file' %}">{% trans "File" %}</a></li>
-        <li class="tabnav-tab"><a href="{% url 'sys_statistic_storage' %}">{% trans "Storage" %}</a></li>
-        <li class="tabnav-tab"><a href="{% url 'sys_statistic_user' %}">{% trans "Users" %}</a></li>
-        <li class="tabnav-tab"><a href="{% url 'sys_statistic_traffic' %}">{% trans "Traffic" %}</a></li>
-    </ul>
-</div>
+
+{% with cur_tab='file' %}
+{% include 'sysadmin/snippets/sys_statistic_nav.html' %}
+{% endwith %}
 
 <div class="system-statistic-time-range ovhd">
     <div class="sf-btn-group fleft">

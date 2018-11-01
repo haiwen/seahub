@@ -100,8 +100,8 @@ PREVIEW_FILEEXT = {
     DOCUMENT: ('doc', 'docx', 'ppt', 'pptx', 'odt', 'fodt', 'odp', 'fodp'),
     SPREADSHEET: ('xls', 'xlsx', 'ods', 'fods'),
     SVG: ('svg',),
-    PDF: ('pdf',),
     DRAW: ('draw',),
+    PDF: ('pdf', 'ai'),
     MARKDOWN: ('markdown', 'md'),
     VIDEO: ('mp4', 'ogv', 'webm', 'mov'),
     AUDIO: ('mp3', 'oga', 'ogg'),
@@ -1244,7 +1244,7 @@ def user_traffic_over_limit(username):
                      exc_info=True)
         return True
 
-    if stat is None:            # No traffic record yet
+    if not stat:            # No traffic record yet
         return False
 
     month_traffic = stat['link_file_upload'] + stat['link_file_download']
