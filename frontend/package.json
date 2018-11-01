@@ -24,6 +24,7 @@
     "react-cookies": "^0.1.0",
     "react-dom": "^16.5.2",
     "react-moment": "^0.7.9",
+    "react-select": "^2.1.1",
     "reactstrap": "^6.4.0",
     "seafile-js": "^0.2.29",
     "seafile-ui": "^0.1.10",

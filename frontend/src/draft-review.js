@@ -158,7 +158,7 @@ class DraftReview extends React.Component {
   toggleAddReviewerDialog = () => {
     this.setState({
       showReviewerDialog: !this.state.showReviewerDialog
-    })
+    });
   }
 
   componentWillMount() {
@@ -196,7 +196,7 @@ class DraftReview extends React.Component {
                 {gettext('View diff')}</Tooltip>
             </div>
             <button className="btn btn-primary add-reviewer-btn" onClick={this.toggleAddReviewerDialog}>
-              {gettext("Add reviewer")}</button>
+              {gettext('Add reviewer')}</button>
             <button className="btn btn-icon btn-secondary btn-active common-list-btn"
               id="commentsNumber" type="button" data-active="false"
               onMouseDown={this.toggleCommentList}>
@@ -265,8 +265,6 @@ class DraftReview extends React.Component {
     );
   }
 }
-
-
 
 ReactDOM.render (
   <DraftReview />,

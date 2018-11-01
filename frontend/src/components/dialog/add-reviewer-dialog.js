@@ -1,97 +1,140 @@
 import React from 'react';
+import Select from 'react-select';
 import PropTypes from 'prop-types';
 import { gettext } from '../../utils/constants';
-import { Button, Input, Modal, ModalHeader, ModalBody, ModalFooter } from 'reactstrap';
+import { Button, Modal, ModalHeader, ModalBody, ModalFooter } from 'reactstrap';
 import { seafileAPI } from '../../utils/seafile-api.js';
 import '../../css/add-reviewer-dialog.css';
-
-const propTypes = {
-  showReviewerDialog: PropTypes.bool.isRequired
-};
 
 class AddReviewerDialog extends React.Component {
 
   constructor(props) {
     super(props);
     this.state = {
-      newReviewer: '',
-      errorMsg: '',
       reviewers: [],
       avatar: [],
+      selectedOption: null,
+      errorMsg: [],
+      options: [],
     };
   }
-  
-  handleChange = (e) => {
-    this.setState({
-      newReviewer: e.target.value, 
-    }); 
-  }
-
-  handleKeyPress = (e) => {
-    if (e.key === 'Enter') {
-      this.addReviewers();
-    } 
-  }
-
-  addReviewers = () => {
-    let array = this.state.newReviewer;
-    seafileAPI.addReviewers(this.props.reviewID, array).then((response) => {
-      if (response.data.failed.length > 0) {
-        this.setState({
-          errorMsg: response.data.failed[0].error_msg
-        });
-        let that = this;
-        setTimeout(function(){
-          that.setState({
-            errorMsg: ''
-          })
-        }, 3000);
-      }
-      if (response.data.success.length > 0) {
-        this.getReviewers();
-      }
-    });
-  }
     
-  getReviewers = () => {
-    seafileAPI.listReviewers(this.props.reviewID).then((response) => {
+  listReviewers = () => {
+    seafileAPI.listReviewers(this.props.reviewID).then((res) => {
       this.setState({
-        reviewers: response.data.reviewers,
+        reviewers: res.data.reviewers
       });
       let array = [];
       for (let i = 0; i < this.state.reviewers.length ; i ++) {
-        seafileAPI.getUserAvatar(this.state.reviewers[i].name, 80).then((response) => {
-          array.push(response.data.url);
+        seafileAPI.getUserAvatar(this.state.reviewers[i].name, 80).then((res) => {
+          array.push(res.data.url);
           this.setState({
-            avatar: array,
+            avatar: array
           });
-        })
+        });
       }
     });
   }
 
+  handleKeyUp = (e) => {
+    this.setState({
+      options: []
+    });
+    if (e.target.value.trim().length > 0) {
+      let value = encodeURIComponent(e.target.value.trim());
+      seafileAPI.searchUsers(value).then((res) => {
+        let options = [];
+        for (let i = 0 ; i < res.data.users.length; i ++) {
+          let obj = {};
+          obj.value = res.data.users[i].name;
+          obj.email = res.data.users[i].email;
+          obj.label = 
+            <div>
+              <img src={res.data.users[i].avatar_url} className="avatar reviewer-select-avatar" alt=""/>
+              <span className='reviewer-select-name'>{res.data.users[i].name}</span>
+            </div>;
+          options.push(obj);
+        }
+        this.setState({
+          options: options
+        });
+      });
+    }
+  }
+
+  handleSelectChange = (option) => {
+    this.setState({
+      selectedOption: option,
+      options: [],
+    });
+  }
+
+  addReviewers = () => {
+    if (this.state.selectedOption.length > 0 ) {
+      let reviewersArray = [];
+      for (let i = 0; i < this.state.selectedOption.length; i ++) {
+        reviewersArray[i] = this.state.selectedOption[i].email;
+      }
+      seafileAPI.addReviewers(this.props.reviewID, reviewersArray).then((res) => {
+        if (res.data.failed.length > 0) {
+          let errorMsg = [];
+          for (let i = 0 ; i < res.data.failed.length ; i++) {
+            errorMsg[i] = res.data.failed[i];
+          }
+          this.setState({
+            errorMsg: errorMsg
+          });
+          let that = this;
+          setTimeout(() => {
+            that.setState({
+              errorMsg: []
+            });
+          }, 3000);
+        }
+        this.setState({
+          selectedOption: null
+        });
+        if (res.data.success.length > 0) {
+          this.listReviewers();
+        }
+      });
+    }
+  }
+
   componentWillMount() {
-    this.getReviewers();
+    this.listReviewers();
   }
 
   render() {
+    let isMulti = true;
     return (
-      <Modal isOpen={this.props.showReviewerDialog} toggle={this.toggle}>
-        <ModalHeader toggle={this.toggle}>{gettext('Request a review')}</ModalHeader>
-        <ModalBody>
+      <Modal isOpen={this.props.showReviewerDialog}>
+        <ModalHeader>{gettext('Request a review')}</ModalHeader>
+        <ModalBody onKeyUp={this.handleKeyUp}>
           <p>{gettext('Add new reviewer')}</p>
-          <Input onKeyPress={this.handleKeyPress}
-            value={this.state.newReviewer}
-            onChange={this.handleChange} />
-            <p className="error">{this.state.errorMsg}</p>
+          <Select
+            value={this.state.selectedOption}
+            onChange={this.handleSelectChange}
+            placeholder={gettext('Please enter 1 or more character')}
+            options={this.state.options}
+            isMulti= {isMulti}
+            className='reviewer-select'
+          />
+          {this.state.errorMsg.length > 0 &&
+            this.state.errorMsg.map((item, index = 0, arr) => {
+              return (
+                <p className="error" key={index}>{this.state.errorMsg[index].error_msg}</p>
+              );
+            })
+          }
           { this.state.reviewers.length > 0 &&
             this.state.reviewers.map((item, index = 0, arr) => {
               return (
-                <div className="reviewer-info" key={index}>
-                  <img className="avatar reviewer-avatar" src={this.state.avatar[index]} alt=""/>
-                  <span className="reviewer-nickname">{item.nickname}</span>
+                <div className="reviewer-select-info" key={index}>
+                  <img className="avatar reviewer-select-avatar" src={this.state.avatar[index]} alt=""/>
+                  <span className="reviewer-select-name">{item.nickname}</span>
                 </div>
-              )
+              );
             })
           }
         </ModalBody>
@@ -104,6 +147,12 @@ class AddReviewerDialog extends React.Component {
     );
   }
 }
+
+const propTypes = {
+  showReviewerDialog: PropTypes.bool.isRequired,
+  reviewID: PropTypes.string.isRequired,
+  toggleAddReviewerDialog: PropTypes.func.isRequired
+};
 
 AddReviewerDialog.propTypes = propTypes;
 
