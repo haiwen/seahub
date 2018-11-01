@@ -2,7 +2,7 @@ import React, { Fragment } from 'react';
 import { gettext, repoID, slug, permission, siteRoot } from '../../utils/constants';
 import { Utils } from '../../utils/utils';
 import PropTypes from 'prop-types';
-import Listtag from '../dialog/list-tag-dialog';
+import ListTagDialog from '../dialog/list-tag-dialog';
 
 const propTypes = {
   filePath: PropTypes.string.isRequired
@@ -49,7 +49,7 @@ class PathToolbar extends React.Component {
             <li className="toolbar-item"><a className="op-link sf2-icon-trash" href={trashUrl} title={gettext('Trash')} aria-label={gettext('Trash')}></a></li>
             <li className="toolbar-item"><a className="op-link sf2-icon-history" href={historyUrl} title={gettext('History')} aria-label={gettext('History')}></a></li>
           </ul>
-          {this.state.listRepotag && <Listtag listTagCancel={this.listTagCancel}/>}
+          {this.state.listRepotag && <ListTagDialog listTagCancel={this.listTagCancel}/>}
         </Fragment>
       );
     } else if ( !isFile && permission) {

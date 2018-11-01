@@ -3,13 +3,13 @@ import PropTypes from 'prop-types';
 import { Button, Modal, ModalHeader, ModalBody, ModalFooter, Input } from 'reactstrap';
 import { gettext, repoID } from '../../utils/constants';
 import { seafileAPI } from '../../utils/seafile-api';
-import Repotag from '../../models/repo-tag';
+import RepoTag from '../../models/repo-tag';
 
 const propTypes = {
   toggleCancel: PropTypes.func.isRequired,
 };
 
-class CreateTag extends React.Component {
+class CreateTagDialog extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
@@ -37,7 +37,7 @@ class CreateTag extends React.Component {
     let name = this.state.tagName;
     let color = this.state.tagColor;
     seafileAPI.createRepotag(repoID, name, color).then(res => {
-      let newTag = new Repotag(res.data.tag);
+      let newTag = new RepoTag(res.data.repo_tag);
       this.setState({
         newTag: newTag,
       });
@@ -103,6 +103,6 @@ class CreateTag extends React.Component {
   }
 }
 
-CreateTag.propTypes = propTypes;
+CreateTagDialog.propTypes = propTypes;
 
-export default CreateTag;
+export default CreateTagDialog;

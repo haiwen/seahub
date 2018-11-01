@@ -3,15 +3,15 @@ import PropTypes from 'prop-types';
 import { Button, Modal, ModalHeader, ModalBody, ModalFooter } from 'reactstrap';
 import { gettext, repoID } from '../../utils/constants';
 import { seafileAPI } from '../../utils/seafile-api';
-import Repotag from '../../models/repo-tag';
-import CreateTag from '../dialog/create-tag-dialog';
-import UpdateTag from '../dialog/update-tag-dialog';
+import RepoTag from '../../models/repo-tag';
+import CreateTagDialog from '../dialog/create-tag-dialog';
+import UpdateTagDialog from '../dialog/update-tag-dialog';
 
 const propTypes = {
   listTagCancel: PropTypes.func.isRequired,
 };
 
-class Listtag extends React.Component {
+class ListTagDialog extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
@@ -29,9 +29,9 @@ class Listtag extends React.Component {
   getTagList = () => {
     seafileAPI.listRepotags(repoID).then(res => {
       let repotagList = [];
-      res.data.tags.forEach(item => {
-        let tag = new Repotag(item);
-        repotagList.push(tag);
+      res.data.repo_tags.forEach(item => {
+        let repo_tag = new RepoTag(item);
+        repotagList.push(repo_tag);
       });
       this.setState({
         repotagList: repotagList,
@@ -90,12 +90,12 @@ class Listtag extends React.Component {
           </ModalFooter>
         </Modal>
         {this.state.createRepoTag &&
-        <CreateTag
+        <CreateTagDialog
           toggleCancel={this.createTagCancel}
         />
         }
         {this.state.updateRepoTag &&
-        <UpdateTag
+        <UpdateTagDialog
           currentTag={this.state.currentTag}
           toggleCancel={this.updateTagCancel}
         />
@@ -105,6 +105,6 @@ class Listtag extends React.Component {
   }
 }
 
-Listtag.propTypes = propTypes;
+ListTagDialog.propTypes = propTypes;
 
-export default Listtag;
+export default ListTagDialog;

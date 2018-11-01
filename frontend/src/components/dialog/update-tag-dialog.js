@@ -3,15 +3,15 @@ import PropTypes from 'prop-types';
 import { Button, Modal, ModalHeader, ModalBody, ModalFooter, Input } from 'reactstrap';
 import { gettext, repoID } from '../../utils/constants';
 import { seafileAPI } from '../../utils/seafile-api';
-import Repotag from '../../models/repo-tag';
-import DeleteTag from '../dialog/delete-tag-dialog';
+import RepoTag from '../../models/repo-tag';
+import DeleteTagDialog from '../dialog/delete-tag-dialog';
 
 const propTypes = {
   currentTag: PropTypes.object,
   toggleCancel: PropTypes.func.isRequired,
 };
 
-class UpdateTag extends React.Component {
+class UpdateTagDialog extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
@@ -41,7 +41,7 @@ class UpdateTag extends React.Component {
     let name = this.state.newName;
     let color = this.state.newColor;
     seafileAPI.updateRepotag(repoID, tag_id, name, color).then(res => {
-      let newTag = new Repotag(res.data.tag);
+      let newTag = new RepoTag(res.data.repo_tag);
       this.setState({
         newTag: newTag,
       });
@@ -130,7 +130,7 @@ class UpdateTag extends React.Component {
         </ModalFooter>
       </Modal>
       {this.state.deleteRepoTag &&
-        <DeleteTag
+        <DeleteTagDialog
           currentTag={this.state.currentTag}
           toggleCancel={this.deleteTagCancel}
         />
@@ -140,6 +140,6 @@ class UpdateTag extends React.Component {
   }
 }
 
-UpdateTag.propTypes = propTypes;
+UpdateTagDialog.propTypes = propTypes;
 
-export default UpdateTag;
+export default UpdateTagDialog;

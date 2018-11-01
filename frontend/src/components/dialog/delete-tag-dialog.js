@@ -9,7 +9,7 @@ const propTypes = {
   toggleCancel: PropTypes.func.isRequired,
 };
 
-class DeleteTag extends React.Component {
+class DeleteTagDialog extends React.Component {
   
   deleteTag = () => {
     let tag_id = this.props.currentTag.id;
@@ -38,6 +38,6 @@ class DeleteTag extends React.Component {
   }
 }
 
-DeleteTag.propTypes = propTypes;
+DeleteTagDialog.propTypes = propTypes;
 
-export default DeleteTag;
+export default DeleteTagDialog;
