@@ -22,6 +22,8 @@ const propTypes = {
   onDirentItemCopy: PropTypes.func.isRequired,
   onItemDetails: PropTypes.func.isRequired,
   updateViewList: PropTypes.func.isRequired,
+  currentRepo: PropTypes.object,
+  isRepoOwner: PropTypes.bool,
 };
 
 class DirentListItem extends React.Component {
@@ -184,12 +186,12 @@ class DirentListItem extends React.Component {
   }
 
   onRenameMenuItemClick = () => {
+    this.props.onRenameMenuItemClick(this.props.dirent);
     this.setState({
       isOperationShow: false,
       isItemMenuShow: false,
       isRenameing: true,
     });
-    this.props.onRenameMenuItemClick(this.props.dirent);
   }
 
   onRenameConfirm = (newName) => {
@@ -349,6 +351,8 @@ class DirentListItem extends React.Component {
                   dirent={this.props.dirent}
                   menuPosition={this.state.menuPosition}
                   onMenuItemClick={this.onItemMenuItemClick}
+                  currentRepo={this.props.currentRepo}
+                  isRepoOwner={this.props.isRepoOwner}
                 />
               }
             </div>

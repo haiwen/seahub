@@ -329,7 +329,7 @@ class Wiki extends Component {
   onRenameNode = (node, newName) => {
     let tree = this.state.tree_data.clone();
     let filePath = node.path;
-    if (node.isMarkdown()) {
+    if (node.isFile()) {
       editorUtilities.renameFile(filePath, newName).then(res => {
         let cloneNode = node.clone();
 

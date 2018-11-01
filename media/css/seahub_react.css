@@ -933,7 +933,8 @@ a.op-icon:focus {
     vertical-align: middle;
 }
 .operation-group-item i:hover {
-    text-decoration: underline;
+    padding-bottom: 0.125rem;
+    border-bottom: 0.125rem solid #f89a68;
 }
 .operation-group-item .sf-dropdown-toggle {
     font-size: 0.85rem;

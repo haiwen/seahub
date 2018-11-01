@@ -16,13 +16,14 @@ class DirentMenuItem extends React.Component {
   }
 
   render() {
-    let operationName = gettext(this.props.item);
+    let operation = this.props.item;
+    let operationMessage = gettext(operation);
     return (
       <Fragment>
         {
-          operationName !== 'Divider' ?
-            <li className="dropdown-item operation-menu-item" data-type={operationName} onClick={this.onClick}>
-              <span className="user-select-none" data-type={operationName} title={operationName} aria-label={operationName}>{operationName}</span>
+          operation !== 'Divider' ?
+            <li className="dropdown-item operation-menu-item" data-type={operation} onClick={this.onClick}>
+              <span className="user-select-none" data-type={operation} title={operationMessage} aria-label={operationMessage}>{operationMessage}</span>
             </li> :
             <li className="dropdown-divider"></li>
         }

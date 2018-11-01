@@ -20,6 +20,8 @@ const propTypes = {
   onItemDetails: PropTypes.func.isRequired,
   updateViewList: PropTypes.func.isRequired,
   isDirentListLoading: PropTypes.bool.isRequired,
+  isRepoOwner: PropTypes.bool,
+  currentRepo: PropTypes.object,
 };
 
 class DirentListView extends React.Component {
@@ -159,6 +161,8 @@ class DirentListView extends React.Component {
                     key={index}
                     dirent={dirent}
                     filePath={this.props.filePath}
+                    currentRepo={this.props.currentRepo}
+                    isRepoOwner={this.props.isRepoOwner}
                     onItemClick={this.props.onItemClick}
                     onRenameMenuItemClick={this.onRenameMenuItemClick}
                     onItemDelete={this.props.onItemDelete}

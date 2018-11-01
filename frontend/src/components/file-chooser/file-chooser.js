@@ -18,6 +18,7 @@ class FileChooser extends React.Component {
     super(props);
     this.state = {
       hasRequest: false,
+      isCurrentRepoShow: true,
       isOtherRepoShow: false,
       repoList: [],
       currentRepo: null,
@@ -62,6 +63,10 @@ class FileChooser extends React.Component {
     }
   }
 
+  onCurrentRepoToggle = () => [
+    this.setState({isCurrentRepoShow: !this.state.isCurrentRepoShow})
+  ]
+
   onDirentItemClick = (repo, filePath) => {
     this.props.onDirentItemClick(repo, filePath);
     this.setState({
@@ -83,11 +88,11 @@ class FileChooser extends React.Component {
       <div className="file-chooser-container">
         <div className="list-view">
           <div className="list-view-header">
-            <span className="item-toggle fa fa-caret-down"></span>
+            <span className={`item-toggle fa ${this.state.isCurrentRepoShow ? 'fa-caret-down' : 'fa-caret-right'}`} onClick={this.onCurrentRepoToggle}></span>
             <span className="library">{gettext('Current Library')}</span>
           </div>
           {
-            this.state.currentRepo &&
+            this.state.isCurrentRepoShow && this.state.currentRepo &&
             <RepoListView 
               initToShowChildren={true}
               repo={this.state.currentRepo}

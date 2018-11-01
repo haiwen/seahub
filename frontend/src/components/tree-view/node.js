@@ -78,6 +78,10 @@ class Node {
     }
   }
 
+  isFile() {
+    return this.type === 'file';
+  }
+
   isDir() {
     return this.type == 'dir';
   }

@@ -2,6 +2,7 @@ import React, { Component, Fragment } from 'react';
 import PropTypes from 'prop-types';
 import { gettext, repoID, serviceUrl, slug, siteRoot } from '../../utils/constants';
 import { seafileAPI } from '../../utils/seafile-api';
+import Repo from '../../models/repo';
 import Dirent from '../../models/dirent';
 import CommonToolbar from '../../components/toolbar/common-toolbar';
 import PathToolbar from '../../components/toolbar/path-toolbar';
@@ -50,10 +51,23 @@ class MainPanel extends Component {
       currentDirent: null,
       currentFilePath: '',
       isDirentListLoading: true,
+      currentRepo: null,
+      isRepoOwner: false,
     };
   }
 
   componentDidMount() {
+    seafileAPI.getRepoInfo(repoID).then(res => {
+      let repo = new Repo(res.data);
+      seafileAPI.getAccountInfo().then(res => {
+        let user_email = res.data.email;
+        let isRepoOwner = repo.owner_email === user_email;
+        this.setState({
+          currentRepo: repo,
+          isRepoOwner: isRepoOwner,
+        });
+      });
+    });
     document.addEventListener('click', this.hideOperationMenu);
   }
 
@@ -296,6 +310,8 @@ class MainPanel extends Component {
                   onItemDetails={this.onItemDetails}
                   updateViewList={this.updateViewList}
                   isDirentListLoading={this.state.isDirentListLoading}
+                  currentRepo={this.state.currentRepo}
+                  isRepoOwner={this.state.isRepoOwner}
                 />
               }
             </div>
