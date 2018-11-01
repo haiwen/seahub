@@ -49,7 +49,7 @@ class RepoTagsView(APIView):
         for tag in tag_list:
             tags.append(tag.to_dict())
 
-        return Response({"tags": tags}, status=status.HTTP_200_OK)
+        return Response({"repo_tags": tags}, status=status.HTTP_200_OK)
 
     def post(self, request, repo_id):
         """add one repo_tag.
@@ -87,7 +87,7 @@ class RepoTagsView(APIView):
             error_msg = 'Internal Server Error.'
             return api_error(status.HTTP_500_INTERNAL_SERVER_ERROR, error_msg)
 
-        return Response({"tag": repo_tag.to_dict()}, status=status.HTTP_201_CREATED)
+        return Response({"repo_tag": repo_tag.to_dict()}, status=status.HTTP_201_CREATED)
 
 
 class RepoTagView(APIView):
@@ -129,7 +129,7 @@ class RepoTagView(APIView):
             error_msg = 'Internal Server Error.'
             return api_error(status.HTTP_500_INTERNAL_SERVER_ERROR, error_msg)
 
-        return Response({"tag": repo_tag.to_dict()}, status=status.HTTP_200_OK)
+        return Response({"repo_tag": repo_tag.to_dict()}, status=status.HTTP_200_OK)
 
     def delete(self, request, repo_id, repo_tag_id):
         """delete one repo_tag
