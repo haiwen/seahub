@@ -329,7 +329,7 @@ class DirentListItem extends React.Component {
         </td>
         <td className="operation">
           {
-            true && 
+            this.state.isOperationShow && 
             <div className="operations">
               <ul className="operation-group">
                 <li className="operation-group-item">

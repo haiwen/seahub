@@ -61,10 +61,10 @@ class MainPanel extends Component {
       let repo = new Repo(res.data);
       seafileAPI.getAccountInfo().then(res => {
         let user_email = res.data.email;
-        let is_repo_owner = repo.owner_email === user_email;
+        let isRepoOwner = repo.owner_email === user_email;
         this.setState({
           currentRepo: repo,
-          is_repo_owner: is_repo_owner,
+          isRepoOwner: isRepoOwner,
         });
       });
     });
