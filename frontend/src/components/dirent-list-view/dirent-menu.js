@@ -1,14 +1,14 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { seafileAPI } from '../../utils/seafile-api';
-import { repoID, isPro, enableFileComment, fileAuditEnabled, folderPermEnabled} from '../../utils/constants';
-import Repo from '../../models/repo';
+import { isPro, enableFileComment, fileAuditEnabled, folderPermEnabled} from '../../utils/constants';
 import DirentMenuItem from './dirent-menu-item';
 
 const propTypes = {
   dirent: PropTypes.object.isRequired,
   menuPosition: PropTypes.object.isRequired, 
   onMenuItemClick: PropTypes.func.isRequired,
+  currentRepo: PropTypes.object.isRequired,
+  is_repo_owner: PropTypes.bool.isRequired,
 };
 
 class DirentMenu extends React.Component {
@@ -16,32 +16,25 @@ class DirentMenu extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      repo: null,
       menuList: [],
     };
-    this.is_repo_owner = false;
   }
 
   componentDidMount() {
-    seafileAPI.getRepoInfo(repoID).then(res => {
-      let repo = new Repo(res.data);
-      seafileAPI.getAccountInfo().then(res => {
-        let user_email = res.data.email;
-        this.is_repo_owner = repo.owner_email === user_email;
-        let menuList = this.calculateMenuList(repo);
-        this.setState({
-          repo: repo,
-          menuList: menuList
-        });
-      });
+    let repo = this.props.currentRepo;
+    let menuList = this.calculateMenuList(repo);
+    this.setState({
+      menuList: menuList
     });
+
   }
 
   calculateMenuList(repoInfo) {
     let dirent = this.props.dirent;
+    let is_repo_owner = this.props.is_repo_owner;
     let type = dirent.type;
     let permission = dirent.permission;
-    let can_set_folder_perm = folderPermEnabled  && ((this.is_repo_owner && repoInfo.has_been_shared_out) || repoInfo.is_admin);
+    let can_set_folder_perm = folderPermEnabled  && ((is_repo_owner && repoInfo.has_been_shared_out) || repoInfo.is_admin);
     if (type === 'dir' && permission === 'rw') {
       let menuList = [];
       if (can_set_folder_perm) {
