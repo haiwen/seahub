@@ -14,9 +14,9 @@ class RepoTagsManager(models.Manager):
         except self.model.DoesNotExist:
             return None
 
-    def get_repo_tag_by_id(self, tag_id):
+    def get_repo_tag_by_id(self, repo_tag_id):
         try:
-            return super(RepoTagsManager, self).get(pk=tag_id)
+            return super(RepoTagsManager, self).get(pk=repo_tag_id)
         except self.model.DoesNotExist:
             return None
 
@@ -28,9 +28,9 @@ class RepoTagsManager(models.Manager):
             repo_tag.save()
             return repo_tag
 
-    def delete_repo_tag(self, tag_id):
+    def delete_repo_tag(self, repo_tag_id):
         try:
-            repo_tag = super(RepoTagsManager, self).get(pk=tag_id)
+            repo_tag = super(RepoTagsManager, self).get(pk=repo_tag_id)
             repo_tag.delete()
             return True
         except self.model.DoesNotExist:
@@ -47,7 +47,7 @@ class RepoTags(models.Model):
 
     def to_dict(self):
         return {
-            "tag_id": self.pk,
+            "repo_tag_id": self.pk,
             "repo_id": self.repo_id,
             "tag_name": self.name,
             "tag_color": self.color,
