@@ -22,7 +22,7 @@ class ReviewComments extends React.Component {
     super(props);
     this.state = {
       commentsList: [],
-      userAvatar: `${window.location.host}media/avatars/default.png`,
+      userAvatar: `${window.location.origin}/media/avatars/default.png`,
       inResizing: false,
       commentFooterHeight: 30,
       showResolvedComment: false,
@@ -191,7 +191,7 @@ class ReviewComments extends React.Component {
         <div className="seafile-comment-footer" style={{height:this.state.commentFooterHeight+'%'}}>
           <div className="seafile-comment-row-resize" onMouseDown={this.onResizeMouseDown}></div>
           <div className="user-header">
-            <img className="avatar" src={this.state.userAvatar} alt="avatar"/>
+            <img className="avatar" src={this.state.userAvatar} alt=""/>
           </div>
           <div className="seafile-add-comment">
             <textarea className="add-comment-input" ref="commentTextarea"
