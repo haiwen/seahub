@@ -1,0 +1,48 @@
+.tag-list-container {
+  padding: 0.5rem;
+  padding-bottom: 0;
+  max-height: 15rem;
+  list-style: none;
+  overflow: auto;
+}
+
+.tag-list-item {
+  display: flex;
+  justify-content: space-around;
+  margin-bottom: 0.5rem;
+}
+
+.tag-list-item .tag-demo {
+  flex: 1;
+  border-radius: 0.25rem;
+  padding-left: 0.5rem;
+  display: flex;
+  align-items: center;
+  color: #ffffff;
+}
+
+.tag-list-item .tag-demo:hover {
+  border-left: 0.75rem solid #eb8205;
+
+}
+
+.tag-list-item .tag-edit {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-left: 0.5rem;
+  width: 2.25rem;
+  height: 2.25rem;
+  border-radius: 0.25rem;
+  color: #798d99;
+}
+
+.tag-list-item .tag-edit:hover {
+  color: #092d42;
+  background-color: rgba(9,45,66,.13);
+}
+
+.tag-create .color-chooser,
+.tag-edit .color-chooser {
+  margin-top: 0.5rem;
+}

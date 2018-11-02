@@ -19,7 +19,7 @@ class Delete extends React.Component {
     let name = this.props.currentNode.name;
     return (
       <Modal isOpen={true} toggle={this.toggle}>
-        <ModalHeader toggle={this.toggle}>{gettext('Delete')}</ModalHeader>
+        <ModalHeader toggle={this.toggle}>{gettext('Delete Tag')}</ModalHeader>
         <ModalBody>
           <p>{gettext('Are you sure to delete')}{' '}<b>{name}</b> ?</p>
         </ModalBody>

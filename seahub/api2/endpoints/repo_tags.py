@@ -49,7 +49,7 @@ class RepoTagsView(APIView):
         for tag in tag_list:
             tags.append(tag.to_dict())
 
-        return Response({"tags": tags}, status=status.HTTP_200_OK)
+        return Response({"repo_tags": tags}, status=status.HTTP_200_OK)
 
     def post(self, request, repo_id):
         """add one repo_tag.
@@ -87,7 +87,7 @@ class RepoTagsView(APIView):
             error_msg = 'Internal Server Error.'
             return api_error(status.HTTP_500_INTERNAL_SERVER_ERROR, error_msg)
 
-        return Response({"tag": repo_tag.to_dict()}, status=status.HTTP_201_CREATED)
+        return Response({"repo_tag": repo_tag.to_dict()}, status=status.HTTP_201_CREATED)
 
 
 class RepoTagView(APIView):
@@ -95,15 +95,10 @@ class RepoTagView(APIView):
     permission_classes = (IsAuthenticated,)
     throttle_classes = (UserRateThrottle,)
 
-    def put(self, request, repo_id):
+    def put(self, request, repo_id, repo_tag_id):
         """update one repo_tag
         """
         # argument check
-        tag_id = request.data.get('tag_id')
-        if not tag_id:
-            error_msg = 'tag_id invalid.'
-            return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
-
         tag_name = request.data.get('name')
         if not tag_name:
             error_msg = 'name invalid.'
@@ -115,7 +110,7 @@ class RepoTagView(APIView):
             return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
 
         # resource check
-        repo_tag = RepoTags.objects.get_repo_tag_by_id(tag_id=tag_id)
+        repo_tag = RepoTags.objects.get_repo_tag_by_id(repo_tag_id)
         if not repo_tag:
             error_msg = 'repo_tag not found.'
             return api_error(status.HTTP_404_NOT_FOUND, error_msg)
@@ -134,19 +129,13 @@ class RepoTagView(APIView):
             error_msg = 'Internal Server Error.'
             return api_error(status.HTTP_500_INTERNAL_SERVER_ERROR, error_msg)
 
-        return Response({"tag": repo_tag.to_dict()}, status=status.HTTP_200_OK)
+        return Response({"repo_tag": repo_tag.to_dict()}, status=status.HTTP_200_OK)
 
-    def delete(self, request, repo_id):
+    def delete(self, request, repo_id, repo_tag_id):
         """delete one repo_tag
         """
-        # argument check
-        tag_id = request.data.get('tag_id')
-        if not tag_id:
-            error_msg = 'tag_id invalid.'
-            return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
-
         # resource check
-        repo_tag = RepoTags.objects.get_repo_tag_by_id(tag_id=tag_id)
+        repo_tag = RepoTags.objects.get_repo_tag_by_id(repo_tag_id)
         if not repo_tag:
             error_msg = 'repo_tag not found.'
             return api_error(status.HTTP_404_NOT_FOUND, error_msg)
@@ -157,7 +146,7 @@ class RepoTagView(APIView):
             return api_error(status.HTTP_403_FORBIDDEN, error_msg)
 
         try:
-            RepoTags.objects.delete_repo_tag(tag_id)
+            RepoTags.objects.delete_repo_tag(repo_tag_id)
         except Exception as e:
             logger.error(e)
             error_msg = 'Internal Server Error.'
