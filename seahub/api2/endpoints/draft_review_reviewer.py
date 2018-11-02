@@ -10,7 +10,7 @@ from django.utils.translation import ugettext as _
 from seaserv import seafile_api
 from seahub.api2.authentication import TokenAuthentication
 from seahub.api2.throttling import UserRateThrottle
-from seahub.api2.utils import api_error
+from seahub.api2.utils import api_error, user_to_dict
 
 from seahub.base.templatetags.seahub_tags import email2nickname
 from seahub.base.accounts import User
@@ -32,8 +32,17 @@ class DraftReviewReviewerView(APIView):
             return api_error(status.HTTP_404_NOT_FOUND,
                              'Review %s not found' % pk)
 
+        # format user result
+        try:
+            avatar_size = int(request.GET.get('avatar_size', 32))
+        except ValueError:
+            avatar_size = 32
+
         # get reviewer list
-        reviewers = [x.to_dict() for x in r.reviewreviewer_set.all()]
+        reviewers = []
+        for x in r.reviewreviewer_set.all():
+            reviewer = user_to_dict(x.reviewer, request=request, avatar_size=avatar_size)
+            reviewers.append(reviewer)
 
         return Response({'reviewers': reviewers})
 
