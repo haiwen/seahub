@@ -3,6 +3,7 @@
   padding-bottom: 0;
   max-height: 15rem;
   list-style: none;
+  overflow: auto;
 }
 
 .tag-list-item {

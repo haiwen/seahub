@@ -20,7 +20,7 @@ class CreateTagDialog extends React.Component {
     this.newInput = React.createRef();
   }
 
-  inputNewname = (e) => {
+  inputNewName = (e) => {
     this.setState({
       tagName: e.target.value,
     }); 
@@ -50,13 +50,10 @@ class CreateTagDialog extends React.Component {
     this.props.toggleCancel();
   }
 
-  componentWillMount() {
-    this.setState({
-      tagColor: this.state.tagColor,
-    });
-  }
-
   componentDidMount() {
+    this.setState({
+      tagColor: this.state.colorList[0]
+    });
     this.newInput.focus();
     this.newInput.setSelectionRange(0, 0);
   }
@@ -69,7 +66,7 @@ class CreateTagDialog extends React.Component {
         <ModalBody>
           <div className="tag-create">
             <p>{gettext('Name')}</p>
-            <Input onKeyPress={this.handleKeyPress} innerRef={input => {this.newInput = input;}} placeholder={gettext('name')} value={this.state.tagName} onChange={this.inputNewname}/>
+            <Input onKeyPress={this.handleKeyPress} innerRef={input => {this.newInput = input;}} placeholder={gettext('name')} value={this.state.tagName} onChange={this.inputNewName}/>
             <div className="form-group color-chooser">
               <label className="form-label">{gettext('Select a color')}</label>
               <div className="row gutters-xs">
@@ -92,7 +89,7 @@ class CreateTagDialog extends React.Component {
           </div>
         </ModalBody>
         <ModalFooter>
-          <Button color="primary" onClick={this.createTag}>{gettext('Create')}</Button>
+          <Button color="primary" onClick={this.createTag}>{gettext('Save')}</Button>
           <Button color="secondary" onClick={this.toggle}>{gettext('Cancel')}</Button>
         </ModalFooter>
       </Modal>

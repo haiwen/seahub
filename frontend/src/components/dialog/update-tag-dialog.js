@@ -3,7 +3,6 @@ import PropTypes from 'prop-types';
 import { Button, Modal, ModalHeader, ModalBody, ModalFooter, Input } from 'reactstrap';
 import { gettext, repoID } from '../../utils/constants';
 import { seafileAPI } from '../../utils/seafile-api';
-import DeleteTagDialog from '../dialog/delete-tag-dialog';
 
 const propTypes = {
   currentTag: PropTypes.object,
@@ -64,20 +63,15 @@ class UpdateTagDialog extends React.Component {
     });
   }
 
-  onRepoTagDeleted = () => {
-    this.onDeleteCancel();
-    this.props.toggleCancel();
-  }
-
-  onDeleteCancel = () => {
-    this.setState({
-      deleteRepoTag: !this.state.deleteRepoTag,
+  onDeleteTag = () => {
+    let tag = this.props.currentTag;
+    seafileAPI.deleteRepoTag(repoID, tag.id).then(() => {
+      this.props.toggleCancel();
     });
   }
 
   render() {
     let colorList = this.state.colorList;
-    let tag = this.props.currentTag;
     return (
       <Fragment>
         <Modal isOpen={true} toggle={this.toggle}>
@@ -107,17 +101,10 @@ class UpdateTagDialog extends React.Component {
             </div>
           </ModalBody>
           <ModalFooter>
-            <Button color="primary" onClick={this.updateTag}>{gettext('Edit')}</Button>
-            <Button color="danger" onClick={this.deleteTagClick.bind(this, tag)}>{gettext('Delete')}</Button>
+            <Button color="primary" onClick={this.updateTag}>{gettext('Save')}</Button>
+            <Button color="danger" onClick={this.onDeleteTag}>{gettext('Delete')}</Button>
           </ModalFooter>
         </Modal>
-        {this.state.deleteRepoTag &&
-          <DeleteTagDialog
-            currentTag={this.props.currentTag}
-            onRepoTagDeleted={this.onRepoTagDeleted}
-            toggleCancel={this.onDeleteCancel}
-          />
-        }
       </Fragment>
     );
   }
