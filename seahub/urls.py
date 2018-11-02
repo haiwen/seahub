@@ -73,6 +73,7 @@ from seahub.api2.endpoints.wiki_pages import WikiPageView, WikiPagesView, WikiPa
 from seahub.api2.endpoints.revision_tag import TaggedItemsView, TagNamesView
 from seahub.api2.endpoints.user import User
 from seahub.api2.endpoints.repo_tags import RepoTagsView, RepoTagView
+from seahub.api2.endpoints.file_tag import RepoFileTagsView, RepoFileTagView
 
 # Admin
 from seahub.api2.endpoints.admin.revision_tag import AdminTaggedItemsView
@@ -283,8 +284,6 @@ urlpatterns = [
     ## user::repos
     url(r'^api/v2.1/repos/$', ReposView.as_view(), name='api-v2.1-repos-view'),
     url(r'^api/v2.1/repos/(?P<repo_id>[-0-9a-f]{36})/$', RepoView.as_view(), name='api-v2.1-repo-view'),
-    url(r'^api/v2.1/repos/(?P<repo_id>[-0-9a-f]{36})/tags/$', FileTagsView.as_view(), name="api-v2.1-filetags-view"),
-    url(r'^api/v2.1/repos/(?P<repo_id>[-0-9a-f]{36})/tags/(?P<name>.*?)/$',FileTagView.as_view(), name="api-v2.1-filetag-view"),
     url(r'^api/v2.1/repos/(?P<repo_id>[-0-9a-f]{36})/file/$', FileView.as_view(), name='api-v2.1-file-view'),
     url(r'^api/v2.1/repos/(?P<repo_id>[-0-9a-f]{36})/file/history/$', FileHistoryView.as_view(), name='api-v2.1-file-history-view'),
     url(r'^api/v2.1/repos/(?P<repo_id>[-0-9a-f]{36})/file/new_history/$', NewFileHistoryView.as_view(), name='api-v2.1-new-file-history-view'),
@@ -295,6 +294,12 @@ urlpatterns = [
     url(r'^api/v2.1/repos/(?P<repo_id>[-0-9a-f]{36})/set-password/$', RepoSetPassword.as_view(), name="api-v2.1-repo-set-password"),
     url(r'^api/v2.1/repos/(?P<repo_id>[-0-9a-f]{36})/repo-tags/$', RepoTagsView.as_view(), name='api-v2.1-repo-tags'),
     url(r'^api/v2.1/repos/(?P<repo_id>[-0-9a-f]{36})/repo-tags/(?P<repo_tag_id>\d+)/$', RepoTagView.as_view(), name='api-v2.1-repo-tag'),
+    url(r'^api/v2.1/repos/(?P<repo_id>[-0-9a-f]{36})/file-tags/$', RepoFileTagsView.as_view(), name='api-v2.1-file-tags'),
+    url(r'^api/v2.1/repos/(?P<repo_id>[-0-9a-f]{36})/file-tags/(?P<file_tag_id>\d+)/$', RepoFileTagView.as_view(), name='api-v2.1-file-tag'),
+
+    # Deprecated
+    url(r'^api/v2.1/repos/(?P<repo_id>[-0-9a-f]{36})/tags/$', FileTagsView.as_view(), name="api-v2.1-filetags-view"),
+    url(r'^api/v2.1/repos/(?P<repo_id>[-0-9a-f]{36})/tags/(?P<name>.*?)/$', FileTagView.as_view(), name="api-v2.1-filetag-view"),
 
     ## user::download-dir-zip-task
     url(r'^api/v2.1/repos/(?P<repo_id>[-0-9a-f]{36})/zip-task/$', ZipTaskView.as_view(), name='api-v2.1-zip-task'),

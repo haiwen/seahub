@@ -73,7 +73,7 @@ class RepoTagsView(APIView):
 
         repo_tag = RepoTags.objects.get_one_repo_tag(repo_id, tag_name, tag_color)
         if repo_tag:
-            return api_error(status.HTTP_200_OK, 'Repo_tag Already Exist.')
+            return Response('Repo_tag Already Exist.', status.HTTP_200_OK)
 
         # permission check
         if check_folder_permission(request, repo_id, '/') != PERMISSION_READ_WRITE:
