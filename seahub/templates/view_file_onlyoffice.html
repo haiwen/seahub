@@ -52,6 +52,7 @@ var SEAFILE_GLOBAL = {
     var docEditor = new DocsAPI.DocEditor("placeholder", config);
 
     {% if can_edit %}
+    {% if not share_link_token %}
     var interval;
     var refreshLock = function() {
         $.ajax({
@@ -76,6 +77,29 @@ var SEAFILE_GLOBAL = {
         });
     };
     interval = setInterval(refreshLock, 60 * 1000);
+    {% else %}
+    var interval;
+    var refreshLock = function() {
+        $.ajax({
+            url: '{% url "api-v2.1-share-link-online-office-lock" share_link_token %}',
+            type: 'PUT',
+            dataType: 'json',
+            cache: false,
+            beforeSend: prepareCSRFToken,
+            success: function(data) {
+            },
+            error: function(xhr) {
+                if (xhr.responseText) {
+                    feedback(JSON.parse(xhr.responseText).error_msg, 'error');
+                } else {
+                    feedback("{% trans "Failed. Please check the network." %}", 'error');
+                }
+                clearInterval(interval);
+            }
+        });
+    };
+    interval = setInterval(refreshLock, 60 * 1000);
+    {% endif %}
     {% endif %}
 </script>
 {% if enable_watermark %}
