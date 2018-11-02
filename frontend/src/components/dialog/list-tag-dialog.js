@@ -4,11 +4,35 @@ import { Button, Modal, ModalHeader, ModalBody, ModalFooter } from 'reactstrap';
 import { gettext, repoID } from '../../utils/constants';
 import { seafileAPI } from '../../utils/seafile-api';
 import RepoTag from '../../models/repo-tag';
-import CreateTagDialog from '../dialog/create-tag-dialog';
-import UpdateTagDialog from '../dialog/update-tag-dialog';
+import '../../css/repo-tag.css';
 
-const propTypes = {
-  listTagCancel: PropTypes.func.isRequired,
+const tagListItemPropTypes = {
+  item: PropTypes.object.isRequired,
+  onTagUpdate: PropTypes.func.isRequired,
+};
+
+class TagListItem extends React.Component {
+  
+  onTagUpdate = () => {
+    this.props.onTagUpdate(this.props.item);
+  }
+
+  render() {
+    return(
+      <li className="tag-list-item">
+        <span className="tag-demo" style={{background: this.props.item.color}}>{this.props.item.name}</span>
+        <i className="tag-edit fa fa-pencil" onClick={this.onTagUpdate}></i>
+      </li>
+    );
+  }
+}
+
+TagListItem.propTypes = tagListItemPropTypes;
+
+const listTagPropTypes = {
+  onListTagCancel: PropTypes.func.isRequired,
+  onCreateRepoTag: PropTypes.func.isRequired,
+  onUpdateRepoTag: PropTypes.func.isRequired,
 };
 
 class ListTagDialog extends React.Component {
@@ -16,17 +40,10 @@ class ListTagDialog extends React.Component {
     super(props);
     this.state = {
       repotagList: [],
-      currentTag: null,
-      createRepoTag: false,
-      updateRepoTag: false,
     };
   }
 
   componentDidMount() {
-    this.getTagList();
-  }
-
-  getTagList = () => {
     seafileAPI.listRepoTags(repoID).then(res => {
       let repotagList = [];
       res.data.repo_tags.forEach(item => {
@@ -40,71 +57,41 @@ class ListTagDialog extends React.Component {
   }
 
   toggle = () => {
-    this.props.listTagCancel();
-  }
-
-  createTagClick = () => {
-    this.setState({
-      createRepoTag: !this.state.createRepoTag,
-    });
-  }
-
-  createTagCancel = () => {
-    this.setState({
-      createRepoTag: !this.state.createRepoTag,
-    });
-  }
-
-  updateTagClick = (item) => {
-    this.setState({
-      updateRepoTag: !this.state.updateRepoTag,
-      currentTag: item,
-    });
-  }
-
-  updateTagCancel = () => {
-    this.setState({
-      updateRepoTag: !this.state.updateRepoTag,
-    });
+    this.props.onListTagCancel();
   }
 
   render() {
     return (
       <Fragment>
         <Modal isOpen={true} toggle={this.toggle}>
-          <ModalHeader toggle={this.toggle}>{gettext('Tags:')}</ModalHeader>
+          <ModalHeader toggle={this.toggle}>{gettext('Tag List')}</ModalHeader>
           <ModalBody>
-            <ul>
-              {this.state.repotagList.map((item) => { return (
-              <li key={item.id} style={{width:400, height:60, listStyle:'none'}}>
-                <span style={{background:item.color, borderRadius:5, width:360, height:50, lineHeight:'50px', float:'left'}}>{item.name}</span>
-                <button className="fa fa-pencil" style={{float:'right', height:50,}} onClick={this.updateTagClick.bind(this, item)}></button>
-              </li>
-              );
-            })}
-            </ul>
-            <div><a href={'#'} onClick={this.createTagClick}>{gettext('Create a new tag:')}</a></div>
+            {
+              this.state.repotagList.length === 0 && 
+              <div className="tag-list tag-list-container">
+                {gettext('Click new tag button to create tags.')}
+              </div>
+            }
+            { this.state.repotagList.length > 0 &&
+              <ul className="tag-list tag-list-container">
+                {this.state.repotagList.map((repoTag, index) => {
+                  return (
+                    <TagListItem key={index} item={repoTag} onTagUpdate={this.props.onUpdateRepoTag}/>
+                  );
+                })}
+              </ul>
+            }
           </ModalBody>
           <ModalFooter>
-            <Button color="primary" onClick={this.toggle}>{gettext('Yes')}</Button>
+            <Button color="primary" onClick={this.props.onCreateRepoTag}>{gettext('New Tag')}</Button>
+            <Button color="secondary" onClick={this.toggle}>{gettext('Close')}</Button>
           </ModalFooter>
         </Modal>
-        {this.state.createRepoTag &&
-        <CreateTagDialog
-          toggleCancel={this.createTagCancel}
-        />
-        }
-        {this.state.updateRepoTag &&
-        <UpdateTagDialog
-          currentTag={this.state.currentTag}
-          toggleCancel={this.updateTagCancel}
-        />
-        }
       </Fragment>
     );
   }
 }
 
-ListTagDialog.propTypes = propTypes;
+ListTagDialog.propTypes = listTagPropTypes;
 
 export default ListTagDialog;

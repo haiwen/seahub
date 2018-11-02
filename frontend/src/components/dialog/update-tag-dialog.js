@@ -3,7 +3,6 @@ import PropTypes from 'prop-types';
 import { Button, Modal, ModalHeader, ModalBody, ModalFooter, Input } from 'reactstrap';
 import { gettext, repoID } from '../../utils/constants';
 import { seafileAPI } from '../../utils/seafile-api';
-import RepoTag from '../../models/repo-tag';
 import DeleteTagDialog from '../dialog/delete-tag-dialog';
 
 const propTypes = {
@@ -16,15 +15,19 @@ class UpdateTagDialog extends React.Component {
     super(props);
     this.state = {
       deleteRepoTag: false,
-      newName: '',
-      newColor: '',
-      newTag: {},
+      newName: this.props.currentTag.name,
+      newColor: this.props.currentTag.color,
       colorList: ['lime', 'teal', 'azure', 'green', 'blue', 'purple', 'pink', 'indigo'],
     };
     this.newInput = React.createRef();
   }
 
-  inputNewname = (e) => {
+  componentDidMount() {
+    this.newInput.focus();
+    this.newInput.setSelectionRange(0, -1);
+  }
+
+  inputNewName = (e) => {
     this.setState({
       newName: e.target.value,
     });
@@ -40,13 +43,9 @@ class UpdateTagDialog extends React.Component {
     let tag_id = this.props.currentTag.id;
     let name = this.state.newName;
     let color = this.state.newColor;
-    seafileAPI.updateRepoTag(repoID, tag_id, name, color).then(res => {
-      let newTag = new RepoTag(res.data.repo_tag);
-      this.setState({
-        newTag: newTag,
-      });
+    seafileAPI.updateRepoTag(repoID, tag_id, name, color).then(() => {
+      this.props.toggleCancel();
     });
-    this.props.toggleCancel();
   }
 
   handleKeyPress = (e) => {
@@ -59,38 +58,18 @@ class UpdateTagDialog extends React.Component {
     this.props.toggleCancel();
   }
 
-  componentWillMount() {
-    this.setState({
-      newName: this.props.currentTag.name,
-      newColor: this.props.currentTag.color,
-    });
-  }
-
-  componentDidMount() {
-    this.changeState();
-    this.newInput.focus();
-    this.newInput.setSelectionRange(0, -1);
-  }
-
-  componentWillReceiveProps(nextProps) {
-    this.changeState(nextProps.currentTag);
-  }
-
-  changeState() {
-    this.setState({
-      newName: this.state.newName,
-      newColor: this.state.newColor,
-    });
-  }
-
   deleteTagClick = (item) => {
     this.setState({
       deleteRepoTag: !this.state.deleteRepoTag,
-      currentTag: item,
     });
   }
 
-  deleteTagCancel = () => {
+  onRepoTagDeleted = () => {
+    this.onDeleteCancel();
+    this.props.toggleCancel();
+  }
+
+  onDeleteCancel = () => {
     this.setState({
       deleteRepoTag: !this.state.deleteRepoTag,
     });
@@ -101,40 +80,44 @@ class UpdateTagDialog extends React.Component {
     let tag = this.props.currentTag;
     return (
       <Fragment>
-      <Modal isOpen={true} toggle={this.toggle}>
-        <ModalHeader toggle={this.toggle}>{gettext('Edit tag:')}</ModalHeader>
-        <ModalBody>
-          <p>{gettext('Enter the new name:')}</p>
-          <Input onKeyPress={this.handleKeyPress} innerRef={input => {this.newInput = input;}} placeholder="newName" value={this.state.newName} onChange={this.inputNewname}/>
-          <div className="form-group">
-            <label className="form-label">{gettext('Select a color:')}</label>
-            <div className="row gutters-xs">
-              {colorList.map((item, index)=>{
-                var className = 'colorinput-color bg-' + item;
-                return (
-                  <div key={index} className="col-auto" onChange={this.selectNewcolor}>
-                    <label className="colorinput">
-                      {item===this.props.currentTag.color ? 
-                      <input name="color" type="radio" value={item} className="colorinput-input" defaultChecked onChange={this.selectNewcolor}></input> :
-                      <input name="color" type="radio" value={item} className="colorinput-input" onChange={this.selectNewcolor}></input>}
-                      <span className={className}></span>
-                    </label>
-                  </div>)
-              })}
+        <Modal isOpen={true} toggle={this.toggle}>
+          <ModalHeader toggle={this.toggle}>{gettext('Edit Tag')}</ModalHeader>
+          <ModalBody>
+            <div className="tag-edit">
+              <p>{gettext('Name:')}</p>
+              <Input onKeyPress={this.handleKeyPress} innerRef={input => {this.newInput = input;}} placeholder="newName" value={this.state.newName} onChange={this.inputNewName}/>
+              <div className="form-group color-chooser">
+                <label className="form-label">{gettext('Select a color')}</label>
+                <div className="row gutters-xs">
+                  {colorList.map((item, index)=>{
+                    var className = 'colorinput-color bg-' + item;
+                    return (
+                      <div key={index} className="col-auto" onChange={this.selectNewcolor}>
+                        <label className="colorinput">
+                          {item===this.props.currentTag.color ? 
+                            <input name="color" type="radio" value={item} className="colorinput-input" defaultChecked onChange={this.selectNewcolor}></input> :
+                            <input name="color" type="radio" value={item} className="colorinput-input" onChange={this.selectNewcolor}></input>}
+                          <span className={className}></span>
+                        </label>
+                      </div>
+                    );
+                  })}
+                </div>
+              </div>
             </div>
-          </div>
-        </ModalBody>
-        <ModalFooter>
-          <Button color="primary" onClick={this.updateTag}>{gettext('Save')}</Button>
-          <Button color="danger" onClick={this.deleteTagClick.bind(this, tag)}>{gettext('Delete')}</Button>
-        </ModalFooter>
-      </Modal>
-      {this.state.deleteRepoTag &&
-        <DeleteTagDialog
-          currentTag={this.state.currentTag}
-          toggleCancel={this.deleteTagCancel}
-        />
-      }
+          </ModalBody>
+          <ModalFooter>
+            <Button color="primary" onClick={this.updateTag}>{gettext('Edit')}</Button>
+            <Button color="danger" onClick={this.deleteTagClick.bind(this, tag)}>{gettext('Delete')}</Button>
+          </ModalFooter>
+        </Modal>
+        {this.state.deleteRepoTag &&
+          <DeleteTagDialog
+            currentTag={this.props.currentTag}
+            onRepoTagDeleted={this.onRepoTagDeleted}
+            toggleCancel={this.onDeleteCancel}
+          />
+        }
       </Fragment>
     );
   }

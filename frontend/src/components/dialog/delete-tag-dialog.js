@@ -6,15 +6,17 @@ import { seafileAPI } from '../../utils/seafile-api';
 
 const propTypes = {
   currentTag: PropTypes.object.isRequired,
+  onRepoTagDeleted: PropTypes.func.isRequired,
   toggleCancel: PropTypes.func.isRequired,
 };
 
 class DeleteTagDialog extends React.Component {
-  
-  deleteTag = () => {
-    let tag_id = this.props.currentTag.id;
-    seafileAPI.deleteRepoTag(repoID, tag_id);
-    this.props.toggleCancel();
+
+  onDeleteTag = () => {
+    let tag = this.props.currentTag;
+    seafileAPI.deleteRepoTag(repoID, tag.id).then(() => {
+      this.props.onRepoTagDeleted();
+    });
   }
 
   toggle = () => {
@@ -30,7 +32,7 @@ class DeleteTagDialog extends React.Component {
           <p>{gettext('Are you sure to delete tag: ')}<b>{name}</b>?</p>
         </ModalBody>
         <ModalFooter>
-          <Button outline color="danger" onClick={this.deleteTag}>{gettext('YES')}</Button>
+          <Button outline color="danger" onClick={this.onDeleteTag}>{gettext('YES')}</Button>
           <Button outline color="secondary" onClick={this.toggle}>{gettext('NO')}</Button>
         </ModalFooter>
       </Modal>

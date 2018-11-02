@@ -3,7 +3,6 @@ import PropTypes from 'prop-types';
 import { Button, Modal, ModalHeader, ModalBody, ModalFooter, Input } from 'reactstrap';
 import { gettext, repoID } from '../../utils/constants';
 import { seafileAPI } from '../../utils/seafile-api';
-import RepoTag from '../../models/repo-tag';
 
 const propTypes = {
   toggleCancel: PropTypes.func.isRequired,
@@ -36,13 +35,9 @@ class CreateTagDialog extends React.Component {
   createTag = () => {  
     let name = this.state.tagName;
     let color = this.state.tagColor;
-    seafileAPI.createRepoTag(repoID, name, color).then(res => {
-      let newTag = new RepoTag(res.data.repo_tag);
-      this.setState({
-        newTag: newTag,
-      });
+    seafileAPI.createRepoTag(repoID, name, color).then(() =>{
+      this.props.toggleCancel();
     });
-    this.props.toggleCancel();
   }
 
   handleKeyPress = (e) => {
@@ -70,32 +65,34 @@ class CreateTagDialog extends React.Component {
     let colorList = this.state.colorList;
     return (
       <Modal isOpen={true} toggle={this.toggle}>
-        <ModalHeader toggle={this.toggle}>{gettext('Create a new tag:')}</ModalHeader>
+        <ModalHeader toggle={this.toggle}>{gettext('New Tag')}</ModalHeader>
         <ModalBody>
-          <p>{gettext('Enter a tag name:')}</p>
-          <Input onKeyPress={this.handleKeyPress} innerRef={input => {this.newInput = input;}} placeholder={gettext('name')} value={this.state.tagName} onChange={this.inputNewname}/>
-          <div className="form-group">
-            <label className="form-label">{gettext('Select a color:')}</label>
-            <div className="row gutters-xs">
-              {colorList.map((item, index)=>{
-                var className = "colorinput-color bg-" + item;
-                return (
-                  <div key={index} className="col-auto" onChange={this.selectTagcolor}>
-                    <label className="colorinput">
-                      {index===0 ? 
-                      <input name="color" type="radio" value={item} className="colorinput-input" defaultChecked onClick={this.selectTagcolor}></input> :
-                      <input name="color" type="radio" value={item} className="colorinput-input" onClick={this.selectTagcolor}></input>}
-                      <span className={className}></span>
-                    </label>
-                  </div>
-                )
-              })
-              }
+          <div className="tag-create">
+            <p>{gettext('Name')}</p>
+            <Input onKeyPress={this.handleKeyPress} innerRef={input => {this.newInput = input;}} placeholder={gettext('name')} value={this.state.tagName} onChange={this.inputNewname}/>
+            <div className="form-group color-chooser">
+              <label className="form-label">{gettext('Select a color')}</label>
+              <div className="row gutters-xs">
+                {colorList.map((item, index)=>{
+                  var className = 'colorinput-color bg-' + item;
+                  return (
+                    <div key={index} className="col-auto" onChange={this.selectTagcolor}>
+                      <label className="colorinput">
+                        {index===0 ? 
+                          <input name="color" type="radio" value={item} className="colorinput-input" defaultChecked onClick={this.selectTagcolor}></input> :
+                          <input name="color" type="radio" value={item} className="colorinput-input" onClick={this.selectTagcolor}></input>}
+                        <span className={className}></span>
+                      </label>
+                    </div>
+                  );
+                })
+                }
+              </div>
             </div>
           </div>
         </ModalBody>
         <ModalFooter>
-          <Button color="primary" onClick={this.createTag}>{gettext('Save')}</Button>
+          <Button color="primary" onClick={this.createTag}>{gettext('Create')}</Button>
           <Button color="secondary" onClick={this.toggle}>{gettext('Cancel')}</Button>
         </ModalFooter>
       </Modal>
