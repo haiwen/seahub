@@ -93,7 +93,7 @@ class DraftReview extends React.Component {
       msg_s = msg_s.replace('%(reviewID)s', reviewID);
       Toast.success(msg_s);
     }).catch(() => {
-      let msg_s = gettext('Failed to close review %(reviewID)s.')
+      let msg_s = gettext('Failed to publish review %(reviewID)s.')
       msg_s = msg_s.replace('%(reviewID)s', reviewID);
       Toast.error(msg_s);
     });
