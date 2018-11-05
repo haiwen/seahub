@@ -19,15 +19,17 @@ from pysearpc import SearpcError
 from seahub.api2.utils import api_error
 from seahub.api2.authentication import TokenAuthentication
 from seahub.api2.throttling import UserRateThrottle
-from seahub.api2.permissions import CanGenerateShareLink
+from seahub.api2.permissions import CanGenerateShareLink, IsProVersion
 
-from seahub.share.models import FileShare, OrgFileShare
-from seahub.utils import gen_shared_link, is_org_context
+from seahub.share.models import FileShare
+from seahub.utils import gen_shared_link, is_org_context, normalize_file_path
+from seahub.utils.file_op import if_locked_by_online_office
 from seahub.views import check_folder_permission
 from seahub.utils.timeutils import datetime_to_isoformat_timestr
+from seahub.constants import PERMISSION_READ_WRITE
 
 from seahub.settings import SHARE_LINK_EXPIRE_DAYS_MAX, \
-        SHARE_LINK_EXPIRE_DAYS_MIN
+        SHARE_LINK_EXPIRE_DAYS_MIN, SHARE_LINK_LOGIN_REQUIRED
 
 logger = logging.getLogger(__name__)
 
@@ -341,5 +343,66 @@ class ShareLink(APIView):
             logger.error(e)
             error_msg = 'Internal Server Error'
             return api_error(status.HTTP_500_INTERNAL_SERVER_ERROR, error_msg)
+
+        return Response({'success': True})
+
+
+class ShareLinkOnlineOfficeLock(APIView):
+
+    permission_classes = (IsProVersion,)
+    throttle_classes = (UserRateThrottle,)
+
+    def put(self, request, token):
+        """ This api only used for refresh OnlineOffice lock
+        when user edit office file via share link.
+
+        Permission checking:
+        1, If enable SHARE_LINK_LOGIN_REQUIRED, user must have been authenticated.
+        2, Share link should have can_edit permission.
+        3, File must have been locked by OnlineOffice.
+        """
+
+        if SHARE_LINK_LOGIN_REQUIRED and \
+                not request.user.is_authenticated():
+            error_msg = 'Permission denied.'
+            return api_error(status.HTTP_403_FORBIDDEN, error_msg)
+
+        try:
+            share_link = FileShare.objects.get(token=token)
+        except FileShare.DoesNotExist:
+            error_msg = 'Share link %s not found.' % token
+            return api_error(status.HTTP_404_NOT_FOUND, error_msg)
+
+        if share_link.is_expired():
+            error_msg = 'Share link %s is expired.' % token
+            return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
+
+        shared_by = share_link.username
+        repo_id = share_link.repo_id
+        path = normalize_file_path(share_link.path)
+        parent_dir = os.path.dirname(path)
+        if seafile_api.check_permission_by_path(repo_id,
+                parent_dir, shared_by) != PERMISSION_READ_WRITE:
+            error_msg = 'Permission denied.'
+            return api_error(status.HTTP_403_FORBIDDEN, error_msg)
+
+        permissions = share_link.get_permissions()
+        can_edit = permissions['can_edit']
+        if not can_edit:
+            error_msg = 'Share link %s has no edit permission.' % token
+            return api_error(status.HTTP_403_FORBIDDEN, error_msg)
+
+        locked_by_online_office = if_locked_by_online_office(repo_id, path)
+        if locked_by_online_office:
+            # refresh lock file
+            try:
+                seafile_api.refresh_file_lock(repo_id, path)
+            except SearpcError, e:
+                logger.error(e)
+                error_msg = 'Internal Server Error'
+                return api_error(status.HTTP_500_INTERNAL_SERVER_ERROR, error_msg)
+        else:
+            error_msg = _("You can not refresh this file's lock.")
+            return api_error(status.HTTP_403_FORBIDDEN, error_msg)
 
         return Response({'success': True})

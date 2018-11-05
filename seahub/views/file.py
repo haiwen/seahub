@@ -28,6 +28,7 @@ from django.shortcuts import render
 from django.utils.http import urlquote
 from django.utils.translation import get_language, ugettext as _
 from django.views.decorators.http import require_POST
+from django.views.decorators.csrf import ensure_csrf_cookie
 from django.template.defaultfilters import filesizeformat
 from django.views.decorators.csrf import csrf_exempt
 
@@ -915,7 +916,6 @@ def _download_file_from_share_link(request, fileshare):
     """
     next = request.META.get('HTTP_REFERER', settings.SITE_ROOT)
 
-    username = request.user.username
     repo = get_repo(fileshare.repo_id)
     if not repo:
         raise Http404
@@ -952,6 +952,7 @@ def _download_file_from_share_link(request, fileshare):
 
     return HttpResponseRedirect(gen_file_get_url(dl_token, filename))
 
+@ensure_csrf_cookie
 @share_link_audit
 @share_link_login_required
 def view_shared_file(request, fileshare):
@@ -1042,6 +1043,23 @@ def view_shared_file(request, fileshare):
         else:
             username = request.user.username
 
+        def online_office_lock_or_refresh_lock(repo_id, path, username):
+            # check file lock info
+            try:
+                is_locked, locked_by_me = check_file_lock(repo_id, path, username)
+            except Exception as e:
+                logger.error(e)
+                is_locked = False
+
+            locked_by_online_office = if_locked_by_online_office(repo_id, path)
+            try:
+                if not is_locked:
+                    seafile_api.lock_file(repo_id, path, ONLINE_OFFICE_LOCK_OWNER, 0)
+                elif locked_by_online_office:
+                    seafile_api.refresh_file_lock(repo_id, path)
+            except Exception as e:
+                logger.error(e)
+
         if ENABLE_OFFICE_WEB_APP and fileext in OFFICE_WEB_APP_FILE_EXTENSION:
 
             action_name = 'edit' if can_edit else 'view'
@@ -1050,6 +1068,10 @@ def view_shared_file(request, fileshare):
                     language_code=request.LANGUAGE_CODE)
 
             if wopi_dict:
+                if is_pro_version() and can_edit:
+                    online_office_lock_or_refresh_lock(repo_id, path, username)
+
+                wopi_dict['share_link_token'] = token
                 return render(request, 'view_file_wopi.html', wopi_dict)
             else:
                 ret_dict['err'] = _(u'Error when prepare Office Online file preview page.')
@@ -1060,6 +1082,10 @@ def view_shared_file(request, fileshare):
                     can_edit=can_edit, can_download=can_download)
 
             if onlyoffice_dict:
+                if is_pro_version() and can_edit:
+                    online_office_lock_or_refresh_lock(repo_id, path, username)
+
+                onlyoffice_dict['share_link_token'] = token
                 return render(request, 'view_file_onlyoffice.html',
                         onlyoffice_dict)
             else:
