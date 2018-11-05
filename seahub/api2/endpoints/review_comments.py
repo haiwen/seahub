@@ -18,6 +18,8 @@ from seahub.api2.endpoints.utils import generate_links_header_for_paginator
 from seahub.views import check_folder_permission
 from seahub.drafts.models import DraftReview, ReviewComment
 from seahub.drafts.signals import comment_review_successful
+from seahub.base.accounts import User
+from seahub.utils import is_valid_username
 
 logger = logging.getLogger(__name__)
 
@@ -111,9 +113,23 @@ class ReviewCommentsView(APIView):
         username = request.user.username
 
         review_comment = ReviewComment.objects.add(comment, detail, username, r)
+        to_user = request.data.get('to_user', '')
+
+        if to_user:
+            if not is_valid_username(to_user):
+                return api_error(status.HTTP_400_BAD_REQUEST, 'Email %s invalid.' % to_user)
+
+            try:
+                User.objects.get(email=to_user)
+            except User.DoesNotExist:
+                return api_error(status.HTTP_400_BAD_REQUEST, 'Invalid user, should be registered')
+
+        if not to_user:
+            to_user = r.creator
 
         # Send notification to review creator
-        comment_review_successful.send(sender=None, review=r, comment=comment, author=username)
+        comment_review_successful.send(sender=None, review=r, comment=comment,
+                                       author=username, to_user=to_user)
 
         comment = review_comment.to_dict()
         comment.update(user_to_dict(username, request=request, avatar_size=avatar_size))

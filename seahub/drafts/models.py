@@ -223,7 +223,7 @@ class ReviewCommentManager(models.Manager):
 
 class ReviewComment(TimestampedModel):
     """
-    Model used to record file comments.
+    Model used to record review comments.
     """
     author = LowerCaseCharField(max_length=255, db_index=True)
     resolved = models.BooleanField(default=False, db_index=True)

@@ -977,9 +977,10 @@ def comment_review_successful_cb(sender, **kwargs):
     review = kwargs['review']
     comment = kwargs['comment']
     author = kwargs['author']
+    to_user = kwargs['to_user']
 
     detail = review_comment_msg_to_json(review.id, author, comment)
-    UserNotification.objects.add_review_comment_msg(review.creator, detail)
+    UserNotification.objects.add_review_comment_msg(to_user, detail)
 
 @receiver(request_reviewer_successful)
 def requeset_reviewer_successful_cb(sender, **kwargs):
