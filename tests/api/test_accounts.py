@@ -3,7 +3,7 @@ import unittest
 
 from tests.common.utils import apiurl, urljoin, randstring
 from tests.api.apitestbase import ApiTestBase
-from tests.api.urls import ACCOUNTS_URL, ACCOUNT_INFO_URL, PING_URL, \
+from tests.api.urls import ACCOUNTS_URL, PING_URL, \
     AUTH_PING_URL
 
 test_account_username = 'test_%s@test.com' % randstring(10)
@@ -12,17 +12,6 @@ test_account_password2 = randstring(20)
 test_account_url = urljoin(ACCOUNTS_URL, test_account_username)
 
 class AccountsApiTest(ApiTestBase):
-    def test_check_account_info(self):
-        info = self.get(ACCOUNT_INFO_URL).json()
-        self.assertIsNotNone(info)
-        self.assertEqual(info['email'], self.username)
-        self.assertIsNotNone(info['total'])
-        self.assertIsNotNone(info['usage'])
-        self.assertIsNotNone(info['login_id'])
-        self.assertIsNotNone(info['department'])
-        self.assertIsNotNone(info['contact_email'])
-        self.assertIsNotNone(info['institution'])
-
     def test_list_accounts(self):
         # Normal user can not list accounts
         self.get(ACCOUNTS_URL, expected=403)

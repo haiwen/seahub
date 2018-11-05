@@ -289,7 +289,7 @@ class AccountInfo(APIView):
     permission_classes = (IsAuthenticated,)
     throttle_classes = (UserRateThrottle, )
 
-    def get(self, request, format=None):
+    def _get_account_info(self, request):
         info = {}
         email = request.user.username
         p = Profile.objects.get_profile_by_user(email)
@@ -321,7 +321,54 @@ class AccountInfo(APIView):
         info['institution'] = p.institution if p and p.institution else ""
         info['is_staff'] = request.user.is_staff
 
-        return Response(info)
+        interval = UserOptions.objects.get_file_updates_email_interval(email)
+        info['email_notification_interval'] = 0 if interval is None else interval
+        return info
+
+    def get(self, request, format=None):
+        return Response(self._get_account_info(request))
+
+    def put(self, request, format=None):
+        """Update account info.
+        """
+        username = request.user.username
+
+        name = request.data.get("name", None)
+        if name is not None:
+            if len(name) > 64:
+                return api_error(status.HTTP_400_BAD_REQUEST,
+                        _(u'Name is too long (maximum is 64 characters)'))
+
+            if "/" in name:
+                return api_error(status.HTTP_400_BAD_REQUEST,
+                        _(u"Name should not include '/'."))
+
+        email_interval = request.data.get("email_notification_interval", None)
+        if email_interval is not None:
+            try:
+                interval = int(email_interval)
+            except ValueError:
+                return api_error(status.HTTP_400_BAD_REQUEST,
+                                 'email_interval invalid')
+
+        # update user info
+
+        if name is not None:
+            profile = Profile.objects.get_profile_by_user(username)
+            if profile is None:
+                profile = Profile(user=username)
+            profile.nickname = name
+            profile.save()
+
+        if interval is not None:
+            if interval <= 0:
+                UserOptions.objects.unset_file_updates_email_interval(username)
+            else:
+                UserOptions.objects.set_file_updates_email_interval(
+                    username, email_interval)
+
+        return Response(self._get_account_info(request))
+
 
 class RegDevice(APIView):
     """Reg device for iOS push notification.

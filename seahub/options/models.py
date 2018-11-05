@@ -1,10 +1,15 @@
 # Copyright (c) 2012-2016 Seafile Ltd.
 # -*- coding: utf-8 -*-
+from datetime import datetime
+import logging
 
 from django.db import models
 
 from seahub.base.fields import LowerCaseCharField
 from seahub.utils import is_pro_version
+
+# Get an instance of a logger
+logger = logging.getLogger(__name__)
 
 KEY_SERVER_CRYPTO = "server_crypto"
 VAL_SERVER_CRYPTO_ENABLED = "1"
@@ -29,6 +34,9 @@ VAL_USER_LOGGED_IN = "1"
 
 KEY_DEFAULT_REPO = "default_repo"
 KEY_WEBDAV_SECRET = "webdav_secret"
+KEY_FILE_UPDATES_EMAIL_INTERVAL = "file_updates_email_interval"
+KEY_FILE_UPDATES_LAST_EMAILED_TIME = "file_updates_last_emailed_time"
+
 
 class CryptoOptionNotSetError(Exception):
     pass
@@ -52,6 +60,20 @@ class UserOptionsManager(models.Manager):
         user_option.save(using=self._db)
 
         return user_option
+
+    def get_user_option(self, username, k):
+        user_options = super(UserOptionsManager, self).filter(
+            email=username, option_key=k)
+
+        if len(user_options) == 0:
+            return None
+        elif len(user_options) == 1:
+            return user_options[0].option_val
+        else:
+            for o in user_options[1: len(user_options)]:
+                o.delete()
+
+            return user_options[0].option_val
 
     def unset_user_option(self, username, k):
         """Remove user's option.
@@ -177,18 +199,7 @@ class UserOptionsManager(models.Manager):
         - `self`:
         - `username`:
         """
-        user_options = super(UserOptionsManager, self).filter(
-            email=username, option_key=KEY_DEFAULT_REPO)
-
-        if len(user_options) == 0:
-            return None
-        elif len(user_options) == 1:
-            return user_options[0].option_val
-        else:
-            for o in user_options[1: len(user_options)]:
-                o.delete()
-
-            return user_options[0].option_val
+        return self.get_user_option(username, KEY_DEFAULT_REPO)
 
     def passwd_change_required(self, username):
         """Check whether user need to change password.
@@ -259,9 +270,46 @@ class UserOptionsManager(models.Manager):
             decoded = None
         return decoded
 
+    def set_file_updates_email_interval(self, username, seconds):
+        return self.set_user_option(username, KEY_FILE_UPDATES_EMAIL_INTERVAL,
+                                    str(seconds))
+
+    def get_file_updates_email_interval(self, username):
+        val = self.get_user_option(username, KEY_FILE_UPDATES_EMAIL_INTERVAL)
+        if not val:
+            return None
+        try:
+            return int(val)
+        except ValueError:
+            logger.error('Failed to convert string %s to int' % val)
+            return None
+
+    def unset_file_updates_email_interval(self, username):
+        return self.unset_user_option(username, KEY_FILE_UPDATES_EMAIL_INTERVAL)
+
+    def set_file_updates_last_emailed_time(self, username, time_dt):
+        return self.set_user_option(
+            username, KEY_FILE_UPDATES_LAST_EMAILED_TIME,
+            time_dt.strftime("%Y-%m-%d %H:%M:%S"))
+
+    def get_file_updates_last_emailed_time(self, username):
+        val = self.get_user_option(username, KEY_FILE_UPDATES_LAST_EMAILED_TIME)
+        if not val:
+            return None
+
+        try:
+            return datetime.strptime(val, "%Y-%m-%d %H:%M:%S")
+        except Exception:
+            logger.error('Failed to convert string %s to datetime obj' % val)
+            return None
+
+    def unset_file_updates_last_emailed_time(self, username):
+        return self.unset_user_option(username, KEY_FILE_UPDATES_LAST_EMAILED_TIME)
+
+
 class UserOptions(models.Model):
     email = LowerCaseCharField(max_length=255, db_index=True)
-    option_key = models.CharField(max_length=50)
+    option_key = models.CharField(max_length=50, db_index=True)
     option_val = models.CharField(max_length=50)
 
     objects = UserOptionsManager()
