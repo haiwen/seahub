@@ -243,3 +243,27 @@ class ReviewComment(TimestampedModel):
             'resolved': self.resolved,
             'detail': self.detail,
         }
+
+
+class ReviewReviewerManager(models.Manager):
+    def add(self, reviewer, review_id):
+        review_reviewer = self.model(reviewer=reviewer, review_id=review_id)
+        review_reviewer.save(using=self._db)
+
+        return review_reviewer
+
+
+class ReviewReviewer(models.Model):
+    """
+    Model used to record review reviewer.
+    """
+    reviewer = LowerCaseCharField(max_length=255, db_index=True)
+    review_id = models.ForeignKey('DraftReview', on_delete=models.CASCADE)
+
+    objects = ReviewReviewerManager()
+
+    def to_dict(self):
+        return {
+            'nickname': email2nickname(self.reviewer),
+            'name': self.reviewer,
+        }

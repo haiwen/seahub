@@ -41,5 +41,6 @@ export const draftFileName = window.draftReview ? window.draftReview.config.draf
 export const reviewID = window.draftReview ? window.draftReview.config.reviewID : '';
 export const draftID = window.draftReview ? window.draftReview.config.draftID : '';
 export const opStatus = window.draftReview ? window.draftReview.config.opStatus : '';
+export const reviewPerm = window.draftReview ? window.draftReview.config.perm : '';
 export const publishFileVersion = window.draftReview ? window.draftReview.config.publishFileVersion : '';
 export const originFileVersion = window.draftReview ? window.draftReview.config.originFileVersion : '';

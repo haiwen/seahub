@@ -1,0 +1,13 @@
+.reviewer-select-info {
+  margin-top: 10px;
+}
+.reviewer-select-avatar {
+  margin-right: 10px;
+}
+.reviewer-select-name {
+  height: 2em;
+  line-height: 2em;
+}
+.reviewer-select>div>div:nth-child(2) {
+  display: none;
+}

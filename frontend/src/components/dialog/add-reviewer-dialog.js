@@ -1,0 +1,138 @@
+import React from 'react';
+import AsyncSelect from 'react-select/lib/Async';
+import PropTypes from 'prop-types';
+import { gettext } from '../../utils/constants';
+import { Button, Modal, ModalHeader, ModalBody, ModalFooter } from 'reactstrap';
+import { seafileAPI } from '../../utils/seafile-api.js';
+import '../../css/add-reviewer-dialog.css';
+
+const propTypes = {
+  showReviewerDialog: PropTypes.bool.isRequired,
+  reviewID: PropTypes.string.isRequired,
+  toggleAddReviewerDialog: PropTypes.func.isRequired
+};
+
+class AddReviewerDialog extends React.Component {
+
+  constructor(props) {
+    super(props);
+    this.state = {
+      reviewers: [],
+      selectedOption: null,
+      errorMsg: [],
+    };
+    this.Options = [];
+  }
+
+  componentWillMount() {
+    seafileAPI.listReviewers(this.props.reviewID).then((res) => {
+      this.setState({
+        reviewers: res.data.reviewers
+      });
+    });
+  }
+
+  handleSelectChange = (option) => {
+    this.setState({
+      selectedOption: option,
+    });
+    this.Options = [];
+  }
+
+  loadOptions = (value, callback) => {
+    if (value.trim().length > 0) {
+      this.Options = [];
+      let that = this;
+      seafileAPI.searchUsers(value.trim()).then((res) => {
+        for (let i = 0 ; i < res.data.users.length; i++) {
+          let obj = {};
+          obj.value = res.data.users[i].name;
+          obj.email = res.data.users[i].email;
+          obj.label =
+            <div>
+              <img src={res.data.users[i].avatar_url} className="avatar reviewer-select-avatar" alt=""/>
+              <span className='reviewer-select-name'>{res.data.users[i].name}</span>
+            </div>;
+          that.Options.push(obj);
+        }
+        callback(this.Options);
+      });
+    }
+  }
+
+  addReviewers = () => {
+    if (this.state.selectedOption.length > 0 ) {
+      let reviewers = [];
+      for (let i = 0; i < this.state.selectedOption.length; i ++) {
+        reviewers[i] = this.state.selectedOption[i].email;
+      }
+      seafileAPI.addReviewers(this.props.reviewID, reviewers).then((res) => {
+        if (res.data.failed.length > 0) {
+          let errorMsg = [];
+          for (let i = 0 ; i < res.data.failed.length ; i++) {
+            errorMsg[i] = res.data.failed[i];
+          }
+          this.setState({
+            errorMsg: errorMsg
+          });
+          let that = this;
+          setTimeout(() => {
+            that.setState({
+              errorMsg: []
+            });
+          }, 3000);
+        }
+        this.setState({
+          selectedOption: null
+        });
+        if (res.data.success.length > 0) {
+          this.listReviewers();
+        }
+      });
+    }
+  }
+
+  render() {
+    return (
+      <Modal isOpen={this.props.showReviewerDialog}>
+        <ModalHeader>{gettext('Request a review')}</ModalHeader>
+        <ModalBody >
+          <p>{gettext('Add new reviewer')}</p>
+          <AsyncSelect
+            className='reviewer-select' isMulti isFocused
+            loadOptions={this.loadOptions}
+            placeholder={gettext('Please enter 1 or more character')}
+            onChange={this.handleSelectChange}
+          />
+          {this.state.errorMsg.length > 0 &&
+            this.state.errorMsg.map((item, index = 0, arr) => {
+              return (
+                <p className="error" key={index}>{this.state.errorMsg[index].email}
+                  {':'}{this.state.errorMsg[index].error_msg}</p>
+              );
+            })
+          }
+          { this.state.reviewers.length > 0 &&
+            this.state.reviewers.map((item, index = 0, arr) => {
+              return (
+                <div className="reviewer-select-info" key={index}>
+                  <img className="avatar reviewer-select-avatar" src={item.avatar_url} alt=""/>
+                  <span className="reviewer-select-name">{item.user_name}</span>
+                </div>
+              );
+            })
+          }
+        </ModalBody>
+        <ModalFooter>
+          <Button color="primary" onClick={this.addReviewers}>{gettext('Submit')}</Button>
+          <Button color="secondary" onClick={this.props.toggleAddReviewerDialog}>
+            {gettext('Cancel')}</Button>
+        </ModalFooter>
+      </Modal>
+    );
+  }
+}
+
+AddReviewerDialog.propTypes = propTypes;
+
+export default AddReviewerDialog;

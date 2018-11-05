@@ -2,7 +2,7 @@
   display: flex;
 }
 
-.header .common-list-btn {
+.header .common-list-btn, .header .add-reviewer-btn {
   margin-right: .25em;
 }
 

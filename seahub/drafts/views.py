@@ -45,5 +45,6 @@ def review(request, pk):
         "draft_file_name": draft_file_name,
         "origin_file_version": d_r.origin_file_version,
         "publish_file_version": d_r.publish_file_version,
-        "status": d_r.status
+        "status": d_r.status,
+        "permission": permission
         })

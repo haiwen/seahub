@@ -21,7 +21,6 @@ from seahub.api2.authentication import TokenAuthentication
 from seahub.api2.endpoints.utils import add_org_context
 from seahub.api2.throttling import UserRateThrottle
 from seahub.api2.utils import api_error
-from seahub.constants import PERMISSION_READ_WRITE
 from seahub.drafts.models import Draft, DraftFileExist, DraftFileConflict
 from seahub.views import check_folder_permission
 from seahub.utils import gen_file_get_url
@@ -63,7 +62,7 @@ class DraftsView(APIView):
 
         # perm check
         perm = check_folder_permission(request, repo.id, file_path)
-        if perm != PERMISSION_READ_WRITE:
+        if perm is None:
             error_msg = 'Permission denied.'
             return api_error(status.HTTP_403_FORBIDDEN, error_msg)
 
