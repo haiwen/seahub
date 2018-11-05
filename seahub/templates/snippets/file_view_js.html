@@ -1,9 +1,20 @@
 {% if filetype == 'Text' %}
 <script type="text/javascript" src="{{MEDIA_URL}}codemirror/codemirror-2.36.js"></script>
 {% endif %}
-{% if filetype == 'PDF' or filetype == 'Document' %}
-<script type="text/javascript" src="{{MEDIA_URL}}js/pdf.js"></script>
+
+{% if filetype == 'Document' %}
+<script type="text/javascript" src="{{MEDIA_URL}}js/pdf/pdf.js"></script>
 {% endif %}
+
+{% if filetype == 'PDF' %}
+<script type="text/javascript">
+var sf_file_url = "{{ raw_path|escapejs }}";
+var sf_pdfworkerjs_url = '{{MEDIA_URL}}js/pdf/pdf.worker.js';
+</script>
+<script type="text/javascript" src="{{MEDIA_URL}}js/pdf/pdf.js"></script>
+<script type="text/javascript" src="{{MEDIA_URL}}js/pdf/pdf.viewer.js"></script>
+{% endif %}
+
 {% if filetype == 'Audio' %}
 <script src="{{MEDIA_URL}}js/mediaelement-and-player.min.js"></script>
 {% endif %}

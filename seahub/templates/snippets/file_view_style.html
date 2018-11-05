@@ -32,3 +32,8 @@ body { overflow:hidden; }
 {% if filetype == 'SpreadSheet' %}
     {% include 'snippets/spreadsheet_convert_style.html' %}
 {% endif %}
+
+{% if filetype == 'Document' or filetype == 'PDF' %}
+<link rel="resource" type="application/l10n" href="{{ MEDIA_URL }}js/pdf/locale/locale.properties" />
+<link rel="stylesheet" type="text/css" href="{{ MEDIA_URL }}css/pdf_file_view.css" />
+{% endif %}

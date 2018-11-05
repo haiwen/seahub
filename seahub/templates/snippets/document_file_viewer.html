@@ -60,12 +60,12 @@ OfficePreviewer.prototype.check_status = function() {
 };
 
 OfficePreviewer.prototype.load_page = function() {
-    var raw_path = '{{ SITE_ROOT }}office-convert/static/{{ repo.id  }}/' + this.commit_id + '{{ path|urlencode  }}/fake.pdf?token={{shared_token}}'
-    {% include "snippets/pdfjs_file_viewer.html" %}
+    var sf_file_url = '{{ SITE_ROOT }}office-convert/static/{{ repo.id  }}/' + this.commit_id + '{{ path|urlencode  }}/fake.pdf?token={{shared_token}}';
+    var sf_pdfworkerjs_url = '{{MEDIA_URL}}js/pdf/pdf.worker.js';
+    $.getScript('{{MEDIA_URL}}js/pdf/pdf.viewer.js');
 };
 
 $(function() {
     var commit_id = '{{ current_commit.id }}' || '{{ repo.head_cmmt_id }}';
-    $('#file-view').html('<div id="pdf"><span class="loading-icon loading-tip"></span></div>');
     new OfficePreviewer('{{ repo.id }}', '{{ path|escapejs }}', '{{ shared_token }}', commit_id).start();
 });
