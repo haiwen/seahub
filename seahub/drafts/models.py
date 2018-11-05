@@ -164,14 +164,11 @@ class DraftReviewManager(models.Manager):
         if has_review:
             raise DraftReviewExist
 
-        uuid = draft.origin_file_uuid
-        file_path = posixpath.join(uuid.parent_path, uuid.filename)
-
         draft_review = self.model(creator=creator,
                                   status='open',
                                   draft_id=draft,
                                   origin_repo_id=draft.origin_repo_id,
-                                  origin_file_path=file_path,
+                                  origin_file_uuid=draft.origin_file_uuid,
                                   draft_file_path=draft.draft_file_path,
                                   origin_file_version=draft.origin_file_version)
         draft_review.save(using=self._db)
@@ -183,7 +180,7 @@ class DraftReview(TimestampedModel):
     creator = LowerCaseCharField(max_length=255, db_index=True)
     status = models.CharField(max_length=20)
     origin_repo_id = models.CharField(max_length=36)
-    origin_file_path = models.CharField(max_length=1024)
+    origin_file_uuid = models.ForeignKey(FileUUIDMap, on_delete=models.CASCADE)
     draft_file_path = models.CharField(max_length=1024)
     origin_file_version = models.CharField(max_length=100)
     publish_file_version = models.CharField(max_length=100, null=True)
@@ -196,6 +193,9 @@ class DraftReview(TimestampedModel):
         if not r_repo:
             raise DraftFileConflict
 
+        uuid = self.origin_file_uuid
+        file_path = posixpath.join(uuid.parent_path, uuid.filename)
+
         return {
             'id': self.pk,
             'creator': self.creator,
@@ -203,7 +203,7 @@ class DraftReview(TimestampedModel):
             'creator_name': email2nickname(self.creator),
             'draft_origin_repo_id': self.origin_repo_id,
             'draft_origin_repo_name': r_repo.name,
-            'draft_origin_file_path': self.origin_file_path,
+            'draft_origin_file_path': file_path,
             'draft_origin_file_version': self.origin_file_version,
             'draft_publish_file_version': self.publish_file_version,
             'draft_file_path': self.draft_file_path,
