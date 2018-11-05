@@ -1,4 +1,6 @@
 # Copyright (c) 2012-2016 Seafile Ltd.
+import posixpath
+
 from rest_framework import status
 from rest_framework.authentication import SessionAuthentication
 from rest_framework.permissions import IsAuthenticated
@@ -86,8 +88,10 @@ class DraftReviewReviewerView(APIView):
                 })
                 continue
 
+            uuid = r.origin_file_uuid
+            origin_file_path = posixpath.join(uuid.parent_path, uuid.filename)
             # check perm
-            if seafile_api.check_permission_by_path(r.origin_repo_id, r.origin_file_path, reviewer) != 'rw':
+            if seafile_api.check_permission_by_path(r.origin_repo_id, origin_file_path, reviewer) != 'rw':
                 error_msg = _(u'Permission denied.')
                 result['failed'].append({
                     'email': reviewer,

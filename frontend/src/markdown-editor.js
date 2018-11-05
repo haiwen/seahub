@@ -94,6 +94,22 @@ class EditorUtilities {
     );
   }
 
+  uploadLocalImage = (imageFile) => {
+    return (
+      seafileAPI.getUploadLink(repoID, dirPath).then((res) => {
+        const uploadLink = res.data + '?ret-json=1';
+        const newFile = new File([imageFile], imageFile.name, {type: imageFile.type});
+        const formData = new FormData();
+        formData.append('parent_dir', '/');
+        formData.append('relative_path', 'images');
+        formData.append('file', newFile);
+        return seafileAPI.uploadImage(uploadLink, formData);
+      }).then ((res) => {
+        return this._getImageURL(res.data[0].name);
+      })
+    );
+  }
+
   getFileURL(fileNode) {
     var url;
     if (fileNode.type === 'file') {
