@@ -37,30 +37,37 @@ class DraftContent extends React.Component {
     });
   }
 
+  getFileName(filePath) {
+    let lastIndex = filePath.lastIndexOf('/');
+    return filePath.slice(lastIndex+1);
+  }
+
   onDeleteHandler = () => {
     let draft = this.state.currentDraft;
+    let draft_name = this.getFileName(draft.draft_file_path);
     editUtilties.deleteDraft(draft.id).then(res => {
       this.initDraftList();
       let msg_s = gettext('Successfully deleted draft %(draft)s.');
-      msg_s = msg_s.replace('%(draft)s', draft.id);
+      msg_s = msg_s.replace('%(draft)s', draft_name);
       Toast.success(msg_s);
     }).catch(() => {
       let msg_s = gettext('Failed to delete draft %(draft)s.');
-      msg_s = msg_s.replace('%(draft)s', draft.id);
+      msg_s = msg_s.replace('%(draft)s', draft_name);
       Toast.error(msg_s);
     });
   }
 
   onPublishHandler = () => {
     let draft = this.state.currentDraft;
+    let draft_name = this.getFileName(draft.draft_file_path);
     editUtilties.publishDraft(draft.id).then(res => {
       this.initDraftList();
       let msg_s = gettext('Successfully published draft %(draft)s.');
-      msg_s = msg_s.replace('%(draft)s', draft.id);
+      msg_s = msg_s.replace('%(draft)s', draft_name);
       Toast.success(msg_s);
     }).catch(() => {
       let msg_s = gettext('Failed to publish draft %(draft)s.');
-      msg_s = msg_s.replace('%(draft)s', draft.id);
+      msg_s = msg_s.replace('%(draft)s', draft_name);
       Toast.error(msg_s);
     });
   }
