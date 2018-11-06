@@ -186,9 +186,9 @@ class DraftReview extends React.Component {
           <div className="button-group">
             <div className={'seafile-toggle-diff'}>
               <label className="custom-switch" id="toggle-diff">
-                <input type="checkbox" checked={this.state.isShowDiff ? 'checked' : ''}
+                <input type="checkbox" checked={this.state.isShowDiff && 'checked'}
                   name="option" className="custom-switch-input"
-                  onClick={this.onSwitchShowDiff}/>
+                  onChange={this.onSwitchShowDiff}/>
                 <span className="custom-switch-indicator"></span>
               </label>
               <Tooltip placement="bottom" isOpen={this.state.showDiffTip}
