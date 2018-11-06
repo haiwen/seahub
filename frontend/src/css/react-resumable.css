@@ -1,0 +1,13 @@
+.sf-resumable-input-container {
+  display: flex;
+  flex: 1;
+}
+
+.sf-resumable-input-container .resumable-input {
+  display: none;
+}
+
+.sf-resumable-input-container .input-placeholder {
+  display: flex;
+  flex: 1;
+}

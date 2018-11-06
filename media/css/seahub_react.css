@@ -773,6 +773,7 @@ a.op-icon:focus {
 }
 .table-container table {
     width: 100%;
+    table-layout: fixed;
 }
 .table-container table th {
     text-align: left;

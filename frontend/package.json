@@ -4,6 +4,7 @@
   "private": true,
   "dependencies": {
     "@reach/router": "^1.2.0",
+    "@seafile/resumablejs": "^1.1.1",
     "@seafile/seafile-editor": "^0.1.35",
     "autoprefixer": "7.1.6",
     "classnames": "^2.2.6",

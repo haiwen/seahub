@@ -11,6 +11,8 @@ import DirentListView from '../../components/dirent-list-view/dirent-list-view';
 import DirentDetail from '../../components/dirent-detail/dirent-details';
 import CreateFolder from '../../components/dialog/create-folder-dialog';
 import CreateFile from '../../components/dialog/create-file-dialog';
+import FileUpload from '../../components/file-upload/file-upload';
+import FileUploadListView from '../../components/file-upload/file-upload-list-view';
 
 const propTypes = {
   content: PropTypes.string,
@@ -53,6 +55,8 @@ class MainPanel extends Component {
       isDirentListLoading: true,
       currentRepo: null,
       isRepoOwner: false,
+      showFileUploadList: false,
+      uploadFileList: [],
     };
   }
 
@@ -249,17 +253,30 @@ class MainPanel extends Component {
                 {
                   !this.props.isViewFileState &&
                   <Fragment>
-                    <button className="btn btn-secondary operation-item" title={gettext('Edit File')} onClick={this.onUploadClick}>{gettext('Upload')}</button>
-                    <button className="btn btn-secondary operation-item" title={gettext('Edit File')} onClick={this.onNewClick}>{gettext('New')}</button>
-                    <button className="btn btn-secondary operation-item" title={gettext('Edit File')} onClick={this.onShareClick}>{gettext('Share')}</button>
+                    <button className="btn btn-secondary operation-item" title={gettext('Upload')} onClick={this.onUploadClick}>{gettext('Upload')}</button>
+                    <button className="btn btn-secondary operation-item" title={gettext('New')} onClick={this.onNewClick}>{gettext('New')}</button>
+                    <button className="btn btn-secondary operation-item" title={gettext('Share')} onClick={this.onShareClick}>{gettext('Share')}</button>
                   </Fragment>
                 }
               </div>
               {
                 this.state.uploadMenuShow && 
                 <ul className="menu dropdown-menu" style={this.state.operationMenuStyle}>
-                  <li className="dropdown-item">{gettext('Upload Files')}</li>
-                  <li className="dropdown-item">{gettext('Upload Folder')}</li>
+                  <li className="dropdown-item">
+                    <FileUpload 
+                      showMessage={gettext('Upload Files')} 
+                      filePath={this.props.filePath} 
+                      isDirectory={false}
+                      updateUploadFileList={this.updateUploadFileList}
+                    />
+                  </li>
+                  <li className="dropdown-item">
+                    <FileUpload 
+                      showMessage={gettext('Upload Folder')} 
+                      filePath={this.props.filePath} 
+                      isDirectory={true} 
+                    />
+                  </li>
                 </ul>
               }
               {
@@ -344,6 +361,11 @@ class MainPanel extends Component {
             parentPath={this.props.filePath}
             addFolderCancel={this.addFolderCancel}
             onAddFolder={this.onMainAddFolder}
+          />
+        }
+        {this.state.showFileUploadList &&
+          <FileUploadListView 
+            uploadFileList={this.state.uploadFileList}
           />
         }
       </div>
