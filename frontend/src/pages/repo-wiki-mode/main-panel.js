@@ -2,6 +2,7 @@ import React, { Component, Fragment } from 'react';
 import PropTypes from 'prop-types';
 import { gettext, repoID, serviceUrl, slug, siteRoot } from '../../utils/constants';
 import { seafileAPI } from '../../utils/seafile-api';
+import { Utils } from '../../utils/utils';
 import Repo from '../../models/repo';
 import Dirent from '../../models/dirent';
 import CommonToolbar from '../../components/toolbar/common-toolbar';
@@ -253,13 +254,24 @@ class MainPanel extends Component {
                 {
                   !this.props.isViewFileState &&
                   <Fragment>
-                    <button className="btn btn-secondary operation-item" title={gettext('Upload')} onClick={this.onUploadClick}>{gettext('Upload')}</button>
+                    {
+                      Utils.isUploaderSupport() ?
+                        <button className="btn btn-secondary operation-item" title={gettext('Upload')} onClick={this.onUploadClick}>{gettext('Upload')}</button> :
+                        <button className="btn btn-secondary operation-item" title={gettext('Upload')}>
+                          <FileUploader
+                            showMessage={gettext('Upload')} 
+                            filePath={this.props.filePath}
+                            isDirectory={false}
+                            updateUploadFileList={this.updateUploadFileList}
+                            />
+                        </button>
+                    }
                     <button className="btn btn-secondary operation-item" title={gettext('New')} onClick={this.onNewClick}>{gettext('New')}</button>
                     <button className="btn btn-secondary operation-item" title={gettext('Share')} onClick={this.onShareClick}>{gettext('Share')}</button>
                   </Fragment>
                 }
               </div>
-              {
+              { 
                 this.state.uploadMenuShow && 
                 <ul className="menu dropdown-menu" style={this.state.operationMenuStyle}>
                   <li className="dropdown-item">

@@ -166,5 +166,10 @@ export const Utils = {
   getFileName: function(filePath) {
     let lastIndex = filePath.lastIndexOf('/');
     return filePath.slice(lastIndex+1);
+  },
+
+  isUploaderSupport: function() {
+    return navigator.userAgent.indexOf('Firefox')!=-1 ||
+      navigator.userAgent.indexOf('Chrome') > -1;
   }
 };
