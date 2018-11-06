@@ -78,7 +78,10 @@ class DraftReviewView(APIView):
             return api_error(status.HTTP_404_NOT_FOUND,
                              'Review %s not found' % pk)
 
-        perm = check_folder_permission(request, r.origin_repo_id, r.origin_file_path)
+        uuid = r.origin_file_uuid
+        origin_file_path = posixpath.join(uuid.parent_path, uuid.filename)
+
+        perm = check_folder_permission(request, r.origin_repo_id, origin_file_path)
 
         # Review owner and 'rw' perm on the original file to close review
         if st == 'closed':
@@ -106,9 +109,6 @@ class DraftReviewView(APIView):
             except (DraftFileConflict, IntegrityError):
                 return api_error(status.HTTP_409_CONFLICT,
                              'There is a conflict between the draft and the original file')
-
-            uuid = r.origin_file_uuid
-            origin_file_path = posixpath.join(uuid.parent_path, uuid.filename)
 
             # if it is a new draft
             # case1. '/path/test(draft).md' ---> '/path/test.md'
