@@ -5,7 +5,7 @@ const propTypes = {
   uploadFile: PropTypes.object.isRequired,
 };
 
-class FileUploadListItem extends React.Component {
+class FileUploaderListItem extends React.Component {
 
   onItemDelete = () => {
 
@@ -22,6 +22,6 @@ class FileUploadListItem extends React.Component {
   }
 }
 
-FileUploadListItem.propTypes = propTypes;
+FileUploaderListItem.propTypes = propTypes;
 
-export default FileUploadListItem;
+export default FileUploaderListItem;

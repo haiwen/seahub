@@ -11,8 +11,8 @@ import DirentListView from '../../components/dirent-list-view/dirent-list-view';
 import DirentDetail from '../../components/dirent-detail/dirent-details';
 import CreateFolder from '../../components/dialog/create-folder-dialog';
 import CreateFile from '../../components/dialog/create-file-dialog';
-import FileUpload from '../../components/file-upload/file-upload';
-import FileUploadListView from '../../components/file-upload/file-upload-list-view';
+import FileUploader from '../../components/file-uploader/file-uploader';
+import FileUploaderListView from '../../components/file-uploader/file-uploader-list-view';
 
 const propTypes = {
   content: PropTypes.string,
@@ -263,18 +263,19 @@ class MainPanel extends Component {
                 this.state.uploadMenuShow && 
                 <ul className="menu dropdown-menu" style={this.state.operationMenuStyle}>
                   <li className="dropdown-item">
-                    <FileUpload 
+                    <FileUploader
                       showMessage={gettext('Upload Files')} 
                       filePath={this.props.filePath} 
                       isDirectory={false}
                       updateUploadFileList={this.updateUploadFileList}
-                    />
+                      />
                   </li>
                   <li className="dropdown-item">
-                    <FileUpload 
+                    <FileUploader 
                       showMessage={gettext('Upload Folder')} 
                       filePath={this.props.filePath} 
                       isDirectory={true} 
+                      updateUploadFileList={this.updateUploadFileList}
                     />
                   </li>
                 </ul>
@@ -364,7 +365,7 @@ class MainPanel extends Component {
           />
         }
         {this.state.showFileUploadList &&
-          <FileUploadListView 
+          <FileUploaderListView 
             uploadFileList={this.state.uploadFileList}
           />
         }

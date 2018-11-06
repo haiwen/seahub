@@ -1,14 +1,13 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { gettext } from '../../utils/constants';
-import FileUploadListItem from './file-upload-list-item';
+import FileUploaderListItem from './file-uploader-list-item';
 import '../../css/upload-view.css';
 
 const propTypes = {
   uploadFileList: PropTypes.array.isRequired, 
 };
 
-class FileUploadListView extends React.Component {
+class FileUploaderListView extends React.Component {
 
   render() {
     return (
@@ -22,7 +21,7 @@ class FileUploadListView extends React.Component {
               {
                 this.props.uploadFileList.map((uploadFile, index) => {
                   return (
-                    <FileUploadListItem key={index} uploadFile={uploadFile}/>
+                    <FileUploaderListItem key={index} uploadFile={uploadFile}/>
                   );
                 })
               }
@@ -34,6 +33,6 @@ class FileUploadListView extends React.Component {
   }
 }
 
-FileUploadListView.propTypes = propTypes;
+FileUploaderListView.propTypes = propTypes;
 
-export default FileUploadListView;
+export default FileUploaderListView;

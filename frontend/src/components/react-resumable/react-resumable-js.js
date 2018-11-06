@@ -18,7 +18,7 @@ class ReactResumableJS extends React.Component {
       maxFileSize: this.props.maxFileSize,
       testMethod: this.props.testMethod || 'post',
       testChunks: this.props.testChunks || false,
-      headers: this.props.headerObject || {},
+      headers: this.props.setHeaders || {},
       withCredentials: this.props.withCredentials || false,
       chunkSize: this.props.chunkSize,
       simultaneousUploads: this.props.simultaneousUploads || 1,
