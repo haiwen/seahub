@@ -23,6 +23,7 @@ const propTypes = {
   onDirentItemCopy: PropTypes.func.isRequired,
   onItemDetails: PropTypes.func.isRequired,
   updateViewList: PropTypes.func.isRequired,
+  updateViewListParam: PropTypes.func.isRequired,
   currentRepo: PropTypes.object,
   isRepoOwner: PropTypes.bool,
 };
@@ -119,11 +120,11 @@ class DirentListItem extends React.Component {
     let filePath = this.getDirentPath(dirent);
     if (dirent.starred) {
       seafileAPI.unStarFile(repoID, filePath).then(() => {
-        this.props.updateViewList(this.props.filePath);
+        this.props.updateViewListParam(this.props.dirent, "starred", false);
       });
     } else {
       seafileAPI.starFile(repoID, filePath).then(() => {
-        this.props.updateViewList(this.props.filePath);
+        this.props.updateViewListParam(this.props.dirent, "starred", true);
       });
     }
   }
@@ -252,7 +253,8 @@ class DirentListItem extends React.Component {
   onLockItem = () => {
     let filePath = this.getDirentPath(this.props.dirent);
     seafileAPI.lockfile(repoID, filePath).then(() => {
-      this.props.updateViewList(this.props.filePath);
+      this.props.updateViewListParam(this.props.dirent, "is_locked", true);
+      this.props.updateViewListParam(this.props.dirent, "locked_by_me", true);
     });
     this.onItemMenuHide();
   }
@@ -260,7 +262,8 @@ class DirentListItem extends React.Component {
   onUnlockItem = () => {
     let filePath = this.getDirentPath(this.props.dirent);
     seafileAPI.unlockfile(repoID, filePath).then(() => {
-      this.props.updateViewList(this.props.filePath);
+      this.props.updateViewListParam(this.props.dirent, "is_locked", false);
+      this.props.updateViewListParam(this.props.dirent, "locked_by_me", false);
     });
     this.onItemMenuHide();
   }

@@ -19,6 +19,7 @@ const propTypes = {
   onItemCopy: PropTypes.func.isRequired,
   onItemDetails: PropTypes.func.isRequired,
   updateViewList: PropTypes.func.isRequired,
+  updateViewListParam: PropTypes.func.isRequired,
   isDirentListLoading: PropTypes.bool.isRequired,
   isRepoOwner: PropTypes.bool,
   currentRepo: PropTypes.object,
@@ -176,6 +177,7 @@ class DirentListView extends React.Component {
                     onDirentItemMove={this.onDirentItemMove}
                     onDirentItemCopy={this.onDirentItemCopy}
                     onItemDetails={this.onItemDetails}
+                    updateViewListParam={this.props.updateViewListParam}
                   />
                 );
               })

@@ -100,6 +100,16 @@ class MainPanel extends Component {
     });
   }
 
+  updateViewListParam = (dirent, paramKey, paramValue) => {
+    let newDirentList = this.state.direntList.map(item => {
+      if (item.id === dirent.id) {
+        item[paramKey] = paramValue;
+      }
+      return item;
+    });
+    this.setState({direnList: newDirentList});
+  }
+
   onMenuClick = () => {
     this.props.onMenuClick();
   }
