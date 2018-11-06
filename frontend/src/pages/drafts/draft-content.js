@@ -12,7 +12,6 @@ class DraftContent extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      isLoadingDraft: true,
       isMenuShow: false,
       menuPosition: {top:'', left: ''},
       currentDraft: null,
@@ -21,20 +20,11 @@ class DraftContent extends React.Component {
   }
 
   componentDidMount() {
-    this.initDraftList();
     document.addEventListener('click', this.onHideContextMenu);
   }
 
   componentWillUnmount() {
     document.removeEventListener('click', this.onHideContextMenu);
-  }
-
-  initDraftList() {
-    this.setState({isLoadingDraft: true});
-    this.props.getDrafts();
-    this.setState({
-      isLoadingDraft: false,
-    });
   }
 
   getFileName(filePath) {
@@ -46,7 +36,7 @@ class DraftContent extends React.Component {
     let draft = this.state.currentDraft;
     let draft_name = this.getFileName(draft.draft_file_path);
     editUtilties.deleteDraft(draft.id).then(res => {
-      this.initDraftList();
+      this.props.updateDraftsList(draft.id);
       let msg_s = gettext('Successfully deleted draft %(draft)s.');
       msg_s = msg_s.replace('%(draft)s', draft_name);
       Toast.success(msg_s);
@@ -61,7 +51,7 @@ class DraftContent extends React.Component {
     let draft = this.state.currentDraft;
     let draft_name = this.getFileName(draft.draft_file_path);
     editUtilties.publishDraft(draft.id).then(res => {
-      this.initDraftList();
+      this.props.updateDraftsList(draft.id);
       let msg_s = gettext('Successfully published draft %(draft)s.');
       msg_s = msg_s.replace('%(draft)s', draft_name);
       Toast.success(msg_s);
@@ -116,15 +106,15 @@ class DraftContent extends React.Component {
   render() {
     return (
       <div className="cur-view-content">
-        {this.state.isLoadingDraft && <Loading /> }
-        {(!this.state.isLoadingDraft && this.props.draftList.length !==0) &&
+        {this.props.isLoadingDraft && <Loading /> }
+        {(!this.props.isLoadingDraft && this.props.draftList.length !==0) &&
           <DraftListView
             draftList={this.props.draftList} 
             isItemFreezed={this.state.isItemFreezed}
             onMenuToggleClick={this.onMenuToggleClick}
           />
         }
-        {(!this.state.isLoadingDraft && this.props.draftList.length === 0) &&
+        {(!this.props.isLoadingDraft && this.props.draftList.length === 0) &&
           <div className="message empty-tip">
             <h2>{gettext('No draft yet')}</h2>
             <p>{gettext('Draft is a way to let you collaborate with others on files. You can create a draft from a file, edit the draft and then ask for a review. The original file will be updated only after the draft be reviewed.')}</p>
