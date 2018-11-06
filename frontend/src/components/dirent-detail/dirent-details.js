@@ -5,6 +5,7 @@ import { serviceUrl, repoID } from '../../utils/constants';
 import DetailListView from './detail-list-view';
 import Repo from '../../models/repo';
 import '../../css/dirent-detail.css';
+import FileTag from '../../models/file-tag';
 
 const propTypes = {
   dirent: PropTypes.object.isRequired,
@@ -20,6 +21,7 @@ class DirentDetail extends React.Component {
       direntType: '',
       direntDetail: '',
       repo: null,
+      filetagList: [],
     };
   }
 
@@ -43,6 +45,14 @@ class DirentDetail extends React.Component {
           direntType: 'file',
           direntDetail: res.data,
         });
+      });
+      seafileAPI.listFileTags(repoID, direntPath).then(res => {
+        let filetagList = [];
+        res.data.file_tags.forEach(item => {
+          let file_tag = new FileTag(item);
+          filetagList.push(file_tag);
+        });
+        this.setState({filetagList: filetagList});
       });
     } else {
       seafileAPI.getDirInfo(repoID, direntPath).then(res => {
@@ -75,6 +85,7 @@ class DirentDetail extends React.Component {
               direntPath={this.props.direntPath}
               direntType={this.state.direntType}
               direntDetail={this.state.direntDetail} 
+              filetagList={this.state.filetagList}
             />
           }
         </div>

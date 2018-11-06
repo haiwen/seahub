@@ -6,6 +6,7 @@ import URLDecorator from '../../utils/url-decorator';
 import Toast from '../toast';
 import DirentMenu from './dirent-menu';
 import DirentRename from './dirent-rename';
+import FileTag from '../../models/file-tag';
 
 const propTypes = {
   filePath: PropTypes.string.isRequired,
@@ -35,6 +36,7 @@ class DirentListItem extends React.Component {
       highlight: false,
       isItemMenuShow: false,
       menuPosition: {top: 0, left: 0 },
+      filetagList: [],
     };
   }
 
@@ -304,6 +306,22 @@ class DirentListItem extends React.Component {
     return path === '/' ? path + dirent.name : path + '/' + dirent.name;
   }
 
+  getFileTag = () => {
+    let file_path = this.getDirentPath(this.props.dirent);
+    seafileAPI.listFileTags(repoID, file_path).then(res => {
+      let filetagList = [];
+      res.data.file_tags.forEach(item => {
+        let file_tag = new FileTag(item);
+        filetagList.push(file_tag);
+      });
+      this.setState({filetagList: filetagList});
+    });
+  }
+
+  componentWillMount() {
+    this.getFileTag();
+  }
+
   render() {
     let { dirent } = this.props;
     return (
@@ -326,6 +344,15 @@ class DirentListItem extends React.Component {
             <DirentRename dirent={dirent} onRenameConfirm={this.onRenameConfirm} onRenameCancel={this.onRenameCancel}/> :
             <span onClick={this.onItemClick}>{dirent.name}</span>
           }
+        </td>
+        <td>
+          <div>
+            { dirent.type !== 'dir' && this.state.filetagList.map((fileTag, index) => {
+              return (
+                <i className="fa fa-circle" key={index} style={{color:fileTag.color}}></i>
+              );
+            })}
+          </div>
         </td>
         <td className="operation">
           {
