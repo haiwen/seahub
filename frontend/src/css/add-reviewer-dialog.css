@@ -5,8 +5,8 @@
   margin-right: 10px;
 }
 .reviewer-select-name {
-  height: 2em;
-  line-height: 2em;
+  height: 2rem;
+  line-height: 2rem;
 }
 .reviewer-select>div>div:nth-child(2) {
   display: none;

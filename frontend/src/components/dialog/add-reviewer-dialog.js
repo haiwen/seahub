@@ -49,10 +49,10 @@ class AddReviewerDialog extends React.Component {
           obj.value = res.data.users[i].name;
           obj.email = res.data.users[i].email;
           obj.label =
-            <div>
+            <React.Fragment>
               <img src={res.data.users[i].avatar_url} className="avatar reviewer-select-avatar" alt=""/>
               <span className='reviewer-select-name'>{res.data.users[i].name}</span>
-            </div>;
+            </React.Fragment>;
           that.Options.push(obj);
         }
         callback(this.Options);
