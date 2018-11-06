@@ -69,7 +69,8 @@ class AddReviewerDialog extends React.Component {
         reviewers[i] = this.state.selectedOption[i].email;
       }
       this.setState({
-        loading: true
+        loading: true,
+        errorMsg: [],
       });
       seafileAPI.addReviewers(this.props.reviewID, reviewers).then((res) => {
         if (res.data.failed.length > 0) {

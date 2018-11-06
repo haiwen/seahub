@@ -276,10 +276,10 @@ class DraftReview extends React.Component {
                 <div className="review-side-panel">
                   <div className="review-side-panel-head">{gettext('Review #')}{reviewID}</div>
                   <div className="review-side-panel-body">
-                    <div className="review-reviewers">
-                      <div className="review-reviewers-head">
-                        <span>{gettext('Reviewers')}</span>
-                        <i className="fa fa-cog" aria-hidden="true" onClick={this.toggleAddReviewerDialog}></i>
+                    <div className="review-side-panel-reviewers">
+                      <div className="reviewers-header">
+                        <div className="review-side-panel-header">{gettext('Reviewers')}</div>
+                        <i className="fa fa-cog" onClick={this.toggleAddReviewerDialog}></i>
                       </div>
                       { this.state.reviewers.length > 0 ?
                         this.state.reviewers.map((item, index = 0, arr) => {
@@ -294,18 +294,19 @@ class DraftReview extends React.Component {
                         <span>{gettext('No reviewer yet.')}</span>
                       }
                     </div>
-                    <div className="review-author">
-                      <span>{gettext('Author')}</span>
-                      <div className="reviewer-info">
-                        <img className="avatar reviewer-avatar" src={this.authorAvatar} alt=""/>
-                        <span className="reviewer-name">{this.authorName}</span>
+                    <div className="review-side-panel-author">
+                      <div className="author-header">
+                        <div className="review-side-panel-header">{gettext('Author')}</div>
+                      </div>
+                      <div className="author-info">
+                        <img className="avatar author-avatar" src={this.authorAvatar} alt=""/>
+                        <span className="author-name">{this.authorName}</span>
                       </div>
                     </div>
                   </div>
                 </div>
               </div>
             }
-
           </div>
         </div>
         { this.state.showReviewerDialog &&
