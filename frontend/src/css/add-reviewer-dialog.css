@@ -8,6 +8,9 @@
   height: 2rem;
   line-height: 2rem;
 }
+.reviewer-select-error {
+  margin-top: 1em;
+}
 .reviewer-select>div>div:nth-child(2) {
   display: none;
 }

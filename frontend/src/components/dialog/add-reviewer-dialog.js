@@ -9,7 +9,8 @@ import '../../css/add-reviewer-dialog.css';
 const propTypes = {
   showReviewerDialog: PropTypes.bool.isRequired,
   reviewID: PropTypes.string.isRequired,
-  toggleAddReviewerDialog: PropTypes.func.isRequired
+  toggleAddReviewerDialog: PropTypes.func.isRequired,
+  reviewers: PropTypes.array.isRequired
 };
 
 class AddReviewerDialog extends React.Component {
@@ -17,14 +18,15 @@ class AddReviewerDialog extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      reviewers: [],
+      reviewers: this.props.reviewers,
       selectedOption: null,
       errorMsg: [],
+      loading: false,
     };
     this.Options = [];
   }
 
-  componentWillMount() {
+  listReviewers = () => {
     seafileAPI.listReviewers(this.props.reviewID).then((res) => {
       this.setState({
         reviewers: res.data.reviewers
@@ -66,6 +68,9 @@ class AddReviewerDialog extends React.Component {
       for (let i = 0; i < this.state.selectedOption.length; i ++) {
         reviewers[i] = this.state.selectedOption[i].email;
       }
+      this.setState({
+        loading: true
+      });
       seafileAPI.addReviewers(this.props.reviewID, reviewers).then((res) => {
         if (res.data.failed.length > 0) {
           let errorMsg = [];
@@ -75,15 +80,10 @@ class AddReviewerDialog extends React.Component {
           this.setState({
             errorMsg: errorMsg
           });
-          let that = this;
-          setTimeout(() => {
-            that.setState({
-              errorMsg: []
-            });
-          }, 3000);
         }
         this.setState({
-          selectedOption: null
+          selectedOption: null,
+          loading: false
         });
         if (res.data.success.length > 0) {
           this.listReviewers();
@@ -107,8 +107,8 @@ class AddReviewerDialog extends React.Component {
           {this.state.errorMsg.length > 0 &&
             this.state.errorMsg.map((item, index = 0, arr) => {
               return (
-                <p className="error" key={index}>{this.state.errorMsg[index].email}
-                  {':'}{this.state.errorMsg[index].error_msg}</p>
+                <p className="reviewer-select-error error" key={index}>{this.state.errorMsg[index].email}
+                  {': '}{this.state.errorMsg[index].error_msg}</p>
               );
             })
           }
@@ -124,7 +124,11 @@ class AddReviewerDialog extends React.Component {
           }
         </ModalBody>
         <ModalFooter>
-          <Button color="primary" onClick={this.addReviewers}>{gettext('Submit')}</Button>
+          { this.state.loading ?
+            <Button disabled><i className="fa fa-spinner" aria-hidden="true"></i></Button>
+            :
+            <Button color="primary" onClick={this.addReviewers}>{gettext('Submit')}</Button>
+          }
           <Button color="secondary" onClick={this.props.toggleAddReviewerDialog}>
             {gettext('Cancel')}</Button>
         </ModalFooter>
