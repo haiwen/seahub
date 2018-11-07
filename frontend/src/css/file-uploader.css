@@ -1,0 +1,13 @@
+.file-uploader-container {
+  display: flex;
+  flex: 1;
+}
+
+.file-uploader-container .file-uploader-input {
+  display: none;
+}
+
+.file-uploader-container .file-uploader-placeholder {
+  display: flex;
+  flex: 1;
+}

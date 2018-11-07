@@ -1,8 +1,9 @@
 import React from 'react';
 import PropTypes from 'prop-types';
+import Resumablejs from '@seafile/resumablejs';
 import { repoID } from '../../utils/constants';
 import { seafileAPI } from '../../utils/seafile-api';
-import ReactResumableJS from '../react-resumable/react-resumable-js';
+import '../../css/file-uploader.css';
 
 const propTypes = {
   filePath: PropTypes.string.isRequired,
@@ -17,10 +18,164 @@ class FileUploader extends React.Component {
     };
   }
 
-  componentDidMount() {
+  componentWillMount() {
     seafileAPI.getUploadLink(repoID, this.props.filePath).then(res => {
-      this.setState({uploadLink: res.data});
+      this.state.uploadLink = res.data;
     });
+  }
+
+  componentDidMount() {
+    let ResumableField = new Resumablejs({
+      target: this.props.service,
+      query: this.query || {},
+      fileType: this.props.filetypes,
+      maxFiles: this.props.maxFiles,
+      maxFileSize: this.props.maxFileSize,
+      testMethod: this.props.testMethod || 'post',
+      testChunks: this.props.testChunks || false,
+      headers: this.setHeaders || {},
+      withCredentials: this.props.withCredentials || false,
+      chunkSize: this.props.chunkSize,
+      simultaneousUploads: this.props.simultaneousUploads || 1,
+      fileParameterName: this.props.fileParameterName,
+      generateUniqueIdentifier: this.props.generateUniqueIdentifier,
+      forceChunkSize: true,
+    });
+
+    this.resumable = ResumableField;
+
+    if (this.props.isDirectory) {
+      this.resumable.assignBrowse(this.uploader, true);
+    } else {
+      this.resumable.assignBrowse(this.uploader);
+    }
+
+    //Enable or Disable DragAnd Drop
+    if (this.props.disableDragAndDrop === false) {
+      this.resumable.assignDrop(this.dropZone);
+    }
+
+    this.bindBusinessHandler();
+  }
+
+  bindBusinessHandler() {
+    this.bindCallBackHandler();
+    this.bindEventHandler();
+  }
+
+  bindCallBackHandler = () => {
+    let {maxFilesErrorCallback, minFileSizeErrorCallback, maxFileSizeErrorCallback, fileTypeErrorCallback } = this.props;
+    
+    if (maxFilesErrorCallback) {
+      this.resumable.opts.maxFilesErrorCallback = this.props.maxFilesErrorCallback;
+    }
+
+    if (minFileSizeErrorCallback) {
+      this.resumable.opts.minFileSizeErrorCallback = this.props.minFileSizeErrorCallback;
+    }
+
+    if (maxFileSizeErrorCallback) {
+      this.resumable.opts.maxFileSizeErrorCallback = this.props.maxFileSizeErrorCallback;
+    }
+
+    if (fileTypeErrorCallback) {
+      this.resumable.opts.fileTypeErrorCallback = this.props.fileTypeErrorCallback;
+    }
+
+  }
+
+  bindEventHandler = () => {
+    this.resumable.on('fileAdded', this.onFileAdded)
+    this.resumable.on('filesAdded', this.onFilesAdded)
+    this.resumable.on('uploadStart', this.onUploadStard)
+    this.resumable.on('fileProgress', this.onFileProgress)
+    this.resumable.on('fileSuccess', this.onFileSuccess)
+    this.resumable.on('progress', this.onProgress)
+    this.resumable.on('complete', this.onComplete)
+    this.resumable.on('pause', this.onPause)
+    this.resumable.on('fileRetry', this.onFileRetry)
+    this.resumable.on('fileError', this.onFileError)
+    this.resumable.on('error', this.onError)
+    this.resumable.on('beforeCancel', this.onBeforeCancel)
+    this.resumable.on('cancel', this.onCancel)
+  }
+
+  onFileAdded = (uploaderFile) => {
+
+    this.props.updateUploadFileList(uploaderFile);
+    
+    let resumable = this.resumable;
+    let filePath = this.props.filePath === '/' ? '/' : this.props.filePath + '/';
+    let fileName = uploaderFile.fileName;
+    let relativePath = uploaderFile.relativePath;
+    let isFile = fileName === relativePath;
+    if (isFile) {
+      resumable.opts.query = {
+        parent_dir: filePath,
+      };
+    } else {
+      let relative_path = relativePath.slice(0, relativePath.lastIndexOf('/') + 1);
+      resumable.opts.query = {
+        parent_dir: filePath,
+        relative_path: relative_path
+      };
+    }
+    resumable.opts.target = this.state.uploadLink;
+    resumable.upload();
+  }
+
+  onFilesAdded = () => {
+
+  }
+
+  onUploadStard = () => {
+
+  }  
+
+  onFileProgress = (file) => {
+    if (this.props.onFileProgress) {
+      this.props.onFileProgress(file, file.progress());
+    }
+  }
+
+  onFileSuccess = () => {
+
+  }
+
+  onFileError = () => {
+
+  }
+
+  onProgress = () => {
+    if (this.props.onProgress) {
+      this.props.onProgress(this.resumable.progress());
+    }
+  }
+
+  onComplete = () => {
+
+  }
+
+  onPause = () => [
+
+  ]
+
+  onError = () => {
+
+  }
+
+  onFileRetry = () => {
+
+  }
+
+  onBeforeCancel = () => {
+
+  }
+
+  onCancel = () => {
+    if (this.props.onCancel) {
+      this.props.onCancel();
+    }
   }
   
   setHeaders = (resumableFile, resumable) => {
@@ -42,60 +197,31 @@ class FileUploader extends React.Component {
     
     return headers;
   }
-  
-  onFileAdded = (uploaderFile, resumable) => {
-
-    this.updateUploadFileList(uploaderFile);
-
-    let filePath = this.props.filePath === '/' ? '/' : this.props.filePath + '/';
-    let fileName = uploaderFile.fileName;
-    let relativePath = uploaderFile.relativePath;
-    let isFile = fileName === relativePath;
-    if (isFile) {
-      resumable.opts.query = {
-        parent_dir: filePath,
-      };
-    } else {
-      let relative_path = relativePath.slice(0, relativePath.lastIndexOf('/') + 1);
-      resumable.opts.query = {
-        parent_dir: filePath,
-        relative_path: relative_path
-      };
-    }
-    resumable.opts.target = this.state.uploadLink;
-    resumable.upload();
-  }
-
-  updateUploadFileList = (resumableFile) => {
-    this.props.updateUploadFileList(resumableFile);
-  }
 
   onClick = (e) => {
     e.nativeEvent.stopImmediatePropagation();
+    this.uploader.click();
   }
 
-  onFileProgress = (file, message) => {
-    this.props.onFileProgress(file, message);
-  }
-
-  onProgress = (message) => {
-    this.props.onProgress(message);
+  onChange = () => {
+    this.resumable.upload();
   }
 
   render() {
+    let { drop } = this.props;
+
+    if (!drop) {
+      return (
+        <div className="file-uploader-container">
+          <div className="file-uploader-placeholder" onClick={this.onClick}>{this.props.showMessage}</div>
+          <input className="file-uploader-input" type="file"  ref={node => this.uploader = node} onChange={this.onChange} />
+        </div>
+      );
+    }
+
+    //for dragdrop;
     return (
-      <ReactResumableJS 
-        forceChunkSize={true}
-        maxFiles={undefined}
-        setHeaders={this.setHeaders}
-        showMessage={this.props.showMessage}
-        isDirectory={this.props.isDirectory}
-        onClick={this.onClick}
-        onFileAdded={this.onFileAdded}
-        onFileProgress={this.onFileProgress}
-        onProgress={this.onProgress}
-      >
-      </ReactResumableJS>
+      <div className="file-uploader-container" ref={node => this.uploader = node}></div>
     );
   }
 }
