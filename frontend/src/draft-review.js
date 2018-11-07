@@ -10,7 +10,7 @@ import DiffViewer from '@seafile/seafile-editor/dist/viewer/diff-viewer';
 import Loading from './components/loading';
 import Toast from './components/toast';
 import ReviewComments from './components/review-list-view/review-comments';
-import { Button, Tooltip } from 'reactstrap';
+import { Tooltip } from 'reactstrap';
 import AddReviewerDialog from './components/dialog/add-reviewer-dialog.js';
 
 import 'seafile-ui';
@@ -39,7 +39,10 @@ class DraftReview extends React.Component {
       isShowDiff: true,
       showDiffTip: false,
       showReviewerDialog: false,
+      reviewers: [],
     };
+    this.authorName = '';
+    this.authorAvatar = '';
   }
 
   componentDidMount() {
@@ -95,7 +98,7 @@ class DraftReview extends React.Component {
       msg_s = msg_s.replace('%(reviewID)s', reviewID);
       Toast.success(msg_s);
     }).catch(() => {
-      let msg_s = gettext('Failed to publish review %(reviewID)s.')
+      let msg_s = gettext('Failed to publish review %(reviewID)s.');
       msg_s = msg_s.replace('%(reviewID)s', reviewID);
       Toast.error(msg_s);
     });
@@ -146,7 +149,7 @@ class DraftReview extends React.Component {
   onSwitchShowDiff = () => {
     this.setState({
       isShowDiff: !this.state.isShowDiff,
-    })
+    });
   }
 
   toggleDiffTip = () => {
@@ -161,8 +164,25 @@ class DraftReview extends React.Component {
     });
   }
 
+  getAuthorInfo = () => {
+    seafileAPI.getAccountInfo().then((res) => {
+      this.authorName = res.data.name;
+      this.authorAvatar = res.data.avatar_url;
+    });
+  }
+
+  listReviewers = () => {
+    seafileAPI.listReviewers(reviewID).then((res) => {
+      this.setState({
+        reviewers: res.data.reviewers
+      });
+    });
+  }
+
   componentWillMount() {
     this.getCommentsNumber();
+    this.getAuthorInfo();
+    this.listReviewers();
   }
 
   render() {
@@ -195,8 +215,6 @@ class DraftReview extends React.Component {
                 target="toggle-diff" toggle={this.toggleDiffTip}>
                 {gettext('View diff')}</Tooltip>
             </div>
-            <button className="btn btn-primary add-reviewer-btn" onClick={this.toggleAddReviewerDialog}>
-              {gettext('Add reviewer')}</button>
             <button className="btn btn-icon btn-secondary btn-active common-list-btn"
               id="commentsNumber" type="button" data-active="false"
               onMouseDown={this.toggleCommentList}>
@@ -227,7 +245,7 @@ class DraftReview extends React.Component {
             onMouseMove={onResizeMove} onMouseUp={this.onResizeMouseUp} ref="comment">
             <div style={{width:(100-this.state.commentWidth)+'%'}}
               className={!this.state.isShowComments ? 'cur-view-content' : 'cur-view-content cur-view-content-commenton'} >
-              {this.state.isLoading ? 
+              {this.state.isLoading ?
                 <div className="markdown-viewer-render-content article">
                   <Loading /> 
                 </div> 
@@ -252,6 +270,43 @@ class DraftReview extends React.Component {
                 />
               </div>
             }
+            { !this.state.isShowComments &&
+              <div className="cur-view-right-part" style={{width:(this.state.commentWidth)+'%'}}>
+                <div className="seafile-comment-resize" onMouseDown={this.onResizeMouseDown}></div>
+                <div className="review-side-panel">
+                  <div className="review-side-panel-head">{gettext('Review #')}{reviewID}</div>
+                  <div className="review-side-panel-body">
+                    <div className="review-side-panel-reviewers">
+                      <div className="reviewers-header">
+                        <div className="review-side-panel-header">{gettext('Reviewers')}</div>
+                        <i className="fa fa-cog" onClick={this.toggleAddReviewerDialog}></i>
+                      </div>
+                      { this.state.reviewers.length > 0 ?
+                        this.state.reviewers.map((item, index = 0, arr) => {
+                          return (
+                            <div className="reviewer-info" key={index}>
+                              <img className="avatar reviewer-avatar" src={item.avatar_url} alt=""/>
+                              <span className="reviewer-name">{item.user_name}</span>
+                            </div>
+                          );
+                        })
+                        :
+                        <span>{gettext('No reviewer yet.')}</span>
+                      }
+                    </div>
+                    <div className="review-side-panel-author">
+                      <div className="author-header">
+                        <div className="review-side-panel-header">{gettext('Author')}</div>
+                      </div>
+                      <div className="author-info">
+                        <img className="avatar author-avatar" src={this.authorAvatar} alt=""/>
+                        <span className="author-name">{this.authorName}</span>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            }
           </div>
         </div>
         { this.state.showReviewerDialog &&
@@ -259,6 +314,7 @@ class DraftReview extends React.Component {
             showReviewerDialog={this.state.showReviewerDialog}
             toggleAddReviewerDialog={this.toggleAddReviewerDialog}
             reviewID={reviewID}
+            reviewers={this.state.reviewers}
           />
         }
       </div>
