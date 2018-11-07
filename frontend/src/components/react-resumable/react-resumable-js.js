@@ -99,9 +99,9 @@ class ReactResumableJS extends React.Component {
 
   }  
 
-  onFileProgress = (file, message) => {
+  onFileProgress = (file) => {
     if (this.props.onFileProgress) {
-      this.props.onFileProgress(file, message);
+      this.props.onFileProgress(file, file.progress());
     }
   }
 
@@ -114,7 +114,9 @@ class ReactResumableJS extends React.Component {
   }
 
   onProgress = () => {
-
+    if (this.props.onProgress) {
+      this.props.onProgress(this.resumeable.progress());
+    }
   }
 
   onComplete = () => {

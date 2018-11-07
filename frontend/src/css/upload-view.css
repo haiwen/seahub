@@ -18,4 +18,13 @@
   font-size: 1rem;
   line-height: 1.5;
   color: #322;
+  display: flex;
+  justify-content: space-between;
+}
+
+.file-upload-header .file-upload-options span{
+  margin-left: 0.25rem;
+  font-size: 18px;
+  color: #b8b8b8;
+  display: inline-block;
 }

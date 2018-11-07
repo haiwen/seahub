@@ -58,6 +58,7 @@ class MainPanel extends Component {
       isRepoOwner: false,
       showFileUploadList: false,
       uploadFileList: [],
+      totalProgress: '0%'
     };
   }
 
@@ -280,7 +281,9 @@ class MainPanel extends Component {
                       filePath={this.props.filePath} 
                       isDirectory={false}
                       updateUploadFileList={this.updateUploadFileList}
-                      />
+                      onFileProgress={this.onFileProgress}
+                      onProgress={this.onProgress}
+                    />
                   </li>
                   <li className="dropdown-item">
                     <FileUploader 
@@ -379,6 +382,10 @@ class MainPanel extends Component {
         {this.state.showFileUploadList &&
           <FileUploaderListView 
             uploadFileList={this.state.uploadFileList}
+            onUploaderCancel={this.onUploaderCancel}
+            totalProgress={this.state.totalProgress}
+            onMinimizeUploader={this.onMinimizeUploader}
+            onCloseUploader={this.onCloseUploader}
           />
         }
       </div>

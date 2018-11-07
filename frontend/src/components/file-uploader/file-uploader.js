@@ -74,6 +74,14 @@ class FileUploader extends React.Component {
     e.nativeEvent.stopImmediatePropagation();
   }
 
+  onFileProgress = (file, message) => {
+    this.props.onFileProgress(file, message);
+  }
+
+  onProgress = (message) => {
+    this.props.onProgress(message);
+  }
+
   render() {
     return (
       <ReactResumableJS 
@@ -85,6 +93,7 @@ class FileUploader extends React.Component {
         onClick={this.onClick}
         onFileAdded={this.onFileAdded}
         onFileProgress={this.onFileProgress}
+        onProgress={this.onProgress}
       >
       </ReactResumableJS>
     );
