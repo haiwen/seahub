@@ -138,9 +138,9 @@
           </div>
         </div>  <!-- secondaryToolbar -->
 
-        <div class="toolbar sf-hide">
+        <div class="toolbar">
           <div id="toolbarContainer">
-            <div id="toolbarViewer">
+            <div id="toolbarViewer" class="sf-hide">
               <div id="toolbarViewerLeft">
                 <button id="sidebarToggle" class="toolbarButton" title="Toggle Sidebar" tabindex="11" data-l10n-id="toggle_sidebar">
                   <span data-l10n-id="toggle_sidebar_label">Toggle Sidebar</span>
@@ -217,7 +217,8 @@
               </div>
             </div>
             <div id="loadingBar">
-              <div class="progress">
+              <span class="loading-icon loading-tip"></span>
+              <div class="progress hide">
                 <div class="glimmer">
                 </div>
               </div>
@@ -237,9 +238,7 @@
         </menu>
 
         <div id="viewerContainer" tabindex="0">
-          <div id="viewer" class="pdfViewer">
-              <span class="loading-icon loading-tip"></span>
-          </div>
+          <div id="viewer" class="pdfViewer"></div>
         </div>
 
         <div id="errorWrapper" hidden='true'>

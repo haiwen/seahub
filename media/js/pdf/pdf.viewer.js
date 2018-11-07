@@ -839,7 +839,8 @@ var PDFViewerApplication = {
     if (this.isViewerEmbedded) {
       return;
     }
-    document.title = title;
+    // Don't change title
+    // document.title = title;
   },
   close: function () {
     var _ref6 = _asyncToGenerator( /*#__PURE__*/_regenerator2.default.mark(function _callee6() {
