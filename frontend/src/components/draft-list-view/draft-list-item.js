@@ -1,6 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { siteRoot, lang } from '../../utils/constants';
+import { Utils } from '../../utils/utils';
 import MenuControl from '../menu-control';
 import moment from 'moment';
 
@@ -66,14 +67,9 @@ class DraftListItem extends React.Component {
     window.open(url);
   }
 
-  getFileName(filePath) {
-    let lastIndex = filePath.lastIndexOf('/');
-    return filePath.slice(lastIndex+1);
-  }
-
   render() {
     let draft = this.props.draft;
-    let fileName = this.getFileName(draft.draft_file_path);
+    let fileName = Utils.getFileName(draft.draft_file_path);
     let localTime = moment.utc(draft.updated_at).toDate();
     localTime = moment(localTime).fromNow();
     return (

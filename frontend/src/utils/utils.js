@@ -162,4 +162,9 @@ export const Utils = {
       .parentNode
       .innerHTML;
   },
+
+  getFileName: function(filePath) {
+    let lastIndex = filePath.lastIndexOf('/');
+    return filePath.slice(lastIndex+1);
+  }
 };

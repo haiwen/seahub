@@ -1,6 +1,7 @@
 import React from 'react';
 import { siteRoot, gettext } from '../../utils/constants';
 import editUtilties from '../../utils/editor-utilties';
+import { Utils } from '../../utils/utils';
 import Toast from '../../components/toast';
 import Loading from '../../components/loading';
 import DraftListView from '../../components/draft-list-view/draft-list-view';
@@ -27,14 +28,9 @@ class DraftContent extends React.Component {
     document.removeEventListener('click', this.onHideContextMenu);
   }
 
-  getFileName(filePath) {
-    let lastIndex = filePath.lastIndexOf('/');
-    return filePath.slice(lastIndex+1);
-  }
-
   onDeleteHandler = () => {
     let draft = this.state.currentDraft;
-    let draft_name = this.getFileName(draft.draft_file_path);
+    let draft_name = Utils.getFileName(draft.draft_file_path);
     editUtilties.deleteDraft(draft.id).then(res => {
       this.props.updateDraftsList(draft.id);
       let msg_s = gettext('Successfully deleted draft %(draft)s.');
@@ -49,7 +45,7 @@ class DraftContent extends React.Component {
 
   onPublishHandler = () => {
     let draft = this.state.currentDraft;
-    let draft_name = this.getFileName(draft.draft_file_path);
+    let draft_name = Utils.getFileName(draft.draft_file_path);
     editUtilties.publishDraft(draft.id).then(res => {
       this.props.updateDraftsList(draft.id);
       let msg_s = gettext('Successfully published draft %(draft)s.');
