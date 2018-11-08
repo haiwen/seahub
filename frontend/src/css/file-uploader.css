@@ -11,3 +11,8 @@
   display: flex;
   flex: 1;
 }
+
+.drag-drop-container {
+  position: fixed;
+  bottom: 99999px;
+}

@@ -291,6 +291,8 @@ class MainPanel extends Component {
                       filePath={this.props.filePath} 
                       isDirectory={true} 
                       updateUploadFileList={this.updateUploadFileList}
+                      onFileProgress={this.onFileProgress}
+                      onProgress={this.onProgress}
                     />
                   </li>
                 </ul>
@@ -388,6 +390,15 @@ class MainPanel extends Component {
             onCloseUploader={this.onCloseUploader}
           />
         }
+        <FileUploader 
+          dragAndDrop={true}
+          showMessage={gettext('Upload Folder')} 
+          filePath={this.props.filePath} 
+          isDirectory={true} 
+          updateUploadFileList={this.updateUploadFileList}
+          onFileProgress={this.onFileProgress}
+          onProgress={this.onProgress}
+        />
       </div>
     );
   }

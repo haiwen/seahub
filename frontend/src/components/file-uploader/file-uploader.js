@@ -51,8 +51,8 @@ class FileUploader extends React.Component {
     }
 
     //Enable or Disable DragAnd Drop
-    if (this.props.disableDragAndDrop === false) {
-      this.resumable.assignDrop(this.dropZone);
+    if (this.props.dragAndDrop === true) {
+      this.resumable.assignDrop(this.uploader);
     }
 
     this.bindBusinessHandler();
@@ -208,9 +208,9 @@ class FileUploader extends React.Component {
   }
 
   render() {
-    let { drop } = this.props;
+    let { dragAndDrop } = this.props;
 
-    if (!drop) {
+    if (!dragAndDrop) {
       return (
         <div className="file-uploader-container">
           <div className="file-uploader-placeholder" onClick={this.onClick}>{this.props.showMessage}</div>
@@ -221,7 +221,7 @@ class FileUploader extends React.Component {
 
     //for dragdrop;
     return (
-      <div className="file-uploader-container" ref={node => this.uploader = node}></div>
+      <div className="darg-drop-container" ref={uploader => this.uploader = uploader}></div>
     );
   }
 }
