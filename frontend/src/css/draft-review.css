@@ -22,6 +22,7 @@
 
 .main .cur-view-container .cur-view-content {
   flex: auto;
+  height: 100%;
 }
 
 .main .cur-view-container .cur-view-content-commenton {
@@ -90,11 +91,10 @@
 .reviewers-header, .author-header {
   display: flex;
   justify-content: space-between;
-  margin-bottom: 1rem;
+  margin-bottom: 0.8125rem;
 }
 .reviewers-header i {
   color: #c8c8c8;
-  font-size: 18px;
 }
 .reviewers-header i:hover {
   cursor: pointer;
@@ -102,7 +102,8 @@
 }
 .review-side-panel-header {
   font-weight: bold;
-  color: #586069;
+  color: #666;
+  font-size: 0.8125rem;
 }
 .reviewer-avatar, .author-avatar {
   margin-right: 10px;
