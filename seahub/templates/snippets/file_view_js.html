@@ -3,16 +3,16 @@
 {% endif %}
 
 {% if filetype == 'Document' %}
-<script type="text/javascript" src="{{MEDIA_URL}}js/pdf/pdf.js"></script>
+<script type="text/javascript" src="{{MEDIA_URL}}js/pdf/pdf.min.js"></script>
 {% endif %}
 
 {% if filetype == 'PDF' %}
 <script type="text/javascript">
 var sf_file_url = "{{ raw_path|escapejs }}";
-var sf_pdfworkerjs_url = '{{MEDIA_URL}}js/pdf/pdf.worker.js';
+var sf_pdfworkerjs_url = '{{MEDIA_URL}}js/pdf/pdf.worker.min.js';
 </script>
-<script type="text/javascript" src="{{MEDIA_URL}}js/pdf/pdf.js"></script>
-<script type="text/javascript" src="{{MEDIA_URL}}js/pdf/pdf.viewer.js"></script>
+<script type="text/javascript" src="{{MEDIA_URL}}js/pdf/pdf.min.js"></script>
+<script type="text/javascript" src="{{MEDIA_URL}}js/pdf/viewer.js"></script>
 {% endif %}
 
 {% if filetype == 'Audio' %}

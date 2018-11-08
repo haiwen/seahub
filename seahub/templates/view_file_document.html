@@ -15,7 +15,7 @@
 
 {% block extra_script %}{{ block.super }}
 {% if not err %}
-<script type="text/javascript" src="{{MEDIA_URL}}js/pdf/pdf.js"></script>
+<script type="text/javascript" src="{{MEDIA_URL}}js/pdf/pdf.min.js"></script>
 <script type="text/javascript">
     {% include 'snippets/document_file_viewer.html' %}
 </script>
