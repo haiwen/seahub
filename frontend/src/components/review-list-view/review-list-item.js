@@ -56,7 +56,6 @@ class ReviewListItem extends React.Component {
         <td className="icon" style={{width: '4%'}}><img src={siteRoot + 'media/img/file/192/txt.png'} alt="icon"/></td>
         <td className="name a-simulate" style={{width: '46%'}} onClick={this.onReviewsClick}>{fileName}</td>
         <td className='library'>{item.draft_origin_repo_name}</td>
-        <td className="status" style={{width: '20%'}}>{item.status}</td>
         <td className="update" style={{width: '20%'}}>{localTime}</td>
         <td className="menu-toggle"></td>
       </tr>

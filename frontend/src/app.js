@@ -27,21 +27,30 @@ class App extends Component {
       isOpen: false,
       isSidePanelClosed: false,
       draftCounts: 0,
-      draftList:[]
+      draftList:[],
+      isLoadingDraft: true,
     };
   }
 
   componentDidMount() {
-    this.getDrafts()
+    this.getDrafts();
   }
 
   getDrafts = () => {
     editUtilties.listDrafts().then(res => {
       this.setState({
         draftCounts: res.data.draft_counts,
-        draftList: res.data.data 
-      })  
-    })
+        draftList: res.data.data, 
+        isLoadingDraft: false,
+      }); 
+    });
+  }
+
+  updateDraftsList = (draft_id) => {
+    this.setState({
+      draftCounts: this.state.draftCounts - 1,
+      draftList: this.state.draftList.filter(draft => draft.id != draft_id), 
+    });
   }
 
   onCloseSidePanel = () => {
@@ -69,7 +78,11 @@ class App extends Component {
           <Router>
             <FilesActivities path={siteRoot + 'dashboard'} />
             <DraftsView path={siteRoot + 'drafts'}  currentTab={currentTab}>
-              <DraftContent path='/' getDrafts={this.getDrafts} draftList={this.state.draftList}/>
+              <DraftContent path='/' getDrafts={this.getDrafts} 
+                isLoadingDraft={this.state.isLoadingDraft}
+                draftList={this.state.draftList}
+                updateDraftsList={this.updateDraftsList}
+              />
               <ReviewContent path='reviews' />
             </DraftsView>
             <Starred path={siteRoot + 'starred'} />
