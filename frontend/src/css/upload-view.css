@@ -20,11 +20,16 @@
   color: #322;
   display: flex;
   justify-content: space-between;
+  min-height: 2.25rem;
 }
 
 .file-upload-header .file-upload-options span{
+  display: inline-block;
   margin-left: 0.25rem;
   font-size: 18px;
   color: #b8b8b8;
-  display: inline-block;
+}
+
+.file-upload-container{
+  background-color: #fff;
 }

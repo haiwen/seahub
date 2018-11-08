@@ -8,6 +8,7 @@ import DirentListItem from './dirent-list-item';
 import ZipDownloadDialog from '../dialog/zip-download-dialog';
 import MoveDirentDialog from '../dialog/move-dirent-dialog';
 import CopyDirentDialog from '../dialog/copy-dirent-dialog';
+import FileUploader from '../../components/file-uploader/file-uploader';
 
 const propTypes = {
   filePath: PropTypes.string.isRequired,
@@ -202,6 +203,15 @@ class DirentListView extends React.Component {
             onCancelCopy={this.onCancelCopy} 
           />
         }
+        <FileUploader 
+          dragAndDrop={true}
+          showMessage={gettext('Upload Folder')} 
+          filePath={this.props.filePath} 
+          isDirectory={true} 
+          updateUploadFileList={this.props.updateUploadFileList}
+          onFileProgress={this.props.onFileProgress}
+          onProgress={this.props.onProgress}
+        />
       </div>
     );
   }

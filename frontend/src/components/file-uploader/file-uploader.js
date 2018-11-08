@@ -1,6 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import Resumablejs from '@seafile/resumablejs';
+import MD5 from 'MD5';
 import { repoID } from '../../utils/constants';
 import { seafileAPI } from '../../utils/seafile-api';
 import '../../css/file-uploader.css';
@@ -11,23 +12,10 @@ const propTypes = {
 
 class FileUploader extends React.Component {
 
-  constructor(props) {
-    super(props);
-    this.state = {
-      uploadLink: ''
-    };
-  }
-
-  componentWillMount() {
-    seafileAPI.getUploadLink(repoID, this.props.filePath).then(res => {
-      this.state.uploadLink = res.data;
-    });
-  }
-
   componentDidMount() {
-    let ResumableField = new Resumablejs({
-      target: this.props.service,
-      query: this.query || {},
+    this.resumable = new Resumablejs({
+      target: "",
+      query: this.setQuery || {},
       fileType: this.props.filetypes,
       maxFiles: this.props.maxFiles,
       maxFileSize: this.props.maxFileSize,
@@ -38,11 +26,9 @@ class FileUploader extends React.Component {
       chunkSize: this.props.chunkSize,
       simultaneousUploads: this.props.simultaneousUploads || 1,
       fileParameterName: this.props.fileParameterName,
-      generateUniqueIdentifier: this.props.generateUniqueIdentifier,
+      generateUniqueIdentifier: this.generateUniqueIdentifier,
       forceChunkSize: true,
     });
-
-    this.resumable = ResumableField;
 
     if (this.props.isDirectory) {
       this.resumable.assignBrowse(this.uploader, true);
@@ -52,8 +38,12 @@ class FileUploader extends React.Component {
 
     //Enable or Disable DragAnd Drop
     if (this.props.dragAndDrop === true) {
-      this.resumable.assignDrop(this.uploader);
+      this.resumable.endableDropOnDocument();
     }
+
+    seafileAPI.getUploadLink(repoID, this.props.filePath).then(res => {
+      this.resumable.opts.target = res.data;
+    });
 
     this.bindBusinessHandler();
   }
@@ -86,7 +76,7 @@ class FileUploader extends React.Component {
 
   bindEventHandler = () => {
     this.resumable.on('fileAdded', this.onFileAdded)
-    this.resumable.on('filesAdded', this.onFilesAdded)
+    this.resumable.on('filesAddedComplete', this.filesAddedComplete)
     this.resumable.on('uploadStart', this.onUploadStard)
     this.resumable.on('fileProgress', this.onFileProgress)
     this.resumable.on('fileSuccess', this.onFileSuccess)
@@ -100,32 +90,31 @@ class FileUploader extends React.Component {
     this.resumable.on('cancel', this.onCancel)
   }
 
-  onFileAdded = (uploaderFile) => {
+  onFileAdded = (resumableFile) => {
 
-    this.props.updateUploadFileList(uploaderFile);
-    
-    let resumable = this.resumable;
+    this.props.updateUploadFileList(resumableFile);
+
+    //gererater file owner formData
     let filePath = this.props.filePath === '/' ? '/' : this.props.filePath + '/';
-    let fileName = uploaderFile.fileName;
-    let relativePath = uploaderFile.relativePath;
+    let fileName = resumableFile.fileName;
+    let relativePath = resumableFile.relativePath;
     let isFile = fileName === relativePath;
+    resumableFile.formData = {};
     if (isFile) {
-      resumable.opts.query = {
+      resumableFile.formData  = {
         parent_dir: filePath,
       };
     } else {
       let relative_path = relativePath.slice(0, relativePath.lastIndexOf('/') + 1);
-      resumable.opts.query = {
+      resumableFile.formData  = {
         parent_dir: filePath,
         relative_path: relative_path
       };
     }
-    resumable.opts.target = this.state.uploadLink;
-    resumable.upload();
   }
 
-  onFilesAdded = () => {
-
+  filesAddedComplete = (resumable) => {
+    resumable.upload();
   }
 
   onUploadStard = () => {
@@ -198,13 +187,19 @@ class FileUploader extends React.Component {
     return headers;
   }
 
+  setQuery = (resumableFile) => {
+    let formData = resumableFile.formData;
+    return formData;
+  }
+
+  generateUniqueIdentifier = (file) => {
+    let relativePath = file.webkitRelativePath||file.relativePath||file.fileName||file.name;
+    return MD5(relativePath) + relativePath;
+  }
+
   onClick = (e) => {
     e.nativeEvent.stopImmediatePropagation();
     this.uploader.click();
-  }
-
-  onChange = () => {
-    this.resumable.upload();
   }
 
   render() {

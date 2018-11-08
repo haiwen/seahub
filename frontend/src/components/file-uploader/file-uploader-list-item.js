@@ -33,9 +33,10 @@ class FileUploaderListItem extends React.Component {
 
   render() {
     let { item } = this.props;
+    let isFile = item.file.relativePath === item.file.fileName;
     return (
       <tr className="file-upload-item">
-        <td width="50%" className="upload-name ellipsis">{item.file.fileName}</td>
+        <td width="50%" className="upload-name ellipsis">{isFile ? item.file.fileName : item.file.relativePath}</td>
         <td width="30%" className="upload-progress upload-size">
           {
             item.progress === "100%" ? this.formatFileSize(item.file.size) : item.progress

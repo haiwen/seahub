@@ -264,6 +264,8 @@ class MainPanel extends Component {
                             filePath={this.props.filePath}
                             isDirectory={false}
                             updateUploadFileList={this.updateUploadFileList}
+                            onFileProgress={this.onFileProgress}
+                            onProgress={this.onProgress}
                             />
                         </button>
                     }
@@ -351,6 +353,9 @@ class MainPanel extends Component {
                   isDirentListLoading={this.state.isDirentListLoading}
                   currentRepo={this.state.currentRepo}
                   isRepoOwner={this.state.isRepoOwner}
+                  updateUploadFileList={this.updateUploadFileList}
+                  onFileProgress={this.onFileProgress}
+                  onProgress={this.onProgress}
                 />
               }
             </div>
@@ -390,15 +395,6 @@ class MainPanel extends Component {
             onCloseUploader={this.onCloseUploader}
           />
         }
-        <FileUploader 
-          dragAndDrop={true}
-          showMessage={gettext('Upload Folder')} 
-          filePath={this.props.filePath} 
-          isDirectory={true} 
-          updateUploadFileList={this.updateUploadFileList}
-          onFileProgress={this.onFileProgress}
-          onProgress={this.onProgress}
-        />
       </div>
     );
   }
