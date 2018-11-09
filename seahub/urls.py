@@ -344,7 +344,7 @@ urlpatterns = [
     url(r'^api/v2.1/review/(?P<pk>\d+)/$', DraftReviewView.as_view(), name='api-v2.1-draft-review'),
     url(r'^api/v2.1/review/(?P<pk>\d+)/reviewer/$', DraftReviewReviewerView.as_view(), name='api-v2.1-draft-review-reviewer'),
 
-    url(r'^api/v2.1/file/review/$', FileReviewView.as_view(), name='api-v2.1-file-review'),
+    url(r'^api/v2.1/file-review/$', FileReviewView.as_view(), name='api-v2.1-file-review'),
 
     ## user::activities
     url(r'^api/v2.1/activities/$', ActivitiesView.as_view(), name='api-v2.1-acitvity'),
