@@ -71,10 +71,10 @@ class DraftsView(APIView):
             return api_error(status.HTTP_404_NOT_FOUND,
                              "File %s not found" % file_path)
 
-        username = request.user.username
+        dirent = seafile_api.get_dirent_by_path(repo_id, file_path)
 
         try:
-            d = Draft.objects.add(username, repo, file_path, file_id)
+            d = Draft.objects.add(dirent.modifier, repo, file_path, file_id)
 
             return Response(d.to_dict())
         except (DraftFileExist, IntegrityError):
