@@ -1,0 +1,75 @@
+#file-view {
+    overflow:hidden;
+    position:relative;
+}
+.sf-hide {
+    height:0;
+    overflow:hidden;
+}
+.hidden {
+    display:none;
+}
+#outerContainer,
+#mainContainer,
+#viewerContainer {
+    position:absolute;
+    top:0;
+    bottom:0;
+    left:0;
+    right:0;
+}
+#viewerContainer {
+    padding:30px 0 15px;
+    overflow:auto;
+}
+#viewerContextMenu {
+    padding:0;
+    margin:0;
+}
+#viewerContainer:focus {
+    outline:none;
+}
+.page {
+    position:relative;
+    background:#fff;
+    box-shadow:0 0 6px #ccc;
+    margin:0 auto 20px;
+}
+.page .loading-icon {
+    position:absolute;
+    top:50%;
+    left:50%;
+}
+.textLayer {
+    position:absolute;
+    left:0;
+    top:0;
+    right:0;
+    bottom:0;
+    overflow:hidden;
+    opacity:0.2;
+    line-height:1.0;
+}
+.textLayer > div {
+    color:transparent;
+    position:absolute;
+    white-space:pre;
+    cursor:text;
+    -webkit-transform-origin:0% 0%;
+    -moz-transform-origin:0% 0%;
+    -o-transform-origin:0% 0%;
+    -ms-transform-origin:0% 0%;
+    transform-origin:0% 0%;
+}
+.textLayer ::selection {
+    background: blue;
+}
+.textLayer ::-moz-selection {
+    background: blue;
+}
+.annotationLayer {
+    display:none;
+}
+#fileInput {
+    display:none;
+}

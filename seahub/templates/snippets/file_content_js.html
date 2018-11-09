@@ -56,11 +56,6 @@ $('#svg-view').show();
     {% include 'snippets/spreadsheet_convert_js.html' %}
 {% endif %}
 
-{% if filetype == 'PDF' %}
-    var raw_path = "{{ raw_path|escapejs }}";
-    {% include 'snippets/pdfjs_file_viewer.html' %}
-{% endif %}
-
 {% if filetype == 'Video' %}
 $('#file-view').html('<div class="video-container"><video id="sf-video" src="{{raw_path}}" width="800" height="400" class="video-js vjs-default-skin"></video></div>');
 videojs.options.flash.swf = "{{MEDIA_URL}}js/video-js.swf";

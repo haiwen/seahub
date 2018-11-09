@@ -44,6 +44,10 @@ For details please refer to 'snippets/file_content_js.html'.
         {% if filetype == 'SpreadSheet' %}
             {% include 'snippets/spreadsheet_convert_html.html' %}
         {% endif %}
+
+        {% if filetype == 'Document' or filetype == 'PDF' %}
+        {% include 'snippets/pdf_html.html' %}
+        {% endif %}
     {% else %}
     <div id="file-view-tip">
         {% if err != 'File preview unsupported' %}

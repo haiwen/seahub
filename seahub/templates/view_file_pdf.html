@@ -2,12 +2,24 @@
 {% load i18n %}
 {% load staticfiles %}
 
+{% block extra_style %}{{ block.super }}
+{% if not err %}
+<link rel="resource" type="application/l10n" href="{{ MEDIA_URL }}js/pdf/locale/locale.properties" />
+<link rel="stylesheet" type="text/css" href="{{ MEDIA_URL }}css/pdf_file_view.css" />
+{% endif %}
+{% endblock %}
+
+{% block file_view %}
+{% include 'snippets/pdf_html.html' %}
+{% endblock %}
+
 {% block extra_script %}{{ block.super }}
 {% if not err %}
-<script type="text/javascript" src="{{MEDIA_URL}}js/pdf.js"></script>
 <script type="text/javascript">
-    var raw_path = "{{ raw_path|escapejs }}";
-    {% include 'snippets/pdfjs_file_viewer.html' %}
+var sf_file_url = "{{ raw_path|escapejs }}";
+var sf_pdfworkerjs_url = '{{MEDIA_URL}}js/pdf/pdf.worker.min.js';
 </script>
+<script type="text/javascript" src="{{MEDIA_URL}}js/pdf/pdf.min.js"></script>
+<script type="text/javascript" src="{{MEDIA_URL}}js/pdf/viewer.js"></script>
 {% endif %}
 {% endblock %}
