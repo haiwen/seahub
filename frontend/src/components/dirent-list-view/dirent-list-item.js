@@ -42,6 +42,7 @@ class DirentListItem extends React.Component {
 
   componentDidMount() {
     document.addEventListener('click', this.onItemMenuHide);
+    this.getFileTag();
   }
   
   componentWillUnmount() {
@@ -318,7 +319,7 @@ class DirentListItem extends React.Component {
     });
   }
 
-  componentWillMount() {
+  componentWillReceiveProps() {
     this.getFileTag();
   }
 

@@ -1,10 +1,9 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import moment from 'moment';
-import { gettext, repoID } from '../../utils/constants';
+import { gettext } from '../../utils/constants';
 import { Utils } from '../../utils/utils';
-import { seafileAPI } from '../../utils/seafile-api';
-import RepoTag from '../../models/repo-tag';
+import EditFileTagDialog from '../dialog/edit-filetag-dialog';
 
 const propTypes = {
   repo: PropTypes.object.isRequired,
@@ -19,8 +18,7 @@ class DetailListView extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      repotagList: [],
-      showRepoTag: false,
+      isEditFileTagShow: false,
     };
   }
 
@@ -35,29 +33,10 @@ class DetailListView extends React.Component {
     return position;
   }
 
-  getRepoTag = () => {
-    seafileAPI.listRepoTags(repoID).then(res => {
-      let repotagList = [];
-      res.data.repo_tags.forEach(item => {
-        let repoTag = new RepoTag(item);
-        repotagList.push(repoTag);
-      });
-      this.setState({
-        repotagList: repotagList,
-        showRepoTag: !this.state.showRepoTag,
-      });
+  onEditFileTagToggle = () => {
+    this.setState({
+      isEditFileTagShow: !this.state.isEditFileTagShow
     });
-  }
-
-  addFileTag = (repoTag) => {
-    let id = repoTag.id;
-    let filePath = this.props.direntPath;
-    seafileAPI.addFileTag(repoID, filePath, id);
-  }
-
-  deleteFileTag = (fileTag) => {
-    let id = fileTag.id;
-    seafileAPI.deleteFileTag(repoID, id)
   }
 
   render() {
@@ -87,30 +66,27 @@ class DetailListView extends React.Component {
               <tr><th>{gettext('Size')}</th><td>{direntDetail.size}</td></tr>
               <tr><th>{gettext('Position')}</th><td>{position}</td></tr>
               <tr><th>{gettext('Last Update')}</th><td>{moment(direntDetail.mtime).format('YYYY-MM-DD')}</td></tr>
-              <tr><th>{gettext('Tags')}</th>
+              <tr><th style={{verticalAlign:"top"}}>{gettext('Tags')}</th>
                 <td>
-                  <div style={{listStyle:"none"}}>
+                  <ul style={{listStyle:"none"}}>
                     {filetagList.map((fileTag, index) => {
                       return (
-                        <label key={index}>
+                        <li key={index}>
                           <i className="fa fa-circle" style={{color:fileTag.color}}></i>
                           {fileTag.name}
-                          <i className="sf2-icon-trash" onClick={this.deleteFileTag.bind(this, fileTag)}></i>
-                        </label>
+                        </li>
                       );
                     })}
-                  </div>
-                  <i className='fa fa-pencil' onClick={this.getRepoTag}></i>
-                  <div style={{listStyle:"none"}}>
-                    { this.state.showRepoTag && this.state.repotagList.map((repoTag, index) => {
-                      return (
-                        <label key={index} onClick={this.addFileTag.bind(this, repoTag)}>
-                          <i className="fa fa-circle" style={{color:repoTag.color}}></i>
-                          {repoTag.name}
-                        </label>
-                      );
-                    })}
-                  </div>
+                  </ul>
+                  <i className='fa fa-pencil' onClick={this.onEditFileTagToggle}></i>
+                  {
+                    this.state.isEditFileTagShow &&
+                    <EditFileTagDialog
+                    filetagList={filetagList}
+                    filePath={this.props.direntPath}
+                    toggleCancel={this.onEditFileTagToggle}
+                    />
+                  }
                 </td>
               </tr>
             </tbody>
