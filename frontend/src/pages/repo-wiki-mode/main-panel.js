@@ -333,6 +333,7 @@ class MainPanel extends Component {
                     dragAndDrop={true}
                     filePath={this.props.filePath}
                     onFileSuccess={this.onFileSuccess}
+                    direntList={this.state.direntList}
                   />
                 </Fragment>
               }

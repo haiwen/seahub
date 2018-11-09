@@ -5,6 +5,7 @@ import MD5 from 'MD5';
 import { repoID, enableResumableFileUpload } from '../../utils/constants';
 import { seafileAPI } from '../../utils/seafile-api';
 import FileUploaderListView from './file-uploader-list-view';
+import UploaderReminderDialog from '../dialog/uploader-reminder-dialog';
 import '../../css/file-uploader.css';
 
 const propTypes = {
@@ -34,6 +35,8 @@ class FileUploader extends React.Component {
       isFileUploadListShow: false,
       uploaderFileList: [],
       totalProgress: 0,
+      isUploaderReminderDialogShow: false,
+      currentResumableFile: null,
     };
   }
 
@@ -131,8 +134,31 @@ class FileUploader extends React.Component {
   }
 
   filesAddedComplete = (resumable) => {
+    //single document uploading can check repetition, because custom dialog conn't prevent program execution; 
     this.setUploaderFileList(resumable.files);
-    resumable.upload();
+    if (resumable.files.length > 1) {
+      resumable.upload();
+    } else if (resumable.files.length === 1 ) {
+      let resumabelFile = resumable.files[0];
+      let direntList = this.props.direntList;
+      let hasRepatition = false;
+      for (let i=0; i< direntList.length; i++) {
+        if (direntList[i].type === 'file' && direntList[i].name === resumabelFile.fileName) {
+          hasRepatition = true;
+        }
+        if (hasRepatition) {
+          break;
+        }
+      }
+      if (hasRepatition) {
+        this.setState({
+          isUploaderReminderDialogShow: true,
+          currentResumableFile: resumable.files[0],
+        });
+      } else {
+        resumable.upload();
+      }
+    }
   }
 
   setUploaderFileList = (files) => {
@@ -212,7 +238,6 @@ class FileUploader extends React.Component {
       seafileAPI.getFileUploadedBytes(repoID, this.props.filePath, file.fileName).then(res => {
         let uploadedBytes = res.data.uploadedBytes;
         let offset = Math.floor(uploadedBytes / (1024 * 1024));
-        console.log(offset - 1);
         file.markChunksCompleted(offset);
       });
     }
@@ -278,7 +303,7 @@ class FileUploader extends React.Component {
       return item.uniqueIdentifier !== resumableFile.uniqueIdentifier;
     });
     let newUploaderFileList = uploaderFileList.map(item => {
-      let progress = Math.round(item.file.progress() * 100);
+      let progress = Math.round(item.resumableFile.progress() * 100);
       item.progress = progress;
       return item;
     });
@@ -287,6 +312,29 @@ class FileUploader extends React.Component {
 
   onUploaderRetry = () => {
 
+  }
+
+  replacePrevFile = () => {
+    let resumableFile = this.resumable.files[0];
+    resumableFile.formData['replace'] = 1;
+    this.setState({
+      isUploaderReminderDialogShow: false,
+      isFileUploadListShow: true,
+    });
+    this.resumable.upload();
+  }
+
+  doNotReplacePervFile = () => {
+    this.setState({
+      isUploaderReminderDialogShow: false,
+      isFileUploadListShow: true,
+    });
+    this.resumable.upload();
+  }
+
+  doNotUploader = () => {
+    this.resumable.files = [];
+    this.setState({isUploaderReminderDialogShow: false});
   }
 
   render() {
@@ -303,6 +351,15 @@ class FileUploader extends React.Component {
             onMinimizeUploader={this.onMinimizeUploader}
             onCloseUploader={this.onCloseUploader}
             onUploaderCancel={this.onUploaderCancel}
+          />
+        }
+        {
+          this.state.isUploaderReminderDialogShow &&
+          <UploaderReminderDialog 
+            currentResumableFile={this.state.currentResumableFile}
+            replacePrevFile={this.replacePrevFile}
+            doNotReplacePervFile={this.doNotReplacePervFile}
+            doNotUploader={this.doNotUploader}
           />
         }
       </div>
