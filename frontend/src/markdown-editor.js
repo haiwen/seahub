@@ -238,9 +238,13 @@ class EditorUtilities {
       window.location.href = serviceUrl + '/lib/' + res.data.origin_repo_id + '/file' + res.data.draft_file_path + '?mode=edit'
     })
   }
+
+  createFileReview() {
+    return seafileAPI.createFileReview(repoID, filePath).then(res => {
+      window.location.href = serviceUrl + '/drafts/review/' + res.data.id;
+    })
+  }
 }
-
-
 
 const editorUtilities = new EditorUtilities();
 
