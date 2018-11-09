@@ -55,7 +55,8 @@ class FileTagsManager(models.Manager):
             repo_id, parent_path, filename, is_dir=False)
         parent_folder_uuid = FileUUIDMap.objects.get_or_create_fileuuidmap(
             repo_id, parent_path, folder_name, is_dir=True)
-        file_tag = self.model(repo_tag_id=repo_tag_id,
+        repo_tag = RepoTags.objects.get_repo_tag_by_id(repo_tag_id)
+        file_tag = self.model(repo_tag=repo_tag,
                               file_uuid=file_uuid,
                               parent_folder_uuid=parent_folder_uuid)
         file_tag.save()
@@ -72,7 +73,7 @@ class FileTagsManager(models.Manager):
 
 class FileTags(models.Model):
 
-    repo_tag_id = models.IntegerField(db_index=True)
+    repo_tag = models.ForeignKey(RepoTags, db_index=True, on_delete=models.CASCADE)
     file_uuid = models.ForeignKey(FileUUIDMap, on_delete=models.CASCADE, related_name='file_uuid')
     parent_folder_uuid = models.ForeignKey(FileUUIDMap, on_delete=models.CASCADE, related_name='parent_folder_uuid')
 
@@ -80,8 +81,8 @@ class FileTags(models.Model):
 
     def to_dict(self):
         repo_tag = RepoTags.objects.get_repo_tag_by_id(self.repo_tag_id)
-        tag_name = repo_tag.name
-        tag_color = repo_tag.color
+        tag_name = repo_tag.name if repo_tag else ''
+        tag_color = repo_tag.color if repo_tag else ''
         return {
             "file_tag_id": self.pk,
             "repo_tag_id": self.repo_tag_id,
