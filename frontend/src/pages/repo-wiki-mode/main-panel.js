@@ -13,7 +13,6 @@ import DirentDetail from '../../components/dirent-detail/dirent-details';
 import CreateFolder from '../../components/dialog/create-folder-dialog';
 import CreateFile from '../../components/dialog/create-file-dialog';
 import FileUploader from '../../components/file-uploader/file-uploader';
-import FileUploaderListView from '../../components/file-uploader/file-uploader-list-view';
 
 const propTypes = {
   content: PropTypes.string,
@@ -56,9 +55,6 @@ class MainPanel extends Component {
       isDirentListLoading: true,
       currentRepo: null,
       isRepoOwner: false,
-      showFileUploadList: false,
-      uploadFileList: [],
-      totalProgress: '0%'
     };
   }
 
@@ -258,16 +254,7 @@ class MainPanel extends Component {
                     {
                       Utils.isUploaderSupport() ?
                         <button className="btn btn-secondary operation-item" title={gettext('Upload')} onClick={this.onUploadClick}>{gettext('Upload')}</button> :
-                        <button className="btn btn-secondary operation-item" title={gettext('Upload')}>
-                          <FileUploader
-                            showMessage={gettext('Upload')} 
-                            filePath={this.props.filePath}
-                            isDirectory={false}
-                            updateUploadFileList={this.updateUploadFileList}
-                            onFileProgress={this.onFileProgress}
-                            onProgress={this.onProgress}
-                            />
-                        </button>
+                        <button className="btn btn-secondary operation-item" title={gettext('Upload')} onClick={this.uploadFile}></button>
                     }
                     <button className="btn btn-secondary operation-item" title={gettext('New')} onClick={this.onNewClick}>{gettext('New')}</button>
                     <button className="btn btn-secondary operation-item" title={gettext('Share')} onClick={this.onShareClick}>{gettext('Share')}</button>
@@ -277,26 +264,8 @@ class MainPanel extends Component {
               { 
                 this.state.uploadMenuShow && 
                 <ul className="menu dropdown-menu" style={this.state.operationMenuStyle}>
-                  <li className="dropdown-item">
-                    <FileUploader
-                      showMessage={gettext('Upload Files')} 
-                      filePath={this.props.filePath} 
-                      isDirectory={false}
-                      updateUploadFileList={this.updateUploadFileList}
-                      onFileProgress={this.onFileProgress}
-                      onProgress={this.onProgress}
-                    />
-                  </li>
-                  <li className="dropdown-item">
-                    <FileUploader 
-                      showMessage={gettext('Upload Folder')} 
-                      filePath={this.props.filePath} 
-                      isDirectory={true} 
-                      updateUploadFileList={this.updateUploadFileList}
-                      onFileProgress={this.onFileProgress}
-                      onProgress={this.onProgress}
-                    />
-                  </li>
+                  <li className="dropdown-item" onClick={this.uploadFile}>{gettext('File Upload')}</li>
+                  <li className="dropdown-item" onClick={this.uploadFolder}>{gettext('Folder Upload')}</li>
                 </ul>
               }
               {
@@ -340,23 +309,28 @@ class MainPanel extends Component {
                   onLinkClick={this.props.onLinkClick}
                   isFileLoading={this.props.isFileLoading}
                 /> :
-                <DirentListView 
-                  direntList={this.state.direntList}
-                  filePath={this.props.filePath}
-                  onItemClick={this.props.onMainItemClick}
-                  onItemDelete={this.props.onMainItemDelete}
-                  onItemRename={this.props.onMainItemRename}
-                  onItemMove={this.props.onMainItemMove}
-                  onItemCopy={this.props.onMainItemCopy}
-                  onItemDetails={this.onItemDetails}
-                  updateViewList={this.updateViewList}
-                  isDirentListLoading={this.state.isDirentListLoading}
-                  currentRepo={this.state.currentRepo}
-                  isRepoOwner={this.state.isRepoOwner}
-                  updateUploadFileList={this.updateUploadFileList}
-                  onFileProgress={this.onFileProgress}
-                  onProgress={this.onProgress}
-                />
+                <Fragment>
+                  <DirentListView 
+                    direntList={this.state.direntList}
+                    filePath={this.props.filePath}
+                    onItemClick={this.props.onMainItemClick}
+                    onItemDelete={this.props.onMainItemDelete}
+                    onItemRename={this.props.onMainItemRename}
+                    onItemMove={this.props.onMainItemMove}
+                    onItemCopy={this.props.onMainItemCopy}
+                    onItemDetails={this.onItemDetails}
+                    updateViewList={this.updateViewList}
+                    isDirentListLoading={this.state.isDirentListLoading}
+                    currentRepo={this.state.currentRepo}
+                    isRepoOwner={this.state.isRepoOwner}
+                  />
+                  <FileUploader 
+                    ref={uploader => this.uploader = uploader}
+                    dragAndDrop={true}
+                    filePath={this.props.filePath}
+                    onFileSuccess={this.onFileSuccess}
+                  />
+                </Fragment>
               }
             </div>
           </div>
@@ -384,15 +358,6 @@ class MainPanel extends Component {
             parentPath={this.props.filePath}
             addFolderCancel={this.addFolderCancel}
             onAddFolder={this.onMainAddFolder}
-          />
-        }
-        {this.state.showFileUploadList &&
-          <FileUploaderListView 
-            uploadFileList={this.state.uploadFileList}
-            onUploaderCancel={this.onUploaderCancel}
-            totalProgress={this.state.totalProgress}
-            onMinimizeUploader={this.onMinimizeUploader}
-            onCloseUploader={this.onCloseUploader}
           />
         }
       </div>

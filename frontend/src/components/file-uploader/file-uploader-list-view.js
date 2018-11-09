@@ -1,11 +1,14 @@
 import React, { Fragment } from 'react';
 import PropTypes from 'prop-types';
-import FileUploaderListItem from './file-uploader-list-item';
-import '../../css/upload-view.css';
 import { gettext } from '../../utils/constants';
+import FileUploaderListItem from './file-uploader-list-item';
 
 const propTypes = {
-  uploadFileList: PropTypes.array.isRequired, 
+  totalProgress: PropTypes.number.isRequired,
+  uploaderFileList: PropTypes.array.isRequired,
+  onMinimizeUploader: PropTypes.func.isRequired,
+  onCloseUploader: PropTypes.func.isRequired,
+  onUploaderCancel: PropTypes.func.isRequired,
 };
 
 class FileUploaderListView extends React.Component {
@@ -20,7 +23,7 @@ class FileUploaderListView extends React.Component {
 
   render() {
     let uploadedMessage = gettext('File Upload');
-    let uploadingMessage = gettext('File is upload...') + this.props.totalProgress;
+    let uploadingMessage = gettext('File is upload...') + this.props.totalProgress + '%';
 
     let uploadedOptions = (
       <Fragment>
@@ -33,20 +36,20 @@ class FileUploaderListView extends React.Component {
     let totalProgress = this.props.totalProgress;
 
     return (
-      <div className="file-upload-module">
-        <div className="file-upload-header">
+      <div className="uploader-list-view">
+        <div className="uploader-list-header">
           <div className="title">
-            {totalProgress === "100%" ? uploadedMessage : uploadingMessage}
+            {totalProgress === 100 ? uploadedMessage : uploadingMessage}
           </div>
-          <div className="file-upload-options">
-            {totalProgress === "100%" ? uploadedOptions : uploadingOptions}
+          <div className="uploader-options">
+            {totalProgress === 100 ? uploadedOptions : uploadingOptions}
           </div>
         </div>
-        <div className="file-upload-container table-container">
+        <div className="uploader-list-content table-container">
           <table>
             <tbody>
               {
-                this.props.uploadFileList.map((item, index) => {
+                this.props.uploaderFileList.map((item, index) => {
                   return (
                     <FileUploaderListItem key={index} item={item} onUploaderCancel={this.props.onUploaderCancel}/>
                   );

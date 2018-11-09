@@ -11,7 +11,7 @@ class FileUploaderListItem extends React.Component {
 
   onUploaderCancel = () => {
     let item = this.props.item;
-    item.file.cancel();
+    item.resumableFile.cancel();
     this.props.onUploaderCancel(item);
   }
 
@@ -19,8 +19,8 @@ class FileUploaderListItem extends React.Component {
     if (typeof size !== 'number') {
       return '';
     }
-    if (size >= 1024 * 1024 * 1024) {
-      return (size / (1024 * 1024 * 1024)).toFixed(1) + ' G';
+    if (size >= 1000 * 1000 * 1000) {
+      return (size / (1000 * 1000 * 1000)).toFixed(1) + ' G';
     }
     if (size >= 1024 * 1024) {
       return (size / (1000 * 1000)).toFixed(1) + ' M';
@@ -33,17 +33,16 @@ class FileUploaderListItem extends React.Component {
 
   render() {
     let { item } = this.props;
-    let isFile = item.file.relativePath === item.file.fileName;
     return (
       <tr className="file-upload-item">
-        <td width="50%" className="upload-name ellipsis">{isFile ? item.file.fileName : item.file.relativePath}</td>
+        <td width="50%" className="upload-name ellipsis">{item.resumableFile.relativePath}</td>
         <td width="30%" className="upload-progress upload-size">
           {
-            item.progress === "100%" ? this.formatFileSize(item.file.size) : item.progress
+            item.progress === 100 ? this.formatFileSize(item.resumableFile.size) : item.progress + '%'
           }
         </td>
         <td width="20%" className="upload-operation">
-          { this.props.item.progress !== "100%" ?
+          { this.props.item.progress !== 100 ?
             <span className="a-simulate" onClick={this.onUploaderCancel}>{gettext(('cancel'))}</span> :
             <span>{gettext('uploaded')}</span>
           }

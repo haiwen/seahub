@@ -4,17 +4,42 @@ import Resumablejs from '@seafile/resumablejs';
 import MD5 from 'MD5';
 import { repoID } from '../../utils/constants';
 import { seafileAPI } from '../../utils/seafile-api';
+import FileUploaderListView from './file-uploader-list-view';
 import '../../css/file-uploader.css';
 
 const propTypes = {
+  filetypes: PropTypes.array,
+  chunkSize: PropTypes.number,
+  withCredentials: PropTypes.bool,
+  maxFiles: PropTypes.number,
+  maxFileSize: PropTypes.number,
+  testMethod: PropTypes.string,
+  testChunks: PropTypes.number,
+  simultaneousUploads: PropTypes.number,
+  fileParameterName: PropTypes.string,
+  maxFilesErrorCallback: PropTypes.func,
+  maxFileSizeErrorCallback: PropTypes.func,
+  minFileSizeErrorCallback: PropTypes.func,
+  fileTypeErrorCallback: PropTypes.func,
+  dragAndDrop: PropTypes.bool.isRequired,
   filePath: PropTypes.string.isRequired,
+  onFileSuccess: PropTypes.func.isRequired,
 };
 
 class FileUploader extends React.Component {
 
+  constructor(props) {
+    super(props);
+    this.state = {
+      isFileUploadListShow: false,
+      uploaderFileList: [],
+      totalProgress: '0%'
+    };
+  }
+
   componentDidMount() {
     this.resumable = new Resumablejs({
-      target: "",
+      target: '',
       query: this.setQuery || {},
       fileType: this.props.filetypes,
       maxFiles: this.props.maxFiles,
@@ -30,15 +55,11 @@ class FileUploader extends React.Component {
       forceChunkSize: true,
     });
 
-    if (this.props.isDirectory) {
-      this.resumable.assignBrowse(this.uploader, true);
-    } else {
-      this.resumable.assignBrowse(this.uploader);
-    }
+    this.resumable.assignBrowse(this.uploader, true);
 
     //Enable or Disable DragAnd Drop
     if (this.props.dragAndDrop === true) {
-      this.resumable.endableDropOnDocument();
+      this.resumable.enableDropOnDocument();
     }
 
     seafileAPI.getUploadLink(repoID, this.props.filePath).then(res => {
@@ -75,26 +96,21 @@ class FileUploader extends React.Component {
   }
 
   bindEventHandler = () => {
-    this.resumable.on('fileAdded', this.onFileAdded)
-    this.resumable.on('filesAddedComplete', this.filesAddedComplete)
-    this.resumable.on('uploadStart', this.onUploadStard)
-    this.resumable.on('fileProgress', this.onFileProgress)
-    this.resumable.on('fileSuccess', this.onFileSuccess)
-    this.resumable.on('progress', this.onProgress)
-    this.resumable.on('complete', this.onComplete)
-    this.resumable.on('pause', this.onPause)
-    this.resumable.on('fileRetry', this.onFileRetry)
-    this.resumable.on('fileError', this.onFileError)
-    this.resumable.on('error', this.onError)
-    this.resumable.on('beforeCancel', this.onBeforeCancel)
-    this.resumable.on('cancel', this.onCancel)
+    this.resumable.on('fileAdded', this.onFileAdded);
+    this.resumable.on('filesAddedComplete', this.filesAddedComplete);
+    this.resumable.on('fileProgress', this.onFileProgress);
+    this.resumable.on('fileSuccess', this.onFileSuccess);
+    this.resumable.on('progress', this.onProgress);
+    this.resumable.on('complete', this.onComplete);
+    this.resumable.on('pause', this.onPause);
+    this.resumable.on('fileRetry', this.onFileRetry);
+    this.resumable.on('fileError', this.onFileError);
+    this.resumable.on('error', this.onError);
+    this.resumable.on('beforeCancel', this.onBeforeCancel);
+    this.resumable.on('cancel', this.onCancel);
   }
 
   onFileAdded = (resumableFile) => {
-
-    this.props.updateUploadFileList(resumableFile);
-
-    //gererater file owner formData
     let filePath = this.props.filePath === '/' ? '/' : this.props.filePath + '/';
     let fileName = resumableFile.fileName;
     let relativePath = resumableFile.relativePath;
@@ -114,31 +130,53 @@ class FileUploader extends React.Component {
   }
 
   filesAddedComplete = (resumable) => {
+    this.setUploaderFileList(resumable.files);
     resumable.upload();
   }
 
-  onUploadStard = () => {
-
-  }  
+  setUploaderFileList = (files) => {
+    let uploaderFileList = files.map(resumableFile => {
+      let customFileObj = {
+        uniqueIdentifier: resumableFile.uniqueIdentifier,
+        resumableFile: resumableFile,
+        progress: 0,
+      };
+      return customFileObj;
+    });
+    this.setState({
+      isFileUploadListShow: true,
+      uploaderFileList: [...this.state.uploaderFileList, ...uploaderFileList]
+    });
+  }
 
   onFileProgress = (file) => {
-    if (this.props.onFileProgress) {
-      this.props.onFileProgress(file, file.progress());
-    }
+    this.updateUploaderFileList(file);
   }
 
-  onFileSuccess = () => {
+  updateUploaderFileList = (file) => {
+    let uniqueIdentifier = file.uniqueIdentifier;
+    let uploaderFileList = this.state.uploaderFileList.map(item => {
+      if (item.uniqueIdentifier === uniqueIdentifier) {
+        item.progress = Math.round(file.progress() * 100);
+      }
+      return item;
+    });
 
+    this.setState({uploaderFileList: uploaderFileList});
   }
 
-  onFileError = () => {
+  onFileSuccess = (file) => {
+    // this.props.onFileSuccess(file);
+    //todos 更新显示列表；
+  }
+
+  onFileError = (file) => {
 
   }
 
   onProgress = () => {
-    if (this.props.onProgress) {
-      this.props.onProgress(this.resumable.progress());
-    }
+    let progress = Math.round(this.resumable.progress() * 100);
+    this.setState({totalProgress: progress});
   }
 
   onComplete = () => {
@@ -162,9 +200,7 @@ class FileUploader extends React.Component {
   }
 
   onCancel = () => {
-    if (this.props.onCancel) {
-      this.props.onCancel();
-    }
+
   }
   
   setHeaders = (resumableFile, resumable) => {
@@ -197,26 +233,64 @@ class FileUploader extends React.Component {
     return MD5(relativePath) + relativePath;
   }
 
+  //component buisiness handler
   onClick = (e) => {
     e.nativeEvent.stopImmediatePropagation();
+    e.stopPropagation();
+  }
+
+  onFileUploader = () => {
+    this.uploader.removeAttribute('webkitdirectory');
     this.uploader.click();
   }
 
+  onFolderUploader = () => {
+    this.uploader.setAttribute('webkitdirectory', 'webkitdirectory');
+    this.uploader.click();
+  }
+
+  //uploader list view handler
+  onMinimizeUploader = () => {
+    this.setState({isFileUploadListShow: false});
+  }
+
+  onCloseUploader = () => {
+    this.setState({isFileUploadListShow: false, uploaderFileList: []});
+  }
+
+  onUploaderCancel = (resumableFile) => {
+    let uploaderFileList = this.state.uploaderFileList.filter(item => {
+      return item.uniqueIdentifier !== resumableFile.uniqueIdentifier;
+    });
+    let newUploaderFileList = uploaderFileList.map(item => {
+      let progress = Math.round(item.file.progress() * 100);
+      item.progress = progress;
+      return item;
+    });
+    this.setState({uploaderFileList: newUploaderFileList});
+  }
+
+  onUploaderRetry = () => {
+
+  }
+
   render() {
-    let { dragAndDrop } = this.props;
-
-    if (!dragAndDrop) {
-      return (
-        <div className="file-uploader-container">
-          <div className="file-uploader-placeholder" onClick={this.onClick}>{this.props.showMessage}</div>
-          <input className="file-uploader-input" type="file"  ref={node => this.uploader = node} onChange={this.onChange} />
-        </div>
-      );
-    }
-
-    //for dragdrop;
     return (
-      <div className="darg-drop-container" ref={uploader => this.uploader = uploader}></div>
+      <div className="file-uploader-container">
+        <div className="file-uploader">
+          <input className="uploader-input" type="file"  ref={node => this.uploader = node} onChange={this.onChange} onClick={this.onClick}/>
+        </div>
+        {
+          this.state.isFileUploadListShow &&
+          <FileUploaderListView 
+            uploaderFileList={this.state.uploaderFileList}
+            totalProgress={this.state.totalProgress}
+            onMinimizeUploader={this.onMinimizeUploader}
+            onCloseUploader={this.onCloseUploader}
+            onUploaderCancel={this.onUploaderCancel}
+          />
+        }
+      </div>
     );
   }
 }
