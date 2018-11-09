@@ -2,7 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import Resumablejs from '@seafile/resumablejs';
 import MD5 from 'MD5';
-import { repoID } from '../../utils/constants';
+import { repoID, enableResumableFileUpload } from '../../utils/constants';
 import { seafileAPI } from '../../utils/seafile-api';
 import FileUploaderListView from './file-uploader-list-view';
 import '../../css/file-uploader.css';
@@ -33,7 +33,7 @@ class FileUploader extends React.Component {
     this.state = {
       isFileUploadListShow: false,
       uploaderFileList: [],
-      totalProgress: '0%'
+      totalProgress: 0,
     };
   }
 
@@ -108,6 +108,7 @@ class FileUploader extends React.Component {
     this.resumable.on('error', this.onError);
     this.resumable.on('beforeCancel', this.onBeforeCancel);
     this.resumable.on('cancel', this.onCancel);
+    this.resumable.on('chunkingComplete', this.onChunkingComplete);
   }
 
   onFileAdded = (resumableFile) => {
@@ -180,7 +181,7 @@ class FileUploader extends React.Component {
   }
 
   onComplete = () => {
-
+    
   }
 
   onPause = () => [
@@ -192,15 +193,29 @@ class FileUploader extends React.Component {
   }
 
   onFileRetry = () => {
-
+    //todos, cancel upload file, uploded again;
   }
 
   onBeforeCancel = () => {
-
+    //todos, giving a pop message ?
   }
 
   onCancel = () => {
 
+  }
+
+  onChunkingComplete = (file) => {
+    if (file.relativePath !== file.fileName) {
+      return; // is upload a folder;
+    }
+    if (enableResumableFileUpload) {
+      seafileAPI.getFileUploadedBytes(repoID, this.props.filePath, file.fileName).then(res => {
+        let uploadedBytes = res.data.uploadedBytes;
+        let offset = Math.floor(uploadedBytes / (1024 * 1024));
+        console.log(offset - 1);
+        file.markChunksCompleted(offset);
+      });
+    }
   }
   
   setHeaders = (resumableFile, resumable) => {

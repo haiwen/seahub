@@ -210,6 +210,10 @@ class MainPanel extends Component {
     this.updateViewList(this.props.filePath);
   }
 
+  onFileSuccess = (file) => {
+
+  }
+
   render() {
     let filePathList = this.props.filePath.split('/');
     let nodePath = '';
