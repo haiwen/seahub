@@ -3,7 +3,7 @@ import ReactDOM from 'react-dom';
 /* eslint-disable */
 import Prism from 'prismjs';
 /* eslint-enable */
-import { siteRoot, gettext, draftID, reviewID, draftOriginFilePath, draftFilePath, draftOriginRepoID, draftFileName, opStatus, publishFileVersion, originFileVersion } from './utils/constants';
+import { siteRoot, gettext, draftID, reviewID, draftOriginFilePath, draftFilePath, draftOriginRepoID, draftFileName, opStatus, publishFileVersion, originFileVersion, author, authorAvatar } from './utils/constants';
 import { seafileAPI } from './utils/seafile-api';
 import axios from 'axios';
 import DiffViewer from '@seafile/seafile-editor/dist/viewer/diff-viewer';
@@ -41,8 +41,6 @@ class DraftReview extends React.Component {
       showReviewerDialog: false,
       reviewers: [],
     };
-    this.authorName = '';
-    this.authorAvatar = '';
   }
 
   componentDidMount() {
@@ -164,13 +162,6 @@ class DraftReview extends React.Component {
     });
   }
 
-  getAuthorInfo = () => {
-    seafileAPI.getAccountInfo().then((res) => {
-      this.authorName = res.data.name;
-      this.authorAvatar = res.data.avatar_url;
-    });
-  }
-
   listReviewers = () => {
     seafileAPI.listReviewers(reviewID).then((res) => {
       this.setState({
@@ -181,7 +172,6 @@ class DraftReview extends React.Component {
 
   componentWillMount() {
     this.getCommentsNumber();
-    this.getAuthorInfo();
     this.listReviewers();
   }
 
@@ -299,8 +289,8 @@ class DraftReview extends React.Component {
                         <div className="review-side-panel-header">{gettext('Author')}</div>
                       </div>
                       <div className="author-info">
-                        <img className="avatar author-avatar" src={this.authorAvatar} alt=""/>
-                        <span className="author-name">{this.authorName}</span>
+                        <img className="avatar author-avatar" src={authorAvatar} alt=""/>
+                        <span className="author-name">{author}</span>
                       </div>
                     </div>
                   </div>

@@ -782,7 +782,7 @@ class UserNotification(models.Model):
         review_id = d['review_id']
         author = d['author']
 
-        msg = _("Review <a href='%(file_url)s'>%(review_id)s</a> has a new comment from user %(author)s") % {
+        msg = _("<a href='%(file_url)s'>Review #%(review_id)s</a> has a new comment from user %(author)s") % {
             'review_id': review_id,
             'file_url': reverse('drafts:review', args=[review_id]),
             'author': escape(email2nickname(author)),
@@ -799,7 +799,7 @@ class UserNotification(models.Model):
         review_id = d['review_id']
         from_user = d['from_user']
 
-        msg = _("%(from_user)s has sent you a request for review <a href='%(file_url)s'>%(review_id)s</a>") % {
+        msg = _("%(from_user)s has sent you a request for <a href='%(file_url)s'>review #%(review_id)s</a>") % {
             'review_id': review_id,
             'file_url': reverse('drafts:review', args=[review_id]),
             'from_user': escape(email2nickname(from_user))
@@ -818,14 +818,14 @@ class UserNotification(models.Model):
         status = d['status']
 
         if status == 'closed':
-            msg = _("%(from_user)s has closed review <a href='%(file_url)s'>%(review_id)s</a>") % {
+            msg = _("%(from_user)s has closed <a href='%(file_url)s'>review #%(review_id)s</a>") % {
                 'review_id': review_id,
                 'file_url': reverse('drafts:review', args=[review_id]),
                 'from_user': escape(email2nickname(from_user))
             }
 
         if status == 'finished':
-            msg = _("%(from_user)s has published review <a href='%(file_url)s'>%(review_id)s</a>") % {
+            msg = _("%(from_user)s has published <a href='%(file_url)s'>review #%(review_id)s</a>") % {
                 'review_id': review_id,
                 'file_url': reverse('drafts:review', args=[review_id]),
                 'from_user': escape(email2nickname(from_user))

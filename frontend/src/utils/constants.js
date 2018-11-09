@@ -44,3 +44,5 @@ export const opStatus = window.draftReview ? window.draftReview.config.opStatus 
 export const reviewPerm = window.draftReview ? window.draftReview.config.perm : '';
 export const publishFileVersion = window.draftReview ? window.draftReview.config.publishFileVersion : '';
 export const originFileVersion = window.draftReview ? window.draftReview.config.originFileVersion : '';
+export const author = window.draftReview ? window.draftReview.config.author : '';
+export const authorAvatar = window.draftReview ? window.draftReview.config.authorAvatar : '';
