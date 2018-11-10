@@ -99,7 +99,7 @@ class Item extends Component {
 
     const data = this.props.data;
 
-    seafileAPI.unLinkDevice(data.platform, data.device_id).then((res) => {
+    seafileAPI.unlinkDevice(data.platform, data.device_id).then((res) => {
       this.setState({
         unlinked: true
       });

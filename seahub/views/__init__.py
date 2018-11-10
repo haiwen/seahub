@@ -1211,5 +1211,5 @@ def choose_register(request):
     })
 
 @login_required
-def linked_devices(request):
+def react_fake_view(request):
     return render(request, "react_app.html")
