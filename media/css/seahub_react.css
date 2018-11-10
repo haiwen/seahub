@@ -986,6 +986,8 @@ a.op-icon:focus {
 /* begin file-tag */
 .tag-list {
     position: relative;
+    display: flex;
+    align-items: center;
 }
 
 .tag-list .file-tag {
@@ -993,16 +995,21 @@ a.op-icon:focus {
     cursor: pointer;
 }
 
+.tag-list .file-tag:first-child {
+    margin-left: 0;
+}
+
 .tag-list-stacked .file-tag{
     margin-left: -0.5rem;
+    box-shadow: 0 0 0 2px #fff;
     cursor: pointer;
 }
 
 .file-tag {
     position: relative;
     display: inline-block;
-    width: 0.875rem;
-    height: 0.875rem;
+    width: 1rem;
+    height: 1rem;
     border-radius: 50%;
 }
 
