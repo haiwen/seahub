@@ -1574,7 +1574,7 @@
         <% } %>
         <% } %>
         <li class="tab<% if (cur_tab == 'devices') { %> tab-cur<% } %>">
-            <a href="{{ SITE_ROOT }}#devices/" class="ellipsis" title="{% trans "Linked Devices" %}"><span aria-hidden="true" class="sf2-icon-monitor"></span>{% trans "Linked Devices" %}</a>
+            <a href="{{ SITE_ROOT }}linked-devices/" class="ellipsis" title="{% trans "Linked Devices" %}"><span aria-hidden="true" class="sf2-icon-monitor"></span>{% trans "Linked Devices" %}</a>
         </li>
         {% if enable_guest_invitation and user.permissions.can_invite_guest %}
         <li class="tab<% if (cur_tab == 'invitations') { %> tab-cur<% } %>">

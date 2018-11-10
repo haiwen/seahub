@@ -9,6 +9,7 @@ import DraftContent from './pages/drafts/draft-content';
 import ReviewContent from './pages/drafts/review-content';
 import FilesActivities from './pages/dashboard/files-activities';
 import Starred from './pages/starred/starred';
+import LinkedDevices from './pages/linked-devices/linked-devices';
 import editUtilties from './utils/editor-utilties';
 
 import 'seafile-ui';
@@ -86,6 +87,7 @@ class App extends Component {
               <ReviewContent path='reviews' />
             </DraftsView>
             <Starred path={siteRoot + 'starred'} />
+            <LinkedDevices path={siteRoot + 'linked-devices'} />
           </Router>
         </MainPanel>
       </div>

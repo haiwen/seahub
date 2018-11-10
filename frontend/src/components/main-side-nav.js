@@ -164,11 +164,11 @@ class MainSideNav extends React.Component {
                 {gettext('Acitivities')}
               </Link>
             </li>
-            <li className={`tab ${this.state.currentTab === 'devices' ? 'tab-cur' : ''}`}>
-              <a href={siteRoot + '#devices/'} className="ellipsis" title={gettext('Linked Devices')} onClick={() => this.tabItemClick('devices')}>
+            <li className={`tab ${this.state.currentTab === 'linked-devices' ? 'tab-cur' : ''}`}>
+              <Link to={siteRoot + 'linked-devices/'} title={gettext('Linked Devices')} onClick={() => this.tabItemClick('linked-devices')}>
                 <span className="sf2-icon-monitor" aria-hidden="true"></span>
                 {gettext('Linked Devices')}
-              </a>
+              </Link>
             </li>
             <li className={`tab ${this.state.currentTab === 'drafts' ? 'tab-cur' : ''}`} onClick={() => this.tabItemClick('drafts')}>
               <Link to={siteRoot + 'drafts/'} title={gettext('Drafts')}>
