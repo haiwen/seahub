@@ -1209,3 +1209,7 @@ def choose_register(request):
     return render(request, 'choose_register.html', {
         'login_bg_image_path': login_bg_image_path
     })
+
+@login_required
+def linked_devices(request):
+    return render(request, "react_app.html")

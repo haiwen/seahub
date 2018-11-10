@@ -191,6 +191,7 @@ urlpatterns = [
     ### React ###
     url(r'^dashboard/$', TemplateView.as_view(template_name="react_app.html"), name="dashboard"),
     url(r'^starred/$', TemplateView.as_view(template_name="react_app.html"), name="starred"),
+    url(r'^linked-devices/$', linked_devices, name="linked_devices"),
 
     ### Ajax ###
     url(r'^ajax/repo/(?P<repo_id>[-0-9a-f]{36})/dirents/$', get_dirents, name="get_dirents"),
