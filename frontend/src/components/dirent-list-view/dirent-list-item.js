@@ -349,7 +349,7 @@ class DirentListItem extends React.Component {
           }
         </td>
         <td>
-          <div className="tag-list tag-list-stacked">
+          <div className="dirent-item tag-list tag-list-stacked ">
             { dirent.type !== 'dir' && this.state.fileTagList.map((fileTag) => {
               return (
                 <span className={`file-tag bg-${fileTag.color}`} key={fileTag.id} title={fileTag.name}></span>

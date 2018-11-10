@@ -975,19 +975,9 @@ a.op-icon:focus {
     border-bottom-color:#eb8205;
 }
 
-/* begin activity page */
-.activity-table-container {
-    flex: 1;
-    padding: 10px 16px 20px;
-    overflow: auto;
-}
-/* end activity page */
-
 /* begin file-tag */
 .tag-list {
     position: relative;
-    display: flex;
-    align-items: center;
 }
 
 .tag-list .file-tag {
@@ -1014,3 +1004,16 @@ a.op-icon:focus {
 }
 
 /* end file-tag */
+
+/* begin activity page */
+.activity-table-container {
+    flex: 1;
+    padding: 10px 16px 20px;
+    overflow: auto;
+}
+/* end activity page */
+
+.dirent-item.tag-list {
+    display: flex;
+    align-items: center;
+}
