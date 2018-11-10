@@ -204,6 +204,10 @@ class MainPanel extends Component {
     this.setState({isDirentDetailShow: false});
   }
 
+  onFileTagChanged = () => {
+    this.updateViewList(this.props.filePath);
+  }
+
   render() {
     let filePathList = this.props.filePath.split('/');
     let nodePath = '';
@@ -322,6 +326,7 @@ class MainPanel extends Component {
                 dirent={this.state.currentDirent}
                 direntPath={this.state.currentFilePath}
                 onItemDetailsClose={this.onItemDetailsClose}
+                onFileTagChanged={this.onFileTagChanged}
               />
             </div>
           }

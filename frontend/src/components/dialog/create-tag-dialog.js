@@ -64,10 +64,12 @@ class CreateTagDialog extends React.Component {
       <Modal isOpen={true} toggle={this.toggle}>
         <ModalHeader toggle={this.toggle}>{gettext('New Tag')}</ModalHeader>
         <ModalBody>
-          <div className="tag-create">
-            <p>{gettext('Name')}</p>
-            <Input onKeyPress={this.handleKeyPress} innerRef={input => {this.newInput = input;}} placeholder={gettext('name')} value={this.state.tagName} onChange={this.inputNewName}/>
-            <div className="form-group color-chooser">
+          <div role="form" className="tag-create">
+            <div className="form-group">
+              <label className="form-label">{gettext('Name')}</label>
+              <Input onKeyPress={this.handleKeyPress} innerRef={input => {this.newInput = input;}} placeholder={gettext('name')} value={this.state.tagName} onChange={this.inputNewName}/>
+            </div>
+            <div className="form-group">
               <label className="form-label">{gettext('Select a color')}</label>
               <div className="row gutters-xs">
                 {colorList.map((item, index)=>{

@@ -982,3 +982,28 @@ a.op-icon:focus {
     overflow: auto;
 }
 /* end activity page */
+
+/* begin file-tag */
+.tag-list {
+    position: relative;
+}
+
+.tag-list .file-tag {
+    margin-left: 0.25rem;
+    cursor: pointer;
+}
+
+.tag-list-stacked .file-tag{
+    margin-left: -0.5rem;
+    cursor: pointer;
+}
+
+.file-tag {
+    position: relative;
+    display: inline-block;
+    width: 0.875rem;
+    height: 0.875rem;
+    border-radius: 50%;
+}
+
+/* end file-tag */

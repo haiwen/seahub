@@ -10,7 +10,8 @@ const propTypes = {
   direntType: PropTypes.string.isRequired,
   direntDetail: PropTypes.object.isRequired,
   direntPath: PropTypes.string.isRequired,
-  filetagList: PropTypes.array.isRequired,
+  fileTagList: PropTypes.array.isRequired,
+  onFileTagChanged: PropTypes.func.isRequired,
 };
 
 class DetailListView extends React.Component {
@@ -40,7 +41,7 @@ class DetailListView extends React.Component {
   }
 
   render() {
-    let { direntType, direntDetail, filetagList } = this.props;
+    let { direntType, direntDetail, fileTagList } = this.props;
     let position = this.getDirentPostion();
     if (direntType === 'dir') {
       return (
@@ -66,31 +67,32 @@ class DetailListView extends React.Component {
               <tr><th>{gettext('Size')}</th><td>{direntDetail.size}</td></tr>
               <tr><th>{gettext('Position')}</th><td>{position}</td></tr>
               <tr><th>{gettext('Last Update')}</th><td>{moment(direntDetail.mtime).format('YYYY-MM-DD')}</td></tr>
-              <tr><th style={{verticalAlign:"top"}}>{gettext('Tags')}</th>
+              <tr className="file-tag-container"><th>{gettext('Tags')}</th>
                 <td>
-                  <ul style={{listStyle:"none"}}>
-                    {filetagList.map((fileTag, index) => {
+                  <ul className="file-tag-list">
+                    {fileTagList.map((fileTag) => {
                       return (
-                        <li key={index}>
-                          <i className="fa fa-circle" style={{color:fileTag.color}}></i>
-                          {fileTag.name}
+                        <li key={fileTag.id}>
+                          <span className={`file-tag bg-${fileTag.color}`}></span>
+                          <span className="tag-name">{fileTag.name}</span>
                         </li>
                       );
                     })}
                   </ul>
                   <i className='fa fa-pencil' onClick={this.onEditFileTagToggle}></i>
-                  {
-                    this.state.isEditFileTagShow &&
-                    <EditFileTagDialog
-                      filetagList={filetagList}
-                      filePath={this.props.direntPath}
-                      toggleCancel={this.onEditFileTagToggle}
-                    />
-                  }
                 </td>
               </tr>
             </tbody>
           </table>
+          {
+            this.state.isEditFileTagShow &&
+            <EditFileTagDialog
+              fileTagList={fileTagList}
+              filePath={this.props.direntPath}
+              toggleCancel={this.onEditFileTagToggle}
+              onFileTagChanged={this.props.onFileTagChanged}
+            />
+          }
         </div>
       );
     }

@@ -36,7 +36,7 @@ class DirentListItem extends React.Component {
       highlight: false,
       isItemMenuShow: false,
       menuPosition: {top: 0, left: 0 },
-      filetagList: [],
+      fileTagList: [],
     };
   }
 
@@ -308,15 +308,17 @@ class DirentListItem extends React.Component {
   }
 
   getFileTag = () => {
-    let file_path = this.getDirentPath(this.props.dirent);
-    seafileAPI.listFileTags(repoID, file_path).then(res => {
-      let filetagList = [];
-      res.data.file_tags.forEach(item => {
-        let file_tag = new FileTag(item);
-        filetagList.push(file_tag);
+    if (this.props.dirent.type === 'file') {
+      let file_path = this.getDirentPath(this.props.dirent);
+      seafileAPI.listFileTags(repoID, file_path).then(res => {
+        let fileTags = res.data.file_tags;
+        let fileTagList = fileTags.map(item => {
+          let fileTag = new FileTag(item);
+          return fileTag;
+        })
+        this.setState({fileTagList: fileTagList});
       });
-      this.setState({filetagList: filetagList});
-    });
+    }
   }
 
   componentWillReceiveProps() {
@@ -347,10 +349,10 @@ class DirentListItem extends React.Component {
           }
         </td>
         <td>
-          <div>
-            { dirent.type !== 'dir' && this.state.filetagList.map((fileTag, index) => {
+          <div className="tag-list tag-list-stacked">
+            { dirent.type !== 'dir' && this.state.fileTagList.map((fileTag) => {
               return (
-                <i className="fa fa-circle" key={index} style={{color:fileTag.color}}></i>
+                <span className={`file-tag bg-${fileTag.color}`} key={fileTag.id} title={fileTag.name}></span>
               );
             })}
           </div>

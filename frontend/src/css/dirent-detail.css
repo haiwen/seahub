@@ -86,3 +86,22 @@
   color: #333;
   word-break: break-all;
 }
+
+.dirent-table-container .file-tag-container th {
+  vertical-align: top;
+  list-style: none;
+}
+
+.dirent-table-container .file-tag-container .tag-list {
+  list-style: none;
+}
+
+.file-tag-list li {
+  display: flex;
+  align-items: center;
+}
+
+.file-tag-list .tag-name {
+  display: inline-block;
+  margin-left: 0.5rem;
+}

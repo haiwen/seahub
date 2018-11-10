@@ -4,13 +4,14 @@ import { seafileAPI } from '../../utils/seafile-api';
 import { serviceUrl, repoID } from '../../utils/constants';
 import DetailListView from './detail-list-view';
 import Repo from '../../models/repo';
-import '../../css/dirent-detail.css';
 import FileTag from '../../models/file-tag';
+import '../../css/dirent-detail.css';
 
 const propTypes = {
   dirent: PropTypes.object.isRequired,
   direntPath: PropTypes.string.isRequired,
   onItemDetailsClose: PropTypes.func.isRequired,
+  onFileTagChanged: PropTypes.func.isRequired,
 };
 
 class DirentDetail extends React.Component {
@@ -21,7 +22,7 @@ class DirentDetail extends React.Component {
       direntType: '',
       direntDetail: '',
       repo: null,
-      filetagList: [],
+      fileTagList: [],
     };
   }
 
@@ -47,12 +48,12 @@ class DirentDetail extends React.Component {
         });
       });
       seafileAPI.listFileTags(repoID, direntPath).then(res => {
-        let filetagList = [];
+        let fileTagList = [];
         res.data.file_tags.forEach(item => {
           let file_tag = new FileTag(item);
-          filetagList.push(file_tag);
+          fileTagList.push(file_tag);
         });
-        this.setState({filetagList: filetagList});
+        this.setState({fileTagList: fileTagList});
       });
     } else {
       seafileAPI.getDirInfo(repoID, direntPath).then(res => {
@@ -85,7 +86,8 @@ class DirentDetail extends React.Component {
               direntPath={this.props.direntPath}
               direntType={this.state.direntType}
               direntDetail={this.state.direntDetail} 
-              filetagList={this.state.filetagList}
+              fileTagList={this.state.fileTagList}
+              onFileTagChanged={this.props.onFileTagChanged}
             />
           }
         </div>
