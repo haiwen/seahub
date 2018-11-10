@@ -33,16 +33,17 @@ class FileUploaderListItem extends React.Component {
 
   render() {
     let { item } = this.props;
+    let progress = Math.round(item.resumableFile.progress() * 100);
     return (
       <tr className="file-upload-item">
         <td width="50%" className="upload-name ellipsis">{item.resumableFile.relativePath}</td>
         <td width="30%" className="upload-progress upload-size">
           {
-            item.progress === 100 ? this.formatFileSize(item.resumableFile.size) : item.progress + '%'
+            progress === 100 ? this.formatFileSize(item.resumableFile.size) : progress + '%'
           }
         </td>
         <td width="20%" className="upload-operation">
-          { this.props.item.progress !== 100 ?
+          { progress !== 100 ?
             <span className="a-simulate" onClick={this.onUploaderCancel}>{gettext(('cancel'))}</span> :
             <span>{gettext('uploaded')}</span>
           }

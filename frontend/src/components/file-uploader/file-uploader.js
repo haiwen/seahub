@@ -133,13 +133,14 @@ class FileUploader extends React.Component {
     }
   }
 
-  filesAddedComplete = (resumable) => {
-    //single document uploading can check repetition, because custom dialog conn't prevent program execution; 
-    this.setUploaderFileList(resumable.files);
-    if (resumable.files.length > 1) {
+  filesAddedComplete = (resumable, files) => {
+    //single file uploading can check repetition, because custom dialog conn't prevent program execution; 
+    let originFiles = files;
+    if (originFiles.length > 1) { //add file or folder;
+      this.setUploaderFileList(resumable.files);
       resumable.upload();
-    } else if (resumable.files.length === 1 ) {
-      let resumabelFile = resumable.files[0];
+    } else if (originFiles.length === 1 ) { // add only one file;
+      let resumableFile = resumable.files[resumable.files.length - 1];
       let direntList = this.props.direntList;
       let hasRepatition = false;
       for (let i=0; i< direntList.length; i++) {
@@ -153,9 +154,10 @@ class FileUploader extends React.Component {
       if (hasRepatition) {
         this.setState({
           isUploaderReminderDialogShow: true,
-          currentResumableFile: resumable.files[0],
+          currentResumableFile: resumableFile,
         });
       } else {
+        this.setUploaderFileList(resumable.files);
         resumable.upload();
       }
     }
@@ -163,17 +165,20 @@ class FileUploader extends React.Component {
 
   setUploaderFileList = (files) => {
     let uploaderFileList = files.map(resumableFile => {
-      let customFileObj = {
-        uniqueIdentifier: resumableFile.uniqueIdentifier,
-        resumableFile: resumableFile,
-        progress: 0,
-      };
-      return customFileObj;
+      return this.buildCustomFileObj(resumableFile);
     });
     this.setState({
       isFileUploadListShow: true,
-      uploaderFileList: [...this.state.uploaderFileList, ...uploaderFileList]
+      uploaderFileList: uploaderFileList
     });
+  }
+
+  buildCustomFileObj = (resumableFile) => {
+    return {
+      uniqueIdentifier: resumableFile.uniqueIdentifier,
+      resumableFile: resumableFile,
+      progress: resumableFile.progress(),
+    };
   }
 
   onFileProgress = (file) => {
@@ -270,7 +275,7 @@ class FileUploader extends React.Component {
 
   generateUniqueIdentifier = (file) => {
     let relativePath = file.webkitRelativePath||file.relativePath||file.fileName||file.name;
-    return MD5(relativePath) + relativePath;
+    return MD5(relativePath + new Date()) + relativePath;
   }
 
   //component buisiness handler
@@ -315,25 +320,25 @@ class FileUploader extends React.Component {
   }
 
   replacePrevFile = () => {
-    let resumableFile = this.resumable.files[0];
+    let resumableFile =  this.resumable.files[this.resumable.files.length - 1];
     resumableFile.formData['replace'] = 1;
-    this.setState({
-      isUploaderReminderDialogShow: false,
-      isFileUploadListShow: true,
-    });
+
+    this.setState({isUploaderReminderDialogShow: false});
+
+    this.setUploaderFileList(this.resumable.files);
+    
     this.resumable.upload();
   }
 
   doNotReplacePervFile = () => {
-    this.setState({
-      isUploaderReminderDialogShow: false,
-      isFileUploadListShow: true,
-    });
+    this.setState({isUploaderReminderDialogShow: false});
+
+    this.setUploaderFileList(this.resumable.files);
     this.resumable.upload();
   }
 
   doNotUploader = () => {
-    this.resumable.files = [];
+    this.resumable.files.pop(); //delete latest file；
     this.setState({isUploaderReminderDialogShow: false});
   }
 
@@ -341,7 +346,7 @@ class FileUploader extends React.Component {
     return (
       <div className="file-uploader-container">
         <div className="file-uploader">
-          <input className="uploader-input" type="file"  ref={node => this.uploader = node} onChange={this.onChange} onClick={this.onClick}/>
+          <input className="uploader-input" type="file" ref={node => this.uploader = node} onClick={this.onClick}/>
         </div>
         {
           this.state.isFileUploadListShow &&
