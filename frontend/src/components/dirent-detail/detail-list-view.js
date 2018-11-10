@@ -82,9 +82,9 @@ class DetailListView extends React.Component {
                   {
                     this.state.isEditFileTagShow &&
                     <EditFileTagDialog
-                    filetagList={filetagList}
-                    filePath={this.props.direntPath}
-                    toggleCancel={this.onEditFileTagToggle}
+                      filetagList={filetagList}
+                      filePath={this.props.direntPath}
+                      toggleCancel={this.onEditFileTagToggle}
                     />
                   }
                 </td>

@@ -53,7 +53,7 @@ class EditFileTagDialog extends React.Component {
       let file_tag_id = '';
       let filetagList = this.props.filetagList;
       filetagList.map((fileTag) => {
-        if (fileTag.repo_tag_id===repoTag.id) {
+        if (fileTag.repo_tag_id === repoTag.id) {
           file_tag_id = fileTag.id;
         }
       });
@@ -84,7 +84,7 @@ class EditFileTagDialog extends React.Component {
                   <span className="tag-demo" style={{background:repoTag.color}}>
                     {repoTag.name}
                     {
-                      repoTagIdList.indexOf(repoTag.id)===-1 ?
+                      repoTagIdList.indexOf(repoTag.id) === -1 ?
                       <input type="checkbox" onClick={this.editFileTag.bind(this, repoTag)} /> :
                       <input type="checkbox" defaultChecked onClick={this.editFileTag.bind(this, repoTag)} />
                     }
