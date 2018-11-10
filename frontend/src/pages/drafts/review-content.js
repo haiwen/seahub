@@ -12,19 +12,21 @@ class ReviewContent extends React.Component {
       reviewsList: [],
       isLoadingReviews: true,
       isItemFreezed: false, 
+      activeTab: 'open',
     };
   }
 
   componentDidMount() {
-    this.initReviewList();
+    this.getReviewList('open');
   }
 
-  initReviewList() {
-    this.setState({isLoadingReviews: true});
-    editUtilties.listReviews().then(res => {
+  getReviewList = (st) => {
+    this.setState({isLoadingReviews: true})
+    editUtilties.listReviews(st).then(res => {
       this.setState({
         reviewsList: res.data.data,
         isLoadingReviews: false,
+        activeTab: st,
       });
     });
   }
@@ -33,16 +35,13 @@ class ReviewContent extends React.Component {
     return (
       <div className="cur-view-content">
         {this.state.isLoadingReviews && <Loading /> }
-        {(!this.state.isLoadingReviews && this.state.reviewsList.length !==0) &&
+        {!this.state.isLoadingReviews  &&
           <ReviewListView
             itemsList={this.state.reviewsList} 
             isItemFreezed={this.state.isItemFreezed}
+            getReviewList={this.getReviewList}
+            activeTab={this.state.activeTab}
           />
-        }
-        {(!this.state.isLoadingReviews && this.state.reviewsList.length === 0) &&
-          <div className="message empty-tip">
-            <h2>{gettext('There is no Review file existing')}</h2>
-          </div>
         }
       </div>
     );

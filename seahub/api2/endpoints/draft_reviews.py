@@ -13,7 +13,7 @@ from django.db import IntegrityError
 from seaserv import seafile_api
 from seahub.api2.authentication import TokenAuthentication
 from seahub.api2.throttling import UserRateThrottle
-from seahub.api2.utils import api_error
+from seahub.api2.utils import api_error, user_to_dict
 from seahub.constants import PERMISSION_READ_WRITE
 from seahub.views import check_folder_permission
 
@@ -28,11 +28,67 @@ class DraftReviewsView(APIView):
     throttle_classes = (UserRateThrottle, )
 
     def get(self, request, format=None):
-        """List all user draft review
+        """ List all reviews related to the user and their corresponding reviewers based on the review status
+        case1: List the reviews created by the user and their associated reviewers by status
+        case2: List the reviews of the user as reviewer and their associated reviewers by status
+        status: open / finished / closed
         """
         username = request.user.username
-        data = [x.to_dict() for x in DraftReview.objects.filter(creator=username)]
-        data += [x.review_id.to_dict() for x in ReviewReviewer.objects.filter(reviewer=username)]
+
+        st = request.GET.get('status', 'open')
+
+        if st not in ('open', 'finished', 'closed'):
+            error_msg = 'Status invalid.'
+            return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
+        # set default avatar_size
+        try:
+            avatar_size = int(request.GET.get('avatar_size', 64))
+        except ValueError:
+            avatar_size = 64
+
+        data = []
+
+        # case1:
+        # step1: Get personal reviews
+        draft_reviews = DraftReview.objects.get_reviews_by_creator_and_status(creator=username, status=st)
+        # step2: Get related reviewers
+        reviewers = ReviewReviewer.objects.get_reviewers_by_reviews(reviews=draft_reviews)
+
+        for draft_review in draft_reviews:
+            review = draft_review.to_dict()
+            reviewer_list = []
+            for r in reviewers:
+                if draft_review.id == r.review_id_id:
+                    reviewer = user_to_dict(r.reviewer, request=request, avatar_size=avatar_size)
+                    reviewer_list.append(reviewer)
+
+            # step3: Get review author info
+            author = user_to_dict(username, request=request, avatar_size=avatar_size)
+
+            review.update({'reviewers': reviewer_list})
+            review.update({'author': author})
+            data.append(review)
+
+        # case2:
+        # step1: Get review as reviewer
+        reviews = DraftReview.objects.get_reviews_by_reviewer_and_status(reviewer=username, status=st)
+        # step2: Get related reviewers
+        reviewers = ReviewReviewer.objects.get_reviewers_by_reviews(reviews=reviews)
+
+        for review in reviews:
+            reviewer_list = []
+            for r in reviewers:
+                if review.id == r.review_id_id:
+                    reviewer = user_to_dict(r.reviewer, request=request, avatar_size=avatar_size)
+                    reviewer_list.append(reviewer)
+
+            # step3: Get review author info
+            author = user_to_dict(review.creator, request=request, avatar_size=avatar_size)
+
+            review_obj = review.to_dict()
+            review_obj.update({'author': author})
+            review_obj.update({'reviewers': reviewer_list})
+            data.append(review_obj)
 
         return Response({'data': data})
 
@@ -64,7 +120,7 @@ class DraftReviewView(APIView):
     throttle_classes = (UserRateThrottle, )
 
     def put(self, request, pk, format=None):
-        """update review status 
+        """update review status
         """
 
         st = request.data.get('status', '')

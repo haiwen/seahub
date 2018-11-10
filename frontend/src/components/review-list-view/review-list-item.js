@@ -9,6 +9,16 @@ const propTypes = {
   item: PropTypes.object.isRequired,
 };
 
+function Reviewers(props) {
+  return (
+    <div>
+      {props.reviewers.map((item, index) => (
+        <img key={index} className="avatar avatar-sm" alt={item.username} src={item.avatar_url} />
+      ))}
+    </div>  
+  );
+}
+
 class ReviewListItem extends React.Component {
 
   constructor(props) {
@@ -54,10 +64,11 @@ class ReviewListItem extends React.Component {
     return (
       <tr className={this.state.highlight} onMouseEnter={this.onMouseEnter} onMouseLeave={this.onMouseLeave}>
         <td className="icon" style={{width: '4%'}}><img src={siteRoot + 'media/img/file/192/txt.png'} alt="icon"/></td>
-        <td className="name a-simulate" style={{width: '46%'}} onClick={this.onReviewsClick}>{fileName}</td>
-        <td className='library'>{item.draft_origin_repo_name}</td>
+        <td className="name a-simulate" style={{width: '26%'}} onClick={this.onReviewsClick}>{fileName}</td>
+        <td className='library' style={{width: '25%'}}>{item.draft_origin_repo_name}</td>
         <td className="update" style={{width: '20%'}}>{localTime}</td>
-        <td className="menu-toggle"></td>
+        <td className="author" style={{width: '10%'}}><img className="avatar avatar-sm" src={item.author.avatar_url} /></td>
+        <td className="reviewer" style={{width: '15%'}}><Reviewers reviewers={item.reviewers}/></td>
       </tr>
     );
   }

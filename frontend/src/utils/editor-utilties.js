@@ -123,8 +123,8 @@ class EditorUtilities {
     return seafileAPI.createDraftReview(id);
   }
 
-  listReviews() {
-    return seafileAPI.listReviews();
+  listReviews(st) {
+    return seafileAPI.listReviews(st);
   }
 
 }

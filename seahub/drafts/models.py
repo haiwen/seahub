@@ -175,6 +175,14 @@ class DraftReviewManager(models.Manager):
 
         return draft_review
 
+    def get_reviews_by_creator_and_status(self, creator, status):
+        reviews = self.filter(creator=creator, status=status)
+        return reviews
+
+    def get_reviews_by_reviewer_and_status(self, reviewer, status):
+        reviews = self.filter(reviewreviewer__reviewer=reviewer, status=status)
+        return reviews
+
 
 class DraftReview(TimestampedModel):
     creator = LowerCaseCharField(max_length=255, db_index=True)
@@ -193,9 +201,6 @@ class DraftReview(TimestampedModel):
         if not r_repo:
             raise DraftFileConflict
 
-        uuid = self.origin_file_uuid
-        file_path = posixpath.join(uuid.parent_path, uuid.filename)
-
         return {
             'id': self.pk,
             'creator': self.creator,
@@ -203,7 +208,6 @@ class DraftReview(TimestampedModel):
             'creator_name': email2nickname(self.creator),
             'draft_origin_repo_id': self.origin_repo_id,
             'draft_origin_repo_name': r_repo.name,
-            'draft_origin_file_path': file_path,
             'draft_origin_file_version': self.origin_file_version,
             'draft_publish_file_version': self.publish_file_version,
             'draft_file_path': self.draft_file_path,
@@ -251,6 +255,10 @@ class ReviewReviewerManager(models.Manager):
         review_reviewer.save(using=self._db)
 
         return review_reviewer
+
+    def get_reviewers_by_reviews(self, reviews):
+        reviewers = self.filter(review_id__in=reviews)
+        return reviewers
 
 
 class ReviewReviewer(models.Model):
