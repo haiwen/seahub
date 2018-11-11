@@ -58,6 +58,7 @@ from seahub.notifications.models import UserNotification
 from seahub.options.models import UserOptions
 from seahub.profile.models import Profile, DetailedProfile
 from seahub.drafts.models import Draft
+from seahub.file_tags.models import FileTags
 from seahub.signals import (repo_created, repo_deleted)
 from seahub.share.models import FileShare, OrgFileShare, UploadLinkShare
 from seahub.utils import gen_file_get_url, gen_token, gen_file_upload_url, \
@@ -1974,6 +1975,8 @@ def get_dir_entrys_by_id(request, repo, path, dir_id, request_type=None):
         e['modifier_name'] = nickname_dict.get(e['modifier_email'], '')
 
         file_path = posixpath.join(path, e['name'])
+        file_tags = [file_tag.to_dict() for file_tag in FileTags.objects.get_file_tag_by_path(repo.id, file_path)]
+        e['file_tags'] = file_tags
         e['starred'] = False
         if normalize_file_path(file_path) in starred_files:
             e['starred'] = True

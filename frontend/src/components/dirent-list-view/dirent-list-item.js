@@ -309,15 +309,13 @@ class DirentListItem extends React.Component {
 
   getFileTag = () => {
     if (this.props.dirent.type === 'file') {
-      let file_path = this.getDirentPath(this.props.dirent);
-      seafileAPI.listFileTags(repoID, file_path).then(res => {
-        let fileTags = res.data.file_tags;
-        let fileTagList = fileTags.map(item => {
-          let fileTag = new FileTag(item);
-          return fileTag;
-        })
-        this.setState({fileTagList: fileTagList});
+      let FileTgas = this.props.dirent.file_tags;
+      let fileTagList = [];
+      FileTgas.forEach(item => {
+        let fileTag = new FileTag(item)
+        fileTagList.push(fileTag)
       });
+      this.setState({fileTagList: fileTagList});
     }
   }
 

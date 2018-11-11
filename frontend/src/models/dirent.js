@@ -18,6 +18,7 @@ class Dirent {
       this.modifier_name = json.modifier_name;
       this.modifier_email = json.modifier_email;
       this.modifier_contact_email = json.modifier_contact_email;
+      this.file_tags = json.file_tags;
     }
   }
 
