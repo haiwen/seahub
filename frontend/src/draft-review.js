@@ -157,6 +157,9 @@ class DraftReview extends React.Component {
   }
 
   toggleAddReviewerDialog = () => {
+    if (this.state.showReviewerDialog) {
+      this.listReviewers();
+    }
     this.setState({
       showReviewerDialog: !this.state.showReviewerDialog
     });
