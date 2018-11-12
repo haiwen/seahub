@@ -57,7 +57,7 @@ class PathToolbar extends React.Component {
       return (
         <Fragment>
           <ul className="path-toolbar">
-            <li className="toolbar-item"><a className="op-link sf2-icon-tag-manager" onClick={this.onListRepoTagToggle} title={gettext('Tags')} aria-label={gettext('Tags')}></a></li>
+            <li className="toolbar-item"><a className="op-link sf2-icon-tag" onClick={this.onListRepoTagToggle} title={gettext('Tags')} aria-label={gettext('Tags')}></a></li>
             <li className="toolbar-item"><a className="op-link sf2-icon-trash" href={trashUrl} title={gettext('Trash')} aria-label={gettext('Trash')}></a></li>
             <li className="toolbar-item"><a className="op-link sf2-icon-history" href={historyUrl} title={gettext('History')} aria-label={gettext('History')}></a></li>
           </ul>
