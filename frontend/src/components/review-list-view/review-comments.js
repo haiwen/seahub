@@ -31,12 +31,15 @@ class ReviewComments extends React.Component {
     this.accountInfo = {};
   }
 
-  listComments = () => {
+  listComments = (scroll) => {
     seafileAPI.listReviewComments(reviewID).then((response) => {
       response.data.comments.reverse();
       this.setState({
         commentsList: response.data.comments
       });
+      if (scroll) {
+        this.refs.commentsList.scrollTo(0, 10000);
+      }
     });
   }
 
@@ -59,7 +62,7 @@ class ReviewComments extends React.Component {
     let comment = this.refs.commentTextarea.value;
     if (comment.trim().length > 0) {
       seafileAPI.addReviewComment(reviewID, comment.trim()).then((res) => {
-        this.listComments();
+        this.listComments(true);
         this.props.getCommentsNumber();
       });
       this.refs.commentTextarea.value = '';
@@ -108,6 +111,16 @@ class ReviewComments extends React.Component {
   onResizeMouseMove = (event) => {
     let rate = 100 - (event.nativeEvent.clientY - 50 ) / this.refs.comment.clientHeight * 100;
     if (rate < 20 || rate > 70) {
+      if (rate < 20) {
+        this.setState({
+          commentFooterHeight: 25
+        });
+      }
+      if (rate > 70) {
+        this.setState({
+          commentFooterHeight: 65
+        });
+      }
       this.setState({
         inResizing: false
       });
@@ -150,28 +163,30 @@ class ReviewComments extends React.Component {
               <div className="comment-vacant">{gettext('No comment yet.')}</div>
             </div>
           }
-          { (this.state.commentsList.length == 0 && this.props.commentsNumber > 0) &&
-            <div><Loading/></div>
+          { (this.state.commentsList.length === 0 && this.props.commentsNumber > 0) &&
+            <div className={'seafile-comment-list'}><Loading/></div>
           }
-          <ul className={'seafile-comment-list'}>
-            { (this.state.commentsList.length > 0 && this.props.commentsNumber > 0) &&
-              this.state.commentsList.map((item, index = 0, arr) => {
-                let oldTime = (new Date(item.created_at)).getTime();
-                let time = moment(oldTime).format('YYYY-MM-DD HH:mm');
-                return (
-                  <CommentItem id={item.id} time={time} headUrl={item.avatar_url}
-                    comment={item.comment} name={item.user_name}
-                    user_email={item.user_email} key={index} resolved={item.resolved}
-                    deleteComment={this.deleteComment}
-                    resolveComment={this.resolveComment}
-                    commentsList={this.state.commentsList}
-                    accountInfo={this.accountInfo}
-                    showResolvedComment={this.state.showResolvedComment}
-                  />
-                );
-              })
-            }
-          </ul>
+          { this.state.commentsList.length > 0 &&
+            <ul className={'seafile-comment-list'} ref='commentsList'>
+              { (this.state.commentsList.length > 0 && this.props.commentsNumber > 0) &&
+                this.state.commentsList.map((item, index = 0, arr) => {
+                  let oldTime = (new Date(item.created_at)).getTime();
+                  let time = moment(oldTime).format('YYYY-MM-DD HH:mm');
+                  return (
+                    <CommentItem id={item.id} time={time} headUrl={item.avatar_url}
+                      comment={item.comment} name={item.user_name}
+                      user_email={item.user_email} key={index} resolved={item.resolved}
+                      deleteComment={this.deleteComment}
+                      resolveComment={this.resolveComment}
+                      commentsList={this.state.commentsList}
+                      accountInfo={this.accountInfo}
+                      showResolvedComment={this.state.showResolvedComment}
+                    />
+                  );
+                })
+              }
+            </ul>
+          }
         </div>
         <div className="seafile-comment-footer" style={{height:this.state.commentFooterHeight+'%'}}>
           <div className="seafile-comment-row-resize" onMouseDown={this.onResizeMouseDown}></div>

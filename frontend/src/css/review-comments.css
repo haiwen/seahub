@@ -76,7 +76,10 @@
   background-color: #fff;
   height: 100%;
 }
-.seafile-comment-item .seafile-comment-info.seafile-comment-dropdown .seafile-comment-dropdown-btn {
+.seafile-comment-dropdown button:hover i {
+  color: #555;
+}
+.seafile-comment-item .seafile-comment-info .seafile-comment-dropdown .seafile-comment-dropdown-btn {
   color: #999;
 }
 .seafile-comment-item .seafile-comment-info .seafile-comment-dropdown:hover .seafile-comment-dropdown-btn {
@@ -136,6 +139,7 @@
   height: calc(100% - 38px);
   min-height: 90px;
   width: 100%;
+  resize: none;
 }
 .seafile-comment-footer .seafile-add-comment .submit-comment {
   height: 28px;

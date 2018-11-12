@@ -88,6 +88,9 @@
   border-bottom: 1px solid #e6e6dd;
   padding: 1em 0;
 }
+.reviewer-info {
+  margin-bottom: 0.8125rem;
+}
 .reviewers-header, .author-header {
   display: flex;
   justify-content: space-between;
