@@ -434,14 +434,21 @@ class Wiki extends Component {
         this.setState({tree_data: tree});
       }
     } else {
-      let parentNode = tree.getNodeByPath(this.state.filePath);
-      let isChild = tree.isNodeChild(parentNode, node);
-
-      tree.deleteNode(node);
-      if (isChild) {
+      
+      //the delete node: current node , node chlid, parent node;
+      if (node.path == this.state.filePath) {
+        let parentNode = tree.findNodeParentFromTree(node);
+        tree.deleteNode(node);
         this.exitViewFileState(tree, parentNode);
       } else {
-        this.setState({tree_data: tree});
+        let currentNode = tree.getNodeByPath(this.state.filePath);
+        let isChild = tree.isNodeChild(currentNode, node);
+        tree.deleteNode(node);
+        if (isChild) {
+          this.exitViewFileState(tree, currentNode);
+        } else {
+          this.setState({tree_data: tree});
+        }
       }
     }
   }
