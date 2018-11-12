@@ -144,7 +144,7 @@ class FileUploader extends React.Component {
       let direntList = this.props.direntList;
       let hasRepatition = false;
       for (let i=0; i< direntList.length; i++) {
-        if (direntList[i].type === 'file' && direntList[i].name === resumabelFile.fileName) {
+        if (direntList[i].type === 'file' && direntList[i].name === resumableFile.fileName) {
           hasRepatition = true;
         }
         if (hasRepatition) {
