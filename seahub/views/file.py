@@ -735,7 +735,9 @@ def view_lib_file(request, repo_id, path):
                 action_name = 'edit'
 
             wopi_dict = get_wopi_dict(username, repo_id, path,
-                    action_name=action_name, language_code=request.LANGUAGE_CODE)
+                    action_name=action_name,
+                    language_code=request.LANGUAGE_CODE,
+                    can_download=parse_repo_perm(permission).can_download)
 
             if wopi_dict:
                 if is_pro_version() and action_name == 'edit':
@@ -755,14 +757,15 @@ def view_lib_file(request, repo_id, path):
         if ENABLE_ONLYOFFICE and fileext in ONLYOFFICE_FILE_EXTENSION:
 
             can_edit = False
-            if permission == 'rw' and \
+            if parse_repo_perm(permission).can_edit_on_web and \
                     fileext in ONLYOFFICE_EDIT_FILE_EXTENSION and \
                     ((not is_locked) or (is_locked and locked_by_me) or \
                     (is_locked and locked_by_online_office)):
                 can_edit = True
 
             onlyoffice_dict = get_onlyoffice_dict(username, repo_id, path,
-                    can_edit=can_edit)
+                    can_edit=can_edit,
+                    can_download=parse_repo_perm(permission).can_download)
 
             if onlyoffice_dict:
                 if is_pro_version() and can_edit:
@@ -846,7 +849,8 @@ def view_history_file_common(request, repo_id, ret_dict):
 
                 # obj_id for view trash/history file
                 wopi_dict = get_wopi_dict(username, repo_id, path,
-                        language_code=request.LANGUAGE_CODE, obj_id=obj_id)
+                        language_code=request.LANGUAGE_CODE, obj_id=obj_id,
+                        can_download=parse_repo_perm(user_perm).can_download)
 
                 if wopi_dict:
                     ret_dict['wopi_dict'] = wopi_dict
@@ -856,7 +860,7 @@ def view_history_file_common(request, repo_id, ret_dict):
             if ENABLE_ONLYOFFICE and fileext in ONLYOFFICE_FILE_EXTENSION:
 
                 onlyoffice_dict = get_onlyoffice_dict(username, repo_id, path,
-                        file_id=obj_id)
+                        file_id=obj_id, can_download=parse_repo_perm(user_perm).can_download)
 
                 if onlyoffice_dict:
                     ret_dict['onlyoffice_dict'] = onlyoffice_dict
