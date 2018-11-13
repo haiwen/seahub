@@ -176,12 +176,50 @@ class DraftReviewManager(models.Manager):
         return draft_review
 
     def get_reviews_by_creator_and_status(self, creator, status):
+
+        from seahub.api2.utils import user_to_dict
         reviews = self.filter(creator=creator, status=status)
-        return reviews
+        reviewers = ReviewReviewer.objects.filter(review_id__in=reviews)
+
+        data = []
+        for review in reviews:
+            reviewer_list = []
+            for r in reviewers:
+                if review.id == r.review_id_id:
+                    reviewer = user_to_dict(r.reviewer, avatar_size=64)
+                    reviewer_list.append(reviewer)
+
+            author = user_to_dict(review.creator, avatar_size=64)
+
+            review = review.to_dict()
+            review.update({'reviewers': reviewer_list})
+            review.update({'author': author})
+            data.append(review)
+
+        return data
 
     def get_reviews_by_reviewer_and_status(self, reviewer, status):
+
+        from seahub.api2.utils import user_to_dict
         reviews = self.filter(reviewreviewer__reviewer=reviewer, status=status)
-        return reviews
+        reviewers = ReviewReviewer.objects.filter(review_id__in=reviews)
+
+        data = []
+        for review in reviews:
+            reviewer_list = []
+            for r in reviewers:
+                if review.id == r.review_id_id:
+                    reviewer = user_to_dict(r.reviewer, avatar_size=64)
+                    reviewer_list.append(reviewer)
+
+            author = user_to_dict(review.creator, avatar_size=64)
+
+            review = review.to_dict()
+            review.update({'author': author})
+            review.update({'reviewers': reviewer_list})
+            data.append(review)
+
+        return data
 
 
 class DraftReview(TimestampedModel):
@@ -255,10 +293,6 @@ class ReviewReviewerManager(models.Manager):
         review_reviewer.save(using=self._db)
 
         return review_reviewer
-
-    def get_reviewers_by_reviews(self, reviews):
-        reviewers = self.filter(review_id__in=reviews)
-        return reviewers
 
 
 class ReviewReviewer(models.Model):
