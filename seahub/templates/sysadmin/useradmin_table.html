@@ -26,7 +26,7 @@
     <tr data-userid="{{user.email}}">
         <td><input type="checkbox" /></td>
         <td>
-            <a href="{% url 'user_info' user.email %}">{{ user.name}}</a>
+            <a href="{% url 'user_info' user.email %}">{{ user.email|email2nickname }}</a>
             {% if user.contact_email %}<br />{{ user.contact_email }}{% endif %}
             {% if not is_admin_page %}
             {% if user.org %}

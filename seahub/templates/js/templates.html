@@ -398,7 +398,7 @@
     </td>
     <td><%- size_formatted %></td>
     <td><%= mtime_relative %></td>
-    <td><span title=""><%- owner_nickname %></span></td>
+    <td><span><%- owner_nickname %></span></td>
 </script>
 <script type="text/template" id="organization-repo-mobile-tmpl">
     <td>
@@ -408,7 +408,7 @@
         <a href="#org/lib/<%= id %>" class="normal"><%- name %></a><br />
         <span class="repo-meta-info"><%- size_formatted %></span>
         <span class="repo-meta-info"><%= mtime_relative %></span>
-        <span class="repo-meta-info" title=""><%- owner_nickname %></span>
+        <span class="repo-meta-info"><%- owner_nickname %></span>
     </td>
     <td class="alc">
         <% if (app.pageOptions.is_staff || owner == app.pageOptions.username) { %>
