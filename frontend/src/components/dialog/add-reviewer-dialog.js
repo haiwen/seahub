@@ -63,6 +63,7 @@ class AddReviewerDialog extends React.Component {
 
   addReviewers = () => {
     if (this.state.selectedOption.length > 0 ) {
+      this.refs.reviewSelect.select.onChange([], { action: 'clear' });
       let reviewers = [];
       for (let i = 0; i < this.state.selectedOption.length; i ++) {
         reviewers[i] = this.state.selectedOption[i].email;
@@ -103,6 +104,7 @@ class AddReviewerDialog extends React.Component {
             loadOptions={this.loadOptions}
             placeholder={gettext('Please enter 1 or more character')}
             onChange={this.handleSelectChange}
+            ref="reviewSelect" isClearable classNamePrefix
           />
           {this.state.errorMsg.length > 0 &&
             this.state.errorMsg.map((item, index = 0, arr) => {
