@@ -58,18 +58,18 @@ class FileUploader extends React.Component {
       forceChunkSize: true,
     });
 
-    this.resumable.assignBrowse(this.uploader, true);
+    this.resumable.assignBrowse(this.uploadInput, true);
 
     //Enable or Disable DragAnd Drop
     if (this.props.dragAndDrop === true) {
       this.resumable.enableDropOnDocument();
     }
 
-    this.bindCallBackHandler();
+    this.bindCallbackHandler();
     this.bindEventHandler();
   }
 
-  bindCallBackHandler = () => {
+  bindCallbackHandler = () => {
     let {maxFilesErrorCallback, minFileSizeErrorCallback, maxFileSizeErrorCallback, fileTypeErrorCallback } = this.props;
     
     if (maxFilesErrorCallback) {
@@ -128,7 +128,7 @@ class FileUploader extends React.Component {
       let fileName = resumableFile.fileName;
       let relativePath = resumableFile.relativePath;
       let isFile = fileName === relativePath;
-  
+
       //update formdata；
       resumableFile.formData = {};
       if (isFile) {
@@ -142,10 +142,10 @@ class FileUploader extends React.Component {
           relative_path: relative_path
         };
       }
-  
+
       //check repetition
       //uploading is file and only upload one file
-      if(files.length === 1 &&  resumableFile.fileName === resumableFile.relativePath) {
+      if (isFile && files.length === 1) {
         let hasRepetition = false;
         let direntList = this.props.direntList;
         for (let i = 0; i < direntList.length; i++) {
@@ -161,11 +161,11 @@ class FileUploader extends React.Component {
           });
         } else {
           this.setUploadFileList(this.resumable.files);
-          this.resumable.upload();
+          resumableFile.upload();
         }
       } else {
         this.setUploadFileList(this.resumable.files);
-        this.resumable.upload();
+        resumableFile.upload();
       }
     });
   }
@@ -278,13 +278,13 @@ class FileUploader extends React.Component {
   }
 
   onFileUpload = () => {
-    this.uploader.removeAttribute('webkitdirectory');
-    this.uploader.click();
+    this.uploadInput.removeAttribute('webkitdirectory');
+    this.uploadInput.click();
   }
 
   onFolderUpload = () => {
-    this.uploader.setAttribute('webkitdirectory', 'webkitdirectory');
-    this.uploader.click();
+    this.uploadInput.setAttribute('webkitdirectory', 'webkitdirectory');
+    this.uploadInput.click();
   }
 
   onMinimizeUploadDialog = () => {
@@ -324,7 +324,7 @@ class FileUploader extends React.Component {
 
   uploadFile = () => {
     // this.setState({isUploadRemindDialogShow: false});
-
+    
     this.setUploadFileList(this.resumable.files);
     this.resumable.upload();
   }
@@ -338,7 +338,7 @@ class FileUploader extends React.Component {
     return (
       <div className="file-uploader-container">
         <div className="file-uploader">
-          <input className="uploader-input" type="file" ref={node => this.uploader = node} onClick={this.onClick}/>
+          <input className="upload-input" type="file" ref={node => this.uploadInput = node} onClick={this.onClick}/>
         </div>
         {
           this.state.isUploadProgressDialogShow &&
