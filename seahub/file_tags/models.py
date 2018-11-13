@@ -20,8 +20,19 @@ class FileTagsManager(models.Manager):
         parent_folder_uuid = FileUUIDMap.objects.get_fileuuidmap_by_path(
             repo_id, parent_path, folder_name, is_dir=True)
 
-        return super(FileTagsManager, self).filter(
-            file_uuid=file_uuid, parent_folder_uuid=parent_folder_uuid)
+        file_tag_list = super(FileTagsManager, self).filter(
+            file_uuid=file_uuid, parent_folder_uuid=parent_folder_uuid).select_related('repo_tag')
+
+        file_tags = list()
+        for file_tag in file_tag_list:
+            tag_dict = dict()
+            tag_dict['file_tag_id'] = file_tag.pk
+            tag_dict['repo_tag_id'] = file_tag.repo_tag.pk
+            tag_dict['tag_name'] = file_tag.repo_tag.name
+            tag_dict['tag_color'] = file_tag.repo_tag.color
+            file_tags.append(tag_dict)
+
+        return file_tags
 
     def get_file_tag_by_id(self, file_tag_id):
         try:
@@ -70,6 +81,14 @@ class FileTagsManager(models.Manager):
         except self.model.DoesNotExist:
             return False
 
+    def get_dir_file_tags(self, repo_id, parent_path):
+
+        folder_name = os.path.dirname(parent_path)
+        parent_folder_uuid = FileUUIDMap.objects.get_or_create_fileuuidmap(
+            repo_id, parent_path, folder_name, is_dir=True)
+
+        return super(FileTagsManager, self).filter(parent_folder_uuid=parent_folder_uuid)
+
 
 class FileTags(models.Model):
 
@@ -80,12 +99,8 @@ class FileTags(models.Model):
     objects = FileTagsManager()
 
     def to_dict(self):
-        repo_tag = RepoTags.objects.get_repo_tag_by_id(self.repo_tag_id)
-        tag_name = repo_tag.name if repo_tag else ''
-        tag_color = repo_tag.color if repo_tag else ''
+
         return {
             "file_tag_id": self.pk,
             "repo_tag_id": self.repo_tag_id,
-            "tag_name": tag_name,
-            "tag_color": tag_color,
         }

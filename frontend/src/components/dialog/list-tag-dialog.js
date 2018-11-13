@@ -18,9 +18,10 @@ class TagListItem extends React.Component {
   }
 
   render() {
+    let color = this.props.item.color;
     return(
       <li className="tag-list-item">
-        <span className="tag-demo" style={{background: this.props.item.color}}>{this.props.item.name}</span>
+        <span className={`tag-demo bg-${color}`}>{this.props.item.name}</span>
         <i className="tag-edit fa fa-pencil" onClick={this.onTagUpdate}></i>
       </li>
     );
@@ -64,7 +65,7 @@ class ListTagDialog extends React.Component {
     return (
       <Fragment>
         <Modal isOpen={true} toggle={this.toggle}>
-          <ModalHeader toggle={this.toggle}>{gettext('Tag List')}</ModalHeader>
+          <ModalHeader toggle={this.toggle}>{gettext('Tags')}</ModalHeader>
           <ModalBody>
             {
               this.state.repotagList.length === 0 && 

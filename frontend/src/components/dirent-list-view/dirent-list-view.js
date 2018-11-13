@@ -147,7 +147,8 @@ class DirentListView extends React.Component {
               <th width="3%" className="select"><input type="checkbox" className="vam" /></th>
               <th width="3%"></th>
               <th width="5%"></th>
-              <th width="45%">{gettext('Name')}</th>
+              <th width="35%">{gettext('Name')}</th>
+              <th width="10%"></th>
               <th width="20%"></th>
               <th width="11%">{gettext('Size')}</th>
               <th width="13%">{gettext('Last Update')}</th>

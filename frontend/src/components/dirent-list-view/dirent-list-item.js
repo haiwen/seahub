@@ -6,6 +6,7 @@ import URLDecorator from '../../utils/url-decorator';
 import Toast from '../toast';
 import DirentMenu from './dirent-menu';
 import DirentRename from './dirent-rename';
+import FileTag from '../../models/file-tag';
 
 const propTypes = {
   filePath: PropTypes.string.isRequired,
@@ -35,11 +36,13 @@ class DirentListItem extends React.Component {
       highlight: false,
       isItemMenuShow: false,
       menuPosition: {top: 0, left: 0 },
+      fileTagList: [],
     };
   }
 
   componentDidMount() {
     document.addEventListener('click', this.onItemMenuHide);
+    this.getFileTag();
   }
   
   componentWillUnmount() {
@@ -304,6 +307,22 @@ class DirentListItem extends React.Component {
     return path === '/' ? path + dirent.name : path + '/' + dirent.name;
   }
 
+  getFileTag = () => {
+    if (this.props.dirent.type === 'file' && this.props.dirent.file_tags!== undefined) {
+      let FileTgas = this.props.dirent.file_tags;
+      let fileTagList = [];
+      FileTgas.forEach(item => {
+        let fileTag = new FileTag(item)
+        fileTagList.push(fileTag)
+      });
+      this.setState({fileTagList: fileTagList});
+    }
+  }
+
+  componentWillReceiveProps() {
+    this.getFileTag();
+  }
+
   render() {
     let { dirent } = this.props;
     return (
@@ -326,6 +345,15 @@ class DirentListItem extends React.Component {
             <DirentRename dirent={dirent} onRenameConfirm={this.onRenameConfirm} onRenameCancel={this.onRenameCancel}/> :
             <span onClick={this.onItemClick}>{dirent.name}</span>
           }
+        </td>
+        <td>
+          <div className="dirent-item tag-list tag-list-stacked ">
+            { dirent.type !== 'dir' && this.state.fileTagList.map((fileTag) => {
+              return (
+                <span className={`file-tag bg-${fileTag.color}`} key={fileTag.id} title={fileTag.name}></span>
+              );
+            })}
+          </div>
         </td>
         <td className="operation">
           {

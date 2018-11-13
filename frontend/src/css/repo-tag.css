@@ -7,9 +7,11 @@
 }
 
 .tag-list-item {
+  position: relative;
   display: flex;
   justify-content: space-around;
   margin-bottom: 0.5rem;
+  height: 2.25rem;
 }
 
 .tag-list-item .tag-demo {
@@ -42,7 +44,7 @@
   background-color: rgba(9,45,66,.13);
 }
 
-.tag-create .color-chooser,
-.tag-edit .color-chooser {
-  margin-top: 0.5rem;
+.tag-list-item .tag-operation {
+  position: absolute;
+  right: 0.5rem;
 }

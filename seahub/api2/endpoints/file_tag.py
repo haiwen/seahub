@@ -56,16 +56,12 @@ class RepoFileTagsView(APIView):
             error_msg = 'Permission denied.'
             return api_error(status.HTTP_403_FORBIDDEN, error_msg)
 
-        file_tags = []
         try:
-            file_tag_list = FileTags.objects.get_file_tag_by_path(repo_id, file_path)
+            file_tags = FileTags.objects.get_file_tag_by_path(repo_id, file_path)
         except Exception as e:
             logger.error(e)
             error_msg = 'Internal Server Error.'
             return api_error(status.HTTP_500_INTERNAL_SERVER_ERROR, error_msg)
-
-        for file_tag in file_tag_list:
-            file_tags.append(file_tag.to_dict())
 
         return Response({"file_tags": file_tags}, status=status.HTTP_200_OK)
 
