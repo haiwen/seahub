@@ -20,8 +20,19 @@ class FileTagsManager(models.Manager):
         parent_folder_uuid = FileUUIDMap.objects.get_fileuuidmap_by_path(
             repo_id, parent_path, folder_name, is_dir=True)
 
-        return super(FileTagsManager, self).filter(
-            file_uuid=file_uuid, parent_folder_uuid=parent_folder_uuid)
+        file_tag_list = super(FileTagsManager, self).filter(
+            file_uuid=file_uuid, parent_folder_uuid=parent_folder_uuid).select_related('repo_tag')
+
+        file_tags = list()
+        for file_tag in file_tag_list:
+            tag_dict = dict()
+            tag_dict['file_tag_id'] = file_tag.pk
+            tag_dict['repo_tag_id'] = file_tag.repo_tag.pk
+            tag_dict['tag_name'] = file_tag.repo_tag.name
+            tag_dict['tag_color'] = file_tag.repo_tag.color
+            file_tags.append(tag_dict)
+
+        return file_tags
 
     def get_file_tag_by_id(self, file_tag_id):
         try:
