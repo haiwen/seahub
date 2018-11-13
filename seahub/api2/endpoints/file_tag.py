@@ -58,14 +58,17 @@ class RepoFileTagsView(APIView):
 
         file_tags = []
         try:
-            file_tag_list = FileTags.objects.get_file_tag_by_path(repo_id, file_path)
+            file_tag_list = FileTags.objects.get_file_tag_by_path(repo_id, file_path).select_related('repo_tag')
         except Exception as e:
             logger.error(e)
             error_msg = 'Internal Server Error.'
             return api_error(status.HTTP_500_INTERNAL_SERVER_ERROR, error_msg)
 
         for file_tag in file_tag_list:
-            file_tags.append(file_tag.to_dict())
+            res = file_tag.to_dict()
+            res['tag_color'] = file_tag.repo_tag.color
+            res['tag_name'] = file_tag.repo_tag.name
+            file_tags.append(res)
 
         return Response({"file_tags": file_tags}, status=status.HTTP_200_OK)
 

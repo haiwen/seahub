@@ -88,12 +88,8 @@ class FileTags(models.Model):
     objects = FileTagsManager()
 
     def to_dict(self):
-        repo_tag = RepoTags.objects.get_repo_tag_by_id(self.repo_tag_id)
-        tag_name = repo_tag.name if repo_tag else ''
-        tag_color = repo_tag.color if repo_tag else ''
+
         return {
             "file_tag_id": self.pk,
             "repo_tag_id": self.repo_tag_id,
-            "tag_name": tag_name,
-            "tag_color": tag_color,
         }
