@@ -65,10 +65,6 @@ class FileUploader extends React.Component {
       this.resumable.enableDropOnDocument();
     }
 
-    seafileAPI.getUploadLink(repoID, this.props.filePath).then(res => {
-      this.resumable.opts.target = res.data;
-    });
-
     this.bindCallBackHandler();
     this.bindEventHandler();
   }
@@ -95,6 +91,7 @@ class FileUploader extends React.Component {
   }
 
   bindEventHandler = () => {
+    this.resumable.on('chunkingComplete', this.onChunkingComplete);
     this.resumable.on('fileAdded', this.onFileAdded);
     this.resumable.on('filesAddedComplete', this.filesAddedComplete);
     this.resumable.on('fileProgress', this.onFileProgress);
@@ -107,14 +104,34 @@ class FileUploader extends React.Component {
     this.resumable.on('error', this.onError);
     this.resumable.on('beforeCancel', this.onBeforeCancel);
     this.resumable.on('cancel', this.onCancel);
-    this.resumable.on('chunkingComplete', this.onChunkingComplete);
   }
 
-  onFileAdded = (resumableFile) => {
+  onChunkingComplete = (file) => {
+    if (file.relativePath !== file.fileName) {
+      return; // is upload a folder;
+    }
+    if (enableResumableFileUpload) {
+      seafileAPI.getFileUploadedBytes(repoID, this.props.filePath, file.fileName).then(res => {
+        let uploadedBytes = res.data.uploadedBytes;
+        let offset = Math.floor(uploadedBytes / (1024 * 1024));
+        file.markChunksCompleted(offset);
+      });
+    }
+  }
+
+  onFileAdded = (resumableFile, event) => {
+    //get uploadLink
+    seafileAPI.getUploadLink(repoID, this.props.filePath).then(res => {
+      this.resumable.opts.target = res.data;
+    });
+
+    //get parent_dir、relative_path；
     let filePath = this.props.filePath === '/' ? '/' : this.props.filePath + '/';
     let fileName = resumableFile.fileName;
     let relativePath = resumableFile.relativePath;
     let isFile = fileName === relativePath;
+
+    //update formdata；
     resumableFile.formData = {};
     if (isFile) {
       resumableFile.formData  = {
@@ -127,6 +144,8 @@ class FileUploader extends React.Component {
         relative_path: relative_path
       };
     }
+
+    //check repetition
   }
 
   filesAddedComplete = (resumable, files) => {
@@ -225,19 +244,6 @@ class FileUploader extends React.Component {
   onCancel = () => {
 
   }
-
-  onChunkingComplete = (file) => {
-    if (file.relativePath !== file.fileName) {
-      return; // is upload a folder;
-    }
-    if (enableResumableFileUpload) {
-      seafileAPI.getFileUploadedBytes(repoID, this.props.filePath, file.fileName).then(res => {
-        let uploadedBytes = res.data.uploadedBytes;
-        let offset = Math.floor(uploadedBytes / (1024 * 1024));
-        file.markChunksCompleted(offset);
-      });
-    }
-  }
   
   setHeaders = (resumableFile, resumable) => {
     let offset = resumable.offset;
@@ -269,7 +275,6 @@ class FileUploader extends React.Component {
     return MD5(relativePath + new Date()) + relativePath;
   }
 
-  //component buisiness handler
   onClick = (e) => {
     e.nativeEvent.stopImmediatePropagation();
     e.stopPropagation();
@@ -285,7 +290,6 @@ class FileUploader extends React.Component {
     this.uploader.click();
   }
 
-  //uploader list view handler
   onMinimizeUploadDialog = () => {
     this.setState({isUploadProgressDialogShow: false});
   }
