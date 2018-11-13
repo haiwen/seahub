@@ -123,56 +123,55 @@ class FileUploader extends React.Component {
     //get uploadLink
     seafileAPI.getUploadLink(repoID, this.props.filePath).then(res => {
       this.resumable.opts.target = res.data;
-    });
-
-    //get parent_dir、relative_path；
-    let filePath = this.props.filePath === '/' ? '/' : this.props.filePath + '/';
-    let fileName = resumableFile.fileName;
-    let relativePath = resumableFile.relativePath;
-    let isFile = fileName === relativePath;
-
-    //update formdata；
-    resumableFile.formData = {};
-    if (isFile) {
-      resumableFile.formData  = {
-        parent_dir: filePath,
-      };
-    } else {
-      let relative_path = relativePath.slice(0, relativePath.lastIndexOf('/') + 1);
-      resumableFile.formData  = {
-        parent_dir: filePath,
-        relative_path: relative_path
-      };
-    }
-
-    //check repetition
-    //uploading is file and only upload one file
-    if(files.length === 1 &&  resumableFile.fileName === resumableFile.relativePath) {
-      let hasRepetition = false;
-      let direntList = this.props.direntList;
-      for (let i = 0; i < direntList.length; i++) {
-        if (direntList[i].type === 'file' && direntList[i].name === resumableFile.fileName) {
-          hasRepetition = true;
-          break;
-        }
+      //get parent_dir、relative_path；
+      let filePath = this.props.filePath === '/' ? '/' : this.props.filePath + '/';
+      let fileName = resumableFile.fileName;
+      let relativePath = resumableFile.relativePath;
+      let isFile = fileName === relativePath;
+  
+      //update formdata；
+      resumableFile.formData = {};
+      if (isFile) {
+        resumableFile.formData  = {
+          parent_dir: filePath,
+        };
+      } else {
+        let relative_path = relativePath.slice(0, relativePath.lastIndexOf('/') + 1);
+        resumableFile.formData  = {
+          parent_dir: filePath,
+          relative_path: relative_path
+        };
       }
-      if (hasRepetition) {
-        this.setState({
-          isUploadRemindDialogShow: true,
-          currentResumableFile: resumableFile,
-        });
+  
+      //check repetition
+      //uploading is file and only upload one file
+      if(files.length === 1 &&  resumableFile.fileName === resumableFile.relativePath) {
+        let hasRepetition = false;
+        let direntList = this.props.direntList;
+        for (let i = 0; i < direntList.length; i++) {
+          if (direntList[i].type === 'file' && direntList[i].name === resumableFile.fileName) {
+            hasRepetition = true;
+            break;
+          }
+        }
+        if (hasRepetition) {
+          this.setState({
+            isUploadRemindDialogShow: true,
+            currentResumableFile: resumableFile,
+          });
+        } else {
+          this.setUploadFileList(this.resumable.files);
+          this.resumable.upload();
+        }
       } else {
         this.setUploadFileList(this.resumable.files);
         this.resumable.upload();
       }
-    } else {
-      this.setUploadFileList(this.resumable.files);
-      this.resumable.upload();
-    }
+    });
   }
 
   filesAddedComplete = (resumable, files) => {
-    //single file uploading can check repetition, because custom dialog conn't prevent program execution; 
+    // single file uploading can check repetition, because custom dialog conn't prevent program execution; 
   }
 
   setUploadFileList = (files) => {
