@@ -210,6 +210,16 @@ class MainPanel extends Component {
     this.updateViewList(this.props.filePath);
   }
 
+  uploadFile = (e) => {
+    e.nativeEvent.stopImmediatePropagation();
+    this.uploader.onFileUpload();
+  }
+
+  uploadFolder = (e) => {
+    e.nativeEvent.stopImmediatePropagation();
+    this.uploader.onFolderUpload();
+  }
+
   onFileSuccess = (file) => {
 
   }
@@ -256,9 +266,9 @@ class MainPanel extends Component {
                   !this.props.isViewFileState &&
                   <Fragment>
                     {
-                      Utils.isUploaderSupport() ?
+                      Utils.isSupportUploadFolder() ?
                         <button className="btn btn-secondary operation-item" title={gettext('Upload')} onClick={this.onUploadClick}>{gettext('Upload')}</button> :
-                        <button className="btn btn-secondary operation-item" title={gettext('Upload')} onClick={this.uploadFile}></button>
+                        <button className="btn btn-secondary operation-item" title={gettext('Upload')} onClick={this.uploadFile}>{gettext('Upload')}</button>
                     }
                     <button className="btn btn-secondary operation-item" title={gettext('New')} onClick={this.onNewClick}>{gettext('New')}</button>
                     <button className="btn btn-secondary operation-item" title={gettext('Share')} onClick={this.onShareClick}>{gettext('Share')}</button>

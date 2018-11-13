@@ -4,15 +4,15 @@ import { gettext } from '../../utils/constants';
 
 const propTypes = {
   item: PropTypes.object.isRequired,
-  onUploaderCancel: PropTypes.func.isRequired,
+  onUploadCancel: PropTypes.func.isRequired,
 };
 
-class FileUploaderListItem extends React.Component {
+class UploadListItem extends React.Component {
 
-  onUploaderCancel = () => {
+  onUploadCancel = () => {
     let item = this.props.item;
     item.resumableFile.cancel();
-    this.props.onUploaderCancel(item);
+    this.props.onUploadCancel(item);
   }
 
   formatFileSize = (size) => {
@@ -22,7 +22,7 @@ class FileUploaderListItem extends React.Component {
     if (size >= 1000 * 1000 * 1000) {
       return (size / (1000 * 1000 * 1000)).toFixed(1) + ' G';
     }
-    if (size >= 1024 * 1024) {
+    if (size >= 1000 * 1000) {
       return (size / (1000 * 1000)).toFixed(1) + ' M';
     }
     if (size >= 1000) {
@@ -44,7 +44,7 @@ class FileUploaderListItem extends React.Component {
         </td>
         <td width="20%" className="upload-operation">
           { progress !== 100 ?
-            <span className="a-simulate" onClick={this.onUploaderCancel}>{gettext(('cancel'))}</span> :
+            <span className="a-simulate" onClick={this.onUploadCancel}>{gettext(('cancel'))}</span> :
             <span>{gettext('uploaded')}</span>
           }
         </td>
@@ -53,6 +53,6 @@ class FileUploaderListItem extends React.Component {
   }
 }
 
-FileUploaderListItem.propTypes = propTypes;
+UploadListItem.propTypes = propTypes;
 
-export default FileUploaderListItem;
+export default UploadListItem;

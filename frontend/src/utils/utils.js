@@ -168,7 +168,7 @@ export const Utils = {
     return filePath.slice(lastIndex+1);
   },
 
-  isUploaderSupport: function() {
+  isSupportUploadFolder: function() {
     return navigator.userAgent.indexOf('Firefox')!=-1 ||
       navigator.userAgent.indexOf('Chrome') > -1;
   }

@@ -1,37 +1,40 @@
 import React, { Fragment } from 'react';
 import PropTypes from 'prop-types';
 import { gettext } from '../../utils/constants';
-import FileUploaderListItem from './file-uploader-list-item';
+import UploadListItem from './upload-list-item';
 
 const propTypes = {
   totalProgress: PropTypes.number.isRequired,
-  uploaderFileList: PropTypes.array.isRequired,
-  onMinimizeUploader: PropTypes.func.isRequired,
-  onCloseUploader: PropTypes.func.isRequired,
-  onUploaderCancel: PropTypes.func.isRequired,
+  uploadFileList: PropTypes.array.isRequired,
+  onMinimizeUploadDialog: PropTypes.func.isRequired,
+  onCloseUploadDialog: PropTypes.func.isRequired,
+  onUploadCancel: PropTypes.func.isRequired,
 };
 
-class FileUploaderListView extends React.Component {
+class UploadProgressDialog extends React.Component {
 
-  onMinimizeUploader = () => {
-    this.props.onMinimizeUploader();
+  onMinimizeUpload = (e) => {
+    e.nativeEvent.stopImmediatePropagation();
+    this.props.onMinimizeUploadDialog();
   }
 
-  onCloseUploader = () => {
-    this.props.onCloseUploader();
+  onCloseUpload = (e) => {
+    e.nativeEvent.stopImmediatePropagation();
+    this.props.onCloseUploadDialog();
   }
 
   render() {
     let uploadedMessage = gettext('File Upload');
     let uploadingMessage = gettext('File is upload...') + this.props.totalProgress + '%';
 
+    let uploadingOptions = (<span className="sf2-icon-minus" onClick={this.onMinimizeUpload}></span>);
+
     let uploadedOptions = (
       <Fragment>
-        <span className="sf2-icon-minus" onClick={this.onMinimizeUploader}></span>
-        <span className="sf2-icon-x1" onClick={this.onCloseUploader}></span>
+        <span className="sf2-icon-minus" onClick={this.onMinimizeUpload}></span>
+        <span className="sf2-icon-x1" onClick={this.onCloseUpload}></span>
       </Fragment>
     );
-    let uploadingOptions = (<span className="sf2-icon-minus" onClick={this.onMinimizeUploader}></span>);
 
     let totalProgress = this.props.totalProgress;
 
@@ -49,9 +52,9 @@ class FileUploaderListView extends React.Component {
           <table>
             <tbody>
               {
-                this.props.uploaderFileList.map((item, index) => {
+                this.props.uploadFileList.map((item, index) => {
                   return (
-                    <FileUploaderListItem key={index} item={item} onUploaderCancel={this.props.onUploaderCancel}/>
+                    <UploadListItem key={index} item={item} onUploadCancel={this.props.onUploadCancel}/>
                   );
                 })
               }
@@ -63,6 +66,6 @@ class FileUploaderListView extends React.Component {
   }
 }
 
-FileUploaderListView.propTypes = propTypes;
+UploadProgressDialog.propTypes = propTypes;
 
-export default FileUploaderListView;
+export default UploadProgressDialog;

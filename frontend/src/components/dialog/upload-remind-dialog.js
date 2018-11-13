@@ -5,20 +5,20 @@ import { Modal, ModalHeader, ModalBody, ModalFooter, Button } from 'reactstrap';
 
 const propTypes = {
   currentResumableFile: PropTypes.object.isRequired,
-  replacePrevFile: PropTypes.func.isRequired,
-  doNotReplacePervFile: PropTypes.func.isRequired,
-  doNotUploader: PropTypes.func.isRequired,
+  replaceRepetitionFile: PropTypes.func.isRequired,
+  uploadFile: PropTypes.func.isRequired,
+  cancelFileUpload: PropTypes.func.isRequired,
 };
 
-class UploaderReminderDialog extends React.Component {
+class UploadRemindDialog extends React.Component {
 
   toggle = () => {
-    this.props.doNotUploader();
+    this.props.cancelFileUpload();
   }
 
   render() {
 
-    let title = gettext("Replace file {filename}?");
+    let title = gettext('Replace file {filename}?');
     title = title.replace('{filename}', '<span class="a-simaulte">' + this.props.currentResumableFile.fileName + '</span>');
     return (
       <Modal isOpen={true} toggle={this.toggle}>
@@ -28,8 +28,8 @@ class UploaderReminderDialog extends React.Component {
           <p>{gettext('Replacing it will overwrite its content.')}</p>
         </ModalBody>
         <ModalFooter>
-          <Button outline color="primary" onClick={this.props.replacePrevFile}>{gettext('Replace')}</Button>
-          <Button outline color="info" onClick={this.props.doNotReplacePervFile}>{gettext("Don't replace")}</Button>
+          <Button outline color="primary" onClick={this.props.replaceRepetitionFile}>{gettext('Replace')}</Button>
+          <Button outline color="info" onClick={this.props.uploadFile}>{gettext("Don't Replace")}</Button>
           <Button outline color="danger" onClick={this.toggle}>{gettext('Cancel')}</Button>
         </ModalFooter>
       </Modal>
@@ -37,6 +37,6 @@ class UploaderReminderDialog extends React.Component {
   }
 }
 
-UploaderReminderDialog.propTypes = propTypes;
+UploadRemindDialog.propTypes = propTypes;
 
-export default UploaderReminderDialog;
+export default UploadRemindDialog;
