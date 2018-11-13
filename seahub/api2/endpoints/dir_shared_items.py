@@ -328,7 +328,7 @@ class DirSharedItemsEndpoint(APIView):
                 if self.has_shared_to_user(request, repo_id, path, to_user):
                     result['failed'].append({
                         'email': to_user,
-                        'error_msg': _(u'This item has been shared to %s.') % to_user
+                        'error_msg': _(u'This item has been shared to %s.') % email2nickname(to_user)
                         })
                     continue
 
