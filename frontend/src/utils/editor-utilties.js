@@ -123,10 +123,6 @@ class EditorUtilities {
     return seafileAPI.createDraftReview(id);
   }
 
-  listReviews(st) {
-    return seafileAPI.listReviews(st);
-  }
-
 }
 
 const editorUtilities = new EditorUtilities();

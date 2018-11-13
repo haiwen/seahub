@@ -1,6 +1,6 @@
 import React from 'react';
 import { gettext } from '../../utils/constants';
-import editUtilties from '../../utils/editor-utilties';
+import { seafileAPI } from '../../utils/seafile-api';
 import Loading from '../../components/loading';
 import ReviewListView from '../../components/review-list-view/review-list-view';
 
@@ -20,13 +20,13 @@ class ReviewContent extends React.Component {
     this.getReviewList('open');
   }
 
-  getReviewList = (st) => {
+  getReviewList = (reviewStatus) => {
     this.setState({isLoadingReviews: true})
-    editUtilties.listReviews(st).then(res => {
+    seafileAPI.listReviews(reviewStatus).then(res => {
       this.setState({
         reviewsList: res.data.data,
         isLoadingReviews: false,
-        activeTab: st,
+        activeTab: reviewStatus,
       });
     });
   }
