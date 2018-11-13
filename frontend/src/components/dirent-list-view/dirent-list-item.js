@@ -308,7 +308,7 @@ class DirentListItem extends React.Component {
   }
 
   getFileTag = () => {
-    if (this.props.dirent.type === 'file') {
+    if (this.props.dirent.type === 'file' && this.props.dirent.file_tags!== undefined) {
       let FileTgas = this.props.dirent.file_tags;
       let fileTagList = [];
       FileTgas.forEach(item => {

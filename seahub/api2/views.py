@@ -58,7 +58,6 @@ from seahub.notifications.models import UserNotification
 from seahub.options.models import UserOptions
 from seahub.profile.models import Profile, DetailedProfile
 from seahub.drafts.models import Draft
-from seahub.file_tags.models import FileTags
 from seahub.signals import (repo_created, repo_deleted)
 from seahub.share.models import FileShare, OrgFileShare, UploadLinkShare
 from seahub.utils import gen_file_get_url, gen_token, gen_file_upload_url, \
@@ -78,6 +77,7 @@ from seahub.utils.repo import get_repo_owner, get_library_storages, \
         add_encrypted_repo_secret_key_to_database, get_available_repo_perms, \
         parse_repo_perm
 from seahub.utils.star import star_file, unstar_file, get_dir_starred_files
+from seahub.utils.file_tags import get_dir_tags_dict
 from seahub.utils.file_types import DOCUMENT
 from seahub.utils.file_size import get_file_size_unit
 from seahub.utils.file_op import check_file_lock
@@ -1970,13 +1970,22 @@ def get_dir_entrys_by_id(request, repo, path, dir_id, request_type=None):
             nickname_dict[e] = email2nickname(e)
 
     starred_files = get_dir_starred_files(username, repo.id, path)
+    dir_tags_dict = get_dir_tags_dict(repo.id, path)
     for e in file_list:
         e['modifier_contact_email'] = contact_email_dict.get(e['modifier_email'], '')
         e['modifier_name'] = nickname_dict.get(e['modifier_email'], '')
 
+        file_tags = dir_tags_dict.get(e['name'])
+        if file_tags:
+            e['file_tags'] = []
+            for file_tag in file_tags:
+                tag_dict = dict()
+                tag_dict['file_tag_id'] = file_tag.pk
+                tag_dict['repo_tag_id'] = file_tag.repo_tag.pk
+                tag_dict['tag_name'] = file_tag.repo_tag.name
+                tag_dict['tag_color'] = file_tag.repo_tag.color
+                e['file_tags'].append(tag_dict)
         file_path = posixpath.join(path, e['name'])
-        file_tags = [file_tag.to_dict() for file_tag in FileTags.objects.get_file_tag_by_path(repo.id, file_path)]
-        e['file_tags'] = file_tags
         e['starred'] = False
         if normalize_file_path(file_path) in starred_files:
             e['starred'] = True

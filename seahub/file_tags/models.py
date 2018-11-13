@@ -70,6 +70,14 @@ class FileTagsManager(models.Manager):
         except self.model.DoesNotExist:
             return False
 
+    def get_dir_file_tags(self, repo_id, parent_path):
+
+        folder_name = os.path.dirname(parent_path)
+        parent_folder_uuid = FileUUIDMap.objects.get_or_create_fileuuidmap(
+            repo_id, parent_path, folder_name, is_dir=True)
+
+        return super(FileTagsManager, self).filter(parent_folder_uuid=parent_folder_uuid)
+
 
 class FileTags(models.Model):
 
