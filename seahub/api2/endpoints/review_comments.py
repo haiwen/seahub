@@ -141,8 +141,8 @@ class ReviewCommentView(APIView):
             return api_error(status.HTTP_404_NOT_FOUND, 
                             'Review comment %s not found' % comment_id)
 
-        username = request.user.username
-        if username != (review_comment.author or r.creator):
+        # permission check
+        if check_folder_permission(request, r.origin_repo_id, '/') is None:
             return api_error(status.HTTP_403_FORBIDDEN, 'Permission denied.')
 
         review_comment.delete()
