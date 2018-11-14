@@ -345,6 +345,7 @@ class MainPanel extends Component {
                     onItemDetails={this.onItemDetails}
                     updateViewList={this.updateViewList}
                     isDirentListLoading={this.state.isDirentListLoading}
+                    updateViewListParam={this.updateViewListParam}
                     currentRepo={this.state.currentRepo}
                     isRepoOwner={this.state.isRepoOwner}
                   />
