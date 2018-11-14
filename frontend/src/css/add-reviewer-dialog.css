@@ -11,6 +11,6 @@
 .reviewer-select-error {
   margin-top: 1em;
 }
-.reviewer-select>div>div:nth-child(2) {
+.reviewer-select .true__dropdown-indicator, .reviewer-select .true__indicator-separator {
   display: none;
 }
