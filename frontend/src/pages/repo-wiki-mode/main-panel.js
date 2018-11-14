@@ -2,6 +2,7 @@ import React, { Component, Fragment } from 'react';
 import PropTypes from 'prop-types';
 import { gettext, repoID, serviceUrl, slug, siteRoot } from '../../utils/constants';
 import { seafileAPI } from '../../utils/seafile-api';
+import { Utils } from '../../utils/utils';
 import Repo from '../../models/repo';
 import Dirent from '../../models/dirent';
 import CommonToolbar from '../../components/toolbar/common-toolbar';
@@ -11,6 +12,7 @@ import DirentListView from '../../components/dirent-list-view/dirent-list-view';
 import DirentDetail from '../../components/dirent-detail/dirent-details';
 import CreateFolder from '../../components/dialog/create-folder-dialog';
 import CreateFile from '../../components/dialog/create-file-dialog';
+import FileUploader from '../../components/file-uploader/file-uploader';
 
 const propTypes = {
   content: PropTypes.string,
@@ -208,6 +210,20 @@ class MainPanel extends Component {
     this.updateViewList(this.props.filePath);
   }
 
+  uploadFile = (e) => {
+    e.nativeEvent.stopImmediatePropagation();
+    this.uploader.onFileUpload();
+  }
+
+  uploadFolder = (e) => {
+    e.nativeEvent.stopImmediatePropagation();
+    this.uploader.onFolderUpload();
+  }
+
+  onFileSuccess = (file) => {
+
+  }
+
   render() {
     let filePathList = this.props.filePath.split('/');
     let nodePath = '';
@@ -249,17 +265,21 @@ class MainPanel extends Component {
                 {
                   !this.props.isViewFileState &&
                   <Fragment>
-                    <button className="btn btn-secondary operation-item" title={gettext('Edit File')} onClick={this.onUploadClick}>{gettext('Upload')}</button>
-                    <button className="btn btn-secondary operation-item" title={gettext('Edit File')} onClick={this.onNewClick}>{gettext('New')}</button>
-                    <button className="btn btn-secondary operation-item" title={gettext('Edit File')} onClick={this.onShareClick}>{gettext('Share')}</button>
+                    {
+                      Utils.isSupportUploadFolder() ?
+                        <button className="btn btn-secondary operation-item" title={gettext('Upload')} onClick={this.onUploadClick}>{gettext('Upload')}</button> :
+                        <button className="btn btn-secondary operation-item" title={gettext('Upload')} onClick={this.uploadFile}>{gettext('Upload')}</button>
+                    }
+                    <button className="btn btn-secondary operation-item" title={gettext('New')} onClick={this.onNewClick}>{gettext('New')}</button>
+                    <button className="btn btn-secondary operation-item" title={gettext('Share')} onClick={this.onShareClick}>{gettext('Share')}</button>
                   </Fragment>
                 }
               </div>
-              {
+              { 
                 this.state.uploadMenuShow && 
                 <ul className="menu dropdown-menu" style={this.state.operationMenuStyle}>
-                  <li className="dropdown-item">{gettext('Upload Files')}</li>
-                  <li className="dropdown-item">{gettext('Upload Folder')}</li>
+                  <li className="dropdown-item" onClick={this.uploadFile}>{gettext('File Upload')}</li>
+                  <li className="dropdown-item" onClick={this.uploadFolder}>{gettext('Folder Upload')}</li>
                 </ul>
               }
               {
@@ -303,20 +323,29 @@ class MainPanel extends Component {
                   onLinkClick={this.props.onLinkClick}
                   isFileLoading={this.props.isFileLoading}
                 /> :
-                <DirentListView 
-                  direntList={this.state.direntList}
-                  filePath={this.props.filePath}
-                  onItemClick={this.props.onMainItemClick}
-                  onItemDelete={this.props.onMainItemDelete}
-                  onItemRename={this.props.onMainItemRename}
-                  onItemMove={this.props.onMainItemMove}
-                  onItemCopy={this.props.onMainItemCopy}
-                  onItemDetails={this.onItemDetails}
-                  updateViewList={this.updateViewList}
-                  isDirentListLoading={this.state.isDirentListLoading}
-                  currentRepo={this.state.currentRepo}
-                  isRepoOwner={this.state.isRepoOwner}
-                />
+                <Fragment>
+                  <DirentListView 
+                    direntList={this.state.direntList}
+                    filePath={this.props.filePath}
+                    onItemClick={this.props.onMainItemClick}
+                    onItemDelete={this.props.onMainItemDelete}
+                    onItemRename={this.props.onMainItemRename}
+                    onItemMove={this.props.onMainItemMove}
+                    onItemCopy={this.props.onMainItemCopy}
+                    onItemDetails={this.onItemDetails}
+                    updateViewList={this.updateViewList}
+                    isDirentListLoading={this.state.isDirentListLoading}
+                    currentRepo={this.state.currentRepo}
+                    isRepoOwner={this.state.isRepoOwner}
+                  />
+                  <FileUploader 
+                    ref={uploader => this.uploader = uploader}
+                    dragAndDrop={true}
+                    filePath={this.props.filePath}
+                    onFileSuccess={this.onFileSuccess}
+                    direntList={this.state.direntList}
+                  />
+                </Fragment>
               }
             </div>
           </div>

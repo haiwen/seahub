@@ -1,0 +1,46 @@
+.file-uploader-container {
+  display: flex;
+  flex: 1;
+}
+
+.file-uploader {
+  position: fixed;
+  bottom: 99999px;
+}
+
+.uploader-list-view {
+  display: flex;
+  flex-direction: column;
+  position: fixed;
+  right: 1px;
+  bottom: 1px;
+  width: 35rem;
+  min-height: 15rem;
+  max-height: 20rem;
+  border: 1px solid #ddd;
+  border-radius: 3px;
+  box-shadow: 0 0 6px #ddd;
+}
+
+.uploader-list-header {
+  background-color: #f0f0f0;
+  padding: 0.375rem 0.625rem;
+  font-size: 1rem;
+  line-height: 1.5;
+  color: #322;
+  display: flex;
+  justify-content: space-between;
+  min-height: 2.25rem;
+}
+
+.uploader-list-header .uploader-options span{
+  display: inline-block;
+  margin-left: 0.25rem;
+  font-size: 18px;
+  color: #b8b8b8;
+  cursor: pointer;
+}
+
+.uploader-list-content {
+  background-color: #fff;
+}
