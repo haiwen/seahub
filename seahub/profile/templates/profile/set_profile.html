@@ -175,6 +175,29 @@
 </div>
 {% endif %}
 
+<div class="setting-item" id="social-auth">
+    <h3>{% trans "Social Login" %}</h3>
+
+      <ul>
+
+        <li>
+          {% if request.LANGUAGE_CODE == 'zh-cn' %}
+          企业微信
+          {% else %}
+          WeChat Work
+          {% endif %}
+
+          {% if social_connected %}
+          <a class="social-disconnect" href="#" data-url="{% url "social:disconnect" 'weixin-work' %}?next={{ social_next_page }}">{% trans "Disconnect" %}</a>
+          {% else %}
+          <a href="{% url "social:begin" 'weixin-work' %}?next={{ social_next_page }}">{% trans "Connect" %}</a>
+          {% endif %}
+        </li>
+
+      </ul>
+
+</div>
+
 {% if ENABLE_DELETE_ACCOUNT %}
 <div class="setting-item" id="del-account">
     <h3>{% trans "Delete Account" %}</h3>
@@ -378,6 +401,12 @@ $('#set-email-notice-interval-form').on('submit', function() {
         error: ajaxErrorHandler
     });
     return false;
+});
+
+addConfirmTo($('.social-disconnect'), {
+    'title':"{% trans "Disconnect" %}",
+    'con':"{% trans "Are you sure you want to disconnect?" %}",
+    'post':true
 });
 </script>
 {% endblock %}
