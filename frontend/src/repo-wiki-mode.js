@@ -10,6 +10,7 @@ import MainPanel from './pages/repo-wiki-mode/main-panel';
 import Node from './components/tree-view/node';
 import Tree from './components/tree-view/tree';
 import Toast from './components/toast';
+import Dirent from './models/dirent';
 import 'seafile-ui';
 import './assets/css/fa-solid.css';
 import './assets/css/fa-regular.css';
@@ -24,26 +25,32 @@ class Wiki extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      content: '',
+      filePath: '',
       tree_data: new Tree(),
       closeSideBar: false,
-      filePath: '',
-      latestContributor: '',
-      lastModified: '',
-      permission: '',
-      isFileLoading: false,
       changedNode: null,
-      isViewFileState: true
+      isDirentListLoading: true,
+      isViewFileState: true,
+      direntList: [],
     };
     window.onpopstate = this.onpopstate;
   }
 
   componentDidMount() {
-    this.initWikiData(initialFilePath);
+    // this.initWikiData(initialFilePath);
+    
+    if(initialFilePath[initialFilePath.length - 1] === '/') {  //judgement is dirent
+      this.initMainPanelDirentList(initialFilePath);
+    } else {
+      this.setState({
+        filePath: initialFilePath,
+        isViewFileState: true,
+      });
+    }
+    this.initSidePanelTreeData(initialFilePath);
   }
 
-  initWikiData(filePath){
-    this.setState({isFileLoading: true});
+  initSidePanelTreeData = (filePath) => {
     editorUtilities.listRepoDir().then((files) => {
       // construct the tree object
       var treeData = new Tree();
@@ -51,19 +58,28 @@ class Wiki extends Component {
 
       let node = treeData.getNodeByPath(filePath);
       treeData.expandNode(node);
-      if (node.isDir()) {
-        this.exitViewFileState(treeData, node);
-        this.setState({isFileLoading: false});
-      } else {
-        this.setState({tree_data: treeData});
-        this.initMainPanelData(filePath);
-      }
+
+      this.setState({tree_data: treeData});
     }, () => {
       /* eslint-disable */
       console.log('failed to load files');
       /* eslint-enable */
+      this.setState({isLoadFailed: true});
+    });
+  }
+
+  initMainPanelDirentList = (filePath) => {
+    this.setState({isDirentListLoading: true});
+    seafileAPI.listDir(repoID, filePath).then(res => {
+      let direntList = [];
+      res.data.forEach(item => {
+        let dirent = new Dirent(item);
+        direntList.push(dirent);
+      });
       this.setState({
-        isLoadFailed: true
+        isViewFileState: false,
+        direntList: direntList,
+        isDirentListLoading: false,
       });
     });
   }
@@ -581,14 +597,10 @@ class Wiki extends Component {
           onDirCollapse={this.onDirCollapse}
         />
         <MainPanel
-          content={this.state.content}
           filePath={this.state.filePath}
-          latestContributor={this.state.latestContributor}
-          lastModified={this.state.lastModified}
-          permission={this.state.permission}
           isViewFileState={this.state.isViewFileState}
-          changedNode={this.state.changedNode}
-          isFileLoading={this.state.isFileLoading}
+          isDirentListLoading={this.state.isDirentListLoading}
+          direntList={this.state.direntList}
           switchViewMode={this.switchViewMode}
           onLinkClick={this.onLinkClick}
           onMenuClick={this.onMenuClick}

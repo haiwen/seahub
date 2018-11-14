@@ -1,5 +1,6 @@
 import React, { Component, Fragment } from 'react';
 import PropTypes from 'prop-types';
+import moment from 'moment';
 import { gettext, repoID, serviceUrl, slug, siteRoot } from '../../utils/constants';
 import { seafileAPI } from '../../utils/seafile-api';
 import { Utils } from '../../utils/utils';
@@ -43,7 +44,6 @@ class MainPanel extends Component {
     super(props);
     this.state = {
       isWikiMode: true,
-      direntList: [],
       newMenuShow: false,
       uploadMenuShow: false,
       showFileDialog: false,
@@ -52,9 +52,13 @@ class MainPanel extends Component {
       isDirentDetailShow: false,
       currentDirent: null,
       currentFilePath: '',
-      isDirentListLoading: true,
       currentRepo: null,
       isRepoOwner: false,
+      isFileLoading: true,
+      content: '',
+      lastModified: '',
+      latestContributor: '',
+      permission: '',
     };
   }
 
@@ -74,10 +78,27 @@ class MainPanel extends Component {
   }
 
   componentWillReceiveProps(nextProps) {
-    let node = nextProps.changedNode;
-    if (node && node.isDir()) {
-      let path = node.path;
-      this.updateViewList(path);
+    if (nextProps.isViewFileState) {
+      let filePath = nextProps.filePath;
+      this.setState({isFileLoading: true});
+
+      seafileAPI.getFileInfo(repoID, filePath).then((res) => {
+        let { mtime, permission, last_modifier_name } = res.data;
+        seafileAPI.getFileDownloadLink(repoID, filePath).then((res) => {
+          seafileAPI.getFileContent(res.data).then((res) => {
+            this.setState({
+              content: res.data,
+              permission: permission,
+              latestContributor: last_modifier_name,
+              lastModified: moment.unix(mtime).fromNow(),
+              isFileLoading: false,
+            });
+          });
+        });
+      });
+
+      let fileUrl = serviceUrl + '/wiki/lib/' + repoID + filePath;
+      window.history.pushState({urlPath: fileUrl, filePath: filePath}, filePath, fileUrl);
     }
   }
 
@@ -327,15 +348,15 @@ class MainPanel extends Component {
             <div className="cur-view-content">
               { this.props.isViewFileState ?
                 <MarkdownViewer
-                  markdownContent={this.props.content}
-                  latestContributor={this.props.latestContributor}
-                  lastModified = {this.props.lastModified}
+                  markdownContent={this.state.content}
+                  latestContributor={this.state.latestContributor}
+                  lastModified = {this.state.lastModified}
                   onLinkClick={this.props.onLinkClick}
-                  isFileLoading={this.props.isFileLoading}
+                  isFileLoading={this.state.isFileLoading}
                 /> :
                 <Fragment>
                   <DirentListView 
-                    direntList={this.state.direntList}
+                    direntList={this.props.direntList}
                     filePath={this.props.filePath}
                     onItemClick={this.props.onMainItemClick}
                     onItemDelete={this.props.onMainItemDelete}
@@ -354,7 +375,7 @@ class MainPanel extends Component {
                     dragAndDrop={true}
                     filePath={this.props.filePath}
                     onFileSuccess={this.onFileSuccess}
-                    direntList={this.state.direntList}
+                    direntList={this.props.direntList}
                   />
                 </Fragment>
               }
