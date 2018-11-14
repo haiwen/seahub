@@ -158,8 +158,9 @@ class Wiki extends Component {
     this.exitViewFileState(tree, node);
 
     // update location url
-    let fileUrl = serviceUrl + '/wiki/lib/' + repoID + node.path;
-    window.history.pushState({urlPath: fileUrl, filePath: node.path},node.path, fileUrl);
+    let path = node.path === '/' ? node.path : node.path + '/'; 
+    let fileUrl = serviceUrl + '/wiki/lib/' + repoID + path;
+    window.history.pushState({urlPath: fileUrl, filePath: path}, path, fileUrl);
   }
 
   onMainItemClick = (direntPath) => {
@@ -470,8 +471,9 @@ class Wiki extends Component {
       filePath: newNode.path,
       isViewFileState: false
     });
-    let fileUrl = serviceUrl + '/wiki/lib/' + repoID + newNode.path;
-    window.history.pushState({urlPath: fileUrl, filePath: newNode.path}, newNode.path, fileUrl);
+    let path = newNode.path === '/' ? newNode.path : newNode.path + '/';
+    let fileUrl = serviceUrl + '/wiki/lib/' + repoID + path;
+    window.history.pushState({urlPath: fileUrl, filePath: path}, path, fileUrl);
   }
 
   getFileNameByPath(path) {
