@@ -30,86 +30,19 @@ class Wiki extends Component {
       closeSideBar: false,
       changedNode: null,
       isDirentListLoading: true,
-      isViewFileState: true,
+      isViewFileState: false,
       direntList: [],
     };
     window.onpopstate = this.onpopstate;
   }
 
   componentDidMount() {
-    // this.initWikiData(initialFilePath);
-    
-    if(initialFilePath[initialFilePath.length - 1] === '/') {  //judgement is dirent
-      this.initMainPanelDirentList(initialFilePath);
+    if(initialFilePath[initialFilePath.length - 1] === '/') {
+      this.enterViewListState(initialFilePath);
     } else {
-      this.setState({
-        filePath: initialFilePath,
-        isViewFileState: true,
-      });
+      this.enterViewFileState(initialFilePath);
     }
-    this.initSidePanelTreeData(initialFilePath);
-  }
-
-  initSidePanelTreeData = (filePath) => {
-    editorUtilities.listRepoDir().then((files) => {
-      // construct the tree object
-      var treeData = new Tree();
-      treeData.parseListToTree(files);
-
-      let node = treeData.getNodeByPath(filePath);
-      treeData.expandNode(node);
-
-      this.setState({tree_data: treeData});
-    }, () => {
-      /* eslint-disable */
-      console.log('failed to load files');
-      /* eslint-enable */
-      this.setState({isLoadFailed: true});
-    });
-  }
-
-  initMainPanelDirentList = (filePath) => {
-    this.setState({isDirentListLoading: true});
-    seafileAPI.listDir(repoID, filePath).then(res => {
-      let direntList = [];
-      res.data.forEach(item => {
-        let dirent = new Dirent(item);
-        direntList.push(dirent);
-      });
-      this.setState({
-        isViewFileState: false,
-        direntList: direntList,
-        isDirentListLoading: false,
-      });
-    });
-  }
-
-  initMainPanelData(filePath) {
-    this.setState({isFileLoading: true});
-
-    seafileAPI.getFileInfo(repoID, filePath).then((res) => {
-      let { mtime, permission, last_modifier_name } = res.data;
-
-      this.setState({
-        latestContributor: last_modifier_name,
-        lastModified: moment.unix(mtime).fromNow(),
-        permission: permission,
-        filePath: filePath,
-      });
-
-      seafileAPI.getFileDownloadLink(repoID, filePath).then((res) => {
-        const downLoadUrl = res.data;
-        seafileAPI.getFileContent(downLoadUrl).then((res) => {
-          this.setState({
-            content: res.data,
-            isFileLoading: false
-          });
-        });
-      });
-    });
-
-    let fileUrl = serviceUrl + '/wiki/lib/' + repoID + filePath;
-    window.history.pushState({urlPath: fileUrl, filePath: filePath}, filePath, fileUrl);
+    this.updateSidePanelTreeData(initialFilePath);
   }
 
   switchViewMode = (mode) => {
@@ -126,6 +59,61 @@ class Wiki extends Component {
     cookie.save('view_mode', mode, { path: '/' });
 
     window.location.href = serviceUrl + '/#common/lib/' + repoID + dirPath;
+  }
+
+  updateSidePanelTreeData = (filePath) => {
+    let nodePath = this.turnUrl2NodePath(filePath);
+    editorUtilities.listRepoDir().then((files) => {
+      var treeData = new Tree();
+      treeData.parseListToTree(files);
+
+      let node = treeData.getNodeByPath(nodePath);
+      treeData.expandNode(node);
+
+      this.setState({
+        tree_data: treeData,
+        changedNode: node,
+      });
+    }, () => {
+      /* eslint-disable */
+      console.log('failed to load files');
+      /* eslint-enable */
+      this.setState({isLoadFailed: true});
+    });
+  }
+
+  enterViewFileState = (filePath) => {
+    this.setState({
+      filePath: filePath,
+      isViewFileState: false
+    });
+  }
+
+  enterViewListState = (filePath) => {
+    this.updateMainPanelDirentList(filePath); //update direntList;
+    this.setState({
+      filePath: filePath,
+      isViewFileState: false
+    });
+
+    // update location url
+    let fileUrl = serviceUrl + '/wiki/lib/' + repoID + filePath;
+    window.history.pushState({urlPath: fileUrl, filePath: filePath}, filePath, fileUrl);
+  }
+
+  updateMainPanelDirentList = (filePath) => {
+    this.setState({isDirentListLoading: true});
+    seafileAPI.listDir(repoID, filePath).then(res => {
+      let direntList = [];
+      res.data.forEach(item => {
+        let dirent = new Dirent(item);
+        direntList.push(dirent);
+      });
+      this.setState({
+        direntList: direntList,
+        isDirentListLoading: false,
+      });
+    });
   }
 
   onLinkClick = (event) => {
@@ -150,7 +138,6 @@ class Wiki extends Component {
         let changedNode = this.state.tree_data.getNodeByPath(path);
         this.exitViewFileState(this.state.tree_data, changedNode);
       }
-
     }
   }
   
@@ -171,12 +158,8 @@ class Wiki extends Component {
     let node = tree.getNodeByPath(nodePath);
     tree.expandNode(node);
 
-    this.exitViewFileState(tree, node);
-
-    // update location url
-    let path = node.path === '/' ? node.path : node.path + '/'; 
-    let fileUrl = serviceUrl + '/wiki/lib/' + repoID + path;
-    window.history.pushState({urlPath: fileUrl, filePath: path}, path, fileUrl);
+    this.setState({tree_data: tree});
+    this.enterViewListState(this.turnNodePath2Url(node.path));
   }
 
   onMainItemClick = (direntPath) => {
@@ -184,11 +167,13 @@ class Wiki extends Component {
     let node = tree.getNodeByPath(direntPath);
     let parentNode = tree.findNodeParentFromTree(node);
     tree.expandNode(parentNode);
+
     if (node.isMarkdown()) {
-      this.initMainPanelData(node.path);
-      this.enterViewFileState(tree, node, node.path);
+      this.setState({tree_data: tree}); // tree
+      this.enterViewFileState({direntPath});
     } else if (node.isDir()){
-      this.exitViewFileState(tree, node);
+      this.setState({tree_data: tree}); //tree
+      this.enterViewListState(this.turnNodePath2Url(node.path));
     } else {
       const w=window.open('about:blank');
       const url = serviceUrl + '/lib/' + repoID + '/file' + node.path;
@@ -257,8 +242,8 @@ class Wiki extends Component {
   onNodeClick = (e, node) => {
     if (node instanceof Node && node.isMarkdown()){
       let tree = this.state.tree_data.clone();
-      this.initMainPanelData(node.path);
-      this.enterViewFileState(tree, node, node.path);
+      this.setState({tree_data: tree});
+      this.setState({filePath: node.path, isViewFileState: true});
     } else if(node instanceof Node && node.isDir()){
       let tree = this.state.tree_data.clone();
       if (this.state.filePath === node.path) {
@@ -268,9 +253,10 @@ class Wiki extends Component {
           tree.expandNode(node);
         }
       }
-      this.exitViewFileState(tree, node);
+      this.setState({tree_data: tree});
+      this.enterViewListState(this.turnNodePath2Url(node.path));
     } else {
-      const w=window.open('about:blank');
+      const w = window.open('about:blank');
       const url = serviceUrl + '/lib/' + repoID + '/file' + node.path;
       w.location.href = url;
     }
@@ -472,24 +458,24 @@ class Wiki extends Component {
 
   
   enterViewFileState(newTree, newNode, newPath) {
-    this.setState({
-      tree_data: newTree,
-      changedNode: newNode,
-      filePath: newPath,
-      isViewFileState: true
-    });
+    // this.setState({
+    //   tree_data: newTree,
+    //   changedNode: newNode,
+    //   filePath: newPath,
+    //   isViewFileState: true
+    // });
   }
   
   exitViewFileState(newTree, newNode) {
-    this.setState({
-      tree_data: newTree,
-      changedNode: newNode,
-      filePath: newNode.path,
-      isViewFileState: false
-    });
-    let path = newNode.path === '/' ? newNode.path : newNode.path + '/';
-    let fileUrl = serviceUrl + '/wiki/lib/' + repoID + path;
-    window.history.pushState({urlPath: fileUrl, filePath: path}, path, fileUrl);
+    // this.setState({
+    //   tree_data: newTree,
+    //   changedNode: newNode,
+    //   filePath: newNode.path,
+    //   isViewFileState: false
+    // });
+    // let path = newNode.path === '/' ? newNode.path : newNode.path + '/';
+    // let fileUrl = serviceUrl + '/wiki/lib/' + repoID + path;
+    // window.history.pushState({urlPath: fileUrl, filePath: path}, path, fileUrl);
   }
 
   getFileNameByPath(path) {
@@ -531,6 +517,18 @@ class Wiki extends Component {
       return true;
     }
     return false;
+  }
+
+  turnUrl2NodePath = (filePath) => {
+    let nodePath = filePath;
+    if (filePath !== '/' && filePath[filePath.length - 1] === '/') {
+      nodePath = filePath.slice(0, filePath.length - 1);
+    }
+    return nodePath;
+  }
+
+  turnNodePath2Url = (nodePath) => {
+    return nodePath === '/' ? nodePath : nodePath + '/';
   }
 
   isMarkdownFile(filePath) {
