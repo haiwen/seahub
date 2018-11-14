@@ -104,6 +104,7 @@ class FileUploader extends React.Component {
     this.resumable.on('error', this.onError);
     this.resumable.on('beforeCancel', this.onBeforeCancel);
     this.resumable.on('cancel', this.onCancel);
+    this.resumable.on('dragstart', this.onDragStart);
   }
 
   onChunkingComplete = (file) => {
@@ -284,6 +285,13 @@ class FileUploader extends React.Component {
   onFolderUpload = () => {
     this.uploadInput.setAttribute('webkitdirectory', 'webkitdirectory');
     this.uploadInput.click();
+    seafileAPI.getUploadLink(repoID, this.props.filePath).then(res => {
+      this.resumable.opts.target = res.data;
+    });
+  }
+  
+  onDragStart = () => {
+    this.uploadInput.setAttribute('webkitdirectory', 'webkitdirectory');
     seafileAPI.getUploadLink(repoID, this.props.filePath).then(res => {
       this.resumable.opts.target = res.data;
     });
