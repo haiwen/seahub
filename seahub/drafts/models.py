@@ -175,6 +175,52 @@ class DraftReviewManager(models.Manager):
 
         return draft_review
 
+    def get_reviews_by_creator_and_status(self, creator, status):
+
+        from seahub.api2.utils import user_to_dict
+        reviews = self.filter(creator=creator, status=status)
+        reviewers = ReviewReviewer.objects.filter(review_id__in=reviews)
+
+        data = []
+        for review in reviews:
+            reviewer_list = []
+            for r in reviewers:
+                if review.id == r.review_id_id:
+                    reviewer = user_to_dict(r.reviewer, avatar_size=64)
+                    reviewer_list.append(reviewer)
+
+            author = user_to_dict(review.creator, avatar_size=64)
+
+            review = review.to_dict()
+            review.update({'reviewers': reviewer_list})
+            review.update({'author': author})
+            data.append(review)
+
+        return data
+
+    def get_reviews_by_reviewer_and_status(self, reviewer, status):
+
+        from seahub.api2.utils import user_to_dict
+        reviews = self.filter(reviewreviewer__reviewer=reviewer, status=status)
+        reviewers = ReviewReviewer.objects.filter(review_id__in=reviews)
+
+        data = []
+        for review in reviews:
+            reviewer_list = []
+            for r in reviewers:
+                if review.id == r.review_id_id:
+                    reviewer = user_to_dict(r.reviewer, avatar_size=64)
+                    reviewer_list.append(reviewer)
+
+            author = user_to_dict(review.creator, avatar_size=64)
+
+            review = review.to_dict()
+            review.update({'author': author})
+            review.update({'reviewers': reviewer_list})
+            data.append(review)
+
+        return data
+
 
 class DraftReview(TimestampedModel):
     creator = LowerCaseCharField(max_length=255, db_index=True)
@@ -193,9 +239,6 @@ class DraftReview(TimestampedModel):
         if not r_repo:
             raise DraftFileConflict
 
-        uuid = self.origin_file_uuid
-        file_path = posixpath.join(uuid.parent_path, uuid.filename)
-
         return {
             'id': self.pk,
             'creator': self.creator,
@@ -203,7 +246,6 @@ class DraftReview(TimestampedModel):
             'creator_name': email2nickname(self.creator),
             'draft_origin_repo_id': self.origin_repo_id,
             'draft_origin_repo_name': r_repo.name,
-            'draft_origin_file_path': file_path,
             'draft_origin_file_version': self.origin_file_version,
             'draft_publish_file_version': self.publish_file_version,
             'draft_file_path': self.draft_file_path,

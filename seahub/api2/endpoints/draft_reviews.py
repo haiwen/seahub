@@ -28,11 +28,26 @@ class DraftReviewsView(APIView):
     throttle_classes = (UserRateThrottle, )
 
     def get(self, request, format=None):
-        """List all user draft review
+        """ List all reviews related to the user and their corresponding reviewers based on the review status
+        case1: List the reviews created by the user and their associated reviewers by status
+        case2: List the reviews of the user as reviewer and their associated reviewers by status
+        status: open / finished / closed
         """
         username = request.user.username
-        data = [x.to_dict() for x in DraftReview.objects.filter(creator=username)]
-        data += [x.review_id.to_dict() for x in ReviewReviewer.objects.filter(reviewer=username)]
+
+        st = request.GET.get('status', 'open')
+
+        if st not in ('open', 'finished', 'closed'):
+            error_msg = 'Status invalid.'
+            return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
+
+        # case1: List the reviews created by the user and their associated reviewers by status
+        reviews_1 = DraftReview.objects.get_reviews_by_creator_and_status(creator=username, status=st)
+
+        # case2: List the reviews of the user as reviewer and their associated reviewers by status
+        reviews_2 = DraftReview.objects.get_reviews_by_reviewer_and_status(reviewer=username, status=st)
+
+        data = reviews_1 + reviews_2
 
         return Response({'data': data})
 
@@ -64,7 +79,7 @@ class DraftReviewView(APIView):
     throttle_classes = (UserRateThrottle, )
 
     def put(self, request, pk, format=None):
-        """update review status 
+        """update review status
         """
 
         st = request.data.get('status', '')

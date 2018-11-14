@@ -14,30 +14,23 @@ class ReviewListView extends React.Component {
 
     constructor(props) {
       super(props);
-  
       this.toggle = this.toggle.bind(this);
-      this.state = {
-        activeTab: 'open'
-      };
     }
 
   toggle(tab) {
-    if (this.state.activeTab !== tab) {
-      this.setState({
-        activeTab: tab
-      });
+    if (this.props.activeTab !== tab) {
+      this.props.getReviewList(tab)
     }
   }
 
   render() {
     let items = this.props.itemsList;
-    let { activeTab } = this.state;
     return (
       <div className="table-container">
         <Nav tabs>
           <NavItem>
             <NavLink
-              className={classnames({ active: this.state.activeTab === 'open' })}
+              className={classnames({ active: this.props.activeTab === 'open' })}
               onClick={() => { this.toggle('open');}}
               >
               {gettext('Open')}
@@ -45,7 +38,7 @@ class ReviewListView extends React.Component {
           </NavItem>
           <NavItem>
             <NavLink
-              className={classnames({ active: this.state.activeTab === 'finished' })}
+              className={classnames({ active: this.props.activeTab === 'finished' })}
               onClick={() => { this.toggle('finished');}}
               >
               {gettext('Published')}
@@ -53,7 +46,7 @@ class ReviewListView extends React.Component {
           </NavItem>
           <NavItem>
             <NavLink
-              className={classnames({ active: this.state.activeTab === 'closed' })}
+              className={classnames({ active: this.props.activeTab === 'closed' })}
               onClick={() => { this.toggle('closed');}}
               >
               {gettext('Closed')}
@@ -65,22 +58,21 @@ class ReviewListView extends React.Component {
             <tr>
               <th style={{width: '4%'}}>{/*img*/}</th>
               <th style={{width: '26%'}}>{gettext('Name')}</th>
-              <th style={{width: '20%'}}>{gettext('Library')}</th>
+              <th style={{width: '25%'}}>{gettext('Library')}</th>
               <th style={{width: '20%'}}>{gettext('Last Update')}</th>
-              <th style={{width: '10%'}}></th>
+              <th style={{width: '10%'}}>{gettext('Author')}</th>
+              <th style={{width: '15%'}}>{gettext('Reviewers')}</th>
             </tr>
           </thead>
           <tbody>
             { items && items.map((item) => {
-              if(item.status === activeTab) {
-                return (
-                    <ReviewListItem 
-                      key={item.id} 
-                      item={item} 
-                      isItemFreezed={this.props.isItemFreezed}
-                    />
-                );
-              }
+              return (
+                  <ReviewListItem 
+                    key={item.id} 
+                    item={item} 
+                    isItemFreezed={this.props.isItemFreezed}
+                  />
+              );
             })}
           </tbody>
         </table>
