@@ -53,6 +53,7 @@ class EditFileTagDialog extends React.Component {
       let filePath = this.props.filePath;
       seafileAPI.addFileTag(repoID, filePath, id).then(() => {
         repoTagIdList = this.getRepoTagIdList();
+        this.props.onFileTagChanged();
       });
     } else {
       let fileTag = null;
@@ -65,9 +66,9 @@ class EditFileTagDialog extends React.Component {
       } 
       seafileAPI.deleteFileTag(repoID, fileTag.id).then(() => {
         repoTagIdList = this.getRepoTagIdList();
+        this.props.onFileTagChanged();
       });
     }
-    this.props.onFileTagChanged();
   }
 
   toggle = () => {

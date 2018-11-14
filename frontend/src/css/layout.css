@@ -112,8 +112,8 @@
 }
 
 .cur-view-detail {
+  flex: 0 0 20rem;
   display: flex;
-  width: 20rem;
 }
 
 /* for reach/router */
