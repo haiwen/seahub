@@ -1,6 +1,5 @@
 import React, { Component, Fragment } from 'react';
 import PropTypes from 'prop-types';
-import moment from 'moment';
 import { gettext, repoID, serviceUrl, slug, siteRoot } from '../../utils/constants';
 import { seafileAPI } from '../../utils/seafile-api';
 import { Utils } from '../../utils/utils';
@@ -54,11 +53,6 @@ class MainPanel extends Component {
       currentFilePath: '',
       currentRepo: null,
       isRepoOwner: false,
-      isFileLoading: true,
-      content: '',
-      lastModified: '',
-      latestContributor: '',
-      permission: '',
     };
   }
 
@@ -75,31 +69,6 @@ class MainPanel extends Component {
       });
     });
     document.addEventListener('click', this.hideOperationMenu);
-  }
-
-  componentWillReceiveProps(nextProps) {
-    if (nextProps.isViewFileState) {
-      let filePath = nextProps.filePath;
-      this.setState({isFileLoading: true});
-
-      seafileAPI.getFileInfo(repoID, filePath).then((res) => {
-        let { mtime, permission, last_modifier_name } = res.data;
-        seafileAPI.getFileDownloadLink(repoID, filePath).then((res) => {
-          seafileAPI.getFileContent(res.data).then((res) => {
-            this.setState({
-              content: res.data,
-              permission: permission,
-              latestContributor: last_modifier_name,
-              lastModified: moment.unix(mtime).fromNow(),
-              isFileLoading: false,
-            });
-          });
-        });
-      });
-
-      let fileUrl = serviceUrl + '/wiki/lib/' + repoID + filePath;
-      window.history.pushState({urlPath: fileUrl, filePath: filePath}, filePath, fileUrl);
-    }
   }
 
   componentWillUnmount() {
@@ -348,11 +317,11 @@ class MainPanel extends Component {
             <div className="cur-view-content">
               { this.props.isViewFileState ?
                 <MarkdownViewer
-                  markdownContent={this.state.content}
-                  latestContributor={this.state.latestContributor}
-                  lastModified = {this.state.lastModified}
+                  markdownContent={this.props.content}
+                  latestContributor={this.props.latestContributor}
+                  lastModified = {this.props.lastModified}
                   onLinkClick={this.props.onLinkClick}
-                  isFileLoading={this.state.isFileLoading}
+                  isFileLoading={this.props.isFileLoading}
                 /> :
                 <Fragment>
                   <DirentListView 
@@ -365,7 +334,7 @@ class MainPanel extends Component {
                     onItemCopy={this.props.onMainItemCopy}
                     onItemDetails={this.onItemDetails}
                     updateViewList={this.updateViewList}
-                    isDirentListLoading={this.state.isDirentListLoading}
+                    isDirentListLoading={this.props.isDirentListLoading}
                     updateViewListParam={this.updateViewListParam}
                     currentRepo={this.state.currentRepo}
                     isRepoOwner={this.state.isRepoOwner}
