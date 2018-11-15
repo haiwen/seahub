@@ -269,6 +269,12 @@ class Wiki extends Component {
     this.setState({direnList: newDirentList});
   }
 
+  onFileTagChanged = (dirent, direntPath) => {
+    seafileAPI.listFileTags(repoID, direntPath).then(res => {
+      this.updateViewListParam(dirent, 'file_tags', res.data.file_tags);
+    })
+  }
+
   onLinkClick = (event) => {
     const url = event.target.href;
     if (this.isInternalMarkdownLink(url)) {
@@ -583,6 +589,7 @@ class Wiki extends Component {
           onMainItemCopy={this.onCopyItem}
           onMainAddFile={this.onNewFile}
           onMainAddFolder={this.onNewDir}
+          onFileTagChanged={this.onFileTagChanged}
         />
       </div>
     );

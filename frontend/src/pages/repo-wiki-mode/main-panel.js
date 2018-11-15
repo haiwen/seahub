@@ -182,8 +182,9 @@ class MainPanel extends Component {
     this.setState({isDirentDetailShow: false});
   }
 
-  onFileTagChanged = () => {
-    this.updateViewList(this.props.filePath);
+  onFileTagChanged = (dirent, direntPath) => {
+    //todos;
+    this.props.onFileTagChanged(dirent, direntPath);
   }
 
   uploadFile = (e) => {
@@ -311,7 +312,6 @@ class MainPanel extends Component {
                     onItemMove={this.props.onMainItemMove}
                     onItemCopy={this.props.onMainItemCopy}
                     onItemDetails={this.onItemDetails}
-                    updateViewList={this.updateViewList}
                     isDirentListLoading={this.props.isDirentListLoading}
                     updateViewListParam={this.props.updateViewListParam}
                     currentRepo={this.state.currentRepo}

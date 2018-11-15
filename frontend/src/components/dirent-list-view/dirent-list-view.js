@@ -18,7 +18,6 @@ const propTypes = {
   onItemMove: PropTypes.func.isRequired,
   onItemCopy: PropTypes.func.isRequired,
   onItemDetails: PropTypes.func.isRequired,
-  updateViewList: PropTypes.func.isRequired,
   updateViewListParam: PropTypes.func.isRequired,
   isDirentListLoading: PropTypes.bool.isRequired,
   isRepoOwner: PropTypes.bool,
