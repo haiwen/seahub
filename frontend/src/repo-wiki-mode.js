@@ -43,9 +43,9 @@ class Wiki extends Component {
 
   componentDidMount() {
     if(initialFilePath[initialFilePath.length - 1] === '/') {
-      this.enterViewListState(initialFilePath);
+      this.showDirentList(initialFilePath);
     } else {
-      this.enterViewFileState(initialFilePath);
+      this.showFileContent(initialFilePath);
     }
     this.initSidePanelTreeData(initialFilePath);
   }
@@ -57,7 +57,7 @@ class Wiki extends Component {
       let isCurrentPath = this.onAddNode(filePath, 'file'); // is add to currentNode;
       if (isCurrentPath && !this.state.isViewFileState) {
         this.onMainItemAdd(filePath, 'file');
-        // this.enterViewListState(this.state.filePath);
+        // this.showDirentList(this.state.filePath);
       }
     }).catch(() => {
       //todos message
@@ -70,7 +70,7 @@ class Wiki extends Component {
       let isCurrentPath = this.onAddNode(dirPath, 'dir');
       if (isCurrentPath && !this.state.isViewFileState) {
         this.onMainItemAdd(dirPath, 'dir');
-        // this.enterViewListState(this.state.filePath);
+        // this.showDirentList(this.state.filePath);
       }
     }).catch(() => {
       //return error message
@@ -131,7 +131,7 @@ class Wiki extends Component {
     seafileAPI.moveDir(repoID, repo.repo_id,moveToDirentPath, dirPath, dirName).then(() => {
       
       this.onMoveNode(direntPath, moveToDirentPath, repo);
-      this.enterViewListState(this.state.filePath);
+      this.onMainItemMove(direntPath);
       
       let message = gettext('Successfully moved %(name)s.');
       message = message.replace('%(name)s', dirName);
@@ -177,7 +177,7 @@ class Wiki extends Component {
   }
 
   initSidePanelTreeData = (filePath) => {
-    let nodePath = this.turnUrl2NodePath(filePath);
+    let nodePath = this.turnFilePath2NodePath(filePath);
     editorUtilities.listRepoDir().then((files) => {
       var treeData = new Tree();
       treeData.parseListToTree(files);
@@ -197,7 +197,7 @@ class Wiki extends Component {
     });
   }
 
-  enterViewFileState = (filePath) => {
+  showFileContent = (filePath) => {
     this.setState({
       filePath: filePath,
       isViewFileState: true
@@ -223,7 +223,7 @@ class Wiki extends Component {
     window.history.pushState({urlPath: fileUrl, filePath: filePath}, filePath, fileUrl);
   }
 
-  enterViewListState = (filePath) => {
+  showDirentList = (filePath) => {
     this.updateMainPanelDirentList(filePath); //update direntList;
     this.setState({
       filePath: filePath,
@@ -250,7 +250,7 @@ class Wiki extends Component {
     });
   }
 
-  updateViewListParam = (dirent, paramKey, paramValue) => {
+  updateDirentParam = (dirent, paramKey, paramValue) => {
     let newDirentList = this.state.direntList.map(item => {
       if (item.name === dirent.name) {
         item[paramKey] = paramValue;
@@ -264,10 +264,10 @@ class Wiki extends Component {
     const url = event.target.href;
     if (this.isInternalMarkdownLink(url)) {
       let path = this.getPathFromInternalMarkdownLink(url);
-      this.enterViewFileState(path);
+      this.showFileContent(path);
     } else if (this.isInternalDirLink(url)) {
       let path = this.getPathFromInternalDirLink(url);
-      this.enterViewListState(path);
+      this.showDirentList(path);
     } else {
       window.location.href = url;
     }
@@ -277,10 +277,10 @@ class Wiki extends Component {
     if (event.state && event.state.filePath) {
       let path = event.state.filePath;
       if (this.isMarkdownFile(path)) {
-        this.enterViewFileState(path);
+        this.showFileContent(path);
       } else {
         let currentNode = this.state.tree_data.getNodeByPath(path);
-        this.enterViewListState(this.turnNodePath2Url(currentNode));
+        this.showDirentList(this.turnNodePath2FilePath(currentNode));
       }
     }
   }
@@ -292,7 +292,7 @@ class Wiki extends Component {
       let tree = this.state.tree_data.clone();
       let node = tree.getNodeByPath(path);
       tree.expandNode(node);
-      this.enterViewFileState(this.turnNodePath2Url(node));
+      this.showFileContent(this.turnNodePath2FilePath(node));
     }
   }
 
@@ -303,10 +303,10 @@ class Wiki extends Component {
     tree.expandNode(node);
 
     this.setState({tree_data: tree, currentNode: node});
-    this.enterViewListState(this.turnNodePath2Url(node));
+    this.showDirentList(this.turnNodePath2FilePath(node));
   }
 
-  onMainItemClick = (direntPath) => {
+  onItemClick = (direntPath) => {
     let tree = this.state.tree_data.clone();
     let node = tree.getNodeByPath(direntPath);
     let parentNode = tree.findNodeParentFromTree(node);
@@ -314,10 +314,10 @@ class Wiki extends Component {
 
     if (node.isMarkdown()) {
       this.setState({tree_data: tree}); // tree
-      this.enterViewFileState(direntPath);
+      this.showFileContent(direntPath);
     } else if (node.isDir()){
       this.setState({tree_data: tree, currentNode: node}); //tree
-      this.enterViewListState(this.turnNodePath2Url(node));
+      this.showDirentList(this.turnNodePath2FilePath(node));
     } else {
       const w=window.open('about:blank');
       const url = serviceUrl + '/lib/' + repoID + '/file' + node.path;
@@ -336,10 +336,10 @@ class Wiki extends Component {
         });
         this.setState({direntList: direntList});
       } else {
-        this.enterViewListState(newPath);
+        this.showDirentList(newPath);
       }
     } else if (newPath && this.state.isViewFileState) {
-      this.enterViewFileState(newPath);
+      this.showFileContent(newPath);
     }
   }
 
@@ -353,7 +353,7 @@ class Wiki extends Component {
         this.setState({direntList: direntList, isViewFileState: false});
       } else {
         //delete self or delete farther...;
-        this.enterViewListState(newPath);
+        this.showDirentList(newPath);
       }
     }
   }
@@ -370,9 +370,17 @@ class Wiki extends Component {
     this.setState({direntList: direntList});
   }
 
+  onMainItemMove = (filePath) => {
+    let name = filePath.slice(filePath.lastIndexOf('/') + 1);
+    let direntList = this.state.direntList.filter(item => {
+      return item.name !== name;
+    });
+    this.setState({direntList: direntList});
+  }
+
   onFileTagChanged = (dirent, direntPath) => {
     seafileAPI.listFileTags(repoID, direntPath).then(res => {
-      this.updateViewListParam(dirent, 'file_tags', res.data.file_tags);
+      this.updateDirentParam(dirent, 'file_tags', res.data.file_tags);
     })
   }
 
@@ -380,9 +388,9 @@ class Wiki extends Component {
     if (node instanceof Node && node.isMarkdown()){
       let tree = this.state.tree_data.clone();
       this.setState({tree_data: tree});
-      let nextPath = this.turnNodePath2Url(node);
+      let nextPath = this.turnNodePath2FilePath(node);
       if (nextPath !== this.state.filePath) {
-        this.enterViewFileState(this.turnNodePath2Url(node));
+        this.showFileContent(this.turnNodePath2FilePath(node));
       }
     } else if(node instanceof Node && node.isDir()){
       let tree = this.state.tree_data.clone();
@@ -394,9 +402,9 @@ class Wiki extends Component {
         }
       }
       this.setState({tree_data: tree});
-      let nextPath = this.turnNodePath2Url(node);
+      let nextPath = this.turnNodePath2FilePath(node);
       if (nextPath !== this.state.filePath) {
-        this.enterViewListState(this.turnNodePath2Url(node));
+        this.showDirentList(this.turnNodePath2FilePath(node));
       }
     } else {
       const w = window.open('about:blank');
@@ -426,7 +434,7 @@ class Wiki extends Component {
 
   onAddNode = (path, type) => {
     let tree = this.state.tree_data.clone();
-    let nodePath = this.turnUrl2NodePath(path);
+    let nodePath = this.turnFilePath2NodePath(path);
     let name = this.getFileNameByPath(nodePath);
 
     let parentPath = nodePath.slice(0, nodePath.lastIndexOf('/'));
@@ -435,12 +443,12 @@ class Wiki extends Component {
     let parentNode = tree.getNodeByPath(parentPath);
     tree.addNodeToParent(node, parentNode);
     this.setState({tree_data: tree});
-    return this.turnNodePath2Url(parentNode) === this.state.filePath;
+    return this.turnNodePath2FilePath(parentNode) === this.state.filePath;
   }
 
   onRenameNode = (node, newName) => {
     let tree = this.state.tree_data.clone();
-    let path = this.turnNodePath2Url(node);
+    let path = this.turnNodePath2FilePath(node);
     //is ancestor, child, currentNode, otherNode?
     let isCurrentNode = path === this.state.filePath;
     let isChildNode = !isCurrentNode && path.indexOf(this.state.filePath) > -1;
@@ -458,10 +466,10 @@ class Wiki extends Component {
       return this.state.filePath;
     }
     if (isCurrentNode) {
-      return this.turnNodePath2Url(treeNode);
+      return this.turnNodePath2FilePath(treeNode);
     }
     if (isAncestorNode) {
-      return this.turnNodePath2Url(treeNode) + ancestor_cild_path;
+      return this.turnNodePath2FilePath(treeNode) + ancestor_cild_path;
     }
 
     //need not update main panel
@@ -471,7 +479,7 @@ class Wiki extends Component {
   onDeleteNode = (node) => {
     let tree = this.state.tree_data.clone();
     // is ancestor, child, currentNode, otherNode? 
-    let path = this.turnNodePath2Url(node);
+    let path = this.turnNodePath2FilePath(node);
     let isCurrentNode = path === this.state.filePath;
     let isChildNode = !isCurrentNode && path.indexOf(this.state.filePath) > -1;
     let isAncestorNode= !isCurrentNode && this.state.filePath.indexOf(path) > -1;
@@ -483,7 +491,7 @@ class Wiki extends Component {
       return this.state.filePath;
     }
     if (isCurrentNode || isAncestorNode) {
-      return this.turnNodePath2Url(parentNode);
+      return this.turnNodePath2FilePath(parentNode);
     }
     //need not update main panel;
     return false;
@@ -565,7 +573,7 @@ class Wiki extends Component {
     return dirent;
   }
 
-  turnUrl2NodePath = (filePath) => {
+  turnFilePath2NodePath = (filePath) => {
     let nodePath = filePath;
     if (filePath !== '/' && filePath[filePath.length - 1] === '/') {
       nodePath = filePath.slice(0, filePath.length - 1);
@@ -573,7 +581,7 @@ class Wiki extends Component {
     return nodePath;
   }
 
-  turnNodePath2Url = (node) => {
+  turnNodePath2FilePath = (node) => {
     if (node.isDir()) {
       return node.path === '/' ? node.path : node.path + '/';
     }
@@ -654,18 +662,18 @@ class Wiki extends Component {
           latestContributor={this.state.latestContributor}
           direntList={this.state.direntList}
           switchViewMode={this.switchViewMode}
-          updateViewListParam={this.updateViewListParam}
+          updateDirentParam={this.updateDirentParam}
           onLinkClick={this.onLinkClick}
           onMenuClick={this.onMenuClick}
           onSearchedClick={this.onSearchedClick}
           onMainNavBarClick={this.onMainNavBarClick}
-          onMainItemClick={this.onMainItemClick}
-          onMainItemDelete={this.onDelete}
-          onMainItemRename={this.onRename}
-          onMainItemMove={this.onMoveItem}
-          onMainItemCopy={this.onCopyItem}
-          onMainAddFile={this.onNewFile}
-          onMainAddFolder={this.onNewDir}
+          onItemClick={this.onItemClick}
+          onItemDelete={this.onDelete}
+          onItemRename={this.onRename}
+          onItemMove={this.onMoveItem}
+          onItemCopy={this.onCopyItem}
+          onAddFile={this.onNewFile}
+          onAddFolder={this.onNewDir}
           onFileTagChanged={this.onFileTagChanged}
         />
       </div>
