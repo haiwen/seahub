@@ -28,7 +28,7 @@ class Wiki extends Component {
       filePath: '',
       tree_data: new Tree(),
       closeSideBar: false,
-      changedNode: null,
+      currentNode: null,
       isDirentListLoading: true,
       isViewFileState: false,
       direntList: [],
@@ -66,7 +66,6 @@ class Wiki extends Component {
   onNewDir = (dirPath) => {
     //validate task
     seafileAPI.createDir(repoID, dirPath).then(() => {
-      //
       let isCurrentPath = this.onAddNode(dirPath, 'dir');
       if (isCurrentPath && !this.state.isViewFileState) {
         this.enterViewListState(this.state.filePath);
@@ -129,7 +128,7 @@ class Wiki extends Component {
         }
       }).catch(() => {
         //todos;
-      })
+      });
     }
   }
 
@@ -260,6 +259,16 @@ class Wiki extends Component {
     });
   }
 
+  updateViewListParam = (dirent, paramKey, paramValue) => {
+    let newDirentList = this.state.direntList.map(item => {
+      if (item.id === dirent.id) {
+        item[paramKey] = paramValue;
+      }
+      return item;
+    });
+    this.setState({direnList: newDirentList});
+  }
+
   onLinkClick = (event) => {
     const url = event.target.href;
     if (this.isInternalMarkdownLink(url)) {
@@ -302,7 +311,7 @@ class Wiki extends Component {
     let node = tree.getNodeByPath(nodePath);
     tree.expandNode(node);
 
-    this.setState({tree_data: tree});
+    this.setState({tree_data: tree, currentNode: node});
     this.enterViewListState(this.turnNodePath2Url(node));
   }
 
@@ -316,7 +325,7 @@ class Wiki extends Component {
       this.setState({tree_data: tree}); // tree
       this.enterViewFileState(direntPath);
     } else if (node.isDir()){
-      this.setState({tree_data: tree}); //tree
+      this.setState({tree_data: tree, currentNode: node}); //tree
       this.enterViewListState(this.turnNodePath2Url(node));
     } else {
       const w=window.open('about:blank');
@@ -405,7 +414,7 @@ class Wiki extends Component {
 
   onRenameNode = (node, newName) => {
     let tree = this.state.tree_data.clone();
-    let path = this.turnNodePath2Url(node)
+    let path = this.turnNodePath2Url(node);
     //is ancestor, child, currentNode, otherNode?
     let isCurrentNode = path === this.state.filePath;
     let isChildNode = !isCurrentNode && path.indexOf(this.state.filePath) > -1;
@@ -442,11 +451,9 @@ class Wiki extends Component {
     tree.deleteNode(node);
 
     this.setState({tree_data: tree});
-    // is childNode, update current node to update list;
     if (isChildNode) {
       return this.state.filePath;
     }
-    // is currentNode, is ancestorNode, find node parent to return;
     if (isCurrentNode || isAncestorNode) {
       return this.turnNodePath2Url(parentNode);
     }
@@ -546,7 +553,7 @@ class Wiki extends Component {
           onCloseSide ={this.onCloseSide}
           treeData={this.state.tree_data}
           currentFilePath={this.state.filePath}
-          changedNode={this.state.changedNode}
+          currentNode={this.state.currentNode}
           onAddFolderNode={this.onNewDir}
           onAddFileNode={this.onNewFile}
           onRenameNode={this.onRename}
@@ -558,12 +565,13 @@ class Wiki extends Component {
           isViewFileState={this.state.isViewFileState}
           isDirentListLoading={this.state.isDirentListLoading}
           isFileLoading={this.state.isFileLoading}
-          permission={this.props.permission}
+          permission={this.state.permission}
           content={this.state.content}
           lastModified={this.state.lastModified}
           latestContributor={this.state.latestContributor}
           direntList={this.state.direntList}
           switchViewMode={this.switchViewMode}
+          updateViewListParam={this.updateViewListParam}
           onLinkClick={this.onLinkClick}
           onMenuClick={this.onMenuClick}
           onSearchedClick={this.onSearchedClick}

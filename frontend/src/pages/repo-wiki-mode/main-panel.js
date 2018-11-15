@@ -4,7 +4,6 @@ import { gettext, repoID, serviceUrl, slug, siteRoot } from '../../utils/constan
 import { seafileAPI } from '../../utils/seafile-api';
 import { Utils } from '../../utils/utils';
 import Repo from '../../models/repo';
-import Dirent from '../../models/dirent';
 import CommonToolbar from '../../components/toolbar/common-toolbar';
 import PathToolbar from '../../components/toolbar/path-toolbar';
 import MarkdownViewer from '../../components/markdown-viewer';
@@ -22,7 +21,9 @@ const propTypes = {
   filePath: PropTypes.string.isRequired,
   isFileLoading: PropTypes.bool.isRequired,
   isViewFileState: PropTypes.bool.isRequired,
-  changedNode: PropTypes.object,
+  isDirentListLoading: PropTypes.bool.isRequired,
+  updateViewListParam: PropTypes.func.isRequired,
+  direntList: PropTypes.array.isRequired,
   onMenuClick: PropTypes.func.isRequired,
   onSearchedClick: PropTypes.func.isRequired,
   onMainNavBarClick: PropTypes.func.isRequired,
@@ -75,29 +76,13 @@ class MainPanel extends Component {
     document.removeEventListener('click', this.hideOperationMenu);
   }
 
-  updateViewList = (filePath) => {
-    this.setState({isDirentListLoading: true});
-    seafileAPI.listDir(repoID, filePath).then(res => {
-      let direntList = [];
-      res.data.forEach(item => {
-        let dirent = new Dirent(item);
-        direntList.push(dirent);
-      });
-      this.setState({
-        direntList: direntList,
-        isDirentListLoading: false,
-      });
-    });
-  }
-
-  updateViewListParam = (dirent, paramKey, paramValue) => {
-    let newDirentList = this.state.direntList.map(item => {
-      if (item.id === dirent.id) {
-        item[paramKey] = paramValue;
-      }
-      return item;
-    });
-    this.setState({direnList: newDirentList});
+  switchViewMode = (e) => {
+    e.preventDefault();
+    if (e.target.id === 'wiki') {
+      return;
+    }
+    this.setState({isWikiMode: false});
+    this.props.switchViewMode(e.target.id);
   }
 
   onMenuClick = () => {
@@ -106,15 +91,6 @@ class MainPanel extends Component {
 
   onMainNavBarClick = (e) => {
     this.props.onMainNavBarClick(e.target.dataset.path);
-  }
-
-  switchViewMode = (e) => {
-    e.preventDefault();
-    if (e.target.id === 'wiki') {
-      return;
-    }
-    this.setState({isWikiMode: false});
-    this.props.switchViewMode(e.target.id);
   }
 
   onEditClick = (e) => {
@@ -225,7 +201,9 @@ class MainPanel extends Component {
   }
 
   render() {
-    let filePathList = this.props.filePath.split('/');
+    let filePath = this.props.filePath;
+    filePath = filePath[filePath.length - 1] === '/' ? filePath.slice(0, filePath.length - 1) : filePath;
+    let filePathList = filePath.split('/');
     let nodePath = '';
     let pathElem = filePathList.map((item, index) => {
       if (item === '') {
@@ -335,7 +313,7 @@ class MainPanel extends Component {
                     onItemDetails={this.onItemDetails}
                     updateViewList={this.updateViewList}
                     isDirentListLoading={this.props.isDirentListLoading}
-                    updateViewListParam={this.updateViewListParam}
+                    updateViewListParam={this.props.updateViewListParam}
                     currentRepo={this.state.currentRepo}
                     isRepoOwner={this.state.isRepoOwner}
                   />

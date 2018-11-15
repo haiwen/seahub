@@ -10,7 +10,7 @@ import CreateFolder from '../../components/dialog/create-folder-dialog';
 import CreateFile from '../../components/dialog/create-file-dialog';
 
 const propTypes = {
-  changedNode: PropTypes.object,
+  currentNode: PropTypes.object,
   treeData: PropTypes.object.isRequired,
   currentFilePath: PropTypes.string.isRequired,
   closeSideBar: PropTypes.bool.isRequired,
@@ -149,9 +149,7 @@ class SidePanel extends Component {
   }
 
   componentWillReceiveProps(nextProps) {
-    this.setState({
-      currentNode: nextProps.changedNode
-    });
+    this.setState({currentNode: nextProps.currentNode});
   }
 
   componentWillUnmount() {

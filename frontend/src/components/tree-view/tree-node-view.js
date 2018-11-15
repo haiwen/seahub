@@ -180,8 +180,14 @@ class TreeNodeView extends React.Component {
     let node = this.props.node;
     let { type, icon } = this.getNodeTypeAndIcon();
     let hlClass = '';
-    if (node.path === this.props.currentFilePath) {
-      hlClass = 'tree-node-hight-light';
+    if (node.isDir()) {
+      if ((node.path + '/') === this.props.currentFilePath) {
+        hlClass = 'tree-node-hight-light';
+      }
+    } else {
+      if (node.path === this.props.currentFilePath) {
+        hlClass = 'tree-node-hight-light';
+      }
     }
 
     return (
