@@ -89,8 +89,8 @@ class DirentListItem extends React.Component {
   }
 
   onItemMenuShow = (e) => {
-    let left = e.clientX - 8*16;
-    let top  = e.clientY + 15;
+    let left = e.clientX;
+    let top  = e.clientY;
     let position = Object.assign({},this.state.menuPosition, {left: left, top: top});
     this.setState({
       menuPosition: position,
