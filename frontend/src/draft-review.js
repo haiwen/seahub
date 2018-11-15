@@ -92,12 +92,10 @@ class DraftReview extends React.Component {
   onPublishReview = () => {
     seafileAPI.updateReviewStatus(reviewID, 'finished').then(res => {
       this.setState({reviewStatus: 'finished'});
-      let msg_s = gettext('Successfully published review %(reviewID)s.');
-      msg_s = msg_s.replace('%(reviewID)s', reviewID);
+      let msg_s = gettext('Successfully published draft.');
       Toast.success(msg_s);
     }).catch(() => {
-      let msg_s = gettext('Failed to publish review %(reviewID)s.');
-      msg_s = msg_s.replace('%(reviewID)s', reviewID);
+      let msg_s = gettext('Failed to publish draft.');
       Toast.error(msg_s);
     });
   }
@@ -219,8 +217,10 @@ class DraftReview extends React.Component {
             {
               this.state.reviewStatus === 'open' &&
               <div className="cur-file-operation">
-                <button className='btn btn-secondary file-operation-btn' title={gettext('Close Review')} onClick={this.onCloseReview}>{gettext('Close')}</button>
-                <button className='btn btn-success file-operation-btn' title={gettext('Publish Review')} onClick={this.onPublishReview}>{gettext('Publish')}</button>
+                <button className='btn btn-secondary file-operation-btn' title={gettext('Close review')}
+                  onClick={this.onCloseReview}>{gettext('Close')}</button>
+                <button className='btn btn-success file-operation-btn' title={gettext('Publish draft')}
+                  onClick={this.onPublishReview}>{gettext('Publish')}</button>
               </div>
             }
             {
