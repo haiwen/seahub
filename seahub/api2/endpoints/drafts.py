@@ -21,6 +21,7 @@ from seahub.api2.authentication import TokenAuthentication
 from seahub.api2.endpoints.utils import add_org_context
 from seahub.api2.throttling import UserRateThrottle
 from seahub.api2.utils import api_error
+from seahub.constants import PERMISSION_READ_WRITE
 from seahub.drafts.models import Draft, DraftFileExist, DraftFileConflict
 from seahub.views import check_folder_permission
 from seahub.utils import gen_file_get_url
@@ -50,7 +51,7 @@ class DraftsView(APIView):
 
     @add_org_context
     def post(self, request, org_id, format=None):
-        """Create a file draft.
+        """Create a file draft if the user has read permission to the origin file
         """
         repo_id = request.POST.get('repo_id', '')
         file_path = request.POST.get('file_path', '')
@@ -71,10 +72,9 @@ class DraftsView(APIView):
             return api_error(status.HTTP_404_NOT_FOUND,
                              "File %s not found" % file_path)
 
-        dirent = seafile_api.get_dirent_by_path(repo_id, file_path)
-
+        username = request.user.username
         try:
-            d = Draft.objects.add(dirent.modifier, repo, file_path, file_id)
+            d = Draft.objects.add(username, repo, file_path, file_id)
 
             return Response(d.to_dict())
         except (DraftFileExist, IntegrityError):
@@ -87,12 +87,12 @@ class DraftView(APIView):
     throttle_classes = (UserRateThrottle, )
 
     def put(self, request, pk, format=None):
-        """Publish a draft.
+        """Publish a draft if the user has read-write permission to the origin file
         """
         op = request.data.get('operation', '')
         if op != 'publish':
             return api_error(status.HTTP_400_BAD_REQUEST,
-                             'Operation %s invalid.')
+                             'Operation invalid.')
 
         try:
             d = Draft.objects.get(pk=pk)
@@ -101,9 +101,14 @@ class DraftView(APIView):
                              'Draft %s not found.' % pk)
 
         # perm check
-        if d.username != request.user.username:
-            return api_error(status.HTTP_403_FORBIDDEN,
-                             'Permission denied.')
+        repo_id = d.origin_repo_id
+        uuid = d.origin_file_uuid
+        file_path = posixpath.join(uuid.parent_path, uuid.filename)
+        perm = check_folder_permission(request, repo_id, file_path)
+
+        if perm != PERMISSION_READ_WRITE:
+            error_msg = 'Permission denied.'
+            return api_error(status.HTTP_403_FORBIDDEN, error_msg)
 
         try:
             d.publish()
@@ -114,7 +119,7 @@ class DraftView(APIView):
                              'There is a conflict between the draft and the original file')
 
     def delete(self, request, pk, format=None):
-        """Delete a draft.
+        """Delete a draft if user is draft owner
         """
         try:
             d = Draft.objects.get(pk=pk)

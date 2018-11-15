@@ -52,7 +52,7 @@ class DraftReviewsView(APIView):
         return Response({'data': data})
 
     def post(self, request, format=None):
-        """Create a draft review
+        """Create a draft review if the user has read permission to the repo
         """
         draft_id = request.data.get('draft_id', '')
         try:
@@ -62,11 +62,15 @@ class DraftReviewsView(APIView):
                              'Draft %s not found.' % draft_id)
 
         # perm check
-        if d.username != request.user.username:
+        perm = check_folder_permission(request, d.origin_repo_id, '/')
+
+        if perm is None:
             return api_error(status.HTTP_403_FORBIDDEN,
                              'Permission denied.')
+
+        username = request.user.username
         try:
-            d_r = DraftReview.objects.add(creator=d.username, draft=d)
+            d_r = DraftReview.objects.add(creator=username, draft=d)
         except (DraftReviewExist):
             return api_error(status.HTTP_409_CONFLICT, 'Draft review already exists.')
 
@@ -79,7 +83,9 @@ class DraftReviewView(APIView):
     throttle_classes = (UserRateThrottle, )
 
     def put(self, request, pk, format=None):
-        """update review status
+        """update review status 
+        Close: the user has read permission to the repo
+        Publish: the user has read-write permission to the repo
         """
 
         st = request.data.get('status', '')
@@ -96,18 +102,18 @@ class DraftReviewView(APIView):
         uuid = r.origin_file_uuid
         origin_file_path = posixpath.join(uuid.parent_path, uuid.filename)
 
-        perm = check_folder_permission(request, r.origin_repo_id, origin_file_path)
+        perm = check_folder_permission(request, r.origin_repo_id, '/')
 
-        # Review owner and 'rw' perm on the original file to close review
+        # Close: the user has read permission to the repo
         if st == 'closed':
-            if perm != PERMISSION_READ_WRITE or request.user.username != r.creator:
+            if perm is None:
                 error_msg = 'Permission denied.'
                 return api_error(status.HTTP_403_FORBIDDEN, error_msg)
 
             r.status = st
             r.save()
 
-        # Only 'rw' perm on original file can publish review
+        # Publish: the user has read-write permission to the repo
         if st == 'finished':
             if perm != PERMISSION_READ_WRITE:
                 error_msg = 'Permission denied.'
