@@ -24,7 +24,8 @@ class DirentMenu extends React.Component {
     let repo = this.props.currentRepo;
     let menuList = this.calculateMenuList(repo);
     this.setState({
-      menuList: menuList
+      menuList: menuList,
+      menuHeight: menuList.length * 30,
     });
 
   }
@@ -98,9 +99,16 @@ class DirentMenu extends React.Component {
   }
 
   render() {
-    let position = this.props.menuPosition;
-    let style = {position: 'fixed', left: position.left, top: position.top, display: 'block'};
     if (this.state.menuList.length) {
+      let position = this.props.menuPosition;
+      let left = position.left - (8 * 16); // 8rem width;
+      let top = position.top + (1 * 16); 
+      let style = {position: 'fixed', left: left, top: top, display: 'block'};
+      let screenH = window.innerHeight;
+      if (screenH - position.top < this.state.menuHeight) {
+        top = position.top - this.state.menuHeight;
+        style = {position: 'fixed', left: left, top: top, display: 'block'};
+      }
       return (
         <ul className="dropdown-menu operation-menu" style={style}>
           {this.state.menuList.map((item, index) => {
