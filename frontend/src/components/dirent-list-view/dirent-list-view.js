@@ -168,7 +168,6 @@ class DirentListView extends React.Component {
                     onRenameMenuItemClick={this.onRenameMenuItemClick}
                     onItemDelete={this.props.onItemDelete}
                     onItemRename={this.props.onItemRename}
-                    updateViewList={this.props.updateViewList}
                     isItemFreezed={this.state.isItemFreezed}
                     onFreezedItem={this.onFreezedItem}
                     onUnfreezedItem={this.onUnfreezedItem}
