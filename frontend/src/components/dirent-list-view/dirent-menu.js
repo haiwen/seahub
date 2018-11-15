@@ -105,7 +105,7 @@ class DirentMenu extends React.Component {
       let top = position.top + (1 * 16); 
       let style = {position: 'fixed', left: left, top: top, display: 'block'};
       let screenH = window.innerHeight;
-      if (screenH - position.top < 400) {
+      if (screenH - position.top < this.state.menuHeight) {
         top = position.top - this.state.menuHeight;
         style = {position: 'fixed', left: left, top: top, display: 'block'};
       }
