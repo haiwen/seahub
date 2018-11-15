@@ -43,9 +43,9 @@ class Wiki extends Component {
 
   componentDidMount() {
     if(initialFilePath[initialFilePath.length - 1] === '/') {
-      this.showDirentList(initialFilePath);
+      this.showDirent(initialFilePath);
     } else {
-      this.showFileContent(initialFilePath);
+      this.showFile(initialFilePath);
     }
     this.initSidePanelTreeData(initialFilePath);
   }
@@ -57,7 +57,7 @@ class Wiki extends Component {
       let isCurrentPath = this.onAddNode(filePath, 'file'); // is add to currentNode;
       if (isCurrentPath && !this.state.isViewFileState) {
         this.onMainItemAdd(filePath, 'file');
-        // this.showDirentList(this.state.filePath);
+        // this.showDirent(this.state.filePath);
       }
     }).catch(() => {
       //todos message
@@ -70,7 +70,7 @@ class Wiki extends Component {
       let isCurrentPath = this.onAddNode(dirPath, 'dir');
       if (isCurrentPath && !this.state.isViewFileState) {
         this.onMainItemAdd(dirPath, 'dir');
-        // this.showDirentList(this.state.filePath);
+        // this.showDirent(this.state.filePath);
       }
     }).catch(() => {
       //return error message
@@ -197,7 +197,7 @@ class Wiki extends Component {
     });
   }
 
-  showFileContent = (filePath) => {
+  showFile = (filePath) => {
     this.setState({
       filePath: filePath,
       isViewFileState: true
@@ -223,7 +223,7 @@ class Wiki extends Component {
     window.history.pushState({urlPath: fileUrl, filePath: filePath}, filePath, fileUrl);
   }
 
-  showDirentList = (filePath) => {
+  showDirent = (filePath) => {
     this.updateMainPanelDirentList(filePath); //update direntList;
     this.setState({
       filePath: filePath,
@@ -250,7 +250,7 @@ class Wiki extends Component {
     });
   }
 
-  updateDirentParam = (dirent, paramKey, paramValue) => {
+  updateDirent = (dirent, paramKey, paramValue) => {
     let newDirentList = this.state.direntList.map(item => {
       if (item.name === dirent.name) {
         item[paramKey] = paramValue;
@@ -264,10 +264,10 @@ class Wiki extends Component {
     const url = event.target.href;
     if (this.isInternalMarkdownLink(url)) {
       let path = this.getPathFromInternalMarkdownLink(url);
-      this.showFileContent(path);
+      this.showFile(path);
     } else if (this.isInternalDirLink(url)) {
       let path = this.getPathFromInternalDirLink(url);
-      this.showDirentList(path);
+      this.showDirent(path);
     } else {
       window.location.href = url;
     }
@@ -277,10 +277,10 @@ class Wiki extends Component {
     if (event.state && event.state.filePath) {
       let path = event.state.filePath;
       if (this.isMarkdownFile(path)) {
-        this.showFileContent(path);
+        this.showFile(path);
       } else {
         let currentNode = this.state.tree_data.getNodeByPath(path);
-        this.showDirentList(this.turnNodePath2FilePath(currentNode));
+        this.showDirent(this.turnNodePath2FilePath(currentNode));
       }
     }
   }
@@ -292,7 +292,7 @@ class Wiki extends Component {
       let tree = this.state.tree_data.clone();
       let node = tree.getNodeByPath(path);
       tree.expandNode(node);
-      this.showFileContent(this.turnNodePath2FilePath(node));
+      this.showFile(this.turnNodePath2FilePath(node));
     }
   }
 
@@ -303,7 +303,7 @@ class Wiki extends Component {
     tree.expandNode(node);
 
     this.setState({tree_data: tree, currentNode: node});
-    this.showDirentList(this.turnNodePath2FilePath(node));
+    this.showDirent(this.turnNodePath2FilePath(node));
   }
 
   onItemClick = (direntPath) => {
@@ -314,10 +314,10 @@ class Wiki extends Component {
 
     if (node.isMarkdown()) {
       this.setState({tree_data: tree}); // tree
-      this.showFileContent(direntPath);
+      this.showFile(direntPath);
     } else if (node.isDir()){
       this.setState({tree_data: tree, currentNode: node}); //tree
-      this.showDirentList(this.turnNodePath2FilePath(node));
+      this.showDirent(this.turnNodePath2FilePath(node));
     } else {
       const w=window.open('about:blank');
       const url = serviceUrl + '/lib/' + repoID + '/file' + node.path;
@@ -336,10 +336,10 @@ class Wiki extends Component {
         });
         this.setState({direntList: direntList});
       } else {
-        this.showDirentList(newPath);
+        this.showDirent(newPath);
       }
     } else if (newPath && this.state.isViewFileState) {
-      this.showFileContent(newPath);
+      this.showFile(newPath);
     }
   }
 
@@ -353,7 +353,7 @@ class Wiki extends Component {
         this.setState({direntList: direntList, isViewFileState: false});
       } else {
         //delete self or delete farther...;
-        this.showDirentList(newPath);
+        this.showDirent(newPath);
       }
     }
   }
@@ -380,7 +380,7 @@ class Wiki extends Component {
 
   onFileTagChanged = (dirent, direntPath) => {
     seafileAPI.listFileTags(repoID, direntPath).then(res => {
-      this.updateDirentParam(dirent, 'file_tags', res.data.file_tags);
+      this.updateDirent(dirent, 'file_tags', res.data.file_tags);
     })
   }
 
@@ -390,7 +390,7 @@ class Wiki extends Component {
       this.setState({tree_data: tree});
       let nextPath = this.turnNodePath2FilePath(node);
       if (nextPath !== this.state.filePath) {
-        this.showFileContent(this.turnNodePath2FilePath(node));
+        this.showFile(this.turnNodePath2FilePath(node));
       }
     } else if(node instanceof Node && node.isDir()){
       let tree = this.state.tree_data.clone();
@@ -404,7 +404,7 @@ class Wiki extends Component {
       this.setState({tree_data: tree});
       let nextPath = this.turnNodePath2FilePath(node);
       if (nextPath !== this.state.filePath) {
-        this.showDirentList(this.turnNodePath2FilePath(node));
+        this.showDirent(this.turnNodePath2FilePath(node));
       }
     } else {
       const w = window.open('about:blank');
@@ -662,7 +662,7 @@ class Wiki extends Component {
           latestContributor={this.state.latestContributor}
           direntList={this.state.direntList}
           switchViewMode={this.switchViewMode}
-          updateDirentParam={this.updateDirentParam}
+          updateDirent={this.updateDirent}
           onLinkClick={this.onLinkClick}
           onMenuClick={this.onMenuClick}
           onSearchedClick={this.onSearchedClick}

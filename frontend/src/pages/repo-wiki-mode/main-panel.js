@@ -22,7 +22,7 @@ const propTypes = {
   isFileLoading: PropTypes.bool.isRequired,
   isViewFileState: PropTypes.bool.isRequired,
   isDirentListLoading: PropTypes.bool.isRequired,
-  updateDirentParam: PropTypes.func.isRequired,
+  updateDirent: PropTypes.func.isRequired,
   direntList: PropTypes.array.isRequired,
   onMenuClick: PropTypes.func.isRequired,
   onSearchedClick: PropTypes.func.isRequired,
@@ -320,7 +320,7 @@ class MainPanel extends Component {
                     onItemCopy={this.props.onItemCopy}
                     onItemDetails={this.onItemDetails}
                     isDirentListLoading={this.props.isDirentListLoading}
-                    updateDirentParam={this.props.updateDirentParam}
+                    updateDirent={this.props.updateDirent}
                     currentRepo={this.state.currentRepo}
                     isRepoOwner={this.state.isRepoOwner}
                   />
