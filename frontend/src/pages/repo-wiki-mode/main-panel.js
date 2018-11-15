@@ -36,6 +36,7 @@ const propTypes = {
   onMainAddFile: PropTypes.func.isRequired,
   onMainAddFolder: PropTypes.func.isRequired,
   switchViewMode: PropTypes.func.isRequired,
+  onFileTagChanged: PropTypes.func.isRequired,
 };
 
 class MainPanel extends Component {
@@ -70,6 +71,12 @@ class MainPanel extends Component {
       });
     });
     document.addEventListener('click', this.hideOperationMenu);
+  }
+
+  componentWillReceiveProps(nextProps) {
+    // if (nextProps.filePath !== this.props.filePath) {
+    //   this.setState({isDirentDetailShow: false});
+    // }
   }
 
   componentWillUnmount() {

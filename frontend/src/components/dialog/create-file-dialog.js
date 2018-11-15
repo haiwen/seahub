@@ -77,7 +77,7 @@ class CreateFile extends React.Component {
         });
       } else if (pos === 0 ) {
         this.setState({
-          childName: '(draft)' + this.state.childname, 
+          childName: '(draft)' + this.state.childName, 
           isDraft: !this.state.isdraft
         });
       } else {
