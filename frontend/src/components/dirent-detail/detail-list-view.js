@@ -40,6 +40,10 @@ class DetailListView extends React.Component {
     });
   }
 
+  onFileTagChanged = () => {
+    this.props.onFileTagChanged(this.props.dirent, this.props.direntPath);
+  }
+
   render() {
     let { direntType, direntDetail, fileTagList } = this.props;
     let position = this.getDirentPostion();
@@ -90,7 +94,7 @@ class DetailListView extends React.Component {
               fileTagList={fileTagList}
               filePath={this.props.direntPath}
               toggleCancel={this.onEditFileTagToggle}
-              onFileTagChanged={this.props.onFileTagChanged}
+              onFileTagChanged={this.onFileTagChanged}
             />
           }
         </div>
