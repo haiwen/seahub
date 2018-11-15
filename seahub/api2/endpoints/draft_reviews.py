@@ -110,8 +110,7 @@ class DraftReviewView(APIView):
                 error_msg = 'Permission denied.'
                 return api_error(status.HTTP_403_FORBIDDEN, error_msg)
 
-            r.status = st
-            r.save()
+            r.close()
 
         # Publish: the user has read-write permission to the repo
         if st == 'finished':
@@ -125,8 +124,9 @@ class DraftReviewView(APIView):
                 return api_error(status.HTTP_404_NOT_FOUND,
                                  'Draft %s not found.' % pk)
 
+            username = request.user.username
             try:
-                d.publish()
+                d.publish(operator=username)
             except (DraftFileConflict, IntegrityError):
                 return api_error(status.HTTP_409_CONFLICT,
                              'There is a conflict between the draft and the original file')
@@ -158,7 +158,7 @@ class DraftReviewView(APIView):
             r.publish_file_version = file_id
             r.status = st
             r.save()
-            d.delete()
+            d.delete(operator=username)
 
         reviewers = ReviewReviewer.objects.filter(review_id=r)
         # send notice to other reviewers if has

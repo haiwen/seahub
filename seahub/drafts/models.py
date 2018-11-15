@@ -80,16 +80,20 @@ class Draft(TimestampedModel):
     # class Meta:
     #     unique_together = (('username', 'draft_repo_id'), )
 
-    def delete(self):
+    def delete(self, operator=None):
+        username = self.username
+        if operator:
+            username = operator
         draft_file_name = os.path.basename(self.draft_file_path)
         draft_file_path = os.path.dirname(self.draft_file_path)
         seafile_api.del_file(self.origin_repo_id, draft_file_path,
-                             draft_file_name, self.username)
+                             draft_file_name, username)
 
         super(Draft, self).delete()
 
-    def publish(self):
+    def publish(self, operator=None):
         # check whether origin file is updated
+
         r_repo = seafile_api.get_repo(self.origin_repo_id)
         if not r_repo:
             raise DraftFileConflict
@@ -117,12 +121,16 @@ class Draft(TimestampedModel):
             file_type = os.path.splitext(draft_file_name)[-1]
             file_name = f + file_type
 
+        username = self.username
+        if operator:
+            username = operator
+
         # move draft file to origin file
         seafile_api.move_file(
             self.origin_repo_id, draft_file_path, draft_file_name,
             self.origin_repo_id, self.origin_file_uuid.parent_path,
             file_name, replace=1,
-            username=self.username, need_progress=0, synchronous=1
+            username=username, need_progress=0, synchronous=1
         )
 
     def to_dict(self):
@@ -233,6 +241,10 @@ class DraftReview(TimestampedModel):
     draft_id = models.OneToOneField(Draft, null=True, on_delete=models.SET_NULL)
 
     objects = DraftReviewManager()
+
+    def close(self):
+        self.status = 'closed'
+        self.save()
 
     def to_dict(self):
         r_repo = seafile_api.get_repo(self.origin_repo_id)
