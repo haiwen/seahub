@@ -376,28 +376,6 @@ class Wiki extends Component {
     })
   }
 
-  onMoveNode = (nodePath, moveToPath, moveToRepo) => {
-    let tree = this.state.tree_data.clone();
-
-    let moveNode = tree.getNodeByPath(nodePath);
-    let moveNodeParent = tree.findNodeParentFromTree(moveNode);
-
-    if (repoID === moveToRepo.repo_id) {
-      let moveToNode = tree.getNodeByPath(moveToPath);
-      tree.addNodeToParent(moveNode, moveToNode);
-    }
-
-    tree.removeNodeFromParent(moveNode, moveNodeParent);
-    this.setState({tree_data: tree});
-  }
-
-  onCopyNode = (nodePath, copyToPath) => {
-    let tree = this.state.tree_data.clone();
-    let copyNode = tree.getNodeByPath(nodePath);
-    let copyToNode = tree.getNodeByPath(copyToPath);
-    tree.addNodeToParent(copyNode, copyToNode);
-  }
-
   onNodeClick = (e, node) => {
     if (node instanceof Node && node.isMarkdown()){
       let tree = this.state.tree_data.clone();
@@ -509,6 +487,28 @@ class Wiki extends Component {
     }
     //need not update main panel;
     return false;
+  }
+
+  onMoveNode = (nodePath, moveToPath, moveToRepo) => {
+    let tree = this.state.tree_data.clone();
+
+    let moveNode = tree.getNodeByPath(nodePath);
+    let moveNodeParent = tree.findNodeParentFromTree(moveNode);
+
+    if (repoID === moveToRepo.repo_id) {
+      let moveToNode = tree.getNodeByPath(moveToPath);
+      tree.addNodeToParent(moveNode, moveToNode);
+    }
+
+    tree.removeNodeFromParent(moveNode, moveNodeParent);
+    this.setState({tree_data: tree});
+  }
+
+  onCopyNode = (nodePath, copyToPath) => {
+    let tree = this.state.tree_data.clone();
+    let copyNode = tree.getNodeByPath(nodePath);
+    let copyToNode = tree.getNodeByPath(copyToPath);
+    tree.addNodeToParent(copyNode, copyToNode);
   }
 
   getFileNameByPath(path) {
