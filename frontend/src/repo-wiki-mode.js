@@ -550,7 +550,7 @@ class Wiki extends Component {
         type: type,
         mtime: data,
         permission: 'rw',
-        size: '0',
+        size: 0,
         starred: false,
         is_locked: false,
         lock_time: '',
