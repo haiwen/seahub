@@ -133,46 +133,41 @@ class Wiki extends Component {
     }
   }
 
-  moveItem = (repo, direntPath, moveToDirentPath) => {
-    // seafileAPI.moveDir(repoID, repo.repo_id, moveToDirentPath, dirPath, dirName).then(() => {
-    //   let tree = this.state.tree_data.clone();
-    //   let moveNode = tree.getNodeByPath(direntPath);
-    //   let moveNodeParent = tree.findNodeParentFromTree(moveNode);
-    //   if (repoID === repo.repo_id) {
-    //     let moveToNode = tree.getNodeByPath(moveToDirentPath);
-    //     tree.addNodeToParent(moveNode, moveToNode);
-    //   }
-    //   tree.removeNodeFromParent(moveNode, moveNodeParent);
-
-    //   this.exitViewFileState(tree, moveNodeParent);
-    //   let message = gettext('Successfully moved %(name)s.');
-    //   message = message.replace('%(name)s', dirName);
-    //   Toast.success(message);
-    // }).catch(() => {
-    //   let message = gettext('Failed to move %(name)s');
-    //   message = message.replace('%(name)s', dirName);
-    //   Toast.error(message);
-    // });
-  }
-
-  copyItem = (repo, direntPath, copyToDirentPath) => {
-    // seafileAPI.copyDir(repoID, repo.repo_id, copyToDirentPath, dirPath, dirName).then(() => {
-    //   if (repoID === repo.repo_id) {
-    //     let tree = this.state.tree_data.clone();
-    //     let copyNode = tree.getNodeByPath(direntPath);
-    //     let copyToNode = tree.getNodeByPath(copyToDirentPath);
-    //     tree.addNodeToParent(copyNode, copyToNode);
-    //     this.exitViewFileState(tree, this.state.changedNode);
-    //   }
+  onMoveItem = (repo, direntPath, moveToDirentPath) => {
+    //just for view list state
+    let index   = direntPath.lastIndexOf('/');
+    let dirPath = direntPath.slice(0, index + 1);
+    let dirName = direntPath.slice(index + 1); 
+    seafileAPI.moveDir(repoID, repo.repo_id,moveToDirentPath, dirPath, dirName).then(() => {
       
-    //   let message = gettext('Successfully copied %(name)s.');
-    //   message = message.replace('%(name)s', dirName);
-    //   Toast.success(message);
-    // }).catch(() => {
-    //   let message = gettext('Failed to copy %(name)s');
-    //   message = message.replace('%(name)s', dirName);
-    //   Toast.error(message);
-    // });
+      this.onMoveNode(direntPath, moveToDirentPath, repo);
+      this.enterViewListState(this.state.filePath);
+      
+      let message = gettext('Successfully moved %(name)s.');
+      message = message.replace('%(name)s', dirName);
+      Toast.success(message);
+    }).catch(() => {
+      let message = gettext('Failed to move %(name)s');
+      message = message.replace('%(name)s', dirName);
+      Toast.error(message);
+    });
+  }
+  
+  onCopyItem = (repo, direntPath, copyToDirentPath) => {
+    //just for view list state
+    let index   = direntPath.lastIndexOf('/');
+    let dirPath = direntPath.slice(0, index + 1);
+    let dirName = direntPath.slice(index + 1); 
+    seafileAPI.moveDir(repoID, repo.repo_id, copyToDirentPath, dirPath, dirName).then(() => {
+      this.onCopyNode(direntPath, copyToDirentPath, repo);
+      let message = gettext('Successfully copied %(name)s.');
+      message = message.replace('%(name)s', dirName);
+      Toast.success(message);
+    }).catch(() => {
+      let message = gettext('Failed to copy %(name)s');
+      message = message.replace('%(name)s', dirName);
+      Toast.error(message);
+    });
   }
 
   switchViewMode = (mode) => {
@@ -330,52 +325,26 @@ class Wiki extends Component {
     }
   }
 
-  onMainItemMove = (repo, direntPath, moveToDirentPath) => {
-    let index   = direntPath.lastIndexOf('/');
-    let dirPath = direntPath.slice(0, index + 1);
-    let dirName = direntPath.slice(index + 1); 
-    seafileAPI.moveDir(repoID, repo.repo_id, moveToDirentPath, dirPath, dirName).then(() => {
-      let tree = this.state.tree_data.clone();
-      let moveNode = tree.getNodeByPath(direntPath);
-      let moveNodeParent = tree.findNodeParentFromTree(moveNode);
-      if (repoID === repo.repo_id) {
-        let moveToNode = tree.getNodeByPath(moveToDirentPath);
-        tree.addNodeToParent(moveNode, moveToNode);
-      }
-      tree.removeNodeFromParent(moveNode, moveNodeParent);
+  onMoveNode = (nodePath, moveToPath, moveToRepo) => {
+    let tree = this.state.tree_data.clone();
 
-      this.exitViewFileState(tree, moveNodeParent);
-      let message = gettext('Successfully moved %(name)s.');
-      message = message.replace('%(name)s', dirName);
-      Toast.success(message);
-    }).catch(() => {
-      let message = gettext('Failed to move %(name)s');
-      message = message.replace('%(name)s', dirName);
-      Toast.error(message);
-    });
+    let moveNode = tree.getNodeByPath(nodePath);
+    let moveNodeParent = tree.findNodeParentFromTree(moveNode);
+
+    if (repoID === moveToRepo.repo_id) {
+      let moveToNode = tree.getNodeByPath(moveToPath);
+      tree.addNodeToParent(moveNode, moveToNode);
+    }
+
+    tree.removeNodeFromParent(moveNode, moveNodeParent);
+    this.setState({tree_data: tree});
   }
 
-  onMainItemCopy = (repo, direntPath, copyToDirentPath) => {
-    let index   = direntPath.lastIndexOf('/');
-    let dirPath = direntPath.slice(0, index + 1);
-    let dirName = direntPath.slice(index + 1); 
-    seafileAPI.copyDir(repoID, repo.repo_id, copyToDirentPath, dirPath, dirName).then(() => {
-      if (repoID === repo.repo_id) {
-        let tree = this.state.tree_data.clone();
-        let copyNode = tree.getNodeByPath(direntPath);
-        let copyToNode = tree.getNodeByPath(copyToDirentPath);
-        tree.addNodeToParent(copyNode, copyToNode);
-        this.exitViewFileState(tree, this.state.changedNode);
-      }
-      
-      let message = gettext('Successfully copied %(name)s.');
-      message = message.replace('%(name)s', dirName);
-      Toast.success(message);
-    }).catch(() => {
-      let message = gettext('Failed to copy %(name)s');
-      message = message.replace('%(name)s', dirName);
-      Toast.error(message);
-    });
+  onCopyNode = (nodePath, copyToPath) => {
+    let tree = this.state.tree_data.clone();
+    let copyNode = tree.getNodeByPath(nodePath);
+    let copyToNode = tree.getNodeByPath(copyToPath);
+    tree.addNodeToParent(copyNode, copyToNode);
   }
 
   onNodeClick = (e, node) => {
@@ -602,8 +571,8 @@ class Wiki extends Component {
           onMainItemClick={this.onMainItemClick}
           onMainItemDelete={this.onDelete}
           onMainItemRename={this.onRename}
-          // onMainItemMove={this.onMainItemMove}
-          // onMainItemCopy={this.onMainItemCopy}
+          onMainItemMove={this.onMoveItem}
+          onMainItemCopy={this.onCopyItem}
           onMainAddFile={this.onNewFile}
           onMainAddFolder={this.onNewDir}
         />
