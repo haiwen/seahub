@@ -57,6 +57,12 @@ class DraftReviewReviewerView(APIView):
             return api_error(status.HTTP_404_NOT_FOUND,
                              'Review %s not found' % pk)
 
+        # perm check
+        perm = check_folder_permission(request, r.origin_repo_id, '/')
+        if perm is None:
+            return api_error(status.HTTP_403_FORBIDDEN,
+                             'Permission denied.')
+
         result = {}
         result['failed'] = []
         result['success'] = []
