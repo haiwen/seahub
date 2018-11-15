@@ -24,7 +24,7 @@ class DraftsViewTest(BaseTestCase):
             'repo_id': self.repo.id,
             'file_path': self.file,
         })
-        print(resp)
+
         self.assertEqual(200, resp.status_code)
         assert len(Draft.objects.all()) == 1
 
@@ -45,7 +45,7 @@ class DraftsViewTest(BaseTestCase):
             'file_path': self.file,
         })
 
-        self.assertEqual(200, resp.status_code)
+        self.assertEqual(409, resp.status_code)
 
 
 class DraftViewTest(BaseTestCase):
