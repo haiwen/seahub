@@ -22,19 +22,19 @@ const propTypes = {
   isFileLoading: PropTypes.bool.isRequired,
   isViewFileState: PropTypes.bool.isRequired,
   isDirentListLoading: PropTypes.bool.isRequired,
-  updateViewListParam: PropTypes.func.isRequired,
+  updateDirentParam: PropTypes.func.isRequired,
   direntList: PropTypes.array.isRequired,
   onMenuClick: PropTypes.func.isRequired,
   onSearchedClick: PropTypes.func.isRequired,
   onMainNavBarClick: PropTypes.func.isRequired,
   onLinkClick: PropTypes.func.isRequired,
-  onMainItemClick: PropTypes.func.isRequired,
-  onMainItemDelete: PropTypes.func.isRequired,
-  onMainItemRename: PropTypes.func.isRequired,
-  onMainItemMove: PropTypes.func.isRequired,
-  onMainItemCopy: PropTypes.func.isRequired,
-  onMainAddFile: PropTypes.func.isRequired,
-  onMainAddFolder: PropTypes.func.isRequired,
+  onItemClick: PropTypes.func.isRequired,
+  onItemDelete: PropTypes.func.isRequired,
+  onItemRename: PropTypes.func.isRequired,
+  onItemMove: PropTypes.func.isRequired,
+  onItemCopy: PropTypes.func.isRequired,
+  onAddFile: PropTypes.func.isRequired,
+  onAddFolder: PropTypes.func.isRequired,
   switchViewMode: PropTypes.func.isRequired,
   onFileTagChanged: PropTypes.func.isRequired,
 };
@@ -167,14 +167,14 @@ class MainPanel extends Component {
     this.setState({showFileDialog: !this.state.showFileDialog});
   }
 
-  onMainAddFile = (filePath, isDraft) => {
+  onAddFile = (filePath, isDraft) => {
     this.setState({showFileDialog: !this.state.showFileDialog});
-    this.props.onMainAddFile(filePath, isDraft);
+    this.props.onAddFile(filePath, isDraft);
   }
 
-  onMainAddFolder = (dirPath) => {
+  onAddFolder = (dirPath) => {
     this.setState({showFolderDialog: !this.state.showFolderDialog});
-    this.props.onMainAddFolder(dirPath);
+    this.props.onAddFolder(dirPath);
   }
 
   onItemDetails = (dirent, direntPath) => {
@@ -313,14 +313,14 @@ class MainPanel extends Component {
                   <DirentListView 
                     direntList={this.props.direntList}
                     filePath={this.props.filePath}
-                    onItemClick={this.props.onMainItemClick}
-                    onItemDelete={this.props.onMainItemDelete}
-                    onItemRename={this.props.onMainItemRename}
-                    onItemMove={this.props.onMainItemMove}
-                    onItemCopy={this.props.onMainItemCopy}
+                    onItemClick={this.props.onItemClick}
+                    onItemDelete={this.props.onItemDelete}
+                    onItemRename={this.props.onItemRename}
+                    onItemMove={this.props.onItemMove}
+                    onItemCopy={this.props.onItemCopy}
                     onItemDetails={this.onItemDetails}
                     isDirentListLoading={this.props.isDirentListLoading}
-                    updateViewListParam={this.props.updateViewListParam}
+                    updateDirentParam={this.props.updateDirentParam}
                     currentRepo={this.state.currentRepo}
                     isRepoOwner={this.state.isRepoOwner}
                   />
@@ -351,14 +351,14 @@ class MainPanel extends Component {
             fileType={this.state.createFileType}
             parentPath={this.props.filePath}
             addFileCancel={this.addFileCancel}
-            onAddFile={this.onMainAddFile}
+            onAddFile={this.onAddFile}
           />
         }
         {this.state.showFolderDialog &&
           <CreateFolder 
             parentPath={this.props.filePath}
             addFolderCancel={this.addFolderCancel}
-            onAddFolder={this.onMainAddFolder}
+            onAddFolder={this.onAddFolder}
           />
         }
       </div>
