@@ -44,6 +44,7 @@ class AddReviewerDialog extends React.Component {
   loadOptions = (value, callback) => {
     if (value.trim().length > 0) {
       seafileAPI.searchUsers(value.trim()).then((res) => {
+        this.Options = [];
         for (let i = 0 ; i < res.data.users.length; i++) {
           let obj = {};
           obj.value = res.data.users[i].name;
@@ -53,7 +54,6 @@ class AddReviewerDialog extends React.Component {
               <img src={res.data.users[i].avatar_url} className="avatar reviewer-select-avatar" alt=""/>
               <span className='reviewer-select-name'>{res.data.users[i].name}</span>
             </React.Fragment>;
-          this.Options.splice(0, this.Options.length);
           this.Options.push(obj);
         }
         callback(this.Options);
