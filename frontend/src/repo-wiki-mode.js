@@ -38,14 +38,14 @@ class Wiki extends Component {
       lastModified: '',
       latestContributor: '',
       permission: '',
-      isInitalPathExist: true,
+      pathNotExist: true,
     };
     window.onpopstate = this.onpopstate;
   }
 
   componentDidMount() {
     if (isDir === 'None') {
-      this.setState({isInitalPathExist: false});
+      this.setState({pathNotExist: false});
     } else if (isDir === 'True') {
       this.showDir(initialPath);
     } else if (isDir === 'False') {
@@ -56,26 +56,32 @@ class Wiki extends Component {
   }
 
   onNewFile = (filePath, isDraft) => {
-    //todos validate;
+    //todo validate;
     seafileAPI.createFile(repoID, filePath, isDraft).then(res => {
-      //todos; get create name; is repetition;
-      let isCurrentPath = this.addNodeToTree(filePath, 'file'); // is add to currentNode;
-      if (isCurrentPath && !this.state.isViewFile) {
-        this.addDirent(filePath, 'file');
-        // this.showDir(this.state.filePath);
+
+      let index = filePath.lastIndexOf('/');
+      let name = filePath.slice(index + 1);
+      let parentPath = filePath.slice(0, index) === '' ? '/' : filePath.slice(0, index);
+
+      this.addNodeToTree(name, parentPath, 'file');
+      if (parentPath === this.state.filePath && !this.state.isViewFile) {
+        this.addDirent(name, 'file');
       }
     }).catch(() => {
-      //todos message
+      //todo;
     });
   }
   
   onNewDir = (dirPath) => {
     //validate task
     seafileAPI.createDir(repoID, dirPath).then(() => {
-      let isCurrentPath = this.addNodeToTree(dirPath, 'dir');
-      if (isCurrentPath && !this.state.isViewFile) {
-        this.addDirent(dirPath, 'dir');
-        // this.showDir(this.state.filePath);
+      let index = dirPath.lastIndexOf('/');
+      let name = dirPath.slice(index + 1);
+      let parentPath = dirPath.slice(0, index) === '' ? '/' : dirPath.slice(0, index);
+
+      this.addNodeToTree(name, parentPath, 'dir');
+      if (parentPath === this.state.filePath && !this.state.isViewFile) {
+        this.addDirent(name, 'dir');
       }
     }).catch(() => {
       //return error message
@@ -90,16 +96,19 @@ class Wiki extends Component {
     }
     if (renameNode.isDir()) {
       seafileAPI.renameDir(repoID, renameNode.path, newName).then(() => {
-        let newPath = this.renameTreeNode(renameNode, newName);
-        this.renameDirent(newPath, renameNode, newName)
-
+        let direntPath = renameNode.path;
+        let oldName = renameNode.name;
+        this.renameTreeNode(renameNode, newName);
+        this.renameDirent(direntPath, oldName, newName);
       }).catch(() => {
         //todos;
       });
     } else {
       seafileAPI.renameFile(repoID, renameNode.path, newName).then(() => {
-        let newPath = this.renameTreeNode(renameNode, newName);
-        this.renameDirent(newPath, renameNode, newName)
+        let direntPath = renameNode.path;
+        let oldName = renameNode.name;
+        this.renameTreeNode(renameNode, newName);
+        this.renameDirent(direntPath, oldName, newName);
       }).catch(() => {
         //todos;
       });
@@ -113,15 +122,19 @@ class Wiki extends Component {
     }
     if (deleteNode.isDir()) {
       seafileAPI.deleteDir(repoID, deleteNode.path).then(() => {
-        let newPath = this.deleteTreeNode(deleteNode); //update tree data;
-        this.deleteDirent(newPath, deleteNode);
+        let direntPath = deleteNode.path;
+        let name = deleteNode.name;
+        this.deleteTreeNode(deleteNode);
+        this.deleteDirent(direntPath, name);
       }).catch(() => {
         //todos;
       });
     } else {
       seafileAPI.deleteFile(repoID, deleteNode.path).then(() => {
-        let newPath = this.deleteTreeNode(deleteNode);
-        this.deleteDirent(newPath, deleteNode);
+        let direntPath = deleteNode.path;
+        let name = deleteNode.name;
+        this.deleteTreeNode(deleteNode);
+        this.deleteDirent(direntPath, name);
       }).catch(() => {
         //todos;
       });
@@ -320,7 +333,7 @@ class Wiki extends Component {
     if (node.isMarkdown()) {
       this.setState({treeData: tree}); // tree
       this.showFile(direntPath);
-    } else if (node.isDir()){
+    } else if (node.isDir()) {
       this.setState({treeData: tree, currentNode: node}); //tree
       this.showDir(node.path);
     } else {
@@ -330,11 +343,21 @@ class Wiki extends Component {
     }
   }
 
-  renameDirent = (newPath, renameNode, newName) => {
+  renameDirent = (direntPath, oldName, newName) => {
+    let newPath = '';
+    let parentPath = direntPath.slice(0, direntPath.lastIndexOf('/') + 1);
+    if (parentPath === this.state.filePath) { //self
+      newPath = parentPath;
+    } else if (parentPath.indexOf(this.state.filePath) > -1) { //child
+      newPath = parentPath;
+    } else if (this.state.filePath.indexOf(parentPath) > -1) { // ancestor
+      newPath = parentPath + newName + this.state.filePath.replace(direntPath, '');
+    }
+
     if (newPath && !this.state.isViewFile) {
       if (newPath === this.state.filePath) {
         let direntList = this.state.direntList.map(item => {
-          if (item.name === renameNode.name) {
+          if (item.name === oldName) {
             item.name = newName;
           }
           return item;
@@ -348,12 +371,22 @@ class Wiki extends Component {
     }
   }
 
-  deleteDirent = (newPath, deleteNode) => {
+  deleteDirent = (direntPath, direntName) => {
+    let newPath = '';
+    let parentPath = direntPath.slice(0, direntPath.lastIndexOf('/') + 1);
+    if (parentPath === this.state.filePath) { //self
+      newPath = parentPath;
+    } else if (parentPath.indexOf(this.state.filePath) > -1) { // child
+      newPath = this.state.filePath;
+    } else if (this.state.filePath.indexOf(parentPath) > -1) { // ancestor
+      newPath = parentPath;
+    }
+
     if (newPath) {
       if (newPath === this.state.filePath) {
         //delete is child;
         let direntList = this.state.direntList.filter(item => {
-          return item.name !== deleteNode.name;
+          return item.name !== direntName;
         });
         this.setState({direntList: direntList, isViewFile: false});
       } else {
@@ -363,8 +396,7 @@ class Wiki extends Component {
     }
   }
 
-  addDirent = (filePath, type) => {
-    let name = filePath.slice(filePath.lastIndexOf('/') + 1);
+  addDirent = (name, type) => {
     let item = this.createDirent(name, type);
     let direntList = this.state.direntList;
     if (type === 'dir') {
@@ -393,16 +425,16 @@ class Wiki extends Component {
   }
 
   onTreeNodeClick = (node) => {
-    if (!this.state.isInitalPathExist) {
-      this.setState({isInitalPathExist: true});
+    if (!this.state.pathNotExist) {
+      this.setState({pathNotExist: true});
     }
-    if (node instanceof Node && node.isMarkdown()){
+    if (node instanceof Node && node.isMarkdown()) {
       let tree = this.state.treeData.clone();
       this.setState({treeData: tree});
       if (node.path !== this.state.filePath) {
         this.showFile(node.path);
       }
-    } else if(node instanceof Node && node.isDir()){
+    } else if (node instanceof Node && node.isDir()) {
       let tree = this.state.treeData.clone();
       if (this.state.filePath === node.path) {
         if (node.isExpanded) {
@@ -441,69 +473,26 @@ class Wiki extends Component {
     });
   }
 
-  addNodeToTree = (path, type) => {
+  addNodeToTree = (name, parentPath, type) => {
     let tree = this.state.treeData.clone();
-    let index = path.lastIndexOf('/');
-    let name = index > -1 ? path.slice(index + 1) : '';
-    let parentPath = path.slice(0, path.lastIndexOf('/'));
-    parentPath = parentPath === '' ? '/' : parentPath;  //root menu
 
     let node = this.createTreeNode(name, type);
     let parentNode = tree.getNodeByPath(parentPath);
 
     tree.addNodeToParent(node, parentNode);
     this.setState({treeData: tree});
-    return parentPath === this.state.filePath;
   }
 
   renameTreeNode = (node, newName) => {
     let tree = this.state.treeData.clone();
-    let path = node.path;
-    //is ancestor, child, currentNode, otherNode?
-    let isCurrentNode = path === this.state.filePath;
-    let isChildNode = !isCurrentNode && path.indexOf(this.state.filePath) > -1;
-    let isAncestorNode= !isCurrentNode && this.state.filePath.indexOf(path) > -1;
-    let ancestor_cild_path = isAncestorNode ? this.state.filePath.replace(node.path, '') : '';
-
-    tree.updateNodeParamByPath(path, 'name', newName);
+    tree.updateNodeParam(node, 'name', newName);
     this.setState({treeData: tree});
-    // return {flag, path};
-    // flag is true; update ui;
-    // flag is false, path is not null, update list 
-    if (isChildNode) {
-      return this.state.filePath;
-    }
-    if (isCurrentNode) {
-      return path;
-    }
-    if (isAncestorNode) {
-      return path + ancestor_cild_path;
-    }
-
-    //need not update main panel
-    return false;
   }
 
   deleteTreeNode = (node) => {
     let tree = this.state.treeData.clone();
-    // is ancestor, child, currentNode, otherNode? 
-    let path = node.path;
-    let isCurrentNode = path === this.state.filePath;
-    let isChildNode = !isCurrentNode && path.indexOf(this.state.filePath) > -1;
-    let isAncestorNode= !isCurrentNode && this.state.filePath.indexOf(path) > -1;
-
-    let parentNode = tree.findNodeParentFromTree(node);
     tree.deleteNode(node);
-
     this.setState({treeData: tree});
-    if (isChildNode) {
-      return this.state.filePath;
-    }
-    if (isCurrentNode || isAncestorNode) {
-      return parentNode.path;
-    }
-    //need not update main panel;
-    return false;
   }
 
   moveTreeNode = (nodePath, moveToPath, moveToRepo) => {
@@ -636,7 +625,7 @@ class Wiki extends Component {
         <MainPanel
           filePath={this.state.filePath}
           isViewFile={this.state.isViewFile}
-          isInitalPathExist={this.state.isInitalPathExist}
+          pathNotExist={this.state.pathNotExist}
           isDirentListLoading={this.state.isDirentListLoading}
           isFileLoading={this.state.isFileLoading}
           permission={this.state.permission}
