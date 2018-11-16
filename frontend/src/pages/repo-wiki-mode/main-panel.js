@@ -301,36 +301,41 @@ class MainPanel extends Component {
               <PathToolbar filePath={this.props.filePath}/>
             </div>
             <div className="cur-view-content">
-              { this.props.isViewFile ?
-                <MarkdownViewer
-                  markdownContent={this.props.content}
-                  latestContributor={this.props.latestContributor}
-                  lastModified = {this.props.lastModified}
-                  onLinkClick={this.props.onLinkClick}
-                  isFileLoading={this.props.isFileLoading}
-                /> :
+              { !this.props.isInitalPathExist ? 
+                <div className="message empty-tip" style={{color: 'red'}}>{gettext('Folder is not exist.')}</div> :
                 <Fragment>
-                  <DirentListView 
-                    direntList={this.props.direntList}
-                    filePath={this.props.filePath}
-                    onItemClick={this.props.onItemClick}
-                    onItemDelete={this.props.onItemDelete}
-                    onItemRename={this.props.onItemRename}
-                    onItemMove={this.props.onItemMove}
-                    onItemCopy={this.props.onItemCopy}
-                    onItemDetails={this.onItemDetails}
-                    isDirentListLoading={this.props.isDirentListLoading}
-                    updateDirent={this.props.updateDirent}
-                    currentRepo={this.state.currentRepo}
-                    isRepoOwner={this.state.isRepoOwner}
-                  />
-                  <FileUploader 
-                    ref={uploader => this.uploader = uploader}
-                    dragAndDrop={true}
-                    filePath={this.props.filePath}
-                    onFileSuccess={this.onFileSuccess}
-                    direntList={this.props.direntList}
-                  />
+                  { this.props.isViewFile ?
+                    <MarkdownViewer
+                      markdownContent={this.props.content}
+                      latestContributor={this.props.latestContributor}
+                      lastModified = {this.props.lastModified}
+                      onLinkClick={this.props.onLinkClick}
+                      isFileLoading={this.props.isFileLoading}
+                    /> :
+                    <Fragment>
+                      <DirentListView 
+                        direntList={this.props.direntList}
+                        filePath={this.props.filePath}
+                        onItemClick={this.props.onItemClick}
+                        onItemDelete={this.props.onItemDelete}
+                        onItemRename={this.props.onItemRename}
+                        onItemMove={this.props.onItemMove}
+                        onItemCopy={this.props.onItemCopy}
+                        onItemDetails={this.onItemDetails}
+                        isDirentListLoading={this.props.isDirentListLoading}
+                        updateDirent={this.props.updateDirent}
+                        currentRepo={this.state.currentRepo}
+                        isRepoOwner={this.state.isRepoOwner}
+                      />
+                      <FileUploader 
+                        ref={uploader => this.uploader = uploader}
+                        dragAndDrop={true}
+                        filePath={this.props.filePath}
+                        onFileSuccess={this.onFileSuccess}
+                        direntList={this.props.direntList}
+                      />
+                    </Fragment>
+                  }
                 </Fragment>
               }
             </div>
