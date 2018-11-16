@@ -119,6 +119,25 @@
   line-height: 2rem;
 }
 
+.markdown-viewer-render-content {
+  position: relative;
+}
+
+.review-comment-btn {
+  position: absolute;
+  top: 0;
+  right: 5000px;
+  border: 1px solid rgba(0, 40, 100, 0.12);
+  box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+  border-radius: 3px;
+  background-color: #fff;
+  padding: 5px;
+}
+.review-comment-btn:hover {
+  cursor: pointer;
+  background-color: #eee;
+}
+
 @media (max-width: 992px) {
   .main .cur-view-container .cur-view-content-commenton {
     width: 20% !important;

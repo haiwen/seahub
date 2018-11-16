@@ -47,7 +47,7 @@
   text-align: center;
 }
 .seafile-comment-item {
-  overflow-y: auto;
+  overflow-y: hidden;
   padding: 15px 10px;
   overflow-y: hidden;
 }

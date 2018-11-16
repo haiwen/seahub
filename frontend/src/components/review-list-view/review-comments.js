@@ -13,7 +13,11 @@ const commentPropTypes = {
   getCommentsNumber: PropTypes.func.isRequired,
   inResizing: PropTypes.bool.isRequired,
   toggleCommentList: PropTypes.func.isRequired,
-  commentsNumber: PropTypes.number.isRequired
+  commentsNumber: PropTypes.number.isRequired,
+  selectedText: PropTypes.string,
+  newIndex: PropTypes.number,
+  oldIndex: PropTypes.number,
+  scrollToQuote: PropTypes.func.isRequired
 };
 
 class ReviewComments extends React.Component {
@@ -59,14 +63,28 @@ class ReviewComments extends React.Component {
   }
 
   submitComment = () => {
-    let comment = this.refs.commentTextarea.value;
-    if (comment.trim().length > 0) {
-      seafileAPI.addReviewComment(reviewID, comment.trim()).then((res) => {
-        this.listComments(true);
-        this.props.getCommentsNumber();
-      });
-      this.refs.commentTextarea.value = '';
+    let comment = this.refs.commentTextarea.value.trim();
+    if (comment.length > 0) {
+      if (this.props.selectedText.length > 0) {
+        let detail = {
+          selectedText: this.props.selectedText.slice(0, 10),
+          newIndex: this.props.newIndex,
+          oldIndex: this.props.oldIndex
+        };
+        let detailJSON = JSON.stringify(detail);
+        seafileAPI.addReviewComment(reviewID, comment, detailJSON).then((response) => {
+          this.listComments(true);
+          this.props.getCommentsNumber();
+        });
+      }
+      else {
+        seafileAPI.addReviewComment(reviewID, comment).then((response) => {
+          this.listComments(true);
+          this.props.getCommentsNumber();
+        });
+      }
     }
+    this.refs.commentTextarea.value = '';
   }
 
   resolveComment = (event) => {
@@ -131,9 +149,30 @@ class ReviewComments extends React.Component {
     });
   };
 
+  setQuoteText = (text) => {
+    if (text.length > 0) {
+      this.refs.commentTextarea.value = '> ' + text;
+    }
+  }
+  
+  scrollToQuote = (newIndex, oldIndex, selectedText) => {
+    this.props.scrollToQuote(newIndex, oldIndex, selectedText);
+    this.refs.commentTextarea.value = '';
+  }
+
   componentWillMount() {
     this.getUserAvatar();
     this.listComments();
+  }
+
+  componentDidMount() {
+    this.setQuoteText(this.props.selectedText);
+  }
+
+  componentWillReceiveProps(nextProps) {
+    if (this.props.selectedText !== nextProps.selectedText) {
+      this.setQuoteText(nextProps.selectedText);
+    }
   }
 
   render() {
@@ -172,6 +211,12 @@ class ReviewComments extends React.Component {
                 this.state.commentsList.map((item, index = 0, arr) => {
                   let oldTime = (new Date(item.created_at)).getTime();
                   let time = moment(oldTime).format('YYYY-MM-DD HH:mm');
+                  let newIndex, oldIndex, selectedText;
+                  if (item.detail !== 'undefined') {
+                    newIndex = JSON.parse(item.detail).newIndex;
+                    oldIndex = JSON.parse(item.detail).oldIndex;
+                    selectedText = JSON.parse(item.detail).selectedText;
+                  }
                   return (
                     <CommentItem id={item.id} time={time} headUrl={item.avatar_url}
                       comment={item.comment} name={item.user_name}
@@ -181,6 +226,8 @@ class ReviewComments extends React.Component {
                       commentsList={this.state.commentsList}
                       accountInfo={this.accountInfo}
                       showResolvedComment={this.state.showResolvedComment}
+                      scrollToQuote={this.scrollToQuote}
+                      newIndex={newIndex} oldIndex={oldIndex} selectedText={selectedText}
                     />
                   );
                 })
@@ -221,7 +268,11 @@ const commentItemPropTypes = {
   accountInfo: PropTypes.object.isRequired,
   headUrl: PropTypes.string.isRequired,
   resolved: PropTypes.bool.isRequired,
-  showResolvedComment: PropTypes.bool.isRequired
+  showResolvedComment: PropTypes.bool.isRequired,
+  newIndex: PropTypes.number,
+  oldIndex: PropTypes.number,
+  selectedText: PropTypes.string,
+  scrollToQuote: PropTypes.func.isRequired
 };
 
 class CommentItem extends React.Component {
@@ -249,6 +300,10 @@ class CommentItem extends React.Component {
         });
       }
     );
+  }
+
+  scrollToQuote = () => {
+    this.props.scrollToQuote(this.props.newIndex, this.props.oldIndex, this.props.selectedText);
   }
 
   componentWillMount() {
@@ -288,7 +343,13 @@ class CommentItem extends React.Component {
             </Dropdown>
           }
         </div>
-        <div className="seafile-comment-content" dangerouslySetInnerHTML={{ __html: this.state.html }}></div>
+        { this.props.newIndex ? 
+          <div className="seafile-comment-content" onClick={this.scrollToQuote}
+            dangerouslySetInnerHTML={{ __html: this.state.html }}></div>
+          :
+          <div className="seafile-comment-content"
+            dangerouslySetInnerHTML={{ __html: this.state.html }}></div>
+        }
       </li>
     );
   }
