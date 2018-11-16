@@ -23,10 +23,9 @@ class Tree {
   }
 
   addNodeToParent(node, parentNode) {
-    let newNode = node.clone();
-    newNode.parent = parentNode;
-    parentNode.children.push(newNode);
-    return newNode;
+    node.parent = parentNode;
+    parentNode.children.push(node);
+    return node;
   }
 
   removeNodeFromParent(node, parentNode) {
@@ -69,7 +68,8 @@ class Tree {
   }
 
   moveNode(node, moveToNode, isDestroy) {
-    this.addNodeToParent(node, moveToNode);
+    let moveNode = node.clone();
+    this.addNodeToParent(moveNode, moveToNode);
     if (isDestroy) {
       this.deleteNode(node);
     }
