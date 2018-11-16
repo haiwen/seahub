@@ -245,9 +245,9 @@ class DraftReview extends React.Component {
                 :
                 <div className="markdown-viewer-render-content article">
                   {this.state.isShowDiff ? 
-                    <DiffViewer markdownContent={this.state.draftContent} markdownContent1={this.state.draftOriginContent} />
+                    <DiffViewer newMarkdownContent={this.state.draftContent} oldMarkdownContent={this.state.draftOriginContent} />
                     : 
-                    <DiffViewer markdownContent={this.state.draftContent} markdownContent1={this.state.draftContent} />
+                    <DiffViewer newMarkdownContent={this.state.draftContent} oldMarkdownContent={this.state.draftContent} />
                   }
                 </div>
               }
