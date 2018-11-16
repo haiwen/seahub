@@ -52,7 +52,7 @@ class RepoFileTagsView(APIView):
             return api_error(status.HTTP_404_NOT_FOUND, error_msg)
 
         # permission check
-        if check_folder_permission(request, repo_id, '/') is None:
+        if not check_folder_permission(request, repo_id, '/'):
             error_msg = 'Permission denied.'
             return api_error(status.HTTP_403_FORBIDDEN, error_msg)
 
