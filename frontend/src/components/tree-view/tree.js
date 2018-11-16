@@ -23,9 +23,10 @@ class Tree {
   }
 
   addNodeToParent(node, parentNode) {
-    node.parent = parentNode;
-    parentNode.children.push(node);
-    return node;
+    let newNode = node.clone();
+    newNode.parent = parentNode;
+    parentNode.children.push(newNode);
+    return newNode;
   }
 
   removeNodeFromParent(node, parentNode) {
@@ -62,6 +63,24 @@ class Tree {
     return false;
   }
 
+  deleteNodeByPath(path) {
+    let node = this.getNodeByPath(path);
+    this.deleteNode(node);
+  }
+
+  moveNode(node, moveToNode, isDestroy) {
+    this.addNodeToParent(node, moveToNode);
+    if (isDestroy) {
+      this.deleteNode(node);
+    }
+  }
+
+  moveNodeByPath(path, moveToPath, isDestroy) {
+    let node = this.getNodeByPath(path);
+    let moveToNode = this.getNodeByPath(moveToPath);
+    this.moveNode(node, moveToNode, isDestroy);
+  }
+
   updateNodeParam(node, param, newValue) {
     let treeNode = this.findNodeFromTree(node);
     if (treeNode && treeNode[param]) {
@@ -69,6 +88,11 @@ class Tree {
       return true;
     }
     return false;
+  }
+
+  updateNodeParamByPath(path, param, newValue) {
+    let node = this.getNodeByPath(path);
+    this.updateNodeParam(node, param, newValue);
   }
 
   findNode(node) {
