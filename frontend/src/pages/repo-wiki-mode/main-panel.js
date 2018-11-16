@@ -20,7 +20,7 @@ const propTypes = {
   permission: PropTypes.string,
   filePath: PropTypes.string.isRequired,
   isFileLoading: PropTypes.bool.isRequired,
-  isViewFileState: PropTypes.bool.isRequired,
+  isViewFile: PropTypes.bool.isRequired,
   isDirentListLoading: PropTypes.bool.isRequired,
   updateDirent: PropTypes.func.isRequired,
   direntList: PropTypes.array.isRequired,
@@ -249,7 +249,7 @@ class MainPanel extends Component {
                   <button className="btn btn-secondary operation-item" title={gettext('Edit File')} onClick={this.onEditClick}>{gettext('Edit')}</button>
                 }
                 {
-                  !this.props.isViewFileState &&
+                  !this.props.isViewFile &&
                   <Fragment>
                     {
                       Utils.isSupportUploadFolder() ?
@@ -301,7 +301,7 @@ class MainPanel extends Component {
               <PathToolbar filePath={this.props.filePath}/>
             </div>
             <div className="cur-view-content">
-              { this.props.isViewFileState ?
+              { this.props.isViewFile ?
                 <MarkdownViewer
                   markdownContent={this.props.content}
                   latestContributor={this.props.latestContributor}

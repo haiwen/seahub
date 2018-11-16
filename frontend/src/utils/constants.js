@@ -26,8 +26,9 @@ export const enableResumableFileUpload = window.app.pageOptions.enableResumableF
 export const slug = window.wiki ? window.wiki.config.slug : '';
 export const repoID = window.wiki ? window.wiki.config.repoId : '';
 export const serviceUrl = window.wiki ? window.wiki.config.serviceUrl : '';
-export const initialFilePath = window.wiki ? window.wiki.config.initial_file_path : '';
+export const initialPath = window.wiki ? window.wiki.config.initial_path : '';
 export const permission = window.wiki ? window.wiki.config.permission === 'True' : '';
+export const isDir = window.wiki ? window.wiki.config.isDir : '';
 
 // file history
 export const PER_PAGE = 25;

@@ -180,7 +180,7 @@ def view_lib_as_wiki(request, repo_id, path):
     return render(request, 'view_lib_as_wiki.html', {
         'repo_id': repo_id,
         'service_url': get_service_url().rstrip('/'),
-        'file_path': path,
+        'initial_path': path,
         'is_dir': is_dir,
         'repo_name': repo.name,
         'permission': user_can_write

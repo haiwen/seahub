@@ -22,18 +22,14 @@ class TreeView extends React.PureComponent {
     */
   }
 
-  toggleCollapse = (e, node) => {
-    this.props.onDirCollapse(e, node);
-  }
-
   onDragStart = (e, node) => {
     const url = editorUtilities.getFileURL(node);
     e.dataTransfer.setData('text/uri-list', url);
     e.dataTransfer.setData('text/plain', url);
   }
 
-  onNodeClick = (e, node) => {
-    this.props.onNodeClick(e, node);
+  onNodeClick = (node) => {
+    this.props.onNodeClick(node);
   }
 
   onShowContextMenu = (e, node) => {

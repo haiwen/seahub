@@ -31,10 +31,10 @@ class TreeNodeView extends React.Component {
     };
   }
 
-  onClick = (e) => {
+  onClick = () => {
     // e.nativeEvent.stopImmediatePropagation();
     let { node } = this.props;
-    this.props.treeView.onNodeClick(e, node);
+    this.props.treeView.onNodeClick(node);
   }
 
   onMouseEnter = () => {
@@ -55,7 +55,7 @@ class TreeNodeView extends React.Component {
 
   handleCollapse = (e) => {
     e.stopPropagation();
-    this.props.onDirCollapse(e, this.props.node);
+    this.props.onDirCollapse(this.props.node);
   }
 
   onDragStart = (e) => {
@@ -180,14 +180,8 @@ class TreeNodeView extends React.Component {
     let node = this.props.node;
     let { type, icon } = this.getNodeTypeAndIcon();
     let hlClass = '';
-    if (node.isDir()) {
-      if ((node.path + '/') === this.props.currentFilePath) {
-        hlClass = 'tree-node-hight-light';
-      }
-    } else {
-      if (node.path === this.props.currentFilePath) {
-        hlClass = 'tree-node-hight-light';
-      }
+    if (node.path === this.props.currentFilePath) {
+      hlClass = 'tree-node-hight-light';
     }
 
     return (
