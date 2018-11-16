@@ -302,7 +302,7 @@ class MainPanel extends Component {
             </div>
             <div className="cur-view-content">
               { !this.props.isInitalPathExist ? 
-                <div className="message empty-tip" style={{color: 'red'}}>{gettext('Folder is not exist.')}</div> :
+                <div className="message empty-tip err-message"><h2>{gettext('Folder does not exist.')}</h2></div> :
                 <Fragment>
                   { this.props.isViewFile ?
                     <MarkdownViewer

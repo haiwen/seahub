@@ -896,6 +896,9 @@ a.op-icon:focus {
     color: #222;
     font-weight: bold;
 }
+.err-message h2{
+    color: red;
+}
 /* end tip */
   
 /* begin more component */
