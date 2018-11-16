@@ -37,17 +37,18 @@ class Wiki extends Component {
       lastModified: '',
       latestContributor: '',
       permission: '',
+      isInitalPathExist: true,
     };
     window.onpopstate = this.onpopstate;
   }
 
   componentDidMount() {
-    if (isDir === 'True') {
+    if (isDir === 'None') {
+      this.setState({isInitalPathExist: false});
+    } else if (isDir === 'True') {
       this.showDir(initialPath);
     } else if (isDir === 'False') {
       this.showFile(initialPath);
-    }else if (isDir === 'none') {
-      //todos；
     }
 
     this.loadSidePanel(initialPath);
@@ -185,12 +186,13 @@ class Wiki extends Component {
       treeData.parseListToTree(files);
 
       let node = treeData.getNodeByPath(filePath);
-      treeData.expandNode(node);
+      if (node) {
+        treeData.expandNode(node);
+        this.setState({tree_data: treeData, currentNode: node});
+      } else {
+        this.setState({tree_data: treeData});
+      }
 
-      this.setState({
-        tree_data: treeData,
-        changedNode: node,
-      });
     }, () => {
       /* eslint-disable */
       console.log('failed to load files');
@@ -387,6 +389,9 @@ class Wiki extends Component {
   }
 
   onTreeNodeClick = (node) => {
+    if (!this.state.isInitalPathExist) {
+      this.setState({isInitalPathExist: true});
+    }
     if (node instanceof Node && node.isMarkdown()){
       let tree = this.state.tree_data.clone();
       this.setState({tree_data: tree});
@@ -639,6 +644,7 @@ class Wiki extends Component {
         <MainPanel
           filePath={this.state.filePath}
           isViewFile={this.state.isViewFile}
+          isInitalPathExist={this.state.isInitalPathExist}
           isDirentListLoading={this.state.isDirentListLoading}
           isFileLoading={this.state.isFileLoading}
           permission={this.state.permission}
