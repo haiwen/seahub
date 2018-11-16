@@ -76,6 +76,7 @@ from seahub.api2.endpoints.revision_tag import TaggedItemsView, TagNamesView
 from seahub.api2.endpoints.user import User
 from seahub.api2.endpoints.repo_tags import RepoTagsView, RepoTagView
 from seahub.api2.endpoints.file_tag import RepoFileTagsView, RepoFileTagView
+from seahub.api2.endpoints.tag_filter_file import TaggedFilesView
 
 # Admin
 from seahub.api2.endpoints.admin.revision_tag import AdminTaggedItemsView
@@ -299,6 +300,7 @@ urlpatterns = [
     url(r'^api/v2.1/repos/(?P<repo_id>[-0-9a-f]{36})/repo-tags/(?P<repo_tag_id>\d+)/$', RepoTagView.as_view(), name='api-v2.1-repo-tag'),
     url(r'^api/v2.1/repos/(?P<repo_id>[-0-9a-f]{36})/file-tags/$', RepoFileTagsView.as_view(), name='api-v2.1-file-tags'),
     url(r'^api/v2.1/repos/(?P<repo_id>[-0-9a-f]{36})/file-tags/(?P<file_tag_id>\d+)/$', RepoFileTagView.as_view(), name='api-v2.1-file-tag'),
+    url(r'^api/v2.1/repos/(?P<repo_id>[-0-9a-f]{36})/tagged-files/(?P<repo_tag_id>\d+)/$', TaggedFilesView.as_view(), name='api-v2.1-tagged-files'),
 
     # Deprecated
     url(r'^api/v2.1/repos/(?P<repo_id>[-0-9a-f]{36})/tags/$', FileTagsView.as_view(), name="api-v2.1-filetags-view"),
