@@ -62,9 +62,9 @@ class SidePanel extends Component {
     });
   }
 
-  onNodeClick = (e, node) => {
+  onNodeClick = (node) => {
     this.setState({currentNode: node});
-    this.props.onNodeClick(e, node);
+    this.props.onNodeClick(node);
   }
 
   onShowContextMenu = (e, node) => {

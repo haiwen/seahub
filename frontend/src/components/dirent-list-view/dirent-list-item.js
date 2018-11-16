@@ -306,7 +306,7 @@ class DirentListItem extends React.Component {
 
   getDirentPath = (dirent) => {
     let path = this.props.filePath;
-    return path + dirent.name;
+    return path === '/' ? path + dirent.name : path + '/' + dirent.name;
   }
 
   getFileTag = () => {
