@@ -37,6 +37,7 @@ const propTypes = {
   onAddFolder: PropTypes.func.isRequired,
   switchViewMode: PropTypes.func.isRequired,
   onFileTagChanged: PropTypes.func.isRequired,
+  pathNotExist: PropTypes.bool.isRequired,
 };
 
 class MainPanel extends Component {
@@ -301,7 +302,7 @@ class MainPanel extends Component {
               <PathToolbar filePath={this.props.filePath}/>
             </div>
             <div className="cur-view-content">
-              { !this.props.isInitalPathExist ? 
+              { !this.props.pathNotExist ? 
                 <div className="message empty-tip err-message"><h2>{gettext('Folder does not exist.')}</h2></div> :
                 <Fragment>
                   { this.props.isViewFile ?
