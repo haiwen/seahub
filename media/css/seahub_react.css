@@ -748,7 +748,7 @@ a.op-icon:focus {
 
 /* begin path navigation */
 .path-containter { /* for the real path */
-    font-size:16px;
+    font-size: 1rem;
     word-break: break-all;
 }
 .path-split {
@@ -767,46 +767,53 @@ a.op-icon:focus {
 /* end path navigation */
 
 /* begin main table list style */
-.table-container {
-    flex: 1;
-    padding: 10px 16px 20px;
-    overflow: auto;
-}
-.table-container table {
+table {
     width: 100%;
     table-layout: fixed;
 }
-.table-container table th {
+table th, table td {
+    padding: 5px 3px;
+    border-bottom: 1px solid #eee;
+}
+table th {
+    padding-top: 1rem;
     text-align: left;
     font-weight: normal;
     font-size: 13px;
     line-height: 1.6;
     color: #9c9c9c;
 }
-.table-container table td {
+table td {
     color: #333;
     font-size: 14px;
     word-break: break-all;
 }
-.table-container table th, .table-container table td {
-    padding: 5px 3px;
-    border-bottom: 1px solid #eee;
-}
-.table-container table th {
-    padding-top: 1rem;
-}
-.table-container table .select,
-.table-container table .star,
-.table-container table .icon {
+
+table .select,
+table .star,
+table .icon {
     position: relative;
     text-align: center;
 }
 
-.table-container table .star {
+table .icon img {
+    width: 1.5rem;
+    height: 1.5rem;
+}
+
+table .dir-icon {
+    position: relative;
+}
+
+table .star {
     cursor: pointer;
 }
 
-.table-container table .rename-container input {
+table .star .empty {
+    color: #d0d0d0;
+}
+
+table .rename-container input {
     box-sizing: content-box;
     padding: 2px 3px;
     width: 16.25rem;
@@ -818,14 +825,14 @@ a.op-icon:focus {
     border: 1px solid #ccc;
 }
 
-.table-container table .rename-container input:focus {
+table .rename-container input:focus {
     background-color: #fff;
     border-color: #1991eb;
     outline: 0;
     box-shadow: 0 0 0 2px rgba(70, 127, 207, 0.25);
 }
 
-.table-container table .rename-container button {
+table .rename-container button {
     margin-left: 0.25rem;
     padding: 5px 6px;
     font-size: 1rem;
@@ -834,25 +841,11 @@ a.op-icon:focus {
     min-width: 0;
 }
 
-.table-container table .rename-container .confirm {
+table .rename-container .confirm {
     color: green;
 }
 
-
-.table-container table .star .empty {
-    color: #d0d0d0;
-}
-
-.table-container table .icon img {
-    width: 1.5rem;
-    height: 1.5rem;
-}
-
-.table-container table .dir-icon {
-    position: relative;
-}
-
-.table-container table .dir-icon .locked {
+table .dir-icon .locked {
     position: absolute;
     width: 1rem;
     height: 1rem;
@@ -860,14 +853,14 @@ a.op-icon:focus {
     left: 50%;
 }
 
-.table-container table .menu-toggle {
+table .menu-toggle {
     text-align: center;
     cursor: pointer;
 } 
+
 .tr-highlight {
     background-color: #f8f8f8;
 }
-  
 /* end table list style */
   
 /* begin dropdown-menu style */

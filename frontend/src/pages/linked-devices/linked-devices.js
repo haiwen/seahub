@@ -38,7 +38,7 @@ class Content extends Component {
       );
 
       return (
-        <table className="table table-hover table-vcenter">
+        <table>
           {window.innerWidth >= 768 ? desktopThead : mobileThead}
           <TableBody items={items} />
         </table>
@@ -201,9 +201,7 @@ class LinkedDevices extends Component {
           <h3 className="sf-heading">{gettext('Linked Devices')}</h3>
         </div>
         <div className="cur-view-content">
-          <div className="table-container">
-            <Content data={this.state} />
-          </div>
+          <Content data={this.state} />
         </div>
       </div>
     );

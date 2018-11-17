@@ -58,7 +58,7 @@ img[src=""] {
 }
 
 .cur-view-content .markdown-container{
-  padding: 10px 40px 20px;
+  padding: 0 1.5rem;
   display: flex;
   flex: 1;
   overflow: auto;
@@ -71,7 +71,7 @@ img[src=""] {
 
 .cur-view-content .markdown-outline {
   position: fixed;
-  padding-right: 18px;
+  padding-right: 1rem;
   top: 97px;
   right: 0;
   width: 200px;
@@ -84,7 +84,7 @@ img[src=""] {
 
 @media (max-width: 991.98px) {
   .cur-view-content .markdown-container {
-    padding-right: 40px;
+    padding-right: 1.5rem;
   }
   .cur-view-content .markdown-content {
     width: 100%;
