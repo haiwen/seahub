@@ -50,7 +50,6 @@
     -webkit-font-smoothing: antialiased;
 }
 
-.sf2-icon-delete:before { content:"\e006"; }
 .sf2-icon-menu:before { content: "\e031"; }
 .sf2-icon-more:before { content: "\e032"; }
 .sf2-icon-x1:before { content:"\e01d"; }
@@ -72,6 +71,7 @@
 .sf2-icon-trash:before { content:"\e016"; }
 .sf2-icon-download:before { content:"\e008"; }
 .sf2-icon-delete:before { content:"\e006"; }
+.sf2-icon-link:before { content:"\e00e"; }
 .sf2-icon-caret-down:before { content:"\e01a"; }
 .sf2-icon-two-columns:before { content:"\e036"; }
 .sf2-icon-confirm:before {content:"\e01e"}
@@ -1018,4 +1018,13 @@ a.op-icon:focus {
 .dirent-item.tag-list {
     display: flex;
     align-items: center;
+}
+
+.nav-link {
+  color: #8a948f;
+  padding: .3em .1em;
+}
+.nav-link.active {
+  color: #eb8205;
+  border-bottom: 2px solid #eb8205;
 }

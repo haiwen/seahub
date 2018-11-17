@@ -60,19 +60,19 @@
                 <ul class="hide">
                     {% if user.permissions.can_add_repo %}
                     <li>
-                        <a href="{{ SITE_ROOT }}#share-admin-libs/"><span aria-hidden="true" class="sharp">#</span>{% trans "Libraries" %}</a>
+                        <a href="{{ SITE_ROOT }}share-admin-libs/"><span aria-hidden="true" class="sharp">#</span>{% trans "Libraries" %}</a>
                     </li>
                     <li>
-                        <a href="{{ SITE_ROOT }}#share-admin-folders/"><span aria-hidden="true" class="sharp">#</span>{% trans "Folders" %}</a>
+                        <a href="{{ SITE_ROOT }}share-admin-folders/"><span aria-hidden="true" class="sharp">#</span>{% trans "Folders" %}</a>
                     </li>
                     {% endif %}
                     {% if user.permissions.can_generate_share_link %}
                     <li>
-                        <a href="{{ SITE_ROOT }}#share-admin-share-links/"><span aria-hidden="true" class="sharp">#</span>{% trans "Links" %}</a>
+                        <a href="{{ SITE_ROOT }}share-admin-share-links/"><span aria-hidden="true" class="sharp">#</span>{% trans "Links" %}</a>
                     </li>
                     {% elif user.permissions.can_generate_upload_link %}
                     <li>
-                        <a href="{{ SITE_ROOT }}#share-admin-upload-links/"><span aria-hidden="true" class="sharp">#</span>{% trans "Links" %}</a>
+                        <a href="{{ SITE_ROOT }}share-admin-upload-links/"><span aria-hidden="true" class="sharp">#</span>{% trans "Links" %}</a>
                     </li>
                     {% endif %}
                 </ul>

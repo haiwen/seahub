@@ -1,4 +1,4 @@
-import { mediaUrl } from './constants';
+import { mediaUrl, gettext } from './constants';
 
 export const Utils = {
 
@@ -171,5 +171,89 @@ export const Utils = {
   isSupportUploadFolder: function() {
     return navigator.userAgent.indexOf('Firefox')!=-1 ||
       navigator.userAgent.indexOf('Chrome') > -1;
+  },
+
+  getLibIconUrl: function(options) {
+    /*
+     * param: {is_encrypted, is_readonly, size}
+     */
+    // icon name
+    var icon_name = 'lib.png';
+    if (options.is_encrypted) {
+      icon_name = 'lib-encrypted.png';
+    }
+    if (options.is_readonly) {
+      icon_name = 'lib-readonly.png';
+    }
+
+    // icon size
+    var icon_size = options.size || 256; // 'size' can be 24, 48, or undefined. (2017.7.31)
+
+    return mediaUrl + 'img/lib/' + icon_size + '/' + icon_name;
+  },
+
+  getFolderIconUrl: function(options) {
+    /*
+     * param: {is_readonly, size}
+     */
+    const readonly = options.is_readonly;
+    const size = options.size;
+    return `${mediaUrl}img/folder${readonly ? '-read-only' : ''}${size > 24 ? '-192' : '-24'}.png`;
+  },
+
+  getLibIconTitle: function(options) {
+    /*
+     * param: {encrypted, is_admin, permission}
+     */
+    var title;
+    if (options.encrypted) {
+      title = gettext("Encrypted library");
+    } else if (options.is_admin) { // shared with 'admin' permission
+      title = gettext("Admin access");
+    } else {
+      switch(options.permission) {
+        case 'rw':
+          title = gettext("Read-Write library");
+          break;
+        case 'r':
+          title = gettext("Read-Only library");
+          break;
+        case 'cloud-edit':
+          title = gettext("Preview-Edit-on-Cloud library");
+          break;
+        case 'preview':
+          title = gettext("Preview-on-Cloud library");
+          break;
+      }
+    }
+    return title;
+  },
+
+  getFolderIconTitle: function(options) {
+    var title;
+    switch(options.permission) {
+      case 'rw':
+        title = gettext("Read-Write folder");
+        break;
+      case 'r':
+        title = gettext("Read-Only folder");
+        break;
+      case 'cloud-edit':
+        title = gettext("Preview-Edit-on-Cloud folder");
+        break;
+      case 'preview':
+        title = gettext("Preview-on-Cloud folder");
+        break;
+    }
+    return title;
+  },
+
+  sharePerms: {
+    'rw': gettext("Read-Write"),
+    'r': gettext("Read-Only"),
+    'admin': gettext("Admin"),
+    'cloud-edit': gettext("Preview-Edit-on-Cloud"),
+    'preview': gettext("Preview-on-Cloud")
   }
+
 };
