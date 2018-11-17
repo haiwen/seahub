@@ -12,7 +12,7 @@ import CreateFile from '../../components/dialog/create-file-dialog';
 const propTypes = {
   currentNode: PropTypes.object,
   treeData: PropTypes.object.isRequired,
-  currentFilePath: PropTypes.string.isRequired,
+  currentPath: PropTypes.string.isRequired,
   closeSideBar: PropTypes.bool.isRequired,
   onCloseSide: PropTypes.func.isRequired,
   onDirCollapse: PropTypes.func.isRequired,
@@ -111,12 +111,12 @@ class SidePanel extends Component {
     this.setState({showFolder: !this.state.showFolder});
     this.onHideContextMenu();
   }
-  
+
   toggleRename = () => {
     this.setState({showRename: !this.state.showRename});
     this.onHideContextMenu();
   }
-  
+
   toggleDelete = () => {
     this.setState({showDelete: !this.state.showDelete});
     this.onHideContextMenu();
@@ -126,18 +126,18 @@ class SidePanel extends Component {
     this.setState({showFolder: !this.state.showFolder});
     this.props.onAddFolderNode(dirPath);
   }
-  
+
   onAddFileNode = (filePath, isDraft) => {
     this.setState({showFile: !this.state.showFile});
     this.props.onAddFileNode(filePath, isDraft);
   }
-  
+
   onRenameNode = (newName) => {
     this.setState({showRename: !this.state.showRename});
     let node = this.state.currentNode;
     this.props.onRenameNode(node, newName);
   }
-  
+
   onDeleteNode = () => {
     this.setState({showDelete: !this.state.showDelete});
     let node = this.state.currentNode;
@@ -182,23 +182,23 @@ class SidePanel extends Component {
           <a title="Close" aria-label="Close" onClick={this.closeSide} className="sf2-icon-x1 sf-popover-close side-panel-close op-icon d-md-none "></a>
         </div>
         <div id="side-nav" className="wiki-side-nav" role="navigation">
-          <h3 
-            className="wiki-pages-heading" 
-            onMouseEnter={this.onMouseEnter} 
+          <h3
+            className="wiki-pages-heading"
+            onMouseEnter={this.onMouseEnter}
             onMouseLeave={this.onMouseLeave}
           >
             {gettext('Files')}
             <div className="heading-icon">
-              <MenuControl 
+              <MenuControl
                 isShow={this.state.isMenuIconShow}
                 onClick={this.onHeadingMenuClick}
               />
             </div>
           </h3>
           <div className="wiki-pages-container">
-            {this.props.treeData && 
+            {this.props.treeData &&
             <TreeView
-              currentFilePath={this.props.currentFilePath}
+              currentPath={this.props.currentPath}
               treeData={this.props.treeData}
               currentNode={this.state.currentNode}
               isNodeItemFrezee={this.state.isNodeItemFrezee}
@@ -207,8 +207,8 @@ class SidePanel extends Component {
               onDirCollapse={this.props.onDirCollapse}
             />
             }
-            {this.state.isShowMenu && 
-            <NodeMenu 
+            {this.state.isShowMenu &&
+            <NodeMenu
               menuPosition={this.state.menuPosition}
               currentNode={this.state.currentNode}
               toggleAddFile={this.toggleAddFile}
@@ -218,13 +218,13 @@ class SidePanel extends Component {
             />
             }
             {this.state.showDelete &&
-            <Delete 
+            <Delete
               currentNode={this.state.currentNode}
               handleSubmit={this.onDeleteNode}
               toggleCancel={this.deleteCancel}
             />
             }
-            {this.state.showFile && 
+            {this.state.showFile &&
             <CreateFile
               fileType={'.md'}
               parentPath={this.state.currentNode.path}
@@ -233,17 +233,17 @@ class SidePanel extends Component {
             />
             }
             {this.state.showFolder &&
-            <CreateFolder 
+            <CreateFolder
               parentPath={this.state.currentNode.path}
               onAddFolder={this.onAddFolderNode}
               addFolderCancel={this.addFolderCancel}
             />
             }
             {this.state.showRename &&
-            <Rename 
+            <Rename
               currentNode={this.state.currentNode}
-              onRename={this.onRenameNode} 
-              toggleCancel={this.renameCancel} 
+              onRename={this.onRenameNode}
+              toggleCancel={this.renameCancel}
             />
             }
           </div>

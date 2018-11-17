@@ -7,7 +7,7 @@ import CreateTagDialog from '../dialog/create-tag-dialog';
 import UpdateTagDialog from '../dialog/update-tag-dialog';
 
 const propTypes = {
-  filePath: PropTypes.string.isRequired
+  path: PropTypes.string.isRequired
 };
 
 class PathToolbar extends React.Component {
@@ -42,15 +42,13 @@ class PathToolbar extends React.Component {
   }
 
   isMarkdownFile(filePath) {
-    let lastIndex = filePath.lastIndexOf('/');
-    let name = filePath.slice(lastIndex + 1);
+    let name = Utils.getFileName(filePath);
     return name.indexOf('.md') > -1 ? true : false;
   }
-  
+
   render() {
-    let isFile = this.isMarkdownFile(this.props.filePath);
-    let index = this.props.filePath.lastIndexOf('/');
-    let name = this.props.filePath.slice(index + 1);
+    let isFile = this.isMarkdownFile(this.props.path);
+    let name = Utils.getFileName(this.props.path);
     let trashUrl = siteRoot + 'repo/recycle/' + repoID + '/?referer=' + encodeURIComponent(location.href);
     let historyUrl = siteRoot + 'repo/history/' + repoID + '/?referer=' + encodeURIComponent(location.href);
     if ( (name === slug  || name === '') && !isFile && permission) {
@@ -62,8 +60,8 @@ class PathToolbar extends React.Component {
             <li className="toolbar-item"><a className="op-link sf2-icon-history" href={historyUrl} title={gettext('History')} aria-label={gettext('History')}></a></li>
           </ul>
           {
-            this.state.isListRepoTagShow && 
-            <ListTagDialog 
+            this.state.isListRepoTagShow &&
+            <ListTagDialog
               onListTagCancel={this.onListRepoTagToggle}
               onCreateRepoTag={this.onCreateRepoTagToggle}
               onUpdateRepoTag={this.onUpdateRepoTagToggle}
@@ -71,27 +69,27 @@ class PathToolbar extends React.Component {
           }
           {
             this.state.isCreateRepoTagShow &&
-            <CreateTagDialog 
+            <CreateTagDialog
               toggleCancel={this.onCreateRepoTagToggle}
             />
           }
           {
             this.state.isUpdateRepoTagShow &&
-            <UpdateTagDialog 
-              currentTag={this.state.currentTag} 
+            <UpdateTagDialog
+              currentTag={this.state.currentTag}
               toggleCancel={this.onUpdateRepoTagToggle}
             />
           }
         </Fragment>
       );
-    } else if ( !isFile && permission) {
+    } else if (!isFile && permission) {
       return (
         <ul className="path-toolbar">
           <li className="toolbar-item"><a className="op-link sf2-icon-trash" href={trashUrl} title={gettext('Trash')} aria-label={gettext('Trash')}></a></li>
         </ul>
       );
     } else if (permission) {
-      historyUrl = siteRoot + 'repo/file_revisions/' + repoID + '/?p=' + Utils.encodePath(this.props.filePath) + '&referer=' + encodeURIComponent(location.href);
+      historyUrl = siteRoot + 'repo/file_revisions/' + repoID + '/?p=' + Utils.encodePath(this.props.path) + '&referer=' + encodeURIComponent(location.href);
       return (
         <ul className="path-toolbar">
           <li className="toolbar-item"><a className="op-link sf2-icon-history" href={historyUrl} title={gettext('History')} aria-label={gettext('History')}></a></li>

@@ -29,6 +29,10 @@ class Dirent {
     }
   }
 
+  isDir() {
+    return this.type !== 'file';
+  }
+
 }
 
 export default Dirent;

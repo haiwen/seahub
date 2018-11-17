@@ -16,7 +16,7 @@ class Node {
 
     return node;
   }
-  
+
   constructor({name, type, size, last_update_time, permission, parent_path, isExpanded, children}) {
     this.name = name;
     this.type = type;
@@ -28,7 +28,7 @@ class Node {
     this.children = children ? children : [];
     this.parent = null;
   }
-  
+
   clone() {
     var n = new Node({
       name: this.name,
@@ -39,10 +39,10 @@ class Node {
       parent_path: this.parent_path,
       isExpanded: this.isExpanded
     });
-    n.children = this.children.map(child => { 
-      var newChild = child.clone(); 
-      newChild.parent = n; 
-      return newChild; 
+    n.children = this.children.map(child => {
+      var newChild = child.clone();
+      newChild.parent = n;
+      return newChild;
     });
     return n;
   }

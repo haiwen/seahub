@@ -10,7 +10,7 @@ import MoveDirentDialog from '../dialog/move-dirent-dialog';
 import CopyDirentDialog from '../dialog/copy-dirent-dialog';
 
 const propTypes = {
-  filePath: PropTypes.string.isRequired,
+  path: PropTypes.string.isRequired,
   direntList: PropTypes.array.isRequired,
   onItemDelete: PropTypes.func.isRequired,
   onItemRename: PropTypes.func.isRequired,
@@ -42,7 +42,7 @@ class DirentListView extends React.Component {
   onFreezedItem = () => {
     this.setState({isItemFreezed: true});
   }
-  
+
   onUnfreezedItem = () => {
     this.setState({isItemFreezed: false});
   }
@@ -70,15 +70,15 @@ class DirentListView extends React.Component {
   onItemMove = (repo, direntPath, moveToDirentPath) => {
     this.props.onItemMove(repo, direntPath, moveToDirentPath);
   }
-  
+
   onCancelMove = () => {
     this.setState({isMoveDialogShow: false});
   }
-  
+
   onItemCopy = (repo, direntPath, copyToDirentPath) => {
     this.props.onItemCopy(repo, direntPath, copyToDirentPath);
   }
-  
+
   onCancelCopy = () => {
     this.setState({isCopyDialogShow: false});
   }
@@ -90,7 +90,7 @@ class DirentListView extends React.Component {
   onItemDownload = (dirent, direntPath) => {
     if (dirent.type === 'dir') {
       this.setState({isProgressDialogShow: true, progress: 0});
-      editorUtilities.zipDownload(this.props.filePath, dirent.name).then(res => {
+      editorUtilities.zipDownload(this.props.path, dirent.name).then(res => {
         this.zip_token = res.data['zip_token'];
         this.addDownloadAnimation();
         this.interval = setInterval(this.addDownloadAnimation, 1000);
@@ -161,7 +161,7 @@ class DirentListView extends React.Component {
                   <DirentListItem
                     key={index}
                     dirent={dirent}
-                    filePath={this.props.filePath}
+                    path={this.props.path}
                     currentRepo={this.props.currentRepo}
                     isRepoOwner={this.props.isRepoOwner}
                     onItemClick={this.props.onItemClick}
@@ -182,24 +182,24 @@ class DirentListView extends React.Component {
             }
           </tbody>
         </table>
-        {this.state.isProgressDialogShow && 
+        {this.state.isProgressDialogShow &&
           <ZipDownloadDialog progress={this.state.progress} onCancelDownload={this.onCancelDownload}
           />
         }
         {this.state.isMoveDialogShow &&
-          <MoveDirentDialog 
-            dirent={this.state.currentDirent} 
-            direntPath={this.state.direntPath} 
+          <MoveDirentDialog
+            dirent={this.state.currentDirent}
+            direntPath={this.state.direntPath}
             onItemMove={this.props.onItemMove}
             onCancelMove={this.onCancelMove}
           />
         }
         {this.state.isCopyDialogShow &&
-          <CopyDirentDialog 
-            dirent={this.state.currentDirent} 
-            direntPath={this.state.direntPath} 
+          <CopyDirentDialog
+            dirent={this.state.currentDirent}
+            direntPath={this.state.direntPath}
             onItemCopy={this.props.onItemCopy}
-            onCancelCopy={this.onCancelCopy} 
+            onCancelCopy={this.onCancelCopy}
           />
         }
       </Fragment>

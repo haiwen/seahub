@@ -5,7 +5,7 @@ import { permission } from '../../utils/constants';
 
 const propTypes = {
   isNodeItemFrezee: PropTypes.bool.isRequired,
-  currentFilePath: PropTypes.string.isRequired,
+  currentPath: PropTypes.string.isRequired,
   paddingLeft: PropTypes.number.isRequired,
   node: PropTypes.object.isRequired,
   treeView: PropTypes.object.isRequired,
@@ -121,7 +121,7 @@ class TreeNodeView extends React.Component {
                 paddingLeft={this.props.paddingLeft}
                 treeView={this.props.treeView}
                 isNodeItemFrezee={this.props.isNodeItemFrezee}
-                currentFilePath={this.props.currentFilePath}
+                currentPath={this.props.currentPath}
                 onDirCollapse={this.props.onDirCollapse}
               />
             );
@@ -138,7 +138,7 @@ class TreeNodeView extends React.Component {
       let isShow = (this.props.node.path === this.props.currentFilePath);
       return (
         <div className="right-icon">
-          <MenuControl 
+          <MenuControl
             isShow={this.state.isMenuIconShow || isShow}
             onClick={this.onMenuControlClick}
           />
@@ -186,11 +186,11 @@ class TreeNodeView extends React.Component {
 
     return (
       <div type={type} className="tree-node" style={styles}>
-        <div 
-          onMouseLeave={this.onMouseLeave} 
+        <div
+          onMouseLeave={this.onMouseLeave}
           onMouseEnter={this.onMouseEnter}
           onClick={this.onClick}
-          type={type} 
+          type={type}
           className={`tree-node-inner text-nowrap ${hlClass} ${node.name === '/'? 'hide': ''}`}
         >
           <div className="tree-node-text" type={type} draggable="true" onDragStart={this.onDragStart}>{node.name}</div>

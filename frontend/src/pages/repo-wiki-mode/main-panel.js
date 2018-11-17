@@ -18,13 +18,15 @@ const propTypes = {
   lastModified: PropTypes.string,
   latestContributor: PropTypes.string,
   permission: PropTypes.string,
-  filePath: PropTypes.string.isRequired,
+  path: PropTypes.string.isRequired,
+  // whether the file or dir corresponding to the path exist
+  pathExist: PropTypes.bool.isRequired,
   isFileLoading: PropTypes.bool.isRequired,
   isViewFile: PropTypes.bool.isRequired,
   isDirentListLoading: PropTypes.bool.isRequired,
-  updateDirent: PropTypes.func.isRequired,
   direntList: PropTypes.array.isRequired,
-  onMenuClick: PropTypes.func.isRequired,
+  updateDirent: PropTypes.func.isRequired,
+  onSideNavMenuClick: PropTypes.func.isRequired,
   onSearchedClick: PropTypes.func.isRequired,
   onMainNavBarClick: PropTypes.func.isRequired,
   onLinkClick: PropTypes.func.isRequired,
@@ -37,7 +39,6 @@ const propTypes = {
   onAddFolder: PropTypes.func.isRequired,
   switchViewMode: PropTypes.func.isRequired,
   onFileTagChanged: PropTypes.func.isRequired,
-  pathNotExist: PropTypes.bool.isRequired,
 };
 
 class MainPanel extends Component {
@@ -75,7 +76,7 @@ class MainPanel extends Component {
   }
 
   componentWillReceiveProps(nextProps) {
-    // if (nextProps.filePath !== this.props.filePath) {
+    // if (nextProps.path !== this.props.path) {
     //   this.setState({isDirentDetailShow: false});
     // }
   }
@@ -93,8 +94,8 @@ class MainPanel extends Component {
     this.props.switchViewMode(e.target.id);
   }
 
-  onMenuClick = () => {
-    this.props.onMenuClick();
+  onSideNavMenuClick = () => {
+    this.props.onSideNavMenuClick();
   }
 
   onMainNavBarClick = (e) => {
@@ -103,7 +104,7 @@ class MainPanel extends Component {
 
   onEditClick = (e) => {
     e.preventDefault();
-    window.location.href= serviceUrl + '/lib/' + repoID + '/file' + this.props.filePath + '?mode=edit';
+    window.location.href= serviceUrl + '/lib/' + repoID + '/file' + this.props.path + '?mode=edit';
   }
 
   onUploadClick = (e) => {
@@ -210,15 +211,15 @@ class MainPanel extends Component {
   }
 
   render() {
-    let filePath = this.props.filePath;
-    filePath = filePath[filePath.length - 1] === '/' ? filePath.slice(0, filePath.length - 1) : filePath;
-    let filePathList = filePath.split('/');
+    let path = this.props.path;
+    path = path[path.length - 1] === '/' ? path.slice(0, path.length - 1) : path;
+    let pathList = path.split('/');
     let nodePath = '';
-    let pathElem = filePathList.map((item, index) => {
+    let pathElem = pathList.map((item, index) => {
       if (item === '') {
         return;
-      } 
-      if (index === (filePathList.length - 1)) {
+      }
+      if (index === (pathList.length - 1)) {
         return (
           <span key={index}><span className="path-split">/</span>{item}</span>
         );
@@ -227,9 +228,9 @@ class MainPanel extends Component {
         return (
           <span key={index} >
             <span className="path-split">/</span>
-            <a 
-              className="path-link" 
-              data-path={nodePath} 
+            <a
+              className="path-link"
+              data-path={nodePath}
               onClick={this.onMainNavBarClick}>
               {item}
             </a>
@@ -242,7 +243,7 @@ class MainPanel extends Component {
       <div className="main-panel wiki-main-panel o-hidden">
         <div className="main-panel-top panel-top">
           <div className="cur-view-toolbar border-left-show">
-            <span className="sf2-icon-menu hidden-md-up d-md-none side-nav-toggle" title={gettext('Side Nav Menu')} onClick={this.onMenuClick}></span>
+            <span className="sf2-icon-menu hidden-md-up d-md-none side-nav-toggle" title={gettext('Side Nav Menu')} onClick={this.onSideNavMenuClick}></span>
             <div className="file-operation">
               <div className="operation">
                 {
@@ -262,8 +263,8 @@ class MainPanel extends Component {
                   </Fragment>
                 }
               </div>
-              { 
-                this.state.uploadMenuShow && 
+              {
+                this.state.uploadMenuShow &&
                 <ul className="menu dropdown-menu" style={this.state.operationMenuStyle}>
                   <li className="dropdown-item" onClick={this.uploadFile}>{gettext('File Upload')}</li>
                   <li className="dropdown-item" onClick={this.uploadFolder}>{gettext('Folder Upload')}</li>
@@ -293,16 +294,16 @@ class MainPanel extends Component {
               <div className="path-containter">
                 <a href={siteRoot + '#common/'} className="normal">{gettext('Libraries')}</a>
                 <span className="path-split">/</span>
-                {this.props.filePath === '/' ?
+                {this.props.path === '/' ?
                   <span>{slug}</span> :
                   <a className="path-link" data-path="/" onClick={this.onMainNavBarClick}>{slug}</a>
                 }
                 {pathElem}
               </div>
-              <PathToolbar filePath={this.props.filePath}/>
+              <PathToolbar path={this.props.path}/>
             </div>
             <div className="cur-view-content">
-              { !this.props.pathNotExist ? 
+              { !this.props.pathExist ?
                 <div className="message empty-tip err-message"><h2>{gettext('Folder does not exist.')}</h2></div> :
                 <Fragment>
                   { this.props.isViewFile ?
@@ -314,9 +315,9 @@ class MainPanel extends Component {
                       isFileLoading={this.props.isFileLoading}
                     /> :
                     <Fragment>
-                      <DirentListView 
+                      <DirentListView
                         direntList={this.props.direntList}
-                        filePath={this.props.filePath}
+                        path={this.props.path}
                         onItemClick={this.props.onItemClick}
                         onItemDelete={this.props.onItemDelete}
                         onItemRename={this.props.onItemRename}
@@ -328,10 +329,10 @@ class MainPanel extends Component {
                         currentRepo={this.state.currentRepo}
                         isRepoOwner={this.state.isRepoOwner}
                       />
-                      <FileUploader 
+                      <FileUploader
                         ref={uploader => this.uploader = uploader}
                         dragAndDrop={true}
-                        filePath={this.props.filePath}
+                        path={this.props.path}
                         onFileSuccess={this.onFileSuccess}
                         direntList={this.props.direntList}
                       />
@@ -343,7 +344,7 @@ class MainPanel extends Component {
           </div>
           { this.state.isDirentDetailShow &&
             <div className="cur-view-detail">
-              <DirentDetail 
+              <DirentDetail
                 dirent={this.state.currentDirent}
                 direntPath={this.state.currentFilePath}
                 onItemDetailsClose={this.onItemDetailsClose}
@@ -352,17 +353,17 @@ class MainPanel extends Component {
             </div>
           }
         </div>
-        {this.state.showFileDialog && 
+        {this.state.showFileDialog &&
           <CreateFile
             fileType={this.state.createFileType}
-            parentPath={this.props.filePath}
+            parentPath={this.props.path}
             addFileCancel={this.addFileCancel}
             onAddFile={this.onAddFile}
           />
         }
         {this.state.showFolderDialog &&
-          <CreateFolder 
-            parentPath={this.props.filePath}
+          <CreateFolder
+            parentPath={this.props.path}
             addFolderCancel={this.addFolderCancel}
             onAddFolder={this.onAddFolder}
           />
