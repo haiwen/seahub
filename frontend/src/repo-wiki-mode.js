@@ -104,13 +104,11 @@ class Wiki extends Component {
   onAddFile = (filePath, isDraft) => {
     //todo validate;
     seafileAPI.createFile(repoID, filePath, isDraft).then(res => {
-
-      let index = filePath.lastIndexOf('/');
-      let name = filePath.slice(index + 1);
-      let parentPath = filePath.slice(0, index) === '' ? '/' : filePath.slice(0, index);
+      let name = Utils.getFileName(filePath);
+      let parentPath = Utils.getDirName(filePath);
 
       this.addNodeToTree(name, parentPath, 'file');
-      if (parentPath === this.state.filePath && !this.state.isViewFile) {
+      if (parentPath === this.state.path && !this.state.isViewFile) {
         this.addDirent(name, 'file');
       }
     }).catch(() => {
@@ -121,12 +119,11 @@ class Wiki extends Component {
   onAddFolder = (dirPath) => {
     //validate task
     seafileAPI.createDir(repoID, dirPath).then(() => {
-      let index = dirPath.lastIndexOf('/');
-      let name = dirPath.slice(index + 1);
-      let parentPath = dirPath.slice(0, index) === '' ? '/' : dirPath.slice(0, index);
+      let name = Utils.getFileName(dirPath);
+      let parentPath = Utils.getDirName(dirPath);
 
       this.addNodeToTree(name, parentPath, 'dir');
-      if (parentPath === this.state.filePath && !this.state.isViewFile) {
+      if (parentPath === this.state.path && !this.state.isViewFile) {
         this.addDirent(name, 'dir');
       }
     }).catch(() => {
