@@ -179,6 +179,7 @@ class DraftReview extends React.Component {
   render() {
     const onResizeMove = this.state.inResizing ? this.onResizeMouseMove : null;
     const draftLink = siteRoot + 'lib/' + draftOriginRepoID + '/file' + draftFilePath + '?mode=edit';
+    const OriginFileLink = siteRoot + 'lib/' + draftOriginRepoID + '/file' + draftOriginFilePath + '/';
     return(
       <div className="wrapper">
         <div id="header" className="header review">
@@ -190,9 +191,10 @@ class DraftReview extends React.Component {
               <React.Fragment>
                 <span className="file-name">{draftFileName}</span>
                 <span className="file-copywriting">{gettext('review')}</span>
+                { draftID !== 'None' && <a href={draftLink} className="draft-link">{gettext('Edit draft')}</a>}
+                { opStatus !== 'open' && <a href={OriginFileLink} className="view-file-link">{gettext('View File')}</a>} 
               </React.Fragment>
-              { draftID !== 'None' && <a href={draftLink} className="draft-link">{gettext('Edit draft')}</a>}
-            </div>
+           </div>
           </div>
           <div className="button-group">
             <div className={'seafile-toggle-diff'}>
