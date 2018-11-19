@@ -1,6 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import moment from 'moment';
+import { Tooltip } from 'reactstrap';
 import { siteRoot, lang } from '../../utils/constants';
 
 moment.locale(lang);
@@ -9,14 +10,50 @@ const propTypes = {
   item: PropTypes.object.isRequired,
 };
 
-function Reviewers(props) {
-  return (
-    <div>
-      {props.reviewers.map((item, index) => (
-        <img key={index} className="avatar avatar-sm" alt={item.username} src={item.avatar_url} />
-      ))}
-    </div>  
-  );
+
+class Reviewers extends React.Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      reviewertipOpen: false, 
+      reviewerList:''
+    };
+  }
+
+  toggle = () => {
+    this.setState({
+      reviewertipOpen: !this.state.reviewertipOpen
+    });
+  }
+  
+  reviewerListItem = () => {
+    let reviewers = '';
+
+    this.props.item.reviewers.map(item => {
+      reviewers = reviewers + ' and ' + item.user_name
+    });
+
+    this.setState({
+      reviewerList: reviewers.substr(5,)
+    });
+  }
+
+  render() {
+    let items = this.props.item;
+    let { reviewerList } = this.state;
+    return (
+      <div className='dirent-item tag-list tag-list-stacked'>
+        <span id={'reviewers' + items.id}>
+        {items.reviewers.map((item, index) => (
+          <img key={index} id={'reviewer-tip' + '-' + items.id + '-' + index} onMouseEnter={this.reviewerListItem} className="avatar file-tag avatar-sm" style={{width: '1.5rem', height: '1.5rem'}} src={item.avatar_url} />
+        ))}
+        </span>
+        <Tooltip placement="bottom" isOpen={this.state.reviewertipOpen} target={'reviewers' + items.id} toggle={this.toggle}>
+          {reviewerList}
+        </Tooltip>
+      </div>  
+    );
+  }
 }
 
 class ReviewListItem extends React.Component {
@@ -25,6 +62,7 @@ class ReviewListItem extends React.Component {
     super(props);
     this.state = {
       highlight: '',
+      authortipOpen: false
     };
   }
 
@@ -42,6 +80,12 @@ class ReviewListItem extends React.Component {
         highlight: ''
       });
     }
+  }
+
+  toggle = () => {
+    this.setState({
+      authortipOpen: !this.state.authortipOpen
+    });
   }
 
   onReviewsClick = () => {
@@ -67,8 +111,11 @@ class ReviewListItem extends React.Component {
         <td className="name a-simulate" style={{width: '26%'}} onClick={this.onReviewsClick}>{fileName}</td>
         <td className='library' style={{width: '25%'}}>{item.draft_origin_repo_name}</td>
         <td className="update" style={{width: '20%'}}>{localTime}</td>
-        <td className="author" style={{width: '10%'}}><img className="avatar avatar-sm" src={item.author.avatar_url} /></td>
-        <td className="reviewer" style={{width: '15%'}}><Reviewers reviewers={item.reviewers}/></td>
+        <td className="author" style={{width: '10%'}}><img className="avatar avatar-sm" id={'tip-' + item.id} src={item.author.avatar_url} /></td>
+        <td className="reviewer" style={{width: '15%'}}><Reviewers item={item}/></td>
+        <Tooltip placement="bottom-end" isOpen={this.state.authortipOpen} target={'tip-' + item.id} toggle={this.toggle}>
+          {item.author.user_name}
+        </Tooltip>
       </tr>
     );
   }

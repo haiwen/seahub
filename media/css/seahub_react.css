@@ -1019,3 +1019,7 @@ a.op-icon:focus {
     display: flex;
     align-items: center;
 }
+
+.author .avatar {
+    cursor: pointer;
+}
