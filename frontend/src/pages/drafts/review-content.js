@@ -3,6 +3,7 @@ import { gettext } from '../../utils/constants';
 import { seafileAPI } from '../../utils/seafile-api';
 import Loading from '../../components/loading';
 import ReviewListView from '../../components/review-list-view/review-list-view';
+import '../../css/review-content.css';
 
 class ReviewContent extends React.Component {
   

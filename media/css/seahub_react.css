@@ -145,6 +145,10 @@ ul,ol,li {
     font-weight: normal;
 }
 
+.avatar-with-tooltip {
+    cursor: pointer;
+}
+
 /* UI Widget */
 
 /**** caret ****/
@@ -1018,8 +1022,4 @@ a.op-icon:focus {
 .dirent-item.tag-list {
     display: flex;
     align-items: center;
-}
-
-.author .avatar {
-    cursor: pointer;
 }
