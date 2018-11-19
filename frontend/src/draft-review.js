@@ -191,7 +191,7 @@ class DraftReview extends React.Component {
               <React.Fragment>
                 <span className="file-name">{draftFileName}</span>
                 <span className="file-copywriting">{gettext('review')}</span>
-                { draftID !== 'None' && <a href={draftLink} className="draft-link">{gettext('Edit draft')}</a>}
+                { opStatus == 'open' && <a href={draftLink} className="draft-link">{gettext('Edit draft')}</a>}
                 { opStatus !== 'open' && <a href={OriginFileLink} className="view-file-link">{gettext('View File')}</a>} 
               </React.Fragment>
            </div>

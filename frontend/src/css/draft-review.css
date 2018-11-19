@@ -57,24 +57,16 @@
   display: block;
   padding-top: 10px;
 }
+
+.file-info .view-file-link, 
 .file-info .draft-link {
   font-size: .6em;
   color: #1e1e1e;
   text-decoration: underline;
   display: block;
   font-weight: normal;
-  float: left;
-  width: 30%;
 }
 
-.file-info .view-file-link {
-  font-size: .6em;
-  color: #1e1e1e;
-  text-decoration: underline;
-  display: block;
-  font-weight: normal;
-  margin-left: auto;
-}
 .seafile-toggle-diff {
   display: flex;
   margin-right: 10px;
