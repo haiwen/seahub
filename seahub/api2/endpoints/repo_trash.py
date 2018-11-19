@@ -19,6 +19,7 @@ from seahub.views import check_folder_permission
 
 from seaserv import seafile_api
 from pysearpc import SearpcError
+from constance import config
 
 logger = logging.getLogger(__name__)
 
@@ -147,7 +148,7 @@ class RepoTrash(APIView):
         # permission check
         username = request.user.username
         repo_owner = get_repo_owner(request, repo_id)
-        if username != repo_owner:
+        if username != repo_owner or not config.ENABLE_USER_CLEAN_TRASH:
             error_msg = 'Permission denied.'
             return api_error(status.HTTP_403_FORBIDDEN, error_msg)
 

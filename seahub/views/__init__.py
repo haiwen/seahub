@@ -267,22 +267,11 @@ def render_recycle_root(request, repo_id, referer):
     if not repo:
         raise Http404
 
-    username = request.user.username
-    if is_org_context(request):
-        repo_owner = seafile_api.get_org_repo_owner(repo.id)
-    else:
-        repo_owner = seafile_api.get_repo_owner(repo.id)
-    is_repo_owner = True if repo_owner == username else False
-
-    enable_clean = False
-    if is_repo_owner and config.ENABLE_USER_CLEAN_TRASH:
-        enable_clean = True
-
     return render(request, 'repo_dir_recycle_view.html', {
             'show_recycle_root': True,
             'repo': repo,
             'repo_dir_name': repo.name,
-            'enable_clean': enable_clean,
+            'enable_clean': config.ENABLE_USER_CLEAN_TRASH,
             'referer': referer,
             })
 
