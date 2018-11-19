@@ -5,6 +5,7 @@ import PropTypes from 'prop-types';
 import ListTagDialog from '../dialog/list-tag-dialog';
 import CreateTagDialog from '../dialog/create-tag-dialog';
 import UpdateTagDialog from '../dialog/update-tag-dialog';
+import ListTaggedFilesDialog from '../dialog/list-taggedfiles-dialog';
 
 const propTypes = {
   repoID: PropTypes.string.isRequired,
@@ -22,6 +23,7 @@ class DirTool extends React.Component {
       isListRepoTagShow: false,
       isUpdateRepoTagShow: false,
       isCreateRepoTagShow: false,
+      isListTaggedFileShow: false,
     };
   }
 
@@ -41,6 +43,14 @@ class DirTool extends React.Component {
       currentTag: currentTag,
       isListRepoTagShow: !this.state.isListRepoTagShow,
       isUpdateRepoTagShow: !this.state.isUpdateRepoTagShow,
+    });
+  }
+
+  onListTaggedFileToggle = (currentTag) => {
+    this.setState({
+      currentTag: currentTag,
+      isListRepoTagShow: !this.state.isListRepoTagShow,
+      isListTaggedFileShow: !this.state.isListTaggedFileShow,
     });
   }
 
@@ -70,6 +80,7 @@ class DirTool extends React.Component {
               onListTagCancel={this.onListRepoTagToggle}
               onCreateRepoTag={this.onCreateRepoTagToggle}
               onUpdateRepoTag={this.onUpdateRepoTagToggle}
+              onListFileCancel={this.onListTaggedFileToggle}
             />
           }
           {
@@ -85,6 +96,13 @@ class DirTool extends React.Component {
               repoID={repoID}
               currentTag={this.state.currentTag}
               toggleCancel={this.onUpdateRepoTagToggle}
+            />
+          }
+          {
+            this.state.isListTaggedFileShow &&
+            <ListTaggedFilesDialog
+              repoTagId={this.state.currentTag.id}
+              toggleCancel={this.onListTaggedFileToggle}
             />
           }
         </Fragment>

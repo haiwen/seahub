@@ -9,19 +9,27 @@ import '../../css/repo-tag.css';
 const tagListItemPropTypes = {
   item: PropTypes.object.isRequired,
   onTagUpdate: PropTypes.func.isRequired,
+  onListFileCancel: PropTypes.func.isRequired,
 };
 
 class TagListItem extends React.Component {
-  
+
   onTagUpdate = () => {
     this.props.onTagUpdate(this.props.item);
+  }
+
+  onListFileCancel = () => {
+    this.props.onListFileCancel(this.props.item)
   }
 
   render() {
     let color = this.props.item.color;
     return(
       <li className="tag-list-item">
-        <span className={`tag-demo bg-${color}`}>{this.props.item.name}</span>
+        <span className={`tag-demo bg-${color}`}>
+          <td width='90%'>{this.props.item.name}</td>
+          <span onClick={this.onListFileCancel}>{this.props.item.fileCount}</span>
+        </span>
         <i className="tag-edit fa fa-pencil" onClick={this.onTagUpdate}></i>
       </li>
     );
@@ -35,6 +43,7 @@ const listTagPropTypes = {
   onListTagCancel: PropTypes.func.isRequired,
   onCreateRepoTag: PropTypes.func.isRequired,
   onUpdateRepoTag: PropTypes.func.isRequired,
+  onListFileCancel: PropTypes.func.isRequired,
 };
 
 class ListTagDialog extends React.Component {
@@ -79,7 +88,9 @@ class ListTagDialog extends React.Component {
               <ul className="tag-list tag-list-container">
                 {this.state.repotagList.map((repoTag, index) => {
                   return (
-                    <TagListItem key={index} item={repoTag} onTagUpdate={this.props.onUpdateRepoTag}/>
+                    <TagListItem key={index} item={repoTag} onTagUpdate={this.props.onUpdateRepoTag}
+                      onListFileCancel={this.props.onListFileCancel}
+                    />
                   );
                 })}
               </ul>
