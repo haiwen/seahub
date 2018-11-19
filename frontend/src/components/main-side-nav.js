@@ -5,6 +5,8 @@ import { gettext, siteRoot } from '../utils/constants';
 import { seafileAPI } from '../utils/seafile-api';
 import { Badge } from 'reactstrap';
 
+import { canViewOrg } from '../utils/constants';
+
 const propTypes = {
   currentTab: PropTypes.string.isRequired,
 };
@@ -134,12 +136,14 @@ class MainSideNav extends React.Component {
                 {gettext('Shared with me')}
               </a>
             </li>
-            <li className={`tab ${this.state.currentTab === 'org' ? 'tab-cur' : ''}`} onClick={() => this.tabItemClick('org')}>
-              <a href={ siteRoot + '#org/' } className="ellipsis" title={gettext('Shared with all')}>
-                <span className="sf2-icon-organization" aria-hidden="true"></span>
-                {gettext('Shared with all')}
-              </a>
-            </li>
+            { canViewOrg &&
+              <li className={`tab ${this.state.currentTab === 'org' ? 'tab-cur' : ''}`} onClick={() => this.tabItemClick('org')}>
+                <a href={ siteRoot + '#org/' } className="ellipsis" title={gettext('Shared with all')}>
+                  <span className="sf2-icon-organization" aria-hidden="true"></span>
+                  {gettext('Shared with all')}
+                </a>
+              </li>
+            }
             <li className="tab" id="group-nav">
               <a className="ellipsis user-select-no" title={gettext('Shared with groups')} onClick={this.grpsExtend}>
                 <span className={`toggle-icon float-right fas ${this.state.groupsExtended ?'fa-caret-down':'fa-caret-left'}`} aria-hidden="true"></span>
