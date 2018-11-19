@@ -57,6 +57,8 @@
   display: block;
   padding-top: 10px;
 }
+
+.file-info .view-file-link, 
 .file-info .draft-link {
   font-size: .6em;
   color: #1e1e1e;
@@ -64,6 +66,7 @@
   display: block;
   font-weight: normal;
 }
+
 .seafile-toggle-diff {
   display: flex;
   margin-right: 10px;
