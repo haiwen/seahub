@@ -33,10 +33,9 @@ def review(request, pk):
 
     origin_repo_id = d_r.origin_repo_id
 
-    if request.user.username:
-        permission = check_folder_permission(request, origin_repo_id, file_path)
+    permission = check_folder_permission(request, origin_repo_id, '/')
 
-    if permission is None:
+    if not permission:
         return render_permission_error(request, _(u'Permission denied.'))
 
     draft_file_name = os.path.basename(d_r.draft_file_path)
