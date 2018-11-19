@@ -1,6 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import moment from 'moment';
+import { Tooltip } from 'reactstrap';
 import { siteRoot, lang } from '../../utils/constants';
 
 moment.locale(lang);
@@ -9,14 +10,51 @@ const propTypes = {
   item: PropTypes.object.isRequired,
 };
 
-function Reviewers(props) {
-  return (
-    <div>
-      {props.reviewers.map((item, index) => (
-        <img key={index} className="avatar avatar-sm" alt={item.username} src={item.avatar_url} />
-      ))}
-    </div>  
-  );
+
+class Reviewers extends React.Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      reviewerTipOpen: false, 
+      reviewerList:''
+    };
+  }
+
+  toggle = () => {
+    this.reviewerListItem();
+    this.setState({
+      reviewerTipOpen: !this.state.reviewerTipOpen
+    });
+  }
+  
+  reviewerListItem = () => {
+    let reviewers = '';
+
+    this.props.item.reviewers.map(item => {
+      reviewers = reviewers + ' and ' + item.user_name
+    });
+
+    this.setState({
+      reviewerList: reviewers.substr(5,)
+    });
+  }
+
+  render() {
+    let items = this.props.item;
+    let { reviewerList } = this.state;
+    return (
+      <div className='position-relative reviewer-list'>
+        <span id={'reviewers' + items.id}>
+        {items.reviewers.map((item, index) => (
+          <img key={index} id={'reviewer-tip' + '-' + items.id + '-' + index}  className="avatar avatar-sm reviewer-avatar" src={item.avatar_url} />
+        ))}
+        </span>
+        <Tooltip placement="bottom-end" isOpen={this.state.reviewerTipOpen} target={'reviewers' + items.id} toggle={this.toggle}>
+          {reviewerList}
+        </Tooltip>
+      </div>  
+    );
+  }
 }
 
 class ReviewListItem extends React.Component {
@@ -25,6 +63,7 @@ class ReviewListItem extends React.Component {
     super(props);
     this.state = {
       highlight: '',
+      authorTipOpen: false
     };
   }
 
@@ -42,6 +81,12 @@ class ReviewListItem extends React.Component {
         highlight: ''
       });
     }
+  }
+
+  toggle = () => {
+    this.setState({
+      authorTipOpen: !this.state.authorTipOpen
+    });
   }
 
   onReviewsClick = () => {
@@ -67,8 +112,11 @@ class ReviewListItem extends React.Component {
         <td className="name a-simulate" style={{width: '26%'}} onClick={this.onReviewsClick}>{fileName}</td>
         <td className='library' style={{width: '25%'}}>{item.draft_origin_repo_name}</td>
         <td className="update" style={{width: '20%'}}>{localTime}</td>
-        <td className="author" style={{width: '10%'}}><img className="avatar avatar-sm" src={item.author.avatar_url} /></td>
-        <td className="reviewer" style={{width: '15%'}}><Reviewers reviewers={item.reviewers}/></td>
+        <td className="author" style={{width: '10%'}}><img className="avatar avatar-sm avatar-with-tooltip" id={'tip-' + item.id} src={item.author.avatar_url} /></td>
+        <td className="reviewer" style={{width: '15%'}}><Reviewers item={item}/></td>
+        <Tooltip placement="bottom-end" isOpen={this.state.authorTipOpen} target={'tip-' + item.id} toggle={this.toggle}>
+          {item.author.user_name}
+        </Tooltip>
       </tr>
     );
   }

@@ -145,6 +145,10 @@ ul,ol,li {
     font-weight: normal;
 }
 
+.avatar-with-tooltip {
+    cursor: pointer;
+}
+
 /* UI Widget */
 
 /**** caret ****/

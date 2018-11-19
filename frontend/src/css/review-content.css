@@ -1,0 +1,10 @@
+.reviewer-list .reviewer-avatar:first-child {
+  margin-left: 0;
+}
+
+.reviewer-list .reviewer-avatar {
+  margin-left: -0.5rem; 
+  box-shadow: 0 0 0 2px #fff;
+  cursor: pointer;
+}
+
