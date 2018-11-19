@@ -256,7 +256,7 @@ class ShareAdminLibraries extends Component {
   }
 
   componentDidMount() {
-    seafileAPI.listSharedLibraries().then((res) => {
+    seafileAPI.listSharedRepos().then((res) => {
       // res: {data: Array(2), status: 200, statusText: "OK", headers: {…}, config: {…}, …}
       this.setState({
         loading: false,
