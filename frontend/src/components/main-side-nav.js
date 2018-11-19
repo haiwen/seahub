@@ -95,22 +95,22 @@ class MainSideNav extends React.Component {
     return (
       <ul className={`${this.state.sharedExtended ? 'side-panel-slide' : 'side-panel-slide-up'}`} style={style} >
         <li className={this.state.currentTab === 'share-admin-libs' ? 'tab-cur' : ''}>
-          <a href={siteRoot + '#share-admin-libs/'} className="ellipsis" title={gettext('Libraries')} onClick={() => this.tabItemClick('share-admin-libs')}>
+          <Link to={siteRoot + 'share-admin-libs/'} className="ellipsis" title={gettext('Libraries')} onClick={() => this.tabItemClick('share-admin-libs')}>
             <span aria-hidden="true" className="sharp">#</span>
             {gettext('Libraries')}
-          </a>
+          </Link>
         </li>
         <li className={this.state.currentTab === 'share-admin-folders' ? 'tab-cur' : ''}>
-          <a href={siteRoot + '#share-admin-folders/'} className="ellipsis" title={gettext('Folders')} onClick={() => this.tabItemClick('share-admin-folders')}>
+          <Link to={siteRoot + 'share-admin-folders/'} className="ellipsis" title={gettext('Folders')} onClick={() => this.tabItemClick('share-admin-folders')}>
             <span aria-hidden="true" className="sharp">#</span>
             {gettext('Folders')}
-          </a>
+          </Link>
         </li>
         <li className={this.state.currentTab === 'share-admin-share-links' ? 'tab-cur' : ''}>
-          <a href={siteRoot + '#share-admin-share-links/'} className="ellipsis" title={gettext('Links')} onClick={() => this.tabItemClick('share-admin-share-links')}>
+          <Link to={siteRoot + 'share-admin-share-links/'} className="ellipsis" title={gettext('Links')} onClick={() => this.tabItemClick('share-admin-share-links')}>
             <span aria-hidden="true" className="sharp">#</span>
             {gettext('Links')}
-          </a>
+          </Link>
         </li>
       </ul>
     );

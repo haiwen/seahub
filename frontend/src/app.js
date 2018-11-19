@@ -11,6 +11,10 @@ import FilesActivities from './pages/dashboard/files-activities';
 import Starred from './pages/starred/starred';
 import LinkedDevices from './pages/linked-devices/linked-devices';
 import editUtilties from './utils/editor-utilties';
+import ShareAdminLibraries from './pages/share-admin/libraries';
+import ShareAdminFolders from './pages/share-admin/folders';
+import ShareAdminShareLinks from './pages/share-admin/share-links';
+import ShareAdminUploadLinks from './pages/share-admin/upload-links';
 
 import 'seafile-ui';
 import './assets/css/fa-solid.css';
@@ -88,6 +92,10 @@ class App extends Component {
             </DraftsView>
             <Starred path={siteRoot + 'starred'} />
             <LinkedDevices path={siteRoot + 'linked-devices'} />
+            <ShareAdminLibraries path={siteRoot + 'share-admin-libs'} />
+            <ShareAdminFolders path={siteRoot + 'share-admin-folders'} />
+            <ShareAdminShareLinks path={siteRoot + 'share-admin-share-links'} />
+            <ShareAdminUploadLinks path={siteRoot + 'share-admin-upload-links'} />
           </Router>
         </MainPanel>
       </div>
