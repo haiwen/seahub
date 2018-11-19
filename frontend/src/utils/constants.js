@@ -16,6 +16,7 @@ export const fileServerRoot = window.app.config.fileServerRoot;
 //pageOptions
 export const canGenerateShareLink = window.app.pageOptions.canGenerateShareLink === 'True';
 export const canGenerateUploadLink = window.app.pageOptions.canGenerateUploadLink === 'True';
+export const canViewOrg = window.app.pageOptions.canViewOrg === 'True';
 export const fileAuditEnabled = window.app.pageOptions.fileAuditEnabled ? true : false;
 export const enableFileComment = window.app.pageOptions.enableFileComment ? true : false;
 export const folderPermEnabled = window.app.pageOptions.folderPermEnabled === 'True';
