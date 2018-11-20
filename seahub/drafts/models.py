@@ -165,6 +165,7 @@ class DraftReviewManager(models.Manager):
             raise DraftReviewExist
 
         draft_review = self.model(creator=creator,
+                                  author=draft.username,
                                   status='open',
                                   draft_id=draft,
                                   origin_repo_id=draft.origin_repo_id,
@@ -224,6 +225,7 @@ class DraftReviewManager(models.Manager):
 
 class DraftReview(TimestampedModel):
     creator = LowerCaseCharField(max_length=255, db_index=True)
+    author = LowerCaseCharField(max_length=255, db_index=True)
     status = models.CharField(max_length=20)
     origin_repo_id = models.CharField(max_length=36)
     origin_file_uuid = models.ForeignKey(FileUUIDMap, on_delete=models.CASCADE)
