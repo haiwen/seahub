@@ -19,6 +19,8 @@ from seahub.views import check_folder_permission, list_inner_pub_repos
 from seahub.share.models import ExtraSharePermission
 from seahub.utils import is_org_context
 from seahub.utils.timeutils import timestamp_to_isoformat_timestr
+from seahub.api2.endpoints.group_owned_libraries import get_group_id_by_repo_owner
+from seahub.group.utils import group_id_to_name
 
 from seaserv import seafile_api
 
@@ -129,6 +131,20 @@ class ReposView(APIView):
             shared_repos.sort(lambda x, y: cmp(y.last_modify, x.last_modify))
             for r in shared_repos:
 
+                owner_email = r.user
+
+                group_name = ''
+                is_group_owned_repo = False
+                if '@seafile_group' in owner_email:
+                    is_group_owned_repo = True
+                    group_id = get_group_id_by_repo_owner(owner_email)
+                    group_name= group_id_to_name(group_id)
+
+                owner_name = group_name if is_group_owned_repo else \
+                        nickname_dict.get(owner_email, '')
+                owner_contact_email = '' if is_group_owned_repo else \
+                        contact_email_dict.get(owner_email, '')
+
                 repo_info = {
                     "type": "shared",
                     "repo_id": r.repo_id,
@@ -137,6 +153,9 @@ class ReposView(APIView):
                     "modifier_email": r.last_modifier,
                     "modifier_name": nickname_dict.get(r.last_modifier, ''),
                     "modifier_contact_email": contact_email_dict.get(r.last_modifier, ''),
+                    "owner_email": owner_email,
+                    "owner_name": owner_name,
+                    "owner_contact_email": owner_contact_email,
                     "size": r.size,
                     "encrypted": r.encrypted,
                     "permission": r.permission,
