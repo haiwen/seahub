@@ -320,6 +320,10 @@ SHARE_LINK_LOGIN_REQUIRED = False
 SHARE_LINK_EXPIRE_DAYS_MIN = 0 # 0 means no limit
 SHARE_LINK_EXPIRE_DAYS_MAX = 0 # 0 means no limit
 
+# default expire days should be
+# greater than or equal to MIN and less than or equal to MAX
+SHARE_LINK_EXPIRE_DAYS_DEFAULT = 0
+
 # mininum length for the password of a share link
 SHARE_LINK_PASSWORD_MIN_LENGTH = 8
 
