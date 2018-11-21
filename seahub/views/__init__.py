@@ -55,7 +55,7 @@ import seahub.settings as settings
 from seahub.settings import AVATAR_FILE_STORAGE, \
     ENABLE_SUB_LIBRARY, ENABLE_FOLDER_PERM, ENABLE_REPO_SNAPSHOT_LABEL, \
     UNREAD_NOTIFICATIONS_REQUEST_INTERVAL, SHARE_LINK_EXPIRE_DAYS_MIN, \
-    SHARE_LINK_EXPIRE_DAYS_MAX
+    SHARE_LINK_EXPIRE_DAYS_MAX, SHARE_LINK_EXPIRE_DAYS_DEFAULT
 
 from seahub.wopi.settings import ENABLE_OFFICE_WEB_APP
 from seahub.onlyoffice.settings import ENABLE_ONLYOFFICE
@@ -736,6 +736,7 @@ def libraries(request):
             'enable_file_comment': settings.ENABLE_FILE_COMMENT,
             'share_link_expire_days_min': SHARE_LINK_EXPIRE_DAYS_MIN,
             'share_link_expire_days_max': SHARE_LINK_EXPIRE_DAYS_MAX,
+            'share_link_expire_days_default': SHARE_LINK_EXPIRE_DAYS_DEFAULT,
             'enable_office_web_app': ENABLE_OFFICE_WEB_APP,
             'enable_onlyoffice': ENABLE_ONLYOFFICE,
             'trash_repos_expire_days': expire_days if expire_days > 0 else 30,

@@ -1205,7 +1205,7 @@
                         <input type="checkbox" checked="checked" disabled="disabled" name="set_expiration" class="vam" />
                         <span class="checkbox-option vam">{% trans "Add auto expiration"%}</span>
                         <div class="link-option-content inline-block vam">
-                            <input type="text" name="expire_days" class="input short-input" id="expire-days" />
+                            <input type="text" name="expire_days" value="{{ share_link_expire_days_default }}" class="input short-input" id="expire-days" />
                             <span>{% trans "days" %}</span>
                             <span>
                                 {% if share_link_expire_days_min > 0 and share_link_expire_days_max > 0 %}
