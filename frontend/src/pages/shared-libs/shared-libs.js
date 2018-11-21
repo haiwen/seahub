@@ -3,6 +3,7 @@ import moment from 'moment';
 import { seafileAPI } from '../../utils/seafile-api';
 import { Utils } from '../../utils/utils';
 import { gettext, siteRoot, loginUrl, isPro } from '../../utils/constants';
+import Loading from '../../components/loading';
 
 class Content extends Component {
 
@@ -10,7 +11,7 @@ class Content extends Component {
     const {loading, errorMsg, items} = this.props.data;
 
     if (loading) {
-      return <span className="loading-icon loading-tip"></span>;
+      return <Loading />;
     } else if (errorMsg) {
       return <p className="error text-center">{errorMsg}</p>;
     } else {
