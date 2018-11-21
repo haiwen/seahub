@@ -40,7 +40,7 @@ def review(request, pk):
 
     draft_file_name = os.path.basename(d_r.draft_file_path)
 
-    user_info = user_to_dict(d_r.creator, avatar_size=32)
+    author_info = user_to_dict(d_r.author, avatar_size=32)
 
     return render(request, "draft_review.html", {
         "draft_id": d_r.draft_id_id,
@@ -54,6 +54,6 @@ def review(request, pk):
         "publish_file_version": d_r.publish_file_version,
         "status": d_r.status,
         "permission": permission,
-        "author": user_info['user_name'],
-        'author_avatar_url': user_info['avatar_url']
+        "author": author_info['user_name'],
+        'author_avatar_url': author_info['avatar_url']
         })
