@@ -242,6 +242,14 @@ ul,ol,li {
     margin-right:3px;
     vertical-align:middle;
 }
+.op-icon.sf2-x,
+.op-icon.sf2-x:hover {
+    color:#f89a68;
+}
+.op-icon.sf2-x:hover,
+.op-icon.sf2-x:focus {
+    text-decoration: underline;
+}
 
 /** Account info **/
 #account {
@@ -1031,4 +1039,10 @@ a.op-icon:focus {
 .nav-link.active {
   color: #eb8205;
   border-bottom: 2px solid #eb8205;
+}
+.item-meta-info {
+  display: inline-block;
+  margin-right: 8px;
+  font-size: 12px;
+  color: #666;
 }
