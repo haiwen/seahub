@@ -8,18 +8,20 @@ import ReviewListItem from './review-list-item';
 const propTypes = {
   isItemFreezed: PropTypes.bool.isRequired,
   itemsList: PropTypes.array.isRequired,
+  getReviewList: PropTypes.func.isRequired,
+  activeTab: PropTypes.string.isRequired,
 };
 
 class ReviewListView extends React.Component {
 
-    constructor(props) {
-      super(props);
-      this.toggle = this.toggle.bind(this);
-    }
+  constructor(props) {
+    super(props);
+    this.toggle = this.toggle.bind(this);
+  }
 
   toggle(tab) {
     if (this.props.activeTab !== tab) {
-      this.props.getReviewList(tab)
+      this.props.getReviewList(tab);
     }
   }
 
@@ -32,7 +34,7 @@ class ReviewListView extends React.Component {
             <NavLink
               className={classnames({ active: this.props.activeTab === 'open' })}
               onClick={() => { this.toggle('open');}}
-              >
+            >
               {gettext('Open')}
             </NavLink>
           </NavItem>
@@ -40,7 +42,7 @@ class ReviewListView extends React.Component {
             <NavLink
               className={classnames({ active: this.props.activeTab === 'finished' })}
               onClick={() => { this.toggle('finished');}}
-              >
+            >
               {gettext('Published')}
             </NavLink>
           </NavItem>
@@ -48,7 +50,7 @@ class ReviewListView extends React.Component {
             <NavLink
               className={classnames({ active: this.props.activeTab === 'closed' })}
               onClick={() => { this.toggle('closed');}}
-              >
+            >
               {gettext('Closed')}
             </NavLink>
           </NavItem>
@@ -67,11 +69,11 @@ class ReviewListView extends React.Component {
           <tbody>
             { items && items.map((item) => {
               return (
-                  <ReviewListItem 
-                    key={item.id} 
-                    item={item} 
-                    isItemFreezed={this.props.isItemFreezed}
-                  />
+                <ReviewListItem 
+                  key={item.id} 
+                  item={item} 
+                  isItemFreezed={this.props.isItemFreezed}
+                />
               );
             })}
           </tbody>

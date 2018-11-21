@@ -9,6 +9,8 @@ import { canViewOrg } from '../utils/constants';
 
 const propTypes = {
   currentTab: PropTypes.string.isRequired,
+  tabItemClick: PropTypes.func.isRequired,
+  draftCounts: PropTypes.number,
 };
 
 class MainSideNav extends React.Component {

@@ -8,6 +8,8 @@ const propTypes = {
   isSidePanelClosed: PropTypes.bool.isRequired,
   currentTab: PropTypes.string.isRequired,
   onCloseSidePanel: PropTypes.func.isRequired,
+  tabItemClick: PropTypes.func.isRequired,
+  draftCounts: PropTypes.number,
 };
 
 class SidePanel extends React.Component {

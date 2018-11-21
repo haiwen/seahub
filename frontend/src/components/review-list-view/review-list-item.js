@@ -31,7 +31,7 @@ class Reviewers extends React.Component {
     let reviewers = '';
 
     this.props.item.reviewers.map(item => {
-      reviewers = reviewers + ' and ' + item.user_name
+      reviewers = reviewers + ' and ' + item.user_name;
     });
 
     this.setState({
@@ -45,9 +45,9 @@ class Reviewers extends React.Component {
     return (
       <div className='position-relative reviewer-list'>
         <span id={'reviewers' + items.id}>
-        {items.reviewers.map((item, index) => (
-          <img key={index} id={'reviewer-tip' + '-' + items.id + '-' + index}  className="avatar avatar-sm reviewer-avatar" src={item.avatar_url} />
-        ))}
+          {items.reviewers.map((item, index) => (
+            <img key={index} id={'reviewer-tip' + '-' + items.id + '-' + index}  className="avatar avatar-sm reviewer-avatar" src={item.avatar_url} alt={item.user_name} />
+          ))}
         </span>
         <Tooltip placement="bottom-end" isOpen={this.state.reviewerTipOpen} target={'reviewers' + items.id} toggle={this.toggle}>
           {reviewerList}
@@ -112,7 +112,7 @@ class ReviewListItem extends React.Component {
         <td className="name a-simulate" style={{width: '26%'}} onClick={this.onReviewsClick}>{fileName}</td>
         <td className='library' style={{width: '25%'}}>{item.draft_origin_repo_name}</td>
         <td className="update" style={{width: '20%'}}>{localTime}</td>
-        <td className="author" style={{width: '10%'}}><img className="avatar avatar-sm avatar-with-tooltip" id={'tip-' + item.id} src={item.author.avatar_url} /></td>
+        <td className="author" style={{width: '10%'}}><img className="avatar avatar-sm avatar-with-tooltip" id={'tip-' + item.id} src={item.author.avatar_url} alt={item.user_name} /></td>
         <td className="reviewer" style={{width: '15%'}}><Reviewers item={item}/></td>
         <Tooltip placement="bottom-end" isOpen={this.state.authorTipOpen} target={'tip-' + item.id} toggle={this.toggle}>
           {item.author.user_name}
@@ -123,5 +123,9 @@ class ReviewListItem extends React.Component {
 }
 
 ReviewListItem.propTypes = propTypes;
+
+Reviewers.propTypes = {
+  item: PropTypes.object.isRequired,
+};
 
 export default ReviewListItem;

@@ -2,11 +2,17 @@ import React from 'react';
 import { siteRoot, gettext } from '../../utils/constants';
 import editUtilties from '../../utils/editor-utilties';
 import { Utils } from '../../utils/utils';
+import PropTypes from 'prop-types';
 import Toast from '../../components/toast';
 import Loading from '../../components/loading';
 import DraftListView from '../../components/draft-list-view/draft-list-view';
 import DraftListMenu from '../../components/draft-list-view/draft-list-menu';
 
+const propTypes = {
+  updateDraftsList: PropTypes.func.isRequired,
+  isLoadingDraft: PropTypes.bool.isRequired,
+  draftList: PropTypes.arrayOf(PropTypes.object),
+};
 
 class DraftContent extends React.Component {
   
@@ -130,5 +136,7 @@ class DraftContent extends React.Component {
     );
   }
 }
+
+DraftContent.propTypes = propTypes;
 
 export default DraftContent;

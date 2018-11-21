@@ -9,6 +9,7 @@ const propTypes = {
     PropTypes.array,
     PropTypes.object
   ]).isRequired,
+  tabItemClick: PropTypes.func.isRequired,
 };
 
 class DraftsView extends React.Component {
