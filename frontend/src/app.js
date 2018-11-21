@@ -35,11 +35,16 @@ class App extends Component {
       draftCounts: 0,
       draftList:[],
       isLoadingDraft: true,
+      currentTab: 'dashboard',
     };
   }
 
   componentDidMount() {
+    let href = window.location.href.split('/');
     this.getDrafts();
+    this.setState({
+      currentTab: href[href.length - 2]
+    });
   }
 
   getDrafts = () => {
@@ -71,19 +76,23 @@ class App extends Component {
     });
   }
 
-  render() {
+  tabItemClick = (param) => {
+    this.setState({
+      currentTab: param
+    });
+  } 
 
-    let href = window.location.href.split('/');
-    let currentTab = href[href.length - 2];
+  render() {
+    let { currentTab } = this.state;
 
     return (
       <div id="main">
-        <SidePanel isSidePanelClosed={this.state.isSidePanelClosed} onCloseSidePanel={this.onCloseSidePanel} currentTab={currentTab} draftCounts={this.state.draftCounts} />
+        <SidePanel isSidePanelClosed={this.state.isSidePanelClosed} onCloseSidePanel={this.onCloseSidePanel} currentTab={currentTab} tabItemClick={this.tabItemClick} draftCounts={this.state.draftCounts} />
 
         <MainPanel onShowSidePanel={this.onShowSidePanel}>
           <Router>
             <FilesActivities path={siteRoot + 'dashboard'} />
-            <DraftsView path={siteRoot + 'drafts'}  currentTab={currentTab}>
+            <DraftsView path={siteRoot + 'drafts'}  tabItemClick={this.tabItemClick} currentTab={currentTab}>
               <DraftContent path='/' getDrafts={this.getDrafts} 
                 isLoadingDraft={this.state.isLoadingDraft}
                 draftList={this.state.draftList}
