@@ -77,7 +77,7 @@ class CreateFile extends React.Component {
         });
       } else if (pos === 0 ) {
         this.setState({
-          childName: '(draft)' + this.state.childname, 
+          childName: '(draft)' + this.state.childName, 
           isDraft: !this.state.isdraft
         });
       } else {
@@ -93,10 +93,11 @@ class CreateFile extends React.Component {
   }
 
   componentDidMount() {
-    if (this.props.parentPath === '/') {
-      this.setState({parentPath: this.props.parentPath});
+    let parentPath = this.props.parentPath;
+    if (parentPath[parentPath.length - 1] === '/') {  // mainPanel
+      this.setState({parentPath: parentPath});
     } else {
-      this.setState({parentPath: this.props.parentPath + '/'});
+      this.setState({parentPath: parentPath + '/'}); // sidePanel
     }
     this.newInput.focus();
     this.newInput.setSelectionRange(0,0);

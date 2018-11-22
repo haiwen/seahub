@@ -6,7 +6,7 @@ import editorUtilities from '../../utils/editor-utilties';
 const propTypes = {
   permission: PropTypes.string,
   isNodeItemFrezee: PropTypes.bool.isRequired,
-  currentFilePath: PropTypes.string.isRequired,
+  currentPath: PropTypes.string.isRequired,
   treeData: PropTypes.object.isRequired,
   onShowContextMenu: PropTypes.func.isRequired,
   onNodeClick: PropTypes.func.isRequired,
@@ -22,18 +22,14 @@ class TreeView extends React.PureComponent {
     */
   }
 
-  toggleCollapse = (e, node) => {
-    this.props.onDirCollapse(e, node);
-  }
-
   onDragStart = (e, node) => {
     const url = editorUtilities.getFileURL(node);
     e.dataTransfer.setData('text/uri-list', url);
     e.dataTransfer.setData('text/plain', url);
   }
 
-  onNodeClick = (e, node) => {
-    this.props.onNodeClick(e, node);
+  onNodeClick = (node) => {
+    this.props.onNodeClick(node);
   }
 
   onShowContextMenu = (e, node) => {
@@ -53,7 +49,7 @@ class TreeView extends React.PureComponent {
           node={this.props.treeData.root}
           isNodeItemFrezee={this.props.isNodeItemFrezee}
           permission={this.props.permission}
-          currentFilePath={this.props.currentFilePath}
+          currentPath={this.props.currentPath}
           onShowContextMenu={this.props.onShowContextMenu}
           onDirCollapse={this.props.onDirCollapse}
         />

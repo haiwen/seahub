@@ -1,5 +1,6 @@
 import moment from 'moment';
 import { Utils } from '../utils/utils';
+import FileTag from './file-tag';
 
 class Dirent {
   constructor(json) {
@@ -18,8 +19,18 @@ class Dirent {
       this.modifier_name = json.modifier_name;
       this.modifier_email = json.modifier_email;
       this.modifier_contact_email = json.modifier_contact_email;
-      this.file_tags = json.file_tags;
+      let file_tags = [];
+      if (json.file_tags) {
+        file_tags = json.file_tags.map(item => {
+          return new FileTag(item);
+        })
+      }
+      this.file_tags = file_tags;
     }
+  }
+
+  isDir() {
+    return this.type !== 'file';
   }
 
 }

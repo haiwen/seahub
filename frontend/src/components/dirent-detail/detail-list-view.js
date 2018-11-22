@@ -25,7 +25,7 @@ class DetailListView extends React.Component {
 
   getDirentPostion = () => {
     let { repo, direntPath } = this.props;
-    let position = repo.repo_name + '/';
+    let position = repo.repo_name;
     if (direntPath !== '/') {
       let index = direntPath.lastIndexOf('/');
       let path = direntPath.slice(0, index);
@@ -38,6 +38,10 @@ class DetailListView extends React.Component {
     this.setState({
       isEditFileTagShow: !this.state.isEditFileTagShow
     });
+  }
+
+  onFileTagChanged = () => {
+    this.props.onFileTagChanged(this.props.dirent, this.props.direntPath);
   }
 
   render() {
@@ -64,7 +68,7 @@ class DetailListView extends React.Component {
               <tr><th width="35%"></th><td width="65%"></td></tr>
               <tr><th>{gettext('Size')}</th><td>{direntDetail.size}</td></tr>
               <tr><th>{gettext('Position')}</th><td>{position}</td></tr>
-              <tr><th>{gettext('Last Update')}</th><td>{moment(direntDetail.mtime).format('YYYY-MM-DD')}</td></tr>
+              <tr><th>{gettext('Last Update')}</th><td>{moment(direntDetail.last_modified).fromNow()}</td></tr>
               <tr className="file-tag-container"><th>{gettext('Tags')}</th>
                 <td>
                   <ul className="file-tag-list">
@@ -88,7 +92,7 @@ class DetailListView extends React.Component {
               fileTagList={fileTagList}
               filePath={this.props.direntPath}
               toggleCancel={this.onEditFileTagToggle}
-              onFileTagChanged={this.props.onFileTagChanged}
+              onFileTagChanged={this.onFileTagChanged}
             />
           }
         </Fragment>

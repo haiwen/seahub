@@ -62,6 +62,25 @@ class Tree {
     return false;
   }
 
+  deleteNodeByPath(path) {
+    let node = this.getNodeByPath(path);
+    this.deleteNode(node);
+  }
+
+  moveNode(node, moveToNode, isDestroy) {
+    let moveNode = node.clone();
+    this.addNodeToParent(moveNode, moveToNode);
+    if (isDestroy) {
+      this.deleteNode(node);
+    }
+  }
+
+  moveNodeByPath(path, moveToPath, isDestroy) {
+    let node = this.getNodeByPath(path);
+    let moveToNode = this.getNodeByPath(moveToPath);
+    this.moveNode(node, moveToNode, isDestroy);
+  }
+
   updateNodeParam(node, param, newValue) {
     let treeNode = this.findNodeFromTree(node);
     if (treeNode && treeNode[param]) {
@@ -69,6 +88,11 @@ class Tree {
       return true;
     }
     return false;
+  }
+
+  updateNodeParamByPath(path, param, newValue) {
+    let node = this.getNodeByPath(path);
+    this.updateNodeParam(node, param, newValue);
   }
 
   findNode(node) {

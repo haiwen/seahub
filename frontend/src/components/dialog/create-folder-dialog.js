@@ -42,10 +42,11 @@ class CreateForder extends React.Component {
   }
 
   componentDidMount() {
-    if (this.props.parentPath === '/') {
-      this.setState({parentPath: this.props.parentPath});
+    let parentPath = this.props.parentPath;
+    if (parentPath[parentPath.length - 1] === '/') {  // mainPanel
+      this.setState({parentPath: parentPath});
     } else {
-      this.setState({parentPath: this.props.parentPath + '/'});
+      this.setState({parentPath: parentPath + '/'}); // sidePanel
     }
     this.newInput.focus();
     this.newInput.setSelectionRange(0,0);

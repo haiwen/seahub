@@ -12,12 +12,12 @@ export const Utils = {
 
   bytesToSize: function(bytes) {
     if (typeof(bytes) == 'undefined') return ' ';
-  
+
     if(bytes < 0) return '--';
     const sizes = ['bytes', 'KB', 'MB', 'GB', 'TB', 'PB'];
-  
+
     if (bytes === 0) return bytes + ' ' + sizes[0];
-  
+
     const i = parseInt(Math.floor(Math.log(bytes) / Math.log(1000)), 10);
     if (i === 0) return bytes + ' ' + sizes[i];
     return (bytes / (1000 ** i)).toFixed(1) + ' ' + sizes[i];
@@ -166,6 +166,40 @@ export const Utils = {
   getFileName: function(filePath) {
     let lastIndex = filePath.lastIndexOf('/');
     return filePath.slice(lastIndex+1);
+  },
+
+  /*
+    return dirname of a path.
+    if path is '/', return '/'.
+  */
+  getDirName: function(path) {
+    let dir = path.slice(0, path.lastIndexOf('/'));
+    if (dir === '') {
+      return '/';
+    } else {
+      return dir;
+    }
+  },
+
+  isChildPath: function(child, parent) {
+    let p = this.getDirName(child);
+    return p === parent;
+  },
+
+  isAncestorPath: function(ancestor, path) {
+    return path.indexOf(ancestor) > -1;
+  },
+
+  renameAncestorPath: function(path, ancestor, newAncestor) {
+    return newAncestor + '/' + path.replace(ancestor, '');
+  },
+
+  joinPath: function(pathA, pathB) {
+    if (pathA[pathA.length-1] === '/') {
+      return pathA + pathB;
+    } else {
+      return pathA + '/' + pathB;
+    }
   },
 
   isSupportUploadFolder: function() {

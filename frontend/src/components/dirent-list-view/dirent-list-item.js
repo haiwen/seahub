@@ -6,10 +6,9 @@ import URLDecorator from '../../utils/url-decorator';
 import Toast from '../toast';
 import DirentMenu from './dirent-menu';
 import DirentRename from './dirent-rename';
-import FileTag from '../../models/file-tag';
 
 const propTypes = {
-  filePath: PropTypes.string.isRequired,
+  path: PropTypes.string.isRequired,
   isItemFreezed: PropTypes.bool.isRequired,
   dirent: PropTypes.object.isRequired,
   onItemClick: PropTypes.func.isRequired,
@@ -22,7 +21,7 @@ const propTypes = {
   onDirentItemMove: PropTypes.func.isRequired,
   onDirentItemCopy: PropTypes.func.isRequired,
   onItemDetails: PropTypes.func.isRequired,
-  updateViewList: PropTypes.func.isRequired,
+  updateDirent: PropTypes.func.isRequired,
   currentRepo: PropTypes.object,
   isRepoOwner: PropTypes.bool,
 };
@@ -36,15 +35,13 @@ class DirentListItem extends React.Component {
       highlight: false,
       isItemMenuShow: false,
       menuPosition: {top: 0, left: 0 },
-      fileTagList: [],
     };
   }
 
   componentDidMount() {
     document.addEventListener('click', this.onItemMenuHide);
-    this.getFileTag();
   }
-  
+
   componentWillUnmount() {
     document.removeEventListener('click', this.onItemMenuHide);
   }
@@ -113,21 +110,21 @@ class DirentListItem extends React.Component {
   onItemSelected = () => {
     //todos;
   }
-  
+
   onItemStarred = () => {
     let dirent = this.props.dirent;
     let filePath = this.getDirentPath(dirent);
     if (dirent.starred) {
       seafileAPI.unStarFile(repoID, filePath).then(() => {
-        this.props.updateViewList(this.props.filePath);
+        this.props.updateDirent(this.props.dirent, "starred", false);
       });
     } else {
       seafileAPI.starFile(repoID, filePath).then(() => {
-        this.props.updateViewList(this.props.filePath);
+        this.props.updateDirent(this.props.dirent, "starred", true);
       });
     }
   }
-  
+
   onItemClick = () => {
     let direntPath = this.getDirentPath(this.props.dirent);
     this.props.onItemClick(direntPath);
@@ -141,13 +138,12 @@ class DirentListItem extends React.Component {
 
   onItemDelete = (e) => {
     e.nativeEvent.stopImmediatePropagation(); //for document event
-    let direntPath = this.getDirentPath(this.props.dirent);
-    this.props.onItemDelete(direntPath);
+    this.props.onItemDelete(this.props.dirent);
   }
 
   onItemMenuItemClick = (operation) => {
     switch(operation) {
-    case 'Rename': 
+    case 'Rename':
       this.onRenameMenuItemClick();
       break;
     case 'Move':
@@ -202,21 +198,20 @@ class DirentListItem extends React.Component {
       this.onRenameCancel();
       return false;
     }
-    
+
     if (!newName) {
       let errMessage = 'It is required.';
       Toast.error(gettext(errMessage));
       return false;
     }
-    
+
     if (newName.indexOf('/') > -1) {
       let errMessage = 'Name should not include "/".';
       Toast.error(gettext(errMessage));
       return false;
     }
 
-    let direntPath = this.getDirentPath(this.props.dirent);
-    this.props.onItemRename(direntPath, newName);
+    this.props.onItemRename(this.props.dirent, newName);
     this.onRenameCancel();
   }
 
@@ -226,7 +221,7 @@ class DirentListItem extends React.Component {
     });
     this.props.onUnfreezedItem();
   }
-  
+
   onDirentItemMove = () => {
     let direntPath = this.getDirentPath(this.props.dirent);
     this.props.onDirentItemMove(this.props.dirent, direntPath);
@@ -252,7 +247,8 @@ class DirentListItem extends React.Component {
   onLockItem = () => {
     let filePath = this.getDirentPath(this.props.dirent);
     seafileAPI.lockfile(repoID, filePath).then(() => {
-      this.props.updateViewList(this.props.filePath);
+      this.props.updateDirent(this.props.dirent, "is_locked", true);
+      this.props.updateDirent(this.props.dirent, "locked_by_me", true);
     });
     this.onItemMenuHide();
   }
@@ -260,14 +256,15 @@ class DirentListItem extends React.Component {
   onUnlockItem = () => {
     let filePath = this.getDirentPath(this.props.dirent);
     seafileAPI.unlockfile(repoID, filePath).then(() => {
-      this.props.updateViewList(this.props.filePath);
+      this.props.updateDirent(this.props.dirent, "is_locked", false);
+      this.props.updateDirent(this.props.dirent, "locked_by_me", false);
     });
     this.onItemMenuHide();
   }
 
   onNewDraft = () => {
     let filePath = this.getDirentPath(this.props.dirent);
-    seafileAPI.createDraft(repoID,filePath).then(res => {
+    seafileAPI.createDraft(repoID, filePath).then(res => {
       let draft_file_Path = res.data.draft_file_path;
       let draftId = res.data.id;
       let url = URLDecorator.getUrl({type: 'draft_view', repoID: repoID, filePath: draft_file_Path, draftId: draftId});
@@ -303,24 +300,8 @@ class DirentListItem extends React.Component {
   }
 
   getDirentPath = (dirent) => {
-    let path = this.props.filePath;
+    let path = this.props.path;
     return path === '/' ? path + dirent.name : path + '/' + dirent.name;
-  }
-
-  getFileTag = () => {
-    if (this.props.dirent.type === 'file' && this.props.dirent.file_tags!== undefined) {
-      let FileTgas = this.props.dirent.file_tags;
-      let fileTagList = [];
-      FileTgas.forEach(item => {
-        let fileTag = new FileTag(item)
-        fileTagList.push(fileTag)
-      });
-      this.setState({fileTagList: fileTagList});
-    }
-  }
-
-  componentWillReceiveProps() {
-    this.getFileTag();
   }
 
   render() {
@@ -348,7 +329,7 @@ class DirentListItem extends React.Component {
         </td>
         <td>
           <div className="dirent-item tag-list tag-list-stacked ">
-            { dirent.type !== 'dir' && this.state.fileTagList.map((fileTag) => {
+            { dirent.type !== 'dir' && dirent.file_tags.map((fileTag) => {
               return (
                 <span className={`file-tag bg-${fileTag.color}`} key={fileTag.id} title={fileTag.name}></span>
               );
@@ -357,7 +338,7 @@ class DirentListItem extends React.Component {
         </td>
         <td className="operation">
           {
-            this.state.isOperationShow && 
+            this.state.isOperationShow &&
             <div className="operations">
               <ul className="operation-group">
                 <li className="operation-group-item">
@@ -374,8 +355,8 @@ class DirentListItem extends React.Component {
                 </li>
               </ul>
               {
-                this.state.isItemMenuShow && 
-                <DirentMenu 
+                this.state.isItemMenuShow &&
+                <DirentMenu
                   dirent={this.props.dirent}
                   menuPosition={this.state.menuPosition}
                   onMenuItemClick={this.onItemMenuItemClick}
