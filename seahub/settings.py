@@ -647,6 +647,8 @@ THUMBNAIL_VIDEO_FRAME_TIME = 5  # use the frame at 5 second as thumbnail
 # template for create new office file
 OFFICE_TEMPLATE_ROOT = os.path.join(MEDIA_ROOT, 'office-template')
 
+ENABLE_WEBDAV_SECRET = False
+
 #####################
 # Global AddressBook #
 #####################

@@ -2,7 +2,8 @@ from seahub.test_utils import BaseTestCase
 from seahub.options.models import (UserOptions, KEY_USER_GUIDE,
                                    VAL_USER_GUIDE_ON, VAL_USER_GUIDE_OFF,
                                    KEY_DEFAULT_REPO,
-                                   KEY_FORCE_2FA, VAL_FORCE_2FA)
+                                   KEY_FORCE_2FA, VAL_FORCE_2FA,
+                                   KEY_WEBDAV_SECRET)
 
 class UserOptionsManagerTest(BaseTestCase):
     def test_is_user_guide_enabled(self):
@@ -69,3 +70,18 @@ class UserOptionsManagerTest(BaseTestCase):
         assert len(UserOptions.objects.filter(email=self.user.email,
                                               option_key=KEY_FORCE_2FA)) == 0
         assert UserOptions.objects.is_force_2fa(self.user.email) is False
+
+    def test_webdav_secret(self, ):
+        assert len(UserOptions.objects.filter(email=self.user.email,
+                                              option_key=KEY_WEBDAV_SECRET)) == 0
+
+        assert UserOptions.objects.get_webdav_secret(self.user.email) is None
+
+        UserOptions.objects.set_webdav_secret(self.user.email, '123456')
+        assert UserOptions.objects.get_webdav_secret(self.user.email) == '123456'
+
+        UserOptions.objects.unset_webdav_secret(self.user.email)
+        assert UserOptions.objects.get_webdav_secret(self.user.email) is None
+
+        assert len(UserOptions.objects.filter(email=self.user.email,
+                                              option_key=KEY_WEBDAV_SECRET)) == 0

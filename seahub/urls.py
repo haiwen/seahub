@@ -70,6 +70,7 @@ from seahub.api2.endpoints.wikis import WikisView, WikiView
 from seahub.api2.endpoints.wiki_pages import WikiPageView, WikiPagesView, WikiPagesDirView, WikiPageContentView
 from seahub.api2.endpoints.revision_tag import TaggedItemsView, TagNamesView
 from seahub.api2.endpoints.user import User
+from seahub.api2.endpoints.webdav_secret import WebdavSecretView
 
 # Admin
 from seahub.api2.endpoints.admin.revision_tag import AdminTaggedItemsView
@@ -308,6 +309,9 @@ urlpatterns = [
 
     ## user::avatar
     url(r'^api/v2.1/user-avatar/$', UserAvatarView.as_view(), name='api-v2.1-user-avatar'),
+
+    ## user:webdav
+    url(r'^api/v2.1/webdav-secret/$', WebdavSecretView.as_view(), name='api-v2.1-webdav-secret'),
 
     ## user::wiki
     url(r'^api/v2.1/wikis/$', WikisView.as_view(), name='api-v2.1-wikis'),
