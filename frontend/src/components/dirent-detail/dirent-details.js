@@ -81,14 +81,16 @@ class DirentDetail extends React.Component {
             <img src={dirent.type === 'dir' ? serviceUrl + '/media/img/folder-192.png' : serviceUrl + '/media/img/file/192/txt.png'} alt="icon"></img>
           </div>
           {this.state.direntDetail && 
-            <DetailListView 
-              repo={this.state.repo}
-              direntPath={this.props.direntPath}
-              direntType={this.state.direntType}
-              direntDetail={this.state.direntDetail} 
-              fileTagList={this.state.fileTagList}
-              onFileTagChanged={this.props.onFileTagChanged}
-            />
+            <div className="dirent-table-container">
+              <DetailListView 
+                repo={this.state.repo}
+                direntPath={this.props.direntPath}
+                direntType={this.state.direntType}
+                direntDetail={this.state.direntDetail} 
+                fileTagList={this.state.fileTagList}
+                onFileTagChanged={this.props.onFileTagChanged}
+              />
+            </div>
           }
         </div>
       </div>
