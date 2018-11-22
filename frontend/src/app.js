@@ -40,6 +40,9 @@ class App extends Component {
   }
 
   componentDidMount() {
+    // e.g.  from http://127.0.0.1:8000/drafts/reviews/
+    // get reviews  
+    // TODO: need refactor later
     let href = window.location.href.split('/');
     this.getDrafts();
     this.setState({
