@@ -13,6 +13,8 @@ import DirentDetail from '../../components/dirent-detail/dirent-details';
 import CreateFolder from '../../components/dialog/create-folder-dialog';
 import CreateFile from '../../components/dialog/create-file-dialog';
 import ZipDownloadDialog from '../../components/dialog/zip-download-dialog';
+import MoveDirentDialog from '../../components/dialog/move-dirent-dialog';
+import CopyDirentDialog from '../../components/dialog/copy-dirent-dialog';
 import FileUploader from '../../components/file-uploader/file-uploader';
 
 const propTypes = {
@@ -63,11 +65,13 @@ class MainPanel extends Component {
       createFileType: '',
       isDirentDetailShow: false,
       currentDirent: null,
-      currentFilePath: '',
+      direntPath: '',
       currentRepo: null,
       isRepoOwner: false,
       progress: 0,
       isProgressDialogShow: false,
+      isMoveDialogShow: false,
+      isCopyDialogShow: false,
     };
     this.zip_token = null;
   }
@@ -194,7 +198,7 @@ class MainPanel extends Component {
   onItemDetails = (dirent, direntPath) => {
     this.setState({
       currentDirent: dirent,
-      currentFilePath: direntPath,
+      direntPath: direntPath,
       isDirentDetailShow: true,
     });
   }
@@ -220,6 +224,38 @@ class MainPanel extends Component {
 
   onFileSuccess = (file) => {
 
+  }
+
+  onDirentItemMove = (dirent, direntPath) => {
+    this.setState({
+      isMoveDialogShow: true,
+      currentDirent: dirent,
+      direntPath: direntPath
+    });
+  }
+
+  onDirentItemCopy = (dirent, direntPath) => {
+    this.setState({
+      isCopyDialogShow: true,
+      currentDirent: dirent,
+      direntPath: direntPath
+    });
+  }
+
+  onItemMove = (repo, direntPath, moveToDirentPath) => {
+    this.props.onItemMove(repo, direntPath, moveToDirentPath);
+  }
+
+  onCancelMove = () => {
+    this.setState({isMoveDialogShow: false});
+  }
+
+  onItemCopy = (repo, direntPath, copyToDirentPath) => {
+    this.props.onItemCopy(repo, direntPath, copyToDirentPath);
+  }
+
+  onCancelCopy = () => {
+    this.setState({isCopyDialogShow: false});
   }
 
   onDownloadSelected = () => {
@@ -412,8 +448,8 @@ class MainPanel extends Component {
                         onItemDelete={this.props.onItemDelete}
                         onItemDownload={this.onItemDownload}
                         onItemRename={this.props.onItemRename}
-                        onItemMove={this.props.onItemMove}
-                        onItemCopy={this.props.onItemCopy}
+                        onDirentItemMove={this.onDirentItemMove}
+                        onDirentItemCopy={this.onDirentItemCopy}
                         onItemDetails={this.onItemDetails}
                         isDirentListLoading={this.props.isDirentListLoading}
                         updateDirent={this.props.updateDirent}
@@ -440,7 +476,7 @@ class MainPanel extends Component {
             <div className="cur-view-detail">
               <DirentDetail
                 dirent={this.state.currentDirent}
-                direntPath={this.state.currentFilePath}
+                direntPath={this.state.direntPath}
                 onItemDetailsClose={this.onItemDetailsClose}
                 onFileTagChanged={this.onFileTagChanged}
               />
@@ -460,6 +496,22 @@ class MainPanel extends Component {
             parentPath={this.props.path}
             addFolderCancel={this.addFolderCancel}
             onAddFolder={this.onAddFolder}
+          />
+        }
+        {this.state.isMoveDialogShow &&
+          <MoveDirentDialog
+            dirent={this.state.currentDirent}
+            direntPath={this.state.direntPath}
+            onItemMove={this.props.onItemMove}
+            onCancelMove={this.onCancelMove}
+          />
+        }
+        {this.state.isCopyDialogShow &&
+          <CopyDirentDialog
+            dirent={this.state.currentDirent}
+            direntPath={this.state.direntPath}
+            onItemCopy={this.props.onItemCopy}
+            onCancelCopy={this.onCancelCopy}
           />
         }
         {this.state.isProgressDialogShow &&
