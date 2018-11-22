@@ -128,7 +128,7 @@ class MainSideNav extends React.Component {
                 {gettext('My Libraries')}
               </a>
             </li>
-            <li className={`tab ${this.state.currentTab === 'shared-libs' ? 'tab-cur' : ''}`}>
+            <li className={`tab ${this.props.currentTab === 'shared-libs' ? 'tab-cur' : ''}`}>
               <Link to={siteRoot + 'shared-libs/'} className="ellipsis" title={gettext('Shared with me')} onClick={() => this.tabItemClick('shared-libs')}>
                 <span className="sf2-icon-share" aria-hidden="true"></span>
                 {gettext('Shared with me')}
