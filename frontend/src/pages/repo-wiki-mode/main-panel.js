@@ -24,6 +24,8 @@ const propTypes = {
   isFileLoading: PropTypes.bool.isRequired,
   isViewFile: PropTypes.bool.isRequired,
   isDirentListLoading: PropTypes.bool.isRequired,
+  isDirentSelected: PropTypes.bool.isRequired,
+  isAllDirentSelected: PropTypes.bool.isRequired,
   direntList: PropTypes.array.isRequired,
   updateDirent: PropTypes.func.isRequired,
   onSideNavMenuClick: PropTypes.func.isRequired,
@@ -31,6 +33,8 @@ const propTypes = {
   onMainNavBarClick: PropTypes.func.isRequired,
   onLinkClick: PropTypes.func.isRequired,
   onItemClick: PropTypes.func.isRequired,
+  onAllItemSelected: PropTypes.func.isRequired,
+  onItemSelected: PropTypes.func.isRequired,
   onItemDelete: PropTypes.func.isRequired,
   onItemRename: PropTypes.func.isRequired,
   onItemMove: PropTypes.func.isRequired,
@@ -328,6 +332,9 @@ class MainPanel extends Component {
                         updateDirent={this.props.updateDirent}
                         currentRepo={this.state.currentRepo}
                         isRepoOwner={this.state.isRepoOwner}
+                        isAllDirentSelected={this.props.isAllDirentSelected}
+                        onAllItemSelected={this.props.onAllItemSelected}
+                        onItemSelected={this.props.onItemSelected}
                       />
                       <FileUploader
                         ref={uploader => this.uploader = uploader}

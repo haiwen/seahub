@@ -15,6 +15,7 @@ const propTypes = {
   onFreezedItem: PropTypes.func.isRequired,
   onUnfreezedItem: PropTypes.func.isRequired,
   onRenameMenuItemClick: PropTypes.func.isRequired,
+  onItemSelected: PropTypes.func.isRequired,
   onItemDelete: PropTypes.func.isRequired,
   onItemRename: PropTypes.func.isRequired,
   onItemDownload: PropTypes.func.isRequired,
@@ -108,7 +109,7 @@ class DirentListItem extends React.Component {
 
   //buiness handler
   onItemSelected = () => {
-    //todos;
+    this.props.onItemSelected(this.props.dirent);
   }
 
   onItemStarred = () => {
@@ -309,7 +310,7 @@ class DirentListItem extends React.Component {
     return (
       <tr className={this.state.highlight ? 'tr-highlight' : ''} onMouseEnter={this.onMouseEnter} onMouseOver={this.onMouseOver} onMouseLeave={this.onMouseLeave}>
         <td className="select">
-          <input type="checkbox" className="vam" />
+          <input type="checkbox" className="vam" onChange={this.onItemSelected} checked={dirent.isSelected}/>
         </td>
         <td className="star" onClick={this.onItemStarred}>
           {dirent.starred !== undefined && !dirent.starred && <i className="far fa-star empty"></i>}

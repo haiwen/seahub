@@ -39,6 +39,9 @@ class Wiki extends Component {
       lastModified: '',
       latestContributor: '',
       permission: '',
+      isDirentSelected: false,
+      isAllDirentSelected: false,
+      selectedDirentlist: [],
     };
     window.onpopstate = this.onpopstate;
   }
@@ -156,7 +159,7 @@ class Wiki extends Component {
     let index   = direntPath.lastIndexOf('/');
     let dirPath = direntPath.slice(0, index + 1);
     let dirName = direntPath.slice(index + 1);
-    seafileAPI.moveDir(repoID, repo.repo_id, copyToDirentPath, dirPath, dirName).then(() => {
+    seafileAPI.copyDir(repoID, repo.repo_id, copyToDirentPath, dirPath, dirName).then(() => {
       this.copyTreeNode(direntPath, copyToDirentPath, repo);
       let message = gettext('Successfully copied %(name)s.');
       message = message.replace('%(name)s', dirName);
@@ -341,6 +344,63 @@ class Wiki extends Component {
       const w=window.open('about:blank');
       const url = serviceUrl + '/lib/' + repoID + '/file' + node.path;
       w.location.href = url;
+    }
+  }
+
+  onDirentSelected = (dirent) => {
+    let direntList = this.state.direntList.map(item => {
+      if (item.name === dirent.name) {
+        item.isSelected = !item.isSelected;
+      }
+      return item;
+    });
+    let selectedDirentlist = direntList.filter(item => {
+      return item.isSelected;
+    });
+
+    if (selectedDirentlist.length > 0) {
+      this.setState({isDirentSelected: true});
+    }
+
+    if (selectedDirentlist.length === direntList.length) {
+      this.setState({isAllDirentSelected: true});
+    }
+
+    this.setState({
+      direnList: direntList,
+      selectedDirentlist: selectedDirentlist,
+    });
+  }
+
+  onAllDirentSelected = () => {
+    let dirent = this.state.direntList[0];
+    if (!dirent) {
+      this.setState({
+        isDirentSelected: false,
+        isAllDirentSelected: false,
+        selectedDirentlist: []
+      });
+    } else {
+      let direntList = [];
+      let isAllDirentSelected = false;
+      if (dirent.isSelected) {
+        direntList = this.state.direntList.map(item => {
+          item.isSelected = false;
+          return item;
+        });
+        isAllDirentSelected = false;
+      } else {
+        direntList = this.state.direntList.map(item => {
+          item.isSelected = true;
+          return item;
+        });
+        isAllDirentSelected = true;
+      }
+      this.setState({
+        isDirentSelected: true,
+        isAllDirentSelected: isAllDirentSelected,
+        selectedDirentlist: direntList,
+      });
     }
   }
 
@@ -651,6 +711,8 @@ class Wiki extends Component {
           onSearchedClick={this.onSearchedClick}
           onMainNavBarClick={this.onMainNavBarClick}
           onItemClick={this.onDirentClick}
+          onItemSelected={this.onDirentSelected}
+          onAllItemSelected={this.onAllDirentSelected}
           onItemDelete={this.onMainPanelItemDelete}
           onItemRename={this.onMainPanelItemRename}
           onItemMove={this.onMoveItem}
@@ -658,6 +720,8 @@ class Wiki extends Component {
           onAddFile={this.onAddFile}
           onAddFolder={this.onAddFolder}
           onFileTagChanged={this.onFileTagChanged}
+          isDirentSelected={this.state.isDirentSelected}
+          isAllDirentSelected={this.state.isAllDirentSelected}
         />
       </div>
     );

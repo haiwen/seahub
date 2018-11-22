@@ -13,6 +13,8 @@ const propTypes = {
   path: PropTypes.string.isRequired,
   direntList: PropTypes.array.isRequired,
   onItemDelete: PropTypes.func.isRequired,
+  onAllItemSelected: PropTypes.func.isRequired,
+  onItemSelected: PropTypes.func.isRequired,
   onItemRename: PropTypes.func.isRequired,
   onItemClick: PropTypes.func.isRequired,
   onItemMove: PropTypes.func.isRequired,
@@ -22,6 +24,7 @@ const propTypes = {
   isDirentListLoading: PropTypes.bool.isRequired,
   isRepoOwner: PropTypes.bool,
   currentRepo: PropTypes.object,
+  isAllDirentSelected: PropTypes.bool.isRequired,
 };
 
 class DirentListView extends React.Component {
@@ -144,7 +147,9 @@ class DirentListView extends React.Component {
         <table>
           <thead>
             <tr>
-              <th width="3%" className="select"><input type="checkbox" className="vam" /></th>
+              <th width="3%" className="select">
+                <input type="checkbox" className="vam" onChange={this.props.onAllItemSelected} checked={this.props.isAllDirentSelected}/>
+              </th>
               <th width="3%"></th>
               <th width="5%"></th>
               <th width="35%">{gettext('Name')}</th>
@@ -166,6 +171,7 @@ class DirentListView extends React.Component {
                     isRepoOwner={this.props.isRepoOwner}
                     onItemClick={this.props.onItemClick}
                     onRenameMenuItemClick={this.onRenameMenuItemClick}
+                    onItemSelected={this.props.onItemSelected}
                     onItemDelete={this.props.onItemDelete}
                     onItemRename={this.props.onItemRename}
                     isItemFreezed={this.state.isItemFreezed}
