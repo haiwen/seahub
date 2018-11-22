@@ -32,9 +32,7 @@ class DirentListView extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      progress: 0,
       isItemFreezed: false,
-      isProgressDialogShow: false,
       isMoveDialogShow: false,
       isCopyDialogShow: false,
       currentDirent: false,
@@ -90,51 +88,6 @@ class DirentListView extends React.Component {
     this.props.onItemDetails(dirent, direntPath);
   }
 
-  onItemDownload = (dirent, direntPath) => {
-    if (dirent.type === 'dir') {
-      this.setState({isProgressDialogShow: true, progress: 0});
-      editorUtilities.zipDownload(this.props.path, dirent.name).then(res => {
-        this.zip_token = res.data['zip_token'];
-        this.addDownloadAnimation();
-        this.interval = setInterval(this.addDownloadAnimation, 1000);
-      });
-    } else {
-      let url = URLDecorator.getUrl({type: 'download_file_url', repoID: repoID, filePath: direntPath});
-      location.href = url;
-    }
-  }
-
-  addDownloadAnimation = () => {
-    let _this = this;
-    let token = this.zip_token;
-    editorUtilities.queryZipProgress(token).then(res => {
-      let data = res.data;
-      let progress = data.total === 0 ? 100 : (data.zipped / data.total * 100).toFixed(0);
-      this.setState({progress: parseInt(progress)});
-
-      if (data['total'] === data['zipped']) {
-        this.setState({
-          progress: 100
-        });
-        clearInterval(this.interval);
-        location.href = URLDecorator.getUrl({type: 'download_dir_zip_url', token: token});
-        setTimeout(function() {
-          _this.setState({isProgressDialogShow: false});
-        }, 500);
-      }
-
-    });
-  }
-
-  onCancelDownload = () => {
-    let zip_token = this.zip_token;
-    editorUtilities.cancelZipTask(zip_token).then(res => {
-      this.setState({
-        isProgressDialogShow: false,
-      });
-    });
-  }
-
   render() {
     const { direntList } = this.props;
 
@@ -177,7 +130,7 @@ class DirentListView extends React.Component {
                     isItemFreezed={this.state.isItemFreezed}
                     onFreezedItem={this.onFreezedItem}
                     onUnfreezedItem={this.onUnfreezedItem}
-                    onItemDownload={this.onItemDownload}
+                    onItemDownload={this.props.onItemDownload}
                     onDirentItemMove={this.onDirentItemMove}
                     onDirentItemCopy={this.onDirentItemCopy}
                     onItemDetails={this.onItemDetails}
@@ -188,10 +141,6 @@ class DirentListView extends React.Component {
             }
           </tbody>
         </table>
-        {this.state.isProgressDialogShow &&
-          <ZipDownloadDialog progress={this.state.progress} onCancelDownload={this.onCancelDownload}
-          />
-        }
         {this.state.isMoveDialogShow &&
           <MoveDirentDialog
             dirent={this.state.currentDirent}

@@ -174,12 +174,12 @@ class Wiki extends Component {
   switchViewMode = (mode) => {
     let dirPath;
     let tree = this.state.treeData;
-    let node = tree.getNodeByPath(this.state.filePath);
+    let node = tree.getNodeByPath(this.state.path);
     if (node.isDir()) {
-      dirPath = this.state.filePath;
+      dirPath = this.state.path;
     } else {
-      const index = this.state.filePath.lastIndexOf('/');
-      dirPath = this.state.filePath.substring(0, index);
+      const index = this.state.path.lastIndexOf('/');
+      dirPath = this.state.path.substring(0, index);
     }
 
     cookie.save('view_mode', mode, { path: '/' });
@@ -382,25 +382,27 @@ class Wiki extends Component {
       });
     } else {
       let direntList = [];
-      let isAllDirentSelected = false;
       if (dirent.isSelected) {
         direntList = this.state.direntList.map(item => {
           item.isSelected = false;
           return item;
         });
-        isAllDirentSelected = false;
+        this.setState({
+          isDirentSelected: false,
+          isAllDirentSelected: false,
+          selectedDirentlist: direntList,
+        });
       } else {
         direntList = this.state.direntList.map(item => {
           item.isSelected = true;
           return item;
         });
-        isAllDirentSelected = true;
+        this.setState({
+          isDirentSelected: true,
+          isAllDirentSelected: true,
+          selectedDirentlist: direntList,
+        });
       }
-      this.setState({
-        isDirentSelected: true,
-        isAllDirentSelected: isAllDirentSelected,
-        selectedDirentlist: direntList,
-      });
     }
   }
 
@@ -439,7 +441,6 @@ class Wiki extends Component {
   }
 
   deleteDirent(direntPath) {
-    let newPath = '';
     if (direntPath === this.state.path) {
       // The deleted item is current item
       let parentPath = Utils.getDirName(direntPath);
@@ -494,12 +495,12 @@ class Wiki extends Component {
     if (node instanceof Node && node.isMarkdown()) {
       let tree = this.state.treeData.clone();
       this.setState({treeData: tree});
-      if (node.path !== this.state.filePath) {
+      if (node.path !== this.state.path) {
         this.showFile(node.path);
       }
     } else if (node instanceof Node && node.isDir()) {
       let tree = this.state.treeData.clone();
-      if (this.state.filePath === node.path) {
+      if (this.state.path === node.path) {
         if (node.isExpanded) {
           tree.collapseNode(node);
         } else {
@@ -507,7 +508,7 @@ class Wiki extends Component {
         }
       }
       this.setState({treeData: tree});
-      if (node.path !== this.state.filePath) {
+      if (node.path !== this.state.path) {
         this.showDir(node.path);
       }
     } else {

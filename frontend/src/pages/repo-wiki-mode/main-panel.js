@@ -3,6 +3,7 @@ import PropTypes from 'prop-types';
 import { gettext, repoID, serviceUrl, slug, siteRoot } from '../../utils/constants';
 import { seafileAPI } from '../../utils/seafile-api';
 import { Utils } from '../../utils/utils';
+import URLDecorator from '../../utils/url-decorator';
 import Repo from '../../models/repo';
 import CommonToolbar from '../../components/toolbar/common-toolbar';
 import PathToolbar from '../../components/toolbar/path-toolbar';
@@ -11,6 +12,7 @@ import DirentListView from '../../components/dirent-list-view/dirent-list-view';
 import DirentDetail from '../../components/dirent-detail/dirent-details';
 import CreateFolder from '../../components/dialog/create-folder-dialog';
 import CreateFile from '../../components/dialog/create-file-dialog';
+import ZipDownloadDialog from '../../components/dialog/zip-download-dialog';
 import FileUploader from '../../components/file-uploader/file-uploader';
 
 const propTypes = {
@@ -61,6 +63,8 @@ class MainPanel extends Component {
       currentFilePath: '',
       currentRepo: null,
       isRepoOwner: false,
+      progress: 0,
+      isProgressDialogShow: false,
     };
   }
 
@@ -214,6 +218,55 @@ class MainPanel extends Component {
 
   }
 
+  onSelectedDownload = () => {
+    
+  }
+
+  onItemDownload = (dirent, direntPath) => {
+    if (dirent.type === 'dir') {
+      this.setState({isProgressDialogShow: true, progress: 0});
+      seafileAPI.zipDownload(repoID, this.props.path, dirent.name).then(res => {
+        this.zip_token = res.data['zip_token'];
+        this.addDownloadAnimation();
+        this.interval = setInterval(this.addDownloadAnimation, 1000);
+      });
+    } else {
+      let url = URLDecorator.getUrl({type: 'download_file_url', repoID: repoID, filePath: direntPath});
+      location.href = url;
+    }
+  }
+
+  addDownloadAnimation = () => {
+    let _this = this;
+    let token = this.zip_token;
+    seafileAPI.queryZipProgress(token).then(res => {
+      let data = res.data;
+      let progress = data.total === 0 ? 100 : (data.zipped / data.total * 100).toFixed(0);
+      this.setState({progress: parseInt(progress)});
+
+      if (data['total'] === data['zipped']) {
+        this.setState({
+          progress: 100
+        });
+        clearInterval(this.interval);
+        location.href = URLDecorator.getUrl({type: 'download_dir_zip_url', token: token});
+        setTimeout(function() {
+          _this.setState({isProgressDialogShow: false});
+        }, 500);
+      }
+
+    });
+  }
+
+  onCancelDownload = () => {
+    let zip_token = this.zip_token;
+    seafileAPI.cancelZipTask(zip_token).then(res => {
+      this.setState({
+        isProgressDialogShow: false,
+      });
+    });
+  }
+
   render() {
     let path = this.props.path;
     path = path[path.length - 1] === '/' ? path.slice(0, path.length - 1) : path;
@@ -248,25 +301,35 @@ class MainPanel extends Component {
         <div className="main-panel-top panel-top">
           <div className="cur-view-toolbar border-left-show">
             <span className="sf2-icon-menu hidden-md-up d-md-none side-nav-toggle" title={gettext('Side Nav Menu')} onClick={this.onSideNavMenuClick}></span>
-            <div className="file-operation">
-              <div className="operation">
-                {
-                  this.props.permission === 'rw' &&
-                  <button className="btn btn-secondary operation-item" title={gettext('Edit File')} onClick={this.onEditClick}>{gettext('Edit')}</button>
-                }
-                {
-                  !this.props.isViewFile &&
-                  <Fragment>
-                    {
-                      Utils.isSupportUploadFolder() ?
-                        <button className="btn btn-secondary operation-item" title={gettext('Upload')} onClick={this.onUploadClick}>{gettext('Upload')}</button> :
-                        <button className="btn btn-secondary operation-item" title={gettext('Upload')} onClick={this.uploadFile}>{gettext('Upload')}</button>
-                    }
-                    <button className="btn btn-secondary operation-item" title={gettext('New')} onClick={this.onNewClick}>{gettext('New')}</button>
-                    <button className="btn btn-secondary operation-item" title={gettext('Share')} onClick={this.onShareClick}>{gettext('Share')}</button>
-                  </Fragment>
-                }
-              </div>
+            <div className="dir-operation">
+              {this.props.isDirentSelected &&
+                <div className="operation mutiple-dirents-operation">
+                  <button className="btn btn-secondary operation-item op-icon sf2-icon-move" title={gettext('Move')} onClick={this.switchViewMode}></button>
+                  <button className="btn btn-secondary operation-item op-icon sf2-icon-copy" title={gettext('Copy')} onClick={this.switchViewMode}></button>
+                  <button className="btn btn-secondary operation-item op-icon sf2-icon-delete" title={gettext('Delete')} onClick={this.switchViewMode}></button>
+                  <button className="btn btn-secondary operation-item op-icon sf2-icon-download" title={gettext('Download')} onClick={this.switchViewMode}></button>
+                </div>
+              }
+              {!this.props.isDirentSelected &&
+                <div className="operation">
+                  {
+                    this.props.permission === 'rw' &&
+                    <button className="btn btn-secondary operation-item" title={gettext('Edit File')} onClick={this.onEditClick}>{gettext('Edit')}</button>
+                  }
+                  {
+                    !this.props.isViewFile &&
+                    <Fragment>
+                      {
+                        Utils.isSupportUploadFolder() ?
+                          <button className="btn btn-secondary operation-item" title={gettext('Upload')} onClick={this.onUploadClick}>{gettext('Upload')}</button> :
+                          <button className="btn btn-secondary operation-item" title={gettext('Upload')} onClick={this.uploadFile}>{gettext('Upload')}</button>
+                      }
+                      <button className="btn btn-secondary operation-item" title={gettext('New')} onClick={this.onNewClick}>{gettext('New')}</button>
+                      <button className="btn btn-secondary operation-item" title={gettext('Share')} onClick={this.onShareClick}>{gettext('Share')}</button>
+                    </Fragment>
+                  }
+                </div>
+              }
               {
                 this.state.uploadMenuShow &&
                 <ul className="menu dropdown-menu" style={this.state.operationMenuStyle}>
@@ -324,6 +387,7 @@ class MainPanel extends Component {
                         path={this.props.path}
                         onItemClick={this.props.onItemClick}
                         onItemDelete={this.props.onItemDelete}
+                        onItemDownload={this.onItemDownload}
                         onItemRename={this.props.onItemRename}
                         onItemMove={this.props.onItemMove}
                         onItemCopy={this.props.onItemCopy}
@@ -373,6 +437,10 @@ class MainPanel extends Component {
             parentPath={this.props.path}
             addFolderCancel={this.addFolderCancel}
             onAddFolder={this.onAddFolder}
+          />
+        }
+        {this.state.isProgressDialogShow &&
+          <ZipDownloadDialog progress={this.state.progress} onCancelDownload={this.onCancelDownload}
           />
         }
       </div>
