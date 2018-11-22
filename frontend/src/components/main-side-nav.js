@@ -106,7 +106,7 @@ class MainSideNav extends React.Component {
             {gettext('Folders')}
           </Link>
         </li>
-        <li className={this.props.currentTab === 'share-admin-share-links' ? 'tab-cur' : ''}>
+        <li className={this.props.currentTab === 'share-admin-share-links' || this.props.currentTab == 'share-admin-upload-links' ? 'tab-cur' : ''}>
           <Link to={siteRoot + 'share-admin-share-links/'} className="ellipsis" title={gettext('Links')} onClick={() => this.tabItemClick('share-admin-share-links')}>
             <span aria-hidden="true" className="sharp">#</span>
             {gettext('Links')}
