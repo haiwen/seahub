@@ -202,7 +202,7 @@ class EditorUtilities {
   }
 
   goReviewPage() {
-    window.location.href = serviceUrl + '/drafts/review/' + reviewID
+    window.location.href = serviceUrl + '/drafts/review/' + reviewID;
   }
 
   getCommentsNumber() {
@@ -230,19 +230,19 @@ class EditorUtilities {
   }
 
   goDraftPage() {
-    window.location.href = serviceUrl + '/lib/' + repoID + '/file' + draftFilePath + '?mode=edit'
+    window.location.href = serviceUrl + '/lib/' + repoID + '/file' + draftFilePath + '?mode=edit';
   }
 
   createDraftFile() {
     return seafileAPI.createDraft(repoID, filePath).then(res => {
-      window.location.href = serviceUrl + '/lib/' + res.data.origin_repo_id + '/file' + res.data.draft_file_path + '?mode=edit'
-    })
+      window.location.href = serviceUrl + '/lib/' + res.data.origin_repo_id + '/file' + res.data.draft_file_path + '?mode=edit';
+    });
   }
 
   createFileReview() {
     return seafileAPI.createFileReview(repoID, filePath).then(res => {
       window.location.href = serviceUrl + '/drafts/review/' + res.data.id;
-    })
+    });
   }
 }
 

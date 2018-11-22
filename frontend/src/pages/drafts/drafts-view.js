@@ -9,21 +9,13 @@ const propTypes = {
     PropTypes.array,
     PropTypes.object
   ]).isRequired,
+  tabItemClick: PropTypes.func.isRequired,
 };
 
 class DraftsView extends React.Component {
-  
-  constructor(props) {
-    super(props);
-    this.state = {
-      currentTab: this.props.currentTab
-    };
-  }
 
   tabItemClick = (param) => {
-    this.setState({
-      currentTab: param  
-    });
+    this.props.tabItemClick(param);
   }
   
   render() {
@@ -31,13 +23,13 @@ class DraftsView extends React.Component {
       <div className="cur-view-container">
         <div className="cur-view-path">
           <ul className="tab-tabs-nav">
-            <li className={`tab ${this.state.currentTab === 'drafts' ? 'ui-state-active': ''}`} onClick={() => this.tabItemClick('drafts')}>
-              <Link  className='a' to={siteRoot + 'drafts'} title={gettext('Drafts')}>
+            <li className={`tab ${this.props.currentTab === 'drafts' ? 'ui-state-active': ''}`} onClick={() => this.tabItemClick('drafts')}>
+              <Link  className='a' to={siteRoot + 'drafts/'} title={gettext('Drafts')}>
                 {gettext('Drafts')}
               </Link>
             </li>
-            <li className={`tab ${this.state.currentTab === 'reviews' ? 'ui-state-active': ''}`} onClick={() => this.tabItemClick('reviews')}>
-              <Link  className='a' to={siteRoot + 'drafts/reviews'} title={gettext('reviews')}>
+            <li className={`tab ${this.props.currentTab === 'reviews' ? 'ui-state-active': ''}`} onClick={() => this.tabItemClick('reviews')}>
+              <Link  className='a' to={siteRoot + 'drafts/reviews/'} title={gettext('reviews')}>
                 {gettext('Reviews')}
               </Link>
             </li>
