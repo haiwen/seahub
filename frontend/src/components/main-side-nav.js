@@ -131,10 +131,10 @@ class MainSideNav extends React.Component {
               </a>
             </li>
             <li className={`tab ${this.state.currentTab === 'shared-libs' ? 'tab-cur' : ''}`}>
-              <a href={ siteRoot + '#shared-libs/'} className="ellipsis" title={gettext('Shared with me')} onClick={() => this.tabItemClick('shared-libs')}>
+              <Link to={siteRoot + 'shared-libs/'} className="ellipsis" title={gettext('Shared with me')} onClick={() => this.tabItemClick('shared-libs')}>
                 <span className="sf2-icon-share" aria-hidden="true"></span>
                 {gettext('Shared with me')}
-              </a>
+              </Link>
             </li>
             { canViewOrg &&
               <li className={`tab ${this.state.currentTab === 'org' ? 'tab-cur' : ''}`} onClick={() => this.tabItemClick('org')}>

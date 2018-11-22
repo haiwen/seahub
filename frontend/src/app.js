@@ -15,6 +15,7 @@ import ShareAdminLibraries from './pages/share-admin/libraries';
 import ShareAdminFolders from './pages/share-admin/folders';
 import ShareAdminShareLinks from './pages/share-admin/share-links';
 import ShareAdminUploadLinks from './pages/share-admin/upload-links';
+import SharedLibraries from './pages/shared-libs/shared-libs';
 
 import 'seafile-ui';
 import './assets/css/fa-solid.css';
@@ -96,6 +97,7 @@ class App extends Component {
             <ShareAdminFolders path={siteRoot + 'share-admin-folders'} />
             <ShareAdminShareLinks path={siteRoot + 'share-admin-share-links'} />
             <ShareAdminUploadLinks path={siteRoot + 'share-admin-upload-links'} />
+            <SharedLibraries path={siteRoot + 'shared-libs'} />
           </Router>
         </MainPanel>
       </div>
