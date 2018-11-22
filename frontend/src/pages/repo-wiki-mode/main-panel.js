@@ -45,6 +45,9 @@ const propTypes = {
   onAddFolder: PropTypes.func.isRequired,
   switchViewMode: PropTypes.func.isRequired,
   onFileTagChanged: PropTypes.func.isRequired,
+  onMoveSelected: PropTypes.func.isRequired,
+  onCopySelected: PropTypes.func.isRequired,
+  onDeleteSelected: PropTypes.func.isRequired,
 };
 
 class MainPanel extends Component {
@@ -66,6 +69,7 @@ class MainPanel extends Component {
       progress: 0,
       isProgressDialogShow: false,
     };
+    this.zip_token = null;
   }
 
   componentDidMount() {
@@ -218,8 +222,27 @@ class MainPanel extends Component {
 
   }
 
-  onSelectedDownload = () => {
-    
+  onDownloadSelected = () => {
+    let selectedDirentList = this.props.direntList.filter(dirent => {
+      return dirent.isSelected;
+    });
+    if (selectedDirentList.length) {
+      if (selectedDirentList.length === 1 && !selectedDirentList[0].isDir()) {
+        let direntPath = Utils.joinPath(this.props.path, selectedDirentList[0].name);
+        let url = URLDecorator.getUrl({type: 'download_file_url', repoID: repoID, filePath: direntPath});
+        location.href= url;
+        return;
+      }
+      let selectedDirentNames = selectedDirentList.map(dirent => {
+        return dirent.name;
+      });
+      this.setState({isProgressDialogShow: true, progress: 0});
+      seafileAPI.zipDownload(repoID, this.props.path, selectedDirentNames).then(res => {
+        this.zip_token = res.data['zip_token'];
+        this.addDownloadAnimation();
+        this.interval = setInterval(this.addDownloadAnimation, 1000);
+      });
+    }
   }
 
   onItemDownload = (dirent, direntPath) => {
@@ -304,10 +327,10 @@ class MainPanel extends Component {
             <div className="dir-operation">
               {this.props.isDirentSelected &&
                 <div className="operation mutiple-dirents-operation">
-                  <button className="btn btn-secondary operation-item op-icon sf2-icon-move" title={gettext('Move')} onClick={this.switchViewMode}></button>
-                  <button className="btn btn-secondary operation-item op-icon sf2-icon-copy" title={gettext('Copy')} onClick={this.switchViewMode}></button>
-                  <button className="btn btn-secondary operation-item op-icon sf2-icon-delete" title={gettext('Delete')} onClick={this.switchViewMode}></button>
-                  <button className="btn btn-secondary operation-item op-icon sf2-icon-download" title={gettext('Download')} onClick={this.switchViewMode}></button>
+                  <button className="btn btn-secondary operation-item op-icon sf2-icon-move" title={gettext('Move')} onClick={this.props.onMoveSelected}></button>
+                  <button className="btn btn-secondary operation-item op-icon sf2-icon-copy" title={gettext('Copy')} onClick={this.props.onCopySelected}></button>
+                  <button className="btn btn-secondary operation-item op-icon sf2-icon-delete" title={gettext('Delete')} onClick={this.props.onDeleteSelected}></button>
+                  <button className="btn btn-secondary operation-item op-icon sf2-icon-download" title={gettext('Download')} onClick={this.onDownloadSelected}></button>
                 </div>
               }
               {!this.props.isDirentSelected &&

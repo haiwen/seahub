@@ -363,46 +363,42 @@ class Wiki extends Component {
     }
 
     if (selectedDirentlist.length === direntList.length) {
-      this.setState({isAllDirentSelected: true});
+      this.setState({
+        direnList: direntList,
+        selectedDirentlist: selectedDirentlist,
+        isAllDirentSelected: true
+      });
+    } else {
+      this.setState({
+        direnList: direntList,
+        selectedDirentlist: selectedDirentlist,
+        isAllDirentSelected: false
+      });
     }
 
-    this.setState({
-      direnList: direntList,
-      selectedDirentlist: selectedDirentlist,
-    });
   }
 
   onAllDirentSelected = () => {
-    let dirent = this.state.direntList[0];
-    if (!dirent) {
+    if (this.state.isAllDirentSelected) {
+      let direntList = this.state.direntList.map(item => {
+        item.isSelected = false;
+        return item;
+      });
       this.setState({
         isDirentSelected: false,
         isAllDirentSelected: false,
-        selectedDirentlist: []
+        selectedDirentlist: direntList,
       });
     } else {
-      let direntList = [];
-      if (dirent.isSelected) {
-        direntList = this.state.direntList.map(item => {
-          item.isSelected = false;
-          return item;
-        });
-        this.setState({
-          isDirentSelected: false,
-          isAllDirentSelected: false,
-          selectedDirentlist: direntList,
-        });
-      } else {
-        direntList = this.state.direntList.map(item => {
-          item.isSelected = true;
-          return item;
-        });
-        this.setState({
-          isDirentSelected: true,
-          isAllDirentSelected: true,
-          selectedDirentlist: direntList,
-        });
-      }
+      let direntList = this.state.direntList.map(item => {
+        item.isSelected = true;
+        return item;
+      });
+      this.setState({
+        isDirentSelected: true,
+        isAllDirentSelected: true,
+        selectedDirentlist: direntList,
+      });
     }
   }
 
@@ -479,13 +475,25 @@ class Wiki extends Component {
     this.setState({direntList: direntList});
   }
 
+  onMoveSelected = () => {
+
+  }
+
+  onCopySelected = () => {
+
+  }
+
+  onDeleteSelected = () => {
+
+  }
+
   onFileTagChanged = (dirent, direntPath) => {
     seafileAPI.listFileTags(repoID, direntPath).then(res => {
       let fileTags = res.data.file_tags.map(item => {
         return new FileTag(item);
-      })
+      });
       this.updateDirent(dirent, 'file_tags', fileTags);
-    })
+    });
   }
 
   onTreeNodeClick = (node) => {
@@ -723,6 +731,9 @@ class Wiki extends Component {
           onFileTagChanged={this.onFileTagChanged}
           isDirentSelected={this.state.isDirentSelected}
           isAllDirentSelected={this.state.isAllDirentSelected}
+          onMoveSelected={this.onMoveSelected}
+          onCopySelected={this.onCopySelected}
+          onDeleteSelected={this.onDeleteSelected}
         />
       </div>
     );
