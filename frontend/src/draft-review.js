@@ -43,10 +43,10 @@ class DraftReview extends React.Component {
       showDiffTip: false,
       showReviewerDialog: false,
       reviewers: [],
-      selectedText: '',
-      newIndex: null,
-      oldIndex: null,
     };
+    this.selectedText = '';
+    this.newIndex = null;
+    this.oldIndex = null;
   }
 
   componentDidMount() {
@@ -224,7 +224,6 @@ class DraftReview extends React.Component {
 
   addComment = (e) => {
     e.stopPropagation();
-    let text = window.getSelection().toString().trim();
     let range = this.setBtnPosition();
     if (!range) {
       return;
@@ -259,13 +258,11 @@ class DraftReview extends React.Component {
     }
     let blockPath = document.createSelection(range).anchor.path.slice(0, 1);
     let node = document.getNode(blockPath);
-    let newIndex = node.data.get('new_index');
-    let oldIndex = node.data.get('old_index');
+    this.selectedText = window.getSelection().toString().trim();
+    this.newIndex = node.data.get('new_index');
+    this.oldIndex = node.data.get('old_index');
     this.setState({
-      selectedText: text,
-      isShowComments: true,
-      newIndex: newIndex,
-      oldIndex: oldIndex,
+      isShowComments: true
     });
   }
 
@@ -415,13 +412,13 @@ class DraftReview extends React.Component {
                 <div className="seafile-comment-resize" onMouseDown={this.onResizeMouseDown}></div>
                 <ReviewComments
                   toggleCommentList={this.toggleCommentList}
-                  commentsNumber={this.state.commentsNumber}
-                  getCommentsNumber={this.getCommentsNumber}
-                  inResizing={this.state.inResizing}
-                  selectedText={this.state.selectedText}
                   scrollToQuote={this.scrollToQuote}
-                  newIndex={this.state.newIndex}
-                  oldIndex={this.state.oldIndex}
+                  getCommentsNumber={this.getCommentsNumber}
+                  commentsNumber={this.state.commentsNumber}
+                  inResizing={this.state.inResizing}
+                  selectedText={this.selectedText}
+                  newIndex={this.newIndex}
+                  oldIndex={this.oldIndex}
                 />
               </div>
             }

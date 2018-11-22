@@ -4,8 +4,8 @@ import { processor } from '../../utils/seafile-markdown2html';
 import { Button, Dropdown, DropdownToggle, DropdownMenu, DropdownItem, Tooltip } from 'reactstrap';
 import { seafileAPI } from '../../utils/seafile-api';
 import { reviewID, gettext } from '../../utils/constants';
-import moment from 'moment';
 import Loading from '../../components/loading.js';
+import reviewComment from '../../models/review-comment.js';
 
 import '../../css/review-comments.css';
 
@@ -26,11 +26,12 @@ class ReviewComments extends React.Component {
     super(props);
     this.state = {
       commentsList: [],
-      userAvatar: `${window.location.host}media/avatars/default.png`,
+      userAvatar: '',
       inResizing: false,
       commentFooterHeight: 30,
       showResolvedComment: false,
       openResolvedTooltip: false,
+      comment: '',
     };
     this.accountInfo = {};
   }
@@ -38,8 +39,13 @@ class ReviewComments extends React.Component {
   listComments = (scroll) => {
     seafileAPI.listReviewComments(reviewID).then((response) => {
       response.data.comments.reverse();
+      let commentList = [];
+      response.data.comments.forEach(item => {
+        let commentItem = new reviewComment(item);
+        commentList.push(commentItem);
+      });
       this.setState({
-        commentsList: response.data.comments
+        commentsList: commentList
       });
       if (scroll) {
         this.refs.commentsList.scrollTo(0, 10000);
@@ -63,7 +69,7 @@ class ReviewComments extends React.Component {
   }
 
   submitComment = () => {
-    let comment = this.refs.commentTextarea.value.trim();
+    let comment = this.state.comment.trim();
     if (comment.length > 0) {
       if (this.props.selectedText.length > 0) {
         let detail = {
@@ -83,8 +89,10 @@ class ReviewComments extends React.Component {
           this.props.getCommentsNumber();
         });
       }
+      this.setState({
+        comment: ''
+      });
     }
-    this.refs.commentTextarea.value = '';
   }
 
   resolveComment = (event) => {
@@ -151,13 +159,18 @@ class ReviewComments extends React.Component {
 
   setQuoteText = (text) => {
     if (text.length > 0) {
-      this.refs.commentTextarea.value = '> ' + text;
+      let comment = '> ' + text;
+      this.setState({
+        comment: comment
+      })
     }
   }
   
   scrollToQuote = (newIndex, oldIndex, selectedText) => {
     this.props.scrollToQuote(newIndex, oldIndex, selectedText);
-    this.refs.commentTextarea.value = '';
+    this.setState({
+      comment: ''
+    });
   }
 
   componentWillMount() {
@@ -208,27 +221,11 @@ class ReviewComments extends React.Component {
           { this.state.commentsList.length > 0 &&
             <ul className={'seafile-comment-list'} ref='commentsList'>
               { (this.state.commentsList.length > 0 && this.props.commentsNumber > 0) &&
-                this.state.commentsList.map((item, index = 0, arr) => {
-                  let oldTime = (new Date(item.created_at)).getTime();
-                  let time = moment(oldTime).format('YYYY-MM-DD HH:mm');
-                  let newIndex, oldIndex, selectedText;
-                  if (item.detail !== 'undefined') {
-                    newIndex = JSON.parse(item.detail).newIndex;
-                    oldIndex = JSON.parse(item.detail).oldIndex;
-                    selectedText = JSON.parse(item.detail).selectedText;
-                  }
+                this.state.commentsList.map((item, index) => {
                   return (
-                    <CommentItem id={item.id} time={time} headUrl={item.avatar_url}
-                      comment={item.comment} name={item.user_name}
-                      user_email={item.user_email} key={index} resolved={item.resolved}
-                      deleteComment={this.deleteComment}
-                      resolveComment={this.resolveComment}
-                      commentsList={this.state.commentsList}
-                      accountInfo={this.accountInfo}
-                      showResolvedComment={this.state.showResolvedComment}
-                      scrollToQuote={this.scrollToQuote}
-                      newIndex={newIndex} oldIndex={oldIndex} selectedText={selectedText}
-                    />
+                    <CommentItem item={item} showResolvedComment={this.state.showResolvedComment}
+                      resolveComment={this.resolveComment} accountInfo={this.accountInfo} key={index}
+                      scrollToQuote={this.scrollToQuote} deleteComment={this.deleteComment}/>
                   );
                 })
               }
@@ -241,8 +238,8 @@ class ReviewComments extends React.Component {
             <img className="avatar" src={this.state.userAvatar} alt="avatar"/>
           </div>
           <div className="seafile-add-comment">
-            <textarea className="add-comment-input" ref="commentTextarea"
-              placeholder={gettext('Add a comment.')}
+            <textarea className="add-comment-input" value={this.state.comment}
+              placeholder={gettext('Add a comment.')} onChange={this.handleCommentChange}
               clos="100" rows="3" warp="virtual"></textarea>
             <Button className="submit-comment" color="success"
               size="sm" onClick={this.submitComment}>
@@ -256,22 +253,12 @@ class ReviewComments extends React.Component {
 
 ReviewComments.propTypes = commentPropTypes;
 
-
 const commentItemPropTypes = {
-  comment: PropTypes.string.isRequired,
-  id: PropTypes.number.isRequired,
-  name: PropTypes.string.isRequired,
-  time: PropTypes.string.isRequired,
-  user_email: PropTypes.string.isRequired,
+  item: PropTypes.object.isRequired,
   deleteComment: PropTypes.func.isRequired,
   resolveComment: PropTypes.func.isRequired,
   accountInfo: PropTypes.object.isRequired,
-  headUrl: PropTypes.string.isRequired,
-  resolved: PropTypes.bool.isRequired,
   showResolvedComment: PropTypes.bool.isRequired,
-  newIndex: PropTypes.number,
-  oldIndex: PropTypes.number,
-  selectedText: PropTypes.string,
   scrollToQuote: PropTypes.func.isRequired
 };
 
@@ -303,47 +290,48 @@ class CommentItem extends React.Component {
   }
 
   scrollToQuote = () => {
-    this.props.scrollToQuote(this.props.newIndex, this.props.oldIndex, this.props.selectedText);
+    this.props.scrollToQuote(this.props.item.newIndex, this.props.item.oldIndex,
+      this.props.item.selectedText);
   }
 
   componentWillMount() {
-    this.convertComment(this.props.comment);
+    this.convertComment(this.props.item.comment);
   }
 
   componentWillReceiveProps(nextProps) {
-    this.convertComment(nextProps.comment);
+    this.convertComment(nextProps.item.comment);
   }
 
   render() {
-    if (this.props.resolved && !this.props.showResolvedComment) {
+    if (this.props.item.resolved && !this.props.showResolvedComment) {
       return null;
     }
     return (
-      <li className={this.props.resolved ? 'seafile-comment-item seafile-comment-item-resolved'
-        : 'seafile-comment-item'} id={this.props.id}>
+      <li className={this.props.item.resolved ? 'seafile-comment-item seafile-comment-item-resolved'
+        : 'seafile-comment-item'} id={this.props.item.id}>
         <div className="seafile-comment-info">
-          <img className="avatar" src={this.props.headUrl} alt="avatar"/>
+          <img className="avatar" src={this.props.item.avatarUrl} alt=""/>
           <div className="reviewer-info">
-            <div className="reviewer-name">{this.props.name}</div>
-            <div className="review-time">{this.props.time}</div>
+            <div className="reviewer-name">{this.props.item.name}</div>
+            <div className="review-time">{this.props.item.time}</div>
           </div>
-          { !this.props.resolved &&
+          { !this.props.item.resolved &&
             <Dropdown isOpen={this.state.dropdownOpen} size="sm"
               className="seafile-comment-dropdown" toggle={this.toggleDropDownMenu}>
               <DropdownToggle className="seafile-comment-dropdown-btn">
                 <i className="fas fa-ellipsis-v"></i>
               </DropdownToggle>
               <DropdownMenu>
-                { (this.props.user_email === this.props.accountInfo.email) &&
+                { (this.props.item.userEmail === this.props.accountInfo.email) &&
                   <DropdownItem onClick={this.props.deleteComment}
-                    className="delete-comment" id={this.props.id}>{gettext('Delete')}</DropdownItem>}
+                    className="delete-comment" id={this.props.item.id}>{gettext('Delete')}</DropdownItem>}
                 <DropdownItem onClick={this.props.resolveComment}
-                  className="seafile-comment-resolved" id={this.props.id}>{gettext('Mark as resolved')}</DropdownItem>
+                  className="seafile-comment-resolved" id={this.props.item.id}>{gettext('Mark as resolved')}</DropdownItem>
               </DropdownMenu>
             </Dropdown>
           }
         </div>
-        { this.props.newIndex ? 
+        { this.props.item.newIndex ? 
           <div className="seafile-comment-content" onClick={this.scrollToQuote}
             dangerouslySetInnerHTML={{ __html: this.state.html }}></div>
           :
