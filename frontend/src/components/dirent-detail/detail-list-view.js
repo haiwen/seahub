@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { Fragment } from 'react';
 import PropTypes from 'prop-types';
 import moment from 'moment';
 import { gettext } from '../../utils/constants';
@@ -45,22 +45,20 @@ class DetailListView extends React.Component {
     let position = this.getDirentPostion();
     if (direntType === 'dir') {
       return (
-        <div className="dirent-table-container">
-          <table>
-            <tbody>
-              <tr><th width="35%"></th><td width="65%"></td></tr>
-              <tr><th>{gettext('Folder')}</th><td>{direntDetail.dir_count}</td></tr>
-              <tr><th>{gettext('File')}</th><td>{direntDetail.file_count}</td></tr>
-              <tr><th>{gettext('Size')}</th><td>{Utils.bytesToSize(direntDetail.size)}</td></tr>
-              <tr><th>{gettext('Position')}</th><td>{position}</td></tr>
-              <tr><th>{gettext('Last Update')}</th><td>{moment(direntDetail.mtime).format('YYYY-MM-DD')}</td></tr>
-            </tbody>
-          </table>
-        </div>
+        <table>
+          <tbody>
+            <tr><th width="35%"></th><td width="65%"></td></tr>
+            <tr><th>{gettext('Folder')}</th><td>{direntDetail.dir_count}</td></tr>
+            <tr><th>{gettext('File')}</th><td>{direntDetail.file_count}</td></tr>
+            <tr><th>{gettext('Size')}</th><td>{Utils.bytesToSize(direntDetail.size)}</td></tr>
+            <tr><th>{gettext('Position')}</th><td>{position}</td></tr>
+            <tr><th>{gettext('Last Update')}</th><td>{moment(direntDetail.mtime).format('YYYY-MM-DD')}</td></tr>
+          </tbody>
+        </table>
       );
     } else {
       return (
-        <div className="dirent-table-container">
+        <Fragment>
           <table>
             <tbody>
               <tr><th width="35%"></th><td width="65%"></td></tr>
@@ -93,7 +91,7 @@ class DetailListView extends React.Component {
               onFileTagChanged={this.props.onFileTagChanged}
             />
           }
-        </div>
+        </Fragment>
       );
     }
   }

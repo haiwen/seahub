@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { Fragment } from 'react';
 import PropTypes from 'prop-types';
 import { Nav, NavItem, NavLink } from 'reactstrap';
 import classnames from 'classnames';
@@ -26,7 +26,7 @@ class ReviewListView extends React.Component {
   render() {
     let items = this.props.itemsList;
     return (
-      <div className="table-container">
+      <Fragment>
         <Nav tabs>
           <NavItem>
             <NavLink
@@ -76,7 +76,7 @@ class ReviewListView extends React.Component {
             })}
           </tbody>
         </table>
-      </div>
+      </Fragment>
     );
   }
 }

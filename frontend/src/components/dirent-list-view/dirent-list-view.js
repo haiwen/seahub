@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { Fragment } from 'react';
 import PropTypes from 'prop-types';
 import { gettext, repoID } from '../../utils/constants';
 import URLDecorator from '../../utils/url-decorator';
@@ -140,7 +140,7 @@ class DirentListView extends React.Component {
     }
 
     return (
-      <div className="table-container">
+      <Fragment>
         <table>
           <thead>
             <tr>
@@ -202,7 +202,7 @@ class DirentListView extends React.Component {
             onCancelCopy={this.onCancelCopy} 
           />
         }
-      </div>
+      </Fragment>
     );
   }
 }
