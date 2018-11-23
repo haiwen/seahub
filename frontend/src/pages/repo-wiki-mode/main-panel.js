@@ -31,6 +31,7 @@ const propTypes = {
   isDirentSelected: PropTypes.bool.isRequired,
   isAllDirentSelected: PropTypes.bool.isRequired,
   direntList: PropTypes.array.isRequired,
+  selectedDirentList: PropTypes.array.isRequired,
   updateDirent: PropTypes.func.isRequired,
   onSideNavMenuClick: PropTypes.func.isRequired,
   onSearchedClick: PropTypes.func.isRequired,
@@ -72,6 +73,7 @@ class MainPanel extends Component {
       isProgressDialogShow: false,
       isMoveDialogShow: false,
       isCopyDialogShow: false,
+      isMutipleOperation: false,
     };
     this.zip_token = null;
   }
@@ -89,12 +91,6 @@ class MainPanel extends Component {
       });
     });
     document.addEventListener('click', this.hideOperationMenu);
-  }
-
-  componentWillReceiveProps(nextProps) {
-    // if (nextProps.path !== this.props.path) {
-    //   this.setState({isDirentDetailShow: false});
-    // }
   }
 
   componentWillUnmount() {
@@ -226,32 +222,44 @@ class MainPanel extends Component {
 
   }
 
-  onItemMoveToggle = (dirent, direntPath) => {
+  onSelectedMoveToggle = () => {
     this.setState({
+      isMutipleOperation: true,
       isMoveDialogShow: true,
-      currentDirent: dirent,
-      direntPath: direntPath
+      currentDirent: null,
+      direntPath: '',
     });
   }
 
+  onSelectedCopyToggle = () => {
+    this.setState({
+      isMutipleOperation: true,
+      isCopyDialogShow: true,
+      currentDirent: null,
+      direntPath: '',
+    });
+  }
+
+  onItemMoveToggle = (dirent, direntPath) => {
+    this.setState({
+      isMutipleOperation: false,
+      isMoveDialogShow: true,
+      currentDirent: dirent,
+      direntPath: direntPath,
+    });
+  }
+  
   onItemCopyToggle = (dirent, direntPath) => {
     this.setState({
+      isMutipleOperation: false,
       isCopyDialogShow: true,
       currentDirent: dirent,
       direntPath: direntPath
     });
   }
 
-  onItemMove = (repo, direntPath, moveToDirentPath) => {
-    this.props.onItemMove(repo, direntPath, moveToDirentPath);
-  }
-
   onCancelMove = () => {
     this.setState({isMoveDialogShow: false});
-  }
-
-  onItemCopy = (repo, direntPath, copyToDirentPath) => {
-    this.props.onItemCopy(repo, direntPath, copyToDirentPath);
   }
 
   onCancelCopy = () => {
@@ -259,9 +267,7 @@ class MainPanel extends Component {
   }
 
   onDownloadSelected = () => {
-    let selectedDirentList = this.props.direntList.filter(dirent => {
-      return dirent.isSelected;
-    });
+    let selectedDirentList = this.props.selectedDirentList;
     if (selectedDirentList.length) {
       if (selectedDirentList.length === 1 && !selectedDirentList[0].isDir()) {
         let direntPath = Utils.joinPath(this.props.path, selectedDirentList[0].name);
@@ -363,8 +369,8 @@ class MainPanel extends Component {
             <div className="dir-operation">
               {this.props.isDirentSelected &&
                 <div className="operation mutiple-dirents-operation">
-                  <button className="btn btn-secondary operation-item op-icon sf2-icon-move" title={gettext('Move')} onClick={this.onItemMoveToggle}></button>
-                  <button className="btn btn-secondary operation-item op-icon sf2-icon-copy" title={gettext('Copy')} onClick={this.props.onItemCopyToggle}></button>
+                  <button className="btn btn-secondary operation-item op-icon sf2-icon-move" title={gettext('Move')} onClick={this.onSelectedMoveToggle}></button>
+                  <button className="btn btn-secondary operation-item op-icon sf2-icon-copy" title={gettext('Copy')} onClick={this.onSelectedCopyToggle}></button>
                   <button className="btn btn-secondary operation-item op-icon sf2-icon-delete" title={gettext('Delete')} onClick={this.props.onDeleteSelected}></button>
                   <button className="btn btn-secondary operation-item op-icon sf2-icon-download" title={gettext('Download')} onClick={this.onDownloadSelected}></button>
                 </div>
@@ -500,17 +506,25 @@ class MainPanel extends Component {
         }
         {this.state.isMoveDialogShow &&
           <MoveDirentDialog
+            path={this.props.path}
+            isMutipleOperation={this.state.isMutipleOperation}
+            selectedDirentList={this.props.selectedDirentList}
             dirent={this.state.currentDirent}
             direntPath={this.state.direntPath}
             onItemMove={this.props.onItemMove}
+            onMoveSelected={this.props.onMoveSelected}
             onCancelMove={this.onCancelMove}
           />
         }
         {this.state.isCopyDialogShow &&
           <CopyDirentDialog
+            path={this.props.path}
+            isMutipleOperation={this.state.isMutipleOperation}
+            selectedDirentList={this.props.selectedDirentList}
             dirent={this.state.currentDirent}
             direntPath={this.state.direntPath}
             onItemCopy={this.props.onItemCopy}
+            onCopySelected={this.props.onCopySelected}
             onCancelCopy={this.onCancelCopy}
           />
         }

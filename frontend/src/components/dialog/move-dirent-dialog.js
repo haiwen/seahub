@@ -6,9 +6,13 @@ import { Utils } from '../../utils/utils';
 import FileChooser from '../file-chooser/file-chooser';
 
 const propTypes = {
+  path: PropTypes.string.isRequired,
   direntPath: PropTypes.string,
-  dirent: PropTypes.object.isRequired,
+  dirent: PropTypes.object,
+  isMutipleOperation: PropTypes.bool.isRequired,
+  selectedDirentList: PropTypes.array.isRequired,
   onItemMove: PropTypes.func.isRequired,
+  onMoveSelected: PropTypes.func.isRequired,
   onCancelMove: PropTypes.func.isRequired,
 };
 
@@ -32,6 +36,67 @@ class MoveDirent extends React.Component {
   }
 
   handleSubmit = () => {
+    if (this.props.isMutipleOperation) {
+      this.moveSelected();
+    } else {
+      this.moveItem();
+    }
+  }
+
+  moveSelected = () => {
+    let { repo, filePath } = this.state;
+    let message = gettext('Invalid destination path');
+    
+    if (!repo || (repo.repo_id === repoID) && filePath === '') {
+      this.setState({errMessage: message});
+      return;
+    }
+
+    let selectedDirentList = this.props.selectedDirentList;
+    let direntPaths = [];
+    selectedDirentList.forEach(item => {
+      let path = Utils.joinPath(this.props.path, item.name);
+      direntPaths.push(path);
+    });
+    
+    //self;
+    if (direntPaths.some(item => { return item === filePath})) {
+      this.setState({errMessage: message});
+      return;
+    }
+
+    //parent;
+    if (filePath && filePath === this.props.path) {
+      this.setState({errMessage: message});
+      return;
+    }
+
+    //child
+    let direntPath = '';
+    let isChildPath = direntPaths.some(item => {
+      let flag = filePath.length > item.length && filePath.indexOf(item) > -1;
+      if (flag) {
+        direntPath = item;
+      }
+      return flag;
+    })
+
+    if (isChildPath) {
+      message = gettext('Can not move directory %(src)s to its subdirectory %(des)s');
+      message = message.replace('%(src)s', direntPath);
+      message = message.replace('%(des)s', filePath);
+      this.setState({errMessage: message});
+      return;
+    }
+
+    if (filePath === '') {
+      filePath = '/';
+    }
+    this.props.onMoveSelected(repo, filePath);
+    this.toggle();
+  }
+
+  moveItem = () => {
     let { direntPath } = this.props;
     let { repo, filePath } = this.state; 
     let message = gettext('Invalid destination path');
@@ -41,17 +106,19 @@ class MoveDirent extends React.Component {
       return;
     }
     
+    //self
     if (filePath && direntPath === filePath) {
       this.setState({errMessage: message});
       return;
     }
     
-    
-    if (filePath && direntPath.length > filePath.length && direntPath.indexOf(filePath) > -1) {
+    //parent
+    if (filePath && Utils.getDirName(direntPath) === filePath) {
       this.setState({errMessage: message});
       return;
     }
     
+    //child
     if ( filePath && filePath.length > direntPath.length && filePath.indexOf(direntPath) > -1) {
       message = gettext('Can not move directory %(src)s to its subdirectory %(des)s');
       message = message.replace('%(src)s', direntPath);
@@ -88,7 +155,11 @@ class MoveDirent extends React.Component {
 
   render() {
     let title = gettext('Move {placeholder} to:');
-    title = title.replace('{placeholder}', '<span class="sf-font">' + Utils.HTMLescape(this.props.dirent.name) + '</span>');
+    if (!this.props.isMutipleOperation) {
+      title = title.replace('{placeholder}', '<span class="sf-font">' + Utils.HTMLescape(this.props.dirent.name) + '</span>');
+    } else {
+      title = gettext("Move selected item(s) to:");
+    }
     return (
       <Modal isOpen={true} toggle={this.toggle}>
         <ModalHeader toggle={this.toggle}><div dangerouslySetInnerHTML={{__html: title}}></div></ModalHeader>

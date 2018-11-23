@@ -41,7 +41,7 @@ class Wiki extends Component {
       permission: '',
       isDirentSelected: false,
       isAllDirentSelected: false,
-      selectedDirentlist: [],
+      selectedDirentList: [],
     };
     window.onpopstate = this.onpopstate;
   }
@@ -354,23 +354,23 @@ class Wiki extends Component {
       }
       return item;
     });
-    let selectedDirentlist = direntList.filter(item => {
+    let selectedDirentList = direntList.filter(item => {
       return item.isSelected;
     });
 
-    if (selectedDirentlist.length) {
+    if (selectedDirentList.length) {
       this.setState({isDirentSelected: true});
-      if (selectedDirentlist.length === direntList.length) {
+      if (selectedDirentList.length === direntList.length) {
         this.setState({
           isAllDirentSelected: true,
           direntList: direntList,
-          selectedDirentlist: selectedDirentlist,
+          selectedDirentList: selectedDirentList,
         });
       } else {
         this.setState({
           isAllDirentSelected: false,
           direntList: direntList,
-          selectedDirentlist: selectedDirentlist
+          selectedDirentList: selectedDirentList
         });
       }
     } else {
@@ -378,7 +378,7 @@ class Wiki extends Component {
         isDirentSelected: false,
         isAllDirentSelected: false,
         direntList: direntList,
-        selectedDirentlist: []
+        selectedDirentList: []
       })
     }
 
@@ -395,7 +395,7 @@ class Wiki extends Component {
         isDirentSelected: false,
         isAllDirentSelected: false,
         direntList: direntList,
-        selectedDirentlist: [],
+        selectedDirentList: [],
       });
     } else {
       let direntList = this.state.direntList.map(item => {
@@ -406,7 +406,7 @@ class Wiki extends Component {
         isDirentSelected: true,
         isAllDirentSelected: true,
         direntList: direntList,
-        selectedDirentlist: direntList,
+        selectedDirentList: direntList,
       });
     }
   }
@@ -484,22 +484,73 @@ class Wiki extends Component {
     this.setState({direntList: direntList});
   }
 
-  onMoveSelected = () => {
+  onMoveSelected = (destRepo, destDirentPath) => {
+    let selectedDirentList = this.state.selectedDirentList;
+    let direntPaths = [];
+    let dirNames = '';
+    let length = selectedDirentList.length;
+    for (let i = 0; i < length; i++) {
+      let direntName = selectedDirentList[i].name;
+      if (i < length - 1) {
+        dirNames += direntName + ':';
+      } else {
+        dirNames += direntName;
+      }
+      direntPaths.push(Utils.joinPath(this.state.path, direntName));
+    }
 
+    seafileAPI.moveDir(repoID, destRepo.repo_id, destDirentPath, this.state.path, dirNames).then(() => {
+      direntPaths.forEach(direntPath => {
+        this.moveTreeNode(direntPath, destDirentPath, destRepo);
+        this.moveDirent(direntPath);
+      });
+      let message = gettext('Successfully moved %(name)s.');
+      message = message.replace('%(name)s', dirNames);
+      Toast.success(message);
+    }).catch(() => {
+      let message = gettext('Failed to move %(name)s');
+      message = message.replace('%(name)s', dirNames);
+      Toast.error(message);
+    })
   }
 
-  onCopySelected = () => {
+  onCopySelected = (destRepo, destDirentPath) => {
+    let selectedDirentList = this.state.selectedDirentList;
+    let direntPaths = [];
+    let dirNames = '';
+    let length = selectedDirentList.length;
+    for (let i = 0; i < length; i++) {
+      let direntName = selectedDirentList[i].name;
+      if (i < length - 1) {
+        dirNames += direntName + ':';
+      } else {
+        dirNames += direntName;
+      }
+      direntPaths.push(Utils.joinPath(this.state.path, direntName));
+    }
 
+    seafileAPI.copyDir(repoID, destRepo.repo_id, destDirentPath, this.state.path, dirNames).then(() => {
+      direntPaths.forEach(direntPath => {
+        this.copyTreeNode(direntPath, destDirentPath, destRepo);
+      });
+      let message = gettext('Successfully copied %(name)s.');
+      message = message.replace('%(name)s', dirNames);
+      Toast.success(message);
+    }).catch(() => {
+      let message = gettext('Failed to copy %(name)s');
+      message = message.replace('%(name)s', dirNames);
+      Toast.error(message);
+    })
   }
 
   onDeleteSelected = () => {
-    let selectedDirentlist = this.state.selectedDirentlist;
+    let selectedDirentList = this.state.selectedDirentList;
     let fileNames = [];
     let direntPaths = [];
-    let length = selectedDirentlist.length;
+    let length = selectedDirentList.length;
     for (let i = 0; i < length; i++) {
-      let direntName = selectedDirentlist[i].name;
-      let direntPath = Utils.joinPath(this.state.path, selectedDirentlist[i].name);
+      let direntName = selectedDirentList[i].name;
+      let direntPath = Utils.joinPath(this.state.path, selectedDirentList[i].name);
       direntPaths.push(direntPath);
       if (i < length - 1) {
         fileNames += direntName + ':';
@@ -743,6 +794,7 @@ class Wiki extends Component {
           lastModified={this.state.lastModified}
           latestContributor={this.state.latestContributor}
           direntList={this.state.direntList}
+          selectedDirentList={this.state.selectedDirentList}
           switchViewMode={this.switchViewMode}
           updateDirent={this.updateDirent}
           onLinkClick={this.onLinkClick}
