@@ -15,6 +15,9 @@ import ReviewComments from './components/review-list-view/review-comments';
 import { Tooltip } from 'reactstrap';
 import AddReviewerDialog from './components/dialog/add-reviewer-dialog.js';
 import { findRange } from '@seafile/slate-react';
+import { Nav, NavItem, NavLink, TabContent, TabPane } from 'reactstrap';
+import classnames from 'classnames';
+import HistoryList from './pages/review/history-list';
 
 import 'seafile-ui';
 import './assets/css/fa-solid.css';
@@ -43,6 +46,8 @@ class DraftReview extends React.Component {
       showDiffTip: false,
       showReviewerDialog: false,
       reviewers: [],
+      activeTab: 'reviewInfo',
+      showReviewHistory: false,
     };
     this.selectedText = '';
     this.newIndex = null;
@@ -312,11 +317,28 @@ class DraftReview extends React.Component {
         scroller.scrollTop = element.offsetTop;
       }
     }
+
+  tabItemClick = (tab) => {
+    if (this.state.activeTab !== tab) {
+      this.setState({
+        activeTab: tab,
+        showReviewHistory: !this.state.showReviewHistory,
+      });
+    }
   }
 
   componentWillMount() {
     this.getCommentsNumber();
     this.listReviewers();
+  }
+
+  setDiffViewerContent = (newContent, prevContent) => {
+    if (this.state.showReviewHistory) { 
+      this.setState({
+        draftContent: newContent,
+        draftOriginContent: prevContent  
+      })
+    }
   }
 
   render() {
@@ -426,36 +448,60 @@ class DraftReview extends React.Component {
               <div className="cur-view-right-part" style={{width:(this.state.commentWidth)+'%'}}>
                 <div className="seafile-comment-resize" onMouseDown={this.onResizeMouseDown}></div>
                 <div className="review-side-panel">
-                  <div className="review-side-panel-head">{gettext('Review #')}{reviewID}</div>
-                  <div className="review-side-panel-body">
-                    <div className="review-side-panel-reviewers">
-                      <div className="reviewers-header">
-                        <div className="review-side-panel-header">{gettext('Reviewers')}</div>
-                        <i className="fa fa-cog" onClick={this.toggleAddReviewerDialog}></i>
+                  <Nav tabs style={{ margin: 0 }}>
+                    <NavItem>
+                      <NavLink
+                        className={classnames({ active: this.state.activeTab === 'reviewInfo' })}
+                        onClick={() => { this.tabItemClick('reviewInfo');}}
+                      >
+                        {gettext('Reivew Info')}
+                      </NavLink>
+                    </NavItem>
+                    <NavItem>
+                      <NavLink
+                        className={classnames({ active: this.state.activeTab === 'history' })}
+                        onClick={() => { this.tabItemClick('history');}}
+                      >
+                        {gettext('Review History')}
+                      </NavLink>
+                    </NavItem>
+                  </Nav>
+                  <TabContent activeTab={this.state.activeTab}>
+                    <TabPane tabId="reviewInfo">
+                      <div className="review-side-panel-body">
+                        <div className="review-side-panel-reviewers">
+                          <div className="reviewers-header">
+                            <div className="review-side-panel-header">{gettext('Reviewers')}</div>
+                            <i className="fa fa-cog" onClick={this.toggleAddReviewerDialog}></i>
+                          </div>
+                          { this.state.reviewers.length > 0 ?
+                            this.state.reviewers.map((item, index = 0, arr) => {
+                              return (
+                                <div className="reviewer-info" key={index}>
+                                  <img className="avatar reviewer-avatar" src={item.avatar_url} alt=""/>
+                                  <span className="reviewer-name">{item.user_name}</span>
+                                </div>
+                              );
+                            })
+                            :
+                            <span>{gettext('No reviewer yet.')}</span>
+                          }
+                        </div>
+                        <div className="review-side-panel-author">
+                          <div className="author-header">
+                            <div className="review-side-panel-header">{gettext('Author')}</div>
+                          </div>
+                          <div className="author-info">
+                            <img className="avatar author-avatar" src={authorAvatar} alt=""/>
+                            <span className="author-name">{author}</span>
+                          </div>
+                        </div>
                       </div>
-                      { this.state.reviewers.length > 0 ?
-                        this.state.reviewers.map((item, index = 0, arr) => {
-                          return (
-                            <div className="reviewer-info" key={index}>
-                              <img className="avatar reviewer-avatar" src={item.avatar_url} alt=""/>
-                              <span className="reviewer-name">{item.user_name}</span>
-                            </div>
-                          );
-                        })
-                        :
-                        <span>{gettext('No reviewer yet.')}</span>
-                      }
-                    </div>
-                    <div className="review-side-panel-author">
-                      <div className="author-header">
-                        <div className="review-side-panel-header">{gettext('Author')}</div>
-                      </div>
-                      <div className="author-info">
-                        <img className="avatar author-avatar" src={authorAvatar} alt=""/>
-                        <span className="author-name">{author}</span>
-                      </div>
-                    </div>
-                  </div>
+                    </TabPane>
+                    <TabPane tabId="history">
+                      <HistoryList setDiffViewerContent={this.setDiffViewerContent}/>
+                    </TabPane>
+                  </TabContent>
                 </div>
               </div>
             }
