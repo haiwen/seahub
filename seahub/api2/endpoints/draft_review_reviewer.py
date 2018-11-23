@@ -120,3 +120,32 @@ class DraftReviewReviewerView(APIView):
                                              to_user=reviewer, review_id=r.id)
 
         return Response(result)
+
+    def delete(self, request, pk):
+        """Delete a reviewer 
+        """
+        try:
+            r = DraftReview.objects.get(pk=pk)
+        except DraftReview.DoesNotExist:
+            return api_error(status.HTTP_404_NOT_FOUND,
+                             'Review %s not found' % pk)
+
+        perm = check_folder_permission(request, r.origin_repo_id, '/')
+
+        if perm is None:
+            error_msg = 'Permission denied.'
+            return api_error(status.HTTP_403_FORBIDDEN, error_msg)
+
+        reviewer = request.GET.get('username')
+
+        if reviewer is None:
+            return api_error(status.HTTP_400_BAD_REQUEST, 'Email %s invalid.' % reviewer)
+
+        try:
+            reviewer_obj = ReviewReviewer.objects.get(reviewer=reviewer, review_id=r)
+        except ReviewReviewer.DoesNotExist:
+            return Response(status.HTTP_200_OK)
+
+        reviewer_obj.delete()
+
+        return Response(status.HTTP_200_OK)
