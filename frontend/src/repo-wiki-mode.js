@@ -493,7 +493,28 @@ class Wiki extends Component {
   }
 
   onDeleteSelected = () => {
+    let selectedDirentlist = this.state.selectedDirentlist;
+    let fileNames = [];
+    let direntPaths = [];
+    let length = selectedDirentlist.length;
+    for (let i = 0; i < length; i++) {
+      let direntName = selectedDirentlist[i].name;
+      let direntPath = Utils.joinPath(this.state.path, selectedDirentlist[i].name);
+      direntPaths.push(direntPath);
+      if (i < length - 1) {
+        fileNames += direntName + ':';
+      } else {
+        fileNames += direntName;
+      }
+    }
 
+    seafileAPI.deleteMutipleDir(repoID, this.state.path, fileNames).then(res => {
+      direntPaths.forEach(direntPath => {
+        let node = this.state.treeData.getNodeByPath(direntPath);
+        this.deleteTreeNode(node);
+        this.deleteDirent(direntPath);
+      });
+    });
   }
 
   onFileTagChanged = (dirent, direntPath) => {

@@ -363,8 +363,8 @@ class MainPanel extends Component {
             <div className="dir-operation">
               {this.props.isDirentSelected &&
                 <div className="operation mutiple-dirents-operation">
-                  <button className="btn btn-secondary operation-item op-icon sf2-icon-move" title={gettext('Move')} onClick={this.props.onMoveSelected}></button>
-                  <button className="btn btn-secondary operation-item op-icon sf2-icon-copy" title={gettext('Copy')} onClick={this.props.onCopySelected}></button>
+                  <button className="btn btn-secondary operation-item op-icon sf2-icon-move" title={gettext('Move')} onClick={this.onItemMoveToggle}></button>
+                  <button className="btn btn-secondary operation-item op-icon sf2-icon-copy" title={gettext('Copy')} onClick={this.props.onItemCopyToggle}></button>
                   <button className="btn btn-secondary operation-item op-icon sf2-icon-delete" title={gettext('Delete')} onClick={this.props.onDeleteSelected}></button>
                   <button className="btn btn-secondary operation-item op-icon sf2-icon-download" title={gettext('Download')} onClick={this.onDownloadSelected}></button>
                 </div>
