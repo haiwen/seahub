@@ -54,13 +54,13 @@ class MoveDirent extends React.Component {
 
     let selectedDirentList = this.props.selectedDirentList;
     let direntPaths = [];
-    selectedDirentList.forEach(item => {
-      let path = Utils.joinPath(this.props.path, item.name);
+    selectedDirentList.forEach(dirent => {
+      let path = Utils.joinPath(this.props.path, dirent.name);
       direntPaths.push(path);
     });
     
     //self;
-    if (direntPaths.some(item => { return item === filePath})) {
+    if (direntPaths.some(direntPath => { return direntPath === filePath})) {
       this.setState({errMessage: message});
       return;
     }
@@ -72,18 +72,18 @@ class MoveDirent extends React.Component {
     }
 
     //child
-    let direntPath = '';
-    let isChildPath = direntPaths.some(item => {
-      let flag = filePath.length > item.length && filePath.indexOf(item) > -1;
+    let moveDirentPath = '';
+    let isChildPath = direntPaths.some(direntPath => {
+      let flag = filePath.length > direntPath.length && filePath.indexOf(direntPath) > -1;
       if (flag) {
-        direntPath = item;
+        moveDirentPath = direntPath;
       }
       return flag;
     })
 
     if (isChildPath) {
       message = gettext('Can not move directory %(src)s to its subdirectory %(des)s');
-      message = message.replace('%(src)s', direntPath);
+      message = message.replace('%(src)s', moveDirentPath);
       message = message.replace('%(des)s', filePath);
       this.setState({errMessage: message});
       return;

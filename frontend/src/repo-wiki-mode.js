@@ -485,19 +485,8 @@ class Wiki extends Component {
   }
 
   onMoveSelected = (destRepo, destDirentPath) => {
-    let selectedDirentList = this.state.selectedDirentList;
-    let direntPaths = [];
-    let dirNames = '';
-    let length = selectedDirentList.length;
-    for (let i = 0; i < length; i++) {
-      let direntName = selectedDirentList[i].name;
-      if (i < length - 1) {
-        dirNames += direntName + ':';
-      } else {
-        dirNames += direntName;
-      }
-      direntPaths.push(Utils.joinPath(this.state.path, direntName));
-    }
+    let direntPaths = this.getSelectedDirentPaths;
+    let dirNames = this.getSelectedDirentFomatDirNames();
 
     seafileAPI.moveDir(repoID, destRepo.repo_id, destDirentPath, this.state.path, dirNames).then(() => {
       direntPaths.forEach(direntPath => {
@@ -515,19 +504,8 @@ class Wiki extends Component {
   }
 
   onCopySelected = (destRepo, destDirentPath) => {
-    let selectedDirentList = this.state.selectedDirentList;
-    let direntPaths = [];
-    let dirNames = '';
-    let length = selectedDirentList.length;
-    for (let i = 0; i < length; i++) {
-      let direntName = selectedDirentList[i].name;
-      if (i < length - 1) {
-        dirNames += direntName + ':';
-      } else {
-        dirNames += direntName;
-      }
-      direntPaths.push(Utils.joinPath(this.state.path, direntName));
-    }
+    let direntPaths = this.getSelectedDirentPaths();
+    let dirNames = this.getSelectedDirentFomatDirNames();
 
     seafileAPI.copyDir(repoID, destRepo.repo_id, destDirentPath, this.state.path, dirNames).then(() => {
       direntPaths.forEach(direntPath => {
@@ -544,22 +522,10 @@ class Wiki extends Component {
   }
 
   onDeleteSelected = () => {
-    let selectedDirentList = this.state.selectedDirentList;
-    let fileNames = [];
-    let direntPaths = [];
-    let length = selectedDirentList.length;
-    for (let i = 0; i < length; i++) {
-      let direntName = selectedDirentList[i].name;
-      let direntPath = Utils.joinPath(this.state.path, selectedDirentList[i].name);
-      direntPaths.push(direntPath);
-      if (i < length - 1) {
-        fileNames += direntName + ':';
-      } else {
-        fileNames += direntName;
-      }
-    }
+    let direntPaths = this.getSelectedDirentPaths();
+    let dirNames = this.getSelectedDirentFomatDirNames();
 
-    seafileAPI.deleteMutipleDir(repoID, this.state.path, fileNames).then(res => {
+    seafileAPI.deleteMutipleDir(repoID, this.state.path, dirNames).then(res => {
       direntPaths.forEach(direntPath => {
         let node = this.state.treeData.getNodeByPath(direntPath);
         this.deleteTreeNode(node);
@@ -765,6 +731,28 @@ class Wiki extends Component {
     }
 
     return path;
+  }
+
+  getSelectedDirentPaths = () => {
+    let paths = [];
+    this.state.selectedDirentList.forEach(selectedDirent => {
+      paths.push(Utils.joinPath(this.state.path, selectedDirent.name));
+    });
+    return paths;
+  }
+
+  getSelectedDirentFomatDirNames = () => {
+    let selectedDirentList = this.state.selectedDirentList;
+    let length = selectedDirentList.length;
+    let names = '';
+    for (let i = 0; i < length; i++) {
+      if (i < length -1) {
+        names += selectedDirentList[i].name + ':';
+      } else {
+        names += selectedDirentList[i].name;
+      }
+    }
+    return names;
   }
 
   render() {
