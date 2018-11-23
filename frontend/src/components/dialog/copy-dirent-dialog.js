@@ -23,7 +23,7 @@ class CopyDirent extends React.Component {
     super(props);
     this.state = {
       repo: null,
-      filePath: '',
+      selectedPath: '',
       errMessage: '',
     };
   }
@@ -44,10 +44,10 @@ class CopyDirent extends React.Component {
   }
 
   copySelected = () => {
-    let { repo, filePath } = this.state;
+    let { repo, selectedPath } = this.state;
     let message = gettext('Invalid destination path');
     
-    if (!repo || (repo.repo_id === repoID) && filePath === '') {
+    if (!repo || (repo.repo_id === repoID) && selectedPath === '') {
       this.setState({errMessage: message});
       return;
     }
@@ -60,13 +60,13 @@ class CopyDirent extends React.Component {
     });
     
     //self;
-    if (direntPaths.some(direntPath => { return direntPath === filePath})) {
+    if (direntPaths.some(direntPath => { return direntPath === selectedPath})) {
       this.setState({errMessage: message});
       return;
     }
 
     //parent;
-    if (filePath && filePath === this.props.path) {
+    if (selectedPath && selectedPath === this.props.path) {
       this.setState({errMessage: message});
       return;
     }
@@ -74,7 +74,7 @@ class CopyDirent extends React.Component {
     //child
     let copyDirentPath = '';
     let isChildPath = direntPaths.some(direntPath => {
-      let flag = filePath.length > direntPath.length && filePath.indexOf(direntPath) > -1;
+      let flag = selectedPath.length > direntPath.length && selectedPath.indexOf(direntPath) > -1;
       if (flag) {
         copyDirentPath = direntPath;
       }
@@ -84,51 +84,50 @@ class CopyDirent extends React.Component {
     if (isChildPath) {
       message = gettext('Can not move directory %(src)s to its subdirectory %(des)s');
       message = message.replace('%(src)s', copyDirentPath);
-      message = message.replace('%(des)s', filePath);
+      message = message.replace('%(des)s', selectedPath);
       this.setState({errMessage: message});
       return;
     }
     
-    if (filePath === '') {
-      filePath = '/';
+    if (selectedPath === '') {
+      selectedPath = '/';
     }
-    this.props.onCopySelected(repo, filePath);
+    this.props.onCopySelected(repo, selectedPath);
     this.toggle();
   }
 
   copyItem = () => {
     let { direntPath } = this.props;
-    let { repo, filePath } = this.state; 
+    let { repo, selectedPath } = this.state; 
     let message = 'Invalid destination path';
 
-    if (!repo || (repo.repo_id === repoID && filePath === '')) {
+    if (!repo || (repo.repo_id === repoID && selectedPath === '')) {
       this.setState({errMessage: message});
       return;
     }
 
-    if (filePath && direntPath === filePath) {
-      this.setState({errMessage: message});
-      return;
-    }
-
-    
-    if (filePath && Utils.getDirName(direntPath) === filePath) {
+    if (selectedPath && direntPath === selectedPath) {
       this.setState({errMessage: message});
       return;
     }
     
-    if ( filePath && filePath.length > direntPath.length && filePath.indexOf(direntPath) > -1) {
+    if (selectedPath && Utils.getDirName(direntPath) === selectedPath) {
+      this.setState({errMessage: message});
+      return;
+    }
+    
+    if ( selectedPath && selectedPath.length > direntPath.length && selectedPath.indexOf(direntPath) > -1) {
       message = gettext('Can not copy directory %(src)s to its subdirectory %(des)s');
       message = message.replace('%(src)s', direntPath);
-      message = message.replace('%(des)s', filePath);
+      message = message.replace('%(des)s', selectedPath);
       this.setState({errMessage: message});
       return;
     }
 
-    if (filePath === '') {
-      filePath = '/';
+    if (selectedPath === '') {
+      selectedPath = '/';
     }
-    this.props.onItemCopy(repo, direntPath, filePath);
+    this.props.onItemCopy(repo, direntPath, selectedPath);
     this.toggle();
   }
 
@@ -136,10 +135,10 @@ class CopyDirent extends React.Component {
     this.props.onCancelCopy();
   }
 
-  onDirentItemClick = (repo, filePath) => {
+  onDirentItemClick = (repo, selectedPath) => {
     this.setState({
       repo: repo,
-      filePath: filePath,
+      selectedPath: selectedPath,
       errMessage: '',
     });
   }
@@ -147,7 +146,7 @@ class CopyDirent extends React.Component {
   onRepoItemClick = (repo) => {
     this.setState({
       repo: repo,
-      filePath: '',
+      selectedPath: '',
       errMessage: ''
     });
   }

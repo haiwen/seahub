@@ -381,8 +381,6 @@ class Wiki extends Component {
         selectedDirentList: []
       })
     }
-
-
   }
 
   onAllDirentSelected = () => {
@@ -485,8 +483,8 @@ class Wiki extends Component {
   }
 
   onMoveSelected = (destRepo, destDirentPath) => {
-    let direntPaths = this.getSelectedDirentPaths;
-    let dirNames = this.getSelectedDirentFomatDirNames();
+    let direntPaths = this.getSelectedDirentPaths();
+    let dirNames = this.getSelectedDirentNames();
 
     seafileAPI.moveDir(repoID, destRepo.repo_id, destDirentPath, this.state.path, dirNames).then(() => {
       direntPaths.forEach(direntPath => {
@@ -505,7 +503,7 @@ class Wiki extends Component {
 
   onCopySelected = (destRepo, destDirentPath) => {
     let direntPaths = this.getSelectedDirentPaths();
-    let dirNames = this.getSelectedDirentFomatDirNames();
+    let dirNames = this.getSelectedDirentNames();
 
     seafileAPI.copyDir(repoID, destRepo.repo_id, destDirentPath, this.state.path, dirNames).then(() => {
       direntPaths.forEach(direntPath => {
@@ -523,9 +521,9 @@ class Wiki extends Component {
 
   onDeleteSelected = () => {
     let direntPaths = this.getSelectedDirentPaths();
-    let dirNames = this.getSelectedDirentFomatDirNames();
+    let dirNames = this.getSelectedDirentNames();
 
-    seafileAPI.deleteMutipleDir(repoID, this.state.path, dirNames).then(res => {
+    seafileAPI.deleteMutipleDirents(repoID, this.state.path, dirNames).then(res => {
       direntPaths.forEach(direntPath => {
         let node = this.state.treeData.getNodeByPath(direntPath);
         this.deleteTreeNode(node);
@@ -741,17 +739,11 @@ class Wiki extends Component {
     return paths;
   }
 
-  getSelectedDirentFomatDirNames = () => {
-    let selectedDirentList = this.state.selectedDirentList;
-    let length = selectedDirentList.length;
-    let names = '';
-    for (let i = 0; i < length; i++) {
-      if (i < length -1) {
-        names += selectedDirentList[i].name + ':';
-      } else {
-        names += selectedDirentList[i].name;
-      }
-    }
+  getSelectedDirentNames = () => {
+    let names = [];
+    this.state.selectedDirentList.forEach(selectedDirent => {
+      names.push(selectedDirent.name);
+    });
     return names;
   }
 
