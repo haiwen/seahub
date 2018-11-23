@@ -59,19 +59,19 @@ class MoveDirent extends React.Component {
       direntPaths.push(path);
     });
     
-    //self;
+    // copy dirents to one of them. eg: A/B, A/C -> A/B
     if (direntPaths.some(direntPath => { return direntPath === selectedPath})) {
       this.setState({errMessage: message});
       return;
     }
 
-    //parent;
+    // copy dirents to current path
     if (selectedPath && selectedPath === this.props.path) {
       this.setState({errMessage: message});
       return;
     }
 
-    //child
+    // copy dirents to one of their child. eg: A/B, A/D -> A/B/C
     let moveDirentPath = '';
     let isChildPath = direntPaths.some(direntPath => {
       let flag = selectedPath.length > direntPath.length && selectedPath.indexOf(direntPath) > -1;
@@ -89,9 +89,6 @@ class MoveDirent extends React.Component {
       return;
     }
 
-    if (selectedPath === '') {
-      selectedPath = '/';
-    }
     this.props.onMoveSelected(repo, selectedPath);
     this.toggle();
   }
@@ -106,19 +103,19 @@ class MoveDirent extends React.Component {
       return;
     }
     
-    //self
+    // copy the dirent to itself. eg: A/B -> A/B
     if (selectedPath && direntPath === selectedPath) {
       this.setState({errMessage: message});
       return;
     }
     
-    //parent
+    // copy the dirent to current path
     if (selectedPath && Utils.getDirName(direntPath) === selectedPath) {
       this.setState({errMessage: message});
       return;
     }
     
-    //child
+    // copy the dirent to it's child. eg: A/B -> A/B/C
     if ( selectedPath && selectedPath.length > direntPath.length && selectedPath.indexOf(direntPath) > -1) {
       message = gettext('Can not move directory %(src)s to its subdirectory %(des)s');
       message = message.replace('%(src)s', direntPath);
@@ -126,9 +123,7 @@ class MoveDirent extends React.Component {
       this.setState({errMessage: message});
       return;
     }
-    if (selectedPath === '') {
-      selectedPath = '/';
-    }
+
     this.props.onItemMove(repo, direntPath, selectedPath);
     this.toggle();
   }
