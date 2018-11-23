@@ -279,7 +279,7 @@ class Wiki extends Component {
       }
       return item;
     });
-    this.setState({direnList: newDirentList});
+    this.setState({direntList: newDirentList});
   }
 
   onLinkClick = (event) => {
@@ -358,23 +358,30 @@ class Wiki extends Component {
       return item.isSelected;
     });
 
-    if (selectedDirentlist.length > 0) {
+    if (selectedDirentlist.length) {
       this.setState({isDirentSelected: true});
-    }
-
-    if (selectedDirentlist.length === direntList.length) {
-      this.setState({
-        direnList: direntList,
-        selectedDirentlist: selectedDirentlist,
-        isAllDirentSelected: true
-      });
+      if (selectedDirentlist.length === direntList.length) {
+        this.setState({
+          isAllDirentSelected: true,
+          direntList: direntList,
+          selectedDirentlist: selectedDirentlist,
+        });
+      } else {
+        this.setState({
+          isAllDirentSelected: false,
+          direntList: direntList,
+          selectedDirentlist: selectedDirentlist
+        });
+      }
     } else {
       this.setState({
-        direnList: direntList,
-        selectedDirentlist: selectedDirentlist,
-        isAllDirentSelected: false
-      });
+        isDirentSelected: false,
+        isAllDirentSelected: false,
+        direntList: direntList,
+        selectedDirentlist: []
+      })
     }
+
 
   }
 
@@ -387,7 +394,8 @@ class Wiki extends Component {
       this.setState({
         isDirentSelected: false,
         isAllDirentSelected: false,
-        selectedDirentlist: direntList,
+        direntList: direntList,
+        selectedDirentlist: [],
       });
     } else {
       let direntList = this.state.direntList.map(item => {
@@ -397,6 +405,7 @@ class Wiki extends Component {
       this.setState({
         isDirentSelected: true,
         isAllDirentSelected: true,
+        direntList: direntList,
         selectedDirentlist: direntList,
       });
     }
@@ -721,7 +730,6 @@ class Wiki extends Component {
           onMainNavBarClick={this.onMainNavBarClick}
           onItemClick={this.onDirentClick}
           onItemSelected={this.onDirentSelected}
-          onAllItemSelected={this.onAllDirentSelected}
           onItemDelete={this.onMainPanelItemDelete}
           onItemRename={this.onMainPanelItemRename}
           onItemMove={this.onMoveItem}
@@ -731,6 +739,7 @@ class Wiki extends Component {
           onFileTagChanged={this.onFileTagChanged}
           isDirentSelected={this.state.isDirentSelected}
           isAllDirentSelected={this.state.isAllDirentSelected}
+          onAllDirentSelected={this.onAllDirentSelected}
           onMoveSelected={this.onMoveSelected}
           onCopySelected={this.onCopySelected}
           onDeleteSelected={this.onDeleteSelected}

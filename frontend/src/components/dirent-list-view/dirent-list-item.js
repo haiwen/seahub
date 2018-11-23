@@ -14,13 +14,13 @@ const propTypes = {
   onItemClick: PropTypes.func.isRequired,
   onFreezedItem: PropTypes.func.isRequired,
   onUnfreezedItem: PropTypes.func.isRequired,
-  onRenameMenuItemClick: PropTypes.func.isRequired,
+  onItemRenameToggle: PropTypes.func.isRequired,
   onItemSelected: PropTypes.func.isRequired,
   onItemDelete: PropTypes.func.isRequired,
   onItemRename: PropTypes.func.isRequired,
   onItemDownload: PropTypes.func.isRequired,
-  onDirentItemMove: PropTypes.func.isRequired,
-  onDirentItemCopy: PropTypes.func.isRequired,
+  onItemMoveToggle: PropTypes.func.isRequired,
+  onItemCopyToggle: PropTypes.func.isRequired,
   onItemDetails: PropTypes.func.isRequired,
   updateDirent: PropTypes.func.isRequired,
   currentRepo: PropTypes.object,
@@ -142,16 +142,16 @@ class DirentListItem extends React.Component {
     this.props.onItemDelete(this.props.dirent);
   }
 
-  onItemMenuItemClick = (operation) => {
+  onMenuItemClick = (operation) => {
     switch(operation) {
     case 'Rename':
-      this.onRenameMenuItemClick();
+      this.onItemRenameToggle();
       break;
     case 'Move':
-      this.onDirentItemMove();
+      this.onItemMoveToggle();
       break;
     case 'Copy':
-      this.onDirentItemCopy();
+      this.onItemCopyToggle();
       break;
     case 'Permission':
       this.onPermissionItem();
@@ -185,8 +185,8 @@ class DirentListItem extends React.Component {
     }
   }
 
-  onRenameMenuItemClick = () => {
-    this.props.onRenameMenuItemClick(this.props.dirent);
+  onItemRenameToggle = () => {
+    this.props.onItemRenameToggle(this.props.dirent);
     this.setState({
       isOperationShow: false,
       isItemMenuShow: false,
@@ -223,15 +223,15 @@ class DirentListItem extends React.Component {
     this.props.onUnfreezedItem();
   }
 
-  onDirentItemMove = () => {
+  onItemMoveToggle = () => {
     let direntPath = this.getDirentPath(this.props.dirent);
-    this.props.onDirentItemMove(this.props.dirent, direntPath);
+    this.props.onItemMoveToggle(this.props.dirent, direntPath);
     this.onItemMenuHide();
   }
 
-  onDirentItemCopy = () => {
+  onItemCopyToggle = () => {
     let direntPath = this.getDirentPath(this.props.dirent);
-    this.props.onDirentItemCopy(this.props.dirent, direntPath);
+    this.props.onItemCopyToggle(this.props.dirent, direntPath);
     this.onItemMenuHide();
   }
 
@@ -360,7 +360,7 @@ class DirentListItem extends React.Component {
                 <DirentMenu
                   dirent={this.props.dirent}
                   menuPosition={this.state.menuPosition}
-                  onMenuItemClick={this.onItemMenuItemClick}
+                  onMenuItemClick={this.onMenuItemClick}
                   currentRepo={this.props.currentRepo}
                   isRepoOwner={this.props.isRepoOwner}
                 />

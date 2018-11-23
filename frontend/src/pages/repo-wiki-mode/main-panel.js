@@ -37,7 +37,7 @@ const propTypes = {
   onMainNavBarClick: PropTypes.func.isRequired,
   onLinkClick: PropTypes.func.isRequired,
   onItemClick: PropTypes.func.isRequired,
-  onAllItemSelected: PropTypes.func.isRequired,
+  onAllDirentSelected: PropTypes.func.isRequired,
   onItemSelected: PropTypes.func.isRequired,
   onItemDelete: PropTypes.func.isRequired,
   onItemRename: PropTypes.func.isRequired,
@@ -226,7 +226,7 @@ class MainPanel extends Component {
 
   }
 
-  onDirentItemMove = (dirent, direntPath) => {
+  onItemMoveToggle = (dirent, direntPath) => {
     this.setState({
       isMoveDialogShow: true,
       currentDirent: dirent,
@@ -234,7 +234,7 @@ class MainPanel extends Component {
     });
   }
 
-  onDirentItemCopy = (dirent, direntPath) => {
+  onItemCopyToggle = (dirent, direntPath) => {
     this.setState({
       isCopyDialogShow: true,
       currentDirent: dirent,
@@ -446,17 +446,17 @@ class MainPanel extends Component {
                         path={this.props.path}
                         onItemClick={this.props.onItemClick}
                         onItemDelete={this.props.onItemDelete}
-                        onItemDownload={this.onItemDownload}
                         onItemRename={this.props.onItemRename}
-                        onDirentItemMove={this.onDirentItemMove}
-                        onDirentItemCopy={this.onDirentItemCopy}
+                        onItemDownload={this.onItemDownload}
+                        onItemMoveToggle={this.onItemMoveToggle}
+                        onItemCopyToggle={this.onItemCopyToggle}
                         onItemDetails={this.onItemDetails}
                         isDirentListLoading={this.props.isDirentListLoading}
                         updateDirent={this.props.updateDirent}
                         currentRepo={this.state.currentRepo}
                         isRepoOwner={this.state.isRepoOwner}
-                        isAllDirentSelected={this.props.isAllDirentSelected}
-                        onAllItemSelected={this.props.onAllItemSelected}
+                        isAllItemSelected={this.props.isAllDirentSelected}
+                        onAllItemSelected={this.props.onAllDirentSelected}
                         onItemSelected={this.props.onItemSelected}
                       />
                       <FileUploader

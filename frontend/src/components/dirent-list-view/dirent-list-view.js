@@ -1,4 +1,4 @@
-import React, { Fragment } from 'react';
+import React from 'react';
 import PropTypes from 'prop-types';
 import { gettext } from '../../utils/constants';
 import Loading from '../loading';
@@ -12,14 +12,14 @@ const propTypes = {
   onItemSelected: PropTypes.func.isRequired,
   onItemRename: PropTypes.func.isRequired,
   onItemClick: PropTypes.func.isRequired,
-  onDirentItemMove: PropTypes.func.isRequired,
-  onDirentItemCopy: PropTypes.func.isRequired,
+  onItemMoveToggle: PropTypes.func.isRequired,
+  onItemCopyToggle: PropTypes.func.isRequired,
   onItemDetails: PropTypes.func.isRequired,
   updateDirent: PropTypes.func.isRequired,
   isDirentListLoading: PropTypes.bool.isRequired,
   isRepoOwner: PropTypes.bool,
   currentRepo: PropTypes.object,
-  isAllDirentSelected: PropTypes.bool.isRequired,
+  isAllItemSelected: PropTypes.bool.isRequired,
 };
 
 class DirentListView extends React.Component {
@@ -39,7 +39,7 @@ class DirentListView extends React.Component {
     this.setState({isItemFreezed: false});
   }
 
-  onRenameMenuItemClick = () => {
+  onItemRenameToggle = () => {
     this.onFreezedItem();
   }
 
@@ -59,7 +59,7 @@ class DirentListView extends React.Component {
         <thead>
           <tr>
             <th width="3%" className="select">
-              <input type="checkbox" className="vam" onChange={this.props.onAllItemSelected} checked={this.props.isAllDirentSelected}/>
+              <input type="checkbox" className="vam" onChange={this.props.onAllItemSelected} checked={this.props.isAllItemSelected}/>
             </th>
             <th width="3%"></th>
             <th width="5%"></th>
@@ -81,18 +81,18 @@ class DirentListView extends React.Component {
                   currentRepo={this.props.currentRepo}
                   isRepoOwner={this.props.isRepoOwner}
                   onItemClick={this.props.onItemClick}
-                  onRenameMenuItemClick={this.onRenameMenuItemClick}
+                  onItemRenameToggle={this.onItemRenameToggle}
                   onItemSelected={this.props.onItemSelected}
                   onItemDelete={this.props.onItemDelete}
                   onItemRename={this.props.onItemRename}
+                  onItemMoveToggle={this.props.onItemMoveToggle}
+                  onItemCopyToggle={this.props.onItemCopyToggle}
+                  onItemDownload={this.props.onItemDownload}
+                  updateDirent={this.props.updateDirent}
                   isItemFreezed={this.state.isItemFreezed}
                   onFreezedItem={this.onFreezedItem}
                   onUnfreezedItem={this.onUnfreezedItem}
-                  onItemDownload={this.props.onItemDownload}
-                  onDirentItemMove={this.props.onDirentItemMove}
-                  onDirentItemCopy={this.props.onDirentItemCopy}
                   onItemDetails={this.onItemDetails}
-                  updateDirent={this.props.updateDirent}
                 />
               );
             })
