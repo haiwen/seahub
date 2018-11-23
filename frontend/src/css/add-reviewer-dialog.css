@@ -1,5 +1,8 @@
 .reviewer-select-info {
   margin-top: 10px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
 }
 .reviewer-select-avatar {
   margin-right: 10px;
@@ -13,4 +16,13 @@
 }
 .reviewer-select .true__dropdown-indicator, .reviewer-select .true__indicator-separator {
   display: none;
+}
+.reviewer-select-info i {
+  opacity: 0;
+  margin-right: 10px;
+}
+.reviewer-select-info:hover i {
+  cursor: pointer;
+  opacity: 1;
+  color: #a4a4a4;
 }
