@@ -17,10 +17,12 @@ from seahub.utils.repo import get_repo_owner, is_repo_admin, \
         repo_has_been_shared_out
 from seahub.views import check_folder_permission, list_inner_pub_repos
 from seahub.share.models import ExtraSharePermission
-from seahub.utils import is_org_context
+from seahub.utils import is_org_context, is_pro_version
 from seahub.utils.timeutils import timestamp_to_isoformat_timestr
 from seahub.api2.endpoints.group_owned_libraries import get_group_id_by_repo_owner
 from seahub.group.utils import group_id_to_name
+
+from seahub.settings import ENABLE_STORAGE_CLASSES
 
 from seaserv import seafile_api
 
@@ -105,6 +107,11 @@ class ReposView(APIView):
                     "encrypted": r.encrypted,
                     "permission": 'rw',  # Always have read-write permission to owned repo
                 }
+
+                if is_pro_version() and ENABLE_STORAGE_CLASSES:
+                    repo_info['storage_name'] = r.storage_name
+                    repo_info['storage_id'] = r.storage_id
+
                 repo_info_list.append(repo_info)
 
         if filter_by['shared']:
