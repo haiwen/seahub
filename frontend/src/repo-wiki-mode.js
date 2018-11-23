@@ -39,6 +39,9 @@ class Wiki extends Component {
       lastModified: '',
       latestContributor: '',
       permission: '',
+      isDirentSelected: false,
+      isAllDirentSelected: false,
+      selectedDirentList: [],
     };
     window.onpopstate = this.onpopstate;
   }
@@ -156,7 +159,7 @@ class Wiki extends Component {
     let index   = direntPath.lastIndexOf('/');
     let dirPath = direntPath.slice(0, index + 1);
     let dirName = direntPath.slice(index + 1);
-    seafileAPI.moveDir(repoID, repo.repo_id, copyToDirentPath, dirPath, dirName).then(() => {
+    seafileAPI.copyDir(repoID, repo.repo_id, copyToDirentPath, dirPath, dirName).then(() => {
       this.copyTreeNode(direntPath, copyToDirentPath, repo);
       let message = gettext('Successfully copied %(name)s.');
       message = message.replace('%(name)s', dirName);
@@ -171,12 +174,12 @@ class Wiki extends Component {
   switchViewMode = (mode) => {
     let dirPath;
     let tree = this.state.treeData;
-    let node = tree.getNodeByPath(this.state.filePath);
+    let node = tree.getNodeByPath(this.state.path);
     if (node.isDir()) {
-      dirPath = this.state.filePath;
+      dirPath = this.state.path;
     } else {
-      const index = this.state.filePath.lastIndexOf('/');
-      dirPath = this.state.filePath.substring(0, index);
+      const index = this.state.path.lastIndexOf('/');
+      dirPath = this.state.path.substring(0, index);
     }
 
     cookie.save('view_mode', mode, { path: '/' });
@@ -276,7 +279,7 @@ class Wiki extends Component {
       }
       return item;
     });
-    this.setState({direnList: newDirentList});
+    this.setState({direntList: newDirentList});
   }
 
   onLinkClick = (event) => {
@@ -317,6 +320,7 @@ class Wiki extends Component {
 
   onMainNavBarClick = (nodePath) => {
     //just for dir
+    this.resetSelected();
     let tree = this.state.treeData.clone();
     let node = tree.getNodeByPath(nodePath);
     tree.expandNode(node);
@@ -326,6 +330,7 @@ class Wiki extends Component {
   }
 
   onDirentClick = (direntPath) => {
+    this.resetSelected();
     let tree = this.state.treeData.clone();
     let node = tree.getNodeByPath(direntPath);
     let parentNode = tree.findNodeParentFromTree(node);
@@ -341,6 +346,68 @@ class Wiki extends Component {
       const w=window.open('about:blank');
       const url = serviceUrl + '/lib/' + repoID + '/file' + node.path;
       w.location.href = url;
+    }
+  }
+
+  onDirentSelected = (dirent) => {
+    let direntList = this.state.direntList.map(item => {
+      if (item.name === dirent.name) {
+        item.isSelected = !item.isSelected;
+      }
+      return item;
+    });
+    let selectedDirentList = direntList.filter(item => {
+      return item.isSelected;
+    });
+
+    if (selectedDirentList.length) {
+      this.setState({isDirentSelected: true});
+      if (selectedDirentList.length === direntList.length) {
+        this.setState({
+          isAllDirentSelected: true,
+          direntList: direntList,
+          selectedDirentList: selectedDirentList,
+        });
+      } else {
+        this.setState({
+          isAllDirentSelected: false,
+          direntList: direntList,
+          selectedDirentList: selectedDirentList
+        });
+      }
+    } else {
+      this.setState({
+        isDirentSelected: false,
+        isAllDirentSelected: false,
+        direntList: direntList,
+        selectedDirentList: []
+      })
+    }
+  }
+
+  onAllDirentSelected = () => {
+    if (this.state.isAllDirentSelected) {
+      let direntList = this.state.direntList.map(item => {
+        item.isSelected = false;
+        return item;
+      });
+      this.setState({
+        isDirentSelected: false,
+        isAllDirentSelected: false,
+        direntList: direntList,
+        selectedDirentList: [],
+      });
+    } else {
+      let direntList = this.state.direntList.map(item => {
+        item.isSelected = true;
+        return item;
+      });
+      this.setState({
+        isDirentSelected: true,
+        isAllDirentSelected: true,
+        direntList: direntList,
+        selectedDirentList: direntList,
+      });
     }
   }
 
@@ -379,7 +446,6 @@ class Wiki extends Component {
   }
 
   deleteDirent(direntPath) {
-    let newPath = '';
     if (direntPath === this.state.path) {
       // The deleted item is current item
       let parentPath = Utils.getDirName(direntPath);
@@ -418,28 +484,79 @@ class Wiki extends Component {
     this.setState({direntList: direntList});
   }
 
+  onMoveItems = (destRepo, destDirentPath) => {
+    let direntPaths = this.getSelectedDirentPaths();
+    let dirNames = this.getSelectedDirentNames();
+
+    seafileAPI.moveDir(repoID, destRepo.repo_id, destDirentPath, this.state.path, dirNames).then(() => {
+      direntPaths.forEach(direntPath => {
+        this.moveTreeNode(direntPath, destDirentPath, destRepo);
+        this.moveDirent(direntPath);
+      });
+      let message = gettext('Successfully moved %(name)s.');
+      message = message.replace('%(name)s', dirNames);
+      Toast.success(message);
+    }).catch(() => {
+      let message = gettext('Failed to move %(name)s');
+      message = message.replace('%(name)s', dirNames);
+      Toast.error(message);
+    })
+  }
+
+  onCopyItems = (destRepo, destDirentPath) => {
+    let direntPaths = this.getSelectedDirentPaths();
+    let dirNames = this.getSelectedDirentNames();
+
+    seafileAPI.copyDir(repoID, destRepo.repo_id, destDirentPath, this.state.path, dirNames).then(() => {
+      direntPaths.forEach(direntPath => {
+        this.copyTreeNode(direntPath, destDirentPath, destRepo);
+      });
+      let message = gettext('Successfully copied %(name)s.');
+      message = message.replace('%(name)s', dirNames);
+      Toast.success(message);
+    }).catch(() => {
+      let message = gettext('Failed to copy %(name)s');
+      message = message.replace('%(name)s', dirNames);
+      Toast.error(message);
+    })
+  }
+
+  onDeleteItems = () => {
+    let direntPaths = this.getSelectedDirentPaths();
+    let dirNames = this.getSelectedDirentNames();
+
+    seafileAPI.deleteMutipleDirents(repoID, this.state.path, dirNames).then(res => {
+      direntPaths.forEach(direntPath => {
+        let node = this.state.treeData.getNodeByPath(direntPath);
+        this.deleteTreeNode(node);
+        this.deleteDirent(direntPath);
+      });
+    });
+  }
+
   onFileTagChanged = (dirent, direntPath) => {
     seafileAPI.listFileTags(repoID, direntPath).then(res => {
       let fileTags = res.data.file_tags.map(item => {
         return new FileTag(item);
-      })
+      });
       this.updateDirent(dirent, 'file_tags', fileTags);
-    })
+    });
   }
 
   onTreeNodeClick = (node) => {
+    this.resetSelected();
     if (!this.state.pathExist) {
       this.setState({pathExist: true});
     }
     if (node instanceof Node && node.isMarkdown()) {
       let tree = this.state.treeData.clone();
       this.setState({treeData: tree});
-      if (node.path !== this.state.filePath) {
+      if (node.path !== this.state.path) {
         this.showFile(node.path);
       }
     } else if (node instanceof Node && node.isDir()) {
       let tree = this.state.treeData.clone();
-      if (this.state.filePath === node.path) {
+      if (this.state.path === node.path) {
         if (node.isExpanded) {
           tree.collapseNode(node);
         } else {
@@ -447,7 +564,7 @@ class Wiki extends Component {
         }
       }
       this.setState({treeData: tree});
-      if (node.path !== this.state.filePath) {
+      if (node.path !== this.state.path) {
         this.showDir(node.path);
       }
     } else {
@@ -617,6 +734,29 @@ class Wiki extends Component {
     return path;
   }
 
+  getSelectedDirentPaths = () => {
+    let paths = [];
+    this.state.selectedDirentList.forEach(selectedDirent => {
+      paths.push(Utils.joinPath(this.state.path, selectedDirent.name));
+    });
+    return paths;
+  }
+
+  getSelectedDirentNames = () => {
+    let names = [];
+    this.state.selectedDirentList.forEach(selectedDirent => {
+      names.push(selectedDirent.name);
+    });
+    return names;
+  }
+
+  resetSelected = () => {
+    this.setState({
+      isDirentSelected: false,
+      isAllDirentSelected: false,
+    });
+  }
+
   render() {
     return (
       <div id="main" className="wiki-main">
@@ -644,6 +784,7 @@ class Wiki extends Component {
           lastModified={this.state.lastModified}
           latestContributor={this.state.latestContributor}
           direntList={this.state.direntList}
+          selectedDirentList={this.state.selectedDirentList}
           switchViewMode={this.switchViewMode}
           updateDirent={this.updateDirent}
           onLinkClick={this.onLinkClick}
@@ -651,6 +792,7 @@ class Wiki extends Component {
           onSearchedClick={this.onSearchedClick}
           onMainNavBarClick={this.onMainNavBarClick}
           onItemClick={this.onDirentClick}
+          onItemSelected={this.onDirentSelected}
           onItemDelete={this.onMainPanelItemDelete}
           onItemRename={this.onMainPanelItemRename}
           onItemMove={this.onMoveItem}
@@ -658,6 +800,12 @@ class Wiki extends Component {
           onAddFile={this.onAddFile}
           onAddFolder={this.onAddFolder}
           onFileTagChanged={this.onFileTagChanged}
+          isDirentSelected={this.state.isDirentSelected}
+          isAllDirentSelected={this.state.isAllDirentSelected}
+          onAllDirentSelected={this.onAllDirentSelected}
+          onItemsMove={this.onMoveItems}
+          onItemsCopy={this.onCopyItems}
+          onItemsDelete={this.onDeleteItems}
         />
       </div>
     );

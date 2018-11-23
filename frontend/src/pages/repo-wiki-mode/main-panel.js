@@ -3,6 +3,7 @@ import PropTypes from 'prop-types';
 import { gettext, repoID, serviceUrl, slug, siteRoot } from '../../utils/constants';
 import { seafileAPI } from '../../utils/seafile-api';
 import { Utils } from '../../utils/utils';
+import URLDecorator from '../../utils/url-decorator';
 import Repo from '../../models/repo';
 import CommonToolbar from '../../components/toolbar/common-toolbar';
 import PathToolbar from '../../components/toolbar/path-toolbar';
@@ -11,6 +12,9 @@ import DirentListView from '../../components/dirent-list-view/dirent-list-view';
 import DirentDetail from '../../components/dirent-detail/dirent-details';
 import CreateFolder from '../../components/dialog/create-folder-dialog';
 import CreateFile from '../../components/dialog/create-file-dialog';
+import ZipDownloadDialog from '../../components/dialog/zip-download-dialog';
+import MoveDirentDialog from '../../components/dialog/move-dirent-dialog';
+import CopyDirentDialog from '../../components/dialog/copy-dirent-dialog';
 import FileUploader from '../../components/file-uploader/file-uploader';
 
 const propTypes = {
@@ -24,13 +28,18 @@ const propTypes = {
   isFileLoading: PropTypes.bool.isRequired,
   isViewFile: PropTypes.bool.isRequired,
   isDirentListLoading: PropTypes.bool.isRequired,
+  isDirentSelected: PropTypes.bool.isRequired,
+  isAllDirentSelected: PropTypes.bool.isRequired,
   direntList: PropTypes.array.isRequired,
+  selectedDirentList: PropTypes.array.isRequired,
   updateDirent: PropTypes.func.isRequired,
   onSideNavMenuClick: PropTypes.func.isRequired,
   onSearchedClick: PropTypes.func.isRequired,
   onMainNavBarClick: PropTypes.func.isRequired,
   onLinkClick: PropTypes.func.isRequired,
   onItemClick: PropTypes.func.isRequired,
+  onAllDirentSelected: PropTypes.func.isRequired,
+  onItemSelected: PropTypes.func.isRequired,
   onItemDelete: PropTypes.func.isRequired,
   onItemRename: PropTypes.func.isRequired,
   onItemMove: PropTypes.func.isRequired,
@@ -39,6 +48,9 @@ const propTypes = {
   onAddFolder: PropTypes.func.isRequired,
   switchViewMode: PropTypes.func.isRequired,
   onFileTagChanged: PropTypes.func.isRequired,
+  onItemsMove: PropTypes.func.isRequired,
+  onItemsCopy: PropTypes.func.isRequired,
+  onItemsDelete: PropTypes.func.isRequired,
 };
 
 class MainPanel extends Component {
@@ -54,10 +66,16 @@ class MainPanel extends Component {
       createFileType: '',
       isDirentDetailShow: false,
       currentDirent: null,
-      currentFilePath: '',
+      direntPath: '',
       currentRepo: null,
       isRepoOwner: false,
+      progress: 0,
+      isProgressDialogShow: false,
+      isMoveDialogShow: false,
+      isCopyDialogShow: false,
+      isMutipleOperation: false,
     };
+    this.zip_token = null;
   }
 
   componentDidMount() {
@@ -73,12 +91,6 @@ class MainPanel extends Component {
       });
     });
     document.addEventListener('click', this.hideOperationMenu);
-  }
-
-  componentWillReceiveProps(nextProps) {
-    // if (nextProps.path !== this.props.path) {
-    //   this.setState({isDirentDetailShow: false});
-    // }
   }
 
   componentWillUnmount() {
@@ -182,7 +194,7 @@ class MainPanel extends Component {
   onItemDetails = (dirent, direntPath) => {
     this.setState({
       currentDirent: dirent,
-      currentFilePath: direntPath,
+      direntPath: direntPath,
       isDirentDetailShow: true,
     });
   }
@@ -208,6 +220,120 @@ class MainPanel extends Component {
 
   onFileSuccess = (file) => {
 
+  }
+
+  onSelectedMoveToggle = () => {
+    this.setState({
+      isMutipleOperation: true,
+      isMoveDialogShow: true,
+      currentDirent: null,
+      direntPath: '',
+    });
+  }
+
+  onSelectedCopyToggle = () => {
+    this.setState({
+      isMutipleOperation: true,
+      isCopyDialogShow: true,
+      currentDirent: null,
+      direntPath: '',
+    });
+  }
+
+  onItemMoveToggle = (dirent, direntPath) => {
+    this.setState({
+      isMutipleOperation: false,
+      isMoveDialogShow: true,
+      currentDirent: dirent,
+      direntPath: direntPath,
+    });
+  }
+  
+  onItemCopyToggle = (dirent, direntPath) => {
+    this.setState({
+      isMutipleOperation: false,
+      isCopyDialogShow: true,
+      currentDirent: dirent,
+      direntPath: direntPath
+    });
+  }
+
+  onCancelMove = () => {
+    this.setState({isMoveDialogShow: false});
+  }
+
+  onCancelCopy = () => {
+    this.setState({isCopyDialogShow: false});
+  }
+
+  onItemsDownload = () => {
+    let selectedDirentList = this.props.selectedDirentList;
+    if (selectedDirentList.length) {
+      if (selectedDirentList.length === 1 && !selectedDirentList[0].isDir()) {
+        let direntPath = Utils.joinPath(this.props.path, selectedDirentList[0].name);
+        let url = URLDecorator.getUrl({type: 'download_file_url', repoID: repoID, filePath: direntPath});
+        location.href= url;
+        return;
+      }
+      let selectedDirentNames = selectedDirentList.map(dirent => {
+        return dirent.name;
+      });
+      this.setState({isProgressDialogShow: true, progress: 0});
+      seafileAPI.zipDownload(repoID, this.props.path, selectedDirentNames).then(res => {
+        this.zip_token = res.data['zip_token'];
+        this.addDownloadAnimation();
+        this.interval = setInterval(this.addDownloadAnimation, 1000);
+      });
+    }
+  }
+
+  onItemDownload = (dirent, direntPath) => {
+    if (dirent.type === 'dir') {
+      this.setState({isProgressDialogShow: true, progress: 0});
+      seafileAPI.zipDownload(repoID, this.props.path, dirent.name).then(res => {
+        this.zip_token = res.data['zip_token'];
+        this.addDownloadAnimation();
+        this.interval = setInterval(this.addDownloadAnimation, 1000);
+      }).catch(() => {
+        clearInterval(this.interval);
+        // Toast.error(gettext(''));
+        //todo;
+      });
+    } else {
+      let url = URLDecorator.getUrl({type: 'download_file_url', repoID: repoID, filePath: direntPath});
+      location.href = url;
+    }
+  }
+
+  addDownloadAnimation = () => {
+    let _this = this;
+    let token = this.zip_token;
+    seafileAPI.queryZipProgress(token).then(res => {
+      let data = res.data;
+      let progress = data.total === 0 ? 100 : (data.zipped / data.total * 100).toFixed(0);
+      this.setState({progress: parseInt(progress)});
+
+      if (data['total'] === data['zipped']) {
+        this.setState({
+          progress: 100
+        });
+        clearInterval(this.interval);
+        location.href = URLDecorator.getUrl({type: 'download_dir_zip_url', token: token});
+        setTimeout(function() {
+          _this.setState({isProgressDialogShow: false});
+        }, 500);
+      }
+
+    });
+  }
+
+  onCancelDownload = () => {
+    let zip_token = this.zip_token;
+    seafileAPI.cancelZipTask(zip_token).then(res => {
+      this.setState({
+        isProgressDialogShow: false,
+      });
+    });
   }
 
   render() {
@@ -244,25 +370,35 @@ class MainPanel extends Component {
         <div className="main-panel-top panel-top">
           <div className="cur-view-toolbar border-left-show">
             <span className="sf2-icon-menu hidden-md-up d-md-none side-nav-toggle" title={gettext('Side Nav Menu')} onClick={this.onSideNavMenuClick}></span>
-            <div className="file-operation">
-              <div className="operation">
-                {
-                  this.props.permission === 'rw' &&
-                  <button className="btn btn-secondary operation-item" title={gettext('Edit File')} onClick={this.onEditClick}>{gettext('Edit')}</button>
-                }
-                {
-                  !this.props.isViewFile &&
-                  <Fragment>
-                    {
-                      Utils.isSupportUploadFolder() ?
-                        <button className="btn btn-secondary operation-item" title={gettext('Upload')} onClick={this.onUploadClick}>{gettext('Upload')}</button> :
-                        <button className="btn btn-secondary operation-item" title={gettext('Upload')} onClick={this.uploadFile}>{gettext('Upload')}</button>
-                    }
-                    <button className="btn btn-secondary operation-item" title={gettext('New')} onClick={this.onNewClick}>{gettext('New')}</button>
-                    <button className="btn btn-secondary operation-item" title={gettext('Share')} onClick={this.onShareClick}>{gettext('Share')}</button>
-                  </Fragment>
-                }
-              </div>
+            <div className="dir-operation">
+              {this.props.isDirentSelected &&
+                <div className="operation mutiple-dirents-operation">
+                  <button className="btn btn-secondary operation-item op-icon sf2-icon-move" title={gettext('Move')} onClick={this.onSelectedMoveToggle}></button>
+                  <button className="btn btn-secondary operation-item op-icon sf2-icon-copy" title={gettext('Copy')} onClick={this.onSelectedCopyToggle}></button>
+                  <button className="btn btn-secondary operation-item op-icon sf2-icon-delete" title={gettext('Delete')} onClick={this.props.onItemsDelete}></button>
+                  <button className="btn btn-secondary operation-item op-icon sf2-icon-download" title={gettext('Download')} onClick={this.onItemsDownload}></button>
+                </div>
+              }
+              {!this.props.isDirentSelected &&
+                <div className="operation">
+                  {
+                    this.props.permission === 'rw' &&
+                    <button className="btn btn-secondary operation-item" title={gettext('Edit File')} onClick={this.onEditClick}>{gettext('Edit')}</button>
+                  }
+                  {
+                    !this.props.isViewFile &&
+                    <Fragment>
+                      {
+                        Utils.isSupportUploadFolder() ?
+                          <button className="btn btn-secondary operation-item" title={gettext('Upload')} onClick={this.onUploadClick}>{gettext('Upload')}</button> :
+                          <button className="btn btn-secondary operation-item" title={gettext('Upload')} onClick={this.uploadFile}>{gettext('Upload')}</button>
+                      }
+                      <button className="btn btn-secondary operation-item" title={gettext('New')} onClick={this.onNewClick}>{gettext('New')}</button>
+                      <button className="btn btn-secondary operation-item" title={gettext('Share')} onClick={this.onShareClick}>{gettext('Share')}</button>
+                    </Fragment>
+                  }
+                </div>
+              }
               {
                 this.state.uploadMenuShow &&
                 <ul className="menu dropdown-menu" style={this.state.operationMenuStyle}>
@@ -321,13 +457,17 @@ class MainPanel extends Component {
                         onItemClick={this.props.onItemClick}
                         onItemDelete={this.props.onItemDelete}
                         onItemRename={this.props.onItemRename}
-                        onItemMove={this.props.onItemMove}
-                        onItemCopy={this.props.onItemCopy}
+                        onItemDownload={this.onItemDownload}
+                        onItemMoveToggle={this.onItemMoveToggle}
+                        onItemCopyToggle={this.onItemCopyToggle}
                         onItemDetails={this.onItemDetails}
                         isDirentListLoading={this.props.isDirentListLoading}
                         updateDirent={this.props.updateDirent}
                         currentRepo={this.state.currentRepo}
                         isRepoOwner={this.state.isRepoOwner}
+                        isAllItemSelected={this.props.isAllDirentSelected}
+                        onAllItemSelected={this.props.onAllDirentSelected}
+                        onItemSelected={this.props.onItemSelected}
                       />
                       <FileUploader
                         ref={uploader => this.uploader = uploader}
@@ -346,7 +486,7 @@ class MainPanel extends Component {
             <div className="cur-view-detail">
               <DirentDetail
                 dirent={this.state.currentDirent}
-                direntPath={this.state.currentFilePath}
+                direntPath={this.state.direntPath}
                 onItemDetailsClose={this.onItemDetailsClose}
                 onFileTagChanged={this.onFileTagChanged}
               />
@@ -366,6 +506,34 @@ class MainPanel extends Component {
             parentPath={this.props.path}
             addFolderCancel={this.addFolderCancel}
             onAddFolder={this.onAddFolder}
+          />
+        }
+        {this.state.isMoveDialogShow &&
+          <MoveDirentDialog
+            path={this.props.path}
+            isMutipleOperation={this.state.isMutipleOperation}
+            selectedDirentList={this.props.selectedDirentList}
+            dirent={this.state.currentDirent}
+            direntPath={this.state.direntPath}
+            onItemMove={this.props.onItemMove}
+            onItemsMove={this.props.onItemsMove}
+            onCancelMove={this.onCancelMove}
+          />
+        }
+        {this.state.isCopyDialogShow &&
+          <CopyDirentDialog
+            path={this.props.path}
+            isMutipleOperation={this.state.isMutipleOperation}
+            selectedDirentList={this.props.selectedDirentList}
+            dirent={this.state.currentDirent}
+            direntPath={this.state.direntPath}
+            onItemCopy={this.props.onItemCopy}
+            onItemsCopy={this.props.onItemsCopy}
+            onCancelCopy={this.onCancelCopy}
+          />
+        }
+        {this.state.isProgressDialogShow &&
+          <ZipDownloadDialog progress={this.state.progress} onCancelDownload={this.onCancelDownload}
           />
         }
       </div>
