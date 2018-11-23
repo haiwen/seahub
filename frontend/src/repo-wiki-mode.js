@@ -320,6 +320,7 @@ class Wiki extends Component {
 
   onMainNavBarClick = (nodePath) => {
     //just for dir
+    this.resetSelected();
     let tree = this.state.treeData.clone();
     let node = tree.getNodeByPath(nodePath);
     tree.expandNode(node);
@@ -329,6 +330,7 @@ class Wiki extends Component {
   }
 
   onDirentClick = (direntPath) => {
+    this.resetSelected();
     let tree = this.state.treeData.clone();
     let node = tree.getNodeByPath(direntPath);
     let parentNode = tree.findNodeParentFromTree(node);
@@ -482,7 +484,7 @@ class Wiki extends Component {
     this.setState({direntList: direntList});
   }
 
-  onMoveDirents = (destRepo, destDirentPath) => {
+  onMoveItems = (destRepo, destDirentPath) => {
     let direntPaths = this.getSelectedDirentPaths();
     let dirNames = this.getSelectedDirentNames();
 
@@ -501,7 +503,7 @@ class Wiki extends Component {
     })
   }
 
-  onCopyDirents = (destRepo, destDirentPath) => {
+  onCopyItems = (destRepo, destDirentPath) => {
     let direntPaths = this.getSelectedDirentPaths();
     let dirNames = this.getSelectedDirentNames();
 
@@ -519,7 +521,7 @@ class Wiki extends Component {
     })
   }
 
-  onDeleteDirents = () => {
+  onDeleteItems = () => {
     let direntPaths = this.getSelectedDirentPaths();
     let dirNames = this.getSelectedDirentNames();
 
@@ -542,6 +544,7 @@ class Wiki extends Component {
   }
 
   onTreeNodeClick = (node) => {
+    this.resetSelected();
     if (!this.state.pathExist) {
       this.setState({pathExist: true});
     }
@@ -747,6 +750,13 @@ class Wiki extends Component {
     return names;
   }
 
+  resetSelected = () => {
+    this.setState({
+      isDirentSelected: false,
+      isAllDirentSelected: false,
+    });
+  }
+
   render() {
     return (
       <div id="main" className="wiki-main">
@@ -793,9 +803,9 @@ class Wiki extends Component {
           isDirentSelected={this.state.isDirentSelected}
           isAllDirentSelected={this.state.isAllDirentSelected}
           onAllDirentSelected={this.onAllDirentSelected}
-          onDirentsMove={this.onMoveDirents}
-          onDirentsCopy={this.onCopyDirents}
-          onDirentsDelete={this.onDeleteDirents}
+          onItemsMove={this.onMoveItems}
+          onItemsCopy={this.onCopyItems}
+          onItemsDelete={this.onDeleteItems}
         />
       </div>
     );

@@ -12,7 +12,7 @@ const propTypes = {
   isMutipleOperation: PropTypes.bool.isRequired,
   selectedDirentList: PropTypes.array.isRequired,
   onItemCopy: PropTypes.func.isRequired,
-  onDirentsCopy: PropTypes.func.isRequired,
+  onItemsCopy: PropTypes.func.isRequired,
   onCancelCopy: PropTypes.func.isRequired,
 };
 
@@ -37,13 +37,13 @@ class CopyDirent extends React.Component {
 
   handleSubmit = () => {
     if (this.props.isMutipleOperation) {
-      this.copyDirents();
+      this.copyItems();
     } else {
       this.copyItem();
     }
   }
 
-  copyDirents = () => {
+  copyItems = () => {
     let { repo, selectedPath } = this.state;
     let message = gettext('Invalid destination path');
     
@@ -89,7 +89,7 @@ class CopyDirent extends React.Component {
       return;
     }
     
-    this.props.onDirentsCopy(repo, selectedPath);
+    this.props.onItemsCopy(repo, selectedPath);
     this.toggle();
   }
 

@@ -48,9 +48,9 @@ const propTypes = {
   onAddFolder: PropTypes.func.isRequired,
   switchViewMode: PropTypes.func.isRequired,
   onFileTagChanged: PropTypes.func.isRequired,
-  onDirentsMove: PropTypes.func.isRequired,
-  onDirentsCopy: PropTypes.func.isRequired,
-  onDirentsDelete: PropTypes.func.isRequired,
+  onItemsMove: PropTypes.func.isRequired,
+  onItemsCopy: PropTypes.func.isRequired,
+  onItemsDelete: PropTypes.func.isRequired,
 };
 
 class MainPanel extends Component {
@@ -266,7 +266,7 @@ class MainPanel extends Component {
     this.setState({isCopyDialogShow: false});
   }
 
-  onDirentsDownload = () => {
+  onItemsDownload = () => {
     let selectedDirentList = this.props.selectedDirentList;
     if (selectedDirentList.length) {
       if (selectedDirentList.length === 1 && !selectedDirentList[0].isDir()) {
@@ -375,8 +375,8 @@ class MainPanel extends Component {
                 <div className="operation mutiple-dirents-operation">
                   <button className="btn btn-secondary operation-item op-icon sf2-icon-move" title={gettext('Move')} onClick={this.onSelectedMoveToggle}></button>
                   <button className="btn btn-secondary operation-item op-icon sf2-icon-copy" title={gettext('Copy')} onClick={this.onSelectedCopyToggle}></button>
-                  <button className="btn btn-secondary operation-item op-icon sf2-icon-delete" title={gettext('Delete')} onClick={this.props.onDirentsDelete}></button>
-                  <button className="btn btn-secondary operation-item op-icon sf2-icon-download" title={gettext('Download')} onClick={this.onDirentsDownload}></button>
+                  <button className="btn btn-secondary operation-item op-icon sf2-icon-delete" title={gettext('Delete')} onClick={this.props.onItemsDelete}></button>
+                  <button className="btn btn-secondary operation-item op-icon sf2-icon-download" title={gettext('Download')} onClick={this.onItemsDownload}></button>
                 </div>
               }
               {!this.props.isDirentSelected &&
@@ -516,7 +516,7 @@ class MainPanel extends Component {
             dirent={this.state.currentDirent}
             direntPath={this.state.direntPath}
             onItemMove={this.props.onItemMove}
-            onDirentsMove={this.props.onDirentsMove}
+            onItemsMove={this.props.onItemsMove}
             onCancelMove={this.onCancelMove}
           />
         }
@@ -528,7 +528,7 @@ class MainPanel extends Component {
             dirent={this.state.currentDirent}
             direntPath={this.state.direntPath}
             onItemCopy={this.props.onItemCopy}
-            onDirentsCopy={this.props.onDirentsCopy}
+            onItemsCopy={this.props.onItemsCopy}
             onCancelCopy={this.onCancelCopy}
           />
         }
