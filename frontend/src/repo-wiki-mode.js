@@ -482,7 +482,7 @@ class Wiki extends Component {
     this.setState({direntList: direntList});
   }
 
-  onMoveSelected = (destRepo, destDirentPath) => {
+  onMoveDirents = (destRepo, destDirentPath) => {
     let direntPaths = this.getSelectedDirentPaths();
     let dirNames = this.getSelectedDirentNames();
 
@@ -501,7 +501,7 @@ class Wiki extends Component {
     })
   }
 
-  onCopySelected = (destRepo, destDirentPath) => {
+  onCopyDirents = (destRepo, destDirentPath) => {
     let direntPaths = this.getSelectedDirentPaths();
     let dirNames = this.getSelectedDirentNames();
 
@@ -519,7 +519,7 @@ class Wiki extends Component {
     })
   }
 
-  onDeleteSelected = () => {
+  onDeleteDirents = () => {
     let direntPaths = this.getSelectedDirentPaths();
     let dirNames = this.getSelectedDirentNames();
 
@@ -793,9 +793,9 @@ class Wiki extends Component {
           isDirentSelected={this.state.isDirentSelected}
           isAllDirentSelected={this.state.isAllDirentSelected}
           onAllDirentSelected={this.onAllDirentSelected}
-          onMoveSelected={this.onMoveSelected}
-          onCopySelected={this.onCopySelected}
-          onDeleteSelected={this.onDeleteSelected}
+          onDirentsMove={this.onMoveDirents}
+          onDirentsCopy={this.onCopyDirents}
+          onDirentsDelete={this.onDeleteDirents}
         />
       </div>
     );

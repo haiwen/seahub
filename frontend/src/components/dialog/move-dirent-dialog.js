@@ -12,7 +12,7 @@ const propTypes = {
   isMutipleOperation: PropTypes.bool.isRequired,
   selectedDirentList: PropTypes.array.isRequired,
   onItemMove: PropTypes.func.isRequired,
-  onMoveSelected: PropTypes.func.isRequired,
+  onDirentsMove: PropTypes.func.isRequired,
   onCancelMove: PropTypes.func.isRequired,
 };
 
@@ -37,13 +37,13 @@ class MoveDirent extends React.Component {
 
   handleSubmit = () => {
     if (this.props.isMutipleOperation) {
-      this.moveSelected();
+      this.moveDirents();
     } else {
       this.moveItem();
     }
   }
 
-  moveSelected = () => {
+  moveDirents = () => {
     let { repo, selectedPath } = this.state;
     let message = gettext('Invalid destination path');
     
@@ -89,7 +89,7 @@ class MoveDirent extends React.Component {
       return;
     }
 
-    this.props.onMoveSelected(repo, selectedPath);
+    this.props.onDirentsMove(repo, selectedPath);
     this.toggle();
   }
 
