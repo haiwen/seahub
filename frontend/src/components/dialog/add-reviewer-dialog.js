@@ -93,6 +93,23 @@ class AddReviewerDialog extends React.Component {
     }
   }
 
+  deleteReviewer = (event) => {
+    let reviewer = event.target.getAttribute('name');
+    seafileAPI.deleteReviewer(this.props.reviewID, reviewer).then((res) => {
+      if (res.data === 200) {
+        let newReviewers = [];
+        for (let i = 0; i < this.state.reviewers.length; i ++) {
+          if (this.state.reviewers[i].user_email !== reviewer) {
+            newReviewers.push(this.state.reviewers[i]);
+          }
+        }
+        this.setState({
+          reviewers: newReviewers
+        });
+      }
+    });
+  }
+
   render() {
     return (
       <Modal isOpen={this.props.showReviewerDialog}>
@@ -118,8 +135,11 @@ class AddReviewerDialog extends React.Component {
             this.state.reviewers.map((item, index = 0, arr) => {
               return (
                 <div className="reviewer-select-info" key={index}>
-                  <img className="avatar reviewer-select-avatar" src={item.avatar_url} alt=""/>
-                  <span className="reviewer-select-name">{item.user_name}</span>
+                  <div>
+                    <img className="avatar reviewer-select-avatar" src={item.avatar_url} alt=""/>
+                    <span className="reviewer-select-name">{item.user_name}</span>
+                  </div>
+                  <i className="fa fa-times" name={item.user_email} onClick={this.deleteReviewer}></i>
                 </div>
               );
             })
