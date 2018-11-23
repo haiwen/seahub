@@ -34,3 +34,17 @@ class ReviewReviewerViewTest(BaseTestCase):
         assert json_resp['success'][0]['user_info']['name'] == self.share_to
 
         self.assertEqual(200, resp.status_code)
+
+    def test_can_delete(self):
+        self.client.post(self.url, {
+            'reviewer': [self.share_to]
+        })
+
+        assert len(ReviewReviewer.objects.all()) == 1
+
+        url = self.url + '?username=' + self.share_to
+        resp = self.client.delete(url)
+
+        self.assertEqual(200, resp.status_code)
+
+        assert len(ReviewReviewer.objects.all()) == 0
