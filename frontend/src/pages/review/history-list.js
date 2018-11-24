@@ -114,7 +114,7 @@ class HistoryList extends React.Component {
           }
           {
             this.state.loading &&
-            <li className={'reloading-reversion'}><Loading style={{width: '0.5rem', margin: '0 auto', color: '#b0b0b0'}}/></li>
+            <li className={'reloading-reversion'}><Loading /></li>
           }
         </ul>
       </div>
