@@ -75,6 +75,12 @@ def edit_profile(request):
     owned_repos = get_owned_repo_list(request)
     owned_repos = filter(lambda r: not r.is_virtual, owned_repos)
 
+    if settings.ENABLE_WEBDAV_SECRET:
+        decoded = UserOptions.objects.get_webdav_decoded_secret(username)
+        webdav_passwd = decoded if decoded else ''
+    else:
+        webdav_passwd = ''
+
     resp_dict = {
             'form': form,
             'server_crypto': server_crypto,
@@ -86,6 +92,8 @@ def edit_profile(request):
             'is_ldap_user': is_ldap_user(request.user),
             'two_factor_auth_enabled': has_two_factor_auth(),
             'ENABLE_CHANGE_PASSWORD': settings.ENABLE_CHANGE_PASSWORD,
+            'ENABLE_WEBDAV_SECRET': settings.ENABLE_WEBDAV_SECRET,
+            'webdav_passwd': webdav_passwd,
     }
 
     if has_two_factor_auth():
