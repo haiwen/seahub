@@ -36,13 +36,13 @@ class HistoryList extends React.Component {
           seafileAPI.getFileRevision(draftOriginRepoID, res.data.data[1].commit_id, draftFilePath)
         ]).then(axios.spread((res1, res2) => {
           axios.all([seafileAPI.getFileContent(res1.data), seafileAPI.getFileContent(res2.data)]).then(axios.spread((content1,content2) => {
-            this.props.setDiffViewerContent(content1.data, content2.data);
+            this.props.initialDiffViewerContent(content1.data, content2.data);
           }));
         }));
       } else {
         seafileAPI.getFileRevision(draftOriginRepoID, res.data.data[0].commit_id, draftFilePath).then((res) => {
           seafileAPI.getFileContent(res.data).then((content) => {
-            this.props.setDiffViewerContent(content.data, '');
+            this.props.initialDiffViewerContent(content.data, '');
           });
         });
       }

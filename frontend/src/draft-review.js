@@ -47,7 +47,8 @@ class DraftReview extends React.Component {
       showReviewerDialog: false,
       reviewers: [],
       activeTab: 'reviewInfo',
-      showReviewHistory: false,
+      newContent: '',
+      prevContent: '',
     };
     this.selectedText = '';
     this.newIndex = null;
@@ -55,6 +56,11 @@ class DraftReview extends React.Component {
   }
 
   componentDidMount() {
+    this.initialContent();
+    document.addEventListener('selectionchange', this.setBtnPosition);
+  }
+
+  initialContent = () => {
     if (publishFileVersion == 'None') {
       axios.all([
         seafileAPI.getFileDownloadLink(draftOriginRepoID, draftFilePath),
@@ -85,7 +91,6 @@ class DraftReview extends React.Component {
         }); 
       }));
     }
-    document.addEventListener('selectionchange', this.setBtnPosition);
   }
 
   componentWillUnmount() {
@@ -107,7 +112,7 @@ class DraftReview extends React.Component {
 
   onPublishReview = () => {
     seafileAPI.updateReviewStatus(reviewID, 'finished').then(res => {
-      this.setState({reviewStatus: 'finished'});
+      this.setState({reviewStatus: 'finished', activeTab: 'reviewInfo' });
       let msg_s = gettext('Successfully published draft.');
       Toast.success(msg_s);
     }).catch(() => {
@@ -321,10 +326,18 @@ class DraftReview extends React.Component {
 
   tabItemClick = (tab) => {
     if (this.state.activeTab !== tab) {
-      this.setState({
-        activeTab: tab,
-        showReviewHistory: !this.state.showReviewHistory,
-      });
+      if (tab == "reviewInfo") { 
+        this.initialContent();
+        this.setState({
+          activeTab: tab,
+        });
+      } else {
+        this.setState({
+          activeTab: tab,
+          draftContent: this.state.newContent,
+          draftOriginContent: this.state.prevContent
+        });
+      } 
     }
   }
 
@@ -333,13 +346,18 @@ class DraftReview extends React.Component {
     this.listReviewers();
   }
 
+  initialDiffViewerContent = (newContent, prevContent) => {
+    this.setState({
+      newContent: newContent,
+      prevContent: prevContent
+    })
+  }
+
   setDiffViewerContent = (newContent, prevContent) => {
-    if (this.state.showReviewHistory) { 
-      this.setState({
-        draftContent: newContent,
-        draftOriginContent: prevContent  
-      })
-    }
+    this.setState({
+      draftContent: newContent,
+      draftOriginContent: prevContent  
+    })
   }
 
   render() {
@@ -458,14 +476,16 @@ class DraftReview extends React.Component {
                         {gettext('Reivew Info')}
                       </NavLink>
                     </NavItem>
-                    <NavItem>
-                      <NavLink
-                        className={classnames({ active: this.state.activeTab === 'history' })}
-                        onClick={() => { this.tabItemClick('history');}}
-                      >
-                        {gettext('Review History')}
-                      </NavLink>
-                    </NavItem>
+                    { this.state.reviewStatus == "finished" ? '':
+                      <NavItem>
+                        <NavLink
+                          className={classnames({ active: this.state.activeTab === 'history' })}
+                          onClick={() => { this.tabItemClick('history');}}
+                        >
+                          {gettext('Review History')}
+                        </NavLink>
+                      </NavItem>
+                    }
                   </Nav>
                   <TabContent activeTab={this.state.activeTab}>
                     <TabPane tabId="reviewInfo">
@@ -499,9 +519,12 @@ class DraftReview extends React.Component {
                         </div>
                       </div>
                     </TabPane>
-                    <TabPane tabId="history" className="history">
-                      <HistoryList setDiffViewerContent={this.setDiffViewerContent}/>
-                    </TabPane>
+                    { this.state.reviewStatus == "finished"? '':
+                      <TabPane tabId="history" className="history">
+                        <HistoryList setDiffViewerContent={this.setDiffViewerContent} 
+                                     initialDiffViewerContent={this.initialDiffViewerContent}/>
+                      </TabPane>
+                    }
                   </TabContent>
                 </div>
               </div>
