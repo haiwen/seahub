@@ -55,7 +55,7 @@ class FileDiscuss(models.Model):
 
 
 class FileCommentManager(models.Manager):
-    def add(self, repo_id, parent_path, item_name, author, comment, detail):
+    def add(self, repo_id, parent_path, item_name, author, comment, detail=''):
         fileuuidmap = FileUUIDMap.objects.get_or_create_fileuuidmap(repo_id, 
                                                                     parent_path, 
                                                                     item_name, 
@@ -64,7 +64,7 @@ class FileCommentManager(models.Manager):
         c.save(using=self._db)
         return c
 
-    def add_by_file_path(self, repo_id, file_path, author, comment, detail):
+    def add_by_file_path(self, repo_id, file_path, author, comment, detail=''):
         file_path = self.model.normalize_path(file_path)
         parent_path = os.path.dirname(file_path)
         item_name = os.path.basename(file_path)
