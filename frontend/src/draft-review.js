@@ -317,6 +317,7 @@ class DraftReview extends React.Component {
         scroller.scrollTop = element.offsetTop;
       }
     }
+  }
 
   tabItemClick = (tab) => {
     if (this.state.activeTab !== tab) {
@@ -498,7 +499,7 @@ class DraftReview extends React.Component {
                         </div>
                       </div>
                     </TabPane>
-                    <TabPane tabId="history">
+                    <TabPane tabId="history" className="history">
                       <HistoryList setDiffViewerContent={this.setDiffViewerContent}/>
                     </TabPane>
                   </TabContent>

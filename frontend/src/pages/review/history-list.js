@@ -89,7 +89,7 @@ class HistoryList extends React.Component {
 
   render() {
     return (
-      <div className="history-body">
+      <div className="history-body" style={{ "height": "500px"}}>
         <ul onScroll={this.onScroll} className={'history-list-container'}>
           {
             this.state.historyList ?
