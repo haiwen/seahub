@@ -6,7 +6,7 @@ import { Utils } from '../../utils/utils';
 import URLDecorator from '../../utils/url-decorator';
 import Repo from '../../models/repo';
 import CommonToolbar from '../../components/toolbar/common-toolbar';
-import PathToolbar from '../../components/toolbar/path-toolbar';
+import CurDirPath from '../../components/cur-dir-path';
 import MarkdownViewer from '../../components/markdown-viewer';
 import DirentListView from '../../components/dirent-list-view/dirent-list-view';
 import DirentDetail from '../../components/dirent-detail/dirent-details';
@@ -110,8 +110,8 @@ class MainPanel extends Component {
     this.props.onSideNavMenuClick();
   }
 
-  onMainNavBarClick = (e) => {
-    this.props.onMainNavBarClick(e.target.dataset.path);
+  onMainNavBarClick = (path) => {
+    this.props.onMainNavBarClick(path);
   }
 
   onEditClick = (e) => {
@@ -337,34 +337,6 @@ class MainPanel extends Component {
   }
 
   render() {
-    let path = this.props.path;
-    path = path[path.length - 1] === '/' ? path.slice(0, path.length - 1) : path;
-    let pathList = path.split('/');
-    let nodePath = '';
-    let pathElem = pathList.map((item, index) => {
-      if (item === '') {
-        return;
-      }
-      if (index === (pathList.length - 1)) {
-        return (
-          <span key={index}><span className="path-split">/</span>{item}</span>
-        );
-      } else {
-        nodePath += '/' + item;
-        return (
-          <span key={index} >
-            <span className="path-split">/</span>
-            <a
-              className="path-link"
-              data-path={nodePath}
-              onClick={this.onMainNavBarClick}>
-              {item}
-            </a>
-          </span>
-        );
-      }
-    });
-
     return (
       <div className="main-panel wiki-main-panel o-hidden">
         <div className="main-panel-top panel-top">
@@ -427,16 +399,7 @@ class MainPanel extends Component {
         <div className="main-panel-center flex-direction-row">
           <div className="cur-view-container">
             <div className="cur-view-path">
-              <div className="path-containter">
-                <a href={siteRoot + '#common/'} className="normal">{gettext('Libraries')}</a>
-                <span className="path-split">/</span>
-                {this.props.path === '/' ?
-                  <span>{slug}</span> :
-                  <a className="path-link" data-path="/" onClick={this.onMainNavBarClick}>{slug}</a>
-                }
-                {pathElem}
-              </div>
-              <PathToolbar path={this.props.path}/>
+              <CurDirPath currentPath={this.props.path} repoName={slug} onPathClick={this.onMainNavBarClick}/>
             </div>
             <div className="cur-view-content">
               { !this.props.pathExist ?

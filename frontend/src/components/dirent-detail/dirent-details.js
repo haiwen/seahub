@@ -84,6 +84,7 @@ class DirentDetail extends React.Component {
             <div className="dirent-table-container">
               <DetailListView 
                 repo={this.state.repo}
+                dirent={this.props.dirent}
                 direntPath={this.props.direntPath}
                 direntType={this.state.direntType}
                 direntDetail={this.state.direntDetail} 
