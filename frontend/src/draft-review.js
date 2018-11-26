@@ -342,7 +342,7 @@ class DraftReview extends React.Component {
     this.listReviewers();
   }
 
-  initialDiffViewerContent = (newContent, prevContent) => {
+  initialDiffViewerContent = () => {
     seafileAPI.listFileHistoryRecords(draftOriginRepoID, draftFilePath, 1, 25).then((res) => {
       this.setState({
         historyList: res.data.data,
