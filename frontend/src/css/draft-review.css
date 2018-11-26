@@ -137,6 +137,18 @@
   cursor: pointer;
   background-color: #eee;
 }
+.review-side-panel-nav {
+  margin: 0;
+}
+.review-side-panel-nav .nav-item {
+  width: 50%;
+}
+.review-side-panel-nav .nav-item a {
+  margin: 0 auto;
+}
+.review-side-panel-nav .nav-item i {
+  padding: 0 8px;
+}
 
 @media (max-width: 992px) {
   .main .cur-view-container .cur-view-content-commenton {

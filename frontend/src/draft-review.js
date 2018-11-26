@@ -15,6 +15,9 @@ import ReviewComments from './components/review-list-view/review-comments';
 import { Tooltip } from 'reactstrap';
 import AddReviewerDialog from './components/dialog/add-reviewer-dialog.js';
 import { findRange } from '@seafile/slate-react';
+import { Nav, NavItem, NavLink, TabContent, TabPane } from 'reactstrap';
+import classnames from 'classnames';
+import HistoryList from './pages/review/history-list';
 
 import 'seafile-ui';
 import './assets/css/fa-solid.css';
@@ -43,6 +46,9 @@ class DraftReview extends React.Component {
       showDiffTip: false,
       showReviewerDialog: false,
       reviewers: [],
+      activeTab: 'reviewInfo',
+      historyList: [],
+      totalReversionCount: 0
     };
     this.selectedText = '';
     this.newIndex = null;
@@ -50,6 +56,11 @@ class DraftReview extends React.Component {
   }
 
   componentDidMount() {
+    this.initialContent();
+    document.addEventListener('selectionchange', this.setBtnPosition);
+  }
+
+  initialContent = () => {
     if (publishFileVersion == 'None') {
       axios.all([
         seafileAPI.getFileDownloadLink(draftOriginRepoID, draftFilePath),
@@ -80,7 +91,6 @@ class DraftReview extends React.Component {
         }); 
       }));
     }
-    document.addEventListener('selectionchange', this.setBtnPosition);
   }
 
   componentWillUnmount() {
@@ -102,7 +112,7 @@ class DraftReview extends React.Component {
 
   onPublishReview = () => {
     seafileAPI.updateReviewStatus(reviewID, 'finished').then(res => {
-      this.setState({reviewStatus: 'finished'});
+      this.setState({reviewStatus: 'finished', activeTab: 'reviewInfo' });
       let msg_s = gettext('Successfully published draft.');
       Toast.success(msg_s);
     }).catch(() => {
@@ -314,9 +324,60 @@ class DraftReview extends React.Component {
     }
   }
 
+  tabItemClick = (tab) => {
+    if (this.state.activeTab !== tab) {
+      if (tab == "reviewInfo") { 
+        this.initialContent();
+      } else {
+        this.initialDiffViewerContent();
+      }
+      this.setState({
+        activeTab: tab
+      })
+    }
+  }
+
   componentWillMount() {
     this.getCommentsNumber();
     this.listReviewers();
+  }
+
+  initialDiffViewerContent = () => {
+    seafileAPI.listFileHistoryRecords(draftOriginRepoID, draftFilePath, 1, 25).then((res) => {
+      this.setState({
+        historyList: res.data.data,
+        totalReversionCount: res.data.total_count
+      });
+      if (res.data.data.length > 1) {
+        axios.all([
+          seafileAPI.getFileRevision(draftOriginRepoID, res.data.data[0].commit_id, draftFilePath),
+          seafileAPI.getFileRevision(draftOriginRepoID, res.data.data[1].commit_id, draftFilePath)
+        ]).then(axios.spread((res1, res2) => {
+          axios.all([seafileAPI.getFileContent(res1.data), seafileAPI.getFileContent(res2.data)]).then(axios.spread((content1,content2) => {
+            this.setState({
+              draftContent: content1.data,
+              draftOriginContent: content2.data
+            });
+          }));
+        }));
+      } else {
+        seafileAPI.getFileRevision(draftOriginRepoID, res.data.data[0].commit_id, draftFilePath).then((res) => {
+          seafileAPI.getFileContent(res.data).then((content) => {
+            this.setState({
+              draftContent: content.data,
+              draftOriginContent: ''
+            })
+          });
+        });
+      }
+    });
+  }
+
+  setDiffViewerContent = (newContent, prevContent) => {
+    this.setState({
+      draftContent: newContent,
+      draftOriginContent: prevContent  
+    })
   }
 
   render() {
@@ -426,36 +487,66 @@ class DraftReview extends React.Component {
               <div className="cur-view-right-part" style={{width:(this.state.commentWidth)+'%'}}>
                 <div className="seafile-comment-resize" onMouseDown={this.onResizeMouseDown}></div>
                 <div className="review-side-panel">
-                  <div className="review-side-panel-head">{gettext('Review #')}{reviewID}</div>
-                  <div className="review-side-panel-body">
-                    <div className="review-side-panel-reviewers">
-                      <div className="reviewers-header">
-                        <div className="review-side-panel-header">{gettext('Reviewers')}</div>
-                        <i className="fa fa-cog" onClick={this.toggleAddReviewerDialog}></i>
+                  <Nav tabs className="review-side-panel-nav">
+                    <NavItem className="nav-item">
+                      <NavLink
+                        className={classnames({ active: this.state.activeTab === 'reviewInfo' })}
+                        onClick={() => { this.tabItemClick('reviewInfo');}}
+                      >
+                       <i className="fas fa-info-circle"></i>
+                      </NavLink>
+                    </NavItem>
+                    { this.state.reviewStatus == "finished" ? '':
+                      <NavItem className="nav-item">
+                        <NavLink
+                          className={classnames({ active: this.state.activeTab === 'history' })}
+                          onClick={() => { this.tabItemClick('history');}}
+                        >
+                          <i className="fas fa-history"></i>
+                        </NavLink>
+                      </NavItem>
+                    }
+                  </Nav>
+                  <TabContent activeTab={this.state.activeTab}>
+                    <TabPane tabId="reviewInfo">
+                      <div className="review-side-panel-body">
+                        <div className="review-side-panel-reviewers">
+                          <div className="reviewers-header">
+                            <div className="review-side-panel-header">{gettext('Reviewers')}</div>
+                            <i className="fa fa-cog" onClick={this.toggleAddReviewerDialog}></i>
+                          </div>
+                          { this.state.reviewers.length > 0 ?
+                            this.state.reviewers.map((item, index = 0, arr) => {
+                              return (
+                                <div className="reviewer-info" key={index}>
+                                  <img className="avatar reviewer-avatar" src={item.avatar_url} alt=""/>
+                                  <span className="reviewer-name">{item.user_name}</span>
+                                </div>
+                              );
+                            })
+                            :
+                            <span>{gettext('No reviewer yet.')}</span>
+                          }
+                        </div>
+                        <div className="review-side-panel-author">
+                          <div className="author-header">
+                            <div className="review-side-panel-header">{gettext('Author')}</div>
+                          </div>
+                          <div className="author-info">
+                            <img className="avatar author-avatar" src={authorAvatar} alt=""/>
+                            <span className="author-name">{author}</span>
+                          </div>
+                        </div>
                       </div>
-                      { this.state.reviewers.length > 0 ?
-                        this.state.reviewers.map((item, index = 0, arr) => {
-                          return (
-                            <div className="reviewer-info" key={index}>
-                              <img className="avatar reviewer-avatar" src={item.avatar_url} alt=""/>
-                              <span className="reviewer-name">{item.user_name}</span>
-                            </div>
-                          );
-                        })
-                        :
-                        <span>{gettext('No reviewer yet.')}</span>
-                      }
-                    </div>
-                    <div className="review-side-panel-author">
-                      <div className="author-header">
-                        <div className="review-side-panel-header">{gettext('Author')}</div>
-                      </div>
-                      <div className="author-info">
-                        <img className="avatar author-avatar" src={authorAvatar} alt=""/>
-                        <span className="author-name">{author}</span>
-                      </div>
-                    </div>
-                  </div>
+                    </TabPane>
+                    { this.state.reviewStatus == "finished"? '':
+                      <TabPane tabId="history" className="history">
+                        <HistoryList setDiffViewerContent={this.setDiffViewerContent} 
+                                     historyList={this.state.historyList}
+                                     totalReversionCount={this.state.totalReversionCount}/>
+                      </TabPane>
+                    }
+                  </TabContent>
                 </div>
               </div>
             }
