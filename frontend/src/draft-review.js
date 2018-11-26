@@ -1,5 +1,6 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
+import PropTypes from 'prop-types';
 /* eslint-disable */
 import Prism from 'prismjs';
 /* eslint-enable */
@@ -124,12 +125,6 @@ class DraftReview extends React.Component {
     }).catch(() => {
       let msg_s = gettext('Failed to publish draft.');
       Toast.error(msg_s);
-    });
-  }
-
-  toggleCommentList = () => {
-    this.setState({
-      isShowComments: !this.state.isShowComments
     });
   }
 
@@ -338,14 +333,15 @@ class DraftReview extends React.Component {
 
   tabItemClick = (tab) => {
     if (this.state.activeTab !== tab) {
-      if (tab == "reviewInfo") { 
+      if (tab == 'reviewInfo') { 
         this.initialContent();
-      } else {
+      }
+      else if (tab == 'history'){
         this.initialDiffViewerContent();
       }
       this.setState({
         activeTab: tab
-      })
+      });
     }
   }
 
@@ -354,13 +350,13 @@ class DraftReview extends React.Component {
     let keys = [];
     let lastDiffState = '';
     nodes.map((node) => {
-      if (node.data.get("diff_state") === 'diff-added' && lastDiffState !== 'diff-added') {
+      if (node.data.get('diff_state') === 'diff-added' && lastDiffState !== 'diff-added') {
         keys.push(node.key);
       }
-      else if (node.data.get("diff_state") === 'diff-removed' && lastDiffState !== 'diff-removed') {
+      else if (node.data.get('diff_state') === 'diff-removed' && lastDiffState !== 'diff-removed') {
         keys.push(node.key);
       }
-      lastDiffState = node.data.get("diff_state");
+      lastDiffState = node.data.get('diff_state');
     });
     this.setState({
       changedNodes: keys
@@ -422,7 +418,7 @@ class DraftReview extends React.Component {
             this.setState({
               draftContent: content.data,
               draftOriginContent: ''
-            })
+            });
           });
         });
       }
@@ -433,7 +429,7 @@ class DraftReview extends React.Component {
     this.setState({
       draftContent: newContent,
       draftOriginContent: prevContent  
-    })
+    });
   }
 
   render() {
@@ -468,14 +464,6 @@ class DraftReview extends React.Component {
                 target="toggle-diff" toggle={this.toggleDiffTip}>
                 {gettext('View diff')}</Tooltip>
             </div>
-            <button className="btn btn-icon btn-secondary btn-active common-list-btn"
-              id="commentsNumber" type="button" data-active="false"
-              onMouseDown={this.toggleCommentList}>
-              <i className="fa fa-comments"></i>
-              { this.state.commentsNumber > 0 &&
-                <span>&nbsp;{this.state.commentsNumber}</span>
-              }
-            </button>
             {
               this.state.reviewStatus === 'open' &&
               <div className="cur-file-operation">
@@ -524,21 +512,6 @@ class DraftReview extends React.Component {
                 </div>
               }
             </div>
-            { this.state.isShowComments &&
-              <div className="cur-view-right-part" style={{width:(this.state.commentWidth)+'%'}}>
-                <div className="seafile-comment-resize" onMouseDown={this.onResizeMouseDown}></div>
-                <ReviewComments
-                  toggleCommentList={this.toggleCommentList}
-                  scrollToQuote={this.scrollToQuote}
-                  getCommentsNumber={this.getCommentsNumber}
-                  commentsNumber={this.state.commentsNumber}
-                  inResizing={this.state.inResizing}
-                  selectedText={this.selectedText}
-                  newIndex={this.newIndex}
-                  oldIndex={this.oldIndex}
-                />
-              </div>
-            }
             { !this.state.isShowComments &&
               <div className="cur-view-right-part" style={{width:(this.state.commentWidth)+'%'}}>
                 <div className="seafile-comment-resize" onMouseDown={this.onResizeMouseDown}></div>
@@ -549,10 +522,20 @@ class DraftReview extends React.Component {
                         className={classnames({ active: this.state.activeTab === 'reviewInfo' })}
                         onClick={() => { this.tabItemClick('reviewInfo');}}
                       >
-                       <i className="fas fa-info-circle"></i>
+                        <i className="fas fa-info-circle"></i>
                       </NavLink>
                     </NavItem>
-                    { this.state.reviewStatus == "finished" ? '':
+                    <NavItem className="nav-item">
+                      <NavLink
+                        className={classnames({ active: this.state.activeTab === 'comments' })}
+                        onClick={() => { this.tabItemClick('comments');}}
+                      >
+                        <i className="fa fa-comments"></i>
+                        { this.state.commentsNumber > 0 &&
+                          <div className='comments-number'>{this.state.commentsNumber}</div>}
+                      </NavLink>
+                    </NavItem>
+                    { this.state.reviewStatus == 'finished' ? '':
                       <NavItem className="nav-item">
                         <NavLink
                           className={classnames({ active: this.state.activeTab === 'history' })}
@@ -577,7 +560,21 @@ class DraftReview extends React.Component {
                         }
                       </div>
                     </TabPane>
-                    { this.state.reviewStatus == "finished"? '':
+                    <TabPane tabId="comments" className="comments">
+                      {this.state.commentsNumber &&
+                        <ReviewComments
+                          scrollToQuote={this.scrollToQuote}
+                          getCommentsNumber={this.getCommentsNumber}
+                          commentsNumber={this.state.commentsNumber}
+                          inResizing={this.state.inResizing}
+                          selectedText={this.selectedText}
+                          newIndex={this.newIndex}
+                          oldIndex={this.oldIndex}
+                        />
+                      }
+                    </TabPane>
+
+                    { this.state.reviewStatus == 'finished'? '':
                       <TabPane tabId="history" className="history">
                         <HistoryList setDiffViewerContent={this.setDiffViewerContent} 
                                      historyList={this.state.historyList}
@@ -632,6 +629,13 @@ class SidePanelReviewers extends React.Component {
   }
 }
 
+const sidePanelReviewersPropTypes = {
+  reviewers: PropTypes.array.isRequired,
+  toggleAddReviewerDialog: PropTypes.func.isRequired
+};
+
+SidePanelReviewers.propTypes = sidePanelReviewersPropTypes;
+
 class SidePanelAuthor extends React.Component {
   render() {
     return (
@@ -669,6 +673,13 @@ class SidePanelChanges extends React.Component {
     );
   }
 }
+
+const sidePanelChangesPropTypes = {
+  changedNumber: PropTypes.number.isRequired,
+  scrollToChangedNode: PropTypes.func.isRequired
+};
+
+SidePanelChanges.propTypes = sidePanelChangesPropTypes;
 
 ReactDOM.render (
   <DraftReview />,

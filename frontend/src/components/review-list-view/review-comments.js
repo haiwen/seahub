@@ -1,7 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { processor } from '../../utils/seafile-markdown2html';
-import { Button, Dropdown, DropdownToggle, DropdownMenu, DropdownItem, Tooltip } from 'reactstrap';
+import { Button, Dropdown, DropdownToggle, DropdownMenu, DropdownItem } from 'reactstrap';
 import { seafileAPI } from '../../utils/seafile-api';
 import { reviewID, gettext } from '../../utils/constants';
 import Loading from '../../components/loading.js';
@@ -12,7 +12,6 @@ import '../../css/review-comments.css';
 const commentPropTypes = {
   getCommentsNumber: PropTypes.func.isRequired,
   inResizing: PropTypes.bool.isRequired,
-  toggleCommentList: PropTypes.func.isRequired,
   commentsNumber: PropTypes.number.isRequired,
   selectedText: PropTypes.string,
   newIndex: PropTypes.number,
@@ -29,8 +28,7 @@ class ReviewComments extends React.Component {
       userAvatar: '',
       inResizing: false,
       commentFooterHeight: 30,
-      showResolvedComment: false,
-      openResolvedTooltip: false,
+      showResolvedComment: true,
       comment: '',
     };
     this.accountInfo = {};
@@ -107,12 +105,6 @@ class ReviewComments extends React.Component {
     });
   }
 
-  toggleResolvedTooltip = () => {
-    this.setState({
-      openResolvedTooltip: !this.state.openResolvedTooltip
-    });
-  }
-
   deleteComment = (event) => {
     seafileAPI.deleteReviewComment(reviewID, event.target.id).then((res) => {
       this.props.getCommentsNumber();
@@ -135,7 +127,7 @@ class ReviewComments extends React.Component {
   };
 
   onResizeMouseMove = (event) => {
-    let rate = 100 - (event.nativeEvent.clientY - 50 ) / this.refs.comment.clientHeight * 100;
+    let rate = 100 - (event.nativeEvent.clientY - 120 ) / this.refs.comment.clientHeight * 100;
     if (rate < 20 || rate > 70) {
       if (rate < 20) {
         this.setState({
@@ -162,7 +154,7 @@ class ReviewComments extends React.Component {
       let comment = '> ' + text;
       this.setState({
         comment: comment
-      })
+      });
     }
   }
   
@@ -195,18 +187,15 @@ class ReviewComments extends React.Component {
         'seafile-comment seafile-comment-resizing' : 'seafile-comment'}
       onMouseMove={onResizeMove} onMouseUp={this.onResizeMouseUp} ref="comment">
         <div className="seafile-comment-title">
-          <div onClick={this.props.toggleCommentList} className={'seafile-comment-title-close'}>
-            <i className={'fa fa-times-circle'}/>
-          </div>
-          <div className={'seafile-comment-title-text'}>{gettext('Comments')}</div>
+          <div className={'seafile-comment-title-text'}>{gettext('Show resolved comments')}</div>
           <div className={'seafile-comment-title-toggle'}>
             <label className="custom-switch" id="toggle-resolved-comments">
-              <input type="checkbox" name="option" className="custom-switch-input" onClick={this.toggleResolvedComment}/>
+              <input type="checkbox" name="option" className="custom-switch-input"
+                onChange={this.toggleResolvedComment}
+                checked={this.state.showResolvedComment && 'checked'}
+              />
               <span className="custom-switch-indicator"></span>
             </label>
-            <Tooltip placement="bottom" isOpen={this.state.openResolvedTooltip}
-              target="toggle-resolved-comments" toggle={this.toggleResolvedTooltip}>
-              {gettext('Show/Hide resolved comments')}</Tooltip>
           </div>
         </div>
         <div style={{height:(100-this.state.commentFooterHeight)+'%'}}>

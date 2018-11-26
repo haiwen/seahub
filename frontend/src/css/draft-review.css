@@ -1,5 +1,6 @@
 .header .button-group {
   display: flex;
+  align-items: center;
 }
 
 .header .common-list-btn, .header .add-reviewer-btn {
@@ -139,17 +140,40 @@
   cursor: pointer;
   background-color: #eee;
 }
+.comments-number {
+  font-size: 12px;
+  width: 16px;
+  height: 16px;
+  border-radius: 8px;
+  text-align: center;
+  line-height: 16px;
+  font-weight: 600;
+  background-color: #feac74;
+  position: absolute;
+  top: 10%;
+  right: 30%;
+  color: #fff;
+}
+
 .review-side-panel-nav {
   margin: 0;
 }
 .review-side-panel-nav .nav-item {
-  width: 50%;
+  width: 33.3%;
 }
 .review-side-panel-nav .nav-item a {
   margin: 0 auto;
 }
 .review-side-panel-nav .nav-item i {
   padding: 0 8px;
+  font-size: 1rem;
+  width: 1rem;
+}
+.review-side-panel .tab-content {
+  height: 100%;
+}
+.review-side-panel .tab-content .comments {
+  height: 100%;
 }
 
 @media (max-width: 992px) {
