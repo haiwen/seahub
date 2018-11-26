@@ -3,8 +3,8 @@ import PropTypes from 'prop-types';
 import CommonToolbar from './common-toolbar';
 
 const propTypes = {
-  onShowSidePanel: PropTypes.func,
-  onSearchedClick: PropTypes.func,
+  onShowSidePanel: PropTypes.func.isRequired,
+  onSearchedClick: PropTypes.func.isRequired,
 };
 
 class GeneralToolbar extends React.Component {
