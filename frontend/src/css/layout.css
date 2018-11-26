@@ -120,6 +120,7 @@
 [role=group] {
   display: flex;
   flex: 1;
+  flex-direction: column;
 }
 
 .header {
@@ -198,4 +199,8 @@
   color: #6b1110;
   background-color: #f5d2d2;
   border-color: #f1c1c0;
+}
+
+img[src=""],img:not([src]){ /* for first loading img*/
+  opacity:0;
 }

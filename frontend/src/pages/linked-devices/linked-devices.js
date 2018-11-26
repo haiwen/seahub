@@ -1,10 +1,9 @@
+import React, { Component, Fragment } from 'react';
 import moment from 'moment';
-import React, { Component } from 'react';
-import Toast from '../../components/toast';
-
 import { seafileAPI } from '../../utils/seafile-api';
-import { Utils } from '../../utils/utils';
-import { gettext, siteRoot, loginUrl } from '../../utils/constants';
+import { gettext, loginUrl } from '../../utils/constants';
+import GeneralToolbar from '../../components/toolbar/general-toolbar';
+import Toast from '../../components/toast';
 
 class Content extends Component {
 
@@ -196,14 +195,25 @@ class LinkedDevices extends Component {
 
   render() {
     return (
-      <div className="cur-view-container" id="linked-devices">
-        <div className="cur-view-path">
-          <h3 className="sf-heading">{gettext('Linked Devices')}</h3>
+      <Fragment>
+        <div className="main-panel-north">
+          <GeneralToolbar 
+            searchPlaceholder={'Search Files'}
+            onShowSidePanel={this.props.onShowSidePanel}
+            onSearchedClick={this.props.onSearchedClick}
+          />
         </div>
-        <div className="cur-view-content">
-          <Content data={this.state} />
+        <div className="main-panel-center">
+          <div className="cur-view-container" id="linked-devices">
+            <div className="cur-view-path">
+              <h3 className="sf-heading">{gettext('Linked Devices')}</h3>
+            </div>
+            <div className="cur-view-content">
+              <Content data={this.state} />
+            </div>
+          </div>
         </div>
-      </div>
+      </Fragment>
     );
   }
 }

@@ -1,10 +1,11 @@
-import React, { Component } from 'react';
+import React, { Component, Fragment } from 'react';
 import { Link } from '@reach/router';
 import moment from 'moment';
 import { Modal, ModalHeader, ModalBody } from 'reactstrap';
 import { seafileAPI } from '../../utils/seafile-api';
 import { Utils } from '../../utils/utils';
 import { gettext, siteRoot, loginUrl, isPro, canGenerateUploadLink } from '../../utils/constants';
+import GeneralToolbar from '../../components/toolbar/general-toolbar';
 
 class Content extends Component {
  constructor(props) {
@@ -237,21 +238,32 @@ class ShareAdminShareLinks extends Component {
 
   render() {
     return (
-      <div className="cur-view-container">
-        <div className="cur-view-path">
-          <ul className="nav">
-            <li className="nav-item">
-              <Link to={`${siteRoot}share-admin-share-links/`} className="nav-link active">{gettext('Share Links')}</Link>
-            </li>
-            { canGenerateUploadLink ?
-              <li className="nav-item"><Link to={`${siteRoot}share-admin-upload-links/`} className="nav-link">{gettext('Upload Links')}</Link></li>
-              : '' }
-          </ul>
+      <Fragment>
+        <div className="main-panel-north">
+          <GeneralToolbar 
+            searchPlaceholder={'Search Files'}
+            onShowSidePanel={this.props.onShowSidePanel}
+            onSearchedClick={this.props.onSearchedClick}
+          />
         </div>
-        <div className="cur-view-content">
-          <Content data={this.state} />
+        <div className="main-panel-cneter">
+          <div className="cur-view-container">
+            <div className="cur-view-path">
+              <ul className="nav">
+                <li className="nav-item">
+                  <Link to={`${siteRoot}share-admin-share-links/`} className="nav-link active">{gettext('Share Links')}</Link>
+                </li>
+                { canGenerateUploadLink ?
+                  <li className="nav-item"><Link to={`${siteRoot}share-admin-upload-links/`} className="nav-link">{gettext('Upload Links')}</Link></li>
+                  : '' }
+              </ul>
+            </div>
+            <div className="cur-view-content">
+              <Content data={this.state} />
+            </div>
+          </div>
         </div>
-      </div>
+      </Fragment>
     );
   }
 }
