@@ -50,6 +50,8 @@ def is_draft_file(repo_id, file_path):
 def has_draft_file(repo_id, file_path):
     has_draft = False
     draft_file_path = None
+    draft_id = None
+    review_id = None
 
     file_path = normalize_file_path(file_path)
     parent_path = os.path.dirname(file_path)
@@ -62,9 +64,13 @@ def has_draft_file(repo_id, file_path):
     if file_uuid:
         try:
             draft = Draft.objects.get(origin_file_uuid=file_uuid)
+            if hasattr(draft, 'draftreview'):
+                review_id = draft.draftreview.id
+
+            draft_id = draft.id
             has_draft = True
             draft_file_path = draft.draft_file_path
         except Draft.DoesNotExist:
             pass
 
-    return has_draft, draft_file_path
+    return has_draft, draft_file_path, draft_id, review_id
