@@ -2,7 +2,7 @@ import React, { Component, Fragment } from 'react';
 import moment from 'moment';
 import { seafileAPI } from '../../utils/seafile-api';
 import { gettext, loginUrl } from '../../utils/constants';
-import OrdinaryToolbar from '../../components/toolbar/ordinary-toolbar';
+import GeneralToolbar from '../../components/toolbar/general-toolbar';
 import Toast from '../../components/toast';
 
 class Content extends Component {
@@ -197,7 +197,7 @@ class LinkedDevices extends Component {
     return (
       <Fragment>
         <div className="main-panel-north">
-          <OrdinaryToolbar 
+          <GeneralToolbar 
             searchPlaceholder={'Search Files'}
             onShowSidePanel={this.props.onShowSidePanel}
             onSearchedClick={this.props.onSearchedClick}

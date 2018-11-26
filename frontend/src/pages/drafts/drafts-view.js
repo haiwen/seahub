@@ -2,7 +2,7 @@ import React, { Fragment } from 'react';
 import PropTypes from 'prop-types';
 import { siteRoot, gettext } from '../../utils/constants';
 import { Link } from '@reach/router';
-import OrdinaryToolbar from '../../components/toolbar/ordinary-toolbar';
+import GeneralToolbar from '../../components/toolbar/general-toolbar';
 
 const propTypes = {
   currentTab: PropTypes.string.isRequired,
@@ -23,7 +23,7 @@ class DraftsView extends React.Component {
     return (
       <Fragment>
         <div className="main-panel-north">
-          <OrdinaryToolbar 
+          <GeneralToolbar 
             searchPlaceholder={'Search Files'}
             onShowSidePanel={this.props.onShowSidePanel}
             onSearchedClick={this.props.onSearchedClick}

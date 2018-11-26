@@ -7,7 +7,7 @@ const propTypes = {
   onSearchedClick: PropTypes.func.isRequired,
 };
 
-class OrdinaryToolbar extends React.Component {
+class GeneralToolbar extends React.Component {
 
   render() {
     let { onShowSidePanel, onSearchedClick } = this.props;
@@ -30,6 +30,6 @@ class OrdinaryToolbar extends React.Component {
   }
 }
 
-OrdinaryToolbar.propTypes = propTypes;
+GeneralToolbar.propTypes = propTypes;
 
-export default OrdinaryToolbar;
+export default GeneralToolbar;

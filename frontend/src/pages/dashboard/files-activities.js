@@ -2,7 +2,7 @@ import React, { Component, Fragment } from 'react';
 import PropTypes from 'prop-types';
 import { seafileAPI } from '../../utils/seafile-api';
 import { gettext, siteRoot } from '../../utils/constants';
-import OrdinaryToolbar from '../../components/toolbar/ordinary-toolbar';
+import GeneralToolbar from '../../components/toolbar/general-toolbar';
 
 const contentPropTypes = {
   data: PropTypes.object.isRequired,
@@ -247,7 +247,7 @@ class FilesActivities extends Component {
     return (
       <Fragment>
         <div className="main-panel-north">
-          <OrdinaryToolbar 
+          <GeneralToolbar 
             searchPlaceholder={'Search Files'}
             onShowSidePanel={this.props.onShowSidePanel}
             onSearchedClick={this.props.onSearchedClick}

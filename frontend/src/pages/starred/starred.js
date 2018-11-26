@@ -2,7 +2,7 @@ import React, { Component, Fragment } from 'react';
 import { seafileAPI } from '../../utils/seafile-api';
 import { Utils } from '../../utils/utils';
 import { gettext, siteRoot, loginUrl } from '../../utils/constants';
-import OrdinaryToolbar from '../../components/toolbar/ordinary-toolbar';
+import GeneralToolbar from '../../components/toolbar/general-toolbar';
 
 class Content extends Component {
 
@@ -265,7 +265,7 @@ class Starred extends Component {
     return (
       <Fragment>
         <div className="main-panel-north">
-          <OrdinaryToolbar 
+          <GeneralToolbar 
             searchPlaceholder={'Search Files'}
             onShowSidePanel={this.props.onShowSidePanel}
             onSearchedClick={this.props.onSearchedClick}
