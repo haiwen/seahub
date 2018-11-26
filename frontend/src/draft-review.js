@@ -487,22 +487,22 @@ class DraftReview extends React.Component {
               <div className="cur-view-right-part" style={{width:(this.state.commentWidth)+'%'}}>
                 <div className="seafile-comment-resize" onMouseDown={this.onResizeMouseDown}></div>
                 <div className="review-side-panel">
-                  <Nav tabs style={{ margin: 0 }}>
-                    <NavItem style={{ "padding":"0 50px" }}>
+                  <Nav tabs className="review-side-panel-nav">
+                    <NavItem className="nav-item">
                       <NavLink
                         className={classnames({ active: this.state.activeTab === 'reviewInfo' })}
                         onClick={() => { this.tabItemClick('reviewInfo');}}
                       >
-                       <i className="fas fa-info-circle" style={{ "padding": "0 8px" }}></i>
+                       <i className="fas fa-info-circle"></i>
                       </NavLink>
                     </NavItem>
                     { this.state.reviewStatus == "finished" ? '':
-                      <NavItem style={{ "padding":"0 50px" }}>
+                      <NavItem className="nav-item">
                         <NavLink
                           className={classnames({ active: this.state.activeTab === 'history' })}
                           onClick={() => { this.tabItemClick('history');}}
                         >
-                          <i className="fas fa-history" style={{ "padding": "0 8px" }}></i>
+                          <i className="fas fa-history"></i>
                         </NavLink>
                       </NavItem>
                     }
