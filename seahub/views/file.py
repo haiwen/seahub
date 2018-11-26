@@ -628,7 +628,7 @@ def view_lib_file(request, repo_id, path):
         has_draft = False
         draft_file_path = ''
         if not is_draft:
-            has_draft, draft_file_path = has_draft_file(repo.id, path)
+            has_draft, draft_file_path, draft_id, review_id = has_draft_file(repo.id, path)
 
         if filetype == MARKDOWN:
             return_dict['protocol'] = request.is_secure() and 'https' or 'http'
