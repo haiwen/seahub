@@ -16,6 +16,7 @@ import ShareAdminFolders from './pages/share-admin/folders';
 import ShareAdminShareLinks from './pages/share-admin/share-links';
 import ShareAdminUploadLinks from './pages/share-admin/upload-links';
 import SharedLibraries from './pages/shared-libs/shared-libs';
+import MainContentWrapper from './components/main-content-wrapper';
 
 import 'seafile-ui';
 import './assets/css/fa-solid.css';
@@ -24,6 +25,16 @@ import './assets/css/fontawesome.css';
 import './css/layout.css';
 import './css/toolbar.css';
 import './css/search.css';
+
+const FilesActivitiesWrapper = MainContentWrapper(FilesActivities);
+const DraftsViewWrapper = MainContentWrapper(DraftsView);
+const StarredWrapper = MainContentWrapper(Starred);
+const LinkedDevicesWrapper = MainContentWrapper(LinkedDevices);
+const SharedLibrariesWrapper = MainContentWrapper(SharedLibraries);
+const ShareAdminLibrariesWrapper = MainContentWrapper(ShareAdminLibraries);
+const ShareAdminFoldersWrapper = MainContentWrapper(ShareAdminFolders);
+const ShareAdminShareLinksWrapper = MainContentWrapper(ShareAdminShareLinks);
+const ShareAdminUploadLinksWrapper = MainContentWrapper(ShareAdminUploadLinks);
 
 class App extends Component {
 
@@ -91,15 +102,14 @@ class App extends Component {
 
   render() {
     let { currentTab } = this.state;
-
     return (
       <div id="main">
         <SidePanel isSidePanelClosed={this.state.isSidePanelClosed} onCloseSidePanel={this.onCloseSidePanel} currentTab={currentTab} tabItemClick={this.tabItemClick} draftCounts={this.state.draftCounts} />
 
         <MainPanel>
           <Router>
-            <FilesActivities path={siteRoot + 'dashboard'} onShowSidePanel={this.onShowSidePanel} onSearchedClick={this.onSearchedClick}/>
-            <DraftsView path={siteRoot + 'drafts'}  
+            <FilesActivitiesWrapper path={siteRoot + 'dashboard'} onShowSidePanel={this.onShowSidePanel} onSearchedClick={this.onSearchedClick} />
+            <DraftsViewWrapper path={siteRoot + 'drafts'}  
               currentTab={currentTab} 
               tabItemClick={this.tabItemClick} 
               onShowSidePanel={this.onShowSidePanel} 
@@ -113,14 +123,14 @@ class App extends Component {
                 updateDraftsList={this.updateDraftsList}
               />
               <ReviewContent path='reviews' />
-            </DraftsView>
-            <Starred path={siteRoot + 'starred'} onShowSidePanel={this.onShowSidePanel} onSearchedClick={this.onSearchedClick} />
-            <LinkedDevices path={siteRoot + 'linked-devices'} onShowSidePanel={this.onShowSidePanel} onSearchedClick={this.onSearchedClick} />
-            <ShareAdminLibraries path={siteRoot + 'share-admin-libs'} onShowSidePanel={this.onShowSidePanel} onSearchedClick={this.onSearchedClick} />
-            <ShareAdminFolders path={siteRoot + 'share-admin-folders'} onShowSidePanel={this.onShowSidePanel} onSearchedClick={this.onSearchedClick} />
-            <ShareAdminShareLinks path={siteRoot + 'share-admin-share-links'} onShowSidePanel={this.onShowSidePanel} onSearchedClick={this.onSearchedClick} />
-            <ShareAdminUploadLinks path={siteRoot + 'share-admin-upload-links'} onShowSidePanel={this.onShowSidePanel} onSearchedClick={this.onSearchedClick} />
-            <SharedLibraries path={siteRoot + 'shared-libs'} onShowSidePanel={this.onShowSidePanel} onSearchedClick={this.onSearchedClick} />
+            </DraftsViewWrapper>
+            <StarredWrapper path={siteRoot + 'starred'} onShowSidePanel={this.onShowSidePanel} onSearchedClick={this.onSearchedClick} />
+            <LinkedDevicesWrapper path={siteRoot + 'linked-devices'} onShowSidePanel={this.onShowSidePanel} onSearchedClick={this.onSearchedClick} />
+            <ShareAdminLibrariesWrapper path={siteRoot + 'share-admin-libs'} onShowSidePanel={this.onShowSidePanel} onSearchedClick={this.onSearchedClick} />
+            <ShareAdminFoldersWrapper path={siteRoot + 'share-admin-folders'} onShowSidePanel={this.onShowSidePanel} onSearchedClick={this.onSearchedClick} />
+            <ShareAdminShareLinksWrapper path={siteRoot + 'share-admin-share-links'} onShowSidePanel={this.onShowSidePanel} onSearchedClick={this.onSearchedClick} />
+            <ShareAdminUploadLinksWrapper path={siteRoot + 'share-admin-upload-links'} onShowSidePanel={this.onShowSidePanel} onSearchedClick={this.onSearchedClick} />
+            <SharedLibrariesWrapper path={siteRoot + 'shared-libs'} onShowSidePanel={this.onShowSidePanel} onSearchedClick={this.onSearchedClick} />
           </Router>
         </MainPanel>
       </div>
