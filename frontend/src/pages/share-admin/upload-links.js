@@ -1,10 +1,11 @@
-import React, { Component } from 'react';
+import React, { Component, Fragment } from 'react';
 import { Link } from '@reach/router';
 import moment from 'moment';
 import { Modal, ModalHeader, ModalBody } from 'reactstrap';
 import { seafileAPI } from '../../utils/seafile-api';
 import { Utils } from '../../utils/utils';
 import { gettext, siteRoot, loginUrl, isPro, canGenerateShareLink } from '../../utils/constants';
+import OrdinaryToolbar from '../../components/toolbar/ordinary-toolbar';
 
 class Content extends Component {
    constructor(props) {
@@ -226,19 +227,30 @@ class ShareAdminUploadLinks extends Component {
 
   render() {
     return (
-      <div className="cur-view-container">
-        <div className="cur-view-path">
-          <ul className="nav">
-            { canGenerateShareLink ?
-            <li className="nav-item"><Link to={`${siteRoot}share-admin-share-links/`} className="nav-link">{gettext('Share Links')}</Link></li>
-              : '' }
-            <li className="nav-item"><Link to={`${siteRoot}share-admin-upload-links/`} className="nav-link active">{gettext('Upload Links')}</Link></li>
-          </ul>
+      <Fragment>
+        <div className="main-panel-north">
+          <OrdinaryToolbar 
+            searchPlaceholder={'Search Files'}
+            onShowSidePanel={this.props.onShowSidePanel}
+            onSearchedClick={this.props.onSearchedClick}
+          />
         </div>
-        <div className="cur-view-content">
-          <Content data={this.state} />
+        <div className="main-panel-center">
+          <div className="cur-view-container">
+            <div className="cur-view-path">
+              <ul className="nav">
+                { canGenerateShareLink ?
+                <li className="nav-item"><Link to={`${siteRoot}share-admin-share-links/`} className="nav-link">{gettext('Share Links')}</Link></li>
+                  : '' }
+                <li className="nav-item"><Link to={`${siteRoot}share-admin-upload-links/`} className="nav-link active">{gettext('Upload Links')}</Link></li>
+              </ul>
+            </div>
+            <div className="cur-view-content">
+              <Content data={this.state} />
+            </div>
+          </div>
         </div>
-      </div>
+      </Fragment>
     );
   }
 }
