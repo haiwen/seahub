@@ -3,8 +3,8 @@ import PropTypes from 'prop-types';
 import CommonToolbar from './common-toolbar';
 
 const propTypes = {
-  onShowSidePanel: PropTypes.func.isRequired,
-  onSearchedClick: PropTypes.func.isRequired,
+  onShowSidePanel: PropTypes.func,
+  onSearchedClick: PropTypes.func,
 };
 
 class GeneralToolbar extends React.Component {
@@ -13,7 +13,7 @@ class GeneralToolbar extends React.Component {
     let { onShowSidePanel, onSearchedClick } = this.props;
     let placeHolder = this.props.searchPlaceholder || 'Search files in this library';
     return (
-      <Fragment>
+      <div className="main-panel-north">
         <div className="cur-view-toolbar">
           <span 
             className="sf2-icon-menu side-nav-toggle hidden-md-up d-md-none" 
@@ -25,7 +25,7 @@ class GeneralToolbar extends React.Component {
           searchPlaceholder={placeHolder}
           onSearchedClick={onSearchedClick} 
         />
-      </Fragment>
+      </div>
     );
   }
 }

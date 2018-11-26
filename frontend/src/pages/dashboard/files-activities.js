@@ -1,8 +1,7 @@
-import React, { Component, Fragment } from 'react';
+import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { seafileAPI } from '../../utils/seafile-api';
 import { gettext, siteRoot } from '../../utils/constants';
-import GeneralToolbar from '../../components/toolbar/general-toolbar';
 
 const contentPropTypes = {
   data: PropTypes.object.isRequired,
@@ -245,25 +244,16 @@ class FilesActivities extends Component {
 
   render() {
     return (
-      <Fragment>
-        <div className="main-panel-north">
-          <GeneralToolbar 
-            searchPlaceholder={'Search Files'}
-            onShowSidePanel={this.props.onShowSidePanel}
-            onSearchedClick={this.props.onSearchedClick}
-          />
-        </div>
-        <div className="main-panel-center">
-          <div className="cur-view-container" id="activities">
-            <div className="cur-view-path">
-              <h3 className="sf-heading">{gettext('Activities')}</h3>
-            </div>
-            <div className="cur-view-content" onScroll={this.handleScroll}>
-              <FileActivitiesContent data={this.state} />
-            </div>
+      <div className="main-panel-center">
+        <div className="cur-view-container" id="activities">
+          <div className="cur-view-path">
+            <h3 className="sf-heading">{gettext('Activities')}</h3>
+          </div>
+          <div className="cur-view-content" onScroll={this.handleScroll}>
+            <FileActivitiesContent data={this.state} />
           </div>
         </div>
-      </Fragment>
+      </div>
     );
   }
 }

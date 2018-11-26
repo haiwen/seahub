@@ -1,8 +1,7 @@
-import React, { Component, Fragment } from 'react';
+import React, { Component } from 'react';
 import { seafileAPI } from '../../utils/seafile-api';
 import { Utils } from '../../utils/utils';
 import { gettext, siteRoot, loginUrl, isPro } from '../../utils/constants';
-import GeneralToolbar from '../../components/toolbar/general-toolbar';
 
 class Content extends Component {
 
@@ -282,25 +281,16 @@ class ShareAdminFolders extends Component {
 
   render() {
     return (
-      <Fragment>
-        <div className="main-panel-north">
-          <GeneralToolbar 
-            searchPlaceholder={'Search Files'}
-            onShowSidePanel={this.props.onShowSidePanel}
-            onSearchedClick={this.props.onSearchedClick}
-          />
-        </div>
-        <div className="main-panel-center">
-          <div className="cur-view-container" id="share-admin-libs">
-            <div className="cur-view-path">
-              <h3 className="sf-heading">{gettext("Folders")}</h3>
-            </div>
-            <div className="cur-view-content">
-              <Content data={this.state} />
-            </div>
+      <div className="main-panel-center">
+        <div className="cur-view-container" id="share-admin-libs">
+          <div className="cur-view-path">
+            <h3 className="sf-heading">{gettext("Folders")}</h3>
+          </div>
+          <div className="cur-view-content">
+            <Content data={this.state} />
           </div>
         </div>
-      </Fragment>
+      </div>
     );
   }
 }
