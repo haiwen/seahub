@@ -16,37 +16,10 @@ class HistoryList extends React.Component {
     super(props);
     this.perPage = 25;
     this.state = {
-      historyList: [],
       activeItem: 0,
       currentPage: 1,
-      totalReversionCount: 0,
       loading: false
     };
-  }
-
-  componentDidMount() {
-    seafileAPI.listFileHistoryRecords(draftOriginRepoID, draftFilePath, 1, this.perPage).then((res) => {
-      this.setState({
-        historyList: res.data.data,
-        totalReversionCount: res.data.total_count
-      });
-      if (res.data.data.length > 1) {
-        axios.all([
-          seafileAPI.getFileRevision(draftOriginRepoID, res.data.data[0].commit_id, draftFilePath),
-          seafileAPI.getFileRevision(draftOriginRepoID, res.data.data[1].commit_id, draftFilePath)
-        ]).then(axios.spread((res1, res2) => {
-          axios.all([seafileAPI.getFileContent(res1.data), seafileAPI.getFileContent(res2.data)]).then(axios.spread((content1,content2) => {
-            this.props.initialDiffViewerContent(content1.data, content2.data);
-          }));
-        }));
-      } else {
-        seafileAPI.getFileRevision(draftOriginRepoID, res.data.data[0].commit_id, draftFilePath).then((res) => {
-          seafileAPI.getFileContent(res.data).then((content) => {
-            this.props.initialDiffViewerContent(content.data, '');
-          });
-        });
-      }
-    });
   }
 
   onClick = (event, key, preCommitID, currentCommitID)=> {
@@ -70,14 +43,14 @@ class HistoryList extends React.Component {
     const scrollTop    = event.target.scrollTop;
     const isBottom = (clientHeight + scrollTop + 1 >= scrollHeight);
     if (isBottom) {
-      if (this.state.totalReversionCount > this.perPage * this.state.currentPage) {
+      if (this.props.totalReversionCount > this.perPage * this.state.currentPage) {
         let currentPage = this.state.currentPage + 1;
         this.setState({
           currentPage: currentPage,
           loading : true
         });
         seafileAPI.listFileHistoryRecords(draftOriginRepoID, draftFilePath, currentPage, this.perPage).then((res) => {
-          let currentHistoryList = Object.assign([], this.state.historyList);
+          let currentHistoryList = Object.assign([], this.props.historyList);
           this.setState({
             historyList: [...currentHistoryList, ...res.data.data],
             loading : false
@@ -92,8 +65,8 @@ class HistoryList extends React.Component {
       <div className="history-body" style={{ "height": "500px"}}>
         <ul onScroll={this.onScroll} className={'history-list-container'}>
           {
-            this.state.historyList ?
-              this.state.historyList.map((item, index = 0, arr) => {
+            this.props.historyList ?
+              this.props.historyList.map((item, index = 0, arr) => {
                 let preItemIndex = index + 1;
                 if (preItemIndex === arr.length) {
                   preItemIndex = index;

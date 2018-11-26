@@ -47,8 +47,8 @@ class DraftReview extends React.Component {
       showReviewerDialog: false,
       reviewers: [],
       activeTab: 'reviewInfo',
-      newContent: '',
-      prevContent: '',
+      historyList: [],
+      totalReversionCount: 0
     };
     this.selectedText = '';
     this.newIndex = null;
@@ -328,16 +328,12 @@ class DraftReview extends React.Component {
     if (this.state.activeTab !== tab) {
       if (tab == "reviewInfo") { 
         this.initialContent();
-        this.setState({
-          activeTab: tab,
-        });
       } else {
-        this.setState({
-          activeTab: tab,
-          draftContent: this.state.newContent,
-          draftOriginContent: this.state.prevContent
-        });
-      } 
+        this.initialDiffViewerContent();
+      }
+      this.setState({
+        activeTab: tab
+      })
     }
   }
 
@@ -347,10 +343,34 @@ class DraftReview extends React.Component {
   }
 
   initialDiffViewerContent = (newContent, prevContent) => {
-    this.setState({
-      newContent: newContent,
-      prevContent: prevContent
-    })
+    seafileAPI.listFileHistoryRecords(draftOriginRepoID, draftFilePath, 1, 25).then((res) => {
+      this.setState({
+        historyList: res.data.data,
+        totalReversionCount: res.data.total_count
+      });
+      if (res.data.data.length > 1) {
+        axios.all([
+          seafileAPI.getFileRevision(draftOriginRepoID, res.data.data[0].commit_id, draftFilePath),
+          seafileAPI.getFileRevision(draftOriginRepoID, res.data.data[1].commit_id, draftFilePath)
+        ]).then(axios.spread((res1, res2) => {
+          axios.all([seafileAPI.getFileContent(res1.data), seafileAPI.getFileContent(res2.data)]).then(axios.spread((content1,content2) => {
+            this.setState({
+              draftContent: content1.data,
+              draftOriginContent: content2.data
+            });
+          }));
+        }));
+      } else {
+        seafileAPI.getFileRevision(draftOriginRepoID, res.data.data[0].commit_id, draftFilePath).then((res) => {
+          seafileAPI.getFileContent(res.data).then((content) => {
+            this.setState({
+              draftContent: content.data,
+              draftOriginContent: ''
+            })
+          });
+        });
+      }
+    });
   }
 
   setDiffViewerContent = (newContent, prevContent) => {
@@ -522,7 +542,8 @@ class DraftReview extends React.Component {
                     { this.state.reviewStatus == "finished"? '':
                       <TabPane tabId="history" className="history">
                         <HistoryList setDiffViewerContent={this.setDiffViewerContent} 
-                                     initialDiffViewerContent={this.initialDiffViewerContent}/>
+                                     historyList={this.state.historyList}
+                                     totalReversionCount={this.state.totalReversionCount}/>
                       </TabPane>
                     }
                   </TabContent>
