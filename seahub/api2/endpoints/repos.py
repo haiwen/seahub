@@ -11,16 +11,18 @@ from seahub.api2.throttling import UserRateThrottle
 from seahub.api2.authentication import TokenAuthentication
 from seahub.api2.utils import api_error
 
+from seahub.api2.endpoints.group_owned_libraries import get_group_id_by_repo_owner
+
 from seahub.base.templatetags.seahub_tags import email2nickname, \
         email2contact_email
-from seahub.utils.repo import get_repo_owner, is_repo_admin, \
-        repo_has_been_shared_out
+from seahub.signals import repo_deleted
 from seahub.views import check_folder_permission, list_inner_pub_repos
 from seahub.share.models import ExtraSharePermission
+from seahub.group.utils import group_id_to_name
 from seahub.utils import is_org_context, is_pro_version
 from seahub.utils.timeutils import timestamp_to_isoformat_timestr
-from seahub.api2.endpoints.group_owned_libraries import get_group_id_by_repo_owner
-from seahub.group.utils import group_id_to_name
+from seahub.utils.repo import get_repo_owner, is_repo_admin, \
+        repo_has_been_shared_out, get_related_users_by_repo
 
 from seahub.settings import ENABLE_STORAGE_CLASSES
 
@@ -293,3 +295,37 @@ class RepoView(APIView):
         }
 
         return Response(result)
+
+    def delete(self, request, repo_id):
+
+        repo = seafile_api.get_repo(repo_id)
+        if not repo:
+            error_msg = 'Library %s not found.' % repo_id
+            return api_error(status.HTTP_404_NOT_FOUND, error_msg)
+
+        # check permission
+        username = request.user.username
+        repo_owner = get_repo_owner(request, repo_id)
+        if username != repo_owner:
+            error_msg = 'Permission denied.'
+            return api_error(status.HTTP_403_FORBIDDEN, error_msg)
+
+        try:
+            org_id = request.user.org.org_id
+            related_users = get_related_users_by_repo(repo_id, org_id)
+        except Exception as e:
+            logger.error(e)
+            related_users = []
+
+        # remove repo
+        seafile_api.remove_repo(repo_id)
+
+        repo_deleted.send(sender=None,
+                          org_id=org_id,
+                          operator=username,
+                          usernames=related_users,
+                          repo_owner=repo_owner,
+                          repo_id=repo_id,
+                          repo_name=repo.name)
+
+        return Response('success', status=status.HTTP_200_OK)
