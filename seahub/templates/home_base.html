@@ -11,7 +11,7 @@
         <h3 class="hd">{% trans "Files" %}</h3>
         <ul class="side-tabnav-tabs">
             {% if user.permissions.can_add_repo %}
-            <li class="tab"><a href="{{ SITE_ROOT }}#my-libs/" class="ellipsis" title="{% trans "My Libraries" %}"><span class="sf2-icon-user" aria-hidden="true"></span>{% trans "My Libraries" %}</a></li>
+            <li class="tab"><a href="{{ SITE_ROOT }}my-libs/" class="ellipsis" title="{% trans "My Libraries" %}"><span class="sf2-icon-user" aria-hidden="true"></span>{% trans "My Libraries" %}</a></li>
             {% endif %}
             <li class="tab"><a href="{{ SITE_ROOT }}shared-libs/" class="ellipsis" title="{% trans "Shared with me" %}"><span class="sf2-icon-share" aria-hidden="true"></span>{% trans "Shared with me" %}</a></li>
             {% if user.permissions.can_view_org %}

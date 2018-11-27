@@ -1212,4 +1212,8 @@ def choose_register(request):
 
 @login_required
 def react_fake_view(request):
-    return render(request, "react_app.html")
+
+    return render(request, "react_app.html", {
+        'storages': get_library_storages(request),
+        'enable_repo_snapshot_label': settings.ENABLE_REPO_SNAPSHOT_LABEL
+    })

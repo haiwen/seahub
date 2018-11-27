@@ -22,6 +22,8 @@ export const enableFileComment = window.app.pageOptions.enableFileComment ? true
 export const folderPermEnabled = window.app.pageOptions.folderPermEnabled === 'True';
 export const enableUploadFolder = window.app.pageOptions.enableUploadFolder === 'True';
 export const enableResumableFileUpload = window.app.pageOptions.enableResumableFileUpload === 'True';
+export const storages = window.app.pageOptions.storages; // storage backends
+export const enableRepoSnapshotLabel = window.app.pageOptions.enableRepoSnapshotLabel;
 
 // wiki
 export const slug = window.wiki ? window.wiki.config.slug : '';
