@@ -115,6 +115,8 @@ define([
             'submit #send-download-link-form': 'sendDownloadLink',
             'click #cancel-share-download-link': 'cancelShareDownloadLink',
             'click #delete-download-link': 'deleteDownloadLink',
+            'click #delete-download-link-confirm': 'deleteDownloadLinkConfirm',
+            'click #delete-download-link-cancel': 'deleteDownloadLinkCancel',
             'click #generate-download-link-form .generate-random-password': 'generateRandomDownloadPassword',
             'keydown #generate-download-link-form .generate-random-password': 'generateRandomDownloadPassword',
             'click #generate-download-link-form .show-or-hide-password': 'showOrHideDownloadPassword',
@@ -560,6 +562,13 @@ define([
         },
 
         deleteDownloadLink: function() {
+            $('#delete-download-link').addClass('hide');
+            $('#delete-download-link-msg').removeClass('hide');
+            $('#delete-download-link-confirm').removeClass('hide');
+            $('#delete-download-link-cancel').removeClass('hide');
+        },
+
+        deleteDownloadLinkConfirm: function() {
             var _this = this;
             $.ajax({
                 url: Common.getUrl({
@@ -573,8 +582,18 @@ define([
                 success: function(data) {
                     _this.$('#generate-download-link-form').removeClass('hide');
                     _this.$('#download-link-operations').addClass('hide');
+                },
+                complete: function() {
+                    _this.deleteDownloadLinkCancel();
                 }
             });
+        },
+
+        deleteDownloadLinkCancel: function() {
+            $('#delete-download-link').removeClass('hide');
+            $('#delete-download-link-msg').addClass('hide');
+            $('#delete-download-link-confirm').addClass('hide');
+            $('#delete-download-link-cancel').addClass('hide');
         },
 
         uploadLinkPanelInit: function() {
