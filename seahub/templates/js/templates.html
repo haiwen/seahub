@@ -1257,6 +1257,7 @@
                 <div id="download-link-operations" class="hide">
                     <dl>
                         <dt>{% trans "Link: " %}</dt>
+                        <dt class="share-link-expire-date-info hide"></dt>
                         <dd id="download-link">
                             <span class="link-placeholder"></span>
                             <input type="text" readonly="readonly" value="" class="shared-link hide" />
@@ -1264,6 +1265,7 @@
                         </dd>
                         <% if (!is_dir) { %>
                         <dt>{% trans "Direct Download Link: " %}</dt>
+                        <dt class="share-link-expire-date-info hide"></dt>
                         <dd id="direct-dl-link">
                             <span class="link-placeholder"></span>
                             <input type="text" readonly="readonly" value="" class="shared-link hide" />
