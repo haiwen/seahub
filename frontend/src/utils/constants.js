@@ -12,7 +12,6 @@ export const logoHeight = window.app.config.logoHeight;
 export const isPro = window.app.config.isPro === 'True';
 export const lang = window.app.config.lang;
 export const fileServerRoot = window.app.config.fileServerRoot;
-export const serviceUrl = window.app.config.serviceUrl;
 
 //pageOptions
 export const canGenerateShareLink = window.app.pageOptions.canGenerateShareLink === 'True';
@@ -24,12 +23,16 @@ export const folderPermEnabled = window.app.pageOptions.folderPermEnabled === 'T
 export const enableUploadFolder = window.app.pageOptions.enableUploadFolder === 'True';
 export const enableResumableFileUpload = window.app.pageOptions.enableResumableFileUpload === 'True';
 
+//main-page
+export const mainServiceUrl = window.main ? window.main.pageOptions.serviceUrl : '';
 // wiki
 export const slug = window.wiki ? window.wiki.config.slug : '';
 export const repoID = window.wiki ? window.wiki.config.repoId : '';
 export const initialPath = window.wiki ? window.wiki.config.initial_path : '';
 export const permission = window.wiki ? window.wiki.config.permission === 'True' : '';
 export const isDir = window.wiki ? window.wiki.config.isDir : '';
+export const serviceUrl = window.wiki ? window.wiki.config.serviceUrl : '';
+
 
 // file history
 export const PER_PAGE = 25;

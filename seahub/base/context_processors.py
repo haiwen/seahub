@@ -22,7 +22,7 @@ from seahub.settings import SEAFILE_VERSION, SITE_TITLE, SITE_NAME, \
     MEDIA_ROOT, SHOW_LOGOUT_ICON, CUSTOM_LOGO_PATH, CUSTOM_FAVICON_PATH
 
 from seahub.constants import DEFAULT_ADMIN
-from seahub.utils import get_site_name, get_service_url
+from seahub.utils import get_site_name
 
 try:
     from seahub.settings import SEACLOUD_MODE
@@ -118,8 +118,7 @@ def base(request):
         'is_pro': True if is_pro_version() else False,
         'enable_repo_wiki_mode': dj_settings.ENABLE_REPO_WIKI_MODE,
         'enable_upload_folder': dj_settings.ENABLE_UPLOAD_FOLDER,
-        'enable_resumable_fileupload': dj_settings.ENABLE_RESUMABLE_FILEUPLOAD,
-        "service_url": get_service_url().rstrip('/')
+        'enable_resumable_fileupload': dj_settings.ENABLE_RESUMABLE_FILEUPLOAD
     }
 
     if request.user.is_staff:

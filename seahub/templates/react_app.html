@@ -2,5 +2,12 @@
 {% load render_bundle from webpack_loader %}
 
 {% block extra_script %}
+<script type="text/javascript">
+  window.main = {
+    pageOptions: {
+      serviceUrl: "{{ service_url }}",
+    }
+  };
+</script>
 {% render_bundle 'app' %}
 {% endblock %}
