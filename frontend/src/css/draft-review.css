@@ -87,32 +87,34 @@
 .review-side-panel-body {
   padding: 1rem 2rem;
 }
-.review-side-panel-reviewers, .review-side-panel-author {
+.review-side-panel-item {
   border-bottom: 1px solid #e6e6dd;
   padding: 1em 0;
 }
-.reviewer-info {
-  margin-bottom: 0.8125rem;
-}
-.reviewers-header, .author-header {
+.reviewer-info, .author-info {
   display: flex;
-  justify-content: space-between;
-  margin-bottom: 0.8125rem;
-}
-.reviewers-header i {
-  color: #c8c8c8;
-}
-.reviewers-header i:hover {
-  cursor: pointer;
-  color: #a4a4a4;
+  align-items: center;
 }
 .review-side-panel-header {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 2px;
   font-weight: bold;
   color: #666;
   font-size: 0.8125rem;
 }
-.reviewer-avatar, .author-avatar {
+.review-side-panel-item i {
+  color: #c8c8c8;
+  margin: 5px 5px 0 0;
+}
+.review-side-panel-item i:hover {
+  cursor: pointer;
+  color: #a4a4a4;
+}
+.review-side-panel-avatar {
   margin-right: 10px;
+  height: 1.5rem;
+  width: 1.5rem;
 }
 .reviewer-name, .author-name {
   height: 2rem;

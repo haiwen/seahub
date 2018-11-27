@@ -48,16 +48,22 @@ class DraftReview extends React.Component {
       reviewers: [],
       activeTab: 'reviewInfo',
       historyList: [],
-      totalReversionCount: 0
+      totalReversionCount: 0,
+      changedNodes: [],
     };
     this.selectedText = '';
     this.newIndex = null;
     this.oldIndex = null;
+    this.changeIndex = -1;
   }
 
   componentDidMount() {
     this.initialContent();
     document.addEventListener('selectionchange', this.setBtnPosition);
+    let that = this;
+    setTimeout(() => {
+      that.getChangedNodes();
+    }, 1000);
   }
 
   initialContent = () => {
@@ -164,6 +170,12 @@ class DraftReview extends React.Component {
   };
 
   onSwitchShowDiff = () => {
+    if (!this.state.isShowDiff) {
+      let that = this;
+      setTimeout(() => {
+        that.getChangedNodes();
+      }, 100);
+    }
     this.setState({
       isShowDiff: !this.state.isShowDiff,
     });
@@ -334,6 +346,50 @@ class DraftReview extends React.Component {
       this.setState({
         activeTab: tab
       })
+    }
+  }
+
+  getChangedNodes = () => {
+    const nodes = this.refs.diffViewer.value.document.nodes;
+    let keys = [];
+    let lastDiffState = '';
+    nodes.map((node) => {
+      if (node.data.get("diff_state") === 'diff-added' && lastDiffState !== 'diff-added') {
+        keys.push(node.key);
+      }
+      else if (node.data.get("diff_state") === 'diff-removed' && lastDiffState !== 'diff-removed') {
+        keys.push(node.key);
+      }
+      lastDiffState = node.data.get("diff_state");
+    });
+    this.setState({
+      changedNodes: keys
+    });
+  }
+
+  scrollToChangedNode = (scroll) => {
+    if (this.state.changedNodes.length == 0) return;
+    if (scroll === 'up') {
+      this.changeIndex++;
+    }
+    else {
+      this.changeIndex--;
+    }
+    if (this.changeIndex > this.state.changedNodes.length - 1) {
+      this.changeIndex = 0;
+    }
+    if (this.changeIndex < 0) {
+      this.changeIndex = this.state.changedNodes.length - 1;
+    }
+    const win = window;
+    let key = this.state.changedNodes[this.changeIndex];
+    const element = win.document.querySelector(`[data-key="${key}"]`);
+    const scroller = this.findScrollContainer(element, win);
+    const isWindow = scroller == win.document.body || scroller == win.document.documentElement;
+    if (isWindow) {
+      win.scrollTo(0, element.offsetTop);
+    } else {
+      scroller.scrollTop = element.offsetTop;
     }
   }
 
@@ -510,33 +566,15 @@ class DraftReview extends React.Component {
                   <TabContent activeTab={this.state.activeTab}>
                     <TabPane tabId="reviewInfo">
                       <div className="review-side-panel-body">
-                        <div className="review-side-panel-reviewers">
-                          <div className="reviewers-header">
-                            <div className="review-side-panel-header">{gettext('Reviewers')}</div>
-                            <i className="fa fa-cog" onClick={this.toggleAddReviewerDialog}></i>
-                          </div>
-                          { this.state.reviewers.length > 0 ?
-                            this.state.reviewers.map((item, index = 0, arr) => {
-                              return (
-                                <div className="reviewer-info" key={index}>
-                                  <img className="avatar reviewer-avatar" src={item.avatar_url} alt=""/>
-                                  <span className="reviewer-name">{item.user_name}</span>
-                                </div>
-                              );
-                            })
-                            :
-                            <span>{gettext('No reviewer yet.')}</span>
-                          }
-                        </div>
-                        <div className="review-side-panel-author">
-                          <div className="author-header">
-                            <div className="review-side-panel-header">{gettext('Author')}</div>
-                          </div>
-                          <div className="author-info">
-                            <img className="avatar author-avatar" src={authorAvatar} alt=""/>
-                            <span className="author-name">{author}</span>
-                          </div>
-                        </div>
+                        <SidePanelReviewers
+                          reviewers={this.state.reviewers}
+                          toggleAddReviewerDialog={this.toggleAddReviewerDialog}/>                        
+                        <SidePanelAuthor/>
+                        { this.state.isShowDiff &&
+                        <SidePanelChanges
+                          changedNumber={this.state.changedNodes.length}
+                          scrollToChangedNode={this.scrollToChangedNode}/>
+                        }
                       </div>
                     </TabPane>
                     { this.state.reviewStatus == "finished"? '':
@@ -560,6 +598,73 @@ class DraftReview extends React.Component {
             reviewers={this.state.reviewers}
           />
         }
+      </div>
+    );
+  }
+}
+
+class SidePanelReviewers extends React.Component {
+
+  constructor(props) {
+    super(props);
+  }
+
+  render() {
+    return (
+      <div className="review-side-panel-item">
+        <div className="review-side-panel-header">{gettext('Reviewers')}
+          <i className="fa fa-cog" onClick={this.props.toggleAddReviewerDialog}></i>
+        </div>
+        { this.props.reviewers.length > 0 ?
+          this.props.reviewers.map((item, index = 0, arr) => {
+            return (
+              <div className="reviewer-info" key={index}>
+                <img className="avatar review-side-panel-avatar" src={item.avatar_url} alt=""/>
+                <span className="reviewer-name">{item.user_name}</span>
+              </div>
+            );
+          })
+          :
+          <span>{gettext('No reviewer yet.')}</span>
+        }
+      </div>
+    );
+  }
+}
+
+class SidePanelAuthor extends React.Component {
+  render() {
+    return (
+      <div className="review-side-panel-item">
+        <div className="review-side-panel-header">{gettext('Author')}</div>
+        <div className="author-info">
+          <img className="avatar review-side-panel-avatar" src={authorAvatar} alt=""/>
+          <span className="author-name">{author}</span>
+        </div>
+      </div>
+    );
+  }
+}
+
+class SidePanelChanges extends React.Component {
+
+  constructor(props) {
+    super(props);
+  }
+
+  render() {
+    return (
+      <div className="review-side-panel-item">
+        <div className="review-side-panel-header">{gettext('Changes')}</div>
+        <div className="changes-info">
+          <span>{gettext(`Number of changes: ${this.props.changedNumber}`)}</span>
+          { this.props.changedNumber > 0 &&
+            <div>
+              <i className="fa fa-arrow-circle-up" onClick={() => { this.props.scrollToChangedNode('down');}}></i>
+              <i className="fa fa-arrow-circle-down" onClick={() => { this.props.scrollToChangedNode('up');}}></i>
+            </div>
+          }
+        </div>
       </div>
     );
   }
