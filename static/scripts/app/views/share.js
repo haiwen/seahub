@@ -4,8 +4,9 @@ define([
     'underscore',
     'backbone',
     'common',
+    'moment',
     'app/views/folder-share-item'
-], function($, jQueryUI, _, Backbone, Common, FolderShareItemView) {
+], function($, jQueryUI, _, Backbone, Common, Moment, FolderShareItemView) {
     'use strict';
 
     var SharePopupView = Backbone.View.extend({
@@ -187,6 +188,11 @@ define([
                 this.$('#download-link-operations .shared-link-copy-icon').addClass('hide');
                 this.$('#download-link, #direct-dl-link').append(' <span class="error">(' + gettext('Expired') + ')</span>');
             } else {
+                if (link_data.expire_date) {
+                    var expire_date = Moment(link_data.expire_date).format('YYYY-MM-DD');
+                    var info = gettext("This share link will be expired at %s").replace('%s', expire_date);
+                    this.$('.share-link-expire-date-info').html(info).removeClass('hide');
+                }
                 this.$('#send-download-link').removeClass('hide');
                 this.$('#download-link-operations .shared-link-copy-icon').removeClass('hide');
                 this.$('#download-link .error, #direct-dl-link .error').remove('');
@@ -477,7 +483,7 @@ define([
                 window.getSelection().removeAllRanges();
                 var range = document.createRange();
                 range.selectNode(targetDom[0]);
-                window.getSelection().addRange(range); 
+                window.getSelection().addRange(range);
             } else {
                 targetDom.select();
             }
@@ -585,6 +591,7 @@ define([
                 },
                 complete: function() {
                     _this.deleteDownloadLinkCancel();
+                    _this.$('.share-link-expire-date-info').html('').addClass('hide')
                 }
             });
         },
