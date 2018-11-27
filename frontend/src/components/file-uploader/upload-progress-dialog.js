@@ -48,7 +48,7 @@ class UploadProgressDialog extends React.Component {
             {totalProgress === 100 ? uploadedOptions : uploadingOptions}
           </div>
         </div>
-        <div className="uploader-list-content table-container">
+        <div className="uploader-list-content">
           <table>
             <tbody>
               {

@@ -1,7 +1,6 @@
 import React, { Component } from 'react';
 import ReactDOM from 'react-dom';
 import moment from 'moment';
-import cookie from 'react-cookies';
 import { gettext, repoID, serviceUrl, initialPath, isDir } from './utils/constants';
 import { seafileAPI } from './utils/seafile-api';
 import { Utils } from './utils/utils';
@@ -169,22 +168,6 @@ class Wiki extends Component {
       message = message.replace('%(name)s', dirName);
       Toast.error(message);
     });
-  }
-
-  switchViewMode = (mode) => {
-    let dirPath;
-    let tree = this.state.treeData;
-    let node = tree.getNodeByPath(this.state.path);
-    if (node.isDir()) {
-      dirPath = this.state.path;
-    } else {
-      const index = this.state.path.lastIndexOf('/');
-      dirPath = this.state.path.substring(0, index);
-    }
-
-    cookie.save('view_mode', mode, { path: '/' });
-
-    window.location.href = serviceUrl + '/#common/lib/' + repoID + dirPath;
   }
 
   loadSidePanel = (filePath) => {
@@ -788,7 +771,6 @@ class Wiki extends Component {
           latestContributor={this.state.latestContributor}
           direntList={this.state.direntList}
           selectedDirentList={this.state.selectedDirentList}
-          switchViewMode={this.switchViewMode}
           updateDirent={this.updateDirent}
           onLinkClick={this.onLinkClick}
           onSideNavMenuClick={this.onSideNavMenuClick}
