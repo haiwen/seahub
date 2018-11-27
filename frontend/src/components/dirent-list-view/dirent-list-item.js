@@ -6,6 +6,7 @@ import URLDecorator from '../../utils/url-decorator';
 import Toast from '../toast';
 import DirentMenu from './dirent-menu';
 import DirentRename from './dirent-rename';
+import ModalPortal from '../modal-portal';
 import ZipDownloadDialog from '../dialog/zip-download-dialog';
 import MoveDirentDialog from '../dialog/move-dirent-dialog';
 import CopyDirentDialog from '../dialog/copy-dirent-dialog';
@@ -425,26 +426,34 @@ class DirentListItem extends React.Component {
           <td className="last-update" dangerouslySetInnerHTML={{__html: dirent.mtime}}></td>
         </tr>
         {this.state.isMoveDialogShow &&
-          <MoveDirentDialog
-            path={this.props.path}
-            dirent={this.props.dirent}
-            isMutipleOperation={this.state.isMutipleOperation}
-            onItemMove={this.props.onItemMove}
-            onCancelMove={this.onItemMoveToggle}
-          />
+          <ModalPortal>
+            <MoveDirentDialog
+              path={this.props.path}
+              dirent={this.props.dirent}
+              isMutipleOperation={this.state.isMutipleOperation}
+              onItemMove={this.props.onItemMove}
+              onCancelMove={this.onItemMoveToggle}
+            />
+          </ModalPortal>
         }
         {this.state.isCopyDialogShow &&
-          <CopyDirentDialog
-            path={this.props.path}
-            dirent={this.props.dirent}
-            isMutipleOperation={this.state.isMutipleOperation}
-            onItemCopy={this.props.onItemCopy}
-            onCancelCopy={this.onItemCopyToggle}
-          />
+          <ModalPortal>
+            <CopyDirentDialog
+              path={this.props.path}
+              dirent={this.props.dirent}
+              isMutipleOperation={this.state.isMutipleOperation}
+              onItemCopy={this.props.onItemCopy}
+              onCancelCopy={this.onItemCopyToggle}
+            />
+          </ModalPortal>
         }
         {this.state.isProgressDialogShow &&
-          <ZipDownloadDialog progress={this.state.progress} onCancelDownload={this.onCancelDownload}
-          />
+          <ModalPortal>
+            <ZipDownloadDialog 
+              progress={this.state.progress} 
+              onCancelDownload={this.onCancelDownload}
+            />
+          </ModalPortal>
         }
       </Fragment>
     );
