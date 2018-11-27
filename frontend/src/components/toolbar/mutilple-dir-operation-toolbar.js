@@ -32,7 +32,7 @@ class MutipleDirOperationToolbar extends React.Component {
   }
 
   onMoveToggle = () => {
-    this.setState({isMoveDialogShow: !this.state.isMoveDialogShow})
+    this.setState({isMoveDialogShow: !this.state.isMoveDialogShow});
   }
 
   onCopyToggle = () => {

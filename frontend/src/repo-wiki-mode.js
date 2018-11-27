@@ -381,7 +381,7 @@ class Wiki extends Component {
         isAllDirentSelected: false,
         direntList: direntList,
         selectedDirentList: []
-      })
+      });
     }
   }
 
@@ -500,7 +500,7 @@ class Wiki extends Component {
       let message = gettext('Failed to move %(name)s');
       message = message.replace('%(name)s', dirNames);
       Toast.error(message);
-    })
+    });
   }
 
   onCopyItems = (destRepo, destDirentPath) => {
@@ -518,7 +518,7 @@ class Wiki extends Component {
       let message = gettext('Failed to copy %(name)s');
       message = message.replace('%(name)s', dirNames);
       Toast.error(message);
-    })
+    });
   }
 
   onDeleteItems = () => {

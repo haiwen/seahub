@@ -1,9 +1,8 @@
 import React, { Component, Fragment } from 'react';
 import PropTypes from 'prop-types';
-import { gettext, repoID, serviceUrl, slug, siteRoot } from '../../utils/constants';
+import { gettext, repoID, serviceUrl, slug } from '../../utils/constants';
 import { seafileAPI } from '../../utils/seafile-api';
 import { Utils } from '../../utils/utils';
-import URLDecorator from '../../utils/url-decorator';
 import Repo from '../../models/repo';
 import CommonToolbar from '../../components/toolbar/common-toolbar';
 import MutipleDirentsOperationToolbar from '../../components/toolbar/mutilple-dir-operation-toolbar';
@@ -13,9 +12,6 @@ import DirentListView from '../../components/dirent-list-view/dirent-list-view';
 import DirentDetail from '../../components/dirent-detail/dirent-details';
 import CreateFolder from '../../components/dialog/create-folder-dialog';
 import CreateFile from '../../components/dialog/create-file-dialog';
-import ZipDownloadDialog from '../../components/dialog/zip-download-dialog';
-import MoveDirentDialog from '../../components/dialog/move-dirent-dialog';
-import CopyDirentDialog from '../../components/dialog/copy-dirent-dialog';
 import FileUploader from '../../components/file-uploader/file-uploader';
 
 const propTypes = {
@@ -70,13 +66,7 @@ class MainPanel extends Component {
       direntPath: '',
       currentRepo: null,
       isRepoOwner: false,
-      progress: 0,
-      isProgressDialogShow: false,
-      isMoveDialogShow: false,
-      isCopyDialogShow: false,
-      isMutipleOperation: false,
     };
-    this.zip_token = null;
   }
 
   componentDidMount() {
@@ -223,120 +213,6 @@ class MainPanel extends Component {
 
   }
 
-  onSelectedMoveToggle = () => {
-    this.setState({
-      isMutipleOperation: true,
-      isMoveDialogShow: true,
-      currentDirent: null,
-      direntPath: '',
-    });
-  }
-
-  onSelectedCopyToggle = () => {
-    this.setState({
-      isMutipleOperation: true,
-      isCopyDialogShow: true,
-      currentDirent: null,
-      direntPath: '',
-    });
-  }
-
-  onItemMoveToggle = (dirent, direntPath) => {
-    this.setState({
-      isMutipleOperation: false,
-      isMoveDialogShow: true,
-      currentDirent: dirent,
-      direntPath: direntPath,
-    });
-  }
-  
-  onItemCopyToggle = (dirent, direntPath) => {
-    this.setState({
-      isMutipleOperation: false,
-      isCopyDialogShow: true,
-      currentDirent: dirent,
-      direntPath: direntPath
-    });
-  }
-
-  onCancelMove = () => {
-    this.setState({isMoveDialogShow: false});
-  }
-
-  onCancelCopy = () => {
-    this.setState({isCopyDialogShow: false});
-  }
-
-  onItemsDownload = () => {
-    let selectedDirentList = this.props.selectedDirentList;
-    if (selectedDirentList.length) {
-      if (selectedDirentList.length === 1 && !selectedDirentList[0].isDir()) {
-        let direntPath = Utils.joinPath(this.props.path, selectedDirentList[0].name);
-        let url = URLDecorator.getUrl({type: 'download_file_url', repoID: repoID, filePath: direntPath});
-        location.href= url;
-        return;
-      }
-      let selectedDirentNames = selectedDirentList.map(dirent => {
-        return dirent.name;
-      });
-      this.setState({isProgressDialogShow: true, progress: 0});
-      seafileAPI.zipDownload(repoID, this.props.path, selectedDirentNames).then(res => {
-        this.zip_token = res.data['zip_token'];
-        this.addDownloadAnimation();
-        this.interval = setInterval(this.addDownloadAnimation, 1000);
-      });
-    }
-  }
-
-  onItemDownload = (dirent, direntPath) => {
-    if (dirent.type === 'dir') {
-      this.setState({isProgressDialogShow: true, progress: 0});
-      seafileAPI.zipDownload(repoID, this.props.path, dirent.name).then(res => {
-        this.zip_token = res.data['zip_token'];
-        this.addDownloadAnimation();
-        this.interval = setInterval(this.addDownloadAnimation, 1000);
-      }).catch(() => {
-        clearInterval(this.interval);
-        // Toast.error(gettext(''));
-        //todo;
-      });
-    } else {
-      let url = URLDecorator.getUrl({type: 'download_file_url', repoID: repoID, filePath: direntPath});
-      location.href = url;
-    }
-  }
-
-  addDownloadAnimation = () => {
-    let _this = this;
-    let token = this.zip_token;
-    seafileAPI.queryZipProgress(token).then(res => {
-      let data = res.data;
-      let progress = data.total === 0 ? 100 : (data.zipped / data.total * 100).toFixed(0);
-      this.setState({progress: parseInt(progress)});
-
-      if (data['total'] === data['zipped']) {
-        this.setState({
-          progress: 100
-        });
-        clearInterval(this.interval);
-        location.href = URLDecorator.getUrl({type: 'download_dir_zip_url', token: token});
-        setTimeout(function() {
-          _this.setState({isProgressDialogShow: false});
-        }, 500);
-      }
-
-    });
-  }
-
-  onCancelDownload = () => {
-    let zip_token = this.zip_token;
-    seafileAPI.cancelZipTask(zip_token).then(res => {
-      this.setState({
-        isProgressDialogShow: false,
-      });
-    });
-  }
-
   render() {
     return (
       <div className="main-panel wiki-main-panel o-hidden">
@@ -423,9 +299,8 @@ class MainPanel extends Component {
                         onItemClick={this.props.onItemClick}
                         onItemDelete={this.props.onItemDelete}
                         onItemRename={this.props.onItemRename}
-                        onItemDownload={this.onItemDownload}
-                        onItemMoveToggle={this.onItemMoveToggle}
-                        onItemCopyToggle={this.onItemCopyToggle}
+                        onItemMove={this.props.onItemMove}
+                        onItemCopy={this.props.onItemCopy}
                         onItemDetails={this.onItemDetails}
                         isDirentListLoading={this.props.isDirentListLoading}
                         updateDirent={this.props.updateDirent}
@@ -472,34 +347,6 @@ class MainPanel extends Component {
             parentPath={this.props.path}
             addFolderCancel={this.addFolderCancel}
             onAddFolder={this.onAddFolder}
-          />
-        }
-        {this.state.isMoveDialogShow &&
-          <MoveDirentDialog
-            path={this.props.path}
-            isMutipleOperation={this.state.isMutipleOperation}
-            selectedDirentList={this.props.selectedDirentList}
-            dirent={this.state.currentDirent}
-            direntPath={this.state.direntPath}
-            onItemMove={this.props.onItemMove}
-            onItemsMove={this.props.onItemsMove}
-            onCancelMove={this.onCancelMove}
-          />
-        }
-        {this.state.isCopyDialogShow &&
-          <CopyDirentDialog
-            path={this.props.path}
-            isMutipleOperation={this.state.isMutipleOperation}
-            selectedDirentList={this.props.selectedDirentList}
-            dirent={this.state.currentDirent}
-            direntPath={this.state.direntPath}
-            onItemCopy={this.props.onItemCopy}
-            onItemsCopy={this.props.onItemsCopy}
-            onCancelCopy={this.onCancelCopy}
-          />
-        }
-        {this.state.isProgressDialogShow &&
-          <ZipDownloadDialog progress={this.state.progress} onCancelDownload={this.onCancelDownload}
           />
         }
       </div>

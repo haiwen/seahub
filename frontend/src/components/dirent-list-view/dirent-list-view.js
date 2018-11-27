@@ -12,8 +12,8 @@ const propTypes = {
   onItemSelected: PropTypes.func.isRequired,
   onItemRename: PropTypes.func.isRequired,
   onItemClick: PropTypes.func.isRequired,
-  onItemMoveToggle: PropTypes.func.isRequired,
-  onItemCopyToggle: PropTypes.func.isRequired,
+  onItemMove: PropTypes.func.isRequired,
+  onItemCopy: PropTypes.func.isRequired,
   onItemDetails: PropTypes.func.isRequired,
   updateDirent: PropTypes.func.isRequired,
   isDirentListLoading: PropTypes.bool.isRequired,
@@ -85,9 +85,8 @@ class DirentListView extends React.Component {
                   onItemSelected={this.props.onItemSelected}
                   onItemDelete={this.props.onItemDelete}
                   onItemRename={this.props.onItemRename}
-                  onItemMoveToggle={this.props.onItemMoveToggle}
-                  onItemCopyToggle={this.props.onItemCopyToggle}
-                  onItemDownload={this.props.onItemDownload}
+                  onItemMove={this.props.onItemMove}
+                  onItemCopy={this.props.onItemCopy}
                   updateDirent={this.props.updateDirent}
                   isItemFreezed={this.state.isItemFreezed}
                   onFreezedItem={this.onFreezedItem}

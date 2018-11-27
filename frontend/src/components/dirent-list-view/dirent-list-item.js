@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { Fragment } from 'react';
 import PropTypes from 'prop-types';
 import { serviceUrl, gettext, repoID } from '../../utils/constants';
 import { seafileAPI } from '../../utils/seafile-api';
@@ -6,6 +6,9 @@ import URLDecorator from '../../utils/url-decorator';
 import Toast from '../toast';
 import DirentMenu from './dirent-menu';
 import DirentRename from './dirent-rename';
+import ZipDownloadDialog from '../dialog/zip-download-dialog';
+import MoveDirentDialog from '../dialog/move-dirent-dialog';
+import CopyDirentDialog from '../dialog/copy-dirent-dialog';
 
 const propTypes = {
   path: PropTypes.string.isRequired,
@@ -18,9 +21,8 @@ const propTypes = {
   onItemSelected: PropTypes.func.isRequired,
   onItemDelete: PropTypes.func.isRequired,
   onItemRename: PropTypes.func.isRequired,
-  onItemDownload: PropTypes.func.isRequired,
-  onItemMoveToggle: PropTypes.func.isRequired,
-  onItemCopyToggle: PropTypes.func.isRequired,
+  onItemMove: PropTypes.func.isRequired,
+  onItemCopy: PropTypes.func.isRequired,
   onItemDetails: PropTypes.func.isRequired,
   updateDirent: PropTypes.func.isRequired,
   currentRepo: PropTypes.object,
@@ -36,7 +38,13 @@ class DirentListItem extends React.Component {
       highlight: false,
       isItemMenuShow: false,
       menuPosition: {top: 0, left: 0 },
+      progress: 0,
+      isProgressDialogShow: false,
+      isMoveDialogShow: false,
+      isCopyDialogShow: false,
+      isMutipleOperation: false,
     };
+    this.zipToken = null;
   }
 
   componentDidMount() {
@@ -131,12 +139,6 @@ class DirentListItem extends React.Component {
     this.props.onItemClick(direntPath);
   }
 
-  onItemDownload = (e) => {
-    e.nativeEvent.stopImmediatePropagation();
-    let direntPath = this.getDirentPath(this.props.dirent);
-    this.props.onItemDownload(this.props.dirent, direntPath);
-  }
-
   onItemDelete = (e) => {
     e.nativeEvent.stopImmediatePropagation(); //for document event
     this.props.onItemDelete(this.props.dirent);
@@ -224,14 +226,12 @@ class DirentListItem extends React.Component {
   }
 
   onItemMoveToggle = () => {
-    let direntPath = this.getDirentPath(this.props.dirent);
-    this.props.onItemMoveToggle(this.props.dirent, direntPath);
+    this.setState({isMoveDialogShow: !this.state.isMoveDialogShow});
     this.onItemMenuHide();
   }
 
   onItemCopyToggle = () => {
-    let direntPath = this.getDirentPath(this.props.dirent);
-    this.props.onItemCopyToggle(this.props.dirent, direntPath);
+    this.setState({isCopyDialogShow: !this.state.isCopyDialogShow});
     this.onItemMenuHide();
   }
 
@@ -300,6 +300,58 @@ class DirentListItem extends React.Component {
     this.onItemMenuHide();
   }
 
+  onItemDownload = (e) => {
+    e.nativeEvent.stopImmediatePropagation();
+    let dirent = this.props.dirent;
+    let direntPath = this.getDirentPath(dirent);
+    if (dirent.type === 'dir') {
+      this.setState({isProgressDialogShow: true, progress: 0});
+      seafileAPI.zipDownload(repoID, this.props.path, dirent.name).then(res => {
+        this.zipToken = res.data['zip_token'];
+        this.addDownloadAnimation();
+        this.interval = setInterval(this.addDownloadAnimation, 1000);
+      }).catch(() => {
+        clearInterval(this.interval);
+        // Toast.error(gettext(''));
+        //todo;
+      });
+    } else {
+      let url = URLDecorator.getUrl({type: 'download_file_url', repoID: repoID, filePath: direntPath});
+      location.href = url;
+    }
+  }
+
+  addDownloadAnimation = () => {
+    let _this = this;
+    let token = this.zipToken;
+    seafileAPI.queryZipProgress(token).then(res => {
+      let data = res.data;
+      let progress = data.total === 0 ? 100 : (data.zipped / data.total * 100).toFixed(0);
+      this.setState({progress: parseInt(progress)});
+
+      if (data['total'] === data['zipped']) {
+        this.setState({
+          progress: 100
+        });
+        clearInterval(this.interval);
+        location.href = URLDecorator.getUrl({type: 'download_dir_zip_url', token: token});
+        setTimeout(function() {
+          _this.setState({isProgressDialogShow: false});
+        }, 500);
+      }
+
+    });
+  }
+
+  onCancelDownload = () => {
+    let zipToken = this.zipToken;
+    seafileAPI.cancelZipTask(zipToken).then(res => {
+      this.setState({
+        isProgressDialogShow: false,
+      });
+    });
+  }
+
   getDirentPath = (dirent) => {
     let path = this.props.path;
     return path === '/' ? path + dirent.name : path + '/' + dirent.name;
@@ -308,69 +360,93 @@ class DirentListItem extends React.Component {
   render() {
     let { dirent } = this.props;
     return (
-      <tr className={this.state.highlight ? 'tr-highlight' : ''} onMouseEnter={this.onMouseEnter} onMouseOver={this.onMouseOver} onMouseLeave={this.onMouseLeave}>
-        <td className="select">
-          <input type="checkbox" className="vam" onChange={this.onItemSelected} checked={dirent.isSelected}/>
-        </td>
-        <td className="star" onClick={this.onItemStarred}>
-          {dirent.starred !== undefined && !dirent.starred && <i className="far fa-star empty"></i>}
-          {dirent.starred !== undefined && dirent.starred && <i className="fas fa-star"></i>}
-        </td>
-        <td className="icon">
-          <div className="dir-icon">
-            <img src={dirent.type === 'dir' ? serviceUrl + '/media/img/folder-192.png' : serviceUrl + '/media/img/file/192/txt.png'} alt={gettext('file icon')}></img>
-            {dirent.is_locked && <img className="locked" src={serviceUrl + '/media/img/file-locked-32.png'} alt={gettext('locked')}></img>}
-          </div>
-        </td>
-        <td className="name a-simulate">
-          {this.state.isRenameing ?
-            <DirentRename dirent={dirent} onRenameConfirm={this.onRenameConfirm} onRenameCancel={this.onRenameCancel}/> :
-            <span onClick={this.onItemClick}>{dirent.name}</span>
-          }
-        </td>
-        <td>
-          <div className="dirent-item tag-list tag-list-stacked ">
-            { dirent.type !== 'dir' && dirent.file_tags.map((fileTag) => {
-              return (
-                <span className={`file-tag bg-${fileTag.color}`} key={fileTag.id} title={fileTag.name}></span>
-              );
-            })}
-          </div>
-        </td>
-        <td className="operation">
-          {
-            this.state.isOperationShow &&
-            <div className="operations">
-              <ul className="operation-group">
-                <li className="operation-group-item">
-                  <i className="sf2-icon-download" title={gettext('Download')} onClick={this.onItemDownload}></i>
-                </li>
-                <li className="operation-group-item">
-                  <i className="sf2-icon-share" title={gettext('Share')} onClick={this.onItemShare}></i>
-                </li>
-                <li className="operation-group-item">
-                  <i className="sf2-icon-delete" title={gettext('Delete')} onClick={this.onItemDelete}></i>
-                </li>
-                <li className="operation-group-item">
-                  <i className="sf2-icon-caret-down sf-dropdown-toggle" title={gettext('More Operation')} onClick={this.onItemMenuToggle}></i>
-                </li>
-              </ul>
-              {
-                this.state.isItemMenuShow &&
-                <DirentMenu
-                  dirent={this.props.dirent}
-                  menuPosition={this.state.menuPosition}
-                  onMenuItemClick={this.onMenuItemClick}
-                  currentRepo={this.props.currentRepo}
-                  isRepoOwner={this.props.isRepoOwner}
-                />
-              }
+      <Fragment>
+        <tr className={this.state.highlight ? 'tr-highlight' : ''} onMouseEnter={this.onMouseEnter} onMouseOver={this.onMouseOver} onMouseLeave={this.onMouseLeave}>
+          <td className="select">
+            <input type="checkbox" className="vam" onChange={this.onItemSelected} checked={dirent.isSelected}/>
+          </td>
+          <td className="star" onClick={this.onItemStarred}>
+            {dirent.starred !== undefined && !dirent.starred && <i className="far fa-star empty"></i>}
+            {dirent.starred !== undefined && dirent.starred && <i className="fas fa-star"></i>}
+          </td>
+          <td className="icon">
+            <div className="dir-icon">
+              <img src={dirent.type === 'dir' ? serviceUrl + '/media/img/folder-192.png' : serviceUrl + '/media/img/file/192/txt.png'} alt={gettext('file icon')}></img>
+              {dirent.is_locked && <img className="locked" src={serviceUrl + '/media/img/file-locked-32.png'} alt={gettext('locked')}></img>}
             </div>
-          }
-        </td>
-        <td className="file-size">{dirent.size && dirent.size}</td>
-        <td className="last-update" dangerouslySetInnerHTML={{__html: dirent.mtime}}></td>
-      </tr>
+          </td>
+          <td className="name a-simulate">
+            {this.state.isRenameing ?
+              <DirentRename dirent={dirent} onRenameConfirm={this.onRenameConfirm} onRenameCancel={this.onRenameCancel}/> :
+              <span onClick={this.onItemClick}>{dirent.name}</span>
+            }
+          </td>
+          <td>
+            <div className="dirent-item tag-list tag-list-stacked ">
+              { dirent.type !== 'dir' && dirent.file_tags.map((fileTag) => {
+                return (
+                  <span className={`file-tag bg-${fileTag.color}`} key={fileTag.id} title={fileTag.name}></span>
+                );
+              })}
+            </div>
+          </td>
+          <td className="operation">
+            {
+              this.state.isOperationShow &&
+              <div className="operations">
+                <ul className="operation-group">
+                  <li className="operation-group-item">
+                    <i className="sf2-icon-download" title={gettext('Download')} onClick={this.onItemDownload}></i>
+                  </li>
+                  <li className="operation-group-item">
+                    <i className="sf2-icon-share" title={gettext('Share')} onClick={this.onItemShare}></i>
+                  </li>
+                  <li className="operation-group-item">
+                    <i className="sf2-icon-delete" title={gettext('Delete')} onClick={this.onItemDelete}></i>
+                  </li>
+                  <li className="operation-group-item">
+                    <i className="sf2-icon-caret-down sf-dropdown-toggle" title={gettext('More Operation')} onClick={this.onItemMenuToggle}></i>
+                  </li>
+                </ul>
+                {
+                  this.state.isItemMenuShow &&
+                  <DirentMenu
+                    dirent={this.props.dirent}
+                    menuPosition={this.state.menuPosition}
+                    onMenuItemClick={this.onMenuItemClick}
+                    currentRepo={this.props.currentRepo}
+                    isRepoOwner={this.props.isRepoOwner}
+                  />
+                }
+              </div>
+            }
+          </td>
+          <td className="file-size">{dirent.size && dirent.size}</td>
+          <td className="last-update" dangerouslySetInnerHTML={{__html: dirent.mtime}}></td>
+        </tr>
+        {this.state.isMoveDialogShow &&
+          <MoveDirentDialog
+            path={this.props.path}
+            dirent={this.props.dirent}
+            isMutipleOperation={this.state.isMutipleOperation}
+            onItemMove={this.props.onItemMove}
+            onCancelMove={this.onItemMoveToggle}
+          />
+        }
+        {this.state.isCopyDialogShow &&
+          <CopyDirentDialog
+            path={this.props.path}
+            dirent={this.props.dirent}
+            isMutipleOperation={this.state.isMutipleOperation}
+            onItemCopy={this.props.onItemCopy}
+            onCancelCopy={this.onItemCopyToggle}
+          />
+        }
+        {this.state.isProgressDialogShow &&
+          <ZipDownloadDialog progress={this.state.progress} onCancelDownload={this.onCancelDownload}
+          />
+        }
+      </Fragment>
     );
   }
 }
