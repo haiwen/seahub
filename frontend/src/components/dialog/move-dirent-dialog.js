@@ -47,7 +47,7 @@ class MoveDirent extends React.Component {
     let { repo, selectedPath } = this.state;
     let message = gettext('Invalid destination path');
     
-    if (!repo || (repo.repo_id === repoID) && selectedPath === '') {
+    if (!repo || selectedPath === '') {
       this.setState({errMessage: message});
       return;
     }
@@ -66,7 +66,7 @@ class MoveDirent extends React.Component {
     }
 
     // copy dirents to current path
-    if (selectedPath && selectedPath === this.props.path) {
+    if (selectedPath && selectedPath === this.props.path && (repo.repo_id === repoID)) {
       this.setState({errMessage: message});
       return;
     }

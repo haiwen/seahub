@@ -6,6 +6,7 @@ import { Utils } from '../../utils/utils';
 import URLDecorator from '../../utils/url-decorator';
 import Repo from '../../models/repo';
 import CommonToolbar from '../../components/toolbar/common-toolbar';
+import MutipleDirentsOperationToolbar from '../../components/toolbar/mutilple-dir-operation-toolbar';
 import CurDirPath from '../../components/cur-dir-path';
 import MarkdownViewer from '../../components/markdown-viewer';
 import DirentListView from '../../components/dirent-list-view/dirent-list-view';
@@ -344,12 +345,14 @@ class MainPanel extends Component {
             <span className="sf2-icon-menu hidden-md-up d-md-none side-nav-toggle" title={gettext('Side Nav Menu')} onClick={this.onSideNavMenuClick}></span>
             <div className="dir-operation">
               {this.props.isDirentSelected &&
-                <div className="operation mutiple-dirents-operation">
-                  <button className="btn btn-secondary operation-item op-icon sf2-icon-move" title={gettext('Move')} onClick={this.onSelectedMoveToggle}></button>
-                  <button className="btn btn-secondary operation-item op-icon sf2-icon-copy" title={gettext('Copy')} onClick={this.onSelectedCopyToggle}></button>
-                  <button className="btn btn-secondary operation-item op-icon sf2-icon-delete" title={gettext('Delete')} onClick={this.props.onItemsDelete}></button>
-                  <button className="btn btn-secondary operation-item op-icon sf2-icon-download" title={gettext('Download')} onClick={this.onItemsDownload}></button>
-                </div>
+                <MutipleDirentsOperationToolbar
+                  repoID={repoID} 
+                  path={this.props.path}
+                  selectedDirentList={this.props.selectedDirentList}
+                  onItemsMove={this.props.onItemsMove}
+                  onItemsCopy={this.props.onItemsCopy}
+                  onItemsDelete={this.props.onItemsDelete}
+                />
               }
               {!this.props.isDirentSelected &&
                 <div className="operation">

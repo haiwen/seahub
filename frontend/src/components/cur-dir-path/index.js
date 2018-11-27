@@ -6,7 +6,7 @@ import DirTool from './dir-tool';
 const propTypes = {
   repoName: PropTypes.string.isRequired,
   currentPath: PropTypes.string.isRequired,
-  onPathClick: PropTypes.string.isRequired,
+  onPathClick: PropTypes.func.isRequired,
 };
 
 class CurDirPath extends React.Component {
