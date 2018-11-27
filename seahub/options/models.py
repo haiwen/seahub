@@ -28,6 +28,7 @@ KEY_USER_LOGGED_IN = "user_logged_in"
 VAL_USER_LOGGED_IN = "1"
 
 KEY_DEFAULT_REPO = "default_repo"
+KEY_WEBDAV_SECRET = "webdav_secret"
 
 class CryptoOptionNotSetError(Exception):
     pass
@@ -231,6 +232,32 @@ class UserOptionsManager(models.Manager):
         except UserOptions.DoesNotExist:
             return False
 
+    def set_webdav_secret(self, username, secret):
+        return self.set_user_option(username, KEY_WEBDAV_SECRET,
+                                    secret)
+
+    def unset_webdav_secret(self, username):
+        return self.unset_user_option(username, KEY_WEBDAV_SECRET)
+
+    def get_webdav_secret(self, username):
+        try:
+            r = super(UserOptionsManager, self).get(
+                email=username, option_key=KEY_WEBDAV_SECRET
+            )
+            return r.option_val
+        except UserOptions.DoesNotExist:
+            return None
+
+    def get_webdav_decoded_secret(self, username):
+        from seahub.utils.hasher import AESPasswordHasher
+
+        secret = UserOptions.objects.get_webdav_secret(username)
+        if secret:
+            aes = AESPasswordHasher()
+            decoded = aes.decode(secret)
+        else:
+            decoded = None
+        return decoded
 
 class UserOptions(models.Model):
     email = LowerCaseCharField(max_length=255, db_index=True)
