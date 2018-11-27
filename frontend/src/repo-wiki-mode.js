@@ -262,19 +262,6 @@ class Wiki extends Component {
     this.setState({direntList: newDirentList});
   }
 
-  onLinkClick = (event) => {
-    const url = event.target.href;
-    if (this.isInternalMarkdownLink(url)) {
-      let path = this.getPathFromInternalMarkdownLink(url);
-      this.showFile(path);
-    } else if (this.isInternalDirLink(url)) {
-      let path = this.getPathFromInternalDirLink(url);
-      this.showDir(path);
-    } else {
-      window.location.href = url;
-    }
-  }
-
   onpopstate = (event) => {
     if (event.state && event.state.path) {
       let path = event.state.path;
@@ -770,7 +757,6 @@ class Wiki extends Component {
           direntList={this.state.direntList}
           selectedDirentList={this.state.selectedDirentList}
           updateDirent={this.updateDirent}
-          onLinkClick={this.onLinkClick}
           onSideNavMenuClick={this.onSideNavMenuClick}
           onSearchedClick={this.onSearchedClick}
           onMainNavBarClick={this.onMainNavBarClick}
