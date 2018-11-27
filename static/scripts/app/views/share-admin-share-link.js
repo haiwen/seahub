@@ -41,24 +41,32 @@ define([
         },
 
         removeLink: function() {
+
             var _this = this;
 
-            $.ajax({
-                url: Common.getUrl({
-                    'name': 'share_admin_share_link',
-                    'token': this.model.get('token')
-                }),
-                type: 'DELETE',
-                beforeSend: Common.prepareCSRFToken,
-                success: function() {
-                    _this.remove();
-                    Common.feedback(gettext("Successfully deleted 1 item"), 'success');
-                },
-                error: function(xhr) {
-                    Common.ajaxErrorHandler(xhr);
-                }
-            });
-
+            var popupTitle = gettext("Are you sure to remove the share link?");
+            var popupContent = gettext("If the share link is removed, no one will be able to access the file any more with the link.");
+            var yesCallback = function() {
+                $.ajax({
+                    url: Common.getUrl({
+                        'name': 'share_admin_share_link',
+                        'token': _this.model.get('token')
+                    }),
+                    type: 'DELETE',
+                    beforeSend: Common.prepareCSRFToken,
+                    success: function() {
+                        _this.remove();
+                        Common.feedback(gettext("Successfully deleted 1 item"), 'success');
+                    },
+                    error: function(xhr) {
+                        Common.ajaxErrorHandler(xhr);
+                    },
+                    complete: function() {
+                        $.modal.close();
+                    }
+                });
+            };
+            Common.showConfirm(popupTitle, popupContent, yesCallback);
             return false;
         },
 

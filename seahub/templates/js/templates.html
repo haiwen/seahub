@@ -1274,7 +1274,13 @@
                     {% if user.permissions.can_send_share_link_mail %}
                         <button id="send-download-link">{% trans 'Send' %}</button>
                     {% endif %}
+                    <p id="delete-download-link-msg" class="error hide">
+                        <span>{% trans "Are you sure to remove the share link?"%}</span><br />
+                        <span>{% trans "If the share link is removed, no one will be able to access the file any more with the link."%}</span><br />
+                    </p>
                     <button id="delete-download-link">{% trans 'Delete' %}</button>
+                    <button id="delete-download-link-confirm" class="hide">{% trans 'Yes' %}</button>
+                    <button id="delete-download-link-cancel" class="hide">{% trans 'No' %}</button>
                     <form id="send-download-link-form" action="" class="hide">
                         <label for="email">{% trans "Send to:"%}</label><br />
                         <input type="text" class="input" name="email" placeholder="{% trans "Emails, separated by ','"%}" title="{% trans "Emails, separated by ','"%}" id="email" /><br />
