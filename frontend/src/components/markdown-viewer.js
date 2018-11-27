@@ -2,6 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { processor, processorGetAST } from '@seafile/seafile-editor/dist/utils/seafile-markdown2html';
 import Prism from 'prismjs';
+import MarkdownViewer from '@seafile/seafile-editor/dist/viewer/markdown-viewer';
 import WikiOutline from './wiki-outline';
 
 var URL = require('url-parse');
@@ -12,36 +13,6 @@ require('@seafile/seafile-editor/dist/editor/code-hight-package');
 
 const contentClass = 'wiki-md-viewer-rendered-content';
 
-const contentPropTypes = {
-  html: PropTypes.string,
-  renderingContent: PropTypes.bool.isRequired,
-  onLinkClick: PropTypes.func.isRequired
-};
-
-class MarkdownViewerContent extends React.Component {
-
-  constructor(props) {
-    super(props);
-  }
-
-  render() {
-    return (
-      <div>
-        { this.props.renderingContent ? (
-          <div className={contentClass + ' article'}>Loading...</div>
-        ) : (
-          <div ref={(mdContent) => {this.mdContentRef = mdContent;} }
-            className={contentClass + ' article'}
-            dangerouslySetInnerHTML={{ __html: this.props.html }}/>
-        )}
-      </div>
-    );
-  }
-}
-
-MarkdownViewerContent.propTypes = contentPropTypes;
-
-
 const viewerPropTypes = {
   isFileLoading: PropTypes.bool.isRequired,
   lastModified: PropTypes.string,
@@ -49,7 +20,7 @@ const viewerPropTypes = {
   markdownContent: PropTypes.string,
 };
 
-class MarkdownViewer extends React.Component {
+class MarkdownContentViewer extends React.Component {
 
   constructor(props) {
     super(props);
@@ -184,9 +155,7 @@ class MarkdownViewer extends React.Component {
     return (
       <div className="markdown-container" onScroll={this.scrollHandler}>
         <div className="markdown-content" ref="markdownContainer">
-          <MarkdownViewerContent
-            renderingContent={this.state.renderingContent} html={this.state.html}
-          />
+          <MarkdownViewer markdownContent={this.props.markdownContent} />
           <p id="wiki-page-last-modified">{gettext('Last modified by')} {this.props.latestContributor}, <span>{this.props.lastModified}</span></p>
         </div>
         <div className="markdown-outline">
@@ -201,6 +170,6 @@ class MarkdownViewer extends React.Component {
   }
 }
 
-MarkdownViewer.propTypes = viewerPropTypes;
+MarkdownContentViewer.propTypes = viewerPropTypes;
 
-export default MarkdownViewer;
+export default MarkdownContentViewer;

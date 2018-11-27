@@ -7,7 +7,7 @@ import Repo from '../../models/repo';
 import CommonToolbar from '../../components/toolbar/common-toolbar';
 import MutipleDirentsOperationToolbar from '../../components/toolbar/mutilple-dir-operation-toolbar';
 import CurDirPath from '../../components/cur-dir-path';
-import MarkdownViewer from '../../components/markdown-viewer';
+import MarkdownContentViewer from '../../components/markdown-viewer';
 import DirentListView from '../../components/dirent-list-view/dirent-list-view';
 import DirentDetail from '../../components/dirent-detail/dirent-details';
 import CreateFolder from '../../components/dialog/create-folder-dialog';
@@ -284,7 +284,7 @@ class MainPanel extends Component {
                 <div className="message empty-tip err-message"><h2>{gettext('Folder does not exist.')}</h2></div> :
                 <Fragment>
                   { this.props.isViewFile ?
-                    <MarkdownViewer
+                    <MarkdownContentViewer
                       markdownContent={this.props.content}
                       latestContributor={this.props.latestContributor}
                       lastModified = {this.props.lastModified}
