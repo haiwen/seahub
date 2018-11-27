@@ -24,7 +24,7 @@ class Dirent {
       if (json.file_tags) {
         file_tags = json.file_tags.map(item => {
           return new FileTag(item);
-        })
+        });
       }
       this.file_tags = file_tags;
     }

@@ -3,17 +3,17 @@ import PropTypes from 'prop-types';
 import cookie from 'react-cookies';
 import { gettext, repoID, serviceUrl, slug } from '../../utils/constants';
 import { seafileAPI } from '../../utils/seafile-api';
+import { Utils } from '../../utils/utils';
 import Repo from '../../models/repo';
 import CommonToolbar from '../../components/toolbar/common-toolbar';
 import ViewModeToolbar from '../../components/toolbar/view-mode-toolbar';
-import DirentsOperationToolBar from '../../components/toolbar/dir-operation-toolbar';
-import MutipleDirentsOperationToolbar from '../../components/toolbar/mutilple-dir-operation-toolbar';
+import DirOperationToolBar from '../../components/toolbar/dir-operation-toolbar';
+import MutipleDirOperationToolbar from '../../components/toolbar/mutilple-dir-operation-toolbar';
 import CurDirPath from '../../components/cur-dir-path';
 import MarkdownViewer from '../../components/markdown-viewer';
 import DirentListView from '../../components/dirent-list-view/dirent-list-view';
 import DirentDetail from '../../components/dirent-detail/dirent-details';
 import FileUploader from '../../components/file-uploader/file-uploader';
-import { Utils } from '../../utils/utils';
 
 const propTypes = {
   content: PropTypes.string,
@@ -130,7 +130,7 @@ class MainPanel extends Component {
             <span className="sf2-icon-menu hidden-md-up d-md-none side-nav-toggle" title={gettext('Side Nav Menu')} onClick={this.onSideNavMenuClick}></span>
             <div className="dir-operation">
               {this.props.isDirentSelected ?
-                <MutipleDirentsOperationToolbar
+                <MutipleDirOperationToolbar
                   repoID={repoID} 
                   path={this.props.path}
                   selectedDirentList={this.props.selectedDirentList}
@@ -138,7 +138,7 @@ class MainPanel extends Component {
                   onItemsCopy={this.props.onItemsCopy}
                   onItemsDelete={this.props.onItemsDelete}
                 /> :
-                <DirentsOperationToolBar 
+                <DirOperationToolBar 
                   repoID={repoID}
                   path={this.props.path}
                   permission={this.props.permission}

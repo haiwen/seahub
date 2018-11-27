@@ -7,6 +7,7 @@ import EditFileTagDialog from '../dialog/edit-filetag-dialog';
 
 const propTypes = {
   repo: PropTypes.object.isRequired,
+  dirent: PropTypes.object.isRequired,
   direntType: PropTypes.string.isRequired,
   direntDetail: PropTypes.object.isRequired,
   direntPath: PropTypes.string.isRequired,

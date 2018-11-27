@@ -3,7 +3,8 @@ import PropTypes from 'prop-types';
 import { gettext } from '../../utils/constants';
 
 const propTypes = {
-  currentMode: PropTypes.string.isRequired
+  currentMode: PropTypes.string.isRequired,
+  switchViewMode: PropTypes.func.isRequired,
 };
 
 class ViewModeToolbar extends React.Component {
@@ -18,7 +19,7 @@ class ViewModeToolbar extends React.Component {
   }
 
   render() {
-    let baseClass = 'btn btn-secondary btn-icon sf-view-mode-btn '
+    let baseClass = 'btn btn-secondary btn-icon sf-view-mode-btn ';
     return (
       <div className="view-mode btn-group">
         <button className={`${baseClass} sf2-icon-list-view ${this.props.currentMode === 'list' ? 'current-mode' : ''}`} id='list' title={gettext('List')} onClick={this.switchViewMode}></button>

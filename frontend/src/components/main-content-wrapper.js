@@ -2,7 +2,7 @@ import React, { Fragment } from 'react';
 import GeneralToolBar from './toolbar/general-toolbar';
 
 const MainContentWrapper = (WrapperedComponent) => {
-  return class extends React.Component {
+  return class Wrapper extends React.Component {
 
     constructor(props) {
       super(props);

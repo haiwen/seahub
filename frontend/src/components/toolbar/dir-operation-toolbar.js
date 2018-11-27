@@ -9,6 +9,7 @@ import CreateFile from '../../components/dialog/create-file-dialog';
 const propTypes = {
   isViewFile: PropTypes.bool,
   path: PropTypes.string.isRequired,
+  repoID: PropTypes.string.isRequired,
   permission: PropTypes.string.isRequired,
   onAddFile: PropTypes.func.isRequired,
   onAddFolder: PropTypes.func.isRequired,
@@ -95,7 +96,7 @@ class DirOperationToolbar extends React.Component {
     this.setState({
       isCreateFileDialogShow: !this.state.isCreateFileDialogShow,
       fileType: '.md'
-    })
+    });
   }
 
   onAddFile = (filePath, isDraft) => {
