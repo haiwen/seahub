@@ -210,7 +210,7 @@ class DirentListItem extends React.Component {
     }
 
     if (newName.indexOf('/') > -1) {
-      let errMessage = `Name should not include '/'.`;
+      let errMessage = 'Name should not include ' + '\'/\'' + '.';
       Toast.error(gettext(errMessage));
       return false;
     }
