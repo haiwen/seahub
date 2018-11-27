@@ -54,7 +54,7 @@ class DraftReview extends React.Component {
     this.selectedText = '';
     this.newIndex = null;
     this.oldIndex = null;
-    this.changeIndex = 0;
+    this.changeIndex = -1;
   }
 
   componentDidMount() {
@@ -356,26 +356,24 @@ class DraftReview extends React.Component {
     nodes.map((node) => {
       if (node.data.get("diff_state") === 'diff-added' && lastDiffState !== 'diff-added') {
         keys.push(node.key);
-        lastDiffState = 'diff-added';
       }
       else if (node.data.get("diff_state") === 'diff-removed' && lastDiffState !== 'diff-removed') {
         keys.push(node.key);
-        lastDiffState = 'diff-removed';
       }
+      lastDiffState = node.data.get("diff_state");
     });
-    if (keys.length > 0) {
-      this.setState({
-        changedNodes: keys
-      });
-    }
+    this.setState({
+      changedNodes: keys
+    });
   }
 
   scrollToChangedNode = (scroll) => {
+    if (this.state.changedNodes.length == 0) return;
     if (scroll === 'up') {
-      this.changeIndex ++;
+      this.changeIndex++;
     }
     else {
-      this.changeIndex --;
+      this.changeIndex--;
     }
     if (this.changeIndex > this.state.changedNodes.length - 1) {
       this.changeIndex = 0;
