@@ -33,7 +33,6 @@ const propTypes = {
   onSideNavMenuClick: PropTypes.func.isRequired,
   onSearchedClick: PropTypes.func.isRequired,
   onMainNavBarClick: PropTypes.func.isRequired,
-  onLinkClick: PropTypes.func.isRequired,
   onItemClick: PropTypes.func.isRequired,
   onAllDirentSelected: PropTypes.func.isRequired,
   onItemSelected: PropTypes.func.isRequired,
@@ -289,7 +288,6 @@ class MainPanel extends Component {
                       markdownContent={this.props.content}
                       latestContributor={this.props.latestContributor}
                       lastModified = {this.props.lastModified}
-                      onLinkClick={this.props.onLinkClick}
                       isFileLoading={this.props.isFileLoading}
                     /> :
                     <Fragment>

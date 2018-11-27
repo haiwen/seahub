@@ -24,17 +24,6 @@ class MarkdownViewerContent extends React.Component {
     super(props);
   }
 
-  componentDidUpdate () {
-    Prism.highlightAll();
-    var links = document.querySelectorAll(`.${contentClass} a`);
-    links.forEach((li) => {li.addEventListener('click', this.onLinkClick); });
-  }
-
-  onLinkClick = (event) => {
-    this.props.onLinkClick(event);
-    event.preventDefault();
-  }
-
   render() {
     return (
       <div>
@@ -58,7 +47,6 @@ const viewerPropTypes = {
   lastModified: PropTypes.string,
   latestContributor: PropTypes.string,
   markdownContent: PropTypes.string,
-  onLinkClick: PropTypes.func.isRequired
 };
 
 class MarkdownViewer extends React.Component {
@@ -198,7 +186,6 @@ class MarkdownViewer extends React.Component {
         <div className="markdown-content" ref="markdownContainer">
           <MarkdownViewerContent
             renderingContent={this.state.renderingContent} html={this.state.html}
-            onLinkClick={this.props.onLinkClick}
           />
           <p id="wiki-page-last-modified">{gettext('Last modified by')} {this.props.latestContributor}, <span>{this.props.lastModified}</span></p>
         </div>
