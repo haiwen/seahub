@@ -1036,3 +1036,28 @@ table .menu-toggle {
   font-size: 12px;
   color: #666;
 }
+.item-operation-menu-toggle-icon {
+  display: inline-block;
+  margin-top: 4px;
+  font-size: 12px;
+}
+.mobile-operation-menu-bg-layer {
+  position: fixed;
+  left: 0;
+  right: 0;
+  top: 0;
+  bottom: 0;
+  background: #000;
+  opacity: 0.1;
+  z-index: 3;
+}
+.mobile-operation-menu {
+  position: fixed;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  padding: .5em 0;
+  background: #fff;
+  text-align: center;
+  z-index: 4;
+}
