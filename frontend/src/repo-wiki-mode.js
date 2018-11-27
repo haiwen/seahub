@@ -635,7 +635,10 @@ class Wiki extends Component {
     this.setState({treeData: tree});
   }
 
-  copyTreeNode = (nodePath, copyToPath) => {
+  copyTreeNode = (nodePath, copyToPath, destRepo) => {
+    if (repoID !== destRepo.repo_id) {
+      return;
+    }
     let tree = this.state.treeData.clone();
     tree.moveNodeByPath(nodePath, copyToPath, false);
     this.setState({treeData: tree});
