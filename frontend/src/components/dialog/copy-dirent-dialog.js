@@ -7,12 +7,11 @@ import FileChooser from '../file-chooser/file-chooser';
 
 const propTypes = {
   path: PropTypes.string.isRequired,
-  direntPath: PropTypes.string,
   dirent: PropTypes.object,
+  selectedDirentList: PropTypes.array,
   isMutipleOperation: PropTypes.bool.isRequired,
-  selectedDirentList: PropTypes.array.isRequired,
-  onItemCopy: PropTypes.func.isRequired,
-  onItemsCopy: PropTypes.func.isRequired,
+  onItemCopy: PropTypes.func,
+  onItemsCopy: PropTypes.func,
   onCancelCopy: PropTypes.func.isRequired,
 };
 
@@ -47,7 +46,7 @@ class CopyDirent extends React.Component {
     let { repo, selectedPath } = this.state;
     let message = gettext('Invalid destination path');
     
-    if (!repo || (repo.repo_id === repoID) && selectedPath === '') {
+    if (!repo || selectedPath === '') {
       this.setState({errMessage: message});
       return;
     }
@@ -60,13 +59,13 @@ class CopyDirent extends React.Component {
     });
     
     // copy dirents to one of them. eg: A/B, A/C -> A/B
-    if (direntPaths.some(direntPath => { return direntPath === selectedPath})) {
+    if (direntPaths.some(direntPath => { return direntPath === selectedPath;})) {
       this.setState({errMessage: message});
       return;
     }
 
     // copy dirents to current path
-    if (selectedPath && selectedPath === this.props.path) {
+    if (selectedPath && selectedPath === this.props.path && repo.repo_id === repoID) {
       this.setState({errMessage: message});
       return;
     }
@@ -79,7 +78,7 @@ class CopyDirent extends React.Component {
         copyDirentPath = direntPath;
       }
       return flag;
-    })
+    });
 
     if (isChildPath) {
       message = gettext('Can not move directory %(src)s to its subdirectory %(des)s');
@@ -94,8 +93,8 @@ class CopyDirent extends React.Component {
   }
 
   copyItem = () => {
-    let { direntPath } = this.props;
     let { repo, selectedPath } = this.state; 
+    let direntPath = Utils.joinPath(this.props.path, this.props.dirent.name);
     let message = 'Invalid destination path';
 
     if (!repo || (repo.repo_id === repoID && selectedPath === '')) {
@@ -153,7 +152,7 @@ class CopyDirent extends React.Component {
     if (!this.props.isMutipleOperation) {
       title = title.replace('{placeholder}', '<span class="sf-font">' + Utils.HTMLescape(this.props.dirent.name) + '</span>');
     } else {
-      title = gettext("Copy selected item(s) to:");
+      title = gettext('Copy selected item(s) to:');
     }
     return (
       <Modal isOpen={true} toggle={this.toggle}>

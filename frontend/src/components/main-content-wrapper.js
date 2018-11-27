@@ -16,7 +16,7 @@ const MainContentWrapper = (WrapperedComponent) => {
         </Fragment>
       );
     }
-  }
-}
+  };
+};
 
 export default MainContentWrapper;

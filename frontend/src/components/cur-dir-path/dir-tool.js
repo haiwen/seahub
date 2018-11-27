@@ -7,10 +7,10 @@ import CreateTagDialog from '../dialog/create-tag-dialog';
 import UpdateTagDialog from '../dialog/update-tag-dialog';
 
 const propTypes = {
-  path: PropTypes.string.isRequired
+  currentPath: PropTypes.string.isRequired
 };
 
-class PathToolbar extends React.Component {
+class DirTool extends React.Component {
 
   constructor(props) {
     super(props);
@@ -47,8 +47,9 @@ class PathToolbar extends React.Component {
   }
 
   render() {
-    let isFile = this.isMarkdownFile(this.props.path);
-    let name = Utils.getFileName(this.props.path);
+    let { currentPath } = this.props;
+    let isFile = this.isMarkdownFile(currentPath);
+    let name = Utils.getFileName(currentPath);
     let trashUrl = siteRoot + 'repo/recycle/' + repoID + '/?referer=' + encodeURIComponent(location.href);
     let historyUrl = siteRoot + 'repo/history/' + repoID + '/?referer=' + encodeURIComponent(location.href);
     if ( (name === slug  || name === '') && !isFile && permission) {
@@ -89,7 +90,7 @@ class PathToolbar extends React.Component {
         </ul>
       );
     } else if (permission) {
-      historyUrl = siteRoot + 'repo/file_revisions/' + repoID + '/?p=' + Utils.encodePath(this.props.path) + '&referer=' + encodeURIComponent(location.href);
+      historyUrl = siteRoot + 'repo/file_revisions/' + repoID + '/?p=' + Utils.encodePath(currentPath) + '&referer=' + encodeURIComponent(location.href);
       return (
         <ul className="path-toolbar">
           <li className="toolbar-item"><a className="op-link sf2-icon-history" href={historyUrl} title={gettext('History')} aria-label={gettext('History')}></a></li>
@@ -100,6 +101,6 @@ class PathToolbar extends React.Component {
   }
 }
 
-PathToolbar.propTypes = propTypes;
+DirTool.propTypes = propTypes;
 
-export default PathToolbar;
+export default DirTool;
