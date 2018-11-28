@@ -7,6 +7,8 @@ import FileTag from '../../models/file-tag';
 import '../../css/dirent-detail.css';
 
 const propTypes = {
+  repoID: PropTypes.string.isRequired,
+  serviceUrl: PropTypes.string.isRequired,
   dirent: PropTypes.object.isRequired,
   direntPath: PropTypes.string.isRequired,
   onItemDetailsClose: PropTypes.func.isRequired,

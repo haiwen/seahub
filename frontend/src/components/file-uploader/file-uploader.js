@@ -10,6 +10,7 @@ import '../../css/file-uploader.css';
 
 const propTypes = {
   repoID: PropTypes.string.isRequired,
+  direntList: PropTypes.array.isRequired,
   filetypes: PropTypes.array,
   chunkSize: PropTypes.number,
   withCredentials: PropTypes.bool,

@@ -14,6 +14,7 @@ import CopyDirentDialog from '../dialog/copy-dirent-dialog';
 const propTypes = {
   path: PropTypes.string.isRequired,
   repoID: PropTypes.string.isRequired,
+  serviceUrl: PropTypes.string.isRequired,
   isItemFreezed: PropTypes.bool.isRequired,
   dirent: PropTypes.object.isRequired,
   onItemClick: PropTypes.func.isRequired,
