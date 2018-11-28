@@ -1,6 +1,6 @@
 import React, { Fragment } from 'react';
 import PropTypes from 'prop-types';
-import { serviceUrl, gettext, repoID } from '../../utils/constants';
+import { gettext } from '../../utils/constants';
 import { seafileAPI } from '../../utils/seafile-api';
 import URLDecorator from '../../utils/url-decorator';
 import Toast from '../toast';
@@ -123,6 +123,7 @@ class DirentListItem extends React.Component {
 
   onItemStarred = () => {
     let dirent = this.props.dirent;
+    let repoID = this.props.repoID;
     let filePath = this.getDirentPath(dirent);
     if (dirent.starred) {
       seafileAPI.unStarFile(repoID, filePath).then(() => {
@@ -247,6 +248,7 @@ class DirentListItem extends React.Component {
   }
 
   onLockItem = () => {
+    let repoID = this.props.repoID;
     let filePath = this.getDirentPath(this.props.dirent);
     seafileAPI.lockfile(repoID, filePath).then(() => {
       this.props.updateDirent(this.props.dirent, 'is_locked', true);
@@ -256,6 +258,7 @@ class DirentListItem extends React.Component {
   }
 
   onUnlockItem = () => {
+    let repoID = this.props.repoID;
     let filePath = this.getDirentPath(this.props.dirent);
     seafileAPI.unlockfile(repoID, filePath).then(() => {
       this.props.updateDirent(this.props.dirent, 'is_locked', false);
@@ -265,6 +268,7 @@ class DirentListItem extends React.Component {
   }
 
   onNewDraft = () => {
+    let repoID = this.props.repoID;
     let filePath = this.getDirentPath(this.props.dirent);
     seafileAPI.createDraft(repoID, filePath).then(res => {
       let draft_file_Path = res.data.draft_file_path;
@@ -283,6 +287,7 @@ class DirentListItem extends React.Component {
   }
 
   onHistory = () => {
+    let repoID = this.props.repoID;
     let filePath = this.getDirentPath(this.props.dirent);
     let referer = location.href;
     let url = URLDecorator.getUrl({type: 'file_revisions', repoID: repoID, filePath: filePath, referer: referer});
@@ -295,6 +300,7 @@ class DirentListItem extends React.Component {
   }
 
   onOpenViaClient = () => {
+    let repoID = this.props.repoID;
     let filePath = this.getDirentPath(this.props.dirent);
     let url = URLDecorator.getUrl({type: 'open_via_client', repoID: repoID, filePath: filePath});
     location.href = url;
@@ -304,6 +310,7 @@ class DirentListItem extends React.Component {
   onItemDownload = (e) => {
     e.nativeEvent.stopImmediatePropagation();
     let dirent = this.props.dirent;
+    let repoID = this.props.repoID;
     let direntPath = this.getDirentPath(dirent);
     if (dirent.type === 'dir') {
       this.setState({isProgressDialogShow: true, progress: 0});
@@ -359,7 +366,7 @@ class DirentListItem extends React.Component {
   }
 
   render() {
-    let { dirent } = this.props;
+    let { dirent, serviceUrl } = this.props;
     return (
       <Fragment>
         <tr className={this.state.highlight ? 'tr-highlight' : ''} onMouseEnter={this.onMouseEnter} onMouseOver={this.onMouseOver} onMouseLeave={this.onMouseLeave}>

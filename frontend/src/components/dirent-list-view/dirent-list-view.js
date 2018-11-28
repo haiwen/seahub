@@ -6,6 +6,12 @@ import DirentListItem from './dirent-list-item';
 
 const propTypes = {
   path: PropTypes.string.isRequired,
+  repoID: PropTypes.string.isRequired,
+  serviceUrl: PropTypes.string.isRequired,
+  isRepoOwner: PropTypes.bool,
+  currentRepo: PropTypes.object,
+  isAllItemSelected: PropTypes.bool.isRequired,
+  isDirentListLoading: PropTypes.bool.isRequired,
   direntList: PropTypes.array.isRequired,
   onItemDelete: PropTypes.func.isRequired,
   onAllItemSelected: PropTypes.func.isRequired,
@@ -16,10 +22,6 @@ const propTypes = {
   onItemCopy: PropTypes.func.isRequired,
   onItemDetails: PropTypes.func.isRequired,
   updateDirent: PropTypes.func.isRequired,
-  isDirentListLoading: PropTypes.bool.isRequired,
-  isRepoOwner: PropTypes.bool,
-  currentRepo: PropTypes.object,
-  isAllItemSelected: PropTypes.bool.isRequired,
 };
 
 class DirentListView extends React.Component {
@@ -78,6 +80,8 @@ class DirentListView extends React.Component {
                   key={index}
                   dirent={dirent}
                   path={this.props.path}
+                  repoID={this.props.repoID}
+                  serviceUrl={this.props.serviceUrl}
                   currentRepo={this.props.currentRepo}
                   isRepoOwner={this.props.isRepoOwner}
                   onItemClick={this.props.onItemClick}

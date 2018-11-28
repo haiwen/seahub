@@ -139,8 +139,9 @@ class MainPanel extends Component {
                   onItemsDelete={this.props.onItemsDelete}
                 /> :
                 <DirOperationToolBar 
-                  repoID={repoID}
                   path={this.props.path}
+                  repoID={repoID}
+                  serviceUrl={serviceUrl}
                   permission={this.props.permission}
                   isViewFile={this.props.isViewFile}
                   onAddFile={this.props.onAddFile}
@@ -173,8 +174,10 @@ class MainPanel extends Component {
                     /> :
                     <Fragment>
                       <DirentListView
-                        direntList={this.props.direntList}
                         path={this.props.path}
+                        repoID={repoID}
+                        serviceUrl={serviceUrl}
+                        direntList={this.props.direntList}
                         onItemClick={this.props.onItemClick}
                         onItemDelete={this.props.onItemDelete}
                         onItemRename={this.props.onItemRename}
@@ -205,6 +208,8 @@ class MainPanel extends Component {
           { this.state.isDirentDetailShow &&
             <div className="cur-view-detail">
               <DirentDetail
+                serviceUrl={serviceUrl}
+                repoID={repoID}
                 dirent={this.state.currentDirent}
                 direntPath={this.state.direntPath}
                 onItemDetailsClose={this.onItemDetailsClose}
