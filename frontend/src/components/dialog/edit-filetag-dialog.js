@@ -1,11 +1,12 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { Button, Modal, ModalHeader, ModalBody, ModalFooter } from 'reactstrap';
-import { repoID, gettext } from '../../utils/constants';
+import { gettext } from '../../utils/constants';
 import { seafileAPI } from '../../utils/seafile-api';
 import RepoTag from '../../models/repo-tag';
 
 const propTypes = {
+  repoID: PropTypes.string.isRequired,
   filePath: PropTypes.string.isRequired,
   fileTagList: PropTypes.array.isRequired,
   onFileTagChanged: PropTypes.func.isRequired,
@@ -25,6 +26,7 @@ class EditFileTagDialog extends React.Component {
   }
 
   getRepoTagList = () => {
+    let repoID = this.props.repoID;
     seafileAPI.listRepoTags(repoID).then(res => {
       let repotagList = [];
       res.data.repo_tags.forEach(item => {
@@ -47,6 +49,7 @@ class EditFileTagDialog extends React.Component {
   }
 
   editFileTag = (repoTag) => {
+    let repoID = this.props.repoID;
     let repoTagIdList = this.getRepoTagIdList();
     if (repoTagIdList.indexOf(repoTag.id) === -1) {
       let id = repoTag.id;

@@ -2,13 +2,15 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import Resumablejs from '@seafile/resumablejs';
 import MD5 from 'MD5';
-import { repoID, enableResumableFileUpload } from '../../utils/constants';
+import { enableResumableFileUpload } from '../../utils/constants';
 import { seafileAPI } from '../../utils/seafile-api';
 import UploadProgressDialog from './upload-progress-dialog';
 import UploadRemindDialog from '../dialog/upload-remind-dialog';
 import '../../css/file-uploader.css';
 
 const propTypes = {
+  repoID: PropTypes.string.isRequired,
+  direntList: PropTypes.array.isRequired,
   filetypes: PropTypes.array,
   chunkSize: PropTypes.number,
   withCredentials: PropTypes.bool,
@@ -112,6 +114,7 @@ class FileUploader extends React.Component {
       return; // is upload a folder;
     }
     if (enableResumableFileUpload) {
+      let repoID = this.props.repoID;
       seafileAPI.getFileUploadedBytes(repoID, this.props.path, file.fileName).then(res => {
         let uploadedBytes = res.data.uploadedBytes;
         let offset = Math.floor(uploadedBytes / (1024 * 1024));
@@ -277,6 +280,7 @@ class FileUploader extends React.Component {
   onFileUpload = () => {
     this.uploadInput.removeAttribute('webkitdirectory');
     this.uploadInput.click();
+    let repoID = this.props.repoID;
     seafileAPI.getUploadLink(repoID, this.props.path).then(res => {
       this.resumable.opts.target = res.data;
     });
@@ -285,12 +289,14 @@ class FileUploader extends React.Component {
   onFolderUpload = () => {
     this.uploadInput.setAttribute('webkitdirectory', 'webkitdirectory');
     this.uploadInput.click();
+    let repoID = this.props.repoID;
     seafileAPI.getUploadLink(repoID, this.props.path).then(res => {
       this.resumable.opts.target = res.data;
     });
   }
 
   onDragStart = () => {
+    let repoID = this.props.repoID;
     this.uploadInput.setAttribute('webkitdirectory', 'webkitdirectory');
     seafileAPI.getUploadLink(repoID, this.props.path).then(res => {
       this.resumable.opts.target = res.data;

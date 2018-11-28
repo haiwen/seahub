@@ -7,6 +7,7 @@ import EditFileTagDialog from '../dialog/edit-filetag-dialog';
 
 const propTypes = {
   repo: PropTypes.object.isRequired,
+  repoID: PropTypes.string.isRequired,
   dirent: PropTypes.object.isRequired,
   direntType: PropTypes.string.isRequired,
   direntDetail: PropTypes.object.isRequired,
@@ -90,6 +91,7 @@ class DetailListView extends React.Component {
           {
             this.state.isEditFileTagShow &&
             <EditFileTagDialog
+              repoID={this.props.repoID}
               fileTagList={fileTagList}
               filePath={this.props.direntPath}
               toggleCancel={this.onEditFileTagToggle}

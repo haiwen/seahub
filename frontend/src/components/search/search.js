@@ -1,12 +1,13 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import { repoID, siteRoot } from '../../utils/constants';
+import { siteRoot } from '../../utils/constants';
 import SearchResultItem from './search-result-item';
 import editorUtilities from '../../utils/editor-utilties';
 import More from '../more';
 
 const propTypes = {
   placeholder: PropTypes.string,
+  repoID: PropTypes.string.isRequired,
   onSearchedClick: PropTypes.func.isRequired,
 };
 
@@ -60,7 +61,7 @@ class Search extends Component {
       });
       return false;
     }
-
+    let repoID = this.props.repoID;
     let queryData = {
       q: newValue,
       search_repo: repoID ? repoID : 'all',
@@ -165,6 +166,7 @@ class Search extends Component {
   }
 
   onShowMore = () => {
+    let repoID = this.props.repoID;
     let newValue = this.state.value;
     let queryData = {
       q: newValue,

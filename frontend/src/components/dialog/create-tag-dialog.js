@@ -1,10 +1,11 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { Button, Modal, ModalHeader, ModalBody, ModalFooter, Input } from 'reactstrap';
-import { gettext, repoID } from '../../utils/constants';
+import { gettext } from '../../utils/constants';
 import { seafileAPI } from '../../utils/seafile-api';
 
 const propTypes = {
+  repoID: PropTypes.string.isRequired,
   toggleCancel: PropTypes.func.isRequired,
 };
 
@@ -35,6 +36,7 @@ class CreateTagDialog extends React.Component {
   createTag = () => {  
     let name = this.state.tagName;
     let color = this.state.tagColor;
+    let repoID = this.props.repoID;
     seafileAPI.createRepoTag(repoID, name, color).then(() =>{
       this.props.toggleCancel();
     });

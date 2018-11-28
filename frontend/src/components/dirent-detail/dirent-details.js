@@ -1,13 +1,14 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { seafileAPI } from '../../utils/seafile-api';
-import { serviceUrl, repoID } from '../../utils/constants';
 import DetailListView from './detail-list-view';
 import Repo from '../../models/repo';
 import FileTag from '../../models/file-tag';
 import '../../css/dirent-detail.css';
 
 const propTypes = {
+  repoID: PropTypes.string.isRequired,
+  serviceUrl: PropTypes.string.isRequired,
   dirent: PropTypes.object.isRequired,
   direntPath: PropTypes.string.isRequired,
   onItemDetailsClose: PropTypes.func.isRequired,
@@ -27,7 +28,7 @@ class DirentDetail extends React.Component {
   }
 
   componentDidMount() {
-    let { dirent, direntPath } = this.props;
+    let { dirent, direntPath, repoID } = this.props;
     seafileAPI.getRepoInfo(repoID).then(res => {
       let repo = new Repo(res.data);
       this.setState({repo: repo});
@@ -40,6 +41,7 @@ class DirentDetail extends React.Component {
   }
 
   updateDetailView = (dirent, direntPath) => {
+    let repoID = this.props.repoID;
     if (dirent.type === 'file') {
       seafileAPI.getFileInfo(repoID, direntPath).then(res => {
         this.setState({
@@ -66,7 +68,7 @@ class DirentDetail extends React.Component {
   }
 
   render() {
-    let { dirent } = this.props;
+    let { dirent, serviceUrl } = this.props;
     return (
       <div className="detail-container">
         <div className="detail-header">
@@ -84,6 +86,7 @@ class DirentDetail extends React.Component {
             <div className="dirent-table-container">
               <DetailListView 
                 repo={this.state.repo}
+                repoID={this.props.repoID}
                 dirent={this.props.dirent}
                 direntPath={this.props.direntPath}
                 direntType={this.state.direntType}

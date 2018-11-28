@@ -2,12 +2,13 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import RepoListView from './repo-list-view';
 import { seafileAPI } from '../../utils/seafile-api';
-import { gettext, repoID } from '../../utils/constants';
+import { gettext } from '../../utils/constants';
 import Repo from '../../models/repo';
 
 import '../../css/file-chooser.css';
 
 const propTypes = {
+  repoID: PropTypes.string.isRequired,
   onDirentItemClick: PropTypes.func,
   onRepoItemClick: PropTypes.func,
 };
@@ -28,6 +29,7 @@ class FileChooser extends React.Component {
   }
 
   componentDidMount() {
+    let repoID = this.props.repoID;
     seafileAPI.getRepoInfo(repoID).then(res => {
       let repo = new Repo(res.data);
       this.setState({

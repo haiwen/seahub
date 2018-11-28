@@ -1,7 +1,7 @@
 import React, { Fragment } from 'react';
 import PropTypes from 'prop-types';
 import { Utils } from '../../utils/utils';
-import { gettext, serviceUrl } from '../../utils/constants';
+import { gettext } from '../../utils/constants';
 import ModalPortal from '../modal-portal';
 import CreateFolder from '../../components/dialog/create-folder-dialog';
 import CreateFile from '../../components/dialog/create-file-dialog';
@@ -10,6 +10,7 @@ const propTypes = {
   isViewFile: PropTypes.bool,
   path: PropTypes.string.isRequired,
   repoID: PropTypes.string.isRequired,
+  serviceUrl: PropTypes.string.isRequired,
   permission: PropTypes.string.isRequired,
   onAddFile: PropTypes.func.isRequired,
   onAddFolder: PropTypes.func.isRequired,
@@ -57,7 +58,7 @@ class DirOperationToolbar extends React.Component {
 
   onEditClick = (e) => {
     e.preventDefault();
-    let { path, repoID} = this.props;
+    let { path, repoID, serviceUrl } = this.props;
     window.location.href= serviceUrl + '/lib/' + repoID + '/file' + path + '?mode=edit';
   }
 

@@ -1,5 +1,5 @@
 import React, { Fragment } from 'react';
-import { gettext, repoID, slug, permission, siteRoot } from '../../utils/constants';
+import { gettext, siteRoot } from '../../utils/constants';
 import { Utils } from '../../utils/utils';
 import PropTypes from 'prop-types';
 import ListTagDialog from '../dialog/list-tag-dialog';
@@ -7,7 +7,10 @@ import CreateTagDialog from '../dialog/create-tag-dialog';
 import UpdateTagDialog from '../dialog/update-tag-dialog';
 
 const propTypes = {
-  currentPath: PropTypes.string.isRequired
+  repoID: PropTypes.string.isRequired,
+  repoName: PropTypes.string.isRequired,
+  permission: PropTypes.bool.isRequired,
+  currentPath: PropTypes.string.isRequired,
 };
 
 class DirTool extends React.Component {
@@ -47,12 +50,12 @@ class DirTool extends React.Component {
   }
 
   render() {
-    let { currentPath } = this.props;
+    let { repoID, repoName, permission, currentPath } = this.props;
     let isFile = this.isMarkdownFile(currentPath);
     let name = Utils.getFileName(currentPath);
     let trashUrl = siteRoot + 'repo/recycle/' + repoID + '/?referer=' + encodeURIComponent(location.href);
     let historyUrl = siteRoot + 'repo/history/' + repoID + '/?referer=' + encodeURIComponent(location.href);
-    if ( (name === slug  || name === '') && !isFile && permission) {
+    if ( (name === repoName  || name === '') && !isFile && permission) {
       return (
         <Fragment>
           <ul className="path-toolbar">
@@ -63,6 +66,7 @@ class DirTool extends React.Component {
           {
             this.state.isListRepoTagShow &&
             <ListTagDialog
+              repoID={repoID}
               onListTagCancel={this.onListRepoTagToggle}
               onCreateRepoTag={this.onCreateRepoTagToggle}
               onUpdateRepoTag={this.onUpdateRepoTagToggle}
@@ -71,12 +75,14 @@ class DirTool extends React.Component {
           {
             this.state.isCreateRepoTagShow &&
             <CreateTagDialog
+              repoID={repoID}
               toggleCancel={this.onCreateRepoTagToggle}
             />
           }
           {
             this.state.isUpdateRepoTagShow &&
             <UpdateTagDialog
+              repoID={repoID}
               currentTag={this.state.currentTag}
               toggleCancel={this.onUpdateRepoTagToggle}
             />

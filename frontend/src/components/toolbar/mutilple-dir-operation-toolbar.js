@@ -104,6 +104,7 @@ class MutipleDirOperationToolbar extends React.Component {
         {this.state.isMoveDialogShow && 
           <MoveDirentDialog 
             path={this.props.path}
+            repoID={this.props.repoID}
             isMutipleOperation={this.state.isMutipleOperation}
             selectedDirentList={this.props.selectedDirentList}
             onItemsMove={this.props.onItemsMove}
@@ -113,6 +114,7 @@ class MutipleDirOperationToolbar extends React.Component {
         {this.state.isCopyDialogShow &&
           <CopyDirentDialog
             path={this.props.path}
+            repoID={this.props.repoID}
             selectedDirentList={this.props.selectedDirentList}
             isMutipleOperation={this.state.isMutipleOperation}
             onItemsCopy={this.props.onItemsCopy}
