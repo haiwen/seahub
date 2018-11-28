@@ -42,5 +42,6 @@
 }
 
 .uploader-list-content {
+  padding: 0.625rem 1rem 1.25rem;
   background-color: #fff;
 }

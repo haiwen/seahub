@@ -23,13 +23,16 @@ export const folderPermEnabled = window.app.pageOptions.folderPermEnabled === 'T
 export const enableUploadFolder = window.app.pageOptions.enableUploadFolder === 'True';
 export const enableResumableFileUpload = window.app.pageOptions.enableResumableFileUpload === 'True';
 
+//main-page
+export const mainServiceUrl = window.main ? window.main.pageOptions.serviceUrl : '';
 // wiki
 export const slug = window.wiki ? window.wiki.config.slug : '';
 export const repoID = window.wiki ? window.wiki.config.repoId : '';
-export const serviceUrl = window.wiki ? window.wiki.config.serviceUrl : '';
 export const initialPath = window.wiki ? window.wiki.config.initial_path : '';
 export const permission = window.wiki ? window.wiki.config.permission === 'True' : '';
 export const isDir = window.wiki ? window.wiki.config.isDir : '';
+export const serviceUrl = window.wiki ? window.wiki.config.serviceUrl : '';
+
 
 // file history
 export const PER_PAGE = 25;

@@ -135,7 +135,7 @@ class TreeNodeView extends React.Component {
 
   renderMenuController() {
     if (permission) {
-      let isShow = (this.props.node.path === this.props.currentFilePath);
+      let isShow = (this.props.node.path === this.props.currentPath);
       return (
         <div className="right-icon">
           <MenuControl
@@ -180,7 +180,7 @@ class TreeNodeView extends React.Component {
     let node = this.props.node;
     let { type, icon } = this.getNodeTypeAndIcon();
     let hlClass = '';
-    if (node.path === this.props.currentFilePath) {
+    if (node.path === this.props.currentPath) {
       hlClass = 'tree-node-hight-light';
     }
 

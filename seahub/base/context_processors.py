@@ -118,7 +118,7 @@ def base(request):
         'is_pro': True if is_pro_version() else False,
         'enable_repo_wiki_mode': dj_settings.ENABLE_REPO_WIKI_MODE,
         'enable_upload_folder': dj_settings.ENABLE_UPLOAD_FOLDER,
-        'enable_resumable_fileupload': dj_settings.ENABLE_RESUMABLE_FILEUPLOAD,
+        'enable_resumable_fileupload': dj_settings.ENABLE_RESUMABLE_FILEUPLOAD
     }
 
     if request.user.is_staff:

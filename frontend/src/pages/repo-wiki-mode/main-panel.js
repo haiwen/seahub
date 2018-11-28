@@ -1,17 +1,18 @@
 import React, { Component, Fragment } from 'react';
 import PropTypes from 'prop-types';
+import cookie from 'react-cookies';
 import { gettext, repoID, serviceUrl, slug } from '../../utils/constants';
 import { seafileAPI } from '../../utils/seafile-api';
 import { Utils } from '../../utils/utils';
 import Repo from '../../models/repo';
 import CommonToolbar from '../../components/toolbar/common-toolbar';
-import MutipleDirentsOperationToolbar from '../../components/toolbar/mutilple-dir-operation-toolbar';
+import ViewModeToolbar from '../../components/toolbar/view-mode-toolbar';
+import DirOperationToolBar from '../../components/toolbar/dir-operation-toolbar';
+import MutipleDirOperationToolbar from '../../components/toolbar/mutilple-dir-operation-toolbar';
 import CurDirPath from '../../components/cur-dir-path';
 import MarkdownViewer from '../../components/markdown-viewer';
 import DirentListView from '../../components/dirent-list-view/dirent-list-view';
 import DirentDetail from '../../components/dirent-detail/dirent-details';
-import CreateFolder from '../../components/dialog/create-folder-dialog';
-import CreateFile from '../../components/dialog/create-file-dialog';
 import FileUploader from '../../components/file-uploader/file-uploader';
 
 const propTypes = {
@@ -43,7 +44,6 @@ const propTypes = {
   onItemCopy: PropTypes.func.isRequired,
   onAddFile: PropTypes.func.isRequired,
   onAddFolder: PropTypes.func.isRequired,
-  switchViewMode: PropTypes.func.isRequired,
   onFileTagChanged: PropTypes.func.isRequired,
   onItemsMove: PropTypes.func.isRequired,
   onItemsCopy: PropTypes.func.isRequired,
@@ -55,12 +55,7 @@ class MainPanel extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      isWikiMode: true,
-      newMenuShow: false,
-      uploadMenuShow: false,
-      showFileDialog: false,
-      showFolderDialog: false,
-      createFileType: '',
+      currentMode: 'wiki',
       isDirentDetailShow: false,
       currentDirent: null,
       direntPath: '',
@@ -81,20 +76,12 @@ class MainPanel extends Component {
         });
       });
     });
-    document.addEventListener('click', this.hideOperationMenu);
   }
 
-  componentWillUnmount() {
-    document.removeEventListener('click', this.hideOperationMenu);
-  }
-
-  switchViewMode = (e) => {
-    e.preventDefault();
-    if (e.target.id === 'wiki') {
-      return;
-    }
-    this.setState({isWikiMode: false});
-    this.props.switchViewMode(e.target.id);
+  switchViewMode = (mode) => {
+    cookie.save('view_mode', mode, { path: '/' });
+    let dirPath = this.props.isViewFile ? Utils.getDirName(this.props.path) : this.props.path;
+    window.location.href = serviceUrl + '/#common/lib/' + repoID + dirPath;
   }
 
   onSideNavMenuClick = () => {
@@ -103,83 +90,6 @@ class MainPanel extends Component {
 
   onMainNavBarClick = (path) => {
     this.props.onMainNavBarClick(path);
-  }
-
-  onEditClick = (e) => {
-    e.preventDefault();
-    window.location.href= serviceUrl + '/lib/' + repoID + '/file' + this.props.path + '?mode=edit';
-  }
-
-  onUploadClick = (e) => {
-    this.toggleOperationMenu(e);
-    this.setState({
-      newMenuShow: false,
-      uploadMenuShow: !this.state.uploadMenuShow,
-    });
-  }
-
-  onNewClick = (e) => {
-    this.toggleOperationMenu(e);
-    this.setState({
-      newMenuShow: !this.state.newMenuShow,
-      uploadMenuShow: false,
-    });
-  }
-
-  onShareClick = () => {
-    alert('share btn clicked');
-  }
-
-  toggleOperationMenu = (e) => {
-    e.nativeEvent.stopImmediatePropagation();
-    let targetRect = e.target.getClientRects()[0];
-    let left = targetRect.x;
-    let top  = targetRect.y + targetRect.height;
-    let style = {position: 'fixed', display: 'block', left: left, top: top};
-    this.setState({operationMenuStyle: style});
-  }
-
-  hideOperationMenu = () => {
-    this.setState({
-      uploadMenuShow: false,
-      newMenuShow: false,
-    });
-  }
-
-  addFolder = () => {
-    this.setState({showFolderDialog: !this.showFolderDialog});
-  }
-
-  addFile = () => {
-    this.setState({
-      showFileDialog: !this.showFileDialog,
-      createFileType: '',
-    });
-  }
-
-  addMarkdownFile = () => {
-    this.setState({
-      showFileDialog: !this.showFileDialog,
-      createFileType: '.md',
-    });
-  }
-
-  addFolderCancel = () => {
-    this.setState({showFolderDialog: !this.state.showFolderDialog});
-  }
-
-  addFileCancel = () => {
-    this.setState({showFileDialog: !this.state.showFileDialog});
-  }
-
-  onAddFile = (filePath, isDraft) => {
-    this.setState({showFileDialog: !this.state.showFileDialog});
-    this.props.onAddFile(filePath, isDraft);
-  }
-
-  onAddFolder = (dirPath) => {
-    this.setState({showFolderDialog: !this.state.showFolderDialog});
-    this.props.onAddFolder(dirPath);
   }
 
   onItemDetails = (dirent, direntPath) => {
@@ -195,22 +105,21 @@ class MainPanel extends Component {
   }
 
   onFileTagChanged = (dirent, direntPath) => {
-    //todos;
     this.props.onFileTagChanged(dirent, direntPath);
   }
 
-  uploadFile = (e) => {
+  onUploadFile = (e) => {
     e.nativeEvent.stopImmediatePropagation();
     this.uploader.onFileUpload();
   }
 
-  uploadFolder = (e) => {
+  onUploadFolder = (e) => {
     e.nativeEvent.stopImmediatePropagation();
     this.uploader.onFolderUpload();
   }
 
   onFileSuccess = (file) => {
-
+    // todo
   }
 
   render() {
@@ -220,58 +129,28 @@ class MainPanel extends Component {
           <div className="cur-view-toolbar border-left-show">
             <span className="sf2-icon-menu hidden-md-up d-md-none side-nav-toggle" title={gettext('Side Nav Menu')} onClick={this.onSideNavMenuClick}></span>
             <div className="dir-operation">
-              {this.props.isDirentSelected &&
-                <MutipleDirentsOperationToolbar
+              {this.props.isDirentSelected ?
+                <MutipleDirOperationToolbar
                   repoID={repoID} 
                   path={this.props.path}
                   selectedDirentList={this.props.selectedDirentList}
                   onItemsMove={this.props.onItemsMove}
                   onItemsCopy={this.props.onItemsCopy}
                   onItemsDelete={this.props.onItemsDelete}
+                /> :
+                <DirOperationToolBar 
+                  repoID={repoID}
+                  path={this.props.path}
+                  permission={this.props.permission}
+                  isViewFile={this.props.isViewFile}
+                  onAddFile={this.props.onAddFile}
+                  onAddFolder={this.props.onAddFolder}
+                  onUploadFile={this.onUploadFile}
+                  onUploadFolder={this.onUploadFolder}
                 />
               }
-              {!this.props.isDirentSelected &&
-                <div className="operation">
-                  {
-                    this.props.permission === 'rw' &&
-                    <button className="btn btn-secondary operation-item" title={gettext('Edit File')} onClick={this.onEditClick}>{gettext('Edit')}</button>
-                  }
-                  {
-                    !this.props.isViewFile &&
-                    <Fragment>
-                      {
-                        Utils.isSupportUploadFolder() ?
-                          <button className="btn btn-secondary operation-item" title={gettext('Upload')} onClick={this.onUploadClick}>{gettext('Upload')}</button> :
-                          <button className="btn btn-secondary operation-item" title={gettext('Upload')} onClick={this.uploadFile}>{gettext('Upload')}</button>
-                      }
-                      <button className="btn btn-secondary operation-item" title={gettext('New')} onClick={this.onNewClick}>{gettext('New')}</button>
-                      <button className="btn btn-secondary operation-item" title={gettext('Share')} onClick={this.onShareClick}>{gettext('Share')}</button>
-                    </Fragment>
-                  }
-                </div>
-              }
-              {
-                this.state.uploadMenuShow &&
-                <ul className="menu dropdown-menu" style={this.state.operationMenuStyle}>
-                  <li className="dropdown-item" onClick={this.uploadFile}>{gettext('File Upload')}</li>
-                  <li className="dropdown-item" onClick={this.uploadFolder}>{gettext('Folder Upload')}</li>
-                </ul>
-              }
-              {
-                this.state.newMenuShow &&
-                <ul className="menu dropdown-menu" style={this.state.operationMenuStyle}>
-                  <li className="dropdown-item" onClick={this.addFolder}>{gettext('New Folder')}</li>
-                  <li className="dropdown-item" onClick={this.addFile}>{gettext('New File')}</li>
-                  <li className="dropdown-divider"></li>
-                  <li className="dropdown-item" onClick={this.addMarkdownFile}>{gettext('New Markdown File')}</li>
-                </ul>
-              }
             </div>
-            <div className="view-mode btn-group">
-              <button className="btn btn-secondary btn-icon sf-view-mode-btn sf2-icon-list-view" id='list' title={gettext('List')} onClick={this.switchViewMode}></button>
-              <button className="btn btn-secondary btn-icon sf-view-mode-btn sf2-icon-grid-view" id='grid' title={gettext('Grid')} onClick={this.switchViewMode}></button>
-              <button className={`btn btn-secondary btn-icon sf-view-mode-btn sf2-icon-two-columns ${this.state.isWikiMode ? 'current-mode' : ''}`} id='wiki' title={gettext('wiki')} onClick={this.switchViewMode}></button>
-            </div>
+            <ViewModeToolbar currentMode={this.state.currentMode} switchViewMode={this.switchViewMode}/>
           </div>
           <CommonToolbar onSearchedClick={this.props.onSearchedClick} searchPlaceholder={'Search files in this library'}/>
         </div>
@@ -334,21 +213,6 @@ class MainPanel extends Component {
             </div>
           }
         </div>
-        {this.state.showFileDialog &&
-          <CreateFile
-            fileType={this.state.createFileType}
-            parentPath={this.props.path}
-            addFileCancel={this.addFileCancel}
-            onAddFile={this.onAddFile}
-          />
-        }
-        {this.state.showFolderDialog &&
-          <CreateFolder
-            parentPath={this.props.path}
-            addFolderCancel={this.addFolderCancel}
-            onAddFolder={this.onAddFolder}
-          />
-        }
       </div>
     );
   }

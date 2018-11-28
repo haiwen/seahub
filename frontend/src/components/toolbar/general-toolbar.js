@@ -1,8 +1,9 @@
-import React, { Fragment } from 'react';
+import React from 'react';
 import PropTypes from 'prop-types';
 import CommonToolbar from './common-toolbar';
 
 const propTypes = {
+  searchPlaceholder: PropTypes.string,
   onShowSidePanel: PropTypes.func.isRequired,
   onSearchedClick: PropTypes.func.isRequired,
 };
