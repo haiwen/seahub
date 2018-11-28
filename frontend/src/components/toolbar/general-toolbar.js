@@ -11,6 +11,7 @@ const propTypes = {
 class GeneralToolbar extends React.Component {
 
   render() {
+    // todo get repoID?
     let { onShowSidePanel, onSearchedClick } = this.props;
     let placeHolder = this.props.searchPlaceholder || 'Search files in this library';
     return (
@@ -23,6 +24,7 @@ class GeneralToolbar extends React.Component {
           </span>
         </div>
         <CommonToolbar 
+          repoID={'todo'}
           searchPlaceholder={placeHolder}
           onSearchedClick={onSearchedClick} 
         />

@@ -13,6 +13,7 @@ import CopyDirentDialog from '../dialog/copy-dirent-dialog';
 
 const propTypes = {
   path: PropTypes.string.isRequired,
+  repoID: PropTypes.string.isRequired,
   isItemFreezed: PropTypes.bool.isRequired,
   dirent: PropTypes.object.isRequired,
   onItemClick: PropTypes.func.isRequired,
@@ -436,6 +437,7 @@ class DirentListItem extends React.Component {
           <ModalPortal>
             <MoveDirentDialog
               path={this.props.path}
+              repoID={this.props.repoID}
               dirent={this.props.dirent}
               isMutipleOperation={this.state.isMutipleOperation}
               onItemMove={this.props.onItemMove}
@@ -447,6 +449,7 @@ class DirentListItem extends React.Component {
           <ModalPortal>
             <CopyDirentDialog
               path={this.props.path}
+              repoID={this.props.repoID}
               dirent={this.props.dirent}
               isMutipleOperation={this.state.isMutipleOperation}
               onItemCopy={this.props.onItemCopy}

@@ -4,7 +4,9 @@ import DirPath from './dir-path';
 import DirTool from './dir-tool';
 
 const propTypes = {
+  repoID: PropTypes.string.isRequired,
   repoName: PropTypes.string.isRequired,
+  permission: PropTypes.bool.isRequired,
   currentPath: PropTypes.string.isRequired,
   onPathClick: PropTypes.func.isRequired,
 };
@@ -19,7 +21,12 @@ class CurDirPath extends React.Component {
           currentPath={this.props.currentPath}
           onPathClick={this.props.onPathClick}
         />
-        <DirTool currentPath={this.props.currentPath} />
+        <DirTool 
+          repoID={this.props.repoID}
+          repoName={this.props.repoName} 
+          permission={this.props.permission}
+          currentPath={this.props.currentPath} 
+        />
       </Fragment>
     );
   }

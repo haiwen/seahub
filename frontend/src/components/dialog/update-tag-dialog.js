@@ -1,11 +1,12 @@
 import React, { Fragment } from 'react';
 import PropTypes from 'prop-types';
 import { Button, Modal, ModalHeader, ModalBody, ModalFooter, Input } from 'reactstrap';
-import { gettext, repoID } from '../../utils/constants';
+import { gettext } from '../../utils/constants';
 import { seafileAPI } from '../../utils/seafile-api';
 
 const propTypes = {
   currentTag: PropTypes.object,
+  repoID: PropTypes.string.isRequired,
   toggleCancel: PropTypes.func.isRequired,
 };
 
@@ -42,6 +43,7 @@ class UpdateTagDialog extends React.Component {
     let tag_id = this.props.currentTag.id;
     let name = this.state.newName;
     let color = this.state.newColor;
+    let repoID = this.props.repoID;
     seafileAPI.updateRepoTag(repoID, tag_id, name, color).then(() => {
       this.props.toggleCancel();
     });
@@ -65,6 +67,7 @@ class UpdateTagDialog extends React.Component {
 
   onDeleteTag = () => {
     let tag = this.props.currentTag;
+    let repoID = this.props.repoID;
     seafileAPI.deleteRepoTag(repoID, tag.id).then(() => {
       this.props.toggleCancel();
     });

@@ -1,7 +1,7 @@
 import React, { Component, Fragment } from 'react';
 import PropTypes from 'prop-types';
 import cookie from 'react-cookies';
-import { gettext, repoID, serviceUrl, slug } from '../../utils/constants';
+import { gettext, repoID, serviceUrl, slug, permission } from '../../utils/constants';
 import { seafileAPI } from '../../utils/seafile-api';
 import { Utils } from '../../utils/utils';
 import Repo from '../../models/repo';
@@ -153,12 +153,18 @@ class MainPanel extends Component {
             </div>
             <ViewModeToolbar currentMode={this.state.currentMode} switchViewMode={this.switchViewMode}/>
           </div>
-          <CommonToolbar onSearchedClick={this.props.onSearchedClick} searchPlaceholder={'Search files in this library'}/>
+          <CommonToolbar repoID={repoID} onSearchedClick={this.props.onSearchedClick} searchPlaceholder={'Search files in this library'}/>
         </div>
         <div className="main-panel-center flex-direction-row">
           <div className="cur-view-container">
             <div className="cur-view-path">
-              <CurDirPath currentPath={this.props.path} repoName={slug} onPathClick={this.onMainNavBarClick}/>
+              <CurDirPath 
+                repoID={repoID}
+                repoName={slug}
+                currentPath={this.props.path} 
+                permission={permission} 
+                onPathClick={this.onMainNavBarClick}
+              />
             </div>
             <div className="cur-view-content">
               { !this.props.pathExist ?
@@ -196,6 +202,7 @@ class MainPanel extends Component {
                         ref={uploader => this.uploader = uploader}
                         dragAndDrop={true}
                         path={this.props.path}
+                        repoID={repoID}
                         onFileSuccess={this.onFileSuccess}
                         direntList={this.props.direntList}
                       />
@@ -208,8 +215,8 @@ class MainPanel extends Component {
           { this.state.isDirentDetailShow &&
             <div className="cur-view-detail">
               <DirentDetail
-                serviceUrl={serviceUrl}
                 repoID={repoID}
+                serviceUrl={serviceUrl}
                 dirent={this.state.currentDirent}
                 direntPath={this.state.direntPath}
                 onItemDetailsClose={this.onItemDetailsClose}

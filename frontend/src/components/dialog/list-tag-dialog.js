@@ -1,7 +1,7 @@
 import React, { Fragment } from 'react';
 import PropTypes from 'prop-types';
 import { Button, Modal, ModalHeader, ModalBody, ModalFooter } from 'reactstrap';
-import { gettext, repoID } from '../../utils/constants';
+import { gettext } from '../../utils/constants';
 import { seafileAPI } from '../../utils/seafile-api';
 import RepoTag from '../../models/repo-tag';
 import '../../css/repo-tag.css';
@@ -31,6 +31,7 @@ class TagListItem extends React.Component {
 TagListItem.propTypes = tagListItemPropTypes;
 
 const listTagPropTypes = {
+  repoID: PropTypes.string.isRequired,
   onListTagCancel: PropTypes.func.isRequired,
   onCreateRepoTag: PropTypes.func.isRequired,
   onUpdateRepoTag: PropTypes.func.isRequired,
@@ -45,6 +46,7 @@ class ListTagDialog extends React.Component {
   }
 
   componentDidMount() {
+    let repoID = this.props.repoID;
     seafileAPI.listRepoTags(repoID).then(res => {
       let repotagList = [];
       res.data.repo_tags.forEach(item => {

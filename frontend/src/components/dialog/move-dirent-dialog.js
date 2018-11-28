@@ -1,12 +1,13 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { Button, Modal, ModalHeader, ModalFooter, ModalBody, Alert } from 'reactstrap';
-import { gettext, repoID } from '../../utils/constants';
+import { gettext } from '../../utils/constants';
 import { Utils } from '../../utils/utils';
 import FileChooser from '../file-chooser/file-chooser';
 
 const propTypes = {
   path: PropTypes.string.isRequired,
+  repoID: PropTypes.string.isRequired,
   dirent: PropTypes.object,
   selectedDirentList: PropTypes.array,
   isMutipleOperation: PropTypes.bool.isRequired,
@@ -43,7 +44,7 @@ class MoveDirent extends React.Component {
   }
 
   moveItems = () => {
-    let { repo, selectedPath } = this.state;
+    let { repo, repoID, selectedPath } = this.state;
     let message = gettext('Invalid destination path');
     
     if (!repo || selectedPath === '') {
@@ -93,7 +94,7 @@ class MoveDirent extends React.Component {
   }
 
   moveItem = () => {
-    let { repo, selectedPath } = this.state; 
+    let { repo, repoID, selectedPath } = this.state; 
     let direntPath = Utils.joinPath(this.props.path, this.props.dirent.name);
     let message = gettext('Invalid destination path');
 
@@ -109,7 +110,7 @@ class MoveDirent extends React.Component {
     }
     
     // copy the dirent to current path
-    if (selectedPath && Utils.getDirName(direntPath) === selectedPath) {
+    if (selectedPath && this.props.path === selectedPath && repo.repo_id === repoID) {
       this.setState({errMessage: message});
       return;
     }
@@ -159,6 +160,7 @@ class MoveDirent extends React.Component {
         <ModalHeader toggle={this.toggle}><div dangerouslySetInnerHTML={{__html: title}}></div></ModalHeader>
         <ModalBody>
           <FileChooser 
+            repoID={this.props.repoID}
             onDirentItemClick={this.onDirentItemClick}
             onRepoItemClick={this.onRepoItemClick}
           />
