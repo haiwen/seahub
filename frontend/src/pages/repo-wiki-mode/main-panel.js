@@ -123,9 +123,11 @@ class MainPanel extends Component {
   }
 
   render() {
+    const ErrMessage = (<div className="message empty-tip err-message"><h2>{gettext('Folder does not exist.')}</h2></div>);
+    
     return (
       <div className="main-panel wiki-main-panel o-hidden">
-        <div className="main-panel-top panel-top">
+        <div className="main-panel-north">
           <div className="cur-view-toolbar border-left-show">
             <span className="sf2-icon-menu hidden-md-up d-md-none side-nav-toggle" title={gettext('Side Nav Menu')} onClick={this.onSideNavMenuClick}></span>
             <div className="dir-operation">
@@ -167,8 +169,8 @@ class MainPanel extends Component {
               />
             </div>
             <div className="cur-view-content">
-              { !this.props.pathExist ?
-                <div className="message empty-tip err-message"><h2>{gettext('Folder does not exist.')}</h2></div> :
+              {!this.props.pathExist ?
+                ErrMessage :
                 <Fragment>
                   { this.props.isViewFile ?
                     <MarkdownViewer
@@ -212,7 +214,7 @@ class MainPanel extends Component {
               }
             </div>
           </div>
-          { this.state.isDirentDetailShow &&
+          {this.state.isDirentDetailShow && (
             <div className="cur-view-detail">
               <DirentDetail
                 repoID={repoID}
@@ -223,7 +225,7 @@ class MainPanel extends Component {
                 onFileTagChanged={this.onFileTagChanged}
               />
             </div>
-          }
+          )}
         </div>
       </div>
     );
