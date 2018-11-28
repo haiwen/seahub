@@ -17,16 +17,18 @@ from pysearpc import SearpcError
 from seahub.api2.utils import api_error
 from seahub.api2.authentication import TokenAuthentication
 from seahub.api2.throttling import UserRateThrottle
+from seahub.api2.endpoints.group_owned_libraries import get_group_id_by_repo_owner
 from seahub.avatar.settings import GROUP_AVATAR_DEFAULT_SIZE
 from seahub.avatar.templatetags.group_avatar_tags import api_grp_avatar_url, \
     get_default_group_avatar_url
 from seahub.utils import is_org_context, is_valid_username
 from seahub.utils.timeutils import timestamp_to_isoformat_timestr
 from seahub.group.utils import validate_group_name, check_group_name_conflict, \
-    is_group_member, is_group_admin, is_group_owner, is_group_admin_or_owner
+    is_group_member, is_group_admin, is_group_owner, is_group_admin_or_owner, \
+    group_id_to_name
 from seahub.group.views import remove_group_common
 from seahub.base.templatetags.seahub_tags import email2nickname, \
-    translate_seahub_time
+    translate_seahub_time, email2contact_email
 from seahub.views.modules import is_wiki_mod_enabled_for_group, \
     enable_mod_for_group, disable_mod_for_group, MOD_GROUP_WIKI
 from seahub.share.models import ExtraGroupsSharePermission
@@ -118,18 +120,45 @@ class Groups(APIView):
                     group_repos = seafile_api.get_repos_by_group(g.id)
 
                 repos = []
+
+                # Use dict to reduce memcache fetch cost in large for-loop.
+                name_dict = {}
+                contact_email_dict = {}
+
+                for email in set([r.user for r in group_repos]):
+
+                    if email not in name_dict:
+                        if '@seafile_group' in email:
+                            group_id = get_group_id_by_repo_owner(email)
+                            group_name= group_id_to_name(group_id)
+                            name_dict[email] = group_name
+                        else:
+                            name_dict[email] = email2nickname(email)
+
+                    if email not in contact_email_dict:
+                        if '@seafile_group' in email:
+                            contact_email_dict[email] = ''
+                        else:
+                            contact_email_dict[email] = email2contact_email(email)
+
                 for r in group_repos:
+
                     repo = {
                         "id": r.id,
+                        "repo_id": r.id,
                         "name": r.name,
+                        "repo_name": r.name,
                         "size": r.size,
                         "size_formatted": filesizeformat(r.size),
                         "mtime": r.last_modified,
                         "mtime_relative": translate_seahub_time(r.last_modified),
+                        "last_modified": timestamp_to_isoformat_timestr(r.last_modified),
                         "encrypted": r.encrypted,
                         "permission": r.permission,
                         "owner": r.user,
-                        "owner_name": email2nickname(r.user),
+                        "owner_email": r.user,
+                        "owner_name": name_dict.get(r.user, ''),
+                        "owner_contact_email": contact_email_dict.get(r.user, ''),
                         "is_admin": (r.id, g.id) in admin_info
                     }
                     repos.append(repo)
