@@ -13,6 +13,7 @@ import DiffViewer from '@seafile/seafile-editor/dist/viewer/diff-viewer';
 import Loading from './components/loading';
 import Toast from './components/toast';
 import ReviewComments from './components/review-list-view/review-comments';
+import ReviewCommentDialog from './components/review-list-view/review-comment-dialog.js'
 import { Tooltip } from 'reactstrap';
 import AddReviewerDialog from './components/dialog/add-reviewer-dialog.js';
 import { findRange } from '@seafile/slate-react';
@@ -51,6 +52,8 @@ class DraftReview extends React.Component {
       historyList: [],
       totalReversionCount: 0,
       changedNodes: [],
+      isShowCommentDialog: false,
+      commentBtnTop: '-1000px',
     };
     this.selectedText = '';
     this.newIndex = null;
@@ -125,6 +128,12 @@ class DraftReview extends React.Component {
     }).catch(() => {
       let msg_s = gettext('Failed to publish draft.');
       Toast.error(msg_s);
+    });
+  }
+  
+  toggleCommentDialog = () => {
+    this.setState({
+      isShowCommentDialog: !this.state.isShowCommentDialog
     });
   }
 
@@ -228,14 +237,16 @@ class DraftReview extends React.Component {
         }
       }
       let style = this.refs.commentbtn.style;
-      style.top = `${rect.top - 113 + this.refs.viewContent.scrollTop}px`;
-      style.right = `${this.refs.viewContent.clientWidth - rect.x - 70}px`;
+      let commentBtnTop = `${rect.top - 100 + this.refs.viewContent.scrollTop}px`;
+      style.top = commentBtnTop;
+      this.setState({
+        commentBtnTop: commentBtnTop
+      });
       return range;
     }
     else {
       let style = this.refs.commentbtn.style;
-      style.top = '0px';
-      style.right = '5000px';
+      style.top = '-1000px';
     }
   }
 
@@ -279,7 +290,7 @@ class DraftReview extends React.Component {
     this.newIndex = node.data.get('new_index');
     this.oldIndex = node.data.get('old_index');
     this.setState({
-      isShowComments: true
+      isShowCommentDialog: true
     });
   }
 
@@ -432,6 +443,11 @@ class DraftReview extends React.Component {
     });
   }
 
+  onCommentAdded = () => {
+    this.getCommentsNumber();
+    this.toggleCommentDialog();
+  }
+
   render() {
     const onResizeMove = this.state.inResizing ? this.onResizeMouseMove : null;
     const draftLink = siteRoot + 'lib/' + draftOriginRepoID + '/file' + draftFilePath + '?mode=edit';
@@ -507,8 +523,17 @@ class DraftReview extends React.Component {
                       ref="diffViewer"
                     />
                   }
-                  <i className="fa fa-comments review-comment-btn"
-                    ref="commentbtn" onMouseDown={this.addComment}></i>
+                  <i className="fa fa-plus-square review-comment-btn" ref="commentbtn" onMouseDown={this.addComment}></i>
+                  {this.state.isShowCommentDialog &&
+                    <ReviewCommentDialog
+                      toggleCommentDialog={this.toggleCommentDialog}
+                      onCommentAdded={this.onCommentAdded}
+                      selectedText={this.selectedText}
+                      newIndex={this.newIndex}
+                      oldIndex={this.oldIndex}
+                      top={this.state.commentBtnTop}
+                    />
+                  }
                 </div>
               }
             </div>
