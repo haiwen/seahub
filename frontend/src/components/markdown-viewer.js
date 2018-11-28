@@ -21,7 +21,7 @@ class MarkdownContentViewer extends React.Component {
     }
     return (
         <div className="markdown-content">
-          <MarkdownViewer markdownContent={this.props.markdownContent} toc={true}/>
+          <MarkdownViewer markdownContent={this.props.markdownContent} showTOC={true}/>
           <p id="wiki-page-last-modified">{gettext('Last modified by')} {this.props.latestContributor}, <span>{this.props.lastModified}</span></p>
         </div>
     );
