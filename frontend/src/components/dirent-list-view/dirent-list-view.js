@@ -45,8 +45,8 @@ class DirentListView extends React.Component {
     this.onFreezedItem();
   }
 
-  onItemDetails = (dirent, direntPath) => {
-    this.props.onItemDetails(dirent, direntPath);
+  onItemDetails = (dirent) => {
+    this.props.onItemDetails(dirent);
   }
 
   render() {

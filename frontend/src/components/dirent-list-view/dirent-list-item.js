@@ -243,8 +243,7 @@ class DirentListItem extends React.Component {
   }
 
   onDetailsItem = () => {
-    let direntPath = this.getDirentPath(this.props.dirent);
-    this.props.onItemDetails(this.props.dirent, direntPath);
+    this.props.onItemDetails(this.props.dirent);
     this.onItemMenuHide();
   }
 

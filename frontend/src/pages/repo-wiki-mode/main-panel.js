@@ -92,10 +92,9 @@ class MainPanel extends Component {
     this.props.onMainNavBarClick(path);
   }
 
-  onItemDetails = (dirent, direntPath) => {
+  onItemDetails = (dirent) => {
     this.setState({
       currentDirent: dirent,
-      direntPath: direntPath,
       isDirentDetailShow: true,
     });
   }
@@ -219,6 +218,7 @@ class MainPanel extends Component {
               <DirentDetail
                 repoID={repoID}
                 serviceUrl={serviceUrl}
+                path={this.props.path}
                 dirent={this.state.currentDirent}
                 direntPath={this.state.direntPath}
                 onItemDetailsClose={this.onItemDetailsClose}

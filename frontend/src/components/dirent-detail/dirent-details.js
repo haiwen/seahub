@@ -1,5 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
+import { Utils } from '../../utils/utils';
 import { seafileAPI } from '../../utils/seafile-api';
 import DetailListView from './detail-list-view';
 import Repo from '../../models/repo';
@@ -10,7 +11,7 @@ const propTypes = {
   repoID: PropTypes.string.isRequired,
   serviceUrl: PropTypes.string.isRequired,
   dirent: PropTypes.object.isRequired,
-  direntPath: PropTypes.string.isRequired,
+  path: PropTypes.string.isRequired,
   onItemDetailsClose: PropTypes.func.isRequired,
   onFileTagChanged: PropTypes.func.isRequired,
 };
@@ -28,7 +29,8 @@ class DirentDetail extends React.Component {
   }
 
   componentDidMount() {
-    let { dirent, direntPath, repoID } = this.props;
+    let { dirent, path, repoID } = this.props;
+    let direntPath = Utils.joinPath(path, dirent.name);
     seafileAPI.getRepoInfo(repoID).then(res => {
       let repo = new Repo(res.data);
       this.setState({repo: repo});
@@ -37,7 +39,9 @@ class DirentDetail extends React.Component {
   }
 
   componentWillReceiveProps(nextProps) {
-    this.updateDetailView(nextProps.dirent, nextProps.direntPath);
+    let { dirent, path } = nextProps;
+    let direntPath = Utils.joinPath(path, dirent.name);
+    this.updateDetailView(dirent, direntPath);
   }
 
   updateDetailView = (dirent, direntPath) => {
@@ -86,9 +90,9 @@ class DirentDetail extends React.Component {
             <div className="dirent-table-container">
               <DetailListView 
                 repo={this.state.repo}
+                path={this.props.path}
                 repoID={this.props.repoID}
                 dirent={this.props.dirent}
-                direntPath={this.props.direntPath}
                 direntType={this.state.direntType}
                 direntDetail={this.state.direntDetail} 
                 fileTagList={this.state.fileTagList}
