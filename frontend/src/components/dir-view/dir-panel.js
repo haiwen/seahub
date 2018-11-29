@@ -42,7 +42,7 @@ const propTypes = {
   onPathClick: PropTypes.func.isRequired,
   updateDirent: PropTypes.func.isRequired,
   onSearchedClick: PropTypes.func.isRequired,
-  onFileSuccess: PropTypes.func.isRequired,
+  onFileUploadSuccess: PropTypes.func.isRequired,
 };
 
 class DirPanel extends React.Component {
@@ -183,7 +183,7 @@ class DirPanel extends React.Component {
                     path={this.props.path}
                     repoID={this.props.repoID}
                     direntList={this.props.direntList}
-                    onFileSuccess={this.props.onFileSuccess}
+                    onFileUploadSuccess={this.props.onFileUploadSuccess}
                   />
                 </Fragment>
               }

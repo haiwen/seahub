@@ -316,7 +316,7 @@ class DirView extends React.Component {
     this.setState({direntList: newDirentList});
   }
 
-  onFileSuccess = () => {
+  onFileUploadSuccess = () => {
     // todo update upload file to direntList
   }
 
@@ -455,7 +455,7 @@ class DirView extends React.Component {
         updateDirent={this.updateDirent}
         switchViewMode={this.switchViewMode}
         onSearchedClick={this.onSearchedClick}
-        onFileSuccess={this.onFileSuccess}
+        onFileUploadSuccess={this.onFileUploadSuccess}
       />
     );
   }

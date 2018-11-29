@@ -26,7 +26,7 @@ const propTypes = {
   fileTypeErrorCallback: PropTypes.func,
   dragAndDrop: PropTypes.bool.isRequired,
   path: PropTypes.string.isRequired,
-  onFileSuccess: PropTypes.func.isRequired,
+  onFileUploadSuccess: PropTypes.func.isRequired,
 };
 
 class FileUploader extends React.Component {
@@ -97,7 +97,7 @@ class FileUploader extends React.Component {
     this.resumable.on('fileAdded', this.onFileAdded);
     this.resumable.on('filesAddedComplete', this.filesAddedComplete);
     this.resumable.on('fileProgress', this.onFileProgress);
-    this.resumable.on('fileSuccess', this.onFileSuccess);
+    this.resumable.on('fileSuccess', this.onFileUploadSuccess);
     this.resumable.on('progress', this.onProgress);
     this.resumable.on('complete', this.onComplete);
     this.resumable.on('pause', this.onPause);
@@ -205,7 +205,7 @@ class FileUploader extends React.Component {
     this.setState({uploadFileList: uploadFileList});
   }
 
-  onFileSuccess = (file) => {
+  onFileUploadSuccess = (file) => {
     // todos, update uploadList or updateList;
   }
 

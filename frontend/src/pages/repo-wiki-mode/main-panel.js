@@ -117,7 +117,7 @@ class MainPanel extends Component {
     this.uploader.onFolderUpload();
   }
 
-  onFileSuccess = (file) => {
+  onFileUploadSuccess = (file) => {
     // todo
   }
 
@@ -204,7 +204,7 @@ class MainPanel extends Component {
                         dragAndDrop={true}
                         path={this.props.path}
                         repoID={repoID}
-                        onFileSuccess={this.onFileSuccess}
+                        onFileUploadSuccess={this.onFileUploadSuccess}
                         direntList={this.props.direntList}
                       />
                     </Fragment>
