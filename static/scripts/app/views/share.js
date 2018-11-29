@@ -116,7 +116,7 @@ define([
             'submit #send-download-link-form': 'sendDownloadLink',
             'click #cancel-share-download-link': 'cancelShareDownloadLink',
             'click #delete-download-link': 'deleteDownloadLink',
-            'click #delete-download-link-confirm': 'deleteDownloadLinkConfirm',
+            'click #delete-download-link-yes': 'deleteDownloadLinkConfirm',
             'click #delete-download-link-cancel': 'deleteDownloadLinkCancel',
             'click #generate-download-link-form .generate-random-password': 'generateRandomDownloadPassword',
             'keydown #generate-download-link-form .generate-random-password': 'generateRandomDownloadPassword',
@@ -190,8 +190,8 @@ define([
             } else {
                 if (link_data.expire_date) {
                     var expire_date = Moment(link_data.expire_date).format('YYYY-MM-DD');
-                    var info = gettext("This share link will be expired at %s").replace('%s', expire_date);
-                    this.$('.share-link-expire-date-info').html(info).removeClass('hide');
+                    this.$('#share-link-expire-date').html(expire_date).removeClass('hide');
+                    this.$('#share-link-expire-date-label').removeClass('hide');
                 }
                 this.$('#send-download-link').removeClass('hide');
                 this.$('#download-link-operations .shared-link-copy-icon').removeClass('hide');
@@ -569,9 +569,7 @@ define([
 
         deleteDownloadLink: function() {
             $('#delete-download-link').addClass('hide');
-            $('#delete-download-link-msg').removeClass('hide');
             $('#delete-download-link-confirm').removeClass('hide');
-            $('#delete-download-link-cancel').removeClass('hide');
         },
 
         deleteDownloadLinkConfirm: function() {
@@ -591,16 +589,16 @@ define([
                 },
                 complete: function() {
                     _this.deleteDownloadLinkCancel();
-                    _this.$('.share-link-expire-date-info').html('').addClass('hide')
+                    _this.$('#share-link-expire-date-label').addClass('hide');
+                    _this.$('#share-link-expire-date').html('').addClass('hide');
+
                 }
             });
         },
 
         deleteDownloadLinkCancel: function() {
             $('#delete-download-link').removeClass('hide');
-            $('#delete-download-link-msg').addClass('hide');
             $('#delete-download-link-confirm').addClass('hide');
-            $('#delete-download-link-cancel').addClass('hide');
         },
 
         uploadLinkPanelInit: function() {

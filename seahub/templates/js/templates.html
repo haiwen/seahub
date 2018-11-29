@@ -1257,7 +1257,6 @@
                 <div id="download-link-operations" class="hide">
                     <dl>
                         <dt>{% trans "Link: " %}</dt>
-                        <dt class="share-link-expire-date-info hide"></dt>
                         <dd id="download-link">
                             <span class="link-placeholder"></span>
                             <input type="text" readonly="readonly" value="" class="shared-link hide" />
@@ -1265,24 +1264,25 @@
                         </dd>
                         <% if (!is_dir) { %>
                         <dt>{% trans "Direct Download Link: " %}</dt>
-                        <dt class="share-link-expire-date-info hide"></dt>
                         <dd id="direct-dl-link">
                             <span class="link-placeholder"></span>
                             <input type="text" readonly="readonly" value="" class="shared-link hide" />
                             <span class="shared-link-copy-icon icon-copy" title="{% trans "Copy" %}"></span>
                         </dd>
                         <% } %>
+                        <dt id="share-link-expire-date-label" class="hide">{% trans "Expiration Date: " %}</dt>
+                        <dd id="share-link-expire-date" class="hide"></dd>
                     </dl>
                     {% if user.permissions.can_send_share_link_mail %}
                         <button id="send-download-link">{% trans 'Send' %}</button>
                     {% endif %}
-                    <p id="delete-download-link-msg" class="error hide">
-                        <span>{% trans "Are you sure to remove the share link?"%}</span><br />
-                        <span>{% trans "If the share link is removed, no one will be able to access the file any more with the link."%}</span><br />
-                    </p>
                     <button id="delete-download-link">{% trans 'Delete' %}</button>
-                    <button id="delete-download-link-confirm" class="hide">{% trans 'Yes' %}</button>
-                    <button id="delete-download-link-cancel" class="hide">{% trans 'No' %}</button>
+                    <div id="delete-download-link-confirm" class="alert alert-warning hide">
+                        <h4 class="alert-heading">{% trans "Are you sure you want to remove the share link?"%}</h4>
+                        <p style="margin-bottom:1rem;">{% trans "If the share link is removed, no one will be able to access it any more."%}</p>
+                        <button id="delete-download-link-yes">{% trans 'Yes' %}</button>
+                        <button id="delete-download-link-cancel">{% trans 'No' %}</button>
+                    </div>
                     <form id="send-download-link-form" action="" class="hide">
                         <label for="email">{% trans "Send to:"%}</label><br />
                         <input type="text" class="input" name="email" placeholder="{% trans "Emails, separated by ','"%}" title="{% trans "Emails, separated by ','"%}" id="email" /><br />
