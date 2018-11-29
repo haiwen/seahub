@@ -10,16 +10,20 @@ import { siteRoot, gettext, reviewID, draftOriginFilePath, draftFilePath, draftO
 import { seafileAPI } from './utils/seafile-api';
 import axios from 'axios';
 import DiffViewer from '@seafile/seafile-editor/dist/viewer/diff-viewer';
+import { htmlSerializer } from '@seafile/seafile-editor/dist/utils/serialize-html';
+import { serialize } from '@seafile/seafile-editor/dist/utils/slate2markdown/serialize';
 import Loading from './components/loading';
 import Toast from './components/toast';
 import ReviewComments from './components/review-list-view/review-comments';
-import ReviewCommentDialog from './components/review-list-view/review-comment-dialog.js'
+import ReviewCommentDialog from './components/review-list-view/review-comment-dialog.js';
 import { Tooltip } from 'reactstrap';
 import AddReviewerDialog from './components/dialog/add-reviewer-dialog.js';
 import { findRange } from '@seafile/slate-react';
 import { Nav, NavItem, NavLink, TabContent, TabPane } from 'reactstrap';
 import classnames from 'classnames';
 import HistoryList from './pages/review/history-list';
+import Plain from 'slate-plain-serializer';
+import { Document, Block, Value } from 'slate';
 
 import 'seafile-ui';
 import './assets/css/fa-solid.css';
@@ -41,7 +45,6 @@ class DraftReview extends React.Component {
       reviewStatus: opStatus,
       isLoading: true,
       commentsNumber: null,
-      isShowComments: false,
       inResizing: false,
       commentWidth: 30,
       isShowDiff: true,
@@ -250,8 +253,36 @@ class DraftReview extends React.Component {
     }
   }
 
-  addComment = (e) => {
-    e.stopPropagation();
+  getSelectedText = () => {
+    const value = this.refs.diffViewer.value;
+    const native = window.getSelection();
+    const { fragment } = value;
+    const nativeRange = native.getRangeAt(0);
+    let contents = nativeRange.cloneContents();
+    const div = window.document.createElement('div');
+    div.appendChild(contents);
+    div.setAttribute('contenteditable', true);
+    let fragmentDOM = htmlSerializer.deserialize(div.innerHTML).document;
+    let nodes = [];
+    for (let i = 0; i < fragmentDOM.nodes.toArray().length; i++) {
+      let node = Block.create({
+        data: fragmentDOM.nodes.toArray()[i].data,
+        key: fragmentDOM.nodes.toArray()[i].key,
+        nodes: fragmentDOM.nodes.toArray()[i].nodes,
+        type: 'blockquote'
+      });
+      nodes[i] = node;
+    }
+    let newDocument = Document.create({
+      nodes: nodes
+    });
+    let newValue = Value.create({
+      document: newDocument
+    });
+    this.selectedText = serialize(newValue);
+  }
+
+  getIndexs = () => {
     let range = this.setBtnPosition();
     if (!range) {
       return;
@@ -286,9 +317,14 @@ class DraftReview extends React.Component {
     }
     let blockPath = document.createSelection(range).anchor.path.slice(0, 1);
     let node = document.getNode(blockPath);
-    this.selectedText = window.getSelection().toString().trim();
     this.newIndex = node.data.get('new_index');
     this.oldIndex = node.data.get('old_index');
+  }
+
+  addComment = (e) => {
+    e.stopPropagation();
+    this.getSelectedText();
+    this.getIndexs();
     this.setState({
       isShowCommentDialog: true
     });
@@ -503,7 +539,7 @@ class DraftReview extends React.Component {
           <div className="cur-view-container content-container"
             onMouseMove={onResizeMove} onMouseUp={this.onResizeMouseUp} ref="comment">
             <div style={{width:(100-this.state.commentWidth)+'%'}}
-              className={!this.state.isShowComments ? 'cur-view-content' : 'cur-view-content cur-view-content-commenton'} ref="viewContent">
+              className='cur-view-content' ref="viewContent">
               {this.state.isLoading ?
                 <div className="markdown-viewer-render-content article">
                   <Loading /> 
@@ -537,79 +573,71 @@ class DraftReview extends React.Component {
                 </div>
               }
             </div>
-            { !this.state.isShowComments &&
-              <div className="cur-view-right-part" style={{width:(this.state.commentWidth)+'%'}}>
-                <div className="seafile-comment-resize" onMouseDown={this.onResizeMouseDown}></div>
-                <div className="review-side-panel">
-                  <Nav tabs className="review-side-panel-nav">
+            <div className="cur-view-right-part" style={{width:(this.state.commentWidth)+'%'}}>
+              <div className="seafile-comment-resize" onMouseDown={this.onResizeMouseDown}></div>
+              <div className="review-side-panel">
+                <Nav tabs className="review-side-panel-nav">
+                  <NavItem className="nav-item">
+                    <NavLink
+                      className={classnames({ active: this.state.activeTab === 'reviewInfo' })}
+                      onClick={() => { this.tabItemClick('reviewInfo');}}
+                    >
+                      <i className="fas fa-info-circle"></i>
+                    </NavLink>
+                  </NavItem>
+                  <NavItem className="nav-item">
+                    <NavLink
+                      className={classnames({ active: this.state.activeTab === 'comments' })}
+                      onClick={() => { this.tabItemClick('comments');}}
+                    >
+                      <i className="fa fa-comments"></i>
+                      { this.state.commentsNumber > 0 &&
+                        <div className='comments-number'>{this.state.commentsNumber}</div>}
+                    </NavLink>
+                  </NavItem>
+                  { this.state.reviewStatus == 'finished' ? '':
                     <NavItem className="nav-item">
                       <NavLink
-                        className={classnames({ active: this.state.activeTab === 'reviewInfo' })}
-                        onClick={() => { this.tabItemClick('reviewInfo');}}
+                        className={classnames({ active: this.state.activeTab === 'history' })}
+                        onClick={() => { this.tabItemClick('history');}}
                       >
-                        <i className="fas fa-info-circle"></i>
+                        <i className="fas fa-history"></i>
                       </NavLink>
                     </NavItem>
-                    <NavItem className="nav-item">
-                      <NavLink
-                        className={classnames({ active: this.state.activeTab === 'comments' })}
-                        onClick={() => { this.tabItemClick('comments');}}
-                      >
-                        <i className="fa fa-comments"></i>
-                        { this.state.commentsNumber > 0 &&
-                          <div className='comments-number'>{this.state.commentsNumber}</div>}
-                      </NavLink>
-                    </NavItem>
-                    { this.state.reviewStatus == 'finished' ? '':
-                      <NavItem className="nav-item">
-                        <NavLink
-                          className={classnames({ active: this.state.activeTab === 'history' })}
-                          onClick={() => { this.tabItemClick('history');}}
-                        >
-                          <i className="fas fa-history"></i>
-                        </NavLink>
-                      </NavItem>
-                    }
-                  </Nav>
-                  <TabContent activeTab={this.state.activeTab}>
-                    <TabPane tabId="reviewInfo">
-                      <div className="review-side-panel-body">
-                        <SidePanelReviewers
-                          reviewers={this.state.reviewers}
-                          toggleAddReviewerDialog={this.toggleAddReviewerDialog}/>                        
-                        <SidePanelAuthor/>
-                        { this.state.isShowDiff &&
-                        <SidePanelChanges
-                          changedNumber={this.state.changedNodes.length}
-                          scrollToChangedNode={this.scrollToChangedNode}/>
-                        }
-                      </div>
-                    </TabPane>
-                    <TabPane tabId="comments" className="comments">
-                      {this.state.commentsNumber &&
-                        <ReviewComments
-                          scrollToQuote={this.scrollToQuote}
-                          getCommentsNumber={this.getCommentsNumber}
-                          commentsNumber={this.state.commentsNumber}
-                          inResizing={this.state.inResizing}
-                          selectedText={this.selectedText}
-                          newIndex={this.newIndex}
-                          oldIndex={this.oldIndex}
-                        />
+                  }
+                </Nav>
+                <TabContent activeTab={this.state.activeTab}>
+                  <TabPane tabId="reviewInfo">
+                    <div className="review-side-panel-body">
+                      <SidePanelReviewers
+                        reviewers={this.state.reviewers}
+                        toggleAddReviewerDialog={this.toggleAddReviewerDialog}/>                        
+                      <SidePanelAuthor/>
+                      { this.state.isShowDiff &&
+                      <SidePanelChanges
+                        changedNumber={this.state.changedNodes.length}
+                        scrollToChangedNode={this.scrollToChangedNode}/>
                       }
+                    </div>
+                  </TabPane>
+                  <TabPane tabId="comments" className="comments">
+                    <ReviewComments
+                      scrollToQuote={this.scrollToQuote}
+                      getCommentsNumber={this.getCommentsNumber}
+                      commentsNumber={this.state.commentsNumber}
+                      inResizing={this.state.inResizing}
+                    />
+                  </TabPane>
+                  { this.state.reviewStatus == 'finished'? '':
+                    <TabPane tabId="history" className="history">
+                      <HistoryList setDiffViewerContent={this.setDiffViewerContent} 
+                        historyList={this.state.historyList}
+                        totalReversionCount={this.state.totalReversionCount}/>
                     </TabPane>
-
-                    { this.state.reviewStatus == 'finished'? '':
-                      <TabPane tabId="history" className="history">
-                        <HistoryList setDiffViewerContent={this.setDiffViewerContent} 
-                                     historyList={this.state.historyList}
-                                     totalReversionCount={this.state.totalReversionCount}/>
-                      </TabPane>
-                    }
-                  </TabContent>
-                </div>
+                  }
+                </TabContent>
               </div>
-            }
+            </div>
           </div>
         </div>
         { this.state.showReviewerDialog &&
