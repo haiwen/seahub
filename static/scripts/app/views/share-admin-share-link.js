@@ -44,8 +44,8 @@ define([
 
             var _this = this;
 
-            var popupTitle = gettext("Are you sure to remove the share link?");
-            var popupContent = gettext("If the share link is removed, no one will be able to access the file any more with the link.");
+            var popupTitle = gettext("Are you sure you want to remove the share link?");
+            var popupContent = gettext("If the share link is removed, no one will be able to access it any more.");
             var yesCallback = function() {
                 $.ajax({
                     url: Common.getUrl({
