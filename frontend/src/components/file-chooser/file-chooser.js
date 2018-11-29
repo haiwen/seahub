@@ -8,6 +8,7 @@ import RepoInfo from '../../models/repo-info';
 import '../../css/file-chooser.css';
 
 const propTypes = {
+  isShowFile: PropTypes.bool,
   repoID: PropTypes.string.isRequired,
   onDirentItemClick: PropTypes.func,
   onRepoItemClick: PropTypes.func,
@@ -104,6 +105,7 @@ class FileChooser extends React.Component {
               selectedPath={this.state.selectedPath}
               onRepoItemClick={this.onRepoItemClick} 
               onDirentItemClick={this.onDirentItemClick}
+              isShowFile={this.props.isShowFile}
             />
           }
         </div>
@@ -121,6 +123,7 @@ class FileChooser extends React.Component {
               selectedPath={this.state.selectedPath}
               onRepoItemClick={this.onRepoItemClick} 
               onDirentItemClick={this.onDirentItemClick}
+              isShowFile={this.props.isShowFile}
             /> 
           }
         </div>
