@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2018-09-07 10:41+0800\n"
+"POT-Creation-Date: 2018-11-29 14:09+0800\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -66,14 +66,14 @@ msgstr ""
 
 #: frontend/src/components/menu-component/menu-dialog/create-fileforder-dialog.js:91
 #: frontend/src/components/menu-component/menu-dialog/rename-dialog.js:71
-#: static/scripts/app/views/fileupload.js:21
+#: static/scripts/app/views/fileupload.js:22
 msgid "Cancel"
 msgstr ""
 
 #: frontend/src/components/menu-component/menu-dialog/delete-dialog.js:16
 #: frontend/src/components/menu-component/node-menu.js:39
 #: frontend/src/components/menu-component/node-menu.js:47
-#: static/scripts/app/views/fileupload.js:22
+#: static/scripts/app/views/fileupload.js:23
 #: static/scripts/sysadmin-app/views/device-trusted-ipaddress.js:27
 msgid "Delete"
 msgstr ""
@@ -194,23 +194,23 @@ msgid "View-on-Cloud"
 msgstr ""
 
 #: static/scripts/app/models/deleted-repo.js:19
-#: static/scripts/app/models/repo.js:59 static/scripts/common.js:343
+#: static/scripts/app/models/repo.js:59 static/scripts/common.js:345
 msgid "Encrypted library"
 msgstr ""
 
 #: static/scripts/app/models/deleted-repo.js:21
-#: static/scripts/app/models/repo.js:61 static/scripts/common.js:347
+#: static/scripts/app/models/repo.js:61 static/scripts/common.js:349
 #: static/scripts/sysadmin-app/models/trash-repo.js:14
 msgid "Read-Write library"
 msgstr ""
 
 #: static/scripts/app/models/dirent.js:113 static/scripts/app/views/dir.js:682
 #: static/scripts/app/views/dir.js:752
-#: static/scripts/app/views/fileupload.js:392
-#: static/scripts/app/views/fileupload.js:406
-#: static/scripts/app/views/fileupload.js:418
-#: static/scripts/app/views/fileupload.js:430
-#: static/scripts/app/views/group.js:65 static/scripts/common.js:643
+#: static/scripts/app/views/fileupload.js:394
+#: static/scripts/app/views/fileupload.js:408
+#: static/scripts/app/views/fileupload.js:420
+#: static/scripts/app/views/fileupload.js:432
+#: static/scripts/app/views/group.js:65 static/scripts/common.js:645
 msgid "Just now"
 msgstr ""
 
@@ -221,29 +221,29 @@ msgstr ""
 #: static/scripts/app/models/repo.js:37
 #: static/scripts/app/views/dialogs/dirent-rename.js:65
 #: static/scripts/app/views/dir.js:667 static/scripts/app/views/dir.js:727
-#: static/scripts/app/views/dirent.js:515
+#: static/scripts/app/views/dirent.js:513
 #: static/scripts/app/views/group-repo.js:131
 #: static/scripts/app/views/repo.js:187
 msgid "Name should not include '/'."
 msgstr ""
 
-#: static/scripts/app/models/repo.js:41 static/scripts/app/views/share.js:334
+#: static/scripts/app/models/repo.js:41 static/scripts/app/views/share.js:350
 msgid "Please enter password"
 msgstr ""
 
-#: static/scripts/app/models/repo.js:42 static/scripts/app/views/share.js:342
+#: static/scripts/app/models/repo.js:42 static/scripts/app/views/share.js:358
 msgid "Please enter the password again"
 msgstr ""
 
-#: static/scripts/app/models/repo.js:44 static/scripts/app/views/share.js:338
+#: static/scripts/app/models/repo.js:44 static/scripts/app/views/share.js:354
 msgid "Password is too short"
 msgstr ""
 
-#: static/scripts/app/models/repo.js:46 static/scripts/app/views/share.js:346
+#: static/scripts/app/models/repo.js:46 static/scripts/app/views/share.js:362
 msgid "Passwords don't match"
 msgstr ""
 
-#: static/scripts/app/models/repo.js:63 static/scripts/common.js:345
+#: static/scripts/app/models/repo.js:63 static/scripts/common.js:347
 msgid "Read-Only library"
 msgstr ""
 
@@ -360,7 +360,7 @@ msgstr ""
 
 #: static/scripts/app/views/dialogs/dirent-rename.js:59
 #: static/scripts/app/views/dir.js:662 static/scripts/app/views/dir.js:722
-#: static/scripts/app/views/dirent.js:509
+#: static/scripts/app/views/dirent.js:507
 #: static/scripts/app/views/group-repo.js:125
 #: static/scripts/app/views/groups.js:118
 #: static/scripts/app/views/invitations.js:65
@@ -415,7 +415,7 @@ msgstr ""
 #: static/scripts/app/views/repo.js:247
 #: static/scripts/sysadmin-app/views/group.js:74
 #: static/scripts/sysadmin-app/views/groups.js:68
-#: static/scripts/sysadmin-app/views/repo.js:107
+#: static/scripts/sysadmin-app/views/repo.js:108
 #: static/scripts/sysadmin-app/views/repos.js:58
 msgid "Search user or enter email and press Enter"
 msgstr ""
@@ -432,11 +432,11 @@ msgstr ""
 msgid "Please click and choose a directory."
 msgstr ""
 
-#: static/scripts/app/views/dialogs/repo-history-settings.js:36
+#: static/scripts/app/views/dialogs/repo-history-settings.js:37
 msgid "{placeholder} History Setting"
 msgstr ""
 
-#: static/scripts/app/views/dialogs/repo-history-settings.js:130
+#: static/scripts/app/views/dialogs/repo-history-settings.js:131
 msgid "Successfully set library history."
 msgstr ""
 
@@ -484,7 +484,7 @@ msgid "Password is required."
 msgstr ""
 
 #: static/scripts/app/views/dir.js:479
-#: static/scripts/app/views/notifications.js:63 static/scripts/common.js:467
+#: static/scripts/app/views/notifications.js:63 static/scripts/common.js:469
 msgid "Please check the network."
 msgstr ""
 
@@ -608,8 +608,8 @@ msgstr ""
 msgid "Failed to copy %(name)s"
 msgstr ""
 
-#: static/scripts/app/views/dirent-details.js:95 static/scripts/common.js:694
-#: static/scripts/common.js:765
+#: static/scripts/app/views/dirent-details.js:95 static/scripts/common.js:696
+#: static/scripts/common.js:767
 msgid "No matches"
 msgstr ""
 
@@ -623,37 +623,37 @@ msgid "locked by {placeholder}"
 msgstr ""
 
 #: static/scripts/app/views/dirent-grid.js:187
-#: static/scripts/app/views/dirent.js:416
+#: static/scripts/app/views/dirent.js:414
 msgid "Successfully deleted %(name)s"
 msgstr ""
 
-#: static/scripts/app/views/fileupload.js:10
+#: static/scripts/app/views/fileupload.js:11
 msgid "File is too big"
 msgstr ""
 
-#: static/scripts/app/views/fileupload.js:11
+#: static/scripts/app/views/fileupload.js:12
 msgid "File is too small"
 msgstr ""
 
-#: static/scripts/app/views/fileupload.js:12
+#: static/scripts/app/views/fileupload.js:13
 msgid "Filetype not allowed"
 msgstr ""
 
-#: static/scripts/app/views/fileupload.js:13
+#: static/scripts/app/views/fileupload.js:14
 msgid "Maximum number of files exceeded"
 msgstr ""
 
-#: static/scripts/app/views/fileupload.js:14
+#: static/scripts/app/views/fileupload.js:15
 msgid "Uploaded bytes exceed file size"
 msgstr ""
 
-#: static/scripts/app/views/fileupload.js:15
+#: static/scripts/app/views/fileupload.js:16
 msgid "Empty file upload result"
 msgstr ""
 
-#: static/scripts/app/views/fileupload.js:17
-#: static/scripts/app/views/fileupload.js:225
-#: static/scripts/app/views/fileupload.js:265
+#: static/scripts/app/views/fileupload.js:18
+#: static/scripts/app/views/fileupload.js:226
+#: static/scripts/app/views/fileupload.js:266
 #: static/scripts/app/views/repo-details.js:37
 #: static/scripts/sysadmin-app/views/address-book-group-item.js:145
 #: static/scripts/sysadmin-app/views/address-book-group-item.js:152
@@ -661,43 +661,43 @@ msgstr ""
 msgid "Error"
 msgstr ""
 
-#: static/scripts/app/views/fileupload.js:18
+#: static/scripts/app/views/fileupload.js:19
 msgid "uploaded"
 msgstr ""
 
-#: static/scripts/app/views/fileupload.js:19
+#: static/scripts/app/views/fileupload.js:20
 msgid "canceled"
 msgstr ""
 
-#: static/scripts/app/views/fileupload.js:20
+#: static/scripts/app/views/fileupload.js:21
 msgid "Start"
 msgstr ""
 
-#: static/scripts/app/views/fileupload.js:46
+#: static/scripts/app/views/fileupload.js:47
 msgid "File Uploading..."
 msgstr ""
 
-#: static/scripts/app/views/fileupload.js:47
+#: static/scripts/app/views/fileupload.js:48
 msgid "File Upload complete"
 msgstr ""
 
-#: static/scripts/app/views/fileupload.js:48
+#: static/scripts/app/views/fileupload.js:49
 msgid "File Upload canceled"
 msgstr ""
 
-#: static/scripts/app/views/fileupload.js:49
+#: static/scripts/app/views/fileupload.js:50
 msgid "File Upload failed"
 msgstr ""
 
-#: static/scripts/app/views/fileupload.js:279
+#: static/scripts/app/views/fileupload.js:280
 msgid "Replace file {filename}?"
 msgstr ""
 
-#: static/scripts/app/views/fileupload.js:305
+#: static/scripts/app/views/fileupload.js:306
 msgid "File is locked"
 msgstr ""
 
-#: static/scripts/app/views/fileupload.js:440
+#: static/scripts/app/views/fileupload.js:442
 msgid "Network error"
 msgstr ""
 
@@ -706,7 +706,7 @@ msgid "Set {placeholder}'s permission"
 msgstr ""
 
 #: static/scripts/app/views/folder-perm.js:126
-#: static/scripts/app/views/share.js:842
+#: static/scripts/app/views/share.js:882
 msgid "Select groups"
 msgstr ""
 
@@ -716,7 +716,7 @@ msgstr ""
 
 #: static/scripts/app/views/folder-share-item.js:127
 #: static/scripts/app/views/folder-share-item.js:188
-#: static/scripts/common.js:444
+#: static/scripts/common.js:446
 #: static/scripts/sysadmin-app/views/dashboard.js:84
 msgid "Failed. Please check the network."
 msgstr ""
@@ -743,7 +743,7 @@ msgstr ""
 #: static/scripts/app/views/repo.js:248
 #: static/scripts/sysadmin-app/views/group.js:75
 #: static/scripts/sysadmin-app/views/groups.js:69
-#: static/scripts/sysadmin-app/views/repo.js:108
+#: static/scripts/sysadmin-app/views/repo.js:109
 #: static/scripts/sysadmin-app/views/repos.js:59
 msgid "You cannot select any more choices"
 msgstr ""
@@ -777,7 +777,7 @@ msgstr ""
 msgid "Are you sure you want to quit this group?"
 msgstr ""
 
-#: static/scripts/app/views/invitation.js:37
+#: static/scripts/app/views/invitation.js:40
 #: static/scripts/sysadmin-app/views/address-book-group-item.js:57
 #: static/scripts/sysadmin-app/views/device-trusted-ipaddress.js:39
 #: static/scripts/sysadmin-app/views/group.js:44
@@ -806,8 +806,8 @@ msgstr ""
 
 #: static/scripts/app/views/repo.js:95
 #: static/scripts/sysadmin-app/views/address-book-group-library.js:30
-#: static/scripts/sysadmin-app/views/admin-operation-log.js:51
-#: static/scripts/sysadmin-app/views/repo.js:65
+#: static/scripts/sysadmin-app/views/admin-operation-log.js:53
+#: static/scripts/sysadmin-app/views/repo.js:66
 #: static/scripts/sysadmin-app/views/trash-repo.js:28
 msgid "Delete Library"
 msgstr ""
@@ -818,23 +818,23 @@ msgstr ""
 #: static/scripts/sysadmin-app/views/device-trusted-ipaddress.js:28
 #: static/scripts/sysadmin-app/views/group-member.js:91
 #: static/scripts/sysadmin-app/views/group.js:31
-#: static/scripts/sysadmin-app/views/repo.js:66
+#: static/scripts/sysadmin-app/views/repo.js:67
 #, javascript-format
 msgid "Are you sure you want to delete %s ?"
 msgstr ""
 
 #: static/scripts/app/views/repo.js:106
-#: static/scripts/sysadmin-app/views/repo.js:79
+#: static/scripts/sysadmin-app/views/repo.js:80
 msgid "Successfully deleted."
 msgstr ""
 
 #: static/scripts/app/views/repo.js:237
-#: static/scripts/sysadmin-app/views/repo.js:97
+#: static/scripts/sysadmin-app/views/repo.js:98
 msgid "Transfer Library {library_name} To"
 msgstr ""
 
 #: static/scripts/app/views/repo.js:276
-#: static/scripts/sysadmin-app/views/repo.js:135
+#: static/scripts/sysadmin-app/views/repo.js:136
 msgid "Successfully transferred the library."
 msgstr ""
 
@@ -849,50 +849,59 @@ msgstr ""
 
 #: static/scripts/app/views/share-admin-folder.js:91
 #: static/scripts/app/views/share-admin-repo.js:99
-#: static/scripts/app/views/share-admin-share-link.js:55
+#: static/scripts/app/views/share-admin-share-link.js:59
 #: static/scripts/app/views/share-admin-upload-link.js:54
 msgid "Successfully deleted 1 item"
 msgstr ""
 
-#: static/scripts/app/views/share.js:109
+#: static/scripts/app/views/share-admin-share-link.js:47
+msgid "Are you sure you want to remove the share link?"
+msgstr ""
+
+#: static/scripts/app/views/share-admin-share-link.js:48
+msgid ""
+"If the share link is removed, no one will be able to access it any more."
+msgstr ""
+
+#: static/scripts/app/views/share.js:91
 #: static/scripts/sysadmin-app/views/share.js:42
 msgid "Share {placeholder}"
 msgstr ""
 
-#: static/scripts/app/views/share.js:209
+#: static/scripts/app/views/share.js:189
 msgid "Expired"
 msgstr ""
 
-#: static/scripts/app/views/share.js:287 static/scripts/app/views/share.js:288
-#: static/scripts/app/views/share.js:309 static/scripts/app/views/share.js:310
+#: static/scripts/app/views/share.js:303 static/scripts/app/views/share.js:304
+#: static/scripts/app/views/share.js:325 static/scripts/app/views/share.js:326
 msgid "Hide"
 msgstr ""
 
-#: static/scripts/app/views/share.js:305 static/scripts/app/views/share.js:306
+#: static/scripts/app/views/share.js:321 static/scripts/app/views/share.js:322
 msgid "Show"
 msgstr ""
 
-#: static/scripts/app/views/share.js:361
+#: static/scripts/app/views/share.js:377
 msgid "Please enter days."
 msgstr ""
 
-#: static/scripts/app/views/share.js:365
+#: static/scripts/app/views/share.js:381
 msgid "Please enter valid days"
 msgstr ""
 
-#: static/scripts/app/views/share.js:468
+#: static/scripts/app/views/share.js:492
 msgid "Share link is copied to the clipboard."
 msgstr ""
 
-#: static/scripts/app/views/share.js:485
+#: static/scripts/app/views/share.js:509
 msgid "Please input at least an email."
 msgstr ""
 
-#: static/scripts/app/views/share.js:502
+#: static/scripts/app/views/share.js:526
 msgid "Successfully sent to {placeholder}"
 msgstr ""
 
-#: static/scripts/app/views/share.js:506
+#: static/scripts/app/views/share.js:530
 msgid "Failed to send to {placeholder}"
 msgstr ""
 
@@ -909,34 +918,34 @@ msgstr ""
 msgid "Successfully unstared {placeholder}"
 msgstr ""
 
-#: static/scripts/common.js:458 static/scripts/common.js:460
+#: static/scripts/common.js:460 static/scripts/common.js:462
 #: static/scripts/sysadmin-app/views/dashboard.js:79
 msgid "Permission error"
 msgstr ""
 
-#: static/scripts/common.js:685
+#: static/scripts/common.js:687
 #: static/scripts/sysadmin-app/views/address-book-group.js:172
 #: static/scripts/sysadmin-app/views/group-members.js:41
 msgid "Search users or enter emails and press Enter"
 msgstr ""
 
-#: static/scripts/common.js:693 static/scripts/common.js:764
+#: static/scripts/common.js:695 static/scripts/common.js:766
 msgid "Please enter 1 or more character"
 msgstr ""
 
-#: static/scripts/common.js:695 static/scripts/common.js:766
+#: static/scripts/common.js:697 static/scripts/common.js:768
 msgid "Searching..."
 msgstr ""
 
-#: static/scripts/common.js:696 static/scripts/common.js:767
+#: static/scripts/common.js:698 static/scripts/common.js:769
 msgid "Loading failed"
 msgstr ""
 
-#: static/scripts/common.js:756
+#: static/scripts/common.js:758
 msgid "Search groups"
 msgstr ""
 
-#: static/scripts/common.js:1091
+#: static/scripts/common.js:1093
 msgid "Packaging..."
 msgstr ""
 
@@ -963,64 +972,64 @@ msgstr ""
 msgid "New Department"
 msgstr ""
 
-#: static/scripts/sysadmin-app/views/admin-operation-log.js:40
+#: static/scripts/sysadmin-app/views/admin-operation-log.js:42
 msgid "Create Library"
 msgstr ""
 
-#: static/scripts/sysadmin-app/views/admin-operation-log.js:41
+#: static/scripts/sysadmin-app/views/admin-operation-log.js:43
 msgid "Created library {library_name} with {owner} as its owner"
 msgstr ""
 
-#: static/scripts/sysadmin-app/views/admin-operation-log.js:52
+#: static/scripts/sysadmin-app/views/admin-operation-log.js:54
 msgid "Deleted library {library_name}"
 msgstr ""
 
-#: static/scripts/sysadmin-app/views/admin-operation-log.js:57
+#: static/scripts/sysadmin-app/views/admin-operation-log.js:59
 msgid "Transfer Library"
 msgstr ""
 
-#: static/scripts/sysadmin-app/views/admin-operation-log.js:58
+#: static/scripts/sysadmin-app/views/admin-operation-log.js:60
 msgid "Transferred library {library_name} from {user_from} to {user_to}"
 msgstr ""
 
-#: static/scripts/sysadmin-app/views/admin-operation-log.js:69
+#: static/scripts/sysadmin-app/views/admin-operation-log.js:71
 msgid "Create Group"
 msgstr ""
 
-#: static/scripts/sysadmin-app/views/admin-operation-log.js:70
+#: static/scripts/sysadmin-app/views/admin-operation-log.js:72
 msgid "Created group {group_name}"
 msgstr ""
 
-#: static/scripts/sysadmin-app/views/admin-operation-log.js:74
+#: static/scripts/sysadmin-app/views/admin-operation-log.js:76
 msgid "Transfer Group"
 msgstr ""
 
-#: static/scripts/sysadmin-app/views/admin-operation-log.js:75
+#: static/scripts/sysadmin-app/views/admin-operation-log.js:77
 msgid "Transferred group {group_name} from {user_from} to {user_to}"
 msgstr ""
 
-#: static/scripts/sysadmin-app/views/admin-operation-log.js:82
+#: static/scripts/sysadmin-app/views/admin-operation-log.js:84
 #: static/scripts/sysadmin-app/views/group.js:30
 msgid "Delete Group"
 msgstr ""
 
-#: static/scripts/sysadmin-app/views/admin-operation-log.js:83
+#: static/scripts/sysadmin-app/views/admin-operation-log.js:85
 msgid "Deleted group {group_name}"
 msgstr ""
 
-#: static/scripts/sysadmin-app/views/admin-operation-log.js:88
+#: static/scripts/sysadmin-app/views/admin-operation-log.js:90
 msgid "Add User"
 msgstr ""
 
-#: static/scripts/sysadmin-app/views/admin-operation-log.js:89
+#: static/scripts/sysadmin-app/views/admin-operation-log.js:91
 msgid "Added user {user}"
 msgstr ""
 
-#: static/scripts/sysadmin-app/views/admin-operation-log.js:94
+#: static/scripts/sysadmin-app/views/admin-operation-log.js:96
 msgid "Delete User"
 msgstr ""
 
-#: static/scripts/sysadmin-app/views/admin-operation-log.js:95
+#: static/scripts/sysadmin-app/views/admin-operation-log.js:97
 msgid "Deleted user {user}"
 msgstr ""
 
