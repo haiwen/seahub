@@ -5,7 +5,7 @@ import { seafileAPI } from '../../utils/seafile-api';
 import { Utils } from '../../utils/utils';
 import { gettext } from '../../utils/constants';
 import Toast from '../toast';
-import RepoListPanel from './dir-panel';
+import DirPanel from './dir-panel';
 import Dirent from '../../models/dirent';
 import FileTag from '../../models/file-tag';
 import Repo from '../../models/repo';
@@ -424,7 +424,7 @@ class DirView extends React.Component {
 
   render() {
     return (
-      <RepoListPanel 
+      <DirPanel 
         serviceUrl={mainServiceUrl}
         currentRepo={this.state.currentRepo}
         path={this.state.path}
