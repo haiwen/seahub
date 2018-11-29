@@ -139,8 +139,7 @@ class DirentListItem extends React.Component {
   }
 
   onItemClick = () => {
-    let direntPath = this.getDirentPath(this.props.dirent);
-    this.props.onItemClick(direntPath);
+    this.props.onItemClick(this.props.dirent);
   }
 
   onItemDelete = (e) => {

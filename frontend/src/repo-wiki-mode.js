@@ -310,8 +310,9 @@ class Wiki extends Component {
     this.showDir(node.path);
   }
 
-  onDirentClick = (direntPath) => {
+  onDirentClick = (dirent) => {
     this.resetSelected();
+    let direntPath = Utils.joinPath(this.state.path, dirent.name);
     let tree = this.state.treeData.clone();
     let node = tree.getNodeByPath(direntPath);
     let parentNode = tree.findNodeParentFromTree(node);

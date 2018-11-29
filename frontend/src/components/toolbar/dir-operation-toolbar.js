@@ -7,11 +7,11 @@ import CreateFolder from '../../components/dialog/create-folder-dialog';
 import CreateFile from '../../components/dialog/create-file-dialog';
 
 const propTypes = {
-  isViewFile: PropTypes.bool,
+  isViewFile: PropTypes.bool,   // just for view file,
+  permission: PropTypes.string, //just for view file， and premission is file permission
   path: PropTypes.string.isRequired,
   repoID: PropTypes.string.isRequired,
   serviceUrl: PropTypes.string.isRequired,
-  permission: PropTypes.string.isRequired,
   onAddFile: PropTypes.func.isRequired,
   onAddFolder: PropTypes.func.isRequired,
   onUploadFile: PropTypes.func.isRequired,

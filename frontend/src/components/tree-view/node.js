@@ -65,6 +65,9 @@ class Node {
   }
 
   isMarkdown() {
+    if (this.isDir()) {
+      return false;
+    }
     let index = this.name.lastIndexOf('.');
     if (index == -1) {
       return false;
