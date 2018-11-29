@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React, { Component, Fragment } from 'react';
 import PropTypes from 'prop-types';
 import { seafileAPI } from '../../utils/seafile-api';
 import { gettext, siteRoot } from '../../utils/constants';
@@ -17,7 +17,7 @@ class FileActivitiesContent extends Component {
       return <p className="error text-center">{error_msg}</p>;
     } else {
       return ( 
-        <div className="activity-table-container">
+        <Fragment>
           <table className="table table-hover table-vcenter">
             <thead>
               <tr>
@@ -32,7 +32,7 @@ class FileActivitiesContent extends Component {
           </table>
           {has_more ? <span className="loading-icon loading-tip"></span> : ''}
           {error_msg ? <p className="error text-center">{error_msg}</p> : ''}
-        </div>
+        </Fragment>
       ); 
     }
   }
