@@ -1,6 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { Utils } from '../../utils/utils';
+import { siteRoot } from '../../utils/constants';
 import { seafileAPI } from '../../utils/seafile-api';
 import DetailListView from './detail-list-view';
 import Repo from '../../models/repo';
@@ -9,7 +10,6 @@ import '../../css/dirent-detail.css';
 
 const propTypes = {
   repoID: PropTypes.string.isRequired,
-  serviceUrl: PropTypes.string.isRequired,
   dirent: PropTypes.object.isRequired,
   path: PropTypes.string.isRequired,
   onItemDetailsClose: PropTypes.func.isRequired,
@@ -72,19 +72,19 @@ class DirentDetail extends React.Component {
   }
 
   render() {
-    let { dirent, serviceUrl } = this.props;
+    let { dirent } = this.props;
     return (
       <div className="detail-container">
         <div className="detail-header">
           <div className="detail-control sf2-icon-x1" onClick={this.props.onItemDetailsClose}></div>
           <div className="detail-title dirent-title">
-            <img src={dirent.type === 'dir' ? serviceUrl + '/media/img/folder-192.png' : serviceUrl + '/media/img/file/192/txt.png'} alt="icon"></img>
+            <img src={dirent.type === 'dir' ? siteRoot + 'media/img/folder-192.png' : siteRoot + 'media/img/file/192/txt.png'} alt="icon"></img>
             <span className="name">{dirent.name}</span>
           </div>
         </div>
         <div className="detail-body dirent-info">
           <div className="img">
-            <img src={dirent.type === 'dir' ? serviceUrl + '/media/img/folder-192.png' : serviceUrl + '/media/img/file/192/txt.png'} alt="icon"></img>
+            <img src={dirent.type === 'dir' ? siteRoot + 'media/img/folder-192.png' : siteRoot + 'media/img/file/192/txt.png'} alt="icon"></img>
           </div>
           {this.state.direntDetail && 
             <div className="dirent-table-container">

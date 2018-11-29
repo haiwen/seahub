@@ -179,7 +179,7 @@ class Search extends Component {
     for (let key in queryData) {
       params += key + '=' + queryData[key] + '&';
     }
-    window.location = siteRoot + '/search/?' + params.slice(0, params.length - 1);
+    window.location = siteRoot + 'search/?' + params.slice(0, params.length - 1);
   }
 
   renderSearchResult() {

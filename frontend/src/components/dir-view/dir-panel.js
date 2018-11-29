@@ -1,7 +1,7 @@
 import React, { Fragment } from 'react';
 import PropTypes from 'prop-types';
 import cookie from 'react-cookies';
-import { gettext } from '../../utils/constants';
+import { gettext, siteRoot } from '../../utils/constants';
 import { seafileAPI } from '../../utils/seafile-api';
 import CommonToolbar from '../toolbar/common-toolbar';
 import ViewModeToolbar from '../toolbar/view-mode-toolbar';
@@ -17,7 +17,6 @@ const propTypes = {
   path: PropTypes.string.isRequired,
   repoID: PropTypes.string.isRequired,
   repoName: PropTypes.string.isRequired,
-  serviceUrl: PropTypes.string.isRequired,
   pathExist: PropTypes.bool.isRequired,
   permission: PropTypes.bool.isRequired,
   isDirentListLoading: PropTypes.bool.isRequired,
@@ -90,12 +89,12 @@ class DirPanel extends React.Component {
   }
 
   switchViewMode = (mode) => {
-    let { path, serviceUrl, repoID } = this.props;
+    let { path, repoID } = this.props;
     if (mode === this.state.currentMode) {
       return;
     }
     if (mode === 'wiki') {
-      var url = serviceUrl + '/wiki/lib/' + repoID + path;      
+      var url = siteRoot + 'wiki/lib/' + repoID + path;      
       window.location = url;
     }
     cookie.save('view_mode', mode, { path: '/' });
@@ -124,7 +123,6 @@ class DirPanel extends React.Component {
                 <DirOperationToolBar 
                   path={this.props.path}
                   repoID={this.props.repoID}
-                  serviceUrl={this.props.serviceUrl}
                   onAddFile={this.props.onAddFile}
                   onAddFolder={this.props.onAddFolder}
                   onUploadFile={this.onUploadFile}
@@ -161,7 +159,6 @@ class DirPanel extends React.Component {
                   <DirentListView
                     path={this.props.path}
                     repoID={this.props.repoID}
-                    serviceUrl={this.props.serviceUrl}
                     direntList={this.props.direntList}
                     currentRepo={this.props.currentRepo}
                     isDirentListLoading={this.props.isDirentListLoading}
@@ -194,7 +191,6 @@ class DirPanel extends React.Component {
               <DirentDetail
                 path={this.props.path}
                 repoID={this.props.repoID}
-                serviceUrl={this.props.serviceUrl}
                 dirent={this.state.currentDirent}
                 onFileTagChanged={this.props.onFileTagChanged}
                 onItemDetailsClose={this.onItemDetailsClose}

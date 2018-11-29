@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import ReactDOM from 'react-dom';
 import moment from 'moment';
-import { gettext, repoID, serviceUrl, initialPath, isDir } from './utils/constants';
+import { gettext, repoID, siteRoot, initialPath, isDir } from './utils/constants';
 import { seafileAPI } from './utils/seafile-api';
 import { Utils } from './utils/utils';
 import SidePanel from './pages/repo-wiki-mode/side-panel';
@@ -222,7 +222,7 @@ class Wiki extends Component {
       });
     });
 
-    let fileUrl = serviceUrl + '/wiki/lib/' + repoID + filePath;
+    let fileUrl = siteRoot + 'wiki/lib/' + repoID + filePath;
     window.history.pushState({url: fileUrl, path: filePath}, filePath, fileUrl);
   }
 
@@ -234,7 +234,7 @@ class Wiki extends Component {
     });
 
     // update location url
-    let url = serviceUrl + '/wiki/lib/' + repoID + path;
+    let url = siteRoot + 'wiki/lib/' + repoID + path;
     window.history.pushState({ url: url, path: path}, path, url);
   }
 
@@ -326,7 +326,7 @@ class Wiki extends Component {
       this.showDir(node.path);
     } else {
       const w=window.open('about:blank');
-      const url = serviceUrl + '/lib/' + repoID + '/file' + node.path;
+      const url = siteRoot + 'lib/' + repoID + '/file' + node.path;
       w.location.href = url;
     }
   }
@@ -551,7 +551,7 @@ class Wiki extends Component {
       }
     } else {
       const w = window.open('about:blank');
-      const url = serviceUrl + '/lib/' + repoID + '/file' + node.path;
+      const url = siteRoot + 'lib/' + repoID + '/file' + node.path;
       w.location.href = url;
     }
   }
@@ -687,24 +687,24 @@ class Wiki extends Component {
   }
 
   isInternalMarkdownLink(url) {
-    var re = new RegExp(serviceUrl + '/lib/' + repoID + '/file' + '.*\.md$');
+    var re = new RegExp(siteRoot + 'lib/' + repoID + '/file' + '.*\.md$');
     return re.test(url);
   }
 
   isInternalDirLink(url) {
-    var re = new RegExp(serviceUrl + '/#[a-z\-]*?/lib/' + repoID + '/.*');
+    var re = new RegExp(siteRoot + '#[a-z\-]*?/lib/' + repoID + '/.*');
     return re.test(url);
   }
 
   getPathFromInternalMarkdownLink(url) {
-    var re = new RegExp(serviceUrl + '/lib/' + repoID + '/file' + '(.*\.md)');
+    var re = new RegExp(siteRoot + 'lib/' + repoID + '/file' + '(.*\.md)');
     var array = re.exec(url);
     var path = decodeURIComponent(array[1]);
     return path;
   }
 
   getPathFromInternalDirLink(url) {
-    var re = new RegExp(serviceUrl + '/#[a-z\-]*?/lib/' + repoID + '(/.*)');
+    var re = new RegExp(siteRoot + '#[a-z\-]*?/lib/' + repoID + '(/.*)');
     var array = re.exec(url);
     var path = decodeURIComponent(array[1]);
 

@@ -1,6 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { serviceUrl } from '../../utils/constants';
+import { siteRoot } from '../../utils/constants';
 
 const propTypes = {
   node: PropTypes.object.isRequired,
@@ -35,7 +35,7 @@ class TreeDirList extends React.Component {
     return (
       <tr className={this.state.highlight ? 'tr-highlight' : ''} onMouseEnter={this.onMouseEnter} onMouseLeave={this.onMouseLeave}>
         <td className="icon">
-          <img src={node.type === 'dir' ? serviceUrl + '/media/img/folder-192.png' : serviceUrl + '/media/img/file/192/txt.png'} alt='icon'></img>
+          <img src={node.type === 'dir' ? siteRoot + 'media/img/folder-192.png' : siteRoot + 'media/img/file/192/txt.png'} alt='icon'></img>
         </td>
         <td className="name a-simulate" onClick={this.onMainNodeClick}>{node.name}</td>
         <td>{node.size}</td>

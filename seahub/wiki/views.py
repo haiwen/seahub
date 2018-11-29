@@ -76,7 +76,6 @@ def slug(request, slug, file_path="home.md"):
         "repo_id": wiki.repo_id,
         "search_repo_id": wiki.repo_id,
         "search_wiki": True,
-        "service_url": get_service_url().rstrip('/')
     })
 
 

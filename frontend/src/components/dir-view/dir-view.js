@@ -1,6 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { mainServiceUrl } from '../../utils/constants';
+import { siteRoot } from '../../utils/constants';
 import { seafileAPI } from '../../utils/seafile-api';
 import { Utils } from '../../utils/utils';
 import { gettext } from '../../utils/constants';
@@ -82,11 +82,11 @@ class DirView extends React.Component {
       this.updateDirentList(direntPath);
       this.setState({path: direntPath});
 
-      let fileUrl = mainServiceUrl + '/librarys/' + this.state.repoID + direntPath;
+      let fileUrl = siteRoot + 'librarys/' + this.state.repoID + direntPath;
       window.history.pushState({url: fileUrl, path: direntPath}, direntPath, fileUrl);
     } else {
       const w=window.open('about:blank');
-      const url = mainServiceUrl + '/lib/' + this.state.repoID + '/file' + direntPath;
+      const url = siteRoot + 'lib/' + this.state.repoID + '/file' + direntPath;
       w.location.href = url;
     }
   }
@@ -302,7 +302,7 @@ class DirView extends React.Component {
     this.updateDirentList(path);
     this.setState({path: path});
 
-    let fileUrl = mainServiceUrl + '/librarys/' + this.state.repoID + path;
+    let fileUrl = siteRoot + 'librarys/' + this.state.repoID + path;
     window.history.pushState({url: fileUrl, path: path}, path, fileUrl);
   }
 
@@ -425,7 +425,6 @@ class DirView extends React.Component {
   render() {
     return (
       <DirPanel 
-        serviceUrl={mainServiceUrl}
         currentRepo={this.state.currentRepo}
         path={this.state.path}
         pathExist={this.state.pathExit}

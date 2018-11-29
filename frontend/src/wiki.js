@@ -3,7 +3,7 @@ import ReactDOM from 'react-dom';
 import SidePanel from './pages/wiki/side-panel';
 import MainPanel from './pages/wiki/main-panel';
 import moment from 'moment';
-import { slug, repoID, serviceUrl, initialFilePath } from './utils/constants';
+import { slug, repoID, siteRoot, initialFilePath } from './utils/constants';
 import editorUtilities from './utils/editor-utilties';
 import Node from './components/tree-view/node';
 import Tree from './components/tree-view/tree';
@@ -65,7 +65,7 @@ class Wiki extends Component {
           });
         });
         const hash = window.location.hash;
-        let fileUrl = serviceUrl + '/wikis/' + slug + filePath + hash;
+        let fileUrl = siteRoot + 'wikis/' + slug + filePath + hash;
         window.history.pushState({urlPath: fileUrl, filePath: filePath}, filePath, fileUrl);
       }
     }, () => {
@@ -90,7 +90,7 @@ class Wiki extends Component {
       });
 
     const hash = window.location.hash;
-    let fileUrl = serviceUrl + '/wikis/' + slug + filePath + hash;
+    let fileUrl = siteRoot + 'wikis/' + slug + filePath + hash;
     window.history.pushState({urlPath: fileUrl, filePath: filePath}, filePath, fileUrl);
   }
 
@@ -133,7 +133,7 @@ class Wiki extends Component {
     this.exitViewFileState(tree, node);
 
     // update location url
-    let fileUrl = serviceUrl + '/wikis/' + slug + node.path;
+    let fileUrl = siteRoot + 'wikis/' + slug + node.path;
     window.history.pushState({urlPath: fileUrl, filePath: node.path},node.path, fileUrl);
   }
 
@@ -147,7 +147,7 @@ class Wiki extends Component {
       this.exitViewFileState(tree, node);
     } else {
       const w=window.open('about:blank');
-      const url = serviceUrl + '/lib/' + repoID + '/file' + node.path;
+      const url = siteRoot + 'lib/' + repoID + '/file' + node.path;
       w.location.href = url;
     }
   }
@@ -169,7 +169,7 @@ class Wiki extends Component {
       this.exitViewFileState(tree, node);
     } else {
       const w=window.open('about:blank');
-      const url = serviceUrl + '/lib/' + repoID + '/file' + node.path;
+      const url = siteRoot + 'lib/' + repoID + '/file' + node.path;
       w.location.href = url;
     }
   }
@@ -371,7 +371,7 @@ class Wiki extends Component {
       filePath: newNode.path,
       isViewFileState: false
     });
-    let fileUrl = serviceUrl + '/wikis/' + slug + newNode.path;
+    let fileUrl = siteRoot + 'wikis/' + slug + newNode.path;
     window.history.pushState({urlPath: fileUrl, filePath: newNode.path}, newNode.path, fileUrl);
   }
 
@@ -431,24 +431,24 @@ class Wiki extends Component {
   }
 
   isInternalMarkdownLink(url) {
-    var re = new RegExp(serviceUrl + '/lib/' + repoID + '/file' + '.*\.md$');
+    var re = new RegExp(siteRoot + 'lib/' + repoID + '/file' + '.*\.md$');
     return re.test(url);
   }
 
   isInternalDirLink(url) {
-    var re = new RegExp(serviceUrl + '/#[a-z\-]*?/lib/' + repoID + '/.*');
+    var re = new RegExp(siteRoot + '#[a-z\-]*?/lib/' + repoID + '/.*');
     return re.test(url);
   }
 
   getPathFromInternalMarkdownLink(url) {
-    var re = new RegExp(serviceUrl + '/lib/' + repoID + '/file' + '(.*\.md)');
+    var re = new RegExp(siteRoot + 'lib/' + repoID + '/file' + '(.*\.md)');
     var array = re.exec(url);
     var path = decodeURIComponent(array[1]);
     return path;
   }
 
   getPathFromInternalDirLink(url) {
-    var re = new RegExp(serviceUrl + '/#[a-z\-]*?/lib/' + repoID + '(/.*)');
+    var re = new RegExp(siteRoot + '#[a-z\-]*?/lib/' + repoID + '(/.*)');
     var array = re.exec(url);
     var path = decodeURIComponent(array[1]);
 

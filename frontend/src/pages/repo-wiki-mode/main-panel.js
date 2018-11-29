@@ -1,7 +1,7 @@
 import React, { Component, Fragment } from 'react';
 import PropTypes from 'prop-types';
 import cookie from 'react-cookies';
-import { gettext, repoID, serviceUrl, slug, permission } from '../../utils/constants';
+import { gettext, repoID, siteRoot, slug, permission } from '../../utils/constants';
 import { seafileAPI } from '../../utils/seafile-api';
 import { Utils } from '../../utils/utils';
 import Repo from '../../models/repo';
@@ -81,7 +81,7 @@ class MainPanel extends Component {
   switchViewMode = (mode) => {
     cookie.save('view_mode', mode, { path: '/' });
     let dirPath = this.props.isViewFile ? Utils.getDirName(this.props.path) : this.props.path;
-    window.location.href = serviceUrl + '/#common/lib/' + repoID + dirPath;
+    window.location.href = siteRoot + '#common/lib/' + repoID + dirPath;
   }
 
   onSideNavMenuClick = () => {
@@ -142,7 +142,6 @@ class MainPanel extends Component {
                 <DirOperationToolBar 
                   path={this.props.path}
                   repoID={repoID}
-                  serviceUrl={serviceUrl}
                   permission={this.props.permission}
                   isViewFile={this.props.isViewFile}
                   onAddFile={this.props.onAddFile}
@@ -183,7 +182,6 @@ class MainPanel extends Component {
                       <DirentListView
                         path={this.props.path}
                         repoID={repoID}
-                        serviceUrl={serviceUrl}
                         direntList={this.props.direntList}
                         onItemClick={this.props.onItemClick}
                         onItemDelete={this.props.onItemDelete}
@@ -217,7 +215,6 @@ class MainPanel extends Component {
             <div className="cur-view-detail">
               <DirentDetail
                 repoID={repoID}
-                serviceUrl={serviceUrl}
                 path={this.props.path}
                 dirent={this.state.currentDirent}
                 direntPath={this.state.direntPath}

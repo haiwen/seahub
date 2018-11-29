@@ -1,6 +1,6 @@
 import React, { Fragment } from 'react';
 import PropTypes from 'prop-types';
-import { gettext } from '../../utils/constants';
+import { gettext, siteRoot } from '../../utils/constants';
 import { seafileAPI } from '../../utils/seafile-api';
 import URLDecorator from '../../utils/url-decorator';
 import Toast from '../toast';
@@ -14,7 +14,6 @@ import CopyDirentDialog from '../dialog/copy-dirent-dialog';
 const propTypes = {
   path: PropTypes.string.isRequired,
   repoID: PropTypes.string.isRequired,
-  serviceUrl: PropTypes.string.isRequired,
   isItemFreezed: PropTypes.bool.isRequired,
   dirent: PropTypes.object.isRequired,
   onItemClick: PropTypes.func.isRequired,
@@ -366,7 +365,7 @@ class DirentListItem extends React.Component {
   }
 
   render() {
-    let { dirent, serviceUrl } = this.props;
+    let { dirent } = this.props;
     return (
       <Fragment>
         <tr className={this.state.highlight ? 'tr-highlight' : ''} onMouseEnter={this.onMouseEnter} onMouseOver={this.onMouseOver} onMouseLeave={this.onMouseLeave}>
@@ -379,8 +378,8 @@ class DirentListItem extends React.Component {
           </td>
           <td className="icon">
             <div className="dir-icon">
-              <img src={dirent.type === 'dir' ? serviceUrl + '/media/img/folder-192.png' : serviceUrl + '/media/img/file/192/txt.png'} alt={gettext('file icon')}></img>
-              {dirent.is_locked && <img className="locked" src={serviceUrl + '/media/img/file-locked-32.png'} alt={gettext('locked')}></img>}
+              <img src={dirent.type === 'dir' ? siteRoot + 'media/img/folder-192.png' : siteRoot + 'media/img/file/192/txt.png'} alt={gettext('file icon')}></img>
+              {dirent.is_locked && <img className="locked" src={siteRoot + 'media/img/file-locked-32.png'} alt={gettext('locked')}></img>}
             </div>
           </td>
           <td className="name a-simulate">
