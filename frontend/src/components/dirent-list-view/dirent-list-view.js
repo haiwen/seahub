@@ -7,7 +7,6 @@ import DirentListItem from './dirent-list-item';
 const propTypes = {
   path: PropTypes.string.isRequired,
   repoID: PropTypes.string.isRequired,
-  serviceUrl: PropTypes.string.isRequired,
   isRepoOwner: PropTypes.bool,
   currentRepo: PropTypes.object,
   isAllItemSelected: PropTypes.bool.isRequired,
@@ -45,8 +44,8 @@ class DirentListView extends React.Component {
     this.onFreezedItem();
   }
 
-  onItemDetails = (dirent, direntPath) => {
-    this.props.onItemDetails(dirent, direntPath);
+  onItemDetails = (dirent) => {
+    this.props.onItemDetails(dirent);
   }
 
   render() {
@@ -81,7 +80,6 @@ class DirentListView extends React.Component {
                   dirent={dirent}
                   path={this.props.path}
                   repoID={this.props.repoID}
-                  serviceUrl={this.props.serviceUrl}
                   currentRepo={this.props.currentRepo}
                   isRepoOwner={this.props.isRepoOwner}
                   onItemClick={this.props.onItemClick}

@@ -1,5 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
+import { Utils } from '../../utils/utils';
+import { siteRoot } from '../../utils/constants';
 import { seafileAPI } from '../../utils/seafile-api';
 import DetailListView from './detail-list-view';
 import Repo from '../../models/repo';
@@ -8,9 +10,8 @@ import '../../css/dirent-detail.css';
 
 const propTypes = {
   repoID: PropTypes.string.isRequired,
-  serviceUrl: PropTypes.string.isRequired,
   dirent: PropTypes.object.isRequired,
-  direntPath: PropTypes.string.isRequired,
+  path: PropTypes.string.isRequired,
   onItemDetailsClose: PropTypes.func.isRequired,
   onFileTagChanged: PropTypes.func.isRequired,
 };
@@ -28,7 +29,8 @@ class DirentDetail extends React.Component {
   }
 
   componentDidMount() {
-    let { dirent, direntPath, repoID } = this.props;
+    let { dirent, path, repoID } = this.props;
+    let direntPath = Utils.joinPath(path, dirent.name);
     seafileAPI.getRepoInfo(repoID).then(res => {
       let repo = new Repo(res.data);
       this.setState({repo: repo});
@@ -37,7 +39,9 @@ class DirentDetail extends React.Component {
   }
 
   componentWillReceiveProps(nextProps) {
-    this.updateDetailView(nextProps.dirent, nextProps.direntPath);
+    let { dirent, path } = nextProps;
+    let direntPath = Utils.joinPath(path, dirent.name);
+    this.updateDetailView(dirent, direntPath);
   }
 
   updateDetailView = (dirent, direntPath) => {
@@ -68,27 +72,27 @@ class DirentDetail extends React.Component {
   }
 
   render() {
-    let { dirent, serviceUrl } = this.props;
+    let { dirent } = this.props;
     return (
       <div className="detail-container">
         <div className="detail-header">
           <div className="detail-control sf2-icon-x1" onClick={this.props.onItemDetailsClose}></div>
           <div className="detail-title dirent-title">
-            <img src={dirent.type === 'dir' ? serviceUrl + '/media/img/folder-192.png' : serviceUrl + '/media/img/file/192/txt.png'} alt="icon"></img>
+            <img src={dirent.type === 'dir' ? siteRoot + 'media/img/folder-192.png' : siteRoot + 'media/img/file/192/txt.png'} alt="icon"></img>
             <span className="name">{dirent.name}</span>
           </div>
         </div>
         <div className="detail-body dirent-info">
           <div className="img">
-            <img src={dirent.type === 'dir' ? serviceUrl + '/media/img/folder-192.png' : serviceUrl + '/media/img/file/192/txt.png'} alt="icon"></img>
+            <img src={dirent.type === 'dir' ? siteRoot + 'media/img/folder-192.png' : siteRoot + 'media/img/file/192/txt.png'} alt="icon"></img>
           </div>
           {this.state.direntDetail && 
             <div className="dirent-table-container">
               <DetailListView 
                 repo={this.state.repo}
+                path={this.props.path}
                 repoID={this.props.repoID}
                 dirent={this.props.dirent}
-                direntPath={this.props.direntPath}
                 direntType={this.state.direntType}
                 direntDetail={this.state.direntDetail} 
                 fileTagList={this.state.fileTagList}

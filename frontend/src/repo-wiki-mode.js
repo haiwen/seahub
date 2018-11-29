@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import ReactDOM from 'react-dom';
 import moment from 'moment';
-import { gettext, repoID, serviceUrl, initialPath, isDir } from './utils/constants';
+import { gettext, repoID, siteRoot, initialPath, isDir } from './utils/constants';
 import { seafileAPI } from './utils/seafile-api';
 import { Utils } from './utils/utils';
 import SidePanel from './pages/repo-wiki-mode/side-panel';
@@ -133,14 +133,13 @@ class Wiki extends Component {
     });
   }
 
-  onMoveItem = (repo, direntPath, moveToDirentPath) => {
+  onMoveItem = (destRepo, dirent, moveToDirentPath) => {
     //just for view list state
-    let index   = direntPath.lastIndexOf('/');
-    let dirPath = direntPath.slice(0, index + 1);
-    let dirName = direntPath.slice(index + 1);
-    seafileAPI.moveDir(repoID, repo.repo_id,moveToDirentPath, dirPath, dirName).then(() => {
+    let dirName = dirent.name
+    let direntPath = Utils.joinPath(this.state.path, dirName);
+    seafileAPI.moveDir(repoID, destRepo.repo_id,moveToDirentPath, this.state.path, dirName).then(() => {
 
-      this.moveTreeNode(direntPath, moveToDirentPath, repo);
+      this.moveTreeNode(direntPath, moveToDirentPath, destRepo);
       this.moveDirent(direntPath);
 
       let message = gettext('Successfully moved %(name)s.');
@@ -153,13 +152,12 @@ class Wiki extends Component {
     });
   }
 
-  onCopyItem = (repo, direntPath, copyToDirentPath) => {
+  onCopyItem = (destRepo, dirent, copyToDirentPath) => {
     //just for view list state
-    let index   = direntPath.lastIndexOf('/');
-    let dirPath = direntPath.slice(0, index + 1);
-    let dirName = direntPath.slice(index + 1);
-    seafileAPI.copyDir(repoID, repo.repo_id, copyToDirentPath, dirPath, dirName).then(() => {
-      this.copyTreeNode(direntPath, copyToDirentPath, repo);
+    let dirName = dirent.name;
+    let direntPath = Utils.joinPath(this.state.path, dirName);
+    seafileAPI.copyDir(repoID, destRepo.repo_id, copyToDirentPath, this.state.path, dirName).then(() => {
+      this.copyTreeNode(direntPath, copyToDirentPath, destRepo);
       let message = gettext('Successfully copied %(name)s.');
       message = message.replace('%(name)s', dirName);
       Toast.success(message);
@@ -224,7 +222,7 @@ class Wiki extends Component {
       });
     });
 
-    let fileUrl = serviceUrl + '/wiki/lib/' + repoID + filePath;
+    let fileUrl = siteRoot + 'wiki/lib/' + repoID + filePath;
     window.history.pushState({url: fileUrl, path: filePath}, filePath, fileUrl);
   }
 
@@ -236,7 +234,7 @@ class Wiki extends Component {
     });
 
     // update location url
-    let url = serviceUrl + '/wiki/lib/' + repoID + path;
+    let url = siteRoot + 'wiki/lib/' + repoID + path;
     window.history.pushState({ url: url, path: path}, path, url);
   }
 
@@ -312,8 +310,9 @@ class Wiki extends Component {
     this.showDir(node.path);
   }
 
-  onDirentClick = (direntPath) => {
+  onDirentClick = (dirent) => {
     this.resetSelected();
+    let direntPath = Utils.joinPath(this.state.path, dirent.name);
     let tree = this.state.treeData.clone();
     let node = tree.getNodeByPath(direntPath);
     let parentNode = tree.findNodeParentFromTree(node);
@@ -327,7 +326,7 @@ class Wiki extends Component {
       this.showDir(node.path);
     } else {
       const w=window.open('about:blank');
-      const url = serviceUrl + '/lib/' + repoID + '/file' + node.path;
+      const url = siteRoot + 'lib/' + repoID + '/file' + node.path;
       w.location.href = url;
     }
   }
@@ -552,7 +551,7 @@ class Wiki extends Component {
       }
     } else {
       const w = window.open('about:blank');
-      const url = serviceUrl + '/lib/' + repoID + '/file' + node.path;
+      const url = siteRoot + 'lib/' + repoID + '/file' + node.path;
       w.location.href = url;
     }
   }
@@ -688,24 +687,24 @@ class Wiki extends Component {
   }
 
   isInternalMarkdownLink(url) {
-    var re = new RegExp(serviceUrl + '/lib/' + repoID + '/file' + '.*\.md$');
+    var re = new RegExp(siteRoot + 'lib/' + repoID + '/file' + '.*\.md$');
     return re.test(url);
   }
 
   isInternalDirLink(url) {
-    var re = new RegExp(serviceUrl + '/#[a-z\-]*?/lib/' + repoID + '/.*');
+    var re = new RegExp(siteRoot + '#[a-z\-]*?/lib/' + repoID + '/.*');
     return re.test(url);
   }
 
   getPathFromInternalMarkdownLink(url) {
-    var re = new RegExp(serviceUrl + '/lib/' + repoID + '/file' + '(.*\.md)');
+    var re = new RegExp(siteRoot + 'lib/' + repoID + '/file' + '(.*\.md)');
     var array = re.exec(url);
     var path = decodeURIComponent(array[1]);
     return path;
   }
 
   getPathFromInternalDirLink(url) {
-    var re = new RegExp(serviceUrl + '/#[a-z\-]*?/lib/' + repoID + '(/.*)');
+    var re = new RegExp(siteRoot + '#[a-z\-]*?/lib/' + repoID + '(/.*)');
     var array = re.exec(url);
     var path = decodeURIComponent(array[1]);
 

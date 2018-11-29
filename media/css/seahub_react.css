@@ -1017,14 +1017,6 @@ table .menu-toggle {
 
 /* end file-tag */
 
-/* begin activity page */
-.activity-table-container {
-    flex: 1;
-    padding: 10px 16px 20px;
-    overflow: auto;
-}
-/* end activity page */
-
 .dirent-item.tag-list {
     display: flex;
     align-items: center;

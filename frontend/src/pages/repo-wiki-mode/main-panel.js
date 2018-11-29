@@ -1,7 +1,7 @@
 import React, { Component, Fragment } from 'react';
 import PropTypes from 'prop-types';
 import cookie from 'react-cookies';
-import { gettext, repoID, serviceUrl, slug, permission } from '../../utils/constants';
+import { gettext, repoID, siteRoot, slug, permission } from '../../utils/constants';
 import { seafileAPI } from '../../utils/seafile-api';
 import { Utils } from '../../utils/utils';
 import Repo from '../../models/repo';
@@ -81,7 +81,7 @@ class MainPanel extends Component {
   switchViewMode = (mode) => {
     cookie.save('view_mode', mode, { path: '/' });
     let dirPath = this.props.isViewFile ? Utils.getDirName(this.props.path) : this.props.path;
-    window.location.href = serviceUrl + '/#common/lib/' + repoID + dirPath;
+    window.location.href = siteRoot + '#common/lib/' + repoID + dirPath;
   }
 
   onSideNavMenuClick = () => {
@@ -92,10 +92,9 @@ class MainPanel extends Component {
     this.props.onMainNavBarClick(path);
   }
 
-  onItemDetails = (dirent, direntPath) => {
+  onItemDetails = (dirent) => {
     this.setState({
       currentDirent: dirent,
-      direntPath: direntPath,
       isDirentDetailShow: true,
     });
   }
@@ -118,14 +117,16 @@ class MainPanel extends Component {
     this.uploader.onFolderUpload();
   }
 
-  onFileSuccess = (file) => {
+  onFileUploadSuccess = (file) => {
     // todo
   }
 
   render() {
+    const ErrMessage = (<div className="message empty-tip err-message"><h2>{gettext('Folder does not exist.')}</h2></div>);
+    
     return (
       <div className="main-panel wiki-main-panel o-hidden">
-        <div className="main-panel-top panel-top">
+        <div className="main-panel-north">
           <div className="cur-view-toolbar border-left-show">
             <span className="sf2-icon-menu hidden-md-up d-md-none side-nav-toggle" title={gettext('Side Nav Menu')} onClick={this.onSideNavMenuClick}></span>
             <div className="dir-operation">
@@ -141,7 +142,6 @@ class MainPanel extends Component {
                 <DirOperationToolBar 
                   path={this.props.path}
                   repoID={repoID}
-                  serviceUrl={serviceUrl}
                   permission={this.props.permission}
                   isViewFile={this.props.isViewFile}
                   onAddFile={this.props.onAddFile}
@@ -167,8 +167,8 @@ class MainPanel extends Component {
               />
             </div>
             <div className="cur-view-content">
-              { !this.props.pathExist ?
-                <div className="message empty-tip err-message"><h2>{gettext('Folder does not exist.')}</h2></div> :
+              {!this.props.pathExist ?
+                ErrMessage :
                 <Fragment>
                   { this.props.isViewFile ?
                     <MarkdownViewer
@@ -182,7 +182,6 @@ class MainPanel extends Component {
                       <DirentListView
                         path={this.props.path}
                         repoID={repoID}
-                        serviceUrl={serviceUrl}
                         direntList={this.props.direntList}
                         onItemClick={this.props.onItemClick}
                         onItemDelete={this.props.onItemDelete}
@@ -203,7 +202,7 @@ class MainPanel extends Component {
                         dragAndDrop={true}
                         path={this.props.path}
                         repoID={repoID}
-                        onFileSuccess={this.onFileSuccess}
+                        onFileUploadSuccess={this.onFileUploadSuccess}
                         direntList={this.props.direntList}
                       />
                     </Fragment>
@@ -212,18 +211,18 @@ class MainPanel extends Component {
               }
             </div>
           </div>
-          { this.state.isDirentDetailShow &&
+          {this.state.isDirentDetailShow && (
             <div className="cur-view-detail">
               <DirentDetail
                 repoID={repoID}
-                serviceUrl={serviceUrl}
+                path={this.props.path}
                 dirent={this.state.currentDirent}
                 direntPath={this.state.direntPath}
                 onItemDetailsClose={this.onItemDetailsClose}
                 onFileTagChanged={this.onFileTagChanged}
               />
             </div>
-          }
+          )}
         </div>
       </div>
     );

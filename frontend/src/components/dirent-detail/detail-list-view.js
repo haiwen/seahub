@@ -11,7 +11,7 @@ const propTypes = {
   dirent: PropTypes.object.isRequired,
   direntType: PropTypes.string.isRequired,
   direntDetail: PropTypes.object.isRequired,
-  direntPath: PropTypes.string.isRequired,
+  path: PropTypes.string.isRequired,
   fileTagList: PropTypes.array.isRequired,
   onFileTagChanged: PropTypes.func.isRequired,
 };
@@ -26,7 +26,8 @@ class DetailListView extends React.Component {
   }
 
   getDirentPostion = () => {
-    let { repo, direntPath } = this.props;
+    let { repo } = this.props;
+    let direntPath = this.getDirentPath();
     let position = repo.repo_name;
     if (direntPath !== '/') {
       let index = direntPath.lastIndexOf('/');
@@ -43,12 +44,19 @@ class DetailListView extends React.Component {
   }
 
   onFileTagChanged = () => {
-    this.props.onFileTagChanged(this.props.dirent, this.props.direntPath);
+    let direntPath = this.getDirentPath();
+    this.props.onFileTagChanged(this.props.dirent, direntPath);
+  }
+
+  getDirentPath = () => {
+    let { dirent, path } = this.props;
+    return Utils.joinPath(path, dirent.name);
   }
 
   render() {
     let { direntType, direntDetail, fileTagList } = this.props;
     let position = this.getDirentPostion();
+    let direntPath = this.getDirentPath();
     if (direntType === 'dir') {
       return (
         <table>
@@ -93,7 +101,7 @@ class DetailListView extends React.Component {
             <EditFileTagDialog
               repoID={this.props.repoID}
               fileTagList={fileTagList}
-              filePath={this.props.direntPath}
+              filePath={direntPath}
               toggleCancel={this.onEditFileTagToggle}
               onFileTagChanged={this.onFileTagChanged}
             />

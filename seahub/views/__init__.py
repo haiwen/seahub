@@ -1212,6 +1212,4 @@ def choose_register(request):
 
 @login_required
 def react_fake_view(request):
-    return render(request, "react_app.html", {
-        "service_url": get_service_url().rstrip('/')
-    })
+    return render(request, "react_app.html")
