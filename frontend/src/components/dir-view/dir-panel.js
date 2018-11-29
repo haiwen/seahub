@@ -13,10 +13,10 @@ import DirentDetail from '../dirent-detail/dirent-details';
 import FileUploader from '../file-uploader/file-uploader';
 
 const propTypes = {
+  currentRepo: PropTypes.object,
   path: PropTypes.string.isRequired,
   repoID: PropTypes.string.isRequired,
   repoName: PropTypes.string.isRequired,
-  currentRepo: PropTypes.string.isRequired,
   serviceUrl: PropTypes.string.isRequired,
   pathExist: PropTypes.bool.isRequired,
   permission: PropTypes.bool.isRequired,
@@ -50,7 +50,6 @@ class DirPanel extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      direntPath: null,
       currentDirent: null,
       currentMode: 'list',
       isDirentDetailShow: false,
@@ -69,10 +68,9 @@ class DirPanel extends React.Component {
     }
   }
 
-  onItemDetails = (dirent, direntPath) => {
+  onItemDetails = (dirent) => {
     this.setState({
       currentDirent: dirent,
-      direntPath: direntPath,
       isDirentDetailShow: true,
     });
   }
@@ -194,10 +192,10 @@ class DirPanel extends React.Component {
           {this.state.isDirentDetailShow && (
             <div className="cur-view-detail">
               <DirentDetail
+                path={this.props.path}
                 repoID={this.props.repoID}
                 serviceUrl={this.props.serviceUrl}
                 dirent={this.state.currentDirent}
-                direntPath={this.state.direntPath}
                 onFileTagChanged={this.props.onFileTagChanged}
                 onItemDetailsClose={this.onItemDetailsClose}
               />
