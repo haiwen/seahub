@@ -58,6 +58,7 @@ img[src=""] {
 }
 
 .wiki-main-panel .cur-view-content {
+  display: flex;
   overflow: hidden;
 }
 
