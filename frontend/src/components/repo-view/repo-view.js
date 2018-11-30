@@ -1,12 +1,13 @@
-import React, { Component } from 'react';
-import { Dropdown, DropdownMenu, DropdownToggle, DropdownItem } from 'reactstrap';
-import { Link } from '@reach/router';
+import React, { Component, Fragment } from 'react';
 import moment from 'moment';
+import { Link } from '@reach/router';
+import { Dropdown, DropdownMenu, DropdownToggle, DropdownItem } from 'reactstrap';
 import { seafileAPI } from '../../utils/seafile-api';
 import { Utils } from '../../utils/utils';
 import { gettext, siteRoot, loginUrl, isPro, storages, canGenerateShareLink, canGenerateUploadLink, folderPermEnabled, enableRepoSnapshotLabel } from '../../utils/constants';
 import Loading from '../loading';
 import DeleteItemPopup from './popups/delete-item';
+import GeneralToolBar from '../toolbar/general-toolbar';
 
 class Content extends Component {
 
@@ -393,14 +394,19 @@ class RepoView extends Component {
 
   render() {
     return (
-      <div className="cur-view-container">
-        <div className="cur-view-path">
-          <h3 className="sf-heading">{gettext("My Libraries")}</h3>
+      <Fragment>
+        <GeneralToolBar onShowSidePanel={this.props.onShowSidePanel} onSearchedClick={this.props.onSearchedClick}/>
+        <div className="main-panel-center">
+          <div className="cur-view-container">
+            <div className="cur-view-path">
+              <h3 className="sf-heading">{gettext("My Libraries")}</h3>
+            </div>
+            <div className="cur-view-content">
+              <Content data={this.state} />
+            </div>
+          </div>
         </div>
-        <div className="cur-view-content">
-          <Content data={this.state} />
-        </div>
-      </div>
+      </Fragment>
     );
   }
 }

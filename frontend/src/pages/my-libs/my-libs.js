@@ -6,16 +6,19 @@ import RepoView from '../../components/repo-view/repo-view';
 
 const propTypes = {
   onShowSidePanel: PropTypes.func.isRequired,
+  onSearchedClick: PropTypes.func.isRequired,
 };
 
 class MyLibraries extends React.Component {
-
-
   render() {
     return (
       <div className="main-panel">
         <Router>
-          <RepoView path={'/'} />
+          <RepoView 
+            path={'/'} 
+            onShowSidePanel={this.props.onShowSidePanel}
+            onSearchedClick={this.props.onSearchedClick} 
+          />
           <DirView 
             path={'/:repoID/*'} 
             onMenuClick={this.props.onShowSidePanel}
