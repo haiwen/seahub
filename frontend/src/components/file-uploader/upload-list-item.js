@@ -9,7 +9,8 @@ const propTypes = {
 
 class UploadListItem extends React.Component {
 
-  onUploadCancel = () => {
+  onUploadCancel = (e) => {
+    e.preventDefault();
     let item = this.props.item;
     item.resumableFile.cancel();
     this.props.onUploadCancel(item);
@@ -44,7 +45,7 @@ class UploadListItem extends React.Component {
         </td>
         <td width="20%" className="upload-operation">
           { progress !== 100 ?
-            <a onClick={this.onUploadCancel}>{gettext(('cancel'))}</a> :
+            <a href="#" onClick={this.onUploadCancel}>{gettext(('cancel'))}</a> :
             <span>{gettext('uploaded')}</span>
           }
         </td>
