@@ -59,13 +59,7 @@ class DirView extends React.Component {
       this.setState({path: path});
     });
 
-    if (path !== '/') { // refresh brower
-      let index = location.href.indexOf(repoID);
-      let tabPath = location.href.slice(0, index);
-      // console.log(tabPath);
-      let pathList = tabPath.split('/');
-      this.props.updateCurrentTab(pathList[pathList.length - 2]);
-    }
+    this.props.updateCurrentTab('my-libs'); // just for refersh brower;
   }
   
   updateDirentList = (filePath) => {

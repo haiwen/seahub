@@ -1494,7 +1494,7 @@
     <ul class="side-tabnav-tabs">
         {% if user.permissions.can_add_repo %}
         <li class="tab<% if (cur_tab == 'mine') { %> tab-cur<% } %>">
-            <a href="{{ SITE_ROOT }}library/" class="ellipsis" title="{% trans "My Libraries" %}"><span aria-hidden="true" class="sf2-icon-user"></span>{% trans "My Libraries" %}</a>
+            <a href="{{ SITE_ROOT }}my-libs/" class="ellipsis" title="{% trans "My Libraries" %}"><span aria-hidden="true" class="sf2-icon-user"></span>{% trans "My Libraries" %}</a>
         </li>
         {% endif %}
 

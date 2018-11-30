@@ -17,6 +17,7 @@ import ShareAdminShareLinks from './pages/share-admin/share-links';
 import ShareAdminUploadLinks from './pages/share-admin/upload-links';
 import SharedLibraries from './pages/shared-libs/shared-libs';
 import MyLibraries from './pages/my-libs/my-libs';
+import DirView from './components/dir-view/dir-view';
 import MainContentWrapper from './components/main-content-wrapper';
 
 import 'seafile-ui';
@@ -136,7 +137,8 @@ class App extends Component {
             <ShareAdminShareLinksWrapper path={siteRoot + 'share-admin-share-links'} onShowSidePanel={this.onShowSidePanel} onSearchedClick={this.onSearchedClick} />
             <ShareAdminUploadLinksWrapper path={siteRoot + 'share-admin-upload-links'} onShowSidePanel={this.onShowSidePanel} onSearchedClick={this.onSearchedClick} />
             <SharedLibrariesWrapper path={siteRoot + 'shared-libs'} onShowSidePanel={this.onShowSidePanel} onSearchedClick={this.onSearchedClick} />
-            <MyLibraries path={siteRoot + 'library/*'} onShowSidePanel={this.onShowSidePanel} updateCurrentTab={this.updateCurrentTab} onSearchedClick={this.onSearchedClick} />
+            <MyLibraries path={siteRoot + 'my-libs/*'} onShowSidePanel={this.onShowSidePanel} onSearchedClick={this.onSearchedClick} />
+            <DirView path={siteRoot + 'library/:repoID/*'} onMenuClick={this.props.onShowSidePanel} updateCurrentTab={this.updateCurrentTab}/>
           </Router>
         </MainPanel>
       </div>

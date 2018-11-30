@@ -122,8 +122,8 @@ class MainSideNav extends React.Component {
         <div className="side-nav-con">
           <h3 className="sf-heading">Files</h3>
           <ul className="side-tabnav-tabs">
-            <li className={`tab ${this.props.currentTab === 'library' ? 'tab-cur' : ''}`}>
-              <Link to={ siteRoot + 'library/' } className="ellipsis" title={gettext('My Libraries')} onClick={() => this.tabItemClick('library')}>
+            <li className={`tab ${this.props.currentTab === 'my-libs' ? 'tab-cur' : ''}`}>
+              <Link to={ siteRoot + 'my-libs/' } className="ellipsis" title={gettext('My Libraries')} onClick={() => this.tabItemClick('my-libs')}>
                 <span className="sf2-icon-user" aria-hidden="true"></span>
                 {gettext('My Libraries')}
               </Link>
