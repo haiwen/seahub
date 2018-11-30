@@ -138,7 +138,7 @@ class App extends Component {
             <ShareAdminUploadLinksWrapper path={siteRoot + 'share-admin-upload-links'} onShowSidePanel={this.onShowSidePanel} onSearchedClick={this.onSearchedClick} />
             <SharedLibrariesWrapper path={siteRoot + 'shared-libs'} onShowSidePanel={this.onShowSidePanel} onSearchedClick={this.onSearchedClick} />
             <MyLibraries path={siteRoot + 'my-libs/*'} onShowSidePanel={this.onShowSidePanel} onSearchedClick={this.onSearchedClick} />
-            <DirView path={siteRoot + 'library/:repoID/*'} onMenuClick={this.props.onShowSidePanel} updateCurrentTab={this.updateCurrentTab}/>
+            <DirView path={siteRoot + 'library/:repoID/*'} onMenuClick={this.onShowSidePanel} updateCurrentTab={this.updateCurrentTab}/>
           </Router>
         </MainPanel>
       </div>

@@ -322,7 +322,7 @@ class Item extends Component {
         <td><img src={data.icon_url} title={data.icon_title} alt={data.icon_title} width="24" /></td>
         <td>
           {data.repo_name ?
-            <Link to={`${siteRoot}library/${data.repo_id}/`}>{data.repo_name}</Link> :
+            <Link to={`${siteRoot}library/${data.repo_id}/${data.repo_name}/`}>{data.repo_name}</Link> :
             gettext('Broken (please contact your administrator to fix this library)')}
         </td>
         <td>{data.repo_name ? desktopOperations : ''}</td>
@@ -337,7 +337,7 @@ class Item extends Component {
         <td><img src={data.icon_url} title={data.icon_title} alt={data.icon_title} width="24" /></td>
         <td>
           {data.repo_name ?
-            <Link to={`${siteRoot}library/${data.repo_id}/`}>{data.repo_name}</Link> :
+            <Link to={`${siteRoot}library/${data.repo_id}/${data.repo_name}/`}>{data.repo_name}</Link> :
             gettext('Broken (please contact your administrator to fix this library)')}
           <br />
           <span className="item-meta-info">{Utils.formatSize({bytes: data.size})}</span>
