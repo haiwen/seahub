@@ -12,6 +12,7 @@ import Repo from '../../models/repo';
 
 const propTypes = {
   onMenuClick: PropTypes.func.isRequired,
+  updateCurrentTab: PropTypes.func.isRequired,
 };
 
 class DirView extends React.Component {
@@ -57,6 +58,14 @@ class DirView extends React.Component {
       this.updateDirentList(path);
       this.setState({path: path});
     });
+
+    if (path !== '/') { // refresh brower
+      let index = location.href.indexOf(repoID);
+      let tabPath = location.href.slice(0, index);
+      // console.log(tabPath);
+      let pathList = tabPath.split('/');
+      this.props.updateCurrentTab(pathList[pathList.length - 2]);
+    }
   }
   
   updateDirentList = (filePath) => {
@@ -82,7 +91,7 @@ class DirView extends React.Component {
       this.updateDirentList(direntPath);
       this.setState({path: direntPath});
 
-      let fileUrl = siteRoot + 'librarys/' + this.state.repoID + direntPath;
+      let fileUrl = siteRoot + 'library/' + this.state.repoID + direntPath;
       window.history.pushState({url: fileUrl, path: direntPath}, direntPath, fileUrl);
     } else {
       const w=window.open('about:blank');
@@ -302,7 +311,7 @@ class DirView extends React.Component {
     this.updateDirentList(path);
     this.setState({path: path});
 
-    let fileUrl = siteRoot + 'librarys/' + this.state.repoID + path;
+    let fileUrl = siteRoot + 'library/' + this.state.repoID + path;
     window.history.pushState({url: fileUrl, path: path}, path, fileUrl);
   }
 

@@ -49,6 +49,7 @@ class App extends Component {
       isLoadingDraft: true,
       currentTab: 'dashboard',
     };
+    this.currentTab = ''; //just for refresh brower
   }
 
   componentDidMount() {
@@ -57,9 +58,10 @@ class App extends Component {
     // TODO: need refactor later
     let href = window.location.href.split('/');
     this.getDrafts();
-    this.setState({
-      currentTab: href[href.length - 2]
-    });
+    this.setState({currentTab: href[href.length - 2]});
+    if (this.currentTab) {
+      this.setState({currentTab: this.currentTab});
+    }
   }
 
   getDrafts = () => {
@@ -95,11 +97,13 @@ class App extends Component {
     //todos
   }
 
-  tabItemClick = (param) => {
-    this.setState({
-      currentTab: param
-    });
+  tabItemClick = (tabName) => {
+    this.setState({currentTab: tabName});
   } 
+
+  updateCurrentTab = (tabName) => {
+    this.currentTab = tabName;
+  }
 
   render() {
     let { currentTab } = this.state;
@@ -132,7 +136,7 @@ class App extends Component {
             <ShareAdminShareLinksWrapper path={siteRoot + 'share-admin-share-links'} onShowSidePanel={this.onShowSidePanel} onSearchedClick={this.onSearchedClick} />
             <ShareAdminUploadLinksWrapper path={siteRoot + 'share-admin-upload-links'} onShowSidePanel={this.onShowSidePanel} onSearchedClick={this.onSearchedClick} />
             <SharedLibrariesWrapper path={siteRoot + 'shared-libs'} onShowSidePanel={this.onShowSidePanel} onSearchedClick={this.onSearchedClick} />
-            <MyLibraries path={siteRoot + 'my-libs'} />
+            <MyLibraries path={siteRoot + 'library/*'} onShowSidePanel={this.onShowSidePanel} updateCurrentTab={this.updateCurrentTab}/>
           </Router>
         </MainPanel>
       </div>

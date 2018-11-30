@@ -200,7 +200,7 @@ urlpatterns = [
     url(r'^share-admin-share-links/$', react_fake_view, name="share_admin_share_links"),
     url(r'^share-admin-upload-links/$', react_fake_view, name="share_admin_upload_links"),
     url(r'^shared-libs/$', react_fake_view, name="shared_libs"),
-    url(r'^my-libs/$', react_fake_view, name="my_libs"),
+    url(r'^library/.*$', react_fake_view, name="my_libs"),
 
     ### Ajax ###
     url(r'^ajax/repo/(?P<repo_id>[-0-9a-f]{36})/dirents/$', get_dirents, name="get_dirents"),
