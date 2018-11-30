@@ -441,12 +441,12 @@ define([
                     if (set_expiration) {
                         if (app.pageOptions.share_link_expire_days_min > 0 ||
                             app.pageOptions.share_link_expire_days_max > 0) {
-                            // do nothing
+                            expire_days_input.val(app.pageOptions.share_link_expire_days_default);
                         } else {
                             set_expiration_checkbox.prop('checked', false);
                             expire_days_input.prop('disabled', true).addClass('input-disabled');
+                            expire_days_input.val('');
                         }
-                        expire_days_input.val('');
                     }
 
                     // restore 'permission'
