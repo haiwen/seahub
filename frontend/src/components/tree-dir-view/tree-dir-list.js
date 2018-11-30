@@ -26,18 +26,22 @@ class TreeDirList extends React.Component {
     this.setState({highlight: false});
   }
 
-  onMainNodeClick = () => {
+  onMainNodeClick = (e) => {
+    e.preventDefault();
     this.props.onMainNodeClick(this.props.node);
   }
 
   render() {
     let node = this.props.node;
+    let href = siteRoot + 'wikis' + node.path;
     return (
       <tr className={this.state.highlight ? 'tr-highlight' : ''} onMouseEnter={this.onMouseEnter} onMouseLeave={this.onMouseLeave}>
         <td className="icon">
           <img src={node.type === 'dir' ? siteRoot + 'media/img/folder-192.png' : siteRoot + 'media/img/file/192/txt.png'} alt='icon'></img>
         </td>
-        <td className="name a-simulate" onClick={this.onMainNodeClick}>{node.name}</td>
+        <td className="name">
+          <a href={href} onClick={this.onMainNodeClick}>{node.name}</a>
+        </td>
         <td>{node.size}</td>
         <td title={node.last_update_time}>{node.last_update_time}</td>
       </tr>

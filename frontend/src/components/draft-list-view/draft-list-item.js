@@ -46,43 +46,30 @@ class DraftListItem extends React.Component {
     this.props.onMenuToggleClick(e, draft);
   }
 
-  onDraftEditClick = () => {
-    let draft = this.props.draft;
-    let filePath = draft.draft_file_path;
-    let repoID = draft.origin_repo_id;
-    let url =  siteRoot + 'lib/' + repoID + '/file' + filePath + '?mode=edit';
-    window.open(url);
-  }
-
-  onLibraryClick = () => {
-    let draft = this.props.draft;
-    let repoID = draft.origin_repo_id;
-    let url =  siteRoot + '#common/lib/' + repoID;
-    window.open(url);
-  }
-
-  onReviewClick = () => {
-    let draft = this.props.draft;
-    let url = siteRoot + 'drafts/review/' + draft.review_id + '/';
-    window.open(url);
-  }
-
   render() {
     let draft = this.props.draft;
-    let fileName = Utils.getFileName(draft.draft_file_path);
+    let repoID = draft.origin_repo_id;
+    let filePath = draft.draft_file_path;
+    let fileName = Utils.getFileName(filePath);
+    let draftUrl = siteRoot + 'lib/' + repoID + '/file' + filePath + '?mode=edit';
+    let libraryUrl = siteRoot + '#common/lib/' + repoID;
+    let reviewUrl = siteRoot + 'drafts/review/' + draft.review_id + '/';
     let localTime = moment.utc(draft.updated_at).toDate();
     localTime = moment(localTime).fromNow();
     return (
       <tr className={this.state.highlight} onMouseEnter={this.onMouseEnter} onMouseLeave={this.onMouseLeave}>
         <td className="icon"><img src={siteRoot + 'media/img/file/192/txt.png'} alt='icon' /></td>
-        <td className="name a-simulate" >
-          <span onClick={this.onDraftEditClick}>{fileName}</span>
+        <td className="name" >
+          <a href={draftUrl} target="_blank">{fileName}</a>
         </td>
-        <td className="library a-simulate">
-          <span onClick={this.onLibraryClick}>{draft.repo_name}</span>
+        <td className="library">
+          <a href={libraryUrl} target="_blank">{draft.repo_name}</a>
         </td>
         <td className="review">
-          { draft.review_id && draft.review_status === 'open' ? <span className="a-simulate" onClick={this.onReviewClick}>#{draft.review_id}</span> : <span>--</span> }
+          {(draft.review_id && draft.review_status === 'open') ? 
+              <a href={reviewUrl} target="_blank">#{draft.review_id}</a> : 
+              <span>--</span> 
+          }
         </td>
         <td className="update">{localTime}</td>
         <td className="menu-toggle">
