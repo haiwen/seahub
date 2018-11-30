@@ -44,7 +44,7 @@ class UploadListItem extends React.Component {
         </td>
         <td width="20%" className="upload-operation">
           { progress !== 100 ?
-            <span className="a-simulate" onClick={this.onUploadCancel}>{gettext(('cancel'))}</span> :
+            <a onClick={this.onUploadCancel}>{gettext(('cancel'))}</a> :
             <span>{gettext('uploaded')}</span>
           }
         </td>

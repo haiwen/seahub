@@ -2,6 +2,7 @@ import React, { Fragment } from 'react';
 import PropTypes from 'prop-types';
 import { gettext, siteRoot } from '../../utils/constants';
 import { seafileAPI } from '../../utils/seafile-api';
+import { Utils } from '../../utils/utils';
 import URLDecorator from '../../utils/url-decorator';
 import Toast from '../toast';
 import DirentMenu from './dirent-menu';
@@ -137,7 +138,8 @@ class DirentListItem extends React.Component {
     }
   }
 
-  onItemClick = () => {
+  onItemClick = (e) => {
+    e.preventDefault();
     this.props.onItemClick(this.props.dirent);
   }
 
@@ -365,7 +367,9 @@ class DirentListItem extends React.Component {
   }
 
   render() {
-    let { dirent } = this.props;
+    let { path, dirent } = this.props;
+    let direntPath = Utils.joinPath(path, dirent.name);
+    let href = siteRoot + 'wiki/lib/' + this.props.repoID + direntPath;
     return (
       <Fragment>
         <tr className={this.state.highlight ? 'tr-highlight' : ''} onMouseEnter={this.onMouseEnter} onMouseOver={this.onMouseOver} onMouseLeave={this.onMouseLeave}>
@@ -382,10 +386,10 @@ class DirentListItem extends React.Component {
               {dirent.is_locked && <img className="locked" src={siteRoot + 'media/img/file-locked-32.png'} alt={gettext('locked')}></img>}
             </div>
           </td>
-          <td className="name a-simulate">
+          <td className="name">
             {this.state.isRenameing ?
               <DirentRename dirent={dirent} onRenameConfirm={this.onRenameConfirm} onRenameCancel={this.onRenameCancel}/> :
-              <span onClick={this.onItemClick}>{dirent.name}</span>
+              <a href={href} onClick={this.onItemClick}>{dirent.name}</a>
             }
           </td>
           <td>
