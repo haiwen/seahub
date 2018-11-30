@@ -123,10 +123,10 @@ class MainSideNav extends React.Component {
           <h3 className="sf-heading">Files</h3>
           <ul className="side-tabnav-tabs">
             <li className={`tab ${this.props.currentTab === 'my-libs' ? 'tab-cur' : ''}`}>
-              <a href={ siteRoot + '#my-libs' } className="ellipsis" title={gettext('My Libraries')} onClick={() => this.tabItemClick('my-libs')}>
+              <Link to={ siteRoot + 'my-libs/' } className="ellipsis" title={gettext('My Libraries')} onClick={() => this.tabItemClick('my-libs')}>
                 <span className="sf2-icon-user" aria-hidden="true"></span>
                 {gettext('My Libraries')}
-              </a>
+              </Link>
             </li>
             <li className={`tab ${this.props.currentTab === 'shared-libs' ? 'tab-cur' : ''}`}>
               <Link to={siteRoot + 'shared-libs/'} className="ellipsis" title={gettext('Shared with me')} onClick={() => this.tabItemClick('shared-libs')}>

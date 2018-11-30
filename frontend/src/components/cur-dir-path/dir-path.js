@@ -45,7 +45,7 @@ class DirPath extends React.Component {
     let pathElem = this.turnPathToLink(currentPath);
     return (
       <div className="path-containter">
-        <a href={siteRoot + '#common/'} className="normal">{gettext('Libraries')}</a>
+        <a href={siteRoot + 'my-libs/'} className="normal">{gettext('Libraries')}</a>
         <span className="path-split">/</span>
         {currentPath === '/' ?
           <span>{repoName}</span>:

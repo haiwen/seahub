@@ -297,10 +297,10 @@ export const Utils = {
     var bytes = options.bytes;
     var precision = options.precision || 0;
 
-    var kilobyte = 1024;
-    var megabyte = kilobyte * 1024;
-    var gigabyte = megabyte * 1024;
-    var terabyte = gigabyte * 1024;
+    var kilobyte = 1000;
+    var megabyte = kilobyte * 1000;
+    var gigabyte = megabyte * 1000;
+    var terabyte = gigabyte * 1000;
 
     if ((bytes >= 0) && (bytes < kilobyte)) {
       return bytes + ' B';

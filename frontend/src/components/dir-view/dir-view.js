@@ -12,6 +12,7 @@ import Repo from '../../models/repo';
 
 const propTypes = {
   onMenuClick: PropTypes.func.isRequired,
+  updateCurrentTab: PropTypes.func.isRequired,
 };
 
 class DirView extends React.Component {
@@ -44,8 +45,6 @@ class DirView extends React.Component {
 
   componentDidMount() {
     let repoID = this.props.repoID;
-    let index = location.href.indexOf(repoID) + repoID.length;
-    let path = decodeURIComponent(location.href.slice(index));
     seafileAPI.getRepoInfo(repoID).then(res => {
       let repo = new Repo(res.data);
       this.setState({
@@ -54,9 +53,15 @@ class DirView extends React.Component {
         permission: repo.permission === 'rw',
         currentRepo: repo,
       });
-      this.updateDirentList(path);
+      
+      let repoName = encodeURIComponent(repo.repo_name);
+      let index = location.href.indexOf(repoName) + repoName.length;
+      let path = decodeURIComponent(location.href.slice(index));
       this.setState({path: path});
+      this.updateDirentList(path);
     });
+
+    this.props.updateCurrentTab('my-libs'); // just for refersh brower;
   }
   
   updateDirentList = (filePath) => {
@@ -82,7 +87,7 @@ class DirView extends React.Component {
       this.updateDirentList(direntPath);
       this.setState({path: direntPath});
 
-      let fileUrl = siteRoot + 'librarys/' + this.state.repoID + direntPath;
+      let fileUrl = siteRoot + 'library/' + this.state.repoID + '/' + this.state.repoName + direntPath;
       window.history.pushState({url: fileUrl, path: direntPath}, direntPath, fileUrl);
     } else {
       const w=window.open('about:blank');
@@ -302,7 +307,7 @@ class DirView extends React.Component {
     this.updateDirentList(path);
     this.setState({path: path});
 
-    let fileUrl = siteRoot + 'librarys/' + this.state.repoID + path;
+    let fileUrl = siteRoot + 'library/' + this.state.repoID + '/' + this.state.repoName  + path;
     window.history.pushState({url: fileUrl, path: path}, path, fileUrl);
   }
 

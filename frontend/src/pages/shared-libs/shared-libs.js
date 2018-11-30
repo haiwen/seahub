@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import moment from 'moment';
+import { Link } from '@reach/router';
 import { seafileAPI } from '../../utils/seafile-api';
 import { Utils } from '../../utils/utils';
 import { gettext, siteRoot, loginUrl, isPro } from '../../utils/constants';
@@ -50,7 +51,7 @@ class Content extends Component {
       );
 
       const table = (
-        <table className="table table-hover table-vcenter">
+        <table>
           {window.innerWidth >= 768 ? desktopThead : mobileThead}
           <TableBody items={items} />
         </table>
@@ -173,7 +174,7 @@ class Item extends Component {
     const desktopItem = (
       <tr onMouseOver={this.handleMouseOver} onMouseOut={this.handleMouseOut}>
         <td><img src={data.icon_url} title={data.icon_title} alt={data.icon_title} width="24" /></td>
-        <td><a href={data.url}>{data.repo_name}</a></td>
+        <td><Link to={`${siteRoot}library/${data.repo_id}/${data.repo_name}/`}>{data.repo_name}</Link></td>
         <td>
           { isPro && data.is_admin ?
             <a href="#" className={shareIconClassName} title={gettext("Share")} onClick={this.share}></a>
@@ -190,7 +191,7 @@ class Item extends Component {
       <tr onMouseOver={this.handleMouseOver} onMouseOut={this.handleMouseOut}>
         <td><img src={data.icon_url} title={data.icon_title} alt={data.icon_title} width="24" /></td>
         <td>
-          <a href={data.url}>{data.repo_name}</a><br />
+          <Link to={`${siteRoot}library/${data.repo_id}/${data.repo_name}/`}>{data.repo_name}</Link><br />
           <span className="item-meta-info" title={data.owner_contact_email}>{data.owner_name}</span>
           <span className="item-meta-info">{Utils.formatSize({bytes: data.size})}</span>
           <span className="item-meta-info" title={moment(data.last_modified).format('llll')}>{moment(data.last_modified).fromNow()}</span>

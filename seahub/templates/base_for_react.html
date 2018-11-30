@@ -43,7 +43,20 @@
             enableFileComment: '{{ enable_file_comment }}',
             folderPermEnabled: '{{ folder_perm_enabled }}',
             enableUploadFolder: '{{ enable_upload_folder }}',
-            enableResumableFileUpload: '{{ enable_resumable_fileupload }}'
+            enableResumableFileUpload: '{{ enable_resumable_fileupload }}',
+            // storage backends
+            storages: (function () {
+              // for 'create repo' & 'storage backend' column in 'my libs'
+              var storages = [];
+              {% for storage in storages %}
+              storages.push({
+                'id': '{{storage.storage_id|escapejs}}',
+                'name': '{{storage.storage_name|escapejs}}'
+              });
+              {% endfor %}
+              return storages;
+            })(),
+            enableRepoSnapshotLabel: {% if enable_repo_snapshot_label %} true {% else %} false {% endif %},
         }
      };
 </script>
