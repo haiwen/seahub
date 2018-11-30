@@ -1,6 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { siteRoot, repoID } from '../../utils/constants';
+import { siteRoot } from '../../utils/constants';
 
 const propTypes = {
   node: PropTypes.object.isRequired,
@@ -33,7 +33,7 @@ class TreeDirList extends React.Component {
 
   render() {
     let node = this.props.node;
-    let href = siteRoot + 'wiki/lib/' + repoID + node.path;
+    let href = siteRoot + 'wikis' + node.path;
     return (
       <tr className={this.state.highlight ? 'tr-highlight' : ''} onMouseEnter={this.onMouseEnter} onMouseLeave={this.onMouseLeave}>
         <td className="icon">
