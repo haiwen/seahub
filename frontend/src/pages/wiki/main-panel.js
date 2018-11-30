@@ -84,7 +84,11 @@ class MainPanel extends Component {
               <button className="btn btn-secondary operation-item" title="Edit File" onClick={this.onEditClick}>{gettext('Edit Page')}</button>
             }
           </div>
-          <CommonToolbar onSearchedClick={this.props.onSearchedClick} searchPlaceholder={'Search files in this library'}/>
+          <CommonToolbar 
+            repoID={repoID}
+            onSearchedClick={this.props.onSearchedClick} 
+            searchPlaceholder={'Search files in this library'}
+          />
         </div>
         <div className="cur-view-container">
           <div className="cur-view-path">

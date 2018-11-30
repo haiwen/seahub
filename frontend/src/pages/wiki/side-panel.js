@@ -12,7 +12,7 @@ import CreateFile from '../../components/dialog/create-file-dialog';
 const propTypes = {
   changedNode: PropTypes.object,
   treeData: PropTypes.object.isRequired,
-  currentFilePath: PropTypes.string.isRequired,
+  currentPath: PropTypes.string.isRequired,
   closeSideBar: PropTypes.bool.isRequired,
   onCloseSide: PropTypes.func.isRequired,
   onDirCollapse: PropTypes.func.isRequired,
@@ -199,7 +199,7 @@ class SidePanel extends Component {
           <div className="wiki-pages-container">
             {this.props.treeData && 
             <TreeView
-              currentFilePath={this.props.currentFilePath}
+              currentPath={this.props.currentPath}
               treeData={this.props.treeData}
               currentNode={this.state.currentNode}
               isNodeItemFrezee={this.state.isNodeItemFrezee}

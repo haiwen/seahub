@@ -3,7 +3,7 @@ import ReactDOM from 'react-dom';
 import SidePanel from './pages/wiki/side-panel';
 import MainPanel from './pages/wiki/main-panel';
 import moment from 'moment';
-import { slug, repoID, siteRoot, initialFilePath } from './utils/constants';
+import { slug, repoID, siteRoot, initialPath } from './utils/constants';
 import editorUtilities from './utils/editor-utilties';
 import Node from './components/tree-view/node';
 import Tree from './components/tree-view/tree';
@@ -36,7 +36,7 @@ class Wiki extends Component {
   }
 
   componentDidMount() {
-    this.initWikiData(initialFilePath);
+    this.initWikiData(initialPath);
   }
 
   initWikiData(filePath){
@@ -115,7 +115,7 @@ class Wiki extends Component {
   
   onSearchedClick = (item) => {
     let path = item.path;
-    if (this.state.currentFilePath !== path) {
+    if (this.state.filePath !== path) {
       this.initMainPanelData(path); 
 
       let tree = this.state.tree_data.clone();
@@ -152,7 +152,7 @@ class Wiki extends Component {
     }
   }
 
-  onNodeClick = (e, node) => {
+  onNodeClick = (node) => {
     if (node instanceof Node && node.isMarkdown()){
       let tree = this.state.tree_data.clone();
       this.initMainPanelData(node.path);
@@ -174,7 +174,7 @@ class Wiki extends Component {
     }
   }
 
-  onDirCollapse = (e, node) => {
+  onDirCollapse = (node) => {
     let tree = this.state.tree_data.clone();
     let findNode = tree.getNodeByPath(node.path);
     findNode.isExpanded = !findNode.isExpanded;
@@ -471,7 +471,7 @@ class Wiki extends Component {
           closeSideBar={this.state.closeSideBar}
           onCloseSide ={this.onCloseSide}
           treeData={this.state.tree_data}
-          currentFilePath={this.state.filePath}
+          currentPath={this.state.filePath}
           changedNode={this.state.changedNode}
           onAddFolderNode={this.onAddFolderNode}
           onAddFileNode={this.onAddFileNode}
