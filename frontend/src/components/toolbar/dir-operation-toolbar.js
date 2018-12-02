@@ -5,6 +5,7 @@ import { gettext, siteRoot } from '../../utils/constants';
 import ModalPortal from '../modal-portal';
 import CreateFolder from '../../components/dialog/create-folder-dialog';
 import CreateFile from '../../components/dialog/create-file-dialog';
+import ShareDialog from '../../components/dialog/share-dialog';
 
 const propTypes = {
   isViewFile: PropTypes.bool,   // just for view file,
@@ -27,6 +28,7 @@ class DirOperationToolbar extends React.Component {
       isCreateFolderDialogShow: false,
       isUploadMenuShow: false,
       isCreateMenuShow: false,
+      isShareDialogShow: false,
       operationMenuStyle: '',
     };
   }
@@ -78,7 +80,11 @@ class DirOperationToolbar extends React.Component {
   }
 
   onShareClick = (e) => {
-    //todos;
+    e.nativeEvent.stopImmediatePropagation(); //for document event
+    this.setState({
+      isShareDialogShow: !this.state.isShareDialogShow
+    });
+
   }
 
   onCreateFolderToggle = () => {
@@ -110,6 +116,7 @@ class DirOperationToolbar extends React.Component {
   }
 
   render() {
+    let dirName = this.props.path.replace('\/','');
     return (
       <Fragment>
         <div className="operation">
@@ -160,6 +167,17 @@ class DirOperationToolbar extends React.Component {
             />
           </ModalPortal>
         )}
+        {this.state.isShareDialogShow &&
+          <ModalPortal>
+            <ShareDialog itemPath={this.props.path}
+                         itemName={dirName}
+                         toggleDialog={this.onShareClick}
+                         isOpen={this.state.isShareDialogShow}
+                         repoID={this.props.repoID}
+                         isDir={true}
+                         />
+          </ModalPortal>
+        }
       </Fragment>
     );
   }

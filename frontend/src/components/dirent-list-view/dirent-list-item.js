@@ -1,6 +1,7 @@
 import React, { Fragment } from 'react';
 import PropTypes from 'prop-types';
-import { gettext, siteRoot } from '../../utils/constants';
+import { gettext, siteRoot, repoID } from '../../utils/constants';
+import { Utils } from '../../utils/utils';
 import { seafileAPI } from '../../utils/seafile-api';
 import { Utils } from '../../utils/utils';
 import URLDecorator from '../../utils/url-decorator';
@@ -11,6 +12,7 @@ import ModalPortal from '../modal-portal';
 import ZipDownloadDialog from '../dialog/zip-download-dialog';
 import MoveDirentDialog from '../dialog/move-dirent-dialog';
 import CopyDirentDialog from '../dialog/copy-dirent-dialog';
+import ShareDialog from '../dialog/share-dialog';
 
 const propTypes = {
   path: PropTypes.string.isRequired,
@@ -45,6 +47,7 @@ class DirentListItem extends React.Component {
       isProgressDialogShow: false,
       isMoveDialogShow: false,
       isCopyDialogShow: false,
+      isShareDialogShow: false,
       isMutipleOperation: false,
     };
     this.zipToken = null;
@@ -146,6 +149,13 @@ class DirentListItem extends React.Component {
   onItemDelete = (e) => {
     e.nativeEvent.stopImmediatePropagation(); //for document event
     this.props.onItemDelete(this.props.dirent);
+  }
+
+  onItemShare = (e) => {
+    e.nativeEvent.stopImmediatePropagation(); //for document event
+    this.setState({
+      isShareDialogShow: !this.state.isShareDialogShow
+    });
   }
 
   onMenuItemClick = (operation) => {
@@ -465,6 +475,17 @@ class DirentListItem extends React.Component {
               progress={this.state.progress} 
               onCancelDownload={this.onCancelDownload}
             />
+          </ModalPortal>
+        }
+        {this.state.isShareDialogShow &&
+          <ModalPortal>
+            <ShareDialog itemPath={direntPath}
+                         itemName={dirent.name}
+                         toggleDialog={this.onItemShare}
+                         isOpen={this.state.isShareDialogShow}
+                         repoID={repoID}
+                         isDir={dirent.isDir()}
+                         />
           </ModalPortal>
         }
       </Fragment>
