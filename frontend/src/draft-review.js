@@ -254,9 +254,7 @@ class DraftReview extends React.Component {
   }
 
   getSelectedText = () => {
-    const value = this.refs.diffViewer.value;
     const native = window.getSelection();
-    const { fragment } = value;
     const nativeRange = native.getRangeAt(0);
     let contents = nativeRange.cloneContents();
     const div = window.document.createElement('div');
