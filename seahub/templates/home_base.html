@@ -23,11 +23,11 @@
                 <a href="#" class="ellipsis" title="{% trans "Shared with groups" %}"><span class="toggle-icon icon-caret-left fright" aria-hidden="true"></span><span class="sf2-icon-group" aria-hidden="true"></span>{% trans "Shared with groups" %}</a>
                 <ul class="grp-list hide">
                     <li>
-                        <a href="{{ SITE_ROOT }}#groups/"><span class="sharp" aria-hidden="true">#</span>{% trans "All Groups" %}</a>
+                        <a href="{{ SITE_ROOT }}groups/"><span class="sharp" aria-hidden="true">#</span>{% trans "All Groups" %}</a>
                     </li>
                     {% for grp in grps %}
                     <li>
-                        <a class="ellipsis" href="{{SITE_ROOT}}#group/{{ grp.id }}/" title="{{ grp.group_name }}"><span class="sharp" aria-hidden="true">#</span>{{ grp.group_name }}</a>
+                        <a class="ellipsis" href="{{SITE_ROOT}}group/{{ grp.id }}/" title="{{ grp.group_name }}"><span class="sharp" aria-hidden="true">#</span>{{ grp.group_name }}</a>
                     </li>
                     {% endfor %}
                 </ul>

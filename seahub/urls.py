@@ -201,6 +201,8 @@ urlpatterns = [
     url(r'^share-admin-upload-links/$', react_fake_view, name="share_admin_upload_links"),
     url(r'^shared-libs/$', react_fake_view, name="shared_libs"),
     url(r'^my-libs/$', react_fake_view, name="my_libs"),
+    url(r'^groups/$', react_fake_view, name="groups"),
+    url(r'^group/(?P<group_id>\d+)/$', react_group, name="group"),
     url(r'^library/.*$', react_fake_view, name="lib_view"),
 
     ### Ajax ###

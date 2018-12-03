@@ -18,6 +18,8 @@ import ShareAdminUploadLinks from './pages/share-admin/upload-links';
 import SharedLibraries from './pages/shared-libs/shared-libs';
 import MyLibraries from './pages/my-libs/my-libs';
 import DirView from './components/dir-view/dir-view';
+import Groups from './pages/group/groups';
+import Group from './pages/group/group';
 import MainContentWrapper from './components/main-content-wrapper';
 
 import 'seafile-ui';
@@ -139,6 +141,8 @@ class App extends Component {
             <SharedLibrariesWrapper path={siteRoot + 'shared-libs'} onShowSidePanel={this.onShowSidePanel} onSearchedClick={this.onSearchedClick} />
             <MyLibraries path={siteRoot + 'my-libs'} onShowSidePanel={this.onShowSidePanel} onSearchedClick={this.onSearchedClick} />
             <DirView path={siteRoot + 'library/:repoID/*'} onMenuClick={this.onShowSidePanel} updateCurrentTab={this.updateCurrentTab}/>
+            <Groups path={siteRoot + 'groups'} />
+            <Group path={siteRoot + 'group/:groupID'} />
           </Router>
         </MainPanel>
       </div>

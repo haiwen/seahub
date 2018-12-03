@@ -14,6 +14,7 @@ export const lang = window.app.config.lang;
 export const fileServerRoot = window.app.config.fileServerRoot;
 
 //pageOptions
+export const username = window.app.pageOptions.username;
 export const canGenerateShareLink = window.app.pageOptions.canGenerateShareLink === 'True';
 export const canGenerateUploadLink = window.app.pageOptions.canGenerateUploadLink === 'True';
 export const canViewOrg = window.app.pageOptions.canViewOrg === 'True';

@@ -80,6 +80,10 @@
 .sf2-icon-minus:before {content:"\e01c"}
 .sf2-icon-move:before {content:"\e029"}
 .sf2-icon-copy:before {content:"\e028"}
+.sf2-icon-cog1:before { content:"\e015"; }
+.sf2-icon-user2:before { content:"\e020"; }
+.sf2-icon-msgs2:before { content:"\e021"; }
+.sf2-icon-x3:before { content: "\e035"; }
 
 /* common class and element style*/
 a { color:#eb8205; }
@@ -1060,4 +1064,31 @@ table .menu-toggle {
   background: #fff;
   text-align: center;
   z-index: 4;
+}
+.group-item-heading {
+  font-size: 16px;
+  font-weight: normal;
+  padding: 3px;
+  border-bottom: 1px solid #e6e6e6;
+  margin: 12px 0 0;
+}
+.group-item-empty-tip {
+  color: #a4a4a4;
+  text-align: center;
+  padding: 4px 0;
+  border-bottom: 1px solid #e5e5e5;
+  margin: 0 0 32px;
+}
+.group-item-table thead th { /* overwrite bootstrap styles */
+  padding: 0;
+  font-size: 0;
+  border: 0;
+}
+.group-item-table td { /* overwrite bootstrap styles */
+  border-top:0;
+}
+.group-top-op-icon {
+    display: inline-block;
+    font-size: 22px;
+    margin: 3px 0 0 10px;
 }

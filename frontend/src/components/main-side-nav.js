@@ -64,18 +64,18 @@ class MainSideNav extends React.Component {
     return (
       <ul className={`grp-list ${this.state.groupsExtended ? 'side-panel-slide' : 'side-panel-slide-up'}`} style={style}>
         <li className={this.props.currentTab === 'groups' ? 'tab-cur' : ''}> 
-          <a href={siteRoot + '#groups/'} onClick={() => this.tabItemClick('groups')}>
+          <Link to={siteRoot + 'groups/'} onClick={() => this.tabItemClick('groups')}>
             <span className="sharp" aria-hidden="true">#</span>
             {gettext('All Groups')}
-          </a>
+          </Link>
         </li>
         {this.state.groupItems.map(item => {
           return (
             <li key={item.id} className={this.props.currentTab === item.id ? 'tab-cur' : ''}> 
-              <a href={siteRoot + '#group/' + item.id + '/'} className="ellipsis" onClick={() => this.tabItemClick(item.id)}>
+              <Link to={siteRoot + 'group/' + item.id + '/'} className="ellipsis" onClick={() => this.tabItemClick(item.id)}>
                 <span className="sharp" aria-hidden="true">#</span>
                 {item.name}
-              </a>
+              </Link>
             </li>
           );
         })}

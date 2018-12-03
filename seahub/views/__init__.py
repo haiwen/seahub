@@ -1217,3 +1217,7 @@ def react_fake_view(request):
         'storages': get_library_storages(request),
         'enable_repo_snapshot_label': settings.ENABLE_REPO_SNAPSHOT_LABEL
     })
+
+@login_required
+def react_group(request, group_id):
+    return render(request, "react_app.html")
