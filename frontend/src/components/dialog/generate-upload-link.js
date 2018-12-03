@@ -29,7 +29,7 @@ class GenerateUploadLink extends React.Component {
   getUploadLink = () => {
     let path = this.props.itemPath;
     let repoID = this.props.repoID; 
-    seafileAPI.getUploadLinkt(repoID, path).then((res) => {
+    seafileAPI.getUploadLinks(repoID, path).then((res) => {
       if (res.data.length !== 0) {
         this.setState({
           link: res.data[0].link,
@@ -39,10 +39,12 @@ class GenerateUploadLink extends React.Component {
     })
   }
 
-
   addPassword = () => {
     this.setState({
-      showPasswordInput: !this.state.showPasswordInput
+      showPasswordInput: !this.state.showPasswordInput,
+      password: '',
+      passwdnew: '',
+      errorInfo: ''
     })
   }
 
@@ -81,12 +83,12 @@ class GenerateUploadLink extends React.Component {
         errorInfo: gettext('Please enter password')
       });
     }
-    else if (this.state.showPasswordInput && this.state.password.length < 8) {
+    else if (this.state.showPasswordInput && (this.state.showPasswordInput && this.state.password.length < 8)) {
       this.setState({
         errorInfo: gettext('Password is too short')
       });
     }
-    else if (this.state.password !== this.state.passwordnew) {
+    else if (this.state.showPasswordInput && (this.state.password !== this.state.passwordnew)) {
       this.setState({
         errorInfo: gettext("Passwords don't match")
       });

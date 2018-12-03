@@ -88,7 +88,6 @@ class ShareToUser extends React.Component {
     }
   }
 
-
   shareToUser = () => {
     let users = [];
     let path = this.props.itemPath; 

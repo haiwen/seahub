@@ -33,11 +33,11 @@ class ShareToGroup extends React.Component {
 
   componentDidMount() {
     this.loadOptions();
-    this.loadGroupList();
+    this.listSharedGroups();
   }
 
   loadOptions = () => {
-    seafileAPI.shareAbledGroups().then((res) => {
+    seafileAPI.shareableGroups().then((res) => {
       this.Options = [];
       for (let i = 0 ; i < res.data.length; i++) {
         let obj = {};
@@ -49,7 +49,7 @@ class ShareToGroup extends React.Component {
     });
   }
 
-  loadGroupList = () => {
+  listSharedGroups = () => {
     let path = this.props.itemPath;
     let repoID = this.props.repoID; 
     seafileAPI.listSharedItems(repoID, path, 'group')
@@ -121,51 +121,50 @@ class ShareToGroup extends React.Component {
       })
   }
 
-
   render() {
     return (
       <Table>
-      <thead>
-        <tr>
-          <th style={{'width': '50%'}}>{gettext('Group')}</th>
-          <th style={{'width': '30%'}}>{gettext('Permission')}</th>
-          <th></th>
-        </tr>
-        <tr>
-        <td>
-          <Select
-            isMulti
-            onChange={this.handleSelectChange}
-            options={this.Options}
-            components={makeAnimated()}
-            inputId={"react-select-2-input"}
-          />
-        </td>
-        <td>
-          <Input type="select" name="select" onChange={this.setPermission}>
-            <option>{gettext('Read-Write')}</option>
-            <option>{gettext('Read-Only')}</option>
-            <option>{gettext('Preview-Edit-on-Cloud')}</option>
-            <option>{gettext('Preview-on-Cloud')}</option>
-          </Input>
-        </td>
-        <td>
-         <Button onClick={this.shareToGroup}>{gettext('Submit')}</Button>
-        </td>
-        </tr>
-        <tr>
-          {this.state.errorMsg.length > 0 &&                  
-            this.state.errorMsg.map((item, index = 0, arr) => {
-              return (                                        
-                <p className="error" key={index}>{this.state.errorMsg[index].group_name}
-                  {': '}{this.state.errorMsg[index].error_msg}</p>
-              );                                               
-            })                                                
-          }
-        </tr>
-      </thead>
-      <GroupList items={this.state.sharedItems}
-                 deleteShareItem={this.deleteShareItem} />
+        <thead>
+          <tr>
+            <th style={{'width': '50%'}}>{gettext('Group')}</th>
+            <th style={{'width': '30%'}}>{gettext('Permission')}</th>
+            <th></th>
+          </tr>
+          <tr>
+          <td>
+            <Select
+              isMulti
+              onChange={this.handleSelectChange}
+              options={this.Options}
+              components={makeAnimated()}
+              inputId={"react-select-2-input"}
+            />
+          </td>
+          <td>
+            <Input type="select" name="select" onChange={this.setPermission}>
+              <option>{gettext('Read-Write')}</option>
+              <option>{gettext('Read-Only')}</option>
+              <option>{gettext('Preview-Edit-on-Cloud')}</option>
+              <option>{gettext('Preview-on-Cloud')}</option>
+            </Input>
+          </td>
+          <td>
+           <Button onClick={this.shareToGroup}>{gettext('Submit')}</Button>
+          </td>
+          </tr>
+          <tr>
+            {this.state.errorMsg.length > 0 &&                  
+              this.state.errorMsg.map((item, index = 0, arr) => {
+                return (                                        
+                  <p className="error" key={index}>{this.state.errorMsg[index].group_name}
+                    {': '}{this.state.errorMsg[index].error_msg}</p>
+                );                                               
+              })                                                
+            }
+          </tr>
+        </thead>
+        <GroupList items={this.state.sharedItems}
+                   deleteShareItem={this.deleteShareItem} />
       </Table>
     );
   }

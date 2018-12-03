@@ -46,7 +46,10 @@ class GenerateShareLink extends React.Component {
 
   addPassword = () => {
     this.setState({
-      showPasswordInput: !this.state.showPasswordInput
+      showPasswordInput: !this.state.showPasswordInput,
+      password: '',
+      passwdnew: '',
+      errorInfo: ''
     })
   }
 
@@ -84,7 +87,7 @@ class GenerateShareLink extends React.Component {
   }
 
   setPermission = (permission) => {
-    if (permission == 'previewd') {
+    if (permission == 'previewAndDownload') {
       this.permissions = '{"can_edit":false,"can_download":true}'
     } else {
       this.permissions = '{"can_edit":false,"can_download":false}'      
@@ -99,12 +102,12 @@ class GenerateShareLink extends React.Component {
         errorInfo: gettext('Please enter password')
       });
     }
-    else if (this.state.showPasswordInput && this.state.password.length < 8) {
+    else if (this.state.showPasswordInput && (this.state.showPasswordInput && this.state.password.length < 8)) {
       this.setState({
         errorInfo: gettext('Password is too short')
       });
     }
-    else if (this.state.password !== this.state.passwordnew) {
+    else if (this.state.showPasswordInput && (this.state.password !== this.state.passwordnew)) {
       this.setState({
         errorInfo: gettext("Passwords don't match")
       });
@@ -180,7 +183,7 @@ class GenerateShareLink extends React.Component {
           </FormGroup>
           <FormGroup check style={{"marginLeft": "18px"}} >
             <Label check>
-             <Input type="radio" name="radio1" defaultChecked={true} onChange={this.setPermission('previewd')}/> {'  '}{gettext('Preview and download')}
+             <Input type="radio" name="radio1" defaultChecked={true} onChange={this.setPermission('previewAndDownload')}/> {'  '}{gettext('Preview and download')}
             </Label>
           </FormGroup>
           <FormGroup check style={{"marginLeft": "18px"}}>

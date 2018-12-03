@@ -3,7 +3,6 @@ import PropTypes from 'prop-types';
 import { gettext, siteRoot, repoID } from '../../utils/constants';
 import { Utils } from '../../utils/utils';
 import { seafileAPI } from '../../utils/seafile-api';
-import { Utils } from '../../utils/utils';
 import URLDecorator from '../../utils/url-decorator';
 import Toast from '../toast';
 import DirentMenu from './dirent-menu';
