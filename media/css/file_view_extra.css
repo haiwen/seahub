@@ -30,11 +30,6 @@
     border:1px solid #ededed;
     margin-top:12px;
 }
-@media (max-width:950px) {
-    #file-view {
-        width:950px;
-    }
-}
 #md-view,
 .CodeMirror,
 #file-view-tip {
