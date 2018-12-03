@@ -7,7 +7,8 @@ import { Utils } from '../../utils/utils';
 import { gettext, siteRoot, loginUrl, isPro, storages, canGenerateShareLink, canGenerateUploadLink, folderPermEnabled, enableRepoSnapshotLabel } from '../../utils/constants';
 import Loading from '../../components/loading';
 import DeleteItemPopup from './popups/delete-item';
-import GeneralToolBar from '../../components/toolbar/general-toolbar';
+import CommonToolbar from '../../components/toolbar/common-toolbar';
+import RepoViewToolbar from '../../components/toolbar/repo-view-toobar';
 
 class Content extends Component {
 
@@ -395,7 +396,10 @@ class MyLibraries extends Component {
   render() {
     return (
       <Fragment>
-        <GeneralToolBar onShowSidePanel={this.props.onShowSidePanel} onSearchedClick={this.props.onSearchedClick}/>
+        <div className="main-panel-north">
+          <RepoViewToolbar onShowSidePanel={this.props.onShowSidePanel}/>
+          <CommonToolbar onSearchedClick={this.props.onSearchedClick} />
+        </div>
         <div className="main-panel-center">
           <div className="cur-view-container">
             <div className="cur-view-path">
