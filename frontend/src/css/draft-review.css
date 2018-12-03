@@ -26,12 +26,6 @@
   height: 100%;
 }
 
-.main .cur-view-container .cur-view-content-commenton {
-  overflow: auto;
-  width: 70%;
-  height: 100%;
-}
-
 .main .cur-view-container .seafile-comment {
   height: 100%;
   position: relative;
@@ -177,9 +171,6 @@
 }
 
 @media (max-width: 992px) {
-  .main .cur-view-container .cur-view-content-commenton {
-    width: 20% !important;
-  }
   .main .cur-view-right-part {
     width: 80% !important;
   }

@@ -67,9 +67,8 @@ class ReviewCommentDialog extends React.Component {
 
   setQuoteText = (text) => {
     if (text.length > 0) {
-      let comment = '> ' + text;
       this.setState({
-        comment: comment
+        comment: text
       });
     }
   }

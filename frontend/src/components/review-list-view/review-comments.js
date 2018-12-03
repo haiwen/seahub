@@ -12,10 +12,7 @@ import '../../css/review-comments.css';
 const commentPropTypes = {
   getCommentsNumber: PropTypes.func.isRequired,
   inResizing: PropTypes.bool.isRequired,
-  commentsNumber: PropTypes.number.isRequired,
-  selectedText: PropTypes.string,
-  newIndex: PropTypes.number,
-  oldIndex: PropTypes.number,
+  commentsNumber: PropTypes.number,
   scrollToQuote: PropTypes.func.isRequired
 };
 
@@ -69,24 +66,10 @@ class ReviewComments extends React.Component {
   submitComment = () => {
     let comment = this.state.comment.trim();
     if (comment.length > 0) {
-      if (this.props.selectedText.length > 0) {
-        let detail = {
-          selectedText: this.props.selectedText.slice(0, 10),
-          newIndex: this.props.newIndex,
-          oldIndex: this.props.oldIndex
-        };
-        let detailJSON = JSON.stringify(detail);
-        seafileAPI.addReviewComment(reviewID, comment, detailJSON).then((response) => {
-          this.listComments(true);
-          this.props.getCommentsNumber();
-        });
-      }
-      else {
-        seafileAPI.addReviewComment(reviewID, comment).then((response) => {
-          this.listComments(true);
-          this.props.getCommentsNumber();
-        });
-      }
+      seafileAPI.addReviewComment(reviewID, comment).then((response) => {
+        this.listComments(true);
+        this.props.getCommentsNumber();
+      });
       this.setState({
         comment: ''
       });
@@ -148,15 +131,6 @@ class ReviewComments extends React.Component {
       commentFooterHeight: rate
     });
   };
-
-  setQuoteText = (text) => {
-    if (text.length > 0) {
-      let comment = '> ' + text;
-      this.setState({
-        comment: comment
-      });
-    }
-  }
   
   scrollToQuote = (newIndex, oldIndex, selectedText) => {
     this.props.scrollToQuote(newIndex, oldIndex, selectedText);
@@ -170,13 +144,9 @@ class ReviewComments extends React.Component {
     this.listComments();
   }
 
-  componentDidMount() {
-    this.setQuoteText(this.props.selectedText);
-  }
-
   componentWillReceiveProps(nextProps) {
-    if (this.props.selectedText !== nextProps.selectedText) {
-      this.setQuoteText(nextProps.selectedText);
+    if (this.props.commentsNumber !== nextProps.commentsNumber) {
+      this.listComments();
     }
   }
 
