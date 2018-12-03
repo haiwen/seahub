@@ -262,15 +262,15 @@ class DraftReview extends React.Component {
     div.setAttribute('contenteditable', true);
     let fragmentDOM = htmlSerializer.deserialize(div.innerHTML).document;
     let nodes = [];
-    for (let i = 0; i < fragmentDOM.nodes.toArray().length; i++) {
-      let node = Block.create({
-        data: fragmentDOM.nodes.toArray()[i].data,
-        key: fragmentDOM.nodes.toArray()[i].key,
-        nodes: fragmentDOM.nodes.toArray()[i].nodes,
+    fragmentDOM.nodes.map(node => {
+      let newNode = Block.create({
+        data: node.data,
+        key: node.key,
+        nodes: node.nodes,
         type: 'blockquote'
       });
-      nodes[i] = node;
-    }
+      nodes.push(newNode);
+    });
     let newDocument = Document.create({
       nodes: nodes
     });
