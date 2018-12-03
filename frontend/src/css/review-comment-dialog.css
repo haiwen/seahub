@@ -9,10 +9,11 @@
   border: 1px solid rgba(0,0,0,.2);
   border-radius: .3rem;
   outline: 0;
+  box-shadow: 0 0 5px #aaaaaa;
 }
 .review-comment-dialog-triangle {
   position: absolute;
-  left: -6px;
+  left: -5px;
   top: 50%;
   transform: rotate(45deg);
   border: 1px solid rgba(0,0,0,.2);
@@ -21,7 +22,8 @@
   width: 10px;
   height: 10px;
   z-index: 1001;
-  background-color: #fff;
+  background-color: #fafafa;
+  box-shadow: -1px 1px #aaaaaa;
 }
 .review-comment-dialog textarea {
   width: 100%;
