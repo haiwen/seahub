@@ -1,7 +1,9 @@
 {% extends "base.html" %}
 {% load seahub_tags i18n %}
 
-{% block viewport %}{% endblock %}
+{% block viewport %}
+<meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no" />
+{% endblock %}
 
 {% block extra_style %}
 {% include 'snippets/file_view_style.html' %}
