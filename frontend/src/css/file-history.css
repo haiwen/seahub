@@ -37,19 +37,18 @@
 }
 
 .history-list-container .history-list-item {
-  margin-top: 0.5rem;
   padding: 0 0.8rem;
   display: flex;
   flex: 1;
 }
 
 .history-list-container .history-list-item:hover {
-  background-color: #eee;
+  background-color: #ffe7d5;
 }
 
 .item-active {
   color: #fff;
-  background-color: #feac74 !important;
+  background-color: #fdc297 !important;
 }
 
 .item-active i {

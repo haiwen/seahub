@@ -66,6 +66,14 @@
   display: flex;
   margin-right: 10px;
 }
+.seafile-toggle-diff .custom-switch .custom-switch-indicator,
+.seafile-comment-title-toggle .custom-switch .custom-switch-indicator {
+  border: 1px solid #e9ecef;
+}
+.seafile-toggle-diff .custom-switch-input:checked ~ .custom-switch-indicator,
+.seafile-comment-title-toggle .custom-switch-input:checked ~ .custom-switch-indicator {
+  background-color: #f59f00;
+}
 
 .review-side-panel {
   border-left: 1px solid #e6e6dd;
@@ -142,7 +150,7 @@
   text-align: center;
   line-height: 16px;
   font-weight: 600;
-  background-color: #feac74;
+  background-color: #f59f00;
   position: absolute;
   top: 10%;
   right: 30%;
@@ -155,8 +163,12 @@
 .review-side-panel-nav .nav-item {
   width: 33.3%;
 }
-.review-side-panel-nav .nav-item a {
+.review-side-panel-nav .nav-item .nav-link {
   margin: 0 auto;
+}
+.review-side-panel-nav .nav-item .nav-link.active {
+  border-color: #f59f00;
+  color: #f59f00;
 }
 .review-side-panel-nav .nav-item i {
   padding: 0 8px;
