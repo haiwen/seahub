@@ -22,7 +22,7 @@ class ShareToGroup extends React.Component {
       permission: 'rw',
       sharedItems: []
     };
-    this.Options = [];
+    this.options = [];
   }
 
   handleSelectChange = (option) => {
@@ -38,13 +38,13 @@ class ShareToGroup extends React.Component {
 
   loadOptions = () => {
     seafileAPI.shareableGroups().then((res) => {
-      this.Options = [];
+      this.options = [];
       for (let i = 0 ; i < res.data.length; i++) {
         let obj = {};
         obj.value = res.data[i].name;
         obj.id = res.data[i].id;
         obj.label = res.data[i].name;
-        this.Options.push(obj);
+        this.options.push(obj);
       }
     });
   }
@@ -52,14 +52,13 @@ class ShareToGroup extends React.Component {
   listSharedGroups = () => {
     let path = this.props.itemPath;
     let repoID = this.props.repoID; 
-    seafileAPI.listSharedItems(repoID, path, 'group')
-      .then((res) => {
-        if(res.data.length !== 0) {
-          this.setState({
-            sharedItems: res.data
-          })  
-        }
-      })
+    seafileAPI.listSharedItems(repoID, path, 'group').then((res) => {
+      if(res.data.length !== 0) {
+        this.setState({
+          sharedItems: res.data
+        });
+      }
+    });
   }
 
   setPermission = (e) => {
@@ -91,17 +90,16 @@ class ShareToGroup extends React.Component {
         groups[i] = this.state.selectedOption[i].id;
       }
     }
-    seafileAPI.shareFolder(repoID, path, 'group', this.state.permission, groups)
-      .then(res => {
-       if (res.data.failed.length > 0) {
-         let errorMsg = [];
-         for (let i = 0 ; i < res.data.failed.length ; i++) {
-           errorMsg[i] = res.data.failed[i];
-         }
-         this.setState({
-           errorMsg: errorMsg
-         });
-       }
+    seafileAPI.shareFolder(repoID, path, 'group', this.state.permission, groups).then(res => {
+      if (res.data.failed.length > 0) {
+        let errorMsg = [];
+        for (let i = 0 ; i < res.data.failed.length ; i++) {
+          errorMsg[i] = res.data.failed[i];
+        }
+        this.setState({
+          errorMsg: errorMsg
+        });
+      }
 
       this.setState({
         sharedItems: this.state.sharedItems.concat(res.data.success)
@@ -113,12 +111,11 @@ class ShareToGroup extends React.Component {
     e.preventDefault();
     let path = this.props.itemPath;
     let repoID = this.props.repoID; 
-    seafileAPI.deleteShareToGroupItem(repoID, path, 'group', groupID)
-      .then(res => {
-        this.setState({
-          sharedItems: this.state.sharedItems.filter( item => { return item.group_info.id !== groupID }) 
-        })
-      })
+    seafileAPI.deleteShareToGroupItem(repoID, path, 'group', groupID).then(() => {
+      this.setState({
+        sharedItems: this.state.sharedItems.filter(item => { return item.group_info.id !== groupID }) 
+      });
+    });
   }
 
   render() {
@@ -135,7 +132,7 @@ class ShareToGroup extends React.Component {
             <Select
               isMulti
               onChange={this.handleSelectChange}
-              options={this.Options}
+              options={this.options}
               components={makeAnimated()}
               inputId={"react-select-2-input"}
             />
@@ -163,8 +160,7 @@ class ShareToGroup extends React.Component {
             }
           </tr>
         </thead>
-        <GroupList items={this.state.sharedItems}
-                   deleteShareItem={this.deleteShareItem} />
+        <GroupList items={this.state.sharedItems} deleteShareItem={this.deleteShareItem} />
       </Table>
     );
   }
@@ -181,7 +177,7 @@ function GroupList(props) {
         </tr>
       ))}
     </tbody>
-  )
+  );
 }
 
 ShareToGroup.propTypes = propTypes;

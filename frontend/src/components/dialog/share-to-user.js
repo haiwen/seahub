@@ -21,14 +21,14 @@ class ShareToUser extends React.Component {
       permission: 'rw',
       sharedItems: []
     };
-    this.Options = [];
+    this.options = [];
   }
 
   handleSelectChange = (option) => {
     this.setState({
       selectedOption: option,
     });
-    this.Options = [];
+    this.options = [];
   }
 
   componentDidMount() {
@@ -71,7 +71,7 @@ class ShareToUser extends React.Component {
   loadOptions = (value, callback) => {
     if (value.trim().length > 0) {
       seafileAPI.searchUsers(value.trim()).then((res) => {
-        this.Options = [];
+        this.options = [];
         for (let i = 0 ; i < res.data.users.length; i++) {
           let obj = {};
           obj.value = res.data.users[i].name;
@@ -81,9 +81,9 @@ class ShareToUser extends React.Component {
               <img src={res.data.users[i].avatar_url} className="avatar reviewer-select-avatar" alt=""/>
               <span className='reviewer-select-name'>{res.data.users[i].name}</span>
             </React.Fragment>;
-          this.Options.push(obj);
+          this.options.push(obj);
         }
-        callback(this.Options);
+        callback(this.options);
       });
     }
   }
@@ -144,7 +144,7 @@ class ShareToUser extends React.Component {
                 placeholder={gettext('Please enter 1 or more character')}
                 onChange={this.handleSelectChange}
                 isClearable classNamePrefix
-                inputId={"react-select-1-input"}
+                inputId={'react-select-1-input'}
               />
             </td>
             <td>
@@ -171,27 +171,24 @@ class ShareToUser extends React.Component {
             }
           </tr>
         </thead>
-        <UserList items={sharedItems}
-                  deleteShareItem={this.deleteShareItem}
-                  />
+        <UserList items={sharedItems} deleteShareItem={this.deleteShareItem} />
       </Table>
     );
   }
 }
 
-
 function UserList(props) {
-    return (
-      <tbody>
-        {props.items.map((item, index) => (
-          <tr key={index}>
-            <td>{item.user_info.nickname}</td>
-            <td>{Utils.sharePerms[item.permission]}</td>
-            <td><i onClick={(e) => {props.deleteShareItem(e, item.user_info.name)}} className="sf2-icon-delete" title="Delete"></i></td>
-          </tr>
-        ))}
-      </tbody>
-    )
+  return (
+    <tbody>
+      {props.items.map((item, index) => (
+        <tr key={index}>
+          <td>{item.user_info.nickname}</td>
+          <td>{Utils.sharePerms[item.permission]}</td>
+          <td><i onClick={(e) => {props.deleteShareItem(e, item.user_info.name)}} className="sf2-icon-delete" title="Delete"></i></td>
+        </tr>
+      ))}
+    </tbody>
+  );
 }
 
 ShareToUser.propTypes = propTypes;
