@@ -1512,14 +1512,14 @@
         <li class="tab" id="group-nav">
             <a href="#" class="ellipsis" title="{% trans "Shared with groups" %}"><span aria-hidden="true" class="toggle-icon icon-caret-down fright"></span><span aria-hidden="true" class="sf2-icon-group"></span>{% trans "Shared with groups" %}</a>
             <ul class="grp-list">
-                <li<% if (cur_group_tab == 'groups') { %> class="tab-cur"<% }%>><a href="{{ SITE_ROOT }}#groups/"><span class="sharp" aria-hidden="true">#</span>{% trans "All Groups" %}</a></li>
+                <li<% if (cur_group_tab == 'groups') { %> class="tab-cur"<% }%>><a href="{{ SITE_ROOT }}groups/"><span class="sharp" aria-hidden="true">#</span>{% trans "All Groups" %}</a></li>
                 <% for (var i = 0, len = groups.length; i < len; i++) { %>
                     <% if (cur_group_id == groups[i].id) { %>
                     <li class="tab-cur">
                     <% } else { %>
                     <li>
                     <% } %>
-                <a class="ellipsis" href="{{SITE_ROOT}}#group/<%= groups[i].id %>/" title="<%- groups[i].name %>"><span class="sharp" aria-hidden="true">#</span><%- groups[i].name %></a>
+                <a class="ellipsis" href="{{SITE_ROOT}}group/<%= groups[i].id %>/" title="<%- groups[i].name %>"><span class="sharp" aria-hidden="true">#</span><%- groups[i].name %></a>
                 </li>
                 <% } %>
             </ul>
@@ -1534,11 +1534,11 @@
             <ul class="grp-list hide">
             <% } %>
                 <li>
-                    <a href="{{ SITE_ROOT }}#groups/"><span class="sharp" aria-hidden="true">#</span>{% trans "All Groups" %}</a>
+                    <a href="{{ SITE_ROOT }}groups/"><span class="sharp" aria-hidden="true">#</span>{% trans "All Groups" %}</a>
                 </li>
                 <% for (var i = 0, len = groups.length; i < len; i++) { %>
                 <li>
-                    <a class="ellipsis" href="{{SITE_ROOT}}#group/<%= groups[i].id %>/" title="<%- groups[i].name %>"><span class="sharp" aria-hidden="true">#</span><%- groups[i].name %></a>
+                    <a class="ellipsis" href="{{SITE_ROOT}}group/<%= groups[i].id %>/" title="<%- groups[i].name %>"><span class="sharp" aria-hidden="true">#</span><%- groups[i].name %></a>
                 </li>
                 <% } %>
             </ul>

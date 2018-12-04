@@ -80,6 +80,9 @@
 .sf2-icon-minus:before {content:"\e01c"}
 .sf2-icon-move:before {content:"\e029"}
 .sf2-icon-copy:before {content:"\e028"}
+.sf2-icon-cog1:before { content:"\e015"; }
+.sf2-icon-user2:before { content:"\e020"; }
+.sf2-icon-x3:before { content: "\e035"; }
 
 /* common class and element style*/
 a { color:#eb8205; }

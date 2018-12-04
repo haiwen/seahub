@@ -36,6 +36,7 @@
             fileServerRoot: '{{ FILE_SERVER_ROOT }}'
         },
         pageOptions: {
+            username: "{{request.user.username|escapejs}}",
             canGenerateShareLink: '{{ user.permissions.can_generate_share_link }}',
             canGenerateUploadLink: '{{ user.permissions.can_generate_upload_link }}',
             canViewOrg:'{{ user.permissions.can_view_org }}',
