@@ -44,7 +44,7 @@ class DraftTest(BaseTestCase):
         assert seafile_api.get_file_id_by_path(d.origin_repo_id, d.draft_file_path) is not None
 
         d = Draft.objects.all()[0]
-        d.delete()
+        d.delete(self.user.username)
 
         assert len(Draft.objects.all()) == 0
         assert seafile_api.get_file_id_by_path(d.origin_repo_id, d.draft_file_path) is None
@@ -57,7 +57,7 @@ class DraftTest(BaseTestCase):
         assert seafile_api.get_file_id_by_path(d.origin_repo_id, d.draft_file_path) is not None
         assert len(seafile_api.list_dir_by_path(self.repo.id, '/Drafts')) == 1
 
-        d.publish()
+        d.publish(self.user.username)
 
         # file is updated in origin repo
         assert len(seafile_api.list_dir_by_path(self.repo.id, '/')) == 2

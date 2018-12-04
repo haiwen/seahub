@@ -110,9 +110,10 @@ class DraftView(APIView):
             error_msg = 'Permission denied.'
             return api_error(status.HTTP_403_FORBIDDEN, error_msg)
 
+        username = request.user.username
         try:
-            d.publish()
-            d.delete()
+            d.publish(operator=username)
+            d.delete(operator=username)
             return Response(status.HTTP_200_OK)
         except (DraftFileConflict, IntegrityError):
             return api_error(status.HTTP_409_CONFLICT,
@@ -121,6 +122,7 @@ class DraftView(APIView):
     def delete(self, request, pk, format=None):
         """Delete a draft if user is draft owner
         """
+        username = request.user.username
         try:
             d = Draft.objects.get(pk=pk)
         except Draft.DoesNotExist:
@@ -128,10 +130,10 @@ class DraftView(APIView):
                              'Draft %s not found.' % pk)
 
         # perm check
-        if d.username != request.user.username:
+        if d.username != username:
             return api_error(status.HTTP_403_FORBIDDEN,
                              'Permission denied.')
 
-        d.delete()
+        d.delete(operator=username)
 
         return Response(status.HTTP_200_OK)
