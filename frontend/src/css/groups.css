@@ -1,0 +1,27 @@
+.group-item-heading {
+  font-size: 16px;
+  font-weight: normal;
+  padding: 3px; 
+  border-bottom: 1px solid #e6e6e6;
+  margin: 12px 0 0; 
+}
+.group-item-empty-tip {
+  color: #a4a4a4;
+  text-align: center;
+  padding: 4px 0;
+  border-bottom: 1px solid #e5e5e5;
+  margin: 0 0 32px;
+}
+.group-item-table thead th { /* overwrite bootstrap styles */
+  padding: 0;
+  font-size: 0;
+  border: 0;
+}
+.group-item-table td { /* overwrite bootstrap styles */
+  border-top:0;
+}
+.group-top-op-icon {
+    display: inline-block;
+    font-size: 22px;
+    margin: 3px 0 0 10px;
+}

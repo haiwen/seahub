@@ -4,6 +4,8 @@ import { gettext, siteRoot, loginUrl, username } from '../../utils/constants';
 import Loading from '../../components/loading';
 import GroupRepoItem from './group-repo-item';
 
+import '../../css/groups.css';
+
 class Content extends Component {
 
   render() {

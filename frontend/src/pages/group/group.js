@@ -5,6 +5,8 @@ import { gettext, siteRoot, loginUrl, username } from '../../utils/constants';
 import Loading from '../../components/loading';
 import GroupRepoItem from './group-repo-item';
 
+import '../../css/groups.css';
+
 class Header extends Component {
 
   render() {
@@ -36,9 +38,6 @@ class Header extends Component {
         </div>
       );
 
-      // TODO: <% if (app.pageOptions.enable_group_discussion) { %>
-      const enableGroupDiscussion = true;
-
       let showSettingsIcon = true;
       if (data.parent_group_id != 0 && data.admins.indexOf(username) == -1) {
         showSettingsIcon = false;
@@ -49,7 +48,6 @@ class Header extends Component {
         <div className="group-toolbar-2">
           {showSettingsIcon ? <a href="#" className="sf2-icon-cog1 op-icon group-top-op-icon" title={gettext("Settings")} id="group-settings-icon" aria-label={gettext("Settings")}></a> : null}
           <a href="#" className="sf2-icon-user2 op-icon group-top-op-icon" title={gettext("Members")} id="group-members-icon" aria-label={gettext("Members")}></a>
-          {enableGroupDiscussion ? <a href="#" className="sf2-icon-msgs2 op-icon group-top-op-icon" title={gettext("Discussion")} id="group-discussions-icon" aria-label={gettext("Discussion")}></a> : null}
         </div>
       );
 
