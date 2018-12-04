@@ -22,6 +22,7 @@ from seahub.avatar.settings import GROUP_AVATAR_DEFAULT_SIZE
 from seahub.avatar.templatetags.group_avatar_tags import api_grp_avatar_url, \
     get_default_group_avatar_url
 from seahub.utils import is_org_context, is_valid_username
+from seahub.utils.repo import get_repo_owner
 from seahub.utils.timeutils import timestamp_to_isoformat_timestr
 from seahub.group.utils import validate_group_name, check_group_name_conflict, \
     is_group_member, is_group_admin, is_group_owner, is_group_admin_or_owner, \
@@ -121,11 +122,21 @@ class Groups(APIView):
 
                 repos = []
 
+                # get repo id owner dict
+                all_repo_owner = []
+                repo_id_owner_dict = {}
+                for repo in group_repos:
+                    repo_id = repo.id
+                    if repo_id not in repo_id_owner_dict:
+                        repo_owner = get_repo_owner(request, repo_id)
+                        all_repo_owner.append(repo_owner)
+                        repo_id_owner_dict[repo_id] = repo_owner
+
                 # Use dict to reduce memcache fetch cost in large for-loop.
                 name_dict = {}
                 contact_email_dict = {}
 
-                for email in set([r.user for r in group_repos]):
+                for email in all_repo_owner:
 
                     if email not in name_dict:
                         if '@seafile_group' in email:
@@ -142,7 +153,7 @@ class Groups(APIView):
                             contact_email_dict[email] = email2contact_email(email)
 
                 for r in group_repos:
-
+                    repo_owner = repo_id_owner_dict.get(r.id, r.user),
                     repo = {
                         "id": r.id,
                         "repo_id": r.id,
@@ -155,10 +166,10 @@ class Groups(APIView):
                         "last_modified": timestamp_to_isoformat_timestr(r.last_modified),
                         "encrypted": r.encrypted,
                         "permission": r.permission,
-                        "owner": r.user,
-                        "owner_email": r.user,
-                        "owner_name": name_dict.get(r.user, ''),
-                        "owner_contact_email": contact_email_dict.get(r.user, ''),
+                        "owner": repo_owner,
+                        "owner_email": repo_owner,
+                        "owner_name": name_dict.get(repo_owner, ''),
+                        "owner_contact_email": contact_email_dict.get(repo_owner, ''),
                         "is_admin": (r.id, g.id) in admin_info
                     }
                     repos.append(repo)

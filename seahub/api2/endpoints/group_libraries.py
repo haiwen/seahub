@@ -15,9 +15,11 @@ from seahub.api2.utils import api_error
 from seahub.api2.throttling import UserRateThrottle
 from seahub.api2.authentication import TokenAuthentication
 from seahub.api2.endpoints.utils import api_check_group
+from seahub.api2.endpoints.group_owned_libraries import get_group_id_by_repo_owner
 
 from seahub.signals import repo_created
-from seahub.group.utils import is_group_member, is_group_admin
+from seahub.group.utils import is_group_member, is_group_admin, \
+    group_id_to_name
 from seahub.utils import is_org_context, is_valid_dirent_name, \
         send_perm_audit_msg
 from seahub.utils.timeutils import timestamp_to_isoformat_timestr
@@ -26,8 +28,7 @@ from seahub.share.models import ExtraGroupsSharePermission
 from seahub.share.signals import share_repo_to_group_successful
 from seahub.share.utils import is_repo_admin, check_group_share_in_permission, \
         share_dir_to_group
-from seahub.constants import PERMISSION_READ, PERMISSION_READ_WRITE, \
-        PERMISSION_ADMIN
+from seahub.constants import PERMISSION_READ
 from seahub.base.templatetags.seahub_tags import email2nickname, \
         email2contact_email
 
@@ -46,20 +47,11 @@ def get_group_repo_info(request, group_repo):
     group_repo_info['repo_name'] = group_repo.name
 
     group_repo_info['mtime'] = timestamp_to_isoformat_timestr(group_repo.last_modified)
+    group_repo_info['last_modified'] = timestamp_to_isoformat_timestr(group_repo.last_modified)
     group_repo_info['permission'] = group_repo.permission
     group_repo_info['size'] = group_repo.size
     group_repo_info['encrypted'] = group_repo.encrypted
     group_repo_info['is_admin'] = True if is_admin else False
-
-    repo_owner = get_repo_owner(request, repo_id)
-    group_repo_info['owner_email'] = repo_owner
-    group_repo_info['owner_name'] = email2nickname(repo_owner)
-    group_repo_info['owner_contact_name'] = email2contact_email(repo_owner)
-
-    modifier = group_repo.last_modifier
-    group_repo_info['modifier_email'] = modifier
-    group_repo_info['modifier_name'] = email2nickname(modifier)
-    group_repo_info['modifier_contact_email'] = email2contact_email(modifier)
 
     return group_repo_info
 
@@ -89,10 +81,52 @@ class GroupLibraries(APIView):
 
         group_repos.sort(lambda x, y: cmp(y.last_modified, x.last_modified))
 
-        result = []
-
+        # get repo id owner dict
+        all_repo_owner = []
+        repo_id_owner_dict = {}
         for repo in group_repos:
-            group_repo_info = get_group_repo_info(request, repo)
+            repo_id = repo.id
+            if repo_id not in repo_id_owner_dict:
+                repo_owner = get_repo_owner(request, repo_id)
+                all_repo_owner.append(repo_owner)
+                repo_id_owner_dict[repo_id] = repo_owner
+
+        all_modifier = [r.last_modifier for r in group_repos]
+
+        # Use dict to reduce memcache fetch cost in large for-loop.
+        name_dict = {}
+        contact_email_dict = {}
+
+        for email in set(all_repo_owner + all_modifier):
+
+            if email not in name_dict:
+                if '@seafile_group' in email:
+                    group_id = get_group_id_by_repo_owner(email)
+                    group_name= group_id_to_name(group_id)
+                    name_dict[email] = group_name
+                else:
+                    name_dict[email] = email2nickname(email)
+
+            if email not in contact_email_dict:
+                if '@seafile_group' in email:
+                    contact_email_dict[email] = ''
+                else:
+                    contact_email_dict[email] = email2contact_email(email)
+
+        result = []
+        for group_repo in group_repos:
+            group_repo_info = get_group_repo_info(request, group_repo)
+
+            repo_owner = repo_id_owner_dict[group_repo.id]
+            group_repo_info['owner_email'] = repo_owner
+            group_repo_info['owner_name'] = name_dict.get(repo_owner, '')
+            group_repo_info['owner_contact_name'] = contact_email_dict.get(repo_owner, '')
+
+            modifier = group_repo.last_modifier
+            group_repo_info['modifier_email'] = modifier
+            group_repo_info['modifier_name'] = name_dict.get(modifier, '')
+            group_repo_info['modifier_contact_email'] = contact_email_dict.get(modifier, '')
+
             result.append(group_repo_info)
 
         return Response(result)
@@ -158,7 +192,6 @@ class GroupLibraries(APIView):
                 library_template=library_template)
 
         # for notification
-        repo = seafile_api.get_repo(repo_id)
         share_repo_to_group_successful.send(sender=None, from_user=username,
                 group_id=group_id, repo=repo, path='/', org_id=org_id)
 
@@ -169,6 +202,15 @@ class GroupLibraries(APIView):
         group_repo = seafile_api.get_group_shared_repo_by_path(repo_id,
                 None, group_id, is_org)
         group_repo_info = get_group_repo_info(request, group_repo)
+
+        group_repo_info['owner_email'] = username
+        group_repo_info['owner_name'] = email2nickname(username)
+        group_repo_info['owner_contact_name'] = email2contact_email(username)
+
+        modifier = group_repo.last_modifier
+        group_repo_info['modifier_email'] = modifier
+        group_repo_info['modifier_name'] = email2nickname(modifier)
+        group_repo_info['modifier_contact_email'] = email2contact_email(modifier)
 
         return Response(group_repo_info)
 
