@@ -3,7 +3,7 @@ import AsyncSelect from 'react-select/lib/Async';
 import { gettext } from '../../utils/constants';
 import { Utils } from '../../utils/utils';
 import PropTypes from 'prop-types';
-import { Button, Input, Table} from 'reactstrap';
+import { Button, Input } from 'reactstrap';
 import { seafileAPI } from '../../utils/seafile-api.js';
 
 const propTypes = {
@@ -129,7 +129,7 @@ class ShareToUser extends React.Component {
   render() {
     let { sharedItems } = this.state;
     return (
-      <Table>
+      <table>
         <thead> 
           <tr>
             <th style={{'width': '50%'}}>{gettext('User')}</th>
@@ -172,7 +172,7 @@ class ShareToUser extends React.Component {
           </tr>
         </thead>
         <UserList items={sharedItems} deleteShareItem={this.deleteShareItem} />
-      </Table>
+      </table>
     );
   }
 }

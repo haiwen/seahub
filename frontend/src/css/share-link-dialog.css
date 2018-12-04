@@ -1,3 +1,4 @@
+
 .share-dialog {
     color: #333;
     font-size: 0.8125rem;
@@ -30,6 +31,26 @@
 .share-dialog .share-dialog-content {
     padding: 1rem 1rem 2rem;
     min-height: 15rem;
+    display: flex;
+    flex-direction: row;
+}
+
+.share-dialog-side {
+    display: flex;
+    flex: 0 0 22%;
+}
+
+.share-dialog-side .nav {
+    display: flex;
+    flex-direction: column;
+}
+
+.share-dialog-main {
+    display: flex;
+    flex: 0 0 78%;
+}
+.share-dialog-main .tab-content {
+    flex: 1;
 }
 
 .generate-share-link .passwd,
@@ -43,4 +64,24 @@
 
 .generate-link-btn {
     margin-top: 1.125rem;
+}
+
+a.nav-link {
+    display: block;
+    padding: 0.25rem 1rem 0.25rem 0.25rem;
+    border-radius: 0.25rem;
+    color: #747476;
+    font-size: 0.875rem;
+    outline: none;
+    text-decoration: none;
+    transition: none;
+}
+
+a.nav-link.active {
+  color: #ffffff !important;
+  background-color: #feac74;
+}
+
+a.nav-link.active:hover {
+    color: #ffffff;
 }

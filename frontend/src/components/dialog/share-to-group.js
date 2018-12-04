@@ -1,6 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { Button, Input, Table } from 'reactstrap';
+import { Button, Input } from 'reactstrap';
 import Select from 'react-select';
 import makeAnimated from 'react-select/lib/animated';
 import { gettext } from '../../utils/constants';
@@ -120,7 +120,7 @@ class ShareToGroup extends React.Component {
 
   render() {
     return (
-      <Table>
+      <table>
         <thead>
           <tr>
             <th style={{'width': '50%'}}>{gettext('Group')}</th>
@@ -161,7 +161,7 @@ class ShareToGroup extends React.Component {
           </tr>
         </thead>
         <GroupList items={this.state.sharedItems} deleteShareItem={this.deleteShareItem} />
-      </Table>
+      </table>
     );
   }
 }

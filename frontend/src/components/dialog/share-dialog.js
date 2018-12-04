@@ -1,6 +1,5 @@
-import React from 'react';
+import React, { Fragment } from 'react';
 import PropTypes from 'prop-types';
-import classnames from 'classnames';
 import { Modal, ModalHeader, ModalBody, TabContent, TabPane, Nav, NavItem, NavLink, Row, Col } from 'reactstrap'; 
 import { gettext } from '../../utils/constants';
 import ShareToUser from './share-to-user';
@@ -32,39 +31,35 @@ class ShareDialog extends React.Component {
     }
   }
 
-  getClassNames = (currentTab) => {
-    let activeTab = this.state.activeTab;
-    return classnames({active: currentTab === activeTab});
-  }
-
   renderDirContent = () => {
+    let activeTab = this.state.activeTab;
     return (
-      <Row>
-        <Col sm='3'>
+      <Fragment>
+        <div className="share-dialog-side">
           <Nav>
             <NavItem>
-              <NavLink className={this.getClassNames('shareLink')} onClick={this.toggle.bind(this, 'shareLink')}>
+              <NavLink className={activeTab === "shareLink" ? 'active' : ''} onClick={this.toggle.bind(this, 'shareLink')}>
                 {gettext("Share Link")}
               </NavLink>
             </NavItem>
             <NavItem>
-              <NavLink className={this.getClassNames('uploadLink')} onClick={this.toggle.bind(this, 'uploadLink')}>
+              <NavLink className={activeTab === 'uploadLink' ? 'active' : ''} onClick={this.toggle.bind(this, 'uploadLink')}>
                 {gettext("Upload Link")}
               </NavLink>
             </NavItem>
             <NavItem>
-              <NavLink className={this.getClassNames('shareToUser')} onClick={this.toggle.bind(this, 'shareToUser')}>
+              <NavLink className={activeTab === 'shareToUser' ? 'active' : ''} onClick={this.toggle.bind(this, 'shareToUser')}>
                 {gettext("Share to user")}
               </NavLink>
             </NavItem>
             <NavItem>
-              <NavLink className={this.getClassNames('shareToGroup')} onClick={this.toggle.bind(this, 'shareToGroup')}>
+              <NavLink className={activeTab === 'shareToGroup' ? 'active' : ''} onClick={this.toggle.bind(this, 'shareToGroup')}>
                 {gettext("Share to group")}
               </NavLink>
             </NavItem>
           </Nav>
-        </Col>
-        <Col sm='9'>
+        </div>
+        <div className="share-dialog-main">
           <TabContent activeTab={this.state.activeTab}>
             <TabPane tabId="shareLink">
               <GenerateShareLink itemPath={this.props.itemPath} repoID={this.props.repoID} />
@@ -79,19 +74,20 @@ class ShareDialog extends React.Component {
               <ShareToGroup itemPath={this.props.itemPath} repoID={this.props.repoID} />
             </TabPane>
           </TabContent>
-        </Col>
-      </Row>
+        </div>
+      </Fragment>
     );
   }
 
   renderFileContent = () => {
+    let activeTab = this.state.activeTab;
     return (
       <Row>
         <Col sm='3'>
           <Nav>
             <NavItem>
               <NavLink
-                className={this.getClassNames('shareLink')} onClick={() => { this.toggle.bind(this, 'shareLink')}}>
+                className={activeTab === 'shareToGroup' ? 'active' : ''} onClick={() => { this.toggle.bind(this, 'shareLink')}}>
                 {gettext("Share Link")}
               </NavLink>
             </NavItem>
@@ -113,7 +109,7 @@ class ShareDialog extends React.Component {
     
     return (
       <div>
-        <Modal isOpen={this.props.isOpen} centered={true} style={{maxWidth: '720px'}} className="share-dialog">
+        <Modal isOpen={this.props.isOpen} style={{maxWidth: '720px'}} className="share-dialog">
           <ModalHeader toggle={this.props.toggleDialog}>Share <span className="sf-font" title={itemName}>{itemName}</span></ModalHeader>
           <ModalBody className="share-dialog-content">
             {this.props.isDir && this.renderDirContent()}
