@@ -1025,14 +1025,25 @@ table .menu-toggle {
     align-items: center;
 }
 
-.nav-link {
-  color: #8a948f;
-  padding: .3em .1em;
+a.nav-link {
+    display: block;
+    padding: 0.25rem 1rem 0.25rem 0.25rem;
+    border-radius: 0.25rem;
+    color: #747476;
+    font-size: 0.875rem;
+    outline: none;
+    text-decoration: none;
 }
-.nav-link.active {
-  color: #eb8205;
-  border-bottom: 2px solid #eb8205;
+
+a.nav-link.active {
+  color: #ffffff;
+  background-color: #eb8205;
 }
+
+a.nav-link.active:hover {
+    color: #ffffff;
+}
+
 .item-meta-info {
   display: inline-block;
   margin-right: 8px;

@@ -1,6 +1,6 @@
 import React, { Fragment } from 'react';
 import PropTypes from 'prop-types';
-import { gettext, siteRoot, repoID } from '../../utils/constants';
+import { gettext, siteRoot } from '../../utils/constants';
 import { Utils } from '../../utils/utils';
 import { seafileAPI } from '../../utils/seafile-api';
 import URLDecorator from '../../utils/url-decorator';
@@ -482,7 +482,7 @@ class DirentListItem extends React.Component {
                          itemName={dirent.name}
                          toggleDialog={this.onItemShare}
                          isOpen={this.state.isShareDialogShow}
-                         repoID={repoID}
+                         repoID={this.props.repoID}
                          isDir={dirent.isDir()}
                          />
           </ModalPortal>

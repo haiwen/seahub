@@ -1,8 +1,8 @@
 import React from 'react';
-import { gettext } from '../../utils/constants';
 import PropTypes from 'prop-types';
+import { gettext } from '../../utils/constants';
 import { seafileAPI } from '../../utils/seafile-api'
-import { Button, Form, FormGroup, Label, Input, InputGroup, InputGroupAddon} from 'reactstrap';
+import { Button, Form, FormGroup, Label, Input, InputGroup, InputGroupAddon } from 'reactstrap';
 
 const propTypes = {
   itemPath: PropTypes.string.isRequired,
@@ -20,11 +20,14 @@ class GenerateShareLink extends React.Component {
       passwdnew: '',
       daysOn: false,
       expireDays: '7',
-      token:'',
-      link:'',
+      token: '',
+      link: '',
       errorInfo: ''
     };
-    this.permissions = '{"can_edit":false, "can_download":true}'
+    this.permissions = {
+      "can_edit": false, 
+      "can_download": true
+    };
   }
 
   componentDidMount() {
@@ -41,7 +44,7 @@ class GenerateShareLink extends React.Component {
           token: res.data[0].token,
         });
       }
-    })
+    });
   } 
 
   addPassword = () => {
@@ -50,13 +53,13 @@ class GenerateShareLink extends React.Component {
       password: '',
       passwdnew: '',
       errorInfo: ''
-    })
+    });
   }
 
   togglePasswordVisible = () => {
     this.setState({
       passwordVisible: !this.state.passwordVisible
-    })
+    });
   }
 
   generatePassword = () => {
@@ -83,14 +86,20 @@ class GenerateShareLink extends React.Component {
     this.setState({
       expireDays: '7', 
       daysOn: !this.state.daysOn
-    })
+    });
   }
 
   setPermission = (permission) => {
     if (permission == 'previewAndDownload') {
-      this.permissions = '{"can_edit":false,"can_download":true}'
+      this.permissions = {
+        "can_edit": false,
+        "can_download": true
+      };
     } else {
-      this.permissions = '{"can_edit":false,"can_download":false}'      
+      this.permissions = {
+        "can_edit": false,
+        "can_download": false
+      };     
     }
   }
 
@@ -112,7 +121,7 @@ class GenerateShareLink extends React.Component {
         errorInfo: gettext("Passwords don't match")
       });
     } 
-    else if (this.state.daysOn && (this.state.validDays == '')) {
+    else if (this.state.daysOn && (this.state.validDays === '')) {
       this.setState({
         errorInfo: gettext('Please enter days')
       });
@@ -123,8 +132,8 @@ class GenerateShareLink extends React.Component {
           this.setState({
             link: res.data.link,
             token: res.data.token
-          })
-        })
+          });
+        });
     }
   }
 
@@ -137,7 +146,10 @@ class GenerateShareLink extends React.Component {
         password: '',
         passwordnew: '',
       });
-      this.permissions = '{"can_edit":false, "can_download":true}'
+      this.permissions = {
+        "can_edit": false,
+        "can_download": true
+      };
     });
   } 
 
@@ -151,44 +163,44 @@ class GenerateShareLink extends React.Component {
       );
     } else {
       return (
-        <Form>
+        <Form className="generate-share-link">
           <FormGroup check>
             <Label check>
-              <Input type="checkbox" onChange={this.addPassword}/> {'  '}{gettext('Add password protection')} 
+              <Input type="checkbox" onChange={this.addPassword}/>{'  '}{gettext('Add password protection')} 
             </Label>
           </FormGroup>
           {this.state.showPasswordInput &&
             <FormGroup>
               <Label>{gettext('Password')}({gettext('at least 8 characters')})</Label>
-              <InputGroup>
-              <Input type={this.state.passwordVisible ? 'text':'password'} value={this.state.password} onChange={this.inputPassword}/>
-              <InputGroupAddon addonType="append">
-                <Button onClick={this.togglePasswordVisible}><i className={`fas ${this.state.passwordVisible ? 'fa-eye': 'fa-eye-slash'}`}></i></Button>
-                <Button onClick={this.generatePassword}><i className="fas fa-magic"></i></Button>
-              </InputGroupAddon>
+              <InputGroup className="passwd">
+                <Input type={this.state.passwordVisible ? 'text' : 'password'} value={this.state.password} onChange={this.inputPassword}/>
+                <InputGroupAddon addonType="append">
+                  <Button onClick={this.togglePasswordVisible}><i className={`fas ${this.state.passwordVisible ? 'fa-eye': 'fa-eye-slash'}`}></i></Button>
+                  <Button onClick={this.generatePassword}><i className="fas fa-magic"></i></Button>
+                </InputGroupAddon>
               </InputGroup>
               <Label>{gettext('Password again')}</Label>
-              <Input type={this.state.passwordVisible?'text':'password'} value={this.state.passwordnew} onChange={this.inputPasswordNew} />
+              <Input className="passwd" type={this.state.passwordVisible ? 'text' : 'password'} value={this.state.passwordnew} onChange={this.inputPasswordNew} />
             </FormGroup>
           }
           <FormGroup check>
             <Label check>
-              <Input type="checkbox" onChange={this.autoExpiration} /> {'  '}{gettext('Add auto expiration')}
+              <Input type="checkbox" onChange={this.autoExpiration} />{'  '}{gettext('Add auto expiration')}
             </Label>
           </FormGroup>
           <FormGroup check>
             <Label check>
-              <Input type="checkbox" checked readOnly/> {'  '}{gettext('Set permission')}
+              <Input type="checkbox" checked readOnly/>{'  '}{gettext('Set permission')}
             </Label>
           </FormGroup>
-          <FormGroup check style={{"marginLeft": "18px"}} >
+          <FormGroup check className="permission">
             <Label check>
-             <Input type="radio" name="radio1" defaultChecked={true} onChange={this.setPermission('previewAndDownload')}/> {'  '}{gettext('Preview and download')}
+             <Input type="radio" name="radio1" defaultChecked={true} onChange={this.setPermission('previewAndDownload')}/>{'  '}{gettext('Preview and download')}
             </Label>
           </FormGroup>
-          <FormGroup check style={{"marginLeft": "18px"}}>
+          <FormGroup check className="permission">
             <Label check>
-              <Input type="radio" name="radio1" onChange={this.setPermission('preview')} /> {'  '}{gettext('Preview only')}
+              <Input type="radio" name="radio1" onChange={this.setPermission('preview')} />{'  '}{gettext('Preview only')}
             </Label>
           </FormGroup>
           <Label>{this.state.errorInfo}</Label><br />

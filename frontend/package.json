@@ -28,7 +28,7 @@
     "react-moment": "^0.7.9",
     "react-select": "^2.1.1",
     "reactstrap": "^6.4.0",
-    "seafile-js": "^0.2.39",
+    "seafile-js": "^0.2.40",
     "seafile-ui": "^0.1.10",
     "sw-precache-webpack-plugin": "0.11.4",
     "unified": "^7.0.0",

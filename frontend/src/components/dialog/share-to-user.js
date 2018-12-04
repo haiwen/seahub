@@ -3,7 +3,7 @@ import AsyncSelect from 'react-select/lib/Async';
 import { gettext } from '../../utils/constants';
 import { Utils } from '../../utils/utils';
 import PropTypes from 'prop-types';
-import { Button, Label, Input, Table} from 'reactstrap';
+import { Button, Input, Table} from 'reactstrap';
 import { seafileAPI } from '../../utils/seafile-api.js';
 
 const propTypes = {

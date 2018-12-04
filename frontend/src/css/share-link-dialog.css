@@ -1,4 +1,12 @@
-.op-target {
-    color: #ee8204;
-    word-wrap: break-word;
+.share-dialog .share-dialog-content {
+    padding: 0.5rem 1rem 2rem;
+}
+
+.generate-share-link .passwd,
+.generate-upload-link .passwd {
+    width: 60%;
+}
+
+.generate-share-link .permission {
+    margin-left: 1.25rem;
 }

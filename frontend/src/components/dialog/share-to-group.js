@@ -1,10 +1,10 @@
 import React from 'react';
+import PropTypes from 'prop-types';
+import { Button, Input, Table } from 'reactstrap';
 import Select from 'react-select';
 import makeAnimated from 'react-select/lib/animated';
 import { gettext } from '../../utils/constants';
 import { Utils } from '../../utils/utils';
-import PropTypes from 'prop-types';
-import { Button, Label, Input, Table} from 'reactstrap';
 import { seafileAPI } from '../../utils/seafile-api.js';
 
 const propTypes = {

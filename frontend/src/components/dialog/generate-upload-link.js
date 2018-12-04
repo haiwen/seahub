@@ -126,7 +126,7 @@ class GenerateUploadLink extends React.Component {
       );
     } else {
       return (
-        <Form>
+        <Form className="generate-upload-link">
           <FormGroup>
             <Label>{gettext('You can share the generated link to others and then they can upload files to this directory via the link.')}</Label>
           </FormGroup>
@@ -135,18 +135,18 @@ class GenerateUploadLink extends React.Component {
               <Input type="checkbox" onChange={this.addPassword}/> {'  '}{gettext('Add password protection')} 
             </Label>
           </FormGroup>
-          { this.state.showPasswordInput &&
+          {this.state.showPasswordInput &&
             <FormGroup>
               <Label>{gettext('Password')}({gettext('at least 8 characters')})</Label>
-              <InputGroup>
-              <Input type={this.state.passwordVisible ? 'text':'password'} value={this.state.password} onChange={this.inputPassword}/>
-              <InputGroupAddon addonType="append">
-                <Button onClick={this.togglePasswordVisible}><i className={`fas ${this.state.passwordVisible ? 'fa-eye': 'fa-eye-slash'}`}></i></Button>
-                <Button onClick={this.generatePassword}><i className="fas fa-magic"></i></Button>
-              </InputGroupAddon>
+              <InputGroup className="passwd">
+                <Input type={this.state.passwordVisible ? 'text':'password'} value={this.state.password} onChange={this.inputPassword}/>
+                <InputGroupAddon addonType="append">
+                  <Button onClick={this.togglePasswordVisible}><i className={`fas ${this.state.passwordVisible ? 'fa-eye': 'fa-eye-slash'}`}></i></Button>
+                  <Button onClick={this.generatePassword}><i className="fas fa-magic"></i></Button>
+                </InputGroupAddon>
               </InputGroup>
               <Label>{gettext('Password again')}</Label>
-              <Input type={this.state.passwordVisible?'text':'password'} value={this.state.passwordnew} onChange={this.inputPasswordNew} />
+              <Input className="passwd" type={this.state.passwordVisible ? 'text' : 'password'} value={this.state.passwordnew} onChange={this.inputPasswordNew} />
             </FormGroup>
           }
           <Label>{this.state.errorInfo}</Label><br/>
