@@ -65,19 +65,19 @@ class ShareToGroup extends React.Component {
     if (e.target.value == 'Read-Write') {
       this.setState({
         permission: 'rw',
-      })
+      });
     } else if (e.target.value == 'Read-Only') {
       this.setState({
         permission: 'r',
-      })
+      });
     } else if (e.target.value == 'Preview-Edit-on-Cloud') {
       this.setState({
         permission: 'clod-edit',
-      })
+      });
     } else if (e.target.value == 'Preview-on-Cloud') {
       this.setState({
         permission: 'preview',
-      })
+      });
     } 
   }
 
@@ -113,7 +113,7 @@ class ShareToGroup extends React.Component {
     let repoID = this.props.repoID; 
     seafileAPI.deleteShareToGroupItem(repoID, path, 'group', groupID).then(() => {
       this.setState({
-        sharedItems: this.state.sharedItems.filter(item => { return item.group_info.id !== groupID }) 
+        sharedItems: this.state.sharedItems.filter(item => { return item.group_info.id !== groupID; }) 
       });
     });
   }
@@ -128,26 +128,26 @@ class ShareToGroup extends React.Component {
             <th></th>
           </tr>
           <tr>
-          <td>
-            <Select
-              isMulti
-              onChange={this.handleSelectChange}
-              options={this.options}
-              components={makeAnimated()}
-              inputId={"react-select-2-input"}
-            />
-          </td>
-          <td>
-            <Input type="select" name="select" onChange={this.setPermission}>
-              <option>{gettext('Read-Write')}</option>
-              <option>{gettext('Read-Only')}</option>
-              <option>{gettext('Preview-Edit-on-Cloud')}</option>
-              <option>{gettext('Preview-on-Cloud')}</option>
-            </Input>
-          </td>
-          <td>
-           <Button onClick={this.shareToGroup}>{gettext('Submit')}</Button>
-          </td>
+            <td>
+              <Select
+                isMulti
+                onChange={this.handleSelectChange}
+                options={this.options}
+                components={makeAnimated()}
+                inputId={'react-select-2-input'}
+              />
+            </td>
+            <td>
+              <Input type="select" name="select" onChange={this.setPermission}>
+                <option>{gettext('Read-Write')}</option>
+                <option>{gettext('Read-Only')}</option>
+                <option>{gettext('Preview-Edit-on-Cloud')}</option>
+                <option>{gettext('Preview-on-Cloud')}</option>
+              </Input>
+            </td>
+            <td>
+              <Button onClick={this.shareToGroup}>{gettext('Submit')}</Button>
+            </td>
           </tr>
           <tr>
             {this.state.errorMsg.length > 0 &&                  
@@ -173,7 +173,7 @@ function GroupList(props) {
         <tr key={index}>
           <td>{item.group_info.name}</td>
           <td>{Utils.sharePerms[item.permission]}</td>
-          <td><i onClick={(e) => {props.deleteShareItem(e, item.group_info.id)}} className="sf2-icon-delete" title="Delete"></i></td>
+          <td><i onClick={(e) => {props.deleteShareItem(e, item.group_info.id);}} className="sf2-icon-delete" title="Delete"></i></td>
         </tr>
       ))}
     </tbody>

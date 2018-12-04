@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { Fragment } from 'react';
 import AsyncSelect from 'react-select/lib/Async';
 import { gettext } from '../../utils/constants';
 import { Utils } from '../../utils/utils';
@@ -25,46 +25,41 @@ class ShareToUser extends React.Component {
   }
 
   handleSelectChange = (option) => {
-    this.setState({
-      selectedOption: option,
-    });
+    this.setState({selectedOption: option});
     this.options = [];
   }
 
   componentDidMount() {
     let path = this.props.itemPath;
     let repoID = this.props.repoID;
-    seafileAPI.listSharedItems(repoID, path, 'user')
-      .then((res) => {
-        if(res.data.length !== 0) {
-          this.setState({
-            sharedItems: res.data
-          })  
-        }
-      })
+    seafileAPI.listSharedItems(repoID, path, 'user').then((res) => {
+      if(res.data.length !== 0) {
+        this.setState({sharedItems: res.data});
+      }
+    });
   }
 
   setPermission = (e) => {
     if (e.target.value == 'Read-Write') {
       this.setState({
         permission: 'rw',
-      })
+      });
     } else if (e.target.value == 'Read-Only') {
       this.setState({
         permission: 'r',
-      })
+      });
     } else if (e.target.value == 'Admin') {
       this.setState({
         permission: 'admin',
-      })
+      });
     } else if (e.target.value == 'Preview-Edit-on-Cloud') {
       this.setState({
         permission: 'clod-edit',
-      })
+      });
     } else if (e.target.value == 'Preview-on-Cloud') {
       this.setState({
         permission: 'preview',
-      })
+      });
     } 
   }
 
@@ -77,10 +72,10 @@ class ShareToUser extends React.Component {
           obj.value = res.data.users[i].name;
           obj.email = res.data.users[i].email;
           obj.label =
-            <React.Fragment>
+            <Fragment>
               <img src={res.data.users[i].avatar_url} className="avatar reviewer-select-avatar" alt=""/>
               <span className='reviewer-select-name'>{res.data.users[i].name}</span>
-            </React.Fragment>;
+            </Fragment>;
           this.options.push(obj);
         }
         callback(this.options);
@@ -97,33 +92,29 @@ class ShareToUser extends React.Component {
         users[i] = this.state.selectedOption[i].email;
       }
     }
-    seafileAPI.shareFolder(repoID, path, 'user', this.state.permission, users) 
-      .then(res => {
-        if (res.data.failed.length > 0) {
-          let errorMsg = [];
-          for (let i = 0 ; i < res.data.failed.length ; i++) {
-            errorMsg[i] = res.data.failed[i];
-          }
-          this.setState({
-            errorMsg: errorMsg
-          });
+    seafileAPI.shareFolder(repoID, path, 'user', this.state.permission, users).then(res => {
+      if (res.data.failed.length > 0) {
+        let errorMsg = [];
+        for (let i = 0 ; i < res.data.failed.length ; i++) {
+          errorMsg[i] = res.data.failed[i];
         }
-        this.setState({
-          sharedItems: this.state.sharedItems.concat(res.data.success)
-        })
-      })
+        this.setState({errorMsg: errorMsg});
+      }
+      this.setState({
+        sharedItems: this.state.sharedItems.concat(res.data.success)
+      });
+    });
   } 
 
   deleteShareItem = (e, username) => {
     e.preventDefault();
     let path = this.props.itemPath;
     let repoID = this.props.repoID;
-    seafileAPI.deleteShareToUserItem(repoID, path, 'user', username)
-      .then(res => {
-        this.setState({
-          sharedItems: this.state.sharedItems.filter( item => { return item.user_info.name !== username }) 
-        })
-      })
+    seafileAPI.deleteShareToUserItem(repoID, path, 'user', username).then(res => {
+      this.setState({
+        sharedItems: this.state.sharedItems.filter( item => { return item.user_info.name !== username; }) 
+      });
+    });
   }
 
   render() {
@@ -184,7 +175,7 @@ function UserList(props) {
         <tr key={index}>
           <td>{item.user_info.nickname}</td>
           <td>{Utils.sharePerms[item.permission]}</td>
-          <td><i onClick={(e) => {props.deleteShareItem(e, item.user_info.name)}} className="sf2-icon-delete" title="Delete"></i></td>
+          <td><i onClick={(e) => {props.deleteShareItem(e, item.user_info.name);}} className="sf2-icon-delete" title="Delete"></i></td>
         </tr>
       ))}
     </tbody>

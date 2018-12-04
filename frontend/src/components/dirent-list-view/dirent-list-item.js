@@ -152,9 +152,7 @@ class DirentListItem extends React.Component {
 
   onItemShare = (e) => {
     e.nativeEvent.stopImmediatePropagation(); //for document event
-    this.setState({
-      isShareDialogShow: !this.state.isShareDialogShow
-    });
+    this.setState({isShareDialogShow: !this.state.isShareDialogShow});
   }
 
   onMenuItemClick = (operation) => {
@@ -478,13 +476,13 @@ class DirentListItem extends React.Component {
         }
         {this.state.isShareDialogShow &&
           <ModalPortal>
-            <ShareDialog itemPath={direntPath}
-                         itemName={dirent.name}
-                         toggleDialog={this.onItemShare}
-                         isOpen={this.state.isShareDialogShow}
-                         repoID={this.props.repoID}
-                         isDir={dirent.isDir()}
-                         />
+            <ShareDialog 
+              isDir={dirent.isDir()}
+              itemPath={direntPath}
+              itemName={dirent.name}
+              repoID={this.props.repoID}
+              toggleDialog={this.onItemShare}
+            />
           </ModalPortal>
         }
       </Fragment>

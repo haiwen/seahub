@@ -1,7 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { gettext, shareLinkExpireDaysMin, shareLinkExpireDaysMax } from '../../utils/constants';
-import { seafileAPI } from '../../utils/seafile-api'
+import { seafileAPI } from '../../utils/seafile-api';
 import { Button, Form, FormGroup, Label, Input, InputGroup, InputGroupAddon } from 'reactstrap';
 
 const propTypes = {
@@ -25,8 +25,8 @@ class GenerateShareLink extends React.Component {
       errorInfo: ''
     };
     this.permissions = {
-      "can_edit": false, 
-      "can_download": true
+      'can_edit': false, 
+      'can_download': true
     };
   }
 
@@ -77,7 +77,7 @@ class GenerateShareLink extends React.Component {
   }
 
   inputPasswordNew = (e) => {
-     this.setState({
+    this.setState({
       passwordnew: e.target.value
     });
   }
@@ -85,13 +85,13 @@ class GenerateShareLink extends React.Component {
   setPermission = (permission) => {
     if (permission == 'previewAndDownload') {
       this.permissions = {
-        "can_edit": false,
-        "can_download": true
+        'can_edit': false,
+        'can_download': true
       };
     } else {
       this.permissions = {
-        "can_edit": false,
-        "can_download": false
+        'can_edit': false,
+        'can_download': false
       };     
     }
   }
@@ -111,7 +111,7 @@ class GenerateShareLink extends React.Component {
     }
     else if (this.state.showPasswordInput && (this.state.password !== this.state.passwordnew)) {
       this.setState({
-        errorInfo: gettext("Passwords don't match")
+        errorInfo: gettext('Passwords don\'t match')
       });
     } 
     else if (this.state.expireDays === '') {
@@ -119,6 +119,7 @@ class GenerateShareLink extends React.Component {
         errorInfo: gettext('Please enter days')
       });
     } else if (!this.state.isValidate) {
+      // errMessage had been setted
       return;
     } else {
       let { password, expireDays } = this.state;
@@ -143,8 +144,8 @@ class GenerateShareLink extends React.Component {
         passwordnew: '',
       });
       this.permissions = {
-        "can_edit": false,
-        "can_download": true
+        'can_edit': false,
+        'can_download': true
       };
     });
   } 
@@ -232,7 +233,7 @@ class GenerateShareLink extends React.Component {
           </FormGroup>
           <FormGroup check className="permission">
             <Label check>
-             <Input type="radio" name="radio1" defaultChecked={true} onChange={this.setPermission('previewAndDownload')}/>{'  '}{gettext('Preview and download')}
+              <Input type="radio" name="radio1" defaultChecked={true} onChange={this.setPermission('previewAndDownload')}/>{'  '}{gettext('Preview and download')}
             </Label>
           </FormGroup>
           <FormGroup check className="permission">

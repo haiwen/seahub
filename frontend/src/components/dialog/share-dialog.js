@@ -12,7 +12,6 @@ const propTypes = {
   itemPath: PropTypes.string.isRequired,
   itemName: PropTypes.string.isRequired,
   toggleDialog: PropTypes.func.isRequired,
-  isOpen: PropTypes.bool.isRequired,
   isDir: PropTypes.bool.isRequired,
   repoID: PropTypes.string.isRequired
 };
@@ -38,23 +37,23 @@ class ShareDialog extends React.Component {
         <div className="share-dialog-side">
           <Nav>
             <NavItem>
-              <NavLink className={activeTab === "shareLink" ? 'active' : ''} onClick={this.toggle.bind(this, 'shareLink')}>
-                {gettext("Share Link")}
+              <NavLink className={activeTab === 'shareLink' ? 'active' : ''} onClick={this.toggle.bind(this, 'shareLink')}>
+                {gettext('Share Link')}
               </NavLink>
             </NavItem>
             <NavItem>
               <NavLink className={activeTab === 'uploadLink' ? 'active' : ''} onClick={this.toggle.bind(this, 'uploadLink')}>
-                {gettext("Upload Link")}
+                {gettext('Upload Link')}
               </NavLink>
             </NavItem>
             <NavItem>
               <NavLink className={activeTab === 'shareToUser' ? 'active' : ''} onClick={this.toggle.bind(this, 'shareToUser')}>
-                {gettext("Share to user")}
+                {gettext('Share to user')}
               </NavLink>
             </NavItem>
             <NavItem>
               <NavLink className={activeTab === 'shareToGroup' ? 'active' : ''} onClick={this.toggle.bind(this, 'shareToGroup')}>
-                {gettext("Share to group")}
+                {gettext('Share to group')}
               </NavLink>
             </NavItem>
           </Nav>
@@ -87,8 +86,8 @@ class ShareDialog extends React.Component {
           <Nav>
             <NavItem>
               <NavLink
-                className={activeTab === 'shareToGroup' ? 'active' : ''} onClick={() => { this.toggle.bind(this, 'shareLink')}}>
-                {gettext("Share Link")}
+                className={activeTab === 'shareToGroup' ? 'active' : ''} onClick={() => {this.toggle.bind(this, 'shareLink');}}>
+                {gettext('Share Link')}
               </NavLink>
             </NavItem>
           </Nav>
@@ -109,7 +108,7 @@ class ShareDialog extends React.Component {
     
     return (
       <div>
-        <Modal isOpen={this.props.isOpen} style={{maxWidth: '720px'}} className="share-dialog">
+        <Modal isOpen={true} style={{maxWidth: '720px'}} className="share-dialog">
           <ModalHeader toggle={this.props.toggleDialog}>Share <span className="sf-font" title={itemName}>{itemName}</span></ModalHeader>
           <ModalBody className="share-dialog-content">
             {this.props.isDir && this.renderDirContent()}
@@ -120,11 +119,6 @@ class ShareDialog extends React.Component {
     );
   }
 }
-
-ShareDialog.defaultProps = {
-  isDir: false,
-  isOpen: false,
-};
 
 ShareDialog.propTypes = propTypes;
 

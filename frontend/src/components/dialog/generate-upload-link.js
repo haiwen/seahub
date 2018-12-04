@@ -19,7 +19,7 @@ class GenerateUploadLink extends React.Component {
       passwdnew: '',
       link: '',
       token:''
-    }
+    };
   }
 
   componentDidMount() {
@@ -36,7 +36,7 @@ class GenerateUploadLink extends React.Component {
           token: res.data[0].token,
         });
       }
-    })
+    });
   }
 
   addPassword = () => {
@@ -45,13 +45,13 @@ class GenerateUploadLink extends React.Component {
       password: '',
       passwdnew: '',
       errorInfo: ''
-    })
+    });
   }
 
   togglePasswordVisible = () => {
     this.setState({
       passwordVisible: !this.state.passwordVisible
-    })
+    });
   }
 
   generatePassword = () => {
@@ -69,7 +69,7 @@ class GenerateUploadLink extends React.Component {
   }
 
   inputPasswordNew = (e) => {
-     this.setState({
+    this.setState({
       passwordnew: e.target.value
     });
   }
@@ -90,30 +90,28 @@ class GenerateUploadLink extends React.Component {
     }
     else if (this.state.showPasswordInput && (this.state.password !== this.state.passwordnew)) {
       this.setState({
-        errorInfo: gettext("Passwords don't match")
+        errorInfo: gettext('Passwords don\'t match')
       });
     } else {
-      seafileAPI.createUploadLink(repoID, path, this.state.password)
-        .then((res) => {
-          this.setState({
-            link: res.data.link,
-            token: res.data.token  
-          })    
-        })
+      seafileAPI.createUploadLink(repoID, path, this.state.password).then((res) => {
+        this.setState({
+          link: res.data.link,
+          token: res.data.token  
+        }); 
+      });
     }
   }
 
   deleteUploadLink = () => {
-    seafileAPI.deleteUploadLink(this.state.token)
-      .then((res) => {
-        this.setState({
-          link: '',
-          token: '',
-          showPasswordInput: false,
-          password: '',
-          passwordnew: '',
-        })
-      })
+    seafileAPI.deleteUploadLink(this.state.token).then(() => {
+      this.setState({
+        link: '',
+        token: '',
+        showPasswordInput: false,
+        password: '',
+        passwordnew: '',
+      });
+    });
   }
 
   render() {
@@ -124,36 +122,35 @@ class GenerateUploadLink extends React.Component {
           <Button onClick={this.deleteUploadLink}>{gettext('Delete')}</Button>
         </Form>
       );
-    } else {
-      return (
-        <Form className="generate-upload-link">
-          <FormGroup>
-            <FormText className="tip">{gettext('You can share the generated link to others and then they can upload files to this directory via the link.')}</FormText>
-          </FormGroup>
-          <FormGroup check>
-            <Label className="" check>
-              <Input type="checkbox" onChange={this.addPassword}/>{'  '}{gettext('Add password protection')} 
-            </Label>
-          </FormGroup>
-          {this.state.showPasswordInput &&
-            <FormGroup className="link-operation-content">
-              <Label>{gettext('Password')}</Label><span className="tip"> ({gettext('at least 8 characters')}) </span>
-              <InputGroup className="passwd">
-                <Input type={this.state.passwordVisible ? 'text':'password'} value={this.state.password || ''} onChange={this.inputPassword}/>
-                <InputGroupAddon addonType="append">
-                  <Button onClick={this.togglePasswordVisible}><i className={`link-operation-icon fas ${this.state.passwordVisible ? 'fa-eye': 'fa-eye-slash'}`}></i></Button>
-                  <Button onClick={this.generatePassword}><i className="link-operation-icon fas fa-magic"></i></Button>
-                </InputGroupAddon>
-              </InputGroup>
-              <Label>{gettext('Password again')}</Label>
-              <Input className="passwd" type={this.state.passwordVisible ? 'text' : 'password'} value={this.state.passwordnew || ''} onChange={this.inputPasswordNew} />
-            </FormGroup>
-          }
-          <Label className="err-message">{this.state.errorInfo}</Label><br/>
-          <Button className="generate-link-btn" onClick={this.generateUploadLink}>{gettext('Generate')}</Button>
-        </Form>
-      );
     }
+    return (
+      <Form className="generate-upload-link">
+        <FormGroup>
+          <FormText className="tip">{gettext('You can share the generated link to others and then they can upload files to this directory via the link.')}</FormText>
+        </FormGroup>
+        <FormGroup check>
+          <Label check>
+            <Input type="checkbox" onChange={this.addPassword}/>{'  '}{gettext('Add password protection')} 
+          </Label>
+        </FormGroup>
+        {this.state.showPasswordInput &&
+          <FormGroup className="link-operation-content">
+            <Label>{gettext('Password')}</Label><span className="tip"> ({gettext('at least 8 characters')}) </span>
+            <InputGroup className="passwd">
+              <Input type={this.state.passwordVisible ? 'text':'password'} value={this.state.password || ''} onChange={this.inputPassword}/>
+              <InputGroupAddon addonType="append">
+                <Button onClick={this.togglePasswordVisible}><i className={`link-operation-icon fas ${this.state.passwordVisible ? 'fa-eye': 'fa-eye-slash'}`}></i></Button>
+                <Button onClick={this.generatePassword}><i className="link-operation-icon fas fa-magic"></i></Button>
+              </InputGroupAddon>
+            </InputGroup>
+            <Label>{gettext('Password again')}</Label>
+            <Input className="passwd" type={this.state.passwordVisible ? 'text' : 'password'} value={this.state.passwordnew || ''} onChange={this.inputPasswordNew} />
+          </FormGroup>
+        }
+        <Label className="err-message">{this.state.errorInfo}</Label><br/>
+        <Button className="generate-link-btn" onClick={this.generateUploadLink}>{gettext('Generate')}</Button>
+      </Form>
+    );
   }
 }
 

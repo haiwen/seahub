@@ -169,13 +169,13 @@ class DirOperationToolbar extends React.Component {
         )}
         {this.state.isShareDialogShow &&
           <ModalPortal>
-            <ShareDialog itemPath={this.props.path}
-                         itemName={dirName}
-                         toggleDialog={this.onShareClick}
-                         isOpen={this.state.isShareDialogShow}
-                         repoID={this.props.repoID}
-                         isDir={true}
-                         />
+            <ShareDialog 
+              isDir={true}
+              itemName={dirName}
+              itemPath={this.props.path}
+              repoID={this.props.repoID}
+              toggleDialog={this.onShareClick}
+            />
           </ModalPortal>
         }
       </Fragment>
