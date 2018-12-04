@@ -25,6 +25,8 @@ export const enableUploadFolder = window.app.pageOptions.enableUploadFolder === 
 export const enableResumableFileUpload = window.app.pageOptions.enableResumableFileUpload === 'True';
 export const storages = window.app.pageOptions.storages; // storage backends
 export const enableRepoSnapshotLabel = window.app.pageOptions.enableRepoSnapshotLabel;
+export const shareLinkExpireDaysMin = window.app.pageOptions.shareLinkExpireDaysMin;
+export const shareLinkExpireDaysMax = window.app.pageOptions.shareLinkExpireDaysMax;
 
 // wiki
 export const slug = window.wiki ? window.wiki.config.slug : '';

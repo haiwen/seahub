@@ -4,12 +4,36 @@
     font-size: 0.8125rem;
 }
 
-.share-dialog label {
+.share-dialog .share-dialog-content {
+    padding: 1rem 1rem 2rem;
+    min-height: 15rem;
+    display: flex;
+    flex-direction: row;
+}
+
+.share-dialog-content .share-dialog-side {
+    display: flex;
+    flex: 0 0 22%;
+}
+
+.share-dialog-content .share-dialog-side .nav {
+    flex-direction: column;
+}
+
+.share-dialog-content .share-dialog-main {
+    display: flex;
+    flex: 0 0 78%;
+}
+.share-dialog-content .share-dialog-main .tab-content {
+    flex: 1;
+}
+
+.share-dialog-content label {
     font-weight: bold;
     padding: 0.5rem 0 0.25rem;
 }
 
-.share-dialog label.form-check-label {
+.share-dialog-content label.form-check-label {
     font-weight: normal;
     padding: 0.25rem 0;
 }
@@ -28,31 +52,6 @@
     margin-bottom: 1rem;
 }
 
-.share-dialog .share-dialog-content {
-    padding: 1rem 1rem 2rem;
-    min-height: 15rem;
-    display: flex;
-    flex-direction: row;
-}
-
-.share-dialog-side {
-    display: flex;
-    flex: 0 0 22%;
-}
-
-.share-dialog-side .nav {
-    display: flex;
-    flex-direction: column;
-}
-
-.share-dialog-main {
-    display: flex;
-    flex: 0 0 78%;
-}
-.share-dialog-main .tab-content {
-    flex: 1;
-}
-
 .generate-share-link .passwd,
 .generate-upload-link .passwd {
     width: 60%;
@@ -68,7 +67,7 @@
 
 a.nav-link {
     display: block;
-    padding: 0.25rem 1rem 0.25rem 0.25rem;
+    padding: 0.3125rem 1rem 0.3125rem 0.25rem;
     border-radius: 0.25rem;
     color: #747476;
     font-size: 0.875rem;
@@ -85,3 +84,11 @@ a.nav-link.active {
 a.nav-link.active:hover {
     color: #ffffff;
 }
+
+input.expire-input {
+    display: inline-block;
+    width: 5rem;
+    height: 1.5rem;
+    margin: 0 0.25rem 0 1.25rem;
+}
+

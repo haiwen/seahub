@@ -1,6 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { gettext } from '../../utils/constants';
+import { gettext, shareLinkExpireDaysMin, shareLinkExpireDaysMax } from '../../utils/constants';
 import { seafileAPI } from '../../utils/seafile-api'
 import { Button, Form, FormGroup, Label, Input, InputGroup, InputGroupAddon } from 'reactstrap';
 
@@ -16,10 +16,10 @@ class GenerateShareLink extends React.Component {
     this.state = {
       passwordVisible: false,
       showPasswordInput: false,
+      isValidate: false,
       password: '',
       passwdnew: '',
-      daysOn: false,
-      expireDays: '7',
+      expireDays: '',
       token: '',
       link: '',
       errorInfo: ''
@@ -82,13 +82,6 @@ class GenerateShareLink extends React.Component {
     });
   }
 
-  autoExpiration = () => {
-    this.setState({
-      expireDays: '7', 
-      daysOn: !this.state.daysOn
-    });
-  }
-
   setPermission = (permission) => {
     if (permission == 'previewAndDownload') {
       this.permissions = {
@@ -121,12 +114,13 @@ class GenerateShareLink extends React.Component {
         errorInfo: gettext("Passwords don't match")
       });
     } 
-    else if (this.state.daysOn && (this.state.validDays === '')) {
+    else if (this.state.expireDays === '') {
       this.setState({
         errorInfo: gettext('Please enter days')
       });
-    } 
-    else {
+    } else if (!this.state.isValidate) {
+      return;
+    } else {
       let { password, expireDays } = this.state;
       let permissions = this.permissions;
       permissions = JSON.stringify(permissions);
@@ -154,6 +148,40 @@ class GenerateShareLink extends React.Component {
       };
     });
   } 
+
+  onExpireHandler = (e) => {
+    let day = e.target.value;
+    let reg = /^\d+$/;
+    let flag = reg.test(day);
+    if (!flag) {
+      this.setState({
+        isValidate: false,
+        errorInfo: gettext('Please enter a non-negative integer'),
+        expireDays: day,
+      });
+      return;
+    }
+    
+    day = parseInt(day);
+
+    if (day < shareLinkExpireDaysMin || day > shareLinkExpireDaysMax) {
+      let errorMessage = gettext('Please enter a value between day1 and day2');
+      errorMessage = errorMessage.replace('day1', shareLinkExpireDaysMin);
+      errorMessage = errorMessage.replace('day2', shareLinkExpireDaysMax);
+      this.setState({
+        isValidate: false,
+        errorInfo: errorMessage,
+        expireDays: day
+      });
+      return;
+    }
+
+    this.setState({
+      isValidate: true,
+      errorInfo: '',
+      expireDays: day
+    });
+  }
 
   render() {
     if (this.state.link) {
@@ -187,7 +215,14 @@ class GenerateShareLink extends React.Component {
           }
           <FormGroup check>
             <Label check>
-              <Input type="checkbox" onChange={this.autoExpiration} />{'  '}{gettext('Add auto expiration')}
+              <Input className="expire-checkbox" type="checkbox" checked readOnly/>{'  '}{gettext('Add auto expiration')}
+              <Input className="expire-input" type="text" value={this.state.expireDays} onChange={this.onExpireHandler}/> <span>{gettext('days')}</span>
+              {parseInt(shareLinkExpireDaysMin) === 0 && parseInt(shareLinkExpireDaysMax) === 0 && (
+                <span> ({gettext('no limit')})</span>
+              )}
+              {parseInt(shareLinkExpireDaysMax) !== 0 && (
+                <span> ({shareLinkExpireDaysMin} - {shareLinkExpireDaysMax}{gettext('days')})</span>
+              )}
             </Label>
           </FormGroup>
           <FormGroup check>
