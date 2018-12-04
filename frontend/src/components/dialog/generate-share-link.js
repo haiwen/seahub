@@ -170,17 +170,17 @@ class GenerateShareLink extends React.Component {
             </Label>
           </FormGroup>
           {this.state.showPasswordInput &&
-            <FormGroup>
-              <Label>{gettext('Password')}({gettext('at least 8 characters')})</Label>
+            <FormGroup className="link-operation-content">
+              <Label>{gettext('Password')}</Label><span className="tip"> ({gettext('at least 8 characters')}) </span>
               <InputGroup className="passwd">
-                <Input type={this.state.passwordVisible ? 'text' : 'password'} value={this.state.password} onChange={this.inputPassword}/>
+                <Input type={this.state.passwordVisible ? 'text' : 'password'} value={this.state.password || ''} onChange={this.inputPassword}/>
                 <InputGroupAddon addonType="append">
-                  <Button onClick={this.togglePasswordVisible}><i className={`fas ${this.state.passwordVisible ? 'fa-eye': 'fa-eye-slash'}`}></i></Button>
-                  <Button onClick={this.generatePassword}><i className="fas fa-magic"></i></Button>
+                  <Button onClick={this.togglePasswordVisible}><i className={`link-operation-icon fas ${this.state.passwordVisible ? 'fa-eye': 'fa-eye-slash'}`}></i></Button>
+                  <Button onClick={this.generatePassword}><i className="link-operation-icon fas fa-magic"></i></Button>
                 </InputGroupAddon>
               </InputGroup>
               <Label>{gettext('Password again')}</Label>
-              <Input className="passwd" type={this.state.passwordVisible ? 'text' : 'password'} value={this.state.passwordnew} onChange={this.inputPasswordNew} />
+              <Input className="passwd" type={this.state.passwordVisible ? 'text' : 'password'} value={this.state.passwordnew || ''} onChange={this.inputPasswordNew} />
             </FormGroup>
           }
           <FormGroup check>
@@ -203,7 +203,7 @@ class GenerateShareLink extends React.Component {
               <Input type="radio" name="radio1" onChange={this.setPermission('preview')} />{'  '}{gettext('Preview only')}
             </Label>
           </FormGroup>
-          <Label>{this.state.errorInfo}</Label><br />
+          <Label className="err-message">{this.state.errorInfo}</Label><br />
           <Button onClick={this.generateShareLink}>{gettext('Generate')}</Button>
         </Form>
       );

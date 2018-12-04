@@ -2,7 +2,7 @@ import React from 'react';
 import { gettext } from '../../utils/constants';
 import PropTypes from 'prop-types';
 import { seafileAPI } from '../../utils/seafile-api';
-import { Button, Form, FormGroup, Label, Input, InputGroup, InputGroupAddon } from 'reactstrap';
+import { Button, Form, FormGroup, FormText, Label, Input, InputGroup, InputGroupAddon } from 'reactstrap';
 
 const propTypes = {
   itemPath: PropTypes.string.isRequired,
@@ -128,29 +128,29 @@ class GenerateUploadLink extends React.Component {
       return (
         <Form className="generate-upload-link">
           <FormGroup>
-            <Label>{gettext('You can share the generated link to others and then they can upload files to this directory via the link.')}</Label>
+            <FormText className="tip">{gettext('You can share the generated link to others and then they can upload files to this directory via the link.')}</FormText>
           </FormGroup>
           <FormGroup check>
-            <Label check>
-              <Input type="checkbox" onChange={this.addPassword}/> {'  '}{gettext('Add password protection')} 
+            <Label className="" check>
+              <Input type="checkbox" onChange={this.addPassword}/>{'  '}{gettext('Add password protection')} 
             </Label>
           </FormGroup>
           {this.state.showPasswordInput &&
-            <FormGroup>
-              <Label>{gettext('Password')}({gettext('at least 8 characters')})</Label>
+            <FormGroup className="link-operation-content">
+              <Label>{gettext('Password')}</Label><span className="tip"> ({gettext('at least 8 characters')}) </span>
               <InputGroup className="passwd">
-                <Input type={this.state.passwordVisible ? 'text':'password'} value={this.state.password} onChange={this.inputPassword}/>
+                <Input type={this.state.passwordVisible ? 'text':'password'} value={this.state.password || ''} onChange={this.inputPassword}/>
                 <InputGroupAddon addonType="append">
-                  <Button onClick={this.togglePasswordVisible}><i className={`fas ${this.state.passwordVisible ? 'fa-eye': 'fa-eye-slash'}`}></i></Button>
-                  <Button onClick={this.generatePassword}><i className="fas fa-magic"></i></Button>
+                  <Button onClick={this.togglePasswordVisible}><i className={`link-operation-icon fas ${this.state.passwordVisible ? 'fa-eye': 'fa-eye-slash'}`}></i></Button>
+                  <Button onClick={this.generatePassword}><i className="link-operation-icon fas fa-magic"></i></Button>
                 </InputGroupAddon>
               </InputGroup>
               <Label>{gettext('Password again')}</Label>
-              <Input className="passwd" type={this.state.passwordVisible ? 'text' : 'password'} value={this.state.passwordnew} onChange={this.inputPasswordNew} />
+              <Input className="passwd" type={this.state.passwordVisible ? 'text' : 'password'} value={this.state.passwordnew || ''} onChange={this.inputPasswordNew} />
             </FormGroup>
           }
-          <Label>{this.state.errorInfo}</Label><br/>
-          <Button onClick={this.generateUploadLink}>{gettext('Generate')}</Button>
+          <Label className="err-message">{this.state.errorInfo}</Label><br/>
+          <Button className="generate-link-btn" onClick={this.generateUploadLink}>{gettext('Generate')}</Button>
         </Form>
       );
     }

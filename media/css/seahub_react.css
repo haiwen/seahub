@@ -906,6 +906,7 @@ table .menu-toggle {
     color: #222;
     font-weight: bold;
 }
+.err-message,
 .err-message h2{
     color: red;
 }
@@ -1037,7 +1038,7 @@ a.nav-link {
 
 a.nav-link.active {
   color: #ffffff;
-  background-color: #eb8205;
+  background-color: #feac74;
 }
 
 a.nav-link.active:hover {
