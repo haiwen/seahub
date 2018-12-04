@@ -60,7 +60,10 @@ class MainPanel extends Component {
       direntPath: '',
       currentRepo: null,
       isRepoOwner: false,
+      activeTitleIndex: -1,
     };
+    this.titlesInfo = null;
+    this.pageScroll = false;
   }
 
   componentDidMount() {
@@ -75,6 +78,10 @@ class MainPanel extends Component {
         });
       });
     });
+    let that = this;
+    setTimeout(function() {
+      that.getTitlesInfo();
+    }, 500);
   }
 
   switchViewMode = (mode) => {
@@ -118,6 +125,45 @@ class MainPanel extends Component {
 
   onFileUploadSuccess = (file) => {
     // todo
+  }
+
+  handlePageScroll = (e) => {    
+    if (this.props.pathExist && this.props.isViewFile && !this.pageScroll && this.titlesInfo.length > 0) {
+      this.pageScroll = true;
+      let that = this;
+      setTimeout(function() {
+        that.pageScroll = false;
+      }, 100);
+      const contentScrollTop = this.refs.curViewContent.scrollTop + 180;
+      let activeTitleIndex;
+      if (contentScrollTop <= this.titlesInfo[0]) {
+        activeTitleIndex = 0;
+      }
+      else if (contentScrollTop > this.titlesInfo[this.titlesInfo.length - 1]) {
+        activeTitleIndex = this.titlesInfo.length - 1;
+      }
+      else {
+        for (let i = 0; i < this.titlesInfo.length - 1; i++) {
+          if (contentScrollTop > this.titlesInfo[i] && this.titlesInfo[i + 1] &&
+            contentScrollTop < this.titlesInfo[i + 1]) {
+            activeTitleIndex = i;
+            break;
+          }
+        }
+      }
+      this.setState({
+        activeTitleIndex: activeTitleIndex
+      });
+    }
+  }
+
+  getTitlesInfo = () => {
+    let titlesInfo = [];
+    let headingList = document.querySelectorAll('h2[id^="user-content"], h3[id^="user-content"]');
+    for (let i = 0; i < headingList.length; i++) {
+      titlesInfo.push(headingList[i].offsetTop);
+    }
+    this.titlesInfo = titlesInfo;
   }
 
   render() {
@@ -165,7 +211,7 @@ class MainPanel extends Component {
                 onPathClick={this.onMainNavBarClick}
               />
             </div>
-            <div className="cur-view-content">
+            <div className="cur-view-content" onScroll={this.handlePageScroll} ref="curViewContent">
               {!this.props.pathExist ?
                 ErrMessage :
                 <Fragment>
@@ -175,6 +221,7 @@ class MainPanel extends Component {
                       latestContributor={this.props.latestContributor}
                       lastModified = {this.props.lastModified}
                       isFileLoading={this.props.isFileLoading}
+                      activeTitleIndex={this.state.activeTitleIndex}
                     /> :
                     <Fragment>
                       <DirentListView
