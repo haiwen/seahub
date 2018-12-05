@@ -454,31 +454,31 @@ a.op-icon:focus {
 }
 
 /* sf-nav-link */
-.side-nav .sf-nav {
+.side-nav .nav-container {
     margin-bottom: 1rem;
 }
 
-.sf-nav .sf-nav-item {
+.sf-nav-pills.nav .nav-item {
     display: block;
     padding: 0;
 }
 
-.sf-nav .sf-nav-item .sf-nav-link {
+.sf-nav-pills.nav .nav-item .nav-link {
     display: block;
     padding: 0.25rem 0.25rem 0.25rem 0;
     transition: none;
     color: #333;
 }
 
-.sf-nav .sf-nav-item .sf-nav-link:hover {
+.sf-nav-pills.nav .nav-item .nav-link:hover {
     background-color:#feefb8;
 }
 
-.sf-nav .sf-nav-item .sf-nav-link.active:hover {
+.sf-nav-pills.nav .nav-item .nav-link.active:hover {
     background-color: #feac74;
 }
 
-.sf-nav .sf-nav-item .sf-nav-link [class^="sf2-icon-"] {
+.sf-nav-pills.nav .nav-item .nav-link [class^="sf2-icon-"] {
     display:inline-block;
     width:2.625rem;
     margin-right:0.325rem;
@@ -489,19 +489,19 @@ a.op-icon:focus {
     color:#999;
 }
 
-.sf-nav .sf-nav-item .sf-nav-link.active {
+.sf-nav-pills.nav .nav-item .nav-link.active {
     font-weight: bold;
 }
 
-.sf-nav .sf-nav-item .sf-nav-link.active,
-.sf-nav .sf-nav-item .sf-nav-link.active [class^="sf2-icon-"],
-.sf-nav .sf-nav-item .sf-nav-link.active .sharp {
+.sf-nav-pills.nav .nav-item .nav-link.active,
+.sf-nav-pills.nav .nav-item .nav-link.active [class^="sf2-icon-"],
+.sf-nav-pills.nav .nav-item .nav-link.active .sharp {
     border-radius: 0.125rem;
     background-color: #feac74;
     color: #fff;
 }
 
-.sf-nav .sf-nav-item .sf-nav-link .toggle-icon {
+.nav .nav-item .nav-link .toggle-icon {
     height: 1.5rem;
     display: flex;
     align-items: center;
@@ -509,7 +509,7 @@ a.op-icon:focus {
     color:#999;
 }
 
-.sf-nav .sf-nav-item .sf-nav-link .sharp {
+.nav .nav-item .nav-link .sharp {
     display:inline-block;
     width:2.625rem;
     margin-right:0.25rem;
@@ -517,21 +517,21 @@ a.op-icon:focus {
     color:#aaa;
 }
 
-.sf-nav-link .draft-info {
+.nav-link .draft-info {
     position: relative;
     line-height: 1.5rem;
 }
 
-.sf-nav-link .draft-info .badge {
+.nav-link .draft-info .badge {
     right: -1.5rem;
 }
 
-.sf-nav .sub-nav {
+.nav .sub-nav {
     display: block;
     overflow: hidden;
 }
 
-.sf-nav .sub-nav .sf-nav-link {
+.sf-nav-pills.nav .sub-nav .nav-link {
     padding: 0;
     display: block;
     font-size: 0.875rem;

@@ -35,24 +35,24 @@ class ShareDialog extends React.Component {
     return (
       <Fragment>
         <div className="share-dialog-side">
-          <Nav pills className="sf-nav">
-            <NavItem className="sf-nav-item">
-              <NavLink className={`sf-nav-link ${activeTab === 'shareLink' ? 'active' : ''}`} onClick={this.toggle.bind(this, 'shareLink')}>
+          <Nav pills className="sf-nav-pills">
+            <NavItem>
+              <NavLink className={activeTab === 'shareLink' ? 'active' : ''} onClick={this.toggle.bind(this, 'shareLink')}>
                 {gettext('Share Link')}
               </NavLink>
             </NavItem>
-            <NavItem className="sf-nav-item">
-              <NavLink className={`sf-nav-link ${activeTab === 'uploadLink' ? 'active' : ''}`} onClick={this.toggle.bind(this, 'uploadLink')}>
+            <NavItem>
+              <NavLink className={activeTab === 'uploadLink' ? 'active' : ''} onClick={this.toggle.bind(this, 'uploadLink')}>
                 {gettext('Upload Link')}
               </NavLink>
             </NavItem>
-            <NavItem className="sf-nav-item">
-              <NavLink className={`sf-nav-link ${activeTab === 'shareToUser' ? 'active' : ''}`} onClick={this.toggle.bind(this, 'shareToUser')}>
+            <NavItem>
+              <NavLink className={activeTab === 'shareToUser' ? 'active' : ''} onClick={this.toggle.bind(this, 'shareToUser')}>
                 {gettext('Share to user')}
               </NavLink>
             </NavItem>
-            <NavItem className="sf-nav-item">
-              <NavLink className={`sf-nav-link ${activeTab === 'shareToGroup' ? 'active' : ''}`} onClick={this.toggle.bind(this, 'shareToGroup')}>
+            <NavItem>
+              <NavLink className={activeTab === 'shareToGroup' ? 'active' : ''} onClick={this.toggle.bind(this, 'shareToGroup')}>
                 {gettext('Share to group')}
               </NavLink>
             </NavItem>
@@ -83,10 +83,10 @@ class ShareDialog extends React.Component {
     return (
       <Fragment>
         <div className="share-dialog-side">
-          <Nav pills className="sf-nav">
-            <NavItem className="sf-nav-item">
+          <Nav pills className="sf-nav-pills">
+            <NavItem>
               <NavLink
-                className={`sf-nav-link ${activeTab === 'shareLink' ? 'active' : ''}`} onClick={() => {this.toggle.bind(this, 'shareLink');}}>
+                className={activeTab === 'shareLink' ? 'active' : ''} onClick={() => {this.toggle.bind(this, 'shareLink');}}>
                 {gettext('Share Link')}
               </NavLink>
             </NavItem>
