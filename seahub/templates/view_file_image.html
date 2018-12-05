@@ -25,11 +25,18 @@
 {% block extra_script %}{{ block.super }}
 <script type="text/javascript">
 {% if enable_thumbnail and not repo.encrypted and fileext != 'gif' %}
+    var try_time = 0;
     var encoded_path = encodePath('{{ path|escapejs }}'); // path: '/Portrait_8.jpg'
     $('#image-view')
     .attr('src', '{{ SITE_ROOT }}thumbnail/{{ repo.id }}/{{ thumbnail_size_for_original }}' + encoded_path)
     .on('error', function() { // fail to load thumbnail
-        $(this).attr('src', '{{ raw_path|escapejs }}');
+        try_time++;
+        if (try_time == 1) { // only try once
+            $(this).attr('src', '{{ raw_path|escapejs }}');
+        } else {
+            $('#file-view').removeClass('image-file-view')
+            .html('<div id="file-view-tip"><p class="error">{% trans "This file cannot be viewed online." %}</p><a href="?dl=1" class="sf-btn-link big-btn-link">{% trans "Download" %}</a></div>');
+        }
     })
 {% else %}
     $('#image-view').attr('src', '{{ raw_path|escapejs }}');
