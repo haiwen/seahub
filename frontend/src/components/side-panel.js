@@ -6,7 +6,7 @@ import SideNavFooter from './side-nav-footer';
 
 const propTypes = {
   isSidePanelClosed: PropTypes.bool.isRequired,
-  currentTab: PropTypes.string.isRequired,
+  currentTab: PropTypes.oneOfType([PropTypes.string, PropTypes.number]).isRequired,
   onCloseSidePanel: PropTypes.func.isRequired,
   tabItemClick: PropTypes.func.isRequired,
   draftCounts: PropTypes.number,

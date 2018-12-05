@@ -8,7 +8,7 @@ import { Badge } from 'reactstrap';
 import { canViewOrg } from '../utils/constants';
 
 const propTypes = {
-  currentTab: PropTypes.string.isRequired,
+  currentTab: PropTypes.oneOfType([PropTypes.string, PropTypes.number]).isRequired,
   tabItemClick: PropTypes.func.isRequired,
   draftCounts: PropTypes.number,
 };
@@ -68,7 +68,7 @@ class MainSideNav extends React.Component {
     return (
       <ul className={`nav sub-nav nav-pills flex-column grp-list ${this.state.groupsExtended ? 'side-panel-slide' : 'side-panel-slide-up'}`} style={style}>
         <li className="nav-item sf-nav-item"> 
-          <Link className={`nav-link sf-nav-link ellipsis ${this.getActiveClass('groups')}`} href={siteRoot + '#groups/'} onClick={() => this.tabItemClick('groups')}>
+          <Link to={siteRoot + 'groups/'}  className={`nav-link sf-nav-link ellipsis ${this.getActiveClass('groups')}`} onClick={() => this.tabItemClick('groups')}>
             <span className="sharp" aria-hidden="true">#</span>
             {gettext('All Groups')}
           </Link>
@@ -76,7 +76,7 @@ class MainSideNav extends React.Component {
         {this.state.groupItems.map(item => {
           return (
             <li key={item.id} className="nav-item sf-nav-item"> 
-              <Link href={siteRoot + '#group/' + item.id + '/'} className={`nav-link sf-nav-link ellipsis ${this.getActiveClass(item.id)}`} onClick={() => this.tabItemClick(item.id)}>
+              <Link to={siteRoot + 'group/' + item.id + '/'} className={`nav-link sf-nav-link ellipsis ${this.getActiveClass(item.id)}`} onClick={() => this.tabItemClick(item.id)}>
                 <span className="sharp" aria-hidden="true">#</span>
                 {item.name}
               </Link>
