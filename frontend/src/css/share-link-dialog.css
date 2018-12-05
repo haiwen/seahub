@@ -64,24 +64,9 @@
     margin-top: 1.125rem;
 }
 
-a.nav-link {
-    display: block;
+.share-dialog .sf-nav .sf-nav-item .sf-nav-link {
     padding: 0.3125rem 1rem 0.3125rem 0.25rem;
-    border-radius: 0.25rem;
-    color: #747476;
     font-size: 0.875rem;
-    outline: none;
-    text-decoration: none;
-    transition: none;
-}
-
-a.nav-link.active {
-  color: #ffffff !important;
-  background-color: #feac74;
-}
-
-a.nav-link.active:hover {
-    color: #ffffff;
 }
 
 input.expire-input {
