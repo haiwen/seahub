@@ -267,21 +267,6 @@ def get_group_message_json(group_id, msg_id, get_all_replies):
         return None
     return group_msg_to_json(msg, get_all_replies)
 
-def get_email(id_or_email):
-    try:
-        uid = int(id_or_email)
-        try:
-            user = User.objects.get(id=uid)
-        except User.DoesNotExist:
-            user = None
-        if not user:
-            return None
-        to_email = user.email
-    except ValueError:
-        to_email = id_or_email
-
-    return to_email
-
 def api_group_check(func):
     """
     Decorator for initial group permission check tasks
