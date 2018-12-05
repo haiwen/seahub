@@ -11,7 +11,6 @@ import Tree from './components/tree-view/tree';
 import Toast from './components/toast';
 import Dirent from './models/dirent';
 import FileTag from './models/file-tag';
-import 'seafile-ui';
 import './assets/css/fa-solid.css';
 import './assets/css/fa-regular.css';
 import './assets/css/fontawesome.css';

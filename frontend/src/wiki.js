@@ -7,7 +7,6 @@ import { slug, repoID, siteRoot, initialPath } from './utils/constants';
 import editorUtilities from './utils/editor-utilties';
 import Node from './components/tree-view/node';
 import Tree from './components/tree-view/tree';
-import 'seafile-ui';
 import './assets/css/fa-solid.css';
 import './assets/css/fa-regular.css';
 import './assets/css/fontawesome.css';
