@@ -32,6 +32,7 @@ def is_draft_file(repo_id, file_path):
     is_draft = False
     review_id = None
     draft_id = None
+    review_status = None
 
     file_path = normalize_file_path(file_path)
 
@@ -42,16 +43,19 @@ def is_draft_file(repo_id, file_path):
         draft_id = draft.id
         if hasattr(draft, 'draftreview'):
             review_id = draft.draftreview.id
+            review_status = draft.draftreview.status
     except Draft.DoesNotExist:
         pass
 
-    return is_draft, review_id, draft_id
+    return is_draft, review_id, draft_id, review_status
+
 
 def has_draft_file(repo_id, file_path):
     has_draft = False
     draft_file_path = None
     draft_id = None
     review_id = None
+    review_status = None
 
     file_path = normalize_file_path(file_path)
     parent_path = os.path.dirname(file_path)
@@ -66,6 +70,7 @@ def has_draft_file(repo_id, file_path):
             draft = Draft.objects.get(origin_file_uuid=file_uuid)
             if hasattr(draft, 'draftreview'):
                 review_id = draft.draftreview.id
+                review_status = draft.draftreview.status
 
             draft_id = draft.id
             has_draft = True
@@ -73,4 +78,4 @@ def has_draft_file(repo_id, file_path):
         except Draft.DoesNotExist:
             pass
 
-    return has_draft, draft_file_path, draft_id, review_id
+    return has_draft, draft_file_path, draft_id, review_id, review_status

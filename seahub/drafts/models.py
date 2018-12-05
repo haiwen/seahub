@@ -80,15 +80,19 @@ class Draft(TimestampedModel):
     # class Meta:
     #     unique_together = (('username', 'draft_repo_id'), )
 
-    def delete(self):
+    def delete(self, operator):
         draft_file_name = os.path.basename(self.draft_file_path)
         draft_file_path = os.path.dirname(self.draft_file_path)
         seafile_api.del_file(self.origin_repo_id, draft_file_path,
-                             draft_file_name, self.username)
+                             draft_file_name, operator)
+
+        if hasattr(self, 'draftreview'):
+            if self.draftreview.status == 'closed':
+                self.draftreview.delete()
 
         super(Draft, self).delete()
 
-    def publish(self):
+    def publish(self, operator):
         # check whether origin file is updated
         r_repo = seafile_api.get_repo(self.origin_repo_id)
         if not r_repo:
@@ -122,7 +126,7 @@ class Draft(TimestampedModel):
             self.origin_repo_id, draft_file_path, draft_file_name,
             self.origin_repo_id, self.origin_file_uuid.parent_path,
             file_name, replace=1,
-            username=self.username, need_progress=0, synchronous=1
+            username=operator, need_progress=0, synchronous=1
         )
 
     def to_dict(self):
@@ -254,6 +258,47 @@ class DraftReview(TimestampedModel):
             'created_at': datetime_to_isoformat_timestr(self.created_at),
             'updated_at': datetime_to_isoformat_timestr(self.updated_at),
         }
+
+    def delete(self):
+        super(DraftReview, self).delete()
+
+    def close(self):
+        self.status = 'closed'
+        self.save()
+
+    def publish(self, operator):
+        uuid = self.origin_file_uuid
+        origin_file_path = posixpath.join(uuid.parent_path, uuid.filename)
+
+        # if it is a new draft
+        # case1. '/path/test(draft).md' ---> '/path/test.md'
+        # case2. '/path/test(dra.md' ---> '/path/test(dra.md'
+        new_draft_dir = os.path.dirname(origin_file_path)
+        new_draft_name = os.path.basename(origin_file_path)
+
+        if self.draft_file_path == origin_file_path:
+            draft_flag = os.path.splitext(new_draft_name)[0][-7:]
+            # remove `(draft)` from file name
+            if draft_flag == '(draft)':
+                f = os.path.splitext(new_draft_name)[0][:-7]
+                file_type = os.path.splitext(new_draft_name)[-1]
+                new_draft_name = f + file_type
+
+            if new_draft_dir == '/':
+                origin_file_path = new_draft_dir + new_draft_name
+            else:
+                origin_file_path = new_draft_dir + '/' + new_draft_name
+
+            self.draft_file_path = origin_file_path
+
+        self.draft_id.publish(operator=operator)
+
+        # get draft published version
+        file_id = seafile_api.get_file_id_by_path(self.origin_repo_id, origin_file_path)
+        self.publish_file_version = file_id
+        self.status = 'finished'
+        self.save()
+        self.draft_id.delete(operator=operator)
 
 
 class ReviewCommentManager(models.Manager):
