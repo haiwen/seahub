@@ -197,14 +197,14 @@ module.exports = {
               {
                 loader: require.resolve('style-loader'),
                 options: {
-                  insertAt: 'top',
+                  insertAt: 'bottom',
                 },
               },
               {
                 loader: require.resolve('css-loader'),
                 options: {
                   importLoaders: 1,
-                  insertAt: 'top',
+                  insertAt: 'bottom',
                 },
               },
               {

@@ -22,7 +22,6 @@ import Groups from './pages/group/groups';
 import Group from './pages/group/group';
 import MainContentWrapper from './components/main-content-wrapper';
 
-import 'seafile-ui';
 import './assets/css/fa-solid.css';
 import './assets/css/fa-regular.css';
 import './assets/css/fontawesome.css';

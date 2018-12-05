@@ -25,7 +25,6 @@ import HistoryList from './pages/review/history-list';
 import Plain from 'slate-plain-serializer';
 import { Document, Block, Value } from 'slate';
 
-import 'seafile-ui';
 import './assets/css/fa-solid.css';
 import './assets/css/fa-regular.css';
 import './assets/css/fontawesome.css';
