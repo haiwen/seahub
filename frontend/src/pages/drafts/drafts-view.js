@@ -23,12 +23,12 @@ class DraftsView extends React.Component {
       <div className="main-panel-center">
         <div className="cur-view-container">
           <div className="cur-view-path">
-            <ul className="tab-tabs-nav">
-              <li className={`tab ${this.props.currentTab === 'drafts' ? 'ui-state-active': ''}`} onClick={() => this.tabItemClick('drafts')}>
-                <Link  className='a' to={siteRoot + 'drafts/'} title={gettext('Drafts')}>{gettext('Drafts')}</Link>
+            <ul className="nav">
+              <li className="nav-item"  onClick={() => this.tabItemClick('drafts')}>
+                <Link className={`nav-link ${this.props.currentTab === 'drafts' ? 'active': ''}`} to={siteRoot + 'drafts/'} title={gettext('Drafts')}>{gettext('Drafts')}</Link>
               </li>
-              <li className={`tab ${this.props.currentTab === 'reviews' ? 'ui-state-active': ''}`} onClick={() => this.tabItemClick('reviews')}>
-                <Link  className='a' to={siteRoot + 'drafts/reviews/'} title={gettext('reviews')}>{gettext('Reviews')}</Link>
+              <li className="nav-item" onClick={() => this.tabItemClick('reviews')}>
+                <Link className={`nav-link ${this.props.currentTab === 'reviews' ? 'active': ''}`} to={siteRoot + 'drafts/reviews/'} title={gettext('reviews')}>{gettext('Reviews')}</Link>
               </li>
             </ul>
           </div>

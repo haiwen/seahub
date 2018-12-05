@@ -454,6 +454,22 @@ a.op-icon:focus {
 }
 
 /* sf-nav-link */
+.nav .nav-item {
+    padding: 0;
+}
+.nav .nav-item .nav-link{
+    margin-right: 0.5rem;
+    padding: 0.5rem 0;
+    color: #8A948F;
+    font-weight: normal;
+}
+
+.nav .nav-item .nav-link.active {
+    color: #eb8205;
+    text-decoration: none;
+    border-bottom: 0.125rem solid #eb8205;
+}
+
 .side-nav .nav-container {
     margin-bottom: 1rem;
 }
@@ -465,7 +481,7 @@ a.op-icon:focus {
 
 .sf-nav-pills.nav .nav-item .nav-link {
     display: block;
-    padding: 0.25rem 0.25rem 0.25rem 0;
+    padding: 0.25rem;
     transition: none;
     color: #333;
 }
@@ -496,9 +512,9 @@ a.op-icon:focus {
 .sf-nav-pills.nav .nav-item .nav-link.active,
 .sf-nav-pills.nav .nav-item .nav-link.active [class^="sf2-icon-"],
 .sf-nav-pills.nav .nav-item .nav-link.active .sharp {
-    border-radius: 0.125rem;
     background-color: #feac74;
     color: #fff;
+    border: none;
 }
 
 .nav .nav-item .nav-link .toggle-icon {

@@ -29,7 +29,7 @@ class ReviewListView extends React.Component {
     let items = this.props.itemsList;
     return (
       <Fragment>
-        <Nav tabs>
+        <Nav pills className="sf-nav-pills">
           <NavItem>
             <NavLink
               className={classnames({ active: this.props.activeTab === 'open' })}
