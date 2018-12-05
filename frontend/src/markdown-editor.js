@@ -12,6 +12,7 @@ let protocol = window.app.pageOptions.protocol;
 let mode = window.app.pageOptions.mode;
 let draftID = window.app.pageOptions.draftID;
 let reviewID = window.app.pageOptions.reviewID;
+let reviewStatus = window.app.pageOptions.reviewStatus;
 let isDraft = window.app.pageOptions.isDraft;
 let hasDraft = window.app.pageOptions.hasDraft;
 let draftFilePath = window.app.pageOptions.draftFilePath;
@@ -317,6 +318,7 @@ class MarkdownEditor extends React.Component {
           mode={mode}
           draftID={draftID}
           reviewID={reviewID}
+          reviewStatus={reviewStatus}
           isDraft={isDraft}
           hasDraft={hasDraft}
         />
