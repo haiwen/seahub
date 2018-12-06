@@ -1,0 +1,82 @@
+.share-dialog {
+    color: #333;
+    font-size: 0.8125rem;
+}
+
+.share-dialog .share-dialog-content {
+    padding: 1rem 1rem 2rem;
+    min-height: 15rem;
+    display: flex;
+    flex-direction: row;
+}
+
+.share-dialog-content .share-dialog-side {
+    display: flex;
+    flex: 0 0 22%;
+}
+
+.share-dialog-content .share-dialog-side .nav {
+    flex-direction: column;
+}
+
+.share-dialog-content .share-dialog-main {
+    display: flex;
+    flex: 0 0 78%;
+}
+.share-dialog-content .share-dialog-main .tab-content {
+    flex: 1;
+}
+
+.share-dialog-content label {
+    font-weight: bold;
+    padding: 0.5rem 0 0.25rem;
+}
+
+.share-dialog-content label.form-check-label {
+    font-weight: normal;
+    padding: 0.25rem 0;
+}
+
+.link-operation-content {
+    margin-left: 1.25rem;
+}
+
+.link-operation-icon {
+    color: #9aa0ac;
+}
+
+.tip {
+    color: #808080;
+    font-size: 0.75rem;
+    margin-bottom: 1rem;
+}
+
+.generate-share-link .passwd,
+.generate-upload-link .passwd {
+    width: 60%;
+}
+
+.generate-share-link .permission {
+    margin-left: 1.25rem;
+}
+
+.generate-link-btn {
+    margin-top: 1.125rem;
+}
+
+.share-dialog .nav .nav-item .nav-link {
+    padding: 0.3125rem 1rem 0.3125rem 0.25rem;
+    font-size: 0.875rem;
+}
+
+.share-dialog .nav .nav-item .nav-link.active {
+    font-weight: normal;
+}
+
+input.expire-input {
+    display: inline-block;
+    width: 5rem;
+    height: 1.5rem;
+    margin: 0 0.25rem 0 1.25rem;
+}
+
