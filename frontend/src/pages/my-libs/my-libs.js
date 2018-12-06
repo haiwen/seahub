@@ -58,13 +58,13 @@ class Content extends Component {
       const desktopThead = (
         <thead>
           <tr>
-            <th width="8%"><span className="sr-only">{gettext("Library Type")}</span></th>
-            <th width="34%">{gettext("Name")}<a className="table-sort-op by-name" href="#">{/*TODO: sort*/}<span className="sort-icon icon-caret-down hide"></span></a></th>
-            <th width="24%"><span className="sr-only">{gettext("Actions")}</span></th>
+            <th width="4%"><span className="sr-only">{gettext("Library Type")}</span></th>
+            <th width="42%">{gettext("Name")}<a className="table-sort-op by-name" href="#">{/*TODO: sort*/}<span className="sort-icon icon-caret-down hide"></span></a></th>
+            <th width="14%"><span className="sr-only">{gettext("Actions")}</span></th>
 
-            <th width={showStorageBackend ? '14%' : '20%'}>{gettext("Size")}</th>
+            <th width={showStorageBackend ? '15%' : '20%'}>{gettext("Size")}</th>
             {showStorageBackend ? <th width="10%">{gettext('Storage backend')}</th> : null}
-            <th width={showStorageBackend ? '10%' : '14%'}>{gettext("Last Update")}<a className="table-sort-op by-time" href="#">{/*TODO: sort*/}<span className="sort-icon icon-caret-up"></span></a></th>
+            <th width={showStorageBackend ? '15%' : '20%'}>{gettext("Last Update")}<a className="table-sort-op by-time" href="#">{/*TODO: sort*/}<span className="sort-icon icon-caret-up"></span></a></th>
           </tr>
         </thead>
       );

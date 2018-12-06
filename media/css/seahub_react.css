@@ -261,7 +261,7 @@ ul,ol,li {
 }
 .op-icon.sf2-x:hover,
 .op-icon.sf2-x:focus {
-    text-decoration: underline;
+    border-bottom: 0.125rem solid #f89a68;;
 }
 
 /** Account info **/
@@ -420,7 +420,6 @@ a.op-icon:focus {
 
 .nav-pills .nav-item .nav-link.active {
     background-color: #feac74;
-    font-weight: bold;
     color: #fff;
     border: none;
 }
@@ -471,7 +470,7 @@ a.op-icon:focus {
     margin-left:auto;
 }
 
-.side-nav-con .nav {
+.side-nav-con>.nav {
     margin-bottom: 1rem;
 }
 
@@ -481,15 +480,17 @@ a.op-icon:focus {
     padding-right: 0;
     margin-right: 0;
 }
+.side-nav-con .active .sharp,
+.side-nav-con .active .nav-text {
+    font-weight: bold;
+}
 
 .side-nav-con .active [class^="sf2-icon-"],
 .side-nav-con .active .sharp {
-    background-color: #feac74;
     color: #fff;
-    border: none;
 }
 
-.side-nav-con  [class^="sf2-icon-"] {
+.side-nav-con [class^="sf2-icon-"] {
     display:inline-block;
     width:2.625rem;
     margin-right:0.325rem;
@@ -500,7 +501,7 @@ a.op-icon:focus {
     color:#999;
 }
 
-.side-nav-con  .sharp {
+.side-nav-con .sharp {
     display:inline-block;
     width:2.625rem;
     margin-right:0.25rem;
@@ -508,7 +509,8 @@ a.op-icon:focus {
     color:#aaa;
 }
 
-.side-nav-con  .toggle-icon {
+.side-nav-con .toggle-icon {
+    margin-right: 0.25rem;
     height: 1.5rem;
     display: flex;
     align-items: center;
@@ -516,12 +518,12 @@ a.op-icon:focus {
     color:#999;
 }
 
-.side-nav-con  .draft-info {
+.side-nav-con .draft-info {
     position: relative;
     line-height: 1.5rem;
 }
 
-.side-nav-con  .draft-info .badge {
+.side-nav-con .draft-info .badge {
     right: -1.5rem;
 }
 

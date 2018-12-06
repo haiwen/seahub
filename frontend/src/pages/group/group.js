@@ -137,7 +137,7 @@ class Content extends Component {
       };
 
       const table = (
-        <table className="table table-hover table-vcenter">
+        <table>
           {window.innerWidth >= 768 ? desktopThead : mobileThead}
           <TableBody items={items} extra={extraData} />
         </table>
@@ -185,7 +185,17 @@ class Group extends Component {
   }
 
   componentDidMount() {
-    seafileAPI.getGroup(this.props.groupID).then((res) => {
+    this.updateGroupRepoList(this.props.groupID);
+  }
+
+  componentWillReceiveProps(nextProps) {
+    if (nextProps.groupID !== this.props.groupID) {
+      this.updateGroupRepoList(nextProps.groupID);
+    }
+  }
+
+  updateGroupRepoList = (groupID) => {
+    seafileAPI.getGroup(groupID).then((res) => {
       // res: {data: {...}, status: 200, statusText: "OK", headers: {…}, config: {…}, …}
       this.setState({
         groupMetaInfo: {

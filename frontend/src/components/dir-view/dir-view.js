@@ -108,7 +108,7 @@ class DirView extends React.Component {
   
   onAddFile = (filePath, isDraft) => {
     let repoID = this.state.repoID;
-    seafileAPI.createDir(repoID, filePath).then(() => {
+    seafileAPI.createFile(repoID, filePath, isDraft).then(() => {
       let name = Utils.getFileName(filePath);
       let dirent = this.createDirent(name, 'file');
       let direntList = this.addItem(dirent, 'file');

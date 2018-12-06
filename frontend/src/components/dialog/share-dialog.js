@@ -35,7 +35,7 @@ class ShareDialog extends React.Component {
     return (
       <Fragment>
         <div className="share-dialog-side">
-          <Nav pills>
+          <Nav pills vertical>
             <NavItem>
               <NavLink className={activeTab === 'shareLink' ? 'active' : ''} onClick={this.toggle.bind(this, 'shareLink')}>
                 {gettext('Share Link')}
@@ -83,7 +83,7 @@ class ShareDialog extends React.Component {
     return (
       <Fragment>
         <div className="share-dialog-side">
-          <Nav pills>
+          <Nav pills vertical>
             <NavItem>
               <NavLink
                 className={activeTab === 'shareLink' ? 'active' : ''} onClick={() => {this.toggle.bind(this, 'shareLink');}}>
