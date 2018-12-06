@@ -59,7 +59,7 @@ class Content extends Component {
         <thead>
           <tr>
             <th width="4%"><span className="sr-only">{gettext("Library Type")}</span></th>
-            <th width="42%%">{gettext("Name")}<a className="table-sort-op by-name" href="#">{/*TODO: sort*/}<span className="sort-icon icon-caret-down hide"></span></a></th>
+            <th width="42%">{gettext("Name")}<a className="table-sort-op by-name" href="#">{/*TODO: sort*/}<span className="sort-icon icon-caret-down hide"></span></a></th>
             <th width="14%"><span className="sr-only">{gettext("Actions")}</span></th>
 
             <th width={showStorageBackend ? '15%' : '20%'}>{gettext("Size")}</th>
