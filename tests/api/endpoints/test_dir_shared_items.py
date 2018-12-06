@@ -244,6 +244,7 @@ class DirSharedItemsTest(BaseTestCase):
         json_resp = json.loads(resp.content)
         assert 'has been shared to' in json_resp['failed'][0]['error_msg']
 
+    @pytest.mark.skipif(TRAVIS, reason="") # pylint: disable=E1101
     def test_can_share_repo_to_groups_with_perms(self):
         self.login_as(self.user)
 
