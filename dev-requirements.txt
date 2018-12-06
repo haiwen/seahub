@@ -2,6 +2,8 @@
 
 fabric==1.14.0
 transifex-client
-mysqlclient==1.3.12
-
 raven==5.0.0
+
+mysqlclient==1.3.12
+pycrypto==2.6.1
+psd-tools==1.4
