@@ -1767,10 +1767,6 @@ button.sf-dropdown-toggle:focus {
         width: 100% !important;
         border-right: none !important;
     }
-
-    #pdf {
-        width: 95% !important;
-    }
 }
 
 /**** discussions/comments ****/
@@ -3190,47 +3186,6 @@ button.sf-dropdown-toggle:focus {
 .anchor:hover {
    text-decoration:none;
 }
-#pdf {
-    width:950px;
-    margin:0 auto;
-}
-.pdf-page {
-    position:relative;
-}
-.pdf-page-canvas {
-    display:block;
-    max-width:100%;
-    box-shadow:0 0 6px #ccc;
-    margin:0 auto 20px;
-}
-.pdf-page-text-layer {
-    position:absolute;
-    left:0;
-    top:0;
-    right:0;
-    bottom:0;
-    overflow:hidden;
-    opacity:0.2;
-    line-height:1.0;
-}
-.pdf-page-text-layer > div {
-    color:transparent;
-    position:absolute;
-    white-space:pre;
-    cursor:text;
-    -webkit-transform-origin:0% 0%;
-    -moz-transform-origin:0% 0%;
-    -o-transform-origin:0% 0%;
-    -ms-transform-origin:0% 0%;
-    transform-origin:0% 0%;
-}
-.pdf-page-text-layer ::selection {
-    background: blue;
-}
-.pdf-page-text-layer ::-moz-selection {
-    background: blue;
-}
-
 #doc-view {
     min-height:700px;
     _height:700px;
@@ -3350,10 +3305,13 @@ button.sf-dropdown-toggle:focus {
     height: 30px;
 }
 @media (max-width: 991.98px){
+    #main #shared-file-view-hd {
+        width: 100%;
+        padding: 10px;
+    }
     .video-container {
         margin: 0 auto;
         width: 80%;
-        height: 80%;
     }
     .sf-video-dimensions {
         width: 100%;

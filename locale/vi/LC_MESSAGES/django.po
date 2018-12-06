@@ -7,9 +7,9 @@ msgid ""
 msgstr ""
 "Project-Id-Version: seahub\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2018-09-17 12:05+0800\n"
-"PO-Revision-Date: 2018-09-17 04:07+0000\n"
-"Last-Translator: ldphuong <ldphuong@gmail.com>\n"
+"POT-Creation-Date: 2018-11-29 14:09+0800\n"
+"PO-Revision-Date: 2018-11-29 06:13+0000\n"
+"Last-Translator: zheng xie <xiez1989@gmail.com>\n"
 "Language-Team: Vietnamese (http://www.transifex.com/haiwen/seahub/language/vi/)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -22,7 +22,7 @@ msgid "Name is too long (maximum is 64 characters)"
 msgstr ""
 
 #: seahub/api2/endpoints/admin/account.py:199 seahub/forms.py:44
-#: seahub/profile/forms.py:17 seahub/templates/sysadmin/userinfo.html:404
+#: seahub/profile/forms.py:17 seahub/templates/sysadmin/userinfo.html:427
 #: seahub/templates/wiki/wiki_list.html:379
 msgid "Name should not include '/'."
 msgstr ""
@@ -55,7 +55,7 @@ msgid "Space quota is too low (minimum value is 0)"
 msgstr "Định mức quá thấp (tối thiểu là 0)"
 
 #: seahub/api2/endpoints/admin/account.py:259 seahub/institutions/views.py:213
-#: seahub/organizations/views.py:928 seahub/views/sysadmin.py:788
+#: seahub/organizations/views.py:928 seahub/views/sysadmin.py:850
 #, python-format
 msgid "Failed to set quota: maximum quota is %d MB"
 msgstr "Thiết lập Quota thất bại: quota tối đa là %d MB"
@@ -79,30 +79,30 @@ msgstr ""
 
 #: seahub/api2/endpoints/admin/default_library.py:31
 #: seahub/api2/endpoints/admin/default_library.py:32
-#: seahub/views/__init__.py:639 seahub/views/__init__.py:640
-#: seahub/views/__init__.py:645 seahub/views/__init__.py:646
+#: seahub/views/__init__.py:629 seahub/views/__init__.py:630
+#: seahub/views/__init__.py:635 seahub/views/__init__.py:636
 msgid "My Library"
 msgstr "Thư viện của tôi"
 
-#: seahub/api2/endpoints/admin/groups.py:118
+#: seahub/api2/endpoints/admin/groups.py:120
 #: seahub/api2/endpoints/groups.py:156 seahub/api2/endpoints/groups.py:232
 #: seahub/group/forms.py:36
 msgid ""
 "Group name can only contain letters, numbers, blank, hyphen or underscore"
 msgstr "Tên nhóm chỉ gồm ký tự, số, khoản trắng, gạch nối, gạch dưới"
 
-#: seahub/api2/endpoints/admin/groups.py:123
+#: seahub/api2/endpoints/admin/groups.py:125
 #: seahub/api2/endpoints/groups.py:161 seahub/api2/endpoints/groups.py:237
 msgid "There is already a group with that name."
 msgstr "Đã tồn tại tên nhóm này"
 
-#: seahub/api2/endpoints/admin/groups.py:199
+#: seahub/api2/endpoints/admin/groups.py:201
 #: seahub/api2/endpoints/groups.py:262
 #, python-format
 msgid "User %s is already group owner."
 msgstr ""
 
-#: seahub/api2/endpoints/admin/libraries.py:226 seahub/views/sysadmin.py:1764
+#: seahub/api2/endpoints/admin/libraries.py:226 seahub/views/sysadmin.py:1826
 msgid "System library can not be deleted."
 msgstr "Không thể xóa thư viện hệ thống."
 
@@ -112,8 +112,8 @@ msgid "User %s is already library owner."
 msgstr ""
 
 #: seahub/api2/endpoints/admin/shares.py:189
-#: seahub/api2/endpoints/invitations.py:49
-#: seahub/api2/endpoints/invitations.py:106
+#: seahub/api2/endpoints/invitations.py:50
+#: seahub/api2/endpoints/invitations.py:110
 #, python-format
 msgid "Email %s invalid."
 msgstr ""
@@ -122,10 +122,224 @@ msgstr ""
 #: seahub/api2/endpoints/admin/shares.py:264
 #: seahub/api2/endpoints/dir_shared_items.py:331
 #: seahub/api2/endpoints/dir_shared_items.py:430
-#: seahub/api2/endpoints/group_owned_libraries.py:929
-#: seahub/api2/endpoints/group_owned_libraries.py:1197
+#: seahub/api2/endpoints/group_owned_libraries.py:930
+#: seahub/api2/endpoints/group_owned_libraries.py:1198
 #, python-format
 msgid "This item has been shared to %s."
+msgstr ""
+
+#: seahub/api2/endpoints/admin/statistics.py:219
+#: seahub/notifications/templates/notifications/notice_email.html:20
+#: seahub/notifications/templates/notifications/user_notification_list.html:23
+#: seahub/organizations/templates/organizations/pubgrp.html:17
+#: seahub/templates/file_revisions.html:39
+#: seahub/templates/js/sysadmin-templates.html:290
+#: seahub/templates/js/sysadmin-templates.html:939
+#: seahub/templates/js/sysadmin-templates.html:979
+#: seahub/templates/repo_history.html:33 seahub/templates/repo_history.html:40
+msgid "Time"
+msgstr "Thời gian"
+
+#: seahub/api2/endpoints/admin/statistics.py:219
+#: seahub/organizations/templates/organizations/org_file_audit.html:17
+#: seahub/organizations/templates/organizations/org_file_update.html:17
+#: seahub/templates/file_access.html:24
+#: seahub/templates/js/sysadmin-templates.html:230
+#: seahub/templates/js/sysadmin-templates.html:285
+#: seahub/templates/js/sysadmin-templates.html:783
+#: seahub/templates/js/templates.html:1360
+#: seahub/templates/js/templates.html:1747
+#: seahub/templates/js/templates.html:2318
+#: seahub/templates/sysadmin/settings.html:60
+#: seahub/templates/sysadmin/sys_trafficadmin.html:35
+msgid "User"
+msgstr "Người dùng"
+
+#: seahub/api2/endpoints/admin/statistics.py:219
+#: seahub/templates/sysadmin/sys_trafficadmin.html:60
+msgid "Web Download"
+msgstr ""
+
+#: seahub/api2/endpoints/admin/statistics.py:220
+#: seahub/templates/sysadmin/sys_trafficadmin.html:48
+msgid "Sync Download"
+msgstr ""
+
+#: seahub/api2/endpoints/admin/statistics.py:220
+msgid "Link Download"
+msgstr ""
+
+#: seahub/api2/endpoints/admin/statistics.py:221
+#: seahub/templates/sysadmin/sys_trafficadmin.html:54
+msgid "Web Upload"
+msgstr ""
+
+#: seahub/api2/endpoints/admin/statistics.py:221
+#: seahub/templates/sysadmin/sys_trafficadmin.html:42
+msgid "Sync Upload"
+msgstr ""
+
+#: seahub/api2/endpoints/admin/statistics.py:222
+msgid "Link Upload"
+msgstr ""
+
+#: seahub/api2/endpoints/admin/statistics.py:264
+#: seahub/base/management/commands/export_users.py:43
+#: seahub/base/management/commands/export_users.py:47
+#: seahub/contacts/templates/contacts/contact_list.html:44
+#: seahub/contacts/templates/contacts/contact_list.html:53
+#: seahub/institutions/templates/institutions/user_info.html:26
+#: seahub/institutions/templates/institutions/useradmin.html:16
+#: seahub/institutions/templates/institutions/useradmin_search.html:10
+#: seahub/institutions/templates/institutions/useradmin_search.html:19
+#: seahub/invitations/templates/invitations/token_view.html:10
+#: seahub/organizations/templates/organizations/org_repo_admin.html:30
+#: seahub/organizations/templates/organizations/org_repo_search.html:28
+#: seahub/organizations/templates/organizations/org_user_admin.html:24
+#: seahub/organizations/templates/organizations/user_search.html:10
+#: seahub/organizations/templates/organizations/userinfo.html:21
+#: seahub/share/templates/share/share_link_audit.html:9
+#: seahub/templates/js/admin-common-templates.html:53
+#: seahub/templates/js/templates.html:2758
+#: seahub/templates/js/templates.html:2791
+#: seahub/templates/registration/registration_form.html:22
+#: seahub/templates/sysadmin/sys_inst_info_admins.html:15
+#: seahub/templates/sysadmin/sys_inst_info_user.html:23
+#: seahub/templates/sysadmin/sys_inst_info_user.html:31
+#: seahub/templates/sysadmin/sys_inst_search_user.html:8
+#: seahub/templates/sysadmin/sys_inst_search_user.html:17
+#: seahub/templates/sysadmin/sys_org_info_user.html:16
+#: seahub/templates/sysadmin/sys_org_info_user.html:62
+#: seahub/templates/sysadmin/sys_useradmin.html:43
+#: seahub/templates/sysadmin/sys_useradmin_ldap.html:26
+#: seahub/templates/sysadmin/user_search.html:10
+#: seahub/templates/sysadmin/userinfo.html:35 seahub/views/sysadmin.py:398
+#: seahub/views/sysadmin.py:402 seahub/views/sysadmin.py:1958
+msgid "Email"
+msgstr "Email"
+
+#: seahub/api2/endpoints/admin/statistics.py:264
+#: seahub/base/management/commands/export_users.py:43
+#: seahub/base/management/commands/export_users.py:47
+#: seahub/contacts/templates/contacts/contact_list.html:18
+#: seahub/group/templates/group/group_wiki.html:45
+#: seahub/group/templates/group/group_wiki.html:90
+#: seahub/group/templates/group/group_wiki_pages.html:29
+#: seahub/institutions/templates/institutions/info.html:10
+#: seahub/institutions/templates/institutions/user_info.html:61
+#: seahub/institutions/templates/institutions/user_info.html:105
+#: seahub/institutions/templates/institutions/useradmin.html:16
+#: seahub/institutions/templates/institutions/useradmin_search.html:19
+#: seahub/organizations/templates/organizations/org_admin_group_info.html:16
+#: seahub/organizations/templates/organizations/org_admin_group_info.html:39
+#: seahub/organizations/templates/organizations/org_group_admin.html:11
+#: seahub/organizations/templates/organizations/org_publink_admin.html:11
+#: seahub/organizations/templates/organizations/org_repo_search.html:11
+#: seahub/organizations/templates/organizations/org_repoadmin_table.html:6
+#: seahub/organizations/templates/organizations/org_users_table.html:4
+#: seahub/organizations/templates/organizations/pubrepo.html:16
+#: seahub/organizations/templates/organizations/userinfo.html:69
+#: seahub/organizations/templates/organizations/userinfo.html:101
+#: seahub/templates/js/admin-common-templates.html:72
+#: seahub/templates/js/admin-common-templates.html:99
+#: seahub/templates/js/admin-common-templates.html:119
+#: seahub/templates/js/admin-common-templates.html:138
+#: seahub/templates/js/admin-common-templates.html:173
+#: seahub/templates/js/admin-common-templates.html:210
+#: seahub/templates/js/lib-op-popups.html:6
+#: seahub/templates/js/lib-op-popups.html:17
+#: seahub/templates/js/sysadmin-templates.html:358
+#: seahub/templates/js/sysadmin-templates.html:380
+#: seahub/templates/js/sysadmin-templates.html:394
+#: seahub/templates/js/sysadmin-templates.html:406
+#: seahub/templates/js/sysadmin-templates.html:465
+#: seahub/templates/js/sysadmin-templates.html:491
+#: seahub/templates/js/sysadmin-templates.html:538
+#: seahub/templates/js/sysadmin-templates.html:619
+#: seahub/templates/js/sysadmin-templates.html:642
+#: seahub/templates/js/sysadmin-templates.html:651
+#: seahub/templates/js/sysadmin-templates.html:668
+#: seahub/templates/js/sysadmin-templates.html:870
+#: seahub/templates/js/sysadmin-templates.html:908
+#: seahub/templates/js/sysadmin-templates.html:936
+#: seahub/templates/js/sysadmin-templates.html:976
+#: seahub/templates/js/templates.html:17 seahub/templates/js/templates.html:72
+#: seahub/templates/js/templates.html:246
+#: seahub/templates/js/templates.html:545
+#: seahub/templates/js/templates.html:1861
+#: seahub/templates/js/templates.html:1887
+#: seahub/templates/js/templates.html:1895
+#: seahub/templates/js/templates.html:1903
+#: seahub/templates/js/templates.html:1929
+#: seahub/templates/js/templates.html:2025
+#: seahub/templates/js/templates.html:2044
+#: seahub/templates/js/templates.html:2159
+#: seahub/templates/js/templates.html:2166
+#: seahub/templates/js/templates.html:2244
+#: seahub/templates/js/templates.html:2263
+#: seahub/templates/js/templates.html:2496
+#: seahub/templates/js/templates.html:2617
+#: seahub/templates/js/templates.html:2653
+#: seahub/templates/js/templates.html:2690
+#: seahub/templates/registration/registration_form.html:18
+#: seahub/templates/repo_dir_recycle_view.html:44
+#: seahub/templates/repo_history_view.html:58
+#: seahub/templates/sysadmin/org_admin_table.html:4
+#: seahub/templates/sysadmin/sys_inst_admin.html:18
+#: seahub/templates/sysadmin/sys_inst_admin.html:27
+#: seahub/templates/sysadmin/sys_link_search.html:21
+#: seahub/templates/sysadmin/sys_org_admin.html:24
+#: seahub/templates/sysadmin/sys_org_info_group.html:15
+#: seahub/templates/sysadmin/sys_org_info_library.html:15
+#: seahub/templates/sysadmin/sys_org_search.html:10
+#: seahub/templates/sysadmin/sys_publink_admin.html:27
+#: seahub/templates/sysadmin/sys_terms_admin.html:16
+#: seahub/templates/sysadmin/sys_terms_admin.html:55
+#: seahub/templates/sysadmin/sys_upload_link_admin.html:21
+#: seahub/templates/sysadmin/useradmin_table.html:6
+#: seahub/templates/sysadmin/useradmin_table.html:10
+#: seahub/templates/sysadmin/userinfo.html:185
+#: seahub/templates/sysadmin/userinfo.html:234
+#: seahub/templates/sysadmin/userinfo.html:272
+#: seahub/templates/sysadmin/userinfo.html:319
+#: seahub/templates/view_shared_dir.html:50
+#: seahub/templates/wiki/personal_wiki.html:43
+#: seahub/templates/wiki/personal_wiki.html:85
+#: seahub/templates/wiki/personal_wiki_pages.html:28
+#: seahub/templates/wiki/wiki_list.html:19
+#: seahub/templates/wiki/wiki_list.html:35
+#: seahub/templates/wiki/wiki_list.html:50 seahub/views/sysadmin.py:398
+#: seahub/views/sysadmin.py:402 seahub/views/sysadmin.py:1254
+#: seahub/views/sysadmin.py:1958
+msgid "Name"
+msgstr "Tên"
+
+#: seahub/api2/endpoints/admin/statistics.py:264
+#: seahub/base/management/commands/export_users.py:43
+#: seahub/base/management/commands/export_users.py:47
+#: seahub/institutions/templates/institutions/useradmin.html:16
+#: seahub/institutions/templates/institutions/useradmin_search.html:19
+#: seahub/organizations/templates/organizations/org_users_table.html:4
+#: seahub/templates/sysadmin/useradmin_table.html:6
+#: seahub/templates/sysadmin/useradmin_table.html:10
+#: seahub/templates/sysadmin/userinfo.html:67 seahub/views/sysadmin.py:398
+#: seahub/views/sysadmin.py:402
+msgid "Contact Email"
+msgstr ""
+
+#: seahub/api2/endpoints/admin/statistics.py:265
+#: seahub/base/management/commands/export_users.py:44
+#: seahub/base/management/commands/export_users.py:48
+#: seahub/views/sysadmin.py:399 seahub/views/sysadmin.py:403
+msgid "Space Usage"
+msgstr ""
+
+#: seahub/api2/endpoints/admin/statistics.py:265
+#: seahub/base/management/commands/export_users.py:44
+#: seahub/base/management/commands/export_users.py:48
+#: seahub/views/sysadmin.py:399 seahub/views/sysadmin.py:403
+#: seahub/views/sysadmin.py:1959
+msgid "Space Quota"
 msgstr ""
 
 #: seahub/api2/endpoints/admin/users_batch.py:76
@@ -138,31 +352,31 @@ msgid "Destination path is too long."
 msgstr "Đường dẫn đích quá dài."
 
 #: seahub/api2/endpoints/copy_move_task.py:90
-#: seahub/api2/endpoints/move_folder_merge.py:125 seahub/views/ajax.py:754
+#: seahub/api2/endpoints/move_folder_merge.py:125 seahub/views/ajax.py:753
 msgid "Invalid destination path"
 msgstr "Đường dẫn không hợp lệ"
 
 #: seahub/api2/endpoints/copy_move_task.py:150
 #: seahub/api2/endpoints/move_folder_merge.py:172
-#: seahub/api2/endpoints/repos_batch.py:491 seahub/api2/views.py:1592
-#: seahub/api2/views.py:1628 seahub/api2/views.py:1675
-#: seahub/api2/views.py:1719 seahub/api2/views.py:1764
-#: seahub/api2/views.py:1812 seahub/api2/views.py:2210
-#: seahub/api2/views.py:2324 seahub/templates/js/templates.html:470
-#: seahub/views/ajax.py:730 seahub/views/ajax.py:814 seahub/views/ajax.py:884
+#: seahub/api2/endpoints/repos_batch.py:491 seahub/api2/views.py:1605
+#: seahub/api2/views.py:1641 seahub/api2/views.py:1688
+#: seahub/api2/views.py:1732 seahub/api2/views.py:1777
+#: seahub/api2/views.py:1825 seahub/api2/views.py:2223
+#: seahub/api2/views.py:2337 seahub/templates/js/templates.html:470
+#: seahub/views/ajax.py:729 seahub/views/ajax.py:813 seahub/views/ajax.py:885
 msgid "Out of quota."
 msgstr ""
 
-#: seahub/api2/endpoints/copy_move_task.py:165 seahub/views/ajax.py:777
+#: seahub/api2/endpoints/copy_move_task.py:165 seahub/views/ajax.py:776
 #, python-format
 msgid "Can not move directory %(src)s to its subdirectory %(des)s"
 msgstr "Không thể chuyển thư mục %(src)s đến thư mục con %(des)s"
 
 #: seahub/api2/endpoints/copy_move_task.py:180
-#: seahub/api2/endpoints/file.py:269 seahub/api2/endpoints/file.py:345
-#: seahub/api2/endpoints/file.py:452 seahub/api2/endpoints/file.py:529
-#: seahub/api2/endpoints/file.py:625 seahub/views/ajax.py:496
-#: seahub/views/ajax.py:567 seahub/views/file.py:1330
+#: seahub/api2/endpoints/file.py:270 seahub/api2/endpoints/file.py:346
+#: seahub/api2/endpoints/file.py:453 seahub/api2/endpoints/file.py:530
+#: seahub/api2/endpoints/file.py:623 seahub/views/ajax.py:495
+#: seahub/views/ajax.py:566 seahub/views/file.py:1347
 msgid "File is locked"
 msgstr "Dữ liệu bị khóa"
 
@@ -171,35 +385,37 @@ msgid "Cancel failed"
 msgstr ""
 
 #: seahub/api2/endpoints/dir_shared_items.py:315
-#: seahub/api2/endpoints/group_owned_libraries.py:913
+#: seahub/api2/endpoints/group_owned_libraries.py:914
 msgid "username invalid."
 msgstr ""
 
 #: seahub/api2/endpoints/dir_shared_items.py:324
-#: seahub/api2/endpoints/group_owned_libraries.py:922
+#: seahub/api2/endpoints/group_owned_libraries.py:923
 #: seahub/oauth/views.py:188
 #, python-format
 msgid "User %s not found."
 msgstr ""
 
-#: seahub/api2/endpoints/file.py:544 seahub/api2/endpoints/file.py:565
+#: seahub/api2/endpoints/file.py:545 seahub/api2/endpoints/file.py:563
 msgid "File is not locked."
 msgstr ""
 
-#: seahub/api2/endpoints/file.py:577
+#: seahub/api2/endpoints/file.py:575 seahub/api2/endpoints/share_links.py:405
 msgid "You can not refresh this file's lock."
 msgstr ""
 
 #: seahub/api2/endpoints/file_tag.py:44
+#: seahub/api2/endpoints/invitations.py:78
+#: seahub/api2/endpoints/invitations.py:145
 #: seahub/api2/endpoints/wiki_pages.py:105
 #: seahub/api2/endpoints/wiki_pages.py:118
 #: seahub/api2/endpoints/wiki_pages.py:153
 #: seahub/api2/endpoints/wiki_pages.py:193
 #: seahub/api2/endpoints/wiki_pages.py:203
 #: seahub/api2/endpoints/wiki_pages.py:285 seahub/group/views.py:366
-#: seahub/views/__init__.py:951 seahub/views/ajax.py:1207
-#: seahub/views/ajax.py:1211 seahub/views/file.py:1327
-#: seahub/views/sysadmin.py:1974 seahub/views/wiki.py:134
+#: seahub/views/__init__.py:949 seahub/views/ajax.py:1192
+#: seahub/views/ajax.py:1196 seahub/views/file.py:1344
+#: seahub/views/sysadmin.py:2000 seahub/views/wiki.py:134
 msgid "Internal Server Error"
 msgstr "Internal Server Error"
 
@@ -208,9 +424,9 @@ msgstr "Internal Server Error"
 #: seahub/api2/endpoints/wiki_pages.py:184 seahub/api2/endpoints/wikis.py:145
 #: seahub/api2/endpoints/wikis.py:230 seahub/group/views.py:453
 #: seahub/thumbnail/views.py:51 seahub/thumbnail/views.py:166
-#: seahub/views/__init__.py:786 seahub/views/ajax.py:209
-#: seahub/views/ajax.py:239 seahub/views/ajax.py:245 seahub/views/ajax.py:924
-#: seahub/views/wiki.py:201 seahub/wiki/views.py:56
+#: seahub/views/__init__.py:784 seahub/views/ajax.py:208
+#: seahub/views/ajax.py:238 seahub/views/ajax.py:244 seahub/views/ajax.py:925
+#: seahub/views/wiki.py:201 seahub/wiki/views.py:61
 msgid "Permission denied."
 msgstr ""
 
@@ -221,37 +437,37 @@ msgstr ""
 msgid "Tag can only contain letters, numbers, dot, hyphen or underscore."
 msgstr ""
 
-#: seahub/api2/endpoints/group_members.py:93
-#: seahub/api2/endpoints/group_members.py:289 seahub/views/ajax.py:1399
+#: seahub/api2/endpoints/group_members.py:94
+#: seahub/api2/endpoints/group_members.py:293 seahub/views/ajax.py:1384
 #, python-format
 msgid "User %s is already a group member."
 msgstr ""
 
-#: seahub/api2/endpoints/group_members.py:99
-#: seahub/api2/endpoints/group_members.py:298 seahub/api2/views.py:1455
-#: seahub/views/ajax.py:1408
+#: seahub/api2/endpoints/group_members.py:100
+#: seahub/api2/endpoints/group_members.py:303 seahub/api2/views.py:1468
+#: seahub/views/ajax.py:1393
 #, python-format
 msgid "User %s not found in organization."
 msgstr ""
 
-#: seahub/api2/endpoints/group_owned_libraries.py:368
-#: seahub/api2/endpoints/group_owned_libraries.py:640
+#: seahub/api2/endpoints/group_owned_libraries.py:369
+#: seahub/api2/endpoints/group_owned_libraries.py:641
 msgid "Permission already exists."
 msgstr ""
 
-#: seahub/api2/endpoints/invitations.py:53
-#: seahub/api2/endpoints/invitations.py:113
+#: seahub/api2/endpoints/invitations.py:54
+#: seahub/api2/endpoints/invitations.py:117
 msgid "The email address is not allowed to be invited as a guest."
 msgstr ""
 
-#: seahub/api2/endpoints/invitations.py:58
-#: seahub/api2/endpoints/invitations.py:121
+#: seahub/api2/endpoints/invitations.py:59
+#: seahub/api2/endpoints/invitations.py:125
 #, python-format
 msgid "%s is already invited."
 msgstr ""
 
-#: seahub/api2/endpoints/invitations.py:68
-#: seahub/api2/endpoints/invitations.py:129 seahub/base/accounts.py:730
+#: seahub/api2/endpoints/invitations.py:69
+#: seahub/api2/endpoints/invitations.py:133 seahub/base/accounts.py:730
 #, python-format
 msgid "User %s already exists."
 msgstr ""
@@ -259,14 +475,14 @@ msgstr ""
 #: seahub/api2/endpoints/query_copy_move_progress.py:47
 #: seahub/templates/js/sysadmin-templates.html:289
 #: seahub/templates/sysadmin/sys_org_info_traffic.html:100
-#: seahub/templates/sysadmin/sys_statistic_file.html:94
-#: seahub/templates/sysadmin/sys_statistic_storage.html:94
-#: seahub/templates/sysadmin/sys_statistic_traffic.html:115
-#: seahub/templates/sysadmin/sys_statistic_user.html:94
+#: seahub/templates/sysadmin/sys_statistic_file.html:90
+#: seahub/templates/sysadmin/sys_statistic_storage.html:90
+#: seahub/templates/sysadmin/sys_statistic_traffic.html:112
+#: seahub/templates/sysadmin/sys_statistic_user.html:89
 #: seahub/templates/sysadmin/useradmin_js.html:269
-#: seahub/templates/sysadmin/useradmin_table.html:111
+#: seahub/templates/sysadmin/useradmin_table.html:110
 #: seahub/templates/sysadmin/userinfo.html:105
-#: seahub/templates/sysadmin/userinfo.html:561
+#: seahub/templates/sysadmin/userinfo.html:584
 #: seahub/templates/view_shared_upload_link.html:82
 #: seahub/templates/wiki/wiki_list.html:143
 #: seahub/templates/wiki/wiki_list.html:202
@@ -275,16 +491,16 @@ msgstr ""
 msgid "Error"
 msgstr "Lỗi"
 
-#: seahub/api2/endpoints/repo_set_password.py:67 seahub/api2/views.py:3494
+#: seahub/api2/endpoints/repo_set_password.py:67 seahub/api2/views.py:3507
 msgid "Wrong password"
 msgstr "Sai mật khẩu"
 
-#: seahub/api2/endpoints/repo_set_password.py:70 seahub/api2/views.py:3497
-#: seahub/views/ajax.py:725 seahub/views/sysadmin.py:2154
+#: seahub/api2/endpoints/repo_set_password.py:70 seahub/api2/views.py:3510
+#: seahub/views/ajax.py:724 seahub/views/sysadmin.py:2180
 msgid "Internal server error"
 msgstr "Internal server error"
 
-#: seahub/api2/endpoints/repo_set_password.py:73 seahub/api2/views.py:3500
+#: seahub/api2/endpoints/repo_set_password.py:73 seahub/api2/views.py:3513
 msgid "Decrypt library error"
 msgstr "Lỗi giải mã"
 
@@ -329,28 +545,27 @@ msgid "An upload link is shared to you on %s"
 msgstr "Một link tải lên được chia sẻ với bạn tại %s"
 
 #: seahub/api2/endpoints/share_link_zip_task.py:100
-#: seahub/views/__init__.py:935
+#: seahub/views/__init__.py:933
 #, python-format
 msgid "Unable to download directory \"%s\": size is too large."
 msgstr "Không thể tải thư mục \"%s\": dung lượng quá lớn."
 
-#: seahub/api2/endpoints/share_links.py:220
+#: seahub/api2/endpoints/share_links.py:222
 msgid "Password is too short."
 msgstr ""
 
-#: seahub/api2/endpoints/share_links.py:230
+#: seahub/api2/endpoints/share_links.py:232
 #, python-format
 msgid "Expire days should be greater or equal to %s"
 msgstr ""
 
-#: seahub/api2/endpoints/share_links.py:236
+#: seahub/api2/endpoints/share_links.py:238
 #, python-format
 msgid "Expire days should be less than or equal to %s"
 msgstr ""
 
 #: seahub/api2/endpoints/upload_links.py:143
 #: seahub/templates/snippets/repo_create_js.html:50
-#: seahub/templates/snippets/shared_link_js.html:140
 msgid "Password is too short"
 msgstr "Mật khẩu quá ngắn"
 
@@ -403,7 +618,7 @@ msgstr ""
 msgid "Name is required."
 msgstr "Yêu cầu tên."
 
-#: seahub/api2/endpoints/zip_task.py:121
+#: seahub/api2/endpoints/zip_task.py:124 seahub/api2/endpoints/zip_task.py:244
 msgid "Total size exceeds limit."
 msgstr ""
 
@@ -415,93 +630,94 @@ msgstr "Vui lòng đăng nhập."
 msgid "Email or Username"
 msgstr "Địa chỉ email hoặc tên đăng nhập"
 
-#: seahub/auth/forms.py:27 seahub/auth/forms.py:202
+#: seahub/auth/forms.py:27 seahub/auth/forms.py:208
 #: seahub/base/accounts.py:708
 #: seahub/invitations/templates/invitations/token_view.html:13
 #: seahub/organizations/templates/organizations/org_register.html:36
 #: seahub/organizations/templates/organizations/org_user_admin.html:29
 #: seahub/profile/templates/profile/set_profile.html:17
 #: seahub/profile/templates/profile/set_profile.html:77
+#: seahub/profile/templates/profile/set_profile.html:84
+#: seahub/profile/templates/profile/set_profile.html:85
 #: seahub/templates/file_edit.html:129
 #: seahub/templates/js/lib-op-popups.html:109
 #: seahub/templates/js/templates.html:58
 #: seahub/templates/js/templates.html:1193
-#: seahub/templates/js/templates.html:1303
+#: seahub/templates/js/templates.html:1311
 #: seahub/templates/registration/login.html:32
 #: seahub/templates/registration/registration_form.html:24
-#: seahub/templates/snippets/file_share_popup.html:18
 #: seahub/templates/sysadmin/settings.html:105
 #: seahub/templates/sysadmin/sudo_mode.html:10
 #: seahub/templates/sysadmin/sys_org_admin.html:28
 #: seahub/templates/sysadmin/sys_org_info_user.html:68
 #: seahub/templates/sysadmin/sys_useradmin.html:59
-#: seahub/views/sysadmin.py:1932
+#: seahub/views/sysadmin.py:1958
 msgid "Password"
 msgstr "Mật khẩu"
 
-#: seahub/auth/forms.py:61
+#: seahub/auth/forms.py:65
 msgid ""
 "Please enter a correct email/username and password. Note that both fields "
 "are case-sensitive."
 msgstr "Vui lòng nhập chính xác tên người dùng và mật khẩu."
 
-#: seahub/auth/forms.py:71 seahub/auth/forms.py:72
+#: seahub/auth/forms.py:77 seahub/auth/forms.py:78
 msgid "This account is inactive."
 msgstr "Tài khoản chưa được kích hoạt"
 
-#: seahub/auth/forms.py:77
+#: seahub/auth/forms.py:83
 msgid ""
 "Your Web browser doesn't appear to have cookies enabled. Cookies are "
 "required for logging in."
 msgstr "Trình duyệt Web của bạn có thể chưa bật cookies. Yêu cầu có cookies để đăng nhập"
 
-#: seahub/auth/forms.py:93
+#: seahub/auth/forms.py:99
 msgid "E-mail"
 msgstr "Email"
 
-#: seahub/auth/forms.py:100
+#: seahub/auth/forms.py:106
 msgid ""
 "Failed to send email, email service is not properly configured, please "
 "contact administrator."
 msgstr "Gửi email thất bại, dịch vụ email không được thiết lập chính xác, vui lòng liên hệ Admin"
 
-#: seahub/auth/forms.py:108
+#: seahub/auth/forms.py:114
 msgid ""
 "That e-mail address doesn't have an associated user account. Are you sure "
 "you've registered?"
 msgstr "Email này không tồn tại trên hệ thống. Vui lòng kiểm tra chính xác địa chỉ email."
 
-#: seahub/auth/forms.py:111
+#: seahub/auth/forms.py:117
 msgid "Can not reset password, please contact LDAP admin."
 msgstr "Không thể đổi mật khẩu, vui lòng liên hệ Admin LDAP"
 
-#: seahub/auth/forms.py:134
+#: seahub/auth/forms.py:140
 #, python-format
 msgid "Reset Password on %s"
 msgstr "Thay đổi mật khẩu trong %s"
 
-#: seahub/auth/forms.py:142
+#: seahub/auth/forms.py:148
 msgid "New password"
 msgstr "Mật khẩu mới"
 
-#: seahub/auth/forms.py:143
+#: seahub/auth/forms.py:149
 msgid "New password confirmation"
 msgstr "Xác nhận lại mật khẩu mới"
 
-#: seahub/auth/forms.py:172 seahub/auth/forms.py:214
+#: seahub/auth/forms.py:178 seahub/auth/forms.py:220
 #: seahub/base/accounts.py:764 seahub/organizations/forms.py:69
 msgid "The two password fields didn't match."
 msgstr "Mật khẩu không khớp."
 
-#: seahub/auth/forms.py:186
+#: seahub/auth/forms.py:192
 msgid "Old password"
 msgstr "Mật khẩu cũ"
 
-#: seahub/auth/forms.py:194
+#: seahub/auth/forms.py:200
 msgid "Your old password was entered incorrectly. Please enter it again."
 msgstr "Mật khẩu cũ không chính xác.Vui lòng nhập lại."
 
-#: seahub/auth/forms.py:203 seahub/base/accounts.py:710
+#: seahub/auth/forms.py:209 seahub/base/accounts.py:710
 msgid "Password (again)"
 msgstr "Mật khẩu"
 
@@ -601,7 +817,7 @@ msgid "This value must be of length 40"
 msgstr "Giá trị này phải có độ dài là 40"
 
 #: seahub/base/accounts.py:720 seahub/forms.py:30
-#: seahub/views/sysadmin.py:1985
+#: seahub/views/sysadmin.py:2011
 msgid "The number of users exceeds the limit."
 msgstr ""
 
@@ -614,8 +830,8 @@ msgid "Invalid user id."
 msgstr "ID người dùng không hợp lệ"
 
 #: seahub/base/accounts.py:785 seahub/templates/js/templates.html:560
-#: seahub/templates/js/templates.html:1870
-#: seahub/templates/js/templates.html:1907
+#: seahub/templates/js/templates.html:1878
+#: seahub/templates/js/templates.html:1915
 msgid "name"
 msgstr "Tên"
 
@@ -641,151 +857,10 @@ msgstr "Nhập địa chỉ email."
 
 #: seahub/base/management/commands/export_users.py:43
 #: seahub/base/management/commands/export_users.py:47
-#: seahub/contacts/templates/contacts/contact_list.html:44
-#: seahub/contacts/templates/contacts/contact_list.html:53
-#: seahub/institutions/templates/institutions/user_info.html:26
-#: seahub/institutions/templates/institutions/useradmin.html:16
-#: seahub/institutions/templates/institutions/useradmin_search.html:10
-#: seahub/institutions/templates/institutions/useradmin_search.html:19
-#: seahub/invitations/templates/invitations/token_view.html:10
-#: seahub/organizations/templates/organizations/org_repo_admin.html:30
-#: seahub/organizations/templates/organizations/org_repo_search.html:28
-#: seahub/organizations/templates/organizations/org_user_admin.html:24
-#: seahub/organizations/templates/organizations/user_search.html:10
-#: seahub/organizations/templates/organizations/userinfo.html:21
-#: seahub/share/templates/share/share_link_audit.html:9
-#: seahub/templates/js/admin-common-templates.html:53
-#: seahub/templates/js/sysadmin-templates.html:936
-#: seahub/templates/js/sysadmin-templates.html:976
-#: seahub/templates/js/templates.html:2750
-#: seahub/templates/js/templates.html:2783
-#: seahub/templates/registration/registration_form.html:22
-#: seahub/templates/sysadmin/sys_inst_info_admins.html:15
-#: seahub/templates/sysadmin/sys_inst_info_user.html:23
-#: seahub/templates/sysadmin/sys_inst_info_user.html:31
-#: seahub/templates/sysadmin/sys_inst_search_user.html:8
-#: seahub/templates/sysadmin/sys_inst_search_user.html:17
-#: seahub/templates/sysadmin/sys_org_info_user.html:16
-#: seahub/templates/sysadmin/sys_org_info_user.html:62
-#: seahub/templates/sysadmin/sys_useradmin.html:43
-#: seahub/templates/sysadmin/sys_useradmin_ldap.html:26
-#: seahub/templates/sysadmin/user_search.html:10
-#: seahub/templates/sysadmin/userinfo.html:35 seahub/views/sysadmin.py:339
-#: seahub/views/sysadmin.py:343 seahub/views/sysadmin.py:1932
-msgid "Email"
-msgstr "Email"
-
-#: seahub/base/management/commands/export_users.py:43
-#: seahub/base/management/commands/export_users.py:47
-#: seahub/contacts/templates/contacts/contact_list.html:18
-#: seahub/group/templates/group/group_wiki.html:45
-#: seahub/group/templates/group/group_wiki.html:90
-#: seahub/group/templates/group/group_wiki_pages.html:29
-#: seahub/institutions/templates/institutions/info.html:10
-#: seahub/institutions/templates/institutions/user_info.html:61
-#: seahub/institutions/templates/institutions/user_info.html:105
-#: seahub/institutions/templates/institutions/useradmin.html:16
-#: seahub/institutions/templates/institutions/useradmin_search.html:19
-#: seahub/organizations/templates/organizations/org_admin_group_info.html:16
-#: seahub/organizations/templates/organizations/org_admin_group_info.html:39
-#: seahub/organizations/templates/organizations/org_group_admin.html:11
-#: seahub/organizations/templates/organizations/org_publink_admin.html:11
-#: seahub/organizations/templates/organizations/org_repo_search.html:11
-#: seahub/organizations/templates/organizations/org_repoadmin_table.html:6
-#: seahub/organizations/templates/organizations/org_users_table.html:4
-#: seahub/organizations/templates/organizations/pubrepo.html:16
-#: seahub/organizations/templates/organizations/userinfo.html:69
-#: seahub/organizations/templates/organizations/userinfo.html:101
-#: seahub/templates/js/admin-common-templates.html:72
-#: seahub/templates/js/admin-common-templates.html:99
-#: seahub/templates/js/admin-common-templates.html:119
-#: seahub/templates/js/admin-common-templates.html:138
-#: seahub/templates/js/admin-common-templates.html:173
-#: seahub/templates/js/admin-common-templates.html:210
-#: seahub/templates/js/lib-op-popups.html:6
-#: seahub/templates/js/lib-op-popups.html:17
-#: seahub/templates/js/sysadmin-templates.html:358
-#: seahub/templates/js/sysadmin-templates.html:380
-#: seahub/templates/js/sysadmin-templates.html:394
-#: seahub/templates/js/sysadmin-templates.html:406
-#: seahub/templates/js/sysadmin-templates.html:465
-#: seahub/templates/js/sysadmin-templates.html:491
-#: seahub/templates/js/sysadmin-templates.html:538
-#: seahub/templates/js/sysadmin-templates.html:619
-#: seahub/templates/js/sysadmin-templates.html:642
-#: seahub/templates/js/sysadmin-templates.html:651
-#: seahub/templates/js/sysadmin-templates.html:668
-#: seahub/templates/js/sysadmin-templates.html:870
-#: seahub/templates/js/sysadmin-templates.html:908
-#: seahub/templates/js/templates.html:17 seahub/templates/js/templates.html:72
-#: seahub/templates/js/templates.html:246
-#: seahub/templates/js/templates.html:545
-#: seahub/templates/js/templates.html:1853
-#: seahub/templates/js/templates.html:1879
-#: seahub/templates/js/templates.html:1887
-#: seahub/templates/js/templates.html:1895
-#: seahub/templates/js/templates.html:1921
-#: seahub/templates/js/templates.html:2017
-#: seahub/templates/js/templates.html:2036
-#: seahub/templates/js/templates.html:2151
-#: seahub/templates/js/templates.html:2158
-#: seahub/templates/js/templates.html:2236
-#: seahub/templates/js/templates.html:2255
-#: seahub/templates/js/templates.html:2488
-#: seahub/templates/js/templates.html:2609
-#: seahub/templates/js/templates.html:2645
-#: seahub/templates/js/templates.html:2682
-#: seahub/templates/registration/registration_form.html:18
-#: seahub/templates/repo_dir_recycle_view.html:44
-#: seahub/templates/repo_history_view.html:58
-#: seahub/templates/sysadmin/org_admin_table.html:4
-#: seahub/templates/sysadmin/sys_inst_admin.html:18
-#: seahub/templates/sysadmin/sys_inst_admin.html:27
-#: seahub/templates/sysadmin/sys_link_search.html:21
-#: seahub/templates/sysadmin/sys_org_admin.html:24
-#: seahub/templates/sysadmin/sys_org_info_group.html:15
-#: seahub/templates/sysadmin/sys_org_info_library.html:15
-#: seahub/templates/sysadmin/sys_org_search.html:10
-#: seahub/templates/sysadmin/sys_publink_admin.html:27
-#: seahub/templates/sysadmin/sys_terms_admin.html:16
-#: seahub/templates/sysadmin/sys_terms_admin.html:55
-#: seahub/templates/sysadmin/sys_upload_link_admin.html:21
-#: seahub/templates/sysadmin/useradmin_table.html:6
-#: seahub/templates/sysadmin/useradmin_table.html:10
-#: seahub/templates/sysadmin/userinfo.html:177
-#: seahub/templates/sysadmin/userinfo.html:226
-#: seahub/templates/sysadmin/userinfo.html:264
-#: seahub/templates/sysadmin/userinfo.html:311
-#: seahub/templates/view_shared_dir.html:50
-#: seahub/templates/wiki/personal_wiki.html:43
-#: seahub/templates/wiki/personal_wiki.html:85
-#: seahub/templates/wiki/personal_wiki_pages.html:28
-#: seahub/templates/wiki/wiki_list.html:19
-#: seahub/templates/wiki/wiki_list.html:35
-#: seahub/templates/wiki/wiki_list.html:50 seahub/views/sysadmin.py:339
-#: seahub/views/sysadmin.py:343 seahub/views/sysadmin.py:1192
-#: seahub/views/sysadmin.py:1932
-msgid "Name"
-msgstr "Tên"
-
-#: seahub/base/management/commands/export_users.py:43
-#: seahub/base/management/commands/export_users.py:47
-#: seahub/institutions/templates/institutions/useradmin.html:16
-#: seahub/institutions/templates/institutions/useradmin_search.html:19
-#: seahub/organizations/templates/organizations/org_users_table.html:4
-#: seahub/templates/sysadmin/useradmin_table.html:6
-#: seahub/templates/sysadmin/useradmin_table.html:10
-#: seahub/templates/sysadmin/userinfo.html:67 seahub/views/sysadmin.py:339
-#: seahub/views/sysadmin.py:343
-msgid "Contact Email"
-msgstr ""
-
-#: seahub/base/management/commands/export_users.py:43
-#: seahub/base/management/commands/export_users.py:47
 #: seahub/institutions/templates/institutions/useradmin.html:17
 #: seahub/institutions/templates/institutions/useradmin_search.html:20
 #: seahub/organizations/templates/organizations/org_users_table.html:5
-#: seahub/profile/templates/profile/set_profile.html:112
+#: seahub/profile/templates/profile/set_profile.html:124
 #: seahub/templates/js/sysadmin-templates.html:978
 #: seahub/templates/sysadmin/sys_inst_info_admins.html:16
 #: seahub/templates/sysadmin/sys_inst_info_user.html:32
@@ -793,8 +868,8 @@ msgstr ""
 #: seahub/templates/sysadmin/sys_org_info_user.html:17
 #: seahub/templates/sysadmin/useradmin_table.html:7
 #: seahub/templates/sysadmin/useradmin_table.html:11
-#: seahub/templates/sysadmin/userinfo.html:115 seahub/views/sysadmin.py:339
-#: seahub/views/sysadmin.py:343
+#: seahub/templates/sysadmin/userinfo.html:115 seahub/views/sysadmin.py:398
+#: seahub/views/sysadmin.py:402
 msgid "Status"
 msgstr "Trạng thái"
 
@@ -802,26 +877,13 @@ msgstr "Trạng thái"
 #: seahub/institutions/templates/institutions/user_info.html:106
 #: seahub/templates/js/admin-common-templates.html:120
 #: seahub/templates/js/sysadmin-templates.html:909
-#: seahub/templates/js/templates.html:2152
+#: seahub/templates/js/templates.html:2160
 #: seahub/templates/sysadmin/sys_useradmin.html:50
 #: seahub/templates/sysadmin/useradmin_table.html:8
-#: seahub/templates/sysadmin/userinfo.html:312 seahub/views/sysadmin.py:339
-#: seahub/views/sysadmin.py:1933
+#: seahub/templates/sysadmin/userinfo.html:320 seahub/views/sysadmin.py:398
+#: seahub/views/sysadmin.py:1959
 msgid "Role"
 msgstr "Vai trò"
-
-#: seahub/base/management/commands/export_users.py:44
-#: seahub/base/management/commands/export_users.py:48
-#: seahub/views/sysadmin.py:340 seahub/views/sysadmin.py:344
-msgid "Space Usage"
-msgstr ""
-
-#: seahub/base/management/commands/export_users.py:44
-#: seahub/base/management/commands/export_users.py:48
-#: seahub/views/sysadmin.py:340 seahub/views/sysadmin.py:344
-#: seahub/views/sysadmin.py:1933
-msgid "Space Quota"
-msgstr ""
 
 #: seahub/base/management/commands/export_users.py:45
 #: seahub/base/management/commands/export_users.py:49
@@ -833,14 +895,14 @@ msgstr ""
 #: seahub/templates/sysadmin/sys_org_info_group.html:17
 #: seahub/templates/sysadmin/sys_publink_admin.html:30
 #: seahub/templates/sysadmin/sys_upload_link_admin.html:24
-#: seahub/templates/sysadmin/userinfo.html:313 seahub/views/sysadmin.py:341
-#: seahub/views/sysadmin.py:345 seahub/views/sysadmin.py:1192
+#: seahub/templates/sysadmin/userinfo.html:321 seahub/views/sysadmin.py:400
+#: seahub/views/sysadmin.py:404 seahub/views/sysadmin.py:1254
 msgid "Create At"
 msgstr "Tạo lúc"
 
 #: seahub/base/management/commands/export_users.py:45
 #: seahub/base/management/commands/export_users.py:49
-#: seahub/views/sysadmin.py:341 seahub/views/sysadmin.py:345
+#: seahub/views/sysadmin.py:400 seahub/views/sysadmin.py:404
 msgid "Last Login"
 msgstr "Lần đăng nhập cuối"
 
@@ -861,22 +923,22 @@ msgstr "Lần đăng nhập cuối"
 #: seahub/templates/js/sysadmin-templates.html:750
 #: seahub/templates/js/sysadmin-templates.html:798
 #: seahub/templates/js/sysadmin-templates.html:828
-#: seahub/templates/js/templates.html:1367
-#: seahub/templates/js/templates.html:1403
-#: seahub/templates/js/templates.html:1684
-#: seahub/templates/js/templates.html:1700
-#: seahub/templates/js/templates.html:1705
-#: seahub/templates/js/templates.html:1709
-#: seahub/templates/js/templates.html:2184
-#: seahub/templates/js/templates.html:2188
-#: seahub/templates/js/templates.html:2195
-#: seahub/templates/js/templates.html:2456
-#: seahub/templates/js/templates.html:2459
-#: seahub/templates/js/templates.html:2518
-#: seahub/templates/js/templates.html:2523
-#: seahub/templates/js/templates.html:2532
-#: seahub/templates/js/templates.html:2540 seahub/views/sysadmin.py:341
-#: seahub/views/sysadmin.py:345 seahub/views/sysadmin.py:736
+#: seahub/templates/js/templates.html:1375
+#: seahub/templates/js/templates.html:1411
+#: seahub/templates/js/templates.html:1692
+#: seahub/templates/js/templates.html:1708
+#: seahub/templates/js/templates.html:1713
+#: seahub/templates/js/templates.html:1717
+#: seahub/templates/js/templates.html:2192
+#: seahub/templates/js/templates.html:2196
+#: seahub/templates/js/templates.html:2203
+#: seahub/templates/js/templates.html:2464
+#: seahub/templates/js/templates.html:2467
+#: seahub/templates/js/templates.html:2526
+#: seahub/templates/js/templates.html:2531
+#: seahub/templates/js/templates.html:2540
+#: seahub/templates/js/templates.html:2548 seahub/views/sysadmin.py:400
+#: seahub/views/sysadmin.py:404 seahub/views/sysadmin.py:795
 msgid "Admin"
 msgstr "Admin"
 
@@ -887,7 +949,7 @@ msgstr "Admin"
 #: seahub/templates/sysadmin/sys_useradmin_admins.html:18
 #: seahub/templates/sysadmin/sys_useradmin_ldap.html:17
 #: seahub/templates/sysadmin/sys_useradmin_paid.html:17
-#: seahub/views/sysadmin.py:341 seahub/views/sysadmin.py:345
+#: seahub/views/sysadmin.py:400 seahub/views/sysadmin.py:404
 msgid "LDAP(imported)"
 msgstr ""
 
@@ -902,9 +964,9 @@ msgstr ""
 #: seahub/templates/sysadmin/sys_inst_search_user.html:30
 #: seahub/templates/sysadmin/sys_org_info_user.html:29
 #: seahub/templates/sysadmin/sys_org_info_user.html:36
-#: seahub/templates/sysadmin/useradmin_table.html:44
-#: seahub/templates/sysadmin/useradmin_table.html:51
-#: seahub/views/sysadmin.py:399
+#: seahub/templates/sysadmin/useradmin_table.html:43
+#: seahub/templates/sysadmin/useradmin_table.html:50
+#: seahub/views/sysadmin.py:458
 msgid "Active"
 msgstr "Đã kích hoạt"
 
@@ -919,9 +981,9 @@ msgstr "Đã kích hoạt"
 #: seahub/templates/sysadmin/sys_inst_search_user.html:32
 #: seahub/templates/sysadmin/sys_org_info_user.html:31
 #: seahub/templates/sysadmin/sys_org_info_user.html:37
-#: seahub/templates/sysadmin/useradmin_table.html:46
-#: seahub/templates/sysadmin/useradmin_table.html:52
-#: seahub/views/sysadmin.py:401
+#: seahub/templates/sysadmin/useradmin_table.html:45
+#: seahub/templates/sysadmin/useradmin_table.html:51
+#: seahub/views/sysadmin.py:460
 msgid "Inactive"
 msgstr "Chưa kích hoạt"
 
@@ -930,17 +992,18 @@ msgstr "Chưa kích hoạt"
 #: seahub/organizations/templates/organizations/org_admin_backbone.html:62
 #: seahub/organizations/templates/organizations/org_admin_group_info.html:87
 #: seahub/templates/base.html:127 seahub/templates/base_for_backbone.html:96
+#: seahub/templates/js/templates.html:1283
 #: seahub/templates/sysadmin/sysadmin_backbone.html:65
-#: seahub/views/sysadmin.py:407 seahub/views/sysadmin.py:408
+#: seahub/views/sysadmin.py:466 seahub/views/sysadmin.py:467
 msgid "Yes"
 msgstr "Có"
 
 #: seahub/base/management/commands/export_users.py:132
 #: seahub/invitations/models.py:15 seahub/invitations/models.py:36
 #: seahub/templates/sysadmin/sys_useradmin.html:53
-#: seahub/templates/sysadmin/useradmin_table.html:60
-#: seahub/templates/sysadmin/useradmin_table.html:70
-#: seahub/views/sysadmin.py:413
+#: seahub/templates/sysadmin/useradmin_table.html:59
+#: seahub/templates/sysadmin/useradmin_table.html:69
+#: seahub/views/sysadmin.py:472
 msgid "Guest"
 msgstr "Tài khoản Khách"
 
@@ -948,9 +1011,9 @@ msgstr "Tài khoản Khách"
 #: seahub/base/management/commands/export_users.py:138
 #: seahub/templates/file_edit.html:441
 #: seahub/templates/sysadmin/sys_useradmin.html:52
-#: seahub/templates/sysadmin/useradmin_table.html:62
-#: seahub/templates/sysadmin/useradmin_table.html:69
-#: seahub/views/sysadmin.py:415 seahub/views/sysadmin.py:419
+#: seahub/templates/sysadmin/useradmin_table.html:61
+#: seahub/templates/sysadmin/useradmin_table.html:68
+#: seahub/views/sysadmin.py:474 seahub/views/sysadmin.py:478
 msgid "Default"
 msgstr ""
 
@@ -1016,7 +1079,7 @@ msgid "Recovered deleted directory"
 msgstr "Đã phục hồi thư mục bị xóa"
 
 #: seahub/base/templatetags/seahub_tags.py:159
-#: seahub/base/templatetags/seahub_tags.py:230 seahub/views/ajax.py:1266
+#: seahub/base/templatetags/seahub_tags.py:230 seahub/views/ajax.py:1251
 msgid "Changed library name or description"
 msgstr "Tên thư viện hoặc mô tả đã thay đổi"
 
@@ -1027,14 +1090,14 @@ msgstr "Tự động hợp nhất bởi hệ thống"
 
 #: seahub/base/templatetags/seahub_tags.py:163
 #: seahub/base/templatetags/seahub_tags.py:234
-#: seahub/templates/js/templates.html:1972
+#: seahub/templates/js/templates.html:1980
 msgid "Created library"
 msgstr "Đã tạo thư viện"
 
 #: seahub/base/templatetags/seahub_tags.py:309
 #: seahub/base/templatetags/seahub_tags.py:345
 #: seahub/templates/file_revisions.html:116
-#: seahub/templates/view_file_base.html:552
+#: seahub/templates/view_file_base.html:539
 #: seahub/templates/wiki/wiki_list.html:228
 msgid "Just now"
 msgstr "Vừa mới"
@@ -1080,33 +1143,33 @@ msgstr[0] "%(seconds)d giây trước"
 #: seahub/templates/js/sysadmin-templates.html:795
 #: seahub/templates/js/sysadmin-templates.html:825
 #: seahub/templates/js/templates.html:47
-#: seahub/templates/js/templates.html:1364
-#: seahub/templates/js/templates.html:1400
-#: seahub/templates/js/templates.html:1687
-#: seahub/templates/js/templates.html:1698
-#: seahub/templates/js/templates.html:1703
-#: seahub/templates/js/templates.html:1707
-#: seahub/templates/js/templates.html:1714
-#: seahub/templates/js/templates.html:1717
-#: seahub/templates/js/templates.html:1751
-#: seahub/templates/js/templates.html:1777
-#: seahub/templates/js/templates.html:1936
-#: seahub/templates/js/templates.html:1943
-#: seahub/templates/js/templates.html:2327
-#: seahub/templates/js/templates.html:2373
-#: seahub/templates/js/templates.html:2521
-#: seahub/templates/js/templates.html:2527
-#: seahub/templates/js/templates.html:2530
+#: seahub/templates/js/templates.html:1372
+#: seahub/templates/js/templates.html:1408
+#: seahub/templates/js/templates.html:1695
+#: seahub/templates/js/templates.html:1706
+#: seahub/templates/js/templates.html:1711
+#: seahub/templates/js/templates.html:1715
+#: seahub/templates/js/templates.html:1722
+#: seahub/templates/js/templates.html:1725
+#: seahub/templates/js/templates.html:1759
+#: seahub/templates/js/templates.html:1785
+#: seahub/templates/js/templates.html:1944
+#: seahub/templates/js/templates.html:1951
+#: seahub/templates/js/templates.html:2335
+#: seahub/templates/js/templates.html:2381
+#: seahub/templates/js/templates.html:2529
+#: seahub/templates/js/templates.html:2535
 #: seahub/templates/js/templates.html:2538
 #: seahub/templates/js/templates.html:2546
-#: seahub/templates/js/templates.html:2549
-#: seahub/templates/js/templates.html:2556
-#: seahub/templates/js/templates.html:2579
-#: seahub/templates/js/templates.html:2582
-#: seahub/templates/js/templates.html:2589
+#: seahub/templates/js/templates.html:2554
+#: seahub/templates/js/templates.html:2557
+#: seahub/templates/js/templates.html:2564
+#: seahub/templates/js/templates.html:2587
+#: seahub/templates/js/templates.html:2590
+#: seahub/templates/js/templates.html:2597
 #: seahub/templates/sysadmin/sys_org_info_library.html:25
-#: seahub/templates/sysadmin/userinfo.html:188
-#: seahub/templates/sysadmin/userinfo.html:239
+#: seahub/templates/sysadmin/userinfo.html:196
+#: seahub/templates/sysadmin/userinfo.html:247
 msgid "Read-Write"
 msgstr "Xem - Điều chỉnh"
 
@@ -1124,30 +1187,30 @@ msgstr "Xem - Điều chỉnh"
 #: seahub/templates/js/sysadmin-templates.html:796
 #: seahub/templates/js/sysadmin-templates.html:826
 #: seahub/templates/js/templates.html:48
-#: seahub/templates/js/templates.html:1365
-#: seahub/templates/js/templates.html:1401
-#: seahub/templates/js/templates.html:1689
-#: seahub/templates/js/templates.html:1699
-#: seahub/templates/js/templates.html:1704
-#: seahub/templates/js/templates.html:1708
-#: seahub/templates/js/templates.html:1715
-#: seahub/templates/js/templates.html:1718
-#: seahub/templates/js/templates.html:1752
-#: seahub/templates/js/templates.html:1778
-#: seahub/templates/js/templates.html:1944
-#: seahub/templates/js/templates.html:2328
-#: seahub/templates/js/templates.html:2374
-#: seahub/templates/js/templates.html:2522
-#: seahub/templates/js/templates.html:2531
-#: seahub/templates/js/templates.html:2535
+#: seahub/templates/js/templates.html:1373
+#: seahub/templates/js/templates.html:1409
+#: seahub/templates/js/templates.html:1697
+#: seahub/templates/js/templates.html:1707
+#: seahub/templates/js/templates.html:1712
+#: seahub/templates/js/templates.html:1716
+#: seahub/templates/js/templates.html:1723
+#: seahub/templates/js/templates.html:1726
+#: seahub/templates/js/templates.html:1760
+#: seahub/templates/js/templates.html:1786
+#: seahub/templates/js/templates.html:1952
+#: seahub/templates/js/templates.html:2336
+#: seahub/templates/js/templates.html:2382
+#: seahub/templates/js/templates.html:2530
 #: seahub/templates/js/templates.html:2539
-#: seahub/templates/js/templates.html:2550
-#: seahub/templates/js/templates.html:2553
-#: seahub/templates/js/templates.html:2557
-#: seahub/templates/js/templates.html:2583
-#: seahub/templates/js/templates.html:2586
-#: seahub/templates/js/templates.html:2590
-#: seahub/templates/sysadmin/userinfo.html:237
+#: seahub/templates/js/templates.html:2543
+#: seahub/templates/js/templates.html:2547
+#: seahub/templates/js/templates.html:2558
+#: seahub/templates/js/templates.html:2561
+#: seahub/templates/js/templates.html:2565
+#: seahub/templates/js/templates.html:2591
+#: seahub/templates/js/templates.html:2594
+#: seahub/templates/js/templates.html:2598
+#: seahub/templates/sysadmin/userinfo.html:245
 msgid "Read-Only"
 msgstr "Chỉ xem"
 
@@ -1234,9 +1297,9 @@ msgstr "Ghi chú"
 #: seahub/templates/sysadmin/sys_org_info_library.html:18
 #: seahub/templates/sysadmin/sys_org_info_user.html:20
 #: seahub/templates/sysadmin/sys_virus_scan_records.html:14
-#: seahub/templates/sysadmin/userinfo.html:180
-#: seahub/templates/sysadmin/userinfo.html:268
-#: seahub/templates/sysadmin/userinfo.html:314
+#: seahub/templates/sysadmin/userinfo.html:188
+#: seahub/templates/sysadmin/userinfo.html:276
+#: seahub/templates/sysadmin/userinfo.html:322
 #: seahub/templates/view_shared_dir.html:53
 msgid "Operations"
 msgstr "Tính năng"
@@ -1250,22 +1313,22 @@ msgstr "Tính năng"
 #: seahub/templates/js/sysadmin-templates.html:734
 #: seahub/templates/js/templates.html:1104
 #: seahub/templates/js/templates.html:1150
-#: seahub/templates/js/templates.html:1693
-#: seahub/templates/js/templates.html:2185
-#: seahub/templates/js/templates.html:2192
-#: seahub/templates/js/templates.html:2519
-#: seahub/templates/js/templates.html:2528
+#: seahub/templates/js/templates.html:1701
+#: seahub/templates/js/templates.html:2193
+#: seahub/templates/js/templates.html:2200
+#: seahub/templates/js/templates.html:2527
 #: seahub/templates/js/templates.html:2536
-#: seahub/templates/js/templates.html:2547
-#: seahub/templates/js/templates.html:2554
-#: seahub/templates/js/templates.html:2580
-#: seahub/templates/js/templates.html:2587
+#: seahub/templates/js/templates.html:2544
+#: seahub/templates/js/templates.html:2555
+#: seahub/templates/js/templates.html:2562
+#: seahub/templates/js/templates.html:2588
+#: seahub/templates/js/templates.html:2595
 #: seahub/templates/repo_history.html:81
 #: seahub/templates/sysadmin/sys_org_info_user.html:33
-#: seahub/templates/sysadmin/useradmin_table.html:48
-#: seahub/templates/sysadmin/useradmin_table.html:66
-#: seahub/templates/sysadmin/useradmin_table.html:89
-#: seahub/templates/sysadmin/useradmin_table.html:121
+#: seahub/templates/sysadmin/useradmin_table.html:47
+#: seahub/templates/sysadmin/useradmin_table.html:65
+#: seahub/templates/sysadmin/useradmin_table.html:88
+#: seahub/templates/sysadmin/useradmin_table.html:120
 #: seahub/templates/sysadmin/userinfo.html:52
 #: seahub/templates/sysadmin/userinfo.html:64
 #: seahub/templates/sysadmin/userinfo.html:76
@@ -1283,8 +1346,9 @@ msgstr "Chỉnh sửa"
 #: seahub/organizations/templates/organizations/org_repoadmin_table.html:23
 #: seahub/organizations/templates/organizations/org_users_table.html:40
 #: seahub/organizations/templates/organizations/userinfo.html:86
-#: seahub/profile/templates/profile/set_profile.html:137
-#: seahub/profile/templates/profile/set_profile.html:139
+#: seahub/profile/templates/profile/set_profile.html:88
+#: seahub/profile/templates/profile/set_profile.html:149
+#: seahub/profile/templates/profile/set_profile.html:151
 #: seahub/templates/js/admin-common-templates.html:45
 #: seahub/templates/js/admin-common-templates.html:167
 #: seahub/templates/js/admin-common-templates.html:204
@@ -1305,14 +1369,13 @@ msgstr "Chỉnh sửa"
 #: seahub/templates/js/templates.html:880
 #: seahub/templates/js/templates.html:966
 #: seahub/templates/js/templates.html:1027
-#: seahub/templates/js/templates.html:1277
-#: seahub/templates/js/templates.html:1327
-#: seahub/templates/js/templates.html:1724
-#: seahub/templates/js/templates.html:2070
-#: seahub/templates/js/templates.html:2206
-#: seahub/templates/js/templates.html:2211
-#: seahub/templates/js/templates.html:2826
-#: seahub/templates/snippets/file_share_popup.html:46
+#: seahub/templates/js/templates.html:1279
+#: seahub/templates/js/templates.html:1335
+#: seahub/templates/js/templates.html:1732
+#: seahub/templates/js/templates.html:2078
+#: seahub/templates/js/templates.html:2214
+#: seahub/templates/js/templates.html:2219
+#: seahub/templates/js/templates.html:2834
 #: seahub/templates/sysadmin/org_admin_table.html:25
 #: seahub/templates/sysadmin/sys_invitations_admin.html:49
 #: seahub/templates/sysadmin/sys_org_info_group.html:25
@@ -1320,10 +1383,10 @@ msgstr "Chỉnh sửa"
 #: seahub/templates/sysadmin/sys_org_info_user.html:48
 #: seahub/templates/sysadmin/sys_terms_admin.html:40
 #: seahub/templates/sysadmin/sys_virus_scan_records.html:23
-#: seahub/templates/sysadmin/useradmin_table.html:142
-#: seahub/templates/sysadmin/userinfo.html:207
-#: seahub/templates/sysadmin/userinfo.html:321
-#: seahub/templates/view_file_base.html:123
+#: seahub/templates/sysadmin/useradmin_table.html:141
+#: seahub/templates/sysadmin/userinfo.html:215
+#: seahub/templates/sysadmin/userinfo.html:329
+#: seahub/templates/view_file_base.html:128
 #: seahub/templates/view_shared_upload_link.html:87
 #: seahub/templates/wiki/wiki_list.html:75
 msgid "Delete"
@@ -1394,27 +1457,27 @@ msgstr "Ghi chú (không bắt buộc)"
 #: seahub/templates/js/templates.html:249
 #: seahub/templates/js/templates.html:1106
 #: seahub/templates/js/templates.html:1152
-#: seahub/templates/js/templates.html:1284
-#: seahub/templates/js/templates.html:1334
-#: seahub/templates/js/templates.html:1371
-#: seahub/templates/js/templates.html:1407
-#: seahub/templates/js/templates.html:1599
-#: seahub/templates/js/templates.html:1642
-#: seahub/templates/js/templates.html:1755
-#: seahub/templates/js/templates.html:1781
-#: seahub/templates/js/templates.html:1926
-#: seahub/templates/js/templates.html:2008
-#: seahub/templates/js/templates.html:2111
-#: seahub/templates/js/templates.html:2120
+#: seahub/templates/js/templates.html:1292
+#: seahub/templates/js/templates.html:1342
+#: seahub/templates/js/templates.html:1379
+#: seahub/templates/js/templates.html:1415
+#: seahub/templates/js/templates.html:1607
+#: seahub/templates/js/templates.html:1650
+#: seahub/templates/js/templates.html:1763
+#: seahub/templates/js/templates.html:1789
+#: seahub/templates/js/templates.html:1934
+#: seahub/templates/js/templates.html:2016
+#: seahub/templates/js/templates.html:2119
 #: seahub/templates/js/templates.html:2128
-#: seahub/templates/js/templates.html:2292
-#: seahub/templates/js/templates.html:2332
-#: seahub/templates/js/templates.html:2345
-#: seahub/templates/js/templates.html:2378
-#: seahub/templates/js/templates.html:2391
-#: seahub/templates/js/templates.html:2409
-#: seahub/templates/js/templates.html:2786
-#: seahub/templates/js/templates.html:2812
+#: seahub/templates/js/templates.html:2136
+#: seahub/templates/js/templates.html:2300
+#: seahub/templates/js/templates.html:2340
+#: seahub/templates/js/templates.html:2353
+#: seahub/templates/js/templates.html:2386
+#: seahub/templates/js/templates.html:2399
+#: seahub/templates/js/templates.html:2417
+#: seahub/templates/js/templates.html:2794
+#: seahub/templates/js/templates.html:2820
 #: seahub/templates/registration/password_change_form.html:24
 #: seahub/templates/registration/password_reset_confirm.html:19
 #: seahub/templates/registration/password_reset_form.html:13
@@ -1422,7 +1485,6 @@ msgstr "Ghi chú (không bắt buộc)"
 #: seahub/templates/repo_history.html:112
 #: seahub/templates/share_access_validation.html:18
 #: seahub/templates/shared_file_view.html:74
-#: seahub/templates/snippets/file_share_popup.html:57
 #: seahub/templates/snippets/search_form.html:11
 #: seahub/templates/snippets/search_form.html:78
 #: seahub/templates/snippets/web_settings_form.html:12
@@ -1441,10 +1503,10 @@ msgstr "Ghi chú (không bắt buộc)"
 #: seahub/templates/sysadmin/sys_org_info_traffic.html:26
 #: seahub/templates/sysadmin/sys_org_info_user.html:77
 #: seahub/templates/sysadmin/sys_org_search.html:12
-#: seahub/templates/sysadmin/sys_statistic_file.html:31
-#: seahub/templates/sysadmin/sys_statistic_storage.html:31
-#: seahub/templates/sysadmin/sys_statistic_traffic.html:42
-#: seahub/templates/sysadmin/sys_statistic_user.html:31
+#: seahub/templates/sysadmin/sys_statistic_file.html:27
+#: seahub/templates/sysadmin/sys_statistic_storage.html:27
+#: seahub/templates/sysadmin/sys_statistic_traffic.html:39
+#: seahub/templates/sysadmin/sys_statistic_user.html:26
 #: seahub/templates/sysadmin/sys_terms_admin.html:71
 #: seahub/templates/sysadmin/sys_user_admin_ldap_imported.html:61
 #: seahub/templates/sysadmin/sys_useradmin.html:68
@@ -1452,14 +1514,14 @@ msgstr "Ghi chú (không bắt buộc)"
 #: seahub/templates/sysadmin/sys_useradmin.html:100
 #: seahub/templates/sysadmin/sys_useradmin_admins.html:45
 #: seahub/templates/sysadmin/user_search.html:12
-#: seahub/templates/sysadmin/useradmin_table.html:165
-#: seahub/templates/sysadmin/userinfo.html:129
-#: seahub/templates/sysadmin/userinfo.html:136
-#: seahub/templates/sysadmin/userinfo.html:143
-#: seahub/templates/sysadmin/userinfo.html:150
-#: seahub/templates/sysadmin/userinfo.html:157
-#: seahub/templates/sysadmin/userinfo.html:168
-#: seahub/templates/view_file_base.html:108
+#: seahub/templates/sysadmin/useradmin_table.html:164
+#: seahub/templates/sysadmin/userinfo.html:137
+#: seahub/templates/sysadmin/userinfo.html:144
+#: seahub/templates/sysadmin/userinfo.html:151
+#: seahub/templates/sysadmin/userinfo.html:158
+#: seahub/templates/sysadmin/userinfo.html:165
+#: seahub/templates/sysadmin/userinfo.html:176
+#: seahub/templates/view_file_base.html:113
 #: seahub/templates/wiki/personal_wiki.html:48
 #: seahub/templates/wiki/personal_wiki.html:58
 #: seahub/templates/wiki/personal_wiki.html:88
@@ -1481,10 +1543,9 @@ msgstr "Chỉnh sửa địa chỉ liên hệ"
 #: seahub/organizations/templates/organizations/org_useradmin_admins.html:86
 #: seahub/organizations/templates/organizations/userinfo.html:169
 #: seahub/templates/snippets/document_file_viewer.html:55
-#: seahub/templates/snippets/shared_link_js.html:108
 #: seahub/templates/snippets/spreadsheet_convert_js.html:39
-#: seahub/templates/view_file_onlyoffice.html:75
-#: seahub/templates/view_file_wopi.html:71
+#: seahub/templates/snippets/wopi_onlyoffice_js.html:26
+#: seahub/templates/snippets/wopi_onlyoffice_js.html:46
 #: seahub/templates/wiki/wiki_list.html:397
 msgid "Failed. Please check the network."
 msgstr "Thất bại. Vui lòng kiểm tra lại network."
@@ -1511,7 +1572,7 @@ msgstr "Xóa địa chỉ liên hệ"
 #: seahub/templates/sysadmin/sys_org_search.html:28
 #: seahub/templates/sysadmin/sys_terms_admin.html:140
 #: seahub/templates/sysadmin/useradmin_js.html:4
-#: seahub/templates/sysadmin/userinfo.html:587
+#: seahub/templates/sysadmin/userinfo.html:610
 #, python-format
 msgid "Are you sure you want to delete %s ?"
 msgstr "Bạn chắc chắn muốn xóa %s ?"
@@ -1580,11 +1641,11 @@ msgstr "Phần mô tả quá dài (tối đa 100 ký tự)"
 msgid "Name %s is not valid"
 msgstr "Tên %s không hợp lệ"
 
-#: seahub/forms.py:97 seahub/views/ajax.py:458 seahub/views/ajax.py:670
-#: seahub/views/ajax.py:1007 seahub/views/ajax.py:1011
-#: seahub/views/ajax.py:1015 seahub/views/ajax.py:1026
-#: seahub/views/ajax.py:1253 seahub/views/file.py:1837
-#: seahub/views/sysadmin.py:1634 seahub/views/sysadmin.py:1652
+#: seahub/forms.py:97 seahub/views/ajax.py:457 seahub/views/ajax.py:669
+#: seahub/views/ajax.py:1008 seahub/views/ajax.py:1012
+#: seahub/views/ajax.py:1016 seahub/views/ajax.py:1027
+#: seahub/views/ajax.py:1238 seahub/views/file.py:1854
+#: seahub/views/sysadmin.py:1696 seahub/views/sysadmin.py:1714
 msgid "Argument missing"
 msgstr "Thiếu tham số"
 
@@ -1646,7 +1707,7 @@ msgid "Permission error: only group staff can add member"
 msgstr "Lỗi: chỉ có thành viên trong Group mới có thể thêm mới"
 
 #: seahub/group/error_msg.py:17 seahub/group/error_msg.py:23
-#: seahub/views/file.py:447
+#: seahub/views/file.py:446
 msgid "Group does not exist"
 msgstr "Group không tồn tại"
 
@@ -1714,15 +1775,15 @@ msgstr ""
 #: seahub/templates/js/sysadmin-templates.html:4
 #: seahub/templates/js/templates.html:177
 #: seahub/templates/js/templates.html:1061
-#: seahub/templates/js/templates.html:1627
-#: seahub/templates/js/templates.html:1650
-#: seahub/templates/js/templates.html:1659
-#: seahub/templates/js/templates.html:2428
-#: seahub/templates/js/templates.html:2794
-#: seahub/templates/js/templates.html:2847
+#: seahub/templates/js/templates.html:1635
+#: seahub/templates/js/templates.html:1658
+#: seahub/templates/js/templates.html:1667
+#: seahub/templates/js/templates.html:2436
+#: seahub/templates/js/templates.html:2802
+#: seahub/templates/js/templates.html:2855
 #: seahub/templates/sysadmin/base.html:14
 #: seahub/templates/sysadmin/sysadmin_backbone.html:31
-#: seahub/templates/view_file_base.html:93
+#: seahub/templates/view_file_base.html:98
 msgid "Close"
 msgstr "Đóng"
 
@@ -1820,13 +1881,12 @@ msgstr "Vui lòng click và chọn một thư viện."
 #: seahub/templates/js/lib-op-popups.html:77
 #: seahub/templates/js/lib-op-popups.html:122
 #: seahub/templates/js/lib-op-popups.html:130
-#: seahub/templates/js/templates.html:1285
-#: seahub/templates/js/templates.html:1335
-#: seahub/templates/js/templates.html:2346
-#: seahub/templates/js/templates.html:2392
+#: seahub/templates/js/templates.html:1293
+#: seahub/templates/js/templates.html:1343
+#: seahub/templates/js/templates.html:2354
+#: seahub/templates/js/templates.html:2400
 #: seahub/templates/repo_dir_recycle_view.html:75
 #: seahub/templates/shared_file_view.html:75
-#: seahub/templates/snippets/file_share_popup.html:58
 #: seahub/templates/snippets/web_settings_form.html:13
 #: seahub/templates/snippets/web_settings_form.html:28
 #: seahub/templates/snippets/web_settings_form.html:45
@@ -1904,13 +1964,13 @@ msgid "Description is required."
 msgstr "Yêu cầu mô tả."
 
 #: seahub/group/views.py:126 seahub/share/views.py:228
-#: seahub/views/__init__.py:545 seahub/views/ajax.py:164
-#: seahub/views/ajax.py:476 seahub/views/ajax.py:483 seahub/views/ajax.py:546
-#: seahub/views/ajax.py:553 seahub/views/ajax.py:683 seahub/views/ajax.py:1191
-#: seahub/views/ajax.py:1233 seahub/views/file.py:995
-#: seahub/views/file.py:1161 seahub/views/file.py:1321
-#: seahub/views/file.py:1846 seahub/views/repo.py:110 seahub/views/repo.py:193
-#: seahub/views/repo.py:290
+#: seahub/views/__init__.py:534 seahub/views/ajax.py:163
+#: seahub/views/ajax.py:475 seahub/views/ajax.py:482 seahub/views/ajax.py:545
+#: seahub/views/ajax.py:552 seahub/views/ajax.py:682 seahub/views/ajax.py:1177
+#: seahub/views/ajax.py:1218 seahub/views/file.py:987
+#: seahub/views/file.py:1178 seahub/views/file.py:1338
+#: seahub/views/file.py:1863 seahub/views/repo.py:109 seahub/views/repo.py:188
+#: seahub/views/repo.py:285
 msgid "Permission denied"
 msgstr "Không có quyền"
 
@@ -2380,11 +2440,9 @@ msgstr ""
 #: seahub/templates/js/orgadmin-templates.html:14
 #: seahub/templates/js/sysadmin-templates.html:40
 #: seahub/templates/sysadmin/base.html:51
-#: seahub/templates/sysadmin/sys_statistic_file.html:15
-#: seahub/templates/sysadmin/sys_statistic_storage.html:15
-#: seahub/templates/sysadmin/sys_statistic_traffic.html:15
-#: seahub/templates/sysadmin/sys_statistic_user.html:15
-#: seahub/templates/sysadmin/sys_trafficadmin.html:12
+#: seahub/templates/sysadmin/snippets/sys_statistic_nav.html:6
+#: seahub/templates/sysadmin/sys_statistic_traffic.html:21
+#: seahub/templates/sysadmin/sys_trafficadmin.html:17
 msgid "Users"
 msgstr "Người dùng"
 
@@ -2420,8 +2478,8 @@ msgstr "Thông tin"
 #: seahub/templates/js/sysadmin-templates.html:34
 #: seahub/templates/js/sysadmin-templates.html:167
 #: seahub/templates/js/sysadmin-templates.html:850
-#: seahub/templates/js/templates.html:1556
-#: seahub/templates/js/templates.html:2480 seahub/templates/libraries.html:5
+#: seahub/templates/js/templates.html:1564
+#: seahub/templates/js/templates.html:2488 seahub/templates/libraries.html:5
 #: seahub/templates/sysadmin/base.html:45
 #: seahub/templates/sysadmin/snippets/sys_org_info_nav.html:5
 msgid "Libraries"
@@ -2451,7 +2509,7 @@ msgstr "Tổng số người dùng"
 #: seahub/templates/js/sysadmin-templates.html:609
 #: seahub/templates/js/sysadmin-templates.html:844
 #: seahub/templates/js/templates.html:515
-#: seahub/templates/js/templates.html:1610
+#: seahub/templates/js/templates.html:1618
 #: seahub/templates/sysadmin/base.html:57
 #: seahub/templates/sysadmin/settings.html:97
 #: seahub/templates/sysadmin/snippets/sys_org_info_nav.html:4
@@ -2538,17 +2596,17 @@ msgstr ""
 #: seahub/templates/js/templates.html:547
 #: seahub/templates/js/templates.html:1085
 #: seahub/templates/js/templates.html:1130
-#: seahub/templates/js/templates.html:1856
-#: seahub/templates/js/templates.html:1860
-#: seahub/templates/js/templates.html:1897
-#: seahub/templates/js/templates.html:2019
-#: seahub/templates/js/templates.html:2238
-#: seahub/templates/js/templates.html:2257
+#: seahub/templates/js/templates.html:1864
+#: seahub/templates/js/templates.html:1868
+#: seahub/templates/js/templates.html:1905
+#: seahub/templates/js/templates.html:2027
+#: seahub/templates/js/templates.html:2246
+#: seahub/templates/js/templates.html:2265
 #: seahub/templates/repo_dir_recycle_view.html:46
 #: seahub/templates/repo_history_view.html:59
-#: seahub/templates/sysadmin/userinfo.html:178
-#: seahub/templates/sysadmin/userinfo.html:228
-#: seahub/templates/sysadmin/userinfo.html:265
+#: seahub/templates/sysadmin/userinfo.html:186
+#: seahub/templates/sysadmin/userinfo.html:236
+#: seahub/templates/sysadmin/userinfo.html:273
 #: seahub/templates/view_shared_dir.html:51
 msgid "Size"
 msgstr "Dung lượng"
@@ -2562,14 +2620,14 @@ msgstr "Dung lượng"
 #: seahub/templates/js/templates.html:548
 #: seahub/templates/js/templates.html:1094
 #: seahub/templates/js/templates.html:1140
-#: seahub/templates/js/templates.html:1796
-#: seahub/templates/js/templates.html:1858
-#: seahub/templates/js/templates.html:1861
-#: seahub/templates/js/templates.html:1898
-#: seahub/templates/js/templates.html:1922
-#: seahub/templates/js/templates.html:2020
-#: seahub/templates/sysadmin/userinfo.html:179
-#: seahub/templates/sysadmin/userinfo.html:229
+#: seahub/templates/js/templates.html:1804
+#: seahub/templates/js/templates.html:1866
+#: seahub/templates/js/templates.html:1869
+#: seahub/templates/js/templates.html:1906
+#: seahub/templates/js/templates.html:1930
+#: seahub/templates/js/templates.html:2028
+#: seahub/templates/sysadmin/userinfo.html:187
+#: seahub/templates/sysadmin/userinfo.html:237
 #: seahub/templates/view_shared_dir.html:52
 #: seahub/templates/wiki/wiki_list.html:21
 #: seahub/templates/wiki/wiki_list.html:51
@@ -2582,10 +2640,10 @@ msgstr "Cập nhật"
 #: seahub/organizations/templates/organizations/pubrepo.html:26
 #: seahub/organizations/templates/organizations/userinfo.html:78
 #: seahub/organizations/templates/organizations/userinfo.html:110
-#: seahub/templates/js/templates.html:1934
+#: seahub/templates/js/templates.html:1942
 #: seahub/templates/sysadmin/sys_org_info_library.html:23
-#: seahub/templates/sysadmin/userinfo.html:186
-#: seahub/templates/sysadmin/userinfo.html:235
+#: seahub/templates/sysadmin/userinfo.html:194
+#: seahub/templates/sysadmin/userinfo.html:243
 msgid "Encrypted"
 msgstr "Mã hóa"
 
@@ -2606,21 +2664,21 @@ msgstr "Mã hóa"
 #: seahub/organizations/templates/organizations/userinfo.html:114
 #: seahub/templates/sysadmin/sys_org_info_library.html:23
 #: seahub/templates/sysadmin/sys_org_info_library.html:25
-#: seahub/templates/sysadmin/userinfo.html:186
-#: seahub/templates/sysadmin/userinfo.html:188
-#: seahub/templates/sysadmin/userinfo.html:235
-#: seahub/templates/sysadmin/userinfo.html:237
-#: seahub/templates/sysadmin/userinfo.html:239
+#: seahub/templates/sysadmin/userinfo.html:194
+#: seahub/templates/sysadmin/userinfo.html:196
+#: seahub/templates/sysadmin/userinfo.html:243
+#: seahub/templates/sysadmin/userinfo.html:245
+#: seahub/templates/sysadmin/userinfo.html:247
 msgid "library icon"
 msgstr "biểu tượng thư viện"
 
 #: seahub/institutions/templates/institutions/user_info.html:96
-#: seahub/templates/sysadmin/userinfo.html:216
+#: seahub/templates/sysadmin/userinfo.html:224
 msgid "This user has not created any libraries"
 msgstr "Người dùng này chưa tạo bất kì thư viện nào"
 
 #: seahub/institutions/templates/institutions/user_info.html:121
-#: seahub/templates/sysadmin/userinfo.html:327
+#: seahub/templates/sysadmin/userinfo.html:335
 msgid "This user has not created or joined any groups"
 msgstr "Người dùng này chưa tao hoặc tham gia nhóm nào"
 
@@ -2750,14 +2808,14 @@ msgstr "Kết quả"
 #: seahub/templates/js/sysadmin-templates.html:620
 #: seahub/templates/js/sysadmin-templates.html:652
 #: seahub/templates/js/sysadmin-templates.html:670
-#: seahub/templates/js/templates.html:1899
+#: seahub/templates/js/templates.html:1907
 #: seahub/templates/sysadmin/sys_link_search.html:23
 #: seahub/templates/sysadmin/sys_org_admin.html:26
 #: seahub/templates/sysadmin/sys_org_info_library.html:17
 #: seahub/templates/sysadmin/sys_publink_admin.html:29
 #: seahub/templates/sysadmin/sys_upload_link_admin.html:23
 #: seahub/templates/sysadmin/sys_virus_scan_records.html:12
-#: seahub/templates/wiki/wiki_list.html:20 seahub/views/sysadmin.py:734
+#: seahub/templates/wiki/wiki_list.html:20 seahub/views/sysadmin.py:793
 msgid "Owner"
 msgstr ""
 
@@ -2765,20 +2823,20 @@ msgstr ""
 #: seahub/templates/js/admin-common-templates.html:31
 #: seahub/templates/js/admin-common-templates.html:35
 #: seahub/templates/js/admin-common-templates.html:38
-#: seahub/templates/js/templates.html:2187
-#: seahub/templates/js/templates.html:2191
-#: seahub/templates/js/templates.html:2194 seahub/views/sysadmin.py:738
+#: seahub/templates/js/templates.html:2195
+#: seahub/templates/js/templates.html:2199
+#: seahub/templates/js/templates.html:2202 seahub/views/sysadmin.py:797
 msgid "Member"
 msgstr ""
 
 #: seahub/institutions/views.py:195 seahub/organizations/views.py:481
-#: seahub/views/sysadmin.py:843
+#: seahub/views/sysadmin.py:905
 #, python-format
 msgid "Successfully deleted %s"
 msgstr "Xóa %s thành công"
 
 #: seahub/institutions/views.py:197 seahub/organizations/views.py:462
-#: seahub/views/sysadmin.py:853
+#: seahub/views/sysadmin.py:915
 msgid "Failed to delete: the user does not exist"
 msgstr "Xóa thất bại: người dùng không tồn tại"
 
@@ -2821,8 +2879,9 @@ msgstr ""
 #: seahub/notifications/templates/notifications/notification_list.html:59
 #: seahub/templates/sysadmin/settings.html:268
 #: seahub/templates/sysadmin/sys_inst_info_user.html:157
+#: seahub/templates/sysadmin/sys_statistic_reports.html:49
 #: seahub/templates/sysadmin/useradmin_js.html:248
-#: seahub/templates/sysadmin/userinfo.html:542
+#: seahub/templates/sysadmin/userinfo.html:565
 #: seahub/templates/wiki/wiki_list.html:373
 msgid "It is required."
 msgstr "Điều này được yêu cầu"
@@ -2922,17 +2981,6 @@ msgstr[0] "\nBạn có %(num)s thông báo mới trên %(site_name)s:\n"
 #: seahub/notifications/templates/notifications/user_notification_list.html:22
 msgid "Message"
 msgstr "Tin nhắn"
-
-#: seahub/notifications/templates/notifications/notice_email.html:20
-#: seahub/notifications/templates/notifications/user_notification_list.html:23
-#: seahub/organizations/templates/organizations/pubgrp.html:17
-#: seahub/templates/file_revisions.html:39
-#: seahub/templates/js/sysadmin-templates.html:290
-#: seahub/templates/js/sysadmin-templates.html:939
-#: seahub/templates/js/sysadmin-templates.html:979
-#: seahub/templates/repo_history.html:33 seahub/templates/repo_history.html:40
-msgid "Time"
-msgstr "Thời gian"
 
 #: seahub/notifications/templates/notifications/notice_email.html:27
 #, python-format
@@ -3133,6 +3181,7 @@ msgstr ""
 #: seahub/organizations/templates/organizations/org_admin_backbone.html:63
 #: seahub/organizations/templates/organizations/org_admin_group_info.html:88
 #: seahub/templates/base.html:128 seahub/templates/base_for_backbone.html:97
+#: seahub/templates/js/templates.html:1284
 #: seahub/templates/sysadmin/sysadmin_backbone.html:66
 msgid "No"
 msgstr "Không"
@@ -3151,15 +3200,15 @@ msgstr "Thông tin nhóm"
 #: seahub/templates/sysadmin/org_admin_table.html:5
 #: seahub/templates/sysadmin/sys_org_info_group.html:16
 #: seahub/templates/sysadmin/sys_org_search.html:11
-#: seahub/views/sysadmin.py:1192
+#: seahub/views/sysadmin.py:1254
 msgid "Creator"
 msgstr "Người tạo"
 
 #: seahub/organizations/templates/organizations/org_admin_group_info.html:30
 #: seahub/templates/js/admin-common-templates.html:112
 #: seahub/templates/js/sysadmin-templates.html:853
-#: seahub/templates/js/templates.html:1619
-#: seahub/templates/js/templates.html:1660
+#: seahub/templates/js/templates.html:1627
+#: seahub/templates/js/templates.html:1668
 #: seahub/templates/sysadmin/snippets/sys_org_info_nav.html:3
 #: seahub/templates/sysadmin/sys_inst_info_admins.html:7
 #: seahub/templates/sysadmin/sys_inst_info_user.html:13
@@ -3177,7 +3226,7 @@ msgid "No library is shared to this group"
 msgstr "Chưa có thư viện nào được chia sẻ trong Group"
 
 #: seahub/organizations/templates/organizations/org_admin_group_info.html:76
-#: seahub/templates/js/templates.html:2055
+#: seahub/templates/js/templates.html:2063
 msgid "admin"
 msgstr ""
 
@@ -3208,8 +3257,8 @@ msgstr ""
 #: seahub/templates/home_base.html:70 seahub/templates/home_base.html:74
 #: seahub/templates/js/orgadmin-templates.html:24
 #: seahub/templates/js/sysadmin-templates.html:76
-#: seahub/templates/js/templates.html:1564
-#: seahub/templates/js/templates.html:1568
+#: seahub/templates/js/templates.html:1572
+#: seahub/templates/js/templates.html:1576
 #: seahub/templates/sysadmin/base.html:87
 msgid "Links"
 msgstr "Links"
@@ -3242,36 +3291,22 @@ msgstr ""
 #: seahub/templates/js/templates.html:607
 #: seahub/templates/js/templates.html:683
 #: seahub/templates/js/templates.html:1042
-#: seahub/templates/js/templates.html:1353
-#: seahub/templates/js/templates.html:1389
-#: seahub/templates/js/templates.html:1740
-#: seahub/templates/js/templates.html:1766
-#: seahub/templates/js/templates.html:1923
-#: seahub/templates/js/templates.html:2312
-#: seahub/templates/js/templates.html:2356
-#: seahub/templates/js/templates.html:2490
-#: seahub/templates/js/templates.html:2611
+#: seahub/templates/js/templates.html:1361
+#: seahub/templates/js/templates.html:1397
+#: seahub/templates/js/templates.html:1748
+#: seahub/templates/js/templates.html:1774
+#: seahub/templates/js/templates.html:1931
+#: seahub/templates/js/templates.html:2320
+#: seahub/templates/js/templates.html:2364
+#: seahub/templates/js/templates.html:2498
+#: seahub/templates/js/templates.html:2619
 msgid "Permission"
 msgstr "Quyền hạn"
-
-#: seahub/organizations/templates/organizations/org_file_audit.html:17
-#: seahub/organizations/templates/organizations/org_file_update.html:17
-#: seahub/templates/file_access.html:24
-#: seahub/templates/js/sysadmin-templates.html:230
-#: seahub/templates/js/sysadmin-templates.html:285
-#: seahub/templates/js/sysadmin-templates.html:783
-#: seahub/templates/js/templates.html:1352
-#: seahub/templates/js/templates.html:1739
-#: seahub/templates/js/templates.html:2310
-#: seahub/templates/sysadmin/settings.html:60
-#: seahub/templates/sysadmin/sys_trafficadmin.html:37
-msgid "User"
-msgstr "Người dùng"
 
 #: seahub/organizations/templates/organizations/org_file_audit.html:18
 #: seahub/templates/file_access.html:25
 #: seahub/templates/sysadmin/sys_invitations_admin.html:18
-#: seahub/templates/sysadmin/userinfo.html:266
+#: seahub/templates/sysadmin/userinfo.html:274
 msgid "Type"
 msgstr ""
 
@@ -3296,24 +3331,20 @@ msgstr ""
 #: seahub/organizations/templates/organizations/org_perm_audit.html:19
 #: seahub/templates/file_edit.html:128
 #: seahub/templates/js/sysadmin-templates.html:288
-#: seahub/templates/js/templates.html:1795
-#: seahub/templates/js/templates.html:2646
-#: seahub/templates/js/templates.html:2683
+#: seahub/templates/js/templates.html:1803
+#: seahub/templates/js/templates.html:2654
+#: seahub/templates/js/templates.html:2691
 #: seahub/templates/sysadmin/settings.html:137
 #: seahub/templates/sysadmin/sys_virus_scan_records.html:11
 msgid "Library"
 msgstr "Thư viện"
 
 #: seahub/organizations/templates/organizations/org_file_audit.html:22
-#: seahub/templates/file_edit.html:407 seahub/templates/js/templates.html:2276
+#: seahub/templates/file_edit.html:407 seahub/templates/js/templates.html:2284
 #: seahub/templates/repo_history_view.html:74
 #: seahub/templates/snippets/repo_dir_trash_tr.html:21
-#: seahub/templates/sysadmin/sys_statistic_file.html:13
-#: seahub/templates/sysadmin/sys_statistic_storage.html:13
-#: seahub/templates/sysadmin/sys_statistic_traffic.html:13
-#: seahub/templates/sysadmin/sys_statistic_user.html:13
-#: seahub/templates/sysadmin/sys_trafficadmin.html:10
-#: seahub/templates/sysadmin/userinfo.html:274
+#: seahub/templates/sysadmin/snippets/sys_statistic_nav.html:4
+#: seahub/templates/sysadmin/userinfo.html:282
 #: seahub/templates/view_shared_dir.html:80
 #: seahub/templates/view_shared_dir.html:82
 #: seahub/templates/view_shared_dir.html:85
@@ -3358,13 +3389,13 @@ msgstr ""
 #: seahub/templates/js/templates.html:1004
 #: seahub/templates/js/templates.html:1044
 #: seahub/templates/js/templates.html:1046
-#: seahub/templates/js/templates.html:1964
+#: seahub/templates/js/templates.html:1972
 #: seahub/templates/repo_history.html:53
 msgid "Details"
 msgstr ""
 
 #: seahub/organizations/templates/organizations/org_file_update.html:97
-#: seahub/templates/js/templates.html:1990
+#: seahub/templates/js/templates.html:1998
 #: seahub/templates/snippets/list_commit_detail.html:10
 msgid "Modification Details"
 msgstr "Chi tiết thay đổi"
@@ -3405,21 +3436,21 @@ msgid "Unknown error."
 msgstr ""
 
 #: seahub/organizations/templates/organizations/org_group_admin.html:6
-#: seahub/templates/home_base.html:26 seahub/templates/js/templates.html:1477
-#: seahub/templates/js/templates.html:1499
+#: seahub/templates/home_base.html:26 seahub/templates/js/templates.html:1485
+#: seahub/templates/js/templates.html:1507
 msgid "All Groups"
 msgstr "Tất cả Group"
 
 #: seahub/organizations/templates/organizations/org_group_admin.html:44
 #: seahub/templates/sysadmin/sys_org_info_group.html:40
-#: seahub/templates/sysadmin/userinfo.html:586
+#: seahub/templates/sysadmin/userinfo.html:609
 msgid "Delete Group"
 msgstr "Xóa nhóm"
 
 #: seahub/organizations/templates/organizations/org_manage.html:13
 #: seahub/organizations/templates/organizations/org_manage.html:22
-#: seahub/templates/sysadmin/sys_statistic_user.html:172
-#: seahub/templates/sysadmin/sys_statistic_user.html:184
+#: seahub/templates/sysadmin/sys_statistic_user.html:167
+#: seahub/templates/sysadmin/sys_statistic_user.html:179
 msgid "Active Users"
 msgstr "Người dùng đã kích hoạt"
 
@@ -3436,31 +3467,31 @@ msgstr ""
 #: seahub/organizations/templates/organizations/org_perm_audit.html:17
 #: seahub/organizations/templates/organizations/pubrepo.html:19
 #: seahub/organizations/templates/organizations/userinfo.html:102
-#: seahub/templates/sysadmin/userinfo.html:227
+#: seahub/templates/sysadmin/userinfo.html:235
 msgid "Share From"
 msgstr "Chia sẻ từ"
 
 #: seahub/organizations/templates/organizations/org_perm_audit.html:18
-#: seahub/templates/js/templates.html:2489
-#: seahub/templates/js/templates.html:2610
+#: seahub/templates/js/templates.html:2497
+#: seahub/templates/js/templates.html:2618
 msgid "Share To"
 msgstr "Chia sẻ đến"
 
 #: seahub/organizations/templates/organizations/org_perm_audit.html:20
-#: seahub/templates/js/templates.html:2311
-#: seahub/templates/js/templates.html:2355
+#: seahub/templates/js/templates.html:2319
+#: seahub/templates/js/templates.html:2363
 msgid "Folder"
 msgstr "Thư mục"
 
 #: seahub/organizations/templates/organizations/org_perm_audit.html:21
 #: seahub/templates/js/templates.html:546
 #: seahub/templates/js/templates.html:563
-#: seahub/templates/js/templates.html:1854
-#: seahub/templates/js/templates.html:1872
-#: seahub/templates/js/templates.html:1881
-#: seahub/templates/js/templates.html:1888
+#: seahub/templates/js/templates.html:1862
+#: seahub/templates/js/templates.html:1880
+#: seahub/templates/js/templates.html:1889
 #: seahub/templates/js/templates.html:1896
-#: seahub/templates/js/templates.html:1910
+#: seahub/templates/js/templates.html:1904
+#: seahub/templates/js/templates.html:1918
 msgid "Actions"
 msgstr ""
 
@@ -3475,16 +3506,16 @@ msgid "Count"
 msgstr ""
 
 #: seahub/organizations/templates/organizations/org_publink_admin.html:23
-#: seahub/templates/js/templates.html:2283
-#: seahub/templates/js/templates.html:2715
-#: seahub/templates/js/templates.html:2726
-#: seahub/templates/js/templates.html:2776
+#: seahub/templates/js/templates.html:2291
+#: seahub/templates/js/templates.html:2723
+#: seahub/templates/js/templates.html:2734
+#: seahub/templates/js/templates.html:2784
 #: seahub/templates/sysadmin/sys_inst_admin.html:36
 #: seahub/templates/sysadmin/sys_link_search.html:36
 #: seahub/templates/sysadmin/sys_publink_admin.html:42
 #: seahub/templates/sysadmin/sys_upload_link_admin.html:36
-#: seahub/templates/sysadmin/userinfo.html:285
-#: seahub/templates/sysadmin/userinfo.html:294
+#: seahub/templates/sysadmin/userinfo.html:293
+#: seahub/templates/sysadmin/userinfo.html:302
 msgid "Remove"
 msgstr "Loại bỏ"
 
@@ -3600,8 +3631,8 @@ msgstr "Xóa thư vei65n"
 #: seahub/templates/js/sysadmin-templates.html:697
 #: seahub/templates/js/templates.html:101
 #: seahub/templates/js/templates.html:152
-#: seahub/templates/js/templates.html:2082
-#: seahub/templates/sysadmin/userinfo.html:208
+#: seahub/templates/js/templates.html:2090
+#: seahub/templates/sysadmin/userinfo.html:216
 msgid "Transfer"
 msgstr "Chuyển"
 
@@ -3623,7 +3654,7 @@ msgstr ""
 #: seahub/organizations/templates/organizations/org_user_admin.html:32
 #: seahub/organizations/templates/organizations/org_user_admin.html:62
 #: seahub/templates/js/templates.html:1196
-#: seahub/templates/js/templates.html:1306
+#: seahub/templates/js/templates.html:1314
 #: seahub/templates/sysadmin/sys_org_info_user.html:71
 #: seahub/templates/sysadmin/sys_org_info_user.html:95
 #: seahub/templates/sysadmin/sys_useradmin.html:62
@@ -3633,7 +3664,7 @@ msgstr ""
 
 #: seahub/organizations/templates/organizations/org_user_admin.html:33
 #: seahub/templates/js/templates.html:1197
-#: seahub/templates/js/templates.html:1307
+#: seahub/templates/js/templates.html:1315
 #: seahub/templates/sysadmin/sys_org_info_user.html:72
 #: seahub/templates/sysadmin/sys_useradmin.html:63
 msgid "Generate a random password"
@@ -3662,7 +3693,6 @@ msgstr "Mật khẩu không được để trống"
 #: seahub/templates/registration/password_change_form.html:70
 #: seahub/templates/registration/registration_form.html:95
 #: seahub/templates/snippets/repo_create_js.html:54
-#: seahub/templates/snippets/shared_link_js.html:144
 #: seahub/templates/sysadmin/sys_org_admin.html:85
 #: seahub/templates/sysadmin/sys_org_info_user.html:134
 #: seahub/templates/sysadmin/sys_useradmin.html:154
@@ -3692,10 +3722,9 @@ msgid "Enter"
 msgstr ""
 
 #: seahub/organizations/templates/organizations/org_useradmin_admins.html:29
-#: seahub/templates/js/templates.html:1280
-#: seahub/templates/js/templates.html:1330
-#: seahub/templates/js/templates.html:2784
-#: seahub/templates/snippets/file_share_popup.html:50
+#: seahub/templates/js/templates.html:1288
+#: seahub/templates/js/templates.html:1338
+#: seahub/templates/js/templates.html:2792
 #: seahub/templates/sysadmin/sys_useradmin_admins.html:39
 msgid "Emails, separated by ','"
 msgstr ""
@@ -3712,7 +3741,7 @@ msgstr "Chú ý: địa chỉ email phải được kích hoạt trước đó."
 #: seahub/templates/sysadmin/sys_inst_info_user.html:57
 #: seahub/templates/sysadmin/sys_inst_search_user.html:43
 #: seahub/templates/sysadmin/useradmin_js.html:13
-#: seahub/templates/sysadmin/useradmin_table.html:149
+#: seahub/templates/sysadmin/useradmin_table.html:148
 msgid "Revoke Admin"
 msgstr "Hủy bỏ quyền Admin"
 
@@ -3744,7 +3773,7 @@ msgstr "Bạn có chắn muốn thay đổi mật khẩu của %s ?"
 
 #: seahub/organizations/templates/organizations/org_users_table.html:41
 #: seahub/templates/sysadmin/sys_org_info_user.html:49
-#: seahub/templates/sysadmin/useradmin_table.html:145
+#: seahub/templates/sysadmin/useradmin_table.html:144
 msgid "ResetPwd"
 msgstr "Thay đổi mật khẩu"
 
@@ -3767,8 +3796,8 @@ msgstr ""
 #: seahub/templates/js/sysadmin-templates.html:379
 #: seahub/templates/js/templates.html:4 seahub/templates/js/templates.html:5
 #: seahub/templates/js/templates.html:16
-#: seahub/templates/js/templates.html:1605
-#: seahub/templates/js/templates.html:1606
+#: seahub/templates/js/templates.html:1613
+#: seahub/templates/js/templates.html:1614
 msgid "New Library"
 msgstr "Tạo thư viện mới"
 
@@ -3788,11 +3817,11 @@ msgstr "Tạo thư viện mới"
 #: seahub/templates/repo_history_view.html:79
 #: seahub/templates/shared_file_view.html:54
 #: seahub/templates/shared_file_view.html:86
-#: seahub/templates/sysadmin/userinfo.html:282
-#: seahub/templates/view_file_base.html:161
-#: seahub/templates/view_file_base.html:164
-#: seahub/templates/view_file_base.html:210
-#: seahub/templates/view_file_base.html:231
+#: seahub/templates/sysadmin/userinfo.html:290
+#: seahub/templates/view_file_base.html:75
+#: seahub/templates/view_file_base.html:166
+#: seahub/templates/view_file_base.html:169
+#: seahub/templates/view_file_base.html:207
 #: seahub/templates/view_history_file.html:23
 #: seahub/templates/view_history_file.html:34
 #: seahub/templates/view_shared_dir.html:68
@@ -3814,8 +3843,8 @@ msgstr "Tải xuống"
 #: seahub/templates/js/templates.html:367
 #: seahub/templates/js/templates.html:396
 #: seahub/templates/js/templates.html:415
-#: seahub/templates/js/templates.html:2563
-#: seahub/templates/js/templates.html:2595
+#: seahub/templates/js/templates.html:2571
+#: seahub/templates/js/templates.html:2603
 msgid "Unshare"
 msgstr "Ngừng chia sẻ"
 
@@ -3842,7 +3871,7 @@ msgstr ""
 #: seahub/templates/repo_history.html:100
 #: seahub/templates/snippets/admin_paginator.html:4
 #: seahub/templates/sysadmin/sys_publink_admin.html:50
-#: seahub/templates/sysadmin/sys_trafficadmin.html:50
+#: seahub/templates/sysadmin/sys_trafficadmin.html:104
 #: seahub/templates/sysadmin/sys_upload_link_admin.html:44
 #: seahub/templates/sysadmin/useradmin_paginator.html:4
 msgid "Previous"
@@ -3859,7 +3888,7 @@ msgstr "Trước"
 #: seahub/templates/repo_history.html:103
 #: seahub/templates/snippets/admin_paginator.html:7
 #: seahub/templates/sysadmin/sys_publink_admin.html:53
-#: seahub/templates/sysadmin/sys_trafficadmin.html:53
+#: seahub/templates/sysadmin/sys_trafficadmin.html:107
 #: seahub/templates/sysadmin/sys_upload_link_admin.html:47
 #: seahub/templates/sysadmin/useradmin_paginator.html:7
 msgid "Next"
@@ -3869,7 +3898,7 @@ msgstr "Tiếp theo"
 #: seahub/templates/file_access.html:63
 #: seahub/templates/snippets/admin_paginator.html:12
 #: seahub/templates/sysadmin/sys_publink_admin.html:58
-#: seahub/templates/sysadmin/sys_trafficadmin.html:58
+#: seahub/templates/sysadmin/sys_trafficadmin.html:112
 #: seahub/templates/sysadmin/sys_upload_link_admin.html:52
 #: seahub/templates/sysadmin/useradmin_paginator.html:12
 msgid "Per page: "
@@ -3891,6 +3920,7 @@ msgid "Back to user list"
 msgstr "Trở về danh sách người dùng"
 
 #: seahub/organizations/templates/organizations/userinfo.html:24
+#: seahub/templates/sysadmin/sys_trafficadmin.html:37
 #: seahub/templates/sysadmin/userinfo.html:39
 msgid "Organization"
 msgstr "Tổ chức"
@@ -3909,16 +3939,16 @@ msgstr ""
 #: seahub/templates/sysadmin/sys_useradmin.html:33
 #: seahub/templates/sysadmin/sys_useradmin_admins.html:27
 #: seahub/templates/sysadmin/user_search.html:17
-#: seahub/templates/sysadmin/useradmin_table.html:158
-#: seahub/templates/sysadmin/userinfo.html:161
+#: seahub/templates/sysadmin/useradmin_table.html:157
+#: seahub/templates/sysadmin/userinfo.html:169
 msgid "Set quota"
 msgstr ""
 
 #: seahub/organizations/templates/organizations/userinfo.html:49
 #: seahub/templates/sysadmin/sys_inst_info_base.html:30
 #: seahub/templates/sysadmin/sys_org_info_base.html:35
-#: seahub/templates/sysadmin/useradmin_table.html:162
-#: seahub/templates/sysadmin/userinfo.html:165
+#: seahub/templates/sysadmin/useradmin_table.html:161
+#: seahub/templates/sysadmin/userinfo.html:173
 msgid "Tip: 0 means default limit"
 msgstr "Mẹo: điền 0 cho thiết lập không giới hạn"
 
@@ -3932,37 +3962,37 @@ msgstr "Thư viện chia sẻ"
 msgid "Quota can not be empty"
 msgstr "Quota không được bỏ trống"
 
-#: seahub/organizations/views.py:394 seahub/views/sysadmin.py:1124
+#: seahub/organizations/views.py:394 seahub/views/sysadmin.py:1186
 #, python-format
 msgid "Fail to add user %s."
 msgstr "Thêm người dùng %s thất bại."
 
-#: seahub/organizations/views.py:404 seahub/views/sysadmin.py:1154
-#: seahub/views/sysadmin.py:1167
+#: seahub/organizations/views.py:404 seahub/views/sysadmin.py:1216
+#: seahub/views/sysadmin.py:1229
 #, python-format
 msgid "Successfully added user %s."
 msgstr "Thêm người dùng %s thành công."
 
-#: seahub/organizations/views.py:516 seahub/views/sysadmin.py:1060
+#: seahub/organizations/views.py:516 seahub/views/sysadmin.py:1122
 #, python-format
 msgid ""
 "Successfully reset password to %(passwd)s, an email has been sent to "
 "%(user)s."
 msgstr "Thay đổi mật khẩu thành công sang %(passwd)s, một email đã được gửi đến %(user)s."
 
-#: seahub/organizations/views.py:521 seahub/views/sysadmin.py:1065
+#: seahub/organizations/views.py:521 seahub/views/sysadmin.py:1127
 #, python-format
 msgid ""
 "Successfully reset password to %(passwd)s, but failed to send email to "
 "%(user)s, please check your email configuration."
 msgstr "Thay đổi mật khẩu thành công sang %(passwd)s, nhưng không thể gửi email đến %(user)s. Vui lòng kiểm tra lại cấu hình email."
 
-#: seahub/organizations/views.py:525 seahub/views/sysadmin.py:1069
+#: seahub/organizations/views.py:525 seahub/views/sysadmin.py:1131
 #, python-format
 msgid "Successfully reset password to %(passwd)s for user %(user)s."
 msgstr "Thay đổi mật khẩu thành công sang %(passwd)s cho người dùng %(user)s."
 
-#: seahub/organizations/views.py:528 seahub/views/sysadmin.py:1072
+#: seahub/organizations/views.py:528 seahub/views/sysadmin.py:1134
 #, python-format
 msgid ""
 "Successfully reset password to %(passwd)s for user %(user)s. But email "
@@ -3971,16 +4001,16 @@ msgid ""
 msgstr "Thay đổi mật khẩu thành công sang %(passwd)s cho người dùng %(user)s. Nhưng không thể gửi email thông báo do thiết lập cấu hình mail chưa đúng"
 
 #: seahub/organizations/views.py:552 seahub/organizations/views.py:1032
-#: seahub/views/sysadmin.py:1917
+#: seahub/views/sysadmin.py:1943
 #, python-format
 msgid "Successfully set %s as admin."
 msgstr "Thiết lập quyền admin cho %s thành công"
 
-#: seahub/organizations/views.py:566 seahub/views/sysadmin.py:905
+#: seahub/organizations/views.py:566 seahub/views/sysadmin.py:967
 msgid "Failed to revoke admin: the user does not exist"
 msgstr "Hủy quyền Admin thất bại: người dùng không tồn tại"
 
-#: seahub/organizations/views.py:575 seahub/views/sysadmin.py:903
+#: seahub/organizations/views.py:575 seahub/views/sysadmin.py:965
 #, python-format
 msgid "Successfully revoke the admin permission of %s"
 msgstr "Hủy quyền admin của %s thành công"
@@ -3991,12 +4021,12 @@ msgid "Successfully transfered 1 item."
 msgstr ""
 
 #: seahub/organizations/views.py:722 seahub/organizations/views.py:999
-#: seahub/views/sysadmin.py:1373 seahub/views/sysadmin.py:1788
-#: seahub/views/sysadmin.py:1883
+#: seahub/views/sysadmin.py:1435 seahub/views/sysadmin.py:1850
+#: seahub/views/sysadmin.py:1909
 msgid "Successfully deleted."
 msgstr "Xóa thành công."
 
-#: seahub/organizations/views.py:1034 seahub/views/sysadmin.py:1919
+#: seahub/organizations/views.py:1034 seahub/views/sysadmin.py:1945
 #, python-format
 msgid "Failed to set %s as admin: user does not exist."
 msgstr "Thiết lập quyền admin cho %s thất bại: người dùng này không tồn tại."
@@ -4006,9 +4036,9 @@ msgstr "Thiết lập quyền admin cho %s thất bại: người dùng này kh�
 #: seahub/templates/base.html:69
 #: seahub/templates/js/admin-common-templates.html:15
 #: seahub/templates/js/sysadmin-templates.html:28
-#: seahub/templates/js/templates.html:1618
-#: seahub/templates/js/templates.html:1651
-#: seahub/templates/js/templates.html:2451
+#: seahub/templates/js/templates.html:1626
+#: seahub/templates/js/templates.html:1659
+#: seahub/templates/js/templates.html:2459
 #: seahub/templates/sysadmin/base.html:39
 #: seahub/templates/sysadmin/settings.html:6
 #: seahub/templates/sysadmin/snippets/sys_org_info_nav.html:7
@@ -4020,14 +4050,14 @@ msgid "Language"
 msgstr "Ngôn ngữ"
 
 #: seahub/profile/templates/profile/set_profile.html:23
-#: seahub/profile/templates/profile/set_profile.html:110
+#: seahub/profile/templates/profile/set_profile.html:122
 #: seahub/templates/sysadmin/userinfo.html:112
 msgid "Two-Factor Authentication"
 msgstr ""
 
 #: seahub/profile/templates/profile/set_profile.html:26
-#: seahub/profile/templates/profile/set_profile.html:135
-#: seahub/profile/templates/profile/set_profile.html:198
+#: seahub/profile/templates/profile/set_profile.html:147
+#: seahub/profile/templates/profile/set_profile.html:210
 msgid "Delete Account"
 msgstr "Xóa tài khoản"
 
@@ -4070,87 +4100,90 @@ msgid "Telephone:"
 msgstr "Điện thoại:"
 
 #: seahub/profile/templates/profile/set_profile.html:78
+#: seahub/profile/templates/profile/set_profile.html:87
 #: seahub/templates/sysadmin/sys_terms_admin.html:39
 msgid "Update"
 msgstr "Cập nhật"
 
-#: seahub/profile/templates/profile/set_profile.html:84
+#: seahub/profile/templates/profile/set_profile.html:96
 msgid "Global Address Book"
 msgstr ""
 
-#: seahub/profile/templates/profile/set_profile.html:91
+#: seahub/profile/templates/profile/set_profile.html:103
 msgid ""
 "List your account in global address book, so that others can find you by "
 "typing your name."
 msgstr ""
 
-#: seahub/profile/templates/profile/set_profile.html:97
+#: seahub/profile/templates/profile/set_profile.html:109
 msgid "Language Setting"
 msgstr "Cài đặt ngôn ngữ"
 
-#: seahub/profile/templates/profile/set_profile.html:112
+#: seahub/profile/templates/profile/set_profile.html:124
 #: seahub/templates/sysadmin/userinfo.html:115
 msgid "enabled"
 msgstr ""
 
-#: seahub/profile/templates/profile/set_profile.html:114
+#: seahub/profile/templates/profile/set_profile.html:126
 #: seahub/templates/sysadmin/userinfo.html:116
 #: seahub/templates/sysadmin/userinfo.html:118
 msgid "Disable Two-Factor Authentication"
 msgstr ""
 
-#: seahub/profile/templates/profile/set_profile.html:118
+#: seahub/profile/templates/profile/set_profile.html:130
 msgid ""
 "If you don't have any device with you, you can access your account using "
 "backup codes."
 msgstr ""
 
-#: seahub/profile/templates/profile/set_profile.html:119
+#: seahub/profile/templates/profile/set_profile.html:131
 #, python-format
 msgid "You have only one backup code remaining."
 msgid_plural "You have %(counter)s backup codes remaining."
 msgstr[0] ""
 
-#: seahub/profile/templates/profile/set_profile.html:122
+#: seahub/profile/templates/profile/set_profile.html:134
 msgid "Show Codes"
 msgstr ""
 
-#: seahub/profile/templates/profile/set_profile.html:126
+#: seahub/profile/templates/profile/set_profile.html:138
 msgid ""
 "Two-factor authentication is not enabled for your account. Enable two-factor"
 " authentication for enhanced account security."
 msgstr ""
 
-#: seahub/profile/templates/profile/set_profile.html:128
+#: seahub/profile/templates/profile/set_profile.html:140
 msgid "Enable Two-Factor Authentication"
 msgstr ""
 
-#: seahub/profile/templates/profile/set_profile.html:136
+#: seahub/profile/templates/profile/set_profile.html:148
 msgid "This operation will not be reverted. Please think twice!"
 msgstr "Xóa tài khoản sẽ không thể phục hồi. Vui lòng suy nghĩ lần nữa!"
 
-#: seahub/profile/templates/profile/set_profile.html:176
+#: seahub/profile/templates/profile/set_profile.html:188
 msgid " is not supported. Please choose an image file."
 msgstr " không được hỗ trợ. Vui lòng chọn một file ảnh."
 
-#: seahub/profile/templates/profile/set_profile.html:181
+#: seahub/profile/templates/profile/set_profile.html:193
 msgid " is not supported. File extensions can only be "
 msgstr " không được hỗ trợ. Định dạng chỉ có thể là "
 
-#: seahub/profile/templates/profile/set_profile.html:188
+#: seahub/profile/templates/profile/set_profile.html:200
 msgid " is too large. Allowed maximum size is 1MB."
 msgstr " quá lớn. Dung lượng tối đa cho phép là 1MB"
 
-#: seahub/profile/templates/profile/set_profile.html:199
+#: seahub/profile/templates/profile/set_profile.html:211
 msgid "Really want to delete your account?"
 msgstr "Bạn có thật sự muốn xóa tài khoản của bạn?"
 
-#: seahub/profile/templates/profile/set_profile.html:229
+#: seahub/profile/templates/profile/set_profile.html:241
+#: seahub/profile/templates/profile/set_profile.html:258
 #: seahub/templates/js/sysadmin-templates.html:999
 #: seahub/templates/sysadmin/settings.html:243
-#: seahub/templates/sysadmin/settings.html:290 seahub/views/sysadmin.py:1340
-#: seahub/views/sysadmin.py:1397 seahub/views/sysadmin.py:2215
-#: seahub/views/sysadmin.py:2297 seahub/views/sysadmin.py:2468
+#: seahub/templates/sysadmin/settings.html:290
+#: seahub/templates/sysadmin/userinfo.html:415 seahub/views/sysadmin.py:1402
+#: seahub/views/sysadmin.py:1459 seahub/views/sysadmin.py:2241
+#: seahub/views/sysadmin.py:2323 seahub/views/sysadmin.py:2494
 msgid "Success"
 msgstr "Thành công"
 
@@ -4162,23 +4195,23 @@ msgstr "Chỉnh sửa profile thành công"
 msgid "Failed to edit profile"
 msgstr "Chỉnh sửa profile thất bại"
 
-#: seahub/profile/views.py:155
+#: seahub/profile/views.py:163
 msgid "Has not accepted invitation yet"
 msgstr "Lời mời chưa được chấp nhận"
 
-#: seahub/profile/views.py:174
+#: seahub/profile/views.py:182
 msgid "Demo account can not be deleted."
 msgstr "Tài khoản demo không thể xóa."
 
-#: seahub/profile/views.py:200
+#: seahub/profile/views.py:208
 msgid "Failed to set default library."
 msgstr "Cài đặt thư viện mặc định thất bại."
 
-#: seahub/profile/views.py:204
+#: seahub/profile/views.py:212
 msgid "Can not set encrypted library as default library."
 msgstr "Không thể mã hóa thư viện mặc định"
 
-#: seahub/profile/views.py:209
+#: seahub/profile/views.py:217
 #, python-format
 msgid "Successfully set \"%s\" as your default library."
 msgstr "Cài đặt \"%s\" thành thư viện mặc định thành công "
@@ -4243,9 +4276,9 @@ msgid ""
 msgstr "Gửi link tải lên thất bại. Dịch vụ email chưa được thiết lập chính xác, vui lòng liên hệ Admin."
 
 #: seahub/share/views.py:332 seahub/thumbnail/views.py:39
-#: seahub/thumbnail/views.py:161 seahub/views/ajax.py:266
-#: seahub/views/ajax.py:451 seahub/views/ajax.py:528 seahub/views/ajax.py:592
-#: seahub/views/ajax.py:658 seahub/views/ajax.py:917 seahub/views/ajax.py:1224
+#: seahub/thumbnail/views.py:161 seahub/views/ajax.py:265
+#: seahub/views/ajax.py:450 seahub/views/ajax.py:527 seahub/views/ajax.py:591
+#: seahub/views/ajax.py:657 seahub/views/ajax.py:918 seahub/views/ajax.py:1209
 msgid "Library does not exist."
 msgstr "Thư viện không tồn tại."
 
@@ -4278,19 +4311,19 @@ msgid "Sorry, but the requested page could not be found."
 msgstr "Không thể tìm thấy trang được yêu cầu"
 
 #: seahub/templates/base.html:72 seahub/templates/js/sysadmin-templates.html:5
-#: seahub/templates/js/templates.html:2453
+#: seahub/templates/js/templates.html:2461
 #: seahub/templates/sysadmin/base.html:16
 msgid "System Admin"
 msgstr "System Admin"
 
-#: seahub/templates/base.html:75 seahub/templates/js/templates.html:2456
+#: seahub/templates/base.html:75 seahub/templates/js/templates.html:2464
 msgid "Organization Admin"
 msgstr ""
 
 #: seahub/templates/base.html:81 seahub/templates/base_for_backbone.html:77
 #: seahub/templates/finish_payment.html:5
 #: seahub/templates/js/admin-common-templates.html:17
-#: seahub/templates/js/templates.html:2461
+#: seahub/templates/js/templates.html:2469
 msgid "Log out"
 msgstr "Đăng xuất"
 
@@ -4302,7 +4335,7 @@ msgstr "Không hỗ trợ phiên bản IE này. Vui lòng nâng cấp phiên b�
 
 #: seahub/templates/base_for_backbone.html:70
 #: seahub/templates/js/sysadmin-templates.html:70
-#: seahub/templates/js/templates.html:2429
+#: seahub/templates/js/templates.html:2437
 #: seahub/templates/sysadmin/base.html:81
 msgid "Notifications"
 msgstr "Thông báo"
@@ -4547,8 +4580,8 @@ msgstr "Yêu cầu mật khẩu."
 #: seahub/templates/js/templates.html:993
 #: seahub/templates/js/templates.html:1003
 #: seahub/templates/repo_history.html:6
-#: seahub/templates/view_file_base.html:152
-#: seahub/templates/view_file_base.html:205
+#: seahub/templates/view_file_base.html:157
+#: seahub/templates/view_file_base.html:202
 msgid "History"
 msgstr "Lịch sử"
 
@@ -4594,8 +4627,8 @@ msgid "Restore"
 msgstr "Khôi phục"
 
 #: seahub/templates/file_revisions.html:89
-#: seahub/templates/js/templates.html:2714
-#: seahub/templates/js/templates.html:2725
+#: seahub/templates/js/templates.html:2722
+#: seahub/templates/js/templates.html:2733
 msgid "View"
 msgstr "Xem"
 
@@ -4621,80 +4654,80 @@ msgstr "Kế hoạch"
 #: seahub/templates/js/sysadmin-templates.html:167
 #: seahub/templates/js/templates.html:195
 #: seahub/templates/js/templates.html:1126
-#: seahub/templates/js/templates.html:1455
+#: seahub/templates/js/templates.html:1463
 msgid "Files"
 msgstr "Tập tin"
 
 #: seahub/templates/home_base.html:14 seahub/templates/js/templates.html:521
 #: seahub/templates/js/templates.html:523
-#: seahub/templates/js/templates.html:1459 seahub/templates/libraries.html:19
+#: seahub/templates/js/templates.html:1467 seahub/templates/libraries.html:19
 #: seahub/templates/libraries.html:39
 msgid "My Libraries"
 msgstr ""
 
 #: seahub/templates/home_base.html:16 seahub/templates/js/templates.html:523
-#: seahub/templates/js/templates.html:1464 seahub/templates/libraries.html:60
+#: seahub/templates/js/templates.html:1472 seahub/templates/libraries.html:60
 msgid "Shared with me"
 msgstr ""
 
 #: seahub/templates/home_base.html:18 seahub/templates/js/templates.html:519
-#: seahub/templates/js/templates.html:1469 seahub/templates/libraries.html:79
+#: seahub/templates/js/templates.html:1477 seahub/templates/libraries.html:79
 msgid "Shared with all"
 msgstr ""
 
-#: seahub/templates/home_base.html:23 seahub/templates/js/templates.html:1475
-#: seahub/templates/js/templates.html:1492
-#: seahub/templates/js/templates.html:1495
+#: seahub/templates/home_base.html:23 seahub/templates/js/templates.html:1483
+#: seahub/templates/js/templates.html:1500
+#: seahub/templates/js/templates.html:1503
 msgid "Shared with groups"
 msgstr ""
 
-#: seahub/templates/home_base.html:38 seahub/templates/js/templates.html:1512
+#: seahub/templates/home_base.html:38 seahub/templates/js/templates.html:1520
 msgid "Tools"
 msgstr ""
 
-#: seahub/templates/home_base.html:41 seahub/templates/js/templates.html:1521
+#: seahub/templates/home_base.html:41 seahub/templates/js/templates.html:1529
 #: seahub/templates/libraries.html:150
 msgid "Favorites"
 msgstr ""
 
-#: seahub/templates/home_base.html:43 seahub/templates/js/templates.html:1525
+#: seahub/templates/home_base.html:43 seahub/templates/js/templates.html:1533
 #: seahub/templates/libraries.html:167
 msgid "Activities"
 msgstr "Các hoạt động"
 
-#: seahub/templates/home_base.html:47 seahub/templates/js/templates.html:1533
+#: seahub/templates/home_base.html:47 seahub/templates/js/templates.html:1541
 #: seahub/templates/wiki/wiki_list.html:5
 #: seahub/templates/wiki/wiki_list.html:11
 msgid "Wikis"
 msgstr ""
 
-#: seahub/templates/home_base.html:50 seahub/templates/js/templates.html:1539
+#: seahub/templates/home_base.html:50 seahub/templates/js/templates.html:1547
 #: seahub/templates/libraries.html:178
 msgid "Linked Devices"
 msgstr ""
 
-#: seahub/templates/home_base.html:53 seahub/templates/js/templates.html:1378
-#: seahub/templates/js/templates.html:1543
-#: seahub/templates/js/templates.html:2142
-#: seahub/templates/js/templates.html:2738
-#: seahub/templates/js/templates.html:2739
-#: seahub/templates/js/templates.html:2743
-#: seahub/templates/js/templates.html:2782
+#: seahub/templates/home_base.html:53 seahub/templates/js/templates.html:1386
+#: seahub/templates/js/templates.html:1551
+#: seahub/templates/js/templates.html:2150
+#: seahub/templates/js/templates.html:2746
+#: seahub/templates/js/templates.html:2747
+#: seahub/templates/js/templates.html:2751
+#: seahub/templates/js/templates.html:2790
 msgid "Invite People"
 msgstr ""
 
-#: seahub/templates/home_base.html:58 seahub/templates/js/templates.html:1548
+#: seahub/templates/home_base.html:58 seahub/templates/js/templates.html:1556
 msgid "Share Admin"
 msgstr "Quản lý chia sẻ"
 
 #: seahub/templates/home_base.html:65 seahub/templates/js/templates.html:1122
-#: seahub/templates/js/templates.html:1559
-#: seahub/templates/js/templates.html:2601
+#: seahub/templates/js/templates.html:1567
+#: seahub/templates/js/templates.html:2609
 msgid "Folders"
 msgstr "Thư mục"
 
-#: seahub/templates/home_base.html:89 seahub/templates/js/templates.html:1515
-#: seahub/templates/js/templates.html:1582
+#: seahub/templates/home_base.html:89 seahub/templates/js/templates.html:1523
+#: seahub/templates/js/templates.html:1590
 msgid "Enable Modules"
 msgstr "Kích hoạt Module"
 
@@ -4710,12 +4743,10 @@ msgstr "Thư mục tải lên"
 
 #: seahub/templates/i18n.html:7 seahub/templates/js/templates.html:1206
 #: seahub/templates/js/templates.html:1225
-#: seahub/templates/snippets/file_share_popup.html:26
 msgid "Add auto expiration"
 msgstr "Thêm hết hạn tự động"
 
 #: seahub/templates/i18n.html:8
-#: seahub/templates/snippets/file_share_popup.html:29
 msgid "Days"
 msgstr "Ngày"
 
@@ -4774,14 +4805,14 @@ msgstr ""
 #: seahub/templates/js/sysadmin-templates.html:373
 #: seahub/templates/js/sysadmin-templates.html:417
 #: seahub/templates/js/sysadmin-templates.html:880
-#: seahub/templates/js/templates.html:2026
-#: seahub/templates/js/templates.html:2043 seahub/templates/libraries.html:137
+#: seahub/templates/js/templates.html:2034
+#: seahub/templates/js/templates.html:2051 seahub/templates/libraries.html:137
 #: seahub/templates/libraries.html:140
 msgid "No libraries"
 msgstr ""
 
 #: seahub/templates/js/admin-common-templates.html:164
-#: seahub/templates/sysadmin/useradmin_table.html:114
+#: seahub/templates/sysadmin/useradmin_table.html:113
 #: seahub/templates/sysadmin/userinfo.html:108
 msgid "Edit Quota"
 msgstr ""
@@ -4886,6 +4917,8 @@ msgstr "Các thiết bị"
 #: seahub/templates/js/sysadmin-templates.html:58
 #: seahub/templates/js/sysadmin-templates.html:202
 #: seahub/templates/sysadmin/base.html:69
+#: seahub/templates/sysadmin/sys_statistic_traffic.html:24
+#: seahub/templates/sysadmin/sys_trafficadmin.html:20
 msgid "Organizations"
 msgstr "Tổ chức"
 
@@ -5004,7 +5037,7 @@ msgid "No connected devices"
 msgstr ""
 
 #: seahub/templates/js/sysadmin-templates.html:259
-#: seahub/templates/js/templates.html:2420
+#: seahub/templates/js/templates.html:2428
 msgid "Unlink"
 msgstr "Bỏ liên kết"
 
@@ -5026,8 +5059,8 @@ msgstr ""
 
 #: seahub/templates/js/sysadmin-templates.html:337
 #: seahub/templates/js/sysadmin-templates.html:553
-#: seahub/templates/sysadmin/sys_statistic_traffic.html:23
-#: seahub/templates/sysadmin/sys_trafficadmin.html:20
+#: seahub/templates/sysadmin/sys_statistic_traffic.html:18
+#: seahub/templates/sysadmin/sys_trafficadmin.html:14
 msgid "System"
 msgstr "Hệ thống"
 
@@ -5083,10 +5116,8 @@ msgstr ""
 #: seahub/templates/js/templates.html:876
 #: seahub/templates/js/templates.html:962
 #: seahub/templates/js/templates.html:1023
-#: seahub/templates/js/templates.html:1426
-#: seahub/templates/js/templates.html:1446
-#: seahub/templates/view_file_base.html:147
-#: seahub/templates/view_file_base.html:198
+#: seahub/templates/js/templates.html:1434
+#: seahub/templates/js/templates.html:1454
 msgid "Share"
 msgstr "Chia sẻ"
 
@@ -5097,6 +5128,7 @@ msgid "History Setting"
 msgstr ""
 
 #: seahub/templates/js/sysadmin-templates.html:486
+#: seahub/templates/libraries.html:44
 #, python-format
 msgid ""
 "Tip: libraries deleted %(trash_repos_expire_days)s days ago will be cleaned "
@@ -5104,8 +5136,8 @@ msgid ""
 msgstr ""
 
 #: seahub/templates/js/sysadmin-templates.html:493
-#: seahub/templates/js/templates.html:1880
-#: seahub/templates/js/templates.html:1887
+#: seahub/templates/js/templates.html:1888
+#: seahub/templates/js/templates.html:1895
 msgid "Deleted Time"
 msgstr "Thời gian xóa"
 
@@ -5119,7 +5151,7 @@ msgstr "Chưa có thư viện nào bị xóa"
 #: seahub/templates/js/templates.html:455
 #: seahub/templates/js/templates.html:456
 #: seahub/templates/js/templates.html:470
-#: seahub/templates/sysadmin/userinfo.html:291
+#: seahub/templates/sysadmin/userinfo.html:299
 msgid "Upload"
 msgstr "Tải lên"
 
@@ -5161,9 +5193,9 @@ msgid "Share to group"
 msgstr ""
 
 #: seahub/templates/js/sysadmin-templates.html:813
-#: seahub/templates/js/templates.html:1388
-#: seahub/templates/js/templates.html:1765
-#: seahub/templates/js/templates.html:2354
+#: seahub/templates/js/templates.html:1396
+#: seahub/templates/js/templates.html:1773
+#: seahub/templates/js/templates.html:2362
 msgid "Group"
 msgstr "Group"
 
@@ -5207,7 +5239,7 @@ msgid "Template"
 msgstr ""
 
 #: seahub/templates/js/templates.html:30
-#: seahub/templates/js/templates.html:1857
+#: seahub/templates/js/templates.html:1865
 msgid "Storage backend"
 msgstr ""
 
@@ -5220,15 +5252,14 @@ msgid "Encrypt"
 msgstr "Mã hóa"
 
 #: seahub/templates/js/templates.html:58
-#: seahub/templates/js/templates.html:2404
+#: seahub/templates/js/templates.html:2412
 #, python-format
 msgid "(at least %(repo_password_min_length)s characters)"
 msgstr "(ít nhất %(repo_password_min_length)s ký tự)"
 
 #: seahub/templates/js/templates.html:60
 #: seahub/templates/js/templates.html:1199
-#: seahub/templates/js/templates.html:1309
-#: seahub/templates/snippets/file_share_popup.html:20
+#: seahub/templates/js/templates.html:1317
 msgid "Password again"
 msgstr "Nhập lại mật khẩu"
 
@@ -5251,8 +5282,8 @@ msgstr ""
 #: seahub/templates/js/templates.html:881
 #: seahub/templates/js/templates.html:967
 #: seahub/templates/js/templates.html:1028
-#: seahub/templates/js/templates.html:2081
-#: seahub/templates/js/templates.html:2093
+#: seahub/templates/js/templates.html:2089
+#: seahub/templates/js/templates.html:2101
 #: seahub/templates/wiki/wiki_list.html:74
 msgid "Rename"
 msgstr "Đổi tên"
@@ -5264,9 +5295,9 @@ msgstr "Thay đổi mật khẩu"
 
 #: seahub/templates/js/templates.html:107
 #: seahub/templates/js/templates.html:158
-#: seahub/templates/js/templates.html:2222
-#: seahub/templates/js/templates.html:2630
-#: seahub/templates/js/templates.html:2668
+#: seahub/templates/js/templates.html:2230
+#: seahub/templates/js/templates.html:2638
+#: seahub/templates/js/templates.html:2676
 #: seahub/templates/sysadmin/sys_publink_admin.html:16
 #: seahub/templates/sysadmin/sys_upload_link_admin.html:10
 msgid "Share Links"
@@ -5326,8 +5357,8 @@ msgstr "Di chuyển"
 #: seahub/templates/js/templates.html:1033
 #: seahub/templates/js/templates.html:1263
 #: seahub/templates/js/templates.html:1270
-#: seahub/templates/js/templates.html:1321
-#: seahub/templates/js/templates.html:2846
+#: seahub/templates/js/templates.html:1329
+#: seahub/templates/js/templates.html:2854
 msgid "Copy"
 msgstr "Sao chép"
 
@@ -5383,14 +5414,14 @@ msgid "grid view"
 msgstr ""
 
 #: seahub/templates/js/templates.html:559
-#: seahub/templates/js/templates.html:1869
-#: seahub/templates/js/templates.html:1906
+#: seahub/templates/js/templates.html:1877
+#: seahub/templates/js/templates.html:1914
 msgid "Sort:"
 msgstr ""
 
 #: seahub/templates/js/templates.html:561
-#: seahub/templates/js/templates.html:1871
-#: seahub/templates/js/templates.html:1908
+#: seahub/templates/js/templates.html:1879
+#: seahub/templates/js/templates.html:1916
 msgid "last update"
 msgstr ""
 
@@ -5399,7 +5430,7 @@ msgstr ""
 #: seahub/templates/js/templates.html:736
 #: seahub/templates/js/templates.html:851
 #: seahub/templates/js/templates.html:854
-#: seahub/templates/js/templates.html:2835
+#: seahub/templates/js/templates.html:2843
 msgid "Internal link"
 msgstr ""
 
@@ -5407,6 +5438,8 @@ msgstr ""
 #: seahub/templates/js/templates.html:784
 #: seahub/templates/js/templates.html:1011
 #: seahub/templates/js/templates.html:1053
+#: seahub/templates/view_file_base.html:78
+#: seahub/templates/view_file_base.html:142
 msgid "Open via Client"
 msgstr ""
 
@@ -5432,20 +5465,20 @@ msgstr "đã khóa"
 #: seahub/templates/js/templates.html:764
 #: seahub/templates/js/templates.html:888
 #: seahub/templates/js/templates.html:974
-#: seahub/templates/view_file_base.html:138
-#: seahub/templates/view_file_base.html:140
-#: seahub/templates/view_file_base.html:183
-#: seahub/templates/view_file_base.html:187
+#: seahub/templates/view_file_base.html:149
+#: seahub/templates/view_file_base.html:151
+#: seahub/templates/view_file_base.html:188
+#: seahub/templates/view_file_base.html:192
 msgid "Unlock"
 msgstr "Mở khóa"
 
 #: seahub/templates/js/templates.html:767
 #: seahub/templates/js/templates.html:891
 #: seahub/templates/js/templates.html:977
-#: seahub/templates/view_file_base.html:137
-#: seahub/templates/view_file_base.html:141
-#: seahub/templates/view_file_base.html:180
-#: seahub/templates/view_file_base.html:190
+#: seahub/templates/view_file_base.html:148
+#: seahub/templates/view_file_base.html:152
+#: seahub/templates/view_file_base.html:185
+#: seahub/templates/view_file_base.html:195
 msgid "Lock"
 msgstr "Khóa"
 
@@ -5455,7 +5488,7 @@ msgstr "Khóa"
 #: seahub/templates/js/templates.html:917
 #: seahub/templates/js/templates.html:991
 #: seahub/templates/js/templates.html:1001
-#: seahub/templates/view_file_base.html:162
+#: seahub/templates/view_file_base.html:167
 msgid "Comment"
 msgstr ""
 
@@ -5475,9 +5508,6 @@ msgid "Tags"
 msgstr ""
 
 #: seahub/templates/js/templates.html:1168
-#: seahub/templates/snippets/file_share_popup.html:6
-#: seahub/templates/sysadmin/sys_statistic_traffic.html:26
-#: seahub/templates/sysadmin/sys_trafficadmin.html:23
 msgid "Share Link"
 msgstr ""
 
@@ -5486,14 +5516,12 @@ msgid "Upload Link"
 msgstr ""
 
 #: seahub/templates/js/templates.html:1190
-#: seahub/templates/js/templates.html:1300
-#: seahub/templates/snippets/file_share_popup.html:15
+#: seahub/templates/js/templates.html:1308
 msgid "Add password protection"
 msgstr ""
 
 #: seahub/templates/js/templates.html:1193
-#: seahub/templates/js/templates.html:1303
-#: seahub/templates/snippets/file_share_popup.html:18
+#: seahub/templates/js/templates.html:1311
 #, python-format
 msgid "(at least %(share_link_password_min_length)s characters)"
 msgstr "(ít nhất %(share_link_password_min_length)s ký tự)"
@@ -5530,13 +5558,11 @@ msgid "Edit on cloud and download"
 msgstr ""
 
 #: seahub/templates/js/templates.html:1255
-#: seahub/templates/js/templates.html:1313
-#: seahub/templates/snippets/file_share_popup.html:42
+#: seahub/templates/js/templates.html:1321
 msgid "Generate"
 msgstr "Khởi tạo"
 
 #: seahub/templates/js/templates.html:1259
-#: seahub/templates/snippets/file_share_popup.html:44
 msgid "Link: "
 msgstr "Link"
 
@@ -5544,313 +5570,322 @@ msgstr "Link"
 msgid "Direct Download Link: "
 msgstr "Link tải trực tiếp"
 
-#: seahub/templates/js/templates.html:1275
-#: seahub/templates/js/templates.html:1325
-#: seahub/templates/snippets/file_share_popup.html:45
+#: seahub/templates/js/templates.html:1273
+msgid "Expiration Date: "
+msgstr ""
+
+#: seahub/templates/js/templates.html:1277
+#: seahub/templates/js/templates.html:1333
 msgid "Send"
 msgstr "Gởi"
 
-#: seahub/templates/js/templates.html:1279
-#: seahub/templates/js/templates.html:1329
-#: seahub/templates/snippets/file_share_popup.html:49
+#: seahub/templates/js/templates.html:1281
+msgid "Are you sure you want to remove the share link?"
+msgstr ""
+
+#: seahub/templates/js/templates.html:1282
+msgid ""
+"If the share link is removed, no one will be able to access it any more."
+msgstr ""
+
+#: seahub/templates/js/templates.html:1287
+#: seahub/templates/js/templates.html:1337
 msgid "Send to:"
 msgstr "Gởi đến:"
 
-#: seahub/templates/js/templates.html:1281
-#: seahub/templates/js/templates.html:1331
-#: seahub/templates/snippets/file_share_popup.html:54
+#: seahub/templates/js/templates.html:1289
+#: seahub/templates/js/templates.html:1339
 msgid "Message (optional):"
 msgstr "Lời nhắn (tùy chọn)"
 
-#: seahub/templates/js/templates.html:1286
-#: seahub/templates/js/templates.html:1336
-#: seahub/templates/snippets/file_share_popup.html:59
+#: seahub/templates/js/templates.html:1294
+#: seahub/templates/js/templates.html:1344
 msgid "Sending..."
 msgstr "Đang gởi..."
 
-#: seahub/templates/js/templates.html:1296
+#: seahub/templates/js/templates.html:1304
 msgid ""
 "You can share the generated link to others and then they can upload files to"
 " this directory via the link."
 msgstr "Bạn có thể chia sẻ link và người khác có thể tải lên vào thư mục từ link này."
 
-#: seahub/templates/js/templates.html:1317
+#: seahub/templates/js/templates.html:1325
 msgid "Upload Link: "
 msgstr "Link tải lên:"
 
-#: seahub/templates/js/templates.html:1428
-#: seahub/templates/js/templates.html:1448
+#: seahub/templates/js/templates.html:1436
+#: seahub/templates/js/templates.html:1456
 msgid "Leave Share"
 msgstr ""
 
-#: seahub/templates/js/templates.html:1593
+#: seahub/templates/js/templates.html:1601
 msgid "Wiki"
 msgstr "Wiki"
 
-#: seahub/templates/js/templates.html:1614
+#: seahub/templates/js/templates.html:1622
 msgid "This is a special group representing a department."
 msgstr ""
 
-#: seahub/templates/js/templates.html:1621
+#: seahub/templates/js/templates.html:1629
 msgid "Discussion"
 msgstr "Thảo luận"
 
-#: seahub/templates/js/templates.html:1628
+#: seahub/templates/js/templates.html:1636
 msgid "Discussions"
 msgstr ""
 
-#: seahub/templates/js/templates.html:1632
+#: seahub/templates/js/templates.html:1640
 msgid "More..."
 msgstr ""
 
-#: seahub/templates/js/templates.html:1634
+#: seahub/templates/js/templates.html:1642
 msgid "No discussion in this group yet."
 msgstr ""
 
-#: seahub/templates/js/templates.html:1641
+#: seahub/templates/js/templates.html:1649
 msgid "Add a discussion..."
 msgstr "Thêm một thảo luận..."
 
-#: seahub/templates/js/templates.html:1731
-#: seahub/templates/js/templates.html:2300
+#: seahub/templates/js/templates.html:1739
+#: seahub/templates/js/templates.html:2308
 msgid "User Permission"
 msgstr "User Permission"
 
-#: seahub/templates/js/templates.html:1732
-#: seahub/templates/js/templates.html:2301
+#: seahub/templates/js/templates.html:1740
+#: seahub/templates/js/templates.html:2309
 msgid "Group Permission"
 msgstr ""
 
-#: seahub/templates/js/templates.html:1794
-#: seahub/templates/js/templates.html:1800
+#: seahub/templates/js/templates.html:1802
+#: seahub/templates/js/templates.html:1808
 msgid "File Name"
 msgstr "Tên tập tin"
 
-#: seahub/templates/js/templates.html:1810
-#: seahub/templates/js/templates.html:1831
+#: seahub/templates/js/templates.html:1818
+#: seahub/templates/js/templates.html:1839
 msgid "icon"
 msgstr "icon"
 
-#: seahub/templates/js/templates.html:1823
-#: seahub/templates/js/templates.html:1845
+#: seahub/templates/js/templates.html:1831
+#: seahub/templates/js/templates.html:1853
 msgid "Unstar"
 msgstr "Hủy đánh dấu"
 
-#: seahub/templates/js/templates.html:1852
-#: seahub/templates/js/templates.html:1867
-#: seahub/templates/js/templates.html:1878
+#: seahub/templates/js/templates.html:1860
+#: seahub/templates/js/templates.html:1875
 #: seahub/templates/js/templates.html:1886
 #: seahub/templates/js/templates.html:1894
-#: seahub/templates/js/templates.html:1904
+#: seahub/templates/js/templates.html:1902
+#: seahub/templates/js/templates.html:1912
 msgid "Library Type"
 msgstr ""
 
-#: seahub/templates/js/templates.html:1915
+#: seahub/templates/js/templates.html:1923
 msgid "Select libraries to share"
 msgstr "Chọn thư viện để chia sẻ"
 
-#: seahub/templates/js/templates.html:1976
+#: seahub/templates/js/templates.html:1984
 msgid "Deleted library"
 msgstr "Xóa thư viện"
 
-#: seahub/templates/js/templates.html:2004
+#: seahub/templates/js/templates.html:2012
 #: seahub/templates/snippets/search_form.html:6
 msgid "Search files in this wiki"
 msgstr "Tìm trong Wiki"
 
-#: seahub/templates/js/templates.html:2004
+#: seahub/templates/js/templates.html:2012
 #: seahub/templates/snippets/search_form.html:6
 msgid "Search files in this library"
 msgstr "Tìm trong thư viện"
 
-#: seahub/templates/js/templates.html:2006
+#: seahub/templates/js/templates.html:2014
 #: seahub/templates/snippets/search_form.html:9
 #: seahub/templates/snippets/search_form.html:15
 msgid "Search Files"
 msgstr "Tìm kiếm"
 
-#: seahub/templates/js/templates.html:2008
+#: seahub/templates/js/templates.html:2016
 #: seahub/templates/snippets/search_form.html:11
 msgid "advanced"
 msgstr "nâng cao"
 
-#: seahub/templates/js/templates.html:2053
+#: seahub/templates/js/templates.html:2061
 msgid "owner"
 msgstr ""
 
-#: seahub/templates/js/templates.html:2068
-#: seahub/templates/js/templates.html:2824
-#: seahub/templates/view_file_base.html:121
+#: seahub/templates/js/templates.html:2076
+#: seahub/templates/js/templates.html:2832
+#: seahub/templates/view_file_base.html:126
 msgid "Reply"
 msgstr "Trả lời"
 
-#: seahub/templates/js/templates.html:2085
-#: seahub/templates/js/templates.html:2096
+#: seahub/templates/js/templates.html:2093
+#: seahub/templates/js/templates.html:2104
 msgid "Import Members"
 msgstr ""
 
-#: seahub/templates/js/templates.html:2086
-#: seahub/templates/js/templates.html:2097
+#: seahub/templates/js/templates.html:2094
+#: seahub/templates/js/templates.html:2105
 msgid "Manage Members"
 msgstr ""
 
-#: seahub/templates/js/templates.html:2089
+#: seahub/templates/js/templates.html:2097
 msgid "Dismiss"
 msgstr "Hủy"
 
-#: seahub/templates/js/templates.html:2101
+#: seahub/templates/js/templates.html:2109
 msgid "Leave group"
 msgstr "Rời Group"
 
-#: seahub/templates/js/templates.html:2108
+#: seahub/templates/js/templates.html:2116
 msgid "Rename Group To"
 msgstr "Đổi tên Group thành"
 
-#: seahub/templates/js/templates.html:2117
+#: seahub/templates/js/templates.html:2125
 msgid "Transfer Group To"
 msgstr "Chuyển Group sang"
 
-#: seahub/templates/js/templates.html:2125
+#: seahub/templates/js/templates.html:2133
 msgid "Import group members from a CSV file"
 msgstr ""
 
-#: seahub/templates/js/templates.html:2127
+#: seahub/templates/js/templates.html:2135
 msgid "File format: user@mail.com"
 msgstr ""
 
-#: seahub/templates/js/templates.html:2137
+#: seahub/templates/js/templates.html:2145
 #: seahub/templates/sysadmin/sys_inst_admin.html:12
 #: seahub/templates/sysadmin/sys_terms_admin.html:9
 msgid "Add"
 msgstr ""
 
-#: seahub/templates/js/templates.html:2225
-#: seahub/templates/js/templates.html:2634
-#: seahub/templates/js/templates.html:2672
+#: seahub/templates/js/templates.html:2233
+#: seahub/templates/js/templates.html:2642
+#: seahub/templates/js/templates.html:2680
 #: seahub/templates/sysadmin/sys_publink_admin.html:19
 #: seahub/templates/sysadmin/sys_upload_link_admin.html:13
 msgid "Upload Links"
 msgstr "Link tải lên"
 
-#: seahub/templates/js/templates.html:2237
-#: seahub/templates/js/templates.html:2256
+#: seahub/templates/js/templates.html:2245
+#: seahub/templates/js/templates.html:2264
 msgid "Created By"
 msgstr ""
 
-#: seahub/templates/js/templates.html:2239
-#: seahub/templates/js/templates.html:2258
-#: seahub/templates/js/templates.html:2647
-#: seahub/templates/js/templates.html:2684
+#: seahub/templates/js/templates.html:2247
+#: seahub/templates/js/templates.html:2266
+#: seahub/templates/js/templates.html:2655
+#: seahub/templates/js/templates.html:2692
 #: seahub/templates/sysadmin/sys_upload_link_admin.html:25
-#: seahub/templates/sysadmin/userinfo.html:267
+#: seahub/templates/sysadmin/userinfo.html:275
 msgid "Visits"
 msgstr "# Truy cập"
 
-#: seahub/templates/js/templates.html:2273
-#: seahub/templates/sysadmin/userinfo.html:278
-#: seahub/templates/sysadmin/userinfo.html:288
+#: seahub/templates/js/templates.html:2281
+#: seahub/templates/sysadmin/userinfo.html:286
+#: seahub/templates/sysadmin/userinfo.html:296
 #: seahub/templates/view_shared_dir.html:60
 msgid "Directory icon"
 msgstr "Danh mục icon"
 
-#: seahub/templates/js/templates.html:2322
-#: seahub/templates/js/templates.html:2341
-#: seahub/templates/js/templates.html:2368
-#: seahub/templates/js/templates.html:2387
+#: seahub/templates/js/templates.html:2330
+#: seahub/templates/js/templates.html:2349
+#: seahub/templates/js/templates.html:2376
+#: seahub/templates/js/templates.html:2395
 msgid "Select a folder"
 msgstr "Chọn thư mục"
 
-#: seahub/templates/js/templates.html:2402
+#: seahub/templates/js/templates.html:2410
 msgid "Old Password"
 msgstr "Mật khẩu cũ"
 
-#: seahub/templates/js/templates.html:2404
+#: seahub/templates/js/templates.html:2412
 #: seahub/templates/registration/password_change_form.html:18
 msgid "New Password"
 msgstr "Mật khẩu mới"
 
-#: seahub/templates/js/templates.html:2406
+#: seahub/templates/js/templates.html:2414
 msgid "New Password Again"
 msgstr "Nhập lại mật khẩu mới"
 
-#: seahub/templates/js/templates.html:2435
+#: seahub/templates/js/templates.html:2443
 msgid "See All Notifications"
 msgstr "Xem tất cả thông báo"
 
-#: seahub/templates/js/templates.html:2498
+#: seahub/templates/js/templates.html:2506
 msgid "You have not shared any libraries"
 msgstr ""
 
-#: seahub/templates/js/templates.html:2499
+#: seahub/templates/js/templates.html:2507
 msgid ""
 "You can share libraries with your friends and colleagues by clicking the "
 "share icon of your own libraries in your home page or creating a new library"
 " in groups you are in."
 msgstr ""
 
-#: seahub/templates/js/templates.html:2513
-#: seahub/templates/js/templates.html:2575
+#: seahub/templates/js/templates.html:2521
+#: seahub/templates/js/templates.html:2583
 msgid "all members"
 msgstr "tất cả thành viên"
 
-#: seahub/templates/js/templates.html:2619
+#: seahub/templates/js/templates.html:2627
 msgid "You have not shared any folders"
 msgstr ""
 
-#: seahub/templates/js/templates.html:2620
+#: seahub/templates/js/templates.html:2628
 msgid ""
 "You can share a single folder with a registered user if you don't want to "
 "share a whole library."
 msgstr "Nếu không muốn chia sẻ toàn bộ thư viện, bạn có thể chia sẻ một thư mục với một người dùng đã đăng ký"
 
-#: seahub/templates/js/templates.html:2648
-#: seahub/templates/js/templates.html:2752
+#: seahub/templates/js/templates.html:2656
+#: seahub/templates/js/templates.html:2760
 msgid "Expiration"
 msgstr "Hết hạn"
 
-#: seahub/templates/js/templates.html:2656
+#: seahub/templates/js/templates.html:2664
 msgid "You don't have any download links"
 msgstr ""
 
-#: seahub/templates/js/templates.html:2657
+#: seahub/templates/js/templates.html:2665
 msgid ""
 "You can generate a download link for a folder or a file. Anyone who receives"
 " this link can view the folder or the file online."
 msgstr ""
 
-#: seahub/templates/js/templates.html:2692
+#: seahub/templates/js/templates.html:2700
 msgid "You don't have any upload links"
 msgstr ""
 
-#: seahub/templates/js/templates.html:2693
+#: seahub/templates/js/templates.html:2701
 msgid ""
 "You can generate an upload link from any folder. Anyone who receives this "
 "link can upload files to this folder."
 msgstr ""
 
-#: seahub/templates/js/templates.html:2751
+#: seahub/templates/js/templates.html:2759
 msgid "Invite Time"
 msgstr ""
 
-#: seahub/templates/js/templates.html:2753
+#: seahub/templates/js/templates.html:2761
 msgid "Accepted"
 msgstr ""
 
-#: seahub/templates/js/templates.html:2761
+#: seahub/templates/js/templates.html:2769
 msgid "You have not invited any people."
 msgstr ""
 
-#: seahub/templates/js/templates.html:2803
-#: seahub/templates/view_file_base.html:99
+#: seahub/templates/js/templates.html:2811
+#: seahub/templates/view_file_base.html:104
 msgid "No comment yet."
 msgstr ""
 
-#: seahub/templates/js/templates.html:2810
-#: seahub/templates/view_file_base.html:106
+#: seahub/templates/js/templates.html:2818
+#: seahub/templates/view_file_base.html:111
 msgid "Add a comment..."
 msgstr ""
 
-#: seahub/templates/js/templates.html:2838
+#: seahub/templates/js/templates.html:2846
 msgid ""
 "An internal link is a link to a file or folder that can be accessed by users"
 " with read permission to the file or folder."
@@ -5866,10 +5901,6 @@ msgid ""
 " one for each of your projects. Each library can be synchronized and shared "
 "separately."
 msgstr "Bạn có thể tạo thư viện để sắp xếp dữ liệu. Ví dụ, bạn có thể tạo mỗi thư viện cho mỗi dự án. Mỗi thư viện có thể đồng bộ và chia sẻ độc lập."
-
-#: seahub/templates/libraries.html:44
-msgid "Tip: libraries deleted 30 days ago will be cleaned automatically."
-msgstr "Mẹo: những thư viện bị xóa 30 ngày trước sẽ được tự động xóa."
 
 #: seahub/templates/libraries.html:50
 msgid "No deleted libraries."
@@ -6099,7 +6130,6 @@ msgstr "Mật khẩu hiện tại không được để trống"
 #: seahub/templates/registration/password_change_form.html:74
 #: seahub/templates/registration/registration_form.html:99
 #: seahub/templates/snippets/repo_create_js.html:58
-#: seahub/templates/snippets/shared_link_js.html:148
 msgid "Passwords don't match"
 msgstr "Mật khẩu không trùng khớp"
 
@@ -6335,7 +6365,7 @@ msgstr "bạn cũng có thể nhấn ← "
 msgid "you can also press → "
 msgstr "bạn cũng có thể nhấn → "
 
-#: seahub/templates/snippets/file_content_html.html:52
+#: seahub/templates/snippets/file_content_html.html:56
 #: seahub/templates/view_file_base.html:73
 msgid "Online view is not applicable to this file format"
 msgstr ""
@@ -6348,15 +6378,6 @@ msgstr ""
 #: seahub/templates/snippets/file_encoding.html:8
 #: seahub/templates/view_file_text.html:32
 msgid "auto detect"
-msgstr ""
-
-#: seahub/templates/snippets/file_share_popup.html:3
-#, python-format
-msgid "Share %(name)s"
-msgstr ""
-
-#: seahub/templates/snippets/file_share_popup.html:36
-msgid "Online preview only"
 msgstr ""
 
 #: seahub/templates/snippets/password_strength_js.html:42
@@ -6375,23 +6396,11 @@ msgstr "trung bình"
 msgid "strong"
 msgstr "mạnh"
 
-#: seahub/templates/snippets/pdfjs_file_viewer.html:23
-msgid ""
-"This file has more than 50 pages, and only the first 50 will be shown here."
-msgstr ""
-
-#: seahub/templates/snippets/pdfjs_file_viewer.html:108
-msgid ""
-"You can use IE 10 or other browsers, for example, Firefox, to view it "
-"online."
-msgstr "Bạn có thể dùng IE 10 hoặc trình duyệt khác như Firefox để xem trực tuyến."
-
 #: seahub/templates/snippets/repo_create_js.html:38
 msgid "Description is required"
 msgstr "Yêu cầu mô tả"
 
 #: seahub/templates/snippets/repo_create_js.html:46
-#: seahub/templates/snippets/shared_link_js.html:136
 msgid "Please enter password"
 msgstr "Vui lòng nhập mật khẩu"
 
@@ -6461,37 +6470,11 @@ msgid ""
 "Please select at least one file type or input at least one file extension"
 msgstr "Vui lòng chọn ít nhất kiểu file hoặc định dạng file"
 
-#: seahub/templates/snippets/shared_link_js.html:62
-msgid "Please input at least an email."
-msgstr "Vui lòng chọn ít nhất một địa chỉ email"
-
-#: seahub/templates/snippets/shared_link_js.html:85
-#, python-brace-format
-msgid "Successfully sent to {placeholder}"
-msgstr "Gởi thành công đến {placeholder}"
-
-#: seahub/templates/snippets/shared_link_js.html:89
-#, python-brace-format
-msgid "Failed to send to {placeholder}"
-msgstr "Gởi thất bại đến {placeholder}"
-
-#: seahub/templates/snippets/shared_link_js.html:157
-msgid "Please enter days"
-msgstr "Vui lòng nhập số ngày"
-
-#: seahub/templates/snippets/shared_link_js.html:163
-msgid "Please enter valid days"
-msgstr "Vui lòng nhập số đúng"
-
 #: seahub/templates/snippets/space_and_traffic.html:3
 msgid "Used:"
 msgstr "Đã dùng"
 
 #: seahub/templates/snippets/space_and_traffic.html:17
-msgid "Traffic this month:"
-msgstr "Băng thông tháng này:"
-
-#: seahub/templates/snippets/space_and_traffic.html:21
 msgid "Payment"
 msgstr "Thanh toán"
 
@@ -6745,13 +6728,17 @@ msgid ""
 msgstr ""
 
 #: seahub/templates/sysadmin/snippets/sys_org_info_nav.html:6
-#: seahub/templates/sysadmin/sys_statistic_file.html:16
-#: seahub/templates/sysadmin/sys_statistic_storage.html:16
-#: seahub/templates/sysadmin/sys_statistic_traffic.html:16
-#: seahub/templates/sysadmin/sys_statistic_user.html:16
-#: seahub/templates/sysadmin/sys_trafficadmin.html:13
+#: seahub/templates/sysadmin/snippets/sys_statistic_nav.html:7
 msgid "Traffic"
 msgstr "Băng thông"
+
+#: seahub/templates/sysadmin/snippets/sys_statistic_nav.html:5
+msgid "Storage"
+msgstr ""
+
+#: seahub/templates/sysadmin/snippets/sys_statistic_nav.html:8
+msgid "Reports"
+msgstr ""
 
 #: seahub/templates/sysadmin/sudo_mode.html:8
 msgid "Confirm password to continue"
@@ -6898,8 +6885,8 @@ msgid "Set org storage limit"
 msgstr "Thiết lập giới hạn dung lượng cho tổ chức"
 
 #: seahub/templates/sysadmin/sys_org_info_base.html:34
-#: seahub/templates/sysadmin/useradmin_table.html:161
-#: seahub/templates/sysadmin/userinfo.html:164
+#: seahub/templates/sysadmin/useradmin_table.html:160
+#: seahub/templates/sysadmin/userinfo.html:172
 msgid "An integer that is greater than or equal to 0."
 msgstr ""
 
@@ -6928,92 +6915,92 @@ msgid "Max User Number"
 msgstr "Tối đa số người dùng"
 
 #: seahub/templates/sysadmin/sys_org_info_setting.html:49
-#: seahub/views/sysadmin.py:1391
+#: seahub/views/sysadmin.py:1453
 msgid "Input should be a number"
 msgstr "Điền vào 1 số cụ thể"
 
 #: seahub/templates/sysadmin/sys_org_info_setting.html:52
-#: seahub/views/sysadmin.py:1401
+#: seahub/views/sysadmin.py:1463
 msgid "Input number should be greater than 0"
 msgstr "Điền vào số lớn hơn 0"
 
 #: seahub/templates/sysadmin/sys_org_info_traffic.html:17
-#: seahub/templates/sysadmin/sys_statistic_file.html:22
-#: seahub/templates/sysadmin/sys_statistic_storage.html:22
-#: seahub/templates/sysadmin/sys_statistic_traffic.html:33
-#: seahub/templates/sysadmin/sys_statistic_user.html:22
+#: seahub/templates/sysadmin/sys_statistic_file.html:18
+#: seahub/templates/sysadmin/sys_statistic_storage.html:18
+#: seahub/templates/sysadmin/sys_statistic_traffic.html:30
+#: seahub/templates/sysadmin/sys_statistic_user.html:17
 msgid "7 Days"
 msgstr ""
 
 #: seahub/templates/sysadmin/sys_org_info_traffic.html:18
-#: seahub/templates/sysadmin/sys_statistic_file.html:23
-#: seahub/templates/sysadmin/sys_statistic_storage.html:23
-#: seahub/templates/sysadmin/sys_statistic_traffic.html:34
-#: seahub/templates/sysadmin/sys_statistic_user.html:23
+#: seahub/templates/sysadmin/sys_statistic_file.html:19
+#: seahub/templates/sysadmin/sys_statistic_storage.html:19
+#: seahub/templates/sysadmin/sys_statistic_traffic.html:31
+#: seahub/templates/sysadmin/sys_statistic_user.html:18
 msgid "30 Days"
 msgstr ""
 
 #: seahub/templates/sysadmin/sys_org_info_traffic.html:19
-#: seahub/templates/sysadmin/sys_statistic_file.html:24
-#: seahub/templates/sysadmin/sys_statistic_storage.html:24
-#: seahub/templates/sysadmin/sys_statistic_traffic.html:35
-#: seahub/templates/sysadmin/sys_statistic_user.html:24
+#: seahub/templates/sysadmin/sys_statistic_file.html:20
+#: seahub/templates/sysadmin/sys_statistic_storage.html:20
+#: seahub/templates/sysadmin/sys_statistic_traffic.html:32
+#: seahub/templates/sysadmin/sys_statistic_user.html:19
 msgid "1 Year"
 msgstr ""
 
 #: seahub/templates/sysadmin/sys_org_info_traffic.html:211
-#: seahub/templates/sysadmin/sys_statistic_traffic.html:226
+#: seahub/templates/sysadmin/sys_statistic_traffic.html:223
 msgctxt "upload traffic"
 msgid "Upload"
 msgstr "Tải lên"
 
 #: seahub/templates/sysadmin/sys_org_info_traffic.html:217
-#: seahub/templates/sysadmin/sys_statistic_traffic.html:232
+#: seahub/templates/sysadmin/sys_statistic_traffic.html:229
 msgctxt "download traffic"
 msgid "Download"
 msgstr "Tải xuống"
 
 #: seahub/templates/sysadmin/sys_org_info_traffic.html:271
-#: seahub/templates/sysadmin/sys_statistic_traffic.html:286
+#: seahub/templates/sysadmin/sys_statistic_traffic.html:283
 msgid "Total Traffic"
 msgstr ""
 
 #: seahub/templates/sysadmin/sys_org_info_traffic.html:278
-#: seahub/templates/sysadmin/sys_statistic_traffic.html:293
+#: seahub/templates/sysadmin/sys_statistic_traffic.html:290
 msgid "Share Link Traffic"
 msgstr ""
 
 #: seahub/templates/sysadmin/sys_org_info_traffic.html:285
-#: seahub/templates/sysadmin/sys_statistic_traffic.html:300
+#: seahub/templates/sysadmin/sys_statistic_traffic.html:297
 msgid "Sync Traffic"
 msgstr ""
 
 #: seahub/templates/sysadmin/sys_org_info_traffic.html:292
-#: seahub/templates/sysadmin/sys_statistic_traffic.html:307
+#: seahub/templates/sysadmin/sys_statistic_traffic.html:304
 msgid "Web Traffic"
 msgstr ""
 
 #: seahub/templates/sysadmin/sys_org_info_traffic.html:365
-#: seahub/templates/sysadmin/sys_statistic_file.html:276
-#: seahub/templates/sysadmin/sys_statistic_storage.html:273
-#: seahub/templates/sysadmin/sys_statistic_traffic.html:380
-#: seahub/templates/sysadmin/sys_statistic_user.html:261
+#: seahub/templates/sysadmin/sys_statistic_file.html:272
+#: seahub/templates/sysadmin/sys_statistic_storage.html:269
+#: seahub/templates/sysadmin/sys_statistic_traffic.html:377
+#: seahub/templates/sysadmin/sys_statistic_user.html:256
 msgid "Invalid start date, should be yyyy-mm-dd"
 msgstr ""
 
 #: seahub/templates/sysadmin/sys_org_info_traffic.html:369
-#: seahub/templates/sysadmin/sys_statistic_file.html:280
-#: seahub/templates/sysadmin/sys_statistic_storage.html:277
-#: seahub/templates/sysadmin/sys_statistic_traffic.html:384
-#: seahub/templates/sysadmin/sys_statistic_user.html:265
+#: seahub/templates/sysadmin/sys_statistic_file.html:276
+#: seahub/templates/sysadmin/sys_statistic_storage.html:273
+#: seahub/templates/sysadmin/sys_statistic_traffic.html:381
+#: seahub/templates/sysadmin/sys_statistic_user.html:260
 msgid "Invalid end date, should be yyyy-mm-dd"
 msgstr ""
 
 #: seahub/templates/sysadmin/sys_org_info_traffic.html:374
-#: seahub/templates/sysadmin/sys_statistic_file.html:285
-#: seahub/templates/sysadmin/sys_statistic_storage.html:282
-#: seahub/templates/sysadmin/sys_statistic_traffic.html:389
-#: seahub/templates/sysadmin/sys_statistic_user.html:270
+#: seahub/templates/sysadmin/sys_statistic_file.html:281
+#: seahub/templates/sysadmin/sys_statistic_storage.html:278
+#: seahub/templates/sysadmin/sys_statistic_traffic.html:386
+#: seahub/templates/sysadmin/sys_statistic_user.html:265
 msgid "Start date should be earlier than end date."
 msgstr ""
 
@@ -7025,36 +7012,50 @@ msgstr ""
 msgid "Search download links by token..."
 msgstr ""
 
-#: seahub/templates/sysadmin/sys_statistic_file.html:14
-#: seahub/templates/sysadmin/sys_statistic_storage.html:14
-#: seahub/templates/sysadmin/sys_statistic_traffic.html:14
-#: seahub/templates/sysadmin/sys_statistic_user.html:14
-#: seahub/templates/sysadmin/sys_trafficadmin.html:11
-msgid "Storage"
-msgstr ""
-
-#: seahub/templates/sysadmin/sys_statistic_file.html:176
+#: seahub/templates/sysadmin/sys_statistic_file.html:172
 msgctxt "files visited"
 msgid "Visited"
 msgstr ""
 
-#: seahub/templates/sysadmin/sys_statistic_file.html:182
+#: seahub/templates/sysadmin/sys_statistic_file.html:178
 msgctxt "files added"
 msgid "Added"
 msgstr "Đã thêm"
 
-#: seahub/templates/sysadmin/sys_statistic_file.html:188
+#: seahub/templates/sysadmin/sys_statistic_file.html:184
 msgctxt "files deleted"
 msgid "Deleted"
 msgstr "Đã xóa"
 
-#: seahub/templates/sysadmin/sys_statistic_file.html:199
+#: seahub/templates/sysadmin/sys_statistic_file.html:195
 msgid "File Operations"
 msgstr ""
 
-#: seahub/templates/sysadmin/sys_statistic_storage.html:172
-#: seahub/templates/sysadmin/sys_statistic_storage.html:184
-msgid "Total storage"
+#: seahub/templates/sysadmin/sys_statistic_reports.html:13
+msgid "Monthly User Traffic"
+msgstr ""
+
+#: seahub/templates/sysadmin/sys_statistic_reports.html:15
+#: seahub/templates/sysadmin/sys_trafficadmin.html:26
+msgid "Month:"
+msgstr "Tháng:"
+
+#: seahub/templates/sysadmin/sys_statistic_reports.html:17
+#: seahub/templates/sysadmin/sys_statistic_reports.html:25
+msgid "Create Report"
+msgstr ""
+
+#: seahub/templates/sysadmin/sys_statistic_reports.html:23
+msgid "User Storage"
+msgstr ""
+
+#: seahub/templates/sysadmin/sys_statistic_reports.html:55
+msgid "Invalid month, should be yyyymm."
+msgstr ""
+
+#: seahub/templates/sysadmin/sys_statistic_storage.html:168
+#: seahub/templates/sysadmin/sys_statistic_storage.html:180
+msgid "Total Storage"
 msgstr ""
 
 #: seahub/templates/sysadmin/sys_terms_admin.html:18
@@ -7091,17 +7092,13 @@ msgstr ""
 msgid "Update Terms and Conditions"
 msgstr ""
 
-#: seahub/templates/sysadmin/sys_trafficadmin.html:28
-msgid "Tip: the traffic only includes the traffic used by sharing links."
+#: seahub/templates/sysadmin/sys_trafficadmin.html:66
+msgid "Share link upload"
 msgstr ""
 
-#: seahub/templates/sysadmin/sys_trafficadmin.html:31
-msgid "Month:"
-msgstr "Tháng:"
-
-#: seahub/templates/sysadmin/sys_trafficadmin.html:38
-msgid "Total Usage"
-msgstr "Tổng dung lượng"
+#: seahub/templates/sysadmin/sys_trafficadmin.html:72
+msgid "Share link download"
+msgstr ""
 
 #: seahub/templates/sysadmin/sys_user_admin_ldap_imported.html:16
 #: seahub/templates/sysadmin/sys_useradmin.html:14
@@ -7156,7 +7153,7 @@ msgid "Download an example file"
 msgstr ""
 
 #: seahub/templates/sysadmin/sys_useradmin.html:77
-#: seahub/views/sysadmin.py:1966 seahub/views/sysadmin.py:2047
+#: seahub/views/sysadmin.py:1992 seahub/views/sysadmin.py:2073
 msgid "Please choose a .xlsx file."
 msgstr ""
 
@@ -7235,7 +7232,7 @@ msgid "Successfully deleted {users}."
 msgstr ""
 
 #: seahub/templates/sysadmin/useradmin_js.html:253
-#: seahub/templates/sysadmin/userinfo.html:547
+#: seahub/templates/sysadmin/userinfo.html:570
 msgid "Invalid quota."
 msgstr ""
 
@@ -7253,26 +7250,26 @@ msgstr ""
 msgid "Institution"
 msgstr ""
 
-#: seahub/templates/sysadmin/useradmin_table.html:79
-#: seahub/templates/sysadmin/useradmin_table.html:92
+#: seahub/templates/sysadmin/useradmin_table.html:78
+#: seahub/templates/sysadmin/useradmin_table.html:91
 msgctxt "Default Administrator"
 msgid "Default Admin"
 msgstr ""
 
-#: seahub/templates/sysadmin/useradmin_table.html:81
-#: seahub/templates/sysadmin/useradmin_table.html:93
+#: seahub/templates/sysadmin/useradmin_table.html:80
+#: seahub/templates/sysadmin/useradmin_table.html:92
 msgctxt "System Administrator"
 msgid "System Admin"
 msgstr "System Admin"
 
-#: seahub/templates/sysadmin/useradmin_table.html:83
-#: seahub/templates/sysadmin/useradmin_table.html:94
+#: seahub/templates/sysadmin/useradmin_table.html:82
+#: seahub/templates/sysadmin/useradmin_table.html:93
 msgctxt "Daily Administrator"
 msgid "Daily Admin"
 msgstr ""
 
-#: seahub/templates/sysadmin/useradmin_table.html:85
-#: seahub/templates/sysadmin/useradmin_table.html:95
+#: seahub/templates/sysadmin/useradmin_table.html:84
+#: seahub/templates/sysadmin/useradmin_table.html:94
 msgctxt "Audit Administrator"
 msgid "Audit Admin"
 msgstr ""
@@ -7286,30 +7283,34 @@ msgid "Reference ID"
 msgstr ""
 
 #: seahub/templates/sysadmin/userinfo.html:126
+msgid "Force Two-Factor Authentication"
+msgstr ""
+
+#: seahub/templates/sysadmin/userinfo.html:134
 msgid "Set user name"
 msgstr ""
 
-#: seahub/templates/sysadmin/userinfo.html:133
+#: seahub/templates/sysadmin/userinfo.html:141
 msgid "Set user department"
 msgstr ""
 
-#: seahub/templates/sysadmin/userinfo.html:140
+#: seahub/templates/sysadmin/userinfo.html:148
 msgid "Set user Login ID"
 msgstr ""
 
-#: seahub/templates/sysadmin/userinfo.html:147
+#: seahub/templates/sysadmin/userinfo.html:155
 msgid "Set user contact email"
 msgstr ""
 
-#: seahub/templates/sysadmin/userinfo.html:154
+#: seahub/templates/sysadmin/userinfo.html:162
 msgid "Set user Reference ID"
 msgstr ""
 
-#: seahub/templates/sysadmin/userinfo.html:254
+#: seahub/templates/sysadmin/userinfo.html:262
 msgid "This user has no shared libraries"
 msgstr "Người dùng này chưa có thư viện nào được chia sẻ"
 
-#: seahub/templates/sysadmin/userinfo.html:302
+#: seahub/templates/sysadmin/userinfo.html:310
 msgid "This user has not created any shared links"
 msgstr "Người dùng này chưa tạo bất kì link chia sẻ nào"
 
@@ -7342,20 +7343,24 @@ msgstr "Xin lỗi, người dùng này chưa đăng ký"
 msgid "updated this file"
 msgstr "cập nhật tập tin này"
 
-#: seahub/templates/view_file_base.html:87
+#: seahub/templates/view_file_base.html:79
+msgid "Please install the desktop client to open file via client."
+msgstr ""
+
+#: seahub/templates/view_file_base.html:92
 msgid "Back to top"
 msgstr ""
 
-#: seahub/templates/view_file_base.html:87
+#: seahub/templates/view_file_base.html:92
 msgid "top"
 msgstr ""
 
-#: seahub/templates/view_file_base.html:94
+#: seahub/templates/view_file_base.html:99
 msgid "Comments"
 msgstr ""
 
-#: seahub/templates/view_file_base.html:133
-#: seahub/templates/view_file_base.html:174
+#: seahub/templates/view_file_base.html:138
+#: seahub/templates/view_file_base.html:179
 msgid "Open parent folder"
 msgstr ""
 
@@ -7528,7 +7533,7 @@ msgid "Are you sure you want to delete this wiki?"
 msgstr ""
 
 #: seahub/thumbnail/views.py:45 seahub/thumbnail/views.py:172
-#: seahub/views/__init__.py:577 seahub/views/file.py:1344
+#: seahub/views/__init__.py:566 seahub/views/file.py:1361
 msgid "Invalid arguments."
 msgstr ""
 
@@ -7544,312 +7549,312 @@ msgstr ""
 msgid "permission error"
 msgstr ""
 
-#: seahub/views/__init__.py:404 seahub/views/__init__.py:420
+#: seahub/views/__init__.py:393 seahub/views/__init__.py:409
 msgid "Unable to view recycle page"
 msgstr ""
 
-#: seahub/views/__init__.py:456
+#: seahub/views/__init__.py:445
 msgid "Unable to view library modification"
 msgstr "Không thể xem sự sửa đổi của thư viện"
 
-#: seahub/views/__init__.py:536 seahub/views/__init__.py:579
-#: seahub/views/__init__.py:781 seahub/views/__init__.py:907
-#: seahub/views/ajax.py:1186 seahub/views/file.py:1832
+#: seahub/views/__init__.py:525 seahub/views/__init__.py:568
+#: seahub/views/__init__.py:779 seahub/views/__init__.py:905
+#: seahub/views/ajax.py:1172 seahub/views/file.py:1849
 msgid "Library does not exist"
 msgstr "Thư viện không tồn tại"
 
-#: seahub/views/__init__.py:570
+#: seahub/views/__init__.py:559
 msgid "Please specify history ID"
 msgstr "Vui lòng ghi rõ lịch sử ID"
 
-#: seahub/views/__init__.py:574
+#: seahub/views/__init__.py:563
 msgid "Successfully restored the library."
 msgstr ""
 
-#: seahub/views/__init__.py:581
+#: seahub/views/__init__.py:570
 msgid "History you specified does not exist"
 msgstr "Lịch sử mà bạn chỉ định không tồn tại"
 
-#: seahub/views/__init__.py:583
+#: seahub/views/__init__.py:572
 msgid "Unknown error"
 msgstr ""
 
-#: seahub/views/__init__.py:914 seahub/views/repo.py:197
+#: seahub/views/__init__.py:912 seahub/views/repo.py:192
 #, python-format
 msgid "\"%s\" does not exist."
 msgstr "\"%s\" không tồn tại."
 
-#: seahub/views/__init__.py:932 seahub/views/file.py:1310
+#: seahub/views/__init__.py:930 seahub/views/file.py:1327
 msgid "Internal Error"
 msgstr ""
 
-#: seahub/views/__init__.py:954
+#: seahub/views/__init__.py:952
 #, python-format
 msgid "Unable to download \"%s\""
 msgstr "Không thể downlad \"%s\""
 
-#: seahub/views/__init__.py:1076
+#: seahub/views/__init__.py:1074
 msgid "Successfully enable \"Personal Wiki\"."
 msgstr "Kích hoạt \"Wiki cá nhân\" thành công."
 
-#: seahub/views/__init__.py:1081
+#: seahub/views/__init__.py:1079
 msgid "Successfully disable \"Personal Wiki\"."
 msgstr "Tắt \"Wiki cá nhân\" thành công."
 
-#: seahub/views/ajax.py:85
+#: seahub/views/ajax.py:84
 msgid "You don't have permission to access the library."
 msgstr "Bạn không được phép truy cập vào thư viện."
 
-#: seahub/views/ajax.py:93
+#: seahub/views/ajax.py:92
 msgid "No path."
 msgstr "Không có đường dẫn."
 
-#: seahub/views/ajax.py:158
+#: seahub/views/ajax.py:157
 msgid "The group doesn't exist"
 msgstr "Nhóm không tồn tại"
 
-#: seahub/views/ajax.py:287 seahub/views/ajax.py:937 seahub/views/ajax.py:1247
+#: seahub/views/ajax.py:286 seahub/views/ajax.py:938 seahub/views/ajax.py:1232
 msgid "Library is encrypted."
 msgstr "Thư viện được mã hóa."
 
-#: seahub/views/ajax.py:293 seahub/views/ajax.py:943
+#: seahub/views/ajax.py:292 seahub/views/ajax.py:944
 msgid "Error: no head commit id"
 msgstr ""
 
-#: seahub/views/ajax.py:536 seahub/views/ajax.py:600
+#: seahub/views/ajax.py:535 seahub/views/ajax.py:599
 msgid "Argument missing."
 msgstr ""
 
-#: seahub/views/ajax.py:578
+#: seahub/views/ajax.py:577
 #, python-format
 msgid "Internal error. Failed to delete %s."
 msgstr ""
 
-#: seahub/views/ajax.py:677
+#: seahub/views/ajax.py:676
 #, python-format
 msgid "Destination path is too long for %s."
 msgstr "Đường dẫn đích quá dài cho %s."
 
-#: seahub/views/ajax.py:848
+#: seahub/views/ajax.py:847
 msgid "You do not have permission to copy files/folders in this directory"
 msgstr "Bạn không có quyền sao chép files/thư mục trong thư mục này"
 
-#: seahub/views/ajax.py:855
+#: seahub/views/ajax.py:856
 #, python-format
 msgid "Can not copy directory %(src)s to its subdirectory %(des)s"
 msgstr "Không thể sao chép thư mục %(src)s đến thư mục con %(des)s"
 
-#: seahub/views/ajax.py:977
+#: seahub/views/ajax.py:978
 msgid "Failed to get file block list"
 msgstr ""
 
-#: seahub/views/ajax.py:986
+#: seahub/views/ajax.py:987
 msgid "FileServer access token invalid."
 msgstr ""
 
-#: seahub/views/ajax.py:1020
+#: seahub/views/ajax.py:1021
 msgid "Wrong repo id"
 msgstr ""
 
-#: seahub/views/ajax.py:1031 seahub/views/ajax.py:1174
+#: seahub/views/ajax.py:1032 seahub/views/ajax.py:1160
 msgid "Bad upload link token."
 msgstr ""
 
-#: seahub/views/ajax.py:1037 seahub/views/file.py:441 seahub/views/file.py:472
-#: seahub/views/file.py:990 seahub/views/file.py:1156
-#: seahub/views/file.py:1841
+#: seahub/views/ajax.py:1038 seahub/views/file.py:440 seahub/views/file.py:471
+#: seahub/views/file.py:982 seahub/views/file.py:1173
+#: seahub/views/file.py:1858
 msgid "File does not exist"
 msgstr "File không tồn tại"
 
-#: seahub/views/ajax.py:1181
+#: seahub/views/ajax.py:1167
 msgid "Bad repo id in upload link."
 msgstr ""
 
-#: seahub/views/ajax.py:1269
+#: seahub/views/ajax.py:1254
 msgid "No conflict in the merge."
 msgstr "Không có xung đột trong khi hợp nhất."
 
-#: seahub/views/file.py:171
+#: seahub/views/file.py:170
 msgid "HTTPError: failed to open file online"
 msgstr "Lỗi HTTP: mở file trực tuyến thất bại"
 
-#: seahub/views/file.py:175
+#: seahub/views/file.py:174
 msgid "URLError: failed to open file online"
 msgstr "Lỗi URL: mở file trực tuyến thất bại"
 
-#: seahub/views/file.py:182 seahub/views/file.py:1362
+#: seahub/views/file.py:181 seahub/views/file.py:1379
 msgid "The encoding you chose is not proper."
 msgstr ""
 
-#: seahub/views/file.py:199 seahub/views/file.py:202
+#: seahub/views/file.py:198 seahub/views/file.py:201
 msgid "Unknown file encoding"
 msgstr ""
 
-#: seahub/views/file.py:323 seahub/views/file.py:354 seahub/views/file.py:586
-#: seahub/views/file.py:638 seahub/views/file.py:737
+#: seahub/views/file.py:322 seahub/views/file.py:353 seahub/views/file.py:585
+#: seahub/views/file.py:637 seahub/views/file.py:736
 #, python-format
 msgid "File size surpasses %s, can not be opened online."
 msgstr "Dung lượng %s quá nặng, không thể mở trực tuyến"
 
-#: seahub/views/file.py:330 seahub/views/file.py:671
+#: seahub/views/file.py:329 seahub/views/file.py:670
 msgid "The library is encrypted, can not open file online."
 msgstr " Thư viện đã mã hóa, không thể mở file trực tuyến"
 
-#: seahub/views/file.py:428 seahub/views/file.py:450 seahub/views/file.py:455
-#: seahub/views/file.py:493 seahub/views/file.py:850 seahub/views/file.py:872
-#: seahub/views/file.py:897 seahub/views/file.py:1017
-#: seahub/views/file.py:1181 seahub/views/file.py:1435
+#: seahub/views/file.py:427 seahub/views/file.py:449 seahub/views/file.py:454
+#: seahub/views/file.py:492 seahub/views/file.py:849 seahub/views/file.py:871
+#: seahub/views/file.py:896 seahub/views/file.py:1013
+#: seahub/views/file.py:1198 seahub/views/file.py:1452
 msgid "Unable to view file"
 msgstr ""
 
-#: seahub/views/file.py:703 seahub/views/file.py:804 seahub/views/file.py:1060
-#: seahub/views/file.py:1218
+#: seahub/views/file.py:702 seahub/views/file.py:803 seahub/views/file.py:1077
+#: seahub/views/file.py:1235
 msgid "Error when prepare Office Online file preview page."
 msgstr ""
 
-#: seahub/views/file.py:730 seahub/views/file.py:814 seahub/views/file.py:1071
-#: seahub/views/file.py:1229
+#: seahub/views/file.py:729 seahub/views/file.py:813 seahub/views/file.py:1092
+#: seahub/views/file.py:1246
 msgid "Error when prepare OnlyOffice file preview page."
 msgstr ""
 
-#: seahub/views/file.py:930
+#: seahub/views/file.py:928
 msgid "Unable to download file, invalid file path"
 msgstr ""
 
-#: seahub/views/file.py:939
+#: seahub/views/file.py:937
 msgid "Unable to download file, wrong file path"
 msgstr ""
 
-#: seahub/views/file.py:944
+#: seahub/views/file.py:942
 msgid "Unable to download file, share link traffic is used up."
 msgstr "Không thể tải file, link chia sẻ đã hết băng thông."
 
-#: seahub/views/file.py:953
+#: seahub/views/file.py:951
 msgid "Unable to download file."
 msgstr ""
 
-#: seahub/views/file.py:1028 seahub/views/file.py:1192
+#: seahub/views/file.py:1024 seahub/views/file.py:1209
 msgid "Unable to view raw file, share link traffic is used up."
 msgstr ""
 
-#: seahub/views/file.py:1334
+#: seahub/views/file.py:1351
 msgid "The library does not exist."
 msgstr "Thư viện không tồn tại"
 
-#: seahub/views/file.py:1338
+#: seahub/views/file.py:1355
 msgid "The library is encrypted."
 msgstr "Thư viện được mã hóa"
 
-#: seahub/views/file.py:1423
+#: seahub/views/file.py:1440
 msgid "Unable to edit file"
 msgstr "Không thể chỉnh sửa file"
 
-#: seahub/views/file.py:1429
+#: seahub/views/file.py:1446
 msgid "The file does not exist."
 msgstr "File không tồn tại."
 
-#: seahub/views/file.py:1461
+#: seahub/views/file.py:1478
 msgid "Edit online is not offered for this type of file."
 msgstr "Loại file này không hỗ trợ chỉnh sửa trực tuyến."
 
-#: seahub/views/file.py:1583 seahub/views/file.py:1588
+#: seahub/views/file.py:1600 seahub/views/file.py:1605
 msgid "Unable to download file"
 msgstr "Không thể tải file"
 
-#: seahub/views/sysadmin.py:330 seahub/views/sysadmin.py:436
-#: seahub/views/sysadmin.py:1189 seahub/views/sysadmin.py:1201
-#: seahub/views/sysadmin.py:1944
+#: seahub/views/sysadmin.py:389 seahub/views/sysadmin.py:495
+#: seahub/views/sysadmin.py:1251 seahub/views/sysadmin.py:1263
+#: seahub/views/sysadmin.py:1970
 msgid "Failed to export Excel"
 msgstr ""
 
-#: seahub/views/sysadmin.py:794 seahub/views/sysadmin.py:820
+#: seahub/views/sysadmin.py:856 seahub/views/sysadmin.py:882
 msgid "Failed to set quota: internal server error"
 msgstr ""
 
-#: seahub/views/sysadmin.py:839
+#: seahub/views/sysadmin.py:901
 msgid "Failed to delete: the user is an organization creator"
 msgstr "Xóa thất bại: đây là người dùng khởi tạo tổ chức"
 
-#: seahub/views/sysadmin.py:874
+#: seahub/views/sysadmin.py:936
 #, python-format
 msgid "Successfully remove trial for: %s"
 msgstr ""
 
-#: seahub/views/sysadmin.py:952
+#: seahub/views/sysadmin.py:1014
 #, python-format
 msgid "Your account on %s is activated"
 msgstr "Tài khoản của bạn trên %s đã được kích hoạt"
 
-#: seahub/views/sysadmin.py:1035
+#: seahub/views/sysadmin.py:1097
 #, python-format
 msgid "Password has been reset on %s"
 msgstr "Mật khẩu đã được thay đổi trên %s"
 
-#: seahub/views/sysadmin.py:1075
+#: seahub/views/sysadmin.py:1137
 msgid "Failed to reset password: user does not exist"
 msgstr "Thay đổi mật khẩu thất bại: người dùng không tồn tại"
 
-#: seahub/views/sysadmin.py:1091 seahub/views/sysadmin.py:2032
+#: seahub/views/sysadmin.py:1153 seahub/views/sysadmin.py:2058
 #, python-format
 msgid "You are invited to join %s"
 msgstr "Bạn được mời sử dụng lưu trữ đám mây %s"
 
-#: seahub/views/sysadmin.py:1149 seahub/views/sysadmin.py:1162
+#: seahub/views/sysadmin.py:1211 seahub/views/sysadmin.py:1224
 #, python-format
 msgid "Successfully added user %s. An email notification has been sent."
 msgstr "Thêm người dùng %s thành công. Email thông báo đã được gởi."
 
-#: seahub/views/sysadmin.py:1152 seahub/views/sysadmin.py:1165
+#: seahub/views/sysadmin.py:1214 seahub/views/sysadmin.py:1227
 #, python-format
 msgid ""
 "Successfully added user %s. An error accurs when sending email notification,"
 " please check your email configuration."
 msgstr "Thêm người dùng %s thành công. Có lỗi xuất hiện khi gửi mail thông báo, vui lòng kiểm tra lại cấu hình mail."
 
-#: seahub/views/sysadmin.py:1169
+#: seahub/views/sysadmin.py:1231
 #, python-format
 msgid ""
 "Successfully added user %s. But email notification can not be sent, because "
 "Email service is not properly configured."
 msgstr "Thêm người dùng %s thành công. Nhưng email thông báo không thể gửi đi vì dịch vụ mail chưa được thiết lập cấu hình đúng."
 
-#: seahub/views/sysadmin.py:1343
+#: seahub/views/sysadmin.py:1405
 msgid "Failed to rename organization"
 msgstr "Đổi tên tổ chức thất bại."
 
-#: seahub/views/sysadmin.py:1886
+#: seahub/views/sysadmin.py:1912
 msgid "Failed to delete, please try again later."
 msgstr "Xóa thất bại, vui lòng thử lại sau."
 
-#: seahub/views/sysadmin.py:1932 seahub/views/sysadmin.py:1933
+#: seahub/views/sysadmin.py:1958 seahub/views/sysadmin.py:1959
 msgid "Optional"
 msgstr ""
 
-#: seahub/views/sysadmin.py:2045
+#: seahub/views/sysadmin.py:2071
 msgid "Import succeeded"
 msgstr "Nhập thành công"
 
-#: seahub/views/sysadmin.py:2129
+#: seahub/views/sysadmin.py:2155
 msgid "Invalid setting"
 msgstr ""
 
-#: seahub/views/sysadmin.py:2136 seahub/views/sysadmin.py:2140
-#: seahub/views/sysadmin.py:2145
+#: seahub/views/sysadmin.py:2162 seahub/views/sysadmin.py:2166
+#: seahub/views/sysadmin.py:2171
 msgid "Invalid value"
 msgstr ""
 
-#: seahub/views/sysadmin.py:2273
+#: seahub/views/sysadmin.py:2299
 #, python-format
 msgid ""
 "Failed to add %s to the institution: user already belongs to an institution"
 msgstr ""
 
-#: seahub/views/sysadmin.py:2278
+#: seahub/views/sysadmin.py:2304
 #, python-format
 msgid "Successfully added %s to the institution."
 msgstr ""
 
-#: seahub/views/sysadmin.py:2601
+#: seahub/views/sysadmin.py:2627
 msgid "Successfully deleted 1 item"
 msgstr ""
 

@@ -4,8 +4,9 @@ define([
     'underscore',
     'backbone',
     'common',
+    'moment',
     'app/views/folder-share-item'
-], function($, jQueryUI, _, Backbone, Common, FolderShareItemView) {
+], function($, jQueryUI, _, Backbone, Common, Moment, FolderShareItemView) {
     'use strict';
 
     var SharePopupView = Backbone.View.extend({
@@ -115,6 +116,8 @@ define([
             'submit #send-download-link-form': 'sendDownloadLink',
             'click #cancel-share-download-link': 'cancelShareDownloadLink',
             'click #delete-download-link': 'deleteDownloadLink',
+            'click #delete-download-link-yes': 'deleteDownloadLinkConfirm',
+            'click #delete-download-link-cancel': 'deleteDownloadLinkCancel',
             'click #generate-download-link-form .generate-random-password': 'generateRandomDownloadPassword',
             'keydown #generate-download-link-form .generate-random-password': 'generateRandomDownloadPassword',
             'click #generate-download-link-form .show-or-hide-password': 'showOrHideDownloadPassword',
@@ -185,6 +188,11 @@ define([
                 this.$('#download-link-operations .shared-link-copy-icon').addClass('hide');
                 this.$('#download-link, #direct-dl-link').append(' <span class="error">(' + gettext('Expired') + ')</span>');
             } else {
+                if (link_data.expire_date) {
+                    var expire_date = Moment(link_data.expire_date).format('YYYY-MM-DD');
+                    this.$('#share-link-expire-date').html(expire_date).removeClass('hide');
+                    this.$('#share-link-expire-date-label').removeClass('hide');
+                }
                 this.$('#send-download-link').removeClass('hide');
                 this.$('#download-link-operations .shared-link-copy-icon').removeClass('hide');
                 this.$('#download-link .error, #direct-dl-link .error').remove('');
@@ -433,12 +441,12 @@ define([
                     if (set_expiration) {
                         if (app.pageOptions.share_link_expire_days_min > 0 ||
                             app.pageOptions.share_link_expire_days_max > 0) {
-                            // do nothing
+                            expire_days_input.val(app.pageOptions.share_link_expire_days_default);
                         } else {
                             set_expiration_checkbox.prop('checked', false);
                             expire_days_input.prop('disabled', true).addClass('input-disabled');
+                            expire_days_input.val('');
                         }
-                        expire_days_input.val('');
                     }
 
                     // restore 'permission'
@@ -475,7 +483,7 @@ define([
                 window.getSelection().removeAllRanges();
                 var range = document.createRange();
                 range.selectNode(targetDom[0]);
-                window.getSelection().addRange(range); 
+                window.getSelection().addRange(range);
             } else {
                 targetDom.select();
             }
@@ -560,6 +568,11 @@ define([
         },
 
         deleteDownloadLink: function() {
+            $('#delete-download-link').addClass('hide');
+            $('#delete-download-link-confirm').removeClass('hide');
+        },
+
+        deleteDownloadLinkConfirm: function() {
             var _this = this;
             $.ajax({
                 url: Common.getUrl({
@@ -573,8 +586,19 @@ define([
                 success: function(data) {
                     _this.$('#generate-download-link-form').removeClass('hide');
                     _this.$('#download-link-operations').addClass('hide');
+                },
+                complete: function() {
+                    _this.deleteDownloadLinkCancel();
+                    _this.$('#share-link-expire-date-label').addClass('hide');
+                    _this.$('#share-link-expire-date').html('').addClass('hide');
+
                 }
             });
+        },
+
+        deleteDownloadLinkCancel: function() {
+            $('#delete-download-link').removeClass('hide');
+            $('#delete-download-link-confirm').addClass('hide');
         },
 
         uploadLinkPanelInit: function() {

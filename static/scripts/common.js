@@ -1179,8 +1179,10 @@ define([
                     'parent_dir': parent_dir,
                     'dirents': dirents
                 },
+                type: 'POST',
                 traditional: true,
                 dataType: 'json',
+                beforeSend: this.prepareCSRFToken,
                 success: function(data) {
                     zip_token = data['zip_token'];
                     $tip.html(packagingTip).modal({

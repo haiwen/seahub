@@ -1,7 +1,9 @@
 {% extends "base.html" %}
 {% load seahub_tags i18n %}
 
-{% block viewport %}{% endblock %}
+{% block viewport %}
+<meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no" />
+{% endblock %}
 
 {% block extra_style %}
 {% include 'snippets/file_view_style.html' %}
@@ -135,8 +137,15 @@ $('#file-save-form').on('submit', function() {
         {% else %}
         $('#image-view').attr('src', '{{ SITE_ROOT }}thumbnail/{{ shared_token }}/{{ thumbnail_size_for_original }}/' + encodeURIComponent('{{file_name|escapejs}}'));
         {% endif %}
+        var try_time = 0;
         $('#image-view').on('error', function() { // fail to load thumbnail
-            $(this).attr('src', '{{ raw_path|escapejs }}');
+            try_time++;
+            if (try_time == 1) { // only try once
+                $(this).attr('src', '{{ raw_path|escapejs }}');
+            } else {
+                $('#file-view').removeClass('d-flex')
+                .html('<div id="file-view-tip"><p class="error">{% trans "This file cannot be viewed online." %}</p></div>');
+            }
         })
     {% else %}
         $('#image-view').attr('src', '{{ raw_path|escapejs }}');

@@ -324,6 +324,10 @@ SHARE_LINK_LOGIN_REQUIRED = False
 SHARE_LINK_EXPIRE_DAYS_MIN = 0 # 0 means no limit
 SHARE_LINK_EXPIRE_DAYS_MAX = 0 # 0 means no limit
 
+# default expire days should be
+# greater than or equal to MIN and less than or equal to MAX
+SHARE_LINK_EXPIRE_DAYS_DEFAULT = 0
+
 # mininum length for the password of a share link
 SHARE_LINK_PASSWORD_MIN_LENGTH = 8
 
@@ -650,6 +654,8 @@ THUMBNAIL_VIDEO_FRAME_TIME = 5  # use the frame at 5 second as thumbnail
 
 # template for create new office file
 OFFICE_TEMPLATE_ROOT = os.path.join(MEDIA_ROOT, 'office-template')
+
+ENABLE_WEBDAV_SECRET = False
 
 #####################
 # Global AddressBook #

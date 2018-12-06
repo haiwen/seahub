@@ -398,7 +398,7 @@
     </td>
     <td><%- size_formatted %></td>
     <td><%= mtime_relative %></td>
-    <td><span title="<%- owner %>"><%- owner_nickname %></span></td>
+    <td><span><%- owner_nickname %></span></td>
 </script>
 <script type="text/template" id="organization-repo-mobile-tmpl">
     <td>
@@ -408,7 +408,7 @@
         <a href="#org/lib/<%= id %>" class="normal"><%- name %></a><br />
         <span class="repo-meta-info"><%- size_formatted %></span>
         <span class="repo-meta-info"><%= mtime_relative %></span>
-        <span class="repo-meta-info" title="<%- owner %>"><%- owner_nickname %></span>
+        <span class="repo-meta-info"><%- owner_nickname %></span>
     </td>
     <td class="alc">
         <% if (app.pageOptions.is_staff || owner == app.pageOptions.username) { %>
@@ -1235,7 +1235,7 @@
                         <input type="checkbox" checked="checked" disabled="disabled" name="set_expiration" class="vam" />
                         <span class="checkbox-option vam">{% trans "Add auto expiration"%}</span>
                         <div class="link-option-content inline-block vam">
-                            <input type="text" name="expire_days" class="input short-input" id="expire-days" />
+                            <input type="text" name="expire_days" value="{{ share_link_expire_days_default }}" class="input short-input" id="expire-days" />
                             <span>{% trans "days" %}</span>
                             <span>
                                 {% if share_link_expire_days_min > 0 and share_link_expire_days_max > 0 %}
@@ -1300,11 +1300,19 @@
                             <span class="shared-link-copy-icon icon-copy" title="{% trans "Copy" %}"></span>
                         </dd>
                         <% } %>
+                        <dt id="share-link-expire-date-label" class="hide">{% trans "Expiration Date: " %}</dt>
+                        <dd id="share-link-expire-date" class="hide"></dd>
                     </dl>
                     {% if user.permissions.can_send_share_link_mail %}
                         <button id="send-download-link">{% trans 'Send' %}</button>
                     {% endif %}
                     <button id="delete-download-link">{% trans 'Delete' %}</button>
+                    <div id="delete-download-link-confirm" class="alert alert-warning hide">
+                        <h4 class="alert-heading">{% trans "Are you sure you want to remove the share link?"%}</h4>
+                        <p style="margin-bottom:1rem;">{% trans "If the share link is removed, no one will be able to access it any more."%}</p>
+                        <button id="delete-download-link-yes">{% trans 'Yes' %}</button>
+                        <button id="delete-download-link-cancel">{% trans 'No' %}</button>
+                    </div>
                     <form id="send-download-link-form" action="" class="hide">
                         <label for="email">{% trans "Send to:"%}</label><br />
                         <input type="text" class="input" name="email" placeholder="{% trans "Emails, separated by ','"%}" title="{% trans "Emails, separated by ','"%}" id="email" /><br />
@@ -1678,7 +1686,7 @@
     </div>
     <div class="comments-panel-footer">
         <form action="" method="post" class="msg-form">
-            <img src="{% avatar_url request.user 64 %}" alt="" width="32" class="avatar-circle fleft" />
+            <img src="{% avatar_url request.user 64 %}" alt="" width="32" height="32" class="avatar-circle fleft" />
             <div class="msg-body">
                 <textarea name="message" placeholder="{% trans "Add a discussion..." %}" class="msg-input"></textarea>
                 <button type="submit" class="submit msg-submit">{% trans "Submit" %}</button>
@@ -2097,7 +2105,7 @@
 
 
 <script type="text/template" id="group-member-tmpl">
-    <img src="<%= avatar_url %>" alt="" width="32" class="avatar-circle fleft" />
+    <img src="<%= avatar_url %>" alt="" width="32" height="32" class="avatar-circle fleft" />
     <div class="txt">
         <p class="txt-item ellipsis" title="<%- name %>"><%- name %>
             <% if (is_owner) { %>
@@ -2110,7 +2118,7 @@
 </script>
 
 <script type="text/template" id="group-discussion-tmpl">
-    <img src="<%= avatar_url %>" alt="" width="32" class="avatar-circle fleft" />
+    <img src="<%= avatar_url %>" alt="" width="32" height="32" class="avatar-circle fleft" />
     <div class="msg-body">
         <div class="ovhd">
             <a class="msg-username ellipsis" title="<%- user_name %>" href="<%= user_profile_url %>"><%- user_name %></a>
@@ -2848,7 +2856,7 @@
     </div>
     <div class="comments-panel-footer">
         <form action="" method="post" class="msg-form">
-            <img src="{% avatar_url request.user 64 %}" alt="" width="32" class="avatar-circle fleft" />
+            <img src="{% avatar_url request.user 64 %}" alt="" width="32" height="32" class="avatar-circle fleft" />
             <div class="msg-body">
                 <textarea name="message" placeholder="{% trans "Add a comment..." %}" title="{% trans "Add a comment..." %}" aria-label="{% trans "Add a comment..." %}" class="msg-input"></textarea>
                 <p class="error hide"></p>
@@ -2858,7 +2866,7 @@
     </div>
 </script>
 <script type="text/template" id="file-comment-tmpl">
-<img src="<%= avatar_url %>" alt="" width="32" class="avatar-circle fleft" />
+<img src="<%= avatar_url %>" alt="" width="32" height="32" class="avatar-circle fleft" />
 <div class="msg-body">
     <div class="ovhd">
         <a class="msg-username ellipsis" title="<%- user_name %>" href="<%= user_profile_url %>"><%- user_name %></a>

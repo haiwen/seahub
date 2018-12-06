@@ -15,11 +15,6 @@ html, body { padding:0; margin:0; height:100%; }
 <div id="placeholder"></div>
 
 {% get_current_language as LANGUAGE_CODE %}
-<script type="text/javascript">
-var SEAFILE_GLOBAL = {
-    csrfCookieName: '{{ CSRF_COOKIE_NAME }}'
-};
-</script>
 <script type="text/javascript" src="{% static "scripts/lib/jquery.min.js" %}"></script>
 <script type="text/javascript" src="{{ MEDIA_URL }}js/jq.min.js"></script>
 <script type="text/javascript" src="{{ MEDIA_URL }}js/base.js?t=1536127546642"></script>
@@ -50,37 +45,7 @@ var SEAFILE_GLOBAL = {
         }
     };
     var docEditor = new DocsAPI.DocEditor("placeholder", config);
-
-    {% if can_edit %}
-    var interval;
-    var refreshLock = function() {
-        $.ajax({
-            url: '{% url "api-v2.1-file-view" repo_id %}' + '?p={{path|urlencode}}',
-            type: 'PUT',
-            dataType: 'json',
-            data: {
-                'operation': 'refresh-lock'
-            },
-            cache: false,
-            beforeSend: prepareCSRFToken,
-            success: function(data) {
-            },
-            error: function(xhr) {
-                if (xhr.responseText) {
-                    feedback(JSON.parse(xhr.responseText).error_msg, 'error');
-                } else {
-                    feedback("{% trans "Failed. Please check the network." %}", 'error');
-                }
-                clearInterval(interval);
-            }
-        });
-    };
-    interval = setInterval(refreshLock, 60 * 1000);
-    {% endif %}
 </script>
-{% if enable_watermark %}
-<script type="text/javascript" src="{{ MEDIA_URL }}js/watermark.js"></script>
-<script type="text/javascript">{% include "snippets/add_watermark.html" %}</script>
-{% endif %}
+{% include 'snippets/wopi_onlyoffice_js.html' %}
 </body>
 </html>

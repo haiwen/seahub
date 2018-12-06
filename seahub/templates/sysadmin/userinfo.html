@@ -13,7 +13,7 @@
 <p class="path-bar">
     <a class="normal" href="{{ SITE_ROOT }}sys/useradmin/">Users</a>
     <span class="path-split">/</span>
-    {{ email }}
+    {{ email|email2nickname }}
 </p>
 
 <div id="tabs" class="tab-tabs">
@@ -251,7 +251,7 @@
                 {% else %}
                 <td>{{ repo.name }}</td>
                 {% endif %}
-                <td>{{ repo.props.user }}</td>
+                <td>{{ repo.props.user|email2nickname }}</td>
                 <td>{{ repo.size|filesizeformat }}</td>
                 <td>{{ repo.last_modify|translate_seahub_time }}</td>
             </tr>

@@ -79,6 +79,18 @@
 </div>
 {% endif %}
 
+{% if ENABLE_WEBDAV_SECRET %}
+<div id="update-webdav-passwd" class="setting-item">
+    <h3>WebDav {% trans "Password" %}</h3>
+    <label>{% trans "Password" %}</label><input type="text" name="password" value="{{ webdav_passwd }}" class="input" />
+    <br/>
+    <a href="#" class="update sf-btn-link">{% trans "Update" %}</a>
+    <a href="#" class="delete sf-btn-link">{% trans "Delete" %}</a>
+
+</div>
+{% endif %}
+
+
 {% if ENABLE_ADDRESSBOOK_OPT_IN %}
 <div class="setting-item" id="list-in-address-book">
     <h3>{% trans "Global Address Book" %}</h3>
@@ -230,6 +242,33 @@ $("#list-in-address-book input[type='checkbox']").on('change', function() {
         },
         error: ajaxErrorHandler
     });
+});
+{% endif %}
+
+{% if ENABLE_WEBDAV_SECRET %}
+function aj_update_webdav_secret(passwd) {
+  $.ajax({
+    url: "{% url 'api-v2.1-webdav-secret' %}",
+    type: 'PUT',
+    dataType: 'json',
+    cache: false,
+    beforeSend: prepareCSRFToken,
+    data: "secret=" + passwd,
+    success: function(data) {
+      feedback("{% trans "Success" %}", 'success');
+    },
+    error: ajaxErrorHandler
+  });
+}
+
+$("#update-webdav-passwd a.update").click(function() {
+  var passwd = $("#update-webdav-passwd input[type='text']").val();
+  aj_update_webdav_secret(passwd);
+});
+
+$("#update-webdav-passwd a.delete").click(function() {
+  $("#update-webdav-passwd input[type='text']").val('');
+  aj_update_webdav_secret('');
 });
 {% endif %}
 

@@ -3,6 +3,7 @@
 # This file is distributed under the same license as the PACKAGE package.
 # 
 # Translators:
+# Pavel Borecki <pavel.borecki@gmail.com>, 2018
 # Petr Zientek <shmaic@gmail.com>, 2017
 # Tomáš Holan <mail@tomasholan.eu>, 2017-2018
 # Tomáš Kubalík <tkubalik@ifrog.cz>, 2017
@@ -10,9 +11,9 @@ msgid ""
 msgstr ""
 "Project-Id-Version: seahub\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2018-09-17 12:01+0800\n"
-"PO-Revision-Date: 2018-09-07 05:47+0000\n"
-"Last-Translator: Tomáš Holan <mail@tomasholan.eu>\n"
+"POT-Creation-Date: 2018-11-29 14:09+0800\n"
+"PO-Revision-Date: 2018-11-29 06:13+0000\n"
+"Last-Translator: zheng xie <xiez1989@gmail.com>\n"
 "Language-Team: Czech (http://www.transifex.com/haiwen/seahub/language/cs/)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -22,7 +23,7 @@ msgstr ""
 
 #: frontend/src/components/account.js:91
 msgid "System Admin"
-msgstr "Systémový administrátor"
+msgstr "Správce systému"
 
 #: frontend/src/components/account.js:127
 msgid "Used"
@@ -71,7 +72,7 @@ msgstr "Odeslat"
 #: frontend/src/components/menu-component/menu-dialog/rename-dialog.js:71
 #: static/scripts/app/views/fileupload.js:22
 msgid "Cancel"
-msgstr "Zrišit"
+msgstr "Storno"
 
 #: frontend/src/components/menu-component/menu-dialog/delete-dialog.js:16
 #: frontend/src/components/menu-component/node-menu.js:39
@@ -101,7 +102,7 @@ msgstr "Přejmenovat soubor"
 #: frontend/src/components/menu-component/menu-dialog/rename-dialog.js:64
 #: static/scripts/app/views/dialogs/dirent-rename.js:39
 msgid "Rename Folder"
-msgstr "Přejmenovat adresář"
+msgstr "Přejmenovat složku"
 
 #: frontend/src/components/menu-component/menu-dialog/rename-dialog.js:66
 msgid "Enter the new file name:"
@@ -150,7 +151,7 @@ msgstr "Zobrazit knihovnu v cloudu"
 
 #: seahub/templates/priv/ali.js:10
 msgid "Admin access"
-msgstr "Přistup administrátora"
+msgstr "Přístup správce"
 
 #: seahub/templates/priv/ali.js:12
 msgid "Read-Write folder"
@@ -197,12 +198,12 @@ msgid "View-on-Cloud"
 msgstr "Zobrazit v cloudu"
 
 #: static/scripts/app/models/deleted-repo.js:19
-#: static/scripts/app/models/repo.js:59 static/scripts/common.js:344
+#: static/scripts/app/models/repo.js:59 static/scripts/common.js:345
 msgid "Encrypted library"
 msgstr "Šifrovaná knihovna"
 
 #: static/scripts/app/models/deleted-repo.js:21
-#: static/scripts/app/models/repo.js:61 static/scripts/common.js:348
+#: static/scripts/app/models/repo.js:61 static/scripts/common.js:349
 #: static/scripts/sysadmin-app/models/trash-repo.js:14
 msgid "Read-Write library"
 msgstr "Čtení / zápis do knihovny"
@@ -213,13 +214,13 @@ msgstr "Čtení / zápis do knihovny"
 #: static/scripts/app/views/fileupload.js:408
 #: static/scripts/app/views/fileupload.js:420
 #: static/scripts/app/views/fileupload.js:432
-#: static/scripts/app/views/group.js:65 static/scripts/common.js:644
+#: static/scripts/app/views/group.js:65 static/scripts/common.js:645
 msgid "Just now"
 msgstr "Právě teď"
 
 #: static/scripts/app/models/repo.js:34
 msgid "Name is required"
-msgstr "Jméno je povinné."
+msgstr "Název je povinný."
 
 #: static/scripts/app/models/repo.js:37
 #: static/scripts/app/views/dialogs/dirent-rename.js:65
@@ -228,25 +229,25 @@ msgstr "Jméno je povinné."
 #: static/scripts/app/views/group-repo.js:131
 #: static/scripts/app/views/repo.js:187
 msgid "Name should not include '/'."
-msgstr "Jméno by nemělo obsahovat '/'."
+msgstr "Název by neměl obsahovat „/“."
 
-#: static/scripts/app/models/repo.js:41 static/scripts/app/views/share.js:338
+#: static/scripts/app/models/repo.js:41 static/scripts/app/views/share.js:350
 msgid "Please enter password"
-msgstr "Prosím vložte heslo."
+msgstr "Zadejte heslo"
 
-#: static/scripts/app/models/repo.js:42 static/scripts/app/views/share.js:346
+#: static/scripts/app/models/repo.js:42 static/scripts/app/views/share.js:358
 msgid "Please enter the password again"
-msgstr "Prosím vložte znovu heslo."
+msgstr "Zopakujte zadání hesla"
 
-#: static/scripts/app/models/repo.js:44 static/scripts/app/views/share.js:342
+#: static/scripts/app/models/repo.js:44 static/scripts/app/views/share.js:354
 msgid "Password is too short"
 msgstr "Heslo je příliš krátké."
 
-#: static/scripts/app/models/repo.js:46 static/scripts/app/views/share.js:350
+#: static/scripts/app/models/repo.js:46 static/scripts/app/views/share.js:362
 msgid "Passwords don't match"
-msgstr "Hesla se neshodují."
+msgstr "Zadání hesla se neshodují"
 
-#: static/scripts/app/models/repo.js:63 static/scripts/common.js:346
+#: static/scripts/app/models/repo.js:63 static/scripts/common.js:347
 msgid "Read-Only library"
 msgstr "Knihovna pouze pro čtení."
 
@@ -327,19 +328,19 @@ msgstr "Zkopírovat {placeholder} do:"
 
 #: static/scripts/app/views/dialogs/dirent-mvcp.js:102
 msgid "Moving %(name)s"
-msgstr "Přesouvám %(name)s"
+msgstr "Přesouvá se %(name)s"
 
 #: static/scripts/app/views/dialogs/dirent-mvcp.js:102
 msgid "Copying %(name)s"
-msgstr "Kopíruji %(name)s"
+msgstr "Kopíruje se %(name)s"
 
 #: static/scripts/app/views/dialogs/dirent-mvcp.js:118
 msgid "Saving..."
-msgstr "Ukládání..."
+msgstr "Ukládání…"
 
 #: static/scripts/app/views/dialogs/dirent-mvcp.js:133
 msgid "Failed."
-msgstr "Chyba."
+msgstr "Nezdařilo se."
 
 #: static/scripts/app/views/dialogs/dirent-mvcp.js:133
 #: static/scripts/app/views/dialogs/dirent-mvcp.js:159
@@ -350,7 +351,7 @@ msgstr "Zrušeno."
 #: static/scripts/app/views/dialogs/dirent-mvcp.js:188
 #: static/scripts/app/views/dir.js:1173
 msgid "Invalid destination path"
-msgstr "Neplatná cesta umístění"
+msgstr "Neplatný popis umístění cíle"
 
 #: static/scripts/app/views/dialogs/dirent-mvcp.js:207
 #: static/scripts/app/views/dirent.js:296
@@ -387,23 +388,23 @@ msgstr "Změnit heslo knihovny {placeholder}"
 
 #: static/scripts/app/views/dialogs/repo-change-password.js:50
 msgid "Please enter the old password"
-msgstr "Prosím vložte staré heslo."
+msgstr "Zadejte původní heslo"
 
 #: static/scripts/app/views/dialogs/repo-change-password.js:54
 msgid "Please enter a new password"
-msgstr "Prosím vložte nové heslo"
+msgstr "Zadejte nové heslo"
 
 #: static/scripts/app/views/dialogs/repo-change-password.js:58
 msgid "New password is too short"
-msgstr "Nové heslo je příliš krátké."
+msgstr "Nové heslo je příliš krátké"
 
 #: static/scripts/app/views/dialogs/repo-change-password.js:62
 msgid "Please enter the new password again"
-msgstr "Prosím vložte znovu nové heslo."
+msgstr "Zopakujte zadání nového hesla"
 
 #: static/scripts/app/views/dialogs/repo-change-password.js:66
 msgid "New passwords don't match"
-msgstr "Hesla se neshodují."
+msgstr "Zadání nového hesla se neshodují"
 
 #: static/scripts/app/views/dialogs/repo-change-password.js:87
 msgid "Successfully changed library password."
@@ -411,17 +412,17 @@ msgstr "Heslo knihovny bylo úspěšně změněno."
 
 #: static/scripts/app/views/dialogs/repo-folder-perm-admin.js:91
 msgid "{placeholder} Folder Permission"
-msgstr "Oprávnění adresáře {placeholder} "
+msgstr "Oprávnění složky {placeholder} "
 
 #: static/scripts/app/views/dialogs/repo-folder-perm-admin.js:110
 #: static/scripts/app/views/group-settings.js:150
 #: static/scripts/app/views/repo.js:247
 #: static/scripts/sysadmin-app/views/group.js:74
 #: static/scripts/sysadmin-app/views/groups.js:68
-#: static/scripts/sysadmin-app/views/repo.js:107
+#: static/scripts/sysadmin-app/views/repo.js:108
 #: static/scripts/sysadmin-app/views/repos.js:58
 msgid "Search user or enter email and press Enter"
-msgstr "Vyberte uživatele nebo vložte email a stiskněte Enter"
+msgstr "Vyberte uživatele nebo zadejte e-mail a stiskněte Enter"
 
 #: static/scripts/app/views/dialogs/repo-folder-perm-admin.js:141
 msgid "Select a group"
@@ -433,13 +434,13 @@ msgstr "Můžete vybrat pouze 1 položku"
 
 #: static/scripts/app/views/dialogs/repo-folder-perm-admin.js:222
 msgid "Please click and choose a directory."
-msgstr "Prosím klikněte a vyberte adresář."
+msgstr "Klikněte a zvolte adresář."
 
-#: static/scripts/app/views/dialogs/repo-history-settings.js:36
+#: static/scripts/app/views/dialogs/repo-history-settings.js:37
 msgid "{placeholder} History Setting"
 msgstr "Nastavení historie {placeholder}"
 
-#: static/scripts/app/views/dialogs/repo-history-settings.js:130
+#: static/scripts/app/views/dialogs/repo-history-settings.js:131
 msgid "Successfully set library history."
 msgstr "Nastavení historie knihovny bylo úspěšné."
 
@@ -455,7 +456,7 @@ msgstr "Zavřít (Esc)"
 #: static/scripts/app/views/dir.js:59
 #: static/scripts/app/views/starred-file.js:107
 msgid "Loading..."
-msgstr "Načítání..."
+msgstr "Načítání…"
 
 #: static/scripts/app/views/dir.js:62
 #: static/scripts/app/views/starred-file.js:110
@@ -484,20 +485,20 @@ msgstr "<a href=\"%url%\" target=\"_blank\">Obrázek</a> nejde načíst."
 
 #: static/scripts/app/views/dir.js:409
 msgid "Password is required."
-msgstr "Heslo je vyžadováno"
+msgstr "Heslo je vyžadováno."
 
 #: static/scripts/app/views/dir.js:479
-#: static/scripts/app/views/notifications.js:63 static/scripts/common.js:468
+#: static/scripts/app/views/notifications.js:63 static/scripts/common.js:469
 msgid "Please check the network."
-msgstr "Prosím zkontrolujte připojení"
+msgstr "Zkontrolujte síťové připojení."
 
 #: static/scripts/app/views/dir.js:733
 msgid "Only an extension there, please input a name."
-msgstr "Poze přípona, prosím vložte jméno"
+msgstr "Pouze přípona, zadejte název."
 
 #: static/scripts/app/views/dir.js:779
 msgid "New Markdown File"
-msgstr "Nový značkovací soubor"
+msgstr "Nový Markdown soubor"
 
 #: static/scripts/app/views/dir.js:787
 msgid "New Excel File"
@@ -513,7 +514,7 @@ msgstr "Nový soubor Wordu"
 
 #: static/scripts/app/views/dir.js:1035 static/scripts/app/views/dir.js:1178
 msgid "Processing..."
-msgstr "Zpracovávám..."
+msgstr "Zpracování…"
 
 #: static/scripts/app/views/dir.js:1072
 msgid "Successfully deleted %(name)s."
@@ -545,7 +546,7 @@ msgstr "Smazat položky"
 
 #: static/scripts/app/views/dir.js:1103
 msgid "Are you sure you want to delete these selected items?"
-msgstr "Jste si jisti, že chcete smazat tyto vybrané položky?"
+msgstr "Opravdu chcete smazat tyto vybrané položky?"
 
 #: static/scripts/app/views/dir.js:1117
 msgid "Move selected item(s) to:"
@@ -597,11 +598,11 @@ msgstr "Vnitřní chyba. Chyba při kopírování %(name)s."
 
 #: static/scripts/app/views/dir.js:1301
 msgid "Moving file %(index)s of %(total)s"
-msgstr "Přesunuji soubor %(index)s z %(total)s"
+msgstr "Přesunuje se soubor %(index)s z %(total)s"
 
 #: static/scripts/app/views/dir.js:1301
 msgid "Copying file %(index)s of %(total)s"
-msgstr "Kopíruji soubor %(index)s z %(total)s"
+msgstr "Kopíruje se soubor %(index)s z %(total)s"
 
 #: static/scripts/app/views/dir.js:1327
 msgid "Failed to move %(name)s"
@@ -611,8 +612,8 @@ msgstr "Chyba při přesunu %(name)s"
 msgid "Failed to copy %(name)s"
 msgstr "Chyba při kopírování %(name)s"
 
-#: static/scripts/app/views/dirent-details.js:95 static/scripts/common.js:695
-#: static/scripts/common.js:766
+#: static/scripts/app/views/dirent-details.js:95 static/scripts/common.js:696
+#: static/scripts/common.js:767
 msgid "No matches"
 msgstr "Žádná shoda"
 
@@ -648,11 +649,11 @@ msgstr "Maximální počet souborů byl překročen"
 
 #: static/scripts/app/views/fileupload.js:15
 msgid "Uploaded bytes exceed file size"
-msgstr "Nahrané byte překročily velikost souboru"
+msgstr "Nahrané bajty překročily velikost souboru"
 
 #: static/scripts/app/views/fileupload.js:16
 msgid "Empty file upload result"
-msgstr "Výsledek nahrání prázdného souboru"
+msgstr "Výsledkem nahrání prázdného souboru"
 
 #: static/scripts/app/views/fileupload.js:18
 #: static/scripts/app/views/fileupload.js:226
@@ -678,7 +679,7 @@ msgstr "Start"
 
 #: static/scripts/app/views/fileupload.js:47
 msgid "File Uploading..."
-msgstr "Nahrávání souboru..."
+msgstr "Nahrávání souboru…"
 
 #: static/scripts/app/views/fileupload.js:48
 msgid "File Upload complete"
@@ -690,7 +691,7 @@ msgstr "Nahrání souboru zrušeno"
 
 #: static/scripts/app/views/fileupload.js:50
 msgid "File Upload failed"
-msgstr "Selhalo nahrání souboru"
+msgstr "Nahrání souboru se nezdařilo"
 
 #: static/scripts/app/views/fileupload.js:280
 msgid "Replace file {filename}?"
@@ -706,27 +707,27 @@ msgstr "Chyba sítě"
 
 #: static/scripts/app/views/folder-perm.js:60
 msgid "Set {placeholder}'s permission"
-msgstr "Nastavit {placeholder}'s oprávnění"
+msgstr "Nastavit oprávnění pro {placeholder}"
 
 #: static/scripts/app/views/folder-perm.js:126
-#: static/scripts/app/views/share.js:846
+#: static/scripts/app/views/share.js:882
 msgid "Select groups"
 msgstr "Vybrat skupiny"
 
 #: static/scripts/app/views/folder-share-item.js:125
 msgid "Edit failed"
-msgstr "Chyba editace"
+msgstr "Úprava se nezdařila"
 
 #: static/scripts/app/views/folder-share-item.js:127
 #: static/scripts/app/views/folder-share-item.js:188
-#: static/scripts/common.js:445
+#: static/scripts/common.js:446
 #: static/scripts/sysadmin-app/views/dashboard.js:84
 msgid "Failed. Please check the network."
-msgstr "Chyba. Prosím zkontrolujte připojení"
+msgstr "Nezdařilo se, zkontrolujte připojení"
 
 #: static/scripts/app/views/folder-share-item.js:186
 msgid "Delete failed"
-msgstr "Chyba při smazání"
+msgstr "Smazání se nezdařilo"
 
 #: static/scripts/app/views/group-manage-members.js:70
 msgid "{placeholder} Members"
@@ -746,7 +747,7 @@ msgstr "Úspěšně zrušeno sdílení 1 položky"
 #: static/scripts/app/views/repo.js:248
 #: static/scripts/sysadmin-app/views/group.js:75
 #: static/scripts/sysadmin-app/views/groups.js:69
-#: static/scripts/sysadmin-app/views/repo.js:108
+#: static/scripts/sysadmin-app/views/repo.js:109
 #: static/scripts/sysadmin-app/views/repos.js:59
 msgid "You cannot select any more choices"
 msgstr "Nemůžete vybrat více možností"
@@ -755,11 +756,11 @@ msgstr "Nemůžete vybrat více možností"
 msgid ""
 "Successfully transferred the group. You are now a normal member of the "
 "group."
-msgstr "Úspěšně přenesena skupina. Nyní jste normální člen skupiny."
+msgstr "Úspěšně přenesena skupina. Nyní jste běžným člen skupiny."
 
 #: static/scripts/app/views/group-settings.js:238
 msgid "Please choose a CSV file"
-msgstr "Prosím vyberte jiný CSV soubor"
+msgstr "Vyberte jiný CSV soubor"
 
 #: static/scripts/app/views/group-settings.js:269
 msgid "Successfully imported."
@@ -781,7 +782,7 @@ msgstr "Opustit skupinu"
 msgid "Are you sure you want to quit this group?"
 msgstr "Skutečne chcete opustit tuto skupinu?"
 
-#: static/scripts/app/views/invitation.js:37
+#: static/scripts/app/views/invitation.js:40
 #: static/scripts/sysadmin-app/views/address-book-group-item.js:57
 #: static/scripts/sysadmin-app/views/device-trusted-ipaddress.js:39
 #: static/scripts/sysadmin-app/views/group.js:44
@@ -798,7 +799,7 @@ msgstr "Úspěšně pozván %(email) a dalších %(num) lidí."
 
 #: static/scripts/app/views/notifications.js:58
 msgid "You have logged out."
-msgstr "Byl jste odhlášen."
+msgstr "Byli jste odhlášeni."
 
 #: static/scripts/app/views/notifications.js:58
 msgid "Log in"
@@ -810,8 +811,8 @@ msgstr "Obnovit"
 
 #: static/scripts/app/views/repo.js:95
 #: static/scripts/sysadmin-app/views/address-book-group-library.js:30
-#: static/scripts/sysadmin-app/views/admin-operation-log.js:51
-#: static/scripts/sysadmin-app/views/repo.js:65
+#: static/scripts/sysadmin-app/views/admin-operation-log.js:53
+#: static/scripts/sysadmin-app/views/repo.js:66
 #: static/scripts/sysadmin-app/views/trash-repo.js:28
 msgid "Delete Library"
 msgstr "Smazat knihovnu"
@@ -822,23 +823,23 @@ msgstr "Smazat knihovnu"
 #: static/scripts/sysadmin-app/views/device-trusted-ipaddress.js:28
 #: static/scripts/sysadmin-app/views/group-member.js:91
 #: static/scripts/sysadmin-app/views/group.js:31
-#: static/scripts/sysadmin-app/views/repo.js:66
+#: static/scripts/sysadmin-app/views/repo.js:67
 #, javascript-format
 msgid "Are you sure you want to delete %s ?"
 msgstr "Skutečně chcete smazat %s ?"
 
 #: static/scripts/app/views/repo.js:106
-#: static/scripts/sysadmin-app/views/repo.js:79
+#: static/scripts/sysadmin-app/views/repo.js:80
 msgid "Successfully deleted."
 msgstr "Úspěšně smazáno"
 
 #: static/scripts/app/views/repo.js:237
-#: static/scripts/sysadmin-app/views/repo.js:97
+#: static/scripts/sysadmin-app/views/repo.js:98
 msgid "Transfer Library {library_name} To"
 msgstr "Přesunout knihovnu {library_name} do"
 
 #: static/scripts/app/views/repo.js:276
-#: static/scripts/sysadmin-app/views/repo.js:135
+#: static/scripts/sysadmin-app/views/repo.js:136
 msgid "Successfully transferred the library."
 msgstr "Knihovna byla úspěšně přesunuta."
 
@@ -853,52 +854,61 @@ msgstr "Oprávnění byla úspěšně změněna"
 
 #: static/scripts/app/views/share-admin-folder.js:91
 #: static/scripts/app/views/share-admin-repo.js:99
-#: static/scripts/app/views/share-admin-share-link.js:55
+#: static/scripts/app/views/share-admin-share-link.js:59
 #: static/scripts/app/views/share-admin-upload-link.js:54
 msgid "Successfully deleted 1 item"
 msgstr "Úspěšně smazána 1 položka"
 
-#: static/scripts/app/views/share.js:90
+#: static/scripts/app/views/share-admin-share-link.js:47
+msgid "Are you sure you want to remove the share link?"
+msgstr ""
+
+#: static/scripts/app/views/share-admin-share-link.js:48
+msgid ""
+"If the share link is removed, no one will be able to access it any more."
+msgstr ""
+
+#: static/scripts/app/views/share.js:91
 #: static/scripts/sysadmin-app/views/share.js:42
 msgid "Share {placeholder}"
 msgstr "Sdílet {placeholder}"
 
-#: static/scripts/app/views/share.js:186
+#: static/scripts/app/views/share.js:189
 msgid "Expired"
-msgstr "Vypršelo"
+msgstr "Platnost skončila"
 
-#: static/scripts/app/views/share.js:291 static/scripts/app/views/share.js:292
-#: static/scripts/app/views/share.js:313 static/scripts/app/views/share.js:314
+#: static/scripts/app/views/share.js:303 static/scripts/app/views/share.js:304
+#: static/scripts/app/views/share.js:325 static/scripts/app/views/share.js:326
 msgid "Hide"
 msgstr "Skrýt"
 
-#: static/scripts/app/views/share.js:309 static/scripts/app/views/share.js:310
+#: static/scripts/app/views/share.js:321 static/scripts/app/views/share.js:322
 msgid "Show"
-msgstr "Ukázat"
+msgstr "Zobrazit"
 
-#: static/scripts/app/views/share.js:365
+#: static/scripts/app/views/share.js:377
 msgid "Please enter days."
-msgstr "Prosím zadejte dny."
+msgstr "Zadejte dny."
 
-#: static/scripts/app/views/share.js:369
+#: static/scripts/app/views/share.js:381
 msgid "Please enter valid days"
-msgstr "Prosím zadejte platné dny"
+msgstr "Zadejte platné dny"
 
-#: static/scripts/app/views/share.js:472
+#: static/scripts/app/views/share.js:492
 msgid "Share link is copied to the clipboard."
 msgstr "Sdílecí odkaz zkopírován do schránky."
 
-#: static/scripts/app/views/share.js:489
+#: static/scripts/app/views/share.js:509
 msgid "Please input at least an email."
-msgstr "Prosím vložte alespoň email."
+msgstr "Zadejte alespoň e-mail."
 
-#: static/scripts/app/views/share.js:506
+#: static/scripts/app/views/share.js:526
 msgid "Successfully sent to {placeholder}"
 msgstr "Úspěšně odesláno do {placeholder}"
 
-#: static/scripts/app/views/share.js:510
+#: static/scripts/app/views/share.js:530
 msgid "Failed to send to {placeholder}"
-msgstr "Chaba při odesílání na {placeholder}"
+msgstr "Chyba při odesílání na {placeholder}"
 
 #: static/scripts/app/views/shared-repo.js:46
 #: static/scripts/sysadmin-app/views/dirent.js:49
@@ -911,38 +921,38 @@ msgstr "Úspěch"
 
 #: static/scripts/app/views/starred-file-item.js:69
 msgid "Successfully unstared {placeholder}"
-msgstr "Úspěšně označeno hvězdou {placeholder}"
+msgstr "Označení {placeholder} hvězdičkou úspěšně zrušeno"
 
-#: static/scripts/common.js:459 static/scripts/common.js:461
+#: static/scripts/common.js:460 static/scripts/common.js:462
 #: static/scripts/sysadmin-app/views/dashboard.js:79
 msgid "Permission error"
 msgstr "Problém s oprávněním"
 
-#: static/scripts/common.js:686
+#: static/scripts/common.js:687
 #: static/scripts/sysadmin-app/views/address-book-group.js:172
 #: static/scripts/sysadmin-app/views/group-members.js:41
 msgid "Search users or enter emails and press Enter"
-msgstr "Vyhledejte uživatele nebo emaily a stiskněte Enter"
+msgstr "Vyhledejte uživatele nebo e-maily a stiskněte Enter"
 
-#: static/scripts/common.js:694 static/scripts/common.js:765
+#: static/scripts/common.js:695 static/scripts/common.js:766
 msgid "Please enter 1 or more character"
-msgstr "Prosím zadejte 1 nebo více znaků"
-
-#: static/scripts/common.js:696 static/scripts/common.js:767
-msgid "Searching..."
-msgstr "Vyhledávání..."
+msgstr "Zadejte 1 nebo více znaků"
 
 #: static/scripts/common.js:697 static/scripts/common.js:768
+msgid "Searching..."
+msgstr "Vyhledávání…"
+
+#: static/scripts/common.js:698 static/scripts/common.js:769
 msgid "Loading failed"
-msgstr "Načítání selhalo"
+msgstr "Načítání se nezdařilo"
 
-#: static/scripts/common.js:757
+#: static/scripts/common.js:758
 msgid "Search groups"
-msgstr "Vyhledej skupiny"
+msgstr "Vyhledat skupiny"
 
-#: static/scripts/common.js:1092
+#: static/scripts/common.js:1093
 msgid "Packaging..."
-msgstr "Balím..."
+msgstr "Balení…"
 
 #: static/scripts/sysadmin-app/views/address-book-group-item.js:46
 msgid "Delete Department"
@@ -950,7 +960,7 @@ msgstr "Smazat oddělení"
 
 #: static/scripts/sysadmin-app/views/address-book-group-item.js:91
 msgid "Invalid quota."
-msgstr "Nevalidní kvóta."
+msgstr "Neplatná kvóta."
 
 #: static/scripts/sysadmin-app/views/address-book-group.js:101
 msgid "New Sub-department"
@@ -967,70 +977,70 @@ msgstr "Jméno je vyžadováno."
 msgid "New Department"
 msgstr "Nové oddělení"
 
-#: static/scripts/sysadmin-app/views/admin-operation-log.js:40
+#: static/scripts/sysadmin-app/views/admin-operation-log.js:42
 msgid "Create Library"
 msgstr "Vytvořit knihovnu"
 
-#: static/scripts/sysadmin-app/views/admin-operation-log.js:41
+#: static/scripts/sysadmin-app/views/admin-operation-log.js:43
 msgid "Created library {library_name} with {owner} as its owner"
 msgstr "Knihovna {library_name} vytvořena s vlastníkem {owner}"
 
-#: static/scripts/sysadmin-app/views/admin-operation-log.js:52
+#: static/scripts/sysadmin-app/views/admin-operation-log.js:54
 msgid "Deleted library {library_name}"
 msgstr "Knihovna {library_name} byla smazána"
 
-#: static/scripts/sysadmin-app/views/admin-operation-log.js:57
+#: static/scripts/sysadmin-app/views/admin-operation-log.js:59
 msgid "Transfer Library"
 msgstr "Převod knihovny"
 
-#: static/scripts/sysadmin-app/views/admin-operation-log.js:58
+#: static/scripts/sysadmin-app/views/admin-operation-log.js:60
 msgid "Transferred library {library_name} from {user_from} to {user_to}"
 msgstr "Knihovna {library_name} byla převedena od uživatele {user_from} k uživateli {user_to}"
 
-#: static/scripts/sysadmin-app/views/admin-operation-log.js:69
+#: static/scripts/sysadmin-app/views/admin-operation-log.js:71
 msgid "Create Group"
 msgstr "Vytvořit skupinu"
 
-#: static/scripts/sysadmin-app/views/admin-operation-log.js:70
+#: static/scripts/sysadmin-app/views/admin-operation-log.js:72
 msgid "Created group {group_name}"
 msgstr "Skupina {group_name} byla vytvořena"
 
-#: static/scripts/sysadmin-app/views/admin-operation-log.js:74
+#: static/scripts/sysadmin-app/views/admin-operation-log.js:76
 msgid "Transfer Group"
 msgstr "Převést skupinu"
 
-#: static/scripts/sysadmin-app/views/admin-operation-log.js:75
+#: static/scripts/sysadmin-app/views/admin-operation-log.js:77
 msgid "Transferred group {group_name} from {user_from} to {user_to}"
 msgstr "Skupina {group_name} byla převedena od uživatele {user_from} k uživateli {user_to}"
 
-#: static/scripts/sysadmin-app/views/admin-operation-log.js:82
+#: static/scripts/sysadmin-app/views/admin-operation-log.js:84
 #: static/scripts/sysadmin-app/views/group.js:30
 msgid "Delete Group"
 msgstr "Smazat skupinu"
 
-#: static/scripts/sysadmin-app/views/admin-operation-log.js:83
+#: static/scripts/sysadmin-app/views/admin-operation-log.js:85
 msgid "Deleted group {group_name}"
 msgstr "Skupina {group_name} byla smazána"
 
-#: static/scripts/sysadmin-app/views/admin-operation-log.js:88
+#: static/scripts/sysadmin-app/views/admin-operation-log.js:90
 msgid "Add User"
 msgstr "Přidat uživatele"
 
-#: static/scripts/sysadmin-app/views/admin-operation-log.js:89
+#: static/scripts/sysadmin-app/views/admin-operation-log.js:91
 msgid "Added user {user}"
 msgstr "Uživatel {user} byl přidán"
 
-#: static/scripts/sysadmin-app/views/admin-operation-log.js:94
+#: static/scripts/sysadmin-app/views/admin-operation-log.js:96
 msgid "Delete User"
 msgstr "Smazat uživatele"
 
-#: static/scripts/sysadmin-app/views/admin-operation-log.js:95
+#: static/scripts/sysadmin-app/views/admin-operation-log.js:97
 msgid "Deleted user {user}"
 msgstr "Uživatel {user} byl smazán"
 
 #: static/scripts/sysadmin-app/views/device-errors.js:39
 msgid "Successfully clean all errors."
-msgstr "Úspěšně vačištěny všechny chyba"
+msgstr "Úspěšně vyčištěny všechny chyby"
 
 #: static/scripts/sysadmin-app/views/group-member.js:90
 msgid "Delete Member"
@@ -1047,7 +1057,7 @@ msgstr "Zrušit sdílení knihovny"
 #: static/scripts/sysadmin-app/views/group-repo.js:29
 #, javascript-format
 msgid "Are you sure you want to unshare %s ?"
-msgstr "Jste si jisti, že chcete zrušit sdílení %s ?"
+msgstr "Opravdu chcete zrušit sdílení %s ?"
 
 #: static/scripts/sysadmin-app/views/group-repo.js:42
 msgid "Successfully unshared library {placeholder}"
@@ -1068,12 +1078,12 @@ msgstr "Smazat knihovnu vlastníkem"
 #: static/scripts/sysadmin-app/views/search-trash-repos.js:47
 #, javascript-format
 msgid "Are you sure you want to delete all %s's libraries?"
-msgstr "Jste si jisti, že chcete smaza všechny %s knihovny?"
+msgstr "Opravdu chcete smazat všechny %s knihovny?"
 
 #: static/scripts/sysadmin-app/views/trash-repo.js:29
 #, javascript-format
 msgid "Are you sure you want to delete %s completely?"
-msgstr "Jste si jisti, že chcete kompletně smazat %s ?"
+msgstr "Opravdu chcete kompletně smazat %s ?"
 
 #: static/scripts/sysadmin-app/views/trash-repo.js:58
 msgid "Restore Library"
@@ -1082,7 +1092,7 @@ msgstr "Obnovit knihovnu"
 #: static/scripts/sysadmin-app/views/trash-repo.js:59
 #, javascript-format
 msgid "Are you sure you want to restore %s?"
-msgstr "Jste si jisti, že chcete obnovit knihovnu %s?"
+msgstr "Opravdu chcete obnovit knihovnu %s?"
 
 #: static/scripts/sysadmin-app/views/trash-repos.js:49
 msgid "Clear Trash"
@@ -1090,4 +1100,4 @@ msgstr "Vysypat koš"
 
 #: static/scripts/sysadmin-app/views/trash-repos.js:50
 msgid "Are you sure you want to clear trash?"
-msgstr "Jste si jisti, že chcete vysypat koš?"
+msgstr "Opravdu chcete vysypat koš?"

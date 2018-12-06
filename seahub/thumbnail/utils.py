@@ -7,6 +7,10 @@ import urllib2
 import logging
 from StringIO import StringIO
 import zipfile
+try: # Py2 and Py3 compatibility
+    from urllib import urlretrieve
+except:
+    from urllib.request import urlretrieve
 
 from PIL import Image
 from seaserv import get_file_id_by_path, get_repo, get_file_size, \
@@ -126,6 +130,10 @@ def generate_thumbnail(request, repo_id, size, path):
     if file_size > THUMBNAIL_IMAGE_SIZE_LIMIT * 1024**2:
         return (False, 400)
 
+    if fileext.lower() == 'psd':
+        return create_psd_thumbnails(repo, file_id, path, size,
+                                           thumbnail_file, file_size)
+
     token = seafile_api.get_fileserver_access_token(repo_id,
             file_id, 'view', '', use_onetime=True)
 
@@ -139,6 +147,38 @@ def generate_thumbnail(request, repo_id, size, path):
         return _create_thumbnail_common(f, thumbnail_file, size)
     except Exception as e:
         logger.error(e)
+        return (False, 500)
+
+def create_psd_thumbnails(repo, file_id, path, size, thumbnail_file, file_size):
+    token = seafile_api.get_fileserver_access_token(
+        repo.id, file_id, 'view', '', use_onetime=False)
+    if not token:
+        return (False, 500)
+
+    tmp_img_path = str(os.path.join(tempfile.gettempdir(), '%s.png' % file_id))
+    t1 = timeit.default_timer()
+
+    from psd_tools import PSDImage
+
+    inner_path = gen_inner_file_get_url(token, os.path.basename(path))
+    tmp_file = os.path.join(tempfile.gettempdir(), file_id)
+    urlretrieve(inner_path, tmp_file)
+    psd = PSDImage.load(tmp_file)
+
+    merged_image = psd.as_PIL()
+    merged_image.save(tmp_img_path)
+    os.unlink(tmp_file)     # remove origin psd file
+
+    t2 = timeit.default_timer()
+    logger.debug('Extract psd image [%s](size: %s) takes: %s' % (path, file_size, (t2 - t1)))
+
+    try:
+        ret = _create_thumbnail_common(tmp_img_path, thumbnail_file, size)
+        os.unlink(tmp_img_path)
+        return ret
+    except Exception as e:
+        logger.error(e)
+        os.unlink(tmp_img_path)
         return (False, 500)
 
 def create_video_thumbnails(repo, file_id, path, size, thumbnail_file, file_size):

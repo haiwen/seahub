@@ -120,9 +120,9 @@ def thumbnail_get(request, repo_id, size, path):
                                 content_type='image/' + THUMBNAIL_EXTENSION)
         except IOError as e:
             logger.error(e)
-            return HttpResponse()
+            return HttpResponse(status=500)
     else:
-        return HttpResponse()
+        return HttpResponse(status=status_code)
 
 def get_real_path_by_fs_and_req_path(fileshare, req_path):
     """ Return the real path of a file.

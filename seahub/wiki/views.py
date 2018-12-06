@@ -42,6 +42,11 @@ def wiki_list(request):
 def slug(request, slug, file_path="home.md"):
     """Show wiki page.
     """
+    # compatible with old wiki url
+    if len(file_path.split('.')) == 1:
+        new_path = file_path + '.md'
+        return HttpResponseRedirect(reverse('wiki:slug', args=[slug, new_path]))
+
     # get wiki object or 404
     wiki = get_object_or_404(Wiki, slug=slug)
     file_path = "/" + file_path

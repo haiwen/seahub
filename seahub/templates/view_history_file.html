@@ -39,7 +39,12 @@ $(function() {
 {% endif %}
 
 {% if filetype == 'Image' and not err %}
-    $('#image-view').attr('src', '{{ raw_path|escapejs }}');
+    $('#image-view')
+    .attr('src', '{{ raw_path|escapejs }}')
+    .on('error', function() {
+        $('#file-view').removeClass('d-flex')
+        .html('<div id="file-view-tip"><p class="error">{% trans "This file cannot be viewed online." %}</p></div>');
+    });
 {% endif %}
 
 {% include "snippets/file_content_js.html" %}

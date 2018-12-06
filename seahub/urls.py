@@ -34,7 +34,8 @@ from seahub.api2.endpoints.address_book.members import AddressBookGroupsSearchMe
 
 from seahub.api2.endpoints.group_members import GroupMembers, GroupMembersBulk, GroupMember
 from seahub.api2.endpoints.search_group import SearchGroup
-from seahub.api2.endpoints.share_links import ShareLinks, ShareLink
+from seahub.api2.endpoints.share_links import ShareLinks, ShareLink, \
+        ShareLinkOnlineOfficeLock
 from seahub.api2.endpoints.shared_folders import SharedFolders
 from seahub.api2.endpoints.shared_repos import SharedRepos, SharedRepo
 from seahub.api2.endpoints.upload_links import UploadLinks, UploadLink, \
@@ -78,6 +79,7 @@ from seahub.api2.endpoints.repo_tags import RepoTagsView, RepoTagView
 from seahub.api2.endpoints.file_tag import RepoFileTagsView, RepoFileTagView
 from seahub.api2.endpoints.tag_filter_file import TaggedFilesView
 from seahub.api2.endpoints.related_files import RelatedFilesView, RelatedFileView
+from seahub.api2.endpoints.webdav_secret import WebdavSecretView
 
 # Admin
 from seahub.api2.endpoints.admin.revision_tag import AdminTaggedItemsView
@@ -275,6 +277,8 @@ urlpatterns = [
     ## user::shared-download-links
     url(r'^api/v2.1/share-links/$', ShareLinks.as_view(), name='api-v2.1-share-links'),
     url(r'^api/v2.1/share-links/(?P<token>[a-f0-9]+)/$', ShareLink.as_view(), name='api-v2.1-share-link'),
+    url(r'^api/v2.1/share-links/(?P<token>[a-f0-9]+)/online-office-lock/$',
+            ShareLinkOnlineOfficeLock.as_view(), name='api-v2.1-share-link-online-office-lock'),
 
     ## user::shared-upload-links
     url(r'^api/v2.1/upload-links/$', UploadLinks.as_view(), name='api-v2.1-upload-links'),
@@ -342,6 +346,9 @@ urlpatterns = [
 
     ## user::avatar
     url(r'^api/v2.1/user-avatar/$', UserAvatarView.as_view(), name='api-v2.1-user-avatar'),
+
+    ## user:webdav
+    url(r'^api/v2.1/webdav-secret/$', WebdavSecretView.as_view(), name='api-v2.1-webdav-secret'),
 
     ## user::wiki
     url(r'^api/v2.1/wikis/$', WikisView.as_view(), name='api-v2.1-wikis'),

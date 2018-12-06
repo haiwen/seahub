@@ -11,9 +11,9 @@ msgid ""
 msgstr ""
 "Project-Id-Version: seahub\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2018-09-17 12:01+0800\n"
-"PO-Revision-Date: 2018-09-07 02:44+0000\n"
-"Last-Translator: C_Q <helloworld.c@outlook.com>\n"
+"POT-Creation-Date: 2018-11-29 14:09+0800\n"
+"PO-Revision-Date: 2018-11-29 06:13+0000\n"
+"Last-Translator: zheng xie <xiez1989@gmail.com>\n"
 "Language-Team: Finnish (http://www.transifex.com/haiwen/seahub/language/fi/)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -198,12 +198,12 @@ msgid "View-on-Cloud"
 msgstr ""
 
 #: static/scripts/app/models/deleted-repo.js:19
-#: static/scripts/app/models/repo.js:59 static/scripts/common.js:344
+#: static/scripts/app/models/repo.js:59 static/scripts/common.js:345
 msgid "Encrypted library"
 msgstr "Salattu kirjasto"
 
 #: static/scripts/app/models/deleted-repo.js:21
-#: static/scripts/app/models/repo.js:61 static/scripts/common.js:348
+#: static/scripts/app/models/repo.js:61 static/scripts/common.js:349
 #: static/scripts/sysadmin-app/models/trash-repo.js:14
 msgid "Read-Write library"
 msgstr "Luku-kirjoitus kirjasto"
@@ -214,7 +214,7 @@ msgstr "Luku-kirjoitus kirjasto"
 #: static/scripts/app/views/fileupload.js:408
 #: static/scripts/app/views/fileupload.js:420
 #: static/scripts/app/views/fileupload.js:432
-#: static/scripts/app/views/group.js:65 static/scripts/common.js:644
+#: static/scripts/app/views/group.js:65 static/scripts/common.js:645
 msgid "Just now"
 msgstr "Juuri nyt"
 
@@ -231,23 +231,23 @@ msgstr "Nimi vaaditaan"
 msgid "Name should not include '/'."
 msgstr "Nimi ei voi sisältää '/'"
 
-#: static/scripts/app/models/repo.js:41 static/scripts/app/views/share.js:338
+#: static/scripts/app/models/repo.js:41 static/scripts/app/views/share.js:350
 msgid "Please enter password"
 msgstr "Ole hyvä ja syötä salasana"
 
-#: static/scripts/app/models/repo.js:42 static/scripts/app/views/share.js:346
+#: static/scripts/app/models/repo.js:42 static/scripts/app/views/share.js:358
 msgid "Please enter the password again"
 msgstr "Ole hyvä ja syötä salasana uudelleen"
 
-#: static/scripts/app/models/repo.js:44 static/scripts/app/views/share.js:342
+#: static/scripts/app/models/repo.js:44 static/scripts/app/views/share.js:354
 msgid "Password is too short"
 msgstr "Salasana on liian lyhyt"
 
-#: static/scripts/app/models/repo.js:46 static/scripts/app/views/share.js:350
+#: static/scripts/app/models/repo.js:46 static/scripts/app/views/share.js:362
 msgid "Passwords don't match"
 msgstr "Salasanat eivät täsmää"
 
-#: static/scripts/app/models/repo.js:63 static/scripts/common.js:346
+#: static/scripts/app/models/repo.js:63 static/scripts/common.js:347
 msgid "Read-Only library"
 msgstr "Vain luku kirjasto"
 
@@ -419,7 +419,7 @@ msgstr "{placeholder} Kansion oikeus"
 #: static/scripts/app/views/repo.js:247
 #: static/scripts/sysadmin-app/views/group.js:74
 #: static/scripts/sysadmin-app/views/groups.js:68
-#: static/scripts/sysadmin-app/views/repo.js:107
+#: static/scripts/sysadmin-app/views/repo.js:108
 #: static/scripts/sysadmin-app/views/repos.js:58
 msgid "Search user or enter email and press Enter"
 msgstr "Etsi käyttäjä tai syötä sähköposti ja paina Enter"
@@ -436,11 +436,11 @@ msgstr "Voit valita vain yhden kohteen"
 msgid "Please click and choose a directory."
 msgstr "Ole hyvä ja valitse hakemisto."
 
-#: static/scripts/app/views/dialogs/repo-history-settings.js:36
+#: static/scripts/app/views/dialogs/repo-history-settings.js:37
 msgid "{placeholder} History Setting"
 msgstr "{placeholder} Historia-asetukset"
 
-#: static/scripts/app/views/dialogs/repo-history-settings.js:130
+#: static/scripts/app/views/dialogs/repo-history-settings.js:131
 msgid "Successfully set library history."
 msgstr "Kirjaston historia asetettu onnistuneesti."
 
@@ -488,7 +488,7 @@ msgid "Password is required."
 msgstr "Salasana vaaditaan"
 
 #: static/scripts/app/views/dir.js:479
-#: static/scripts/app/views/notifications.js:63 static/scripts/common.js:468
+#: static/scripts/app/views/notifications.js:63 static/scripts/common.js:469
 msgid "Please check the network."
 msgstr "Ole hyvä ja tarkista verkko."
 
@@ -612,8 +612,8 @@ msgstr "%(name)s siirtäminen epäonnistui"
 msgid "Failed to copy %(name)s"
 msgstr "%(name)s kopiointi epäonnistui."
 
-#: static/scripts/app/views/dirent-details.js:95 static/scripts/common.js:695
-#: static/scripts/common.js:766
+#: static/scripts/app/views/dirent-details.js:95 static/scripts/common.js:696
+#: static/scripts/common.js:767
 msgid "No matches"
 msgstr "Ei osumia"
 
@@ -710,7 +710,7 @@ msgid "Set {placeholder}'s permission"
 msgstr "Aseta oikeudet kohteelle {placeholder} "
 
 #: static/scripts/app/views/folder-perm.js:126
-#: static/scripts/app/views/share.js:846
+#: static/scripts/app/views/share.js:882
 msgid "Select groups"
 msgstr "Valitse ryhmät"
 
@@ -720,7 +720,7 @@ msgstr "Muokkaus epäonnistui"
 
 #: static/scripts/app/views/folder-share-item.js:127
 #: static/scripts/app/views/folder-share-item.js:188
-#: static/scripts/common.js:445
+#: static/scripts/common.js:446
 #: static/scripts/sysadmin-app/views/dashboard.js:84
 msgid "Failed. Please check the network."
 msgstr "Epäonnistui. Ole hyvä ja tarkista verkkoyhteys."
@@ -747,7 +747,7 @@ msgstr "Onnistuneesti poistettu jako 1 kohteesta."
 #: static/scripts/app/views/repo.js:248
 #: static/scripts/sysadmin-app/views/group.js:75
 #: static/scripts/sysadmin-app/views/groups.js:69
-#: static/scripts/sysadmin-app/views/repo.js:108
+#: static/scripts/sysadmin-app/views/repo.js:109
 #: static/scripts/sysadmin-app/views/repos.js:59
 msgid "You cannot select any more choices"
 msgstr "Et voi tehdä enempää valintoja"
@@ -782,7 +782,7 @@ msgstr "Lopeta ryhmä"
 msgid "Are you sure you want to quit this group?"
 msgstr "Oletko varma, että haluat lopettaa tämän ryhmän?"
 
-#: static/scripts/app/views/invitation.js:37
+#: static/scripts/app/views/invitation.js:40
 #: static/scripts/sysadmin-app/views/address-book-group-item.js:57
 #: static/scripts/sysadmin-app/views/device-trusted-ipaddress.js:39
 #: static/scripts/sysadmin-app/views/group.js:44
@@ -811,8 +811,8 @@ msgstr "Päivitä"
 
 #: static/scripts/app/views/repo.js:95
 #: static/scripts/sysadmin-app/views/address-book-group-library.js:30
-#: static/scripts/sysadmin-app/views/admin-operation-log.js:51
-#: static/scripts/sysadmin-app/views/repo.js:65
+#: static/scripts/sysadmin-app/views/admin-operation-log.js:53
+#: static/scripts/sysadmin-app/views/repo.js:66
 #: static/scripts/sysadmin-app/views/trash-repo.js:28
 msgid "Delete Library"
 msgstr "Tuhoa Kirjasto"
@@ -823,23 +823,23 @@ msgstr "Tuhoa Kirjasto"
 #: static/scripts/sysadmin-app/views/device-trusted-ipaddress.js:28
 #: static/scripts/sysadmin-app/views/group-member.js:91
 #: static/scripts/sysadmin-app/views/group.js:31
-#: static/scripts/sysadmin-app/views/repo.js:66
+#: static/scripts/sysadmin-app/views/repo.js:67
 #, javascript-format
 msgid "Are you sure you want to delete %s ?"
 msgstr "Haluatko varmasti poistaa %s ?"
 
 #: static/scripts/app/views/repo.js:106
-#: static/scripts/sysadmin-app/views/repo.js:79
+#: static/scripts/sysadmin-app/views/repo.js:80
 msgid "Successfully deleted."
 msgstr "Onnistuneesti tuhottu."
 
 #: static/scripts/app/views/repo.js:237
-#: static/scripts/sysadmin-app/views/repo.js:97
+#: static/scripts/sysadmin-app/views/repo.js:98
 msgid "Transfer Library {library_name} To"
 msgstr "Siirrä kirjasto {library_name} kohteeseen"
 
 #: static/scripts/app/views/repo.js:276
-#: static/scripts/sysadmin-app/views/repo.js:135
+#: static/scripts/sysadmin-app/views/repo.js:136
 msgid "Successfully transferred the library."
 msgstr "Kirjasto siirretty onnistuneesti."
 
@@ -854,50 +854,59 @@ msgstr "Oikeuksia muokattu onnistuneesti"
 
 #: static/scripts/app/views/share-admin-folder.js:91
 #: static/scripts/app/views/share-admin-repo.js:99
-#: static/scripts/app/views/share-admin-share-link.js:55
+#: static/scripts/app/views/share-admin-share-link.js:59
 #: static/scripts/app/views/share-admin-upload-link.js:54
 msgid "Successfully deleted 1 item"
 msgstr "Onnistuneesti tuhottu 1 kohde"
 
-#: static/scripts/app/views/share.js:90
+#: static/scripts/app/views/share-admin-share-link.js:47
+msgid "Are you sure you want to remove the share link?"
+msgstr ""
+
+#: static/scripts/app/views/share-admin-share-link.js:48
+msgid ""
+"If the share link is removed, no one will be able to access it any more."
+msgstr ""
+
+#: static/scripts/app/views/share.js:91
 #: static/scripts/sysadmin-app/views/share.js:42
 msgid "Share {placeholder}"
 msgstr "Jaa {placeholder}"
 
-#: static/scripts/app/views/share.js:186
+#: static/scripts/app/views/share.js:189
 msgid "Expired"
 msgstr "Vanhentunut"
 
-#: static/scripts/app/views/share.js:291 static/scripts/app/views/share.js:292
-#: static/scripts/app/views/share.js:313 static/scripts/app/views/share.js:314
+#: static/scripts/app/views/share.js:303 static/scripts/app/views/share.js:304
+#: static/scripts/app/views/share.js:325 static/scripts/app/views/share.js:326
 msgid "Hide"
 msgstr "Piilota"
 
-#: static/scripts/app/views/share.js:309 static/scripts/app/views/share.js:310
+#: static/scripts/app/views/share.js:321 static/scripts/app/views/share.js:322
 msgid "Show"
 msgstr "Näytä"
 
-#: static/scripts/app/views/share.js:365
+#: static/scripts/app/views/share.js:377
 msgid "Please enter days."
 msgstr "Ole hyvä ja syötä päivät."
 
-#: static/scripts/app/views/share.js:369
+#: static/scripts/app/views/share.js:381
 msgid "Please enter valid days"
 msgstr "Ole hyvä ja syötä validit päivät"
 
-#: static/scripts/app/views/share.js:472
+#: static/scripts/app/views/share.js:492
 msgid "Share link is copied to the clipboard."
 msgstr ""
 
-#: static/scripts/app/views/share.js:489
+#: static/scripts/app/views/share.js:509
 msgid "Please input at least an email."
 msgstr "Ole hyvä ja syötä ainakin sähköposti."
 
-#: static/scripts/app/views/share.js:506
+#: static/scripts/app/views/share.js:526
 msgid "Successfully sent to {placeholder}"
 msgstr "Lähetetty onnistuneesti kohteeseen {placeholder}"
 
-#: static/scripts/app/views/share.js:510
+#: static/scripts/app/views/share.js:530
 msgid "Failed to send to {placeholder}"
 msgstr "Lähettäminen kohteeseen {placeholder} epäonnistui"
 
@@ -914,34 +923,34 @@ msgstr "Onnistui"
 msgid "Successfully unstared {placeholder}"
 msgstr "Suosikki {placeholder} poistettu onnistuneesti"
 
-#: static/scripts/common.js:459 static/scripts/common.js:461
+#: static/scripts/common.js:460 static/scripts/common.js:462
 #: static/scripts/sysadmin-app/views/dashboard.js:79
 msgid "Permission error"
 msgstr "Virhe oikeuksissa"
 
-#: static/scripts/common.js:686
+#: static/scripts/common.js:687
 #: static/scripts/sysadmin-app/views/address-book-group.js:172
 #: static/scripts/sysadmin-app/views/group-members.js:41
 msgid "Search users or enter emails and press Enter"
 msgstr "Etsi käyttäjiä tai syötä sähköpostit ja paina Enter"
 
-#: static/scripts/common.js:694 static/scripts/common.js:765
+#: static/scripts/common.js:695 static/scripts/common.js:766
 msgid "Please enter 1 or more character"
 msgstr "Ole hyvä ja syötä 1 tai useampi merkki"
 
-#: static/scripts/common.js:696 static/scripts/common.js:767
+#: static/scripts/common.js:697 static/scripts/common.js:768
 msgid "Searching..."
 msgstr "Etsitään..."
 
-#: static/scripts/common.js:697 static/scripts/common.js:768
+#: static/scripts/common.js:698 static/scripts/common.js:769
 msgid "Loading failed"
 msgstr "Lataus epäonnistui"
 
-#: static/scripts/common.js:757
+#: static/scripts/common.js:758
 msgid "Search groups"
 msgstr "Etsi ryhmiä"
 
-#: static/scripts/common.js:1092
+#: static/scripts/common.js:1093
 msgid "Packaging..."
 msgstr "Pakataan..."
 
@@ -968,64 +977,64 @@ msgstr "Nimi vaaditaan."
 msgid "New Department"
 msgstr "Uusi Osasto"
 
-#: static/scripts/sysadmin-app/views/admin-operation-log.js:40
+#: static/scripts/sysadmin-app/views/admin-operation-log.js:42
 msgid "Create Library"
 msgstr "Luo Kirjasto"
 
-#: static/scripts/sysadmin-app/views/admin-operation-log.js:41
+#: static/scripts/sysadmin-app/views/admin-operation-log.js:43
 msgid "Created library {library_name} with {owner} as its owner"
 msgstr "Kirjasto {library_name} luotu omistajana {owner} "
 
-#: static/scripts/sysadmin-app/views/admin-operation-log.js:52
+#: static/scripts/sysadmin-app/views/admin-operation-log.js:54
 msgid "Deleted library {library_name}"
 msgstr "Poistettu kirjasto {library_name}"
 
-#: static/scripts/sysadmin-app/views/admin-operation-log.js:57
+#: static/scripts/sysadmin-app/views/admin-operation-log.js:59
 msgid "Transfer Library"
 msgstr "Siirrä Kirjasto"
 
-#: static/scripts/sysadmin-app/views/admin-operation-log.js:58
+#: static/scripts/sysadmin-app/views/admin-operation-log.js:60
 msgid "Transferred library {library_name} from {user_from} to {user_to}"
 msgstr "Siirrä kirjasto {library_name} käyttäjältä {user_from} käyttäjälle {user_to}"
 
-#: static/scripts/sysadmin-app/views/admin-operation-log.js:69
+#: static/scripts/sysadmin-app/views/admin-operation-log.js:71
 msgid "Create Group"
 msgstr "Luo Ryhmä"
 
-#: static/scripts/sysadmin-app/views/admin-operation-log.js:70
+#: static/scripts/sysadmin-app/views/admin-operation-log.js:72
 msgid "Created group {group_name}"
 msgstr "Luotu ryhmä {group_name}"
 
-#: static/scripts/sysadmin-app/views/admin-operation-log.js:74
+#: static/scripts/sysadmin-app/views/admin-operation-log.js:76
 msgid "Transfer Group"
 msgstr "Siirrä Ryhmä"
 
-#: static/scripts/sysadmin-app/views/admin-operation-log.js:75
+#: static/scripts/sysadmin-app/views/admin-operation-log.js:77
 msgid "Transferred group {group_name} from {user_from} to {user_to}"
 msgstr "Siirrä ryhmä {group_name} käyttäjältä {user_from} käyttäjälle {user_to}"
 
-#: static/scripts/sysadmin-app/views/admin-operation-log.js:82
+#: static/scripts/sysadmin-app/views/admin-operation-log.js:84
 #: static/scripts/sysadmin-app/views/group.js:30
 msgid "Delete Group"
 msgstr "Tuhoa Ryhmä"
 
-#: static/scripts/sysadmin-app/views/admin-operation-log.js:83
+#: static/scripts/sysadmin-app/views/admin-operation-log.js:85
 msgid "Deleted group {group_name}"
 msgstr "Tuhottu ryhmä {group_name}"
 
-#: static/scripts/sysadmin-app/views/admin-operation-log.js:88
+#: static/scripts/sysadmin-app/views/admin-operation-log.js:90
 msgid "Add User"
 msgstr "Lisää Käyttäjä"
 
-#: static/scripts/sysadmin-app/views/admin-operation-log.js:89
+#: static/scripts/sysadmin-app/views/admin-operation-log.js:91
 msgid "Added user {user}"
 msgstr "Lisätty käyttäjä {user}"
 
-#: static/scripts/sysadmin-app/views/admin-operation-log.js:94
+#: static/scripts/sysadmin-app/views/admin-operation-log.js:96
 msgid "Delete User"
 msgstr "Poista käyttäjä"
 
-#: static/scripts/sysadmin-app/views/admin-operation-log.js:95
+#: static/scripts/sysadmin-app/views/admin-operation-log.js:97
 msgid "Deleted user {user}"
 msgstr "Poistettu käyttäjä {user}"
 
