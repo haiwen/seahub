@@ -11,7 +11,7 @@
 .seafile-comment-title {
   border-bottom: 1px solid #e5e5e5;
   line-height: 2em;
-  padding: 0 1em;
+  padding: 2px 1em;
   display: flex;
   position: absolute;
   z-index: 1;
@@ -25,7 +25,7 @@
   display: flex;
 }
 .seafile-comment-list {
-  padding-top: 30px;
+  padding-top: 35px;
   box-sizing: border-box;
   height: 100%;
   overflow-y: auto;

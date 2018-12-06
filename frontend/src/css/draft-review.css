@@ -109,6 +109,7 @@
 .review-side-panel-item i {
   color: #c8c8c8;
   margin: 5px 5px 0 0;
+  font-size: 1rem;
 }
 .review-side-panel-item i:hover {
   cursor: pointer;
@@ -162,6 +163,7 @@
 }
 .review-side-panel-nav .nav-item {
   width: 33.3%;
+  padding-top: 4px;
 }
 .review-side-panel-nav .nav-item .nav-link {
   margin: 0 auto;
