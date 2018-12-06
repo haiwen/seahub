@@ -55,7 +55,7 @@ class GenerateUploadLink extends React.Component {
   }
 
   generatePassword = () => {
-    let val = Math.random().toString(36).substr(2);
+    let val = Math.random().toString(36).substr(5);
     this.setState({
       password: val,
       passwordnew: val

@@ -70,7 +70,7 @@ class MainSideNav extends React.Component {
         <li className="nav-item"> 
           <Link to={siteRoot + 'groups/'}  className={`nav-link ellipsis ${this.getActiveClass('groups')}`} onClick={() => this.tabItemClick('groups')}>
             <span className="sharp" aria-hidden="true">#</span>
-            {gettext('All Groups')}
+            <span className="nav-text">{gettext('All Groups')}</span>
           </Link>
         </li>
         {this.state.groupItems.map(item => {
@@ -78,7 +78,7 @@ class MainSideNav extends React.Component {
             <li key={item.id} className="nav-item"> 
               <Link to={siteRoot + 'group/' + item.id + '/'} className={`nav-link ellipsis ${this.getActiveClass(item.id)}`} onClick={() => this.tabItemClick(item.id)}>
                 <span className="sharp" aria-hidden="true">#</span>
-                {item.name}
+                <span className="nav-text">{item.name}</span>
               </Link>
             </li>
           );
@@ -101,19 +101,19 @@ class MainSideNav extends React.Component {
         <li className="nav-item">
           <Link to={siteRoot + 'share-admin-libs/'} className={`nav-link ellipsis ${this.getActiveClass('share-admin-libs')}`} title={gettext('Libraries')} onClick={() => this.tabItemClick('share-admin-libs')}>
             <span aria-hidden="true" className="sharp">#</span>
-            {gettext('Libraries')}
+            <span className="nav-text">{gettext('Libraries')}</span>
           </Link>
         </li>
         <li className="nav-item">
           <Link to={siteRoot + 'share-admin-folders/'} className={`nav-link ellipsis ${this.getActiveClass('share-admin-folders')}`} title={gettext('Folders')} onClick={() => this.tabItemClick('share-admin-folders')}>
             <span aria-hidden="true" className="sharp">#</span>
-            {gettext('Folders')}
+            <span className="nav-text">{gettext('Folders')}</span>
           </Link>
         </li>
         <li className="nav-item">
           <Link to={siteRoot + 'share-admin-share-links/'} className={`nav-link ellipsis ${this.getActiveClass('share-admin-share-links') || this.getActiveClass('share-admin-upload-links')}`} title={gettext('Links')} onClick={() => this.tabItemClick('share-admin-share-links')}>
             <span aria-hidden="true" className="sharp">#</span>
-            {gettext('Links')}
+            <span className="nav-text">{gettext('Links')}</span>
           </Link>
         </li>
       </ul>
@@ -129,20 +129,20 @@ class MainSideNav extends React.Component {
             <li className="nav-item">
               <Link to={ siteRoot + 'my-libs/' } className={`nav-link ellipsis ${this.getActiveClass('my-libs')}`} title={gettext('My Libraries')} onClick={() => this.tabItemClick('my-libs')}>
                 <span className="sf2-icon-user" aria-hidden="true"></span>
-                {gettext('My Libraries')}
+                <span className="nav-text">{gettext('My Libraries')}</span>
               </Link>
             </li>
             <li className="nav-item">
               <Link to={siteRoot + 'shared-libs/'} className={`nav-link ellipsis ${this.getActiveClass('shared-libs')}`} title={gettext('Shared with me')} onClick={() => this.tabItemClick('shared-libs')}>
                 <span className="sf2-icon-share" aria-hidden="true"></span>
-                {gettext('Shared with me')}
+                <span className="nav-text">{gettext('Shared with me')}</span>
               </Link>
             </li>
             { canViewOrg &&
               <li className="nav-item" onClick={() => this.tabItemClick('org')}>
                 <a href={ siteRoot + '#org/' } className={`nav-link ellipsis ${this.getActiveClass('org')}`} title={gettext('Shared with all')}>
                   <span className="sf2-icon-organization" aria-hidden="true"></span>
-                  {gettext('Shared with all')}
+                  <span className="nav-text">{gettext('Shared with all')}</span>
                 </a>
               </li>
             }
@@ -150,7 +150,7 @@ class MainSideNav extends React.Component {
               <a className="nav-link ellipsis" title={gettext('Shared with groups')} onClick={this.grpsExtend}>
                 <span className={`toggle-icon float-right fas ${this.state.groupsExtended ?'fa-caret-down':'fa-caret-left'}`} aria-hidden="true"></span>
                 <span className="sf2-icon-group" aria-hidden="true"></span>
-                {gettext('Shared with groups')}
+                <span className="nav-text">{gettext('Shared with groups')}</span>
               </a>
               {this.renderSharedGroups()}
             </li>
@@ -161,25 +161,25 @@ class MainSideNav extends React.Component {
             <li className="nav-item">
               <Link className={`nav-link ellipsis ${this.getActiveClass('starred')}`} to={siteRoot + 'starred/'} title={gettext('Favorites')} onClick={() => this.tabItemClick('starred')}>
                 <span className="sf2-icon-star" aria-hidden="true"></span>
-                {gettext('Favorites')}
+                <span className="nav-text">{gettext('Favorites')}</span>
               </Link>
             </li>
             <li className="nav-item">
               <Link className={`nav-link ellipsis ${this.getActiveClass('dashboard')}`} to={siteRoot + 'dashboard/'} title={gettext('Acitivities')} onClick={() => this.tabItemClick('dashboard')}>
                 <span className="sf2-icon-clock" aria-hidden="true"></span>
-                {gettext('Acitivities')}
+                <span className="nav-text">{gettext('Acitivities')}</span>
               </Link>
             </li>
             <li className="nav-item">
               <Link className={`nav-link ellipsis ${this.getActiveClass('linked-devices')}`} to={siteRoot + 'linked-devices/'} title={gettext('Linked Devices')} onClick={() => this.tabItemClick('linked-devices')}>
                 <span className="sf2-icon-monitor" aria-hidden="true"></span>
-                {gettext('Linked Devices')}
+                <span className="nav-text">{gettext('Linked Devices')}</span>
               </Link>
             </li>
             <li className="nav-item" onClick={() => this.tabItemClick('drafts')}>
               <Link className={`nav-link ellipsis ${this.getActiveClass('drafts') || this.getActiveClass('reviews')}`} to={siteRoot + 'drafts/'} title={gettext('Drafts')}>
                 <span className="sf2-icon-edit" aria-hidden="true"></span>
-                <span className="draft-info">
+                <span className="draft-info nav-text">
                   {gettext('Drafts')}  
                   {this.props.draftCounts === 0 ? '' : <Badge color="info" pill>{this.props.draftCounts}</Badge>}
                 </span>
@@ -188,8 +188,8 @@ class MainSideNav extends React.Component {
             <li className="nav-item flex-column" id="share-admin-nav">
               <a className="nav-link ellipsis" title={gettext('Share Admin')} onClick={this.shExtend}>
                 <span className={`toggle-icon float-right fas ${this.state.sharedExtended ? 'fa-caret-down':'fa-caret-left'}`} aria-hidden="true"></span>
-                <span aria-hidden="true" className="sf2-icon-wrench"></span>
-                {gettext('Share Admin')}
+                <span className="sf2-icon-wrench" aria-hidden="true"></span>
+                <span className="nav-text">{gettext('Share Admin')}</span>
               </a>
               {this.renderSharedAdmin()}
             </li>

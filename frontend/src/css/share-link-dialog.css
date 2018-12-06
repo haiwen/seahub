@@ -4,7 +4,7 @@
 }
 
 .share-dialog .share-dialog-content {
-    padding: 1rem 1rem 2rem;
+    padding: 0;
     min-height: 15rem;
     display: flex;
     flex-direction: row;
@@ -13,15 +13,14 @@
 .share-dialog-content .share-dialog-side {
     display: flex;
     flex: 0 0 22%;
-}
-
-.share-dialog-content .share-dialog-side .nav {
-    flex-direction: column;
+    padding: 1rem 0 0 1rem;
+    border-right: 1px solid #eee;
 }
 
 .share-dialog-content .share-dialog-main {
     display: flex;
     flex: 0 0 78%;
+    padding: 1rem 1.5rem 2rem;
 }
 .share-dialog-content .share-dialog-main .tab-content {
     flex: 1;
@@ -67,10 +66,6 @@
 .share-dialog .nav .nav-item .nav-link {
     padding: 0.3125rem 1rem 0.3125rem 0.25rem;
     font-size: 0.875rem;
-}
-
-.share-dialog .nav .nav-item .nav-link.active {
-    font-weight: normal;
 }
 
 input.expire-input {
