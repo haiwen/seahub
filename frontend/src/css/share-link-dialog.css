@@ -69,6 +69,10 @@
     font-size: 0.875rem;
 }
 
+.share-dialog .nav .nav-item .nav-link.active {
+    font-weight: normal;
+}
+
 input.expire-input {
     display: inline-block;
     width: 5rem;
