@@ -72,7 +72,7 @@
 }
 .seafile-toggle-diff .custom-switch-input:checked ~ .custom-switch-indicator,
 .seafile-comment-title-toggle .custom-switch-input:checked ~ .custom-switch-indicator {
-  background-color: #f59f00;
+  background-color: #f19645;
 }
 
 .review-side-panel {
@@ -151,7 +151,7 @@
   text-align: center;
   line-height: 16px;
   font-weight: 600;
-  background-color: #f59f00;
+  background-color: #f19645;
   position: absolute;
   top: 10%;
   right: 30%;
@@ -169,8 +169,8 @@
   margin: 0 auto;
 }
 .review-side-panel-nav .nav-item .nav-link.active {
-  border-color: #f59f00;
-  color: #f59f00;
+  border-color: #f19645;
+  color: #f19645;
 }
 .review-side-panel-nav .nav-item i {
   padding: 0 8px;
