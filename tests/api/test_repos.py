@@ -14,7 +14,7 @@ from seaserv import seafile_api
 
 from tests.api.apitestbase import ApiTestBase
 from tests.api.urls import (
-    REPOS_URL, DEFAULT_REPO_URL, GET_REPO_TOKENS_URL
+    REPOS_URL, GET_REPO_TOKENS_URL
 )
 from tests.common.utils import apiurl, urljoin, randstring
 from tests.common.common import SEAFILE_BASE_URL
@@ -23,15 +23,6 @@ from seahub.test_utils import BaseTestCase
 
 # TODO: all tests should be run on an encrypted repo
 class ReposApiTest(ApiTestBase):
-    def test_get_default_repo(self):
-        repo = self.get(DEFAULT_REPO_URL).json()
-        self.assertIsNotNone(repo['exists'])
-
-    def test_create_default_repo(self):
-        repo = self.post(DEFAULT_REPO_URL).json()
-        self.assertEqual(len(repo['repo_id']), 36)
-        self.assertEqual(repo['exists'], True)
-
     def test_list_repos(self):
         repos = self.get(REPOS_URL).json()
         # self.assertHasLen(repos, 1)
@@ -119,19 +110,6 @@ class ReposApiTest(ApiTestBase):
     def test_check_or_create_sub_repo(self):
         # TODO: create a sub folder and use it as a sub repo
         pass
-
-    def test_fetch_repo_download_info(self):
-        with self.get_tmp_repo() as repo:
-            download_info_repo_url = urljoin(repo.repo_url, '/download-info/')
-            info = self.get(download_info_repo_url).json()
-            self.assertIsNotNone(info['relay_addr'])
-            self.assertIsNotNone(info['token'])
-            self.assertIsNotNone(info['repo_id'])
-            self.assertIsNotNone(info['relay_port'])
-            self.assertIsNotNone(info['encrypted'])
-            self.assertIsNotNone(info['repo_name'])
-            self.assertIsNotNone(info['relay_id'])
-            self.assertIsNotNone(info['email'])
 
     @pytest.mark.xfail
     def test_generate_repo_tokens(self):

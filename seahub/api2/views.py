@@ -1401,7 +1401,7 @@ class RepoHistoryLimit(APIView):
 
 
 class DownloadRepo(APIView):
-    authentication_classes = (TokenAuthentication, )
+    authentication_classes = (TokenAuthentication, SessionAuthentication)
     permission_classes = (IsAuthenticated, )
     throttle_classes = (UserRateThrottle, )
 

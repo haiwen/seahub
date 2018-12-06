@@ -9,7 +9,6 @@ ACCOUNT_INFO_URL = apiurl('/api2/account/info/')
 AVATAR_BASE_URL = apiurl(u'/api2/avatars/')
 
 REPOS_URL = apiurl('/api2/repos/')
-DEFAULT_REPO_URL = apiurl('/api2/default-repo/')
 GET_REPO_TOKENS_URL = apiurl('/api2/repo-tokens/')
 
 GROUPS_URL = apiurl(u'/api2/groups/')
