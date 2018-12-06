@@ -17,6 +17,10 @@
         <li class="tab"><a href="#update-user-passwd">{% trans "Password" %}</a></li>
         {% endif %}
 
+        {% if ENABLE_WEBDAV_SECRET %}
+        <li class="tab"><a href="#update-webdav-passwd">{% trans "WebDav Password" %}</a></li>
+        {% endif %}
+
         <li class="tab"><a href="#lang-setting">{% trans "Language" %}</a></li>
 
         {% if two_factor_auth_enabled %}
@@ -81,12 +85,15 @@
 
 {% if ENABLE_WEBDAV_SECRET %}
 <div id="update-webdav-passwd" class="setting-item">
-    <h3>WebDav {% trans "Password" %}</h3>
-    <label>{% trans "Password" %}</label><input type="text" name="password" value="{{ webdav_passwd }}" class="input" />
-    <br/>
-    <a href="#" class="update sf-btn-link">{% trans "Update" %}</a>
-    <a href="#" class="delete sf-btn-link">{% trans "Delete" %}</a>
-
+    <h3>{% trans "WebDav Password" %}</h3>
+    <label>{% trans "Password" %}</label>
+    <div class="passwd-wrapper">
+        <input type="password" name="password" value="{{ webdav_passwd }}" class="passwd input" />
+        <span title="{% trans "Show" %}" class="icon-eye show-or-hide-password cspt" role="button" tabindex="0" aria-label="{% trans "Show" %}"></span>
+        <span title="{% trans "Generate a random password" %}" class="icon-magic generate-random-password cspt" role="button" tabindex="0" aria-label="{% trans "Generate a random password" %}"></span>
+    </div>
+    <button class="update submit">{% trans "Update" %}</button>
+    <button class="delete submit">{% trans "Delete" %}</button>
 </div>
 {% endif %}
 
@@ -246,29 +253,65 @@ $("#list-in-address-book input[type='checkbox']").on('change', function() {
 {% endif %}
 
 {% if ENABLE_WEBDAV_SECRET %}
-function aj_update_webdav_secret(passwd) {
+function update_webdav_secret(passwd) {
   $.ajax({
     url: "{% url 'api-v2.1-webdav-secret' %}",
     type: 'PUT',
     dataType: 'json',
     cache: false,
     beforeSend: prepareCSRFToken,
-    data: "secret=" + passwd,
-    success: function(data) {
+    data: {'secret': passwd},
+    success: function() {
       feedback("{% trans "Success" %}", 'success');
     },
     error: ajaxErrorHandler
   });
 }
 
-$("#update-webdav-passwd a.update").click(function() {
-  var passwd = $("#update-webdav-passwd input[type='text']").val();
-  aj_update_webdav_secret(passwd);
+$("#update-webdav-passwd .update").click(function() {
+    var passwd = $("#update-webdav-passwd [name='password']").val();
+    update_webdav_secret(passwd);
 });
 
-$("#update-webdav-passwd a.delete").click(function() {
-  $("#update-webdav-passwd input[type='text']").val('');
-  aj_update_webdav_secret('');
+$("#update-webdav-passwd .delete").click(function() {
+    $("#update-webdav-passwd [name='password']").val('');
+    update_webdav_secret('');
+});
+
+$('#update-webdav-passwd .show-or-hide-password').click(function() {
+    var $icon = $(this),
+        $password = $('#update-webdav-passwd [name="password"]');
+
+    $icon.toggleClass('icon-eye icon-eye-slash');
+    if ($icon.hasClass('icon-eye')) {
+        $icon.attr({
+            'title': '{% trans "Show" %}',
+            'aria-label': '{% trans "Show" %}'
+        });
+        $password.attr('type', 'password');
+    } else {
+        $icon.attr({
+            'title': '{% trans "Hide" %}',
+            'aria-label': '{% trans "Hide" %}'
+        });
+        $password.attr('type', 'text');
+    }
+});
+
+$('#update-webdav-passwd .generate-random-password').click(function() {
+    var random_password_length = 8;
+    var random_password = '';
+    var possible = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
+    for (var i = 0; i < random_password_length; i++) {
+        random_password += possible.charAt(Math.floor(Math.random() * possible.length));
+    }
+
+    $('#update-webdav-passwd [name="password"]').attr('type', 'text').val(random_password);
+    $('#update-webdav-passwd .show-or-hide-password')
+    .attr({
+        'title': '{% trans "Hide" %}',
+        'aria-label': '{% trans "Hide" %}'
+    }).removeClass('icon-eye').addClass('icon-eye-slash');
 });
 {% endif %}
 
