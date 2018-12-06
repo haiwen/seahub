@@ -443,25 +443,6 @@ a.op-icon:focus {
     overflow-y:auto;
 }
 
-@media (max-width: 767px) {
-    .side-nav {
-        background: #f8f8f8;
-        width:300px;
-        position:fixed;
-        left:-300px;
-        top:0;
-        bottom:0;
-        z-index:1;
-        box-shadow:0 0 4px #ccc;
-        -webkit-transition: all 0.3s ease;
-        -moz-transition: all 0.3s ease;
-        transition: all 0.3s ease;
-    }
-    .side-nav-shown {
-        left:0;
-    }
-}
-
 .side-nav-con {
     overflow:hidden;
     padding:20px;
