@@ -1,0 +1,18 @@
+#!/bin/bash
+
+NAME=Seahub
+DJANGODIR=/home/ubuntu/seahub/ # Django project directory
+PID_FILE=${DJANGODIR}mysite.pid
+NUM_WORKERS=3 # how many worker processes should Gunicorn spawn
+DJANGO_SETTINGS_MODULE=seahub.settings # which settings file should Django use
+DJANGO_WSGI_MODULE=seahub.wsgi:application # WSGI module name
+
+cd $DJANGODIR
+source  ~/.virtualenvs/6.3/bin/activate # Activate the virtual environment
+. setenv.sh          # Set ccnet/seafiel env, and related python path
+
+export DJANGO_SETTINGS_MODULE=$DJANGO_SETTINGS_MODULE
+export LANG=en_US.UTF-8
+export LC_ALL=en_US.UTF-8
+export LC_LANG=en_US.UTF-8
+gunicorn ${DJANGO_WSGI_MODULE} --workers $NUM_WORKERS --log-level=debug --access-logfile=/tmp/gunicorn-access.log --error-logfile=/tmp/gunicorn-error.log --pid=${PID_FILE} --daemon --preload

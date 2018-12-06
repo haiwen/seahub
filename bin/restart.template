@@ -1,0 +1,33 @@
+#!/bin/bash
+
+
+PROJDIR="/home/ubuntu/seahub"
+PIDFILE="$PROJDIR/mysite.pid"
+
+#kill -HUP `cat -- $PIDFILE`
+
+cd $PROJDIR
+
+if [ -f $PIDFILE ]; then
+    echo "Killing seahub python processes ..."
+    PID=`cat -- $PIDFILE`
+    echo "Parent process: $PID"
+    echo "Child processes:" `pgrep -P $PID`
+
+    kill `cat -- $PIDFILE`
+    rm -f -- $PIDFILE
+
+    sleep 5
+fi
+
+echo ""
+echo "Starting seahub gunicorn ..."
+./start.template
+sleep 2
+
+if [ -f $PIDFILE ]; then
+    echo "Done."
+    PID=`cat -- $PIDFILE`
+    echo "New seahub parent process: $PID"
+    echo "Child processes:" `pgrep -P $PID`
+fi

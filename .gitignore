@@ -16,17 +16,29 @@ settings.py.mysql
 settings.py.sqlite
 secret_key.py
 run-seahub.sh
+
+# setenv
 setenv.sh
+setenv*.sh
+
 pylintrc
 .DS_Store
 *.mo
 media/CACHE
 media/custom
+
+# media/avatars
 media/avatars/*
 !media/avatars/default-non-register.jpg
 !media/avatars/default.png
 !media/default.jpg
 !media/groups/default.jpg
+
+# bin/
+bin/*
+!bin/start.template
+!bin/restart.template
+
 static/scripts/dist
 logs/
 mysite.pid
