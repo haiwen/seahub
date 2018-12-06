@@ -59,7 +59,7 @@ img[src=""] {
 
 .wiki-main-panel .cur-view-content {
   display: flex;
-  overflow: hidden;
+  overflow: auto;
 }
 
 .cur-view-content .markdown-container{
