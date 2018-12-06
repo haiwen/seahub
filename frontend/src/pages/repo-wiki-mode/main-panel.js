@@ -20,6 +20,7 @@ const propTypes = {
   lastModified: PropTypes.string,
   latestContributor: PropTypes.string,
   permission: PropTypes.string,
+  hash: PropTypes.string,
   path: PropTypes.string.isRequired,
   // whether the file or dir corresponding to the path exist
   pathExist: PropTypes.bool.isRequired,
@@ -82,6 +83,12 @@ class MainPanel extends Component {
     setTimeout(function() {
       that.getTitlesInfo();
     }, 500);
+    if (this.props.hash) {
+      let hash = this.props.hash;
+      setTimeout(function() {
+        window.location.hash = hash;
+      }, 500);
+    }
   }
 
   switchViewMode = (mode) => {

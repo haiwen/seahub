@@ -42,6 +42,14 @@ class Wiki extends Component {
       selectedDirentList: [],
     };
     window.onpopstate = this.onpopstate;
+    this.hash = '';
+  }
+
+  componentWillMount() {
+    const hash = window.location.hash;
+    if (hash.slice(0, 1) === '#') {
+      this.hash = hash;
+    }
   }
 
   componentDidMount() {
@@ -775,6 +783,7 @@ class Wiki extends Component {
           onItemsMove={this.onMoveItems}
           onItemsCopy={this.onCopyItems}
           onItemsDelete={this.onDeleteItems}
+          hash={this.hash}
         />
       </div>
     );
