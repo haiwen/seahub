@@ -290,7 +290,7 @@ class CommentItem extends React.Component {
             </Dropdown>
           }
         </div>
-        { this.props.item.newIndex ? 
+        { (this.props.item.newIndex >= -1 && this.props.item.oldIndex >= -1)? 
           <div className="seafile-comment-content" onClick={this.scrollToQuote}
             dangerouslySetInnerHTML={{ __html: this.state.html }}></div>
           :
