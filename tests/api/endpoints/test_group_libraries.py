@@ -1,4 +1,5 @@
 import json
+import pytest
 
 from django.core.urlresolvers import reverse
 
@@ -6,7 +7,7 @@ from seaserv import seafile_api, ccnet_api
 
 from tests.common.utils import randstring
 
-from seahub.test_utils import BaseTestCase
+from seahub.test_utils import BaseTestCase, TRAVIS
 from seahub.share.models import ExtraGroupsSharePermission
 from seahub.constants import (
     PERMISSION_ADMIN, PERMISSION_PREVIEW, PERMISSION_PREVIEW_EDIT)
@@ -78,13 +79,14 @@ class GroupLibrariesTest(BaseTestCase):
         group_repos = seafile_api.get_repos_by_group(self.group_id)
         assert len(group_repos) == 1
 
+    @pytest.mark.skipif(TRAVIS, reason="pro only")
     def test_can_create_with_perms(self):
         group_repos = seafile_api.get_repos_by_group(self.group_id)
         assert len(group_repos) == 0
 
         self.login_as(self.user)
 
-        for perm in [PERMISSION_PREVIEW_EDIT, ]:
+        for perm in [PERMISSION_PREVIEW, PERMISSION_PREVIEW_EDIT]:
             repo_name = randstring(6)
             resp = self.client.post(self.group_libraries_url, {
                 'repo_name': repo_name,
@@ -97,7 +99,7 @@ class GroupLibrariesTest(BaseTestCase):
             assert json_resp['permission'] == perm
 
         group_repos = seafile_api.get_repos_by_group(self.group_id)
-        assert len(group_repos) == 1
+        assert len(group_repos) == 2
 
     def test_create_with_login_user_is_not_group_member(self):
 
