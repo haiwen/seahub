@@ -7,7 +7,7 @@ import More from '../more';
 
 const propTypes = {
   placeholder: PropTypes.string,
-  repoID: PropTypes.string.isRequired,
+  repoID: PropTypes.string,
   onSearchedClick: PropTypes.func.isRequired,
 };
 

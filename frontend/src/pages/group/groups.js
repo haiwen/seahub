@@ -1,8 +1,9 @@
-import React, { Component } from 'react';
+import React, { Component, Fragment } from 'react';
 import { seafileAPI } from '../../utils/seafile-api';
 import { gettext, siteRoot, loginUrl, username } from '../../utils/constants';
 import Loading from '../../components/loading';
 import GroupRepoItem from './group-repo-item';
+import GeneralToolbar from '../../components/toolbar/general-toolbar';
 
 import '../../css/groups.css';
 
@@ -157,16 +158,19 @@ class Groups extends Component {
 
   render() {
     return (
-      <div className="main-panel-center">
-        <div className="cur-view-container">
-          <div className="cur-view-path">
-            <h3 className="sf-heading">{gettext("My Groups")}</h3>
-          </div>
-          <div className="cur-view-content">
-            <Content data={this.state} />
+      <Fragment>
+        <GeneralToolbar onShowSidePanel={this.props.onShowSidePanel} onSearchedClick={this.props.onSearchedClick}/>
+        <div className="main-panel-center">
+          <div className="cur-view-container">
+            <div className="cur-view-path">
+              <h3 className="sf-heading">{gettext("My Groups")}</h3>
+            </div>
+            <div className="cur-view-content">
+              <Content data={this.state} />
+            </div>
           </div>
         </div>
-      </div>
+      </Fragment>
     );
   }
 }

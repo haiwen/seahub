@@ -140,8 +140,8 @@ class App extends Component {
             <SharedLibrariesWrapper path={siteRoot + 'shared-libs'} onShowSidePanel={this.onShowSidePanel} onSearchedClick={this.onSearchedClick} />
             <MyLibraries path={siteRoot + 'my-libs'} onShowSidePanel={this.onShowSidePanel} onSearchedClick={this.onSearchedClick} />
             <DirView path={siteRoot + 'library/:repoID/*'} onMenuClick={this.onShowSidePanel} updateCurrentTab={this.updateCurrentTab}/>
-            <Groups path={siteRoot + 'groups'} />
-            <Group path={siteRoot + 'group/:groupID'} />
+            <Groups path={siteRoot + 'groups'} onShowSidePanel={this.onShowSidePanel} onSearchedClick={this.onSearchedClick}/>
+            <Group path={siteRoot + 'group/:groupID'} onShowSidePanel={this.onShowSidePanel} onSearchedClick={this.onSearchedClick}/>
           </Router>
         </MainPanel>
       </div>
