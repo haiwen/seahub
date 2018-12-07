@@ -68,7 +68,7 @@ class CreateRepoDialog extends React.Component {
 
     }
     if (repoName.indexOf('/') > -1) {
-      errMessage = 'Name should not include '/'.';
+      errMessage = 'Name should not include \'/\'.';
       this.setState({errMessage: errMessage});
       return;
     }
