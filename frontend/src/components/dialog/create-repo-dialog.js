@@ -1,6 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { Button, Modal, ModalHeader, Input, CustomInput, ModalBody, ModalFooter, Form, FormGroup, Label } from 'reactstrap';
+import { Button, Modal, ModalHeader, Input, ModalBody, ModalFooter, Form, FormGroup, Label } from 'reactstrap';
 import { gettext } from '../../utils/constants';
 
 const propTypes = {
@@ -112,17 +112,17 @@ class CreateRepoDialog extends React.Component {
     let repo = {
       id: null,
       name: repoName,
-      desc: "",
+      desc: '',
       encrypted: encrypt,
       passwd: password,
       passwd1: password,
       passwd2: password,
       mtime: 0,
-      mtime_relative: "",
-      owner: "-",
-      owner_nickname: "-",
-      permission: "rw",
-      storage_name: "-",
+      mtime_relative: '',
+      owner: '-',
+      owner_nickname: '-',
+      permission: 'rw',
+      storage_name: '-',
     };
     return repo;
   }

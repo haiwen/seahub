@@ -395,7 +395,7 @@ class MyLibraries extends Component {
 
   onCreateRepo = (repo) => {
     seafileAPI.createMineRepo(repo).then((res) => {
-      
+      //todo update repoList 
     });
   }
 
