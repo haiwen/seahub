@@ -190,7 +190,7 @@ class ReviewCommentView(APIView):
                 logger.error(e)
                 return api_error(status.HTTP_500_INTERNAL_SERVER_ERROR, 'Internal error.')
 
-        if detail is not None:
+        if detail:
             try:
                 review_comment.detail = detail
                 review_comment.save()
