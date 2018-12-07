@@ -34,12 +34,14 @@ class Alert extends React.PureComponent {
     this.toastTextTitle = css({
       fontWeight: '600',
       fontSize: '14px',
-      color: '#435a6f'
+      color: '#435a6f',
+      margin: '0',
     });
 
     this.toastTextChild = css({
       fontSize: '14px',
-      color: '#999'
+      color: '#999',
+      margin: '0'
     });
     this.toastClose = css({
       marginLeft: '15px',

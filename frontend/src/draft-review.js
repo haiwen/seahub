@@ -13,7 +13,7 @@ import DiffViewer from '@seafile/seafile-editor/dist/viewer/diff-viewer';
 import { htmlSerializer } from '@seafile/seafile-editor/dist/utils/serialize-html';
 import { serialize } from '@seafile/seafile-editor/dist/utils/slate2markdown/serialize';
 import Loading from './components/loading';
-import Toast from './components/toast';
+import toaster from './components/toast';
 import ReviewComments from './components/review-list-view/review-comments';
 import ReviewCommentDialog from './components/review-list-view/review-comment-dialog.js';
 import { Tooltip } from 'reactstrap';
@@ -114,11 +114,11 @@ class DraftReview extends React.Component {
       this.setState({reviewStatus: 'closed'});
       let msg_s = gettext('Successfully closed review %(reviewID)s.');
       msg_s = msg_s.replace('%(reviewID)s', reviewID);
-      Toast.success(msg_s);
+      toaster.success(msg_s);
     }).catch(() => {
       let msg_s = gettext('Failed to close review %(reviewID)s');
       msg_s = msg_s.replace('%(reviewID)s', reviewID);
-      Toast.error(msg_s);
+      toaster.danger(msg_s);
     });
   }
 
@@ -126,10 +126,10 @@ class DraftReview extends React.Component {
     seafileAPI.updateReviewStatus(reviewID, 'finished').then(res => {
       this.setState({reviewStatus: 'finished', activeTab: 'reviewInfo' });
       let msg_s = gettext('Successfully published draft.');
-      Toast.success(msg_s);
+      toaster.success(msg_s);
     }).catch(() => {
       let msg_s = gettext('Failed to publish draft.');
-      Toast.error(msg_s);
+      toaster.danger(msg_s);
     });
   }
   

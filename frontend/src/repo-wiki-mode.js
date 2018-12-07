@@ -8,7 +8,7 @@ import SidePanel from './pages/repo-wiki-mode/side-panel';
 import MainPanel from './pages/repo-wiki-mode/main-panel';
 import Node from './components/tree-view/node';
 import Tree from './components/tree-view/tree';
-import Toast from './components/toast';
+import toaster from './components/toast';
 import Dirent from './models/dirent';
 import FileTag from './models/file-tag';
 import './assets/css/fa-solid.css';
@@ -151,11 +151,11 @@ class Wiki extends Component {
 
       let message = gettext('Successfully moved %(name)s.');
       message = message.replace('%(name)s', dirName);
-      Toast.success(message);
+      toaster.success(message);
     }).catch(() => {
       let message = gettext('Failed to move %(name)s');
       message = message.replace('%(name)s', dirName);
-      Toast.error(message);
+      toaster.danger(message);
     });
   }
 
@@ -167,11 +167,11 @@ class Wiki extends Component {
       this.copyTreeNode(direntPath, copyToDirentPath, destRepo);
       let message = gettext('Successfully copied %(name)s.');
       message = message.replace('%(name)s', dirName);
-      Toast.success(message);
+      toaster.success(message);
     }).catch(() => {
       let message = gettext('Failed to copy %(name)s');
       message = message.replace('%(name)s', dirName);
-      Toast.error(message);
+      toaster.danger(message);
     });
   }
 
@@ -471,11 +471,11 @@ class Wiki extends Component {
       });
       let message = gettext('Successfully moved %(name)s.');
       message = message.replace('%(name)s', dirNames);
-      Toast.success(message);
+      toaster.success(message);
     }).catch(() => {
       let message = gettext('Failed to move %(name)s');
       message = message.replace('%(name)s', dirNames);
-      Toast.error(message);
+      toaster.danger(message);
     });
   }
 
@@ -489,11 +489,11 @@ class Wiki extends Component {
       });
       let message = gettext('Successfully copied %(name)s.');
       message = message.replace('%(name)s', dirNames);
-      Toast.success(message);
+      toaster.success(message);
     }).catch(() => {
       let message = gettext('Failed to copy %(name)s');
       message = message.replace('%(name)s', dirNames);
-      Toast.error(message);
+      toaster.danger(message);
     });
   }
 

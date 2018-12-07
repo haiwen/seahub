@@ -4,7 +4,7 @@ import { siteRoot } from '../../utils/constants';
 import { seafileAPI } from '../../utils/seafile-api';
 import { Utils } from '../../utils/utils';
 import { gettext } from '../../utils/constants';
-import Toast from '../toast';
+import toaster from '../toast';
 import DirPanel from './dir-panel';
 import Dirent from '../../models/dirent';
 import FileTag from '../../models/file-tag';
@@ -166,11 +166,11 @@ class DirView extends React.Component {
 
       let message = gettext('Successfully moved %(name)s.');
       message = message.replace('%(name)s', dirName);
-      Toast.success(message);
+      toaster.success(message);
     }).catch(() => {
       let message = gettext('Failed to move %(name)s');
       message = message.replace('%(name)s', dirName);
-      Toast.error(message);
+      toaster.danger(message);
     });
   }
 
@@ -180,11 +180,11 @@ class DirView extends React.Component {
     seafileAPI.copyDir(repoID, destRepo.repo_id, copyToDirentPath, this.state.path, dirName).then(() => {
       let message = gettext('Successfully copied %(name)s.');
       message = message.replace('%(name)s', dirName);
-      Toast.success(message);
+      toaster.success(message);
     }).catch(() => {
       let message = gettext('Failed to copy %(name)s');
       message = message.replace('%(name)s', dirName);
-      Toast.error(message);
+      toaster.danger(message);
     });
   }
 
@@ -232,11 +232,11 @@ class DirView extends React.Component {
       this.setState({direntList: direntList});
       let message = gettext('Successfully moved %(name)s.');
       message = message.replace('%(name)s', dirNames);
-      Toast.success(message);
+      toaster.success(message);
     }).catch(() => {
       let message = gettext('Failed to move %(name)s');
       message = message.replace('%(name)s', dirNames);
-      Toast.error(message);
+      toaster.danger(message);
     });
   }
 
@@ -246,11 +246,11 @@ class DirView extends React.Component {
     seafileAPI.copyDir(repoID, destRepo.repo_id, destDirentPath, this.state.path, dirNames).then(() => {
       let message = gettext('Successfully copied %(name)s.');
       message = message.replace('%(name)s', dirNames);
-      Toast.success(message);
+      toaster.success(message);
     }).catch(() => {
       let message = gettext('Failed to copy %(name)s');
       message = message.replace('%(name)s', dirNames);
-      Toast.error(message);
+      toaster.danger(message);
     });
   }
 

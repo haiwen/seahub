@@ -4,7 +4,7 @@ import { gettext, siteRoot } from '../../utils/constants';
 import { Utils } from '../../utils/utils';
 import { seafileAPI } from '../../utils/seafile-api';
 import URLDecorator from '../../utils/url-decorator';
-import Toast from '../toast';
+import toaster from '../toast';
 import DirentMenu from './dirent-menu';
 import DirentRename from './dirent-rename';
 import ModalPortal from '../modal-portal';
@@ -215,13 +215,13 @@ class DirentListItem extends React.Component {
 
     if (!newName) {
       let errMessage = 'It is required.';
-      Toast.error(gettext(errMessage));
+      toaster.danger(gettext(errMessage));
       return false;
     }
 
     if (newName.indexOf('/') > -1) {
       let errMessage = 'Name should not include ' + '\'/\'' + '.';
-      Toast.error(gettext(errMessage));
+      toaster.danger(gettext(errMessage));
       return false;
     }
 
@@ -285,7 +285,7 @@ class DirentListItem extends React.Component {
       let newWindow = window.open('draft');
       newWindow.location.href = url;
     }).catch(() => {
-      Toast.error('Create draft failed.');
+      toaster.danger('Create draft failed.');
     });
     this.onItemMenuHide();
   }
@@ -328,7 +328,7 @@ class DirentListItem extends React.Component {
         this.interval = setInterval(this.addDownloadAnimation, 1000);
       }).catch(() => {
         clearInterval(this.interval);
-        // Toast.error(gettext(''));
+        // toaster.danger(gettext(''));
         //todo;
       });
     } else {
