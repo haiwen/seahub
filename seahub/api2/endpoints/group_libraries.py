@@ -120,7 +120,7 @@ class GroupLibraries(APIView):
             repo_owner = repo_id_owner_dict[group_repo.id]
             group_repo_info['owner_email'] = repo_owner
             group_repo_info['owner_name'] = name_dict.get(repo_owner, '')
-            group_repo_info['owner_contact_name'] = contact_email_dict.get(repo_owner, '')
+            group_repo_info['owner_contact_email'] = contact_email_dict.get(repo_owner, '')
 
             modifier = group_repo.last_modifier
             group_repo_info['modifier_email'] = modifier
@@ -205,7 +205,7 @@ class GroupLibraries(APIView):
 
         group_repo_info['owner_email'] = username
         group_repo_info['owner_name'] = email2nickname(username)
-        group_repo_info['owner_contact_name'] = email2contact_email(username)
+        group_repo_info['owner_contact_email'] = email2contact_email(username)
 
         modifier = group_repo.last_modifier
         group_repo_info['modifier_email'] = modifier
