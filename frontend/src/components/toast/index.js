@@ -1,3 +1,5 @@
-import Toast from './toast';
+import Toaster from './toaster';
 
-export default Toast;
+const toaster = new Toaster();
+
+export default toaster;
