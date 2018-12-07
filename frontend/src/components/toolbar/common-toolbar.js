@@ -6,7 +6,7 @@ import Notification from '../common/notification';
 import Account from '../common/account';
 
 const propTypes = {
-  repoID: PropTypes.string.isRequired,
+  repoID: PropTypes.string,
   onSearchedClick: PropTypes.func.isRequired,
   searchPlaceholder: PropTypes.string
 };

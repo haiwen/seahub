@@ -1,9 +1,11 @@
-import React, { Component } from 'react';
+import React, { Component, Fragment } from 'react';
 import { seafileAPI } from '../../utils/seafile-api';
 import { Utils } from '../../utils/utils';
 import { gettext, siteRoot, loginUrl, username } from '../../utils/constants';
 import Loading from '../../components/loading';
 import GroupRepoItem from './group-repo-item';
+import CommonToolbar from '../../components/toolbar/common-toolbar';
+import RepoViewToolbar from '../../components/toolbar/repo-view-toobar';
 
 import '../../css/groups.css';
 
@@ -271,18 +273,31 @@ class Group extends Component {
     });
   }
 
+  onCreateRepo = (repo) => {
+    let groupId = this.props.groupID;
+    seafileAPI.createGroupRepo(groupId, repo).then(() => {
+      //todo update group list
+    });
+  }
+
   render() {
     return (
-      <div className="main-panel-center">
-        <div className="cur-view-container">
-          <div className="cur-view-path">
-            <Header data={this.state.groupMetaInfo} />
-          </div>
-          <div className="cur-view-content">
-            <Content data={this.state} />
+      <Fragment>
+        <div className="main-panel-north">
+          <RepoViewToolbar onShowSidePanel={this.props.onShowSidePanel} onCreateRepo={this.onCreateRepo} />
+          <CommonToolbar onSearchedClick={this.props.onSearchedClick} />
+        </div>
+        <div className="main-panel-center">
+          <div className="cur-view-container">
+            <div className="cur-view-path">
+              <Header data={this.state.groupMetaInfo} />
+            </div>
+            <div className="cur-view-content">
+              <Content data={this.state} />
+            </div>
           </div>
         </div>
-      </div>
+      </Fragment>
     );
   }
 }

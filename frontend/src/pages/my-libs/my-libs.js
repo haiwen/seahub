@@ -393,11 +393,17 @@ class MyLibraries extends Component {
     });
   }
 
+  onCreateRepo = (repo) => {
+    seafileAPI.createMineRepo(repo).then((res) => {
+      
+    });
+  }
+
   render() {
     return (
       <Fragment>
         <div className="main-panel-north">
-          <RepoViewToolbar onShowSidePanel={this.props.onShowSidePanel}/>
+          <RepoViewToolbar onShowSidePanel={this.props.onShowSidePanel} onCreateRepo={this.onCreateRepo} />
           <CommonToolbar onSearchedClick={this.props.onSearchedClick} />
         </div>
         <div className="main-panel-center">
