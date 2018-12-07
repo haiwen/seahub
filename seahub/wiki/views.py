@@ -34,7 +34,7 @@ def wiki_list(request):
     if joined_groups:
         joined_groups.sort(lambda x, y: cmp(x.group_name.lower(), y.group_name.lower()))
 
-    return render(request, "wiki/wiki_list.html", {
+    return render(request, "react_app.html", {
         "grps": joined_groups,
     })
 

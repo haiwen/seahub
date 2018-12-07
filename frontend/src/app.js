@@ -20,6 +20,7 @@ import MyLibraries from './pages/my-libs/my-libs';
 import DirView from './components/dir-view/dir-view';
 import Group from './pages/groups/group-view';
 import Groups from './pages/groups/groups-view';
+import Wikis from './pages/wikis/wikis';
 import MainContentWrapper from './components/main-content-wrapper';
 
 import './assets/css/fa-solid.css';
@@ -38,6 +39,7 @@ const ShareAdminLibrariesWrapper = MainContentWrapper(ShareAdminLibraries);
 const ShareAdminFoldersWrapper = MainContentWrapper(ShareAdminFolders);
 const ShareAdminShareLinksWrapper = MainContentWrapper(ShareAdminShareLinks);
 const ShareAdminUploadLinksWrapper = MainContentWrapper(ShareAdminUploadLinks);
+const Wikiswrapper = MainContentWrapper(Wikis);
 
 class App extends Component {
 
@@ -142,6 +144,7 @@ class App extends Component {
             <DirView path={siteRoot + 'library/:repoID/*'} onMenuClick={this.onShowSidePanel} updateCurrentTab={this.updateCurrentTab}/>
             <Groups path={siteRoot + 'groups'} onShowSidePanel={this.onShowSidePanel} onSearchedClick={this.onSearchedClick}/>
             <Group path={siteRoot + 'group/:groupID'} onShowSidePanel={this.onShowSidePanel} onSearchedClick={this.onSearchedClick}/>
+            <Wikiswrapper path={siteRoot + 'wikis'} onShowSidePanel={this.onShowSidePanel} onSearchedClick={this.onSearchedClick}/>
           </Router>
         </MainPanel>
       </div>
