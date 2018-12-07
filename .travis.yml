@@ -24,7 +24,7 @@ before_install:
 
 # install seahub requirements
 install:
-  - pip install -r requirements.txt --allow-all-external --allow-unverified PIL
+  - pip install -r dev-requirements.txt --allow-all-external --allow-unverified PIL
   - pip install -r test-requirements.txt
 
 before_scipt: true

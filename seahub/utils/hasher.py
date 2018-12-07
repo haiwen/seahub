@@ -7,6 +7,7 @@ except ImportError:
 
 
 from django.conf import settings
+from django.utils.encoding import force_str
 
 
 class AESPasswordDecodeError(Exception):
@@ -35,9 +36,10 @@ class AESPasswordHasher:
         if not secret:
             secret = settings.SECRET_KEY[:BLOCK_SIZE]
 
-        self.cipher = AES.new(secret)
+        self.cipher = AES.new(secret, AES.MODE_ECB)
 
     def encode(self, password):
+        password = force_str(password)
         return "%s$%s" % (self.algorithm, EncodeAES(self.cipher, password))
 
     def verify(self, password, encoded):
