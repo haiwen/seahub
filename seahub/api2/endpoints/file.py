@@ -291,7 +291,7 @@ class FileView(APIView):
             # rename draft file
             filetype, fileext = get_file_type_and_ext(new_file_name)
             if filetype == MARKDOWN or filetype == TEXT:
-                is_draft, review_id, draft_id = is_draft_file(repo.id, path)
+                is_draft, review_id, draft_id, _ = is_draft_file(repo.id, path)
                 if is_draft:
                     try:
                         draft = Draft.objects.get(pk=draft_id)
