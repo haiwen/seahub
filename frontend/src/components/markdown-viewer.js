@@ -9,6 +9,7 @@ const viewerPropTypes = {
   lastModified: PropTypes.string,
   latestContributor: PropTypes.string,
   markdownContent: PropTypes.string,
+  onContentRendered: PropTypes.func,
   activeTitleIndex: PropTypes.number
 };
 
@@ -22,7 +23,10 @@ class MarkdownContentViewer extends React.Component {
     }
     return (
         <div className="markdown-content">
-          <MarkdownViewer markdownContent={this.props.markdownContent} showTOC={true} activeTitleIndex={this.props.activeTitleIndex}/>
+          <MarkdownViewer markdownContent={this.props.markdownContent} showTOC={true}
+            activeTitleIndex={this.props.activeTitleIndex}
+            onContentRendered={this.props.onContentRendered}
+          />
           <p id="wiki-page-last-modified">{gettext('Last modified by')} {this.props.latestContributor}, <span>{this.props.lastModified}</span></p>
         </div>
     );
