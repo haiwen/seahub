@@ -3,7 +3,7 @@ import { siteRoot, gettext } from '../../utils/constants';
 import editUtilties from '../../utils/editor-utilties';
 import { Utils } from '../../utils/utils';
 import PropTypes from 'prop-types';
-import Toast from '../../components/toast';
+import toaster from '../../components/toast';
 import Loading from '../../components/loading';
 import DraftListView from '../../components/draft-list-view/draft-list-view';
 import DraftListMenu from '../../components/draft-list-view/draft-list-menu';
@@ -41,11 +41,11 @@ class DraftContent extends React.Component {
       this.props.updateDraftsList(draft.id);
       let msg_s = gettext('Successfully deleted draft %(draft)s.');
       msg_s = msg_s.replace('%(draft)s', draft_name);
-      Toast.success(msg_s);
+      toaster.success(msg_s);
     }).catch(() => {
       let msg_s = gettext('Failed to delete draft %(draft)s.');
       msg_s = msg_s.replace('%(draft)s', draft_name);
-      Toast.error(msg_s);
+      toaster.danger(msg_s);
     });
   }
 
@@ -56,11 +56,11 @@ class DraftContent extends React.Component {
       this.props.updateDraftsList(draft.id);
       let msg_s = gettext('Successfully published draft %(draft)s.');
       msg_s = msg_s.replace('%(draft)s', draft_name);
-      Toast.success(msg_s);
+      toaster.success(msg_s);
     }).catch(() => {
       let msg_s = gettext('Failed to publish draft %(draft)s.');
       msg_s = msg_s.replace('%(draft)s', draft_name);
-      Toast.error(msg_s);
+      toaster.danger(msg_s);
     });
   }
 
@@ -72,7 +72,7 @@ class DraftContent extends React.Component {
       w.location = siteRoot + 'drafts/review/' + res.data.id;
     }).catch((error) => { 
       if (error.response.status == '409') {
-        Toast.error(gettext('Review already exists.'));
+        toaster.danger(gettext('Review already exists.'));
       }    
     });
   }

@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import moment from 'moment';
 import { seafileAPI } from '../../utils/seafile-api';
 import { gettext, loginUrl } from '../../utils/constants';
-import Toast from '../../components/toast';
+import toaster from '../../components/toast';
 
 class Content extends Component {
 
@@ -103,11 +103,11 @@ class Item extends Component {
       });
       let msg_s = gettext("Successfully unlink %(name)s.");
       msg_s = msg_s.replace('%(name)s', data.device_name);
-      Toast.success(msg_s);
+      toaster.success(msg_s);
     }).catch((error) => {
       let message = gettext("Failed to unlink %(name)s");
       message = message.replace('%(name)s', data.device_name);
-      Toast.error(message);
+      toaster.danger(message);
     });
   }
 

@@ -13,6 +13,7 @@
     "dotenv": "4.0.0",
     "dotenv-expand": "4.2.0",
     "file-loader": "1.1.5",
+    "glamor": "^2.20.40",
     "html-webpack-plugin": "2.29.0",
     "jest": "20.0.4",
     "moment": "^2.22.2",
