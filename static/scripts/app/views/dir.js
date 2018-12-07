@@ -104,6 +104,14 @@ define([
                     }
                 });
 
+                // confirm leaving the page when file is uploading
+                window.onbeforeunload = function(e) {
+                    if ($('#upload-file-dialog').is(':visible') &&
+                        $('#upload-file-dialog .status').text() == window.fileuploading) {
+                        return '';
+                    }
+                };
+
             },
 
             renderMainCon: function() {
