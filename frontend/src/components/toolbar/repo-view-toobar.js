@@ -6,7 +6,7 @@ import CreateRepoDialog from '../dialog/create-repo-dialog';
 
 const propTypes = {
   // isOwnLibrary: PropTypes.bool.isRequired,
-  // libraryType: PropTypes.string.isRequired,
+  libraryType: PropTypes.string.isRequired,
   onCreateRepo: PropTypes.func.isRequired,
 };
 
@@ -38,12 +38,15 @@ class RepoViewToolbar extends React.Component {
               <i className="fas fa-plus-square op-icon"></i>
               {gettext('New Library')}
             </button>
-            <button className="btn btn-secondary operation-item" title={gettext('More')} onClick={this.onShareClick}>{gettext('More')}</button>
+            {this.props.libraryType !== 'group' && (
+              <button className="btn btn-secondary operation-item" title={gettext('More')} onClick={this.onShareClick}>{gettext('More')}</button>
+            )}
           </div>
         </div>
         {this.state.isCreateRepoDialogShow && (
           <ModalPortal>
             <CreateRepoDialog 
+              libraryType={this.props.libraryType}
               onCreateRepo={this.onCreateRepo}
               onCreateToggle={this.onCreateToggle}
             />

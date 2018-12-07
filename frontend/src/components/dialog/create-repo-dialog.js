@@ -35,8 +35,8 @@ class CreateRepoDialog extends React.Component {
   }
 
   handleSubmit = () => {
-    let isValidate = this.validateInputParams();
-    if (isValidate) {
+    let isValid= this.validateInputParams();
+    if (isValid) {
       let repoName = this.state.repoName.trim();
       let password = this.state.encrypt ? this.state.password1 : '';
       let repo = this.createRepo(repoName, password);
@@ -65,12 +65,11 @@ class CreateRepoDialog extends React.Component {
       errMessage = 'Name is required';
       this.setState({errMessage: errMessage});
       return false;
-
     }
     if (repoName.indexOf('/') > -1) {
       errMessage = 'Name should not include \'/\'.';
       this.setState({errMessage: errMessage});
-      return;
+      return false;
     }
     if (this.state.encrypt) {
       let password1 = this.state.password1.trim();
@@ -108,22 +107,33 @@ class CreateRepoDialog extends React.Component {
   }
 
   createRepo = (repoName, password) => {
+    let libraryType = this.props.libraryType;
     let encrypt = password ? true : false;
-    let repo = {
-      id: null,
-      name: repoName,
-      desc: '',
-      encrypted: encrypt,
-      passwd: password,
-      passwd1: password,
-      passwd2: password,
-      mtime: 0,
-      mtime_relative: '',
-      owner: '-',
-      owner_nickname: '-',
-      permission: 'rw',
-      storage_name: '-',
-    };
+    let repo = null;
+    if (libraryType === 'mine' || libraryType === 'public') {
+      repo = {
+        id: null,
+        name: repoName,
+        desc: '',
+        encrypted: encrypt,
+        passwd: password,
+        passwd1: password,
+        passwd2: password,
+        mtime: 0,
+        mtime_relative: '',
+        owner: '-',
+        owner_nickname: '-',
+        permission: 'rw',
+        storage_name: '-',
+      };
+    }
+    if (libraryType === 'group') {
+      repo = {
+        repo_name: repoName,
+        password: password,
+        permission: 'rw',
+      };
+    }
     return repo;
   }
 
