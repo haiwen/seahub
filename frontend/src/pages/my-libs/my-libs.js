@@ -6,23 +6,43 @@ import { seafileAPI } from '../../utils/seafile-api';
 import { Utils } from '../../utils/utils';
 import { gettext, siteRoot, loginUrl, isPro, storages, canGenerateShareLink, canGenerateUploadLink, folderPermEnabled, enableRepoSnapshotLabel } from '../../utils/constants';
 import Loading from '../../components/loading';
+import ModalPortal from '../../components/modal-portal';
 import DeleteItemPopup from './popups/delete-item';
 import CommonToolbar from '../../components/toolbar/common-toolbar';
 import RepoViewToolbar from '../../components/toolbar/repo-view-toobar';
+import TransferDialog from '../../components/dialog/transfer-dialog';
+import LibHistorySetting from '../../components/dialog/lib-history-setting-dialog';
+import LibDetail from '../../components/dirent-detail/lib-details';
 
 class Content extends Component {
 
   constructor(props) {
     super(props);
     this.state = {
-      deleteItemPopupOpen: false
+      deleteItemPopupOpen: false,
+      showTransfer: false,
+      itemName: '',
+      showHistorySetting: false,
+      showDetails: false,
+      libID: '',
+      libSize: '',
+      libUpdateTime: ''
     };
 
     this.toggleDeleteItemPopup = this.toggleDeleteItemPopup.bind(this);
     this.showDeleteItemPopup = this.showDeleteItemPopup.bind(this);
+    this.onTransfer = this.onTransfer.bind(this);
+    this.onHistorySetting = this.onHistorySetting.bind(this);
+    this.onFileTagChanged = this.onFileTagChanged.bind(this);
+    this.onDetails = this.onDetails.bind(this);
+    this.closeDetails = this.closeDetails.bind(this);
 
     this.operations = {
-      showDeleteItemPopup: this.showDeleteItemPopup
+      showDeleteItemPopup: this.showDeleteItemPopup,
+      onTransfer: this.onTransfer,
+      onHistorySetting: this.onHistorySetting,
+      onDetails: this.onDetails,
+      onRenameRepo: this.props.renameRepo,
     };
   }
 
@@ -38,6 +58,50 @@ class Content extends Component {
       deleteItemPopupData: data
     });
   }
+
+  onTransfer(itemName, itemID) {
+    this.setState({
+      showTransfer: !this.state.showTransfer,
+      itemName: itemName,
+      libID: itemID 
+    });
+  } 
+
+  onHistorySetting(itemName, itemID) {
+    this.setState({
+      showHistorySetting: !this.state.showHistorySetting,
+      itemName: itemName,
+      libID: itemID
+    });
+  } 
+
+  onDetails(data) {
+    const libSize = Utils.formatSize({bytes: data.size});
+    const libID = data.repo_id;
+    const libUpdateTime = moment(data.last_modified).fromNow(); 
+
+    this.setState({
+      showDetails: !this.state.showDetails,
+      libID: libID,
+      libSize: libSize,
+      libUpdateTime: libUpdateTime
+    });
+  }
+
+  closeDetails() {
+    this.setState({
+      showDetails: !this.state.showDetails
+    })
+  }
+
+   onFileTagChanged() {
+    seafileAPI.listFileTags(this.state.detailsRepoID, '/').then(res => {
+      let fileTags = res.data.file_tags.map(item => {
+        console.log(item);
+      });
+    });
+   }
+
 
   render() {
     const {loading, errorMsg, items} = this.props.data;
@@ -96,6 +160,32 @@ class Content extends Component {
           {table}
           <DeleteItemPopup isOpen={this.state.deleteItemPopupOpen} 
             toggle={this.toggleDeleteItemPopup} data={this.state.deleteItemPopupData} />
+          {this.state.showTransfer &&
+            <ModalPortal>
+              <TransferDialog toggleDialog={this.onTransfer} 
+                              itemName={this.state.itemName}
+                              repoID={this.state.libID}
+                              submit={this.props.toggleTransferSubmit}
+                              />
+            </ModalPortal>
+          }
+          {this.state.showHistorySetting &&
+            <ModalPortal>
+              <LibHistorySetting toggleDialog={this.onHistorySetting} 
+                                 itemName={this.state.itemName}
+                                 repoID={this.state.libID}
+                                 />
+            </ModalPortal>
+          }
+          {this.state.showDetails && (
+            <div className="cur-view-detail">
+              <LibDetail libID={this.state.libID}
+                         libSize={this.state.libSize}
+                         libUpdateTime={this.state.libUpdateTime}
+                         closeDetails={this.closeDetails}
+                         />
+            </div>
+          )}
         </React.Fragment>
       );
 
@@ -132,7 +222,9 @@ class Item extends Component {
     this.state = {
       showOpIcon: false,
       operationMenuOpen: false,
-      deleted: false
+      deleted: false,
+      showChangeLibName: false, 
+      repoName: this.props.data.repo_name,
     };
 
     this.handleMouseOver = this.handleMouseOver.bind(this);
@@ -213,12 +305,37 @@ class Item extends Component {
   }
 
   rename() {
+    this.setState({
+      showChangeLibName: !this.state.showChangeLibName
+    })
+  }
+
+  onChangeLibName = (e) => {
+    this.setState({
+      repoName: e.target.value
+    })
+  }
+
+  updateLibName = () => {
+    const itemID = this.props.data.repo_id;
+    seafileAPI.renameRepo(itemID, this.state.repoName).then(res => {
+      this.rename();
+      this.props.operations.onRenameRepo(itemID, this.state.repoName);
+    }).catch(res => {
+      // TODO res error 
+    })
   }
 
   transfer() {
+    const itemName = this.props.data.repo_name;
+    const itemID = this.props.data.repo_id;
+    this.props.operations.onTransfer(itemName, itemID);
   }
 
   historySetting() {
+    const itemName = this.props.data.repo_name;
+    const itemID = this.props.data.repo_id;
+    this.props.operations.onHistorySetting(itemName, itemID);
   }
 
   changePassword() {
@@ -231,6 +348,8 @@ class Item extends Component {
   }
 
   showDetails() {
+    let data = this.props.data;
+    this.props.operations.onDetails(data);
   }
   
   label() {
@@ -321,11 +440,21 @@ class Item extends Component {
     const desktopItem = (
       <tr onMouseOver={this.handleMouseOver} onMouseOut={this.handleMouseOut}>
         <td><img src={data.icon_url} title={data.icon_title} alt={data.icon_title} width="24" /></td>
-        <td>
-          {data.repo_name ?
-            <Link to={`${siteRoot}library/${data.repo_id}/${data.repo_name}/`}>{data.repo_name}</Link> :
-            gettext('Broken (please contact your administrator to fix this library)')}
-        </td>
+        {
+          this.state.showChangeLibName ? (
+            <td>
+              <input value={this.state.repoName} onChange={this.onChangeLibName} />
+              <button type='button' className='sf2-icon-tick text-success' onClick={this.updateLibName} />
+              <button type='button' className='sf2-icon-x2' onClick={this.rename}/>
+            </td>
+          ) : (
+            <td>
+              {data.repo_name ?
+                <Link to={`${siteRoot}library/${data.repo_id}/${data.repo_name}/`}>{data.repo_name}</Link> :
+                gettext('Broken (please contact your administrator to fix this library)')}
+            </td>
+          )
+        }
         <td>{data.repo_name ? desktopOperations : ''}</td>
         <td>{Utils.formatSize({bytes: data.size})}</td>
         {storages.length ? <td>{data.storage_name}</td> : null}
@@ -399,6 +528,25 @@ class MyLibraries extends Component {
     });
   }
 
+  toggleTransferSubmit = (repoID) => {
+    this.setState({
+      items: this.state.items.filter(item => item.repo_id !== repoID) 
+    }) 
+  }
+
+  renameRepo = (repoID, newName) => {
+    let array = this.state.items;
+    for(var i=0;i<array.length;i++){
+      if(array[i].repo_id==repoID){
+        array[i].repo_name=newName; 
+        break;
+      }
+    }
+    this.setState({
+      items: array
+    })
+  }
+
   render() {
     return (
       <Fragment>
@@ -412,7 +560,10 @@ class MyLibraries extends Component {
               <h3 className="sf-heading">{gettext("My Libraries")}</h3>
             </div>
             <div className="cur-view-content">
-              <Content data={this.state} />
+              <Content data={this.state}
+                       toggleTransferSubmit={this.toggleTransferSubmit}
+                       renameRepo={this.renameRepo}
+                       />
             </div>
           </div>
         </div>
