@@ -84,7 +84,7 @@ class GroupLibrariesTest(BaseTestCase):
 
         self.login_as(self.user)
 
-        for perm in [PERMISSION_PREVIEW, PERMISSION_PREVIEW_EDIT]:
+        for perm in [PERMISSION_PREVIEW_EDIT, ]:
             repo_name = randstring(6)
             resp = self.client.post(self.group_libraries_url, {
                 'repo_name': repo_name,
@@ -97,7 +97,7 @@ class GroupLibrariesTest(BaseTestCase):
             assert json_resp['permission'] == perm
 
         group_repos = seafile_api.get_repos_by_group(self.group_id)
-        assert len(group_repos) == 2
+        assert len(group_repos) == 1
 
     def test_create_with_login_user_is_not_group_member(self):
 
