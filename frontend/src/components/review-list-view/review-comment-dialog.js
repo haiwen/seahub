@@ -12,7 +12,6 @@ const commentDialogPropTypes = {
   selectedText: PropTypes.string,
   newIndex: PropTypes.number,
   oldIndex: PropTypes.number,
-  top: PropTypes.string
 };
 
 class ReviewCommentDialog extends React.Component {
@@ -88,9 +87,8 @@ class ReviewCommentDialog extends React.Component {
   }
 
   render() {
-    let dialogTop = (parseInt(this.props.top) - 80)+ 'px';
     return (
-      <div className="review-comment-dialog" style={{top: (dialogTop)}}>
+      <div className="review-comment-dialog">
         <div>{this.state.userName}</div>
         <textarea value={this.state.comment} onChange={this.handleCommentChange}></textarea>
         <div className="button-group">

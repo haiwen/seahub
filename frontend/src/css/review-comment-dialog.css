@@ -1,15 +1,13 @@
 .review-comment-dialog {
-  width: 300px;
+  width: 500px;
   position: absolute;
-  top: 200px;
+  top: 30%;
   right: 0;
   padding: 10px;
   background-color: #fafafa;
-  background-clip: padding-box;
   border: 1px solid rgba(0,0,0,.2);
   border-radius: .3rem;
-  outline: 0;
-  box-shadow: 0 0 5px #aaaaaa;
+  box-shadow: 0 0 3px #ccc;
 }
 .review-comment-dialog-triangle {
   position: absolute;
@@ -21,14 +19,13 @@
   border-right: none;
   width: 10px;
   height: 10px;
-  z-index: 1001;
   background-color: #fafafa;
-  box-shadow: -1px 1px #aaaaaa;
+  box-shadow: -1px 1px #ccc;
 }
 .review-comment-dialog textarea {
   width: 100%;
-  min-height: 100px;
-  max-height: 200px;
+  min-height: 200px;
+  max-height: 300px;
 }
 .review-comment-dialog .button-group .btn {
   margin-right: 10px;

@@ -22,7 +22,6 @@ import { findRange } from '@seafile/slate-react';
 import { Nav, NavItem, NavLink, TabContent, TabPane } from 'reactstrap';
 import classnames from 'classnames';
 import HistoryList from './pages/review/history-list';
-import Plain from 'slate-plain-serializer';
 import { Document, Block, Value } from 'slate';
 
 import './assets/css/fa-solid.css';
@@ -55,7 +54,6 @@ class DraftReview extends React.Component {
       totalReversionCount: 0,
       changedNodes: [],
       isShowCommentDialog: false,
-      commentBtnTop: '-1000px',
     };
     this.selectedText = '';
     this.newIndex = null;
@@ -239,11 +237,7 @@ class DraftReview extends React.Component {
         }
       }
       let style = this.refs.commentbtn.style;
-      let commentBtnTop = `${rect.top - 100 + this.refs.viewContent.scrollTop}px`;
-      style.top = commentBtnTop;
-      this.setState({
-        commentBtnTop: commentBtnTop
-      });
+      style.top = `${rect.top - 100 + this.refs.viewContent.scrollTop}px`;
       return range;
     }
     else {
@@ -557,16 +551,6 @@ class DraftReview extends React.Component {
                     />
                   }
                   <i className="fa fa-plus-square review-comment-btn" ref="commentbtn" onMouseDown={this.addComment}></i>
-                  {this.state.isShowCommentDialog &&
-                    <ReviewCommentDialog
-                      toggleCommentDialog={this.toggleCommentDialog}
-                      onCommentAdded={this.onCommentAdded}
-                      selectedText={this.selectedText}
-                      newIndex={this.newIndex}
-                      oldIndex={this.oldIndex}
-                      top={this.state.commentBtnTop}
-                    />
-                  }
                 </div>
               }
             </div>
@@ -643,6 +627,15 @@ class DraftReview extends React.Component {
             toggleAddReviewerDialog={this.toggleAddReviewerDialog}
             reviewID={reviewID}
             reviewers={this.state.reviewers}
+          />
+        }
+        {this.state.isShowCommentDialog &&
+          <ReviewCommentDialog
+            toggleCommentDialog={this.toggleCommentDialog}
+            onCommentAdded={this.onCommentAdded}
+            selectedText={this.selectedText}
+            newIndex={this.newIndex}
+            oldIndex={this.oldIndex}
           />
         }
       </div>
