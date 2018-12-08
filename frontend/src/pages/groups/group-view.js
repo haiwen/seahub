@@ -1,17 +1,14 @@
-import React, { Fragment } from 'react';
+import React from 'react';
 import PropTypes from 'prop-types';
-import Loading from '../../components/loading';
 import { gettext, username, loginUrl } from '../../utils/constants';
 import { seafileAPI } from '../../utils/seafile-api';
 import Group from '../../models/group';
 import RepoInfo from '../../models/repoInfo';
-import CommonToolbar from '../../components/toolbar/common-toolbar';
-import RepoViewToolbar from '../../components/toolbar/repo-view-toobar';
-import CurGroupPath from '../../components/cur-group-path/';
-import RepoListView from '../../components/repo-list-view/repo-list-view';
+import SharedRepoView from '../../components/repo-view/share-repo-view';
 
 const propTypes = {
-
+  onShowSidePanel: PropTypes.func.isRequired,
+  onSearchedClick: PropTypes.func.isRequired,
 };
 
 class GroupView extends React.Component {
@@ -21,8 +18,12 @@ class GroupView extends React.Component {
     this.state = {
       isLoading: true,
       errMessage: '',
+      emptyTip: null,
       currentGroup: null,
+      isStaff: false,
       repoList: [],
+      currentTab: 'group',
+      isShowRepoOwner: true,
     }
   }
 
@@ -40,7 +41,13 @@ class GroupView extends React.Component {
   loadGroup = (groupID) => {
     seafileAPI.getGroup(groupID).then((res) => {
       let currentGroup = new Group(res.data);
-      this.setState({currentGroup: currentGroup});
+      let emptyTip = this.getEmptyTip(currentGroup);
+      let isStaff  = currentGroup.admins.indexOf(username) > -1;  //for item operations
+      this.setState({
+        emptyTip: emptyTip,
+        currentGroup: currentGroup,
+        isStaff: isStaff,
+      });
       this.loadRepos(groupID);
     }).catch((error) => {
       if (error.response) {
@@ -99,25 +106,7 @@ class GroupView extends React.Component {
     });
   }
 
-  onCreateRepo = (repo) => {
-    let groupId = this.props.groupID;
-    seafileAPI.createGroupRepo(groupId, repo).then(res => {
-      let repo = new RepoInfo(res.data);
-      let repoList = this.addRepoItem(repo);
-      this.setState({repoList: repoList});
-    }).catch(() => {
-      //todo
-    });
-  }
-
-  addRepoItem = (repo) => {
-    let newRepoList = this.state.repoList.map(item => {return item;});
-    newRepoList.push(repo);
-    return newRepoList;
-  }
-
-  getEmptyTip = () => {
-    let currentGroup = this.state.currentGroup;
+  getEmptyTip = (currentGroup) => {
     let emptyTip = null;
     if (currentGroup) {
       if (currentGroup.parent_group_id === 0) {
@@ -129,7 +118,7 @@ class GroupView extends React.Component {
           </div>
         );
       } else {
-        if (currentGroup.admins.indexOf(username) == -1) {
+        if (currentGroup.admins.indexOf(username) == -1) {  // is a member of this group
           emptyTip = (
             <div className="empty-tip">
               <h2>{gettext('No libraries')}</h2>
@@ -149,33 +138,8 @@ class GroupView extends React.Component {
   }
 
   render() {
-    let emptyTip = this.getEmptyTip();
     return (
-      <Fragment>
-        <div className="main-panel-north">
-          <RepoViewToolbar onShowSidePanel={this.props.onShowSidePanel} onCreateRepo={this.onCreateRepo} libraryType={'group'}/>
-          <CommonToolbar onSearchedClick={this.props.onSearchedClick} />
-        </div>
-        <div className="main-panel-center">
-          <div className="cur-view-container">
-            <div className="cur-view-path">
-              {this.state.currentGroup && <CurGroupPath currentGroup={this.state.currentGroup}/>}
-            </div>
-            <div className="cur-view-content">
-              {this.state.isLoading && <Loading />}
-              {(!this.state.isLoading && this.state.errMessage) && this.state.errMessage}
-              {(!this.state.isLoading && this.state.repoList.length === 0) && emptyTip}
-              {(!this.state.isLoading && this.state.repoList.length > 0) &&
-                <RepoListView 
-                  isShowRepoOwner={true}
-                  currentGroup={this.state.currentGroup} 
-                  repoList={this.state.repoList} 
-                />
-              }
-            </div>
-          </div>
-        </div>
-      </Fragment>
+      <SharedRepoView {...this.state} {...this.props}/>
     );
   }
 }

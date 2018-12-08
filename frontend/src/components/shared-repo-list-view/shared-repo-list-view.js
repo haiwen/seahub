@@ -1,14 +1,15 @@
-import React from 'react';
+import React, {Fragment} from 'react';
 import PropTypes from 'prop-types';
 import { gettext } from '../../utils/constants';
-import RepoListItem from './repo-list-item';
+import SharedRepoListItem from './shared-repo-list-item';
 
 const propTypes = {
-  isShowRepoOwner: PropTypes.bool.isRequired,
+  currentGroup: PropTypes.object,
   repoList: PropTypes.array.isRequired,
+  isShowRepoOwner: PropTypes.bool.isRequired,
 };
 
-class RepoListView extends React.Component {
+class SharedRepoListView extends React.Component {
 
   constructor(props) {
     super(props);
@@ -18,26 +19,27 @@ class RepoListView extends React.Component {
   }
 
   renderPCUI = () => {
+    let isShowRepoOwner = this.props.isShowRepoOwner;
     return (
       <table>
         <thead>
           <tr>
             <th width="4%"><span className="sr-only">{gettext("Library Type")}</span></th>
-            <th width="38%">{gettext("Name")}
+            <th width="40%">{gettext("Name")}
               <a className="table-sort-op by-name" href="#">{/*TODO: sort*/}<span className="sort-icon icon-caret-down hide"></span></a>
             </th>
-            <th width="10%"><span className="sr-only">{gettext("Actions")}</span></th>
-            <th width="14%">{gettext("Size")}</th>
-            <th width="18%">{gettext("Last Update")}
+            <th width="12%"><span className="sr-only">{gettext("Actions")}</span></th>
+            <th width={isShowRepoOwner ? '14%' : '22%'}>{gettext("Size")}</th>
+            <th width={isShowRepoOwner ? '14%' : '22%'}>{gettext("Last Update")}
               <a className="table-sort-op by-time" href="#">{/*TODO: sort*/}<span className="sort-icon icon-caret-up"></span></a>
             </th>
-            <th width="16%">{gettext("Owner")}</th>
+            {isShowRepoOwner && <th width="16%">{gettext("Owner")}</th>}
           </tr>
         </thead>
         <tbody>
           {this.props.repoList.map(repo => {
             return (
-              <RepoListItem
+              <SharedRepoListItem
                 key={repo.repo_id}
                 repo={repo}
                 isShowRepoOwner={this.props.isShowRepoOwner}
@@ -52,15 +54,22 @@ class RepoListView extends React.Component {
   }
 
   renderMobileUI = () => {
+    let isShowRepoOwner = this.props.isShowRepoOwner;
     return (
       <table>
         <thead>
           <tr>
             <th width="18%"><span className="sr-only">{gettext("Library Type")}</span></th>
             <th width="68%">
-              {gettext("Sort:")} {/* TODO: sort */}
-              {gettext("name")}<a className="table-sort-op mobile-table-sort-op by-name" href="#"> <span className="sort-icon icon-caret-down hide"></span></a>
-              {gettext("last update")}<a className="table-sort-op mobile-table-sort-op by-time" href="#"> <span className="sort-icon icon-caret-up"></span></a>
+              {isShowRepoOwner ? (
+                <Fragment>
+                  {gettext("Sort:")} {/* TODO: sort */}
+                  {gettext("name")}<a className="table-sort-op mobile-table-sort-op by-name" href="#"> <span className="sort-icon icon-caret-down hide"></span></a>
+                  {gettext("last update")}<a className="table-sort-op mobile-table-sort-op by-time" href="#"> <span className="sort-icon icon-caret-up"></span></a>
+                </Fragment>
+              ) :
+              (gettext('name'))
+              }
             </th>
             <th width="14%"><span className="sr-only">{gettext("Actions")}</span></th>
           </tr>
@@ -68,7 +77,7 @@ class RepoListView extends React.Component {
         <tbody>
           {this.props.repoList.map(repo => {
             return (
-              <RepoListItem
+              <SharedRepoListItem
                 key={repo.repo_id}
                 repo={repo}
                 isShowRepoOwner={this.props.isShowRepoOwner}
@@ -91,6 +100,6 @@ class RepoListView extends React.Component {
   }
 }
 
-RepoListView.propTypes = propTypes;
+SharedRepoListView.propTypes = propTypes;
 
-export default RepoListView;
+export default SharedRepoListView;

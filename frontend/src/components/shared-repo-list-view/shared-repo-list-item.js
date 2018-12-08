@@ -6,10 +6,10 @@ import { Utils } from '../../utils/utils';
 import { gettext, siteRoot, isPro, username, folderPermEnabled } from '../../utils/constants';
 
 const propTypes = {
+  currentGroup: PropTypes.object,
   repo: PropTypes.object.isRequired,
   isItemFreezed: PropTypes.bool.isRequired,
   isShowRepoOwner: PropTypes.bool.isRequired,
-  currentGroup: PropTypes.object.isRequired
 };
 
 class RepoListItem extends React.Component {
