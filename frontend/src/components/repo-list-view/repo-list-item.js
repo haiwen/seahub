@@ -108,10 +108,10 @@ class RepoListItem extends React.Component {
 
     const share = <a href="#" className={shareIconClassName} title={gettext("Share")} onClick={this.share}></a>;
     const unshare = <a href="#" className={unshareIconClassName} title={gettext("Unshare")} onClick={this.unshare}></a>
+    const deleteOperation = <a href="#" className={deleteIconClassName} title={gettext('Delete')} onClick={this.deleteItem}></a>;
 
     const shareDropdownItem = <DropdownItem onClick={this.share}>{gettext('Share')}</DropdownItem>;
     const unshareDropdownItem = <DropdownItem onClick={this.unshare}>{gettext('Unshare')}</DropdownItem>;
-
     if (isPro) {
       if (repo.owner_email.indexOf('@seafile_group') != -1) { // group owned repo
         if (isStaff) {
@@ -119,7 +119,7 @@ class RepoListItem extends React.Component {
             desktopOperations = (
               <Fragment>
                 {share}
-                <a href="#" className={deleteIconClassName} title={gettext('Delete')} onClick={this.deleteItem}></a>
+                {deleteOperation}
                 <Dropdown isOpen={this.state.isOperationShow} toggle={this.toggleOperationMenu}>
                   {commonToggle}
                   <DropdownMenu>
@@ -170,7 +170,7 @@ class RepoListItem extends React.Component {
     }
 
     const mobileOperations = (
-      <Dropdown isOpen={this.state.isOperationShow} toggle={this.toggleOperationMenu}>
+      <Dropdown isOpen={this.state.isItemMenuShow} toggle={this.toggleOperationMenu}>
         {commonToggle}
         <div className={`${this.state.isItemMenuShow?'':'d-none'}`} onClick={this.toggleOperationMenu}>
           <div className="mobile-operation-menu-bg-layer"></div>
