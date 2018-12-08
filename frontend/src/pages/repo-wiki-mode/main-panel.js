@@ -79,10 +79,6 @@ class MainPanel extends Component {
         });
       });
     });
-    let that = this;
-    setTimeout(function() {
-      that.getTitlesInfo();
-    }, 500);
     if (this.props.hash) {
       let hash = this.props.hash;
       setTimeout(function() {
@@ -134,8 +130,8 @@ class MainPanel extends Component {
     // todo
   }
 
-  handlePageScroll = (e) => {    
-    if (this.props.pathExist && this.props.isViewFile && !this.pageScroll && this.titlesInfo.length > 0) {
+  handlePageScroll = () => {    
+    if (this.props.pathExist && this.props.isViewFile && !this.pageScroll &&  this.titlesInfo && this.titlesInfo.length > 0) {
       this.pageScroll = true;
       let that = this;
       setTimeout(function() {
@@ -164,13 +160,8 @@ class MainPanel extends Component {
     }
   }
 
-  getTitlesInfo = () => {
-    let titlesInfo = [];
-    let headingList = document.querySelectorAll('h2[id^="user-content"], h3[id^="user-content"]');
-    for (let i = 0; i < headingList.length; i++) {
-      titlesInfo.push(headingList[i].offsetTop);
-    }
-    this.titlesInfo = titlesInfo;
+  onContentRendered = (markdownViewer) => {
+    this.titlesInfo = markdownViewer.titlesInfo;
   }
 
   render() {
@@ -229,6 +220,7 @@ class MainPanel extends Component {
                       lastModified = {this.props.lastModified}
                       isFileLoading={this.props.isFileLoading}
                       activeTitleIndex={this.state.activeTitleIndex}
+                      onContentRendered={this.onContentRendered}
                     /> :
                     <Fragment>
                       <DirentListView
