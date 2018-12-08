@@ -101,9 +101,19 @@ class GroupView extends React.Component {
 
   onCreateRepo = (repo) => {
     let groupId = this.props.groupID;
-    seafileAPI.createGroupRepo(groupId, repo).then(() => {
-      //todo update group list
+    seafileAPI.createGroupRepo(groupId, repo).then(res => {
+      let repo = new RepoInfo(res.data);
+      let repoList = this.addRepoItem(repo);
+      this.setState({repoList: repoList});
+    }).catch(() => {
+      //todo
     });
+  }
+
+  addRepoItem = (repo) => {
+    let newRepoList = this.state.repoList.map(item => {return item;});
+    newRepoList.push(repo);
+    return newRepoList;
   }
 
   getEmptyTip = () => {

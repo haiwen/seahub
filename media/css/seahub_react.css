@@ -83,6 +83,7 @@
 .sf2-icon-close:before { content:"\e035"; }
 .sf2-icon-two-columns:before { content:"\e036"; }
 .sf2-icon-tag:before {content:"\e037"}
+.sf2-icon-x3:before {content:"\e035";}
 
 /* common class and element style*/
 a { color:#eb8205; }
