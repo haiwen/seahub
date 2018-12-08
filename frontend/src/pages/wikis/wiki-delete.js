@@ -22,8 +22,8 @@ class WikiDelete extends React.Component {
           <p>{gettext('Are you sure you want to delete this wiki?')}</p>
         </ModalBody>
         <ModalFooter>
-          <Button outline color="secondary" onClick={this.toggle}>{gettext('Cancel')}</Button>
-          <Button outline color="danger" onClick={this.props.handleSubmit}>{gettext('Submit')}</Button>
+          <Button color="secondary" onClick={this.toggle}>{gettext('Cancel')}</Button>
+          <Button color="danger" onClick={this.props.handleSubmit}>{gettext('Delete')}</Button>
         </ModalFooter>
       </Modal>
     );

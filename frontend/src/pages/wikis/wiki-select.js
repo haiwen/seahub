@@ -76,8 +76,8 @@ class WikiSelect extends React.Component {
           </table>
         </ModalBody>
         <ModalFooter>
-          <Button outline color="secondary" onClick={this.toggle}>{gettext('Cancel')}</Button>
-          <Button outline color="primary" onClick={this.handleSubmit}>{gettext('Submit')}</Button>
+          <Button color="secondary" onClick={this.toggle}>{gettext('Cancel')}</Button>
+          <Button color="primary" onClick={this.handleSubmit}>{gettext('Submit')}</Button>
         </ModalFooter>
       </Modal>
     );

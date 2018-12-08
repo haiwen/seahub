@@ -56,8 +56,8 @@ class WikiDelete extends React.Component {
           <Input onKeyPress={this.handleKeyPress} innerRef={input => {this.newName = input}} value={this.state.name} onChange={this.inputNewName}/>
         </ModalBody>
         <ModalFooter>
-          <Button outline color="secondary" onClick={this.toggle}>{gettext('Cancel')}</Button>
-          <Button outline color="primary" onClick={this.handleSubmit}>{gettext('Submit')}</Button>
+          <Button color="secondary" onClick={this.toggle}>{gettext('Cancel')}</Button>
+          <Button color="primary" onClick={this.handleSubmit}>{gettext('Submit')}</Button>
         </ModalFooter>
       </Modal>
     );
