@@ -16,6 +16,7 @@ import WikiCreate from './wiki-create';
 
 const itempropTypes = {
   wiki: PropTypes.object.isRequired,
+  renameWiki: PropTypes.func.isRequired,
   deleteWiki: PropTypes.func.isRequired,
 };
 
@@ -30,7 +31,6 @@ class Item extends Component {
       isShowMenuControl: false,
       isRenameing: false,
       highlight: '',
-      wiki: this.props.wiki,
     };
   }
 
@@ -98,7 +98,7 @@ class Item extends Component {
   }
 
   onRenameConfirm = (newName) => {
-    let wiki = this.state.wiki;
+    let wiki = this.props.wiki;
 
     if (newName === wiki.name) {
       this.onRenameCancel();
@@ -132,15 +132,8 @@ class Item extends Component {
   }
 
   renameWiki = (newName) => {
-    let wiki = this.state.wiki;
-    seafileAPI.renameWiki(wiki.slug, newName).then((res) => {
-      this.setState({wiki: res.data});
-    }).catch((error) => {
-      if(error.response) {
-        let errorMsg = error.response.data.error_msg;
-        Toast.error(errorMsg);
-      }
-    });
+    let wiki = this.props.wiki;
+    this.props.renameWiki(wiki, newName);
   }
 
   deleteWiki = () => {
@@ -152,7 +145,7 @@ class Item extends Component {
   }
 
   render() {
-    let wiki = this.state.wiki;
+    let wiki = this.props.wiki;
     let userProfileURL = `${siteRoot}profile/${encodeURIComponent(wiki.owner)}/`;
 
     return (
@@ -194,6 +187,7 @@ Item.propTypes = itempropTypes;
 
 const contentpropTypes = {
   data: PropTypes.object.isRequired,
+  renameWiki: PropTypes.func.isRequired,
   deleteWiki: PropTypes.func.isRequired,
 };
 
@@ -219,7 +213,11 @@ class WikisContent extends Component {
           </thead>
           <tbody>
             {wikis.map((wiki, index) => {
-              return(<Item key={index} wiki={wiki} deleteWiki={this.props.deleteWiki} />);
+              return(
+                <Item key={index} wiki={wiki}
+                  renameWiki={this.props.renameWiki}
+                  deleteWiki={this.props.deleteWiki}
+                />);
             })}
           </tbody>
         </table>
@@ -340,6 +338,25 @@ class Wikis extends Component {
     });
   }
 
+  renameWiki = (wiki, newName) => {
+    seafileAPI.renameWiki(wiki.slug, newName).then((res) => {
+      let wikis = this.state.wikis.map((item) => {
+        if (item.name === wiki.name) {
+          item = res.data;
+        }
+        return item;
+      });
+      this.setState({
+        wikis: wikis
+      });
+    }).catch((error) => {
+      if(error.response) {
+        let errorMsg = error.response.data.error_msg;
+        Toast.error(errorMsg);
+      }
+    });
+  }
+
   deleteWiki = (wiki) => {
     seafileAPI.deleteWiki(wiki.slug).then(() => {
       this.setState({
@@ -391,6 +408,7 @@ class Wikis extends Component {
             {(this.state.loading || this.state.wikis.length !== 0) &&
               <WikisContent
                 data={this.state}
+                renameWiki={this.renameWiki}
                 deleteWiki={this.deleteWiki}
               />
             }
