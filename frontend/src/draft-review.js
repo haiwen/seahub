@@ -10,7 +10,6 @@ import { siteRoot, gettext, reviewID, draftOriginFilePath, draftFilePath, draftO
 import { seafileAPI } from './utils/seafile-api';
 import axios from 'axios';
 import DiffViewer from '@seafile/seafile-editor/dist/viewer/diff-viewer';
-import { htmlSerializer } from '@seafile/seafile-editor/dist/utils/serialize-html';
 import { serialize } from '@seafile/seafile-editor/dist/utils/slate2markdown/serialize';
 import Loading from './components/loading';
 import toaster from './components/toast';
@@ -22,7 +21,7 @@ import { findRange } from '@seafile/slate-react';
 import { Nav, NavItem, NavLink, TabContent, TabPane } from 'reactstrap';
 import classnames from 'classnames';
 import HistoryList from './pages/review/history-list';
-import { Document, Block, Value } from 'slate';
+import { Value } from 'slate';
 
 import './assets/css/fa-solid.css';
 import './assets/css/fa-regular.css';
@@ -55,7 +54,7 @@ class DraftReview extends React.Component {
       changedNodes: [],
       isShowCommentDialog: false,
     };
-    this.selectedText = '';
+    this.quote = '';
     this.newIndex = null;
     this.oldIndex = null;
     this.changeIndex = -1;
@@ -246,34 +245,8 @@ class DraftReview extends React.Component {
     }
   }
 
-  getSelectedText = () => {
-    const native = window.getSelection();
-    const nativeRange = native.getRangeAt(0);
-    let contents = nativeRange.cloneContents();
-    const div = window.document.createElement('div');
-    div.appendChild(contents);
-    div.setAttribute('contenteditable', true);
-    let fragmentDOM = htmlSerializer.deserialize(div.innerHTML).document;
-    let nodes = [];
-    fragmentDOM.nodes.map(node => {
-      let newNode = Block.create({
-        data: node.data,
-        key: node.key,
-        nodes: node.nodes,
-        type: 'blockquote'
-      });
-      nodes.push(newNode);
-    });
-    let newDocument = Document.create({
-      nodes: nodes
-    });
-    let newValue = Value.create({
-      document: newDocument
-    });
-    this.selectedText = serialize(newValue);
-  }
-
-  getIndexs = () => {
+  getQuote = () => {
+    this.quote = '';
     let range = this.setBtnPosition();
     if (!range) {
       return;
@@ -306,6 +279,11 @@ class DraftReview extends React.Component {
         range = range.moveFocusTo(nextText.key, 0); 
       }
     }
+    let fragment = document.getFragmentAtRange(range);
+    let newValue = Value.create({
+      document: fragment
+    });
+    this.quote = serialize(newValue.toJSON());
     let blockPath = document.createSelection(range).anchor.path.slice(0, 1);
     let node = document.getNode(blockPath);
     this.newIndex = node.data.get('new_index');
@@ -314,8 +292,10 @@ class DraftReview extends React.Component {
 
   addComment = (e) => {
     e.stopPropagation();
-    this.getSelectedText();
-    this.getIndexs();
+    this.getQuote();
+    if (!this.quote) {
+      return;
+    }
     this.setState({
       isShowCommentDialog: true
     });
@@ -341,7 +321,7 @@ class DraftReview extends React.Component {
     return scroller;
   }
 
-  scrollToQuote = (newIndex, oldIndex, selectedText) => {
+  scrollToQuote = (newIndex, oldIndex, quote) => {
     const nodes = this.refs.diffViewer.value.document.nodes;
     let key;
     nodes.map((node) => {
@@ -351,7 +331,7 @@ class DraftReview extends React.Component {
     });
     if (typeof(key) !== 'string') {
       nodes.map((node) => {
-        if (node.text.indexOf(selectedText) > 0) {
+        if (node.text.indexOf(quote) > 0) {
           key = node.key;
         }
       });
@@ -633,7 +613,7 @@ class DraftReview extends React.Component {
           <ReviewCommentDialog
             toggleCommentDialog={this.toggleCommentDialog}
             onCommentAdded={this.onCommentAdded}
-            selectedText={this.selectedText}
+            quote={this.quote}
             newIndex={this.newIndex}
             oldIndex={this.oldIndex}
           />
