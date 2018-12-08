@@ -26,7 +26,7 @@ class LibHistorySetting extends React.Component {
   }
 
   componentDidMount() {
-    seafileAPI.getRepoHistortLimit(this.props.repoID).then(res => {
+    seafileAPI.getRepoHistoryLimit(this.props.repoID).then(res => {
       this.setState({
         keepDays: res.data.keep_days,
         allHistory: res.data.keep_days < 0 ? true : false,
@@ -44,7 +44,7 @@ class LibHistorySetting extends React.Component {
     let reg = /^-?\d+$/;
     let flag = reg.test(days);
     if (flag) {  
-      seafileAPI.setRepoHistortLimit(repoID, days).then(res => {
+      seafileAPI.setRepoHistoryLimit(repoID, days).then(res => {
         this.setState({
           keepDays: res.data.keep_days
         });

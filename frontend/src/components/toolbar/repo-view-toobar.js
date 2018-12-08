@@ -1,8 +1,10 @@
 import React, { Fragment } from 'react';
 import PropTypes from 'prop-types';
-import { gettext } from '../../utils/constants';
+import { Link } from '@reach/router';
+import { siteRoot, gettext } from '../../utils/constants';
 import ModalPortal from '../modal-portal';
 import CreateRepoDialog from '../dialog/create-repo-dialog';
+import { DropdownToggle, Dropdown, DropdownMenu, DropdownItem } from 'reactstrap';
 
 const propTypes = {
   // isOwnLibrary: PropTypes.bool.isRequired,
@@ -16,6 +18,7 @@ class RepoViewToolbar extends React.Component {
     super(props);
     this.state = {
       isCreateRepoDialogShow: false,
+      isOpen: false,
     };
   }
 
@@ -26,6 +29,14 @@ class RepoViewToolbar extends React.Component {
 
   onCreateToggle = () => {
     this.setState({isCreateRepoDialogShow: !this.state.isCreateRepoDialogShow});
+  }
+
+  toggleMore = () => {
+    this.setState({ isOpen: !this.state.isOpen });
+  }
+
+  onDeleteRepoPage = () => {
+    console.log('turn to delete page');
   }
 
   render() {
@@ -39,7 +50,16 @@ class RepoViewToolbar extends React.Component {
               {gettext('New Library')}
             </button>
             {this.props.libraryType !== 'group' && (
-              <button className="btn btn-secondary operation-item" title={gettext('More')} onClick={this.onShareClick}>{gettext('More')}</button>
+              <Dropdown isOpen={this.state.isOpen} toggle={this.toggleMore}>
+                <DropdownToggle className='btn btn-secondary operation-item'>
+                  {gettext('More')}
+                </DropdownToggle>
+                <DropdownMenu>
+                <DropdownItem>
+                <Link to={siteRoot + 'my-libs/deleted/'}>{gettext('Deleted Libraries')}</Link>
+                </DropdownItem>
+                </DropdownMenu>
+              </Dropdown>
             )}
           </div>
         </div>
