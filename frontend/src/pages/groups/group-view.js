@@ -9,7 +9,7 @@ import RepoInfo from '../../models/repoInfo';
 import CommonToolbar from '../../components/toolbar/common-toolbar';
 import CreateRepoDialog from '../../components/dialog/create-repo-dialog';
 import CreateDepartmentRepoDialog from '../../components/dialog/create-department-repo-dialog';
-import ShareRepoListView from '../../components/share-repo-list-view/share-repo-list-view';
+import SharedRepoListView from '../../components/shared-repo-list-view/shared-repo-list-view';
 
 const propTypes = {
   onShowSidePanel: PropTypes.func.isRequired,
@@ -223,7 +223,7 @@ class GroupView extends React.Component {
               {(!this.state.isLoading && errMessage) && errMessage}
               {(!this.state.isLoading && this.state.repoList.length === 0) && emptyTip}
               {(!this.state.isLoading && this.state.repoList.length > 0) &&
-                <ShareRepoListView 
+                <SharedRepoListView 
                   repoList={this.state.repoList} 
                   currentGroup={this.state.currentGroup} 
                   onItemUnshared={this.onItemUnshared}

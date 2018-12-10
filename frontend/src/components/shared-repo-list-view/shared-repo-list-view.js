@@ -1,7 +1,7 @@
 import React, {Fragment} from 'react';
 import PropTypes from 'prop-types';
 import { gettext } from '../../utils/constants';
-import ShareRepoListItem from './share-repo-list-item';
+import SharedRepoListItem from './shared-repo-list-item';
 
 const propTypes = {
   currentGroup: PropTypes.object,
@@ -10,7 +10,7 @@ const propTypes = {
   onItemUnshared: PropTypes.func.isRequired,
 };
 
-class ShareRepoListView extends React.Component {
+class SharedRepoListView extends React.Component {
 
   constructor(props) {
     super(props);
@@ -30,7 +30,7 @@ class ShareRepoListView extends React.Component {
       <Fragment>
         {this.props.repoList.map(repo => {
           return (
-            <ShareRepoListItem
+            <SharedRepoListItem
               key={repo.repo_id}
               repo={repo}
               currentGroup={this.props.currentGroup}
@@ -100,6 +100,6 @@ class ShareRepoListView extends React.Component {
   }
 }
 
-ShareRepoListView.propTypes = propTypes;
+SharedRepoListView.propTypes = propTypes;
 
-export default ShareRepoListView;
+export default SharedRepoListView;

@@ -6,7 +6,7 @@ import Loading from '../../components/loading';
 import Group from '../../models/group';
 import RepoInfo from '../../models/repoInfo';
 import GeneralToolbar from '../../components/toolbar/general-toolbar';
-import ShareRepoListView from '../../components/share-repo-list-view/share-repo-list-view';
+import SharedRepoListView from '../../components/shared-repo-list-view/shared-repo-list-view';
 
 import '../../css/groups.css';
 
@@ -43,7 +43,7 @@ class RepoListViewPanel extends React.Component {
         </h4>
         {this.state.repoList.length === 0 ? 
           emptyTip :
-          <ShareRepoListView 
+          <SharedRepoListView 
             isShowTableThread={false}
             isShowRepoOwner={false} 
             currentGroup={this.props.group} 
