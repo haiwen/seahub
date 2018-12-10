@@ -1,10 +1,14 @@
-import React from 'react';
+import React,{ Fragment } from 'react';
 import PropTypes from 'prop-types';
 import { gettext, username, loginUrl } from '../../utils/constants';
 import { seafileAPI } from '../../utils/seafile-api';
+import Loading from '../../components/loading';
 import Group from '../../models/group';
 import RepoInfo from '../../models/repoInfo';
-import SharedRepoView from '../../components/repo-view/share-repo-view';
+import CommonToolbar from '../../components/toolbar/common-toolbar';
+import RepoViewToolbar from '../../components/toolbar/repo-view-toobar';
+import CurRepoPath from '../../components/cur-repo-path/';
+import ShareRepoListView from '../../components/share-repo-list-view/share-repo-list-view';
 
 const propTypes = {
   onShowSidePanel: PropTypes.func.isRequired,
@@ -54,19 +58,19 @@ class GroupView extends React.Component {
         if (error.response.status == 403) {
           this.setState({
             isLoading: false,
-            errorMsg: gettext("Permission denied")
+            errMessage: gettext("Permission denied")
           });
           location.href = `${loginUrl}?next=${encodeURIComponent(location.href)}`;
         } else {
           this.setState({
             isLoading: false,
-            errorMsg: gettext("Error")
+            errMessage: gettext("Error")
           });
         }
       } else {
         this.setState({
           isLoading: false,
-          errorMsg: gettext("Please check the network.")
+          errMessage: gettext("Please check the network.")
         });
       }
     });
@@ -88,19 +92,19 @@ class GroupView extends React.Component {
         if (error.response.status == 403) {
           this.setState({
             isLoading: false,
-            errorMsg: gettext("Permission denied")
+            errMessage: gettext("Permission denied")
           });
           location.href = `${loginUrl}?next=${encodeURIComponent(location.href)}`;
         } else {
           this.setState({
             isLoading: false,
-            errorMsg: gettext("Error")
+            errMessage: gettext("Error")
           });
         }
       } else {
         this.setState({
           isLoading: false,
-          errorMsg: gettext("Please check the network.")
+          errMessage: gettext("Please check the network.")
         });
       }
     });
@@ -137,9 +141,55 @@ class GroupView extends React.Component {
     return emptyTip;
   }
 
+  onCreateRepo = (repo) => {
+    let groupId = this.props.groupID;
+    seafileAPI.createGroupRepo(groupId, repo).then(res => {
+      let repo = new RepoInfo(res.data);
+      let repoList = this.addRepoItem(repo);
+      this.setState({repoList: repoList});
+    }).catch(() => {
+      //todo
+    });
+  }
+
+  addRepoItem = (repo) => {
+    let newRepoList = this.state.repoList.map(item => {return item;});
+    newRepoList.push(repo);
+    return newRepoList;
+  }
+
   render() {
+    let { errMessage, emptyTip } = this.state;
     return (
-      <SharedRepoView {...this.state} {...this.props}/>
+      <Fragment>
+        <div className="main-panel-north">
+          <RepoViewToolbar 
+            libraryType={this.state.currentTab}
+            onShowSidePanel={this.props.onShowSidePanel} 
+            onCreateRepo={this.onCreateRepo} 
+          />
+          <CommonToolbar onSearchedClick={this.props.onSearchedClick} />
+        </div>
+        <div className="main-panel-center">
+          <div className="cur-view-container">
+            <div className="cur-view-path">
+              <CurRepoPath currentTab={this.state.currentTab} currentGroup={this.state.currentGroup}/>
+            </div>
+            <div className="cur-view-content">
+              {this.state.isLoading && <Loading />}
+              {(!this.state.isLoading && errMessage) && errMessage}
+              {(!this.state.isLoading && this.state.repoList.length === 0) && emptyTip}
+              {(!this.state.isLoading && this.state.repoList.length > 0) &&
+                <ShareRepoListView 
+                  repoList={this.state.repoList} 
+                  currentGroup={this.state.currentGroup} 
+                  isShowRepoOwner={this.state.isShowRepoOwner}
+                />
+              }
+            </div>
+          </div>
+        </div>
+      </Fragment>
     );
   }
 }
