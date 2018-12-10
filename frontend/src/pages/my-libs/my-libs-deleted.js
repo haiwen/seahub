@@ -4,6 +4,7 @@ import { gettext, siteRoot, lang } from '../../utils/constants';
 import { seafileAPI } from '../../utils/seafile-api';
 import toaster from '../../components/toast';
 import CommonToolbar from '../../components/toolbar/common-toolbar';
+import classnames from 'classnames';
 import moment from 'moment';
 moment.locale(lang);
 
@@ -99,6 +100,31 @@ class DeletedRepoTable extends Component {
 }
 
 class DeletedRepoItem extends Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      hideRestoreMenu: true,
+      highlight: '',
+    };
+  }
+
+  onMouseEnter = () => {
+    if (!this.props.isItemFreezed) {
+      this.setState({
+        hideRestoreMenu: false,
+        highlight: 'tr-highlight'
+      });
+    }
+  }
+
+  onMouseLeave = () => {
+    if (!this.props.isItemFreezed) {
+      this.setState({
+        hideRestoreMenu: true,
+        highlight: ''
+      });
+    }
+  } 
 
   restoreDeletedRepo = () => {
     let repoID = this.props.repo.repo_id;
@@ -118,11 +144,11 @@ class DeletedRepoItem extends Component {
     localTime = moment(localTime).fromNow();
 
     return (
-      <tr>
+      <tr className={this.state.highlight} onMouseEnter={this.onMouseEnter} onMouseLeave={this.onMouseLeave}>
         <td className="icon"><img src={siteRoot + 'media/img/lib/48/lib.png'} alt='icon' /></td>
         <td className="name">{this.props.repo.repo_name}</td>
         <td className="update">{localTime}</td>
-        <td className="menu-toggle"><i onClick={this.restoreDeletedRepo}className="fas fa-reply"></i></td>
+        <td className={classnames({hide: this.state.hideRestoreMenu})}><i onClick={this.restoreDeletedRepo} className="fas fa-reply"></i></td>
       </tr>
     );
   }
