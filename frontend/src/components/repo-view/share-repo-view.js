@@ -73,7 +73,7 @@ class ShareRepoView extends React.Component {
               {(!this.props.isLoading && this.state.repoList.length === 0) && emptyTip}
               {(!this.props.isLoading && this.state.repoList.length > 0) &&
                 <ShareRepoListView 
-                  repoList={this.props.repoList} 
+                  repoList={this.state.repoList} 
                   currentGroup={this.props.currentGroup} 
                   isShowRepoOwner={this.props.isShowRepoOwner}
                 />

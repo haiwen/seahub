@@ -18,6 +18,31 @@ class SharedRepoListView extends React.Component {
     };
   }
 
+  onFreezedItem = () => {
+    this.setState({
+      isItemFreezed: !this.state.isItemFreezed,
+    });
+  }
+
+  renderRepoListView = () => {
+    return (
+      <Fragment>
+        {this.props.repoList.map(repo => {
+          return (
+            <SharedRepoListItem
+              key={repo.repo_id}
+              repo={repo}
+              isShowRepoOwner={this.props.isShowRepoOwner}
+              currentGroup={this.props.currentGroup}
+              isItemFreezed={this.state.isItemFreezed}
+              onFreezedItem={this.onFreezedItem}
+            />
+          );
+        })}
+      </Fragment>
+    );
+  }
+
   renderPCUI = () => {
     let isShowRepoOwner = this.props.isShowRepoOwner;
     return (
@@ -37,17 +62,7 @@ class SharedRepoListView extends React.Component {
           </tr>
         </thead>
         <tbody>
-          {this.props.repoList.map(repo => {
-            return (
-              <SharedRepoListItem
-                key={repo.repo_id}
-                repo={repo}
-                isShowRepoOwner={this.props.isShowRepoOwner}
-                isItemFreezed={this.state.isItemFreezed}
-                currentGroup={this.props.currentGroup}
-              />
-            );
-          })}
+          {this.renderRepoListView()}
         </tbody>
       </table>
     );
@@ -75,17 +90,7 @@ class SharedRepoListView extends React.Component {
           </tr>
         </thead>
         <tbody>
-          {this.props.repoList.map(repo => {
-            return (
-              <SharedRepoListItem
-                key={repo.repo_id}
-                repo={repo}
-                isShowRepoOwner={this.props.isShowRepoOwner}
-                isItemFreezed={this.state.isItemFreezed}
-                currentGroup={this.props.currentGroup}
-              />
-            );
-          })}
+          {this.renderRepoListView()}
         </tbody>
       </table>
     );

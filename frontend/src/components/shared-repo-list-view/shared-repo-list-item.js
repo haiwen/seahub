@@ -10,6 +10,7 @@ const propTypes = {
   repo: PropTypes.object.isRequired,
   isItemFreezed: PropTypes.bool.isRequired,
   isShowRepoOwner: PropTypes.bool.isRequired,
+  onFreezedItem: PropTypes.func.isRequired,
 };
 
 class RepoListItem extends React.Component {
@@ -21,26 +22,45 @@ class RepoListItem extends React.Component {
       isOperationShow: false,
       isItemMenuShow: false,
     };
+    this.isDeparementOnwerGroupMember = false;
   }
 
   onMouseEnter = () => {
-    this.setState({
-      highlight: true,
-      isOperationShow: true,
-    });
+    if (!this.props.isItemFreezed) {
+      this.setState({
+        highlight: true,
+        isOperationShow: true,
+      });
+    }
   }
   
   onMouseLeave = () => {
-    this.setState({
-      highlight: false,
-      isOperationShow: false,
-    });
+    if (!this.props.isItemFreezed) {
+      this.setState({
+        highlight: false,
+        isOperationShow: false,
+      });
+    }
+  }
+
+  clickOperationMenuToggle = (e) => {
+    e.preventDefault();
+    this.toggleOperationMenu();
   }
 
   toggleOperationMenu = () => {
-    this.setState({
-      isItemMenuShow: !this.state.isItemMenuShow
-    });
+    if (this.props.isItemFreezed) {
+      this.setState({
+        highlight: false,
+        isOperationShow: false,
+        isItemMenuShow: !this.state.isItemMenuShow
+      });
+    } else {
+      this.setState({
+        isItemMenuShow: !this.state.isItemMenuShow
+      });
+    }
+    this.props.onFreezedItem();
   }
 
   getRepoComputeParams = () => {
@@ -67,132 +87,179 @@ class RepoListItem extends React.Component {
     return { iconUrl, iconTitle, libPath };
   }
 
+  onMenuItemClick = (e) => {
+    let operation = e.target.dataset.toggle;
+    switch(operation) {
+      case 'Rename':
+        this.onItemRename();
+        break;
+      case 'Folder Permission':
+        this.onItemPermisionChanged();
+        break;
+      case 'Details':
+        this.onItemDetails();
+        break;
+      case 'Share':
+        this.onItemShared();
+        break;
+      case 'Unshare':
+        this.onItemUnshared();
+        break;
+      default:
+        break;
+    }
+  }
+
+  onItemRename = () => {
+    // todo
+  }
+
+  onItemPermisionChanged = () => {
+    // todo
+  }
+
+  onItemDetails = () => {
+    // todo
+  }
+
+  onItemShared = () => {
+    // todo
+  }
+
+  onItemUnshared = () => {
+    // todo
+  }
+
+  onItemDelete = () => {
+    // todo
+  }
+
   generatorOperations = () => {
     let { repo, currentGroup } = this.props;
     let isStaff = currentGroup.admins.indexOf(username) > -1; //for group repolist;
     let isRepoOwner = repo.owner_email === username;
     let isAdmin = repo.is_admin;
-
-    let iconVisibility = this.state.isOperationShow ? '' : ' invisible';
-    let shareIconClassName = 'sf2-icon-share sf2-x repo-share-btn op-icon' + iconVisibility; 
-    let unshareIconClassName = 'sf2-icon-x3 sf2-x op-icon' + iconVisibility; 
-    let deleteIconClassName = 'sf2-icon-delete sf2-x op-icon' + iconVisibility;
-    let operationMenuToggleIconClassName = 'sf2-icon-caret-down item-operation-menu-toggle-icon op-icon';
-    if (window.innerWidth >= 768) {
-      operationMenuToggleIconClassName += iconVisibility;
-    }
-
-    const commonToggle = (
-      <DropdownToggle
-        tag="a" 
-        href="#" 
-        className={operationMenuToggleIconClassName} 
-        title={gettext('More Operations')}
-        onClick={this.clickOperationMenuToggle}
-        data-toggle="dropdown" 
-        aria-expanded={this.state.isItemMenuShow}
-      >
-      </DropdownToggle>
-    );
-
-    const commonOperationsInMenu = (
-      <React.Fragment>
-        <DropdownItem onClick={this.rename}>{gettext('Rename')}</DropdownItem>
-        {folderPermEnabled ? <DropdownItem onClick={this.folderPerm}>{gettext('Folder Permission')}</DropdownItem> : null}
-        <DropdownItem onClick={this.showDetails}>{gettext('Details')}</DropdownItem>
-      </React.Fragment>
-    );
-
-    let desktopOperations;
-    let mobileOperationMenu;
-
-    const share = <a href="#" className={shareIconClassName} title={gettext("Share")} onClick={this.share}></a>;
-    const unshare = <a href="#" className={unshareIconClassName} title={gettext("Unshare")} onClick={this.unshare}></a>
-    const deleteOperation = <a href="#" className={deleteIconClassName} title={gettext('Delete')} onClick={this.deleteItem}></a>;
-
-    const shareDropdownItem = <DropdownItem onClick={this.share}>{gettext('Share')}</DropdownItem>;
-    const unshareDropdownItem = <DropdownItem onClick={this.unshare}>{gettext('Unshare')}</DropdownItem>;
+    let operations = [];
+    // todo ,shared width me shared width all;
     if (isPro) {
-      if (repo.owner_email.indexOf('@seafile_group') != -1) { // group owned repo
-        if (isStaff) {
-          if (repo.owner_email == currentGroup.id + '@seafile_group') { // this repo belongs to the current group
-            desktopOperations = (
-              <Fragment>
-                {share}
-                {deleteOperation}
-                <Dropdown isOpen={this.state.isOperationShow} toggle={this.toggleOperationMenu}>
-                  {commonToggle}
-                  <DropdownMenu>
-                    {commonOperationsInMenu}
-                  </DropdownMenu>
-                </Dropdown>
-              </Fragment>
-            );
-            mobileOperationMenu = (
-              <Fragment>
-                {shareDropdownItem}
-                <DropdownItem onClick={this.deleteItem}>{gettext('Delete')}</DropdownItem>
-                {commonOperationsInMenu}
-              </Fragment>
-            );
+      if (repo.owner_email.indexOf('@seafile_group') != -1) {  //current repo is belong to a group;
+        if (isStaff && repo.owner_email == currentGroup.id + '@seafile_group') { //is a member of this current group,
+          this.isDeparementOnwerGroupMember = true;
+          if (folderPermEnabled) {
+            operations = ['Rename', 'Folder Permission', 'deatils'];
           } else {
-            desktopOperations = unshare;
-            mobileOperationMenu = unshareDropdownItem;
+            operations = ['Rename', 'Details']
           }
+        } else {
+          operations.push('Unshare');
         }
       } else {
-        desktopOperations = (
-          <Fragment>
-            {isRepoOwner || isAdmin ? share : null}
-            {isStaff || isRepoOwner || isAdmin ? unshare : null}
-          </Fragment>
-        );
-        mobileOperationMenu = (
-          <Fragment>
-            {isRepoOwner || isAdmin ? shareDropdownItem : null}
-            {isStaff || isRepoOwner || isAdmin ? unshareDropdownItem : null}
-          </Fragment>
-        );
+        if (isRepoOwner || isAdmin) {
+          operations.push('Share');
+        }
+        if (isStaff || isRepoOwner || isAdmin) {
+          operations.push('Unshare');
+        }
       }
     } else {
-      desktopOperations = (
-        <Fragment>
-          {isRepoOwner ? share : null}
-          {isStaff || isRepoOwner ? unshare : null}
-        </Fragment>
-      );
-      mobileOperationMenu = (
-        <Fragment>
-          {isRepoOwner ? shareDropdownItem : null}
-          {isStaff || isRepoOwner ? unshareDropdownItem : null}
-        </Fragment>
-      );
+      if (isRepoOwner) {
+        operations.push('share');
+      }
+      if (isStaff || isRepoOwner) {
+        operations.push('Unshare');
+      }
     }
+    return operations;
+  } 
 
-    const mobileOperations = (
+  generatorMobileMenu = () => {
+    let operations = this.generatorOperations();
+    if (this.isDeparementOnwerGroupMember) {
+      operations.unshift('unshare');
+      operations.unshift('share');
+    }
+    return (
       <Dropdown isOpen={this.state.isItemMenuShow} toggle={this.toggleOperationMenu}>
-        {commonToggle}
+        <DropdownToggle 
+          tag="a" 
+          className="sf2-icon-caret-down item-operation-menu-toggle-icon op-icon" 
+          title={gettext('More Operations')} 
+          data-toggle="dropdown" 
+          aria-expanded={this.state.isItemMenuShow}
+          onClick={this.clickOperationMenuToggle}
+        />
         <div className={`${this.state.isItemMenuShow?'':'d-none'}`} onClick={this.toggleOperationMenu}>
           <div className="mobile-operation-menu-bg-layer"></div>
           <div className="mobile-operation-menu">
-            {mobileOperationMenu}
+            {operations.map((item, index) => {
+              return (
+                <DropdownItem key={index} data-toggle={item} onClick={this.onMenuItemClick}>{gettext(item)}</DropdownItem>
+              );
+            })}
           </div>
         </div>
       </Dropdown>
     );
+  }
 
-    return { desktopOperations, mobileOperations }
+  generatorPCMenu = () => {
+    // scene one: (share, delete, itemToggle and other operations);
+    // scene two: (share, unshare), (share), (unshare)
+    let operations = this.generatorOperations();
+    const shareOperation   = <a href="#" className="sf2-icon-share sf2-x op-icon" title={gettext("Share")} onClick={this.onItemShared}></a>;
+    const unshareOperation = <a href="#" className="sf2-icon-x3 sf2-x op-icon" title={gettext("Unshare")} onClick={this.onItemShared}></a>
+    const deleteOperation  = <a href="#" className="sf2-icon-delete sf2-x op-icon" title={gettext('Delete')} onClick={this.onItemDelete}></a>;
+    
+    if (this.isDeparementOnwerGroupMember) {
+      return (
+        <Fragment>
+          {shareOperation}
+          {deleteOperation}
+          <Dropdown isOpen={this.state.isItemMenuShow} toggle={this.toggleOperationMenu}>
+            <DropdownToggle 
+              tag="a" 
+              className="sf2-icon-caret-down item-operation-menu-toggle-icon op-icon" 
+              title={gettext('More Operations')}
+              data-toggle="dropdown" 
+              aria-expanded={this.state.isItemMenuShow}
+              onClick={this.clickOperationMenuToggle}
+            />
+            <DropdownMenu>
+              {operations.map((item, index) => {
+                return <DropdownItem key={index} data-toggle={item} onClick={this.onMenuItemClick}>{gettext(item)}</DropdownItem>
+              })}
+            </DropdownMenu>
+          </Dropdown>
+        </Fragment>
+      );
+    } else {
+      if (operations.length == 2) {
+        return (
+          <Fragment>
+            {shareOperation}
+            {unshareOperation}
+          </Fragment>
+        );
+      }
+      if (operations.length == 1 && operations[0] === 'share') {
+        return shareOperation;
+      }
+
+      if (operations.length == 1 && operations[0] === 'unshare') {
+        return unshareOperation;
+      }
+    }
+    return null;
   }
 
   renderPCUI = () => {
     let { iconUrl, iconTitle, libPath } = this.getRepoComputeParams();
     let { repo, isShowRepoOwner } = this.props;
-    let { desktopOperations } = this.generatorOperations();
     return (
       <tr className={this.state.highlight ? 'tr-highlight' : ''} onMouseEnter={this.onMouseEnter} onMouseLeave={this.onMouseLeave}>
         <td><img src={iconUrl} title={repo.iconTitle} alt={iconTitle} width="24" /></td>
         <td><a href={libPath}>{repo.repo_name}</a></td>
-        <td>{desktopOperations}</td>
+        <td>{this.state.isOperationShow && this.generatorPCMenu()}</td>
         <td>{repo.size}</td>
         <td title={moment(repo.last_modified).format('llll')}>{moment(repo.last_modified).fromNow()}</td>
         {isShowRepoOwner && <td title={repo.owner_contact_email}>{repo.owner_name}</td>}
@@ -203,7 +270,6 @@ class RepoListItem extends React.Component {
   renderMobileUI = () => {
     let { iconUrl, iconTitle, libPath } = this.getRepoComputeParams();
     let { repo, isShowRepoOwner } = this.props;
-    let { mobileOperations } = this.generatorOperations();
     return (
       <tr className={this.state.highlight ? 'tr-highlight' : ''}  onMouseEnter={this.onMouseEnter} onMouseLeave={this.onMouseLeave}>
         <td><img src={iconUrl} title={iconTitle} alt={iconTitle}/></td>
@@ -213,7 +279,7 @@ class RepoListItem extends React.Component {
           <span className="item-meta-info">{repo.size}</span>
           <span className="item-meta-info" title={moment(repo.last_modified).format('llll')}>{moment(repo.last_modified).fromNow()}</span>
         </td>
-        <td>{mobileOperations}</td>
+        <td>{this.generatorMobileMenu()}</td>
       </tr>
     );
   }
