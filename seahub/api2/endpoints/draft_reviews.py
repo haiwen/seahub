@@ -47,7 +47,8 @@ class DraftReviewsView(APIView):
         # case2: List the reviews of the user as reviewer and their associated reviewers by status
         reviews_2 = DraftReview.objects.get_reviews_by_reviewer_and_status(reviewer=username, status=st)
 
-        data = reviews_1 + reviews_2
+        result = reviews_1 + reviews_2
+        data = sorted(result, key=lambda k: k['updated_at'], reverse=True)
 
         return Response({'data': data})
 
