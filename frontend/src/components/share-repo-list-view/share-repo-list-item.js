@@ -13,7 +13,7 @@ const propTypes = {
   onFreezedItem: PropTypes.func.isRequired,
 };
 
-class RepoListItem extends React.Component {
+class SharedRepoListItem extends React.Component {
 
   constructor(props) {
     super(props);
@@ -136,7 +136,8 @@ class RepoListItem extends React.Component {
 
   generatorOperations = () => {
     let { repo, currentGroup } = this.props;
-    let isStaff = currentGroup.admins.indexOf(username) > -1; //for group repolist;
+    //todo this have a bug; use current api is not return admins param;
+    let isStaff = currentGroup.admins && currentGroup.admins.indexOf(username) > -1; //for group repolist;
     let isRepoOwner = repo.owner_email === username;
     let isAdmin = repo.is_admin;
     let operations = [];
@@ -293,6 +294,6 @@ class RepoListItem extends React.Component {
   }
 }
 
-RepoListItem.propTypes = propTypes;
+SharedRepoListItem.propTypes = propTypes;
 
-export default RepoListItem;
+export default SharedRepoListItem;

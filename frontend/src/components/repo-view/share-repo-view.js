@@ -6,7 +6,7 @@ import Loading from '../../components/loading';
 import CommonToolbar from '../../components/toolbar/common-toolbar';
 import RepoViewToolbar from '../../components/toolbar/repo-view-toobar';
 import CurRepoPath from '../../components/cur-repo-path/';
-import ShareRepoListView from '../../components/shared-repo-list-view/shared-repo-list-view';
+import ShareRepoListView from '../../components/share-repo-list-view/share-repo-list-view';
 
 const propTypes = {
   isLoading: PropTypes.bool.isRequired,

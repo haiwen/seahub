@@ -1,15 +1,16 @@
 import React, {Fragment} from 'react';
 import PropTypes from 'prop-types';
 import { gettext } from '../../utils/constants';
-import SharedRepoListItem from './shared-repo-list-item';
+import ShareRepoListItem from './share-repo-list-item';
 
 const propTypes = {
   currentGroup: PropTypes.object,
   repoList: PropTypes.array.isRequired,
   isShowRepoOwner: PropTypes.bool.isRequired,
+  isShowTableThread: PropTypes.bool,
 };
 
-class SharedRepoListView extends React.Component {
+class ShareRepoListView extends React.Component {
 
   constructor(props) {
     super(props);
@@ -29,7 +30,7 @@ class SharedRepoListView extends React.Component {
       <Fragment>
         {this.props.repoList.map(repo => {
           return (
-            <SharedRepoListItem
+            <ShareRepoListItem
               key={repo.repo_id}
               repo={repo}
               isShowRepoOwner={this.props.isShowRepoOwner}
@@ -45,9 +46,10 @@ class SharedRepoListView extends React.Component {
 
   renderPCUI = () => {
     let isShowRepoOwner = this.props.isShowRepoOwner;
+    let isShowTableThread = this.props.isShowTableThread !== undefined ? this.props.isShowTableThread : true;
     return (
       <table>
-        <thead>
+        <thead className={isShowTableThread ? '' : 'vh'}>
           <tr>
             <th width="4%"><span className="sr-only">{gettext("Library Type")}</span></th>
             <th width="40%">{gettext("Name")}
@@ -70,9 +72,10 @@ class SharedRepoListView extends React.Component {
 
   renderMobileUI = () => {
     let isShowRepoOwner = this.props.isShowRepoOwner;
+    let isShowTableThread = this.props.isShowTableThread !== undefined ? this.props.isShowTableThread : true;
     return (
       <table>
-        <thead>
+        <thead className={isShowTableThread ? '' : 'vh'}>
           <tr>
             <th width="18%"><span className="sr-only">{gettext("Library Type")}</span></th>
             <th width="68%">
@@ -105,6 +108,6 @@ class SharedRepoListView extends React.Component {
   }
 }
 
-SharedRepoListView.propTypes = propTypes;
+ShareRepoListView.propTypes = propTypes;
 
-export default SharedRepoListView;
+export default ShareRepoListView;
