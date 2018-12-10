@@ -1,13 +1,12 @@
 import React,{ Fragment } from 'react';
 import PropTypes from 'prop-types';
-import { gettext, username, loginUrl } from '../../utils/constants';
+import { gettext, siteRoot, username, loginUrl } from '../../utils/constants';
 import { seafileAPI } from '../../utils/seafile-api';
 import Loading from '../../components/loading';
 import ModalPortal from '../../components/modal-portal';
 import Group from '../../models/group';
 import RepoInfo from '../../models/repoInfo';
 import CommonToolbar from '../../components/toolbar/common-toolbar';
-import CurRepoPath from '../../components/cur-repo-path/';
 import CreateRepoDialog from '../../components/dialog/create-repo-dialog';
 import CreateDepartmentRepoDialog from '../../components/dialog/create-department-repo-dialog';
 import ShareRepoListView from '../../components/share-repo-list-view/share-repo-list-view';
@@ -181,7 +180,8 @@ class GroupView extends React.Component {
   }
 
   render() {
-    let { errMessage, emptyTip } = this.state;
+    let { errMessage, emptyTip, currentGroup } = this.state;
+    let isShowSettingIcon = !(currentGroup && currentGroup.parent_group_id !== 0 && currentGroup.admins.indexOf(username) === -1);
     return (
       <Fragment>
         <div className="main-panel-north">
@@ -199,7 +199,24 @@ class GroupView extends React.Component {
         <div className="main-panel-center">
           <div className="cur-view-container">
             <div className="cur-view-path">
-              <CurRepoPath libraryType={this.state.libraryType} currentGroup={this.state.currentGroup}/>
+              {currentGroup && (
+                <Fragment>
+                  <div className="path-container">
+                    <a href={`${siteRoot}groups/`}>{gettext("Groups")}</a>
+                    <span className="path-split">/</span>
+                    <span>{currentGroup.name}</span>
+                    {currentGroup.parent_group_id !== 0 && (
+                      <span className="address-book-group-icon icon-building" title={gettext("This is a special group representing a department.")}></span>
+                    )}
+                  </div>
+                  <div className="path-tool">
+                    {isShowSettingIcon && (
+                      <a href="#" className="sf2-icon-cog1 op-icon group-top-op-icon" title={gettext("Settings")} aria-label={gettext("Settings")}></a>
+                    )}
+                    <a href="#" className="sf2-icon-user2 op-icon group-top-op-icon" title={gettext("Members")} aria-label={gettext("Members")}></a>
+                  </div>
+                </Fragment>
+              )}
             </div>
             <div className="cur-view-content">
               {this.state.isLoading && <Loading />}

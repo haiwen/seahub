@@ -77,11 +77,9 @@ class ShareRepoListView extends React.Component {
           <tr>
             <th width="18%"><span className="sr-only">{gettext("Library Type")}</span></th>
             <th width="68%">
-              <Fragment>
-                {gettext("Sort:")} {/* TODO: sort */}
-                {gettext("name")}<a className="table-sort-op mobile-table-sort-op by-name" href="#"> <span className="sort-icon icon-caret-down hide"></span></a>
-                {gettext("last update")}<a className="table-sort-op mobile-table-sort-op by-time" href="#"> <span className="sort-icon icon-caret-up"></span></a>
-              </Fragment>
+              {gettext("Sort:")} {/* TODO: sort */}
+              {gettext("name")}<a className="table-sort-op mobile-table-sort-op by-name" href="#"> <span className="sort-icon icon-caret-down hide"></span></a>
+              {gettext("last update")}<a className="table-sort-op mobile-table-sort-op by-time" href="#"> <span className="sort-icon icon-caret-up"></span></a>
             </th>
             <th width="14%"><span className="sr-only">{gettext("Actions")}</span></th>
           </tr>
