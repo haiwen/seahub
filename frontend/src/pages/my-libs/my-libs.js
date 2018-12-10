@@ -536,8 +536,8 @@ class MyLibraries extends Component {
 
   renameRepo = (repoID, newName) => {
     let array = this.state.items;
-    for(var i=0;i<array.length;i++){
-      if(array[i].repo_id==repoID){
+    for (var i=0; i < array.length; i++) {
+      if (array[i].repo_id === repoID) {
         array[i].repo_name=newName; 
         break;
       }

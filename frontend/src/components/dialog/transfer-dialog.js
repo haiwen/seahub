@@ -66,10 +66,13 @@ class TransferDialog extends React.Component {
 
   render() {
     const itemName = this.props.itemName;
+    const innerSpan = '<span class="sf-font" title=' + itemName + '>' + itemName +'</span>';
+    let msg = gettext('Transfer Library {library_name} To');
+    let message = msg.replace('{library_name}', innerSpan);
     return (
       <Modal isOpen={true} centered={true}>
         <ModalHeader toggle={this.props.toggleDialog}>
-        {gettext('Transfer Library')} <span className="sf-font" title={itemName}>{itemName}</span> {gettext('TO')}
+          <div dangerouslySetInnerHTML={{__html:message}} />
         </ModalHeader>
         <ModalBody>
           <AsyncSelect

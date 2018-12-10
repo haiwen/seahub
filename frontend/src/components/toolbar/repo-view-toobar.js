@@ -35,10 +35,6 @@ class RepoViewToolbar extends React.Component {
     this.setState({ isOpen: !this.state.isOpen });
   }
 
-  onDeleteRepoPage = () => {
-    console.log('turn to delete page');
-  }
-
   render() {
     return (
       <Fragment>
