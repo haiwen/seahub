@@ -153,7 +153,7 @@ class Groups(APIView):
                             contact_email_dict[email] = email2contact_email(email)
 
                 for r in group_repos:
-                    repo_owner = repo_id_owner_dict.get(r.id, r.user),
+                    repo_owner = repo_id_owner_dict.get(r.id, r.user)
                     repo = {
                         "id": r.id,
                         "repo_id": r.id,

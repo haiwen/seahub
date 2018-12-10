@@ -18,8 +18,8 @@ import ShareAdminUploadLinks from './pages/share-admin/upload-links';
 import SharedLibraries from './pages/shared-libs/shared-libs';
 import MyLibraries from './pages/my-libs/my-libs';
 import DirView from './components/dir-view/dir-view';
-import Groups from './pages/group/groups';
-import Group from './pages/group/group';
+import Group from './pages/groups/group-view';
+import Groups from './pages/groups/groups-view';
 import MainContentWrapper from './components/main-content-wrapper';
 
 import './assets/css/fa-solid.css';
