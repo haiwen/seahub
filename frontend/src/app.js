@@ -49,7 +49,7 @@ class App extends Component {
       draftCounts: 0,
       draftList:[],
       isLoadingDraft: true,
-      currentTab: 'dashboard',
+      currentTab: '/',
     };
     this.currentTab = ''; //just for refresh brower
   }
@@ -112,9 +112,9 @@ class App extends Component {
     return (
       <div id="main">
         <SidePanel isSidePanelClosed={this.state.isSidePanelClosed} onCloseSidePanel={this.onCloseSidePanel} currentTab={currentTab} tabItemClick={this.tabItemClick} draftCounts={this.state.draftCounts} />
-
         <MainPanel>
           <Router>
+            <MyLibraries path={ siteRoot } onShowSidePanel={this.onShowSidePanel} onSearchedClick={this.onSearchedClick} />
             <FilesActivitiesWrapper path={siteRoot + 'dashboard'} onShowSidePanel={this.onShowSidePanel} onSearchedClick={this.onSearchedClick} />
             <DraftsViewWrapper path={siteRoot + 'drafts'}  
               currentTab={currentTab} 
