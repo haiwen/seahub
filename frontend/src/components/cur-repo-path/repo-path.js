@@ -4,14 +4,14 @@ import {gettext, siteRoot} from '../../utils/constants';
 
 const propTypes = {
   currentGroup: PropTypes.object, // for group
-  currentTab: PropTypes.string.isRequired, //for my-library, shared width me, shared whith all, groups 
+  libraryType: PropTypes.string.isRequired, //for my-library, shared width me, shared whith all, groups 
 };
 
 class RepoPath extends React.Component {
 
   render() {
-    let { currentTab, currentGroup } = this.props;
-    if (currentTab === 'group' && currentGroup) {
+    let { libraryType, currentGroup } = this.props;
+    if (libraryType === 'group' && currentGroup) {
       return (
         <div className="path-container">
           <a href={`${siteRoot}groups/`}>{gettext("Groups")}</a>
@@ -26,7 +26,7 @@ class RepoPath extends React.Component {
 
     return (
       <div className="path-container">
-        <span>{currentTab}</span>
+        <span>{libraryType}</span>
       </div>
     ); 
   }

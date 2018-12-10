@@ -4,18 +4,18 @@ import RepoPath from './repo-path';
 import RepoTool from './repo-tool';
 
 const propTypes = {
-  currentTab: PropTypes.string.isRequired,
+  libraryType: PropTypes.string.isRequired,
   currentGroup: PropTypes.object,
 };
 
 class CurGroupPath extends React.Component {
 
   render() {
-    let { currentTab, currentGroup } = this.props;
+    let { libraryType, currentGroup } = this.props;
     return (
       <Fragment>
-        <RepoPath currentTab={currentTab} currentGroup={currentGroup}/>
-        <RepoTool currentTab={currentTab} currentGroup={currentGroup}/>
+        <RepoPath libraryType={libraryType} currentGroup={currentGroup}/>
+        <RepoTool libraryType={libraryType} currentGroup={currentGroup}/>
       </Fragment>
     );
   }

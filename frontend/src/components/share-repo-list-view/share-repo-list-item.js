@@ -9,8 +9,8 @@ const propTypes = {
   currentGroup: PropTypes.object,
   repo: PropTypes.object.isRequired,
   isItemFreezed: PropTypes.bool.isRequired,
-  isShowRepoOwner: PropTypes.bool.isRequired,
   onFreezedItem: PropTypes.func.isRequired,
+  onItemUnshared: PropTypes.func.isRequired,
 };
 
 class SharedRepoListItem extends React.Component {
@@ -26,6 +26,15 @@ class SharedRepoListItem extends React.Component {
   }
 
   onMouseEnter = () => {
+    if (!this.props.isItemFreezed) {
+      this.setState({
+        highlight: true,
+        isOperationShow: true,
+      });
+    }
+  }
+
+  onMouseOver = () => {
     if (!this.props.isItemFreezed) {
       this.setState({
         highlight: true,
@@ -128,6 +137,7 @@ class SharedRepoListItem extends React.Component {
 
   onItemUnshared = () => {
     // todo
+    this.props.onItemUnshared(this.props.repo);
   }
 
   onItemDelete = () => {
@@ -208,7 +218,7 @@ class SharedRepoListItem extends React.Component {
     // scene two: (share, unshare), (share), (unshare)
     let operations = this.generatorOperations();
     const shareOperation   = <a href="#" className="sf2-icon-share sf2-x op-icon" title={gettext("Share")} onClick={this.onItemShared}></a>;
-    const unshareOperation = <a href="#" className="sf2-icon-x3 sf2-x op-icon" title={gettext("Unshare")} onClick={this.onItemShared}></a>
+    const unshareOperation = <a href="#" className="sf2-icon-x3 sf2-x op-icon" title={gettext("Unshare")} onClick={this.onItemUnshared}></a>
     const deleteOperation  = <a href="#" className="sf2-icon-delete sf2-x op-icon" title={gettext('Delete')} onClick={this.onItemDelete}></a>;
     
     if (this.isDeparementOnwerGroupMember) {
@@ -255,28 +265,28 @@ class SharedRepoListItem extends React.Component {
 
   renderPCUI = () => {
     let { iconUrl, iconTitle, libPath } = this.getRepoComputeParams();
-    let { repo, isShowRepoOwner } = this.props;
+    let { repo } = this.props;
     return (
-      <tr className={this.state.highlight ? 'tr-highlight' : ''} onMouseEnter={this.onMouseEnter} onMouseLeave={this.onMouseLeave}>
+      <tr className={this.state.highlight ? 'tr-highlight' : ''} onMouseEnter={this.onMouseEnter} onMouseOver={this.onMouseOver} onMouseLeave={this.onMouseLeave}>
         <td><img src={iconUrl} title={repo.iconTitle} alt={iconTitle} width="24" /></td>
         <td><a href={libPath}>{repo.repo_name}</a></td>
         <td>{this.state.isOperationShow && this.generatorPCMenu()}</td>
         <td>{repo.size}</td>
         <td title={moment(repo.last_modified).format('llll')}>{moment(repo.last_modified).fromNow()}</td>
-        {isShowRepoOwner && <td title={repo.owner_contact_email}>{repo.owner_name}</td>}
+        <td title={repo.owner_contact_email}>{repo.owner_name}</td>
       </tr>
     );
   }
   
   renderMobileUI = () => {
     let { iconUrl, iconTitle, libPath } = this.getRepoComputeParams();
-    let { repo, isShowRepoOwner } = this.props;
+    let { repo } = this.props;
     return (
-      <tr className={this.state.highlight ? 'tr-highlight' : ''}  onMouseEnter={this.onMouseEnter} onMouseLeave={this.onMouseLeave}>
+      <tr className={this.state.highlight ? 'tr-highlight' : ''}  onMouseEnter={this.onMouseEnter} onMouseOver={this.onMouseOver} onMouseLeave={this.onMouseLeave}>
         <td><img src={iconUrl} title={iconTitle} alt={iconTitle}/></td>
         <td>
           <a href={libPath}>{repo.repo_name}</a><br />
-          {isShowRepoOwner ? <span className="item-meta-info" title={repo.owner_contact_email}>{repo.owner_name}</span> : null}
+          <span className="item-meta-info" title={repo.owner_contact_email}>{repo.owner_name}</span>
           <span className="item-meta-info">{repo.size}</span>
           <span className="item-meta-info" title={moment(repo.last_modified).format('llll')}>{moment(repo.last_modified).fromNow()}</span>
         </td>

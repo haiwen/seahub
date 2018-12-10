@@ -4,13 +4,13 @@ import { gettext, username } from '../../utils/constants';
 
 const propTypes = {
   currentGroup: PropTypes.object, // for group
-  currentTab: PropTypes.string.isRequired, //for my-library, shared width me, shared whith all, groups 
+  libraryType: PropTypes.string.isRequired, //for my-library, shared width me, shared whith all, groups 
 };
 
 class RepoTool extends React.Component {
 
   render() {
-    if (this.props.currentTab === 'group' && this.props.currentGroup) {
+    if (this.props.libraryType === 'group' && this.props.currentGroup) {
       let currentGroup = this.props.currentGroup;
       let isShowSettingIcon = !(currentGroup.parent_group_id !== 0 && currentGroup.admins.indexOf(username) === -1);
       return (

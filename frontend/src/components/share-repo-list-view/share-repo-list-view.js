@@ -6,8 +6,8 @@ import ShareRepoListItem from './share-repo-list-item';
 const propTypes = {
   currentGroup: PropTypes.object,
   repoList: PropTypes.array.isRequired,
-  isShowRepoOwner: PropTypes.bool.isRequired,
   isShowTableThread: PropTypes.bool,
+  onItemUnshared: PropTypes.func.isRequired,
 };
 
 class ShareRepoListView extends React.Component {
@@ -33,10 +33,10 @@ class ShareRepoListView extends React.Component {
             <ShareRepoListItem
               key={repo.repo_id}
               repo={repo}
-              isShowRepoOwner={this.props.isShowRepoOwner}
               currentGroup={this.props.currentGroup}
               isItemFreezed={this.state.isItemFreezed}
               onFreezedItem={this.onFreezedItem}
+              onItemUnshared={this.props.onItemUnshared}
             />
           );
         })}
@@ -45,7 +45,6 @@ class ShareRepoListView extends React.Component {
   }
 
   renderPCUI = () => {
-    let isShowRepoOwner = this.props.isShowRepoOwner;
     let isShowTableThread = this.props.isShowTableThread !== undefined ? this.props.isShowTableThread : true;
     return (
       <table>
@@ -56,11 +55,11 @@ class ShareRepoListView extends React.Component {
               <a className="table-sort-op by-name" href="#">{/*TODO: sort*/}<span className="sort-icon icon-caret-down hide"></span></a>
             </th>
             <th width="12%"><span className="sr-only">{gettext("Actions")}</span></th>
-            <th width={isShowRepoOwner ? '14%' : '22%'}>{gettext("Size")}</th>
-            <th width={isShowRepoOwner ? '14%' : '22%'}>{gettext("Last Update")}
+            <th width={'14%'}>{gettext("Size")}</th>
+            <th width={'14%'}>{gettext("Last Update")}
               <a className="table-sort-op by-time" href="#">{/*TODO: sort*/}<span className="sort-icon icon-caret-up"></span></a>
             </th>
-            {isShowRepoOwner && <th width="16%">{gettext("Owner")}</th>}
+            <th width="16%">{gettext("Owner")}</th>
           </tr>
         </thead>
         <tbody>
@@ -71,7 +70,6 @@ class ShareRepoListView extends React.Component {
   }
 
   renderMobileUI = () => {
-    let isShowRepoOwner = this.props.isShowRepoOwner;
     let isShowTableThread = this.props.isShowTableThread !== undefined ? this.props.isShowTableThread : true;
     return (
       <table>
@@ -79,15 +77,11 @@ class ShareRepoListView extends React.Component {
           <tr>
             <th width="18%"><span className="sr-only">{gettext("Library Type")}</span></th>
             <th width="68%">
-              {isShowRepoOwner ? (
-                <Fragment>
-                  {gettext("Sort:")} {/* TODO: sort */}
-                  {gettext("name")}<a className="table-sort-op mobile-table-sort-op by-name" href="#"> <span className="sort-icon icon-caret-down hide"></span></a>
-                  {gettext("last update")}<a className="table-sort-op mobile-table-sort-op by-time" href="#"> <span className="sort-icon icon-caret-up"></span></a>
-                </Fragment>
-              ) :
-              (gettext('name'))
-              }
+              <Fragment>
+                {gettext("Sort:")} {/* TODO: sort */}
+                {gettext("name")}<a className="table-sort-op mobile-table-sort-op by-name" href="#"> <span className="sort-icon icon-caret-down hide"></span></a>
+                {gettext("last update")}<a className="table-sort-op mobile-table-sort-op by-time" href="#"> <span className="sort-icon icon-caret-up"></span></a>
+              </Fragment>
             </th>
             <th width="14%"><span className="sr-only">{gettext("Actions")}</span></th>
           </tr>

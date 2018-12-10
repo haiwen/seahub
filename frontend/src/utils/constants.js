@@ -27,6 +27,7 @@ export const storages = window.app.pageOptions.storages; // storage backends
 export const enableRepoSnapshotLabel = window.app.pageOptions.enableRepoSnapshotLabel;
 export const shareLinkExpireDaysMin = window.app.pageOptions.shareLinkExpireDaysMin;
 export const shareLinkExpireDaysMax = window.app.pageOptions.shareLinkExpireDaysMax;
+export const maxFileName = window.app.pageOptions.maxFileName;
 
 // wiki
 export const slug = window.wiki ? window.wiki.config.slug : '';

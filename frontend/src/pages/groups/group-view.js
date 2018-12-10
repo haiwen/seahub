@@ -3,17 +3,21 @@ import PropTypes from 'prop-types';
 import { gettext, username, loginUrl } from '../../utils/constants';
 import { seafileAPI } from '../../utils/seafile-api';
 import Loading from '../../components/loading';
+import ModalPortal from '../../components/modal-portal';
 import Group from '../../models/group';
 import RepoInfo from '../../models/repoInfo';
 import CommonToolbar from '../../components/toolbar/common-toolbar';
-import RepoViewToolbar from '../../components/toolbar/repo-view-toobar';
 import CurRepoPath from '../../components/cur-repo-path/';
+import CreateRepoDialog from '../../components/dialog/create-repo-dialog';
+import CreateDepartmentRepoDialog from '../../components/dialog/create-department-repo-dialog';
 import ShareRepoListView from '../../components/share-repo-list-view/share-repo-list-view';
 
 const propTypes = {
   onShowSidePanel: PropTypes.func.isRequired,
   onSearchedClick: PropTypes.func.isRequired,
 };
+
+const DEPARETMENT_GROUP_ONWER_NAME = 'system admin';
 
 class GroupView extends React.Component {
 
@@ -26,8 +30,9 @@ class GroupView extends React.Component {
       currentGroup: null,
       isStaff: false,
       repoList: [],
-      currentTab: 'group',
-      isShowRepoOwner: true,
+      libraryType: 'group',
+      isCreateRepoDialogShow: false,
+      isDepartmentGroup: false,
     }
   }
 
@@ -47,10 +52,12 @@ class GroupView extends React.Component {
       let currentGroup = new Group(res.data);
       let emptyTip = this.getEmptyTip(currentGroup);
       let isStaff  = currentGroup.admins.indexOf(username) > -1;  //for item operations
+      let isDepartmentGroup = currentGroup.owner === DEPARETMENT_GROUP_ONWER_NAME;
       this.setState({
         emptyTip: emptyTip,
         currentGroup: currentGroup,
         isStaff: isStaff,
+        isDepartmentGroup: isDepartmentGroup,
       });
       this.loadRepos(groupID);
     }).catch((error) => {
@@ -141,6 +148,10 @@ class GroupView extends React.Component {
     return emptyTip;
   }
 
+  onCreateRepoToggle = () => {
+    this.setState({isCreateRepoDialogShow: !this.state.isCreateRepoDialogShow});
+  }
+
   onCreateRepo = (repo) => {
     let groupId = this.props.groupID;
     seafileAPI.createGroupRepo(groupId, repo).then(res => {
@@ -150,6 +161,7 @@ class GroupView extends React.Component {
     }).catch(() => {
       //todo
     });
+    this.onCreateRepoToggle();
   }
 
   addRepoItem = (repo) => {
@@ -158,22 +170,36 @@ class GroupView extends React.Component {
     return newRepoList;
   }
 
+  onItemUnshared = (repo) => {
+    let group = this.state.currentGroup;
+    seafileAPI.unshareRepo(repo.repo_id, {share_type: 'group', group_id: group.id}).then(() => {
+      let repoList = this.state.repoList.filter(item => {
+        return item.repo_id !== repo.repo_id;
+      });
+      this.setState({repoList: repoList});
+    });
+  }
+
   render() {
     let { errMessage, emptyTip } = this.state;
     return (
       <Fragment>
         <div className="main-panel-north">
-          <RepoViewToolbar 
-            libraryType={this.state.currentTab}
-            onShowSidePanel={this.props.onShowSidePanel} 
-            onCreateRepo={this.onCreateRepo} 
-          />
+          <div className="cur-view-toolbar border-left-show">
+            <span className="sf2-icon-menu side-nav-toggle hidden-md-up d-md-none" title="Side Nav Menu" onClick={this.props.onShowSidePanel}></span>
+            <div className="operation">
+              <button className="btn btn-secondary operation-item" title={gettext('New Library')} onClick={this.onCreateRepoToggle}>
+                <i className="fas fa-plus-square op-icon"></i>
+                {gettext('New Library')}
+              </button>
+            </div>
+          </div>
           <CommonToolbar onSearchedClick={this.props.onSearchedClick} />
         </div>
         <div className="main-panel-center">
           <div className="cur-view-container">
             <div className="cur-view-path">
-              <CurRepoPath currentTab={this.state.currentTab} currentGroup={this.state.currentGroup}/>
+              <CurRepoPath libraryType={this.state.libraryType} currentGroup={this.state.currentGroup}/>
             </div>
             <div className="cur-view-content">
               {this.state.isLoading && <Loading />}
@@ -183,12 +209,29 @@ class GroupView extends React.Component {
                 <ShareRepoListView 
                   repoList={this.state.repoList} 
                   currentGroup={this.state.currentGroup} 
-                  isShowRepoOwner={this.state.isShowRepoOwner}
+                  onItemUnshared={this.onItemUnshared}
                 />
               }
             </div>
           </div>
         </div>
+        {this.state.isCreateRepoDialogShow && !this.state.isDepartmentGroup && (
+          <ModalPortal>
+            <CreateRepoDialog 
+              hasPermission={this.hasPermission}
+              libraryType={this.state.libraryType}
+              onCreateToggle={this.onCreateRepoToggle}
+              onCreateRepo={this.onCreateRepo}
+            />
+          </ModalPortal>
+        )}
+        {this.state.isCreateRepoDialogShow && this.state.isDepartmentGroup &&
+          <CreateDepartmentRepoDialog 
+            isAdmin={this.state.isAdmin}
+            onCreateToggle={this.onCreateRepoToggle}
+            onCreateRepo={this.onCreateRepo}
+          />
+        }
       </Fragment>
     );
   }
