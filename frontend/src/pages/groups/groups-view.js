@@ -26,13 +26,11 @@ class RepoListViewPanel extends React.Component {
 
   componentDidMount() {
     let group = this.props.group;
-    seafileAPI.listGroupRepos(group.id).then(res => {
-      let repoList = res.data.map(item => {
-        let repo = new RepoInfo(item);
-        return repo;
-      });
-      this.setState({repoList: repoList});
+    let repoList = group.repos.map(item => {
+      let repo = new RepoInfo(item);
+      return repo;
     });
+    this.setState({repoList: repoList});
   }
 
   render() {
@@ -71,10 +69,10 @@ class GroupsView extends React.Component {
   }
 
   componentDidMount() {
-    seafileAPI.listGroups().then((res) => { // TODO: api name
+    seafileAPI.listGroupsV2({'with_repos': 1}).then((res) => { // TODO: api name
       // `{'with_repos': 1}`: list repos of every group
       // res: {data: [...], status: 200, statusText: "OK", headers: {…}, config: {…}, …}
-      let groupList = res.data.groups.map(item => {
+      let groupList = res.data.map(item => {
         let group = new Group(item);
         return group;
       })
@@ -96,7 +94,6 @@ class GroupsView extends React.Component {
             errorMsg: gettext("Error")
           });
         }
-
       } else {
         this.setState({
           isLoading: false,
