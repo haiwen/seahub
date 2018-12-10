@@ -39,7 +39,7 @@ const ShareAdminLibrariesWrapper = MainContentWrapper(ShareAdminLibraries);
 const ShareAdminFoldersWrapper = MainContentWrapper(ShareAdminFolders);
 const ShareAdminShareLinksWrapper = MainContentWrapper(ShareAdminShareLinks);
 const ShareAdminUploadLinksWrapper = MainContentWrapper(ShareAdminUploadLinks);
-const Wikiswrapper = MainContentWrapper(Wikis);
+const WikisWrapper = MainContentWrapper(Wikis);
 
 class App extends Component {
 
@@ -144,7 +144,7 @@ class App extends Component {
             <DirView path={siteRoot + 'library/:repoID/*'} onMenuClick={this.onShowSidePanel} updateCurrentTab={this.updateCurrentTab}/>
             <Groups path={siteRoot + 'groups'} onShowSidePanel={this.onShowSidePanel} onSearchedClick={this.onSearchedClick}/>
             <Group path={siteRoot + 'group/:groupID'} onShowSidePanel={this.onShowSidePanel} onSearchedClick={this.onSearchedClick}/>
-            <Wikiswrapper path={siteRoot + 'wikis'} onShowSidePanel={this.onShowSidePanel} onSearchedClick={this.onSearchedClick}/>
+            <WikisWrapper path={siteRoot + 'wikis'} onShowSidePanel={this.onShowSidePanel} onSearchedClick={this.onSearchedClick}/>
           </Router>
         </MainPanel>
       </div>

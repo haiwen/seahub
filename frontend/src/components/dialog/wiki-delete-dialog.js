@@ -8,7 +8,7 @@ const propTypes = {
   handleSubmit: PropTypes.func.isRequired,
 };
 
-class WikiDelete extends React.Component {
+class WikiDeleteDialog extends React.Component {
 
   toggle = () => {
     this.props.toggleCancel();
@@ -30,6 +30,6 @@ class WikiDelete extends React.Component {
   }
 }
 
-WikiDelete.propTypes = propTypes;
+WikiDeleteDialog.propTypes = propTypes;
 
-export default WikiDelete;
+export default WikiDeleteDialog;

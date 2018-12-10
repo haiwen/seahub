@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import { gettext } from '../../utils/constants';
 
 const propTypes = {
-  menuPosition: PropTypes.object.isRequired,
+  position: PropTypes.object.isRequired,
   onRenameToggle: PropTypes.func.isRequired,
   onDeleteToggle: PropTypes.func.isRequired,
 };
@@ -11,8 +11,8 @@ const propTypes = {
 class WikiMenu extends React.Component {
 
   render() {
-    let menuPosition = this.props.menuPosition;
-    let style = {position: 'fixed', top: menuPosition.top, left: menuPosition.left, display: 'block'};
+    let position = this.props.position;
+    let style = {position: 'fixed', top: position.top, left: position.left, display: 'block'};
 
     return (
       <ul className="dropdown-menu" style={style}>

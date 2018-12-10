@@ -4,7 +4,7 @@ import { gettext } from '../../utils/constants';
 
 const propTypes = {
   isShowWikiAdd: PropTypes.bool.isRequired,
-  addPosition: PropTypes.object.isRequired,
+  position: PropTypes.object.isRequired,
   onSelectToggle: PropTypes.func.isRequired,
   onCreateToggle: PropTypes.func.isRequired,
 };
@@ -13,9 +13,9 @@ class WikiAdd extends React.Component {
 
   render() {
     let style = {};
-    let {isShowWikiAdd, addPosition} = this.props;
+    let {isShowWikiAdd, position} = this.props;
     if (isShowWikiAdd) {
-      style = {position: 'fixed', top: addPosition.top, left: addPosition.left, display: 'block'};
+      style = {position: 'fixed', top: position.top, left: position.left, display: 'block'};
     }
     return (
       <ul className="dropdown-menu" style={style}>

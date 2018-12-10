@@ -61,7 +61,8 @@
             enableRepoSnapshotLabel: {% if enable_repo_snapshot_label %} true {% else %} false {% endif %},
             shareLinkExpireDaysMin: "{{ share_link_expire_days_min }}",
             shareLinkExpireDaysMax: "{{ share_link_expire_days_max }}",
-            maxFileName: "{{ max_file_name }}"
+            maxFileName: "{{ max_file_name }}",
+            enableWiki: {% if enable_wiki %} true {% else %} false {% endif %},
         }
      };
 </script>

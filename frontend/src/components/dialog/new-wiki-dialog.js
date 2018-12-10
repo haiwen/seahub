@@ -8,7 +8,7 @@ const propTypes = {
   addWiki: PropTypes.func.isRequired,
 };
 
-class WikiDelete extends React.Component {
+class NewWikiDialog extends React.Component {
 
   constructor(props) {
     super(props);
@@ -64,6 +64,6 @@ class WikiDelete extends React.Component {
   }
 }
 
-WikiDelete.propTypes = propTypes;
+NewWikiDialog.propTypes = propTypes;
 
-export default WikiDelete;
+export default NewWikiDialog;

@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React, { Component, Fragment } from 'react';
 import PropTypes from 'prop-types';
 import { seafileAPI } from '../../utils/seafile-api';
 import { gettext, siteRoot, loginUrl } from '../../utils/constants';
@@ -9,9 +9,10 @@ import MenuControl from '../../components/menu-control';
 import WikiAdd from './wiki-add';
 import WikiMenu from './wiki-menu';
 import WikiRename from './wiki-rename';
-import WikiDelete from './wiki-delete';
-import WikiSelect from './wiki-select';
-import WikiCreate from './wiki-create';
+import NewWikiDialog from '../../components/dialog/new-wiki-dialog';
+import WikiDeleteDialog from '../../components/dialog/wiki-delete-dialog';
+import WikiSelectDialog from '../../components/dialog/wiki-select-dialog';
+import ModalPortal from '../../components/modal-portal';
 
 
 const itempropTypes = {
@@ -25,7 +26,7 @@ class Item extends Component {
     super(props);
     this.state = {
       isShowWikiMenu: false,
-      menuPosition: {top:'', left: ''},
+      position: {top:'', left: ''},
       isItemFreezed: false,
       isShowDeleteDialog: false,
       isShowMenuControl: false,
@@ -59,7 +60,7 @@ class Item extends Component {
     let position = {top: top, left: left};
     this.setState({
       isShowWikiMenu: true,
-      menuPosition: position,
+      position: position,
       isItemFreezed: true,
     });
   }
@@ -149,35 +150,39 @@ class Item extends Component {
     let userProfileURL = `${siteRoot}profile/${encodeURIComponent(wiki.owner)}/`;
 
     return (
-      <tr className={this.state.highlight} onMouseEnter={this.onMouseEnter} onMouseLeave={this.onMouseLeave}>
-        <td>
-          {this.state.isRenameing ?
-            <WikiRename wiki={wiki} onRenameConfirm={this.onRenameConfirm} onRenameCancel={this.onRenameCancel}/> :
-            <a href={wiki.link}>{gettext(wiki.name)}</a>
-          }
-        </td>
-        <td><a href={userProfileURL} target='_blank'>{gettext(wiki.owner_nickname)}</a></td>
-        <td>{moment(wiki.updated_at).fromNow()}</td>
-        <td className="menu-toggle" onClick={this.onMenuToggle}>
-          <MenuControl
-            isShow={this.state.isShowMenuControl}
-            onClick={this.onMenuToggle}
-          />
-          {this.state.isShowWikiMenu &&
-            <WikiMenu
-              menuPosition={this.state.menuPosition}
-              onRenameToggle={this.onRenameToggle}
-              onDeleteToggle={this.onDeleteToggle}
+      <Fragment>
+        <tr className={this.state.highlight} onMouseEnter={this.onMouseEnter} onMouseLeave={this.onMouseLeave}>
+          <td>
+            {this.state.isRenameing ?
+              <WikiRename wiki={wiki} onRenameConfirm={this.onRenameConfirm} onRenameCancel={this.onRenameCancel}/> :
+              <a href={wiki.link}>{gettext(wiki.name)}</a>
+            }
+          </td>
+          <td><a href={userProfileURL} target='_blank'>{gettext(wiki.owner_nickname)}</a></td>
+          <td>{moment(wiki.updated_at).fromNow()}</td>
+          <td className="menu-toggle" onClick={this.onMenuToggle}>
+            <MenuControl
+              isShow={this.state.isShowMenuControl}
+              onClick={this.onMenuToggle}
             />
-          }
-          {this.state.isShowDeleteDialog &&
-            <WikiDelete
+            {this.state.isShowWikiMenu &&
+              <WikiMenu
+                position={this.state.position}
+                onRenameToggle={this.onRenameToggle}
+                onDeleteToggle={this.onDeleteToggle}
+              />
+            }
+          </td>
+        </tr>
+        {this.state.isShowDeleteDialog &&
+          <ModalPortal>
+            <WikiDeleteDialog
               toggleCancel={this.onDeleteToggle}
               handleSubmit={this.deleteWiki}
             />
-          }
-        </td>
-      </tr>
+          </ModalPortal>
+        }
+      </Fragment>
     );
   }
 }
@@ -237,7 +242,7 @@ class Wikis extends Component {
       errorMsg: '',
       wikis: [],
       isShowWikiAdd: false,
-      addPosition: {top:'', left: ''},
+      position: {top:'', left: ''},
       isShowSelectDialog: false,
       isShowCreateDialog: false,
     };
@@ -245,10 +250,6 @@ class Wikis extends Component {
 
   componentDidMount() {
     document.addEventListener('click', this.onHideWikiAdd);
-    this.getWikis();
-  }
-
-  componentWillReceiveProps() {
     this.getWikis();
   }
 
@@ -302,7 +303,7 @@ class Wikis extends Component {
     let position = {top: top, left: left};
     this.setState({
       isShowWikiAdd: true,
-      addPosition: position,
+      position: position,
     });
   }
 
@@ -374,53 +375,59 @@ class Wikis extends Component {
 
   render() {
     return (
-      <div className="main-panel-center">
-        <div className="cur-view-container" id="wikis">
-          <div className="cur-view-path">
-            <h3 className="sf-heading">{gettext('Wikis')}</h3>
-            <div style={{float:'right'}}>
-              <Button className="fa fa-plus-square" onClick={this.onAddMenuToggle}>
-                {gettext('Add Wiki')}
-              </Button>
-            </div>
-            {this.state.isShowWikiAdd &&
-              <WikiAdd 
-                isShowWikiAdd={this.state.isShowWikiAdd}
-                addPosition={this.state.addPosition}
-                onSelectToggle={this.onSelectToggle}
-                onCreateToggle={this.onCreateToggle}
-              />
-            }
-            {this.state.isShowCreateDialog &&
-              <WikiCreate
-                toggleCancel={this.onCreateToggle}
-                addWiki={this.addWiki}
-              />
-            }
-            {this.state.isShowSelectDialog &&
-              <WikiSelect
-                toggleCancel={this.onSelectToggle}
-                addWiki={this.addWiki}
-              />
-            }
-          </div>
-          <div className="cur-view-content">
-            {(this.state.loading || this.state.wikis.length !== 0) &&
-              <WikisContent
-                data={this.state}
-                renameWiki={this.renameWiki}
-                deleteWiki={this.deleteWiki}
-              />
-            }
-            {(!this.state.loading && this.state.wikis.length === 0) &&
-              <div className="message empty-tip">
-                <h2>{gettext('You do not have any Wiki.')}</h2>
-                <p>{gettext('Seafile Wiki enables you to organize your knowledge in a simple way. The contents of wiki is stored in a normal library with pre-defined file/folder structure. This enables you to edit your wiki in your desktop and then sync back to the server.')}</p>
+      <Fragment>
+        <div className="main-panel-center">
+          <div className="cur-view-container" id="wikis">
+            <div className="cur-view-path">
+              <h3 className="sf-heading">{gettext('Wikis')}</h3>
+              <div style={{float:'right'}}>
+                <Button className="fa fa-plus-square" onClick={this.onAddMenuToggle}>
+                  {gettext('Add Wiki')}
+                </Button>
               </div>
-            }
+              {this.state.isShowWikiAdd &&
+                <WikiAdd 
+                  isShowWikiAdd={this.state.isShowWikiAdd}
+                  position={this.state.position}
+                  onSelectToggle={this.onSelectToggle}
+                  onCreateToggle={this.onCreateToggle}
+                />
+              }
+            </div>
+            <div className="cur-view-content">
+              {(this.state.loading || this.state.wikis.length !== 0) &&
+                <WikisContent
+                  data={this.state}
+                  renameWiki={this.renameWiki}
+                  deleteWiki={this.deleteWiki}
+                />
+              }
+              {(!this.state.loading && this.state.wikis.length === 0) &&
+                <div className="message empty-tip">
+                  <h2>{gettext('You do not have any Wiki.')}</h2>
+                  <p>{gettext('Seafile Wiki enables you to organize your knowledge in a simple way. The contents of wiki is stored in a normal library with pre-defined file/folder structure. This enables you to edit your wiki in your desktop and then sync back to the server.')}</p>
+                </div>
+              }
+            </div>
           </div>
         </div>
-      </div>
+        {this.state.isShowCreateDialog &&
+          <ModalPortal>
+            <NewWikiDialog
+              toggleCancel={this.onCreateToggle}
+              addWiki={this.addWiki}
+            />
+          </ModalPortal>
+        }
+        {this.state.isShowSelectDialog &&
+          <ModalPortal>
+            <WikiSelectDialog
+              toggleCancel={this.onSelectToggle}
+              addWiki={this.addWiki}
+            />
+          </ModalPortal>
+        }
+      </Fragment>
     );
   }
 }

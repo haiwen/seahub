@@ -10,7 +10,7 @@ const propTypes = {
   addWiki: PropTypes.func.isRequired,
 };
 
-class WikiSelect extends React.Component {
+class WikiSelectDialog extends React.Component {
 
   constructor(props) {
     super(props);
@@ -84,6 +84,6 @@ class WikiSelect extends React.Component {
   }
 }
 
-WikiSelect.propTypes = propTypes;
+WikiSelectDialog.propTypes = propTypes;
 
-export default WikiSelect;
+export default WikiSelectDialog;
