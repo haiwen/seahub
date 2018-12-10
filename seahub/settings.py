@@ -718,7 +718,7 @@ OTP_LOGIN_URL = '/profile/two_factor_authentication/setup/'
 TWO_FACTOR_DEVICE_REMEMBER_DAYS = 90
 
 # Enable personal wiki, group wiki
-ENABLE_WIKI = True
+ENABLE_WIKI = False
 
 # Enable 'repo snapshot label' feature
 ENABLE_REPO_SNAPSHOT_LABEL = False
