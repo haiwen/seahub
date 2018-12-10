@@ -1,6 +1,7 @@
 import React, { Fragment } from 'react';
 import PropTypes from 'prop-types';
 import { gettext } from '../../utils/constants';
+import toaster from '../toast';
 import { Button, Modal, ModalHeader, ModalBody, Form, FormGroup, Label, Input } from 'reactstrap';
 import { seafileAPI } from '../../utils/seafile-api.js';
 
@@ -44,7 +45,9 @@ class LibHistorySetting extends React.Component {
     let reg = /^-?\d+$/;
     let flag = reg.test(days);
     if (flag) {  
+      let message = gettext('Successfully set library history.');
       seafileAPI.setRepoHistoryLimit(repoID, days).then(res => {
+        toaster.success(message);
         this.setState({
           keepDays: res.data.keep_days
         });

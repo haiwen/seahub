@@ -1,6 +1,7 @@
 import React, { Fragment } from 'react';
 import PropTypes from 'prop-types';
 import AsyncSelect from 'react-select/lib/Async';
+import toaster from '../toast';
 import { gettext } from '../../utils/constants';
 import { Button, Modal, ModalHeader, ModalBody, ModalFooter } from 'reactstrap';
 import { seafileAPI } from '../../utils/seafile-api.js';
@@ -52,8 +53,14 @@ class TransferDialog extends React.Component {
     let repoID = this.props.repoID;
     let user = this.state.selectedOption.email;
     seafileAPI.transferRepo(repoID, user).then(res => {
+      let message = gettext('Successfully transferred the library.');
+      toaster.success(message);
       this.props.submit(repoID);
       this.props.toggleDialog();
+    }).catch(res => {
+        let message = gettext('Failed. Please check the network.')
+        this.props.toggleDialog();
+        toaster.danger(message);
     })
   } 
 

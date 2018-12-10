@@ -2,6 +2,7 @@ import React, { Component, Fragment } from 'react';
 import { Link } from '@reach/router';
 import { gettext, siteRoot, lang } from '../../utils/constants';
 import { seafileAPI } from '../../utils/seafile-api';
+import toaster from '../../components/toast';
 import CommonToolbar from '../../components/toolbar/common-toolbar';
 import moment from 'moment';
 moment.locale(lang);
@@ -101,8 +102,14 @@ class DeletedRepoItem extends Component {
 
   restoreDeletedRepo = () => {
     let repoID = this.props.repo.repo_id;
+    let repoName = this.props.repo.repo_name;
     seafileAPI.restoreDeletedRepo(repoID).then(res => {
+      let message = gettext('Successfully restored library') + '  ' + repoName;
+      toaster.success(message);
       this.props.refreshDeletedRepoList(repoID);
+    }).catch(res => {
+        let message = gettext('Failed. Please check the network.')
+        toaster.danger(message);
     })
   }
 
