@@ -361,6 +361,9 @@ FORCE_PASSWORD_CHANGE = True
 # Enable a user to change password in 'settings' page.
 ENABLE_CHANGE_PASSWORD = True
 
+ENABLE_DELETE_ACCOUNT = True
+ENABLE_UPDATE_USER_INFO = True
+
 # Enable or disable repo history setting
 ENABLE_REPO_HISTORY_SETTING = True
 
