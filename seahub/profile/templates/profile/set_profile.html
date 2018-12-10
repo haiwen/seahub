@@ -23,6 +23,8 @@
 
         <li class="tab"><a href="#lang-setting">{% trans "Language" %}</a></li>
 
+        <li class="tab"><a href="#email-notice">{% trans "Email Notification" %}</a></li>
+
         {% if two_factor_auth_enabled %}
         <li class="tab"><a href="#two-factor-auth">{% trans "Two-Factor Authentication" %}</a></li>
         {% endif %}
@@ -122,6 +124,19 @@
             {% endfor %}
         </ul>
     </div>
+</div>
+
+<div class="setting-item" id="email-notice">
+    <h3>{% trans "Email Notification of File Changes" %}</h3>
+    <form method="post" action="" id="set-email-notice-interval-form">{% csrf_token %}
+        {# email_notification_interval: in seconds #}
+        <input type="radio" name="interval" value="0" class="vam" id="interval-option1" {% if email_notification_interval == 0 %}checked="checked"{% endif %} /> <label class="vam" for="interval-option1">{% trans "Don't send emails" %}</label> <br />
+        <input type="radio" name="interval" value="3600" class="vam" id="interval-option2" {% if email_notification_interval == 3600 %}checked="checked"{% endif %} /> <label class="vam" for="interval-option2">{% trans "Per hour" %}</label> <br />
+        <input type="radio" name="interval" value="14400" class="vam" id="interval-option3" {% if email_notification_interval == 14400 %}checked="checked"{% endif %} /> <label class="vam" for="interval-option3">{% trans "Per 4 hours" %}</label> <br />
+        <input type="radio" name="interval" value="86400" class="vam" id="interval-option4" {% if email_notification_interval == 86400 %}checked="checked"{% endif %} /> <label class="vam" for="interval-option4">{% trans "Per day" %}</label> <br />
+        <input type="radio" name="interval" value="604800" class="vam" id="interval-option5" {% if email_notification_interval == 604800 %}checked="checked"{% endif %} /> <label class="vam" for="interval-option5">{% trans "Per week" %}</label> <br />
+        <button type="submit" class="submit">{% trans "Submit" %}</button>
+    </form>
 </div>
 
 {% if two_factor_auth_enabled %}
@@ -334,5 +349,21 @@ $('#update-webdav-passwd .generate-random-password').click(function() {
         }
     });
 })();
+
+$('#set-email-notice-interval-form').on('submit', function() {
+    var interval = $('[name="interval"]:checked', $(this)).val();
+    $.ajax({
+        url: '{{SITE_ROOT}}api2/account/info/',
+        type: 'PUT',
+        data: {'email_notification_interval': interval},
+        dataType: 'json',
+        beforeSend: prepareCSRFToken,
+        success: function() {
+            feedback("{% trans "Success" %}", 'success');
+        },
+        error: ajaxErrorHandler
+    });
+    return false;
+});
 </script>
 {% endblock %}
