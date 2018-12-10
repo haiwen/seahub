@@ -10,7 +10,7 @@ const propTypes = {
   repo: PropTypes.object.isRequired,
   isItemFreezed: PropTypes.bool.isRequired,
   onFreezedItem: PropTypes.func.isRequired,
-  onItemUnshared: PropTypes.func.isRequired,
+  onItemUnshare: PropTypes.func.isRequired,
 };
 
 class SharedRepoListItem extends React.Component {
@@ -112,7 +112,7 @@ class SharedRepoListItem extends React.Component {
         this.onItemShared();
         break;
       case 'Unshare':
-        this.onItemUnshared();
+        this.onItemUnshare();
         break;
       default:
         break;
@@ -131,13 +131,13 @@ class SharedRepoListItem extends React.Component {
     // todo
   }
 
-  onItemShared = () => {
+  onItemShare = () => {
     // todo
   }
 
-  onItemUnshared = () => {
+  onItemUnshare = () => {
     // todo
-    this.props.onItemUnshared(this.props.repo);
+    this.props.onItemUnshare(this.props.repo);
   }
 
   onItemDelete = () => {
@@ -218,7 +218,7 @@ class SharedRepoListItem extends React.Component {
     // scene two: (share, unshare), (share), (unshare)
     let operations = this.generatorOperations();
     const shareOperation   = <a href="#" className="sf2-icon-share sf2-x op-icon" title={gettext("Share")} onClick={this.onItemShared}></a>;
-    const unshareOperation = <a href="#" className="sf2-icon-x3 sf2-x op-icon" title={gettext("Unshare")} onClick={this.onItemUnshared}></a>
+    const unshareOperation = <a href="#" className="sf2-icon-x3 sf2-x op-icon" title={gettext("Unshare")} onClick={this.onItemUnshare}></a>
     const deleteOperation  = <a href="#" className="sf2-icon-delete sf2-x op-icon" title={gettext('Delete')} onClick={this.onItemDelete}></a>;
     
     if (this.isDeparementOnwerGroupMember) {

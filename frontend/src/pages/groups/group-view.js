@@ -169,7 +169,7 @@ class GroupView extends React.Component {
     return newRepoList;
   }
 
-  onItemUnshared = (repo) => {
+  onItemUnshare = (repo) => {
     let group = this.state.currentGroup;
     seafileAPI.unshareRepo(repo.repo_id, {share_type: 'group', group_id: group.id}).then(() => {
       let repoList = this.state.repoList.filter(item => {
@@ -226,7 +226,7 @@ class GroupView extends React.Component {
                 <SharedRepoListView 
                   repoList={this.state.repoList} 
                   currentGroup={this.state.currentGroup} 
-                  onItemUnshared={this.onItemUnshared}
+                  onItemUnshare={this.onItemUnshare}
                 />
               }
             </div>

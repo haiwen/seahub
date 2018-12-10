@@ -7,7 +7,7 @@ const propTypes = {
   currentGroup: PropTypes.object,
   repoList: PropTypes.array.isRequired,
   isShowTableThread: PropTypes.bool,
-  onItemUnshared: PropTypes.func.isRequired,
+  onItemUnshare: PropTypes.func.isRequired,
 };
 
 class SharedRepoListView extends React.Component {
@@ -36,7 +36,7 @@ class SharedRepoListView extends React.Component {
               currentGroup={this.props.currentGroup}
               isItemFreezed={this.state.isItemFreezed}
               onFreezedItem={this.onFreezedItem}
-              onItemUnshared={this.props.onItemUnshared}
+              onItemUnshare={this.props.onItemUnshare}
             />
           );
         })}

@@ -33,6 +33,16 @@ class RepoListViewPanel extends React.Component {
     this.setState({repoList: repoList});
   }
 
+  onItemUnshare = (repo) => {
+    let group = this.props.group;
+    seafileAPI.unshareRepo(repo.repo_id, {share_type: 'group', group_id: group.id}).then(() => {
+      let repoList = this.state.repoList.filter(item => {
+        return item.repo_id !== repo.repo_id;
+      });
+      this.setState({repoList: repoList});
+    });
+  }
+
   render() {
     let group = this.props.group;
     const emptyTip = <p className="group-item-empty-tip">{gettext('No libraries')}</p>;
@@ -48,6 +58,7 @@ class RepoListViewPanel extends React.Component {
             isShowRepoOwner={false} 
             currentGroup={this.props.group} 
             repoList={this.state.repoList}
+            onItemUnshare={this.onItemUnshare}
           />
         }
       </Fragment>
