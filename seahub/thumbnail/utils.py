@@ -145,6 +145,13 @@ def generate_thumbnail(request, repo_id, size, path):
         return (False, 500)
 
 def create_psd_thumbnails(repo, file_id, path, size, thumbnail_file, file_size):
+    try:
+        from psd_tools import PSDImage
+    except ImportError:
+        logger.error("Could not find psd_tools installed. "
+                     "Please install by 'pip install psd_tools'")
+        return (False, 500)
+
     token = seafile_api.get_fileserver_access_token(
         repo.id, file_id, 'view', '', use_onetime=False)
     if not token:
@@ -152,8 +159,6 @@ def create_psd_thumbnails(repo, file_id, path, size, thumbnail_file, file_size):
 
     tmp_img_path = str(os.path.join(tempfile.gettempdir(), '%s.png' % file_id))
     t1 = timeit.default_timer()
-
-    from psd_tools import PSDImage
 
     inner_path = gen_inner_file_get_url(token, os.path.basename(path))
     tmp_file = os.path.join(tempfile.gettempdir(), file_id)
