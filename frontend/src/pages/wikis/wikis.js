@@ -1,237 +1,13 @@
 import React, { Component, Fragment } from 'react';
 import PropTypes from 'prop-types';
 import { seafileAPI } from '../../utils/seafile-api';
-import { gettext, siteRoot, loginUrl } from '../../utils/constants';
-import moment from 'moment';
-import { Button } from 'reactstrap';
-import Toast from '../../components/toast';
-import MenuControl from '../../components/menu-control';
+import { gettext, loginUrl } from '../../utils/constants';
 import WikiAdd from './wiki-add';
-import WikiMenu from './wiki-menu';
-import WikiRename from './wiki-rename';
-import NewWikiDialog from '../../components/dialog/new-wiki-dialog';
-import WikiDeleteDialog from '../../components/dialog/wiki-delete-dialog';
-import WikiSelectDialog from '../../components/dialog/wiki-select-dialog';
+import Toast from '../../components/toast';
 import ModalPortal from '../../components/modal-portal';
-
-
-const itempropTypes = {
-  wiki: PropTypes.object.isRequired,
-  renameWiki: PropTypes.func.isRequired,
-  deleteWiki: PropTypes.func.isRequired,
-};
-
-class Item extends Component {
-  constructor(props) {
-    super(props);
-    this.state = {
-      isShowWikiMenu: false,
-      position: {top:'', left: ''},
-      isItemFreezed: false,
-      isShowDeleteDialog: false,
-      isShowMenuControl: false,
-      isRenameing: false,
-      highlight: '',
-    };
-  }
-
-  componentDidMount() {
-    document.addEventListener('click', this.onHideWikiMenu);
-  }
-
-  componentWillUnmount() {
-    document.removeEventListener('click', this.onHideWikiMenu);
-  }
-
-  onMenuToggle = (e) => {
-    e.stopPropagation();
-    e.nativeEvent.stopImmediatePropagation();
-
-    if (this.state.isShowWikiMenu) {
-      this.onHideWikiMenu();
-    } else {
-      this.onShowWikiMenu(e);
-    }
-  }
-
-  onShowWikiMenu = (e) => {
-    let left = e.clientX - 8*16;
-    let top  = e.clientY + 12;
-    let position = {top: top, left: left};
-    this.setState({
-      isShowWikiMenu: true,
-      position: position,
-      isItemFreezed: true,
-    });
-  }
-
-  onHideWikiMenu = () => {
-    this.setState({
-      isShowWikiMenu: false,
-      isItemFreezed: false,
-    });
-  }
-
-  onMouseEnter = () => {
-    if (!this.state.isItemFreezed) {
-      this.setState({
-        isShowMenuControl: true,
-        highlight: 'tr-highlight',
-      });
-    }
-  }
-
-  onMouseLeave = () => {
-    if (!this.state.isItemFreezed) {
-      this.setState({
-        isShowMenuControl: false,
-        highlight: '',
-      });
-    }
-  }
-
-  onRenameToggle = () => {
-    this.setState({
-      isShowWikiMenu: false,
-      isItemFreezed: true,
-      isRenameing: true,
-    });
-  }
-
-  onRenameConfirm = (newName) => {
-    let wiki = this.props.wiki;
-
-    if (newName === wiki.name) {
-      this.onRenameCancel();
-      return false;
-    }
-    if (!newName) {
-      let errMessage = 'Name is required.';
-      Toast.error(gettext(errMessage));
-      return false;
-    }
-    if (newName.indexOf('/') > -1) {
-      let errMessage = 'Name should not include ' + '\'/\'' + '.';
-      Toast.error(gettext(errMessage));
-      return false;
-    }
-    this.renameWiki(newName);
-    this.onRenameCancel();
-  }
-
-  onRenameCancel = () => {
-    this.setState({
-      isRenameing: false,
-      isItemFreezed: false,
-    });
-  }
-
-  onDeleteToggle = () => {
-    this.setState({
-      isShowDeleteDialog: !this.state.isShowDeleteDialog,
-    });
-  }
-
-  renameWiki = (newName) => {
-    let wiki = this.props.wiki;
-    this.props.renameWiki(wiki, newName);
-  }
-
-  deleteWiki = () => {
-    let wiki = this.props.wiki;
-    this.props.deleteWiki(wiki);
-    this.setState({
-      isShowDeleteDialog: !this.state.isShowDeleteDialog,
-    });
-  }
-
-  render() {
-    let wiki = this.props.wiki;
-    let userProfileURL = `${siteRoot}profile/${encodeURIComponent(wiki.owner)}/`;
-
-    return (
-      <Fragment>
-        <tr className={this.state.highlight} onMouseEnter={this.onMouseEnter} onMouseLeave={this.onMouseLeave}>
-          <td>
-            {this.state.isRenameing ?
-              <WikiRename wiki={wiki} onRenameConfirm={this.onRenameConfirm} onRenameCancel={this.onRenameCancel}/> :
-              <a href={wiki.link}>{gettext(wiki.name)}</a>
-            }
-          </td>
-          <td><a href={userProfileURL} target='_blank'>{gettext(wiki.owner_nickname)}</a></td>
-          <td>{moment(wiki.updated_at).fromNow()}</td>
-          <td className="menu-toggle" onClick={this.onMenuToggle}>
-            <MenuControl
-              isShow={this.state.isShowMenuControl}
-              onClick={this.onMenuToggle}
-            />
-            {this.state.isShowWikiMenu &&
-              <WikiMenu
-                position={this.state.position}
-                onRenameToggle={this.onRenameToggle}
-                onDeleteToggle={this.onDeleteToggle}
-              />
-            }
-          </td>
-        </tr>
-        {this.state.isShowDeleteDialog &&
-          <ModalPortal>
-            <WikiDeleteDialog
-              toggleCancel={this.onDeleteToggle}
-              handleSubmit={this.deleteWiki}
-            />
-          </ModalPortal>
-        }
-      </Fragment>
-    );
-  }
-}
-
-Item.propTypes = itempropTypes;
-
-
-const contentpropTypes = {
-  data: PropTypes.object.isRequired,
-  renameWiki: PropTypes.func.isRequired,
-  deleteWiki: PropTypes.func.isRequired,
-};
-
-class WikisContent extends Component {
-
-  render() {
-    let {loading, errorMsg, wikis} = this.props.data;
-
-    if (loading) {
-      return <span className="loading-icon loading-tip"></span>;
-    } else if (errorMsg) {
-      return <p className="error text-center">{errorMsg}</p>;
-    } else {
-      return (
-        <table>
-          <thead>
-            <tr>
-              <th width="50%">{gettext('Name')}</th>
-              <th width="20%">{gettext('Owner')}</th>
-              <th width="20%">{gettext('Last Update')}</th>
-              <th width="10%">{/* operation */}</th>
-            </tr>
-          </thead>
-          <tbody>
-            {wikis.map((wiki, index) => {
-              return(
-                <Item key={index} wiki={wiki}
-                  renameWiki={this.props.renameWiki}
-                  deleteWiki={this.props.deleteWiki}
-                />);
-            })}
-          </tbody>
-        </table>
-      );
-    }
-  }
-}
-
-WikisContent.propTypes = contentpropTypes;
+import NewWikiDialog from '../../components/dialog/new-wiki-dialog';
+import WikiSelectDialog from '../../components/dialog/wiki-select-dialog';
+import WikiListView from '../../components/wiki-list-view/wiki-list-view';
 
 
 class Wikis extends Component {
@@ -380,10 +156,11 @@ class Wikis extends Component {
           <div className="cur-view-container" id="wikis">
             <div className="cur-view-path">
               <h3 className="sf-heading">{gettext('Wikis')}</h3>
-              <div style={{float:'right'}}>
-                <Button className="fa fa-plus-square" onClick={this.onAddMenuToggle}>
+              <div style={{float:'right'}} className="operation">
+                <button className="btn btn-secondary operation-item" onClick={this.onAddMenuToggle}>
+                  <i className="fa fa-plus-square op-icon"></i>
                   {gettext('Add Wiki')}
-                </Button>
+                </button>
               </div>
               {this.state.isShowWikiAdd &&
                 <WikiAdd 
@@ -396,7 +173,7 @@ class Wikis extends Component {
             </div>
             <div className="cur-view-content">
               {(this.state.loading || this.state.wikis.length !== 0) &&
-                <WikisContent
+                <WikiListView
                   data={this.state}
                   renameWiki={this.renameWiki}
                   deleteWiki={this.deleteWiki}
