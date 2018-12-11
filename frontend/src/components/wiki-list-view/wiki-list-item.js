@@ -102,11 +102,12 @@ class WikiListItem extends Component {
   }
 
   onRenameCancel = () => {
-    this.setState({isRenameing: false});
     this.props.onUnfreezedItem();
+    this.setState({isRenameing: false});
   }
   
   onDeleteToggle = () => {
+    this.props.onUnfreezedItem();
     this.setState({
       isShowDeleteDialog: !this.state.isShowDeleteDialog,
       isShowWikiMenu: false,
@@ -115,10 +116,10 @@ class WikiListItem extends Component {
   }
   
   onDeleteCancel = () => {
+    this.props.onUnfreezedItem();
     this.setState({
       isShowDeleteDialog: !this.state.isShowDeleteDialog,
     });
-    this.props.onUnfreezedItem();
   }
 
   renameWiki = (newName) => {
