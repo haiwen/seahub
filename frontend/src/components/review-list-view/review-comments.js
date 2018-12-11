@@ -132,8 +132,8 @@ class ReviewComments extends React.Component {
     });
   };
   
-  scrollToQuote = (newIndex, oldIndex, selectedText) => {
-    this.props.scrollToQuote(newIndex, oldIndex, selectedText);
+  scrollToQuote = (newIndex, oldIndex, quote) => {
+    this.props.scrollToQuote(newIndex, oldIndex, quote);
     this.setState({
       comment: ''
     });
@@ -227,7 +227,8 @@ class CommentItem extends React.Component {
     super(props);
     this.state = {
       dropdownOpen: false,
-      html: '',
+      comment: '',
+      quote: '',
     };
   }
 
@@ -237,66 +238,74 @@ class CommentItem extends React.Component {
     });
   }
 
-  convertComment = (mdFile) => {
-    processor.process(mdFile).then(
+  convertComment = (item) => {
+    processor.process(item.comment).then(
       (result) => {
-        let html = String(result);
+        let comment = String(result);
         this.setState({
-          html: html
+          comment: comment
+        });
+      }
+    );
+    processor.process(item.quote).then(
+      (result) => {
+        let quote = String(result);
+        this.setState({
+          quote: quote
         });
       }
     );
   }
 
   scrollToQuote = () => {
-    this.props.scrollToQuote(this.props.item.newIndex, this.props.item.oldIndex,
-      this.props.item.selectedText);
+    const item = this.props.item;
+    this.props.scrollToQuote(item.newIndex, item.oldIndex, item.quote);
   }
 
   componentWillMount() {
-    this.convertComment(this.props.item.comment);
+    this.convertComment(this.props.item);
   }
 
   componentWillReceiveProps(nextProps) {
-    this.convertComment(nextProps.item.comment);
+    this.convertComment(nextProps.item);
   }
 
   render() {
-    if (this.props.item.resolved && !this.props.showResolvedComment) {
+    const item = this.props.item;
+    if (item.resolved && !this.props.showResolvedComment) {
       return null;
     }
     return (
-      <li className={this.props.item.resolved ? 'seafile-comment-item seafile-comment-item-resolved'
-        : 'seafile-comment-item'} id={this.props.item.id}>
+      <li className={item.resolved ? 'seafile-comment-item seafile-comment-item-resolved'
+        : 'seafile-comment-item'} id={item.id}>
         <div className="seafile-comment-info">
-          <img className="avatar" src={this.props.item.avatarUrl} alt=""/>
+          <img className="avatar" src={item.avatarUrl} alt=""/>
           <div className="reviewer-info">
-            <div className="reviewer-name">{this.props.item.name}</div>
-            <div className="review-time">{this.props.item.time}</div>
+            <div className="reviewer-name">{item.name}</div>
+            <div className="review-time">{item.time}</div>
           </div>
-          { !this.props.item.resolved &&
+          { !item.resolved &&
             <Dropdown isOpen={this.state.dropdownOpen} size="sm"
               className="seafile-comment-dropdown" toggle={this.toggleDropDownMenu}>
               <DropdownToggle className="seafile-comment-dropdown-btn">
                 <i className="fas fa-ellipsis-v"></i>
               </DropdownToggle>
               <DropdownMenu>
-                { (this.props.item.userEmail === this.props.accountInfo.email) &&
+                { (item.userEmail === this.props.accountInfo.email) &&
                   <DropdownItem onClick={this.props.deleteComment}
-                    className="delete-comment" id={this.props.item.id}>{gettext('Delete')}</DropdownItem>}
+                    className="delete-comment" id={item.id}>{gettext('Delete')}</DropdownItem>}
                 <DropdownItem onClick={this.props.resolveComment}
-                  className="seafile-comment-resolved" id={this.props.item.id}>{gettext('Mark as resolved')}</DropdownItem>
+                  className="seafile-comment-resolved" id={item.id}>{gettext('Mark as resolved')}</DropdownItem>
               </DropdownMenu>
             </Dropdown>
           }
         </div>
-        { (this.props.item.newIndex >= -1 && this.props.item.oldIndex >= -1)? 
-          <div className="seafile-comment-content" onClick={this.scrollToQuote}
-            dangerouslySetInnerHTML={{ __html: this.state.html }}></div>
-          :
-          <div className="seafile-comment-content"
-            dangerouslySetInnerHTML={{ __html: this.state.html }}></div>
+        { (item.newIndex >= -1 && item.oldIndex >= -1) &&
+          <blockquote className="seafile-comment-content">
+            <div onClick={this.scrollToQuote} dangerouslySetInnerHTML={{ __html: this.state.quote }}></div>
+          </blockquote>
         }
+        <div className="seafile-comment-content" dangerouslySetInnerHTML={{ __html: this.state.comment }}></div>
       </li>
     );
   }

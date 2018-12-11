@@ -3,13 +3,14 @@ import PropTypes from 'prop-types';
 import { Button } from 'reactstrap';
 import { seafileAPI } from '../../utils/seafile-api';
 import { reviewID, gettext } from '../../utils/constants';
+import { processor } from '../../utils/seafile-markdown2html';
 
 import '../../css/review-comment-dialog.css';
 
 const commentDialogPropTypes = {
   onCommentAdded: PropTypes.func.isRequired,
   toggleCommentDialog: PropTypes.func.isRequired,
-  selectedText: PropTypes.string,
+  quote: PropTypes.string,
   newIndex: PropTypes.number,
   oldIndex: PropTypes.number,
 };
@@ -21,6 +22,7 @@ class ReviewCommentDialog extends React.Component {
     this.state = {
       comment: '',
       userName: '',
+      quote: '',
     };
   }
 
@@ -42,9 +44,9 @@ class ReviewCommentDialog extends React.Component {
   submitComment = () => {
     let comment = this.state.comment.trim();
     if (comment.length > 0) {
-      if (this.props.selectedText.length > 0) {
+      if (this.props.quote.length > 0) {
         let detail = {
-          selectedText: this.props.selectedText.slice(0, 10),
+          quote: this.props.quote,
           newIndex: this.props.newIndex,
           oldIndex: this.props.oldIndex
         };
@@ -64,12 +66,15 @@ class ReviewCommentDialog extends React.Component {
     }
   }
 
-  setQuoteText = (text) => {
-    if (text.length > 0) {
-      this.setState({
-        comment: text
-      });
-    }
+  setQuoteText = (mdQuote) => {
+    processor.process(mdQuote).then(
+      (result) => {
+        let quote = String(result);
+        this.setState({
+          quote: quote
+        });
+      }
+    );
   }
 
   componentWillMount() {
@@ -77,12 +82,12 @@ class ReviewCommentDialog extends React.Component {
   }
 
   componentDidMount() {
-    this.setQuoteText(this.props.selectedText);
+    this.setQuoteText(this.props.quote);
   }
 
   componentWillReceiveProps(nextProps) {
-    if (this.props.selectedText !== nextProps.selectedText) {
-      this.setQuoteText(nextProps.selectedText);
+    if (this.props.quote !== nextProps.quote) {
+      this.setQuoteText(nextProps.quote);
     }
   }
 
@@ -90,6 +95,9 @@ class ReviewCommentDialog extends React.Component {
     return (
       <div className="review-comment-dialog">
         <div>{this.state.userName}</div>
+        <blockquote className="review-comment-dialog-quote">
+          <div dangerouslySetInnerHTML={{ __html: this.state.quote}}></div>
+        </blockquote>
         <textarea value={this.state.comment} onChange={this.handleCommentChange}></textarea>
         <div className="button-group">
           <Button size="sm" color="primary" onClick={this.submitComment}>{gettext('Submit')}</Button>

@@ -96,10 +96,11 @@
 .seafile-comment-item .seafile-comment-content td {
   border: 1px solid #333;
 }
-.seafile-comment-item .seafile-comment-content blockquote {
+.seafile-comment-item blockquote {
   word-wrap: break-word;
   overflow: hidden;
   margin-right: 10px;
+  cursor: pointer;
 }
 .seafile-comment-row-resize {
   height: 5px;
