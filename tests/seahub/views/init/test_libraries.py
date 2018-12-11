@@ -9,7 +9,7 @@ from seahub.test_utils import BaseTestCase
 
 class LibrariesTest(BaseTestCase):
     def setUp(self):
-        self.url = reverse('libraries')
+        self.url = reverse('libraries') + '?_old=1'
         from constance import config
         self.config = config
 
