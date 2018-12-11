@@ -1,5 +1,4 @@
 import React, { Component, Fragment } from 'react';
-import PropTypes from 'prop-types';
 import { Dropdown, DropdownToggle, DropdownMenu, DropdownItem } from 'reactstrap';
 import { seafileAPI } from '../../utils/seafile-api';
 import { gettext, loginUrl } from '../../utils/constants';
@@ -17,8 +16,7 @@ class Wikis extends Component {
       loading: true,
       errorMsg: '',
       wikis: [],
-      isShowWikiAdd: false,
-      position: {top:'', left: ''},
+      isShowAddWikiMenu: false,
       isShowSelectDialog: false,
       isShowCreateDialog: false,
     };
@@ -63,27 +61,21 @@ class Wikis extends Component {
   }
 
   onMenuToggle = () => {
-    this.setState({isShowWikiAdd: !this.state.isShowWikiAdd})
+    this.setState({isShowAddWikiMenu: !this.state.isShowAddWikiMenu});
   }
 
   onSelectToggle = () => {
-    this.setState({
-      isShowSelectDialog: !this.state.isShowSelectDialog,
-    });
+    this.setState({isShowSelectDialog: !this.state.isShowSelectDialog});
   }
 
   onCreateToggle = () => {
-    this.setState({
-      isShowCreateDialog: !this.state.isShowCreateDialog,
-    });
+    this.setState({isShowCreateDialog: !this.state.isShowCreateDialog});
   }
 
   addWiki = (isExist, name, repoID) => {
     seafileAPI.addWiki(isExist, name, repoID).then((res) => {
       this.state.wikis.push(res.data);
-      this.setState({
-        wikis: this.state.wikis
-      });
+      this.setState({wikis: this.state.wikis});
     }).catch((error) => {
       if(error.response) {
         let errorMsg = error.response.data.error_msg;
@@ -133,13 +125,13 @@ class Wikis extends Component {
                 <h3 className="sf-heading">{gettext('Wikis')}</h3>
               </div>
               <div className="path-toolbar">
-                <Dropdown tag="div" className="btn btn-secondary operation-item" style={{marginTop: '-0.25rem'}} isOpen={this.state.isShowWikiAdd} toggle={this.onMenuToggle}>
+                <Dropdown tag="div" className="btn btn-secondary operation-item" style={{marginTop: '-0.25rem'}} isOpen={this.state.isShowAddWikiMenu} toggle={this.onMenuToggle}>
                   <DropdownToggle 
                     tag="i" 
                     className="fa fa-plus-square op-icon" 
                     title={gettext('More Operations')}
                     data-toggle="dropdown" 
-                    aria-expanded={this.state.isShowWikiAdd}
+                    aria-expanded={this.state.isShowAddWikiMenu}
                     onClick={this.clickMenuToggle}
                   >
                     {gettext(' Add Wiki')}
@@ -168,22 +160,22 @@ class Wikis extends Component {
             </div>
           </div>
         </div>
-        {this.state.isShowCreateDialog &&
+        {this.state.isShowCreateDialog && (
           <ModalPortal>
             <NewWikiDialog
               toggleCancel={this.onCreateToggle}
               addWiki={this.addWiki}
             />
           </ModalPortal>
-        }
-        {this.state.isShowSelectDialog &&
+        )}
+        {this.state.isShowSelectDialog && (
           <ModalPortal>
             <WikiSelectDialog
               toggleCancel={this.onSelectToggle}
               addWiki={this.addWiki}
             />
           </ModalPortal>
-        }
+        )}
       </Fragment>
     );
   }

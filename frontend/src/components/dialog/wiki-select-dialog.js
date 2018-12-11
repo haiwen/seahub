@@ -17,9 +17,9 @@ class WikiSelectDialog extends React.Component {
     this.state = {
       repos: [],
       isExist: true,
-      name: "",
-      repoID: "",
-    }
+      name: '',
+      repoID: '',
+    };
   }
 
   componentDidMount() {
@@ -27,7 +27,7 @@ class WikiSelectDialog extends React.Component {
       this.setState({
         repos: res.data.repos,
       }); 
-    })
+    });
   }
 
   onChange = (repo) => {
@@ -66,7 +66,7 @@ class WikiSelectDialog extends React.Component {
                 return (
                   <tr key={index}>
                     <td className="select"><input type="radio" className="vam" name="repo" value={repo.repo_id} onChange={this.onChange.bind(this, repo)} /></td>
-                    <td><img src={siteRoot + 'media/img/lib/48/lib.png'} width="24" /></td>
+                    <td><img src={siteRoot + 'media/img/lib/48/lib.png'} width="24" alt={gettext('icon')} /></td>
                     <td>{gettext(repo.repo_name)}</td>
                     <td>{moment(repo.last_modified).fromNow()}</td>
                   </tr>

@@ -15,7 +15,7 @@ class WikiListView extends Component {
     super(props);
     this.state = {
       isItemFreezed: false,
-    }
+    };
   }
 
   onFreezedItem = () => {
@@ -27,7 +27,7 @@ class WikiListView extends Component {
   }
 
   render() {
-    let {loading, errorMsg, wikis} = this.props.data;
+    let { loading, errorMsg, wikis } = this.props.data;
 
     if (loading) {
       return <span className="loading-icon loading-tip"></span>;

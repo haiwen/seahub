@@ -14,8 +14,8 @@ class NewWikiDialog extends React.Component {
     super(props);
     this.state = {
       isExist: false,
-      name: "",
-      repoID: "",
+      name: '',
+      repoID: '',
     };
     this.newName = React.createRef();
   }
@@ -53,7 +53,7 @@ class NewWikiDialog extends React.Component {
         <ModalHeader toggle={this.toggle}>{gettext('New Wiki')}</ModalHeader>
         <ModalBody>
           <label className="form-label">{gettext('Name')}</label>
-          <Input onKeyPress={this.handleKeyPress} innerRef={input => {this.newName = input}} value={this.state.name} onChange={this.inputNewName}/>
+          <Input onKeyPress={this.handleKeyPress} innerRef={input => {this.newName = input;}} value={this.state.name} onChange={this.inputNewName}/>
         </ModalBody>
         <ModalFooter>
           <Button color="secondary" onClick={this.toggle}>{gettext('Cancel')}</Button>
