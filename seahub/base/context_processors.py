@@ -29,7 +29,8 @@ try:
 except ImportError:
     SEACLOUD_MODE = False
 
-from seahub.utils import HAS_FILE_SEARCH, EVENTS_ENABLED, is_pro_version
+from seahub.utils import HAS_FILE_SEARCH, EVENTS_ENABLED, is_pro_version, \
+    get_service_url
 
 try:
     from seahub.settings import ENABLE_PUBFILE
@@ -62,6 +63,10 @@ def base(request):
     file_server_root = config.FILE_SERVER_ROOT
     if not file_server_root.endswith('/'):
         file_server_root += '/'
+
+    service_url = get_service_url()
+    if not service_url.endswith('/'):
+        service_url += '/'
 
     logo_path = LOGO_PATH
     favicon_path = FAVICON_PATH
@@ -109,6 +114,7 @@ def base(request):
         'CSRF_COOKIE_NAME': dj_settings.CSRF_COOKIE_NAME,
         'constance_enabled': dj_settings.CONSTANCE_ENABLED,
         'FILE_SERVER_ROOT': file_server_root,
+        'SERVICE_URL': service_url,
         'LOGIN_URL': dj_settings.LOGIN_URL,
         'enable_thumbnail': ENABLE_THUMBNAIL,
         'thumbnail_size_for_original': THUMBNAIL_SIZE_FOR_ORIGINAL,

@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import ReactDOM from 'react-dom';
 import { Router } from '@reach/router';
-import { siteRoot } from './utils/constants';
+import { siteRoot, serviceURL } from './utils/constants';
 import SidePanel from './components/side-panel';
 import MainPanel from './components/main-panel';
 import DraftsView from './pages/drafts/drafts-view';
@@ -51,7 +51,7 @@ class App extends Component {
       draftCounts: 0,
       draftList:[],
       isLoadingDraft: true,
-      currentTab: '/',
+      currentTab: 'my-libs',
     };
     this.currentTab = ''; //just for refresh brower
   }
@@ -60,12 +60,20 @@ class App extends Component {
     // e.g.  from http://127.0.0.1:8000/drafts/reviews/
     // get reviews  
     // TODO: need refactor later
-    let href = window.location.href.split('/');
+    let url = window.location.href;
+
     this.getDrafts();
-    this.setState({currentTab: href[href.length - 2]});
+    if (serviceURL === url) {
+      this.setState({currentTab: 'my-libs'});
+    } else {
+      let href = url.split('/');
+      this.setState({currentTab: href[href.length - 2]});
+    }
+
     if (this.currentTab) {
       this.setState({currentTab: this.currentTab});
     }
+
   }
 
   getDrafts = () => {
