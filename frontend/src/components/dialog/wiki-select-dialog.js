@@ -51,7 +51,7 @@ class WikiSelectDialog extends React.Component {
     return (
       <Modal isOpen={true}>
         <ModalHeader toggle={this.toggle}>{gettext('Choose a library as Wiki')}</ModalHeader>
-        <ModalBody>
+        <ModalBody className="dialog-list-container">
           <table>
             <thead>
               <tr>

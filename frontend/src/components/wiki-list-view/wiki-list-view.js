@@ -1,15 +1,30 @@
-import React, { Component, Fragment } from 'react';
+import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { gettext } from '../../utils/constants';
 import WikiListItem from './wiki-list-item';
 
-const contentpropTypes = {
+const propTypes = {
   data: PropTypes.object.isRequired,
   renameWiki: PropTypes.func.isRequired,
   deleteWiki: PropTypes.func.isRequired,
 };
 
 class WikiListView extends Component {
+
+  constructor(props) {
+    super(props);
+    this.state = {
+      isItemFreezed: false,
+    }
+  }
+
+  onFreezedItem = () => {
+    this.setState({isItemFreezed: true});
+  }
+
+  onUnfreezedItem = () => {
+    this.setState({isItemFreezed: false});
+  }
 
   render() {
     let {loading, errorMsg, wikis} = this.props.data;
@@ -32,9 +47,14 @@ class WikiListView extends Component {
           <tbody>
             {wikis.map((wiki, index) => {
               return(
-                <WikiListItem key={index} wiki={wiki}
+                <WikiListItem 
+                  key={index} 
+                  wiki={wiki}
                   renameWiki={this.props.renameWiki}
                   deleteWiki={this.props.deleteWiki}
+                  isItemFreezed={this.state.isItemFreezed}
+                  onFreezedItem={this.onFreezedItem}
+                  onUnfreezedItem={this.onUnfreezedItem}
                 />);
             })}
           </tbody>
@@ -44,6 +64,6 @@ class WikiListView extends Component {
   }
 }
 
-WikiListView.propTypes = contentpropTypes;
+WikiListView.propTypes = propTypes;
 
 export default WikiListView;

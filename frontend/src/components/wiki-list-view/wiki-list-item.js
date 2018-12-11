@@ -9,10 +9,13 @@ import Toast from '../toast';
 import WikiMenu from './wiki-menu';
 import WikiRename from './wiki-rename';
 
-const itempropTypes = {
+const propTypes = {
   wiki: PropTypes.object.isRequired,
   renameWiki: PropTypes.func.isRequired,
   deleteWiki: PropTypes.func.isRequired,
+  isItemFreezed: PropTypes.bool.isRequired,
+  onFreezedItem: PropTypes.func.isRequired,
+  onUnfreezedItem: PropTypes.func.isRequired,
 };
 
 class WikiListItem extends Component {
@@ -21,7 +24,6 @@ class WikiListItem extends Component {
     this.state = {
       isShowWikiMenu: false,
       position: {top:'', left: ''},
-      isItemFreezed: false,
       isShowDeleteDialog: false,
       isShowMenuControl: false,
       isRenameing: false,
@@ -55,19 +57,21 @@ class WikiListItem extends Component {
     this.setState({
       isShowWikiMenu: true,
       position: position,
-      isItemFreezed: true,
     });
+    this.props.onFreezedItem();
   }
 
   onHideWikiMenu = () => {
     this.setState({
       isShowWikiMenu: false,
-      isItemFreezed: false,
+      isShowMenuControl: false,
+      highlight: '',
     });
+    this.props.onUnfreezedItem();
   }
 
   onMouseEnter = () => {
-    if (!this.state.isItemFreezed) {
+    if (!this.props.isItemFreezed) {
       this.setState({
         isShowMenuControl: true,
         highlight: 'tr-highlight',
@@ -76,7 +80,7 @@ class WikiListItem extends Component {
   }
 
   onMouseLeave = () => {
-    if (!this.state.isItemFreezed) {
+    if (!this.props.isItemFreezed) {
       this.setState({
         isShowMenuControl: false,
         highlight: '',
@@ -84,10 +88,12 @@ class WikiListItem extends Component {
     }
   }
 
-  onRenameToggle = () => {
+  onRenameToggle = (e) => {
+    e.nativeEvent.stopImmediatePropagation();
+    this.props.onFreezedItem();
     this.setState({
       isShowWikiMenu: false,
-      isItemFreezed: true,
+      isShowMenuControl: false,
       isRenameing: true,
     });
   }
@@ -114,10 +120,8 @@ class WikiListItem extends Component {
   }
 
   onRenameCancel = () => {
-    this.setState({
-      isRenameing: false,
-      isItemFreezed: false,
-    });
+    this.setState({isRenameing: false});
+    this.props.onUnfreezedItem();
   }
 
   onDeleteToggle = () => {
@@ -146,7 +150,7 @@ class WikiListItem extends Component {
     return (
       <Fragment>
         <tr className={this.state.highlight} onMouseEnter={this.onMouseEnter} onMouseLeave={this.onMouseLeave}>
-          <td>
+          <td className="name">
             {this.state.isRenameing ?
               <WikiRename wiki={wiki} onRenameConfirm={this.onRenameConfirm} onRenameCancel={this.onRenameCancel}/> :
               <a href={wiki.link}>{gettext(wiki.name)}</a>
@@ -154,7 +158,7 @@ class WikiListItem extends Component {
           </td>
           <td><a href={userProfileURL} target='_blank'>{gettext(wiki.owner_nickname)}</a></td>
           <td>{moment(wiki.updated_at).fromNow()}</td>
-          <td className="menu-toggle" onClick={this.onMenuToggle}>
+          <td className="menu-toggle">
             <MenuControl
               isShow={this.state.isShowMenuControl}
               onClick={this.onMenuToggle}
@@ -181,6 +185,6 @@ class WikiListItem extends Component {
   }
 }
 
-WikiListItem.propTypes = itempropTypes;
+WikiListItem.propTypes = propTypes;
 
 export default WikiListItem;

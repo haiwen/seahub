@@ -163,6 +163,11 @@ ul,ol,li {
     user-select: none;
 }
 
+.dialog-list-container { /*for content is list dialog*/
+    height: 20rem;
+    overflow: auto;
+}
+
 /* UI Widget */
 
 /**** caret ****/
@@ -810,6 +815,10 @@ table .star {
 
 table .star .empty {
     color: #d0d0d0;
+}
+
+table .name {
+    line-height: 1.5rem; /*for wiki height*/
 }
 
 table .rename-container input {

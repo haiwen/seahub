@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import { seafileAPI } from '../../utils/seafile-api';
 import { gettext, loginUrl } from '../../utils/constants';
 import WikiAdd from './wiki-add';
-import Toast from '../../components/toast';
+import toaster from '../../components/toast';
 import ModalPortal from '../../components/modal-portal';
 import NewWikiDialog from '../../components/dialog/new-wiki-dialog';
 import WikiSelectDialog from '../../components/dialog/wiki-select-dialog';
@@ -110,7 +110,7 @@ class Wikis extends Component {
     }).catch((error) => {
       if(error.response) {
         let errorMsg = error.response.data.error_msg;
-        Toast.error(errorMsg);
+        toaster.danger(errorMsg);
       }
     });
   }
@@ -123,28 +123,25 @@ class Wikis extends Component {
         }
         return item;
       });
-      this.setState({
-        wikis: wikis
-      });
+      this.setState({wikis: wikis});
     }).catch((error) => {
       if(error.response) {
         let errorMsg = error.response.data.error_msg;
-        Toast.error(errorMsg);
+        toaster.danger(errorMsg);
       }
     });
   }
 
   deleteWiki = (wiki) => {
     seafileAPI.deleteWiki(wiki.slug).then(() => {
-      this.setState({
-        wikis: this.state.wikis.filter(item => {
-          return item.name !== wiki.name
-        })
+      let wikis = this.state.wikis.filter(item => {
+        return item.name !== wiki.name;
       });
+      this.setState({wikis: wikis});
     }).catch((error) => {
       if(error.response) {
         let errorMsg = error.response.data.error_msg;
-        Toast.error(errorMsg);
+        toaster.danger(errorMsg);
       }
     });
   }
@@ -155,9 +152,11 @@ class Wikis extends Component {
         <div className="main-panel-center">
           <div className="cur-view-container" id="wikis">
             <div className="cur-view-path">
-              <h3 className="sf-heading">{gettext('Wikis')}</h3>
-              <div style={{float:'right'}} className="operation">
-                <button className="btn btn-secondary operation-item" onClick={this.onAddMenuToggle}>
+              <div className="path-container">
+                <h3 className="sf-heading">{gettext('Wikis')}</h3>
+              </div>
+              <div className="path-toolbar">
+                <button className="btn btn-secondary operation-item" style={{marginTop: '-0.25rem'}} onClick={this.onAddMenuToggle}>
                   <i className="fa fa-plus-square op-icon"></i>
                   {gettext('Add Wiki')}
                 </button>
