@@ -116,9 +116,9 @@ else:
         repo_owner = kwargs['repo_owner']
 
         if org_id > 0:
-            related_users = [r.user for r in seafile_api.org_get_shared_users_by_repo(org_id, repo_id)]
+            related_users = seafile_api.org_get_shared_users_by_repo(org_id, repo_id)
         else:
-            related_users = [r.user for r in seafile_api.get_shared_users_by_repo(repo_id)]
+            related_users = seafile_api.get_shared_users_by_repo(repo_id)
             org_id = -1
 
         related_users.append(repo_owner)

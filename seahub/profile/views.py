@@ -81,6 +81,9 @@ def edit_profile(request):
     else:
         webdav_passwd = ''
 
+    email_inverval = UserOptions.objects.get_file_updates_email_interval(username)
+    email_inverval = email_inverval if email_inverval is not None else 0
+
     resp_dict = {
             'form': form,
             'server_crypto': server_crypto,
@@ -94,6 +97,7 @@ def edit_profile(request):
             'ENABLE_CHANGE_PASSWORD': settings.ENABLE_CHANGE_PASSWORD,
             'ENABLE_WEBDAV_SECRET': settings.ENABLE_WEBDAV_SECRET,
             'webdav_passwd': webdav_passwd,
+            'email_notification_interval': email_inverval,
     }
 
     if has_two_factor_auth():

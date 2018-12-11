@@ -5,7 +5,6 @@ TOKEN_URL = apiurl('/api2/auth-token/')
 AUTH_PING_URL = apiurl('/api2/auth/ping/')
 
 ACCOUNTS_URL = apiurl('/api2/accounts/')
-ACCOUNT_INFO_URL = apiurl('/api2/account/info/')
 AVATAR_BASE_URL = apiurl(u'/api2/avatars/')
 
 REPOS_URL = apiurl('/api2/repos/')

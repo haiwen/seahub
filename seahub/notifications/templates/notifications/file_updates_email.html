@@ -1,0 +1,49 @@
+{% extends 'email_base.html' %}
+
+{% load i18n seahub_tags %}
+
+{% block email_con %}
+
+<p style="font-size:14px; line-height: 1.5; color:#121214; margin:.2em 0 12px;">{% trans "Hi," %} {{ name }}</p>
+<p style="font-size:14px; line-height: 1.5; color:#434144; margin:.2em 0;">
+{% blocktrans count num=updates_count %}
+You've got 1 new file updates on {{ site_name }}:
+{% plural %}
+You've got {{num}} file updates on {{ site_name }}:
+{% endblocktrans %}
+</p>
+
+    <table style="width:100%; margin:12px 0 20px; table-layout:fixed; border-spacing: 0; border-collapse: collapse;">
+        <tr>
+            <th width="9%" style="padding: 5px 3px; border-bottom: 1px solid #eee;"></th>
+            <th width="19%" style="padding: 5px 3px; border-bottom: 1px solid #eee; font-size:13px; text-align: left; font-weight: normal; color: #9c9c9c;">{% trans "User" %}</th>
+            <th width="20%" style="padding: 5px 3px; border-bottom: 1px solid #eee; font-size:13px; text-align: left; font-weight: normal; color: #9c9c9c;">{% trans "Operation" %}</th>
+            <th width="30%" style="padding: 5px 3px; border-bottom: 1px solid #eee; font-size:13px; text-align: left; font-weight: normal; color: #9c9c9c;">{% trans "File" %}</th>
+            <th width="22%" style="padding: 5px 3px; border-bottom: 1px solid #eee; font-size:13px; text-align: left; font-weight: normal; color: #9c9c9c;">{% trans "Time" %}</th>
+        </tr>
+
+        {% autoescape off %}
+        {% for ele in updates %}
+        <tr>
+            <td style="padding:8px 3px 5px; border-bottom: 1px solid #eee; text-align:center; vertical-align:top;"><img src="{{ele.user_avatar}}" width="32" height="32" alt="" style="border-radius:1000px;" /></td>
+
+            <td style="padding: 5px 3px; border-bottom: 1px solid #eee; font-size: 13px; color: #333; word-wrap: break-word;">
+              {{ele.op_user_link}}
+            </td>
+
+            <td style="padding: 5px 3px; border-bottom: 1px solid #eee; font-size: 13px; color: #333; word-wrap: break-word;">
+              {{ele.operation}}
+            </td>
+
+            <td style="padding: 5px 3px; border-bottom: 1px solid #eee; font-size: 13px; color: #333; word-wrap: break-word;">
+              {{ele.op_details}}
+            </td>
+
+            <td style="padding: 5px 3px; border-bottom: 1px solid #eee; font-size: 13px; color: #333; word-wrap: break-word;">{{ ele.local_timestamp|date:"Y-m-d G:i:s"}}</td>
+        </tr>
+        {% endfor %}
+        {% endautoescape %}
+
+    </table>
+
+{% endblock %}
