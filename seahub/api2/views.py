@@ -346,7 +346,7 @@ class AccountInfo(APIView):
         email_interval = request.data.get("email_notification_interval", None)
         if email_interval is not None:
             try:
-                interval = int(email_interval)
+                email_interval = int(email_interval)
             except ValueError:
                 return api_error(status.HTTP_400_BAD_REQUEST,
                                  'email_interval invalid')
@@ -360,8 +360,8 @@ class AccountInfo(APIView):
             profile.nickname = name
             profile.save()
 
-        if interval is not None:
-            if interval <= 0:
+        if email_interval is not None:
+            if email_interval <= 0:
                 UserOptions.objects.unset_file_updates_email_interval(username)
             else:
                 UserOptions.objects.set_file_updates_email_interval(
