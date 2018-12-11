@@ -1,6 +1,6 @@
 import React, { Component, Fragment } from 'react';
 import ReactDOM from 'react-dom';
-import { Router } from '@reach/router';
+import { Router, Link } from '@reach/router';
 import { gettext, siteRoot } from './utils/constants';
 import SidePanel from './components/side-panel';
 import MainPanel from './components/main-panel';
@@ -113,9 +113,9 @@ class App extends Component {
     if (groupID) { //group
       return (
         <Fragment>
-          <a href={siteRoot + 'groups/'} className="normal">{gettext('Groups')}</a>
+          <Link to={siteRoot + 'groups/'} className="normal">{gettext('Groups')}</Link>
           <span className="path-split">/</span>
-          <a href={siteRoot + 'group/' + groupID + '/'} className="normal">{currentTab}</a>
+          <Link to={siteRoot + 'group/' + groupID + '/'} className="normal">{currentTab}</Link>
           <span className="path-split">/</span>
         </Fragment>
       );
@@ -123,7 +123,7 @@ class App extends Component {
     if (currentTab === 'my-libs') {
       return (
         <Fragment>
-          <a href={siteRoot + 'my-libs/'} className="normal">{gettext('Libraries')}</a>
+          <Link to={siteRoot + 'my-libs/'} className="normal">{gettext('Libraries')}</Link>
           <span className="path-split">/</span>
         </Fragment>
       );
@@ -131,7 +131,7 @@ class App extends Component {
     if (currentTab === 'shared-libs') {
       return (
         <Fragment>
-          <a href={siteRoot + 'shared-libs/'} className="normal">{gettext('Shared with me')}</a>
+          <Link to={siteRoot + 'shared-libs/'} className="normal">{gettext('Shared with me')}</Link>
           <span className="path-split">/</span>
         </Fragment>
       );

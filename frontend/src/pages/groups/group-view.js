@@ -1,6 +1,7 @@
 import React,{ Fragment } from 'react';
 import PropTypes from 'prop-types';
 import { gettext, siteRoot, username, loginUrl } from '../../utils/constants';
+import { Link } from '@reach/router';
 import { seafileAPI } from '../../utils/seafile-api';
 import Loading from '../../components/loading';
 import ModalPortal from '../../components/modal-portal';
@@ -202,7 +203,7 @@ class GroupView extends React.Component {
               {currentGroup && (
                 <Fragment>
                   <div className="path-container">
-                    <a href={`${siteRoot}groups/`}>{gettext("Groups")}</a>
+                    <Link to={`${siteRoot}groups/`}>{gettext("Groups")}</Link>
                     <span className="path-split">/</span>
                     <span>{currentGroup.name}</span>
                     {currentGroup.parent_group_id !== 0 && (
