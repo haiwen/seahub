@@ -15,7 +15,7 @@ class reviewComment {
       let detail = JSON.parse(item.detail);
       this.newIndex = detail.newIndex;
       this.oldIndex = detail.oldIndex;
-      this.selectedText = detail.selectedText;
+      this.quote = detail.quote;
     }
   }
 
