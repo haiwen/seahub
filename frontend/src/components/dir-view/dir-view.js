@@ -11,8 +11,8 @@ import FileTag from '../../models/file-tag';
 import Repo from '../../models/repo';
 
 const propTypes = {
+  pathPrefix: PropTypes.object.isRequired,
   onMenuClick: PropTypes.func.isRequired,
-  updateCurrentTab: PropTypes.func.isRequired,
 };
 
 class DirView extends React.Component {
@@ -53,15 +53,9 @@ class DirView extends React.Component {
         permission: repo.permission === 'rw',
         currentRepo: repo,
       });
-      
-      let repoName = encodeURIComponent(repo.repo_name);
-      let index = location.href.indexOf(repoName) + repoName.length;
-      let path = decodeURIComponent(location.href.slice(index));
-      this.setState({path: path});
-      this.updateDirentList(path);
-    });
 
-    this.props.updateCurrentTab('my-libs'); // just for refersh brower;
+      this.updateDirentList(this.state.path);
+    });
   }
   
   updateDirentList = (filePath) => {
@@ -430,6 +424,7 @@ class DirView extends React.Component {
   render() {
     return (
       <DirPanel 
+        pathPrefix={this.props.pathPrefix}
         currentRepo={this.state.currentRepo}
         path={this.state.path}
         pathExist={this.state.pathExit}

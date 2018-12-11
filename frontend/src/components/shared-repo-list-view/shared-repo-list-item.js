@@ -2,6 +2,7 @@ import React, { Fragment } from 'react';
 import PropTypes from 'prop-types';
 import moment from 'moment';
 import { Dropdown, DropdownMenu, DropdownToggle, DropdownItem } from 'reactstrap';
+import { Link } from '@reach/router';
 import { Utils } from '../../utils/utils';
 import { gettext, siteRoot, isPro, username, folderPermEnabled } from '../../utils/constants';
 
@@ -91,7 +92,7 @@ class SharedRepoListItem extends React.Component {
     });
 
     //todo change to library; div-view is not compatibility
-    let libPath = `${siteRoot}#group/${currentGroup.id}/lib/${this.props.repo.repo_id}/`;
+    let libPath = `${siteRoot}library/${this.props.repo.repo_id}/`;
 
     return { iconUrl, iconTitle, libPath };
   }
@@ -269,7 +270,7 @@ class SharedRepoListItem extends React.Component {
     return (
       <tr className={this.state.highlight ? 'tr-highlight' : ''} onMouseEnter={this.onMouseEnter} onMouseOver={this.onMouseOver} onMouseLeave={this.onMouseLeave}>
         <td><img src={iconUrl} title={repo.iconTitle} alt={iconTitle} width="24" /></td>
-        <td><a href={libPath}>{repo.repo_name}</a></td>
+        <td><Link to={libPath}>{repo.repo_name}</Link></td>
         <td>{this.state.isOperationShow && this.generatorPCMenu()}</td>
         <td>{repo.size}</td>
         <td title={moment(repo.last_modified).format('llll')}>{moment(repo.last_modified).fromNow()}</td>

@@ -14,6 +14,7 @@ import FileUploader from '../file-uploader/file-uploader';
 
 const propTypes = {
   currentRepo: PropTypes.object,
+  pathPrefix: PropTypes.object.isRequired,
   path: PropTypes.string.isRequired,
   repoID: PropTypes.string.isRequired,
   repoName: PropTypes.string.isRequired,
@@ -147,6 +148,7 @@ class DirPanel extends React.Component {
               <CurDirPath 
                 repoID={this.props.repoID}
                 repoName={this.props.repoName}
+                pathPrefix={this.props.pathPrefix}
                 currentPath={this.props.path} 
                 permission={this.props.permission}
                 onPathClick={this.props.onPathClick}

@@ -52,8 +52,8 @@ class MainSideNav extends React.Component {
     });
   }
 
-  tabItemClick = (param) => {
-    this.props.tabItemClick(param);
+  tabItemClick = (param, id) => {
+    this.props.tabItemClick(param, id);
   }
 
   getActiveClass = (tab) => {
@@ -76,7 +76,7 @@ class MainSideNav extends React.Component {
         {this.state.groupItems.map(item => {
           return (
             <li key={item.id} className="nav-item"> 
-              <Link to={siteRoot + 'group/' + item.id + '/'} className={`nav-link ellipsis ${this.getActiveClass(item.id)}`} onClick={() => this.tabItemClick(item.id)}>
+              <Link to={siteRoot + 'group/' + item.id + '/'} className={`nav-link ellipsis ${this.getActiveClass(item.name)}`} onClick={() => this.tabItemClick(item.name, item.id)}>
                 <span className="sharp" aria-hidden="true">#</span>
                 <span className="nav-text">{item.name}</span>
               </Link>

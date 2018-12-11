@@ -1,9 +1,10 @@
-import React from 'react';
+import React, { Fragment } from 'react';
 import PropTypes from 'prop-types';
 import { siteRoot, gettext } from '../../utils/constants';
 
 const propTypes = {
   repoName: PropTypes.string.isRequired,
+  pathPrefix: PropTypes.object,
   currentPath: PropTypes.string.isRequired,
   onPathClick: PropTypes.func.isRequired,
 };
@@ -43,10 +44,16 @@ class DirPath extends React.Component {
   render() {
     let { currentPath, repoName } = this.props;
     let pathElem = this.turnPathToLink(currentPath);
+    let pathPrefix = this.props.pathPrefix !== undefined ? this.props.pathPrefix : false;
     return (
       <div className="path-containter">
-        <a href={siteRoot + 'my-libs/'} className="normal">{gettext('Libraries')}</a>
-        <span className="path-split">/</span>
+        {pathPrefix ? 
+          pathPrefix :
+            <Fragment>
+              <a href={siteRoot + 'my-libs/'} className="normal">{gettext('Libraries')}</a>
+              <span className="path-split">/</span>
+            </Fragment>       
+        }
         {currentPath === '/' ?
           <span>{repoName}</span>:
           <a className="path-link" data-path="/" onClick={this.onPathClick}>{repoName}</a>

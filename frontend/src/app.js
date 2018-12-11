@@ -1,7 +1,7 @@
-import React, { Component } from 'react';
+import React, { Component, Fragment } from 'react';
 import ReactDOM from 'react-dom';
 import { Router } from '@reach/router';
-import { siteRoot } from './utils/constants';
+import { gettext, siteRoot } from './utils/constants';
 import SidePanel from './components/side-panel';
 import MainPanel from './components/main-panel';
 import DraftsView from './pages/drafts/drafts-view';
@@ -52,8 +52,8 @@ class App extends Component {
       draftList:[],
       isLoadingDraft: true,
       currentTab: '/',
+      pathPrefix: null,
     };
-    this.currentTab = ''; //just for refresh brower
   }
 
   componentDidMount() {
@@ -101,12 +101,42 @@ class App extends Component {
     //todos
   }
 
-  tabItemClick = (tabName) => {
-    this.setState({currentTab: tabName});
+  tabItemClick = (tabName, groupID) => {
+    let pathPrefix = this.generatorPrefix(tabName, groupID);
+    this.setState({
+      currentTab: tabName,
+      pathPrefix: pathPrefix
+    });
   } 
 
-  updateCurrentTab = (tabName) => {
-    this.currentTab = tabName;
+  generatorPrefix = (currentTab, groupID) => {
+    if (groupID) { //group
+      return (
+        <Fragment>
+          <a href={siteRoot + 'groups/'} className="normal">{gettext('Groups')}</a>
+          <span className="path-split">/</span>
+          <a href={siteRoot + 'group/' + groupID + '/'} className="normal">{currentTab}</a>
+          <span className="path-split">/</span>
+        </Fragment>
+      );
+    }
+    if (currentTab === 'my-libs') {
+      return (
+        <Fragment>
+          <a href={siteRoot + 'my-libs/'} className="normal">{gettext('Libraries')}</a>
+          <span className="path-split">/</span>
+        </Fragment>
+      );
+    }
+    if (currentTab === 'shared-libs') {
+      return (
+        <Fragment>
+          <a href={siteRoot + 'shared-libs/'} className="normal">{gettext('Shared with me')}</a>
+          <span className="path-split">/</span>
+        </Fragment>
+      );
+    }
+    return null;
   }
 
   render() {
@@ -141,7 +171,7 @@ class App extends Component {
             <ShareAdminUploadLinksWrapper path={siteRoot + 'share-admin-upload-links'} onShowSidePanel={this.onShowSidePanel} onSearchedClick={this.onSearchedClick} />
             <SharedLibrariesWrapper path={siteRoot + 'shared-libs'} onShowSidePanel={this.onShowSidePanel} onSearchedClick={this.onSearchedClick} />
             <MyLibraries path={siteRoot + 'my-libs'} onShowSidePanel={this.onShowSidePanel} onSearchedClick={this.onSearchedClick} />
-            <DirView path={siteRoot + 'library/:repoID/*'} onMenuClick={this.onShowSidePanel} updateCurrentTab={this.updateCurrentTab}/>
+            <DirView path={siteRoot + 'library/:repoID/*'} pathPrefix={this.state.pathPrefix} onMenuClick={this.onShowSidePanel}/>
             <Groups path={siteRoot + 'groups'} onShowSidePanel={this.onShowSidePanel} onSearchedClick={this.onSearchedClick}/>
             <Group path={siteRoot + 'group/:groupID'} onShowSidePanel={this.onShowSidePanel} onSearchedClick={this.onSearchedClick}/>
             <WikisWrapper path={siteRoot + 'wikis'} onShowSidePanel={this.onShowSidePanel} onSearchedClick={this.onSearchedClick}/>
