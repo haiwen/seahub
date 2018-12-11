@@ -1,12 +1,11 @@
 import React, { Component, Fragment } from 'react';
 import PropTypes from 'prop-types';
 import moment from 'moment';
+import { Dropdown, DropdownToggle, DropdownMenu, DropdownItem } from 'reactstrap';
 import { gettext, siteRoot } from '../../utils/constants';
+import Toast from '../toast';
 import ModalPortal from '../modal-portal';
 import WikiDeleteDialog from '../dialog/wiki-delete-dialog';
-import MenuControl from '../menu-control';
-import Toast from '../toast';
-import WikiMenu from './wiki-menu';
 import WikiRename from './wiki-rename';
 
 const propTypes = {
@@ -23,58 +22,42 @@ class WikiListItem extends Component {
     super(props);
     this.state = {
       isShowWikiMenu: false,
-      position: {top:'', left: ''},
       isShowDeleteDialog: false,
       isShowMenuControl: false,
       isRenameing: false,
-      highlight: '',
+      highlight: false,
     };
   }
 
-  componentDidMount() {
-    document.addEventListener('click', this.onHideWikiMenu);
-  }
-
-  componentWillUnmount() {
-    document.removeEventListener('click', this.onHideWikiMenu);
+  clickMenuToggle = (e) => {
+    e.preventDefault();
+    this.onMenuToggle(e);
   }
 
   onMenuToggle = (e) => {
-    e.stopPropagation();
-    e.nativeEvent.stopImmediatePropagation();
-
-    if (this.state.isShowWikiMenu) {
-      this.onHideWikiMenu();
-    } else {
-      this.onShowWikiMenu(e);
+    let targetType = e.target.dataset.toggle;
+    if (targetType === 'dropdown') {
+      if (this.props.isItemFreezed) {
+        this.setState({
+          highlight: false,
+          isShowMenuControl: false,
+          isShowWikiMenu: !this.state.isShowWikiMenu
+        });
+        this.props.onUnfreezedItem();
+      } else {
+        this.setState({
+          isShowWikiMenu: !this.state.isShowWikiMenu
+        });
+        this.props.onFreezedItem();
+      }
     }
-  }
-
-  onShowWikiMenu = (e) => {
-    let left = e.clientX - 8*16;
-    let top  = e.clientY + 12;
-    let position = {top: top, left: left};
-    this.setState({
-      isShowWikiMenu: true,
-      position: position,
-    });
-    this.props.onFreezedItem();
-  }
-
-  onHideWikiMenu = () => {
-    this.setState({
-      isShowWikiMenu: false,
-      isShowMenuControl: false,
-      highlight: '',
-    });
-    this.props.onUnfreezedItem();
   }
 
   onMouseEnter = () => {
     if (!this.props.isItemFreezed) {
       this.setState({
         isShowMenuControl: true,
-        highlight: 'tr-highlight',
+        highlight: true,
       });
     }
   }
@@ -83,13 +66,12 @@ class WikiListItem extends Component {
     if (!this.props.isItemFreezed) {
       this.setState({
         isShowMenuControl: false,
-        highlight: '',
+        highlight: false,
       });
     }
   }
 
   onRenameToggle = (e) => {
-    e.nativeEvent.stopImmediatePropagation();
     this.props.onFreezedItem();
     this.setState({
       isShowWikiMenu: false,
@@ -123,11 +105,20 @@ class WikiListItem extends Component {
     this.setState({isRenameing: false});
     this.props.onUnfreezedItem();
   }
-
+  
   onDeleteToggle = () => {
     this.setState({
       isShowDeleteDialog: !this.state.isShowDeleteDialog,
+      isShowWikiMenu: false,
+      isShowMenuControl: false,
     });
+  }
+  
+  onDeleteCancel = () => {
+    this.setState({
+      isShowDeleteDialog: !this.state.isShowDeleteDialog,
+    });
+    this.props.onUnfreezedItem();
   }
 
   renameWiki = (newName) => {
@@ -149,7 +140,7 @@ class WikiListItem extends Component {
 
     return (
       <Fragment>
-        <tr className={this.state.highlight} onMouseEnter={this.onMouseEnter} onMouseLeave={this.onMouseLeave}>
+        <tr className={this.state.highlight ? 'tr-highlight' : ''} onMouseEnter={this.onMouseEnter} onMouseLeave={this.onMouseLeave}>
           <td className="name">
             {this.state.isRenameing ?
               <WikiRename wiki={wiki} onRenameConfirm={this.onRenameConfirm} onRenameCancel={this.onRenameCancel}/> :
@@ -159,23 +150,28 @@ class WikiListItem extends Component {
           <td><a href={userProfileURL} target='_blank'>{gettext(wiki.owner_nickname)}</a></td>
           <td>{moment(wiki.updated_at).fromNow()}</td>
           <td className="menu-toggle">
-            <MenuControl
-              isShow={this.state.isShowMenuControl}
-              onClick={this.onMenuToggle}
-            />
-            {this.state.isShowWikiMenu &&
-              <WikiMenu
-                position={this.state.position}
-                onRenameToggle={this.onRenameToggle}
-                onDeleteToggle={this.onDeleteToggle}
-              />
-            }
+            {this.state.isShowMenuControl && (
+              <Dropdown isOpen={this.state.isShowWikiMenu} toggle={this.onMenuToggle}>
+                <DropdownToggle 
+                  tag="a" 
+                  className="fas fa-ellipsis-v" 
+                  title={gettext('More Operations')}
+                  data-toggle="dropdown" 
+                  aria-expanded={this.state.isShowWikiMenu}
+                  onClick={this.clickMenuToggle}
+                />
+                <DropdownMenu>
+                  <DropdownItem onClick={this.onRenameToggle}>{gettext('Rename')}</DropdownItem>
+                  <DropdownItem onClick={this.onDeleteToggle}>{gettext('Delete')}</DropdownItem>
+                </DropdownMenu>
+              </Dropdown>
+            )}
           </td>
         </tr>
         {this.state.isShowDeleteDialog &&
           <ModalPortal>
             <WikiDeleteDialog
-              toggleCancel={this.onDeleteToggle}
+              toggleCancel={this.onDeleteCancel}
               handleSubmit={this.deleteWiki}
             />
           </ModalPortal>

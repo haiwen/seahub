@@ -46,7 +46,7 @@ class WikiListView extends Component {
           </thead>
           <tbody>
             {wikis.map((wiki, index) => {
-              return(
+              return (
                 <WikiListItem 
                   key={index} 
                   wiki={wiki}
@@ -55,7 +55,8 @@ class WikiListView extends Component {
                   isItemFreezed={this.state.isItemFreezed}
                   onFreezedItem={this.onFreezedItem}
                   onUnfreezedItem={this.onUnfreezedItem}
-                />);
+                />
+              );
             })}
           </tbody>
         </table>

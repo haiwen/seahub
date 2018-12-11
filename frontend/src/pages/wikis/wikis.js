@@ -1,8 +1,8 @@
 import React, { Component, Fragment } from 'react';
 import PropTypes from 'prop-types';
+import { Dropdown, DropdownToggle, DropdownMenu, DropdownItem } from 'reactstrap';
 import { seafileAPI } from '../../utils/seafile-api';
 import { gettext, loginUrl } from '../../utils/constants';
-import WikiAdd from './wiki-add';
 import toaster from '../../components/toast';
 import ModalPortal from '../../components/modal-portal';
 import NewWikiDialog from '../../components/dialog/new-wiki-dialog';
@@ -25,12 +25,7 @@ class Wikis extends Component {
   }
 
   componentDidMount() {
-    document.addEventListener('click', this.onHideWikiAdd);
     this.getWikis();
-  }
-
-  componentWillUnmount() {
-    document.removeEventListener('click', this.onHideWikiAdd);
   }
 
   getWikis = () => {
@@ -62,31 +57,13 @@ class Wikis extends Component {
     });
   }
 
-  onAddMenuToggle = (e) => {
-    e.stopPropagation();
-    e.nativeEvent.stopImmediatePropagation();
-
-    if (this.state.isShowWikiAdd) {
-      this.onHideWikiAdd();
-    } else {
-      this.onShowWikiAdd(e);
-    }
+  clickMenuToggle = (e) => {
+    e.preventDefault();
+    this.onMenuToggle();
   }
 
-  onShowWikiAdd = (e) => {
-    let left = e.clientX - 10*20;
-    let top  = e.clientY + 12;
-    let position = {top: top, left: left};
-    this.setState({
-      isShowWikiAdd: true,
-      position: position,
-    });
-  }
-
-  onHideWikiAdd = () => {
-    this.setState({
-      isShowWikiAdd: false,
-    });
+  onMenuToggle = () => {
+    this.setState({isShowWikiAdd: !this.state.isShowWikiAdd})
   }
 
   onSelectToggle = () => {
@@ -156,19 +133,23 @@ class Wikis extends Component {
                 <h3 className="sf-heading">{gettext('Wikis')}</h3>
               </div>
               <div className="path-toolbar">
-                <button className="btn btn-secondary operation-item" style={{marginTop: '-0.25rem'}} onClick={this.onAddMenuToggle}>
-                  <i className="fa fa-plus-square op-icon"></i>
-                  {gettext('Add Wiki')}
-                </button>
+                <Dropdown tag="div" className="btn btn-secondary operation-item" style={{marginTop: '-0.25rem'}} isOpen={this.state.isShowWikiAdd} toggle={this.onMenuToggle}>
+                  <DropdownToggle 
+                    tag="i" 
+                    className="fa fa-plus-square op-icon" 
+                    title={gettext('More Operations')}
+                    data-toggle="dropdown" 
+                    aria-expanded={this.state.isShowWikiAdd}
+                    onClick={this.clickMenuToggle}
+                  >
+                    {gettext(' Add Wiki')}
+                  </DropdownToggle>
+                  <DropdownMenu>
+                    <DropdownItem onClick={this.onCreateToggle}>{gettext('New Wiki')}</DropdownItem>
+                    <DropdownItem onClick={this.onSelectToggle}>{gettext('Choose a library as Wiki')}</DropdownItem>
+                  </DropdownMenu>
+                </Dropdown>
               </div>
-              {this.state.isShowWikiAdd &&
-                <WikiAdd 
-                  isShowWikiAdd={this.state.isShowWikiAdd}
-                  position={this.state.position}
-                  onSelectToggle={this.onSelectToggle}
-                  onCreateToggle={this.onCreateToggle}
-                />
-              }
             </div>
             <div className="cur-view-content">
               {(this.state.loading || this.state.wikis.length !== 0) &&
