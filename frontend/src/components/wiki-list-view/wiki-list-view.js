@@ -35,7 +35,7 @@ class WikiListView extends Component {
       return <p className="error text-center">{errorMsg}</p>;
     } else {
       return (
-        <table>
+        <table className="wiki-list-table">
           <thead>
             <tr>
               <th width="50%">{gettext('Name')}</th>
