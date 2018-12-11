@@ -26,8 +26,8 @@ class Content extends Component {
       const desktopThead = (
         <thead>
           <tr>
-            <th width="8%"><span className="sr-only">{gettext("Library Type")}</span></th>
-            <th width="34%">{gettext("Name")}<a className="table-sort-op by-name" href="#">{/*TODO: sort*/}<span className="sort-icon icon-caret-down hide"></span></a></th>
+            <th width="4%"><span className="sr-only">{gettext("Library Type")}</span></th>
+            <th width="38%">{gettext("Name")}<a className="table-sort-op by-name" href="#">{/*TODO: sort*/}<span className="sort-icon icon-caret-down hide"></span></a></th>
             <th width="10%"><span className="sr-only">{gettext("Actions")}</span></th>
             <th width="14%">{gettext("Size")}</th>
             <th width="18%">{gettext("Last Update")}<a className="table-sort-op by-time" href="#">{/*TODO: sort*/}<span className="sort-icon icon-caret-up"></span></a></th>

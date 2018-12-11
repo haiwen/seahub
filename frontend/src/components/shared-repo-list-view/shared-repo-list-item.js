@@ -75,14 +75,13 @@ class SharedRepoListItem extends React.Component {
 
   getRepoComputeParams = () => {
     let repo = this.props.repo;
-    let currentGroup = this.props.currentGroup; //todo--change to libray
-    let isReadyOnly = false;
-    if ( repo.permission === 'r' || repo.permission === 'preview') {
-      isReadyOnly = true;
+    let isReadOnly = false;
+    if (repo.permission === 'r' || repo.permission === 'preview') {
+      isReadOnly = true;
     }
     let iconUrl = Utils.getLibIconUrl({
       is_encryted: repo.encrypted, 
-      is_readyonly: isReadyOnly,
+      is_readonly: isReadOnly,
       size: Utils.isHiDPI() ? 48 : 24
     });
     let iconTitle = Utils.getLibIconTitle({
