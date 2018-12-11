@@ -36,7 +36,7 @@ class WikiListItem extends Component {
 
   onMenuToggle = (e) => {
     let targetType = e.target.dataset.toggle;
-    if (targetType === 'dropdown') {
+    if (targetType !== 'item') {
       if (this.props.isItemFreezed) {
         this.setState({
           highlight: false,
