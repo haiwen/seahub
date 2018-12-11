@@ -4,11 +4,13 @@ import { css } from 'glamor';
 class Alert extends React.PureComponent {
   constructor(props) {
     super(props);
+
     this.containerStyle = css({
       borderRadius: '3px',
       backgroundColor: '#fff',
-      padding: '20px',
+      padding: '10px 16px',
       display: 'flex',
+      boxSizing: 'border-box',
       boxShadow: 'rgba(67, 90, 111, 0.3) 0px 0px 1px, rgba(67, 90, 111, 0.47) 0px 8px 10px -4px',
       justifyContent: 'space-between',
       flexDirection: 'row',
@@ -35,7 +37,7 @@ class Alert extends React.PureComponent {
       fontWeight: '600',
       fontSize: '14px',
       color: '#435a6f',
-      margin: '0',
+      margin: '0'
     });
 
     this.toastTextChild = css({
@@ -90,7 +92,7 @@ class Alert extends React.PureComponent {
         </div>
         <div className={this.toastTextContainer}>
           <p className={this.toastTextTitle}>{this.props.title}</p>
-          {  <p className={this.toastTextChild}>{this.props.children}</p> }
+          {this.props.children ? <p className={this.toastTextChild}>{this.props.children}</p> : null}
         </div>
         <div onClick={this.props.onRemove} className={this.toastClose}>
           <span>&times;</span>
